@@ -96,6 +96,12 @@
   .progress .barre{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:5px}
   .progress .barre i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
 
+  details.methode{margin:0 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);
+    font-size:14px;padding:10px 14px}
+  details.methode summary{cursor:pointer;font-weight:600;font-size:13.5px;color:var(--accent)}
+  details.methode ol{margin:10px 0 4px;padding-left:22px}
+  details.methode li{margin:6px 0}
+
   footer.site{margin-top:40px;font-size:13px;color:var(--muted);text-align:center}
   .cache{display:none !important}
 </style>
@@ -143,11 +149,35 @@
   <!-- ================= Formulaire de recherche ================= -->
   <section class="panel" id="panneau-recherche">
     <h2>2. Recherche</h2>
+    <details class="methode">
+      <summary>Méthode : bien chercher, quel que soit le sujet</summary>
+      <ol>
+        <li><b>Nommez la notion</b> dans « Mots-clés » : « clause de non-concurrence »,
+            « trouble anormal de voisinage », « vice caché », « faute grave »…</li>
+        <li><b>Expression exacte</b> pour les formules figées du droit ;
+            <b>ET</b> pour croiser des idées ; <b>OU</b> pour des synonymes.</li>
+        <li>Appliquez un ou plusieurs <b>angles d'analyse</b> : ils transforment la
+            recherche en cours (arrêts de principe, régime de la preuve, définition,
+            actualité…) et <b>se combinent</b> — quel que soit le sujet.</li>
+        <li><b>Mots à exclure</b> pour écarter les notions voisines qui parasitent
+            (ex. exclure « sexuel » quand vous cherchez le harcèlement moral).</li>
+        <li>Repères : <b>Bulletin</b> = arrêts que la Cour juge importants ;
+            <b>sommaire/titrage</b> = le langage officiel et normalisé de la Cour ;
+            <b>motivations</b> = le raisonnement ; <b>dispositif</b> = ce qui est jugé.</li>
+        <li>Pour une étude complète, <b>recoupez plusieurs recherches</b> (par ex. les
+            formulations avant/après une réforme) et fusionnez les exports CSV.</li>
+      </ol>
+    </details>
     <div class="grid">
-      <div class="grid g2">
-        <label class="champ"><b>Bibliothèque de recherches (modèles prêts à l'emploi)</b>
+      <div class="grid g3">
+        <label class="champ"><b>Angles d'analyse (transforment vos mots-clés)</b>
+          <select id="in-angle">
+            <option value="">— Appliquer un angle à la recherche en cours —</option>
+          </select>
+        </label>
+        <label class="champ"><b>Exemples thématiques (recherches complètes)</b>
           <select id="in-preset">
-            <option value="">— Choisir un modèle : il remplit le formulaire pour vous —</option>
+            <option value="">— Choisir un exemple : il remplit tout le formulaire —</option>
           </select>
         </label>
         <label class="champ"><b>Recherches récentes</b>
@@ -496,6 +526,71 @@ function appliquerCriteres(c){
   document.querySelectorAll(".pub").forEach(el=>{ el.checked = (c.pub||[]).includes(el.value); });
   $("in-approfondi").checked = !!c.prof;
 }
+
+/* --------------------------- Angles d'analyse --------------------------- */
+/* Un angle est une transformation GÉNÉRIQUE de la recherche en cours : il
+   s'applique à n'importe quelle notion tapée dans « Mots-clés » et les angles
+   se combinent (chacun part des critères affichés à l'écran). */
+const ANGLES = [
+  {
+    label: "Arrêts de principe (publiés au Bulletin)",
+    note: "Restreint à la Cour de cassation et aux décisions publiées au Bulletin — celles que la Cour elle-même juge importantes — triées des plus récentes aux plus anciennes.",
+    f: c => ({...c, jur:["cc"], pub:["b"], tri:"date-desc"})
+  },
+  {
+    label: "Régime de la preuve de la notion recherchée",
+    note: "Ajoute « preuve » à vos mots-clés et cherche dans les sommaires et titrages officiels, où la Cour emploie un vocabulaire normalisé (preuve, charge, présomption) accolé à la notion. Cour de cassation, décisions publiées.",
+    f: c => ({...c,
+      q: (c.q.replace(/\s*\bpreuve\b\s*/gi," ").trim()+" preuve").trim(),
+      op:"and", field:"sommaire", jur:["cc"], pub:["b"], tri:"date-desc"})
+  },
+  {
+    label: "Définition et critères de la notion",
+    note: "Cherche vos mots-clés uniquement dans les sommaires et titrages officiels : c'est là que la Cour énonce définitions et conditions. Cour de cassation, décisions publiées.",
+    f: c => ({...c, field:"sommaire", jur:["cc"], pub:["b"]})
+  },
+  {
+    label: "Jurisprudence récente (3 dernières années)",
+    note: "Limite la recherche aux trois dernières années, triée des plus récentes aux plus anciennes — pour vérifier l'état actuel du droit ou repérer un revirement.",
+    f: c => {
+      const d = new Date(); d.setFullYear(d.getFullYear()-3);
+      return {...c, du:d.toISOString().slice(0,10), au:"", tri:"date-desc"};
+    }
+  },
+  {
+    label: "Cassations uniquement (censure des juges du fond)",
+    note: "Ne garde que les arrêts de cassation : ceux où la Cour censure la décision attaquée — souvent les plus instructifs sur le contenu exact de la règle.",
+    f: c => ({...c, sol:"cassation", jur:["cc"]})
+  },
+  {
+    label: "Panorama complet (tous filtres levés)",
+    note: "Lève publication, solution et zone, et interroge Cour de cassation, cours d'appel et tribunaux judiciaires : vision d'ensemble du contentieux, y compris au fond.",
+    f: c => ({...c, jur:["cc","ca","tj"], pub:[], sol:"", field:"", tri:"score"})
+  },
+];
+
+(function initAngles(){
+  const sel = $("in-angle");
+  ANGLES.forEach((a,i)=>{
+    const o = document.createElement("option");
+    o.value = String(i); o.textContent = a.label;
+    sel.appendChild(o);
+  });
+  sel.onchange = ()=>{
+    const a = ANGLES[Number(sel.value)];
+    sel.value = "";
+    if(!a) return;
+    const c = lireCriteres();
+    if(!c.q){
+      $("msg-recherche").innerHTML = '<div class="alerte err">Saisissez d\'abord vos mots-clés (la notion recherchée), puis appliquez un angle.</div>';
+      $("in-q").focus();
+      return;
+    }
+    appliquerCriteres(a.f(c));
+    $("msg-recherche").innerHTML = '<div class="alerte info"><b>Angle appliqué.</b> '+echap(a.note)+
+      " Les angles se combinent : vous pouvez en appliquer un autre, puis « Rechercher ».</div>";
+  };
+})();
 
 /* ----------------------- Bibliothèque de recherches ----------------------- */
 /* Chaque modèle remplit le formulaire avec les formules consacrées de la

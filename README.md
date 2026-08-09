@@ -25,11 +25,18 @@ partent directement de votre navigateur vers l'API officielle.
 - **Recherche par zone de la décision** : toute la décision, ou seulement les
   motivations, le dispositif, les moyens, l'exposé du litige, ou le
   sommaire/titrage officiels.
-- **Bibliothèque de recherches** : des modèles prêts à l'emploi qui remplissent
-  le formulaire avec les formules consacrées de la jurisprudence (régime de la
-  preuve du harcèlement moral avant/après 2016, appréciation globale « pris
-  dans leur ensemble », harcèlement moral institutionnel, obligation de
-  sécurité, droit à la preuve, nullité du licenciement…).
+- **Angles d'analyse (génériques)** : des transformations applicables à
+  n'importe quelle notion tapée dans les mots-clés — arrêts de principe,
+  régime de la preuve, définition et critères, jurisprudence récente,
+  cassations uniquement, panorama complet. Les angles se **combinent** :
+  chacun part des critères affichés à l'écran.
+- **Exemples thématiques** : des recherches complètes prêtes à l'emploi qui
+  illustrent la méthode sur un sujet (régime de la preuve du harcèlement moral
+  avant/après 2016, appréciation globale « pris dans leur ensemble »,
+  harcèlement moral institutionnel, obligation de sécurité, droit à la preuve,
+  nullité du licenciement…).
+- **Guide de méthode intégré** (panneau dépliant « Méthode ») : comment
+  formuler une recherche efficace quel que soit le sujet.
 - **Filtres** : juridictions (Cass. / cours d'appel / tribunaux judiciaires /
   tribunaux de commerce), chambres de la Cour de cassation, période, solution
   (cassation, rejet…), niveau de publication (Bulletin, Rapport annuel,
