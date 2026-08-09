@@ -908,7 +908,8 @@ async function exporter(format){
       const colonnes = ["date","juridiction","chambre","numero","ecli","solution","publication",
                         "matieres","citation","sommaire","extraits","url","judilibre_id"];
       const cel = v=>'"'+String(v??"").replace(/"/g,'""')+'"';
-      const csv = "﻿"+colonnes.join(";")+"\n"+
+      /* \uFEFF = BOM : indique à Excel que le fichier est en UTF-8 (accents). */
+      const csv = "\uFEFF"+colonnes.join(";")+"\n"+
         lignes.map(l=>colonnes.map(c=>cel(l[c])).join(";")).join("\n");
       telecharger(nomFichier("csv"), csv, "text/csv;charset=utf-8");
     }else{
