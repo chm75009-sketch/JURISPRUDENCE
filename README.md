@@ -87,6 +87,10 @@ clé sur son propre poste.
 
 ## Limites utiles à connaître
 
+- **Élargissement automatique** : quand une recherche (expression exacte ou
+  ET) ne donne aucun résultat, l'API Judilibre la relance silencieusement en
+  mode « au moins un mot ». L'application le détecte (champ `relaxed` de la
+  réponse) et l'affiche en toutes lettres, à l'écran comme à l'export.
 - L'API limite chaque recherche aux **10 000 premiers résultats** : au-delà,
   affinez avec les dates (l'application vous le signale).
 - Les quotas PISTE s'appliquent (l'export ménage l'API avec une pause entre

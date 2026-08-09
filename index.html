@@ -797,6 +797,21 @@ async function lancerRecherche(page){
     const d = await appelApi("/search", params);
     if(gen!==generationRecherche) return;      // une recherche plus récente a pris la main
     etat = { page, total:d.total||0 };
+    /* L'API relance silencieusement en mode « au moins un mot » quand la
+       recherche initiale ne donne rien (champ relaxed:true) : on le dit. */
+    if(d.relaxed){
+      const mode = $("in-operator").value;
+      const q = $("in-q").value.trim();
+      msg.innerHTML = '<div class="alerte info"><b>Attention : recherche élargie par l\'API.</b> '+
+        (mode==="exact"
+          ? "Aucune décision ne contient l'expression exacte « "+echap(q)+" »."
+          : mode==="and"
+            ? "Aucune décision ne contient tous ces mots à la fois."
+            : "Aucune décision ne correspondait à la recherche initiale.")+
+        " Judilibre a automatiquement relancé en mode « au moins un mot » : les résultats ci-dessous sont donc "+
+        "<b>plus larges que votre demande</b>. Pour une correspondance stricte, raccourcissez l'expression, "+
+        "retirez les termes rares (sigles, abréviations…) ou passez en mode ET avec les mots développés.</div>";
+    }
     const exclus = listeExclusions();
     const tous = d.results||[];
     const gardees = [], ecartees = [];
@@ -806,6 +821,7 @@ async function lancerRecherche(page){
 
     $("zone-resultats").classList.remove("cache");
     $("total-texte").innerHTML = "<b>"+Number(etat.total).toLocaleString("fr-FR")+"</b> décision"+(etat.total>1?"s":"")+" trouvée"+(etat.total>1?"s":"")+
+      (d.relaxed ? ' <span class="note" style="color:var(--warn)">(recherche élargie par l\'API — voir l\'encadré ci-dessus)</span>' : "")+
       (exclus.length ? ' <span class="note">(avant application de vos mots exclus)</span>' : "");
     $("temps-texte").textContent = "Recherche effectuée en "+Math.round(performance.now()-t0)+" ms";
     $("note-exclusions").textContent = exclus.length
@@ -944,13 +960,14 @@ async function collecterPourExport(){
   const zone = $("zone-progress"), texte = $("progress-texte"), barre = $("progress-barre");
   zone.classList.remove("cache");
   const lignes = [];
-  let ecartees = 0;
+  let ecartees = 0, elargie = false;
   const maxPages = Math.ceil(PLAFOND/parPage);
   for(let p=0; p<maxPages && lignes.length<voulu; p++){
     texte.textContent = "Récupération : "+lignes.length+" / "+voulu+" décisions…";
     barre.style.width = Math.min(100, Math.round(100*lignes.length/voulu))+"%";
     const params = construireParams(p, parPage);
     const d = await appelApi("/search", params);
+    if(d.relaxed) elargie = true;
     for(const r of (d.results||[])){
       if(estExclue(r, exclus)){ ecartees++; continue; }
       lignes.push({
@@ -976,7 +993,7 @@ async function collecterPourExport(){
     await new Promise(res=>setTimeout(res, 250));   // rythme courtois vis-à-vis de l'API
   }
   zone.classList.add("cache");
-  return {lignes, ecartees};
+  return {lignes, ecartees, elargie};
 }
 
 function telecharger(nom, contenu, type){
@@ -998,7 +1015,7 @@ async function exporter(format){
   const msg = $("msg-recherche");
   msg.innerHTML = "";
   try{
-    const {lignes, ecartees} = await collecterPourExport();
+    const {lignes, ecartees, elargie} = await collecterPourExport();
     if(format==="csv"){
       const colonnes = ["date","juridiction","chambre","numero","ecli","solution","publication",
                         "matieres","citation","sommaire","extraits","url","judilibre_id"];
@@ -1012,7 +1029,9 @@ async function exporter(format){
     }
     msg.innerHTML = '<div class="alerte ok">'+
       lignes.length.toLocaleString("fr-FR")+" décisions exportées ✓"+
-      (ecartees ? " ("+ecartees.toLocaleString("fr-FR")+" écartées par vos mots exclus)" : "")+"</div>";
+      (ecartees ? " ("+ecartees.toLocaleString("fr-FR")+" écartées par vos mots exclus)" : "")+"</div>"+
+      (elargie ? '<div class="alerte info"><b>Attention :</b> votre recherche initiale ne donnait aucun résultat ; '+
+        "l'API l'a élargie en mode « au moins un mot ». Le fichier exporté est donc plus large que votre demande.</div>" : "");
   }catch(e){
     $("zone-progress").classList.add("cache");
     msg.innerHTML = '<div class="alerte err">Export interrompu : '+echap(messageErreur(e))+"</div>";
