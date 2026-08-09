@@ -15,6 +15,7 @@
   html,body{margin:0;padding:0}
   body{font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
   a{color:var(--link)}
+  mark{background:#fdeaa2;color:inherit;padding:0 1px;border-radius:2px}
   .wrap{max-width:1060px;margin:0 auto;padding:0 18px 60px}
 
   header.site{background:linear-gradient(135deg,#1c2430,#37220f 60%,#5a1b26);color:#fff;padding:34px 0 30px}
@@ -55,10 +56,12 @@
   .alerte{border-radius:10px;padding:12px 14px;font-size:14px;margin-top:14px}
   .alerte.err{background:#fdecec;border:1px solid #f3c3c3;color:#8a1f1f}
   .alerte.info{background:var(--warn-soft);border:1px solid #ecd9b0;color:var(--warn)}
+  .alerte.ok{background:var(--ok-soft);border:1px solid #bfe3c8;color:var(--ok)}
 
   .resume-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:24px}
   .resume-bar .total{font-size:15px}
   .resume-bar .total b{font-size:19px;color:var(--accent)}
+  #note-exclusions{font-size:13.5px;color:var(--warn);margin-top:4px}
 
   .fiche{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:12px}
   .fiche .tete{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
@@ -67,6 +70,7 @@
   .badge{font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:var(--bg)}
   .badge.pub{background:var(--ok-soft);color:var(--ok);border-color:#bfe3c8}
   .badge.sol{background:var(--accent-soft);color:var(--accent);border-color:#ecc9ce}
+  .badge.theme{color:var(--muted)}
   .fiche .extraits{margin:10px 0 8px;font-size:14.5px;color:#33404f}
   .fiche .extraits em{background:#fdeaa2;font-style:normal;padding:0 2px;border-radius:3px}
   .fiche .extraits .sep{color:#9aa7b5}
@@ -82,10 +86,11 @@
     align-items:flex-start;padding:18px 22px 12px;border-bottom:1px solid var(--line)}
   .dlg-tete h3{margin:0;font-size:17px}
   .dlg-tete .note{margin-top:3px}
+  .dlg-tete .dlg-btns{display:flex;gap:8px;flex-shrink:0}
   .dlg-corps{padding:16px 22px 26px;overflow-wrap:break-word}
   .dlg-corps .sommaire{background:var(--accent-soft);border:1px solid #ecc9ce;border-radius:10px;padding:12px 14px;font-size:14.5px;margin-bottom:14px}
   .dlg-corps pre{white-space:pre-wrap;font:14px/1.6 Georgia,'Times New Roman',serif;margin:0}
-  .fermer{font:inherit;border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 13px;cursor:pointer}
+  .fermer{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 13px;cursor:pointer}
 
   .progress{margin-top:10px;font-size:14px;color:var(--muted)}
   .progress .barre{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:5px}
@@ -139,9 +144,36 @@
   <section class="panel" id="panneau-recherche">
     <h2>2. Recherche</h2>
     <div class="grid">
+      <div class="grid g2">
+        <label class="champ"><b>Bibliothèque de recherches (modèles prêts à l'emploi)</b>
+          <select id="in-preset">
+            <option value="">— Choisir un modèle : il remplit le formulaire pour vous —</option>
+          </select>
+        </label>
+        <label class="champ"><b>Recherches récentes</b>
+          <select id="in-historique">
+            <option value="">— Reprendre une recherche précédente —</option>
+          </select>
+        </label>
+      </div>
       <label class="champ"><b>Mots-clés</b>
         <input type="search" id="in-q" placeholder="ex. harcèlement moral licenciement nullité">
       </label>
+      <div class="grid g2">
+        <label class="champ"><b>Mots à exclure <span style="font-weight:400;color:var(--muted)">(séparés par des virgules)</span></b>
+          <input type="text" id="in-exclure" placeholder="ex. harcèlement sexuel, discrimination">
+        </label>
+        <label class="champ"><b>Chercher dans</b>
+          <select id="in-field">
+            <option value="">Toute la décision</option>
+            <option value="motivations">Motivations (raisonnement de la cour)</option>
+            <option value="dispositif">Dispositif (ce qui est jugé)</option>
+            <option value="moyens">Moyens (arguments des parties)</option>
+            <option value="expose">Exposé du litige (les faits)</option>
+            <option value="sommaire">Sommaire et titrage officiels</option>
+          </select>
+        </label>
+      </div>
       <div class="grid g3">
         <label class="champ"><b>Type de recherche</b>
           <select id="in-operator">
@@ -179,6 +211,7 @@
           <label><input type="checkbox" id="j-cc" checked> Cour de cassation</label>
           <label><input type="checkbox" id="j-ca" checked> Cours d'appel</label>
           <label><input type="checkbox" id="j-tj"> Tribunaux judiciaires</label>
+          <label><input type="checkbox" id="j-tcom"> Tribunaux de commerce</label>
         </div>
       </div>
       <div id="bloc-chambres">
@@ -195,8 +228,20 @@
         </div>
         <p class="note" style="margin:4px 0 0">Aucune case cochée = toutes les chambres.</p>
       </div>
+      <div>
+        <b style="font-size:13.5px">Publication (Cour de cassation)</b>
+        <div class="cases">
+          <label><input type="checkbox" class="pub" value="b"> Bulletin</label>
+          <label><input type="checkbox" class="pub" value="r"> Rapport annuel</label>
+          <label><input type="checkbox" class="pub" value="l"> Lettres de chambre</label>
+          <label><input type="checkbox" class="pub" value="c"> Communiqué</label>
+        </div>
+        <p class="note" style="margin:4px 0 0">Aucune case cochée = toutes les décisions. « Bulletin » = arrêts importants.</p>
+      </div>
       <div class="cases">
-        <label><input type="checkbox" id="in-publiees"> Uniquement les décisions publiées au Bulletin</label>
+        <label><input type="checkbox" id="in-approfondi">
+          Vérification approfondie des mots exclus dans le texte intégral
+          <span class="note">(page affichée uniquement — plus lent, consomme du quota)</span></label>
       </div>
     </div>
     <div class="actions">
@@ -210,6 +255,7 @@
         <option value="2500">Export : 2 500 premières</option>
         <option value="10000">Export : maximum (10 000)</option>
       </select>
+      <button class="second" id="btn-lien" type="button" title="Copie une adresse qui rouvre cette recherche pré-remplie (sans votre clé API)">Copier le lien de cette recherche</button>
     </div>
     <div id="zone-progress" class="progress cache">
       <span id="progress-texte"></span>
@@ -221,7 +267,10 @@
   <!-- ================= Résultats ================= -->
   <section id="zone-resultats" class="cache">
     <div class="resume-bar">
-      <div class="total" id="total-texte"></div>
+      <div>
+        <div class="total" id="total-texte"></div>
+        <div id="note-exclusions"></div>
+      </div>
       <div class="note" id="temps-texte"></div>
     </div>
     <div id="liste-resultats"></div>
@@ -247,7 +296,10 @@
       <h3 id="dlg-titre">Décision</h3>
       <div class="note" id="dlg-sous-titre"></div>
     </div>
-    <button class="fermer" id="dlg-fermer" type="button">Fermer ✕</button>
+    <div class="dlg-btns">
+      <button class="fermer" id="dlg-citer" type="button">Copier la citation</button>
+      <button class="fermer" id="dlg-fermer" type="button">Fermer ✕</button>
+    </div>
   </div>
   <div class="dlg-corps" id="dlg-corps"></div>
 </dialog>
@@ -264,6 +316,7 @@ const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const PAGE_SIZE = 25;
 const PLAFOND = 10000;               // l'API refuse page*page_size au-delà
 const CLE_STOCKAGE = "judilibre_keyid";
+const HISTO_STOCKAGE = "judilibre_historique";
 
 const $ = id => document.getElementById(id);
 
@@ -279,6 +332,8 @@ function dateFr(iso){
 const NOMS_CHAMBRES = {soc:"ch. sociale", cr:"ch. criminelle", civ1:"1re ch. civile",
   civ2:"2e ch. civile", civ3:"3e ch. civile", comm:"ch. commerciale",
   pl:"assemblée plénière", mi:"ch. mixte", ordo:"ordonnance", creun:"chambres réunies"};
+const ABREV_CHAMBRES = {soc:"soc.", cr:"crim.", civ1:"1re civ.", civ2:"2e civ.",
+  civ3:"3e civ.", comm:"com.", pl:"ass. plén.", mi:"ch. mixte"};
 
 function libelleJuridiction(r){
   const j = (r.jurisdiction||"").toLowerCase();
@@ -288,6 +343,23 @@ function libelleJuridiction(r){
   return r.location || r.jurisdiction || "Juridiction";
 }
 
+function numerosDe(r){
+  return (r.numbers && r.numbers.length ? r.numbers : (r.number?[r.number]:[])).join(", ");
+}
+
+/* Citation au format usuel des écritures : « Cass. soc., 16 juin 2021, n° 19-25.075 ». */
+function citationDe(r){
+  const j = (r.jurisdiction||"").toLowerCase();
+  let tete;
+  if(j==="cc") tete = "Cass. "+(ABREV_CHAMBRES[(r.chamber||"").toLowerCase()]||"");
+  else if(j==="ca") tete = (r.location||"Cour d'appel").replace(/^Cour d'appel (de |d')/i, m=>"CA ");
+  else tete = r.location || "Trib. jud.";
+  const nums = numerosDe(r);
+  return tete.trim()+", "+dateFr(r.decision_date)+
+    (nums ? ", n° "+nums : "")+
+    ((r.publication||[]).includes("b") ? ", publié au bulletin" : "");
+}
+
 function echap(s){
   return String(s??"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 }
@@ -295,6 +367,25 @@ function echap(s){
    puis on ne réactive que ces balises-là. */
 function extraitSurligne(s){
   return echap(s).replace(/&lt;em&gt;/g,"<em>").replace(/&lt;\/em&gt;/g,"</em>");
+}
+function normaliser(s){
+  return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+}
+function echapRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+function copierTexte(t){
+  if(navigator.clipboard && navigator.clipboard.writeText)
+    return navigator.clipboard.writeText(t);
+  const ta = document.createElement("textarea");
+  ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); }finally{ ta.remove(); }
+  return Promise.resolve();
+}
+function retourBouton(btn, texte){
+  const initial = btn.textContent;
+  btn.textContent = texte;
+  setTimeout(()=>{ btn.textContent = initial; }, 1600);
 }
 
 /* ------------------------------ Clé API ------------------------------ */
@@ -352,7 +443,7 @@ $("btn-tester-cle").onclick = async ()=>{
   try{
     const p = new URLSearchParams({query:"droit", page_size:"1"});
     const d = await appelApi("/search", p);
-    msg.innerHTML = '<div class="alerte" style="background:var(--ok-soft);border:1px solid #bfe3c8;color:var(--ok)">'+
+    msg.innerHTML = '<div class="alerte ok">'+
       "Clé valide ✓ — l'API répond ("+Number(d.total).toLocaleString("fr-FR")+" décisions pour le mot « droit »).</div>";
     $("in-cle").value = "";
     majEtatCle();
@@ -362,8 +453,157 @@ $("btn-tester-cle").onclick = async ()=>{
   }
 };
 
+/* --------------------- Critères : lecture / écriture --------------------- */
+/* Les critères circulent sous forme d'objet compact : préréglages, historique
+   et lien partageable utilisent tous le même format. La clé API n'en fait
+   JAMAIS partie. */
+function lireCriteres(){
+  const jur = [];
+  if($("j-cc").checked) jur.push("cc");
+  if($("j-ca").checked) jur.push("ca");
+  if($("j-tj").checked) jur.push("tj");
+  if($("j-tcom").checked) jur.push("tcom");
+  return {
+    q: $("in-q").value.trim(),
+    x: $("in-exclure").value.trim(),
+    op: $("in-operator").value,
+    tri: $("in-tri").value,
+    sol: $("in-solution").value,
+    du: $("in-du").value,
+    au: $("in-au").value,
+    field: $("in-field").value,
+    jur,
+    ch: [...document.querySelectorAll(".ch:checked")].map(c=>c.value),
+    pub: [...document.querySelectorAll(".pub:checked")].map(c=>c.value),
+    prof: $("in-approfondi").checked,
+  };
+}
+function appliquerCriteres(c){
+  $("in-q").value = c.q||"";
+  $("in-exclure").value = c.x||"";
+  $("in-operator").value = c.op||"and";
+  $("in-tri").value = c.tri||"score";
+  $("in-solution").value = c.sol||"";
+  $("in-du").value = c.du||"";
+  $("in-au").value = c.au||"";
+  $("in-field").value = c.field||"";
+  const jur = c.jur || ["cc","ca"];
+  $("j-cc").checked = jur.includes("cc");
+  $("j-ca").checked = jur.includes("ca");
+  $("j-tj").checked = jur.includes("tj");
+  $("j-tcom").checked = jur.includes("tcom");
+  document.querySelectorAll(".ch").forEach(el=>{ el.checked = (c.ch||[]).includes(el.value); });
+  document.querySelectorAll(".pub").forEach(el=>{ el.checked = (c.pub||[]).includes(el.value); });
+  $("in-approfondi").checked = !!c.prof;
+}
+
+/* ----------------------- Bibliothèque de recherches ----------------------- */
+/* Chaque modèle remplit le formulaire avec les formules consacrées de la
+   jurisprudence : la recherche par « expression exacte » sur ces formules est
+   bien plus précise qu'une recherche par mots-clés libres. */
+const PRESETS = [
+  {
+    label: "Harcèlement moral · régime de la preuve (formulation depuis 2016)",
+    note: "Cible le mécanisme probatoire de l'article L. 1154-1 du code du travail dans sa rédaction issue de la loi du 17 août 2015 : le salarié « présente des éléments de fait laissant supposer l'existence d'un harcèlement », puis l'employeur doit prouver que ses agissements en sont exempts. Pour les arrêts antérieurs à 2016, utilisez le modèle « ancienne formulation ».",
+    c: {q:"laissant supposer l'existence d'un harcèlement", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Harcèlement moral · régime de la preuve (formulation avant 2016)",
+    note: "Ancienne rédaction de l'article L. 1154-1 : le salarié « établit des faits qui permettent de présumer l'existence d'un harcèlement ». Utile pour retrouver la jurisprudence fondatrice (notamment les arrêts de 2008 sur le contrôle de la Cour de cassation).",
+    c: {q:"permettent de présumer l'existence d'un harcèlement", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Harcèlement moral · appréciation globale des faits (« pris dans leur ensemble »)",
+    note: "La formule par laquelle la chambre sociale impose aux juges du fond d'apprécier les faits « pris dans leur ensemble », et non isolément, avant de dire si un harcèlement est présumé. Combinez avec des dates pour suivre l'évolution.",
+    c: {q:"pris dans leur ensemble", op:"exact", x:"harcèlement sexuel", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Harcèlement moral · sans le harcèlement sexuel",
+    note: "Expression exacte « harcèlement moral » avec exclusion locale des décisions qui mentionnent aussi le harcèlement sexuel. L'API ne sachant pas exclure un mot, le tri est fait par l'application sur les extraits et sommaires reçus ; cochez la « vérification approfondie » pour contrôler aussi le texte intégral de la page affichée.",
+    c: {q:"harcèlement moral", op:"exact", x:"harcèlement sexuel", jur:["cc"], ch:["soc"], tri:"date-desc", prof:true}
+  },
+  {
+    label: "Harcèlement moral institutionnel (politique d'entreprise)",
+    note: "Le harcèlement moral « institutionnel », résultant d'une politique d'entreprise, consacré par la chambre criminelle dans l'affaire France Télécom (Cass. crim., 21 janvier 2025). Peu de décisions, mais toutes importantes.",
+    c: {q:"harcèlement moral institutionnel", op:"exact", jur:["cc","ca"], tri:"date-desc"}
+  },
+  {
+    label: "Obligation de sécurité de l'employeur · prévention du harcèlement",
+    note: "L'obligation de sécurité de l'employeur (art. L. 4121-1) telle que redéfinie depuis Cass. soc., 25 novembre 2015, n° 14-24.444 (Air France) : l'employeur qui a pris toutes les mesures de prévention peut s'exonérer. Souvent invoquée en parallèle du harcèlement moral.",
+    c: {q:"obligation de sécurité", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Droit à la preuve · preuve illicite ou déloyale",
+    note: "Le « droit à la preuve » qui permet, depuis Ass. plén., 22 décembre 2023 (n° 20-20.648), de produire une preuve illicite ou déloyale si elle est indispensable et proportionnée. Décisif en matière de harcèlement (enregistrements, courriels, etc.).",
+    c: {q:"droit à la preuve", op:"exact", jur:["cc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Nullité du licenciement lié au harcèlement moral",
+    note: "Croise harcèlement moral, licenciement et nullité (art. L. 1152-3 : tout licenciement intervenu en méconnaissance des règles sur le harcèlement est nul). Recherche en mode ET, chambre sociale.",
+    c: {q:"harcèlement moral licenciement nullité", op:"and", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+];
+
+(function initPresets(){
+  const sel = $("in-preset");
+  PRESETS.forEach((p,i)=>{
+    const o = document.createElement("option");
+    o.value = String(i); o.textContent = p.label;
+    sel.appendChild(o);
+  });
+  sel.onchange = ()=>{
+    const p = PRESETS[Number(sel.value)];
+    if(!p) return;
+    appliquerCriteres(p.c);
+    $("msg-recherche").innerHTML = '<div class="alerte info"><b>Modèle appliqué.</b> '+echap(p.note)+
+      " Cliquez sur « Rechercher » (et ajustez les critères si besoin).</div>";
+  };
+})();
+
+/* ------------------------- Historique des recherches ------------------------- */
+function lireHistorique(){
+  try{ return JSON.parse(localStorage.getItem(HISTO_STOCKAGE)||"[]"); }
+  catch(e){ return []; }
+}
+function sauverDansHistorique(c){
+  if(!c.q) return;
+  const cle = JSON.stringify(c);
+  const arr = lireHistorique().filter(e=>JSON.stringify(e.c)!==cle);
+  arr.unshift({t:Date.now(), c});
+  localStorage.setItem(HISTO_STOCKAGE, JSON.stringify(arr.slice(0,12)));
+  majHistorique();
+}
+function majHistorique(){
+  const sel = $("in-historique");
+  const arr = lireHistorique();
+  sel.innerHTML = '<option value="">— Reprendre une recherche précédente —</option>';
+  arr.forEach((e,i)=>{
+    const o = document.createElement("option");
+    const d = new Date(e.t);
+    o.value = String(i);
+    o.textContent = "« "+e.c.q.slice(0,60)+" » · "+
+      String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0");
+    sel.appendChild(o);
+  });
+  if(arr.length){
+    const o = document.createElement("option");
+    o.value = "__effacer"; o.textContent = "— Effacer l'historique —";
+    sel.appendChild(o);
+  }
+}
+$("in-historique").onchange = ()=>{
+  const v = $("in-historique").value;
+  if(v==="__effacer"){
+    localStorage.removeItem(HISTO_STOCKAGE); majHistorique(); return;
+  }
+  const e = lireHistorique()[Number(v)];
+  if(e){ appliquerCriteres(e.c); lancerRecherche(0); }
+};
+
 /* ------------------------------ Recherche ------------------------------ */
-let etat = { page:0, total:0, params:null };
+let etat = { page:0, total:0 };
+let resultatsCourants = {};          // id -> résultat brut de la page affichée
+let generationRecherche = 0;         // invalide les vérifications approfondies dépassées
 
 function construireParams(page, pageSize){
   const q = $("in-q").value.trim();
@@ -378,11 +618,15 @@ function construireParams(page, pageSize){
   if($("in-du").value) p.set("date_start", $("in-du").value);
   if($("in-au").value) p.set("date_end", $("in-au").value);
   if($("in-solution").value) p.append("solution", $("in-solution").value);
-  if($("in-publiees").checked) p.append("publication","b");
+  document.querySelectorAll(".pub:checked").forEach(c=>p.append("publication", c.value));
+  const champ = $("in-field").value;
+  if(champ==="sommaire"){ p.append("field","sommaire"); p.append("field","titrage"); }
+  else if(champ) p.append("field", champ);
   const jur = [];
   if($("j-cc").checked) jur.push("cc");
   if($("j-ca").checked) jur.push("ca");
   if($("j-tj").checked) jur.push("tj");
+  if($("j-tcom").checked) jur.push("tcom");
   jur.forEach(j=>p.append("jurisdiction", j));
   if($("j-cc").checked){
     document.querySelectorAll(".ch:checked").forEach(c=>p.append("chamber", c.value));
@@ -390,28 +634,60 @@ function construireParams(page, pageSize){
   return p;
 }
 
+/* ----------------------------- Mots exclus ----------------------------- */
+function listeExclusions(){
+  return $("in-exclure").value.split(/[;,]/).map(s=>normaliser(s.trim())).filter(Boolean);
+}
+/* Filtre « de surface » : tout ce que la recherche renvoie sans requête
+   supplémentaire (extraits surlignés, sommaire, matières, solution). */
+function blobDeSurface(r){
+  const morceaux = [r.summary, r.solution, (r.themes||[]).join(" ")];
+  const h = r.highlights || {};
+  for(const k of Object.keys(h)) morceaux.push((h[k]||[]).join(" "));
+  return normaliser(morceaux.filter(Boolean).join(" ").replace(/<\/?em>/g,""));
+}
+function estExclue(r, exclus){
+  if(!exclus.length) return false;
+  const blob = blobDeSurface(r);
+  return exclus.some(x=>blob.includes(x));
+}
+
 function carteResultat(r){
   const jur = libelleJuridiction(r);
-  const nums = (r.numbers && r.numbers.length ? r.numbers : (r.number?[r.number]:[])).join(", ");
+  const nums = numerosDe(r);
   const pub = (r.publication||[]).includes("b");
+  const themes = (r.themes||[]).slice(0,3)
+      .map(t=>'<span class="badge theme">'+echap(t)+'</span>').join("");
   const extraits = ((r.highlights && r.highlights.text) || []).slice(0,3)
       .map(h=>"« … "+extraitSurligne(h)+" … »").join(' <span class="sep">·</span> ');
   const somm = r.summary ? '<div class="extraits">'+echap(String(r.summary).slice(0,300))+'</div>' : "";
-  return '<article class="fiche">'+
+  return '<article class="fiche" data-id="'+echap(r.id)+'">'+
     '<div class="tete">'+
       '<span class="jur">'+echap(jur)+'</span>'+
       '<span class="date">'+dateFr(r.decision_date)+'</span>'+
       (nums ? '<span class="badge">n° '+echap(nums)+'</span>' : "")+
       (r.solution ? '<span class="badge sol">'+echap(r.solution)+'</span>' : "")+
       (pub ? '<span class="badge pub">Publié au Bulletin</span>' : "")+
+      themes+
     '</div>'+
     (extraits ? '<div class="extraits">'+extraits+'</div>' : somm)+
     '<div class="pied">'+
       '<button type="button" data-id="'+echap(r.id)+'" class="voir-texte">Texte intégral</button>'+
+      '<button type="button" data-id="'+echap(r.id)+'" class="copier-cit">Copier la citation</button>'+
       '<a href="https://www.courdecassation.fr/decision/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener">Fiche officielle ↗</a>'+
       (r.ecli ? '<span class="note">'+echap(r.ecli)+'</span>' : "")+
     '</div>'+
   '</article>';
+}
+
+function brancherBoutonsFiches(){
+  document.querySelectorAll(".voir-texte").forEach(b=>b.onclick = ()=>ouvrirDecision(b.dataset.id));
+  document.querySelectorAll(".copier-cit").forEach(b=>b.onclick = ()=>{
+    const r = resultatsCourants[b.dataset.id];
+    if(!r) return;
+    copierTexte(citationDe(r)+"\n"+"https://www.courdecassation.fr/decision/"+r.id)
+      .then(()=>retourBouton(b, "Copié ✓"));
+  });
 }
 
 async function lancerRecherche(page){
@@ -420,24 +696,40 @@ async function lancerRecherche(page){
   if(!params){ msg.innerHTML = '<div class="alerte err">Saisissez des mots-clés.</div>'; return; }
   msg.innerHTML = "";
   $("btn-chercher").disabled = true;
+  const gen = ++generationRecherche;
   try{
     const t0 = performance.now();
     const d = await appelApi("/search", params);
-    etat = { page, total:d.total||0, params };
+    if(gen!==generationRecherche) return;      // une recherche plus récente a pris la main
+    etat = { page, total:d.total||0 };
+    const exclus = listeExclusions();
+    const tous = d.results||[];
+    const gardees = [], ecartees = [];
+    for(const r of tous) (estExclue(r, exclus) ? ecartees : gardees).push(r);
+    resultatsCourants = {};
+    gardees.forEach(r=>{ resultatsCourants[r.id] = r; });
+
     $("zone-resultats").classList.remove("cache");
-    $("total-texte").innerHTML = "<b>"+Number(etat.total).toLocaleString("fr-FR")+"</b> décision"+(etat.total>1?"s":"")+" trouvée"+(etat.total>1?"s":"");
+    $("total-texte").innerHTML = "<b>"+Number(etat.total).toLocaleString("fr-FR")+"</b> décision"+(etat.total>1?"s":"")+" trouvée"+(etat.total>1?"s":"")+
+      (exclus.length ? ' <span class="note">(avant application de vos mots exclus)</span>' : "");
     $("temps-texte").textContent = "Recherche effectuée en "+Math.round(performance.now()-t0)+" ms";
+    $("note-exclusions").textContent = exclus.length
+      ? (ecartees.length ? ecartees.length+" décision"+(ecartees.length>1?"s":"")+" écartée"+(ecartees.length>1?"s":"")+" sur cette page (mots exclus)." : "Aucune décision écartée sur cette page.")
+      : "";
     $("liste-resultats").innerHTML =
-      (d.results||[]).map(carteResultat).join("") ||
-      '<div class="panel">Aucune décision ne correspond à ces critères.</div>';
+      gardees.map(carteResultat).join("") ||
+      '<div class="panel">Aucune décision à afficher sur cette page'+(exclus.length?" (toutes écartées par vos mots exclus — passez à la page suivante)":" : aucune ne correspond à ces critères")+'.</div>';
     const nbPages = Math.ceil(Math.min(etat.total, PLAFOND)/PAGE_SIZE) || 1;
     $("page-texte").textContent = "Page "+(page+1)+" / "+nbPages.toLocaleString("fr-FR")+
       (etat.total>PLAFOND ? " (affichage limité aux 10 000 premières — affinez avec les dates)" : "");
     $("btn-prec").disabled = page<=0;
     $("btn-suiv").disabled = !d.next_page || (page+1)>=nbPages;
     $("btn-export-csv").disabled = $("btn-export-json").disabled = etat.total===0;
-    document.querySelectorAll(".voir-texte").forEach(b=>b.onclick = ()=>ouvrirDecision(b.dataset.id));
-    if(page===0) $("zone-resultats").scrollIntoView({behavior:"smooth", block:"start"});
+    brancherBoutonsFiches();
+    $("zone-resultats").scrollIntoView({behavior:"smooth", block:"start"});
+    if(page===0) sauverDansHistorique(lireCriteres());
+    if(exclus.length && $("in-approfondi").checked && gardees.length)
+      verificationApprofondie(gardees, exclus, gen, ecartees.length);
   }catch(e){
     msg.innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
   }finally{
@@ -445,67 +737,151 @@ async function lancerRecherche(page){
   }
 }
 
+/* Vérification approfondie : télécharge le texte intégral des décisions de la
+   page affichée pour y traquer les mots exclus que les extraits ne montraient
+   pas. Une décision par requête → réservé à la page courante, avec un rythme
+   courtois vis-à-vis de l'API. */
+async function verificationApprofondie(gardees, exclus, gen, dejaEcartees){
+  const note = $("note-exclusions");
+  let retirees = 0, faites = 0;
+  for(const r of gardees){
+    if(gen!==generationRecherche) return;
+    note.textContent = "Vérification approfondie du texte intégral… ("+(++faites)+"/"+gardees.length+")";
+    try{
+      const d = await appelApi("/decision", new URLSearchParams({id:r.id}));
+      if(gen!==generationRecherche) return;
+      const blob = normaliser((d.text||"")+" "+(d.summary||""));
+      if(exclus.some(x=>blob.includes(x))){
+        const el = document.querySelector('.fiche[data-id="'+CSS.escape(r.id)+'"]');
+        if(el) el.remove();
+        delete resultatsCourants[r.id];
+        retirees++;
+      }
+    }catch(e){
+      note.textContent = "Vérification approfondie interrompue ("+messageErreur(e)+")";
+      return;
+    }
+    await new Promise(res=>setTimeout(res, 200));
+  }
+  if(gen!==generationRecherche) return;
+  const totalEcartees = dejaEcartees + retirees;
+  note.textContent = "Vérification approfondie terminée : "+
+    (totalEcartees ? totalEcartees+" décision"+(totalEcartees>1?"s":"")+" écartée"+(totalEcartees>1?"s":"")+" sur cette page ("+retirees+" via le texte intégral)."
+                   : "aucune décision écartée sur cette page.");
+  if(!document.querySelector("#liste-resultats .fiche"))
+    $("liste-resultats").innerHTML = '<div class="panel">Toutes les décisions de cette page ont été écartées par vos mots exclus — passez à la page suivante.</div>';
+}
+
 $("btn-chercher").onclick = ()=>lancerRecherche(0);
 $("in-q").addEventListener("keydown", e=>{ if(e.key==="Enter") lancerRecherche(0); });
+$("in-exclure").addEventListener("keydown", e=>{ if(e.key==="Enter") lancerRecherche(0); });
 $("btn-prec").onclick = ()=>lancerRecherche(Math.max(0, etat.page-1));
 $("btn-suiv").onclick = ()=>lancerRecherche(etat.page+1);
 
+/* -------------------------- Lien partageable -------------------------- */
+/* Le lien encode uniquement les critères de recherche (jamais la clé API) :
+   l'ouvrir pré-remplit le formulaire et relance la recherche. */
+$("btn-lien").onclick = ()=>{
+  const c = lireCriteres();
+  if(!c.q){ $("msg-recherche").innerHTML = '<div class="alerte err">Saisissez d\'abord des mots-clés.</div>'; return; }
+  const url = location.origin + location.pathname + "#r=" + encodeURIComponent(JSON.stringify(c));
+  copierTexte(url).then(()=>retourBouton($("btn-lien"), "Lien copié ✓"));
+};
+function restaurerDepuisLien(){
+  const m = location.hash.match(/^#r=(.+)$/);
+  if(!m) return false;
+  try{
+    appliquerCriteres(JSON.parse(decodeURIComponent(m[1])));
+    return true;
+  }catch(e){ return false; }
+}
+
 /* --------------------------- Texte intégral --------------------------- */
+let decisionOuverte = null;
+
+/* Surligne les mots de la recherche courante dans le texte intégral. */
+function surlignerRequete(texteEchappe){
+  const q = $("in-q").value.trim();
+  if(!q) return texteEchappe;
+  const motifs = ($("in-operator").value==="exact")
+    ? [q]
+    : q.split(/\s+/).filter(mot=>mot.length>=3);
+  if(!motifs.length) return texteEchappe;
+  const re = new RegExp("("+motifs.map(echapRegex).join("|")+")", "gi");
+  return texteEchappe.replace(re, "<mark>$1</mark>");
+}
+
 async function ouvrirDecision(id){
   const dlg = $("dlg-decision");
   $("dlg-titre").textContent = "Chargement…";
   $("dlg-sous-titre").textContent = "";
   $("dlg-corps").innerHTML = "";
+  decisionOuverte = null;
   dlg.showModal();
   try{
     const d = await appelApi("/decision", new URLSearchParams({id}));
+    decisionOuverte = d;
     const jur = libelleJuridiction(d);
-    const nums = (d.numbers&&d.numbers.length?d.numbers:(d.number?[d.number]:[])).join(", ");
+    const nums = numerosDe(d);
     $("dlg-titre").textContent = jur+" — "+dateFr(d.decision_date)+(nums?" — n° "+nums:"");
     $("dlg-sous-titre").textContent = [d.ecli, d.solution].filter(Boolean).join(" · ");
     $("dlg-corps").innerHTML =
       (d.summary ? '<div class="sommaire"><b>Sommaire officiel.</b> '+echap(d.summary)+'</div>' : "")+
-      "<pre>"+echap(d.text||"(texte indisponible)")+"</pre>";
+      "<pre>"+surlignerRequete(echap(d.text||"(texte indisponible)"))+"</pre>";
   }catch(e){
     $("dlg-titre").textContent = "Erreur";
     $("dlg-corps").innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
   }
 }
 $("dlg-fermer").onclick = ()=>$("dlg-decision").close();
+$("dlg-citer").onclick = ()=>{
+  if(!decisionOuverte) return;
+  copierTexte(citationDe(decisionOuverte)+"\n"+"https://www.courdecassation.fr/decision/"+decisionOuverte.id)
+    .then(()=>retourBouton($("dlg-citer"), "Copié ✓"));
+};
 $("dlg-decision").addEventListener("click", e=>{ if(e.target===$("dlg-decision")) $("dlg-decision").close(); });
 
 /* ------------------------------- Export ------------------------------- */
 async function collecterPourExport(){
   const voulu = Math.min(Number($("in-export-max").value), etat.total, PLAFOND);
   const parPage = 50;
-  const pages = Math.ceil(voulu/parPage);
+  const exclus = listeExclusions();
   const zone = $("zone-progress"), texte = $("progress-texte"), barre = $("progress-barre");
   zone.classList.remove("cache");
   const lignes = [];
-  for(let p=0; p<pages; p++){
-    texte.textContent = "Récupération "+Math.min((p+1)*parPage, voulu)+" / "+voulu+" décisions…";
-    barre.style.width = Math.round(100*(p+1)/pages)+"%";
+  let ecartees = 0;
+  const maxPages = Math.ceil(PLAFOND/parPage);
+  for(let p=0; p<maxPages && lignes.length<voulu; p++){
+    texte.textContent = "Récupération : "+lignes.length+" / "+voulu+" décisions…";
+    barre.style.width = Math.min(100, Math.round(100*lignes.length/voulu))+"%";
     const params = construireParams(p, parPage);
     const d = await appelApi("/search", params);
     for(const r of (d.results||[])){
+      if(estExclue(r, exclus)){ ecartees++; continue; }
       lignes.push({
         date: (r.decision_date||"").slice(0,10),
         juridiction: libelleJuridiction(r),
+        chambre: (r.jurisdiction||"").toLowerCase()==="cc"
+          ? (NOMS_CHAMBRES[(r.chamber||"").toLowerCase()]||r.chamber||"") : "",
         numero: (r.numbers&&r.numbers.length?r.numbers:(r.number?[r.number]:[])).join(" / "),
         ecli: r.ecli||"",
         solution: r.solution||"",
         publication: (r.publication||[]).join(" "),
+        matieres: (r.themes||[]).join(" / "),
+        citation: citationDe(r),
         sommaire: (r.summary||"").replace(/\s+/g," ").trim(),
+        extraits: (((r.highlights&&r.highlights.text)||[]).join(" … "))
+          .replace(/<\/?em>/g,"").replace(/\s+/g," ").trim(),
         url: "https://www.courdecassation.fr/decision/"+r.id,
         judilibre_id: r.id,
       });
       if(lignes.length>=voulu) break;
     }
-    if(lignes.length>=voulu || !d.next_page) break;
+    if(!d.next_page) break;
     await new Promise(res=>setTimeout(res, 250));   // rythme courtois vis-à-vis de l'API
   }
   zone.classList.add("cache");
-  return lignes;
+  return {lignes, ecartees};
 }
 
 function telecharger(nom, contenu, type){
@@ -527,9 +903,10 @@ async function exporter(format){
   const msg = $("msg-recherche");
   msg.innerHTML = "";
   try{
-    const lignes = await collecterPourExport();
+    const {lignes, ecartees} = await collecterPourExport();
     if(format==="csv"){
-      const colonnes = ["date","juridiction","numero","ecli","solution","publication","sommaire","url","judilibre_id"];
+      const colonnes = ["date","juridiction","chambre","numero","ecli","solution","publication",
+                        "matieres","citation","sommaire","extraits","url","judilibre_id"];
       const cel = v=>'"'+String(v??"").replace(/"/g,'""')+'"';
       const csv = "﻿"+colonnes.join(";")+"\n"+
         lignes.map(l=>colonnes.map(c=>cel(l[c])).join(";")).join("\n");
@@ -537,8 +914,9 @@ async function exporter(format){
     }else{
       telecharger(nomFichier("json"), JSON.stringify(lignes, null, 2), "application/json");
     }
-    msg.innerHTML = '<div class="alerte" style="background:var(--ok-soft);border:1px solid #bfe3c8;color:var(--ok)">'+
-      lignes.length.toLocaleString("fr-FR")+" décisions exportées ✓</div>";
+    msg.innerHTML = '<div class="alerte ok">'+
+      lignes.length.toLocaleString("fr-FR")+" décisions exportées ✓"+
+      (ecartees ? " ("+ecartees.toLocaleString("fr-FR")+" écartées par vos mots exclus)" : "")+"</div>";
   }catch(e){
     $("zone-progress").classList.add("cache");
     msg.innerHTML = '<div class="alerte err">Export interrompu : '+echap(messageErreur(e))+"</div>";
@@ -552,6 +930,8 @@ $("btn-export-json").onclick = ()=>exporter("json");
 
 /* --------------------------- Initialisation --------------------------- */
 majEtatCle();
+majHistorique();
+if(restaurerDepuisLien() && cleCourante()) lancerRecherche(0);
 </script>
 </body>
 </html>
