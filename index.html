@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jurisprudence — Recherche Judilibre</title>
+<meta name="description" content="Application autonome de recherche jurisprudentielle sur la base Judilibre (Cour de cassation, cours d'appel, tribunaux judiciaires).">
+<style>
+  :root{
+    --ink:#1c2430; --muted:#5b6a7c; --line:#dde4ec; --bg:#f4f6f9; --card:#ffffff;
+    --accent:#8b1e2d; --accent-soft:#f7e9eb; --link:#1d4ed8;
+    --ok:#166534; --ok-soft:#e8f5ec; --warn:#92400e; --warn-soft:#fdf3e3;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+  a{color:var(--link)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 18px 60px}
+
+  header.site{background:linear-gradient(135deg,#1c2430,#37220f 60%,#5a1b26);color:#fff;padding:34px 0 30px}
+  header.site .wrap{padding-bottom:0}
+  header.site h1{margin:0 0 6px;font-size:30px;letter-spacing:.3px}
+  header.site h1 .marque{color:#f0c9ce}
+  header.site p{margin:0;color:#cfd6df;max-width:760px;font-size:15px}
+  .keybar{margin-top:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px}
+  .keybar .etat{padding:4px 12px;border-radius:999px;background:#ffffff22;border:1px solid #ffffff44}
+  .keybar .etat.ok{background:#1b5e2f;border-color:#2e7d46}
+  .keybar button{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid #ffffff55;background:transparent;color:#fff;cursor:pointer}
+  .keybar button:hover{background:#ffffff22}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:22px}
+  .panel h2{margin:0 0 12px;font-size:19px}
+  .grid{display:grid;gap:12px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:720px){.g2,.g3{grid-template-columns:1fr}}
+  label.champ{display:block;font-size:13px;color:var(--muted)}
+  label.champ b{display:block;color:var(--ink);margin-bottom:4px;font-size:13.5px}
+  input[type=text],input[type=search],input[type=password],input[type=date],select{
+    font:inherit;font-size:14.5px;width:100%;padding:9px 12px;border:1px solid var(--line);
+    border-radius:10px;background:#fff;color:var(--ink)}
+  input:focus,select:focus{outline:2px solid #8b1e2d33;border-color:var(--accent)}
+  .cases{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding-top:4px}
+  .cases label{display:flex;gap:6px;align-items:center;font-size:14px;cursor:pointer}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  button.principal{font:inherit;font-size:15px;font-weight:600;padding:10px 22px;border-radius:10px;
+    border:none;background:var(--accent);color:#fff;cursor:pointer}
+  button.principal:hover{background:#6f1824}
+  button.second{font:inherit;font-size:14px;padding:9px 16px;border-radius:10px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);cursor:pointer}
+  button.second:hover{border-color:var(--accent);color:var(--accent)}
+  button[disabled]{opacity:.5;cursor:not-allowed}
+
+  .note{font-size:13px;color:var(--muted)}
+  .alerte{border-radius:10px;padding:12px 14px;font-size:14px;margin-top:14px}
+  .alerte.err{background:#fdecec;border:1px solid #f3c3c3;color:#8a1f1f}
+  .alerte.info{background:var(--warn-soft);border:1px solid #ecd9b0;color:var(--warn)}
+
+  .resume-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:24px}
+  .resume-bar .total{font-size:15px}
+  .resume-bar .total b{font-size:19px;color:var(--accent)}
+
+  .fiche{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:12px}
+  .fiche .tete{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+  .fiche .jur{font-weight:700}
+  .fiche .date{color:var(--muted)}
+  .badge{font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:var(--bg)}
+  .badge.pub{background:var(--ok-soft);color:var(--ok);border-color:#bfe3c8}
+  .badge.sol{background:var(--accent-soft);color:var(--accent);border-color:#ecc9ce}
+  .fiche .extraits{margin:10px 0 8px;font-size:14.5px;color:#33404f}
+  .fiche .extraits em{background:#fdeaa2;font-style:normal;padding:0 2px;border-radius:3px}
+  .fiche .extraits .sep{color:#9aa7b5}
+  .fiche .pied{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;align-items:center}
+  .fiche .pied button{font:inherit;font-size:13.5px;border:none;background:none;color:var(--link);cursor:pointer;padding:0;text-decoration:underline}
+
+  .pagination{display:flex;gap:10px;justify-content:center;align-items:center;margin:22px 0 6px}
+  .pagination span{font-size:14px;color:var(--muted)}
+
+  dialog{border:none;border-radius:16px;max-width:900px;width:94vw;max-height:88vh;padding:0}
+  dialog::backdrop{background:#0b1220aa}
+  .dlg-tete{position:sticky;top:0;background:var(--card);display:flex;justify-content:space-between;gap:10px;
+    align-items:flex-start;padding:18px 22px 12px;border-bottom:1px solid var(--line)}
+  .dlg-tete h3{margin:0;font-size:17px}
+  .dlg-tete .note{margin-top:3px}
+  .dlg-corps{padding:16px 22px 26px;overflow-wrap:break-word}
+  .dlg-corps .sommaire{background:var(--accent-soft);border:1px solid #ecc9ce;border-radius:10px;padding:12px 14px;font-size:14.5px;margin-bottom:14px}
+  .dlg-corps pre{white-space:pre-wrap;font:14px/1.6 Georgia,'Times New Roman',serif;margin:0}
+  .fermer{font:inherit;border:1px solid var(--line);background:#fff;border-radius:9px;padding:6px 13px;cursor:pointer}
+
+  .progress{margin-top:10px;font-size:14px;color:var(--muted)}
+  .progress .barre{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:5px}
+  .progress .barre i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+
+  footer.site{margin-top:40px;font-size:13px;color:var(--muted);text-align:center}
+  .cache{display:none !important}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1><span class="marque">Jurisprudence</span> — recherche Judilibre</h1>
+    <p>Recherche en texte intégral dans la base ouverte des décisions de justice
+       (Cour de cassation, cours d'appel, tribunaux judiciaires) via l'API publique Judilibre.
+       Vos requêtes partent directement de votre navigateur : aucune donnée ne transite par un serveur tiers.</p>
+    <div class="keybar">
+      <span class="etat" id="etat-cle">Clé API : non configurée</span>
+      <button id="btn-changer-cle" type="button">Configurer / changer la clé</button>
+      <button id="btn-oublier-cle" type="button" class="cache">Oublier la clé</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= Configuration de la clé ================= -->
+  <section class="panel" id="panneau-cle">
+    <h2>1. Votre clé API Judilibre</h2>
+    <p class="note">
+      L'accès à l'API nécessite une clé personnelle et gratuite, délivrée par le portail
+      <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>
+      (créer un compte → créer une application en environnement <b>PRODUCTION</b> →
+      souscrire l'application à l'API <b>JUDILIBRE</b> → copier l'« API Key »).
+      La clé est conservée <b>uniquement dans votre navigateur</b> (stockage local) —
+      elle n'est jamais publiée ni envoyée ailleurs qu'à l'API officielle.
+    </p>
+    <div class="grid g2" style="margin-top:10px">
+      <label class="champ"><b>Clé API (« KeyId »)</b>
+        <input type="password" id="in-cle" placeholder="ex. a1b2c3d4-…" autocomplete="off">
+      </label>
+      <div style="align-self:end" class="actions" >
+        <button class="principal" id="btn-tester-cle" type="button">Enregistrer et tester</button>
+      </div>
+    </div>
+    <div id="msg-cle"></div>
+  </section>
+
+  <!-- ================= Formulaire de recherche ================= -->
+  <section class="panel" id="panneau-recherche">
+    <h2>2. Recherche</h2>
+    <div class="grid">
+      <label class="champ"><b>Mots-clés</b>
+        <input type="search" id="in-q" placeholder="ex. harcèlement moral licenciement nullité">
+      </label>
+      <div class="grid g3">
+        <label class="champ"><b>Type de recherche</b>
+          <select id="in-operator">
+            <option value="and">Tous les mots (ET)</option>
+            <option value="or">Au moins un mot (OU)</option>
+            <option value="exact">Expression exacte</option>
+          </select>
+        </label>
+        <label class="champ"><b>Trier par</b>
+          <select id="in-tri">
+            <option value="score">Pertinence</option>
+            <option value="date-desc">Date (récent d'abord)</option>
+            <option value="date-asc">Date (ancien d'abord)</option>
+          </select>
+        </label>
+        <label class="champ"><b>Solution (Cour de cassation)</b>
+          <select id="in-solution">
+            <option value="">Toutes</option>
+            <option value="cassation">Cassation</option>
+            <option value="rejet">Rejet</option>
+            <option value="irrecevabilite">Irrecevabilité</option>
+            <option value="annulation">Annulation</option>
+            <option value="qpc">QPC</option>
+            <option value="avis">Avis</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid g2">
+        <label class="champ"><b>Du (inclus)</b><input type="date" id="in-du"></label>
+        <label class="champ"><b>Au (inclus)</b><input type="date" id="in-au"></label>
+      </div>
+      <div>
+        <b style="font-size:13.5px">Juridictions</b>
+        <div class="cases">
+          <label><input type="checkbox" id="j-cc" checked> Cour de cassation</label>
+          <label><input type="checkbox" id="j-ca" checked> Cours d'appel</label>
+          <label><input type="checkbox" id="j-tj"> Tribunaux judiciaires</label>
+        </div>
+      </div>
+      <div id="bloc-chambres">
+        <b style="font-size:13.5px">Chambres (Cour de cassation)</b>
+        <div class="cases">
+          <label><input type="checkbox" class="ch" value="soc"> Sociale</label>
+          <label><input type="checkbox" class="ch" value="cr"> Criminelle</label>
+          <label><input type="checkbox" class="ch" value="civ1"> 1re civile</label>
+          <label><input type="checkbox" class="ch" value="civ2"> 2e civile</label>
+          <label><input type="checkbox" class="ch" value="civ3"> 3e civile</label>
+          <label><input type="checkbox" class="ch" value="comm"> Commerciale</label>
+          <label><input type="checkbox" class="ch" value="pl"> Ass. plénière</label>
+          <label><input type="checkbox" class="ch" value="mi"> Ch. mixte</label>
+        </div>
+        <p class="note" style="margin:4px 0 0">Aucune case cochée = toutes les chambres.</p>
+      </div>
+      <div class="cases">
+        <label><input type="checkbox" id="in-publiees"> Uniquement les décisions publiées au Bulletin</label>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="principal" id="btn-chercher" type="button">Rechercher</button>
+      <button class="second" id="btn-export-csv" type="button" disabled>Exporter en CSV</button>
+      <button class="second" id="btn-export-json" type="button" disabled>Exporter en JSON</button>
+      <select id="in-export-max" title="Nombre maximal de décisions à exporter">
+        <option value="200">Export : 200 premières</option>
+        <option value="500">Export : 500 premières</option>
+        <option value="1000">Export : 1 000 premières</option>
+        <option value="2500">Export : 2 500 premières</option>
+        <option value="10000">Export : maximum (10 000)</option>
+      </select>
+    </div>
+    <div id="zone-progress" class="progress cache">
+      <span id="progress-texte"></span>
+      <div class="barre"><i id="progress-barre"></i></div>
+    </div>
+    <div id="msg-recherche"></div>
+  </section>
+
+  <!-- ================= Résultats ================= -->
+  <section id="zone-resultats" class="cache">
+    <div class="resume-bar">
+      <div class="total" id="total-texte"></div>
+      <div class="note" id="temps-texte"></div>
+    </div>
+    <div id="liste-resultats"></div>
+    <div class="pagination">
+      <button class="second" id="btn-prec" type="button">← Précédent</button>
+      <span id="page-texte"></span>
+      <button class="second" id="btn-suiv" type="button">Suivant →</button>
+    </div>
+  </section>
+
+  <footer class="site">
+    Données : <a href="https://www.courdecassation.fr/acces-rapide-judilibre" target="_blank" rel="noopener">Judilibre — Cour de cassation</a>
+    (open data, décisions pseudonymisées) · API servie par
+    <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>.
+    Cette application ne collecte aucune donnée personnelle.
+  </footer>
+</div>
+
+<!-- ================= Texte intégral ================= -->
+<dialog id="dlg-decision">
+  <div class="dlg-tete">
+    <div>
+      <h3 id="dlg-titre">Décision</h3>
+      <div class="note" id="dlg-sous-titre"></div>
+    </div>
+    <button class="fermer" id="dlg-fermer" type="button">Fermer ✕</button>
+  </div>
+  <div class="dlg-corps" id="dlg-corps"></div>
+</dialog>
+
+<script>
+"use strict";
+/* =========================================================================
+   Application autonome de recherche Judilibre.
+   - La clé API est stockée dans localStorage (navigateur uniquement).
+   - Les requêtes partent du navigateur vers l'API officielle (CORS ouvert).
+   ========================================================================= */
+
+const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
+const PAGE_SIZE = 25;
+const PLAFOND = 10000;               // l'API refuse page*page_size au-delà
+const CLE_STOCKAGE = "judilibre_keyid";
+
+const $ = id => document.getElementById(id);
+
+const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août",
+              "septembre","octobre","novembre","décembre"];
+function dateFr(iso){
+  if(!iso) return "date inconnue";
+  const [a,m,j] = iso.slice(0,10).split("-").map(Number);
+  if(!a||!m||!j) return iso;
+  return (j===1?"1er":j)+" "+MOIS[m-1]+" "+a;
+}
+
+const NOMS_CHAMBRES = {soc:"ch. sociale", cr:"ch. criminelle", civ1:"1re ch. civile",
+  civ2:"2e ch. civile", civ3:"3e ch. civile", comm:"ch. commerciale",
+  pl:"assemblée plénière", mi:"ch. mixte", ordo:"ordonnance", creun:"chambres réunies"};
+
+function libelleJuridiction(r){
+  const j = (r.jurisdiction||"").toLowerCase();
+  if(j==="cc") return "Cass. "+(NOMS_CHAMBRES[(r.chamber||"").toLowerCase()]||r.chamber||"");
+  if(j==="ca") return (r.location||"Cour d'appel").replace(/^Cour d'appel (de |d')/i, m=>"CA ");
+  if(j==="tj"||j==="tcom") return r.location || "Tribunal judiciaire";
+  return r.location || r.jurisdiction || "Juridiction";
+}
+
+function echap(s){
+  return String(s??"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+}
+/* Les extraits de l'API contiennent des <em> de surlignage : on échappe tout
+   puis on ne réactive que ces balises-là. */
+function extraitSurligne(s){
+  return echap(s).replace(/&lt;em&gt;/g,"<em>").replace(/&lt;\/em&gt;/g,"</em>");
+}
+
+/* ------------------------------ Clé API ------------------------------ */
+function cleCourante(){ return localStorage.getItem(CLE_STOCKAGE) || ""; }
+
+function majEtatCle(){
+  const cle = cleCourante();
+  const etat = $("etat-cle");
+  if(cle){
+    etat.textContent = "Clé API : configurée (…"+cle.slice(-6)+")";
+    etat.classList.add("ok");
+    $("btn-oublier-cle").classList.remove("cache");
+    $("panneau-cle").classList.add("cache");
+  }else{
+    etat.textContent = "Clé API : non configurée";
+    etat.classList.remove("ok");
+    $("btn-oublier-cle").classList.add("cache");
+    $("panneau-cle").classList.remove("cache");
+  }
+}
+
+async function appelApi(chemin, params){
+  const cle = cleCourante();
+  if(!cle) throw new Error("PAS_DE_CLE");
+  const url = API + chemin + "?" + params.toString();
+  const rep = await fetch(url, {headers:{ "KeyId": cle, "accept":"application/json" }});
+  if(rep.status===401 || rep.status===403) throw new Error("CLE_REFUSEE");
+  if(rep.status===429) throw new Error("QUOTA");
+  if(!rep.ok) throw new Error("HTTP_"+rep.status);
+  return rep.json();
+}
+
+function messageErreur(e){
+  switch(e.message){
+    case "PAS_DE_CLE":  return "Configurez d'abord votre clé API (bandeau en haut de page).";
+    case "CLE_REFUSEE": return "Accès refusé par l'API : clé invalide, ou application non souscrite à l'API JUDILIBRE (production) sur PISTE.";
+    case "QUOTA":       return "Quota de requêtes atteint (limite PISTE). Patientez quelques instants puis réessayez.";
+    default:
+      if(e instanceof TypeError) return "Impossible de joindre l'API (connexion internet ? blocage réseau ?).";
+      return "Erreur inattendue : "+e.message;
+  }
+}
+
+$("btn-changer-cle").onclick = ()=>{ $("panneau-cle").classList.remove("cache"); $("in-cle").focus(); };
+$("btn-oublier-cle").onclick = ()=>{
+  localStorage.removeItem(CLE_STOCKAGE); majEtatCle();
+  $("msg-cle").innerHTML = "";
+};
+$("btn-tester-cle").onclick = async ()=>{
+  const cle = $("in-cle").value.trim();
+  const msg = $("msg-cle");
+  if(!cle){ msg.innerHTML = '<div class="alerte err">Saisissez une clé.</div>'; return; }
+  localStorage.setItem(CLE_STOCKAGE, cle);
+  msg.innerHTML = '<div class="alerte info">Test de la clé en cours…</div>';
+  try{
+    const p = new URLSearchParams({query:"droit", page_size:"1"});
+    const d = await appelApi("/search", p);
+    msg.innerHTML = '<div class="alerte" style="background:var(--ok-soft);border:1px solid #bfe3c8;color:var(--ok)">'+
+      "Clé valide ✓ — l'API répond ("+Number(d.total).toLocaleString("fr-FR")+" décisions pour le mot « droit »).</div>";
+    $("in-cle").value = "";
+    majEtatCle();
+  }catch(e){
+    localStorage.removeItem(CLE_STOCKAGE); majEtatCle();
+    msg.innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
+  }
+};
+
+/* ------------------------------ Recherche ------------------------------ */
+let etat = { page:0, total:0, params:null };
+
+function construireParams(page, pageSize){
+  const q = $("in-q").value.trim();
+  if(!q) return null;
+  const p = new URLSearchParams();
+  p.set("query", q);
+  p.set("operator", $("in-operator").value);
+  p.set("page_size", String(pageSize));
+  p.set("page", String(page));
+  const tri = $("in-tri").value;
+  if(tri!=="score"){ p.set("sort","date"); p.set("order", tri==="date-asc"?"asc":"desc"); }
+  if($("in-du").value) p.set("date_start", $("in-du").value);
+  if($("in-au").value) p.set("date_end", $("in-au").value);
+  if($("in-solution").value) p.append("solution", $("in-solution").value);
+  if($("in-publiees").checked) p.append("publication","b");
+  const jur = [];
+  if($("j-cc").checked) jur.push("cc");
+  if($("j-ca").checked) jur.push("ca");
+  if($("j-tj").checked) jur.push("tj");
+  jur.forEach(j=>p.append("jurisdiction", j));
+  if($("j-cc").checked){
+    document.querySelectorAll(".ch:checked").forEach(c=>p.append("chamber", c.value));
+  }
+  return p;
+}
+
+function carteResultat(r){
+  const jur = libelleJuridiction(r);
+  const nums = (r.numbers && r.numbers.length ? r.numbers : (r.number?[r.number]:[])).join(", ");
+  const pub = (r.publication||[]).includes("b");
+  const extraits = ((r.highlights && r.highlights.text) || []).slice(0,3)
+      .map(h=>"« … "+extraitSurligne(h)+" … »").join(' <span class="sep">·</span> ');
+  const somm = r.summary ? '<div class="extraits">'+echap(String(r.summary).slice(0,300))+'</div>' : "";
+  return '<article class="fiche">'+
+    '<div class="tete">'+
+      '<span class="jur">'+echap(jur)+'</span>'+
+      '<span class="date">'+dateFr(r.decision_date)+'</span>'+
+      (nums ? '<span class="badge">n° '+echap(nums)+'</span>' : "")+
+      (r.solution ? '<span class="badge sol">'+echap(r.solution)+'</span>' : "")+
+      (pub ? '<span class="badge pub">Publié au Bulletin</span>' : "")+
+    '</div>'+
+    (extraits ? '<div class="extraits">'+extraits+'</div>' : somm)+
+    '<div class="pied">'+
+      '<button type="button" data-id="'+echap(r.id)+'" class="voir-texte">Texte intégral</button>'+
+      '<a href="https://www.courdecassation.fr/decision/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener">Fiche officielle ↗</a>'+
+      (r.ecli ? '<span class="note">'+echap(r.ecli)+'</span>' : "")+
+    '</div>'+
+  '</article>';
+}
+
+async function lancerRecherche(page){
+  const params = construireParams(page, PAGE_SIZE);
+  const msg = $("msg-recherche");
+  if(!params){ msg.innerHTML = '<div class="alerte err">Saisissez des mots-clés.</div>'; return; }
+  msg.innerHTML = "";
+  $("btn-chercher").disabled = true;
+  try{
+    const t0 = performance.now();
+    const d = await appelApi("/search", params);
+    etat = { page, total:d.total||0, params };
+    $("zone-resultats").classList.remove("cache");
+    $("total-texte").innerHTML = "<b>"+Number(etat.total).toLocaleString("fr-FR")+"</b> décision"+(etat.total>1?"s":"")+" trouvée"+(etat.total>1?"s":"");
+    $("temps-texte").textContent = "Recherche effectuée en "+Math.round(performance.now()-t0)+" ms";
+    $("liste-resultats").innerHTML =
+      (d.results||[]).map(carteResultat).join("") ||
+      '<div class="panel">Aucune décision ne correspond à ces critères.</div>';
+    const nbPages = Math.ceil(Math.min(etat.total, PLAFOND)/PAGE_SIZE) || 1;
+    $("page-texte").textContent = "Page "+(page+1)+" / "+nbPages.toLocaleString("fr-FR")+
+      (etat.total>PLAFOND ? " (affichage limité aux 10 000 premières — affinez avec les dates)" : "");
+    $("btn-prec").disabled = page<=0;
+    $("btn-suiv").disabled = !d.next_page || (page+1)>=nbPages;
+    $("btn-export-csv").disabled = $("btn-export-json").disabled = etat.total===0;
+    document.querySelectorAll(".voir-texte").forEach(b=>b.onclick = ()=>ouvrirDecision(b.dataset.id));
+    if(page===0) $("zone-resultats").scrollIntoView({behavior:"smooth", block:"start"});
+  }catch(e){
+    msg.innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
+  }finally{
+    $("btn-chercher").disabled = false;
+  }
+}
+
+$("btn-chercher").onclick = ()=>lancerRecherche(0);
+$("in-q").addEventListener("keydown", e=>{ if(e.key==="Enter") lancerRecherche(0); });
+$("btn-prec").onclick = ()=>lancerRecherche(Math.max(0, etat.page-1));
+$("btn-suiv").onclick = ()=>lancerRecherche(etat.page+1);
+
+/* --------------------------- Texte intégral --------------------------- */
+async function ouvrirDecision(id){
+  const dlg = $("dlg-decision");
+  $("dlg-titre").textContent = "Chargement…";
+  $("dlg-sous-titre").textContent = "";
+  $("dlg-corps").innerHTML = "";
+  dlg.showModal();
+  try{
+    const d = await appelApi("/decision", new URLSearchParams({id}));
+    const jur = libelleJuridiction(d);
+    const nums = (d.numbers&&d.numbers.length?d.numbers:(d.number?[d.number]:[])).join(", ");
+    $("dlg-titre").textContent = jur+" — "+dateFr(d.decision_date)+(nums?" — n° "+nums:"");
+    $("dlg-sous-titre").textContent = [d.ecli, d.solution].filter(Boolean).join(" · ");
+    $("dlg-corps").innerHTML =
+      (d.summary ? '<div class="sommaire"><b>Sommaire officiel.</b> '+echap(d.summary)+'</div>' : "")+
+      "<pre>"+echap(d.text||"(texte indisponible)")+"</pre>";
+  }catch(e){
+    $("dlg-titre").textContent = "Erreur";
+    $("dlg-corps").innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
+  }
+}
+$("dlg-fermer").onclick = ()=>$("dlg-decision").close();
+$("dlg-decision").addEventListener("click", e=>{ if(e.target===$("dlg-decision")) $("dlg-decision").close(); });
+
+/* ------------------------------- Export ------------------------------- */
+async function collecterPourExport(){
+  const voulu = Math.min(Number($("in-export-max").value), etat.total, PLAFOND);
+  const parPage = 50;
+  const pages = Math.ceil(voulu/parPage);
+  const zone = $("zone-progress"), texte = $("progress-texte"), barre = $("progress-barre");
+  zone.classList.remove("cache");
+  const lignes = [];
+  for(let p=0; p<pages; p++){
+    texte.textContent = "Récupération "+Math.min((p+1)*parPage, voulu)+" / "+voulu+" décisions…";
+    barre.style.width = Math.round(100*(p+1)/pages)+"%";
+    const params = construireParams(p, parPage);
+    const d = await appelApi("/search", params);
+    for(const r of (d.results||[])){
+      lignes.push({
+        date: (r.decision_date||"").slice(0,10),
+        juridiction: libelleJuridiction(r),
+        numero: (r.numbers&&r.numbers.length?r.numbers:(r.number?[r.number]:[])).join(" / "),
+        ecli: r.ecli||"",
+        solution: r.solution||"",
+        publication: (r.publication||[]).join(" "),
+        sommaire: (r.summary||"").replace(/\s+/g," ").trim(),
+        url: "https://www.courdecassation.fr/decision/"+r.id,
+        judilibre_id: r.id,
+      });
+      if(lignes.length>=voulu) break;
+    }
+    if(lignes.length>=voulu || !d.next_page) break;
+    await new Promise(res=>setTimeout(res, 250));   // rythme courtois vis-à-vis de l'API
+  }
+  zone.classList.add("cache");
+  return lignes;
+}
+
+function telecharger(nom, contenu, type){
+  const url = URL.createObjectURL(new Blob([contenu], {type}));
+  const a = document.createElement("a");
+  a.href = url; a.download = nom; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 5000);
+}
+
+function nomFichier(ext){
+  const q = $("in-q").value.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+      .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50) || "recherche";
+  return "judilibre-"+q+"-"+new Date().toISOString().slice(0,10)+"."+ext;
+}
+
+async function exporter(format){
+  const btns = [$("btn-export-csv"), $("btn-export-json"), $("btn-chercher")];
+  btns.forEach(b=>b.disabled = true);
+  const msg = $("msg-recherche");
+  msg.innerHTML = "";
+  try{
+    const lignes = await collecterPourExport();
+    if(format==="csv"){
+      const colonnes = ["date","juridiction","numero","ecli","solution","publication","sommaire","url","judilibre_id"];
+      const cel = v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+      const csv = "﻿"+colonnes.join(";")+"\n"+
+        lignes.map(l=>colonnes.map(c=>cel(l[c])).join(";")).join("\n");
+      telecharger(nomFichier("csv"), csv, "text/csv;charset=utf-8");
+    }else{
+      telecharger(nomFichier("json"), JSON.stringify(lignes, null, 2), "application/json");
+    }
+    msg.innerHTML = '<div class="alerte" style="background:var(--ok-soft);border:1px solid #bfe3c8;color:var(--ok)">'+
+      lignes.length.toLocaleString("fr-FR")+" décisions exportées ✓</div>";
+  }catch(e){
+    $("zone-progress").classList.add("cache");
+    msg.innerHTML = '<div class="alerte err">Export interrompu : '+echap(messageErreur(e))+"</div>";
+  }finally{
+    btns.forEach(b=>b.disabled = false);
+    $("btn-export-csv").disabled = $("btn-export-json").disabled = etat.total===0;
+  }
+}
+$("btn-export-csv").onclick = ()=>exporter("csv");
+$("btn-export-json").onclick = ()=>exporter("json");
+
+/* --------------------------- Initialisation --------------------------- */
+majEtatCle();
+</script>
+</body>
+</html>
