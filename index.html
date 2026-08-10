@@ -106,6 +106,19 @@
   .progress .barre{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:5px}
   .progress .barre i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
 
+  #criteres-actifs{background:var(--warn-soft);border:1px solid #ecd9b0;border-radius:12px;
+    padding:10px 13px;margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13.5px}
+  #criteres-actifs .titre{font-weight:600;color:var(--warn)}
+  #criteres-actifs .crit{display:inline-flex;align-items:center;gap:6px;background:#fff;
+    border:1px solid #e3cfa4;border-radius:999px;padding:3px 6px 3px 11px}
+  #criteres-actifs .crit b{font-weight:600}
+  #criteres-actifs .crit button{font:inherit;font-size:15px;line-height:1;border:none;background:none;
+    color:var(--warn);cursor:pointer;padding:0 4px;border-radius:99px}
+  #criteres-actifs .crit button:hover{background:#f0e2c4}
+  #criteres-actifs .info{background:#fff;border:1px dashed #e3cfa4;border-radius:999px;padding:3px 11px;color:var(--muted)}
+  #criteres-actifs .tout{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;
+    border:1px solid var(--warn);background:#fff;color:var(--warn);cursor:pointer;margin-left:auto}
+
   h3.groupe{margin:26px 0 2px;font-size:15px;color:var(--accent);display:flex;gap:9px;align-items:baseline;
     border-bottom:2px solid var(--accent-soft);padding-bottom:5px}
   h3.groupe span{font-weight:400;font-size:13px;color:var(--muted)}
@@ -394,6 +407,7 @@
       </div>
       <div class="note" id="temps-texte"></div>
     </div>
+    <div id="criteres-actifs" class="cache"></div>
     <div id="zone-panorama" class="cache"></div>
     <div id="liste-resultats"></div>
     <div class="pagination">
@@ -1568,6 +1582,80 @@ function brancherBoutonsFiches(){
   });
 }
 
+/* ------------------------ Critères actifs ------------------------
+   Un filtre oublié d'une recherche précédente — une matière, un mot exclu —
+   peut écarter la totalité des résultats : l'API annonce alors des centaines de
+   décisions dont aucune ne s'affiche. Les champs concernés étant loin dans le
+   formulaire, voire hors écran sur téléphone, la cause reste invisible. D'où ce
+   rappel, juste au-dessus des résultats, où chaque contrainte se retire d'un
+   clic. */
+const NOMS_CHAMBRES_COURT = {soc:"Sociale", cr:"Criminelle", civ1:"1re civile", civ2:"2e civile",
+  civ3:"3e civile", comm:"Commerciale", pl:"Ass. plénière", mi:"Ch. mixte"};
+const NOMS_PUBLICATION = {b:"Bulletin", r:"Rapport annuel", l:"Lettres de chambre", c:"Communiqué"};
+const NOMS_OPERATEUR = {and:"tous les mots", or:"au moins un mot", exact:"expression exacte"};
+const NOMS_ZONE = {motivations:"motivations", dispositif:"dispositif", moyens:"moyens",
+  expose:"exposé du litige", sommaire:"sommaire et titrage"};
+
+function effacerCritere(cle){
+  switch(cle){
+    case "x":    $("in-exclure").value = ""; break;
+    case "req":  $("in-exiges").value = ""; break;
+    case "mat":  $("in-matiere").value = ""; break;
+    case "field":$("in-field").value = ""; break;
+    case "loc":  $("in-lieu").value = ""; break;
+    case "ch":   document.querySelectorAll(".ch").forEach(c=>c.checked = false); break;
+    case "pub":  document.querySelectorAll(".pub").forEach(c=>c.checked = false); break;
+    case "sol":  $("in-solution").value = ""; break;
+    case "dates":$("in-du").value = ""; $("in-au").value = ""; break;
+    case "prof": $("in-approfondi").checked = false; break;
+    case "grp":  $("in-groupe").value = ""; break;
+  }
+}
+
+function majCriteresActifs(){
+  const zone = $("criteres-actifs");
+  const c = lireCriteres();
+  const chips = [];
+  const ajout = (cle, libelle, valeur) =>
+    chips.push('<span class="crit"><span><b>'+echap(libelle)+'</b> : '+echap(valeur)+
+      '</span><button type="button" data-crit="'+cle+'" title="Retirer ce critère">✕</button></span>');
+
+  if(c.mat)   ajout("mat", "Matière", c.mat);
+  if(c.x)     ajout("x", "Mots exclus", c.x);
+  if(c.req)   ajout("req", "Mots exigés", c.req);
+  if(c.field) ajout("field", "Zone", NOMS_ZONE[c.field]||c.field);
+  if(c.loc){
+    const nom = (JURIDICTIONS.ca[c.loc]||JURIDICTIONS.tj[c.loc]||JURIDICTIONS.tcom[c.loc]||c.loc);
+    ajout("loc", "Juridiction", nom);
+  }
+  if(c.ch.length)  ajout("ch", "Chambres", c.ch.map(k=>NOMS_CHAMBRES_COURT[k]||k).join(", "));
+  if(c.pub.length) ajout("pub", "Publication", c.pub.map(k=>NOMS_PUBLICATION[k]||k).join(", "));
+  if(c.sol)   ajout("sol", "Solution", c.sol);
+  if(c.du || c.au) ajout("dates", "Période", (c.du?"du "+dateFr(c.du):"")+(c.au?" au "+dateFr(c.au):""));
+  if(c.prof)  ajout("prof", "Vérification", "texte intégral");
+  if(c.grp)   ajout("grp", "Regroupement", c.grp);
+
+  /* La nature de la recherche n'est pas un filtre : on l'affiche sans croix,
+     pour qu'on sache toujours comment les mots ont été interprétés. */
+  const info = '<span class="info">Recherche : '+echap(NOMS_OPERATEUR[c.op]||c.op)+"</span>";
+
+  if(!chips.length){
+    zone.innerHTML = '<span class="titre">Aucun filtre actif.</span>'+info;
+    zone.classList.remove("cache");
+    return;
+  }
+  zone.innerHTML = '<span class="titre">Filtres actifs :</span>'+chips.join("")+info+
+    '<button type="button" class="tout">Tout retirer et relancer</button>';
+  zone.classList.remove("cache");
+  zone.querySelectorAll("[data-crit]").forEach(b=>b.onclick = ()=>{
+    effacerCritere(b.dataset.crit); lancerRecherche(0);
+  });
+  zone.querySelector(".tout").onclick = ()=>{
+    ["x","req","mat","field","loc","ch","pub","sol","dates","prof","grp"].forEach(effacerCritere);
+    lancerRecherche(0);
+  };
+}
+
 async function lancerRecherche(page){
   const params = construireParams(page, PAGE_SIZE);
   const msg = $("msg-recherche");
@@ -1603,6 +1691,7 @@ async function lancerRecherche(page){
     gardees.forEach(r=>{ resultatsCourants[r.id] = r; });
 
     $("zone-resultats").classList.remove("cache");
+    majCriteresActifs();
     $("total-texte").innerHTML = "<b>"+Number(etat.total).toLocaleString("fr-FR")+"</b> décision"+(etat.total>1?"s":"")+" trouvée"+(etat.total>1?"s":"")+
       (d.relaxed ? ' <span class="note" style="color:var(--warn)">(recherche élargie par l\'API — voir l\'encadré ci-dessus)</span>' : "")+
       (filtres ? ' <span class="note">(avant application de vos filtres locaux)</span>' : "");
@@ -1611,7 +1700,7 @@ async function lancerRecherche(page){
       ? (ecartees.length ? ecartees.length+" décision"+(ecartees.length>1?"s":"")+" écartée"+(ecartees.length>1?"s":"")+" sur cette page." : "Aucune décision écartée sur cette page.")
       : "";
     rendreListe(gardees, filtres
-      ? "Aucune décision de cette page ne passe vos filtres locaux — passez à la page suivante."
+      ? "Aucune décision de cette page ne passe vos filtres locaux. Retirez un filtre dans le bandeau orange ci-dessus, ou passez à la page suivante."
       : "Aucune décision ne correspond à ces critères.");
     const nbPages = Math.ceil(Math.min(etat.total, PLAFOND)/PAGE_SIZE) || 1;
     $("page-texte").textContent = "Page "+(page+1)+" / "+nbPages.toLocaleString("fr-FR")+
