@@ -45,7 +45,8 @@ strictement autonome — utile comme secours.
 - **Angles d'analyse (génériques)** : des transformations applicables à
   n'importe quelle notion tapée dans les mots-clés — arrêts de principe,
   régime de la preuve, définition et critères, jurisprudence récente,
-  cassations uniquement, panorama complet. Les angles se **combinent** :
+  cassations uniquement, juges du fond (bascule vers les cours d'appel en
+  levant les filtres propres à la Cour de cassation), panorama complet. Les angles se **combinent** :
   chacun part des critères affichés à l'écran.
 - **Bibliothèque de recherches** : 67 recherches complètes prêtes à l'emploi,
   construites sur les formules consacrées de la jurisprudence et couvrant le
@@ -62,6 +63,11 @@ strictement autonome — utile comme secours.
   tribunaux de commerce), chambres de la Cour de cassation, période, solution
   (cassation, rejet…), niveau de publication (Bulletin, Rapport annuel,
   Lettres de chambre, Communiqué).
+- **Juridiction précise** : les **351 juridictions du fond** de la base — 36
+  cours d'appel, 174 tribunaux judiciaires, 141 tribunaux de commerce — avec un
+  champ de filtrage (« Paris », « Aix »…). Choisir une juridiction coche
+  automatiquement la case de son type. Ce filtre n'a pas d'équivalent pour la
+  Cour de cassation, dont les chambres ont leur propre sélecteur.
 - **Recherches récentes** : les 12 dernières recherches sont mémorisées dans le
   navigateur et rejouables en un clic.
 - **Lien partageable** : copie une adresse qui rouvre la recherche pré-remplie

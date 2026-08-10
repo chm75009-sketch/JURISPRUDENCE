@@ -328,6 +328,10 @@
           <label><input type="checkbox" id="j-tcom"> Tribunaux de commerce</label>
         </div>
       </div>
+      <label class="champ"><b>Juridiction précise <span style="font-weight:400;color:var(--muted)">(facultatif — une seule à la fois)</span></b>
+        <input type="search" id="in-lieu-filtre" placeholder="Filtrer : Paris, Versailles, Aix, Douai…">
+        <select id="in-lieu" style="margin-top:6px"></select>
+      </label>
       <div id="bloc-chambres">
         <b style="font-size:13.5px">Chambres (Cour de cassation)</b>
         <div class="cases">
@@ -607,6 +611,7 @@ function lireCriteres(){
     req: $("in-exiges").value.trim(),
     mat: $("in-matiere").value.trim(),
     grp: $("in-groupe").value,
+    loc: $("in-lieu").value,
     op: $("in-operator").value,
     tri: $("in-tri").value,
     sol: $("in-solution").value,
@@ -625,6 +630,13 @@ function appliquerCriteres(c){
   $("in-exiges").value = c.req||"";
   $("in-matiere").value = c.mat||"";
   $("in-groupe").value = c.grp||"";
+  /* On repart d'une liste non filtrée : sinon un filtre resté en place
+     empêcherait de restaurer une juridiction absente de la liste réduite. */
+  if(typeof remplirLieux === "function"){
+    $("in-lieu-filtre").value = "";
+    remplirLieux("");
+    $("in-lieu").value = c.loc||"";
+  }
   $("in-operator").value = c.op||"and";
   $("in-tri").value = c.tri||"score";
   $("in-solution").value = c.sol||"";
@@ -640,6 +652,266 @@ function appliquerCriteres(c){
   document.querySelectorAll(".pub").forEach(el=>{ el.checked = (c.pub||[]).includes(el.value); });
   $("in-approfondi").checked = !!c.prof;
 }
+
+const JURIDICTIONS = {
+  /* 36 cours d'appel */
+  ca: {
+    "ca_agen":"Cour d'appel d'Agen", "ca_aix_provence":"Cour d'appel d'Aix-en-Provence",
+    "ca_amiens":"Cour d'appel d'Amiens", "ca_angers":"Cour d'appel d'Angers",
+    "ca_orleans":"Cour d'appel d'Orléans", "ca_basse_terre":"Cour d'appel de Basse-Terre",
+    "ca_bastia":"Cour d'appel de Bastia", "ca_besancon":"Cour d'appel de Besançon",
+    "ca_bordeaux":"Cour d'appel de Bordeaux", "ca_bourges":"Cour d'appel de Bourges",
+    "ca_caen":"Cour d'appel de Caen", "ca_cayenne":"Cour d'appel de Cayenne",
+    "ca_chambery":"Cour d'appel de Chambéry", "ca_colmar":"Cour d'appel de Colmar",
+    "ca_dijon":"Cour d'appel de Dijon", "ca_douai":"Cour d'appel de Douai",
+    "ca_fort_de_france":"Cour d'appel de Fort-de-France", "ca_grenoble":"Cour d'appel de Grenoble",
+    "ca_limoges":"Cour d'appel de Limoges", "ca_lyon":"Cour d'appel de Lyon",
+    "ca_metz":"Cour d'appel de Metz", "ca_montpellier":"Cour d'appel de Montpellier",
+    "ca_nancy":"Cour d'appel de Nancy", "ca_noumea":"Cour d'appel de Nouméa",
+    "ca_nimes":"Cour d'appel de Nîmes", "ca_papeete":"Cour d'appel de Papeete",
+    "ca_paris":"Cour d'appel de Paris", "ca_pau":"Cour d'appel de Pau",
+    "ca_poitiers":"Cour d'appel de Poitiers", "ca_reims":"Cour d'appel de Reims",
+    "ca_rennes":"Cour d'appel de Rennes", "ca_riom":"Cour d'appel de Riom",
+    "ca_rouen":"Cour d'appel de Rouen",
+    "ca_st_denis_reunion":"Cour d'appel de Saint-Denis de la Réunion",
+    "ca_toulouse":"Cour d'appel de Toulouse", "ca_versailles":"Cour d'appel de Versailles"
+  },
+  /* 174 tribunaux judiciaires */
+  tj: {
+    "tj47001":"Tribunal judiciaire d'Agen", "tj13001":"Tribunal judiciaire d'Aix-en-Provence",
+    "tj2a004":"Tribunal judiciaire d'Ajaccio", "tj73011":"Tribunal judiciaire d'Albertville",
+    "tj81004":"Tribunal judiciaire d'Albi", "tj61001":"Tribunal judiciaire d'Alençon",
+    "tj30007":"Tribunal judiciaire d'Alès", "tj80021":"Tribunal judiciaire d'Amiens",
+    "tj49007":"Tribunal judiciaire d'Angers", "tj16015":"Tribunal judiciaire d'Angoulême",
+    "tj74010":"Tribunal judiciaire d'Annecy", "tj61006":"Tribunal judiciaire d'Argentan",
+    "tj62041":"Tribunal judiciaire d'Arras", "tj32013":"Tribunal judiciaire d'Auch",
+    "tj15014":"Tribunal judiciaire d'Aurillac", "tj89024":"Tribunal judiciaire d'Auxerre",
+    "tj59036":"Tribunal judiciaire d'Avesnes-sur-Helpe", "tj84007":"Tribunal judiciaire d'Avignon",
+    "tj45234":"Tribunal judiciaire d'Orléans", "tj88160":"Tribunal judiciaire d'Épinal",
+    "tj27229":"Tribunal judiciaire d'Évreux", "tj91228":"Tribunal judiciaire d'Évry",
+    "tj55029":"Tribunal judiciaire de Bar-le-Duc", "tj97105":"Tribunal judiciaire de Basse-Terre",
+    "tj2b033":"Tribunal judiciaire de Bastia", "tj64102":"Tribunal judiciaire de Bayonne",
+    "tj60057":"Tribunal judiciaire de Beauvais", "tj90010":"Tribunal judiciaire de Belfort",
+    "tj24037":"Tribunal judiciaire de Bergerac", "tj25056":"Tribunal judiciaire de Besançon",
+    "tj41018":"Tribunal judiciaire de Blois", "tj93008":"Tribunal judiciaire de Bobigny",
+    "tj74042":"Tribunal judiciaire de Bonneville", "tj33063":"Tribunal judiciaire de Bordeaux",
+    "tj62160":"Tribunal judiciaire de Boulogne-sur-Mer",
+    "tj01053":"Tribunal judiciaire de Bourg-en-Bresse", "tj18033":"Tribunal judiciaire de Bourges",
+    "tj38053":"Tribunal judiciaire de Bourgoin-Jallieu", "tj29019":"Tribunal judiciaire de Brest",
+    "tj19031":"Tribunal judiciaire de Brive-la-Gaillarde",
+    "tj62119":"Tribunal judiciaire de Béthune", "tj34032":"Tribunal judiciaire de Béziers",
+    "tj14118":"Tribunal judiciaire de Caen", "tj46042":"Tribunal judiciaire de Cahors",
+    "tj59122":"Tribunal judiciaire de Cambrai", "tj11069":"Tribunal judiciaire de Carcassonne",
+    "tj84031":"Tribunal judiciaire de Carpentras", "tj81065":"Tribunal judiciaire de Castres",
+    "tj97302":"Tribunal judiciaire de Cayenne", "tj71076":"Tribunal judiciaire de Chalon-sur-Saône",
+    "tj51108":"Tribunal judiciaire de Chalons-en-Champagne",
+    "tj73065":"Tribunal judiciaire de Chambéry",
+    "tj08105":"Tribunal judiciaire de Charleville-Mézières",
+    "tj28085":"Tribunal judiciaire de Chartres", "tj52121":"Tribunal judiciaire de Chaumont",
+    "tj50129":"Tribunal judiciaire de Cherbourg-en-Cotentin",
+    "tj36044":"Tribunal judiciaire de Châteauroux",
+    "tj63113":"Tribunal judiciaire de Clermont-Ferrand", "tj68066":"Tribunal judiciaire de Colmar",
+    "tj60159":"Tribunal judiciaire de Compiègne", "tj50147":"Tribunal judiciaire de Coutances",
+    "tj94028":"Tribunal judiciaire de Créteil", "tj03095":"Tribunal judiciaire de Cusset",
+    "tj40088":"Tribunal judiciaire de Dax", "tj76217":"Tribunal judiciaire de Dieppe",
+    "tj04070":"Tribunal judiciaire de Digne-les-Bains", "tj21231":"Tribunal judiciaire de Dijon",
+    "tj39198":"Tribunal judiciaire de Dole (chambre détachée)",
+    "tj59178":"Tribunal judiciaire de Douai", "tj83050":"Tribunal judiciaire de Draguignan",
+    "tj59183":"Tribunal judiciaire de Dunkerque", "tj09122":"Tribunal judiciaire de Foix",
+    "tj77186":"Tribunal judiciaire de Fontainebleau",
+    "tj97209":"Tribunal judiciaire de Fort-de-France", "tj05061":"Tribunal judiciaire de Gap",
+    "tj06069":"Tribunal judiciaire de Grasse", "tj38185":"Tribunal judiciaire de Grenoble",
+    "tj22070":"Tribunal judiciaire de Guingamp (chambre détachée)",
+    "tj23096":"Tribunal judiciaire de Guéret",
+    "tj98811":"Tribunal judiciaire de Kone (section détachée)",
+    "tj85191":"Tribunal judiciaire de La Roche-sur-Yon",
+    "tj17300":"Tribunal judiciaire de La Rochelle", "tj02408":"Tribunal judiciaire de Laon",
+    "tj53130":"Tribunal judiciaire de Laval", "tj33243":"Tribunal judiciaire de Libourne",
+    "tj59350":"Tribunal judiciaire de Lille", "tj87085":"Tribunal judiciaire de Limoges",
+    "tj14366":"Tribunal judiciaire de Lisieux", "tj39300":"Tribunal judiciaire de Lons-le-Saunier",
+    "tj56121":"Tribunal judiciaire de Lorient", "tj69123":"Tribunal judiciaire de Lyon",
+    "tj97611":"Tribunal judiciaire de Mamoudzou",
+    "tj47157":"Tribunal judiciaire de Marmande (chambre détachée)",
+    "tj13055":"Tribunal judiciaire de Marseille", "tj98613":"Tribunal judiciaire de Mata-Utu",
+    "tj77284":"Tribunal judiciaire de Meaux", "tj77288":"Tribunal judiciaire de Melun",
+    "tj48095":"Tribunal judiciaire de Mende", "tj57463":"Tribunal judiciaire de Metz",
+    "tj12145":"Tribunal judiciaire de Millau (chambre détachée)",
+    "tj40192":"Tribunal judiciaire de Mont-de-Marsan", "tj45208":"Tribunal judiciaire de Montargis",
+    "tj82121":"Tribunal judiciaire de Montauban", "tj25388":"Tribunal judiciaire de Montbéliard",
+    "tj03185":"Tribunal judiciaire de Montluçon", "tj34172":"Tribunal judiciaire de Montpellier",
+    "tj03190":"Tribunal judiciaire de Moulins", "tj68224":"Tribunal judiciaire de Mulhouse",
+    "tj71270":"Tribunal judiciaire de Mâcon", "tj54395":"Tribunal judiciaire de Nancy",
+    "tj92050":"Tribunal judiciaire de Nanterre", "tj44109":"Tribunal judiciaire de Nantes",
+    "tj11262":"Tribunal judiciaire de Narbonne", "tj58194":"Tribunal judiciaire de Nevers",
+    "tj06088":"Tribunal judiciaire de Nice", "tj79191":"Tribunal judiciaire de Niort",
+    "tj98818":"Tribunal judiciaire de Nouméa", "tj30189":"Tribunal judiciaire de Nîmes",
+    "tj98735":"Tribunal judiciaire de Papeete", "tj75056":"Tribunal judiciaire de Paris",
+    "tj64445":"Tribunal judiciaire de Pau", "tj66136":"Tribunal judiciaire de Perpignan",
+    "tj97120":"Tribunal judiciaire de Pointe-à-Pitre", "tj86194":"Tribunal judiciaire de Poitiers",
+    "tj95500":"Tribunal judiciaire de Pontoise", "tj07186":"Tribunal judiciaire de Privas",
+    "tj24322":"Tribunal judiciaire de Périgueux", "tj29232":"Tribunal judiciaire de Quimper",
+    "tj51454":"Tribunal judiciaire de Reims", "tj35238":"Tribunal judiciaire de Rennes",
+    "tj42187":"Tribunal judiciaire de Roanne", "tj12202":"Tribunal judiciaire de Rodez",
+    "tj76540":"Tribunal judiciaire de Rouen", "tj22278":"Tribunal judiciaire de Saint-Brieuc",
+    "tj97411":"Tribunal judiciaire de Saint-Denis de La Réunion",
+    "tj42218":"Tribunal judiciaire de Saint-Etienne",
+    "tj31483":"Tribunal judiciaire de Saint-Gaudens",
+    "tj97311":"Tribunal judiciaire de Saint-Laurent-Du-Maroni (chambre détachée)",
+    "tj35288":"Tribunal judiciaire de Saint-Malo",
+    "tj97801":"Tribunal judiciaire de Saint-Martin (chambre détachée)",
+    "tj44184":"Tribunal judiciaire de Saint-Nazaire", "tj62765":"Tribunal judiciaire de Saint-Omer",
+    "tj97416":"Tribunal judiciaire de Saint-Pierre de La Réunion",
+    "tj02691":"Tribunal judiciaire de Saint-Quentin", "tj17415":"Tribunal judiciaire de Saintes",
+    "tj57631":"Tribunal judiciaire de Sarreguemines", "tj49328":"Tribunal judiciaire de Saumur",
+    "tj67437":"Tribunal judiciaire de Saverne", "tj60612":"Tribunal judiciaire de Senlis",
+    "tj89387":"Tribunal judiciaire de Sens", "tj02722":"Tribunal judiciaire de Soissons",
+    "tj67482":"Tribunal judiciaire de Strasbourg", "tj13108":"Tribunal judiciaire de Tarascon",
+    "tj65440":"Tribunal judiciaire de Tarbes", "tj57672":"Tribunal judiciaire de Thionville",
+    "tj74281":"Tribunal judiciaire de Thonon-les-Bains", "tj83137":"Tribunal judiciaire de Toulon",
+    "tj31555":"Tribunal judiciaire de Toulouse", "tj37261":"Tribunal judiciaire de Tours",
+    "tj10387":"Tribunal judiciaire de Troyes", "tj19272":"Tribunal judiciaire de Tulle",
+    "tj54099":"Tribunal judiciaire de Val de Briey", "tj26362":"Tribunal judiciaire de Valence",
+    "tj59606":"Tribunal judiciaire de Valenciennes", "tj56260":"Tribunal judiciaire de Vannes",
+    "tj55545":"Tribunal judiciaire de Verdun", "tj78646":"Tribunal judiciaire de Versailles",
+    "tj70550":"Tribunal judiciaire de Vesoul", "tj38544":"Tribunal judiciaire de Vienne",
+    "tj69264":"Tribunal judiciaire de Villefranche-sur-Saône",
+    "tj85194":"Tribunal judiciaire des Sables-d'Olonne", "tj76351":"Tribunal judiciaire du Havre",
+    "tj72181":"Tribunal judiciaire du Mans", "tj43157":"Tribunal judiciaire du Puy-en-Velay"
+  },
+  /* 141 tribunaux de commerce */
+  tcom: {
+    "4701":"Tribunal de commerce d'Agen", "1301":"Tribunal de commerce d'Aix-en-Provence",
+    "2001":"Tribunal de commerce d'Ajaccio", "8101":"Tribunal de commerce d'Albi",
+    "6101":"Tribunal de commerce d'Alençon", "8002":"Tribunal de commerce d'Amiens",
+    "4901":"Tribunal de commerce d'Angers", "1601":"Tribunal de commerce d'Angoulême",
+    "7401":"Tribunal de commerce d'Annecy", "0601":"Tribunal de commerce d'Antibes",
+    "6201":"Tribunal de commerce d'Arras", "0702":"Tribunal de commerce d'Aubenas",
+    "3201":"Tribunal de commerce d'Auch", "1501":"Tribunal de commerce d'Aurillac",
+    "4502":"Tribunal de commerce d'Orléans", "8801":"Tribunal de commerce d'Épinal",
+    "2702":"Tribunal de commerce d'Évreux", "7801":"Tribunal de commerce d'Évry",
+    "5501":"Tribunal de commerce de Bar-le-Duc", "9711":"Tribunal de commerce de Basse-Terre",
+    "2002":"Tribunal de commerce de Bastia", "6401":"Tribunal de commerce de Bayonne",
+    "6001":"Tribunal de commerce de Beauvais", "9001":"Tribunal de commerce de Belfort",
+    "2401":"Tribunal de commerce de Bergerac", "2701":"Tribunal de commerce de Bernay",
+    "2501":"Tribunal de commerce de Besançon", "4101":"Tribunal de commerce de Blois",
+    "9301":"Tribunal de commerce de Bobigny", "3302":"Tribunal de commerce de Bordeaux",
+    "6202":"Tribunal de commerce de Boulogne-sur-Mer",
+    "0101":"Tribunal de commerce de Bourg-en-Bresse", "1801":"Tribunal de commerce de Bourges",
+    "2901":"Tribunal de commerce de Brest", "5401":"Tribunal de commerce de Briey",
+    "1901":"Tribunal de commerce de Brive-la-Gaillarde", "3402":"Tribunal de commerce de Béziers",
+    "1402":"Tribunal de commerce de Caen", "4601":"Tribunal de commerce de Cahors",
+    "0602":"Tribunal de commerce de Cannes", "1101":"Tribunal de commerce de Carcassonne",
+    "8102":"Tribunal de commerce de Castres", "9731":"Tribunal de commerce de Cayenne",
+    "7102":"Tribunal de commerce de Chalon-sur-Saône",
+    "5101":"Tribunal de commerce de Chalons-en-Champagne",
+    "7301":"Tribunal de commerce de Chambéry", "2801":"Tribunal de commerce de Chartres",
+    "5201":"Tribunal de commerce de Chaumont", "5001":"Tribunal de commerce de Cherbourg",
+    "3601":"Tribunal de commerce de Châteauroux", "6303":"Tribunal de commerce de Clermont-Ferrand",
+    "6002":"Tribunal de commerce de Compiègne", "5002":"Tribunal de commerce de Coutances",
+    "9401":"Tribunal de commerce de Créteil", "0301":"Tribunal de commerce de Cusset",
+    "4001":"Tribunal de commerce de Dax", "7601":"Tribunal de commerce de Dieppe",
+    "2104":"Tribunal de commerce de Dijon", "5952":"Tribunal de commerce de Douai",
+    "8302":"Tribunal de commerce de Draguignan", "5902":"Tribunal de commerce de Dunkerque",
+    "0901":"Tribunal de commerce de Foix", "9721":"Tribunal de commerce de Fort-de-France",
+    "8303":"Tribunal de commerce de Fréjus", "0501":"Tribunal de commerce de Gap",
+    "0603":"Tribunal de commerce de Grasse", "3801":"Tribunal de commerce de Grenoble",
+    "2301":"Tribunal de commerce de Guéret", "8501":"Tribunal de commerce de La Roche-sur-Yon",
+    "1704":"Tribunal de commerce de La Rochelle", "5301":"Tribunal de commerce de Laval",
+    "3303":"Tribunal de commerce de Libourne", "5910":"Tribunal de commerce de Lille Métropole",
+    "1407":"Tribunal de commerce de Lisieux", "3902":"Tribunal de commerce de Lons-le-Saunier",
+    "5601":"Tribunal de commerce de Lorient", "9761":"Tribunal de commerce de Mamoudzou",
+    "0401":"Tribunal de commerce de Manosque", "7701":"Tribunal de commerce de Meaux",
+    "7702":"Tribunal de commerce de Melun", "4801":"Tribunal de commerce de Mende",
+    "4002":"Tribunal de commerce de Mont-de-Marsan", "8201":"Tribunal de commerce de Montauban",
+    "0303":"Tribunal de commerce de Montluçon", "3405":"Tribunal de commerce de Montpellier",
+    "7106":"Tribunal de commerce de Mâcon", "4401":"Tribunal de commerce de Nantes",
+    "1104":"Tribunal de commerce de Narbonne", "5802":"Tribunal de commerce de Nevers",
+    "0605":"Tribunal de commerce de Nice", "7901":"Tribunal de commerce de Niort",
+    "3003":"Tribunal de commerce de Nîmes", "6403":"Tribunal de commerce de Pau",
+    "6601":"Tribunal de commerce de Perpignan", "9712":"Tribunal de commerce de Pointe-à-Pitre",
+    "8602":"Tribunal de commerce de Poitiers", "7802":"Tribunal de commerce de Pontoise",
+    "2402":"Tribunal de commerce de Périgueux", "2903":"Tribunal de commerce de Quimper",
+    "5103":"Tribunal de commerce de Reims", "3501":"Tribunal de commerce de Rennes",
+    "4201":"Tribunal de commerce de Roanne", "1203":"Tribunal de commerce de Rodez",
+    "2602":"Tribunal de commerce de Romans", "7608":"Tribunal de commerce de Rouen",
+    "9741":"Tribunal de commerce de Saint-Denis de La Réunion",
+    "4202":"Tribunal de commerce de Saint-Etienne", "3502":"Tribunal de commerce de Saint-Malo",
+    "4402":"Tribunal de commerce de Saint-Nazaire",
+    "9742":"Tribunal de commerce de Saint-Pierre de La Réunion",
+    "0202":"Tribunal de commerce de Saint-Quentin", "1708":"Tribunal de commerce de Saintes",
+    "1304":"Tribunal de commerce de Salon-de-Provence", "0802":"Tribunal de commerce de Sedan",
+    "8903":"Tribunal de commerce de Sens", "0203":"Tribunal de commerce de Soissons",
+    "1305":"Tribunal de commerce de Tarascon", "6502":"Tribunal de commerce de Tarbes",
+    "7402":"Tribunal de commerce de Thonon-les-Bains", "8305":"Tribunal de commerce de Toulon",
+    "3102":"Tribunal de commerce de Toulouse", "3701":"Tribunal de commerce de Tours",
+    "1001":"Tribunal de commerce de Troyes", "5906":"Tribunal de commerce de Valenciennes",
+    "5602":"Tribunal de commerce de Vannes", "7001":"Tribunal de commerce de Vesoul - Gray",
+    "3802":"Tribunal de commerce de Vienne",
+    "6903":"Tribunal de commerce de Villefranche-sur-Saône - Tarare",
+    "4302":"Tribunal de commerce du Puy-en-Velay",
+    "8901":"Tribunal des activités économiques d'Auxerre",
+    "8401":"Tribunal des activités économiques d'Avignon",
+    "8701":"Tribunal des activités économiques de Limoges",
+    "6901":"Tribunal des activités économiques de Lyon",
+    "1303":"Tribunal des activités économiques de Marseille",
+    "5402":"Tribunal des activités économiques de Nancy",
+    "9201":"Tribunal des activités économiques de Nanterre",
+    "7501":"Tribunal des activités économiques de Paris",
+    "2202":"Tribunal des activités économiques de Saint-Brieuc",
+    "7803":"Tribunal des activités économiques de Versailles",
+    "7606":"Tribunal des activités économiques du Havre",
+    "7202":"Tribunal des activités économiques du Mans"
+  },
+};
+
+/* Le filtre « location » de l'API permet de cibler une juridiction du fond. Il
+   n'existe pas d'équivalent pour la Cour de cassation, dont les chambres sont
+   déjà couvertes par leur propre sélecteur. Avec 351 juridictions, un menu brut
+   serait inutilisable : d'où le champ de filtrage, comme pour la bibliothèque. */
+const ETIQ_JUR = {ca:"Cours d'appel", tj:"Tribunaux judiciaires", tcom:"Tribunaux de commerce"};
+
+function remplirLieux(filtre){
+  const sel = $("in-lieu");
+  const f = normaliser(filtre||"").trim();
+  const choix = sel.value;
+  sel.innerHTML = "";
+  const vide = document.createElement("option");
+  vide.value = ""; vide.textContent = "— Toutes les juridictions cochées ci-dessus —";
+  sel.appendChild(vide);
+  let total = 0;
+  for(const type of ["ca","tj","tcom"]){
+    const entrees = Object.entries(JURIDICTIONS[type])
+      .filter(([,nom]) => !f || normaliser(nom).includes(f));
+    if(!entrees.length) continue;
+    total += entrees.length;
+    const g = document.createElement("optgroup");
+    g.label = ETIQ_JUR[type]+" ("+entrees.length+")";
+    for(const [cle,nom] of entrees){
+      const o = document.createElement("option");
+      o.value = cle; o.textContent = nom;
+      g.appendChild(o);
+    }
+    sel.appendChild(g);
+  }
+  if(f && !total) vide.textContent = "— aucune juridiction ne correspond à « "+filtre+" » —";
+  if(choix && sel.querySelector('option[value="'+CSS.escape(choix)+'"]')) sel.value = choix;
+}
+
+(function initLieux(){
+  remplirLieux("");
+  $("in-lieu-filtre").addEventListener("input", e=>remplirLieux(e.target.value));
+  /* Choisir une juridiction n'a de sens que si son type est coché : on s'en
+     charge, plutôt que de renvoyer une recherche vide sans explication. */
+  $("in-lieu").onchange = ()=>{
+    const v = $("in-lieu").value;
+    if(!v) return;
+    const type = v.startsWith("ca_") ? "j-ca" : (v.startsWith("tcom") ? "j-tcom" : "j-tj");
+    if(!$(type).checked){
+      $(type).checked = true;
+      $("msg-recherche").innerHTML = '<div class="alerte info">Juridiction sélectionnée : la case correspondante a été cochée automatiquement.</div>';
+    }
+  };
+})();
 
 /* --------------------------- Angles d'analyse --------------------------- */
 /* Un angle est une transformation GÉNÉRIQUE de la recherche en cours : il
@@ -675,6 +947,11 @@ const ANGLES = [
     label: "Cassations uniquement (censure des juges du fond)",
     note: "Ne garde que les arrêts de cassation : ceux où la Cour censure la décision attaquée — souvent les plus instructifs sur le contenu exact de la règle.",
     f: c => ({...c, sol:"cassation", jur:["cc"]})
+  },
+  {
+    label: "Juges du fond (toutes les cours d'appel)",
+    note: "Bascule la recherche sur les 36 cours d'appel et lève les filtres propres à la Cour de cassation — chambre, publication au Bulletin, solution — qui n'ont pas de sens pour elles. C'est là que se juge la matière au fond ; la couverture de la base y est surtout dense depuis 2022. Utilisez ensuite « Juridiction précise » pour cibler une cour.",
+    f: c => ({...c, jur:["ca"], ch:[], pub:[], sol:"", tri:"date-desc"})
   },
   {
     label: "Panorama complet (tous filtres levés)",
@@ -1167,6 +1444,7 @@ function construireParams(page, pageSize){
   if($("j-tj").checked) jur.push("tj");
   if($("j-tcom").checked) jur.push("tcom");
   jur.forEach(j=>p.append("jurisdiction", j));
+  if($("in-lieu").value) p.append("location", $("in-lieu").value);
   if($("j-cc").checked){
     document.querySelectorAll(".ch:checked").forEach(c=>p.append("chamber", c.value));
   }
