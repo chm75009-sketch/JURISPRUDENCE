@@ -122,6 +122,13 @@
   .pano-ligne button{font:inherit;font-size:13.5px;border:none;background:none;color:var(--link);
     cursor:pointer;padding:0;text-align:left;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
+  #panneau-lf summary{cursor:pointer;font-size:15px}
+  #panneau-lf summary .note{margin-left:8px}
+  button.art{font:inherit;font-size:inherit;border:none;background:#eef3ff;color:var(--link);
+    border-bottom:1px dotted var(--link);cursor:pointer;padding:0 2px;border-radius:3px}
+  button.art:hover{background:#dbe6ff}
+  #art-corps .texte-art{font:15px/1.65 Georgia,'Times New Roman',serif;white-space:pre-wrap}
+
   details.methode{margin:0 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);
     font-size:14px;padding:10px 14px}
   details.methode summary{cursor:pointer;font-weight:600;font-size:13.5px;color:var(--accent)}
@@ -170,6 +177,36 @@
       </div>
     </div>
     <div id="msg-cle"></div>
+  </section>
+
+  <!-- ============ Légifrance : les textes cités par les décisions ============ -->
+  <section class="panel">
+    <details id="panneau-lf">
+      <summary><b>Textes officiels (Légifrance) — facultatif</b>
+        <span class="note" id="etat-lf">non configuré</span></summary>
+      <p class="note" style="margin-top:10px">
+        En connectant l'API <b>Légifrance</b>, les articles cités dans le texte d'une décision
+        (« article L. 1154-1 du code du travail ») deviennent cliquables et s'affichent
+        <b>dans leur version applicable à la date de la décision</b>.
+        Sur <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>, souscrivez
+        l'API <b>Légifrance</b> avec la même application, puis recopiez ci-dessous les
+        <b>identifiants OAuth</b> de la fiche (« Client ID » et son secret).
+        Comme la clé Judilibre, ils restent <b>uniquement dans votre navigateur</b>.
+      </p>
+      <div class="grid g2" style="margin-top:10px">
+        <label class="champ"><b>Client ID</b>
+          <input type="text" id="in-lf-id" placeholder="ex. c83af52e-…" autocomplete="off">
+        </label>
+        <label class="champ"><b>Client secret</b>
+          <input type="password" id="in-lf-secret" placeholder="secret OAuth" autocomplete="off">
+        </label>
+      </div>
+      <div class="actions">
+        <button class="principal" id="btn-lf-tester" type="button">Enregistrer et tester</button>
+        <button class="second" id="btn-lf-oublier" type="button">Oublier ces identifiants</button>
+      </div>
+      <div id="msg-lf"></div>
+    </details>
   </section>
 
   <!-- ================= Formulaire de recherche ================= -->
@@ -367,8 +404,9 @@
 
   <footer class="site">
     Données : <a href="https://www.courdecassation.fr/acces-rapide-judilibre" target="_blank" rel="noopener">Judilibre — Cour de cassation</a>
-    (open data, décisions pseudonymisées) · API servie par
-    <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>.
+    (open data, décisions pseudonymisées) · textes :
+    <a href="https://www.legifrance.gouv.fr" target="_blank" rel="noopener">Légifrance</a> (DILA) ·
+    API servies par <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>.
     Cette application ne collecte aucune donnée personnelle.
   </footer>
 </div>
@@ -386,6 +424,20 @@
     </div>
   </div>
   <div class="dlg-corps" id="dlg-corps"></div>
+</dialog>
+
+<!-- ================= Article de code (Légifrance) ================= -->
+<dialog id="dlg-article">
+  <div class="dlg-tete">
+    <div>
+      <h3 id="art-titre">Article</h3>
+      <div class="note" id="art-sous-titre"></div>
+    </div>
+    <div class="dlg-btns">
+      <button class="fermer" id="art-fermer" type="button">Fermer ✕</button>
+    </div>
+  </div>
+  <div class="dlg-corps" id="art-corps"></div>
 </dialog>
 
 <script>
@@ -508,6 +560,9 @@ function messageErreur(e){
     case "PAS_DE_CLE":  return "Configurez d'abord votre clé API (bandeau en haut de page).";
     case "CLE_REFUSEE": return "Accès refusé par l'API : clé invalide, ou application non souscrite à l'API JUDILIBRE (production) sur PISTE.";
     case "QUOTA":       return "Quota de requêtes atteint (limite PISTE). Patientez quelques instants puis réessayez.";
+    case "PAS_DE_LEGIFRANCE": return "Configurez d'abord les identifiants Légifrance (panneau « Textes officiels » en haut de page).";
+    case "LF_IDENT_REFUSES":  return "Légifrance a refusé les identifiants OAuth : vérifiez le Client ID et son secret sur PISTE (fiche de l'application, rubrique « Identifiants Oauth »).";
+    case "LF_NON_SOUSCRITE":  return "Accès refusé par Légifrance : l'application PISTE n'est probablement pas souscrite à l'API Légifrance en production.";
     default:
       if(e instanceof TypeError) return "Impossible de joindre l'API (connexion internet ? blocage réseau ?).";
       return "Erreur inattendue : "+e.message;
@@ -1131,8 +1186,287 @@ function restaurerDepuisLien(){
   }catch(e){ return false; }
 }
 
+/* ========================= Textes officiels (Légifrance) =========================
+   Seconde source, facultative : les codes. L'API Légifrance s'authentifie en
+   OAuth2 « client_credentials » (identifiants de l'application PISTE) et non par
+   simple clé comme Judilibre. Les identifiants restent dans le navigateur ; le
+   jeton d'accès, lui, n'est gardé qu'en mémoire, le temps de la session.
+   Structures de requête conformes à la spécification publique de l'API. */
+const LF_OAUTH = "https://oauth.piste.gouv.fr/api/oauth/token";
+const LF_API   = "https://api.piste.gouv.fr/dila/legifrance/lf-engine-app";
+const LF_ID_STOCKAGE = "legifrance_client_id";
+const LF_SECRET_STOCKAGE = "legifrance_client_secret";
+
+const CODES = [
+  "Code civil","Code de commerce","Code de déontologie des architectes",
+  "Code de justice administrative","Code de justice militaire (nouveau)",
+  "Code de l'action sociale et des familles",
+  "Code de l'entrée et du séjour des étrangers et du droit d'asile","Code de l'environnement",
+  "Code de l'expropriation pour cause d'utilité publique","Code de l'organisation judiciaire",
+  "Code de l'urbanisme","Code de l'éducation","Code de l'énergie",
+  "Code de la Légion d'honneur, de la Médaille militaire et de l'ordre national du Mérite",
+  "Code de la commande publique","Code de la consommation",
+  "Code de la construction et de l'habitation","Code de la défense",
+  "Code de la famille et de l'aide sociale","Code de la justice pénale des mineurs",
+  "Code de la mutualité","Code de la propriété intellectuelle","Code de la recherche",
+  "Code de la route","Code de la santé publique","Code de la sécurité intérieure",
+  "Code de la sécurité sociale","Code de la voirie routière","Code de procédure civile",
+  "Code de procédure pénale","Code des assurances","Code des communes",
+  "Code des communes de la Nouvelle-Calédonie","Code des douanes","Code des douanes de Mayotte",
+  "Code des impositions sur les biens et services",
+  "Code des instruments monétaires et des médailles","Code des juridictions financières",
+  "Code des pensions civiles et militaires de retraite",
+  "Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance",
+  "Code des pensions militaires d'invalidité et des victimes de guerre",
+  "Code des ports maritimes","Code des postes et des communications électroniques",
+  "Code des procédures civiles d'exécution",
+  "Code des relations entre le public et l'administration","Code des transports",
+  "Code disciplinaire et pénal de la marine marchande","Code du cinéma et de l'image animée",
+  "Code du domaine de l'Etat",
+  "Code du domaine de l'Etat et des collectivités publiques applicable à la collectivité territoriale de Mayotte",
+  "Code du domaine public fluvial et de la navigation intérieure","Code du patrimoine",
+  "Code du service national","Code du sport","Code du travail","Code du travail maritime",
+  "Code forestier (nouveau)","Code général de la fonction publique",
+  "Code général de la propriété des personnes publiques",
+  "Code général des collectivités territoriales","Code général des impôts",
+  "Code général des impôts, annexe IV","Code minier (nouveau)","Code monétaire et financier",
+  "Code pénal","Code pénitentiaire","Code rural (ancien)","Code rural et de la pêche maritime",
+  "Code électoral","Livre des procédures fiscales"
+];
+
+let lfJeton = null, lfExpire = 0;
+
+function lfConfiguree(){
+  return !!(localStorage.getItem(LF_ID_STOCKAGE) && localStorage.getItem(LF_SECRET_STOCKAGE));
+}
+function majEtatLf(){
+  $("etat-lf").textContent = lfConfiguree() ? "connecté ✓" : "non configuré";
+}
+
+/* Jeton d'accès, renouvelé automatiquement à l'expiration. */
+async function lfToken(){
+  const id = localStorage.getItem(LF_ID_STOCKAGE)||"";
+  const secret = localStorage.getItem(LF_SECRET_STOCKAGE)||"";
+  if(!id || !secret) throw new Error("PAS_DE_LEGIFRANCE");
+  if(lfJeton && Date.now() < lfExpire) return lfJeton;
+  const corps = new URLSearchParams({grant_type:"client_credentials",
+    client_id:id, client_secret:secret, scope:"openid"});
+  const rep = await fetch(LF_OAUTH, {method:"POST",
+    headers:{"content-type":"application/x-www-form-urlencoded"}, body:corps});
+  if(rep.status===400 || rep.status===401) throw new Error("LF_IDENT_REFUSES");
+  if(!rep.ok) throw new Error("HTTP_"+rep.status);
+  const d = await rep.json();
+  if(!d.access_token) throw new Error("LF_IDENT_REFUSES");
+  lfJeton = d.access_token;
+  lfExpire = Date.now() + Math.max(60, (Number(d.expires_in)||3600) - 60)*1000;
+  return lfJeton;
+}
+
+async function lfAppel(chemin, corps){
+  const t = await lfToken();
+  const rep = await fetch(LF_API+chemin, {method:"POST",
+    headers:{"Authorization":"Bearer "+t, "content-type":"application/json", "accept":"application/json"},
+    body: JSON.stringify(corps)});
+  if(rep.status===401){ lfJeton = null; throw new Error("LF_IDENT_REFUSES"); }
+  if(rep.status===403) throw new Error("LF_NON_SOUSCRITE");
+  if(rep.status===429) throw new Error("QUOTA");
+  if(!rep.ok) throw new Error("HTTP_"+rep.status);
+  return rep.json();
+}
+
+/* « L. 1154-1 » → « L1154-1 » : format attendu par le champ NUM_ARTICLE. */
+function normaliserNumeroArticle(n){
+  const s = String(n).trim();
+  const m = /^([A-Za-z]+)\.?\s*(.+)$/.exec(s);
+  return (m ? m[1]+m[2] : s).replace(/\s+/g,"");
+}
+/* Le filtre NOM_CODE exige le libellé officiel exact : on recale ce que la
+   décision écrit (« code du travail ») sur la nomenclature Légifrance. */
+function codeOfficiel(libelle){
+  const n = normaliser(libelle).replace(/\s+/g," ").trim().replace(/[.,;:]+$/,"");
+  if(!n) return null;
+  const exact = CODES.find(c=>normaliser(c)===n);
+  if(exact) return exact;
+  /* Une citation peut déborder (« du code du travail et de la sécurité
+     sociale ») : on retient alors le plus long code officiel qui la commence. */
+  let meilleur = null;
+  for(const c of CODES){
+    const nc = normaliser(c);
+    if((n.startsWith(nc) || nc.startsWith(n)) && (!meilleur || nc.length>normaliser(meilleur).length))
+      meilleur = c;
+  }
+  return meilleur;
+}
+
+/* Repère les citations d'articles dans le texte d'une décision : « article
+   L. 1154-1 du code du travail », « articles 455 et 458 du code de procédure
+   civile », « article L. 1235-3, alinéa 2, du code du travail »… Les numéros
+   sont décrits explicitement (préfixe L/R/D facultatif, point et espace
+   facultatifs) plutôt que par une capture large : le point de « L. » interdit
+   toute approche fondée sur « tout sauf la ponctuation ». */
+const RE_NUM_ART = "(?:[LRDAlrda]\\.?\\s*)?\\d+(?:-\\d+)*";
+const RE_CITATION = new RegExp(
+  "\\barticles?\\s+("+RE_NUM_ART+"(?:\\s*(?:,|et|à)\\s*"+RE_NUM_ART+")*)"+
+  "(?:\\s*,?\\s*(?:alin[ée]as?|al\\.)\\s*\\w+)?"+
+  "\\s*,?\\s*du\\s+(code\\s+[^,.;:()\\n]{2,60})", "gi");
+function extraireNumeros(bloc){
+  const propre = bloc
+    .replace(/\b(?:alin[ée]as?|al\.)\s*\d+(?:\s*(?:et|,)\s*\d+)*/gi, " ")
+    .replace(/\b(?:paragraphes?|§|points?)\s*\d+/gi, " ");
+  const re = /\b([LRD]\.?\s*\d+(?:-\d+)*|\d+(?:-\d+)+|\d{1,4})\b/g;
+  const vus = new Set(); let m;
+  while((m = re.exec(propre)) && vus.size < 8) vus.add(normaliserNumeroArticle(m[1]));
+  return [...vus];
+}
+
+/* Recherche l'article dans le fonds CODE_DATE, à la date voulue. */
+async function lfChercherArticle(numero, nomCode, dateIso){
+  const filtres = [];
+  if(nomCode) filtres.push({facette:"NOM_CODE", valeurs:[nomCode]});
+  const t = dateIso ? Date.parse(dateIso.slice(0,10)) : NaN;
+  if(!Number.isNaN(t)) filtres.push({facette:"DATE_VERSION", singleDate:t});
+  const d = await lfAppel("/search", {
+    fond: "CODE_DATE",
+    recherche: {
+      filtres, sort:"PERTINENCE", operateur:"ET", typePagination:"DEFAUT",
+      pageNumber:1, pageSize:10,
+      champs:[{typeChamp:"NUM_ARTICLE", operateur:"ET",
+        criteres:[{typeRecherche:"EXACTE", valeur:normaliserNumeroArticle(numero), operateur:"ET"}]}],
+    },
+  });
+  /* Réponse imbriquée : results → sections → extracts (type « articles »). */
+  for(const item of (d.results||[])){
+    for(const sec of (item.sections||[])){
+      for(const ex of (sec.extracts||[])){
+        if(ex.type && ex.type!=="articles") continue;
+        if(ex.id) return {id:ex.id, num:ex.num, titreCode:item.title||item.titre||nomCode||""};
+      }
+    }
+    if(item.id && /^LEGIARTI/.test(item.id)) return {id:item.id, num:item.num, titreCode:item.title||""};
+  }
+  return null;
+}
+
+async function lfArticle(id, dateIso){
+  const corps = {id};
+  if(dateIso) corps.date = dateIso.slice(0,10);
+  const d = await lfAppel("/consult/getArticle", corps);
+  const a = d.article || d;
+  const texte = a.texte || a.contenu || (Array.isArray(a.values) ? a.values.join("\n") : "");
+  return {id:a.id||id, num:a.num||a.numero||"", texte, etat:a.etat||"", cid:a.cid||""};
+}
+
+/* Ouvre un article cité, dans sa version applicable à la date de la décision.
+   Une citation pouvant viser plusieurs articles, on propose le choix. */
+async function ouvrirArticle(numeros, libelleCode, dateDecision){
+  const dlg = $("dlg-article");
+  const nomCode = codeOfficiel(libelleCode);
+  const liste = [].concat(numeros);
+  if(!dlg.open) dlg.showModal();
+  if(liste.length > 1){
+    $("art-titre").textContent = "Articles cités";
+    $("art-sous-titre").textContent = nomCode || libelleCode || "";
+    $("art-corps").innerHTML = "<p>Cette citation vise plusieurs articles. Lequel souhaitez-vous consulter ?</p>"+
+      '<div class="actions">'+liste.map(n=>
+        '<button class="second choix-art" type="button" data-num="'+echap(n)+'">Article '+echap(n)+"</button>").join("")+
+      "</div>";
+    $("art-corps").querySelectorAll(".choix-art").forEach(b=>b.onclick = ()=>
+      ouvrirArticle([b.dataset.num], libelleCode, dateDecision));
+    return;
+  }
+  const numero = liste[0];
+  $("art-titre").textContent = "Article "+numero+(nomCode?" — "+nomCode:"");
+  $("art-sous-titre").textContent = dateDecision
+    ? "Version applicable au "+dateFr(dateDecision)+" (date de la décision)"
+    : "Version en vigueur";
+  $("art-corps").innerHTML = '<div class="alerte info">Consultation de Légifrance…</div>';
+  try{
+    let trouve = await lfChercherArticle(numero, nomCode, dateDecision);
+    /* Le nom du code déduit de la citation peut être imparfait : plutôt que
+       d'annoncer un échec, on réessaie sans restriction de code. */
+    let elargi = false;
+    if(!trouve && nomCode){
+      trouve = await lfChercherArticle(numero, null, dateDecision);
+      elargi = !!trouve;
+    }
+    if(!trouve){
+      $("art-corps").innerHTML = '<div class="alerte info">Article introuvable sur Légifrance'+
+        (nomCode ? " dans le « "+echap(nomCode)+" », ni dans les autres codes," : "")+
+        " à cette date. Le texte a pu être abrogé ou renuméroté depuis, ou la citation viser un autre recueil (loi, décret, convention collective) que les codes.</div>";
+      return;
+    }
+    const art = await lfArticle(trouve.id, dateDecision);
+    $("art-sous-titre").textContent = [
+      dateDecision ? "Version applicable au "+dateFr(dateDecision) : "Version en vigueur",
+      art.etat ? "état : "+art.etat.toLowerCase() : "",
+      trouve.titreCode || nomCode || "",
+    ].filter(Boolean).join(" · ");
+    $("art-corps").innerHTML =
+      (elargi ? '<div class="alerte info">Article introuvable dans le « '+echap(nomCode)+
+        ' » : voici celui trouvé sous ce numéro dans un autre code — vérifiez qu\'il s\'agit bien du texte visé.</div>' : "")+
+      '<div class="texte-art">'+echap(art.texte || "(texte indisponible)")+"</div>"+
+      '<p class="note" style="margin-top:14px">Source : Légifrance (DILA) · '+
+      '<a href="https://www.legifrance.gouv.fr/codes/article_lc/'+encodeURIComponent(art.id)+
+      '" target="_blank" rel="noopener">Voir sur Légifrance ↗</a></p>';
+  }catch(e){
+    $("art-corps").innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
+  }
+}
+$("art-fermer").onclick = ()=>$("dlg-article").close();
+$("dlg-article").addEventListener("click", e=>{ if(e.target===$("dlg-article")) $("dlg-article").close(); });
+
+/* Réglages Légifrance */
+$("btn-lf-tester").onclick = async ()=>{
+  const id = $("in-lf-id").value.trim(), secret = $("in-lf-secret").value.trim();
+  const msg = $("msg-lf");
+  if(!id || !secret){ msg.innerHTML = '<div class="alerte err">Saisissez le Client ID et son secret.</div>'; return; }
+  localStorage.setItem(LF_ID_STOCKAGE, id);
+  localStorage.setItem(LF_SECRET_STOCKAGE, secret);
+  lfJeton = null; lfExpire = 0;
+  msg.innerHTML = '<div class="alerte info">Connexion à Légifrance…</div>';
+  try{
+    const t = await lfChercherArticle("L1154-1", "Code du travail", null);
+    msg.innerHTML = '<div class="alerte ok">Légifrance connecté ✓ — '+
+      (t ? "l'article de test a bien été retrouvé." : "l'authentification fonctionne (article de test non trouvé, sans gravité).")+
+      " Les articles cités dans les décisions sont désormais cliquables.</div>";
+    $("in-lf-secret").value = "";
+    majEtatLf();
+  }catch(e){
+    localStorage.removeItem(LF_ID_STOCKAGE); localStorage.removeItem(LF_SECRET_STOCKAGE);
+    majEtatLf();
+    msg.innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
+  }
+};
+$("btn-lf-oublier").onclick = ()=>{
+  localStorage.removeItem(LF_ID_STOCKAGE); localStorage.removeItem(LF_SECRET_STOCKAGE);
+  lfJeton = null; lfExpire = 0; majEtatLf();
+  $("msg-lf").innerHTML = '<div class="alerte info">Identifiants Légifrance effacés de ce navigateur.</div>';
+};
+
 /* --------------------------- Texte intégral --------------------------- */
 let decisionOuverte = null;
+
+/* Rend cliquables les articles de code cités dans une décision. On découpe le
+   texte autour des citations : le surlignage de la recherche s'applique aux
+   segments, la citation devient un bouton entier. Découper plutôt qu'insérer des
+   marqueurs évite toute interférence entre les balises de surlignage et les
+   boutons. */
+function lierArticles(texteEchappe, surligner){
+  if(!lfConfiguree()) return surligner(texteEchappe);
+  let sortie = "", curseur = 0, m;
+  RE_CITATION.lastIndex = 0;
+  while((m = RE_CITATION.exec(texteEchappe)) !== null){
+    const nums = extraireNumeros(m[1]);
+    sortie += surligner(texteEchappe.slice(curseur, m.index));
+    sortie += nums.length
+      ? '<button type="button" class="art" data-nums="'+echap(nums.join("|"))+
+        '" data-code="'+echap(m[2])+'" title="Voir '+(nums.length>1?"ces articles":"cet article")+
+        ' dans la version applicable à la décision">'+surligner(m[0])+"</button>"
+      : surligner(m[0]);
+    curseur = m.index + m[0].length;
+  }
+  return sortie + surligner(texteEchappe.slice(curseur));
+}
 
 /* Surligne les mots de la recherche courante dans le texte intégral. */
 function surlignerRequete(texteEchappe){
@@ -1162,7 +1496,10 @@ async function ouvrirDecision(id){
     $("dlg-sous-titre").textContent = [d.ecli, d.solution].filter(Boolean).join(" · ");
     $("dlg-corps").innerHTML =
       (d.summary ? '<div class="sommaire"><b>Sommaire officiel.</b> '+echap(d.summary)+'</div>' : "")+
-      "<pre>"+surlignerRequete(echap(d.text||"(texte indisponible)"))+"</pre>";
+      "<pre>"+lierArticles(echap(d.text||"(texte indisponible)"), surlignerRequete)+"</pre>";
+    /* Chaque citation d'article ouvre le texte applicable à la date de la décision. */
+    $("dlg-corps").querySelectorAll("button.art").forEach(b=>b.onclick = ()=>
+      ouvrirArticle(b.dataset.nums.split("|"), b.dataset.code, d.decision_date));
   }catch(e){
     $("dlg-titre").textContent = "Erreur";
     $("dlg-corps").innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
@@ -1319,6 +1656,7 @@ $("btn-export-json").onclick = ()=>exporter("json");
 
 /* --------------------------- Initialisation --------------------------- */
 majEtatCle();
+majEtatLf();
 majHistorique();
 if(restaurerDepuisLien() && cleCourante()) lancerRecherche(0);
 </script>

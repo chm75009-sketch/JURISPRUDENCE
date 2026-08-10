@@ -59,6 +59,23 @@ partent directement de votre navigateur vers l'API officielle.
   chez un collaborateur (le lien ne contient jamais la clé API — chacun utilise
   la sienne).
 
+### Textes officiels (Légifrance) — facultatif
+
+En connectant l'API **Légifrance** (même compte PISTE, même application), les
+articles cités dans le texte d'une décision — « article L. 1154-1 du code du
+travail », « articles 455 et 458 du code de procédure civile » — deviennent
+**cliquables** et s'affichent **dans leur version applicable à la date de la
+décision**, sans quitter la page.
+
+- Authentification **OAuth2 `client_credentials`** (Client ID + secret de la
+  fiche PISTE), à saisir dans le panneau « Textes officiels ». Comme la clé
+  Judilibre, les identifiants restent **uniquement dans le navigateur** ; le
+  jeton d'accès n'est gardé qu'en mémoire et renouvelé automatiquement.
+- Le nom du code cité est recalé sur la nomenclature officielle Légifrance ;
+  si l'article n'y est pas trouvé, la recherche est relancée sur l'ensemble des
+  codes et le résultat est signalé comme tel.
+- Une citation visant plusieurs articles propose le choix.
+
 ### Résultats
 - Extraits surlignés, numéro de pourvoi, ECLI, solution, matières (titrage),
   lien vers la fiche officielle sur courdecassation.fr.
@@ -117,7 +134,12 @@ clé sur son propre poste.
   surtout depuis 2016-2020), tribunaux judiciaires et de commerce (en cours de
   versement).
 
+- Les **articles cliquables** ne couvrent que les **codes** : une citation
+  visant une loi non codifiée, un décret ou une convention collective n'est pas
+  résolue.
+
 ## Données
 
 Décisions : © Cour de cassation, base Judilibre (open data).
-API servie par la plateforme d'État [PISTE](https://piste.gouv.fr).
+Textes : © DILA, [Légifrance](https://www.legifrance.gouv.fr) (open data).
+API servies par la plateforme d'État [PISTE](https://piste.gouv.fr).
