@@ -1047,12 +1047,27 @@ function pageHtmlExport(lignes, elargie){
     '.m{color:#666;font-size:12.5px;margin-top:3px} a{color:#1d4ed8;word-break:break-all}'+
     '.s{background:#f7ecec;border-radius:6px;padding:8px 11px;margin:7px 0;font-size:13.5px}'+
     '.e{font-size:13.5px;color:#444;margin-top:6px}'+
-    '@media print{.d{break-inside:avoid}}'+
+    '#filtre{font:inherit;width:100%;padding:9px 12px;border:1px solid #bbb;border-radius:8px;margin:4px 0 2px}'+
+    '#compteur{color:#666;font-size:12.5px}'+
+    '@media print{.d{break-inside:avoid} #filtre,#compteur{display:none}}'+
     '</style></head><body><h1>'+echap(titre)+'</h1>'+
     '<p class="info">'+lignes.length.toLocaleString("fr-FR")+" décision"+(lignes.length>1?"s":"")+
     (elargie ? " — attention : recherche élargie par l'API (« au moins un mot »)" : "")+
     " · Source : Judilibre, Cour de cassation (open data, décisions pseudonymisées).</p>"+
-    entrees+"</body></html>";
+    '<input id="filtre" type="search" placeholder="Filtrer les décisions : tapez un ou plusieurs mots (ex. licenciement nullité)…">'+
+    '<div id="compteur"></div>'+
+    entrees+
+    /* Filtre embarqué : chaque mot tapé doit figurer dans la décision
+       (accents et majuscules ignorés). Fonctionne hors ligne. */
+    '<scr'+'ipt>var f=document.getElementById("filtre"),n=document.getElementById("compteur"),'+
+    'ds=[].slice.call(document.querySelectorAll(".d"));'+
+    'function norm(s){return s.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"")}'+
+    'var tx=ds.map(function(d){return norm(d.textContent)});'+
+    'f.oninput=function(){var mots=norm(f.value).split(/\\s+/).filter(Boolean),c=0;'+
+    'ds.forEach(function(d,i){var ok=mots.every(function(m){return tx[i].indexOf(m)>=0});'+
+    'd.style.display=ok?"":"none";if(ok)c++});'+
+    'n.textContent=mots.length?c+" décision"+(c>1?"s":"")+" sur "+ds.length+" contien"+(c>1?"nent":"t")+" : "+f.value:""};'+
+    '</scr'+'ipt></body></html>';
 }
 
 async function exporter(format){
