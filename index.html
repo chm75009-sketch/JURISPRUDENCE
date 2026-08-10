@@ -1234,12 +1234,14 @@ const CODES = [
   "Code électoral","Livre des procédures fiscales"
 ];
 
+/* Affiche l'adresse du site en plus de l'état : installée sur un téléphone,
+   l'application tourne sans barre d'adresse, et deux installations (Netlify et
+   GitHub Pages) sont autrement impossibles à distinguer. */
 function majEtatLf(){
-  $("etat-lf").textContent = relaisDisponible === true
-    ? "relais actif — texte affiché dans la page"
-    : (relaisDisponible === false
-        ? "articles cliquables — ouverture sur legifrance.gouv.fr"
-        : "articles cliquables");
+  const hote = location.hostname || "fichier local";
+  $("etat-lf").textContent = hote + (relaisDisponible === true
+    ? " · relais actif"
+    : (relaisDisponible === false ? " · sans relais" : ""));
 }
 
 /* « L. 1154-1 » → « L1154-1 » : format attendu par Légifrance. */
