@@ -287,6 +287,7 @@
     <div class="actions">
       <button class="principal" id="btn-chercher" type="button">Rechercher</button>
       <button class="second" id="btn-export-csv" type="button" disabled>Exporter en CSV</button>
+      <button class="second" id="btn-export-html" type="button" disabled title="Fichier lisible dans tout navigateur, accents garantis, imprimable en PDF">Exporter en HTML (lisible)</button>
       <button class="second" id="btn-export-json" type="button" disabled>Exporter en JSON</button>
       <select id="in-export-max" title="Nombre maximal de décisions à exporter">
         <option value="200">Export : 200 premières</option>
@@ -850,7 +851,7 @@ async function lancerRecherche(page){
       (etat.total>PLAFOND ? " (affichage limité aux 10 000 premières — affinez avec les dates)" : "");
     $("btn-prec").disabled = page<=0;
     $("btn-suiv").disabled = !d.next_page || (page+1)>=nbPages;
-    $("btn-export-csv").disabled = $("btn-export-json").disabled = etat.total===0;
+    $("btn-export-csv").disabled = $("btn-export-html").disabled = $("btn-export-json").disabled = etat.total===0;
     brancherBoutonsFiches();
     $("zone-resultats").scrollIntoView({behavior:"smooth", block:"start"});
     if(page===0) sauverDansHistorique(lireCriteres());
@@ -1024,8 +1025,38 @@ function nomFichier(ext){
   return "judilibre-"+q+"-"+new Date().toISOString().slice(0,10)+"."+ext;
 }
 
+/* Export HTML : un fichier autonome, lisible dans tout navigateur (UTF-8
+   déclaré), mis en page pour la lecture et l'impression en PDF. */
+function pageHtmlExport(lignes, elargie){
+  const q = $("in-q").value.trim();
+  const titre = "Recherche Judilibre — « "+q+" » — "+new Date().toLocaleDateString("fr-FR");
+  const entrees = lignes.map(l=>
+    '<div class="d">'+
+      '<div class="t">'+echap(l.citation)+'</div>'+
+      '<div class="m">'+echap([l.ecli, l.matieres, l.publication?("publication : "+l.publication):""].filter(Boolean).join(" · "))+'</div>'+
+      (l.sommaire ? '<div class="s"><b>Sommaire officiel.</b> '+echap(l.sommaire)+'</div>' : "")+
+      (l.extraits ? '<div class="e">« … '+echap(l.extraits)+' … »</div>' : "")+
+      '<div class="m"><a href="'+echap(l.url)+'">'+echap(l.url)+'</a></div>'+
+    '</div>').join("");
+  return '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">'+
+    '<meta name="viewport" content="width=device-width, initial-scale=1">'+
+    '<title>'+echap(titre)+'</title><style>'+
+    'body{font:14.5px/1.55 Georgia,"Times New Roman",serif;color:#1c2430;max-width:840px;margin:26px auto;padding:0 18px}'+
+    'h1{font-size:20px;margin-bottom:4px} .info{color:#666;font-size:13px;margin-bottom:18px}'+
+    '.d{border-bottom:1px solid #d8d8d8;padding:13px 0} .t{font-weight:bold}'+
+    '.m{color:#666;font-size:12.5px;margin-top:3px} a{color:#1d4ed8;word-break:break-all}'+
+    '.s{background:#f7ecec;border-radius:6px;padding:8px 11px;margin:7px 0;font-size:13.5px}'+
+    '.e{font-size:13.5px;color:#444;margin-top:6px}'+
+    '@media print{.d{break-inside:avoid}}'+
+    '</style></head><body><h1>'+echap(titre)+'</h1>'+
+    '<p class="info">'+lignes.length.toLocaleString("fr-FR")+" décision"+(lignes.length>1?"s":"")+
+    (elargie ? " — attention : recherche élargie par l'API (« au moins un mot »)" : "")+
+    " · Source : Judilibre, Cour de cassation (open data, décisions pseudonymisées).</p>"+
+    entrees+"</body></html>";
+}
+
 async function exporter(format){
-  const btns = [$("btn-export-csv"), $("btn-export-json"), $("btn-chercher")];
+  const btns = [$("btn-export-csv"), $("btn-export-html"), $("btn-export-json"), $("btn-chercher")];
   btns.forEach(b=>b.disabled = true);
   const msg = $("msg-recherche");
   msg.innerHTML = "";
@@ -1039,6 +1070,8 @@ async function exporter(format){
       const csv = "\uFEFF"+colonnes.join(";")+"\n"+
         lignes.map(l=>colonnes.map(c=>cel(l[c])).join(";")).join("\n");
       telecharger(nomFichier("csv"), csv, "text/csv;charset=utf-8");
+    }else if(format==="html"){
+      telecharger(nomFichier("html"), pageHtmlExport(lignes, elargie), "text/html;charset=utf-8");
     }else{
       telecharger(nomFichier("json"), JSON.stringify(lignes, null, 2), "application/json");
     }
@@ -1052,7 +1085,7 @@ async function exporter(format){
     msg.innerHTML = '<div class="alerte err">Export interrompu : '+echap(messageErreur(e))+"</div>";
   }finally{
     btns.forEach(b=>b.disabled = false);
-    $("btn-export-csv").disabled = $("btn-export-json").disabled = etat.total===0;
+    $("btn-export-csv").disabled = $("btn-export-html").disabled = $("btn-export-json").disabled = etat.total===0;
   }
 }
 $("btn-export-csv").onclick = ()=>exporter("csv");
