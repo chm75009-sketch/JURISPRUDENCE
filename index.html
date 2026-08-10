@@ -1610,6 +1610,12 @@ $("btn-export-csv").onclick = ()=>exporter("csv");
 $("btn-export-json").onclick = ()=>exporter("json");
 
 /* --------------------------- Initialisation --------------------------- */
+/* Installation sur l'appareil et consultation hors connexion. L'échec de
+   l'enregistrement (navigation privée, protocole file://) est sans conséquence :
+   l'application fonctionne exactement pareil, simplement sans mode hors ligne. */
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))
+  window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+
 majEtatCle();
 majEtatLf();
 majHistorique();

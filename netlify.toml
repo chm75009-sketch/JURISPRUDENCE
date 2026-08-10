@@ -7,7 +7,7 @@
 # GitHub Pages qui sert la même application.
 
 [build]
-  command = "mkdir -p dist && cp index.html dist/ && cp manifest.json dist/ 2>/dev/null || true && cp -r icons dist/ 2>/dev/null || true"
+  command = "mkdir -p dist && cp index.html manifest.json sw.js dist/ && cp -r icons dist/"
   publish = "dist"
   functions = "netlify/functions"
 
