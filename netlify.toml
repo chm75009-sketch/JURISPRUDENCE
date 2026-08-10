@@ -1,0 +1,15 @@
+# Configuration Netlify.
+# Le site est un fichier statique : aucune étape de construction n'est nécessaire.
+# Seule la fonction « legifrance » tourne côté serveur (voir netlify/functions/).
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+  command = ""
+
+# Le relais n'est utile qu'appelé par l'application ; on évite qu'il soit
+# indexé ou appelé depuis un navigateur par une adresse plus courte.
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
