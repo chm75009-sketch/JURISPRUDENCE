@@ -42,11 +42,15 @@ partent directement de votre navigateur vers l'API officielle.
   régime de la preuve, définition et critères, jurisprudence récente,
   cassations uniquement, panorama complet. Les angles se **combinent** :
   chacun part des critères affichés à l'écran.
-- **Exemples thématiques** : des recherches complètes prêtes à l'emploi qui
-  illustrent la méthode sur un sujet (régime de la preuve du harcèlement moral
-  avant/après 2016, appréciation globale « pris dans leur ensemble »,
-  harcèlement moral institutionnel, obligation de sécurité, droit à la preuve,
-  nullité du licenciement…).
+- **Bibliothèque de recherches (droit du travail)** : une vingtaine de
+  recherches complètes prêtes à l'emploi, construites sur les formules
+  consacrées de la jurisprudence — harcèlement moral (régime de la preuve
+  avant/après 2016, appréciation globale, forme institutionnelle),
+  représentation du personnel (consultation du CSE, délit d'entrave, CSSCT,
+  BDESE), contrat de travail (faux CV, clause de non-concurrence, rupture
+  conventionnelle), discipline (règlement intérieur, retards répétés), preuve
+  (droit à la preuve, heures supplémentaires, discrimination), santé et
+  sécurité (obligation de sécurité, obligation de reclassement).
 - **Guide de méthode intégré** (panneau dépliant « Méthode ») : comment
   formuler une recherche efficace quel que soit le sujet.
 - **Filtres** : juridictions (Cass. / cours d'appel / tribunaux judiciaires /

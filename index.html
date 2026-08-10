@@ -241,9 +241,9 @@
             <option value="">— Appliquer un angle à la recherche en cours —</option>
           </select>
         </label>
-        <label class="champ"><b>Exemples thématiques (recherches complètes)</b>
+        <label class="champ"><b>Bibliothèque de recherches (droit du travail)</b>
           <select id="in-preset">
-            <option value="">— Choisir un exemple : il remplit tout le formulaire —</option>
+            <option value="">— Choisir un sujet : il remplit tout le formulaire —</option>
           </select>
         </label>
         <label class="champ"><b>Recherches récentes</b>
@@ -710,47 +710,119 @@ const ANGLES = [
    jurisprudence : la recherche par « expression exacte » sur ces formules est
    bien plus précise qu'une recherche par mots-clés libres. */
 const PRESETS = [
+  /* ---------------------------- Harcèlement ---------------------------- */
   {
-    label: "Harcèlement moral · régime de la preuve (formulation depuis 2016)",
-    note: "Cible le mécanisme probatoire de l'article L. 1154-1 du code du travail dans sa rédaction issue de la loi du 17 août 2015 : le salarié « présente des éléments de fait laissant supposer l'existence d'un harcèlement », puis l'employeur doit prouver que ses agissements en sont exempts. Pour les arrêts antérieurs à 2016, utilisez le modèle « ancienne formulation ».",
+    label: "Harcèlement moral · régime de la preuve (depuis 2016)",
+    note: "Le mécanisme probatoire de l'article L. 1154-1 du code du travail dans sa rédaction issue de la loi du 17 août 2015 : le salarié « présente des éléments de fait laissant supposer l'existence d'un harcèlement », puis l'employeur doit prouver que ses agissements en sont exempts.",
     c: {q:"laissant supposer l'existence d'un harcèlement", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
   },
   {
-    label: "Harcèlement moral · régime de la preuve (formulation avant 2016)",
-    note: "Ancienne rédaction de l'article L. 1154-1 : le salarié « établit des faits qui permettent de présumer l'existence d'un harcèlement ». Utile pour retrouver la jurisprudence fondatrice (notamment les arrêts de 2008 sur le contrôle de la Cour de cassation).",
+    label: "Harcèlement moral · régime de la preuve (avant 2016)",
+    note: "Ancienne rédaction de l'article L. 1154-1 : le salarié « établit des faits qui permettent de présumer l'existence d'un harcèlement ». Pour retrouver la jurisprudence fondatrice.",
     c: {q:"permettent de présumer l'existence d'un harcèlement", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
   },
   {
-    label: "Harcèlement moral · appréciation globale des faits (« pris dans leur ensemble »)",
-    note: "La formule par laquelle la chambre sociale impose aux juges du fond d'apprécier les faits « pris dans leur ensemble », et non isolément, avant de dire si un harcèlement est présumé. Combinez avec des dates pour suivre l'évolution.",
+    label: "Harcèlement moral · appréciation globale (« pris dans leur ensemble »)",
+    note: "La formule par laquelle la chambre sociale impose aux juges du fond d'apprécier les faits « pris dans leur ensemble », et non isolément.",
     c: {q:"pris dans leur ensemble", op:"exact", x:"harcèlement sexuel", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
   },
   {
     label: "Harcèlement moral · sans le harcèlement sexuel",
-    note: "Expression exacte « harcèlement moral » avec exclusion locale des décisions qui mentionnent aussi le harcèlement sexuel. L'API ne sachant pas exclure un mot, le tri est fait par l'application sur les extraits et sommaires reçus ; cochez la « vérification approfondie » pour contrôler aussi le texte intégral de la page affichée.",
+    note: "Expression exacte « harcèlement moral », avec exclusion locale des décisions mentionnant aussi le harcèlement sexuel. La vérification approfondie contrôle le texte intégral des décisions affichées.",
     c: {q:"harcèlement moral", op:"exact", x:"harcèlement sexuel", jur:["cc"], ch:["soc"], tri:"date-desc", prof:true}
   },
   {
     label: "Harcèlement moral institutionnel (politique d'entreprise)",
-    note: "Le harcèlement moral « institutionnel », résultant d'une politique d'entreprise, consacré par la chambre criminelle dans l'affaire France Télécom (Cass. crim., 21 janvier 2025). Peu de décisions, mais toutes importantes.",
+    note: "Le harcèlement moral « institutionnel », résultant d'une politique d'entreprise, consacré par la chambre criminelle dans l'affaire France Télécom. Peu de décisions, mais toutes importantes.",
     c: {q:"harcèlement moral institutionnel", op:"exact", jur:["cc","ca"], tri:"date-desc"}
   },
   {
-    label: "Obligation de sécurité de l'employeur · prévention du harcèlement",
-    note: "L'obligation de sécurité de l'employeur (art. L. 4121-1) telle que redéfinie depuis Cass. soc., 25 novembre 2015, n° 14-24.444 (Air France) : l'employeur qui a pris toutes les mesures de prévention peut s'exonérer. Souvent invoquée en parallèle du harcèlement moral.",
-    c: {q:"obligation de sécurité", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+    label: "Nullité du licenciement lié au harcèlement moral",
+    note: "Croise harcèlement moral, licenciement et nullité (art. L. 1152-3 : est nul tout licenciement intervenu en méconnaissance des règles sur le harcèlement).",
+    c: {q:"harcèlement moral licenciement nullité", op:"and", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+
+  /* --------------------- Représentation du personnel --------------------- */
+  {
+    label: "CSE · consultation obligatoire et défaut de consultation",
+    note: "Les consultations du comité social et économique, instance issue des ordonnances de 2017. Pour les litiges antérieurs, refaites la recherche avec « comité d'entreprise », qui reste la formule employée dans les décisions plus anciennes.",
+    c: {q:"consultation du comité social et économique", op:"exact", jur:["cc","ca"], tri:"date-desc"}
   },
   {
+    label: "CSE · délit d'entrave",
+    note: "L'entrave au fonctionnement des institutions représentatives du personnel. Le contentieux relève du pénal : la chambre criminelle est cochée en plus de la sociale. Rappel : les jugements correctionnels des tribunaux ne figurent pas dans la base ouverte, seules les décisions de la Cour de cassation apparaissent ici.",
+    c: {q:"délit d'entrave", op:"exact", jur:["cc"], ch:["cr","soc"], tri:"date-desc"}
+  },
+  {
+    label: "CSSCT · commission santé, sécurité et conditions de travail",
+    note: "La commission santé, sécurité et conditions de travail, obligatoire dans les entreprises d'au moins 300 salariés et dans certains établissements à risques. Contentieux récent, donc peu fourni : élargissez aux cours d'appel.",
+    c: {q:"commission santé, sécurité et conditions de travail", op:"exact", jur:["cc","ca"], tri:"date-desc"}
+  },
+  {
+    label: "BDESE · base de données économiques, sociales et environnementales",
+    note: "Les décisions écrivent le nom complet, presque jamais le sigle : la recherche porte donc sur « base de données économiques ». Cochez les cours d'appel et les tribunaux judiciaires, où se juge l'essentiel de ce contentieux (référés CSE).",
+    c: {q:"base de données économiques", op:"exact", jur:["cc","ca","tj"], tri:"date-desc"}
+  },
+
+  /* ---------------------- Formation et rupture du contrat ---------------------- */
+  {
+    label: "Faux CV · mensonge et dol à l'embauche",
+    note: "Le contentieux du curriculum vitae mensonger : le mensonge n'entraîne la nullité du contrat que s'il constitue un dol déterminant du consentement, faute de quoi il relève du seul pouvoir disciplinaire. Ajoutez « dol » en mots exigés pour resserrer.",
+    c: {q:"curriculum vitae", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Clause de non-concurrence · validité et contrepartie",
+    note: "Validité de la clause : limitation dans le temps et l'espace, spécificité à l'emploi, et contrepartie financière — condition posée par la chambre sociale depuis 2002.",
+    c: {q:"clause de non-concurrence", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Rupture conventionnelle · vice du consentement",
+    note: "La rupture conventionnelle et sa contestation : consentement vicié, contexte de harcèlement, formalités et délai de rétractation.",
+    c: {q:"rupture conventionnelle", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+
+  /* ------------------------ Discipline et sanctions ------------------------ */
+  {
+    label: "Règlement intérieur · clauses illicites",
+    note: "Le contrôle du contenu du règlement intérieur : restrictions aux libertés devant être justifiées par la nature de la tâche et proportionnées au but recherché (art. L. 1121-1).",
+    c: {q:"règlement intérieur", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Retards répétés · faute et sanction",
+    note: "Les retards répétés comme motif disciplinaire : appréciation de la gravité, proportionnalité de la sanction, exigence d'une mise en garde préalable.",
+    c: {q:"retards répétés", op:"exact", jur:["cc","ca"], tri:"date-desc"}
+  },
+
+  /* ------------------------------- Preuve ------------------------------- */
+  {
     label: "Droit à la preuve · preuve illicite ou déloyale",
-    note: "Le « droit à la preuve » qui permet, depuis Ass. plén., 22 décembre 2023 (n° 20-20.648), de produire une preuve illicite ou déloyale si elle est indispensable et proportionnée. Décisif en matière de harcèlement (enregistrements, courriels, etc.).",
+    note: "Le « droit à la preuve » qui permet, depuis Ass. plén., 22 décembre 2023 (n° 20-20.648), de produire une preuve illicite ou déloyale si elle est indispensable et proportionnée. Décisif en matière de harcèlement (enregistrements, courriels).",
     c: {q:"droit à la preuve", op:"exact", jur:["cc"], pub:["b"], tri:"date-desc"}
   },
   {
-    label: "Nullité du licenciement lié au harcèlement moral",
-    note: "Croise harcèlement moral, licenciement et nullité (art. L. 1152-3 : tout licenciement intervenu en méconnaissance des règles sur le harcèlement est nul). Recherche en mode ET, chambre sociale.",
-    c: {q:"harcèlement moral licenciement nullité", op:"and", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+    label: "Heures supplémentaires · régime de la preuve",
+    note: "Le partage de la preuve de l'article L. 3171-4 : le salarié doit présenter des « éléments suffisamment précis » quant aux heures non rémunérées, formule employée depuis l'alignement de 2020 sur le droit de l'Union.",
+    c: {q:"éléments suffisamment précis", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Discrimination · régime de la preuve",
+    note: "Le mécanisme probatoire de l'article L. 1134-1, jumeau de celui du harcèlement : le salarié présente des éléments de fait « laissant supposer l'existence d'une discrimination ».",
+    c: {q:"laissant supposer l'existence d'une discrimination", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+
+  /* --------------------------- Santé et sécurité --------------------------- */
+  {
+    label: "Obligation de sécurité de l'employeur",
+    note: "L'obligation de sécurité (art. L. 4121-1) telle que redéfinie depuis Cass. soc., 25 novembre 2015, n° 14-24.444 (Air France) : l'employeur qui a pris toutes les mesures de prévention peut s'exonérer.",
+    c: {q:"obligation de sécurité", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Inaptitude · obligation de reclassement",
+    note: "L'étendue de l'obligation de reclassement du salarié déclaré inapte : périmètre du groupe, loyauté de la recherche, cas de dispense.",
+    c: {q:"obligation de reclassement", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
   },
 ];
+
 
 (function initPresets(){
   const sel = $("in-preset");
