@@ -106,6 +106,22 @@
   .progress .barre{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:5px}
   .progress .barre i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
 
+  h3.groupe{margin:26px 0 2px;font-size:15px;color:var(--accent);display:flex;gap:9px;align-items:baseline;
+    border-bottom:2px solid var(--accent-soft);padding-bottom:5px}
+  h3.groupe span{font-weight:400;font-size:13px;color:var(--muted)}
+
+  #zone-panorama{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:14px}
+  #zone-panorama h3{margin:0 0 4px;font-size:16px}
+  .pano-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:12px}
+  .pano-bloc h4{margin:0 0 7px;font-size:13.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.4px}
+  .pano-ligne{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:3px 0}
+  .pano-ligne .lib{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pano-ligne .nb{color:var(--muted);font-variant-numeric:tabular-nums}
+  .pano-ligne .jauge{width:56px;height:6px;background:var(--line);border-radius:99px;overflow:hidden;flex-shrink:0}
+  .pano-ligne .jauge i{display:block;height:100%;background:var(--accent)}
+  .pano-ligne button{font:inherit;font-size:13.5px;border:none;background:none;color:var(--link);
+    cursor:pointer;padding:0;text-align:left;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
   details.methode{margin:0 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);
     font-size:14px;padding:10px 14px}
   details.methode summary{cursor:pointer;font-weight:600;font-size:13.5px;color:var(--accent)}
@@ -169,8 +185,15 @@
         <li>Appliquez un ou plusieurs <b>angles d'analyse</b> : ils transforment la
             recherche en cours (arrêts de principe, régime de la preuve, définition,
             actualité…) et <b>se combinent</b> — quel que soit le sujet.</li>
-        <li><b>Mots à exclure</b> pour écarter les notions voisines qui parasitent
-            (ex. exclure « sexuel » quand vous cherchez le harcèlement moral).</li>
+        <li><b>Affinez avec les filtres locaux</b>, que l'API ne sait pas faire :
+            <b>mots à exclure</b> pour écarter les notions voisines (ex. « sexuel »
+            quand vous cherchez le harcèlement moral) ; <b>mots exigés</b> pour
+            imposer un terme absent de la requête, vérifié dans le texte intégral
+            de chaque décision affichée ; <b>matière</b> pour ne garder qu'un
+            titrage (ex. « contrat de travail »).</li>
+        <li><b>Prenez de la hauteur</b> : « Analyser les résultats » donne la
+            répartition par matière, juridiction, année et solution — et
+            « Regrouper les résultats » réorganise l'affichage par thème.</li>
         <li>Repères : <b>Bulletin</b> = arrêts que la Cour juge importants ;
             <b>sommaire/titrage</b> = le langage officiel et normalisé de la Cour ;
             <b>motivations</b> = le raisonnement ; <b>dispositif</b> = ce qui est jugé.</li>
@@ -200,9 +223,14 @@
         <input type="search" id="in-q" placeholder="ex. harcèlement moral licenciement nullité">
       </label>
       <div class="grid g2">
+        <label class="champ"><b>Mots exigés <span style="font-weight:400;color:var(--muted)">(vérifiés dans le texte intégral)</span></b>
+          <input type="text" id="in-exiges" placeholder="ex. preuve, charge de la preuve">
+        </label>
         <label class="champ"><b>Mots à exclure <span style="font-weight:400;color:var(--muted)">(séparés par des virgules)</span></b>
           <input type="text" id="in-exclure" placeholder="ex. harcèlement sexuel, discrimination">
         </label>
+      </div>
+      <div class="grid g3">
         <label class="champ"><b>Chercher dans</b>
           <select id="in-field">
             <option value="">Toute la décision</option>
@@ -211,6 +239,18 @@
             <option value="moyens">Moyens (arguments des parties)</option>
             <option value="expose">Exposé du litige (les faits)</option>
             <option value="sommaire">Sommaire et titrage officiels</option>
+          </select>
+        </label>
+        <label class="champ"><b>Matière <span style="font-weight:400;color:var(--muted)">(filtre sur le titrage)</span></b>
+          <input type="text" id="in-matiere" placeholder="ex. contrat de travail">
+        </label>
+        <label class="champ"><b>Regrouper les résultats</b>
+          <select id="in-groupe">
+            <option value="">Sans regroupement (par pertinence)</option>
+            <option value="matiere">Par matière (titrage officiel)</option>
+            <option value="juridiction">Par juridiction et chambre</option>
+            <option value="annee">Par année</option>
+            <option value="solution">Par solution (cassation, rejet…)</option>
           </select>
         </label>
       </div>
@@ -280,8 +320,9 @@
       </div>
       <div class="cases">
         <label><input type="checkbox" id="in-approfondi">
-          Vérification approfondie des mots exclus dans le texte intégral
-          <span class="note">(page affichée uniquement — plus lent, consomme du quota)</span></label>
+          Vérifier aussi les mots exclus dans le texte intégral
+          <span class="note">(page affichée uniquement — plus lent, consomme du quota. Les mots exigés sont
+          toujours vérifiés dans le texte intégral.)</span></label>
       </div>
     </div>
     <div class="actions">
@@ -296,6 +337,7 @@
         <option value="2500">Export : 2 500 premières</option>
         <option value="10000">Export : maximum (10 000)</option>
       </select>
+      <button class="second" id="btn-panorama" type="button" disabled title="Analyse un échantillon des résultats et en donne la répartition par matière, chambre, année et solution">Analyser les résultats</button>
       <button class="second" id="btn-lien" type="button" title="Copie une adresse qui rouvre cette recherche pré-remplie (sans votre clé API)">Copier le lien de cette recherche</button>
     </div>
     <div id="zone-progress" class="progress cache">
@@ -314,6 +356,7 @@
       </div>
       <div class="note" id="temps-texte"></div>
     </div>
+    <div id="zone-panorama" class="cache"></div>
     <div id="liste-resultats"></div>
     <div class="pagination">
       <button class="second" id="btn-prec" type="button">← Précédent</button>
@@ -508,6 +551,9 @@ function lireCriteres(){
   return {
     q: $("in-q").value.trim(),
     x: $("in-exclure").value.trim(),
+    req: $("in-exiges").value.trim(),
+    mat: $("in-matiere").value.trim(),
+    grp: $("in-groupe").value,
     op: $("in-operator").value,
     tri: $("in-tri").value,
     sol: $("in-solution").value,
@@ -523,6 +569,9 @@ function lireCriteres(){
 function appliquerCriteres(c){
   $("in-q").value = c.q||"";
   $("in-exclure").value = c.x||"";
+  $("in-exiges").value = c.req||"";
+  $("in-matiere").value = c.mat||"";
+  $("in-groupe").value = c.grp||"";
   $("in-operator").value = c.op||"and";
   $("in-tri").value = c.tri||"score";
   $("in-solution").value = c.sol||"";
@@ -741,10 +790,20 @@ function construireParams(page, pageSize){
   return p;
 }
 
-/* ----------------------------- Mots exclus ----------------------------- */
-function listeExclusions(){
-  return $("in-exclure").value.split(/[;,]/).map(s=>normaliser(s.trim())).filter(Boolean);
+/* ------------------- Filtres locaux (exclus / exigés / matière) -------------------
+   L'API ne sait ni exclure un mot, ni exiger un mot en plus de la requête, ni
+   filtrer par libellé de matière : l'application s'en charge sur les données
+   reçues. Les mots EXCLUS se contrôlent sur la « surface » (extraits, sommaire,
+   matières) — une trouvaille y est certaine, d'où un filtrage immédiat et sûr.
+   Les mots EXIGÉS, eux, ne peuvent pas se juger sur la surface (leur absence
+   d'un extrait ne prouve rien) : ils sont vérifiés dans le texte intégral. */
+function decouper(v){
+  return v.split(/[;,]/).map(s=>normaliser(s.trim())).filter(Boolean);
 }
+function listeExclusions(){ return decouper($("in-exclure").value); }
+function listeExiges(){ return decouper($("in-exiges").value); }
+function listeMatieres(){ return decouper($("in-matiere").value); }
+
 /* Filtre « de surface » : tout ce que la recherche renvoie sans requête
    supplémentaire (extraits surlignés, sommaire, matières, solution). */
 function blobDeSurface(r){
@@ -757,6 +816,53 @@ function estExclue(r, exclus){
   if(!exclus.length) return false;
   const blob = blobDeSurface(r);
   return exclus.some(x=>blob.includes(x));
+}
+/* Matière : au moins un des libellés demandés doit figurer dans le titrage. */
+function matiereOk(r, matieres){
+  if(!matieres.length) return true;
+  const t = normaliser((r.themes||[]).join(" ; "));
+  return matieres.some(m=>t.includes(m));
+}
+function filtrerSurface(tous, exclus, matieres){
+  const gardees = [], ecartees = [];
+  for(const r of tous) ((estExclue(r, exclus) || !matiereOk(r, matieres)) ? ecartees : gardees).push(r);
+  return {gardees, ecartees};
+}
+
+/* ---------------------------- Regroupement ---------------------------- */
+const GROUPES = {
+  matiere:     {titre:"Matière",     cle:r=>(r.themes||[])[0] || "Matière non renseignée"},
+  juridiction: {titre:"Juridiction", cle:r=>libelleJuridiction(r) || "Juridiction inconnue"},
+  annee:       {titre:"Année",       cle:r=>(r.decision_date||"").slice(0,4) || "Date inconnue"},
+  solution:    {titre:"Solution",    cle:r=>r.solution || "Solution non précisée"},
+};
+
+function rendreListe(arr, contexte){
+  const zone = $("liste-resultats");
+  if(!arr.length){
+    zone.innerHTML = '<div class="panel">'+echap(contexte||"Aucune décision à afficher sur cette page.")+'</div>';
+    return;
+  }
+  const g = GROUPES[$("in-groupe").value];
+  if(!g){
+    zone.innerHTML = arr.map(carteResultat).join("");
+  }else{
+    const paquets = new Map();
+    for(const r of arr){
+      const k = g.cle(r);
+      if(!paquets.has(k)) paquets.set(k, []);
+      paquets.get(k).push(r);
+    }
+    /* Les groupes les plus fournis d'abord ; l'ordre interne (pertinence ou
+       date) reste celui renvoyé par l'API. */
+    const ordonnes = [...paquets.entries()].sort((a,b)=>b[1].length-a[1].length || String(a[0]).localeCompare(b[0],"fr"));
+    zone.innerHTML = ordonnes.map(([k,liste])=>
+      '<h3 class="groupe">'+echap(k)+
+        ' <span>'+liste.length+" décision"+(liste.length>1?"s":"")+" sur cette page</span></h3>"+
+      liste.map(carteResultat).join("")
+    ).join("");
+  }
+  brancherBoutonsFiches();
 }
 
 function carteResultat(r){
@@ -828,35 +934,38 @@ async function lancerRecherche(page){
         "<b>plus larges que votre demande</b>. Pour une correspondance stricte, raccourcissez l'expression, "+
         "retirez les termes rares (sigles, abréviations…) ou passez en mode ET avec les mots développés.</div>";
     }
-    const exclus = listeExclusions();
+    const exclus = listeExclusions(), exiges = listeExiges(), matieres = listeMatieres();
+    const filtres = exclus.length || matieres.length || exiges.length;
     const tous = d.results||[];
-    const gardees = [], ecartees = [];
-    for(const r of tous) (estExclue(r, exclus) ? ecartees : gardees).push(r);
+    const {gardees, ecartees} = filtrerSurface(tous, exclus, matieres);
     resultatsCourants = {};
     gardees.forEach(r=>{ resultatsCourants[r.id] = r; });
 
     $("zone-resultats").classList.remove("cache");
     $("total-texte").innerHTML = "<b>"+Number(etat.total).toLocaleString("fr-FR")+"</b> décision"+(etat.total>1?"s":"")+" trouvée"+(etat.total>1?"s":"")+
       (d.relaxed ? ' <span class="note" style="color:var(--warn)">(recherche élargie par l\'API — voir l\'encadré ci-dessus)</span>' : "")+
-      (exclus.length ? ' <span class="note">(avant application de vos mots exclus)</span>' : "");
+      (filtres ? ' <span class="note">(avant application de vos filtres locaux)</span>' : "");
     $("temps-texte").textContent = "Recherche effectuée en "+Math.round(performance.now()-t0)+" ms";
-    $("note-exclusions").textContent = exclus.length
-      ? (ecartees.length ? ecartees.length+" décision"+(ecartees.length>1?"s":"")+" écartée"+(ecartees.length>1?"s":"")+" sur cette page (mots exclus)." : "Aucune décision écartée sur cette page.")
+    $("note-exclusions").textContent = filtres
+      ? (ecartees.length ? ecartees.length+" décision"+(ecartees.length>1?"s":"")+" écartée"+(ecartees.length>1?"s":"")+" sur cette page." : "Aucune décision écartée sur cette page.")
       : "";
-    $("liste-resultats").innerHTML =
-      gardees.map(carteResultat).join("") ||
-      '<div class="panel">Aucune décision à afficher sur cette page'+(exclus.length?" (toutes écartées par vos mots exclus — passez à la page suivante)":" : aucune ne correspond à ces critères")+'.</div>';
+    rendreListe(gardees, filtres
+      ? "Aucune décision de cette page ne passe vos filtres locaux — passez à la page suivante."
+      : "Aucune décision ne correspond à ces critères.");
     const nbPages = Math.ceil(Math.min(etat.total, PLAFOND)/PAGE_SIZE) || 1;
     $("page-texte").textContent = "Page "+(page+1)+" / "+nbPages.toLocaleString("fr-FR")+
       (etat.total>PLAFOND ? " (affichage limité aux 10 000 premières — affinez avec les dates)" : "");
     $("btn-prec").disabled = page<=0;
     $("btn-suiv").disabled = !d.next_page || (page+1)>=nbPages;
-    $("btn-export-csv").disabled = $("btn-export-html").disabled = $("btn-export-json").disabled = etat.total===0;
-    brancherBoutonsFiches();
+    $("btn-export-csv").disabled = $("btn-export-html").disabled = $("btn-export-json").disabled =
+      $("btn-panorama").disabled = etat.total===0;
+    $("zone-panorama").classList.add("cache");
     $("zone-resultats").scrollIntoView({behavior:"smooth", block:"start"});
     if(page===0) sauverDansHistorique(lireCriteres());
-    if(exclus.length && $("in-approfondi").checked && gardees.length)
-      verificationApprofondie(gardees, exclus, gen, ecartees.length);
+    /* Les mots exigés imposent la lecture du texte intégral ; les mots exclus
+       n'y passent que si l'utilisateur l'a demandé. */
+    if(gardees.length && (exiges.length || (exclus.length && $("in-approfondi").checked)))
+      verificationTexteIntegral(gardees, exiges, exclus.length && $("in-approfondi").checked ? exclus : [], gen, ecartees.length);
   }catch(e){
     msg.innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
   }finally{
@@ -864,46 +973,145 @@ async function lancerRecherche(page){
   }
 }
 
-/* Vérification approfondie : télécharge le texte intégral des décisions de la
-   page affichée pour y traquer les mots exclus que les extraits ne montraient
-   pas. Une décision par requête → réservé à la page courante, avec un rythme
-   courtois vis-à-vis de l'API. */
-async function verificationApprofondie(gardees, exclus, gen, dejaEcartees){
+/* Vérification dans le texte intégral : télécharge le texte des décisions de la
+   page affichée pour y exiger les mots demandés et y traquer les mots exclus que
+   les extraits ne montraient pas. Une décision par requête → réservé à la page
+   courante, avec un rythme courtois vis-à-vis de l'API. */
+async function verificationTexteIntegral(gardees, exiges, exclus, gen, dejaEcartees){
   const note = $("note-exclusions");
-  let retirees = 0, faites = 0;
+  const survivants = [];
+  let faites = 0;
   for(const r of gardees){
     if(gen!==generationRecherche) return;
-    note.textContent = "Vérification approfondie du texte intégral… ("+(++faites)+"/"+gardees.length+")";
+    note.textContent = "Lecture du texte intégral… ("+(++faites)+"/"+gardees.length+")";
     try{
       const d = await appelApi("/decision", new URLSearchParams({id:r.id}));
       if(gen!==generationRecherche) return;
-      const blob = normaliser((d.text||"")+" "+(d.summary||""));
-      if(exclus.some(x=>blob.includes(x))){
+      const blob = normaliser((d.text||"")+" "+(d.summary||"")+" "+(d.themes||[]).join(" "));
+      const ok = exiges.every(m=>blob.includes(m)) && !exclus.some(x=>blob.includes(x));
+      if(ok){ survivants.push(r); }
+      else{
         const el = document.querySelector('.fiche[data-id="'+CSS.escape(r.id)+'"]');
         if(el) el.remove();
         delete resultatsCourants[r.id];
-        retirees++;
       }
     }catch(e){
-      note.textContent = "Vérification approfondie interrompue ("+messageErreur(e)+")";
+      note.textContent = "Vérification interrompue ("+messageErreur(e)+") — les décisions affichées n'ont pas toutes été vérifiées.";
       return;
     }
     await new Promise(res=>setTimeout(res, 200));
   }
   if(gen!==generationRecherche) return;
+  const retirees = gardees.length - survivants.length;
   const totalEcartees = dejaEcartees + retirees;
-  note.textContent = "Vérification approfondie terminée : "+
-    (totalEcartees ? totalEcartees+" décision"+(totalEcartees>1?"s":"")+" écartée"+(totalEcartees>1?"s":"")+" sur cette page ("+retirees+" via le texte intégral)."
-                   : "aucune décision écartée sur cette page.");
-  if(!document.querySelector("#liste-resultats .fiche"))
-    $("liste-resultats").innerHTML = '<div class="panel">Toutes les décisions de cette page ont été écartées par vos mots exclus — passez à la page suivante.</div>';
+  /* Re-rendu complet : les compteurs des groupes doivent refléter le tri final. */
+  rendreListe(survivants, exiges.length
+    ? "Aucune décision de cette page ne contient vos mots exigés — passez à la page suivante."
+    : "Toutes les décisions de cette page ont été écartées par vos mots exclus — passez à la page suivante.");
+  note.textContent = "Texte intégral vérifié sur cette page : "+
+    (totalEcartees ? totalEcartees+" décision"+(totalEcartees>1?"s":"")+" écartée"+(totalEcartees>1?"s":"")+
+       " ("+retirees+" après lecture du texte), "+survivants.length+" conservée"+(survivants.length>1?"s":"")+"."
+     : "aucune décision écartée, "+survivants.length+" conservée"+(survivants.length>1?"s":"")+".");
 }
 
 $("btn-chercher").onclick = ()=>lancerRecherche(0);
-$("in-q").addEventListener("keydown", e=>{ if(e.key==="Enter") lancerRecherche(0); });
-$("in-exclure").addEventListener("keydown", e=>{ if(e.key==="Enter") lancerRecherche(0); });
+["in-q","in-exclure","in-exiges","in-matiere"].forEach(id=>
+  $(id).addEventListener("keydown", e=>{ if(e.key==="Enter") lancerRecherche(0); }));
 $("btn-prec").onclick = ()=>lancerRecherche(Math.max(0, etat.page-1));
 $("btn-suiv").onclick = ()=>lancerRecherche(etat.page+1);
+/* Changer le regroupement réorganise l'affichage sans relancer de requête. */
+$("in-groupe").onchange = ()=>{
+  const arr = Object.values(resultatsCourants);
+  if(arr.length) rendreListe(arr);
+};
+
+/* -------------------- Analyse (panorama des résultats) -------------------- */
+/* Parcourt un échantillon des résultats pour en donner la structure : matières,
+   juridictions, années, solutions. C'est la vue d'ensemble qui manque quand une
+   recherche renvoie des milliers de décisions. */
+const PANO_MAX = 500, PANO_PAR_PAGE = 50;
+
+function classement(compteur, n){
+  return [...compteur.entries()].sort((a,b)=>b[1]-a[1] || String(a[0]).localeCompare(String(b[0]),"fr")).slice(0,n);
+}
+function blocPano(titre, lignes, total, cliquable){
+  if(!lignes.length) return "";
+  const max = lignes[0][1] || 1;
+  return '<div class="pano-bloc"><h4>'+echap(titre)+"</h4>"+
+    lignes.map(([lib,n])=>
+      '<div class="pano-ligne">'+
+        (cliquable
+          ? '<button type="button" class="pano-mat" data-mat="'+echap(lib)+'" title="Filtrer sur cette matière">'+echap(lib)+"</button>"
+          : '<span class="lib">'+echap(lib)+"</span>")+
+        '<span class="jauge"><i style="width:'+Math.round(100*n/max)+'%"></i></span>'+
+        '<span class="nb">'+n.toLocaleString("fr-FR")+" ("+Math.round(100*n/total)+"%)</span>"+
+      "</div>").join("")+
+    "</div>";
+}
+
+async function analyserResultats(){
+  const zone = $("zone-panorama"), prog = $("zone-progress");
+  const texte = $("progress-texte"), barre = $("progress-barre");
+  const boutons = [$("btn-panorama"), $("btn-chercher")];
+  boutons.forEach(b=>b.disabled = true);
+  prog.classList.remove("cache");
+  const gen = generationRecherche;
+  const exclus = listeExclusions(), matieres = listeMatieres();
+  const vise = Math.min(PANO_MAX, etat.total, PLAFOND);
+  const mat = new Map(), jur = new Map(), ans = new Map(), sol = new Map();
+  let lues = 0, ecartees = 0;
+  try{
+    for(let p=0; p*PANO_PAR_PAGE<vise; p++){
+      texte.textContent = "Analyse : "+lues+" / "+vise+" décisions…";
+      barre.style.width = Math.min(100, Math.round(100*lues/vise))+"%";
+      const d = await appelApi("/search", construireParams(p, PANO_PAR_PAGE));
+      if(gen!==generationRecherche) return;                 // recherche changée entre-temps
+      for(const r of (d.results||[])){
+        if(lues>=vise) break;
+        lues++;
+        if(estExclue(r, exclus) || !matiereOk(r, matieres)){ ecartees++; continue; }
+        const themes = (r.themes||[]);
+        if(themes.length) themes.forEach(t=>mat.set(t,(mat.get(t)||0)+1));
+        else mat.set("Matière non renseignée",(mat.get("Matière non renseignée")||0)+1);
+        const j = libelleJuridiction(r); jur.set(j,(jur.get(j)||0)+1);
+        const a = (r.decision_date||"").slice(0,4)||"?"; ans.set(a,(ans.get(a)||0)+1);
+        const s = r.solution||"non précisée"; sol.set(s,(sol.get(s)||0)+1);
+      }
+      if(!d.next_page) break;
+      await new Promise(res=>setTimeout(res, 250));
+    }
+    const retenues = lues - ecartees;
+    if(!retenues){
+      zone.innerHTML = '<h3>Analyse des résultats</h3><p class="note">Aucune décision retenue dans l\'échantillon analysé.</p>';
+    }else{
+      zone.innerHTML = "<h3>Analyse des résultats</h3>"+
+        '<p class="note">Échantillon : les <b>'+retenues.toLocaleString("fr-FR")+"</b> premières décisions retenues"+
+        (ecartees ? " ("+ecartees.toLocaleString("fr-FR")+" écartées par vos filtres locaux)" : "")+
+        " sur "+Number(etat.total).toLocaleString("fr-FR")+" trouvées"+
+        (etat.total>vise ? " — l'analyse s'arrête à "+PANO_MAX.toLocaleString("fr-FR")+" décisions pour ménager votre quota, elle est donc indicative." : "")+
+        ". Une décision peut relever de plusieurs matières.</p>"+
+        '<div class="pano-grille">'+
+          blocPano("Matières (titrage officiel)", classement(mat,10), retenues, true)+
+          blocPano("Juridictions et chambres", classement(jur,8), retenues, false)+
+          blocPano("Années", classement(ans,10), retenues, false)+
+          blocPano("Solutions", classement(sol,8), retenues, false)+
+        "</div>";
+      zone.querySelectorAll(".pano-mat").forEach(b=>b.onclick = ()=>{
+        $("in-matiere").value = b.dataset.mat;
+        lancerRecherche(0);
+      });
+    }
+    zone.classList.remove("cache");
+    zone.scrollIntoView({behavior:"smooth", block:"start"});
+  }catch(e){
+    $("msg-recherche").innerHTML = '<div class="alerte err">Analyse interrompue : '+echap(messageErreur(e))+"</div>";
+  }finally{
+    prog.classList.add("cache");
+    boutons.forEach(b=>b.disabled = false);
+    $("btn-panorama").disabled = etat.total===0;
+  }
+}
+$("btn-panorama").onclick = analyserResultats;
 
 /* -------------------------- Lien partageable -------------------------- */
 /* Le lien encode uniquement les critères de recherche (jamais la clé API) :
@@ -972,7 +1180,7 @@ $("dlg-decision").addEventListener("click", e=>{ if(e.target===$("dlg-decision")
 async function collecterPourExport(){
   const voulu = Math.min(Number($("in-export-max").value), etat.total, PLAFOND);
   const parPage = 50;
-  const exclus = listeExclusions();
+  const exclus = listeExclusions(), matieres = listeMatieres();
   const zone = $("zone-progress"), texte = $("progress-texte"), barre = $("progress-barre");
   zone.classList.remove("cache");
   const lignes = [];
@@ -985,7 +1193,7 @@ async function collecterPourExport(){
     const d = await appelApi("/search", params);
     if(d.relaxed) elargie = true;
     for(const r of (d.results||[])){
-      if(estExclue(r, exclus)){ ecartees++; continue; }
+      if(estExclue(r, exclus) || !matiereOk(r, matieres)){ ecartees++; continue; }
       lignes.push({
         date: (r.decision_date||"").slice(0,10),
         juridiction: libelleJuridiction(r),
@@ -1092,7 +1300,10 @@ async function exporter(format){
     }
     msg.innerHTML = '<div class="alerte ok">'+
       lignes.length.toLocaleString("fr-FR")+" décisions exportées ✓"+
-      (ecartees ? " ("+ecartees.toLocaleString("fr-FR")+" écartées par vos mots exclus)" : "")+"</div>"+
+      (ecartees ? " ("+ecartees.toLocaleString("fr-FR")+" écartées par vos filtres locaux)" : "")+"</div>"+
+      (listeExiges().length ? '<div class="alerte info"><b>Note :</b> les « mots exigés » ne sont pas appliqués à '+
+        "l'export (ils exigent la lecture du texte intégral de chaque décision, une requête par décision). "+
+        "L'export suit vos mots exclus et votre filtre de matière.</div>" : "")+
       (elargie ? '<div class="alerte info"><b>Attention :</b> votre recherche initiale ne donnait aucun résultat ; '+
         "l'API l'a élargie en mode « au moins un mot ». Le fichier exporté est donc plus large que votre demande.</div>" : "");
   }catch(e){

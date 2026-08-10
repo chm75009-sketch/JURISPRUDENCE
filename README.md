@@ -16,12 +16,24 @@ partent directement de votre navigateur vers l'API officielle.
 ### Recherche
 - **Recherche en texte intégral** : tous les mots (ET), au moins un mot (OU) ou
   expression exacte ; tri par pertinence ou par date.
-- **Mots à exclure** : écarte localement les décisions dont les extraits,
-  sommaires ou matières contiennent un terme indésirable (ex. chercher
-  « harcèlement moral » en excluant « harcèlement sexuel »). L'API ne sachant
-  pas exclure un mot, ce tri est fait par l'application sur les données reçues ;
-  une **vérification approfondie** optionnelle contrôle aussi le texte intégral
-  des décisions de la page affichée (consomme davantage de quota).
+- **Filtres locaux** que l'API ne sait pas faire, appliqués par l'application
+  sur les données reçues :
+  - **Mots à exclure** — écarte les décisions dont les extraits, sommaires ou
+    matières contiennent un terme indésirable (ex. chercher « harcèlement
+    moral » en excluant « harcèlement sexuel »). Une **vérification
+    approfondie** optionnelle contrôle aussi le texte intégral des décisions de
+    la page affichée (consomme davantage de quota).
+  - **Mots exigés** — impose un terme absent de la requête principale, toujours
+    vérifié dans le **texte intégral** de chaque décision affichée (l'absence
+    d'un mot dans un extrait ne prouvant rien). Une requête par décision : ne
+    s'applique donc qu'à la page affichée, pas à l'export.
+  - **Matière** — ne garde que les décisions dont le titrage officiel contient
+    un libellé donné (ex. « contrat de travail »).
+- **Regroupement des résultats** par matière, juridiction et chambre, année ou
+  solution — réorganise l'affichage sans relancer de requête.
+- **Analyse des résultats** : parcourt un échantillon (jusqu'à 500 décisions) et
+  affiche la répartition par matière, juridiction, année et solution, avec
+  pourcentages. Un clic sur une matière la passe en filtre.
 - **Recherche par zone de la décision** : toute la décision, ou seulement les
   motivations, le dispositif, les moyens, l'exposé du litige, ou le
   sommaire/titrage officiels.
