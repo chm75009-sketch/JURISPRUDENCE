@@ -142,7 +142,14 @@
   button.art:hover{background:#dbe6ff}
   #art-corps .texte-art{font:15px/1.65 Georgia,'Times New Roman',serif;white-space:pre-wrap}
 
-  details.methode{margin:0 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);
+  #avance{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+  #avance > summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--accent);list-style:none}
+  #avance > summary::-webkit-details-marker{display:none}
+  #avance > summary::before{content:"▸ ";font-size:12px}
+  #avance[open] > summary::before{content:"▾ "}
+  #actions-resultats{margin-top:18px}
+
+  details.methode{margin:14px 0 0;border:1px solid var(--line);border-radius:10px;background:var(--bg);
     font-size:14px;padding:10px 14px}
   details.methode summary{cursor:pointer;font-weight:600;font-size:13.5px;color:var(--accent)}
   details.methode ol{margin:10px 0 4px;padding-left:22px}
@@ -219,89 +226,16 @@
   </section>
 
   <!-- ================= Formulaire de recherche ================= -->
+  <!-- L'essentiel tient en quatre réglages. Tout le reste — filtres fins,
+       bibliothèque, angles — vit dans « Options avancées », replié par défaut :
+       une recherche courante ne doit rien demander de plus. -->
   <section class="panel" id="panneau-recherche">
-    <h2>2. Recherche</h2>
-    <details class="methode">
-      <summary>Méthode : bien chercher, quel que soit le sujet</summary>
-      <ol>
-        <li><b>Nommez la notion</b> dans « Mots-clés » : « clause de non-concurrence »,
-            « trouble anormal de voisinage », « vice caché », « faute grave »…</li>
-        <li><b>Expression exacte</b> pour les formules figées du droit ;
-            <b>ET</b> pour croiser des idées ; <b>OU</b> pour des synonymes.</li>
-        <li>Appliquez un ou plusieurs <b>angles d'analyse</b> : ils transforment la
-            recherche en cours (arrêts de principe, régime de la preuve, définition,
-            actualité…) et <b>se combinent</b> — quel que soit le sujet.</li>
-        <li><b>Affinez avec les filtres locaux</b>, que l'API ne sait pas faire :
-            <b>mots à exclure</b> pour écarter les notions voisines (ex. « sexuel »
-            quand vous cherchez le harcèlement moral) ; <b>mots exigés</b> pour
-            imposer un terme absent de la requête, vérifié dans le texte intégral
-            de chaque décision affichée ; <b>matière</b> pour ne garder qu'un
-            titrage (ex. « contrat de travail »).</li>
-        <li><b>Prenez de la hauteur</b> : « Analyser les résultats » donne la
-            répartition par matière, juridiction, année et solution — et
-            « Regrouper les résultats » réorganise l'affichage par thème.</li>
-        <li>Repères : <b>Bulletin</b> = arrêts que la Cour juge importants ;
-            <b>sommaire/titrage</b> = le langage officiel et normalisé de la Cour ;
-            <b>motivations</b> = le raisonnement ; <b>dispositif</b> = ce qui est jugé.</li>
-        <li>Pour une étude complète, <b>recoupez plusieurs recherches</b> (par ex. les
-            formulations avant/après une réforme) et fusionnez les exports CSV.</li>
-      </ol>
-    </details>
+    <h2>Recherche</h2>
     <div class="grid">
-      <div class="grid g3">
-        <label class="champ"><b>Angles d'analyse (transforment vos mots-clés)</b>
-          <select id="in-angle">
-            <option value="">— Appliquer un angle à la recherche en cours —</option>
-          </select>
-        </label>
-        <label class="champ"><b>Bibliothèque de recherches</b>
-          <input type="search" id="in-preset-filtre" placeholder="Filtrer : premières lettres du sujet (bail, preuve, nullité…)">
-          <select id="in-preset" style="margin-top:6px">
-            <option value="">— Choisir un sujet : il remplit tout le formulaire —</option>
-          </select>
-        </label>
-        <label class="champ"><b>Recherches récentes</b>
-          <select id="in-historique">
-            <option value="">— Reprendre une recherche précédente —</option>
-          </select>
-        </label>
-      </div>
       <label class="champ"><b>Mots-clés</b>
-        <input type="search" id="in-q" placeholder="ex. harcèlement moral licenciement nullité">
+        <input type="search" id="in-q" placeholder="ex. clause de non-concurrence">
       </label>
       <div class="grid g2">
-        <label class="champ"><b>Mots exigés <span style="font-weight:400;color:var(--muted)">(vérifiés dans le texte intégral)</span></b>
-          <input type="text" id="in-exiges" placeholder="ex. preuve, charge de la preuve">
-        </label>
-        <label class="champ"><b>Mots à exclure <span style="font-weight:400;color:var(--muted)">(séparés par des virgules)</span></b>
-          <input type="text" id="in-exclure" placeholder="ex. harcèlement sexuel, discrimination">
-        </label>
-      </div>
-      <div class="grid g3">
-        <label class="champ"><b>Chercher dans</b>
-          <select id="in-field">
-            <option value="">Toute la décision</option>
-            <option value="motivations">Motivations (raisonnement de la cour)</option>
-            <option value="dispositif">Dispositif (ce qui est jugé)</option>
-            <option value="moyens">Moyens (arguments des parties)</option>
-            <option value="expose">Exposé du litige (les faits)</option>
-            <option value="sommaire">Sommaire et titrage officiels</option>
-          </select>
-        </label>
-        <label class="champ"><b>Matière <span style="font-weight:400;color:var(--muted)">(filtre sur le titrage)</span></b>
-          <input type="text" id="in-matiere" placeholder="ex. contrat de travail">
-        </label>
-        <label class="champ"><b>Regrouper les résultats</b>
-          <select id="in-groupe">
-            <option value="">Sans regroupement (par pertinence)</option>
-            <option value="matiere">Par matière (titrage officiel)</option>
-            <option value="juridiction">Par juridiction et chambre</option>
-            <option value="annee">Par année</option>
-            <option value="solution">Par solution (cassation, rejet…)</option>
-          </select>
-        </label>
-      </div>
-      <div class="grid g3">
         <label class="champ"><b>Type de recherche</b>
           <select id="in-operator">
             <option value="and">Tous les mots (ET)</option>
@@ -316,21 +250,6 @@
             <option value="date-asc">Date (ancien d'abord)</option>
           </select>
         </label>
-        <label class="champ"><b>Solution (Cour de cassation)</b>
-          <select id="in-solution">
-            <option value="">Toutes</option>
-            <option value="cassation">Cassation</option>
-            <option value="rejet">Rejet</option>
-            <option value="irrecevabilite">Irrecevabilité</option>
-            <option value="annulation">Annulation</option>
-            <option value="qpc">QPC</option>
-            <option value="avis">Avis</option>
-          </select>
-        </label>
-      </div>
-      <div class="grid g2">
-        <label class="champ"><b>Du (inclus)</b><input type="date" id="in-du"></label>
-        <label class="champ"><b>Au (inclus)</b><input type="date" id="in-au"></label>
       </div>
       <div>
         <b style="font-size:13.5px">Juridictions</b>
@@ -341,60 +260,138 @@
           <label><input type="checkbox" id="j-tcom"> Tribunaux de commerce</label>
         </div>
       </div>
-      <label class="champ"><b>Juridiction précise <span style="font-weight:400;color:var(--muted)">(facultatif — une seule à la fois)</span></b>
-        <input type="search" id="in-lieu-filtre" placeholder="Filtrer : Paris, Versailles, Aix, Douai…">
-        <select id="in-lieu" style="margin-top:6px"></select>
-      </label>
-      <div id="bloc-chambres">
-        <b style="font-size:13.5px">Chambres (Cour de cassation)</b>
-        <div class="cases">
-          <label><input type="checkbox" class="ch" value="soc"> Sociale</label>
-          <label><input type="checkbox" class="ch" value="cr"> Criminelle</label>
-          <label><input type="checkbox" class="ch" value="civ1"> 1re civile</label>
-          <label><input type="checkbox" class="ch" value="civ2"> 2e civile</label>
-          <label><input type="checkbox" class="ch" value="civ3"> 3e civile</label>
-          <label><input type="checkbox" class="ch" value="comm"> Commerciale</label>
-          <label><input type="checkbox" class="ch" value="pl"> Ass. plénière</label>
-          <label><input type="checkbox" class="ch" value="mi"> Ch. mixte</label>
-        </div>
-        <p class="note" style="margin:4px 0 0">Aucune case cochée = toutes les chambres.</p>
-      </div>
-      <div>
-        <b style="font-size:13.5px">Publication (Cour de cassation)</b>
-        <div class="cases">
-          <label><input type="checkbox" class="pub" value="b"> Bulletin</label>
-          <label><input type="checkbox" class="pub" value="r"> Rapport annuel</label>
-          <label><input type="checkbox" class="pub" value="l"> Lettres de chambre</label>
-          <label><input type="checkbox" class="pub" value="c"> Communiqué</label>
-        </div>
-        <p class="note" style="margin:4px 0 0">Aucune case cochée = toutes les décisions. « Bulletin » = arrêts importants.</p>
-      </div>
-      <div class="cases">
-        <label><input type="checkbox" id="in-approfondi">
-          Vérifier aussi les mots exclus dans le texte intégral
-          <span class="note">(page affichée uniquement — plus lent, consomme du quota. Les mots exigés sont
-          toujours vérifiés dans le texte intégral.)</span></label>
+      <div class="grid g2">
+        <label class="champ"><b>Du (inclus)</b><input type="date" id="in-du"></label>
+        <label class="champ"><b>Au (inclus)</b><input type="date" id="in-au"></label>
       </div>
     </div>
     <div class="actions">
       <button class="principal" id="btn-chercher" type="button">Rechercher</button>
-      <button class="second" id="btn-export-csv" type="button" disabled>Exporter en CSV</button>
-      <button class="second" id="btn-export-html" type="button" disabled title="Fichier lisible dans tout navigateur, accents garantis, imprimable en PDF">Exporter en HTML (lisible)</button>
-      <button class="second" id="btn-export-json" type="button" disabled>Exporter en JSON</button>
-      <select id="in-export-max" title="Nombre maximal de décisions à exporter">
-        <option value="200">Export : 200 premières</option>
-        <option value="500">Export : 500 premières</option>
-        <option value="1000">Export : 1 000 premières</option>
-        <option value="2500">Export : 2 500 premières</option>
-        <option value="10000">Export : maximum (10 000)</option>
-      </select>
-      <button class="second" id="btn-panorama" type="button" disabled title="Analyse un échantillon des résultats et en donne la répartition par matière, chambre, année et solution">Analyser les résultats</button>
-      <button class="second" id="btn-lien" type="button" title="Copie une adresse qui rouvre cette recherche pré-remplie (sans votre clé API)">Copier le lien de cette recherche</button>
+      <button class="second" id="btn-reinit" type="button" title="Vide tous les champs et tous les filtres">Réinitialiser</button>
     </div>
-    <div id="zone-progress" class="progress cache">
-      <span id="progress-texte"></span>
-      <div class="barre"><i id="progress-barre"></i></div>
-    </div>
+
+    <details id="avance">
+      <summary>Options avancées</summary>
+      <div class="grid" style="margin-top:14px">
+        <div class="grid g3">
+          <label class="champ"><b>Angles d'analyse <span style="font-weight:400;color:var(--muted)">(transforment vos mots-clés)</span></b>
+            <select id="in-angle">
+              <option value="">— Appliquer un angle à la recherche en cours —</option>
+            </select>
+          </label>
+          <label class="champ"><b>Bibliothèque de recherches</b>
+            <input type="search" id="in-preset-filtre" placeholder="Filtrer : bail, preuve, nullité…">
+            <select id="in-preset" style="margin-top:6px">
+              <option value="">— Choisir un sujet —</option>
+            </select>
+          </label>
+          <label class="champ"><b>Recherches récentes</b>
+            <select id="in-historique">
+              <option value="">— Reprendre une recherche précédente —</option>
+            </select>
+          </label>
+        </div>
+        <div class="grid g2">
+          <label class="champ"><b>Mots exigés <span style="font-weight:400;color:var(--muted)">(vérifiés dans le texte intégral)</span></b>
+            <input type="text" id="in-exiges" placeholder="ex. preuve, charge de la preuve">
+          </label>
+          <label class="champ"><b>Mots à exclure <span style="font-weight:400;color:var(--muted)">(séparés par des virgules)</span></b>
+            <input type="text" id="in-exclure" placeholder="ex. harcèlement sexuel">
+          </label>
+        </div>
+        <div class="grid g3">
+          <label class="champ"><b>Chercher dans</b>
+            <select id="in-field">
+              <option value="">Toute la décision</option>
+              <option value="motivations">Motivations (raisonnement de la cour)</option>
+              <option value="dispositif">Dispositif (ce qui est jugé)</option>
+              <option value="moyens">Moyens (arguments des parties)</option>
+              <option value="expose">Exposé du litige (les faits)</option>
+              <option value="sommaire">Sommaire et titrage officiels</option>
+            </select>
+          </label>
+          <label class="champ"><b>Matière <span style="font-weight:400;color:var(--muted)">(filtre sur le titrage)</span></b>
+            <input type="text" id="in-matiere" placeholder="ex. contrat de travail">
+          </label>
+          <label class="champ"><b>Solution (Cour de cassation)</b>
+            <select id="in-solution">
+              <option value="">Toutes</option>
+              <option value="cassation">Cassation</option>
+              <option value="rejet">Rejet</option>
+              <option value="irrecevabilite">Irrecevabilité</option>
+              <option value="annulation">Annulation</option>
+              <option value="qpc">QPC</option>
+              <option value="avis">Avis</option>
+            </select>
+          </label>
+        </div>
+        <div class="grid g2">
+          <label class="champ"><b>Juridiction précise <span style="font-weight:400;color:var(--muted)">(une seule à la fois)</span></b>
+            <input type="search" id="in-lieu-filtre" placeholder="Filtrer : Paris, Versailles, Aix…">
+            <select id="in-lieu" style="margin-top:6px"></select>
+          </label>
+          <label class="champ"><b>Regrouper les résultats</b>
+            <select id="in-groupe">
+              <option value="">Sans regroupement (par pertinence)</option>
+              <option value="matiere">Par matière (titrage officiel)</option>
+              <option value="juridiction">Par juridiction et chambre</option>
+              <option value="annee">Par année</option>
+              <option value="solution">Par solution (cassation, rejet…)</option>
+            </select>
+          </label>
+        </div>
+        <div id="bloc-chambres">
+          <b style="font-size:13.5px">Chambres (Cour de cassation)</b>
+          <div class="cases">
+            <label><input type="checkbox" class="ch" value="soc"> Sociale</label>
+            <label><input type="checkbox" class="ch" value="cr"> Criminelle</label>
+            <label><input type="checkbox" class="ch" value="civ1"> 1re civile</label>
+            <label><input type="checkbox" class="ch" value="civ2"> 2e civile</label>
+            <label><input type="checkbox" class="ch" value="civ3"> 3e civile</label>
+            <label><input type="checkbox" class="ch" value="comm"> Commerciale</label>
+            <label><input type="checkbox" class="ch" value="pl"> Ass. plénière</label>
+            <label><input type="checkbox" class="ch" value="mi"> Ch. mixte</label>
+          </div>
+          <p class="note" style="margin:4px 0 0">Aucune case cochée = toutes les chambres.</p>
+        </div>
+        <div>
+          <b style="font-size:13.5px">Publication (Cour de cassation)</b>
+          <div class="cases">
+            <label><input type="checkbox" class="pub" value="b"> Bulletin</label>
+            <label><input type="checkbox" class="pub" value="r"> Rapport annuel</label>
+            <label><input type="checkbox" class="pub" value="l"> Lettres de chambre</label>
+            <label><input type="checkbox" class="pub" value="c"> Communiqué</label>
+          </div>
+          <p class="note" style="margin:4px 0 0">Aucune case cochée = toutes les décisions. « Bulletin » = arrêts importants.</p>
+        </div>
+        <div class="cases">
+          <label><input type="checkbox" id="in-approfondi">
+            Vérifier aussi les mots exclus dans le texte intégral
+            <span class="note">(page affichée uniquement — plus lent)</span></label>
+        </div>
+      </div>
+
+      <details class="methode">
+        <summary>Méthode : bien chercher, quel que soit le sujet</summary>
+        <ol>
+          <li><b>Nommez la notion</b> dans « Mots-clés » : « clause de non-concurrence »,
+              « trouble anormal de voisinage », « vice caché », « faute grave »…</li>
+          <li><b>Expression exacte</b> pour les formules figées du droit ;
+              <b>ET</b> pour croiser des idées ; <b>OU</b> pour des synonymes.</li>
+          <li>Les <b>angles d'analyse</b> transforment la recherche en cours (arrêts de
+              principe, régime de la preuve, définition, actualité, juges du fond) et
+              <b>se combinent</b> — quel que soit le sujet.</li>
+          <li>Les <b>filtres locaux</b> affinent ce que l'API ne sait pas faire :
+              mots à exclure, mots exigés, matière. Ils restent actifs d'une recherche
+              à l'autre — le bandeau orange au-dessus des résultats les rappelle et
+              permet de les retirer.</li>
+          <li>Repères : <b>Bulletin</b> = arrêts que la Cour juge importants ;
+              <b>sommaire/titrage</b> = le langage officiel de la Cour ;
+              <b>motivations</b> = le raisonnement ; <b>dispositif</b> = ce qui est jugé.</li>
+        </ol>
+      </details>
+    </details>
+
     <div id="msg-recherche"></div>
   </section>
 
@@ -406,6 +403,24 @@
         <div id="note-exclusions"></div>
       </div>
       <div class="note" id="temps-texte"></div>
+    </div>
+    <div class="actions" id="actions-resultats">
+      <button class="second" id="btn-panorama" type="button" disabled title="Répartition d'un échantillon par matière, juridiction, année et solution">Analyser les résultats</button>
+      <button class="second" id="btn-export-csv" type="button" disabled>Exporter en CSV</button>
+      <button class="second" id="btn-export-html" type="button" disabled title="Lisible dans tout navigateur, imprimable en PDF">Exporter en HTML</button>
+      <button class="second" id="btn-export-json" type="button" disabled>Exporter en JSON</button>
+      <select id="in-export-max" title="Nombre maximal de décisions à exporter">
+        <option value="200">Export : 200 premières</option>
+        <option value="500">Export : 500 premières</option>
+        <option value="1000">Export : 1 000 premières</option>
+        <option value="2500">Export : 2 500 premières</option>
+        <option value="10000">Export : maximum (10 000)</option>
+      </select>
+      <button class="second" id="btn-lien" type="button" title="Copie une adresse qui rouvre cette recherche (sans votre clé API)">Copier le lien</button>
+    </div>
+    <div id="zone-progress" class="progress cache">
+      <span id="progress-texte"></span>
+      <div class="barre"><i id="progress-barre"></i></div>
     </div>
     <div id="criteres-actifs" class="cache"></div>
     <div id="zone-panorama" class="cache"></div>
@@ -1612,7 +1627,19 @@ function effacerCritere(cle){
   }
 }
 
+/* Les filtres vivent dans une section repliée : leur nombre est rappelé sur le
+   titre, pour qu'un filtre actif ne soit jamais invisible. */
+function majResumeAvance(){
+  const c = lireCriteres();
+  const n = [c.mat, c.x, c.req, c.field, c.loc, c.sol, c.du, c.au, c.grp].filter(Boolean).length
+          + c.ch.length + c.pub.length + (c.prof ? 1 : 0);
+  const s = document.querySelector("#avance > summary");
+  if(s) s.textContent = n ? "Options avancées — "+n+" filtre"+(n>1?"s":"")+" actif"+(n>1?"s":"")
+                          : "Options avancées";
+}
+
 function majCriteresActifs(){
+  majResumeAvance();
   const zone = $("criteres-actifs");
   const c = lireCriteres();
   const chips = [];
@@ -1765,6 +1792,15 @@ async function verificationTexteIntegral(gardees, exiges, exclus, gen, dejaEcart
 }
 
 $("btn-chercher").onclick = ()=>lancerRecherche(0);
+$("btn-reinit").onclick = ()=>{
+  appliquerCriteres({});                 // valeurs par défaut du formulaire
+  $("in-q").value = "";
+  $("in-preset-filtre").value = ""; remplirPresets("");
+  $("zone-resultats").classList.add("cache");
+  $("msg-recherche").innerHTML = "";
+  majResumeAvance();
+  $("in-q").focus();
+};
 ["in-q","in-exclure","in-exiges","in-matiere"].forEach(id=>
   $(id).addEventListener("keydown", e=>{ if(e.key==="Enter") lancerRecherche(0); }));
 $("btn-prec").onclick = ()=>lancerRecherche(Math.max(0, etat.page-1));
@@ -2309,6 +2345,12 @@ async function exporter(format){
 $("btn-export-csv").onclick = ()=>exporter("csv");
 $("btn-export-json").onclick = ()=>exporter("json");
 
+/* Le résumé suit les modifications faites à la main dans la section repliée. */
+document.querySelectorAll("#avance input, #avance select").forEach(el=>{
+  el.addEventListener("change", majResumeAvance);
+  if(el.tagName === "INPUT" && el.type !== "checkbox") el.addEventListener("input", majResumeAvance);
+});
+
 /* --------------------------- Initialisation --------------------------- */
 /* Installation sur l'appareil et consultation hors connexion. L'échec de
    l'enregistrement (navigation privée, protocole file://) est sans conséquence :
@@ -2318,6 +2360,7 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http"))
 
 majEtatCle();
 majEtatLf();
+majResumeAvance();
 majHistorique();
 if(restaurerDepuisLien() && cleCourante()) lancerRecherche(0);
 </script>
