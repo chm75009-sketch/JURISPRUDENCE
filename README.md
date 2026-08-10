@@ -47,15 +47,15 @@ strictement autonome — utile comme secours.
   régime de la preuve, définition et critères, jurisprudence récente,
   cassations uniquement, panorama complet. Les angles se **combinent** :
   chacun part des critères affichés à l'écran.
-- **Bibliothèque de recherches (droit du travail)** : une vingtaine de
-  recherches complètes prêtes à l'emploi, construites sur les formules
-  consacrées de la jurisprudence — harcèlement moral (régime de la preuve
-  avant/après 2016, appréciation globale, forme institutionnelle),
-  représentation du personnel (consultation du CSE, délit d'entrave, CSSCT,
-  BDESE), contrat de travail (faux CV, clause de non-concurrence, rupture
-  conventionnelle), discipline (règlement intérieur, retards répétés), preuve
-  (droit à la preuve, heures supplémentaires, discrimination), santé et
-  sécurité (obligation de sécurité, obligation de reclassement).
+- **Bibliothèque de recherches** : 67 recherches complètes prêtes à l'emploi,
+  construites sur les formules consacrées de la jurisprudence et couvrant le
+  droit civil, commercial, pénal, du travail et la procédure — de « Abus de
+  biens sociaux » à « Vices cachés ». Classée par ordre alphabétique et
+  **filtrable** : tapez les premières lettres du sujet. Le filtre porte aussi
+  sur la note explicative, de sorte que « preuve » ou « nullité » retrouve les
+  sujets dont le libellé ne contient pas le mot. Chaque formulation a été
+  vérifiée contre l'API : toutes renvoient des résultats réels, aucune n'est
+  élargie faute de correspondance.
 - **Guide de méthode intégré** (panneau dépliant « Méthode ») : comment
   formuler une recherche efficace quel que soit le sujet.
 - **Filtres** : juridictions (Cass. / cours d'appel / tribunaux judiciaires /

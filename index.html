@@ -241,8 +241,9 @@
             <option value="">— Appliquer un angle à la recherche en cours —</option>
           </select>
         </label>
-        <label class="champ"><b>Bibliothèque de recherches (droit du travail)</b>
-          <select id="in-preset">
+        <label class="champ"><b>Bibliothèque de recherches</b>
+          <input type="search" id="in-preset-filtre" placeholder="Filtrer : premières lettres du sujet (bail, preuve, nullité…)">
+          <select id="in-preset" style="margin-top:6px">
             <option value="">— Choisir un sujet : il remplit tout le formulaire —</option>
           </select>
         </label>
@@ -821,21 +822,279 @@ const PRESETS = [
     note: "L'étendue de l'obligation de reclassement du salarié déclaré inapte : périmètre du groupe, loyauté de la recherche, cas de dispense.",
     c: {q:"obligation de reclassement", op:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
   },
+
+  /* ------------- Autres domaines (civil, commercial, pénal, procédure) ------------- */
+  {
+    label: "Abus de biens sociaux",
+    note: "L'usage des biens ou du crédit de la société contraire à l'intérêt social, à des fins personnelles (art. L. 241-3 et L. 242-6 du code de commerce).",
+    c: {q: "abus de biens sociaux", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"]}
+  },
+  {
+    label: "Abus de confiance",
+    note: "Le détournement d'un bien remis à charge de le rendre ou d'en faire un usage déterminé (art. 314-1 du code pénal).",
+    c: {q: "abus de confiance", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"]}
+  },
+  {
+    label: "Abus de majorité (sociétés)",
+    note: "La décision prise contrairement à l'intérêt social et dans l'unique dessein de favoriser les majoritaires au détriment des minoritaires.",
+    c: {q: "abus de majorité", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Action paulienne",
+    note: "L'action ouverte au créancier pour faire déclarer inopposables les actes accomplis par son débiteur en fraude de ses droits.",
+    c: {q: "action paulienne", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Agent commercial · indemnité de rupture",
+    note: "Le statut d'agent commercial et l'indemnité compensatrice due en cas de cessation du contrat.",
+    c: {q: "agent commercial", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"], pub: ["b"]}
+  },
+  {
+    label: "Assurance · fausse déclaration du risque",
+    note: "La nullité du contrat pour fausse déclaration intentionnelle de l'assuré (art. L. 113-8 du code des assurances).",
+    c: {q: "fausse déclaration intentionnelle", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Astreinte · liquidation",
+    note: "La liquidation de l'astreinte : modulation, suppression, prise en compte du comportement du débiteur.",
+    c: {q: "liquidation de l'astreinte", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Autorité de la chose jugée",
+    note: "L'étendue de la chose jugée : identité de parties, d'objet et de cause, et concentration des moyens.",
+    c: {q: "autorité de la chose jugée", op: "exact", jur: ["cc"], tri: "date-desc", pub: ["b"]}
+  },
+  {
+    label: "Autorité parentale · exercice",
+    note: "Exercice de l'autorité parentale : résidence de l'enfant, décisions importantes, droit de visite. Peu de décisions sous cette formulation exacte — élargissez aux cours d'appel.",
+    c: {q: "exercice de l'autorité parentale", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"]}
+  },
+  {
+    label: "Bail d'habitation · congé pour reprise",
+    note: "Le congé délivré au locataire pour reprise : bénéficiaire, sincérité du motif, formalisme.",
+    c: {q: "congé pour reprise", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Clause abusive",
+    note: "Le déséquilibre significatif entre les droits et obligations des parties dans les contrats de consommation.",
+    c: {q: "clause abusive", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"]}
+  },
+  {
+    label: "Clause pénale",
+    note: "Le pouvoir du juge de modérer ou d'augmenter la pénalité manifestement excessive ou dérisoire.",
+    c: {q: "clause pénale", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Compétence · exception d'incompétence",
+    note: "Régime de l'exception d'incompétence : moment de la soulever, motivation exigée, effets.",
+    c: {q: "exception d'incompétence", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Concurrence déloyale",
+    note: "Les actes de concurrence déloyale : dénigrement, confusion, désorganisation, parasitisme.",
+    c: {q: "concurrence déloyale", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Contrefaçon",
+    note: "La contrefaçon de droits de propriété intellectuelle : caractérisation, preuve, réparation.",
+    c: {q: "contrefaçon", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm", "civ1"], pub: ["b"]}
+  },
+  {
+    label: "Détention provisoire",
+    note: "Conditions et motivation de la détention provisoire, contrôle de la chambre de l'instruction.",
+    c: {q: "détention provisoire", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"], pub: ["b"]}
+  },
+  {
+    label: "Divorce · prestation compensatoire",
+    note: "La prestation compensatoire : disparité, critères d'attribution, forme et révision.",
+    c: {q: "prestation compensatoire", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"], pub: ["b"]}
+  },
+  {
+    label: "Dol · réticence dolosive",
+    note: "Le silence sur une information déterminante du consentement, cause de nullité du contrat.",
+    c: {q: "réticence dolosive", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Escroquerie",
+    note: "Les manœuvres frauduleuses déterminant la remise de fonds ou de valeurs (art. 313-1 du code pénal).",
+    c: {q: "escroquerie", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"], pub: ["b"]}
+  },
+  {
+    label: "Expertise judiciaire",
+    note: "Régime de l'expertise : mission, respect du contradictoire, valeur des conclusions pour le juge.",
+    c: {q: "expertise judiciaire", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Garantie décennale",
+    note: "La responsabilité décennale des constructeurs : notion d'ouvrage, désordres compromettant la solidité ou la destination.",
+    c: {q: "garantie décennale", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Garde à vue · nullité",
+    note: "Les nullités de la garde à vue : notification des droits, assistance de l'avocat, exigence d'un grief.",
+    c: {q: "nullité de la garde à vue", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"]}
+  },
+  {
+    label: "Indivision",
+    note: "Régime de l'indivision : actes de gestion, indemnité d'occupation, partage.",
+    c: {q: "indivision", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"], pub: ["b"]}
+  },
+  {
+    label: "Licenciement économique · motif",
+    note: "La cause économique : difficultés, mutations technologiques, réorganisation, et périmètre d'appréciation.",
+    c: {q: "motif économique", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["soc"], pub: ["b"]}
+  },
+  {
+    label: "Liquidation judiciaire",
+    note: "Ouverture et effets de la liquidation judiciaire, pouvoirs du liquidateur.",
+    c: {q: "liquidation judiciaire", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"], pub: ["b"]}
+  },
+  {
+    label: "Motivation · défaut de base légale",
+    note: "Le grief tiré du défaut de base légale : la décision ne met pas la Cour en mesure d'exercer son contrôle. Recherche très large — resserrez avec un angle d'analyse ou une matière.",
+    c: {q: "défaut de base légale", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Motivation · défaut de motifs",
+    note: "Le défaut de motifs, cas d'ouverture à cassation (art. 455 du code de procédure civile). Recherche très large : à combiner impérativement avec des filtres.",
+    c: {q: "défaut de motifs", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Obligation d'information · devoir de conseil",
+    note: "Le devoir de conseil du professionnel et la charge de la preuve de son exécution.",
+    c: {q: "devoir de conseil", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Péremption d'instance",
+    note: "La péremption de l'instance faute de diligences des parties pendant deux ans.",
+    c: {q: "péremption de l'instance", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Prescription · interruption",
+    note: "Les causes d'interruption : demande en justice, reconnaissance du droit, mesure d'exécution.",
+    c: {q: "interruption de la prescription", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Procédure collective · période suspecte",
+    note: "Les nullités des actes accomplis entre la cessation des paiements et le jugement d'ouverture.",
+    c: {q: "période suspecte", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Recel",
+    note: "Le recel : détention, dissimulation ou profit d'une chose provenant d'un crime ou d'un délit.",
+    c: {q: "recel", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"], pub: ["b"]}
+  },
+  {
+    label: "Responsabilité · garde de la chose",
+    note: "La responsabilité du fait des choses : détermination du gardien, usage, direction et contrôle.",
+    c: {q: "garde de la chose", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Rupture brutale des relations commerciales",
+    note: "La rupture sans préavis écrit tenant compte de la durée de la relation (art. L. 442-1, II du code de commerce).",
+    c: {q: "rupture brutale des relations commerciales établies", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Servitude de passage",
+    note: "Les servitudes de passage : enclave, titre, prescription, assiette et exercice.",
+    c: {q: "servitude de passage", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Succession · rapport",
+    note: "Le rapport des libéralités à la succession et son incidence sur la réserve.",
+    c: {q: "rapport à la succession", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"]}
+  },
+  {
+    label: "Travail dissimulé",
+    note: "La dissimulation d'emploi salarié ou d'activité, et l'indemnité forfaitaire due au salarié.",
+    c: {q: "travail dissimulé", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["soc", "cr"]}
+  },
+  {
+    label: "Trouble anormal de voisinage",
+    note: "Le trouble excédant les inconvénients normaux du voisinage : responsabilité sans faute.",
+    c: {q: "trouble anormal de voisinage", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Vices cachés",
+    note: "La garantie des vices cachés : défaut rendant la chose impropre à son usage, délai d'action, action rédhibitoire ou estimatoire.",
+    c: {q: "vice caché", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1", "civ3"]}
+  },
+  {
+    label: "Bail commercial · déplafonnement du loyer",
+    note: "Le déplafonnement du loyer lors du renouvellement : motifs et détermination de la valeur locative.",
+    c: {q: "déplafonnement", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Bail commercial · refus de renouvellement",
+    note: "Le refus de renouvellement du bail et l'indemnité d'éviction.",
+    c: {q: "refus de renouvellement", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Cautionnement · disproportion",
+    note: "L'engagement de caution manifestement disproportionné aux biens et revenus de la caution.",
+    c: {q: "manifestement disproportionné", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Copropriété · charges",
+    note: "Répartition et recouvrement des charges de copropriété, contestation des comptes.",
+    c: {q: "charges de copropriété", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Devoir de mise en garde (banque)",
+    note: "Le devoir de mise en garde du banquier envers l'emprunteur non averti, au regard du risque d'endettement.",
+    c: {q: "devoir de mise en garde", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Exécution provisoire",
+    note: "L'exécution provisoire des décisions : de droit ou facultative, arrêt et aménagement.",
+    c: {q: "exécution provisoire", op: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Force majeure",
+    note: "L'événement imprévisible, irrésistible et extérieur, exonératoire de responsabilité ou libératoire de l'obligation.",
+    c: {q: "force majeure", op: "exact", jur: ["cc"], tri: "date-desc", pub: ["b"]}
+  },
+  {
+    label: "Usufruit",
+    note: "Droits et obligations de l'usufruitier à l'égard du nu-propriétaire.",
+    c: {q: "usufruitier", op: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"], pub: ["b"]}
+  },
 ];
 
 
-(function initPresets(){
+/* La bibliothèque est triée alphabétiquement et filtrable : à plusieurs dizaines
+   d'entrées, un menu déroulant brut devient inutilisable, surtout sur téléphone.
+   Le filtre porte aussi sur la note explicative, pour que « preuve » ou
+   « nullité » retrouve les sujets dont le libellé ne contient pas le mot. */
+PRESETS.sort((a,b)=>a.label.localeCompare(b.label,"fr"));
+
+function remplirPresets(filtre){
   const sel = $("in-preset");
-  PRESETS.forEach((p,i)=>{
+  const f = normaliser(filtre||"").trim();
+  const liste = PRESETS.map((p,i)=>({p,i}))
+    .filter(({p}) => !f || normaliser(p.label+" "+p.note).includes(f));
+  sel.innerHTML = "";
+  const vide = document.createElement("option");
+  vide.value = "";
+  vide.textContent = liste.length
+    ? "— "+liste.length+" sujet"+(liste.length>1?"s":"")+" — choisir pour remplir le formulaire —"
+    : "— aucun sujet ne correspond à « "+filtre+" » —";
+  sel.appendChild(vide);
+  for(const {p,i} of liste){
     const o = document.createElement("option");
     o.value = String(i); o.textContent = p.label;
     sel.appendChild(o);
-  });
-  sel.onchange = ()=>{
-    const p = PRESETS[Number(sel.value)];
+  }
+}
+
+(function initPresets(){
+  remplirPresets("");
+  $("in-preset-filtre").addEventListener("input", e=>remplirPresets(e.target.value));
+  $("in-preset").onchange = ()=>{
+    const p = PRESETS[Number($("in-preset").value)];
     if(!p) return;
     appliquerCriteres(p.c);
-    $("msg-recherche").innerHTML = '<div class="alerte info"><b>Modèle appliqué.</b> '+echap(p.note)+
+    $("msg-recherche").innerHTML = '<div class="alerte info"><b>'+echap(p.label)+'.</b> '+echap(p.note)+
       " Cliquez sur « Rechercher » (et ajustez les critères si besoin).</div>";
   };
 })();
