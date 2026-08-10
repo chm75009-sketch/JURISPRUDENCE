@@ -5,11 +5,16 @@ décisions de justice (Cour de cassation, cours d'appel, tribunaux judiciaires,
 tribunaux de commerce), via l'[API publique Judilibre](https://www.courdecassation.fr/acces-rapide-judilibre)
 de la Cour de cassation.
 
-Une seule page web (`index.html`), sans serveur, sans dépendance : les requêtes
+Une seule page web (`index.html`), sans dépendance : les requêtes de recherche
 partent directement de votre navigateur vers l'API officielle.
 
-**Application en ligne : <https://chm75009-sketch.github.io/JURISPRUDENCE/>**
-(attention, `JURISPRUDENCE` en majuscules).
+**Application en ligne : <https://jurisprudence-recherche.netlify.app>**
+— version complète, avec le texte des articles de code affiché dans la page.
+
+Une seconde adresse, <https://chm75009-sketch.github.io/JURISPRUDENCE/>
+(`JURISPRUDENCE` en majuscules), sert la même application **sans le relais
+Légifrance** : les articles cités y renvoient vers legifrance.gouv.fr. Elle est
+strictement autonome — utile comme secours.
 
 ## Fonctionnalités
 
@@ -68,30 +73,52 @@ partent directement de votre navigateur vers l'API officielle.
 Les articles cités dans le texte d'une décision — « article L. 1154-1 du code du
 travail », « articles 455 et 458 du code de procédure civile », « article
 L. 1235-3, alinéa 2, du code du travail » — sont détectés et rendus
-**cliquables**, sans aucune configuration. Un clic ouvre l'article sur le site
-officiel **Légifrance**. Une citation visant plusieurs articles propose le choix.
+**cliquables**, sans aucune configuration. Une citation visant plusieurs
+articles propose le choix.
 
-#### Pourquoi le texte de l'article ne s'affiche pas dans la page
+Le clic aboutit de deux façons selon le déploiement :
 
-L'API Légifrance permettrait d'afficher l'article **dans sa version applicable à
-la date de la décision**, sans quitter la page. Cette voie est aujourd'hui
-**fermée à une application de navigateur** :
+- **avec le relais Légifrance** (adresse Netlify) : le texte de l'article
+  s'affiche dans la page, **dans sa version applicable à la date de la
+  décision**. Lire un arrêt de 2012 montre la rédaction de 2012 ;
+- **sans relais** (GitHub Pages) : le clic ouvre la fiche sur legifrance.gouv.fr.
 
-- l'API Légifrance exige un jeton **OAuth2** (`www-authenticate: Bearer`) ;
-- le serveur `oauth.piste.gouv.fr` répond **403 Forbidden, sans en-tête CORS**, à
+Le nom du code cité est recalé sur la nomenclature officielle (70 codes) ; si
+l'article n'y est pas trouvé, la recherche est relancée sur l'ensemble des codes
+et le résultat est signalé comme tel.
+
+#### Pourquoi un relais côté serveur est nécessaire
+
+- L'API Légifrance exige un jeton **OAuth2** (`www-authenticate: Bearer`).
+- Le serveur `oauth.piste.gouv.fr` répond **403 Forbidden, sans en-tête CORS**, à
   toute demande de jeton portant un en-tête `Origin` — que tout navigateur
   ajoute systématiquement. La même requête *sans* `Origin` reçoit une réponse
-  normale (400 `invalid_client`). Le refus est donc antérieur à toute
-  vérification : aucun identifiant valide ne peut aboutir depuis une page web.
+  normale (400 `invalid_client`). Le refus précède toute vérification : aucun
+  identifiant valide ne peut aboutir depuis une page web.
+- L'API Légifrance elle-même **accepte** les appels de navigateur (elle renvoie
+  les en-têtes CORS attendus) : seul le point d'authentification bloque.
 
-À noter : l'API Légifrance elle-même **accepte** les appels de navigateur (elle
-renvoie les en-têtes CORS attendus) — seul le point d'authentification bloque.
+`netlify/functions/legifrance.mjs` fait donc ce travail côté serveur. Les
+identifiants PISTE y sont fournis en **variables d'environnement**
+(`PISTE_CLIENT_ID`, `PISTE_CLIENT_SECRET`) : ils ne figurent jamais dans le code
+publié et ne sont jamais transmis au navigateur. Les origines autorisées à
+appeler le relais sont restreintes, afin qu'un tiers ne consomme pas le quota.
 
-Le code de l'intégration OAuth est conservé (panneau « Textes officiels ») : il
-fonctionnera tel quel si PISTE lève cette restriction, ou derrière un relais
-côté serveur qui détiendrait les identifiants. Il recale le nom du code cité sur
-la nomenclature officielle (70 codes) et, si l'article n'y est pas trouvé,
-relance la recherche sur l'ensemble des codes en le signalant.
+### Installation sur l'appareil
+
+L'application s'installe comme un logiciel (PWA) : icône dédiée, ouverture en
+plein écran, et **consultation hors connexion** une fois ouverte au moins une
+fois. Le service worker suit une stratégie « réseau d'abord, cache en secours » :
+jamais de version périmée tant qu'il y a du réseau. Les appels aux API ne sont
+jamais mis en cache.
+
+- **Ordinateur** (Chrome, Edge) : icône d'installation dans la barre d'adresse,
+  ou menu ⋮ → « Installer Jurisprudence… ».
+- **iPhone** (Safari obligatoirement) : Partager → « Sur l'écran d'accueil ».
+
+Le nom d'hôte est affiché dans le panneau « Textes officiels » : installée en
+plein écran, l'application n'a pas de barre d'adresse, et deux installations
+seraient autrement indiscernables.
 
 ### Résultats
 - Extraits surlignés, numéro de pourvoi, ECLI, solution, matières (titrage),
@@ -101,12 +128,17 @@ relance la recherche sur l'ensemble des codes en le signalant.
 - **Copier la citation** : un clic copie la référence au format des écritures
   (« Cass. soc., 25 novembre 2015, n° 14-24.444, publié au bulletin ») suivie
   du lien officiel.
-- **Export massif** en CSV (Excel) ou JSON : jusqu'à 10 000 décisions par
+- **Export massif** en CSV (Excel), HTML ou JSON : jusqu'à 10 000 décisions par
   recherche, avec barre de progression. Colonnes : date, juridiction, chambre,
   numéro, ECLI, solution, publication, matières, citation prête à l'emploi,
-  sommaire officiel, extraits pertinents, lien. Les mots à exclure s'appliquent
-  aussi à l'export. Le fichier est déposé dans le dossier **Téléchargements**
-  du navigateur.
+  sommaire officiel, extraits pertinents, lien. Les mots exclus et le filtre de
+  matière s'appliquent aussi à l'export. Le fichier est déposé dans le dossier
+  **Téléchargements** du navigateur.
+  - L'**export HTML** est autonome et lisible dans tout navigateur, accents
+    garantis (aucun réglage d'encodage), imprimable en PDF, et embarque une
+    **barre de filtrage** par mots-clés qui fonctionne hors ligne.
+  - L'**export CSV** commence par un BOM UTF-8 pour qu'Excel affiche
+    correctement les accents au double-clic.
 
 ## Mise en route
 
@@ -120,7 +152,7 @@ relance la recherche sur l'ensemble des codes en le signalant.
 
 ### 2. Ouvrir l'application
 
-- **En ligne (recommandé)** : <https://chm75009-sketch.github.io/JURISPRUDENCE/>
+- **En ligne (recommandé)** : <https://jurisprudence-recherche.netlify.app>
 - **Ou en local** : téléchargez `index.html` et ouvrez-le dans votre navigateur.
 
 ### 3. Première utilisation
@@ -154,8 +186,8 @@ clé sur son propre poste.
 - Les **articles cliquables** ne couvrent que les **codes** : une citation
   visant une loi non codifiée, un décret ou une convention collective n'est pas
   résolue.
-- Le texte des articles n'est **pas affiché dans la page** : le portail PISTE
-  refuse l'authentification Légifrance aux navigateurs (voir ci-dessus).
+- Le texte des articles ne s'affiche dans la page que sur le déploiement muni
+  du relais ; ailleurs, le clic ouvre legifrance.gouv.fr.
 
 ## Données
 
