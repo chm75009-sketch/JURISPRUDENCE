@@ -71,6 +71,8 @@
   .badge.pub{background:var(--ok-soft);color:var(--ok);border-color:#bfe3c8}
   .badge.sol{background:var(--accent-soft);color:var(--accent);border-color:#ecc9ce}
   .badge.theme{color:var(--muted)}
+  .fiche .resume{margin:10px 0 6px;font-size:13.5px;background:var(--accent-soft);
+    border:1px solid #ecc9ce;border-radius:8px;padding:8px 11px;color:#5a2a31}
   .fiche .extraits{margin:10px 0 8px;font-size:14.5px;color:#33404f}
   .fiche .extraits em{background:#fdeaa2;font-style:normal;padding:0 2px;border-radius:3px}
   .fiche .extraits .sep{color:#9aa7b5}
@@ -374,7 +376,8 @@ function libelleJuridiction(r){
 }
 
 function numerosDe(r){
-  return (r.numbers && r.numbers.length ? r.numbers : (r.number?[r.number]:[])).join(", ");
+  const arr = r.numbers && r.numbers.length ? r.numbers : (r.number?[r.number]:[]);
+  return [...new Set(arr)].join(", ");
 }
 
 /* Citation au format usuel des écritures : « Cass. soc., 16 juin 2021, n° 19-25.075 ». */
@@ -755,7 +758,10 @@ function carteResultat(r){
       .map(t=>'<span class="badge theme">'+echap(t)+'</span>').join("");
   const extraits = ((r.highlights && r.highlights.text) || []).slice(0,3)
       .map(h=>"« … "+extraitSurligne(h)+" … »").join(' <span class="sep">·</span> ');
-  const somm = r.summary ? '<div class="extraits">'+echap(String(r.summary).slice(0,300))+'</div>' : "";
+  /* Le sommaire officiel (arrêts publiés) est le meilleur résumé disponible :
+     on l'affiche toujours quand il existe, en plus des extraits. */
+  const s = String(r.summary||"").replace(/\s+/g," ").trim();
+  const somm = s ? '<div class="resume"><b>Sommaire officiel.</b> '+echap(s.slice(0,420))+(s.length>420?"…":"")+'</div>' : "";
   return '<article class="fiche" data-id="'+echap(r.id)+'">'+
     '<div class="tete">'+
       '<span class="jur">'+echap(jur)+'</span>'+
@@ -765,7 +771,8 @@ function carteResultat(r){
       (pub ? '<span class="badge pub">Publié au Bulletin</span>' : "")+
       themes+
     '</div>'+
-    (extraits ? '<div class="extraits">'+extraits+'</div>' : somm)+
+    somm+
+    (extraits ? '<div class="extraits">'+extraits+'</div>' : "")+
     '<div class="pied">'+
       '<button type="button" data-id="'+echap(r.id)+'" class="voir-texte">Texte intégral</button>'+
       '<button type="button" data-id="'+echap(r.id)+'" class="copier-cit">Copier la citation</button>'+
@@ -975,7 +982,7 @@ async function collecterPourExport(){
         juridiction: libelleJuridiction(r),
         chambre: (r.jurisdiction||"").toLowerCase()==="cc"
           ? (NOMS_CHAMBRES[(r.chamber||"").toLowerCase()]||r.chamber||"") : "",
-        numero: (r.numbers&&r.numbers.length?r.numbers:(r.number?[r.number]:[])).join(" / "),
+        numero: numerosDe(r),
         ecli: r.ecli||"",
         solution: r.solution||"",
         publication: (r.publication||[]).join(" "),
