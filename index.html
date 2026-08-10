@@ -184,14 +184,23 @@
     <details id="panneau-lf">
       <summary><b>Textes officiels (Légifrance) — facultatif</b>
         <span class="note" id="etat-lf">non configuré</span></summary>
+      <div class="alerte info" style="margin-top:10px">
+        <b>Limitation actuelle du portail PISTE.</b> Les articles cités dans les décisions sont
+        <b>déjà cliquables sans rien configurer</b> : ils s'ouvrent sur le site officiel Légifrance.
+        En revanche, <b>afficher leur texte directement dans cette page n'est pas possible</b> :
+        l'API Légifrance impose une authentification OAuth, et le serveur
+        <code>oauth.piste.gouv.fr</code> répond « 403 Forbidden » à toute demande de jeton portant
+        un en-tête <code>Origin</code> — que tout navigateur ajoute systématiquement. Ce refus est
+        antérieur à toute vérification : aucun identifiant, si valide soit-il, ne peut aboutir
+        depuis une page web. (L'API Légifrance elle-même accepte pourtant les appels de navigateur :
+        seul le point d'authentification bloque.) Renseigner les champs ci-dessous n'aura donc
+        d'effet que si PISTE lève cette restriction, ou si vous placez un relais côté serveur.
+      </div>
       <p class="note" style="margin-top:10px">
-        En connectant l'API <b>Légifrance</b>, les articles cités dans le texte d'une décision
-        (« article L. 1154-1 du code du travail ») deviennent cliquables et s'affichent
-        <b>dans leur version applicable à la date de la décision</b>.
-        Sur <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>, souscrivez
-        l'API <b>Légifrance</b> avec la même application, puis recopiez ci-dessous les
+        Le cas échéant : sur <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>,
+        souscrivez l'API <b>Légifrance</b> avec la même application, puis recopiez ci-dessous les
         <b>identifiants OAuth</b> de la fiche (« Client ID » et son secret).
-        Comme la clé Judilibre, ils restent <b>uniquement dans votre navigateur</b>.
+        Comme la clé Judilibre, ils resteraient <b>uniquement dans votre navigateur</b>.
       </p>
       <div class="grid g2" style="margin-top:10px">
         <label class="champ"><b>Client ID</b>
@@ -563,6 +572,7 @@ function messageErreur(e){
     case "PAS_DE_LEGIFRANCE": return "Configurez d'abord les identifiants Légifrance (panneau « Textes officiels » en haut de page).";
     case "LF_IDENT_REFUSES":  return "Légifrance a refusé les identifiants OAuth : vérifiez le Client ID et son secret sur PISTE (fiche de l'application, rubrique « Identifiants Oauth »).";
     case "LF_NON_SOUSCRITE":  return "Accès refusé par Légifrance : l'application PISTE n'est probablement pas souscrite à l'API Légifrance en production.";
+    case "LF_BLOQUE_NAVIGATEUR": return "Le serveur d'authentification de PISTE (oauth.piste.gouv.fr) refuse les demandes de jeton émises depuis un navigateur : il répond 403 dès que la requête porte un en-tête « Origin », que tout navigateur ajoute. Vos identifiants ne sont pas en cause — le texte intégral des articles ne peut donc pas être affiché ici. Les articles cités restent cliquables et s'ouvrent sur le site Légifrance.";
     default:
       if(e instanceof TypeError) return "Impossible de joindre l'API (connexion internet ? blocage réseau ?).";
       return "Erreur inattendue : "+e.message;
@@ -1251,8 +1261,17 @@ async function lfToken(){
   if(lfJeton && Date.now() < lfExpire) return lfJeton;
   const corps = new URLSearchParams({grant_type:"client_credentials",
     client_id:id, client_secret:secret, scope:"openid"});
-  const rep = await fetch(LF_OAUTH, {method:"POST",
-    headers:{"content-type":"application/x-www-form-urlencoded"}, body:corps});
+  let rep;
+  try{
+    rep = await fetch(LF_OAUTH, {method:"POST",
+      headers:{"content-type":"application/x-www-form-urlencoded"}, body:corps});
+  }catch(e){
+    /* Le serveur d'authentification de PISTE rejette (403, sans en-tête CORS)
+       toute requête portant un en-tête Origin, que le navigateur ajoute
+       systématiquement : la demande de jeton échoue avant toute vérification
+       des identifiants. Erreur distinguée pour ne pas accuser à tort la clé. */
+    throw new Error("LF_BLOQUE_NAVIGATEUR");
+  }
   if(rep.status===400 || rep.status===401) throw new Error("LF_IDENT_REFUSES");
   if(!rep.ok) throw new Error("HTTP_"+rep.status);
   const d = await rep.json();
@@ -1347,6 +1366,21 @@ async function lfChercherArticle(numero, nomCode, dateIso){
   return null;
 }
 
+/* Repli universel : la fiche de l'article sur le site public Légifrance.
+   Ne demande aucun identifiant et fonctionne pour tout le monde. */
+function urlLegifrance(numero, libelleCode){
+  const q = "article "+numero+(libelleCode ? " "+libelleCode : "");
+  return "https://www.legifrance.gouv.fr/search/all?tab_selection=all&query="+encodeURIComponent(q);
+}
+function blocRepliLegifrance(numero, nomCode, explication){
+  return '<div class="alerte info">'+explication+"</div>"+
+    '<p style="margin-top:16px"><a class="lien-lf" href="'+echap(urlLegifrance(numero, nomCode))+
+    '" target="_blank" rel="noopener">Ouvrir « article '+echap(numero)+
+    (nomCode ? " — "+echap(nomCode) : "")+' » sur Légifrance ↗</a></p>'+
+    '<p class="note">Le site officiel affiche la version en vigueur ; son sélecteur de version '+
+    "permet de remonter à la rédaction applicable à la date de la décision.</p>";
+}
+
 async function lfArticle(id, dateIso){
   const corps = {id};
   if(dateIso) corps.date = dateIso.slice(0,10);
@@ -1379,6 +1413,14 @@ async function ouvrirArticle(numeros, libelleCode, dateDecision){
   $("art-sous-titre").textContent = dateDecision
     ? "Version applicable au "+dateFr(dateDecision)+" (date de la décision)"
     : "Version en vigueur";
+  /* Sans identifiants — cas de loin le plus fréquent, l'API n'étant pas
+     joignable depuis un navigateur — on renvoie directement vers Légifrance. */
+  if(!lfConfiguree()){
+    $("art-corps").innerHTML = blocRepliLegifrance(numero, nomCode,
+      "Le texte de l'article n'est pas affiché ici : l'API Légifrance exige une authentification "+
+      "que le portail PISTE refuse aux pages web (voir le panneau « Textes officiels »).");
+    return;
+  }
   $("art-corps").innerHTML = '<div class="alerte info">Consultation de Légifrance…</div>';
   try{
     let trouve = await lfChercherArticle(numero, nomCode, dateDecision);
@@ -1409,7 +1451,10 @@ async function ouvrirArticle(numeros, libelleCode, dateDecision){
       '<a href="https://www.legifrance.gouv.fr/codes/article_lc/'+encodeURIComponent(art.id)+
       '" target="_blank" rel="noopener">Voir sur Légifrance ↗</a></p>';
   }catch(e){
-    $("art-corps").innerHTML = '<div class="alerte err">'+echap(messageErreur(e))+"</div>";
+    $("art-corps").innerHTML = e.message==="LF_BLOQUE_NAVIGATEUR"
+      ? blocRepliLegifrance(numero, nomCode, echap(messageErreur(e)))
+      : '<div class="alerte err">'+echap(messageErreur(e))+"</div>"+
+        blocRepliLegifrance(numero, nomCode, "Vous pouvez consulter l'article directement sur le site officiel :");
   }
 }
 $("art-fermer").onclick = ()=>$("dlg-article").close();
@@ -1452,7 +1497,6 @@ let decisionOuverte = null;
    marqueurs évite toute interférence entre les balises de surlignage et les
    boutons. */
 function lierArticles(texteEchappe, surligner){
-  if(!lfConfiguree()) return surligner(texteEchappe);
   let sortie = "", curseur = 0, m;
   RE_CITATION.lastIndex = 0;
   while((m = RE_CITATION.exec(texteEchappe)) !== null){

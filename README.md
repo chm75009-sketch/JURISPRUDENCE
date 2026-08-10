@@ -59,22 +59,35 @@ partent directement de votre navigateur vers l'API officielle.
   chez un collaborateur (le lien ne contient jamais la clé API — chacun utilise
   la sienne).
 
-### Textes officiels (Légifrance) — facultatif
+### Articles de code cliquables
 
-En connectant l'API **Légifrance** (même compte PISTE, même application), les
-articles cités dans le texte d'une décision — « article L. 1154-1 du code du
-travail », « articles 455 et 458 du code de procédure civile » — deviennent
-**cliquables** et s'affichent **dans leur version applicable à la date de la
-décision**, sans quitter la page.
+Les articles cités dans le texte d'une décision — « article L. 1154-1 du code du
+travail », « articles 455 et 458 du code de procédure civile », « article
+L. 1235-3, alinéa 2, du code du travail » — sont détectés et rendus
+**cliquables**, sans aucune configuration. Un clic ouvre l'article sur le site
+officiel **Légifrance**. Une citation visant plusieurs articles propose le choix.
 
-- Authentification **OAuth2 `client_credentials`** (Client ID + secret de la
-  fiche PISTE), à saisir dans le panneau « Textes officiels ». Comme la clé
-  Judilibre, les identifiants restent **uniquement dans le navigateur** ; le
-  jeton d'accès n'est gardé qu'en mémoire et renouvelé automatiquement.
-- Le nom du code cité est recalé sur la nomenclature officielle Légifrance ;
-  si l'article n'y est pas trouvé, la recherche est relancée sur l'ensemble des
-  codes et le résultat est signalé comme tel.
-- Une citation visant plusieurs articles propose le choix.
+#### Pourquoi le texte de l'article ne s'affiche pas dans la page
+
+L'API Légifrance permettrait d'afficher l'article **dans sa version applicable à
+la date de la décision**, sans quitter la page. Cette voie est aujourd'hui
+**fermée à une application de navigateur** :
+
+- l'API Légifrance exige un jeton **OAuth2** (`www-authenticate: Bearer`) ;
+- le serveur `oauth.piste.gouv.fr` répond **403 Forbidden, sans en-tête CORS**, à
+  toute demande de jeton portant un en-tête `Origin` — que tout navigateur
+  ajoute systématiquement. La même requête *sans* `Origin` reçoit une réponse
+  normale (400 `invalid_client`). Le refus est donc antérieur à toute
+  vérification : aucun identifiant valide ne peut aboutir depuis une page web.
+
+À noter : l'API Légifrance elle-même **accepte** les appels de navigateur (elle
+renvoie les en-têtes CORS attendus) — seul le point d'authentification bloque.
+
+Le code de l'intégration OAuth est conservé (panneau « Textes officiels ») : il
+fonctionnera tel quel si PISTE lève cette restriction, ou derrière un relais
+côté serveur qui détiendrait les identifiants. Il recale le nom du code cité sur
+la nomenclature officielle (70 codes) et, si l'article n'y est pas trouvé,
+relance la recherche sur l'ensemble des codes en le signalant.
 
 ### Résultats
 - Extraits surlignés, numéro de pourvoi, ECLI, solution, matières (titrage),
@@ -137,6 +150,8 @@ clé sur son propre poste.
 - Les **articles cliquables** ne couvrent que les **codes** : une citation
   visant une loi non codifiée, un décret ou une convention collective n'est pas
   résolue.
+- Le texte des articles n'est **pas affiché dans la page** : le portail PISTE
+  refuse l'authentification Légifrance aux navigateurs (voir ci-dessus).
 
 ## Données
 
