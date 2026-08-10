@@ -1,14 +1,17 @@
 # Configuration Netlify.
-# Le site est un fichier statique : aucune étape de construction n'est nécessaire.
-# Seule la fonction « legifrance » tourne côté serveur (voir netlify/functions/).
+#
+# Le site est statique : rien à compiler. La « construction » se borne à copier
+# les fichiers publiables dans dist/. Ce détour évite que le dossier des
+# fonctions se retrouve à l'intérieur du dossier publié — situation que Netlify
+# refuse — tout en gardant index.html à la racine du dépôt, comme l'exige
+# GitHub Pages qui sert la même application.
 
 [build]
-  publish = "."
+  command = "mkdir -p dist && cp index.html dist/ && cp manifest.json dist/ 2>/dev/null || true && cp -r icons dist/ 2>/dev/null || true"
+  publish = "dist"
   functions = "netlify/functions"
-  command = ""
 
-# Le relais n'est utile qu'appelé par l'application ; on évite qu'il soit
-# indexé ou appelé depuis un navigateur par une adresse plus courte.
+# Le relais n'a pas vocation à être indexé.
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
