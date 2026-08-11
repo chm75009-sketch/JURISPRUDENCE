@@ -67,12 +67,15 @@ rappelé au-dessus des résultats, retirable d'un clic.
 ## Résultats
 
 - Citation, date, numéro de pourvoi, solution, matières, ECLI.
-- **Sommaire officiel** quand il existe — le résumé rédigé par la Cour, donné
-  **en entier** (mesuré : 80 % dépassent 400 caractères, médiane 732, jusqu'à
-  3 058 ; le tronquer revenait à l'amputer presque toujours). Au-delà de 600
-  caractères il est simplement replié, le texte restant dans la page — donc
-  trouvable par la recherche du navigateur et copiable.
+- **Sommaire officiel** quand il existe — le résumé rédigé par la Cour.
 - Extraits surlignés.
+
+**Rien n'est amputé.** Une fiche restitue tout ce que l'API renvoie sur la
+décision : le sommaire officiel en entier, tous les extraits, toutes les
+matières. Aucun seuil d'affichage — un seuil est une décision prise à la place
+du lecteur, qui n'a aucun moyen de savoir ce qu'on lui a retiré. Le nombre de
+décisions par page (10, 20 ou 50) est lui aussi un choix, offert à côté de la
+pagination.
 - **Texte intégral** sans quitter la page, vos termes surlignés.
 - **Copier la citation** au format des écritures
   (« Cass. soc., 25 novembre 2015, n° 14-24.444, publié au bulletin »).
