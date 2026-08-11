@@ -124,8 +124,15 @@ cache.
   ou menu ⋮ → « Installer Jurisprudence… ».
 - **iPhone** (Safari obligatoirement) : Partager → « Sur l'écran d'accueil ».
 
-Le nom d'hôte figure en tête : installée en plein écran, l'application n'a pas
-de barre d'adresse.
+Le nom d'hôte et **le numéro de version** figurent en tête : installée en plein
+écran, l'application n'a pas de barre d'adresse, et rien n'indiquerait sinon ce
+que l'on utilise.
+
+**Les mises à jour se signalent d'elles-mêmes.** Une application installée ne se
+recharge jamais seule : sans avertissement, on peut rester des jours sur une
+version dépassée sans le savoir — ce qui rend incompréhensible tout défaut déjà
+corrigé. Dès qu'une nouvelle version prend la main, un bandeau apparaît avec un
+bouton « Recharger maintenant ».
 
 ## Mise en route
 

@@ -10,7 +10,9 @@
    cache : les résultats de recherche doivent rester frais, et une réponse
    d'API stockée hors ligne induirait en erreur. */
 
-const CACHE = "jurisprudence-v1";
+/* Le nom du cache porte la version : un changement de version écarte
+   automatiquement l'ancien contenu. */
+const CACHE = "jurisprudence-1.0";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
