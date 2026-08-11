@@ -177,9 +177,10 @@ async function lireConvention(idcc, id){
     const titre = prem(n, "title", "titre", "nature");
     const ident = prem(n, "id", "cid");
     if(/^KALITEXT/.test(String(ident)))
-      textes.push({ id:String(ident), titre:String(titre||"(sans intitulé)"),
-        nature: prem(n, "nature", "type"), date: prem(n, "dateTexte", "dateDebut", "datePubli"),
-        etat: prem(n, "etat", "legalStatus"), chemin });
+      textes.push({ id:String(ident), titre:String(titre||"(sans intitulé)").replace(/\s+/g," ").trim(),
+        nature: String(prem(n, "nature", "type")||""),
+        date: dateLisible(prem(n, "dateTexte", "dateDebut", "dateParution")),
+        etat: String(prem(n, "etat", "legalStatus")||""), chemin });
     for(const cle of ["sections","children","enfants","articles","textes","texts","liens"])
       for(const f of tab(n, cle)) parcourir(f, chemin.concat(titre ? [String(titre)] : []));
   };
@@ -213,28 +214,64 @@ async function structureTexteCcn(id){
   return {racine:Object.keys(d||{}), noeuds:vus.slice(0, 14)};
 }
 
-/* Le contenu d'un texte : sections et articles, à plat et dans l'ordre. */
+/* La DILA date certains champs en millisecondes depuis 1970, d'autres en clair. */
+function dateLisible(v){
+  const s = String(v||"").trim();
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
+  if(/^\d{12,}$/.test(s)){
+    const d = new Date(Number(s));
+    return Number.isNaN(d.getTime()) ? "" : d.toISOString().slice(0,10);
+  }
+  return "";
+}
+const enVigueur = e => !e || /^VIGUEUR/.test(String(e));
+
+/* Le contenu d'un texte : sections et articles, à plat et dans l'ordre.
+
+   Deux points que seule la lecture des réponses réelles a permis de régler :
+
+   — l'ordre des tableaux renvoyés n'est pas l'ordre du document ; c'est le
+     champ « intOrdre » qui le porte, sur les sections comme sur les articles.
+     Sans tri, la nomenclature des cadres sortait dans l'ordre 3, 4, 1, 2, 7,
+     5, 6 ;
+   — un même article figure autant de fois qu'il a connu de versions, la
+     version applicable portant un « etat » commençant par VIGUEUR et les
+     autres REMPLACE, ABROGE ou PERIME. On ne retient que la version en
+     vigueur : afficher les deux revient à présenter comme le droit un texte
+     qui ne l'est plus. Le nombre de versions écartées est renvoyé, pour que
+     l'omission reste visible. */
 async function lireTexteCcn(id){
   const d = await appelLegifrance("/consult/kaliText", {id:String(id)});
   const t = d.text || d.texte || d;
   const blocs = [];
+  let ecartes = 0;
+  const ordre = n => { const v = Number(prem(n, "intOrdre", "ordre")); return Number.isNaN(v) ? 0 : v; };
+  const trier = l => l.slice().sort((a,b) => ordre(a) - ordre(b));
+
   const parcourir = (n, niveau) => {
     if(!n || typeof n !== "object") return;
     const titre = prem(n, "title", "titre", "intitule");
     const contenu = prem(n, "content", "contenu", "texteHtml", "texte");
-    const num = prem(n, "num", "numero");
-    if(titre && !contenu) blocs.push({type:"section", niveau, titre:String(titre)});
-    if(contenu) blocs.push({type:"article", niveau, num:String(num||""),
-                            titre:String(titre||""), html:String(contenu)});
-    for(const cle of ["sections","articles","children","enfants"])
-      for(const f of tab(n, cle)) parcourir(f, niveau+1);
+    if(contenu){
+      if(!enVigueur(prem(n, "etat"))){ ecartes++; return; }
+      blocs.push({type:"article", niveau, num:String(prem(n, "num", "numero")||""),
+                  titre:String(titre||""), etat:String(prem(n, "etat")||""),
+                  html:String(contenu)});
+      return;
+    }
+    if(titre && niveau > 0) blocs.push({type:"section", niveau, titre:String(titre)});
+    for(const f of trier(tab(n, "sections").concat(tab(n, "children"), tab(n, "enfants"))))
+      parcourir(f, niveau+1);
+    for(const f of trier(tab(n, "articles"))) parcourir(f, niveau+1);
   };
   parcourir(t, 0);
+
   return {
     id: String(prem(t, "id", "cid") || id),
-    titre: String(prem(t, "title", "titre") || ""),
-    date: String(prem(t, "dateTexte", "dateDebut", "datePubli") || ""),
-    etat: String(prem(t, "etat", "legalStatus") || ""),
+    titre: String(prem(t, "title", "titre") || "").trim(),
+    date: dateLisible(prem(t, "dateTexte", "dateParution", "dateDebutVersion")),
+    etat: String(prem(t, "etat", "jurisState") || ""),
+    ecartes,
     blocs,
     ...(blocs.length ? {} : {diag:{cles:Object.keys(t||{})}}),
   };

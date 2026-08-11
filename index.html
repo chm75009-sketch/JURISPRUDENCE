@@ -1607,7 +1607,7 @@ $("dlg-article").addEventListener("click", e=>{ if(e.target===$("dlg-article")) 
    d'articles. Ce que l'application affiche est le texte officiel, daté, et
    rien d'autre : c'est la même exigence que pour les décisions.
    -------------------------------------------------------------------- */
-let ccnCourant = null;                       // dernier texte ouvert, pour les exports
+let ccnCourant = null, ccnTextes = [];   // texte ouvert, et sommaire de la convention
 
 function ccnMessage(html, type){
   $("ccn-msg").innerHTML = html ? '<div class="msg '+(type||"info")+'">'+html+"</div>" : "";
@@ -1669,15 +1669,34 @@ async function ccnOuvrir(idcc, id){
       return ccnMessage("Convention trouvée, mais aucun texte n'a pu être lu."+
         (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "err");
     ccnMessage("", "");
+    ccnTextes = d.textes;
+    /* Une convention compte plusieurs centaines de textes — 500 pour les
+       transports routiers. Une liste brute serait inutilisable : le filtre
+       est donc donné en même temps qu'elle, et non caché ailleurs. */
     $("ccn-sommaire").innerHTML =
       '<div class="msg ok" style="margin-top:12px"><b>'+echap(d.titre||("IDCC "+idcc))+"</b> — "+
-      d.textes.length+" texte"+(d.textes.length>1?"s":"")+" (texte de base, annexes, avenants)</div>"+
-      d.textes.map(t => '<div class="fiche"><b>'+echap(t.titre)+"</b>"+
-        (t.date ? ' <span class="note">'+echap(String(t.date).slice(0,10))+"</span>" : "")+
-        (t.etat ? ' <span class="badge">'+echap(t.etat)+"</span>" : "")+
-        ' <button class="second ccn-t" type="button" data-id="'+echap(t.id)+'">Lire</button></div>').join("");
-    [...document.querySelectorAll(".ccn-t")].forEach(b => b.onclick = ()=>ccnLire(b.dataset.id));
+      d.textes.length+" texte"+(d.textes.length>1?"s":"")+" : texte de base, annexes, avenants.</div>"+
+      '<label class="champ"><b>Filtrer les textes</b>'+
+      '<input id="ccn-fl" placeholder="ex. ingénieurs et cadres, ou annexe III" autocomplete="off"></label>'+
+      '<div id="ccn-liste"></div>';
+    $("ccn-fl").addEventListener("input", ()=>ccnListe($("ccn-fl").value));
+    ccnListe("");
   }catch(e){ ccnMessage(ccnErreur(e), "err"); }
+}
+
+function ccnListe(filtre){
+  const f = normaliser(filtre||"");
+  const l = ccnTextes.filter(t => !f || normaliser(t.titre).includes(f));
+  const vus = l.slice(0, 60);
+  $("ccn-liste").innerHTML =
+    (l.length ? '<p class="note">'+l.length+" texte"+(l.length>1?"s":"")+
+      (l.length > vus.length ? " — les "+vus.length+" premiers sont affichés, affinez le filtre" : "")+
+      "</p>" : '<p class="note">Aucun texte ne porte ces mots.</p>')+
+    vus.map(t => '<div class="fiche"><b>'+echap(t.titre)+"</b>"+
+      (t.date ? ' <span class="note">'+echap(t.date)+"</span>" : "")+
+      (t.etat ? ' <span class="badge">'+echap(t.etat)+"</span>" : "")+
+      ' <button class="second ccn-t" type="button" data-id="'+echap(t.id)+'">Lire</button></div>').join("");
+  [...document.querySelectorAll(".ccn-t")].forEach(b => b.onclick = ()=>ccnLire(b.dataset.id));
 }
 
 /* Le contenu des articles arrive en HTML — tableaux de coefficients compris,
@@ -1732,8 +1751,12 @@ async function ccnLire(id){
         (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "err");
     ccnCourant = d; ccnMessage("", "");
     $("ccn-titre").textContent = d.titre || "Texte";
-    $("ccn-sous").textContent = [d.date ? "version du "+dateFr(d.date) : "", d.etat, d.id]
-      .filter(Boolean).join(" · ");
+    /* Le nombre de versions écartées est affiché : une omission silencieuse
+       laisserait croire que le texte est donné en entier. */
+    $("ccn-sous").textContent = [
+      d.date ? "version du "+dateFr(d.date) : "", d.etat, d.id,
+      d.ecartes ? d.ecartes+" version"+(d.ecartes>1?"s":"")+" antérieure"+(d.ecartes>1?"s":"")+" écartée"+(d.ecartes>1?"s":"") : "",
+    ].filter(Boolean).join(" · ");
     $("ccn-filtre").value = "";
     $("ccn-corps").innerHTML = ccnHtml(d.blocs, "");
     $("dlg-ccn").showModal();
