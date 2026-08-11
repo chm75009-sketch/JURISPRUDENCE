@@ -79,6 +79,14 @@ pagination.
 - **Texte intégral** sans quitter la page, vos termes surlignés.
 - **Copier la citation** au format des écritures
   (« Cass. soc., 25 novembre 2015, n° 14-24.444, publié au bulletin »).
+- **Copie de la décision en PDF et en Word**, depuis la fenêtre du texte
+  intégral. Le PDF passe par l'impression du navigateur — seul moyen fiable et
+  sans dépendance d'obtenir un PDF fidèle — déclenchée depuis un cadre masqué
+  pour éviter les blocages de fenêtres surgissantes. Le Word est un **vrai
+  `.docx`** : archive ZIP et XML Office écrits par l'application, non un HTML
+  renommé. Titre, sous-titre, sommaire officiel, texte intégral et mention de
+  source y figurent, et le fichier est relu sans erreur par une implémentation
+  Word indépendante.
 - **Export CSV** (Excel, accents corrects au double-clic grâce au BOM UTF-8) et
   **export HTML** : fichier autonome, lisible partout, imprimable en PDF, avec
   une barre de filtrage embarquée qui fonctionne hors ligne.

@@ -314,8 +314,10 @@
 <dialog id="dlg-decision">
   <div class="dlg-tete">
     <div><h3 id="dlg-titre">Décision</h3><div class="note" id="dlg-sous"></div></div>
-    <div style="display:flex;gap:8px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="fermer" id="dlg-citer" type="button">Copier la citation</button>
+      <button class="fermer" id="dlg-pdf" type="button">PDF</button>
+      <button class="fermer" id="dlg-word" type="button">Word</button>
       <button class="fermer" id="dlg-fermer" type="button">Fermer</button>
     </div>
   </div>
@@ -355,7 +357,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "1.1 — 10 août 2026";
+const VERSION = "1.2 — 10 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1475,6 +1477,13 @@ $("dlg-citer").onclick = ()=>{
   if(ouverte) copier(citationDe(ouverte)+"\n"+"https://www.courdecassation.fr/decision/"+ouverte.id)
     .then(()=>clin($("dlg-citer"), "Copié"));
 };
+$("dlg-pdf").onclick = ()=>{ if(ouverte) imprimerDecision(ouverte); };
+$("dlg-word").onclick = ()=>{
+  if(!ouverte) return;
+  telecharger(nomDecision(ouverte, "docx"), docxDecision(ouverte),
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  clin($("dlg-word"), "Enregistré");
+};
 $("dlg-decision").addEventListener("click", e=>{ if(e.target===$("dlg-decision")) $("dlg-decision").close(); });
 
 /* ------------------------- Articles de code -------------------------
@@ -1555,6 +1564,158 @@ async function ouvrirArticle(numeros, libelleCode, dateDecision){
 }
 $("art-fermer").onclick = ()=>$("dlg-article").close();
 $("dlg-article").addEventListener("click", e=>{ if(e.target===$("dlg-article")) $("dlg-article").close(); });
+
+
+/* ------------------ Copie de la décision : PDF et Word ------------------
+   Une décision doit pouvoir sortir de l'application : jointe à des écritures,
+   versée à un dossier, annotée. Deux formats couvrent tous les usages.
+
+   Le PDF passe par l'impression du navigateur, seul moyen fiable et sans
+   dépendance d'obtenir un PDF fidèle ; l'impression se fait depuis un cadre
+   masqué, ce qui évite les blocages de fenêtres surgissantes.
+
+   Le Word est un vrai .docx — une archive ZIP contenant du XML Office — et non
+   un HTML renommé : un fichier renommé s'ouvre parfois, mais se corrompt au
+   partage et n'est pas ce qui a été demandé. */
+
+function documentDecision(d){
+  const n = numerosDe(d);
+  return {
+    titre: juridictionDe(d)+" — "+dateFr(d.decision_date)+(n?" — n° "+n:""),
+    sousTitre: [d.ecli, d.solution].filter(Boolean).join(" · "),
+    citation: citationDe(d),
+    sommaire: String(d.summary||"").replace(/\s+/g," ").trim(),
+    texte: String(d.text||"").replace(/\r\n?/g,"\n"),
+    lien: "https://www.courdecassation.fr/decision/"+d.id,
+  };
+}
+
+function imprimerDecision(d){
+  const o = documentDecision(d);
+  const html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>'+echap(o.titre)+"</title><style>"+
+    '@page{margin:18mm}body{font:12pt/1.5 Georgia,"Times New Roman",serif;color:#000}'+
+    'h1{font-size:14pt;margin:0 0 2mm}.st{font-size:10pt;color:#444;margin-bottom:6mm}'+
+    '.som{border:1pt solid #999;padding:3mm;margin-bottom:6mm;font-size:11pt}'+
+    'pre{white-space:pre-wrap;font:11pt/1.55 Georgia,"Times New Roman",serif;margin:0}'+
+    '.src{margin-top:8mm;font-size:9pt;color:#444}'+
+    "</style></head><body><h1>"+echap(o.titre)+"</h1>"+
+    '<div class="st">'+echap(o.sousTitre)+"</div>"+
+    (o.sommaire ? '<div class="som"><b>Sommaire officiel.</b> '+echap(o.sommaire)+"</div>" : "")+
+    "<pre>"+echap(o.texte)+"</pre>"+
+    '<div class="src">'+echap(o.citation)+" — source : "+echap(o.lien)+
+    " (Judilibre, Cour de cassation, open data, décision pseudonymisée)</div>"+
+    "</body></html>";
+  const cadre = document.createElement("iframe");
+  cadre.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0";
+  document.body.appendChild(cadre);
+  cadre.srcdoc = html;
+  cadre.onload = ()=>{
+    cadre.contentWindow.focus();
+    cadre.contentWindow.print();
+    setTimeout(()=>cadre.remove(), 60000);
+  };
+}
+
+/* --- Écriture d'une archive ZIP sans compression (méthode « stored ») --- */
+function crc32(octets){
+  let c, table = crc32.t;
+  if(!table){
+    table = crc32.t = new Uint32Array(256);
+    for(let n=0; n<256; n++){
+      c = n;
+      for(let k=0; k<8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      table[n] = c >>> 0;
+    }
+  }
+  let crc = 0xFFFFFFFF;
+  for(let i=0; i<octets.length; i++) crc = (crc >>> 8) ^ table[(crc ^ octets[i]) & 0xFF];
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+function zip(fichiers){
+  const enc = new TextEncoder(), morceaux = [], central = [];
+  let position = 0;
+  const u16 = v => [v & 255, (v >>> 8) & 255];
+  const u32 = v => [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255];
+  for(const {nom, contenu} of fichiers){
+    const data = enc.encode(contenu), nomOctets = enc.encode(nom), somme = crc32(data);
+    const entete = [].concat(u32(0x04034b50), u16(20), u16(0), u16(0), u16(0), u16(0),
+      u32(somme), u32(data.length), u32(data.length), u16(nomOctets.length), u16(0));
+    morceaux.push(new Uint8Array(entete), nomOctets, data);
+    central.push({nom: nomOctets, somme, taille: data.length, position});
+    position += entete.length + nomOctets.length + data.length;
+  }
+  const debutCentral = position;
+  for(const c of central){
+    const e = [].concat(u32(0x02014b50), u16(20), u16(20), u16(0), u16(0), u16(0), u16(0),
+      u32(c.somme), u32(c.taille), u32(c.taille), u16(c.nom.length),
+      u16(0), u16(0), u16(0), u16(0), u32(0), u32(c.position));
+    morceaux.push(new Uint8Array(e), c.nom);
+    position += e.length + c.nom.length;
+  }
+  morceaux.push(new Uint8Array([].concat(u32(0x06054b50), u16(0), u16(0),
+    u16(central.length), u16(central.length), u32(position - debutCentral), u32(debutCentral), u16(0))));
+  const total = morceaux.reduce((s, m) => s + m.length, 0);
+  const sortie = new Uint8Array(total);
+  let o = 0;
+  for(const m of morceaux){ sortie.set(m, o); o += m.length; }
+  return sortie;
+}
+
+function xmlEchap(s){
+  return String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));
+}
+function paragraphe(texte, options){
+  const o = options || {};
+  const style = "<w:pPr>"+(o.gras || o.taille ? "" : "")+
+    '<w:spacing w:after="120"/>'+(o.centre ? '<w:jc w:val="center"/>' : "")+"</w:pPr>";
+  /* L'ordre des éléments de w:rPr est imposé par le schéma Office :
+     w:b, puis w:color, puis w:sz. Word tolère un autre ordre, LibreOffice
+     refuse le fichier — vérifié. */
+  const rpr = "<w:rPr>"+(o.gras ? "<w:b/>" : "")+
+    (o.gris ? '<w:color w:val="555555"/>' : "")+
+    (o.taille ? '<w:sz w:val="'+o.taille+'"/>' : "")+"</w:rPr>";
+  return "<w:p>"+style+"<w:r>"+rpr+'<w:t xml:space="preserve">'+xmlEchap(texte)+"</w:t></w:r></w:p>";
+}
+
+function docxDecision(d){
+  const o = documentDecision(d);
+  const corps =
+    paragraphe(o.titre, {gras:true, taille:28}) +
+    (o.sousTitre ? paragraphe(o.sousTitre, {gris:true, taille:18}) : "") +
+    (o.sommaire ? paragraphe("Sommaire officiel. "+o.sommaire, {taille:20}) : "") +
+    o.texte.split("\n").map(l => paragraphe(l)).join("") +
+    paragraphe(o.citation+" — source : "+o.lien+
+      " (Judilibre, Cour de cassation, open data, décision pseudonymisée)", {gris:true, taille:16});
+  return zip([
+    {nom:"[Content_Types].xml", contenu:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'+
+      '<Default Extension="xml" ContentType="application/xml"/>'+
+      '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'+
+      "</Types>"},
+    /* Word se passe de ce fichier, d'autres lecteurs non : on le fournit. */
+    {nom:"word/_rels/document.xml.rels", contenu:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>'},
+    {nom:"_rels/.rels", contenu:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'+
+      "</Relationships>"},
+    {nom:"word/document.xml", contenu:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+
+      corps+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>'+
+      '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"/></w:sectPr>'+
+      "</w:body></w:document>"},
+  ]);
+}
+
+function nomDecision(d, ext){
+  const base = normaliser(citationDe(d)).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,70);
+  return (base || "decision")+"."+ext;
+}
 
 /* ------------------------------- Export ------------------------------- */
 async function collecter(){
