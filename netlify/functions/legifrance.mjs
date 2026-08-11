@@ -179,7 +179,7 @@ async function lireConvention(idcc, id){
     if(/^KALITEXT/.test(String(ident)))
       textes.push({ id:String(ident), titre:String(titre||"(sans intitulé)").replace(/\s+/g," ").trim(),
         nature: String(prem(n, "nature", "type")||""),
-        date: dateLisible(prem(n, "dateTexte", "dateDebut", "dateParution")),
+        date: datePremiere(n, "dateTexte", "dateDebut", "dateParution"),
         etat: String(prem(n, "etat", "legalStatus")||""), chemin });
     for(const cle of ["sections","children","enfants","articles","textes","texts","liens"])
       for(const f of tab(n, cle)) parcourir(f, chemin.concat(titre ? [String(titre)] : []));
@@ -214,14 +214,23 @@ async function structureTexteCcn(id){
   return {racine:Object.keys(d||{}), noeuds:vus.slice(0, 14)};
 }
 
-/* La DILA date certains champs en millisecondes depuis 1970, d'autres en clair. */
+/* La DILA date certains champs en millisecondes depuis 1970, d'autres en clair.
+   Elle emploie en outre deux sentinelles pour « pas de borne » : 2999-01-01 et
+   l'origine des temps. Les afficher serait pire que de ne rien afficher. */
 function dateLisible(v){
   const s = String(v||"").trim();
-  if(/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
-  if(/^\d{12,}$/.test(s)){
+  let iso = "";
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)) iso = s.slice(0,10);
+  else if(/^-?\d{9,}$/.test(s)){
     const d = new Date(Number(s));
-    return Number.isNaN(d.getTime()) ? "" : d.toISOString().slice(0,10);
+    iso = Number.isNaN(d.getTime()) ? "" : d.toISOString().slice(0,10);
   }
+  if(!iso || iso >= "2999-01-01" || iso <= "1900-01-01") return "";
+  return iso;
+}
+/* Première date exploitable parmi plusieurs champs candidats. */
+function datePremiere(o, ...noms){
+  for(const n of noms){ const d = dateLisible(o && o[n]); if(d) return d; }
   return "";
 }
 const enVigueur = e => !e || /^VIGUEUR/.test(String(e));
@@ -269,7 +278,7 @@ async function lireTexteCcn(id){
   return {
     id: String(prem(t, "id", "cid") || id),
     titre: String(prem(t, "title", "titre") || "").trim(),
-    date: dateLisible(prem(t, "dateTexte", "dateParution", "dateDebutVersion")),
+    date: datePremiere(t, "dateTexte", "dateDebutVersion", "modifDate", "dateParution"),
     etat: String(prem(t, "etat", "jurisState") || ""),
     ecartes,
     blocs,
