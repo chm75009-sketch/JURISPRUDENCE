@@ -93,6 +93,39 @@ pagination.
 - **Copier le lien** : rouvre la recherche chez un confrère. Le lien ne contient
   jamais la clé API.
 
+## Trouver les bons mots-clés
+
+On cherche « faux CV » et l'on ne trouve rien, parce que les juges n'écrivent
+pas « faux CV » : ils écrivent « fausses déclarations », « fausse
+qualification », « manœuvres dolosives ». Personne ne peut deviner ces
+formules, et un assistant qui les inventerait ne vaudrait pas mieux que le
+hasard.
+
+Le bouton **« Trouver les bons mots-clés »** applique donc la règle qui
+gouverne le reste de l'application : ne rien affirmer qui ne soit mesuré.
+
+1. La recherche est lancée sur les mots de l'utilisateur en « tous les mots »
+   — jamais « au moins un mot » d'emblée, qui ramasse n'importe quoi dès qu'un
+   terme est ambigu : sur « faux CV », il ramenait la taxe différentielle sur
+   les véhicules, « CV » y valant cheval fiscal.
+2. Les sommaires et extraits des cinquante décisions renvoyées sont lus, et
+   l'on en extrait les expressions de deux à cinq mots qui y reviennent.
+3. **Chacune est ensuite comptée** en expression exacte sur la base entière.
+4. Le classement se fait par **spécificité**, non par abondance : ce qui est
+   fréquent dans l'échantillon et rare dans la base caractérise le sujet.
+   « base légale » revient dans 14 901 décisions et n'apprend rien ; « entrave
+   au fonctionnement régulier » n'en compte que 40 et désigne la recherche.
+
+Ce qui est proposé n'est donc pas une suggestion : c'est un relevé chiffré,
+vérifiable d'un clic. Les expressions que l'API ne trouve pas telles quelles
+sont écartées et signalées — les proposer reviendrait à promettre des résultats
+inexistants.
+
+**Ses limites, qui sont celles de la méthode.** Le relevé vaut ce que vaut
+l'échantillon : sur un sujet abondamment jugé, il est excellent ; sur un sujet
+rare ou formulé de façon ambiguë, il reste bruité. Les matières dominantes des
+décisions lues sont affichées à côté, comme second angle d'attaque.
+
 ## Conventions collectives
 
 Le texte officiel des **conventions collectives nationales**, tel qu'il est

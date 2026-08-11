@@ -177,6 +177,13 @@
     <label class="champ"><b>Que cherchez-vous ?</b>
       <input type="search" id="q" placeholder="ex. clause de non-concurrence">
     </label>
+    <div class="boutons" style="margin:-6px 0 12px">
+      <button class="second" id="btn-mots" type="button">Trouver les bons mots-clés</button>
+      <span class="note" style="align-self:center">Décrivez votre sujet en français courant —
+        « faux CV », « salarié qui ment sur ses diplômes ». L'application ira lire les décisions
+        pour vous dire quelles formules les juges emploient réellement, et combien il en existe.</span>
+    </div>
+    <div id="mots-zone"></div>
 
     <div class="bloc-titre">Comment interpréter ces mots</div>
     <div class="cases" id="modes" style="margin-bottom:14px">
@@ -391,7 +398,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "1.3 — 11 août 2026";
+const VERSION = "1.4 — 11 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1598,6 +1605,206 @@ async function ouvrirArticle(numeros, libelleCode, dateDecision){
 }
 $("art-fermer").onclick = ()=>$("dlg-article").close();
 $("dlg-article").addEventListener("click", e=>{ if(e.target===$("dlg-article")) $("dlg-article").close(); });
+
+/* --------------------- Assistant de mots-clés ---------------------
+
+   Le problème : on cherche « faux CV » et l'on ne trouve rien, parce que les
+   juges n'écrivent pas « faux CV ». Ils écrivent « fausses déclarations »,
+   « curriculum vitae mensonger », « mensonge sur les diplômes ». Personne ne
+   peut deviner ces formules, et un assistant qui les inventerait ne vaudrait
+   pas mieux que le hasard.
+
+   La méthode retenue est donc la même que celle qui gouverne le reste de
+   l'application : ne rien affirmer qui ne soit mesuré. On interroge la base
+   avec les mots de l'utilisateur en « au moins un mot », on lit ce que les
+   décisions renvoyées contiennent réellement, on en extrait les expressions
+   qui reviennent — puis on COMPTE chacune d'elles en expression exacte. Ce qui
+   est proposé n'est pas une suggestion : c'est un relevé, chiffré, vérifiable
+   d'un clic.
+
+   Les expressions que l'API ne trouve pas en exact — celles pour lesquelles
+   elle élargit la recherche — sont écartées : les proposer reviendrait à
+   promettre des résultats inexistants.
+   ------------------------------------------------------------------ */
+
+/* Mots vides du français, auxquels s'ajoute la langue de bois judiciaire :
+   sans elle, toute liste d'expressions fréquentes se réduirait à « la cour
+   d'appel », « il résulte de », « aux termes de l'article ». */
+const VIDES = new Set(("au aux avec ce ces dans de des du elle en et eux il ils je la le les leur "+
+  "lui ma mais me meme mes moi mon ne nos notre nous on ou par pas pour qu que qui sa se ses son "+
+  "sur ta te tes toi ton tu un une vos votre vous c d j l m n s t y ete etee etees etes etant "+
+  "suis es est sommes etes sont serai seras sera serons serez seront etais etait etions etiez "+
+  "etaient fus fut fumes futes furent ai as a avons avez ont avais avait avions aviez avaient "+
+  "eus eut eumes eutes eurent aurai auras aura aurons aurez auront ayant eu eue eues plus moins "+
+  "tres bien fait faire dit dire cette cet celui celle ceux dont donc alors ainsi lors lorsque "+
+  "apres avant depuis pendant entre sans sous vers chez selon toute toutes tout tous autre autres "+
+  "meme memes tel telle tels telles quel quelle quels quelles ledit ladite lesdits lesdites "+
+  "cour appel cassation chambre sociale civile commerciale criminelle arret arrets jugement "+
+  "juge juges juridiction pourvoi pourvois moyen moyens branche branches attendu considerant "+
+  "article articles code travail civil procedure penal commerce alinea termes vertu application "+
+  "espece cause litige instance demande demandes partie parties societe monsieur madame salarie "+
+  "salariee salaries employeur contrat travail decision decisions resulte constate retient "+
+  "enonce statuant statue casse annule rejette rejet condamne condamnation somme euros date "+
+  "premier premiere second seconde ci apres dessus dessous savoir egalement notamment").split(" "));
+
+const estVide = m => m.length < 3 || VIDES.has(m);
+
+/* Expressions de 2 à 5 mots, comptées en nombre de décisions distinctes où
+   elles apparaissent — non en occurrences, pour qu'une décision bavarde ne
+   pèse pas plus qu'une autre. */
+function expressions(textes){
+  const freq = new Map();
+  for(const t of textes){
+    const vus = new Set();
+    /* Découpage en propositions : une expression ne doit pas enjamber une
+       ponctuation forte, sans quoi on fabrique des suites qui n'existent pas. */
+    for(const phrase of normaliser(t).split(/[.;:!?()«»"]+/)){
+      const mots = phrase.split(/[^a-z0-9]+/).filter(Boolean);
+      for(let n = 2; n <= 5; n++)
+        for(let i = 0; i + n <= mots.length; i++){
+          const suite = mots.slice(i, i + n);
+          /* Une expression utile ne commence ni ne finit par un mot vide, et
+             ne peut pas être faite que de mots vides. */
+          if(estVide(suite[0]) || estVide(suite[n-1])) continue;
+          if(suite.every(estVide)) continue;
+          /* Un millésime ou un numéro n'est jamais un terme de recherche :
+             « plainte le 11 novembre 2021 » ne sert à personne. */
+          if(suite.some(m => /\d/.test(m))) continue;
+          const e = suite.join(" ");
+          if(!vus.has(e)){ vus.add(e); freq.set(e, (freq.get(e)||0) + 1); }
+        }
+    }
+  }
+  return freq;
+}
+
+/* Une expression contenue dans une expression plus longue et aussi fréquente
+   n'apporte rien : on garde la plus précise. */
+function elaguer(liste){
+  return liste.filter(a => !liste.some(b =>
+    b.e !== a.e && b.e.includes(a.e) && b.n >= a.n * 0.8));
+}
+
+async function compter(expression){
+  const p = new URLSearchParams();
+  p.append("query", expression);
+  p.append("operator", "exact");
+  p.append("page_size", "1");
+  for(const j of ["cc","ca"]) p.append("jurisdiction", j);
+  const d = await appelApi("/search", p);
+  return {total: d.total || 0, elargi: !!d.relaxed};
+}
+
+async function assistantMots(){
+  const sujet = $("q").value.trim();
+  const zone = $("mots-zone");
+  if(!cle()) return message("Renseignez d'abord votre clé Judilibre.", "err");
+  if(sujet.length < 3)
+    return message("Décrivez d'abord votre sujet dans le champ ci-dessus.", "info");
+
+  zone.innerHTML = '<div class="msg info">Lecture des décisions en cours…</div>';
+  try{
+    /* 1. Constituer l'échantillon. « Tous les mots » d'abord : « au moins un
+       mot » ramasse n'importe quoi dès qu'un terme est ambigu — sur « faux CV »
+       il ramenait la taxe différentielle sur les véhicules, « CV » y valant
+       cheval fiscal. On ne se rabat sur « au moins un mot » que si l'API n'a
+       rien trouvé, ce qu'elle signale par son indicateur d'élargissement. */
+    const echantillon = async (op) => {
+      const p = new URLSearchParams();
+      p.append("query", sujet);
+      p.append("operator", op);
+      p.append("page_size", "50");
+      p.append("resolve_references", "true");
+      for(const j of ["cc","ca"]) p.append("jurisdiction", j);
+      return appelApi("/search", p);
+    };
+    let d = await echantillon("and"), large = false;
+    if(d.relaxed || !(d.results||[]).length){ d = await echantillon("or"); large = true; }
+    const res = d.results || [];
+    if(!res.length){
+      zone.innerHTML = '<div class="msg err">Aucune décision ne contient même un seul de ces mots. '+
+        "Reformulez avec des termes plus courants.</div>";
+      return;
+    }
+
+    /* 2. Lire ce que ces décisions contiennent réellement. */
+    const textes = [], matieres = new Map();
+    for(const r of res){
+      const bouts = [r.summary || ""].concat((r.highlights && r.highlights.text) || []);
+      textes.push(bouts.join(" ").replace(/<\/?em>/g, ""));
+      for(const m of (r.themes || [])) matieres.set(m, (matieres.get(m)||0) + 1);
+    }
+
+    /* 3. Retenir les expressions récurrentes, les plus longues d'abord. */
+    const brut = [...expressions(textes)].map(([e, n]) => ({e, n}))
+      .filter(x => x.n >= 3)
+      .sort((a, b) => b.n - a.n || b.e.length - a.e.length);
+    const retenues = elaguer(brut).slice(0, 12);
+    /* Les mots de l'utilisateur sont toujours mesurés : c'est la comparaison
+       qui instruit, pas la seule liste. */
+    if(!retenues.some(x => x.e === normaliser(sujet)))
+      retenues.unshift({e: normaliser(sujet), n: 0, sien: true});
+
+    /* 4. Compter chacune en expression exacte. */
+    const lignes = [];
+    for(let i = 0; i < retenues.length; i++){
+      zone.innerHTML = '<div class="msg info">Comptage des expressions… '+
+        (i+1)+" sur "+retenues.length+"</div>";
+      try{
+        const c = await compter(retenues[i].e);
+        lignes.push(Object.assign({}, retenues[i], c));
+      }catch(e){ /* une expression qui échoue ne doit pas tout arrêter */ }
+    }
+
+    /* 5. Classer par spécificité, non par abondance.
+
+       « base légale » revient dans 14 901 décisions : c'est de la langue de
+       palais, elle apparaît partout et n'apprend rien. « entrave au
+       fonctionnement régulier » n'en compte que 40 : elle désigne le sujet.
+       Le rang est donc donné par la fréquence dans l'échantillon rapportée à
+       la fréquence dans la base entière — ce qui est fréquent ici et rare
+       ailleurs caractérise la recherche. */
+    const utiles = lignes.filter(l => !l.elargi && l.total > 0)
+      .filter(l => l.total < 20000 || l.sien)      // au-delà, c'est de la langue de palais
+      .map(l => Object.assign({}, l, {
+        score: (l.n + 1) / Math.pow(Math.log10(l.total + 10), 2) }))
+      .sort((a, b) => b.score - a.score);
+    const vaines = lignes.filter(l => l.elargi || !l.total);
+    const mat = [...matieres].sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+    zone.innerHTML =
+      '<div class="msg ok" style="margin-top:12px"><b>Relevé établi sur '+res.length+
+      " décisions lues"+(large ? ", trouvées avec au moins un de vos mots — vos termes ne "+
+        "coexistent dans aucune décision, le relevé est donc moins sûr" : ", contenant toutes "+
+        "vos mots")+".</b> Les nombres sont ceux que l'API renvoie pour chaque expression prise "+
+      "à la lettre, en Cour de cassation et cours d'appel. Les plus caractéristiques sont en "+
+      "tête : une expression fréquente ici et rare ailleurs désigne le sujet. Cliquez pour l'employer.</div>"+
+      (utiles.length ? '<div class="fiche"><b>Formules employées par les juges</b>'+
+        '<table style="width:100%;border-collapse:collapse;margin-top:8px">'+
+        utiles.map(l => '<tr><td style="padding:4px 8px 4px 0">'+
+          '<button class="second mot-u" type="button" data-e="'+echap(l.e)+'">'+echap(l.e)+"</button></td>"+
+          '<td class="note" style="padding:4px 0;white-space:nowrap">'+l.total.toLocaleString("fr-FR")+
+          " décision"+(l.total>1?"s":"")+(l.sien ? " — vos mots" : "")+"</td></tr>").join("")+
+        "</table></div>" : '<div class="msg err">Aucune des expressions relevées n\'existe telle quelle '+
+        "dans la base. Le sujet est peut-être formulé autrement par les juges : essayez d'autres termes.</div>")+
+      (vaines.length ? '<div class="fiche"><b>Écartées</b><div class="note">'+
+        vaines.map(l => echap(l.e)+" — "+(l.elargi ? "n'existe pas telle quelle" : "aucune décision")).join(" · ")+
+        "</div></div>" : "")+
+      (mat.length ? '<div class="fiche"><b>Matières dominantes dans ces décisions</b><div style="margin-top:6px">'+
+        mat.map(m => '<span class="badge">'+echap(m[0])+" ("+m[1]+")</span>").join(" ")+
+        "</div></div>" : "");
+
+    [...document.querySelectorAll(".mot-u")].forEach(b => b.onclick = ()=>{
+      $("q").value = b.dataset.e;
+      document.querySelector('input[name="mode"][value="exact"]').checked = true;
+      zone.innerHTML = "";
+      chercher(0);
+    });
+  }catch(e){
+    zone.innerHTML = '<div class="msg err">'+messageErreur(e)+"</div>";
+  }
+}
+$("btn-mots").onclick = assistantMots;
 
 /* ---------------------- Conventions collectives ----------------------
 
