@@ -93,6 +93,29 @@ pagination.
 - **Copier le lien** : rouvre la recherche chez un confrère. Le lien ne contient
   jamais la clé API.
 
+## Conventions collectives
+
+Le texte officiel des **conventions collectives nationales**, tel qu'il est
+publié — fonds KALI de Légifrance, la même API et le même abonnement que les
+codes.
+
+Une convention se désigne par son **numéro IDCC** (16 pour les transports
+routiers, 1486 pour les bureaux d'études) ou se cherche par son intitulé.
+L'application affiche alors la liste de ses textes — texte de base, annexes,
+avenants — chacun avec sa date et son état juridique. Un texte s'ouvre
+entièrement, se filtre par mot-clé (« coefficient », « classification »), et
+**s'exporte en PDF et en Word** : c'est ce qui permet de le verser aux débats,
+proprement daté et référencé.
+
+Les tableaux — grilles de coefficients notamment — sont conservés tels que la
+DILA les publie. Le HTML reçu est inséré après avoir été débarrassé de tout ce
+qui peut s'exécuter : la source est officielle, ce n'est pas une raison pour lui
+accorder les droits d'un script de la page.
+
+Comme pour les articles de code, cet écran suppose le **relais** (adresse
+Netlify) : l'authentification OAuth de Légifrance est impossible depuis un
+navigateur.
+
 ## Articles de code cliquables
 
 Les articles cités dans le texte d'une décision — « article L. 1154-1 du code du

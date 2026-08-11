@@ -122,6 +122,104 @@ async function lireArticle(id, dateIso){
   };
 }
 
+/* =========================================================================
+   Fonds KALI — conventions collectives nationales.
+
+   Même API, même abonnement, mêmes identifiants que les codes : seuls les
+   points d'accès diffèrent. La hiérarchie est : un CONTENEUR (KALICONT) par
+   convention, identifié par son numéro IDCC, qui regroupe des TEXTES
+   (KALITEXT : texte de base, annexes, avenants), eux-mêmes composés de
+   sections (KALISCTA) et d'articles (KALIARTI).
+
+   Les formes de réponse de la DILA varient d'un fonds à l'autre et ne sont pas
+   documentées champ par champ. La lecture ci-dessous est donc tolérante : elle
+   accepte plusieurs noms pour la même donnée, et, si elle ne reconnaît rien,
+   renvoie la liste des clés rencontrées plutôt qu'un silence — un défaut qu'on
+   ne peut pas diagnostiquer est un défaut qu'on ne corrige pas.
+   ========================================================================= */
+
+const prem = (o, ...noms) => { for(const n of noms) if(o && o[n] != null && o[n] !== "") return o[n]; return ""; };
+const tab  = (o, ...noms) => { for(const n of noms) if(Array.isArray(o && o[n])) return o[n]; return []; };
+
+/* Recherche de conventions par intitulé, ou par numéro IDCC. */
+async function chercherConventions(q, idcc){
+  const champ = idcc ? "IDCC" : "TITLE";
+  const valeur = idcc || q;
+  const filtres = [{facette:"LEGAL_STATUS", valeurs:["VIGUEUR","VIGUEUR_ETEN","VIGUEUR_NON_ETEN"]}];
+  if(idcc) filtres.push({facette:"IDCC", valeurs:[String(idcc)]});
+  const d = await appelLegifrance("/search", {
+    fond: "KALI",
+    recherche: {
+      filtres, sort:"PERTINENCE", operateur:"ET", typePagination:"DEFAUT",
+      pageNumber:1, pageSize:20,
+      champs:[{typeChamp:champ, operateur:"ET",
+        criteres:[{typeRecherche:"UN_DES_MOTS", valeur:String(valeur), operateur:"ET"}]}],
+    },
+  });
+  const sortie = (d.results||[]).map(r => ({
+    id: prem(r, "id", "cid", "titleId"),
+    titre: prem(r, "title", "titre", "nature"),
+    idcc: prem(r, "idcc", "numIdcc"),
+    etat: prem(r, "etat", "legalStatus"),
+  })).filter(x => x.id || x.titre);
+  return sortie.length ? sortie : {vide:true, cles:Object.keys(d||{})};
+}
+
+/* Une convention entière : son intitulé et la liste de ses textes. */
+async function lireConvention(idcc, id){
+  const d = id
+    ? await appelLegifrance("/consult/kaliCont", {id:String(id)})
+    : await appelLegifrance("/consult/kaliContIdcc", {id:String(idcc)});
+  const c = d.container || d.conteneur || d;
+  const textes = [];
+  const parcourir = (n, chemin) => {
+    if(!n || typeof n !== "object") return;
+    const titre = prem(n, "title", "titre", "nature");
+    const ident = prem(n, "id", "cid");
+    if(/^KALITEXT/.test(String(ident)))
+      textes.push({ id:String(ident), titre:String(titre||"(sans intitulé)"),
+        nature: prem(n, "nature", "type"), date: prem(n, "dateTexte", "dateDebut", "datePubli"),
+        etat: prem(n, "etat", "legalStatus"), chemin });
+    for(const cle of ["sections","children","enfants","articles","textes","texts","liens"])
+      for(const f of tab(n, cle)) parcourir(f, chemin.concat(titre ? [String(titre)] : []));
+  };
+  parcourir(c, []);
+  return {
+    titre: String(prem(c, "title", "titre") || ""),
+    idcc: String(prem(c, "idcc", "numIdcc") || idcc || ""),
+    id: String(prem(c, "id", "cid") || id || ""),
+    textes,
+    ...(textes.length ? {} : {diag:{cles:Object.keys(c||{})}}),
+  };
+}
+
+/* Le contenu d'un texte : sections et articles, à plat et dans l'ordre. */
+async function lireTexteCcn(id){
+  const d = await appelLegifrance("/consult/kaliText", {id:String(id)});
+  const t = d.text || d.texte || d;
+  const blocs = [];
+  const parcourir = (n, niveau) => {
+    if(!n || typeof n !== "object") return;
+    const titre = prem(n, "title", "titre", "intitule");
+    const contenu = prem(n, "content", "contenu", "texteHtml", "texte");
+    const num = prem(n, "num", "numero");
+    if(titre && !contenu) blocs.push({type:"section", niveau, titre:String(titre)});
+    if(contenu) blocs.push({type:"article", niveau, num:String(num||""),
+                            titre:String(titre||""), html:String(contenu)});
+    for(const cle of ["sections","articles","children","enfants"])
+      for(const f of tab(n, cle)) parcourir(f, niveau+1);
+  };
+  parcourir(t, 0);
+  return {
+    id: String(prem(t, "id", "cid") || id),
+    titre: String(prem(t, "title", "titre") || ""),
+    date: String(prem(t, "dateTexte", "dateDebut", "datePubli") || ""),
+    etat: String(prem(t, "etat", "legalStatus") || ""),
+    blocs,
+    ...(blocs.length ? {} : {diag:{cles:Object.keys(t||{})}}),
+  };
+}
+
 export default async (req) => {
   const origine = req.headers.get("origin");
   const entetes = enTetesCors(origine);
@@ -136,6 +234,30 @@ export default async (req) => {
   let demande;
   try{ demande = await req.json(); }
   catch(e){ return new Response(JSON.stringify({erreur:"REQUETE_INVALIDE"}), {status:400, headers:entetes}); }
+
+  /* Conventions collectives. L'absence d'« action » conserve le comportement
+     d'origine : une version ancienne de la page continue de fonctionner. */
+  const action = String(demande.action||"").slice(0,20);
+  if(action.startsWith("ccn")){
+    const erreurs = ["RELAIS_NON_CONFIGURE","IDENTIFIANTS_REFUSES","API_NON_SOUSCRITE","QUOTA"];
+    try{
+      let r;
+      if(action === "ccn-recherche")
+        r = await chercherConventions(String(demande.q||"").slice(0,120),
+                                      String(demande.idcc||"").slice(0,10));
+      else if(action === "ccn-texte")
+        r = await lireTexteCcn(String(demande.id||"").slice(0,40));
+      else
+        r = await lireConvention(String(demande.idcc||"").slice(0,10),
+                                 String(demande.id||"").slice(0,40));
+      return new Response(JSON.stringify(r), {status:200, headers:entetes});
+    }catch(e){
+      const c = erreurs.includes(e.message) ? e.message : "ERREUR_LEGIFRANCE";
+      const s = c==="QUOTA" ? 429 : (c==="RELAIS_NON_CONFIGURE" ? 503 : 502);
+      return new Response(JSON.stringify({erreur:c, detail:String(e.message).slice(0,80)}),
+                          {status:s, headers:entetes});
+    }
+  }
 
   const numero = String(demande.numero||"").slice(0,40);
   const code   = demande.code ? String(demande.code).slice(0,120) : null;
