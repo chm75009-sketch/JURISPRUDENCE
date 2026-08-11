@@ -193,6 +193,26 @@ async function lireConvention(idcc, id){
   };
 }
 
+/* Relevé de structure : les noms de champs réellement renvoyés par la DILA.
+   Sert à corriger sur pièces plutôt qu'à deviner. Ne renvoie aucun contenu. */
+async function structureTexteCcn(id){
+  const d = await appelLegifrance("/consult/kaliText", {id:String(id)});
+  const t = d.text || d.texte || d;
+  const vus = [];
+  const parcourir = (n, chemin, prof) => {
+    if(!n || typeof n !== "object" || prof > 4) return;
+    vus.push({chemin, cles:Object.keys(n).slice(0,30),
+              apercu:Object.fromEntries(Object.entries(n)
+                .filter(([k,v]) => typeof v !== "object")
+                .slice(0,12).map(([k,v]) => [k, String(v).slice(0,40)]))});
+    for(const cle of ["sections","articles","children","enfants"])
+      for(const [i,f] of (Array.isArray(n[cle])?n[cle]:[]).entries())
+        if(i < 2) parcourir(f, chemin+"/"+cle+"["+i+"]", prof+1);
+  };
+  parcourir(t, "", 0);
+  return {racine:Object.keys(d||{}), noeuds:vus.slice(0, 14)};
+}
+
 /* Le contenu d'un texte : sections et articles, à plat et dans l'ordre. */
 async function lireTexteCcn(id){
   const d = await appelLegifrance("/consult/kaliText", {id:String(id)});
@@ -245,6 +265,8 @@ export default async (req) => {
       if(action === "ccn-recherche")
         r = await chercherConventions(String(demande.q||"").slice(0,120),
                                       String(demande.idcc||"").slice(0,10));
+      else if(action === "ccn-struct")
+        r = await structureTexteCcn(String(demande.id||"").slice(0,40));
       else if(action === "ccn-texte")
         r = await lireTexteCcn(String(demande.id||"").slice(0,40));
       else
