@@ -398,7 +398,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "1.4 — 11 août 2026";
+const VERSION = "1.5 — 11 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1652,13 +1652,35 @@ const estVide = m => m.length < 3 || VIDES.has(m);
 /* Expressions de 2 à 5 mots, comptées en nombre de décisions distinctes où
    elles apparaissent — non en occurrences, pour qu'une décision bavarde ne
    pèse pas plus qu'une autre. */
+/* Les ligatures, et un défaut de la source.
+
+   « œ » et « æ » ne se décomposent pas comme les accents : la normalisation les
+   laisse intacts, et le découpage sur [^a-z0-9] taillerait « manœuvres » en
+   « man » + « uvres ». On les développe donc.
+
+   Mais il y a pire, et cela vient de la base elle-même : Judilibre renvoie
+   « man'uvres » — une apostrophe à la place du œ, séquelle d'un transcodage
+   ancien. Vérifié caractère par caractère sur le texte reçu de l'API. Sans
+   réparation, l'assistant proposerait « man uvres » comme formule employée par
+   les juges, ce qui est faux et ridicule. La liste ci-dessous est celle des
+   mots français courants où le œ se trouve ainsi mutilé ; elle est volontairement
+   fermée, une règle générale sur l'apostrophe abîmerait « aujourd'hui ». */
+const MUTILES = [[/man'uvr/g,"manoeuvr"], [/c'ur/g,"coeur"], [/s'ur/g,"soeur"],
+                 [/v'u/g,"voeu"], [/n'ud/g,"noeud"], [/b'uf/g,"boeuf"],
+                 [/'uvre/g,"oeuvre"], [/c'lio/g,"coelio"], [/f'tus/g,"foetus"]];
+function ligatures(s){
+  let t = String(s||"").replace(/œ/g, "oe").replace(/æ/g, "ae");
+  for(const [r, v] of MUTILES) t = t.replace(r, v);
+  return t;
+}
+
 function expressions(textes){
   const freq = new Map();
   for(const t of textes){
     const vus = new Set();
     /* Découpage en propositions : une expression ne doit pas enjamber une
        ponctuation forte, sans quoi on fabrique des suites qui n'existent pas. */
-    for(const phrase of normaliser(t).split(/[.;:!?()«»"]+/)){
+    for(const phrase of ligatures(normaliser(t)).split(/[.;:!?()«»"]+/)){
       const mots = phrase.split(/[^a-z0-9]+/).filter(Boolean);
       for(let n = 2; n <= 5; n++)
         for(let i = 0; i + n <= mots.length; i++){
@@ -1742,8 +1764,9 @@ async function assistantMots(){
     const retenues = elaguer(brut).slice(0, 12);
     /* Les mots de l'utilisateur sont toujours mesurés : c'est la comparaison
        qui instruit, pas la seule liste. */
-    if(!retenues.some(x => x.e === normaliser(sujet)))
-      retenues.unshift({e: normaliser(sujet), n: 0, sien: true});
+    const sien = ligatures(normaliser(sujet));
+    if(!retenues.some(x => x.e === sien))
+      retenues.unshift({e: sien, n: 0, sien: true});
 
     /* 4. Compter chacune en expression exacte. */
     const lignes = [];
@@ -1778,7 +1801,10 @@ async function assistantMots(){
         "coexistent dans aucune décision, le relevé est donc moins sûr" : ", contenant toutes "+
         "vos mots")+".</b> Les nombres sont ceux que l'API renvoie pour chaque expression prise "+
       "à la lettre, en Cour de cassation et cours d'appel. Les plus caractéristiques sont en "+
-      "tête : une expression fréquente ici et rare ailleurs désigne le sujet. Cliquez pour l'employer.</div>"+
+      "tête : une expression fréquente ici et rare ailleurs désigne le sujet. "+
+      "<b>Cliquez pour l'employer</b> — le relevé reste affiché, vous pouvez en essayer "+
+      "plusieurs de suite. <button class=\"second\" id=\"mots-fermer\" type=\"button\" "+
+      "style=\"margin-left:8px\">Masquer le relevé</button></div>"+
       (utiles.length ? '<div class="fiche"><b>Formules employées par les juges</b>'+
         '<table style="width:100%;border-collapse:collapse;margin-top:8px">'+
         utiles.map(l => '<tr><td style="padding:4px 8px 4px 0">'+
@@ -1794,11 +1820,18 @@ async function assistantMots(){
         mat.map(m => '<span class="badge">'+echap(m[0])+" ("+m[1]+")</span>").join(" ")+
         "</div></div>" : "");
 
+    /* Le relevé demeure après un clic — on essaie une formule, on regarde,
+       on en essaie une autre. L'effacer obligerait à tout refaire. */
+    $("mots-fermer").onclick = ()=>{ zone.innerHTML = ""; };
     [...document.querySelectorAll(".mot-u")].forEach(b => b.onclick = ()=>{
       $("q").value = b.dataset.e;
       document.querySelector('input[name="mode"][value="exact"]').checked = true;
-      zone.innerHTML = "";
+      [...document.querySelectorAll(".mot-u")].forEach(x => {
+        x.classList.remove("principal"); x.classList.add("second");
+      });
+      b.classList.remove("second"); b.classList.add("principal");
       chercher(0);
+      $("resultats").scrollIntoView({behavior:"smooth", block:"start"});
     });
   }catch(e){
     zone.innerHTML = '<div class="msg err">'+messageErreur(e)+"</div>";
