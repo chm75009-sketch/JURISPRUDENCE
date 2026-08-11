@@ -355,7 +355,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "1.0 — 10 août 2026";
+const VERSION = "1.1 — 10 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1454,8 +1454,17 @@ async function ouvrirDecision(id){
     $("dlg-corps").innerHTML =
       (d.summary ? '<div class="sommaire"><b>Sommaire officiel.</b> '+echap(d.summary)+"</div>" : "")+
       "<pre>"+lierArticles(echap(d.text||"(texte indisponible)"), t=>surligner(t, c.q, c.mode))+"</pre>";
-    $("dlg-corps").querySelectorAll("button.art").forEach(b=>b.onclick = ()=>
+    const cites = $("dlg-corps").querySelectorAll("button.art");
+    cites.forEach(b=>b.onclick = ()=>
       ouvrirArticle(b.dataset.nums.split("|"), b.dataset.code, d.decision_date));
+    /* La consultation des textes ne se devine pas : on l'annonce, mais seulement
+       quand des articles ont réellement été repérés — sinon c'est une promesse
+       en l'air. */
+    if(cites.length) $("dlg-corps").insertAdjacentHTML("afterbegin",
+      '<div class="msg info" style="margin-top:0">'+cites.length+" citation"+(cites.length>1?"s":"")+
+      " d'article"+(cites.length>1?"s":"")+" repérée"+(cites.length>1?"s":"")+
+      " dans ce texte : <b>cliquez dessus</b> pour lire l'article sur fond bleu, "+
+      "dans sa rédaction applicable au "+dateFr(d.decision_date)+".</div>");
   }catch(e){
     $("dlg-titre").textContent = "Erreur";
     $("dlg-corps").innerHTML = '<div class="msg err">'+echap(messageErreur(e))+"</div>";
