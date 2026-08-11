@@ -67,7 +67,11 @@ rappelé au-dessus des résultats, retirable d'un clic.
 ## Résultats
 
 - Citation, date, numéro de pourvoi, solution, matières, ECLI.
-- **Sommaire officiel** quand il existe — le résumé rédigé par la Cour.
+- **Sommaire officiel** quand il existe — le résumé rédigé par la Cour, donné
+  **en entier** (mesuré : 80 % dépassent 400 caractères, médiane 732, jusqu'à
+  3 058 ; le tronquer revenait à l'amputer presque toujours). Au-delà de 600
+  caractères il est simplement replié, le texte restant dans la page — donc
+  trouvable par la recherche du navigateur et copiable.
 - Extraits surlignés.
 - **Texte intégral** sans quitter la page, vos termes surlignés.
 - **Copier la citation** au format des écritures

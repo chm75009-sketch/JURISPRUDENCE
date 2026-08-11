@@ -100,6 +100,11 @@
   .badge.sol{background:var(--accent-soft);color:var(--accent);border-color:#ecc9ce}
   .fiche .resume{background:var(--accent-soft);border:1px solid #ecc9ce;border-radius:9px;
     padding:9px 11px;font-size:13.5px;color:#5a2a31;margin:8px 0}
+  .fiche .resume.repliable{max-height:7.4em;overflow:hidden;
+    -webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+  .fiche .resume.deplie{max-height:none;-webkit-mask-image:none;mask-image:none}
+  .fiche .plus{font:inherit;font-size:13px;border:none;background:none;color:var(--link);
+    cursor:pointer;padding:2px 0;text-decoration:underline}
   .fiche .extraits{font-size:14px;color:#33404f;margin:8px 0}
   .fiche .extraits em{background:#fdeaa2;font-style:normal;border-radius:2px}
   .fiche .pied{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;align-items:center;margin-top:9px}
@@ -1231,7 +1236,13 @@ function fiche(r){
       (pub ? '<span class="badge pub">Bulletin</span>' : "")+
       (r.themes||[]).slice(0,2).map(t=>'<span class="badge">'+echap(t)+'</span>').join("")+
     '</div>'+
-    (s ? '<div class="resume"><b>Sommaire officiel.</b> '+echap(s.slice(0,400))+(s.length>400?"…":"")+'</div>' : "")+
+    /* Le sommaire est l'élément le plus utile de la fiche : il est toujours
+       donné en entier. Mesuré : 80 % dépassent 400 caractères, la médiane est
+       à 732 — le tronquer revenait à l'amputer presque toujours. Au-delà de
+       600 caractères il est simplement replié, le texte restant dans la page
+       (donc trouvable par la recherche du navigateur et copiable). */
+    (s ? '<div class="resume'+(s.length>600?" repliable":"")+'"><b>Sommaire officiel.</b> '+echap(s)+'</div>'+
+         (s.length>600 ? '<button type="button" class="plus">Afficher la suite du sommaire</button>' : "") : "")+
     (extraits ? '<div class="extraits">'+extraits+'</div>' : "")+
     '<div class="pied">'+
       '<button type="button" class="voir" data-id="'+echap(r.id)+'">Texte intégral</button>'+
@@ -1242,6 +1253,11 @@ function fiche(r){
 }
 
 function brancherFiches(){
+  document.querySelectorAll(".fiche .plus").forEach(b=>b.onclick = ()=>{
+    const bloc = b.previousElementSibling;
+    const deplie = bloc.classList.toggle("deplie");
+    b.textContent = deplie ? "Replier le sommaire" : "Afficher la suite du sommaire";
+  });
   document.querySelectorAll(".voir").forEach(b=>b.onclick = ()=>ouvrirDecision(b.dataset.id));
   document.querySelectorAll(".citer").forEach(b=>b.onclick = ()=>{
     const r = courants[b.dataset.id];
