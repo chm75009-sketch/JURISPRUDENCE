@@ -1737,7 +1737,13 @@ function ccnHtml(blocs, filtre){
     if(f && !normaliser(brut).includes(f)) return "";
     if(b.type==="section")
       return '<h4 style="margin:18px 0 6px">'+echap(b.titre)+"</h4>";
-    return '<div class="fiche"><b>'+echap((b.num ? "Article "+b.num : b.titre||"Article"))+"</b>"+
+    /* L'identifiant Légifrance accompagne chaque article : c'est la référence
+       qu'on cite dans des écritures, et le lien qui permet de la vérifier. */
+    const ref = b.id
+      ? ' <a class="note" href="https://www.legifrance.gouv.fr/conv_coll/article/'+
+        encodeURIComponent(b.id)+'" target="_blank" rel="noopener">'+echap(b.id)+"</a>"
+      : "";
+    return '<div class="fiche"><b>'+echap((b.num ? "Article "+b.num : b.titre||"Article"))+"</b>"+ref+
            '<div class="texte">'+nettoyerHtml(b.html)+"</div></div>";
   }).join("") || '<p class="note">Rien ne correspond à ce filtre dans ce texte.</p>';
 }

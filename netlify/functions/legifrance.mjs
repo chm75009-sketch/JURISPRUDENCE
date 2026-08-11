@@ -263,12 +263,16 @@ async function lireTexteCcn(id){
     const contenu = prem(n, "content", "contenu", "texteHtml", "texte");
     if(contenu){
       if(!enVigueur(prem(n, "etat"))){ ecartes++; return; }
+      /* L'identifiant est renvoyé : on doit pouvoir citer ce qu'on lit, et
+         vérifier la citation sur legifrance.gouv.fr sans la chercher. */
       blocs.push({type:"article", niveau, num:String(prem(n, "num", "numero")||""),
                   titre:String(titre||""), etat:String(prem(n, "etat")||""),
-                  html:String(contenu)});
+                  id:String(prem(n, "id", "cid")||""), html:String(contenu)});
       return;
     }
-    if(titre && niveau > 0) blocs.push({type:"section", niveau, titre:String(titre)});
+    if(titre && niveau > 0)
+      blocs.push({type:"section", niveau, titre:String(titre),
+                  id:String(prem(n, "id", "cid")||"")});
     for(const f of trier(tab(n, "sections").concat(tab(n, "children"), tab(n, "enfants"))))
       parcourir(f, niveau+1);
     for(const f of trier(tab(n, "articles"))) parcourir(f, niveau+1);
