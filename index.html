@@ -1728,24 +1728,36 @@ function htmlEnTexte(html){
     .replace(/[ \t]+$/gm, "").replace(/\n{3,}/g, "\n\n").trim();
 }
 
+/* Un article sans sa section peut être attribué à tort : dans une nomenclature
+   de classification, c'est le titre de la section — « Groupe 6 » — qui dit à
+   quel groupe la définition se rapporte, l'article n'en portant aucune trace.
+   La section est donc rappelée sur chaque fiche, et le filtre ne peut jamais
+   détacher un article de la sienne. */
 function ccnHtml(blocs, filtre){
   const f = normaliser(filtre||"");
-  return blocs.map(b => {
-    const brut = b.type==="article"
-      ? (b.num ? "Article "+b.num+". " : "")+(b.titre||"")+" "+htmlEnTexte(b.html)
-      : b.titre;
-    if(f && !normaliser(brut).includes(f)) return "";
-    if(b.type==="section")
-      return '<h4 style="margin:18px 0 6px">'+echap(b.titre)+"</h4>";
+  let section = null, sectionRendue = null, sortie = "";
+  for(const b of blocs){
+    if(b.type === "section"){ section = b; continue; }
+    const brut = (b.num ? "Article "+b.num+". " : "")+(b.titre||"")+" "+htmlEnTexte(b.html);
+    if(f && !normaliser(brut).includes(f) && !(section && normaliser(section.titre).includes(f))) continue;
+    if(section && section !== sectionRendue){
+      sortie += '<h4 style="margin:18px 0 6px">'+echap(section.titre)+"</h4>";
+      sectionRendue = section;
+    }
     /* L'identifiant Légifrance accompagne chaque article : c'est la référence
        qu'on cite dans des écritures, et le lien qui permet de la vérifier. */
     const ref = b.id
       ? ' <a class="note" href="https://www.legifrance.gouv.fr/conv_coll/article/'+
         encodeURIComponent(b.id)+'" target="_blank" rel="noopener">'+echap(b.id)+"</a>"
       : "";
-    return '<div class="fiche"><b>'+echap((b.num ? "Article "+b.num : b.titre||"Article"))+"</b>"+ref+
-           '<div class="texte">'+nettoyerHtml(b.html)+"</div></div>";
-  }).join("") || '<p class="note">Rien ne correspond à ce filtre dans ce texte.</p>';
+    const situe = section
+      ? '<div class="note">dans « '+echap(section.titre)+" »"+
+        (section.id ? " — "+echap(section.id) : "")+"</div>"
+      : "";
+    sortie += '<div class="fiche"><b>'+echap((b.num ? "Article "+b.num : b.titre||"Article"))+"</b>"+ref+
+              situe+'<div class="texte">'+nettoyerHtml(b.html)+"</div></div>";
+  }
+  return sortie || '<p class="note">Rien ne correspond à ce filtre dans ce texte.</p>';
 }
 
 async function ccnLire(id){
@@ -1773,9 +1785,9 @@ async function ccnLire(id){
    décision — impression PDF par le navigateur, et vrai .docx. */
 function ccnTexteBrut(){
   return (ccnCourant.blocs||[]).map(b => b.type==="section"
-    ? "\n"+b.titre
+    ? "\n"+b.titre+(b.id ? "  ["+b.id+"]" : "")
     : ((b.num ? "Article "+b.num+". " : "")+(b.titre && !b.num ? b.titre+". " : "")+
-       htmlEnTexte(b.html))
+       htmlEnTexte(b.html)+(b.id ? "\n["+b.id+"]" : ""))
   ).map(s => s.replace(/\s+$/,"")).filter(s => s.trim()).join("\n");
 }
 function ccnSource(){
