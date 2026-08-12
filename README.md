@@ -249,6 +249,22 @@ officielle. Chaque collaborateur utilise la sienne, sur son poste.
 - Les articles cliquables ne couvrent que les **codes** : une loi non codifiée,
   un décret ou une convention collective ne sont pas résolus.
 
+## Publication
+
+Le site est **servi sans construction**. Les fichiers publiables vivent dans
+`docs/`, que Netlify sert directement et que GitHub Pages accepte comme source.
+
+Ce n'est pas un détail d'organisation. La configuration précédente copiait les
+fichiers dans `dist/` au moyen d'une commande, ce qui déclenchait un *build* à
+chaque envoi. Or le plan gratuit de Netlify accorde un nombre limité de minutes
+de construction par mois, chaque déploiement étant facturé à la minute entamée :
+une fois le quota épuisé, les envois sont acceptés mais **plus rien n'est
+publié**, sans message ni erreur. Supprimer la construction supprime la
+dépendance — la publication devient immédiate et gratuite, indéfiniment.
+
+Le dossier des fonctions reste en dehors du dossier publié, comme Netlify
+l'exige.
+
 ## Données
 
 Décisions : © Cour de cassation, base Judilibre (open data).

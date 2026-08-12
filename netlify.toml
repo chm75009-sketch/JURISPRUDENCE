@@ -1,14 +1,25 @@
 # Configuration Netlify.
 #
-# Le site est statique : rien à compiler. La « construction » se borne à copier
-# les fichiers publiables dans dist/. Ce détour évite que le dossier des
-# fonctions se retrouve à l'intérieur du dossier publié — situation que Netlify
-# refuse — tout en gardant index.html à la racine du dépôt, comme l'exige
-# GitHub Pages qui sert la même application.
+# AUCUNE COMMANDE DE CONSTRUCTION — et c'est délibéré.
+#
+# Le site est statique : rien à compiler. La configuration précédente copiait
+# néanmoins les fichiers dans dist/ au moyen d'une commande, ce qui déclenchait
+# un vrai « build » à chaque envoi. Or le plan gratuit de Netlify accorde un
+# nombre limité de minutes de construction par mois, chaque déploiement étant
+# facturé à la minute entamée : une fois le quota épuisé, les envois sont
+# acceptés mais plus rien n'est publié — sans message, sans erreur.
+#
+# Les fichiers publiables vivent donc dans docs/, que Netlify sert directement.
+# Il n'y a plus de construction, donc plus de minutes consommées, et la
+# publication est immédiate. Le dossier des fonctions reste en dehors du dossier
+# publié, comme Netlify l'exige.
+#
+# Le nom « docs » n'est pas indifférent : c'est l'un des deux seuls
+# emplacements que GitHub Pages accepte de servir, avec la racine. La même
+# arborescence alimente ainsi les deux adresses.
 
 [build]
-  command = "mkdir -p dist && cp index.html manifest.json sw.js dist/ && cp -r icons dist/"
-  publish = "dist"
+  publish = "docs"
   functions = "netlify/functions"
 
 # Le relais n'a pas vocation à être indexé.
