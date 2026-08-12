@@ -165,6 +165,47 @@ async function chercherConventions(q, idcc){
   return sortie.length ? sortie : {vide:true, cles:Object.keys(d||{})};
 }
 
+/* Recherche plein texte à l'intérieur d'une convention.
+
+   Le champ ALL porte sur le contenu, non sur les seuls intitulés : c'est ce qui
+   permet de trouver « coefficient 200 » ou « période d'essai » dans les huit
+   cents articles d'une convention sans les parcourir. Le filtre IDCC borne la
+   recherche à la convention ouverte — sans lui, on ratisserait les quelque
+   sept cents conventions du fonds. */
+async function chercherDansConvention(q, idcc, exact){
+  const filtres = [{facette:"LEGAL_STATUS", valeurs:["VIGUEUR","VIGUEUR_ETEN","VIGUEUR_NON_ETEN"]}];
+  if(idcc) filtres.push({facette:"IDCC", valeurs:[String(idcc)]});
+  const d = await appelLegifrance("/search", {
+    fond: "KALI",
+    recherche: {
+      filtres, sort:"PERTINENCE", operateur:"ET", typePagination:"DEFAUT",
+      pageNumber:1, pageSize:20,
+      champs:[{typeChamp:"ALL", operateur:"ET",
+        criteres:[{typeRecherche: exact ? "EXACTE" : "TOUS_LES_MOTS_DANS_UN_CHAMP",
+                   valeur:String(q), operateur:"ET"}]}],
+    },
+  });
+  const sortie = [];
+  for(const r of (d.results||[])){
+    const extraits = [];
+    for(const sec of (r.sections||[]))
+      for(const ex of (sec.extracts||[]))
+        if(ex.values || ex.title)
+          extraits.push({id: String(prem(ex, "id")||""), num: String(prem(ex, "num")||""),
+                         titre: String(prem(ex, "title", "titre")||""),
+                         texte: (Array.isArray(ex.values) ? ex.values.join(" … ") : "").slice(0, 900)});
+    sortie.push({
+      id: String(prem(r, "id", "cid")||""),
+      titre: String(prem(r, "title", "titre")||"").replace(/\s+/g," ").trim(),
+      idcc: String(prem(r, "idcc", "numIdcc")||""),
+      etat: String(prem(r, "etat", "legalStatus")||""),
+      extraits,
+    });
+  }
+  return {total: d.totalResultNumber || d.total || sortie.length, resultats: sortie,
+          ...(sortie.length ? {} : {diag:{cles:Object.keys(d||{})}})};
+}
+
 /* Une convention entière : son intitulé et la liste de ses textes. */
 async function lireConvention(idcc, id){
   const d = id
@@ -315,6 +356,10 @@ export default async (req) => {
       if(action === "ccn-recherche")
         r = await chercherConventions(String(demande.q||"").slice(0,120),
                                       String(demande.idcc||"").slice(0,10));
+      else if(action === "ccn-plein")
+        r = await chercherDansConvention(String(demande.q||"").slice(0,200),
+                                         String(demande.idcc||"").slice(0,10),
+                                         !!demande.exact);
       else if(action === "ccn-struct")
         r = await structureTexteCcn(String(demande.id||"").slice(0,40));
       else if(action === "ccn-texte")

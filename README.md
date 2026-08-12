@@ -145,6 +145,32 @@ DILA les publie. Le HTML reçu est inséré après avoir été débarrassé de t
 qui peut s'exécuter : la source est officielle, ce n'est pas une raison pour lui
 accorder les droits d'un script de la page.
 
+### Chercher dans le texte d'une convention
+
+Un champ interroge le **contenu** de la convention ouverte, et non ses seuls
+intitulés : « coefficient 200 », « période d'essai », « prime d'ancienneté »
+ramènent les textes qui les contiennent, avec les extraits, sans parcourir les
+huit cents articles. La recherche est bornée à la convention choisie par son
+numéro IDCC.
+
+### Le pont avec la jurisprudence
+
+Une décision qui applique un texte conventionnel le cite le plus souvent mot
+pour mot. Deux passerelles en découlent :
+
+- **« Décisions citant cette convention »** cherche dans Judilibre le nom sous
+  lequel les juges la désignent — 3 447 décisions pour les transports routiers,
+  2 169 pour les bureaux d'études, 745 pour la métallurgie.
+- **« Décisions citant cet article »**, sur chaque article ouvert, cherche une
+  **phrase caractéristique** de son texte — assez longue pour lui être propre,
+  assez courte pour que l'expression exacte aboutisse. Chercher par le numéro
+  d'article serait illusoire : « article 5 » existe dans les sept cents
+  conventions du fonds. Sur la définition du groupe 6 des cadres du transport
+  routier, la passerelle rend 4 décisions.
+
+Rien n'est deviné : l'expression envoyée à Judilibre est celle que l'on a sous
+les yeux, et la recherche s'y lance en expression exacte.
+
 Comme pour les articles de code, cet écran suppose le **relais** (adresse
 Netlify) : l'authentification OAuth de Légifrance est impossible depuis un
 navigateur.

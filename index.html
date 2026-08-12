@@ -325,7 +325,14 @@
     </div>
     <div class="boutons">
       <button class="principal" id="ccn-ouvrir" type="button">Ouvrir la convention</button>
-      <button class="second" id="ccn-chercher" type="button">Chercher</button>
+      <button class="second" id="ccn-chercher" type="button">Chercher une convention</button>
+    </div>
+    <label class="champ"><b>Chercher dans le texte de la convention</b>
+      <input id="ccn-texte-q" placeholder="ex. coefficient 200, période d'essai, prime d'ancienneté" autocomplete="off"></label>
+    <div class="boutons" style="margin-top:-6px">
+      <button class="second" id="ccn-plein" type="button">Chercher dans la convention</button>
+      <label style="align-self:center"><input type="checkbox" id="ccn-plein-exact"> expression exacte</label>
+      <button class="second" id="ccn-decisions" type="button">Décisions citant cette convention</button>
     </div>
     <div id="ccn-msg"></div>
     <div id="ccn-sommaire"></div>
@@ -399,7 +406,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "1.6 — 12 août 2026";
+const VERSION = "1.7 — 12 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1853,7 +1860,7 @@ $("btn-mots").onclick = assistantMots;
    d'articles. Ce que l'application affiche est le texte officiel, daté, et
    rien d'autre : c'est la même exigence que pour les décisions.
    -------------------------------------------------------------------- */
-let ccnCourant = null, ccnTextes = [];   // texte ouvert, et sommaire de la convention
+let ccnCourant = null, ccnTextes = [], ccnTitre = "";   // texte ouvert, et sommaire de la convention
 
 function ccnMessage(html, type){
   $("ccn-msg").innerHTML = html ? '<div class="msg '+(type||"info")+'">'+html+"</div>" : "";
@@ -1915,7 +1922,7 @@ async function ccnOuvrir(idcc, id){
       return ccnMessage("Convention trouvée, mais aucun texte n'a pu être lu."+
         (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "err");
     ccnMessage("", "");
-    ccnTextes = d.textes;
+    ccnTextes = d.textes; ccnTitre = d.titre || "";
     /* Une convention compte plusieurs centaines de textes — 500 pour les
        transports routiers. Une liste brute serait inutilisable : le filtre
        est donc donné en même temps qu'elle, et non caché ailleurs. */
@@ -2000,7 +2007,16 @@ function ccnHtml(blocs, filtre){
       ? '<div class="note">dans « '+echap(section.titre)+" »"+
         (section.id ? " — "+echap(section.id) : "")+"</div>"
       : "";
-    sortie += '<div class="fiche"><b>'+echap((b.num ? "Article "+b.num : b.titre||"Article"))+"</b>"+ref+
+    /* Une décision qui applique un texte conventionnel le cite le plus souvent
+       mot pour mot : chercher une phrase caractéristique de l'article est donc
+       le moyen le plus sûr de retrouver les décisions qui s'en sont servies —
+       plus sûr que son numéro, qui se répète d'une convention à l'autre. */
+    const phrase = phraseCaracteristique(b.html);
+    const vers = phrase
+      ? ' <button class="second art-dec" type="button" data-p="'+echap(phrase)+
+        '" title="Chercher dans Judilibre les décisions citant ce passage">Décisions citant cet article</button>'
+      : "";
+    sortie += '<div class="fiche"><b>'+echap((b.num ? "Article "+b.num : b.titre||"Article"))+"</b>"+ref+vers+
               situe+'<div class="texte">'+nettoyerHtml(b.html)+"</div></div>";
   }
   return sortie || '<p class="note">Rien ne correspond à ce filtre dans ce texte.</p>';
@@ -2023,6 +2039,7 @@ async function ccnLire(id){
     ].filter(Boolean).join(" · ");
     $("ccn-filtre").value = "";
     $("ccn-corps").innerHTML = ccnHtml(d.blocs, "");
+    brancherArticles();
     $("dlg-ccn").showModal();
   }catch(e){ ccnMessage(ccnErreur(e), "err"); }
 }
@@ -2046,12 +2063,84 @@ function ccnNom(ext){
           .replace(/^-|-$/g,"").slice(0,70) || "convention")+"."+ext;
 }
 
+/* Une phrase caractéristique : assez longue pour être propre à cet article,
+   assez courte pour que la recherche en expression exacte aboutisse. Mesuré :
+   au-delà d'environ 120 signes, l'API n'a plus de correspondance. */
+function phraseCaracteristique(html){
+  const t = htmlEnTexte(html).replace(/\s+/g, " ");
+  const phrases = t.split(/(?<=[.;])\s+/).map(x => x.trim())
+    .filter(x => x.length >= 45 && x.length <= 120 && !/^\d/.test(x));
+  if(phrases.length) return phrases.sort((a, b) => b.length - a.length)[0].replace(/[.;]$/, "");
+  const court = t.slice(0, 110);
+  const coupe = court.lastIndexOf(" ");
+  return court.length >= 45 ? court.slice(0, coupe > 45 ? coupe : court.length) : "";
+}
+
+/* Chercher dans Judilibre depuis un texte conventionnel : la recherche est
+   remplie et lancée, et l'on est amené aux résultats. Rien n'est deviné —
+   l'expression cherchée est celle que l'utilisateur voit à l'écran. */
+function versJudilibre(expression){
+  $("dlg-ccn").close();
+  $("q").value = expression;
+  document.querySelector('input[name="mode"][value="exact"]').checked = true;
+  $("mots-zone").innerHTML = "";
+  chercher(0);
+  $("resultats").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+async function ccnPleinTexte(){
+  const q = $("ccn-texte-q").value.trim();
+  const idcc = $("ccn-idcc").value.trim();
+  if(q.length < 3) return ccnMessage("Indiquez ce que vous cherchez dans la convention.", "info");
+  if(!idcc) return ccnMessage("Indiquez d'abord le numéro IDCC de la convention à explorer.", "info");
+  ccnMessage("Recherche dans la convention…", "info"); $("ccn-sommaire").innerHTML = "";
+  try{
+    const d = await relais({action:"ccn-plein", q, idcc, exact: $("ccn-plein-exact").checked});
+    const l = d.resultats || [];
+    if(!l.length)
+      return ccnMessage("Rien ne correspond dans cette convention."+
+        (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "info");
+    ccnMessage("", "");
+    $("ccn-sommaire").innerHTML =
+      '<div class="msg ok" style="margin-top:12px"><b>'+l.length+" texte"+(l.length>1?"s":"")+
+      " de la convention "+echap(idcc)+" contien"+(l.length>1?"nent":"t")+" « "+echap(q)+" »"+
+      (d.total > l.length ? " — "+d.total+" au total, les "+l.length+" premiers sont affichés" : "")+
+      ".</b></div>"+
+      l.map(r => '<div class="fiche"><b>'+echap(r.titre||"(sans intitulé)")+"</b>"+
+        (r.etat ? ' <span class="badge">'+echap(r.etat)+"</span>" : "")+
+        ' <button class="second ccn-t" type="button" data-id="'+echap(r.id)+'">Lire le texte</button>'+
+        (r.extraits||[]).slice(0,4).map(e => '<div class="texte" style="margin-top:6px">'+
+          (e.num ? "<b>Article "+echap(e.num)+".</b> " : "")+
+          (e.titre && !e.num ? "<b>"+echap(e.titre)+".</b> " : "")+
+          echap(e.texte||"")+"</div>").join("")+
+        "</div>").join("");
+    [...document.querySelectorAll(".ccn-t")].forEach(b => b.onclick = ()=>ccnLire(b.dataset.id));
+  }catch(e){ ccnMessage(ccnErreur(e), "err"); }
+}
+
 $("ccn-ouvrir").onclick = ()=>ccnOuvrir();
+$("ccn-plein").onclick = ccnPleinTexte;
+$("ccn-texte-q").addEventListener("keydown", e=>{ if(e.key==="Enter") ccnPleinTexte(); });
+$("ccn-decisions").onclick = ()=>{
+  /* L'intitulé complet d'une convention n'est presque jamais reproduit tel
+     quel dans une décision : on cherche le nom sous lequel les juges la
+     désignent, c'est-à-dire l'intitulé amputé de sa date et de sa forme
+     développée. Mesuré : 3 447 décisions pour les transports routiers. */
+  const t = (ccnTitre || "").replace(/\s+/g, " ")
+    .replace(/\s+du\s+\d.*$/i, "").replace(/\s*\(.*\)\s*$/, "").trim();
+  if(!t) return ccnMessage("Ouvrez d'abord une convention.", "info");
+  versJudilibre(t);
+};
 $("ccn-chercher").onclick = ccnChercher;
 $("ccn-idcc").addEventListener("keydown", e=>{ if(e.key==="Enter") ccnOuvrir(); });
 $("ccn-q").addEventListener("keydown", e=>{ if(e.key==="Enter") ccnChercher(); });
+function brancherArticles(){
+  [...document.querySelectorAll(".art-dec")].forEach(b =>
+    b.onclick = ()=>versJudilibre(b.dataset.p));
+}
 $("ccn-filtre").addEventListener("input", ()=>{
-  if(ccnCourant) $("ccn-corps").innerHTML = ccnHtml(ccnCourant.blocs, $("ccn-filtre").value);
+  if(ccnCourant){ $("ccn-corps").innerHTML = ccnHtml(ccnCourant.blocs, $("ccn-filtre").value);
+                  brancherArticles(); }
 });
 $("ccn-fermer").onclick = ()=>$("dlg-ccn").close();
 $("dlg-ccn").addEventListener("click", e=>{ if(e.target===$("dlg-ccn")) $("dlg-ccn").close(); });
