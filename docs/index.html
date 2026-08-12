@@ -121,6 +121,9 @@
   .dlg-corps .texte-art{font:15px/1.65 Georgia,'Times New Roman',serif;white-space:pre-wrap}
   .fermer{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;
     border-radius:9px;padding:6px 12px;cursor:pointer;flex-shrink:0}
+  button.ccnlien{font:inherit;font-size:inherit;border:none;background:#f0eaf6;color:#5b2d82;
+    padding:0 3px;border-radius:4px;cursor:pointer;text-align:left}
+  button.ccnlien:hover{background:#e3d7ef;text-decoration:underline}
   button.art{font:inherit;font-size:inherit;border:none;background:#eef3ff;color:var(--link);
     border-bottom:1px dotted var(--link);cursor:pointer;padding:0 2px;border-radius:3px}
 
@@ -406,7 +409,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "1.7 — 12 août 2026";
+const VERSION = "1.8 — 12 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1481,19 +1484,53 @@ function surligner(texteEchappe, q, mode){
 }
 /* Découper le texte autour des citations, plutôt qu'y insérer des marqueurs,
    évite toute interférence entre surlignage et boutons. */
+/* Les conventions collectives citées dans une décision.
+
+   Le pont dans l'autre sens : depuis une décision, ouvrir la convention qu'elle
+   applique. Les juges la désignent presque toujours de la même façon —
+   « la convention collective nationale des transports routiers », « la
+   convention collective des bureaux d'études techniques ». On capture ce
+   groupe nominal, en s'arrêtant à la première ponctuation forte : au-delà,
+   on ramasserait la phrase entière.
+
+   La borne à quatre-vingts signes n'est pas arbitraire : les intitulés les plus
+   longs du fonds KALI tiennent en dessous, et une capture plus large ne
+   retrouverait plus rien. */
+const RE_CCN = new RegExp(
+  "\\bconventions?\\s+collectives?" +
+  "(?:\\s+nationales?)?(?:\\s+[ée]tendue)?" +
+  "(?:\\s+(?:de\\s+la|des|du|de\\s+l'|de|d')\\s*)" +
+  "([^,.;:()\\[\\]\\n]{4,80}?)" +
+  "(?=\\s*(?:[,.;:()]|du\\s+\\d|applicable|en\\s+date|dans\\s+sa|$))", "gi");
+
+function lierConventions(fragment, surlignage){
+  let sortie = "", curseur = 0, m;
+  RE_CCN.lastIndex = 0;
+  while((m = RE_CCN.exec(fragment)) !== null){
+    const nom = m[1].replace(/\s+/g, " ").trim();
+    sortie += surlignage(fragment.slice(curseur, m.index));
+    sortie += nom.length >= 4
+      ? '<button type="button" class="ccnlien" data-nom="'+echap(nom)+
+        '" title="Ouvrir cette convention collective">'+surlignage(m[0])+"</button>"
+      : surlignage(m[0]);
+    curseur = m.index + m[0].length;
+  }
+  return sortie + surlignage(fragment.slice(curseur));
+}
+
 function lierArticles(texteEchappe, surlignage){
   let sortie = "", curseur = 0, m;
   RE_CITATION.lastIndex = 0;
   while((m = RE_CITATION.exec(texteEchappe)) !== null){
     const nums = numerosArticles(m[1]);
-    sortie += surlignage(texteEchappe.slice(curseur, m.index));
+    sortie += lierConventions(texteEchappe.slice(curseur, m.index), surlignage);
     sortie += nums.length
       ? '<button type="button" class="art" data-nums="'+echap(nums.join("|"))+'" data-code="'+echap(m[2])+
         '">'+surlignage(m[0])+"</button>"
       : surlignage(m[0]);
     curseur = m.index + m[0].length;
   }
-  return sortie + surlignage(texteEchappe.slice(curseur));
+  return sortie + lierConventions(texteEchappe.slice(curseur), surlignage);
 }
 
 async function ouvrirDecision(id){
@@ -1513,6 +1550,16 @@ async function ouvrirDecision(id){
     const cites = $("dlg-corps").querySelectorAll("button.art");
     cites.forEach(b=>b.onclick = ()=>
       ouvrirArticle(b.dataset.nums.split("|"), b.dataset.code, d.decision_date));
+    /* Le pont dans l'autre sens : de la décision vers la convention qu'elle
+       applique. On renseigne l'écran des conventions et l'on y conduit —
+       plutôt que d'ouvrir une fenêtre de plus par-dessus celle-ci. */
+    $("dlg-corps").querySelectorAll("button.ccnlien").forEach(b=>b.onclick = ()=>{
+      $("dlg-decision").close();
+      $("ccn-q").value = b.dataset.nom;
+      $("ccn-idcc").value = "";
+      $("carte-ccn").scrollIntoView({behavior:"smooth", block:"start"});
+      ccnChercher();
+    });
     /* La consultation des textes ne se devine pas : on l'annonce, mais seulement
        quand des articles ont réellement été repérés — sinon c'est une promesse
        en l'air. */

@@ -171,6 +171,18 @@ pour mot. Deux passerelles en découlent :
 Rien n'est deviné : l'expression envoyée à Judilibre est celle que l'on a sous
 les yeux, et la recherche s'y lance en expression exacte.
 
+### Et dans l'autre sens : de la décision à la convention
+
+Dans le texte intégral d'une décision, les **conventions collectives citées
+sont cliquables**, comme le sont déjà les articles de code. « la convention
+collective nationale des transports routiers », « la convention collective des
+bureaux d'études techniques » : un clic renseigne l'écran des conventions et
+lance la recherche.
+
+La capture s'arrête à la première ponctuation forte et se borne à quatre-vingts
+signes — les intitulés les plus longs du fonds KALI tiennent en dessous, et une
+capture plus large ramasserait la phrase entière au lieu du nom.
+
 Comme pour les articles de code, cet écran suppose le **relais** (adresse
 Netlify) : l'authentification OAuth de Légifrance est impossible depuis un
 navigateur.
