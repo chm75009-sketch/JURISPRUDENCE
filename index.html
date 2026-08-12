@@ -141,6 +141,7 @@
       <span><span class="pastille" id="voyant"></span> <span id="etat-cle">clé non configurée</span></span>
       <button id="btn-cle" type="button">Changer la clé</button>
       <span id="etat-hote"></span>
+      <button id="btn-adresse" type="button" title="Copier l'adresse de l'application">Copier l'adresse</button>
       <span id="etat-version"></span>
     </div>
   </div>
@@ -398,7 +399,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "1.5 — 11 août 2026";
+const VERSION = "1.6 — 12 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -485,6 +486,11 @@ function majEtat(){
   $("carte-cle").classList.toggle("cache", !!k);
   $("etat-hote").textContent = "· " + (location.hostname || "fichier local");
   $("etat-version").textContent = "· version " + VERSION;
+  /* L'adresse doit pouvoir être transmise à un confrère sans la retaper :
+     installée en plein écran, l'application n'a pas de barre d'adresse d'où
+     la copier. Le lien copié est celui de l'accueil, sans recherche en cours
+     ni fragment — c'est l'application qu'on partage, pas son état. */
+  $("btn-adresse").hidden = !location.protocol.startsWith("http");
 }
 
 async function appelApi(chemin, params){
@@ -2411,6 +2417,10 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   });
 }
 $("btn-maj").onclick = ()=>location.reload();
+$("btn-adresse").onclick = ()=>{
+  copier(location.origin + location.pathname);
+  clin($("btn-adresse"), "Adresse copiée");
+};
 
 remplirModeles(""); remplirLieux(""); majEtat(); majResumeAffiner();
 
