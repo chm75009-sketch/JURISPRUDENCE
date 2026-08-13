@@ -350,39 +350,58 @@ async function lireTexteCcn(id){
    comme pour KALI : on ne suppose pas la structure, on l'explore.
    ====================================================================== */
 
-async function chercherLoda(q, nor){
+/* Le drapeau « exact » commande le type de recherche. Il n'est pas cosmétique :
+   c'est lui qui permet de COMPTER une expression, donc de mesurer au lieu de
+   supposer. L'assistant de mots-clés repose entièrement dessus. */
+async function chercherLoda(q, nor, exact, taille){
   const champs = [];
   if(nor)
     champs.push({typeChamp:"NOR", operateur:"ET",
       criteres:[{typeRecherche:"EXACTE", valeur:String(nor).trim().toUpperCase(), operateur:"ET"}]});
   if(q)
     champs.push({typeChamp:"ALL", operateur:"ET",
-      criteres:[{typeRecherche:"UN_DES_MOTS", valeur:String(q), operateur:"ET"}]});
-  if(!champs.length) return {resultats:[]};
+      criteres:[{typeRecherche: exact ? "EXACTE" : "UN_DES_MOTS", valeur:String(q), operateur:"ET"}]});
+  if(!champs.length) return {resultats:[], total:0};
 
   const d = await appelLegifrance("/search", {
     fond: "LODA_DATE",
     recherche: {
       filtres: [], sort:"PERTINENCE", operateur:"ET", typePagination:"DEFAUT",
-      pageNumber:1, pageSize:20, champs,
+      pageNumber:1, pageSize: Math.min(50, Math.max(1, Number(taille)||20)), champs,
     },
   });
+
+  /* Le titre d'un texte peut se présenter sous trois formes selon le point
+     d'accès ; on prend la première qui existe plutôt que d'en présumer une. */
+  const titreDe = it => {
+    if(Array.isArray(it.titles) && it.titles.length)
+      return String(it.titles[0].title || it.titles[0].titre || "");
+    return String(prem(it, "title", "titre") || "");
+  };
 
   const resultats = [];
   for(const item of (d.results||[])){
     const id = prem(item, "id", "cid", "textId");
     if(!id) continue;
+    /* Les extraits portent les mots réellement employés par le législateur :
+       c'est la matière de l'assistant, le titre seul ne suffirait pas. */
+    const extraits = [];
+    for(const sec of tab(item, "sections"))
+      for(const ex of tab(sec, "extracts")){
+        for(const v of tab(ex, "values")) if(v) extraits.push(String(v));
+        if(ex.title) extraits.push(String(ex.title));
+      }
     resultats.push({
       id: String(id),
-      titre: String(prem(item, "titles", "title", "titre") &&
-                    (Array.isArray(item.titles) ? (item.titles[0]?.title||"") : (item.title||item.titre||""))).trim(),
+      titre: titreDe(item).trim(),
       nature: String(prem(item, "nature")||""),
       date: dateLisible(prem(item, "dateSignature", "datePublication", "date")),
       nor: String(prem(item, "nor")||""),
       etat: String(prem(item, "etat", "legalStatus")||""),
+      extraits: extraits.slice(0, 8),
     });
   }
-  return {resultats, total: Number(d.totalResultNumber||resultats.length)};
+  return {resultats, total: Number(d.totalResultNumber||resultats.length), exact: !!exact};
 }
 
 /* Un texte LODA se consulte comme une convention : on descend l'arbre et on
@@ -483,7 +502,8 @@ export default async (req) => {
         ? await lireLoda(String(demande.id||"").slice(0,40),
                          demande.date ? String(demande.date).slice(0,10) : null)
         : await chercherLoda(String(demande.q||"").slice(0,200),
-                             String(demande.nor||"").slice(0,20));
+                             String(demande.nor||"").slice(0,20),
+                             !!demande.exact, demande.taille);
       return new Response(JSON.stringify(r), {status:200, headers:entetes});
     }catch(e){
       const c = erreurs.includes(e.message) ? e.message : "ERREUR_LEGIFRANCE";
