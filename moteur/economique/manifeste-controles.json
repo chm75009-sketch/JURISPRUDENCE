@@ -1,0 +1,1075 @@
+{
+ "objet": "manifeste des contrôles",
+ "empreinte": "c648f50e846d",
+ "empreintesFichiers": {
+  "moteur.js": "9f8062b93bfd",
+  "controles.js": "1cd43a708d9d",
+  "controles2.js": "6494f1e74321",
+  "grille-eco.js": "637ecbe53699",
+  "grille-auto.js": "20ca038f05b7",
+  "pieces.js": "95ed7ab57ced",
+  "preuve.js": "ba61fe6fc07a"
+ },
+ "genere": "2026-08-15 14:24:16",
+ "verification": {
+  "identifiantsUniques": true,
+  "conformiteSansTest": [],
+  "detectionAvecTest": [],
+  "detectionPouvantConclureConforme": [],
+  "somme": true,
+  "coherenceTestes": true
+ },
+ "compteurs": {
+  "controles": 48,
+  "conformite": 42,
+  "detection": 6,
+  "testes": 42,
+  "casDeTest": 44,
+  "echecs": 0,
+  "regles": 232
+ },
+ "definitions": [
+  [
+   "contrôles publiés",
+   "Nombre d'identifiants uniques du manifeste. Chacun est exécuté sur le dossier soumis, et chacun figure au questionnaire."
+  ],
+  [
+   "contrôles de conformité",
+   "Ceux qui peuvent conclure à la conformité. Chacun doit être couvert par au moins un cas contradictoire."
+  ],
+  [
+   "contrôles de détection",
+   "Ceux qui ne concluent jamais à la conformité : ils signalent une situation hors du champ automatisable. Ils n'ont pas de cas contradictoire, n'ayant aucune faute à détecter — seulement une déclaration à relayer."
+  ],
+  [
+   "contrôles couverts par un test",
+   "Identifiants uniques visés par au moins un scénario fautif. Ils sont, par construction, les contrôles de conformité."
+  ],
+  [
+   "cas contradictoires",
+   "Nombre de scénarios fautifs exécutés. Il excède le nombre de contrôles couverts, plusieurs fautes distinctes pouvant viser le même contrôle."
+  ]
+ ],
+ "controles": [
+  {
+   "id": "CTL-REC-01",
+   "rubrique": "Reclassement",
+   "objet": "Un état daté des postes disponibles a-t-il été établi ?",
+   "type": "conformité",
+   "entrees": [
+    "postesDisponibles"
+   ],
+   "piece": "etat-postes",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "état des postes absent",
+    "état des postes annoncé sans pièce versée"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-02",
+   "rubrique": "Reclassement",
+   "objet": "La recherche couvre-t-elle tout le périmètre de permutation ?",
+   "type": "conformité",
+   "entrees": [
+    "groupe",
+    "societes",
+    "postesDisponibles"
+   ],
+   "piece": "etat-postes",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "société du groupe non interrogée"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-03",
+   "rubrique": "Reclassement",
+   "objet": "Les offres respectent-elles les six mentions obligatoires ?",
+   "type": "conformité",
+   "entrees": [
+    "offresFaites"
+   ],
+   "piece": "offres",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "D. 1233-2-1",
+   "tests": [
+    "offre sans rémunération"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-04",
+   "rubrique": "Reclassement",
+   "objet": "L'absence de poste est-elle établie, ou seulement affirmée ?",
+   "type": "conformité",
+   "entrees": [
+    "postesDisponibles"
+   ],
+   "piece": "attestation-absence-poste",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "aucun poste et aucune attestation d'absence"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-05",
+   "rubrique": "Reclassement",
+   "objet": "Les efforts de formation et d'adaptation ont-ils été faits ?",
+   "type": "conformité",
+   "entrees": [
+    "formationProposee",
+    "cause"
+   ],
+   "piece": "formation",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "aucune formation proposée sur une mutation technologique"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-EMP-01",
+   "rubrique": "Emploi",
+   "objet": "La suppression d'emploi est-elle documentée poste par poste ?",
+   "type": "conformité",
+   "entrees": [
+    "postesSupprimes",
+    "nbLicenciements"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-3, al. 1er",
+   "tests": [
+    "suppressions déclarées différentes du nombre de licenciements"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-EMP-02",
+   "rubrique": "Emploi",
+   "objet": "Des recrutements ou des précaires contredisent-ils la suppression ?",
+   "type": "conformité",
+   "entrees": [
+    "precaires",
+    "postesSupprimes"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-3",
+   "tests": [
+    "intérimaire sur un emploi supprimé"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-ECO-01",
+   "rubrique": "Cause économique",
+   "objet": "La démonstration comptable est-elle produite ?",
+   "type": "conformité",
+   "entrees": [
+    "cause",
+    "trimestres",
+    "resultatExploitation",
+    "tresorerie"
+   ],
+   "piece": "liasse",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-3, 1°",
+   "tests": [
+    "aucune pièce comptable renseignée"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-ECO-02",
+   "rubrique": "Cause économique",
+   "objet": "Le périmètre de la démonstration est-il le bon ?",
+   "type": "conformité",
+   "entrees": [
+    "groupe",
+    "societes",
+    "trimestres"
+   ],
+   "piece": "comptes-groupe",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-3",
+   "tests": [
+    "données comptables sans périmètre de secteur"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-ECO-03",
+   "rubrique": "Cause économique",
+   "objet": "La menace sur la compétitivité est-elle établie ?",
+   "type": "détection — conclut au risque, jamais à la conformité",
+   "entrees": [
+    "cause",
+    "menace"
+   ],
+   "piece": "—",
+   "etats": [
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-3, 3°",
+   "tests": [],
+   "teste": false
+  },
+  {
+   "id": "CTL-ECO-04",
+   "rubrique": "Cause économique",
+   "objet": "La mutation technologique est-elle datée et documentée ?",
+   "type": "conformité",
+   "entrees": [
+    "cause",
+    "mutation"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-3, 2°",
+   "tests": [
+    "mutation technologique non décrite"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-01",
+   "rubrique": "Procédure",
+   "objet": "La consultation du comité était-elle due, et a-t-elle eu lieu ?",
+   "type": "conformité",
+   "entrees": [
+    "dateInfoCSE",
+    "datesReunionsCSE",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "pv-cse",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-8 · L. 1233-28",
+   "tests": [
+    "une seule réunion là où deux sont exigées"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-02",
+   "rubrique": "Procédure",
+   "objet": "Les délais entre convocation, réunions et avis sont-ils respectés ?",
+   "type": "conformité",
+   "entrees": [
+    "datesReunionsCSE",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-29 · L. 1233-30",
+   "tests": [
+    "moins de quinze jours entre les deux réunions"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-03",
+   "rubrique": "Procédure",
+   "objet": "Les renseignements ont-ils été joints à la convocation ?",
+   "type": "conformité",
+   "entrees": [
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "renseignements-cse",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-10 · L. 1233-31",
+   "tests": [
+    "document des sept renseignements non versé"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-04",
+   "rubrique": "Procédure",
+   "objet": "L'avis a-t-il été rendu, ou le délai est-il expiré ?",
+   "type": "conformité",
+   "entrees": [
+    "dateAvisCSE",
+    "datesReunionsCSE",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "pv-cse",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-8 · L. 1233-30, II",
+   "tests": [
+    "aucun avis rendu et délai non établi"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-05",
+   "rubrique": "Procédure",
+   "objet": "La notification ou l'information de l'administration est-elle faite ?",
+   "type": "conformité",
+   "entrees": [
+    "dateNotifAdmin",
+    "datesReunionsCSE",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-19 · L. 1233-46",
+   "tests": [
+    "notification administrative avant la première réunion"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PSE-01",
+   "rubrique": "Plan de sauvegarde de l'emploi",
+   "objet": "Un plan est-il dû, et son contenu couvre-t-il les mesures exigées ?",
+   "type": "conformité",
+   "entrees": [
+    "pse",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "pse",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-61 · L. 1233-62 · L. 1233-63",
+   "tests": [
+    "plan de sauvegarde sans mesure de suivi"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PSE-02",
+   "rubrique": "Plan de sauvegarde de l'emploi",
+   "objet": "Le plan est-il calibré sur les moyens du groupe ?",
+   "type": "conformité",
+   "entrees": [
+    "groupe",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "comptes-groupe",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-57-3",
+   "tests": [
+    "comptes du groupe non versés alors qu'un plan est dû"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PSE-03",
+   "rubrique": "Plan de sauvegarde de l'emploi",
+   "objet": "La voie retenue est-elle arrêtée : accord majoritaire ou document unilatéral ?",
+   "type": "conformité",
+   "entrees": [
+    "pse",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-24-1 · L. 1233-57-3",
+   "tests": [
+    "voie du plan non arrêtée"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PSE-04",
+   "rubrique": "Plan de sauvegarde de l'emploi",
+   "objet": "La notification intervient-elle après la décision administrative ?",
+   "type": "conformité",
+   "entrees": [
+    "pse",
+    "dateNotification",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "decision-admin",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-39",
+   "tests": [
+    "notification avant la décision d'homologation"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PRT-01",
+   "rubrique": "Salariés protégés",
+   "objet": "L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?",
+   "type": "conformité",
+   "entrees": [
+    "salariesProteges"
+   ],
+   "piece": "autorisations",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "sans objet"
+   ],
+   "fondement": "L. 2411-1",
+   "tests": [
+    "salarié protégé sans autorisation"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-IND-01",
+   "rubrique": "Situations individuelles",
+   "objet": "Des salariés en arrêt, congé maternité ou inaptitude sont-ils concernés ?",
+   "type": "détection — conclut au risque, jamais à la conformité",
+   "entrees": [
+    "salariesSuspendus"
+   ],
+   "piece": "—",
+   "etats": [
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "—",
+   "tests": [],
+   "teste": false
+  },
+  {
+   "id": "CTL-COE-01",
+   "rubrique": "Groupe",
+   "objet": "Un risque de co-emploi est-il signalé ?",
+   "type": "détection — conclut au risque, jamais à la conformité",
+   "entrees": [
+    "coEmploi"
+   ],
+   "piece": "—",
+   "etats": [
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "—",
+   "tests": [],
+   "teste": false
+  },
+  {
+   "id": "CTL-CCN-01",
+   "rubrique": "Normes conventionnelles",
+   "objet": "La convention et les accords sont-ils versés ?",
+   "type": "conformité",
+   "entrees": [
+    "conventionJointe",
+    "accordsJoints"
+   ],
+   "piece": "convention",
+   "etats": [
+    "conforme",
+    "risque à vérifier"
+   ],
+   "fondement": "L. 1233-5 · L. 1233-39",
+   "tests": [
+    "convention et accords non versés"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PCE-01",
+   "rubrique": "Pièces",
+   "objet": "Les pièces versées portent-elles leurs métadonnées ?",
+   "type": "conformité",
+   "entrees": [
+    "pieces"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "—",
+   "tests": [
+    "pièce seulement cochée, sans métadonnées"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PCE-02",
+   "rubrique": "Pièces",
+   "objet": "Les pièces sont-elles antérieures à l'acte qu'elles justifient ?",
+   "type": "conformité",
+   "entrees": [
+    "dateNotification",
+    "pieces"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "—",
+   "tests": [
+    "pièce postérieure à l'acte"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PCE-03",
+   "rubrique": "Pièces",
+   "objet": "Le périmètre des pièces correspond-il au périmètre à démontrer ?",
+   "type": "conformité",
+   "entrees": [
+    "groupe",
+    "pièce liasse",
+    "pièce comptes-groupe"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-3",
+   "tests": [
+    "comptes du groupe sans périmètre déclaré"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PCE-04",
+   "rubrique": "Pièces",
+   "objet": "Les pièces ont-elles été lues, ou seulement déposées ?",
+   "type": "conformité",
+   "entrees": [
+    "pieces"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "—",
+   "tests": [
+    "pièce déposée mais non lue"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-06",
+   "rubrique": "Reclassement",
+   "objet": "L'état des postes est-il antérieur à la notification ?",
+   "type": "conformité",
+   "entrees": [
+    "dateNotification",
+    "pièce etat-postes"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "état des postes postérieur à la notification"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-07",
+   "rubrique": "Reclassement",
+   "objet": "Des postes disponibles ont-ils été omis dans les offres ?",
+   "type": "conformité",
+   "entrees": [
+    "postesDisponibles",
+    "offresFaites"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "poste disponible non proposé"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-08",
+   "rubrique": "Reclassement",
+   "objet": "Les offres sont-elles personnalisées et adressées à chaque salarié ?",
+   "type": "conformité",
+   "entrees": [
+    "offresFaites",
+    "nbLicenciements"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-4 · D. 1233-2-1",
+   "tests": [
+    "offres non adressées à tous les salariés"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-09",
+   "rubrique": "Reclassement",
+   "objet": "Un délai et un moyen de réponse ont-ils été indiqués ?",
+   "type": "conformité",
+   "entrees": [
+    "offresFaites"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "offre sans délai de réponse"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-10",
+   "rubrique": "Reclassement",
+   "objet": "Un poste de catégorie inférieure a-t-il été proposé sans accord exprès ?",
+   "type": "conformité",
+   "entrees": [
+    "offresFaites"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "poste de catégorie inférieure sans accord exprès"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-REC-11",
+   "rubrique": "Reclassement",
+   "objet": "L'absence de poste repose-t-elle sur autre chose qu'une attestation interne ?",
+   "type": "conformité",
+   "entrees": [
+    "postesDisponibles",
+    "pièce attestation-absence-poste"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-4",
+   "tests": [
+    "attestation d'absence de poste établie par la direction"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-06",
+   "rubrique": "Procédure",
+   "objet": "Le délai entre la convocation et la première réunion est-il suffisant ?",
+   "type": "conformité",
+   "entrees": [
+    "dateInfoCSE",
+    "datesReunionsCSE",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-10 · L. 1233-31",
+   "tests": [
+    "convocation postérieure à la réunion",
+    "convocation deux jours avant la réunion"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-07",
+   "rubrique": "Procédure",
+   "objet": "L'instance compétente est-elle la bonne ?",
+   "type": "conformité",
+   "entrees": [
+    "etablissementsDistincts",
+    "cseCentralConsulte",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-9 · L. 2316-1",
+   "tests": [
+    "comité central non réuni malgré plusieurs établissements"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-08",
+   "rubrique": "Procédure",
+   "objet": "Un comité existe-t-il, ou un procès-verbal de carence a-t-il été établi ?",
+   "type": "conformité",
+   "entrees": [
+    "cseExistant",
+    "pvCarence",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "—",
+   "tests": [
+    "aucun comité et aucune carence"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CSE-09",
+   "rubrique": "Procédure",
+   "objet": "Une expertise a-t-elle été demandée, et son calendrier tient-il ?",
+   "type": "détection — conclut au risque, jamais à la conformité",
+   "entrees": [
+    "expertise",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "—",
+   "tests": [],
+   "teste": false
+  },
+  {
+   "id": "CTL-CSE-10",
+   "rubrique": "Procédure",
+   "objet": "Les conséquences sur la santé, la sécurité et les conditions de travail sont-elles exposées ?",
+   "type": "conformité",
+   "entrees": [
+    "consequencesSSCT",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-10, 7° · L. 1233-31, 7°",
+   "tests": [
+    "conséquences santé et sécurité non exposées"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-EFF-01",
+   "rubrique": "Effectifs",
+   "objet": "L'effectif de l'établissement est-il cohérent avec celui de l'entreprise ?",
+   "type": "conformité",
+   "entrees": [
+    "effectifEtablissement",
+    "effectif"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "—",
+   "tests": [
+    "effectif d'établissement supérieur à celui de l'entreprise"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-EFF-02",
+   "rubrique": "Effectifs",
+   "objet": "Le périmètre d'application des critères d'ordre est-il licite ?",
+   "type": "conformité",
+   "entrees": [
+    "perimetreOrdre",
+    "accordPerimetreOrdre"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-5",
+   "tests": [
+    "critères d'ordre appliqués à l'établissement sans accord"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PSE-05",
+   "rubrique": "Plan de sauvegarde de l'emploi",
+   "objet": "Les mesures du plan sont-elles chiffrées ?",
+   "type": "conformité",
+   "entrees": [
+    "pse",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-62",
+   "tests": [
+    "mesures du plan non chiffrées"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PSE-06",
+   "rubrique": "Plan de sauvegarde de l'emploi",
+   "objet": "Le plan a-t-il été joint à la convocation du comité ?",
+   "type": "conformité",
+   "entrees": [
+    "dateInfoCSE",
+    "pièce pse",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-32",
+   "tests": [
+    "plan postérieur à la convocation"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PSE-07",
+   "rubrique": "Plan de sauvegarde de l'emploi",
+   "objet": "L'accord majoritaire remplit-il la condition de représentativité ?",
+   "type": "conformité",
+   "entrees": [
+    "pse",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-24-1",
+   "tests": [
+    "accord majoritaire sous les 50 %"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CCN-02",
+   "rubrique": "Normes conventionnelles",
+   "objet": "La convention versée est-elle celle de l'IDCC déclaré, et à jour ?",
+   "type": "conformité",
+   "entrees": [
+    "idcc",
+    "veille",
+    "pièce convention",
+    "pièce conventionJointe"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "—",
+   "tests": [
+    "convention déclarée mais non versée comme pièce"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-CCN-03",
+   "rubrique": "Normes conventionnelles",
+   "objet": "Les accords versés ont-ils été confrontés aux règles légales ?",
+   "type": "conformité",
+   "entrees": [
+    "accordsJoints",
+    "pieces"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier"
+   ],
+   "fondement": "L. 1233-21 · L. 1233-24-1 · L. 2254-2",
+   "tests": [
+    "accords annoncés mais non lus"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-USA-01",
+   "rubrique": "Normes conventionnelles",
+   "objet": "Des usages ou engagements unilatéraux plus favorables existent-ils ?",
+   "type": "détection — conclut au risque, jamais à la conformité",
+   "entrees": [
+    "usagesEtEngagements"
+   ],
+   "piece": "—",
+   "etats": [
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "—",
+   "tests": [],
+   "teste": false
+  },
+  {
+   "id": "CTL-CTX-01",
+   "rubrique": "Contentieux",
+   "objet": "Un contentieux ou un contrôle est-il en cours ?",
+   "type": "détection — conclut au risque, jamais à la conformité",
+   "entrees": [
+    "contentieuxEnCours"
+   ],
+   "piece": "—",
+   "etats": [
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "—",
+   "tests": [],
+   "teste": false
+  }
+ ],
+ "objets": {
+  "manifeste": "manifeste-controles.json — le catalogue des contrôles",
+  "registre": "rapport-tests.json — le journal d'exécution des tests",
+  "dossier": "dossier-reference.json — le dossier sur lequel les mutations sont appliquées"
+ }
+}

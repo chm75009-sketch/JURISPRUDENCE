@@ -1,0 +1,229 @@
+{
+ "entreprise": "ARDENNE PLASTURGIE SAS",
+ "dateAudit": "2026-04-03",
+ "cause": "1",
+ "effectif": 84,
+ "effectifGroupe": 246,
+ "groupe": true,
+ "nbLicenciements": 6,
+ "licenciementsRecents30j": 0,
+ "refusModification": 0,
+ "dateEntretien": "2026-04-16",
+ "dateNotification": "2026-04-28",
+ "societes": [
+  {
+   "nom": "POITOU MOULAGE",
+   "effectif": 61,
+   "activite": "injection plastique technique"
+  },
+  {
+   "nom": "LOIRE INJECTION",
+   "effectif": 44,
+   "activite": "injection plastique technique"
+  },
+  {
+   "nom": "NOVAPLAST SERVICES",
+   "effectif": 12,
+   "activite": "informatique et comptabilité"
+  },
+  {
+   "nom": "NOVAPLAST IBERICA",
+   "effectif": 38,
+   "activite": "injection plastique technique",
+   "etranger": true
+  }
+ ],
+ "convention": {
+  "nom": "convention de branche applicable",
+  "criteresOrdre": false,
+  "preavisPlusFavorable": false,
+  "indemnitePlusFavorable": true,
+  "commissionParitaireEmploi": false
+ },
+ "accords": {
+  "methode": false,
+  "pse": false,
+  "apc": false,
+  "gepp": true
+ },
+ "transfertEnvisage": false,
+ "procedureCollective": false,
+ "salariesProteges": [],
+ "trimestres": [
+  {
+   "libelle": "T2-25",
+   "n": 9240,
+   "n1": 10180
+  },
+  {
+   "libelle": "T3-25",
+   "n": 8610,
+   "n1": 9970
+  },
+  {
+   "libelle": "T4-25",
+   "n": 8120,
+   "n1": 9640
+  },
+  {
+   "libelle": "T1-26",
+   "n": 7480,
+   "n1": 9310
+  }
+ ],
+ "categories": [
+  {
+   "nom": "Opérateur régleur injection",
+   "suppressions": 4,
+   "salaries": [
+    {
+     "nom": "Salarié 07",
+     "charges": 0,
+     "anciennetePoints": 1,
+     "social": 0,
+     "qualites": 2
+    },
+    {
+     "nom": "Salarié 14",
+     "charges": 1,
+     "anciennetePoints": 1,
+     "social": 0,
+     "qualites": 2
+    },
+    {
+     "nom": "Salarié 03",
+     "charges": 0,
+     "anciennetePoints": 2,
+     "social": 0,
+     "qualites": 3
+    },
+    {
+     "nom": "Salarié 11",
+     "charges": 2,
+     "anciennetePoints": 1,
+     "social": 0,
+     "qualites": 2
+    },
+    {
+     "nom": "Salarié 09",
+     "charges": 1,
+     "anciennetePoints": 2,
+     "social": 0,
+     "qualites": 3
+    },
+    {
+     "nom": "Salarié 02",
+     "charges": 3,
+     "anciennetePoints": 4,
+     "social": 3,
+     "qualites": 3
+    }
+   ]
+  },
+  {
+   "nom": "Conducteur de ligne",
+   "suppressions": 1,
+   "salaries": [
+    {
+     "nom": "Salarié 21",
+     "charges": 0,
+     "anciennetePoints": 1,
+     "social": 0,
+     "qualites": 2
+    },
+    {
+     "nom": "Salarié 22",
+     "charges": 2,
+     "anciennetePoints": 3,
+     "social": 0,
+     "qualites": 3
+    }
+   ]
+  }
+ ],
+ "salaries": [
+  {
+   "nom": "K. BENALI",
+   "anciennete": 14.5,
+   "ancienneteMois": 174,
+   "moyenne12": 2850,
+   "tiers3": 2790
+  },
+  {
+   "nom": "Salarié 14",
+   "anciennete": 6.25,
+   "ancienneteMois": 75,
+   "moyenne12": 2410,
+   "tiers3": 2480
+  },
+  {
+   "nom": "Salarié 03",
+   "anciennete": 0.5,
+   "ancienneteMois": 6,
+   "moyenne12": 2200,
+   "tiers3": 2200
+  }
+ ],
+ "idcc": "1486",
+ "conventionJointe": false,
+ "accordsJoints": false,
+ "conventionAJour": "je ne sais pas",
+ "avenantsRecents": "non renseigné",
+ "veille": {
+  "articles": {
+   "inchanges": 0,
+   "modifies": []
+  },
+  "convention": {
+   "trouvee": true,
+   "idcc": "1486",
+   "titre": "Convention collective nationale des bureaux d'études techniques, des cabinets d'ingénieurs-conseils et des sociétés de conseils du 15 décembre 1987 mise à jour par avenant n° 46 du 16 juillet 2021 ",
+   "id": "KALICONT000005635173",
+   "nombreTextes": 172,
+   "dernier": "Accord du 26 juin 2024 relatif aux salaires minimaux (Annexe III)",
+   "lien": "https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635173"
+  },
+  "decisions": {
+   "depuis": "2026-07-01",
+   "nombre": 4,
+   "decisions": [
+    {
+     "num": "25-13.280",
+     "date": "2026-07-08",
+     "ch": "soc",
+     "sol": "cassation",
+     "sommaire": "Aucune mesure d'expertise n'étant prévue par les articles L. 1233-34 et L. 2315-92 du code du travail en cas de procédure d'information-consultation lorsqu'un employeur envisage de procéder à un licenciement collectif pour motif économique de moins de dix salariés dans une même période de trente jou",
+     "requete": "licenciement pour motif économique",
+     "lien": "https://www.courdecassation.fr/decision/6a4de52493c619cd1f843748"
+    },
+    {
+     "num": "24-21.026",
+     "date": "2026-07-08",
+     "ch": "soc",
+     "sol": "cassation",
+     "sommaire": "Il résulte des articles L. 2143-10 du code du travail et L. 2143-3, dernier alinéa, du code du travail, dans sa rédaction issue de la loi n° 2018-217 du 29 mars 2018, interprétés à la lumière des dispositions de l'article 6 de la directive 2001/23 /CE du Conseil du 12 mars 2001 concernant le rapproc",
+     "requete": "comité social et économique",
+     "lien": "https://www.courdecassation.fr/decision/6a4de53793c619cd1f8439e7"
+    },
+    {
+     "num": "25-11.262",
+     "date": "2026-07-08",
+     "ch": "soc",
+     "sol": "rejet",
+     "sommaire": "Aux termes de l'article L. 2142-3 du code du travail, l'affichage des communications syndicales s'effectue librement sur des panneaux réservés à cet usage, distincts de ceux affectés aux communications du comité social et économique. Un exemplaire des communications syndicales est transmis à l'emplo",
+     "requete": "comité social et économique",
+     "lien": "https://www.courdecassation.fr/decision/6a4de52b93c619cd1f84383b"
+    },
+    {
+     "num": "25-10.126",
+     "date": "2026-07-08",
+     "ch": "soc",
+     "sol": "rejet",
+     "sommaire": "Il résulte des articles L. 2315-64, L. 2315-68, L. 2315-69 et L. 2315-71 du code du travail que tous les membres du comité social et économique ont  un égal accès aux archives et aux documents administratifs et comptables dudit comité",
+     "requete": "comité social et économique",
+     "lien": "https://www.courdecassation.fr/decision/6a4de52793c619cd1f8437c3"
+    }
+   ]
+  }
+ }
+}

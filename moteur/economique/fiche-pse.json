@@ -1,0 +1,202 @@
+{
+ "entreprise": "SOCIÉTÉ CENTRALE D'USINAGE SAS",
+ "dateAudit": "2026-08-15",
+ "cause": "3",
+ "effectif": 320,
+ "effectifGroupe": 602,
+ "groupe": true,
+ "idcc": "1486",
+ "nbLicenciements": 22,
+ "licenciementsRecents30j": 0,
+ "refusModification": 0,
+ "dateEntretien": "2026-06-02",
+ "dateNotification": "2026-06-15",
+ "conventionJointe": true,
+ "accordsJoints": false,
+ "conventionAJour": "oui",
+ "avenantsRecents": "non",
+ "societes": [
+  {
+   "nom": "PRÉCISION ATLANTIQUE",
+   "effectif": 180
+  },
+  {
+   "nom": "SUD MÉCANIQUE",
+   "effectif": 95
+  }
+ ],
+ "convention": {
+  "criteresOrdre": true
+ },
+ "pieces": [
+  {
+   "code": "etat-postes",
+   "fichier": "postes-groupe-2026-06-01.pdf",
+   "date": "2026-06-01",
+   "periode": "au 1er juin 2026",
+   "auteur": "Direction des ressources humaines du groupe",
+   "version": "2",
+   "perimetre": "groupe France",
+   "lue": true
+  },
+  {
+   "code": "liasse",
+   "fichier": "liasse-2025.pdf",
+   "date": "2026-05-04",
+   "periode": "exercice 2025",
+   "auteur": "Cabinet AUDIT OCCITANIE",
+   "version": "1",
+   "perimetre": "entreprise",
+   "lue": true
+  },
+  {
+   "code": "comptes-groupe",
+   "fichier": "consolides-2025.pdf",
+   "date": "2026-04-30",
+   "periode": "exercice 2025",
+   "auteur": "MERIDIEN INDUSTRIES",
+   "version": "1",
+   "perimetre": "secteur d'activité du groupe",
+   "lue": true
+  },
+  {
+   "code": "renseignements-cse",
+   "fichier": "info-cse-2026-03-09.pdf",
+   "date": "2026-03-09",
+   "periode": "projet 2026",
+   "auteur": "Direction générale",
+   "version": "1",
+   "perimetre": "entreprise",
+   "lue": true
+  },
+  {
+   "code": "pse",
+   "fichier": "projet-pse.pdf",
+   "date": "2026-03-09",
+   "periode": "2026-2027",
+   "auteur": "Direction générale",
+   "version": "3",
+   "perimetre": "entreprise",
+   "lue": false
+  }
+ ],
+ "postesSupprimes": [
+  {
+   "intitule": "Opérateur 5 axes",
+   "avant": 38,
+   "apres": 18
+  }
+ ],
+ "precaires": [
+  {
+   "emploi": "Opérateur 5 axes",
+   "type": "intérim"
+  }
+ ],
+ "trimestres": [
+  {
+   "libelle": "T2-25",
+   "n": 9240,
+   "n1": 10180,
+   "perimetre": "secteur"
+  }
+ ],
+ "resultatExploitation": [
+  {
+   "annee": 2025,
+   "valeur": 2100
+  }
+ ],
+ "tresorerie": [
+  {
+   "annee": 2025,
+   "valeur": 4300
+  }
+ ],
+ "menace": "Mise en concurrence du programme A, objectif de prix inférieur de 17 %, lettre du 12 janvier 2026",
+ "postesDisponibles": [
+  {
+   "societe": "PRÉCISION ATLANTIQUE",
+   "intitule": "Régleur"
+  }
+ ],
+ "offresFaites": [
+  {
+   "intitule": "Régleur",
+   "descriptif": "conduite de centre d'usinage",
+   "employeur": "PRÉCISION ATLANTIQUE",
+   "contrat": "CDI",
+   "lieu": "Nantes",
+   "remuneration": "31 200 €",
+   "classification": "N3",
+   "dateCertaine": true,
+   "salarie": "S1",
+   "delaiReponse": "15 jours"
+  }
+ ],
+ "formationProposee": [
+  {
+   "contenu": "adaptation 5 axes",
+   "duree": "120 h",
+   "reponse": "refus"
+  }
+ ],
+ "dateInfoCSE": "2026-03-09",
+ "datesReunionsCSE": [
+  "2026-03-23",
+  "2026-04-14"
+ ],
+ "dateAvisCSE": "2026-04-14",
+ "dateNotifAdmin": "2026-03-24",
+ "pse": {
+  "voie": "unilateral",
+  "evitement": "réduction de l'intérim, départs volontaires",
+  "reclassementInterne": "11 postes recensés",
+  "formation": "jusqu'à 350 heures",
+  "creation": "aide de 12 000 €",
+  "suivi": "commission paritaire",
+  "dateDecisionAdmin": "2026-06-20",
+  "suffrages": 62
+ },
+ "salariesProteges": [
+  {
+   "nom": "M. R.",
+   "mandat": "membre du CSE",
+   "autorisation": "2026-06-05"
+  }
+ ],
+ "salariesSuspendus": [],
+ "coEmploi": false,
+ "categories": [
+  {
+   "nom": "Opérateur 5 axes",
+   "suppressions": 20,
+   "salaries": [
+    {
+     "nom": "S1",
+     "charges": 0,
+     "anciennetePoints": 1,
+     "social": 0,
+     "qualites": 2
+    }
+   ]
+  }
+ ],
+ "salaries": [
+  {
+   "nom": "S1",
+   "anciennete": 9,
+   "ancienneteMois": 108,
+   "moyenne12": 2600,
+   "tiers3": 2550
+  }
+ ],
+ "etablissementsDistincts": 1,
+ "cseExistant": true,
+ "expertise": false,
+ "consequencesSSCT": "Réorganisation des rotations sur les lignes 1 et 3, sans augmentation de cadence ; mise à jour du document unique avant le 30 juin 2026",
+ "perimetreOrdre": "entreprise",
+ "effectifEtablissement": 320,
+ "usagesEtEngagements": "Prime d'ancienneté versée depuis 2011 sans base conventionnelle",
+ "contentieuxEnCours": "aucun"
+}
