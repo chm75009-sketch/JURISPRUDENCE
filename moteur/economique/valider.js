@@ -20,12 +20,12 @@ const estNombreFini = x => typeof x === "number" && Number.isFinite(x);
 const ATTENDU = {
   dateAudit: "date", dateEntretien: "date", dateNotification: "date",
   dateInfoCSE: "date", dateAvisCSE: "date ou « avis non rendu »",
-  dateNotifAdmin: "date", dateDernieresElections: "date",
+  dateNotifAdmin: "date",
   effectif: "entier positif", effectifEtablissement: "entier positif",
   effectifGroupe: "entier positif", nbLicenciements: "entier positif",
   licenciementsRecents30j: "entier positif", refusModification: "entier positif",
   licenciements3moisGlissants: "entier positif", etablissementsDistincts: "entier positif",
-  masseSalariale: "nombre", idcc: "quatre chiffres", siren: "neuf chiffres",
+  idcc: "quatre chiffres", siren: "neuf chiffres",
   cause: "1, 2, 3 ou 4",
 };
 
@@ -35,7 +35,7 @@ function valider(f) {
   const a = (champ) => Object.prototype.hasOwnProperty.call(f, champ) && f[champ] !== null && f[champ] !== "";
 
   for (const champ of ["dateAudit", "dateEntretien", "dateNotification", "dateInfoCSE",
-                       "dateNotifAdmin", "dateDernieresElections"])
+                       "dateNotifAdmin"])
     if (a(champ) && !estDateISO(f[champ]))
       dit(champ, f[champ], "date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ");
 
@@ -49,9 +49,6 @@ function valider(f) {
       dit(champ, f[champ], typeof f[champ] === "number"
         ? (f[champ] < 0 ? "valeur négative" : "valeur décimale, alors qu'il s'agit d'un dénombrement")
         : "valeur non numérique");
-
-  if (a("masseSalariale") && !estNombreFini(f.masseSalariale))
-    dit("masseSalariale", f.masseSalariale, "valeur non numérique");
 
   if (a("idcc") && !/^\d{4}$/.test(String(f.idcc)))
     dit("idcc", f.idcc, "un identifiant de convention collective compte quatre chiffres");

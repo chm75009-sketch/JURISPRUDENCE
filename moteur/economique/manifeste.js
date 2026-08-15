@@ -25,6 +25,9 @@ function construire(){
       conformite:controles.length-detection.length,
       detection:detection.length,
       coherence:coherence.length,
+      /* couverture réelle : ce que le corpus de fiches n'a jamais exécuté */
+      reglesJamaisDeclenchees:(()=>{try{return require("./sonde.js")
+        .reglesJamaisDeclenchees(require("./grille.js")).length}catch(e){return null}})(),
       testes:testes.size,
       casDeTest:tests?tests.total:0,
       echecs:tests?tests.echecs:null,

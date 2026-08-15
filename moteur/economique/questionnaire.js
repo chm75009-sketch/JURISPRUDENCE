@@ -237,7 +237,13 @@ function construire(){
     contrôle à sortir « donnée manquante » sans que personne puisse y remédier. */
  const fsx=require("fs");
  const srcCtl=fsx.readFileSync(__dirname+"/controles.js","utf8")+fsx.readFileSync(__dirname+"/controles2.js","utf8");
- const lus=[...new Set([...srcCtl.matchAll(/\bf\.([a-zA-Z_][a-zA-Z0-9_]*)/g)].map(m=>m[1]))];
+ /* Deux mesures, réunies. L'inspection du code voit les branches que
+    l'exécution n'atteint pas ; la sonde voit les notations que l'expression
+    régulière ne reconnaît pas — f["nom"] et const {nom} = f. Aucune des deux
+    ne suffit seule, et c'est leur union qui fait la garantie. */
+ const parRegex=[...new Set([...srcCtl.matchAll(/\bf\.([a-zA-Z_][a-zA-Z0-9_]*)/g)].map(m=>m[1]))];
+ const parSonde=[...new Set(Object.values(require("./sonde.js").champsLus(require("./controles.js").C)).flat())];
+ const lus=[...new Set([...parRegex,...parSonde])];
  const demandes=new Set(CHAMPS.flatMap(([,l])=>l.map(x=>x[0])));
  /* « veille » est renseigné par l'application elle-même, non par l'employeur. */
  const INTERNES=new Set(["veille"]);
@@ -249,6 +255,9 @@ function construire(){
    &&!composes.has(c)&&!COMPOSES_LISTE.has(c));
  h2("Contrôle de non-divergence");
  tab(["Vérification","Résultat"],[
+  ["Champs vus par inspection du code",String(parRegex.length)],
+  ["Champs vus par la sonde d'exécution",String(parSonde.length)],
+  ["Champs que seule la sonde a vus",parSonde.filter(c=>!parRegex.includes(c)).join(", ")||"aucun"],
   ["Champs lus par un contrôle et jamais demandés",jamaisDemandes.join(", ")||"aucun"],
   ["Champs demandés qu'aucun contrôle ne lit",[...demandes].filter(c=>!lus.includes(c)&&!composes.has(c)
     &&![...demandes].some(x=>x.startsWith(c+"."))).join(", ")||"aucun"],
