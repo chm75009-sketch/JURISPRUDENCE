@@ -16,12 +16,26 @@
      comme de contenu. Il a besoin du réseau : il n'est donc pas dans la chaîne
      de tests, qui doit rester exécutable hors connexion.
 
-   Usage : node verifier-textes.js [AAAA-MM-JJ]   */
+   Réserve sur le relais, mesurée et non supposée. Interrogé trois cent
+   soixante-huit fois d'affilée, il rend des 502 — et, plus insidieux, il rend
+   parfois un article homonyme d'une autre partie du code : R. 2312-9 est tantôt
+   le tableau de la base de données économiques et sociales, 31 803 caractères,
+   tantôt un renvoi de 53 caractères à l'article R. 2112-8. Une seule lecture ne
+   prouve donc rien, ni dans un sens ni dans l'autre. La règle appliquée ici :
+   une divergence est reprise jusqu'à quatre fois ; si la version du dépôt
+   reparaît ne serait-ce qu'une fois, il n'y a pas d'écart ; l'écart n'est
+   déclaré que si toutes les lectures divergent et s'accordent sur la même
+   version. Les divergences non confirmées sont comptées à part, parce que les
+   taire masquerait que la source n'est pas fiable sous charge.
+
+   Usage : node verifier-textes.js [AAAA-MM-JJ] [article…]
+   Sans article, les 368 sont relus ; avec, seuls ceux-là.   */
 const fs = require("fs");
 const T = JSON.parse(fs.readFileSync(__dirname + "/textes_cse.json", "utf8"));
 const RELAIS = "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance";
 const CODE = "LEGITEXT000006072050";
-const DATE = process.argv[2] || "2026-08-15";
+const DATE = /^\d{4}-\d{2}-\d{2}$/.test(process.argv[2] || "") ? process.argv[2] : "2026-08-15";
+const CIBLES = process.argv.slice(2).filter(x => /^[LRD]\d/.test(x));
 
 const net = s => String(s || "").replace(/\s+/g, " ").trim();
 function extraire(o, out) {
@@ -45,14 +59,8 @@ async function lireUneFois(numero) {
   return l.find(x => x.num.replace(/[.\s]/g, "") === attendu.replace(/[.\s]/g, "")) || l[0] || null;
 }
 
-/* Le relais fatigue sous trois cent soixante-huit requêtes d'affilée : il rend
-   des 502, et — plus insidieux — il lui arrive de rendre une autre version que
-   celle demandée. La première exécution a ainsi signalé dix écarts dont aucun
-   n'était réel : réinterrogés un par un, les dix articles rendaient exactement
-   la version du dépôt. Un contrôle qui crie au loup une fois sur trente-sept
-   ne sert à rien. Un écart n'est donc déclaré qu'après confirmation par une
-   seconde lecture espacée, et l'attente entre deux articles laisse au relais
-   le temps de respirer. */
+/* Une lecture, c'est jusqu'à trois tentatives : le relais rend des 502 sous
+   charge, et un échec de transport n'est pas un écart de texte. */
 async function lire(numero, essais = 3) {
   let dernier = null;
   for (let i = 0; i < essais; i++) {
@@ -64,7 +72,8 @@ async function lire(numero, essais = 3) {
 }
 
 (async () => {
-  const cites = Object.keys(T).filter(k => T[k] && T[k].texte);
+  const cites = Object.keys(T).filter(k => T[k] && T[k].texte)
+    .filter(k => !CIBLES.length || CIBLES.includes(k));
   const vides = Object.keys(T).filter(k => !T[k] || !T[k].texte);
   console.log(`${cites.length} articles lus dans le dépôt · ${vides.length} demandés sans réponse · version au ${DATE}`);
   const ecarts = [], confirmes = [];
@@ -73,19 +82,31 @@ async function lire(numero, essais = 3) {
     try { a = await lire(num); }
     catch (e) { ecarts.push({ num, quoi: "relais", detail: e.message }); continue; }
     if (!a) { ecarts.push({ num, quoi: "absent", detail: "aucun article rendu par le relais" }); continue; }
-    if (a.id !== T[num].id || net(a.texte) !== net(T[num].texte)) {
-      /* Confirmation : une seule lecture divergente ne suffit pas à conclure. */
-      await pause(2500);
-      let b = null;
-      try { b = await lire(num); } catch (e) { /* la confirmation a échoué */ }
-      if (!b || b.id === T[num].id && net(b.texte) === net(T[num].texte)) {
-        confirmes.push(num); process.stdout.write("?"); continue;
+    const concorde = x => x && x.id === T[num].id && net(x.texte) === net(T[num].texte);
+    if (!concorde(a)) {
+      /* Une lecture divergente ne prouve rien : on reprend jusqu'à quatre fois.
+         Si la version du dépôt reparaît une seule fois, il n'y a pas d'écart. */
+      const vues = [a];
+      let reparue = false;
+      for (let i = 0; i < 4 && !reparue; i++) {
+        await pause(2500);
+        let b = null;
+        try { b = await lire(num); } catch (e) { continue; }
+        vues.push(b);
+        if (concorde(b)) reparue = true;
       }
-      if (b.id !== T[num].id)
-        ecarts.push({ num, quoi: "version", detail: `dépôt ${T[num].id} · source ${b.id}` });
-      else
-        ecarts.push({ num, quoi: "contenu",
-          detail: `même version, texte différent (${net(T[num].texte).length} caractères au dépôt, ${net(b.texte).length} à la source)` });
+      if (reparue) { confirmes.push(num); process.stdout.write("?"); continue; }
+      const ids = [...new Set(vues.filter(Boolean).map(x => x.id))];
+      if (ids.length !== 1) {
+        /* La source ne s'accorde pas avec elle-même : rien ne peut être conclu. */
+        confirmes.push(`${num} (source instable : ${ids.join(", ")})`);
+        process.stdout.write("?"); continue;
+      }
+      const b = vues.filter(Boolean).pop();
+      ecarts.push(b.id !== T[num].id
+        ? { num, quoi: "version", detail: `dépôt ${T[num].id} · source ${b.id}, ${vues.length} lectures concordantes` }
+        : { num, quoi: "contenu",
+            detail: `même version, texte différent (${net(T[num].texte).length} caractères au dépôt, ${net(b.texte).length} à la source)` });
       process.stdout.write("!");
       continue;
     }
@@ -94,7 +115,7 @@ async function lire(numero, essais = 3) {
   }
   console.log();
   if (confirmes.length)
-    console.log(`${confirmes.length} lecture(s) divergente(s) non confirmée(s) à la seconde interrogation — le relais avait rendu autre chose que ce qu'il rend : ${confirmes.join(", ")}`);
+    console.log(`${confirmes.length} lecture(s) divergente(s) que les interrogations suivantes n'ont pas confirmée(s) — le relais avait rendu autre chose que ce qu'il rend : ${confirmes.join(", ")}`);
   if (!ecarts.length) { console.log(`aucun écart : les ${cites.length} articles du dépôt sont ceux de la source.`); return; }
   for (const e of ecarts) console.log(`ÉCART ${e.quoi} · ${e.num} — ${e.detail}`);
   console.log(`${ecarts.length} écart(s). Reprendre la moisson (textes_cse.py) avant toute diffusion.`);

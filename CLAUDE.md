@@ -44,6 +44,28 @@ Le relais ne sert que le code du travail : l'identifiant du code de commerce
 essayé (`LEGITEXT000005634379`) renvoie des articles d'autres codes. Ne pas citer
 d'article du code de commerce sans l'avoir vérifié autrement.
 
+### Le relais n'est pas fiable sous charge — mesuré le 15 août 2026
+
+Interrogé 368 fois d'affilée, il rend des 502, et — plus insidieux — il rend
+parfois **un article homonyme d'une autre partie du code**. `R2312-9` a ainsi été
+rendu tantôt comme le tableau de la base de données économiques et sociales
+(31 803 caractères), tantôt comme un renvoi de 53 caractères à l'article
+R. 2112-8. Une première passe a signalé dix écarts de version : réinterrogés au
+calme, les dix articles rendaient exactement la version du dépôt.
+
+Conséquence pratique : **une seule lecture ne prouve rien**, ni la concordance ni
+l'écart. Relire deux ou trois fois, espacer les requêtes, et ne conclure que sur
+des lectures concordantes. `moteur/cse/verifier-textes.js` applique cette règle.
+
+### Toujours noter l'identifiant de version, pas seulement le numéro
+
+Un article peut être modifié sans changer de numéro. `LEGIARTI…` dit laquelle des
+versions successives a été lue ; le numéro ne le dit pas. Un contre-audit externe
+a reproché au dépôt d'avoir tronqué `L2314-33` : il lisait la version
+`LEGIARTI000036761951`, en vigueur jusqu'en octobre 2025, quand le dépôt portait
+`LEGIARTI000052437191`, celle de la date d'audit. Sans identifiant, ce genre de
+reproche coûte quatre requêtes datées à écarter.
+
 ## Jurisprudence — API Judilibre
 
 Clé lue dans le fichier local `.jk` du répertoire de travail, jamais écrite dans
