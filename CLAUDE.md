@@ -1,5 +1,12 @@
 # Consignes de travail
 
+## Réponses — règle générale
+
+**Répondre court.** Le résultat, pas la démarche. Pas de détail sur la méthode,
+les vérifications ou les corrections tant que l'utilisateur ne le demande pas.
+S'il pose une question fermée, répondre par oui ou non, puis se taire.
+Le détail est disponible sur demande — il n'est jamais fourni d'office.
+
 ## Documents Word — règle impérative
 
 **Générer tous les .docx avec `python-docx`, jamais avec la bibliothèque JavaScript `docx`.**
