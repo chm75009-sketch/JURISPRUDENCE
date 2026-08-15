@@ -133,6 +133,11 @@
 
   footer{margin-top:34px;font-size:12.5px;color:var(--muted);text-align:center}
   .cache{display:none !important}
+  /* Le lien vers l'audit : même gabarit que les boutons de la barre d'état,
+     pour qu'il se lise comme une seconde entrée et non comme un ornement. */
+  .lien-audit{display:inline-block;padding:4px 10px;border:1px solid currentColor;
+    border-radius:3px;text-decoration:none;font-weight:600;font-size:inherit}
+  .lien-audit:hover{filter:brightness(1.15)}
 </style>
 </head>
 <body>
@@ -145,6 +150,7 @@
       <button id="btn-cle" type="button">Changer la clé</button>
       <span id="etat-hote"></span>
       <button id="btn-adresse" type="button" title="Copier l'adresse de l'application">Copier l'adresse</button>
+      <a href="audit.html" class="lien-audit" title="Auditer un projet de licenciement pour motif économique">Audit du licenciement économique</a>
       <span id="etat-version"></span>
     </div>
   </div>

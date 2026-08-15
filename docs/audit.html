@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Audit — licenciement pour motif économique</title>
+<!-- Tout se passe dans le navigateur : le moteur est chargé comme un script
+     ordinaire, aucune donnée saisie ne quitte le poste. Il n'y a ni serveur
+     d'application, ni compte, ni envoi. -->
+<style>
+  :root{
+    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
+    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
+    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papier);color:var(--corps);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .page{max-width:1000px;margin:0 auto;padding:0 20px 80px}
+  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
+  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
+  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
+  .chapo{color:var(--gris);max-width:64ch;margin:0}
+  header a{color:var(--bleu)}
+  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
+  h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:22px 0 8px}
+  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:70ch}
+
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 22px}
+  label{display:block;font-size:14px}
+  label .nom{display:block;color:var(--encre);margin-bottom:4px}
+  label .cle{color:var(--gris);font:500 12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
+    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
+  textarea{min-height:74px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
+  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px 20px;margin:0 0 16px}
+  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
+
+  .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
+    padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
+  button.second{background:var(--surface);color:var(--bleu)}
+  button:hover{filter:brightness(1.1)}
+  .compteur{color:var(--gris);font-size:14px;margin-left:auto}
+
+  /* --- restitution --- */
+  #sortie{margin-top:30px}
+  .bandeau{padding:18px 20px;color:#fff;margin:0 0 18px;border-radius:3px}
+  .bandeau .r{font:700 26px/1.15 system-ui;letter-spacing:.4px;margin:0 0 6px}
+  .bandeau .s{margin:0;font-size:15px}
+  .b-rouge{background:var(--rouge)} .b-orange{background:var(--orange)}
+  .b-vert{background:var(--vert)} .b-gris{background:var(--ardoise)}
+  .etape{margin:22px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
+    color:var(--bleu);font:600 15px/1.3 system-ui;display:flex;justify-content:space-between;gap:12px}
+  .etape span{font-weight:400;font-size:13px;color:var(--gris)}
+  .acte{border-left:4px solid var(--bleu);background:var(--surface);padding:10px 14px;margin:0 0 7px}
+  .acte .t{font-weight:600;color:var(--encre)}
+  .acte .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
+  .chip{font:600 11px/1 system-ui;color:#fff;padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
+  .c-bloquant{background:var(--rouge)}.c-critique{background:var(--orange)}
+  .c-important{background:var(--bleu)}.c-information{background:#767676}
+  .a-bloquant{border-left-color:var(--rouge);background:var(--rouge-f)}
+  .a-critique{border-left-color:var(--orange);background:var(--orange-f)}
+  .a-information{border-left-color:#767676;background:var(--gris-f)}
+  .interdit{border:1px solid var(--rouge);background:var(--rouge-f);padding:12px 14px;margin:0 0 8px;border-radius:3px}
+  .interdit .t{font-weight:700;color:var(--rouge)}
+  .interdit .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
+  .i-reserve{border-color:var(--orange);background:var(--orange-f)} .i-reserve .t{color:var(--orange)}
+  .i-examen{border-color:#9aa0a8;background:var(--gris-f)} .i-examen .t{color:#4a4a4a}
+  .acquis{margin:0 0 4px;padding-left:20px;text-indent:-20px;font-size:15px}
+  .acquis b{color:var(--vert)}
+  .enc{border:1px solid var(--bleu);background:#f4f6fb;padding:12px 14px;margin:14px 0;border-radius:3px}
+  .enc .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
+  .tab{overflow-x:auto;margin:12px 0}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
+  th,td{border:1px solid var(--filet);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--bleu);color:#fff;font-weight:600}
+  .note{color:var(--gris);font-size:13.5px}
+  .puce{margin:0 0 4px 18px;text-indent:-18px}
+  hr{border:none;border-top:1px solid var(--filet);margin:18px 0}
+  .erreur{border:1px solid var(--rouge);background:var(--rouge-f);color:var(--rouge);
+    padding:12px 14px;border-radius:3px;font-weight:600}
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
+  @media print{ .barre,form,header a,footer{display:none} .page{padding:0} }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <p class="fil">Application Jurisprudence</p>
+  <h1>Audit — licenciement pour motif économique</h1>
+  <p class="chapo">Renseignez ce que vous savez, laissez le reste vide. L'audit se calcule dans
+  votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
+  <a href="./">Retour à la recherche de jurisprudence</a></p>
+</header>
+
+<div class="enc" style="margin-top:22px">
+  <p class="sh">Une donnée non renseignée ne produit jamais « conforme »</p>
+  <p style="margin:0">Elle produit « donnée manquante », et le rapport le dit. Une déclaration que
+  ne justifie aucune pièce ne produit pas « conforme » non plus : elle produit « risque à
+  vérifier ». C'est la seule façon d'obtenir un résultat qui ne mente pas. Le résultat est établi
+  sur la seule loi tant que votre convention collective et vos accords d'entreprise ne sont pas
+  joints — la réserve correspondante figure alors dans le rapport.</p>
+</div>
+
+<form id="formulaire" autocomplete="off"></form>
+
+<div class="barre">
+  <button type="button" id="lancer">Lancer l'audit</button>
+  <button type="button" class="second" id="exemple">Charger un dossier d'exemple</button>
+  <button type="button" class="second" id="vider">Tout effacer</button>
+  <button type="button" class="second" id="imprimer">Imprimer le résultat</button>
+  <span class="compteur" id="compteur"></span>
+</div>
+
+<div id="sortie"></div>
+
+<footer id="pied"></footer>
+</div>
+
+<script src="moteur-eco.js"></script>
+<script>
+(function () {
+  "use strict";
+  var M = window.MoteurEco;
+  var form = document.getElementById("formulaire");
+  var sortie = document.getElementById("sortie");
+  var CLE = "audit-eco-brouillon";
+
+  /* --- le formulaire est engendré par les champs du questionnaire, non ressaisi --- */
+  function typeDe(format) {
+    var f = String(format || "").toLowerCase();
+    if (f.indexOf("oui") === 0) return "oui-non";
+    if (f.indexOf("aaaa-mm-jj") >= 0) return "date";
+    if (f === "nombre" || f === "euros" || f.indexOf("chiffres") >= 0) return "nombre";
+    if (f.indexOf("liste") >= 0 || f.indexOf("objet") >= 0 || f.indexOf("tableau") >= 0) return "json";
+    if (f === "1 à 4") return "cause";
+    return "texte";
+  }
+  var CAUSES = ["", "1 — difficultés économiques", "2 — mutations technologiques",
+    "3 — sauvegarde de la compétitivité", "4 — cessation d'activité"];
+
+  M.champs.forEach(function (rub) {
+    var fs = document.createElement("fieldset");
+    var lg = document.createElement("legend"); lg.textContent = rub[0]; fs.appendChild(lg);
+    var g = document.createElement("div"); g.className = "grille";
+    rub[1].forEach(function (ch) {
+      var cle = ch[0], libelle = ch[1], format = ch[2], t = typeDe(format);
+      var lab = document.createElement("label");
+      lab.innerHTML = '<span class="nom">' + libelle +
+        ' <span class="cle">' + cle + '</span></span>';
+      var e;
+      if (t === "oui-non" || t === "cause") {
+        e = document.createElement("select");
+        (t === "cause" ? CAUSES : ["", "oui", "non"]).forEach(function (v, i) {
+          var o = document.createElement("option");
+          o.value = t === "cause" ? (i ? String(i) : "") : v;
+          o.textContent = v || "— non renseigné —";
+          e.appendChild(o);
+        });
+      } else if (t === "json") {
+        e = document.createElement("textarea");
+        e.placeholder = format + " — au format JSON, par exemple [] ou [{…}]";
+      } else {
+        e = document.createElement("input");
+        e.type = t === "date" ? "date" : (t === "nombre" ? "number" : "text");
+        if (t === "nombre") e.step = "any";
+        e.placeholder = format;
+      }
+      e.name = cle; e.id = "c-" + cle;
+      lab.appendChild(e); g.appendChild(lab);
+    });
+    fs.appendChild(g); form.appendChild(fs);
+  });
+
+  /* --- la fiche : ce que l'utilisateur a écrit, converti sans être deviné --- */
+  function fiche() {
+    var f = {}, mauvais = [];
+    M.champs.forEach(function (rub) {
+      rub[1].forEach(function (ch) {
+        var cle = ch[0], t = typeDe(ch[2]);
+        var e = document.getElementById("c-" + cle);
+        var v = e ? e.value.trim() : "";
+        if (v === "") return;                       /* champ vide = silence, non néant */
+        if (t === "oui-non") { poser(f, cle, v === "oui"); return; }
+        if (t === "nombre") {
+          var n = Number(v.replace(/\s/g, "").replace(",", "."));
+          poser(f, cle, isNaN(n) ? v : (/chiffres/.test(ch[2]) ? v : n));
+          return;
+        }
+        if (t === "json") {
+          try { poser(f, cle, JSON.parse(v)); }
+          catch (err) { mauvais.push(cle); }
+          return;
+        }
+        poser(f, cle, v);
+      });
+    });
+    return { f: f, mauvais: mauvais };
+  }
+  /* « pse.voie » désigne un sous-champ : la fiche le reconstitue en objet. */
+  function poser(o, cle, val) {
+    var p = cle.split(".");
+    if (p.length === 1) { o[cle] = val; return; }
+    o[p[0]] = o[p[0]] || {};
+    o[p[0]][p[1]] = val;
+  }
+
+  /* --- restitution : le même vocabulaire d'éléments que le PDF --- */
+  var ech = function (s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  };
+  var REND = {
+    sur: function (i) { return '<p class="note">' + ech(i.t) + "</p>"; },
+    t1: function (i) { return "<h2>" + ech(i.t) + "</h2>"; },
+    trait: function () { return "<hr>"; },
+    h1: function (i) { return "<h2>" + ech(i.t) + "</h2>"; },
+    h2: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
+    h3: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
+    p: function (i) { return "<p>" + ech(i.t) + "</p>"; },
+    note: function (i) { return '<p class="note">' + ech(i.t) + "</p>"; },
+    puce: function (i) { return '<p class="puce">— ' + ech(i.t) + "</p>"; },
+    saut: function () { return ""; },
+    enc: function (i) {
+      return '<div class="enc"><p class="sh">' + ech(i.titre) + '</p><p style="margin:0">' + ech(i.t) + "</p></div>";
+    },
+    bandeau: function (i) {
+      return '<div class="bandeau b-' + ech(i.couleur) + '"><p class="r">' + ech(i.t) +
+        '</p><p class="s">' + ech(i.sous) + "</p></div>";
+    },
+    etape: function (i) {
+      return '<p class="etape">' + ech(i.t) + "<span>" + ech(i.compte || "") + "</span></p>";
+    },
+    acte: function (i) {
+      return '<div class="acte a-' + ech(i.priorite) + '"><p class="t">' + ech(i.n) + ". " + ech(i.t) +
+        '<span class="chip c-' + ech(i.priorite) + '">' + ech(i.priorite) + '</span></p><p class="w">' +
+        (i.etat ? "<b>" + ech(i.etat) + "</b> — " : "") + ech(i.pourquoi) + " · " + ech(i.id) + "</p></div>";
+    },
+    interdit: function (i) {
+      return '<div class="interdit i-' + ech(i.ton || "certain") + '"><p class="t">' + ech(i.t) +
+        '</p><p class="w">' + ech(i.pourquoi) + " · " + ech(i.id) + "</p></div>";
+    },
+    acquis: function (i) {
+      return '<p class="acquis"><b>&#10003;</b> ' + ech(i.t) +
+        ' <span class="note">— ' + ech(i.base) + "</span></p>";
+    },
+    table: function (i) {
+      return '<div class="tab"><table><tr>' + i.head.map(function (h) { return "<th>" + ech(h) + "</th>"; }).join("") +
+        "</tr>" + i.rows.map(function (r) {
+          return "<tr>" + r.map(function (c) { return "<td>" + ech(c) + "</td>"; }).join("") + "</tr>";
+        }).join("") + "</table></div>";
+    },
+  };
+
+  function lancer() {
+    var r = fiche();
+    if (r.mauvais.length) {
+      sortie.innerHTML = '<div class="erreur">Ces champs attendent du JSON et n\'ont pas pu être lus : ' +
+        ech(r.mauvais.join(", ")) + ". Corrigez-les, ou laissez-les vides.</div>";
+      sortie.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    var items;
+    try { items = M.audit(r.f); }
+    catch (e) {
+      sortie.innerHTML = '<div class="erreur">L\'audit n\'a pas pu être produit : ' + ech(e.message) +
+        ". Rien n'a été perdu — corrigez la saisie et relancez.</div>";
+      return;
+    }
+    sortie.innerHTML = items.map(function (i) {
+      return REND[i.k] ? REND[i.k](i) : "";
+    }).join("");
+    try { localStorage.setItem(CLE, JSON.stringify(r.f)); } catch (e) {}
+    sortie.scrollIntoView({ behavior: "smooth" });
+    compter();
+  }
+
+  function compter() {
+    var n = 0;
+    M.champs.forEach(function (rub) {
+      rub[1].forEach(function (ch) {
+        var e = document.getElementById("c-" + ch[0]);
+        if (e && e.value.trim() !== "") n++;
+      });
+    });
+    var total = M.champs.reduce(function (s, r) { return s + r[1].length; }, 0);
+    document.getElementById("compteur").textContent = n + " donnée(s) renseignée(s) sur " + total;
+  }
+
+  /* --- un dossier d'exemple, pour voir ce que l'outil produit --- */
+  var EXEMPLE = {
+    entreprise: "SOCIÉTÉ D'EXEMPLE SAS", siren: "123456789", dateAudit: "2026-08-15",
+    idcc: "1486", effectif: "320", effectifEtablissement: "320", groupe: "oui",
+    effectifGroupe: "602", etablissementsDistincts: "1", cause: "1", nbLicenciements: "22",
+    licenciementsRecents30j: "0", refusModification: "0", licenciements3moisGlissants: "0",
+    dateEntretien: "2026-06-02", dateNotification: "2026-06-15",
+    dateInfoCSE: "2026-03-09", dateAvisCSE: "2026-04-14", dateNotifAdmin: "2026-03-24",
+    cseExistant: "oui", expertise: "non", perimetreOrdre: "entreprise",
+    procedureCollective: "non", transfertEnvisage: "non", refusAPC: "non",
+    fermetureEtablissement: "non",
+    datesReunionsCSE: '["2026-03-23","2026-04-14"]',
+    societes: '[{"nom":"ALPHA","effectif":180,"activite":"usinage","pays":"France","etranger":false}]',
+    trimestres: '[{"libelle":"T2-25","n":9240,"n1":10180,"perimetre":"secteur"}]',
+    resultatExploitation: '[{"annee":2025,"valeur":-1870}]',
+    precaires: "[]", salariesSuspendus: "[]", usagesEtEngagements: "", contentieuxEnCours: "",
+  };
+
+  document.getElementById("lancer").addEventListener("click", lancer);
+  document.getElementById("imprimer").addEventListener("click", function () { window.print(); });
+  document.getElementById("exemple").addEventListener("click", function () {
+    Object.keys(EXEMPLE).forEach(function (k) {
+      var e = document.getElementById("c-" + k);
+      if (e) e.value = EXEMPLE[k];
+    });
+    compter();
+  });
+  document.getElementById("vider").addEventListener("click", function () {
+    form.reset(); sortie.innerHTML = ""; compter();
+    try { localStorage.removeItem(CLE); } catch (e) {}
+  });
+  form.addEventListener("input", compter);
+
+  /* Le brouillon reste sur le poste : on ne perd pas une saisie longue. */
+  try {
+    var b = JSON.parse(localStorage.getItem(CLE) || "null");
+    if (b) Object.keys(b).forEach(function (k) {
+      var e = document.getElementById("c-" + k);
+      if (!e) return;
+      var v = b[k];
+      e.value = typeof v === "boolean" ? (v ? "oui" : "non")
+        : (v && typeof v === "object" ? JSON.stringify(v) : String(v));
+    });
+  } catch (e) {}
+  compter();
+
+  var m = M.manifeste || {}, c = m.compteurs || {};
+  document.getElementById("pied").innerHTML =
+    "Moteur " + ech(m.empreinte || "—") + " · " + ech(c.regles || "—") + " règles, " +
+    ech(c.controles || "—") + " contrôles dont " + ech(c.coherence || 0) + " de cohérence et " +
+    ech(c.detection || 0) + " de détection · articles relus sur Légifrance le 15 août 2026." +
+    " Cet audit est une aide à la préparation du dossier : il ne remplace ni l'analyse d'un conseil," +
+    " ni la décision qui vous appartient.";
+})();
+</script>
+</body>
+</html>
