@@ -152,6 +152,25 @@ const R = [
    "S'arrêter à la confusion d'intérêts, d'activités et de direction : c'est la première moitié de la formule, et elle ne suffit pas.",
    "Confondre le co-emploi avec la responsabilité délictuelle de la mère, qui obéit à d'autres conditions."],
  valeur:"principe", source:"rédigée"},
+
+/* Le seuil de dix ne se lit pas sur le projet mais sur une fenêtre de temps,
+   et deux textes distincts l'étendent. La grille ne l'énonçait nulle part. */
+{id:"SEU-01", rubrique:"Socle · seuil de dix",
+ question:"Comment se compte le seuil de dix licenciements ?",
+ si:f=>typeof f.nbLicenciements==="number",
+ alors:f=>{const c=require("./moteur.js").comptes30j(f);
+   return "Le seuil de dix ne se compte pas sur le projet mais sur « une même période de trente jours » : les licenciements économiques déjà prononcés dans cette fenêtre s'y ajoutent. "
+    + c.motif + (c.motifRefus ? " " + c.motifRefus : "")
+    + " Deux extensions s'y ajoutent : à partir de dix refus de modification d'un élément essentiel du contrat, le licenciement de ces salariés relève du régime collectif (L. 1233-25) ; et lorsqu'une entreprise d'au moins cinquante salariés a prononcé plus de dix licenciements économiques sur trois mois consécutifs sans jamais atteindre dix sur trente jours, tout nouveau licenciement des trois mois suivants relève du même régime (L. 1233-26).";},
+ fondement:["L. 1233-8","L. 1233-25","L. 1233-26","L. 1233-28","L. 1233-61"],
+ juris:[],
+ pieces:["Registre des entrées et sorties sur les trois derniers mois",
+   "Lettres de proposition de modification et réponses des salariés",
+   "Notifications de licenciement économique des trois derniers mois"],
+ erreurs:["Compter le seuil sur le seul projet, en ignorant les licenciements déjà prononcés dans les trente jours.",
+   "Additionner les refus de modification aux autres licenciements : l'article L. 1233-25 exige dix refus, il ne les cumule pas.",
+   "Fractionner un projet en séries successives de moins de dix : l'article L. 1233-26 y fait échec."],
+ valeur:"principe", source:"rédigée"},
 ];
 
 /* ===================== CAUSE 1 ===================== */

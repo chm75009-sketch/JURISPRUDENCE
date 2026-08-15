@@ -9,30 +9,57 @@ const trancheEffectif = e =>
   e < 11 ? "moins de 11 salariés" : e < 50 ? "de 11 à 49 salariés"
   : e < 300 ? "de 50 à 299 salariés" : "300 salariés et plus";
 
+/* --- le décompte des trente jours ---
+   Le seuil de dix n'est pas celui du projet mais celui d'« une même période de
+   trente jours » (L. 1233-28, L. 1233-61) : les licenciements économiques déjà
+   prononcés dans cette fenêtre s'y ajoutent. Le refus de modification obéit à
+   une autre règle : l'article L. 1233-25 exige qu'au moins dix salariés aient
+   refusé — ces refus ne s'additionnent pas aux autres licenciements, ils
+   déclenchent le régime collectif par eux-mêmes. */
+function comptes30j(f) {
+  const nb = x => typeof x === "number" ? x : 0;
+  const projet = nb(f.nbLicenciements), recents = nb(f.licenciementsRecents30j);
+  const refus = nb(f.refusModification);
+  const total30j = projet + recents;
+  return { projet, recents, refus, total30j,
+    refusDeclencheur: refus >= 10,
+    /* ce qui fait franchir le seuil, dit explicitement */
+    motif: recents
+      ? `${projet} licenciement(s) envisagé(s) et ${recents} déjà prononcé(s) dans la même période de trente jours, soit ${total30j} au total.`
+      : `${projet} licenciement(s) envisagé(s) sur trente jours.`,
+    motifRefus: refus >= 10
+      ? `${refus} salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est soumis au régime du licenciement collectif (L. 1233-25), indépendamment du décompte ci-dessus.`
+      : (refus ? `${refus} refus de modification : en deçà de dix, l'article L. 1233-25 ne s'applique pas et ces refus ne s'ajoutent pas au décompte des trente jours.` : null),
+    textes: ["L. 1233-8", "L. 1233-28", "L. 1233-61", "L. 1233-25"] };
+}
+
 /* --- régime de procédure du licenciement économique --- */
 function regimeEco(f) {
-  const n = f.nbLicenciements, e = f.effectif;
+  const c = comptes30j(f), e = f.effectif;
+  /* Le seuil se lit sur la fenêtre de trente jours ; le délai d'avis, lui, se
+     lit sur le nombre de licenciements du projet consulté (L. 1233-30, II). */
+  const n = (c.total30j >= 10 || c.refusDeclencheur) ? Math.max(c.total30j, 10) : c.total30j;
   if (n <= 1) return {
     code: "INDIVIDUEL", libelle: "licenciement individuel",
     consultationCSE: false, reunions: 0, delaiAvis: null, pse: false,
-    documents: null, textes: ["L. 1233-11 à L. 1233-16"],
+    documents: null, textes: ["L. 1233-11 à L. 1233-16"], comptes: c,
     note: "L'article L. 1233-8 vise le licenciement collectif de moins de dix salariés : un licenciement isolé n'ouvre pas de consultation sur le projet." };
   if (n < 10) return {
     code: "PETIT_COLLECTIF", libelle: "licenciement collectif de moins de 10 salariés sur 30 jours",
     consultationCSE: e >= 11, reunions: 1, delaiAvis: "un mois au plus à compter de la première réunion",
     pse: false, documents: "les sept renseignements de L. 1233-10",
-    textes: ["L. 1233-8", "L. 1233-10"] };
+    textes: ["L. 1233-8", "L. 1233-10"], comptes: c };
   if (e < 50) return {
     code: "GRAND_PETITE_ENTREPRISE", libelle: "10 licenciements ou plus, entreprise de moins de 50 salariés",
     consultationCSE: true, reunions: 2, delaiAvis: "deux réunions séparées d'un délai qui ne peut être supérieur à quatorze jours",
     pse: false, documents: "les sept renseignements de L. 1233-31, plus les mesures pour éviter ou limiter les licenciements",
-    textes: ["L. 1233-28", "L. 1233-29", "L. 1233-31", "L. 1233-32"] };
+    textes: ["L. 1233-28", "L. 1233-29", "L. 1233-31", "L. 1233-32"], comptes: c };
   return {
     code: "GRAND_COLLECTIF", libelle: "10 licenciements ou plus, entreprise d'au moins 50 salariés",
     consultationCSE: true, reunions: "au moins deux, espacées d'au moins quinze jours",
-    delaiAvis: n < 100 ? "deux mois" : n < 250 ? "trois mois" : "quatre mois",
+    delaiAvis: c.projet < 100 ? "deux mois" : c.projet < 250 ? "trois mois" : "quatre mois",
     pse: true, documents: "les sept renseignements de L. 1233-31, plus le plan de sauvegarde de l'emploi",
-    textes: ["L. 1233-28", "L. 1233-30", "L. 1233-31", "L. 1233-32", "L. 1233-61", "L. 1233-57-3"] };
+    textes: ["L. 1233-28", "L. 1233-30", "L. 1233-31", "L. 1233-32", "L. 1233-61", "L. 1233-57-3"], comptes: c };
 }
 
 /* --- accompagnement --- */
@@ -133,7 +160,7 @@ function baisseTrimestrielle(f) {
     trimestresConsecutifs: meilleure, atteint: meilleure >= seuil, detail: calc };
 }
 const _EXPORT_ = { seuilTrimestres, trancheEffectif, regimeEco, accompagnement, perimetre,
-  etatTexte, calendrier, baisseTrimestrielle, ajouteJoursOuvrables, ajouteJours,
+  etatTexte, calendrier, baisseTrimestrielle, ajouteJoursOuvrables, ajouteJours, comptes30j,
   ajouteMois, delaiAvisMois };
 
 /* ================= INDEMNITÉS, PRÉAVIS, BARÈME ================= */

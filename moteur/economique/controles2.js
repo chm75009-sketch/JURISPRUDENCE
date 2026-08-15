@@ -269,4 +269,37 @@ c("CTL-ORD-02","Ordre des licenciements","Les catégories professionnelles sont-
    if (uniques.length) return { etat: RISQ, motif: `${uniques.length} catégorie(s) ne comptent qu'un salarié : ${uniques.map(c => c.nom).join(" ; ")}. Le rattachement à une catégorie plus large doit être justifié.` };
    return { etat: CONF, motif: `${f.categories.length} catégories professionnelles, toutes de plus d'un salarié.` }; });
 
+
+/* ---------------- Le décompte des trente jours ---------------- */
+c("CTL-SEU-01","Seuil de dix","Le décompte des trente jours intègre-t-il les licenciements déjà prononcés ?",
+ ["L. 1233-28","L. 1233-61"],
+ f => { if (typeof f.nbLicenciements !== "number") return { etat: MANQ, motif: "Le nombre de licenciements envisagés n'est pas renseigné." };
+   if (typeof f.licenciementsRecents30j !== "number")
+     return { etat: MANQ, motif: "Les licenciements économiques déjà prononcés dans les trente jours ne sont pas renseignés : le seuil de dix ne peut pas être vérifié sur la fenêtre légale." };
+   const cpt = M.comptes30j(f);
+   if (cpt.projet < 10 && cpt.total30j >= 10)
+     return { etat: NC, motif: `${cpt.motif} Le projet porte sur moins de dix salariés, mais la fenêtre de trente jours en compte ${cpt.total30j} : le régime du licenciement collectif d'au moins dix salariés s'applique` + (f.effectif >= 50 ? ", plan de sauvegarde de l'emploi compris." : ".") };
+   return { etat: CONF, motif: `${cpt.motif} Le décompte retenu est celui de la fenêtre de trente jours.` }; });
+
+c("CTL-SEU-02","Seuil de dix","Les refus de modification du contrat déclenchent-ils le régime collectif ?",["L. 1233-25"],
+ f => { if (typeof f.refusModification !== "number") return { etat: MANQ, motif: "Le nombre de salariés ayant refusé une modification d'un élément essentiel de leur contrat n'est pas renseigné." };
+   const cpt = M.comptes30j(f);
+   if (!cpt.refus) return { etat: SO, motif: "Aucun refus de modification déclaré." };
+   return cpt.refusDeclencheur
+     ? { etat: NC, motif: `${cpt.motifRefus} Si la procédure a été conduite comme un licenciement de moins de dix salariés, elle est irrégulière.` }
+     : { etat: CONF, motif: cpt.motifRefus };
+ });
+
+/* Anti-fractionnement : plus de dix licenciements sur trois mois consécutifs
+   sans jamais atteindre dix sur trente jours. */
+c("CTL-SEU-03","Seuil de dix","Le projet suit-il une série de licenciements étalée sur trois mois ?",["L. 1233-26"],
+ f => { if (typeof f.effectif !== "number") return { etat: MANQ, motif: "L'effectif n'est pas renseigné." };
+   if (f.effectif < 50) return { etat: SO, motif: "L'article L. 1233-26 ne vise que les entreprises employant habituellement au moins cinquante salariés." };
+   if (typeof f.licenciements3moisGlissants !== "number")
+     return { etat: MANQ, motif: "Le total des licenciements économiques des trois mois consécutifs précédents n'est pas renseigné : la règle anti-fractionnement ne peut pas être vérifiée." };
+   const cpt = M.comptes30j(f);
+   if (f.licenciements3moisGlissants > 10 && cpt.total30j < 10)
+     return { etat: NC, motif: `${f.licenciements3moisGlissants} licenciements économiques ont été prononcés sur les trois mois consécutifs précédents, sans jamais atteindre dix sur une même période de trente jours. Tout nouveau licenciement économique envisagé au cours des trois mois suivants est soumis au régime du licenciement collectif d'au moins dix salariés.` };
+   return { etat: CONF, motif: `${f.licenciements3moisGlissants} licenciement(s) sur les trois mois précédents : la règle anti-fractionnement de l'article L. 1233-26 ne trouve pas à s'appliquer.` }; });
+
 module.exports = C;

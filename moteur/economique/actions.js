@@ -58,6 +58,9 @@ const A = {
 "CTL-PCE-03": { faire: "Produire les pièces au périmètre à démontrer : secteur d'activité du groupe, et non la seule entreprise.", quand: AV_DEC },
 "CTL-PCE-04": { faire: "Faire lire et viser chaque pièce déposée : une pièce non lue ne démontre rien.", quand: AV_DEC },
 "CTL-EFF-01": { faire: "Réconcilier l'effectif de l'établissement et celui de l'entreprise, pièces à l'appui.", quand: AV_CSE },
+"CTL-SEU-01": { faire: "Reprendre la procédure au régime du licenciement collectif d'au moins dix salariés : le seuil se compte sur la fenêtre de trente jours, licenciements déjà prononcés compris.", quand: AV_CSE },
+"CTL-SEU-02": { faire: "Soumettre les licenciements consécutifs aux refus de modification au régime du licenciement collectif : dix refus au moins ont été opposés.", quand: AV_CSE },
+"CTL-SEU-03": { faire: "Soumettre tout nouveau licenciement économique des trois mois à venir au régime du licenciement collectif d'au moins dix salariés.", quand: AV_CSE },
 "CTL-REC-12": { faire: "Retirer du décompte les offres émanant de sociétés non établies sur le territoire national, et rechercher les postes disponibles en France.", quand: AV_OFF },
 "CTL-REP-01": { faire: "Engager la recherche d'un repreneur dès l'information du comité, et l'informer de son déroulement : mandat, journal des candidats, motifs d'écartement.", quand: AV_CSE },
 "CTL-FRA-01": { faire: "Faire examiner par un professionnel l'origine des difficultés : produire le résultat reconstitué hors redevances, management fees et prix de transfert.", quand: AV_DEC },
@@ -84,6 +87,9 @@ const INTERDITS = {
 "CTL-PSE-07": "Ne déposez pas l'accord : la condition de représentativité n'est pas remplie.",
 "CTL-CSE-04": "Ne notifiez aucun licenciement : le délai de consultation n'est pas expiré et le comité n'a pas rendu d'avis.",
 "CTL-REC-12": "Ne décomptez pas les offres à l'étranger : elles ne satisfont pas l'obligation de reclassement.",
+"CTL-SEU-01": "Ne conduisez pas la procédure au régime des moins de dix salariés : la fenêtre de trente jours en compte au moins dix.",
+"CTL-SEU-02": "Ne traitez pas ces licenciements isolément : dix refus de modification au moins déclenchent le régime collectif.",
+"CTL-SEU-03": "N'engagez pas un nouveau licenciement au régime allégé : la règle anti-fractionnement s'applique.",
 };
 const SUSPENS = {
 "CTL-PSE-04": "Ne notifiez aucun licenciement tant que la décision de validation ou d'homologation n'a pas été vérifiée.",
@@ -97,6 +103,9 @@ const SUSPENS = {
 "CTL-PSE-06": "Ne tenez pas la réunion tant que la remise du plan avec la convocation n'a pas été vérifiée.",
 "CTL-PSE-07": "Ne déposez pas l'accord tant que la condition de représentativité n'a pas été vérifiée.",
 "CTL-CSE-04": "Ne notifiez aucun licenciement tant que l'avis du comité ou l'expiration du délai n'a pas été vérifiée.",
+"CTL-SEU-01": "Ne fixez pas le régime tant que les licenciements déjà prononcés dans les trente jours ne sont pas renseignés.",
+"CTL-SEU-02": "Ne fixez pas le régime tant que le nombre de refus de modification n'est pas renseigné.",
+"CTL-SEU-03": "Ne fixez pas le régime tant que le total des trois mois précédents n'est pas renseigné.",
 "CTL-REC-12": "Ne décomptez pas les offres tant que le lieu d'établissement des sociétés émettrices n'a pas été vérifié.",
 };
 /* Trois registres selon ce que l'application a réellement constaté. */

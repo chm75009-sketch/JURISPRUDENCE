@@ -1,16 +1,16 @@
 {
  "objet": "manifeste des contrôles",
- "empreinte": "19ec5b0e770c",
+ "empreinte": "146415829623",
  "empreintesFichiers": {
-  "moteur.js": "4b8365853040",
+  "moteur.js": "ff1790b03245",
   "controles.js": "ab0fdab86e3d",
-  "controles2.js": "123f5eccd6de",
-  "grille-eco.js": "00f6b087193c",
+  "controles2.js": "00a4940d1ae8",
+  "grille-eco.js": "35d6383e43ea",
   "grille-auto.js": "20ca038f05b7",
   "pieces.js": "95ed7ab57ced",
   "preuve.js": "ba61fe6fc07a"
  },
- "genere": "2026-08-15 20:11:01",
+ "genere": "2026-08-15 20:24:00",
  "verification": {
   "identifiantsUniques": true,
   "conformiteSansTest": [],
@@ -20,13 +20,13 @@
   "coherenceTestes": true
  },
  "compteurs": {
-  "controles": 52,
-  "conformite": 45,
+  "controles": 55,
+  "conformite": 48,
   "detection": 7,
-  "testes": 45,
-  "casDeTest": 49,
+  "testes": 48,
+  "casDeTest": 52,
   "echecs": 0,
-  "regles": 233
+  "regles": 234
  },
  "definitions": [
   [
@@ -1153,6 +1153,71 @@
    "fondement": "L. 1233-5",
    "tests": [
     "catégorie professionnelle d'un seul salarié protégé"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-SEU-01",
+   "rubrique": "Seuil de dix",
+   "objet": "Le décompte des trente jours intègre-t-il les licenciements déjà prononcés ?",
+   "type": "conformité",
+   "entrees": [
+    "nbLicenciements",
+    "licenciementsRecents30j",
+    "effectif"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-28 · L. 1233-61",
+   "tests": [
+    "neuf licenciements et un déjà prononcé dans les trente jours"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-SEU-02",
+   "rubrique": "Seuil de dix",
+   "objet": "Les refus de modification du contrat déclenchent-ils le régime collectif ?",
+   "type": "conformité",
+   "entrees": [
+    "refusModification"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-25",
+   "tests": [
+    "dix refus de modification traités isolément"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-SEU-03",
+   "rubrique": "Seuil de dix",
+   "objet": "Le projet suit-il une série de licenciements étalée sur trois mois ?",
+   "type": "conformité",
+   "entrees": [
+    "effectif",
+    "licenciements3moisGlissants"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-26",
+   "tests": [
+    "série étalée sur trois mois pour rester sous le seuil"
    ],
    "teste": true
   }

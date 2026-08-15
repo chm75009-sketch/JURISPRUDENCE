@@ -414,5 +414,6 @@
   }
  ],
  "fermetureEtablissement": true,
- "rechercheRepreneur": ""
+ "rechercheRepreneur": "",
+ "licenciements3moisGlissants": 0
 }

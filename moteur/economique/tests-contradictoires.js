@@ -6,6 +6,7 @@ const BASE={entreprise:"T",effectif:320,effectifGroupe:602,groupe:true,cause:"1"
  nbLicenciements:22,dateNotification:"2026-06-15",dateEntretien:"2026-06-02",
  dateInfoCSE:"2026-03-09",datesReunionsCSE:["2026-03-23","2026-04-14"],dateAvisCSE:"2026-04-14",
  dateNotifAdmin:"2026-03-24",etablissementsDistincts:1,cseExistant:true,expertise:false,
+ licenciementsRecents30j:0,refusModification:0,licenciements3moisGlissants:0,
  consequencesSSCT:"réorganisation des rotations",perimetreOrdre:"entreprise",
  effectifEtablissement:320,idcc:"1486",conventionJointe:true,accordsJoints:true,
  societes:[{nom:"A"},{nom:"B"}],
@@ -32,6 +33,12 @@ const BASE={entreprise:"T",effectif:320,effectifGroupe:602,groupe:true,cause:"1"
   reclassementInterne:"11 postes",formation:"350 heures",creation:"12 000 €",
   suivi:"commission tous les 2 mois",dateDecisionAdmin:"2026-06-10"}};
 const CAS=[
+ ["neuf licenciements et un déjà prononcé dans les trente jours","CTL-SEU-01","non conforme",
+  f=>{f.nbLicenciements=9; f.licenciementsRecents30j=1;}],
+ ["dix refus de modification traités isolément","CTL-SEU-02","non conforme",
+  f=>{f.refusModification=11;}],
+ ["série étalée sur trois mois pour rester sous le seuil","CTL-SEU-03","non conforme",
+  f=>{f.nbLicenciements=4; f.licenciementsRecents30j=0; f.licenciements3moisGlissants=13;}],
  ["offre de reclassement émanant d'une société étrangère","CTL-REC-12","non conforme",
   f=>{f.societes=[{nom:"A"},{nom:"B",etranger:true}];}],
  ["fermeture d'un établissement sans recherche de repreneur","CTL-REP-01","non conforme",

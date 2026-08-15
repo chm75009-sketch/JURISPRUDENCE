@@ -7,7 +7,7 @@ const GRAVITE = {
  /* la loi interdit de notifier tant que le point n'est pas réglé */
  "CTL-PSE-04":B, "CTL-PRT-01":B, "CTL-CSE-05":B, "CTL-REC-08":B, "CTL-CSE-01":B,
  "CTL-CSE-08":B, "CTL-CSE-07":B, "CTL-PSE-07":B, "CTL-CSE-02":B, "CTL-PSE-06":B,
- "CTL-CSE-04":B, "CTL-REC-12":B,
+ "CTL-CSE-04":B, "CTL-REC-12":B, "CTL-SEU-01":B, "CTL-SEU-02":B, "CTL-SEU-03":B,
  /* l'écart fragilise la cause ou la procédure sans l'interdire */
  "CTL-REC-07":CR, "CTL-REC-03":CR, "CTL-REC-06":CR, "CTL-REC-10":CR, "CTL-EMP-02":CR,
  "CTL-PCE-02":CR, "CTL-EFF-01":CR, "CTL-ECO-01":CR, "CTL-ECO-02":CR, "CTL-PSE-01":CR,
