@@ -17,7 +17,7 @@ const CHAMPS=[
   ["societes","Sociétés du groupe : nom, effectif, activité, pays","liste"],
   ["etablissementsDistincts","Nombre d'établissements distincts","nombre"]]],
  ["Groupe — origine des difficultés",[
-  ["fluxIntragroupe","Redevances de marque, management fees et prix de transfert versés aux sociétés du groupe, par exercice","tableau"],
+  ["fluxIntragroupe","Redevances de marque, management fees et prix de transfert versés aux sociétés du groupe, par exercice — montants comptables, non une appréciation","tableau"],
   ["resultatHorsFlux","Résultat d'exploitation reconstitué hors ces flux, par exercice","tableau"],
   ["resultatGroupe","Résultat consolidé du groupe et dividendes versés, par exercice","tableau"]]],
  ["Comité social et économique",[
