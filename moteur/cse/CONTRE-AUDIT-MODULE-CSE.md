@@ -258,3 +258,21 @@ La publication échoue si un cas échoue, si un contrôle conclut à la conformi
 vide, si un contrôle de détection conclut à la conformité, si une branche « non conforme » n'est
 atteinte par aucun cas contradictoire, ou si le questionnaire et les contrôles divergent dans
 l'un ou l'autre sens.
+
+### Résultat de la relecture à la source, 15 août 2026
+
+Les **368 articles du dépôt sont ceux de la source**, version par version. Aucun écart, ni de
+version ni de contenu.
+
+Ce résultat a demandé trois passes, et la raison en vaut d'être écrite. Les deux premières ont
+signalé onze écarts de version, dont aucun n'était réel : **le relais Légifrance rend parfois un
+article homonyme d'une autre partie du code**. R. 2312-9 est rendu tantôt comme le tableau de la
+base de données économiques et sociales — 31 803 caractères — tantôt comme un renvoi de
+53 caractères à l'article R. 2112-8. La réponse est bien formée et porte le bon numéro : rien ne
+signale l'erreur. Les quatorze articles suspectés par les deux premières passes ont été
+réinterrogés un par un ; les quatorze concordent.
+
+C'était le point aveugle commun au contre-audit et à la vérification qui l'examinait : l'un
+comme l'autre tenaient la source pour fidèle. Une seule lecture ne prouve rien — ni la
+concordance, ni l'écart. La règle est désormais écrite dans le script et dans les consignes de
+travail du dépôt.

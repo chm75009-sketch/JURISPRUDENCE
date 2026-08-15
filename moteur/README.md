@@ -63,7 +63,11 @@ node cse_recueil.js            # le recueil de jurisprudence classé
   verdict de conformité : `commun/dates.js` refuse de le rendre.
 - **L'article reproduit porte son identifiant de version.** Un article peut être
   modifié sans changer de numéro ; `cse/verifier-textes.js` rejoue la lecture à
-  la source et signale tout écart, de version comme de contenu.
+  la source et signale tout écart, de version comme de contenu. Relecture du
+  15 août 2026 : les 368 articles du dépôt sont ceux de la source, aucun écart.
+  Le relais rendant parfois un article homonyme d'une autre partie du code, une
+  divergence n'est retenue que si plusieurs lectures espacées la confirment et
+  s'accordent entre elles.
 - **Ce que la base ne sait pas faire est écrit, non comblé.** Le calcul de
   parité de l'article L. 2314-30 s'arrête et le dit lorsque l'arrondi
   arithmétique des deux sexes ne retombe pas sur le nombre de candidats : le
