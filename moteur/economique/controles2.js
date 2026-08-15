@@ -3,6 +3,7 @@
    pièce existe — ils demandent ce qu'elle dit, et si elle contredit le reste. */
 const M = require("./moteur.js");
 const PC = require("./pieces.js");
+const VAL = require("./valider.js");
 const CONF = "conforme", NC = "non conforme", RISQ = "risque à vérifier",
       MANQ = "donnée manquante", SO = "sans objet";
 const declare = (f, champ) => Object.prototype.hasOwnProperty.call(f, champ);
@@ -342,5 +343,16 @@ c("CTL-COH-03","Cohérence","Les quatre critères d'ordre départagent-ils réel
    if (inertes.length >= 3) return { etat: NC, motif: `${inertes.length} des quatre critères de l'article L. 1233-5 prennent la même valeur pour tous les salariés — ${inertes.map(k => CRIT[k]).join(", ")} — et ne départagent donc personne. Les quatre critères sont formellement présents et matériellement neutralisés : le départage repose en réalité sur ${Object.keys(CRIT).filter(k=>!inertes.includes(k)).map(k=>CRIT[k]).join(" et ")}.` };
    if (inertes.length) return { etat: RISQ, motif: `${inertes.length} critère(s) prennent la même valeur pour tous : ${inertes.map(k => CRIT[k]).join(", ")}. Une identité de valeur peut être exacte, mais elle doit pouvoir être justifiée salarié par salarié.` };
    return { etat: CONF, motif: "Les quatre critères prennent des valeurs différenciées : chacun contribue au départage." }; });
+
+
+/* La donnée est-elle seulement lisible ? Ce contrôle ne juge aucune règle de
+   fond : il refuse que le moteur conclue sur une valeur qui ne peut pas exister. */
+c("CTL-VAL-01","Cohérence","Les données saisies sont-elles lisibles et cohérentes entre elles ?",[],
+ f => { const an = VAL.valider(f);
+   return an.length
+     ? { etat: NC, motif: `${an.length} donnée(s) impossible(s) ou incohérente(s) : `
+         + an.map(x => `${x.champ} = « ${x.valeur} » — ${x.motif}`).join(" ; ")
+         + `. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.` }
+     : { etat: CONF, motif: "Toutes les données renseignées sont lisibles, et les dates et effectifs sont cohérents entre eux." }; });
 
 module.exports = C;

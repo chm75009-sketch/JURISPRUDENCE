@@ -33,6 +33,12 @@ const BASE={entreprise:"T",effectif:320,effectifGroupe:602,groupe:true,cause:"1"
   reclassementInterne:"11 postes",formation:"350 heures",creation:"12 000 €",
   suivi:"commission tous les 2 mois",dateDecisionAdmin:"2026-06-10"}};
 const CAS=[
+ ["date impossible : 30 février","CTL-VAL-01","non conforme", f=>{f.dateNotification="2026-02-30";}],
+ ["effectif négatif","CTL-VAL-01","non conforme", f=>{f.effectif=-12;}],
+ ["nombre de licenciements décimal","CTL-VAL-01","non conforme", f=>{f.nbLicenciements=9.5;}],
+ ["date au format français","CTL-VAL-01","non conforme", f=>{f.dateEntretien="02/06/2026";}],
+ ["effectif d'établissement supérieur à celui de l'entreprise","CTL-VAL-01","non conforme",
+  f=>{f.effectif=320; f.effectifEtablissement=900;}],
  ["poste déclaré disponible et supprimé","CTL-COH-01","non conforme",
   f=>{f.postesDisponibles=[{societe:"T",intitule:"Régleur"}]; f.postesSupprimes=[{intitule:"Régleur",avant:10,apres:4}];}],
  ["un même poste proposé à trois salariés","CTL-COH-02","non conforme",

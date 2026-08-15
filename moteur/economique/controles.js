@@ -184,7 +184,10 @@ c("CTL-CSE-04","Procédure","L'avis a-t-il été rendu, ou le délai est-il expi
      return { etat: MANQ, motif: `Valeur non interprétable : « ${f.dateAvisCSE} ». Attendu : une date au format AAAA-MM-JJ, ou la mention « avis non rendu ».` };
    if (vide(f.datesReunionsCSE)) return { etat: MANQ, motif: "Ni avis rendu, ni dates de réunion : l'expiration du délai ne peut pas être calculée." };
    const mois = M.delaiAvisMois(r);
-   const depart = f.datesReunionsCSE[0];
+   /* La première réunion est la plus ancienne, non la première de la liste :
+      sans tri, inverser deux lignes du dossier déplace l'expiration du délai. */
+   const ordonnees = [...f.datesReunionsCSE].sort();
+   const depart = ordonnees[0];
    if (mois === null) return { etat: RISQ, motif: `Aucun avis rendu. Le régime n'exprime pas le délai en mois : ${r.delaiAvis}. La date à laquelle le comité est réputé consulté doit être établie avant toute notification.` };
    const expiration = M.ajouteMois(depart, mois);
    /* L'égalité stricte est le cas où « avant » et « au plus tard » se

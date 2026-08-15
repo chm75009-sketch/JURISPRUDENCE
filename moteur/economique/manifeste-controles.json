@@ -1,16 +1,16 @@
 {
  "objet": "manifeste des contrôles",
- "empreinte": "2fdee2faabbe",
+ "empreinte": "233b286f8d70",
  "empreintesFichiers": {
-  "moteur.js": "ff1790b03245",
-  "controles.js": "9c8c08893410",
-  "controles2.js": "5110a370e6b9",
+  "moteur.js": "e79dbcbbf6f7",
+  "controles.js": "a1b19f1438e8",
+  "controles2.js": "6486a9d1cc37",
   "grille-eco.js": "35d6383e43ea",
   "grille-auto.js": "20ca038f05b7",
   "pieces.js": "95ed7ab57ced",
   "preuve.js": "ba61fe6fc07a"
  },
- "genere": "2026-08-15 20:31:51",
+ "genere": "2026-08-15 20:41:36",
  "verification": {
   "identifiantsUniques": true,
   "conformiteSansTest": [],
@@ -20,12 +20,12 @@
   "coherenceTestes": true
  },
  "compteurs": {
-  "controles": 58,
-  "conformite": 51,
+  "controles": 59,
+  "conformite": 52,
   "detection": 7,
-  "coherence": 5,
-  "testes": 51,
-  "casDeTest": 57,
+  "coherence": 6,
+  "testes": 52,
+  "casDeTest": 62,
   "echecs": 0,
   "regles": 234
  },
@@ -1293,6 +1293,27 @@
    "fondement": "L. 1233-5",
    "tests": [
     "trois critères d'ordre identiques pour tous"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-VAL-01",
+   "rubrique": "Cohérence",
+   "objet": "Les données saisies sont-elles lisibles et cohérentes entre elles ?",
+   "type": "cohérence — porte sur la relation entre deux champs",
+   "entrees": [],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme"
+   ],
+   "fondement": "—",
+   "tests": [
+    "date impossible : 30 février",
+    "effectif négatif",
+    "nombre de licenciements décimal",
+    "date au format français",
+    "effectif d'établissement supérieur à celui de l'entreprise"
    ],
    "teste": true
   }

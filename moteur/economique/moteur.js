@@ -105,7 +105,44 @@ function etatTexte(d) {
 }
 
 /* --- jours ouvrables : samedi compté, dimanche et jours fériés exclus --- */
-const FERIES = d => ["01-01","05-01","05-08","07-14","08-15","11-01","11-11","12-25"].includes(d.slice(5));
+const ajouteJours = (iso, n) => { const d = new Date(iso + "T12:00:00Z");
+  d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+
+/* Onze jours fériés, dont trois mobiles — et les trois tombent entre mars et
+   juin, c'est-à-dire en pleine saison de ces procédures. Les oublier raccourcit
+   le délai de cinq jours ouvrables entre la convocation et l'entretien, et fait
+   sortir une convocation irrégulière en conforme. Pâques par l'algorithme de
+   Butcher, valable pour tout le calendrier grégorien. */
+function paques(an) {
+  const a = an % 19, b = Math.floor(an / 100), c = an % 100;
+  const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4), k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const mois = Math.floor((h + l - 7 * m + 114) / 31);
+  const jour = ((h + l - 7 * m + 114) % 31) + 1;
+  return `${an}-${String(mois).padStart(2,"0")}-${String(jour).padStart(2,"0")}`;
+}
+const FIXES = ["01-01","05-01","05-08","07-14","08-15","11-01","11-11","12-25"];
+/* L'Alsace-Moselle ajoute le Vendredi saint et le 26 décembre : le drapeau est
+   porté par la fiche, non deviné. */
+const ALSACE_MOSELLE = ["12-26"];
+const mobiles = an => {
+  const p = paques(an);
+  return { lundiPaques: ajouteJours(p, 1), ascension: ajouteJours(p, 39),
+    lundiPentecote: ajouteJours(p, 50), vendrediSaint: ajouteJours(p, -2), paques: p };
+};
+const CACHE_FERIES = {};
+function feriesDe(an, alsaceMoselle) {
+  const cle = an + (alsaceMoselle ? "-AM" : "");
+  if (CACHE_FERIES[cle]) return CACHE_FERIES[cle];
+  const m = mobiles(an);
+  const l = FIXES.map(d => `${an}-${d}`).concat([m.lundiPaques, m.ascension, m.lundiPentecote]);
+  if (alsaceMoselle) l.push(m.vendrediSaint, ...ALSACE_MOSELLE.map(d => `${an}-${d}`));
+  return (CACHE_FERIES[cle] = new Set(l));
+}
+const FERIES = (d, alsaceMoselle) => feriesDe(Number(d.slice(0, 4)), alsaceMoselle).has(d);
 /* Ajoute n mois de quantième à quantième. Le 31 mars + 1 mois donne le 30 avril :
    on retient le dernier jour du mois lorsque le quantième n'existe pas. */
 function ajouteMois(iso, n) {
@@ -127,15 +164,13 @@ function delaiAvisMois(r) {
   return null;
 }
 
-function ajouteJoursOuvrables(iso, n) {
+function ajouteJoursOuvrables(iso, n, alsaceMoselle) {
   const d = new Date(iso + "T12:00:00Z"); let reste = n;
   while (reste > 0) { d.setUTCDate(d.getUTCDate() + 1);
     const s = d.toISOString().slice(0, 10);
-    if (d.getUTCDay() !== 0 && !FERIES(s)) reste--; }
+    if (d.getUTCDay() !== 0 && !FERIES(s, alsaceMoselle)) reste--; }
   return d.toISOString().slice(0, 10);
 }
-const ajouteJours = (iso, n) => { const d = new Date(iso + "T12:00:00Z");
-  d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
 
 /* --- calendrier individuel --- */
 function calendrier(f) {
@@ -161,7 +196,7 @@ function baisseTrimestrielle(f) {
 }
 const _EXPORT_ = { seuilTrimestres, trancheEffectif, regimeEco, accompagnement, perimetre,
   etatTexte, calendrier, baisseTrimestrielle, ajouteJoursOuvrables, ajouteJours, comptes30j,
-  ajouteMois, delaiAvisMois };
+  ajouteMois, delaiAvisMois, paques, feriesDe, FERIES };
 
 /* ================= INDEMNITÉS, PRÉAVIS, BARÈME ================= */
 
