@@ -171,6 +171,26 @@ const R = [
    "Additionner les refus de modification aux autres licenciements : l'article L. 1233-25 exige dix refus, il ne les cumule pas.",
    "Fractionner un projet en séries successives de moins de dix : l'article L. 1233-26 y fait échec."],
  valeur:"principe", source:"rédigée"},
+
+/* Le jour de l'expiration lui-même : un arbitrage, non un signe de comparaison.
+   Il est écrit ici pour être discuté, et non enfoui dans un « < ». */
+{id:"AVI-01", rubrique:"Procédure · avis du comité",
+ question:"Que vaut une notification faite le jour même de l'expiration du délai d'avis ?",
+ si:f=>typeof f.nbLicenciements==="number"&&f.nbLicenciements>1,
+ alors:f=>{const r=M.regimeEco(f); const mois=M.delaiAvisMois(r);
+   const dep=Array.isArray(f.datesReunionsCSE)&&f.datesReunionsCSE.length?[...f.datesReunionsCSE].sort()[0]:null;
+   const exp=dep&&mois?M.ajouteMois(dep,mois):null;
+   return "À défaut d'avis rendu, le comité est réputé avoir été consulté « à l'expiration » du délai. "
+    + (exp?`Ici, le délai de ${r.delaiAvis} court depuis la première réunion du ${dep} et expire le ${exp}. `:"")
+    + "Le texte ne dit pas si le jour de l'expiration est compris ou non. Deux lectures se soutiennent : le délai s'achève à la fin de ce jour, et notifier le matin même serait prématuré ; ou l'expiration est acquise dès l'entrée dans ce jour. "
+    + "La base ne tranche pas et ne le fera pas tant qu'aucun arrêt publié ne le fera : elle traite la notification antérieure comme irrégulière, et la notification du jour même comme un risque signalé, en recommandant de décaler d'un jour. Ce décalage supprime la difficulté sans rien coûter.";},
+ fondement:["L. 1233-30, II","L. 1233-8"],
+ juris:[],
+ pieces:["Convocations et procès-verbaux des réunions, datés","Preuve de la remise des informations au comité"],
+ erreurs:["Notifier le jour même de l'expiration en croyant le délai acquis : la question n'est pas réglée.",
+   "Faire courir le délai depuis la convocation au lieu de la première réunion.",
+   "Retenir comme première réunion la première de la liste plutôt que la plus ancienne."],
+ valeur:"arbitrage", source:"rédigée"},
 ];
 
 /* ===================== CAUSE 1 ===================== */

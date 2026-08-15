@@ -18,6 +18,12 @@ const CHAMPS=[
   ["activite","Activité de l'entreprise auditée, dans les termes qui servent à délimiter le secteur","texte"],
   ["societesDuSecteur","Sociétés du groupe relevant du même secteur d'activité, nommées","liste"],
   ["etablissementsDistincts","Nombre d'établissements distincts","nombre"]]],
+ ["Procédure collective",[
+  ["procedureCollective","L'entreprise fait-elle l'objet d'une procédure collective ?","oui / non"],
+  ["typeProcedure","Nature de la procédure","sauvegarde / redressement / liquidation"],
+  ["dateJugement","Date du jugement d'ouverture ou de liquidation","AAAA-MM-JJ"],
+  ["qualiteAuteur","Qui met en œuvre le plan de licenciement","employeur / administrateur / liquidateur"],
+  ["ordonnanceJugeCommissaire","Ordonnance du juge-commissaire autorisant les licenciements : date et référence","texte"]]],
  ["Groupe — origine des difficultés",[
   ["fluxIntragroupe","Redevances de marque, management fees et prix de transfert versés aux sociétés du groupe, par exercice — montants comptables, non une appréciation","tableau"],
   ["resultatHorsFlux","Résultat d'exploitation reconstitué hors ces flux, par exercice","tableau"],

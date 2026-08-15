@@ -7,12 +7,12 @@ const GRAVITE = {
  /* la loi interdit de notifier tant que le point n'est pas réglé */
  "CTL-PSE-04":B, "CTL-PRT-01":B, "CTL-CSE-05":B, "CTL-REC-08":B, "CTL-CSE-01":B,
  "CTL-CSE-08":B, "CTL-CSE-07":B, "CTL-PSE-07":B, "CTL-CSE-02":B, "CTL-PSE-06":B,
- "CTL-CSE-04":B, "CTL-REC-12":B, "CTL-VAL-01":B, "CTL-SEU-01":B, "CTL-SEU-02":B, "CTL-SEU-03":B,
+ "CTL-CSE-04":B, "CTL-REC-12":B, "CTL-VAL-01":B, "CTL-PCO-02":B, "CTL-PCO-03":B, "CTL-SEU-01":B, "CTL-SEU-02":B, "CTL-SEU-03":B,
  /* l'écart fragilise la cause ou la procédure sans l'interdire */
  "CTL-REC-07":CR, "CTL-REC-03":CR, "CTL-REC-06":CR, "CTL-REC-10":CR, "CTL-EMP-02":CR,
  "CTL-PCE-02":CR, "CTL-EFF-01":CR, "CTL-ECO-01":CR, "CTL-ECO-02":CR, "CTL-PSE-01":CR,
  "CTL-CCN-01":CR, "CTL-REC-05":CR, "CTL-REC-02":CR, "CTL-ORD-02":CR, "CTL-REP-01":CR,
- "CTL-COH-01":CR, "CTL-COH-02":CR, "CTL-COH-03":CR, "CTL-ECO-05":CR,
+ "CTL-COH-01":CR, "CTL-COH-02":CR, "CTL-COH-03":CR, "CTL-ECO-05":CR, "CTL-PCO-01":CR,
  /* une pièce ou une vérification manque avant de décider */
  "CTL-REC-01":IM, "CTL-REC-04":IM, "CTL-REC-09":IM, "CTL-REC-11":IM, "CTL-EMP-01":IM,
  "CTL-CSE-03":IM, "CTL-CSE-04":IM, "CTL-CSE-06":IM, "CTL-CSE-10":IM, "CTL-PSE-02":IM,

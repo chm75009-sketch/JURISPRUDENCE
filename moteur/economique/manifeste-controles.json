@@ -1,16 +1,16 @@
 {
  "objet": "manifeste des contrôles",
- "empreinte": "ed398f3d06ff",
+ "empreinte": "47a19beef9c4",
  "empreintesFichiers": {
   "moteur.js": "895186e42a6c",
   "controles.js": "a1b19f1438e8",
-  "controles2.js": "2c6362dc6392",
-  "grille-eco.js": "ab7562cc145b",
+  "controles2.js": "12c97cec074b",
+  "grille-eco.js": "dfaeb2b51d02",
   "grille-auto.js": "20ca038f05b7",
   "pieces.js": "95ed7ab57ced",
   "preuve.js": "ba61fe6fc07a"
  },
- "genere": "2026-08-15 20:48:09",
+ "genere": "2026-08-15 20:53:42",
  "verification": {
   "identifiantsUniques": true,
   "conformiteSansTest": [],
@@ -20,14 +20,14 @@
   "coherenceTestes": true
  },
  "compteurs": {
-  "controles": 62,
-  "conformite": 54,
+  "controles": 65,
+  "conformite": 57,
   "detection": 8,
   "coherence": 7,
-  "testes": 54,
-  "casDeTest": 65,
+  "testes": 57,
+  "casDeTest": 68,
   "echecs": 0,
-  "regles": 234
+  "regles": 235
  },
  "definitions": [
   [
@@ -1383,6 +1383,77 @@
    "fondement": "L. 1233-3, 4°",
    "tests": [],
    "teste": false
+  },
+  {
+   "id": "CTL-PCO-01",
+   "rubrique": "Procédure collective",
+   "objet": "Le régime de la procédure collective est-il identifié et l'auteur des licenciements désigné ?",
+   "type": "conformité",
+   "entrees": [
+    "procedureCollective",
+    "typeProcedure",
+    "dateJugement",
+    "qualiteAuteur"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-58",
+   "tests": [
+    "procédure collective déclarée sans sa nature"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PCO-02",
+   "rubrique": "Procédure collective",
+   "objet": "L'autorité administrative a-t-elle été informée, et le licenciement autorisé par le juge ?",
+   "type": "conformité",
+   "entrees": [
+    "procedureCollective",
+    "ordonnanceJugeCommissaire",
+    "typeProcedure",
+    "dateNotifAdmin"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-60",
+   "tests": [
+    "redressement sans ordonnance du juge-commissaire"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-PCO-03",
+   "rubrique": "Procédure collective",
+   "objet": "La notification intervient-elle dans la fenêtre de garantie des créances ?",
+   "type": "conformité",
+   "entrees": [
+    "procedureCollective",
+    "typeProcedure",
+    "dateJugement",
+    "dateNotification",
+    "effectif, nbLicenciements (par le moteur)"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 3253-8",
+   "tests": [
+    "liquidation : notification hors de la fenêtre de garantie"
+   ],
+   "teste": true
   }
  ],
  "objets": {

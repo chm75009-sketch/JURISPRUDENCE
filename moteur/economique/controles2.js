@@ -397,4 +397,45 @@ c("CTL-ECO-06","Cause économique","La cessation procède-t-elle d'une faute ou 
  f => { if (f.cause !== "4") return { etat: SO, motif: "La cause invoquée n'est pas la cessation d'activité." };
    return { etat: RISQ, motif: "La cessation complète et définitive constitue en elle-même une cause économique, sauf si elle procède d'une faute de l'employeur ou de sa légèreté blâmable. C'est là que se joue ce type de dossier, et la base ne peut pas trancher : la question appelle l'examen d'un professionnel, pièces de gestion à l'appui. Ce contrôle ne conclut jamais à la conformité." }; });
 
+
+/* ---------------- Procédure collective ----------------
+   La règle PCO-01 énonçait le régime, aucun contrôle ne le faisait vivre :
+   un dossier en redressement ou en liquidation était audité comme un dossier
+   ordinaire. */
+const PROC = { sauvegarde: "sauvegarde", redressement: "redressement judiciaire", liquidation: "liquidation judiciaire" };
+c("CTL-PCO-01","Procédure collective","Le régime de la procédure collective est-il identifié et l'auteur des licenciements désigné ?",
+ ["L. 1233-58"],
+ f => { if (f.procedureCollective !== true) return { etat: SO, motif: "Aucune procédure collective déclarée." };
+   const manque = [];
+   if (vide(f.typeProcedure)) manque.push("la nature de la procédure — sauvegarde, redressement ou liquidation");
+   if (vide(f.dateJugement)) manque.push("la date du jugement d'ouverture ou de liquidation");
+   if (vide(f.qualiteAuteur)) manque.push("la qualité de celui qui met en œuvre le plan — employeur, administrateur ou liquidateur");
+   if (manque.length) return { etat: MANQ, motif: `Procédure collective déclarée, mais ${manque.join(", ")} n'est pas renseigné. Le régime de l'article L. 1233-58 ne peut pas être appliqué.` };
+   return { etat: CONF, motif: `${PROC[f.typeProcedure] || f.typeProcedure} ouverte le ${f.dateJugement}, plan de licenciement mis en œuvre par ${f.qualiteAuteur}. La consultation obéit au seuil applicable, et le plan de sauvegarde de l'emploi reste dû dans les conditions des articles L. 1233-61 et L. 1233-62.` }; });
+
+c("CTL-PCO-02","Procédure collective","L'autorité administrative a-t-elle été informée, et le licenciement autorisé par le juge ?",
+ ["L. 1233-60"],
+ f => { if (f.procedureCollective !== true) return { etat: SO, motif: "Aucune procédure collective déclarée." };
+   if (vide(f.ordonnanceJugeCommissaire) && (f.typeProcedure === "redressement" || f.typeProcedure === "liquidation"))
+     return { etat: NC, motif: "En redressement comme en liquidation, les licenciements présentant un caractère urgent, inévitable et indispensable sont autorisés par ordonnance du juge-commissaire. Aucune ordonnance n'est déclarée : la notification serait dépourvue de fondement." };
+   if (vide(f.dateNotifAdmin))
+     return { etat: NC, motif: "L'autorité administrative doit être informée avant qu'il soit procédé aux licenciements, dans les conditions du code de commerce auxquelles renvoie l'article L. 1233-60. Aucune information n'est déclarée." };
+   return { etat: CONF, motif: `Ordonnance du juge-commissaire déclarée et autorité administrative informée le ${f.dateNotifAdmin}.` }; });
+
+/* La fenêtre de garantie de l'AGS : quinze jours après le jugement de
+   liquidation, vingt et un lorsqu'un plan de sauvegarde de l'emploi est
+   élaboré. Notifier hors de cette fenêtre fait perdre la garantie. */
+c("CTL-PCO-03","Procédure collective","La notification intervient-elle dans la fenêtre de garantie des créances ?",
+ ["L. 3253-8"],
+ f => { if (f.procedureCollective !== true) return { etat: SO, motif: "Aucune procédure collective déclarée." };
+   if (f.typeProcedure !== "liquidation") return { etat: SO, motif: "La fenêtre de quinze ou vingt et un jours vise les ruptures suivant le jugement de liquidation." };
+   if (vide(f.dateJugement) || vide(f.dateNotification))
+     return { etat: MANQ, motif: "La date du jugement de liquidation ou celle de la notification n'est pas renseignée : la fenêtre de garantie ne peut pas être vérifiée." };
+   const pse = M.regimeEco(f).pse;
+   const limite = M.ajouteJours(f.dateJugement, pse ? 21 : 15);
+   const j = Math.round((new Date(f.dateNotification) - new Date(f.dateJugement)) / 86400000);
+   return f.dateNotification > limite
+     ? { etat: NC, motif: `Jugement de liquidation du ${f.dateJugement}, notification du ${f.dateNotification}, soit ${j} jours. La garantie couvre les ruptures intervenant dans les ${pse ? "vingt et un jours, un plan de sauvegarde de l'emploi étant élaboré" : "quinze jours"} suivant le jugement, soit jusqu'au ${limite}. Hors de cette fenêtre, les créances de rupture ne sont pas garanties.` }
+     : { etat: CONF, motif: `Notification ${j} jours après le jugement de liquidation, dans la fenêtre de ${pse ? "vingt et un" : "quinze"} jours qui expire le ${limite}.` }; });
+
 module.exports = C;
