@@ -16,6 +16,7 @@ const fs = require("fs"), path = require("path");
 const ICI = process.cwd();
 const SORTIE = process.argv[2] || path.join(ICI, "../../docs/moteur-eco.js");
 const ENTREE = process.argv[3] || "audit-client.js";
+const GLOBALE = process.argv[4] || "MoteurEco";
 
 /* Le corpus des arrêts pèse neuf mégaoctets, dont l'essentiel est le texte
    intégral des décisions — que la grille ne lit jamais. Trois champs suffisent :
@@ -25,6 +26,13 @@ const ENTREE = process.argv[3] || "audit-client.js";
 const ALLEGE = {
   "eco_textes.json": (t) => JSON.stringify(JSON.parse(t)
     .map(d => ({ id: d.id, num: d.num, sommaire: d.sommaire }))),
+  /* Même raison côté comité : la grille lit le numéro, la date, la chambre, la
+     solution, le sommaire et la publication — jamais le texte intégral. */
+  "cse_corpus.json": (t) => { const D = JSON.parse(t), o = {};
+    for (const k of Object.keys(D)) { const d = D[k];
+      o[k] = { num: d.num, date: d.date, ch: d.ch, sol: d.sol, sommaire: d.sommaire,
+               pub: d.pub, rubrique: d.rubrique, sous: d.sous }; }
+    return JSON.stringify(o); },
 };
 const allegements = [];
 function donnees(nom) {
@@ -90,20 +98,52 @@ function adapter(nom, src) {
    chose que ce que la base sait exploiter — c'est la même garantie de
    non-divergence, prolongée jusqu'à l'écran. */
 const CHAMPS = (() => {
-  try {
-    const q = fs.readFileSync(path.join(ICI, "questionnaire.js"), "utf8");
-    const bloc = q.split("const CHAMPS=[")[1].split("\n];")[0];
-    return eval("[" + bloc + "]");
-  } catch (e) { return []; }
+  /* Deux questionnaires, deux écritures : le module économique déclare un
+     tableau CHAMPS, celui du comité appelle q(rubrique, champ, libellé, format).
+     On lit l'une ou l'autre, jamais une liste tenue à la main. */
+  for (const nom of ["questionnaire.js", "questionnaire-cse.js"]) {
+    const chemin = path.join(ICI, nom);
+    if (!fs.existsSync(chemin)) continue;
+    const src = fs.readFileSync(chemin, "utf8");
+    if (src.includes("const CHAMPS=[")) {
+      try { return eval("[" + src.split("const CHAMPS=[")[1].split("\n];")[0] + "]"); }
+      catch (e) { return []; }
+    }
+    const par = new Map();
+    for (const m of src.matchAll(/^q\((".*?"),\s*(".*?"),\s*(".*?"),\s*(".*?")/gm)) {
+      try {
+        const [rub, cle, lib, fmt] = [m[1], m[2], m[3], m[4]].map(x => JSON.parse(x));
+        if (!par.has(rub)) par.set(rub, []);
+        par.get(rub).push([cle, lib, fmt]);
+      } catch (e) {}
+    }
+    if (par.size) return [...par.entries()];
+  }
+  return [];
 })();
 
 /* --- ce qui doit être calculé ici, puisqu'il ne peut pas l'être là-bas --- */
-const MAN = (() => { try { return require(path.join(ICI, "manifeste.js")).construire(); }
-  catch (e) { return { empreinte: "—", compteurs: {} }; } })();
+/* L'empreinte et les compteurs : produits par manifeste.js là où il existe,
+   lus dans le manifeste déjà publié sinon. Aucun chiffre n'est inventé. */
+const MAN = (() => {
+  try { return require(path.join(ICI, "manifeste.js")).construire(); } catch (e) {}
+  for (const nom of fs.readdirSync(ICI).filter(x => /^manifeste.*\.json$/.test(x))) {
+    try { return JSON.parse(fs.readFileSync(path.join(ICI, nom), "utf8")); } catch (e) {}
+  }
+  return { empreinte: "—", compteurs: {} };
+})();
 const REG = (() => { try { const r = require(path.join(ICI, "registre.js"));
   return { construire: r.construire(), coherence: r.coherence(),
     DETECTION: [...r.DETECTION], COHERENCE: [...(r.COHERENCE || [])] }; }
   catch (e) { return null; } })();
+
+/* Les modules ne portent pas le même nom d'un moteur à l'autre — moteur.js et
+   moteur-cse.js, grille.js et grille-cse.js. On les désigne par leur rôle. */
+const MOD = role => {
+  for (const nom of MODULES.keys())
+    if (new RegExp(`^\\./${role}(-cse)?\\.js$`).test(nom)) return nom;
+  return "./" + role + ".js";
+};
 
 const morceaux = [];
 for (const [nom, src] of MODULES) morceaux.push(
@@ -135,21 +175,19 @@ ${allegements.length ? "\n   Jeux de données allégés — champs non lus par l
     return mod.exports;
   }
   var __MANIFESTE = ${JSON.stringify(MAN)};
-  var __REGISTRE = (function () { var r = ${JSON.stringify(REG)};
-    return { construire: function () { return r.construire; },
-             coherence: function () { return r.coherence; },
-             DETECTION: new Set(r.DETECTION), COHERENCE: new Set(r.COHERENCE) }; })();
+  var __REGISTRE = (function () { var r = ${JSON.stringify(REG)} || {};
+    return { construire: function () { return r.construire || []; },
+             coherence: function () { return r.coherence || {}; },
+             DETECTION: new Set(r.DETECTION || []), COHERENCE: new Set(r.COHERENCE || []) }; })();
 
 ${morceaux.join("\n\n")}
 
-  global.MoteurEco = {
-    audit: require("./audit-client.js"),
-    moteur: require("./moteur.js"),
-    grille: require("./grille.js"),
-    controles: require("./controles.js"),
-    gravite: require("./gravite.js"),
-    actions: require("./actions.js"),
-    valider: require("./valider.js"),
+  global.${GLOBALE} = {
+    audit: require(${JSON.stringify("./" + ENTREE)}),
+    moteur: require(${JSON.stringify(MOD("moteur"))}),
+    grille: require(${JSON.stringify(MOD("grille"))}),
+    controles: require(${JSON.stringify(MOD("controles"))}),
+    actions: require(${JSON.stringify(MOD("actions"))}),
     manifeste: __MANIFESTE,
     champs: ${JSON.stringify(CHAMPS)},
   };
