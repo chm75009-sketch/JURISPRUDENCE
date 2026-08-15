@@ -5,9 +5,12 @@ const fs = require("fs");
 const M = require("./moteur-cse.js");
 const O = require("./outils.js");
 const GRILLE = require("./grille-cse.js");
-const { C: CONTROLES, ETATS, DETECTION } = require("./controles-cse.js");
+const { C: CONTROLES, ETATS, DETECTION, COHERENCE } = require("./controles-cse.js");
 const ACT = require("./actions-cse.js");
 const T = JSON.parse(fs.readFileSync(__dirname + "/textes_cse.json", "utf8"));
+/* Le manifeste porte les compteurs mesurés à la publication — dont le nombre de
+   règles qu'aucun dossier d'épreuve n'a jamais déclenchées, publié au rapport. */
+const MAN = JSON.parse(fs.readFileSync(__dirname + "/manifeste-cse.json", "utf8"));
 
 const MOIS = ["", "janvier", "février", "mars", "avril", "mai", "juin", "juillet",
   "août", "septembre", "octobre", "novembre", "décembre"];
@@ -193,6 +196,37 @@ function audit(f) {
    ["Contrôles exécutés", `${CONTROLES.length} dont ${DETECTION.size} de détection`],
    ["Corpus de jurisprudence", "163 arrêts publiés, du 24 janvier 2018 au 8 juillet 2026"],
    ["Accords collectifs versés", f.accordsCse && f.accordsCse.length ? `${f.accordsCse.length} déclaré(s), non lus par la base` : "non renseignés"]]);
+
+  /* --- Ce que l'audit n'a pas exercé. ---
+     Symétrique de l'annexe du module économique, et pour la même raison : un
+     rapport qui ne publie que ce qu'il a vérifié laisse croire qu'il a tout
+     vérifié. Les chiffres sont ceux du manifeste, produits par l'exécution. */
+  h3("Ce que cet audit n'a pas exercé");
+  p("Les lignes qui précèdent disent sur quoi le résultat repose. Celles-ci disent ce qu'il ne couvre pas — non par omission, mais parce que c'est mesuré et publié. Un audit qui ne dit pas où s'arrête sa propre couverture n'est pas opposable.");
+  const _c = (MAN && MAN.compteurs) || {};
+  tab(["Mesure", "Valeur", "Ce que cela veut dire"], [
+   ["Règles de la base non applicables à votre situation",
+    `${GRILLE.length - retenues.length} sur ${GRILLE.length}`,
+    "Leur condition d'application n'est pas remplie par votre dossier. Elles n'ont donc rien dit, ni dans un sens ni dans l'autre."],
+   ["Règles qu'aucun dossier d'épreuve n'a jamais déclenchées",
+    _c.reglesJamaisDeclenchees !== undefined ? String(_c.reglesJamaisDeclenchees) : "—",
+    "Elles sont écrites sur des articles lus à la source, mais aucune fiche d'épreuve du dépôt ne les a encore exercées : elles n'ont jamais été mises à l'épreuve. C'est la mesure exacte de la couverture réelle, et elle est publiée plutôt que tue."],
+   ["Contrôles restés sans objet sur votre dossier", `${so.length} sur ${V.length}`,
+    "Le contrôle ne s'applique pas à votre configuration. « Sans objet » n'est pas « conforme »."],
+   ["Contrôles n'ayant pas pu conclure faute de données", `${mq.length} sur ${V.length}`,
+    "La donnée n'a pas été fournie. Aucune conclusion n'en a été tirée, dans aucun sens."],
+   ["Contrôles de détection", String(DETECTION.size),
+    "Ils signalent une situation et s'arrêtent là : ils ne concluent jamais à la conformité, parce que le sujet excède ce qu'une base peut trancher."],
+   ["Contrôles de cohérence", String(COHERENCE.size),
+    "Ils ne vérifient pas une donnée mais la relation entre deux — ici, l'effectif déclaré confronté aux relevés mensuels du même dossier. C'est là que se cachent les conformités fausses."],
+   ["Articles demandés à la source restés sans réponse",
+    _c.articlesSansReponse !== undefined ? String(_c.articlesSansReponse) : "—",
+    "Aucune règle ne peut s'y fonder : le chargement de la grille échoue si une règle cite un article dont le texte est absent."],
+   ["Dossiers construits pour mettre les contrôles en défaut",
+    _c.casContradictoires !== undefined ? String(_c.casContradictoires) : "—",
+    "Chaque contrôle susceptible de constater une non-conformité doit la constater au moins une fois sur ces dossiers, sans quoi la publication échoue."]]);
+  enc("Ce que la loi elle-même ne tranche pas",
+   "La règle de composition des listes de l'article L. 2314-30 est arithmétiquement contradictoire dans un peu moins d'un cas sur cent : l'arrondi prescrit ne retombe pas sur le nombre de candidats à désigner. Le texte ne règle pas ce cas et aucun arrêt publié du corpus ne le tranche. L'application s'arrête et l'écrit, au lieu de choisir — le refus figure alors dans le corps du rapport, à l'endroit de la question.");
   return A.D;
 }
 module.exports = audit;

@@ -459,7 +459,12 @@ for (const ctl of C) {
   ctl.verdict = f => surEffectif(f, brut(f));
 }
 
-module.exports = { C, ETATS, DETECTION, SUR_EFFECTIF, effectifDouteux };
+/* Les contrôles de cohérence ne vérifient pas une donnée mais la relation entre
+   deux. C'est la famille qui manquait, et c'est là que se cachaient les
+   conformités fausses — celles qu'un dossier obtient en se contredisant. */
+const COHERENCE = new Set(["CSE-CTL-COH-01", "CSE-CTL-COH-02"]);
+
+module.exports = { C, ETATS, DETECTION, COHERENCE, SUR_EFFECTIF, effectifDouteux };
 if (require.main === module) {
   const ids = C.map(x => x.id);
   console.log(`${C.length} contrôles · ${new Set(ids).size} identifiants distincts · ${DETECTION.size} de détection`);

@@ -27,7 +27,7 @@ etape(4, "audit du dossier de référence", "audit-cse.js", "fiche-cse.json");
 const rapport = JSON.parse(fs.readFileSync(path.join(ICI, "rapport-tests-cse.json"), "utf8"));
 const T = JSON.parse(fs.readFileSync(path.join(ICI, "textes_cse.json"), "utf8"));
 const CORPUS = JSON.parse(fs.readFileSync(path.join(ICI, "cse_corpus.json"), "utf8"));
-const { C, DETECTION } = require("./controles-cse.js");
+const { C, DETECTION, COHERENCE } = require("./controles-cse.js");
 const GRILLE = require("./grille-cse.js");
 const CAS_MOTEUR = require("./tests-cse.js");
 const SONDE = require("./sonde.js");
@@ -61,6 +61,7 @@ const manifeste = {
     reglesJamaisDeclenchees: jamais.length,
     controles: C.length,
     detection: DETECTION.size,
+    coherence: COHERENCE.size,
     casMoteur: CAS_MOTEUR.length,
     casContradictoires: rapport.cas,
     verdicts: rapport.cas * rapport.controles,

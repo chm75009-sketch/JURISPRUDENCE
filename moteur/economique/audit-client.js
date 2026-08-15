@@ -427,6 +427,38 @@ function audit(f) {
    ["Contrôles exécutés", _m ? `${_m.compteurs.controles} dont ${_m.compteurs.detection} de détection` : "—"],
    ["Convention collective", f.conventionJointe ? "versée" : (f.idcc ? `IDCC ${f.idcc} déclaré, texte non versé` : "non renseignée")],
    ["Accords d'entreprise", f.accordsJoints ? "versés" : "non versés"]]);
+
+  /* --- Ce que l'audit n'a pas exercé. ---
+     Cette section est un aveu, et c'est délibéré. Un rapport qui ne publie que
+     ce qu'il a vérifié laisse croire qu'il a tout vérifié. Les chiffres
+     ci-dessous sont mesurés à chaque publication, non écrits à la main : le
+     nombre de règles qu'aucun dossier d'épreuve n'a jamais déclenchées est
+     celui que produit la sonde d'exécution. */
+  h3("Ce que cet audit n'a pas exercé");
+  p("Les lignes qui précèdent disent sur quoi le résultat repose. Celles-ci disent ce qu'il ne couvre pas — non par omission, mais parce que c'est mesuré et publié. Un audit qui ne dit pas où s'arrête sa propre couverture n'est pas opposable.");
+  const _c = _m ? _m.compteurs : {};
+  tab(["Mesure", "Valeur", "Ce que cela veut dire"], [
+   ["Règles de la base non applicables à votre situation",
+    `${GRILLE.length - retenues.length} sur ${GRILLE.length}`,
+    "Leur condition d'application n'est pas remplie par votre dossier. Elles n'ont donc rien dit, ni dans un sens ni dans l'autre."],
+   ["Règles qu'aucun dossier d'épreuve n'a jamais déclenchées",
+    _c.reglesJamaisDeclenchees !== undefined ? String(_c.reglesJamaisDeclenchees) : "—",
+    "Elles sont écrites sur des articles lus à la source, mais aucune fiche d'épreuve du dépôt ne les a encore exercées : elles n'ont jamais été mises à l'épreuve. C'est la mesure exacte de la couverture réelle, et elle est publiée plutôt que tue."],
+   ["Contrôles restés sans objet sur votre dossier",
+    `${(cpt[ETATS.SO] || 0)} sur ${verdicts.length}`,
+    "Le contrôle ne s'applique pas à votre configuration. « Sans objet » n'est pas « conforme »."],
+   ["Contrôles n'ayant pas pu conclure faute de données",
+    `${(cpt[ETATS.MANQ] || 0)} sur ${verdicts.length}`,
+    "La donnée n'a pas été fournie. Aucune conclusion n'en a été tirée, dans aucun sens."],
+   ["Contrôles de détection", _c.detection !== undefined ? String(_c.detection) : "—",
+    "Ils signalent une situation et s'arrêtent là : ils ne concluent jamais à la conformité, parce que le sujet excède ce qu'une base peut trancher."],
+   ["Contrôles de cohérence", _c.coherence !== undefined ? String(_c.coherence) : "—",
+    "Ils ne vérifient pas une donnée mais la relation entre deux — c'est là que se cachent les conformités fausses, celles qu'un dossier obtient en se contredisant lui-même."],
+   ["Dossiers construits pour mettre les contrôles en défaut",
+    _c.casDeTest !== undefined ? String(_c.casDeTest) : "—",
+    "Chaque contrôle susceptible de constater une non-conformité doit la constater au moins une fois sur ces dossiers, sans quoi la publication échoue."]]);
+  enc("Ce que la loi elle-même ne tranche pas",
+   "Lorsqu'un texte ne règle pas un cas et qu'aucun arrêt publié du corpus ne le tranche, l'application s'arrête et l'écrit, au lieu de choisir. Le refus figure alors dans le corps du rapport, à l'endroit de la question — jamais dissimulé dans une réserve générale.");
   return A.D;
 }
 module.exports = audit;
