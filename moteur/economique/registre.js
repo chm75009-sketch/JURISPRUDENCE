@@ -8,6 +8,10 @@ const G = require("./grille.js");
 
 /* Les contrôles qui ne concluent jamais à la conformité : ils détectent une
    situation qui appelle un examen extérieur à la base. */
+/* Trois familles, non deux. Un contrôle de cohérence ne lit pas un champ mais
+   la relation entre deux champs : c'est là que se logent les dossiers
+   formellement complets et juridiquement indéfendables. */
+const COHERENCE = new Set(["CTL-COH-01","CTL-COH-02","CTL-COH-03","CTL-SEU-01","CTL-SEU-03"]);
 const DETECTION = new Set(["CTL-COE-01","CTL-USA-01","CTL-CTX-01","CTL-IND-01","CTL-ECO-03","CTL-CSE-09","CTL-FRA-01"]);
 
 const src = x => String(x.verdict);
@@ -38,7 +42,8 @@ function construire() {
   const T = casDeTest();
   return C.map(x => ({
     id: x.id, rubrique: x.rubrique, objet: x.objet,
-    type: DETECTION.has(x.id) ? "détection — conclut au risque, jamais à la conformité" : "conformité",
+    type: DETECTION.has(x.id) ? "détection — conclut au risque, jamais à la conformité"
+      : (COHERENCE.has(x.id) ? "cohérence — porte sur la relation entre deux champs" : "conformité"),
     entrees: entrees(x),
     piece: PIECE_ATTENDUE[x.id] || "—",
     etats: etats(x),
@@ -59,4 +64,4 @@ function coherence() {
     regles: G.length,
   };
 }
-module.exports = { construire, coherence, DETECTION };
+module.exports = { construire, coherence, DETECTION, COHERENCE };

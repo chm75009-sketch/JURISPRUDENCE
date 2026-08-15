@@ -8,6 +8,11 @@ const CONF = "conforme", NC = "non conforme", RISQ = "risque à vérifier",
 const vide = x => x === undefined || x === null || x === "" ||
                   (Array.isArray(x) && !x.length);
 const piece = (f, nom) => Array.isArray(f.pieces) && f.pieces.includes(nom);
+/* Une réponse « il n'y en a aucun » n'est pas une absence de réponse. Le champ
+   présent et vide vaut déclaration de néant ; le champ absent vaut silence.
+   Sans cette distinction, l'employeur ne peut jamais sortir de la réserve. */
+const declare = (f, champ) => Object.prototype.hasOwnProperty.call(f, champ);
+const neant = (f, champ) => declare(f, champ) && vide(f[champ]);
 const P = require("./preuve.js");
 /* Le niveau de preuve accompagne chaque verdict : l'état dit si l'exigence est
    satisfaite, le niveau dit sur quoi cette réponse repose. */
@@ -77,7 +82,8 @@ c("CTL-EMP-01","Emploi","La suppression d'emploi est-elle documentée poste par 
      })());
 
 c("CTL-EMP-02","Emploi","Des recrutements ou des précaires contredisent-ils la suppression ?",["L. 1233-3"],
- f => vide(f.precaires) ? { etat: MANQ, motif: "Les contrats à durée déterminée, l'intérim et les recrutements récents ne sont pas renseignés : c'est la première contradiction que recherchera un contradicteur." }
+ f => neant(f, "precaires") ? { etat: CONF, motif: "Aucun contrat à durée déterminée ni intérimaire n'est déclaré sur les emplois supprimés. Réponse déclarative : elle n'est justifiée par aucune pièce et sera vérifiée sur le registre du personnel en cas de contestation." }
+   : vide(f.precaires) ? { etat: MANQ, motif: "Les contrats à durée déterminée, l'intérim et les recrutements récents ne sont pas renseignés : c'est la première contradiction que recherchera un contradicteur." }
    : (() => {
        const cat = new Set((f.postesSupprimes||[]).map(p=>p.intitule));
        const conflit = f.precaires.filter(p => cat.has(p.emploi));
@@ -105,7 +111,20 @@ c("CTL-ECO-02","Cause économique","Le périmètre de la démonstration est-il l
  f => !f.groupe ? { etat: SO, motif: "L'entreprise n'appartient à aucun groupe." }
    : vide(f.societes) ? { etat: MANQ, motif: "Les sociétés du groupe ne sont pas renseignées : le secteur d'activité ne peut pas être délimité." }
    : (f.trimestres && f.trimestres.some(t => t.perimetre === "secteur"))
-     ? { etat: CONF, motif: "Les données produites portent sur le secteur d'activité du groupe." }
+     ? (() => {
+         /* L'étiquette « secteur » est une déclaration, pas un contenu. Si une
+            société française du groupe exerce la même activité, les agrégats
+            doivent la comprendre : le contrôle ne peut pas l'affirmer. */
+         const soeurs = (f.societes || []).filter(s => !s.etranger && s.activite && s.nom !== f.entreprise
+           && (f.societes || []).some(x => x.nom === f.entreprise ? false : true) && !/holding/i.test(s.activite));
+         const memeActivite = soeurs.filter(s => (f.societesDuSecteur || []).includes(s.nom)
+           || (f.activite && s.activite && s.activite.toLowerCase() === String(f.activite).toLowerCase()));
+         if (memeActivite.length)
+           return { etat: RISQ, motif: `Les données déclarent porter sur le secteur d'activité du groupe, et ${memeActivite.length} société(s) française(s) du même secteur sont déclarées : ${memeActivite.map(s=>s.nom).join(", ")}. Que les agrégats les comprennent réellement ne se déduit pas de l'étiquette : la pièce doit le dire poste par poste.` };
+         if (soeurs.length && vide(f.societesDuSecteur))
+           return { etat: RISQ, motif: `Les données déclarent porter sur le secteur d'activité du groupe, mais les sociétés qui composent ce secteur ne sont pas énumérées. ${soeurs.length} société(s) française(s) du groupe pourraient en relever : ${soeurs.map(s=>s.nom+" ("+s.activite+")").join(", ")}. Le périmètre déclaré doit être nommé pour être vérifiable.` };
+         return { etat: CONF, motif: "Les données produites portent sur le secteur d'activité du groupe, et les sociétés qui le composent sont énumérées." };
+       })()
      : { etat: RISQ, motif: "Rien n'indique que les données portent sur le secteur d'activité du groupe plutôt que sur la seule entreprise. « Il incombe à l'employeur de démontrer, dans le périmètre pertinent, la réalité et le sérieux du motif » (Cass. soc. 31 mars 2021, n° 19-26.054)." });
 
 c("CTL-ECO-03","Cause économique","La menace sur la compétitivité est-elle établie ?",["L. 1233-3, 3°"],
@@ -168,6 +187,12 @@ c("CTL-CSE-04","Procédure","L'avis a-t-il été rendu, ou le délai est-il expi
    const depart = f.datesReunionsCSE[0];
    if (mois === null) return { etat: RISQ, motif: `Aucun avis rendu. Le régime n'exprime pas le délai en mois : ${r.delaiAvis}. La date à laquelle le comité est réputé consulté doit être établie avant toute notification.` };
    const expiration = M.ajouteMois(depart, mois);
+   /* L'égalité stricte est le cas où « avant » et « au plus tard » se
+      distinguent. Le texte fait courir la présomption « à l'expiration » du
+      délai : notifier le jour même n'est ni clairement régulier, ni clairement
+      irrégulier. La base le signale au lieu de choisir un signe. */
+   if (!vide(f.dateNotification) && f.dateNotification === expiration)
+     return { etat: RISQ, motif: `Aucun avis rendu. Le délai de ${r.delaiAvis} expire le ${expiration}, et la notification est fixée au même jour. Le comité est réputé consulté « à l'expiration » du délai : la coïncidence exacte des deux dates n'est tranchée ni par le texte, ni par un arrêt publié du corpus. Décaler la notification d'un jour supprime la difficulté.`, aVerifier: true };
    if (!vide(f.dateNotification) && f.dateNotification < expiration)
      return { etat: NC, motif: `Aucun avis rendu. Le délai de ${r.delaiAvis} court depuis la première réunion du ${depart} et expire le ${expiration} : la notification prévue le ${f.dateNotification} lui est antérieure. Le comité n'est pas encore réputé consulté.` };
    return { etat: RISQ, motif: `Aucun avis rendu. Le délai de ${r.delaiAvis}, courant depuis la première réunion du ${depart}, expire le ${expiration} ; à cette date le comité est réputé avoir été consulté. Aucune notification ne doit intervenir avant.` }; });
@@ -224,16 +249,40 @@ c("CTL-PSE-04","Plan de sauvegarde de l'emploi","La notification intervient-elle
    return { etat: CONF, motif: `Décision du ${d}, notification postérieure.` }; });
 
 /* ---------------- SALARIÉS PROTÉGÉS ET SITUATIONS INDIVIDUELLES ---------------- */
-c("CTL-PRT-01","Salariés protégés","L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?",["L. 2411-1"],
+/* Une case remplie n'est pas une autorisation. Le champ peut porter un refus,
+   une date postérieure à la notification, ou une mention non interprétable :
+   dans aucun de ces cas la protection n'est satisfaite. */
+const sensAutorisation = s => {
+  if (vide(s)) return { sens: "absent" };
+  if (typeof s === "object") return { sens: s.sens || "absent", date: s.date };
+  const t = String(s);
+  const d = (t.match(/\d{4}-\d{2}-\d{2}/) || [])[0];
+  if (/refus|rejet|refusé/i.test(t)) return { sens: "refus", date: d };
+  if (/attente|en cours|instruction/i.test(t)) return { sens: "en attente", date: d };
+  if (d && /accord|autoris|accept/i.test(t)) return { sens: "accord", date: d };
+  if (d && t.trim() === d) return { sens: "accord", date: d };
+  return { sens: "illisible", date: d, brut: t };
+};
+c("CTL-PRT-01","Salariés protégés","L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?",["L. 2411-1","L. 2411-5"],
  f => vide(f.salariesProteges) ? { etat: SO, motif: "Aucun salarié protégé signalé." }
-   : (() => { const sans = f.salariesProteges.filter(s => vide(s.autorisation));
-       return sans.length
-         ? { etat: NC, motif: `${sans.length} salarié(s) protégé(s) sans autorisation renseignée : ${sans.map(s=>s.nom+" ("+s.mandat+")").join(", ")}. Aucune notification ne peut intervenir avant l'autorisation.` }
-         : { etat: CONF, motif: `Les ${f.salariesProteges.length} salariés protégés disposent d'une autorisation.` };
+   : (() => {
+       const lu = f.salariesProteges.map(s => ({ ...s, a: sensAutorisation(s.autorisation) }));
+       const refus = lu.filter(x => x.a.sens === "refus");
+       if (refus.length) return { etat: NC, motif: `${refus.length} salarié(s) protégé(s) dont l'autorisation a été REFUSÉE : ${refus.map(x=>x.nom+" ("+x.mandat+")").join(", ")}. Le licenciement notifié malgré un refus est nul, et le fait de passer outre est pénalement sanctionné.` };
+       const absents = lu.filter(x => x.a.sens === "absent" || x.a.sens === "en attente");
+       if (absents.length) return { etat: NC, motif: `${absents.length} salarié(s) protégé(s) sans autorisation obtenue : ${absents.map(x=>x.nom+" ("+x.mandat+")").join(", ")}. Aucune notification ne peut intervenir avant l'autorisation.` };
+       const illisibles = lu.filter(x => x.a.sens === "illisible");
+       if (illisibles.length) return { etat: MANQ, motif: `Mention non interprétable pour ${illisibles.map(x=>x.nom+" : « "+x.a.brut+" »").join(", ")}. Attendu : le sens de la décision — accord, refus ou en attente — et sa date.` };
+       const tardives = lu.filter(x => x.a.date && !vide(f.dateNotification) && x.a.date > f.dateNotification);
+       if (tardives.length) return { etat: NC, motif: `${tardives.length} autorisation(s) postérieure(s) à la notification du ${f.dateNotification} : ${tardives.map(x=>x.nom+" — "+x.a.date).join(", ")}. L'autorisation doit précéder la notification, non la suivre.` };
+       const sansDate = lu.filter(x => !x.a.date);
+       if (sansDate.length) return { etat: RISQ, motif: `Autorisations déclarées mais non datées pour ${sansDate.map(x=>x.nom).join(", ")} : l'antériorité par rapport à la notification n'est pas vérifiable.` };
+       return { etat: CONF, motif: `Les ${lu.length} salariés protégés disposent d'une autorisation, toutes antérieures à la notification du ${f.dateNotification}.` };
      })());
 
 c("CTL-IND-01","Situations individuelles","Des salariés en arrêt, congé maternité ou inaptitude sont-ils concernés ?",[],
- f => vide(f.salariesSuspendus)
+ f => neant(f, "salariesSuspendus") ? { etat: SO, motif: "Aucun salarié en arrêt, en congé maternité ou déclaré inapte n'est déclaré parmi les salariés concernés." }
+   : vide(f.salariesSuspendus)
    ? { etat: MANQ, motif: "Les salariés en arrêt, en congé maternité ou déclarés inaptes ne sont pas renseignés. Chacune de ces situations obéit à des règles propres qui peuvent interdire ou retarder la notification." }
    : { etat: RISQ, motif: `${f.salariesSuspendus.length} salarié(s) dans une situation particulière : chacun doit faire l'objet d'un examen distinct, hors du champ de cette base.` });
 

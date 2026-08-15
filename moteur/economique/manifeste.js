@@ -11,7 +11,12 @@ function construire(){
   let tests=null;
   try{ tests=JSON.parse(fs.readFileSync("rapport-tests.json","utf8")); }catch(e){}
   const testes=new Set(tests?tests.cas.map(c=>c.controle):[]);
-  const detection=controles.filter(c=>c.type!=="conformité").map(c=>c.id);
+  /* Trois familles. La détection ne conclut jamais à la conformité et n'a donc
+     pas de cas contradictoire ; la cohérence, elle, est un contrôle de fond à
+     part entière : elle conclut, et elle doit être testée comme telle. */
+  const est=(c,f)=>String(c.type||"").startsWith(f);
+  const detection=controles.filter(c=>est(c,"détection")).map(c=>c.id);
+  const coherence=controles.filter(c=>est(c,"cohérence")).map(c=>c.id);
   return {
     empreinte,
     genere:new Date().toISOString().slice(0,19).replace("T"," "),
@@ -19,6 +24,7 @@ function construire(){
       controles:controles.length,
       conformite:controles.length-detection.length,
       detection:detection.length,
+      coherence:coherence.length,
       testes:testes.size,
       casDeTest:tests?tests.total:0,
       echecs:tests?tests.echecs:null,
@@ -37,12 +43,13 @@ function construire(){
 /* Contrôle de non-divergence, publié dans les deux documents. */
 function verifier(){
   const m=construire();
-  const conf=m.controles.filter(c=>c.type==="conformité");
+  const estC=c=>!String(c.type||"").startsWith("détection");
+  const conf=m.controles.filter(estC);
   return {
     identifiantsUniques:new Set(m.controles.map(c=>c.id)).size===m.controles.length,
     conformiteSansTest:conf.filter(c=>!c.teste).map(c=>c.id),
-    detectionAvecTest:m.controles.filter(c=>c.type!=="conformité"&&c.teste).map(c=>c.id),
-    detectionPouvantConclureConforme:m.controles.filter(c=>c.type!=="conformité"&&c.etats.includes("conforme")).map(c=>c.id),
+    detectionAvecTest:m.controles.filter(c=>String(c.type||"").startsWith("détection")&&c.teste).map(c=>c.id),
+    detectionPouvantConclureConforme:m.controles.filter(c=>String(c.type||"").startsWith("détection")&&c.etats.includes("conforme")).map(c=>c.id),
     somme: m.compteurs.conformite+m.compteurs.detection===m.compteurs.controles,
     coherenceTestes: m.compteurs.testes===m.compteurs.conformite,
   };

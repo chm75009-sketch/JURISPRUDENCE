@@ -5,6 +5,8 @@ const M = require("./moteur.js");
 const PC = require("./pieces.js");
 const CONF = "conforme", NC = "non conforme", RISQ = "risque à vérifier",
       MANQ = "donnée manquante", SO = "sans objet";
+const declare = (f, champ) => Object.prototype.hasOwnProperty.call(f, champ);
+const neant = (f, champ) => declare(f, champ) && vide(f[champ]);
 const vide = x => x === undefined || x === null || x === "" || (Array.isArray(x) && !x.length);
 const C = [];
 const c = (id, rubrique, objet, fondement, fn) => C.push({ id, rubrique, objet, fondement, verdict: fn });
@@ -205,12 +207,14 @@ c("CTL-CCN-03","Normes conventionnelles","Les accords versés ont-ils été conf
      : { etat: RISQ, motif: "Accords annoncés comme versés, mais aucun n'est enregistré comme lu : leur articulation avec la loi n'a pas été faite." }; });
 
 c("CTL-USA-01","Normes conventionnelles","Des usages ou engagements unilatéraux plus favorables existent-ils ?",[],
- f => vide(f.usagesEtEngagements)
+ f => neant(f, "usagesEtEngagements") ? { etat: SO, motif: "Aucun usage ni engagement unilatéral plus favorable n'est déclaré dans l'entreprise." }
+   : vide(f.usagesEtEngagements)
    ? { etat: MANQ, motif: "La question des usages, engagements unilatéraux et décisions unilatérales n'est pas renseignée. Ils ne figurent dans aucune base publique et priment lorsqu'ils sont plus favorables." }
    : { etat: RISQ, motif: `Usages ou engagements signalés : ${String(f.usagesEtEngagements).slice(0,160)}. Leur articulation avec la loi et la convention est hors du champ de cette base.` });
 
 c("CTL-CTX-01","Contentieux","Un contentieux ou un contrôle est-il en cours ?",[],
- f => vide(f.contentieuxEnCours)
+ f => neant(f, "contentieuxEnCours") ? { etat: SO, motif: "Aucun contentieux ni contrôle en cours n'est déclaré." }
+   : vide(f.contentieuxEnCours)
    ? { etat: MANQ, motif: "L'existence d'un contentieux ou d'un contrôle en cours n'est pas renseignée." }
    : /aucun|non|néant/i.test(String(f.contentieuxEnCours))
      ? { etat: SO, motif: "Aucun contentieux ni contrôle signalé. Ce contrôle ne conclut jamais à la conformité." }
@@ -301,5 +305,42 @@ c("CTL-SEU-03","Seuil de dix","Le projet suit-il une série de licenciements ét
    if (f.licenciements3moisGlissants > 10 && cpt.total30j < 10)
      return { etat: NC, motif: `${f.licenciements3moisGlissants} licenciements économiques ont été prononcés sur les trois mois consécutifs précédents, sans jamais atteindre dix sur une même période de trente jours. Tout nouveau licenciement économique envisagé au cours des trois mois suivants est soumis au régime du licenciement collectif d'au moins dix salariés.` };
    return { etat: CONF, motif: `${f.licenciements3moisGlissants} licenciement(s) sur les trois mois précédents : la règle anti-fractionnement de l'article L. 1233-26 ne trouve pas à s'appliquer.` }; });
+
+
+/* ---------------- Contrôles de cohérence ----------------
+   Ils ne lisent pas un champ mais la relation entre deux champs. C'est là que
+   se logent les dossiers formellement complets et juridiquement indéfendables. */
+c("CTL-COH-01","Cohérence","Un poste est-il déclaré à la fois disponible et supprimé ?",["L. 1233-3","L. 1233-4"],
+ f => { if (vide(f.postesDisponibles) || vide(f.postesSupprimes))
+     return { etat: MANQ, motif: "Les postes disponibles ou les postes supprimés ne sont pas renseignés : la contradiction ne peut pas être recherchée." };
+   const supprimes = new Set(f.postesSupprimes.map(p => (p.intitule || "").trim().toLowerCase()));
+   const contradictoires = f.postesDisponibles.filter(p =>
+     (!p.societe || p.societe === f.entreprise) && supprimes.has((p.intitule || "").trim().toLowerCase()));
+   return contradictoires.length
+     ? { etat: NC, motif: `${contradictoires.length} poste(s) déclaré(s) à la fois disponible(s) au reclassement et supprimé(s) dans l'entreprise : ${contradictoires.map(p=>p.intitule).join(", ")}. Un poste ne peut pas être les deux : ou l'emploi est supprimé, ou il est disponible, et la démonstration de la suppression tombe.` }
+     : { etat: CONF, motif: "Aucun poste n'est déclaré simultanément disponible et supprimé." }; });
+
+c("CTL-COH-02","Cohérence","Un même poste est-il proposé à plusieurs salariés ?",["L. 1233-4","D. 1233-2-1"],
+ f => { if (vide(f.offresFaites)) return { etat: MANQ, motif: "Aucune offre renseignée." };
+   const parPoste = {};
+   f.offresFaites.forEach(o => { const cle = [o.intitule, o.employeur, o.lieu].join(" | ");
+     (parPoste[cle] = parPoste[cle] || new Set()).add(o.salarie); });
+   const partages = Object.entries(parPoste).filter(([, s]) => s.size > 1);
+   if (!partages.length) return { etat: CONF, motif: `Les ${f.offresFaites.length} offre(s) portent sur des postes distincts.` };
+   const detail = partages.map(([cle, s]) => `${cle} — ${s.size} destinataires`).join(" ; ");
+   return { etat: NC, motif: `${partages.length} poste(s) proposé(s) simultanément à plusieurs salariés : ${detail}. Le nombre d'offres ne vaut pas nombre de postes : une liste commune est admise, mais elle doit alors préciser les critères de départage entre les salariés candidats au même emploi.` }; });
+
+c("CTL-COH-03","Cohérence","Les quatre critères d'ordre départagent-ils réellement les salariés ?",["L. 1233-5"],
+ f => { if (vide(f.categories)) return { etat: MANQ, motif: "Les catégories professionnelles ne sont pas renseignées." };
+   const tous = f.categories.flatMap(c => c.salaries || []);
+   if (tous.length < 2) return { etat: SO, motif: "Moins de deux salariés renseignés : aucun départage à opérer." };
+   const CRIT = { charges: "charges de famille", anciennetePoints: "ancienneté", social: "situation rendant la réinsertion difficile", qualites: "qualités professionnelles" };
+   const inertes = Object.keys(CRIT).filter(k => {
+     const v = tous.map(s => s[k] ?? 0);
+     return v.every(x => x === v[0]);
+   });
+   if (inertes.length >= 3) return { etat: NC, motif: `${inertes.length} des quatre critères de l'article L. 1233-5 prennent la même valeur pour tous les salariés — ${inertes.map(k => CRIT[k]).join(", ")} — et ne départagent donc personne. Les quatre critères sont formellement présents et matériellement neutralisés : le départage repose en réalité sur ${Object.keys(CRIT).filter(k=>!inertes.includes(k)).map(k=>CRIT[k]).join(" et ")}.` };
+   if (inertes.length) return { etat: RISQ, motif: `${inertes.length} critère(s) prennent la même valeur pour tous : ${inertes.map(k => CRIT[k]).join(", ")}. Une identité de valeur peut être exacte, mais elle doit pouvoir être justifiée salarié par salarié.` };
+   return { etat: CONF, motif: "Les quatre critères prennent des valeurs différenciées : chacun contribue au départage." }; });
 
 module.exports = C;

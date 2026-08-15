@@ -33,6 +33,19 @@ const BASE={entreprise:"T",effectif:320,effectifGroupe:602,groupe:true,cause:"1"
   reclassementInterne:"11 postes",formation:"350 heures",creation:"12 000 €",
   suivi:"commission tous les 2 mois",dateDecisionAdmin:"2026-06-10"}};
 const CAS=[
+ ["poste déclaré disponible et supprimé","CTL-COH-01","non conforme",
+  f=>{f.postesDisponibles=[{societe:"T",intitule:"Régleur"}]; f.postesSupprimes=[{intitule:"Régleur",avant:10,apres:4}];}],
+ ["un même poste proposé à trois salariés","CTL-COH-02","non conforme",
+  f=>{f.offresFaites=[0,1,2].map(i=>({intitule:"Régleur",employeur:"A",descriptif:"d",contrat:"CDI",lieu:"L",
+    remuneration:"30 000 €",classification:"N3",dateCertaine:true,salarie:"S"+i,delaiReponse:"15 jours"}));}],
+ ["trois critères d'ordre identiques pour tous","CTL-COH-03","non conforme",
+  f=>{f.categories=[{nom:"Régleur",effectif:8,salaries:[
+    {nom:"S1",charges:0,anciennetePoints:0,social:0,qualites:2},
+    {nom:"S2",charges:0,anciennetePoints:0,social:0,qualites:1}]}];}],
+ ["autorisation de licencier refusée","CTL-PRT-01","non conforme",
+  f=>{f.salariesProteges=[{nom:"P1",mandat:"élu",autorisation:"2026-05-12 — refus de l'inspecteur du travail"}];}],
+ ["autorisation postérieure à la notification","CTL-PRT-01","non conforme",
+  f=>{f.salariesProteges=[{nom:"P1",mandat:"élu",autorisation:"2026-07-01"}]; f.dateNotification="2026-06-15";}],
  ["neuf licenciements et un déjà prononcé dans les trente jours","CTL-SEU-01","non conforme",
   f=>{f.nbLicenciements=9; f.licenciementsRecents30j=1;}],
  ["dix refus de modification traités isolément","CTL-SEU-02","non conforme",

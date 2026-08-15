@@ -1,16 +1,16 @@
 {
  "objet": "manifeste des contrôles",
- "empreinte": "146415829623",
+ "empreinte": "2fdee2faabbe",
  "empreintesFichiers": {
   "moteur.js": "ff1790b03245",
-  "controles.js": "ab0fdab86e3d",
-  "controles2.js": "00a4940d1ae8",
+  "controles.js": "9c8c08893410",
+  "controles2.js": "5110a370e6b9",
   "grille-eco.js": "35d6383e43ea",
   "grille-auto.js": "20ca038f05b7",
   "pieces.js": "95ed7ab57ced",
   "preuve.js": "ba61fe6fc07a"
  },
- "genere": "2026-08-15 20:24:00",
+ "genere": "2026-08-15 20:31:51",
  "verification": {
   "identifiantsUniques": true,
   "conformiteSansTest": [],
@@ -20,11 +20,12 @@
   "coherenceTestes": true
  },
  "compteurs": {
-  "controles": 55,
-  "conformite": 48,
+  "controles": 58,
+  "conformite": 51,
   "detection": 7,
-  "testes": 48,
-  "casDeTest": 52,
+  "coherence": 5,
+  "testes": 51,
+  "casDeTest": 57,
   "echecs": 0,
   "regles": 234
  },
@@ -232,7 +233,10 @@
    "entrees": [
     "groupe",
     "societes",
-    "trimestres"
+    "trimestres",
+    "entreprise",
+    "societesDuSecteur",
+    "activite"
    ],
    "piece": "comptes-groupe",
    "etats": [
@@ -494,16 +498,21 @@
    "objet": "L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?",
    "type": "conformité",
    "entrees": [
-    "salariesProteges"
+    "salariesProteges",
+    "dateNotification"
    ],
    "piece": "autorisations",
    "etats": [
     "conforme",
     "non conforme",
+    "risque à vérifier",
+    "donnée manquante",
     "sans objet"
    ],
-   "fondement": "L. 2411-1",
+   "fondement": "L. 2411-1 · L. 2411-5",
    "tests": [
+    "autorisation de licencier refusée",
+    "autorisation postérieure à la notification",
     "salarié protégé sans autorisation"
    ],
    "teste": true
@@ -519,7 +528,8 @@
    "piece": "—",
    "etats": [
     "risque à vérifier",
-    "donnée manquante"
+    "donnée manquante",
+    "sans objet"
    ],
    "fondement": "—",
    "tests": [],
@@ -1045,7 +1055,8 @@
    "piece": "—",
    "etats": [
     "risque à vérifier",
-    "donnée manquante"
+    "donnée manquante",
+    "sans objet"
    ],
    "fondement": "—",
    "tests": [],
@@ -1160,7 +1171,7 @@
    "id": "CTL-SEU-01",
    "rubrique": "Seuil de dix",
    "objet": "Le décompte des trente jours intègre-t-il les licenciements déjà prononcés ?",
-   "type": "conformité",
+   "type": "cohérence — porte sur la relation entre deux champs",
    "entrees": [
     "nbLicenciements",
     "licenciementsRecents30j",
@@ -1203,7 +1214,7 @@
    "id": "CTL-SEU-03",
    "rubrique": "Seuil de dix",
    "objet": "Le projet suit-il une série de licenciements étalée sur trois mois ?",
-   "type": "conformité",
+   "type": "cohérence — porte sur la relation entre deux champs",
    "entrees": [
     "effectif",
     "licenciements3moisGlissants"
@@ -1218,6 +1229,70 @@
    "fondement": "L. 1233-26",
    "tests": [
     "série étalée sur trois mois pour rester sous le seuil"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-COH-01",
+   "rubrique": "Cohérence",
+   "objet": "Un poste est-il déclaré à la fois disponible et supprimé ?",
+   "type": "cohérence — porte sur la relation entre deux champs",
+   "entrees": [
+    "postesDisponibles",
+    "postesSupprimes",
+    "entreprise"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-3 · L. 1233-4",
+   "tests": [
+    "poste déclaré disponible et supprimé"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-COH-02",
+   "rubrique": "Cohérence",
+   "objet": "Un même poste est-il proposé à plusieurs salariés ?",
+   "type": "cohérence — porte sur la relation entre deux champs",
+   "entrees": [
+    "offresFaites"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-4 · D. 1233-2-1",
+   "tests": [
+    "un même poste proposé à trois salariés"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-COH-03",
+   "rubrique": "Cohérence",
+   "objet": "Les quatre critères d'ordre départagent-ils réellement les salariés ?",
+   "type": "cohérence — porte sur la relation entre deux champs",
+   "entrees": [
+    "categories"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-5",
+   "tests": [
+    "trois critères d'ordre identiques pour tous"
    ],
    "teste": true
   }

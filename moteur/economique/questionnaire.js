@@ -15,6 +15,8 @@ const CHAMPS=[
   ["groupe","L'entreprise appartient-elle à un groupe ?","oui / non"],
   ["effectifGroupe","Effectif total du groupe, France et étranger","nombre"],
   ["societes","Sociétés du groupe : nom, effectif, activité, pays","liste"],
+  ["activite","Activité de l'entreprise auditée, dans les termes qui servent à délimiter le secteur","texte"],
+  ["societesDuSecteur","Sociétés du groupe relevant du même secteur d'activité, nommées","liste"],
   ["etablissementsDistincts","Nombre d'établissements distincts","nombre"]]],
  ["Groupe — origine des difficultés",[
   ["fluxIntragroupe","Redevances de marque, management fees et prix de transfert versés aux sociétés du groupe, par exercice — montants comptables, non une appréciation","tableau"],
@@ -131,6 +133,8 @@ const CTRL={
  effectifGroupe:"Détermine le contrat de sécurisation professionnelle ou le congé de reclassement",
  groupe:"Détermine le périmètre d'appréciation de la cause et du reclassement",
  societes:"Contrôle que chaque société française du périmètre a été interrogée",
+ activite:"Sert à reconnaître les sociétés du même secteur d'activité",
+ societesDuSecteur:"Nomme le périmètre du secteur : sans elle, l'étiquette « secteur » n'est pas vérifiable",
  nbLicenciements:"Détermine le régime, le nombre de réunions et le délai d'avis",
  licenciementsRecents30j:"S'ajoute au projet pour le seuil de dix : le décompte est celui de la fenêtre de trente jours",
  licenciements3moisGlissants:"Applique la règle anti-fractionnement de l'article L. 1233-26",
