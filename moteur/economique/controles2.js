@@ -229,6 +229,8 @@ c("CTL-CTX-01","Contentieux","Un contentieux ou un contrôle est-il en cours ?",
    l'obligation sans la satisfaire. */
 c("CTL-REC-12","Reclassement","Les offres relèvent-elles du territoire national ?",["L. 1233-4"],
  f => { if (vide(f.offresFaites)) return { etat: MANQ, motif: "Aucune offre de reclassement n'est renseignée." };
+   if (f.dateNotification && f.dateNotification < "2017-09-24")
+     return { etat: SO, motif: `Notification du ${f.dateNotification} : la limitation de l'obligation de reclassement au territoire national est née de l'ordonnance du 22 septembre 2017. Elle n'est pas opposable à ce licenciement, et les offres à l'étranger comptent.` };
    const etrangeres = new Set((f.societes || []).filter(s => s.etranger).map(s => s.nom));
    if (!etrangeres.size) return { etat: SO, motif: "Aucune société étrangère n'est déclarée dans le groupe." };
    const hors = f.offresFaites.filter(o => etrangeres.has(o.employeur));
@@ -354,5 +356,45 @@ c("CTL-VAL-01","Cohérence","Les données saisies sont-elles lisibles et cohére
          + an.map(x => `${x.champ} = « ${x.valeur} » — ${x.motif}`).join(" ; ")
          + `. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.` }
      : { etat: CONF, motif: "Toutes les données renseignées sont lisibles, et les dates et effectifs sont cohérents entre eux." }; });
+
+
+/* ---------------- Le droit dans le temps ---------------- */
+/* Le moteur savait quelle version de L. 1233-3 s'appliquait, et appliquait
+   l'autre. Ce contrôle rend la version visible et la confronte au dossier. */
+c("CTL-TMP-01","Droit dans le temps","La version du texte appliquée est-elle celle en vigueur au jour de la notification ?",
+ ["L. 1233-3"],
+ f => { if (vide(f.dateNotification))
+     return { etat: MANQ, motif: "La date de notification n'est pas renseignée : la version applicable de l'article L. 1233-3 ne peut pas être déterminée. Le rapport raisonne alors sur la version en vigueur, ce qui est faux pour tout licenciement antérieur au 24 septembre 2017." };
+   const e = M.etatTexte(f.dateNotification);
+   const p = M.perimetre(f);
+   const ancien = f.dateNotification < "2017-09-24";
+   const tresAncien = f.dateNotification < "2016-12-01";
+   if (!ancien) return { etat: CONF, motif: `Notification du ${f.dateNotification} : version ${e.etat}, qui porte ${e.contenu}. C'est la version que la base applique.` };
+   const etrangeres = (f.societes || []).filter(s => s.etranger).map(s => s.nom);
+   return { etat: RISQ, motif: `Notification du ${f.dateNotification} : version « ${e.etat} », qui porte ${e.contenu}. `
+     + (tresAncien ? "Le seuil trimestriel chiffré n'existait pas et n'est donc pas opposé au dossier. " : "")
+     + `Le périmètre retenu est ${p.niveau}`
+     + (etrangeres.length ? `, ${etrangeres.join(" et ")} y étant comprise(s) : la limitation au territoire national ne s'applique pas.` : ".")
+     + " Un dossier régi par un texte abrogé appelle une relecture par un professionnel : la base connaît les trois versions, elle ne connaît pas la jurisprudence propre à chacune." }; });
+
+/* ---------------- Cause 4 : la cessation d'activité ---------------- */
+c("CTL-ECO-05","Cause économique","La cessation d'activité est-elle complète et définitive ?",["L. 1233-3, 4°"],
+ f => { if (f.cause !== "4") return { etat: SO, motif: "La cause invoquée n'est pas la cessation d'activité." };
+   if (f.cessationComplete === undefined || f.cessationComplete === null)
+     return { etat: MANQ, motif: "Le caractère complet et définitif de la cessation n'est pas renseigné. C'est la condition même de la cause : une cessation partielle ou temporaire ne la constitue pas." };
+   if (f.cessationComplete === false)
+     return { etat: NC, motif: "La cessation est déclarée incomplète ou non définitive. L'article L. 1233-3, 4° ne vise que la cessation complète et définitive de l'activité de l'entreprise : une cessation partielle relève, le cas échéant, d'un autre cas." };
+   /* Une société du groupe qui poursuit la même activité contredit la cessation. */
+   const memes = (f.societes || []).filter(s => s.activite && f.activite
+     && String(s.activite).toLowerCase() === String(f.activite).toLowerCase());
+   if (memes.length)
+     return { etat: NC, motif: `La cessation est déclarée complète et définitive, mais ${memes.length} société(s) du groupe exercent la même activité : ${memes.map(s => s.nom + (s.etranger ? " (à l'étranger)" : " (en France)")).join(", ")}. La cessation s'apprécie au niveau de l'entreprise, mais la poursuite de la même activité dans le groupe nourrit le débat sur le caractère réel de la cessation et sur l'obligation de reclassement.` };
+   if (vide(f.societesDuSecteur) && f.groupe)
+     return { etat: RISQ, motif: "La cessation est déclarée complète et définitive. Les sociétés du groupe exerçant la même activité ne sont pas énumérées : la contradiction ne peut pas être recherchée." };
+   return { etat: CONF, motif: "La cessation est déclarée complète et définitive, et aucune société du groupe n'est déclarée exercer la même activité." }; });
+
+c("CTL-ECO-06","Cause économique","La cessation procède-t-elle d'une faute ou d'une légèreté blâmable ?",["L. 1233-3, 4°"],
+ f => { if (f.cause !== "4") return { etat: SO, motif: "La cause invoquée n'est pas la cessation d'activité." };
+   return { etat: RISQ, motif: "La cessation complète et définitive constitue en elle-même une cause économique, sauf si elle procède d'une faute de l'employeur ou de sa légèreté blâmable. C'est là que se joue ce type de dossier, et la base ne peut pas trancher : la question appelle l'examen d'un professionnel, pièces de gestion à l'appui. Ce contrôle ne conclut jamais à la conformité." }; });
 
 module.exports = C;

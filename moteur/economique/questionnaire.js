@@ -242,6 +242,8 @@ function construire(){
  h2("Contrôle de non-divergence");
  tab(["Vérification","Résultat"],[
   ["Champs lus par un contrôle et jamais demandés",jamaisDemandes.join(", ")||"aucun"],
+  ["Champs demandés qu'aucun contrôle ne lit",[...demandes].filter(c=>!lus.includes(c)&&!composes.has(c)
+    &&![...demandes].some(x=>x.startsWith(c+"."))).join(", ")||"aucun"],
   ["Champs composés, demandés par leurs sous-champs",[...composes,...COMPOSES_LISTE].join(", ")],
   ["Champs renseignés par l'application, non demandés à l'employeur",[...INTERNES].join(", ")]]);
  if(jamaisDemandes.length){

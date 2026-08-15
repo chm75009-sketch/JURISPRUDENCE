@@ -187,7 +187,10 @@ R.push(
 
 {id:"ECO-1-02", rubrique:"1° Difficultés économiques",
  question:"Le seuil trimestriel est-il atteint ?",
- si:f=>f.cause==="1"&&Array.isArray(f.trimestres)&&f.trimestres.length>0,
+ /* Le seuil trimestriel chiffré est né le 1er décembre 2016 : il ne peut pas
+    être opposé à un licenciement notifié avant. */
+ si:f=>f.cause==="1"&&Array.isArray(f.trimestres)&&f.trimestres.length>0
+   &&(!f.dateNotification||f.dateNotification>="2016-12-01"),
  alors:f=>{const b=M.baisseTrimestrielle(f);
   const d=b.detail.map(x=>`${x.libelle} ${(x.ecart*100).toFixed(1)} %`).join(" · ");
   return `Effectif ${f.effectif} — tranche « ${b.tranche} » : ${b.seuilRequis} trimestre(s) consécutif(s) requis. Constatés : ${b.trimestresConsecutifs}. ${b.atteint?"Le seuil est ATTEINT.":"Le seuil n'est PAS atteint."} Détail : ${d}. La comparaison porte sur le même trimestre de l'année précédente, et non d'exercice à exercice.`;},

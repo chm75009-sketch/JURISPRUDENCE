@@ -11,8 +11,8 @@ const G = require("./grille.js");
 /* Trois familles, non deux. Un contrôle de cohérence ne lit pas un champ mais
    la relation entre deux champs : c'est là que se logent les dossiers
    formellement complets et juridiquement indéfendables. */
-const COHERENCE = new Set(["CTL-COH-01","CTL-COH-02","CTL-COH-03","CTL-SEU-01","CTL-SEU-03","CTL-VAL-01"]);
-const DETECTION = new Set(["CTL-COE-01","CTL-USA-01","CTL-CTX-01","CTL-IND-01","CTL-ECO-03","CTL-CSE-09","CTL-FRA-01"]);
+const COHERENCE = new Set(["CTL-COH-01","CTL-COH-02","CTL-COH-03","CTL-SEU-01","CTL-SEU-03","CTL-VAL-01","CTL-TMP-01"]);
+const DETECTION = new Set(["CTL-COE-01","CTL-USA-01","CTL-CTX-01","CTL-IND-01","CTL-ECO-03","CTL-CSE-09","CTL-FRA-01","CTL-ECO-06"]);
 
 const src = x => String(x.verdict);
 /* les champs de la fiche réellement lus par la fonction */

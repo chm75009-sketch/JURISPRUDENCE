@@ -89,12 +89,27 @@ function accompagnement(f) {
 }
 
 /* --- périmètre d'appréciation de la cause --- */
+/* Le périmètre dépend de la date de notification, non de la date d'aujourd'hui.
+   La limitation au territoire national est née de l'ordonnance du 22 septembre
+   2017 : l'appliquer à un licenciement antérieur, c'est écarter des sociétés
+   étrangères que la jurisprudence d'alors comprenait dans le périmètre. */
 function perimetre(f) {
   if (!f.groupe) return { niveau: "l'entreprise", texte: "L. 1233-3",
     motif: "L'entreprise n'appartient à aucun groupe." };
-  return { niveau: "le secteur d'activité commun à l'entreprise et aux entreprises du groupe établies sur le territoire national",
-    texte: "L. 1233-3", motif: "L'entreprise appartient à un groupe ; le secteur est limité au territoire national depuis le 24 septembre 2017.",
-    exclusions: (f.societes || []).filter(s => s.etranger).map(s => s.nom) };
+  const d = f.dateNotification;
+  const etrangeres = (f.societes || []).filter(s => s.etranger).map(s => s.nom);
+  if (!d) return { niveau: "le secteur d'activité commun à l'entreprise et aux entreprises du groupe établies sur le territoire national",
+    texte: "L. 1233-3", dateInconnue: true,
+    motif: "La date de notification n'est pas renseignée : le périmètre est donné dans sa version en vigueur depuis le 24 septembre 2017. Pour un licenciement antérieur, il serait différent.",
+    exclusions: etrangeres };
+  if (d >= "2017-09-24") return { niveau: "le secteur d'activité commun à l'entreprise et aux entreprises du groupe établies sur le territoire national",
+    texte: "L. 1233-3", version: "depuis le 24 septembre 2017",
+    motif: `Notification du ${d} : le secteur est limité au territoire national depuis le 24 septembre 2017.`,
+    exclusions: etrangeres };
+  return { niveau: "le secteur d'activité du groupe, sans limitation au territoire national",
+    texte: "L. 1233-3", version: d >= "2016-12-01" ? "1er décembre 2016 au 23 septembre 2017" : "avant le 1er décembre 2016",
+    motif: `Notification du ${d}, antérieure à l'ordonnance du 22 septembre 2017 : la limitation du périmètre au territoire national n'existait pas. Les sociétés étrangères du même secteur entrent dans le périmètre d'appréciation.`,
+    exclusions: [], societesEtrangeresIncluses: etrangeres };
 }
 
 /* --- état du texte L. 1233-3 applicable à une date --- */

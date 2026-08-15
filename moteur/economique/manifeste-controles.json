@@ -1,16 +1,16 @@
 {
  "objet": "manifeste des contrôles",
- "empreinte": "233b286f8d70",
+ "empreinte": "ed398f3d06ff",
  "empreintesFichiers": {
-  "moteur.js": "e79dbcbbf6f7",
+  "moteur.js": "895186e42a6c",
   "controles.js": "a1b19f1438e8",
-  "controles2.js": "6486a9d1cc37",
-  "grille-eco.js": "35d6383e43ea",
+  "controles2.js": "2c6362dc6392",
+  "grille-eco.js": "ab7562cc145b",
   "grille-auto.js": "20ca038f05b7",
   "pieces.js": "95ed7ab57ced",
   "preuve.js": "ba61fe6fc07a"
  },
- "genere": "2026-08-15 20:41:36",
+ "genere": "2026-08-15 20:48:09",
  "verification": {
   "identifiantsUniques": true,
   "conformiteSansTest": [],
@@ -20,12 +20,12 @@
   "coherenceTestes": true
  },
  "compteurs": {
-  "controles": 59,
-  "conformite": 52,
-  "detection": 7,
-  "coherence": 6,
-  "testes": 52,
-  "casDeTest": 62,
+  "controles": 62,
+  "conformite": 54,
+  "detection": 8,
+  "coherence": 7,
+  "testes": 54,
+  "casDeTest": 65,
   "echecs": 0,
   "regles": 234
  },
@@ -1087,6 +1087,7 @@
    "type": "conformité",
    "entrees": [
     "offresFaites",
+    "dateNotification",
     "societes"
    ],
    "piece": "—",
@@ -1316,6 +1317,72 @@
     "effectif d'établissement supérieur à celui de l'entreprise"
    ],
    "teste": true
+  },
+  {
+   "id": "CTL-TMP-01",
+   "rubrique": "Droit dans le temps",
+   "objet": "La version du texte appliquée est-elle celle en vigueur au jour de la notification ?",
+   "type": "cohérence — porte sur la relation entre deux champs",
+   "entrees": [
+    "dateNotification",
+    "societes"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-3",
+   "tests": [
+    "licenciement notifié sous une version abrogée du texte"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-ECO-05",
+   "rubrique": "Cause économique",
+   "objet": "La cessation d'activité est-elle complète et définitive ?",
+   "type": "conformité",
+   "entrees": [
+    "cause",
+    "cessationComplete",
+    "societes",
+    "activite",
+    "societesDuSecteur",
+    "groupe"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-3, 4°",
+   "tests": [
+    "cessation déclarée totale, société du groupe poursuivant la même activité",
+    "cessation déclarée partielle"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-ECO-06",
+   "rubrique": "Cause économique",
+   "objet": "La cessation procède-t-elle d'une faute ou d'une légèreté blâmable ?",
+   "type": "détection — conclut au risque, jamais à la conformité",
+   "entrees": [
+    "cause"
+   ],
+   "piece": "—",
+   "etats": [
+    "risque à vérifier",
+    "sans objet"
+   ],
+   "fondement": "L. 1233-3, 4°",
+   "tests": [],
+   "teste": false
   }
  ],
  "objets": {

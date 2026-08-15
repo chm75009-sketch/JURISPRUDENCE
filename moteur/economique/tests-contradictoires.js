@@ -33,6 +33,13 @@ const BASE={entreprise:"T",effectif:320,effectifGroupe:602,groupe:true,cause:"1"
   reclassementInterne:"11 postes",formation:"350 heures",creation:"12 000 €",
   suivi:"commission tous les 2 mois",dateDecisionAdmin:"2026-06-10"}};
 const CAS=[
+ ["cessation déclarée totale, société du groupe poursuivant la même activité","CTL-ECO-05","non conforme",
+  f=>{f.cause="4"; f.cessationComplete=true; f.activite="usinage";
+      f.societes=[{nom:"SŒUR FRANCE",activite:"usinage",pays:"France",etranger:false}];}],
+ ["cessation déclarée partielle","CTL-ECO-05","non conforme",
+  f=>{f.cause="4"; f.cessationComplete=false;}],
+ ["licenciement notifié sous une version abrogée du texte","CTL-TMP-01","risque à vérifier",
+  f=>{f.dateNotification="2015-06-01";}],
  ["date impossible : 30 février","CTL-VAL-01","non conforme", f=>{f.dateNotification="2026-02-30";}],
  ["effectif négatif","CTL-VAL-01","non conforme", f=>{f.effectif=-12;}],
  ["nombre de licenciements décimal","CTL-VAL-01","non conforme", f=>{f.nbLicenciements=9.5;}],
