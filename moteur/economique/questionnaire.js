@@ -253,18 +253,35 @@ function construire(){
  const COMPOSES_LISTE=new Set(["pieces"]);
  const jamaisDemandes=lus.filter(c=>!demandes.has(c)&&!INTERNES.has(c)
    &&!composes.has(c)&&!COMPOSES_LISTE.has(c));
+ /* La symétrie. Un champ demandé que nul contrôle ne lit donne l'illusion d'une
+    couverture qui n'existe pas : l'employeur répond, et la réponse ne produit
+    rien. Certains champs sont pourtant légitimement de contexte — ils sont
+    repris tels quels dans le rapport, ou nourrissent la veille. Ils doivent
+    alors être déclarés ici, nommément : c'est la déclaration qui est vérifiée,
+    non l'absence de contrôle. */
+ const CONTEXTE=new Set(["entreprise","siren","dateAudit","idcc","autresElements",
+   "salaries","convention","accords","conventionAJour","avenantsRecents",
+   "conventionJointe","accordsJoints","effectifGroupe","resultatGroupe",
+   "cadreAuSensL1441_13","dateEntretien","menace","perimetreOrdre"]);
+ const jamaisLus=[...demandes].filter(c=>!lus.includes(c)&&!composes.has(c)
+   &&!c.includes(".")&&![...demandes].some(x=>x.startsWith(c+".")));
+ const nonDeclares=jamaisLus.filter(c=>!CONTEXTE.has(c));
  h2("Contrôle de non-divergence");
  tab(["Vérification","Résultat"],[
   ["Champs vus par inspection du code",String(parRegex.length)],
   ["Champs vus par la sonde d'exécution",String(parSonde.length)],
   ["Champs que seule la sonde a vus",parSonde.filter(c=>!parRegex.includes(c)).join(", ")||"aucun"],
   ["Champs lus par un contrôle et jamais demandés",jamaisDemandes.join(", ")||"aucun"],
-  ["Champs demandés qu'aucun contrôle ne lit",[...demandes].filter(c=>!lus.includes(c)&&!composes.has(c)
-    &&![...demandes].some(x=>x.startsWith(c+"."))).join(", ")||"aucun"],
+  ["Champs demandés qu'aucun contrôle ne lit",jamaisLus.join(", ")||"aucun"],
+  ["Champs de contexte, déclarés tels",[...CONTEXTE].join(", ")],
   ["Champs composés, demandés par leurs sous-champs",[...composes,...COMPOSES_LISTE].join(", ")],
   ["Champs renseignés par l'application, non demandés à l'employeur",[...INTERNES].join(", ")]]);
  if(jamaisDemandes.length){
   console.error("DIVERGENCE : champs lus par un contrôle et absents du questionnaire — "+jamaisDemandes.join(", "));
+  process.exit(1);
+ }
+ if(nonDeclares.length){
+  console.error("DIVERGENCE : champs demandés que nul contrôle ne lit, et non déclarés de contexte — "+nonDeclares.join(", "));
   process.exit(1);
  }
  tab(["Vérification","Résultat"],[
