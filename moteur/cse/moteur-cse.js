@@ -27,6 +27,63 @@ function seuilAtteint(mois, seuil) {
   return { consecutifs: max, atteint: max >= 12, texte: "L. 2311-2" };
 }
 
+/* L'effectif déclaré, confronté aux relevés mensuels.
+
+   Tout le régime du comité — nombre de réunions, commission santé et sécurité,
+   subvention, attributions — se calcule sur un seul nombre, « effectif », que
+   l'employeur déclare. Les relevés mensuels ne servaient qu'au seuil de onze.
+   Un dossier déclarant 299 salariés et produisant quatorze relevés compris
+   entre 312 et 317 obtenait donc six réunions par an au lieu de douze et une
+   absence de commission déclarée régulière : la contradiction était dans le
+   dossier lui-même, et personne ne la lisait.
+
+   Les seuils ne se franchissent pas de la même manière selon le chapitre : les
+   articles L. 2311-2, L. 2312-2 et L. 2312-34 posent chacun leur règle des
+   douze mois consécutifs, mais les chapitres du fonctionnement — réunion
+   mensuelle de L. 2315-28, commission de L. 2315-36 — n'en posent aucune. Le
+   moteur dit ce que chaque texte prévoit et ne complète pas le silence des
+   autres. */
+const SEUILS_EFFECTIF = [
+ { seuil: 11,   texte: "L. 2311-2",  douzeMois: true,
+   effet: "la mise en place du comité social et économique" },
+ { seuil: 50,   texte: "L. 2312-2",  douzeMois: true,
+   effet: "les attributions récurrentes d'information et de consultation, la subvention de fonctionnement (L. 2315-61) et la contribution aux activités sociales (L. 2312-81)" },
+ { seuil: 300,  texte: "L. 2312-34", douzeMois: true,
+   effet: "les obligations d'information et de consultation du chapitre II ; s'y ajoutent, sans que leur chapitre fixe de règle propre de franchissement, la réunion mensuelle (L. 2315-28) et la commission santé, sécurité et conditions de travail (L. 2315-36)" },
+ { seuil: 1000, texte: "L. 2312-63", douzeMois: false,
+   effet: "l'établissement du rapport d'alerte économique par la commission économique" },
+ { seuil: 2000, texte: "L. 2315-61", douzeMois: false,
+   effet: "le taux de la subvention de fonctionnement, porté à 0,22 % de la masse salariale brute" },
+];
+
+function coherenceEffectif(f = {}) {
+  const e = f.effectif, mois = f.effectifsMensuels;
+  if (typeof e !== "number" || !Array.isArray(mois) || !mois.length) return null;
+  const nombres = mois.filter(x => typeof x === "number" && Number.isFinite(x));
+  if (nombres.length !== mois.length)
+    return { lisible: false, releves: mois.length, exploitables: nombres.length,
+      motif: "Un ou plusieurs relevés mensuels ne sont pas des nombres : la cohérence de l'effectif déclaré ne peut pas être vérifiée." };
+  const min = Math.min(...nombres), max = Math.max(...nombres);
+  const moyenne = Math.round(nombres.reduce((a, b) => a + b, 0) / nombres.length);
+  /* Les seuils que les relevés atteignent alors que l'effectif déclaré est en
+     dessous. Ce sont les seuls qui changent le régime appliqué au dossier. */
+  const franchis = [];
+  for (const s of SEUILS_EFFECTIF) {
+    if (e >= s.seuil) continue;
+    const d = seuilAtteint(nombres, s.seuil);
+    const atteint = s.douzeMois ? d.atteint : nombres.some(m => m >= s.seuil);
+    if (!atteint) continue;
+    franchis.push({ ...s, consecutifs: d.consecutifs,
+      regle: s.douzeMois
+        ? `${s.texte} répute le seuil franchi lorsqu'il est atteint pendant douze mois consécutifs : les relevés en comptent ${d.consecutifs}.`
+        : `${s.texte} ne fixe pas de règle de franchissement propre : ${nombres.filter(m => m >= s.seuil).length} relevé(s) atteignent ce seuil.` });
+  }
+  return { lisible: true, effectifDeclare: e, releves: nombres.length,
+    min, max, moyenne, dans: e >= min && e <= max,
+    ecart: e < min ? min - e : (e > max ? e - max : 0),
+    seuilsFranchis: franchis };
+}
+
 const ATTRIBUTIONS = [
  { min: 0,    max: 10,   regime: "aucun comité obligatoire", texte: "L. 2311-2" },
  { min: 11,   max: 49,   regime: "réclamations, santé et sécurité, enquêtes", texte: "L. 2312-5" },
@@ -126,26 +183,44 @@ function listeParitaire(o = {}) {
     return d >= 0.5 ? Math.ceil(x) : Math.floor(x); };
   const nF = arrondi(brutF), nH = arrondi(brutH);
   const egaliteStricte = femmes === hommes;
-  const base = { applicable: true, candidats: n, sieges: o.sieges ?? null,
+  /* Le quatrième alinéa n'est pas indexé sur le nombre de candidats mais sur le
+     nombre de **sièges à pourvoir** : « En cas de nombre impair de sièges à
+     pourvoir et de stricte égalité entre les femmes et les hommes inscrits… ».
+     La distinction n'est pas théorique — une liste incomplète comporte moins de
+     candidats que le collège n'a de sièges. Le moteur lisait le nombre de
+     candidats, ce qui ouvrait l'alinéa 4 dans des cas qu'il ne couvre pas et le
+     fermait dans des cas qu'il couvre. */
+  const sieges = typeof o.sieges === "number" ? o.sieges : null;
+  const base = { applicable: true, candidats: n, sieges,
     inscrits, femmes, hommes,
     partF: +(100 * femmes / inscrits).toFixed(2), partH: +(100 * hommes / inscrits).toFixed(2),
     brutF: +brutF.toFixed(4), brutH: +brutH.toFixed(4), texte: "L. 2314-30",
     sanction: "Le non-respect de la proportion entraîne l'annulation de l'élection des derniers élus du sexe surreprésenté, en suivant l'ordre inverse de la liste ; le non-respect de l'alternance entraîne l'annulation de l'élection de tout élu dont le positionnement est irrégulier (L. 2314-32).",
     portee: "La règle s'applique séparément à la liste des titulaires et à celle des suppléants (L. 2314-30, dernier alinéa)." };
 
-  /* Cas expressément réglé par le quatrième alinéa. */
-  if (nF + nH !== n && n % 2 === 1 && egaliteStricte)
-    return { ...base, indifferent: true, candidatsFemmes: null, candidatsHommes: null,
-      motif: `Nombre impair de candidats et stricte égalité entre les femmes et les hommes inscrits : la liste comprend ${Math.floor(n / 2)} candidats de chaque sexe et, indifféremment, un homme ou une femme supplémentaire.`,
-      texte_al: "L. 2314-30, al. 4" };
-
-  /* Cas où l'arrondi arithmétique des deux sexes ne retombe pas sur le nombre
-     de candidats. Le texte ne le règle pas et aucun arrêt du corpus ne le
-     tranche : la base le signale au lieu de choisir. */
-  if (nF + nH !== n)
+  if (nF + nH !== n) {
+    /* Cas expressément réglé par le quatrième alinéa : sièges à pourvoir en
+       nombre impair, et stricte égalité entre les inscrits des deux sexes. */
+    if (egaliteStricte && sieges !== null && sieges % 2 === 1)
+      return { ...base, indifferent: true, candidatsFemmes: null, candidatsHommes: null,
+        motif: `${sieges} sièges à pourvoir — nombre impair — et stricte égalité entre les femmes et les hommes inscrits : la liste comprend ${Math.floor(n / 2)} candidat${Math.floor(n / 2) > 1 ? "s" : ""} de chaque sexe et, indifféremment, un homme ou une femme supplémentaire.`,
+        texte_al: "L. 2314-30, al. 4" };
+    /* Stricte égalité, mais le nombre de sièges à pourvoir n'est pas connu :
+       l'alinéa 4 ne peut ni être appliqué, ni être écarté. La donnée manque, et
+       le dire vaut mieux que de la remplacer par le nombre de candidats. */
+    if (egaliteStricte && sieges === null)
+      return { ...base, siegesInconnus: true, aVerifier: true,
+        candidatsFemmes: null, candidatsHommes: null,
+        motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}. Les inscrits des deux sexes étant en stricte égalité, l'issue dépend du nombre de sièges à pourvoir dans le collège, seul critère retenu par le quatrième alinéa — et il n'est pas renseigné. L'indiquer tranchera le cas.`,
+        texte_al: "L. 2314-30, al. 4" };
+    /* Cas où l'arrondi arithmétique des deux sexes ne retombe pas sur le nombre
+       de candidats, hors l'hypothèse du quatrième alinéa. Le texte ne le règle
+       pas et aucun arrêt du corpus ne le tranche : la base le signale au lieu
+       de choisir. */
     return { ...base, conflit: true, candidatsFemmes: null, candidatsHommes: null,
-      motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}. Le texte ne règle pas ce cas et aucun arrêt publié du corpus ne le tranche : la composition doit être arrêtée avec un conseil avant le dépôt de la liste.`,
+      motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}${sieges !== null ? ` et ${sieges} siège(s) à pourvoir` : ""}. Le quatrième alinéa ne couvre pas ce cas${!egaliteStricte ? " — les inscrits des deux sexes ne sont pas en stricte égalité" : " — le nombre de sièges à pourvoir est pair"}, et aucun arrêt publié du corpus ne le tranche : la composition doit être arrêtée avec un conseil avant le dépôt de la liste.`,
       aVerifier: true };
+  }
 
   const exclusion = (nF === 0 || nH === 0)
     ? "L'application de la règle exclut totalement la représentation d'un sexe. La liste peut alors comporter un candidat du sexe qui, à défaut, ne serait pas représenté ; ce candidat ne peut être en première position (L. 2314-30, al. 5)."
@@ -227,6 +302,7 @@ function electionsPartielles(o = {}) {
 }
 
 module.exports = { R2314_1, tranche, delegation, seuilAtteint, attributions, ATTRIBUTIONS,
+  SEUILS_EFFECTIF, coherenceEffectif,
   delaiConsultation, budgetFonctionnement, cssct, reunions, colleges, listeParitaire,
   financementExpertise, EXPERTISES, contestationExpertise, delaiContestation, mandat,
   electionsPartielles };

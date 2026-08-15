@@ -16,10 +16,13 @@
  "protocole": { "nbSignataires": 2, "nbParticipants": 3, "suffragesSignataires": 64, "proportionFH": false },
  "listesDeposees": [
    { "nom": "collège 1 · titulaires", "femmesInscrites": 60, "hommesInscrits": 40,
+     "siegesAPourvoir": 3,
      "candidats": [{"sexe":"F"},{"sexe":"F"},{"sexe":"H"}] }],
  "voteElectronique": true,
  "titulairesInitiaux": 12,
  "titulairesRestants": 11,
+ "collegeVide": false,
+ "moisAvantTerme": 2,
  "titulairesElus": 11,
  "heuresAccordees": 240,
  "heuresRetenues": true,

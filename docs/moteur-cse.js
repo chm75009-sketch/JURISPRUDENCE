@@ -4,8 +4,8 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : c9d9c283c367
-   {"articlesLus":368,"arrets":163,"controles":35,"casContradictoires":55,"verdicts":1925,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":11,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0}
+   Empreinte du moteur au moment de l'empaquetage : fa8e48b25eaf
+   {"articlesLus":368,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":38,"detection":3,"casMoteur":59,"casContradictoires":63,"verdicts":2394,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0}
 
    Jeux de données allégés — champs non lus par la grille, retirés :
    · cse_corpus.json : 3128 Ko réduits à 177 Ko
@@ -24,7 +24,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"comité social et économique","date":"2026-08-15","empreinte":"c9d9c283c367","fichiers":{"actions-cse.js":"aeddce295044","audit-cse.js":"8694347eed88","controles-cse.js":"50f0ebbf0e50","cse_corpus.json":"ea46040a4b05","grille-cse.js":"3dbd69ab4ead","moteur-cse.js":"fffe3dfc70db","questionnaire-cse.js":"3bf7753f3185","tests-controles-cse.js":"7bd1e11ed018","tests-cse.js":"8fc324b76152","textes_cse.json":"701f84e52560"},"compteurs":{"articlesLus":368,"arrets":163,"controles":35,"casContradictoires":55,"verdicts":1925,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":11,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0}};
+  var __MANIFESTE = {"domaine":"comité social et économique","date":"2026-08-15","empreinte":"fa8e48b25eaf","fichiers":{"_r2314_1.json":"572dbb2da415","actions-cse.js":"840947c5cf3a","audit-cse.js":"5a9ca61f93d9","controles-cse.js":"1f461278e2e1","cse_corpus.json":"ea46040a4b05","dates.js":"b6d7e587bec3","grille-cse.js":"3dbd69ab4ead","moteur-cse.js":"6924600b2464","publier-cse.js":"6c54f3a6de7e","questionnaire-cse.js":"3321762bf8f0","sonde.js":"ac23bba7af98","tests-controles-cse.js":"3e9ec4663b7b","tests-cse.js":"6f47db6df965","textes_cse.json":"701f84e52560","valider-cse.js":"f4c42cc9bc37"},"compteurs":{"articlesLus":368,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":38,"detection":3,"casMoteur":59,"casContradictoires":63,"verdicts":2394,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0},"reglesJamaisDeclenchees":[]};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -190,11 +190,11 @@ function audit(f) {
   }
 
   h1("2 · Les textes applicables");
-  p("Texte intégral des articles retenus, dans leur version en vigueur au 15 août 2026, tels qu'ils ont été lus sur Légifrance.");
+  p("Texte intégral des articles retenus, dans leur version en vigueur au 15 août 2026, tels qu'ils ont été lus sur Légifrance. Chaque article porte l'identifiant de la version reproduite : un article peut être modifié sans changer de numéro, et c'est cet identifiant, non le numéro, qui dit laquelle des versions successives a été lue.");
   const arts = [...new Set(retenues.flatMap(r => r.fondement))].sort();
   for (const a of arts) { const v = T[a];
     if (!v || !v.texte) { h3(artFr(a)); note("Article non lu à la source : il n'est pas reproduit."); continue; }
-    h3(artFr(a)); p(net(v.texte)); }
+    h3(artFr(a)); p(net(v.texte)); note(`Version reproduite : ${v.id}.`); }
 
   h1("3 · La jurisprudence applicable");
   p("Sommaires publiés de la Cour de cassation, tels qu'elle les a écrits.");
@@ -220,6 +220,8 @@ function audit(f) {
    ["Date de génération", new Date().toISOString().slice(0, 10)],
    ["Date de contrôle des sources", "15 août 2026 — articles relus sur Légifrance à cette date"],
    ["Articles lus à la source", String(Object.values(T).filter(v => v && v.texte).length)],
+   ["Articles demandés sans réponse de la source", `${Object.values(T).filter(v => !v || !v.texte).length} — aucune règle ne peut s'y fonder : le chargement de la grille échoue si une règle cite un article dont le texte est absent`],
+   ["Vérification des versions", "node verifier-textes.js — rejoue la lecture de chaque article et signale tout écart d'identifiant ou de contenu"],
    ["Règles de la base", `${GRILLE.length} dont ${retenues.length} applicables`],
    ["Contrôles exécutés", `${CONTROLES.length} dont ${DETECTION.size} de détection`],
    ["Corpus de jurisprudence", "163 arrêts publiés, du 24 janvier 2018 au 8 juillet 2026"],
@@ -265,6 +267,63 @@ function seuilAtteint(mois, seuil) {
   let suite = 0, max = 0;
   for (const m of mois) { suite = m >= seuil ? suite + 1 : 0; max = Math.max(max, suite); }
   return { consecutifs: max, atteint: max >= 12, texte: "L. 2311-2" };
+}
+
+/* L'effectif déclaré, confronté aux relevés mensuels.
+
+   Tout le régime du comité — nombre de réunions, commission santé et sécurité,
+   subvention, attributions — se calcule sur un seul nombre, « effectif », que
+   l'employeur déclare. Les relevés mensuels ne servaient qu'au seuil de onze.
+   Un dossier déclarant 299 salariés et produisant quatorze relevés compris
+   entre 312 et 317 obtenait donc six réunions par an au lieu de douze et une
+   absence de commission déclarée régulière : la contradiction était dans le
+   dossier lui-même, et personne ne la lisait.
+
+   Les seuils ne se franchissent pas de la même manière selon le chapitre : les
+   articles L. 2311-2, L. 2312-2 et L. 2312-34 posent chacun leur règle des
+   douze mois consécutifs, mais les chapitres du fonctionnement — réunion
+   mensuelle de L. 2315-28, commission de L. 2315-36 — n'en posent aucune. Le
+   moteur dit ce que chaque texte prévoit et ne complète pas le silence des
+   autres. */
+const SEUILS_EFFECTIF = [
+ { seuil: 11,   texte: "L. 2311-2",  douzeMois: true,
+   effet: "la mise en place du comité social et économique" },
+ { seuil: 50,   texte: "L. 2312-2",  douzeMois: true,
+   effet: "les attributions récurrentes d'information et de consultation, la subvention de fonctionnement (L. 2315-61) et la contribution aux activités sociales (L. 2312-81)" },
+ { seuil: 300,  texte: "L. 2312-34", douzeMois: true,
+   effet: "les obligations d'information et de consultation du chapitre II ; s'y ajoutent, sans que leur chapitre fixe de règle propre de franchissement, la réunion mensuelle (L. 2315-28) et la commission santé, sécurité et conditions de travail (L. 2315-36)" },
+ { seuil: 1000, texte: "L. 2312-63", douzeMois: false,
+   effet: "l'établissement du rapport d'alerte économique par la commission économique" },
+ { seuil: 2000, texte: "L. 2315-61", douzeMois: false,
+   effet: "le taux de la subvention de fonctionnement, porté à 0,22 % de la masse salariale brute" },
+];
+
+function coherenceEffectif(f = {}) {
+  const e = f.effectif, mois = f.effectifsMensuels;
+  if (typeof e !== "number" || !Array.isArray(mois) || !mois.length) return null;
+  const nombres = mois.filter(x => typeof x === "number" && Number.isFinite(x));
+  if (nombres.length !== mois.length)
+    return { lisible: false, releves: mois.length, exploitables: nombres.length,
+      motif: "Un ou plusieurs relevés mensuels ne sont pas des nombres : la cohérence de l'effectif déclaré ne peut pas être vérifiée." };
+  const min = Math.min(...nombres), max = Math.max(...nombres);
+  const moyenne = Math.round(nombres.reduce((a, b) => a + b, 0) / nombres.length);
+  /* Les seuils que les relevés atteignent alors que l'effectif déclaré est en
+     dessous. Ce sont les seuls qui changent le régime appliqué au dossier. */
+  const franchis = [];
+  for (const s of SEUILS_EFFECTIF) {
+    if (e >= s.seuil) continue;
+    const d = seuilAtteint(nombres, s.seuil);
+    const atteint = s.douzeMois ? d.atteint : nombres.some(m => m >= s.seuil);
+    if (!atteint) continue;
+    franchis.push({ ...s, consecutifs: d.consecutifs,
+      regle: s.douzeMois
+        ? `${s.texte} répute le seuil franchi lorsqu'il est atteint pendant douze mois consécutifs : les relevés en comptent ${d.consecutifs}.`
+        : `${s.texte} ne fixe pas de règle de franchissement propre : ${nombres.filter(m => m >= s.seuil).length} relevé(s) atteignent ce seuil.` });
+  }
+  return { lisible: true, effectifDeclare: e, releves: nombres.length,
+    min, max, moyenne, dans: e >= min && e <= max,
+    ecart: e < min ? min - e : (e > max ? e - max : 0),
+    seuilsFranchis: franchis };
 }
 
 const ATTRIBUTIONS = [
@@ -366,26 +425,44 @@ function listeParitaire(o = {}) {
     return d >= 0.5 ? Math.ceil(x) : Math.floor(x); };
   const nF = arrondi(brutF), nH = arrondi(brutH);
   const egaliteStricte = femmes === hommes;
-  const base = { applicable: true, candidats: n, sieges: o.sieges ?? null,
+  /* Le quatrième alinéa n'est pas indexé sur le nombre de candidats mais sur le
+     nombre de **sièges à pourvoir** : « En cas de nombre impair de sièges à
+     pourvoir et de stricte égalité entre les femmes et les hommes inscrits… ».
+     La distinction n'est pas théorique — une liste incomplète comporte moins de
+     candidats que le collège n'a de sièges. Le moteur lisait le nombre de
+     candidats, ce qui ouvrait l'alinéa 4 dans des cas qu'il ne couvre pas et le
+     fermait dans des cas qu'il couvre. */
+  const sieges = typeof o.sieges === "number" ? o.sieges : null;
+  const base = { applicable: true, candidats: n, sieges,
     inscrits, femmes, hommes,
     partF: +(100 * femmes / inscrits).toFixed(2), partH: +(100 * hommes / inscrits).toFixed(2),
     brutF: +brutF.toFixed(4), brutH: +brutH.toFixed(4), texte: "L. 2314-30",
     sanction: "Le non-respect de la proportion entraîne l'annulation de l'élection des derniers élus du sexe surreprésenté, en suivant l'ordre inverse de la liste ; le non-respect de l'alternance entraîne l'annulation de l'élection de tout élu dont le positionnement est irrégulier (L. 2314-32).",
     portee: "La règle s'applique séparément à la liste des titulaires et à celle des suppléants (L. 2314-30, dernier alinéa)." };
 
-  /* Cas expressément réglé par le quatrième alinéa. */
-  if (nF + nH !== n && n % 2 === 1 && egaliteStricte)
-    return { ...base, indifferent: true, candidatsFemmes: null, candidatsHommes: null,
-      motif: `Nombre impair de candidats et stricte égalité entre les femmes et les hommes inscrits : la liste comprend ${Math.floor(n / 2)} candidats de chaque sexe et, indifféremment, un homme ou une femme supplémentaire.`,
-      texte_al: "L. 2314-30, al. 4" };
-
-  /* Cas où l'arrondi arithmétique des deux sexes ne retombe pas sur le nombre
-     de candidats. Le texte ne le règle pas et aucun arrêt du corpus ne le
-     tranche : la base le signale au lieu de choisir. */
-  if (nF + nH !== n)
+  if (nF + nH !== n) {
+    /* Cas expressément réglé par le quatrième alinéa : sièges à pourvoir en
+       nombre impair, et stricte égalité entre les inscrits des deux sexes. */
+    if (egaliteStricte && sieges !== null && sieges % 2 === 1)
+      return { ...base, indifferent: true, candidatsFemmes: null, candidatsHommes: null,
+        motif: `${sieges} sièges à pourvoir — nombre impair — et stricte égalité entre les femmes et les hommes inscrits : la liste comprend ${Math.floor(n / 2)} candidat${Math.floor(n / 2) > 1 ? "s" : ""} de chaque sexe et, indifféremment, un homme ou une femme supplémentaire.`,
+        texte_al: "L. 2314-30, al. 4" };
+    /* Stricte égalité, mais le nombre de sièges à pourvoir n'est pas connu :
+       l'alinéa 4 ne peut ni être appliqué, ni être écarté. La donnée manque, et
+       le dire vaut mieux que de la remplacer par le nombre de candidats. */
+    if (egaliteStricte && sieges === null)
+      return { ...base, siegesInconnus: true, aVerifier: true,
+        candidatsFemmes: null, candidatsHommes: null,
+        motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}. Les inscrits des deux sexes étant en stricte égalité, l'issue dépend du nombre de sièges à pourvoir dans le collège, seul critère retenu par le quatrième alinéa — et il n'est pas renseigné. L'indiquer tranchera le cas.`,
+        texte_al: "L. 2314-30, al. 4" };
+    /* Cas où l'arrondi arithmétique des deux sexes ne retombe pas sur le nombre
+       de candidats, hors l'hypothèse du quatrième alinéa. Le texte ne le règle
+       pas et aucun arrêt du corpus ne le tranche : la base le signale au lieu
+       de choisir. */
     return { ...base, conflit: true, candidatsFemmes: null, candidatsHommes: null,
-      motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}. Le texte ne règle pas ce cas et aucun arrêt publié du corpus ne le tranche : la composition doit être arrêtée avec un conseil avant le dépôt de la liste.`,
+      motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}${sieges !== null ? ` et ${sieges} siège(s) à pourvoir` : ""}. Le quatrième alinéa ne couvre pas ce cas${!egaliteStricte ? " — les inscrits des deux sexes ne sont pas en stricte égalité" : " — le nombre de sièges à pourvoir est pair"}, et aucun arrêt publié du corpus ne le tranche : la composition doit être arrêtée avec un conseil avant le dépôt de la liste.`,
       aVerifier: true };
+  }
 
   const exclusion = (nF === 0 || nH === 0)
     ? "L'application de la règle exclut totalement la représentation d'un sexe. La liste peut alors comporter un candidat du sexe qui, à défaut, ne serait pas représenté ; ce candidat ne peut être en première position (L. 2314-30, al. 5)."
@@ -467,6 +544,7 @@ function electionsPartielles(o = {}) {
 }
 
 module.exports = { R2314_1, tranche, delegation, seuilAtteint, attributions, ATTRIBUTIONS,
+  SEUILS_EFFECTIF, coherenceEffectif,
   delaiConsultation, budgetFonctionnement, cssct, reunions, colleges, listeParitaire,
   financementExpertise, EXPERTISES, contestationExpertise, delaiContestation, mandat,
   electionsPartielles };
@@ -946,14 +1024,83 @@ __def("./controles-cse.js", function(module, exports, require){
    décrite y satisfait. Cinq états, et jamais « conforme » sur une déclaration
    que rien ne justifie : une affirmation de l'employeur n'est pas une preuve. */
 const M = require("./moteur-cse.js");
+const D = require("./dates.js");
+const { valider, examines } = require("./valider-cse.js");
 const CONF = "conforme", NC = "non conforme", RISQ = "risque à vérifier",
       MANQ = "donnée manquante", SO = "sans objet";
 const ETATS = { CONF, NC, RISQ, MANQ, SO };
 const vide = x => x === undefined || x === null || x === "" || (Array.isArray(x) && !x.length);
 const piece = (f, nom) => Array.isArray(f.pieces) && f.pieces.includes(nom);
 
+/* Le néant est une réponse. « Aucune organisation syndicale invitée » et « la
+   question n'a pas été renseignée » sont deux situations opposées, et la base
+   les confondait toutes deux en « donnée manquante ». Un employeur qui déclare
+   expressément n'avoir rien fait doit obtenir le constat correspondant, non une
+   invitation à compléter. La distinction se lit sur la fiche : la clé est
+   présente et sa valeur est vide. */
+const declare = (f, champ) => Object.prototype.hasOwnProperty.call(f, champ);
+const neant = (f, champ) => declare(f, champ) && vide(f[champ]);
+
+/* Un écart de dates, ou le refus de conclure. Voir moteur/commun/dates.js :
+   une chronologie inversée n'est pas un délai tenu. */
+const ecart = D.ecart;
+
+/* L'effectif déclaré est-il contredit par les relevés mensuels du dossier ?
+   Tant qu'il l'est, aucun contrôle assis sur l'effectif ne peut conclure à la
+   conformité : il conclurait sur un nombre que le dossier dément lui-même. */
+function effectifDouteux(f) {
+  const c = M.coherenceEffectif(f);
+  if (!c || !c.lisible) return null;
+  if (c.seuilsFranchis.length)
+    return { seuil: true,
+      motif: `les relevés mensuels atteignent le seuil de ${c.seuilsFranchis.map(s => s.seuil).join(" et ")} salarié(s), que l'effectif déclaré de ${c.effectifDeclare} ne franchit pas` };
+  if (!c.dans)
+    return { seuil: false,
+      motif: `l'effectif déclaré de ${c.effectifDeclare} se situe hors de l'intervalle des relevés mensuels (${c.min} à ${c.max})` };
+  return null;
+}
+/* Un verdict qui repose sur un effectif contredit devient une réserve.
+   « Conforme » toujours : il tiendrait pour acquis un constat que le dossier
+   dément. « Sans objet » lorsque le doute porte sur un seuil : c'est le cas le
+   plus trompeur du module — « commission non obligatoire en deçà de trois
+   cents salariés » écrit sur un dossier dont les quatorze relevés dépassent
+   trois cents. Les autres états ne prononcent rien et restent inchangés. */
+const surEffectif = (f, v) => {
+  if (v.etat !== CONF && v.etat !== SO) return v;
+  const d = effectifDouteux(f);
+  if (!d || (v.etat === SO && !d.seuil)) return v;
+  return { etat: RISQ, motif: v.etat === CONF
+    ? `${v.motif} Ce constat repose sur l'effectif déclaré, or ${d.motif} : il ne peut pas être tenu pour acquis tant que l'effectif n'est pas rétabli.`
+    : `${v.motif} Cette mise hors du champ repose sur l'effectif déclaré, or ${d.motif} : le contrôle pourrait s'appliquer, et sa conclusion changer, une fois l'effectif rétabli.` };
+};
+
 const C = [];
 const c = (id, rubrique, objet, fondement, fn) => C.push({ id, rubrique, objet, fondement, verdict: fn });
+
+/* ---------------- Recevabilité et cohérence des données ---------------- */
+c("CSE-CTL-REC-01", "Recevabilité", "Les données saisies sont-elles lisibles ?", [],
+ f => { const A = valider(f);
+   if (A.length) return { etat: NC, motif: `${A.length} donnée(s) impossible(s) ou mal formée(s) : ${A.map(x => `${x.champ} = « ${x.valeur} » — ${x.motif}`).join(" ; ")}. Tant qu'elles ne sont pas corrigées, les contrôles qui les lisent concluent sur des valeurs qui n'existent pas.` };
+   const n = examines(f);
+   return n
+     ? { etat: CONF, motif: `${n} donnée(s) examinée(s), aucune impossible : dates existantes, dénombrements entiers, montants positifs, chronologies dans l'ordre.` }
+     : { etat: MANQ, motif: "Aucune des données que ce contrôle sait examiner n'est renseignée : il n'y a rien dont la lisibilité puisse être constatée." }; });
+
+c("CSE-CTL-COH-01", "Recevabilité", "L'effectif déclaré est-il cohérent avec les relevés mensuels ?", ["L. 1111-2", "L. 2311-2"],
+ f => { const co = M.coherenceEffectif(f);
+   if (!co) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas renseignés : la cohérence ne peut pas être vérifiée." };
+   if (!co.lisible) return { etat: MANQ, motif: co.motif };
+   if (co.dans) return { etat: CONF, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, compris dans l'intervalle des ${co.releves} relevés mensuels (${co.min} à ${co.max}, moyenne ${co.moyenne}).` };
+   return { etat: NC, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, alors que les ${co.releves} relevés mensuels s'échelonnent de ${co.min} à ${co.max} — un écart de ${co.ecart} salarié(s) avec le relevé le plus proche. Aucun mois du dossier ne corrobore le nombre déclaré, sur lequel repose pourtant tout le régime applicable au comité.` }; });
+
+c("CSE-CTL-COH-02", "Recevabilité", "Les relevés mensuels franchissent-ils un seuil que l'effectif déclaré ne franchit pas ?", ["L. 2311-2", "L. 2312-2", "L. 2312-34"],
+ f => { const co = M.coherenceEffectif(f);
+   if (!co || !co.lisible) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas exploitables : le franchissement des seuils ne peut pas être vérifié." };
+   if (!co.seuilsFranchis.length)
+     return { etat: CONF, motif: `Aucun seuil n'est atteint par les relevés mensuels sans l'être par l'effectif déclaré de ${co.effectifDeclare} salariés.` };
+   return { etat: NC, motif: co.seuilsFranchis.map(s =>
+     `Seuil de ${s.seuil} salariés : ${s.regle} L'effectif déclaré étant de ${co.effectifDeclare}, le régime appliqué au dossier ignore ${s.effet}.`).join(" ") +
+     " Le régime du comité — réunions, commission, budgets, attributions — se calcule sur l'effectif déclaré : tant qu'il contredit les relevés, les conformités qui en découlent ne valent rien." }; });
 
 /* ---------------- Mise en place ---------------- */
 c("CSE-CTL-MEP-01", "Mise en place", "Le seuil de onze salariés est-il mesuré sur douze mois consécutifs ?", ["L. 2311-2"],
@@ -978,10 +1125,12 @@ c("CSE-CTL-MEP-03", "Mise en place", "Les élections ont-elles été engagées d
  f => vide(f.dateDernieresElections)
    ? { etat: MANQ, motif: "La date des dernières élections n'est pas renseignée." }
    : (() => { const m = M.mandat(f);
-       const ecoule = (new Date(f.dateAudit || "2026-08-15") - new Date(f.dateDernieresElections)) / 31557600000;
-       return ecoule > m.annees
-         ? { etat: NC, motif: `${ecoule.toFixed(1)} ans se sont écoulés depuis les dernières élections, pour un mandat de ${m.annees} ans : le renouvellement est en retard.` }
-         : { etat: CONF, motif: `${ecoule.toFixed(1)} ans écoulés depuis les dernières élections, pour un mandat de ${m.annees} ans.` }; })());
+       const e = D.ecartAnnees(f.dateDernieresElections, f.dateAudit || "2026-08-15",
+         "la date des dernières élections", "la date d'audit");
+       if (!e.valide) return { etat: MANQ, motif: e.motif };
+       return e.annees > m.annees
+         ? { etat: NC, motif: `${e.annees.toFixed(1)} ans se sont écoulés depuis les dernières élections, pour un mandat de ${m.annees} ans : le renouvellement est en retard.` }
+         : { etat: CONF, motif: `${e.annees.toFixed(1)} ans écoulés depuis les dernières élections, pour un mandat de ${m.annees} ans.` }; })());
 
 c("CSE-CTL-MEP-04", "Mise en place", "La durée de mandat fixée par accord est-elle licite ?", ["L. 2314-34"],
  f => typeof f.dureeAccord !== "number"
@@ -1019,6 +1168,8 @@ c("CSE-CTL-PER-03", "Périmètre", "Les représentants de proximité ont-ils ét
 c("CSE-CTL-ELE-01", "Élections", "Les organisations syndicales ont-elles toutes été invitées à négocier ?", ["L. 2314-5"],
  f => f.electionsEnCours !== true
    ? { etat: SO, motif: "Aucune élection en cours." }
+   : neant(f, "syndicatsInvites")
+     ? { etat: NC, motif: "Aucune organisation syndicale n'a été invitée à négocier le protocole, alors qu'un processus électoral est engagé. L'invitation est due à toutes les organisations visées par l'article L. 2314-5, et son défaut entache le processus." }
    : vide(f.syndicatsInvites)
      ? { etat: MANQ, motif: "La liste des organisations invitées n'est pas renseignée." }
      : (piece(f, "invitations-syndicats")
@@ -1028,10 +1179,12 @@ c("CSE-CTL-ELE-01", "Élections", "Les organisations syndicales ont-elles toutes
 c("CSE-CTL-ELE-02", "Élections", "Le premier tour se tient-il dans les quatre-vingt-dix jours de l'information du personnel ?", ["L. 2314-4"],
  f => (vide(f.dateInformationPersonnel) || vide(f.datePremierTour))
    ? { etat: MANQ, motif: "La date d'information du personnel ou celle du premier tour n'est pas renseignée." }
-   : (() => { const j = Math.round((new Date(f.datePremierTour) - new Date(f.dateInformationPersonnel)) / 86400000);
-       return j > 90
-         ? { etat: NC, motif: `${j} jours entre l'information du personnel et le premier tour : le maximum est de quatre-vingt-dix jours.` }
-         : { etat: CONF, motif: `${j} jours entre l'information du personnel et le premier tour.` }; })());
+   : (() => { const e = ecart(f.dateInformationPersonnel, f.datePremierTour,
+         "l'information du personnel", "le premier tour");
+       if (!e.valide) return { etat: e.cause === "ordre" ? NC : MANQ, motif: e.motif };
+       return e.jours > 90
+         ? { etat: NC, motif: `${e.jours} jours entre l'information du personnel et le premier tour : le maximum est de quatre-vingt-dix jours.` }
+         : { etat: CONF, motif: `${e.jours} jours entre l'information du personnel et le premier tour.` }; })());
 
 c("CSE-CTL-ELE-03", "Élections", "Le protocole préélectoral remplit-il la condition de double majorité ?", ["L. 2314-6"],
  f => f.electionsEnCours !== true && vide(f.protocole)
@@ -1056,15 +1209,20 @@ c("CSE-CTL-ELE-04", "Élections", "La proportion de femmes et d'hommes figure-t-
        : { etat: MANQ, motif: "La mention de la proportion de femmes et d'hommes au protocole n'est pas renseignée." })));
 
 c("CSE-CTL-ELE-05", "Élections", "Les listes déposées respectent-elles la proportion et l'alternance ?", ["L. 2314-30", "L. 2314-32"],
- f => vide(f.listesDeposees)
+ f => neant(f, "listesDeposees")
+   ? { etat: SO, motif: "Aucune liste n'est déposée : il n'y a pas de composition à contrôler. Si le délai de dépôt est expiré sans qu'aucune liste ait été présentée, le procès-verbal de carence doit être établi à l'issue du scrutin." }
+   : vide(f.listesDeposees)
    ? { etat: MANQ, motif: "Les listes déposées ne sont pas renseignées : la composition ne peut pas être contrôlée." }
    : (() => {
        const ko = [], douteux = [];
        for (const l of f.listesDeposees) {
-         const r = M.listeParitaire({ femmes: l.femmesInscrites, hommes: l.hommesInscrits, candidats: (l.candidats || []).length });
+         /* Le nombre de sièges à pourvoir est distinct du nombre de candidats :
+            le quatrième alinéa de L. 2314-30 est indexé sur le premier. */
+         const r = M.listeParitaire({ femmes: l.femmesInscrites, hommes: l.hommesInscrits,
+           candidats: (l.candidats || []).length, sieges: l.siegesAPourvoir });
          if (!r) { douteux.push(`${l.nom} : données du collège incomplètes`); continue; }
          if (!r.applicable) continue;
-         if (r.conflit || r.indifferent) { douteux.push(`${l.nom} : ${r.motif}`); continue; }
+         if (r.conflit || r.indifferent || r.siegesInconnus) { douteux.push(`${l.nom} : ${r.motif}`); continue; }
          const nF = (l.candidats || []).filter(x => x.sexe === "F").length;
          const nH = (l.candidats || []).filter(x => x.sexe === "H").length;
          if (nF !== r.candidatsFemmes || nH !== r.candidatsHommes)
@@ -1099,6 +1257,8 @@ c("CSE-CTL-ELE-07", "Élections", "Des élections partielles sont-elles dues et 
 c("CSE-CTL-CON-01", "Consultations", "Les trois consultations récurrentes ont-elles été conduites ?", ["L. 2312-17", "L. 2312-22"],
  f => (typeof f.effectif !== "number" || f.effectif < 50)
    ? { etat: SO, motif: "Les consultations récurrentes ne sont dues qu'à partir de cinquante salariés." }
+   : neant(f, "consultationsRecurrentes")
+     ? { etat: NC, motif: "Aucune consultation récurrente n'a été conduite. À défaut d'accord en aménageant la périodicité, les trois consultations — orientations stratégiques, situation économique et financière, politique sociale — sont annuelles, et leur défaut constitue un trouble manifestement illicite." }
    : vide(f.consultationsRecurrentes)
      ? { etat: MANQ, motif: "Les consultations récurrentes conduites ne sont pas renseignées." }
      : (() => { const dues = ["orientations stratégiques", "situation économique et financière", "politique sociale"];
@@ -1112,10 +1272,12 @@ c("CSE-CTL-CON-02", "Consultations", "Le délai de consultation a-t-il couru dep
    ? { etat: MANQ, motif: "La date de remise des informations au comité n'est pas renseignée : le point de départ du délai est inconnu." }
    : (() => { const d = M.delaiConsultation(f.consultation);
        if (vide(f.consultation.dateAvis)) return { etat: RISQ, motif: `Informations remises le ${f.consultation.dateRemiseInformations}, délai de ${d.jours} jours. Aucune date d'avis n'est renseignée : à l'expiration, le comité est réputé avoir rendu un avis négatif.` };
-       const j = Math.round((new Date(f.consultation.dateAvis) - new Date(f.consultation.dateRemiseInformations)) / 86400000);
-       return j > d.jours
-         ? { etat: RISQ, motif: `${j} jours entre la remise des informations et l'avis, pour un délai de ${d.jours} jours : l'avis a été rendu après l'expiration, donc après qu'un avis négatif a été réputé acquis.` }
-         : { etat: CONF, motif: `Avis rendu ${j} jours après la remise des informations, dans le délai de ${d.jours} jours.` }; })());
+       const e = ecart(f.consultation.dateRemiseInformations, f.consultation.dateAvis,
+         "la remise des informations", "l'avis du comité");
+       if (!e.valide) return { etat: e.cause === "ordre" ? NC : MANQ, motif: e.motif };
+       return e.jours > d.jours
+         ? { etat: RISQ, motif: `${e.jours} jours entre la remise des informations et l'avis, pour un délai de ${d.jours} jours : l'avis a été rendu après l'expiration, donc après qu'un avis négatif a été réputé acquis.` }
+         : { etat: CONF, motif: `Avis rendu ${e.jours} jours après la remise des informations, dans le délai de ${d.jours} jours.` }; })());
 
 c("CSE-CTL-CON-03", "Consultations", "Le comité a-t-il reçu des informations précises et écrites ?", ["L. 2312-15"],
  f => piece(f, "note-information-cse")
@@ -1183,7 +1345,9 @@ c("CSE-CTL-MOY-03", "Moyens", "Les heures de délégation ont-elles été payée
      : { etat: NC, motif: "Des heures de délégation ont été retenues sur la paie. Le temps passé est de plein droit du temps de travail payé à l'échéance normale : l'employeur qui conteste doit payer d'abord et saisir le juge ensuite." }));
 
 c("CSE-CTL-MOY-04", "Moyens", "Les formations obligatoires ont-elles été dispensées ?", ["L. 2315-18", "L. 2315-63"],
- f => vide(f.formationsDispensees)
+ f => neant(f, "formationsDispensees")
+   ? { etat: NC, motif: "Aucune formation n'a été dispensée. La formation en santé, sécurité et conditions de travail est due à tous les membres de la délégation du personnel, pour cinq jours au minimum lors du premier mandat." }
+   : vide(f.formationsDispensees)
    ? { etat: MANQ, motif: "Les formations dispensées aux élus ne sont pas renseignées." }
    : (f.formationsDispensees.some(x => /sant|sécurit/i.test(x))
      ? { etat: piece(f, "attestations-formation") ? CONF : RISQ,
@@ -1207,6 +1371,8 @@ c("CSE-CTL-SST-01", "Santé et sécurité", "La commission santé, sécurité et
 c("CSE-CTL-SST-02", "Santé et sécurité", "La composition de la commission respecte-t-elle le siège réservé au second ou au troisième collège ?", ["L. 2315-39"],
  f => f.cssct !== true
    ? { etat: SO, motif: "Aucune commission en place." }
+   : neant(f, "membresCssct")
+     ? { etat: NC, motif: "La commission est déclarée en place, mais aucun membre n'y est désigné. Elle doit comprendre au moins trois représentants du personnel, dont au moins un du second ou, le cas échéant, du troisième collège." }
    : vide(f.membresCssct)
      ? { etat: MANQ, motif: "La composition de la commission n'est pas renseignée." }
      : (() => { const n = f.membresCssct.length;
@@ -1262,10 +1428,12 @@ c("CSE-CTL-EXP-02", "Expertises", "La contestation de l'expertise a-t-elle été
    ? { etat: SO, motif: "Aucune contestation d'expertise en cours." }
    : vide(f.expertise.dateSaisine)
      ? { etat: MANQ, motif: "La date de saisine du juge n'est pas renseignée." }
-     : (() => { const j = Math.round((new Date(f.expertise.dateSaisine) - new Date(f.expertise.dateDepart)) / 86400000);
-         return j > 10
-           ? { etat: NC, motif: `${j} jours entre le point de départ et la saisine : le délai est de dix jours. Le délai ne court qu'à compter du lendemain de l'acte, et la date de saisine s'entend de celle de l'assignation.` }
-           : { etat: CONF, motif: `${j} jours entre le point de départ et la saisine, dans le délai de dix jours.` }; })());
+     : (() => { const e = ecart(f.expertise.dateDepart, f.expertise.dateSaisine,
+           "le point de départ du délai", "la saisine du juge");
+         if (!e.valide) return { etat: e.cause === "ordre" ? NC : MANQ, motif: e.motif };
+         return e.jours > 10
+           ? { etat: NC, motif: `${e.jours} jours entre le point de départ et la saisine : le délai est de dix jours. Le délai ne court qu'à compter du lendemain de l'acte, et la date de saisine s'entend de celle de l'assignation.` }
+           : { etat: CONF, motif: `${e.jours} jours entre le point de départ et la saisine, dans le délai de dix jours.` }; })());
 
 c("CSE-CTL-EXP-03", "Expertises", "Une expertise a-t-elle été décidée sur un fondement qui ne la prévoit pas ?", ["L. 1233-34", "L. 2315-92"],
  f => (vide(f.expertise) || typeof f.nbLicenciements !== "number")
@@ -1277,21 +1445,42 @@ c("CSE-CTL-EXP-03", "Expertises", "Une expertise a-t-elle été décidée sur un
 /* ---------------- Détection : jamais de conclusion de conformité ---------------- */
 const DETECTION = new Set(["CSE-CTL-DET-01", "CSE-CTL-DET-02", "CSE-CTL-DET-03"]);
 c("CSE-CTL-DET-01", "À faire examiner", "Un accord collectif prive-t-il le comité d'une prérogative légale ?", ["L. 2262-14"],
- f => vide(f.accordsCse)
+ f => neant(f, "accordsCse")
+   ? { etat: SO, motif: "Aucun accord collectif applicable au comité n'est déclaré : la loi s'applique seule, sans aménagement conventionnel à articuler avec elle." }
+   : vide(f.accordsCse)
    ? { etat: MANQ, motif: "Les accords collectifs applicables au comité ne sont pas renseignés." }
    : { etat: RISQ, motif: `${f.accordsCse.length} accord(s) déclarés. La base ne lit pas leurs stipulations. Un accord peut légalement aménager la périodicité, le contenu et le niveau des consultations, mais non priver le comité d'une prérogative : le comité peut alors en invoquer l'illégalité par voie d'exception, sans condition de délai. Ce point appelle l'examen d'un professionnel.` });
 
 c("CSE-CTL-DET-02", "À faire examiner", "Un contentieux ou une procédure sont-ils en cours devant le juge ?", [],
- f => vide(f.contentieuxCse)
+ f => neant(f, "contentieuxCse")
+   ? { etat: SO, motif: "Aucun contentieux ni procédure en cours n'est déclaré concernant le comité." }
+   : vide(f.contentieuxCse)
    ? { etat: MANQ, motif: "L'existence d'un contentieux en cours n'est pas renseignée." }
    : { etat: RISQ, motif: "Un contentieux est signalé. La base ne l'apprécie pas : il doit être porté à la connaissance de la direction et du conseil juridique avant toute décision." });
 
 c("CSE-CTL-DET-03", "À faire examiner", "Des faits susceptibles de caractériser une entrave sont-ils signalés ?", ["L. 2317-1"],
- f => vide(f.faitsEntrave)
+ f => neant(f, "faitsEntrave")
+   ? { etat: SO, motif: "Aucun fait susceptible de caractériser une entrave n'est signalé. La base ne recherche pas de tels faits : elle enregistre ce qui lui est déclaré." }
+   : vide(f.faitsEntrave)
    ? { etat: MANQ, motif: "Aucun élément n'est renseigné sur ce point." }
    : { etat: RISQ, motif: "Des faits sont signalés. L'entrave est une infraction pénale, et aucun arrêt publié du corpus ne s'y rattache : la base détecte, elle ne qualifie pas. Ce point appelle l'examen d'un professionnel." });
 
-module.exports = { C, ETATS, DETECTION };
+/* Tout le régime du comité se calcule sur l'effectif déclaré. Lorsque les
+   relevés mensuels du dossier le contredisent, les contrôles qui en dépendent
+   ne peuvent plus prononcer la conformité : ils la prononceraient sur un nombre
+   que le dossier dément. Ils passent en réserve, et disent pourquoi. La liste
+   est explicite plutôt que devinée, et un test vérifie qu'elle couvre bien tous
+   les contrôles qui lisent l'effectif. */
+const SUR_EFFECTIF = new Set(["CSE-CTL-CON-01", "CSE-CTL-CON-05", "CSE-CTL-CON-06",
+  "CSE-CTL-MOY-01", "CSE-CTL-MOY-02", "CSE-CTL-SST-01", "CSE-CTL-SST-02",
+  "CSE-CTL-BUD-01", "CSE-CTL-BUD-02"]);
+for (const ctl of C) {
+  if (!SUR_EFFECTIF.has(ctl.id)) continue;
+  const brut = ctl.verdict;
+  ctl.verdict = f => surEffectif(f, brut(f));
+}
+
+module.exports = { C, ETATS, DETECTION, SUR_EFFECTIF, effectifDouteux };
 if (require.main === module) {
   const ids = C.map(x => x.id);
   console.log(`${C.length} contrôles · ${new Set(ids).size} identifiants distincts · ${DETECTION.size} de détection`);
@@ -1302,6 +1491,205 @@ if (require.main === module) {
     if (/etat:\s*CONF/.test(bloc)) { console.log("ÉCHEC : " + id + " peut conclure à la conformité."); process.exit(1); }
   }
   console.log("aucun contrôle de détection ne peut conclure à la conformité");
+}
+
+});
+
+__def("./dates.js", function(module, exports, require){
+/* Les dates, et le refus de conclure sur une chronologie impossible.
+
+   Le défaut corrigé ici était le même dans les deux moteurs et se lisait sur la
+   page de résultat : un contrôle soustrayait deux dates, obtenait un nombre
+   négatif, constatait qu'il n'excédait pas le délai légal et prononçait la
+   conformité. « Avis rendu -58 jours après la remise des informations » a été
+   imprimé tel quel. Un écart négatif ne signifie jamais que le délai est tenu :
+   il signifie que les deux dates sont dans le mauvais ordre, donc que l'une
+   d'elles est fausse. C'est une donnée à corriger, pas un délai à valider.
+
+   Une seule fonction en tire les conséquences, et les deux moteurs l'appellent :
+   ecart() ne rend un nombre de jours que si les deux dates existent et se
+   suivent. Sinon elle dit pourquoi, et l'appelant ne peut pas conclure. */
+
+/* Le 30 février tombe ici : new Date("2026-02-30") ne jette pas, il décale. */
+const estDateISO = s => {
+  if (typeof s !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const [a, m, j] = s.split("-").map(Number);
+  if (m < 1 || m > 12) return false;
+  const dernier = new Date(Date.UTC(a, m, 0)).getUTCDate();
+  return j >= 1 && j <= dernier;
+};
+
+const JOUR = 86400000;
+const jour = s => Date.UTC(...s.split("-").map((x, i) => i === 1 ? +x - 1 : +x));
+
+/* ecart(depuis, jusqu) — le nombre de jours écoulés du premier au second.
+   Rend { valide: true, jours } si, et seulement si, les deux dates existent et
+   sont dans cet ordre. Sinon { valide: false, cause, motif } : « format » quand
+   une date n'existe pas, « ordre » quand la chronologie est inversée. */
+function ecart(depuis, jusqu, nomDepuis, nomJusqu) {
+  const nd = nomDepuis || "la première date", nj = nomJusqu || "la seconde date";
+  if (!estDateISO(depuis)) return { valide: false, cause: "format", jours: null,
+    motif: `${nd} (${depuis === undefined || depuis === null || depuis === "" ? "non renseignée" : "« " + depuis + " »"}) n'est pas une date existante au format AAAA-MM-JJ.` };
+  if (!estDateISO(jusqu)) return { valide: false, cause: "format", jours: null,
+    motif: `${nj} (${jusqu === undefined || jusqu === null || jusqu === "" ? "non renseignée" : "« " + jusqu + " »"}) n'est pas une date existante au format AAAA-MM-JJ.` };
+  const j = Math.round((jour(jusqu) - jour(depuis)) / JOUR);
+  if (j < 0) return { valide: false, cause: "ordre", jours: j,
+    motif: `${nj} (${jusqu}) est antérieure de ${-j} jour(s) à ${nd} (${depuis}). La chronologie est impossible : l'une des deux dates est erronée. Aucun délai ne peut être vérifié tant qu'elle n'est pas corrigée.` };
+  return { valide: true, cause: null, jours: j, motif: null };
+}
+
+/* Le même écart exprimé en années, pour les durées de mandat. */
+function ecartAnnees(depuis, jusqu, nomDepuis, nomJusqu) {
+  const e = ecart(depuis, jusqu, nomDepuis, nomJusqu);
+  return e.valide ? { ...e, annees: +(e.jours / 365.2425).toFixed(2) } : { ...e, annees: null };
+}
+
+module.exports = { estDateISO, ecart, ecartAnnees, JOUR };
+
+});
+
+__def("./valider-cse.js", function(module, exports, require){
+/* La validation des entrées du module comité.
+
+   Le module économique avait déjà la sienne ; celui-ci n'en avait aucune. Une
+   date d'élections au 30 février était acceptée sans broncher — new Date la
+   décale au 1er ou au 2 mars — et le contrôle du renouvellement prononçait une
+   conformité sur un jour qui n'existe pas. Un effectif de 299,5, une masse
+   salariale négative, un nombre de titulaires décimal passaient de même.
+
+   Ce fichier ne juge rien du droit : il dit seulement si la donnée est lisible.
+   Ce qui n'est pas lisible n'est ni conforme ni non conforme — c'est à corriger
+   avant tout examen, et le contrôle de recevabilité le dit en tête du rapport. */
+const { estDateISO } = require("./dates.js");
+
+const estEntierPositif = x => typeof x === "number" && Number.isFinite(x) && Number.isInteger(x) && x >= 0;
+const estNombreFini = x => typeof x === "number" && Number.isFinite(x) && x >= 0;
+
+const DATES = ["dateAudit", "dateDernieresElections", "dateInformationPersonnel", "datePremierTour"];
+const ENTIERS = ["effectif", "nbCadres", "titulairesElus", "titulairesInitiaux",
+  "titulairesRestants", "reunionsTenues", "reunionsSante", "reunionsAccord",
+  "heuresAccordees", "nbLicenciements", "dureeAccord"];
+const MONTANTS = ["masseSalariale", "masseSalarialeN1", "subventionVersee", "ascAnneeN", "ascAnneeN1"];
+
+const ATTENDU = {};
+DATES.forEach(c => ATTENDU[c] = "date au format AAAA-MM-JJ");
+ENTIERS.forEach(c => ATTENDU[c] = "entier positif");
+MONTANTS.forEach(c => ATTENDU[c] = "montant en euros, positif");
+Object.assign(ATTENDU, {
+  effectifsMensuels: "liste de nombres entiers positifs",
+  "consultation.dateRemiseInformations": "date au format AAAA-MM-JJ",
+  "consultation.dateAvis": "date au format AAAA-MM-JJ",
+  "expertise.dateDepart": "date au format AAAA-MM-JJ",
+  "expertise.dateSaisine": "date au format AAAA-MM-JJ",
+  "expertise.partEmployeur": "pourcentage de 0 à 100",
+  "protocole.suffragesSignataires": "pourcentage de 0 à 100",
+  "protocole.nbSignataires": "entier positif",
+  "protocole.nbParticipants": "entier positif",
+  listesDeposees: "liste d'objets : inscrits femmes et hommes, sièges à pourvoir, candidats",
+});
+
+function valider(f) {
+  const A = [];
+  const dit = (champ, valeur, motif) => A.push({ champ, valeur, motif, attendu: ATTENDU[champ] });
+  const a = (o, c) => o && Object.prototype.hasOwnProperty.call(o, c) && o[c] !== null && o[c] !== "";
+
+  for (const c of DATES)
+    if (a(f, c) && !estDateISO(f[c]))
+      dit(c, f[c], "date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ");
+
+  for (const c of ENTIERS)
+    if (a(f, c) && !estEntierPositif(f[c]))
+      dit(c, f[c], typeof f[c] === "number"
+        ? (f[c] < 0 ? "valeur négative" : "valeur décimale, alors qu'il s'agit d'un dénombrement")
+        : "valeur non numérique");
+
+  for (const c of MONTANTS)
+    if (a(f, c) && !estNombreFini(f[c]))
+      dit(c, f[c], typeof f[c] === "number" ? "montant négatif ou non fini" : "valeur non numérique");
+
+  if (a(f, "effectifsMensuels")) {
+    if (!Array.isArray(f.effectifsMensuels))
+      dit("effectifsMensuels", f.effectifsMensuels, "les relevés mensuels doivent former une liste");
+    else {
+      const mauvais = f.effectifsMensuels.filter(x => !estEntierPositif(x));
+      if (mauvais.length) dit("effectifsMensuels", mauvais.join(", "),
+        `${mauvais.length} relevé(s) ne sont pas des entiers positifs`);
+      else if (f.effectifsMensuels.length < 12)
+        dit("effectifsMensuels", f.effectifsMensuels.length + " relevé(s)",
+          "moins de douze relevés : la règle des douze mois consécutifs ne peut pas être vérifiée");
+    }
+  }
+
+  /* Les objets imbriqués : la fiche les porte tels quels, les contrôles les
+     lisent tels quels, ils se valident donc tels quels. */
+  for (const [objet, champs] of [["consultation", ["dateRemiseInformations", "dateAvis"]],
+                                 ["expertise", ["dateDepart", "dateSaisine"]]])
+    for (const c of champs)
+      if (a(f[objet], c) && !estDateISO(f[objet][c]))
+        dit(`${objet}.${c}`, f[objet][c], "date inexistante ou format non reconnu");
+
+  for (const [objet, c] of [["expertise", "partEmployeur"], ["protocole", "suffragesSignataires"]])
+    if (a(f[objet], c) && !(typeof f[objet][c] === "number" && f[objet][c] >= 0 && f[objet][c] <= 100))
+      dit(`${objet}.${c}`, f[objet][c], "un pourcentage se situe entre 0 et 100");
+
+  for (const c of ["nbSignataires", "nbParticipants"])
+    if (a(f.protocole, c) && !estEntierPositif(f.protocole[c]))
+      dit(`protocole.${c}`, f.protocole[c], "valeur non entière ou négative");
+
+  if (Array.isArray(f.listesDeposees)) f.listesDeposees.forEach((l, i) => {
+    const nom = l && l.nom ? l.nom : `liste n° ${i + 1}`;
+    for (const c of ["femmesInscrites", "hommesInscrits", "siegesAPourvoir"])
+      if (a(l, c) && !estEntierPositif(l[c]))
+        dit("listesDeposees", `${nom} · ${c} = ${l[c]}`, "valeur non entière ou négative");
+    if (Array.isArray(l && l.candidats)) {
+      const s = l.candidats.filter(x => !x || (x.sexe !== "F" && x.sexe !== "H"));
+      if (s.length) dit("listesDeposees", `${nom} · ${s.length} candidat(s)`,
+        "le sexe de chaque candidat doit être « F » ou « H »");
+    }
+  });
+
+  /* Cohérences internes : elles ne dépendent d'aucune règle de fond. */
+  const ordre = (a1, c1, a2, c2, quoi1, quoi2) => {
+    if (estDateISO(a1) && estDateISO(a2) && a2 < a1)
+      dit(c2, a2, `antérieure à ${quoi1} du ${a1} — ${quoi2} ne peut pas la précéder`);
+  };
+  ordre(f.dateInformationPersonnel, "dateInformationPersonnel", f.datePremierTour, "datePremierTour",
+    "l'information du personnel", "le premier tour");
+  if (f.consultation) ordre(f.consultation.dateRemiseInformations, "consultation.dateRemiseInformations",
+    f.consultation.dateAvis, "consultation.dateAvis", "la remise des informations", "l'avis du comité");
+  if (f.expertise) ordre(f.expertise.dateDepart, "expertise.dateDepart",
+    f.expertise.dateSaisine, "expertise.dateSaisine", "le point de départ", "la saisine du juge");
+  if (estDateISO(f.dateAudit) && estDateISO(f.dateDernieresElections) && f.dateDernieresElections > f.dateAudit)
+    dit("dateDernieresElections", f.dateDernieresElections,
+      `postérieure à la date d'audit (${f.dateAudit}) : des élections à venir ne peuvent pas être les dernières tenues`);
+
+  if (estEntierPositif(f.titulairesInitiaux) && estEntierPositif(f.titulairesRestants)
+      && f.titulairesRestants > f.titulairesInitiaux)
+    dit("titulairesRestants", f.titulairesRestants,
+      `supérieur au nombre de titulaires élus à l'origine (${f.titulairesInitiaux})`);
+  if (estEntierPositif(f.effectif) && estEntierPositif(f.nbCadres) && f.nbCadres > f.effectif)
+    dit("nbCadres", f.nbCadres, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
+  if (estEntierPositif(f.reunionsSante) && estEntierPositif(f.reunionsTenues)
+      && f.reunionsSante > f.reunionsTenues)
+    dit("reunionsSante", f.reunionsSante,
+      `supérieur au nombre total de réunions tenues (${f.reunionsTenues})`);
+
+  return A;
+}
+
+/* Les champs que ce fichier sait examiner. Une fiche qui n'en porte aucun n'est
+   pas « recevable » : il n'y a rien à examiner, et le contrôle le dit. */
+const CHAMPS_VALIDES = [...DATES, ...ENTIERS, ...MONTANTS,
+  "effectifsMensuels", "listesDeposees", "consultation", "expertise", "protocole"];
+const examines = f => CHAMPS_VALIDES.filter(c =>
+  Object.prototype.hasOwnProperty.call(f || {}, c) && f[c] !== null && f[c] !== "").length;
+
+module.exports = { valider, estDateISO, estEntierPositif, ATTENDU, CHAMPS_VALIDES, examines };
+if (require.main === module) {
+  
+  const f = JSON.parse(fs.readFileSync(process.argv[2] || __dirname + "/fiche-cse.json", "utf8"));
+  const A = valider(f);
+  console.log(A.length ? A.map(x => `${x.champ} = ${x.valeur} — ${x.motif}`).join("\n") : "aucune anomalie de saisie");
 }
 
 });
@@ -1318,6 +1706,9 @@ const AV_DEC = "Avant de décider";
 const ORDRE = [NOW, AV_ELE, AV_LIS, AV_CON, AV_AVI, AV_DEC];
 
 const A = {
+"CSE-CTL-REC-01": { faire: "Corriger les données impossibles listées au constat : une date qui n'existe pas ou un dénombrement décimal ne peuvent pas être audités.", quand: NOW },
+"CSE-CTL-COH-01": { faire: "Rétablir l'effectif de l'entreprise au sens de l'article L. 1111-2, en le calculant sur les relevés mensuels versés, et relancer l'audit.", quand: NOW },
+"CSE-CTL-COH-02": { faire: "Appliquer le régime du seuil que les relevés mensuels franchissent — réunions, commission santé et sécurité, budgets, attributions — ou établir pourquoi l'effectif au sens de L. 1111-2 reste en deçà.", quand: NOW },
 "CSE-CTL-MEP-01": { faire: "Produire les états mensuels d'effectif des douze derniers mois, calculés selon l'article L. 1111-2.", quand: AV_ELE },
 "CSE-CTL-MEP-02": { faire: "Mettre en place le comité, ou verser le procès-verbal de carence établi à l'issue des élections.", quand: AV_ELE },
 "CSE-CTL-MEP-03": { faire: "Engager le renouvellement du comité : informer le personnel et fixer la date du premier tour.", quand: NOW },
@@ -1359,6 +1750,9 @@ const rangQuand = q => { const i = ORDRE.indexOf(q); return i < 0 ? ORDRE.length
 
 /* Deux registres : l'écart constaté affirme, la donnée manquante suspend. */
 const INTERDITS = {
+"CSE-CTL-REC-01": "Ne lisez pas le reste du rapport comme un résultat : une partie des contrôles a conclu sur des données impossibles.",
+"CSE-CTL-COH-01": "Ne vous fondez sur aucune conformité tirée de l'effectif : le dossier le dément lui-même.",
+"CSE-CTL-COH-02": "N'appliquez pas le régime déduit de l'effectif déclaré : vos propres relevés en franchissent un autre.",
 "CSE-CTL-MEP-02": "N'engagez aucune consultation : il n'y a ni comité, ni procès-verbal de carence.",
 "CSE-CTL-CON-04": "Ne poursuivez pas : l'instance consultée n'est pas celle que la loi désigne.",
 "CSE-CTL-SST-01": "Ne tenez pas les réunions santé et sécurité sans avoir mis en place la commission obligatoire.",
@@ -1367,6 +1761,9 @@ const INTERDITS = {
 "CSE-CTL-PER-03": "Ne faites plus fonctionner les représentants de proximité : aucun accord ne les institue.",
 };
 const SUSPENS = {
+"CSE-CTL-REC-01": "Ne concluez rien tant que la lisibilité des données n'a pas été vérifiée.",
+"CSE-CTL-COH-01": "Ne vous fondez sur aucune conformité tirée de l'effectif tant qu'il n'a pas été rapproché des relevés mensuels.",
+"CSE-CTL-COH-02": "N'appliquez pas le régime déduit de l'effectif déclaré tant que les relevés mensuels n'ont pas été produits.",
 "CSE-CTL-MEP-02": "N'engagez aucune consultation tant que l'existence d'un comité ou d'un procès-verbal de carence n'a pas été vérifiée.",
 "CSE-CTL-CON-04": "Ne poursuivez pas tant que l'instance compétente n'a pas été vérifiée.",
 "CSE-CTL-SST-01": "Ne tenez pas les réunions santé et sécurité tant que l'existence de la commission n'a pas été vérifiée.",
@@ -1384,6 +1781,10 @@ const B = "bloquant", CR = "critique", IM = "important", IN = "information";
 const GRAVITE = {
  "CSE-CTL-MEP-02": B, "CSE-CTL-ELE-03": B, "CSE-CTL-ELE-05": B, "CSE-CTL-CON-04": B,
  "CSE-CTL-SST-01": B, "CSE-CTL-PER-03": B,
+ /* Recevabilité et cohérence : bloquants, non parce qu'un texte interdit de
+    poursuivre, mais parce qu'un résultat calculé sur une donnée impossible ou
+    démentie par le dossier n'est pas un résultat. Rien ne doit s'y appuyer. */
+ "CSE-CTL-REC-01": B, "CSE-CTL-COH-01": B, "CSE-CTL-COH-02": B,
  "CSE-CTL-MEP-03": CR, "CSE-CTL-ELE-02": CR, "CSE-CTL-ELE-04": CR, "CSE-CTL-CON-01": CR,
  "CSE-CTL-CON-02": CR, "CSE-CTL-MOY-01": CR, "CSE-CTL-MOY-03": CR, "CSE-CTL-BUD-01": CR,
  "CSE-CTL-EXP-02": CR, "CSE-CTL-SST-02": CR, "CSE-CTL-ELE-07": CR,
@@ -1449,6 +1850,6 @@ __def("./textes_cse.json", function(module){ module.exports = {"L2311-1": {"id":
     controles: require("./controles-cse.js"),
     actions: require("./actions-cse.js"),
     manifeste: __MANIFESTE,
-    champs: [["Identité",[["entreprise","Dénomination sociale et numéro SIREN","texte"],["dateAudit","Date à laquelle la situation est décrite","AAAA-MM-JJ"]]],["Effectifs",[["effectif","Effectif de l'entreprise au sens de l'article L. 1111-2","nombre"],["effectifsMensuels","Effectif mois par mois sur les quatorze derniers mois","liste de nombres"],["nbCadres","Nombre d'ingénieurs, chefs de service et cadres assimilés","nombre"],["masseSalariale","Masse salariale brute de l'exercice, assiette de l'article L. 2312-83","euros"],["masseSalarialeN1","Masse salariale brute de l'exercice précédent","euros"]]],["Périmètre",[["etablissementsMultiples","L'entreprise comporte-t-elle plusieurs établissements distincts ?","oui / non"],["sourceDecoupage","Source du découpage : accord, décision unilatérale, décision administrative","texte"],["ues","L'entreprise fait-elle partie d'une unité économique et sociale ?","oui / non"],["representantsProximite","Des représentants de proximité sont-ils en place ?","oui / non"]]],["Comité",[["comiteExistant","Un comité social et économique est-il en place ?","oui / non"],["dateDernieresElections","Date du premier tour des dernières élections","AAAA-MM-JJ"],["dureeAccord","Durée conventionnelle des mandats, si un accord en fixe une","nombre d'années"],["titulairesElus","Nombre de titulaires effectivement élus","nombre"],["titulairesInitiaux","Nombre de titulaires élus à l'origine","nombre"],["titulairesRestants","Nombre de titulaires encore en fonction","nombre"],["partiellesOrganisees","Des élections partielles ont-elles été organisées ?","oui / non"]]],["Élections",[["electionsEnCours","Un processus électoral est-il en cours ?","oui / non"],["dateInformationPersonnel","Date de l'information du personnel sur l'organisation des élections","AAAA-MM-JJ"],["datePremierTour","Date envisagée ou tenue du premier tour","AAAA-MM-JJ"],["syndicatsInvites","Organisations syndicales invitées à négocier le protocole","liste"],["protocole","Protocole : nombre de signataires, de participants, part des suffrages, mention de la proportion femmes-hommes","objet"],["listesDeposees","Pour chaque liste : inscrits femmes et hommes du collège, et sexe de chaque candidat dans l'ordre de dépôt","liste d'objets"],["voteElectronique","Le vote électronique est-il utilisé ?","oui / non"]]],["Consultations",[["consultationsRecurrentes","Consultations récurrentes conduites sur l'exercice","liste d'objets"],["consultation","Pour la consultation en cours : date de remise des informations, date de l'avis, existence d'une expertise","objet"],["instanceConsultee","Instance consultée : centrale, d'établissement, ou les deux","texte"],["mesuresAdaptation","Le projet comporte-t-il des mesures d'adaptation spécifiques à un ou plusieurs établissements ?","oui / non"]]],["Fonctionnement",[["reunionsTenues","Nombre de réunions du comité tenues sur l'année","nombre"],["reunionsSante","Nombre de réunions ayant porté, en tout ou partie, sur la santé et la sécurité","nombre"],["accordPeriodicite","Un accord fixe-t-il la périodicité des consultations et le nombre de réunions ?","oui / non"],["reunionsAccord","Nombre de réunions annuelles prévu par cet accord","nombre"],["heuresAccordees","Volume mensuel total d'heures de délégation accordé","nombre"],["heuresRetenues","Des heures de délégation ont-elles été retenues sur la paie ?","oui / non"],["formationsDispensees","Formations dispensées aux élus","liste"]]],["Santé et sécurité",[["cssct","Une commission santé, sécurité et conditions de travail est-elle en place ?","oui / non"],["seveso","L'établissement relève-t-il des articles L. 4521-1 et suivants ?","oui / non"],["membresCssct","Membres de la commission, avec le collège de chacun","liste d'objets"]]],["Budgets",[["subventionVersee","Subvention de fonctionnement versée sur l'exercice","euros"],["ascAnneeN","Contribution aux activités sociales et culturelles de l'exercice","euros"],["ascAnneeN1","Même contribution, exercice précédent","euros"],["ancienneteASC","L'accès aux activités sociales est-il subordonné à une condition d'ancienneté ?","oui / non"]]],["Expertises",[["expertise","Expertise en cours : cas de recours, part employeur, date du point de départ, date de saisine du juge","objet"],["nbLicenciements","Nombre de licenciements économiques envisagés sur trente jours","nombre"]]],["Normes",[["accordsCse","Accords collectifs applicables au comité","liste"],["contentieuxCse","Contentieux ou procédure en cours concernant le comité","texte"],["faitsEntrave","Faits susceptibles de caractériser une entrave","texte"]]],["Pièces",[["pieces","Identifiants des pièces effectivement versées","liste"]]]],
+    champs: [["Identité",[["entreprise","Dénomination sociale et numéro SIREN","texte"],["dateAudit","Date à laquelle la situation est décrite","AAAA-MM-JJ"]]],["Effectifs",[["effectif","Effectif de l'entreprise au sens de l'article L. 1111-2","nombre"],["effectifsMensuels","Effectif mois par mois sur les quatorze derniers mois","liste de nombres"],["nbCadres","Nombre d'ingénieurs, chefs de service et cadres assimilés","nombre"],["masseSalariale","Masse salariale brute de l'exercice, assiette de l'article L. 2312-83","euros"],["masseSalarialeN1","Masse salariale brute de l'exercice précédent","euros"]]],["Périmètre",[["etablissementsMultiples","L'entreprise comporte-t-elle plusieurs établissements distincts ?","oui / non"],["sourceDecoupage","Source du découpage : accord, décision unilatérale, décision administrative","texte"],["ues","L'entreprise fait-elle partie d'une unité économique et sociale ?","oui / non"],["representantsProximite","Des représentants de proximité sont-ils en place ?","oui / non"]]],["Comité",[["comiteExistant","Un comité social et économique est-il en place ?","oui / non"],["dateDernieresElections","Date du premier tour des dernières élections","AAAA-MM-JJ"],["dureeAccord","Durée conventionnelle des mandats, si un accord en fixe une","nombre d'années"],["titulairesElus","Nombre de titulaires effectivement élus","nombre"],["titulairesInitiaux","Nombre de titulaires élus à l'origine","nombre"],["titulairesRestants","Nombre de titulaires encore en fonction","nombre"],["collegeVide","Un collège électoral n'est-il plus représenté au comité ?","oui / non"],["moisAvantTerme","Nombre de mois restant à courir jusqu'au terme des mandats","nombre de mois"],["partiellesOrganisees","Des élections partielles ont-elles été organisées ?","oui / non"]]],["Élections",[["electionsEnCours","Un processus électoral est-il en cours ?","oui / non"],["dateInformationPersonnel","Date de l'information du personnel sur l'organisation des élections","AAAA-MM-JJ"],["datePremierTour","Date envisagée ou tenue du premier tour","AAAA-MM-JJ"],["syndicatsInvites","Organisations syndicales invitées à négocier le protocole","liste"],["protocole","Protocole : nombre de signataires, de participants, part des suffrages, mention de la proportion femmes-hommes","objet"],["listesDeposees","Pour chaque liste : inscrits femmes et hommes du collège, nombre de sièges à pourvoir dans ce collège, et sexe de chaque candidat dans l'ordre de dépôt","liste d'objets"],["voteElectronique","Le vote électronique est-il utilisé ?","oui / non"]]],["Consultations",[["consultationsRecurrentes","Consultations récurrentes conduites sur l'exercice","liste d'objets"],["consultation","Pour la consultation en cours : date de remise des informations, date de l'avis, existence d'une expertise","objet"],["instanceConsultee","Instance consultée : centrale, d'établissement, ou les deux","texte"],["mesuresAdaptation","Le projet comporte-t-il des mesures d'adaptation spécifiques à un ou plusieurs établissements ?","oui / non"]]],["Fonctionnement",[["reunionsTenues","Nombre de réunions du comité tenues sur l'année","nombre"],["reunionsSante","Nombre de réunions ayant porté, en tout ou partie, sur la santé et la sécurité","nombre"],["accordPeriodicite","Un accord fixe-t-il la périodicité des consultations et le nombre de réunions ?","oui / non"],["reunionsAccord","Nombre de réunions annuelles prévu par cet accord","nombre"],["heuresAccordees","Volume mensuel total d'heures de délégation accordé","nombre"],["heuresRetenues","Des heures de délégation ont-elles été retenues sur la paie ?","oui / non"],["formationsDispensees","Formations dispensées aux élus","liste"]]],["Santé et sécurité",[["cssct","Une commission santé, sécurité et conditions de travail est-elle en place ?","oui / non"],["seveso","L'établissement relève-t-il des articles L. 4521-1 et suivants ?","oui / non"],["membresCssct","Membres de la commission, avec le collège de chacun","liste d'objets"]]],["Budgets",[["subventionVersee","Subvention de fonctionnement versée sur l'exercice","euros"],["ascAnneeN","Contribution aux activités sociales et culturelles de l'exercice","euros"],["ascAnneeN1","Même contribution, exercice précédent","euros"],["ancienneteASC","L'accès aux activités sociales est-il subordonné à une condition d'ancienneté ?","oui / non"]]],["Expertises",[["expertise","Expertise en cours : cas de recours, part employeur, date du point de départ, date de saisine du juge","objet"],["nbLicenciements","Nombre de licenciements économiques envisagés sur trente jours","nombre"]]],["Normes",[["accordsCse","Accords collectifs applicables au comité","liste"],["contentieuxCse","Contentieux ou procédure en cours concernant le comité","texte"],["faitsEntrave","Faits susceptibles de caractériser une entrave","texte"]]],["Pièces",[["pieces","Identifiants des pièces effectivement versées","liste"]]]],
   };
 })(typeof window !== "undefined" ? window : this);

@@ -9,6 +9,9 @@ const AV_DEC = "Avant de décider";
 const ORDRE = [NOW, AV_ELE, AV_LIS, AV_CON, AV_AVI, AV_DEC];
 
 const A = {
+"CSE-CTL-REC-01": { faire: "Corriger les données impossibles listées au constat : une date qui n'existe pas ou un dénombrement décimal ne peuvent pas être audités.", quand: NOW },
+"CSE-CTL-COH-01": { faire: "Rétablir l'effectif de l'entreprise au sens de l'article L. 1111-2, en le calculant sur les relevés mensuels versés, et relancer l'audit.", quand: NOW },
+"CSE-CTL-COH-02": { faire: "Appliquer le régime du seuil que les relevés mensuels franchissent — réunions, commission santé et sécurité, budgets, attributions — ou établir pourquoi l'effectif au sens de L. 1111-2 reste en deçà.", quand: NOW },
 "CSE-CTL-MEP-01": { faire: "Produire les états mensuels d'effectif des douze derniers mois, calculés selon l'article L. 1111-2.", quand: AV_ELE },
 "CSE-CTL-MEP-02": { faire: "Mettre en place le comité, ou verser le procès-verbal de carence établi à l'issue des élections.", quand: AV_ELE },
 "CSE-CTL-MEP-03": { faire: "Engager le renouvellement du comité : informer le personnel et fixer la date du premier tour.", quand: NOW },
@@ -50,6 +53,9 @@ const rangQuand = q => { const i = ORDRE.indexOf(q); return i < 0 ? ORDRE.length
 
 /* Deux registres : l'écart constaté affirme, la donnée manquante suspend. */
 const INTERDITS = {
+"CSE-CTL-REC-01": "Ne lisez pas le reste du rapport comme un résultat : une partie des contrôles a conclu sur des données impossibles.",
+"CSE-CTL-COH-01": "Ne vous fondez sur aucune conformité tirée de l'effectif : le dossier le dément lui-même.",
+"CSE-CTL-COH-02": "N'appliquez pas le régime déduit de l'effectif déclaré : vos propres relevés en franchissent un autre.",
 "CSE-CTL-MEP-02": "N'engagez aucune consultation : il n'y a ni comité, ni procès-verbal de carence.",
 "CSE-CTL-CON-04": "Ne poursuivez pas : l'instance consultée n'est pas celle que la loi désigne.",
 "CSE-CTL-SST-01": "Ne tenez pas les réunions santé et sécurité sans avoir mis en place la commission obligatoire.",
@@ -58,6 +64,9 @@ const INTERDITS = {
 "CSE-CTL-PER-03": "Ne faites plus fonctionner les représentants de proximité : aucun accord ne les institue.",
 };
 const SUSPENS = {
+"CSE-CTL-REC-01": "Ne concluez rien tant que la lisibilité des données n'a pas été vérifiée.",
+"CSE-CTL-COH-01": "Ne vous fondez sur aucune conformité tirée de l'effectif tant qu'il n'a pas été rapproché des relevés mensuels.",
+"CSE-CTL-COH-02": "N'appliquez pas le régime déduit de l'effectif déclaré tant que les relevés mensuels n'ont pas été produits.",
 "CSE-CTL-MEP-02": "N'engagez aucune consultation tant que l'existence d'un comité ou d'un procès-verbal de carence n'a pas été vérifiée.",
 "CSE-CTL-CON-04": "Ne poursuivez pas tant que l'instance compétente n'a pas été vérifiée.",
 "CSE-CTL-SST-01": "Ne tenez pas les réunions santé et sécurité tant que l'existence de la commission n'a pas été vérifiée.",
@@ -75,6 +84,10 @@ const B = "bloquant", CR = "critique", IM = "important", IN = "information";
 const GRAVITE = {
  "CSE-CTL-MEP-02": B, "CSE-CTL-ELE-03": B, "CSE-CTL-ELE-05": B, "CSE-CTL-CON-04": B,
  "CSE-CTL-SST-01": B, "CSE-CTL-PER-03": B,
+ /* Recevabilité et cohérence : bloquants, non parce qu'un texte interdit de
+    poursuivre, mais parce qu'un résultat calculé sur une donnée impossible ou
+    démentie par le dossier n'est pas un résultat. Rien ne doit s'y appuyer. */
+ "CSE-CTL-REC-01": B, "CSE-CTL-COH-01": B, "CSE-CTL-COH-02": B,
  "CSE-CTL-MEP-03": CR, "CSE-CTL-ELE-02": CR, "CSE-CTL-ELE-04": CR, "CSE-CTL-CON-01": CR,
  "CSE-CTL-CON-02": CR, "CSE-CTL-MOY-01": CR, "CSE-CTL-MOY-03": CR, "CSE-CTL-BUD-01": CR,
  "CSE-CTL-EXP-02": CR, "CSE-CTL-SST-02": CR, "CSE-CTL-ELE-07": CR,

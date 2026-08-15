@@ -154,7 +154,9 @@ c("CTL-CSE-02","Procédure","Les délais entre convocation, réunions et avis so
    if (!r.consultationCSE || vide(f.datesReunionsCSE)) return { etat: MANQ, motif: "Dates de réunion non renseignées." };
    const d = [...f.datesReunionsCSE].sort();
    if (d.length < 2) return { etat: SO, motif: "Une seule réunion : aucun intervalle à contrôler." };
-   const jours = Math.round((new Date(d[1]) - new Date(d[0])) / 86400000);
+   const e = require("./dates.js").ecart(d[0], d[1], "la première réunion", "la seconde réunion");
+   if (!e.valide) return { etat: MANQ, motif: e.motif };
+   const jours = e.jours;
    if (r.code === "GRAND_COLLECTIF")
      return jours >= 15 ? { etat: CONF, motif: `${jours} jours entre les deux réunions, le minimum est de quinze.` }
                         : { etat: NC, motif: `${jours} jours entre les deux réunions : le minimum de quinze jours n'est pas respecté (L. 1233-30, I).` };

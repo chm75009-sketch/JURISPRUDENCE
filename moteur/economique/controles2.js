@@ -11,7 +11,13 @@ const neant = (f, champ) => declare(f, champ) && vide(f[champ]);
 const vide = x => x === undefined || x === null || x === "" || (Array.isArray(x) && !x.length);
 const C = [];
 const c = (id, rubrique, objet, fondement, fn) => C.push({ id, rubrique, objet, fondement, verdict: fn });
-const jours = (a, b) => Math.round((new Date(b) - new Date(a)) / 86400000);
+/* Les écarts de dates passent par moteur/commun/dates.js : une chronologie
+   inversée ou une date qui n'existe pas ne rend pas un nombre de jours, elle
+   rend un refus de conclure. jours() garde sa signature — il rend le nombre,
+   ou null lorsque l'écart n'est pas calculable — et chaque appelant traite le
+   null pour son compte. */
+const DT = require("./dates.js");
+const jours = (a, b) => { const e = DT.ecart(a, b); return e.valide ? e.jours : (e.cause === "ordre" ? e.jours : null); };
 
 /* ---------- LES PIÈCES ---------- */
 c("CTL-PCE-01","Pièces","Les pièces versées portent-elles leurs métadonnées ?",[],
@@ -454,7 +460,9 @@ c("CTL-PCO-03","Procédure collective","La notification intervient-elle dans la 
      return { etat: MANQ, motif: "La date du jugement de liquidation ou celle de la notification n'est pas renseignée : la fenêtre de garantie ne peut pas être vérifiée." };
    const pse = M.regimeEco(f).pse;
    const limite = M.ajouteJours(f.dateJugement, pse ? 21 : 15);
-   const j = Math.round((new Date(f.dateNotification) - new Date(f.dateJugement)) / 86400000);
+   const e = DT.ecart(f.dateJugement, f.dateNotification, "le jugement de liquidation", "la notification");
+   if (!e.valide) return { etat: e.cause === "ordre" ? NC : MANQ, motif: e.motif + (e.cause === "ordre" ? " Une rupture notifiée avant le jugement de liquidation ne relève pas de la fenêtre de garantie, qui court à compter de celui-ci." : "") };
+   const j = e.jours;
    return f.dateNotification > limite
      ? { etat: NC, motif: `Jugement de liquidation du ${f.dateJugement}, notification du ${f.dateNotification}, soit ${j} jours. La garantie couvre les ruptures intervenant dans les ${pse ? "vingt et un jours, un plan de sauvegarde de l'emploi étant élaboré" : "quinze jours"} suivant le jugement, soit jusqu'au ${limite}. Hors de cette fenêtre, les créances de rupture ne sont pas garanties.` }
      : { etat: CONF, motif: `Notification ${j} jours après le jugement de liquidation, dans la fenêtre de ${pse ? "vingt et un" : "quinze"} jours qui expire le ${limite}.` }; });

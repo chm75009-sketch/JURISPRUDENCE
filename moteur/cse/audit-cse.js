@@ -157,11 +157,11 @@ function audit(f) {
   }
 
   h1("2 · Les textes applicables");
-  p("Texte intégral des articles retenus, dans leur version en vigueur au 15 août 2026, tels qu'ils ont été lus sur Légifrance.");
+  p("Texte intégral des articles retenus, dans leur version en vigueur au 15 août 2026, tels qu'ils ont été lus sur Légifrance. Chaque article porte l'identifiant de la version reproduite : un article peut être modifié sans changer de numéro, et c'est cet identifiant, non le numéro, qui dit laquelle des versions successives a été lue.");
   const arts = [...new Set(retenues.flatMap(r => r.fondement))].sort();
   for (const a of arts) { const v = T[a];
     if (!v || !v.texte) { h3(artFr(a)); note("Article non lu à la source : il n'est pas reproduit."); continue; }
-    h3(artFr(a)); p(net(v.texte)); }
+    h3(artFr(a)); p(net(v.texte)); note(`Version reproduite : ${v.id}.`); }
 
   h1("3 · La jurisprudence applicable");
   p("Sommaires publiés de la Cour de cassation, tels qu'elle les a écrits.");
@@ -187,6 +187,8 @@ function audit(f) {
    ["Date de génération", new Date().toISOString().slice(0, 10)],
    ["Date de contrôle des sources", "15 août 2026 — articles relus sur Légifrance à cette date"],
    ["Articles lus à la source", String(Object.values(T).filter(v => v && v.texte).length)],
+   ["Articles demandés sans réponse de la source", `${Object.values(T).filter(v => !v || !v.texte).length} — aucune règle ne peut s'y fonder : le chargement de la grille échoue si une règle cite un article dont le texte est absent`],
+   ["Vérification des versions", "node verifier-textes.js — rejoue la lecture de chaque article et signale tout écart d'identifiant ou de contenu"],
    ["Règles de la base", `${GRILLE.length} dont ${retenues.length} applicables`],
    ["Contrôles exécutés", `${CONTROLES.length} dont ${DETECTION.size} de détection`],
    ["Corpus de jurisprudence", "163 arrêts publiés, du 24 janvier 2018 au 8 juillet 2026"],
