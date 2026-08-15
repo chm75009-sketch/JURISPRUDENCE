@@ -152,12 +152,25 @@ c("CTL-CSE-03","Procédure","Les renseignements ont-ils été joints à la convo
      ? { etat: CONF, motif: `Le document d'information prévu à l'article ${art} est versé, avec la décharge des membres.` }
      : { etat: RISQ, motif: `Le document des sept renseignements de l'article ${art} n'est pas versé. Il doit être adressé « avec la convocation », non remis en séance.` }; });
 
+/* Une case remplie n'est pas une date. Le questionnaire admet la mention
+   « avis non rendu » : la lire comme un avis rendu produirait un faux conforme,
+   et l'exigence décisive — la notification intervient-elle après l'expiration
+   du délai ? — ne serait jamais contrôlée. */
+const estDate = s => /^\d{4}-\d{2}-\d{2}$/.test(String(s || ""));
 c("CTL-CSE-04","Procédure","L'avis a-t-il été rendu, ou le délai est-il expiré ?",["L. 1233-8","L. 1233-30, II"],
  f => { const r = M.regimeEco(f);
    if (!r.consultationCSE) return { etat: SO, motif: "Consultation non due." };
-   if (!vide(f.dateAvisCSE)) return { etat: CONF, motif: `Avis rendu le ${f.dateAvisCSE}.` };
-   if (vide(f.datesReunionsCSE)) return { etat: MANQ, motif: "Ni avis, ni dates de réunion." };
-   return { etat: RISQ, motif: `Aucun avis rendu. À l'expiration du délai — ${r.delaiAvis} — le comité est réputé avoir été consulté ; la date d'expiration doit être établie avant toute notification.` }; });
+   if (estDate(f.dateAvisCSE)) return { etat: CONF, motif: `Avis rendu le ${f.dateAvisCSE}.` };
+   if (!vide(f.dateAvisCSE) && !/non rendu/i.test(String(f.dateAvisCSE)))
+     return { etat: MANQ, motif: `Valeur non interprétable : « ${f.dateAvisCSE} ». Attendu : une date au format AAAA-MM-JJ, ou la mention « avis non rendu ».` };
+   if (vide(f.datesReunionsCSE)) return { etat: MANQ, motif: "Ni avis rendu, ni dates de réunion : l'expiration du délai ne peut pas être calculée." };
+   const mois = M.delaiAvisMois(r);
+   const depart = f.datesReunionsCSE[0];
+   if (mois === null) return { etat: RISQ, motif: `Aucun avis rendu. Le régime n'exprime pas le délai en mois : ${r.delaiAvis}. La date à laquelle le comité est réputé consulté doit être établie avant toute notification.` };
+   const expiration = M.ajouteMois(depart, mois);
+   if (!vide(f.dateNotification) && f.dateNotification < expiration)
+     return { etat: NC, motif: `Aucun avis rendu. Le délai de ${r.delaiAvis} court depuis la première réunion du ${depart} et expire le ${expiration} : la notification prévue le ${f.dateNotification} lui est antérieure. Le comité n'est pas encore réputé consulté.` };
+   return { etat: RISQ, motif: `Aucun avis rendu. Le délai de ${r.delaiAvis}, courant depuis la première réunion du ${depart}, expire le ${expiration} ; à cette date le comité est réputé avoir été consulté. Aucune notification ne doit intervenir avant.` }; });
 
 c("CTL-CSE-05","Procédure","La notification ou l'information de l'administration est-elle faite ?",["L. 1233-19","L. 1233-46"],
  f => { const r = M.regimeEco(f);
@@ -226,7 +239,7 @@ c("CTL-IND-01","Situations individuelles","Des salariés en arrêt, congé mater
 
 c("CTL-COE-01","Groupe","Un risque de co-emploi est-il signalé ?",[],
  f => f.coEmploi === true
-   ? { etat: RISQ, motif: "Une immixtion de la société mère dans la gestion est signalée. Le co-emploi suppose une confusion d'intérêts, d'activités et de direction ; il est hors du champ de cette base et appelle un examen distinct." }
+   ? { etat: RISQ, motif: "Une immixtion de la société mère dans la gestion est signalée. Le co-emploi suppose une confusion d'intérêts, d'activités et de direction, se manifestant par une immixtion permanente de la société mère dans la gestion économique et sociale de la société employeuse, conduisant à la perte totale d'autonomie d'action de cette dernière. Le critère est exigeant : la première moitié de la formule ne suffit pas. La qualification est hors du champ de cette base et appelle un examen distinct." }
    : vide(f.coEmploi) ? { etat: MANQ, motif: "La question de l'immixtion d'une société du groupe dans la gestion n'est pas renseignée." }
    : { etat: SO, motif: "Aucune immixtion signalée. Ce contrôle ne conclut jamais à la conformité : il détecte une situation qui appellerait un examen extérieur à la base." });
 
@@ -248,7 +261,7 @@ const PIECE_ATTENDUE = {
  "CTL-PSE-01":"pse", "CTL-PSE-02":"comptes-groupe", "CTL-PSE-04":"decision-admin",
  "CTL-PRT-01":"autorisations", "CTL-CCN-01":"convention",
 };
-const A_PRO = new Set(["CTL-ECO-03","CTL-IND-01","CTL-COE-01","CTL-PSE-02"]);
+const A_PRO = new Set(["CTL-ECO-03","CTL-IND-01","CTL-COE-01","CTL-PSE-02","CTL-FRA-01","CTL-REP-01"]);
 function niveauDe(x, f, v) {
   if (v.etat === MANQ) return P.NIV.MANQUANT;
   if (v.etat === SO) return "—";

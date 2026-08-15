@@ -1,0 +1,378 @@
+{
+  "entreprise": "NORDHAVN MOBILITÉ FRANCE SAS",
+  "siren": "812457903",
+  "dateAudit": "2026-08-15",
+  "idcc": "1486",
+  "cause": "1",
+  "effectif": 3500,
+  "effectifEtablissement": 620,
+  "etablissementsDistincts": 4,
+  "groupe": true,
+  "effectifGroupe": 15400,
+  "nbLicenciements": 890,
+  "licenciementsRecents30j": 45,
+  "refusModification": 62,
+  "refusAPC": true,
+  "dateEntretien": "2026-06-02",
+  "dateNotification": "2026-06-10",
+  "cadreAuSensL1441_13": true,
+  "dateInfoCSE": "2026-02-03",
+  "datesReunionsCSE": [
+    "2026-02-17",
+    "2026-03-10"
+  ],
+  "dateAvisCSE": "avis non rendu",
+  "dateNotifAdmin": "2026-01-28",
+  "conventionJointe": false,
+  "accordsJoints": false,
+  "conventionAJour": "je ne sais pas",
+  "avenantsRecents": "oui, avenant du 12 mars 2026 non publié",
+  "transfertEnvisage": true,
+  "procedureCollective": false,
+  "coEmploi": true,
+  "societes": [
+    {
+      "nom": "NORDHAVN INDUSTRIES SE (mère)",
+      "effectif": 240,
+      "activite": "holding",
+      "pays": "Pays-Bas",
+      "etranger": true
+    },
+    {
+      "nom": "NORDHAVN E-DRIVE SAS",
+      "effectif": 240,
+      "activite": "mobilité électrique poids lourd",
+      "pays": "France",
+      "etranger": false
+    },
+    {
+      "nom": "NORDHAVN SERVICES FRANCE SAS",
+      "effectif": 410,
+      "activite": "maintenance",
+      "pays": "France",
+      "etranger": false
+    },
+    {
+      "nom": "NORDHAVN POLSKA sp. z o.o.",
+      "effectif": 2100,
+      "activite": "mobilité électrique",
+      "pays": "Pologne",
+      "etranger": true
+    },
+    {
+      "nom": "NORDHAVN MAROC SARL",
+      "effectif": 3400,
+      "activite": "mobilité électrique",
+      "pays": "Maroc",
+      "etranger": true
+    },
+    {
+      "nom": "NORDHAVN VIETNAM Co Ltd",
+      "effectif": 4200,
+      "activite": "mobilité électrique",
+      "pays": "Vietnam",
+      "etranger": true
+    },
+    {
+      "nom": "NORDHAVN DEUTSCHLAND GmbH",
+      "effectif": 1310,
+      "activite": "composants industriels",
+      "pays": "Allemagne",
+      "etranger": true
+    }
+  ],
+  "trimestres": [
+    {
+      "libelle": "T3-25",
+      "n": 214000,
+      "n1": 231000,
+      "perimetre": "entreprise"
+    },
+    {
+      "libelle": "T4-25",
+      "n": 198000,
+      "n1": 226000,
+      "perimetre": "entreprise"
+    },
+    {
+      "libelle": "T1-26",
+      "n": 187000,
+      "n1": 219000,
+      "perimetre": "entreprise"
+    }
+  ],
+  "resultatExploitation": [
+    {
+      "annee": 2023,
+      "valeur": 12400
+    },
+    {
+      "annee": 2024,
+      "valeur": -8900
+    },
+    {
+      "annee": 2025,
+      "valeur": -38000
+    }
+  ],
+  "tresorerie": [
+    {
+      "annee": 2024,
+      "valeur": 41000
+    },
+    {
+      "annee": 2025,
+      "valeur": 26000
+    }
+  ],
+  "autresElements": "Redevance de marque de 4,5 % du chiffre d'affaires (61 M€/an) et management fees (18 M€/an) versés à la société mère néerlandaise depuis l'avenant du 3 avril 2023. Hors ces flux, le résultat d'exploitation 2025 du secteur France serait positif de 41 M€. Résultat net consolidé du groupe 2025 : +412 M€ ; dividendes versés : 180 M€.",
+  "menace": "",
+  "postesSupprimes": [
+    {
+      "intitule": "Technicien de maintenance — Rennes",
+      "service": "Services",
+      "avant": 310,
+      "apres": 0
+    },
+    {
+      "intitule": "Chargé de clientèle — Rennes",
+      "service": "Services",
+      "avant": 310,
+      "apres": 0
+    },
+    {
+      "intitule": "Opérateur ligne d'assemblage — Sochaux",
+      "service": "Production",
+      "avant": 980,
+      "apres": 670
+    },
+    {
+      "intitule": "Fonctions support — Vélizy",
+      "service": "Siège",
+      "avant": 340,
+      "apres": 245
+    }
+  ],
+  "precaires": [
+    {
+      "emploi": "Opérateur ligne d'assemblage — Sochaux",
+      "type": "intérim",
+      "nombre": 88
+    },
+    {
+      "emploi": "Technicien de maintenance — Rennes",
+      "type": "CDD",
+      "nombre": 12
+    }
+  ],
+  "categories": [
+    {
+      "nom": "Technicien de maintenance",
+      "effectif": 310,
+      "suppressions": 310,
+      "salaries": [
+        {
+          "nom": "T001",
+          "charges": 3,
+          "anciennetePoints": 4,
+          "social": 1,
+          "qualites": 1
+        }
+      ]
+    },
+    {
+      "nom": "Responsable de secteur maintenance Rennes — niveau 7 échelon B",
+      "effectif": 1,
+      "suppressions": 1,
+      "salaries": [
+        {
+          "nom": "P-ELU-01",
+          "charges": 2,
+          "anciennetePoints": 4,
+          "social": 2,
+          "qualites": 0
+        }
+      ]
+    },
+    {
+      "nom": "Chargé de clientèle grands comptes zone Ouest",
+      "effectif": 1,
+      "suppressions": 1,
+      "salaries": [
+        {
+          "nom": "P-ELU-02",
+          "charges": 3,
+          "anciennetePoints": 4,
+          "social": 2,
+          "qualites": 0
+        }
+      ]
+    },
+    {
+      "nom": "Opérateur ligne d'assemblage",
+      "effectif": 980,
+      "suppressions": 310,
+      "salaries": [
+        {
+          "nom": "O001",
+          "charges": 1,
+          "anciennetePoints": 3,
+          "social": 0,
+          "qualites": 2
+        }
+      ]
+    }
+  ],
+  "salaries": [
+    {
+      "nom": "T001",
+      "anciennete": 18.5,
+      "ancienneteMois": 222,
+      "moyenne12": 2980,
+      "tiers3": 2940
+    },
+    {
+      "nom": "P-ELU-01",
+      "anciennete": 22.0,
+      "ancienneteMois": 264,
+      "moyenne12": 4120,
+      "tiers3": 4050
+    },
+    {
+      "nom": "O001",
+      "anciennete": 6.5,
+      "ancienneteMois": 78,
+      "moyenne12": 2310,
+      "tiers3": 2280
+    }
+  ],
+  "salariesProteges": [
+    {
+      "nom": "P-ELU-01",
+      "mandat": "secrétaire du CSE central",
+      "autorisation": null
+    },
+    {
+      "nom": "P-ELU-02",
+      "mandat": "délégué syndical",
+      "autorisation": null
+    },
+    {
+      "nom": "P-ELU-03",
+      "mandat": "membre du CSE d'établissement de Rennes",
+      "autorisation": "2026-05-20"
+    }
+  ],
+  "salariesSuspendus": [
+    {
+      "nom": "T001",
+      "situation": "congé de maternité jusqu'au 12 septembre 2026"
+    }
+  ],
+  "postesDisponibles": [
+    {
+      "societe": "NORDHAVN MAROC SARL",
+      "intitule": "Technicien de maintenance",
+      "lieu": "Tanger",
+      "remuneration": "380 €/mois"
+    },
+    {
+      "societe": "NORDHAVN VIETNAM Co Ltd",
+      "intitule": "Opérateur",
+      "lieu": "Hai Phong",
+      "remuneration": "310 €/mois"
+    },
+    {
+      "societe": "NORDHAVN MOBILITÉ FRANCE SAS",
+      "intitule": "Technicien méthodes",
+      "lieu": "Vélizy",
+      "remuneration": "34 000 €"
+    }
+  ],
+  "offresFaites": [
+    {
+      "intitule": "Technicien de maintenance",
+      "descriptif": "",
+      "employeur": "NORDHAVN MAROC SARL",
+      "contrat": "contrat local",
+      "lieu": "Tanger",
+      "remuneration": "380 €/mois",
+      "classification": "",
+      "dateCertaine": false,
+      "salarie": "T001",
+      "delaiReponse": "8 jours"
+    },
+    {
+      "intitule": "Technicien méthodes",
+      "descriptif": "méthodes industrialisation",
+      "employeur": "NORDHAVN MOBILITÉ FRANCE SAS",
+      "contrat": "CDI",
+      "lieu": "Vélizy",
+      "remuneration": "34 000 €",
+      "classification": "N5",
+      "dateCertaine": true,
+      "salarie": "T001",
+      "delaiReponse": "15 jours"
+    }
+  ],
+  "formationProposee": [],
+  "convention": {
+    "criteresOrdre": true,
+    "preavisPlusFavorable": false,
+    "indemnitePlusFavorable": true
+  },
+  "accords": {
+    "methode": true,
+    "pse": true,
+    "apc": true,
+    "gepp": false
+  },
+  "usagesEtEngagements": "Engagement unilatéral de 2019 portant indemnité supra-légale de 3 mois de salaire en cas de fermeture de site.",
+  "contentieuxEnCours": "Requête du CSE central devant le tribunal administratif de Paris contre la décision d'homologation ; contestation de l'unité économique et sociale avec NORDHAVN SERVICES FRANCE devant le tribunal judiciaire.",
+  "pse": {
+    "voie": "accord",
+    "suffrages": 47,
+    "evitement": "réduction de l'intérim",
+    "reclassementInterne": "12 postes recensés sur le territoire national",
+    "formation": "",
+    "creation": "aide de 4 000 €",
+    "suivi": "",
+    "dateDecisionAdmin": "2026-06-25"
+  },
+  "pieces": [
+    {
+      "code": "renseignements-cse",
+      "fichier": "info-csec-2026-02-03.pdf",
+      "date": "2026-02-03",
+      "periode": "projet 2026",
+      "auteur": "Direction générale",
+      "version": "1",
+      "perimetre": "entreprise",
+      "lue": true
+    },
+    {
+      "code": "comptes-groupe",
+      "fichier": "consolides-2025-extrait.pdf",
+      "date": "2026-04-30",
+      "periode": "exercice 2025",
+      "auteur": "NORDHAVN INDUSTRIES SE",
+      "version": "1",
+      "perimetre": "",
+      "lue": false
+    },
+    {
+      "code": "pse",
+      "fichier": "projet-pse-v4.pdf",
+      "date": "2026-03-10",
+      "periode": "2026-2027",
+      "auteur": "Direction générale",
+      "version": "4",
+      "perimetre": "entreprise",
+      "lue": false
+    }
+  ],
+  "perimetreOrdre": "établissement de Rennes",
+  "accordPerimetreOrdre": false,
+  "cseExistant": true,
+  "expertise": true
+}

@@ -1,166 +1,184 @@
 {
- "entreprise": "T",
- "effectif": 320,
- "effectifGroupe": 602,
- "groupe": true,
- "cause": "1",
- "nbLicenciements": 22,
- "dateNotification": "2026-06-15",
- "dateEntretien": "2026-06-02",
- "dateInfoCSE": "2026-03-09",
- "datesReunionsCSE": [
-  "2026-03-23",
-  "2026-04-14"
- ],
- "dateAvisCSE": "2026-04-14",
- "dateNotifAdmin": "2026-03-24",
- "etablissementsDistincts": 1,
- "cseExistant": true,
- "expertise": false,
- "consequencesSSCT": "réorganisation des rotations",
- "perimetreOrdre": "entreprise",
- "effectifEtablissement": 320,
- "idcc": "1486",
- "conventionJointe": true,
- "accordsJoints": true,
- "societes": [
-  {
-   "nom": "A"
-  },
-  {
-   "nom": "B"
+ "objet": "dossier de référence des cas contradictoires",
+ "manifeste": {
+  "empreinte": "19ec5b0e770c",
+  "fichier": "manifeste-controles.json"
+ },
+ "registre": "rapport-tests.json",
+ "empreintesFichiers": {
+  "moteur.js": "4b8365853040",
+  "controles.js": "ab0fdab86e3d",
+  "controles2.js": "123f5eccd6de",
+  "grille-eco.js": "00f6b087193c",
+  "grille-auto.js": "20ca038f05b7",
+  "pieces.js": "95ed7ab57ced",
+  "preuve.js": "ba61fe6fc07a"
+ },
+ "note": "Chaque cas du registre applique une mutation à ce dossier ; la colonne « donnée injectée » en donne la différence, valeur avant puis valeur après.",
+ "dossier": {
+  "entreprise": "T",
+  "effectif": 320,
+  "effectifGroupe": 602,
+  "groupe": true,
+  "cause": "1",
+  "nbLicenciements": 22,
+  "dateNotification": "2026-06-15",
+  "dateEntretien": "2026-06-02",
+  "dateInfoCSE": "2026-03-09",
+  "datesReunionsCSE": [
+   "2026-03-23",
+   "2026-04-14"
+  ],
+  "dateAvisCSE": "2026-04-14",
+  "dateNotifAdmin": "2026-03-24",
+  "etablissementsDistincts": 1,
+  "cseExistant": true,
+  "expertise": false,
+  "consequencesSSCT": "réorganisation des rotations",
+  "perimetreOrdre": "entreprise",
+  "effectifEtablissement": 320,
+  "idcc": "1486",
+  "conventionJointe": true,
+  "accordsJoints": true,
+  "societes": [
+   {
+    "nom": "A"
+   },
+   {
+    "nom": "B"
+   }
+  ],
+  "postesDisponibles": [
+   {
+    "societe": "A",
+    "intitule": "Régleur"
+   },
+   {
+    "societe": "B",
+    "intitule": "Cariste"
+   }
+  ],
+  "offresFaites": [
+   {
+    "intitule": "Régleur",
+    "employeur": "A",
+    "descriptif": "d",
+    "contrat": "CDI",
+    "lieu": "L",
+    "remuneration": "30 000 €",
+    "classification": "N3",
+    "dateCertaine": true,
+    "salarie": "S1",
+    "delaiReponse": "15 jours"
+   },
+   {
+    "intitule": "Cariste",
+    "employeur": "B",
+    "descriptif": "d",
+    "contrat": "CDI",
+    "lieu": "L",
+    "remuneration": "26 000 €",
+    "classification": "N2",
+    "dateCertaine": true,
+    "salarie": "S1",
+    "delaiReponse": "15 jours"
+   }
+  ],
+  "pieces": [
+   {
+    "code": "etat-postes",
+    "fichier": "postes.pdf",
+    "date": "2026-06-01",
+    "periode": "juin 2026",
+    "auteur": "DRH groupe",
+    "version": "1",
+    "perimetre": "groupe France",
+    "lue": true
+   },
+   {
+    "code": "renseignements-cse",
+    "fichier": "info.pdf",
+    "date": "2026-03-09",
+    "periode": "2026",
+    "auteur": "direction",
+    "version": "1",
+    "perimetre": "entreprise",
+    "lue": true
+   },
+   {
+    "code": "comptes-groupe",
+    "fichier": "cons.pdf",
+    "date": "2026-04-30",
+    "periode": "2025",
+    "auteur": "groupe",
+    "version": "1",
+    "perimetre": "secteur d'activité du groupe",
+    "lue": true
+   },
+   {
+    "code": "conventionJointe",
+    "fichier": "ccn.pdf",
+    "date": "2026-01-10",
+    "periode": "2026",
+    "auteur": "branche",
+    "version": "avenant 46",
+    "lue": true,
+    "perimetre": "branche"
+   },
+   {
+    "code": "accord-methode",
+    "fichier": "acc.pdf",
+    "date": "2026-02-01",
+    "periode": "2026",
+    "auteur": "entreprise",
+    "version": "1",
+    "perimetre": "entreprise",
+    "lue": true
+   }
+  ],
+  "trimestres": [
+   {
+    "libelle": "T2-25",
+    "n": 9240,
+    "n1": 10180,
+    "perimetre": "secteur"
+   }
+  ],
+  "resultatExploitation": [
+   {
+    "annee": 2025,
+    "valeur": -1870
+   }
+  ],
+  "tresorerie": [
+   {
+    "annee": 2025,
+    "valeur": -580
+   }
+  ],
+  "formationProposee": [
+   {
+    "contenu": "adaptation",
+    "duree": "120 h",
+    "reponse": "refus"
+   }
+  ],
+  "postesSupprimes": [
+   {
+    "intitule": "Régleur",
+    "avant": 10,
+    "apres": -12
+   }
+  ],
+  "pse": {
+   "voie": "accord",
+   "suffrages": 62,
+   "evitement": "14 postes d'intérim supprimés",
+   "reclassementInterne": "11 postes",
+   "formation": "350 heures",
+   "creation": "12 000 €",
+   "suivi": "commission tous les 2 mois",
+   "dateDecisionAdmin": "2026-06-10"
   }
- ],
- "postesDisponibles": [
-  {
-   "societe": "A",
-   "intitule": "Régleur"
-  },
-  {
-   "societe": "B",
-   "intitule": "Cariste"
-  }
- ],
- "offresFaites": [
-  {
-   "intitule": "Régleur",
-   "employeur": "A",
-   "descriptif": "d",
-   "contrat": "CDI",
-   "lieu": "L",
-   "remuneration": "30 000 €",
-   "classification": "N3",
-   "dateCertaine": true,
-   "salarie": "S1",
-   "delaiReponse": "15 jours"
-  },
-  {
-   "intitule": "Cariste",
-   "employeur": "B",
-   "descriptif": "d",
-   "contrat": "CDI",
-   "lieu": "L",
-   "remuneration": "26 000 €",
-   "classification": "N2",
-   "dateCertaine": true,
-   "salarie": "S1",
-   "delaiReponse": "15 jours"
-  }
- ],
- "pieces": [
-  {
-   "code": "etat-postes",
-   "fichier": "postes.pdf",
-   "date": "2026-06-01",
-   "periode": "juin 2026",
-   "auteur": "DRH groupe",
-   "version": "1",
-   "perimetre": "groupe France",
-   "lue": true
-  },
-  {
-   "code": "renseignements-cse",
-   "fichier": "info.pdf",
-   "date": "2026-03-09",
-   "periode": "2026",
-   "auteur": "direction",
-   "version": "1",
-   "perimetre": "entreprise",
-   "lue": true
-  },
-  {
-   "code": "comptes-groupe",
-   "fichier": "cons.pdf",
-   "date": "2026-04-30",
-   "periode": "2025",
-   "auteur": "groupe",
-   "version": "1",
-   "perimetre": "secteur d'activité du groupe",
-   "lue": true
-  },
-  {
-   "code": "conventionJointe",
-   "fichier": "ccn.pdf",
-   "date": "2026-01-10",
-   "periode": "2026",
-   "auteur": "branche",
-   "version": "avenant 46",
-   "lue": true,
-   "perimetre": "branche"
-  },
-  {
-   "code": "accord-methode",
-   "fichier": "acc.pdf",
-   "date": "2026-02-01",
-   "periode": "2026",
-   "auteur": "entreprise",
-   "version": "1",
-   "perimetre": "entreprise",
-   "lue": true
-  }
- ],
- "trimestres": [
-  {
-   "libelle": "T2-25",
-   "n": 9240,
-   "n1": 10180,
-   "perimetre": "secteur"
-  }
- ],
- "resultatExploitation": [
-  {
-   "annee": 2025,
-   "valeur": -1870
-  }
- ],
- "tresorerie": [
-  {
-   "annee": 2025,
-   "valeur": -580
-  }
- ],
- "formationProposee": [
-  {
-   "contenu": "adaptation",
-   "duree": "120 h",
-   "reponse": "refus"
-  }
- ],
- "postesSupprimes": [
-  {
-   "intitule": "Régleur",
-   "avant": 10,
-   "apres": -12
-  }
- ],
- "pse": {
-  "voie": "accord",
-  "suffrages": 62,
-  "evitement": "14 postes d'intérim supprimés",
-  "reclassementInterne": "11 postes",
-  "formation": "350 heures",
-  "creation": "12 000 €",
-  "suivi": "commission tous les 2 mois",
-  "dateDecisionAdmin": "2026-06-10"
  }
 }

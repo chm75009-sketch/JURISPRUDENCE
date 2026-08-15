@@ -135,6 +135,23 @@ const R = [
  pieces:["Accord de performance collective","Information des salariés avec date certaine","Refus écrit du salarié"],
  erreurs:["Traiter ce licenciement comme économique","Le croire soustrait à tout contrôle"],
  valeur:"—"},
+
+/* Le co-emploi n'était énoncé nulle part dans la grille : seul un contrôle de
+   détection le mentionnait, et avec la moitié de la formule. */
+{id:"COE-01", rubrique:"Groupe · co-emploi",
+ question:"À quelles conditions une société du groupe peut-elle être qualifiée de coemployeur ?",
+ si:f=>f.groupe===true,
+ alors:()=>"Hors l'existence d'un lien de subordination, une société faisant partie d'un groupe ne peut être qualifiée de coemployeur du personnel employé par une autre que s'il existe, au-delà de la nécessaire coordination des actions économiques entre les sociétés du groupe et de l'état de domination économique que cette appartenance peut engendrer, une immixtion permanente de cette société dans la gestion économique et sociale de la société employeur, conduisant à la perte totale d'autonomie d'action de cette dernière. Les deux conditions sont cumulatives : l'immixtion permanente, et la perte totale d'autonomie. La coordination économique et la domination, à elles seules, ne suffisent jamais.",
+ fondement:["L. 1221-1"],
+ juris:[A("18-13.769","2020-11-25","soc.","toujours valable",
+   "Formule actuelle du co-emploi. Publié au Bulletin et au Rapport annuel, formation plénière de chambre.")],
+ pieces:["Organigramme fonctionnel et capitalistique","Délégations de pouvoir du dirigeant de la filiale",
+   "Conventions de trésorerie, de prestations de services et de marque",
+   "Comptes rendus des instances de direction de la filiale"],
+ erreurs:["Retenir le co-emploi de la seule domination économique de la mère.",
+   "S'arrêter à la confusion d'intérêts, d'activités et de direction : c'est la première moitié de la formule, et elle ne suffit pas.",
+   "Confondre le co-emploi avec la responsabilité délictuelle de la mère, qui obéit à d'autres conditions."],
+ valeur:"principe", source:"rédigée"},
 ];
 
 /* ===================== CAUSE 1 ===================== */

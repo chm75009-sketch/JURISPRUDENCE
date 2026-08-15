@@ -8,7 +8,7 @@ const G = require("./grille.js");
 
 /* Les contrôles qui ne concluent jamais à la conformité : ils détectent une
    situation qui appelle un examen extérieur à la base. */
-const DETECTION = new Set(["CTL-COE-01","CTL-USA-01","CTL-CTX-01","CTL-IND-01","CTL-ECO-03","CTL-CSE-09"]);
+const DETECTION = new Set(["CTL-COE-01","CTL-USA-01","CTL-CTX-01","CTL-IND-01","CTL-ECO-03","CTL-CSE-09","CTL-FRA-01"]);
 
 const src = x => String(x.verdict);
 /* les champs de la fiche réellement lus par la fonction */

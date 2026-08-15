@@ -16,6 +16,22 @@ const CHAMPS=[
   ["effectifGroupe","Effectif total du groupe, France et étranger","nombre"],
   ["societes","Sociétés du groupe : nom, effectif, activité, pays","liste"],
   ["etablissementsDistincts","Nombre d'établissements distincts","nombre"]]],
+ ["Groupe — origine des difficultés",[
+  ["fluxIntragroupe","Redevances de marque, management fees et prix de transfert versés aux sociétés du groupe, par exercice","tableau"],
+  ["resultatHorsFlux","Résultat d'exploitation reconstitué hors ces flux, par exercice","tableau"],
+  ["resultatGroupe","Résultat consolidé du groupe et dividendes versés, par exercice","tableau"]]],
+ ["Comité social et économique",[
+  ["cseExistant","Un comité est-il en place ?","oui / non"],
+  ["pvCarence","Procès-verbal de carence, à défaut de comité","fichier"],
+  ["cseCentralConsulte","Le comité central a-t-il été consulté ?","oui / non"],
+  ["consequencesSSCT","Conséquences du projet sur la santé, la sécurité et les conditions de travail exposées au comité","texte"],
+  ["expertise","Une expertise du comité a-t-elle été demandée ?","oui / non"]]],
+ ["Ordre des licenciements — périmètre",[
+  ["perimetreOrdre","Périmètre d'application des critères d'ordre","texte"],
+  ["accordPerimetreOrdre","Un accord collectif fixe-t-il ce périmètre ?","oui / non"]]],
+ ["Fermeture de site",[
+  ["fermetureEtablissement","Le projet emporte-t-il la fermeture d'un établissement ?","oui / non"],
+  ["rechercheRepreneur","Recherche d'un repreneur : date d'engagement, mandataire, candidats, motifs d'écartement","texte"]]],
  ["Le projet",[
   ["cause","Cause invoquée : 1 difficultés · 2 mutations technologiques · 3 sauvegarde de la compétitivité · 4 cessation d'activité","1 à 4"],
   ["cessationComplete","Si cause 4 : la cessation est-elle totale et définitive ?","oui / non"],
@@ -201,7 +217,30 @@ function construire(){
     "contrôles de détection":MAN.compteurs.detection,"contrôles couverts par un test":MAN.compteurs.testes,
     "cas contradictoires":MAN.compteurs.casDeTest}[k]??"—"),d]));
  note("Les six contrôles de détection n'ont pas de cas contradictoire : ils ne détectent aucune faute, ils relaient une déclaration. C'est pourquoi 42 contrôles sont couverts par un test alors que 48 sont publiés.");
+ /* Non-divergence dans les deux sens. Le sens questionnaire → contrôles était
+    seul vérifié : un champ lu par un contrôle mais jamais demandé condamnait ce
+    contrôle à sortir « donnée manquante » sans que personne puisse y remédier. */
+ const fsx=require("fs");
+ const srcCtl=fsx.readFileSync(__dirname+"/controles.js","utf8")+fsx.readFileSync(__dirname+"/controles2.js","utf8");
+ const lus=[...new Set([...srcCtl.matchAll(/\bf\.([a-zA-Z_][a-zA-Z0-9_]*)/g)].map(m=>m[1]))];
+ const demandes=new Set(CHAMPS.flatMap(([,l])=>l.map(x=>x[0])));
+ /* « veille » est renseigné par l'application elle-même, non par l'employeur. */
+ const INTERNES=new Set(["veille"]);
+ /* Un champ composé est demandé par ses sous-champs : « pse » l'est par
+    « pse.voie », « pieces » par la section qui en énumère les codes. */
+ const composes=new Set([...demandes].filter(x=>x.includes(".")).map(x=>x.split(".")[0]));
+ const COMPOSES_LISTE=new Set(["pieces"]);
+ const jamaisDemandes=lus.filter(c=>!demandes.has(c)&&!INTERNES.has(c)
+   &&!composes.has(c)&&!COMPOSES_LISTE.has(c));
  h2("Contrôle de non-divergence");
+ tab(["Vérification","Résultat"],[
+  ["Champs lus par un contrôle et jamais demandés",jamaisDemandes.join(", ")||"aucun"],
+  ["Champs composés, demandés par leurs sous-champs",[...composes,...COMPOSES_LISTE].join(", ")],
+  ["Champs renseignés par l'application, non demandés à l'employeur",[...INTERNES].join(", ")]]);
+ if(jamaisDemandes.length){
+  console.error("DIVERGENCE : champs lus par un contrôle et absents du questionnaire — "+jamaisDemandes.join(", "));
+  process.exit(1);
+ }
  tab(["Vérification","Résultat"],[
   ["Identifiants uniques",VER.identifiantsUniques?"oui":"NON"],
   ["Contrôles de conformité sans cas de test",VER.conformiteSansTest.join(", ")||"aucun"],

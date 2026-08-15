@@ -58,6 +58,10 @@ const A = {
 "CTL-PCE-03": { faire: "Produire les pièces au périmètre à démontrer : secteur d'activité du groupe, et non la seule entreprise.", quand: AV_DEC },
 "CTL-PCE-04": { faire: "Faire lire et viser chaque pièce déposée : une pièce non lue ne démontre rien.", quand: AV_DEC },
 "CTL-EFF-01": { faire: "Réconcilier l'effectif de l'établissement et celui de l'entreprise, pièces à l'appui.", quand: AV_CSE },
+"CTL-REC-12": { faire: "Retirer du décompte les offres émanant de sociétés non établies sur le territoire national, et rechercher les postes disponibles en France.", quand: AV_OFF },
+"CTL-REP-01": { faire: "Engager la recherche d'un repreneur dès l'information du comité, et l'informer de son déroulement : mandat, journal des candidats, motifs d'écartement.", quand: AV_CSE },
+"CTL-FRA-01": { faire: "Faire examiner par un professionnel l'origine des difficultés : produire le résultat reconstitué hors redevances, management fees et prix de transfert.", quand: AV_DEC },
+"CTL-ORD-02": { faire: "Rattacher chaque catégorie professionnelle d'un seul salarié à une catégorie plus large, ou justifier par écrit la spécificité de la fonction.", quand: AV_NOT },
 "CTL-EFF-02": { faire: "Ramener le périmètre d'application des critères d'ordre à celui qu'autorisent la loi et l'accord applicable.", quand: AV_NOT },
 };
 const ORDRE = [NOW, AV_CSE, AV_OFF, AV_ADM, AV_NOT, AV_DEC];
@@ -78,6 +82,8 @@ const INTERDITS = {
 "CTL-REC-08": "Ne notifiez pas : les offres de reclassement ne sont pas régulièrement adressées.",
 "CTL-PSE-06": "Ne tenez pas la réunion : le plan doit être joint à la convocation.",
 "CTL-PSE-07": "Ne déposez pas l'accord : la condition de représentativité n'est pas remplie.",
+"CTL-CSE-04": "Ne notifiez aucun licenciement : le délai de consultation n'est pas expiré et le comité n'a pas rendu d'avis.",
+"CTL-REC-12": "Ne décomptez pas les offres à l'étranger : elles ne satisfont pas l'obligation de reclassement.",
 };
 const SUSPENS = {
 "CTL-PSE-04": "Ne notifiez aucun licenciement tant que la décision de validation ou d'homologation n'a pas été vérifiée.",
@@ -90,6 +96,8 @@ const SUSPENS = {
 "CTL-REC-08": "Ne notifiez pas tant que la régularité de l'envoi des offres de reclassement n'a pas été vérifiée.",
 "CTL-PSE-06": "Ne tenez pas la réunion tant que la remise du plan avec la convocation n'a pas été vérifiée.",
 "CTL-PSE-07": "Ne déposez pas l'accord tant que la condition de représentativité n'a pas été vérifiée.",
+"CTL-CSE-04": "Ne notifiez aucun licenciement tant que l'avis du comité ou l'expiration du délai n'a pas été vérifiée.",
+"CTL-REC-12": "Ne décomptez pas les offres tant que le lieu d'établissement des sociétés émettrices n'a pas été vérifié.",
 };
 /* Trois registres selon ce que l'application a réellement constaté. */
 const interdit = (id, etat) => etat === "non conforme"

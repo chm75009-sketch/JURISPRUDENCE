@@ -55,9 +55,13 @@ c("CTL-REC-06","Reclassement","L'état des postes est-il antérieur à la notifi
      ? { etat: NC, motif: `État des postes daté du ${p.date}, postérieur à la notification du ${f.dateNotification}. Le reclassement s'apprécie au jour du licenciement.` }
      : { etat: CONF, motif: `État des postes du ${p.date}, antérieur à la notification.` }; });
 
+/* Une offre à l'étranger ne satisfait pas l'obligation : elle ne peut donc pas
+   couvrir un poste omis, ni compter un destinataire servi. Voir CTL-REC-12. */
+const horsFrance = f => new Set((f.societes || []).filter(s => s.etranger).map(s => s.nom));
+const offresValables = f => (f.offresFaites || []).filter(o => !horsFrance(f).has(o.employeur));
 c("CTL-REC-07","Reclassement","Des postes disponibles ont-ils été omis dans les offres ?",["L. 1233-4"],
  f => { if (vide(f.postesDisponibles)) return { etat: MANQ, motif: "Aucun poste disponible renseigné." };
-   const off = new Set((f.offresFaites||[]).map(o => (o.intitule||"") + "|" + (o.employeur||"")));
+   const off = new Set(offresValables(f).map(o => (o.intitule||"") + "|" + (o.employeur||"")));
    const omis = f.postesDisponibles.filter(p => !p.motifExclusion &&
      !off.has((p.intitule||"") + "|" + (p.societe||"")));
    return omis.length
@@ -66,12 +70,15 @@ c("CTL-REC-07","Reclassement","Des postes disponibles ont-ils été omis dans le
 
 c("CTL-REC-08","Reclassement","Les offres sont-elles personnalisées et adressées à chaque salarié ?",["L. 1233-4","D. 1233-2-1"],
  f => { if (vide(f.offresFaites)) return { etat: MANQ, motif: "Aucune offre renseignée." };
-   const dest = new Set(f.offresFaites.map(o => o.salarie).filter(Boolean));
+   const valables = offresValables(f);
+   const ecartees = f.offresFaites.length - valables.length;
+   const dest = new Set(valables.map(o => o.salarie).filter(Boolean));
    const nb = f.nbLicenciements || 0;
+   const mention = ecartees ? ` ${ecartees} offre(s) émanant d'une société non établie sur le territoire national ne sont pas décomptées.` : "";
    if (!dest.size) return { etat: RISQ, motif: "Les offres ne désignent aucun destinataire : rien n'établit qu'elles ont été adressées personnellement. La liste collective est admise, mais elle doit alors préciser les critères de départage entre salariés." };
    return dest.size < nb
-     ? { etat: NC, motif: `${dest.size} salarié(s) destinataires pour ${nb} licenciements envisagés : ${nb - dest.size} salarié(s) n'ont reçu aucune offre.` }
-     : { etat: CONF, motif: `Chacun des ${nb} salariés concernés est destinataire d'au moins une offre.` }; });
+     ? { etat: NC, motif: `${dest.size} salarié(s) destinataires pour ${nb} licenciements envisagés : ${nb - dest.size} salarié(s) n'ont reçu aucune offre.${mention}` }
+     : { etat: CONF, motif: `Chacun des ${nb} salariés concernés est destinataire d'au moins une offre.${mention}` }; });
 
 c("CTL-REC-09","Reclassement","Un délai et un moyen de réponse ont-ils été indiqués ?",["L. 1233-4"],
  f => { if (vide(f.offresFaites)) return { etat: MANQ, motif: "Aucune offre renseignée." };
@@ -208,5 +215,58 @@ c("CTL-CTX-01","Contentieux","Un contentieux ou un contrôle est-il en cours ?",
    : /aucun|non|néant/i.test(String(f.contentieuxEnCours))
      ? { etat: SO, motif: "Aucun contentieux ni contrôle signalé. Ce contrôle ne conclut jamais à la conformité." }
      : { etat: RISQ, motif: `Contentieux ou contrôle signalé : ${String(f.contentieuxEnCours).slice(0,160)}. Il peut modifier la stratégie et les délais ; hors du champ de cette base.` });
+
+
+/* ---------------- Reclassement : le territoire national ---------------- */
+/* Depuis l'ordonnance n° 2017-1386 du 22 septembre 2017, l'obligation de
+   reclassement est limitée au territoire national. Le périmètre de recherche
+   était filtré, les offres ne l'étaient pas : une offre à l'étranger nourrissait
+   l'obligation sans la satisfaire. */
+c("CTL-REC-12","Reclassement","Les offres relèvent-elles du territoire national ?",["L. 1233-4"],
+ f => { if (vide(f.offresFaites)) return { etat: MANQ, motif: "Aucune offre de reclassement n'est renseignée." };
+   const etrangeres = new Set((f.societes || []).filter(s => s.etranger).map(s => s.nom));
+   if (!etrangeres.size) return { etat: SO, motif: "Aucune société étrangère n'est déclarée dans le groupe." };
+   const hors = f.offresFaites.filter(o => etrangeres.has(o.employeur));
+   return hors.length
+     ? { etat: NC, motif: `${hors.length} offre(s) sur ${f.offresFaites.length} émanent d'une société non établie sur le territoire national : ${[...new Set(hors.map(o => o.employeur))].join(", ")}. L'obligation de reclassement est limitée au territoire national : ces offres ne la satisfont pas et ne peuvent être décomptées.` }
+     : { etat: CONF, motif: `Les ${f.offresFaites.length} offre(s) émanent de sociétés établies sur le territoire national.` }; });
+
+/* ---------------- Fermeture de site : la recherche d'un repreneur ---------------- */
+/* Le déclencheur est la fermeture d'un établissement, non la cause invoquée :
+   la base l'accrochait à la seule cessation d'activité, et ne se déclenchait
+   donc jamais sur une fermeture invoquée au titre des difficultés économiques. */
+c("CTL-REP-01","Fermeture de site","La recherche d'un repreneur a-t-elle été engagée ?",
+ ["L. 1233-57-9","L. 1233-57-10","L. 1233-57-14"],
+ f => { if (typeof f.effectif !== "number") return { etat: MANQ, motif: "L'effectif n'est pas renseigné." };
+   if (f.effectif < 1000) return { etat: SO, motif: "L'obligation ne vise que les entreprises d'au moins mille salariés." };
+   if (vide(f.fermetureEtablissement)) return { etat: MANQ, motif: "La fermeture d'un établissement n'est pas renseignée : l'obligation ne peut pas être vérifiée." };
+   if (f.fermetureEtablissement !== true) return { etat: SO, motif: "Aucune fermeture d'établissement déclarée." };
+   return vide(f.rechercheRepreneur)
+     ? { etat: NC, motif: "Fermeture d'un établissement dans une entreprise d'au moins mille salariés : la recherche d'un repreneur doit être engagée dès l'information du comité, et celui-ci informé de son déroulement. Rien n'est déclaré." }
+     : { etat: RISQ, motif: "Une recherche de repreneur est déclarée. Le mandat, le journal des candidats et les motifs d'écartement doivent être versés : le comité peut saisir le tribunal administratif du respect de cette obligation." }; });
+
+/* ---------------- Groupe : l'origine des difficultés ---------------- */
+/* Contrôle de détection : il signale une inversion de signe, il ne qualifie
+   aucune fraude. La question est posée à l'employeur, aucun texte libre n'est
+   analysé. */
+c("CTL-FRA-01","Groupe","Les difficultés invoquées peuvent-elles procéder de flux intragroupe ?",["L. 1233-3"],
+ f => { const local = (f.resultatExploitation || []).slice(-1)[0];
+   const hors = (f.resultatHorsFlux || []).slice(-1)[0];
+   if (!local) return { etat: MANQ, motif: "Le résultat d'exploitation n'est pas renseigné." };
+   if (!f.groupe) return { etat: SO, motif: "L'entreprise n'appartient à aucun groupe." };
+   if (!hors) return { etat: MANQ, motif: "Le résultat d'exploitation reconstitué hors flux intragroupe — redevances de marque, management fees, prix de transfert — n'est pas renseigné : l'inversion du signe ne peut pas être vérifiée." };
+   return (local.valeur < 0 && hors.valeur >= 0)
+     ? { etat: RISQ, motif: `Résultat d'exploitation déclaré ${local.valeur} pour ${local.annee}, résultat reconstitué hors flux intragroupe ${hors.valeur} : les difficultés invoquées disparaissent une fois ces flux neutralisés. Ce contrôle ne conclut jamais à la conformité. L'appréciation d'une organisation artificielle des difficultés relève d'un professionnel, et elle écarte la limitation du périmètre d'appréciation au territoire national.` }
+     : { etat: RISQ, motif: `Résultat d'exploitation ${local.valeur}, résultat hors flux intragroupe ${hors.valeur} : le signe ne s'inverse pas. Le point reste à documenter, la base ne conclut pas à la conformité sur cette question.` }; });
+
+/* ---------------- Ordre des licenciements : la construction des catégories ---------------- */
+c("CTL-ORD-02","Ordre des licenciements","Les catégories professionnelles sont-elles construites objectivement ?",["L. 1233-5"],
+ f => { if (vide(f.categories)) return { etat: MANQ, motif: "Les catégories professionnelles ne sont pas renseignées." };
+   const proteges = new Set((f.salariesProteges || []).map(s => s.nom));
+   const uniques = f.categories.filter(c => (typeof c.effectif === "number" ? c.effectif : (c.salaries || []).length) === 1);
+   const ciblees = uniques.filter(c => (c.salaries || []).some(s => proteges.has(s.nom)));
+   if (ciblees.length) return { etat: NC, motif: `${ciblees.length} catégorie(s) réduite(s) à un seul salarié, occupée(s) par un salarié protégé : ${ciblees.map(c => c.nom).join(" ; ")}. Une catégorie professionnelle regroupe les salariés exerçant des fonctions de même nature supposant une formation professionnelle commune ; une catégorie d'une seule personne désigne cette personne au lieu de la classer, et neutralise les critères d'ordre.` };
+   if (uniques.length) return { etat: RISQ, motif: `${uniques.length} catégorie(s) ne comptent qu'un salarié : ${uniques.map(c => c.nom).join(" ; ")}. Le rattachement à une catégorie plus large doit être justifié.` };
+   return { etat: CONF, motif: `${f.categories.length} catégories professionnelles, toutes de plus d'un salarié.` }; });
 
 module.exports = C;

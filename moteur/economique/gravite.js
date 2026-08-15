@@ -7,10 +7,11 @@ const GRAVITE = {
  /* la loi interdit de notifier tant que le point n'est pas réglé */
  "CTL-PSE-04":B, "CTL-PRT-01":B, "CTL-CSE-05":B, "CTL-REC-08":B, "CTL-CSE-01":B,
  "CTL-CSE-08":B, "CTL-CSE-07":B, "CTL-PSE-07":B, "CTL-CSE-02":B, "CTL-PSE-06":B,
+ "CTL-CSE-04":B, "CTL-REC-12":B,
  /* l'écart fragilise la cause ou la procédure sans l'interdire */
  "CTL-REC-07":CR, "CTL-REC-03":CR, "CTL-REC-06":CR, "CTL-REC-10":CR, "CTL-EMP-02":CR,
  "CTL-PCE-02":CR, "CTL-EFF-01":CR, "CTL-ECO-01":CR, "CTL-ECO-02":CR, "CTL-PSE-01":CR,
- "CTL-CCN-01":CR, "CTL-REC-05":CR, "CTL-REC-02":CR,
+ "CTL-CCN-01":CR, "CTL-REC-05":CR, "CTL-REC-02":CR, "CTL-ORD-02":CR, "CTL-REP-01":CR,
  /* une pièce ou une vérification manque avant de décider */
  "CTL-REC-01":IM, "CTL-REC-04":IM, "CTL-REC-09":IM, "CTL-REC-11":IM, "CTL-EMP-01":IM,
  "CTL-CSE-03":IM, "CTL-CSE-04":IM, "CTL-CSE-06":IM, "CTL-CSE-10":IM, "CTL-PSE-02":IM,
@@ -18,7 +19,7 @@ const GRAVITE = {
  "CTL-EFF-02":IM, "CTL-CCN-02":IM, "CTL-CCN-03":IM, "CTL-ECO-04":IM,
  /* point à documenter, hors du champ automatisable */
  "CTL-COE-01":IN, "CTL-USA-01":IN, "CTL-CTX-01":IN, "CTL-IND-01":IN,
- "CTL-ECO-03":IN, "CTL-CSE-09":IN,
+ "CTL-ECO-03":IN, "CTL-CSE-09":IN, "CTL-FRA-01":IN,
 };
 const DEF=[[B,"La procédure ne doit pas être poursuivie avant correction : un texte s'y oppose."],
  [CR,"Risque élevé de contestation ou d'irrégularité, sans interdiction expresse de poursuivre."],

@@ -79,6 +79,27 @@ function etatTexte(d) {
 
 /* --- jours ouvrables : samedi compté, dimanche et jours fériés exclus --- */
 const FERIES = d => ["01-01","05-01","05-08","07-14","08-15","11-01","11-11","12-25"].includes(d.slice(5));
+/* Ajoute n mois de quantième à quantième. Le 31 mars + 1 mois donne le 30 avril :
+   on retient le dernier jour du mois lorsque le quantième n'existe pas. */
+function ajouteMois(iso, n) {
+  const [a, m, j] = iso.split("-").map(Number);
+  const total = (m - 1) + n;
+  const an = a + Math.floor(total / 12), mois = (total % 12 + 12) % 12;
+  const dernier = new Date(Date.UTC(an, mois + 1, 0)).getUTCDate();
+  const jour = Math.min(j, dernier);
+  return `${an}-${String(mois + 1).padStart(2, "0")}-${String(jour).padStart(2, "0")}`;
+}
+/* Le délai d'avis, en mois, tel que le régime le fixe. Null quand le régime
+   n'exprime pas le délai en mois — deux réunions séparées de quatorze jours. */
+function delaiAvisMois(r) {
+  const d = String(r.delaiAvis || "");
+  if (/quatre mois/.test(d)) return 4;
+  if (/trois mois/.test(d)) return 3;
+  if (/deux mois/.test(d)) return 2;
+  if (/un mois/.test(d)) return 1;
+  return null;
+}
+
 function ajouteJoursOuvrables(iso, n) {
   const d = new Date(iso + "T12:00:00Z"); let reste = n;
   while (reste > 0) { d.setUTCDate(d.getUTCDate() + 1);
@@ -112,7 +133,8 @@ function baisseTrimestrielle(f) {
     trimestresConsecutifs: meilleure, atteint: meilleure >= seuil, detail: calc };
 }
 const _EXPORT_ = { seuilTrimestres, trancheEffectif, regimeEco, accompagnement, perimetre,
-  etatTexte, calendrier, baisseTrimestrielle, ajouteJoursOuvrables, ajouteJours };
+  etatTexte, calendrier, baisseTrimestrielle, ajouteJoursOuvrables, ajouteJours,
+  ajouteMois, delaiAvisMois };
 
 /* ================= INDEMNITÉS, PRÉAVIS, BARÈME ================= */
 

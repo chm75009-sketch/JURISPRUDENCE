@@ -32,6 +32,19 @@ const BASE={entreprise:"T",effectif:320,effectifGroupe:602,groupe:true,cause:"1"
   reclassementInterne:"11 postes",formation:"350 heures",creation:"12 000 €",
   suivi:"commission tous les 2 mois",dateDecisionAdmin:"2026-06-10"}};
 const CAS=[
+ ["offre de reclassement émanant d'une société étrangère","CTL-REC-12","non conforme",
+  f=>{f.societes=[{nom:"A"},{nom:"B",etranger:true}];}],
+ ["fermeture d'un établissement sans recherche de repreneur","CTL-REP-01","non conforme",
+  f=>{f.effectif=1200; f.effectifEtablissement=1200; f.fermetureEtablissement=true;}],
+ ["catégorie professionnelle d'un seul salarié protégé","CTL-ORD-02","non conforme",
+  f=>{f.categories=[{nom:"Chef d'atelier zone Est",effectif:1,salaries:[{nom:"P1"}]},
+       {nom:"Régleur",effectif:12,salaries:[{nom:"S1"},{nom:"S2"}]}];
+      f.salariesProteges=[{nom:"P1",mandat:"élu",autorisation:"2026-05-01"}];}],
+ ["avis non rendu et notification antérieure à l'expiration du délai","CTL-CSE-04","non conforme",
+  f=>{f.dateAvisCSE="avis non rendu"; f.datesReunionsCSE=["2026-03-23","2026-04-14"];
+      f.dateNotification="2026-05-01";}],
+ ["mention « avis non rendu » lue comme un avis rendu","CTL-CSE-04","non conforme",
+  f=>{f.dateAvisCSE="avis non rendu"; f.dateNotification="2026-04-01";}],
  ["poste disponible non proposé","CTL-REC-07","non conforme",
   f=>{f.offresFaites=f.offresFaites.slice(0,1);}],
  ["offre sans rémunération","CTL-REC-03","non conforme",
