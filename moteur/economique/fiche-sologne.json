@@ -1,0 +1,511 @@
+{
+  "_objet": "Dossier de test nº 2 — faux conforme. Toutes les données sont renseignées, toutes les pièces sont versées, datées, versionnées et lues. Les manquements ne vivent que dans les relations entre champs, jamais dans une absence. Toute valeur est dérivable de la fiche ; les hypothèses portent une note.",
+  "entreprise": "SOLOGNE MÉCANIQUE DE PRÉCISION SAS",
+  "siren": "493028176",
+  "dateAudit": "2026-08-15",
+  "idcc": "1486",
+  "effectif": 50,
+  "effectifEtablissement": 50,
+  "etablissementsDistincts": 1,
+  "groupe": true,
+  "effectifGroupe": 1200,
+  "cause": "1",
+  "nbLicenciements": 9,
+  "licenciementsRecents30j": 1,
+  "refusModification": 2,
+  "_note_seuil": "9 licenciements envisagés + 1 déjà prononcé dans les trente jours + 2 salariés dont le licenciement est envisagé après refus d'une modification pour motif économique — un tel refus suivi de licenciement est lui-même un licenciement économique au sens de L. 1233-3, et se compte donc dans le total. Total réel sur trente jours : 12. À ne pas confondre avec L. 1233-25, qui vise le cas distinct où les refus atteignent dix à eux seuls.",
+  "dateInfoCSE": "2026-03-02",
+  "datesReunionsCSE": [
+    "2026-03-16",
+    "2026-03-31"
+  ],
+  "dateAvisCSE": "avis non rendu",
+  "dateNotifAdmin": "2026-03-17",
+  "dateEntretien": "2026-05-04",
+  "dateNotification": "2026-05-16",
+  "cadreAuSensL1441_13": false,
+  "_note_dates": "15 jours pile entre les deux réunions. Le délai d'avis courant depuis la première réunion du 16 mars expire le 16 mai ; la notification est fixée au 16 mai, jour pour jour.",
+  "cseExistant": true,
+  "pvCarence": false,
+  "cseCentralConsulte": false,
+  "expertise": false,
+  "consequencesSSCT": "Aucune conséquence sur la santé, la sécurité ou les conditions de travail des salariés conservés : les postes supprimés ne modifient ni les cadences ni l'organisation des équipes restantes.",
+  "societes": [
+    {
+      "nom": "SOLOGNE OUTILLAGE SAS",
+      "effectif": 340,
+      "activite": "mécanique de précision",
+      "pays": "France",
+      "etranger": false
+    },
+    {
+      "nom": "SOLOGNE HOLDING SAS",
+      "effectif": 12,
+      "activite": "holding",
+      "pays": "France",
+      "etranger": false
+    },
+    {
+      "nom": "SOLOGNE PRECISION IBERICA SL",
+      "effectif": 798,
+      "activite": "mécanique de précision",
+      "pays": "Espagne",
+      "etranger": true
+    }
+  ],
+  "_note_groupe": "SOLOGNE OUTILLAGE exerce la même activité que la société auditée, sur le territoire national : elle appartient donc au même secteur d'activité au sens de L. 1233-3.",
+  "trimestres": [
+    {
+      "libelle": "T2-25",
+      "n": 3120,
+      "n1": 3480,
+      "perimetre": "secteur"
+    },
+    {
+      "libelle": "T3-25",
+      "n": 2940,
+      "n1": 3310,
+      "perimetre": "secteur"
+    },
+    {
+      "libelle": "T4-25",
+      "n": 2760,
+      "n1": 3225,
+      "perimetre": "secteur"
+    },
+    {
+      "libelle": "T1-26",
+      "n": 2610,
+      "n1": 3050,
+      "perimetre": "secteur"
+    }
+  ],
+  "resultatExploitation": [
+    {
+      "annee": 2023,
+      "valeur": 210
+    },
+    {
+      "annee": 2024,
+      "valeur": -140
+    },
+    {
+      "annee": 2025,
+      "valeur": -390
+    }
+  ],
+  "tresorerie": [
+    {
+      "annee": 2024,
+      "valeur": 620
+    },
+    {
+      "annee": 2025,
+      "valeur": 410
+    }
+  ],
+  "fluxIntragroupe": [
+    {
+      "annee": 2024,
+      "redevanceMarque": 0,
+      "managementFees": 0,
+      "total": 0
+    },
+    {
+      "annee": 2025,
+      "redevanceMarque": 0,
+      "managementFees": 0,
+      "total": 0
+    }
+  ],
+  "resultatHorsFlux": [
+    {
+      "annee": 2024,
+      "valeur": -140
+    },
+    {
+      "annee": 2025,
+      "valeur": -390
+    }
+  ],
+  "resultatGroupe": [
+    {
+      "annee": 2025,
+      "resultatConsolide": 8900,
+      "dividendes": 3400
+    }
+  ],
+  "autresElements": "SOLOGNE OUTILLAGE SAS, même secteur d'activité et même territoire, dégage un résultat d'exploitation de +1 780 k€ en 2025. Le résultat consolidé du groupe s'établit à +8 900 k€ et 3 400 k€ de dividendes ont été distribués au titre de l'exercice.",
+  "menace": "",
+  "postesSupprimes": [
+    {
+      "intitule": "Régleur commande numérique",
+      "service": "Atelier",
+      "avant": 14,
+      "apres": 8
+    },
+    {
+      "intitule": "Contrôleur qualité",
+      "service": "Qualité",
+      "avant": 9,
+      "apres": 6
+    },
+    {
+      "intitule": "Magasinier",
+      "service": "Logistique",
+      "avant": 5,
+      "apres": 2
+    }
+  ],
+  "_note_suppressions": "6 + 3 + 3 = 12 suppressions pour 9 licenciements déclarés : l'écart correspond au licenciement déjà prononcé dans les trente jours et aux 2 refus de modification.",
+  "precaires": [],
+  "categories": [
+    {
+      "nom": "Régleur commande numérique",
+      "effectif": 14,
+      "suppressions": 6,
+      "salaries": [
+        {
+          "nom": "R01",
+          "charges": 0,
+          "anciennetePoints": 0,
+          "social": 0,
+          "qualites": 3
+        },
+        {
+          "nom": "R02",
+          "charges": 0,
+          "anciennetePoints": 0,
+          "social": 0,
+          "qualites": 1
+        }
+      ]
+    },
+    {
+      "nom": "Contrôleur qualité",
+      "effectif": 9,
+      "suppressions": 3,
+      "salaries": [
+        {
+          "nom": "C01",
+          "charges": 0,
+          "anciennetePoints": 0,
+          "social": 0,
+          "qualites": 2
+        },
+        {
+          "nom": "C02",
+          "charges": 0,
+          "anciennetePoints": 0,
+          "social": 0,
+          "qualites": 0
+        }
+      ]
+    },
+    {
+      "nom": "Magasinier",
+      "effectif": 5,
+      "suppressions": 3,
+      "salaries": [
+        {
+          "nom": "M01",
+          "charges": 0,
+          "anciennetePoints": 0,
+          "social": 0,
+          "qualites": 2
+        }
+      ]
+    }
+  ],
+  "_note_bareme": "Les points de charges de famille, d'ancienneté et de situation sociale sont à zéro pour tous les salariés de toutes les catégories : seules les qualités professionnelles départagent. Trois des quatre critères de L. 1233-5 sont ainsi neutralisés sans être formellement absents.",
+  "perimetreOrdre": "entreprise",
+  "accordPerimetreOrdre": false,
+  "salaries": [
+    {
+      "nom": "R01",
+      "anciennete": 11.0,
+      "ancienneteMois": 132,
+      "moyenne12": 2540,
+      "tiers3": 2510
+    },
+    {
+      "nom": "R02",
+      "anciennete": 3.5,
+      "ancienneteMois": 42,
+      "moyenne12": 2180,
+      "tiers3": 2160
+    },
+    {
+      "nom": "C01",
+      "anciennete": 7.0,
+      "ancienneteMois": 84,
+      "moyenne12": 2320,
+      "tiers3": 2300
+    },
+    {
+      "nom": "C02",
+      "anciennete": 1.5,
+      "ancienneteMois": 18,
+      "moyenne12": 2050,
+      "tiers3": 2040
+    },
+    {
+      "nom": "M01",
+      "anciennete": 22.5,
+      "ancienneteMois": 270,
+      "moyenne12": 2410,
+      "tiers3": 2380
+    }
+  ],
+  "salariesProteges": [
+    {
+      "nom": "R02",
+      "mandat": "membre du CSE",
+      "autorisation": "2026-05-12 — refus de l'inspecteur du travail"
+    },
+    {
+      "nom": "M01",
+      "mandat": "délégué syndical",
+      "autorisation": "2026-06-08"
+    }
+  ],
+  "_note_proteges": "La première mention est un refus d'autorisation, non une autorisation. La seconde est postérieure du 8 juin à la notification du 16 mai.",
+  "salariesSuspendus": [],
+  "postesDisponibles": [
+    {
+      "societe": "SOLOGNE MÉCANIQUE DE PRÉCISION SAS",
+      "intitule": "Régleur commande numérique",
+      "lieu": "Vierzon",
+      "remuneration": "26 400 €",
+      "classification": "N3",
+      "date": "2026-04-20"
+    },
+    {
+      "societe": "SOLOGNE OUTILLAGE SAS",
+      "intitule": "Opérateur rectification",
+      "lieu": "Salbris",
+      "remuneration": "25 200 €",
+      "classification": "N2",
+      "date": "2026-04-20"
+    },
+    {
+      "societe": "SOLOGNE HOLDING SAS",
+      "intitule": "Assistant administratif",
+      "lieu": "Orléans",
+      "remuneration": "24 000 €",
+      "classification": "N2",
+      "date": "2026-04-20"
+    }
+  ],
+  "_note_postes": "« Régleur commande numérique » est déclaré simultanément poste disponible et poste supprimé — un poste ne peut être les deux à la fois.",
+  "offresFaites": [
+    {
+      "intitule": "Opérateur rectification",
+      "descriptif": "rectification cylindrique et plane",
+      "employeur": "SOLOGNE OUTILLAGE SAS",
+      "contrat": "CDI",
+      "lieu": "Salbris",
+      "remuneration": "25 200 €",
+      "classification": "N2",
+      "dateCertaine": true,
+      "salarie": "R01",
+      "delaiReponse": "15 jours"
+    },
+    {
+      "intitule": "Opérateur rectification",
+      "descriptif": "rectification cylindrique et plane",
+      "employeur": "SOLOGNE OUTILLAGE SAS",
+      "contrat": "CDI",
+      "lieu": "Salbris",
+      "remuneration": "25 200 €",
+      "classification": "N2",
+      "dateCertaine": true,
+      "salarie": "R02",
+      "delaiReponse": "15 jours"
+    },
+    {
+      "intitule": "Opérateur rectification",
+      "descriptif": "rectification cylindrique et plane",
+      "employeur": "SOLOGNE OUTILLAGE SAS",
+      "contrat": "CDI",
+      "lieu": "Salbris",
+      "remuneration": "25 200 €",
+      "classification": "N2",
+      "dateCertaine": true,
+      "salarie": "C01",
+      "delaiReponse": "15 jours"
+    },
+    {
+      "intitule": "Opérateur rectification",
+      "descriptif": "rectification cylindrique et plane",
+      "employeur": "SOLOGNE OUTILLAGE SAS",
+      "contrat": "CDI",
+      "lieu": "Salbris",
+      "remuneration": "25 200 €",
+      "classification": "N2",
+      "dateCertaine": true,
+      "salarie": "C02",
+      "delaiReponse": "15 jours"
+    },
+    {
+      "intitule": "Opérateur rectification",
+      "descriptif": "rectification cylindrique et plane",
+      "employeur": "SOLOGNE OUTILLAGE SAS",
+      "contrat": "CDI",
+      "lieu": "Salbris",
+      "remuneration": "25 200 €",
+      "classification": "N2",
+      "dateCertaine": true,
+      "salarie": "M01",
+      "delaiReponse": "15 jours"
+    },
+    {
+      "intitule": "Régleur commande numérique",
+      "descriptif": "conduite de centre d'usinage",
+      "employeur": "SOLOGNE MÉCANIQUE DE PRÉCISION SAS",
+      "contrat": "CDI",
+      "lieu": "Vierzon",
+      "remuneration": "26 400 €",
+      "classification": "N3",
+      "dateCertaine": true,
+      "salarie": "R01",
+      "delaiReponse": "15 jours"
+    },
+    {
+      "intitule": "Assistant administratif",
+      "descriptif": "accueil et saisie",
+      "employeur": "SOLOGNE HOLDING SAS",
+      "contrat": "CDI",
+      "lieu": "Orléans",
+      "remuneration": "24 000 €",
+      "classification": "N2",
+      "dateCertaine": true,
+      "salarie": "C02",
+      "delaiReponse": "15 jours"
+    }
+  ],
+  "_note_offres": "Un seul poste chez SOLOGNE OUTILLAGE est proposé simultanément aux cinq salariés : les six mentions sont réunies pour chacune des offres, mais il n'existe qu'un poste pour cinq destinataires.",
+  "formationProposee": [
+    {
+      "contenu": "adaptation rectification cylindrique",
+      "duree": "70 h",
+      "cout": "2 400 €",
+      "reponse": "en attente"
+    }
+  ],
+  "convention": {
+    "criteresOrdre": true,
+    "preavisPlusFavorable": true,
+    "indemnitePlusFavorable": true
+  },
+  "accords": {
+    "methode": true,
+    "pse": false,
+    "apc": false,
+    "gepp": true
+  },
+  "conventionJointe": true,
+  "accordsJoints": true,
+  "conventionAJour": "oui",
+  "avenantsRecents": "non",
+  "usagesEtEngagements": "",
+  "contentieuxEnCours": "",
+  "refusAPC": false,
+  "transfertEnvisage": false,
+  "procedureCollective": false,
+  "coEmploi": false,
+  "fermetureEtablissement": false,
+  "rechercheRepreneur": "",
+  "pieces": [
+    {
+      "code": "convention",
+      "fichier": "ccn-1486-2026-06.pdf",
+      "date": "2026-02-10",
+      "periode": "version consolidée au 1er janvier 2026",
+      "auteur": "Légifrance, fonds KALI",
+      "version": "consolidée",
+      "perimetre": "entreprise",
+      "lue": true
+    },
+    {
+      "code": "accords",
+      "fichier": "accord-methode-2026-02-24.pdf",
+      "date": "2026-02-24",
+      "periode": "2026",
+      "auteur": "Direction et organisations syndicales",
+      "version": "1",
+      "perimetre": "entreprise",
+      "lue": true
+    },
+    {
+      "code": "liasse",
+      "fichier": "liasse-2025.pdf",
+      "date": "2026-04-08",
+      "periode": "exercice 2025",
+      "auteur": "Cabinet BERRY AUDIT",
+      "version": "1",
+      "perimetre": "entreprise",
+      "lue": true
+    },
+    {
+      "code": "comptes-groupe",
+      "fichier": "consolides-2025.pdf",
+      "date": "2026-04-14",
+      "periode": "exercice 2025",
+      "auteur": "SOLOGNE HOLDING SAS",
+      "version": "1",
+      "perimetre": "secteur d'activité du groupe",
+      "lue": true
+    },
+    {
+      "code": "renseignements-cse",
+      "fichier": "info-cse-2026-03-02.pdf",
+      "date": "2026-03-02",
+      "periode": "projet 2026",
+      "auteur": "Direction générale",
+      "version": "1",
+      "perimetre": "entreprise",
+      "lue": true
+    },
+    {
+      "code": "pv-cse",
+      "fichier": "pv-reunions-2026-03.pdf",
+      "date": "2026-04-02",
+      "periode": "réunions des 16 et 31 mars 2026",
+      "auteur": "Secrétaire du comité",
+      "version": "1",
+      "perimetre": "entreprise",
+      "lue": true
+    },
+    {
+      "code": "etat-postes",
+      "fichier": "etat-postes-2026-04-20.pdf",
+      "date": "2026-04-20",
+      "periode": "au 20 avril 2026",
+      "auteur": "Direction des ressources humaines",
+      "version": "1",
+      "perimetre": "groupe France",
+      "lue": true
+    },
+    {
+      "code": "offres",
+      "fichier": "offres-reclassement.pdf",
+      "date": "2026-04-27",
+      "periode": "avril 2026",
+      "auteur": "Direction des ressources humaines",
+      "version": "1",
+      "perimetre": "entreprise",
+      "lue": true
+    },
+    {
+      "code": "autorisations",
+      "fichier": "decisions-inspection-travail.pdf",
+      "date": "2026-06-08",
+      "periode": "mai-juin 2026",
+      "auteur": "Inspection du travail",
+      "version": "1",
+      "perimetre": "entreprise",
+      "lue": true
+    }
+  ]
+}

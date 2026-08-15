@@ -1,1 +1,4 @@
 dist/
+
+# la clé Judilibre reste locale
+.jk

@@ -122,6 +122,332 @@ async function lireArticle(id, dateIso){
   };
 }
 
+/* =========================================================================
+   Fonds KALI — conventions collectives nationales.
+
+   Même API, même abonnement, mêmes identifiants que les codes : seuls les
+   points d'accès diffèrent. La hiérarchie est : un CONTENEUR (KALICONT) par
+   convention, identifié par son numéro IDCC, qui regroupe des TEXTES
+   (KALITEXT : texte de base, annexes, avenants), eux-mêmes composés de
+   sections (KALISCTA) et d'articles (KALIARTI).
+
+   Les formes de réponse de la DILA varient d'un fonds à l'autre et ne sont pas
+   documentées champ par champ. La lecture ci-dessous est donc tolérante : elle
+   accepte plusieurs noms pour la même donnée, et, si elle ne reconnaît rien,
+   renvoie la liste des clés rencontrées plutôt qu'un silence — un défaut qu'on
+   ne peut pas diagnostiquer est un défaut qu'on ne corrige pas.
+   ========================================================================= */
+
+const prem = (o, ...noms) => { for(const n of noms) if(o && o[n] != null && o[n] !== "") return o[n]; return ""; };
+const tab  = (o, ...noms) => { for(const n of noms) if(Array.isArray(o && o[n])) return o[n]; return []; };
+
+/* Recherche de conventions par intitulé, ou par numéro IDCC. */
+async function chercherConventions(q, idcc){
+  const champ = idcc ? "IDCC" : "TITLE";
+  const valeur = idcc || q;
+  const filtres = [{facette:"LEGAL_STATUS", valeurs:["VIGUEUR","VIGUEUR_ETEN","VIGUEUR_NON_ETEN"]}];
+  if(idcc) filtres.push({facette:"IDCC", valeurs:[String(idcc)]});
+  const d = await appelLegifrance("/search", {
+    fond: "KALI",
+    recherche: {
+      filtres, sort:"PERTINENCE", operateur:"ET", typePagination:"DEFAUT",
+      pageNumber:1, pageSize:20,
+      champs:[{typeChamp:champ, operateur:"ET",
+        criteres:[{typeRecherche:"UN_DES_MOTS", valeur:String(valeur), operateur:"ET"}]}],
+    },
+  });
+  const sortie = (d.results||[]).map(r => ({
+    id: prem(r, "id", "cid", "titleId"),
+    titre: prem(r, "title", "titre", "nature"),
+    idcc: prem(r, "idcc", "numIdcc"),
+    etat: prem(r, "etat", "legalStatus"),
+  })).filter(x => x.id || x.titre);
+  return sortie.length ? sortie : {vide:true, cles:Object.keys(d||{})};
+}
+
+/* Recherche plein texte à l'intérieur d'une convention.
+
+   Le champ ALL porte sur le contenu, non sur les seuls intitulés : c'est ce qui
+   permet de trouver « coefficient 200 » ou « période d'essai » dans les huit
+   cents articles d'une convention sans les parcourir. Le filtre IDCC borne la
+   recherche à la convention ouverte — sans lui, on ratisserait les quelque
+   sept cents conventions du fonds. */
+async function chercherDansConvention(q, idcc, exact){
+  const filtres = [{facette:"LEGAL_STATUS", valeurs:["VIGUEUR","VIGUEUR_ETEN","VIGUEUR_NON_ETEN"]}];
+  if(idcc) filtres.push({facette:"IDCC", valeurs:[String(idcc)]});
+  const d = await appelLegifrance("/search", {
+    fond: "KALI",
+    recherche: {
+      filtres, sort:"PERTINENCE", operateur:"ET", typePagination:"DEFAUT",
+      pageNumber:1, pageSize:20,
+      champs:[{typeChamp:"ALL", operateur:"ET",
+        criteres:[{typeRecherche: exact ? "EXACTE" : "TOUS_LES_MOTS_DANS_UN_CHAMP",
+                   valeur:String(q), operateur:"ET"}]}],
+    },
+  });
+  const sortie = [];
+  for(const r of (d.results||[])){
+    const extraits = [];
+    for(const sec of (r.sections||[]))
+      for(const ex of (sec.extracts||[]))
+        if(ex.values || ex.title)
+          extraits.push({id: String(prem(ex, "id")||""), num: String(prem(ex, "num")||""),
+                         titre: String(prem(ex, "title", "titre")||""),
+                         texte: (Array.isArray(ex.values) ? ex.values.join(" … ") : "").slice(0, 900)});
+    sortie.push({
+      id: String(prem(r, "id", "cid")||""),
+      titre: String(prem(r, "title", "titre")||"").replace(/\s+/g," ").trim(),
+      idcc: String(prem(r, "idcc", "numIdcc")||""),
+      etat: String(prem(r, "etat", "legalStatus")||""),
+      extraits,
+    });
+  }
+  return {total: d.totalResultNumber || d.total || sortie.length, resultats: sortie,
+          ...(sortie.length ? {} : {diag:{cles:Object.keys(d||{})}})};
+}
+
+/* Une convention entière : son intitulé et la liste de ses textes. */
+async function lireConvention(idcc, id){
+  const d = id
+    ? await appelLegifrance("/consult/kaliCont", {id:String(id)})
+    : await appelLegifrance("/consult/kaliContIdcc", {id:String(idcc)});
+  const c = d.container || d.conteneur || d;
+  const textes = [];
+  const parcourir = (n, chemin) => {
+    if(!n || typeof n !== "object") return;
+    const titre = prem(n, "title", "titre", "nature");
+    const ident = prem(n, "id", "cid");
+    if(/^KALITEXT/.test(String(ident)))
+      textes.push({ id:String(ident), titre:String(titre||"(sans intitulé)").replace(/\s+/g," ").trim(),
+        nature: String(prem(n, "nature", "type")||""),
+        date: datePremiere(n, "dateTexte", "dateDebut", "dateParution"),
+        etat: String(prem(n, "etat", "legalStatus")||""), chemin });
+    for(const cle of ["sections","children","enfants","articles","textes","texts","liens"])
+      for(const f of tab(n, cle)) parcourir(f, chemin.concat(titre ? [String(titre)] : []));
+  };
+  parcourir(c, []);
+  return {
+    titre: String(prem(c, "title", "titre") || ""),
+    idcc: String(prem(c, "idcc", "numIdcc") || idcc || ""),
+    id: String(prem(c, "id", "cid") || id || ""),
+    textes,
+    ...(textes.length ? {} : {diag:{cles:Object.keys(c||{})}}),
+  };
+}
+
+/* Relevé de structure : les noms de champs réellement renvoyés par la DILA.
+   Sert à corriger sur pièces plutôt qu'à deviner. Ne renvoie aucun contenu. */
+async function structureTexteCcn(id){
+  const d = await appelLegifrance("/consult/kaliText", {id:String(id)});
+  const t = d.text || d.texte || d;
+  const vus = [];
+  const parcourir = (n, chemin, prof) => {
+    if(!n || typeof n !== "object" || prof > 4) return;
+    vus.push({chemin, cles:Object.keys(n).slice(0,30),
+              apercu:Object.fromEntries(Object.entries(n)
+                .filter(([k,v]) => typeof v !== "object")
+                .slice(0,12).map(([k,v]) => [k, String(v).slice(0,40)]))});
+    for(const cle of ["sections","articles","children","enfants"])
+      for(const [i,f] of (Array.isArray(n[cle])?n[cle]:[]).entries())
+        if(i < 2) parcourir(f, chemin+"/"+cle+"["+i+"]", prof+1);
+  };
+  parcourir(t, "", 0);
+  return {racine:Object.keys(d||{}), noeuds:vus.slice(0, 14)};
+}
+
+/* La DILA date certains champs en millisecondes depuis 1970, d'autres en clair.
+   Elle emploie en outre deux sentinelles pour « pas de borne » : 2999-01-01 et
+   l'origine des temps. Les afficher serait pire que de ne rien afficher. */
+function dateLisible(v){
+  const s = String(v||"").trim();
+  let iso = "";
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)) iso = s.slice(0,10);
+  else if(/^-?\d{9,}$/.test(s)){
+    const d = new Date(Number(s));
+    iso = Number.isNaN(d.getTime()) ? "" : d.toISOString().slice(0,10);
+  }
+  if(!iso || iso >= "2999-01-01" || iso <= "1900-01-01") return "";
+  return iso;
+}
+/* Première date exploitable parmi plusieurs champs candidats. */
+function datePremiere(o, ...noms){
+  for(const n of noms){ const d = dateLisible(o && o[n]); if(d) return d; }
+  return "";
+}
+const enVigueur = e => !e || /^VIGUEUR/.test(String(e));
+
+/* Les tableaux renvoyés par la DILA ne sont pas ordonnés : c'est « intOrdre »
+   qui porte le rang. Sans ce tri, les groupes d'une grille sortent mêlés. */
+const rangDila = n => { const v = Number(prem(n, "intOrdre", "ordre")); return Number.isNaN(v) ? 0 : v; };
+const ordonner = l => l.slice().sort((a, b) => rangDila(a) - rangDila(b));
+
+/* Le contenu d'un texte : sections et articles, à plat et dans l'ordre.
+
+   Deux points que seule la lecture des réponses réelles a permis de régler :
+
+   — l'ordre des tableaux renvoyés n'est pas l'ordre du document ; c'est le
+     champ « intOrdre » qui le porte, sur les sections comme sur les articles.
+     Sans tri, la nomenclature des cadres sortait dans l'ordre 3, 4, 1, 2, 7,
+     5, 6 ;
+   — un même article figure autant de fois qu'il a connu de versions, la
+     version applicable portant un « etat » commençant par VIGUEUR et les
+     autres REMPLACE, ABROGE ou PERIME. On ne retient que la version en
+     vigueur : afficher les deux revient à présenter comme le droit un texte
+     qui ne l'est plus. Le nombre de versions écartées est renvoyé, pour que
+     l'omission reste visible. */
+async function lireTexteCcn(id){
+  const d = await appelLegifrance("/consult/kaliText", {id:String(id)});
+  const t = d.text || d.texte || d;
+  const blocs = [];
+  let ecartes = 0;
+  const ordre = n => { const v = Number(prem(n, "intOrdre", "ordre")); return Number.isNaN(v) ? 0 : v; };
+  const trier = l => l.slice().sort((a,b) => ordre(a) - ordre(b));
+
+  const parcourir = (n, niveau) => {
+    if(!n || typeof n !== "object") return;
+    const titre = prem(n, "title", "titre", "intitule");
+    const contenu = prem(n, "content", "contenu", "texteHtml", "texte");
+    if(contenu){
+      if(!enVigueur(prem(n, "etat"))){ ecartes++; return; }
+      /* L'identifiant est renvoyé : on doit pouvoir citer ce qu'on lit, et
+         vérifier la citation sur legifrance.gouv.fr sans la chercher. */
+      blocs.push({type:"article", niveau, num:String(prem(n, "num", "numero")||""),
+                  titre:String(titre||""), etat:String(prem(n, "etat")||""),
+                  id:String(prem(n, "id", "cid")||""), html:String(contenu)});
+      return;
+    }
+    if(titre && niveau > 0)
+      blocs.push({type:"section", niveau, titre:String(titre),
+                  id:String(prem(n, "id", "cid")||"")});
+    for(const f of trier(tab(n, "sections").concat(tab(n, "children"), tab(n, "enfants"))))
+      parcourir(f, niveau+1);
+    for(const f of trier(tab(n, "articles"))) parcourir(f, niveau+1);
+  };
+  parcourir(t, 0);
+
+  return {
+    id: String(prem(t, "id", "cid") || id),
+    titre: String(prem(t, "title", "titre") || "").trim(),
+    date: datePremiere(t, "dateTexte", "dateDebutVersion", "modifDate", "dateParution"),
+    etat: String(prem(t, "etat", "jurisState") || ""),
+    ecartes,
+    blocs,
+    ...(blocs.length ? {} : {diag:{cles:Object.keys(t||{})}}),
+  };
+}
+
+/* =========================================================================
+   Fonds LODA — lois, ordonnances, décrets et arrêtés.
+
+   Même abonnement et mêmes identifiants que CODE_DATE et KALI : il n'y a rien
+   à souscrire, seulement un fonds de plus à interroger. C'est ce fonds qui
+   porte les lois de financement de la sécurité sociale et les lois ordinaires,
+   c'est-à-dire les textes qu'aucune source secondaire ne remplace.
+
+   Trois entrées, parce qu'on cherche un texte de trois façons : par son titre
+   ou son numéro, par son NOR, ou directement par son identifiant quand on le
+   connaît déjà. La lecture reste tolérante aux variations de forme de la DILA,
+   comme pour KALI : on ne suppose pas la structure, on l'explore.
+   ====================================================================== */
+
+/* Le drapeau « exact » commande le type de recherche. Il n'est pas cosmétique :
+   c'est lui qui permet de COMPTER une expression, donc de mesurer au lieu de
+   supposer. L'assistant de mots-clés repose entièrement dessus. */
+async function chercherLoda(q, nor, exact, taille){
+  const champs = [];
+  if(nor)
+    champs.push({typeChamp:"NOR", operateur:"ET",
+      criteres:[{typeRecherche:"EXACTE", valeur:String(nor).trim().toUpperCase(), operateur:"ET"}]});
+  if(q)
+    champs.push({typeChamp:"ALL", operateur:"ET",
+      criteres:[{typeRecherche: exact ? "EXACTE" : "UN_DES_MOTS", valeur:String(q), operateur:"ET"}]});
+  if(!champs.length) return {resultats:[], total:0};
+
+  const d = await appelLegifrance("/search", {
+    fond: "LODA_DATE",
+    recherche: {
+      filtres: [], sort:"PERTINENCE", operateur:"ET", typePagination:"DEFAUT",
+      pageNumber:1, pageSize: Math.min(50, Math.max(1, Number(taille)||20)), champs,
+    },
+  });
+
+  /* Le titre d'un texte peut se présenter sous trois formes selon le point
+     d'accès ; on prend la première qui existe plutôt que d'en présumer une. */
+  const titreDe = it => {
+    if(Array.isArray(it.titles) && it.titles.length)
+      return String(it.titles[0].title || it.titles[0].titre || "");
+    return String(prem(it, "title", "titre") || "");
+  };
+
+  const resultats = [];
+  for(const item of (d.results||[])){
+    const id = prem(item, "id", "cid", "textId");
+    if(!id) continue;
+    /* Les extraits portent les mots réellement employés par le législateur :
+       c'est la matière de l'assistant, le titre seul ne suffirait pas. */
+    const extraits = [];
+    for(const sec of tab(item, "sections"))
+      for(const ex of tab(sec, "extracts")){
+        for(const v of tab(ex, "values")) if(v) extraits.push(String(v));
+        if(ex.title) extraits.push(String(ex.title));
+      }
+    resultats.push({
+      id: String(id),
+      titre: titreDe(item).trim(),
+      nature: String(prem(item, "nature")||""),
+      date: dateLisible(prem(item, "dateSignature", "datePublication", "date")),
+      nor: String(prem(item, "nor")||""),
+      etat: String(prem(item, "etat", "legalStatus")||""),
+      extraits: extraits.slice(0, 8),
+    });
+  }
+  return {resultats, total: Number(d.totalResultNumber||resultats.length), exact: !!exact};
+}
+
+/* Un texte LODA se consulte comme une convention : on descend l'arbre et on
+   ne garde que ce qui est en vigueur, en signalant ce qui a été écarté. */
+async function lireLoda(id, dateIso){
+  const corps = {textId: String(id)};
+  if(dateIso) corps.date = String(dateIso).slice(0,10);
+  let d;
+  try{ d = await appelLegifrance("/consult/lawDecree", corps); }
+  catch(e){ d = await appelLegifrance("/consult/legiPart", {textId:String(id), ...(dateIso?{date:String(dateIso).slice(0,10)}:{})}); }
+
+  const t = d.textTitles ? d : (d.text || d.texte || d);
+  const blocs = [];
+  let ecartes = 0;
+  const parcourir = (n, niveau) => {
+    if(!n || typeof n !== "object") return;
+    const titre = prem(n, "title", "titre", "intitule");
+    const contenu = prem(n, "content", "contenu", "texteHtml", "texte");
+    if(contenu){
+      if(!enVigueur(prem(n, "etat"))){ ecartes++; return; }
+      blocs.push({type:"article", niveau, num:String(prem(n, "num", "numero")||""),
+                  titre:String(titre||""), etat:String(prem(n, "etat")||""),
+                  id:String(prem(n, "id", "cid")||""), html:String(contenu)});
+      return;
+    }
+    if(titre && niveau > 0)
+      blocs.push({type:"section", niveau, titre:String(titre),
+                  id:String(prem(n, "id", "cid")||"")});
+    for(const f of ordonner(tab(n, "sections").concat(tab(n, "articles"), tab(n, "children"))))
+      parcourir(f, niveau+1);
+  };
+  parcourir(t, 0);
+
+  return {
+    id: String(prem(t, "id", "cid") || id),
+    titre: String(prem(t, "title", "titre") ||
+                  (Array.isArray(t.textTitles) ? (t.textTitles[0]?.titre||"") : "")).trim(),
+    nature: String(prem(t, "nature")||""),
+    nor: String(prem(t, "nor")||""),
+    date: datePremiere(t, "dateTexte", "dateDebutVersion", "datePubli", "dateParution"),
+    etat: String(prem(t, "etat", "legalStatus")||""),
+    ecartes, blocs,
+    ...(blocs.length ? {} : {diag:{cles:Object.keys(t||{})}}),
+  };
+}
+
 export default async (req) => {
   const origine = req.headers.get("origin");
   const entetes = enTetesCors(origine);
@@ -136,6 +462,56 @@ export default async (req) => {
   let demande;
   try{ demande = await req.json(); }
   catch(e){ return new Response(JSON.stringify({erreur:"REQUETE_INVALIDE"}), {status:400, headers:entetes}); }
+
+  /* Conventions collectives. L'absence d'« action » conserve le comportement
+     d'origine : une version ancienne de la page continue de fonctionner. */
+  const action = String(demande.action||"").slice(0,20);
+  if(action.startsWith("ccn")){
+    const erreurs = ["RELAIS_NON_CONFIGURE","IDENTIFIANTS_REFUSES","API_NON_SOUSCRITE","QUOTA"];
+    try{
+      let r;
+      if(action === "ccn-recherche")
+        r = await chercherConventions(String(demande.q||"").slice(0,120),
+                                      String(demande.idcc||"").slice(0,10));
+      else if(action === "ccn-plein")
+        r = await chercherDansConvention(String(demande.q||"").slice(0,200),
+                                         String(demande.idcc||"").slice(0,10),
+                                         !!demande.exact);
+      else if(action === "ccn-struct")
+        r = await structureTexteCcn(String(demande.id||"").slice(0,40));
+      else if(action === "ccn-texte")
+        r = await lireTexteCcn(String(demande.id||"").slice(0,40));
+      else
+        r = await lireConvention(String(demande.idcc||"").slice(0,10),
+                                 String(demande.id||"").slice(0,40));
+      return new Response(JSON.stringify(r), {status:200, headers:entetes});
+    }catch(e){
+      const c = erreurs.includes(e.message) ? e.message : "ERREUR_LEGIFRANCE";
+      const s = c==="QUOTA" ? 429 : (c==="RELAIS_NON_CONFIGURE" ? 503 : 502);
+      return new Response(JSON.stringify({erreur:c, detail:String(e.message).slice(0,80)}),
+                          {status:s, headers:entetes});
+    }
+  }
+
+  /* Lois, ordonnances et décrets. Même traitement des erreurs que KALI :
+     on distingue ce qui vient de l'abonnement de ce qui vient du texte. */
+  if(action.startsWith("loda")){
+    const erreurs = ["RELAIS_NON_CONFIGURE","IDENTIFIANTS_REFUSES","API_NON_SOUSCRITE","QUOTA"];
+    try{
+      const r = (action === "loda-texte")
+        ? await lireLoda(String(demande.id||"").slice(0,40),
+                         demande.date ? String(demande.date).slice(0,10) : null)
+        : await chercherLoda(String(demande.q||"").slice(0,200),
+                             String(demande.nor||"").slice(0,20),
+                             !!demande.exact, demande.taille);
+      return new Response(JSON.stringify(r), {status:200, headers:entetes});
+    }catch(e){
+      const c = erreurs.includes(e.message) ? e.message : "ERREUR_LEGIFRANCE";
+      const s = c==="QUOTA" ? 429 : (c==="RELAIS_NON_CONFIGURE" ? 503 : 502);
+      return new Response(JSON.stringify({erreur:c, detail:String(e.message).slice(0,80)}),
+                          {status:s, headers:entetes});
+    }
+  }
 
   const numero = String(demande.numero||"").slice(0,40);
   const code   = demande.code ? String(demande.code).slice(0,120) : null;

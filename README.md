@@ -93,6 +93,100 @@ pagination.
 - **Copier le lien** : rouvre la recherche chez un confrère. Le lien ne contient
   jamais la clé API.
 
+## Trouver les bons mots-clés
+
+On cherche « faux CV » et l'on ne trouve rien, parce que les juges n'écrivent
+pas « faux CV » : ils écrivent « fausses déclarations », « fausse
+qualification », « manœuvres dolosives ». Personne ne peut deviner ces
+formules, et un assistant qui les inventerait ne vaudrait pas mieux que le
+hasard.
+
+Le bouton **« Trouver les bons mots-clés »** applique donc la règle qui
+gouverne le reste de l'application : ne rien affirmer qui ne soit mesuré.
+
+1. La recherche est lancée sur les mots de l'utilisateur en « tous les mots »
+   — jamais « au moins un mot » d'emblée, qui ramasse n'importe quoi dès qu'un
+   terme est ambigu : sur « faux CV », il ramenait la taxe différentielle sur
+   les véhicules, « CV » y valant cheval fiscal.
+2. Les sommaires et extraits des cinquante décisions renvoyées sont lus, et
+   l'on en extrait les expressions de deux à cinq mots qui y reviennent.
+3. **Chacune est ensuite comptée** en expression exacte sur la base entière.
+4. Le classement se fait par **spécificité**, non par abondance : ce qui est
+   fréquent dans l'échantillon et rare dans la base caractérise le sujet.
+   « base légale » revient dans 14 901 décisions et n'apprend rien ; « entrave
+   au fonctionnement régulier » n'en compte que 40 et désigne la recherche.
+
+Ce qui est proposé n'est donc pas une suggestion : c'est un relevé chiffré,
+vérifiable d'un clic. Les expressions que l'API ne trouve pas telles quelles
+sont écartées et signalées — les proposer reviendrait à promettre des résultats
+inexistants.
+
+**Ses limites, qui sont celles de la méthode.** Le relevé vaut ce que vaut
+l'échantillon : sur un sujet abondamment jugé, il est excellent ; sur un sujet
+rare ou formulé de façon ambiguë, il reste bruité. Les matières dominantes des
+décisions lues sont affichées à côté, comme second angle d'attaque.
+
+## Conventions collectives
+
+Le texte officiel des **conventions collectives nationales**, tel qu'il est
+publié — fonds KALI de Légifrance, la même API et le même abonnement que les
+codes.
+
+Une convention se désigne par son **numéro IDCC** (16 pour les transports
+routiers, 1486 pour les bureaux d'études) ou se cherche par son intitulé.
+L'application affiche alors la liste de ses textes — texte de base, annexes,
+avenants — chacun avec sa date et son état juridique. Un texte s'ouvre
+entièrement, se filtre par mot-clé (« coefficient », « classification »), et
+**s'exporte en PDF et en Word** : c'est ce qui permet de le verser aux débats,
+proprement daté et référencé.
+
+Les tableaux — grilles de coefficients notamment — sont conservés tels que la
+DILA les publie. Le HTML reçu est inséré après avoir été débarrassé de tout ce
+qui peut s'exécuter : la source est officielle, ce n'est pas une raison pour lui
+accorder les droits d'un script de la page.
+
+### Chercher dans le texte d'une convention
+
+Un champ interroge le **contenu** de la convention ouverte, et non ses seuls
+intitulés : « coefficient 200 », « période d'essai », « prime d'ancienneté »
+ramènent les textes qui les contiennent, avec les extraits, sans parcourir les
+huit cents articles. La recherche est bornée à la convention choisie par son
+numéro IDCC.
+
+### Le pont avec la jurisprudence
+
+Une décision qui applique un texte conventionnel le cite le plus souvent mot
+pour mot. Deux passerelles en découlent :
+
+- **« Décisions citant cette convention »** cherche dans Judilibre le nom sous
+  lequel les juges la désignent — 3 447 décisions pour les transports routiers,
+  2 169 pour les bureaux d'études, 745 pour la métallurgie.
+- **« Décisions citant cet article »**, sur chaque article ouvert, cherche une
+  **phrase caractéristique** de son texte — assez longue pour lui être propre,
+  assez courte pour que l'expression exacte aboutisse. Chercher par le numéro
+  d'article serait illusoire : « article 5 » existe dans les sept cents
+  conventions du fonds. Sur la définition du groupe 6 des cadres du transport
+  routier, la passerelle rend 4 décisions.
+
+Rien n'est deviné : l'expression envoyée à Judilibre est celle que l'on a sous
+les yeux, et la recherche s'y lance en expression exacte.
+
+### Et dans l'autre sens : de la décision à la convention
+
+Dans le texte intégral d'une décision, les **conventions collectives citées
+sont cliquables**, comme le sont déjà les articles de code. « la convention
+collective nationale des transports routiers », « la convention collective des
+bureaux d'études techniques » : un clic renseigne l'écran des conventions et
+lance la recherche.
+
+La capture s'arrête à la première ponctuation forte et se borne à quatre-vingts
+signes — les intitulés les plus longs du fonds KALI tiennent en dessous, et une
+capture plus large ramasserait la phrase entière au lieu du nom.
+
+Comme pour les articles de code, cet écran suppose le **relais** (adresse
+Netlify) : l'authentification OAuth de Légifrance est impossible depuis un
+navigateur.
+
 ## Articles de code cliquables
 
 Les articles cités dans le texte d'une décision — « article L. 1154-1 du code du
@@ -166,6 +260,22 @@ officielle. Chaque collaborateur utilise la sienne, sur son poste.
   la base.
 - Les articles cliquables ne couvrent que les **codes** : une loi non codifiée,
   un décret ou une convention collective ne sont pas résolus.
+
+## Publication
+
+Le site est **servi sans construction**. Les fichiers publiables vivent dans
+`docs/`, que Netlify sert directement et que GitHub Pages accepte comme source.
+
+Ce n'est pas un détail d'organisation. La configuration précédente copiait les
+fichiers dans `dist/` au moyen d'une commande, ce qui déclenchait un *build* à
+chaque envoi. Or le plan gratuit de Netlify accorde un nombre limité de minutes
+de construction par mois, chaque déploiement étant facturé à la minute entamée :
+une fois le quota épuisé, les envois sont acceptés mais **plus rien n'est
+publié**, sans message ni erreur. Supprimer la construction supprime la
+dépendance — la publication devient immédiate et gratuite, indéfiniment.
+
+Le dossier des fonctions reste en dehors du dossier publié, comme Netlify
+l'exige.
 
 ## Données
 

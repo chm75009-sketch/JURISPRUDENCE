@@ -1,0 +1,29 @@
+{
+ "domaine": "comité social et économique",
+ "date": "2026-08-15",
+ "empreinte": "c9d9c283c367",
+ "fichiers": {
+  "actions-cse.js": "aeddce295044",
+  "audit-cse.js": "8694347eed88",
+  "controles-cse.js": "50f0ebbf0e50",
+  "cse_corpus.json": "ea46040a4b05",
+  "grille-cse.js": "3dbd69ab4ead",
+  "moteur-cse.js": "fffe3dfc70db",
+  "questionnaire-cse.js": "3bf7753f3185",
+  "tests-controles-cse.js": "7bd1e11ed018",
+  "tests-cse.js": "8fc324b76152",
+  "textes_cse.json": "701f84e52560"
+ },
+ "compteurs": {
+  "articlesLus": 368,
+  "arrets": 163,
+  "controles": 35,
+  "casContradictoires": 55,
+  "verdicts": 1925,
+  "exceptions": 0,
+  "conformitesSurFicheVide": 0,
+  "sansBrancheNonConforme": 11,
+  "branchesNonConformeJamaisAtteintes": 0,
+  "detectionConcluantConforme": 0
+ }
+}
