@@ -139,8 +139,12 @@
     var f = String(format || "").toLowerCase();
     if (f.indexOf("oui") === 0) return "oui-non";
     if (f.indexOf("aaaa-mm-jj") >= 0) return "date";
-    if (f === "nombre" || f === "euros" || f.indexOf("chiffres") >= 0) return "nombre";
+    /* Les listes d'abord : « liste de nombres » est une liste, pas un nombre. */
     if (f.indexOf("liste") >= 0 || f.indexOf("objet") >= 0 || f.indexOf("tableau") >= 0) return "json";
+    /* Puis les nombres, y compris qualifiés — « nombre de mois », « nombre
+       d'années ». Sans cela ils arrivaient au moteur sous forme de chaîne, et
+       les contrôles les tenaient pour non renseignés. */
+    if (f.indexOf("nombre") === 0 || f === "euros" || f.indexOf("chiffres") >= 0) return "nombre";
     if (f === "1 à 4") return "cause";
     return "texte";
   }
