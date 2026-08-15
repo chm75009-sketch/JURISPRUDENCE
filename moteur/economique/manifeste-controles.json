@@ -1,16 +1,16 @@
 {
  "objet": "manifeste des contrôles",
- "empreinte": "e040ce908a1c",
+ "empreinte": "5eecb135c6c3",
  "empreintesFichiers": {
   "moteur.js": "2304d9348fbe",
   "controles.js": "a1b19f1438e8",
-  "controles2.js": "5e1061aa8b42",
+  "controles2.js": "720534f106c0",
   "grille-eco.js": "0aca350d0d14",
   "grille-auto.js": "20ca038f05b7",
   "pieces.js": "95ed7ab57ced",
   "preuve.js": "ba61fe6fc07a"
  },
- "genere": "2026-08-15 20:59:07",
+ "genere": "2026-08-15 21:35:46",
  "verification": {
   "identifiantsUniques": true,
   "conformiteSansTest": [],
@@ -26,7 +26,7 @@
   "coherence": 8,
   "reglesJamaisDeclenchees": 15,
   "testes": 60,
-  "casDeTest": 72,
+  "casDeTest": 73,
   "echecs": 0,
   "regles": 236
  },
@@ -622,18 +622,22 @@
    "type": "conformité",
    "entrees": [
     "groupe",
+    "societes",
+    "societesDuSecteur",
     "pièce liasse",
     "pièce comptes-groupe"
    ],
    "piece": "—",
    "etats": [
     "conforme",
+    "non conforme",
     "risque à vérifier",
     "donnée manquante",
     "sans objet"
    ],
    "fondement": "L. 1233-3",
    "tests": [
+    "pièce étiquetée « secteur » sans énumérer les sociétés du secteur",
     "comptes du groupe sans périmètre déclaré"
    ],
    "teste": true

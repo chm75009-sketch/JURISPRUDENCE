@@ -33,6 +33,8 @@ const BASE={entreprise:"T",effectif:320,effectifGroupe:602,groupe:true,cause:"1"
   reclassementInterne:"11 postes",formation:"350 heures",creation:"12 000 €",
   suivi:"commission tous les 2 mois",dateDecisionAdmin:"2026-06-10"}};
 const CAS=[
+ ["pièce étiquetée « secteur » sans énumérer les sociétés du secteur","CTL-PCE-03","risque à vérifier",
+  f=>{f.societes=[{nom:"SŒUR",activite:"usinage",pays:"France",etranger:false}]; delete f.societesDuSecteur;}],
  ["entretiens organisés là où la loi en dispense","CTL-ENT-01","risque à vérifier",
   f=>{f.nbLicenciements=12; f.cseExistant=true; f.dateEntretien="2026-05-04";}],
  ["moins de dix licenciements sans entretien déclaré","CTL-ENT-01","non conforme",

@@ -1,11 +1,68 @@
 {
- "version": "e040ce908a1c",
- "execute": "2026-08-15 20:59:28",
- "total": 72,
+ "objet": "registre d'exécution des tests",
+ "version": "5eecb135c6c3",
+ "execute": "2026-08-15 21:35:46",
+ "manifeste": {
+  "empreinte": "5eecb135c6c3",
+  "fichier": "manifeste-controles.json"
+ },
+ "dossierReference": "dossier-reference.json",
+ "totalCas": 73,
+ "succes": 73,
  "echecs": 0,
+ "controlesTotal": 68,
+ "controlesConformite": 60,
+ "controlesDetection": 8,
+ "controlesDistinctsCouverts": 60,
+ "controlesConformiteSansTest": 0,
+ "empreintesFichiers": {
+  "moteur.js": "2304d9348fbe",
+  "controles.js": "a1b19f1438e8",
+  "controles2.js": "720534f106c0",
+  "grille-eco.js": "0aca350d0d14",
+  "grille-auto.js": "20ca038f05b7",
+  "pieces.js": "95ed7ab57ced",
+  "preuve.js": "ba61fe6fc07a"
+ },
+ "detectionSansTest": [
+  "CTL-ECO-03",
+  "CTL-IND-01",
+  "CTL-COE-01",
+  "CTL-CSE-09",
+  "CTL-USA-01",
+  "CTL-CTX-01",
+  "CTL-FRA-01",
+  "CTL-SEU-01",
+  "CTL-SEU-03",
+  "CTL-COH-01",
+  "CTL-COH-02",
+  "CTL-COH-03",
+  "CTL-VAL-01",
+  "CTL-TMP-01",
+  "CTL-ECO-06",
+  "CTL-TRF-01"
+ ],
+ "repartitionEtats": {
+  "risque à vérifier": 24,
+  "non conforme": 44,
+  "donnée manquante": 5
+ },
  "cas": [
   {
    "cas": "T-001",
+   "intitule": "pièce étiquetée « secteur » sans énumérer les sociétés du secteur",
+   "controle": "CTL-PCE-03",
+   "objet": "Le périmètre des pièces correspond-il au périmètre à démontrer ?",
+   "injecte": "societes : 2 élément(s) → 1",
+   "attendu": "risque à vérifier",
+   "obtenu": "risque à vérifier",
+   "verdict": "succès",
+   "constat": "La pièce déclare couvrir le périmètre « secteur d'activité du groupe », mais les sociétés qui composent ce secteur ne sont pas énumérées. 1 société(s) française(s) du groupe pourraient en relever : SŒUR (usinage). Une étiquette de périmètre n'est pas une couve",
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
+  },
+  {
+   "cas": "T-002",
    "intitule": "entretiens organisés là où la loi en dispense",
    "controle": "CTL-ENT-01",
    "objet": "Le calendrier suivi est-il celui que le régime commande ?",
@@ -14,11 +71,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "12 licenciements sur trente jours et un comité social et économique en place : la procédure d'entretien préalable ne s'applique pas. Un entretien est pourtant déclaré le 2026-05-04. Le tenir n'est pas irrégulier, mais il n'ouvre aucun délai opposable : la noti",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-002",
+   "cas": "T-003",
    "intitule": "moins de dix licenciements sans entretien déclaré",
    "controle": "CTL-ENT-01",
    "objet": "Le calendrier suivi est-il celui que le régime commande ?",
@@ -27,11 +84,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Moins de dix licenciements sur trente jours : l'entretien préalable est dû pour chaque salarié. Aucune date d'entretien n'est déclarée.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-003",
+   "cas": "T-004",
    "intitule": "licenciement consécutif au refus d'un accord de performance collective",
    "controle": "CTL-APC-01",
    "objet": "Le licenciement consécutif au refus d'un accord de performance collective est-il correctement qualifié ?",
@@ -40,11 +97,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Le licenciement du salarié qui refuse l'application d'un accord de performance collective repose sur un motif spécifique qui constitue une cause réelle et sérieuse : il n'est pas un licenciement pour motif économique. Le soumettre au régime de l'article L. 123",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-004",
+   "cas": "T-005",
    "intitule": "reconstitution hors flux qui ne se recalcule pas",
    "controle": "CTL-FRA-01",
    "objet": "Les difficultés invoquées peuvent-elles procéder de flux intragroupe ?",
@@ -53,11 +110,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Reconstitution incohérente pour 2025 : résultat d'exploitation -1870 plus 1000 de flux intragroupe donnent -870, alors que le résultat reconstitué déclaré est 4000. L'écart est de 4870. Une reconstitution qui ne se recalcule pas ne démontre rien.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-005",
+   "cas": "T-006",
    "intitule": "liquidation : notification hors de la fenêtre de garantie",
    "controle": "CTL-PCO-03",
    "objet": "La notification intervient-elle dans la fenêtre de garantie des créances ?",
@@ -66,11 +123,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Jugement de liquidation du 2026-04-01, notification du 2026-05-15, soit 44 jours. La garantie couvre les ruptures intervenant dans les vingt et un jours, un plan de sauvegarde de l'emploi étant élaboré suivant le jugement, soit jusqu'au 2026-04-22. Hors de cet",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-006",
+   "cas": "T-007",
    "intitule": "redressement sans ordonnance du juge-commissaire",
    "controle": "CTL-PCO-02",
    "objet": "L'autorité administrative a-t-elle été informée, et le licenciement autorisé par le juge ?",
@@ -79,11 +136,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "En redressement comme en liquidation, les licenciements présentant un caractère urgent, inévitable et indispensable sont autorisés par ordonnance du juge-commissaire. Aucune ordonnance n'est déclarée : la notification serait dépourvue de fondement.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-007",
+   "cas": "T-008",
    "intitule": "procédure collective déclarée sans sa nature",
    "controle": "CTL-PCO-01",
    "objet": "Le régime de la procédure collective est-il identifié et l'auteur des licenciements désigné ?",
@@ -92,11 +149,11 @@
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "Procédure collective déclarée, mais la nature de la procédure — sauvegarde, redressement ou liquidation, la date du jugement d'ouverture ou de liquidation, la qualité de celui qui met en œuvre le plan — employeur, administrateur ou liquidateur n'est pas rensei",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-008",
+   "cas": "T-009",
    "intitule": "cessation déclarée totale, société du groupe poursuivant la même activité",
    "controle": "CTL-ECO-05",
    "objet": "La cessation d'activité est-elle complète et définitive ?",
@@ -105,11 +162,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "La cessation est déclarée complète et définitive, mais 1 société(s) du groupe exercent la même activité : SŒUR FRANCE (en France). La cessation s'apprécie au niveau de l'entreprise, mais la poursuite de la même activité dans le groupe nourrit le débat sur le c",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-009",
+   "cas": "T-010",
    "intitule": "cessation déclarée partielle",
    "controle": "CTL-ECO-05",
    "objet": "La cessation d'activité est-elle complète et définitive ?",
@@ -118,11 +175,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "La cessation est déclarée incomplète ou non définitive. L'article L. 1233-3, 4° ne vise que la cessation complète et définitive de l'activité de l'entreprise : une cessation partielle relève, le cas échéant, d'un autre cas.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-010",
+   "cas": "T-011",
    "intitule": "licenciement notifié sous une version abrogée du texte",
    "controle": "CTL-TMP-01",
    "objet": "La version du texte appliquée est-elle celle en vigueur au jour de la notification ?",
@@ -131,11 +188,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Notification du 2015-06-01 : version « avant le 1er décembre 2016 », qui porte « difficultés économiques », sans définition ni indicateur. Le seuil trimestriel chiffré n'existait pas et n'est donc pas opposé au dossier. Le périmètre retenu est le secteur d'act",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-011",
+   "cas": "T-012",
    "intitule": "date impossible : 30 février",
    "controle": "CTL-VAL-01",
    "objet": "Les données saisies sont-elles lisibles et cohérentes entre elles ?",
@@ -144,11 +201,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : dateNotification = « 2026-02-30 » — date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-012",
+   "cas": "T-013",
    "intitule": "effectif négatif",
    "controle": "CTL-VAL-01",
    "objet": "Les données saisies sont-elles lisibles et cohérentes entre elles ?",
@@ -157,11 +214,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : effectif = « -12 » — valeur négative. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-013",
+   "cas": "T-014",
    "intitule": "nombre de licenciements décimal",
    "controle": "CTL-VAL-01",
    "objet": "Les données saisies sont-elles lisibles et cohérentes entre elles ?",
@@ -170,11 +227,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : nbLicenciements = « 9.5 » — valeur décimale, alors qu'il s'agit d'un dénombrement. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-014",
+   "cas": "T-015",
    "intitule": "date au format français",
    "controle": "CTL-VAL-01",
    "objet": "Les données saisies sont-elles lisibles et cohérentes entre elles ?",
@@ -183,11 +240,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : dateEntretien = « 02/06/2026 » — date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-015",
+   "cas": "T-016",
    "intitule": "effectif d'établissement supérieur à celui de l'entreprise",
    "controle": "CTL-VAL-01",
    "objet": "Les données saisies sont-elles lisibles et cohérentes entre elles ?",
@@ -196,11 +253,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : effectifEtablissement = « 900 » — supérieur à l'effectif de l'entreprise (320). Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-016",
+   "cas": "T-017",
    "intitule": "poste déclaré disponible et supprimé",
    "controle": "CTL-COH-01",
    "objet": "Un poste est-il déclaré à la fois disponible et supprimé ?",
@@ -209,11 +266,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 poste(s) déclaré(s) à la fois disponible(s) au reclassement et supprimé(s) dans l'entreprise : Régleur. Un poste ne peut pas être les deux : ou l'emploi est supprimé, ou il est disponible, et la démonstration de la suppression tombe.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-017",
+   "cas": "T-018",
    "intitule": "un même poste proposé à trois salariés",
    "controle": "CTL-COH-02",
    "objet": "Un même poste est-il proposé à plusieurs salariés ?",
@@ -222,11 +279,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 poste(s) proposé(s) simultanément à plusieurs salariés : Régleur | A | L — 3 destinataires. Le nombre d'offres ne vaut pas nombre de postes : une liste commune est admise, mais elle doit alors préciser les critères de départage entre les salariés candidats a",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-018",
+   "cas": "T-019",
    "intitule": "trois critères d'ordre identiques pour tous",
    "controle": "CTL-COH-03",
    "objet": "Les quatre critères d'ordre départagent-ils réellement les salariés ?",
@@ -235,11 +292,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "3 des quatre critères de l'article L. 1233-5 prennent la même valeur pour tous les salariés — charges de famille, ancienneté, situation rendant la réinsertion difficile — et ne départagent donc personne. Les quatre critères sont formellement présents et matéri",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-019",
+   "cas": "T-020",
    "intitule": "autorisation de licencier refusée",
    "controle": "CTL-PRT-01",
    "objet": "L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?",
@@ -248,11 +305,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 salarié(s) protégé(s) dont l'autorisation a été REFUSÉE : P1 (élu). Le licenciement notifié malgré un refus est nul, et le fait de passer outre est pénalement sanctionné.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-020",
+   "cas": "T-021",
    "intitule": "autorisation postérieure à la notification",
    "controle": "CTL-PRT-01",
    "objet": "L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?",
@@ -261,11 +318,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 autorisation(s) postérieure(s) à la notification du 2026-06-15 : P1 — 2026-07-01. L'autorisation doit précéder la notification, non la suivre.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-021",
+   "cas": "T-022",
    "intitule": "neuf licenciements et un déjà prononcé dans les trente jours",
    "controle": "CTL-SEU-01",
    "objet": "Le décompte des trente jours intègre-t-il les licenciements déjà prononcés ?",
@@ -274,11 +331,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "9 licenciement(s) envisagé(s) et 1 déjà prononcé(s) dans la même période de trente jours, soit 10 au total. Le projet porte sur moins de dix salariés, mais la fenêtre de trente jours en compte 10 : le régime du licenciement collectif d'au moins dix salariés s'",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-022",
+   "cas": "T-023",
    "intitule": "dix refus de modification traités isolément",
    "controle": "CTL-SEU-02",
    "objet": "Les refus de modification du contrat déclenchent-ils le régime collectif ?",
@@ -287,11 +344,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "11 salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est soumis au régime du licenciement collectif (L. 1233-25), indépendamment du décompte ci-dessus. Si la procédure a été conduite comme un licenciement de moins d",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-023",
+   "cas": "T-024",
    "intitule": "série étalée sur trois mois pour rester sous le seuil",
    "controle": "CTL-SEU-03",
    "objet": "Le projet suit-il une série de licenciements étalée sur trois mois ?",
@@ -300,11 +357,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "13 licenciements économiques ont été prononcés sur les trois mois consécutifs précédents, sans jamais atteindre dix sur une même période de trente jours. Tout nouveau licenciement économique envisagé au cours des trois mois suivants est soumis au régime du lic",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-024",
+   "cas": "T-025",
    "intitule": "offre de reclassement émanant d'une société étrangère",
    "controle": "CTL-REC-12",
    "objet": "Les offres relèvent-elles du territoire national ?",
@@ -313,11 +370,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 offre(s) sur 2 émanent d'une société non établie sur le territoire national : B. L'obligation de reclassement est limitée au territoire national : ces offres ne la satisfont pas et ne peuvent être décomptées.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-025",
+   "cas": "T-026",
    "intitule": "fermeture d'un établissement sans recherche de repreneur",
    "controle": "CTL-REP-01",
    "objet": "La recherche d'un repreneur a-t-elle été engagée ?",
@@ -326,11 +383,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Fermeture d'un établissement dans une entreprise d'au moins mille salariés : la recherche d'un repreneur doit être engagée dès l'information du comité, et celui-ci informé de son déroulement. Rien n'est déclaré.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-026",
+   "cas": "T-027",
    "intitule": "catégorie professionnelle d'un seul salarié protégé",
    "controle": "CTL-ORD-02",
    "objet": "Les catégories professionnelles sont-elles construites objectivement ?",
@@ -339,11 +396,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 catégorie(s) réduite(s) à un seul salarié, occupée(s) par un salarié protégé : Chef d'atelier zone Est. Une catégorie professionnelle regroupe les salariés exerçant des fonctions de même nature supposant une formation professionnelle commune ; une catégorie ",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-027",
+   "cas": "T-028",
    "intitule": "avis non rendu et notification antérieure à l'expiration du délai",
    "controle": "CTL-CSE-04",
    "objet": "L'avis a-t-il été rendu, ou le délai est-il expiré ?",
@@ -352,11 +409,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois court depuis la première réunion du 2026-03-23 et expire le 2026-05-23 : la notification prévue le 2026-05-01 lui est antérieure. Le comité n'est pas encore réputé consulté.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-028",
+   "cas": "T-029",
    "intitule": "mention « avis non rendu » lue comme un avis rendu",
    "controle": "CTL-CSE-04",
    "objet": "L'avis a-t-il été rendu, ou le délai est-il expiré ?",
@@ -365,11 +422,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois court depuis la première réunion du 2026-03-23 et expire le 2026-05-23 : la notification prévue le 2026-04-01 lui est antérieure. Le comité n'est pas encore réputé consulté.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-029",
+   "cas": "T-030",
    "intitule": "poste disponible non proposé",
    "controle": "CTL-REC-07",
    "objet": "Des postes disponibles ont-ils été omis dans les offres ?",
@@ -378,11 +435,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 poste(s) recensés comme disponibles n'ont fait l'objet d'aucune offre et d'aucun motif d'exclusion : Cariste (B).",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-030",
+   "cas": "T-031",
    "intitule": "offre sans rémunération",
    "controle": "CTL-REC-03",
    "objet": "Les offres respectent-elles les six mentions obligatoires ?",
@@ -391,11 +448,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 offre(s) sur 2 ne comportent pas toutes les mentions exigées : intitulé et descriptif du poste, nom de l'employeur, nature du contrat, localisation, rémunération, classification.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-031",
+   "cas": "T-032",
    "intitule": "société du groupe non interrogée",
    "controle": "CTL-REC-02",
    "objet": "La recherche couvre-t-elle tout le périmètre de permutation ?",
@@ -404,11 +461,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Aucun poste n'est recensé, ni aucune absence de poste attestée, pour : B. Une société du périmètre non interrogée est un manquement.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-032",
+   "cas": "T-033",
    "intitule": "état des postes postérieur à la notification",
    "controle": "CTL-REC-06",
    "objet": "L'état des postes est-il antérieur à la notification ?",
@@ -417,11 +474,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "État des postes daté du 2026-06-20, postérieur à la notification du 2026-06-15. Le reclassement s'apprécie au jour du licenciement.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-033",
+   "cas": "T-034",
    "intitule": "offre sans délai de réponse",
    "controle": "CTL-REC-09",
    "objet": "Un délai et un moyen de réponse ont-ils été indiqués ?",
@@ -430,11 +487,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "1 offre(s) n'indiquent aucun délai de réponse. Sans délai identifiable, le silence du salarié ne peut pas être opposé comme un refus.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-034",
+   "cas": "T-035",
    "intitule": "poste de catégorie inférieure sans accord exprès",
    "controle": "CTL-REC-10",
    "objet": "Un poste de catégorie inférieure a-t-il été proposé sans accord exprès ?",
@@ -443,11 +500,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 poste(s) de catégorie inférieure proposés sans accord exprès du salarié.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-035",
+   "cas": "T-036",
    "intitule": "pièce seulement cochée, sans métadonnées",
    "controle": "CTL-PCE-01",
    "objet": "Les pièces versées portent-elles leurs métadonnées ?",
@@ -456,11 +513,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "1 pièce(s) sont seulement cochées comme versées, sans nom de fichier, date, période couverte, auteur, version ni périmètre. Une case cochée n'établit ni la date, ni le périmètre, ni la complétude.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-036",
+   "cas": "T-037",
    "intitule": "pièce postérieure à l'acte",
    "controle": "CTL-PCE-02",
    "objet": "Les pièces sont-elles antérieures à l'acte qu'elles justifient ?",
@@ -469,11 +526,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 pièce(s) sont postérieures à la notification du 2026-06-15 : etat-postes (2026-07-01). Une pièce postérieure ne peut pas justifier un acte antérieur.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-037",
+   "cas": "T-038",
    "intitule": "pièce déposée mais non lue",
    "controle": "CTL-PCE-04",
    "objet": "Les pièces ont-elles été lues, ou seulement déposées ?",
@@ -482,11 +539,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "1 pièce(s) déposées mais non lues : etat-postes. Le dépôt n'est pas la lecture, et la lecture n'est pas la conformité.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-038",
+   "cas": "T-039",
    "intitule": "convocation postérieure à la réunion",
    "controle": "CTL-CSE-06",
    "objet": "Le délai entre la convocation et la première réunion est-il suffisant ?",
@@ -495,11 +552,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "La convocation du 2026-03-25 est postérieure à la première réunion.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-039",
+   "cas": "T-040",
    "intitule": "convocation deux jours avant la réunion",
    "controle": "CTL-CSE-06",
    "objet": "Le délai entre la convocation et la première réunion est-il suffisant ?",
@@ -508,11 +565,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "2 jour(s) entre la convocation et la première réunion. Le code ne fixe pas de délai chiffré ici, mais les renseignements devant être adressés « avec la convocation », un délai aussi court prive le comité de tout examen — et c'est sur ce terrain que la consulta",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-040",
+   "cas": "T-041",
    "intitule": "comité central non réuni malgré plusieurs établissements",
    "controle": "CTL-CSE-07",
    "objet": "L'instance compétente est-elle la bonne ?",
@@ -521,11 +578,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "4 établissements distincts, et le comité central n'a pas été réuni. Il doit l'être dès lors que les mesures excèdent le pouvoir des chefs d'établissement ou portent sur plusieurs établissements (L. 1233-9).",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-041",
+   "cas": "T-042",
    "intitule": "aucun comité et aucune carence",
    "controle": "CTL-CSE-08",
    "objet": "Un comité existe-t-il, ou un procès-verbal de carence a-t-il été établi ?",
@@ -534,11 +591,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Aucun comité et aucun procès-verbal de carence : l'absence d'institution ne dispense pas, elle doit être établie.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-042",
+   "cas": "T-043",
    "intitule": "conséquences santé et sécurité non exposées",
    "controle": "CTL-CSE-10",
    "objet": "Les conséquences sur la santé, la sécurité et les conditions de travail sont-elles exposées ?",
@@ -547,11 +604,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Le septième renseignement — les conséquences en matière de santé, de sécurité ou de conditions de travail — n'est pas renseigné. Son omission vicie la consultation.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-043",
+   "cas": "T-044",
    "intitule": "notification administrative avant la première réunion",
    "controle": "CTL-CSE-05",
    "objet": "La notification ou l'information de l'administration est-elle faite ?",
@@ -560,11 +617,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Notification du 2026-03-10 : elle ne peut intervenir qu'au plus tôt le lendemain de la date prévue pour la première réunion, le 2026-03-23 (L. 1233-46).",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-044",
+   "cas": "T-045",
    "intitule": "effectif d'établissement supérieur à celui de l'entreprise",
    "controle": "CTL-EFF-01",
    "objet": "L'effectif de l'établissement est-il cohérent avec celui de l'entreprise ?",
@@ -573,11 +630,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Effectif de l'établissement (400) supérieur à celui de l'entreprise (320).",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-045",
+   "cas": "T-046",
    "intitule": "critères d'ordre appliqués à l'établissement sans accord",
    "controle": "CTL-EFF-02",
    "objet": "Le périmètre d'application des critères d'ordre est-il licite ?",
@@ -586,11 +643,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Le périmètre retenu est l'établissement, sans accord collectif le prévoyant. À défaut d'accord, ce périmètre ne peut être inférieur à la zone d'emplois où sont situés les établissements concernés.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-046",
+   "cas": "T-047",
    "intitule": "accord majoritaire sous les 50 %",
    "controle": "CTL-PSE-07",
    "objet": "L'accord majoritaire remplit-il la condition de représentativité ?",
@@ -599,11 +656,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "41 % des suffrages : l'accord doit être signé par des organisations ayant recueilli au moins 50 % des suffrages exprimés au premier tour des dernières élections des titulaires au comité.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-047",
+   "cas": "T-048",
    "intitule": "mesures du plan non chiffrées",
    "controle": "CTL-PSE-05",
    "objet": "Les mesures du plan sont-elles chiffrées ?",
@@ -612,11 +669,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Mesures énoncées sans aucun chiffre : evitement, reclassementInterne, formation, creation. L'administration apprécie la proportionnalité des moyens ; une mesure non chiffrée n'est pas appréciable.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-048",
+   "cas": "T-049",
    "intitule": "plan postérieur à la convocation",
    "controle": "CTL-PSE-06",
    "objet": "Le plan a-t-il été joint à la convocation du comité ?",
@@ -625,11 +682,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Projet de plan daté du 2026-03-20, postérieur à la convocation du 2026-03-09 : il doit être adressé avec elle.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-049",
+   "cas": "T-050",
    "intitule": "notification avant la décision d'homologation",
    "controle": "CTL-PSE-04",
    "objet": "La notification intervient-elle après la décision administrative ?",
@@ -638,11 +695,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Notification prévue le 2026-06-15, décision administrative le 2026-06-20 : la notification ne peut intervenir qu'après.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-050",
+   "cas": "T-051",
    "intitule": "salarié protégé sans autorisation",
    "controle": "CTL-PRT-01",
    "objet": "L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?",
@@ -651,11 +708,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 salarié(s) protégé(s) sans autorisation obtenue : X (membre du CSE). Aucune notification ne peut intervenir avant l'autorisation.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-051",
+   "cas": "T-052",
    "intitule": "intérimaire sur un emploi supprimé",
    "controle": "CTL-EMP-02",
    "objet": "Des recrutements ou des précaires contredisent-ils la suppression ?",
@@ -664,11 +721,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 contrat(s) précaire(s) ou recrutement(s) portent sur un emploi déclaré supprimé : Régleur.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-052",
+   "cas": "T-053",
    "intitule": "attestation d'absence de poste établie par la direction",
    "controle": "CTL-REC-11",
    "objet": "L'absence de poste repose-t-elle sur autre chose qu'une attestation interne ?",
@@ -677,11 +734,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "L'absence de poste ne repose que sur une attestation interne (La DRH). Un état des mouvements de personnel ou un registre daté vaut mieux qu'une affirmation de l'employeur sur lui-même.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-053",
+   "cas": "T-054",
    "intitule": "état des postes absent",
    "controle": "CTL-REC-01",
    "objet": "Un état daté des postes disponibles a-t-il été établi ?",
@@ -690,11 +747,11 @@
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "Aucune liste de postes disponibles n'a été fournie. L'obligation de reclassement ne peut donc pas être contrôlée.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-054",
+   "cas": "T-055",
    "intitule": "état des postes annoncé sans pièce versée",
    "controle": "CTL-REC-01",
    "objet": "Un état daté des postes disponibles a-t-il été établi ?",
@@ -703,11 +760,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "2 poste(s) recensé(s). L'existence de cette liste est déclarée mais l'état daté n'est pas versé : la loyauté de la recherche reste invérifiable.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-055",
+   "cas": "T-056",
    "intitule": "aucun poste et aucune attestation d'absence",
    "controle": "CTL-REC-04",
    "objet": "L'absence de poste est-elle établie, ou seulement affirmée ?",
@@ -716,11 +773,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "L'absence de poste n'est pas attestée. « Il n'y a pas de manquement à l'obligation de reclassement si l'employeur justifie de l'absence de poste disponible » — encore faut-il le justifier (Cass. soc. 2 juillet 2014, n° 13-12.048).",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-056",
+   "cas": "T-057",
    "intitule": "aucune formation proposée sur une mutation technologique",
    "controle": "CTL-REC-05",
    "objet": "Les efforts de formation et d'adaptation ont-ils été faits ?",
@@ -729,11 +786,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Aucune formation n'est renseignée alors que la cause invoquée est une mutation technologique : c'est le terrain sur lequel le litige se noue.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-057",
+   "cas": "T-058",
    "intitule": "offres non adressées à tous les salariés",
    "controle": "CTL-REC-08",
    "objet": "Les offres sont-elles personnalisées et adressées à chaque salarié ?",
@@ -742,11 +799,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 salarié(s) destinataires pour 3 licenciements envisagés : 2 salarié(s) n'ont reçu aucune offre.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-058",
+   "cas": "T-059",
    "intitule": "suppressions déclarées différentes du nombre de licenciements",
    "controle": "CTL-EMP-01",
    "objet": "La suppression d'emploi est-elle documentée poste par poste ?",
@@ -755,11 +812,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Écart entre les suppressions déclarées (1) et le nombre de licenciements (22). Un écart non expliqué affaiblit la démonstration.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-059",
+   "cas": "T-060",
    "intitule": "aucune pièce comptable renseignée",
    "controle": "CTL-ECO-01",
    "objet": "La démonstration comptable est-elle produite ?",
@@ -768,11 +825,11 @@
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "Aucune pièce comptable n'est renseignée.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-060",
+   "cas": "T-061",
    "intitule": "données comptables sans périmètre de secteur",
    "controle": "CTL-ECO-02",
    "objet": "Le périmètre de la démonstration est-il le bon ?",
@@ -781,11 +838,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Rien n'indique que les données portent sur le secteur d'activité du groupe plutôt que sur la seule entreprise. « Il incombe à l'employeur de démontrer, dans le périmètre pertinent, la réalité et le sérieux du motif » (Cass. soc. 31 mars 2021, n° 19-26.054).",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-061",
+   "cas": "T-062",
    "intitule": "mutation technologique non décrite",
    "controle": "CTL-ECO-04",
    "objet": "La mutation technologique est-elle datée et documentée ?",
@@ -794,11 +851,11 @@
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "La mutation n'est pas décrite : outil abandonné, outil nouveau, date de mise en service, montant.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-062",
+   "cas": "T-063",
    "intitule": "une seule réunion là où deux sont exigées",
    "controle": "CTL-CSE-01",
    "objet": "La consultation du comité était-elle due, et a-t-elle eu lieu ?",
@@ -807,11 +864,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 réunion(s) tenue(s) pour 2 exigée(s) dans ce régime.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-063",
+   "cas": "T-064",
    "intitule": "moins de quinze jours entre les deux réunions",
    "controle": "CTL-CSE-02",
    "objet": "Les délais entre convocation, réunions et avis sont-ils respectés ?",
@@ -820,11 +877,11 @@
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "7 jours entre les deux réunions : le minimum de quinze jours n'est pas respecté (L. 1233-30, I).",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-064",
+   "cas": "T-065",
    "intitule": "document des sept renseignements non versé",
    "controle": "CTL-CSE-03",
    "objet": "Les renseignements ont-ils été joints à la convocation ?",
@@ -833,11 +890,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Le document des sept renseignements de l'article L. 1233-31 n'est pas versé. Il doit être adressé « avec la convocation », non remis en séance.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-065",
+   "cas": "T-066",
    "intitule": "aucun avis rendu et délai non établi",
    "controle": "CTL-CSE-04",
    "objet": "L'avis a-t-il été rendu, ou le délai est-il expiré ?",
@@ -846,11 +903,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois, courant depuis la première réunion du 2026-03-23, expire le 2026-05-23 ; à cette date le comité est réputé avoir été consulté. Aucune notification ne doit intervenir avant.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-066",
+   "cas": "T-067",
    "intitule": "plan de sauvegarde sans mesure de suivi",
    "controle": "CTL-PSE-01",
    "objet": "Un plan est-il dû, et son contenu couvre-t-il les mesures exigées ?",
@@ -859,11 +916,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Le plan ne renseigne pas : modalités de suivi de la mise en œuvre. Ces mesures sont examinées par l'administration au regard des moyens de l'entreprise, de l'unité économique et sociale ou du groupe.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-067",
+   "cas": "T-068",
    "intitule": "comptes du groupe non versés alors qu'un plan est dû",
    "controle": "CTL-PSE-02",
    "objet": "Le plan est-il calibré sur les moyens du groupe ?",
@@ -872,11 +929,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Les comptes du groupe ne sont pas versés. Un plan calibré sur les seuls moyens de la filiale est le motif de refus d'homologation le plus fréquent.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-068",
+   "cas": "T-069",
    "intitule": "voie du plan non arrêtée",
    "controle": "CTL-PSE-03",
    "objet": "La voie retenue est-elle arrêtée : accord majoritaire ou document unilatéral ?",
@@ -885,11 +942,11 @@
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "La voie n'est pas arrêtée. Elle détermine tout le calendrier et se choisit avant la première réunion.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-069",
+   "cas": "T-070",
    "intitule": "convention et accords non versés",
    "controle": "CTL-CCN-01",
    "objet": "La convention et les accords sont-ils versés ?",
@@ -898,11 +955,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "La convention collective n'est pas versée. Les accords d'entreprise ne sont pas versés. Tant qu'ils ne le sont pas, l'audit applique la loi seule, alors que ces textes priment sur les critères d'ordre, les délais et l'indemnité.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-070",
+   "cas": "T-071",
    "intitule": "comptes du groupe sans périmètre déclaré",
    "controle": "CTL-PCE-03",
    "objet": "Le périmètre des pièces correspond-il au périmètre à démontrer ?",
@@ -911,11 +968,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Les pièces comptables enregistrées ne déclarent pas couvrir le secteur d'activité du groupe. La démonstration risque de porter sur la seule entreprise.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-071",
+   "cas": "T-072",
    "intitule": "convention déclarée mais non versée comme pièce",
    "controle": "CTL-CCN-02",
    "objet": "La convention versée est-elle celle de l'IDCC déclaré, et à jour ?",
@@ -924,11 +981,11 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "IDCC 1486 déclaré, mais aucune convention versée comme pièce datée. L'application peut la récupérer dans KALI, mais rien n'établit que c'est celle que vous appliquez.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   },
   {
-   "cas": "T-072",
+   "cas": "T-073",
    "intitule": "accords annoncés mais non lus",
    "controle": "CTL-CCN-03",
    "objet": "Les accords versés ont-ils été confrontés aux règles légales ?",
@@ -937,8 +994,8 @@
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Accords annoncés comme versés, mais aucun n'est enregistré comme lu : leur articulation avec la loi n'a pas été faite.",
-   "version": "e040ce908a1c",
-   "execute": "2026-08-15 20:59:28"
+   "version": "5eecb135c6c3",
+   "execute": "2026-08-15 21:35:46"
   }
  ]
 }

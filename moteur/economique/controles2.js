@@ -37,8 +37,19 @@ c("CTL-PCE-03","Pièces","Le périmètre des pièces correspond-il au périmètr
  f => { if (!f.groupe) return { etat: SO, motif: "L'entreprise n'appartient à aucun groupe : le périmètre de l'entreprise suffit." };
    const eco = PC.get(f, "liasse"), grp = PC.get(f, "comptes-groupe");
    if (!eco && !grp) return { etat: MANQ, motif: "Aucune pièce comptable enregistrée." };
-   if (grp && grp.perimetre && /groupe|secteur/i.test(grp.perimetre))
-     return { etat: CONF, motif: `Les comptes du groupe couvrent le périmètre « ${grp.perimetre} ».` };
+   if (grp && grp.perimetre && /groupe|secteur/i.test(grp.perimetre)) {
+     /* L'étiquette portée sur la pièce est une déclaration, pas un contenu :
+        la même réserve que pour CTL-ECO-02. Si des sociétés françaises du
+        groupe peuvent relever du même secteur, la pièce doit les nommer. */
+     const soeurs = (f.societes || []).filter(s => !s.etranger && s.activite && !/holding/i.test(s.activite));
+     if (soeurs.length && vide(f.societesDuSecteur))
+       return { etat: RISQ, motif: `La pièce déclare couvrir le périmètre « ${grp.perimetre} », mais les sociétés qui composent ce secteur ne sont pas énumérées. ${soeurs.length} société(s) française(s) du groupe pourraient en relever : ${soeurs.map(s => s.nom + " (" + s.activite + ")").join(", ")}. Une étiquette de périmètre n'est pas une couverture : la pièce doit nommer les sociétés qu'elle agrège.` };
+     const nonCouvertes = (f.societesDuSecteur || []).filter(n => !(grp.societesCouvertes || []).includes(n));
+     if ((f.societesDuSecteur || []).length && (grp.societesCouvertes || []).length && nonCouvertes.length)
+       return { etat: NC, motif: `La pièce déclare couvrir le secteur, mais ${nonCouvertes.length} société(s) du secteur n'y figurent pas : ${nonCouvertes.join(", ")}. Les agrégats ne portent donc pas sur le périmètre à démontrer.` };
+     return { etat: CONF, motif: `Les comptes du groupe couvrent le périmètre « ${grp.perimetre} »`
+       + ((f.societesDuSecteur || []).length ? `, et les sociétés du secteur sont énumérées : ${f.societesDuSecteur.join(", ")}.` : ".") };
+   }
    return { etat: RISQ, motif: "Les pièces comptables enregistrées ne déclarent pas couvrir le secteur d'activité du groupe. La démonstration risque de porter sur la seule entreprise." }; });
 
 c("CTL-PCE-04","Pièces","Les pièces ont-elles été lues, ou seulement déposées ?",[],
