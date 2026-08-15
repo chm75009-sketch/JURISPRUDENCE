@@ -12,10 +12,16 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-1.9";
+const CACHE = "jurisprudence-2.0";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
+  /* Les deux audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
+     mégaoctet, et c'est délibéré : une page d'audit installée qui échouerait
+     hors connexion serait pire que pas d'installation du tout. L'audit se
+     calcule entièrement sur le poste — il n'a besoin d'aucun réseau. */
+  "./audit.html", "./moteur-eco.js",
+  "./audit-cse.html", "./moteur-cse.js",
 ];
 
 self.addEventListener("install", e => {
