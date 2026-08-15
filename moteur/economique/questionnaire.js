@@ -24,6 +24,8 @@ const CHAMPS=[
   ["dateJugement","Date du jugement d'ouverture ou de liquidation","AAAA-MM-JJ"],
   ["qualiteAuteur","Qui met en œuvre le plan de licenciement","employeur / administrateur / liquidateur"],
   ["ordonnanceJugeCommissaire","Ordonnance du juge-commissaire autorisant les licenciements : date et référence","texte"]]],
+ ["Transfert d'entité",[
+  ["transfertEnvisage","Un transfert d'entité économique est-il envisagé ?","oui / non"]]],
  ["Groupe — origine des difficultés",[
   ["fluxIntragroupe","Redevances de marque, management fees et prix de transfert versés aux sociétés du groupe, par exercice — montants comptables, non une appréciation","tableau"],
   ["resultatHorsFlux","Résultat d'exploitation reconstitué hors ces flux, par exercice","tableau"],

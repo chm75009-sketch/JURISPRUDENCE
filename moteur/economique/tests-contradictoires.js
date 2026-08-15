@@ -33,6 +33,15 @@ const BASE={entreprise:"T",effectif:320,effectifGroupe:602,groupe:true,cause:"1"
   reclassementInterne:"11 postes",formation:"350 heures",creation:"12 000 €",
   suivi:"commission tous les 2 mois",dateDecisionAdmin:"2026-06-10"}};
 const CAS=[
+ ["entretiens organisés là où la loi en dispense","CTL-ENT-01","risque à vérifier",
+  f=>{f.nbLicenciements=12; f.cseExistant=true; f.dateEntretien="2026-05-04";}],
+ ["moins de dix licenciements sans entretien déclaré","CTL-ENT-01","non conforme",
+  f=>{f.nbLicenciements=4; f.licenciementsRecents30j=0; delete f.dateEntretien;}],
+ ["licenciement consécutif au refus d'un accord de performance collective","CTL-APC-01","non conforme",
+  f=>{f.refusAPC=true;}],
+ ["reconstitution hors flux qui ne se recalcule pas","CTL-FRA-01","non conforme",
+  f=>{f.groupe=true; f.resultatExploitation=[{annee:2025,valeur:-1870}];
+      f.fluxIntragroupe=[{annee:2025,total:1000}]; f.resultatHorsFlux=[{annee:2025,valeur:4000}];}],
  ["liquidation : notification hors de la fenêtre de garantie","CTL-PCO-03","non conforme",
   f=>{f.procedureCollective=true; f.typeProcedure="liquidation"; f.qualiteAuteur="liquidateur";
       f.dateJugement="2026-04-01"; f.dateNotification="2026-05-15";

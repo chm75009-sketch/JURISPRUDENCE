@@ -112,6 +112,25 @@ function perimetre(f) {
     exclusions: [], societesEtrangeresIncluses: etrangeres };
 }
 
+/* L'entretien préalable n'est pas toujours dû : l'article L. 1233-38 en dispense
+   l'employeur qui licencie au moins dix salariés sur trente jours dans une
+   entreprise dotée d'un comité. Imposer alors un calendrier individuel, c'est
+   appliquer une règle là où la loi l'écarte. */
+function entretienDu(f) {
+  const c = comptes30j(f);
+  const cse = f.cseExistant;
+  if (c.total30j >= 10 && cse === true)
+    return { du: false, texte: "L. 1233-38",
+      motif: `${c.total30j} licenciements sur trente jours et un comité social et économique en place : la procédure d'entretien préalable ne s'applique pas.` };
+  if (c.total30j >= 10 && cse === undefined)
+    return { du: null, texte: "L. 1233-38",
+      motif: `${c.total30j} licenciements sur trente jours. L'existence d'un comité n'est pas renseignée : la dispense d'entretien préalable ne peut pas être établie.` };
+  return { du: true, texte: "L. 1233-11",
+    motif: c.total30j >= 10
+      ? `${c.total30j} licenciements sur trente jours, mais aucun comité : l'entretien préalable reste dû.`
+      : `Moins de dix licenciements sur trente jours : l'entretien préalable est dû pour chaque salarié.` };
+}
+
 /* --- état du texte L. 1233-3 applicable à une date --- */
 function etatTexte(d) {
   if (d >= "2017-09-24") return { etat: "depuis le 24 septembre 2017", contenu: "indicateurs, seuils et périmètre du secteur d'activité du groupe" };
@@ -211,7 +230,7 @@ function baisseTrimestrielle(f) {
 }
 const _EXPORT_ = { seuilTrimestres, trancheEffectif, regimeEco, accompagnement, perimetre,
   etatTexte, calendrier, baisseTrimestrielle, ajouteJoursOuvrables, ajouteJours, comptes30j,
-  ajouteMois, delaiAvisMois, paques, feriesDe, FERIES };
+  ajouteMois, delaiAvisMois, paques, feriesDe, FERIES, entretienDu };
 
 /* ================= INDEMNITÉS, PRÉAVIS, BARÈME ================= */
 

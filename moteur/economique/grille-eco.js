@@ -105,7 +105,8 @@ const R = [
 
 {id:"SOC-09", rubrique:"Socle · calendrier",
  question:"Quels délais individuels respecter ?",
- si:f=>!!f.dateEntretien,
+ /* Le calendrier individuel ne vaut que là où l'entretien est dû. */
+ si:f=>!!f.dateEntretien&&M.entretienDu(f).du!==false,
  alors:f=>{const c=M.calendrier(f);
   return `Entretien préalable le ${c.entretien}, la convocation devant être présentée au moins cinq jours ouvrables avant. Notification au plus tôt le ${c.notificationAuPlusTot} — délai de ${c.delaiApplique}. Un délai conventionnel plus favorable au salarié prime.`;},
  fondement:["L. 1233-11","L. 1233-13","L. 1233-15","L. 1233-39"],
@@ -191,6 +192,21 @@ const R = [
    "Faire courir le délai depuis la convocation au lieu de la première réunion.",
    "Retenir comme première réunion la première de la liste plutôt que la plus ancienne."],
  valeur:"arbitrage", source:"rédigée"},
+
+{id:"ENT-01", rubrique:"Socle · calendrier",
+ question:"L'entretien préalable est-il dû ?",
+ si:f=>typeof f.nbLicenciements==="number",
+ alors:f=>{const e=M.entretienDu(f);
+   return e.motif + " " + (e.du===false
+     ? "La notification n'est alors commandée ni par la convocation ni par l'entretien, mais par l'avis du comité et, lorsqu'un plan est soumis à l'administration, par sa décision. Organiser malgré tout des entretiens n'est pas interdit, mais n'ajoute aucun délai opposable."
+     : (e.du===null ? "Tant que ce point n'est pas renseigné, le calendrier individuel est donné à titre conservatoire."
+     : "La convocation doit être présentée au moins cinq jours ouvrables avant l'entretien, et la notification ne peut intervenir avant le délai applicable."));},
+ fondement:["L. 1233-38","L. 1233-11","L. 1233-13"],
+ juris:[],
+ pieces:["Procès-verbal des élections ou de carence","Convocations aux entretiens, le cas échéant"],
+ erreurs:["Dérouler un calendrier individuel dans un licenciement d'au moins dix salariés avec comité : la loi en dispense.",
+   "En déduire qu'aucun délai ne s'impose : ceux du comité et de l'administration demeurent."],
+ valeur:"principe", source:"rédigée"},
 ];
 
 /* ===================== CAUSE 1 ===================== */

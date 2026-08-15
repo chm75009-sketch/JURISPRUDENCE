@@ -262,6 +262,16 @@ c("CTL-FRA-01","Groupe","Les difficultés invoquées peuvent-elles procéder de 
    if (!local) return { etat: MANQ, motif: "Le résultat d'exploitation n'est pas renseigné." };
    if (!f.groupe) return { etat: SO, motif: "L'entreprise n'appartient à aucun groupe." };
    if (!hors) return { etat: MANQ, motif: "Le résultat d'exploitation reconstitué hors flux intragroupe — redevances de marque, management fees, prix de transfert — n'est pas renseigné : l'inversion du signe ne peut pas être vérifiée." };
+   /* La reconstitution doit être arithmétiquement cohérente avec les flux
+      déclarés : résultat + flux de l'exercice = résultat reconstitué. Sans ce
+      contrôle, la reconstitution reste une affirmation. */
+   const flux = (f.fluxIntragroupe || []).find(x => x.annee === hors.annee);
+   if (!flux) return { etat: RISQ, motif: `Un résultat reconstitué est déclaré pour ${hors.annee}, mais aucun montant de flux intragroupe n'est renseigné pour cet exercice : la reconstitution est déclarative et ne peut pas être recalculée.` };
+   const total = typeof flux.total === "number" ? flux.total
+     : (flux.redevanceMarque || 0) + (flux.managementFees || 0) + (flux.prixTransfert || 0);
+   const attendu = (local.annee === hors.annee ? local.valeur : (f.resultatExploitation || []).find(x => x.annee === hors.annee)?.valeur);
+   if (typeof attendu === "number" && Math.abs(attendu + total - hors.valeur) > 1)
+     return { etat: NC, motif: `Reconstitution incohérente pour ${hors.annee} : résultat d'exploitation ${attendu} plus ${total} de flux intragroupe donnent ${attendu + total}, alors que le résultat reconstitué déclaré est ${hors.valeur}. L'écart est de ${hors.valeur - attendu - total}. Une reconstitution qui ne se recalcule pas ne démontre rien.` };
    return (local.valeur < 0 && hors.valeur >= 0)
      ? { etat: RISQ, motif: `Résultat d'exploitation déclaré ${local.valeur} pour ${local.annee}, résultat reconstitué hors flux intragroupe ${hors.valeur} : les difficultés invoquées disparaissent une fois ces flux neutralisés. Ce contrôle ne conclut jamais à la conformité. L'appréciation d'une organisation artificielle des difficultés relève d'un professionnel, et elle écarte la limitation du périmètre d'appréciation au territoire national.` }
      : { etat: RISQ, motif: `Résultat d'exploitation ${local.valeur}, résultat hors flux intragroupe ${hors.valeur} : le signe ne s'inverse pas. Le point reste à documenter, la base ne conclut pas à la conformité sur cette question.` }; });
@@ -437,5 +447,31 @@ c("CTL-PCO-03","Procédure collective","La notification intervient-elle dans la 
    return f.dateNotification > limite
      ? { etat: NC, motif: `Jugement de liquidation du ${f.dateJugement}, notification du ${f.dateNotification}, soit ${j} jours. La garantie couvre les ruptures intervenant dans les ${pse ? "vingt et un jours, un plan de sauvegarde de l'emploi étant élaboré" : "quinze jours"} suivant le jugement, soit jusqu'au ${limite}. Hors de cette fenêtre, les créances de rupture ne sont pas garanties.` }
      : { etat: CONF, motif: `Notification ${j} jours après le jugement de liquidation, dans la fenêtre de ${pse ? "vingt et un" : "quinze"} jours qui expire le ${limite}.` }; });
+
+
+/* ---------------- Entretien préalable : dû ou non ---------------- */
+c("CTL-ENT-01","Procédure","Le calendrier suivi est-il celui que le régime commande ?",["L. 1233-38","L. 1233-11"],
+ f => { const e = M.entretienDu(f);
+   if (e.du === null) return { etat: MANQ, motif: e.motif };
+   if (e.du === false)
+     return vide(f.dateEntretien)
+       ? { etat: CONF, motif: e.motif + " Aucun entretien n'est déclaré, ce qui est conforme au régime." }
+       : { etat: RISQ, motif: e.motif + ` Un entretien est pourtant déclaré le ${f.dateEntretien}. Le tenir n'est pas irrégulier, mais il n'ouvre aucun délai opposable : la notification reste commandée par l'avis du comité et, le cas échéant, par la décision administrative. Se régler sur le calendrier individuel exposerait à notifier trop tôt au regard du calendrier collectif.` };
+   return vide(f.dateEntretien)
+     ? { etat: NC, motif: e.motif + " Aucune date d'entretien n'est déclarée." }
+     : { etat: CONF, motif: e.motif + ` Entretien déclaré le ${f.dateEntretien}.` }; });
+
+/* ---------------- Transfert d'entité ---------------- */
+c("CTL-TRF-01","Transfert d'entité","Un transfert est-il envisagé, et les licenciements s'y heurtent-ils ?",["L. 1224-1"],
+ f => { if (vide(f.transfertEnvisage)) return { etat: MANQ, motif: "L'existence d'un transfert d'entité n'est pas renseignée." };
+   if (f.transfertEnvisage !== true) return { etat: SO, motif: "Aucun transfert d'entité économique n'est envisagé." };
+   return { etat: RISQ, motif: "Un transfert d'entité est envisagé. Tous les contrats en cours au jour de la modification subsistent avec le nouvel employeur : les licenciements prononcés à l'occasion du transfert se heurtent à l'article L. 1224-1, et la répartition des salariés entre l'entité transférée et celle qui demeure décide de leur sort. Ce contrôle ne conclut jamais à la conformité — l'articulation du transfert avec le projet de licenciement appelle l'examen d'un professionnel." }; });
+
+/* ---------------- Refus d'un accord de performance collective ---------------- */
+c("CTL-APC-01","Qualification","Le licenciement consécutif au refus d'un accord de performance collective est-il correctement qualifié ?",
+ ["L. 2254-2"],
+ f => { if (vide(f.refusAPC)) return { etat: MANQ, motif: "L'existence d'un licenciement consécutif au refus d'un accord de performance collective n'est pas renseignée." };
+   if (f.refusAPC !== true) return { etat: SO, motif: "Aucun licenciement consécutif au refus d'un accord de performance collective." };
+   return { etat: NC, motif: "Le licenciement du salarié qui refuse l'application d'un accord de performance collective repose sur un motif spécifique qui constitue une cause réelle et sérieuse : il n'est pas un licenciement pour motif économique. Le soumettre au régime de l'article L. 1233-3 — cause économique, critères d'ordre, plan de sauvegarde de l'emploi — est une erreur de qualification. Les développements du présent rapport sur ces points ne lui sont pas applicables." }; });
 
 module.exports = C;

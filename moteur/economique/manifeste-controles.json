@@ -1,16 +1,16 @@
 {
  "objet": "manifeste des contrôles",
- "empreinte": "47a19beef9c4",
+ "empreinte": "e040ce908a1c",
  "empreintesFichiers": {
-  "moteur.js": "895186e42a6c",
+  "moteur.js": "2304d9348fbe",
   "controles.js": "a1b19f1438e8",
-  "controles2.js": "12c97cec074b",
-  "grille-eco.js": "dfaeb2b51d02",
+  "controles2.js": "5e1061aa8b42",
+  "grille-eco.js": "0aca350d0d14",
   "grille-auto.js": "20ca038f05b7",
   "pieces.js": "95ed7ab57ced",
   "preuve.js": "ba61fe6fc07a"
  },
- "genere": "2026-08-15 20:53:42",
+ "genere": "2026-08-15 20:55:58",
  "verification": {
   "identifiantsUniques": true,
   "conformiteSansTest": [],
@@ -20,14 +20,14 @@
   "coherenceTestes": true
  },
  "compteurs": {
-  "controles": 65,
-  "conformite": 57,
+  "controles": 68,
+  "conformite": 60,
   "detection": 8,
-  "coherence": 7,
-  "testes": 57,
-  "casDeTest": 68,
+  "coherence": 8,
+  "testes": 60,
+  "casDeTest": 72,
   "echecs": 0,
-  "regles": 235
+  "regles": 236
  },
  "definitions": [
   [
@@ -1130,21 +1130,25 @@
    "id": "CTL-FRA-01",
    "rubrique": "Groupe",
    "objet": "Les difficultés invoquées peuvent-elles procéder de flux intragroupe ?",
-   "type": "détection — conclut au risque, jamais à la conformité",
+   "type": "cohérence — porte sur la relation entre deux champs",
    "entrees": [
     "resultatExploitation",
     "resultatHorsFlux",
-    "groupe"
+    "groupe",
+    "fluxIntragroupe"
    ],
    "piece": "—",
    "etats": [
+    "non conforme",
     "risque à vérifier",
     "donnée manquante",
     "sans objet"
    ],
    "fondement": "L. 1233-3",
-   "tests": [],
-   "teste": false
+   "tests": [
+    "reconstitution hors flux qui ne se recalcule pas"
+   ],
+   "teste": true
   },
   {
    "id": "CTL-ORD-02",
@@ -1452,6 +1456,66 @@
    "fondement": "L. 3253-8",
    "tests": [
     "liquidation : notification hors de la fenêtre de garantie"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-ENT-01",
+   "rubrique": "Procédure",
+   "objet": "Le calendrier suivi est-il celui que le régime commande ?",
+   "type": "conformité",
+   "entrees": [
+    "dateEntretien"
+   ],
+   "piece": "—",
+   "etats": [
+    "conforme",
+    "non conforme",
+    "risque à vérifier",
+    "donnée manquante"
+   ],
+   "fondement": "L. 1233-38 · L. 1233-11",
+   "tests": [
+    "entretiens organisés là où la loi en dispense",
+    "moins de dix licenciements sans entretien déclaré"
+   ],
+   "teste": true
+  },
+  {
+   "id": "CTL-TRF-01",
+   "rubrique": "Transfert d'entité",
+   "objet": "Un transfert est-il envisagé, et les licenciements s'y heurtent-ils ?",
+   "type": "détection — conclut au risque, jamais à la conformité",
+   "entrees": [
+    "transfertEnvisage"
+   ],
+   "piece": "—",
+   "etats": [
+    "risque à vérifier",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 1224-1",
+   "tests": [],
+   "teste": false
+  },
+  {
+   "id": "CTL-APC-01",
+   "rubrique": "Qualification",
+   "objet": "Le licenciement consécutif au refus d'un accord de performance collective est-il correctement qualifié ?",
+   "type": "conformité",
+   "entrees": [
+    "refusAPC"
+   ],
+   "piece": "—",
+   "etats": [
+    "non conforme",
+    "donnée manquante",
+    "sans objet"
+   ],
+   "fondement": "L. 2254-2",
+   "tests": [
+    "licenciement consécutif au refus d'un accord de performance collective"
    ],
    "teste": true
   }
