@@ -7,12 +7,13 @@
 
    TROIS RÈGLES DE MÉTHODE, écrites ici plutôt que dispersées :
 
-   1. Le régime est INDÉTERMINÉ tant que l'accord applicable n'a pas été
-      recherché ET vérifié. Le supplétif ne s'applique pas « par défaut » au
-      sens de « quand on n'a rien trouvé » : il s'applique en l'absence
-      d'accord, ce qui est un fait à établir, pas un silence à interpréter.
-      Une entreprise qui ignore si un accord existe n'est pas sous le supplétif :
-      elle est sous un régime qu'elle n'a pas identifié.
+   1. Une seule question commande : y a-t-il un accord ? Non — la loi
+      s'applique, c'est-à-dire le décret. Oui — on demande l'accord, puisque
+      c'est lui qui fixe alors le contenu et qu'on ne peut pas vérifier un
+      texte qu'on n'a pas. Le régime n'est INDÉTERMINÉ que dans deux cas :
+      la question n'a pas reçu de réponse, ou l'accord annoncé n'est pas joint.
+      Un silence n'est pas un « non » : une question sans réponse ne vaut
+      aucun régime.
 
    2. Le seuil qui commande la BDESE n'est pas celui du comité. Le comité se met
       en place à onze salariés ; les attributions récurrentes — dont la base
@@ -38,7 +39,6 @@ const SEUIL_CONTENU = 300;
 
 const nombre = x => (typeof x === "number" && isFinite(x) ? x : null);
 const dit = x => x === true || x === "oui";
-const nie = x => x === false || x === "non";
 const renseigne = x => x !== undefined && x !== null && x !== "";
 
 function ajouterMois(iso, mois) {
@@ -70,15 +70,6 @@ const REGIMES = {
 function regime(f) {
   const eff = nombre(f.effectif);
 
-  /* La recherche de l'accord est un fait à établir. Tant qu'elle n'est pas
-     déclarée faite, aucun régime n'est retenu — pas même le supplétif. */
-  if (!renseigne(f.accordRecherche))
-    return { regime: REGIMES.INDETERMINE, cause: "recherche non déclarée",
-      motif: "Il n'est pas déclaré si un accord définissant la base a été recherché. Le régime supplétif ne s'applique pas faute d'avoir cherché : il s'applique en l'absence d'accord, ce qui est un fait à établir. Tant que la recherche n'est pas faite, le contenu exigible est inconnu — et l'audit ne peut pas conclure." };
-  if (nie(f.accordRecherche))
-    return { regime: REGIMES.INDETERMINE, cause: "recherche non faite",
-      motif: "Aucune recherche d'accord n'a été conduite. Trois textes peuvent en porter un : un accord d'entreprise (L. 2312-21, al. 1er), un accord conclu avec le comité en l'absence de délégué syndical, ou — en deçà de trois cents salariés et à défaut d'accord d'entreprise — un accord de branche. Conduisez la recherche avant d'auditer le contenu." };
-
   if (dit(f.accordEntreprise)) {
     if (!dit(f.accordEntrepriseVerse))
       return { regime: REGIMES.INDETERMINE, cause: "accord déclaré non versé",
@@ -101,27 +92,20 @@ function regime(f) {
       motif: `À défaut d'accord d'entreprise et l'effectif étant inférieur à trois cents salariés (${eff}), un accord de branche peut définir la base. C'est lui qui commande, sous la même réserve de plancher.` };
   }
 
+  /* Ni accord d'entreprise ni accord de branche. Encore faut-il que la question
+     ait reçu une réponse : un silence n'est pas un « non ». */
+  if (!renseigne(f.accordEntreprise) && !renseigne(f.accordBranche))
+    return { regime: REGIMES.INDETERMINE, cause: "accord non déclaré",
+      motif: "Il n'est pas dit si un accord définit la base. Répondez oui ou non : sans accord, c'est le décret qui fixe le contenu ; avec un accord, c'est lui, et il faut alors le joindre." };
+
   if (eff === null)
     return { regime: REGIMES.INDETERMINE, cause: "effectif inconnu",
-      motif: "Aucun accord n'a été trouvé, mais l'effectif n'est pas renseigné : le contenu supplétif exigible dépend du seuil de trois cents salariés (R. 2312-8 en deçà, R. 2312-9 au-delà)." };
-
-  /* L'absence d'accord se prouve, elle ne se déclare pas.
-
-     La recherche déclarée « faite » est une affirmation ; ce qui l'établit est
-     une déclaration datée et signée, disant qui a cherché, où, et à quelle date.
-     Sans elle, le supplétif reposerait sur la seule parole de celui qui l'invoque
-     — et c'est précisément ce que ce module refuse ailleurs. Tant que la preuve
-     manque, le régime reste indéterminé. */
-  const preuve = f.preuveAbsenceAccord || {};
-  if (!renseigne(preuve.date) || !renseigne(preuve.auteur))
-    return { regime: REGIMES.INDETERMINE, cause: "absence d'accord non prouvée",
-      motif: "La recherche d'accord est déclarée faite et n'a rien trouvé, mais l'absence d'accord n'est pas établie : il y faut une déclaration datée et signée, disant qui a conduit la recherche et à quelle date. Sans elle, le régime supplétif reposerait sur une simple affirmation — et le contenu exigible resterait, en réalité, inconnu." };
+      motif: "Aucun accord ne définit la base : c'est le décret qui s'applique. Mais l'effectif n'est pas renseigné, et le contenu dû n'est pas le même de part et d'autre de trois cents salariés (R. 2312-8 en deçà, R. 2312-9 au-delà)." };
 
   return { regime: REGIMES.SUPPLETIF,
-    preuve: { date: preuve.date, auteur: preuve.auteur },
     article: eff >= SEUIL_CONTENU ? "R. 2312-9" : "R. 2312-8",
     seuil: eff >= SEUIL_CONTENU ? "au moins trois cents salariés" : "moins de trois cents salariés",
-    motif: `Aucun accord ne définit la base — absence établie par la déclaration du ${preuve.date}, signée par ${preuve.auteur}. Le contenu est celui du décret, article ${eff >= SEUIL_CONTENU ? "R. 2312-9" : "R. 2312-8"}, l'entreprise comptant ${eff} salariés.` };
+    motif: `Aucun accord ne définit la base : c'est la loi qui s'applique. Le contenu dû est celui du décret, article ${eff >= SEUIL_CONTENU ? "R. 2312-9" : "R. 2312-8"}, l'entreprise comptant ${eff} salariés.` };
 }
 
 /* -------------------------------------------------- les dates d'exigibilité

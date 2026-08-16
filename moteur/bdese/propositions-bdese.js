@@ -24,15 +24,13 @@ const RUBRIQUES = (() => {
 const OUI_NON = ["oui", "non"];
 
 const P = {
-  accordRecherche: { valeurs: OUI_NON, libre: false,
-    aide: "Avez-vous vérifié s'il existe un accord d'entreprise ou de branche sur la base de données ? Regardez vos accords signés, ou demandez à votre service des ressources humaines. Sans cette réponse, l'application ne sait pas quelles informations sont obligatoires chez vous, et elle s'arrête là." },
   accordEntreprise: { valeurs: OUI_NON, libre: false,
-    aide: "Un accord signé avec les syndicats — ou, s'il n'y a pas de délégué syndical, avec le comité à la majorité de ses membres titulaires." },
+    aide: "Un accord signé avec les syndicats — ou, s'il n'y a pas de délégué syndical, avec le comité à la majorité de ses membres titulaires. Si vous n'en avez pas, répondez non : c'est alors la loi qui fixe le contenu de la base." },
   accordEntrepriseVerse: { valeurs: OUI_NON, libre: false,
-    aide: "Si vous dites qu'un accord existe mais ne le joignez pas, l'application ne peut pas savoir ce qu'il prévoit : elle ne conclura sur rien." },
+    aide: "Joignez-le. C'est lui qui dit ce que votre base doit contenir : sans son texte, l'application n'a rien à vérifier." },
   accordBranche: { valeurs: OUI_NON, libre: false,
-    aide: "Un accord de branche ne vaut que si votre entreprise compte moins de 300 salariés et qu'aucun accord d'entreprise n'existe." },
-  accordBrancheVerse: { valeurs: OUI_NON, libre: false, aide: "Même chose : joignez-le, sinon l'application ne peut rien vérifier." },
+    aide: "À poser seulement si vous n'avez pas d'accord d'entreprise. Un accord de branche ne vaut que dans les entreprises de moins de 300 salariés." },
+  accordBrancheVerse: { valeurs: OUI_NON, libre: false, aide: "Joignez-le, comme l'accord d'entreprise." },
   etablissementsDistincts: { valeurs: OUI_NON, libre: false,
     aide: "Une entreprise à plusieurs sites peut tenir sa base au niveau de l'entreprise, de chaque établissement, ou des deux. C'est l'accord qui le dit." },
   accordPeriodiciteConsultations: { valeurs: OUI_NON, libre: false,

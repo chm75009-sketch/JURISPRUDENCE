@@ -53,22 +53,21 @@ affiché caractère par caractère, et **il bloque la publication**.
 
 ## La règle qui commande tout : le régime d'abord
 
-Le régime supplétif du décret **ne s'applique pas « faute d'avoir trouvé »** : il
-s'applique en l'absence d'accord, ce qui est un fait à établir. Tant que la
-recherche d'accord n'est pas déclarée conduite, ou tant qu'un accord déclaré
-n'est pas versé, le module répond **« régime indéterminé »** et n'audite aucun
-contenu.
+Une seule question commande : **y a-t-il un accord ?**
+
+- **Non** — c'est la loi qui s'applique : le contenu dû est celui du décret
+  (R. 2312-8 en deçà de trois cents salariés, R. 2312-9 au-delà).
+- **Oui** — c'est l'accord qui commande, et il faut alors le joindre.
+
+Le module ne répond **« régime indéterminé »** que dans deux cas : la question
+n'a pas reçu de réponse, ou l'accord annoncé n'est pas joint. Un silence n'est
+pas un « non » — une question sans réponse ne vaut aucun régime, et aucun
+contenu n'est alors audité.
 
 Auditer un contenu sans savoir quel texte le commande produirait des
 non-conformités inventées — un accord peut légalement organiser la base
 autrement, sous la seule réserve du plancher. La chaîne de publication mesure
 cette règle : `contenuAuditeSurRegimeIndetermine` doit rester à zéro.
-
-**L'absence d'accord se prouve, elle ne se déclare pas.** Une recherche déclarée
-« faite » est une affirmation ; ce qui l'établit est une **déclaration datée et
-signée**, disant qui a conduit la recherche et à quelle date. À défaut, le régime
-reste indéterminé — le supplétif reposerait sinon sur la seule parole de celui
-qui l'invoque, ce que ce module refuse partout ailleurs.
 
 Quatre régimes : accord d'entreprise (L. 2312-21, al. 1er), accord de branche
 (dernier alinéa, en deçà de trois cents salariés et à défaut d'accord
@@ -144,8 +143,8 @@ Le contrôle le réclame et rend « risque à vérifier » à défaut.
 1. **Le manifeste réglementaire** — les 32 articles retenus, chacun avec son
    identifiant `LEGIARTI…`, sa longueur et le résultat de sa relecture. Il est
    écrit dans `manifeste-bdese.json`, section `manifesteReglementaire`.
-2. **Les cas d'épreuve du moteur de régime** — `cas-regime.js` : 13 cas de
-   régime (dont **7 où le module doit répondre « indéterminé »** plutôt que
+2. **Les cas d'épreuve du moteur de régime** — `cas-regime.js` : 12 cas de
+   régime (dont **5 où le module doit répondre « indéterminé »** plutôt que
    retomber sur le supplétif), 5 cas de dates et 4 cas de délais.
 
 ## Les textes, relus à la source
@@ -198,8 +197,11 @@ contenu est audité sur un régime indéterminé, ou si le contrôle de preuve c
   partagé — accès simultané employeur / élus / expert, traçabilité des
   consultations — est reportée, non tranchée. Aucun écrit ne doit promettre un
   accès partagé tant qu'elle ne l'est pas.
-- ~~Ce qui prouve « absence d'accord vérifiée »~~ — **tranché** : une déclaration
-  datée et signée est désormais exigée, et le régime reste indéterminé à défaut.
+- ~~Ce qui prouve « absence d'accord vérifiée »~~ — **tranché** : rien à prouver.
+  L'employeur a un accord ou n'en a pas ; s'il n'en a pas, la loi s'applique.
+  L'exigence d'une déclaration datée et signée, un temps posée, a été retirée :
+  elle faisait porter au client une formalité que le code du travail ne demande
+  pas, et bloquait l'audit sur une pièce sans fondement légal.
 - **Le comité central et les établissements** : le niveau de mise en place est
   contrôlé, et R. 2312-6 II est cité. La consultation à double niveau n'est pas
   modélisée plus avant.

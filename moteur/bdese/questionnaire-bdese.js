@@ -58,13 +58,10 @@ q("Identité", "dateAudit", "Date à laquelle la situation est décrite", "AAAA-
 q("Identité", "effectif", "Effectif de l'entreprise au sens de l'article L. 1111-2", "nombre", "registre du personnel");
 q("Identité", "etablissementsDistincts", "L'entreprise comporte-t-elle plusieurs établissements distincts ?", "oui / non", "accord ou décision de découpage");
 
-q("Le régime applicable", "accordRecherche", "La recherche d'un accord définissant la base a-t-elle été conduite ?", "oui / non", "note de recherche, datée et signée");
-q("Le régime applicable", "accordEntreprise", "Un accord d'entreprise définit-il la base ?", "oui / non", "accord d'entreprise");
-q("Le régime applicable", "accordEntrepriseVerse", "Cet accord est-il joint au dossier ?", "oui / non", "l'accord lui-même");
-q("Le régime applicable", "accordBranche", "À défaut, un accord de branche la définit-il ?", "oui / non", "accord de branche");
-q("Le régime applicable", "accordBrancheVerse", "Cet accord de branche est-il joint au dossier ?", "oui / non", "l'accord lui-même");
-q("Le régime applicable", "preuveAbsenceAccord.date", "Date de la déclaration constatant l'absence d'accord", "AAAA-MM-JJ", "déclaration datée et signée");
-q("Le régime applicable", "preuveAbsenceAccord.auteur", "Auteur et signataire de cette déclaration", "texte", "la déclaration elle-même");
+q("Le régime applicable", "accordEntreprise", "Avez-vous un accord d'entreprise sur la base de données ?", "oui / non", "accord d'entreprise");
+q("Le régime applicable", "accordEntrepriseVerse", "Si oui, l'avez-vous joint ?", "oui / non", "l'accord lui-même");
+q("Le régime applicable", "accordBranche", "Sinon, avez-vous un accord de branche sur la base ?", "oui / non", "accord de branche");
+q("Le régime applicable", "accordBrancheVerse", "Si oui, l'avez-vous joint ?", "oui / non", "l'accord lui-même");
 q("Le régime applicable", "pieces", "Pièces versées au dossier", "liste d'objets", "les pièces elles-mêmes");
 
 q("Les dates", "dateSeuil50Atteint", "Date à laquelle l'effectif a atteint cinquante salariés pendant douze mois consécutifs", "AAAA-MM-JJ", "états d'effectif mensuels");
