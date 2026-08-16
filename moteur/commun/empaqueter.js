@@ -198,6 +198,7 @@ const COLONNES = (() => {
    exploiter, extraites du code des contrôles et vérifiées dans les deux sens.
    Le formulaire ne peut donc pas proposer autre chose que ce que le moteur
    reconnaît — c'est la garantie de non-divergence, prolongée aux réponses. */
+let APPELEES = {};
 const PROPOSITIONS = (() => {
   for (const nom of ["propositions.js", "propositions-cse.js"]) {
     const chemin = path.join(ICI, nom);
@@ -208,6 +209,7 @@ const PROPOSITIONS = (() => {
         console.error("ÉCHEC — propositions et code divergent :\n  " + m.ECARTS.join("\n  "));
         process.exit(1);
       }
+      APPELEES = m.PIECES_APPELEES || {};
       return m.P || {};
     } catch (e) { console.error("propositions illisibles : " + e.message); process.exit(1); }
   }
@@ -285,6 +287,7 @@ ${morceaux.join("\n\n")}
     propositions: ${JSON.stringify(PROPOSITIONS)},
     listes: ${JSON.stringify(LISTES)},
     colonnes: ${JSON.stringify(COLONNES)},
+    piecesAppelees: ${JSON.stringify(APPELEES)},
   };
 })(typeof window !== "undefined" ? window : this);
 `;

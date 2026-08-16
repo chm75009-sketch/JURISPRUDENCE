@@ -130,6 +130,8 @@ const CAS=[
   f=>{f.dateNotifAdmin="2026-03-10";}],
  ["effectif d'établissement supérieur à celui de l'entreprise","CTL-EFF-01","non conforme",
   f=>{f.effectifEtablissement=400;}],
+ ["périmètre d'établissement, accord déclaré mais non versé","CTL-EFF-02","risque à vérifier",
+  f=>{f.perimetreOrdre="établissement"; f.accordPerimetreOrdre=true;}],
  ["critères d'ordre appliqués à l'établissement sans accord","CTL-EFF-02","risque à vérifier",
   f=>{f.perimetreOrdre="établissement";}],
  ["accord majoritaire sous les 50 %","CTL-PSE-07","non conforme",

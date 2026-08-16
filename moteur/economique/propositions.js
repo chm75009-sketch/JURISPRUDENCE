@@ -35,8 +35,38 @@ const P = {
     aide: "Les pièces effectivement versées. Chacune peut être déclarée par son seul code, ou décrite — fichier, date, période, auteur, version, périmètre — ce qui permet de la contrôler au lieu de la croire." },
 };
 
-const ECARTS = V.verifier(P, SOURCES);
-module.exports = { P, ECARTS, CODES_PIECES };
+/* Une réponse « oui » qui appelle une pièce.
+
+   « Un accord collectif fixe-t-il ce périmètre ? — oui » et rien ne suivait :
+   la déclaration restait sans titre, et le contrôle concluait sur elle. Il
+   exige désormais l'accord ; le formulaire doit donc le demander à la suite de
+   la réponse, non laisser l'utilisateur deviner qu'une pièce l'attend ailleurs.
+
+   Le lien est déclaré ici et vérifié : le code doit être une pièce que les
+   contrôles savent chercher, et le contrôle qui l'attend doit bien lire le
+   champ. Sans quoi le formulaire réclamerait un document dont nul ne fait rien. */
+const PIECES_APPELEES = {
+  accordPerimetreOrdre: "accord-perimetre-ordre",
+};
+const ECARTS_PIECES = (() => {
+  const out = [];
+  const { PIECE_ATTENDUE, C } = require("./controles.js");
+  for (const [champ, code] of Object.entries(PIECES_APPELEES)) {
+    if (!CODES_PIECES.includes(code)) {
+      out.push(`${champ} : la pièce « ${code} » n'est attendue par aucun contrôle.`); continue;
+    }
+    const ids = Object.keys(PIECE_ATTENDUE).filter(id => PIECE_ATTENDUE[id] === code);
+    const lit = ids.some(id => {
+      const ctl = C.find(x => x.id === id);
+      return ctl && new RegExp("f\\." + champ + "\\b").test(String(ctl.verdict));
+    });
+    if (!lit) out.push(`${champ} : le contrôle qui attend « ${code} » ne lit pas ce champ.`);
+  }
+  return out;
+})();
+
+const ECARTS = V.verifier(P, SOURCES).concat(ECARTS_PIECES);
+module.exports = { P, ECARTS, CODES_PIECES, PIECES_APPELEES };
 if (require.main === module) {
   console.log(`${Object.keys(P).length} question(s) à propositions · ${CODES_PIECES.length} codes de pièces`);
   if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART — " + e)); process.exit(1); }

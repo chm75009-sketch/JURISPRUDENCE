@@ -175,8 +175,18 @@ c("CTL-EFF-01","Effectifs","L'effectif de l'établissement est-il cohérent avec
 
 c("CTL-EFF-02","Effectifs","Le périmètre d'application des critères d'ordre est-il licite ?",["L. 1233-5"],
  f => { if (vide(f.perimetreOrdre)) return { etat: MANQ, motif: "Le périmètre d'application des critères d'ordre n'est pas renseigné." };
-   if (/etablissement|établissement/i.test(f.perimetreOrdre) && !f.accordPerimetreOrdre)
-     return { etat: RISQ, motif: "Le périmètre retenu est l'établissement, sans accord collectif le prévoyant. À défaut d'accord, ce périmètre ne peut être inférieur à la zone d'emplois où sont situés les établissements concernés." };
+   if (/etablissement|établissement/i.test(f.perimetreOrdre)) {
+     if (!f.accordPerimetreOrdre)
+       return { etat: RISQ, motif: "Le périmètre retenu est l'établissement, sans accord collectif le prévoyant. À défaut d'accord, ce périmètre ne peut être inférieur à la zone d'emplois où sont situés les établissements concernés." };
+     /* L'accord est déclaré : il reste à le produire. Une déclaration que rien
+        ne justifie ne vaut pas conformité — la règle vaut ici comme ailleurs, et
+        l'accord est le seul titre auquel le périmètre de l'établissement se
+        défende. Le formulaire demande donc le document à la suite de la
+        réponse « oui », au lieu de s'en tenir à elle. */
+     const a = PC.get(f, "accord-perimetre-ordre");
+     if (!a) return { etat: RISQ, motif: "Un accord collectif est déclaré fixer le périmètre d'application des critères d'ordre, mais il n'est pas versé. Le périmètre de l'établissement ne se défend que par cet accord : tant qu'il n'est pas produit, ni son existence, ni son champ, ni sa date ne sont vérifiables." };
+     return { etat: CONF, motif: `Périmètre retenu : ${f.perimetreOrdre}, fixé par l'accord collectif versé${a.date ? " du " + a.date : ""}.` };
+   }
    return { etat: CONF, motif: `Périmètre retenu : ${f.perimetreOrdre}.` }; });
 
 /* ---------- PLAN DE SAUVEGARDE : contenu ---------- */

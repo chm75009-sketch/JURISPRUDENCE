@@ -314,6 +314,7 @@ const PIECE_ATTENDUE = {
  "CTL-CSE-01":"pv-cse", "CTL-CSE-03":"renseignements-cse", "CTL-CSE-04":"pv-cse",
  "CTL-PSE-01":"pse", "CTL-PSE-02":"comptes-groupe", "CTL-PSE-04":"decision-admin",
  "CTL-PRT-01":"autorisations", "CTL-CCN-01":"convention",
+ "CTL-EFF-02":"accord-perimetre-ordre",
 };
 const A_PRO = new Set(["CTL-ECO-03","CTL-IND-01","CTL-COE-01","CTL-PSE-02","CTL-FRA-01","CTL-REP-01"]);
 function niveauDe(x, f, v) {
