@@ -1,0 +1,112 @@
+{
+  "_objet": "Dossier d'épreuve nº 2 du module CSE — faux conforme. Tous les champs sont renseignés, toutes les pièces versées. Les manquements ne vivent que dans les relations entre champs. Toute valeur est dérivable de la fiche.",
+
+  "entreprise": "LORRAINE ASSEMBLAGE SAS",
+  "dateAudit": "2026-08-15",
+
+  "effectif": 299,
+  "effectifsMensuels": [313, 314, 312, 316, 315, 313, 317, 314, 312, 315, 316, 314, 313, 315],
+  "_note_effectif": "L'effectif déclaré est de 299. Les quatorze relevés mensuels versés au même dossier sont tous compris entre 312 et 317. Aucun mois ne descend sous 300.",
+
+  "nbCadres": 18,
+  "etablissementsMultiples": false,
+  "representantsProximite": false,
+  "comiteExistant": true,
+  "dateDernieresElections": "2023-05-15",
+  "dureeAccord": 4,
+
+  "electionsEnCours": true,
+  "dateInformationPersonnel": "2026-06-25",
+  "datePremierTour": "2026-03-02",
+  "_note_dates_elections": "Le premier tour est daté du 2 mars, l'information du personnel du 25 juin : le scrutin précède de cent quinze jours l'information qui doit l'annoncer.",
+
+  "syndicatsInvites": ["CGT", "CFDT", "FO", "CFE-CGC", "CFTC"],
+  "protocole": {
+    "nbSignataires": 3,
+    "nbParticipants": 4,
+    "suffragesSignataires": 71,
+    "proportionFH": true
+  },
+
+  "listesDeposees": [
+    {
+      "nom": "collège 1 · titulaires",
+      "femmesInscrites": 60,
+      "hommesInscrits": 40,
+      "candidats": [
+        {"nom": "C1", "sexe": "F"},
+        {"nom": "C2", "sexe": "F"},
+        {"nom": "C3", "sexe": "F"},
+        {"nom": "C4", "sexe": "H"},
+        {"nom": "C5", "sexe": "H"}
+      ]
+    }
+  ],
+  "_note_listes": "Cinq candidats pour 60 % de femmes inscrites : trois femmes et deux hommes, la proportion est exacte. L'ordre déposé est F F F H H, alors que l'article impose l'alternance F H F H jusqu'à épuisement du sexe minoritaire.",
+
+  "voteElectronique": true,
+  "titulairesInitiaux": 11,
+  "titulairesRestants": 11,
+  "partiellesOrganisees": false,
+
+  "titulairesElus": 11,
+  "heuresAccordees": 242,
+  "_note_moyens": "11 titulaires et 242 heures correspondent exactement à la tranche « 250 à 299 » du tableau de R. 2314-1, c'est-à-dire à l'effectif déclaré, non à l'effectif relevé.",
+
+  "heuresRetenues": false,
+  "formationsDispensees": ["formation économique", "formation santé, sécurité et conditions de travail"],
+
+  "cssct": false,
+  "membresCssct": [],
+  "_note_cssct": "Aucune commission : elle n'est obligatoire qu'à partir de trois cents salariés, seuil que l'effectif déclaré ne franchit pas.",
+
+  "reunionsTenues": 6,
+  "reunionsSante": 4,
+
+  "masseSalariale": 14200000,
+  "masseSalarialeN1": 13800000,
+  "subventionVersee": 28400,
+  "ascAnneeN": 213000,
+  "ascAnneeN1": 207000,
+  "ancienneteASC": false,
+  "_note_budgets": "28 400 € représentent exactement 0,20 % de 14 200 000 €. Le rapport des activités sociales est de 1,500 % contre 1,500 % l'exercice précédent.",
+
+  "consultationsRecurrentes": [
+    {"objet": "orientations stratégiques"},
+    {"objet": "situation économique et financière"},
+    {"objet": "politique sociale, conditions de travail et emploi"}
+  ],
+  "consultation": {
+    "dateRemiseInformations": "2026-07-01",
+    "dateAvis": "2026-05-04",
+    "expertise": false
+  },
+  "_note_consultation": "L'avis est daté du 4 mai, les informations remises le 1er juillet : le comité a rendu son avis cinquante-huit jours avant d'avoir reçu ce sur quoi il devait se prononcer.",
+
+  "instanceConsultee": "unique",
+  "mesuresAdaptation": false,
+
+  "expertise": {
+    "cas": "situation économique et financière",
+    "employeur": 100,
+    "comite": 0,
+    "dateNotification": "2026-04-02",
+    "dateContestation": null,
+    "contestation": false
+  },
+  "nbLicenciements": 0,
+
+  "accordsCse": [],
+  "contentieuxCse": [],
+  "faitsEntrave": [],
+
+  "pieces": [
+    "etats-effectifs",
+    "note-information-cse",
+    "proces-verbaux-reunions",
+    "protocole-preelectoral",
+    "listes-candidats",
+    "comptes-cse",
+    "attestations-formation"
+  ]
+}

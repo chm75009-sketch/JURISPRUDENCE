@@ -374,5 +374,53 @@
   "perimetreOrdre": "établissement de Rennes",
   "accordPerimetreOrdre": false,
   "cseExistant": true,
-  "expertise": true
+  "expertise": true,
+  "fluxIntragroupe": [
+    {
+      "annee": 2023,
+      "redevanceMarque": 58000,
+      "managementFees": 17000,
+      "total": 75000
+    },
+    {
+      "annee": 2024,
+      "redevanceMarque": 60000,
+      "managementFees": 18000,
+      "total": 78000
+    },
+    {
+      "annee": 2025,
+      "redevanceMarque": 61000,
+      "managementFees": 18000,
+      "total": 79000
+    }
+  ],
+  "resultatHorsFlux": [
+    {
+      "annee": 2023,
+      "valeur": 87400
+    },
+    {
+      "annee": 2024,
+      "valeur": 69100
+    },
+    {
+      "annee": 2025,
+      "valeur": 41000
+    }
+  ],
+  "resultatGroupe": [
+    {
+      "annee": 2024,
+      "resultatConsolide": 379000,
+      "dividendes": 165000
+    },
+    {
+      "annee": 2025,
+      "resultatConsolide": 412000,
+      "dividendes": 180000
+    }
+  ],
+  "fermetureEtablissement": true,
+  "rechercheRepreneur": ""
 }

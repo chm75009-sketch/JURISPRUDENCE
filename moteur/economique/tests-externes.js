@@ -24,14 +24,28 @@ function epreuve(ref, intitule, fn) {
   console.log(`${ok ? "  ok  " : "ÉCHEC "} ${ref.padEnd(6)} ${intitule}${ok ? "" : "\n         → " + detail}`);
 }
 
-/* ------------------------------------------------------------------ F-01 */
-epreuve("F-01", "Le seuil de dix se compte sur trente jours, licenciements déjà prononcés compris", () => {
-  const r = M.regimeEco({ effectif: 50, nbLicenciements: 9, licenciementsRecents30j: 1, refusModification: 0 });
-  return r.pse === true || `9 + 1 sur trente jours donne ${r.code}, plan dû : ${r.pse}`;
-});
-epreuve("F-01", "Les refus de modification suivis de licenciement entrent dans le total", () => {
-  const r = M.regimeEco({ effectif: 50, nbLicenciements: 8, licenciementsRecents30j: 0, refusModification: 2 });
-  return r.pse === true || `8 + 2 refus donne ${r.code}, plan dû : ${r.pse}`;
+/* ------------------------------------------------------------------ F-01
+   Révisée le 16 août 2026. La rédaction initiale visait regimeEco, prise
+   isolément, et concluait que le moteur ignorait la règle des trente jours.
+   C'était mal viser : la règle est appliquée, mais ailleurs — la fonction
+   trenteJours du moteur et la règle PRO-01 de la grille la tiennent
+   correctement. Le défaut n'est pas arithmétique, il est de composition ;
+   il est décrit en F-19. Seule subsiste ici l'exigence de fond.
+
+   Une deuxième contre-épreuve a été retirée : elle exigeait que huit
+   licenciements plus deux refus de modification fassent dix. L'article
+   L. 1233-25 ne dit pas cela — il ouvre le régime collectif « lorsqu'au moins
+   dix salariés ont refusé la modification d'un élément essentiel de leur
+   contrat ». Le seuil de dix refus comme déclencheur autonome, que le moteur
+   applique, est la lecture littérale. L'addition réclamée était soutenable
+   mais discutée, et une contre-épreuve ne doit pas imposer au moteur une
+   lecture incertaine du texte. L'erreur était de l'auteur, pas du moteur. */
+epreuve("F-01", "Le régime restitué au client tient compte des licenciements des trente jours antérieurs", () => {
+  const f = { effectif: 50, nbLicenciements: 9, licenciementsRecents30j: 1, refusModification: 0 };
+  const t = M.trenteJours(f);
+  const r = M.regimeEco({ ...f, nbLicenciements: t.total });
+  return (t.total === 10 && r.pse === true) ||
+    `total recalculé ${t.total}, plan dû sur ce total : ${r.pse}`;
 });
 
 /* ------------------------------------------------------------------ F-02 */
@@ -160,6 +174,47 @@ epreuve("F-18", "Le registre voit les champs lus en notation crochets", () => {
   const fs = require("fs");
   const src = fs.readFileSync(__dirname + "/registre.js", "utf8");
   return /Proxy/.test(src) || "le registre déduit les champs par expression régulière, sans observer les accès";
+});
+
+/* ------------------------------------------------------------------ F-19
+   Constaté le 16 août 2026. Sur le dossier Sologne, la grille tire deux règles
+   qui répondent en sens contraire à la même question, et les imprime toutes
+   deux dans le même rapport :
+     SOC-08  « Plan de sauvegarde de l'emploi : non dû. »
+     PRO-01  « Régime recalculé sur 10 licenciements : 10 licenciements ou plus,
+               entreprise d'au moins 50 salariés. »
+   Le moteur connaît donc la bonne règle, l'énonce, et laisse la conclusion
+   fausse à côté d'elle. Devant un juge, un rapport qui se contredit ne vaut
+   rien : il faut une règle de préséance entre règles concurrentes. */
+epreuve("F-19", "Deux règles de la grille ne répondent pas en sens contraire à la même question", () => {
+  const G = require("./grille-eco.js");
+  const R = G.R || G.REGLES || G.regles || G;
+  const f = require("./fiche-sologne.json");
+  const tirees = [];
+  for (const r of R) {
+    try { if (r.si && r.si(f)) tirees.push([r.id || "?", String(typeof r.alors === "function" ? r.alors(f) : r.alors)]); }
+    catch (e) { /* règle en défaut : hors sujet ici */ }
+  }
+  const nie = tirees.filter(([, t]) => /plan de sauvegarde de l'emploi\s*:\s*non dû/i.test(t)).map(([i]) => i);
+  const affirme = tirees.filter(([, t]) => /10 licenciements ou plus, entreprise d'au moins 50/i.test(t)).map(([i]) => i);
+  return !(nie.length && affirme.length) ||
+    `${nie.join(",")} écarte le plan de sauvegarde, ${affirme.join(",")} le rend dû, dans le même rapport`;
+});
+
+/* ---------------------------------------------------- propriétés à préserver */
+epreuve("tenu", "Deux exécutions du même dossier rendent exactement les mêmes verdicts", () => {
+  const f = require("./fiche-sologne.json");
+  const passe = () => JSON.stringify(C.map(c => {
+    try { const v = c.verdict(f); return [c.id, v.etat, v.motif]; } catch (e) { return [c.id, "ERREUR", e.message]; }
+  }));
+  return passe() === passe() || "les verdicts diffèrent d'une exécution à l'autre";
+});
+epreuve("tenu", "Aucun contrôle ne dépend de l'heure ni du hasard", () => {
+  const fs = require("fs");
+  const src = ["moteur.js", "controles.js", "controles2.js"]
+    .map(n => fs.readFileSync(__dirname + "/" + n, "utf8")).join("\n");
+  const t = src.match(/Date\.now|new Date\(\s*\)|Math\.random/g);
+  return !t || `${t.length} recours à l'horloge ou au hasard : ${[...new Set(t)].join(", ")}`;
 });
 
 console.log(`\n${total - echecs} contre-épreuve(s) satisfaite(s) sur ${total}.`);

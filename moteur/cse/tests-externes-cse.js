@@ -124,9 +124,65 @@ epreuve("C-08", "Un article cité dont le texte est vide fait échouer le charge
   return garde || `${vides.length} entrées sans texte, et le chargement ne vérifie que la présence de la clé`;
 });
 
+/* ------------------------------------------------------------------ C-09
+   Constaté le 16 août 2026 par une sonde d'accès : les contrôles lisent des
+   chemins qu'aucun dossier ne renseigne, et qu'aucun ne peut renseigner
+   puisqu'ils ne sont demandés nulle part. CSE-CTL-EXP-01 lit
+   expertise.partEmployeur, tandis que les dossiers déclarent expertise.employeur.
+   Sur un dossier où la part de l'employeur est renseignée à 100 %, l'application
+   répond « Part employeur non renseignée » : elle reproche au client une omission
+   qui n'en est pas une. C'est le plus grave des états rendus à tort, parce qu'il
+   déplace la faute. Instrument : node ../commun/sonde-chemins.js cse */
+epreuve("C-09", "Aucun contrôle ne lit un chemin qu'aucun dossier ne peut renseigner", () => {
+  const lus = new Set();
+  const sonde = (o, p) => new Proxy(o, { get(t, k) {
+    if (typeof k !== "string" || /^\d+$/.test(k) || typeof t[k] === "function") return t[k];
+    if (p && k !== "length") lus.add(p + "." + k);   /* length est une propriété du tableau, pas un champ du dossier */
+    const v = t[k];
+    return (v && typeof v === "object" && !(v instanceof Date)) ? sonde(v, p ? p + "." + k : k) : v;
+  } });
+  const fournis = new Set();
+  const relever = (o, p) => {
+    if (!o || typeof o !== "object") return;
+    if (Array.isArray(o)) return o.forEach(x => relever(x, p));
+    for (const k of Object.keys(o)) { if (p) fournis.add(p + "." + k); relever(o[k], p ? p + "." + k : k); }
+  };
+  for (const n of ["fiche-cse.json", "fiche-lorraine.json"]) {
+    const f = JSON.parse(fs.readFileSync(__dirname + "/" + n, "utf8"));
+    relever(f, ""); C.forEach(c => { try { c.verdict(sonde(f, "")); } catch (e) {} });
+  }
+  const orphelins = [...lus].filter(c => !fournis.has(c) && !/^_/.test(c)).sort();
+  return !orphelins.length || `${orphelins.length} chemin(s) inatteignable(s) : ${orphelins.join(", ")}`;
+});
+epreuve("C-09", "La part de l'employeur déclarée n'est pas tenue pour manquante", () => {
+  const v = verdict("CSE-CTL-EXP-01", { expertise: {
+    cas: "situation économique et financière", employeur: 100, comite: 0 } });
+  return v.etat !== "donnée manquante" ||
+    `« ${(v.motif || "").slice(0, 60)} » alors que le dossier déclare 100 %`;
+});
+
+/* ------------------------------------------------------------------ C-10
+   Mesure d'ensemble. Le dossier Lorraine est un faux conforme : six manquements
+   y sont plantés, tous vérifiables par recoupement de champs versés au dossier.
+   L'application en relève un seul. Cette contre-épreuve ne prescrit pas quel
+   contrôle doit changer — elle fixe le résultat attendu de l'ensemble. */
+epreuve("C-10", "Le dossier Lorraine fait apparaître au moins quatre non-conformités", () => {
+  const f = JSON.parse(fs.readFileSync(__dirname + "/fiche-lorraine.json", "utf8"));
+  const n = C.filter(c => { try { return c.verdict(f).etat === "non conforme"; } catch (e) { return false; } });
+  return n.length >= 4 ||
+    `${n.length} non-conformité(s) relevée(s) : ${n.map(x => x.id).join(", ") || "aucune"}`;
+});
+
 /* ---------------------------------------------------- propriétés à préserver
    Celles-ci passent aujourd'hui. Elles figurent ici pour qu'une correction
    ultérieure ne les casse pas sans qu'on le sache. */
+epreuve("tenu", "Deux exécutions du même dossier rendent exactement les mêmes verdicts", () => {
+  const f = JSON.parse(fs.readFileSync(__dirname + "/fiche-lorraine.json", "utf8"));
+  const passe = () => JSON.stringify(C.map(c => {
+    try { const v = c.verdict(f); return [c.id, v.etat, v.motif]; } catch (e) { return [c.id, "ERREUR", e.message]; }
+  }));
+  return passe() === passe() || "les verdicts diffèrent d'une exécution à l'autre";
+});
 epreuve("tenu", "Le tableau de R. 2314-1 reste conforme au texte moissonné", () => {
   const T = JSON.parse(fs.readFileSync(__dirname + "/textes_cse.json", "utf8"));
   const t = T["R2314-1"].texte;
