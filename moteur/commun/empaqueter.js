@@ -137,6 +137,63 @@ const LISTES = (() => {
   return [];
 })();
 
+/* Les colonnes d'un champ qui porte un tableau d'objets.
+
+   Le formulaire n'avait, pour ces champs, qu'une zone de texte réclamant du
+   JSON. Personne ne compose des accolades sur un téléphone, et la question
+   « Redevances de marque, management fees et prix de transfert versés aux
+   sociétés du groupe, par exercice » n'appelle pas des accolades mais deux
+   colonnes : l'exercice et le montant.
+
+   Les colonnes ne sont pas écrites à la main. Elles sont l'union des clés que
+   portent les dossiers de référence versés au dépôt — des dossiers que la
+   chaîne de tests exécute à chaque publication, donc des clés que le moteur
+   consomme réellement — et chacune est ensuite confrontée au code : une clé que
+   nul contrôle ne lit n'est pas offerte, et le retrait est déclaré. */
+const COLONNES = (() => {
+  const out = {};
+  /* Le type d'une colonne se lit sur la valeur que portent les dossiers de
+     référence : le formulaire offre alors le bon champ de saisie — une date,
+     un nombre, un oui/non — plutôt qu'une ligne de texte pour tout. */
+  const forme = v => typeof v === "boolean" ? "oui / non"
+    : (typeof v === "number" ? "nombre"
+    : (/^\d{4}-\d{2}-\d{2}$/.test(String(v)) ? "AAAA-MM-JJ" : "texte"));
+  const fiches = fs.readdirSync(ICI).filter(x => /^fiche-.*\.json$/.test(x));
+  for (const nom of fiches) {
+    let f;
+    try { f = JSON.parse(fs.readFileSync(path.join(ICI, nom), "utf8")); } catch (e) { continue; }
+    for (const [cle, val] of Object.entries(f)) {
+      if (LISTES.indexOf(cle) >= 0) continue;          /* déjà décrit par ses sous-champs */
+      if (!Array.isArray(val) || !val.length) continue;
+      if (!val.every(x => x && typeof x === "object" && !Array.isArray(x))) continue;
+      /* Un tableau ne représente pas une valeur qui est elle-même un tableau :
+         « categories » porte la liste de ses salariés. Ces champs gardent la
+         zone de texte, où la structure reste visible. */
+      if (val.some(o => Object.values(o).some(v => v && typeof v === "object"))) {
+        out[cle] = null; continue;
+      }
+      const cols = out[cle] = out[cle] || [];
+      for (const o of val) for (const [k, v] of Object.entries(o)) {
+        if (!cols.some(c => c[0] === k)) cols.push([k, forme(v)]);
+      }
+    }
+  }
+  const src = [...MODULES.values()].join("\n");
+  const retirees = [], imbriques = [];
+  for (const cle of Object.keys(out)) {
+    if (!out[cle]) { imbriques.push(cle); delete out[cle]; continue; }
+    const gardees = out[cle].filter(c => new RegExp("[.\"']" + c[0] + "\\b").test(src));
+    out[cle].filter(c => gardees.indexOf(c) < 0).forEach(c => retirees.push(cle + "." + c[0]));
+    /* Une seule colonne n'est pas un tableau : la zone de texte suffit. */
+    if (gardees.length >= 2) out[cle] = gardees; else delete out[cle];
+  }
+  if (imbriques.length)
+    console.log("  champs laissés en saisie libre — ils portent une valeur imbriquée : " + imbriques.join(", "));
+  if (retirees.length)
+    console.log("  colonnes écartées — aucun contrôle ne les lit : " + retirees.join(", "));
+  return out;
+})();
+
 /* Les propositions offertes par le formulaire : les valeurs que la base sait
    exploiter, extraites du code des contrôles et vérifiées dans les deux sens.
    Le formulaire ne peut donc pas proposer autre chose que ce que le moteur
@@ -227,6 +284,7 @@ ${morceaux.join("\n\n")}
     champs: ${JSON.stringify(CHAMPS)},
     propositions: ${JSON.stringify(PROPOSITIONS)},
     listes: ${JSON.stringify(LISTES)},
+    colonnes: ${JSON.stringify(COLONNES)},
   };
 })(typeof window !== "undefined" ? window : this);
 `;
