@@ -1266,6 +1266,36 @@
     var b = JSON.parse(localStorage.getItem(CLE) || "null");
     if (b) Object.keys(b).forEach(function (k) { ecrire(k, b[k]); });
   } catch (e) {}
+
+  /* ------------------------------------------------ la barre d'actions
+
+     Sur téléphone, cinq boutons empilés cachaient le formulaire : on saisissait
+     par une fente. La barre se replie donc, et ne montre que « Lancer l'audit »
+     et un bouton qui déplie le reste. Le pli est l'état par défaut sur petit
+     écran, et il se rouvre d'un doigt — jamais d'action supprimée. */
+  (function barreCompacte(){
+    var barre = document.querySelector(".barre");
+    if (!barre || document.getElementById("plus")) return;
+    var b = document.createElement("button");
+    b.type = "button"; b.id = "plus"; b.className = "second";
+    b.setAttribute("aria-expanded", "false");
+    b.textContent = "⋯";
+    b.title = "Les autres actions : exemple, effacer, annuler, Word, impression";
+    barre.insertBefore(b, barre.querySelector("button.second"));
+    var etroit = function(){ return matchMedia("(max-width: 640px)").matches; };
+    var poser = function(){
+      if (etroit() && b.getAttribute("aria-expanded") === "false")
+        { barre.classList.add("repliee"); barre.classList.remove("depliee"); }
+      else { barre.classList.remove("repliee"); barre.classList.toggle("depliee", etroit()); }
+    };
+    b.addEventListener("click", function(){
+      b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") === "false" ? "true" : "false");
+      poser();
+    });
+    addEventListener("resize", poser);
+    poser();
+  })();
+
   Object.keys(APPELEES).forEach(majAppel);
   compter();
   majAnnuler();
