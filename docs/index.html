@@ -474,7 +474,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "2.3 — 16 août 2026";
+const VERSION = "2.4 — 16 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -2333,13 +2333,7 @@ function imprimerDecision(d){
     "<pre>"+echap(o.texte)+"</pre>"+
     '<div class="src">'+echap(o.citation)+" — source : "+echap(o.lien)+
     " (Judilibre, Cour de cassation, open data, décision pseudonymisée)</div>"+
-    "<script>
-  document.getElementById("btn-avert").addEventListener("click", function () {
-    var d = document.getElementById("dlg-avertissement");
-    if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", "");
-  });
-</script>
-</body></html>";
+    "</body></html>";
   const cadre = document.createElement("iframe");
   cadre.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0";
   document.body.appendChild(cadre);
@@ -2858,6 +2852,20 @@ remplirModeles(""); remplirLieux(""); majEtat(); majResumeAffiner();
   if(!m) return;
   try{ ecrire(JSON.parse(decodeURIComponent(m[1]))); if(cle()) chercher(0); }catch(e){}
 })();
+
+/* Le bouton « Avertissement d'usage ».
+
+   La première pose de ce gestionnaire avait été insérée avant le PREMIER
+   « </body> » du fichier — lequel se trouve à l'intérieur d'une chaîne du
+   script, celle qui construit la page imprimable d'une décision. La chaîne
+   n'était plus fermée, tout le script de la page mourait au chargement, et plus
+   un seul bouton ne répondait — ni « Enregistrer » pour la clé, ni la recherche.
+   Le symptôme était muet et la cause invisible à la relecture : il a fallu
+   ouvrir la page dans un navigateur pour la voir. */
+document.getElementById("btn-avert").addEventListener("click", ()=>{
+  const d = document.getElementById("dlg-avertissement");
+  if(typeof d.showModal === "function") d.showModal(); else d.setAttribute("open","");
+});
 </script>
 </body>
 </html>
