@@ -48,7 +48,7 @@ const CHAMPS=[
   ["nbLicenciements","Nombre de licenciements envisagés sur 30 jours","nombre"],
   ["licenciementsRecents30j","Licenciements économiques déjà prononcés dans la même période de trente jours","nombre"],
   ["licenciements3moisGlissants","Total des licenciements économiques sur les trois mois consécutifs précédents","nombre"],
-  ["refusModification","Salariés ayant refusé une modification de leur contrat","nombre"],
+  ["refusModification","Salariés dont le licenciement est envisagé après refus d'une modification de leur contrat, non compris dans le nombre ci-dessus","nombre"],
   ["postesSupprimes","Postes supprimés : intitulé, service, effectif avant et après","liste"]]],
  ["La démonstration économique",[
   ["trimestres","Chiffre d'affaires ou commandes, trimestre par trimestre, comparés au même trimestre de l'année précédente, sur le périmètre du secteur","tableau"],
@@ -146,7 +146,7 @@ const CTRL={
  nbLicenciements:"Détermine le régime, le nombre de réunions et le délai d'avis",
  licenciementsRecents30j:"S'ajoute au projet pour le seuil de dix : le décompte est celui de la fenêtre de trente jours",
  licenciements3moisGlissants:"Applique la règle anti-fractionnement de l'article L. 1233-26",
- refusModification:"À partir de dix refus, déclenche à lui seul le régime collectif (L. 1233-25) ; en deçà, il ne s'ajoute pas au décompte",
+ refusModification:"Entre dans le décompte des trente jours — le projet concerne ces salariés — et déclenche à lui seul le régime collectif à partir de dix (L. 1233-25)",
  trimestres:"Calcule la durée de baisse et la compare au seuil de l'effectif",
  postesSupprimes:"Compare les suppressions déclarées au nombre de licenciements",
  precaires:"Détecte un contrat précaire sur un emploi déclaré supprimé",

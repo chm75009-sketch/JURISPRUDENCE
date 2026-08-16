@@ -37,9 +37,21 @@ Object.assign(ATTENDU, {
   listesDeposees: "liste d'objets : inscrits femmes et hommes, sièges à pourvoir, candidats",
 });
 
+/* Deux natures d'anomalie, et la distinction commande ce qui en découle.
+
+   « lisibilité » : la valeur ne peut pas exister — le 30 février, un effectif
+   décimal, un montant négatif. Aucun contrôle ne peut rien conclure de ce qu'il
+   a lu là, et moteur/commun/recevabilite.js le lui interdit.
+
+   « cohérence » : deux valeurs parfaitement lisibles se contredisent — plus de
+   titulaires restants qu'élus à l'origine, un avis antérieur à la remise des
+   informations. Ce n'est pas un obstacle à l'examen, c'est son objet : les
+   contrôles doivent au contraire pouvoir le constater. */
 function valider(f) {
   const A = [];
-  const dit = (champ, valeur, motif) => A.push({ champ, valeur, motif, attendu: ATTENDU[champ] });
+  const dit = (champ, valeur, motif, nature) =>
+    A.push({ champ, valeur, motif, nature: nature || "lisibilité", attendu: ATTENDU[champ] });
+  const incoherent = (champ, valeur, motif) => dit(champ, valeur, motif, "cohérence");
   const a = (o, c) => o && Object.prototype.hasOwnProperty.call(o, c) && o[c] !== null && o[c] !== "";
 
   for (const c of DATES)
@@ -64,7 +76,7 @@ function valider(f) {
       if (mauvais.length) dit("effectifsMensuels", mauvais.join(", "),
         `${mauvais.length} relevé(s) ne sont pas des entiers positifs`);
       else if (f.effectifsMensuels.length < 12)
-        dit("effectifsMensuels", f.effectifsMensuels.length + " relevé(s)",
+        incoherent("effectifsMensuels", f.effectifsMensuels.length + " relevé(s)",
           "moins de douze relevés : la règle des douze mois consécutifs ne peut pas être vérifiée");
     }
   }
@@ -100,7 +112,7 @@ function valider(f) {
   /* Cohérences internes : elles ne dépendent d'aucune règle de fond. */
   const ordre = (a1, c1, a2, c2, quoi1, quoi2) => {
     if (estDateISO(a1) && estDateISO(a2) && a2 < a1)
-      dit(c2, a2, `antérieure à ${quoi1} du ${a1} — ${quoi2} ne peut pas la précéder`);
+      incoherent(c2, a2, `antérieure à ${quoi1} du ${a1} — ${quoi2} ne peut pas la précéder`);
   };
   ordre(f.dateInformationPersonnel, "dateInformationPersonnel", f.datePremierTour, "datePremierTour",
     "l'information du personnel", "le premier tour");
@@ -109,18 +121,18 @@ function valider(f) {
   if (f.expertise) ordre(f.expertise.dateDepart, "expertise.dateDepart",
     f.expertise.dateSaisine, "expertise.dateSaisine", "le point de départ", "la saisine du juge");
   if (estDateISO(f.dateAudit) && estDateISO(f.dateDernieresElections) && f.dateDernieresElections > f.dateAudit)
-    dit("dateDernieresElections", f.dateDernieresElections,
+    incoherent("dateDernieresElections", f.dateDernieresElections,
       `postérieure à la date d'audit (${f.dateAudit}) : des élections à venir ne peuvent pas être les dernières tenues`);
 
   if (estEntierPositif(f.titulairesInitiaux) && estEntierPositif(f.titulairesRestants)
       && f.titulairesRestants > f.titulairesInitiaux)
-    dit("titulairesRestants", f.titulairesRestants,
+    incoherent("titulairesRestants", f.titulairesRestants,
       `supérieur au nombre de titulaires élus à l'origine (${f.titulairesInitiaux})`);
   if (estEntierPositif(f.effectif) && estEntierPositif(f.nbCadres) && f.nbCadres > f.effectif)
-    dit("nbCadres", f.nbCadres, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
+    incoherent("nbCadres", f.nbCadres, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
   if (estEntierPositif(f.reunionsSante) && estEntierPositif(f.reunionsTenues)
       && f.reunionsSante > f.reunionsTenues)
-    dit("reunionsSante", f.reunionsSante,
+    incoherent("reunionsSante", f.reunionsSante,
       `supérieur au nombre total de réunions tenues (${f.reunionsTenues})`);
 
   return A;

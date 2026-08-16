@@ -15,14 +15,31 @@ const COHERENCE = new Set(["CTL-COH-01","CTL-COH-02","CTL-COH-03","CTL-SEU-01","
 const DETECTION = new Set(["CTL-COE-01","CTL-USA-01","CTL-CTX-01","CTL-IND-01","CTL-ECO-03","CTL-CSE-09","CTL-ECO-06","CTL-TRF-01"]);
 
 const src = x => String(x.verdict);
-/* les champs de la fiche réellement lus par la fonction */
+
+/* Les champs de la fiche réellement lus par la fonction.
+
+   L'inspection du texte du code ne voit que ce qui est écrit « f.nom ». Deux
+   écritures parfaitement valables lui échappent — la notation entre crochets,
+   f["nom"], et la déstructuration, const {nom} = f — de sorte qu'un contrôle
+   pouvait lire un champ que personne ne peut renseigner sans que rien ne le
+   signale. La garantie de non-divergence ne tenait alors que par la discipline
+   de celui qui écrit.
+
+   La sonde résout le problème à la racine : elle enveloppe la fiche dans un
+   Proxy et relève chaque accès, quelle que soit la notation. Elle ne voit en
+   revanche que le chemin effectivement parcouru par les fiches d'épreuve. Les
+   deux mesures sont donc réunies — l'une rattrape ce que l'autre manque. */
+const SONDE = require("./sonde.js");
+const LUS = (() => { try { return SONDE.champsLus(C); } catch (e) { return {}; } })();
+
 function entrees(x) {
   const s = src(x); const out = new Set();
   for (const m of s.matchAll(/\bf\.([A-Za-z_][A-Za-z0-9_]*)/g)) out.add(m[1]);
+  for (const ch of LUS[x.id] || []) out.add(ch);
   for (const m of s.matchAll(/PC\.get\(f,\s*"([^"]+)"/g)) out.add("pièce " + m[1]);
   if (/PC\.norm\(f\)/.test(s)) out.add("pieces");
   if (/M\.regimeEco\(f\)/.test(s)) out.add("effectif, nbLicenciements (par le moteur)");
-  return [...out];
+  return [...out].sort();
 }
 function etats(x) {
   const s = src(x); const e = [];

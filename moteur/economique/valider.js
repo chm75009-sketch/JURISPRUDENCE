@@ -29,9 +29,24 @@ const ATTENDU = {
   cause: "1, 2, 3 ou 4",
 };
 
+/* Deux natures d'anomalie, et la distinction commande ce qui en découle.
+
+   « lisibilité » : la valeur ne peut pas exister — le 30 février, un effectif
+   négatif, neuf licenciements et demi. Aucun contrôle ne peut rien conclure de
+   ce qu'il a lu là, et moteur/commun/recevabilite.js le lui interdit.
+
+   « cohérence » : deux valeurs parfaitement lisibles se contredisent — un
+   effectif d'établissement supérieur à celui de l'entreprise, une notification
+   antérieure à l'entretien préalable. Ce n'est pas un obstacle à l'examen,
+   c'est son objet : les contrôles doivent au contraire pouvoir le constater.
+   Confondre les deux revenait à faire taire le contrôle chargé de voir la
+   contradiction — quatre cas contradictoires l'ont dit dès la première
+   exécution. */
 function valider(f) {
   const A = [];
-  const dit = (champ, valeur, motif) => A.push({ champ, valeur, motif, attendu: ATTENDU[champ] });
+  const dit = (champ, valeur, motif, nature) =>
+    A.push({ champ, valeur, motif, nature: nature || "lisibilité", attendu: ATTENDU[champ] });
+  const incoherent = (champ, valeur, motif) => dit(champ, valeur, motif, "cohérence");
   const a = (champ) => Object.prototype.hasOwnProperty.call(f, champ) && f[champ] !== null && f[champ] !== "";
 
   for (const champ of ["dateAudit", "dateEntretien", "dateNotification", "dateInfoCSE",
@@ -59,20 +74,20 @@ function valider(f) {
 
   /* Cohérences internes de dates : elles ne dépendent d'aucune règle de fond. */
   if (estDateISO(f.dateEntretien) && estDateISO(f.dateNotification) && f.dateNotification < f.dateEntretien)
-    dit("dateNotification", f.dateNotification, `antérieure à l'entretien préalable du ${f.dateEntretien}`);
+    incoherent("dateNotification", f.dateNotification, `antérieure à l'entretien préalable du ${f.dateEntretien}`);
   if (Array.isArray(f.datesReunionsCSE)) {
     const mauvaises = f.datesReunionsCSE.filter(d => !estDateISO(d));
     if (mauvaises.length) dit("datesReunionsCSE", mauvaises.join(", "), "date(s) inexistante(s) ou mal formée(s)");
   }
   if (estEntierPositif(f.effectif) && estEntierPositif(f.effectifEtablissement)
       && f.effectifEtablissement > f.effectif)
-    dit("effectifEtablissement", f.effectifEtablissement,
+    incoherent("effectifEtablissement", f.effectifEtablissement,
         `supérieur à l'effectif de l'entreprise (${f.effectif})`);
   if (estEntierPositif(f.effectif) && estEntierPositif(f.effectifGroupe) && f.effectifGroupe < f.effectif)
-    dit("effectifGroupe", f.effectifGroupe,
+    incoherent("effectifGroupe", f.effectifGroupe,
         `inférieur à l'effectif de l'entreprise (${f.effectif}), alors que celle-ci en fait partie`);
   if (estEntierPositif(f.nbLicenciements) && estEntierPositif(f.effectif) && f.nbLicenciements > f.effectif)
-    dit("nbLicenciements", f.nbLicenciements, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
+    incoherent("nbLicenciements", f.nbLicenciements, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
 
   return A;
 }
