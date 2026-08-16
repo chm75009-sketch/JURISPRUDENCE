@@ -101,7 +101,7 @@ const CHAMPS = (() => {
   /* Deux questionnaires, deux écritures : le module économique déclare un
      tableau CHAMPS, celui du comité appelle q(rubrique, champ, libellé, format).
      On lit l'une ou l'autre, jamais une liste tenue à la main. */
-  for (const nom of ["questionnaire.js", "questionnaire-cse.js"]) {
+  for (const nom of ["questionnaire.js", "questionnaire-cse.js", "questionnaire-pse.js"]) {
     const chemin = path.join(ICI, nom);
     if (!fs.existsSync(chemin)) continue;
     const src = fs.readFileSync(chemin, "utf8");
@@ -128,7 +128,7 @@ const CHAMPS = (() => {
    distinction il composait un objet là où le moteur attend un tableau, et le
    contrôle des pièces échouait à l'exécution. */
 const LISTES = (() => {
-  for (const nom of ["questionnaire.js", "questionnaire-cse.js"]) {
+  for (const nom of ["questionnaire.js", "questionnaire-cse.js", "questionnaire-pse.js"]) {
     const chemin = path.join(ICI, nom);
     if (!fs.existsSync(chemin)) continue;
     const m = fs.readFileSync(chemin, "utf8").match(/const COMPOSES_LISTE\s*=\s*new Set\(\[([^\]]*)\]\)/);
@@ -162,7 +162,16 @@ const COLONNES = (() => {
   for (const nom of fiches) {
     let f;
     try { f = JSON.parse(fs.readFileSync(path.join(ICI, nom), "utf8")); } catch (e) { continue; }
+    /* Les listes ne sont pas toutes de premier niveau : « plan.mesures » vit
+       sous « plan ». On descend d'un cran, et la clé retenue est le chemin
+       complet — celui que le questionnaire demande. */
+    const plat = {};
     for (const [cle, val] of Object.entries(f)) {
+      plat[cle] = val;
+      if (val && typeof val === "object" && !Array.isArray(val))
+        for (const [k2, v2] of Object.entries(val)) plat[cle + "." + k2] = v2;
+    }
+    for (const [cle, val] of Object.entries(plat)) {
       if (LISTES.indexOf(cle) >= 0) continue;          /* déjà décrit par ses sous-champs */
       if (!Array.isArray(val) || !val.length) continue;
       if (!val.every(x => x && typeof x === "object" && !Array.isArray(x))) continue;
@@ -200,7 +209,7 @@ const COLONNES = (() => {
    reconnaît — c'est la garantie de non-divergence, prolongée aux réponses. */
 let APPELEES = {};
 const PROPOSITIONS = (() => {
-  for (const nom of ["propositions.js", "propositions-cse.js"]) {
+  for (const nom of ["propositions.js", "propositions-cse.js", "propositions-pse.js"]) {
     const chemin = path.join(ICI, nom);
     if (!fs.existsSync(chemin)) continue;
     try {
@@ -235,9 +244,13 @@ const REG = (() => { try { const r = require(path.join(ICI, "registre.js"));
    moteur-cse.js, grille.js et grille-cse.js. On les désigne par leur rôle. */
 const MOD = role => {
   for (const nom of MODULES.keys())
-    if (new RegExp(`^\\./${role}(-cse)?\\.js$`).test(nom)) return nom;
-  return "./" + role + ".js";
+    if (new RegExp(`^\\./${role}(-cse|-pse)?\\.js$`).test(nom)) return nom;
+  return null;   /* tous les moteurs n'ont pas de grille ni de barème d'actions */
 };
+/* Un rôle absent n'est pas empaqueté : l'exiger ferait échouer le chargement
+   de la page sur un module qui n'en a pas besoin. */
+const ROLE = (cle, role) => { const n = MOD(role);
+  return n ? `\n    ${cle}: require(${JSON.stringify(n)}),` : ""; };
 
 const morceaux = [];
 for (const [nom, src] of MODULES) morceaux.push(
@@ -278,10 +291,7 @@ ${morceaux.join("\n\n")}
 
   global.${GLOBALE} = {
     audit: require(${JSON.stringify("./" + ENTREE)}),
-    moteur: require(${JSON.stringify(MOD("moteur"))}),
-    grille: require(${JSON.stringify(MOD("grille"))}),
-    controles: require(${JSON.stringify(MOD("controles"))}),
-    actions: require(${JSON.stringify(MOD("actions"))}),
+${ROLE("moteur", "moteur")}${ROLE("grille", "grille")}${ROLE("controles", "controles")}${ROLE("actions", "actions")}
     manifeste: __MANIFESTE,
     champs: ${JSON.stringify(CHAMPS)},
     propositions: ${JSON.stringify(PROPOSITIONS)},

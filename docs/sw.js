@@ -12,22 +12,24 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-2.4";
+const CACHE = "jurisprudence-2.5";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
-  /* Les deux audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
+  /* Les trois audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
      mégaoctet, et c'est délibéré : une page d'audit installée qui échouerait
      hors connexion serait pire que pas d'installation du tout. L'audit se
      calcule entièrement sur le poste — il n'a besoin d'aucun réseau. */
   "./audit.html", "./moteur-eco.js",
   "./audit-cse.html", "./moteur-cse.js",
-  /* Le formulaire est commun aux deux pages : sans lui, elles s'ouvrent vides. */
+  "./audit-pse.html", "./moteur-pse.js",
+  /* Le formulaire est commun aux trois pages : sans lui, elles s'ouvrent vides. */
   "./audit-form.js", "./audit-export.js",
   /* Chaque audit s'installe pour lui-même : son manifeste et ses icônes. */
-  "./manifest-audit.json", "./manifest-audit-cse.json",
+  "./manifest-audit.json", "./manifest-audit-cse.json", "./manifest-audit-pse.json",
   "./icons/icon-audit-192.png", "./icons/icon-audit-512.png", "./icons/icon-audit-180.png",
   "./icons/icon-cse-192.png", "./icons/icon-cse-512.png", "./icons/icon-cse-180.png",
+  "./icons/icon-pse-192.png", "./icons/icon-pse-512.png", "./icons/icon-pse-180.png",
 ];
 
 self.addEventListener("install", e => {

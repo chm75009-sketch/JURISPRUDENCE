@@ -6,13 +6,13 @@
 <!-- Chaque audit s'installe pour lui-même, avec son nom et son icône : sur
      l'écran d'accueil, trois applications distinctes valent mieux qu'une seule
      dont on ne sait laquelle des trois pages elle ouvre. -->
-<meta name="theme-color" content="#1C5E36">
-<link rel="manifest" href="manifest-audit-cse.json">
-<link rel="apple-touch-icon" href="icons/icon-cse-180.png">
-<link rel="icon" href="icons/icon-cse-180.png">
+<meta name="theme-color" content="#8C3A12">
+<link rel="manifest" href="manifest-audit-pse.json">
+<link rel="apple-touch-icon" href="icons/icon-pse-180.png">
+<link rel="icon" href="icons/icon-pse-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Audit — comité social et économique</title>
+<title>Audit — plan de sauvegarde de l'emploi</title>
 <!-- Cette page sert les deux moteurs : le script chargé et le libellé changent,
      tout le reste est commun. Voir audit-cse.html, qui ne diffère que par eux. -->
 <!-- Tout se passe dans le navigateur : le moteur est chargé comme un script
@@ -162,41 +162,43 @@
 
 <header>
   <p class="fil">Application Jurisprudence</p>
-  <h1>Audit — comité social et économique</h1>
-  <p class="chapo"><b>Cette application vérifie le fonctionnement de votre comité social
-  et économique point par point</b> — contre les 368 articles du livre III et les arrêts publiés de la Cour de
-  cassation — et vous dit ce qui bloque, ce qu'il reste à faire, et ce qui est en règle.<br>
+  <h1>Audit — plan de sauvegarde de l'emploi</h1>
+  <p class="chapo"><b>Cette application vérifie votre plan de sauvegarde de l'emploi point par
+  point</b> — son contenu au regard des sept rubriques de l'article L. 1233-62, son chiffrage, le dispositif
+  d'accompagnement dû, la voie retenue, les délais d'instruction et le suivi — et vous dit ce qui bloque,
+  ce qu'il reste à faire, et ce que l'administration appréciera.<br>
   L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
-  <a href="./">Recherche de jurisprudence</a> · <a href="audit.html">Audit du licenciement économique</a> · <a href="audit-pse.html">Audit du plan de sauvegarde de l'emploi</a>
+  <a href="./">Recherche de jurisprudence</a> · <a href="audit.html">Audit du licenciement économique</a> · <a href="audit-cse.html">Audit du comité</a>
   · <button type="button" class="lien-avert" data-avertissement>Avertissement d'usage</button></p>
 </header>
 
 <div class="presentation">
   <h2>À quoi sert cette page</h2>
-  <p>Vous décrivez la situation, l'application la confronte aux textes, vous obtenez un rapport
-  imprimable, remis tel quel à la direction ou au comité. Ce que vous ignorez reste vide : un dossier
-  partiellement renseigné produit un audit partiel, jamais un faux « conforme ».</p>
+  <p>Un plan de sauvegarde de l'emploi ne se juge pas seulement à son contenu : il se juge à ce que
+  l'administration en fera. Vous décrivez le plan, l'application le confronte aux articles L. 1233-61
+  à L. 1233-63 et aux règles d'instruction, vous obtenez un rapport imprimable.</p>
   <ul class="etapes">
-    <li><b>1. Vous décrivez</b> l'effectif, le comité, les élections en cours, les réunions, les budgets,
-    les pièces versées. Ce que vous ignorez reste vide.</li>
-    <li><b>2. L'application vérifie</b> chaque exigence légale une par une, et dit sur quoi elle se fonde.</li>
-    <li><b>3. Vous obtenez</b> un rapport imprimable, remis tel quel à la direction ou au comité.</li>
+    <li><b>1. Vous décrivez</b> les mesures du plan, une par ligne — rubrique, bénéficiaires, budget,
+    durée — le dispositif d'accompagnement, la voie retenue et le calendrier. Les données déjà saisies
+    dans l'audit du licenciement économique sont reprises automatiquement.</li>
+    <li><b>2. L'application vérifie</b> chaque exigence une par une, et dit sur quoi elle se fonde.</li>
+    <li><b>3. Vous obtenez</b> un rapport imprimable : ce qui bloque, ce qui manque, et ce que
+    l'administration appréciera.</li>
   </ul>
-  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne remplace pas votre conseil, elle ne lit
-  pas les stipulations de vos accords collectifs — qui peuvent modifier le nombre d'élus, les heures de
-  délégation, la durée des mandats et la périodicité des consultations — et elle ne qualifie pas le délit
-  d'entrave. Quand un texte ne tranche pas une question, elle le dit au lieu de choisir.</p>
+  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne rédige pas le plan, ne conduit pas la
+  négociation, ne dépose rien sur le portail de l'administration — et surtout, <b>elle ne dit pas si le
+  plan est suffisant</b>. Aucun texte ne fixe le montant d'un plan : l'article L. 1233-57-3 confie
+  l'appréciation de sa proportionnalité aux moyens du groupe à l'autorité administrative, puis au juge
+  administratif. L'application calcule les rapports et les affiche ; elle ne les juge pas.</p>
 </div>
 
 <div class="enc" style="margin-top:22px">
-  <p class="sh">Une donnée non renseignée ne produit jamais « conforme »</p>
-  <p style="margin:0">Elle produit « donnée manquante », et le rapport le dit. Une déclaration que
-  ne justifie aucune pièce ne produit pas « conforme » non plus : elle produit « risque à
-  vérifier ». C'est la seule façon d'obtenir un résultat qui ne mente pas. Le résultat est établi
-  sur la seule loi tant que votre convention collective et vos accords d'entreprise ne sont pas
-  joints — la réserve correspondante figure alors dans le rapport. Un accord d'entreprise peut
-  modifier le nombre de membres du comité, le volume des heures de délégation, la durée des
-  mandats, la périodicité des consultations et le nombre de réunions.</p>
+  <p class="sh">Le calibrage se calcule, il ne se conclut pas</p>
+  <p style="margin:0">Le coût par salarié licencié et la part du plan dans le résultat consolidé du
+  groupe sont calculés et affichés. Aucun de ces contrôles ne rend « conforme » : ils rendent
+  « risque à vérifier », parce qu'aucun seuil légal n'existe. Un feu vert sur ce point serait faux, et
+  il serait le plus coûteux de tous. Une donnée non renseignée, elle, ne produit jamais « conforme » :
+  elle produit « donnée manquante », et le rapport le dit.</p>
 </div>
 
 <form id="formulaire" autocomplete="off"></form>
@@ -218,54 +220,130 @@
 <footer id="pied"></footer>
 </div>
 
-<script src="moteur-cse.js"></script>
+<script src="moteur-pse.js"></script>
 <script>
-  /* Ce qui distingue les deux pages : le moteur, la clé du brouillon et le
-     dossier d'exemple. Tout le reste vit dans audit-form.js. */
-  window.__MOTEUR = "MoteurCSE";
-  window.__CLE = "audit-cse-brouillon";
+  /* Ce qui distingue cette page : le moteur, la clé du brouillon et le dossier
+     d'exemple. Tout le reste vit dans audit-form.js, commun aux trois audits.
+
+     Les données communes à l'audit du licenciement économique — effectif,
+     groupe, nombre de licenciements, date de notification, pièces — sont
+     reprises de son brouillon si l'utilisateur l'a rempli : personne ne
+     ressaisit deux fois le même effectif. Elles restent modifiables ici, et
+     elles restent demandées : un module qui suppose une saisie faite ailleurs
+     conclut sur ce qu'il n'a pas lu. */
+  window.__MOTEUR = "MoteurPSE";
+  window.__CLE = "audit-pse-brouillon";
+  (function () {
+    var COMMUNS = ["effectif", "effectifEtablissement", "groupe", "effectifGroupe",
+                   "nbLicenciements", "dateNotification", "pieces", "entreprise"];
+    try {
+      if (localStorage.getItem("audit-pse-brouillon")) return;
+      var eco = JSON.parse(localStorage.getItem("audit-eco-brouillon") || "null");
+      if (!eco) return;
+      var repris = {};
+      COMMUNS.forEach(function (c) { if (eco[c] !== undefined && eco[c] !== "") repris[c] = eco[c]; });
+      if (Object.keys(repris).length) localStorage.setItem("audit-pse-brouillon", JSON.stringify(repris));
+    } catch (e) {}
+  })();
   window.__EXEMPLE = {
-      "entreprise": "SOCIÉTÉ MÉRIDIENNE LOGISTIQUE SAS",
-      "dateAudit": "2026-08-15",
-      "effectif": "420",
-      "nbCadres": "31",
-      "effectifsMensuels": "[418, 419, 420, 421, 420, 419, 422, 420, 418, 420, 421, 420, 420, 420]",
-      "etablissementsMultiples": "oui",
-      "sourceDecoupage": "décision unilatérale",
-      "representantsProximite": "oui",
-      "comiteExistant": "oui",
-      "dateDernieresElections": "2022-04-12",
-      "electionsEnCours": "oui",
-      "dateInformationPersonnel": "2026-03-02",
-      "datePremierTour": "2026-06-25",
-      "syndicatsInvites": "[\"CGT\", \"CFDT\"]",
-      "protocole": "{\"nbSignataires\": 2, \"nbParticipants\": 3, \"suffragesSignataires\": 64, \"proportionFH\": false}",
-      "listesDeposees": "[{\"nom\": \"collège 1 · titulaires\", \"femmesInscrites\": 60, \"hommesInscrits\": 40, \"siegesAPourvoir\": 3, \"candidats\": [{\"sexe\": \"F\"}, {\"sexe\": \"F\"}, {\"sexe\": \"H\"}]}]",
-      "voteElectronique": "oui",
-      "titulairesInitiaux": "12",
-      "titulairesRestants": "11",
-      "collegeVide": "non",
-      "moisAvantTerme": "2",
-      "titulairesElus": "11",
-      "heuresAccordees": "240",
-      "heuresRetenues": "oui",
-      "reunionsTenues": "8",
-      "reunionsSante": "2",
-      "formationsDispensees": "[\"formation économique\"]",
-      "cssct": "non",
-      "masseSalariale": "16800000",
-      "masseSalarialeN1": "16200000",
-      "subventionVersee": "28000",
-      "ascAnneeN": "130000",
-      "ascAnneeN1": "145000",
-      "ancienneteASC": "oui",
-      "consultationsRecurrentes": "[{\"objet\": \"situation économique et financière\"}]",
-      "consultation": "{\"dateRemiseInformations\": \"2026-05-04\", \"dateAvis\": \"2026-07-01\"}",
-      "instanceConsultee": "central",
-      "mesuresAdaptation": "oui",
-      "accordsCse": "[\"accord sur la périodicité des consultations du 12 janvier 2024\"]",
-      "pieces": "[\"etats-effectifs\"]"
-  };
+      "effectif": 320,
+      "effectifEtablissement": 320,
+      "groupe": true,
+      "effectifGroupe": 640,
+      "nbLicenciements": 22,
+      "total30j": 22,
+      "pieces": [
+        {
+          "type": "comptes-groupe",
+          "date": "2026-05-02"
+        }
+      ],
+      "plan": {
+        "mesures": [
+          {
+            "rubrique": "1°",
+            "intitule": "Reclassement interne",
+            "beneficiaires": 22,
+            "budget": 180000,
+            "duree": "6 mois",
+            "detail": ""
+          },
+          {
+            "rubrique": "1° bis",
+            "intitule": "Reprise partielle d'activité",
+            "beneficiaires": 4,
+            "budget": 40000,
+            "duree": "12 mois",
+            "detail": ""
+          },
+          {
+            "rubrique": "2°",
+            "intitule": "Création d'une activité de maintenance",
+            "beneficiaires": 6,
+            "budget": 120000,
+            "duree": "18 mois",
+            "detail": ""
+          },
+          {
+            "rubrique": "3°",
+            "intitule": "Antenne emploi et bassin",
+            "beneficiaires": 22,
+            "budget": 90000,
+            "duree": "9 mois",
+            "detail": ""
+          },
+          {
+            "rubrique": "4°",
+            "intitule": "Aide à la création d'entreprise",
+            "beneficiaires": 5,
+            "budget": 60000,
+            "duree": "12 mois",
+            "detail": ""
+          },
+          {
+            "rubrique": "5°",
+            "intitule": "Formations de reconversion",
+            "beneficiaires": 18,
+            "budget": 240000,
+            "duree": "12 mois",
+            "detail": ""
+          },
+          {
+            "rubrique": "6°",
+            "intitule": "Réduction des heures supplémentaires",
+            "beneficiaires": 40,
+            "budget": 0,
+            "duree": "permanent",
+            "detail": ""
+          }
+        ],
+        "budgetTotal": 730000,
+        "resultatGroupe": 9200000,
+        "salariesExposes": [
+          "3 salariés de plus de 55 ans",
+          "2 sans qualification"
+        ],
+        "suivi": {
+          "modalites": "commission de suivi trimestrielle",
+          "consultation": "quatre réunions par an",
+          "bilan": "bilan annuel à la DREETS"
+        },
+        "accompagnement": "contrat de sécurisation professionnelle",
+        "dateProposition": "2026-07-10",
+        "dateRupture": "2026-07-20",
+        "demandesReembauche": [],
+        "informationElusPostes": true
+      },
+      "pse": {
+        "voie": "unilateral",
+        "suffrages": null,
+        "dateDepotAdmin": "2026-06-01",
+        "dateDecisionAdmin": "2026-06-18"
+      },
+      "dateNotification": "2026-06-25",
+      "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
+      "dateAudit": "2026-08-16"
+    };
 </script>
 <script src="audit-export.js"></script>
 <script src="audit-form.js"></script>
