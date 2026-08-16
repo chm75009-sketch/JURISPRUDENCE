@@ -12,9 +12,12 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-3.7";
+const CACHE = "jurisprudence-3.8";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
+  /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
+     reconnaissance de la matière instantanée et disponible hors connexion. */
+  "./vocabulaire.json",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
   /* Les quatre audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
      mégaoctet, et c'est délibéré : une page d'audit installée qui échouerait

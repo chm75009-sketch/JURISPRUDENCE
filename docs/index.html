@@ -211,6 +211,7 @@
         « faux CV », « salarié qui ment sur ses diplômes ». L'application ira lire les décisions
         pour vous dire quelles formules les juges emploient réellement, et combien il en existe.</span>
     </div>
+    <div id="mots-matieres"></div>
     <div id="mots-zone"></div>
 
     <div class="bloc-titre">Comment interpréter ces mots</div>
@@ -474,7 +475,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "3.1 — 16 août 2026";
+const VERSION = "3.2 — 16 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1911,9 +1912,96 @@ async function compter(expression){
   return {total: d.total || 0, elargi: !!d.relaxed};
 }
 
+/* ---- Le vocabulaire de la Cour, relevé une fois pour toutes ----
+
+   L'assistant ci-dessous lit des décisions à chaque recherche, ce qui prend du
+   temps et dépend d'un échantillon tiré sur les mots de l'utilisateur — c'est-
+   à-dire précisément ceux qu'il ne faut pas employer. On a donc fait l'analyse
+   une fois : pour chacune des rubriques du titrage officiel, un échantillon de
+   décisions a été lu et les mots qui la caractérisent relevés. Le résultat est
+   `vocabulaire.json` : 593 rubriques, 2 627 mots. Il est chargé avec la page.
+
+   Ce que cela permet : dire, INSTANTANÉMENT et sans aucune requête, sous quelle
+   rubrique la Cour range un sujet décrit en français courant. Un titrage vaut
+   mieux qu'une formule approchée — il restreint la recherche à un champ du
+   droit, ce qu'aucune combinaison de mots ne sait faire. */
+let VOC = null, IDF = null;
+async function vocabulaire(){
+  if(VOC) return VOC;
+  try{
+    VOC = await (await fetch("./vocabulaire.json", {cache: "force-cache"})).json();
+  }catch(e){ VOC = {}; }
+  /* Un mot présent dans cent quarante rubriques — « procédure », « droit » —
+     ne désigne rien. Son poids est l'inverse de sa dispersion. */
+  const dans = new Map();
+  for(const k in VOC) for(const m of VOC[k].m) dans.set(m, (dans.get(m)||0) + 1);
+  const N = Object.keys(VOC).length || 1;
+  IDF = m => Math.log(N / (1 + (dans.get(m)||0)));
+  return VOC;
+}
+
+/* Les rubriques que les mots du sujet désignent.
+
+   Deux poids, et une coupe. Un mot qui figure dans l'INTITULÉ de la rubrique
+   vaut plus qu'un mot relevé dans le corps des décisions : « licenciement »
+   dans « licenciement pour motif économique » désigne la rubrique, le même mot
+   croisé dans les motifs d'une décision de prud'hommes ne fait que passer. Et
+   un mot répandu dans cent rubriques ne compte pas : il ne distingue rien.
+
+   La coupe se fait sur le meilleur score, non sur un seuil absolu : ce qui
+   importe est l'écart entre la première rubrique et les suivantes. */
+function matieresProbables(sujet){
+  if(!VOC) return [];
+  const RAC = m => m.length > 7 ? m.slice(0, 7) : m;
+  const mots = [...new Set(ligatures(normaliser(sujet)).split(/[^a-z0-9]+/)
+    .filter(m => m.length > 3 && !estVide(m)).map(RAC))];
+  if(!mots.length) return [];
+  const out = [];
+  for(const k in VOC){
+    const titre = new Set(ligatures(normaliser(k)).split(/[^a-z0-9]+/)
+      .filter(m => m.length > 3).map(RAC));
+    const corps = new Set(VOC[k].m.map(RAC));
+    let s = 0, touches = 0;
+    for(const r of mots){
+      const poids = IDF(r);
+      if(poids < 1.2) continue;              /* mot trop répandu : il ne dit rien */
+      const w = titre.has(r) ? 2.2 * poids : (corps.has(r) ? poids : 0);
+      if(w){ s += w; touches++; }
+    }
+    if(touches) out.push({t: k, s: s, touches: touches, n: VOC[k].n});
+  }
+  if(!out.length) return [];
+  out.sort((a, b) => b.s - a.s || b.touches - a.touches);
+  return out.filter(x => x.s >= out[0].s * 0.6).slice(0, 6);
+}
+
+function poserMatieres(sujet){
+  const z = $("mots-matieres");
+  const liste = matieresProbables(sujet);
+  if(!liste.length){ z.innerHTML = ""; return; }
+  z.innerHTML = '<div class="fiche"><b>La Cour range ce sujet ici</b>'+
+    '<div class="note" style="margin:4px 0 8px">Rubriques du titrage officiel, reconnues sur '+
+    "les mots de votre phrase — sans aucune requête. Touchez-en une : la recherche est "+
+    "restreinte à ce champ du droit.</div><div>"+
+    liste.map(x => '<button class="second mat-v" type="button" data-t="'+echap(x.t)+'">'+
+      echap(x.t)+' <span class="note">('+x.n.toLocaleString("fr-FR")+")</span></button>").join(" ")+
+    "</div></div>";
+  [...document.querySelectorAll(".mat-v")].forEach(b => b.onclick = ()=>{
+    window.__THEME = (window.__THEME === b.dataset.t) ? "" : b.dataset.t;
+    [...document.querySelectorAll(".mat-v")].forEach(x => {
+      const actif = x.dataset.t === window.__THEME;
+      x.classList.toggle("principal", actif); x.classList.toggle("second", !actif);
+    });
+    majMatiere();
+    chercher(0);
+  });
+}
+
 async function assistantMots(){
   const sujet = $("q").value.trim();
   const zone = $("mots-zone");
+  /* Le titrage, d'abord : il ne coûte rien et ne dépend d'aucune clé. */
+  if(sujet.length >= 3){ await vocabulaire(); poserMatieres(sujet); }
   if(!cle()) return message("Renseignez d'abord votre clé Judilibre.", "err");
   if(sujet.length < 3)
     return message("Décrivez d'abord votre sujet dans le champ ci-dessus.", "info");
@@ -2054,7 +2142,8 @@ async function assistantMots(){
 
     /* Le relevé demeure après un clic — on essaie une formule, on regarde,
        on en essaie une autre. L'effacer obligerait à tout refaire. */
-    $("mots-fermer").onclick = ()=>{ zone.innerHTML = ""; window.__THEME = ""; majMatiere(); };
+    $("mots-fermer").onclick = ()=>{ zone.innerHTML = ""; $("mots-matieres").innerHTML = "";
+      window.__THEME = ""; majMatiere(); };
     [...document.querySelectorAll(".mat-u")].forEach(b => b.onclick = ()=>{
       window.__THEME = (window.__THEME === b.dataset.t) ? "" : b.dataset.t;
       [...document.querySelectorAll(".mat-u")].forEach(x => {
