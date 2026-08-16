@@ -88,10 +88,18 @@ fs.writeFileSync(__dirname + "/verification-textes-bdese.json",
     concordants: resultats.filter(r => r.etat === "concordant").length,
     ecarts: mauvais.length, douteux: douteux.length,
     homonymesEcartes: resultats.reduce((n, r) => n + (r.homonymesEcartes || 0), 0),
+    synthese: `${resultats.filter(r => r.etat === "concordant").length} articles reconfirmés par le relais sur ${resultats.length} ; ${douteux.length} articles non reconfirmés au moment de la relecture ; ${mauvais.length} divergence(s) constatée(s) ; version du dépôt conservée et identifiable par son identifiant LEGIARTI.`,
     detail: resultats }, null, 1));
 
-console.log(`\n${resultats.length} articles · ${resultats.filter(r => r.etat === "concordant").length} concordants`
-  + ` · ${mauvais.length} écarts · ${douteux.length} sans conclusion possible`);
+/* La synthèse est écrite de manière à ne pas pouvoir être mal lue : « zéro
+   écart » n'est pas « cent pour cent des articles reconfirmés par la source ».
+   Un relais muet, ou qui ne sert que l'homonyme, ne permet de conclure ni à la
+   concordance ni à la divergence — et la version du dépôt reste identifiable
+   par son identifiant, ce que la phrase dit expressément. */
+const SYNTHESE = `${resultats.filter(r => r.etat === "concordant").length} articles reconfirmés par le relais sur ${resultats.length} ; `
+  + `${douteux.length} articles non reconfirmés au moment de la relecture ; `
+  + `${mauvais.length} divergence(s) constatée(s) ; version du dépôt conservée et identifiable par son identifiant LEGIARTI.`;
+console.log("\n" + SYNTHESE);
 if (mauvais.length) {
   console.error("\nÉcarts à trancher à la main :");
   for (const r of mauvais) console.error(`  ${r.numero} — attendu ${r.attendu}, lu ${r.lu} (${r.ecartCaracteres} caractères d'écart)`);

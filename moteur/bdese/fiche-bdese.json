@@ -6,6 +6,10 @@
  "accordRecherche": true,
  "accordEntreprise": false,
  "accordBranche": false,
+ "preuveAbsenceAccord": {
+  "date": "2026-07-01",
+  "auteur": "Direction des ressources humaines"
+ },
  "pieces": [],
  "dateSeuil50Atteint": "2019-03-01",
  "dateFinMandat": "2029-05-01",

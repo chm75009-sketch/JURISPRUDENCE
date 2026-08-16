@@ -105,10 +105,23 @@ function regime(f) {
     return { regime: REGIMES.INDETERMINE, cause: "effectif inconnu",
       motif: "Aucun accord n'a été trouvé, mais l'effectif n'est pas renseigné : le contenu supplétif exigible dépend du seuil de trois cents salariés (R. 2312-8 en deçà, R. 2312-9 au-delà)." };
 
+  /* L'absence d'accord se prouve, elle ne se déclare pas.
+
+     La recherche déclarée « faite » est une affirmation ; ce qui l'établit est
+     une déclaration datée et signée, disant qui a cherché, où, et à quelle date.
+     Sans elle, le supplétif reposerait sur la seule parole de celui qui l'invoque
+     — et c'est précisément ce que ce module refuse ailleurs. Tant que la preuve
+     manque, le régime reste indéterminé. */
+  const preuve = f.preuveAbsenceAccord || {};
+  if (!renseigne(preuve.date) || !renseigne(preuve.auteur))
+    return { regime: REGIMES.INDETERMINE, cause: "absence d'accord non prouvée",
+      motif: "La recherche d'accord est déclarée faite et n'a rien trouvé, mais l'absence d'accord n'est pas établie : il y faut une déclaration datée et signée, disant qui a conduit la recherche et à quelle date. Sans elle, le régime supplétif reposerait sur une simple affirmation — et le contenu exigible resterait, en réalité, inconnu." };
+
   return { regime: REGIMES.SUPPLETIF,
+    preuve: { date: preuve.date, auteur: preuve.auteur },
     article: eff >= SEUIL_CONTENU ? "R. 2312-9" : "R. 2312-8",
     seuil: eff >= SEUIL_CONTENU ? "au moins trois cents salariés" : "moins de trois cents salariés",
-    motif: `Aucun accord ne définit la base : le contenu est celui du décret, article ${eff >= SEUIL_CONTENU ? "R. 2312-9" : "R. 2312-8"}, l'entreprise comptant ${eff} salariés.` };
+    motif: `Aucun accord ne définit la base — absence établie par la déclaration du ${preuve.date}, signée par ${preuve.auteur}. Le contenu est celui du décret, article ${eff >= SEUIL_CONTENU ? "R. 2312-9" : "R. 2312-8"}, l'entreprise comptant ${eff} salariés.` };
 }
 
 /* -------------------------------------------------- les dates d'exigibilité

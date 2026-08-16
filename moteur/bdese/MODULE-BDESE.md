@@ -16,6 +16,21 @@ d'accès et l'information donnée aux bénéficiaires. Un contrôle dédié
 (`BDESE-CTL-PRV-01`) réunit ces éléments et rend « risque à vérifier » — il ne
 rend jamais « conforme », et la publication échoue s'il le fait un jour.
 
+## L'état de publication — développement, et non catalogue exhaustif
+
+Deux états, qui ne se confondent pas :
+
+| État | Signification |
+|---|---|
+| **Développement** *(état actuel)* | Couverture mesurée à 96,2 % et 96,6 %, reliquat identifié et suivi. Le catalogue réglementaire **n'est pas exhaustif**, et le module ne doit pas être présenté comme vérifiant l'intégralité du décret. |
+| Réglementaire publiée | 100 % du texte consommé, ou reliquat explicitement validé par un juriste et rattaché à une règle. |
+
+L'état est **calculé** par la chaîne de publication, écrit au manifeste
+(`etatPublication`, `catalogueReglementaire.exhaustif`), affiché dans la page et
+repris en tête de chaque rapport. La transparence sur les 96 % est nécessaire ;
+elle ne suffit pas à autoriser une présentation qui laisserait croire le
+catalogue complet.
+
 ## La règle qui commande tout : le régime d'abord
 
 Le régime supplétif du décret **ne s'applique pas « faute d'avoir trouvé »** : il
@@ -28,6 +43,12 @@ Auditer un contenu sans savoir quel texte le commande produirait des
 non-conformités inventées — un accord peut légalement organiser la base
 autrement, sous la seule réserve du plancher. La chaîne de publication mesure
 cette règle : `contenuAuditeSurRegimeIndetermine` doit rester à zéro.
+
+**L'absence d'accord se prouve, elle ne se déclare pas.** Une recherche déclarée
+« faite » est une affirmation ; ce qui l'établit est une **déclaration datée et
+signée**, disant qui a conduit la recherche et à quelle date. À défaut, le régime
+reste indéterminé — le supplétif reposerait sinon sur la seule parole de celui
+qui l'invoque, ce que ce module refuse partout ailleurs.
 
 Quatre régimes : accord d'entreprise (L. 2312-21, al. 1er), accord de branche
 (dernier alinéa, en deçà de trois cents salariés et à défaut d'accord
@@ -109,8 +130,16 @@ Le contrôle le réclame et rend « risque à vérifier » à défaut.
 
 ## Les textes, relus à la source
 
-Relecture au relais Légifrance, deux lectures espacées par article. **Aucun
-écart** entre le dépôt et la source.
+Relecture au relais Légifrance, deux lectures espacées par article. La synthèse
+est écrite de manière à ne pas pouvoir être mal lue :
+
+> **28 articles reconfirmés par le relais sur 32 ; 4 articles non reconfirmés au
+> moment de la relecture ; 0 divergence constatée ; version du dépôt conservée et
+> identifiable par son identifiant LEGIARTI.**
+
+« Zéro écart » n'est pas « cent pour cent des articles reconfirmés par la
+source » : un relais muet, ou qui ne sert que l'homonyme, ne permet de conclure
+ni à la concordance ni à la divergence.
 
 Le relais sert des **homonymes** — des articles réels portant le même numéro
 dans une autre partie du code — et deux critères les écartent :
@@ -149,11 +178,16 @@ contenu est audité sur un régime indéterminé, ou si le contrôle de preuve c
   partagé — accès simultané employeur / élus / expert, traçabilité des
   consultations — est reportée, non tranchée. Aucun écrit ne doit promettre un
   accès partagé tant qu'elle ne l'est pas.
-- **Ce qui prouve « absence d'accord vérifiée »** : le module demande une
-  déclaration de recherche. Une déclaration datée et signée serait plus solide ;
-  la décision appartient à l'utilisateur.
+- ~~Ce qui prouve « absence d'accord vérifiée »~~ — **tranché** : une déclaration
+  datée et signée est désormais exigée, et le régime reste indéterminé à défaut.
 - **Le comité central et les établissements** : le niveau de mise en place est
   contrôlé, et R. 2312-6 II est cité. La consultation à double niveau n'est pas
   modélisée plus avant.
-- **La couverture du découpage** reste à 96,2 % et 96,6 % : le reliquat doit être
-  repris à la main et marqué comme tel pour atteindre 100 %.
+- **La couverture du découpage** reste à 96,2 % et 96,6 %. Le critère de sortie de
+  100 % est **bloquant pour l'état « réglementaire publiée »** : tant qu'il n'est
+  pas atteint, le manifeste porte l'état « développement », et la page comme le
+  rapport le disent.
+- **Le comité central et les établissements distincts** : point fonctionnel à
+  approfondir avant de revendiquer une couverture complète des consultations
+  complexes. Le niveau de mise en place est contrôlé et R. 2312-6, II est cité ;
+  la consultation à double niveau n'est pas modélisée plus avant.

@@ -26,6 +26,13 @@ const CAS = [
   { nom: "Aucun accord, effectif inconnu",
     f: { accordRecherche: true, accordEntreprise: false, accordBranche: false },
     regime: REGIMES.INDETERMINE, cause: "effectif inconnu" },
+  { nom: "Aucun accord trouvé, mais l'absence n'est pas prouvée",
+    f: { accordRecherche: true, accordEntreprise: false, accordBranche: false, effectif: 420 },
+    regime: REGIMES.INDETERMINE, cause: "absence d'accord non prouvée" },
+  { nom: "Déclaration d'absence datée mais non signée",
+    f: { accordRecherche: true, accordEntreprise: false, accordBranche: false, effectif: 420,
+         preuveAbsenceAccord: { date: "2026-07-01" } },
+    regime: REGIMES.INDETERMINE, cause: "absence d'accord non prouvée" },
 
   /* --- les accords --- */
   { nom: "Accord d'entreprise versé",
@@ -44,11 +51,13 @@ const CAS = [
     regime: REGIMES.SUPPLETIF, article: "R. 2312-9" },
 
   /* --- le supplétif, de part et d'autre du seuil de contenu --- */
-  { nom: "Aucun accord, moins de trois cents",
-    f: { accordRecherche: true, accordEntreprise: false, accordBranche: false, effectif: 299 },
+  { nom: "Aucun accord, absence prouvée, moins de trois cents",
+    f: { accordRecherche: true, accordEntreprise: false, accordBranche: false, effectif: 299,
+         preuveAbsenceAccord: { date: "2026-07-01", auteur: "Direction des ressources humaines" }, },
     regime: REGIMES.SUPPLETIF, article: "R. 2312-8" },
-  { nom: "Aucun accord, exactement trois cents",
-    f: { accordRecherche: true, accordEntreprise: false, accordBranche: false, effectif: 300 },
+  { nom: "Aucun accord, absence prouvée, exactement trois cents",
+    f: { accordRecherche: true, accordEntreprise: false, accordBranche: false, effectif: 300,
+         preuveAbsenceAccord: { date: "2026-07-01", auteur: "Direction des ressources humaines" }, },
     regime: REGIMES.SUPPLETIF, article: "R. 2312-9" },
 ];
 

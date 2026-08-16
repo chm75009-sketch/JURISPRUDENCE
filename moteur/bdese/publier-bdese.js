@@ -55,8 +55,29 @@ for (const f of FICHIERS)
 const empreinte = crypto.createHash("sha256")
   .update(FICHIERS.map(f => f + ":" + empreintes[f]).join("\n")).digest("hex").slice(0, 12);
 
+/* Deux états de publication, et ils ne se confondent pas.
+
+   Tant que le découpage du décret n'a pas consommé 100 % du texte, le catalogue
+   réglementaire N'EST PAS exhaustif : le module est en état de DÉVELOPPEMENT.
+   La transparence sur les 96 % est nécessaire, elle ne suffit pas — une
+   présentation commerciale ne doit pas laisser croire que le catalogue est
+   complet quand le critère de sortie est 100 %. L'état est donc calculé, écrit
+   au manifeste, et repris tel quel partout où le module est présenté. */
+const SEUIL_CATALOGUE = 100;
+const couvertures = [B.contenu["moins300"].couverture.part, B.contenu["au moins300"].couverture.part];
+const catalogueExhaustif = couvertures.every(x => x >= SEUIL_CATALOGUE);
+
 const manifeste = {
   domaine: "base de données économiques, sociales et environnementales",
+  etatPublication: catalogueExhaustif ? "réglementaire publiée" : "développement",
+  catalogueReglementaire: {
+    exhaustif: catalogueExhaustif,
+    seuilDeSortie: SEUIL_CATALOGUE,
+    couvertures: { "R. 2312-8": couvertures[0], "R. 2312-9": couvertures[1] },
+    mention: catalogueExhaustif
+      ? "Le texte du décret est intégralement consommé par le découpage, ou son reliquat est validé et rattaché à une règle."
+      : "État de développement : le découpage laisse du texte de côté et le reliquat n'est pas encore repris à la main. Le catalogue réglementaire n'est PAS exhaustif, et le module ne doit pas être présenté comme tel.",
+  },
   date: new Date().toISOString().slice(0, 10),
   empreinte,
   perimetre: "Le module prépare, structure, documente et audite la base. Il ne fournit pas une base collaborative accessible simultanément à plusieurs catégories d'utilisateurs, et il n'est pas la base : la mise à disposition reste un acte de l'employeur.",
@@ -110,7 +131,9 @@ try {
 }
 
 fs.writeFileSync(path.join(ICI, "manifeste-bdese.json"), JSON.stringify(manifeste, null, 1));
-console.log(`7. manifeste écrit — empreinte ${empreinte}`);
+console.log(`7. manifeste écrit — empreinte ${empreinte} · état : ${manifeste.etatPublication}`);
+if (!catalogueExhaustif)
+  console.log(`   catalogue réglementaire NON exhaustif — couverture ${couvertures.join(" % et ")} %, critère de sortie ${SEUIL_CATALOGUE} %.`);
 console.log("   " + JSON.stringify(manifeste.compteurs));
 
 etape(8, "empaquetage pour le navigateur", "../commun/empaqueter.js",

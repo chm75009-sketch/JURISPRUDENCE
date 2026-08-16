@@ -19,6 +19,7 @@ const BASE = {
   entreprise: "SOCIÉTÉ D'EXEMPLE SAS", dateAudit: "2026-08-16",
   effectif: 420, etablissementsDistincts: false,
   accordRecherche: true, accordEntreprise: false, accordBranche: false,
+  preuveAbsenceAccord: { date: "2026-07-01", auteur: "Direction des ressources humaines" },
   pieces: [],
   dateSeuil50Atteint: "2019-03-01", dateFinMandat: "2029-05-01",
   dateSeuil300Franchi: "2024-02-01",
@@ -89,6 +90,7 @@ const CAS = [
    doit y conclure, dans aucun sens. */
 const REGIME_INCONNU = [
   { nom: "Recherche d'accord non déclarée", f: avec(f => { delete f.accordRecherche; }) },
+  { nom: "Absence d'accord non prouvée", f: avec(f => { delete f.preuveAbsenceAccord; }) },
   { nom: "Recherche non conduite", f: avec(f => { f.accordRecherche = false; }) },
   { nom: "Accord déclaré mais non versé", f: avec(f => { f.accordEntreprise = true; }) },
 ];

@@ -63,6 +63,8 @@ q("Le régime applicable", "accordEntreprise", "Un accord d'entreprise définit-
 q("Le régime applicable", "accordEntrepriseVerse", "Cet accord est-il joint au dossier ?", "oui / non", "l'accord lui-même");
 q("Le régime applicable", "accordBranche", "À défaut, un accord de branche la définit-il ?", "oui / non", "accord de branche");
 q("Le régime applicable", "accordBrancheVerse", "Cet accord de branche est-il joint au dossier ?", "oui / non", "l'accord lui-même");
+q("Le régime applicable", "preuveAbsenceAccord.date", "Date de la déclaration constatant l'absence d'accord", "AAAA-MM-JJ", "déclaration datée et signée");
+q("Le régime applicable", "preuveAbsenceAccord.auteur", "Auteur et signataire de cette déclaration", "texte", "la déclaration elle-même");
 q("Le régime applicable", "pieces", "Pièces versées au dossier", "liste d'objets", "les pièces elles-mêmes");
 
 q("Les dates", "dateSeuil50Atteint", "Date à laquelle l'effectif a atteint cinquante salariés pendant douze mois consécutifs", "AAAA-MM-JJ", "états d'effectif mensuels");
