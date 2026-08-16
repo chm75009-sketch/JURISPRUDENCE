@@ -905,16 +905,40 @@
   }
 
   /* ------------------------------------------------------------ restitution */
+  /* ------------------------------------------------- nommer les contrôles
+
+     Le rapport portait des identifiants nus — « CSE-CTL-SST-01 » — et il
+     fallait demander ce qu'ils désignaient. Un lecteur ne doit pas avoir à le
+     demander : il doit le lire. Chaque identifiant est donc suivi de sa
+     rubrique, en clair.
+
+     La table n'est pas écrite ici : elle est construite depuis les contrôles du
+     moteur, qui portent chacun la leur. Elle ne peut donc pas dériver — un
+     contrôle renommé se renomme partout, et un contrôle ajouté est nommé sans
+     que personne ait à y penser. */
+  var RUBRIQUE = (function () {
+    var t = {}, c = M.controles && (M.controles.C || M.controles);
+    if (Array.isArray(c)) c.forEach(function (x) { if (x && x.id) t[x.id] = x.rubrique || ""; });
+    return t;
+  })();
+  var IDENT = /\b(?:[A-Z]{2,6}-)?CTL-[A-Z]{3}-\d{2}\b/g;
+  function nommer(html) {
+    return String(html).replace(IDENT, function (id) {
+      var r = RUBRIQUE[id];
+      return r ? ech(r) + ' <span class="ident">' + id + "</span>" : id;
+    });
+  }
+
   var REND = {
-    sur: function (i) { return '<p class="note">' + ech(i.t) + "</p>"; },
+    sur: function (i) { return '<p class="note">' + nommer(ech(i.t)) + "</p>"; },
     t1: function (i) { return "<h2>" + ech(i.t) + "</h2>"; },
     trait: function () { return "<hr>"; },
     h1: function (i) { return "<h2>" + ech(i.t) + "</h2>"; },
     h2: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
     h3: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
-    p: function (i) { return "<p>" + ech(i.t) + "</p>"; },
+    p: function (i) { return "<p>" + nommer(ech(i.t)) + "</p>"; },
     note: function (i) { return '<p class="note">' + ech(i.t) + "</p>"; },
-    puce: function (i) { return '<p class="puce">— ' + ech(i.t) + "</p>"; },
+    puce: function (i) { return '<p class="puce">— ' + nommer(ech(i.t)) + "</p>"; },
     saut: function () { return ""; },
     enc: function (i) {
       return '<div class="enc"><p class="sh">' + ech(i.titre) + '</p><p style="margin:0">' + ech(i.t) + "</p></div>";
@@ -929,11 +953,13 @@
     acte: function (i) {
       return '<div class="acte a-' + ech(i.priorite) + '"><p class="t">' + ech(i.n) + ". " + ech(i.t) +
         '<span class="chip c-' + ech(i.priorite) + '">' + ech(i.priorite) + '</span></p><p class="w">' +
-        (i.etat ? "<b>" + ech(i.etat) + "</b> — " : "") + ech(i.pourquoi) + " · " + ech(i.id) + "</p></div>";
+        (i.etat ? "<b>" + ech(i.etat) + "</b> — " : "") + nommer(ech(i.pourquoi)) +
+        ' · ' + ech(RUBRIQUE[i.id] || "") + ' <span class="ident">' + ech(i.id) + "</span></p></div>";
     },
     interdit: function (i) {
       return '<div class="interdit i-' + ech(i.ton || "certain") + '"><p class="t">' + ech(i.t) +
-        '</p><p class="w">' + ech(i.pourquoi) + " · " + ech(i.id) + "</p></div>";
+        '</p><p class="w">' + nommer(ech(i.pourquoi)) +
+        ' · ' + ech(RUBRIQUE[i.id] || "") + ' <span class="ident">' + ech(i.id) + "</span></p></div>";
     },
     acquis: function (i) {
       return '<p class="acquis"><b>&#10003;</b> ' + ech(i.t) +
