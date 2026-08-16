@@ -474,7 +474,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "2.8 — 16 août 2026";
+const VERSION = "2.9 — 16 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1926,10 +1926,33 @@ async function assistantMots(){
       for(const m of (r.themes || [])) matieres.set(m, (matieres.get(m)||0) + 1);
     }
 
-    /* 3. Retenir les expressions récurrentes, les plus longues d'abord. */
-    const brut = [...expressions(textes)].map(([e, n]) => ({e, n}))
-      .filter(x => x.n >= 3)
-      .sort((a, b) => b.n - a.n || b.e.length - a.e.length);
+    /* 3. Retenir les expressions récurrentes — mais seulement celles qui
+       parlent DU SUJET.
+
+       Sans cette condition, le relevé remontait la langue commune à toutes les
+       décisions : sur « demande de copie d'e-mail professionnel », il rendait
+       « droits de l'homme » (163 décisions), « convention de sauvegarde des
+       droits » (12 306) et « doit être » (6 763). Des expressions réelles,
+       comptées juste, et sans le moindre rapport avec la question posée — la
+       fréquence dans l'échantillon ne dit rien tant que l'échantillon lui-même
+       est fait de décisions choisies sur des mots courants.
+
+       Une expression n'est donc candidate que si elle contient l'un des mots du
+       sujet, à la racine près : c'est le seul lien qui garantisse qu'elle
+       désigne ce que l'on cherche. */
+    const RACINE = m => m.length > 7 ? m.slice(0, 7) : m;
+    const motsSujet = new Set(ligatures(normaliser(sujet)).split(/[^a-z0-9]+/)
+      .filter(m => m.length > 3 && !estVide(m)).map(RACINE));
+    const parleDuSujet = e => e.split(" ").some(m => motsSujet.has(RACINE(m)));
+
+    const toutes = [...expressions(textes)].map(([e, n]) => ({e, n}));
+    let brut = toutes.filter(x => x.n >= 3 && parleDuSujet(x.e));
+    /* Si rien ne relie l'échantillon au sujet, mieux vaut le dire que rendre
+       la langue de palais : on garde alors les expressions les plus longues,
+       et le relevé porte la réserve. */
+    const horsSujet = brut.length === 0;
+    if(horsSujet) brut = toutes.filter(x => x.n >= 3);
+    brut = brut.sort((a, b) => b.n - a.n || b.e.length - a.e.length);
     const retenues = elaguer(brut).slice(0, 12);
     /* Les mots de l'utilisateur sont toujours mesurés : c'est la comparaison
        qui instruit, pas la seule liste. */
@@ -1956,10 +1979,18 @@ async function assistantMots(){
        Le rang est donc donné par la fréquence dans l'échantillon rapportée à
        la fréquence dans la base entière — ce qui est fréquent ici et rare
        ailleurs caractérise la recherche. */
+    /* Le rang : ce qui est fréquent ICI et rare AILLEURS.
+
+       L'ancien calcul divisait par le logarithme du total, ce qui ne suffisait
+       pas : une expression vue cinquante fois dans l'échantillon et présente
+       dans six mille décisions passait devant une expression vue trois fois et
+       présente dans quarante. C'est l'inverse qu'il faut. On pèse donc chaque
+       expression par sa rareté dans la base entière — la forme classique du
+       rapport entre fréquence locale et fréquence globale. */
     const utiles = lignes.filter(l => !l.elargi && l.total > 0)
       .filter(l => l.total < 20000 || l.sien)      // au-delà, c'est de la langue de palais
       .map(l => Object.assign({}, l, {
-        score: (l.n + 1) / Math.pow(Math.log10(l.total + 10), 2) }))
+        score: (l.n + 1) * Math.log10(30000 / Math.max(l.total, 3)) }))
       .sort((a, b) => b.score - a.score);
     const vaines = lignes.filter(l => l.elargi || !l.total);
     const mat = [...matieres].sort((a, b) => b[1] - a[1]).slice(0, 8);
@@ -1971,6 +2002,9 @@ async function assistantMots(){
         "vos mots")+".</b> Les nombres sont ceux que l'API renvoie pour chaque expression prise "+
       "à la lettre, en Cour de cassation et cours d'appel. Les plus caractéristiques sont en "+
       "tête : une expression fréquente ici et rare ailleurs désigne le sujet. "+
+      (horsSujet ? "<br><b>Réserve :</b> aucune des expressions relevées ne reprend vos mots. "+
+        "Les décisions lues parlent probablement d'autre chose — reformulez avec le terme "+
+        "central de votre question. " : "")+
       "<b>Cliquez pour l'employer</b> — le relevé reste affiché, vous pouvez en essayer "+
       "plusieurs de suite. <button class=\"second\" id=\"mots-fermer\" type=\"button\" "+
       "style=\"margin-left:8px\">Masquer le relevé</button></div>"+
