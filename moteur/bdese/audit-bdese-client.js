@@ -46,10 +46,14 @@ function audit(f) {
   /* L'état du catalogue réglementaire est dit dans le rapport, non seulement au
      manifeste : le lecteur du rapport doit savoir si le découpage du décret est
      intégral, et il ne le saura pas en lisant le code. */
-  const couv = [B.contenu["moins300"].couverture.part, B.contenu["au moins300"].couverture.part];
-  if (couv.some(x => x < 100))
+  const cv = [B.contenu["moins300"].couverture, B.contenu["au moins300"].couverture];
+  const reste = cv.reduce((n, c) => n + (c.reliquat || 0), 0);
+  if (reste)
     enc("État du catalogue réglementaire — développement",
-      `Le découpage du décret consomme ${couv[0]} % du texte de l'article R. 2312-8 et ${couv[1]} % de celui de l'article R. 2312-9. Le critère de sortie est cent pour cent : tant qu'il n'est pas atteint, le catalogue réglementaire n'est pas exhaustif, et ce rapport ne doit pas être lu comme une vérification de l'intégralité du décret. Ce qui n'a pas été reconnu est compté et publié plutôt que passé sous silence.`);
+      `Le découpage laisse ${reste} caractère(s) du décret hors de son périmètre. Le critère de sortie est cent pour cent : tant qu'il n'est pas atteint, le catalogue n'est pas exhaustif, et ce rapport ne doit pas être lu comme une vérification de l'intégralité du décret.`);
+  else
+    enc("État du catalogue réglementaire — complet",
+      `Le texte des articles R. 2312-8 et R. 2312-9 est intégralement rendu : chaque caractère est soit extrait comme contenu, soit reconnu comme structure du découpage — marqueur, numérotation, séparateur (${cv[0].structure} et ${cv[1].structure} caractères respectivement). Aucun reliquat. La chaîne de publication échoue si un seul caractère cesse d'être l'un ou l'autre.`);
 
   enc("Ce que ce module fait, et ce qu'il ne fait pas",
     "Il prépare, structure, documente et audite la base de données. Il ne fournit pas une base collaborative accessible simultanément à plusieurs catégories d'utilisateurs, et il n'est pas la base : la mise à disposition reste un acte de l'employeur, qui se prouve par le support lui-même, ses traces d'accès et l'information donnée aux bénéficiaires.");

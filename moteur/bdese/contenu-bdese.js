@@ -150,7 +150,31 @@ const ENTETE = /^.*?comporte (?:les informations suivantes|les informations pré
    La phrase n'est pas du contenu, c'est un renvoi — mais ce qu'elle importe en
    est, et l'omettre priverait les entreprises d'au moins trois cents salariés
    de la formation professionnelle et des conditions de travail. */
-const RENVOI = /Elle comporte également les informations relatives[^.]*?\.\s*/i;
+/* Le renvoi se termine par un numéro d'article — « … de l'article R. 2312-8. » —
+   dont le point interne trompait la borne : la phrase était coupée après
+   « R. », et « 2312-8. » restait sur le carreau. La borne suit donc le numéro. */
+const RENVOI = /Elle comporte également les informations relatives.*?article R\.\s*\d+-\d+(?:-\d+)?\.\s*/i;
+/* Ce qui reste entre deux extraits, et qui n'est pas du contenu perdu.
+
+   La première mesure annonçait 96,2 % et 96,6 %, et il fallait comprendre ce
+   que valaient les 3,8 % restants avant de promettre cent pour cent. Ils ont été
+   sortis un à un : ce sont des marqueurs et de la ponctuation — « ; a) »,
+   « ; iii- », « ; 2° », « . II. » — c'est-à-dire l'ossature même du découpage.
+   Le plus long trou de R. 2312-9, cent soixante et un caractères, est la phrase
+   de renvoi vers R. 2312-8, déjà exécutée ailleurs.
+
+   Autrement dit : rien n'était perdu, la mesure était fausse. Elle comptait
+   comme reliquat ce que le découpage consomme en tant que structure — comme si
+   l'on reprochait à une table des matières de ne pas contenir ses propres
+   numéros de page.
+
+   La règle est donc écrite, et STRICTE : un intervalle non extrait ne compte
+   comme structure que s'il ne contient rien d'autre que des séparateurs, des
+   numérotations et des lettres de rang. Tout le reste demeure un reliquat, il
+   est publié tel quel, et il bloque la publication réglementaire. */
+const STRUCTURE = /^[\s;:.,)(°-]*(?:(?:\d+°(?:\s*bis)?|[a-z]\)|[ivxIVX]+-|[A-Z]\.|[A-Z]-|I{1,3}\.|\d+\)|[a-z]-|-)[\s;:.,-]*)*$/;
+const estStructure = t => STRUCTURE.test(t);
+
 function couverture(brut, rubriques) {
   const dedans = [];
   for (const r of rubriques) {
@@ -182,11 +206,29 @@ function couverture(brut, rubriques) {
   const tete = (brut.match(ENTETE) || [""])[0].length;
   const renvoi = brut.match(RENVOI);
   if (renvoi) pris.fill(1, renvoi.index, renvoi.index + renvoi[0].length);
+  /* Les intervalles restés hors du découpage, classés un à un : structure
+     d'un côté — elle est consommée —, reliquat de l'autre — il ne l'est pas.
+     Le classement se fait sur le texte lui-même, jamais sur sa longueur. */
+  const structure = [], reliquat = [];
+  let debut = -1;
+  for (let i = tete; i <= pris.length; i++) {
+    if (i < pris.length && !pris[i]) { if (debut < 0) debut = i; continue; }
+    if (debut < 0) continue;
+    const bout = { i: debut, n: i - debut, t: brut.slice(debut, i) };
+    (estStructure(bout.t) ? structure : reliquat).push(bout);
+    debut = -1;
+  }
+  structure.forEach(x => pris.fill(1, x.i, x.i + x.n));
+
   let couverts = 0;
   for (let i = tete; i < pris.length; i++) if (pris[i]) couverts++;
   const contenu = brut.length - tete;
+  const perdus = reliquat.reduce((n, x) => n + x.n, 0);
   return { extraits: dedans.length, couverts, entete: tete, contenu,
     renvoi: renvoi ? net(renvoi[0]) : null,
+    structure: structure.reduce((n, x) => n + x.n, 0),
+    reliquat: perdus,
+    fragments: reliquat.sort((a, b) => b.n - a.n).slice(0, 20).map(x => net(x.t)),
     part: +(100 * couverts / contenu).toFixed(1) };
 }
 
@@ -261,16 +303,21 @@ if (require.main === module) {
      gouvernance, non de droit — elle est écrite ici pour ne pas être décidée au
      cas par cas, et ce qui reste hors du découpage est nommé, jamais toléré en
      silence. */
-  const SEUIL_BLOQUANT = 95, SEUIL_REVUE = 100;
-  const bas = Object.values(b.contenu).filter(d => d.couverture.part < SEUIL_REVUE);
+  /* Le critère de sortie est cent pour cent, et il bloque. Tout intervalle du
+     texte doit être, soit extrait comme contenu, soit reconnu comme structure —
+     marqueur, numérotation, séparateur. Le moindre caractère qui n'est ni l'un
+     ni l'autre est un reliquat : il est affiché, et la publication échoue. */
+  const bas = Object.values(b.contenu).filter(d => d.couverture.reliquat > 0);
   if (bas.length) {
-    console.log("\ncouverture inférieure à 100 % — le découpage laisse du texte de côté :");
+    console.log("\nÉCHEC — le découpage laisse du texte de côté :");
     for (const d of bas) {
-      console.log(`  ${d.article} : ${d.couverture.part} % (${d.couverture.couverts} sur ${d.couverture.contenu} caractères de contenu)`);
-      if (d.couverture.part < SEUIL_BLOQUANT) { ko++;
-        console.log(`  ÉCHEC — en deçà de ${SEUIL_BLOQUANT} %, la publication est bloquée : reprendre le découpage.`); }
-      else console.log(`  au-dessus de ${SEUIL_BLOQUANT} % : publication possible, revue du découpage recommandée.`);
+      console.log(`  ${d.article} : ${d.couverture.part} % · ${d.couverture.reliquat} caractère(s) hors du découpage`);
+      d.couverture.fragments.forEach(f => console.log(`      · ${JSON.stringify(f.slice(0, 120))}`));
+      ko++;
     }
+  } else {
+    for (const d of Object.values(b.contenu))
+      console.log(`  ${d.article} : 100 % — ${d.couverture.couverts} caractères, dont ${d.couverture.structure} de structure (marqueurs, numérotations, séparateurs). Reliquat : aucun.`);
   }
   if (b.contenu["au moins300"].renvois)
     console.log("\nrenvois exécutés vers R. 2312-8 : " + b.contenu["au moins300"].renvois.join(" · "));

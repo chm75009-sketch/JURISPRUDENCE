@@ -16,20 +16,40 @@ d'accès et l'information donnée aux bénéficiaires. Un contrôle dédié
 (`BDESE-CTL-PRV-01`) réunit ces éléments et rend « risque à vérifier » — il ne
 rend jamais « conforme », et la publication échoue s'il le fait un jour.
 
-## L'état de publication — développement, et non catalogue exhaustif
-
-Deux états, qui ne se confondent pas :
+## L'état de publication — réglementaire publiée, à 100 %
 
 | État | Signification |
 |---|---|
-| **Développement** *(état actuel)* | Couverture mesurée à 96,2 % et 96,6 %, reliquat identifié et suivi. Le catalogue réglementaire **n'est pas exhaustif**, et le module ne doit pas être présenté comme vérifiant l'intégralité du décret. |
-| Réglementaire publiée | 100 % du texte consommé, ou reliquat explicitement validé par un juriste et rattaché à une règle. |
+| Développement | Un reliquat subsiste : du texte du décret n'est ni extrait, ni reconnu comme structure. |
+| **Réglementaire publiée** *(état actuel)* | **100 %** — reliquat nul sur R. 2312-8 comme sur R. 2312-9. |
 
 L'état est **calculé** par la chaîne de publication, écrit au manifeste
 (`etatPublication`, `catalogueReglementaire.exhaustif`), affiché dans la page et
-repris en tête de chaque rapport. La transparence sur les 96 % est nécessaire ;
-elle ne suffit pas à autoriser une présentation qui laisserait croire le
-catalogue complet.
+repris en tête de chaque rapport.
+
+### Comment les 96 % sont devenus 100 %
+
+Pas en abaissant l'exigence : en cherchant ce que valaient les 3,8 % manquants.
+Ils ont été sortis un à un, et c'étaient des **marqueurs et de la ponctuation** —
+« ; a) », « ; iii- », « ; 2° », « ; - » — c'est-à-dire l'ossature même du
+découpage ; plus, sur R. 2312-9, les 161 caractères de la phrase de renvoi vers
+R. 2312-8, déjà exécutée par ailleurs. Deux défauts de mesure s'y cachaient : le
+tiret de puce n'était pas reconnu comme marqueur, et la borne du renvoi tombait
+sur le point interne de « R. 2312-8. », laissant « 2312-8. 1° » sur le carreau.
+
+Rien n'était perdu : **la mesure était fausse**. Elle comptait comme reliquat ce
+que le découpage consomme en tant que structure — comme si l'on reprochait à une
+table des matières de ne pas contenir ses propres numéros de page.
+
+La règle est donc écrite, et stricte : un intervalle non extrait ne compte comme
+structure que s'il **ne contient rien d'autre** que des séparateurs, des
+numérotations et des lettres de rang. Tout le reste demeure un reliquat, il est
+affiché caractère par caractère, et **il bloque la publication**.
+
+| Article | Caractères | dont structure | Reliquat |
+|---|---|---|---|
+| R. 2312-8 | 10 798 | 412 | **0** |
+| R. 2312-9 | 31 542 | 1 072 | **0** |
 
 ## La règle qui commande tout : le régime d'abord
 
@@ -183,10 +203,6 @@ contenu est audité sur un régime indéterminé, ou si le contrôle de preuve c
 - **Le comité central et les établissements** : le niveau de mise en place est
   contrôlé, et R. 2312-6 II est cité. La consultation à double niveau n'est pas
   modélisée plus avant.
-- **La couverture du découpage** reste à 96,2 % et 96,6 %. Le critère de sortie de
-  100 % est **bloquant pour l'état « réglementaire publiée »** : tant qu'il n'est
-  pas atteint, le manifeste porte l'état « développement », et la page comme le
-  rapport le disent.
 - **Le comité central et les établissements distincts** : point fonctionnel à
   approfondir avant de revendiquer une couverture complète des consultations
   complexes. Le niveau de mise en place est contrôlé et R. 2312-6, II est cité ;

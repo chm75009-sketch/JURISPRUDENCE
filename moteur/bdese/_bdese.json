@@ -504,11 +504,14 @@
    ],
    "couverture": {
     "extraits": 103,
-    "couverts": 10386,
+    "couverts": 10798,
     "entete": 195,
     "contenu": 10798,
     "renvoi": null,
-    "part": 96.2
+    "structure": 412,
+    "reliquat": 0,
+    "fragments": [],
+    "part": 100
    },
    "infidelites": []
   },
@@ -1509,11 +1512,14 @@
    ],
    "couverture": {
     "extraits": 285,
-    "couverts": 30462,
+    "couverts": 31542,
     "entete": 261,
     "contenu": 31542,
-    "renvoi": "Elle comporte également les informations relatives à la formation professionnelle et aux conditions de travail prévues au 1° A e et f de l'article R.",
-    "part": 96.6
+    "renvoi": "Elle comporte également les informations relatives à la formation professionnelle et aux conditions de travail prévues au 1° A e et f de l'article R. 2312-8.",
+    "structure": 1072,
+    "reliquat": 0,
+    "fragments": [],
+    "part": 100
    },
    "infidelites": [],
    "renvois": [
