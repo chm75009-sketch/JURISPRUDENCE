@@ -124,8 +124,8 @@ Le contrôle le réclame et rend « risque à vérifier » à défaut.
 1. **Le manifeste réglementaire** — les 32 articles retenus, chacun avec son
    identifiant `LEGIARTI…`, sa longueur et le résultat de sa relecture. Il est
    écrit dans `manifeste-bdese.json`, section `manifesteReglementaire`.
-2. **Les cas d'épreuve du moteur de régime** — `cas-regime.js` : 11 cas de
-   régime (dont **5 où le module doit répondre « indéterminé »** plutôt que
+2. **Les cas d'épreuve du moteur de régime** — `cas-regime.js` : 13 cas de
+   régime (dont **7 où le module doit répondre « indéterminé »** plutôt que
    retomber sur le supplétif), 5 cas de dates et 4 cas de délais.
 
 ## Les textes, relus à la source
