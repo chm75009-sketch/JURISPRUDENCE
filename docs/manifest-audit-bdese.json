@@ -1,0 +1,25 @@
+{
+  "name": "Audit — base de données (BDESE)",
+  "short_name": "Audit BDESE",
+  "description": "Établit le régime applicable à la base de données économiques, sociales et environnementales, puis en audite le contenu, la mise à disposition et les délais de consultation. Tout se calcule sur l'appareil.",
+  "lang": "fr",
+  "start_url": "audit-bdese.html",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#f6f7f9",
+  "theme_color": "#3C4557",
+  "icons": [
+    {
+      "src": "icons/icon-bdese-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-bdese-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

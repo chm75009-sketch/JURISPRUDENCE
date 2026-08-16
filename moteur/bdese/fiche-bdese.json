@@ -1,0 +1,80 @@
+{
+ "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
+ "dateAudit": "2026-08-16",
+ "effectif": 420,
+ "etablissementsDistincts": false,
+ "accordRecherche": true,
+ "accordEntreprise": false,
+ "accordBranche": false,
+ "pieces": [],
+ "dateSeuil50Atteint": "2019-03-01",
+ "dateFinMandat": "2029-05-01",
+ "dateSeuil300Franchi": "2024-02-01",
+ "base": {
+  "themes": [
+   {
+    "theme": "Investissements",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Fonds propres, endettement et impôts",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Rémunération des salariés et dirigeants, dans l'ensemble de leurs éléments",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Représentation du personnel et Activités sociales et culturelles",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Rémunération des financeurs, en dehors des éléments mentionnés au 4°",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Flux financiers à destination de l'entreprise",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Partenariats",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Pour les entreprises appartenant à un groupe, transferts commerciaux et financiers entre les entités du groupe",
+    "renseigne": "oui"
+   },
+   {
+    "theme": "Environnement (52)",
+    "renseigne": "oui"
+   }
+  ],
+  "anneesPassees": 2,
+  "anneesSuivantes": 3,
+  "formePerspectives": "grandes tendances",
+  "informationsNonRenseignables": [
+   "Les investissements immatériels au-delà de N+1 — le plan d'affaires ne va pas plus loin"
+  ],
+  "support": "espace informatique dédié, accès nominatif",
+  "beneficiaires": [
+   "membres titulaires et suppléants du comité",
+   "délégués syndicaux"
+  ],
+  "niveau": "entreprise",
+  "dateDerniereMiseAJour": "2026-06-30",
+  "informationMiseAJour": true,
+  "preuveAcces": "journal de connexion horodaté"
+ },
+ "accordPeriodiciteConsultations": false,
+ "accordDelaisConsultation": false,
+ "consultation": {
+  "dateMiseADisposition": "2026-05-04",
+  "nbExpertises": 0,
+  "centralEtEtablissements": false,
+  "dateAvis": "2026-05-28"
+ }
+}

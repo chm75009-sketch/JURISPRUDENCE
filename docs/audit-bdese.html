@@ -6,13 +6,13 @@
 <!-- Chaque audit s'installe pour lui-même, avec son nom et son icône : sur
      l'écran d'accueil, trois applications distinctes valent mieux qu'une seule
      dont on ne sait laquelle des trois pages elle ouvre. -->
-<meta name="theme-color" content="#8C3A12">
-<link rel="manifest" href="manifest-audit-pse.json">
-<link rel="apple-touch-icon" href="icons/icon-pse-180.png">
-<link rel="icon" href="icons/icon-pse-180.png">
+<meta name="theme-color" content="#3C4557">
+<link rel="manifest" href="manifest-audit-bdese.json">
+<link rel="apple-touch-icon" href="icons/icon-bdese-180.png">
+<link rel="icon" href="icons/icon-bdese-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Audit — plan de sauvegarde de l'emploi</title>
+<title>Audit — base de données économiques, sociales et environnementales</title>
 <!-- Cette page sert les deux moteurs : le script chargé et le libellé changent,
      tout le reste est commun. Voir audit-cse.html, qui ne diffère que par eux. -->
 <!-- Tout se passe dans le navigateur : le moteur est chargé comme un script
@@ -162,43 +162,44 @@
 
 <header>
   <p class="fil">Application Jurisprudence</p>
-  <h1>Audit — plan de sauvegarde de l'emploi</h1>
-  <p class="chapo"><b>Cette application vérifie votre plan de sauvegarde de l'emploi point par
-  point</b> — son contenu au regard des sept rubriques de l'article L. 1233-62, son chiffrage, le dispositif
-  d'accompagnement dû, la voie retenue, les délais d'instruction et le suivi — et vous dit ce qui bloque,
-  ce qu'il reste à faire, et ce que l'administration appréciera.<br>
+  <h1>Audit — base de données économiques, sociales et environnementales</h1>
+  <p class="chapo"><b>Cette application vérifie votre base de données économiques, sociales et
+  environnementales</b> — le texte qui en commande le contenu, les dates auxquelles il devient
+  exigible, le plancher légal qu'aucun accord ne peut retirer, la mise à disposition et les délais
+  de consultation — et vous dit ce qui manque, ce qui ne va pas, et ce qui est en règle.<br>
   L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
-  <a href="./">Recherche de jurisprudence</a> · <a href="audit.html">Audit du licenciement économique</a> · <a href="audit-cse.html">Audit du comité</a> · <a href="audit-bdese.html">Base de données (BDESE)</a>
+  <a href="./">Recherche de jurisprudence</a> · <a href="audit-cse.html">Audit du comité</a> · <a href="audit.html">Licenciement économique</a> · <a href="audit-pse.html">Plan de sauvegarde de l'emploi</a>
   · <button type="button" class="lien-avert" data-avertissement>Avertissement d'usage</button></p>
 </header>
 
 <div class="presentation">
   <h2>À quoi sert cette page</h2>
-  <p>Un plan de sauvegarde de l'emploi ne se juge pas seulement à son contenu : il se juge à ce que
-  l'administration en fera. Vous décrivez le plan, l'application le confronte aux articles L. 1233-61
-  à L. 1233-63 et aux règles d'instruction, vous obtenez un rapport imprimable.</p>
+  <p>Une base de données ne s'audite pas dans le vide : ce qu'elle doit contenir dépend du texte qui
+  la commande — un accord d'entreprise, un accord de branche, ou le décret à défaut d'accord. Le
+  module commence donc par établir ce régime, et refuse d'auditer le contenu tant qu'il est inconnu.</p>
   <ul class="etapes">
-    <li><b>1. Vous décrivez</b> les mesures du plan, une par ligne — rubrique, bénéficiaires, budget,
-    durée — le dispositif d'accompagnement, la voie retenue et le calendrier. Les données déjà saisies
-    dans l'audit du licenciement économique sont reprises automatiquement.</li>
-    <li><b>2. L'application vérifie</b> chaque exigence une par une, et dit sur quoi elle se fonde.</li>
-    <li><b>3. Vous obtenez</b> un rapport imprimable : ce qui bloque, ce qui manque, et ce que
-    l'administration appréciera.</li>
+    <li><b>1. Vous décrivez</b> la recherche d'accord et son résultat, l'effectif et les dates de
+    franchissement des seuils, les thèmes que la base comporte, son support et son actualisation.</li>
+    <li><b>2. L'application établit le régime</b>, puis confronte votre base au contenu que ce
+    régime commande — et, dans tous les cas, au plancher de l'article L. 2312-21, alinéa 3.</li>
+    <li><b>3. Vous obtenez</b> un rapport imprimable : le régime retenu, les dates d'exigibilité, le
+    plancher thème par thème, le contenu du décret rubrique par rubrique.</li>
   </ul>
-  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne rédige pas le plan, ne conduit pas la
-  négociation, ne dépose rien sur le portail de l'administration — et surtout, <b>elle ne dit pas si le
-  plan est suffisant</b>. Aucun texte ne fixe le montant d'un plan : l'article L. 1233-57-3 confie
-  l'appréciation de sa proportionnalité aux moyens du groupe à l'autorité administrative, puis au juge
-  administratif. L'application calcule les rapports et les affiche ; elle ne les juge pas.</p>
+  <p class="note"><b>Ce que cette page ne fait pas :</b> elle <b>prépare, structure, documente et
+  audite</b> la base — elle ne fournit pas une base collaborative accessible simultanément à
+  plusieurs catégories d'utilisateurs, et <b>elle n'est pas la base</b>. La mise à disposition reste
+  un acte de l'employeur : elle se prouve par le support lui-même, ses traces d'accès et
+  l'information donnée aux bénéficiaires. Elle ne lit pas davantage les stipulations de votre accord :
+  quand un accord définit la base, elle vérifie ce qui s'impose à lui, non ce qu'il contient.</p>
 </div>
 
 <div class="enc" style="margin-top:22px">
-  <p class="sh">Le calibrage se calcule, il ne se conclut pas</p>
-  <p style="margin:0">Le coût par salarié licencié et la part du plan dans le résultat consolidé du
-  groupe sont calculés et affichés. Aucun de ces contrôles ne rend « conforme » : ils rendent
-  « risque à vérifier », parce qu'aucun seuil légal n'existe. Un feu vert sur ce point serait faux, et
-  il serait le plus coûteux de tous. Une donnée non renseignée, elle, ne produit jamais « conforme » :
-  elle produit « donnée manquante », et le rapport le dit.</p>
+  <p class="sh">Le régime d'abord, le contenu ensuite</p>
+  <p style="margin:0">Le régime supplétif du décret ne s'applique pas « faute d'avoir trouvé » : il
+  s'applique en l'absence d'accord, ce qui est un fait à établir. Tant que la recherche d'accord
+  n'est pas déclarée faite, ou tant qu'un accord déclaré n'est pas joint, le rapport annonce
+  « régime indéterminé » et n'audite aucun contenu — auditer un contenu sans savoir quel texte le
+  commande produirait des non-conformités inventées.</p>
 </div>
 
 <form id="formulaire" autocomplete="off"></form>
@@ -220,61 +221,39 @@
 <footer id="pied"></footer>
 </div>
 
-<script src="moteur-pse.js"></script>
+<script src="moteur-bdese.js"></script>
 <script>
-  /* Ce qui distingue cette page : le moteur, la clé du brouillon et le dossier
-     d'exemple. Tout le reste vit dans audit-form.js, commun aux trois audits.
-
-     Les données communes à l'audit du licenciement économique — effectif,
-     groupe, nombre de licenciements, date de notification, pièces — sont
-     reprises de son brouillon si l'utilisateur l'a rempli : personne ne
-     ressaisit deux fois le même effectif. Elles restent modifiables ici, et
-     elles restent demandées : un module qui suppose une saisie faite ailleurs
-     conclut sur ce qu'il n'a pas lu. */
-  window.__MOTEUR = "MoteurPSE";
-  window.__CLE = "audit-pse-brouillon";
-  (function () {
-    var COMMUNS = ["effectif", "effectifEtablissement", "groupe", "effectifGroupe",
-                   "nbLicenciements", "dateNotification", "pieces", "entreprise"];
-    try {
-      if (localStorage.getItem("audit-pse-brouillon")) return;
-      var eco = JSON.parse(localStorage.getItem("audit-eco-brouillon") || "null");
-      if (!eco) return;
-      var repris = {};
-      COMMUNS.forEach(function (c) { if (eco[c] !== undefined && eco[c] !== "") repris[c] = eco[c]; });
-      if (Object.keys(repris).length) localStorage.setItem("audit-pse-brouillon", JSON.stringify(repris));
-    } catch (e) {}
-  })();
+  window.__MOTEUR = "MoteurBDESE";
+  window.__CLE = "audit-bdese-brouillon";
   window.__EXEMPLE = {
-    "effectif": "320",
-    "effectifEtablissement": "320",
-    "groupe": "oui",
-    "effectifGroupe": "640",
-    "nbLicenciements": "22",
-    "total30j": "22",
-    "pieces": "[{\"type\": \"comptes-groupe\", \"date\": \"2026-05-02\"}]",
-    "plan.mesures": "[{\"rubrique\": \"1°\", \"intitule\": \"Reclassement interne\", \"beneficiaires\": 22, \"budget\": 180000, \"duree\": \"6 mois\"}, {\"rubrique\": \"1° bis\", \"intitule\": \"Reprise partielle d'activité\", \"beneficiaires\": 4, \"budget\": 40000, \"duree\": \"12 mois\"}, {\"rubrique\": \"2°\", \"intitule\": \"Création d'une activité de maintenance\", \"beneficiaires\": 6, \"budget\": 120000, \"duree\": \"18 mois\"}, {\"rubrique\": \"3°\", \"intitule\": \"Antenne emploi et bassin\", \"beneficiaires\": 22, \"budget\": 90000, \"duree\": \"9 mois\"}, {\"rubrique\": \"4°\", \"intitule\": \"Aide à la création d'entreprise\", \"beneficiaires\": 5, \"budget\": 60000, \"duree\": \"12 mois\"}, {\"rubrique\": \"5°\", \"intitule\": \"Formations de reconversion\", \"beneficiaires\": 18, \"budget\": 240000, \"duree\": \"12 mois\"}, {\"rubrique\": \"6°\", \"intitule\": \"Réduction des heures supplémentaires\", \"beneficiaires\": 40, \"budget\": 0, \"duree\": \"permanent\"}]",
-    "plan.budgetTotal": "730000",
-    "plan.resultatGroupe": "9200000",
-    "plan.salariesExposes": "3 salariés de plus de 55 ans\n2 sans qualification",
-    "plan.suivi": "{\"modalites\": \"commission de suivi trimestrielle\", \"consultation\": \"quatre réunions par an\", \"bilan\": \"bilan annuel à la DREETS\"}",
-    "plan.accompagnement": "contrat de sécurisation professionnelle",
-    "plan.dateProposition": "2026-07-10",
-    "plan.dateRupture": "2026-07-20",
-    "plan.demandesReembauche": "",
-    "plan.informationElusPostes": "oui",
-    "pse.voie": "unilateral",
-    "pse.suffrages": null,
-    "pse.dateDepotAdmin": "2026-06-01",
-    "pse.dateDecisionAdmin": "2026-06-18",
-    "pse.dateDesignationExpert": "2026-03-23",
-    "datesReunionsCSE": "2026-03-23\n2026-04-14",
-    "dateAvisCSE": "2026-04-14",
-    "accordDelaisConsultation": "non",
-    "expertisePSE": "oui",
-    "dateNotification": "2026-06-25",
     "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
-    "dateAudit": "2026-08-16"
+    "dateAudit": "2026-08-16",
+    "effectif": "420",
+    "etablissementsDistincts": "non",
+    "accordRecherche": "oui",
+    "accordEntreprise": "non",
+    "accordBranche": "non",
+    "pieces": "",
+    "dateSeuil50Atteint": "2019-03-01",
+    "dateFinMandat": "2029-05-01",
+    "dateSeuil300Franchi": "2024-02-01",
+    "base.themes": "[{\"theme\": \"Investissements\", \"renseigne\": \"oui\"}, {\"theme\": \"Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise\", \"renseigne\": \"oui\"}, {\"theme\": \"Fonds propres, endettement et impôts\", \"renseigne\": \"oui\"}, {\"theme\": \"Rémunération des salariés et dirigeants, dans l'ensemble de leurs éléments\", \"renseigne\": \"oui\"}, {\"theme\": \"Représentation du personnel et Activités sociales et culturelles\", \"renseigne\": \"oui\"}, {\"theme\": \"Rémunération des financeurs, en dehors des éléments mentionnés au 4°\", \"renseigne\": \"oui\"}, {\"theme\": \"Flux financiers à destination de l'entreprise\", \"renseigne\": \"oui\"}, {\"theme\": \"Partenariats\", \"renseigne\": \"oui\"}, {\"theme\": \"Pour les entreprises appartenant à un groupe, transferts commerciaux et financiers entre les entités du groupe\", \"renseigne\": \"oui\"}, {\"theme\": \"Environnement (52)\", \"renseigne\": \"oui\"}]",
+    "base.anneesPassees": "2",
+    "base.anneesSuivantes": "3",
+    "base.formePerspectives": "grandes tendances",
+    "base.informationsNonRenseignables": "Les investissements immatériels au-delà de N+1 — le plan d'affaires ne va pas plus loin",
+    "base.support": "espace informatique dédié, accès nominatif",
+    "base.beneficiaires": "membres titulaires et suppléants du comité\ndélégués syndicaux",
+    "base.niveau": "entreprise",
+    "base.dateDerniereMiseAJour": "2026-06-30",
+    "base.informationMiseAJour": "oui",
+    "base.preuveAcces": "journal de connexion horodaté",
+    "accordPeriodiciteConsultations": "non",
+    "accordDelaisConsultation": "non",
+    "consultation.dateMiseADisposition": "2026-05-04",
+    "consultation.nbExpertises": "0",
+    "consultation.centralEtEtablissements": "non",
+    "consultation.dateAvis": "2026-05-28"
   };
 </script>
 <script src="audit-export.js"></script>
