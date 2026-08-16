@@ -490,7 +490,12 @@
         options(e, ["", "oui", "non"], "");
       } else if (t === "json") {
         e = document.createElement("textarea");
-        e.placeholder = format + " — au format JSON, par exemple [] ou [{…}]";
+        /* Une liste se tape une par ligne. Le format JSON était la seule entrée
+           possible, et il tenait lieu de barrière : personne ne compose des
+           accolades sur un téléphone. Il reste accepté — un tableau collé depuis
+           ailleurs doit continuer de fonctionner — mais il n'est plus demandé. */
+        e.placeholder = "une par ligne\nou joignez un fichier ci-dessus";
+        e.rows = 3;
       } else {
         e = document.createElement("input");
         e.type = t === "date" ? "date" : (t === "nombre" ? "number" : "text");
@@ -498,9 +503,11 @@
         e.placeholder = format;
       }
       e.name = cle; e.id = "c-" + cle;
-      lab.appendChild(e);
-      /* Un tableau se dépose au lieu de se retaper. */
+      /* Le dépôt est offert avant la saisie, non après : placé en dessous, il
+         passait sous la barre d'actions collée en bas de l'écran, et l'on
+         croyait devoir tout taper à la main. */
       if (t === "json") lab.appendChild(depot(cle, format));
+      lab.appendChild(e);
       g.appendChild(lab);
     });
     fs.appendChild(g); form.appendChild(fs);
@@ -656,7 +663,11 @@
       if (!f) return;
       etat.className = "etat-depot"; etat.textContent = "lecture…";
       lireFichier(f, format).then(function (r) {
-        document.getElementById("c-" + cle).value = JSON.stringify(r.valeur, null, 1);
+        var champ = document.getElementById("c-" + cle);
+        champ.value = Array.isArray(r.valeur)
+            && r.valeur.every(function (x) { return x === null || typeof x !== "object"; })
+          ? r.valeur.join("\n")
+          : JSON.stringify(r.valeur, null, 1);
         etat.className = "etat-depot ok";
         etat.textContent = f.name + " — " + r.note + ". Relisez le résultat avant de lancer l'audit.";
         compter();
@@ -715,8 +726,19 @@
           return;
         }
         if (t === "json") {
-          try { poser(f, cle, JSON.parse(v)); }
-          catch (err) { mauvais.push(cle); }
+          var brut = String(v).trim();
+          /* Du JSON si c'en est ; sinon une ligne par élément. */
+          if (brut[0] === "[" || brut[0] === "{") {
+            try { poser(f, cle, JSON.parse(brut)); }
+            catch (err) { mauvais.push(cle); }
+            return;
+          }
+          var elements = brut.split("\n").map(function (x) { return x.trim(); })
+            .filter(function (x) { return x !== ""; });
+          if (!elements.length) return;
+          var nombres = /nombre/.test(String(ch[2]).toLowerCase());
+          poser(f, cle, elements.map(function (x) {
+            return nombres ? cellule(x) : (x === "oui" ? true : (x === "non" ? false : x)); }));
           return;
         }
         poser(f, cle, v);
@@ -778,8 +800,8 @@
   function lancer() {
     var r = fiche();
     if (r.mauvais.length) {
-      sortie.innerHTML = '<div class="erreur">Ces champs attendent du JSON et n\'ont pas pu être lus : ' +
-        ech(r.mauvais.join(", ")) + ". Corrigez-les, importez un tableau, ou laissez-les vides.</div>";
+      sortie.innerHTML = '<div class="erreur">Ces champs commencent par une accolade ou un crochet, et le JSON n\'a pas pu être lu : ' +
+        ech(r.mauvais.join(", ")) + ". Écrivez plutôt un élément par ligne, joignez un fichier, ou laissez-les vides.</div>";
       sortie.scrollIntoView({ behavior: "smooth" });
       return;
     }
@@ -855,8 +877,12 @@
       return;
     }
     if (!e) return;
+    if (Array.isArray(v) && v.every(function (x) { return x === null || typeof x !== "object"; })) {
+      e.value = v.join("\n");                       /* une par ligne, comme à la saisie */
+      return;
+    }
     e.value = typeof v === "boolean" ? (v ? "oui" : "non")
-      : (v && typeof v === "object" ? JSON.stringify(v) : String(v));
+      : (v && typeof v === "object" ? JSON.stringify(v, null, 1) : String(v));
   }
 
   document.getElementById("lancer").addEventListener("click", lancer);
