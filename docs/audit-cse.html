@@ -3,6 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Chaque audit s'installe pour lui-même, avec son nom et son icône : sur
+     l'écran d'accueil, trois applications distinctes valent mieux qu'une seule
+     dont on ne sait laquelle des trois pages elle ouvre. -->
+<meta name="theme-color" content="#1C5E36">
+<link rel="manifest" href="manifest-audit-cse.json">
+<link rel="apple-touch-icon" href="icons/icon-cse-180.png">
+<link rel="icon" href="icons/icon-cse-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Audit — comité social et économique</title>
 <!-- Cette page sert les deux moteurs : le script chargé et le libellé changent,
      tout le reste est commun. Voir audit-cse.html, qui ne diffère que par eux. -->
@@ -241,5 +250,12 @@
   };
 </script>
 <script src="audit-form.js"></script>
+<script>
+  /* L'installation sur l'écran d'accueil suppose un service worker enregistré.
+     Le même sert les deux audits et la recherche : il est à la racine du site,
+     donc sa portée couvre les trois pages. */
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+</script>
 </body>
 </html>
