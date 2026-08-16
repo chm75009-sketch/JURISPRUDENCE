@@ -1008,6 +1008,16 @@
       sortie.scrollIntoView({ behavior: "smooth" });
       return;
     }
+    /* Un dossier vide ne produit pas un rapport : il produit une invitation à
+       le remplir. Auditer le néant donnait une page entière de tableaux et un
+       compte de « non conforme : 0 » qui se lisait comme un satisfecit. */
+    if (!Object.keys(r.f).length) {
+      sortie.innerHTML = '<div class="erreur">Vous n\'avez renseigné aucune donnée : ' +
+        "il n'y a rien à auditer. Décrivez la situation — même partiellement — puis relancez. " +
+        'Le bouton « Charger un dossier d\'exemple » montre ce que l\'outil produit.</div>';
+      sortie.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
     var items;
     try { items = M.audit(r.f); }
     catch (e) {

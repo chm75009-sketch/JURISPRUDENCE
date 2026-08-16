@@ -4,7 +4,7 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : b26f448009c8
+   Empreinte du moteur au moment de l'empaquetage : d5af0bf47dea
    {"articlesLus":368,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":38,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":63,"verdicts":2394,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0}
 
    Jeux de données allégés — champs non lus par la grille, retirés :
@@ -24,7 +24,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"comité social et économique","date":"2026-08-16","empreinte":"b26f448009c8","fichiers":{"_r2314_1.json":"572dbb2da415","actions-cse.js":"840947c5cf3a","audit-cse.js":"f9613f2bfc8a","controles-cse.js":"07716954c60b","cse_corpus.json":"ea46040a4b05","dates.js":"b6d7e587bec3","grille-cse.js":"3dbd69ab4ead","moteur-cse.js":"6924600b2464","publier-cse.js":"a9ec72528734","questionnaire-cse.js":"3321762bf8f0","sonde.js":"ac23bba7af98","tests-controles-cse.js":"3e9ec4663b7b","tests-cse.js":"6f47db6df965","textes_cse.json":"701f84e52560","valider-cse.js":"ef7bcb36b10e"},"compteurs":{"articlesLus":368,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":38,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":63,"verdicts":2394,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0},"reglesJamaisDeclenchees":[]};
+  var __MANIFESTE = {"domaine":"comité social et économique","date":"2026-08-16","empreinte":"d5af0bf47dea","fichiers":{"_r2314_1.json":"572dbb2da415","actions-cse.js":"840947c5cf3a","audit-cse.js":"f9613f2bfc8a","controles-cse.js":"f0fc626a6b48","cse_corpus.json":"ea46040a4b05","dates.js":"b6d7e587bec3","grille-cse.js":"3dbd69ab4ead","moteur-cse.js":"6924600b2464","publier-cse.js":"a9ec72528734","questionnaire-cse.js":"3321762bf8f0","sonde.js":"ac23bba7af98","tests-controles-cse.js":"3e9ec4663b7b","tests-cse.js":"6f47db6df965","textes_cse.json":"701f84e52560","valider-cse.js":"ef7bcb36b10e"},"compteurs":{"articlesLus":368,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":38,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":63,"verdicts":2394,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0},"reglesJamaisDeclenchees":[]};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -1525,6 +1525,7 @@ const COHERENCE = new Set(["CSE-CTL-COH-01", "CSE-CTL-COH-02"]);
 /* Ce qu'une donnée illisible interdit de conclure — voir
    moteur/commun/recevabilite.js. CSE-CTL-REC-01 est exempté : c'est lui qui
    porte l'anomalie, il doit continuer à la constater. */
+REC.surSilence(C, ["CSE-CTL-REC-01"]);
 REC.envelopper(C, valider, ["CSE-CTL-REC-01"]);
 
 module.exports = { C, ETATS, DETECTION, COHERENCE, SUR_EFFECTIF, effectifDouteux };
@@ -1565,7 +1566,7 @@ __def("./recevabilite.js", function(module, exports, require){
    les champs réellement touchés — f.nom, f["nom"] et la déstructuration
    comprises. Aucune liste tenue à la main, donc rien qui puisse dériver. */
 
-const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier";
+const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier", SO = "sans objet";
 const CONCLUSIFS = new Set([CONF, "non conforme"]);
 
 /* Remplacer la fonction d'un contrôle sans la rendre illisible.
@@ -1630,7 +1631,54 @@ function envelopper(controles, valider, exemptes) {
   return controles;
 }
 
-module.exports = { envelopper, remplacer, racine };
+/* ------------------------------------------------------------ le silence
+
+   Un contrôle qui se déclare « sans objet » ferme la question : il affirme que
+   l'exigence ne s'applique pas. Or beaucoup se fermaient sur rien — « l'entreprise
+   n'appartient à aucun groupe », « aucune élection en cours », « l'entreprise ne
+   comporte pas plusieurs établissements distincts » — alors que la fiche ne
+   disait rien du groupe, des élections ni des établissements. Sur un dossier
+   entièrement vide, quarante-quatre contrôles des deux modules affirmaient ainsi
+   des faits que personne n'avait déclarés.
+
+   C'est la règle du dépôt appliquée à un état de plus : une donnée non
+   renseignée ne produit jamais « conforme », et elle ne doit pas davantage
+   produire « sans objet ». Le silence n'est pas une réponse — ni dans un sens,
+   ni dans l'autre.
+
+   La mesure est la même que pour la recevabilité : on observe l'exécution. Si le
+   contrôle a conclu « sans objet » sans qu'aucun des champs qu'il a lus ne soit
+   déclaré sur la fiche, sa conclusion ne repose sur rien et devient « donnée
+   manquante ». S'il a lu ne serait-ce qu'un champ renseigné — un effectif de
+   vingt, qui écarte une obligation due à cinquante — le « sans objet » tient. */
+function surSilence(controles, exemptes) {
+  const hors = new Set(exemptes || []);
+  for (const ctl of controles) {
+    if (hors.has(ctl.id)) continue;
+    const brut = remplacer(ctl, function (f) {
+      const lus = new Set();
+      const p = new Proxy(f, {
+        get(c, k) { if (typeof k === "string") lus.add(k); return c[k]; },
+        has(c, k) { if (typeof k === "string") lus.add(k); return k in c; },
+        getOwnPropertyDescriptor(c, k) {
+          if (typeof k === "string") lus.add(k);
+          return Reflect.getOwnPropertyDescriptor(c, k);
+        },
+      });
+      const v = brut(p);
+      if (!v || v.etat !== SO) return v;
+      const declares = [...lus].filter(k =>
+        Object.prototype.hasOwnProperty.call(f, k) && f[k] !== undefined);
+      if (declares.length) return v;
+      const attendus = [...lus].filter(k => !/^(then|constructor|toJSON|inspect|Symbol)/.test(k));
+      return { etat: MANQ, surSilence: true,
+        motif: `Ce contrôle s'écarterait de lui-même — « ${v.motif} » — mais aucune des données sur lesquelles il se fonde n'est renseignée${attendus.length ? " : " + attendus.join(", ") : ""}. Le silence n'est pas une réponse : renseignez-les, ou déclarez expressément qu'il n'y a rien à déclarer.` };
+    });
+  }
+  return controles;
+}
+
+module.exports = { envelopper, surSilence, remplacer, racine };
 
 });
 
@@ -1997,12 +2045,12 @@ __def("./textes_cse.json", function(module){ module.exports = {"L2311-1": {"id":
 __def("./manifeste-cse.json", function(module){ module.exports = {
  "domaine": "comité social et économique",
  "date": "2026-08-16",
- "empreinte": "b26f448009c8",
+ "empreinte": "d5af0bf47dea",
  "fichiers": {
   "_r2314_1.json": "572dbb2da415",
   "actions-cse.js": "840947c5cf3a",
   "audit-cse.js": "f9613f2bfc8a",
-  "controles-cse.js": "07716954c60b",
+  "controles-cse.js": "f0fc626a6b48",
   "cse_corpus.json": "ea46040a4b05",
   "dates.js": "b6d7e587bec3",
   "grille-cse.js": "3dbd69ab4ead",
@@ -2048,5 +2096,6 @@ __def("./manifeste-cse.json", function(module){ module.exports = {
     propositions: {"sourceDecoupage":{"valeurs":["accord"],"autres":["décision unilatérale","décision administrative"],"libre":true,"aide":"L'ordre des sources est strict : accord d'entreprise majoritaire d'abord, décision de l'employeur à défaut, décision administrative en dernier lieu."},"instanceConsultee":{"valeurs":["central"],"autres":["établissement","les deux"],"libre":true,"aide":"Le comité central pour ce qui excède les pouvoirs des chefs d'établissement ; les comités d'établissement pour les mesures d'adaptation qui leur sont propres."},"expertise.cas":{"valeurs":["situation économique et financière","politique sociale","risque grave","licenciement collectif pour motif économique","orientations stratégiques","consultation ponctuelle","expertise libre"],"libre":false,"aide":"Le cas de recours commande la répartition du coût : la base ne connaît que ceux-là, et refuse de conclure sur un autre."},"pieces":{"valeurs":["accord-decoupage","accord-representants-proximite","accord-vote-electronique","attestations-formation","decision-vote-electronique","delegations-pouvoir","etats-effectifs","invitations-syndicats","note-information-cse","pv-carence"],"libre":true,"multiple":true,"aide":"Les pièces effectivement versées. Une déclaration sans pièce ne produit jamais « conforme » : elle produit « risque à vérifier »."},"consultationsRecurrentes":{"valeurs":["orientations stratégiques","situation économique et financière","politique sociale"],"libre":true,"multiple":true,"objet":"objet","aide":"À défaut d'accord en aménageant la périodicité, les trois sont annuelles."},"formationsDispensees":{"valeurs":["santé, sécurité et conditions de travail","formation économique"],"libre":true,"multiple":true,"indicatif":true,"aide":"La formation en santé, sécurité et conditions de travail est due à tous les membres de la délégation du personnel ; le contrôle la reconnaît à sa mention, quelle qu'en soit la formulation exacte."}},
     listes: [],
     colonnes: {},
+    piecesAppelees: {},
   };
 })(typeof window !== "undefined" ? window : this);

@@ -470,6 +470,7 @@ const COHERENCE = new Set(["CSE-CTL-COH-01", "CSE-CTL-COH-02"]);
 /* Ce qu'une donnée illisible interdit de conclure — voir
    moteur/commun/recevabilite.js. CSE-CTL-REC-01 est exempté : c'est lui qui
    porte l'anomalie, il doit continuer à la constater. */
+REC.surSilence(C, ["CSE-CTL-REC-01"]);
 REC.envelopper(C, valider, ["CSE-CTL-REC-01"]);
 
 module.exports = { C, ETATS, DETECTION, COHERENCE, SUR_EFFECTIF, effectifDouteux };
