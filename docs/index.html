@@ -474,7 +474,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "2.1 — 16 août 2026";
+const VERSION = "2.2 — 16 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -594,7 +594,18 @@ $("btn-cle").onclick = ()=>{ $("carte-cle").classList.remove("cache"); $("in-cle
 $("btn-tester").onclick = async ()=>{
   const k = $("in-cle").value.trim();
   if(!k){ $("msg-cle").innerHTML = '<div class="msg err">Saisissez une clé.</div>'; return; }
-  localStorage.setItem(CLE_STOCKAGE, k);
+  /* En navigation privée, le stockage local refuse l'écriture : l'ancienne
+     version levait alors une exception avant d'avoir rien affiché, et le bouton
+     paraissait mort. Un bouton qui ne répond pas est le pire des messages —
+     l'utilisateur croit à une panne de l'application, et cherche du côté de sa
+     clé, qui n'y est pour rien. */
+  try{ localStorage.setItem(CLE_STOCKAGE, k); }
+  catch(err){
+    $("msg-cle").innerHTML = '<div class="msg err">La clé n\'a pas pu être enregistrée : ' +
+      'ce navigateur refuse le stockage local. C\'est le cas en <b>navigation privée</b>. ' +
+      'Ouvrez cette page dans un onglet ordinaire, puis saisissez la clé à nouveau.</div>';
+    return;
+  }
   $("msg-cle").innerHTML = '<div class="msg info">Vérification…</div>';
   try{
     await appelApi("/search", new URLSearchParams({query:"droit", page_size:"1"}));
