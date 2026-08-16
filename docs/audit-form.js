@@ -150,6 +150,151 @@
     });
   }
 
+  /* Un PDF : le texte qu'il contient, ligne par ligne.
+
+     Un PDF n'est pas un tableau, c'est une mise en page : les colonnes n'y sont
+     que des positions. On en tire donc le texte, et l'on retrouve les colonnes
+     à la séparation — tabulation, point-virgule, ou deux espaces et plus. C'est
+     un secours, jamais aussi sûr qu'un tableur : le résultat est affiché pour
+     être relu avant d'être utilisé.
+
+     Deux limites, dites plutôt que contournées. Un PDF scanné ne contient
+     aucun texte, seulement une image : rien n'en sortira, et le message le dit
+     au lieu de rendre une liste vide. Un PDF dont les polices n'embarquent pas
+     leur table de correspondance peut rendre des caractères faux ; on le
+     détecte au taux de caractères non imprimables et on refuse plutôt que de
+     livrer une bouillie. */
+  function inflate(brut, zlib) {
+    var f = new Blob([brut]).stream().pipeThrough(new DecompressionStream(zlib ? "deflate" : "deflate-raw"));
+    return new Response(f).arrayBuffer().then(function (b) { return new Uint8Array(b); });
+  }
+
+  function lirePdf(buf) {
+    if (typeof DecompressionStream === "undefined")
+      return Promise.reject(new Error("ce navigateur ne sait pas décompresser un PDF"));
+    var d = new Uint8Array(buf);
+    var latin = new TextDecoder("latin1");
+    var brut = latin.decode(d);
+    /* Les flux : chacun précédé de son dictionnaire. */
+    var flux = [], re = /stream\r?\n?/g, m;
+    while ((m = re.exec(brut))) {
+      var deb = m.index + m[0].length;
+      var fin = brut.indexOf("endstream", deb);
+      if (fin < 0) continue;
+      var dict = brut.slice(Math.max(0, m.index - 900), m.index);
+      /* Le dictionnaire annonce la longueur exacte : s'y fier évite de livrer au
+         décompresseur le saut de ligne qui précède « endstream », qu'il refuse. */
+      var lg = (dict.match(/\/Length\s+(\d+)/) || [])[1];
+      var stop = lg ? Math.min(fin, deb + (+lg)) : fin;
+      while (stop > deb && (d[stop - 1] === 10 || d[stop - 1] === 13)) stop--;
+      flux.push({ dict: dict, octets: d.subarray(deb, stop) });
+      re.lastIndex = fin;
+    }
+    if (!flux.length) return Promise.reject(new Error("aucun flux de contenu : ce PDF est probablement une image scannée"));
+    return Promise.all(flux.map(function (f) {
+      if (!/\/FlateDecode/.test(f.dict)) return Promise.resolve(latin.decode(f.octets));
+      return inflate(f.octets, true).then(function (u) { return latin.decode(u); })
+        .catch(function () {
+          /* Certains producteurs écrivent un flux brut, sans en-tête zlib. */
+          return inflate(f.octets, false).then(function (u) { return latin.decode(u); })
+            .catch(function () { return ""; });
+        });
+    })).then(function (contenus) {
+      /* Les tables de correspondance des polices, réunies. Réserve assumée :
+         si deux polices se contredisent sur un même code, la dernière lue
+         l'emporte — c'est rare, et le résultat reste affiché avant usage. */
+      var uni = {};
+      contenus.forEach(function (c) {
+        if (c.indexOf("beginbfchar") < 0 && c.indexOf("beginbfrange") < 0) return;
+        var r1 = /<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>/g, x;
+        var zonesChar = c.split("beginbfchar").slice(1);
+        zonesChar.forEach(function (z) {
+          z = z.split("endbfchar")[0];
+          while ((x = r1.exec(z))) uni[parseInt(x[1], 16)] = hexVersTexte(x[2]);
+        });
+        var zonesRange = c.split("beginbfrange").slice(1);
+        zonesRange.forEach(function (z) {
+          z = z.split("endbfrange")[0];
+          var r2 = /<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>/g, y;
+          while ((y = r2.exec(z))) {
+            var a = parseInt(y[1], 16), b = parseInt(y[2], 16), base = parseInt(y[3], 16);
+            for (var i = a; i <= b && i - a < 4096; i++)
+              uni[i] = String.fromCharCode(base + (i - a));
+          }
+        });
+      });
+      var lignes = [];
+      contenus.forEach(function (c) {
+        if (c.indexOf("Tj") < 0 && c.indexOf("TJ") < 0) return;
+        lignes = lignes.concat(texteDuFlux(c, uni));
+      });
+      if (!lignes.length)
+        throw new Error("aucun texte : ce PDF est probablement une image scannée, ou son texte n'est pas extractible");
+      var mauvais = lignes.join("").replace(/[^\uFFFD\u0000-\u001F]/g, "").length;
+      if (mauvais > lignes.join("").length / 20)
+        throw new Error("le texte extrait est illisible — les polices de ce PDF n'embarquent pas leur table de correspondance");
+      /* Les colonnes : tabulation, point-virgule, ou deux espaces et plus. */
+      return lignes.map(function (l) {
+        return l.indexOf("\t") >= 0 ? l.split("\t")
+          : (l.indexOf(";") >= 0 ? l.split(";") : l.split(/\s{2,}/));
+      }).map(function (r) { return r.map(function (c) { return c.trim(); }); });
+    });
+  }
+
+  function hexVersTexte(h) {
+    var t = "";
+    for (var i = 0; i + 3 < h.length + 1; i += 4) t += String.fromCharCode(parseInt(h.substr(i, 4), 16));
+    return t;
+  }
+
+  /* Le texte d'un flux de contenu : les opérateurs Tj, TJ, ' et " montrent du
+     texte ; Td, TD, T* et ET changent de ligne. */
+  function texteDuFlux(c, uni) {
+    var lignes = [], courante = "", i = 0;
+    function litLitteral(k) {
+      var prof = 1, out = "";
+      for (k++; k < c.length && prof; k++) {
+        var ch = c[k];
+        if (ch === "\\") {
+          var suiv = c[k + 1];
+          var codes = { n: "\n", r: "", t: "\t", b: "", f: "", "(": "(", ")": ")", "\\": "\\" };
+          if (suiv >= "0" && suiv <= "7") {
+            var o = c.substr(k + 1, 3).match(/^[0-7]{1,3}/)[0];
+            out += String.fromCharCode(parseInt(o, 8)); k += o.length;
+          } else { out += codes[suiv] !== undefined ? codes[suiv] : suiv; k++; }
+          continue;
+        }
+        if (ch === "(") prof++;
+        else if (ch === ")") { prof--; if (!prof) break; }
+        out += ch;
+      }
+      return { texte: out, fin: k };
+    }
+    while (i < c.length) {
+      var ch = c[i];
+      if (ch === "(") { var r = litLitteral(i); courante += r.texte; i = r.fin + 1; continue; }
+      if (ch === "<" && c[i + 1] !== "<") {
+        var f = c.indexOf(">", i);
+        if (f < 0) break;
+        var h = c.slice(i + 1, f).replace(/\s/g, "");
+        var t = "";
+        for (var k2 = 0; k2 + 1 < h.length; k2 += 2) {
+          var code = parseInt(h.substr(k2, 4).length === 4 ? h.substr(k2, 4) : h.substr(k2, 2), 16);
+          if (uni[code] !== undefined) { t += uni[code]; k2 += 2; }
+          else t += String.fromCharCode(parseInt(h.substr(k2, 2), 16));
+        }
+        courante += t; i = f + 1; continue;
+      }
+      if (c.startsWith("Td", i) || c.startsWith("TD", i) || c.startsWith("T*", i) || c.startsWith("ET", i)) {
+        if (courante.trim()) lignes.push(courante.replace(/[ \t]+$/, "").trim());
+        courante = ""; i += 2; continue;
+      }
+      i++;
+    }
+    if (courante.trim()) lignes.push(courante.replace(/[ \t]+$/, "").trim());
+    return lignes;
+  }
+
   /* Un CSV : séparateur deviné sur la première ligne, guillemets respectés. */
   function lireCsv(texte) {
     var t = texte.replace(/^﻿/, "");
@@ -232,7 +377,8 @@
     if (/\.csv$|\.txt$/.test(nom)) lecture = fichier.text().then(lireCsv);
     else if (/\.xlsx$|\.xlsm$/.test(nom)) lecture = fichier.arrayBuffer().then(lireXlsx);
     else if (/\.docx$/.test(nom)) lecture = fichier.arrayBuffer().then(lireDocx);
-    else return Promise.reject(new Error("format non reconnu — déposez un .xlsx, un .csv ou un .docx"));
+    else if (/\.pdf$/.test(nom)) lecture = fichier.arrayBuffer().then(lirePdf);
+    else return Promise.reject(new Error("format non reconnu — déposez un .xlsx, un .csv, un .docx ou un .pdf"));
     return lecture.then(function (lignes) { return versValeur(lignes, format); });
   }
 
@@ -431,9 +577,9 @@
     plus.addEventListener("click", function () { ligne(null); compter(); });
     barre.appendChild(plus);
     var b = document.createElement("button");
-    b.type = "button"; b.className = "fichier"; b.textContent = "Importer un tableau ou un document";
+    b.type = "button"; b.className = "fichier"; b.textContent = "Joindre un fichier (Excel, Word, PDF, CSV)";
     var i = document.createElement("input");
-    i.type = "file"; i.accept = ".xlsx,.xlsm,.csv,.txt,.docx"; i.style.display = "none";
+    i.type = "file"; i.accept = ".xlsx,.xlsm,.csv,.txt,.docx,.pdf"; i.style.display = "none";
     var etat = document.createElement("span"); etat.className = "etat-depot";
     b.addEventListener("click", function () { i.click(); });
     i.addEventListener("change", function () {
@@ -500,9 +646,9 @@
     var d = document.createElement("div"); d.className = "depot";
     var b = document.createElement("button");
     b.type = "button"; b.className = "fichier";
-    b.textContent = "Importer un tableau ou un document";
+    b.textContent = "Joindre un fichier (Excel, Word, PDF, CSV)";
     var i = document.createElement("input");
-    i.type = "file"; i.accept = ".xlsx,.xlsm,.csv,.txt,.docx"; i.style.display = "none";
+    i.type = "file"; i.accept = ".xlsx,.xlsm,.csv,.txt,.docx,.pdf"; i.style.display = "none";
     var etat = document.createElement("span"); etat.className = "etat-depot";
     b.addEventListener("click", function () { i.click(); });
     i.addEventListener("change", function () {
