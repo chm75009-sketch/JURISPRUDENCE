@@ -477,7 +477,11 @@
       var p = PROP[cle];
       var lab = document.createElement("label");
       lab.innerHTML = '<span class="nom">' + ech(libelle) +
-        ' <span class="cle">' + ech(cle) + "</span></span>";
+        "</span>";
+        /* Le nom technique du champ — « accordRecherche » — n'apprend rien à
+           qui remplit le formulaire : c'est du chinois posé à côté d'une
+           question française. Il reste dans le code, où il sert, et disparaît
+           de l'écran, où il nuisait. */
       var e;
 
       /* Une question à choix multiple : des cases, et non un tableau JSON à
@@ -587,7 +591,7 @@
     var titre = document.createElement("p");
     titre.className = "nom";
     titre.innerHTML = (libelle ? ech(libelle) + " — une ligne par entrée" : "Une ligne par entrée") +
-      ' <span class="cle">' + ech(fam) + "</span>";
+      "";
     enveloppe.appendChild(titre);
 
     var tab = document.createElement("table"); tab.className = "saisie";

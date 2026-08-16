@@ -25,35 +25,35 @@ const OUI_NON = ["oui", "non"];
 
 const P = {
   accordRecherche: { valeurs: OUI_NON, libre: false,
-    aide: "Le régime supplétif ne s'applique pas faute d'avoir cherché : il s'applique en l'absence d'accord, ce qui est un fait à établir. Tant que la recherche n'est pas déclarée faite, le module répond « régime indéterminé » et n'audite aucun contenu." },
+    aide: "Avez-vous vérifié s'il existe un accord d'entreprise ou de branche sur la base de données ? Regardez vos accords signés, ou demandez à votre service des ressources humaines. Sans cette réponse, l'application ne sait pas quelles informations sont obligatoires chez vous, et elle s'arrête là." },
   accordEntreprise: { valeurs: OUI_NON, libre: false,
-    aide: "Accord d'entreprise, ou, en l'absence de délégué syndical, accord entre l'employeur et le comité adopté à la majorité des titulaires (L. 2312-21, al. 1er)." },
+    aide: "Un accord signé avec les syndicats — ou, s'il n'y a pas de délégué syndical, avec le comité à la majorité de ses membres titulaires." },
   accordEntrepriseVerse: { valeurs: OUI_NON, libre: false,
-    aide: "Un accord déclaré et non versé laisse le régime indéterminé : le contenu exigible est celui qu'il définit, et il ne se devine pas." },
+    aide: "Si vous dites qu'un accord existe mais ne le joignez pas, l'application ne peut pas savoir ce qu'il prévoit : elle ne conclura sur rien." },
   accordBranche: { valeurs: OUI_NON, libre: false,
-    aide: "L'accord de branche ne peut définir la base que dans les entreprises de moins de trois cents salariés, et seulement à défaut d'accord d'entreprise." },
-  accordBrancheVerse: { valeurs: OUI_NON, libre: false, aide: "Même règle que pour l'accord d'entreprise : déclaré et non versé, il laisse le régime indéterminé." },
+    aide: "Un accord de branche ne vaut que si votre entreprise compte moins de 300 salariés et qu'aucun accord d'entreprise n'existe." },
+  accordBrancheVerse: { valeurs: OUI_NON, libre: false, aide: "Même chose : joignez-le, sinon l'application ne peut rien vérifier." },
   etablissementsDistincts: { valeurs: OUI_NON, libre: false,
-    aide: "Le niveau auquel la base est mise en place se fixe par l'accord de l'article L. 2312-21, 2°." },
+    aide: "Une entreprise à plusieurs sites peut tenir sa base au niveau de l'entreprise, de chaque établissement, ou des deux. C'est l'accord qui le dit." },
   accordPeriodiciteConsultations: { valeurs: OUI_NON, libre: false,
-    aide: "Attention : ce n'est PAS l'accord qui définit la base. Celui-ci relève de l'article L. 2312-19 et porte sur le contenu, la périodicité et les modalités des consultations récurrentes. Un accord sur la base ne déplace pas la périodicité des consultations." },
+    aide: "Attention, ce n'est pas le même accord que celui sur la base de données. Celui-ci dit tous les combien vous consultez le comité. Un accord sur la base ne change pas ce rythme." },
   accordDelaisConsultation: { valeurs: OUI_NON, libre: false,
-    aide: "L'accord de l'article L. 2312-19, 4°, fixe les délais dans lesquels les avis sont rendus. À défaut, le délai supplétif de l'article R. 2312-6 s'applique : un mois, deux avec expert, trois lorsque des expertises interviennent au niveau central et d'établissement." },
+    aide: "Un accord peut fixer le temps laissé au comité pour rendre son avis. Sans accord : un mois, deux s'il y a un expert, trois si l'expertise porte à la fois sur le comité central et sur des établissements." },
   "base.informationMiseAJour": { valeurs: OUI_NON, libre: false,
-    aide: "C'est cette information — ou la communication des informations — qui fait courir le délai de consultation (R. 2312-5). Sans elle, le délai ne court pas." },
+    aide: "Prévenez-vous les élus à chaque mise à jour ? C'est ce message qui déclenche le délai de consultation. Sans lui, le délai ne commence jamais à courir." },
   "base.formePerspectives": {
     valeurs: ["chiffrée", "grandes tendances", "mixte"], libre: true, indicatif: true,
-    aide: "Les trois années à venir se présentent sous forme de données chiffrées ou, à défaut, sous forme de GRANDES TENDANCES (R. 2312-10). Les tendances suffisent : exiger des chiffres produirait des non-conformités fausses. L'employeur doit en revanche indiquer, en les motivant, les informations qui ne peuvent recevoir ni chiffres ni tendances." },
+    aide: "Pour les trois années à venir, vous pouvez donner des chiffres — ou, si vous ne les avez pas, de grandes tendances. Les deux sont admis. En revanche, ce que vous ne pouvez donner ni en chiffres ni en tendances, il faut le dire et expliquer pourquoi." },
   "base.niveau": {
     /* Le contrôle reprend le niveau tel quel dans son motif, sans le comparer à
        une liste : la proposition est indicative, et déclarée telle. */
     valeurs: ["entreprise", "établissement", "les deux"], libre: true, indicatif: true,
-    aide: "En l'absence d'accord, la base est constituée au niveau de l'entreprise (R. 2312-11) ; l'accord peut fixer un autre niveau dans les entreprises à établissements distincts." },
+    aide: "Sans accord, la base se tient au niveau de l'entreprise. Un accord peut en décider autrement si vous avez plusieurs établissements." },
   "base.themes.theme": {
     valeurs: RUBRIQUES, libre: true, indicatif: true,
-    aide: "Les rubriques que le décret nomme, découpées depuis son texte. Un accord peut en retenir d'autres — mais aucun ne peut descendre sous le plancher des dix thèmes de l'article L. 2312-21, alinéa 3." },
+    aide: "Les rubriques que le décret prévoit. Un accord peut en choisir d'autres, mais dix thèmes restent obligatoires quoi qu'il arrive." },
   pieces: { valeurs: ["accord-bdese"], autres: ["accord-branche"], libre: true, multiple: true, indicatif: true,
-    aide: "Les pièces versées. Un régime conventionnel se prouve par le texte de son accord." },
+    aide: "Les documents que vous joignez. Un accord ne se prouve que par son texte." },
 };
 
 const ECARTS = V.verifier(P, SOURCES);
