@@ -27,6 +27,47 @@
     return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   };
 
+  /* ---------------------------------------------------- la formule d'usage
+
+     Écrite une fois, à trois endroits : un bouton toujours accessible en tête
+     de page, et le pied de tout rapport — à l'écran comme dans le Word et le
+     PDF. Un rapport se détache de l'application dès qu'il est exporté ; la
+     réserve doit voyager avec lui, sinon elle ne protège rien. */
+  var AVERTISSEMENT = [
+    "Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un avocat, "
+      + "ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.",
+    "Les constats qu'il produit reposent sur les seules données que vous avez saisies et sur les textes "
+      + "en vigueur à la date de l'audit. Ils ne constituent pas une consultation juridique et n'engagent "
+      + "pas leur auteur. La décision, et la responsabilité qui l'accompagne, restent les vôtres.",
+    "L'application n'apprécie pas ce que la loi confie à l'appréciation du juge, et elle ne lit pas vos "
+      + "accords collectifs tant qu'ils ne lui sont pas joints : un résultat « conforme » se lit sous cette "
+      + "réserve, qui figure dans le rapport.",
+    "Rien ne quitte votre poste : l'audit se calcule dans votre navigateur, et les fichiers déposés sont "
+      + "lus en mémoire."
+  ];
+  var PIED_RAPPORT = [
+    { k: "trait" },
+    { k: "h2", t: "Avertissement" }
+  ].concat(AVERTISSEMENT.map(function (t) { return { k: "note", t: t }; }));
+
+  function poserAvertissement() {
+    var d = document.createElement("dialog");
+    d.id = "dlg-avertissement";
+    d.style.cssText = "max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;"
+      + "font:15px/1.55 system-ui;color:#1c2126";
+    d.innerHTML = "<h2 style=\"margin:0 0 12px;font:600 19px/1.3 system-ui\">Avertissement d'usage</h2>"
+      + AVERTISSEMENT.map(function (t) { return '<p style="margin:0 0 10px">' + ech(t) + "</p>"; }).join("")
+      + '<form method="dialog" style="margin-top:14px"><button style="font:inherit;padding:8px 18px;'
+      + 'border-radius:8px;border:1px solid #d8dbe0;background:#f6f7f9;cursor:pointer">Fermer</button></form>';
+    document.body.appendChild(d);
+    var boutons = document.querySelectorAll("[data-avertissement]");
+    for (var i = 0; i < boutons.length; i++)
+      boutons[i].addEventListener("click", function () {
+        if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", "");
+      });
+  }
+  poserAvertissement();
+
   /* ------------------------------------------------------------------ types */
   function typeDe(format) {
     var f = String(format || "").toLowerCase();
@@ -553,7 +594,11 @@
     var thead = document.createElement("tr");
     colonnes.forEach(function (c) {
       var th = document.createElement("th");
-      th.textContent = c[0].split(".")[1];
+      /* Le nom de la colonne est ce qui suit la famille — et la famille peut
+         elle-même être composée : « plan.mesures.rubrique » donne « rubrique »,
+         non « mesures ». Pris au deuxième segment, toutes les colonnes d'un
+         tableau composé portaient le même nom, et la saisie se perdait. */
+      th.textContent = c[0].split(".").pop();
       th.title = c[1];
       thead.appendChild(th);
     });
@@ -564,7 +609,7 @@
     function ligne(valeurs) {
       var tr = document.createElement("tr");
       colonnes.forEach(function (c) {
-        var sous = c[0].split(".")[1], p = PROP[c[0]], td = document.createElement("td"), e;
+        var sous = c[0].split(".").pop(), p = PROP[c[0]], td = document.createElement("td"), e;
         if (p) {
           e = document.createElement("select");
           var o0 = document.createElement("option"); o0.value = ""; o0.textContent = "—";
@@ -810,7 +855,11 @@
     /* Les familles-tableaux sont lues d'un bloc, non colonne par colonne. */
     TABLEAUX.forEach(function (fam) {
       var v = valeurTableau(fam);
-      if (v) f[fam] = v;
+      /* Un tableau peut porter un nom composé — « plan.mesures » : il se range
+         sous son objet, comme n'importe quel champ composé. Écrit à plat, il
+         créait une clé « plan.mesures » que le moteur ne lit jamais, et sept
+         mesures saisies passaient pour un plan vide. */
+      if (v) poser(f, fam, v);
     });
     M.champs.forEach(function (rub) {
       rub[1].forEach(function (ch) {
@@ -1025,6 +1074,7 @@
         ". Rien n'a été perdu — corrigez la saisie et relancez.</div>";
       return;
     }
+    items = items.concat(PIED_RAPPORT);
     DERNIER = items;
     sortie.innerHTML = '<div class="retour">' +
       '<button type="button" id="revenir">\u2190 Revenir au formulaire</button>' +

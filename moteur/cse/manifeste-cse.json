@@ -1,7 +1,7 @@
 {
  "domaine": "comité social et économique",
  "date": "2026-08-16",
- "empreinte": "d5af0bf47dea",
+ "empreinte": "dd4cfa3a982d",
  "fichiers": {
   "_r2314_1.json": "572dbb2da415",
   "actions-cse.js": "840947c5cf3a",
@@ -16,11 +16,11 @@
   "sonde.js": "ac23bba7af98",
   "tests-controles-cse.js": "3e9ec4663b7b",
   "tests-cse.js": "6f47db6df965",
-  "textes_cse.json": "701f84e52560",
+  "textes_cse.json": "458a6c68ecdc",
   "valider-cse.js": "ef7bcb36b10e"
  },
  "compteurs": {
-  "articlesLus": 368,
+  "articlesLus": 372,
   "articlesSansReponse": 64,
   "arrets": 163,
   "regles": 40,

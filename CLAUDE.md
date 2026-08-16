@@ -57,6 +57,23 @@ Conséquence pratique : **une seule lecture ne prouve rien**, ni la concordance 
 l'écart. Relire deux ou trois fois, espacer les requêtes, et ne conclure que sur
 des lectures concordantes. `moteur/cse/verifier-textes.js` applique cette règle.
 
+#### Quand les deux lectures sont stables, elles désignent deux articles réels
+
+Cas mesuré le 16 août 2026 sur `R2312-13` et `R2312-14` : cinq lectures espacées
+rendent trois fois l'un et deux fois l'autre, sans qu'aucune ne soit une panne.
+Le relais sert en réalité **deux articles distincts portant le même numéro**,
+l'un de la section de la base de données économiques et sociales
+(`LEGIARTI000036411588`, `…590`), l'autre d'une autre partie du code
+(`LEGIARTI000037729185`, `…183`, qui renvoie aux articles R. 2112-16 et
+R. 2112-18). Relire davantage ne tranche donc rien.
+
+Le seul critère sûr est **le contenu** : l'article cherché parle de ce qu'on
+cherche. Pour la base de données, retenir la version qui mentionne « base de
+données » ou renvoie à un article `L. 2312-…`. Les identifiants de la famille
+`LEGIARTI0000377291…` se sont révélés être les homonymes dans les trois cas
+rencontrés, mais c'est une observation, pas une règle : c'est le texte qui
+décide.
+
 ### Toujours noter l'identifiant de version, pas seulement le numéro
 
 Un article peut être modifié sans changer de numéro. `LEGIARTI…` dit laquelle des

@@ -1,0 +1,100 @@
+{
+ "effectif": 320,
+ "effectifEtablissement": 320,
+ "groupe": true,
+ "effectifGroupe": 640,
+ "nbLicenciements": 22,
+ "total30j": 22,
+ "pieces": [
+  {
+   "type": "comptes-groupe",
+   "date": "2026-05-02"
+  }
+ ],
+ "plan": {
+  "mesures": [
+   {
+    "rubrique": "1°",
+    "intitule": "Reclassement interne",
+    "beneficiaires": 22,
+    "budget": 180000,
+    "duree": "6 mois"
+   },
+   {
+    "rubrique": "1° bis",
+    "intitule": "Reprise partielle d'activité",
+    "beneficiaires": 4,
+    "budget": 40000,
+    "duree": "12 mois"
+   },
+   {
+    "rubrique": "2°",
+    "intitule": "Création d'une activité de maintenance",
+    "beneficiaires": 6,
+    "budget": 120000,
+    "duree": "18 mois"
+   },
+   {
+    "rubrique": "3°",
+    "intitule": "Antenne emploi et bassin",
+    "beneficiaires": 22,
+    "budget": 90000,
+    "duree": "9 mois"
+   },
+   {
+    "rubrique": "4°",
+    "intitule": "Aide à la création d'entreprise",
+    "beneficiaires": 5,
+    "budget": 60000,
+    "duree": "12 mois"
+   },
+   {
+    "rubrique": "5°",
+    "intitule": "Formations de reconversion",
+    "beneficiaires": 18,
+    "budget": 240000,
+    "duree": "12 mois"
+   },
+   {
+    "rubrique": "6°",
+    "intitule": "Réduction des heures supplémentaires",
+    "beneficiaires": 40,
+    "budget": 0,
+    "duree": "permanent"
+   }
+  ],
+  "budgetTotal": 730000,
+  "resultatGroupe": 9200000,
+  "salariesExposes": [
+   "3 salariés de plus de 55 ans",
+   "2 sans qualification"
+  ],
+  "suivi": {
+   "modalites": "commission de suivi trimestrielle",
+   "consultation": "quatre réunions par an",
+   "bilan": "bilan annuel à la DREETS"
+  },
+  "accompagnement": "contrat de sécurisation professionnelle",
+  "dateProposition": "2026-07-10",
+  "dateRupture": "2026-07-20",
+  "demandesReembauche": [],
+  "informationElusPostes": true
+ },
+ "pse": {
+  "voie": "unilateral",
+  "suffrages": null,
+  "dateDepotAdmin": "2026-06-01",
+  "dateDecisionAdmin": "2026-06-18",
+  "dateDesignationExpert": "2026-03-23"
+ },
+ "datesReunionsCSE": [
+  "2026-03-23",
+  "2026-04-14"
+ ],
+ "dateAvisCSE": "2026-04-14",
+ "accordDelaisConsultation": false,
+ "expertisePSE": true,
+ "dateNotification": "2026-06-25",
+ "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
+ "dateAudit": "2026-08-16"
+}

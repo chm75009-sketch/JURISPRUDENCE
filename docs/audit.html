@@ -33,6 +33,9 @@
   .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
   h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
   .chapo{color:var(--gris);max-width:64ch;margin:0}
+  .lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;
+    color:var(--bleu);text-decoration:underline;cursor:pointer}
+  #dlg-avertissement::backdrop{background:#0b111a99}
   header a{color:var(--bleu)}
   h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
   h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:22px 0 8px}
@@ -164,7 +167,8 @@
   par point</b> — contre les articles du code du travail et les arrêts publiés de la Cour de cassation — et
   vous dit ce qui bloque, ce qu'il reste à faire, et ce qui est en règle.<br>
   L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
-  <a href="./">Recherche de jurisprudence</a> · <a href="audit-cse.html">Audit du comité social et économique</a></p>
+  <a href="./">Recherche de jurisprudence</a> · <a href="audit-cse.html">Audit du comité social et économique</a> · <a href="audit-pse.html">Audit du plan de sauvegarde de l'emploi</a> · <a href="audit-bdese.html">Base de données (BDESE)</a>
+  · <button type="button" class="lien-avert" data-avertissement>Avertissement d'usage</button></p>
 </header>
 
 <div class="presentation">
