@@ -10,6 +10,7 @@ const O = require("./outils.js");
 const M = require("./moteur-pse.js");
 const { C, ETATS, DETECTION, COHERENCE } = require("./controles-pse.js");
 const { L1233_62 } = require("./mesures.js");
+const GRILLE = require("./grille-pse.js");
 
 const { CONF, NC, RISQ, MANQ, SO } = ETATS;
 const euros = n => (typeof n === "number" && isFinite(n) ? n.toLocaleString("fr-FR") + " €" : "—");
@@ -93,6 +94,22 @@ function audit(f) {
     for (const x of ok) A.D.push({ k: "acquis", t: x.objet, base: x.v.motif });
   }
 
+  /* --- ce que la Cour de cassation a jugé --- */
+  const regles = GRILLE.retenues(f);
+  h1("Ce que la Cour de cassation a jugé");
+  p(`${regles.length} règle(s) de la grille s'appliquent à votre situation, sur ${GRILLE.G.length}. Chacune renvoie à un arrêt publié, dont le sommaire est reproduit : jugez vous-même si la règle dit bien ce que l'arrêt dit. Une règle dont la condition n'est pas remplie ne dit rien, ni dans un sens ni dans l'autre.`);
+  note("Un arrêt de la chambre sociale ne lie pas l'autorité administrative. Depuis la loi du 14 juin 2013, le contenu du plan et la régularité de la procédure relèvent du juge administratif — plusieurs des arrêts ci-dessous le disent expressément.");
+  for (const r of regles) {
+    h3(`${r.sujet} — ${r.id}`);
+    p(r.dit);
+    for (const num of r.arrets) {
+      const a = GRILLE.arret(num);
+      if (!a) continue;
+      note(`Cass. ${a.ch || "soc."} ${a.date}, n° ${a.num}${a.sol ? ", " + a.sol : ""}${a.pub ? " — " + a.pub : ""}`);
+      if (a.sommaire) note("« " + a.sommaire.replace(/\s+/g, " ").trim() + " »");
+    }
+  }
+
   /* --- la mesure du travail fait --- */
   h1("Ce que cet audit a mesuré");
   tab(["Mesure", "Valeur", "Ce que cela veut dire"], [
@@ -103,6 +120,8 @@ function audit(f) {
     ["Sans objet", `${so.length}`, "L'exigence ne s'applique pas, et une donnée renseignée permet de le dire."],
     ["Contrôles de calibrage", `${DETECTION.length}`, "Ils calculent et affichent ; ils ne concluent jamais à la conformité."],
     ["Contrôles de cohérence", `${COHERENCE.length}`, "Ils ne vérifient pas une donnée mais la relation entre deux."],
+    ["Règles de jurisprudence retenues", `${regles.length} sur ${GRILLE.G.length}`,
+      "Les autres ne s'appliquent pas à votre situation : elles n'ont rien dit. Le corpus compte " + Object.keys(GRILLE.CORPUS).length + " arrêts publiés, versés au dépôt avec leur sommaire."],
     ["Rubriques de L. 1233-62 découpées depuis le texte", `${L1233_62.mesures.length}`,
       `Couverture du découpage : ${L1233_62.couverture} % du texte de l'énumération. Version lue : ${L1233_62.version}.`],
   ]);

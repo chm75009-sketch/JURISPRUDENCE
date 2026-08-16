@@ -58,5 +58,55 @@
   "id": "LEGIARTI000027566048",
   "texte": "Dans les entreprises de moins de cinquante salariés, l'employeur notifie au salarié le licenciement pour motif économique par lettre recommandée avec avis de réception. La lettre de notification ne peut être adressée avant l'expiration d'un délai courant à compter de la notification du projet de licenciement à l'autorité administrative. Ce délai ne peut être inférieur à trente jours. Une convention ou un accord collectif de travail peut prévoir des délais plus favorables aux salariés. Dans les entreprises de cinquante salariés ou plus, lorsque le projet de licenciement concerne dix salariés ou plus dans une même période de trente jours, l'employeur notifie le licenciement selon les modalités prévues au premier alinéa du présent article, après la notification par l'autorité administrative de la décision de validation mentionnée à l'article L. 1233-57-2 ou de la décision d'homologation mentionnée à l'article L. 1233-57-3 , ou à l'expiration des délais prévus à l'article L. 1233-57-4 . Il ne peut procéder, à peine de nullité, à la rupture des contrats de travail avant la notification de cette décision d'homologation ou de validation ou l'expiration des délais prévus à l'article L. 1233-57-4.",
   "elargi": true
+ },
+ "L1233-30": {
+  "id": "LEGIARTI000035643899",
+  "texte": "I.-Dans les entreprises ou établissements employant habituellement au moins cinquante salariés, l'employeur réunit et consulte le comité social et économique sur : 1° L'opération projetée et ses modalités d'application, conformément à l'article L. 2323-31 ; 2° Le projet de licenciement collectif : le nombre de suppressions d'emploi, les catégories professionnelles concernées, les critères d'ordre et le calendrier prévisionnel des licenciements, les mesures sociales d'accompagnement prévues par le plan de sauvegarde de l'emploi et, le cas échéant, les conséquences des licenciements projetés en matière de santé, de sécurité ou de conditions de travail. Les éléments mentionnés au 2° du présent I qui font l'objet de l'accord mentionné à l'article L. 1233-24-1 ne sont pas soumis à la consultation du comité social et économique prévue au présent article. Le comité social et économique tient au moins deux réunions espacées d'au moins quinze jours. II.-Le comité social et économique rend ses deux avis dans un délai qui ne peut être supérieur, à compter de la date de sa première réunion au cours de laquelle il est consulté sur les 1° et 2° du I, à : 1° Deux mois lorsque le nombre des licenciements est inférieur à cent ; 2° Trois mois lorsque le nombre des licenciements est au moins égal à cent et inférieur à deux cent cinquante ; 3° Quatre mois lorsque le nombre des licenciements est au moins égal à deux cent cinquante. Une convention ou un accord collectif de travail peut prévoir des délais différents. En l'absence d'avis du comité social et économique dans ces délais, celui-ci est réputé avoir été consulté.",
+  "elargi": true
+ },
+ "L1233-33": {
+  "id": "LEGIARTI000035652923",
+  "texte": "L'employeur met à l'étude, dans le délai prévu à l'article L. 1233-30 , les suggestions relatives aux mesures sociales envisagées et les propositions alternatives au projet de restructuration mentionné à l'article L. 2323-31 formulées par le   comité social et économique. Il leur donne une réponse motivée.",
+  "elargi": true
+ },
+ "L1233-34": {
+  "id": "LEGIARTI000036762068",
+  "texte": "Dans les entreprises d'au moins cinquante salariés, lorsque le projet de licenciement concerne au moins dix salariés dans une même période de trente jours, le comité social et économique peut, le cas échéant sur proposition des commissions constituées en son sein, décider, lors de la première réunion prévue à l' article L. 1233-30 , de recourir à une expertise pouvant porter sur les domaines économique et comptable ainsi que sur la santé, la sécurité ou les effets potentiels du projet sur les conditions de travail. Les modalités et conditions de réalisation de l'expertise, lorsqu'elle porte sur un ou plusieurs des domaines cités au premier alinéa, sont déterminées par un décret en Conseil d'Etat. L'expert peut être assisté dans les conditions prévues à l' article L. 2315-81 . Le comité social et économique peut également mandater un expert afin qu'il apporte toute analyse utile aux organisations syndicales pour mener la négociation prévue à l' article L. 1233-24-1 . Le rapport de l'expert est remis au comité social et économique et, le cas échéant, aux organisations syndicales, au plus tard quinze jours avant l'expiration du délai mentionné à l'article L. 1233-30.",
+  "elargi": true
+ },
+ "L1233-35": {
+  "id": "LEGIARTI000036261799",
+  "texte": "L'expert désigné par le comité social et économique demande à l'employeur, dans les dix jours à compter de sa désignation, toutes les informations qu'il juge nécessaires à la réalisation de sa mission. L'employeur répond à cette demande dans les huit jours. Le cas échéant, l'expert demande, dans les dix jours, des informations complémentaires à l'employeur, qui répond à cette demande dans les huit jours à compter de la date à laquelle la demande de l'expert est formulée.",
+  "elargi": true
+ },
+ "L1233-24-2": {
+  "id": "LEGIARTI000036261824",
+  "texte": "L'accord collectif mentionné à l'article L. 1233-24-1 porte sur le contenu du plan de sauvegarde de l'emploi mentionné aux articles L. 1233-61 à L. 1233-63 . Il peut également porter sur : 1° Les modalités d'information et de consultation du comité social et économique, en particulier les conditions dans lesquelles ces modalités peuvent être aménagées en cas de projet de transfert d'une ou de plusieurs entités économiques prévu à l' article L. 1233-61 , nécessaire à la sauvegarde d'une partie des emplois ; 2° La pondération et le périmètre d'application des critères d'ordre des licenciements mentionnés à l'article L. 1233-5 ; 3° Le calendrier des licenciements ; 4° Le nombre de suppressions d'emploi et les catégories professionnelles concernées ; 5° Les modalités de mise en œuvre des mesures de formation, d'adaptation et de reclassement prévues à l'article L. 1233-4 .",
+  "elargi": true
+ },
+ "L1233-24-4": {
+  "id": "LEGIARTI000035652928",
+  "texte": "A défaut d'accord mentionné à l'article L. 1233-24-1 , un document élaboré par l'employeur après la dernière réunion du   comité social et économique fixe le contenu du plan de sauvegarde de l'emploi et précise les éléments prévus aux 1° à 5° de l'article L. 1233-24-2 , dans le cadre des dispositions légales et conventionnelles en vigueur.",
+  "elargi": true
+ },
+ "L1233-32": {
+  "id": "LEGIARTI000025579021",
+  "texte": "Outre les renseignements prévus à l'article L. 1233-31 , dans les entreprises de moins de cinquante salariés, l'employeur adresse aux représentants du personnel les mesures qu'il envisage de mettre en oeuvre pour éviter les licenciements ou en limiter le nombre et pour faciliter le reclassement du personnel dont le licenciement ne pourrait être évité. Dans les entreprises d'au moins cinquante salariés, l'employeur adresse le plan de sauvegarde de l'emploi concourant aux mêmes objectifs.",
+  "elargi": true
+ },
+ "L1233-26": {
+  "id": "LEGIARTI000035643922",
+  "texte": "Lorsqu'une entreprise ou un établissement employant habituellement au moins cinquante salariés a procédé pendant trois mois consécutifs à des licenciements économiques de plus de dix salariés au total, sans atteindre dix salariés dans une même période de trente jours, tout nouveau licenciement économique envisagé au cours des trois mois suivants est soumis aux dispositions du présent chapitre.",
+  "elargi": true
+ },
+ "L1233-25": {
+  "id": "LEGIARTI000006901037",
+  "texte": "Lorsqu'au moins dix salariés ont refusé la modification d'un élément essentiel de leur contrat de travail, proposée par leur employeur pour l'un des motifs économiques énoncés à l'article L. 1233-3 et que leur licenciement est envisagé, celui-ci est soumis aux dispositions applicables en cas de licenciement collectif pour motif économique.",
+  "elargi": true
+ },
+ "L1233-28": {
+  "id": "LEGIARTI000035652699",
+  "texte": "L'employeur qui envisage de procéder à un licenciement collectif pour motif économique d'au moins dix salariés dans une même période de trente jours réunit et consulte le comité social et économique dans les conditions prévues par le présent paragraphe.",
+  "elargi": true
  }
 }

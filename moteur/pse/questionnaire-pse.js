@@ -103,6 +103,12 @@ q("Voie et instruction", "pse.suffrages", "Part des suffrages recueillie par les
 q("Voie et instruction", "pse.dateDepotAdmin", "Date de réception par l'administration du dossier complet", "AAAA-MM-JJ", "accusé de réception");
 q("Voie et instruction", "pse.dateDecisionAdmin", "Date de la décision de validation ou d'homologation", "AAAA-MM-JJ", "décision notifiée");
 
+q("Consultation du comité", "datesReunionsCSE", "Dates des réunions du comité sur le projet, dans l'ordre", "liste de dates", "convocations et procès-verbaux");
+q("Consultation du comité", "dateAvisCSE", "Date à laquelle le comité a rendu son avis", "AAAA-MM-JJ", "procès-verbal");
+q("Consultation du comité", "accordDelaisConsultation", "Un accord fixe-t-il des délais de consultation différents de ceux de la loi ?", "oui / non", "accord de méthode ou accord collectif");
+q("Consultation du comité", "expertisePSE", "Le comité a-t-il décidé de recourir à une expertise ?", "oui / non", "délibération du comité");
+q("Consultation du comité", "pse.dateDesignationExpert", "Date de désignation de l'expert", "AAAA-MM-JJ", "délibération du comité");
+
 q("Après le licenciement", "plan.dateRupture", "Date de rupture des contrats", "AAAA-MM-JJ", "lettres de licenciement");
 q("Après le licenciement", "plan.demandesReembauche", "Demandes de priorité de réembauche reçues", "liste", "courriers reçus, datés");
 q("Après le licenciement", "plan.informationElusPostes", "Les représentants du personnel sont-ils informés des postes devenus disponibles ?", "oui / non", "ordres du jour et procès-verbaux");

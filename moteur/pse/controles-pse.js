@@ -299,6 +299,60 @@ ctl("PSE-CTL-REM-01", "Priorité de réembauche",
     return { etat: CONF, motif: `${p.motif} Les demandes reçues sont recensées et les élus sont informés des postes disponibles.` };
   });
 
+/* --------------------------------------- la consultation du comité sur le projet */
+
+ctl("PSE-CTL-CSE-01", "Consultation du comité",
+  "Le comité a-t-il tenu au moins deux réunions espacées d'au moins quinze jours ?",
+  ["L. 1233-30, I"],
+  f => siPlanDu(f, () => {
+    const r = Array.isArray(f.datesReunionsCSE) ? f.datesReunionsCSE.filter(Boolean).slice().sort() : [];
+    if (!r.length) return { etat: MANQ, motif: "Les dates des réunions du comité ne sont pas renseignées." };
+    if (r.length < 2)
+      return { etat: NC, motif: `Une seule réunion est renseignée (${r[0]}). Le comité tient au moins deux réunions (L. 1233-30, I) : la seconde n'est pas une formalité, c'est celle où l'avis se rend.` };
+    const ecarts = r.slice(1).map((d, i) => ({ de: r[i], a: d, jours: M.joursEntre(r[i], d) }));
+    const courts = ecarts.filter(e => e.jours < M.ESPACEMENT_MINIMAL);
+    return courts.length
+      ? { etat: NC, motif: `Deux réunions sont espacées de moins de quinze jours : ${courts.map(e => `${e.de} → ${e.a}, ${e.jours} jour(s)`).join(" ; ")}. L'article L. 1233-30, I impose un espacement d'au moins quinze jours.` }
+      : { etat: CONF, motif: `${r.length} réunions, espacées d'au moins quinze jours (${ecarts.map(e => e.jours + " j").join(", ")}).` };
+  }));
+
+ctl("PSE-CTL-CSE-02", "Consultation du comité",
+  "L'avis est-il rendu dans le délai que le nombre de licenciements commande ?",
+  ["L. 1233-30, II"],
+  f => siPlanDu(f, () => {
+    const c = M.consultation(f);
+    if (!c.connu) return { etat: MANQ, motif: c.motif };
+    if (!c.premiere) return { etat: MANQ, motif: `${c.motif} La date de la première réunion n'est pas renseignée.` };
+    /* Un accord peut prévoir d'autres délais. Tant qu'il est déclaré sans être
+       versé, la règle légale ne peut pas être opposée avec certitude : le
+       contrôle le dit au lieu de conclure sur un texte qu'il n'a pas lu. */
+    if (f.accordDelaisConsultation === true || f.accordDelaisConsultation === "oui") {
+      const P = Array.isArray(f.pieces) ? f.pieces : [];
+      if (!P.some(p => /accord.?d[ée]lais|accord.?m[ée]thode/i.test(String(p.type || p.nom || ""))))
+        return { etat: RISQ, motif: `Un accord fixant des délais différents est déclaré mais n'est pas versé. Le plafond légal de ${c.mois} mois n'est donc pas opposable en l'état, et l'application ne peut pas vérifier celui que vous appliquez : joignez l'accord.` };
+    }
+    const avis = (f.pse || {}).dateAvisCSE || f.dateAvisCSE;
+    if (vide(avis)) return { etat: RISQ, motif: `${c.motif} Aucun avis n'est enregistré : à défaut d'avis rendu au ${c.echeance}, le comité sera réputé consulté — ce qui ne dispense pas d'avoir tenu les réunions.` };
+    return avis <= c.echeance
+      ? { etat: CONF, motif: `Première réunion le ${c.premiere}, avis du ${avis} : le délai de ${c.mois} mois, qui expirait le ${c.echeance}, est tenu.` }
+      : { etat: RISQ, motif: `Avis du ${avis}, postérieur au terme du ${c.echeance} (${c.mois} mois après la première réunion du ${c.premiere}). Passé ce terme, le comité était déjà réputé consulté : l'avis tardif n'a pas d'effet sur la régularité, mais un calendrier qui déborde le délai légal signale que le dossier n'a pas suivi le rythme prévu.` };
+  }));
+
+ctl("PSE-CTL-CSE-03", "Consultation du comité",
+  "L'expertise décidée par le comité tient-elle dans le calendrier ?",
+  ["L. 1233-34", "L. 1233-35"],
+  f => siPlanDu(f, () => {
+    if (vide(f.expertisePSE)) return { etat: MANQ, motif: "Le recours à une expertise n'est pas renseigné. Le comité peut la décider lors de la première réunion, et elle pèse sur tout le calendrier." };
+    if (f.expertisePSE === false || f.expertisePSE === "non")
+      return { etat: SO, motif: "Aucune expertise n'a été décidée par le comité." };
+    const c = M.consultation(f);
+    const d = (f.pse || {}).dateDesignationExpert;
+    if (vide(d)) return { etat: MANQ, motif: "La date de désignation de l'expert n'est pas renseignée." };
+    if (c.premiere && d > c.premiere && M.joursEntre(c.premiere, d) > 0 && f.datesReunionsCSE && f.datesReunionsCSE.length && d > f.datesReunionsCSE.slice().sort()[0])
+      return { etat: RISQ, motif: `Expert désigné le ${d}, après la première réunion du ${c.premiere}. L'article L. 1233-34 place la décision de recourir à l'expertise à la première réunion : une désignation postérieure expose la procédure à la contestation, sans que le délai d'avis en soit prolongé.` };
+    return { etat: CONF, motif: `Expert désigné le ${d}. Il demande à l'employeur, dans les dix jours de sa désignation, les informations qu'il juge nécessaires ; l'employeur répond dans les huit jours (L. 1233-35). Le délai d'avis, lui, reste celui de ${c.mois} mois.` };
+  }));
+
 /* ------------------------------------------------------------ la cohérence */
 
 const COHERENCE = ["PSE-CTL-COH-01"];

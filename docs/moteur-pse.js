@@ -4,8 +4,8 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : 2ddca7e6fad9
-   {"articlesLus":12,"rubriquesL1233_62":7,"couvertureDecoupage":98.1,"versionL1233_62":"LEGIARTI000036261725","controles":18,"calibrage":2,"coherence":1,"donneesDemandees":24,"casContradictoires":10,"verdicts":216,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"calibrageConcluantConforme":0}
+   Empreinte du moteur au moment de l'empaquetage : f4dd914aee6e
+   {"articlesLus":22,"rubriquesL1233_62":7,"couvertureDecoupage":98.1,"versionL1233_62":"LEGIARTI000036261725","controles":21,"calibrage":2,"coherence":1,"donneesDemandees":29,"reglesJurisprudence":13,"arretsAuCorpus":20,"casContradictoires":16,"verdicts":378,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"calibrageConcluantConforme":0}
 */
 (function (global) {
   "use strict";
@@ -21,7 +21,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"plan de sauvegarde de l'emploi","date":"2026-08-16","empreinte":"2ddca7e6fad9","fichiers":{"audit-pse-client.js":"92589e40b86a","controles-pse.js":"fec14800924e","dates.js":"b6d7e587bec3","fiche-pse.json":"a59799a54950","mesures.js":"5dd166061596","moteur-pse.js":"074fb8a1994c","outils.js":"7401cc07f5a6","propositions-pse.js":"8e8aabf771be","questionnaire-pse.js":"b91e4d8ecfea","recevabilite.js":"62a84856a6f1","sonde.js":"e23b90b65ecb","tests-pse.js":"7e9dc3c377d7","textes-pse.json":"05145f9f7b1c"},"compteurs":{"articlesLus":12,"rubriquesL1233_62":7,"couvertureDecoupage":98.1,"versionL1233_62":"LEGIARTI000036261725","controles":18,"calibrage":2,"coherence":1,"donneesDemandees":24,"casContradictoires":10,"verdicts":216,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"calibrageConcluantConforme":0}};
+  var __MANIFESTE = {"domaine":"plan de sauvegarde de l'emploi","date":"2026-08-16","empreinte":"f4dd914aee6e","fichiers":{"audit-pse-client.js":"8be0e6bece28","controles-pse.js":"6d03b8daafc5","dates.js":"b6d7e587bec3","fiche-pse.json":"70b94774f5ff","grille-pse.js":"aa5acbc21302","mesures.js":"5dd166061596","moteur-pse.js":"a6e15d88385d","outils.js":"7401cc07f5a6","propositions-pse.js":"55a3494acac4","questionnaire-pse.js":"a91c7dd25e09","recevabilite.js":"62a84856a6f1","sonde.js":"e23b90b65ecb","tests-pse.js":"f8c992547e17","textes-pse.json":"0d0d30238eb2","verifier-textes-pse.js":"01173b76e310"},"compteurs":{"articlesLus":22,"rubriquesL1233_62":7,"couvertureDecoupage":98.1,"versionL1233_62":"LEGIARTI000036261725","controles":21,"calibrage":2,"coherence":1,"donneesDemandees":29,"reglesJurisprudence":13,"arretsAuCorpus":20,"casContradictoires":16,"verdicts":378,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"calibrageConcluantConforme":0},"textesRelus":{"date":"2026-08-16","articles":22,"concordants":22,"ecarts":0,"sansConclusion":0}};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -40,6 +40,7 @@ const O = require("./outils.js");
 const M = require("./moteur-pse.js");
 const { C, ETATS, DETECTION, COHERENCE } = require("./controles-pse.js");
 const { L1233_62 } = require("./mesures.js");
+const GRILLE = require("./grille-pse.js");
 
 const { CONF, NC, RISQ, MANQ, SO } = ETATS;
 const euros = n => (typeof n === "number" && isFinite(n) ? n.toLocaleString("fr-FR") + " €" : "—");
@@ -123,6 +124,22 @@ function audit(f) {
     for (const x of ok) A.D.push({ k: "acquis", t: x.objet, base: x.v.motif });
   }
 
+  /* --- ce que la Cour de cassation a jugé --- */
+  const regles = GRILLE.retenues(f);
+  h1("Ce que la Cour de cassation a jugé");
+  p(`${regles.length} règle(s) de la grille s'appliquent à votre situation, sur ${GRILLE.G.length}. Chacune renvoie à un arrêt publié, dont le sommaire est reproduit : jugez vous-même si la règle dit bien ce que l'arrêt dit. Une règle dont la condition n'est pas remplie ne dit rien, ni dans un sens ni dans l'autre.`);
+  note("Un arrêt de la chambre sociale ne lie pas l'autorité administrative. Depuis la loi du 14 juin 2013, le contenu du plan et la régularité de la procédure relèvent du juge administratif — plusieurs des arrêts ci-dessous le disent expressément.");
+  for (const r of regles) {
+    h3(`${r.sujet} — ${r.id}`);
+    p(r.dit);
+    for (const num of r.arrets) {
+      const a = GRILLE.arret(num);
+      if (!a) continue;
+      note(`Cass. ${a.ch || "soc."} ${a.date}, n° ${a.num}${a.sol ? ", " + a.sol : ""}${a.pub ? " — " + a.pub : ""}`);
+      if (a.sommaire) note("« " + a.sommaire.replace(/\s+/g, " ").trim() + " »");
+    }
+  }
+
   /* --- la mesure du travail fait --- */
   h1("Ce que cet audit a mesuré");
   tab(["Mesure", "Valeur", "Ce que cela veut dire"], [
@@ -133,6 +150,8 @@ function audit(f) {
     ["Sans objet", `${so.length}`, "L'exigence ne s'applique pas, et une donnée renseignée permet de le dire."],
     ["Contrôles de calibrage", `${DETECTION.length}`, "Ils calculent et affichent ; ils ne concluent jamais à la conformité."],
     ["Contrôles de cohérence", `${COHERENCE.length}`, "Ils ne vérifient pas une donnée mais la relation entre deux."],
+    ["Règles de jurisprudence retenues", `${regles.length} sur ${GRILLE.G.length}`,
+      "Les autres ne s'appliquent pas à votre situation : elles n'ont rien dit. Le corpus compte " + Object.keys(GRILLE.CORPUS).length + " arrêts publiés, versés au dépôt avec leur sommaire."],
     ["Rubriques de L. 1233-62 découpées depuis le texte", `${L1233_62.mesures.length}`,
       `Couverture du découpage : ${L1233_62.couverture} % du texte de l'énumération. Version lue : ${L1233_62.version}.`],
   ]);
@@ -242,6 +261,48 @@ function ajouter(iso, jours) {
   return d.toISOString().slice(0, 10);
 }
 
+/* La consultation du comité sur le projet, article L. 1233-30.
+
+   Deux choses distinctes, et le module les distingue parce que les confondre
+   est l'erreur ordinaire :
+
+   — le comité tient AU MOINS DEUX RÉUNIONS espacées d'au moins quinze jours ;
+   — il rend ses deux avis dans un délai qui, à compter de la première réunion,
+     ne peut excéder deux, trois ou quatre mois selon le nombre de licenciements.
+
+   Le second est un plafond légal supplétif : une convention ou un accord
+   collectif peut prévoir des délais différents — plus longs comme plus courts.
+   Le moteur le dit et refuse de conclure quand un accord est déclaré sans être
+   versé. À défaut d'avis dans le délai, le comité est réputé consulté. */
+const DELAIS_AVIS = [
+  { seuil: 0, mois: 2, texte: "moins de cent licenciements" },
+  { seuil: 100, mois: 3, texte: "au moins cent et moins de deux cent cinquante" },
+  { seuil: 250, mois: 4, texte: "au moins deux cent cinquante" },
+];
+const ESPACEMENT_MINIMAL = 15;   /* jours, entre deux réunions */
+
+function consultation(f) {
+  const n = nombre(f.total30j !== undefined ? f.total30j : f.nbLicenciements);
+  if (n === null) return { connu: false, motif: "Le nombre de licenciements n'est pas renseigné : le délai maximal d'avis ne peut pas être déterminé." };
+  const t = [...DELAIS_AVIS].reverse().find(x => n >= x.seuil);
+  const reunions = Array.isArray(f.datesReunionsCSE) ? f.datesReunionsCSE.filter(Boolean).slice().sort() : [];
+  return { connu: true, mois: t.mois, tranche: t.texte, reunions,
+    premiere: reunions[0] || null,
+    echeance: reunions[0] ? ajouterMois(reunions[0], t.mois) : null,
+    motif: `${n} licenciements — ${t.texte} : le comité rend ses deux avis dans un délai qui ne peut excéder ${t.mois} mois à compter de sa première réunion. Une convention ou un accord collectif peut prévoir des délais différents. À défaut d'avis dans le délai, le comité est réputé avoir été consulté.` };
+}
+function ajouterMois(iso, mois) {
+  const d = new Date(iso + "T00:00:00Z");
+  if (isNaN(d.getTime())) return null;
+  const j = d.getUTCDate();
+  d.setUTCMonth(d.getUTCMonth() + mois);
+  /* Le 31 mai plus trois mois n'est pas le 31 août pour tout le monde : quand le
+     mois d'arrivée est plus court, on retient son dernier jour. */
+  if (d.getUTCDate() !== j) d.setUTCDate(0);
+  return d.toISOString().slice(0, 10);
+}
+const joursEntre = (a, b) => Math.round((new Date(b + "T00:00:00Z") - new Date(a + "T00:00:00Z")) / 86400000);
+
 /* La priorité de réembauche : un an à compter de la rupture, et seulement si le
    salarié la demande dans ce même délai (L. 1233-45). L'obligation d'information
    des représentants du personnel, elle, ne dépend d'aucune demande. */
@@ -252,7 +313,8 @@ function priorite(f) {
     motif: `La priorité de réembauche court jusqu'au ${ajouter(d, 365)} pour le salarié qui en fait la demande dans ce même délai.` };
 }
 
-module.exports = { planDu, accompagnement, instruction, priorite, INSTRUCTION, SEUIL_MILLE, ajouter, ECART };
+module.exports = { planDu, accompagnement, instruction, priorite, consultation,
+  INSTRUCTION, SEUIL_MILLE, DELAIS_AVIS, ESPACEMENT_MINIMAL, ajouter, ajouterMois, joursEntre, ECART };
 
 });
 
@@ -611,6 +673,60 @@ ctl("PSE-CTL-REM-01", "Priorité de réembauche",
     return { etat: CONF, motif: `${p.motif} Les demandes reçues sont recensées et les élus sont informés des postes disponibles.` };
   });
 
+/* --------------------------------------- la consultation du comité sur le projet */
+
+ctl("PSE-CTL-CSE-01", "Consultation du comité",
+  "Le comité a-t-il tenu au moins deux réunions espacées d'au moins quinze jours ?",
+  ["L. 1233-30, I"],
+  f => siPlanDu(f, () => {
+    const r = Array.isArray(f.datesReunionsCSE) ? f.datesReunionsCSE.filter(Boolean).slice().sort() : [];
+    if (!r.length) return { etat: MANQ, motif: "Les dates des réunions du comité ne sont pas renseignées." };
+    if (r.length < 2)
+      return { etat: NC, motif: `Une seule réunion est renseignée (${r[0]}). Le comité tient au moins deux réunions (L. 1233-30, I) : la seconde n'est pas une formalité, c'est celle où l'avis se rend.` };
+    const ecarts = r.slice(1).map((d, i) => ({ de: r[i], a: d, jours: M.joursEntre(r[i], d) }));
+    const courts = ecarts.filter(e => e.jours < M.ESPACEMENT_MINIMAL);
+    return courts.length
+      ? { etat: NC, motif: `Deux réunions sont espacées de moins de quinze jours : ${courts.map(e => `${e.de} → ${e.a}, ${e.jours} jour(s)`).join(" ; ")}. L'article L. 1233-30, I impose un espacement d'au moins quinze jours.` }
+      : { etat: CONF, motif: `${r.length} réunions, espacées d'au moins quinze jours (${ecarts.map(e => e.jours + " j").join(", ")}).` };
+  }));
+
+ctl("PSE-CTL-CSE-02", "Consultation du comité",
+  "L'avis est-il rendu dans le délai que le nombre de licenciements commande ?",
+  ["L. 1233-30, II"],
+  f => siPlanDu(f, () => {
+    const c = M.consultation(f);
+    if (!c.connu) return { etat: MANQ, motif: c.motif };
+    if (!c.premiere) return { etat: MANQ, motif: `${c.motif} La date de la première réunion n'est pas renseignée.` };
+    /* Un accord peut prévoir d'autres délais. Tant qu'il est déclaré sans être
+       versé, la règle légale ne peut pas être opposée avec certitude : le
+       contrôle le dit au lieu de conclure sur un texte qu'il n'a pas lu. */
+    if (f.accordDelaisConsultation === true || f.accordDelaisConsultation === "oui") {
+      const P = Array.isArray(f.pieces) ? f.pieces : [];
+      if (!P.some(p => /accord.?d[ée]lais|accord.?m[ée]thode/i.test(String(p.type || p.nom || ""))))
+        return { etat: RISQ, motif: `Un accord fixant des délais différents est déclaré mais n'est pas versé. Le plafond légal de ${c.mois} mois n'est donc pas opposable en l'état, et l'application ne peut pas vérifier celui que vous appliquez : joignez l'accord.` };
+    }
+    const avis = (f.pse || {}).dateAvisCSE || f.dateAvisCSE;
+    if (vide(avis)) return { etat: RISQ, motif: `${c.motif} Aucun avis n'est enregistré : à défaut d'avis rendu au ${c.echeance}, le comité sera réputé consulté — ce qui ne dispense pas d'avoir tenu les réunions.` };
+    return avis <= c.echeance
+      ? { etat: CONF, motif: `Première réunion le ${c.premiere}, avis du ${avis} : le délai de ${c.mois} mois, qui expirait le ${c.echeance}, est tenu.` }
+      : { etat: RISQ, motif: `Avis du ${avis}, postérieur au terme du ${c.echeance} (${c.mois} mois après la première réunion du ${c.premiere}). Passé ce terme, le comité était déjà réputé consulté : l'avis tardif n'a pas d'effet sur la régularité, mais un calendrier qui déborde le délai légal signale que le dossier n'a pas suivi le rythme prévu.` };
+  }));
+
+ctl("PSE-CTL-CSE-03", "Consultation du comité",
+  "L'expertise décidée par le comité tient-elle dans le calendrier ?",
+  ["L. 1233-34", "L. 1233-35"],
+  f => siPlanDu(f, () => {
+    if (vide(f.expertisePSE)) return { etat: MANQ, motif: "Le recours à une expertise n'est pas renseigné. Le comité peut la décider lors de la première réunion, et elle pèse sur tout le calendrier." };
+    if (f.expertisePSE === false || f.expertisePSE === "non")
+      return { etat: SO, motif: "Aucune expertise n'a été décidée par le comité." };
+    const c = M.consultation(f);
+    const d = (f.pse || {}).dateDesignationExpert;
+    if (vide(d)) return { etat: MANQ, motif: "La date de désignation de l'expert n'est pas renseignée." };
+    if (c.premiere && d > c.premiere && M.joursEntre(c.premiere, d) > 0 && f.datesReunionsCSE && f.datesReunionsCSE.length && d > f.datesReunionsCSE.slice().sort()[0])
+      return { etat: RISQ, motif: `Expert désigné le ${d}, après la première réunion du ${c.premiere}. L'article L. 1233-34 place la décision de recourir à l'expertise à la première réunion : une désignation postérieure expose la procédure à la contestation, sans que le délai d'avis en soit prolongé.` };
+    return { etat: CONF, motif: `Expert désigné le ${d}. Il demande à l'employeur, dans les dix jours de sa désignation, les informations qu'il juge nécessaires ; l'employeur répond dans les huit jours (L. 1233-35). Le délai d'avis, lui, reste celui de ${c.mois} mois.` };
+  }));
+
 /* ------------------------------------------------------------ la cohérence */
 
 const COHERENCE = ["PSE-CTL-COH-01"];
@@ -930,6 +1046,285 @@ module.exports = { envelopper, surSilence, remplacer, racine };
 
 });
 
+__def("./grille-pse.js", function(module, exports, require){
+/* La grille de jurisprudence du module.
+
+   Vingt arrêts publiés de la chambre sociale, tous versés au dépôt dans
+   pse_corpus.json avec leur sommaire intégral : rien n'est cité de mémoire, et
+   chaque règle renvoie au numéro de pourvoi qui la porte. Le sommaire est
+   reproduit dans le rapport, sous la règle, pour que le lecteur juge lui-même
+   si la règle dit bien ce que l'arrêt dit.
+
+   Une règle ne s'affiche que si sa condition est remplie par le dossier. Celles
+   qui ne le sont pas ne disent rien — ni dans un sens ni dans l'autre — et leur
+   nombre est publié : c'est la mesure honnête de ce que la grille n'a pas eu à
+   dire.
+
+   Ce que cette grille ne fait pas : elle ne tranche pas. Un arrêt de la chambre
+   sociale ne lie pas l'autorité administrative, et le contentieux du contenu du
+   plan relève du juge administratif depuis la loi du 14 juin 2013 — plusieurs
+   des arrêts retenus le disent expressément. La grille signale ; elle ne
+   conclut jamais à la conformité. */
+
+const CORPUS = require("./pse_corpus.json");
+
+const nb = x => (typeof x === "number" && isFinite(x) ? x : null);
+const oui = x => x === true || x === "oui";
+const mesures = f => Array.isArray((f.plan || {}).mesures) ? f.plan.mesures : [];
+const planDu = f => {
+  const e = nb(f.effectif), n = nb(f.total30j !== undefined ? f.total30j : f.nbLicenciements);
+  return e !== null && n !== null && e >= 50 && n >= 10;
+};
+
+const G = [];
+const r = (id, sujet, si, dit, arrets) => G.push({ id, sujet, si, dit, arrets });
+
+r("PSE-JUR-01", "Calibrage",
+  f => planDu(f) && oui(f.groupe),
+  "La pertinence du plan s'apprécie en fonction des moyens dont disposent l'entreprise et le groupe pour maintenir les emplois ou faciliter le reclassement. S'agissant des possibilités de reclassement dans le groupe, elle s'apprécie parmi les entreprises dont les activités, l'organisation ou le lieu d'exploitation permettent la permutation de tout ou partie du personnel.",
+  ["15-15.190"]);
+
+r("PSE-JUR-02", "Sanction",
+  f => planDu(f),
+  "La nullité de la procédure ne peut être prononcée qu'en cas d'absence ou d'insuffisance du plan — non pour un défaut tenant à la cause du licenciement. L'indemnité allouée à ce titre répare intégralement le préjudice résultant du caractère illicite du licenciement.",
+  ["11-20.741", "16-11.563"]);
+
+r("PSE-JUR-03", "Égalité de traitement",
+  f => mesures(f).length > 1,
+  "Un plan peut contenir des mesures réservées à certains salariés, à la condition que tous les salariés placés dans une situation identique au regard de l'avantage en cause puissent en bénéficier, à moins qu'une différence de traitement soit justifiée par des raisons objectives et pertinentes, et que les règles d'attribution soient préalablement définies et contrôlables.",
+  ["14-16.009", "09-15.182"]);
+
+r("PSE-JUR-04", "Seuils",
+  f => oui(f.groupe) || nb(f.effectifEtablissement) !== null,
+  "Les conditions d'effectif et de nombre qui imposent l'établissement d'un plan s'apprécient au niveau de l'entreprise que dirige l'employeur — non au niveau de l'unité économique et sociale ou du groupement d'intérêt économique.",
+  ["07-45.481"]);
+
+r("PSE-JUR-05", "Seuils",
+  f => nb(f.effectif) !== null && f.effectif < 50 && mesures(f).length > 0,
+  "Un plan mis en place volontairement par un employeur employant moins de cinquante salariés n'a pas à satisfaire aux exigences des articles L. 1233-61 et L. 1233-62. Les contrôles de contenu de ce module sont donc sans objet sur votre dossier — mais l'engagement pris, lui, oblige.",
+  ["14-10.031"]);
+
+r("PSE-JUR-06", "Priorité de réembauche",
+  f => (f.plan || {}).dateRupture || f.dateNotification,
+  "L'obligation d'informer le salarié de tout emploi devenu disponible et compatible avec sa qualification n'est pas limitée aux emplois pourvus par contrat à durée indéterminée : les contrats à durée déterminée sont concernés.",
+  ["08-40.125"]);
+
+r("PSE-JUR-07", "Priorité de réembauche",
+  f => (f.plan || {}).dateRupture || f.dateNotification,
+  "L'employeur qui établit qu'aucun emploi disponible en rapport avec les compétences des salariés n'existait — ni avant le prononcé des licenciements, ni ensuite dans le cadre de la priorité de réembauche, au besoin après une formation d'adaptation — échappe à la nullité du plan.",
+  ["14-10.766"]);
+
+r("PSE-JUR-08", "Contrat de sécurisation professionnelle",
+  f => /sécurisation/i.test(String((f.plan || {}).accompagnement || "")),
+  "La rupture résultant de l'acceptation d'un contrat de sécurisation professionnelle doit avoir une cause économique réelle et sérieuse. L'employeur doit énoncer cette cause dans un écrit remis ou adressé au salarié au cours de la procédure et au plus tard au moment de l'acceptation ; à défaut, la rupture est sans cause réelle et sérieuse.",
+  ["18-24.531", "20-17.360"]);
+
+r("PSE-JUR-09", "Congé de reclassement",
+  f => /reclassement/i.test(String((f.plan || {}).accompagnement || "")),
+  "Pendant la période du congé de reclassement qui dépasse la durée du préavis, le salarié ne peut prétendre au maintien des avantages en nature dont il bénéficiait durant le préavis, mais seulement au versement de l'indemnité prévue par le texte.",
+  ["23-22.756"]);
+
+r("PSE-JUR-10", "Séparation des pouvoirs",
+  f => planDu(f),
+  "Le contenu du plan et la régularité de la procédure ne peuvent faire l'objet d'un litige distinct de celui relatif à la décision de validation ou d'homologation : leur vérification relève de l'administration, sous le contrôle du juge administratif. Le juge judiciaire reste compétent pour l'obligation individuelle de reclassement, sans méconnaître l'autorité de la chose décidée par l'administration.",
+  ["18-23.692", "23-18.987", "17-16.766", "18-26.229"]);
+
+r("PSE-JUR-11", "Calendrier",
+  f => planDu(f),
+  "La réorganisation peut être mise en œuvre par l'employeur avant la date d'homologation du plan : le comité doit être saisi en temps utile du projet de restructuration, mais l'homologation ne conditionne pas la mise en œuvre de la réorganisation elle-même. La notification des licenciements, elle, reste subordonnée à la décision administrative.",
+  ["20-15.370"]);
+
+r("PSE-JUR-12", "Départs volontaires",
+  f => mesures(f).some(m => /volontaire|départ|rupture amiable/i.test(String(m.intitule || "") + " " + String(m.detail || ""))),
+  "Lorsque la rupture résulte d'un accord amiable conclu dans le cadre d'un plan assorti d'un plan de départs volontaires, et qu'une décision administrative l'a autorisée puis est devenue définitive, le juge judiciaire ne peut apprécier le caractère réel et sérieux du motif au regard de la cause économique ni le respect de l'obligation de reclassement.",
+  ["23-15.533", "23-15.498"]);
+
+r("PSE-JUR-13", "Catégories professionnelles",
+  f => planDu(f),
+  "La notion de catégorie professionnelle, qui sert de base à l'ordre des licenciements et que le plan doit désigner, concerne l'ensemble des salariés qui exercent dans l'entreprise des fonctions de même nature supposant une formation professionnelle commune.",
+  ["95-16.648"]);
+
+function retenues(f) {
+  return G.filter(x => { try { return !!x.si(f); } catch (e) { return false; } });
+}
+function arret(num) { return CORPUS[num] || null; }
+
+module.exports = { G, retenues, arret, CORPUS };
+
+if (require.main === module) {
+  const manquants = G.flatMap(x => x.arrets).filter(n => !CORPUS[n]);
+  console.log(`${G.length} règles · ${Object.keys(CORPUS).length} arrêts au corpus`);
+  if (manquants.length) { console.error("Arrêts cités mais absents du corpus : " + manquants.join(", ")); process.exit(1); }
+  const cites = new Set(G.flatMap(x => x.arrets));
+  const inutilises = Object.keys(CORPUS).filter(n => !cites.has(n));
+  if (inutilises.length) console.log(`arrêts versés au corpus mais qu'aucune règle ne cite : ${inutilises.join(", ")}`);
+  const { BASE } = require("./tests-pse.js");
+  console.log(`sur le dossier de référence : ${retenues(BASE).length} règles retenues, ${G.length - retenues(BASE).length} sans objet`);
+}
+
+});
+
+__def("./tests-pse.js", function(module, exports, require){
+/* Les dossiers construits pour mettre les contrôles en défaut.
+
+   La règle du dépôt : tout contrôle capable de constater une non-conformité
+   doit la constater au moins une fois sur ces dossiers, sans quoi la
+   publication échoue. Un contrôle qui n'a jamais dit « non » n'a jamais été
+   éprouvé — il peut être écrit à l'envers sans que rien ne le révèle.
+
+   S'y ajoutent deux épreuves de principe, qui valent pour tout le module :
+   sur un dossier vide, aucun contrôle ne rend « conforme » ni « sans objet » ;
+   et aucun contrôle de calibrage ne rend jamais « conforme », parce qu'aucun
+   texte ne fixe le montant d'un plan.
+
+   Usage : node tests-pse.js      */
+const { C, ETATS, DETECTION } = require("./controles-pse.js");
+const { CONF, NC, RISQ, MANQ, SO } = ETATS;
+
+const BASE = {
+  effectif: 320, effectifEtablissement: 320, groupe: true, effectifGroupe: 640,
+  nbLicenciements: 22, total30j: 22,
+  pieces: [{ type: "comptes-groupe", date: "2026-05-02" }],
+  plan: {
+    mesures: [
+      { rubrique: "1°", intitule: "Reclassement interne", beneficiaires: 22, budget: 180000, duree: "6 mois" },
+      { rubrique: "1° bis", intitule: "Reprise partielle d'activité", beneficiaires: 4, budget: 40000, duree: "12 mois" },
+      { rubrique: "2°", intitule: "Création d'une activité de maintenance", beneficiaires: 6, budget: 120000, duree: "18 mois" },
+      { rubrique: "3°", intitule: "Antenne emploi et bassin", beneficiaires: 22, budget: 90000, duree: "9 mois" },
+      { rubrique: "4°", intitule: "Aide à la création d'entreprise", beneficiaires: 5, budget: 60000, duree: "12 mois" },
+      { rubrique: "5°", intitule: "Formations de reconversion", beneficiaires: 18, budget: 240000, duree: "12 mois" },
+      { rubrique: "6°", intitule: "Réduction des heures supplémentaires", beneficiaires: 40, budget: 0, duree: "permanent" },
+    ],
+    budgetTotal: 730000, resultatGroupe: 9200000,
+    salariesExposes: ["3 salariés de plus de 55 ans", "2 sans qualification"],
+    suivi: { modalites: "commission de suivi trimestrielle", consultation: "quatre réunions par an", bilan: "bilan annuel à la DREETS" },
+    accompagnement: "contrat de sécurisation professionnelle",
+    dateProposition: "2026-07-10", dateRupture: "2026-07-20",
+    demandesReembauche: [], informationElusPostes: true,
+  },
+  pse: { voie: "unilateral", suffrages: null, dateDepotAdmin: "2026-06-01", dateDecisionAdmin: "2026-06-18",
+         dateDesignationExpert: "2026-03-23" },
+  datesReunionsCSE: ["2026-03-23", "2026-04-14"], dateAvisCSE: "2026-04-14",
+  accordDelaisConsultation: false, expertisePSE: true,
+  dateNotification: "2026-06-25",
+};
+
+const clone = o => JSON.parse(JSON.stringify(o));
+function avec(mod) { const f = clone(BASE); mod(f); return f; }
+
+const CAS = [
+  { nom: "Aucune action de reclassement interne", attendu: ["PSE-CTL-CON-02"],
+    f: avec(f => { f.plan.mesures = f.plan.mesures.filter(m => m.rubrique !== "1°"); }) },
+  { nom: "Budget total en désaccord avec le détail", attendu: ["PSE-CTL-CHF-02"],
+    f: avec(f => { f.plan.budgetTotal = 1200000; }) },
+  { nom: "Congé de reclassement retenu en deçà de mille salariés", attendu: ["PSE-CTL-ACC-01"],
+    f: avec(f => { f.plan.accompagnement = "congé de reclassement"; }) },
+  { nom: "Congé de reclassement de dix-huit mois sans reconversion", attendu: ["PSE-CTL-ACC-02"],
+    f: avec(f => { f.effectif = 1400; f.plan.accompagnement = "congé de reclassement";
+                   f.plan.dureeConge = 18; f.plan.formationReconversion = false; }) },
+  { nom: "Contrat de sécurisation proposé avant la décision administrative", attendu: ["PSE-CTL-ACC-03"],
+    f: avec(f => { f.plan.dateProposition = "2026-06-02"; }) },
+  { nom: "Accord signé à 38 % des suffrages", attendu: ["PSE-CTL-VOI-02"],
+    f: avec(f => { f.pse.voie = "accord"; f.pse.suffrages = 38; }) },
+  { nom: "Notification antérieure à la décision administrative", attendu: ["PSE-CTL-VOI-04"],
+    f: avec(f => { f.dateNotification = "2026-06-10"; }) },
+  { nom: "Suivi sans bilan à l'administration", attendu: ["PSE-CTL-SUI-01"],
+    f: avec(f => { delete f.plan.suivi.bilan; }) },
+  { nom: "Élus non informés des postes disponibles", attendu: ["PSE-CTL-REM-01"],
+    f: avec(f => { f.plan.informationElusPostes = false; }) },
+  { nom: "Mesure visant plus de bénéficiaires qu'il n'est licencié", attendu: ["PSE-CTL-COH-01"],
+    f: avec(f => { f.plan.mesures[0].beneficiaires = 60; }) },
+  { nom: "Une seule réunion du comité", attendu: ["PSE-CTL-CSE-01"],
+    f: avec(f => { f.datesReunionsCSE = ["2026-03-23"]; }) },
+  { nom: "Deux réunions espacées de six jours", attendu: ["PSE-CTL-CSE-01"],
+    f: avec(f => { f.datesReunionsCSE = ["2026-03-23", "2026-03-29"]; f.dateAvisCSE = "2026-03-29"; }) },
+
+  /* Les dossiers ci-dessous n'attendent pas de non-conformité : ils vérifient
+     qu'un contrôle rend bien l'état intermédiaire prévu là où le texte ne
+     tranche pas — un risque, jamais un feu vert et jamais un couperet. */
+  { nom: "Avis rendu après le terme de deux mois", attendu: [], risque: ["PSE-CTL-CSE-02"],
+    f: avec(f => { f.datesReunionsCSE = ["2026-03-23", "2026-04-14"]; f.dateAvisCSE = "2026-06-30"; }) },
+  { nom: "Accord de méthode déclaré mais non versé", attendu: [], risque: ["PSE-CTL-CSE-02"],
+    f: avec(f => { f.accordDelaisConsultation = true; }) },
+  { nom: "Expert désigné après la première réunion", attendu: [], risque: ["PSE-CTL-CSE-03"],
+    f: avec(f => { f.pse.dateDesignationExpert = "2026-04-10"; }) },
+  { nom: "Comptes du groupe non versés", attendu: [], risque: ["PSE-CTL-CAL-03"],
+    f: avec(f => { f.pieces = []; }) },
+];
+
+const tousLesDossiers = [BASE, ...CAS.map(c => c.f), {},
+  /* deux dossiers de bord, qui n'attendent aucun verdict particulier mais font
+     passer la grille de jurisprudence par ses branches restées froides */
+  { effectif: 30, nbLicenciements: 12, total30j: 12, plan: { mesures: [{ rubrique: "1°", intitule: "aide au départ volontaire", beneficiaires: 3, budget: 30000, duree: "3 mois" }] } },
+  { effectif: 2400, effectifEtablissement: 900, groupe: true, effectifGroupe: 2400, nbLicenciements: 260, total30j: 260,
+    plan: { accompagnement: "congé de reclassement", dureeConge: 12, mesures: [
+      { rubrique: "1°", intitule: "reclassement", beneficiaires: 200, budget: 900000, duree: "12 mois" },
+      { rubrique: "4°", intitule: "plan de départs volontaires", beneficiaires: 60, budget: 600000, duree: "6 mois" }] },
+    datesReunionsCSE: ["2026-02-02", "2026-03-02", "2026-04-06"] }];
+
+function verdicts(f) {
+  const o = {};
+  for (const c of C) {
+    try { o[c.id] = c.verdict(f); }
+    catch (e) { o[c.id] = { etat: MANQ, motif: "Contrôle non exécutable : " + e.message }; }
+  }
+  return o;
+}
+
+module.exports = { CAS, BASE, verdicts };
+
+if (require.main === module) {
+  let echecs = [];
+  for (const cas of CAS) {
+    const v = verdicts(cas.f);
+    for (const id of cas.attendu)
+      if (!v[id] || v[id].etat !== NC)
+        echecs.push(`${cas.nom} : ${id} rend « ${v[id] ? v[id].etat : "rien"} » au lieu de « non conforme ».`);
+    for (const id of cas.risque || [])
+      if (!v[id] || v[id].etat !== RISQ)
+        echecs.push(`${cas.nom} : ${id} rend « ${v[id] ? v[id].etat : "rien"} » au lieu de « risque à vérifier ».`);
+  }
+
+  /* Tout contrôle capable de dire non doit l'avoir dit au moins une fois. */
+  const peutDireNon = C.filter(c => /etat: NC/.test(String(c.brut || c.verdict))).map(c => c.id);
+  const ontDitNon = new Set(CAS.flatMap(c => c.attendu));
+  const jamais = peutDireNon.filter(id => !ontDitNon.has(id));
+
+  /* Le dossier vide : ni conforme, ni sans objet. */
+  const vide = verdicts({});
+  const surVide = Object.entries(vide).filter(([, v]) => v.etat === CONF || v.etat === SO)
+    .map(([id, v]) => `${id} → ${v.etat}`);
+
+  /* Le calibrage ne conclut jamais à la conformité, sur aucun dossier. */
+  const calibrageConforme = [];
+  for (const cas of [{ nom: "référence", f: BASE }, ...CAS]) {
+    const v = verdicts(cas.f);
+    for (const id of DETECTION) if (v[id] && v[id].etat === CONF) calibrageConforme.push(`${cas.nom} : ${id}`);
+  }
+
+  /* La grille de jurisprudence : aucune règle ne doit citer un arrêt absent du
+     corpus, et chaque règle doit être atteinte par au moins un dossier — une
+     règle qu'aucun dossier ne déclenche n'a jamais été exercée. */
+  const GR = require("./grille-pse.js");
+  const horsCorpus = GR.G.flatMap(x => x.arrets).filter(n => !GR.CORPUS[n]);
+  const jamaisRetenues = GR.G.filter(x => !tousLesDossiers.some(f => { try { return !!x.si(f); } catch (e) { return false; } })).map(x => x.id);
+
+  console.log(`${CAS.length} dossiers contradictoires · ${C.length} contrôles · ${GR.G.length} règles de jurisprudence`);
+  console.log(`contrôles capables de constater une non-conformité : ${peutDireNon.length}, éprouvés ${ontDitNon.size}`);
+  console.log(`sur un dossier vide : ${surVide.length} verdict(s) « conforme » ou « sans objet »`);
+  console.log(`calibrage rendu « conforme » : ${calibrageConforme.length} fois`);
+  echecs = echecs
+    .concat(horsCorpus.map(n => `La grille cite l'arrêt ${n}, absent du corpus versé au dépôt.`))
+    .concat(jamaisRetenues.map(id => `${id} : aucun dossier d'épreuve ne déclenche cette règle de jurisprudence.`))
+    .concat(jamais.map(id => `${id} peut constater une non-conformité, mais aucun dossier ne le lui fait dire.`))
+    .concat(surVide.map(x => `Sur un dossier vide, ${x} : le silence n'est pas une réponse.`))
+    .concat(calibrageConforme.map(x => `${x} : un contrôle de calibrage ne peut pas conclure à la conformité.`));
+  if (echecs.length) { console.error("\n" + echecs.join("\n")); process.exit(1); }
+  console.log("tout est vert");
+}
+
+});
+
 __def("./textes-pse.json", function(module){ module.exports = {
  "L1233-61": {
   "id": "LEGIARTI000036261733",
@@ -990,6 +1385,522 @@ __def("./textes-pse.json", function(module){ module.exports = {
   "id": "LEGIARTI000027566048",
   "texte": "Dans les entreprises de moins de cinquante salariés, l'employeur notifie au salarié le licenciement pour motif économique par lettre recommandée avec avis de réception. La lettre de notification ne peut être adressée avant l'expiration d'un délai courant à compter de la notification du projet de licenciement à l'autorité administrative. Ce délai ne peut être inférieur à trente jours. Une convention ou un accord collectif de travail peut prévoir des délais plus favorables aux salariés. Dans les entreprises de cinquante salariés ou plus, lorsque le projet de licenciement concerne dix salariés ou plus dans une même période de trente jours, l'employeur notifie le licenciement selon les modalités prévues au premier alinéa du présent article, après la notification par l'autorité administrative de la décision de validation mentionnée à l'article L. 1233-57-2 ou de la décision d'homologation mentionnée à l'article L. 1233-57-3 , ou à l'expiration des délais prévus à l'article L. 1233-57-4 . Il ne peut procéder, à peine de nullité, à la rupture des contrats de travail avant la notification de cette décision d'homologation ou de validation ou l'expiration des délais prévus à l'article L. 1233-57-4.",
   "elargi": true
+ },
+ "L1233-30": {
+  "id": "LEGIARTI000035643899",
+  "texte": "I.-Dans les entreprises ou établissements employant habituellement au moins cinquante salariés, l'employeur réunit et consulte le comité social et économique sur : 1° L'opération projetée et ses modalités d'application, conformément à l'article L. 2323-31 ; 2° Le projet de licenciement collectif : le nombre de suppressions d'emploi, les catégories professionnelles concernées, les critères d'ordre et le calendrier prévisionnel des licenciements, les mesures sociales d'accompagnement prévues par le plan de sauvegarde de l'emploi et, le cas échéant, les conséquences des licenciements projetés en matière de santé, de sécurité ou de conditions de travail. Les éléments mentionnés au 2° du présent I qui font l'objet de l'accord mentionné à l'article L. 1233-24-1 ne sont pas soumis à la consultation du comité social et économique prévue au présent article. Le comité social et économique tient au moins deux réunions espacées d'au moins quinze jours. II.-Le comité social et économique rend ses deux avis dans un délai qui ne peut être supérieur, à compter de la date de sa première réunion au cours de laquelle il est consulté sur les 1° et 2° du I, à : 1° Deux mois lorsque le nombre des licenciements est inférieur à cent ; 2° Trois mois lorsque le nombre des licenciements est au moins égal à cent et inférieur à deux cent cinquante ; 3° Quatre mois lorsque le nombre des licenciements est au moins égal à deux cent cinquante. Une convention ou un accord collectif de travail peut prévoir des délais différents. En l'absence d'avis du comité social et économique dans ces délais, celui-ci est réputé avoir été consulté.",
+  "elargi": true
+ },
+ "L1233-33": {
+  "id": "LEGIARTI000035652923",
+  "texte": "L'employeur met à l'étude, dans le délai prévu à l'article L. 1233-30 , les suggestions relatives aux mesures sociales envisagées et les propositions alternatives au projet de restructuration mentionné à l'article L. 2323-31 formulées par le   comité social et économique. Il leur donne une réponse motivée.",
+  "elargi": true
+ },
+ "L1233-34": {
+  "id": "LEGIARTI000036762068",
+  "texte": "Dans les entreprises d'au moins cinquante salariés, lorsque le projet de licenciement concerne au moins dix salariés dans une même période de trente jours, le comité social et économique peut, le cas échéant sur proposition des commissions constituées en son sein, décider, lors de la première réunion prévue à l' article L. 1233-30 , de recourir à une expertise pouvant porter sur les domaines économique et comptable ainsi que sur la santé, la sécurité ou les effets potentiels du projet sur les conditions de travail. Les modalités et conditions de réalisation de l'expertise, lorsqu'elle porte sur un ou plusieurs des domaines cités au premier alinéa, sont déterminées par un décret en Conseil d'Etat. L'expert peut être assisté dans les conditions prévues à l' article L. 2315-81 . Le comité social et économique peut également mandater un expert afin qu'il apporte toute analyse utile aux organisations syndicales pour mener la négociation prévue à l' article L. 1233-24-1 . Le rapport de l'expert est remis au comité social et économique et, le cas échéant, aux organisations syndicales, au plus tard quinze jours avant l'expiration du délai mentionné à l'article L. 1233-30.",
+  "elargi": true
+ },
+ "L1233-35": {
+  "id": "LEGIARTI000036261799",
+  "texte": "L'expert désigné par le comité social et économique demande à l'employeur, dans les dix jours à compter de sa désignation, toutes les informations qu'il juge nécessaires à la réalisation de sa mission. L'employeur répond à cette demande dans les huit jours. Le cas échéant, l'expert demande, dans les dix jours, des informations complémentaires à l'employeur, qui répond à cette demande dans les huit jours à compter de la date à laquelle la demande de l'expert est formulée.",
+  "elargi": true
+ },
+ "L1233-24-2": {
+  "id": "LEGIARTI000036261824",
+  "texte": "L'accord collectif mentionné à l'article L. 1233-24-1 porte sur le contenu du plan de sauvegarde de l'emploi mentionné aux articles L. 1233-61 à L. 1233-63 . Il peut également porter sur : 1° Les modalités d'information et de consultation du comité social et économique, en particulier les conditions dans lesquelles ces modalités peuvent être aménagées en cas de projet de transfert d'une ou de plusieurs entités économiques prévu à l' article L. 1233-61 , nécessaire à la sauvegarde d'une partie des emplois ; 2° La pondération et le périmètre d'application des critères d'ordre des licenciements mentionnés à l'article L. 1233-5 ; 3° Le calendrier des licenciements ; 4° Le nombre de suppressions d'emploi et les catégories professionnelles concernées ; 5° Les modalités de mise en œuvre des mesures de formation, d'adaptation et de reclassement prévues à l'article L. 1233-4 .",
+  "elargi": true
+ },
+ "L1233-24-4": {
+  "id": "LEGIARTI000035652928",
+  "texte": "A défaut d'accord mentionné à l'article L. 1233-24-1 , un document élaboré par l'employeur après la dernière réunion du   comité social et économique fixe le contenu du plan de sauvegarde de l'emploi et précise les éléments prévus aux 1° à 5° de l'article L. 1233-24-2 , dans le cadre des dispositions légales et conventionnelles en vigueur.",
+  "elargi": true
+ },
+ "L1233-32": {
+  "id": "LEGIARTI000025579021",
+  "texte": "Outre les renseignements prévus à l'article L. 1233-31 , dans les entreprises de moins de cinquante salariés, l'employeur adresse aux représentants du personnel les mesures qu'il envisage de mettre en oeuvre pour éviter les licenciements ou en limiter le nombre et pour faciliter le reclassement du personnel dont le licenciement ne pourrait être évité. Dans les entreprises d'au moins cinquante salariés, l'employeur adresse le plan de sauvegarde de l'emploi concourant aux mêmes objectifs.",
+  "elargi": true
+ },
+ "L1233-26": {
+  "id": "LEGIARTI000035643922",
+  "texte": "Lorsqu'une entreprise ou un établissement employant habituellement au moins cinquante salariés a procédé pendant trois mois consécutifs à des licenciements économiques de plus de dix salariés au total, sans atteindre dix salariés dans une même période de trente jours, tout nouveau licenciement économique envisagé au cours des trois mois suivants est soumis aux dispositions du présent chapitre.",
+  "elargi": true
+ },
+ "L1233-25": {
+  "id": "LEGIARTI000006901037",
+  "texte": "Lorsqu'au moins dix salariés ont refusé la modification d'un élément essentiel de leur contrat de travail, proposée par leur employeur pour l'un des motifs économiques énoncés à l'article L. 1233-3 et que leur licenciement est envisagé, celui-ci est soumis aux dispositions applicables en cas de licenciement collectif pour motif économique.",
+  "elargi": true
+ },
+ "L1233-28": {
+  "id": "LEGIARTI000035652699",
+  "texte": "L'employeur qui envisage de procéder à un licenciement collectif pour motif économique d'au moins dix salariés dans une même période de trente jours réunit et consulte le comité social et économique dans les conditions prévues par le présent paragraphe.",
+  "elargi": true
+ }
+}; });
+
+__def("./pse_corpus.json", function(module){ module.exports = {
+ "14-16.009": {
+  "id": "6079c7ab9ba5988459c57588",
+  "num": "14-16.009",
+  "date": "2015-07-09",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Si un plan de sauvegarde de l'emploi peut contenir des mesures réservées à certains salariés, c'est à la condition que tous les salariés de l'entreprise placés dans une situation identique au regard de l'avantage en cause puissent bénéficier de cet avantage, à moins qu'une différence de traitement soit justifiée par des raisons objectives et pertinentes et que les règles déterminant les conditions d'attribution de cet avantage soient préalablement définies et contrôlables. Ayant constaté d'une part, qu'un salarié avait refusé une mesure de cessation anticipée d'activité et que le plan de sauvegarde de l'emploi prévoyait que, de ce fait, les avantages dont il bénéficiait étaient moins importants que ceux des autres salariés licenciés qui ne remplissaient pas les conditions pour prétendre à un départ anticipé et d'autre part, que cette différence de traitement ne pouvait être justifiée par",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "contenu",
+   "mesures réservées à certains salariés",
+   "avantage",
+   "egalité de traitement",
+   "conditions",
+   "détermination",
+   "atteinte au principe",
+   "cas",
+   "dispositions introduisant une différence de traitement entre les salariés éligibles à un mécanisme de cessation anticipée d'activité et les autres",
+   "raisons objectives et pertinentes justifiant la différence de traitement (non)",
+   "portée"
+  ]
+ },
+ "16-11.563": {
+  "id": "5fd8f97f3202718e5d749d89",
+  "num": "16-11.563",
+  "date": "2017-09-14",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin",
+  "sommaire": "L'indemnité allouée en application des articles L. 1235-10 et L. 1235-11 du code du travail lorsque la procédure de licenciement est nulle en raison d'une absence ou d'une insuffisance de plan de sauvegarde de l'emploi répare intégralement le préjudice résultant du caractère illicite du licenciement. Viole dès lors ces textes et le principe de réparation intégrale du préjudice la cour d'appel qui, après avoir condamné l'employeur au paiement de cette indemnité, alloue par ailleurs aux salariés des dommages-intérêts pour privation des mesures du plan de sauvegarde de l'emploi",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "absence ou insuffisance du plan",
+   "sanction",
+   "indemnité de l'article l. 1235-11",
+   "cumul avec des dommages et intérêts pour privation des mesures du plan",
+   "possibilité (non)"
+  ]
+ },
+ "07-45.481": {
+  "id": "6079b5b99ba5988459c56dbf",
+  "num": "07-45.481",
+  "date": "2009-01-28",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Les conditions d'effectif et de nombre des salariées qui imposent l'établissement et la mise en oeuvre d'un plan de sauvegarde de l'emploi s'apprécient au niveau de l'entreprise que dirige l'employeur. Manque en conséquence de base légale au regard de l'article L. 1233-61 du code du travail l'arrêt d'une cour d'appel qui retient que les membres d'un GIE, constituant une unité économique et sociale, doivent être considérés comme formant une seule entreprise, pour la vérification des conditions déterminant l'établissement d'un plan de sauvegarde de l'emploi, sans rechercher si l'ensemble des personnes morales qui composent ce groupement avaient la qualité d'employeur",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "mise en oeuvre",
+   "conditions",
+   "effectif à prendre en compte",
+   "appréciation",
+   "cadre",
+   "détermination"
+  ]
+ },
+ "08-40.125": {
+  "id": "6079b6689ba5988459c56e12",
+  "num": "08-40.125",
+  "date": "2009-04-08",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "L'obligation pour l'employeur, dans le cadre de la priorité de réembauche, d'informer le salarié de tout emploi devenu disponible et compatible avec sa qualification n'est pas limitée aux emplois pourvus par des contrats de travail à durée indéterminée. Justifie légalement sa décision la cour d'appel qui, pour condamner un employeur à payer à un salarié, ingénieur du son, une indemnité pour violation de la priorité de réembauche, retient qu'il a régulièrement recouru, pendant la période couvrant cette priorité, à plusieurs ingénieurs du son, ou chefs opérateurs prise de son, correspondant à une fonction identique, sous la forme de contrats à durée déterminée",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "priorité de réembauchage",
+   "conditions",
+   "emploi disponible",
+   "information du salarié",
+   "obligation de l'employeur",
+   "etendue",
+   "cas",
+   "emploi à pourvoi par contrat à durée déterminée",
+   "condition"
+  ]
+ },
+ "20-17.360": {
+  "id": "629702197c2a1fa9d4442267",
+  "num": "20-17.360",
+  "date": "2022-06-01",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Selon l'article 5 de la convention Unédic relative au contrat de sécurisation professionnelle du 19 juillet 2011, agréée par arrêté du 6 octobre 2011, lorsque la rupture du contrat de travail résulte de l'acceptation par le salarié d'un contrat de sécurisation professionnelle, l'employeur doit en énoncer le motif économique soit dans le document écrit d'information sur le contrat de sécurisation professionnelle remis obligatoirement au salarié concerné par le projet de licenciement, soit dans la lettre qu'il est tenu d'adresser, en application de ce texte, au salarié lorsque le délai dont ce dernier dispose pour faire connaître sa réponse à la proposition de contrat de sécurisation professionnelle expire après le délai d'envoi de la lettre de licenciement imposé par les articles L. 1233-15 et L. 1233-39 du code du travail. Lorsque le salarié adhère au contrat de sécurisation professionne",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "formalités légales",
+   "lettre de licenciement",
+   "notification",
+   "délai",
+   "respect par l'employeur",
+   "contrat de sécurisation professionnelle",
+   "mention des motifs de la rupture",
+   "enonciation par écrit",
+   "portée"
+  ]
+ },
+ "23-22.756": {
+  "id": "67d12fa1a74c455c1adcabad",
+  "num": "23-22.756",
+  "date": "2025-03-12",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Il résulte des articles L. 1233-72 du code du travail, dans sa rédaction antérieure à la loi n° 2020-1576 du 14 décembre 2020, et R. 1233-32 du même code, que lorsqu'un salarié se trouve en congé de reclassement, au cours de la période dépassant la durée de son préavis, il ne peut prétendre au maintien des avantages en nature dont il bénéficiait durant le préavis, mais seulement au versement de l'indemnité prévue au 3° de l'article L. 5123-2 du code du travail",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "mesures d'accompagnement",
+   "congé de reclassement",
+   "période excédant le préavis",
+   "cas",
+   "maintien des avantages en nature",
+   "exclusion",
+   "détermination",
+   "portée"
+  ]
+ },
+ "18-26.229": {
+  "id": "5fca56f2fa41e51ef42e20d9",
+  "num": "18-26.229",
+  "date": "2020-06-10",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Si, selon l'article L. 1235-7-1 du code du travail, le contenu du plan de sauvegarde de l'emploi et la régularité de la procédure de licenciement collectif ne peuvent faire l'objet d'un litige distinct de celui relatif à la décision de validation de l'accord collectif déterminant le contenu du plan de sauvegarde de l'emploi, le juge judiciaire demeure compétent pour connaître de l'action exercée par les salariés licenciés aux fins de voir constater une violation des dispositions de l'article L. 1224-1 du code du travail de nature à priver d'effet leurs licenciements",
+  "themes": [
+   "separation des pouvoirs",
+   "compétence judiciaire",
+   "domaine d'application",
+   "licenciement économique",
+   "plan de sauvegarde de l'emploi",
+   "action ultérieure en violation des dispositions de l'article l. 1224-1 du code du travail exercée par les salariés licenciés",
+   "office du juge judiciaire",
+   "détermination",
+   "portée"
+  ]
+ },
+ "14-10.766": {
+  "id": "6079c78f9ba5988459c5757c",
+  "num": "14-10.766",
+  "date": "2015-05-27",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Ayant constaté qu'une société ne comportait aucun emploi disponible, tant avant le prononcé des licenciements qu'après dans le cadre de la priorité de réembauche, en rapport avec les compétences des salariés, au besoin en les faisant bénéficier d'une formation d'adaptation, la cour d'appel justifie sa décision de rejet de la demande des salariés en nullité du plan de sauvegarde de l'emploi",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "validité",
+   "emploi disponible",
+   "critères",
+   "appréciation",
+   "portée"
+  ]
+ },
+ "95-16.648": {
+  "id": "6079b1829ba5988459c52650",
+  "num": "95-16.648",
+  "date": "1997-02-13",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Aux termes de l'article L. 321-4 du Code du travail, l'employeur doit indiquer au comité d'entreprise saisi d'un projet de licenciement collectif les catégories professionnelles concernées. Une cour d'appel a exactement retenu que la notion de catégories professionnelles, qui sert de base à l'établissement de l'ordre des licenciements, concerne l'ensemble des salariés qui exercent au sein de l'entreprise des fonctions de même nature supposant une formation professionnelle commune.",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "consultation du comité d'entreprise",
+   "projet de licenciement",
+   "catégories professionnelles concernées",
+   "définition",
+   "representation des salaries",
+   "comité d'entreprise",
+   "attributions",
+   "attributions consultatives",
+   "communications par l'employeur",
+   "contrat de travail, execution",
+   "employeur",
+   "obligations",
+   "communication au comité d'entreprise",
+   "plan social",
+   "contenu",
+   "mesures énoncées à l'article l. 321",
+   "4",
+   "1 du code du travail",
+   "plan de reclassement",
+   "mesures spéciales et concrètes",
+   "absence",
+   "effet",
+   "mesures précises et concrètes",
+   "nécessité",
+   "eléments constitutifs",
+   "nullité",
+   "etendue"
+  ]
+ },
+ "17-16.766": {
+  "id": "5fca7fe75ad83e6f5d80d442",
+  "num": "17-16.766",
+  "date": "2018-11-21",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin Publié au Rapport",
+  "sommaire": "Il résulte de l'article L. 1235-7-1 du code du travail, issu de la loi n° 2013-504 du 14 juin 2013, que, si le juge judiciaire demeure compétent pour apprécier le respect par l'employeur de l'obligation individuelle de reclassement, cette appréciation ne peut méconnaître l'autorité de la chose décidée par l'autorité administrative ayant homologué le document élaboré par l'employeur par lequel a été fixé le contenu du plan de reclassement intégré au plan de sauvegarde de l'emploi. Viole dès lors ces dispositions ainsi que la loi des 16-24 août 1790, le décret du 16 fructidor an III et le principe de la séparation des pouvoirs, une cour d'appel qui, pour juger des licenciements dénués de cause réelle et sérieuse, se fonde sur une insuffisance du plan de sauvegarde de l'emploi alors que le contrôle du contenu de ce plan relève de la compétence exclusive de la juridiction administrative",
+  "themes": [
+   "separation des pouvoirs",
+   "compétence judiciaire",
+   "domaine d'application",
+   "licenciement économique",
+   "reclassement",
+   "obligation de l'employeur",
+   "contrôle",
+   "office du juge judiciaire",
+   "limites",
+   "détermination",
+   "portée"
+  ]
+ },
+ "11-20.741": {
+  "id": "6079beae9ba5988459c571a8",
+  "num": "11-20.741",
+  "date": "2012-05-03",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin",
+  "sommaire": "La nullité de la procédure de licenciement pour motif économique ne pouvant être prononcée, en vertu de l'article L. 1235-10 du code du travail, qu'en cas d'absence ou d'insuffisance du plan de sauvegarde de l'emploi, doit être cassée la décision d'une cour d'appel qui, pour annuler une procédure de licenciement, se prononce sur la cause du licenciement",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "motif économique",
+   "appréciation",
+   "office du juge",
+   "exclusion",
+   "portée",
+   "nullité",
+   "action en nullité",
+   "fondement",
+   "cause",
+   "limites",
+   "détermination"
+  ]
+ },
+ "18-24.531": {
+  "id": "5fca57e1c23d672238d0a68e",
+  "num": "18-24.531",
+  "date": "2020-05-27",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "La rupture du contrat de travail résultant de l'acceptation par le salarié d'un contrat de sécurisation professionnelle doit avoir une cause économique réelle et sérieuse. L'employeur est en conséquence tenu d'énoncer la cause économique de la rupture du contrat dans un écrit remis ou adressé au salarié au cours de la procédure de licenciement et au plus tard au moment de l'acceptation du contrat de sécurisation professionnelle par le salarié, afin qu'il soit informé des raisons de la rupture lors de son acceptation. Une cour d'appel qui constate qu'aucun écrit énonçant la cause économique de la rupture n'avait été remis ou adressé au salarié au cours de la procédure de licenciement, peu important les écrits adressés lors de la procédure spécifique de modification du contrat de travail, en déduit exactement que l'employeur n'avait pas satisfait à son obligation légale d'informer le salar",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "mesures d'accompagnement",
+   "contrat de sécurisation professionnelle",
+   "mention des motifs de la rupture",
+   "enonciation dans un écrit",
+   "moment",
+   "détermination",
+   "portée"
+  ]
+ },
+ "15-15.190": {
+  "id": "5fd9187091d093b422ebe710",
+  "num": "15-15.190",
+  "date": "2016-11-16",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin Publié au Rapport",
+  "sommaire": "La pertinence d'un plan de sauvegarde de l'emploi doit être appréciée en fonction des moyens dont disposent l'entreprise et le groupe dont elle fait partie pour maintenir les emplois ou faciliter le reclassement. S'agissant des possibilités de reclassement au sein du groupe, cette pertinence doit s'apprécier parmi les entreprises dont les activités, l'organisation ou le lieu d'exploitation leur permettent la permutation de tout ou partie du personnel. En revanche, s'agissant des moyens financiers du groupe, la pertinence doit s'apprécier compte tenu des moyens de l'ensemble des entreprises unies par le contrôle ou l'influence d'une entreprise dominante dans les conditions définies à l'article L. 2331-1 du code du travail, sans qu'il y ait lieu de réduire le groupe aux entreprises situées sur le territoire national",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "contenu",
+   "appréciation",
+   "périmètre",
+   "groupe de sociétés",
+   "critères",
+   "moyens financiers du groupe",
+   "périmètre du groupe",
+   "détermination"
+  ]
+ },
+ "18-23.692": {
+  "id": "5fca5943aa4c3b2dde12015d",
+  "num": "18-23.692",
+  "date": "2020-03-25",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Le respect du principe de la séparation des pouvoirs s'oppose à ce que le juge judiciaire se prononce sur le respect par l'employeur de stipulations conventionnelles dont il est soutenu qu'elles s'imposaient au stade de l'élaboration du plan de sauvegarde de l'emploi, dès lors qu'en application de l'article L. 1233-57-3 du code du travail la vérification du contenu dudit plan relève de l'administration sous le contrôle du juge administratif. Par suite, le juge judiciaire n'est pas compétent pour statuer sur des demandes de salariés, qui, sous le couvert de demandes tendant à obtenir l'exécution des engagements énoncés dans le cadre d'un accord de méthode conclu dans l'entreprise antérieurement à l'élaboration du plan de sauvegarde de l'emploi, contestent la conformité du contenu du plan de sauvegarde de l'emploi aux stipulations de cet accord",
+  "themes": [
+   "separation des pouvoirs",
+   "compétence judiciaire",
+   "exclusion",
+   "cas",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "contenu",
+   "conformité aux stipulations d'un accord de méthode conclu antérieurement",
+   "vérification",
+   "compétence du juge administratif",
+   "détermination",
+   "portée"
+  ]
+ },
+ "09-15.182": {
+  "id": "6079bb4e9ba5988459c57032",
+  "num": "09-15.182",
+  "date": "2010-07-12",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Si un plan de sauvegarde de l'emploi peut contenir des mesures réservées à certains salariés, c'est à la condition que tous les salariés de l'entreprise placés dans une situation identique au regard de l'avantage en cause puissent bénéficier de cet avantage, à moins qu'une différence de traitement soit justifiée par des raisons objectives et pertinentes, et que les règles déterminant les conditions d'attribution de cet avantage soient préalablement définies et contrôlables. Doit dès lors être rejeté le pourvoi reprochant à une cour d'appel d'avoir jugé qu'un plan de sauvegarde de l'emploi emportait rupture de l'égalité de traitement entre salariés des divers établissements d'une entreprise, et de l'avoir annulé, après avoir constaté que ce plan prévoyait, d'une part, des mesures incitant à des départs volontaires réservées aux seuls salariés d'un établissement et, d'autre part, qu'au cas",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "contenu",
+   "mesures réservées à certains salariés",
+   "avantage",
+   "egalité de traitement",
+   "nécessité",
+   "portée",
+   "appréciation",
+   "critères",
+   "mesures de reclassement",
+   "priorité donnée au salarié à reclasser",
+   "reclassement",
+   "obligation de l'employeur",
+   "périmètre de l'obligation",
+   "groupe de sociétés"
+  ]
+ },
+ "23-15.533": {
+  "id": "667baf23eee23a0a3f11d256",
+  "num": "23-15.533",
+  "date": "2024-06-26",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Le juge judiciaire ne peut, sans violer le principe de séparation des pouvoirs, en l'état d'une décision administrative autorisant la rupture amiable dans le cadre de la mise en oeuvre d'un plan de sauvegarde de l'emploi assorti d'un plan de départs volontaires devenue définitive, apprécier le caractère réel et sérieux du motif de la rupture au regard de la cause économique ou du respect par l'employeur de son obligation de reclassement. Doit en conséquence être censuré l'arrêt qui déclare la rupture du contrat de travail d'un salarié protégé sans cause réelle et sérieuse et lui alloue des dommages-intérêts à ce titre, alors que par une décision devenue définitive cette rupture amiable avait été autorisée par l'inspection du travail",
+  "themes": [
+   "contrat de travail, rupture"
+  ]
+ },
+ "20-15.370": {
+  "id": "623ac744804402057638eae0",
+  "num": "20-15.370",
+  "date": "2022-03-23",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Si, en application de l'article L. 2323-31 du code du travail, dans sa version en vigueur du 1er janvier 2016 au 1er janvier 2018, le comité d'entreprise doit être saisi en temps utile des projets de restructuration et de compression des effectifs, la réorganisation peut être mise en oeuvre par l'employeur avant la date d'homologation du plan de sauvegarde de l'emploi par l'autorité administrative. Dès lors, encourt la cassation l'arrêt qui, pour prononcer la résiliation judiciaire du contrat de travail du salarié aux torts de l'employeur pour manquement à son obligation de fournir un travail, retient que le document unilatéral établi par la société, portant projet de réorganisation et plan de sauvegarde de l'emploi, ne pouvait être mis en oeuvre avant son homologation par l'administration et qu'il en résultait que le salarié avait vocation à travailler sur le site dont la fermeture avai",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "homologation par l'autorité administrative",
+   "demande",
+   "effets",
+   "réorganisation de l'entreprise antérieure à la décision de l'autorité administrative",
+   "possibilité",
+   "conditions",
+   "détermination",
+   "portée"
+  ]
+ },
+ "23-18.987": {
+  "id": "67593248db845b438efc6e0e",
+  "num": "23-18.987",
+  "date": "2024-12-11",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Il résulte des dispositions des articles L. 1235-7-1, L. 1233-24-2 et L. 1233-57-3 du code du travail, d'une part, que le juge judiciaire ne peut, sans violer le principe de séparation des pouvoirs, en l'état d'une décision de validation d'un accord collectif majoritaire fixant le plan de sauvegarde de l'emploi devenue définitive, apprécier la légalité des mesures figurant dans ce plan et déterminant les catégories professionnelles concernées par le licenciement et, d'autre part, qu'il appartient à l'autorité administrative sous le contrôle du juge administratif de vérifier si les stipulations de l'accord collectif majoritaire qui déterminent les catégories professionnelles sont entachées de nullité, en raison notamment de ce qu'elles revêtiraient un caractère discriminatoire",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "plan de sauvegarde de l'emploi fixé par accord collectif",
+   "décision définitive de validation de l'accord collectif",
+   "contestation de la légalité des mesures du plan de sauvegarde de l'emploi",
+   "mesures déterminant les catégories professionnelles concernées par le licenciement",
+   "examen par le juge judiciaire",
+   "possibilité (non)"
+  ]
+ },
+ "23-15.498": {
+  "id": "667baf1deee23a0a3f11d252",
+  "num": "23-15.498",
+  "date": "2024-06-26",
+  "ch": "Chambre sociale",
+  "sol": "Cassation",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Il résulte des articles 1101 et 1103 du code civil et L. 1221-1 et L. 1233-3 du code du travail, ce dernier dans sa rédaction issue de l'ordonnance n° 2017-1387 du 22 septembre 2017, que lorsque la rupture du contrat de travail résulte de la conclusion d'un accord amiable intervenu dans le cadre de la mise en oeuvre d'un plan de sauvegarde de l'emploi assorti d'un plan de départs volontaires, soumis aux représentants du personnel, la cause de la rupture ne peut être contestée, sauf fraude ou vice du consentement",
+  "themes": [
+   "contrat de travail, rupture",
+   "rupture d'un commun accord",
+   "domaine d'application",
+   "départ volontaire",
+   "départ dans le cadre d'un plan de sauvegarde de l'emploi",
+   "cause",
+   "contestation",
+   "possibilité (non)"
+  ]
+ },
+ "14-10.031": {
+  "id": "6079c7fa9ba5988459c575ab",
+  "num": "14-10.031",
+  "date": "2015-06-10",
+  "ch": "Chambre sociale",
+  "sol": "Rejet",
+  "pub": "Publié au Bulletin",
+  "sommaire": "Justifie sa décision la cour d'appel qui, ayant constaté que l'entreprise comportait moins de cinquante salariés au jour de l'engagement de la procédure de licenciement, retient que le \"plan de sauvegarde de l'emploi\" volontairement mis en place par l'employeur, n'avait pas à satisfaire aux exigences des articles L. 1233-61 et L. 1233-62 du code du travail",
+  "themes": [
+   "contrat de travail, rupture",
+   "licenciement économique",
+   "licenciement collectif",
+   "plan de sauvegarde de l'emploi",
+   "contenu",
+   "mesures énoncées à l'article l. 1233",
+   "61 du code du travail",
+   "nécessité",
+   "exclusion",
+   "cas",
+   "entreprise comportant moins de cinquante salariés au jour de l'engagement de la procédure de licenciement",
+   "62 du code du travail",
+   "entreprise comportant moins de cinquante salariés au jour de l'engagement de la procédure de licenciement contrat de travail, rupture",
+   "mise en oeuvre",
+   "conditions",
+   "effectif à prendre en compte",
+   "appréciation",
+   "moment",
+   "détermination",
+   "portée"
+  ]
  }
 }; });
 
@@ -997,12 +1908,13 @@ __def("./textes-pse.json", function(module){ module.exports = {
     audit: require("./audit-pse-client.js"),
 
     moteur: require("./moteur-pse.js"),
+    grille: require("./grille-pse.js"),
     controles: require("./controles-pse.js"),
     manifeste: __MANIFESTE,
-    champs: [["Reprises de l'audit économique",[["effectif","Effectif de l'entreprise","nombre"],["effectifEtablissement","Effectif de l'établissement concerné","nombre"],["groupe","L'entreprise appartient-elle à un groupe ?","oui / non"],["effectifGroupe","Effectif total du groupe","nombre"],["nbLicenciements","Nombre de licenciements envisagés sur trente jours","nombre"],["total30j","Décompte des trente jours retenu par l'audit économique, refus de modification et licenciements déjà prononcés compris","nombre"],["dateNotification","Date de notification des licenciements","AAAA-MM-JJ"],["pieces","Pièces versées au dossier","liste d'objets"]]],["Le plan",[["plan.mesures","Les mesures du plan, une par ligne : rubrique de l'article L. 1233-62, intitulé, détail, nombre de bénéficiaires, budget, durée","liste d'objets"],["plan.budgetTotal","Budget total annoncé du plan","euros"],["plan.salariesExposes","Salariés dont la réinsertion est particulièrement difficile — âge, caractéristiques sociales, qualification","liste"],["plan.resultatGroupe","Résultat consolidé du groupe sur le dernier exercice clos","euros"],["plan.suivi","Modalités de suivi : suivi des mesures, consultation du comité, bilan à l'administration","objet"]]],["Accompagnement individuel",[["plan.accompagnement","Dispositif retenu : congé de reclassement ou contrat de sécurisation professionnelle","texte"],["plan.dureeConge","Durée du congé de reclassement","nombre de mois"],["plan.formationReconversion","Le congé comporte-t-il une formation de reconversion professionnelle ?","oui / non"],["plan.dateProposition","Date de proposition du contrat de sécurisation professionnelle","AAAA-MM-JJ"]]],["Voie et instruction",[["pse.voie","Voie retenue : accord majoritaire ou document unilatéral","texte"],["pse.suffrages","Part des suffrages recueillie par les organisations signataires au premier tour des dernières élections","nombre"],["pse.dateDepotAdmin","Date de réception par l'administration du dossier complet","AAAA-MM-JJ"],["pse.dateDecisionAdmin","Date de la décision de validation ou d'homologation","AAAA-MM-JJ"]]],["Après le licenciement",[["plan.dateRupture","Date de rupture des contrats","AAAA-MM-JJ"],["plan.demandesReembauche","Demandes de priorité de réembauche reçues","liste"],["plan.informationElusPostes","Les représentants du personnel sont-ils informés des postes devenus disponibles ?","oui / non"]]]],
-    propositions: {"plan.mesures.rubrique":{"valeurs":["1°","1° bis","2°","3°","4°","5°","6°"],"libre":true,"indicatif":true,"aide":"La rubrique de l'article L. 1233-62 à laquelle la mesure se rattache. L'article énonce « des mesures telles que » : la liste n'est pas limitative, et une mesure peut n'entrer dans aucune rubrique — mais l'administration apprécie le plan au regard de celles-ci."},"pse.voie":{"valeurs":["accord"],"autres":["unilateral"],"libre":false,"aide":"Accord collectif majoritaire validé en quinze jours, ou document unilatéral homologué en vingt et un. Le choix commande tout le calendrier et se fait avant la première réunion."},"plan.accompagnement":{"valeurs":["congé de reclassement","contrat de sécurisation professionnelle"],"libre":false,"aide":"Le dispositif n'est pas au choix : au moins mille salariés, c'est le congé de reclassement (L. 1233-71) ; en deçà, le contrat de sécurisation professionnelle (L. 1233-66). Les deux ne se cumulent pas."},"groupe":{"valeurs":["oui","non"],"libre":false,"aide":"L'appartenance à un groupe commande le périmètre d'appréciation des moyens : l'article L. 1233-57-3 fait des moyens du groupe le premier critère."},"pieces":{"valeurs":["comptes-groupe"],"libre":true,"multiple":true,"indicatif":true,"aide":"Les pièces effectivement versées. Les comptes consolidés du groupe sont la pièce décisive du calibrage : à défaut, l'administration apprécie les moyens sur ce qu'elle a."}},
+    champs: [["Reprises de l'audit économique",[["effectif","Effectif de l'entreprise","nombre"],["effectifEtablissement","Effectif de l'établissement concerné","nombre"],["groupe","L'entreprise appartient-elle à un groupe ?","oui / non"],["effectifGroupe","Effectif total du groupe","nombre"],["nbLicenciements","Nombre de licenciements envisagés sur trente jours","nombre"],["total30j","Décompte des trente jours retenu par l'audit économique, refus de modification et licenciements déjà prononcés compris","nombre"],["dateNotification","Date de notification des licenciements","AAAA-MM-JJ"],["pieces","Pièces versées au dossier","liste d'objets"]]],["Le plan",[["plan.mesures","Les mesures du plan, une par ligne : rubrique de l'article L. 1233-62, intitulé, détail, nombre de bénéficiaires, budget, durée","liste d'objets"],["plan.budgetTotal","Budget total annoncé du plan","euros"],["plan.salariesExposes","Salariés dont la réinsertion est particulièrement difficile — âge, caractéristiques sociales, qualification","liste"],["plan.resultatGroupe","Résultat consolidé du groupe sur le dernier exercice clos","euros"],["plan.suivi","Modalités de suivi : suivi des mesures, consultation du comité, bilan à l'administration","objet"]]],["Accompagnement individuel",[["plan.accompagnement","Dispositif retenu : congé de reclassement ou contrat de sécurisation professionnelle","texte"],["plan.dureeConge","Durée du congé de reclassement","nombre de mois"],["plan.formationReconversion","Le congé comporte-t-il une formation de reconversion professionnelle ?","oui / non"],["plan.dateProposition","Date de proposition du contrat de sécurisation professionnelle","AAAA-MM-JJ"]]],["Voie et instruction",[["pse.voie","Voie retenue : accord majoritaire ou document unilatéral","texte"],["pse.suffrages","Part des suffrages recueillie par les organisations signataires au premier tour des dernières élections","nombre"],["pse.dateDepotAdmin","Date de réception par l'administration du dossier complet","AAAA-MM-JJ"],["pse.dateDecisionAdmin","Date de la décision de validation ou d'homologation","AAAA-MM-JJ"]]],["Consultation du comité",[["datesReunionsCSE","Dates des réunions du comité sur le projet, dans l'ordre","liste de dates"],["dateAvisCSE","Date à laquelle le comité a rendu son avis","AAAA-MM-JJ"],["accordDelaisConsultation","Un accord fixe-t-il des délais de consultation différents de ceux de la loi ?","oui / non"],["expertisePSE","Le comité a-t-il décidé de recourir à une expertise ?","oui / non"],["pse.dateDesignationExpert","Date de désignation de l'expert","AAAA-MM-JJ"]]],["Après le licenciement",[["plan.dateRupture","Date de rupture des contrats","AAAA-MM-JJ"],["plan.demandesReembauche","Demandes de priorité de réembauche reçues","liste"],["plan.informationElusPostes","Les représentants du personnel sont-ils informés des postes devenus disponibles ?","oui / non"]]]],
+    propositions: {"plan.mesures.rubrique":{"valeurs":["1°","1° bis","2°","3°","4°","5°","6°"],"libre":true,"indicatif":true,"aide":"La rubrique de l'article L. 1233-62 à laquelle la mesure se rattache. L'article énonce « des mesures telles que » : la liste n'est pas limitative, et une mesure peut n'entrer dans aucune rubrique — mais l'administration apprécie le plan au regard de celles-ci."},"pse.voie":{"valeurs":["accord"],"autres":["unilateral"],"libre":false,"aide":"Accord collectif majoritaire validé en quinze jours, ou document unilatéral homologué en vingt et un. Le choix commande tout le calendrier et se fait avant la première réunion."},"plan.accompagnement":{"valeurs":["congé de reclassement","contrat de sécurisation professionnelle"],"libre":false,"aide":"Le dispositif n'est pas au choix : au moins mille salariés, c'est le congé de reclassement (L. 1233-71) ; en deçà, le contrat de sécurisation professionnelle (L. 1233-66). Les deux ne se cumulent pas."},"groupe":{"valeurs":["oui","non"],"libre":false,"aide":"L'appartenance à un groupe commande le périmètre d'appréciation des moyens : l'article L. 1233-57-3 fait des moyens du groupe le premier critère."},"accordDelaisConsultation":{"valeurs":["oui","non"],"libre":false,"aide":"Le plafond de deux, trois ou quatre mois de l'article L. 1233-30 est supplétif : une convention ou un accord collectif peut prévoir des délais différents. S'il en existe un, joignez-le — sans lui, l'application ne peut vérifier ni la règle légale ni la vôtre."},"expertisePSE":{"valeurs":["oui","non"],"libre":false,"aide":"Le comité décide du recours à l'expertise lors de la première réunion (L. 1233-34). L'expertise ne prolonge pas le délai d'avis."},"pieces":{"valeurs":["comptes-groupe"],"libre":true,"multiple":true,"indicatif":true,"aide":"Les pièces effectivement versées. Les comptes consolidés du groupe sont la pièce décisive du calibrage : à défaut, l'administration apprécie les moyens sur ce qu'elle a."}},
     listes: [],
-    colonnes: {"pieces":[["type","texte"],["date","AAAA-MM-JJ"]],"plan.mesures":[["rubrique","texte"],["intitule","texte"],["beneficiaires","nombre"],["budget","nombre"],["duree","texte"],["detail","texte"]]},
+    colonnes: {"pieces":[["type","texte"],["date","AAAA-MM-JJ"]],"plan.mesures":[["rubrique","texte"],["intitule","texte"],["beneficiaires","nombre"],["budget","nombre"],["duree","texte"]]},
     piecesAppelees: {},
   };
 })(typeof window !== "undefined" ? window : this);

@@ -35,7 +35,10 @@ const BASE = {
     dateProposition: "2026-07-10", dateRupture: "2026-07-20",
     demandesReembauche: [], informationElusPostes: true,
   },
-  pse: { voie: "unilateral", suffrages: null, dateDepotAdmin: "2026-06-01", dateDecisionAdmin: "2026-06-18" },
+  pse: { voie: "unilateral", suffrages: null, dateDepotAdmin: "2026-06-01", dateDecisionAdmin: "2026-06-18",
+         dateDesignationExpert: "2026-03-23" },
+  datesReunionsCSE: ["2026-03-23", "2026-04-14"], dateAvisCSE: "2026-04-14",
+  accordDelaisConsultation: false, expertisePSE: true,
   dateNotification: "2026-06-25",
 };
 
@@ -64,7 +67,33 @@ const CAS = [
     f: avec(f => { f.plan.informationElusPostes = false; }) },
   { nom: "Mesure visant plus de bénéficiaires qu'il n'est licencié", attendu: ["PSE-CTL-COH-01"],
     f: avec(f => { f.plan.mesures[0].beneficiaires = 60; }) },
+  { nom: "Une seule réunion du comité", attendu: ["PSE-CTL-CSE-01"],
+    f: avec(f => { f.datesReunionsCSE = ["2026-03-23"]; }) },
+  { nom: "Deux réunions espacées de six jours", attendu: ["PSE-CTL-CSE-01"],
+    f: avec(f => { f.datesReunionsCSE = ["2026-03-23", "2026-03-29"]; f.dateAvisCSE = "2026-03-29"; }) },
+
+  /* Les dossiers ci-dessous n'attendent pas de non-conformité : ils vérifient
+     qu'un contrôle rend bien l'état intermédiaire prévu là où le texte ne
+     tranche pas — un risque, jamais un feu vert et jamais un couperet. */
+  { nom: "Avis rendu après le terme de deux mois", attendu: [], risque: ["PSE-CTL-CSE-02"],
+    f: avec(f => { f.datesReunionsCSE = ["2026-03-23", "2026-04-14"]; f.dateAvisCSE = "2026-06-30"; }) },
+  { nom: "Accord de méthode déclaré mais non versé", attendu: [], risque: ["PSE-CTL-CSE-02"],
+    f: avec(f => { f.accordDelaisConsultation = true; }) },
+  { nom: "Expert désigné après la première réunion", attendu: [], risque: ["PSE-CTL-CSE-03"],
+    f: avec(f => { f.pse.dateDesignationExpert = "2026-04-10"; }) },
+  { nom: "Comptes du groupe non versés", attendu: [], risque: ["PSE-CTL-CAL-03"],
+    f: avec(f => { f.pieces = []; }) },
 ];
+
+const tousLesDossiers = [BASE, ...CAS.map(c => c.f), {},
+  /* deux dossiers de bord, qui n'attendent aucun verdict particulier mais font
+     passer la grille de jurisprudence par ses branches restées froides */
+  { effectif: 30, nbLicenciements: 12, total30j: 12, plan: { mesures: [{ rubrique: "1°", intitule: "aide au départ volontaire", beneficiaires: 3, budget: 30000, duree: "3 mois" }] } },
+  { effectif: 2400, effectifEtablissement: 900, groupe: true, effectifGroupe: 2400, nbLicenciements: 260, total30j: 260,
+    plan: { accompagnement: "congé de reclassement", dureeConge: 12, mesures: [
+      { rubrique: "1°", intitule: "reclassement", beneficiaires: 200, budget: 900000, duree: "12 mois" },
+      { rubrique: "4°", intitule: "plan de départs volontaires", beneficiaires: 60, budget: 600000, duree: "6 mois" }] },
+    datesReunionsCSE: ["2026-02-02", "2026-03-02", "2026-04-06"] }];
 
 function verdicts(f) {
   const o = {};
@@ -84,6 +113,9 @@ if (require.main === module) {
     for (const id of cas.attendu)
       if (!v[id] || v[id].etat !== NC)
         echecs.push(`${cas.nom} : ${id} rend « ${v[id] ? v[id].etat : "rien"} » au lieu de « non conforme ».`);
+    for (const id of cas.risque || [])
+      if (!v[id] || v[id].etat !== RISQ)
+        echecs.push(`${cas.nom} : ${id} rend « ${v[id] ? v[id].etat : "rien"} » au lieu de « risque à vérifier ».`);
   }
 
   /* Tout contrôle capable de dire non doit l'avoir dit au moins une fois. */
@@ -103,11 +135,20 @@ if (require.main === module) {
     for (const id of DETECTION) if (v[id] && v[id].etat === CONF) calibrageConforme.push(`${cas.nom} : ${id}`);
   }
 
-  console.log(`${CAS.length} dossiers contradictoires · ${C.length} contrôles`);
+  /* La grille de jurisprudence : aucune règle ne doit citer un arrêt absent du
+     corpus, et chaque règle doit être atteinte par au moins un dossier — une
+     règle qu'aucun dossier ne déclenche n'a jamais été exercée. */
+  const GR = require("./grille-pse.js");
+  const horsCorpus = GR.G.flatMap(x => x.arrets).filter(n => !GR.CORPUS[n]);
+  const jamaisRetenues = GR.G.filter(x => !tousLesDossiers.some(f => { try { return !!x.si(f); } catch (e) { return false; } })).map(x => x.id);
+
+  console.log(`${CAS.length} dossiers contradictoires · ${C.length} contrôles · ${GR.G.length} règles de jurisprudence`);
   console.log(`contrôles capables de constater une non-conformité : ${peutDireNon.length}, éprouvés ${ontDitNon.size}`);
   console.log(`sur un dossier vide : ${surVide.length} verdict(s) « conforme » ou « sans objet »`);
   console.log(`calibrage rendu « conforme » : ${calibrageConforme.length} fois`);
   echecs = echecs
+    .concat(horsCorpus.map(n => `La grille cite l'arrêt ${n}, absent du corpus versé au dépôt.`))
+    .concat(jamaisRetenues.map(id => `${id} : aucun dossier d'épreuve ne déclenche cette règle de jurisprudence.`))
     .concat(jamais.map(id => `${id} peut constater une non-conformité, mais aucun dossier ne le lui fait dire.`))
     .concat(surVide.map(x => `Sur un dossier vide, ${x} : le silence n'est pas une réponse.`))
     .concat(calibrageConforme.map(x => `${x} : un contrôle de calibrage ne peut pas conclure à la conformité.`));

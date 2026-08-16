@@ -594,7 +594,11 @@
     var thead = document.createElement("tr");
     colonnes.forEach(function (c) {
       var th = document.createElement("th");
-      th.textContent = c[0].split(".")[1];
+      /* Le nom de la colonne est ce qui suit la famille — et la famille peut
+         elle-même être composée : « plan.mesures.rubrique » donne « rubrique »,
+         non « mesures ». Pris au deuxième segment, toutes les colonnes d'un
+         tableau composé portaient le même nom, et la saisie se perdait. */
+      th.textContent = c[0].split(".").pop();
       th.title = c[1];
       thead.appendChild(th);
     });
@@ -605,7 +609,7 @@
     function ligne(valeurs) {
       var tr = document.createElement("tr");
       colonnes.forEach(function (c) {
-        var sous = c[0].split(".")[1], p = PROP[c[0]], td = document.createElement("td"), e;
+        var sous = c[0].split(".").pop(), p = PROP[c[0]], td = document.createElement("td"), e;
         if (p) {
           e = document.createElement("select");
           var o0 = document.createElement("option"); o0.value = ""; o0.textContent = "—";
@@ -851,7 +855,11 @@
     /* Les familles-tableaux sont lues d'un bloc, non colonne par colonne. */
     TABLEAUX.forEach(function (fam) {
       var v = valeurTableau(fam);
-      if (v) f[fam] = v;
+      /* Un tableau peut porter un nom composé — « plan.mesures » : il se range
+         sous son objet, comme n'importe quel champ composé. Écrit à plat, il
+         créait une clé « plan.mesures » que le moteur ne lit jamais, et sept
+         mesures saisies passaient pour un plan vide. */
+      if (v) poser(f, fam, v);
     });
     M.champs.forEach(function (rub) {
       rub[1].forEach(function (ch) {

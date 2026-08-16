@@ -34,6 +34,14 @@ const P = {
     valeurs: ["oui", "non"], libre: false,
     aide: "L'appartenance à un groupe commande le périmètre d'appréciation des moyens : l'article L. 1233-57-3 fait des moyens du groupe le premier critère.",
   },
+  accordDelaisConsultation: {
+    valeurs: ["oui", "non"], libre: false,
+    aide: "Le plafond de deux, trois ou quatre mois de l'article L. 1233-30 est supplétif : une convention ou un accord collectif peut prévoir des délais différents. S'il en existe un, joignez-le — sans lui, l'application ne peut vérifier ni la règle légale ni la vôtre.",
+  },
+  expertisePSE: {
+    valeurs: ["oui", "non"], libre: false,
+    aide: "Le comité décide du recours à l'expertise lors de la première réunion (L. 1233-34). L'expertise ne prolonge pas le délai d'avis.",
+  },
   pieces: {
     valeurs: ["comptes-groupe"], libre: true, multiple: true, indicatif: true,
     aide: "Les pièces effectivement versées. Les comptes consolidés du groupe sont la pièce décisive du calibrage : à défaut, l'administration apprécie les moyens sur ce qu'elle a.",

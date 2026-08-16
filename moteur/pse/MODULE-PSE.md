@@ -17,7 +17,7 @@ ressaisit deux fois le même effectif. Ces données restent demandées et
 modifiables — un module qui suppose une saisie faite ailleurs conclut sur ce
 qu'il n'a pas lu.
 
-## Ce qu'il contrôle — 18 contrôles
+## Ce qu'il contrôle — 21 contrôles
 
 | Rubrique | Contrôles | Fondement |
 |---|---|---|
@@ -28,6 +28,7 @@ qu'il n'a pas lu.
 | Voie et instruction | 4 | L. 1233-24-1, L. 1233-39, L. 1233-57-3, L. 1233-57-4 |
 | Suivi | 1 | L. 1233-63 |
 | Priorité de réembauche | 1 | L. 1233-45 |
+| Consultation du comité | 3 | L. 1233-30, L. 1233-34, L. 1233-35 |
 | Cohérence | 1 | L. 1233-62 |
 
 ## Ce qu'il ne peut pas dire, et ne dit pas
@@ -71,6 +72,45 @@ Le recouvrement est assumé et documenté ici plutôt que résolu par une
 suppression : retirer ces contrôles du module économique amputerait son rapport
 de ce que l'utilisateur y cherche — savoir, sans quitter la page, qu'un plan est
 dû.
+
+## La jurisprudence
+
+Treize règles, tirées de vingt arrêts publiés de la chambre sociale, versés au
+dépôt dans `pse_corpus.json` avec leur sommaire intégral. Chaque règle cite le
+numéro de pourvoi qui la porte, et le rapport reproduit le sommaire sous la
+règle : le lecteur juge lui-même si la règle dit ce que l'arrêt dit.
+
+Une règle ne s'affiche que si sa condition est remplie ; celles qui ne le sont
+pas ne disent rien, et leur nombre est publié. La chaîne échoue si une règle
+cite un arrêt absent du corpus, ou si aucun dossier d'épreuve ne la déclenche.
+
+Réserve écrite dans le rapport : un arrêt de la chambre sociale ne lie pas
+l'autorité administrative, et depuis la loi du 14 juin 2013 le contenu du plan
+relève du juge administratif — plusieurs des arrêts retenus le disent.
+
+## Les textes, relus à la source
+
+Les vingt-deux articles ont été relus sur le relais Légifrance, **deux lectures
+espacées par article**, conformément à la règle du dépôt : une seule lecture ne
+prouve rien. Résultat au 16 août 2026 : **22 concordants, 0 écart, 0 sans
+conclusion**. Le détail, avec les identifiants de version, est dans
+`verification-textes-pse.json`, et le manifeste en porte le résumé.
+
+```
+node verifier-textes-pse.js [AAAA-MM-JJ]
+```
+
+## L'épreuve de l'écran
+
+La page a été ouverte dans Chromium, au format d'un téléphone, et pilotée :
+chargement du dossier d'exemple, tableau des mesures rempli ligne à ligne,
+audit lancé, avertissement affiché, retour au formulaire. Aucune erreur de page.
+Deux défauts du formulaire commun ont été trouvés là et corrigés :
+
+- un tableau au nom composé — `plan.mesures` — était rangé à plat dans la fiche,
+  et sept mesures saisies passaient pour un plan vide ;
+- les colonnes d'un tel tableau portaient toutes le même nom, pris au deuxième
+  segment de la clé : la saisie se perdait cellule par cellule.
 
 ## Chaîne de publication
 
