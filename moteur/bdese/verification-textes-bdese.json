@@ -2,18 +2,18 @@
  "date": "2026-08-16",
  "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
  "articles": 32,
- "concordants": 27,
+ "concordants": 28,
  "ecarts": 0,
- "douteux": 5,
- "homonymesEcartes": 14,
+ "douteux": 4,
+ "homonymesEcartes": 10,
  "detail": [
   {
    "numero": "L2312-2",
    "attendu": "LEGIARTI000035650754",
-   "lu": "LEGIARTI000035650754",
-   "etat": "concordant",
-   "homonymesEcartes": 1,
-   "ecartCaracteres": 0
+   "lu": "LEGIARTI000037704137",
+   "etat": "homonyme servi par le relais",
+   "homonymesEcartes": 2,
+   "ecartCaracteres": null
   },
   {
    "numero": "L2312-8",
@@ -146,17 +146,17 @@
   {
    "numero": "R2312-5",
    "attendu": "LEGIARTI000045680873",
-   "lu": "LEGIARTI000045680873",
-   "etat": "concordant",
+   "lu": null,
+   "etat": "illisible",
    "homonymesEcartes": 0,
-   "ecartCaracteres": 0
+   "ecartCaracteres": null
   },
   {
    "numero": "R2312-6",
    "attendu": "LEGIARTI000036411558",
    "lu": "LEGIARTI000036411558",
    "etat": "concordant",
-   "homonymesEcartes": 1,
+   "homonymesEcartes": 0,
    "ecartCaracteres": 0
   },
   {
@@ -170,10 +170,10 @@
   {
    "numero": "R2312-8",
    "attendu": "LEGIARTI000049905537",
-   "lu": "LEGIARTI000037729197",
-   "etat": "homonyme servi par le relais",
-   "homonymesEcartes": 2,
-   "ecartCaracteres": null
+   "lu": "LEGIARTI000049905537",
+   "etat": "concordant",
+   "homonymesEcartes": 0,
+   "ecartCaracteres": 0
   },
   {
    "numero": "R2312-9",
@@ -202,26 +202,26 @@
   {
    "numero": "R2312-12",
    "attendu": "LEGIARTI000036411586",
-   "lu": "LEGIARTI000037729189",
-   "etat": "homonyme servi par le relais",
-   "homonymesEcartes": 2,
-   "ecartCaracteres": null
+   "lu": "LEGIARTI000036411586",
+   "etat": "concordant",
+   "homonymesEcartes": 0,
+   "ecartCaracteres": 0
   },
   {
    "numero": "R2312-13",
    "attendu": "LEGIARTI000036411588",
    "lu": "LEGIARTI000036411588",
    "etat": "concordant",
-   "homonymesEcartes": 0,
+   "homonymesEcartes": 1,
    "ecartCaracteres": 0
   },
   {
    "numero": "R2312-14",
    "attendu": "LEGIARTI000036411590",
-   "lu": "LEGIARTI000037729183",
-   "etat": "homonyme servi par le relais",
-   "homonymesEcartes": 2,
-   "ecartCaracteres": null
+   "lu": "LEGIARTI000036411590",
+   "etat": "concordant",
+   "homonymesEcartes": 1,
+   "ecartCaracteres": 0
   },
   {
    "numero": "R2312-15",

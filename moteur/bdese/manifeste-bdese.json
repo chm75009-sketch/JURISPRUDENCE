@@ -78,7 +78,7 @@
    "article": "L2312-2",
    "version": "LEGIARTI000035650754",
    "caracteres": 913,
-   "relecture": "lectures discordantes"
+   "relecture": "homonyme servi par le relais"
   },
   {
    "article": "L2312-21",
@@ -186,7 +186,7 @@
    "article": "R2312-13",
    "version": "LEGIARTI000036411588",
    "caracteres": 306,
-   "relecture": "homonyme servi par le relais"
+   "relecture": "concordant"
   },
   {
    "article": "R2312-14",
@@ -210,13 +210,13 @@
    "article": "R2312-5",
    "version": "LEGIARTI000045680873",
    "caracteres": 489,
-   "relecture": "concordant"
+   "relecture": "illisible"
   },
   {
    "article": "R2312-6",
    "version": "LEGIARTI000036411558",
    "caracteres": 1179,
-   "relecture": "lectures discordantes"
+   "relecture": "concordant"
   },
   {
    "article": "R2312-7",
@@ -240,9 +240,9 @@
  "textesRelus": {
   "date": "2026-08-16",
   "articles": 32,
-  "concordants": 27,
+  "concordants": 28,
   "ecarts": 0,
-  "sansConclusion": 5,
-  "homonymesEcartes": 9
+  "sansConclusion": 4,
+  "homonymesEcartes": 10
  }
 }
