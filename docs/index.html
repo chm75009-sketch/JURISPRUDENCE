@@ -474,7 +474,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "2.2 — 16 août 2026";
+const VERSION = "2.3 — 16 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -571,8 +571,20 @@ function majEtat(){
 async function appelApi(chemin, params){
   const k = cle();
   if(!k) throw new Error("PAS_DE_CLE");
-  const rep = await fetch(API+chemin+"?"+params.toString(),
-    {headers:{"KeyId":k, "accept":"application/json"}});
+  /* Une requête sans limite de temps peut rester suspendue indéfiniment : la
+     page affiche alors « Vérification… » pour toujours, et rien ne dit à
+     l'utilisateur que l'appel n'aboutira pas. On borne donc l'attente, et l'on
+     nomme la panne au lieu de la laisser deviner. */
+  const minuteur = new AbortController();
+  const arret = setTimeout(()=>minuteur.abort(), 15000);
+  let rep;
+  try{
+    rep = await fetch(API+chemin+"?"+params.toString(),
+      {headers:{"KeyId":k, "accept":"application/json"}, signal: minuteur.signal});
+  }catch(err){
+    if(err && err.name === "AbortError") throw new Error("TROP_LONG");
+    throw err;
+  }finally{ clearTimeout(arret); }
   if(rep.status===401 || rep.status===403) throw new Error("CLE_REFUSEE");
   if(rep.status===429) throw new Error("QUOTA");
   if(!rep.ok) throw new Error("HTTP_"+rep.status);
@@ -584,6 +596,7 @@ function messageErreur(e){
     case "PAS_DE_CLE":  return "Configurez d'abord votre clé Judilibre.";
     case "CLE_REFUSEE": return "Accès refusé : clé invalide, ou application PISTE non souscrite à l'API JUDILIBRE en production.";
     case "QUOTA":       return "Quota de requêtes atteint. Patientez quelques instants.";
+    case "TROP_LONG":   return "L'API n'a pas répondu en quinze secondes. Vérifiez la connexion — si vous êtes sur un réseau d'entreprise ou un VPN, il bloque peut-être api.piste.gouv.fr.";
     default: return (e instanceof TypeError)
       ? "Impossible de joindre l'API (connexion internet ?)."
       : "Erreur inattendue : "+e.message;

@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-2.8";
+const CACHE = "jurisprudence-2.9";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
