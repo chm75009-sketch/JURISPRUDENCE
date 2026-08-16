@@ -3,6 +3,17 @@
    grille — il ne peut donc pas se désynchroniser d'elle. */
 const O=require("./outils.js");
 const G=require("./grille.js");
+/* Un champ ne se demande qu'une fois. Deux questions pour une même donnée, et
+   l'une des deux réponses se perd en silence : c'est arrivé, et il a fallu une
+   restauration de brouillon défaillante pour s'en apercevoir. La vérification
+   est faite au chargement, où elle arrête tout. */
+function sansDoublon(champs) {
+  const vus = new Set(), dup = [];
+  for (const [, l] of champs) for (const [c] of l) { if (vus.has(c)) dup.push(c); vus.add(c); }
+  if (dup.length) throw new Error("champ demandé plusieurs fois : " + [...new Set(dup)].join(", "));
+  return champs;
+}
+
 /* Un champ composé qui désigne une liste, non un objet unique : « pieces »
    est un tableau — une ligne par pièce — quand « pse » est un objet seul.
    La distinction est déclarée ici, à la source, parce que deux lecteurs en
@@ -111,11 +122,15 @@ const CHAMPS=[
   ["pieces.version","Version ou numéro d'avenant","texte"],
   ["pieces.perimetre","Périmètre couvert : établissement, entreprise, secteur d'activité du groupe","texte"],
   ["pieces.lue","La pièce a-t-elle été lue et rapprochée des réponses ?","oui / non"]]],
+ /* « transfertEnvisage » et « procedureCollective » étaient posés une seconde
+    fois ici : deux questions pour une même donnée, dont une seule était lue —
+    celle du haut du formulaire. L'employeur pouvait répondre « non » à l'une et
+    « oui » à l'autre sans que rien ne le signale. Elles sont posées une fois,
+    dans leurs rubriques propres. */
  ["Situations particulières",[
-  ["transfertEnvisage","Une entité économique est-elle transférée ?","oui / non"],
-  ["procedureCollective","L'entreprise est-elle en redressement ou liquidation judiciaire ?","oui / non"],
   ["coEmploi","Une société du groupe s'immisce-t-elle dans la gestion de l'entreprise ?","oui / non"]]],
 ];
+sansDoublon(CHAMPS);
 const PIECES={
  entreprise:"Extrait Kbis", siren:"Extrait Kbis", idcc:"Convention ou bulletin de paie",
  effectif:"Registre unique du personnel ou déclaration sociale nominative",
