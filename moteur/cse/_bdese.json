@@ -84,11 +84,28 @@
          "informations": [
           "Données sur le travail à temps partiel : -nombre, sexe et qualification des salariés travaillant à temps partiel",
           "horaires de travail à temps partiel pratiqués dans l'entreprise",
-          "Le programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail prévu au 2° de l'article L. 2312-27 établi à partir des analyses mentionnées à l'article L. 2312-9 et fixant la liste détaillée des mesures devant être prises au cours de l'année à venir dans les mêmes domaines afin de satisfaire, notamment : i-Aux principes généraux de prévention prévus aux articles L. 4121-1 à L. 4121-5 et L. 4221-1",
-          "ii-A l'information et à la formation des travailleurs prévues aux articles L. 4141-1 à L. 4143-1",
-          "iii-A l'information et à la formation des salariés titulaires d'un contrat de travail à durée déterminée et des salariés temporaires prévues aux articles L. 4154-2 et L. 4154-4",
-          "iv-A la coordination de la prévention prévue aux articles L. 4522-1 et L. 4522-2"
+          "Le programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail prévu au 2° de l'article L. 2312-27 établi à partir des analyses mentionnées à l'article L. 2312-9 et fixant la liste détaillée des mesures devant être prises au cours de l'année à venir dans les mêmes domaines afin de satisfaire, notamment :"
          ]
+        },
+        {
+         "lettre": "i",
+         "intitule": "Aux principes généraux de prévention prévus aux articles L. 4121-1 à L. 4121-5 et L. 4221-1",
+         "informations": []
+        },
+        {
+         "lettre": "ii",
+         "intitule": "A l'information et à la formation des travailleurs prévues aux articles L. 4141-1 à L. 4143-1",
+         "informations": []
+        },
+        {
+         "lettre": "iii",
+         "intitule": "A l'information et à la formation des salariés titulaires d'un contrat de travail à durée déterminée et des salariés temporaires prévues aux articles L. 4154-2 et L. 4154-4",
+         "informations": []
+        },
+        {
+         "lettre": "iv",
+         "intitule": "A la coordination de la prévention prévue aux articles L. 4522-1 et L. 4522-2",
+         "informations": []
         }
        ]
       },
@@ -425,6 +442,17 @@
      "titre": "Environnement (1) A-Politique générale en matière environnementale",
      "sections": [
       {
+       "lettre": null,
+       "titre": "Environnement (1)",
+       "sujets": [
+        {
+         "lettre": null,
+         "intitule": "Environnement (1)",
+         "informations": []
+        }
+       ]
+      },
+      {
        "lettre": "A",
        "titre": "Politique générale en matière environnementale",
        "sujets": [
@@ -475,10 +503,12 @@
     }
    ],
    "couverture": {
-    "extraits": 100,
-    "couverts": 10399,
-    "source": 10993,
-    "part": 94.6
+    "extraits": 103,
+    "couverts": 10386,
+    "entete": 195,
+    "contenu": 10798,
+    "renvoi": null,
+    "part": 96.2
    },
    "infidelites": []
   },
@@ -498,8 +528,12 @@
         {
          "lettre": "a",
          "intitule": "Evolution des effectifs par type de contrat, par âge, par ancienneté",
+         "informations": []
+        },
+        {
+         "lettre": "i",
+         "intitule": "Effectif : Effectif total au 31/12 (1) (I)",
          "informations": [
-          "i-Effectif : Effectif total au 31/12 (1) (I)",
           "Effectif permanent (2) (I)",
           "Nombre de salariés titulaires d'un contrat de travail à durée déterminée au 31/12 (I)",
           "Effectif mensuel moyen de l'année considérée (3) (I)",
@@ -507,8 +541,13 @@
           "Répartition par âge de l'effectif total au 31/12 (4) (I)",
           "Répartition de l'effectif total au 31/12 selon l'ancienneté (5) (I)",
           "Répartition de l'effectif total au 31/12 selon la nationalité (I) : français/ étrangers",
-          "Répartition de l'effectif total au 31/12 selon une structure de qualification détaillée (II)",
-          "ii-Travailleurs extérieurs : Nombre de salariés (6) appartenant à une entreprise extérieure (23)",
+          "Répartition de l'effectif total au 31/12 selon une structure de qualification détaillée (II)"
+         ]
+        },
+        {
+         "lettre": "ii",
+         "intitule": "Travailleurs extérieurs : Nombre de salariés (6) appartenant à une entreprise extérieure (23)",
+         "informations": [
           "Nombre de stagiaires (écoles, universités …) (7)",
           "Nombre moyen mensuel de salariés temporaires (8)",
           "Durée moyenne des contrats de travail temporaire",
@@ -519,11 +558,20 @@
         {
          "lettre": "b",
          "intitule": "Evolution des emplois, notamment, par catégorie professionnelle",
+         "informations": []
+        },
+        {
+         "lettre": "i",
+         "intitule": "Embauches : Nombre d'embauches par contrats de travail à durée indéterminée",
          "informations": [
-          "i-Embauches : Nombre d'embauches par contrats de travail à durée indéterminée",
           "Nombre d'embauches par contrats de travail à durée déterminée (dont Nombre de contrats de travailleurs saisonniers) (I)",
-          "Nombre d'embauches de salariés de moins de vingt-cinq ans",
-          "ii-Départs : Total des départs (I)",
+          "Nombre d'embauches de salariés de moins de vingt-cinq ans"
+         ]
+        },
+        {
+         "lettre": "ii",
+         "intitule": "Départs : Total des départs (I)",
+         "informations": [
           "Nombre de démissions (I)",
           "Nombre de licenciements pour motif économique, dont départs en retraite et préretraite (I)",
           "Nombre de licenciements pour d'autres causes (I)",
@@ -531,9 +579,18 @@
           "Nombre de départs au cours de la période d'essai (9) (I)",
           "Nombre de mutations d'un établissement à un autre (I)",
           "Nombre de départs volontaires en retraite et préretraite (10) (I)",
-          "Nombre de décès (I)",
-          "iii-Promotions : Nombre de salariés promus dans l'année dans une catégorie supérieure (11)",
-          "iv-Chômage : Nombre de salariés mis en chômage partiel pendant l'année considérée (I)",
+          "Nombre de décès (I)"
+         ]
+        },
+        {
+         "lettre": "iii",
+         "intitule": "Promotions : Nombre de salariés promus dans l'année dans une catégorie supérieure (11)",
+         "informations": []
+        },
+        {
+         "lettre": "iv",
+         "intitule": "Chômage : Nombre de salariés mis en chômage partiel pendant l'année considérée (I)",
+         "informations": [
           "Nombre total d'heures de chômage partiel pendant l'année considérée (12) (I) : -indemnisées",
           "non indemnisées",
           "Nombre de salariés mis en chômage intempéries pendant l'année considérée (I)",
@@ -557,8 +614,12 @@
         {
          "lettre": "e",
          "intitule": "Formation professionnelle : investissements en formation, publics concernés",
+         "informations": []
+        },
+        {
+         "lettre": "i",
+         "intitule": "Formation professionnelle continue (44) : Pourcentage de la masse salariale afférent à la formation continue",
          "informations": [
-          "i-Formation professionnelle continue (44) : Pourcentage de la masse salariale afférent à la formation continue",
           "Montant consacré à la formation continue : Formation interne",
           "formation effectuée en application de conventions",
           "versement aux organismes de recouvrement",
@@ -567,16 +628,30 @@
           "total",
           "Nombre de stagiaires (II)",
           "Nombre d'heures de stage (II) : -rémunérées",
-          "non rémunérées. Décomposition par type de stages à titre d'exemple : adaptation, formation professionnelle, entretien ou perfectionnement des connaissances",
-          "ii-Congés formation : Nombre de salariés ayant bénéficié d'un congé formation rémunéré",
-          "Nombre de salariés ayant bénéficié d'un congé formation non rémunéré",
-          "Nombre de salariés auxquels a été refusé un congé formation",
-          "iii-Apprentissage : Nombre de contrats d'apprentissage conclus dans l'année"
+          "non rémunérées. Décomposition par type de stages à titre d'exemple : adaptation, formation professionnelle, entretien ou perfectionnement des connaissances"
          ]
         },
         {
+         "lettre": "ii",
+         "intitule": "Congés formation : Nombre de salariés ayant bénéficié d'un congé formation rémunéré",
+         "informations": [
+          "Nombre de salariés ayant bénéficié d'un congé formation non rémunéré",
+          "Nombre de salariés auxquels a été refusé un congé formation"
+         ]
+        },
+        {
+         "lettre": "iii",
+         "intitule": "Apprentissage : Nombre de contrats d'apprentissage conclus dans l'année",
+         "informations": []
+        },
+        {
          "lettre": "f",
-         "intitule": "Conditions de travail : Durée du travail dont travail à temps partiel et aménagement du temps de travail, les données sur l'exposition aux risques et aux facteurs de pénibilité, (accidents du travail, maladies professionnelles, absentéisme, dépenses en matière de sécurité) i-Accidents du travail et de trajet : Taux de fréquence des accidents du travail (I) Nombre d'accidents avec arrêts de travail divisé par nombre d'heures travaillées",
+         "intitule": "Conditions de travail : Durée du travail dont travail à temps partiel et aménagement du temps de travail, les données sur l'exposition aux risques et aux facteurs de pénibilité, (accidents du travail, maladies professionnelles, absentéisme, dépenses en matière de sécurité)",
+         "informations": []
+        },
+        {
+         "lettre": "i",
+         "intitule": "Accidents du travail et de trajet : Taux de fréquence des accidents du travail (I) Nombre d'accidents avec arrêts de travail divisé par nombre d'heures travaillées",
          "informations": [
           "Nombre d'accidents de travail avec arrêt × 106 divisé par nombre d'heures travaillées",
           "Taux de gravité des accidents du travail (I)",
@@ -586,21 +661,41 @@
           "Nombre d'accidents mortels : de travail, de trajet",
           "Nombre d'accidents de trajet ayant entraîné un arrêt de travail",
           "Nombre d'accidents dont sont victimes les salariés temporaires ou de prestations de services dans l'entreprise",
-          "Taux et montant de la cotisation sécurité sociale d'accidents de travail",
-          "ii-Répartition des accidents par éléments matériels (28) : Nombre d'accidents liés à l'existence de risques graves-codes 32 à 40",
+          "Taux et montant de la cotisation sécurité sociale d'accidents de travail"
+         ]
+        },
+        {
+         "lettre": "ii",
+         "intitule": "Répartition des accidents par éléments matériels (28) : Nombre d'accidents liés à l'existence de risques graves-codes 32 à 40",
+         "informations": [
           "Nombre d'accidents liés à des chutes avec dénivellation-code 02",
           "Nombre d'accidents occasionnés par des machines (à l'exception de ceux liés aux risques ci-dessus)-codes 09 à 30",
           "Nombre d'accidents de circulation-manutention-stockage-codes 01,03,04 et 06,07,08",
           "Nombre d'accidents occasionnés par des objets, masses, particules en mouvement accidentel-code 05",
-          "Autres cas",
-          "iii-Maladies professionnelles : Nombre et dénomination des maladies professionnelles déclarées à la sécurité sociale au cours de l'année",
+          "Autres cas"
+         ]
+        },
+        {
+         "lettre": "iii",
+         "intitule": "Maladies professionnelles : Nombre et dénomination des maladies professionnelles déclarées à la sécurité sociale au cours de l'année",
+         "informations": [
           "Nombre de salariés atteints par des affections pathologiques à caractère professionnel et caractérisation de celles-ci",
-          "Nombre de déclarations par l'employeur de procédés de travail susceptibles de provoquer des maladies professionnelles (29)",
-          "iv-Dépenses en matière de sécurité : Effectif formé à la sécurité dans l'année",
+          "Nombre de déclarations par l'employeur de procédés de travail susceptibles de provoquer des maladies professionnelles (29)"
+         ]
+        },
+        {
+         "lettre": "iv",
+         "intitule": "Dépenses en matière de sécurité : Effectif formé à la sécurité dans l'année",
+         "informations": [
           "Montant des dépenses de formation à la sécurité réalisées dans l'entreprise",
           "Taux de réalisation du programme de sécurité présenté l'année précédente",
-          "Existence et nombre de plans spécifiques de sécurité",
-          "v-Durée et aménagement du temps de travail : Horaire hebdomadaire moyen affiché des ouvriers et employés ou catégories assimilées (30) (I)",
+          "Existence et nombre de plans spécifiques de sécurité"
+         ]
+        },
+        {
+         "lettre": "v",
+         "intitule": "Durée et aménagement du temps de travail : Horaire hebdomadaire moyen affiché des ouvriers et employés ou catégories assimilées (30) (I)",
+         "informations": [
           "Nombre de salariés ayant bénéficié d'un repos compensateur (I) : -au titre du présent code (31)",
           "au titre d'un régime conventionne (I)",
           "Nombre de salariés bénéficiant d'un système d'horaires individualisés (32) (I)",
@@ -608,19 +703,34 @@
           "autres formes de temps partiel",
           "Nombre de salariés ayant bénéficié tout au long de l'année considérée de deux jours de repos hebdomadaire consécutifs (I)",
           "Nombre moyen de jours de congés annuels (non compris le repos compensateur) (34) (I)",
-          "Nombre de jours fériés payés (35) (I)",
-          "vi-Absentéisme (14) : Nombre de journées d'absence (15) (I)",
+          "Nombre de jours fériés payés (35) (I)"
+         ]
+        },
+        {
+         "lettre": "vi",
+         "intitule": "Absentéisme (14) : Nombre de journées d'absence (15) (I)",
+         "informations": [
           "Nombre de journées théoriques travaillées",
           "Nombre de journées d'absence pour maladie (I)",
           "Répartition des absences pour maladie selon leur durée (16) (I)",
           "Nombre de journées d'absence pour accidents du travail et de trajet ou maladies professionnelles (I)",
           "Nombre de journées d'absence pour maternité (I)",
           "Nombre de journées d'absence pour congés autorisés (événements familiaux, congés spéciaux pour les femmes …) (I)",
-          "Nombre de journées d'absence imputables à d'autres causes (I)",
-          "vii-Organisation et contenu du travail : Nombre de personnes occupant des emplois à horaires alternant ou de nuit",
+          "Nombre de journées d'absence imputables à d'autres causes (I)"
+         ]
+        },
+        {
+         "lettre": "vii",
+         "intitule": "Organisation et contenu du travail : Nombre de personnes occupant des emplois à horaires alternant ou de nuit",
+         "informations": [
           "Nombre de personnes occupant des emplois à horaires alternant ou de nuit de plus de cinquante ans",
-          "Salarié affecté à des tâches répétitives au sens de l'article D. 4163-2 (36) (distinguer femmes-hommes)",
-          "viii-Conditions physiques de travail : Nombre de personnes exposées de façon habituelle et régulière à plus de 80 à 85 db à leur poste de travail (37)",
+          "Salarié affecté à des tâches répétitives au sens de l'article D. 4163-2 (36) (distinguer femmes-hommes)"
+         ]
+        },
+        {
+         "lettre": "viii",
+         "intitule": "Conditions physiques de travail : Nombre de personnes exposées de façon habituelle et régulière à plus de 80 à 85 db à leur poste de travail (37)",
+         "informations": [
           "Nombre de salariés exposés au froid et à la chaleur au sens des articles R. 4223-13 à R. 4223-15",
           "Nombre de salariés exposés aux températures extrêmes au sens de l'article D. 4163-2 (38)",
           "Nombre de salariés travaillant aux intempéries de façon habituelle et régulière, de l'article L. 5424-8 (39)",
@@ -634,6 +744,16 @@
           "xii-Travailleurs inaptes : Nombre de salariés déclarés définitivement inaptes à leur emploi par le médecin du travail",
           "Nombre de salariés reclassés dans l'entreprise à la suite d'une inaptitude"
          ]
+        },
+        {
+         "lettre": "f",
+         "intitule": "Conditions de travail : durée du travail dont travail à temps partiel et aménagement du temps de travail",
+         "informations": [
+          "Données sur le travail à temps partiel : -nombre, sexe et qualification des salariés travaillant à temps partiel",
+          "horaires de travail à temps partiel pratiqués dans l'entreprise",
+          "Le programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail prévu au 2° de l'article L. 2312-27 établi à partir des analyses mentionnées à l'article L. 2312-9 et fixant la liste détaillée des mesures devant être prises au cours de l'année à venir dans les mêmes domaines afin de satisfaire, notamment :"
+         ],
+         "renvoi": "R. 2312-8, 1° A f)"
         }
        ]
       },
@@ -669,6 +789,17 @@
      "n": 2,
      "titre": "Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise",
      "sections": [
+      {
+       "lettre": "I",
+       "titre": "Indicateurs sur la situation comparée des femmes et des hommes dans l'entreprise",
+       "sujets": [
+        {
+         "lettre": null,
+         "intitule": "Indicateurs sur la situation comparée des femmes et des hommes dans l'entreprise :",
+         "informations": []
+        }
+       ]
+      },
       {
        "lettre": "A",
        "titre": "Conditions générales d'emploi",
@@ -775,9 +906,19 @@
           "maladies : -nombre d'arrêts de travail",
           "nombre de journées d'absence",
           "maladies ayant donné lieu à un examen de reprise du travail en application du 3° de l'article R. 4624-31 : -nombre d'arrêts de travail",
-          "nombre de journées d'absence",
-          "II. Indicateurs relatifs à l'articulation entre l'activité professionnelle et l'exercice de la responsabilité familiale :"
+          "nombre de journées d'absence"
          ]
+        }
+       ]
+      },
+      {
+       "lettre": "II",
+       "titre": "Indicateurs relatifs à l'articulation entre l'activité professionnelle et l'exercice de la responsabilité familiale",
+       "sujets": [
+        {
+         "lettre": null,
+         "intitule": "Indicateurs relatifs à l'articulation entre l'activité professionnelle et l'exercice de la responsabilité familiale :",
+         "informations": []
         }
        ]
       },
@@ -832,7 +973,18 @@
         },
         {
          "lettre": "c",
-         "intitule": "Ou toute catégorie pertinente au sein de l'entreprise. Toutefois, l'indicateur relatif à la rémunération moyenne ou médiane mensuelle comprend au moins deux niveaux de comparaison dont celui mentionné au a ci-dessus. III. Stratégie d'action : A partir de l'analyse des indicateurs mentionnés aux I et II, la stratégie d'action comprend les éléments suivants : -mesures prises au cours de l'année écoulée en vue d'assurer l'égalité professionnelle. Bilan des actions de l'année écoulée et, le cas échéant, de l'année précédente. Evaluation du niveau de réalisation des objectifs sur la base des indicateurs retenus. Explications sur les actions prévues non réalisées",
+         "intitule": "Ou toute catégorie pertinente au sein de l'entreprise. Toutefois, l'indicateur relatif à la rémunération moyenne ou médiane mensuelle comprend au moins deux niveaux de comparaison dont celui mentionné au a ci-dessus.",
+         "informations": []
+        }
+       ]
+      },
+      {
+       "lettre": "III",
+       "titre": "Stratégie d'action",
+       "sujets": [
+        {
+         "lettre": null,
+         "intitule": "Stratégie d'action : A partir de l'analyse des indicateurs mentionnés aux I et II, la stratégie d'action comprend les éléments suivants : -mesures prises au cours de l'année écoulée en vue d'assurer l'égalité professionnelle. Bilan des actions de l'année écoulée et, le cas échéant, de l'année précédente. Evaluation du niveau de réalisation des objectifs sur la base des indicateurs retenus. Explications sur les actions prévues non réalisées",
          "informations": [
           "objectifs de progression pour l'année à venir et indicateurs associés. Définition qualitative et quantitative des mesures permettant de les atteindre conformément à l'article R. 2242-2 . Evaluation de leur coût. Echéancier des mesures prévues"
          ]
@@ -888,16 +1040,35 @@
         {
          "lettre": "a",
          "intitule": "Frais de personnel (24) y compris cotisations sociales, évolutions salariales par catégorie et par sexe, salaire de base minimum, salaire moyen ou médian, par sexe et par catégorie professionnelle",
+         "informations": []
+        },
+        {
+         "lettre": "i",
+         "intitule": "Montant des rémunérations (17) : Choix de deux indicateurs dans l'un des groupes suivants : -rapport entre la masse salariale annuelle (18) (II) et l'effectif mensuel moyen",
          "informations": [
-          "i-Montant des rémunérations (17) : Choix de deux indicateurs dans l'un des groupes suivants : -rapport entre la masse salariale annuelle (18) (II) et l'effectif mensuel moyen",
           "rémunération moyenne du mois de décembre (effectif permanent) hors primes à périodicité non mensuelle ― base 35 heures (II)",
           "OU -rémunération mensuelle moyenne (19) (II)",
           "part des primes à périodicité non mensuelle dans la déclaration de salaire (II)",
-          "grille des rémunérations (20)",
-          "ii-Hiérarchie des rémunérations : Choix d'un des deux indicateurs suivants : -rapport entre la moyenne des rémunérations des 10 % des salariés touchant les rémunérations les plus élevées et celle correspondant au 10 % des salariés touchant les rémunérations les moins élevées",
-          "OU -rapport entre la moyenne des rémunérations des cadres ou assimilés (y compris cadres supérieurs et dirigeants) et la moyenne des rémunérations des ouvriers non qualifiés ou assimilés (21)",
-          "montant global des dix rémunérations les plus élevées. iii-Mode de calcul des rémunérations : Pourcentage des salariés dont le salaire dépend, en tout ou partie, du rendement (22). Pourcentage des ouvriers et employés payés au mois sur la base de l'horaire affiché. iv-Charge salariale globale"
+          "grille des rémunérations (20)"
          ]
+        },
+        {
+         "lettre": "ii",
+         "intitule": "Hiérarchie des rémunérations : Choix d'un des deux indicateurs suivants : -rapport entre la moyenne des rémunérations des 10 % des salariés touchant les rémunérations les plus élevées et celle correspondant au 10 % des salariés touchant les rémunérations les moins élevées",
+         "informations": [
+          "OU -rapport entre la moyenne des rémunérations des cadres ou assimilés (y compris cadres supérieurs et dirigeants) et la moyenne des rémunérations des ouvriers non qualifiés ou assimilés (21)",
+          "montant global des dix rémunérations les plus élevées."
+         ]
+        },
+        {
+         "lettre": "iii",
+         "intitule": "Mode de calcul des rémunérations : Pourcentage des salariés dont le salaire dépend, en tout ou partie, du rendement (22). Pourcentage des ouvriers et employés payés au mois sur la base de l'horaire affiché.",
+         "informations": []
+        },
+        {
+         "lettre": "iv",
+         "intitule": "Charge salariale globale",
+         "informations": []
         },
         {
          "lettre": "b",
@@ -954,6 +1125,17 @@
      "n": 5,
      "titre": "Représentation du personnel et Activités sociales et culturelles",
      "sections": [
+      {
+       "lettre": null,
+       "titre": "montant de la contribution aux activités sociales et culturelles du comité social et économique, mécénat",
+       "sujets": [
+        {
+         "lettre": null,
+         "intitule": "montant de la contribution aux activités sociales et culturelles du comité social et économique, mécénat :",
+         "informations": []
+        }
+       ]
+      },
       {
        "lettre": "A",
        "titre": "Représentation du personnel",
@@ -1241,9 +1423,18 @@
         {
          "lettre": null,
          "intitule": "Changement climatique : Bilan des émissions de gaz à effet de serre prévu par l'article L. 229-25 du code de l'environnement ou bilan simplifié prévu par l'article 244 de la loi n° 2020-1721 du 29 décembre 2020 de finances pour 2021 pour les entreprises tenues d'établir ces différents bilans",
-         "informations": [
-          "II-Pour les entreprises non soumises à la déclaration prévue à l'article R. 225-105 du code de commerce :"
-         ]
+         "informations": []
+        }
+       ]
+      },
+      {
+       "lettre": "II",
+       "titre": "Pour les entreprises non soumises à la déclaration prévue à l'article R. 225-105 du code de commerce",
+       "sujets": [
+        {
+         "lettre": null,
+         "intitule": "Pour les entreprises non soumises à la déclaration prévue à l'article R. 225-105 du code de commerce :",
+         "informations": []
         }
        ]
       },
@@ -1263,11 +1454,14 @@
        "titre": "Economie circulaire",
        "sujets": [
         {
-         "lettre": null,
-         "intitule": "Economie circulaire : i-Prévention et gestion de la production de déchets : évaluation de la quantité de déchets dangereux définis à l'article R. 541-8 du code de l'environnement et faisant l'objet d'une émission du bordereau mentionné à l'article R. 541-45 du même code",
-         "informations": [
-          "ii-Utilisation durable des ressources : consommation d'eau et consommation d'énergie"
-         ]
+         "lettre": "i",
+         "intitule": "Prévention et gestion de la production de déchets : évaluation de la quantité de déchets dangereux définis à l'article R. 541-8 du code de l'environnement et faisant l'objet d'une émission du bordereau mentionné à l'article R. 541-45 du même code",
+         "informations": []
+        },
+        {
+         "lettre": "ii",
+         "intitule": "Utilisation durable des ressources : consommation d'eau et consommation d'énergie",
+         "informations": []
         }
        ]
       },
@@ -1277,7 +1471,31 @@
        "sujets": [
         {
          "lettre": "i",
-         "intitule": "(effectif du mois i). (20) Faire une grille des rémunérations en distinguant au moins six tranches. (21) Pour être prises en compte, les catégories concernées doivent comporter au minimum dix salariés. (22) Distinguer les primes individuelles et les primes collectives. (23) Prestataires de services. (24) Frais de personnel : ensemble des rémunérations et des cotisations sociales mises légalement ou conventionnellement à la charge de l'entreprise. (25) Le montant global de la réserve de participation est le montant de la réserve dégagée-ou de la provision constituée-au titre de la participation sur les résultats de l'exercice considéré. (26) La participation est envisagée ici au sens du titre II du livre III de la partie III. (27) Non compris les dirigeants. (28) Faire référence aux codes de classification des éléments matériels des accidents (arrêté du 10 octobre 1974). (29) En application de l'article L. 461-4 du code de la sécurité sociale. (30) Il est possible de remplacer cet indicateur par la somme des heures travaillées durant l'année. (31) Au sens des dispositions du présent code et du code rural et de la pêche maritime instituant un repos compensateur en matière d'heures supplémentaires. (32) Au sens de l'article L. 3121-48. (33) Au sens de l'article L. 3123-1. (34) Cet indicateur peut être calculé sur la dernière période de référence. (35) Préciser, le cas échéant, les conditions restrictives. (36) Seuils associés aux facteurs de risques professionnels pour le travail répétitif : Travail répétitif caractérisé par la réalisation de travaux impliquant l'exécution de mouvements répétés, sollicitant tout ou partie du membre supérieur, à une fréquence élevée et sous cadence contrainte : -Temps de cycle inférieur ou égal à 30 secondes : 15 actions techniques ou plus pour minimum 900 heures par an -Temps de cycle supérieur à 30 secondes, temps de cycle variable ou absence de temps de cycle : 30 actions techniques ou plus par minute pour minimum 900 heures par an.. (37) Les valeurs limites d'exposition et les valeurs d'exposition déclenchant une action de prévention qui sont fixées dans le tableau prévu à l'article R. 4431-2. (38) Température inférieure ou égale à 5 degrés Celsius ou au moins égale à 30 degrés Celsius pour minimum 900 heures par an. (39) Sont considérées comme intempéries, les conditions atmosphériques et les inondations lorsqu'elles rendent dangereux ou impossible l'accomplissement du travail eu égard soit à la santé ou à la sécurité des salariés, soit à la nature ou à la technique du travail à accomplir. (40) Renseignements tirés du rapport du directeur du service de prévention et de santé au travail interentreprises (41) Pour l'explication de ces expériences d'amélioration du contenu du travail, donner le nombre de salariés concernés. (42) Non compris l'évaluation des dépenses en matière de santé et de sécurité. (43) Renseignements tirés du rapport du directeur du service de prévention et de santé au travail interentreprises. (44) Conformément aux données relatives aux contributions de formation professionnelle de la déclaration sociale nominative. (45) Au sens des articles L. 2145-5 et suivants. (46) On entend par réunion du personnel, les réunions régulières de concertation, concernant les relations et conditions de travail organisées par l'entreprise. (47) Préciser leur périodicité. (48) Avec indication de la nature du différend et, le cas échéant, de la solution qui y a mis fin. (49) Dépenses consolidées de l'entreprise. La répartition est indiquée ici à titre d'exemple. (50) (51) Versements directs ou par l'intermédiaire d'assurances. (52) Lorsque les données et informations environnementales transmises dans le cadre de cette rubrique ne sont pas éditées au niveau de l'entreprise (i. e. par exemple, au niveau du groupe ou des établissements distincts, le cas échéant), elles doivent être accompagnées d'informations supplémentaires pertinentes pour être mises en perspective à ce niveau.",
+         "intitule": "Identification des postes d'émissions directes de gaz à effet de serre produites par les sources fixes et mobiles nécessaires aux activités de l'entreprise (communément appelées \" émissions du scope 1 \") et, lorsque l'entreprise dispose de cette information, évaluation du volume de ces émissions de gaz à effet de serre",
+         "informations": []
+        },
+        {
+         "lettre": "ii",
+         "intitule": "Bilan des émissions de gaz à effet de serre prévu par l'article L. 229-25 du code de l'environnement ou le bilan simplifié prévu par l'article 244 de la loi n° 2020-1721 du 29 décembre 2020 de finances pour 2021 pour les entreprises tenues d'établir ces bilans. Notes : I.-Une structure de qualification détaillée, en trois ou quatre postes minimum, est requise. Il est souhaitable de faire référence à la classification de la convention collective, de l'accord d'entreprise et aux pratiques habituellement retenues dans l'entreprise. A titre d'exemple la répartition suivante peut être retenue : cadres",
+         "informations": [
+          "employés, techniciens et agents de maîtrise (ETAM)",
+          "et ouvriers. II.-Une structure de qualification détaillée en cinq ou six postes minimum est requise. Il est souhaitable de faire référence à la classification de la convention collective, de l'accord d'entreprise et aux pratiques habituellement retenues dans l'entreprise. A titre d'exemple, la répartition suivante des postes peut être retenue : cadres",
+          "techniciens",
+          "agents de maîtrise",
+          "employés qualifiés",
+          "employés non qualifiés",
+          "ouvriers qualifiés",
+          "ouvriers non qualifiés. Doivent en outre être distinguées les catégories femmes et hommes. (1) Effectif total : tout salarié inscrit à l'effectif au 31/12 quelle que soit la nature de son contrat de travail. (2) Effectif permanent : les salariés à temps plein, inscrits à l'effectif pendant toute l'année considérée et titulaires d'un contrat de travail à durée indéterminée. (3) Somme des effectifs totaux mensuels divisée par 12 (on entend par effectif total tout salarié inscrit à l'effectif au dernier jour du mois considéré). (4) La répartition retenue est celle habituellement utilisée dans l'entreprise à condition de distinguer au moins quatre catégories, dont les jeunes de moins de vingt-cinq ans. (5) La répartition selon l'ancienneté est celle habituellement retenue dans l'entreprise. (6) Il s'agit des catégories de travailleurs extérieurs dont l'entreprise connaît le nombre, soit parce qu'il figure dans le contrat signé avec l'entreprise extérieure, soit parce que ces travailleurs sont inscrits aux effectifs. Exemple : démonstrateurs dans le commerce … (7) Stages supérieurs à une semaine. (8) Est considérée comme salarié temporaire toute personne mise à la disposition de l'entreprise, par une entreprise de travail temporaire. (9) A ne remplir que si ces départs sont comptabilisés dans le total des départs. (10) Distinguer les différents systèmes légaux et conventionnels de toute nature. (11) Utiliser les catégories de la nomenclature détaillée II. (12) Y compris les heures indemnisées au titre du chômage total en cas d'arrêt de plus de quatre semaines consécutives. (13) Tel qu'il résulte de la déclaration obligatoire prévue à l'article L. 5212-5. (14) Possibilités de comptabiliser tous les indicateurs de la rubrique absentéisme, au choix, en journées, 1/2 journées ou heures. (15) Ne sont pas comptés parmi les absences : les diverses sortes de congés, les conflits et le service national. (16) Les tranches choisies sont laissées au choix des entreprises. (17) On entend par rémunération la somme des salaires effectivement perçus pendant l'année par le salarié (au sens de la déclaration sociale nominative). (18) Masse salariale annuelle totale, au sens de la déclaration annuelle de salaire. (19) Rémunération mensuelle moyenne : 1/2 ∑ (masse salariale du mois"
+         ]
+        },
+        {
+         "lettre": "i",
+         "intitule": "(effectif du mois",
+         "informations": []
+        },
+        {
+         "lettre": "i",
+         "intitule": ". (20) Faire une grille des rémunérations en distinguant au moins six tranches. (21) Pour être prises en compte, les catégories concernées doivent comporter au minimum dix salariés. (22) Distinguer les primes individuelles et les primes collectives. (23) Prestataires de services. (24) Frais de personnel : ensemble des rémunérations et des cotisations sociales mises légalement ou conventionnellement à la charge de l'entreprise. (25) Le montant global de la réserve de participation est le montant de la réserve dégagée-ou de la provision constituée-au titre de la participation sur les résultats de l'exercice considéré. (26) La participation est envisagée ici au sens du titre II du livre III de la partie III. (27) Non compris les dirigeants. (28) Faire référence aux codes de classification des éléments matériels des accidents (arrêté du 10 octobre 1974). (29) En application de l'article L. 461-4 du code de la sécurité sociale. (30) Il est possible de remplacer cet indicateur par la somme des heures travaillées durant l'année. (31) Au sens des dispositions du présent code et du code rural et de la pêche maritime instituant un repos compensateur en matière d'heures supplémentaires. (32) Au sens de l'article L. 3121-48. (33) Au sens de l'article L. 3123-1. (34) Cet indicateur peut être calculé sur la dernière période de référence. (35) Préciser, le cas échéant, les conditions restrictives. (36) Seuils associés aux facteurs de risques professionnels pour le travail répétitif : Travail répétitif caractérisé par la réalisation de travaux impliquant l'exécution de mouvements répétés, sollicitant tout ou partie du membre supérieur, à une fréquence élevée et sous cadence contrainte : -Temps de cycle inférieur ou égal à 30 secondes : 15 actions techniques ou plus pour minimum 900 heures par an -Temps de cycle supérieur à 30 secondes, temps de cycle variable ou absence de temps de cycle : 30 actions techniques ou plus par minute pour minimum 900 heures par an.. (37) Les valeurs limites d'exposition et les valeurs d'exposition déclenchant une action de prévention qui sont fixées dans le tableau prévu à l'article R. 4431-2. (38) Température inférieure ou égale à 5 degrés Celsius ou au moins égale à 30 degrés Celsius pour minimum 900 heures par an. (39) Sont considérées comme intempéries, les conditions atmosphériques et les inondations lorsqu'elles rendent dangereux ou impossible l'accomplissement du travail eu égard soit à la santé ou à la sécurité des salariés, soit à la nature ou à la technique du travail à accomplir. (40) Renseignements tirés du rapport du directeur du service de prévention et de santé au travail interentreprises (41) Pour l'explication de ces expériences d'amélioration du contenu du travail, donner le nombre de salariés concernés. (42) Non compris l'évaluation des dépenses en matière de santé et de sécurité. (43) Renseignements tirés du rapport du directeur du service de prévention et de santé au travail interentreprises. (44) Conformément aux données relatives aux contributions de formation professionnelle de la déclaration sociale nominative. (45) Au sens des articles L. 2145-5 et suivants. (46) On entend par réunion du personnel, les réunions régulières de concertation, concernant les relations et conditions de travail organisées par l'entreprise. (47) Préciser leur périodicité. (48) Avec indication de la nature du différend et, le cas échéant, de la solution qui y a mis fin. (49) Dépenses consolidées de l'entreprise. La répartition est indiquée ici à titre d'exemple. (50) (51) Versements directs ou par l'intermédiaire d'assurances. (52) Lorsque les données et informations environnementales transmises dans le cadre de cette rubrique ne sont pas éditées au niveau de l'entreprise (i. e. par exemple, au niveau du groupe ou des établissements distincts, le cas échéant), elles doivent être accompagnées d'informations supplémentaires pertinentes pour être mises en perspective à ce niveau.",
          "informations": []
         }
        ]
@@ -1290,12 +1508,18 @@
     }
    ],
    "couverture": {
-    "extraits": 263,
-    "couverts": 26478,
-    "source": 31803,
-    "part": 83.3
+    "extraits": 285,
+    "couverts": 30462,
+    "entete": 261,
+    "contenu": 31542,
+    "renvoi": "Elle comporte également les informations relatives à la formation professionnelle et aux conditions de travail prévues au 1° A e et f de l'article R.",
+    "part": 96.6
    },
-   "infidelites": []
+   "infidelites": [],
+   "renvois": [
+    "R. 2312-8, 1° A e) — formation professionnelle",
+    "R. 2312-8, 1° A f) — conditions de travail"
+   ]
   }
  }
 }
