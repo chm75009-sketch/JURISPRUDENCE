@@ -3,14 +3,83 @@
    décrite y satisfait. Cinq états, et jamais « conforme » sur une déclaration
    que rien ne justifie : une affirmation de l'employeur n'est pas une preuve. */
 const M = require("./moteur-cse.js");
+const D = require("./dates.js");
+const { valider, examines } = require("./valider-cse.js");
 const CONF = "conforme", NC = "non conforme", RISQ = "risque à vérifier",
       MANQ = "donnée manquante", SO = "sans objet";
 const ETATS = { CONF, NC, RISQ, MANQ, SO };
 const vide = x => x === undefined || x === null || x === "" || (Array.isArray(x) && !x.length);
 const piece = (f, nom) => Array.isArray(f.pieces) && f.pieces.includes(nom);
 
+/* Le néant est une réponse. « Aucune organisation syndicale invitée » et « la
+   question n'a pas été renseignée » sont deux situations opposées, et la base
+   les confondait toutes deux en « donnée manquante ». Un employeur qui déclare
+   expressément n'avoir rien fait doit obtenir le constat correspondant, non une
+   invitation à compléter. La distinction se lit sur la fiche : la clé est
+   présente et sa valeur est vide. */
+const declare = (f, champ) => Object.prototype.hasOwnProperty.call(f, champ);
+const neant = (f, champ) => declare(f, champ) && vide(f[champ]);
+
+/* Un écart de dates, ou le refus de conclure. Voir moteur/commun/dates.js :
+   une chronologie inversée n'est pas un délai tenu. */
+const ecart = D.ecart;
+
+/* L'effectif déclaré est-il contredit par les relevés mensuels du dossier ?
+   Tant qu'il l'est, aucun contrôle assis sur l'effectif ne peut conclure à la
+   conformité : il conclurait sur un nombre que le dossier dément lui-même. */
+function effectifDouteux(f) {
+  const c = M.coherenceEffectif(f);
+  if (!c || !c.lisible) return null;
+  if (c.seuilsFranchis.length)
+    return { seuil: true,
+      motif: `les relevés mensuels atteignent le seuil de ${c.seuilsFranchis.map(s => s.seuil).join(" et ")} salarié(s), que l'effectif déclaré de ${c.effectifDeclare} ne franchit pas` };
+  if (!c.dans)
+    return { seuil: false,
+      motif: `l'effectif déclaré de ${c.effectifDeclare} se situe hors de l'intervalle des relevés mensuels (${c.min} à ${c.max})` };
+  return null;
+}
+/* Un verdict qui repose sur un effectif contredit devient une réserve.
+   « Conforme » toujours : il tiendrait pour acquis un constat que le dossier
+   dément. « Sans objet » lorsque le doute porte sur un seuil : c'est le cas le
+   plus trompeur du module — « commission non obligatoire en deçà de trois
+   cents salariés » écrit sur un dossier dont les quatorze relevés dépassent
+   trois cents. Les autres états ne prononcent rien et restent inchangés. */
+const surEffectif = (f, v) => {
+  if (v.etat !== CONF && v.etat !== SO) return v;
+  const d = effectifDouteux(f);
+  if (!d || (v.etat === SO && !d.seuil)) return v;
+  return { etat: RISQ, motif: v.etat === CONF
+    ? `${v.motif} Ce constat repose sur l'effectif déclaré, or ${d.motif} : il ne peut pas être tenu pour acquis tant que l'effectif n'est pas rétabli.`
+    : `${v.motif} Cette mise hors du champ repose sur l'effectif déclaré, or ${d.motif} : le contrôle pourrait s'appliquer, et sa conclusion changer, une fois l'effectif rétabli.` };
+};
+
 const C = [];
 const c = (id, rubrique, objet, fondement, fn) => C.push({ id, rubrique, objet, fondement, verdict: fn });
+
+/* ---------------- Recevabilité et cohérence des données ---------------- */
+c("CSE-CTL-REC-01", "Recevabilité", "Les données saisies sont-elles lisibles ?", [],
+ f => { const A = valider(f);
+   if (A.length) return { etat: NC, motif: `${A.length} donnée(s) impossible(s) ou mal formée(s) : ${A.map(x => `${x.champ} = « ${x.valeur} » — ${x.motif}`).join(" ; ")}. Tant qu'elles ne sont pas corrigées, les contrôles qui les lisent concluent sur des valeurs qui n'existent pas.` };
+   const n = examines(f);
+   return n
+     ? { etat: CONF, motif: `${n} donnée(s) examinée(s), aucune impossible : dates existantes, dénombrements entiers, montants positifs, chronologies dans l'ordre.` }
+     : { etat: MANQ, motif: "Aucune des données que ce contrôle sait examiner n'est renseignée : il n'y a rien dont la lisibilité puisse être constatée." }; });
+
+c("CSE-CTL-COH-01", "Recevabilité", "L'effectif déclaré est-il cohérent avec les relevés mensuels ?", ["L. 1111-2", "L. 2311-2"],
+ f => { const co = M.coherenceEffectif(f);
+   if (!co) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas renseignés : la cohérence ne peut pas être vérifiée." };
+   if (!co.lisible) return { etat: MANQ, motif: co.motif };
+   if (co.dans) return { etat: CONF, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, compris dans l'intervalle des ${co.releves} relevés mensuels (${co.min} à ${co.max}, moyenne ${co.moyenne}).` };
+   return { etat: NC, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, alors que les ${co.releves} relevés mensuels s'échelonnent de ${co.min} à ${co.max} — un écart de ${co.ecart} salarié(s) avec le relevé le plus proche. Aucun mois du dossier ne corrobore le nombre déclaré, sur lequel repose pourtant tout le régime applicable au comité.` }; });
+
+c("CSE-CTL-COH-02", "Recevabilité", "Les relevés mensuels franchissent-ils un seuil que l'effectif déclaré ne franchit pas ?", ["L. 2311-2", "L. 2312-2", "L. 2312-34"],
+ f => { const co = M.coherenceEffectif(f);
+   if (!co || !co.lisible) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas exploitables : le franchissement des seuils ne peut pas être vérifié." };
+   if (!co.seuilsFranchis.length)
+     return { etat: CONF, motif: `Aucun seuil n'est atteint par les relevés mensuels sans l'être par l'effectif déclaré de ${co.effectifDeclare} salariés.` };
+   return { etat: NC, motif: co.seuilsFranchis.map(s =>
+     `Seuil de ${s.seuil} salariés : ${s.regle} L'effectif déclaré étant de ${co.effectifDeclare}, le régime appliqué au dossier ignore ${s.effet}.`).join(" ") +
+     " Le régime du comité — réunions, commission, budgets, attributions — se calcule sur l'effectif déclaré : tant qu'il contredit les relevés, les conformités qui en découlent ne valent rien." }; });
 
 /* ---------------- Mise en place ---------------- */
 c("CSE-CTL-MEP-01", "Mise en place", "Le seuil de onze salariés est-il mesuré sur douze mois consécutifs ?", ["L. 2311-2"],
@@ -35,10 +104,12 @@ c("CSE-CTL-MEP-03", "Mise en place", "Les élections ont-elles été engagées d
  f => vide(f.dateDernieresElections)
    ? { etat: MANQ, motif: "La date des dernières élections n'est pas renseignée." }
    : (() => { const m = M.mandat(f);
-       const ecoule = (new Date(f.dateAudit || "2026-08-15") - new Date(f.dateDernieresElections)) / 31557600000;
-       return ecoule > m.annees
-         ? { etat: NC, motif: `${ecoule.toFixed(1)} ans se sont écoulés depuis les dernières élections, pour un mandat de ${m.annees} ans : le renouvellement est en retard.` }
-         : { etat: CONF, motif: `${ecoule.toFixed(1)} ans écoulés depuis les dernières élections, pour un mandat de ${m.annees} ans.` }; })());
+       const e = D.ecartAnnees(f.dateDernieresElections, f.dateAudit || "2026-08-15",
+         "la date des dernières élections", "la date d'audit");
+       if (!e.valide) return { etat: MANQ, motif: e.motif };
+       return e.annees > m.annees
+         ? { etat: NC, motif: `${e.annees.toFixed(1)} ans se sont écoulés depuis les dernières élections, pour un mandat de ${m.annees} ans : le renouvellement est en retard.` }
+         : { etat: CONF, motif: `${e.annees.toFixed(1)} ans écoulés depuis les dernières élections, pour un mandat de ${m.annees} ans.` }; })());
 
 c("CSE-CTL-MEP-04", "Mise en place", "La durée de mandat fixée par accord est-elle licite ?", ["L. 2314-34"],
  f => typeof f.dureeAccord !== "number"
@@ -76,6 +147,8 @@ c("CSE-CTL-PER-03", "Périmètre", "Les représentants de proximité ont-ils ét
 c("CSE-CTL-ELE-01", "Élections", "Les organisations syndicales ont-elles toutes été invitées à négocier ?", ["L. 2314-5"],
  f => f.electionsEnCours !== true
    ? { etat: SO, motif: "Aucune élection en cours." }
+   : neant(f, "syndicatsInvites")
+     ? { etat: NC, motif: "Aucune organisation syndicale n'a été invitée à négocier le protocole, alors qu'un processus électoral est engagé. L'invitation est due à toutes les organisations visées par l'article L. 2314-5, et son défaut entache le processus." }
    : vide(f.syndicatsInvites)
      ? { etat: MANQ, motif: "La liste des organisations invitées n'est pas renseignée." }
      : (piece(f, "invitations-syndicats")
@@ -85,10 +158,12 @@ c("CSE-CTL-ELE-01", "Élections", "Les organisations syndicales ont-elles toutes
 c("CSE-CTL-ELE-02", "Élections", "Le premier tour se tient-il dans les quatre-vingt-dix jours de l'information du personnel ?", ["L. 2314-4"],
  f => (vide(f.dateInformationPersonnel) || vide(f.datePremierTour))
    ? { etat: MANQ, motif: "La date d'information du personnel ou celle du premier tour n'est pas renseignée." }
-   : (() => { const j = Math.round((new Date(f.datePremierTour) - new Date(f.dateInformationPersonnel)) / 86400000);
-       return j > 90
-         ? { etat: NC, motif: `${j} jours entre l'information du personnel et le premier tour : le maximum est de quatre-vingt-dix jours.` }
-         : { etat: CONF, motif: `${j} jours entre l'information du personnel et le premier tour.` }; })());
+   : (() => { const e = ecart(f.dateInformationPersonnel, f.datePremierTour,
+         "l'information du personnel", "le premier tour");
+       if (!e.valide) return { etat: e.cause === "ordre" ? NC : MANQ, motif: e.motif };
+       return e.jours > 90
+         ? { etat: NC, motif: `${e.jours} jours entre l'information du personnel et le premier tour : le maximum est de quatre-vingt-dix jours.` }
+         : { etat: CONF, motif: `${e.jours} jours entre l'information du personnel et le premier tour.` }; })());
 
 c("CSE-CTL-ELE-03", "Élections", "Le protocole préélectoral remplit-il la condition de double majorité ?", ["L. 2314-6"],
  f => f.electionsEnCours !== true && vide(f.protocole)
@@ -113,15 +188,20 @@ c("CSE-CTL-ELE-04", "Élections", "La proportion de femmes et d'hommes figure-t-
        : { etat: MANQ, motif: "La mention de la proportion de femmes et d'hommes au protocole n'est pas renseignée." })));
 
 c("CSE-CTL-ELE-05", "Élections", "Les listes déposées respectent-elles la proportion et l'alternance ?", ["L. 2314-30", "L. 2314-32"],
- f => vide(f.listesDeposees)
+ f => neant(f, "listesDeposees")
+   ? { etat: SO, motif: "Aucune liste n'est déposée : il n'y a pas de composition à contrôler. Si le délai de dépôt est expiré sans qu'aucune liste ait été présentée, le procès-verbal de carence doit être établi à l'issue du scrutin." }
+   : vide(f.listesDeposees)
    ? { etat: MANQ, motif: "Les listes déposées ne sont pas renseignées : la composition ne peut pas être contrôlée." }
    : (() => {
        const ko = [], douteux = [];
        for (const l of f.listesDeposees) {
-         const r = M.listeParitaire({ femmes: l.femmesInscrites, hommes: l.hommesInscrits, candidats: (l.candidats || []).length });
+         /* Le nombre de sièges à pourvoir est distinct du nombre de candidats :
+            le quatrième alinéa de L. 2314-30 est indexé sur le premier. */
+         const r = M.listeParitaire({ femmes: l.femmesInscrites, hommes: l.hommesInscrits,
+           candidats: (l.candidats || []).length, sieges: l.siegesAPourvoir });
          if (!r) { douteux.push(`${l.nom} : données du collège incomplètes`); continue; }
          if (!r.applicable) continue;
-         if (r.conflit || r.indifferent) { douteux.push(`${l.nom} : ${r.motif}`); continue; }
+         if (r.conflit || r.indifferent || r.siegesInconnus) { douteux.push(`${l.nom} : ${r.motif}`); continue; }
          const nF = (l.candidats || []).filter(x => x.sexe === "F").length;
          const nH = (l.candidats || []).filter(x => x.sexe === "H").length;
          if (nF !== r.candidatsFemmes || nH !== r.candidatsHommes)
@@ -156,6 +236,8 @@ c("CSE-CTL-ELE-07", "Élections", "Des élections partielles sont-elles dues et 
 c("CSE-CTL-CON-01", "Consultations", "Les trois consultations récurrentes ont-elles été conduites ?", ["L. 2312-17", "L. 2312-22"],
  f => (typeof f.effectif !== "number" || f.effectif < 50)
    ? { etat: SO, motif: "Les consultations récurrentes ne sont dues qu'à partir de cinquante salariés." }
+   : neant(f, "consultationsRecurrentes")
+     ? { etat: NC, motif: "Aucune consultation récurrente n'a été conduite. À défaut d'accord en aménageant la périodicité, les trois consultations — orientations stratégiques, situation économique et financière, politique sociale — sont annuelles, et leur défaut constitue un trouble manifestement illicite." }
    : vide(f.consultationsRecurrentes)
      ? { etat: MANQ, motif: "Les consultations récurrentes conduites ne sont pas renseignées." }
      : (() => { const dues = ["orientations stratégiques", "situation économique et financière", "politique sociale"];
@@ -169,10 +251,12 @@ c("CSE-CTL-CON-02", "Consultations", "Le délai de consultation a-t-il couru dep
    ? { etat: MANQ, motif: "La date de remise des informations au comité n'est pas renseignée : le point de départ du délai est inconnu." }
    : (() => { const d = M.delaiConsultation(f.consultation);
        if (vide(f.consultation.dateAvis)) return { etat: RISQ, motif: `Informations remises le ${f.consultation.dateRemiseInformations}, délai de ${d.jours} jours. Aucune date d'avis n'est renseignée : à l'expiration, le comité est réputé avoir rendu un avis négatif.` };
-       const j = Math.round((new Date(f.consultation.dateAvis) - new Date(f.consultation.dateRemiseInformations)) / 86400000);
-       return j > d.jours
-         ? { etat: RISQ, motif: `${j} jours entre la remise des informations et l'avis, pour un délai de ${d.jours} jours : l'avis a été rendu après l'expiration, donc après qu'un avis négatif a été réputé acquis.` }
-         : { etat: CONF, motif: `Avis rendu ${j} jours après la remise des informations, dans le délai de ${d.jours} jours.` }; })());
+       const e = ecart(f.consultation.dateRemiseInformations, f.consultation.dateAvis,
+         "la remise des informations", "l'avis du comité");
+       if (!e.valide) return { etat: e.cause === "ordre" ? NC : MANQ, motif: e.motif };
+       return e.jours > d.jours
+         ? { etat: RISQ, motif: `${e.jours} jours entre la remise des informations et l'avis, pour un délai de ${d.jours} jours : l'avis a été rendu après l'expiration, donc après qu'un avis négatif a été réputé acquis.` }
+         : { etat: CONF, motif: `Avis rendu ${e.jours} jours après la remise des informations, dans le délai de ${d.jours} jours.` }; })());
 
 c("CSE-CTL-CON-03", "Consultations", "Le comité a-t-il reçu des informations précises et écrites ?", ["L. 2312-15"],
  f => piece(f, "note-information-cse")
@@ -240,7 +324,9 @@ c("CSE-CTL-MOY-03", "Moyens", "Les heures de délégation ont-elles été payée
      : { etat: NC, motif: "Des heures de délégation ont été retenues sur la paie. Le temps passé est de plein droit du temps de travail payé à l'échéance normale : l'employeur qui conteste doit payer d'abord et saisir le juge ensuite." }));
 
 c("CSE-CTL-MOY-04", "Moyens", "Les formations obligatoires ont-elles été dispensées ?", ["L. 2315-18", "L. 2315-63"],
- f => vide(f.formationsDispensees)
+ f => neant(f, "formationsDispensees")
+   ? { etat: NC, motif: "Aucune formation n'a été dispensée. La formation en santé, sécurité et conditions de travail est due à tous les membres de la délégation du personnel, pour cinq jours au minimum lors du premier mandat." }
+   : vide(f.formationsDispensees)
    ? { etat: MANQ, motif: "Les formations dispensées aux élus ne sont pas renseignées." }
    : (f.formationsDispensees.some(x => /sant|sécurit/i.test(x))
      ? { etat: piece(f, "attestations-formation") ? CONF : RISQ,
@@ -264,6 +350,8 @@ c("CSE-CTL-SST-01", "Santé et sécurité", "La commission santé, sécurité et
 c("CSE-CTL-SST-02", "Santé et sécurité", "La composition de la commission respecte-t-elle le siège réservé au second ou au troisième collège ?", ["L. 2315-39"],
  f => f.cssct !== true
    ? { etat: SO, motif: "Aucune commission en place." }
+   : neant(f, "membresCssct")
+     ? { etat: NC, motif: "La commission est déclarée en place, mais aucun membre n'y est désigné. Elle doit comprendre au moins trois représentants du personnel, dont au moins un du second ou, le cas échéant, du troisième collège." }
    : vide(f.membresCssct)
      ? { etat: MANQ, motif: "La composition de la commission n'est pas renseignée." }
      : (() => { const n = f.membresCssct.length;
@@ -319,10 +407,12 @@ c("CSE-CTL-EXP-02", "Expertises", "La contestation de l'expertise a-t-elle été
    ? { etat: SO, motif: "Aucune contestation d'expertise en cours." }
    : vide(f.expertise.dateSaisine)
      ? { etat: MANQ, motif: "La date de saisine du juge n'est pas renseignée." }
-     : (() => { const j = Math.round((new Date(f.expertise.dateSaisine) - new Date(f.expertise.dateDepart)) / 86400000);
-         return j > 10
-           ? { etat: NC, motif: `${j} jours entre le point de départ et la saisine : le délai est de dix jours. Le délai ne court qu'à compter du lendemain de l'acte, et la date de saisine s'entend de celle de l'assignation.` }
-           : { etat: CONF, motif: `${j} jours entre le point de départ et la saisine, dans le délai de dix jours.` }; })());
+     : (() => { const e = ecart(f.expertise.dateDepart, f.expertise.dateSaisine,
+           "le point de départ du délai", "la saisine du juge");
+         if (!e.valide) return { etat: e.cause === "ordre" ? NC : MANQ, motif: e.motif };
+         return e.jours > 10
+           ? { etat: NC, motif: `${e.jours} jours entre le point de départ et la saisine : le délai est de dix jours. Le délai ne court qu'à compter du lendemain de l'acte, et la date de saisine s'entend de celle de l'assignation.` }
+           : { etat: CONF, motif: `${e.jours} jours entre le point de départ et la saisine, dans le délai de dix jours.` }; })());
 
 c("CSE-CTL-EXP-03", "Expertises", "Une expertise a-t-elle été décidée sur un fondement qui ne la prévoit pas ?", ["L. 1233-34", "L. 2315-92"],
  f => (vide(f.expertise) || typeof f.nbLicenciements !== "number")
@@ -334,21 +424,47 @@ c("CSE-CTL-EXP-03", "Expertises", "Une expertise a-t-elle été décidée sur un
 /* ---------------- Détection : jamais de conclusion de conformité ---------------- */
 const DETECTION = new Set(["CSE-CTL-DET-01", "CSE-CTL-DET-02", "CSE-CTL-DET-03"]);
 c("CSE-CTL-DET-01", "À faire examiner", "Un accord collectif prive-t-il le comité d'une prérogative légale ?", ["L. 2262-14"],
- f => vide(f.accordsCse)
+ f => neant(f, "accordsCse")
+   ? { etat: SO, motif: "Aucun accord collectif applicable au comité n'est déclaré : la loi s'applique seule, sans aménagement conventionnel à articuler avec elle." }
+   : vide(f.accordsCse)
    ? { etat: MANQ, motif: "Les accords collectifs applicables au comité ne sont pas renseignés." }
    : { etat: RISQ, motif: `${f.accordsCse.length} accord(s) déclarés. La base ne lit pas leurs stipulations. Un accord peut légalement aménager la périodicité, le contenu et le niveau des consultations, mais non priver le comité d'une prérogative : le comité peut alors en invoquer l'illégalité par voie d'exception, sans condition de délai. Ce point appelle l'examen d'un professionnel.` });
 
 c("CSE-CTL-DET-02", "À faire examiner", "Un contentieux ou une procédure sont-ils en cours devant le juge ?", [],
- f => vide(f.contentieuxCse)
+ f => neant(f, "contentieuxCse")
+   ? { etat: SO, motif: "Aucun contentieux ni procédure en cours n'est déclaré concernant le comité." }
+   : vide(f.contentieuxCse)
    ? { etat: MANQ, motif: "L'existence d'un contentieux en cours n'est pas renseignée." }
    : { etat: RISQ, motif: "Un contentieux est signalé. La base ne l'apprécie pas : il doit être porté à la connaissance de la direction et du conseil juridique avant toute décision." });
 
 c("CSE-CTL-DET-03", "À faire examiner", "Des faits susceptibles de caractériser une entrave sont-ils signalés ?", ["L. 2317-1"],
- f => vide(f.faitsEntrave)
+ f => neant(f, "faitsEntrave")
+   ? { etat: SO, motif: "Aucun fait susceptible de caractériser une entrave n'est signalé. La base ne recherche pas de tels faits : elle enregistre ce qui lui est déclaré." }
+   : vide(f.faitsEntrave)
    ? { etat: MANQ, motif: "Aucun élément n'est renseigné sur ce point." }
    : { etat: RISQ, motif: "Des faits sont signalés. L'entrave est une infraction pénale, et aucun arrêt publié du corpus ne s'y rattache : la base détecte, elle ne qualifie pas. Ce point appelle l'examen d'un professionnel." });
 
-module.exports = { C, ETATS, DETECTION };
+/* Tout le régime du comité se calcule sur l'effectif déclaré. Lorsque les
+   relevés mensuels du dossier le contredisent, les contrôles qui en dépendent
+   ne peuvent plus prononcer la conformité : ils la prononceraient sur un nombre
+   que le dossier dément. Ils passent en réserve, et disent pourquoi. La liste
+   est explicite plutôt que devinée, et un test vérifie qu'elle couvre bien tous
+   les contrôles qui lisent l'effectif. */
+const SUR_EFFECTIF = new Set(["CSE-CTL-CON-01", "CSE-CTL-CON-05", "CSE-CTL-CON-06",
+  "CSE-CTL-MOY-01", "CSE-CTL-MOY-02", "CSE-CTL-SST-01", "CSE-CTL-SST-02",
+  "CSE-CTL-BUD-01", "CSE-CTL-BUD-02"]);
+for (const ctl of C) {
+  if (!SUR_EFFECTIF.has(ctl.id)) continue;
+  const brut = ctl.verdict;
+  ctl.verdict = f => surEffectif(f, brut(f));
+}
+
+/* Les contrôles de cohérence ne vérifient pas une donnée mais la relation entre
+   deux. C'est la famille qui manquait, et c'est là que se cachaient les
+   conformités fausses — celles qu'un dossier obtient en se contredisant. */
+const COHERENCE = new Set(["CSE-CTL-COH-01", "CSE-CTL-COH-02"]);
+
+module.exports = { C, ETATS, DETECTION, COHERENCE, SUR_EFFECTIF, effectifDouteux };
 if (require.main === module) {
   const ids = C.map(x => x.id);
   console.log(`${C.length} contrôles · ${new Set(ids).size} identifiants distincts · ${DETECTION.size} de détection`);

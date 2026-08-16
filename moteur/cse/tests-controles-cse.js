@@ -132,6 +132,38 @@ cas("expertise régulière sur un licenciement de vingt salariés", {
   expertise: { cas: "licenciement collectif pour motif économique", partEmployeur: 100 } });
 cas("titulaires élus au nombre prévu", { effectif: 120, titulairesElus: 6, heuresAccordees: 126 });
 
+/* Recevabilité, cohérence de l'effectif et néant déclaré : les quatre cas qui
+   ont motivé le contre-audit du module. */
+cas("dates impossibles et dénombrements décimaux", {
+  effectif: 120.5, dateDernieresElections: "2023-02-30", dateAudit: "2026-08-15",
+  reunionsTenues: 6, reunionsSante: 9, masseSalariale: -1000 });
+cas("chronologie inversée sur les élections et la consultation", {
+  effectif: 300, electionsEnCours: true,
+  dateInformationPersonnel: "2026-05-04", datePremierTour: "2026-01-09",
+  consultation: { dateRemiseInformations: "2026-03-10", dateAvis: "2026-01-11" },
+  expertise: { cas: "nécessité", dateDepart: "2026-04-01", dateSaisine: "2026-03-20" } });
+cas("effectif déclaré à 299 contre quatorze relevés au-dessus de 310", {
+  effectif: 299, effectifsMensuels: [312, 313, 314, 315, 316, 317, 312, 313, 314, 315, 316, 317, 313, 314],
+  comiteExistant: true, cssct: false, reunionsTenues: 6, reunionsSante: 4,
+  titulairesElus: 11, heuresAccordees: 231, masseSalariale: 12000000, subventionVersee: 24000,
+  pieces: ["etats-effectifs"] });
+cas("effectif déclaré hors de l'intervalle des relevés, sans franchissement de seuil", {
+  effectif: 60, effectifsMensuels: Array(14).fill(120), comiteExistant: true });
+cas("néant déclaré partout", {
+  effectif: 120, electionsEnCours: true, cssct: true,
+  syndicatsInvites: [], listesDeposees: [], consultationsRecurrentes: [],
+  formationsDispensees: [], membresCssct: [], accordsCse: [], contentieuxCse: "", faitsEntrave: "" });
+cas("liste au conflit d'arrondi tranché par un nombre impair de sièges", {
+  effectif: 120, electionsEnCours: true, listesDeposees: [
+    { nom: "collège 1 · titulaires", femmesInscrites: 50, hommesInscrits: 50, siegesAPourvoir: 3,
+      candidats: [{ sexe: "F" }, { sexe: "H" }, { sexe: "F" }] }] });
+cas("élections partielles écartées à moins de six mois du terme", {
+  effectif: 200, titulairesInitiaux: 10, titulairesRestants: 4, moisAvantTerme: 4,
+  collegeVide: false, partiellesOrganisees: false });
+cas("collège non représenté", {
+  effectif: 200, titulairesInitiaux: 10, titulairesRestants: 8, collegeVide: true,
+  moisAvantTerme: 20, partiellesOrganisees: false });
+
 /* ---------------- exécution ---------------- */
 const res = [];
 let jets = 0, confVide = 0;

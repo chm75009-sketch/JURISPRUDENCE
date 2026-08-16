@@ -13,17 +13,18 @@ source : le chargement de la grille échoue si un article cité manque.
 |---|---|---|
 | Domaine | Licenciement pour motif économique, article L. 1233-3 | Comité social et économique, deuxième partie, livre III |
 | Articles lus sur Légifrance | 200 | 368 |
-| Règles | 232 | 40 |
-| Contrôles | 48 dont 6 de détection | 35 dont 3 de détection |
-| Cas de contrôle | 44 cas contradictoires | 45 cas moteur + 55 cas contradictoires |
+| Règles | 236 | 40 |
+| Contrôles | 68 dont 8 de cohérence et 8 de détection | 38 dont 2 de cohérence et 3 de détection |
+| Cas de contrôle | 73 cas contradictoires | 59 cas moteur + 63 cas contradictoires |
 | Corpus de jurisprudence | 474 arrêts publiés dépouillés | 163 arrêts publiés classés sur 11 rubriques |
+| Contre-audit versé au dépôt | `economique/CONTRE-AUDIT-MOTEUR-ECONOMIQUE.md` | `cse/CONTRE-AUDIT-MODULE-CSE.md` |
 
 ## Comment l'exécuter
 
 ```
 cd moteur/economique
 node tests.js                  # les cas de référence du moteur
-node tests-contradictoires.js  # 44 dossiers construits pour mettre les contrôles en défaut
+node tests-contradictoires.js  # 73 dossiers construits pour mettre les contrôles en défaut
 node publier.js                # manifeste, registre d'exécution, empreintes concordantes
 node lancer-audit.js fiche-complete.json
 node ../commun/audit.js ./_audit_items.js Audit "Titre"     # le PDF, pagination mesurée
@@ -32,10 +33,12 @@ python3 ../commun/word_py.py _audit_items.json Audit.docx "Titre"
 
 ```
 cd moteur/cse
-node tests-cse.js              # 45 cas sur les seuils, délais, budgets et la parité
-node tests-controles-cse.js    # 55 cas × 35 contrôles = 1925 verdicts
+node publier-cse.js            # toute la chaîne, puis le manifeste
+node tests-cse.js              # 59 cas sur les seuils, délais, budgets et la parité
+node tests-controles-cse.js    # 63 cas × 38 contrôles = 2394 verdicts
 node audit-cse.js fiche-cse.json
 node questionnaire-cse.js      # le questionnaire vierge, et son contrôle de non-divergence
+node verifier-textes.js        # relit les 368 articles à la source — demande le réseau
 node cse_recueil.js            # le recueil de jurisprudence classé
 ```
 
@@ -46,9 +49,25 @@ node cse_recueil.js            # le recueil de jurisprudence classé
   « conforme » ; une déclaration que rien ne justifie non plus.
 - **Les contrôles de détection ne concluent jamais à la conformité.** Un test
   le vérifie sur la source, à chaque exécution.
-- **Le questionnaire ne peut pas diverger des contrôles** : la colonne
-  « contrôle attendu » est déduite du code des contrôles, y compris pour les
-  champs lus indirectement à travers le moteur.
+- **Le questionnaire ne peut pas diverger des contrôles, dans les deux sens.**
+  Tout contrôle doit être alimenté par une donnée demandée, et tout champ qu'un
+  contrôle lit doit être demandé — sinon il conclurait sur une donnée que
+  personne ne peut renseigner. La colonne « contrôle attendu » est déduite du
+  code des contrôles, y compris pour les champs lus indirectement à travers le
+  moteur, et la déduction réunit deux mesures indépendantes : l'inspection du
+  code, et une sonde qui observe l'exécution — un `Proxy` sur la fiche, qui voit
+  les écritures `f["nom"]` et `const {nom} = f` que l'inspection manque. Un écart
+  dans l'un ou l'autre sens fait échouer la génération.
+- **Une chronologie impossible n'est pas un délai tenu.** Un écart de dates
+  négatif, ou calculé sur une date qui n'existe pas, ne produit jamais de
+  verdict de conformité : `commun/dates.js` refuse de le rendre.
+- **L'article reproduit porte son identifiant de version.** Un article peut être
+  modifié sans changer de numéro ; `cse/verifier-textes.js` rejoue la lecture à
+  la source et signale tout écart, de version comme de contenu. Relecture du
+  15 août 2026 : les 368 articles du dépôt sont ceux de la source, aucun écart.
+  Le relais rendant parfois un article homonyme d'une autre partie du code, une
+  divergence n'est retenue que si plusieurs lectures espacées la confirment et
+  s'accordent entre elles.
 - **Ce que la base ne sait pas faire est écrit, non comblé.** Le calcul de
   parité de l'article L. 2314-30 s'arrête et le dit lorsque l'arrondi
   arithmétique des deux sexes ne retombe pas sur le nombre de candidats : le
