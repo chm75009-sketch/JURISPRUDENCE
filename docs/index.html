@@ -474,7 +474,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "2.5 — 16 août 2026";
+const VERSION = "2.6 — 16 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1445,7 +1445,19 @@ async function chercher(page){
       majFiltres(c);
       $("nb").textContent = "0"; $("nb-mot").textContent = "décision correspond exactement";
       $("duree").textContent = "";
-      $("garantie").innerHTML = '<div class="msg info"><b>Aucune décision ne correspond à votre demande.</b><br>'+
+      /* Une phrase entière cherchée « au mot près » ne se trouve jamais : les
+         juges n'écrivent pas comme on parle. C'est le premier conseil à donner,
+         avant toute explication technique — et il vaut mieux qu'il soit
+         actionnable d'un doigt que formulé en principe. */
+      const tropDeMots = c.mode === "exact" && c.q.trim().split(/\s+/).length >= 4;
+      $("garantie").innerHTML = '<div class="msg info">'+
+        (tropDeMots
+          ? "<b>Vous cherchez une phrase entière, au mot près.</b><br>Les juges n'écrivent pas comme on parle : " +
+            "cette phrase n'existe telle quelle dans aucune décision. Deux gestes, au choix :<br><br>" +
+            '<button class="second" id="btn-mots-zero" type="button">Trouver les bons mots-clés</button> ' +
+            '<button class="second" id="btn-tous-mots" type="button">Chercher toutes ces décisions contenant tous ces mots</button>' +
+            "<br><br><span style=\"opacity:.8\">Le détail : </span>"
+          : "<b>Aucune décision ne correspond à votre demande.</b><br>")+
         "Vous cherchez « "+echap(c.q)+" » en mode <b>"+echap(MODES[c.mode])+"</b> : la base ne contient rien de tel. "+
         "L'API a proposé d'elle-même un élargissement à « au moins un mot », que nous écartons : "+
         "il aurait renvoyé "+Number(d.total||0).toLocaleString("fr-FR")+" décisions sans rapport avec votre demande.<br><br>"+
@@ -1455,6 +1467,14 @@ async function chercher(page){
       $("liste").innerHTML = "";
       $("page-txt").textContent = ""; $("btn-prec").disabled = $("btn-suiv").disabled = true;
       $("btn-csv").disabled = $("btn-html").disabled = true;
+      if($("btn-mots-zero")) $("btn-mots-zero").onclick = ()=>{
+        $("q").value = c.q; assistantMots();
+        $("mots-zone").scrollIntoView({behavior:"smooth", block:"center"});
+      };
+      if($("btn-tous-mots")) $("btn-tous-mots").onclick = ()=>{
+        document.querySelector('input[name=mode][value="and"]').checked = true;
+        chercher(0);
+      };
       $("btn-elargir").onclick = ()=>afficherElargies(d, c);
       $("btn-relacher").onclick = ()=>{
         document.querySelector('input[name=mode][value="or"]').checked = true;
