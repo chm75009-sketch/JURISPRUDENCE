@@ -1031,7 +1031,10 @@
     var b = document.getElementById("annuler");
     if (!b) return;
     b.disabled = !PILE.length;
-    b.textContent = PILE.length ? "Revenir en arrière (" + PILE.length + ")" : "Revenir en arrière";
+    /* « Revenir en arrière » se confondait avec le retour de navigation : on
+       croyait quitter la page, alors que ce bouton défait la dernière saisie.
+       Deux gestes différents ne peuvent pas porter le même nom. */
+    b.textContent = PILE.length ? "Annuler la dernière saisie (" + PILE.length + ")" : "Annuler la dernière saisie";
     b.title = PILE.length ? "Annule : " + PILE[PILE.length - 1].quoi : "Rien à annuler";
   }
   function annuler() {
@@ -1226,7 +1229,7 @@
     Object.keys(APPELEES).forEach(majAppel);
     sortie.innerHTML = ""; compter();
     try { localStorage.removeItem(CLE); } catch (e) {}
-    signaler("Tout a été effacé. « Revenir en arrière » rétablit la saisie.");
+    signaler("Tout a été effacé. « Annuler la dernière saisie » rétablit ce que vous aviez écrit.");
   });
   form.addEventListener("input", function () { memoriserFrappe(); compter(); });
   form.addEventListener("change", compter);
