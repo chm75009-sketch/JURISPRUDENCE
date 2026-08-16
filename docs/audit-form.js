@@ -27,6 +27,47 @@
     return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   };
 
+  /* ---------------------------------------------------- la formule d'usage
+
+     Écrite une fois, à trois endroits : un bouton toujours accessible en tête
+     de page, et le pied de tout rapport — à l'écran comme dans le Word et le
+     PDF. Un rapport se détache de l'application dès qu'il est exporté ; la
+     réserve doit voyager avec lui, sinon elle ne protège rien. */
+  var AVERTISSEMENT = [
+    "Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un avocat, "
+      + "ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.",
+    "Les constats qu'il produit reposent sur les seules données que vous avez saisies et sur les textes "
+      + "en vigueur à la date de l'audit. Ils ne constituent pas une consultation juridique et n'engagent "
+      + "pas leur auteur. La décision, et la responsabilité qui l'accompagne, restent les vôtres.",
+    "L'application n'apprécie pas ce que la loi confie à l'appréciation du juge, et elle ne lit pas vos "
+      + "accords collectifs tant qu'ils ne lui sont pas joints : un résultat « conforme » se lit sous cette "
+      + "réserve, qui figure dans le rapport.",
+    "Rien ne quitte votre poste : l'audit se calcule dans votre navigateur, et les fichiers déposés sont "
+      + "lus en mémoire."
+  ];
+  var PIED_RAPPORT = [
+    { k: "trait" },
+    { k: "h2", t: "Avertissement" }
+  ].concat(AVERTISSEMENT.map(function (t) { return { k: "note", t: t }; }));
+
+  function poserAvertissement() {
+    var d = document.createElement("dialog");
+    d.id = "dlg-avertissement";
+    d.style.cssText = "max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;"
+      + "font:15px/1.55 system-ui;color:#1c2126";
+    d.innerHTML = "<h2 style=\"margin:0 0 12px;font:600 19px/1.3 system-ui\">Avertissement d'usage</h2>"
+      + AVERTISSEMENT.map(function (t) { return '<p style="margin:0 0 10px">' + ech(t) + "</p>"; }).join("")
+      + '<form method="dialog" style="margin-top:14px"><button style="font:inherit;padding:8px 18px;'
+      + 'border-radius:8px;border:1px solid #d8dbe0;background:#f6f7f9;cursor:pointer">Fermer</button></form>';
+    document.body.appendChild(d);
+    var boutons = document.querySelectorAll("[data-avertissement]");
+    for (var i = 0; i < boutons.length; i++)
+      boutons[i].addEventListener("click", function () {
+        if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", "");
+      });
+  }
+  poserAvertissement();
+
   /* ------------------------------------------------------------------ types */
   function typeDe(format) {
     var f = String(format || "").toLowerCase();
@@ -1025,6 +1066,7 @@
         ". Rien n'a été perdu — corrigez la saisie et relancez.</div>";
       return;
     }
+    items = items.concat(PIED_RAPPORT);
     DERNIER = items;
     sortie.innerHTML = '<div class="retour">' +
       '<button type="button" id="revenir">\u2190 Revenir au formulaire</button>' +

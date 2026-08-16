@@ -150,12 +150,27 @@
       <button id="btn-cle" type="button">Changer la clé</button>
       <span id="etat-hote"></span>
       <button id="btn-adresse" type="button" title="Copier l'adresse de l'application">Copier l'adresse</button>
+      <button id="btn-avert" type="button" title="Ce que fait cet outil, et ce qu'il ne fait pas">Avertissement d'usage</button>
       <a href="audit.html" class="lien-audit" title="Auditer un projet de licenciement pour motif économique">Audit · licenciement économique</a>
       <a href="audit-cse.html" class="lien-audit" title="Auditer le fonctionnement du comité social et économique">Audit · comité social et économique</a>
       <span id="etat-version"></span>
     </div>
   </div>
 </header>
+
+<dialog id="dlg-avertissement" style="max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;font:15px/1.55 system-ui;color:#1c2126">
+  <h2 style="margin:0 0 12px;font:600 19px/1.3 system-ui">Avertissement d'usage</h2>
+  <p style="margin:0 0 10px">Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
+  avocat, ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
+  <p style="margin:0 0 10px">Les décisions affichées sont celles que l'API Judilibre de la Cour de cassation
+  renvoie à votre recherche, et les articles ceux que Légifrance renvoie à la date demandée. Une recherche
+  n'est jamais exhaustive : l'absence de résultat ne prouve pas l'absence de jurisprudence.</p>
+  <p style="margin:0 0 10px">Les résultats ne constituent pas une consultation juridique et n'engagent pas
+  leur auteur. La décision, et la responsabilité qui l'accompagne, restent les vôtres.</p>
+  <p style="margin:0 0 10px">Votre clé API reste dans votre navigateur ; elle n'est ni transmise ni conservée
+  ailleurs.</p>
+  <form method="dialog" style="margin-top:14px"><button style="font:inherit;padding:8px 18px;border-radius:8px;border:1px solid #d8dbe0;background:#f6f7f9;cursor:pointer">Fermer</button></form>
+</dialog>
 
 <div id="maj" class="cache">
   <div class="wrap" style="padding-top:10px">
@@ -2292,7 +2307,13 @@ function imprimerDecision(d){
     "<pre>"+echap(o.texte)+"</pre>"+
     '<div class="src">'+echap(o.citation)+" — source : "+echap(o.lien)+
     " (Judilibre, Cour de cassation, open data, décision pseudonymisée)</div>"+
-    "</body></html>";
+    "<script>
+  document.getElementById("btn-avert").addEventListener("click", function () {
+    var d = document.getElementById("dlg-avertissement");
+    if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", "");
+  });
+</script>
+</body></html>";
   const cadre = document.createElement("iframe");
   cadre.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0";
   document.body.appendChild(cadre);
