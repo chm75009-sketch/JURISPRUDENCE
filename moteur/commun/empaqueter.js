@@ -122,6 +122,41 @@ const CHAMPS = (() => {
   return [];
 })();
 
+/* Les champs composés qui désignent une liste, déclarés par le questionnaire :
+   « pieces » est un tableau d'objets — une ligne par pièce — là où « pse » est
+   un objet unique. Le formulaire en tire un éditeur de tableau ; sans cette
+   distinction il composait un objet là où le moteur attend un tableau, et le
+   contrôle des pièces échouait à l'exécution. */
+const LISTES = (() => {
+  for (const nom of ["questionnaire.js", "questionnaire-cse.js"]) {
+    const chemin = path.join(ICI, nom);
+    if (!fs.existsSync(chemin)) continue;
+    const m = fs.readFileSync(chemin, "utf8").match(/const COMPOSES_LISTE\s*=\s*new Set\(\[([^\]]*)\]\)/);
+    if (m) return [...m[1].matchAll(/"([^"]+)"/g)].map(x => x[1]);
+  }
+  return [];
+})();
+
+/* Les propositions offertes par le formulaire : les valeurs que la base sait
+   exploiter, extraites du code des contrôles et vérifiées dans les deux sens.
+   Le formulaire ne peut donc pas proposer autre chose que ce que le moteur
+   reconnaît — c'est la garantie de non-divergence, prolongée aux réponses. */
+const PROPOSITIONS = (() => {
+  for (const nom of ["propositions.js", "propositions-cse.js"]) {
+    const chemin = path.join(ICI, nom);
+    if (!fs.existsSync(chemin)) continue;
+    try {
+      const m = require(chemin);
+      if (m.ECARTS && m.ECARTS.length) {
+        console.error("ÉCHEC — propositions et code divergent :\n  " + m.ECARTS.join("\n  "));
+        process.exit(1);
+      }
+      return m.P || {};
+    } catch (e) { console.error("propositions illisibles : " + e.message); process.exit(1); }
+  }
+  return {};
+})();
+
 /* --- ce qui doit être calculé ici, puisqu'il ne peut pas l'être là-bas --- */
 /* L'empreinte et les compteurs : produits par manifeste.js là où il existe,
    lus dans le manifeste déjà publié sinon. Aucun chiffre n'est inventé. */
@@ -190,10 +225,12 @@ ${morceaux.join("\n\n")}
     actions: require(${JSON.stringify(MOD("actions"))}),
     manifeste: __MANIFESTE,
     champs: ${JSON.stringify(CHAMPS)},
+    propositions: ${JSON.stringify(PROPOSITIONS)},
+    listes: ${JSON.stringify(LISTES)},
   };
 })(typeof window !== "undefined" ? window : this);
 `;
 fs.mkdirSync(path.dirname(SORTIE), { recursive: true });
 fs.writeFileSync(SORTIE, sortie);
-console.log(`${path.relative(ICI, SORTIE)} · ${(sortie.length / 1024 | 0)} Ko · ${MODULES.size} modules, ${JSONS.size} jeux de données · empreinte ${MAN.empreinte}`);
+console.log(`${path.relative(ICI, SORTIE)} · ${(sortie.length / 1024 | 0)} Ko · ${MODULES.size} modules, ${JSONS.size} jeux de données · ${Object.keys(PROPOSITIONS).length} questions à propositions · empreinte ${MAN.empreinte}`);
 allegements.forEach(a => console.log('  allégé — ' + a));
