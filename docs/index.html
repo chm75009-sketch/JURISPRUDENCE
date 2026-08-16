@@ -474,7 +474,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "2.9 — 16 août 2026";
+const VERSION = "3.0 — 16 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -1234,6 +1234,26 @@ const PRESETS = [
    Un objet unique décrit la demande. Il sert au formulaire, au lien
    partageable, aux modèles et au rappel des filtres actifs : une seule
    source de vérité, donc aucun réglage ne peut agir en restant invisible. */
+/* La matière retenue s'affiche sous le champ de recherche : un filtre invisible
+   est un piège — on cherche, on ne trouve rien, et l'on ignore pourquoi. */
+function majMatiere(){
+  let z = document.getElementById("matiere-active");
+  if(!z){
+    z = document.createElement("div");
+    z.id = "matiere-active"; z.className = "note"; z.style.margin = "6px 0 0";
+    const champ = document.getElementById("q");
+    champ.parentNode.parentNode.insertBefore(z, champ.parentNode.nextSibling);
+  }
+  if(!window.__THEME){ z.textContent = ""; return; }
+  z.innerHTML = "Recherche restreinte à la matière « <b>"+echap(window.__THEME)+"</b> » "+
+    '<button class="second" id="ote-matiere" type="button" style="padding:2px 8px;font-size:12px">retirer</button>';
+  document.getElementById("ote-matiere").onclick = ()=>{
+    window.__THEME = ""; majMatiere();
+    [...document.querySelectorAll(".mat-u")].forEach(x => { x.classList.remove("principal"); x.classList.add("second"); });
+    chercher(0);
+  };
+}
+
 function lire(){
   const jur = [];
   ["cc","ca","tj","tcom"].forEach(j=>{ if($("j-"+j).checked) jur.push(j); });
@@ -1245,6 +1265,10 @@ function lire(){
     pub: [...document.querySelectorAll(".pub:checked")].map(c=>c.value),
     du: $("du").value, au: $("au").value,
     zone: $("zone").value, tri: $("tri").value,
+    /* La matière : un thème du titrage officiel de la Cour, posé par le relevé
+       de mots-clés. Il restreint la recherche au champ du droit concerné, ce
+       qu'aucune combinaison de mots ne sait faire. */
+    theme: (window.__THEME || ""),
     exclure: $("exclure").value.trim(),
   };
 }
@@ -1284,6 +1308,7 @@ function parametres(c, page, taille){
   if(c.jur.includes("cc")) c.ch.forEach(v=>p.append("chamber", v));
   c.pub.forEach(v=>p.append("publication", v));
   if(c.loc) p.append("location", c.loc);
+  if(c.theme) p.append("theme", c.theme);
   return p;
 }
 
@@ -2019,13 +2044,26 @@ async function assistantMots(){
       (vaines.length ? '<div class="fiche"><b>Écartées</b><div class="note">'+
         vaines.map(l => echap(l.e)+" — "+(l.elargi ? "n'existe pas telle quelle" : "aucune décision")).join(" · ")+
         "</div></div>" : "")+
-      (mat.length ? '<div class="fiche"><b>Matières dominantes dans ces décisions</b><div style="margin-top:6px">'+
-        mat.map(m => '<span class="badge">'+echap(m[0])+" ("+m[1]+")</span>").join(" ")+
+      (mat.length ? '<div class="fiche"><b>La matière de votre sujet, selon le titrage de la Cour</b>'+
+        '<div class="note" style="margin:4px 0 8px">Ce sont les rubriques sous lesquelles la Cour de cassation '+
+        "range elle-même ces décisions. En toucher une restreint la recherche à ce champ du droit — "+
+        "ce qu'aucune combinaison de mots ne sait faire.</div><div>"+
+        mat.map(m => '<button class="second mat-u" type="button" data-t="'+echap(m[0])+'">'+
+          echap(m[0])+' <span class="note">('+m[1]+")</span></button>").join(" ")+
         "</div></div>" : "");
 
     /* Le relevé demeure après un clic — on essaie une formule, on regarde,
        on en essaie une autre. L'effacer obligerait à tout refaire. */
-    $("mots-fermer").onclick = ()=>{ zone.innerHTML = ""; };
+    $("mots-fermer").onclick = ()=>{ zone.innerHTML = ""; window.__THEME = ""; majMatiere(); };
+    [...document.querySelectorAll(".mat-u")].forEach(b => b.onclick = ()=>{
+      window.__THEME = (window.__THEME === b.dataset.t) ? "" : b.dataset.t;
+      [...document.querySelectorAll(".mat-u")].forEach(x => {
+        const actif = x.dataset.t === window.__THEME;
+        x.classList.toggle("principal", actif); x.classList.toggle("second", !actif);
+      });
+      majMatiere();
+      chercher(0);
+    });
     [...document.querySelectorAll(".mot-u")].forEach(b => b.onclick = ()=>{
       $("q").value = b.dataset.e;
       document.querySelector('input[name="mode"][value="exact"]').checked = true;
