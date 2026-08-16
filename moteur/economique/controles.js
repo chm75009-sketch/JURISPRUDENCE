@@ -365,6 +365,7 @@ for (const [id, sources] of Object.entries(SUBORDONNE)) {
 /* ---------------- Ce qu'une donnée illisible interdit de conclure ----------------
    Voir moteur/commun/recevabilite.js. CTL-VAL-01 est exempté : c'est lui qui
    porte l'anomalie, il doit continuer à la constater. */
+require("./recevabilite.js").surSilence(C, ["CTL-VAL-01"]);
 require("./recevabilite.js").envelopper(C, require("./valider.js").valider, ["CTL-VAL-01"]);
 
 module.exports = { C, ETATS: { CONF, NC, RISQ, MANQ, SO }, niveauDe, PIECE_ATTENDUE, SUBORDONNE };

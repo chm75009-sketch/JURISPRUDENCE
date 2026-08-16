@@ -1,12 +1,12 @@
 {
  "domaine": "comité social et économique",
  "date": "2026-08-16",
- "empreinte": "b26f448009c8",
+ "empreinte": "d5af0bf47dea",
  "fichiers": {
   "_r2314_1.json": "572dbb2da415",
   "actions-cse.js": "840947c5cf3a",
   "audit-cse.js": "f9613f2bfc8a",
-  "controles-cse.js": "07716954c60b",
+  "controles-cse.js": "f0fc626a6b48",
   "cse_corpus.json": "ea46040a4b05",
   "dates.js": "b6d7e587bec3",
   "grille-cse.js": "3dbd69ab4ead",

@@ -20,7 +20,7 @@
    les champs réellement touchés — f.nom, f["nom"] et la déstructuration
    comprises. Aucune liste tenue à la main, donc rien qui puisse dériver. */
 
-const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier";
+const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier", SO = "sans objet";
 const CONCLUSIFS = new Set([CONF, "non conforme"]);
 
 /* Remplacer la fonction d'un contrôle sans la rendre illisible.
@@ -85,4 +85,51 @@ function envelopper(controles, valider, exemptes) {
   return controles;
 }
 
-module.exports = { envelopper, remplacer, racine };
+/* ------------------------------------------------------------ le silence
+
+   Un contrôle qui se déclare « sans objet » ferme la question : il affirme que
+   l'exigence ne s'applique pas. Or beaucoup se fermaient sur rien — « l'entreprise
+   n'appartient à aucun groupe », « aucune élection en cours », « l'entreprise ne
+   comporte pas plusieurs établissements distincts » — alors que la fiche ne
+   disait rien du groupe, des élections ni des établissements. Sur un dossier
+   entièrement vide, quarante-quatre contrôles des deux modules affirmaient ainsi
+   des faits que personne n'avait déclarés.
+
+   C'est la règle du dépôt appliquée à un état de plus : une donnée non
+   renseignée ne produit jamais « conforme », et elle ne doit pas davantage
+   produire « sans objet ». Le silence n'est pas une réponse — ni dans un sens,
+   ni dans l'autre.
+
+   La mesure est la même que pour la recevabilité : on observe l'exécution. Si le
+   contrôle a conclu « sans objet » sans qu'aucun des champs qu'il a lus ne soit
+   déclaré sur la fiche, sa conclusion ne repose sur rien et devient « donnée
+   manquante ». S'il a lu ne serait-ce qu'un champ renseigné — un effectif de
+   vingt, qui écarte une obligation due à cinquante — le « sans objet » tient. */
+function surSilence(controles, exemptes) {
+  const hors = new Set(exemptes || []);
+  for (const ctl of controles) {
+    if (hors.has(ctl.id)) continue;
+    const brut = remplacer(ctl, function (f) {
+      const lus = new Set();
+      const p = new Proxy(f, {
+        get(c, k) { if (typeof k === "string") lus.add(k); return c[k]; },
+        has(c, k) { if (typeof k === "string") lus.add(k); return k in c; },
+        getOwnPropertyDescriptor(c, k) {
+          if (typeof k === "string") lus.add(k);
+          return Reflect.getOwnPropertyDescriptor(c, k);
+        },
+      });
+      const v = brut(p);
+      if (!v || v.etat !== SO) return v;
+      const declares = [...lus].filter(k =>
+        Object.prototype.hasOwnProperty.call(f, k) && f[k] !== undefined);
+      if (declares.length) return v;
+      const attendus = [...lus].filter(k => !/^(then|constructor|toJSON|inspect|Symbol)/.test(k));
+      return { etat: MANQ, surSilence: true,
+        motif: `Ce contrôle s'écarterait de lui-même — « ${v.motif} » — mais aucune des données sur lesquelles il se fonde n'est renseignée${attendus.length ? " : " + attendus.join(", ") : ""}. Le silence n'est pas une réponse : renseignez-les, ou déclarez expressément qu'il n'y a rien à déclarer.` };
+    });
+  }
+  return controles;
+}
+
+module.exports = { envelopper, surSilence, remplacer, racine };
