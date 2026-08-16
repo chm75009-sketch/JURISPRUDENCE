@@ -397,6 +397,11 @@
      un objet unique là où le moteur attend un tableau : les huit cases se
      réunissaient en une pièce imaginaire, et le contrôle des pièces échouait. */
   var LISTES = M.listes || [];
+  /* Les champs qui portent un tableau d'objets et dont les colonnes ont pu être
+     établies : ils reçoivent le même éditeur de lignes que « pieces », au lieu
+     d'une zone de texte réclamant du JSON. */
+  var COLONNES = M.colonnes || {};
+  var TABLEAUX = LISTES.concat(Object.keys(COLONNES));
   var estColonne = function (cle) {
     return LISTES.some(function (f) { return cle.indexOf(f + ".") === 0; });
   };
@@ -408,6 +413,12 @@
     var faits = {};
     rub[1].forEach(function (ch) {
       var cle = ch[0], libelle = ch[1], format = ch[2], t = typeDe(format);
+      /* un champ dont les colonnes sont connues : un éditeur de lignes */
+      if (COLONNES[cle]) {
+        g.appendChild(tableau(cle, COLONNES[cle].map(function (c) {
+          return [cle + "." + c[0], c[0], c[1]]; }), libelle));
+        return;
+      }
       /* une colonne de tableau : l'éditeur est produit une fois pour la famille */
       if (estColonne(cle)) {
         var fam = cle.split(".")[0];
@@ -516,13 +527,14 @@
   /* Un éditeur de tableau : une ligne par entrée, les colonnes étant les
      sous-champs déclarés par le questionnaire. Rien n'est inventé ici — ni les
      colonnes, ni les valeurs proposées dans chacune. */
-  function tableau(fam, colonnes) {
+  function tableau(fam, colonnes, libelle) {
     var enveloppe = document.createElement("div");
     enveloppe.className = "tableau-champ";
     enveloppe.setAttribute("data-liste", fam);
     var titre = document.createElement("p");
     titre.className = "nom";
-    titre.innerHTML = "Une ligne par entrée <span class=\"cle\">" + ech(fam) + "</span>";
+    titre.innerHTML = (libelle ? ech(libelle) + " — une ligne par entrée" : "Une ligne par entrée") +
+      ' <span class="cle">' + ech(fam) + "</span>";
     enveloppe.appendChild(titre);
 
     var tab = document.createElement("table"); tab.className = "saisie";
@@ -707,7 +719,7 @@
   function fiche() {
     var f = {}, mauvais = [];
     /* Les familles-tableaux sont lues d'un bloc, non colonne par colonne. */
-    LISTES.forEach(function (fam) {
+    TABLEAUX.forEach(function (fam) {
       var v = valeurTableau(fam);
       if (v) f[fam] = v;
     });
@@ -823,6 +835,7 @@
     M.champs.forEach(function (rub) {
       rub[1].forEach(function (ch) {
         if (estColonne(ch[0])) { familles[ch[0].split(".")[0]] = true; return; }
+        if (COLONNES[ch[0]]) { familles[ch[0]] = true; return; }
         var v = valeurDe(ch[0]);
         if (v !== null && v !== "" && v !== undefined) n++;
       });
@@ -830,7 +843,8 @@
     Object.keys(familles).forEach(function (fam) { if (valeurTableau(fam)) n++; });
     /* Une famille-tableau compte pour une donnée, non pour ses colonnes. */
     var total = M.champs.reduce(function (s, r) {
-      return s + r[1].filter(function (x) { return !estColonne(x[0]); }).length; }, 0)
+      return s + r[1].filter(function (x) {
+        return !estColonne(x[0]) && !COLONNES[x[0]]; }).length; }, 0)
       + Object.keys(familles).length;
     document.getElementById("compteur").textContent = n + " donnée(s) renseignée(s) sur " + total;
   }
@@ -839,7 +853,7 @@
   function ecrire(cle, v) {
     var p = PROP[cle], e = document.getElementById("c-" + cle);
     /* Une famille-tableau se remplit ligne à ligne. */
-    if (LISTES.indexOf(cle) >= 0) {
+    if (TABLEAUX.indexOf(cle) >= 0) {
       if (typeof v === "string") { try { v = JSON.parse(v); } catch (err) { return; } }
       var env = document.querySelector('[data-liste="' + cle + '"]');
       if (!env || !Array.isArray(v)) return;
