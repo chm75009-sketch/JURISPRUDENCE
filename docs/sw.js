@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-2.6";
+const CACHE = "jurisprudence-2.7";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
@@ -67,6 +67,36 @@ self.addEventListener("fetch", e => {
         }
         return rep;
       })
-      .catch(() => caches.match(req).then(r => r || caches.match("./index.html")))
+      /* Le repli hors connexion, et le défaut qu'il portait.
+
+         La version précédente renvoyait « ./index.html » dès qu'une page
+         n'était pas en cache. Conséquence : l'icône de l'audit du comité,
+         ouverte sans réseau, affichait la recherche de jurisprudence — quatre
+         applications installées, une seule qui s'ouvrait. Le repli était plus
+         nuisible que l'absence de repli : il ne signalait pas la panne, il
+         servait autre chose à sa place, ce qui est la pire des réponses.
+
+         Chaque page se replie désormais sur ELLE-MÊME, et sur rien d'autre.
+         Si elle n'a jamais été mise en cache, on le dit — au lieu de faire
+         croire que l'application demandée est celle qui s'affiche. */
+      .catch(() => caches.match(req).then(r => {
+        if (r) return r;
+        if (req.mode !== "navigate") return Response.error();
+        return new Response(
+          '<!doctype html><html lang="fr"><meta charset="utf-8">' +
+          '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+          '<title>Hors connexion</title>' +
+          '<body style="margin:0;min-height:100vh;display:grid;place-items:center;' +
+          'font:16px/1.6 system-ui,-apple-system,sans-serif;background:#f6f7f9;color:#16181d;padding:24px">' +
+          '<div style="max-width:34rem;text-align:center">' +
+          '<h1 style="font:600 22px/1.3 system-ui;margin:0 0 12px">Cette page n\'est pas disponible hors connexion</h1>' +
+          '<p style="margin:0 0 10px;color:#5f6874">Vous l\'ouvrez pour la première fois, ou depuis une mise à jour : ' +
+          'elle n\'a pas encore été enregistrée sur l\'appareil. Rétablissez la connexion et rouvrez-la une fois ; ' +
+          'elle fonctionnera ensuite sans réseau.</p>' +
+          '<p style="margin:0;color:#5f6874;font-size:14px">Aucune autre page ne vous est présentée à sa place : ' +
+          'ce serait vous laisser croire que vous consultez celle que vous avez demandée.</p>' +
+          '</div></body></html>',
+          { headers: { "content-type": "text/html; charset=utf-8" }, status: 503 });
+      }))
   );
 });
