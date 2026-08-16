@@ -1,16 +1,16 @@
 {
  "objet": "manifeste des contrôles",
- "empreinte": "dfd7ce32f030",
+ "empreinte": "fb41b004807b",
  "empreintesFichiers": {
   "moteur.js": "87d63d4a2b25",
-  "controles.js": "7dfe8568c2ef",
-  "controles2.js": "7634325210ba",
+  "controles.js": "420b4fb36eb1",
+  "controles2.js": "09e495224c04",
   "grille-eco.js": "0aca350d0d14",
   "grille-auto.js": "20ca038f05b7",
   "pieces.js": "95ed7ab57ced",
   "preuve.js": "ba61fe6fc07a"
  },
- "genere": "2026-08-16 06:48:37",
+ "genere": "2026-08-16 06:54:27",
  "verification": {
   "identifiantsUniques": true,
   "conformiteSansTest": [],
@@ -26,7 +26,7 @@
   "coherence": 8,
   "reglesJamaisDeclenchees": 15,
   "testes": 60,
-  "casDeTest": 73,
+  "casDeTest": 74,
   "echecs": 0,
   "regles": 236
  },
@@ -1652,10 +1652,11 @@
     "licenciementsRecents30j",
     "nbLicenciements",
     "perimetreOrdre",
+    "pièce accord-perimetre-ordre",
     "refusModification",
     "siren"
    ],
-   "piece": "—",
+   "piece": "accord-perimetre-ordre",
    "etats": [
     "conforme",
     "risque à vérifier",
@@ -1663,6 +1664,7 @@
    ],
    "fondement": "L. 1233-5",
    "tests": [
+    "périmètre d'établissement, accord déclaré mais non versé",
     "critères d'ordre appliqués à l'établissement sans accord"
    ],
    "teste": true

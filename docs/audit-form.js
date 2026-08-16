@@ -401,6 +401,11 @@
      établies : ils reçoivent le même éditeur de lignes que « pieces », au lieu
      d'une zone de texte réclamant du JSON. */
   var COLONNES = M.colonnes || {};
+  /* Une réponse « oui » qui appelle une pièce : le document est demandé à la
+     suite de la réponse, et la ligne correspondante est ajoutée au tableau des
+     pièces. Sans cela l'utilisateur répond « oui » et rien ne lui dit qu'un
+     titre est attendu — c'est exactement ce que le contrôle lui reprochera. */
+  var APPELEES = M.piecesAppelees || {};
   var TABLEAUX = LISTES.concat(Object.keys(COLONNES));
   var estColonne = function (cle) {
     return LISTES.some(function (f) { return cle.indexOf(f + ".") === 0; });
@@ -499,6 +504,7 @@
       if (t === "oui-non" || t === "cause") {
         e = document.createElement("select");
         options(e, ["", "oui", "non"], "");
+        if (APPELEES[cle]) e.addEventListener("change", function () { majAppel(cle); });
       } else if (t === "json") {
         e = document.createElement("textarea");
         /* Une liste se tape une par ligne. Le format JSON était la seule entrée
@@ -519,6 +525,12 @@
          croyait devoir tout taper à la main. */
       if (t === "json") lab.appendChild(depot(cle, format));
       lab.appendChild(e);
+      /* Une question qui demande un document se répond en joignant le document,
+         non en tapant son nom. Le fichier ne quitte pas le poste : la base ne
+         lit pas son contenu, elle enregistre qu'il a été produit et sous quel
+         nom — ce que la question demandait déjà, en plus sûr. */
+      if (/fichier/.test(String(format).toLowerCase())) lab.appendChild(piece(cle));
+      if (APPELEES[cle]) lab.appendChild(appel(cle, APPELEES[cle]));
       g.appendChild(lab);
     });
     fs.appendChild(g); form.appendChild(fs);
@@ -654,6 +666,79 @@
       if (rempli) out.push(o);
     });
     return out.length ? out : null;
+  }
+
+  /* Joindre un document à une question qui en demande un. */
+  function piece(cle) {
+    var d = document.createElement("div"); d.className = "depot";
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "fichier"; b.textContent = "Joindre le document";
+    var i = document.createElement("input");
+    i.type = "file"; i.style.display = "none";
+    var etat = document.createElement("span"); etat.className = "etat-depot";
+    b.addEventListener("click", function () { i.click(); });
+    i.addEventListener("change", function () {
+      var f = i.files && i.files[0];
+      if (!f) { i.value = ""; return; }
+      var champ = document.getElementById("c-" + cle);
+      champ.value = f.name;
+      etat.className = "etat-depot ok";
+      etat.textContent = "joint : " + f.name + " (" + Math.round(f.size / 1024) +
+        " Ko). Le document reste sur cet appareil ; la base enregistre qu'il est produit, elle n'en lit pas le contenu.";
+      i.value = "";
+      compter();
+    });
+    d.appendChild(b); d.appendChild(i); d.appendChild(etat);
+    return d;
+  }
+
+  /* Le document qu'une réponse « oui » appelle. Caché tant que la réponse ne
+     l'est pas ; joint, il ajoute la pièce au tableau des pièces, là où le
+     contrôle ira la chercher. */
+  function appel(cle, code) {
+    var d = document.createElement("div");
+    d.className = "depot appel"; d.id = "appel-" + cle; d.style.display = "none";
+    var t = document.createElement("p"); t.className = "aide-champ";
+    t.textContent = "Cette réponse appelle un document : sans lui, l'audit ne peut pas conclure — une déclaration que rien ne justifie ne vaut pas conformité.";
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "fichier"; b.textContent = "Joindre l'accord (Excel, Word, PDF…)";
+    var i = document.createElement("input"); i.type = "file"; i.style.display = "none";
+    var etat = document.createElement("span"); etat.className = "etat-depot";
+    b.addEventListener("click", function () { i.click(); });
+    i.addEventListener("change", function () {
+      var f = i.files && i.files[0];
+      if (!f) { i.value = ""; return; }
+      var ok = ajouterPiece(code, f.name);
+      etat.className = "etat-depot " + (ok ? "ok" : "ko");
+      etat.textContent = ok
+        ? "joint : " + f.name + " — ajouté au tableau des pièces sous le code « " + code + " ». Complétez sa date et son périmètre."
+        : "le tableau des pièces est introuvable sur cette page.";
+      i.value = "";
+      compter();
+    });
+    d.appendChild(t); d.appendChild(b); d.appendChild(i); d.appendChild(etat);
+    return d;
+  }
+  function majAppel(cle) {
+    var s = document.getElementById("c-" + cle), d = document.getElementById("appel-" + cle);
+    if (s && d) d.style.display = s.value === "oui" ? "" : "none";
+  }
+  /* Ajouter une ligne au tableau des pièces, sans écraser ce qui s'y trouve. */
+  function ajouterPiece(code, fichier) {
+    var env = document.querySelector('[data-liste="pieces"]');
+    if (!env) return false;
+    var trs = Array.prototype.slice.call(env.querySelectorAll("tr")).slice(1);
+    var vide = trs.filter(function (tr) {
+      return Array.prototype.every.call(tr.querySelectorAll("[data-sous]"),
+        function (e) { return e.value.trim() === ""; }); })[0];
+    var tr = vide || env.ligne(null);
+    Array.prototype.forEach.call(tr.querySelectorAll("[data-sous]"), function (e) {
+      var n = e.getAttribute("data-sous");
+      if (n === "code") e.value = code;
+      if (n === "fichier") e.value = fichier;
+      if (n === "lue") e.value = "oui";
+    });
+    return true;
   }
 
   function aide(texte) {
@@ -903,6 +988,7 @@
   document.getElementById("imprimer").addEventListener("click", function () { window.print(); });
   document.getElementById("exemple").addEventListener("click", function () {
     Object.keys(EXEMPLE).forEach(function (k) { ecrire(k, EXEMPLE[k]); });
+    Object.keys(APPELEES).forEach(majAppel);
     compter();
   });
   document.getElementById("vider").addEventListener("click", function () {
@@ -915,12 +1001,14 @@
   });
   form.addEventListener("input", compter);
   form.addEventListener("change", compter);
+  Object.keys(APPELEES).forEach(majAppel);
 
   /* Le brouillon reste sur le poste : on ne perd pas une saisie longue. */
   try {
     var b = JSON.parse(localStorage.getItem(CLE) || "null");
     if (b) Object.keys(b).forEach(function (k) { ecrire(k, b[k]); });
   } catch (e) {}
+  Object.keys(APPELEES).forEach(majAppel);
   compter();
 
   var m = M.manifeste || {}, c = m.compteurs || {};
