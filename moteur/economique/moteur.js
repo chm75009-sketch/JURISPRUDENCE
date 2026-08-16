@@ -20,16 +20,41 @@ function comptes30j(f) {
   const nb = x => typeof x === "number" ? x : 0;
   const projet = nb(f.nbLicenciements), recents = nb(f.licenciementsRecents30j);
   const refus = nb(f.refusModification);
-  const total30j = projet + recents;
+  /* Les trois termes s'additionnent, et la raison est dans le texte que le
+     seuil sert à appliquer. L. 1233-61 vise « le projet de licenciement [qui]
+     concerne au moins dix salariés dans une même période de trente jours » ;
+     L. 1233-28 et L. 1233-8, « le licenciement collectif de moins de dix / d'au
+     moins dix salariés dans une même période de trente jours ». L'unité comptée
+     est le salarié dont le licenciement est envisagé, sans distinction selon le
+     chemin qui y mène. Le salarié qui refuse la modification d'un élément
+     essentiel de son contrat pour motif économique et dont le licenciement est
+     envisagé est un salarié dont le licenciement est envisagé : il compte.
+
+     L'article L. 1233-25 ne dit pas le contraire. Il règle le cas où les refus
+     atteignent dix à eux seuls, et les soumet alors au régime collectif ; il
+     n'écarte pas ces salariés du décompte général lorsqu'ils s'ajoutent à
+     d'autres licenciements. La base a d'abord lu ce texte comme une exclusion —
+     8 + 2 ne déclenchait alors aucun plan, ce qui revenait à faire dépendre le
+     régime de la manière dont l'employeur a présenté deux ruptures. Une
+     contre-épreuve extérieure a relevé l'erreur ; la relecture des quatre
+     articles à la source lui donne raison.
+
+     Reste le risque de double compte, et il se règle au questionnaire, non
+     ici : la question posée est celle des refus « non compris dans le nombre de
+     licenciements envisagés ». */
+  const total30j = projet + recents + refus;
+  const termes = [`${projet} licenciement(s) envisagé(s)`];
+  if (recents) termes.push(`${recents} déjà prononcé(s) dans la même période`);
+  if (refus) termes.push(`${refus} salarié(s) dont le licenciement est envisagé après refus d'une modification du contrat`);
   return { projet, recents, refus, total30j,
     refusDeclencheur: refus >= 10,
     /* ce qui fait franchir le seuil, dit explicitement */
-    motif: recents
-      ? `${projet} licenciement(s) envisagé(s) et ${recents} déjà prononcé(s) dans la même période de trente jours, soit ${total30j} au total.`
+    motif: termes.length > 1
+      ? `${termes.join(", ")} — soit ${total30j} salariés sur une même période de trente jours.`
       : `${projet} licenciement(s) envisagé(s) sur trente jours.`,
     motifRefus: refus >= 10
-      ? `${refus} salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est soumis au régime du licenciement collectif (L. 1233-25), indépendamment du décompte ci-dessus.`
-      : (refus ? `${refus} refus de modification : en deçà de dix, l'article L. 1233-25 ne s'applique pas et ces refus ne s'ajoutent pas au décompte des trente jours.` : null),
+      ? `${refus} salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est à lui seul soumis au régime du licenciement collectif (L. 1233-25), quand bien même aucun autre licenciement ne serait envisagé.`
+      : (refus ? `${refus} refus de modification suivis d'un licenciement envisagé. En deçà de dix, l'article L. 1233-25 ne joue pas comme déclencheur autonome, mais ces salariés entrent dans le décompte des trente jours : le projet les concerne.` : null),
     textes: ["L. 1233-8", "L. 1233-28", "L. 1233-61", "L. 1233-25"] };
 }
 

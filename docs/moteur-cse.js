@@ -4,7 +4,7 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : f6a1dc52219a
+   Empreinte du moteur au moment de l'empaquetage : 6de77119df5b
    {"articlesLus":368,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":38,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":63,"verdicts":2394,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0}
 
    Jeux de données allégés — champs non lus par la grille, retirés :
@@ -24,7 +24,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"comité social et économique","date":"2026-08-15","empreinte":"f6a1dc52219a","fichiers":{"_r2314_1.json":"572dbb2da415","actions-cse.js":"840947c5cf3a","audit-cse.js":"f9613f2bfc8a","controles-cse.js":"201e7e44b21f","cse_corpus.json":"ea46040a4b05","dates.js":"b6d7e587bec3","grille-cse.js":"3dbd69ab4ead","moteur-cse.js":"6924600b2464","publier-cse.js":"603c56931d5d","questionnaire-cse.js":"3321762bf8f0","sonde.js":"ac23bba7af98","tests-controles-cse.js":"3e9ec4663b7b","tests-cse.js":"6f47db6df965","textes_cse.json":"701f84e52560","valider-cse.js":"f4c42cc9bc37"},"compteurs":{"articlesLus":368,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":38,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":63,"verdicts":2394,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0},"reglesJamaisDeclenchees":[]};
+  var __MANIFESTE = {"domaine":"comité social et économique","date":"2026-08-16","empreinte":"6de77119df5b","fichiers":{"_r2314_1.json":"572dbb2da415","actions-cse.js":"840947c5cf3a","audit-cse.js":"f9613f2bfc8a","controles-cse.js":"07716954c60b","cse_corpus.json":"ea46040a4b05","dates.js":"b6d7e587bec3","grille-cse.js":"3dbd69ab4ead","moteur-cse.js":"6924600b2464","publier-cse.js":"603c56931d5d","questionnaire-cse.js":"3321762bf8f0","sonde.js":"ac23bba7af98","tests-controles-cse.js":"3e9ec4663b7b","tests-cse.js":"6f47db6df965","textes_cse.json":"701f84e52560","valider-cse.js":"ef7bcb36b10e"},"compteurs":{"articlesLus":368,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":38,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":63,"verdicts":2394,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0},"reglesJamaisDeclenchees":[]};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -1058,6 +1058,7 @@ __def("./controles-cse.js", function(module, exports, require){
    décrite y satisfait. Cinq états, et jamais « conforme » sur une déclaration
    que rien ne justifie : une affirmation de l'employeur n'est pas une preuve. */
 const M = require("./moteur-cse.js");
+const REC = require("./recevabilite.js");
 const D = require("./dates.js");
 const { valider, examines } = require("./valider-cse.js");
 const CONF = "conforme", NC = "non conforme", RISQ = "risque à vérifier",
@@ -1083,7 +1084,7 @@ const ecart = D.ecart;
    Tant qu'il l'est, aucun contrôle assis sur l'effectif ne peut conclure à la
    conformité : il conclurait sur un nombre que le dossier dément lui-même. */
 function effectifDouteux(f) {
-  const c = M.coherenceEffectif(f);
+  const c = M.coherenceEffectif({ effectif: f.effectif, effectifsMensuels: f.effectifsMensuels });
   if (!c || !c.lisible) return null;
   if (c.seuilsFranchis.length)
     return { seuil: true,
@@ -1121,14 +1122,14 @@ c("CSE-CTL-REC-01", "Recevabilité", "Les données saisies sont-elles lisibles ?
      : { etat: MANQ, motif: "Aucune des données que ce contrôle sait examiner n'est renseignée : il n'y a rien dont la lisibilité puisse être constatée." }; });
 
 c("CSE-CTL-COH-01", "Recevabilité", "L'effectif déclaré est-il cohérent avec les relevés mensuels ?", ["L. 1111-2", "L. 2311-2"],
- f => { const co = M.coherenceEffectif(f);
+ f => { const co = M.coherenceEffectif({ effectif: f.effectif, effectifsMensuels: f.effectifsMensuels });
    if (!co) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas renseignés : la cohérence ne peut pas être vérifiée." };
    if (!co.lisible) return { etat: MANQ, motif: co.motif };
    if (co.dans) return { etat: CONF, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, compris dans l'intervalle des ${co.releves} relevés mensuels (${co.min} à ${co.max}, moyenne ${co.moyenne}).` };
    return { etat: NC, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, alors que les ${co.releves} relevés mensuels s'échelonnent de ${co.min} à ${co.max} — un écart de ${co.ecart} salarié(s) avec le relevé le plus proche. Aucun mois du dossier ne corrobore le nombre déclaré, sur lequel repose pourtant tout le régime applicable au comité.` }; });
 
 c("CSE-CTL-COH-02", "Recevabilité", "Les relevés mensuels franchissent-ils un seuil que l'effectif déclaré ne franchit pas ?", ["L. 2311-2", "L. 2312-2", "L. 2312-34"],
- f => { const co = M.coherenceEffectif(f);
+ f => { const co = M.coherenceEffectif({ effectif: f.effectif, effectifsMensuels: f.effectifsMensuels });
    if (!co || !co.lisible) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas exploitables : le franchissement des seuils ne peut pas être vérifié." };
    if (!co.seuilsFranchis.length)
      return { etat: CONF, motif: `Aucun seuil n'est atteint par les relevés mensuels sans l'être par l'effectif déclaré de ${co.effectifDeclare} salariés.` };
@@ -1511,13 +1512,20 @@ const SUR_EFFECTIF = new Set(["CSE-CTL-CON-01", "CSE-CTL-CON-05", "CSE-CTL-CON-0
 for (const ctl of C) {
   if (!SUR_EFFECTIF.has(ctl.id)) continue;
   const brut = ctl.verdict;
-  ctl.verdict = f => surEffectif(f, brut(f));
+  /* remplacer() conserve le texte de la fonction enveloppée : le registre et le
+     questionnaire déduisent les champs lus en l'inspectant. */
+  REC.remplacer(ctl, f => surEffectif(f, brut(f)));
 }
 
 /* Les contrôles de cohérence ne vérifient pas une donnée mais la relation entre
    deux. C'est la famille qui manquait, et c'est là que se cachaient les
    conformités fausses — celles qu'un dossier obtient en se contredisant. */
 const COHERENCE = new Set(["CSE-CTL-COH-01", "CSE-CTL-COH-02"]);
+
+/* Ce qu'une donnée illisible interdit de conclure — voir
+   moteur/commun/recevabilite.js. CSE-CTL-REC-01 est exempté : c'est lui qui
+   porte l'anomalie, il doit continuer à la constater. */
+REC.envelopper(C, valider, ["CSE-CTL-REC-01"]);
 
 module.exports = { C, ETATS, DETECTION, COHERENCE, SUR_EFFECTIF, effectifDouteux };
 if (require.main === module) {
@@ -1531,6 +1539,98 @@ if (require.main === module) {
   }
   console.log("aucun contrôle de détection ne peut conclure à la conformité");
 }
+
+});
+
+__def("./recevabilite.js", function(module, exports, require){
+/* Un verdict ne se prononce pas sur une donnée qui ne peut pas exister.
+
+   Chaque module valide déjà ses entrées et le dit dans un contrôle dédié. Cela
+   ne suffisait pas : le contrôle de recevabilité criait, et les trente-sept
+   autres continuaient de conclure. Une notification datée du 30 février
+   produisait encore deux conformités ; un effectif de -50, puis de 299,6,
+   produisaient encore des verdicts. Le rapport contenait donc, dans la même
+   page, l'affirmation que la donnée est impossible et des conclusions tirées
+   d'elle.
+
+   La règle appliquée ici est plus simple que les exceptions qu'il faudrait
+   écrire sans elle : un contrôle qui a lu un champ illisible n'a rien constaté.
+   Son verdict devient « donnée manquante » — la donnée n'est pas absente, elle
+   est inexploitable, ce qui revient au même pour la conclusion — et le motif
+   dit lequel des champs lus est en cause. Le contrôle de recevabilité, lui,
+   garde son « non conforme » : c'est lui qui porte l'anomalie, et il bloque.
+
+   Comment savoir ce qu'un contrôle a lu, sans le deviner ? En l'observant. La
+   fiche est enveloppée dans un Proxy le temps de l'exécution, et l'on relève
+   les champs réellement touchés — f.nom, f["nom"] et la déstructuration
+   comprises. Aucune liste tenue à la main, donc rien qui puisse dériver. */
+
+const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier";
+const CONCLUSIFS = new Set([CONF, "non conforme"]);
+
+/* Remplacer la fonction d'un contrôle sans la rendre illisible.
+
+   Le registre et le questionnaire déduisent les champs lus en inspectant le
+   texte de la fonction. Une enveloppe qui masque ce texte casserait la
+   garantie de non-divergence — la première tentative l'a fait, et trois
+   contre-épreuves l'ont dit aussitôt. L'enveloppe rend donc, quand on
+   l'imprime, le texte de la fonction qu'elle enveloppe. */
+function remplacer(ctl, fn) {
+  const brut = ctl.verdict;
+  const source = typeof brut.toString === "function" ? brut.toString() : String(brut);
+  Object.defineProperty(fn, "toString", { value: () => source, writable: true, configurable: true });
+  ctl.brut = ctl.brut || brut;
+  ctl.verdict = fn;
+  return brut;
+}
+
+/* Le champ de premier niveau : « consultation.dateAvis » est lu à travers
+   « consultation », qui est le nom que la sonde voit passer. */
+const racine = champ => String(champ).split(".")[0];
+
+function envelopper(controles, valider, exemptes) {
+  const hors = new Set(exemptes || []);
+  for (const ctl of controles) {
+    if (hors.has(ctl.id)) continue;
+    const brut = remplacer(ctl, function (f) {
+      /* Seules les anomalies de lisibilité font taire un contrôle. Une
+         contradiction entre deux valeurs bien formées ne l'empêche pas de
+         conclure : elle est précisément ce qu'il a pour objet de constater. */
+      const anomalies = (() => { try { return (valider(f) || [])
+        .filter(a => (a.nature || "lisibilité") === "lisibilité"); } catch (e) { return []; } })();
+      if (!anomalies.length) return brut(f);
+      const lus = new Set();
+      const p = new Proxy(f, {
+        get(c, k) { if (typeof k === "string") lus.add(k); return c[k]; },
+        has(c, k) { if (typeof k === "string") lus.add(k); return k in c; },
+        getOwnPropertyDescriptor(c, k) {
+          if (typeof k === "string") lus.add(k);
+          return Reflect.getOwnPropertyDescriptor(c, k);
+        },
+      });
+      const v = brut(p);
+      if (!v || !CONCLUSIFS.has(v.etat)) return v;
+      const touchees = anomalies.filter(a => lus.has(racine(a.champ)));
+      if (touchees.length)
+        return { etat: MANQ, illisible: true,
+          motif: `Ce contrôle a lu ${touchees.length > 1 ? "des données inexploitables" : "une donnée inexploitable"} : `
+            + touchees.map(a => `${a.champ} = « ${a.valeur} » — ${a.motif}`).join(" ; ")
+            + ". Aucune conclusion n'en est tirée, dans aucun sens. Corrigez la saisie et relancez l'audit ; le constat qu'aurait rendu ce contrôle est sans valeur tant que la donnée n'existe pas." };
+      /* Le contrôle n'a lu aucune des données fautives : son constat tient par
+         lui-même. Il ne peut pas pour autant valoir conformité — le document
+         se lit d'un bloc, et une page qui affirme qu'une donnée est impossible
+         ne peut pas en présenter une autre comme acquise. Le manquement
+         constaté, lui, reste constaté : une non-conformité n'est pas effacée
+         par une erreur de saisie ailleurs dans le dossier. */
+      if (v.etat !== CONF) return v;
+      return { etat: RISQ, dossierDouteux: true,
+        motif: `${v.motif} Ce constat ne dépend d'aucune des ${anomalies.length} donnée(s) impossible(s) que porte le dossier, mais il ne peut pas être tenu pour acquis tant qu'elles n'ont pas été corrigées : un dossier dont une partie des valeurs ne peut pas exister ne se lit pas par morceaux.` };
+    });
+  }
+  return controles;
+}
+
+module.exports = { envelopper, remplacer, racine };
 
 });
 
@@ -1627,9 +1727,21 @@ Object.assign(ATTENDU, {
   listesDeposees: "liste d'objets : inscrits femmes et hommes, sièges à pourvoir, candidats",
 });
 
+/* Deux natures d'anomalie, et la distinction commande ce qui en découle.
+
+   « lisibilité » : la valeur ne peut pas exister — le 30 février, un effectif
+   décimal, un montant négatif. Aucun contrôle ne peut rien conclure de ce qu'il
+   a lu là, et moteur/commun/recevabilite.js le lui interdit.
+
+   « cohérence » : deux valeurs parfaitement lisibles se contredisent — plus de
+   titulaires restants qu'élus à l'origine, un avis antérieur à la remise des
+   informations. Ce n'est pas un obstacle à l'examen, c'est son objet : les
+   contrôles doivent au contraire pouvoir le constater. */
 function valider(f) {
   const A = [];
-  const dit = (champ, valeur, motif) => A.push({ champ, valeur, motif, attendu: ATTENDU[champ] });
+  const dit = (champ, valeur, motif, nature) =>
+    A.push({ champ, valeur, motif, nature: nature || "lisibilité", attendu: ATTENDU[champ] });
+  const incoherent = (champ, valeur, motif) => dit(champ, valeur, motif, "cohérence");
   const a = (o, c) => o && Object.prototype.hasOwnProperty.call(o, c) && o[c] !== null && o[c] !== "";
 
   for (const c of DATES)
@@ -1654,7 +1766,7 @@ function valider(f) {
       if (mauvais.length) dit("effectifsMensuels", mauvais.join(", "),
         `${mauvais.length} relevé(s) ne sont pas des entiers positifs`);
       else if (f.effectifsMensuels.length < 12)
-        dit("effectifsMensuels", f.effectifsMensuels.length + " relevé(s)",
+        incoherent("effectifsMensuels", f.effectifsMensuels.length + " relevé(s)",
           "moins de douze relevés : la règle des douze mois consécutifs ne peut pas être vérifiée");
     }
   }
@@ -1690,7 +1802,7 @@ function valider(f) {
   /* Cohérences internes : elles ne dépendent d'aucune règle de fond. */
   const ordre = (a1, c1, a2, c2, quoi1, quoi2) => {
     if (estDateISO(a1) && estDateISO(a2) && a2 < a1)
-      dit(c2, a2, `antérieure à ${quoi1} du ${a1} — ${quoi2} ne peut pas la précéder`);
+      incoherent(c2, a2, `antérieure à ${quoi1} du ${a1} — ${quoi2} ne peut pas la précéder`);
   };
   ordre(f.dateInformationPersonnel, "dateInformationPersonnel", f.datePremierTour, "datePremierTour",
     "l'information du personnel", "le premier tour");
@@ -1699,18 +1811,18 @@ function valider(f) {
   if (f.expertise) ordre(f.expertise.dateDepart, "expertise.dateDepart",
     f.expertise.dateSaisine, "expertise.dateSaisine", "le point de départ", "la saisine du juge");
   if (estDateISO(f.dateAudit) && estDateISO(f.dateDernieresElections) && f.dateDernieresElections > f.dateAudit)
-    dit("dateDernieresElections", f.dateDernieresElections,
+    incoherent("dateDernieresElections", f.dateDernieresElections,
       `postérieure à la date d'audit (${f.dateAudit}) : des élections à venir ne peuvent pas être les dernières tenues`);
 
   if (estEntierPositif(f.titulairesInitiaux) && estEntierPositif(f.titulairesRestants)
       && f.titulairesRestants > f.titulairesInitiaux)
-    dit("titulairesRestants", f.titulairesRestants,
+    incoherent("titulairesRestants", f.titulairesRestants,
       `supérieur au nombre de titulaires élus à l'origine (${f.titulairesInitiaux})`);
   if (estEntierPositif(f.effectif) && estEntierPositif(f.nbCadres) && f.nbCadres > f.effectif)
-    dit("nbCadres", f.nbCadres, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
+    incoherent("nbCadres", f.nbCadres, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
   if (estEntierPositif(f.reunionsSante) && estEntierPositif(f.reunionsTenues)
       && f.reunionsSante > f.reunionsTenues)
-    dit("reunionsSante", f.reunionsSante,
+    incoherent("reunionsSante", f.reunionsSante,
       `supérieur au nombre total de réunions tenues (${f.reunionsTenues})`);
 
   return A;
@@ -1884,13 +1996,13 @@ __def("./textes_cse.json", function(module){ module.exports = {"L2311-1": {"id":
 
 __def("./manifeste-cse.json", function(module){ module.exports = {
  "domaine": "comité social et économique",
- "date": "2026-08-15",
- "empreinte": "f6a1dc52219a",
+ "date": "2026-08-16",
+ "empreinte": "6de77119df5b",
  "fichiers": {
   "_r2314_1.json": "572dbb2da415",
   "actions-cse.js": "840947c5cf3a",
   "audit-cse.js": "f9613f2bfc8a",
-  "controles-cse.js": "201e7e44b21f",
+  "controles-cse.js": "07716954c60b",
   "cse_corpus.json": "ea46040a4b05",
   "dates.js": "b6d7e587bec3",
   "grille-cse.js": "3dbd69ab4ead",
@@ -1901,7 +2013,7 @@ __def("./manifeste-cse.json", function(module){ module.exports = {
   "tests-controles-cse.js": "3e9ec4663b7b",
   "tests-cse.js": "6f47db6df965",
   "textes_cse.json": "701f84e52560",
-  "valider-cse.js": "f4c42cc9bc37"
+  "valider-cse.js": "ef7bcb36b10e"
  },
  "compteurs": {
   "articlesLus": 368,

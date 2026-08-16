@@ -1,12 +1,12 @@
 {
  "domaine": "comité social et économique",
- "date": "2026-08-15",
- "empreinte": "f6a1dc52219a",
+ "date": "2026-08-16",
+ "empreinte": "6de77119df5b",
  "fichiers": {
   "_r2314_1.json": "572dbb2da415",
   "actions-cse.js": "840947c5cf3a",
   "audit-cse.js": "f9613f2bfc8a",
-  "controles-cse.js": "201e7e44b21f",
+  "controles-cse.js": "07716954c60b",
   "cse_corpus.json": "ea46040a4b05",
   "dates.js": "b6d7e587bec3",
   "grille-cse.js": "3dbd69ab4ead",
@@ -17,7 +17,7 @@
   "tests-controles-cse.js": "3e9ec4663b7b",
   "tests-cse.js": "6f47db6df965",
   "textes_cse.json": "701f84e52560",
-  "valider-cse.js": "f4c42cc9bc37"
+  "valider-cse.js": "ef7bcb36b10e"
  },
  "compteurs": {
   "articlesLus": 368,

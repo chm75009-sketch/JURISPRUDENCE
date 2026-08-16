@@ -4,7 +4,7 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : 1fd34d226cc1
+   Empreinte du moteur au moment de l'empaquetage : dfd7ce32f030
    {"controles":68,"conformite":60,"detection":8,"coherence":8,"reglesJamaisDeclenchees":15,"testes":60,"echecs":0,"regles":236}
 
    Jeux de données allégés — champs non lus par la grille, retirés :
@@ -24,8 +24,8 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"empreinte":"1fd34d226cc1","genere":"2026-08-15 22:28:22","compteurs":{"controles":68,"conformite":60,"detection":8,"coherence":8,"reglesJamaisDeclenchees":15,"testes":60,"echecs":0,"regles":236},"definitions":[["contrôles publiés","Nombre d'identifiants uniques du manifeste. Chacun est exécuté sur le dossier soumis, et chacun figure au questionnaire."],["contrôles de conformité","Ceux qui peuvent conclure à la conformité. Chacun doit être couvert par au moins un cas contradictoire."],["contrôles de détection","Ceux qui ne concluent jamais à la conformité : ils signalent une situation hors du champ automatisable. Ils n'ont pas de cas contradictoire, n'ayant aucune faute à détecter — seulement une déclaration à relayer."],["contrôles couverts par un test","Identifiants uniques visés par au moins un scénario fautif. Ils sont, par construction, les contrôles de conformité."],["cas contradictoires","Nombre de scénarios fautifs exécutés. Il excède le nombre de contrôles couverts, plusieurs fautes distinctes pouvant viser le même contrôle."]],"controles":[{"id":"CTL-REC-01","rubrique":"Reclassement","objet":"Un état daté des postes disponibles a-t-il été établi ?","type":"conformité","entrees":["postesDisponibles"],"piece":"etat-postes","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["état des postes absent","état des postes annoncé sans pièce versée"],"teste":true},{"id":"CTL-REC-02","rubrique":"Reclassement","objet":"La recherche couvre-t-elle tout le périmètre de permutation ?","type":"conformité","entrees":["groupe","societes","postesDisponibles"],"piece":"etat-postes","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["société du groupe non interrogée"],"teste":true},{"id":"CTL-REC-03","rubrique":"Reclassement","objet":"Les offres respectent-elles les six mentions obligatoires ?","type":"conformité","entrees":["offresFaites"],"piece":"offres","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"D. 1233-2-1","tests":["offre sans rémunération"],"teste":true},{"id":"CTL-REC-04","rubrique":"Reclassement","objet":"L'absence de poste est-elle établie, ou seulement affirmée ?","type":"conformité","entrees":["postesDisponibles"],"piece":"attestation-absence-poste","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-4","tests":["aucun poste et aucune attestation d'absence"],"teste":true},{"id":"CTL-REC-05","rubrique":"Reclassement","objet":"Les efforts de formation et d'adaptation ont-ils été faits ?","type":"conformité","entrees":["formationProposee","cause"],"piece":"formation","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["aucune formation proposée sur une mutation technologique"],"teste":true},{"id":"CTL-EMP-01","rubrique":"Emploi","objet":"La suppression d'emploi est-elle documentée poste par poste ?","type":"conformité","entrees":["postesSupprimes","nbLicenciements"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-3, al. 1er","tests":["suppressions déclarées différentes du nombre de licenciements"],"teste":true},{"id":"CTL-EMP-02","rubrique":"Emploi","objet":"Des recrutements ou des précaires contredisent-ils la suppression ?","type":"conformité","entrees":["precaires","postesSupprimes"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-3","tests":["intérimaire sur un emploi supprimé"],"teste":true},{"id":"CTL-ECO-01","rubrique":"Cause économique","objet":"La démonstration comptable est-elle produite ?","type":"conformité","entrees":["cause","trimestres","resultatExploitation","tresorerie"],"piece":"liasse","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 1°","tests":["aucune pièce comptable renseignée"],"teste":true},{"id":"CTL-ECO-02","rubrique":"Cause économique","objet":"Le périmètre de la démonstration est-il le bon ?","type":"conformité","entrees":["groupe","societes","trimestres","entreprise","societesDuSecteur","activite"],"piece":"comptes-groupe","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["données comptables sans périmètre de secteur"],"teste":true},{"id":"CTL-ECO-03","rubrique":"Cause économique","objet":"La menace sur la compétitivité est-elle établie ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","menace"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 3°","tests":[],"teste":false},{"id":"CTL-ECO-04","rubrique":"Cause économique","objet":"La mutation technologique est-elle datée et documentée ?","type":"conformité","entrees":["cause","mutation"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-3, 2°","tests":["mutation technologique non décrite"],"teste":true},{"id":"CTL-CSE-01","rubrique":"Procédure","objet":"La consultation du comité était-elle due, et a-t-elle eu lieu ?","type":"conformité","entrees":["dateInfoCSE","datesReunionsCSE","effectif, nbLicenciements (par le moteur)"],"piece":"pv-cse","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-8 · L. 1233-28","tests":["une seule réunion là où deux sont exigées"],"teste":true},{"id":"CTL-CSE-02","rubrique":"Procédure","objet":"Les délais entre convocation, réunions et avis sont-ils respectés ?","type":"conformité","entrees":["datesReunionsCSE","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-29 · L. 1233-30","tests":["moins de quinze jours entre les deux réunions"],"teste":true},{"id":"CTL-CSE-03","rubrique":"Procédure","objet":"Les renseignements ont-ils été joints à la convocation ?","type":"conformité","entrees":["effectif, nbLicenciements (par le moteur)"],"piece":"renseignements-cse","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-10 · L. 1233-31","tests":["document des sept renseignements non versé"],"teste":true},{"id":"CTL-CSE-04","rubrique":"Procédure","objet":"L'avis a-t-il été rendu, ou le délai est-il expiré ?","type":"conformité","entrees":["dateAvisCSE","datesReunionsCSE","dateNotification","effectif, nbLicenciements (par le moteur)"],"piece":"pv-cse","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-8 · L. 1233-30, II","tests":["avis non rendu et notification antérieure à l'expiration du délai","mention « avis non rendu » lue comme un avis rendu","aucun avis rendu et délai non établi"],"teste":true},{"id":"CTL-CSE-05","rubrique":"Procédure","objet":"La notification ou l'information de l'administration est-elle faite ?","type":"conformité","entrees":["dateNotifAdmin","datesReunionsCSE","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-19 · L. 1233-46","tests":["notification administrative avant la première réunion"],"teste":true},{"id":"CTL-PSE-01","rubrique":"Plan de sauvegarde de l'emploi","objet":"Un plan est-il dû, et son contenu couvre-t-il les mesures exigées ?","type":"conformité","entrees":["pse","effectif, nbLicenciements (par le moteur)"],"piece":"pse","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-61 · L. 1233-62 · L. 1233-63","tests":["plan de sauvegarde sans mesure de suivi"],"teste":true},{"id":"CTL-PSE-02","rubrique":"Plan de sauvegarde de l'emploi","objet":"Le plan est-il calibré sur les moyens du groupe ?","type":"conformité","entrees":["groupe","effectif, nbLicenciements (par le moteur)"],"piece":"comptes-groupe","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-57-3","tests":["comptes du groupe non versés alors qu'un plan est dû"],"teste":true},{"id":"CTL-PSE-03","rubrique":"Plan de sauvegarde de l'emploi","objet":"La voie retenue est-elle arrêtée : accord majoritaire ou document unilatéral ?","type":"conformité","entrees":["pse","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-24-1 · L. 1233-57-3","tests":["voie du plan non arrêtée"],"teste":true},{"id":"CTL-PSE-04","rubrique":"Plan de sauvegarde de l'emploi","objet":"La notification intervient-elle après la décision administrative ?","type":"conformité","entrees":["pse","dateNotification","effectif, nbLicenciements (par le moteur)"],"piece":"decision-admin","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-39","tests":["notification avant la décision d'homologation"],"teste":true},{"id":"CTL-PRT-01","rubrique":"Salariés protégés","objet":"L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?","type":"conformité","entrees":["salariesProteges","dateNotification"],"piece":"autorisations","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 2411-1 · L. 2411-5","tests":["autorisation de licencier refusée","autorisation postérieure à la notification","salarié protégé sans autorisation"],"teste":true},{"id":"CTL-IND-01","rubrique":"Situations individuelles","objet":"Des salariés en arrêt, congé maternité ou inaptitude sont-ils concernés ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["salariesSuspendus"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-COE-01","rubrique":"Groupe","objet":"Un risque de co-emploi est-il signalé ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["coEmploi"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-CCN-01","rubrique":"Normes conventionnelles","objet":"La convention et les accords sont-ils versés ?","type":"conformité","entrees":["conventionJointe","accordsJoints"],"piece":"convention","etats":["conforme","risque à vérifier"],"fondement":"L. 1233-5 · L. 1233-39","tests":["convention et accords non versés"],"teste":true},{"id":"CTL-PCE-01","rubrique":"Pièces","objet":"Les pièces versées portent-elles leurs métadonnées ?","type":"conformité","entrees":["pieces"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["pièce seulement cochée, sans métadonnées"],"teste":true},{"id":"CTL-PCE-02","rubrique":"Pièces","objet":"Les pièces sont-elles antérieures à l'acte qu'elles justifient ?","type":"conformité","entrees":["dateNotification","pieces"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"—","tests":["pièce postérieure à l'acte"],"teste":true},{"id":"CTL-PCE-03","rubrique":"Pièces","objet":"Le périmètre des pièces correspond-il au périmètre à démontrer ?","type":"conformité","entrees":["groupe","societes","societesDuSecteur","pièce liasse","pièce comptes-groupe"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["pièce étiquetée « secteur » sans énumérer les sociétés du secteur","comptes du groupe sans périmètre déclaré"],"teste":true},{"id":"CTL-PCE-04","rubrique":"Pièces","objet":"Les pièces ont-elles été lues, ou seulement déposées ?","type":"conformité","entrees":["pieces"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["pièce déposée mais non lue"],"teste":true},{"id":"CTL-REC-06","rubrique":"Reclassement","objet":"L'état des postes est-il antérieur à la notification ?","type":"conformité","entrees":["dateNotification","pièce etat-postes"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4","tests":["état des postes postérieur à la notification"],"teste":true},{"id":"CTL-REC-07","rubrique":"Reclassement","objet":"Des postes disponibles ont-ils été omis dans les offres ?","type":"conformité","entrees":["postesDisponibles"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4","tests":["poste disponible non proposé"],"teste":true},{"id":"CTL-REC-08","rubrique":"Reclassement","objet":"Les offres sont-elles personnalisées et adressées à chaque salarié ?","type":"conformité","entrees":["offresFaites","nbLicenciements"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4 · D. 1233-2-1","tests":["offres non adressées à tous les salariés"],"teste":true},{"id":"CTL-REC-09","rubrique":"Reclassement","objet":"Un délai et un moyen de réponse ont-ils été indiqués ?","type":"conformité","entrees":["offresFaites"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["offre sans délai de réponse"],"teste":true},{"id":"CTL-REC-10","rubrique":"Reclassement","objet":"Un poste de catégorie inférieure a-t-il été proposé sans accord exprès ?","type":"conformité","entrees":["offresFaites"],"piece":"—","etats":["conforme","non conforme","sans objet"],"fondement":"L. 1233-4","tests":["poste de catégorie inférieure sans accord exprès"],"teste":true},{"id":"CTL-REC-11","rubrique":"Reclassement","objet":"L'absence de poste repose-t-elle sur autre chose qu'une attestation interne ?","type":"conformité","entrees":["postesDisponibles","pièce attestation-absence-poste"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["attestation d'absence de poste établie par la direction"],"teste":true},{"id":"CTL-CSE-06","rubrique":"Procédure","objet":"Le délai entre la convocation et la première réunion est-il suffisant ?","type":"conformité","entrees":["dateInfoCSE","datesReunionsCSE","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-10 · L. 1233-31","tests":["convocation postérieure à la réunion","convocation deux jours avant la réunion"],"teste":true},{"id":"CTL-CSE-07","rubrique":"Procédure","objet":"L'instance compétente est-elle la bonne ?","type":"conformité","entrees":["etablissementsDistincts","cseCentralConsulte","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-9 · L. 2316-1","tests":["comité central non réuni malgré plusieurs établissements"],"teste":true},{"id":"CTL-CSE-08","rubrique":"Procédure","objet":"Un comité existe-t-il, ou un procès-verbal de carence a-t-il été établi ?","type":"conformité","entrees":["cseExistant","pvCarence","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"—","tests":["aucun comité et aucune carence"],"teste":true},{"id":"CTL-CSE-09","rubrique":"Procédure","objet":"Une expertise a-t-elle été demandée, et son calendrier tient-il ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["expertise","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-CSE-10","rubrique":"Procédure","objet":"Les conséquences sur la santé, la sécurité et les conditions de travail sont-elles exposées ?","type":"conformité","entrees":["consequencesSSCT","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-10, 7° · L. 1233-31, 7°","tests":["conséquences santé et sécurité non exposées"],"teste":true},{"id":"CTL-EFF-01","rubrique":"Effectifs","objet":"L'effectif de l'établissement est-il cohérent avec celui de l'entreprise ?","type":"conformité","entrees":["effectifEtablissement","effectif"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"—","tests":["effectif d'établissement supérieur à celui de l'entreprise"],"teste":true},{"id":"CTL-EFF-02","rubrique":"Effectifs","objet":"Le périmètre d'application des critères d'ordre est-il licite ?","type":"conformité","entrees":["perimetreOrdre","accordPerimetreOrdre"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-5","tests":["critères d'ordre appliqués à l'établissement sans accord"],"teste":true},{"id":"CTL-PSE-05","rubrique":"Plan de sauvegarde de l'emploi","objet":"Les mesures du plan sont-elles chiffrées ?","type":"conformité","entrees":["pse","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-62","tests":["mesures du plan non chiffrées"],"teste":true},{"id":"CTL-PSE-06","rubrique":"Plan de sauvegarde de l'emploi","objet":"Le plan a-t-il été joint à la convocation du comité ?","type":"conformité","entrees":["dateInfoCSE","pièce pse","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-32","tests":["plan postérieur à la convocation"],"teste":true},{"id":"CTL-PSE-07","rubrique":"Plan de sauvegarde de l'emploi","objet":"L'accord majoritaire remplit-il la condition de représentativité ?","type":"conformité","entrees":["pse","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-24-1","tests":["accord majoritaire sous les 50 %"],"teste":true},{"id":"CTL-CCN-02","rubrique":"Normes conventionnelles","objet":"La convention versée est-elle celle de l'IDCC déclaré, et à jour ?","type":"conformité","entrees":["idcc","veille","pièce convention","pièce conventionJointe"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["convention déclarée mais non versée comme pièce"],"teste":true},{"id":"CTL-CCN-03","rubrique":"Normes conventionnelles","objet":"Les accords versés ont-ils été confrontés aux règles légales ?","type":"conformité","entrees":["accordsJoints","pieces"],"piece":"—","etats":["conforme","risque à vérifier"],"fondement":"L. 1233-21 · L. 1233-24-1 · L. 2254-2","tests":["accords annoncés mais non lus"],"teste":true},{"id":"CTL-USA-01","rubrique":"Normes conventionnelles","objet":"Des usages ou engagements unilatéraux plus favorables existent-ils ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["usagesEtEngagements"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-CTX-01","rubrique":"Contentieux","objet":"Un contentieux ou un contrôle est-il en cours ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["contentieuxEnCours"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-REC-12","rubrique":"Reclassement","objet":"Les offres relèvent-elles du territoire national ?","type":"conformité","entrees":["offresFaites","dateNotification","societes"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["offre de reclassement émanant d'une société étrangère"],"teste":true},{"id":"CTL-REP-01","rubrique":"Fermeture de site","objet":"La recherche d'un repreneur a-t-elle été engagée ?","type":"conformité","entrees":["effectif","fermetureEtablissement","rechercheRepreneur"],"piece":"—","etats":["non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-57-9 · L. 1233-57-10 · L. 1233-57-14","tests":["fermeture d'un établissement sans recherche de repreneur"],"teste":true},{"id":"CTL-FRA-01","rubrique":"Groupe","objet":"Les difficultés invoquées peuvent-elles procéder de flux intragroupe ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["resultatExploitation","resultatHorsFlux","groupe","fluxIntragroupe"],"piece":"—","etats":["non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["reconstitution hors flux qui ne se recalcule pas"],"teste":true},{"id":"CTL-ORD-02","rubrique":"Ordre des licenciements","objet":"Les catégories professionnelles sont-elles construites objectivement ?","type":"conformité","entrees":["categories","salariesProteges"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-5","tests":["catégorie professionnelle d'un seul salarié protégé"],"teste":true},{"id":"CTL-SEU-01","rubrique":"Seuil de dix","objet":"Le décompte des trente jours intègre-t-il les licenciements déjà prononcés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["nbLicenciements","licenciementsRecents30j","effectif"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-28 · L. 1233-61","tests":["neuf licenciements et un déjà prononcé dans les trente jours"],"teste":true},{"id":"CTL-SEU-02","rubrique":"Seuil de dix","objet":"Les refus de modification du contrat déclenchent-ils le régime collectif ?","type":"conformité","entrees":["refusModification"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-25","tests":["dix refus de modification traités isolément"],"teste":true},{"id":"CTL-SEU-03","rubrique":"Seuil de dix","objet":"Le projet suit-il une série de licenciements étalée sur trois mois ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["effectif","licenciements3moisGlissants"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-26","tests":["série étalée sur trois mois pour rester sous le seuil"],"teste":true},{"id":"CTL-COH-01","rubrique":"Cohérence","objet":"Un poste est-il déclaré à la fois disponible et supprimé ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["postesDisponibles","postesSupprimes","entreprise"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-3 · L. 1233-4","tests":["poste déclaré disponible et supprimé"],"teste":true},{"id":"CTL-COH-02","rubrique":"Cohérence","objet":"Un même poste est-il proposé à plusieurs salariés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["offresFaites"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4 · D. 1233-2-1","tests":["un même poste proposé à trois salariés"],"teste":true},{"id":"CTL-COH-03","rubrique":"Cohérence","objet":"Les quatre critères d'ordre départagent-ils réellement les salariés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["categories"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-5","tests":["trois critères d'ordre identiques pour tous"],"teste":true},{"id":"CTL-VAL-01","rubrique":"Cohérence","objet":"Les données saisies sont-elles lisibles et cohérentes entre elles ?","type":"cohérence — porte sur la relation entre deux champs","entrees":[],"piece":"—","etats":["conforme","non conforme"],"fondement":"—","tests":["date impossible : 30 février","effectif négatif","nombre de licenciements décimal","date au format français","effectif d'établissement supérieur à celui de l'entreprise"],"teste":true},{"id":"CTL-TMP-01","rubrique":"Droit dans le temps","objet":"La version du texte appliquée est-elle celle en vigueur au jour de la notification ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["dateNotification","societes"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-3","tests":["licenciement notifié sous une version abrogée du texte"],"teste":true},{"id":"CTL-ECO-05","rubrique":"Cause économique","objet":"La cessation d'activité est-elle complète et définitive ?","type":"conformité","entrees":["cause","cessationComplete","societes","activite","societesDuSecteur","groupe"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 4°","tests":["cessation déclarée totale, société du groupe poursuivant la même activité","cessation déclarée partielle"],"teste":true},{"id":"CTL-ECO-06","rubrique":"Cause économique","objet":"La cessation procède-t-elle d'une faute ou d'une légèreté blâmable ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause"],"piece":"—","etats":["risque à vérifier","sans objet"],"fondement":"L. 1233-3, 4°","tests":[],"teste":false},{"id":"CTL-PCO-01","rubrique":"Procédure collective","objet":"Le régime de la procédure collective est-il identifié et l'auteur des licenciements désigné ?","type":"conformité","entrees":["procedureCollective","typeProcedure","dateJugement","qualiteAuteur"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-58","tests":["procédure collective déclarée sans sa nature"],"teste":true},{"id":"CTL-PCO-02","rubrique":"Procédure collective","objet":"L'autorité administrative a-t-elle été informée, et le licenciement autorisé par le juge ?","type":"conformité","entrees":["procedureCollective","ordonnanceJugeCommissaire","typeProcedure","dateNotifAdmin"],"piece":"—","etats":["conforme","non conforme","sans objet"],"fondement":"L. 1233-60","tests":["redressement sans ordonnance du juge-commissaire"],"teste":true},{"id":"CTL-PCO-03","rubrique":"Procédure collective","objet":"La notification intervient-elle dans la fenêtre de garantie des créances ?","type":"conformité","entrees":["procedureCollective","typeProcedure","dateJugement","dateNotification","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 3253-8","tests":["liquidation : notification hors de la fenêtre de garantie"],"teste":true},{"id":"CTL-ENT-01","rubrique":"Procédure","objet":"Le calendrier suivi est-il celui que le régime commande ?","type":"conformité","entrees":["dateEntretien"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-38 · L. 1233-11","tests":["entretiens organisés là où la loi en dispense","moins de dix licenciements sans entretien déclaré"],"teste":true},{"id":"CTL-TRF-01","rubrique":"Transfert d'entité","objet":"Un transfert est-il envisagé, et les licenciements s'y heurtent-ils ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["transfertEnvisage"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1224-1","tests":[],"teste":false},{"id":"CTL-APC-01","rubrique":"Qualification","objet":"Le licenciement consécutif au refus d'un accord de performance collective est-il correctement qualifié ?","type":"conformité","entrees":["refusAPC"],"piece":"—","etats":["non conforme","donnée manquante","sans objet"],"fondement":"L. 2254-2","tests":["licenciement consécutif au refus d'un accord de performance collective"],"teste":true}]};
-  var __REGISTRE = (function () { var r = {"construire":[{"id":"CTL-REC-01","rubrique":"Reclassement","objet":"Un état daté des postes disponibles a-t-il été établi ?","type":"conformité","entrees":["postesDisponibles"],"piece":"etat-postes","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["état des postes absent","état des postes annoncé sans pièce versée"]},{"id":"CTL-REC-02","rubrique":"Reclassement","objet":"La recherche couvre-t-elle tout le périmètre de permutation ?","type":"conformité","entrees":["groupe","societes","postesDisponibles"],"piece":"etat-postes","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["société du groupe non interrogée"]},{"id":"CTL-REC-03","rubrique":"Reclassement","objet":"Les offres respectent-elles les six mentions obligatoires ?","type":"conformité","entrees":["offresFaites"],"piece":"offres","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"D. 1233-2-1","tests":["offre sans rémunération"]},{"id":"CTL-REC-04","rubrique":"Reclassement","objet":"L'absence de poste est-elle établie, ou seulement affirmée ?","type":"conformité","entrees":["postesDisponibles"],"piece":"attestation-absence-poste","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-4","tests":["aucun poste et aucune attestation d'absence"]},{"id":"CTL-REC-05","rubrique":"Reclassement","objet":"Les efforts de formation et d'adaptation ont-ils été faits ?","type":"conformité","entrees":["formationProposee","cause"],"piece":"formation","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["aucune formation proposée sur une mutation technologique"]},{"id":"CTL-EMP-01","rubrique":"Emploi","objet":"La suppression d'emploi est-elle documentée poste par poste ?","type":"conformité","entrees":["postesSupprimes","nbLicenciements"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-3, al. 1er","tests":["suppressions déclarées différentes du nombre de licenciements"]},{"id":"CTL-EMP-02","rubrique":"Emploi","objet":"Des recrutements ou des précaires contredisent-ils la suppression ?","type":"conformité","entrees":["precaires","postesSupprimes"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-3","tests":["intérimaire sur un emploi supprimé"]},{"id":"CTL-ECO-01","rubrique":"Cause économique","objet":"La démonstration comptable est-elle produite ?","type":"conformité","entrees":["cause","trimestres","resultatExploitation","tresorerie"],"piece":"liasse","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 1°","tests":["aucune pièce comptable renseignée"]},{"id":"CTL-ECO-02","rubrique":"Cause économique","objet":"Le périmètre de la démonstration est-il le bon ?","type":"conformité","entrees":["groupe","societes","trimestres","entreprise","societesDuSecteur","activite"],"piece":"comptes-groupe","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["données comptables sans périmètre de secteur"]},{"id":"CTL-ECO-03","rubrique":"Cause économique","objet":"La menace sur la compétitivité est-elle établie ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","menace"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 3°","tests":[]},{"id":"CTL-ECO-04","rubrique":"Cause économique","objet":"La mutation technologique est-elle datée et documentée ?","type":"conformité","entrees":["cause","mutation"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-3, 2°","tests":["mutation technologique non décrite"]},{"id":"CTL-CSE-01","rubrique":"Procédure","objet":"La consultation du comité était-elle due, et a-t-elle eu lieu ?","type":"conformité","entrees":["dateInfoCSE","datesReunionsCSE","effectif, nbLicenciements (par le moteur)"],"piece":"pv-cse","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-8 · L. 1233-28","tests":["une seule réunion là où deux sont exigées"]},{"id":"CTL-CSE-02","rubrique":"Procédure","objet":"Les délais entre convocation, réunions et avis sont-ils respectés ?","type":"conformité","entrees":["datesReunionsCSE","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-29 · L. 1233-30","tests":["moins de quinze jours entre les deux réunions"]},{"id":"CTL-CSE-03","rubrique":"Procédure","objet":"Les renseignements ont-ils été joints à la convocation ?","type":"conformité","entrees":["effectif, nbLicenciements (par le moteur)"],"piece":"renseignements-cse","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-10 · L. 1233-31","tests":["document des sept renseignements non versé"]},{"id":"CTL-CSE-04","rubrique":"Procédure","objet":"L'avis a-t-il été rendu, ou le délai est-il expiré ?","type":"conformité","entrees":["dateAvisCSE","datesReunionsCSE","dateNotification","effectif, nbLicenciements (par le moteur)"],"piece":"pv-cse","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-8 · L. 1233-30, II","tests":["avis non rendu et notification antérieure à l'expiration du délai","mention « avis non rendu » lue comme un avis rendu","aucun avis rendu et délai non établi"]},{"id":"CTL-CSE-05","rubrique":"Procédure","objet":"La notification ou l'information de l'administration est-elle faite ?","type":"conformité","entrees":["dateNotifAdmin","datesReunionsCSE","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-19 · L. 1233-46","tests":["notification administrative avant la première réunion"]},{"id":"CTL-PSE-01","rubrique":"Plan de sauvegarde de l'emploi","objet":"Un plan est-il dû, et son contenu couvre-t-il les mesures exigées ?","type":"conformité","entrees":["pse","effectif, nbLicenciements (par le moteur)"],"piece":"pse","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-61 · L. 1233-62 · L. 1233-63","tests":["plan de sauvegarde sans mesure de suivi"]},{"id":"CTL-PSE-02","rubrique":"Plan de sauvegarde de l'emploi","objet":"Le plan est-il calibré sur les moyens du groupe ?","type":"conformité","entrees":["groupe","effectif, nbLicenciements (par le moteur)"],"piece":"comptes-groupe","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-57-3","tests":["comptes du groupe non versés alors qu'un plan est dû"]},{"id":"CTL-PSE-03","rubrique":"Plan de sauvegarde de l'emploi","objet":"La voie retenue est-elle arrêtée : accord majoritaire ou document unilatéral ?","type":"conformité","entrees":["pse","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-24-1 · L. 1233-57-3","tests":["voie du plan non arrêtée"]},{"id":"CTL-PSE-04","rubrique":"Plan de sauvegarde de l'emploi","objet":"La notification intervient-elle après la décision administrative ?","type":"conformité","entrees":["pse","dateNotification","effectif, nbLicenciements (par le moteur)"],"piece":"decision-admin","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-39","tests":["notification avant la décision d'homologation"]},{"id":"CTL-PRT-01","rubrique":"Salariés protégés","objet":"L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?","type":"conformité","entrees":["salariesProteges","dateNotification"],"piece":"autorisations","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 2411-1 · L. 2411-5","tests":["autorisation de licencier refusée","autorisation postérieure à la notification","salarié protégé sans autorisation"]},{"id":"CTL-IND-01","rubrique":"Situations individuelles","objet":"Des salariés en arrêt, congé maternité ou inaptitude sont-ils concernés ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["salariesSuspendus"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-COE-01","rubrique":"Groupe","objet":"Un risque de co-emploi est-il signalé ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["coEmploi"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-CCN-01","rubrique":"Normes conventionnelles","objet":"La convention et les accords sont-ils versés ?","type":"conformité","entrees":["conventionJointe","accordsJoints"],"piece":"convention","etats":["conforme","risque à vérifier"],"fondement":"L. 1233-5 · L. 1233-39","tests":["convention et accords non versés"]},{"id":"CTL-PCE-01","rubrique":"Pièces","objet":"Les pièces versées portent-elles leurs métadonnées ?","type":"conformité","entrees":["pieces"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["pièce seulement cochée, sans métadonnées"]},{"id":"CTL-PCE-02","rubrique":"Pièces","objet":"Les pièces sont-elles antérieures à l'acte qu'elles justifient ?","type":"conformité","entrees":["dateNotification","pieces"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"—","tests":["pièce postérieure à l'acte"]},{"id":"CTL-PCE-03","rubrique":"Pièces","objet":"Le périmètre des pièces correspond-il au périmètre à démontrer ?","type":"conformité","entrees":["groupe","societes","societesDuSecteur","pièce liasse","pièce comptes-groupe"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["pièce étiquetée « secteur » sans énumérer les sociétés du secteur","comptes du groupe sans périmètre déclaré"]},{"id":"CTL-PCE-04","rubrique":"Pièces","objet":"Les pièces ont-elles été lues, ou seulement déposées ?","type":"conformité","entrees":["pieces"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["pièce déposée mais non lue"]},{"id":"CTL-REC-06","rubrique":"Reclassement","objet":"L'état des postes est-il antérieur à la notification ?","type":"conformité","entrees":["dateNotification","pièce etat-postes"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4","tests":["état des postes postérieur à la notification"]},{"id":"CTL-REC-07","rubrique":"Reclassement","objet":"Des postes disponibles ont-ils été omis dans les offres ?","type":"conformité","entrees":["postesDisponibles"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4","tests":["poste disponible non proposé"]},{"id":"CTL-REC-08","rubrique":"Reclassement","objet":"Les offres sont-elles personnalisées et adressées à chaque salarié ?","type":"conformité","entrees":["offresFaites","nbLicenciements"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4 · D. 1233-2-1","tests":["offres non adressées à tous les salariés"]},{"id":"CTL-REC-09","rubrique":"Reclassement","objet":"Un délai et un moyen de réponse ont-ils été indiqués ?","type":"conformité","entrees":["offresFaites"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["offre sans délai de réponse"]},{"id":"CTL-REC-10","rubrique":"Reclassement","objet":"Un poste de catégorie inférieure a-t-il été proposé sans accord exprès ?","type":"conformité","entrees":["offresFaites"],"piece":"—","etats":["conforme","non conforme","sans objet"],"fondement":"L. 1233-4","tests":["poste de catégorie inférieure sans accord exprès"]},{"id":"CTL-REC-11","rubrique":"Reclassement","objet":"L'absence de poste repose-t-elle sur autre chose qu'une attestation interne ?","type":"conformité","entrees":["postesDisponibles","pièce attestation-absence-poste"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["attestation d'absence de poste établie par la direction"]},{"id":"CTL-CSE-06","rubrique":"Procédure","objet":"Le délai entre la convocation et la première réunion est-il suffisant ?","type":"conformité","entrees":["dateInfoCSE","datesReunionsCSE","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-10 · L. 1233-31","tests":["convocation postérieure à la réunion","convocation deux jours avant la réunion"]},{"id":"CTL-CSE-07","rubrique":"Procédure","objet":"L'instance compétente est-elle la bonne ?","type":"conformité","entrees":["etablissementsDistincts","cseCentralConsulte","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-9 · L. 2316-1","tests":["comité central non réuni malgré plusieurs établissements"]},{"id":"CTL-CSE-08","rubrique":"Procédure","objet":"Un comité existe-t-il, ou un procès-verbal de carence a-t-il été établi ?","type":"conformité","entrees":["cseExistant","pvCarence","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"—","tests":["aucun comité et aucune carence"]},{"id":"CTL-CSE-09","rubrique":"Procédure","objet":"Une expertise a-t-elle été demandée, et son calendrier tient-il ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["expertise","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-CSE-10","rubrique":"Procédure","objet":"Les conséquences sur la santé, la sécurité et les conditions de travail sont-elles exposées ?","type":"conformité","entrees":["consequencesSSCT","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-10, 7° · L. 1233-31, 7°","tests":["conséquences santé et sécurité non exposées"]},{"id":"CTL-EFF-01","rubrique":"Effectifs","objet":"L'effectif de l'établissement est-il cohérent avec celui de l'entreprise ?","type":"conformité","entrees":["effectifEtablissement","effectif"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"—","tests":["effectif d'établissement supérieur à celui de l'entreprise"]},{"id":"CTL-EFF-02","rubrique":"Effectifs","objet":"Le périmètre d'application des critères d'ordre est-il licite ?","type":"conformité","entrees":["perimetreOrdre","accordPerimetreOrdre"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-5","tests":["critères d'ordre appliqués à l'établissement sans accord"]},{"id":"CTL-PSE-05","rubrique":"Plan de sauvegarde de l'emploi","objet":"Les mesures du plan sont-elles chiffrées ?","type":"conformité","entrees":["pse","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-62","tests":["mesures du plan non chiffrées"]},{"id":"CTL-PSE-06","rubrique":"Plan de sauvegarde de l'emploi","objet":"Le plan a-t-il été joint à la convocation du comité ?","type":"conformité","entrees":["dateInfoCSE","pièce pse","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-32","tests":["plan postérieur à la convocation"]},{"id":"CTL-PSE-07","rubrique":"Plan de sauvegarde de l'emploi","objet":"L'accord majoritaire remplit-il la condition de représentativité ?","type":"conformité","entrees":["pse","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-24-1","tests":["accord majoritaire sous les 50 %"]},{"id":"CTL-CCN-02","rubrique":"Normes conventionnelles","objet":"La convention versée est-elle celle de l'IDCC déclaré, et à jour ?","type":"conformité","entrees":["idcc","veille","pièce convention","pièce conventionJointe"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["convention déclarée mais non versée comme pièce"]},{"id":"CTL-CCN-03","rubrique":"Normes conventionnelles","objet":"Les accords versés ont-ils été confrontés aux règles légales ?","type":"conformité","entrees":["accordsJoints","pieces"],"piece":"—","etats":["conforme","risque à vérifier"],"fondement":"L. 1233-21 · L. 1233-24-1 · L. 2254-2","tests":["accords annoncés mais non lus"]},{"id":"CTL-USA-01","rubrique":"Normes conventionnelles","objet":"Des usages ou engagements unilatéraux plus favorables existent-ils ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["usagesEtEngagements"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-CTX-01","rubrique":"Contentieux","objet":"Un contentieux ou un contrôle est-il en cours ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["contentieuxEnCours"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-REC-12","rubrique":"Reclassement","objet":"Les offres relèvent-elles du territoire national ?","type":"conformité","entrees":["offresFaites","dateNotification","societes"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["offre de reclassement émanant d'une société étrangère"]},{"id":"CTL-REP-01","rubrique":"Fermeture de site","objet":"La recherche d'un repreneur a-t-elle été engagée ?","type":"conformité","entrees":["effectif","fermetureEtablissement","rechercheRepreneur"],"piece":"—","etats":["non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-57-9 · L. 1233-57-10 · L. 1233-57-14","tests":["fermeture d'un établissement sans recherche de repreneur"]},{"id":"CTL-FRA-01","rubrique":"Groupe","objet":"Les difficultés invoquées peuvent-elles procéder de flux intragroupe ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["resultatExploitation","resultatHorsFlux","groupe","fluxIntragroupe"],"piece":"—","etats":["non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["reconstitution hors flux qui ne se recalcule pas"]},{"id":"CTL-ORD-02","rubrique":"Ordre des licenciements","objet":"Les catégories professionnelles sont-elles construites objectivement ?","type":"conformité","entrees":["categories","salariesProteges"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-5","tests":["catégorie professionnelle d'un seul salarié protégé"]},{"id":"CTL-SEU-01","rubrique":"Seuil de dix","objet":"Le décompte des trente jours intègre-t-il les licenciements déjà prononcés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["nbLicenciements","licenciementsRecents30j","effectif"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-28 · L. 1233-61","tests":["neuf licenciements et un déjà prononcé dans les trente jours"]},{"id":"CTL-SEU-02","rubrique":"Seuil de dix","objet":"Les refus de modification du contrat déclenchent-ils le régime collectif ?","type":"conformité","entrees":["refusModification"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-25","tests":["dix refus de modification traités isolément"]},{"id":"CTL-SEU-03","rubrique":"Seuil de dix","objet":"Le projet suit-il une série de licenciements étalée sur trois mois ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["effectif","licenciements3moisGlissants"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-26","tests":["série étalée sur trois mois pour rester sous le seuil"]},{"id":"CTL-COH-01","rubrique":"Cohérence","objet":"Un poste est-il déclaré à la fois disponible et supprimé ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["postesDisponibles","postesSupprimes","entreprise"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-3 · L. 1233-4","tests":["poste déclaré disponible et supprimé"]},{"id":"CTL-COH-02","rubrique":"Cohérence","objet":"Un même poste est-il proposé à plusieurs salariés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["offresFaites"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4 · D. 1233-2-1","tests":["un même poste proposé à trois salariés"]},{"id":"CTL-COH-03","rubrique":"Cohérence","objet":"Les quatre critères d'ordre départagent-ils réellement les salariés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["categories"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-5","tests":["trois critères d'ordre identiques pour tous"]},{"id":"CTL-VAL-01","rubrique":"Cohérence","objet":"Les données saisies sont-elles lisibles et cohérentes entre elles ?","type":"cohérence — porte sur la relation entre deux champs","entrees":[],"piece":"—","etats":["conforme","non conforme"],"fondement":"—","tests":["date impossible : 30 février","effectif négatif","nombre de licenciements décimal","date au format français","effectif d'établissement supérieur à celui de l'entreprise"]},{"id":"CTL-TMP-01","rubrique":"Droit dans le temps","objet":"La version du texte appliquée est-elle celle en vigueur au jour de la notification ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["dateNotification","societes"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-3","tests":["licenciement notifié sous une version abrogée du texte"]},{"id":"CTL-ECO-05","rubrique":"Cause économique","objet":"La cessation d'activité est-elle complète et définitive ?","type":"conformité","entrees":["cause","cessationComplete","societes","activite","societesDuSecteur","groupe"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 4°","tests":["cessation déclarée totale, société du groupe poursuivant la même activité","cessation déclarée partielle"]},{"id":"CTL-ECO-06","rubrique":"Cause économique","objet":"La cessation procède-t-elle d'une faute ou d'une légèreté blâmable ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause"],"piece":"—","etats":["risque à vérifier","sans objet"],"fondement":"L. 1233-3, 4°","tests":[]},{"id":"CTL-PCO-01","rubrique":"Procédure collective","objet":"Le régime de la procédure collective est-il identifié et l'auteur des licenciements désigné ?","type":"conformité","entrees":["procedureCollective","typeProcedure","dateJugement","qualiteAuteur"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-58","tests":["procédure collective déclarée sans sa nature"]},{"id":"CTL-PCO-02","rubrique":"Procédure collective","objet":"L'autorité administrative a-t-elle été informée, et le licenciement autorisé par le juge ?","type":"conformité","entrees":["procedureCollective","ordonnanceJugeCommissaire","typeProcedure","dateNotifAdmin"],"piece":"—","etats":["conforme","non conforme","sans objet"],"fondement":"L. 1233-60","tests":["redressement sans ordonnance du juge-commissaire"]},{"id":"CTL-PCO-03","rubrique":"Procédure collective","objet":"La notification intervient-elle dans la fenêtre de garantie des créances ?","type":"conformité","entrees":["procedureCollective","typeProcedure","dateJugement","dateNotification","effectif, nbLicenciements (par le moteur)"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 3253-8","tests":["liquidation : notification hors de la fenêtre de garantie"]},{"id":"CTL-ENT-01","rubrique":"Procédure","objet":"Le calendrier suivi est-il celui que le régime commande ?","type":"conformité","entrees":["dateEntretien"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-38 · L. 1233-11","tests":["entretiens organisés là où la loi en dispense","moins de dix licenciements sans entretien déclaré"]},{"id":"CTL-TRF-01","rubrique":"Transfert d'entité","objet":"Un transfert est-il envisagé, et les licenciements s'y heurtent-ils ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["transfertEnvisage"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1224-1","tests":[]},{"id":"CTL-APC-01","rubrique":"Qualification","objet":"Le licenciement consécutif au refus d'un accord de performance collective est-il correctement qualifié ?","type":"conformité","entrees":["refusAPC"],"piece":"—","etats":["non conforme","donnée manquante","sans objet"],"fondement":"L. 2254-2","tests":["licenciement consécutif au refus d'un accord de performance collective"]}],"coherence":{"total":68,"identifiantsUniques":true,"sansTest":[],"sansEntree":["CTL-VAL-01"],"detection":["CTL-ECO-03","CTL-IND-01","CTL-COE-01","CTL-CSE-09","CTL-USA-01","CTL-CTX-01","CTL-FRA-01","CTL-SEU-01","CTL-SEU-03","CTL-COH-01","CTL-COH-02","CTL-COH-03","CTL-VAL-01","CTL-TMP-01","CTL-ECO-06","CTL-TRF-01"],"regles":236},"DETECTION":["CTL-COE-01","CTL-USA-01","CTL-CTX-01","CTL-IND-01","CTL-ECO-03","CTL-CSE-09","CTL-ECO-06","CTL-TRF-01"],"COHERENCE":["CTL-COH-01","CTL-COH-02","CTL-COH-03","CTL-SEU-01","CTL-SEU-03","CTL-VAL-01","CTL-TMP-01","CTL-FRA-01"]} || {};
+  var __MANIFESTE = {"empreinte":"dfd7ce32f030","genere":"2026-08-16 05:54:26","compteurs":{"controles":68,"conformite":60,"detection":8,"coherence":8,"reglesJamaisDeclenchees":15,"testes":60,"echecs":0,"regles":236},"definitions":[["contrôles publiés","Nombre d'identifiants uniques du manifeste. Chacun est exécuté sur le dossier soumis, et chacun figure au questionnaire."],["contrôles de conformité","Ceux qui peuvent conclure à la conformité. Chacun doit être couvert par au moins un cas contradictoire."],["contrôles de détection","Ceux qui ne concluent jamais à la conformité : ils signalent une situation hors du champ automatisable. Ils n'ont pas de cas contradictoire, n'ayant aucune faute à détecter — seulement une déclaration à relayer."],["contrôles couverts par un test","Identifiants uniques visés par au moins un scénario fautif. Ils sont, par construction, les contrôles de conformité."],["cas contradictoires","Nombre de scénarios fautifs exécutés. Il excède le nombre de contrôles couverts, plusieurs fautes distinctes pouvant viser le même contrôle."]],"controles":[{"id":"CTL-REC-01","rubrique":"Reclassement","objet":"Un état daté des postes disponibles a-t-il été établi ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","postesDisponibles","refusModification","siren"],"piece":"etat-postes","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["état des postes absent","état des postes annoncé sans pièce versée"],"teste":true},{"id":"CTL-REC-02","rubrique":"Reclassement","objet":"La recherche couvre-t-elle tout le périmètre de permutation ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","postesDisponibles","refusModification","siren","societes"],"piece":"etat-postes","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["société du groupe non interrogée"],"teste":true},{"id":"CTL-REC-03","rubrique":"Reclassement","objet":"Les offres respectent-elles les six mentions obligatoires ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren"],"piece":"offres","etats":["conforme","non conforme","risque à vérifier"],"fondement":"D. 1233-2-1","tests":["offre sans rémunération"],"teste":true},{"id":"CTL-REC-04","rubrique":"Reclassement","objet":"L'absence de poste est-elle établie, ou seulement affirmée ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","postesDisponibles","refusModification","siren"],"piece":"attestation-absence-poste","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-4","tests":["aucun poste et aucune attestation d'absence"],"teste":true},{"id":"CTL-REC-05","rubrique":"Reclassement","objet":"Les efforts de formation et d'adaptation ont-ils été faits ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","formationProposee","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"formation","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["aucune formation proposée sur une mutation technologique"],"teste":true},{"id":"CTL-EMP-01","rubrique":"Emploi","objet":"La suppression d'emploi est-elle documentée poste par poste ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","postesSupprimes","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-3, al. 1er","tests":["suppressions déclarées différentes du nombre de licenciements"],"teste":true},{"id":"CTL-EMP-02","rubrique":"Emploi","objet":"Des recrutements ou des précaires contredisent-ils la suppression ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","postesSupprimes","precaires","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-3","tests":["intérimaire sur un emploi supprimé"],"teste":true},{"id":"CTL-ECO-01","rubrique":"Cause économique","objet":"La démonstration comptable est-elle produite ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","resultatExploitation","siren","tresorerie","trimestres"],"piece":"liasse","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 1°","tests":["aucune pièce comptable renseignée"],"teste":true},{"id":"CTL-ECO-02","rubrique":"Cause économique","objet":"Le périmètre de la démonstration est-il le bon ?","type":"conformité","entrees":["activite","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","entreprise","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","societes","societesDuSecteur","trimestres"],"piece":"comptes-groupe","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["données comptables sans périmètre de secteur"],"teste":true},{"id":"CTL-ECO-03","rubrique":"Cause économique","objet":"La menace sur la compétitivité est-elle établie ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","menace","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 3°","tests":[],"teste":false},{"id":"CTL-ECO-04","rubrique":"Cause économique","objet":"La mutation technologique est-elle datée et documentée ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","mutation","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-3, 2°","tests":["mutation technologique non décrite"],"teste":true},{"id":"CTL-CSE-01","rubrique":"Procédure","objet":"La consultation du comité était-elle due, et a-t-elle eu lieu ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"pv-cse","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-8 · L. 1233-28","tests":["une seule réunion là où deux sont exigées"],"teste":true},{"id":"CTL-CSE-02","rubrique":"Procédure","objet":"Les délais entre convocation, réunions et avis sont-ils respectés ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-29 · L. 1233-30","tests":["moins de quinze jours entre les deux réunions"],"teste":true},{"id":"CTL-CSE-03","rubrique":"Procédure","objet":"Les renseignements ont-ils été joints à la convocation ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"renseignements-cse","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-10 · L. 1233-31","tests":["document des sept renseignements non versé"],"teste":true},{"id":"CTL-CSE-04","rubrique":"Procédure","objet":"L'avis a-t-il été rendu, ou le délai est-il expiré ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"pv-cse","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-8 · L. 1233-30, II","tests":["avis non rendu et notification antérieure à l'expiration du délai","mention « avis non rendu » lue comme un avis rendu","aucun avis rendu et délai non établi"],"teste":true},{"id":"CTL-CSE-05","rubrique":"Procédure","objet":"La notification ou l'information de l'administration est-elle faite ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-19 · L. 1233-46","tests":["notification administrative avant la première réunion"],"teste":true},{"id":"CTL-PSE-01","rubrique":"Plan de sauvegarde de l'emploi","objet":"Un plan est-il dû, et son contenu couvre-t-il les mesures exigées ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"pse","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-61 · L. 1233-62 · L. 1233-63","tests":["plan de sauvegarde sans mesure de suivi"],"teste":true},{"id":"CTL-PSE-02","rubrique":"Plan de sauvegarde de l'emploi","objet":"Le plan est-il calibré sur les moyens du groupe ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"comptes-groupe","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-57-3","tests":["comptes du groupe non versés alors qu'un plan est dû"],"teste":true},{"id":"CTL-PSE-03","rubrique":"Plan de sauvegarde de l'emploi","objet":"La voie retenue est-elle arrêtée : accord majoritaire ou document unilatéral ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-24-1 · L. 1233-57-3","tests":["voie du plan non arrêtée"],"teste":true},{"id":"CTL-PSE-04","rubrique":"Plan de sauvegarde de l'emploi","objet":"La notification intervient-elle après la décision administrative ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"decision-admin","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-39","tests":["notification avant la décision d'homologation"],"teste":true},{"id":"CTL-PRT-01","rubrique":"Salariés protégés","objet":"L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","salariesProteges","siren"],"piece":"autorisations","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 2411-1 · L. 2411-5","tests":["autorisation de licencier refusée","autorisation postérieure à la notification","salarié protégé sans autorisation"],"teste":true},{"id":"CTL-IND-01","rubrique":"Situations individuelles","objet":"Des salariés en arrêt, congé maternité ou inaptitude sont-ils concernés ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","salariesSuspendus","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-COE-01","rubrique":"Groupe","objet":"Un risque de co-emploi est-il signalé ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","coEmploi","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-CCN-01","rubrique":"Normes conventionnelles","objet":"La convention et les accords sont-ils versés ?","type":"conformité","entrees":["accordsJoints","cause","conventionJointe","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"convention","etats":["conforme","risque à vérifier"],"fondement":"L. 1233-5 · L. 1233-39","tests":["convention et accords non versés"],"teste":true},{"id":"CTL-PCE-01","rubrique":"Pièces","objet":"Les pièces versées portent-elles leurs métadonnées ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["pièce seulement cochée, sans métadonnées"],"teste":true},{"id":"CTL-PCE-02","rubrique":"Pièces","objet":"Les pièces sont-elles antérieures à l'acte qu'elles justifient ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"—","tests":["pièce postérieure à l'acte"],"teste":true},{"id":"CTL-PCE-03","rubrique":"Pièces","objet":"Le périmètre des pièces correspond-il au périmètre à démontrer ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce comptes-groupe","pièce liasse","refusModification","siren","societes","societesDuSecteur"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["pièce étiquetée « secteur » sans énumérer les sociétés du secteur","comptes du groupe sans périmètre déclaré"],"teste":true},{"id":"CTL-PCE-04","rubrique":"Pièces","objet":"Les pièces ont-elles été lues, ou seulement déposées ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["pièce déposée mais non lue"],"teste":true},{"id":"CTL-REC-06","rubrique":"Reclassement","objet":"L'état des postes est-il antérieur à la notification ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce etat-postes","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4","tests":["état des postes postérieur à la notification"],"teste":true},{"id":"CTL-REC-07","rubrique":"Reclassement","objet":"Des postes disponibles ont-ils été omis dans les offres ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","entreprise","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","postesDisponibles","postesSupprimes","refusModification","siren","societes"],"piece":"—","etats":["conforme","non conforme","risque à vérifier"],"fondement":"L. 1233-4","tests":["poste disponible non proposé"],"teste":true},{"id":"CTL-REC-08","rubrique":"Reclassement","objet":"Les offres sont-elles personnalisées et adressées à chaque salarié ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren","societes"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4 · D. 1233-2-1","tests":["offres non adressées à tous les salariés"],"teste":true},{"id":"CTL-REC-09","rubrique":"Reclassement","objet":"Un délai et un moyen de réponse ont-ils été indiqués ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["offre sans délai de réponse"],"teste":true},{"id":"CTL-REC-10","rubrique":"Reclassement","objet":"Un poste de catégorie inférieure a-t-il été proposé sans accord exprès ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","sans objet"],"fondement":"L. 1233-4","tests":["poste de catégorie inférieure sans accord exprès"],"teste":true},{"id":"CTL-REC-11","rubrique":"Reclassement","objet":"L'absence de poste repose-t-elle sur autre chose qu'une attestation interne ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce attestation-absence-poste","postesDisponibles","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["attestation d'absence de poste établie par la direction"],"teste":true},{"id":"CTL-CSE-06","rubrique":"Procédure","objet":"Le délai entre la convocation et la première réunion est-il suffisant ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-10 · L. 1233-31","tests":["convocation postérieure à la réunion","convocation deux jours avant la réunion"],"teste":true},{"id":"CTL-CSE-07","rubrique":"Procédure","objet":"L'instance compétente est-elle la bonne ?","type":"conformité","entrees":["cause","cseCentralConsulte","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-9 · L. 2316-1","tests":["comité central non réuni malgré plusieurs établissements"],"teste":true},{"id":"CTL-CSE-08","rubrique":"Procédure","objet":"Un comité existe-t-il, ou un procès-verbal de carence a-t-il été établi ?","type":"conformité","entrees":["cause","cseExistant","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pvCarence","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"—","tests":["aucun comité et aucune carence"],"teste":true},{"id":"CTL-CSE-09","rubrique":"Procédure","objet":"Une expertise a-t-elle été demandée, et son calendrier tient-il ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","expertise","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-CSE-10","rubrique":"Procédure","objet":"Les conséquences sur la santé, la sécurité et les conditions de travail sont-elles exposées ?","type":"conformité","entrees":["cause","consequencesSSCT","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-10, 7° · L. 1233-31, 7°","tests":["conséquences santé et sécurité non exposées"],"teste":true},{"id":"CTL-EFF-01","rubrique":"Effectifs","objet":"L'effectif de l'établissement est-il cohérent avec celui de l'entreprise ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"—","tests":["effectif d'établissement supérieur à celui de l'entreprise"],"teste":true},{"id":"CTL-EFF-02","rubrique":"Effectifs","objet":"Le périmètre d'application des critères d'ordre est-il licite ?","type":"conformité","entrees":["accordPerimetreOrdre","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","perimetreOrdre","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-5","tests":["critères d'ordre appliqués à l'établissement sans accord"],"teste":true},{"id":"CTL-PSE-05","rubrique":"Plan de sauvegarde de l'emploi","objet":"Les mesures du plan sont-elles chiffrées ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-62","tests":["mesures du plan non chiffrées"],"teste":true},{"id":"CTL-PSE-06","rubrique":"Plan de sauvegarde de l'emploi","objet":"Le plan a-t-il été joint à la convocation du comité ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce pse","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-32","tests":["plan postérieur à la convocation"],"teste":true},{"id":"CTL-PSE-07","rubrique":"Plan de sauvegarde de l'emploi","objet":"L'accord majoritaire remplit-il la condition de représentativité ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-24-1","tests":["accord majoritaire sous les 50 %"],"teste":true},{"id":"CTL-CCN-02","rubrique":"Normes conventionnelles","objet":"La convention versée est-elle celle de l'IDCC déclaré, et à jour ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce convention","pièce conventionJointe","refusModification","siren","veille"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["convention déclarée mais non versée comme pièce"],"teste":true},{"id":"CTL-CCN-03","rubrique":"Normes conventionnelles","objet":"Les accords versés ont-ils été confrontés aux règles légales ?","type":"conformité","entrees":["accordsJoints","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier"],"fondement":"L. 1233-21 · L. 1233-24-1 · L. 2254-2","tests":["accords annoncés mais non lus"],"teste":true},{"id":"CTL-USA-01","rubrique":"Normes conventionnelles","objet":"Des usages ou engagements unilatéraux plus favorables existent-ils ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","usagesEtEngagements"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-CTX-01","rubrique":"Contentieux","objet":"Un contentieux ou un contrôle est-il en cours ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","contentieuxEnCours","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[],"teste":false},{"id":"CTL-REC-12","rubrique":"Reclassement","objet":"Les offres relèvent-elles du territoire national ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren","societes"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["offre de reclassement émanant d'une société étrangère"],"teste":true},{"id":"CTL-REP-01","rubrique":"Fermeture de site","objet":"La recherche d'un repreneur a-t-elle été engagée ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","fermetureEtablissement","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","rechercheRepreneur","refusModification","siren"],"piece":"—","etats":["non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-57-9 · L. 1233-57-10 · L. 1233-57-14","tests":["fermeture d'un établissement sans recherche de repreneur"],"teste":true},{"id":"CTL-FRA-01","rubrique":"Groupe","objet":"Les difficultés invoquées peuvent-elles procéder de flux intragroupe ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","fluxIntragroupe","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","resultatExploitation","resultatHorsFlux","siren"],"piece":"—","etats":["non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["reconstitution hors flux qui ne se recalcule pas"],"teste":true},{"id":"CTL-ORD-02","rubrique":"Ordre des licenciements","objet":"Les catégories professionnelles sont-elles construites objectivement ?","type":"conformité","entrees":["categories","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","salariesProteges","siren"],"piece":"—","etats":["conforme","non conforme","risque à vérifier"],"fondement":"L. 1233-5","tests":["catégorie professionnelle d'un seul salarié protégé"],"teste":true},{"id":"CTL-SEU-01","rubrique":"Seuil de dix","objet":"Le décompte des trente jours intègre-t-il les licenciements déjà prononcés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-28 · L. 1233-61","tests":["neuf licenciements et un déjà prononcé dans les trente jours"],"teste":true},{"id":"CTL-SEU-02","rubrique":"Seuil de dix","objet":"Les refus de modification du contrat déclenchent-ils le régime collectif ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-25","tests":["dix refus de modification traités isolément"],"teste":true},{"id":"CTL-SEU-03","rubrique":"Seuil de dix","objet":"Le projet suit-il une série de licenciements étalée sur trois mois ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-26","tests":["série étalée sur trois mois pour rester sous le seuil"],"teste":true},{"id":"CTL-COH-01","rubrique":"Cohérence","objet":"Un poste est-il déclaré à la fois disponible et supprimé ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","entreprise","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","postesDisponibles","postesSupprimes","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-3 · L. 1233-4","tests":["poste déclaré disponible et supprimé"],"teste":true},{"id":"CTL-COH-02","rubrique":"Cohérence","objet":"Un même poste est-il proposé à plusieurs salariés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4 · D. 1233-2-1","tests":["un même poste proposé à trois salariés"],"teste":true},{"id":"CTL-COH-03","rubrique":"Cohérence","objet":"Les quatre critères d'ordre départagent-ils réellement les salariés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["categories","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-5","tests":["trois critères d'ordre identiques pour tous"],"teste":true},{"id":"CTL-VAL-01","rubrique":"Cohérence","objet":"Les données saisies sont-elles lisibles et cohérentes entre elles ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme"],"fondement":"—","tests":["date impossible : 30 février","effectif négatif","nombre de licenciements décimal","date au format français","effectif d'établissement supérieur à celui de l'entreprise"],"teste":true},{"id":"CTL-TMP-01","rubrique":"Droit dans le temps","objet":"La version du texte appliquée est-elle celle en vigueur au jour de la notification ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","societes"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-3","tests":["licenciement notifié sous une version abrogée du texte"],"teste":true},{"id":"CTL-ECO-05","rubrique":"Cause économique","objet":"La cessation d'activité est-elle complète et définitive ?","type":"conformité","entrees":["activite","cause","cessationComplete","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","societes","societesDuSecteur"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 4°","tests":["cessation déclarée totale, société du groupe poursuivant la même activité","cessation déclarée partielle"],"teste":true},{"id":"CTL-ECO-06","rubrique":"Cause économique","objet":"La cessation procède-t-elle d'une faute ou d'une légèreté blâmable ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","sans objet"],"fondement":"L. 1233-3, 4°","tests":[],"teste":false},{"id":"CTL-PCO-01","rubrique":"Procédure collective","objet":"Le régime de la procédure collective est-il identifié et l'auteur des licenciements désigné ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateJugement","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","procedureCollective","qualiteAuteur","refusModification","siren","typeProcedure"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-58","tests":["procédure collective déclarée sans sa nature"],"teste":true},{"id":"CTL-PCO-02","rubrique":"Procédure collective","objet":"L'autorité administrative a-t-elle été informée, et le licenciement autorisé par le juge ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","ordonnanceJugeCommissaire","procedureCollective","refusModification","siren","typeProcedure"],"piece":"—","etats":["conforme","non conforme","sans objet"],"fondement":"L. 1233-60","tests":["redressement sans ordonnance du juge-commissaire"],"teste":true},{"id":"CTL-PCO-03","rubrique":"Procédure collective","objet":"La notification intervient-elle dans la fenêtre de garantie des créances ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateJugement","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","procedureCollective","refusModification","siren","typeProcedure"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 3253-8","tests":["liquidation : notification hors de la fenêtre de garantie"],"teste":true},{"id":"CTL-ENT-01","rubrique":"Procédure","objet":"Le calendrier suivi est-il celui que le régime commande ?","type":"conformité","entrees":["cause","cseExistant","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-38 · L. 1233-11","tests":["entretiens organisés là où la loi en dispense","moins de dix licenciements sans entretien déclaré"],"teste":true},{"id":"CTL-TRF-01","rubrique":"Transfert d'entité","objet":"Un transfert est-il envisagé, et les licenciements s'y heurtent-ils ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","transfertEnvisage"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1224-1","tests":[],"teste":false},{"id":"CTL-APC-01","rubrique":"Qualification","objet":"Le licenciement consécutif au refus d'un accord de performance collective est-il correctement qualifié ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusAPC","refusModification","siren"],"piece":"—","etats":["non conforme","donnée manquante","sans objet"],"fondement":"L. 2254-2","tests":["licenciement consécutif au refus d'un accord de performance collective"],"teste":true}]};
+  var __REGISTRE = (function () { var r = {"construire":[{"id":"CTL-REC-01","rubrique":"Reclassement","objet":"Un état daté des postes disponibles a-t-il été établi ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","postesDisponibles","refusModification","siren"],"piece":"etat-postes","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["état des postes absent","état des postes annoncé sans pièce versée"]},{"id":"CTL-REC-02","rubrique":"Reclassement","objet":"La recherche couvre-t-elle tout le périmètre de permutation ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","postesDisponibles","refusModification","siren","societes"],"piece":"etat-postes","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["société du groupe non interrogée"]},{"id":"CTL-REC-03","rubrique":"Reclassement","objet":"Les offres respectent-elles les six mentions obligatoires ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren"],"piece":"offres","etats":["conforme","non conforme","risque à vérifier"],"fondement":"D. 1233-2-1","tests":["offre sans rémunération"]},{"id":"CTL-REC-04","rubrique":"Reclassement","objet":"L'absence de poste est-elle établie, ou seulement affirmée ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","postesDisponibles","refusModification","siren"],"piece":"attestation-absence-poste","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-4","tests":["aucun poste et aucune attestation d'absence"]},{"id":"CTL-REC-05","rubrique":"Reclassement","objet":"Les efforts de formation et d'adaptation ont-ils été faits ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","formationProposee","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"formation","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["aucune formation proposée sur une mutation technologique"]},{"id":"CTL-EMP-01","rubrique":"Emploi","objet":"La suppression d'emploi est-elle documentée poste par poste ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","postesSupprimes","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-3, al. 1er","tests":["suppressions déclarées différentes du nombre de licenciements"]},{"id":"CTL-EMP-02","rubrique":"Emploi","objet":"Des recrutements ou des précaires contredisent-ils la suppression ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","postesSupprimes","precaires","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-3","tests":["intérimaire sur un emploi supprimé"]},{"id":"CTL-ECO-01","rubrique":"Cause économique","objet":"La démonstration comptable est-elle produite ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","resultatExploitation","siren","tresorerie","trimestres"],"piece":"liasse","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 1°","tests":["aucune pièce comptable renseignée"]},{"id":"CTL-ECO-02","rubrique":"Cause économique","objet":"Le périmètre de la démonstration est-il le bon ?","type":"conformité","entrees":["activite","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","entreprise","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","societes","societesDuSecteur","trimestres"],"piece":"comptes-groupe","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["données comptables sans périmètre de secteur"]},{"id":"CTL-ECO-03","rubrique":"Cause économique","objet":"La menace sur la compétitivité est-elle établie ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","menace","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 3°","tests":[]},{"id":"CTL-ECO-04","rubrique":"Cause économique","objet":"La mutation technologique est-elle datée et documentée ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","mutation","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-3, 2°","tests":["mutation technologique non décrite"]},{"id":"CTL-CSE-01","rubrique":"Procédure","objet":"La consultation du comité était-elle due, et a-t-elle eu lieu ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"pv-cse","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-8 · L. 1233-28","tests":["une seule réunion là où deux sont exigées"]},{"id":"CTL-CSE-02","rubrique":"Procédure","objet":"Les délais entre convocation, réunions et avis sont-ils respectés ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-29 · L. 1233-30","tests":["moins de quinze jours entre les deux réunions"]},{"id":"CTL-CSE-03","rubrique":"Procédure","objet":"Les renseignements ont-ils été joints à la convocation ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"renseignements-cse","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-10 · L. 1233-31","tests":["document des sept renseignements non versé"]},{"id":"CTL-CSE-04","rubrique":"Procédure","objet":"L'avis a-t-il été rendu, ou le délai est-il expiré ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"pv-cse","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-8 · L. 1233-30, II","tests":["avis non rendu et notification antérieure à l'expiration du délai","mention « avis non rendu » lue comme un avis rendu","aucun avis rendu et délai non établi"]},{"id":"CTL-CSE-05","rubrique":"Procédure","objet":"La notification ou l'information de l'administration est-elle faite ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-19 · L. 1233-46","tests":["notification administrative avant la première réunion"]},{"id":"CTL-PSE-01","rubrique":"Plan de sauvegarde de l'emploi","objet":"Un plan est-il dû, et son contenu couvre-t-il les mesures exigées ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"pse","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-61 · L. 1233-62 · L. 1233-63","tests":["plan de sauvegarde sans mesure de suivi"]},{"id":"CTL-PSE-02","rubrique":"Plan de sauvegarde de l'emploi","objet":"Le plan est-il calibré sur les moyens du groupe ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"comptes-groupe","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-57-3","tests":["comptes du groupe non versés alors qu'un plan est dû"]},{"id":"CTL-PSE-03","rubrique":"Plan de sauvegarde de l'emploi","objet":"La voie retenue est-elle arrêtée : accord majoritaire ou document unilatéral ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-24-1 · L. 1233-57-3","tests":["voie du plan non arrêtée"]},{"id":"CTL-PSE-04","rubrique":"Plan de sauvegarde de l'emploi","objet":"La notification intervient-elle après la décision administrative ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"decision-admin","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-39","tests":["notification avant la décision d'homologation"]},{"id":"CTL-PRT-01","rubrique":"Salariés protégés","objet":"L'autorisation administrative est-elle obtenue pour chaque salarié protégé ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","salariesProteges","siren"],"piece":"autorisations","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 2411-1 · L. 2411-5","tests":["autorisation de licencier refusée","autorisation postérieure à la notification","salarié protégé sans autorisation"]},{"id":"CTL-IND-01","rubrique":"Situations individuelles","objet":"Des salariés en arrêt, congé maternité ou inaptitude sont-ils concernés ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","salariesSuspendus","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-COE-01","rubrique":"Groupe","objet":"Un risque de co-emploi est-il signalé ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","coEmploi","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-CCN-01","rubrique":"Normes conventionnelles","objet":"La convention et les accords sont-ils versés ?","type":"conformité","entrees":["accordsJoints","cause","conventionJointe","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"convention","etats":["conforme","risque à vérifier"],"fondement":"L. 1233-5 · L. 1233-39","tests":["convention et accords non versés"]},{"id":"CTL-PCE-01","rubrique":"Pièces","objet":"Les pièces versées portent-elles leurs métadonnées ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["pièce seulement cochée, sans métadonnées"]},{"id":"CTL-PCE-02","rubrique":"Pièces","objet":"Les pièces sont-elles antérieures à l'acte qu'elles justifient ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"—","tests":["pièce postérieure à l'acte"]},{"id":"CTL-PCE-03","rubrique":"Pièces","objet":"Le périmètre des pièces correspond-il au périmètre à démontrer ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce comptes-groupe","pièce liasse","refusModification","siren","societes","societesDuSecteur"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["pièce étiquetée « secteur » sans énumérer les sociétés du secteur","comptes du groupe sans périmètre déclaré"]},{"id":"CTL-PCE-04","rubrique":"Pièces","objet":"Les pièces ont-elles été lues, ou seulement déposées ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["pièce déposée mais non lue"]},{"id":"CTL-REC-06","rubrique":"Reclassement","objet":"L'état des postes est-il antérieur à la notification ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce etat-postes","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4","tests":["état des postes postérieur à la notification"]},{"id":"CTL-REC-07","rubrique":"Reclassement","objet":"Des postes disponibles ont-ils été omis dans les offres ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","entreprise","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","postesDisponibles","postesSupprimes","refusModification","siren","societes"],"piece":"—","etats":["conforme","non conforme","risque à vérifier"],"fondement":"L. 1233-4","tests":["poste disponible non proposé"]},{"id":"CTL-REC-08","rubrique":"Reclassement","objet":"Les offres sont-elles personnalisées et adressées à chaque salarié ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren","societes"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4 · D. 1233-2-1","tests":["offres non adressées à tous les salariés"]},{"id":"CTL-REC-09","rubrique":"Reclassement","objet":"Un délai et un moyen de réponse ont-ils été indiqués ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-4","tests":["offre sans délai de réponse"]},{"id":"CTL-REC-10","rubrique":"Reclassement","objet":"Un poste de catégorie inférieure a-t-il été proposé sans accord exprès ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","sans objet"],"fondement":"L. 1233-4","tests":["poste de catégorie inférieure sans accord exprès"]},{"id":"CTL-REC-11","rubrique":"Reclassement","objet":"L'absence de poste repose-t-elle sur autre chose qu'une attestation interne ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce attestation-absence-poste","postesDisponibles","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["attestation d'absence de poste établie par la direction"]},{"id":"CTL-CSE-06","rubrique":"Procédure","objet":"Le délai entre la convocation et la première réunion est-il suffisant ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-10 · L. 1233-31","tests":["convocation postérieure à la réunion","convocation deux jours avant la réunion"]},{"id":"CTL-CSE-07","rubrique":"Procédure","objet":"L'instance compétente est-elle la bonne ?","type":"conformité","entrees":["cause","cseCentralConsulte","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-9 · L. 2316-1","tests":["comité central non réuni malgré plusieurs établissements"]},{"id":"CTL-CSE-08","rubrique":"Procédure","objet":"Un comité existe-t-il, ou un procès-verbal de carence a-t-il été établi ?","type":"conformité","entrees":["cause","cseExistant","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pvCarence","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"—","tests":["aucun comité et aucune carence"]},{"id":"CTL-CSE-09","rubrique":"Procédure","objet":"Une expertise a-t-elle été demandée, et son calendrier tient-il ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","expertise","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-CSE-10","rubrique":"Procédure","objet":"Les conséquences sur la santé, la sécurité et les conditions de travail sont-elles exposées ?","type":"conformité","entrees":["cause","consequencesSSCT","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-10, 7° · L. 1233-31, 7°","tests":["conséquences santé et sécurité non exposées"]},{"id":"CTL-EFF-01","rubrique":"Effectifs","objet":"L'effectif de l'établissement est-il cohérent avec celui de l'entreprise ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"—","tests":["effectif d'établissement supérieur à celui de l'entreprise"]},{"id":"CTL-EFF-02","rubrique":"Effectifs","objet":"Le périmètre d'application des critères d'ordre est-il licite ?","type":"conformité","entrees":["accordPerimetreOrdre","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","perimetreOrdre","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-5","tests":["critères d'ordre appliqués à l'établissement sans accord"]},{"id":"CTL-PSE-05","rubrique":"Plan de sauvegarde de l'emploi","objet":"Les mesures du plan sont-elles chiffrées ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier","sans objet"],"fondement":"L. 1233-62","tests":["mesures du plan non chiffrées"]},{"id":"CTL-PSE-06","rubrique":"Plan de sauvegarde de l'emploi","objet":"Le plan a-t-il été joint à la convocation du comité ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce pse","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-32","tests":["plan postérieur à la convocation"]},{"id":"CTL-PSE-07","rubrique":"Plan de sauvegarde de l'emploi","objet":"L'accord majoritaire remplit-il la condition de représentativité ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pse","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-24-1","tests":["accord majoritaire sous les 50 %"]},{"id":"CTL-CCN-02","rubrique":"Normes conventionnelles","objet":"La convention versée est-elle celle de l'IDCC déclaré, et à jour ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","pièce convention","pièce conventionJointe","refusModification","siren","veille"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"—","tests":["convention déclarée mais non versée comme pièce"]},{"id":"CTL-CCN-03","rubrique":"Normes conventionnelles","objet":"Les accords versés ont-ils été confrontés aux règles légales ?","type":"conformité","entrees":["accordsJoints","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","pieces","refusModification","siren"],"piece":"—","etats":["conforme","risque à vérifier"],"fondement":"L. 1233-21 · L. 1233-24-1 · L. 2254-2","tests":["accords annoncés mais non lus"]},{"id":"CTL-USA-01","rubrique":"Normes conventionnelles","objet":"Des usages ou engagements unilatéraux plus favorables existent-ils ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","usagesEtEngagements"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-CTX-01","rubrique":"Contentieux","objet":"Un contentieux ou un contrôle est-il en cours ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","contentieuxEnCours","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"—","tests":[]},{"id":"CTL-REC-12","rubrique":"Reclassement","objet":"Les offres relèvent-elles du territoire national ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren","societes"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-4","tests":["offre de reclassement émanant d'une société étrangère"]},{"id":"CTL-REP-01","rubrique":"Fermeture de site","objet":"La recherche d'un repreneur a-t-elle été engagée ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","fermetureEtablissement","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","rechercheRepreneur","refusModification","siren"],"piece":"—","etats":["non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-57-9 · L. 1233-57-10 · L. 1233-57-14","tests":["fermeture d'un établissement sans recherche de repreneur"]},{"id":"CTL-FRA-01","rubrique":"Groupe","objet":"Les difficultés invoquées peuvent-elles procéder de flux intragroupe ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","fluxIntragroupe","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","resultatExploitation","resultatHorsFlux","siren"],"piece":"—","etats":["non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3","tests":["reconstitution hors flux qui ne se recalcule pas"]},{"id":"CTL-ORD-02","rubrique":"Ordre des licenciements","objet":"Les catégories professionnelles sont-elles construites objectivement ?","type":"conformité","entrees":["categories","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","salariesProteges","siren"],"piece":"—","etats":["conforme","non conforme","risque à vérifier"],"fondement":"L. 1233-5","tests":["catégorie professionnelle d'un seul salarié protégé"]},{"id":"CTL-SEU-01","rubrique":"Seuil de dix","objet":"Le décompte des trente jours intègre-t-il les licenciements déjà prononcés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-28 · L. 1233-61","tests":["neuf licenciements et un déjà prononcé dans les trente jours"]},{"id":"CTL-SEU-02","rubrique":"Seuil de dix","objet":"Les refus de modification du contrat déclenchent-ils le régime collectif ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-25","tests":["dix refus de modification traités isolément"]},{"id":"CTL-SEU-03","rubrique":"Seuil de dix","objet":"Le projet suit-il une série de licenciements étalée sur trois mois ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 1233-26","tests":["série étalée sur trois mois pour rester sous le seuil"]},{"id":"CTL-COH-01","rubrique":"Cohérence","objet":"Un poste est-il déclaré à la fois disponible et supprimé ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","entreprise","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","postesDisponibles","postesSupprimes","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-3 · L. 1233-4","tests":["poste déclaré disponible et supprimé"]},{"id":"CTL-COH-02","rubrique":"Cohérence","objet":"Un même poste est-il proposé à plusieurs salariés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","offresFaites","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","donnée manquante"],"fondement":"L. 1233-4 · D. 1233-2-1","tests":["un même poste proposé à trois salariés"]},{"id":"CTL-COH-03","rubrique":"Cohérence","objet":"Les quatre critères d'ordre départagent-ils réellement les salariés ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["categories","cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-5","tests":["trois critères d'ordre identiques pour tous"]},{"id":"CTL-VAL-01","rubrique":"Cohérence","objet":"Les données saisies sont-elles lisibles et cohérentes entre elles ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme"],"fondement":"—","tests":["date impossible : 30 février","effectif négatif","nombre de licenciements décimal","date au format français","effectif d'établissement supérieur à celui de l'entreprise"]},{"id":"CTL-TMP-01","rubrique":"Droit dans le temps","objet":"La version du texte appliquée est-elle celle en vigueur au jour de la notification ?","type":"cohérence — porte sur la relation entre deux champs","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","societes"],"piece":"—","etats":["conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-3","tests":["licenciement notifié sous une version abrogée du texte"]},{"id":"CTL-ECO-05","rubrique":"Cause économique","objet":"La cessation d'activité est-elle complète et définitive ?","type":"conformité","entrees":["activite","cause","cessationComplete","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","groupe","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","societes","societesDuSecteur"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1233-3, 4°","tests":["cessation déclarée totale, société du groupe poursuivant la même activité","cessation déclarée partielle"]},{"id":"CTL-ECO-06","rubrique":"Cause économique","objet":"La cessation procède-t-elle d'une faute ou d'une légèreté blâmable ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["risque à vérifier","sans objet"],"fondement":"L. 1233-3, 4°","tests":[]},{"id":"CTL-PCO-01","rubrique":"Procédure collective","objet":"Le régime de la procédure collective est-il identifié et l'auteur des licenciements désigné ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateJugement","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","procedureCollective","qualiteAuteur","refusModification","siren","typeProcedure"],"piece":"—","etats":["conforme","donnée manquante","sans objet"],"fondement":"L. 1233-58","tests":["procédure collective déclarée sans sa nature"]},{"id":"CTL-PCO-02","rubrique":"Procédure collective","objet":"L'autorité administrative a-t-elle été informée, et le licenciement autorisé par le juge ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","ordonnanceJugeCommissaire","procedureCollective","refusModification","siren","typeProcedure"],"piece":"—","etats":["conforme","non conforme","sans objet"],"fondement":"L. 1233-60","tests":["redressement sans ordonnance du juge-commissaire"]},{"id":"CTL-PCO-03","rubrique":"Procédure collective","objet":"La notification intervient-elle dans la fenêtre de garantie des créances ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateJugement","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectif, nbLicenciements (par le moteur)","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","procedureCollective","refusModification","siren","typeProcedure"],"piece":"—","etats":["conforme","non conforme","donnée manquante","sans objet"],"fondement":"L. 3253-8","tests":["liquidation : notification hors de la fenêtre de garantie"]},{"id":"CTL-ENT-01","rubrique":"Procédure","objet":"Le calendrier suivi est-il celui que le régime commande ?","type":"conformité","entrees":["cause","cseExistant","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren"],"piece":"—","etats":["conforme","non conforme","risque à vérifier","donnée manquante"],"fondement":"L. 1233-38 · L. 1233-11","tests":["entretiens organisés là où la loi en dispense","moins de dix licenciements sans entretien déclaré"]},{"id":"CTL-TRF-01","rubrique":"Transfert d'entité","objet":"Un transfert est-il envisagé, et les licenciements s'y heurtent-ils ?","type":"détection — conclut au risque, jamais à la conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusModification","siren","transfertEnvisage"],"piece":"—","etats":["risque à vérifier","donnée manquante","sans objet"],"fondement":"L. 1224-1","tests":[]},{"id":"CTL-APC-01","rubrique":"Qualification","objet":"Le licenciement consécutif au refus d'un accord de performance collective est-il correctement qualifié ?","type":"conformité","entrees":["cause","dateAudit","dateAvisCSE","dateEntretien","dateInfoCSE","dateNotifAdmin","dateNotification","datesReunionsCSE","effectif","effectifEtablissement","effectifGroupe","etablissementsDistincts","idcc","licenciements3moisGlissants","licenciementsRecents30j","nbLicenciements","refusAPC","refusModification","siren"],"piece":"—","etats":["non conforme","donnée manquante","sans objet"],"fondement":"L. 2254-2","tests":["licenciement consécutif au refus d'un accord de performance collective"]}],"coherence":{"total":68,"identifiantsUniques":true,"sansTest":[],"sansEntree":[],"detection":["CTL-ECO-03","CTL-IND-01","CTL-COE-01","CTL-CSE-09","CTL-USA-01","CTL-CTX-01","CTL-FRA-01","CTL-SEU-01","CTL-SEU-03","CTL-COH-01","CTL-COH-02","CTL-COH-03","CTL-VAL-01","CTL-TMP-01","CTL-ECO-06","CTL-TRF-01"],"regles":236},"DETECTION":["CTL-COE-01","CTL-USA-01","CTL-CTX-01","CTL-IND-01","CTL-ECO-03","CTL-CSE-09","CTL-ECO-06","CTL-TRF-01"],"COHERENCE":["CTL-COH-01","CTL-COH-02","CTL-COH-03","CTL-SEU-01","CTL-SEU-03","CTL-VAL-01","CTL-TMP-01","CTL-FRA-01"]} || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
              DETECTION: new Set(r.DETECTION || []), COHERENCE: new Set(r.COHERENCE || []) }; })();
@@ -521,16 +521,41 @@ function comptes30j(f) {
   const nb = x => typeof x === "number" ? x : 0;
   const projet = nb(f.nbLicenciements), recents = nb(f.licenciementsRecents30j);
   const refus = nb(f.refusModification);
-  const total30j = projet + recents;
+  /* Les trois termes s'additionnent, et la raison est dans le texte que le
+     seuil sert à appliquer. L. 1233-61 vise « le projet de licenciement [qui]
+     concerne au moins dix salariés dans une même période de trente jours » ;
+     L. 1233-28 et L. 1233-8, « le licenciement collectif de moins de dix / d'au
+     moins dix salariés dans une même période de trente jours ». L'unité comptée
+     est le salarié dont le licenciement est envisagé, sans distinction selon le
+     chemin qui y mène. Le salarié qui refuse la modification d'un élément
+     essentiel de son contrat pour motif économique et dont le licenciement est
+     envisagé est un salarié dont le licenciement est envisagé : il compte.
+
+     L'article L. 1233-25 ne dit pas le contraire. Il règle le cas où les refus
+     atteignent dix à eux seuls, et les soumet alors au régime collectif ; il
+     n'écarte pas ces salariés du décompte général lorsqu'ils s'ajoutent à
+     d'autres licenciements. La base a d'abord lu ce texte comme une exclusion —
+     8 + 2 ne déclenchait alors aucun plan, ce qui revenait à faire dépendre le
+     régime de la manière dont l'employeur a présenté deux ruptures. Une
+     contre-épreuve extérieure a relevé l'erreur ; la relecture des quatre
+     articles à la source lui donne raison.
+
+     Reste le risque de double compte, et il se règle au questionnaire, non
+     ici : la question posée est celle des refus « non compris dans le nombre de
+     licenciements envisagés ». */
+  const total30j = projet + recents + refus;
+  const termes = [`${projet} licenciement(s) envisagé(s)`];
+  if (recents) termes.push(`${recents} déjà prononcé(s) dans la même période`);
+  if (refus) termes.push(`${refus} salarié(s) dont le licenciement est envisagé après refus d'une modification du contrat`);
   return { projet, recents, refus, total30j,
     refusDeclencheur: refus >= 10,
     /* ce qui fait franchir le seuil, dit explicitement */
-    motif: recents
-      ? `${projet} licenciement(s) envisagé(s) et ${recents} déjà prononcé(s) dans la même période de trente jours, soit ${total30j} au total.`
+    motif: termes.length > 1
+      ? `${termes.join(", ")} — soit ${total30j} salariés sur une même période de trente jours.`
       : `${projet} licenciement(s) envisagé(s) sur trente jours.`,
     motifRefus: refus >= 10
-      ? `${refus} salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est soumis au régime du licenciement collectif (L. 1233-25), indépendamment du décompte ci-dessus.`
-      : (refus ? `${refus} refus de modification : en deçà de dix, l'article L. 1233-25 ne s'applique pas et ces refus ne s'ajoutent pas au décompte des trente jours.` : null),
+      ? `${refus} salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est à lui seul soumis au régime du licenciement collectif (L. 1233-25), quand bien même aucun autre licenciement ne serait envisagé.`
+      : (refus ? `${refus} refus de modification suivis d'un licenciement envisagé. En deçà de dix, l'article L. 1233-25 ne joue pas comme déclencheur autonome, mais ces salariés entrent dans le décompte des trente jours : le projet les concerne.` : null),
     textes: ["L. 1233-8", "L. 1233-28", "L. 1233-61", "L. 1233-25"] };
 }
 
@@ -1724,7 +1749,48 @@ function niveauDe(x, f, v) {
   return P.aPiece(f, cle) ? P.NIV.PIECE : P.NIV.DECLARE;
 }
 C.push(...require('./controles2.js'));
-module.exports = { C, ETATS: { CONF, NC, RISQ, MANQ, SO }, niveauDe, PIECE_ATTENDUE };
+
+/* ---------------- Ce qu'une contradiction interdit de conclure ----------------
+
+   Les contrôles de cohérence constataient la contradiction, et les contrôles de
+   conformité continuaient de prononcer « conforme » sur les mêmes faits. Le
+   rapport disait donc, à deux pages d'intervalle, qu'un poste est à la fois
+   disponible et supprimé, et que tout poste disponible a bien été proposé.
+   Les deux affirmations sont exactes prises séparément ; ensemble elles ne
+   veulent rien dire.
+
+   Un constat de conformité suppose que les faits sur lesquels il porte tiennent
+   ensemble. Quand la cohérence est rompue, le constat n'est pas faux : il est
+   sans objet, et il devient une réserve qui nomme la contradiction. Les
+   verdicts « non conforme » ne sont pas touchés — un manquement constaté reste
+   un manquement. */
+const SUBORDONNE = {
+  "CTL-REC-07": ["CTL-COH-01"],   /* « tout poste disponible a été proposé » suppose que les postes disponibles le soient */
+  "CTL-REC-03": ["CTL-COH-02"],   /* « les offres sont complètes » suppose qu'elles portent sur des postes distincts */
+  "CTL-ORD-02": ["CTL-COH-03"],   /* « les catégories sont objectives » suppose que les critères départagent */
+};
+for (const [id, sources] of Object.entries(SUBORDONNE)) {
+  const cible = C.find(x => x.id === id);
+  if (!cible) continue;
+  const brut = cible.verdict;
+  cible.verdict = f => {
+    const v = brut(f);
+    if (!v || v.etat !== CONF) return v;
+    const rompues = sources.map(s => ({ id: s, v: (() => {
+      try { return C.find(x => x.id === s).verdict(f); } catch (e) { return null; } })() }))
+      .filter(x => x.v && x.v.etat === NC);
+    if (!rompues.length) return v;
+    return { etat: RISQ, motif: `${v.motif} Ce constat suppose toutefois que les faits déclarés tiennent ensemble, et ils ne tiennent pas : `
+      + rompues.map(x => `${x.id} — ${x.v.motif}`).join(" ") };
+  };
+}
+
+/* ---------------- Ce qu'une donnée illisible interdit de conclure ----------------
+   Voir moteur/commun/recevabilite.js. CTL-VAL-01 est exempté : c'est lui qui
+   porte l'anomalie, il doit continuer à la constater. */
+require("./recevabilite.js").envelopper(C, require("./valider.js").valider, ["CTL-VAL-01"]);
+
+module.exports = { C, ETATS: { CONF, NC, RISQ, MANQ, SO }, niveauDe, PIECE_ATTENDUE, SUBORDONNE };
 
 });
 
@@ -2374,9 +2440,24 @@ const ATTENDU = {
   cause: "1, 2, 3 ou 4",
 };
 
+/* Deux natures d'anomalie, et la distinction commande ce qui en découle.
+
+   « lisibilité » : la valeur ne peut pas exister — le 30 février, un effectif
+   négatif, neuf licenciements et demi. Aucun contrôle ne peut rien conclure de
+   ce qu'il a lu là, et moteur/commun/recevabilite.js le lui interdit.
+
+   « cohérence » : deux valeurs parfaitement lisibles se contredisent — un
+   effectif d'établissement supérieur à celui de l'entreprise, une notification
+   antérieure à l'entretien préalable. Ce n'est pas un obstacle à l'examen,
+   c'est son objet : les contrôles doivent au contraire pouvoir le constater.
+   Confondre les deux revenait à faire taire le contrôle chargé de voir la
+   contradiction — quatre cas contradictoires l'ont dit dès la première
+   exécution. */
 function valider(f) {
   const A = [];
-  const dit = (champ, valeur, motif) => A.push({ champ, valeur, motif, attendu: ATTENDU[champ] });
+  const dit = (champ, valeur, motif, nature) =>
+    A.push({ champ, valeur, motif, nature: nature || "lisibilité", attendu: ATTENDU[champ] });
+  const incoherent = (champ, valeur, motif) => dit(champ, valeur, motif, "cohérence");
   const a = (champ) => Object.prototype.hasOwnProperty.call(f, champ) && f[champ] !== null && f[champ] !== "";
 
   for (const champ of ["dateAudit", "dateEntretien", "dateNotification", "dateInfoCSE",
@@ -2404,20 +2485,20 @@ function valider(f) {
 
   /* Cohérences internes de dates : elles ne dépendent d'aucune règle de fond. */
   if (estDateISO(f.dateEntretien) && estDateISO(f.dateNotification) && f.dateNotification < f.dateEntretien)
-    dit("dateNotification", f.dateNotification, `antérieure à l'entretien préalable du ${f.dateEntretien}`);
+    incoherent("dateNotification", f.dateNotification, `antérieure à l'entretien préalable du ${f.dateEntretien}`);
   if (Array.isArray(f.datesReunionsCSE)) {
     const mauvaises = f.datesReunionsCSE.filter(d => !estDateISO(d));
     if (mauvaises.length) dit("datesReunionsCSE", mauvaises.join(", "), "date(s) inexistante(s) ou mal formée(s)");
   }
   if (estEntierPositif(f.effectif) && estEntierPositif(f.effectifEtablissement)
       && f.effectifEtablissement > f.effectif)
-    dit("effectifEtablissement", f.effectifEtablissement,
+    incoherent("effectifEtablissement", f.effectifEtablissement,
         `supérieur à l'effectif de l'entreprise (${f.effectif})`);
   if (estEntierPositif(f.effectif) && estEntierPositif(f.effectifGroupe) && f.effectifGroupe < f.effectif)
-    dit("effectifGroupe", f.effectifGroupe,
+    incoherent("effectifGroupe", f.effectifGroupe,
         `inférieur à l'effectif de l'entreprise (${f.effectif}), alors que celle-ci en fait partie`);
   if (estEntierPositif(f.nbLicenciements) && estEntierPositif(f.effectif) && f.nbLicenciements > f.effectif)
-    dit("nbLicenciements", f.nbLicenciements, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
+    incoherent("nbLicenciements", f.nbLicenciements, `supérieur à l'effectif de l'entreprise (${f.effectif})`);
 
   return A;
 }
@@ -2425,8 +2506,104 @@ module.exports = { valider, estDateISO, estEntierPositif, ATTENDU };
 
 });
 
+__def("./recevabilite.js", function(module, exports, require){
+/* Un verdict ne se prononce pas sur une donnée qui ne peut pas exister.
+
+   Chaque module valide déjà ses entrées et le dit dans un contrôle dédié. Cela
+   ne suffisait pas : le contrôle de recevabilité criait, et les trente-sept
+   autres continuaient de conclure. Une notification datée du 30 février
+   produisait encore deux conformités ; un effectif de -50, puis de 299,6,
+   produisaient encore des verdicts. Le rapport contenait donc, dans la même
+   page, l'affirmation que la donnée est impossible et des conclusions tirées
+   d'elle.
+
+   La règle appliquée ici est plus simple que les exceptions qu'il faudrait
+   écrire sans elle : un contrôle qui a lu un champ illisible n'a rien constaté.
+   Son verdict devient « donnée manquante » — la donnée n'est pas absente, elle
+   est inexploitable, ce qui revient au même pour la conclusion — et le motif
+   dit lequel des champs lus est en cause. Le contrôle de recevabilité, lui,
+   garde son « non conforme » : c'est lui qui porte l'anomalie, et il bloque.
+
+   Comment savoir ce qu'un contrôle a lu, sans le deviner ? En l'observant. La
+   fiche est enveloppée dans un Proxy le temps de l'exécution, et l'on relève
+   les champs réellement touchés — f.nom, f["nom"] et la déstructuration
+   comprises. Aucune liste tenue à la main, donc rien qui puisse dériver. */
+
+const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier";
+const CONCLUSIFS = new Set([CONF, "non conforme"]);
+
+/* Remplacer la fonction d'un contrôle sans la rendre illisible.
+
+   Le registre et le questionnaire déduisent les champs lus en inspectant le
+   texte de la fonction. Une enveloppe qui masque ce texte casserait la
+   garantie de non-divergence — la première tentative l'a fait, et trois
+   contre-épreuves l'ont dit aussitôt. L'enveloppe rend donc, quand on
+   l'imprime, le texte de la fonction qu'elle enveloppe. */
+function remplacer(ctl, fn) {
+  const brut = ctl.verdict;
+  const source = typeof brut.toString === "function" ? brut.toString() : String(brut);
+  Object.defineProperty(fn, "toString", { value: () => source, writable: true, configurable: true });
+  ctl.brut = ctl.brut || brut;
+  ctl.verdict = fn;
+  return brut;
+}
+
+/* Le champ de premier niveau : « consultation.dateAvis » est lu à travers
+   « consultation », qui est le nom que la sonde voit passer. */
+const racine = champ => String(champ).split(".")[0];
+
+function envelopper(controles, valider, exemptes) {
+  const hors = new Set(exemptes || []);
+  for (const ctl of controles) {
+    if (hors.has(ctl.id)) continue;
+    const brut = remplacer(ctl, function (f) {
+      /* Seules les anomalies de lisibilité font taire un contrôle. Une
+         contradiction entre deux valeurs bien formées ne l'empêche pas de
+         conclure : elle est précisément ce qu'il a pour objet de constater. */
+      const anomalies = (() => { try { return (valider(f) || [])
+        .filter(a => (a.nature || "lisibilité") === "lisibilité"); } catch (e) { return []; } })();
+      if (!anomalies.length) return brut(f);
+      const lus = new Set();
+      const p = new Proxy(f, {
+        get(c, k) { if (typeof k === "string") lus.add(k); return c[k]; },
+        has(c, k) { if (typeof k === "string") lus.add(k); return k in c; },
+        getOwnPropertyDescriptor(c, k) {
+          if (typeof k === "string") lus.add(k);
+          return Reflect.getOwnPropertyDescriptor(c, k);
+        },
+      });
+      const v = brut(p);
+      if (!v || !CONCLUSIFS.has(v.etat)) return v;
+      const touchees = anomalies.filter(a => lus.has(racine(a.champ)));
+      if (touchees.length)
+        return { etat: MANQ, illisible: true,
+          motif: `Ce contrôle a lu ${touchees.length > 1 ? "des données inexploitables" : "une donnée inexploitable"} : `
+            + touchees.map(a => `${a.champ} = « ${a.valeur} » — ${a.motif}`).join(" ; ")
+            + ". Aucune conclusion n'en est tirée, dans aucun sens. Corrigez la saisie et relancez l'audit ; le constat qu'aurait rendu ce contrôle est sans valeur tant que la donnée n'existe pas." };
+      /* Le contrôle n'a lu aucune des données fautives : son constat tient par
+         lui-même. Il ne peut pas pour autant valoir conformité — le document
+         se lit d'un bloc, et une page qui affirme qu'une donnée est impossible
+         ne peut pas en présenter une autre comme acquise. Le manquement
+         constaté, lui, reste constaté : une non-conformité n'est pas effacée
+         par une erreur de saisie ailleurs dans le dossier. */
+      if (v.etat !== CONF) return v;
+      return { etat: RISQ, dossierDouteux: true,
+        motif: `${v.motif} Ce constat ne dépend d'aucune des ${anomalies.length} donnée(s) impossible(s) que porte le dossier, mais il ne peut pas être tenu pour acquis tant qu'elles n'ont pas été corrigées : un dossier dont une partie des valeurs ne peut pas exister ne se lit pas par morceaux.` };
+    });
+  }
+  return controles;
+}
+
+module.exports = { envelopper, remplacer, racine };
+
+});
+
 __def("./registre.js", function(module, exports, require){
 module.exports = __REGISTRE;
+});
+
+__def("./sonde.js", function(module, exports, require){
+module.exports = { sonder(){}, champsLus:()=>({}), fichesDEpreuve:()=>[], reglesJamaisDeclenchees:()=>[], controlesJamaisConcluants:()=>[] };
 });
 
 __def("./gravite.js", function(module, exports, require){
@@ -2529,10 +2706,6 @@ module.exports={GRAVITE,DEF,de,RANG,statut,statutNormalise,STATUTS,B,CR,IM,IN};
 
 __def("./manifeste.js", function(module, exports, require){
 module.exports = { construire: () => __MANIFESTE, verifier: () => ({}) };
-});
-
-__def("./sonde.js", function(module, exports, require){
-module.exports = { sonder(){}, champsLus:()=>({}), fichesDEpreuve:()=>[], reglesJamaisDeclenchees:()=>[], controlesJamaisConcluants:()=>[] };
 });
 
 __def("./actions.js", function(module, exports, require){
@@ -2679,10 +2852,10 @@ __def("./eco_textes.json", function(module){ module.exports = [{"id":"5fd9358e1d
 
 __def("./rapport-tests.json", function(module){ module.exports = {
  "objet": "registre d'exécution des tests",
- "version": "1fd34d226cc1",
- "execute": "2026-08-15 22:28:21",
+ "version": "dfd7ce32f030",
+ "execute": "2026-08-16 05:53:46",
  "manifeste": {
-  "empreinte": "1fd34d226cc1",
+  "empreinte": "dfd7ce32f030",
   "fichier": "manifeste-controles.json"
  },
  "dossierReference": "dossier-reference.json",
@@ -2695,8 +2868,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
  "controlesDistinctsCouverts": 60,
  "controlesConformiteSansTest": 0,
  "empreintesFichiers": {
-  "moteur.js": "2304d9348fbe",
-  "controles.js": "494a41ca89ac",
+  "moteur.js": "87d63d4a2b25",
+  "controles.js": "7dfe8568c2ef",
   "controles2.js": "7634325210ba",
   "grille-eco.js": "0aca350d0d14",
   "grille-auto.js": "20ca038f05b7",
@@ -2737,8 +2910,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "La pièce déclare couvrir le périmètre « secteur d'activité du groupe », mais les sociétés qui composent ce secteur ne sont pas énumérées. 1 société(s) française(s) du groupe pourraient en relever : SŒUR (usinage). Une étiquette de périmètre n'est pas une couve",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-002",
@@ -2750,8 +2923,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "12 licenciements sur trente jours et un comité social et économique en place : la procédure d'entretien préalable ne s'applique pas. Un entretien est pourtant déclaré le 2026-05-04. Le tenir n'est pas irrégulier, mais il n'ouvre aucun délai opposable : la noti",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-003",
@@ -2763,8 +2936,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Moins de dix licenciements sur trente jours : l'entretien préalable est dû pour chaque salarié. Aucune date d'entretien n'est déclarée.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-004",
@@ -2776,8 +2949,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Le licenciement du salarié qui refuse l'application d'un accord de performance collective repose sur un motif spécifique qui constitue une cause réelle et sérieuse : il n'est pas un licenciement pour motif économique. Le soumettre au régime de l'article L. 123",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-005",
@@ -2789,8 +2962,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Reconstitution incohérente pour 2025 : résultat d'exploitation -1870 plus 1000 de flux intragroupe donnent -870, alors que le résultat reconstitué déclaré est 4000. L'écart est de 4870. Une reconstitution qui ne se recalcule pas ne démontre rien.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-006",
@@ -2802,8 +2975,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Jugement de liquidation du 2026-04-01, notification du 2026-05-15, soit 44 jours. La garantie couvre les ruptures intervenant dans les vingt et un jours, un plan de sauvegarde de l'emploi étant élaboré suivant le jugement, soit jusqu'au 2026-04-22. Hors de cet",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-007",
@@ -2815,8 +2988,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "En redressement comme en liquidation, les licenciements présentant un caractère urgent, inévitable et indispensable sont autorisés par ordonnance du juge-commissaire. Aucune ordonnance n'est déclarée : la notification serait dépourvue de fondement.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-008",
@@ -2828,8 +3001,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "Procédure collective déclarée, mais la nature de la procédure — sauvegarde, redressement ou liquidation, la date du jugement d'ouverture ou de liquidation, la qualité de celui qui met en œuvre le plan — employeur, administrateur ou liquidateur n'est pas rensei",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-009",
@@ -2841,8 +3014,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "La cessation est déclarée complète et définitive, mais 1 société(s) du groupe exercent la même activité : SŒUR FRANCE (en France). La cessation s'apprécie au niveau de l'entreprise, mais la poursuite de la même activité dans le groupe nourrit le débat sur le c",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-010",
@@ -2854,8 +3027,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "La cessation est déclarée incomplète ou non définitive. L'article L. 1233-3, 4° ne vise que la cessation complète et définitive de l'activité de l'entreprise : une cessation partielle relève, le cas échéant, d'un autre cas.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-011",
@@ -2867,8 +3040,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Notification du 2015-06-01 : version « avant le 1er décembre 2016 », qui porte « difficultés économiques », sans définition ni indicateur. Le seuil trimestriel chiffré n'existait pas et n'est donc pas opposé au dossier. Le périmètre retenu est le secteur d'act",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-012",
@@ -2880,8 +3053,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : dateNotification = « 2026-02-30 » — date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-013",
@@ -2893,8 +3066,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : effectif = « -12 » — valeur négative. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-014",
@@ -2906,8 +3079,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : nbLicenciements = « 9.5 » — valeur décimale, alors qu'il s'agit d'un dénombrement. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-015",
@@ -2919,8 +3092,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : dateEntretien = « 02/06/2026 » — date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-016",
@@ -2932,8 +3105,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : effectifEtablissement = « 900 » — supérieur à l'effectif de l'entreprise (320). Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-017",
@@ -2945,8 +3118,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 poste(s) déclaré(s) à la fois disponible(s) au reclassement et supprimé(s) dans l'entreprise : Régleur. Un poste ne peut pas être les deux : ou l'emploi est supprimé, ou il est disponible, et la démonstration de la suppression tombe.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-018",
@@ -2958,8 +3131,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 poste(s) proposé(s) simultanément à plusieurs salariés : Régleur | A | L — 3 destinataires. Le nombre d'offres ne vaut pas nombre de postes : une liste commune est admise, mais elle doit alors préciser les critères de départage entre les salariés candidats a",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-019",
@@ -2971,8 +3144,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "3 des quatre critères de l'article L. 1233-5 prennent la même valeur pour tous les salariés — charges de famille, ancienneté, situation rendant la réinsertion difficile — et ne départagent donc personne. Les quatre critères sont formellement présents et matéri",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-020",
@@ -2984,8 +3157,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 salarié(s) protégé(s) dont l'autorisation a été REFUSÉE : P1 (élu). Le licenciement notifié malgré un refus est nul, et le fait de passer outre est pénalement sanctionné.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-021",
@@ -2997,8 +3170,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 autorisation(s) postérieure(s) à la notification du 2026-06-15 : P1 — 2026-07-01. L'autorisation doit précéder la notification, non la suivre.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-022",
@@ -3009,9 +3182,9 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "attendu": "non conforme",
    "obtenu": "non conforme",
    "verdict": "succès",
-   "constat": "9 licenciement(s) envisagé(s) et 1 déjà prononcé(s) dans la même période de trente jours, soit 10 au total. Le projet porte sur moins de dix salariés, mais la fenêtre de trente jours en compte 10 : le régime du licenciement collectif d'au moins dix salariés s'",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "constat": "9 licenciement(s) envisagé(s), 1 déjà prononcé(s) dans la même période — soit 10 salariés sur une même période de trente jours. Le projet porte sur moins de dix salariés, mais la fenêtre de trente jours en compte 10 : le régime du licenciement collectif d'au m",
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-023",
@@ -3022,9 +3195,9 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "attendu": "non conforme",
    "obtenu": "non conforme",
    "verdict": "succès",
-   "constat": "11 salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est soumis au régime du licenciement collectif (L. 1233-25), indépendamment du décompte ci-dessus. Si la procédure a été conduite comme un licenciement de moins d",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "constat": "11 salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est à lui seul soumis au régime du licenciement collectif (L. 1233-25), quand bien même aucun autre licenciement ne serait envisagé. Si la procédure a été conduit",
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-024",
@@ -3036,8 +3209,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "13 licenciements économiques ont été prononcés sur les trois mois consécutifs précédents, sans jamais atteindre dix sur une même période de trente jours. Tout nouveau licenciement économique envisagé au cours des trois mois suivants est soumis au régime du lic",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-025",
@@ -3049,8 +3222,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 offre(s) sur 2 émanent d'une société non établie sur le territoire national : B. L'obligation de reclassement est limitée au territoire national : ces offres ne la satisfont pas et ne peuvent être décomptées.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-026",
@@ -3062,8 +3235,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Fermeture d'un établissement dans une entreprise d'au moins mille salariés : la recherche d'un repreneur doit être engagée dès l'information du comité, et celui-ci informé de son déroulement. Rien n'est déclaré.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-027",
@@ -3075,8 +3248,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 catégorie(s) réduite(s) à un seul salarié, occupée(s) par un salarié protégé : Chef d'atelier zone Est. Une catégorie professionnelle regroupe les salariés exerçant des fonctions de même nature supposant une formation professionnelle commune ; une catégorie ",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-028",
@@ -3088,8 +3261,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois court depuis la première réunion du 2026-03-23 et expire le 2026-05-23 : la notification prévue le 2026-05-01 lui est antérieure. Le comité n'est pas encore réputé consulté.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-029",
@@ -3101,8 +3274,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois court depuis la première réunion du 2026-03-23 et expire le 2026-05-23 : la notification prévue le 2026-04-01 lui est antérieure. Le comité n'est pas encore réputé consulté.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-030",
@@ -3114,8 +3287,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 poste(s) recensés comme disponibles n'ont fait l'objet d'aucune offre et d'aucun motif d'exclusion : Cariste (B).",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-031",
@@ -3127,8 +3300,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 offre(s) sur 2 ne comportent pas toutes les mentions exigées : intitulé et descriptif du poste, nom de l'employeur, nature du contrat, localisation, rémunération, classification.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-032",
@@ -3140,8 +3313,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Aucun poste n'est recensé, ni aucune absence de poste attestée, pour : B. Une société du périmètre non interrogée est un manquement.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-033",
@@ -3153,8 +3326,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "État des postes daté du 2026-06-20, postérieur à la notification du 2026-06-15. Le reclassement s'apprécie au jour du licenciement.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-034",
@@ -3166,8 +3339,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "1 offre(s) n'indiquent aucun délai de réponse. Sans délai identifiable, le silence du salarié ne peut pas être opposé comme un refus.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-035",
@@ -3179,8 +3352,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 poste(s) de catégorie inférieure proposés sans accord exprès du salarié.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-036",
@@ -3192,8 +3365,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "1 pièce(s) sont seulement cochées comme versées, sans nom de fichier, date, période couverte, auteur, version ni périmètre. Une case cochée n'établit ni la date, ni le périmètre, ni la complétude.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-037",
@@ -3205,8 +3378,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 pièce(s) sont postérieures à la notification du 2026-06-15 : etat-postes (2026-07-01). Une pièce postérieure ne peut pas justifier un acte antérieur.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-038",
@@ -3218,8 +3391,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "1 pièce(s) déposées mais non lues : etat-postes. Le dépôt n'est pas la lecture, et la lecture n'est pas la conformité.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-039",
@@ -3231,8 +3404,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "La convocation du 2026-03-25 est postérieure à la première réunion.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-040",
@@ -3244,8 +3417,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "2 jour(s) entre la convocation et la première réunion. Le code ne fixe pas de délai chiffré ici, mais les renseignements devant être adressés « avec la convocation », un délai aussi court prive le comité de tout examen — et c'est sur ce terrain que la consulta",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-041",
@@ -3257,8 +3430,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "4 établissements distincts, et le comité central n'a pas été réuni. Il doit l'être dès lors que les mesures excèdent le pouvoir des chefs d'établissement ou portent sur plusieurs établissements (L. 1233-9).",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-042",
@@ -3270,8 +3443,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Aucun comité et aucun procès-verbal de carence : l'absence d'institution ne dispense pas, elle doit être établie.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-043",
@@ -3283,8 +3456,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Le septième renseignement — les conséquences en matière de santé, de sécurité ou de conditions de travail — n'est pas renseigné. Son omission vicie la consultation.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-044",
@@ -3296,8 +3469,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Notification du 2026-03-10 : elle ne peut intervenir qu'au plus tôt le lendemain de la date prévue pour la première réunion, le 2026-03-23 (L. 1233-46).",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-045",
@@ -3309,8 +3482,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Effectif de l'établissement (400) supérieur à celui de l'entreprise (320).",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-046",
@@ -3322,8 +3495,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Le périmètre retenu est l'établissement, sans accord collectif le prévoyant. À défaut d'accord, ce périmètre ne peut être inférieur à la zone d'emplois où sont situés les établissements concernés.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-047",
@@ -3335,8 +3508,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "41 % des suffrages : l'accord doit être signé par des organisations ayant recueilli au moins 50 % des suffrages exprimés au premier tour des dernières élections des titulaires au comité.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-048",
@@ -3348,8 +3521,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Mesures énoncées sans aucun chiffre : evitement, reclassementInterne, formation, creation. L'administration apprécie la proportionnalité des moyens ; une mesure non chiffrée n'est pas appréciable.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-049",
@@ -3361,8 +3534,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Projet de plan daté du 2026-03-20, postérieur à la convocation du 2026-03-09 : il doit être adressé avec elle.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-050",
@@ -3374,8 +3547,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Notification prévue le 2026-06-15, décision administrative le 2026-06-20 : la notification ne peut intervenir qu'après.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-051",
@@ -3387,8 +3560,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 salarié(s) protégé(s) sans autorisation obtenue : X (membre du CSE). Aucune notification ne peut intervenir avant l'autorisation.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-052",
@@ -3400,8 +3573,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 contrat(s) précaire(s) ou recrutement(s) portent sur un emploi déclaré supprimé : Régleur.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-053",
@@ -3413,8 +3586,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "L'absence de poste ne repose que sur une attestation interne (La DRH). Un état des mouvements de personnel ou un registre daté vaut mieux qu'une affirmation de l'employeur sur lui-même.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-054",
@@ -3426,8 +3599,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "Aucune liste de postes disponibles n'a été fournie. L'obligation de reclassement ne peut donc pas être contrôlée.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-055",
@@ -3439,8 +3612,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "2 poste(s) recensé(s). L'existence de cette liste est déclarée mais l'état daté n'est pas versé : la loyauté de la recherche reste invérifiable.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-056",
@@ -3452,8 +3625,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "L'absence de poste n'est pas attestée. « Il n'y a pas de manquement à l'obligation de reclassement si l'employeur justifie de l'absence de poste disponible » — encore faut-il le justifier (Cass. soc. 2 juillet 2014, n° 13-12.048).",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-057",
@@ -3465,8 +3638,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "Aucune formation n'est renseignée alors que la cause invoquée est une mutation technologique : c'est le terrain sur lequel le litige se noue.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-058",
@@ -3478,8 +3651,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 salarié(s) destinataires pour 3 licenciements envisagés : 2 salarié(s) n'ont reçu aucune offre.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-059",
@@ -3491,8 +3664,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Écart entre les suppressions déclarées (1) et le nombre de licenciements (22). Un écart non expliqué affaiblit la démonstration.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-060",
@@ -3504,8 +3677,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "Aucune pièce comptable n'est renseignée.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-061",
@@ -3517,8 +3690,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Rien n'indique que les données portent sur le secteur d'activité du groupe plutôt que sur la seule entreprise. « Il incombe à l'employeur de démontrer, dans le périmètre pertinent, la réalité et le sérieux du motif » (Cass. soc. 31 mars 2021, n° 19-26.054).",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-062",
@@ -3530,8 +3703,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "La mutation n'est pas décrite : outil abandonné, outil nouveau, date de mise en service, montant.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-063",
@@ -3543,8 +3716,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "1 réunion(s) tenue(s) pour 2 exigée(s) dans ce régime.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-064",
@@ -3556,8 +3729,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "non conforme",
    "verdict": "succès",
    "constat": "7 jours entre les deux réunions : le minimum de quinze jours n'est pas respecté (L. 1233-30, I).",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-065",
@@ -3569,8 +3742,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Le document des sept renseignements de l'article L. 1233-31 n'est pas versé. Il doit être adressé « avec la convocation », non remis en séance.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-066",
@@ -3582,8 +3755,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois, courant depuis la première réunion du 2026-03-23, expire le 2026-05-23 ; à cette date le comité est réputé avoir été consulté. Aucune notification ne doit intervenir avant.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-067",
@@ -3595,8 +3768,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Le plan ne renseigne pas : modalités de suivi de la mise en œuvre. Ces mesures sont examinées par l'administration au regard des moyens de l'entreprise, de l'unité économique et sociale ou du groupe.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-068",
@@ -3608,8 +3781,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Les comptes du groupe ne sont pas versés. Un plan calibré sur les seuls moyens de la filiale est le motif de refus d'homologation le plus fréquent.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-069",
@@ -3621,8 +3794,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "donnée manquante",
    "verdict": "succès",
    "constat": "La voie n'est pas arrêtée. Elle détermine tout le calendrier et se choisit avant la première réunion.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-070",
@@ -3634,8 +3807,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "La convention collective n'est pas versée. Les accords d'entreprise ne sont pas versés. Tant qu'ils ne le sont pas, l'audit applique la loi seule, alors que ces textes priment sur les critères d'ordre, les délais et l'indemnité.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-071",
@@ -3647,8 +3820,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Les pièces comptables enregistrées ne déclarent pas couvrir le secteur d'activité du groupe. La démonstration risque de porter sur la seule entreprise.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-072",
@@ -3660,8 +3833,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "IDCC 1486 déclaré, mais aucune convention versée comme pièce datée. L'application peut la récupérer dans KALI, mais rien n'établit que c'est celle que vous appliquez.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   },
   {
    "cas": "T-073",
@@ -3673,8 +3846,8 @@ __def("./rapport-tests.json", function(module){ module.exports = {
    "obtenu": "risque à vérifier",
    "verdict": "succès",
    "constat": "Accords annoncés comme versés, mais aucun n'est enregistré comme lu : leur articulation avec la loi n'a pas été faite.",
-   "version": "1fd34d226cc1",
-   "execute": "2026-08-15 22:28:21"
+   "version": "dfd7ce32f030",
+   "execute": "2026-08-16 05:53:46"
   }
  ]
 }; });
@@ -3686,6 +3859,6 @@ __def("./rapport-tests.json", function(module){ module.exports = {
     controles: require("./controles.js"),
     actions: require("./actions.js"),
     manifeste: __MANIFESTE,
-    champs: [["Identification",[["entreprise","Dénomination sociale","texte"],["siren","SIREN","9 chiffres"],["dateAudit","Date de l'audit","AAAA-MM-JJ"],["idcc","Convention collective — numéro IDCC","4 chiffres"]]],["Effectifs et structure",[["effectif","Effectif de l'entreprise","nombre"],["effectifEtablissement","Effectif de l'établissement concerné","nombre"],["groupe","L'entreprise appartient-elle à un groupe ?","oui / non"],["effectifGroupe","Effectif total du groupe, France et étranger","nombre"],["societes","Sociétés du groupe : nom, effectif, activité, pays","liste"],["activite","Activité de l'entreprise auditée, dans les termes qui servent à délimiter le secteur","texte"],["societesDuSecteur","Sociétés du groupe relevant du même secteur d'activité, nommées","liste"],["etablissementsDistincts","Nombre d'établissements distincts","nombre"]]],["Procédure collective",[["procedureCollective","L'entreprise fait-elle l'objet d'une procédure collective ?","oui / non"],["typeProcedure","Nature de la procédure","sauvegarde / redressement / liquidation"],["dateJugement","Date du jugement d'ouverture ou de liquidation","AAAA-MM-JJ"],["qualiteAuteur","Qui met en œuvre le plan de licenciement","employeur / administrateur / liquidateur"],["ordonnanceJugeCommissaire","Ordonnance du juge-commissaire autorisant les licenciements : date et référence","texte"]]],["Transfert d'entité",[["transfertEnvisage","Un transfert d'entité économique est-il envisagé ?","oui / non"]]],["Groupe — origine des difficultés",[["fluxIntragroupe","Redevances de marque, management fees et prix de transfert versés aux sociétés du groupe, par exercice — montants comptables, non une appréciation","tableau"],["resultatHorsFlux","Résultat d'exploitation reconstitué hors ces flux, par exercice","tableau"],["resultatGroupe","Résultat consolidé du groupe et dividendes versés, par exercice","tableau"]]],["Comité social et économique",[["cseExistant","Un comité est-il en place ?","oui / non"],["pvCarence","Procès-verbal de carence, à défaut de comité","fichier"],["cseCentralConsulte","Le comité central a-t-il été consulté ?","oui / non"],["consequencesSSCT","Conséquences du projet sur la santé, la sécurité et les conditions de travail exposées au comité","texte"],["expertise","Une expertise du comité a-t-elle été demandée ?","oui / non"]]],["Ordre des licenciements — périmètre",[["perimetreOrdre","Périmètre d'application des critères d'ordre","texte"],["accordPerimetreOrdre","Un accord collectif fixe-t-il ce périmètre ?","oui / non"]]],["Fermeture de site",[["fermetureEtablissement","Le projet emporte-t-il la fermeture d'un établissement ?","oui / non"],["rechercheRepreneur","Recherche d'un repreneur : date d'engagement, mandataire, candidats, motifs d'écartement","texte"]]],["Le projet",[["cause","Cause invoquée : 1 difficultés · 2 mutations technologiques · 3 sauvegarde de la compétitivité · 4 cessation d'activité","1 à 4"],["cessationComplete","Si cause 4 : la cessation est-elle totale et définitive ?","oui / non"],["nbLicenciements","Nombre de licenciements envisagés sur 30 jours","nombre"],["licenciementsRecents30j","Licenciements économiques déjà prononcés dans la même période de trente jours","nombre"],["licenciements3moisGlissants","Total des licenciements économiques sur les trois mois consécutifs précédents","nombre"],["refusModification","Salariés ayant refusé une modification de leur contrat","nombre"],["postesSupprimes","Postes supprimés : intitulé, service, effectif avant et après","liste"]]],["La démonstration économique",[["trimestres","Chiffre d'affaires ou commandes, trimestre par trimestre, comparés au même trimestre de l'année précédente, sur le périmètre du secteur","tableau"],["resultatExploitation","Résultat d'exploitation des trois derniers exercices","tableau"],["tresorerie","Trésorerie et excédent brut d'exploitation, trois exercices","tableau"],["autresElements","Autres éléments invoqués : perte de marché, sinistre, rupture de contrat","texte"],["menace","Si cause 3 : la menace, sa date, sa source et son chiffrage","texte"],["mutation","Si cause 2 : outil abandonné, outil nouveau, date de mise en service, montant","texte"]]],["Les salariés",[["salaries","Pour chacun : nom, emploi, ancienneté en mois, rémunération des 12 derniers mois, des 3 derniers","liste"],["categories","Catégories professionnelles : intitulé, effectif, nombre de suppressions, notes des critères d'ordre","liste"],["salariesProteges","Salariés protégés : nom, mandat, date et sens de l'autorisation de l'inspecteur du travail","liste"],["salariesSuspendus","Salariés en arrêt, congé maternité, inaptitude","liste"],["precaires","Contrats à durée déterminée, intérimaires, recrutements des 12 derniers mois","liste"]]],["Le reclassement",[["postesDisponibles","Postes disponibles dans l'entreprise et le groupe sur le territoire national : intitulé, société, lieu, contrat, rémunération, classification","liste"],["offresFaites","Offres adressées : intitulé, descriptif, employeur, nature du contrat, localisation, rémunération, classification, moyen conférant date certaine, réponse","liste"],["formationProposee","Formations d'adaptation proposées : contenu, durée, coût, réponse","liste"]]],["La procédure",[["dateInfoCSE","Date de convocation du comité social et économique","AAAA-MM-JJ"],["datesReunionsCSE","Dates des réunions du comité","liste de dates"],["dateAvisCSE","Date de l'avis rendu, ou mention « avis non rendu »","AAAA-MM-JJ"],["dateEntretien","Date de l'entretien préalable","AAAA-MM-JJ"],["dateNotification","Date de notification envisagée","AAAA-MM-JJ"],["cadreAuSensL1441_13","Salarié relevant du personnel d'encadrement au sens du 2° de L. 1441-13","oui / non"],["dateNotifAdmin","Date de notification ou d'information à l'autorité administrative","AAAA-MM-JJ"]]],["Les normes conventionnelles — pièces à joindre",[["conventionJointe","PIÈCE À JOINDRE — convention collective applicable : le texte à jour, ou à défaut son numéro IDCC et son intitulé exact","fichier ou référence"],["accordsJoints","PIÈCE À JOINDRE — accords d'entreprise applicables : accord de méthode, accord portant plan de sauvegarde de l'emploi, accord de performance collective, accord de gestion des emplois. Joindre le texte intégral de chacun, avenants compris","fichiers"],["convention","Clauses relevées, si la convention n'est pas jointe : critères d'ordre, préavis, indemnité, priorité de réembauche, commission paritaire de l'emploi, délais","cases à cocher"],["accords","Accords existants, si les textes ne sont pas joints : méthode, plan de sauvegarde de l'emploi, performance collective, gestion des emplois","cases à cocher"],["refusAPC","Le licenciement fait-il suite au refus d'un accord de performance collective ?","oui / non"]]],["Fraîcheur des sources — à confirmer par l'employeur",[["conventionAJour","L'application récupère elle-même votre convention dans la base KALI de Légifrance à partir de l'IDCC. Confirmez-vous que la version qui y figure est bien celle que vous appliquez ?","oui / non / je ne sais pas"],["avenantsRecents","Appliquez-vous un avenant, un accord de branche ou un accord d'entreprise postérieur à la dernière mise à jour publiée sur Légifrance ? Si oui, joindre le texte","oui / non + fichier"],["usagesEtEngagements","Existe-t-il des usages, engagements unilatéraux ou décisions unilatérales plus favorables que la loi et la convention ?","texte"],["contentieuxEnCours","Un contentieux ou un contrôle est-il en cours sur ces questions ?","texte"]]],["Plan de sauvegarde de l'emploi — si au moins 10 licenciements et 50 salariés",[["pse.voie","Voie retenue : accord majoritaire ou document unilatéral","accord / unilatéral"],["pse.evitement","Mesures pour éviter les licenciements ou en limiter le nombre","texte"],["pse.reclassementInterne","Plan de reclassement interne sur le territoire national","texte"],["pse.formation","Actions de formation, validation des acquis, reconversion","texte"],["pse.creation","Soutien à la création ou à la reprise d'activité","texte"],["pse.suivi","Modalités de suivi de la mise en œuvre","texte"],["pse.dateDecisionAdmin","Date de la décision de validation ou d'homologation","AAAA-MM-JJ"]]],["Pièces versées — une ligne par pièce, non une case à cocher",[["pieces.code","Nature de la pièce, à choisir dans le registre P-001 à P-015","liste"],["pieces.fichier","Nom du fichier déposé","texte"],["pieces.date","Date du document lui-même, non la date de dépôt","AAAA-MM-JJ"],["pieces.periode","Période couverte par le document","texte"],["pieces.auteur","Auteur ou émetteur : direction, expert-comptable, commissaire aux comptes, tiers","texte"],["pieces.version","Version ou numéro d'avenant","texte"],["pieces.perimetre","Périmètre couvert : établissement, entreprise, secteur d'activité du groupe","texte"],["pieces.lue","La pièce a-t-elle été lue et rapprochée des réponses ?","oui / non"]]],["Situations particulières",[["transfertEnvisage","Une entité économique est-elle transférée ?","oui / non"],["procedureCollective","L'entreprise est-elle en redressement ou liquidation judiciaire ?","oui / non"],["coEmploi","Une société du groupe s'immisce-t-elle dans la gestion de l'entreprise ?","oui / non"]]]],
+    champs: [["Identification",[["entreprise","Dénomination sociale","texte"],["siren","SIREN","9 chiffres"],["dateAudit","Date de l'audit","AAAA-MM-JJ"],["idcc","Convention collective — numéro IDCC","4 chiffres"]]],["Effectifs et structure",[["effectif","Effectif de l'entreprise","nombre"],["effectifEtablissement","Effectif de l'établissement concerné","nombre"],["groupe","L'entreprise appartient-elle à un groupe ?","oui / non"],["effectifGroupe","Effectif total du groupe, France et étranger","nombre"],["societes","Sociétés du groupe : nom, effectif, activité, pays","liste"],["activite","Activité de l'entreprise auditée, dans les termes qui servent à délimiter le secteur","texte"],["societesDuSecteur","Sociétés du groupe relevant du même secteur d'activité, nommées","liste"],["etablissementsDistincts","Nombre d'établissements distincts","nombre"]]],["Procédure collective",[["procedureCollective","L'entreprise fait-elle l'objet d'une procédure collective ?","oui / non"],["typeProcedure","Nature de la procédure","sauvegarde / redressement / liquidation"],["dateJugement","Date du jugement d'ouverture ou de liquidation","AAAA-MM-JJ"],["qualiteAuteur","Qui met en œuvre le plan de licenciement","employeur / administrateur / liquidateur"],["ordonnanceJugeCommissaire","Ordonnance du juge-commissaire autorisant les licenciements : date et référence","texte"]]],["Transfert d'entité",[["transfertEnvisage","Un transfert d'entité économique est-il envisagé ?","oui / non"]]],["Groupe — origine des difficultés",[["fluxIntragroupe","Redevances de marque, management fees et prix de transfert versés aux sociétés du groupe, par exercice — montants comptables, non une appréciation","tableau"],["resultatHorsFlux","Résultat d'exploitation reconstitué hors ces flux, par exercice","tableau"],["resultatGroupe","Résultat consolidé du groupe et dividendes versés, par exercice","tableau"]]],["Comité social et économique",[["cseExistant","Un comité est-il en place ?","oui / non"],["pvCarence","Procès-verbal de carence, à défaut de comité","fichier"],["cseCentralConsulte","Le comité central a-t-il été consulté ?","oui / non"],["consequencesSSCT","Conséquences du projet sur la santé, la sécurité et les conditions de travail exposées au comité","texte"],["expertise","Une expertise du comité a-t-elle été demandée ?","oui / non"]]],["Ordre des licenciements — périmètre",[["perimetreOrdre","Périmètre d'application des critères d'ordre","texte"],["accordPerimetreOrdre","Un accord collectif fixe-t-il ce périmètre ?","oui / non"]]],["Fermeture de site",[["fermetureEtablissement","Le projet emporte-t-il la fermeture d'un établissement ?","oui / non"],["rechercheRepreneur","Recherche d'un repreneur : date d'engagement, mandataire, candidats, motifs d'écartement","texte"]]],["Le projet",[["cause","Cause invoquée : 1 difficultés · 2 mutations technologiques · 3 sauvegarde de la compétitivité · 4 cessation d'activité","1 à 4"],["cessationComplete","Si cause 4 : la cessation est-elle totale et définitive ?","oui / non"],["nbLicenciements","Nombre de licenciements envisagés sur 30 jours","nombre"],["licenciementsRecents30j","Licenciements économiques déjà prononcés dans la même période de trente jours","nombre"],["licenciements3moisGlissants","Total des licenciements économiques sur les trois mois consécutifs précédents","nombre"],["refusModification","Salariés dont le licenciement est envisagé après refus d'une modification de leur contrat, non compris dans le nombre ci-dessus","nombre"],["postesSupprimes","Postes supprimés : intitulé, service, effectif avant et après","liste"]]],["La démonstration économique",[["trimestres","Chiffre d'affaires ou commandes, trimestre par trimestre, comparés au même trimestre de l'année précédente, sur le périmètre du secteur","tableau"],["resultatExploitation","Résultat d'exploitation des trois derniers exercices","tableau"],["tresorerie","Trésorerie et excédent brut d'exploitation, trois exercices","tableau"],["autresElements","Autres éléments invoqués : perte de marché, sinistre, rupture de contrat","texte"],["menace","Si cause 3 : la menace, sa date, sa source et son chiffrage","texte"],["mutation","Si cause 2 : outil abandonné, outil nouveau, date de mise en service, montant","texte"]]],["Les salariés",[["salaries","Pour chacun : nom, emploi, ancienneté en mois, rémunération des 12 derniers mois, des 3 derniers","liste"],["categories","Catégories professionnelles : intitulé, effectif, nombre de suppressions, notes des critères d'ordre","liste"],["salariesProteges","Salariés protégés : nom, mandat, date et sens de l'autorisation de l'inspecteur du travail","liste"],["salariesSuspendus","Salariés en arrêt, congé maternité, inaptitude","liste"],["precaires","Contrats à durée déterminée, intérimaires, recrutements des 12 derniers mois","liste"]]],["Le reclassement",[["postesDisponibles","Postes disponibles dans l'entreprise et le groupe sur le territoire national : intitulé, société, lieu, contrat, rémunération, classification","liste"],["offresFaites","Offres adressées : intitulé, descriptif, employeur, nature du contrat, localisation, rémunération, classification, moyen conférant date certaine, réponse","liste"],["formationProposee","Formations d'adaptation proposées : contenu, durée, coût, réponse","liste"]]],["La procédure",[["dateInfoCSE","Date de convocation du comité social et économique","AAAA-MM-JJ"],["datesReunionsCSE","Dates des réunions du comité","liste de dates"],["dateAvisCSE","Date de l'avis rendu, ou mention « avis non rendu »","AAAA-MM-JJ"],["dateEntretien","Date de l'entretien préalable","AAAA-MM-JJ"],["dateNotification","Date de notification envisagée","AAAA-MM-JJ"],["cadreAuSensL1441_13","Salarié relevant du personnel d'encadrement au sens du 2° de L. 1441-13","oui / non"],["dateNotifAdmin","Date de notification ou d'information à l'autorité administrative","AAAA-MM-JJ"]]],["Les normes conventionnelles — pièces à joindre",[["conventionJointe","PIÈCE À JOINDRE — convention collective applicable : le texte à jour, ou à défaut son numéro IDCC et son intitulé exact","fichier ou référence"],["accordsJoints","PIÈCE À JOINDRE — accords d'entreprise applicables : accord de méthode, accord portant plan de sauvegarde de l'emploi, accord de performance collective, accord de gestion des emplois. Joindre le texte intégral de chacun, avenants compris","fichiers"],["convention","Clauses relevées, si la convention n'est pas jointe : critères d'ordre, préavis, indemnité, priorité de réembauche, commission paritaire de l'emploi, délais","cases à cocher"],["accords","Accords existants, si les textes ne sont pas joints : méthode, plan de sauvegarde de l'emploi, performance collective, gestion des emplois","cases à cocher"],["refusAPC","Le licenciement fait-il suite au refus d'un accord de performance collective ?","oui / non"]]],["Fraîcheur des sources — à confirmer par l'employeur",[["conventionAJour","L'application récupère elle-même votre convention dans la base KALI de Légifrance à partir de l'IDCC. Confirmez-vous que la version qui y figure est bien celle que vous appliquez ?","oui / non / je ne sais pas"],["avenantsRecents","Appliquez-vous un avenant, un accord de branche ou un accord d'entreprise postérieur à la dernière mise à jour publiée sur Légifrance ? Si oui, joindre le texte","oui / non + fichier"],["usagesEtEngagements","Existe-t-il des usages, engagements unilatéraux ou décisions unilatérales plus favorables que la loi et la convention ?","texte"],["contentieuxEnCours","Un contentieux ou un contrôle est-il en cours sur ces questions ?","texte"]]],["Plan de sauvegarde de l'emploi — si au moins 10 licenciements et 50 salariés",[["pse.voie","Voie retenue : accord majoritaire ou document unilatéral","accord / unilatéral"],["pse.evitement","Mesures pour éviter les licenciements ou en limiter le nombre","texte"],["pse.reclassementInterne","Plan de reclassement interne sur le territoire national","texte"],["pse.formation","Actions de formation, validation des acquis, reconversion","texte"],["pse.creation","Soutien à la création ou à la reprise d'activité","texte"],["pse.suivi","Modalités de suivi de la mise en œuvre","texte"],["pse.dateDecisionAdmin","Date de la décision de validation ou d'homologation","AAAA-MM-JJ"]]],["Pièces versées — une ligne par pièce, non une case à cocher",[["pieces.code","Nature de la pièce, à choisir dans le registre P-001 à P-015","liste"],["pieces.fichier","Nom du fichier déposé","texte"],["pieces.date","Date du document lui-même, non la date de dépôt","AAAA-MM-JJ"],["pieces.periode","Période couverte par le document","texte"],["pieces.auteur","Auteur ou émetteur : direction, expert-comptable, commissaire aux comptes, tiers","texte"],["pieces.version","Version ou numéro d'avenant","texte"],["pieces.perimetre","Périmètre couvert : établissement, entreprise, secteur d'activité du groupe","texte"],["pieces.lue","La pièce a-t-elle été lue et rapprochée des réponses ?","oui / non"]]],["Situations particulières",[["transfertEnvisage","Une entité économique est-elle transférée ?","oui / non"],["procedureCollective","L'entreprise est-elle en redressement ou liquidation judiciaire ?","oui / non"],["coEmploi","Une société du groupe s'immisce-t-elle dans la gestion de l'entreprise ?","oui / non"]]]],
   };
 })(typeof window !== "undefined" ? window : this);

@@ -325,4 +325,45 @@ function niveauDe(x, f, v) {
   return P.aPiece(f, cle) ? P.NIV.PIECE : P.NIV.DECLARE;
 }
 C.push(...require('./controles2.js'));
-module.exports = { C, ETATS: { CONF, NC, RISQ, MANQ, SO }, niveauDe, PIECE_ATTENDUE };
+
+/* ---------------- Ce qu'une contradiction interdit de conclure ----------------
+
+   Les contrôles de cohérence constataient la contradiction, et les contrôles de
+   conformité continuaient de prononcer « conforme » sur les mêmes faits. Le
+   rapport disait donc, à deux pages d'intervalle, qu'un poste est à la fois
+   disponible et supprimé, et que tout poste disponible a bien été proposé.
+   Les deux affirmations sont exactes prises séparément ; ensemble elles ne
+   veulent rien dire.
+
+   Un constat de conformité suppose que les faits sur lesquels il porte tiennent
+   ensemble. Quand la cohérence est rompue, le constat n'est pas faux : il est
+   sans objet, et il devient une réserve qui nomme la contradiction. Les
+   verdicts « non conforme » ne sont pas touchés — un manquement constaté reste
+   un manquement. */
+const SUBORDONNE = {
+  "CTL-REC-07": ["CTL-COH-01"],   /* « tout poste disponible a été proposé » suppose que les postes disponibles le soient */
+  "CTL-REC-03": ["CTL-COH-02"],   /* « les offres sont complètes » suppose qu'elles portent sur des postes distincts */
+  "CTL-ORD-02": ["CTL-COH-03"],   /* « les catégories sont objectives » suppose que les critères départagent */
+};
+for (const [id, sources] of Object.entries(SUBORDONNE)) {
+  const cible = C.find(x => x.id === id);
+  if (!cible) continue;
+  const brut = cible.verdict;
+  cible.verdict = f => {
+    const v = brut(f);
+    if (!v || v.etat !== CONF) return v;
+    const rompues = sources.map(s => ({ id: s, v: (() => {
+      try { return C.find(x => x.id === s).verdict(f); } catch (e) { return null; } })() }))
+      .filter(x => x.v && x.v.etat === NC);
+    if (!rompues.length) return v;
+    return { etat: RISQ, motif: `${v.motif} Ce constat suppose toutefois que les faits déclarés tiennent ensemble, et ils ne tiennent pas : `
+      + rompues.map(x => `${x.id} — ${x.v.motif}`).join(" ") };
+  };
+}
+
+/* ---------------- Ce qu'une donnée illisible interdit de conclure ----------------
+   Voir moteur/commun/recevabilite.js. CTL-VAL-01 est exempté : c'est lui qui
+   porte l'anomalie, il doit continuer à la constater. */
+require("./recevabilite.js").envelopper(C, require("./valider.js").valider, ["CTL-VAL-01"]);
+
+module.exports = { C, ETATS: { CONF, NC, RISQ, MANQ, SO }, niveauDe, PIECE_ATTENDUE, SUBORDONNE };

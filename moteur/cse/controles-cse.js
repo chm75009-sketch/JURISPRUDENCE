@@ -3,6 +3,7 @@
    décrite y satisfait. Cinq états, et jamais « conforme » sur une déclaration
    que rien ne justifie : une affirmation de l'employeur n'est pas une preuve. */
 const M = require("./moteur-cse.js");
+const REC = require("./recevabilite.js");
 const D = require("./dates.js");
 const { valider, examines } = require("./valider-cse.js");
 const CONF = "conforme", NC = "non conforme", RISQ = "risque à vérifier",
@@ -28,7 +29,7 @@ const ecart = D.ecart;
    Tant qu'il l'est, aucun contrôle assis sur l'effectif ne peut conclure à la
    conformité : il conclurait sur un nombre que le dossier dément lui-même. */
 function effectifDouteux(f) {
-  const c = M.coherenceEffectif(f);
+  const c = M.coherenceEffectif({ effectif: f.effectif, effectifsMensuels: f.effectifsMensuels });
   if (!c || !c.lisible) return null;
   if (c.seuilsFranchis.length)
     return { seuil: true,
@@ -66,14 +67,14 @@ c("CSE-CTL-REC-01", "Recevabilité", "Les données saisies sont-elles lisibles ?
      : { etat: MANQ, motif: "Aucune des données que ce contrôle sait examiner n'est renseignée : il n'y a rien dont la lisibilité puisse être constatée." }; });
 
 c("CSE-CTL-COH-01", "Recevabilité", "L'effectif déclaré est-il cohérent avec les relevés mensuels ?", ["L. 1111-2", "L. 2311-2"],
- f => { const co = M.coherenceEffectif(f);
+ f => { const co = M.coherenceEffectif({ effectif: f.effectif, effectifsMensuels: f.effectifsMensuels });
    if (!co) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas renseignés : la cohérence ne peut pas être vérifiée." };
    if (!co.lisible) return { etat: MANQ, motif: co.motif };
    if (co.dans) return { etat: CONF, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, compris dans l'intervalle des ${co.releves} relevés mensuels (${co.min} à ${co.max}, moyenne ${co.moyenne}).` };
    return { etat: NC, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, alors que les ${co.releves} relevés mensuels s'échelonnent de ${co.min} à ${co.max} — un écart de ${co.ecart} salarié(s) avec le relevé le plus proche. Aucun mois du dossier ne corrobore le nombre déclaré, sur lequel repose pourtant tout le régime applicable au comité.` }; });
 
 c("CSE-CTL-COH-02", "Recevabilité", "Les relevés mensuels franchissent-ils un seuil que l'effectif déclaré ne franchit pas ?", ["L. 2311-2", "L. 2312-2", "L. 2312-34"],
- f => { const co = M.coherenceEffectif(f);
+ f => { const co = M.coherenceEffectif({ effectif: f.effectif, effectifsMensuels: f.effectifsMensuels });
    if (!co || !co.lisible) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas exploitables : le franchissement des seuils ne peut pas être vérifié." };
    if (!co.seuilsFranchis.length)
      return { etat: CONF, motif: `Aucun seuil n'est atteint par les relevés mensuels sans l'être par l'effectif déclaré de ${co.effectifDeclare} salariés.` };
@@ -456,13 +457,20 @@ const SUR_EFFECTIF = new Set(["CSE-CTL-CON-01", "CSE-CTL-CON-05", "CSE-CTL-CON-0
 for (const ctl of C) {
   if (!SUR_EFFECTIF.has(ctl.id)) continue;
   const brut = ctl.verdict;
-  ctl.verdict = f => surEffectif(f, brut(f));
+  /* remplacer() conserve le texte de la fonction enveloppée : le registre et le
+     questionnaire déduisent les champs lus en l'inspectant. */
+  REC.remplacer(ctl, f => surEffectif(f, brut(f)));
 }
 
 /* Les contrôles de cohérence ne vérifient pas une donnée mais la relation entre
    deux. C'est la famille qui manquait, et c'est là que se cachaient les
    conformités fausses — celles qu'un dossier obtient en se contredisant. */
 const COHERENCE = new Set(["CSE-CTL-COH-01", "CSE-CTL-COH-02"]);
+
+/* Ce qu'une donnée illisible interdit de conclure — voir
+   moteur/commun/recevabilite.js. CSE-CTL-REC-01 est exempté : c'est lui qui
+   porte l'anomalie, il doit continuer à la constater. */
+REC.envelopper(C, valider, ["CSE-CTL-REC-01"]);
 
 module.exports = { C, ETATS, DETECTION, COHERENCE, SUR_EFFECTIF, effectifDouteux };
 if (require.main === module) {
