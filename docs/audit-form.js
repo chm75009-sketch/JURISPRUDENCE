@@ -593,7 +593,9 @@
       var sup = document.createElement("button");
       sup.type = "button"; sup.className = "fichier retirer"; sup.textContent = "\u00d7";
       sup.title = "retirer cette ligne";
-      sup.addEventListener("click", function () { tr.remove(); compter(); });
+      sup.addEventListener("click", function () {
+        memoriser("le retrait d'une ligne de « " + fam + " »");
+        tr.remove(); compter(); });
       td2.appendChild(sup); tr.appendChild(td2);
       tab.appendChild(tr);
       return tr;
@@ -617,6 +619,7 @@
       var fich = i.files && i.files[0];
       if (!fich) return;
       etat.className = "etat-depot"; etat.textContent = "lecture\u2026";
+      memoriser("l'import de « " + fich.name + " »");
       lireFichier(fich, "liste d'objets").then(function (r) {
         Array.prototype.slice.call(tab.querySelectorAll("tr")).slice(1)
           .forEach(function (tr) { tr.remove(); });
@@ -759,6 +762,7 @@
       var f = i.files && i.files[0];
       if (!f) return;
       etat.className = "etat-depot"; etat.textContent = "lecture…";
+      memoriser("l'import de « " + f.name + " »");
       lireFichier(f, format).then(function (r) {
         var champ = document.getElementById("c-" + cle);
         champ.value = Array.isArray(r.valeur)
@@ -894,6 +898,108 @@
     },
   };
 
+  /* ------------------------------------------------------------ revenir en arrière
+
+     Un formulaire long sans retour en arrière est une menace permanente : une
+     fausse manœuvre efface une demi-heure de saisie et rien ne la rend. La pile
+     ci-dessous garde l'état complet avant chaque geste qui détruit ou remplace
+     — tout effacer, charger l'exemple, importer un fichier, retirer une ligne —
+     et la frappe est enregistrée par paliers, pour que « revenir en arrière »
+     ne défasse pas une lettre à la fois.
+
+     L'état est celui des champs, non la fiche produite : c'est ce que
+     l'utilisateur voit, donc ce qu'il s'attend à retrouver. */
+  var PILE = [], PROFONDEUR = 40, minuteur = null;
+
+  function instantane() {
+    var v = {};
+    Array.prototype.forEach.call(form.querySelectorAll("input,select,textarea"), function (e, i) {
+      if (e.type === "file") return;          /* un champ de fichier ne se restaure pas */
+      /* Les cellules d'un éditeur de tableau sont relevées avec leurs lignes,
+         plus bas : les compter deux fois, par un index qui bouge dès qu'une
+         ligne est ajoutée ou retirée, écrasait la restauration. */
+      if (e.closest("[data-liste]")) return;
+      var cle = e.id || (e.name || "") + "#" + i;
+      v[cle] = e.type === "checkbox" ? e.checked : e.value;
+    });
+    var t = {};
+    TABLEAUX.forEach(function (fam) {
+      var env = document.querySelector('[data-liste="' + fam + '"]');
+      if (!env) return;
+      t[fam] = Array.prototype.slice.call(env.querySelectorAll("tr")).slice(1).map(function (tr) {
+        var o = {};
+        Array.prototype.forEach.call(tr.querySelectorAll("[data-sous]"), function (e) {
+          o[e.getAttribute("data-sous")] = e.value; });
+        return o;
+      });
+    });
+    var a = {};
+    Object.keys(APPELEES).forEach(function (c) {
+      var d = document.getElementById("appel-" + c);
+      if (d) a[c] = d.style.display;
+    });
+    return { v: v, t: t, a: a };
+  }
+
+  function restaurer(e) {
+    Array.prototype.forEach.call(form.querySelectorAll("input,select,textarea"), function (el, i) {
+      if (el.type === "file" || el.closest("[data-liste]")) return;
+      var cle = el.id || (el.name || "") + "#" + i;
+      if (!(cle in e.v)) return;
+      if (el.type === "checkbox") el.checked = e.v[cle]; else el.value = e.v[cle];
+    });
+    Object.keys(e.t).forEach(function (fam) {
+      var env = document.querySelector('[data-liste="' + fam + '"]');
+      if (!env) return;
+      Array.prototype.slice.call(env.querySelectorAll("tr")).slice(1)
+        .forEach(function (tr) { tr.remove(); });
+      e.t[fam].forEach(function (o) { env.ligne(o); });
+      if (!env.querySelectorAll("tr")[1]) env.ligne(null);
+    });
+    Object.keys(e.a || {}).forEach(function (c) {
+      var d = document.getElementById("appel-" + c);
+      if (d) d.style.display = e.a[c];
+    });
+    compter();
+  }
+
+  function memoriser(quoi) {
+    PILE.push({ e: instantane(), quoi: quoi });
+    if (PILE.length > PROFONDEUR) PILE.shift();
+    majAnnuler();
+  }
+  /* La frappe : un palier par pause, non par caractère. */
+  function memoriserFrappe() {
+    if (minuteur) clearTimeout(minuteur);
+    var avant = instantane();
+    minuteur = setTimeout(function () {
+      PILE.push({ e: avant, quoi: "la dernière saisie" });
+      if (PILE.length > PROFONDEUR) PILE.shift();
+      majAnnuler();
+    }, 1200);
+  }
+  function majAnnuler() {
+    var b = document.getElementById("annuler");
+    if (!b) return;
+    b.disabled = !PILE.length;
+    b.textContent = PILE.length ? "Revenir en arrière (" + PILE.length + ")" : "Revenir en arrière";
+    b.title = PILE.length ? "Annule : " + PILE[PILE.length - 1].quoi : "Rien à annuler";
+  }
+  function annuler() {
+    if (!PILE.length) return;
+    var d = PILE.pop();
+    restaurer(d.e);
+    majAnnuler();
+    signaler("Revenu en arrière — " + d.quoi + " a été annulé.");
+  }
+  function signaler(texte) {
+    var z = document.getElementById("message");
+    if (!z) return;
+    z.textContent = texte; z.style.display = "";
+    clearTimeout(signaler._t);
+    signaler._t = setTimeout(function () { z.style.display = "none"; }, 6000);
+  }
+
   function lancer() {
     var r = fiche();
     if (r.mauvais.length) {
@@ -909,10 +1015,58 @@
         ". Rien n'a été perdu — corrigez la saisie et relancez.</div>";
       return;
     }
-    sortie.innerHTML = items.map(function (i) { return REND[i.k] ? REND[i.k](i) : ""; }).join("");
+    DERNIER = items;
+    sortie.innerHTML = '<div class="retour">' +
+      '<button type="button" id="revenir">\u2190 Revenir au formulaire</button>' +
+      '<button type="button" class="second" id="word">Télécharger en Word</button>' +
+      '<button type="button" class="second" id="pdf">Imprimer / enregistrer en PDF</button>' +
+      "</div>" +
+      items.map(function (i) { return REND[i.k] ? REND[i.k](i) : ""; }).join("");
+    document.getElementById("revenir").addEventListener("click", revenir);
+    document.getElementById("word").addEventListener("click", enWord);
+    document.getElementById("pdf").addEventListener("click", function () { window.print(); });
     try { localStorage.setItem(CLE, JSON.stringify(r.f)); } catch (e) {}
+    /* Le bouton « précédent » du téléphone ramène au formulaire au lieu de
+       quitter la page : c'est le geste que tout le monde fait d'abord. */
+    try { history.pushState({ audit: true }, "", "#resultat"); } catch (e) {}
     sortie.scrollIntoView({ behavior: "smooth" });
     compter();
+  }
+
+  var DERNIER = null;
+  function revenir() {
+    if (location.hash === "#resultat") { history.back(); return; }
+    montrerFormulaire();
+  }
+  function montrerFormulaire() {
+    sortie.innerHTML = "";
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  window.addEventListener("popstate", function () {
+    if (sortie.innerHTML) montrerFormulaire();
+  });
+
+  function enWord() {
+    if (!DERNIER || !global_export()) return;
+    var titre = (document.querySelector("h1") || {}).textContent || "Audit";
+    /* Le nom du fichier est ramené à l'ASCII : les accents font perdre le nom
+       proposé au téléchargement — le fichier arrive alors appelé « download ».
+       Mesuré, non supposé : « essai.docx » passe, « Audit-économique.docx » non. */
+    var nom = titre.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "Audit";
+    try {
+      var d = window.AuditExport.docx(DERNIER, titre);
+      window.AuditExport.telecharger(d, nom + ".docx",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+      signaler("Document Word téléchargé. Ouvrez-le pour vérifier la mise en page.");
+    } catch (e) {
+      signaler("Le document Word n'a pas pu être produit : " + e.message);
+    }
+  }
+  function global_export() {
+    if (window.AuditExport) return true;
+    signaler("Le module d'export n'est pas chargé.");
+    return false;
   }
 
   function compter() {
@@ -986,20 +1140,35 @@
 
   document.getElementById("lancer").addEventListener("click", lancer);
   document.getElementById("imprimer").addEventListener("click", function () { window.print(); });
+  var bWord = document.getElementById("mot");
+  if (bWord) bWord.addEventListener("click", enWord);
+  var bAnnuler = document.getElementById("annuler");
+  if (bAnnuler) bAnnuler.addEventListener("click", annuler);
   document.getElementById("exemple").addEventListener("click", function () {
+    memoriser("le chargement du dossier d'exemple");
     Object.keys(EXEMPLE).forEach(function (k) { ecrire(k, EXEMPLE[k]); });
     Object.keys(APPELEES).forEach(majAppel);
     compter();
   });
   document.getElementById("vider").addEventListener("click", function () {
+    memoriser("l'effacement complet");
     form.reset();
     Array.prototype.forEach.call(document.querySelectorAll('.libre'), function (e) {
       e.value = ""; if (e.getAttribute("data-multiple") !== "1") e.style.display = "none";
     });
+    TABLEAUX.forEach(function (fam) {
+      var env = document.querySelector('[data-liste="' + fam + '"]');
+      if (!env) return;
+      Array.prototype.slice.call(env.querySelectorAll("tr")).slice(1)
+        .forEach(function (tr) { tr.remove(); });
+      env.ligne(null);
+    });
+    Object.keys(APPELEES).forEach(majAppel);
     sortie.innerHTML = ""; compter();
     try { localStorage.removeItem(CLE); } catch (e) {}
+    signaler("Tout a été effacé. « Revenir en arrière » rétablit la saisie.");
   });
-  form.addEventListener("input", compter);
+  form.addEventListener("input", function () { memoriserFrappe(); compter(); });
   form.addEventListener("change", compter);
   Object.keys(APPELEES).forEach(majAppel);
 
@@ -1010,6 +1179,7 @@
   } catch (e) {}
   Object.keys(APPELEES).forEach(majAppel);
   compter();
+  majAnnuler();
 
   var m = M.manifeste || {}, c = m.compteurs || {};
   document.getElementById("pied").innerHTML =

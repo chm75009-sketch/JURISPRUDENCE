@@ -142,6 +142,15 @@
     .presentation{padding:15px 16px}
     .presentation .etapes li{flex:1 1 100%}
   }
+
+  /* Retour, message et barre du résultat */
+  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
+    border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}
+  .retour{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px;
+    padding-bottom:14px;border-bottom:1px solid var(--filet)}
+  .retour button{flex:1 1 auto}
+  button:disabled{opacity:.45;cursor:default}
+  @media print{ .retour,#message{display:none} }
   @media print{ .barre,form,header a,footer{display:none} .page{padding:0} }
 </style>
 </head>
@@ -190,9 +199,13 @@
   <button type="button" id="lancer">Lancer l'audit</button>
   <button type="button" class="second" id="exemple">Charger un dossier d'exemple</button>
   <button type="button" class="second" id="vider">Tout effacer</button>
-  <button type="button" class="second" id="imprimer">Imprimer le résultat</button>
+  <button type="button" class="second" id="annuler" disabled>Revenir en arrière</button>
+  <button type="button" class="second" id="mot">Word</button>
+  <button type="button" class="second" id="imprimer">Imprimer / PDF</button>
   <span class="compteur" id="compteur"></span>
 </div>
+
+<p id="message" role="status"></p>
 
 <div id="sortie"></div>
 
@@ -227,6 +240,7 @@
         auteur: "direction", version: "1", perimetre: "entreprise", lue: true }],
   };
 </script>
+<script src="audit-export.js"></script>
 <script src="audit-form.js"></script>
 <script>
   /* L'installation sur l'écran d'accueil suppose un service worker enregistré.
