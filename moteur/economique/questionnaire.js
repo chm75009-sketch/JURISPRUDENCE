@@ -3,6 +3,14 @@
    grille — il ne peut donc pas se désynchroniser d'elle. */
 const O=require("./outils.js");
 const G=require("./grille.js");
+/* Un champ composé qui désigne une liste, non un objet unique : « pieces »
+   est un tableau — une ligne par pièce — quand « pse » est un objet seul.
+   La distinction est déclarée ici, à la source, parce que deux lecteurs en
+   dépendent : le contrôle de non-divergence ci-dessous, et le formulaire du
+   navigateur, qui offre alors un éditeur de tableau au lieu de huit cases
+   isolées dont la réunion ne formait pas ce que le moteur attend. */
+const COMPOSES_LISTE=new Set(["pieces"]);
+
 const CHAMPS=[
  ["Identification",[
   ["entreprise","Dénomination sociale","texte"],
@@ -250,7 +258,6 @@ function construire(){
  /* Un champ composé est demandé par ses sous-champs : « pse » l'est par
     « pse.voie », « pieces » par la section qui en énumère les codes. */
  const composes=new Set([...demandes].filter(x=>x.includes(".")).map(x=>x.split(".")[0]));
- const COMPOSES_LISTE=new Set(["pieces"]);
  const jamaisDemandes=lus.filter(c=>!demandes.has(c)&&!INTERNES.has(c)
    &&!composes.has(c)&&!COMPOSES_LISTE.has(c));
  /* La symétrie. Un champ demandé que nul contrôle ne lit donne l'illusion d'une

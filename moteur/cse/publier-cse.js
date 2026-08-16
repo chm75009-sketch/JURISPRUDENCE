@@ -22,7 +22,8 @@ const etape = (n, quoi, fichier, ...args) => {
 etape(1, "cas de contrôle du moteur", "tests-cse.js");
 etape(2, "cas contradictoires sur les contrôles", "tests-controles-cse.js");
 etape(3, "questionnaire et contrôle de non-divergence, dans les deux sens", "questionnaire-cse.js");
-etape(4, "audit du dossier de référence", "audit-cse.js", "fiche-cse.json");
+etape(4, "propositions du formulaire, vérifiées dans les deux sens", "propositions-cse.js");
+etape(5, "audit du dossier de référence", "audit-cse.js", "fiche-cse.json");
 
 const rapport = JSON.parse(fs.readFileSync(path.join(ICI, "rapport-tests-cse.json"), "utf8"));
 const T = JSON.parse(fs.readFileSync(path.join(ICI, "textes_cse.json"), "utf8"));
@@ -75,7 +76,7 @@ const manifeste = {
 };
 fs.writeFileSync(path.join(ICI, "manifeste-cse.json"), JSON.stringify(manifeste, null, 1) + "\n");
 
-console.log("5. manifeste");
+console.log("6. manifeste");
 console.log(`empreinte : ${empreinte}`);
 console.log("compteurs : " + JSON.stringify(manifeste.compteurs));
 if (jamais.length) console.log(`règles jamais déclenchées par les fiches du dépôt : ${jamais.map(r => r.id).join(", ")}`);

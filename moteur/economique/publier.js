@@ -12,7 +12,17 @@ const EMPREINTE=h(FICHIERS.map(f=>fs.readFileSync(f,"utf8")).join(""));
 console.log("1. exécution des cas contradictoires");
 execSync("node tests-contradictoires.js", {stdio:"pipe"});
 
-console.log("2. manifeste des contrôles");
+console.log("2. propositions du formulaire, vérifiées dans les deux sens");
+{
+  const { ECARTS } = require("./propositions.js");
+  if (ECARTS.length) {
+    ECARTS.forEach(e => console.error("ÉCART — " + e));
+    console.error("ÉCHEC — le formulaire proposerait autre chose que ce que la base sait lire.");
+    process.exit(1);
+  }
+}
+
+console.log("3. manifeste des contrôles");
 const MAN=require("./manifeste.js");
 const m0=MAN.construire(); const v=MAN.verifier();
 /* Les empreintes individuelles en tête : c'est elles qui disent lequel des sept
@@ -32,7 +42,7 @@ m.objets={
 };
 fs.writeFileSync("manifeste-controles.json", JSON.stringify(m,null,1));
 
-console.log("3. estampillage du registre d'exécution");
+console.log("4. estampillage du registre d'exécution");
 const R=JSON.parse(fs.readFileSync("rapport-tests.json","utf8"));
 const couverts=new Set(R.cas.map(c=>c.controle));
 const enrichi={
@@ -53,7 +63,7 @@ const enrichi={
 };
 fs.writeFileSync("rapport-tests.json", JSON.stringify(enrichi,null,1));
 
-console.log("4. estampillage du dossier de référence");
+console.log("5. estampillage du dossier de référence");
 const D=JSON.parse(fs.readFileSync("dossier-reference.json","utf8"));
 fs.writeFileSync("dossier-reference.json", JSON.stringify({
  objet:"dossier de référence des cas contradictoires",

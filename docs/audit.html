@@ -86,6 +86,52 @@
   .erreur{border:1px solid var(--rouge);background:var(--rouge-f);color:var(--rouge);
     padding:12px 14px;border-radius:3px;font-weight:600}
   footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
+
+  /* Propositions, cases à cocher et dépôt de fichier */
+  .cases{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px;
+    border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:9px 11px}
+  .case{display:flex;align-items:flex-start;gap:6px;font-size:13.5px;color:var(--corps);
+    width:100%;line-height:1.35}
+  .case input{width:auto;margin:2px 0 0;flex:0 0 auto}
+  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
+  .depot{margin-top:6px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  button.fichier{font:600 13px/1 system-ui;padding:7px 11px;background:var(--surface);
+    color:var(--bleu);border:1px solid var(--filet)}
+  .etat-depot{font-size:12.5px;color:var(--gris);flex:1 1 180px}
+  .etat-depot.ok{color:var(--vert)} .etat-depot.ko{color:var(--rouge)}
+  input.libre{margin-top:6px}
+
+  /* Présentation */
+  .presentation{border:1px solid var(--filet);background:var(--surface);
+    border-radius:4px;padding:18px 20px;margin:22px 0 0}
+  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
+  .presentation p{margin:0 0 10px;max-width:74ch}
+  .presentation p:last-child{margin-bottom:0}
+  .presentation .etapes{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;padding:0;list-style:none}
+  .presentation .etapes li{flex:1 1 190px;border-left:3px solid var(--bleu);padding:2px 0 2px 10px;
+    font-size:14px;color:var(--corps)}
+  .presentation .etapes b{display:block;color:var(--encre)}
+
+  /* Éditeur de tableau : une ligne par entrée */
+  .tableau-champ{grid-column:1/-1;border:1px solid var(--filet);background:var(--surface);
+    border-radius:3px;padding:12px 14px}
+  .tableau-champ>.nom{margin:0 0 8px;font-size:14px;color:var(--encre)}
+  table.saisie{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-x:auto}
+  table.saisie th{background:var(--gris-f);color:var(--bleu);border:1px solid var(--filet);
+    padding:5px 7px;font:600 12px/1.3 system-ui;text-align:left;white-space:nowrap}
+  table.saisie td{border:1px solid var(--filet);padding:3px}
+  table.saisie input,table.saisie select{border:none;padding:5px 6px;font-size:13px;min-width:104px}
+  button.retirer{padding:4px 8px;color:var(--rouge);border-color:var(--filet)}
+
+  /* Sur un téléphone, la barre d'actions ne doit pas manger l'écran. */
+  @media (max-width:560px){
+    .barre{gap:8px;padding:10px 0}
+    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
+    .barre button:first-child{flex:1 1 100%}
+    .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
+    .presentation{padding:15px 16px}
+    .presentation .etapes li{flex:1 1 100%}
+  }
   @media print{ .barre,form,header a,footer{display:none} .page{padding:0} }
 </style>
 </head>
@@ -95,10 +141,31 @@
 <header>
   <p class="fil">Application Jurisprudence</p>
   <h1>Audit — licenciement pour motif économique</h1>
-  <p class="chapo">Renseignez ce que vous savez, laissez le reste vide. L'audit se calcule dans
-  votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
+  <p class="chapo">L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est
+  conservé ailleurs que sur ce poste.
   <a href="./">Recherche de jurisprudence</a> · <a href="audit-cse.html">Audit du comité social et économique</a></p>
 </header>
+
+<div class="presentation">
+  <h2>À quoi sert cette page</h2>
+  <p>Vous préparez un licenciement pour motif économique — d'un salarié ou de plusieurs. Décrivez la
+  situation : l'application la confronte aux articles du code du travail et aux arrêts publiés de la Cour
+  de cassation, puis rend un audit qui dit ce qui vous interdit d'avancer aujourd'hui, ce qu'il faut faire
+  et dans quel ordre, et ce qui est déjà acquis.</p>
+  <ul class="etapes">
+    <li><b>1. Vous décrivez</b> l'effectif, la cause, le calendrier, le reclassement, les pièces versées.
+    Ce que vous ignorez reste vide.</li>
+    <li><b>2. L'application vérifie</b> chaque exigence légale une par une, et dit sur quoi elle se fonde.</li>
+    <li><b>3. Vous obtenez</b> un rapport imprimable : le résultat en tête, les actions dans l'ordre, les
+    textes applicables et la jurisprudence.</li>
+  </ul>
+  <p class="note">Comptez une vingtaine de minutes pour un dossier complet, moins pour une première
+  approche — un dossier partiellement renseigné produit un audit partiel, jamais un faux « conforme ».
+  Vous pouvez revenir : votre saisie reste sur ce poste.</p>
+  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne remplace pas votre conseil, elle
+  n'apprécie pas la réalité de la cause économique — que le juge apprécie souverainement — et elle ne lit
+  pas vos accords collectifs. Quand un texte ne tranche pas une question, elle le dit au lieu de choisir.</p>
+</div>
 
 <div class="enc" style="margin-top:22px">
   <p class="sh">Une donnée non renseignée ne produit jamais « conforme »</p>
@@ -125,181 +192,12 @@
 </div>
 
 <script src="moteur-eco.js"></script>
-<script>window.__MOTEUR="MoteurEco";</script>
 <script>
-(function () {
-  "use strict";
-  var M = window[window.__MOTEUR || "MoteurEco"];
-  var form = document.getElementById("formulaire");
-  var sortie = document.getElementById("sortie");
-  var CLE = "audit-eco-brouillon";
-
-  /* --- le formulaire est engendré par les champs du questionnaire, non ressaisi --- */
-  function typeDe(format) {
-    var f = String(format || "").toLowerCase();
-    if (f.indexOf("oui") === 0) return "oui-non";
-    if (f.indexOf("aaaa-mm-jj") >= 0) return "date";
-    /* Les listes d'abord : « liste de nombres » est une liste, pas un nombre. */
-    if (f.indexOf("liste") >= 0 || f.indexOf("objet") >= 0 || f.indexOf("tableau") >= 0) return "json";
-    /* Puis les nombres, y compris qualifiés — « nombre de mois », « nombre
-       d'années ». Sans cela ils arrivaient au moteur sous forme de chaîne, et
-       les contrôles les tenaient pour non renseignés. */
-    if (f.indexOf("nombre") === 0 || f === "euros" || f.indexOf("chiffres") >= 0) return "nombre";
-    if (f === "1 à 4") return "cause";
-    return "texte";
-  }
-  var CAUSES = ["", "1 — difficultés économiques", "2 — mutations technologiques",
-    "3 — sauvegarde de la compétitivité", "4 — cessation d'activité"];
-
-  M.champs.forEach(function (rub) {
-    var fs = document.createElement("fieldset");
-    var lg = document.createElement("legend"); lg.textContent = rub[0]; fs.appendChild(lg);
-    var g = document.createElement("div"); g.className = "grille";
-    rub[1].forEach(function (ch) {
-      var cle = ch[0], libelle = ch[1], format = ch[2], t = typeDe(format);
-      var lab = document.createElement("label");
-      lab.innerHTML = '<span class="nom">' + libelle +
-        ' <span class="cle">' + cle + '</span></span>';
-      var e;
-      if (t === "oui-non" || t === "cause") {
-        e = document.createElement("select");
-        (t === "cause" ? CAUSES : ["", "oui", "non"]).forEach(function (v, i) {
-          var o = document.createElement("option");
-          o.value = t === "cause" ? (i ? String(i) : "") : v;
-          o.textContent = v || "— non renseigné —";
-          e.appendChild(o);
-        });
-      } else if (t === "json") {
-        e = document.createElement("textarea");
-        e.placeholder = format + " — au format JSON, par exemple [] ou [{…}]";
-      } else {
-        e = document.createElement("input");
-        e.type = t === "date" ? "date" : (t === "nombre" ? "number" : "text");
-        if (t === "nombre") e.step = "any";
-        e.placeholder = format;
-      }
-      e.name = cle; e.id = "c-" + cle;
-      lab.appendChild(e); g.appendChild(lab);
-    });
-    fs.appendChild(g); form.appendChild(fs);
-  });
-
-  /* --- la fiche : ce que l'utilisateur a écrit, converti sans être deviné --- */
-  function fiche() {
-    var f = {}, mauvais = [];
-    M.champs.forEach(function (rub) {
-      rub[1].forEach(function (ch) {
-        var cle = ch[0], t = typeDe(ch[2]);
-        var e = document.getElementById("c-" + cle);
-        var v = e ? e.value.trim() : "";
-        if (v === "") return;                       /* champ vide = silence, non néant */
-        if (t === "oui-non") { poser(f, cle, v === "oui"); return; }
-        if (t === "nombre") {
-          var n = Number(v.replace(/\s/g, "").replace(",", "."));
-          poser(f, cle, isNaN(n) ? v : (/chiffres/.test(ch[2]) ? v : n));
-          return;
-        }
-        if (t === "json") {
-          try { poser(f, cle, JSON.parse(v)); }
-          catch (err) { mauvais.push(cle); }
-          return;
-        }
-        poser(f, cle, v);
-      });
-    });
-    return { f: f, mauvais: mauvais };
-  }
-  /* « pse.voie » désigne un sous-champ : la fiche le reconstitue en objet. */
-  function poser(o, cle, val) {
-    var p = cle.split(".");
-    if (p.length === 1) { o[cle] = val; return; }
-    o[p[0]] = o[p[0]] || {};
-    o[p[0]][p[1]] = val;
-  }
-
-  /* --- restitution : le même vocabulaire d'éléments que le PDF --- */
-  var ech = function (s) {
-    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  };
-  var REND = {
-    sur: function (i) { return '<p class="note">' + ech(i.t) + "</p>"; },
-    t1: function (i) { return "<h2>" + ech(i.t) + "</h2>"; },
-    trait: function () { return "<hr>"; },
-    h1: function (i) { return "<h2>" + ech(i.t) + "</h2>"; },
-    h2: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
-    h3: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
-    p: function (i) { return "<p>" + ech(i.t) + "</p>"; },
-    note: function (i) { return '<p class="note">' + ech(i.t) + "</p>"; },
-    puce: function (i) { return '<p class="puce">— ' + ech(i.t) + "</p>"; },
-    saut: function () { return ""; },
-    enc: function (i) {
-      return '<div class="enc"><p class="sh">' + ech(i.titre) + '</p><p style="margin:0">' + ech(i.t) + "</p></div>";
-    },
-    bandeau: function (i) {
-      return '<div class="bandeau b-' + ech(i.couleur) + '"><p class="r">' + ech(i.t) +
-        '</p><p class="s">' + ech(i.sous) + "</p></div>";
-    },
-    etape: function (i) {
-      return '<p class="etape">' + ech(i.t) + "<span>" + ech(i.compte || "") + "</span></p>";
-    },
-    acte: function (i) {
-      return '<div class="acte a-' + ech(i.priorite) + '"><p class="t">' + ech(i.n) + ". " + ech(i.t) +
-        '<span class="chip c-' + ech(i.priorite) + '">' + ech(i.priorite) + '</span></p><p class="w">' +
-        (i.etat ? "<b>" + ech(i.etat) + "</b> — " : "") + ech(i.pourquoi) + " · " + ech(i.id) + "</p></div>";
-    },
-    interdit: function (i) {
-      return '<div class="interdit i-' + ech(i.ton || "certain") + '"><p class="t">' + ech(i.t) +
-        '</p><p class="w">' + ech(i.pourquoi) + " · " + ech(i.id) + "</p></div>";
-    },
-    acquis: function (i) {
-      return '<p class="acquis"><b>&#10003;</b> ' + ech(i.t) +
-        ' <span class="note">— ' + ech(i.base) + "</span></p>";
-    },
-    table: function (i) {
-      return '<div class="tab"><table><tr>' + i.head.map(function (h) { return "<th>" + ech(h) + "</th>"; }).join("") +
-        "</tr>" + i.rows.map(function (r) {
-          return "<tr>" + r.map(function (c) { return "<td>" + ech(c) + "</td>"; }).join("") + "</tr>";
-        }).join("") + "</table></div>";
-    },
-  };
-
-  function lancer() {
-    var r = fiche();
-    if (r.mauvais.length) {
-      sortie.innerHTML = '<div class="erreur">Ces champs attendent du JSON et n\'ont pas pu être lus : ' +
-        ech(r.mauvais.join(", ")) + ". Corrigez-les, ou laissez-les vides.</div>";
-      sortie.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
-    var items;
-    try { items = M.audit(r.f); }
-    catch (e) {
-      sortie.innerHTML = '<div class="erreur">L\'audit n\'a pas pu être produit : ' + ech(e.message) +
-        ". Rien n'a été perdu — corrigez la saisie et relancez.</div>";
-      return;
-    }
-    sortie.innerHTML = items.map(function (i) {
-      return REND[i.k] ? REND[i.k](i) : "";
-    }).join("");
-    try { localStorage.setItem(CLE, JSON.stringify(r.f)); } catch (e) {}
-    sortie.scrollIntoView({ behavior: "smooth" });
-    compter();
-  }
-
-  function compter() {
-    var n = 0;
-    M.champs.forEach(function (rub) {
-      rub[1].forEach(function (ch) {
-        var e = document.getElementById("c-" + ch[0]);
-        if (e && e.value.trim() !== "") n++;
-      });
-    });
-    var total = M.champs.reduce(function (s, r) { return s + r[1].length; }, 0);
-    document.getElementById("compteur").textContent = n + " donnée(s) renseignée(s) sur " + total;
-  }
-
-  /* --- un dossier d'exemple, pour voir ce que l'outil produit --- */
-  var EXEMPLE = {
+  /* Ce qui distingue les deux pages : le moteur, la clé du brouillon et le
+     dossier d'exemple. Tout le reste vit dans audit-form.js. */
+  window.__MOTEUR = "MoteurEco";
+  window.__CLE = "audit-eco-brouillon";
+  window.__EXEMPLE = {
     entreprise: "SOCIÉTÉ D'EXEMPLE SAS", siren: "123456789", dateAudit: "2026-08-15",
     idcc: "1486", effectif: "320", effectifEtablissement: "320", groupe: "oui",
     effectifGroupe: "602", etablissementsDistincts: "1", cause: "1", nbLicenciements: "22",
@@ -314,44 +212,13 @@
     trimestres: '[{"libelle":"T2-25","n":9240,"n1":10180,"perimetre":"secteur"}]',
     resultatExploitation: '[{"annee":2025,"valeur":-1870}]',
     precaires: "[]", salariesSuspendus: "[]", usagesEtEngagements: "", contentieuxEnCours: "",
+    pieces: [
+      { code: "etat-postes", fichier: "postes.pdf", date: "2026-06-01", periode: "juin 2026",
+        auteur: "DRH groupe", version: "1", perimetre: "groupe France", lue: true },
+      { code: "renseignements-cse", fichier: "info.pdf", date: "2026-03-09", periode: "2026",
+        auteur: "direction", version: "1", perimetre: "entreprise", lue: true }],
   };
-
-  document.getElementById("lancer").addEventListener("click", lancer);
-  document.getElementById("imprimer").addEventListener("click", function () { window.print(); });
-  document.getElementById("exemple").addEventListener("click", function () {
-    Object.keys(EXEMPLE).forEach(function (k) {
-      var e = document.getElementById("c-" + k);
-      if (e) e.value = EXEMPLE[k];
-    });
-    compter();
-  });
-  document.getElementById("vider").addEventListener("click", function () {
-    form.reset(); sortie.innerHTML = ""; compter();
-    try { localStorage.removeItem(CLE); } catch (e) {}
-  });
-  form.addEventListener("input", compter);
-
-  /* Le brouillon reste sur le poste : on ne perd pas une saisie longue. */
-  try {
-    var b = JSON.parse(localStorage.getItem(CLE) || "null");
-    if (b) Object.keys(b).forEach(function (k) {
-      var e = document.getElementById("c-" + k);
-      if (!e) return;
-      var v = b[k];
-      e.value = typeof v === "boolean" ? (v ? "oui" : "non")
-        : (v && typeof v === "object" ? JSON.stringify(v) : String(v));
-    });
-  } catch (e) {}
-  compter();
-
-  var m = M.manifeste || {}, c = m.compteurs || {};
-  document.getElementById("pied").innerHTML =
-    "Moteur " + ech(m.empreinte || "—") + " · " + ech(c.regles || "—") + " règles, " +
-    ech(c.controles || "—") + " contrôles dont " + ech(c.coherence || 0) + " de cohérence et " +
-    ech(c.detection || 0) + " de détection · articles relus sur Légifrance le 15 août 2026." +
-    " Cet audit est une aide à la préparation du dossier : il ne remplace ni l'analyse d'un conseil," +
-    " ni la décision qui vous appartient.";
-})();
 </script>
+<script src="audit-form.js"></script>
 </body>
 </html>

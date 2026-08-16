@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-2.0";
+const CACHE = "jurisprudence-2.1";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
@@ -22,6 +22,8 @@ const ESSENTIELS = [
      calcule entièrement sur le poste — il n'a besoin d'aucun réseau. */
   "./audit.html", "./moteur-eco.js",
   "./audit-cse.html", "./moteur-cse.js",
+  /* Le formulaire est commun aux deux pages : sans lui, elles s'ouvrent vides. */
+  "./audit-form.js",
 ];
 
 self.addEventListener("install", e => {
