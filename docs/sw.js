@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-4.1";
+const CACHE = "jurisprudence-4.2";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -21,6 +21,8 @@ const ESSENTIELS = [
   "./guides.html",
   /* L'agenda social lit les brouillons des audits et le moteur NAO, déjà listés. */
   "./agenda.html",
+  /* Le générateur de documents des relations collectives : autonome, tout est dans la page. */
+  "./documents.html",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
   /* Les quatre audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
      mégaoctet, et c'est délibéré : une page d'audit installée qui échouerait

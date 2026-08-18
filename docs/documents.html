@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1F3864">
+<link rel="icon" href="icons/icon-180.png">
+<title>Documents — relations collectives</title>
+<!-- Générateur de documents pour la gestion quotidienne des relations
+     collectives : convocation et ordre du jour du CSE, trame de procès-verbal,
+     accord de méthode et procès-verbal de désaccord de la négociation
+     obligatoire, note d'information, réponse à une réclamation.
+
+     Tout se passe dans le navigateur : un formulaire court, un document
+     généré à l'écran, imprimable en PDF et copiable en texte. Rien n'est
+     envoyé, rien n'est conservé ailleurs que sur ce poste (localStorage).
+
+     Chaque mention juridique s'appuie sur un article lu à la source et
+     identifié par sa version (LEGIARTI), repris des textes vérifiés du
+     dépôt (moteur/cse/textes_cse.json, moteur/nao/textes-nao.json) ou de
+     docs/textes-documents.json pour les compléments vérifiés au relais. -->
+<style>
+  :root{
+    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
+    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36;
+    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papier);color:var(--corps);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .page{max-width:1000px;margin:0 auto;padding:0 20px 80px}
+  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
+  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
+  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
+  .chapo{color:var(--gris);max-width:64ch;margin:0}
+  header a{color:var(--bleu)}
+
+  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
+    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
+    margin:0 -20px 0;padding:10px 20px}
+  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
+  button.retour:hover{filter:brightness(1.12)}
+  .retour-ou{font-size:13px;color:var(--gris)}
+  .retour-ou a{color:var(--bleu)}
+
+  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
+  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:70ch}
+  .note{color:var(--gris);font-size:13.5px}
+
+  .presentation{border:1px solid var(--filet);background:var(--surface);
+    border-radius:4px;padding:18px 20px;margin:22px 0 0}
+  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
+  .presentation p{margin:0 0 10px;max-width:74ch}
+  .presentation p:last-child{margin-bottom:0}
+
+  /* Le choix du modèle : six cartes, une seule active. */
+  .modeles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:22px 0 0}
+  .modele{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
+    padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:var(--corps)}
+  .modele b{display:block;color:var(--encre);font-size:15px;margin-bottom:3px}
+  .modele span{font-size:13px;color:var(--gris);line-height:1.45;display:block}
+  .modele:hover{border-color:var(--bleu)}
+  .modele.actif{border-color:var(--bleu);outline:2px solid var(--bleu);outline-offset:-1px}
+  .modele.actif b{color:var(--bleu)}
+
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 22px}
+  label{display:block;font-size:14px}
+  label .nom{display:block;color:var(--encre);margin-bottom:4px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
+    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
+  textarea{min-height:74px;font:14px/1.5 inherit}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
+  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px 20px;margin:0 0 16px}
+  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
+  .pleine{grid-column:1/-1}
+  .cases{display:flex;flex-direction:column;gap:6px;margin:2px 0 6px;
+    border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:9px 11px}
+  .case{display:flex;align-items:flex-start;gap:7px;font-size:13.5px;color:var(--corps);line-height:1.35}
+  .case input{width:auto;margin:2px 0 0;flex:0 0 auto}
+  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
+  .fonde{font-size:12.5px;color:var(--gris);margin:6px 0 0}
+
+  .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
+    padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
+  button.second{background:var(--surface);color:var(--bleu)}
+  button:hover{filter:brightness(1.1)}
+  button:disabled{opacity:.45;cursor:default}
+  @media (max-width:560px){
+    .barre{gap:8px;padding:10px 0}
+    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
+    .barre button:first-child{flex:1 1 100%}
+  }
+
+  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
+    border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}
+  .avert{border:1px solid var(--orange);background:var(--orange-f);color:var(--orange);
+    padding:10px 12px;border-radius:3px;font-size:14px;margin:10px 0 0}
+
+  /* --- le document généré : une feuille --- */
+  #docu{display:none;margin-top:30px}
+  .feuille{background:var(--surface);border:1px solid var(--filet);border-radius:4px;
+    padding:clamp(22px,5vw,52px);max-width:820px;margin:0 auto;
+    font:15px/1.65 Georgia,"Times New Roman",serif;color:#1a1d22}
+  .feuille .entete{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    margin:0 0 26px;font-size:13.5px;color:#444}
+  .feuille .entete b{font-size:15px;color:#1a1d22}
+  .feuille h2.titre-doc{font:700 19px/1.3 Georgia,serif;color:#1a1d22;text-align:center;
+    margin:0 0 4px;text-transform:uppercase;letter-spacing:.04em}
+  .feuille .sous-titre{text-align:center;font-size:14px;color:#444;margin:0 0 24px}
+  .feuille h3{font:700 15px/1.4 Georgia,serif;color:#1a1d22;margin:22px 0 6px}
+  .feuille p{margin:0 0 10px}
+  .feuille ol,.feuille ul{margin:0 0 10px;padding-left:24px}
+  .feuille li{margin:0 0 5px}
+  .feuille table{border-collapse:collapse;width:100%;font-size:13.5px;margin:0 0 12px}
+  .feuille th,.feuille td{border:1px solid #b9bec7;padding:6px 9px;text-align:left;vertical-align:top}
+  .feuille th{background:#eef0f4;font-weight:700}
+  .feuille .signatures{display:flex;gap:24px;flex-wrap:wrap;margin-top:34px}
+  .feuille .signatures>div{flex:1 1 220px;border-top:1px solid #b9bec7;padding-top:8px;font-size:13.5px}
+  .feuille .champ-vide{color:#777;font-style:italic}
+  .feuille .pied-textes{margin-top:36px;padding-top:10px;border-top:1px solid #d5d8de;
+    font:11.5px/1.55 system-ui;color:#8a9099}
+  .feuille .pied-textes .ident{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
+  .doc-outils{max-width:820px;margin:0 auto 12px;display:flex;gap:10px;flex-wrap:wrap}
+
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
+
+  /* À l'impression, seule la feuille sort — sans cadre ni fond d'écran. */
+  @media print{
+    body{background:#fff}
+    .retour-barre,header,.presentation,.modeles,#form-bloc,.barre,#message,.doc-outils,footer,h2.titre-zone,.avert{display:none !important}
+    .page{max-width:none;padding:0}
+    #docu{margin:0}
+    .feuille{border:none;border-radius:0;max-width:none;padding:0;font-size:12.5pt}
+    .feuille .pied-textes{font-size:8pt}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="retour-barre">
+  <button type="button" id="btn-retour" class="retour">← Retour</button>
+  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
+  · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
+  · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
+  · <a href="agenda.html">agenda</a> · <a href="guides.html">guides</a></span>
+</div>
+
+<header>
+  <p class="fil">Application Jurisprudence</p>
+  <h1>Documents — relations collectives</h1>
+  <p class="chapo"><b>Cette page prépare les documents de la gestion quotidienne des relations
+  collectives</b> — convocation et ordre du jour du comité, trame de procès-verbal, accord de méthode
+  et procès-verbal de désaccord de la négociation obligatoire, note d'information, réponse écrite à
+  une réclamation. Un formulaire court, un document à l'écran, imprimable en PDF et copiable en
+  texte.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
+  que sur ce poste.</p>
+</header>
+
+<div class="presentation">
+  <h2>À quoi sert cette page</h2>
+  <p>Chaque modèle pose les quelques questions dont le document a besoin, puis le compose : les
+  mentions imposées par le code du travail y sont, chacune fondée sur un article lu à la source et
+  identifié par sa version en pied de document. Ce que vous saisissez reste sur ce poste, et le
+  brouillon de chaque modèle est retrouvé à la prochaine visite.</p>
+  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne remplace ni la négociation ni le
+  conseil — elle donne une trame conforme aux textes, que vous restez libre d'adapter. Un champ non
+  rempli apparaît comme un blanc à compléter, jamais comme une valeur inventée.</p>
+</div>
+
+<h2 class="titre-zone">1. Choisissez un modèle</h2>
+<div class="modeles" id="modeles" role="tablist"></div>
+
+<h2 class="titre-zone">2. Renseignez le formulaire</h2>
+<div id="form-bloc"><form id="formulaire" autocomplete="off"></form></div>
+
+<div class="barre">
+  <button type="button" id="generer">Générer le document</button>
+  <button type="button" class="second" id="imprimer" disabled>Imprimer / PDF</button>
+  <button type="button" class="second" id="copier" disabled>Copier le texte</button>
+  <button type="button" class="second" id="vider">Effacer ce modèle</button>
+</div>
+
+<p id="message" role="status"></p>
+<div id="alerte"></div>
+
+<div id="docu">
+  <div class="doc-outils">
+    <button type="button" class="second" id="imprimer2">Imprimer / PDF</button>
+    <button type="button" class="second" id="copier2">Copier le texte</button>
+  </div>
+  <div class="feuille" id="feuille"></div>
+</div>
+
+<footer>
+  <p>Les mentions juridiques de chaque modèle s'appuient sur des articles du code du travail lus à
+  la source (relais Légifrance de l'application) et identifiés par leur version — l'identifiant
+  figure en pied de chaque document généré. Cette page ne cite aucun article qu'elle n'a pas lu.</p>
+</footer>
+</div>
+
+<script>
+"use strict";
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ------------------------------------------------------------------ */
+  /* Les textes. Chaque article cité ici a été lu à la source et porte   */
+  /* l'identifiant de la version lue. Provenance : les fichiers de       */
+  /* textes vérifiés du dépôt (moteur/cse/textes_cse.json,               */
+  /* moteur/nao/textes-nao.json), et docs/textes-documents.json pour     */
+  /* D. 2315-26, vérifié au relais en double lecture concordante.        */
+  /* ------------------------------------------------------------------ */
+  var TEXTES = {
+    "L2315-29": { id: "LEGIARTI000035624861", quoi: "ordre du jour établi conjointement par le président et le secrétaire ; consultations obligatoires inscrites de plein droit" },
+    "L2315-30": { id: "LEGIARTI000035624863", quoi: "ordre du jour communiqué aux membres, à l'inspection du travail et à l'agent des services de prévention trois jours au moins avant la réunion" },
+    "L2315-28": { id: "LEGIARTI000035624857", quoi: "à défaut d'accord : réunion au moins mensuelle à partir de trois cents salariés, au moins tous les deux mois en dessous" },
+    "L2315-27": { id: "LEGIARTI000036761943", quoi: "au moins quatre réunions par an portent en tout ou partie sur la santé, la sécurité et les conditions de travail" },
+    "L2312-22": { id: "LEGIARTI000043975191", quoi: "à défaut d'accord, consultation chaque année sur les orientations stratégiques, la situation économique et financière, la politique sociale" },
+    "L2315-34": { id: "LEGIARTI000036262447", quoi: "délibérations consignées dans un procès-verbal établi par le secrétaire dans un délai fixé par accord ou, à défaut, par décret ; transmis à l'employeur, qui fait connaître sa décision motivée à la réunion suivante" },
+    "L2315-35": { id: "LEGIARTI000035624877", quoi: "le procès-verbal peut, après adoption, être affiché ou diffusé par le secrétaire" },
+    "D2315-26": { id: "LEGIARTI000036433681", quoi: "à défaut d'accord, procès-verbal établi et transmis dans les quinze jours (trois jours dans la consultation de l'article L. 1233-30, un jour en redressement ou liquidation)" },
+    "L2315-22": { id: "LEGIARTI000035624430", quoi: "note écrite deux jours ouvrables avant la réunion ; réponse écrite motivée au plus tard dans les six jours ouvrables suivant la réunion ; transcription ou annexion au registre spécial" },
+    "L2312-5":  { id: "LEGIARTI000043893930", quoi: "la délégation du personnel présente à l'employeur les réclamations individuelles ou collectives" },
+    "L2242-11": { id: "LEGIARTI000052437060", quoi: "l'accord précise les thèmes et leur périodicité (au moins tous les quatre ans), le contenu de chaque thème, le calendrier et les lieux, les informations remises et la date de remise, les modalités de suivi ; durée de l'accord au plus quatre ans" },
+    "L2242-12": { id: "LEGIARTI000052437050", quoi: "un accord conclu dans ces domaines peut fixer la périodicité de sa renégociation, dans la limite de quatre ans" },
+    "L2242-13": { id: "LEGIARTI000052437044", quoi: "à défaut d'accord de méthode : négociation chaque année sur la rémunération et sur l'égalité professionnelle, tous les trois ans sur la gestion des emplois à partir de trois cents salariés" },
+    "L2242-5":  { id: "LEGIARTI000035627862", quoi: "si aucun accord n'a été conclu, procès-verbal de désaccord consignant, en leur dernier état, les propositions respectives des parties et les mesures que l'employeur entend appliquer unilatéralement ; dépôt à l'initiative de la partie la plus diligente" },
+    "R2242-1":  { id: "LEGIARTI000036222825", quoi: "le procès-verbal de désaccord est déposé dans les conditions prévues à l'article D. 2231-2" }
+  };
+  function refArt(n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }
+
+  /* ------------------------------------------------------------------ */
+  /* Outillage : échappement, dates, champs.                             */
+  /* ------------------------------------------------------------------ */
+  function e(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function dateFr(iso) {
+    if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
+    var d = new Date(iso + "T12:00:00");
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+  }
+  function vide(txt) { return '<span class="champ-vide">[' + e(txt) + "]</span>"; }
+  function ch(valeur, blanc) { return valeur ? e(valeur) : vide(blanc); }
+  function chDate(iso, blanc) { return iso ? e(dateFr(iso)) : vide(blanc); }
+  function lignes(txt) {
+    return String(txt || "").split(/\n/).map(function (l) { return l.trim(); }).filter(Boolean);
+  }
+  function joursEntre(a, b) {
+    if (!a || !b) return null;
+    return Math.round((new Date(b + "T12:00:00") - new Date(a + "T12:00:00")) / 86400000);
+  }
+
+  /* Pied de document : les articles cités, avec leur version. */
+  function piedTextes(numeros) {
+    var morceaux = numeros.map(function (n) {
+      return "art. " + refArt(n) + ' <span class="ident">' + TEXTES[n].id + "</span>";
+    });
+    return '<div class="pied-textes">Textes cités, lus à la source — code du travail, ' +
+      morceaux.join(" · ") +
+      ". Document préparé avec l'application Jurisprudence ; il reste à relire et à adapter avant usage.</div>";
+  }
+
+  function enteteFeuille(entreprise, lieuDate) {
+    return '<div class="entete"><div><b>' + ch(entreprise, "dénomination de l'entreprise") +
+      "</b></div><div>" + (lieuDate || "") + "</div></div>";
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Profil d'entreprise : si une autre page l'a rempli, on préremplit.  */
+  /* ------------------------------------------------------------------ */
+  function lireProfil() {
+    try {
+      var p = JSON.parse(localStorage.getItem("profil-entreprise") || "null");
+      if (!p || typeof p !== "object") return {};
+      return {
+        entreprise: p.denomination || p.denominationSociale || p.entreprise || p.nom || "",
+        effectif: p.effectif || "",
+        adresse: p.adresse || p.siege || ""
+      };
+    } catch (_) { return {}; }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Les six modèles : champs, puis composition du document.             */
+  /* Types de champ : text, date, time, number, select, textarea, cases. */
+  /* ------------------------------------------------------------------ */
+  var MODELES = [
+  {
+    cle: "convocation",
+    nom: "Convocation + ordre du jour CSE",
+    resume: "Réunion ordinaire : convocation du président et ordre du jour établi conjointement avec le secrétaire, communiqué trois jours au moins avant.",
+    articles: ["L2315-29", "L2315-30", "L2315-28", "L2315-27", "L2312-22"],
+    sections: [
+      { titre: "L'entreprise et la réunion", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "president", nom: "Président du CSE (nom, qualité)", t: "text" },
+        { c: "secretaire", nom: "Secrétaire du CSE (nom)", t: "text" },
+        { c: "effectif", nom: "Effectif de l'entreprise", t: "number", profil: "effectif",
+          aide: "Sert au rappel de périodicité : au moins une réunion par mois à partir de 300 salariés, au moins une tous les deux mois en dessous (art. L. 2315-28, à défaut d'accord)." },
+        { c: "dateReunion", nom: "Date de la réunion", t: "date" },
+        { c: "heure", nom: "Heure", t: "time" },
+        { c: "lieu", nom: "Lieu (et lien de visioconférence, le cas échéant)", t: "text" },
+        { c: "dateEnvoi", nom: "Date d'envoi de la convocation et de l'ordre du jour", t: "date",
+          aide: "L'ordre du jour est communiqué trois jours au moins avant la réunion (art. L. 2315-30)." }
+      ]},
+      { titre: "L'ordre du jour", champs: [
+        { c: "consultations", nom: "Consultations récurrentes à inscrire (inscrites de plein droit — art. L. 2315-29)", t: "cases", pleine: true, options: [
+          "Consultation sur les orientations stratégiques de l'entreprise",
+          "Consultation sur la situation économique et financière de l'entreprise",
+          "Consultation sur la politique sociale, les conditions de travail et l'emploi"
+        ], aide: "À défaut d'accord d'adaptation, ces trois consultations ont lieu chaque année (art. L. 2312-22)." },
+        { c: "pointSSCT", nom: "Points santé, sécurité et conditions de travail", t: "cases", pleine: true, options: [
+          "La réunion porte, en tout ou partie, sur la santé, la sécurité et les conditions de travail"
+        ], aide: "Au moins quatre réunions par an y sont consacrées en tout ou partie (art. L. 2315-27). Cocher déclenche la mention correspondante." },
+        { c: "points", nom: "Autres points (un par ligne)", t: "textarea", pleine: true,
+          aide: "Exemples : approbation du procès-verbal de la précédente réunion ; réclamations individuelles et collectives ; questions diverses." }
+      ]}
+    ],
+    composer: function (v) {
+      var pts = [];
+      (v.consultations || []).forEach(function (c) { pts.push(c); });
+      if ((v.pointSSCT || []).length)
+        pts.push("Santé, sécurité et conditions de travail (réunion consacrée, en tout ou partie, à ces attributions — art. L. 2315-27 du code du travail)");
+      lignes(v.points).forEach(function (l) { pts.push(l); });
+      var liste = pts.length
+        ? "<ol>" + pts.map(function (p) { return "<li>" + e(p) + "</li>"; }).join("") + "</ol>"
+        : "<p>" + vide("points à l'ordre du jour") + "</p>";
+
+      var eff = parseInt(v.effectif, 10);
+      var periodicite = isNaN(eff) ? "" :
+        (eff >= 300
+          ? "Il est rappelé qu'à défaut d'accord, le comité se réunit au moins une fois par mois (art. L. 2315-28 du code du travail)."
+          : "Il est rappelé qu'à défaut d'accord, le comité se réunit au moins une fois tous les deux mois (art. L. 2315-28 du code du travail).");
+
+      return enteteFeuille(v.entreprise, chDate(v.dateEnvoi, "date d'envoi")) +
+        '<h2 class="titre-doc">Convocation à la réunion ordinaire<br>du comité social et économique</h2>' +
+        '<p class="sous-titre">et ordre du jour joint</p>' +
+        "<p>Mesdames, Messieurs les membres de la délégation du personnel au comité social et économique,</p>" +
+        "<p>Vous êtes convoqués à la réunion ordinaire du comité social et économique de " +
+        ch(v.entreprise, "entreprise") + ", qui se tiendra le <b>" + chDate(v.dateReunion, "date") +
+        "</b> à <b>" + ch(v.heure, "heure") + "</b>, " + ch(v.lieu, "lieu") + ".</p>" +
+        "<p>L'ordre du jour, établi conjointement par le président et le secrétaire du comité " +
+        "(art. L. 2315-29 du code du travail), est le suivant :</p>" + liste +
+        "<p>Le présent ordre du jour est communiqué aux membres du comité, à l'agent de contrôle de " +
+        "l'inspection du travail ainsi qu'à l'agent des services de prévention des organismes de " +
+        "sécurité sociale, trois jours au moins avant la réunion (art. L. 2315-30 du code du travail). " +
+        "Les consultations rendues obligatoires par une disposition législative ou réglementaire ou " +
+        "par un accord collectif y sont inscrites de plein droit (art. L. 2315-29).</p>" +
+        (periodicite ? "<p>" + periodicite + "</p>" : "") +
+        '<div class="signatures"><div>Le président du comité social et économique<br>' +
+        ch(v.president, "nom et qualité du président") + "</div>" +
+        "<div>Ordre du jour établi conjointement avec le secrétaire<br>" +
+        ch(v.secretaire, "nom du secrétaire") + "</div></div>" +
+        piedTextes(["L2315-29", "L2315-30", "L2315-28", "L2315-27", "L2312-22"]);
+    },
+    verifier: function (v) {
+      var j = joursEntre(v.dateEnvoi, v.dateReunion);
+      if (j !== null && j < 3)
+        return "L'ordre du jour doit être communiqué trois jours au moins avant la réunion " +
+          "(art. L. 2315-30) : entre la date d'envoi et la réunion saisies, il n'y a que " + j +
+          " jour(s). Avancez l'envoi ou reculez la réunion.";
+      return "";
+    }
+  },
+
+  {
+    cle: "pv-cse",
+    nom: "Trame de procès-verbal CSE",
+    resume: "Les mentions utiles du procès-verbal de réunion, le délai d'établissement, la transmission à l'employeur et la diffusion après adoption.",
+    articles: ["L2315-34", "D2315-26", "L2315-35"],
+    sections: [
+      { titre: "La réunion", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "dateReunion", nom: "Date de la réunion", t: "date" },
+        { c: "lieu", nom: "Lieu", t: "text" },
+        { c: "president", nom: "Président (nom, qualité, assisté le cas échéant)", t: "text" },
+        { c: "secretaire", nom: "Secrétaire (rédacteur du procès-verbal)", t: "text" },
+        { c: "presents", nom: "Élus présents (un par ligne)", t: "textarea", pleine: true },
+        { c: "excuses", nom: "Absents excusés, suppléants remplaçants, invités (un par ligne)", t: "textarea", pleine: true }
+      ]},
+      { titre: "Les délibérations", champs: [
+        { c: "points", nom: "Points examinés : un point par ligne, sous la forme « Intitulé — résumé des échanges et délibération, résultat du vote le cas échéant »", t: "textarea", pleine: true,
+          aide: "À défaut d'accord, le procès-verbal contient au moins le résumé des délibérations et la décision motivée de l'employeur sur les propositions de la précédente réunion (art. D. 2315-26)." },
+        { c: "reponsesEmployeur", nom: "Décision motivée de l'employeur sur les propositions de la précédente réunion", t: "textarea", pleine: true }
+      ]}
+    ],
+    composer: function (v) {
+      var pts = lignes(v.points);
+      var corps = pts.length
+        ? pts.map(function (p, i) {
+            var m = p.split(/\s+—\s+|\s+--\s+/);
+            return "<h3>" + (i + 1) + ". " + e(m[0]) + "</h3><p>" +
+              (m.length > 1 ? e(m.slice(1).join(" — ")) : vide("résumé des échanges, délibération, résultat du vote")) + "</p>";
+          }).join("")
+        : "<p>" + vide("points examinés et délibérations") + "</p>";
+      return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
+        '<h2 class="titre-doc">Procès-verbal de la réunion<br>du comité social et économique</h2>' +
+        '<p class="sous-titre">Réunion du ' + chDate(v.dateReunion, "date") + " — " + ch(v.lieu, "lieu") + "</p>" +
+        "<h3>Présences</h3>" +
+        "<p>Président : " + ch(v.president, "nom et qualité") + "<br>Secrétaire : " +
+        ch(v.secretaire, "nom du secrétaire") + "</p>" +
+        (lignes(v.presents).length ? "<p>Élus présents :</p><ul>" + lignes(v.presents).map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>" : "<p>Élus présents : " + vide("liste") + "</p>") +
+        (lignes(v.excuses).length ? "<p>Excusés, remplaçants, invités :</p><ul>" + lignes(v.excuses).map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>" : "") +
+        "<h3>Délibérations</h3>" + corps +
+        "<h3>Suites données par l'employeur</h3><p>" +
+        ch(v.reponsesEmployeur, "décision motivée de l'employeur sur les propositions faites lors de la précédente réunion — art. L. 2315-34 et D. 2315-26") + "</p>" +
+        "<h3>Établissement, transmission et diffusion</h3>" +
+        "<p>Le présent procès-verbal est établi par le secrétaire du comité et transmis à l'employeur " +
+        "dans le délai fixé par accord ou, à défaut, dans les quinze jours suivant la réunion — " +
+        "trois jours dans le cadre de la consultation prévue à l'article L. 1233-30, un jour lorsque " +
+        "l'entreprise est en redressement ou en liquidation judiciaire (art. L. 2315-34 et D. 2315-26 " +
+        "du code du travail). L'employeur fait connaître, lors de la réunion suivant cette transmission, " +
+        "sa décision motivée sur les propositions qui lui ont été soumises. Après adoption, le " +
+        "procès-verbal peut être affiché ou diffusé dans l'entreprise par le secrétaire, selon les " +
+        "modalités précisées par le règlement intérieur du comité (art. L. 2315-35).</p>" +
+        '<div class="signatures"><div>Le secrétaire du comité<br>' + ch(v.secretaire, "nom") + "</div></div>" +
+        piedTextes(["L2315-34", "D2315-26", "L2315-35"]);
+    }
+  },
+
+  {
+    cle: "accord-methode",
+    nom: "Accord de méthode NAO",
+    resume: "La trame de l'accord qui organise les négociations obligatoires : les cinq mentions de l'article L. 2242-11, et la durée limitée à quatre ans.",
+    articles: ["L2242-11", "L2242-12", "L2242-13"],
+    sections: [
+      { titre: "Les parties et la durée", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "representant", nom: "Représentant de l'entreprise (nom, qualité)", t: "text" },
+        { c: "syndicats", nom: "Organisations syndicales signataires (une par ligne : organisation, délégué syndical)", t: "textarea", pleine: true },
+        { c: "duree", nom: "Durée de l'accord, en années (au plus quatre — art. L. 2242-11)", t: "number" },
+        { c: "dateSignature", nom: "Date de signature", t: "date" }
+      ]},
+      { titre: "Les cinq mentions obligatoires (art. L. 2242-11)", champs: [
+        { c: "themes", nom: "1° Thèmes des négociations et périodicité de chacun — un par ligne, sous la forme « Thème — périodicité »", t: "textarea", pleine: true,
+          aide: "La périodicité choisie ne peut excéder quatre ans pour la rémunération, le temps de travail et le partage de la valeur ajoutée, l'égalité professionnelle et la qualité de vie et des conditions de travail, et la gestion des emplois et des parcours professionnels." },
+        { c: "contenu", nom: "2° Contenu de chacun des thèmes", t: "textarea", pleine: true },
+        { c: "calendrier", nom: "3° Calendrier et lieux des réunions", t: "textarea", pleine: true },
+        { c: "informations", nom: "4° Informations remises par l'employeur aux négociateurs, et date de cette remise", t: "textarea", pleine: true },
+        { c: "suivi", nom: "5° Modalités de suivi des engagements souscrits par les parties", t: "textarea", pleine: true }
+      ]}
+    ],
+    composer: function (v) {
+      function bloc(titre, val, blanc) {
+        return "<h3>" + titre + "</h3><p>" + ch(val, blanc) + "</p>";
+      }
+      var themes = lignes(v.themes);
+      var tableau = themes.length
+        ? "<table><tr><th>Thème</th><th>Périodicité</th></tr>" + themes.map(function (t) {
+            var m = t.split(/\s+—\s+|\s+--\s+/);
+            return "<tr><td>" + e(m[0]) + "</td><td>" + (m[1] ? e(m.slice(1).join(" — ")) : vide("périodicité")) + "</td></tr>";
+          }).join("") + "</table>"
+        : "<p>" + vide("thèmes et périodicités") + "</p>";
+      return enteteFeuille(v.entreprise, chDate(v.dateSignature, "date de signature")) +
+        '<h2 class="titre-doc">Accord de méthode<br>sur les négociations obligatoires</h2>' +
+        '<p class="sous-titre">Accord conclu en application des articles L. 2242-10 et suivants du code du travail</p>' +
+        "<p>Entre " + ch(v.entreprise, "entreprise") + ", représentée par " +
+        ch(v.representant, "nom et qualité") + ", d'une part, et les organisations syndicales " +
+        "représentatives signataires, d'autre part :</p>" +
+        (lignes(v.syndicats).length ? "<ul>" + lignes(v.syndicats).map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>" : "<p>" + vide("organisations syndicales signataires") + "</p>") +
+        "<h3>Article 1 — Thèmes des négociations et périodicité</h3>" +
+        "<p>Les thèmes des négociations et leur périodicité sont fixés comme suit, de telle sorte " +
+        "qu'au moins tous les quatre ans soient négociés les thèmes mentionnés aux 1° et 2° de " +
+        "l'article L. 2242-1 et aux articles L. 2242-2 et L. 2242-2-1 du code du travail " +
+        "(art. L. 2242-11, 1°) :</p>" + tableau +
+        bloc("Article 2 — Contenu de chacun des thèmes (art. L. 2242-11, 2°)", v.contenu, "contenu de chaque thème") +
+        bloc("Article 3 — Calendrier et lieux des réunions (art. L. 2242-11, 3°)", v.calendrier, "calendrier et lieux") +
+        bloc("Article 4 — Informations remises aux négociateurs et date de leur remise (art. L. 2242-11, 4°)", v.informations, "informations et date de remise") +
+        bloc("Article 5 — Modalités de suivi des engagements souscrits (art. L. 2242-11, 5°)", v.suivi, "modalités de suivi") +
+        "<h3>Article 6 — Durée de l'accord</h3>" +
+        "<p>Le présent accord est conclu pour une durée de <b>" + ch(v.duree, "durée") +
+        " an(s)</b>. Cette durée ne peut excéder quatre ans (art. L. 2242-11, dernier alinéa). " +
+        "En cas de non-respect de ses stipulations ou à son échéance sans renouvellement, " +
+        "l'employeur engage les négociations selon la périodicité prévue à l'article L. 2242-13 " +
+        "du code du travail.</p>" +
+        "<h3>Article 7 — Dépôt</h3>" +
+        "<p>Le présent accord sera déposé dans les conditions prévues par voie réglementaire.</p>" +
+        '<div class="signatures"><div>Pour l\'entreprise<br>' + ch(v.representant, "nom et qualité") +
+        "</div><div>Pour les organisations syndicales<br>" +
+        (lignes(v.syndicats).length ? e(lignes(v.syndicats).join(" ; ")) : vide("signataires")) + "</div></div>" +
+        piedTextes(["L2242-11", "L2242-12", "L2242-13"]);
+    },
+    verifier: function (v) {
+      var d = parseFloat(v.duree);
+      if (!isNaN(d) && d > 4)
+        return "La durée de l'accord de méthode ne peut excéder quatre ans (art. L. 2242-11, dernier alinéa). Ramenez la durée saisie (" + e(v.duree) + " ans) à quatre ans au plus.";
+      return "";
+    }
+  },
+
+  {
+    cle: "pv-desaccord",
+    nom: "PV de désaccord NAO",
+    resume: "Quand la négociation obligatoire n'aboutit pas : les propositions respectives des parties en leur dernier état, les mesures unilatérales, le dépôt.",
+    articles: ["L2242-5", "R2242-1"],
+    sections: [
+      { titre: "La négociation", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "representant", nom: "Représentant de l'entreprise (nom, qualité)", t: "text" },
+        { c: "theme", nom: "Thème de la négociation", t: "text",
+          aide: "Par exemple : rémunération, temps de travail et partage de la valeur ajoutée — ou égalité professionnelle et qualité de vie et des conditions de travail." },
+        { c: "reunions", nom: "Dates des réunions de négociation (une par ligne)", t: "textarea", pleine: true },
+        { c: "syndicats", nom: "Organisations syndicales parties à la négociation (une par ligne : organisation, délégué syndical)", t: "textarea", pleine: true },
+        { c: "dateEtablissement", nom: "Date d'établissement du procès-verbal", t: "date" }
+      ]},
+      { titre: "Le constat (art. L. 2242-5)", champs: [
+        { c: "propositionsOS", nom: "Propositions des organisations syndicales, en leur dernier état", t: "textarea", pleine: true },
+        { c: "propositionsEmployeur", nom: "Propositions de l'employeur, en leur dernier état", t: "textarea", pleine: true },
+        { c: "mesures", nom: "Mesures que l'employeur entend appliquer unilatéralement", t: "textarea", pleine: true }
+      ]}
+    ],
+    composer: function (v) {
+      var reunions = lignes(v.reunions);
+      return enteteFeuille(v.entreprise, chDate(v.dateEtablissement, "date d'établissement")) +
+        '<h2 class="titre-doc">Procès-verbal de désaccord</h2>' +
+        '<p class="sous-titre">Négociation obligatoire — ' + ch(v.theme, "thème de la négociation") +
+        " (art. L. 2242-5 du code du travail)</p>" +
+        "<p>La négociation obligatoire portant sur " + ch(v.theme, "thème") + " a été engagée entre " +
+        ch(v.entreprise, "entreprise") + ", représentée par " + ch(v.representant, "nom et qualité") +
+        ", et les organisations syndicales représentatives suivantes :</p>" +
+        (lignes(v.syndicats).length ? "<ul>" + lignes(v.syndicats).map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>" : "<p>" + vide("organisations syndicales") + "</p>") +
+        (reunions.length
+          ? "<p>Les parties se sont réunies " + (reunions.length > 1 ? reunions.length + " fois, les " : "le ") + e(reunions.join(", ")) + ".</p>"
+          : "<p>Les parties se sont réunies " + vide("dates des réunions") + ".</p>") +
+        "<p>Au terme de la négociation, aucun accord n'a été conclu. Conformément à l'article " +
+        "L. 2242-5 du code du travail, le présent procès-verbal consigne, en leur dernier état, " +
+        "les propositions respectives des parties et les mesures que l'employeur entend appliquer " +
+        "unilatéralement.</p>" +
+        "<h3>1. Propositions des organisations syndicales, en leur dernier état</h3><p>" +
+        ch(v.propositionsOS, "dernier état des propositions syndicales") + "</p>" +
+        "<h3>2. Propositions de l'employeur, en leur dernier état</h3><p>" +
+        ch(v.propositionsEmployeur, "dernier état des propositions de l'employeur") + "</p>" +
+        "<h3>3. Mesures que l'employeur entend appliquer unilatéralement</h3><p>" +
+        ch(v.mesures, "mesures unilatérales envisagées — ou « néant »") + "</p>" +
+        "<h3>4. Dépôt</h3>" +
+        "<p>Le présent procès-verbal donne lieu à dépôt, à l'initiative de la partie la plus " +
+        "diligente, dans les conditions prévues par voie réglementaire (art. L. 2242-5) — " +
+        "c'est-à-dire dans les conditions prévues à l'article D. 2231-2 du code du travail " +
+        "(art. R. 2242-1).</p>" +
+        '<div class="signatures"><div>Pour l\'entreprise<br>' + ch(v.representant, "nom et qualité") +
+        "</div><div>Pour les organisations syndicales<br>" +
+        (lignes(v.syndicats).length ? e(lignes(v.syndicats).join(" ; ")) : vide("parties syndicales")) + "</div></div>" +
+        piedTextes(["L2242-5", "R2242-1"]);
+    }
+  },
+
+  {
+    cle: "note-rh",
+    nom: "Note d'information RH",
+    resume: "Un gabarit sobre : objet, contexte, règle applicable avec sa référence, application pratique, entrée en vigueur.",
+    articles: [],
+    sections: [
+      { titre: "La note", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "emetteur", nom: "Émetteur (service, nom)", t: "text" },
+        { c: "destinataires", nom: "Destinataires", t: "text",
+          aide: "Par exemple : l'ensemble du personnel, les responsables de service, les managers." },
+        { c: "dateNote", nom: "Date de la note", t: "date" },
+        { c: "objet", nom: "Objet", t: "text" },
+        { c: "contexte", nom: "Contexte : pourquoi cette note, maintenant", t: "textarea", pleine: true },
+        { c: "regle", nom: "Règle applicable — citez le texte ou l'accord, avec sa référence exacte", t: "textarea", pleine: true,
+          aide: "Ne citez un article que vérifié à la source ; la référence saisie ici est reproduite telle quelle, sous votre responsabilité." },
+        { c: "application", nom: "Application pratique : ce qui change concrètement, pour qui, comment", t: "textarea", pleine: true },
+        { c: "vigueur", nom: "Entrée en vigueur", t: "date" },
+        { c: "contact", nom: "Contact pour toute question (service, personne)", t: "text" }
+      ]}
+    ],
+    composer: function (v) {
+      return enteteFeuille(v.entreprise, chDate(v.dateNote, "date de la note")) +
+        '<h2 class="titre-doc">Note d\'information</h2>' +
+        '<p class="sous-titre">' + ch(v.emetteur, "émetteur") + " — à l'attention de " +
+        ch(v.destinataires, "destinataires") + "</p>" +
+        "<h3>Objet</h3><p><b>" + ch(v.objet, "objet de la note") + "</b></p>" +
+        "<h3>Contexte</h3><p>" + ch(v.contexte, "contexte") + "</p>" +
+        "<h3>Règle applicable</h3><p>" + ch(v.regle, "règle applicable et sa référence") + "</p>" +
+        "<h3>Application pratique</h3><p>" + ch(v.application, "ce qui change concrètement") + "</p>" +
+        "<h3>Entrée en vigueur</h3><p>" +
+        (v.vigueur ? "La présente note s'applique à compter du <b>" + e(dateFr(v.vigueur)) + "</b>."
+                   : vide("date d'entrée en vigueur")) + "</p>" +
+        (v.contact ? "<p>Pour toute question : " + e(v.contact) + ".</p>" : "") +
+        '<div class="signatures"><div>' + ch(v.emetteur, "émetteur") + "</div></div>" +
+        '<div class="pied-textes">Document préparé avec l\'application Jurisprudence ; la référence ' +
+        "des textes cités dans la note relève de son rédacteur — il reste à relire et à adapter avant usage.</div>";
+    }
+  },
+
+  {
+    cle: "reclamation",
+    nom: "Réponse écrite à une réclamation",
+    resume: "La réponse motivée de l'employeur à une réclamation portée par la délégation du personnel, destinée au registre : question, fondement, réponse, date.",
+    articles: ["L2312-5", "L2315-22"],
+    sections: [
+      { titre: "La réclamation", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "auteur", nom: "Membre de la délégation ayant présenté la réclamation", t: "text" },
+        { c: "dateReunion", nom: "Date de la réunion où la réclamation a été présentée", t: "date" },
+        { c: "reclamation", nom: "La réclamation, telle que présentée", t: "textarea", pleine: true },
+        { c: "fondement", nom: "Fondement invoqué ou identifié (texte, convention, accord, usage)", t: "textarea", pleine: true }
+      ]},
+      { titre: "La réponse", champs: [
+        { c: "reponse", nom: "Réponse motivée de l'employeur", t: "textarea", pleine: true,
+          aide: "L'employeur répond par écrit au plus tard dans les six jours ouvrables suivant la réunion (art. L. 2315-22)." },
+        { c: "dateReponse", nom: "Date de la réponse", t: "date" },
+        { c: "signataire", nom: "Signataire (nom, qualité)", t: "text" }
+      ]}
+    ],
+    composer: function (v) {
+      return enteteFeuille(v.entreprise, chDate(v.dateReponse, "date de la réponse")) +
+        '<h2 class="titre-doc">Réponse écrite à une réclamation</h2>' +
+        '<p class="sous-titre">Destinée au registre spécial des demandes et réponses (art. L. 2315-22 du code du travail)</p>' +
+        "<h3>Réclamation présentée</h3>" +
+        "<p>Réclamation présentée par " + ch(v.auteur, "membre de la délégation") +
+        ", lors de la réunion du " + chDate(v.dateReunion, "date de la réunion") +
+        ", au titre de la mission de la délégation du personnel de présenter à l'employeur les " +
+        "réclamations individuelles ou collectives (art. L. 2312-5 du code du travail) :</p>" +
+        "<p>" + ch(v.reclamation, "texte de la réclamation") + "</p>" +
+        "<h3>Fondement invoqué</h3><p>" + ch(v.fondement, "texte, convention, accord ou usage invoqué") + "</p>" +
+        "<h3>Réponse motivée de l'employeur</h3><p>" + ch(v.reponse, "réponse motivée") + "</p>" +
+        "<h3>Inscription au registre</h3>" +
+        "<p>La présente réponse, donnée par écrit au plus tard dans les six jours ouvrables suivant " +
+        "la réunion, est transcrite sur le registre spécial ou y est annexée. Ce registre est tenu " +
+        "à la disposition des salariés de l'entreprise un jour ouvrable par quinzaine et en dehors " +
+        "de leur temps de travail, ainsi qu'à la disposition de l'agent de contrôle de l'inspection " +
+        "du travail et des membres de la délégation du personnel (art. L. 2315-22 du code du travail).</p>" +
+        '<div class="signatures"><div>Fait le ' + chDate(v.dateReponse, "date") + "<br>" +
+        ch(v.signataire, "nom et qualité du signataire") + "</div></div>" +
+        piedTextes(["L2312-5", "L2315-22"]);
+    },
+    verifier: function (v) {
+      var j = joursEntre(v.dateReunion, v.dateReponse);
+      if (j !== null && j > 8)
+        return "L'employeur répond par écrit au plus tard dans les six jours ouvrables suivant la " +
+          "réunion (art. L. 2315-22). Entre la réunion et la réponse saisies, il s'est écoulé " + j +
+          " jours calendaires : vérifiez que le délai de six jours ouvrables est tenu.";
+      return "";
+    }
+  }];
+
+  /* ------------------------------------------------------------------ */
+  /* Construction du formulaire, brouillon, génération.                  */
+  /* ------------------------------------------------------------------ */
+  var CLE_BROUILLON = "documents-brouillon";
+  var actif = MODELES[0];
+
+  function lireBrouillons() {
+    try { return JSON.parse(localStorage.getItem(CLE_BROUILLON) || "{}") || {}; }
+    catch (_) { return {}; }
+  }
+  function ecrireBrouillon(cle, valeurs) {
+    var b = lireBrouillons();
+    b[cle] = valeurs;
+    try { localStorage.setItem(CLE_BROUILLON, JSON.stringify(b)); } catch (_) {}
+  }
+
+  function construireCartes() {
+    var conteneur = $("modeles");
+    MODELES.forEach(function (m) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "modele";
+      b.id = "modele-" + m.cle;
+      b.setAttribute("role", "tab");
+      b.innerHTML = "<b>" + e(m.nom) + "</b><span>" + e(m.resume) + "</span>";
+      b.addEventListener("click", function () { choisir(m); });
+      conteneur.appendChild(b);
+    });
+  }
+
+  function champHtml(champ) {
+    var pleine = champ.pleine ? ' class="pleine"' : "";
+    var aide = champ.aide ? '<p class="aide-champ">' + e(champ.aide) + "</p>" : "";
+    if (champ.t === "cases") {
+      return "<div" + pleine + '><span class="nom" style="display:block;color:var(--encre);font-size:14px;margin-bottom:4px">' + e(champ.nom) + "</span>" +
+        '<div class="cases">' + champ.options.map(function (o, i) {
+          return '<label class="case"><input type="checkbox" name="' + champ.c + '" value="' + e(o) + '" id="' + champ.c + "-" + i + '"> <span>' + e(o) + "</span></label>";
+        }).join("") + "</div>" + aide + "</div>";
+    }
+    var interieur;
+    if (champ.t === "textarea")
+      interieur = '<textarea id="ch-' + champ.c + '" name="' + champ.c + '"></textarea>';
+    else
+      interieur = '<input id="ch-' + champ.c + '" name="' + champ.c + '" type="' + champ.t + '"' +
+        (champ.t === "number" ? ' min="0" step="1"' : "") + ">";
+    return "<label" + pleine + '><span class="nom">' + e(champ.nom) + "</span>" + interieur + aide + "</label>";
+  }
+
+  function construireFormulaire(m) {
+    var f = $("formulaire");
+    f.innerHTML = m.sections.map(function (s) {
+      return "<fieldset><legend>" + e(s.titre) + '</legend><div class="grille">' +
+        s.champs.map(champHtml).join("") + "</div></fieldset>";
+    }).join("") +
+    (m.articles.length
+      ? '<p class="fonde">Ce modèle se fonde sur : ' + m.articles.map(function (n) {
+          return "art. " + refArt(n) + " (" + e(TEXTES[n].quoi) + ")";
+        }).join(" ; ") + ".</p>"
+      : '<p class="fonde">Ce modèle ne cite aucun article de lui-même : la référence de la règle rappelée dans la note relève de son rédacteur.</p>');
+    f.addEventListener("input", function () { ecrireBrouillon(m.cle, lireValeurs(m)); });
+  }
+
+  function lireValeurs(m) {
+    var v = {};
+    m.sections.forEach(function (s) {
+      s.champs.forEach(function (c) {
+        if (c.t === "cases") {
+          v[c.c] = [].slice.call(document.querySelectorAll('input[name="' + c.c + '"]:checked'))
+            .map(function (x) { return x.value; });
+        } else {
+          var el = $("ch-" + c.c);
+          v[c.c] = el ? el.value.trim() : "";
+        }
+      });
+    });
+    return v;
+  }
+
+  function remplir(m, valeurs) {
+    m.sections.forEach(function (s) {
+      s.champs.forEach(function (c) {
+        if (c.t === "cases") {
+          var cochees = valeurs[c.c] || [];
+          [].slice.call(document.querySelectorAll('input[name="' + c.c + '"]')).forEach(function (x) {
+            x.checked = cochees.indexOf(x.value) !== -1;
+          });
+        } else {
+          var el = $("ch-" + c.c);
+          if (el) el.value = valeurs[c.c] || "";
+        }
+      });
+    });
+  }
+
+  function choisir(m) {
+    actif = m;
+    [].slice.call(document.querySelectorAll(".modele")).forEach(function (b) {
+      b.classList.toggle("actif", b.id === "modele-" + m.cle);
+    });
+    construireFormulaire(m);
+    /* Brouillon d'abord ; à défaut, le profil d'entreprise s'il existe. */
+    var brouillon = lireBrouillons()[m.cle];
+    if (brouillon) remplir(m, brouillon);
+    else {
+      var profil = lireProfil(), v = {};
+      m.sections.forEach(function (s) {
+        s.champs.forEach(function (c) {
+          if (c.profil && profil[c.profil]) v[c.c] = profil[c.profil];
+        });
+      });
+      if (Object.keys(v).length) remplir(m, v);
+    }
+    $("docu").style.display = "none";
+    $("imprimer").disabled = true;
+    $("copier").disabled = true;
+    $("alerte").innerHTML = "";
+    message("");
+  }
+
+  function message(txt) {
+    var m = $("message");
+    if (!txt) { m.style.display = "none"; m.textContent = ""; return; }
+    m.textContent = txt;
+    m.style.display = "block";
+  }
+
+  function generer() {
+    var v = lireValeurs(actif);
+    ecrireBrouillon(actif.cle, v);
+    var alerte = actif.verifier ? actif.verifier(v) : "";
+    $("alerte").innerHTML = alerte ? '<p class="avert">' + e(alerte) + "</p>" : "";
+    $("feuille").innerHTML = actif.composer(v);
+    $("docu").style.display = "block";
+    $("imprimer").disabled = false;
+    $("copier").disabled = false;
+    message("Document généré ci-dessous — relisez-le, complétez les blancs entre crochets, puis imprimez-le ou copiez-le.");
+    $("docu").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function copierTexte() {
+    var texte = $("feuille").innerText.replace(/\n{3,}/g, "\n\n").trim();
+    function fini(ok) { message(ok ? "Texte copié dans le presse-papiers." : "La copie a échoué — sélectionnez le document et copiez-le à la main."); }
+    if (navigator.clipboard && navigator.clipboard.writeText)
+      navigator.clipboard.writeText(texte).then(function () { fini(true); }, function () { fini(false); });
+    else {
+      var z = document.createElement("textarea");
+      z.value = texte; document.body.appendChild(z); z.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (_) {}
+      document.body.removeChild(z);
+      fini(ok);
+    }
+  }
+
+  $("generer").addEventListener("click", generer);
+  $("imprimer").addEventListener("click", function () { window.print(); });
+  $("imprimer2").addEventListener("click", function () { window.print(); });
+  $("copier").addEventListener("click", copierTexte);
+  $("copier2").addEventListener("click", copierTexte);
+  $("vider").addEventListener("click", function () {
+    var b = lireBrouillons();
+    delete b[actif.cle];
+    try { localStorage.setItem(CLE_BROUILLON, JSON.stringify(b)); } catch (_) {}
+    choisir(actif);
+    message("Formulaire de ce modèle effacé. Les autres modèles sont intacts.");
+  });
+  $("btn-retour").addEventListener("click", function () {
+    if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
+    else location.href = "./";
+  });
+
+  construireCartes();
+  choisir(MODELES[0]);
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+</body>
+</html>
