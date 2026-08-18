@@ -26,6 +26,7 @@
    "dateEngagement": "2026-03-05",
    "issue": "PV de désaccord",
    "depot": "oui",
+   "appuiBDESE": "oui",
    "planAction": {
     "existe": "oui",
     "depot": "oui"

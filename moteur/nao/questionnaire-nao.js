@@ -96,7 +96,7 @@ q("L'accord de méthode", "accordMethode.mentions", "Mentions que l'accord porte
 q("L'accord de méthode", "accordMethode.periodicites", "Périodicités fixées par thème, en années", "objet", "l'accord lui-même");
 
 q("Les négociations menées", "negos.remuneration", "Rémunération : date d'engagement, issue, dépôt, procès-verbal d'ouverture sur les écarts, thèmes traités", "objet", "convocations, accord ou procès-verbal");
-q("Les négociations menées", "negos.egalite", "Égalité et qualité de vie : date d'engagement, issue, dépôt, plan d'action, thèmes traités", "objet", "convocations, accord ou procès-verbal");
+q("Les négociations menées", "negos.egalite", "Égalité et qualité de vie : date d'engagement, issue, dépôt, plan d'action, thèmes traités, appui sur la BDESE", "objet", "convocations, accord ou procès-verbal");
 q("Les négociations menées", "negos.gepp", "Gestion des emplois et des parcours : date d'engagement, issue, dépôt", "objet", "convocations, accord ou procès-verbal");
 q("Les négociations menées", "negos.experimentes", "Salariés expérimentés : date d'engagement, issue", "objet", "convocations, accord ou procès-verbal");
 

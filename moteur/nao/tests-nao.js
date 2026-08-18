@@ -20,7 +20,7 @@ const BASE = {
     remuneration: { dateEngagement: "2026-02-10", issue: "accord", depot: "oui",
       pvOuvertureEcarts: "oui",
       themesTraites: ["salaires", "temps de travail", "épargne salariale", "écarts femmes-hommes"] },
-    egalite: { dateEngagement: "2026-03-05", issue: "PV de désaccord", depot: "oui",
+    egalite: { dateEngagement: "2026-03-05", issue: "PV de désaccord", depot: "oui", appuiBDESE: "oui",
       planAction: { existe: "oui", depot: "oui" },
       themesTraites: ["articulation", "écarts femmes-hommes", "discriminations", "handicap", "prévoyance", "déconnexion"] },
     gepp: { dateEngagement: "2024-06-01", issue: "accord", depot: "oui", themesTraites: [] },
@@ -70,6 +70,8 @@ const CAS = [
     f: avec(f => { f.negos.egalite.planAction = { existe: "non" }; }) },
   { nom: "Plan d'action égalité non déposé", attendu: ["NAO-CTL-EGA-01"],
     f: avec(f => { f.negos.egalite.planAction = { existe: "oui", depot: "non" }; }) },
+  { nom: "Négociation égalité conduite sans s'appuyer sur la base", attendu: ["NAO-CTL-CON-03"],
+    f: avec(f => { f.negos.egalite.appuiBDESE = "non"; }) },
   { nom: "Index égalité non publié", attendu: ["NAO-CTL-EGA-02"],
     f: avec(f => { f.indexEgalitePublie = "non"; }) },
 ];

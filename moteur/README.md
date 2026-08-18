@@ -1,6 +1,6 @@
 # Les moteurs d'audit
 
-Deux domaines, une même chaîne : le moteur calcule, la grille énonce ce que la
+Cinq domaines, une même chaîne : le moteur calcule, la grille énonce ce que la
 loi exige, les contrôles constatent si la situation décrite y satisfait, les cas
 contradictoires vérifient que les contrôles contrôlent quelque chose, et le
 document met en forme. Aucune phrase de droit n'est écrite ailleurs que dans la
@@ -18,6 +18,20 @@ source : le chargement de la grille échoue si un article cité manque.
 | Cas de contrôle | 73 cas contradictoires | 59 cas moteur + 63 cas contradictoires |
 | Corpus de jurisprudence | 474 arrêts publiés dépouillés | 163 arrêts publiés classés sur 11 rubriques |
 | Contre-audit versé au dépôt | `economique/CONTRE-AUDIT-MOTEUR-ECONOMIQUE.md` | `cse/CONTRE-AUDIT-MODULE-CSE.md` |
+
+Trois modules ont rejoint la même chaîne, chacun avec son dossier et son
+`MODULE-….md` :
+
+- **`pse/`** — le plan de sauvegarde de l'emploi (L. 1233-61 à L. 1233-63) :
+  21 contrôles, 22 articles relus, découpage de L. 1233-62 mesuré. Le calibrage
+  du plan se calcule et ne se conclut jamais.
+- **`bdese/`** — la base de données économiques, sociales et environnementales
+  (L. 2312-18 et suivants) : 17 contrôles, 32 articles, couverture des décrets
+  R. 2312-8 et R. 2312-9 mesurée à 100 %. Le régime tient en une question :
+  accord ou pas.
+- **`nao/`** — la négociation obligatoire (L. 2242-1 et suivants) :
+  17 contrôles, 25 articles, quatre thèmes et leurs périodicités, exposition
+  aux pénalités jamais « blanchie ». Publication : `node publier-nao.js`.
 
 ## Comment l'exécuter
 

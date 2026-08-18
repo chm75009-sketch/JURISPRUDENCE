@@ -37,13 +37,14 @@ rend **jamais** « conforme » : les pénalités de L. 2242-7 (salaires — jusq
 des rémunérations) sont fixées par l'administration selon les efforts
 constatés ; un blanc-seing serait faux.
 
-## Les seize contrôles
+## Les dix-sept contrôles
 
 Régime (2) · périodicités des quatre thèmes (4) · demande syndicale — huit et
 quinze jours (1) · loyauté — première réunion, conditions de dépôt d'un accord
 salaires, décisions unilatérales pendant négociation (3) · issue et dépôts (1) ·
 égalité — plan d'action supplétif, couverture et index (2) · contenu des
 négociations rémunération et égalité (2, en risque jamais en non-conformité) ·
+appui de la négociation égalité sur la BDESE (1) ·
 exposition aux sanctions (1, jamais conforme).
 
 Cinq états : conforme, non conforme, risque à vérifier, donnée manquante, sans
@@ -62,7 +63,7 @@ l'écart.
 
 ## La chaîne de publication
 
-`node publier-nao.js` : tests contradictoires (14 dossiers, tout contrôle
+`node publier-nao.js` : tests contradictoires (15 dossiers, tout contrôle
 capable de dire « non » l'a dit au moins une fois), non-divergence
 questionnaire/contrôles dans les deux sens, propositions vérifiées dans les
 deux sens, manifeste avec compteurs mesurés, empaquetage navigateur
@@ -77,6 +78,6 @@ conclut « conforme ».
   constatés.
 - **Le contenu des accords signés n'est pas audité** : le module vérifie que
   les thèmes légaux ont été mis sur la table, pas ce qui en est sorti.
-- **La BDESE nourrit la négociation** (L. 2242-17 renvoie à L. 2312-36) : le
-  lien avec le module BDESE est documentaire, pas encore croisé dans les
-  contrôles.
+- ~~La BDESE nourrit la négociation~~ — **croisé** : le contrôle
+  NAO-CTL-CON-03 vérifie que la négociation égalité s'est appuyée sur les
+  données de la base (L. 2242-17, 2°), et renvoie au module BDESE.

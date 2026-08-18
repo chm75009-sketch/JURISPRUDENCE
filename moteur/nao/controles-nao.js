@@ -239,6 +239,18 @@ function ctlContenu(id, cle, items, fondement) {
 ctlContenu("NAO-CTL-CON-01", "remuneration", ITEMS_REMUNERATION, "L. 2242-15");
 ctlContenu("NAO-CTL-CON-02", "egalite", ITEMS_EGALITE, "L. 2242-17");
 
+ctl("NAO-CTL-CON-03", "Contenu des négociations",
+  "La négociation sur l'égalité professionnelle s'est-elle appuyée sur les données de la base (BDESE) ?",
+  ["L. 2242-17, 2°"],
+  f => siAssujetti(f, () => {
+    const n = nego(f, "egalite");
+    if (vide(n.dateEngagement)) return { etat: SO, motif: "La négociation égalité n'est pas déclarée engagée : l'appui sur la base n'a pas d'objet." };
+    if (vide(n.appuiBDESE)) return { etat: MANQ, motif: "Il n'est pas indiqué si la négociation s'est appuyée sur les données de la base de données économiques, sociales et environnementales. L. 2242-17, 2°, l'impose : « cette négociation s'appuie sur les données mentionnées au 2° de l'article L. 2312-36 »." };
+    if (nie(n.appuiBDESE))
+      return { etat: NC, motif: "La négociation sur l'égalité professionnelle a été conduite sans s'appuyer sur les données de la base : L. 2242-17, 2°, l'impose. Des négociateurs privés du diagnostic comparé femmes-hommes de la base ne négocient pas en connaissance de cause — c'est un grief de loyauté autant que de contenu. Le module « base de données (BDESE) » de cette application audite la rubrique en cause." };
+    return { etat: CONF, motif: "La négociation s'est appuyée sur les données de la base, comme L. 2242-17, 2°, l'impose." };
+  }));
+
 /* ------------------------------------------------------------ l'exposition */
 
 ctl("NAO-CTL-PEN-01", "Exposition aux sanctions",

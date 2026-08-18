@@ -49,6 +49,8 @@ const P = {
   "negos.egalite.themesTraites": {
     valeurs: ["articulation", "écarts femmes-hommes", "discriminations", "handicap", "prévoyance", "déconnexion"], libre: false, multiple: true,
     aide: "Les six thèmes que la loi met sur la table pour cette négociation. Cochez ceux qui y ont réellement été traités." },
+  "negos.egalite.appuiBDESE": { valeurs: OUI_NON, libre: false,
+    aide: "La loi impose que cette négociation s'appuie sur les données de la BDESE — le diagnostic comparé femmes-hommes. Remettez ces extraits aux négociateurs, et gardez la preuve de la remise." },
   "negos.egalite.planAction.existe": { valeurs: OUI_NON, libre: false,
     aide: "Sans accord sur l'égalité, un plan d'action annuel est obligatoire : objectifs de progression, actions chiffrées, coût." },
   "negos.egalite.planAction.depot": { valeurs: OUI_NON, libre: false,
