@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1F3864">
+<link rel="icon" href="icons/icon-180.png">
+<title>Guides — Application Jurisprudence</title>
+<style>
+  :root{
+    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papier);color:var(--corps);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .page{max-width:860px;margin:0 auto;padding:0 20px 80px}
+  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
+    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
+    margin:0 -20px 0;padding:10px 20px}
+  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
+  .retour-ou{font-size:13px;color:var(--gris)}
+  .retour-ou a{color:var(--bleu)}
+  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
+  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
+  h1{font:600 clamp(26px,4vw,34px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
+  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:0}
+  h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:18px 0 6px}
+  .usage{background:#fbf7f1;border:1px solid #e5d9c4;border-radius:10px;padding:14px 18px;margin:22px 0}
+  details{background:var(--surface);border:1px solid var(--filet);border-radius:10px;
+    margin:14px 0;padding:0}
+  summary{cursor:pointer;padding:16px 18px;list-style:none;display:flex;align-items:center;gap:10px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:'\25B8';color:var(--gris)}
+  details[open] summary::before{content:'\25BE'}
+  .corps-guide{padding:0 18px 16px}
+  .ou{font-size:13px;color:var(--gris);margin-left:auto}
+  .ou a{color:var(--bleu)}
+  ol{margin:6px 0;padding-left:22px}
+  li{margin:4px 0}
+  .note{color:var(--gris);font-size:14px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="retour-barre">
+  <button type="button" id="btn-retour" class="retour">&#8592; Retour</button>
+  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
+  · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
+  · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a></span>
+</div>
+
+<header>
+  <p class="fil">Application Jurisprudence</p>
+  <h1>Guides d'utilisation</h1>
+  <p class="note">Un guide court par outil : à quoi il sert, comment s'en servir, ce qu'il ne fait pas.</p>
+</header>
+
+<div class="usage">
+  <b>La règle d'usage, valable pour tout ce qui suit.</b> Ces outils vous assistent dans votre
+  démarche : ils lisent les textes à la source, citent leurs fondements et mesurent ce qu'ils font.
+  Ils ne se substituent ni au conseil de votre avocat, ni à l'appréciation du juge ou de
+  l'administration. Un « conforme » n'est jamais un blanc-seing ; un « risque à vérifier » appelle un
+  professionnel. Tout se calcule dans votre navigateur : aucune donnée saisie ne quitte votre
+  appareil.
+</div>
+
+<details open>
+  <summary><h2>Recherche — jurisprudence et textes</h2><span class="ou"><a href="./">ouvrir</a></span></summary>
+  <div class="corps-guide">
+    <h3>À quoi elle sert</h3>
+    <p>Trouver les décisions de la Cour de cassation et des cours d'appel (base officielle Judilibre),
+    et lire les articles des codes et les conventions collectives (Légifrance), sans quitter la page.</p>
+    <h3>Comment s'en servir</h3>
+    <ol>
+      <li><b>Votre clé Judilibre</b>, une seule fois : collez-la dans le champ prévu — elle reste dans
+      votre navigateur, jamais dans un serveur ni dans le code.</li>
+      <li><b>Décrivez votre sujet en français courant</b> — « faux CV », « salarié qui ment sur ses
+      diplômes » — puis touchez « Trouver les bons mots-clés » : l'application affiche d'abord les
+      rubriques du titrage officiel de la Cour (instantané, hors connexion), puis va lire les décisions
+      pour relever les formules que les juges emploient réellement, chacune avec son compte.</li>
+      <li><b>Touchez une formule ou une rubrique</b> : la recherche se lance avec. Les nombres affichés
+      sont ceux que la base renvoie — un relevé, pas une suggestion.</li>
+      <li><b>Ouvrez une décision</b> : texte intégral, articles cités cliquables, export PDF ou Word.</li>
+    </ol>
+    <h3>Ce qu'elle ne fait pas</h3>
+    <p class="note">Elle n'invente aucune référence : tout numéro affiché vient de la base officielle.
+    Une recherche que l'API « élargit » est écartée plutôt que servie — des résultats sans rapport
+    seraient pires que pas de résultats. Les comptes affichés valent pour cette base, pas pour la
+    jurisprudence entière.</p>
+  </div>
+</details>
+
+<details>
+  <summary><h2>Audit — licenciement économique</h2><span class="ou"><a href="audit.html">ouvrir</a></span></summary>
+  <div class="corps-guide">
+    <h3>À quoi il sert</h3>
+    <p>Vérifier un projet de licenciement économique point par point — motif, seuils, ordre des
+    licenciements, consultation, reclassement, calendrier — avant qu'un juge ne le fasse.</p>
+    <h3>Comment s'en servir</h3>
+    <ol>
+      <li>Répondez aux questions, rubrique par rubrique — chacune se déplie d'un clic et affiche son
+      remplissage. Le compteur vous dit, au fil de la saisie, ce que l'audit sait déjà.</li>
+      <li>Ne devinez pas : une donnée que vous n'avez pas se laisse vide. Elle produira « donnée
+      manquante », jamais une conclusion fausse.</li>
+      <li>Lancez l'audit : chaque verdict cite l'article ou l'arrêt qui le fonde. Exportez en Word ou
+      PDF pour le dossier.</li>
+    </ol>
+    <h3>Ce qu'il ne fait pas</h3>
+    <p class="note">Il ne rédige pas les lettres, ne calcule pas les indemnités individuelles, et ne
+    plaide pas : il dit ce qui bloque, ce qui manque, et sur quoi chaque point repose.</p>
+  </div>
+</details>
+
+<details>
+  <summary><h2>Audit — comité social et économique</h2><span class="ou"><a href="audit-cse.html">ouvrir</a></span></summary>
+  <div class="corps-guide">
+    <h3>À quoi il sert</h3>
+    <p>Vérifier la mise en place et le fonctionnement du CSE — élections, réunions, consultations,
+    budgets, formation des élus, BDESE — et repérer ce qui exposerait au délit d'entrave.</p>
+    <h3>Comment s'en servir</h3>
+    <ol>
+      <li>Renseignez l'effectif et les dates : c'est le squelette — beaucoup d'obligations en
+      découlent mécaniquement.</li>
+      <li>Décrivez ensuite ce qui s'est réellement passé : réunions tenues, consultations menées,
+      budgets versés.</li>
+      <li>Lancez l'audit ; le rapport classe : non conforme, risque, donnée manquante — et cite le
+      texte à chaque fois.</li>
+    </ol>
+    <h3>Ce qu'il ne fait pas</h3>
+    <p class="note">Il n'organise pas les élections et ne remplace pas le protocole préélectoral ;
+    il vérifie que ce qui devait être fait l'a été, aux dates où il le fallait.</p>
+  </div>
+</details>
+
+<details>
+  <summary><h2>Audit — plan de sauvegarde de l'emploi</h2><span class="ou"><a href="audit-pse.html">ouvrir</a></span></summary>
+  <div class="corps-guide">
+    <h3>À quoi il sert</h3>
+    <p>Vérifier un PSE tel que l'administration le vérifiera : contenu au regard des sept rubriques de
+    L. 1233-62, accompagnement dû (CSP ou congé de reclassement, selon le seuil de mille), voie
+    retenue, délais d'instruction, suivi.</p>
+    <h3>Comment s'en servir</h3>
+    <ol>
+      <li>Les données déjà saisies dans l'audit du licenciement économique sont reprises — ne les
+      ressaisissez pas.</li>
+      <li>Décrivez les mesures du plan, une par ligne : rubrique, bénéficiaires, budget, durée.</li>
+      <li>Lancez l'audit ; le calibrage (coût par salarié, part du résultat du groupe) est calculé et
+      affiché, jamais « validé » — aucun texte ne fixe le montant d'un plan.</li>
+    </ol>
+    <h3>Ce qu'il ne fait pas</h3>
+    <p class="note">Il ne dit pas si le plan est « suffisant » : cette appréciation appartient à
+    l'administration puis au juge administratif. Un outil qui prétendrait la faire vous tromperait.</p>
+  </div>
+</details>
+
+<details>
+  <summary><h2>Audit — base de données (BDESE)</h2><span class="ou"><a href="audit-bdese.html">ouvrir</a></span></summary>
+  <div class="corps-guide">
+    <h3>À quoi il sert</h3>
+    <p>Préparer, structurer et auditer votre base de données économiques, sociales et
+    environnementales : ce qu'elle doit contenir chez vous, sa mise à disposition, ses consultations.</p>
+    <h3>Comment s'en servir</h3>
+    <ol>
+      <li>Une question commande tout : <b>avez-vous un accord sur la base ?</b> Non — c'est la loi qui
+      fixe le contenu (le décret, selon votre effectif). Oui — c'est l'accord, et il faut le joindre.</li>
+      <li>Décrivez ensuite la base telle qu'elle est : thèmes, années couvertes, accès, mises à jour.</li>
+      <li>Lancez l'audit ; chaque rubrique manquante est nommée, avec l'article qui la fonde.</li>
+    </ol>
+    <h3>Ce qu'il ne fait pas</h3>
+    <p class="note">Il ne remplit pas la base et n'en fournit pas une version partagée entre employeur
+    et élus : il prépare, structure, documente et audite la vôtre, sur votre poste.</p>
+  </div>
+</details>
+
+<details>
+  <summary><h2>Audit — négociation obligatoire (NAO)</h2><span class="ou"><a href="audit-nao.html">ouvrir</a></span></summary>
+  <div class="corps-guide">
+    <h3>À quoi il sert</h3>
+    <p>Vérifier vos négociations obligatoires : ce qui est dû et tous les combien — rémunération,
+    égalité professionnelle, gestion des emplois, salariés expérimentés —, la loyauté de la conduite,
+    l'issue et son dépôt, et ce que coûte un manquement.</p>
+    <h3>Comment s'en servir</h3>
+    <ol>
+      <li>Deux questions ouvrent tout : <b>y a-t-il une section syndicale ?</b> Sans elle, rien n'est
+      dû. <b>Y a-t-il un accord de méthode ?</b> Sans accord, la loi impose son rythme — rémunération
+      et égalité chaque année, le reste tous les trois ans à partir de trois cents salariés.</li>
+      <li>Datez chaque négociation engagée et dites comment elle s'est terminée : accord déposé, ou
+      procès-verbal de désaccord déposé.</li>
+      <li>Lancez l'audit ; l'exposition aux pénalités est mesurée, jamais « blanchie ».</li>
+    </ol>
+    <h3>Ce qu'il ne fait pas</h3>
+    <p class="note">La loi oblige à négocier, pas à conclure : l'outil ne juge pas le contenu de ce qui
+    a été signé — il vérifie que chaque thème dû a été mis sur la table, à temps, loyalement, et que
+    l'issue est formalisée.</p>
+  </div>
+</details>
+
+<footer class="note" style="margin-top:28px">
+  Chaque page d'audit porte le même « Avertissement d'usage », accessible d'un bouton.
+  Les textes cités sont lus à la source et identifiés par leur version.
+</footer>
+</div>
+
+<script>
+  document.getElementById("btn-retour").addEventListener("click", function () {
+    if (history.length > 1) history.back(); else location.href = "./";
+  });
+</script>
+</body>
+</html>
