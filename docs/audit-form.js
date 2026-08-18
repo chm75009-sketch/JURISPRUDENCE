@@ -34,6 +34,9 @@
      PDF. Un rapport se détache de l'application dès qu'il est exporté ; la
      réserve doit voyager avec lui, sinon elle ne protège rien. */
   var AVERTISSEMENT = [
+    "Ces applications outillent l'accompagnement des ressources humaines dans la gestion des "
+      + "relations collectives de travail et leur sécurisation : chaque obligation y est vérifiée "
+      + "à son texte, chaque risque nommé avant que l'administration ou le juge ne le fasse.",
     "Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un avocat, "
       + "ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.",
     "Les constats qu'il produit reposent sur les seules données que vous avez saisies et sur les textes "
