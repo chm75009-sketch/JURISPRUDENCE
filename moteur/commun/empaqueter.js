@@ -244,7 +244,7 @@ const REG = (() => { try { const r = require(path.join(ICI, "registre.js"));
    moteur-cse.js, grille.js et grille-cse.js. On les désigne par leur rôle. */
 const MOD = role => {
   for (const nom of MODULES.keys())
-    if (new RegExp(`^\\./${role}(-cse|-pse|-bdese)?\\.js$`).test(nom)) return nom;
+    if (new RegExp(`^\\./${role}(-[a-z]+)?\\.js$`).test(nom)) return nom;
   return null;   /* tous les moteurs n'ont pas de grille ni de barème d'actions */
 };
 /* Un rôle absent n'est pas empaqueté : l'exiger ferait échouer le chargement

@@ -452,9 +452,32 @@
     return LISTES.some(function (f) { return cle.indexOf(f + ".") === 0; });
   };
 
-  M.champs.forEach(function (rub) {
+  /* Les rubriques se replient : un long formulaire ouvert d'un bloc décourage
+     avant la première réponse. La première rubrique est ouverte, les autres
+     attendent — chacune affiche son remplissage, pour qu'on sache où l'on en
+     est sans dérouler. Le style est injecté ici : il appartient au formulaire,
+     pas aux cinq pages qui le chargent. */
+  (function () {
+    var st = document.createElement("style");
+    st.textContent =
+      "fieldset.repliable>legend{cursor:pointer;-webkit-user-select:none;user-select:none}" +
+      "fieldset.repliable>legend::before{content:'\\25BE\\00a0';color:#5f6874}" +
+      "fieldset.repliable.replie>legend::before{content:'\\25B8\\00a0'}" +
+      "fieldset.repliable.replie>.grille{display:none}" +
+      "legend .rempli{font:400 12px/1 system-ui;color:#5f6874;margin-left:8px}";
+    document.head.appendChild(st);
+  })();
+  var RUBRIQUES_UI = [];
+
+  M.champs.forEach(function (rub, iRub) {
     var fs = document.createElement("fieldset");
     var lg = document.createElement("legend"); lg.textContent = rub[0]; fs.appendChild(lg);
+    fs.className = "repliable";
+    if (iRub > 0) fs.classList.add("replie");
+    var etatRub = document.createElement("span"); etatRub.className = "rempli";
+    lg.appendChild(etatRub);
+    lg.addEventListener("click", function () { fs.classList.toggle("replie"); });
+    RUBRIQUES_UI.push({ fs: fs, etat: etatRub, rub: rub });
     var g = document.createElement("div"); g.className = "grille";
     var faits = {};
     rub[1].forEach(function (ch) {
@@ -1179,6 +1202,54 @@
         return !estColonne(x[0]) && !COLONNES[x[0]]; }).length; }, 0)
       + Object.keys(familles).length;
     document.getElementById("compteur").textContent = n + " donnée(s) renseignée(s) sur " + total;
+
+    /* Le remplissage de chaque rubrique, lisible sans la dérouler. */
+    RUBRIQUES_UI.forEach(function (r) {
+      var fait = 0, tout = 0, fams = {};
+      r.rub[1].forEach(function (ch) {
+        if (estColonne(ch[0])) { fams[ch[0].split(".")[0]] = true; return; }
+        if (COLONNES[ch[0]]) { fams[ch[0]] = true; return; }
+        tout++;
+        var v = valeurDe(ch[0]);
+        if (v !== null && v !== "" && v !== undefined) fait++;
+      });
+      Object.keys(fams).forEach(function (fam) { tout++; if (valeurTableau(fam)) fait++; });
+      r.etat.textContent = fait + "/" + tout + " renseigné(s)";
+    });
+
+    etatVifPlusTard();
+  }
+
+  /* --------------------------------------------- le résultat, au fil de l'eau
+
+     L'audit ne devrait pas être un saut dans le vide au bout de trente et une
+     questions : dès qu'une donnée est saisie, les contrôles savent déjà des
+     choses, et le compteur les dit. Le calcul est différé de sept cents
+     millisecondes pour ne pas courir après chaque frappe. */
+  var minuteurVif = null;
+  function etatVifPlusTard() {
+    if (minuteurVif) clearTimeout(minuteurVif);
+    minuteurVif = setTimeout(etatVif, 700);
+  }
+  function etatVif() {
+    var C = M.controles && (M.controles.C || null);
+    if (!C || !C.length) return;
+    var r;
+    try { r = fiche(); } catch (e) { return; }
+    if (r.mauvais.length || !Object.keys(r.f).length) return;
+    var n = { "non conforme": 0, "risque à vérifier": 0, "donnée manquante": 0,
+              "conforme": 0, "sans objet": 0 };
+    C.forEach(function (c) {
+      try { var v = c.verdict(r.f); if (n[v.etat] !== undefined) n[v.etat]++; } catch (e) {}
+    });
+    var bouts = [];
+    if (n["non conforme"]) bouts.push(n["non conforme"] + " non conforme(s)");
+    if (n["risque à vérifier"]) bouts.push(n["risque à vérifier"] + " à vérifier");
+    if (n["conforme"]) bouts.push(n["conforme"] + " conforme(s)");
+    if (n["donnée manquante"]) bouts.push(n["donnée manquante"] + " en attente de données");
+    if (!bouts.length) return;
+    var e = document.getElementById("compteur");
+    e.textContent = e.textContent.split(" — ")[0] + " — en l'état : " + bouts.join(" · ");
   }
 
   /* --------------------------------------------------- remplir et effacer */
