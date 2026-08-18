@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1F3864">
+<link rel="icon" href="icons/icon-180.png">
+<title>Agenda social — échéancier des obligations collectives</title>
+<!-- Tout se passe dans le navigateur : les brouillons des audits sont lus dans
+     le stockage local du poste, l'échéancier se calcule ici, rien n'est envoyé.
+
+     TEXTES LUS AU RELAIS LÉGIFRANCE LE 18 AOÛT 2026 — deux lectures
+     concordantes chacun, critère de contenu contre les homonymes :
+       L. 2315-28   LEGIARTI000035624857  (réunions du CSE : mensuelles à partir
+                    de 300 salariés, tous les deux mois en deçà, à défaut d'accord)
+       L. 2312-17   LEGIARTI000051559706  (les trois consultations récurrentes)
+       L. 2312-22   LEGIARTI000043975191  (annuelles à défaut d'accord)
+       L. 2312-19   LEGIARTI000036262394  (l'accord peut fixer la périodicité,
+                    trois ans au plus)
+       L. 2312-18   LEGIARTI000052437125  (la BDESE rassemble les informations
+                    nécessaires aux consultations récurrentes)
+       L. 1142-8    LEGIARTI000044605453  (publication annuelle des indicateurs
+                    d'écarts, à partir de 50 salariés)
+       D. 1142-4    LEGIARTI000045250060  (au plus tard le 1er mars ; version en
+                    vigueur à la date de lecture, signalée « abrogation différée »)
+       L. 2314-4    LEGIARTI000035651165  (information du personnel tous les
+                    quatre ans ; premier tour au plus tard le 90e jour suivant)
+       L. 2314-33   LEGIARTI000052437191  (élus pour quatre ans)
+       L. 2242-2    LEGIARTI000036262221  (GEPP : 300 salariés)
+       L. 2242-2-1  LEGIARTI000052432470  (salariés expérimentés : 300 salariés)
+       L. 2242-11   LEGIARTI000052437060  (accord de méthode : quatre ans au plus)
+       L. 2242-13   LEGIARTI000052437044  (régime supplétif : rémunération et
+                    égalité chaque année, GEPP et expérimentés tous les trois ans)
+       L. 2242-14   LEGIARTI000035627802  (première réunion : lieu, calendrier,
+                    informations remises et date de remise)
+
+     NON CONFIRMÉ PENDANT LA CONSTRUCTION DE CETTE PAGE : L. 2242-1 — sept
+     lectures espacées, une seule a rendu l'article du code du travail
+     (LEGIARTI000043893962), les six autres des homonymes d'autres codes. Faute
+     de deux lectures concordantes, cette page ne le cite pas : les périodicités
+     des thèmes de négociation sont fondées sur L. 2242-13 (supplétif) et sur
+     L. 2242-2, L. 2242-2-1 et L. 2242-11, tous relus deux fois. -->
+<style>
+  :root{
+    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
+    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
+    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papier);color:var(--corps);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .page{max-width:1000px;margin:0 auto;padding:0 20px 80px}
+  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
+  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
+  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
+  .chapo{color:var(--gris);max-width:64ch;margin:0}
+  header a{color:var(--bleu)}
+  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 8px}
+  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:74ch}
+
+  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
+    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
+    margin:0 -20px 0;padding:10px 20px}
+  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
+  button.retour:hover{filter:brightness(1.12)}
+  .retour-ou{font-size:13px;color:var(--gris)}
+  .retour-ou a{color:var(--bleu)}
+
+  .presentation{border:1px solid var(--filet);background:var(--surface);
+    border-radius:4px;padding:18px 20px;margin:22px 0 0}
+  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
+  .presentation p{margin:0 0 10px;max-width:74ch}
+  .presentation p:last-child{margin-bottom:0}
+  .note{color:var(--gris);font-size:13.5px}
+
+  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
+    padding:16px 18px 20px;margin:16px 0}
+  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px 22px}
+  label{display:block;font-size:14px}
+  label .nom{display:block;color:var(--encre);margin-bottom:4px}
+  input,select{width:100%;padding:8px 10px;border:1px solid var(--filet);
+    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
+  input:focus,select:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
+  .provenance{display:inline-block;font:600 11px/1.5 system-ui;color:var(--vert);
+    background:var(--vert-f);border:1px solid #cfe3d6;border-radius:2px;padding:1px 6px;margin-top:4px}
+  .barre{margin:16px 0 0;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
+  button.second{background:var(--surface);color:var(--bleu)}
+  button:hover{filter:brightness(1.1)}
+
+  .vide{border:1px solid var(--filet);background:var(--gris-f);color:var(--corps);
+    padding:12px 14px;border-radius:3px;margin:18px 0 0;font-size:14.5px}
+  .enc{border:1px solid var(--bleu);background:#f4f6fb;padding:12px 14px;margin:14px 0;border-radius:3px}
+  .enc .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
+  .enc p{margin:0}
+
+  .tab{overflow-x:auto;margin:12px 0}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
+  th,td{border:1px solid var(--filet);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--bleu);color:#fff;font-weight:600}
+  td .quand{font-weight:600;color:var(--encre);white-space:nowrap}
+  td .fenetre{color:var(--corps)}
+  .badge{display:inline-block;font:600 11px/1 system-ui;color:#fff;background:var(--rouge);
+    border-radius:2px;padding:3px 7px;margin-left:8px;white-space:nowrap;vertical-align:middle}
+  .badge-doux{background:var(--orange)}
+  tr.retard td{background:var(--rouge-f)}
+  td .fond{display:block;color:var(--gris);font-size:12.5px;margin-top:3px}
+  td .prov{display:block;color:var(--vert);font-size:12px;margin-top:3px}
+
+  .attente{border-left:4px solid var(--orange);background:var(--orange-f);
+    padding:10px 14px;margin:8px 0}
+  .attente .t{font-weight:600;color:var(--encre)}
+  .attente .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
+
+  .ident{font:500 11.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8a9099;
+    background:#f0f1f4;border-radius:3px;padding:1px 4px;white-space:nowrap}
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
+  footer ul{margin:6px 0 0;padding-left:20px}
+  footer li{margin:2px 0}
+
+  @media print{
+    .retour-barre,.barre,form,#form-bloc,.presentation,button{display:none !important}
+    body{background:#fff}
+    .page{max-width:none;padding:0}
+    header{padding:0 0 12px}
+    th{background:#fff;color:var(--encre);border-bottom:2px solid var(--encre)}
+    tr.retard td{background:#fff}
+    .badge{border:1px solid var(--rouge);color:var(--rouge);background:#fff}
+    .badge-doux{border-color:var(--orange);color:var(--orange)}
+    a{text-decoration:none;color:inherit}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="retour-barre">
+  <button type="button" id="btn-retour" class="retour">← Retour</button>
+  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
+  · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
+  · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
+  · <a href="guides.html">guides</a></span>
+</div>
+
+<header>
+  <p class="fil">Application Jurisprudence</p>
+  <h1>Agenda social — les douze prochains mois</h1>
+  <p class="chapo"><b>Cette page produit l'échéancier de vos obligations collectives</b> — réunions du
+  comité, négociations obligatoires, consultations récurrentes, index de l'égalité, élections — à
+  partir de ce que vous avez déjà saisi dans les audits. Chaque ligne cite son fondement et les
+  documents à préparer.<br>
+  Tout se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce
+  poste.</p>
+</header>
+
+<div class="presentation">
+  <h2>D'où viennent les dates</h2>
+  <p>Les brouillons des cinq audits (licenciement, comité, plan de sauvegarde, base de données,
+  négociation) sont lus sur ce poste : effectif, date des dernières élections, dates d'engagement des
+  négociations, dernière mise à jour de la base. Ce qui en est repris est marqué — « repris de
+  l'audit NAO » — et reste modifiable ci-dessous. Ce que les audits ne disent pas se renseigne ici,
+  et n'est conservé que sur ce poste.</p>
+  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne convoque personne, ne rédige rien et
+  ne remplace pas les audits — chaque échéance affichée mérite d'être vérifiée dans le module qui la
+  détaille. Une donnée absente ne produit pas une échéance : elle produit une ligne « à renseigner ».</p>
+</div>
+
+<div id="form-bloc">
+  <h2>Les données de l'échéancier</h2>
+  <p class="aide" id="etat-brouillons"></p>
+  <form id="formulaire" autocomplete="off">
+    <fieldset>
+      <legend>L'entreprise et ses institutions</legend>
+      <div class="grille">
+        <label><span class="nom">Effectif de l'entreprise</span>
+          <input type="number" id="f-effectif" min="0" step="1">
+          <span class="provenance" id="p-effectif" hidden></span></label>
+        <label><span class="nom">Une section syndicale d'organisation représentative est-elle constituée&nbsp;?</span>
+          <select id="f-sectionsSyndicales">
+            <option value="">— non renseigné —</option>
+            <option value="oui">oui</option>
+            <option value="non">non</option>
+          </select>
+          <span class="provenance" id="p-sectionsSyndicales" hidden></span></label>
+        <label><span class="nom">Date des dernières élections du CSE</span>
+          <input type="date" id="f-dateDernieresElections">
+          <span class="provenance" id="p-dateDernieresElections" hidden></span></label>
+        <label><span class="nom">Dernière mise à jour de la BDESE</span>
+          <input type="date" id="f-bdeseDerniereMaj">
+          <span class="provenance" id="p-bdeseDerniereMaj" hidden></span></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Dernier engagement de chaque négociation obligatoire</legend>
+      <div class="grille" id="grille-negos"></div>
+    </fieldset>
+  </form>
+  <div class="barre">
+    <button type="button" id="construire">Construire l'échéancier</button>
+    <button type="button" class="second" id="imprimer">Imprimer / PDF</button>
+    <button type="button" class="second" id="effacer">Effacer la saisie de cette page</button>
+  </div>
+</div>
+
+<div id="sortie"></div>
+
+<footer>
+  <p><b>Les textes de cette page ont été lus au relais Légifrance le 18 août 2026</b>, deux lectures
+  concordantes chacun, identifiés par leur version&nbsp;:</p>
+  <ul>
+    <li>L.&nbsp;2315-28 <span class="ident">LEGIARTI000035624857</span> — réunions du CSE&nbsp;;
+        L.&nbsp;2312-17 <span class="ident">LEGIARTI000051559706</span>,
+        L.&nbsp;2312-22 <span class="ident">LEGIARTI000043975191</span>,
+        L.&nbsp;2312-19 <span class="ident">LEGIARTI000036262394</span>,
+        L.&nbsp;2312-18 <span class="ident">LEGIARTI000052437125</span> — consultations récurrentes et base de données&nbsp;;</li>
+    <li>L.&nbsp;2242-2 <span class="ident">LEGIARTI000036262221</span>,
+        L.&nbsp;2242-2-1 <span class="ident">LEGIARTI000052432470</span>,
+        L.&nbsp;2242-11 <span class="ident">LEGIARTI000052437060</span>,
+        L.&nbsp;2242-13 <span class="ident">LEGIARTI000052437044</span>,
+        L.&nbsp;2242-14 <span class="ident">LEGIARTI000035627802</span> — négociations obligatoires&nbsp;;</li>
+    <li>L.&nbsp;1142-8 <span class="ident">LEGIARTI000044605453</span>,
+        D.&nbsp;1142-4 <span class="ident">LEGIARTI000045250060</span> — index de l'égalité professionnelle&nbsp;;
+        L.&nbsp;2314-4 <span class="ident">LEGIARTI000035651165</span>,
+        L.&nbsp;2314-33 <span class="ident">LEGIARTI000052437191</span> — élections.</li>
+  </ul>
+  <p>L.&nbsp;2242-1 n'a pas pu être confirmé au relais pendant la construction de cette page (des
+  homonymes d'autres codes ont été servis)&nbsp;: il n'est pas cité — les périodicités des thèmes
+  reposent sur L.&nbsp;2242-13, L.&nbsp;2242-2, L.&nbsp;2242-2-1 et L.&nbsp;2242-11.
+  Cet agenda est une aide à la préparation&nbsp;: il ne remplace ni l'analyse d'un conseil, ni la
+  décision qui vous appartient.</p>
+</footer>
+</div>
+
+<script src="moteur-nao.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+
+  /* ------------------------------------------------------------- les dates */
+  var AUJ = (function () { var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0"); })();
+  var MOIS_FR = ["janvier","février","mars","avril","mai","juin","juillet","août",
+    "septembre","octobre","novembre","décembre"];
+  function estDate(s) { return typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s); }
+  function enFr(iso) {
+    if (!estDate(iso)) return iso || "—";
+    var p = iso.split("-").map(Number);
+    return (p[2] === 1 ? "1er" : p[2]) + " " + MOIS_FR[p[1] - 1] + " " + p[0];
+  }
+  /* Ajouter des mois sans déborder : le 31 janvier + 1 mois rend le dernier
+     jour de février, pas le 3 mars. */
+  function plusMois(iso, mois) {
+    var p = iso.split("-").map(Number);
+    var a = p[0], m = p[1] - 1 + mois, j = p[2];
+    a += Math.floor(m / 12); m = ((m % 12) + 12) % 12;
+    var dernier = new Date(Date.UTC(a, m + 1, 0)).getUTCDate();
+    if (j > dernier) j = dernier;
+    return a + "-" + String(m + 1).padStart(2, "0") + "-" + String(j).padStart(2, "0");
+  }
+  function plusJours(iso, jours) {
+    var p = iso.split("-").map(Number);
+    var d = new Date(Date.UTC(p[0], p[1] - 1, p[2] + jours));
+    return d.toISOString().slice(0, 10);
+  }
+  var passee = function (iso) { return estDate(iso) && iso < AUJ; };
+
+  /* --------------------------------------------- lire et fondre les brouillons
+
+     Les brouillons des audits sont la fiche telle que audit-form.js l'a
+     enregistrée : des objets, parfois imbriqués. Mais un brouillon peut aussi
+     être à plat — « negos.remuneration.dateEngagement » — ou porter des objets
+     écrits en JSON dans des chaînes. Tout est ramené à une seule forme :
+     l'objet imbriqué, les nombres en nombres. */
+  function poser(o, chemin, v) {
+    var p = chemin.split("."), c = o, i;
+    for (i = 0; i < p.length - 1; i++) {
+      if (typeof c[p[i]] !== "object" || c[p[i]] === null || Array.isArray(c[p[i]])) c[p[i]] = {};
+      c = c[p[i]];
+    }
+    c[p[p.length - 1]] = v;
+  }
+  function normaliser(brut) {
+    var f = {};
+    (function verser(prefixe, o) {
+      Object.keys(o || {}).forEach(function (k) {
+        var v = o[k], chemin = prefixe ? prefixe + "." + k : k;
+        if (typeof v === "string") {
+          var t = v.trim();
+          if (t[0] === "{" || t[0] === "[") { try { v = JSON.parse(t); } catch (e) {} }
+        }
+        if (v && typeof v === "object" && !Array.isArray(v)) { verser(chemin, v); return; }
+        poser(f, chemin, v);
+      });
+    })("", brut);
+    return f;
+  }
+  function lireBrouillon(cle) {
+    try {
+      var b = JSON.parse(localStorage.getItem(cle) || "null");
+      if (b && typeof b === "object" && !Array.isArray(b) && Object.keys(b).length)
+        return normaliser(b);
+    } catch (e) {}
+    return null;
+  }
+  function lire(f, chemin) {
+    if (!f) return undefined;
+    var v = f, p = chemin.split("."), i;
+    for (i = 0; i < p.length; i++) {
+      if (v == null || typeof v !== "object") return undefined;
+      v = v[p[i]];
+    }
+    return v === "" ? undefined : v;
+  }
+  function nombre(x) {
+    if (typeof x === "number" && isFinite(x)) return x;
+    if (typeof x === "string" && /^\s*\d+([.,]\d+)?\s*$/.test(x))
+      return Number(x.replace(/\s/g, "").replace(",", "."));
+    return null;
+  }
+
+  var NOMS_SOURCES = {
+    agenda: "saisi ici", nao: "repris de l'audit NAO", cse: "repris de l'audit CSE",
+    bdese: "repris de l'audit BDESE", eco: "repris de l'audit du licenciement économique",
+    pse: "repris de l'audit PSE",
+  };
+  var B = {};
+  function chargerBrouillons() {
+    B = {
+      agenda: lireBrouillon("agenda-brouillon"),
+      nao: lireBrouillon("audit-nao-brouillon"),
+      cse: lireBrouillon("audit-cse-brouillon"),
+      bdese: lireBrouillon("audit-bdese-brouillon"),
+      eco: lireBrouillon("audit-eco-brouillon"),
+      pse: lireBrouillon("audit-pse-brouillon"),
+    };
+  }
+  /* La première source qui répond gagne ; la saisie de cette page passe avant. */
+  function donnee(chemins) {
+    for (var i = 0; i < chemins.length; i++) {
+      var v = lire(B[chemins[i][0]], chemins[i][1]);
+      if (v !== undefined && v !== null) return { valeur: v, source: chemins[i][0] };
+    }
+    return null;
+  }
+
+  /* ------------------------------------------------------------ le formulaire */
+  var THEMES = (window.MoteurNAO && MoteurNAO.moteur && MoteurNAO.moteur.THEMES) || {};
+  var CLES_THEMES = Object.keys(THEMES);
+  var PROVENANCES = {
+    effectif: [["agenda", "effectif"], ["nao", "effectif"], ["cse", "effectif"],
+      ["bdese", "effectif"], ["eco", "effectif"], ["pse", "effectif"]],
+    sectionsSyndicales: [["agenda", "sectionsSyndicales"], ["nao", "sectionsSyndicales"]],
+    dateDernieresElections: [["agenda", "dateDernieresElections"], ["cse", "dateDernieresElections"]],
+    bdeseDerniereMaj: [["agenda", "bdeseDerniereMaj"], ["bdese", "base.dateDerniereMiseAJour"]],
+  };
+  CLES_THEMES.forEach(function (cle) {
+    PROVENANCES["nego." + cle] = [["agenda", "nego." + cle], ["nao", "negos." + cle + ".dateEngagement"]];
+  });
+
+  function construireFormulaire() {
+    var g = $("grille-negos");
+    g.innerHTML = CLES_THEMES.map(function (cle) {
+      return '<label><span class="nom">' + ech(THEMES[cle].titre) + "</span>" +
+        '<input type="date" id="f-nego.' + ech(cle) + '">' +
+        '<span class="provenance" id="p-nego.' + ech(cle) + '" hidden></span></label>';
+    }).join("");
+  }
+  function valeurChamp(cle) {
+    var e = $("f-" + cle);
+    return e ? String(e.value || "").trim() : "";
+  }
+  function preremplir() {
+    Object.keys(PROVENANCES).forEach(function (cle) {
+      var d = donnee(PROVENANCES[cle]), e = $("f-" + cle), p = $("p-" + cle);
+      if (!e) return;
+      if (d && !e.value) {
+        var v = d.valeur;
+        if (typeof v === "boolean") v = v ? "oui" : "non";
+        e.value = String(v);
+      }
+      if (p) {
+        if (d && d.source !== "agenda") { p.textContent = NOMS_SOURCES[d.source]; p.hidden = false; }
+        else p.hidden = true;
+      }
+    });
+  }
+  /* La valeur venue d'un audit, pour la clé donnée — sans la saisie de la page. */
+  function valeurAudit(cle) {
+    return donnee(PROVENANCES[cle].filter(function (c) { return c[0] !== "agenda"; }));
+  }
+  function memeValeur(a, b) {
+    if (typeof a === "boolean") a = a ? "oui" : "non";
+    return String(a) === String(b);
+  }
+  /* N'est enregistré ici que ce qui diffère des audits : une valeur simplement
+     reprise n'est pas figée — si l'audit change, l'agenda suit. */
+  function enregistrer() {
+    var b = {};
+    Object.keys(PROVENANCES).forEach(function (cle) {
+      var v = valeurChamp(cle);
+      if (v === "") return;
+      var x = valeurAudit(cle);
+      if (!x || !memeValeur(x.valeur, v)) b[cle] = v;
+    });
+    try {
+      if (Object.keys(b).length) localStorage.setItem("agenda-brouillon", JSON.stringify(b));
+      else localStorage.removeItem("agenda-brouillon");
+    } catch (e) {}
+  }
+
+  /* --------------------------------------------------------- les échéances */
+  function collecter() {
+    /* La valeur au moment du calcul : le champ s'il est rempli, la source sinon.
+       Un champ prérempli depuis un audit garde sa provenance tant qu'il n'a pas
+       été modifié : « repris de l'audit NAO » reste vrai. */
+    var d = {};
+    Object.keys(PROVENANCES).forEach(function (cle) {
+      var v = valeurChamp(cle), x = valeurAudit(cle);
+      if (v !== "") {
+        d[cle] = { valeur: v, source: x && memeValeur(x.valeur, v) ? x.source : "agenda" };
+        return;
+      }
+      if (x) d[cle] = x;
+    });
+    return d;
+  }
+
+  function calculer() {
+    var d = collecter();
+    var lignes = [], attentes = [], cadences = [], notes = [];
+    var effectif = d.effectif ? nombre(d.effectif.valeur) : null;
+
+    /* --- réunions du CSE : une cadence, pas une date --- */
+    if (effectif !== null) {
+      var mensuel = effectif >= 300;
+      cadences.push({
+        titre: "Réunions ordinaires du CSE",
+        rythme: mensuel ? "au moins une fois par mois"
+          : "au moins une fois tous les deux mois",
+        fondement: "L. 2315-28 (à défaut d'accord : au moins une fois par mois à partir de trois cents salariés, au moins une fois tous les deux mois en deçà)",
+        docs: "convocation, ordre du jour, documents joints ; procès-verbal de la réunion précédente",
+        prov: d.effectif.source,
+        detail: "Effectif retenu : " + effectif + " salariés.",
+      });
+    } else {
+      attentes.push({ t: "Réunions du CSE : effectif non renseigné.",
+        w: "La périodicité des réunions dépend du seuil de trois cents salariés (L. 2315-28). Renseignez l'effectif ci-dessus." });
+    }
+
+    /* --- négociations obligatoires : le moteur NAO fait le calcul --- */
+    var naoDisponible = window.MoteurNAO && MoteurNAO.moteur && MoteurNAO.moteur.echeances;
+    if (naoDisponible) {
+      var fiche = { dateAudit: AUJ };
+      if (d.sectionsSyndicales) fiche.sectionsSyndicales = d.sectionsSyndicales.valeur;
+      if (effectif !== null) fiche.effectif = effectif;
+      ["groupe", "effectifGroupe", "dimensionCommunautaire", "effectifFrance"].forEach(function (k) {
+        var v = lire(B.nao, k);
+        if (v !== undefined) fiche[k] = k.indexOf("effectif") === 0 ? nombre(v) : v;
+      });
+      var am = lire(B.nao, "accordMethode.existe");
+      if (am !== undefined) {
+        fiche.accordMethode = (B.nao || {}).accordMethode || {};
+      } else if (CLES_THEMES.some(function (c) { return d["nego." + c]; })) {
+        /* Aucun audit NAO ne déclare d'accord de méthode : le calendrier
+           supplétif de L. 2242-13 est retenu, et la page le dit. */
+        fiche.accordMethode = { existe: "non" };
+        notes.push("Aucun accord de méthode n'est déclaré (audit NAO non rempli sur ce point) : " +
+          "le calendrier supplétif de L. 2242-13 est retenu. Si un accord de méthode fixe " +
+          "d'autres périodicités (L. 2242-11, quatre ans au plus), ce sont elles qui commandent — " +
+          "renseignez-le dans l'audit NAO.");
+      }
+      fiche.negos = {};
+      CLES_THEMES.forEach(function (cle) {
+        var n = lire(B.nao, "negos." + cle);
+        n = (n && typeof n === "object") ? JSON.parse(JSON.stringify(n)) : {};
+        if (d["nego." + cle] && d["nego." + cle].source === "agenda")
+          n.dateEngagement = d["nego." + cle].valeur;
+        fiche.negos[cle] = n;
+      });
+
+      var E = MoteurNAO.moteur.echeances(fiche);
+      var FONDEMENTS_SUPPL = {
+        remuneration: "L. 2242-13, 1° (chaque année)",
+        egalite: "L. 2242-13, 2° (chaque année)",
+        gepp: "L. 2242-13, 3° et L. 2242-2 (tous les trois ans à partir de trois cents salariés)",
+        experimentes: "L. 2242-13, 4° et L. 2242-2-1 (tous les trois ans à partir de trois cents salariés)",
+      };
+      if (E.regime.regime === "indéterminé" || E.regime.regime === "sans objet") {
+        attentes.push({ t: "Négociations obligatoires : " +
+          (E.regime.regime === "sans objet" ? "non dues en l'état déclaré." : "régime indéterminé."),
+          w: E.regime.motif });
+      } else {
+        CLES_THEMES.forEach(function (cle) {
+          var t = E.themes[cle];
+          var fondement = E.regime.regime === "accord de méthode"
+            ? "périodicité fixée par l'accord de méthode (L. 2242-11 : au moins tous les quatre ans)"
+            : FONDEMENTS_SUPPL[cle];
+          var docs = "convocation des délégations ; informations remises aux négociateurs et date de leur remise (L. 2242-14)" +
+            (cle === "remuneration"
+              ? " ; procès-verbal d'ouverture des négociations sur les écarts de rémunération femmes-hommes, à joindre au dépôt de l'accord"
+              : "");
+          if (t.du === false) return;
+          if (t.du === null) {
+            attentes.push({ t: "« " + t.titre + " » : effectif non renseigné.",
+              w: "Cette négociation n'est due qu'à partir de trois cents salariés — renseignez l'effectif." });
+            return;
+          }
+          if (/jamais engagée/.test(t.etat)) {
+            attentes.push({ t: "« " + t.titre + " » : aucune date d'engagement connue.",
+              w: "Si elle n'a réellement jamais été engagée, le manquement est constitué — " +
+                fondement + ". Datez le dernier engagement ci-dessus, ou engagez-la." });
+            return;
+          }
+          if (/inexploitables/.test(t.etat)) {
+            attentes.push({ t: "« " + t.titre + " » : " + t.etat, w: "Corrigez la date saisie." });
+            return;
+          }
+          var prochaine = plusMois(t.nego.dateEngagement, t.periodiciteMois);
+          var prov = (d["nego." + cle] || {}).source || "nao";
+          lignes.push({
+            tri: prochaine, quand: enFr(prochaine),
+            titre: "Engager la négociation « " + t.titre + " »",
+            fondement: fondement,
+            docs: docs,
+            retard: t.etat === "en retard",
+            detail: "Dernier engagement le " + enFr(t.nego.dateEngagement) +
+              " ; périodicité de " + (t.periodiciteMois / 12) + " an(s)" +
+              (t.etat === "en retard" ? " — dépassée d'environ " + t.retardMois + " mois" : "") + ".",
+            prov: prov,
+          });
+        });
+      }
+    }
+
+    /* --- consultations récurrentes du CSE --- */
+    if (effectif !== null || d.bdeseDerniereMaj) {
+      var CONSULTATIONS = ["les orientations stratégiques de l'entreprise",
+        "la situation économique et financière de l'entreprise",
+        "la politique sociale de l'entreprise, les conditions de travail et l'emploi"];
+      CONSULTATIONS.forEach(function (objet, i) {
+        lignes.push({
+          tri: plusMois(AUJ, 12), fenetre: "dans les douze mois",
+          titre: "Consulter le CSE sur " + objet,
+          fondement: "L. 2312-17, " + (i + 1) + "° ; annuelle à défaut d'accord (L. 2312-22) — un accord peut porter la périodicité à trois ans au plus (L. 2312-19)",
+          docs: "mise à jour de la BDESE avant la consultation — elle rassemble les informations " +
+            "nécessaires aux consultations récurrentes (L. 2312-18)" +
+            (d.bdeseDerniereMaj ? " ; dernière mise à jour connue le " + enFr(d.bdeseDerniereMaj.valeur) : "") +
+            " ; convocation et ordre du jour",
+          retard: false,
+          detail: "La date de la dernière consultation n'est pas connue de cette page : " +
+            "la fenêtre court sur les douze prochains mois.",
+          prov: d.bdeseDerniereMaj ? d.bdeseDerniereMaj.source : null,
+        });
+      });
+    }
+
+    /* --- index de l'égalité professionnelle --- */
+    if (effectif === null || effectif >= 50) {
+      var annee = Number(AUJ.slice(0, 4));
+      var premierMars = annee + "-03-01";
+      if (AUJ > premierMars) premierMars = (annee + 1) + "-03-01";
+      lignes.push({
+        tri: premierMars, quand: enFr(premierMars),
+        titre: "Publier l'index de l'égalité professionnelle (indicateurs d'écarts de rémunération)",
+        fondement: "L. 1142-8 (publication annuelle à partir de cinquante salariés) ; D. 1142-4 (au plus tard le 1er mars de l'année en cours, au titre de l'année précédente)",
+        docs: "calcul des indicateurs au titre de l'année écoulée ; publication visible et lisible sur le site internet de l'entreprise — à défaut de site, information des salariés par tout moyen",
+        retard: false,
+        detail: effectif === null
+          ? "L'effectif n'est pas renseigné : cette obligation vaut à partir de cinquante salariés."
+          : "Effectif retenu : " + effectif + " salariés.",
+        prov: null,
+      });
+    }
+
+    /* --- élections du CSE --- */
+    if (d.dateDernieresElections && estDate(d.dateDernieresElections.valeur)) {
+      var elections = d.dateDernieresElections.valeur;
+      var fin = plusMois(elections, 48);
+      var engager = plusJours(fin, -90);
+      lignes.push({
+        tri: engager, quand: enFr(engager),
+        titre: "Engager le processus électoral : informer le personnel de l'organisation des élections et inviter les organisations syndicales à négocier le protocole préélectoral",
+        fondement: "L. 2314-4 (le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant la diffusion de l'information au personnel)",
+        docs: "document d'information du personnel, par tout moyen conférant date certaine, précisant la date envisagée du premier tour ; invitations à négocier le protocole d'accord préélectoral",
+        retard: passee(engager),
+        detail: "Quatre-vingt-dix jours avant la fin des mandats, pour que le premier tour puisse se tenir avant leur terme.",
+        prov: d.dateDernieresElections.source,
+      });
+      lignes.push({
+        tri: fin, quand: enFr(fin),
+        titre: "Fin des mandats des élus du CSE — le renouvellement doit être acquis",
+        fondement: "L. 2314-33 (les membres de la délégation du personnel sont élus pour quatre ans)",
+        docs: "protocole d'accord préélectoral signé ; organisation du premier tour ; procès-verbaux des élections",
+        retard: passee(fin),
+        detail: "Dernières élections le " + enFr(elections) + ".",
+        prov: d.dateDernieresElections.source,
+      });
+    } else {
+      attentes.push({ t: "Élections du CSE : date des dernières élections non renseignée.",
+        w: "Les mandats durent quatre ans (L. 2314-33) : sans la date des dernières élections, l'échéance du renouvellement ne peut pas être calculée." });
+    }
+
+    return { lignes: lignes, attentes: attentes, cadences: cadences, notes: notes,
+      rien: !Object.keys(d).length };
+  }
+
+  /* ------------------------------------------------------------- l'affichage */
+  function rendre() {
+    var r = calculer();
+    var sortie = $("sortie");
+    if (r.rien) {
+      sortie.innerHTML = '<div class="vide"><b>Aucune donnée disponible.</b> Aucun brouillon ' +
+        "d'audit n'a été trouvé sur ce poste, et rien n'est saisi ci-dessus. Renseignez le " +
+        "minimum — l'effectif suffit pour commencer — puis relancez « Construire l'échéancier ». " +
+        "Les pages d'audit, elles, alimentent cet agenda automatiquement.</div>";
+      return;
+    }
+    var h = "";
+    if (r.cadences.length) {
+      h += "<h2>Le rythme permanent</h2>";
+      r.cadences.forEach(function (c) {
+        h += '<div class="enc"><p class="sh">' + ech(c.titre) + " — " + ech(c.rythme) + "</p>" +
+          "<p>" + ech(c.detail) + " Fondement : " + ech(c.fondement) + ".<br>" +
+          "<span class=\"note\">À préparer : " + ech(c.docs) + "." +
+          (c.prov && c.prov !== "agenda" ? " — effectif " + ech(NOMS_SOURCES[c.prov]) + "." : "") +
+          "</span></p></div>";
+      });
+    }
+    r.notes.forEach(function (n) { h += '<div class="vide">' + ech(n) + "</div>"; });
+
+    h += "<h2>L'échéancier des douze prochains mois</h2>";
+    if (!r.lignes.length) {
+      h += '<p class="aide">Aucune échéance datée ne peut être calculée avec les données disponibles.</p>';
+    } else {
+      r.lignes.sort(function (a, b) { return a.tri < b.tri ? -1 : a.tri > b.tri ? 1 : 0; });
+      h += '<div class="tab"><table><thead><tr><th>Échéance</th><th>Ce qui est dû</th>' +
+        "<th>Documents à préparer</th></tr></thead><tbody>";
+      r.lignes.forEach(function (l) {
+        h += '<tr class="' + (l.retard ? "retard" : "") + '"><td>' +
+          (l.quand ? '<span class="quand">' + ech(l.quand) + "</span>"
+                   : '<span class="fenetre">' + ech(l.fenetre) + "</span>") +
+          (l.retard ? '<span class="badge">en retard</span>' : "") + "</td>" +
+          "<td><b>" + ech(l.titre) + "</b>" +
+          (l.detail ? '<span class="fond">' + ech(l.detail) + "</span>" : "") +
+          '<span class="fond">Fondement : ' + ech(l.fondement) + ".</span>" +
+          (l.prov && l.prov !== "agenda"
+            ? '<span class="prov">' + ech(NOMS_SOURCES[l.prov]) + "</span>" : "") +
+          "</td><td>" + ech(l.docs) + "</td></tr>";
+      });
+      h += "</tbody></table></div>";
+    }
+    if (r.attentes.length) {
+      h += "<h2>Ce qui manque pour compléter l'agenda</h2>";
+      r.attentes.forEach(function (a) {
+        h += '<div class="attente"><p class="t" style="margin:0">' + ech(a.t) +
+          '</p><p class="w">' + ech(a.w) + "</p></div>";
+      });
+    }
+    h += '<p class="note" style="margin-top:14px">Échéancier établi au ' + ech(enFr(AUJ)) +
+      ", sur les données présentes sur ce poste. Chaque module d'audit détaille et vérifie " +
+      "l'obligation correspondante.</p>";
+    sortie.innerHTML = h;
+  }
+
+  /* --------------------------------------------------------------- démarrage */
+  chargerBrouillons();
+  construireFormulaire();
+  preremplir();
+  var trouves = ["nao", "cse", "bdese", "eco", "pse"].filter(function (k) { return B[k]; });
+  $("etat-brouillons").textContent = trouves.length
+    ? "Brouillons d'audit trouvés sur ce poste : " +
+      trouves.map(function (k) { return NOMS_SOURCES[k].replace("repris de l'audit ", ""); }).join(", ") +
+      ". Les valeurs reprises sont marquées ; ce que vous saisissez ici prévaut, et reste sur ce poste."
+    : "Aucun brouillon d'audit trouvé sur ce poste : renseignez le minimum ci-dessous. " +
+      "Tout reste dans ce navigateur.";
+  rendre();
+
+  $("construire").addEventListener("click", function () { enregistrer(); rendre();
+    $("sortie").scrollIntoView({ behavior: "smooth" }); });
+  $("imprimer").addEventListener("click", function () { enregistrer(); rendre(); window.print(); });
+  $("effacer").addEventListener("click", function () {
+    try { localStorage.removeItem("agenda-brouillon"); } catch (e) {}
+    Object.keys(PROVENANCES).forEach(function (cle) { var e = $("f-" + cle); if (e) e.value = ""; });
+    chargerBrouillons(); preremplir(); rendre();
+  });
+  $("formulaire").addEventListener("change", function () { enregistrer(); rendre(); });
+
+  $("btn-retour").addEventListener("click", function () {
+    if (history.length > 1 && document.referrer &&
+        new URL(document.referrer, location.href).origin === location.origin) history.back();
+    else location.href = "./";
+  });
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+</body>
+</html>
