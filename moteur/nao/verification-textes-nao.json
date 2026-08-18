@@ -1,0 +1,185 @@
+{
+ "date": "2026-08-18",
+ "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
+ "articles": 25,
+ "concordants": 13,
+ "ecarts": 0,
+ "douteux": 12,
+ "detail": [
+  {
+   "numero": "L2242-1",
+   "attendu": "LEGIARTI000006390466",
+   "lu": "LEGIARTI000043893962",
+   "etat": "lectures discordantes",
+   "ecartCaracteres": 449
+  },
+  {
+   "numero": "L2242-2",
+   "attendu": "LEGIARTI000036262221",
+   "lu": "LEGIARTI000027469641",
+   "etat": "lectures discordantes",
+   "ecartCaracteres": 265
+  },
+  {
+   "numero": "L2242-2-1",
+   "attendu": "LEGIARTI000052432470",
+   "lu": "LEGIARTI000052432470",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-3",
+   "attendu": "LEGIARTI000037389684",
+   "lu": "LEGIARTI000037389684",
+   "etat": "lectures discordantes",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-4",
+   "attendu": "LEGIARTI000052437071",
+   "lu": "LEGIARTI000047053409",
+   "etat": "lectures discordantes",
+   "ecartCaracteres": 2704
+  },
+  {
+   "numero": "L2242-5",
+   "attendu": "LEGIARTI000035627862",
+   "lu": "LEGIARTI000032286054",
+   "etat": "homonyme servi",
+   "ecartCaracteres": 184
+  },
+  {
+   "numero": "L2242-6",
+   "attendu": "LEGIARTI000032285967",
+   "lu": "LEGIARTI000035627858",
+   "etat": "homonyme servi",
+   "ecartCaracteres": 438
+  },
+  {
+   "numero": "L2242-7",
+   "attendu": "LEGIARTI000030902077",
+   "lu": "LEGIARTI000035627851",
+   "etat": "homonyme servi",
+   "ecartCaracteres": 1951
+  },
+  {
+   "numero": "L2242-8",
+   "attendu": "LEGIARTI000051289082",
+   "lu": "LEGIARTI000051289082",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-9",
+   "attendu": "LEGIARTI000035627834",
+   "lu": "LEGIARTI000029333691",
+   "etat": "lectures discordantes",
+   "ecartCaracteres": 1485
+  },
+  {
+   "numero": "L2242-10",
+   "attendu": "LEGIARTI000032284434",
+   "lu": "LEGIARTI000035627827",
+   "etat": "homonyme servi",
+   "ecartCaracteres": 24
+  },
+  {
+   "numero": "L2242-11",
+   "attendu": "LEGIARTI000052437060",
+   "lu": "LEGIARTI000052437060",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-12",
+   "attendu": "LEGIARTI000052437050",
+   "lu": "LEGIARTI000052437050",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-13",
+   "attendu": "LEGIARTI000052437044",
+   "lu": "LEGIARTI000052437044",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-14",
+   "attendu": "LEGIARTI000035627802",
+   "lu": "LEGIARTI000035627802",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-15",
+   "attendu": "LEGIARTI000038837123",
+   "lu": "LEGIARTI000038837123",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-16",
+   "attendu": "LEGIARTI000035627789",
+   "lu": "LEGIARTI000035627789",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-17",
+   "attendu": "LEGIARTI000043893940",
+   "lu": "LEGIARTI000043893940",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-18",
+   "attendu": "LEGIARTI000035627777",
+   "lu": "LEGIARTI000035627777",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-19",
+   "attendu": "LEGIARTI000036262303",
+   "lu": "LEGIARTI000036262303",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-20",
+   "attendu": "LEGIARTI000043975202",
+   "lu": "LEGIARTI000043975202",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2242-21",
+   "attendu": "LEGIARTI000052437031",
+   "lu": "LEGIARTI000052437031",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2243-1",
+   "attendu": "LEGIARTI000031086617",
+   "lu": "LEGIARTI000045211932",
+   "etat": "homonyme servi",
+   "ecartCaracteres": 76
+  },
+  {
+   "numero": "L2243-2",
+   "attendu": "LEGIARTI000031086604",
+   "lu": "LEGIARTI000028807878",
+   "etat": "homonyme servi",
+   "ecartCaracteres": 957
+  },
+  {
+   "numero": "R2242-1",
+   "attendu": "LEGIARTI000036222825",
+   "lu": "LEGIARTI000006397143",
+   "etat": "lectures discordantes",
+   "ecartCaracteres": 191
+  }
+ ]
+}

@@ -101,7 +101,7 @@ const CHAMPS = (() => {
   /* Deux questionnaires, deux écritures : le module économique déclare un
      tableau CHAMPS, celui du comité appelle q(rubrique, champ, libellé, format).
      On lit l'une ou l'autre, jamais une liste tenue à la main. */
-  for (const nom of ["questionnaire.js", "questionnaire-cse.js", "questionnaire-pse.js", "questionnaire-bdese.js"]) {
+  for (const nom of ["questionnaire.js", "questionnaire-cse.js", "questionnaire-pse.js", "questionnaire-bdese.js", "questionnaire-nao.js"]) {
     const chemin = path.join(ICI, nom);
     if (!fs.existsSync(chemin)) continue;
     const src = fs.readFileSync(chemin, "utf8");
@@ -128,7 +128,7 @@ const CHAMPS = (() => {
    distinction il composait un objet là où le moteur attend un tableau, et le
    contrôle des pièces échouait à l'exécution. */
 const LISTES = (() => {
-  for (const nom of ["questionnaire.js", "questionnaire-cse.js", "questionnaire-pse.js", "questionnaire-bdese.js"]) {
+  for (const nom of ["questionnaire.js", "questionnaire-cse.js", "questionnaire-pse.js", "questionnaire-bdese.js", "questionnaire-nao.js"]) {
     const chemin = path.join(ICI, nom);
     if (!fs.existsSync(chemin)) continue;
     const m = fs.readFileSync(chemin, "utf8").match(/const COMPOSES_LISTE\s*=\s*new Set\(\[([^\]]*)\]\)/);
@@ -209,7 +209,7 @@ const COLONNES = (() => {
    reconnaît — c'est la garantie de non-divergence, prolongée aux réponses. */
 let APPELEES = {};
 const PROPOSITIONS = (() => {
-  for (const nom of ["propositions.js", "propositions-cse.js", "propositions-pse.js", "propositions-bdese.js"]) {
+  for (const nom of ["propositions.js", "propositions-cse.js", "propositions-pse.js", "propositions-bdese.js", "propositions-nao.js"]) {
     const chemin = path.join(ICI, nom);
     if (!fs.existsSync(chemin)) continue;
     try {

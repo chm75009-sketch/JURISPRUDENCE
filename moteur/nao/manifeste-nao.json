@@ -1,0 +1,40 @@
+{
+ "domaine": "négociation obligatoire en entreprise",
+ "date": "2026-08-18",
+ "empreinte": "93d2b0914d30",
+ "fichiers": {
+  "audit-nao-client.js": "65d55e7e32a0",
+  "capturer-textes-nao.js": "287d81d2ea1c",
+  "controles-nao.js": "b1a6c2fd5cef",
+  "dates.js": "5d945470174f",
+  "fiche-nao.json": "0e6aea1184e2",
+  "moteur-nao.js": "7bb1df1b203e",
+  "outils.js": "6defb2be2a2b",
+  "propositions-nao.js": "04c8d74311f0",
+  "questionnaire-nao.js": "b24df8744f1a",
+  "tests-nao.js": "35e3e3490abf",
+  "textes-nao.json": "889bda7d970d",
+  "verifier-textes-nao.js": "b44a05c8c286"
+ },
+ "compteurs": {
+  "articlesLus": 25,
+  "themes": 4,
+  "mentionsAccordMethode": 5,
+  "controles": 16,
+  "exposition": 1,
+  "coherence": 0,
+  "donneesDemandees": 31,
+  "casContradictoires": 14,
+  "verdicts": 256,
+  "exceptions": 0,
+  "conformitesOuSansObjetSurFicheVide": 0,
+  "expositionConcluantConforme": 0
+ },
+ "textesRelus": {
+  "date": "2026-08-18",
+  "articles": 25,
+  "concordants": 13,
+  "ecarts": 0,
+  "sansConclusion": 12
+ }
+}

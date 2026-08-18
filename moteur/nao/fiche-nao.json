@@ -1,0 +1,71 @@
+{
+ "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
+ "dateAudit": "2026-08-18",
+ "effectif": 420,
+ "groupe": false,
+ "effectifGroupe": null,
+ "dimensionCommunautaire": false,
+ "sectionsSyndicales": "oui",
+ "accordMethode": {
+  "existe": "non"
+ },
+ "negos": {
+  "remuneration": {
+   "dateEngagement": "2026-02-10",
+   "issue": "accord",
+   "depot": "oui",
+   "pvOuvertureEcarts": "oui",
+   "themesTraites": [
+    "salaires",
+    "temps de travail",
+    "épargne salariale",
+    "écarts femmes-hommes"
+   ]
+  },
+  "egalite": {
+   "dateEngagement": "2026-03-05",
+   "issue": "PV de désaccord",
+   "depot": "oui",
+   "planAction": {
+    "existe": "oui",
+    "depot": "oui"
+   },
+   "themesTraites": [
+    "articulation",
+    "écarts femmes-hommes",
+    "discriminations",
+    "handicap",
+    "prévoyance",
+    "déconnexion"
+   ]
+  },
+  "gepp": {
+   "dateEngagement": "2024-06-01",
+   "issue": "accord",
+   "depot": "oui",
+   "themesTraites": []
+  },
+  "experimentes": {
+   "dateEngagement": "2026-01-15",
+   "issue": "en cours"
+  }
+ },
+ "indexEgalitePublie": "oui",
+ "demandeSyndicale": {
+  "recue": "oui",
+  "date": "2026-01-05",
+  "dateTransmissionAutresOS": "2026-01-08",
+  "dateConvocation": "2026-01-14"
+ },
+ "premiereReunion": {
+  "date": "2026-02-10",
+  "lieuCalendrierFixes": "oui",
+  "informationsRemises": "oui",
+  "dateRemiseInformations": "2026-02-03"
+ },
+ "decisionUnilaterale": {
+  "prise": "non"
+ },
+ "reponsesMotivees": "oui",
+ "pieces": []
+}
