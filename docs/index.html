@@ -479,10 +479,15 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "3.6 — 19 août 2026";
+const VERSION = "3.7 — 19 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
+/* Le relais Judilibre de l'application : la clé peut être portée par le site
+   (variable d'environnement Netlify), auquel cas rien n'est demandé ici. */
+const RELAIS_JUDI = /\.netlify\.app$/.test(location.hostname)
+  ? "/.netlify/functions/judilibre"
+  : "https://jurisprudence-recherche.netlify.app/.netlify/functions/judilibre";
 const PAGES_POSSIBLES = [10, 20, 50];
 const PLAFOND = 10000;                       // l'API refuse au-delà
 const CLE_STOCKAGE = "judilibre_keyid";
@@ -573,7 +578,9 @@ function majEtat(){
   $("btn-adresse").hidden = !location.protocol.startsWith("http");
 }
 
-async function appelApi(chemin, params){
+/* Appel direct avec la clé personnelle du navigateur — le mode historique,
+   conservé tel quel : c'est le repli, et le chemin de validation d'une clé. */
+async function appelApiDirect(chemin, params){
   const k = cle();
   if(!k) throw new Error("PAS_DE_CLE");
   /* Une requête sans limite de temps peut rester suspendue indéfiniment : la
@@ -594,6 +601,53 @@ async function appelApi(chemin, params){
   if(rep.status===429) throw new Error("QUOTA");
   if(!rep.ok) throw new Error("HTTP_"+rep.status);
   return rep.json();
+}
+
+/* Le relais de l'application d'abord : quand le site porte la clé Judilibre,
+   aucune clé n'est demandée à l'utilisateur. Relais non activé (variable
+   absente, fonction inexistante, clé du site refusée) → repli sur la clé
+   personnelle, exactement comme avant. La règle « relaxed → écarté » vaut
+   dans les deux cas : elle s'applique sur la réponse, pas sur le chemin. */
+let relaisJudi = null;   // null : inconnu · true : actif · false : non activé
+async function appelApi(chemin, params){
+  if(relaisJudi !== false){
+    const minuteur = new AbortController();
+    const arret = setTimeout(()=>minuteur.abort(), 15000);
+    let rep = null;
+    try{
+      rep = await fetch(RELAIS_JUDI, {method:"POST",
+        headers:{"content-type":"application/json"},
+        /* Les paramètres partent en paires : field ou jurisdiction se répètent,
+           un objet les écraserait. Jamais de clé dans ce corps. */
+        body: JSON.stringify({chemin, params:[...params]}),
+        signal: minuteur.signal});
+    }catch(err){
+      if(err && err.name === "AbortError") throw new Error("TROP_LONG");
+      relaisJudi = false;                     // pas de relais joignable : mode historique
+    }finally{ clearTimeout(arret); }
+    if(rep){
+      if(rep.status===404 || rep.status===405 || rep.status===401 || rep.status===403){
+        relaisJudi = false;                   // non déployé, ou clé du site refusée : repli
+      }else if(rep.status===503){
+        const d = await rep.json().catch(()=>null);
+        if(d && d.erreur === "cle-absente") relaisJudi = false;
+        else throw new Error("HTTP_503");
+      }else if(rep.status===429){ throw new Error("QUOTA");
+      }else if(!rep.ok){ throw new Error("HTTP_"+rep.status);
+      }else{
+        if(relaisJudi !== true){
+          relaisJudi = true;
+          /* La connexion est portée par l'application : le bandeau cesse de
+             réclamer une clé. */
+          $("etat-cle").textContent = "connexion de l'application";
+          $("voyant").classList.add("ok");
+          $("carte-cle").classList.add("cache");
+        }
+        return rep.json();
+      }
+    }
+  }
+  return appelApiDirect(chemin, params);
 }
 
 function messageErreur(e){
@@ -626,7 +680,9 @@ $("btn-tester").onclick = async ()=>{
   }
   $("msg-cle").innerHTML = '<div class="msg info">Vérification…</div>';
   try{
-    await appelApi("/search", new URLSearchParams({query:"droit", page_size:"1"}));
+    /* La validation d'une clé PERSONNELLE passe en direct : la faire transiter
+       par le relais validerait la clé du site, pas celle qu'on vient de saisir. */
+    await appelApiDirect("/search", new URLSearchParams({query:"droit", page_size:"1"}));
     $("msg-cle").innerHTML = '<div class="msg ok">Clé valide. Vous pouvez rechercher.</div>';
     $("in-cle").value = ""; majEtat();
   }catch(e){
@@ -2006,7 +2062,9 @@ async function assistantMots(){
   const zone = $("mots-zone");
   /* Le titrage, d'abord : il ne coûte rien et ne dépend d'aucune clé. */
   if(sujet.length >= 3){ await vocabulaire(); poserMatieres(sujet); }
-  if(!cle()) return message("Renseignez d'abord votre clé Judilibre.", "err");
+  /* Sans clé personnelle, on n'arrête que si le relais de l'application s'est
+     déjà révélé non activé : sinon, il peut porter la connexion. */
+  if(!cle() && relaisJudi === false) return message("Renseignez d'abord votre clé Judilibre.", "err");
   if(sujet.length < 3)
     return message("Décrivez d'abord votre sujet dans le champ ci-dessus.", "info");
 
@@ -3035,7 +3093,9 @@ remplirModeles(""); remplirLieux(""); majEtat(); majResumeAffiner();
 (function depuisLien(){
   const m = location.hash.match(/^#r=(.+)$/);
   if(!m) return;
-  try{ ecrire(JSON.parse(decodeURIComponent(m[1]))); if(cle()) chercher(0); }catch(e){}
+  /* Le relais de l'application peut porter la connexion : on tente la
+     recherche même sans clé personnelle — au pire, l'erreur se nomme. */
+  try{ ecrire(JSON.parse(decodeURIComponent(m[1]))); chercher(0); }catch(e){}
 })();
 
 /* Le bouton « Avertissement d'usage ».

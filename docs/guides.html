@@ -264,16 +264,19 @@
     <p>Poser une question à Claude sans quitter la page, avec le contexte de votre travail :
     le brouillon de l'audit en cours et le profil de l'entreprise lui sont transmis. Il peut
     lire les articles du code du travail à la source (Légifrance, avec l'identifiant de
-    version LEGIARTI) et chercher dans Judilibre avec votre clé déjà enregistrée.</p>
+    version LEGIARTI) et chercher dans Judilibre.</p>
     <h3>Comment s'en servir</h3>
     <ol>
-      <li>Touchez le bouton rond en bas à droite, sur n'importe quelle page.</li>
-      <li><b>Votre clé API Anthropic</b>, une seule fois : créez-la sur
-      <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>
-      et collez-la. <b>Elle reste dans votre navigateur</b> — envoyée à la seule API
-      d'Anthropic, jamais à un serveur de l'application ni dans le code.</li>
-      <li>Posez votre question. Chaque article cité par l'assistant l'est avec son
-      identifiant de version ; chaque recherche que Judilibre « élargit » est écartée.</li>
+      <li>Touchez le bouton rond en bas à droite, sur n'importe quelle page, et posez votre
+      question : <b>aucune clé à fournir</b> — c'est l'application qui porte la connexion,
+      comme pour Légifrance.</li>
+      <li>Chaque article cité par l'assistant l'est avec son identifiant de version ;
+      chaque recherche que Judilibre « élargit » est écartée.</li>
+      <li>En second recours seulement — connexion du site non activée — une clé API
+      personnelle peut être saisie (lien « clé personnelle » en bas du panneau, création sur
+      <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>).
+      <b>Elle reste alors dans votre navigateur</b> — envoyée à la seule API d'Anthropic,
+      jamais à un serveur de l'application ni dans le code.</li>
     </ol>
     <h3>Ce qu'il ne fait pas</h3>
     <p class="note">Il ne conserve rien : la conversation vit en mémoire et disparaît à la

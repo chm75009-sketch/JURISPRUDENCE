@@ -5,18 +5,22 @@
    dispose en outre de deux outils — lire un article du code du travail via le
    relais Légifrance, chercher dans Judilibre avec la clé déjà enregistrée.
 
-   Trois règles de sécurité, non négociables :
-   — la clé API Anthropic est saisie par l'utilisateur, vit dans SON navigateur
-     (localStorage) et n'est envoyée qu'à api.anthropic.com, jamais ailleurs,
-     jamais journalisée ;
+   C'est l'APPLICATION qui porte la connexion à Claude, sur le modèle du
+   relais Légifrance : la page appelle la fonction Netlify « assistant », qui
+   détient la clé API Anthropic (variable d'environnement, jamais dans le code)
+   et retransmet le flux SSE tel quel. Aucune clé n'est demandée à
+   l'utilisateur. En second recours seulement — relais non activé — une clé
+   personnelle peut être saisie : elle vit alors dans CE navigateur
+   (localStorage), n'est envoyée qu'à api.anthropic.com (accès direct officiel,
+   en-tête anthropic-dangerous-direct-browser-access) et jamais journalisée.
+
+   Règles non négociables :
    — toute recherche Judilibre « relaxed » est écartée : une requête élargie
      ramène des décisions sans rapport avec la demande (règle absolue du dépôt) ;
    — le contenu d'un article fait foi sur son numéro : le relais Légifrance peut
      servir un homonyme d'une autre partie du code.
 
-   L'appel navigateur → api.anthropic.com est le mécanisme officiel d'accès
-   direct (en-tête anthropic-dangerous-direct-browser-access). Il exige la
-   connexion ; le reste de l'application fonctionne hors ligne, pas ce panneau. */
+   Le panneau exige la connexion ; le reste de l'application marche hors ligne. */
 
 (function () {
   "use strict";
@@ -24,7 +28,7 @@
   /* ------------------------------ Constantes ------------------------------ */
 
   var API_ANTHROPIC = "https://api.anthropic.com/v1/messages";
-  var CLE_STOCKAGE = "assistant-cle-anthropic";   // la clé API, chez l'utilisateur
+  var CLE_STOCKAGE = "assistant-cle-anthropic";   // clé personnelle (repli seulement)
   var CLE_MODELE = "assistant-modele";
   var MODELE_DEFAUT = "claude-opus-5";
   var MODELES = [
@@ -41,10 +45,21 @@
     ? "/.netlify/functions/legifrance"
     : "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance";
 
-  /* Judilibre : le même chemin d'appel que la page de recherche, avec la clé
-     que l'utilisateur y a déjà enregistrée. */
+  /* Le relais Anthropic de l'application : c'est LUI qui détient la clé, le
+     navigateur ne fait que lui transmettre la conversation. */
+  var RELAIS_ASSISTANT = /\.netlify\.app$/.test(location.hostname)
+    ? "/.netlify/functions/assistant"
+    : "https://jurisprudence-recherche.netlify.app/.netlify/functions/assistant";
+
+  /* Judilibre : le relais de l'application d'abord (clé côté serveur) ; en
+     repli, l'appel direct avec la clé que l'utilisateur a pu enregistrer sur
+     la page de recherche. */
   var API_JUDILIBRE = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
   var CLE_JUDILIBRE = "judilibre_keyid";
+  var RELAIS_JUDILIBRE = /\.netlify\.app$/.test(location.hostname)
+    ? "/.netlify/functions/judilibre"
+    : "https://jurisprudence-recherche.netlify.app/.netlify/functions/judilibre";
+  var relaisJudiAbsent = false;   // mémorisé : inutile de réessayer un relais non activé
 
   /* --------------------------- Rôle et outils ----------------------------- */
 
@@ -256,21 +271,47 @@
     });
   }
 
+  /* La recherche elle-même : d'abord le relais de l'application (aucune clé
+     envoyée), et si sa clé n'est pas configurée, l'appel direct avec la clé
+     personnelle du navigateur. Rend la réponse HTTP, quelle qu'elle soit. */
+  function judilibreChercher(paires) {
+    if (!relaisJudiAbsent) {
+      return avecDelai(fetch(RELAIS_JUDILIBRE, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ chemin: "/search", params: paires })
+      }), 20000).then(function (rep) {
+        if (rep.status === 503 || rep.status === 404 || rep.status === 405) {
+          return rep.json().catch(function () { return null; }).then(function (d) {
+            if (rep.status !== 503 || (d && d.erreur === "cle-absente")) {
+              relaisJudiAbsent = true;          // relais non activé : repli direct
+              return judilibreDirect(paires);
+            }
+            return rep;                          // autre 503 : rendu tel quel
+          });
+        }
+        return rep;
+      }, function () { relaisJudiAbsent = true; return judilibreDirect(paires); });
+    }
+    return judilibreDirect(paires);
+  }
+
+  function judilibreDirect(paires) {
+    var k = "";
+    try { k = localStorage.getItem(CLE_JUDILIBRE) || ""; } catch (e) {}
+    if (!k) return Promise.reject(new Error("PAS_DE_CLE_JUDILIBRE"));
+    var p = new URLSearchParams();
+    paires.forEach(function (x) { p.append(x[0], x[1]); });
+    return avecDelai(fetch(API_JUDILIBRE + "/search?" + p.toString(), {
+      headers: { "KeyId": k, "accept": "application/json" }
+    }), 20000);
+  }
+
   function outilJudilibre(entree) {
     var q = String(entree && entree.query || "").trim();
     if (!q) return Promise.resolve({ content: "Paramètre « query » manquant.", is_error: true });
-    var k = "";
-    try { k = localStorage.getItem(CLE_JUDILIBRE) || ""; } catch (e) {}
-    if (!k) return Promise.resolve({
-      content: "Aucune clé Judilibre enregistrée dans ce navigateur. L'utilisatrice doit " +
-        "d'abord saisir sa clé sur la page de recherche (bandeau « Votre clé Judilibre »).",
-      is_error: true
-    });
     var taille = Math.max(1, Math.min(20, parseInt(entree.page_size, 10) || 10));
-    var p = new URLSearchParams({ query: q, page_size: String(taille) });
-    return avecDelai(fetch(API_JUDILIBRE + "/search?" + p.toString(), {
-      headers: { "KeyId": k, "accept": "application/json" }
-    }), 20000).then(function (rep) {
+    return judilibreChercher([["query", q], ["page_size", String(taille)]]).then(function (rep) {
       if (rep.status === 401 || rep.status === 403)
         return { content: "Clé Judilibre refusée par l'API.", is_error: true };
       if (rep.status === 429)
@@ -304,6 +345,14 @@
         };
       });
     }).catch(function (e) {
+      if (e && e.message === "PAS_DE_CLE_JUDILIBRE") return {
+        content: "La connexion Judilibre de l'application n'est pas activée (variable " +
+          "JUDILIBRE_KEY_ID dans les réglages Netlify du site) et aucune clé personnelle " +
+          "n'est enregistrée dans ce navigateur. L'utilisatrice peut soit activer la " +
+          "connexion du site, soit saisir sa clé sur la page de recherche " +
+          "(bandeau « Votre clé Judilibre »).",
+        is_error: true
+      };
       return {
         content: e && e.message === "TROP_LONG"
           ? "Judilibre n'a pas répondu en vingt secondes."
@@ -328,8 +377,21 @@
 
   /* Un appel à /v1/messages en SSE. `surTexte` reçoit le texte au fil de l'eau ;
      la promesse rend { stop_reason, contenu } où `contenu` est la liste des
-     blocs (text, tool_use avec input déjà parsé) à rejouer dans l'historique. */
+     blocs (text, tool_use avec input déjà parsé) à rejouer dans l'historique.
+
+     Par défaut, l'appel passe par le relais de l'application (la clé vit côté
+     serveur, rien n'est demandé à l'utilisateur). Si une clé personnelle a été
+     saisie en repli, l'appel va directement à api.anthropic.com avec elle. */
   function appelClaude(messages, surTexte, signal) {
+    var clePerso = cle();
+    var adresse = clePerso ? API_ANTHROPIC : RELAIS_ASSISTANT;
+    var entetes = { "content-type": "application/json" };
+    if (clePerso) {
+      /* La clé personnelle ne part QUE vers api.anthropic.com, jamais ailleurs. */
+      entetes["x-api-key"] = clePerso;
+      entetes["anthropic-version"] = "2023-06-01";
+      entetes["anthropic-dangerous-direct-browser-access"] = "true";
+    }
     var corps = {
       model: modele(),
       max_tokens: MAX_TOKENS,
@@ -340,26 +402,25 @@
       tools: OUTILS,
       messages: messages
     };
-    return fetch(API_ANTHROPIC, {
+    return fetch(adresse, {
       method: "POST",
-      headers: {
-        "x-api-key": cle(),
-        "anthropic-version": "2023-06-01",
-        "anthropic-dangerous-direct-browser-access": "true",
-        "content-type": "application/json"
-      },
+      headers: entetes,
       body: JSON.stringify(corps),
       signal: signal
     }).catch(function (e) {
       if (e && e.name === "AbortError") throw e;
       throw ErreurApi("RESEAU");
     }).then(function (rep) {
-      if (rep.status === 401) throw ErreurApi("CLE_INVALIDE");
+      if (rep.status === 401)
+        throw ErreurApi(clePerso ? "CLE_INVALIDE" : "CLE_RELAIS_REFUSEE");
       if (rep.status === 429) throw ErreurApi("QUOTA", rep.headers.get("retry-after") || "");
-      if (rep.status === 529 || rep.status >= 500) throw ErreurApi("SURCHARGE");
-      if (!rep.ok) {
+      if (rep.status === 529 || rep.status >= 500 || !rep.ok) {
         return rep.json().catch(function () { return null; }).then(function (d) {
-          throw ErreurApi("API", d && d.error && d.error.message || "HTTP " + rep.status);
+          /* Le relais signale par un code explicite que la clé du site n'est
+             pas configurée : l'assistant n'est pas encore activé. */
+          if (d && d.erreur === "cle-absente") throw ErreurApi("CLE_ABSENTE");
+          if (rep.status === 529 || rep.status >= 500) throw ErreurApi("SURCHARGE");
+          throw ErreurApi("API", d && (d.error && d.error.message || d.erreur) || "HTTP " + rep.status);
         });
       }
       return lireFlux(rep, surTexte);
@@ -586,6 +647,17 @@
         texte = "Clé invalide : l'API Anthropic a refusé cette clé (401).";
         bouton = { libelle: "Ressaisir la clé", action: function () { montrerEcranCle(true); } };
         break;
+      case "CLE_ABSENTE":
+        texte = "L'assistant n'est pas encore activé : ajouter la variable " +
+          "ANTHROPIC_API_KEY dans les réglages Netlify du site (Site configuration " +
+          "→ Environment variables). En attendant, une clé personnelle peut servir de recours.";
+        bouton = { libelle: "Saisir une clé personnelle", action: function () { montrerEcranCle(false); } };
+        break;
+      case "CLE_RELAIS_REFUSEE":
+        texte = "La clé configurée dans Netlify est refusée par l'API Anthropic (401) : " +
+          "la vérifier dans les réglages du site. Une clé personnelle peut servir de recours.";
+        bouton = { libelle: "Saisir une clé personnelle", action: function () { montrerEcranCle(false); } };
+        break;
       case "QUOTA":
         var attente = parseInt(err.detail, 10);
         texte = "Limite de requêtes atteinte (429)." +
@@ -633,7 +705,7 @@
   function envoyer(texte) {
     texte = (texte == null ? ui.champ.value : texte).trim();
     if (!texte || enCours) return;
-    if (!cle()) { montrerEcranCle(false); return; }
+    /* Aucune clé exigée : le relais de l'application porte la connexion. */
     ui.champ.value = "";
     dernierTexte = texte;
     var instantane = historique.length;      // pour revenir en arrière si l'appel échoue
@@ -663,25 +735,30 @@
 
   /* --------------------------- Écran de la clé ----------------------------- */
 
+  /* L'écran de clé PERSONNELLE — un repli, jamais un préalable : par défaut,
+     c'est le relais de l'application qui porte la connexion. */
   function montrerEcranCle(remplacement) {
     ui.fil.style.display = "none";
     ui.saisie.style.display = "none";
     ui.pied.style.display = "none";
     ui.ecranCle.style.display = "block";
     ui.ecranCle.innerHTML =
-      "<h2>" + (remplacement ? "Ressaisir la clé API" : "Votre clé API Anthropic") + "</h2>" +
-      "<p>L'assistant appelle l'API Anthropic directement depuis ce navigateur. " +
-      "Il lui faut votre clé personnelle&nbsp;: elle reste dans ce navigateur " +
-      "(stockage local), n'est envoyée qu'à api.anthropic.com, et jamais dans un serveur " +
-      "de l'application ni dans le code.</p>" +
+      "<h2>" + (remplacement ? "Ressaisir la clé personnelle" : "Clé API personnelle (recours)") + "</h2>" +
+      "<p>Par défaut, l'assistant passe par la connexion de l'application — aucune clé " +
+      "à fournir. Cet écran sert de recours si cette connexion n'est pas activée&nbsp;: " +
+      "avec une clé personnelle, le navigateur appelle alors l'API Anthropic directement. " +
+      "La clé reste dans ce navigateur (stockage local), n'est envoyée qu'à " +
+      "api.anthropic.com, et jamais dans un serveur de l'application ni dans le code.</p>" +
       "<p>Pas encore de clé&nbsp;? Créez-la sur " +
       '<a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>' +
       " (rubrique «&nbsp;API keys&nbsp;»).</p>" +
       '<label for="assist-cle-champ" style="font-size:13px;color:#2b313a">Clé API (sk-ant-…)</label>' +
       '<input id="assist-cle-champ" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">' +
-      '<button type="button" id="assist-cle-ok">Enregistrer la clé</button>' +
-      '<p style="margin-top:12px;font-size:12.5px">La clé peut être retirée à tout moment ' +
-      "(lien «&nbsp;changer de clé&nbsp;» en bas du panneau).</p>";
+      '<button type="button" id="assist-cle-ok">Enregistrer la clé</button> ' +
+      '<button type="button" id="assist-cle-annuler" style="background:#fff;color:#2b313a;border:1px solid #dcdfe4">Annuler</button>' +
+      (cle() ? '<p style="margin-top:12px;font-size:12.5px"><a id="assist-cle-retirer" ' +
+        'style="color:#8a2d2d;cursor:pointer;text-decoration:underline">Retirer la clé personnelle</a> ' +
+        "et revenir à la connexion de l'application.</p>" : "");
     var champ = document.getElementById("assist-cle-champ");
     var ok = document.getElementById("assist-cle-ok");
     function valider() {
@@ -694,6 +771,12 @@
       masquerEcranCle();
     }
     ok.addEventListener("click", valider);
+    document.getElementById("assist-cle-annuler").addEventListener("click", masquerEcranCle);
+    var retirer = document.getElementById("assist-cle-retirer");
+    if (retirer) retirer.addEventListener("click", function () {
+      try { localStorage.removeItem(CLE_STOCKAGE); } catch (e) {}
+      masquerEcranCle();
+    });
     champ.addEventListener("keydown", function (e) { if (e.key === "Enter") valider(); });
     champ.focus();
   }
@@ -741,7 +824,7 @@
       "</div>" +
       '<div class="assist-pied">' +
       "<span>La conversation reste en mémoire, rien n'est conservé.</span>" +
-      '<a id="assist-changer-cle" style="margin-left:auto">changer de clé</a>' +
+      '<a id="assist-changer-cle" style="margin-left:auto">clé personnelle</a>' +
       "</div>";
     document.body.appendChild(panneau);
 
@@ -760,18 +843,16 @@
     });
 
     bouton.addEventListener("click", function () {
-      var ouvert = panneau.classList.toggle("ouvert");
-      if (ouvert) {
-        if (!cle()) montrerEcranCle(false);
-        else ui.champ.focus();
-      }
+      /* Pas d'écran de clé au premier usage : l'assistant tente d'abord le
+         relais de l'application, qui porte la connexion. */
+      if (panneau.classList.toggle("ouvert")) ui.champ.focus();
     });
     document.getElementById("assist-fermer").addEventListener("click", function () {
       panneau.classList.remove("ouvert");
     });
     document.getElementById("assist-nouvelle").addEventListener("click", nouvelleConversation);
     document.getElementById("assist-changer-cle").addEventListener("click", function () {
-      montrerEcranCle(true);
+      montrerEcranCle(!!cle());
     });
     ui.envoyer.addEventListener("click", function () { envoyer(); });
     ui.champ.addEventListener("keydown", function (e) {
