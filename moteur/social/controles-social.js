@@ -68,8 +68,17 @@ function evaluerVerif(v, reponses, p) {
     const e = D.ecart(String(val), p.dateAudit, `« ${v.libelle} »`, "la date de l'audit");
     if (!e.valide) return { r: "invalide", motif: e.motif };
     const mois = e.jours / 30.4375;
-    if (mois > v.mois) return { r: "nc",
-      motif: v.motifNC + ` (dernière date : ${val}, soit environ ${Math.round(mois)} mois au ${p.dateAudit}, pour ${v.mois} au plus).` };
+    if (mois > v.mois) {
+      /* Certains rythmes ne s'imposent qu'à partir d'un effectif : en deçà,
+         un dépassement n'est pas une non-conformité, c'est un point à
+         vérifier — le motif propre à l'item le dit. */
+      const effectif = typeof p.effectif === "number" ? p.effectif
+        : (String(p.effectif || "").trim() !== "" && isFinite(+p.effectif) ? +p.effectif : null);
+      if (v.siEffectifAuMoins && effectif !== null && effectif < v.siEffectifAuMoins)
+        return { r: "risque", motif: v.motifSousSeuil || v.motifNC };
+      return { r: "nc",
+        motif: v.motifNC + ` (dernière date : ${val}, soit environ ${Math.round(mois)} mois au ${p.dateAudit}, pour ${v.mois} au plus).` };
+    }
     return { r: "ok" };
   }
   if (v.regle === "date") {
@@ -102,17 +111,20 @@ function verdictItem(it, p, dossier) {
 
   /* Coché « je l'ai » : les questions de vérification décident. */
   const rep = (dossier.reponses || {})[it.id] || {};
-  const griefs = [], manques = [], invalides = [];
+  const griefs = [], manques = [], invalides = [], attentions = [];
   for (const v of it.verifs || []) {
     const r = evaluerVerif(v, rep, p);
     if (r.r === "nc") griefs.push(r.motif);
     else if (r.r === "manque") manques.push(r.quoi);
     else if (r.r === "invalide") invalides.push(r.motif);
+    else if (r.r === "risque") attentions.push(r.motif);
   }
   if (griefs.length)
     return { etat: NC, assujetti: true, motif: griefs.join(" ") + renvoi(it) };
   if (invalides.length)
     return { etat: MANQ, assujetti: true, motif: invalides.join(" ") };
+  if (attentions.length)
+    return { etat: RISQ, assujetti: true, motif: attentions.join(" ") + renvoi(it) };
   if (manques.length)
     return { etat: RISQ, assujetti: true,
       motif: `Vous cochez « je l'ai », mais sans détail vérifiable : ${manques.join(" ; ")}. Une case cochée ne prouve rien — répondez aux questions de vérification pour que l'audit conclue.` + renvoi(it) };

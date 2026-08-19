@@ -12,6 +12,7 @@
    établir » — jamais un lien vers ce qui n'existe pas.                      */
 const R = require("./referentiel-social.js");
 const C = require("./controles-social.js");
+const { MODELES } = require("./modeles-social.js");
 
 const NIVEAUX = {
   1: "priorité 1 — exposition forte (sécurité des personnes, entrave, absence d'institution ou de couverture)",
@@ -35,6 +36,9 @@ function plan(p, dossier) {
       action: it.plan.action, etapes: it.plan.etapes, acteur: it.plan.acteur,
       delai: it.plan.delai, risque: it.plan.risque,
       modele: it.plan.modele || { page: null, nom: "modèle à établir" },
+      /* Le modèle ADAPTÉ : une trame pré-remplie avec les données du
+         questionnaire — jamais une trame générique quand on peut mieux. */
+      modeleAdapte: MODELES[it.id] ? MODELES[it.id](p) : null,
       module: it.module || null,
     };
     if (x.etat === "non conforme") actions.push(base);

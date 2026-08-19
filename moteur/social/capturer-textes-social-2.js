@@ -15,7 +15,9 @@ const { execFileSync } = require("child_process");
 
 const DATE = process.argv[2] || new Date().toISOString().slice(0, 10);
 const RELAIS = "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance";
-const CODE = "LEGITEXT000006072050";
+const CODE = "Code du travail"; /* le relais filtre par NOM_CODE — le NOM du code,
+   pas son identifiant LEGITEXT : passer l'identifiant désactivait le filtre et
+   laissait la pertinence servir des homonymes d'autres codes (mesuré ce jour) */
 
 const ARTICLES = {
   "L2311-2":  ["comité social et économique", "onze salariés"],
@@ -29,17 +31,17 @@ const ARTICLES = {
   "R4121-2":  ["document unique"],
   "R4121-4":  ["document unique"],
   "L1142-6":  ["embauche"],
-  "L3171-1":  ["horaire collectif"],
+  "L3171-1":  ["heures auxquelles commence et finit le travail"],
   "L1221-13": ["registre unique du personnel"],
-  "D4132-1":  ["danger grave"],
-  "L6315-1":  ["entretien professionnel"],
+  "D4132-1":  ["registre spécial"],
+  "L6315-1":  ["parcours professionnel"],
   "L6321-1":  ["adaptation des salariés", "capacité à occuper un emploi"],
   "L4141-2":  ["formation pratique et appropriée"],
   "L4622-1":  ["prévention et de santé au travail"],
   "L3322-2":  ["cinquante salariés", "résultats de l'entreprise"],
   "L1142-8":  ["écarts de rémunération"],
   "L5212-1":  ["vingt salariés"],
-  "L5212-2":  ["travailleurs handicapés"],
+  "L5212-2":  ["obligation d'emploi"],
   "L5212-5":  ["obligation d'emploi"],
 };
 
@@ -64,7 +66,7 @@ for (const [numero, frs] of Object.entries(ARTICLES)) {
   const vus = new Map(); /* texte → {n, id} */
   let verdict = null;
   const autres = [];
-  for (let essai = 0; essai < 10 && !verdict; essai++) {
+  for (let essai = 0; essai < 5 && !verdict; essai++) {
     const l = lire(numero); dors(1100);
     if (!l.texte) continue;
     const v = vus.get(l.texte) || { n: 0, id: l.id };
@@ -78,7 +80,7 @@ for (const [numero, frs] of Object.entries(ARTICLES)) {
     console.log(`${numero.padEnd(11)} confirmé  ${verdict.id}  ${verdict.texte.slice(0, 60)}…`
       + (autres.length ? `  (homonymes écartés : ${autres.join(", ")})` : ""));
   } else {
-    NC.articles[numero] = { motif: "seconde passe : dix lectures espacées sans deux lectures concordantes du contenu attendu — rien n'est conclu, l'article n'entre pas au référentiel",
+    NC.articles[numero] = { motif: "seconde passe : lectures espacées sans deux lectures concordantes du contenu attendu — rien n'est conclu, l'article n'entre pas au référentiel",
       lectures: [...vus.entries()].map(([t, v]) => ({ id: v.id, fois: v.n, debut: t.slice(0, 120) })) };
     console.log(`${numero.padEnd(11)} toujours NON CONFIRMÉ`);
   }

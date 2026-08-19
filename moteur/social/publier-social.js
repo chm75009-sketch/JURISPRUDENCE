@@ -1,0 +1,115 @@
+/* Publier le module « audit social » : rejouer la chaîne, mesurer,
+   estampiller, empaqueter.
+
+   Aucun chiffre n'est recopié : les compteurs sont mesurés sur le code et les
+   données au moment de la publication. La publication échoue si un maillon
+   échoue, si une fiche vide produit une conformité ou un « sans objet », si
+   un item conventionnel ou renvoyé à un module conclut « conforme », ou si le
+   référentiel cite un article non lu à la source.
+
+   Usage : node publier-social.js                                            */
+const fs = require("fs"), path = require("path"), crypto = require("crypto");
+const { execFileSync } = require("child_process");
+
+const ICI = __dirname;
+const etape = (n, quoi, fichier, ...args) => {
+  process.stdout.write(`${n}. ${quoi}\n`);
+  try { execFileSync(process.execPath, [path.join(ICI, fichier), ...args], { cwd: ICI, stdio: "pipe" }); }
+  catch (e) {
+    console.error(`ÉCHEC — ${fichier} :\n${(e.stdout || "").toString()}${(e.stderr || "").toString()}`);
+    process.exit(1);
+  }
+};
+
+etape(1, "chargement du référentiel — un article cité non lu fait échouer", "referentiel-social.js");
+etape(2, "dossiers contradictoires et profils types", "tests-social.js");
+etape(3, "questionnaire et non-divergence, dans les deux sens", "questionnaire-social.js");
+
+const R = require("./referentiel-social.js");
+const C = require("./controles-social.js");
+const P = require("./plan-social.js");
+const Q = require("./questionnaire-social.js");
+const T = JSON.parse(fs.readFileSync(path.join(ICI, "textes-social.json"), "utf8"));
+const NC = JSON.parse(fs.readFileSync(path.join(ICI, "textes-social-non-confirmes.json"), "utf8"));
+
+/* La mesure de ce que la chaîne interdit. */
+let conformitesSurVide = 0, conclusionsInterdites = 0;
+const vVide = C.verdicts({}, {});
+for (const x of Object.values(vVide))
+  if (x.etat === "conforme" || x.etat === "sans objet") conformitesSurVide++;
+
+const MAX = { entreprise: "X", dateAudit: "2026-08-19", effectif: 320, seuilDepuis12Mois: "oui",
+  groupe: "oui", etablissementsDistincts: "oui", secteur: "industrie", conventionCollective: "test",
+  accordsCollectifs: "oui", sectionSyndicale: "oui", matieresInflammables: "oui", cadres: "oui",
+  projetLicenciementEco: "oui" };
+for (const it of R.REF) {
+  const rep = {};
+  for (const vf of it.verifs || []) rep[vf.cle] = vf.regle === "oui" ? "oui" : "2026-06-01";
+  const v = C.verdictItem(it, MAX, { coches: { [it.id]: "oui" }, reponses: { [it.id]: rep } });
+  if (!C.peutCONF(it) && v.etat === "conforme") conclusionsInterdites++;
+}
+
+/* Aucun article non confirmé ne doit être cité par un item. */
+let citationsInterdites = 0;
+for (const it of R.REF) for (const n of it.articles)
+  if (NC.articles && NC.articles[n]) citationsInterdites++;
+
+const FICHIERS = fs.readdirSync(ICI)
+  .filter(x => /\.js$/.test(x) && x !== "publier-social.js"
+    || /^(textes-social|textes-social-non-confirmes)\.json$/.test(x))
+  .sort();
+const empreintes = {};
+for (const f of FICHIERS)
+  empreintes[f] = crypto.createHash("sha256").update(fs.readFileSync(path.join(ICI, f))).digest("hex").slice(0, 12);
+const empreinte = crypto.createHash("sha256")
+  .update(FICHIERS.map(f => f + ":" + empreintes[f]).join("\n")).digest("hex").slice(0, 12);
+
+const parCat = {};
+for (const c of R.CATEGORIES) parCat[c] = R.REF.filter(x => x.categorie === c).length;
+
+const manifeste = {
+  domaine: "audit social — le chapeau des obligations de l'employeur",
+  date: new Date().toISOString().slice(0, 10),
+  empreinte,
+  fichiers: empreintes,
+  compteurs: {
+    obligations: R.REF.length,
+    parCategorie: parCat,
+    articlesLus: Object.keys(T).length,
+    articlesNonConfirmes: Object.keys((NC.articles) || {}).length,
+    articlesCites: [...new Set(R.REF.flatMap(x => x.articles))].length,
+    renvoisModules: R.REF.filter(x => x.module).length,
+    itemsConventionnels: R.REF.filter(x => x.convention).length,
+    itemsGeneriques: R.REF.filter(x => x.generique).length,
+    questionsOrientation: Q.LIGNES.length,
+    questionsVerification: R.REF.reduce((s, x) => s + (x.verifs || []).length, 0),
+    conformitesOuSansObjetSurProfilVide: conformitesSurVide,
+    conclusionsConformesInterdites: conclusionsInterdites,
+    citationsDArticlesNonConfirmes: citationsInterdites,
+  },
+};
+
+if (conformitesSurVide || conclusionsInterdites || citationsInterdites) {
+  console.error("ÉCHEC — la chaîne a produit ce qu'elle interdit :",
+    JSON.stringify({ conformitesSurVide, conclusionsInterdites, citationsInterdites }));
+  process.exit(1);
+}
+
+/* La relecture des textes à la source, si elle a été jouée. */
+try {
+  const V = JSON.parse(fs.readFileSync(path.join(ICI, "verification-textes-social.json"), "utf8"));
+  manifeste.textesRelus = { date: V.date, articles: V.articles, concordants: V.concordants,
+    ecarts: V.ecarts, sansConclusion: V.douteux };
+  if (V.ecarts) { console.error(`ÉCHEC — ${V.ecarts} article(s) du dépôt s'écartent de la source.`); process.exit(1); }
+} catch (e) {
+  manifeste.textesRelus = null;
+  console.log("   (les textes n'ont pas été relus à la source : node verifier-textes-social.js)");
+}
+
+fs.writeFileSync(path.join(ICI, "manifeste-social.json"), JSON.stringify(manifeste, null, 1));
+console.log(`4. manifeste écrit — empreinte ${empreinte}`);
+console.log("   " + JSON.stringify(manifeste.compteurs));
+
+etape(5, "empaquetage pour le navigateur", "../commun/empaqueter.js",
+  path.join(ICI, "../../docs/moteur-social.js"), "audit-social-client.js", "MoteurSocial");
+console.log("publication du module social : tout est vert");

@@ -130,13 +130,15 @@ item({
   articlesSouhaites: ["L2313-1"],
   module: { nom: "comité social et économique", page: "audit-cse.html" },
   condition: p => {
-    const s = M.seuilDouzeMois(p, 11);
+    /* L. 2313-1 : « dans les entreprises d'au moins cinquante salariés
+       comportant au moins deux établissements distincts ». */
+    const s = M.seuil(p, 50);
     if (!s.connu) return { du: null, motif: s.motif };
-    if (!s.atteint) return { du: false, motif: s.motif };
+    if (!s.atteint) return { du: false, motif: s.motif + " L'architecture comité central / comités d'établissement vise les entreprises d'au moins cinquante salariés comportant au moins deux établissements distincts (L. 2313-1)." };
     const e = M.ouiNon(p, "etablissementsDistincts", "L'entreprise comporte-t-elle au moins deux établissements distincts ?");
     if (!e.connu) return { du: null, motif: e.motif };
     if (!e.vrai) return { du: false, motif: "L'entreprise ne déclare pas d'établissements distincts : un comité unique suffit." };
-    return { du: true, motif: "Le seuil du comité est acquis et l'entreprise comporte au moins deux établissements distincts : l'architecture comité central / comités d'établissement doit être organisée." };
+    return { du: true, motif: "Entreprise d'au moins cinquante salariés comportant au moins deux établissements distincts : des comités d'établissement et un comité central doivent être constitués (L. 2313-1)." };
   },
   verifs: [
     { cle: "architectureEnPlace", libelle: "Les CSE d'établissement et le CSE central sont-ils en place ?", format: "oui / non", regle: "oui",
@@ -228,7 +230,7 @@ item({
     const g = M.ouiNon(p, "groupe", "L'entreprise appartient-elle à un groupe ?");
     if (!g.connu) return { du: null, motif: g.motif };
     if (!g.vrai) return { du: false, motif: "L'entreprise ne déclare pas appartenir à un groupe : le comité de groupe n'a pas d'objet." };
-    return { du: true, motif: "L'entreprise appartient à un groupe : un comité de groupe doit exister au niveau de l'entreprise dominante" + (lu("L2331-1") ? " (" + jol("L2331-1") + ")" : " — l'article précis n'a pas été confirmé au relais, vérifiez le texte avec votre conseil") + ". Si c'est la société dominante qui manque à l'obligation, signalez-le-lui." },
+    return { du: true, motif: "L'entreprise appartient à un groupe : un comité de groupe doit exister au niveau de l'entreprise dominante" + (lu("L2331-1") ? " (" + jol("L2331-1") + ")" : " — l'article précis n'a pas été confirmé au relais, vérifiez le texte avec votre conseil") + ". Si c'est la société dominante qui manque à l'obligation, signalez-le-lui." };
   },
   verifs: [
     { cle: "comiteGroupeExiste", libelle: "Un comité de groupe est-il constitué au niveau de l'entreprise dominante ?", format: "oui / non", regle: "oui",
@@ -331,10 +333,11 @@ item({
   verifs: [
     { cle: "existe", libelle: "Le document unique existe-t-il ?", format: "oui / non", regle: "oui",
       motifNC: "Aucun document unique d'évaluation des risques : c'est le socle de toute la prévention — l'établir est la première urgence de ce plan." },
-    { cle: "dateMaj", libelle: "Date de la dernière mise à jour", format: "AAAA-MM-JJ", regle: "ageMaxMois", mois: 12,
-      motifNC: "La dernière mise à jour du document unique date de plus d'un an : mettez-le à jour — la mise à jour est annuelle au moins dans les entreprises d'au moins onze salariés, et s'impose à chaque aménagement important ou information nouvelle ; en deçà de onze salariés, vérifiez le rythme applicable." },
-    { cle: "accessible", libelle: "Est-il tenu à la disposition des salariés, du CSE et des services de prévention (modalités d'accès portées à leur connaissance) ?", format: "oui / non", regle: "oui",
-      motifNC: "Les modalités d'accès au document unique ne sont pas portées à la connaissance des salariés : la tenue à disposition fait partie de l'obligation." },
+    { cle: "dateMaj", libelle: "Date de la dernière mise à jour", format: "AAAA-MM-JJ", regle: "ageMaxMois", mois: 12, siEffectifAuMoins: 11,
+      motifNC: "La dernière mise à jour du document unique date de plus d'un an : mettez-le à jour — R. 4121-2 impose une mise à jour au moins annuelle dans les entreprises d'au moins onze salariés, et à chaque aménagement important ou information nouvelle.",
+      motifSousSeuil: "La dernière mise à jour date de plus d'un an. Sous onze salariés, le rythme annuel n'est pas exigé (R. 4121-2) — mais la mise à jour s'impose à chaque aménagement important et à chaque information nouvelle : vérifiez qu'aucun ne s'est produit depuis." },
+    { cle: "accessible", libelle: "Le document et ses versions successives sont-ils tenus à la disposition des travailleurs (et anciens travailleurs), du CSE et des services de prévention ?", format: "oui / non", regle: "oui",
+      motifNC: "Le document unique n'est pas tenu à disposition : R. 4121-4 impose de le tenir, avec ses versions antérieures conservées quarante ans, à la disposition des travailleurs, des anciens travailleurs et des services concernés." },
   ],
   plan: {
     priorite: 1,
@@ -484,25 +487,25 @@ item({
 
 item({
   id: "SOC-AFF-EGALITE", categorie: "affichages et informations",
-  intitule: "Information sur l'égalité de rémunération et la lutte contre les discriminations (lieux de travail et d'embauche)",
+  intitule: "Information sur l'interdiction des discriminations (textes du code pénal, lieux de travail et d'embauche)",
   articles: ["L1142-6"].filter(lu),
   articlesSouhaites: ["L1142-6"],
   module: null,
   condition: toutEmployeur,
   verifs: [
-    { cle: "informationFaite", libelle: "Les textes sont-ils portés à la connaissance des salariés et des candidats (lieux de travail et locaux d'embauche) ?", format: "oui / non", regle: "oui",
-      motifNC: "Les textes sur l'égalité et la non-discrimination ne sont pas portés à la connaissance des salariés et candidats : mettez l'information en place par tout moyen." },
+    { cle: "informationFaite", libelle: "Le texte des articles 225-1 à 225-4 du code pénal est-il porté, par tout moyen, à la connaissance des personnes dans les lieux de travail et les locaux (ou à la porte des locaux) où se fait l'embauche ?", format: "oui / non", regle: "oui",
+      motifNC: "Le texte des articles 225-1 à 225-4 du code pénal (interdiction des discriminations) n'est pas porté à la connaissance des salariés et candidats : L. 1142-6 l'impose, par tout moyen, dans les lieux de travail et les lieux d'embauche." },
   ],
   plan: {
     priorite: 3,
-    action: "Porter à la connaissance des salariés et des candidats les textes sur l'égalité de rémunération et la non-discrimination.",
+    action: "Porter à la connaissance des salariés et des candidats le texte des articles 225-1 à 225-4 du code pénal (interdiction des discriminations).",
     etapes: [
-      "Préparer le support reprenant les textes applicables.",
-      "Le diffuser par tout moyen dans les lieux de travail et les locaux d'embauche.",
+      "Préparer le support reprenant les textes (reproduire les articles en vigueur du code pénal).",
+      "Le diffuser par tout moyen dans les lieux de travail et les locaux — ou à la porte des locaux — où se fait l'embauche.",
     ],
     acteur: "Ressources humaines",
     delai: "Immédiat",
-    risque: "Manquement d'information retenu dans les contentieux d'égalité de traitement — formulation prudente : l'article d'amende n'a pas été vérifié ici.",
+    risque: "Manquement d'information retenu dans les contentieux de discrimination — formulation prudente : l'article d'amende n'a pas été vérifié ici.",
     modele: { page: "documents.html", nom: "note d'information (modèle « note-rh »)" },
   },
 });
@@ -552,7 +555,7 @@ item({
         + "une consigne de sécurité incendie doit être établie et affichée" + (lu("R4227-37") ? " (" + jol("R4227-37") + ")" : "") + "." };
     if (!M.renseigne(inflammables))
       return { du: null, motif: "L'effectif est sous cinquante, mais il n'est pas dit si des matières inflammables sont manipulées : la consigne est due dans ce cas — répondez pour conclure." };
-    return { du: false, motif: "Moins de cinquante personnes réunies et pas de matières inflammables déclarées : la consigne formalisée n'est pas exigée — l'obligation générale de sécurité demeure, et des consignes restent recommandées." };
+    return { du: false, motif: "Moins de cinquante personnes réunies et pas de matières inflammables déclarées : la consigne formalisée du champ de R. 4227-34 n'est pas exigée — mais R. 4227-37 prévoit que, dans les autres établissements, des instructions permettant d'assurer l'évacuation des personnes sont établies : gardez-les écrites." };
   },
   verifs: [
     { cle: "consigneEtablie", libelle: "La consigne est-elle établie et affichée de manière très apparente ?", format: "oui / non", regle: "oui",
@@ -686,21 +689,23 @@ item({
 
 item({
   id: "SOC-REG-SECURITE", categorie: "registres",
-  intitule: "Registres de sécurité : vérifications, contrôles et observations",
-  articles: ["L4711-5"].filter(lu),
-  articlesSouhaites: ["L4711-5"],
+  intitule: "Registres de sécurité : vérifications, contrôles et observations de l'inspection",
+  articles: ["L4711-1", "L4711-2", "L4711-5"].filter(lu),
+  articlesSouhaites: ["L4711-1", "L4711-2", "L4711-5"],
   module: null,
   condition: toutEmployeur,
   verifs: [
-    { cle: "tenu", libelle: "Les attestations, consignes, résultats et rapports des vérifications périodiques (électricité, incendie, équipements…) sont-ils conservés — le cas échéant sur un registre unique de sécurité ?", format: "oui / non", regle: "oui",
-      motifNC: "Les documents des vérifications périodiques ne sont pas rassemblés : conservez-les (un registre unique de sécurité peut les regrouper) — sans eux, impossible de prouver que les contrôles ont eu lieu." },
+    { cle: "tenu", libelle: "Les attestations, consignes, résultats et rapports des vérifications et contrôles (L. 4711-1) sont-ils conservés — le cas échéant réunis sur un registre unique ?", format: "oui / non", regle: "oui",
+      motifNC: "Les documents des vérifications et contrôles ne sont pas rassemblés : L. 4711-1 les met à la charge de l'employeur, et L. 4711-5 permet de les réunir sur un registre unique — sans eux, impossible de prouver que les contrôles ont eu lieu." },
+    { cle: "misesEnDemeure", libelle: "Les observations et mises en demeure de l'inspection du travail (santé-sécurité, médecine du travail, prévention) sont-elles conservées ?", format: "oui / non", regle: "oui",
+      motifNC: "Les observations et mises en demeure de l'inspection ne sont pas conservées : L. 4711-2 impose leur conservation par l'employeur." },
   ],
   plan: {
     priorite: 2,
     action: "Rassembler et tenir les documents de vérifications et contrôles au titre de la santé-sécurité.",
     etapes: [
       "Inventorier les vérifications périodiques dues (installations électriques, moyens d'extinction, équipements de travail, aération…).",
-      "Rassembler attestations, consignes, résultats et rapports — au besoin sur un registre unique de sécurité.",
+      "Rassembler attestations, consignes, résultats et rapports (L. 4711-1) et les observations et mises en demeure de l'inspection (L. 4711-2) — au besoin sur un registre unique (L. 4711-5).",
       "Programmer les vérifications manquantes avec des organismes agréés.",
     ],
     acteur: "Services généraux / responsable sécurité",
@@ -924,31 +929,39 @@ item({
 
 item({
   id: "SOC-FOR-ENTRETIENS", categorie: "formation et entretiens",
-  intitule: "Entretiens professionnels : tous les deux ans, et état des lieux récapitulatif tous les six ans",
+  intitule: "Entretiens de parcours professionnel : dans l'année suivant l'embauche, puis tous les quatre ans au plus, et état des lieux tous les huit ans",
   articles: ["L6315-1"].filter(lu),
   articlesSouhaites: ["L6315-1"],
+  /* L. 6315-1 dans sa rédaction en vigueur à la date de capture : « entretien
+     de parcours professionnel » — premier dans l'année suivant l'embauche,
+     puis tous les quatre ans (un accord peut fixer une autre périodicité,
+     sans excéder quatre ans) ; état des lieux récapitulatif tous les huit
+     ans, le premier pouvant intervenir sept ans après le premier entretien ;
+     proposé systématiquement aux retours d'absences longues si aucun
+     entretien n'a eu lieu dans les douze mois précédant la reprise. */
   module: null,
   condition: toutEmployeur,
   verifs: [
-    { cle: "cycleAJour", libelle: "Chaque salarié a-t-il eu son entretien professionnel dans les deux dernières années (et au retour des absences longues) ?", format: "oui / non", regle: "oui",
-      motifNC: "Des entretiens professionnels manquent : rattrapez-les — l'entretien est dû tous les deux ans et au retour de certaines absences (congé maternité, parental, arrêt long…)." },
-    { cle: "bilanSixAns", libelle: "L'état des lieux récapitulatif des six ans est-il fait pour les salariés concernés ?", format: "oui / non", regle: "oui",
-      motifNC: "L'état des lieux des six ans n'est pas établi : faites-le — dans les entreprises d'au moins cinquante salariés, un parcours sans les entretiens et sans formation non obligatoire déclenche l'abondement correctif du compte formation du salarié." },
-    { cle: "dateDernierCycle", libelle: "Date de la dernière campagne d'entretiens", format: "AAAA-MM-JJ", regle: "ageMaxMois", mois: 24,
-      motifNC: "La dernière campagne d'entretiens professionnels date de plus de deux ans : le cycle est dépassé — planifiez la campagne de rattrapage." },
+    { cle: "cycleAJour", libelle: "Chaque salarié a-t-il eu son entretien de parcours professionnel aux échéances — dans l'année suivant l'embauche, puis tous les quatre ans au plus (ou à la périodicité fixée par accord), et aux retours d'absences longues ?", format: "oui / non", regle: "oui",
+      motifNC: "Des entretiens de parcours professionnel manquent : rattrapez-les — L. 6315-1 les impose dans l'année suivant l'embauche, puis tous les quatre ans au plus (un accord peut fixer une périodicité différente sans excéder quatre ans), et les propose systématiquement aux retours d'absences longues quand aucun entretien n'a eu lieu dans les douze mois précédant la reprise." },
+    { cle: "bilanHuitAns", libelle: "L'état des lieux récapitulatif des huit ans est-il fait pour les salariés concernés (document écrit, copie remise) ?", format: "oui / non", regle: "oui",
+      motifNC: "L'état des lieux récapitulatif des huit ans n'est pas établi : L. 6315-1, II, l'impose — et dans les entreprises d'au moins cinquante salariés, un parcours sans les entretiens prévus et sans au moins une formation non obligatoire déclenche l'abondement correctif du compte personnel de formation." },
+    { cle: "dateDernierCycle", libelle: "Date de la dernière campagne d'entretiens", format: "AAAA-MM-JJ", regle: "ageMaxMois", mois: 48,
+      motifNC: "La dernière campagne d'entretiens date de plus de quatre ans : la périodicité maximale de L. 6315-1 est dépassée — planifiez la campagne de rattrapage." },
   ],
   plan: {
     priorite: 2,
-    action: "Remettre à jour les entretiens professionnels et les états des lieux de six ans.",
+    action: "Remettre à jour les entretiens de parcours professionnel et les états des lieux de huit ans.",
     etapes: [
-      "Établir, salarié par salarié, la date du dernier entretien et l'échéance du prochain (deux ans, et retours d'absence).",
-      "Conduire la campagne de rattrapage, formaliser chaque entretien par écrit remis au salarié.",
-      "Établir les états des lieux de six ans et, s'il y a carence dans une entreprise d'au moins cinquante salariés, provisionner l'abondement correctif.",
+      "Établir, salarié par salarié, la date du dernier entretien et l'échéance du prochain (année suivant l'embauche, puis quatre ans au plus — vérifier la périodicité qu'un accord aurait fixée).",
+      "Conduire la campagne de rattrapage ; formaliser chaque entretien par un document écrit dont copie est remise au salarié — l'entretien ne porte pas sur l'évaluation du travail.",
+      "Proposer systématiquement l'entretien aux retours d'absences longues (maternité, parental, proche aidant, arrêt long, mandat syndical…) quand aucun entretien n'a eu lieu dans les douze mois précédant la reprise.",
+      "Établir les états des lieux de huit ans et, s'il y a carence dans une entreprise d'au moins cinquante salariés, provisionner l'abondement correctif du compte formation.",
     ],
     acteur: "Ressources humaines et managers",
     delai: "Campagne de rattrapage : un trimestre",
-    risque: "À partir de cinquante salariés, la carence sur un cycle de six ans déclenche l'abondement correctif du compte personnel de formation du salarié — et fragilise tout licenciement fondé sur l'insuffisance professionnelle.",
-    modele: { page: "documents.html", nom: "modèle à établir (aucune trame d'entretien professionnel dans le générateur à ce jour)" },
+    risque: "À partir de cinquante salariés, la carence sur le cycle de huit ans (entretiens non tenus et aucune formation non obligatoire) déclenche l'abondement correctif du compte personnel de formation (L. 6315-1, II) — et fragilise tout licenciement fondé sur l'insuffisance professionnelle.",
+    modele: { page: "documents.html", nom: "modèle à établir (aucune trame d'entretien dans le générateur à ce jour)" },
   },
 });
 
@@ -993,7 +1006,7 @@ item({
       return { du: null, motif: s.motif + " Reste à dater le franchissement : l'obligation de participation s'applique à compter d'un délai suivant le franchissement durable du seuil — dites depuis quand l'effectif s'y maintient." };
     if (M.nie(p.seuilDepuis12Mois))
       return { du: null, motif: "Le seuil de cinquante salariés vient d'être franchi : l'obligation de participation naît après un maintien durable de l'effectif au-dessus du seuil (la loi aménage un différé) — datez le franchissement et faites vérifier l'échéance exacte par votre expert." };
-    return { du: true, motif: s.motif + " La participation aux résultats doit être mise en place (accord, régime d'autorité à défaut)" + (lu("L3322-2") ? " — " + jol("L3322-2") + " lu à la source" : "") + ". L'échéance exacte dépend de la durée de maintien au-dessus du seuil : faites-la vérifier." },
+    return { du: true, motif: s.motif + " La participation aux résultats doit être mise en place (accord, régime d'autorité à défaut)" + (lu("L3322-2") ? " — " + jol("L3322-2") + " lu à la source" : "") + ". L'échéance exacte dépend de la durée de maintien au-dessus du seuil : faites-la vérifier." };
   },
   verifs: [
     { cle: "dispositifEnPlace", libelle: "Un accord de participation (ou le régime d'autorité) est-il en place ?", format: "oui / non", regle: "oui",
@@ -1087,7 +1100,8 @@ item({
   condition: p => {
     if (!M.renseigne(p.conventionCollective))
       return { du: null, motif: "La convention collective n'est pas renseignée : impossible de dire quelles obligations conventionnelles s'ajoutent aux obligations légales" + (M.renseigne(p.secteur) ? ` (secteur déclaré : ${String(p.secteur).trim()})` : "") + ". Identifiez-la d'abord." };
-    return { du: true, motif: `La convention « ${String(p.conventionCollective).trim()} » ajoute ses propres obligations : salaires minima, primes, prévoyance, classification, jours conventionnels… Selon la convention collective applicable : à vérifier — le relais de l'application ne sert que le code du travail, rien de précis n'est affirmé ici.` },
+    return { du: true, motif: `La convention « ${String(p.conventionCollective).trim()} » ajoute ses propres obligations : salaires minima, primes, prévoyance, classification, jours conventionnels… Selon la convention collective applicable : à vérifier — le relais de l'application ne sert que le code du travail, rien de précis n'est affirmé ici.` };
+  },
   verifs: [
     { cle: "verificationFaite", libelle: "Une vérification de conformité aux obligations de la branche (minima, primes, prévoyance…) a-t-elle été faite récemment ?", format: "oui / non", regle: "oui",
       motifNC: "Aucune vérification de conformité conventionnelle déclarée : faites passer en revue minima, primes, classification et prévoyance de branche — un rappel de prime conventionnelle se prescrit en années, pas en mois." },
