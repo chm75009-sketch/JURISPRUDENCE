@@ -37,12 +37,15 @@ vérifient via le relais Légifrance de l'application :
 ```
 curl -s -X POST "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance" \
   -H "content-type: application/json" \
-  -d '{"action":"article","numero":"L1233-3","code":"LEGITEXT000006072050","date":"AAAA-MM-JJ"}'
+  -d '{"action":"article","numero":"L1233-3","code":"Code du travail","date":"AAAA-MM-JJ"}'
 ```
 
-Le relais ne sert que le code du travail : l'identifiant du code de commerce
-essayé (`LEGITEXT000005634379`) renvoie des articles d'autres codes. Ne pas citer
-d'article du code de commerce sans l'avoir vérifié autrement.
+**Le champ `code` attend le NOM du code (« Code du travail »), pas un identifiant
+`LEGITEXT`** — découverte du 19 août 2026 (captures SST et social) : un `LEGITEXT`
+désactive le filtre, et la recherche par pertinence sert alors des homonymes
+d'autres codes. C'est la cause première des homonymes historiques du dépôt.
+Le relais ne sert que le code du travail : ne pas citer d'article d'un autre code
+sans l'avoir vérifié autrement.
 
 ### Le relais n'est pas fiable sous charge — mesuré le 15 août 2026
 
