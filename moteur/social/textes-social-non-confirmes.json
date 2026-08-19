@@ -1,0 +1,371 @@
+{
+ "date": "2026-08-19",
+ "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
+ "articles": {
+  "L2311-2": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000006390512",
+     "erreur": null,
+     "debut": "Le budget communal comprend les ressources nécessaires à la couverture des dépenses d'investissement à effectuer au cour"
+    },
+    {
+     "id": "LEGIARTI000006390512",
+     "erreur": null,
+     "debut": "Le budget communal comprend les ressources nécessaires à la couverture des dépenses d'investissement à effectuer au cour"
+    }
+   ]
+  },
+  "L2313-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000037704141",
+     "erreur": null,
+     "debut": "Pour organiser son achat, l'acheteur peut : 1° Procéder à une mutualisation de ses besoins avec d'autres acheteurs, dans"
+    },
+    {
+     "id": "LEGIARTI000037704141",
+     "erreur": null,
+     "debut": "Pour organiser son achat, l'acheteur peut : 1° Procéder à une mutualisation de ses besoins avec d'autres acheteurs, dans"
+    }
+   ]
+  },
+  "L2331-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000022517192",
+     "erreur": null,
+     "debut": "Sont portés devant la juridiction administrative les litiges relatifs : 1° Aux autorisations ou contrats comportant occu"
+    },
+    {
+     "id": "LEGIARTI000022517192",
+     "erreur": null,
+     "debut": "Sont portés devant la juridiction administrative les litiges relatifs : 1° Aux autorisations ou contrats comportant occu"
+    }
+   ]
+  },
+  "L1311-2": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000037703338",
+     "erreur": null,
+     "debut": "Lorsqu'une autorité concédante décide de conclure un contrat unique destiné à satisfaire des besoins, objectivement diss"
+    },
+    {
+     "id": "LEGIARTI000037703338",
+     "erreur": null,
+     "debut": "Lorsqu'une autorité concédante décide de conclure un contrat unique destiné à satisfaire des besoins, objectivement diss"
+    }
+   ]
+  },
+  "L1321-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000037703350",
+     "erreur": null,
+     "debut": "Lorsqu'un acheteur décide de conclure un contrat unique alors que ce contrat porte sur des prestations, objectivement di"
+    },
+    {
+     "id": "LEGIARTI000037703350",
+     "erreur": null,
+     "debut": "Lorsqu'un acheteur décide de conclure un contrat unique alors que ce contrat porte sur des prestations, objectivement di"
+    }
+   ]
+  },
+  "L1321-2": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000037703352",
+     "erreur": null,
+     "debut": "Lorsqu'une autorité concédante décide de conclure un contrat unique alors que ce contrat porte sur des prestations, obje"
+    },
+    {
+     "id": "LEGIARTI000037703352",
+     "erreur": null,
+     "debut": "Lorsqu'une autorité concédante décide de conclure un contrat unique alors que ce contrat porte sur des prestations, obje"
+    }
+   ]
+  },
+  "L1321-4": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000006389183",
+     "erreur": null,
+     "debut": "Les conditions dans lesquelles les biens mis à disposition, en application de l'article L. 1321-2 , peuvent faire l'obje"
+    },
+    {
+     "id": "LEGIARTI000006389183",
+     "erreur": null,
+     "debut": "Les conditions dans lesquelles les biens mis à disposition, en application de l'article L. 1321-2 , peuvent faire l'obje"
+    }
+   ]
+  },
+  "R4121-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000024885902",
+     "erreur": null,
+     "debut": "Pour l'application des dispositions de l'article L. 4121-1 , la mise en location des immeubles dont l'Etat a la jouissan"
+    },
+    {
+     "id": "LEGIARTI000024885902",
+     "erreur": null,
+     "debut": "Pour l'application des dispositions de l'article L. 4121-1 , la mise en location des immeubles dont l'Etat a la jouissan"
+    }
+   ]
+  },
+  "R4121-2": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000024885906",
+     "erreur": null,
+     "debut": "Pour l'application des dispositions de l'article L. 4121-1 , les immeubles dont l'Etat a la jouissance ou qu'il détient "
+    },
+    {
+     "id": "LEGIARTI000024885906",
+     "erreur": null,
+     "debut": "Pour l'application des dispositions de l'article L. 4121-1 , les immeubles dont l'Etat a la jouissance ou qu'il détient "
+    }
+   ]
+  },
+  "R4121-4": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000024885915",
+     "erreur": null,
+     "debut": "Il est établi et tenu à jour un état des immeubles dont l'Etat ou les établissements publics nationaux à caractère admin"
+    },
+    {
+     "id": "LEGIARTI000024885915",
+     "erreur": null,
+     "debut": "Il est établi et tenu à jour un état des immeubles dont l'Etat ou les établissements publics nationaux à caractère admin"
+    }
+   ]
+  },
+  "L1142-6": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000006686005",
+     "erreur": null,
+     "debut": "Les commissions régionales de conciliation et d'indemnisation des accidents médicaux, des affections iatrogènes et des i"
+    },
+    {
+     "id": "LEGIARTI000006686005",
+     "erreur": null,
+     "debut": "Les commissions régionales de conciliation et d'indemnisation des accidents médicaux, des affections iatrogènes et des i"
+    }
+   ]
+  },
+  "L3171-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000033021067",
+     "erreur": null,
+     "debut": "L'employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos. Lorsq"
+    },
+    {
+     "id": "LEGIARTI000033021067",
+     "erreur": null,
+     "debut": "L'employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos. Lorsq"
+    }
+   ]
+  },
+  "L1221-13": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000033897135",
+     "erreur": null,
+     "debut": "L'hémovigilance a pour objet l'ensemble des procédures de surveillance et d'évaluation des incidents, ainsi que des effe"
+    },
+    {
+     "id": "LEGIARTI000039802596",
+     "erreur": null,
+     "debut": "Les conditions dans lesquelles les employeurs sont assujettis à un versement destiné au financement des services de mobi"
+    },
+    {
+     "id": "LEGIARTI000039802596",
+     "erreur": null,
+     "debut": "Les conditions dans lesquelles les employeurs sont assujettis à un versement destiné au financement des services de mobi"
+    }
+   ]
+  },
+  "D4132-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000035705238",
+     "erreur": null,
+     "debut": "Le conseil départemental de l'ordre des médecins est composé de six binômes titulaires et de six binômes suppléants si l"
+    },
+    {
+     "id": "LEGIARTI000035705238",
+     "erreur": null,
+     "debut": "Le conseil départemental de l'ordre des médecins est composé de six binômes titulaires et de six binômes suppléants si l"
+    }
+   ]
+  },
+  "L6315-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000024462592",
+     "erreur": null,
+     "debut": "La continuité des soins aux malades est assurée quelles que soient les circonstances. Lorsque le médecin se dégage de sa"
+    },
+    {
+     "id": "LEGIARTI000024462592",
+     "erreur": null,
+     "debut": "La continuité des soins aux malades est assurée quelles que soient les circonstances. Lorsque le médecin se dégage de sa"
+    }
+   ]
+  },
+  "L6321-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": null,
+     "erreur": "Command failed: curl -s --max-time 40 -X POST https://jurisprudence-recherche.ne",
+     "debut": ""
+    },
+    {
+     "id": "LEGIARTI000039483840",
+     "erreur": null,
+     "debut": "Pour l'application du présent code dans les îles Wallis et Futuna : 1° Les références au préfet ou à l'autorité préfecto"
+    },
+    {
+     "id": "LEGIARTI000039483840",
+     "erreur": null,
+     "debut": "Pour l'application du présent code dans les îles Wallis et Futuna : 1° Les références au préfet ou à l'autorité préfecto"
+    }
+   ]
+  },
+  "L4141-2": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000044190643",
+     "erreur": null,
+     "debut": "I.-Sont transmis au représentant de l'Etat dans la région, dans les conditions prévues au II : 1° Les délibérations du c"
+    },
+    {
+     "id": "LEGIARTI000044190643",
+     "erreur": null,
+     "debut": "I.-Sont transmis au représentant de l'Etat dans la région, dans les conditions prévues au II : 1° Les délibérations du c"
+    }
+   ]
+  },
+  "L4622-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000043893834",
+     "erreur": null,
+     "debut": "Les employeurs relevant du présent titre organisent des services de prévention et de santé au travail."
+    },
+    {
+     "id": "LEGIARTI000043893834",
+     "erreur": null,
+     "debut": "Les employeurs relevant du présent titre organisent des services de prévention et de santé au travail."
+    }
+   ]
+  },
+  "L3322-2": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000054140162",
+     "erreur": null,
+     "debut": "Les boissons alcooliques livrées par le fabricant ou l'importateur, détenues, transportées, mises en vente, vendues ou o"
+    },
+    {
+     "id": "LEGIARTI000054140162",
+     "erreur": null,
+     "debut": "Les boissons alcooliques livrées par le fabricant ou l'importateur, détenues, transportées, mises en vente, vendues ou o"
+    }
+   ]
+  },
+  "L1142-8": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000021940570",
+     "erreur": null,
+     "debut": "Lorsque les dommages subis présentent le caractère de gravité prévu au II de l'article L. 1142-1 , la commission émet un"
+    },
+    {
+     "id": "LEGIARTI000021940570",
+     "erreur": null,
+     "debut": "Lorsque les dommages subis présentent le caractère de gravité prévu au II de l'article L. 1142-1 , la commission émet un"
+    }
+   ]
+  },
+  "L5212-1": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000045630348",
+     "erreur": null,
+     "debut": "Pour les dispositifs mentionnés à l'article premier du règlement (UE) 2017/745 du Parlement européen et du Conseil du 5 "
+    },
+    {
+     "id": "LEGIARTI000045630348",
+     "erreur": null,
+     "debut": "Pour les dispositifs mentionnés à l'article premier du règlement (UE) 2017/745 du Parlement européen et du Conseil du 5 "
+    }
+   ]
+  },
+  "L5212-2": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000027574003",
+     "erreur": null,
+     "debut": "Sauf lorsqu'elle résulte des délibérations concordantes de l'ensemble des conseils municipaux, la création d'un syndicat"
+    },
+    {
+     "id": "LEGIARTI000045630301",
+     "erreur": null,
+     "debut": "Les obligations de notification à l'Agence nationale de sécurité du médicament et des produits de santé ou d'information"
+    },
+    {
+     "id": "LEGIARTI000045630301",
+     "erreur": null,
+     "debut": "Les obligations de notification à l'Agence nationale de sécurité du médicament et des produits de santé ou d'information"
+    }
+   ]
+  },
+  "L5212-5": {
+   "motif": "deux lectures stables, mais le contenu ne porte pas le fragment attendu : homonyme probable — l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": null,
+     "erreur": "Command failed: curl -s --max-time 40 -X POST https://jurisprudence-recherche.ne",
+     "debut": ""
+    },
+    {
+     "id": "LEGIARTI000006392973",
+     "erreur": null,
+     "debut": "Le syndicat est formé soit sans fixation de terme, soit pour une durée déterminée par la décision institutive."
+    },
+    {
+     "id": "LEGIARTI000006392973",
+     "erreur": null,
+     "debut": "Le syndicat est formé soit sans fixation de terme, soit pour une durée déterminée par la décision institutive."
+    }
+   ]
+  }
+ }
+}

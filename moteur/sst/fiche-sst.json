@@ -1,0 +1,42 @@
+{
+ "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
+ "dateAudit": "2026-08-19",
+ "effectif": 420,
+ "cse": { "existe": "oui" },
+ "duerp": {
+  "existe": "oui",
+  "dateDerniereMaj": "2026-03-02",
+  "unitesTravail": "oui",
+  "versionsConservees": "oui",
+  "avisAffiche": "oui",
+  "consultationCSE": "oui",
+  "transmisSPST": "oui"
+ },
+ "evenement": { "survenu": "non", "majFaite": "" },
+ "suites": {
+  "programmeAnnuel": { "existe": "oui", "presenteCSE": "oui" },
+  "listeActions": { "consignee": "" }
+ },
+ "etablissementDistinct300": "non",
+ "etablissementRisqueParticulier": "non",
+ "cssctImposeeInspection": "non",
+ "cssct": {
+  "existe": "oui",
+  "presideeEmployeur": "oui",
+  "nbMembres": 4,
+  "membreSecondCollege": "oui",
+  "designesParCSE": "oui",
+  "modalitesFixees": "règlement intérieur",
+  "delegationConforme": "oui"
+ },
+ "formationSSCT": "oui",
+ "referentEmployeur": "oui",
+ "referentCSE": "oui",
+ "infoHarcelementMoral": "oui",
+ "infoHarcelementSexuel": "oui",
+ "infoCoordonnees": "oui",
+ "risquesHarcelementEvalues": "oui",
+ "mesuresPreventionHarcelement": "oui",
+ "signalement": { "recu": "non", "enqueteMenee": "", "mesuresPrises": "" },
+ "pieces": []
+}
