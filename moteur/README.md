@@ -39,6 +39,17 @@ Trois modules ont rejoint la même chaîne, chacun avec son dossier et son
   le filtre de code du relais attend le NOM du code, pas l'identifiant
   `LEGITEXT…` — sans lui, le relais sert l'homonyme d'un autre code.
   Publication : `node publier-sst.js`.
+- **`social/`** — l'audit social chapeau : le référentiel des obligations de
+  l'employeur (33 obligations en huit catégories, 34 articles lus au relais en
+  lectures doubles concordantes avec critère de contenu), l'assujettissement
+  par profil (effectif, ancienneté des seuils, secteur, convention, groupe,
+  établissements), le contrôle de l'existant aux cinq états — cocher sans
+  détail vérifiable rend « risque à vérifier », jamais « conforme » — et le
+  plan d'action du manquant, priorisé, avec modèles pré-remplis des données du
+  questionnaire. Douze items renvoient aux modules détaillés (CSE, BDESE, NAO,
+  PSE, économique, SST) et n'y concluent jamais « conforme » ; les obligations
+  conventionnelles ou hors code du travail sont signalées « à vérifier »,
+  jamais affirmées. Publication : `node publier-social.js`.
 
 ## Comment l'exécuter
 
