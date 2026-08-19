@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-4.6";
+const CACHE = "jurisprudence-4.7";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -39,6 +39,10 @@ const ESSENTIELS = [
   "./audit-social.html", "./moteur-social.js",
   /* Le formulaire est commun aux quatre pages : sans lui, elles s'ouvrent vides. */
   "./audit-form.js", "./audit-export.js",
+  /* Le sélecteur de convention collective et la liste officielle des IDCC
+     (54 Ko) : sans eux, le champ convention retombe en saisie libre — il
+     fonctionne, mais la liste doit être là hors connexion comme le reste. */
+  "./idcc.js", "./idcc.json",
   /* L'assistant Claude, présent sur toutes les pages. Son code se met en cache
      comme le reste ; ses appels à api.anthropic.com, eux, ne passent JAMAIS par
      ce service worker (le gestionnaire fetch ne retient que la même origine). */

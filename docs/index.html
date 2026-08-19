@@ -353,7 +353,7 @@
     <h2>Conventions collectives</h2>
     <p class="note">Le texte officiel des conventions collectives nationales, tel qu'il est publié
       (fonds KALI de Légifrance). Une convention se désigne par son <b>numéro IDCC</b> —
-      16 pour les transports routiers, 1486 pour les bureaux d'études, 3239 pour la métallurgie —
+      16 pour les transports routiers, 1486 pour les bureaux d'études, 3248 pour la métallurgie —
       ou se cherche par son intitulé. Chaque texte s'exporte en PDF et en Word, pour être versé aux débats.</p>
     <div class="duo" style="margin-top:12px">
       <label class="champ"><b>Numéro IDCC</b>
@@ -485,7 +485,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "3.7 — 19 août 2026";
+const VERSION = "3.8 — 19 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -3116,6 +3116,18 @@ remplirModeles(""); remplirLieux(""); majEtat(); majResumeAffiner();
 document.getElementById("btn-avert").addEventListener("click", ()=>{
   const d = document.getElementById("dlg-avertissement");
   if(typeof d.showModal === "function") d.showModal(); else d.setAttribute("open","");
+});
+</script>
+<script src="idcc.js" defer></script>
+<script>
+/* Le champ IDCC gagne la liste officielle des conventions (menu filtrant,
+   « Autre » en fin de liste) ; il ne stocke toujours que le numéro. */
+window.addEventListener("DOMContentLoaded", function () {
+  var e = document.getElementById("ccn-idcc");
+  if (e && window.IDCC) {
+    e.setAttribute("data-garde-placeholder", "1");
+    window.IDCC.attacher(e, { stocker: "code", zeros: false });
+  }
 });
 </script>
 <script src="assistant.js" defer></script>

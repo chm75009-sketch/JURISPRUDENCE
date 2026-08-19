@@ -18,6 +18,170 @@
   "use strict";
   var M = window[window.__MOTEUR || "MoteurEco"];
   var PROP = M.propositions || {};
+
+  /* ------------------------------------------- les menus déroulants ajoutés
+
+     Les propositions des moteurs offrent déjà un menu partout où le code
+     discrimine sur une valeur. Restaient quelques questions dont le format
+     énonce des valeurs sans que le moteur les compare : elles se répondaient
+     au clavier. Les listes ci-dessous ne vivent que dans le formulaire — aucun
+     moteur n'est modifié — et chaque valeur est exactement celle que les
+     moteurs impriment ou comparent (« accord » / « unilateral » sont celles du
+     module PSE ; « je ne sais pas » celle des dossiers de référence). */
+  var PROP_UI = {
+    MoteurEco: {
+      conventionAJour: { valeurs: ["oui", "non", "je ne sais pas"], libre: false },
+      "pse.voie": { valeurs: ["accord", "unilateral"], libre: false,
+        etiquettes: { accord: "accord majoritaire", unilateral: "document unilatéral" } },
+    },
+    MoteurBDESE: {
+      "base.support": { valeurs: ["informatique", "papier"], libre: true,
+        aide: "« informatique » ou « papier » — ou décrivez le support réel par « — autre — »." },
+    },
+  };
+  (function () {
+    var sur = PROP_UI[window.__MOTEUR || ""] || {};
+    for (var k in sur) if (!PROP[k]) PROP[k] = sur[k];
+  })();
+
+  /* ------------------------------------------- l'affichage conditionnel
+
+     « Quand on dit pas de liquidation, les questions en lien doivent
+     disparaître. » Chaque règle nomme un pilote et les champs qui n'ont
+     indiscutablement plus d'objet au vu de sa réponse — la condition reprend
+     la garde du contrôle correspondant (état « sans objet » du moteur), jamais
+     une supposition. Un pilote sans réponse ne masque rien : l'audit ne
+     devine pas. Un champ masqué est vidé : le moteur le traite comme une
+     donnée absente, ce qu'il sait faire — jamais comme une donnée fantôme.
+
+     Deux formes : { si: { champ, vaut: [...] }, champs: [...] } — les champs
+     ne restent visibles que si le pilote est vide ou vaut l'une des valeurs —
+     et { si: fonction(txt, nb) → true (visible) / false (masqué) / null
+     (indéterminé, donc visible), champs: [...] } pour les seuils d'effectif. */
+  var DEPENDANCES = {
+    MoteurEco: [
+      { si: { champ: "procedureCollective", vaut: ["oui"] },
+        champs: ["typeProcedure", "dateJugement", "qualiteAuteur", "ordonnanceJugeCommissaire"] },
+      { si: { champ: "groupe", vaut: ["oui"] },
+        champs: ["effectifGroupe", "societes", "societesDuSecteur",
+          "fluxIntragroupe", "resultatHorsFlux", "resultatGroupe", "coEmploi"] },
+      { si: { champ: "cseExistant", vaut: ["non"] }, champs: ["pvCarence"] },
+      { si: { champ: "cseExistant", vaut: ["oui"] },
+        champs: ["cseCentralConsulte", "consequencesSSCT", "expertise"] },
+      { si: { champ: "fermetureEtablissement", vaut: ["oui"] }, champs: ["rechercheRepreneur"] },
+      { si: { champ: "cause", vaut: ["4"] }, champs: ["cessationComplete"] },
+      { si: { champ: "cause", vaut: ["3"] }, champs: ["menace"] },
+      { si: { champ: "cause", vaut: ["2"] }, champs: ["mutation"] },
+      /* Le plan de sauvegarde n'est jamais dû sous cinquante salariés. */
+      { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 50; },
+        champs: ["pse.voie", "pse.evitement", "pse.reclassementInterne", "pse.formation",
+          "pse.creation", "pse.suivi", "pse.dateDecisionAdmin"] },
+    ],
+    MoteurCSE: [
+      { si: { champ: "etablissementsMultiples", vaut: ["oui"] },
+        champs: ["sourceDecoupage", "instanceConsultee", "mesuresAdaptation"] },
+      { si: { champ: "comiteExistant", vaut: ["oui"] },
+        champs: ["titulairesElus", "titulairesInitiaux", "titulairesRestants", "collegeVide",
+          "moisAvantTerme", "partiellesOrganisees", "reunionsTenues", "reunionsSante",
+          "accordPeriodicite", "reunionsAccord", "heuresAccordees", "heuresRetenues",
+          "formationsDispensees", "cssct", "membresCssct", "subventionVersee",
+          "ascAnneeN", "ascAnneeN1", "ancienneteASC", "consultationsRecurrentes",
+          "consultation", "instanceConsultee", "mesuresAdaptation", "expertise"] },
+      { si: { champ: "electionsEnCours", vaut: ["oui"] },
+        champs: ["dateInformationPersonnel", "datePremierTour", "syndicatsInvites",
+          "protocole", "listesDeposees"] },
+      { si: { champ: "accordPeriodicite", vaut: ["oui"] }, champs: ["reunionsAccord"] },
+      { si: { champ: "cssct", vaut: ["oui"] }, champs: ["membresCssct"] },
+    ],
+    MoteurPSE: [
+      { si: { champ: "groupe", vaut: ["oui"] }, champs: ["effectifGroupe", "plan.resultatGroupe"] },
+      { si: { champ: "pse.voie", vaut: ["accord"] }, champs: ["pse.suffrages"] },
+      { si: { champ: "expertisePSE", vaut: ["oui"] }, champs: ["pse.dateDesignationExpert"] },
+      /* Le dispositif d'accompagnement n'est pas au choix : mille salariés et
+         plus, congé de reclassement ; en deçà, contrat de sécurisation
+         professionnelle (mêmes lectures que M.accompagnement). */
+      { si: function (txt, nb) {
+          var l = [nb("effectif"), nb("effectifEtablissement"),
+            txt("groupe") === "oui" ? nb("effectifGroupe") : null]
+            .filter(function (x) { return x !== null; });
+          if (!l.length) return null;
+          return Math.max.apply(null, l) >= 1000;     /* congé de reclassement dû */
+        },
+        champs: ["plan.dureeConge", "plan.formationReconversion"] },
+      { si: function (txt, nb) {
+          var l = [nb("effectif"), nb("effectifEtablissement"),
+            txt("groupe") === "oui" ? nb("effectifGroupe") : null]
+            .filter(function (x) { return x !== null; });
+          if (!l.length) return null;
+          return Math.max.apply(null, l) < 1000;      /* contrat de sécurisation dû */
+        },
+        champs: ["plan.dateProposition"] },
+    ],
+    MoteurBDESE: [
+      { si: { champ: "accordEntreprise", vaut: ["oui"] }, champs: ["accordEntrepriseVerse"] },
+      { si: { champ: "accordEntreprise", vaut: ["non"] }, champs: ["accordBranche", "accordBrancheVerse"] },
+      { si: { champ: "accordBranche", vaut: ["oui"] }, champs: ["accordBrancheVerse"] },
+      { si: { champ: "accordPeriodiciteConsultations", vaut: ["oui"] },
+        champs: ["periodiciteConsultations", "reunionsAnnuellesAccord"] },
+      { si: { champ: "etablissementsDistincts", vaut: ["oui"] },
+        champs: ["consultation.centralEtEtablissements"] },
+    ],
+    MoteurNAO: [
+      { si: { champ: "groupe", vaut: ["oui"] },
+        champs: ["effectifGroupe", "dimensionCommunautaire", "effectifFrance"] },
+      { si: { champ: "dimensionCommunautaire", vaut: ["oui"] }, champs: ["effectifFrance"] },
+      /* Sans section syndicale, l'entreprise n'est pas assujettie : les
+         contrôles rendent « sans objet » (garde siAssujetti). */
+      { si: { champ: "sectionsSyndicales", vaut: ["oui"] },
+        champs: ["accordMethode.existe", "accordMethode.verse", "accordMethode.dureeAns",
+          "accordMethode.mentions", "accordMethode.periodicites",
+          "negos.remuneration", "negos.egalite", "negos.gepp", "negos.experimentes",
+          "premiereReunion.date", "premiereReunion.lieuCalendrierFixes",
+          "premiereReunion.informationsRemises", "premiereReunion.dateRemiseInformations",
+          "reponsesMotivees", "decisionUnilaterale.prise", "decisionUnilaterale.matiere",
+          "decisionUnilaterale.urgence", "demandeSyndicale.recue", "demandeSyndicale.date",
+          "demandeSyndicale.dateTransmissionAutresOS", "demandeSyndicale.dateConvocation",
+          "indexEgalitePublie"] },
+      { si: { champ: "accordMethode.existe", vaut: ["oui"] },
+        champs: ["accordMethode.verse", "accordMethode.dureeAns",
+          "accordMethode.mentions", "accordMethode.periodicites"] },
+      { si: { champ: "decisionUnilaterale.prise", vaut: ["oui"] },
+        champs: ["decisionUnilaterale.matiere", "decisionUnilaterale.urgence"] },
+      { si: { champ: "demandeSyndicale.recue", vaut: ["oui"] },
+        champs: ["demandeSyndicale.date", "demandeSyndicale.dateTransmissionAutresOS",
+          "demandeSyndicale.dateConvocation"] },
+      { si: { champ: "premiereReunion.informationsRemises", vaut: ["oui"] },
+        champs: ["premiereReunion.dateRemiseInformations"] },
+      /* L'index de L. 1142-8 vise les entreprises d'au moins cinquante salariés. */
+      { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 50; },
+        champs: ["indexEgalitePublie"] },
+    ],
+    MoteurSST: [
+      { si: { champ: "duerp.existe", vaut: ["oui"] },
+        champs: ["duerp.dateDerniereMaj", "duerp.unitesTravail", "duerp.versionsConservees",
+          "duerp.avisAffiche", "duerp.consultationCSE", "duerp.transmisSPST",
+          "evenement.survenu", "evenement.majFaite",
+          "programmeAnnuel.existe", "programmeAnnuel.presenteCSE", "listeActions.consignee"] },
+      { si: { champ: "evenement.survenu", vaut: ["oui"] }, champs: ["evenement.majFaite"] },
+      { si: { champ: "cse.existe", vaut: ["oui"] },
+        champs: ["duerp.consultationCSE", "programmeAnnuel.presenteCSE",
+          "formationSSCT", "referentCSE"] },
+      { si: { champ: "cssct.existe", vaut: ["oui"] },
+        champs: ["cssct.presideeEmployeur", "cssct.nbMembres", "cssct.membreSecondCollege",
+          "cssct.designesParCSE", "cssct.modalitesFixees", "cssct.delegationConforme"] },
+      { si: { champ: "signalement.recu", vaut: ["oui"] },
+        champs: ["signalement.enqueteMenee", "signalement.mesuresPrises"] },
+      /* Programme annuel à partir de cinquante salariés ; en deçà, la liste
+         d'actions consignée au document unique. Référent employeur : 250. */
+      { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 50; },
+        champs: ["programmeAnnuel.existe", "programmeAnnuel.presenteCSE"] },
+      { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e < 50; },
+        champs: ["listeActions.consignee"] },
+      { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 250; },
+        champs: ["referentEmployeur"] },
+    ],
+  };
+  var REGLES_VISIBILITE = DEPENDANCES[window.__MOTEUR || ""] || [];
   var form = document.getElementById("formulaire");
   var sortie = document.getElementById("sortie");
   var CLE = window.__CLE || "audit-brouillon";
@@ -572,6 +736,23 @@
         return;
       }
 
+      /* La convention collective se choisit dans la liste officielle des IDCC
+         (menu filtrant, « Autre » en fin de liste) — la valeur stockée reste le
+         numéro à quatre chiffres que le moteur attend, et la saisie libre
+         demeure : un brouillon existant s'affiche tel quel. */
+      if (cle === "idcc") {
+        e = document.createElement("input");
+        e.type = "text";
+        e.setAttribute("inputmode", "search");
+        e.placeholder = format;
+        e.setAttribute("data-garde-placeholder", "1");
+        e.name = cle; e.id = "c-" + cle;
+        lab.appendChild(e);
+        if (window.IDCC) window.IDCC.attacher(e, { stocker: "code", zeros: true });
+        g.appendChild(lab);
+        return;
+      }
+
       if (t === "oui-non" || t === "cause") {
         e = document.createElement("select");
         options(e, ["", "oui", "non"], "");
@@ -855,6 +1036,93 @@
     });
     d.appendChild(b); d.appendChild(i); d.appendChild(etat);
     return d;
+  }
+
+  /* --------------------------------- l'affichage conditionnel : l'exécution
+
+     Les règles sont déclarées en tête de fichier ; ici, leur application.
+     À chaque saisie : les pilotes sont relus, les champs sans objet masqués
+     ET VIDÉS — un champ invisible ne laisse aucune valeur derrière lui, sans
+     quoi le moteur conclurait sur des données fantômes —, et une rubrique dont
+     tous les champs sont masqués disparaît en bloc. Un pilote sans réponse ne
+     masque rien. */
+  function texteDeChamp(cle) {
+    var p = PROP[cle];
+    if (p && !p.multiple) {
+      var s = document.getElementById("s-" + cle);
+      if (s) {
+        if (s.value !== AUTRE) return s.value;
+        var l = document.getElementById("c-" + cle);
+        return l ? l.value.trim() : "";
+      }
+    }
+    var e = document.getElementById("c-" + cle);
+    return e ? String(e.value).trim() : "";
+  }
+  function nombreDeChamp(cle) {
+    var v = texteDeChamp(cle);
+    if (v === "") return null;
+    var n = Number(String(v).replace(/\s/g, "").replace(",", "."));
+    return isNaN(n) ? null : n;
+  }
+  function conteneurDe(cle) {
+    var env = document.querySelector('[data-liste="' + cle + '"]');
+    if (env) return env;
+    var e = document.getElementById("c-" + cle) || document.getElementById("s-" + cle);
+    return e ? e.closest("label") : null;
+  }
+  function estVisible(cle) {
+    var c = conteneurDe(cle);
+    return !c || c.style.display !== "none";
+  }
+  function viderChamp(cle) {
+    var env = document.querySelector('[data-liste="' + cle + '"]');
+    if (env) {
+      Array.prototype.slice.call(env.querySelectorAll("tr")).slice(1)
+        .forEach(function (tr) { tr.remove(); });
+      env.ligne(null);
+      return;
+    }
+    Array.prototype.forEach.call(
+      document.querySelectorAll('[data-champ="' + cle + '"]'),
+      function (cb) { cb.checked = false; });
+    var s = document.getElementById("s-" + cle);
+    if (s) s.value = "";
+    var e = document.getElementById("c-" + cle);
+    if (e) {
+      e.value = "";
+      if (e.classList.contains("libre") && e.getAttribute("data-multiple") !== "1")
+        e.style.display = "none";
+    }
+  }
+  function appliquerVisibilite() {
+    if (!REGLES_VISIBILITE.length) return;
+    var caches = {}, concernes = {};
+    REGLES_VISIBILITE.forEach(function (r) {
+      r.champs.forEach(function (c) { concernes[c] = true; });
+      var cacher;
+      if (typeof r.si === "function") cacher = r.si(texteDeChamp, nombreDeChamp) === false;
+      else {
+        var v = texteDeChamp(r.si.champ);
+        cacher = v !== "" && r.si.vaut.indexOf(v) < 0;
+      }
+      if (cacher) r.champs.forEach(function (c) { caches[c] = true; });
+    });
+    Object.keys(concernes).forEach(function (cle) {
+      var cont = conteneurDe(cle);
+      if (!cont) return;
+      var doitCacher = !!caches[cle];
+      var estCache = cont.style.display === "none";
+      if (doitCacher && !estCache) { cont.style.display = "none"; viderChamp(cle); }
+      else if (!doitCacher && estCache) cont.style.display = "";
+    });
+    /* Une rubrique dont plus rien n'est visible n'a plus rien à dire. */
+    RUBRIQUES_UI.forEach(function (r) {
+      var enfants = r.fs.querySelectorAll(".grille > label, .grille > .tableau-champ");
+      var toutCache = enfants.length > 0 && Array.prototype.every.call(enfants,
+        function (el) { return el.style.display === "none"; });
+      r.fs.style.display = toutCache ? "none" : "";
+    });
   }
 
   /* ------------------------------------------------------------- la fiche */
@@ -1189,21 +1457,26 @@
   }
 
   function compter() {
-    var n = 0, familles = {};
+    /* Les règles d'abord : ce qui vient d'être masqué a été vidé, et les
+       compteurs ne comptent que les champs visibles. */
+    appliquerVisibilite();
+    var n = 0, total = 0, familles = {};
     M.champs.forEach(function (rub) {
       rub[1].forEach(function (ch) {
         if (estColonne(ch[0])) { familles[ch[0].split(".")[0]] = true; return; }
         if (COLONNES[ch[0]]) { familles[ch[0]] = true; return; }
+        if (!estVisible(ch[0])) return;
+        total++;
         var v = valeurDe(ch[0]);
         if (v !== null && v !== "" && v !== undefined) n++;
       });
     });
-    Object.keys(familles).forEach(function (fam) { if (valeurTableau(fam)) n++; });
     /* Une famille-tableau compte pour une donnée, non pour ses colonnes. */
-    var total = M.champs.reduce(function (s, r) {
-      return s + r[1].filter(function (x) {
-        return !estColonne(x[0]) && !COLONNES[x[0]]; }).length; }, 0)
-      + Object.keys(familles).length;
+    Object.keys(familles).forEach(function (fam) {
+      if (!estVisible(fam)) return;
+      total++;
+      if (valeurTableau(fam)) n++;
+    });
     document.getElementById("compteur").textContent = n + " donnée(s) renseignée(s) sur " + total;
 
     /* Le remplissage de chaque rubrique, lisible sans la dérouler. */
@@ -1212,11 +1485,15 @@
       r.rub[1].forEach(function (ch) {
         if (estColonne(ch[0])) { fams[ch[0].split(".")[0]] = true; return; }
         if (COLONNES[ch[0]]) { fams[ch[0]] = true; return; }
+        if (!estVisible(ch[0])) return;
         tout++;
         var v = valeurDe(ch[0]);
         if (v !== null && v !== "" && v !== undefined) fait++;
       });
-      Object.keys(fams).forEach(function (fam) { tout++; if (valeurTableau(fam)) fait++; });
+      Object.keys(fams).forEach(function (fam) {
+        if (!estVisible(fam)) return;
+        tout++; if (valeurTableau(fam)) fait++;
+      });
       r.etat.textContent = fait + "/" + tout + " renseigné(s)";
     });
 
@@ -1291,7 +1568,16 @@
     if (p) {
       var s = document.getElementById("s-" + cle);
       if (!s) return;
+      /* Un brouillon d'avant le menu peut porter un booléen — l'ancien champ
+         oui/non de « conventionAJour » : il se relit comme son libellé. */
+      if (typeof v === "boolean") v = v ? "oui" : "non";
       var offre = (p.valeurs || []).concat(p.autres || []);
+      /* « unilatéral » écrit à la main avant le menu se relit comme « unilateral ». */
+      if (offre.indexOf(v) < 0 && typeof v === "string") {
+        var plat = function (x) { return String(x).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); };
+        var m = offre.filter(function (o) { return plat(o) === plat(v); })[0];
+        if (m !== undefined) v = m;
+      }
       if (offre.indexOf(v) >= 0) { s.value = v; if (e) { e.value = ""; e.style.display = "none"; } }
       else if (v !== "" && v != null && p.libre) { s.value = AUTRE; if (e) { e.value = v; e.style.display = ""; } }
       return;

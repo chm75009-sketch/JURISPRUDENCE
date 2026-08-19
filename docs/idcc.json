@@ -1,0 +1,1320 @@
+{
+ "source": "DILA — jeu de données « KALI : Conventions collectives nationales » sur data.gouv.fr, ressource « Liste des conventions collectives » (Dila_Kali_Liste_correspondances_conventions-idcc-20230306.xlsx). Conventions en vigueur seulement ; la mention d'extension par arrêté, qui n'est pas l'intitulé, est retirée.",
+ "url": "https://www.data.gouv.fr/fr/datasets/kali-conventions-collectives-nationales/",
+ "extraitLe": "2026-08-19",
+ "filtre": "lignes CC_TI = IDCC dont l'état KALI est en vigueur (VIGUEUR_ETEN, VIGUEUR_NON_ETEN, VIGUEUR, MODIFIE) ; conventions abrogées, remplacées, périmées ou dénoncées écartées",
+ "conventions": [
+  {
+   "idcc": "1325",
+   "intitule": "Accord collectif national du 12 novembre 1951 relatif aux contrats individuels passés entre les gérants non salariés et les sociétés coopératives de consommation. Mis à jour par avenant du 21 novembre 1984 et par accord du 2 mars 2006"
+  },
+  {
+   "idcc": "1314",
+   "intitule": "Accord collectif national du 18 juillet 1963 concernant les gérants non salariés des maisons d'alimentation à succursales, supermarchés, hypermarchés \"gérants mandataires\" du 18 juillet 1963. Mis à jour par accord du 24 septembre 1984"
+  },
+  {
+   "idcc": "3210",
+   "intitule": "Convention collective Banque populaire du 15 juin 2015"
+  },
+  {
+   "idcc": "3219",
+   "intitule": "Convention collective de branche des salariés en portage salarial du 22 mars 2017"
+  },
+  {
+   "idcc": "2480",
+   "intitule": "Convention collective de la manutention portuaire du port de Fort-de-France du 4 juillet 2003"
+  },
+  {
+   "idcc": "0390",
+   "intitule": "Convention collective de travail des professeurs de l'enseignement secondaire libre enseignant dans les établissements hors contrat et dans les établissements sous contrat mais sans être contractuels du 23 juillet 1964"
+  },
+  {
+   "idcc": "2542",
+   "intitule": "Convention collective départementale des industries métallurgiques, mécaniques et connexes de l'Aisne du 30 septembre 2005"
+  },
+  {
+   "idcc": "0500",
+   "intitule": "Convention collective des commerces de gros de l'habillement, de la mercerie, de la chaussure et du jouet du 13 mars 1969"
+  },
+  {
+   "idcc": "7002",
+   "intitule": "Convention collective des coopératives agricoles de céréales, de meunerie, d'approvisionnement, d'alimentation du bétail et d'oléagineux (mise à jour par avenant n° 122 du 14 novembre 2013)"
+  },
+  {
+   "idcc": "3144",
+   "intitule": "Convention collective des employés, techniciens et agents de maîtrise du bâtiment et travaux publics (Guadeloupe) du 24 juillet 2008"
+  },
+  {
+   "idcc": "3107",
+   "intitule": "Convention collective des employés, techniciens et agents de maîtrise du bâtiment, travaux publics et activités annexes (Martinique) du 31 mai 2012"
+  },
+  {
+   "idcc": "2579",
+   "intitule": "Convention collective des industries métallurgiques et connexes de Loir-et-Cher du 5 juillet 1991"
+  },
+  {
+   "idcc": "1635",
+   "intitule": "Convention collective des industries métallurgiques, mécaniques et connexes (Gironde et Landes). Mise à jour par avenant du 18 février 2011"
+  },
+  {
+   "idcc": "3223",
+   "intitule": "Convention collective des personnels navigants officiers des entreprises de transport et services maritimes du 19 novembre 2012"
+  },
+  {
+   "idcc": "3211",
+   "intitule": "Convention collective des salariés des établissements privés du 7 juillet 2015"
+  },
+  {
+   "idcc": "1014",
+   "intitule": "Convention collective des sociétés d'économie mixte d'autoroutes du 1er juin 1979"
+  },
+  {
+   "idcc": "2796",
+   "intitule": "Convention collective du personnel de direction du régime social des indépendants du 20 mars 2008"
+  },
+  {
+   "idcc": "2704",
+   "intitule": "Convention collective du personnel des banques de la Guadeloupe, de Saint-Martin et de Saint-Barthélemy du 19 décembre 2007"
+  },
+  {
+   "idcc": "2450",
+   "intitule": "Convention collective du personnel du Crédit mutuel Centre Est Europe, Sud-Est du 22 octobre 2004"
+  },
+  {
+   "idcc": "2701",
+   "intitule": "Convention collective du travail du personnel des banques de la Guyane du 18 décembre 2007"
+  },
+  {
+   "idcc": "2702",
+   "intitule": "Convention collective du travail du personnel des banques de la Martinique du 17 décembre 2007"
+  },
+  {
+   "idcc": "0172",
+   "intitule": "Convention collective interrégionale de l'industrie du bois de pin maritime en forêt de Gascogne du 1er juillet 2014 (réactualisation)"
+  },
+  {
+   "idcc": "7012",
+   "intitule": "Convention collective nationale concernant le personnel des centres équestres du 11 juillet 1975"
+  },
+  {
+   "idcc": "7008",
+   "intitule": "Convention collective nationale concernant le personnel des organismes de contrôle laitier du 16 septembre 2002"
+  },
+  {
+   "idcc": "7005",
+   "intitule": "Convention collective nationale concernant les caves coopératives vinicoles et leurs unions du 22 avril 1986"
+  },
+  {
+   "idcc": "0573",
+   "intitule": "Convention collective nationale de commerces de gros du 23 juin 1970"
+  },
+  {
+   "idcc": "2272",
+   "intitule": "Convention collective nationale de l'assainissement et de la maintenance industrielle du 21 mai 2002"
+  },
+  {
+   "idcc": "2121",
+   "intitule": "Convention collective nationale de l'édition du 14 janvier 2000"
+  },
+  {
+   "idcc": "2770",
+   "intitule": "Convention collective nationale de l'édition phonographique du 30 juin 2008"
+  },
+  {
+   "idcc": "2691",
+   "intitule": "Convention collective nationale de l'enseignement privé indépendant du 27 novembre 2007"
+  },
+  {
+   "idcc": "3218",
+   "intitule": "Convention collective nationale de l'enseignement privé non lucratif du 13 octobre 2020 (Avenant n° 2020-03 du 13 octobre 2020)"
+  },
+  {
+   "idcc": "2636",
+   "intitule": "Convention collective nationale de l'enseignement, écoles supérieures d'ingénieurs et de cadres ― FESIC du 5 décembre 2006"
+  },
+  {
+   "idcc": "3032",
+   "intitule": "Convention collective nationale de l'esthétique-cosmétique et de l'enseignement technique et professionnel lié aux métiers de l'esthétique et de la parfumerie du 24 juin 2011"
+  },
+  {
+   "idcc": "1307",
+   "intitule": "Convention collective nationale de l'exploitation cinématographique du 19 juillet 1984"
+  },
+  {
+   "idcc": "2336",
+   "intitule": "Convention collective nationale de l'habitat et du logement accompagnés du 16 juillet 2003"
+  },
+  {
+   "idcc": "1044",
+   "intitule": "Convention collective nationale de l'horlogerie du 17 décembre 1979"
+  },
+  {
+   "idcc": "2264",
+   "intitule": "Convention collective nationale de l'hospitalisation privée du 18 avril 2002"
+  },
+  {
+   "idcc": "1631",
+   "intitule": "Convention collective nationale de l'hôtellerie de plein air du 2 juin 1993"
+  },
+  {
+   "idcc": "1527",
+   "intitule": "Convention collective nationale de l'immobilier, administrateurs de biens, sociétés immobilières, agents immobiliers, etc. (anciennement cabinets d'administrateurs de biens et des sociétés immobilières), du 9 septembre 1988"
+  },
+  {
+   "idcc": "0043",
+   "intitule": "Convention collective nationale de l'import-export et du commerce international du 18 décembre 1952"
+  },
+  {
+   "idcc": "1580",
+   "intitule": "Convention collective nationale de l'industrie de la chaussure et des articles chaussants du 31 mai 1968, révisée par protocole d'accord du 7 mars 1990"
+  },
+  {
+   "idcc": "3233",
+   "intitule": "Convention collective nationale de l'industrie de la fabrication des ciments du 2 octobre 2019"
+  },
+  {
+   "idcc": "0354",
+   "intitule": "Convention collective nationale de l'industrie de la ganterie de peau du 27 novembre 1962"
+  },
+  {
+   "idcc": "1586",
+   "intitule": "Convention collective nationale de l'industrie de la salaison, charcuterie en gros et conserves de viandes du 29 mars 1972"
+  },
+  {
+   "idcc": "2567",
+   "intitule": "Convention collective nationale de l'industrie des glaces, sorbets et crèmes glacées du 3 mars 2006"
+  },
+  {
+   "idcc": "2089",
+   "intitule": "Convention collective nationale de l'industrie des panneaux à base de bois du 29 juin 1999"
+  },
+  {
+   "idcc": "1170",
+   "intitule": "Convention collective nationale de l'industrie des tuiles et briques du 17 février 1982"
+  },
+  {
+   "idcc": "1388",
+   "intitule": "Convention collective nationale de l'industrie du pétrole du 3 septembre 1985"
+  },
+  {
+   "idcc": "1945",
+   "intitule": "Convention collective nationale de l'industrie du vitrail du 15 novembre 1996"
+  },
+  {
+   "idcc": "3236",
+   "intitule": "Convention collective nationale de l'industrie et des services nautiques du 13 octobre 2020"
+  },
+  {
+   "idcc": "0112",
+   "intitule": "Convention collective nationale de l'industrie laitière du 20 mai 1955, modifiée par avenant n° 34 du 29 juin 2006"
+  },
+  {
+   "idcc": "0176",
+   "intitule": "Convention collective nationale de l'industrie pharmaceutique (accord du 11 avril 2019)"
+  },
+  {
+   "idcc": "0018",
+   "intitule": "Convention collective nationale de l'industrie textile du 1er février 1951"
+  },
+  {
+   "idcc": "1679",
+   "intitule": "Convention collective nationale de l'inspection d'assurance du 27 juillet 1992"
+  },
+  {
+   "idcc": "1431",
+   "intitule": "Convention collective nationale de l'optique-lunetterie de détail du 13 juin 2019 (actualisée par l'avenant du 13 juin 2019)"
+  },
+  {
+   "idcc": "2306",
+   "intitule": "Convention collective nationale de l'Union des chambres syndicales des métiers du verre du 18 décembre 2002"
+  },
+  {
+   "idcc": "2120",
+   "intitule": "Convention collective nationale de la banque du 10 janvier 2000"
+  },
+  {
+   "idcc": "0567",
+   "intitule": "Convention collective nationale de la bijouterie, joaillerie, orfèvrerie et activités qui s'y rattachent du 5 juin 1970 (mise à jour par accord du 20 mars 1973)"
+  },
+  {
+   "idcc": "2002",
+   "intitule": "Convention collective nationale de la blanchisserie – teinturerie et nettoyage (blanchisserie, laverie, location de linge, nettoyage à sec, pressing et teinturerie) du 17 novembre 1997"
+  },
+  {
+   "idcc": "0992",
+   "intitule": "Convention collective nationale de la boucherie, boucherie-charcuterie, boucherie hippophagique, triperie, commerces de volailles et gibiers du 12 décembre 1978, actualisée par l'avenant n° 114 du 10 juillet 2006"
+  },
+  {
+   "idcc": "0843",
+   "intitule": "Convention collective nationale de la boulangerie-pâtisserie du 19 mars 1976"
+  },
+  {
+   "idcc": "1543",
+   "intitule": "Convention collective nationale de la boyauderie du 19 février 1989"
+  },
+  {
+   "idcc": "2941",
+   "intitule": "Convention collective nationale de la branche de l'aide, de l'accompagnement, des soins et des services à domicile du 21 mai 2010"
+  },
+  {
+   "idcc": "3217",
+   "intitule": "Convention collective nationale de la branche ferroviaire du 31 mai 2016 (CLASSIFICATIONS ET REMUNERATIONS) (Accord du 6 décembre 2021)"
+  },
+  {
+   "idcc": "1800",
+   "intitule": "Convention collective nationale de la céramique d'art du 29 avril 1994"
+  },
+  {
+   "idcc": "0953",
+   "intitule": "Convention collective nationale de la charcuterie de détail du 4 avril 2007"
+  },
+  {
+   "idcc": "2596",
+   "intitule": "Convention collective nationale de la coiffure et des professions connexes du 10 juillet 2006"
+  },
+  {
+   "idcc": "2494",
+   "intitule": "Convention collective nationale de la coopération maritime du 7 décembre 2004 (réécrite par avenant n° 8 du 23 novembre 2011)"
+  },
+  {
+   "idcc": "1561",
+   "intitule": "Convention collective nationale de la cordonnerie multiservice du 7 août 1989. Elargie au secteur des cordonniers industriels"
+  },
+  {
+   "idcc": "0303",
+   "intitule": "Convention collective nationale de la couture parisienne du 10 juillet 1961"
+  },
+  {
+   "idcc": "2372",
+   "intitule": "Convention collective nationale de la distribution directe du 9 février 2004"
+  },
+  {
+   "idcc": "3224",
+   "intitule": "Convention collective nationale de la distribution et du commerce de gros des papiers-cartons du 12 juillet 2017"
+  },
+  {
+   "idcc": "1411",
+   "intitule": "Convention collective nationale de la fabrication de l'ameublement du 14 janvier 1986"
+  },
+  {
+   "idcc": "1821",
+   "intitule": "Convention collective nationale de la fabrication du verre à la main, semi-automatique et mixte du 3 novembre 1994"
+  },
+  {
+   "idcc": "1555",
+   "intitule": "Convention collective nationale de la fabrication et du commerce des produits à usage pharmaceutique, parapharmaceutique et vétérinaire du 17 janvier 2018 (Avenant du 17 janvier 2018)"
+  },
+  {
+   "idcc": "0673",
+   "intitule": "Convention collective nationale de la fourrure du 29 juin 1972"
+  },
+  {
+   "idcc": "3013",
+   "intitule": "Convention collective nationale de la librairie du 24 mars 2011"
+  },
+  {
+   "idcc": "3248",
+   "intitule": "Convention collective nationale de la métallurgie du 7 février 2022"
+  },
+  {
+   "idcc": "1499",
+   "intitule": "Convention collective nationale de la miroiterie, de la transformation et du négoce du verre du 9 mars 1988"
+  },
+  {
+   "idcc": "2128",
+   "intitule": "Convention collective nationale de la mutualité du 31 janvier 2000"
+  },
+  {
+   "idcc": "1267",
+   "intitule": "Convention collective nationale de la pâtisserie du 30 juin 1983"
+  },
+  {
+   "idcc": "1996",
+   "intitule": "Convention collective nationale de la pharmacie d'officine du 3 décembre 1997"
+  },
+  {
+   "idcc": "0292",
+   "intitule": "Convention collective nationale de la plasturgie du 1er juillet 1960"
+  },
+  {
+   "idcc": "1504",
+   "intitule": "Convention collective nationale de la poissonnerie du 12 avril 1988"
+  },
+  {
+   "idcc": "3242",
+   "intitule": "Convention collective nationale de la presse quotidienne et hebdomadaire en régions du 9 août 2021"
+  },
+  {
+   "idcc": "7024",
+   "intitule": "Convention collective nationale de la production agricole et CUMA du 15 septembre 2020"
+  },
+  {
+   "idcc": "2642",
+   "intitule": "Convention collective nationale de la production audiovisuelle du 13 décembre 2006"
+  },
+  {
+   "idcc": "3097",
+   "intitule": "Convention collective nationale de la production cinématographique du 19 janvier 2012"
+  },
+  {
+   "idcc": "2412",
+   "intitule": "Convention collective nationale de la production de films d'animation du 6 juillet 2004"
+  },
+  {
+   "idcc": "3238",
+   "intitule": "Convention collective nationale de la production et de la transformation des papiers et cartons du 29 janvier 2021"
+  },
+  {
+   "idcc": "1512",
+   "intitule": "Convention collective nationale de la promotion immobilière du 18 mai 1988"
+  },
+  {
+   "idcc": "1922",
+   "intitule": "Convention collective nationale de la radiodiffusion du 11 avril 1996 (accord d'étape)"
+  },
+  {
+   "idcc": "1621",
+   "intitule": "Convention collective nationale de la répartition pharmaceutique du 7 janvier 1992"
+  },
+  {
+   "idcc": "1311",
+   "intitule": "Convention collective nationale de la restauration ferroviaire du 4 septembre 1984"
+  },
+  {
+   "idcc": "1501",
+   "intitule": "Convention collective nationale de la restauration rapide du 18 mars 1988"
+  },
+  {
+   "idcc": "2344",
+   "intitule": "Convention collective nationale de la sidérurgie du 20 novembre 2001"
+  },
+  {
+   "idcc": "3241",
+   "intitule": "Convention collective nationale de la télédiffusion du 2 juillet 2021"
+  },
+  {
+   "idcc": "2847",
+   "intitule": "Convention collective nationale de Pôle emploi du 21 novembre 2009"
+  },
+  {
+   "idcc": "1316",
+   "intitule": "Convention collective nationale de tourisme social et familial du 28 juin 1979, mise à jour du 10 octobre 1984"
+  },
+  {
+   "idcc": "7017",
+   "intitule": "Convention collective nationale de travail concernant le personnel des parcs et jardins zoologiques privés ouverts au public du 24 janvier 2012 (Avenant du 24 janvier 2012 étendu par arrêté du 29 novembre 2012 JORF 11 décembre 2012)"
+  },
+  {
+   "idcc": "7013",
+   "intitule": "Convention collective nationale de travail concernant le personnel occupé dans les établissements d'entraînement de chevaux de courses au trot du 9 janvier 1979"
+  },
+  {
+   "idcc": "7006",
+   "intitule": "Convention collective nationale de travail concernant les coopératives agricoles, unions de coopératives agricoles et SICA de fleurs, de fruits et légumes et de pommes de terre du 16 novembre 2011"
+  },
+  {
+   "idcc": "0207",
+   "intitule": "Convention collective nationale de travail de l'industrie des cuirs et peaux du 6 juin 2018 (Avenant du 6 juin 2018)"
+  },
+  {
+   "idcc": "0086",
+   "intitule": "Convention collective nationale de travail des cadres, techniciens et employés de la publicité française du 22 avril 1955"
+  },
+  {
+   "idcc": "0413",
+   "intitule": "Convention collective nationale de travail des établissements et services pour personnes inadaptées et handicapées du 15 mars 1966. Mise à jour au 15 septembre 1976"
+  },
+  {
+   "idcc": "0614",
+   "intitule": "Convention collective nationale de travail des industries de la sérigraphie et des procédés d'impression numérique connexes du 23 mars 1971"
+  },
+  {
+   "idcc": "1710",
+   "intitule": "Convention collective nationale de travail du personnel des agences de voyages et de tourisme du 12 mars 1993 (réécrite par avenant du 10 décembre 2013)"
+  },
+  {
+   "idcc": "0184",
+   "intitule": "Convention collective nationale de travail du personnel des imprimeries de labeur et des industries graphiques. En vigueur le 1er juin 1956"
+  },
+  {
+   "idcc": "1794",
+   "intitule": "Convention collective nationale de travail du personnel des institutions de retraite complémentaire et de prévoyance du 9 décembre 1993"
+  },
+  {
+   "idcc": "0218",
+   "intitule": "Convention collective nationale de travail du personnel des organismes de sécurité sociale du 8 février 1957"
+  },
+  {
+   "idcc": "3109",
+   "intitule": "Convention collective nationale des 5 branches industries alimentaires diverses du 21 mars 2012"
+  },
+  {
+   "idcc": "2666",
+   "intitule": "Convention collective nationale des acteurs du développement et de l'ingénierie territoriale d'intérêt général (ADITIG) du 24 mai 2007"
+  },
+  {
+   "idcc": "1261",
+   "intitule": "Convention collective nationale des acteurs du lien social et familial : centres sociaux et socioculturels, associations d'accueil de jeunes enfants, associations de développement social local du 4 juin 1983"
+  },
+  {
+   "idcc": "0435",
+   "intitule": "Convention collective nationale des acteurs et acteurs de complément de la production cinématographique du 1er septembre 1967"
+  },
+  {
+   "idcc": "2931",
+   "intitule": "Convention collective nationale des activités de marchés financiers du 11 juin 2010"
+  },
+  {
+   "idcc": "1513",
+   "intitule": "Convention collective nationale des activités de production des eaux embouteillées et boissons rafraîchissantes sans alcool et de bière du 1er septembre 2010"
+  },
+  {
+   "idcc": "2149",
+   "intitule": "Convention collective nationale des activités du déchet du 16 avril 2019 (Avenant n° 62 du 16 avril 2019)"
+  },
+  {
+   "idcc": "1747",
+   "intitule": "Convention collective nationale des activités industrielles de boulangerie et pâtisserie du 13 juillet 1993. Mise à jour par avenant n°10 du 11 octobre 2011"
+  },
+  {
+   "idcc": "3232",
+   "intitule": "Convention collective nationale des agents de direction des organismes du régime général de sécurité sociale du 18 septembre 2018"
+  },
+  {
+   "idcc": "1734",
+   "intitule": "Convention collective nationale des artistes-interprètes engagés pour des émissions de télévision du 30 décembre 1992"
+  },
+  {
+   "idcc": "2230",
+   "intitule": "Convention collective nationale des associations agréées de surveillance de la qualité de l'air du 3 octobre 2001"
+  },
+  {
+   "idcc": "3160",
+   "intitule": "Convention collective nationale des associations de gestion et de comptabilité du 8 janvier 2013"
+  },
+  {
+   "idcc": "3016",
+   "intitule": "Convention collective nationale des ateliers et chantiers d'insertion du 31 mars 2011"
+  },
+  {
+   "idcc": "1000",
+   "intitule": "Convention collective nationale des avocats et de leur personnel du 20 février 1979"
+  },
+  {
+   "idcc": "1486",
+   "intitule": "Convention collective nationale des bureaux d'études techniques, des cabinets d'ingénieurs-conseils et des sociétés de conseils du 15 décembre 1987"
+  },
+  {
+   "idcc": "1850",
+   "intitule": "Convention collective nationale des cabinets d'avocats (avocats salariés) du 17 février 1995"
+  },
+  {
+   "idcc": "0787",
+   "intitule": "Convention collective nationale des cabinets d'experts-comptables et de commissaires aux comptes du 9 décembre 1974"
+  },
+  {
+   "idcc": "1619",
+   "intitule": "Convention collective nationale des cabinets dentaires du 17 janvier 1992"
+  },
+  {
+   "idcc": "1875",
+   "intitule": "Convention collective nationale des cabinets et cliniques vétérinaires du 5 juillet 1995"
+  },
+  {
+   "idcc": "1951",
+   "intitule": "Convention collective nationale des cabinets ou entreprises d'expertises en automobile du 20 novembre 1996"
+  },
+  {
+   "idcc": "2543",
+   "intitule": "Convention collective nationale des cabinets ou entreprises de géomètres-experts, géomètres-topographes, photogrammètres et experts fonciers du 13 octobre 2005"
+  },
+  {
+   "idcc": "1591",
+   "intitule": "Convention collective nationale des cadres de l'importation charbonnière, des usines d'agglomération de houille et du commerce de combustibles en gros du 1er juin 1990"
+  },
+  {
+   "idcc": "0731",
+   "intitule": "Convention collective nationale des cadres des commerces de quincaillerie, fournitures industrielles, fers, métaux et équipement de la maison du 23 juin 1971 (anciennement convention collective interrégionale)"
+  },
+  {
+   "idcc": "0211",
+   "intitule": "Convention collective nationale des cadres des industries de carrières et matériaux du 6 décembre 1956"
+  },
+  {
+   "idcc": "3212",
+   "intitule": "Convention collective nationale des cadres des travaux publics du 20 novembre 2015"
+  },
+  {
+   "idcc": "2420",
+   "intitule": "Convention collective nationale des cadres du bâtiment du 1er juin 2004"
+  },
+  {
+   "idcc": "1016",
+   "intitule": "Convention collective nationale des cadres et agents de maîtrise de l'édition de musique du 14 juin 1979"
+  },
+  {
+   "idcc": "0892",
+   "intitule": "Convention collective nationale des cadres et agents de maîtrise de la distribution des films de l'industrie cinématographique du 30 juin 1976"
+  },
+  {
+   "idcc": "0388",
+   "intitule": "Convention collective nationale des cadres, agents de maîtrise et assistants des auditoriums cinématographiques du 30 juin 1994"
+  },
+  {
+   "idcc": "1256",
+   "intitule": "Convention collective nationale des cadres, ingénieurs et assimilés des entreprises de gestion d'équipements thermiques et de climatisation du 3 mai 1983"
+  },
+  {
+   "idcc": "2257",
+   "intitule": "Convention collective nationale des casinos du 29 mars 2002"
+  },
+  {
+   "idcc": "1237",
+   "intitule": "Convention collective nationale des centres de gestion agréés du 17 janvier 1983"
+  },
+  {
+   "idcc": "2046",
+   "intitule": "Convention collective nationale des centres de lutte contre le cancer du 1er janvier 1999"
+  },
+  {
+   "idcc": "2075",
+   "intitule": "Convention collective nationale des centres immatriculés de conditionnement, de commercialisation et de transformation des œufs et des industries en produits d'œufs du 10 mai 1999"
+  },
+  {
+   "idcc": "2060",
+   "intitule": "Convention collective nationale des chaînes de cafétérias et assimilés du 28 août 1998"
+  },
+  {
+   "idcc": "2411",
+   "intitule": "Convention collective nationale des chaînes thématiques du 19 juin 2017 (Avenant n° 4 du 19 juin 2017)"
+  },
+  {
+   "idcc": "3213",
+   "intitule": "Convention collective nationale des collaborateurs salariés des entreprises d'économistes de la construction et des métreurs-vérificateurs du 16 décembre 2015"
+  },
+  {
+   "idcc": "1517",
+   "intitule": "Convention collective nationale des commerces de détail non alimentaires : antiquités, brocante, galeries d'art (œuvres d'art), arts de la table, coutellerie, droguerie, équipement du foyer, bazars, commerces ménagers, modélisme, jeux, jouets, puérinatalité, maroquinerie, presse et jeux de hasard ou pronostics, produits de la vape du 9 mai 2012 (avenant du 9 mai 2012)"
+  },
+  {
+   "idcc": "1686",
+   "intitule": "Convention collective nationale des commerces et services de l'audiovisuel, de l'électronique et de l'équipement ménager du 26 novembre 1992"
+  },
+  {
+   "idcc": "7003",
+   "intitule": "Convention collective nationale des conserveries coopératives et SICA (Avenant n° 116 du 13 juillet 2011)"
+  },
+  {
+   "idcc": "7007",
+   "intitule": "Convention collective nationale des coopératives agricoles de teillage du lin du 21 mars 1985"
+  },
+  {
+   "idcc": "7004",
+   "intitule": "Convention collective nationale des coopératives agricoles laitières du 7 juin 1984"
+  },
+  {
+   "idcc": "3205",
+   "intitule": "Convention collective nationale des coopératives de consommateurs salariés du 23 novembre 2018 (21e édition)"
+  },
+  {
+   "idcc": "7001",
+   "intitule": "Convention collective nationale des coopératives et SICA bétail et viande (Avenant n° 133 du 6 avril 2016 étendu par arrêté du 7 février 2017 JORF 17 février 2017)"
+  },
+  {
+   "idcc": "7019",
+   "intitule": "Convention collective nationale des cultures marines et de la coopération maritime"
+  },
+  {
+   "idcc": "0733",
+   "intitule": "Convention collective nationale des détaillants en chaussures du 27 juin 1973 (actualisée par avenant n° 79 du 8 décembre 2014 étendu par arrêté du 11 décembre 2015 JORF 23 décembre 2015)"
+  },
+  {
+   "idcc": "1286",
+   "intitule": "Convention collective nationale des détaillants et détaillants-fabricants de la confiserie, chocolaterie, biscuiterie du 1er janvier 1984"
+  },
+  {
+   "idcc": "1536",
+   "intitule": "Convention collective nationale des distributeurs conseils hors domicile (distributeurs CHD)"
+  },
+  {
+   "idcc": "3225",
+   "intitule": "Convention collective nationale des éditeurs de la presse magazine (employés et cadres) du 30 octobre 2017"
+  },
+  {
+   "idcc": "1194",
+   "intitule": "Convention collective nationale des employés de l'édition de musique du 15 avril 1982"
+  },
+  {
+   "idcc": "1383",
+   "intitule": "Convention collective nationale des employés et agents de maîtrise des commerces de quincaillerie, fournitures industrielles, fers, métaux et équipement de la maison"
+  },
+  {
+   "idcc": "2798",
+   "intitule": "Convention collective nationale des employés et cadres du régime social des indépendants du 20 mars 2008"
+  },
+  {
+   "idcc": "0716",
+   "intitule": "Convention collective nationale des employés et ouvriers de la distribution cinématographique du 1er mars 1973"
+  },
+  {
+   "idcc": "1622",
+   "intitule": "Convention collective nationale des employés, techniciens et agents de maîtrise de l'importation charbonnière, des usines d'agglomération de houille et du commerce des combustibles en gros du 10 décembre 1991"
+  },
+  {
+   "idcc": "2614",
+   "intitule": "Convention collective nationale des employés, techniciens et agents de maîtrise des travaux publics du 12 juillet 2006"
+  },
+  {
+   "idcc": "2609",
+   "intitule": "Convention collective nationale des employés, techniciens et agents de maîtrise du bâtiment du 12 juillet 2006"
+  },
+  {
+   "idcc": "3221",
+   "intitule": "Convention collective nationale des employés, techniciens et cadres des agences de presse du 7 avril 2017"
+  },
+  {
+   "idcc": "3230",
+   "intitule": "Convention collective nationale des employés, techniciens, agents de maîtrise et cadres de la presse d'information spécialisée du 27 décembre 2018"
+  },
+  {
+   "idcc": "7023",
+   "intitule": "Convention collective nationale des entreprises agricoles de déshydratation du 15 novembre 2017"
+  },
+  {
+   "idcc": "2332",
+   "intitule": "Convention collective nationale des entreprises d'architecture du 27 février 2003"
+  },
+  {
+   "idcc": "1405",
+   "intitule": "Convention collective nationale des entreprises d'expédition et d'exportation de fruits et légumes du 17 décembre 1985"
+  },
+  {
+   "idcc": "0915",
+   "intitule": "Convention collective nationale des entreprises d'expertises en matière d'évaluations industrielles et commerciales du 7 décembre 1976"
+  },
+  {
+   "idcc": "1412",
+   "intitule": "Convention collective nationale des entreprises d'installation sans fabrication, y compris entretien, réparation, dépannage de matériel aéraulique, thermique, frigorifique et connexes du 21 janvier 1986"
+  },
+  {
+   "idcc": "2247",
+   "intitule": "Convention collective nationale des entreprises de courtage d'assurances et/ou de réassurances du 18 janvier 2002, étendue par arrêté du 14 octobre 2002 (JO du 25 octobre 2002)"
+  },
+  {
+   "idcc": "1605",
+   "intitule": "Convention collective nationale des entreprises de désinfection, désinsectisation, dératisation (3D) du 1er septembre 1991"
+  },
+  {
+   "idcc": "1534",
+   "intitule": "Convention collective nationale des entreprises de l'industrie et des commerces en gros des viandes du 27 juin 2018 (Avenant du 27 juin 2018)"
+  },
+  {
+   "idcc": "1611",
+   "intitule": "Convention collective nationale des entreprises de logistique de communication écrite directe du 19 novembre 1991"
+  },
+  {
+   "idcc": "1351",
+   "intitule": "Convention collective nationale des entreprises de prévention et de sécurité du 15 février 1985"
+  },
+  {
+   "idcc": "3043",
+   "intitule": "Convention collective nationale des entreprises de propreté et services associés du 26 juillet 2011"
+  },
+  {
+   "idcc": "3127",
+   "intitule": "Convention collective nationale des entreprises de services à la personne du 20 septembre 2012"
+  },
+  {
+   "idcc": "7025",
+   "intitule": "Convention collective nationale des entreprises de travaux et services agricoles, ruraux et forestiers (ETARF) du 8 octobre 2020"
+  },
+  {
+   "idcc": "2147",
+   "intitule": "Convention collective nationale des entreprises des services d'eau et d'assainissement du 12 avril 2000"
+  },
+  {
+   "idcc": "1539",
+   "intitule": "Convention collective nationale des entreprises du bureau et du numérique – Commerces et services du 15 décembre 1988"
+  },
+  {
+   "idcc": "2198",
+   "intitule": "Convention collective nationale des entreprises du commerce à distance du 6 février 2001"
+  },
+  {
+   "idcc": "1077",
+   "intitule": "Convention collective nationale des entreprises du négoce et de l'industrie des produits du sol, engrais et produits connexes du 2 juillet 1980"
+  },
+  {
+   "idcc": "7018",
+   "intitule": "Convention collective nationale des entreprises du paysage du 10 octobre 2008"
+  },
+  {
+   "idcc": "3090",
+   "intitule": "Convention collective nationale des entreprises du secteur privé du spectacle vivant du 3 février 2012"
+  },
+  {
+   "idcc": "7021",
+   "intitule": "Convention collective nationale des entreprises relevant de la sélection et de la reproduction animale du 15 avril 2008"
+  },
+  {
+   "idcc": "2717",
+   "intitule": "Convention collective nationale des entreprises techniques au service de la création et de l'événement du 21 février 2008"
+  },
+  {
+   "idcc": "1790",
+   "intitule": "Convention collective nationale des espaces de loisirs, d'attractions et culturels du 5 janvier 1994"
+  },
+  {
+   "idcc": "7014",
+   "intitule": "Convention collective nationale des établissements d'entraînement de chevaux de courses au galop du 11 janvier 2019"
+  },
+  {
+   "idcc": "0029",
+   "intitule": "Convention collective nationale des établissements privés d'hospitalisation, de soins, de cure et de garde à but non lucratif du 31 octobre 1951"
+  },
+  {
+   "idcc": "0200",
+   "intitule": "Convention collective nationale des exploitations frigorifiques du 10 juillet 1956"
+  },
+  {
+   "idcc": "1978",
+   "intitule": "Convention collective nationale des fleuristes, de la vente et des services des animaux familiers du 29 septembre 2020 (Accord du 29 septembre 2020)"
+  },
+  {
+   "idcc": "1043",
+   "intitule": "Convention collective nationale des gardiens, concierges et employés d'immeubles (réécrite par l'avenant n° 74 du 27 avril 2009 portant modification de la convention)"
+  },
+  {
+   "idcc": "2156",
+   "intitule": "Convention collective nationale des grands magasins et des magasins populaires du 30 juin 2000"
+  },
+  {
+   "idcc": "1979",
+   "intitule": "Convention collective nationale des hôtels, cafés restaurants (HCR) du 30 avril 1997"
+  },
+  {
+   "idcc": "0044",
+   "intitule": "Convention collective nationale des industries chimiques et connexes du 30 décembre 1952"
+  },
+  {
+   "idcc": "0669",
+   "intitule": "Convention collective nationale des industries de fabrication mécanique du verre du 8 juin 1972"
+  },
+  {
+   "idcc": "0247",
+   "intitule": "Convention collective nationale des industries de l'habillement du 17 février 1958"
+  },
+  {
+   "idcc": "3227",
+   "intitule": "Convention collective nationale des industries de la fabrication de la chaux du 16 janvier 2018"
+  },
+  {
+   "idcc": "2528",
+   "intitule": "Convention collective nationale des industries de la maroquinerie, articles de voyage, chasse-sellerie, gainerie, bracelets en cuir du 9 septembre 2005"
+  },
+  {
+   "idcc": "1938",
+   "intitule": "Convention collective nationale des industries de la transformation des volailles du 10 juillet 1996"
+  },
+  {
+   "idcc": "1607",
+   "intitule": "Convention collective nationale des industries des jeux, jouets, articles de fêtes et ornements de Nöel, articles de puériculture et voitures d'enfants, modélisme et industries connexes du 25 janvier 1991"
+  },
+  {
+   "idcc": "0637",
+   "intitule": "Convention collective nationale des industries et du commerce de la récupération du 6 décembre 1971"
+  },
+  {
+   "idcc": "0650",
+   "intitule": "Convention collective nationale des ingénieurs et cadres de la métallurgie du 13 mars 1972"
+  },
+  {
+   "idcc": "2594",
+   "intitule": "Convention collective nationale des installateurs en remontées mécaniques du 15 mai 2006"
+  },
+  {
+   "idcc": "0715",
+   "intitule": "Convention collective nationale des instruments à écrire et des industries connexes du 13 février 1973"
+  },
+  {
+   "idcc": "1760",
+   "intitule": "Convention collective nationale des jardineries et graineteries du 3 décembre 1993"
+  },
+  {
+   "idcc": "1480",
+   "intitule": "Convention collective nationale des journalistes du 1er novembre 1976, refondue le 27 octobre 1987"
+  },
+  {
+   "idcc": "2064",
+   "intitule": "Convention collective nationale des laboratoires cinématographiques et sous-titrage du 17 mars 1999"
+  },
+  {
+   "idcc": "0959",
+   "intitule": "Convention collective nationale des laboratoires de biologie médicale extra-hospitaliers du 3 février 1978"
+  },
+  {
+   "idcc": "2754",
+   "intitule": "Convention collective nationale des magasins prestataires de services de cuisine à usage domestique du 17 juillet 2008"
+  },
+  {
+   "idcc": "0675",
+   "intitule": "Convention collective nationale des maisons à succursales de vente au détail d'habillement du 30 juin 1972"
+  },
+  {
+   "idcc": "1671",
+   "intitule": "Convention collective nationale des maisons d'étudiants du 27 mai 1992"
+  },
+  {
+   "idcc": "1326",
+   "intitule": "Convention collective nationale des maîtres de l'enseignement primaire privé enseignant dans les classes hors contrat et sous contrat simple et ne relevant pas de la convention collective de travail de l'enseignement primaire catholique du 27 novembre 1984"
+  },
+  {
+   "idcc": "2397",
+   "intitule": "Convention collective nationale des mannequins adultes et mannequins enfants de moins de 16 ans employés par les agences de mannequins du 22 juin 2004"
+  },
+  {
+   "idcc": "1589",
+   "intitule": "Convention collective nationale des mareyeurs-expéditeurs du 15 mai 1990"
+  },
+  {
+   "idcc": "1001",
+   "intitule": "Convention collective nationale des médecins spécialistes qualifiés au regard du conseil de l'ordre travaillant dans les établissements et services pour personnes inadaptées et handicapées du 1er mars 1979"
+  },
+  {
+   "idcc": "3222",
+   "intitule": "Convention collective nationale des menuiseries, charpentes et constructions industrialisées et portes planes du 19 janvier 2017"
+  },
+  {
+   "idcc": "1518",
+   "intitule": "Convention collective nationale des métiers de l'éducation, de la culture, des loisirs et de l'animation agissant pour l'utilité sociale et environnementale, au service des territoires (ÉCLAT) du 28 juin 1988"
+  },
+  {
+   "idcc": "1930",
+   "intitule": "Convention collective nationale des métiers de la transformation des grains du 9 novembre 2016 (Avenant n° 46 du 9 novembre 2016)"
+  },
+  {
+   "idcc": "3237",
+   "intitule": "Convention collective nationale des métiers du commerce de détail alimentaire spécialisé du 12 janvier 2021"
+  },
+  {
+   "idcc": "2190",
+   "intitule": "Convention collective nationale des missions locales et PAIO du 21 février 2001"
+  },
+  {
+   "idcc": "2727",
+   "intitule": "Convention collective nationale des omnipraticiens exerçant dans les centres de santé miniers du 23 janvier 2008"
+  },
+  {
+   "idcc": "3245",
+   "intitule": "Convention collective nationale des opérateurs de voyages et des guides du 19 avril 2022"
+  },
+  {
+   "idcc": "2526",
+   "intitule": "Convention collective nationale des organisations professionnelles de l'habitat social du 20 septembre 2005"
+  },
+  {
+   "idcc": "1516",
+   "intitule": "Convention collective nationale des organismes de formation du 10 juin 1988"
+  },
+  {
+   "idcc": "1909",
+   "intitule": "Convention collective nationale des organismes de tourisme du 5 février 1996"
+  },
+  {
+   "idcc": "1816",
+   "intitule": "Convention collective nationale des ouvriers de l'importation charbonnière maritime et usines d'agglomération de houille du littoral du 15 septembre 1994"
+  },
+  {
+   "idcc": "1702",
+   "intitule": "Convention collective nationale des ouvriers des travaux publics du 15 décembre 1992"
+  },
+  {
+   "idcc": "1597",
+   "intitule": "Convention collective nationale des ouvriers employés par les entreprises du bâtiment non visées par le décret du 1er mars 1962 (c'est-à-dire occupant plus de 10 salariés) du 8 octobre 1990"
+  },
+  {
+   "idcc": "1596",
+   "intitule": "Convention collective nationale des ouvriers employés par les entreprises du bâtiment visées par le décret du 1er mars 1962 (c'est-à-dire occupant jusqu'à 10 salariés) du 8 octobre 1990"
+  },
+  {
+   "idcc": "0294",
+   "intitule": "Convention collective nationale des ouvriers indépendants des studios de la production cinématographique du 1er août 1960"
+  },
+  {
+   "idcc": "0998",
+   "intitule": "Convention collective nationale des ouvriers, employés, techniciens et agents de maîtrise de l'exploitation d'équipements thermiques et de génie climatique du 7 février 1979"
+  },
+  {
+   "idcc": "3239",
+   "intitule": "Convention collective nationale des particuliers employeurs et de l'emploi à domicile du 15 mars 2021"
+  },
+  {
+   "idcc": "1987",
+   "intitule": "Convention collective nationale des pâtes alimentaires sèches et du couscous non préparé du 3 juillet 1997"
+  },
+  {
+   "idcc": "1465",
+   "intitule": "Convention collective nationale des peintres en lettres, décorateurs et graphistes en signalisation, enseignes, publicité peinte du 12 juin 1987"
+  },
+  {
+   "idcc": "7010",
+   "intitule": "Convention collective nationale des personnels des élevages aquacoles du 22 août 2016"
+  },
+  {
+   "idcc": "1182",
+   "intitule": "Convention collective nationale des personnels des ports de plaisance du 8 mars 2012"
+  },
+  {
+   "idcc": "2150",
+   "intitule": "Convention collective nationale des personnels des sociétés anonymes et fondations d'HLM du 27 avril 2000"
+  },
+  {
+   "idcc": "2697",
+   "intitule": "Convention collective nationale des personnels des structures associatives cynégétiques du 13 décembre 2007"
+  },
+  {
+   "idcc": "1446",
+   "intitule": "Convention collective nationale des personnels enseignant hors contrat et des chefs de travaux exerçant des responsabilités hors contrat dans les établissements d'enseignement technique privés révisée le 7 janvier 2013"
+  },
+  {
+   "idcc": "1278",
+   "intitule": "Convention collective nationale des personnels PACT et ARIM du 21 octobre 1983"
+  },
+  {
+   "idcc": "0759",
+   "intitule": "Convention collective nationale des pompes funèbres du 1er mars 1974"
+  },
+  {
+   "idcc": "2603",
+   "intitule": "Convention collective nationale des praticiens-conseils du régime général de sécurité sociale du 4 avril 2006"
+  },
+  {
+   "idcc": "2797",
+   "intitule": "Convention collective nationale des praticiens-conseils du régime social des indépendants du 15 juin 2007"
+  },
+  {
+   "idcc": "3168",
+   "intitule": "Convention collective nationale des professions de la photographie du 13 février 2013"
+  },
+  {
+   "idcc": "0993",
+   "intitule": "Convention collective nationale des prothésistes dentaires et des personnels des laboratoires de prothèse dentaire du 18 décembre 1978"
+  },
+  {
+   "idcc": "1334",
+   "intitule": "Convention collective nationale des psychologues de l'enseignement privé du 11 janvier 1985"
+  },
+  {
+   "idcc": "3105",
+   "intitule": "Convention collective nationale des régies de quartier du 2 avril 2012"
+  },
+  {
+   "idcc": "0454",
+   "intitule": "Convention collective nationale des remontées mécaniques et domaines skiables du 15 mai 1968. (1)"
+  },
+  {
+   "idcc": "1424",
+   "intitule": "Convention collective nationale des réseaux de transports publics urbains de voyageurs du 11 avril 1986"
+  },
+  {
+   "idcc": "3216",
+   "intitule": "Convention collective nationale des salariés du négoce des matériaux de construction du 8 décembre 2015"
+  },
+  {
+   "idcc": "0897",
+   "intitule": "Convention collective nationale des services de santé au travail interentreprises du 20 juillet 1976"
+  },
+  {
+   "idcc": "2583",
+   "intitule": "Convention collective nationale des sociétés concessionnaires ou exploitantes d'autoroutes ou d'ouvrages routiers du 27 juin 2006"
+  },
+  {
+   "idcc": "1801",
+   "intitule": "Convention collective nationale des sociétés d'assistance du 13 avril 1994"
+  },
+  {
+   "idcc": "1672",
+   "intitule": "Convention collective nationale des sociétés d'assurances du 27 mai 1992"
+  },
+  {
+   "idcc": "2785",
+   "intitule": "Convention collective nationale des sociétés de ventes volontaires de meubles aux enchères publiques et des offices de commissaires-priseurs judiciaires du 17 décembre 2008"
+  },
+  {
+   "idcc": "0478",
+   "intitule": "Convention collective nationale des sociétés financières du 22 novembre 1968"
+  },
+  {
+   "idcc": "3203",
+   "intitule": "Convention collective nationale des structures associatives de pêche de loisir et de protection du milieu aquatique du 22 juin 2013"
+  },
+  {
+   "idcc": "2728",
+   "intitule": "Convention collective nationale des sucreries, sucreries-distilleries et raffineries de sucre du 31 janvier 2008"
+  },
+  {
+   "idcc": "2219",
+   "intitule": "Convention collective nationale des taxis du 11 septembre 2001"
+  },
+  {
+   "idcc": "0014",
+   "intitule": "Convention collective nationale des techniciens de la production cinématographique du 30 avril 1950"
+  },
+  {
+   "idcc": "2148",
+   "intitule": "Convention collective nationale des télécommunications du 26 avril 2000"
+  },
+  {
+   "idcc": "1942",
+   "intitule": "Convention collective nationale des textiles artificiels et synthétiques et produits assimilés du 6 juin 1996"
+  },
+  {
+   "idcc": "0016",
+   "intitule": "Convention collective nationale des transports routiers et activités auxiliaires du transport du 21 décembre 1950"
+  },
+  {
+   "idcc": "2270",
+   "intitule": "Convention collective nationale des universités et instituts catholiques de France du 4 juin 2002"
+  },
+  {
+   "idcc": "2564",
+   "intitule": "Convention collective nationale des vétérinaires praticiens salariés du 31 janvier 2006 : annexe VII de la CCN des cabinets et cliniques vétérinaires (article 4 de l'accord du 29 mars 2019)"
+  },
+  {
+   "idcc": "0493",
+   "intitule": "Convention collective nationale des vins, cidres, jus de fruits, sirops, spiritueux et liqueurs de France du 13 février 1969"
+  },
+  {
+   "idcc": "1606",
+   "intitule": "Convention collective nationale du bricolage (vente au détail en libre-service) du 30 septembre 1991"
+  },
+  {
+   "idcc": "1618",
+   "intitule": "Convention collective nationale du camping du 13 janvier 1970 mise à jour par accord du 20 janvier 2015"
+  },
+  {
+   "idcc": "0045",
+   "intitule": "Convention collective nationale du caoutchouc du 6 mars 1953"
+  },
+  {
+   "idcc": "0489",
+   "intitule": "Convention collective nationale du cartonnage du 17 avril 2019 (Accord du 17 avril 2019)"
+  },
+  {
+   "idcc": "1505",
+   "intitule": "Convention collective nationale du commerce de détail alimentaire non spécialisé du 12 janvier 2021 (Avenant n° 138 du 12 janvier 2021)"
+  },
+  {
+   "idcc": "1483",
+   "intitule": "Convention collective nationale du commerce de détail de l'habillement et des articles textiles du 25 novembre 1987, révisée par avenant du 17 juin 2004"
+  },
+  {
+   "idcc": "1487",
+   "intitule": "Convention collective nationale du commerce de détail de l'horlogerie bijouterie du 17 décembre 1987"
+  },
+  {
+   "idcc": "2216",
+   "intitule": "Convention collective nationale du commerce de détail et de gros à prédominance alimentaire du 12 juillet 2001"
+  },
+  {
+   "idcc": "1557",
+   "intitule": "Convention collective nationale du commerce des articles de sports et d'équipements de loisirs du 26 juin 1989"
+  },
+  {
+   "idcc": "1090",
+   "intitule": "Convention collective nationale du commerce et de la réparation de l'automobile, du cycle et du motocycle et des activités connexes, ainsi que du contrôle technique automobile du 15 janvier 1981"
+  },
+  {
+   "idcc": "0468",
+   "intitule": "Convention collective nationale du commerce succursaliste de la chaussure du 2 juillet 1968, mise à jour le 18 novembre 1971 (1)"
+  },
+  {
+   "idcc": "2622",
+   "intitule": "Convention collective nationale du Crédit maritime mutuel du 18 janvier 2002"
+  },
+  {
+   "idcc": "2021",
+   "intitule": "Convention collective nationale du golf du 13 juillet 1998"
+  },
+  {
+   "idcc": "1947",
+   "intitule": "Convention collective nationale du négoce de bois d'oeuvre et de produits dérivés du 17 décembre 1996"
+  },
+  {
+   "idcc": "1880",
+   "intitule": "Convention collective nationale du négoce de l'ameublement du 31 mai 1995"
+  },
+  {
+   "idcc": "1408",
+   "intitule": "Convention collective nationale du négoce et de distribution de combustibles solides, liquides, gazeux, produits pétroliers du 20 décembre 1985"
+  },
+  {
+   "idcc": "1982",
+   "intitule": "Convention collective nationale du négoce et des prestations de services dans les domaines médico-techniques du 9 avril 1997"
+  },
+  {
+   "idcc": "2205",
+   "intitule": "Convention collective nationale du notariat du 8 juin 2001"
+  },
+  {
+   "idcc": "0275",
+   "intitule": "Convention collective nationale du personnel au sol des entreprises de transport aérien du 22 mai 1959"
+  },
+  {
+   "idcc": "0706",
+   "intitule": "Convention collective nationale du personnel de la reprographie du 18 décembre 1972. Mise à jour en juin 1976"
+  },
+  {
+   "idcc": "2706",
+   "intitule": "Convention collective nationale du personnel des administrateurs et des mandataires judiciaires du 20 décembre 2007"
+  },
+  {
+   "idcc": "2335",
+   "intitule": "Convention collective nationale du personnel des agences générales d'assurances du 17 septembre 2019 (Avenant n° 22 du 17 septembre 2019)"
+  },
+  {
+   "idcc": "1147",
+   "intitule": "Convention collective nationale du personnel des cabinets médicaux du 14 octobre 1981"
+  },
+  {
+   "idcc": "0179",
+   "intitule": "Convention collective nationale du personnel des coopératives de consommation du 30 avril 1956"
+  },
+  {
+   "idcc": "0538",
+   "intitule": "Convention collective nationale du personnel des entreprises de manutention ferroviaire et travaux connexes du 12 juin 2019 (Accord du 12 juin 2019)"
+  },
+  {
+   "idcc": "1266",
+   "intitule": "Convention collective nationale du personnel des entreprises de restauration de collectivités du 20 juin 1983"
+  },
+  {
+   "idcc": "3229",
+   "intitule": "Convention collective nationale du personnel des entreprises de transport en navigation intérieure du 20 décembre 2018"
+  },
+  {
+   "idcc": "1921",
+   "intitule": "Convention collective nationale du personnel des huissiers de justice du 11 avril 1996"
+  },
+  {
+   "idcc": "3220",
+   "intitule": "Convention collective nationale du personnel des offices publics de l'habitat et des sociétés de coordination du 6 avril 2017"
+  },
+  {
+   "idcc": "2098",
+   "intitule": "Convention collective nationale du personnel des prestataires de services dans le domaine du secteur tertiaire du 13 août 1999"
+  },
+  {
+   "idcc": "1588",
+   "intitule": "Convention collective nationale du personnel des sociétés coopératives d'HLM du 15 mai 1990"
+  },
+  {
+   "idcc": "0779",
+   "intitule": "Convention collective nationale du personnel des voies ferrées d'intérêt local du 26 septembre 1974"
+  },
+  {
+   "idcc": "3228",
+   "intitule": "Convention collective nationale du personnel navigant du groupement des armateurs de services de passages d'eau du 23 mai 2018"
+  },
+  {
+   "idcc": "1944",
+   "intitule": "Convention collective nationale du personnel navigant technique des exploitants d'hélicoptères du 13 novembre 1996"
+  },
+  {
+   "idcc": "2972",
+   "intitule": "Convention collective nationale du personnel sédentaire des entreprises de navigation du 14 septembre 2010"
+  },
+  {
+   "idcc": "2683",
+   "intitule": "Convention collective nationale du portage de presse du 26 juin 2007"
+  },
+  {
+   "idcc": "1659",
+   "intitule": "Convention collective nationale du rouissage-teillage de lin du 28 janvier 1992, issue de l'annexe à l'avenant n° 12 du 6 mars 2002"
+  },
+  {
+   "idcc": "2511",
+   "intitule": "Convention collective nationale du sport du 7 juillet 2005 étendue par arrêté du 21 novembre 2006"
+  },
+  {
+   "idcc": "2104",
+   "intitule": "Convention collective nationale du thermalisme du 10 septembre 1999"
+  },
+  {
+   "idcc": "1612",
+   "intitule": "Convention collective nationale du travail aérien du 21 janvier 1991 (Personnel navigant des essais et réceptions)"
+  },
+  {
+   "idcc": "7015",
+   "intitule": "Convention collective nationale du travail concernant les gardes-chasse et gardes-pêche particuliers du 2 mai 1973"
+  },
+  {
+   "idcc": "0158",
+   "intitule": "Convention collective nationale du travail mécanique du bois, des scieries, du négoce et de l'importation des bois du 28 novembre 1955"
+  },
+  {
+   "idcc": "1404",
+   "intitule": "Convention collective nationale métropolitaine des entreprises de la maintenance, distribution et location de matériels agricoles, de travaux publics, de bâtiment, de manutention, de motoculture de plaisance et activités connexes, dite SDLM du 23 avril 2012"
+  },
+  {
+   "idcc": "1285",
+   "intitule": "Convention collective nationale pour les entreprises artistiques et culturelles du 1er janvier 1984"
+  },
+  {
+   "idcc": "1396",
+   "intitule": "Convention collective nationale pour les industries de produits alimentaires élaborés du 17 janvier 1952. Mise à jour par accord du 22 octobre 1985"
+  },
+  {
+   "idcc": "0135",
+   "intitule": "Convention collective nationale relative aux conditions de travail des employés, techniciens et agents de maîtrise des industries de carrières et de matériaux du 12 juillet 1955"
+  },
+  {
+   "idcc": "0087",
+   "intitule": "Convention collective nationale relative aux conditions de travail des ouvriers des industries de carrières et de matériaux du 22 avril 1955"
+  },
+  {
+   "idcc": "1558",
+   "intitule": "Convention collective nationale relative aux conditions de travail du personnel des industries céramiques de France du 6 juillet 1989"
+  },
+  {
+   "idcc": "3017",
+   "intitule": "Convention collective nationale unifiée ports et manutention du 15 avril 2011"
+  },
+  {
+   "idcc": "1391",
+   "intitule": "Convention collective régionale concernant le personnel de l'industrie de la manutention et du nettoyage sur les aéroports de la région parisienne ouverts à la circulation publique du 27 juillet 2016 (Avenant du 27 juillet 2016)"
+  },
+  {
+   "idcc": "2707",
+   "intitule": "Convention collective régionale des employés, techniciens et agents de maîtrise du bâtiment de la région Ile-de-France (hors Seine-et-Marne) du 19 novembre 2007"
+  },
+  {
+   "idcc": "2658",
+   "intitule": "Convention collective régionale des guides et accompagnateurs en milieu amazonien du 12 mai 2007"
+  },
+  {
+   "idcc": "1370",
+   "intitule": "Convention collective régionale des hôtels de tourisme trois, quatre et quatre étoiles luxe de Paris et de la région parisienne du 1er mai 1985"
+  },
+  {
+   "idcc": "0054",
+   "intitule": "Convention collective régionale des industries métallurgiques, mécaniques et connexes de la région parisienne du 16 juillet 1954"
+  },
+  {
+   "idcc": "1843",
+   "intitule": "Convention collective régionale des ingénieurs, assimilés et cadres du bâtiment de la région parisienne du 12 avril 1960"
+  },
+  {
+   "idcc": "1740",
+   "intitule": "Convention collective régionale des ouvriers du bâtiment de la région parisienne du 28 juin 1993"
+  },
+  {
+   "idcc": "3123",
+   "intitule": "Convention collective régionale des ouvriers, employés et techniciens des entreprises d'ambulances (Guyane) du 24 avril 2012"
+  },
+  {
+   "idcc": "0405",
+   "intitule": "Convention relative aux établissements médico-sociaux de l'union intersyndicale des secteurs sanitaires et sociaux (Avenant du 16 mars 2012 relatif à la mise à jour de la convention)"
+  }
+ ]
+}

@@ -317,6 +317,7 @@ elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
 </dialog>
 
 <script src="moteur-social.js"></script>
+<script src="idcc.js"></script>
 <script>
 (function () {
   "use strict";
@@ -351,6 +352,12 @@ elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
 
   /* ------------------------------------------------- 1. le questionnaire --- */
+  /* Les secteurs proposés : ceux dont les modèles du plan d'action parlent la
+     langue (unités de travail, risques). « — autre — » ouvre la saisie libre —
+     la valeur stockée reste une chaîne, comme avant : un brouillon existant
+     s'affiche tel quel. */
+  var SECTEURS = ["transport et logistique", "industrie",
+    "bâtiment et travaux publics", "commerce", "services"];
   function construireFormulaire() {
     var commun = lireProfilCommun();
     var html = '<fieldset><legend>Le profil qui ouvre la liste</legend><div class="grille">';
@@ -358,7 +365,21 @@ elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
       var val = ETAT.profil[q.champ];
       if (val === undefined || val === "") val = commun[q.champ] || "";
       var champ;
-      if (q.format === "oui / non") {
+      if (q.champ === "secteur") {
+        var connu = SECTEURS.indexOf(String(val)) >= 0;
+        champ = '<select id="sel-secteur"><option value=""></option>' +
+          SECTEURS.map(function (s) {
+            return "<option" + (val === s ? " selected" : "") + ">" + e(s) + "</option>";
+          }).join("") +
+          '<option value="__autre"' + (val && !connu ? " selected" : "") + '>— autre —</option></select>' +
+          '<input type="text" id="libre-secteur" placeholder="précisez le secteur" ' +
+          'style="margin-top:6px' + (val && !connu ? "" : ";display:none") + '" value="' +
+          (connu ? "" : e(val)) + '">' +
+          '<input type="hidden" name="secteur" value="' + e(val) + '">';
+      } else if (q.champ === "conventionCollective") {
+        champ = '<input name="conventionCollective" id="champ-convention" type="text" value="' + e(val) +
+          '" placeholder="numéro IDCC ou intitulé — la liste s\'ouvre à la saisie" autocomplete="off">';
+      } else if (q.format === "oui / non") {
         champ = '<select name="' + q.champ + '"><option value=""></option>' +
           '<option' + (val === "oui" ? " selected" : "") + '>oui</option>' +
           '<option' + (val === "non" ? " selected" : "") + '>non</option></select>';
@@ -374,7 +395,47 @@ elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
     });
     html += "</div></fieldset>";
     $("formulaire").innerHTML = html;
-    $("formulaire").addEventListener("change", function () { lireFormulaire(); enregistrer(); majCompteur(); });
+
+    /* Le secteur : le menu et la saisie libre alimentent le champ caché, qui
+       est la seule valeur lue — rien ne change pour le moteur ni le brouillon. */
+    var sel = $("sel-secteur"), libre = $("libre-secteur");
+    var cache = $("formulaire").querySelector('[name="secteur"]');
+    function majSecteur() {
+      cache.value = sel.value === "__autre" ? libre.value.trim() : sel.value;
+    }
+    sel.addEventListener("change", function () {
+      libre.style.display = sel.value === "__autre" ? "" : "none";
+      if (sel.value !== "__autre") libre.value = "";
+      majSecteur();
+    });
+    libre.addEventListener("input", function () {
+      majSecteur(); lireFormulaire(); enregistrer(); majCompteur();
+    });
+
+    /* La convention : la liste officielle des IDCC (menu filtrant, « Autre /
+       pas dans la liste » en fin), la saisie libre restant toujours possible. */
+    if (window.IDCC) window.IDCC.attacher($("champ-convention"));
+
+    $("formulaire").addEventListener("change", function () {
+      lireFormulaire(); enregistrer(); majVisibilite(); majCompteur();
+    });
+    majVisibilite();
+  }
+
+  /* Sous onze salariés, aucun seuil d'effectif n'est en jeu : la question du
+     maintien du seuil sur douze mois disparaît, et sa réponse avec elle — le
+     moteur la traite alors comme non renseignée, ce qu'il sait faire. */
+  function majVisibilite() {
+    var eff = $("formulaire").querySelector('[name="effectif"]');
+    var seuil = $("formulaire").querySelector('[name="seuilDepuis12Mois"]');
+    if (!eff || !seuil) return;
+    var n = eff.value.trim() === "" ? null : Number(eff.value);
+    var cacher = n !== null && !isNaN(n) && n < 11;
+    var lab = seuil.closest("label");
+    if (cacher) {
+      if (seuil.value) { seuil.value = ""; delete ETAT.profil.seuilDepuis12Mois; enregistrer(); }
+      lab.style.display = "none";
+    } else lab.style.display = "";
   }
   function lireFormulaire() {
     var p = {};
@@ -389,7 +450,11 @@ elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
   }
   function majCompteur() {
     var n = Object.keys(ETAT.profil).length;
-    $("compteur").textContent = n + " / " + A.questions.length + " réponses";
+    var total = A.questions.length;
+    /* Une question masquée (sans objet au vu du profil) ne compte pas. */
+    var seuil = $("formulaire").querySelector('[name="seuilDepuis12Mois"]');
+    if (seuil && seuil.closest("label").style.display === "none") total--;
+    $("compteur").textContent = n + " / " + total + " réponses";
   }
 
   /* --------------------------------------------------------- 2. la liste --- */
