@@ -18,47 +18,47 @@ const clone = o => JSON.parse(JSON.stringify(o));
 function avec(mod) { const f = clone(BASE); mod(f); return f; }
 
 const CAS = [
-  { nom: "Aucun document unique", attendu: ["SST-CTL-DUERP-01", "SST-CTL-PEN-01"],
+  { nom: "Aucun document unique", attendu: ["SST-CTL-DUE-01", "SST-CTL-PEN-01"],
     f: avec(f => { f.duerp.existe = "non"; }) },
-  { nom: "Document unique sans inventaire par unité de travail", attendu: ["SST-CTL-DUERP-02"],
+  { nom: "Document unique sans inventaire par unité de travail", attendu: ["SST-CTL-DUE-02"],
     f: avec(f => { f.duerp.unitesTravail = "non"; }) },
   { nom: "Document unique non mis à jour depuis deux ans, à quatre cent vingt salariés",
-    attendu: ["SST-CTL-DUERP-03", "SST-CTL-PEN-01"],
+    attendu: ["SST-CTL-DUE-03", "SST-CTL-PEN-01"],
     f: avec(f => { f.duerp.dateDerniereMaj = "2024-05-10"; }) },
-  { nom: "Aménagement important sans mise à jour", attendu: ["SST-CTL-DUERP-04", "SST-CTL-PEN-01"],
+  { nom: "Aménagement important sans mise à jour", attendu: ["SST-CTL-DUE-04", "SST-CTL-PEN-01"],
     f: avec(f => { f.evenement = { survenu: "oui", majFaite: "non" }; }) },
-  { nom: "Quatre cent vingt salariés sans programme annuel de prévention", attendu: ["SST-CTL-DUERP-05"],
-    f: avec(f => { f.suites.programmeAnnuel = { existe: "non" }; }) },
-  { nom: "Programme annuel jamais présenté au comité", attendu: ["SST-CTL-DUERP-05"],
-    f: avec(f => { f.suites.programmeAnnuel = { existe: "oui", presenteCSE: "non" }; }) },
-  { nom: "Quarante salariés sans liste d'actions consignée", attendu: ["SST-CTL-DUERP-05"],
-    f: avec(f => { f.effectif = 40; f.suites.programmeAnnuel = { existe: "" };
-      f.suites.listeActions = { consignee: "non" };
+  { nom: "Quatre cent vingt salariés sans programme annuel de prévention", attendu: ["SST-CTL-DUE-05"],
+    f: avec(f => { f.programmeAnnuel = { existe: "non" }; }) },
+  { nom: "Programme annuel jamais présenté au comité", attendu: ["SST-CTL-DUE-05"],
+    f: avec(f => { f.programmeAnnuel = { existe: "oui", presenteCSE: "non" }; }) },
+  { nom: "Quarante salariés sans liste d'actions consignée", attendu: ["SST-CTL-DUE-05"],
+    f: avec(f => { f.effectif = 40; f.programmeAnnuel = { existe: "" };
+      f.listeActions = { consignee: "non" };
       f.etablissementDistinct300 = "non"; f.referentEmployeur = ""; }) },
-  { nom: "Versions non conservées et avis d'accès non affiché", attendu: ["SST-CTL-DUERP-06"],
+  { nom: "Versions non conservées et avis d'accès non affiché", attendu: ["SST-CTL-DUE-06"],
     f: avec(f => { f.duerp.versionsConservees = "non"; f.duerp.avisAffiche = "non"; }) },
-  { nom: "Comité jamais consulté sur le document unique", attendu: ["SST-CTL-DUERP-07"],
+  { nom: "Comité jamais consulté sur le document unique", attendu: ["SST-CTL-DUE-07"],
     f: avec(f => { f.duerp.consultationCSE = "non"; }) },
-  { nom: "Document unique jamais transmis au service de prévention", attendu: ["SST-CTL-DUERP-08"],
+  { nom: "Document unique jamais transmis au service de prévention", attendu: ["SST-CTL-DUE-08"],
     f: avec(f => { f.duerp.transmisSPST = "non"; }) },
-  { nom: "Quatre cent vingt salariés sans commission santé-sécurité", attendu: ["SST-CTL-CSSCT-01"],
+  { nom: "Quatre cent vingt salariés sans commission santé-sécurité", attendu: ["SST-CTL-CSS-01"],
     f: avec(f => { f.cssct = { existe: "non" }; }) },
-  { nom: "Établissement à hauts risques sans commission, à quatre-vingts salariés", attendu: ["SST-CTL-CSSCT-01"],
+  { nom: "Établissement à hauts risques sans commission, à quatre-vingts salariés", attendu: ["SST-CTL-CSS-01"],
     f: avec(f => { f.effectif = 80; f.etablissementRisqueParticulier = "oui";
       f.cssct = { existe: "non" }; f.referentEmployeur = "";
-      f.suites.programmeAnnuel = { existe: "oui", presenteCSE: "oui" }; }) },
-  { nom: "Commission imposée par l'inspecteur et jamais créée", attendu: ["SST-CTL-CSSCT-01"],
+      f.programmeAnnuel = { existe: "oui", presenteCSE: "oui" }; }) },
+  { nom: "Commission imposée par l'inspecteur et jamais créée", attendu: ["SST-CTL-CSS-01"],
     f: avec(f => { f.effectif = 120; f.cssctImposeeInspection = "oui";
       f.cssct = { existe: "non" }; f.referentEmployeur = ""; }) },
   { nom: "Commission de deux membres, sans second collège, hors désignation par le comité",
-    attendu: ["SST-CTL-CSSCT-02"],
+    attendu: ["SST-CTL-CSS-02"],
     f: avec(f => { f.cssct.presideeEmployeur = "non"; f.cssct.nbMembres = 2;
       f.cssct.membreSecondCollege = "non"; f.cssct.designesParCSE = "non"; }) },
-  { nom: "Commission sans accord ni règlement intérieur", attendu: ["SST-CTL-CSSCT-03"],
+  { nom: "Commission sans accord ni règlement intérieur", attendu: ["SST-CTL-CSS-03"],
     f: avec(f => { f.cssct.modalitesFixees = "aucune"; }) },
-  { nom: "Délégation empiétant sur l'expertise et les consultations", attendu: ["SST-CTL-CSSCT-04"],
+  { nom: "Délégation empiétant sur l'expertise et les consultations", attendu: ["SST-CTL-CSS-04"],
     f: avec(f => { f.cssct.delegationConforme = "non"; }) },
-  { nom: "Élus jamais formés à la santé-sécurité", attendu: ["SST-CTL-CSSCT-05"],
+  { nom: "Élus jamais formés à la santé-sécurité", attendu: ["SST-CTL-CSS-05"],
     f: avec(f => { f.formationSSCT = "non"; }) },
   { nom: "Quatre cent vingt salariés sans référent employeur", attendu: ["SST-CTL-HAR-01"],
     f: avec(f => { f.referentEmployeur = "non"; }) },
@@ -76,9 +76,9 @@ const CAS = [
 /* Les dossiers où une donnée décisive manque : les contrôles concernés ne
    concluent dans aucun sens. */
 const INDETERMINES = [
-  { nom: "Effectif non renseigné", ctl: ["SST-CTL-DUERP-03", "SST-CTL-DUERP-05", "SST-CTL-CSSCT-01", "SST-CTL-HAR-01"],
+  { nom: "Effectif non renseigné", ctl: ["SST-CTL-DUE-03", "SST-CTL-DUE-05", "SST-CTL-CSS-01", "SST-CTL-HAR-01"],
     f: avec(f => { delete f.effectif; }) },
-  { nom: "Existence du comité non renseignée", ctl: ["SST-CTL-DUERP-07", "SST-CTL-CSSCT-05", "SST-CTL-HAR-02"],
+  { nom: "Existence du comité non renseignée", ctl: ["SST-CTL-DUE-07", "SST-CTL-CSS-05", "SST-CTL-HAR-02"],
     f: avec(f => { f.cse = {}; }) },
 ];
 

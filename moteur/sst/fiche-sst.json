@@ -2,7 +2,9 @@
  "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
  "dateAudit": "2026-08-19",
  "effectif": 420,
- "cse": { "existe": "oui" },
+ "cse": {
+  "existe": "oui"
+ },
  "duerp": {
   "existe": "oui",
   "dateDerniereMaj": "2026-03-02",
@@ -12,10 +14,9 @@
   "consultationCSE": "oui",
   "transmisSPST": "oui"
  },
- "evenement": { "survenu": "non", "majFaite": "" },
- "suites": {
-  "programmeAnnuel": { "existe": "oui", "presenteCSE": "oui" },
-  "listeActions": { "consignee": "" }
+ "evenement": {
+  "survenu": "non",
+  "majFaite": ""
  },
  "etablissementDistinct300": "non",
  "etablissementRisqueParticulier": "non",
@@ -37,6 +38,17 @@
  "infoCoordonnees": "oui",
  "risquesHarcelementEvalues": "oui",
  "mesuresPreventionHarcelement": "oui",
- "signalement": { "recu": "non", "enqueteMenee": "", "mesuresPrises": "" },
- "pieces": []
+ "signalement": {
+  "recu": "non",
+  "enqueteMenee": "",
+  "mesuresPrises": ""
+ },
+ "pieces": [],
+ "programmeAnnuel": {
+  "existe": "oui",
+  "presenteCSE": "oui"
+ },
+ "listeActions": {
+  "consignee": ""
+ }
 }

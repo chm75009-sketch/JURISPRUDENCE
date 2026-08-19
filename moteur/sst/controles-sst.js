@@ -33,7 +33,7 @@ const ctl = (id, rubrique, objet, fondement, verdict) => C.push({ id, rubrique, 
 
 /* ------------------------------------------------------ le document unique */
 
-ctl("SST-CTL-DUERP-01", "Document unique",
+ctl("SST-CTL-DUE-01", "Document unique",
   "Les risques ont-ils été évalués et transcrits dans un document unique ?",
   ["L. 4121-1", "L. 4121-3", "L. 4121-3-1", "R. 4121-1"],
   f => {
@@ -43,23 +43,23 @@ ctl("SST-CTL-DUERP-01", "Document unique",
     return { etat: CONF, motif: "Un document unique d'évaluation des risques professionnels existe : la transcription exigée par R. 4121-1 est faite. Son contenu, sa mise à jour et ses suites sont contrôlés par ailleurs." };
   });
 
-ctl("SST-CTL-DUERP-02", "Document unique",
+ctl("SST-CTL-DUE-02", "Document unique",
   "L'évaluation comporte-t-elle un inventaire des risques par unité de travail ?",
   ["R. 4121-1"],
   f => {
     const du = f.duerp || {};
-    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : son contenu n'a pas d'objet — l'absence du document, elle, est constatée par SST-CTL-DUERP-01." };
+    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : son contenu n'a pas d'objet — l'absence du document, elle, est constatée par SST-CTL-DUE-01." };
     if (vide(du.existe) || vide(du.unitesTravail)) return { etat: MANQ, motif: "Il n'est pas indiqué si l'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail de l'entreprise ou de l'établissement, comme R. 4121-1 l'impose." };
     if (nie(du.unitesTravail)) return { etat: NC, motif: "Le document unique ne comporte pas d'inventaire des risques par unité de travail : R. 4121-1 impose que l'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail, y compris ceux liés aux ambiances thermiques." };
     return { etat: CONF, motif: "L'évaluation comporte un inventaire des risques par unité de travail, conformément à R. 4121-1." };
   });
 
-ctl("SST-CTL-DUERP-03", "Document unique",
+ctl("SST-CTL-DUE-03", "Document unique",
   "Le document unique a-t-il été mis à jour dans l'année (entreprises d'au moins onze salariés) ?",
   ["R. 4121-2, 1°", "L. 4121-3, dernier alinéa"],
   f => {
     const du = f.duerp || {};
-    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa mise à jour n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUERP-01." };
+    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa mise à jour n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUE-01." };
     const m = M.majDuerp(f);
     if (!m.effectif.connu) return { etat: MANQ, motif: m.effectif.motif };
     if (m.etat === "date de mise à jour non renseignée")
@@ -75,12 +75,12 @@ ctl("SST-CTL-DUERP-03", "Document unique",
     return { etat: CONF, motif: `Dernière mise à jour il y a environ ${m.moisEcoules} mois : la périodicité annuelle de R. 4121-2, 1°, est tenue au ${f.dateAudit}.` };
   });
 
-ctl("SST-CTL-DUERP-04", "Document unique",
+ctl("SST-CTL-DUE-04", "Document unique",
   "Le document unique a-t-il été mis à jour lors du dernier aménagement important ou de la dernière information nouvelle ?",
   ["R. 4121-2, 2° et 3°"],
   f => {
     const du = f.duerp || {};
-    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa mise à jour n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUERP-01." };
+    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa mise à jour n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUE-01." };
     const ev = f.evenement || {};
     if (vide(ev.survenu)) return { etat: MANQ, motif: "Il n'est pas indiqué si, depuis la dernière mise à jour, est survenu un aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail, ou si une information supplémentaire intéressant l'évaluation d'un risque a été portée à la connaissance de l'employeur (R. 4121-2, 2° et 3°)." };
     if (nie(ev.survenu)) return { etat: CONF, motif: "Aucun aménagement important ni information nouvelle déclarés depuis la dernière mise à jour : les cas de mise à jour de R. 4121-2, 2° et 3°, ne se sont pas présentés." };
@@ -89,17 +89,17 @@ ctl("SST-CTL-DUERP-04", "Document unique",
     return { etat: CONF, motif: "Le document unique a été mis à jour à la suite de l'aménagement important ou de l'information nouvelle déclarés, conformément à R. 4121-2." };
   });
 
-ctl("SST-CTL-DUERP-05", "Suites de l'évaluation",
+ctl("SST-CTL-DUE-05", "Suites de l'évaluation",
   "Les résultats de l'évaluation débouchent-ils sur ce que le seuil de cinquante salariés commande — programme annuel de prévention, ou liste d'actions consignée ?",
   ["L. 4121-3-1, III", "L. 2312-27, 2°"],
   f => {
     const du = f.duerp || {};
-    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : ses suites n'ont pas d'objet — l'absence du document est constatée par SST-CTL-DUERP-01." };
+    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : ses suites n'ont pas d'objet — l'absence du document est constatée par SST-CTL-DUE-01." };
     const s = M.suitesEvaluation(f);
     if (!s.connu) return { etat: MANQ, motif: s.motif };
-    const su = f.suites || {};
+    
     if (s.regime === "programme annuel") {
-      const p = su.programmeAnnuel || {};
+      const p = f.programmeAnnuel || {};
       if (vide(p.existe)) return { etat: MANQ, motif: "Effectif d'au moins cinquante salariés : il n'est pas indiqué si un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail a été établi (L. 4121-3-1, III, 1°)." };
       if (nie(p.existe)) return { etat: NC, motif: s.motif + " Ce programme n'est pas établi : le manquement est constitué." };
       const cse = f.cse || {};
@@ -111,18 +111,18 @@ ctl("SST-CTL-DUERP-05", "Suites de l'évaluation",
         return { etat: NC, motif: "Le programme annuel de prévention existe, mais il n'est pas présenté au comité social et économique dans le cadre de la consultation sur la politique sociale, comme L. 2312-27, 2°, l'impose — le comité peut proposer un ordre de priorité et des mesures supplémentaires." };
       return { etat: CONF, motif: "Effectif d'au moins cinquante salariés et programme annuel de prévention établi" + (dit(cse.existe) ? ", présenté au comité social et économique (L. 2312-27, 2°)" : "") + " : L. 4121-3-1, III, 1°, est respecté." };
     }
-    const l = su.listeActions || {};
+    const l = f.listeActions || {};
     if (vide(l.consignee)) return { etat: MANQ, motif: "Effectif de moins de cinquante salariés : il n'est pas indiqué si la liste des actions de prévention et de protection est consignée dans le document unique et ses mises à jour (L. 4121-3-1, III, 2°)." };
     if (nie(l.consignee)) return { etat: NC, motif: s.motif + " Cette liste n'est pas consignée : le manquement est constitué." };
     return { etat: CONF, motif: "Effectif de moins de cinquante salariés et liste d'actions de prévention consignée dans le document unique : L. 4121-3-1, III, 2°, est respecté." };
   });
 
-ctl("SST-CTL-DUERP-06", "Document unique",
+ctl("SST-CTL-DUE-06", "Document unique",
   "Les versions successives sont-elles conservées, et l'avis sur les modalités d'accès est-il affiché ?",
   ["L. 4121-3-1, V", "R. 4121-4"],
   f => {
     const du = f.duerp || {};
-    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa conservation n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUERP-01." };
+    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa conservation n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUE-01." };
     if (vide(du.existe) || vide(du.versionsConservees) || vide(du.avisAffiche))
       return { etat: MANQ, motif: "Il n'est pas indiqué si les versions successives du document unique sont conservées (quarante ans au moins — L. 4121-3-1, V ; R. 4121-4) et si un avis indiquant les modalités d'accès des travailleurs au document est affiché à une place convenable et aisément accessible (R. 4121-4, dernier alinéa)." };
     const griefs = [];
@@ -132,7 +132,7 @@ ctl("SST-CTL-DUERP-06", "Document unique",
     return { etat: CONF, motif: "Versions successives conservées et avis d'accès affiché : L. 4121-3-1, V, et R. 4121-4 sont respectés en l'état déclaré." };
   });
 
-ctl("SST-CTL-DUERP-07", "Document unique",
+ctl("SST-CTL-DUE-07", "Document unique",
   "Le comité social et économique est-il consulté sur le document unique et sur ses mises à jour ?",
   ["L. 4121-3, 1°"],
   f => {
@@ -140,18 +140,18 @@ ctl("SST-CTL-DUERP-07", "Document unique",
     if (vide(cse.existe)) return { etat: MANQ, motif: "Il n'est pas indiqué si un comité social et économique existe dans l'entreprise : la consultation de L. 4121-3, 1°, ne peut pas être contrôlée." };
     if (nie(cse.existe)) return { etat: SO, motif: "Aucun comité social et économique déclaré : la consultation sur le document unique (L. 4121-3, 1°) n'a pas d'objet ici — la régularité de cette absence relève du module « comité social et économique » de l'application." };
     const du = f.duerp || {};
-    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa consultation n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUERP-01." };
+    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa consultation n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUE-01." };
     if (vide(du.consultationCSE)) return { etat: MANQ, motif: "Il n'est pas indiqué si le comité social et économique est consulté sur le document unique et sur ses mises à jour, comme L. 4121-3, 1°, l'impose." };
     if (nie(du.consultationCSE)) return { etat: NC, motif: "Le comité social et économique n'est pas consulté sur le document unique et ses mises à jour : L. 4121-3, 1°, l'impose — le comité et sa commission santé, sécurité et conditions de travail, s'ils existent, apportent leur contribution à l'évaluation des risques." };
     return { etat: CONF, motif: "Le comité social et économique est consulté sur le document unique et ses mises à jour, conformément à L. 4121-3, 1°." };
   });
 
-ctl("SST-CTL-DUERP-08", "Document unique",
+ctl("SST-CTL-DUE-08", "Document unique",
   "Le document unique est-il transmis au service de prévention et de santé au travail à chaque mise à jour ?",
   ["L. 4121-3-1, VI"],
   f => {
     const du = f.duerp || {};
-    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa transmission n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUERP-01." };
+    if (nie(du.existe)) return { etat: SO, motif: "Le document unique n'existe pas : sa transmission n'a pas d'objet — l'absence du document est constatée par SST-CTL-DUE-01." };
     if (vide(du.existe) || vide(du.transmisSPST)) return { etat: MANQ, motif: "Il n'est pas indiqué si le document unique est transmis, à chaque mise à jour, au service de prévention et de santé au travail auquel l'employeur adhère (L. 4121-3-1, VI)." };
     if (nie(du.transmisSPST)) return { etat: NC, motif: "Le document unique n'est pas transmis au service de prévention et de santé au travail à chaque mise à jour : L. 4121-3-1, VI, l'impose." };
     return { etat: CONF, motif: "Le document unique est transmis au service de prévention et de santé au travail à chaque mise à jour, conformément à L. 4121-3-1, VI." };
@@ -159,7 +159,7 @@ ctl("SST-CTL-DUERP-08", "Document unique",
 
 /* ----------------------------------------------------------------- la CSSCT */
 
-ctl("SST-CTL-CSSCT-01", "Commission santé, sécurité et conditions de travail",
+ctl("SST-CTL-CSS-01", "Commission santé, sécurité et conditions de travail",
   "La commission santé, sécurité et conditions de travail est-elle créée là où elle est due ?",
   ["L. 2315-36", "L. 2315-37", "L. 2315-43"],
   f => {
@@ -173,15 +173,15 @@ ctl("SST-CTL-CSSCT-01", "Commission santé, sécurité et conditions de travail"
   });
 
 /* Le garde des contrôles qui portent sur une commission : sans commission,
-   rien ne se contrôle d'elle — son absence, elle, relève de SST-CTL-CSSCT-01. */
+   rien ne se contrôle d'elle — son absence, elle, relève de SST-CTL-CSS-01. */
 function siCommission(f, suite) {
   const c = f.cssct || {};
   if (vide(c.existe)) return { etat: MANQ, motif: "Il n'est pas indiqué si une commission santé, sécurité et conditions de travail existe." };
-  if (nie(c.existe)) return { etat: SO, motif: "Aucune commission santé, sécurité et conditions de travail : ce contrôle n'a pas d'objet — l'obligation de la créer, elle, est contrôlée par SST-CTL-CSSCT-01." };
+  if (nie(c.existe)) return { etat: SO, motif: "Aucune commission santé, sécurité et conditions de travail : ce contrôle n'a pas d'objet — l'obligation de la créer, elle, est contrôlée par SST-CTL-CSS-01." };
   return suite(c);
 }
 
-ctl("SST-CTL-CSSCT-02", "Commission santé, sécurité et conditions de travail",
+ctl("SST-CTL-CSS-02", "Commission santé, sécurité et conditions de travail",
   "La composition de la commission respecte-t-elle L. 2315-39 — présidence, trois membres au moins dont un du second collège, désignation par le comité ?",
   ["L. 2315-39"],
   f => siCommission(f, c => {
@@ -199,7 +199,7 @@ ctl("SST-CTL-CSSCT-02", "Commission santé, sécurité et conditions de travail"
   }));
 
 const MODALITES_CSSCT = ["accord d'entreprise", "accord avec le comité", "règlement intérieur"];
-ctl("SST-CTL-CSSCT-03", "Commission santé, sécurité et conditions de travail",
+ctl("SST-CTL-CSS-03", "Commission santé, sécurité et conditions de travail",
   "Les modalités de mise en place et de fonctionnement de la commission sont-elles fixées — accord d'entreprise, accord avec le comité, ou règlement intérieur à défaut ?",
   ["L. 2315-41", "L. 2315-42", "L. 2315-44"],
   f => siCommission(f, c => {
@@ -209,7 +209,7 @@ ctl("SST-CTL-CSSCT-03", "Commission santé, sécurité et conditions de travail"
     return { etat: CONF, motif: `Les modalités de la commission sont fixées par ${f.cssct.modalitesFixees === "règlement intérieur" ? "le règlement intérieur du comité (L. 2315-44)" : f.cssct.modalitesFixees === "accord avec le comité" ? "un accord entre l'employeur et le comité, adopté à la majorité des membres titulaires (L. 2315-42)" : "un accord d'entreprise (L. 2315-41)"}.` };
   }));
 
-ctl("SST-CTL-CSSCT-04", "Commission santé, sécurité et conditions de travail",
+ctl("SST-CTL-CSS-04", "Commission santé, sécurité et conditions de travail",
   "La délégation confiée à la commission respecte-t-elle ses limites — jamais le recours à l'expert ni les attributions consultatives du comité ?",
   ["L. 2315-38"],
   f => siCommission(f, c => {
@@ -218,7 +218,7 @@ ctl("SST-CTL-CSSCT-04", "Commission santé, sécurité et conditions de travail"
     return { etat: CONF, motif: "La délégation confiée à la commission exclut le recours à l'expert et les attributions consultatives du comité, conformément à L. 2315-38." };
   }));
 
-ctl("SST-CTL-CSSCT-05", "Commission santé, sécurité et conditions de travail",
+ctl("SST-CTL-CSS-05", "Commission santé, sécurité et conditions de travail",
   "Les élus bénéficient-ils de la formation santé, sécurité et conditions de travail — cinq jours au premier mandat, trois au renouvellement, cinq pour la commission à partir de trois cents salariés ?",
   ["L. 2315-18"],
   f => {
