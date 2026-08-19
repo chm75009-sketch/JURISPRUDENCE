@@ -6,13 +6,13 @@
    réseau l'utilisateur voit toujours la dernière version ; sans réseau, il
    retrouve l'application telle qu'il l'a consultée la dernière fois.
 
-   Les appels aux API (Judilibre, relais Légifrance) ne sont jamais mis en
-   cache : les résultats de recherche doivent rester frais, et une réponse
-   d'API stockée hors ligne induirait en erreur. */
+   Les appels aux API (Judilibre, relais Légifrance, API Anthropic de
+   l'assistant) ne sont jamais mis en cache : les résultats doivent rester
+   frais, et une réponse d'API stockée hors ligne induirait en erreur. */
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-4.2";
+const CACHE = "jurisprudence-4.3";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -35,6 +35,10 @@ const ESSENTIELS = [
   "./audit-nao.html", "./moteur-nao.js",
   /* Le formulaire est commun aux quatre pages : sans lui, elles s'ouvrent vides. */
   "./audit-form.js", "./audit-export.js",
+  /* L'assistant Claude, présent sur toutes les pages. Son code se met en cache
+     comme le reste ; ses appels à api.anthropic.com, eux, ne passent JAMAIS par
+     ce service worker (le gestionnaire fetch ne retient que la même origine). */
+  "./assistant.js",
   /* Chaque audit s'installe pour lui-même : son manifeste et ses icônes. */
   "./manifest-audit.json", "./manifest-audit-cse.json", "./manifest-audit-pse.json", "./manifest-audit-bdese.json", "./manifest-audit-nao.json",
   "./icons/icon-audit-192.png", "./icons/icon-audit-512.png", "./icons/icon-audit-180.png",
@@ -65,7 +69,7 @@ self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;                         // le relais fonctionne en POST
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return;          // API Judilibre et Légifrance
+  if (url.origin !== self.location.origin) return;          // API Judilibre, Légifrance, Anthropic
   if (url.pathname.startsWith("/.netlify/")) return;        // relais
 
   e.respondWith(

@@ -479,7 +479,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "3.5 — 18 août 2026";
+const VERSION = "3.6 — 19 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -3052,5 +3052,6 @@ document.getElementById("btn-avert").addEventListener("click", ()=>{
   if(typeof d.showModal === "function") d.showModal(); else d.setAttribute("open","");
 });
 </script>
+<script src="assistant.js" defer></script>
 </body>
 </html>
