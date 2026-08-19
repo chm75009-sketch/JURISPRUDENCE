@@ -16,9 +16,15 @@
 const fs = require("fs");
 const path = require("path");
 
-const SOURCES = ["referentiel-social.js", "moteur-social.js", "controles-social.js",
-  "plan-social.js", "modeles-social.js"]
-  .map(n => fs.readFileSync(path.join(__dirname, n), "utf8")).join("\n");
+/* L'inspection des sources ne vaut qu'à la publication : dans le navigateur,
+   où il n'y a pas de disque, elle est simplement sautée — elle a déjà été
+   jouée, et un échec y aurait fait échouer l'empaquetage. */
+let SOURCES = null;
+try {
+  SOURCES = ["referentiel-social.js", "moteur-social.js", "controles-social.js",
+    "plan-social.js", "modeles-social.js"]
+    .map(n => fs.readFileSync(path.join(__dirname, n), "utf8")).join("\n");
+} catch (e) { SOURCES = null; }
 
 const LIGNES = [];
 const q = (champ, libelle, format, aide) => LIGNES.push({ champ, libelle, format, aide });
@@ -52,14 +58,14 @@ q("projetLicenciementEco", "Un licenciement pour motif économique est-il envisa
 
 /* ─────────────────────────── la garantie, dans les deux sens ─────────── */
 const lusParLeCode = new Set();
-for (const m of SOURCES.matchAll(/\bp\.([a-zA-Z_][a-zA-Z0-9_]*)/g)) lusParLeCode.add(m[1]);
-for (const m of SOURCES.matchAll(/ouiNon\(\s*p\s*,\s*"([a-zA-Z0-9_]+)"/g)) lusParLeCode.add(m[1]);
+for (const m of (SOURCES || "").matchAll(/\bp\.([a-zA-Z_][a-zA-Z0-9_]*)/g)) lusParLeCode.add(m[1]);
+for (const m of (SOURCES || "").matchAll(/ouiNon\(\s*p\s*,\s*"([a-zA-Z0-9_]+)"/g)) lusParLeCode.add(m[1]);
 /* p[cle] des règles typées : cle vient des verifs, pas du profil — ignoré.
    dateAudit est lu par les règles de délai via p.dateAudit : couvert. */
 
 const demandes = new Set(LIGNES.map(l => l.champ));
-const nonLus = [...demandes].filter(c => !lusParLeCode.has(c)).sort();
-const nonDemandes = [...lusParLeCode].filter(c => !demandes.has(c)).sort();
+const nonLus = SOURCES === null ? [] : [...demandes].filter(c => !lusParLeCode.has(c)).sort();
+const nonDemandes = SOURCES === null ? [] : [...lusParLeCode].filter(c => !demandes.has(c)).sort();
 
 module.exports = { LIGNES, nonLus, nonDemandes };
 

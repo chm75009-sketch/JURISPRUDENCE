@@ -1,0 +1,51 @@
+{
+ "domaine": "audit social — le chapeau des obligations de l'employeur",
+ "date": "2026-08-19",
+ "empreinte": "2d43af47ec54",
+ "fichiers": {
+  "audit-social-client.js": "7a478d627254",
+  "capturer-textes-social-2.js": "4d61e2c885d8",
+  "capturer-textes-social.js": "f79e801d9e31",
+  "controles-social.js": "dca44c7025a0",
+  "modeles-social.js": "f0d25d41f7e9",
+  "moteur-social.js": "6e23710d673f",
+  "plan-social.js": "790ea6b6be17",
+  "questionnaire-social.js": "71fc9a4ae24a",
+  "referentiel-social.js": "ce5126f5ee06",
+  "tests-social.js": "f8ba31758c76",
+  "textes-social-non-confirmes.json": "4a15a4d57c34",
+  "textes-social.json": "5141260645ac",
+  "verifier-textes-social.js": "de5da88f7ad0"
+ },
+ "compteurs": {
+  "obligations": 33,
+  "parCategorie": {
+   "instances": 6,
+   "documents obligatoires": 5,
+   "affichages et informations": 7,
+   "registres": 3,
+   "négociations": 3,
+   "santé-sécurité": 3,
+   "formation et entretiens": 2,
+   "épargne et protection sociale": 4
+  },
+  "articlesLus": 34,
+  "articlesNonConfirmes": 0,
+  "articlesCites": 34,
+  "renvoisModules": 12,
+  "itemsConventionnels": 2,
+  "itemsGeneriques": 2,
+  "questionsOrientation": 13,
+  "questionsVerification": 54,
+  "conformitesOuSansObjetSurProfilVide": 0,
+  "conclusionsConformesInterdites": 0,
+  "citationsDArticlesNonConfirmes": 0
+ },
+ "textesRelus": {
+  "date": "2026-08-19",
+  "articles": 34,
+  "concordants": 33,
+  "ecarts": 0,
+  "sansConclusion": 1
+ }
+}

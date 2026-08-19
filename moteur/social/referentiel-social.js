@@ -164,7 +164,7 @@ item({
   intitule: "Commission santé, sécurité et conditions de travail (CSSCT)",
   articles: ["L2315-36"].filter(lu),
   articlesSouhaites: ["L2315-36"],
-  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  module: { nom: "santé, sécurité et conditions de travail (SST)", page: "audit-sst.html" },
   condition: p => {
     const s = auSeuil(300)(p);
     if (s.du === null) return s;
@@ -255,7 +255,7 @@ item({
   intitule: "Référent chargé de la lutte contre le harcèlement sexuel et les agissements sexistes (entreprise d'au moins 250 salariés)",
   articles: ["L1153-5-1"].filter(lu),
   articlesSouhaites: ["L1153-5-1"],
-  module: null,
+  module: { nom: "santé, sécurité et conditions de travail (SST)", page: "audit-sst.html" },
   condition: p => {
     const s = auSeuil(250)(p);
     if (s.du === null) return s;
@@ -328,7 +328,7 @@ item({
   intitule: "Document unique d'évaluation des risques professionnels (DUERP)",
   articles: ["R4121-1", "R4121-2", "R4121-4"].filter(lu),
   articlesSouhaites: ["R4121-1", "R4121-2", "R4121-4"],
-  module: null,
+  module: { nom: "santé, sécurité et conditions de travail (SST)", page: "audit-sst.html" },
   condition: toutEmployeur,
   verifs: [
     { cle: "existe", libelle: "Le document unique existe-t-il ?", format: "oui / non", regle: "oui",
@@ -462,7 +462,7 @@ item({
   intitule: "Information sur les harcèlements moral et sexuel (textes, voies de recours, coordonnées)",
   articles: ["L1152-4", "L1153-5"].filter(lu),
   articlesSouhaites: ["L1152-4", "L1153-5"],
-  module: null,
+  module: { nom: "santé, sécurité et conditions de travail (SST)", page: "audit-sst.html" },
   condition: toutEmployeur,
   verifs: [
     { cle: "informationFaite", libelle: "L'information est-elle faite par tout moyen dans les lieux de travail (et lieux d'embauche pour le harcèlement sexuel) ?", format: "oui / non", regle: "oui",

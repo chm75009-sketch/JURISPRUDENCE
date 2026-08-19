@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#5C2A54">
+<link rel="manifest" href="manifest-audit-social.json">
+<link rel="apple-touch-icon" href="icons/icon-social-180.png">
+<link rel="icon" href="icons/icon-social-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Audit social — obligations de l'employeur</title>
+<!-- L'audit social chapeau, en quatre temps : le profil ouvre la liste des
+     obligations, le client coche ce qu'il a, LE MANQUANT REÇOIT D'ABORD son
+     plan d'action — concret, priorisé, avec des modèles pré-remplis de ses
+     données —, puis l'existant est contrôlé point par point. Un rapport
+     imprimable clôt chaque temps, et un rapport général consolide le tout.
+     Tout se passe dans le navigateur : le moteur est un script ordinaire,
+     aucune donnée saisie ne quitte le poste. -->
+<style>
+  :root{
+    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#5C2A54;
+    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
+    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papier);color:var(--corps);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .page{max-width:1060px;margin:0 auto;padding:0 20px 80px}
+  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
+  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
+  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
+  .chapo{color:var(--gris);max-width:66ch;margin:0}
+  header a{color:var(--bleu)}
+  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
+  h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:22px 0 8px}
+  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:72ch}
+
+  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
+    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
+    margin:0 -20px 0;padding:10px 20px}
+  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
+  button.retour:hover{filter:brightness(1.12)}
+  .retour-ou{font-size:13px;color:var(--gris)}
+  .retour-ou a{color:var(--bleu)}
+
+  .presentation{border:1px solid var(--filet);background:var(--surface);
+    border-radius:4px;padding:18px 20px;margin:22px 0 0}
+  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
+  .presentation p{margin:0 0 10px;max-width:76ch}
+  .presentation p:last-child{margin-bottom:0}
+  .presentation .etapes{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;padding:0;list-style:none}
+  .presentation .etapes li{flex:1 1 200px;border-left:3px solid var(--bleu);padding:2px 0 2px 10px;
+    font-size:14px;color:var(--corps)}
+  .presentation .etapes b{display:block;color:var(--encre)}
+
+  /* Le fil des quatre temps */
+  .temps{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 6px}
+  .temps span{font:600 13px/1 system-ui;padding:8px 12px;border-radius:99px;
+    border:1px solid var(--filet);background:var(--surface);color:var(--gris)}
+  .temps span.actif{border-color:var(--bleu);background:var(--bleu);color:#fff}
+  .temps span.fait{border-color:var(--vert);color:var(--vert)}
+
+  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px 20px;margin:0 0 16px}
+  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 22px}
+  label{display:block;font-size:14px}
+  label .nom{display:block;color:var(--encre);margin-bottom:4px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
+    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
+  input:focus,select:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
+  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
+
+  .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
+    padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;z-index:10}
+  button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
+  button.second{background:var(--surface);color:var(--bleu)}
+  button:hover{filter:brightness(1.1)}
+  button:disabled{opacity:.45;cursor:default}
+  .compteur{color:var(--gris);font-size:14px;margin-left:auto}
+  @media (max-width:560px){
+    .barre{gap:8px;padding:10px 0}
+    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
+    .barre button:first-child{flex:1 1 100%}
+    .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
+  }
+
+  /* La liste des obligations */
+  .categorie{margin:26px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
+    color:var(--bleu);font:600 15px/1.3 system-ui;display:flex;justify-content:space-between;gap:12px}
+  .categorie span{font-weight:400;font-size:13px;color:var(--gris)}
+  .obl{border-left:4px solid var(--bleu);background:var(--surface);padding:12px 14px;margin:0 0 8px;border-radius:0 3px 3px 0}
+  .obl .t{font-weight:600;color:var(--encre)}
+  .obl .fond{font-size:12.5px;color:var(--gris);margin:5px 0 0}
+  .obl .motif{font-size:13.5px;color:var(--corps);margin:6px 0 0}
+  .obl.non-due{border-left-color:#b8bec7;opacity:.75}
+  .obl.a-preciser{border-left-color:var(--orange);background:var(--orange-f)}
+  .obl .renvoi{font-size:13px;margin:6px 0 0}
+  .obl .renvoi a{color:var(--bleu);font-weight:600}
+  .coches{display:flex;gap:14px;margin:10px 0 0;flex-wrap:wrap;font-size:14px}
+  .coches label{display:flex;align-items:center;gap:6px;width:auto;cursor:pointer;
+    border:1px solid var(--filet);border-radius:99px;padding:6px 14px;background:var(--gris-f)}
+  .coches input{width:auto;margin:0}
+  .coches label:has(input:checked){border-color:var(--bleu);background:#f3ecf2;color:var(--encre);font-weight:600}
+  .ident{font:500 11.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8a9099;
+    background:#f0f1f4;border-radius:3px;padding:2px 5px;white-space:nowrap}
+
+  /* Verdicts et rapports */
+  .bandeau{padding:18px 20px;color:#fff;margin:14px 0 18px;border-radius:3px}
+  .bandeau .r{font:700 24px/1.15 system-ui;letter-spacing:.4px;margin:0 0 6px}
+  .bandeau .s{margin:0;font-size:15px}
+  .b-rouge{background:var(--rouge)} .b-orange{background:var(--orange)}
+  .b-vert{background:var(--vert)} .b-gris{background:var(--ardoise)} .b-prune{background:var(--bleu)}
+  .verdict{border-left:4px solid #767676;background:var(--surface);padding:10px 14px;margin:0 0 7px}
+  .verdict .t{font-weight:600;color:var(--encre)}
+  .verdict .w{font-size:13.5px;color:var(--corps);margin:4px 0 0}
+  .verdict .fond{font-size:12.5px;color:var(--gris);margin:4px 0 0}
+  .v-nc{border-left-color:var(--rouge);background:var(--rouge-f)}
+  .v-risq{border-left-color:var(--orange);background:var(--orange-f)}
+  .v-conf{border-left-color:var(--vert);background:var(--vert-f)}
+  .v-manq{border-left-color:#9aa0a8;background:var(--gris-f)}
+  .chip{font:600 11px/1 system-ui;color:#fff;padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
+  .c-nc{background:var(--rouge)} .c-risq{background:var(--orange)}
+  .c-conf{background:var(--vert)} .c-manq{background:#767676} .c-so{background:var(--ardoise)}
+
+  /* Le plan d'action */
+  .action{border:1px solid var(--filet);border-left:4px solid var(--rouge);background:var(--surface);
+    padding:14px 16px;margin:0 0 12px;border-radius:0 3px 3px 0}
+  .action.verifier{border-left-color:var(--orange)}
+  .action .t{font-weight:700;color:var(--encre)}
+  .action .quoi{margin:6px 0 0;font-size:14.5px}
+  .action .meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:13px;color:var(--gris)}
+  .action .meta b{color:var(--corps)}
+  .action ol{margin:8px 0 0;padding-left:22px;font-size:14px}
+  .action ol li{margin:0 0 4px}
+  .action .risque{font-size:13.5px;color:var(--rouge);margin:8px 0 0}
+  .action.verifier .risque{color:var(--orange)}
+  .prio{font:600 11px/1 system-ui;color:#fff;background:var(--ardoise);padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
+  .p-1{background:var(--rouge)} .p-2{background:var(--orange)} .p-3{background:var(--ardoise)}
+  details.modele{margin:10px 0 0;border:1px dashed var(--bleu);border-radius:3px;background:#faf7fa}
+  details.modele summary{cursor:pointer;font:600 13.5px/1.3 system-ui;color:var(--bleu);padding:9px 12px}
+  .feuille{background:#fff;border-top:1px dashed var(--filet);padding:14px 16px;font-size:14px}
+  .feuille .ft{font:700 16px/1.3 Georgia,serif;color:var(--encre);margin:0 0 8px}
+  .feuille p{margin:0 0 7px}
+  .feuille .fh{font:600 14px/1.3 system-ui;color:var(--bleu);margin:10px 0 4px}
+  .feuille .fp{margin:0 0 4px 18px;text-indent:-14px}
+  .feuille .fc{color:var(--corps);margin:0 0 4px;font-style:italic}
+
+  .tab{overflow-x:auto;margin:12px 0}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
+  th,td{border:1px solid var(--filet);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--bleu);color:#fff;font-weight:600}
+  .note{color:var(--gris);font-size:13.5px}
+  .enc{border:1px solid var(--bleu);background:#f7f2f6;padding:12px 14px;margin:14px 0;border-radius:3px}
+  .enc .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
+  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
+    border:1px solid var(--bleu);background:#f7f2f6;color:var(--bleu);font-size:14px}
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
+  .lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;
+    color:var(--bleu);text-decoration:underline;cursor:pointer}
+
+  /* Vérification de l'existant */
+  .verif-bloc{border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:12px 14px;margin:0 0 10px}
+  .verif-bloc .t{font-weight:600;color:var(--encre);margin:0 0 8px}
+  .verif-q{display:grid;grid-template-columns:minmax(240px,1fr) minmax(130px,220px);gap:6px 14px;
+    align-items:center;margin:0 0 7px;font-size:13.5px}
+  @media (max-width:560px){ .verif-q{grid-template-columns:1fr} }
+
+  /* Évolution depuis le dernier passage */
+  .evolution{border:1px solid var(--vert);background:var(--vert-f);border-radius:3px;padding:12px 14px;margin:14px 0}
+  .evolution .sh{font-weight:600;color:var(--vert);margin:0 0 6px}
+  .evolution p{margin:0 0 4px;font-size:14px}
+
+  /* Impression ciblée : chaque rapport s'imprime seul. */
+  @media print{
+    .retour-barre,.presentation,.temps,.barre,#message,form,header a,footer,
+    .coches,details.modele summary,.no-print,.enc{display:none !important}
+    details.modele{border:none} details.modele .feuille{border-top:none;padding:8px 0}
+    details.modele[open] .feuille{display:block}
+    .page{padding:0}
+    body.print-manquant #bloc-liste,body.print-manquant #bloc-existant,body.print-manquant #bloc-general{display:none}
+    body.print-existant #bloc-liste,body.print-existant #bloc-manquant,body.print-existant #bloc-general{display:none}
+    body.print-general #bloc-liste,body.print-general #bloc-manquant,body.print-general #bloc-existant{display:none}
+    body.print-liste #bloc-manquant,body.print-liste #bloc-existant,body.print-liste #bloc-general{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="retour-barre">
+  <button type="button" id="btn-retour" class="retour">← Retour</button>
+  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
+  · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
+  · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
+  · <a href="agenda.html">agenda</a> · <a href="documents.html">documents</a> · <a href="guides.html">guides</a></span>
+</div>
+
+<header>
+  <p class="fil">Application Jurisprudence</p>
+  <h1>Audit social — le point complet des obligations</h1>
+  <p class="chapo"><b>Cette application dresse la liste de ce que votre entreprise doit avoir ou avoir
+  fait</b> — instances, documents, affichages, registres, négociations, santé-sécurité, formation,
+  épargne et protection sociale — en fonction de votre effectif, de votre secteur et de votre
+  convention. Vous cochez ce qui est en place : <b>le manquant reçoit d'abord un plan d'action</b>
+  concret et priorisé, avec des modèles pré-remplis de vos données ; l'existant est ensuite contrôlé
+  point par point. Chaque article cité a été lu à la source (identifiant de version à l'appui) ;
+  ce qui relève de la convention collective est signalé « à vérifier », jamais affirmé.<br>
+  L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
+  <button type="button" class="lien-avert" id="btn-avert">Avertissement d'usage</button></p>
+</header>
+
+<div class="presentation">
+  <h2>À quoi sert cette page</h2>
+  <p>C'est le point d'entrée de l'audit d'une entreprise : le tour complet, avant de descendre dans le
+  détail. Les sujets qui ont leur propre module — comité, base de données, négociations, plan de
+  sauvegarde, licenciement économique — restent ici au niveau du « dû / pas dû » : la page vous y
+  renvoie pour l'audit fin.</p>
+  <ul class="etapes">
+    <li><b>1. Votre profil</b> — effectif, ancienneté du seuil, secteur, convention, groupe,
+    établissements : huit questions qui ouvrent ou ferment chaque obligation.</li>
+    <li><b>2. La liste s'ouvre</b> — chaque obligation avec sa source, lue au relais Légifrance ;
+    vous cochez « je l'ai » ou « je ne l'ai pas ».</li>
+    <li><b>3. Le manquant d'abord</b> — un plan d'action daté et priorisé : étapes, responsable,
+    délai, risque, et un modèle pré-rempli de vos données pour chaque action.</li>
+    <li><b>4. L'existant ensuite</b> — des questions de vérification courtes ; cinq états possibles,
+    et cocher sans preuve ne rend jamais « conforme ».</li>
+  </ul>
+  <p class="note"><b>Ce que cette page ne fait pas :</b> elle n'affirme rien sur le contenu de votre
+  convention collective (le relais ne sert que le code du travail), ne remplace pas les modules
+  d'audit détaillés, et ne délivre aucun blanc-seing : un rapport tout vert dit « rien ne bloque en
+  l'état des réponses », pas « rien ne bloquera ».</p>
+</div>
+
+<div class="temps" id="fil-temps">
+  <span data-t="1" class="actif">1 · Profil</span>
+  <span data-t="2">2 · Liste des obligations</span>
+  <span data-t="3">3 · Plan d'action du manquant</span>
+  <span data-t="4">4 · Contrôle de l'existant</span>
+  <span data-t="5">Rapport général</span>
+</div>
+
+<h2 id="t1">1. Le profil de l'entreprise</h2>
+<p class="aide">Chaque réponse ouvre ou ferme des obligations. Une réponse absente ne ferme rien :
+elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
+<form id="formulaire" autocomplete="off"></form>
+
+<div class="barre">
+  <button type="button" id="generer">Générer la liste des obligations</button>
+  <button type="button" class="second" id="exemple">Charger un exemple (60 salariés)</button>
+  <button type="button" class="second" id="vider">Tout effacer</button>
+  <span class="compteur" id="compteur"></span>
+</div>
+<p id="message" role="status"></p>
+
+<div id="bloc-liste" style="display:none">
+  <h2 id="t2">2. La liste des obligations <span class="note" id="liste-date"></span></h2>
+  <p class="aide">Cochez, pour chaque obligation applicable : « je l'ai » ou « je ne l'ai pas ».
+  La source de chaque ligne est citée — article du code du travail lu au relais avec son identifiant
+  de version, renvoi au module d'audit dédié, ou mention « selon la convention collective : à vérifier ».</p>
+  <div id="liste"></div>
+  <div class="barre no-print">
+    <button type="button" id="vers-plan">Voir le plan d'action du manquant</button>
+    <button type="button" class="second" id="imprimer-liste">Imprimer la liste</button>
+    <span class="compteur" id="compteur-coches"></span>
+  </div>
+</div>
+
+<div id="bloc-manquant" style="display:none">
+  <h2 id="t3">3. Le manquant d'abord : le plan d'action</h2>
+  <div id="plan"></div>
+  <div class="barre no-print">
+    <button type="button" id="vers-existant">Passer au contrôle de l'existant</button>
+    <button type="button" class="second" id="imprimer-plan">Imprimer le plan d'action</button>
+    <button type="button" class="second" id="copier-plan">Copier le texte</button>
+  </div>
+</div>
+
+<div id="bloc-existant" style="display:none">
+  <h2 id="t4">4. L'existant : le contrôle de conformité</h2>
+  <p class="aide">Pour chaque obligation que vous déclarez en place, quelques vérifications courtes —
+  dates, dépôts, affichages effectifs. Une case cochée sans détail vérifiable rend « risque à
+  vérifier », jamais « conforme ».</p>
+  <div id="verifs"></div>
+  <div class="barre no-print">
+    <button type="button" id="controler">Vérifier l'existant</button>
+    <button type="button" class="second" id="imprimer-existant">Imprimer le rapport de l'existant</button>
+  </div>
+  <div id="rapport-existant"></div>
+</div>
+
+<div id="bloc-general" style="display:none">
+  <h2 id="t5">Le rapport général</h2>
+  <div id="rapport-general"></div>
+  <div class="barre no-print">
+    <button type="button" id="imprimer-general">Imprimer le rapport général</button>
+  </div>
+</div>
+
+<footer id="pied"></footer>
+</div>
+
+<dialog id="dlg-avertissement" style="max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;font:15px/1.55 system-ui;color:#1c2126">
+  <h2 style="margin:0 0 12px;font:600 19px/1.3 system-ui">Avertissement d'usage</h2>
+  <p style="margin:0 0 10px">Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
+  avocat, ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
+  <p style="margin:0 0 10px">La liste produite est la plus complète que les textes lus à la source permettent :
+  elle n'est pas exhaustive pour autant — votre convention collective, vos accords et votre activité peuvent
+  ajouter des obligations que cette page signale sans les détailler.</p>
+  <form method="dialog" style="margin:14px 0 0;text-align:right">
+    <button style="font:600 14px/1 system-ui;padding:9px 16px;border:1px solid #5C2A54;background:#5C2A54;color:#fff;border-radius:6px;cursor:pointer">Fermer</button>
+  </form>
+</dialog>
+
+<script src="moteur-social.js"></script>
+<script>
+(function () {
+  "use strict";
+  var A = window.MoteurSocial.audit;
+  var CLE = "audit-social-brouillon";
+  var CLE_HISTO = "audit-social-historique";
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ------------------------------------------------------------ l'état --- */
+  /* Tout tient dans un seul objet, enregistré à chaque changement : le
+     brouillon survit à la fermeture, et le suivi dans le temps s'appuie sur
+     l'historique des rapports généraux. */
+  var etatVide = function () { return { profil: {}, coches: {}, reponses: {} }; };
+  var ETAT = etatVide();
+  try { var lu = JSON.parse(localStorage.getItem(CLE) || "null"); if (lu && lu.profil) ETAT = lu; } catch (e) {}
+  function enregistrer() { try { localStorage.setItem(CLE, JSON.stringify(ETAT)); } catch (e) {} }
+
+  /* Le profil commun « profil-entreprise », si une autre page l'a rempli. */
+  function lireProfilCommun() {
+    try {
+      var p = JSON.parse(localStorage.getItem("profil-entreprise") || "null");
+      if (!p || typeof p !== "object") return {};
+      return {
+        entreprise: p.denomination || p.denominationSociale || p.entreprise || p.nom || "",
+        effectif: p.effectif || "", secteur: p.secteur || p.activite || "",
+        conventionCollective: p.conventionCollective || p.convention || p.idcc || ""
+      };
+    } catch (e) { return {}; }
+  }
+
+  var e = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+
+  /* ------------------------------------------------- 1. le questionnaire --- */
+  function construireFormulaire() {
+    var commun = lireProfilCommun();
+    var html = '<fieldset><legend>Le profil qui ouvre la liste</legend><div class="grille">';
+    A.questions.forEach(function (q) {
+      var val = ETAT.profil[q.champ];
+      if (val === undefined || val === "") val = commun[q.champ] || "";
+      var champ;
+      if (q.format === "oui / non") {
+        champ = '<select name="' + q.champ + '"><option value=""></option>' +
+          '<option' + (val === "oui" ? " selected" : "") + '>oui</option>' +
+          '<option' + (val === "non" ? " selected" : "") + '>non</option></select>';
+      } else if (q.format === "nombre") {
+        champ = '<input name="' + q.champ + '" type="number" min="0" value="' + e(val) + '">';
+      } else if (q.format === "AAAA-MM-JJ") {
+        champ = '<input name="' + q.champ + '" type="date" value="' + e(val) + '">';
+      } else {
+        champ = '<input name="' + q.champ + '" type="text" value="' + e(val) + '">';
+      }
+      html += '<label><span class="nom">' + e(q.libelle) + '</span>' + champ +
+        '<span class="aide-champ">' + e(q.aide) + "</span></label>";
+    });
+    html += "</div></fieldset>";
+    $("formulaire").innerHTML = html;
+    $("formulaire").addEventListener("change", function () { lireFormulaire(); enregistrer(); majCompteur(); });
+  }
+  function lireFormulaire() {
+    var p = {};
+    Array.prototype.forEach.call($("formulaire").elements, function (el) {
+      if (!el.name) return;
+      var v = el.value.trim();
+      if (v === "") return;
+      p[el.name] = el.type === "number" ? Number(v) : v;
+    });
+    ETAT.profil = p;
+    return p;
+  }
+  function majCompteur() {
+    var n = Object.keys(ETAT.profil).length;
+    $("compteur").textContent = n + " / " + A.questions.length + " réponses";
+  }
+
+  /* --------------------------------------------------------- 2. la liste --- */
+  var chips = { "non conforme": "c-nc", "risque à vérifier": "c-risq", "conforme": "c-conf",
+    "donnée manquante": "c-manq", "sans objet": "c-so" };
+
+  function construireListe() {
+    var p = ETAT.profil;
+    var apps = A.applicables(p);
+    var parCat = {};
+    apps.forEach(function (x) { (parCat[x.categorie] = parCat[x.categorie] || []).push(x); });
+    var html = "";
+    A.categories.forEach(function (cat) {
+      var items = parCat[cat] || [];
+      var dus = items.filter(function (x) { return x.du === true; }).length;
+      html += '<div class="categorie">' + e(cat.charAt(0).toUpperCase() + cat.slice(1)) +
+        "<span>" + dus + " applicable(s) sur " + items.length + "</span></div>";
+      items.forEach(function (x) {
+        var cls = x.du === true ? "" : (x.du === false ? " non-due" : " a-preciser");
+        html += '<div class="obl' + cls + '" id="obl-' + x.id + '">' +
+          '<div class="t">' + e(x.intitule) +
+          (x.du === false ? '<span class="chip c-so">non dû</span>' : "") +
+          (x.du === null ? '<span class="chip c-manq">à préciser</span>' : "") + "</div>" +
+          '<p class="motif">' + e(x.motif) + "</p>" +
+          '<p class="fond">Source : ' + e(x.fondement) + "</p>" +
+          (x.module ? '<p class="renvoi">Audit détaillé : <a href="' + e(x.module.page) + '">module « ' +
+            e(x.module.nom) + " »</a></p>" : "");
+        if (x.du === true) {
+          var v = ETAT.coches[x.id] || "";
+          html += '<div class="coches" role="radiogroup" aria-label="' + e(x.intitule) + '">' +
+            '<label><input type="radio" name="coche-' + x.id + '" value="oui"' + (v === "oui" ? " checked" : "") + "> je l'ai</label>" +
+            '<label><input type="radio" name="coche-' + x.id + '" value="non"' + (v === "non" ? " checked" : "") + "> je ne l'ai pas</label>" +
+            "</div>";
+        }
+        html += "</div>";
+      });
+    });
+    $("liste").innerHTML = html;
+    $("liste").addEventListener("change", function (ev) {
+      var m = /^coche-(.+)$/.exec(ev.target.name || "");
+      if (!m) return;
+      ETAT.coches[m[1]] = ev.target.value;
+      enregistrer(); majCompteurCoches();
+    });
+    var d = p.dateAudit ? "Situation décrite au " + p.dateAudit + "." : "";
+    $("liste-date").textContent = d;
+    majCompteurCoches();
+  }
+  function majCompteurCoches() {
+    var apps = A.applicables(ETAT.profil).filter(function (x) { return x.du === true; });
+    var faits = apps.filter(function (x) { return ETAT.coches[x.id]; }).length;
+    $("compteur-coches").textContent = faits + " / " + apps.length + " obligations cochées";
+  }
+
+  /* ----------------------------------------- 3. le plan d'action (manquant) --- */
+  function feuille(mod) {
+    if (!mod) return "";
+    var corps = mod.lignes.map(function (l) {
+      if (l.t === "h") return '<p class="fh">' + e(l.x) + "</p>";
+      if (l.t === "puce") return '<p class="fp">— ' + e(l.x) + "</p>";
+      if (l.t === "champ") return '<p class="fc">' + e(l.x) + "</p>";
+      return "<p>" + e(l.x) + "</p>";
+    }).join("");
+    return '<details class="modele"><summary>Modèle pré-rempli : ' + e(mod.titre) +
+      "</summary>" + '<div class="feuille"><p class="ft">' + e(mod.titre) + "</p>" + corps + "</div></details>";
+  }
+  function carteAction(a, verifier) {
+    return '<div class="action' + (verifier ? " verifier" : "") + '">' +
+      '<div class="t">' + e(a.intitule) + '<span class="prio p-' + a.priorite + '">priorité ' + a.priorite + "</span></div>" +
+      '<p class="quoi"><b>' + e(a.action) + "</b></p>" +
+      '<p class="note">' + e(a.constat) + "</p>" +
+      "<ol>" + a.etapes.map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ol>" +
+      '<div class="meta"><span><b>Qui :</b> ' + e(a.acteur) + "</span><span><b>Délai indicatif :</b> " +
+      e(a.delai) + "</span><span><b>Modèle :</b> " + e(a.modele.nom) + "</span></div>" +
+      '<p class="risque">Risque : ' + e(a.risque) + "</p>" +
+      '<p class="fond note">Source : ' + e(a.fondement) + "</p>" +
+      feuille(a.modeleAdapte) + "</div>";
+  }
+  function construirePlan() {
+    var p = ETAT.profil;
+    var pl = A.plan(p, { coches: ETAT.coches, reponses: ETAT.reponses });
+    /* Le manquant : ce qui est déclaré absent — quel que soit l'état rendu
+       (non conforme quand la source est lue, risque quand elle ne l'est pas). */
+    var absents = pl.actions.concat(pl.aVerifier).filter(function (a) { return ETAT.coches[a.id] === "non"; });
+    var html = '<div class="bandeau ' + (absents.length ? "b-rouge" : "b-vert") + '">' +
+      '<p class="r">' + (absents.length ? absents.length + " obligation(s) déclarée(s) absente(s)" :
+        "Aucune obligation déclarée absente") + "</p>" +
+      '<p class="s">' + e(pl.entreprise || "") + (pl.dateAudit ? " — situation au " + e(pl.dateAudit) : "") +
+      " — plan établi le " + new Date().toISOString().slice(0, 10) + ". Tri : sanctions et expositions fortes d'abord, puis pénalités, puis régularisations rapides.</p></div>";
+    if (!absents.length) html += '<p class="aide">Rien à traiter dans ce temps : passez au contrôle de l\'existant.</p>';
+    absents.forEach(function (a) { html += carteAction(a, a.etat !== "non conforme"); });
+    var nonCoches = pl.aCompleter.filter(function (x) { return !ETAT.coches[x.id]; });
+    if (nonCoches.length) {
+      html += "<h3>Obligations applicables non cochées (" + nonCoches.length + ")</h3>" +
+        '<p class="aide">Sans réponse, rien ne se contrôle : retournez à la liste et cochez.</p>';
+      nonCoches.forEach(function (x) {
+        html += '<div class="verdict v-manq"><div class="t">' + e(x.intitule) + '<span class="chip c-manq">donnée manquante</span></div><p class="w">' + e(x.motif) + "</p></div>";
+      });
+    }
+    $("plan").innerHTML = html;
+  }
+
+  /* ------------------------------------------- 4. le contrôle de l'existant --- */
+  function construireVerifs() {
+    var apps = A.applicables(ETAT.profil).filter(function (x) {
+      return x.du === true && ETAT.coches[x.id] === "oui";
+    });
+    if (!apps.length) {
+      $("verifs").innerHTML = '<p class="aide">Aucune obligation déclarée en place pour l\'instant : cochez « je l\'ai » dans la liste pour contrôler l\'existant.</p>';
+      return;
+    }
+    var html = "";
+    apps.forEach(function (x) {
+      var rep = ETAT.reponses[x.id] || {};
+      html += '<div class="verif-bloc" data-item="' + x.id + '"><p class="t">' + e(x.intitule) + "</p>";
+      x.verifs.forEach(function (v) {
+        var val = rep[v.cle] === undefined ? "" : rep[v.cle];
+        var champ;
+        if (v.format === "oui / non") {
+          champ = '<select data-cle="' + v.cle + '"><option value=""></option>' +
+            '<option' + (val === "oui" ? " selected" : "") + '>oui</option>' +
+            '<option' + (val === "non" ? " selected" : "") + '>non</option></select>';
+        } else {
+          champ = '<input type="date" data-cle="' + v.cle + '" value="' + e(val) + '">';
+        }
+        html += '<div class="verif-q"><span>' + e(v.libelle) + "</span>" + champ + "</div>";
+      });
+      html += "</div>";
+    });
+    $("verifs").innerHTML = html;
+    $("verifs").addEventListener("change", function (ev) {
+      var bloc = ev.target.closest(".verif-bloc"); if (!bloc) return;
+      var id = bloc.getAttribute("data-item");
+      ETAT.reponses[id] = ETAT.reponses[id] || {};
+      ETAT.reponses[id][ev.target.getAttribute("data-cle")] = ev.target.value.trim();
+      enregistrer();
+    });
+  }
+  function construireRapportExistant() {
+    var v = A.verdicts(ETAT.profil, { coches: ETAT.coches, reponses: ETAT.reponses });
+    var lignes = A.referentiel.filter(function (x) { return ETAT.coches[x.id] === "oui"; });
+    var nc = 0, risq = 0, conf = 0, manq = 0;
+    var corps = "";
+    var ordre = ["non conforme", "risque à vérifier", "donnée manquante", "conforme"];
+    ordre.forEach(function (etat) {
+      lignes.forEach(function (x) {
+        var r = v[x.id]; if (!r || r.etat !== etat) return;
+        if (etat === "non conforme") nc++; else if (etat === "risque à vérifier") risq++;
+        else if (etat === "conforme") conf++; else manq++;
+        var cls = etat === "non conforme" ? "v-nc" : etat === "risque à vérifier" ? "v-risq" :
+          etat === "conforme" ? "v-conf" : "v-manq";
+        corps += '<div class="verdict ' + cls + '"><div class="t">' + e(x.intitule) +
+          '<span class="chip ' + chips[etat] + '">' + etat + "</span></div>" +
+          '<p class="w">' + e(r.motif) + "</p>" +
+          '<p class="fond">Source : ' + e(x.fondement) + "</p></div>";
+      });
+    });
+    var teinte = nc ? "b-rouge" : (risq || manq ? "b-orange" : "b-vert");
+    $("rapport-existant").innerHTML =
+      '<div class="bandeau ' + teinte + '"><p class="r">Existant : ' + nc + " non conforme(s) · " +
+      risq + " à vérifier · " + manq + " donnée(s) manquante(s) · " + conf + " conforme(s)</p>" +
+      '<p class="s">' + e(ETAT.profil.entreprise || "") + " — contrôle du " +
+      new Date().toISOString().slice(0, 10) + ". Une case cochée sans détail vérifiable rend « risque à vérifier », jamais « conforme ».</p></div>" + corps;
+  }
+
+  /* ------------------------------------------------- le rapport général --- */
+  function construireRapportGeneral() {
+    var p = ETAT.profil;
+    var dossier = { coches: ETAT.coches, reponses: ETAT.reponses };
+    var v = A.verdicts(p, dossier);
+    var s = A.synthese(p, dossier);
+    var absents = Object.keys(ETAT.coches).filter(function (id) { return ETAT.coches[id] === "non"; }).length;
+    var teinte = s.nonConformes ? "b-rouge" : (s.risques || s.manquantes ? "b-orange" : "b-vert");
+    var html = '<div class="bandeau ' + teinte + '">' +
+      '<p class="r">' + s.applicables + " obligations applicables · " + absents + " déclarée(s) absente(s) · " +
+      s.nonConformes + " non conforme(s) · " + s.risques + " à vérifier · " + s.conformes + " conforme(s)</p>" +
+      '<p class="s">' + e(p.entreprise || "Entreprise non dénommée") +
+      (p.dateAudit ? " — situation au " + e(p.dateAudit) : "") +
+      " — rapport établi le " + new Date().toISOString().slice(0, 10) +
+      ". " + s.manquantes + " donnée(s) manquante(s), " + s.sansObjet + " sans objet, " +
+      s.indetermines + " assujettissement(s) à préciser.</p></div>";
+
+    /* L'évolution depuis le dernier passage : ce qui a été fait, ce qui reste. */
+    var histo = [];
+    try { histo = JSON.parse(localStorage.getItem(CLE_HISTO) || "[]"); } catch (e2) {}
+    if (histo.length) {
+      var avant = histo[histo.length - 1];
+      var faits = [], restants = [];
+      A.referentiel.forEach(function (x) {
+        var av = avant.etats[x.id], ap = (v[x.id] || {}).etat;
+        var mauvais = function (t) { return t === "non conforme" || t === "risque à vérifier"; };
+        if (mauvais(av) && ap === "conforme") faits.push(x.intitule);
+        else if (mauvais(av) && mauvais(ap)) restants.push(x.intitule);
+      });
+      if (faits.length || restants.length) {
+        html += '<div class="evolution"><p class="sh">Évolution depuis le rapport du ' + e(avant.date) + "</p>";
+        if (faits.length) html += "<p><b>Fait depuis (" + faits.length + ")&nbsp;:</b> " + e(faits.join(" · ")) + "</p>";
+        if (restants.length) html += "<p><b>Restant (" + restants.length + ")&nbsp;:</b> " + e(restants.join(" · ")) + "</p>";
+        html += "</div>";
+      }
+    }
+
+    html += '<div class="tab"><table><thead><tr><th>Obligation</th><th>État</th><th>Constat</th><th>Source</th></tr></thead><tbody>';
+    A.categories.forEach(function (cat) {
+      var items = A.referentiel.filter(function (x) { return x.categorie === cat; });
+      html += '<tr><th colspan="4" style="background:#f0eaef;color:#5C2A54">' +
+        e(cat.charAt(0).toUpperCase() + cat.slice(1)) + "</th></tr>";
+      items.forEach(function (x) {
+        var r = v[x.id] || { etat: "donnée manquante", motif: "" };
+        html += "<tr><td>" + e(x.intitule) + "</td>" +
+          '<td><span class="chip ' + (chips[r.etat] || "c-manq") + '">' + e(r.etat) + "</span></td>" +
+          "<td>" + e(r.motif) + "</td><td>" + e(x.fondement) + "</td></tr>";
+      });
+    });
+    html += "</tbody></table></div>" +
+      '<p class="note">Chaque article cité a été lu au relais Légifrance de l\'application, en deux ' +
+      'lectures concordantes espacées, et porte son identifiant de version (LEGIARTI). Les obligations ' +
+      'conventionnelles sont signalées « à vérifier » : le relais ne sert que le code du travail. ' +
+      'Ce rapport dit l\'état des réponses données — il ne délivre aucun blanc-seing.</p>';
+    $("rapport-general").innerHTML = html;
+
+    /* L'historique du suivi : un instantané par rapport général, le dernier
+       servant de point de comparaison au passage suivant. */
+    var etats = {};
+    A.referentiel.forEach(function (x) { etats[x.id] = (v[x.id] || {}).etat; });
+    histo.push({ date: new Date().toISOString().slice(0, 10), synthese: s, etats: etats });
+    while (histo.length > 12) histo.shift();
+    try { localStorage.setItem(CLE_HISTO, JSON.stringify(histo)); } catch (e3) {}
+  }
+
+  /* ------------------------------------------------------- la navigation --- */
+  function montrer(t) {
+    $("bloc-liste").style.display = t >= 2 ? "" : "none";
+    $("bloc-manquant").style.display = t >= 3 ? "" : "none";
+    $("bloc-existant").style.display = t >= 4 ? "" : "none";
+    $("bloc-general").style.display = t >= 5 ? "" : "none";
+    Array.prototype.forEach.call(document.querySelectorAll("#fil-temps span"), function (el) {
+      var n = Number(el.getAttribute("data-t"));
+      el.className = n === t ? "actif" : (n < t ? "fait" : "");
+    });
+  }
+  function imprimer(cible) {
+    document.body.className = "print-" + cible;
+    window.print();
+    document.body.className = "";
+  }
+
+  $("generer").addEventListener("click", function () {
+    lireFormulaire(); enregistrer();
+    construireListe(); montrer(2);
+    $("t2").scrollIntoView({ behavior: "smooth" });
+  });
+  $("vers-plan").addEventListener("click", function () {
+    construirePlan(); montrer(3);
+    $("t3").scrollIntoView({ behavior: "smooth" });
+  });
+  $("vers-existant").addEventListener("click", function () {
+    construireVerifs(); montrer(4);
+    $("t4").scrollIntoView({ behavior: "smooth" });
+  });
+  $("controler").addEventListener("click", function () {
+    construireRapportExistant(); construireRapportGeneral(); montrer(5);
+    $("rapport-existant").scrollIntoView({ behavior: "smooth" });
+  });
+  $("imprimer-liste").addEventListener("click", function () { imprimer("liste"); });
+  $("imprimer-plan").addEventListener("click", function () { imprimer("manquant"); });
+  $("imprimer-existant").addEventListener("click", function () { imprimer("existant"); });
+  $("imprimer-general").addEventListener("click", function () { imprimer("general"); });
+  $("copier-plan").addEventListener("click", function () {
+    var txt = $("plan").innerText;
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject())
+      .then(function () { message("Plan copié dans le presse-papiers."); },
+            function () { message("Copie impossible dans ce navigateur : sélectionnez le texte à la main."); });
+  });
+  $("exemple").addEventListener("click", function () {
+    ETAT = etatVide();
+    ETAT.profil = { entreprise: "SOCIÉTÉ D'EXEMPLE SAS", dateAudit: new Date().toISOString().slice(0, 10),
+      effectif: 60, seuilDepuis12Mois: "oui", secteur: "services", conventionCollective: "Bureaux d'études techniques (Syntec, IDCC 1486)",
+      groupe: "non", etablissementsDistincts: "non", sectionSyndicale: "oui", accordsCollectifs: "non",
+      matieresInflammables: "non", cadres: "oui", projetLicenciementEco: "non" };
+    enregistrer(); construireFormulaire(); majCompteur();
+    message("Exemple chargé : 60 salariés, secteur services. Générez la liste.");
+  });
+  $("vider").addEventListener("click", function () {
+    ETAT = etatVide(); enregistrer(); construireFormulaire(); majCompteur(); montrer(1);
+    message("Tout est effacé. L'historique de suivi est conservé — il s'efface avec les données du navigateur.");
+  });
+  function message(txt) {
+    var m = $("message"); m.textContent = txt; m.style.display = "block";
+    clearTimeout(message.t); message.t = setTimeout(function () { m.style.display = "none"; }, 6000);
+  }
+
+  $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
+  $("btn-retour").addEventListener("click", function () {
+    if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
+    else location.href = "./";
+  });
+
+  var man = window.MoteurSocial.manifeste || {};
+  $("pied").innerHTML = "Moteur : " + e(man.domaine || "audit social") +
+    (man.empreinte ? " — empreinte " + '<span class="ident">' + e(man.empreinte) + "</span>" : "") +
+    (man.compteurs ? " — " + man.compteurs.obligations + " obligations, " + man.compteurs.articlesLus +
+      " articles lus à la source" : "") +
+    ". Les données saisies restent dans ce navigateur.";
+
+  construireFormulaire(); majCompteur();
+  /* Si un brouillon existe déjà, la liste se rouvre là où on l'a laissée. */
+  if (Object.keys(ETAT.profil).length && Object.keys(ETAT.coches).length) {
+    construireListe(); montrer(2);
+  }
+})();
+</script>
+<script>
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>
