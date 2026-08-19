@@ -1,20 +1,22 @@
 {
  "domaine": "audit social — le chapeau des obligations de l'employeur",
  "date": "2026-08-19",
- "empreinte": "2d43af47ec54",
+ "empreinte": "c5ab7aa842bb",
  "fichiers": {
   "audit-social-client.js": "7a478d627254",
   "capturer-textes-social-2.js": "4d61e2c885d8",
+  "capturer-textes-social-3.js": "ae2db2f3a775",
   "capturer-textes-social.js": "f79e801d9e31",
   "controles-social.js": "dca44c7025a0",
-  "modeles-social.js": "f0d25d41f7e9",
+  "generer-donnees-modeles.js": "f8f64294ce6d",
+  "modeles-social.js": "8eb326b216ab",
   "moteur-social.js": "6e23710d673f",
   "plan-social.js": "790ea6b6be17",
   "questionnaire-social.js": "71fc9a4ae24a",
-  "referentiel-social.js": "ce5126f5ee06",
-  "tests-social.js": "f8ba31758c76",
-  "textes-social-non-confirmes.json": "4a15a4d57c34",
-  "textes-social.json": "5141260645ac",
+  "referentiel-social.js": "c9e532c2a944",
+  "tests-social.js": "3751883a7bf3",
+  "textes-social-non-confirmes.json": "ff595f9c4875",
+  "textes-social.json": "9127b61d78e2",
   "verifier-textes-social.js": "de5da88f7ad0"
  },
  "compteurs": {
@@ -29,9 +31,9 @@
    "formation et entretiens": 2,
    "épargne et protection sociale": 4
   },
-  "articlesLus": 34,
-  "articlesNonConfirmes": 0,
-  "articlesCites": 34,
+  "articlesLus": 44,
+  "articlesNonConfirmes": 1,
+  "articlesCites": 44,
   "renvoisModules": 12,
   "itemsConventionnels": 2,
   "itemsGeneriques": 2,
@@ -43,9 +45,9 @@
  },
  "textesRelus": {
   "date": "2026-08-19",
-  "articles": 34,
-  "concordants": 33,
+  "articles": 44,
+  "concordants": 44,
   "ecarts": 0,
-  "sansConclusion": 1
+  "sansConclusion": 0
  }
 }

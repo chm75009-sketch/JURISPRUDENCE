@@ -1,0 +1,989 @@
+{
+ "bdese": {
+  "source": "découpage des décrets par moteur/bdese/contenu-bdese.js, textes lus à la source",
+  "plancher": [
+   "investissement social",
+   "investissement matériel et immatériel",
+   "égalité professionnelle entre les femmes et les hommes au sein de l'entreprise",
+   "fonds propres",
+   "endettement",
+   "ensemble des éléments de la rémunération des salariés et dirigeants",
+   "activités sociales et culturelles",
+   "rémunération des financeurs",
+   "flux financiers à destination de l'entreprise",
+   "conséquences environnementales de l'activité de l'entreprise"
+  ],
+  "plancherSource": "L. 2312-21, al. 3 (LEGIARTI000043975329)",
+  "moins300": {
+   "article": "R2312-8",
+   "version": "LEGIARTI000049905537",
+   "seuil": "moins de trois cents salariés",
+   "rubriques": [
+    {
+     "n": 1,
+     "titre": "Investissements",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Investissement social",
+       "sujets": [
+        "Evolution des effectifs par type de contrat, par âge, par ancienneté",
+        "Evolution des emplois par catégorie professionnelle",
+        "Evolution de l'emploi des personnes handicapées et mesures prises pour le développer",
+        "Evolution du nombre de stagiaires de plus de 16 ans",
+        "Formation professionnelle : investissements en formation, publics concernés",
+        "Conditions de travail : durée du travail dont travail à temps partiel et aménagement du temps de travail",
+        "Aux principes généraux de prévention prévus aux articles L. 4121-1 à L. 4121-5 et L. 4221-1",
+        "A l'information et à la formation des travailleurs prévues aux articles L. 4141-1 à L. 4143-1",
+        "A l'information et à la formation des salariés titulaires d'un contrat de travail à durée déterminée et des salariés temporaires prévues aux articles L. 4154-2 et L. 4154-4",
+        "A la coordination de la prévention prévue aux articles L. 4522-1 et L. 4522-2"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Investissement matériel et immatériel",
+       "sujets": [
+        "Evolution des actifs nets d'amortissement et de dépréciations éventuelles (immobilisations)",
+        "Le cas échéant, dépenses de recherche et développement",
+        "Mesures envisagées en ce qui concerne l'amélioration, le renouvellement ou la transformation des méthodes de production et d'exploitation"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "titre": "Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Analyse des données chiffrées",
+       "sujets": [
+        "Analyse des données chiffrées : Analyse des données chiffrées par catégorie professionnelle de la situation respective des femmes et des hommes en matière d'embauche, de formation, de promotion professionnelle, de qualification, de classification, de conditions de travail, de santé et de sécurité au travail, de rémunération effective et d'articulation entre l'activité professionnelle et l'exercice de la responsabilité familiale analyse des écarts de salaires et de déroulement de carrière en fonction de leur âge, de leur qualification et de leur ancienneté"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Stratégie d'action",
+       "sujets": [
+        "Stratégie d'action : A partir de l'analyse des données chiffrées mentionnées au A du 2°, la stratégie comprend les éléments suivants : -mesures prises au cours de l'année écoulée en vue d'assurer l'égalité professionnelle. Bilan des actions de l'année écoulée et, le cas échéant, de l'année précédente. Evaluation du niveau de réalisation des objectifs sur la base des indicateurs retenus. Explications sur les actions prévues non réalisées"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 3,
+     "titre": "Fonds propres, endettement et impôts",
+     "sections": [
+      {
+       "lettre": null,
+       "titre": "a) Capitaux propres de l'entreprise",
+       "sujets": [
+        "Capitaux propres de l'entreprise",
+        "Emprunts et dettes financières dont échéances et charges financières",
+        "Impôts et taxes, notamment, le cas échéant, les informations contenues dans le rapport relatif à l'impôt sur les bénéfices prévu par l' article L. 232-6 du code de commerce"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 4,
+     "titre": "Rémunération des salariés et dirigeants, dans l'ensemble de leurs éléments",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Evolution des rémunérations salariales",
+       "sujets": [
+        "Frais de personnel y compris cotisations sociales, évolutions salariales par catégorie et par sexe, salaire de base minimum, salaire moyen ou médian, par sexe et par catégorie professionnelle",
+        "Pour les entreprises soumises aux dispositions de l' article L. 225-115 du code de commerce , montant global des rémunérations visées au 4° de cet article",
+        "Epargne salariale : intéressement, participation"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 5,
+     "titre": "Activités sociales et culturelles",
+     "sections": [
+      {
+       "lettre": null,
+       "titre": "montant de la contribution aux activités sociales et culturelles Du comité social et économique, mécénat",
+       "sujets": [
+        "montant de la contribution aux activités sociales et culturelles Du comité social et économique, mécénat"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 6,
+     "titre": "Rémunération des financeurs, en dehors des éléments mentionnés au 4°",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Rémunération des actionnaires (revenus distribués)",
+       "sujets": [
+        "Rémunération des actionnaires (revenus distribués)"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Rémunération de l'actionnariat salarié (montant des actions détenues dans le cadre de l'épargne salariale, part dans le capital, dividendes reçus)",
+       "sujets": [
+        "Rémunération de l'actionnariat salarié (montant des actions détenues dans le cadre de l'épargne salariale, part dans le capital, dividendes reçus)"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 7,
+     "titre": "Flux financiers à destination de l'entreprise",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Aides publiques",
+       "sujets": [
+        "Aides publiques : Aides ou avantages financiers consentis à l'entreprise par l'Union européenne, l'Etat, une collectivité territoriale, un de leurs établissements publics ou un organisme privé chargé d'une mission de service public, et leur utilisation. Pour chacune de ces aides, il est indiqué la nature de l'aide, son objet, son montant, les conditions de versement et d'emploi fixées, le cas échéant, par la personne publique qui l'attribue et son emploi"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Réductions d'impôts",
+       "sujets": [
+        "Réductions d'impôts"
+       ]
+      },
+      {
+       "lettre": "C",
+       "titre": "Exonérations et réductions de cotisations sociales",
+       "sujets": [
+        "Exonérations et réductions de cotisations sociales"
+       ]
+      },
+      {
+       "lettre": "D",
+       "titre": "Crédits d'impôts",
+       "sujets": [
+        "Crédits d'impôts"
+       ]
+      },
+      {
+       "lettre": "E",
+       "titre": "Mécénat",
+       "sujets": [
+        "Mécénat"
+       ]
+      },
+      {
+       "lettre": "F",
+       "titre": "Résultats financiers",
+       "sujets": [
+        "Chiffre d'affaires, bénéfices ou pertes constatés",
+        "Résultats d'activité en valeur et en volume",
+        "Affectation des bénéfices réalisés"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 8,
+     "titre": "Partenariats",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Partenariats conclus pour produire des services ou des produits pour une autre entreprise",
+       "sujets": [
+        "Partenariats conclus pour produire des services ou des produits pour une autre entreprise"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Partenariats conclus pour bénéficier des services ou des produits d'une autre entreprise",
+       "sujets": [
+        "Partenariats conclus pour bénéficier des services ou des produits d'une autre entreprise"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 9,
+     "titre": "Pour les entreprises appartenant à un groupe, transferts commerciaux et financiers entre les entités du groupe",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Transferts de capitaux tels qu'ils figurent dans les comptes individuels des sociétés du g",
+       "sujets": [
+        "Transferts de capitaux tels qu'ils figurent dans les comptes individuels des sociétés du groupe lorsqu'ils présentent une importance significative, notamment transferts de capitaux importants entre la société mère et les filiales"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Cessions, fusions, et acquisitions réalisées.",
+       "sujets": [
+        "Cessions, fusions, et acquisitions réalisées."
+       ]
+      }
+     ]
+    },
+    {
+     "n": 10,
+     "titre": "Environnement (1) A-Politique générale en matière environnementale",
+     "sections": [
+      {
+       "lettre": null,
+       "titre": "Environnement (1)",
+       "sujets": [
+        "Environnement (1)"
+       ]
+      },
+      {
+       "lettre": "A",
+       "titre": "Politique générale en matière environnementale",
+       "sujets": [
+        "Politique générale en matière environnementale : Organisation de l'entreprise pour prendre en compte les questions environnementales et, le cas échéant, les démarches d'évaluation ou de certification en matière d'environnement"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Economie circulaire",
+       "sujets": [
+        "Prévention et gestion de la production de déchets : évaluation de la quantité de déchets dangereux définis à l' article R. 541-8 du code de l'environnement et faisant l'objet d'une émission du bordereau mentionné à l' article R. 541-45 du même code",
+        "Utilisation durable des ressources : consommation d'eau et consommation d'énergie"
+       ]
+      },
+      {
+       "lettre": "C",
+       "titre": "Changement climatique",
+       "sujets": [
+        "Identification des postes d'émissions directes de gaz à effet de serre produites par les sources fixes et mobiles nécessaires aux activités de l'entreprise (communément appelées \" émissions du scope 1 \") et, lorsque l'entreprise dispose de cette information, évaluation du volume de ces émissions de gaz à effet de serre",
+        "Bilan des émissions de gaz à effet de serre prévu par l' article L. 229-25 du code de l'environnement ou bilan simplifié prévu par l' article 244 de la loi n° 2020-1721 du 29 décembre 2020 de finances pour 2021 pour les entreprises tenues d'établir ces différents bilans. Notes : (1) Lorsque les données et informations environnementales transmises dans le cadre de cette rubrique ne sont pas éditées au niveau de l'entreprise (i. e. par exemple, au niveau du groupe ou des établissements distincts, le cas échéant), elles doivent être accompagnées d'informations supplémentaires pertinentes pour être mises en perspective à ce niveau."
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "auMoins300": {
+   "article": "R2312-9",
+   "version": "LEGIARTI000049905524",
+   "seuil": "au moins trois cents salariés",
+   "rubriques": [
+    {
+     "n": 1,
+     "titre": "Investissements",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Investissement social",
+       "sujets": [
+        "Evolution des effectifs par type de contrat, par âge, par ancienneté",
+        "Effectif : Effectif total au 31/12 (1) (I)",
+        "Travailleurs extérieurs : Nombre de salariés (6) appartenant à une entreprise extérieure (23)",
+        "Evolution des emplois, notamment, par catégorie professionnelle",
+        "Embauches : Nombre d'embauches par contrats de travail à durée indéterminée",
+        "Départs : Total des départs (I)",
+        "Promotions : Nombre de salariés promus dans l'année dans une catégorie supérieure (11)",
+        "Chômage : Nombre de salariés mis en chômage partiel pendant l'année considérée (I)",
+        "Evolution de l'emploi des personnes handicapées et mesures prises pour le développer",
+        "Evolution du nombre de stagiaires",
+        "Formation professionnelle : investissements en formation, publics concernés",
+        "Formation professionnelle continue (44) : Pourcentage de la masse salariale afférent à la formation continue",
+        "Congés formation : Nombre de salariés ayant bénéficié d'un congé formation rémunéré",
+        "Apprentissage : Nombre de contrats d'apprentissage conclus dans l'année",
+        "Conditions de travail : Durée du travail dont travail à temps partiel et aménagement du temps de travail, les données sur l'exposition aux risques et aux facteurs de pénibilité, (accidents du travail, maladies professionnelles, absentéisme, dépenses en matière de sécurité)",
+        "Accidents du travail et de trajet : Taux de fréquence des accidents du travail (I) Nombre d'accidents avec arrêts de travail divisé par nombre d'heures travaillées",
+        "Répartition des accidents par éléments matériels (28) : Nombre d'accidents liés à l'existence de risques graves-codes 32 à 40",
+        "Maladies professionnelles : Nombre et dénomination des maladies professionnelles déclarées à la sécurité sociale au cours de l'année",
+        "Dépenses en matière de sécurité : Effectif formé à la sécurité dans l'année",
+        "Durée et aménagement du temps de travail : Horaire hebdomadaire moyen affiché des ouvriers et employés ou catégories assimilées (30) (I)",
+        "Absentéisme (14) : Nombre de journées d'absence (15) (I)",
+        "Organisation et contenu du travail : Nombre de personnes occupant des emplois à horaires alternant ou de nuit",
+        "Conditions physiques de travail : Nombre de personnes exposées de façon habituelle et régulière à plus de 80 à 85 db à leur poste de travail (37)",
+        "Conditions de travail : durée du travail dont travail à temps partiel et aménagement du temps de travail"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Investissement matériel et immatériel",
+       "sujets": [
+        "Evolution des actifs nets d'amortissement et de dépréciations éventuelles (immobilisations)",
+        "Le cas échéant, dépenses de recherche et développement",
+        "L'évolution de la productivité et le taux d'utilisation des capacités de production, lorsque ces éléments sont mesurables dans l'entreprise"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "titre": "Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise",
+     "sections": [
+      {
+       "lettre": "I",
+       "titre": "Indicateurs sur la situation comparée des femmes et des hommes dans l'entreprise",
+       "sujets": [
+        "Indicateurs sur la situation comparée des femmes et des hommes dans l'entreprise :"
+       ]
+      },
+      {
+       "lettre": "A",
+       "titre": "Conditions générales d'emploi",
+       "sujets": [
+        "Effectifs : Données chiffrées par sexe : -Répartition par catégorie professionnelle selon les différents contrats de travail (CDI ou CDD)",
+        "Durée et organisation du travail : Données chiffrées par sexe : -Répartition des effectifs selon la durée du travail : temps complet, temps partiel (compris entre 20 et 30 heures et autres formes de temps partiel)",
+        "Données sur les congés : Données chiffrées par sexe : -Répartition par catégorie professionnelle",
+        "Données sur les embauches et les départs : Données chiffrées par sexe : -répartition des embauches par catégorie professionnelle et type de contrat de travail",
+        "Positionnement dans l'entreprise : Données chiffrées par sexe : -répartition des effectifs par catégorie professionnelle"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Rémunérations et déroulement de carrière",
+       "sujets": [
+        "Promotion : Données chiffrées par sexe : -nombre et taux de promotions par catégorie professionnelle",
+        "Ancienneté : Données chiffrées par sexe : -ancienneté moyenne par catégorie professionnelle",
+        "Age : Données chiffrées par sexe : -âge moyen par catégorie professionnelle",
+        "Rémunérations : Données chiffrées par sexe : -rémunération moyenne ou médiane mensuelle par catégorie professionnelle"
+       ]
+      },
+      {
+       "lettre": "C",
+       "titre": "Formation",
+       "sujets": [
+        "Formation : Données chiffrées par sexe : Répartition par catégorie professionnelle selon : -le nombre moyen d'heures d'actions de formation par salarié et par an"
+       ]
+      },
+      {
+       "lettre": "D",
+       "titre": "Conditions de travail, santé et sécurité au travail",
+       "sujets": [
+        "Conditions de travail, santé et sécurité au travail : Données générales par sexe : -répartition par poste de travail selon : -l'exposition à des risques professionnels"
+       ]
+      },
+      {
+       "lettre": "II",
+       "titre": "Indicateurs relatifs à l'articulation entre l'activité professionnelle et l'exercice de la responsabilité familiale",
+       "sujets": [
+        "Indicateurs relatifs à l'articulation entre l'activité professionnelle et l'exercice de la responsabilité familiale :"
+       ]
+      },
+      {
+       "lettre": "A",
+       "titre": "Congés",
+       "sujets": [
+        "Existence d'un complément de salaire versé par l'employeur pour le congé de paternité, le congé de maternité, le congé d'adoption",
+        "Données chiffrées par catégorie professionnelle : nombre de jours de congés de paternité pris par le salarié par rapport au nombre de jours de congés théoriques"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Organisation du temps de travail dans l'entreprise. a) Existence de formules d'organisatio",
+       "sujets": [
+        "Existence de formules d'organisation du travail facilitant l'articulation de la vie familiale et de la vie professionnelle",
+        "Données chiffrées par sexe et par catégorie professionnelle : -nombre de salariés ayant accédé au temps partiel choisi",
+        "Services de proximité : -participation de l'entreprise et du comité social et économique aux modes d'accueil de la petite enfance",
+        "Les ouvriers, les employés, techniciens, agents de maîtrise et les cadres",
+        "Ou les catégories d'emplois définies par la classification",
+        "Ou toute catégorie pertinente au sein de l'entreprise. Toutefois, l'indicateur relatif à la rémunération moyenne ou médiane mensuelle comprend au moins deux niveaux de comparaison dont celui mentionné au a ci-dessus."
+       ]
+      },
+      {
+       "lettre": "III",
+       "titre": "Stratégie d'action",
+       "sujets": [
+        "Stratégie d'action : A partir de l'analyse des indicateurs mentionnés aux I et II, la stratégie d'action comprend les éléments suivants : -mesures prises au cours de l'année écoulée en vue d'assurer l'égalité professionnelle. Bilan des actions de l'année écoulée et, le cas échéant, de l'année précédente. Evaluation du niveau de réalisation des objectifs sur la base des indicateurs retenus. Explications sur les actions prévues non réalisées"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 3,
+     "titre": "Fonds propres, endettement et impôts",
+     "sections": [
+      {
+       "lettre": null,
+       "titre": "a) Capitaux propres de l'entreprise",
+       "sujets": [
+        "Capitaux propres de l'entreprise",
+        "Emprunts et dettes financières dont échéances et charges financières",
+        "Impôts et taxes, notamment, le cas échéant, les informations contenues dans le rapport relatif à l'impôt sur les bénéfices prévu par l'article L. 232-6 du code de commerce"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 4,
+     "titre": "Rémunération des salariés et dirigeants, dans l'ensemble de leurs éléments",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Evolution des rémunérations salariales",
+       "sujets": [
+        "Frais de personnel (24) y compris cotisations sociales, évolutions salariales par catégorie et par sexe, salaire de base minimum, salaire moyen ou médian, par sexe et par catégorie professionnelle",
+        "Montant des rémunérations (17) : Choix de deux indicateurs dans l'un des groupes suivants : -rapport entre la masse salariale annuelle (18) (II) et l'effectif mensuel moyen",
+        "Hiérarchie des rémunérations : Choix d'un des deux indicateurs suivants : -rapport entre la moyenne des rémunérations des 10 % des salariés touchant les rémunérations les plus élevées et celle correspondant au 10 % des salariés touchant les rémunérations les moins élevées",
+        "Mode de calcul des rémunérations : Pourcentage des salariés dont le salaire dépend, en tout ou partie, du rendement (22). Pourcentage des ouvriers et employés payés au mois sur la base de l'horaire affiché.",
+        "Charge salariale globale",
+        "Pour les entreprises soumises aux dispositions de l'article L. 225-115 du code de commerce, montant global des rémunérations visées au 4° de cet article"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Epargne salariale",
+       "sujets": [
+        "Epargne salariale : intéressement, participation : Montant global de la réserve de participation (25)"
+       ]
+      },
+      {
+       "lettre": "C",
+       "titre": "Rémunérations accessoires",
+       "sujets": [
+        "Rémunérations accessoires : primes par sexe et par catégorie professionnelle, avantages en nature, régimes de prévoyance et de retraite complémentaire"
+       ]
+      },
+      {
+       "lettre": "D",
+       "titre": "Rémunération des dirigeants mandataires sociaux telles que présentées dans le rapport de g",
+       "sujets": [
+        "Rémunération des dirigeants mandataires sociaux telles que présentées dans le rapport de gestion en application des trois premiers alinéas de l'article L. 225-102-1 du code de commerce, pour les entreprises soumises à l'obligation de présenter le rapport visé à l'article L. 225-102 du même code"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 5,
+     "titre": "Représentation du personnel et Activités sociales et culturelles",
+     "sections": [
+      {
+       "lettre": null,
+       "titre": "montant de la contribution aux activités sociales et culturelles du comité social et économique, mécénat",
+       "sujets": [
+        "montant de la contribution aux activités sociales et culturelles du comité social et économique, mécénat :"
+       ]
+      },
+      {
+       "lettre": "A",
+       "titre": "Représentation du personnel",
+       "sujets": [
+        "Représentants du personnel et délégués syndicaux : Composition des comités sociaux et économiques et/ ou d'établissement avec indication, s'il y a lieu, de l'appartenance syndicale",
+        "Information et communication : Nombre d'heures consacrées aux différentes formes de réunion du personnel (46)",
+        "Différends concernant l'application du droit du travail (48)"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Activités sociales et culturelles",
+       "sujets": [
+        "Activités sociales : Contributions au financement, le cas échéant, du comité social et économique et des comités sociaux économiques d'établissement",
+        "Autres charges sociales : Coût pour l'entreprise des prestations complémentaires (maladie, décès) (50)"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 6,
+     "titre": "Rémunération des financeurs, en dehors des éléments mentionnés au 4°",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Rémunération des actionnaires (revenus distribués)",
+       "sujets": [
+        "Rémunération des actionnaires (revenus distribués)"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Rémunération de l'actionnariat salarié (montant des actions détenues dans le cadre de l'épargne salariale, part dans le capital, dividendes reçus)",
+       "sujets": [
+        "Rémunération de l'actionnariat salarié (montant des actions détenues dans le cadre de l'épargne salariale, part dans le capital, dividendes reçus)"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 7,
+     "titre": "Flux financiers à destination de l'entreprise",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Aides publiques",
+       "sujets": [
+        "Aides publiques : Les aides ou avantages financiers consentis à l'entreprise par l'Union européenne, l'Etat, une collectivité territoriale, un de leurs établissements publics ou un organisme privé chargé d'une mission de service public, et leur utilisation"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Réductions d'impôts",
+       "sujets": [
+        "Réductions d'impôts"
+       ]
+      },
+      {
+       "lettre": "C",
+       "titre": "Exonérations et réductions de cotisations sociales",
+       "sujets": [
+        "Exonérations et réductions de cotisations sociales"
+       ]
+      },
+      {
+       "lettre": "D",
+       "titre": "Crédits d'impôts",
+       "sujets": [
+        "Crédits d'impôts"
+       ]
+      },
+      {
+       "lettre": "E",
+       "titre": "Mécénat",
+       "sujets": [
+        "Mécénat"
+       ]
+      },
+      {
+       "lettre": "F",
+       "titre": "Résultats financiers a) Le chiffre d'affaires",
+       "sujets": [
+        "Le chiffre d'affaires",
+        "Les bénéfices ou pertes constatés",
+        "Les résultats globaux de la production en valeur et en volume",
+        "L'affectation des bénéfices réalisés"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 8,
+     "titre": "Partenariats",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Partenariats conclus pour produire des services ou des produits pour une autre entreprise",
+       "sujets": [
+        "Partenariats conclus pour produire des services ou des produits pour une autre entreprise"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Partenariats conclus pour bénéficier des services ou des produits d'une autre entreprise",
+       "sujets": [
+        "Partenariats conclus pour bénéficier des services ou des produits d'une autre entreprise"
+       ]
+      }
+     ]
+    },
+    {
+     "n": 9,
+     "titre": "Pour les entreprises appartenant à un groupe, transferts commerciaux et financiers entre les entités du groupe",
+     "sections": [
+      {
+       "lettre": "A",
+       "titre": "Transferts de capitaux tels qu'ils figurent dans les comptes individuels des sociétés du groupe lorsqu'ils présentent une importance significative",
+       "sujets": [
+        "Transferts de capitaux tels qu'ils figurent dans les comptes individuels des sociétés du groupe lorsqu'ils présentent une importance significative"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Cessions, fusions, et acquisitions réalisées.",
+       "sujets": [
+        "Cessions, fusions, et acquisitions réalisées."
+       ]
+      }
+     ]
+    },
+    {
+     "n": 10,
+     "titre": "Environnement (52)",
+     "sections": [
+      {
+       "lettre": "I",
+       "titre": "Pour les entreprises soumises à la déclaration prévue à l'article R. 225-105 du code de commerce",
+       "sujets": [
+        "Pour les entreprises soumises à la déclaration prévue à l'article R. 225-105 du code de commerce :"
+       ]
+      },
+      {
+       "lettre": "A",
+       "titre": "Politique générale en matière environnementale",
+       "sujets": [
+        "Politique générale en matière environnementale : Informations environnementales présentées en application du 2° du A du II de l'article R. 225-105 du code de commerce"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Economie circulaire",
+       "sujets": [
+        "Economie circulaire : Prévention et gestion de la production de déchets : évaluation de la quantité de déchets dangereux définis à l'article R. 541-8 du code de l'environnement et faisant l'objet d'une émission du bordereau mentionné à l'article R. 541-45 du même code"
+       ]
+      },
+      {
+       "lettre": "C",
+       "titre": "Changement climatique",
+       "sujets": [
+        "Changement climatique : Bilan des émissions de gaz à effet de serre prévu par l'article L. 229-25 du code de l'environnement ou bilan simplifié prévu par l'article 244 de la loi n° 2020-1721 du 29 décembre 2020 de finances pour 2021 pour les entreprises tenues d'établir ces différents bilans"
+       ]
+      },
+      {
+       "lettre": "II",
+       "titre": "Pour les entreprises non soumises à la déclaration prévue à l'article R. 225-105 du code de commerce",
+       "sujets": [
+        "Pour les entreprises non soumises à la déclaration prévue à l'article R. 225-105 du code de commerce :"
+       ]
+      },
+      {
+       "lettre": "A",
+       "titre": "Politique générale en matière environnementale",
+       "sujets": [
+        "Politique générale en matière environnementale : Organisation de l'entreprise pour prendre en compte les questions environnementales et, le cas échéant, les démarches d'évaluation ou de certification en matière d'environnement"
+       ]
+      },
+      {
+       "lettre": "B",
+       "titre": "Economie circulaire",
+       "sujets": [
+        "Prévention et gestion de la production de déchets : évaluation de la quantité de déchets dangereux définis à l'article R. 541-8 du code de l'environnement et faisant l'objet d'une émission du bordereau mentionné à l'article R. 541-45 du même code",
+        "Utilisation durable des ressources : consommation d'eau et consommation d'énergie"
+       ]
+      },
+      {
+       "lettre": "C",
+       "titre": "Changement climatique",
+       "sujets": [
+        "Identification des postes d'émissions directes de gaz à effet de serre produites par les sources fixes et mobiles nécessaires aux activités de l'entreprise (communément appelées \" émissions du scope 1 \") et, lorsque l'entreprise dispose de cette information, évaluation du volume de ces émissions de gaz à effet de serre",
+        "Bilan des émissions de gaz à effet de serre prévu par l'article L. 229-25 du code de l'environnement ou le bilan simplifié prévu par l'article 244 de la loi n° 2020-1721 du 29 décembre 2020 de finances pour 2021 pour les entreprises tenues d'établir ces bilans. Notes : I.-Une structure de qualification détaillée, en trois ou quatre postes minimum, est requise. Il est souhaitable de faire référence à la classification de la convention collective, de l'accord d'entreprise et aux pratiques habituellement retenues dans l'entreprise. A titre d'exemple la répartition suivante peut être retenue : cadres",
+        "(effectif du mois",
+        ". (20) Faire une grille des rémunérations en distinguant au moins six tranches. (21) Pour être prises en compte, les catégories concernées doivent comporter au minimum dix salariés. (22) Distinguer les primes individuelles et les primes collectives. (23) Prestataires de services. (24) Frais de personnel : ensemble des rémunérations et des cotisations sociales mises légalement ou conventionnellement à la charge de l'entreprise. (25) Le montant global de la réserve de participation est le montant de la réserve dégagée-ou de la provision constituée-au titre de la participation sur les résultats de l'exercice considéré. (26) La participation est envisagée ici au sens du titre II du livre III de la partie III. (27) Non compris les dirigeants. (28) Faire référence aux codes de classification des éléments matériels des accidents (arrêté du 10 octobre 1974). (29) En application de l'article L. 461-4 du code de la sécurité sociale. (30) Il est possible de remplacer cet indicateur par la somme des heures travaillées durant l'année. (31) Au sens des dispositions du présent code et du code rural et de la pêche maritime instituant un repos compensateur en matière d'heures supplémentaires. (32) Au sens de l'article L. 3121-48. (33) Au sens de l'article L. 3123-1. (34) Cet indicateur peut être calculé sur la dernière période de référence. (35) Préciser, le cas échéant, les conditions restrictives. (36) Seuils associés aux facteurs de risques professionnels pour le travail répétitif : Travail répétitif caractérisé par la réalisation de travaux impliquant l'exécution de mouvements répétés, sollicitant tout ou partie du membre supérieur, à une fréquence élevée et sous cadence contrainte : -Temps de cycle inférieur ou égal à 30 secondes : 15 actions techniques ou plus pour minimum 900 heures par an -Temps de cycle supérieur à 30 secondes, temps de cycle variable ou absence de temps de cycle : 30 actions techniques ou plus par minute pour minimum 900 heures par an.. (37) Les valeurs limites d'exposition et les valeurs d'exposition déclenchant une action de prévention qui sont fixées dans le tableau prévu à l'article R. 4431-2. (38) Température inférieure ou égale à 5 degrés Celsius ou au moins égale à 30 degrés Celsius pour minimum 900 heures par an. (39) Sont considérées comme intempéries, les conditions atmosphériques et les inondations lorsqu'elles rendent dangereux ou impossible l'accomplissement du travail eu égard soit à la santé ou à la sécurité des salariés, soit à la nature ou à la technique du travail à accomplir. (40) Renseignements tirés du rapport du directeur du service de prévention et de santé au travail interentreprises (41) Pour l'explication de ces expériences d'amélioration du contenu du travail, donner le nombre de salariés concernés. (42) Non compris l'évaluation des dépenses en matière de santé et de sécurité. (43) Renseignements tirés du rapport du directeur du service de prévention et de santé au travail interentreprises. (44) Conformément aux données relatives aux contributions de formation professionnelle de la déclaration sociale nominative. (45) Au sens des articles L. 2145-5 et suivants. (46) On entend par réunion du personnel, les réunions régulières de concertation, concernant les relations et conditions de travail organisées par l'entreprise. (47) Préciser leur périodicité. (48) Avec indication de la nature du différend et, le cas échéant, de la solution qui y a mis fin. (49) Dépenses consolidées de l'entreprise. La répartition est indiquée ici à titre d'exemple. (50) (51) Versements directs ou par l'intermédiaire d'assurances. (52) Lorsque les données et informations environnementales transmises dans le cadre de cette rubrique ne sont pas éditées au niveau de l'entreprise (i. e. par exemple, au niveau du groupe ou des établissements distincts, le cas échéant), elles doivent être accompagnées d'informations supplémentaires pertinentes pour être mises en perspective à ce niveau."
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "r2314_1": {
+  "source": "table de R. 2314-1 extraite par le module CSE (moteur/cse/_r2314_1.json)",
+  "tranches": [
+   [
+    11,
+    24,
+    1,
+    10
+   ],
+   [
+    25,
+    49,
+    2,
+    10
+   ],
+   [
+    50,
+    74,
+    4,
+    18
+   ],
+   [
+    75,
+    99,
+    5,
+    19
+   ],
+   [
+    100,
+    124,
+    6,
+    21
+   ],
+   [
+    125,
+    149,
+    7,
+    21
+   ],
+   [
+    150,
+    174,
+    8,
+    21
+   ],
+   [
+    175,
+    199,
+    9,
+    21
+   ],
+   [
+    200,
+    249,
+    10,
+    22
+   ],
+   [
+    250,
+    299,
+    11,
+    22
+   ],
+   [
+    300,
+    399,
+    11,
+    22
+   ],
+   [
+    400,
+    499,
+    12,
+    22
+   ],
+   [
+    500,
+    599,
+    13,
+    24
+   ],
+   [
+    600,
+    699,
+    14,
+    24
+   ],
+   [
+    700,
+    799,
+    14,
+    24
+   ],
+   [
+    800,
+    899,
+    15,
+    24
+   ],
+   [
+    900,
+    999,
+    16,
+    24
+   ],
+   [
+    1000,
+    1249,
+    17,
+    24
+   ],
+   [
+    1250,
+    1499,
+    18,
+    24
+   ],
+   [
+    1500,
+    1749,
+    20,
+    26
+   ],
+   [
+    1750,
+    1999,
+    21,
+    26
+   ],
+   [
+    2000,
+    2249,
+    22,
+    26
+   ],
+   [
+    2250,
+    2499,
+    23,
+    26
+   ],
+   [
+    2500,
+    2749,
+    24,
+    26
+   ],
+   [
+    2750,
+    2999,
+    24,
+    26
+   ],
+   [
+    3000,
+    3249,
+    25,
+    26
+   ],
+   [
+    3250,
+    3499,
+    25,
+    26
+   ],
+   [
+    3500,
+    3749,
+    26,
+    27
+   ],
+   [
+    3750,
+    3999,
+    26,
+    27
+   ],
+   [
+    4000,
+    4249,
+    26,
+    28
+   ],
+   [
+    4250,
+    4499,
+    27,
+    28
+   ],
+   [
+    4500,
+    4749,
+    27,
+    28
+   ],
+   [
+    4750,
+    4999,
+    28,
+    28
+   ],
+   [
+    5000,
+    5249,
+    29,
+    29
+   ],
+   [
+    5250,
+    5499,
+    29,
+    29
+   ],
+   [
+    5500,
+    5749,
+    29,
+    29
+   ],
+   [
+    5750,
+    5999,
+    30,
+    29
+   ],
+   [
+    6000,
+    6249,
+    31,
+    29
+   ],
+   [
+    6250,
+    6499,
+    31,
+    29
+   ],
+   [
+    6500,
+    6749,
+    31,
+    29
+   ],
+   [
+    6750,
+    6999,
+    31,
+    30
+   ],
+   [
+    7000,
+    7249,
+    32,
+    30
+   ],
+   [
+    7250,
+    7499,
+    32,
+    30
+   ],
+   [
+    7500,
+    7749,
+    32,
+    31
+   ],
+   [
+    7750,
+    7999,
+    32,
+    32
+   ],
+   [
+    8000,
+    8249,
+    32,
+    32
+   ],
+   [
+    8250,
+    8499,
+    33,
+    32
+   ],
+   [
+    8500,
+    8749,
+    33,
+    32
+   ],
+   [
+    8750,
+    8999,
+    33,
+    32
+   ],
+   [
+    9000,
+    9249,
+    34,
+    32
+   ],
+   [
+    9250,
+    9499,
+    34,
+    32
+   ],
+   [
+    9500,
+    9749,
+    34,
+    32
+   ],
+   [
+    9750,
+    9999,
+    34,
+    34
+   ],
+   [
+    10000,
+    null,
+    35,
+    34
+   ]
+  ]
+ }
+}

@@ -21,9 +21,10 @@ const etape = (n, quoi, fichier, ...args) => {
   }
 };
 
-etape(1, "chargement du référentiel — un article cité non lu fait échouer", "referentiel-social.js");
-etape(2, "dossiers contradictoires et profils types", "tests-social.js");
-etape(3, "questionnaire et non-divergence, dans les deux sens", "questionnaire-social.js");
+etape(1, "données des modèles, régénérées depuis les modules BDESE et CSE", "generer-donnees-modeles.js");
+etape(2, "chargement du référentiel — un article cité non lu fait échouer", "referentiel-social.js");
+etape(3, "dossiers contradictoires, profils types et qualité des modèles", "tests-social.js");
+etape(4, "questionnaire et non-divergence, dans les deux sens", "questionnaire-social.js");
 
 const R = require("./referentiel-social.js");
 const C = require("./controles-social.js");
@@ -107,9 +108,9 @@ try {
 }
 
 fs.writeFileSync(path.join(ICI, "manifeste-social.json"), JSON.stringify(manifeste, null, 1));
-console.log(`4. manifeste écrit — empreinte ${empreinte}`);
+console.log(`5. manifeste écrit — empreinte ${empreinte}`);
 console.log("   " + JSON.stringify(manifeste.compteurs));
 
-etape(5, "empaquetage pour le navigateur", "../commun/empaqueter.js",
+etape(6, "empaquetage pour le navigateur", "../commun/empaqueter.js",
   path.join(ICI, "../../docs/moteur-social.js"), "audit-social-client.js", "MoteurSocial");
 console.log("publication du module social : tout est vert");

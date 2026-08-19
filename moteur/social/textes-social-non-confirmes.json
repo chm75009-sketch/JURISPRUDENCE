@@ -1,5 +1,16 @@
 {
  "date": "2026-08-19",
  "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
- "articles": {}
+ "articles": {
+  "D1142-2": {
+   "motif": "troisième passe : lectures espacées sans deux lectures concordantes du contenu attendu — rien n'est conclu, l'article n'entre pas au référentiel",
+   "lectures": [
+    {
+     "id": "LEGIARTI000038026011",
+     "fois": 5,
+     "debut": "Pour les entreprises de plus de deux cent cinquante salariés, les indicateurs mentionnés à l'article L. 1142-8 sont les "
+    }
+   ]
+  }
+ }
 }

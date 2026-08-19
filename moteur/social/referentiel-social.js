@@ -91,8 +91,8 @@ const item = o => { REF.push(o); return o; };
 item({
   id: "SOC-INS-CSE", categorie: "instances",
   intitule: "Comité social et économique (CSE) : mise en place et élections",
-  articles: ["L2311-2"].filter(lu),
-  articlesSouhaites: ["L2311-2"],
+  articles: ["L2311-2", "L2314-4", "L2314-5"].filter(lu),
+  articlesSouhaites: ["L2311-2", "L2314-4", "L2314-5"],
   module: { nom: "comité social et économique", page: "audit-cse.html" },
   condition: p => {
     const s = M.seuilDouzeMois(p, 11);
@@ -162,8 +162,8 @@ item({
 item({
   id: "SOC-INS-CSSCT", categorie: "instances",
   intitule: "Commission santé, sécurité et conditions de travail (CSSCT)",
-  articles: ["L2315-36"].filter(lu),
-  articlesSouhaites: ["L2315-36"],
+  articles: ["L2315-36", "L2315-38", "L2315-39", "L2315-41"].filter(lu),
+  articlesSouhaites: ["L2315-36", "L2315-38", "L2315-39", "L2315-41"],
   module: { nom: "santé, sécurité et conditions de travail (SST)", page: "audit-sst.html" },
   condition: p => {
     const s = auSeuil(300)(p);
@@ -287,8 +287,8 @@ item({
 item({
   id: "SOC-DOC-RI", categorie: "documents obligatoires",
   intitule: "Règlement intérieur : établissement, contenu obligatoire, dépôt et publicité",
-  articles: ["L1311-2", "L1321-1", "L1321-2", "L1321-4"].filter(lu),
-  articlesSouhaites: ["L1311-2", "L1321-1", "L1321-2", "L1321-4"],
+  articles: ["L1311-2", "L1321-1", "L1321-2", "L1321-2-1", "L1321-3", "L1321-4", "L1321-5", "L1321-6"].filter(lu),
+  articlesSouhaites: ["L1311-2", "L1321-1", "L1321-2", "L1321-2-1", "L1321-3", "L1321-4", "L1321-5", "L1321-6"],
   module: null,
   condition: p => {
     const s = M.seuilDouzeMois(p, 50);
@@ -664,8 +664,8 @@ item({
 item({
   id: "SOC-REG-PERSONNEL", categorie: "registres",
   intitule: "Registre unique du personnel",
-  articles: ["L1221-13"].filter(lu),
-  articlesSouhaites: ["L1221-13"],
+  articles: ["L1221-13", "D1221-23"].filter(lu),
+  articlesSouhaites: ["L1221-13", "D1221-23"],
   module: null,
   condition: toutEmployeur,
   verifs: [

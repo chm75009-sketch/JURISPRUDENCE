@@ -1,10 +1,10 @@
 {
  "date": "2026-08-19",
  "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
- "articles": 34,
- "concordants": 33,
+ "articles": 44,
+ "concordants": 44,
  "ecarts": 0,
- "douteux": 1,
+ "douteux": 0,
  "detail": [
   {
    "numero": "L2315-36",
@@ -233,14 +233,84 @@
   {
    "numero": "L4711-1",
    "attendu": "LEGIARTI000006903383",
-   "lu": null,
-   "etat": "illisible",
-   "ecartCaracteres": null
+   "lu": "LEGIARTI000006903383",
+   "etat": "concordant",
+   "ecartCaracteres": 0
   },
   {
    "numero": "L4711-2",
    "attendu": "LEGIARTI000006903384",
    "lu": "LEGIARTI000006903384",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L1321-2-1",
+   "attendu": "LEGIARTI000033001625",
+   "lu": "LEGIARTI000033001625",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L1321-3",
+   "attendu": "LEGIARTI000033975667",
+   "lu": "LEGIARTI000033975667",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L1321-5",
+   "attendu": "LEGIARTI000035653093",
+   "lu": "LEGIARTI000035653093",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L1321-6",
+   "attendu": "LEGIARTI000006901439",
+   "lu": "LEGIARTI000006901439",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2315-38",
+   "attendu": "LEGIARTI000035626459",
+   "lu": "LEGIARTI000035626459",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2315-39",
+   "attendu": "LEGIARTI000036262434",
+   "lu": "LEGIARTI000036262434",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2315-41",
+   "attendu": "LEGIARTI000035626467",
+   "lu": "LEGIARTI000035626467",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "D1221-23",
+   "attendu": "LEGIARTI000018537878",
+   "lu": "LEGIARTI000018537878",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2314-4",
+   "attendu": "LEGIARTI000035651165",
+   "lu": "LEGIARTI000035651165",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2314-5",
+   "attendu": "LEGIARTI000035651159",
+   "lu": "LEGIARTI000035651159",
    "etat": "concordant",
    "ecartCaracteres": 0
   }
