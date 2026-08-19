@@ -9,7 +9,8 @@
 <!-- Générateur de documents pour la gestion quotidienne des relations
      collectives : convocation et ordre du jour du CSE, trame de procès-verbal,
      accord de méthode et procès-verbal de désaccord de la négociation
-     obligatoire, note d'information, réponse à une réclamation.
+     obligatoire, note d'information, réponse à une réclamation, procédure de
+     signalement harcèlement, canevas d'enquête interne.
 
      Tout se passe dans le navigateur : un formulaire court, un document
      généré à l'écran, imprimable en PDF et copiable en texte. Rien n'est
@@ -17,8 +18,9 @@
 
      Chaque mention juridique s'appuie sur un article lu à la source et
      identifié par sa version (LEGIARTI), repris des textes vérifiés du
-     dépôt (moteur/cse/textes_cse.json, moteur/nao/textes-nao.json) ou de
-     docs/textes-documents.json pour les compléments vérifiés au relais. -->
+     dépôt (moteur/cse/textes_cse.json, moteur/nao/textes-nao.json,
+     moteur/sst/textes-sst.json) ou de docs/textes-documents.json pour les
+     compléments vérifiés au relais. -->
 <style>
   :root{
     --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
@@ -55,7 +57,7 @@
   .presentation p{margin:0 0 10px;max-width:74ch}
   .presentation p:last-child{margin-bottom:0}
 
-  /* Le choix du modèle : six cartes, une seule active. */
+  /* Le choix du modèle : huit cartes, une seule active. */
   .modeles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:22px 0 0}
   .modele{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
     padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:var(--corps)}
@@ -156,8 +158,8 @@
   <p class="chapo"><b>Cette page prépare les documents de la gestion quotidienne des relations
   collectives</b> — convocation et ordre du jour du comité, trame de procès-verbal, accord de méthode
   et procès-verbal de désaccord de la négociation obligatoire, note d'information, réponse écrite à
-  une réclamation. Un formulaire court, un document à l'écran, imprimable en PDF et copiable en
-  texte.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
+  une réclamation, procédure de signalement harcèlement, canevas d'enquête interne. Un formulaire
+  court, un document à l'écran, imprimable en PDF et copiable en texte.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
   que sur ce poste.</p>
 </header>
 
@@ -212,8 +214,9 @@
   /* Les textes. Chaque article cité ici a été lu à la source et porte   */
   /* l'identifiant de la version lue. Provenance : les fichiers de       */
   /* textes vérifiés du dépôt (moteur/cse/textes_cse.json,               */
-  /* moteur/nao/textes-nao.json), et docs/textes-documents.json pour     */
-  /* D. 2315-26, vérifié au relais en double lecture concordante.        */
+  /* moteur/nao/textes-nao.json, moteur/sst/textes-sst.json), et         */
+  /* docs/textes-documents.json pour D. 2315-26, vérifié au relais en    */
+  /* double lecture concordante.                                         */
   /* ------------------------------------------------------------------ */
   var TEXTES = {
     "L2315-29": { id: "LEGIARTI000035624861", quoi: "ordre du jour établi conjointement par le président et le secrétaire ; consultations obligatoires inscrites de plein droit" },
@@ -230,7 +233,20 @@
     "L2242-12": { id: "LEGIARTI000052437050", quoi: "un accord conclu dans ces domaines peut fixer la périodicité de sa renégociation, dans la limite de quatre ans" },
     "L2242-13": { id: "LEGIARTI000052437044", quoi: "à défaut d'accord de méthode : négociation chaque année sur la rémunération et sur l'égalité professionnelle, tous les trois ans sur la gestion des emplois à partir de trois cents salariés" },
     "L2242-5":  { id: "LEGIARTI000035627862", quoi: "si aucun accord n'a été conclu, procès-verbal de désaccord consignant, en leur dernier état, les propositions respectives des parties et les mesures que l'employeur entend appliquer unilatéralement ; dépôt à l'initiative de la partie la plus diligente" },
-    "R2242-1":  { id: "LEGIARTI000036222825", quoi: "le procès-verbal de désaccord est déposé dans les conditions prévues à l'article D. 2231-2" }
+    "R2242-1":  { id: "LEGIARTI000036222825", quoi: "le procès-verbal de désaccord est déposé dans les conditions prévues à l'article D. 2231-2" },
+    /* Harcèlement — articles repris de moteur/sst/textes-sst.json, capturés au
+       relais en lectures doubles concordantes avec critère de contenu. */
+    "L1152-1":  { id: "LEGIARTI000006900818", quoi: "définition du harcèlement moral : agissements répétés ayant pour objet ou pour effet une dégradation des conditions de travail" },
+    "L1152-2":  { id: "LEGIARTI000045391810", quoi: "protection contre les représailles : aucune mesure de l'article L. 1121-2 contre qui subit, refuse de subir, relate ou témoigne de bonne foi (harcèlement moral)" },
+    "L1152-4":  { id: "LEGIARTI000029144897", quoi: "l'employeur prend toutes dispositions nécessaires en vue de prévenir le harcèlement moral ; information par tout moyen du texte de l'article 222-33-2 du code pénal" },
+    "L1153-1":  { id: "LEGIARTI000043893894", quoi: "définition du harcèlement sexuel et des faits assimilés (pression grave, même non répétée)" },
+    "L1153-2":  { id: "LEGIARTI000045391805", quoi: "protection contre les représailles : aucune mesure de l'article L. 1121-2 contre qui subit, refuse de subir, relate ou témoigne de bonne foi (harcèlement sexuel)" },
+    "L1153-5":  { id: "LEGIARTI000037389712", quoi: "l'employeur prévient les faits de harcèlement sexuel, y met un terme et les sanctionne ; information sur le texte de l'article 222-33 du code pénal, les actions ouvertes et les coordonnées des services compétents" },
+    "L1153-5-1":{ id: "LEGIARTI000037380160", quoi: "référent chargé d'orienter, d'informer et d'accompagner les salariés, dans toute entreprise d'au moins deux cent cinquante salariés" },
+    "D1151-1":  { id: "LEGIARTI000038025995", quoi: "coordonnées à porter à la connaissance : médecin du travail, inspection du travail, Défenseur des droits, référent employeur, référent du comité" },
+    "L2314-1":  { id: "LEGIARTI000037389707", quoi: "référent harcèlement sexuel et agissements sexistes désigné par le comité social et économique parmi ses membres" },
+    "L4121-1":  { id: "LEGIARTI000035640828", quoi: "obligation de sécurité : l'employeur prend les mesures nécessaires pour protéger la santé physique et mentale des travailleurs" },
+    "L4121-2":  { id: "LEGIARTI000033019913", quoi: "principes généraux de prévention ; la planification intègre les risques liés au harcèlement moral, au harcèlement sexuel et aux agissements sexistes (7°)" }
   };
   function refArt(n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }
 
@@ -640,6 +656,178 @@
         return "L'employeur répond par écrit au plus tard dans les six jours ouvrables suivant la " +
           "réunion (art. L. 2315-22). Entre la réunion et la réponse saisies, il s'est écoulé " + j +
           " jours calendaires : vérifiez que le délai de six jours ouvrables est tenu.";
+      return "";
+    }
+  },
+
+  {
+    cle: "signalement-harcelement",
+    nom: "Procédure de signalement harcèlement",
+    resume: "Le gabarit de la procédure interne : canaux de signalement, confidentialité, délais indicatifs de traitement, protection contre les représailles, coordonnées obligatoires.",
+    articles: ["L1152-1", "L1153-1", "L1152-4", "L1153-5", "L1152-2", "L1153-2", "L1153-5-1", "L2314-1", "D1151-1", "L4121-2"],
+    sections: [
+      { titre: "L'entreprise et les référents", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "effectif", nom: "Effectif de l'entreprise", t: "number", profil: "effectif",
+          aide: "À partir de 250 salariés, un référent employeur est obligatoire (art. L. 1153-5-1) ; le référent du CSE (art. L. 2314-1) ne dépend pas de ce seuil." },
+        { c: "dateNote", nom: "Date de la procédure", t: "date" },
+        { c: "referentEmployeur", nom: "Référent employeur harcèlement (nom, fonction, contact)", t: "text" },
+        { c: "referentCSE", nom: "Référent harcèlement du CSE (nom, contact)", t: "text" },
+        { c: "contactRH", nom: "Autre destinataire interne des signalements (service RH, supérieur, direction)", t: "text" }
+      ]},
+      { titre: "Les canaux et le traitement", champs: [
+        { c: "canaux", nom: "Canaux de signalement ouverts (un par ligne : courriel dédié, entretien, courrier, plateforme…)", t: "textarea", pleine: true },
+        { c: "delaiAccuse", nom: "Délai indicatif d'accusé de réception (en jours ouvrés)", t: "number",
+          aide: "Aucun texte ne fixe ce délai : il est indicatif, et la procédure le dit. S'engager sur un délai court et le tenir est une preuve de sérieux." },
+        { c: "delaiTraitement", nom: "Délai indicatif d'examen initial du signalement (en jours ouvrés)", t: "number" },
+        { c: "coordonnees", nom: "Coordonnées externes (médecin du travail, inspection du travail et nom de l'inspecteur, Défenseur des droits) — une par ligne", t: "textarea", pleine: true,
+          aide: "Ces coordonnées font partie de l'information obligatoire (art. D. 1151-1) : adresse et numéro d'appel de chacun." }
+      ]}
+    ],
+    composer: function (v) {
+      var canaux = lignes(v.canaux);
+      var coord = lignes(v.coordonnees);
+      var eff = parseInt(v.effectif, 10);
+      return enteteFeuille(v.entreprise, chDate(v.dateNote, "date de la procédure")) +
+        '<h2 class="titre-doc">Procédure de signalement<br>des faits de harcèlement</h2>' +
+        '<p class="sous-titre">Harcèlement moral, harcèlement sexuel et agissements sexistes — art. L. 1152-4 et L. 1153-5 du code du travail</p>' +
+        "<h3>1. Objet</h3>" +
+        "<p>La présente procédure organise le signalement et le traitement des faits de harcèlement " +
+        "moral (art. L. 1152-1 du code du travail), de harcèlement sexuel et des faits assimilés " +
+        "(art. L. 1153-1), ainsi que des agissements sexistes. Elle s'inscrit dans les dispositions " +
+        "que l'employeur prend pour prévenir ces faits, y mettre un terme et les sanctionner " +
+        "(art. L. 1152-4 et L. 1153-5), et dans la planification de la prévention qui intègre ces " +
+        "risques (art. L. 4121-2, 7°). Elle s'applique à l'ensemble des salariés, ainsi qu'aux " +
+        "candidats à un recrutement, à un stage ou à une formation.</p>" +
+        "<h3>2. À qui signaler</h3>" +
+        "<ul>" +
+        (eff >= 250 || v.referentEmployeur
+          ? "<li>Référent employeur harcèlement sexuel et agissements sexistes" +
+            (eff >= 250 ? " (obligatoire à partir de 250 salariés — art. L. 1153-5-1)" : "") + " : " +
+            ch(v.referentEmployeur, "nom, fonction, contact") + "</li>" : "") +
+        "<li>Référent harcèlement du comité social et économique (art. L. 2314-1) : " +
+        ch(v.referentCSE, "nom, contact — ou « comité non encore doté d'un référent »") + "</li>" +
+        "<li>" + ch(v.contactRH, "autre destinataire interne : service RH, supérieur hiérarchique, direction") + "</li>" +
+        "</ul>" +
+        "<p>Canaux ouverts :</p>" +
+        (canaux.length ? "<ul>" + canaux.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+                       : "<p>" + vide("canaux de signalement : courriel dédié, entretien, courrier, plateforme") + "</p>") +
+        "<p>Le signalement peut émaner de la personne qui s'estime victime comme d'un témoin. " +
+        "Aucune forme n'est imposée : un signalement oral est reçu et consigné.</p>" +
+        "<h3>3. Confidentialité</h3>" +
+        "<p>Les personnes qui reçoivent ou traitent un signalement sont tenues à la discrétion : " +
+        "l'identité de l'auteur du signalement, celle de la personne visée et celle des témoins ne " +
+        "sont communiquées qu'aux personnes ayant besoin d'en connaître pour le traitement. Les " +
+        "documents recueillis sont conservés de manière restreinte et séparée.</p>" +
+        "<h3>4. Traitement du signalement — délais indicatifs</h3>" +
+        "<p>Sauf circonstance particulière, l'entreprise s'engage à :</p><ul>" +
+        "<li>accuser réception du signalement sous " + ch(v.delaiAccuse, "délai") + " jour(s) ouvré(s) ;</li>" +
+        "<li>procéder à un premier examen — audition de l'auteur du signalement, appréciation des " +
+        "mesures conservatoires utiles — sous " + ch(v.delaiTraitement, "délai") + " jour(s) ouvré(s) ;</li>" +
+        "<li>décider des suites : enquête interne, mesures d'éloignement provisoires, classement " +
+        "motivé si les faits ne sont manifestement pas constitués.</li></ul>" +
+        "<p>Ces délais sont indicatifs — aucun texte n'en fixe : leur dépassement ne prive pas le " +
+        "signalement d'effet, et l'obligation de l'employeur de mettre un terme aux faits établis " +
+        "(art. L. 1153-5) ne dépend d'aucun délai.</p>" +
+        "<h3>5. Protection contre les représailles</h3>" +
+        "<p>Aucune personne ayant subi ou refusé de subir des faits de harcèlement, ou ayant, de " +
+        "bonne foi, relaté ou témoigné de tels faits, ne peut faire l'objet des mesures mentionnées " +
+        "à l'article L. 1121-2 du code du travail — sanction, licenciement ou mesure discriminatoire, " +
+        "directe ou indirecte (art. L. 1152-2 et L. 1153-2). Les auteurs d'un signalement de " +
+        "mauvaise foi — c'est-à-dire avec la connaissance de la fausseté des faits — s'exposent en " +
+        "revanche à une sanction disciplinaire.</p>" +
+        "<h3>6. Coordonnées des autorités et services compétents (art. D. 1151-1)</h3>" +
+        (coord.length ? "<ul>" + coord.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+                      : "<p>" + vide("adresse et numéro d'appel : médecin du travail ou service de prévention et de santé au travail, inspection du travail et nom de l'inspecteur, Défenseur des droits") + "</p>") +
+        '<div class="signatures"><div>Pour l\'entreprise<br>' + ch(v.entreprise, "dénomination") + "</div></div>" +
+        piedTextes(["L1152-1", "L1153-1", "L1152-4", "L1153-5", "L1152-2", "L1153-2", "L1153-5-1", "L2314-1", "D1151-1", "L4121-2"]);
+    }
+  },
+
+  {
+    cle: "enquete-interne",
+    nom: "Canevas d'enquête interne",
+    resume: "La trame de l'enquête après signalement : saisine, périmètre, auditions (représentation des faits, confidentialité, contradictoire), rapport, suites.",
+    articles: ["L4121-1", "L1152-4", "L1153-5"],
+    sections: [
+      { titre: "La saisine", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "dateSignalement", nom: "Date du signalement", t: "date" },
+        { c: "dateOuverture", nom: "Date d'ouverture de l'enquête", t: "date" },
+        { c: "enqueteurs", nom: "Personnes chargées de l'enquête (noms, fonctions — un par ligne)", t: "textarea", pleine: true,
+          aide: "Choisir des personnes sans lien hiérarchique direct avec les intéressés ; une conduite paritaire (direction + représentant du personnel) renforce la crédibilité de l'enquête." },
+        { c: "objet", nom: "Faits signalés, tels que signalés (sans qualification)", t: "textarea", pleine: true }
+      ]},
+      { titre: "Le périmètre et les auditions", champs: [
+        { c: "perimetre", nom: "Périmètre : période, services et personnes concernés", t: "textarea", pleine: true },
+        { c: "auditions", nom: "Personnes à entendre (une par ligne : auteur du signalement, personne visée, témoins)", t: "textarea", pleine: true },
+        { c: "mesuresConservatoires", nom: "Mesures conservatoires prises pendant l'enquête, le cas échéant", t: "textarea", pleine: true,
+          aide: "Éloignement provisoire, aménagement d'équipes, dispense d'activité : des mesures prises sans attendre la fin de l'enquête, sans préjuger de son issue." }
+      ]},
+      { titre: "Le rapport et les suites", champs: [
+        { c: "dateRapport", nom: "Date (prévue) du rapport", t: "date" },
+        { c: "destinataires", nom: "Destinataires du rapport", t: "text",
+          aide: "Par exemple : la direction, et pour information le référent CSE — dans le respect de la confidentialité." }
+      ]}
+    ],
+    composer: function (v) {
+      var enq = lignes(v.enqueteurs), aud = lignes(v.auditions);
+      return enteteFeuille(v.entreprise, chDate(v.dateOuverture, "date d'ouverture")) +
+        '<h2 class="titre-doc">Enquête interne<br>à la suite d\'un signalement</h2>' +
+        '<p class="sous-titre">Canevas de conduite et de restitution</p>' +
+        "<h3>1. Saisine</h3>" +
+        "<p>Un signalement a été reçu le " + chDate(v.dateSignalement, "date du signalement") +
+        ". L'enquête est ouverte le " + chDate(v.dateOuverture, "date d'ouverture") +
+        " au titre de l'obligation de l'employeur de protéger la santé physique et mentale des " +
+        "travailleurs (art. L. 4121-1 du code du travail), de prévenir les agissements de " +
+        "harcèlement moral (art. L. 1152-4) et de mettre un terme aux faits de harcèlement sexuel " +
+        "et de les sanctionner (art. L. 1153-5).</p>" +
+        "<p>Faits signalés, tels que signalés :</p><p>" + ch(v.objet, "description factuelle, sans qualification juridique à ce stade") + "</p>" +
+        "<p>Chargés de l'enquête :</p>" +
+        (enq.length ? "<ul>" + enq.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+                    : "<p>" + vide("noms et fonctions des enquêteurs") + "</p>") +
+        "<h3>2. Périmètre</h3>" +
+        "<p>" + ch(v.perimetre, "période examinée, services et personnes concernés") + "</p>" +
+        "<p>Le périmètre peut être étendu en cours d'enquête si les auditions le justifient ; " +
+        "l'extension est consignée.</p>" +
+        "<h3>3. Auditions</h3>" +
+        (aud.length ? "<p>Personnes entendues ou à entendre :</p><ul>" + aud.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+                    : "<p>Personnes entendues ou à entendre : " + vide("auteur du signalement, personne visée, témoins") + "</p>") +
+        "<p>Chaque audition donne lieu à un compte rendu écrit, relu et signé par la personne " +
+        "entendue, qui peut y porter ses observations. Les questions sont ouvertes et factuelles — " +
+        "qui, quoi, quand, où, en présence de qui — et les faits rapportés sont représentés " +
+        "fidèlement, dans les termes de la personne entendue, sans reformulation qui les qualifie.</p>" +
+        "<p><b>Confidentialité :</b> chaque personne entendue est informée du caractère confidentiel " +
+        "de l'audition, de l'usage qui sera fait du compte rendu, et de la protection contre les " +
+        "représailles dont bénéficient les témoins de bonne foi.</p>" +
+        "<p><b>Contradictoire :</b> la personne visée par le signalement est entendue, informée de " +
+        "la substance des faits qui lui sont prêtés, et mise en mesure de s'expliquer sur chacun " +
+        "d'eux ; elle peut proposer des témoins et produire des éléments.</p>" +
+        "<h3>4. Mesures conservatoires</h3>" +
+        "<p>" + ch(v.mesuresConservatoires, "mesures prises pendant l'enquête — ou « néant »") + "</p>" +
+        "<h3>5. Rapport</h3>" +
+        "<p>Le rapport, prévu pour le " + chDate(v.dateRapport, "date prévue") + ", est remis à " +
+        ch(v.destinataires, "destinataires") + ". Il comprend : la chronologie de l'enquête, la " +
+        "liste des auditions et des pièces, les faits que l'enquête permet de tenir pour établis, " +
+        "ceux qu'elle ne permet pas d'établir, et les éléments recueillis dans un sens comme dans " +
+        "l'autre — sans omettre ceux qui ne confortent pas la conclusion.</p>" +
+        "<h3>6. Suites</h3>" +
+        "<p>Selon les conclusions : mesures d'organisation, sanction disciplinaire si les faits " +
+        "sont établis, information de l'auteur du signalement et de la personne visée sur les " +
+        "suites données, actualisation de l'évaluation des risques. L'absence de faits établis ne " +
+        "prive pas l'auteur de bonne foi de sa protection contre les représailles.</p>" +
+        '<div class="signatures"><div>Les chargés de l\'enquête<br>' +
+        (enq.length ? e(enq.join(" ; ")) : vide("noms")) + "</div></div>" +
+        piedTextes(["L4121-1", "L1152-4", "L1153-5"]) +
+        '<div class="pied-textes">Jurisprudence — Soc., 18 juin 2025, n° 23-19.022, publié : la ' +
+        "valeur probante d'une enquête interne relève de l'appréciation souveraine des juges du " +
+        "fond, au regard le cas échéant des autres éléments de preuve. D'où ce canevas : une " +
+        "enquête documentée est un élément de preuve que le juge apprécie — pas davantage.</div>";
+    },
+    verifier: function (v) {
+      var j = joursEntre(v.dateSignalement, v.dateOuverture);
+      if (j !== null && j < 0)
+        return "L'ouverture de l'enquête est antérieure au signalement : l'une des deux dates est erronée.";
       return "";
     }
   }];

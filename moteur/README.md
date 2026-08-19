@@ -32,6 +32,13 @@ Trois modules ont rejoint la même chaîne, chacun avec son dossier et son
 - **`nao/`** — la négociation obligatoire (L. 2242-1 et suivants) :
   17 contrôles, 25 articles, quatre thèmes et leurs périodicités, exposition
   aux pénalités jamais « blanchie ». Publication : `node publier-nao.js`.
+- **`sst/`** — la santé, la sécurité et les conditions de travail (L. 4121-1
+  et suivants, L. 2315-36 et suivants, L. 1152-1 et suivants) : 19 contrôles,
+  30 articles dont 11 repris du module CSE, quatre seuils lus à la source
+  (11, 50, 250, 300), exposition jamais « blanchie ». La capture a mesuré que
+  le filtre de code du relais attend le NOM du code, pas l'identifiant
+  `LEGITEXT…` — sans lui, le relais sert l'homonyme d'un autre code.
+  Publication : `node publier-sst.js`.
 
 ## Comment l'exécuter
 

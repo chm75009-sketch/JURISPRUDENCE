@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Chaque audit s'installe pour lui-même, avec son nom et son icône : sur
+     l'écran d'accueil, trois applications distinctes valent mieux qu'une seule
+     dont on ne sait laquelle des trois pages elle ouvre. -->
+<meta name="theme-color" content="#4A2C6B">
+<link rel="manifest" href="manifest-audit-sst.json">
+<link rel="apple-touch-icon" href="icons/icon-sst-180.png">
+<link rel="icon" href="icons/icon-sst-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Audit — santé, sécurité et conditions de travail (SST)</title>
+<!-- Cette page sert les deux moteurs : le script chargé et le libellé changent,
+     tout le reste est commun. Voir audit-cse.html, qui ne diffère que par eux. -->
+<!-- Tout se passe dans le navigateur : le moteur est chargé comme un script
+     ordinaire, aucune donnée saisie ne quitte le poste. Il n'y a ni serveur
+     d'application, ni compte, ni envoi. -->
+<style>
+  :root{
+    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
+    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
+    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papier);color:var(--corps);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .page{max-width:1000px;margin:0 auto;padding:0 20px 80px}
+  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
+  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
+  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
+  .chapo{color:var(--gris);max-width:64ch;margin:0}
+  .lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;
+    color:var(--bleu);text-decoration:underline;cursor:pointer}
+  #dlg-avertissement::backdrop{background:#0b111a99}
+  /* Le retour, visible de partout.
+
+     Installée sur un téléphone, l'application n'a pas la barre du navigateur :
+     pas de flèche « précédent », et le geste de bord ne marche pas toujours.
+     Ouvrir un audit depuis la recherche devenait un aller sans retour. La barre
+     ci-dessous est donc collée en haut, sur toutes les pages d'audit, et elle
+     revient d'où l'on vient — ou à la recherche si l'on est arrivé directement. */
+  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
+    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
+    margin:0 -20px 0;padding:10px 20px}
+  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
+  button.retour:hover{filter:brightness(1.12)}
+  .retour-ou{font-size:13px;color:var(--gris)}
+  .retour-ou a{color:var(--bleu)}
+  @media print{ .retour-barre{display:none} }
+
+  header a{color:var(--bleu)}
+  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
+  h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:22px 0 8px}
+  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:70ch}
+
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 22px}
+  label{display:block;font-size:14px}
+  label .nom{display:block;color:var(--encre);margin-bottom:4px}
+  label .cle{color:var(--gris);font:500 12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
+    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
+  textarea{min-height:74px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
+  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px 20px;margin:0 0 16px}
+  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
+
+  .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
+    padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
+  button.second{background:var(--surface);color:var(--bleu)}
+  button:hover{filter:brightness(1.1)}
+  .compteur{color:var(--gris);font-size:14px;margin-left:auto}
+
+  /* La barre d'actions sur téléphone.
+
+     Cinq boutons empilés occupaient le tiers bas de l'écran, et le formulaire
+     se lisait par une fente. Sur petit écran, la barre se réduit donc à une
+     ligne : l'action principale, et un bouton « ⋯ » qui déplie les autres au
+     besoin. Rien n'est retiré — tout est à un doigt. */
+  @media (max-width: 640px){
+    .barre{gap:8px}
+    .barre.repliee > button.second:not(#plus),
+    .barre.repliee > .compteur{display:none}
+    .barre > #lancer{flex:1 1 auto}
+    .barre > #plus{flex:0 0 auto;padding:12px 16px}
+    .barre.depliee > #plus{background:var(--surface);color:var(--bleu)}
+    .barre > button{min-height:44px}
+    .barre .compteur{width:100%;margin:2px 0 0;text-align:right}
+  }
+  @media (min-width: 641px){ #plus{display:none} }
+
+
+  /* --- restitution --- */
+  #sortie{margin-top:30px}
+  .bandeau{padding:18px 20px;color:#fff;margin:0 0 18px;border-radius:3px}
+  .bandeau .r{font:700 26px/1.15 system-ui;letter-spacing:.4px;margin:0 0 6px}
+  .bandeau .s{margin:0;font-size:15px}
+  .b-rouge{background:var(--rouge)} .b-orange{background:var(--orange)}
+  .b-vert{background:var(--vert)} .b-gris{background:var(--ardoise)}
+  .etape{margin:22px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
+    color:var(--bleu);font:600 15px/1.3 system-ui;display:flex;justify-content:space-between;gap:12px}
+  .etape span{font-weight:400;font-size:13px;color:var(--gris)}
+  .acte{border-left:4px solid var(--bleu);background:var(--surface);padding:10px 14px;margin:0 0 7px}
+  .acte .t{font-weight:600;color:var(--encre)}
+  .acte .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
+  .chip{font:600 11px/1 system-ui;color:#fff;padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
+  .c-bloquant{background:var(--rouge)}.c-critique{background:var(--orange)}
+  .c-important{background:var(--bleu)}.c-information{background:#767676}
+  .a-bloquant{border-left-color:var(--rouge);background:var(--rouge-f)}
+  .a-critique{border-left-color:var(--orange);background:var(--orange-f)}
+  .a-information{border-left-color:#767676;background:var(--gris-f)}
+  .interdit{border:1px solid var(--rouge);background:var(--rouge-f);padding:12px 14px;margin:0 0 8px;border-radius:3px}
+  .interdit .t{font-weight:700;color:var(--rouge)}
+  .interdit .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
+  .i-reserve{border-color:var(--orange);background:var(--orange-f)} .i-reserve .t{color:var(--orange)}
+  .i-examen{border-color:#9aa0a8;background:var(--gris-f)} .i-examen .t{color:#4a4a4a}
+  .acquis{margin:0 0 4px;padding-left:20px;text-indent:-20px;font-size:15px}
+  .acquis b{color:var(--vert)}
+  .enc{border:1px solid var(--bleu);background:#f4f6fb;padding:12px 14px;margin:14px 0;border-radius:3px}
+  .enc .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
+  .tab{overflow-x:auto;margin:12px 0}
+  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
+  th,td{border:1px solid var(--filet);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--bleu);color:#fff;font-weight:600}
+  .note{color:var(--gris);font-size:13.5px}
+  .ident{font:500 11.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8a9099;
+    background:#f0f1f4;border-radius:3px;padding:2px 5px;white-space:nowrap}
+
+  .puce{margin:0 0 4px 18px;text-indent:-18px}
+  hr{border:none;border-top:1px solid var(--filet);margin:18px 0}
+  .erreur{border:1px solid var(--rouge);background:var(--rouge-f);color:var(--rouge);
+    padding:12px 14px;border-radius:3px;font-weight:600}
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
+
+  /* Propositions, cases à cocher et dépôt de fichier */
+  .cases{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px;
+    border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:9px 11px}
+  .case{display:flex;align-items:flex-start;gap:6px;font-size:13.5px;color:var(--corps);
+    width:100%;line-height:1.35}
+  .case input{width:auto;margin:2px 0 0;flex:0 0 auto}
+  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
+  .depot{margin:2px 0 6px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  button.fichier{font:600 13px/1.25 system-ui;padding:9px 12px;background:#eef2f9;
+    color:var(--bleu);border:1px solid var(--bleu)}
+  label>.depot>button.fichier{flex:1 1 100%}
+  .etat-depot{font-size:12.5px;color:var(--gris);flex:1 1 180px}
+  .etat-depot.ok{color:var(--vert)} .etat-depot.ko{color:var(--rouge)}
+  input.libre{margin-top:6px}
+
+  /* Présentation */
+  .presentation{border:1px solid var(--filet);background:var(--surface);
+    border-radius:4px;padding:18px 20px;margin:22px 0 0}
+  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
+  .presentation p{margin:0 0 10px;max-width:74ch}
+  .presentation p:last-child{margin-bottom:0}
+  .presentation .etapes{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;padding:0;list-style:none}
+  .presentation .etapes li{flex:1 1 190px;border-left:3px solid var(--bleu);padding:2px 0 2px 10px;
+    font-size:14px;color:var(--corps)}
+  .presentation .etapes b{display:block;color:var(--encre)}
+
+  /* Éditeur de tableau : une ligne par entrée */
+  .tableau-champ{grid-column:1/-1;border:1px solid var(--filet);background:var(--surface);
+    border-radius:3px;padding:12px 14px}
+  .tableau-champ>.nom{margin:0 0 8px;font-size:14px;color:var(--encre)}
+  table.saisie{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-x:auto}
+  table.saisie th{background:var(--gris-f);color:var(--bleu);border:1px solid var(--filet);
+    padding:5px 7px;font:600 12px/1.3 system-ui;text-align:left;white-space:nowrap}
+  table.saisie td{border:1px solid var(--filet);padding:3px}
+  table.saisie input,table.saisie select{border:none;padding:5px 6px;font-size:13px;min-width:104px}
+  button.retirer{padding:4px 8px;color:var(--rouge);border-color:var(--filet)}
+
+  /* Sur un téléphone, la barre d'actions ne doit pas manger l'écran. */
+  @media (max-width:560px){
+    .barre{gap:8px;padding:10px 0}
+    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
+    .barre button:first-child{flex:1 1 100%}
+    .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
+    .presentation{padding:15px 16px}
+    .presentation .etapes li{flex:1 1 100%}
+  }
+
+  /* Retour, message et barre du résultat */
+  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
+    border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}
+  .retour{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px;
+    padding-bottom:14px;border-bottom:1px solid var(--filet)}
+  .retour button{flex:1 1 auto}
+  button:disabled{opacity:.45;cursor:default}
+  @media print{ .retour,#message{display:none} }
+  @media print{ .barre,form,header a,footer{display:none} .page{padding:0} }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="retour-barre">
+  <button type="button" id="btn-retour" class="retour">← Retour</button>
+  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
+  · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
+  · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
+  · <a href="audit-sst.html">santé-sécurité (SST)</a> · <a href="agenda.html">agenda</a> · <a href="guides.html">guides</a></span>
+</div>
+
+
+<header>
+  <p class="fil">Application Jurisprudence</p>
+  <h1>Audit — santé, sécurité et conditions de travail (SST)</h1>
+  <p class="chapo"><b>Cette application vérifie vos obligations de santé et de sécurité point par point</b> —
+  le document unique d'évaluation des risques (dû sans seuil, mis à jour, suivi d'un programme ou
+  d'une liste d'actions), la commission santé-sécurité (CSSCT) là où elle est due, la prévention du
+  harcèlement (référents, information, réaction), et ce à quoi l'employeur s'expose en cas de
+  manquement.<br>
+  L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
+  <a href="./">Recherche de jurisprudence</a> · <a href="audit.html">Audit du licenciement économique</a> · <a href="audit-cse.html">Audit du comité</a> · <a href="audit-pse.html">Plan de sauvegarde</a> · <a href="audit-bdese.html">Base de données (BDESE)</a> · <a href="audit-nao.html">Négociation (NAO)</a>
+  · <button type="button" class="lien-avert" data-avertissement>Avertissement d'usage</button></p>
+</header>
+
+<div class="presentation">
+  <h2>À quoi sert cette page</h2>
+  <p>Le document unique d'évaluation des risques est dû par tout employeur, dès le premier salarié —
+  c'est l'effectif qui commande le reste : mise à jour au moins annuelle à partir de onze salariés,
+  programme annuel de prévention à partir de cinquante, référent harcèlement de l'employeur à partir
+  de deux cent cinquante, commission santé-sécurité à partir de trois cents. Vous décrivez la
+  situation, l'application la confronte aux articles L. 4121-1 et suivants, L. 2315-36 et suivants
+  et L. 1152-1 et suivants du code du travail, vous obtenez un rapport imprimable.</p>
+  <ul class="etapes">
+    <li><b>1. Vous répondez</b> à quelques questions : le document unique existe-t-il, de quand date
+    sa mise à jour, la commission est-elle en place, les référents harcèlement sont-ils désignés ?</li>
+    <li><b>2. L'application vérifie</b> chaque exigence une par une, et dit sur quoi elle se fonde.</li>
+    <li><b>3. Vous obtenez</b> un rapport imprimable : ce qui bloque, ce qui manque, et ce à quoi
+    l'employeur s'expose — amende pénale sur le document unique, sanctions du harcèlement.</li>
+  </ul>
+  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne rédige pas votre document unique et
+  n'évalue aucun risque à votre place. Et surtout, <b>elle ne juge jamais que vos mesures de
+  prévention suffisent</b> : leur suffisance s'apprécie au fond — quand des mesures existent, le
+  rapport dit « risque à vérifier », jamais « conforme ».</p>
+</div>
+
+<div class="enc" style="margin-top:22px">
+  <p class="sh">L'exposition se mesure, elle ne se blanchit pas</p>
+  <p style="margin:0">Le contrôle des sanctions — amende de cinquième classe pour le document unique
+  absent ou périmé (R. 4741-1), amende de 10 000 € appliquée autant de fois qu'il y a de travailleurs
+  concernés pour les règles techniques de L. 4741-1, un an d'emprisonnement et 3 750 € d'amende pour
+  les discriminations consécutives à un harcèlement (L. 1155-2) — ne rend jamais « conforme » :
+  l'obligation de sécurité s'apprécie en continu et au fond. Une donnée non renseignée, elle, ne
+  produit jamais « conforme » : elle produit « donnée manquante », et le rapport le dit.</p>
+</div>
+
+<form id="formulaire" autocomplete="off"></form>
+
+<div class="barre">
+  <button type="button" id="lancer">Lancer l'audit</button>
+  <button type="button" class="second" id="exemple">Charger un dossier d'exemple</button>
+  <button type="button" class="second" id="vider">Tout effacer</button>
+  <button type="button" class="second" id="annuler" disabled>Annuler la dernière saisie</button>
+  <button type="button" class="second" id="mot">Word</button>
+  <button type="button" class="second" id="imprimer">Imprimer / PDF</button>
+  <span class="compteur" id="compteur"></span>
+</div>
+
+<p id="message" role="status"></p>
+
+<div id="sortie"></div>
+
+<footer id="pied"></footer>
+</div>
+
+<script src="moteur-sst.js"></script>
+<script>
+  /* Ce qui distingue cette page : le moteur, la clé du brouillon et le dossier
+     d'exemple. Tout le reste vit dans audit-form.js, commun aux trois audits.
+
+     Les données communes à l'audit du licenciement économique — effectif,
+     groupe, nombre de licenciements, date de notification, pièces — sont
+     reprises de son brouillon si l'utilisateur l'a rempli : personne ne
+     ressaisit deux fois le même effectif. Elles restent modifiables ici, et
+     elles restent demandées : un module qui suppose une saisie faite ailleurs
+     conclut sur ce qu'il n'a pas lu. */
+  window.__MOTEUR = "MoteurSST";
+  window.__CLE = "audit-sst-brouillon";
+  /* Pas de reprise d'un autre audit : le dossier SST est autonome. */
+  window.__EXEMPLE = {
+    "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
+    "dateAudit": "2026-08-19",
+    "effectif": "420",
+    "cse.existe": "oui",
+    "duerp.existe": "oui",
+    "duerp.dateDerniereMaj": "2026-03-02",
+    "duerp.unitesTravail": "oui",
+    "duerp.versionsConservees": "oui",
+    "duerp.avisAffiche": "oui",
+    "duerp.consultationCSE": "oui",
+    "duerp.transmisSPST": "oui",
+    "evenement.survenu": "non",
+    "evenement.majFaite": "",
+    "programmeAnnuel.existe": "oui",
+    "programmeAnnuel.presenteCSE": "oui",
+    "listeActions.consignee": "",
+    "etablissementDistinct300": "non",
+    "etablissementRisqueParticulier": "non",
+    "cssctImposeeInspection": "non",
+    "cssct.existe": "oui",
+    "cssct.presideeEmployeur": "oui",
+    "cssct.nbMembres": "4",
+    "cssct.membreSecondCollege": "oui",
+    "cssct.designesParCSE": "oui",
+    "cssct.modalitesFixees": "règlement intérieur",
+    "cssct.delegationConforme": "oui",
+    "formationSSCT": "oui",
+    "referentEmployeur": "oui",
+    "referentCSE": "oui",
+    "infoHarcelementMoral": "oui",
+    "infoHarcelementSexuel": "oui",
+    "infoCoordonnees": "oui",
+    "risquesHarcelementEvalues": "oui",
+    "mesuresPreventionHarcelement": "oui",
+    "signalement.recu": "non",
+    "signalement.enqueteMenee": "",
+    "signalement.mesuresPrises": "",
+    "pieces": ""
+};
+</script>
+<script src="audit-export.js"></script>
+<script src="audit-form.js"></script>
+<script>
+  /* L'installation sur l'écran d'accueil suppose un service worker enregistré.
+     Le même sert les deux audits et la recherche : il est à la racine du site,
+     donc sa portée couvre les trois pages. */
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+</script>
+
+<script>
+  /* Revenir d'où l'on vient. À défaut d'historique — l'application a été
+     ouverte directement sur cette page — on rejoint la recherche, qui est la
+     porte d'entrée. On ne laisse jamais le bouton sans effet. */
+  document.getElementById("btn-retour").addEventListener("click", function () {
+    if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
+    else location.href = "./";
+  });
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

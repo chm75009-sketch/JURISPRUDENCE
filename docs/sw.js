@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-4.4";
+const CACHE = "jurisprudence-4.5";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -24,7 +24,7 @@ const ESSENTIELS = [
   /* Le générateur de documents des relations collectives : autonome, tout est dans la page. */
   "./documents.html",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
-  /* Les quatre audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
+  /* Les audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
      mégaoctet, et c'est délibéré : une page d'audit installée qui échouerait
      hors connexion serait pire que pas d'installation du tout. L'audit se
      calcule entièrement sur le poste — il n'a besoin d'aucun réseau. */
@@ -33,6 +33,7 @@ const ESSENTIELS = [
   "./audit-pse.html", "./moteur-pse.js",
   "./audit-bdese.html", "./moteur-bdese.js",
   "./audit-nao.html", "./moteur-nao.js",
+  "./audit-sst.html", "./moteur-sst.js",
   /* Le formulaire est commun aux quatre pages : sans lui, elles s'ouvrent vides. */
   "./audit-form.js", "./audit-export.js",
   /* L'assistant Claude, présent sur toutes les pages. Son code se met en cache
@@ -40,12 +41,13 @@ const ESSENTIELS = [
      ce service worker (le gestionnaire fetch ne retient que la même origine). */
   "./assistant.js",
   /* Chaque audit s'installe pour lui-même : son manifeste et ses icônes. */
-  "./manifest-audit.json", "./manifest-audit-cse.json", "./manifest-audit-pse.json", "./manifest-audit-bdese.json", "./manifest-audit-nao.json",
+  "./manifest-audit.json", "./manifest-audit-cse.json", "./manifest-audit-pse.json", "./manifest-audit-bdese.json", "./manifest-audit-nao.json", "./manifest-audit-sst.json",
   "./icons/icon-audit-192.png", "./icons/icon-audit-512.png", "./icons/icon-audit-180.png",
   "./icons/icon-cse-192.png", "./icons/icon-cse-512.png", "./icons/icon-cse-180.png",
   "./icons/icon-pse-192.png", "./icons/icon-pse-512.png", "./icons/icon-pse-180.png",
   "./icons/icon-bdese-192.png", "./icons/icon-bdese-512.png", "./icons/icon-bdese-180.png",
   "./icons/icon-nao-192.png", "./icons/icon-nao-512.png", "./icons/icon-nao-180.png",
+  "./icons/icon-sst-192.png", "./icons/icon-sst-512.png", "./icons/icon-sst-180.png",
 ];
 
 self.addEventListener("install", e => {
