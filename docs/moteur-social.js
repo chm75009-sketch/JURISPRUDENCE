@@ -4,8 +4,8 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : c5ab7aa842bb
-   {"obligations":33,"parCategorie":{"instances":6,"documents obligatoires":5,"affichages et informations":7,"registres":3,"négociations":3,"santé-sécurité":3,"formation et entretiens":2,"épargne et protection sociale":4},"articlesLus":44,"articlesNonConfirmes":1,"articlesCites":44,"renvoisModules":12,"itemsConventionnels":2,"itemsGeneriques":2,"questionsOrientation":13,"questionsVerification":54,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0}
+   Empreinte du moteur au moment de l'empaquetage : 4bdb2b11abfd
+   {"obligations":41,"parCategorie":{"instances":10,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":3,"santé-sécurité":4,"formation et entretiens":2,"épargne et protection sociale":5},"articlesLus":62,"articlesNonConfirmes":1,"articlesCites":62,"renvoisModules":16,"itemsConventionnels":2,"itemsGeneriques":2,"questionsOrientation":17,"questionsVerification":67,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0}
 */
 (function (global) {
   "use strict";
@@ -21,7 +21,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"audit social — le chapeau des obligations de l'employeur","date":"2026-08-19","empreinte":"c5ab7aa842bb","fichiers":{"audit-social-client.js":"7a478d627254","capturer-textes-social-2.js":"4d61e2c885d8","capturer-textes-social-3.js":"ae2db2f3a775","capturer-textes-social.js":"f79e801d9e31","controles-social.js":"dca44c7025a0","generer-donnees-modeles.js":"f8f64294ce6d","modeles-social.js":"8eb326b216ab","moteur-social.js":"6e23710d673f","plan-social.js":"790ea6b6be17","questionnaire-social.js":"71fc9a4ae24a","referentiel-social.js":"c9e532c2a944","tests-social.js":"3751883a7bf3","textes-social-non-confirmes.json":"ff595f9c4875","textes-social.json":"9127b61d78e2","verifier-textes-social.js":"de5da88f7ad0"},"compteurs":{"obligations":33,"parCategorie":{"instances":6,"documents obligatoires":5,"affichages et informations":7,"registres":3,"négociations":3,"santé-sécurité":3,"formation et entretiens":2,"épargne et protection sociale":4},"articlesLus":44,"articlesNonConfirmes":1,"articlesCites":44,"renvoisModules":12,"itemsConventionnels":2,"itemsGeneriques":2,"questionsOrientation":13,"questionsVerification":54,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0},"textesRelus":{"date":"2026-08-19","articles":44,"concordants":44,"ecarts":0,"sansConclusion":0}};
+  var __MANIFESTE = {"domaine":"audit social — le chapeau des obligations de l'employeur","date":"2026-08-20","empreinte":"4bdb2b11abfd","fichiers":{"audit-social-client.js":"7a478d627254","capturer-textes-social-2.js":"4d61e2c885d8","capturer-textes-social-3.js":"ae2db2f3a775","capturer-textes-social-4.js":"5cb24e703a38","capturer-textes-social.js":"f79e801d9e31","controles-social.js":"dca44c7025a0","generer-donnees-modeles.js":"f8f64294ce6d","modeles-social.js":"5325269df019","moteur-social.js":"6e23710d673f","plan-social.js":"790ea6b6be17","questionnaire-social.js":"fc65eb547510","referentiel-social.js":"87453028cff8","tests-social.js":"7d77207443b3","textes-social-non-confirmes.json":"ff595f9c4875","textes-social.json":"6ed5ebf7af68","verifier-textes-social.js":"de5da88f7ad0"},"compteurs":{"obligations":41,"parCategorie":{"instances":10,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":3,"santé-sécurité":4,"formation et entretiens":2,"épargne et protection sociale":5},"articlesLus":62,"articlesNonConfirmes":1,"articlesCites":62,"renvoisModules":16,"itemsConventionnels":2,"itemsGeneriques":2,"questionsOrientation":17,"questionsVerification":67,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0},"textesRelus":{"date":"2026-08-20","articles":62,"concordants":62,"ecarts":0,"sansConclusion":0}};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -275,31 +275,163 @@ item({
 
 item({
   id: "SOC-INS-COMMISSIONS", categorie: "instances",
-  intitule: "Autres commissions du CSE (formation, information et aide au logement, égalité professionnelle)",
-  articles: [],
-  articlesSouhaites: [],
+  intitule: "Commissions du CSE à défaut d'accord : formation, information et aide au logement, égalité professionnelle",
+  articles: ["L2315-45", "L2315-49", "L2315-50", "L2315-51", "L2315-56"].filter(lu),
+  articlesSouhaites: ["L2315-45", "L2315-49", "L2315-50", "L2315-51", "L2315-56"],
   module: { nom: "comité social et économique", page: "audit-cse.html" },
   condition: p => {
     const s = auSeuil(300)(p);
     if (s.du === null) return s;
-    if (!s.du) return { du: false, motif: s.motif + " Les commissions supplémentaires du comité naissent, pour l'essentiel, à partir de trois cents salariés." };
-    return { du: true, motif: s.motif + " Les commissions du comité (formation, information et aide au logement, égalité professionnelle) doivent être constituées — leurs articles précis sont vérifiés dans le module dédié." };
+    if (!s.du) return { du: false, motif: s.motif + " Les commissions supplétives du comité (formation, information et aide au logement, égalité professionnelle) naissent à partir de trois cents salariés — et seulement en l'absence d'accord d'entreprise prévu à l'article L. 2315-45." };
+    return { du: true, motif: s.motif + " Ces commissions ne jouent qu'À DÉFAUT D'ACCORD : un accord d'entreprise (L. 2315-45) peut organiser les commissions autrement. En son absence, le comité constitue une commission de la formation (L. 2315-49), une commission d'information et d'aide au logement (L. 2315-50, missions à L. 2315-51) et une commission de l'égalité professionnelle (L. 2315-56)." };
   },
   verifs: [
-    { cle: "commissionsConstituees", libelle: "Ces commissions sont-elles constituées ?", format: "oui / non", regle: "oui",
-      motifNC: "Les commissions dues à partir de trois cents salariés ne sont pas déclarées constituées : constituez-les, ou vérifiez dans le module comité ce qu'un accord a pu aménager." },
+    { cle: "commissionsConstituees", libelle: "Un accord d'entreprise (L. 2315-45) organise-t-il les commissions — ou, à défaut d'accord, les trois commissions supplétives (formation, logement, égalité professionnelle) sont-elles constituées ?", format: "oui / non", regle: "oui",
+      motifNC: "Ni accord organisant les commissions, ni commissions supplétives constituées : à trois cents salariés et à défaut d'accord L. 2315-45, le comité doit constituer les commissions formation (L. 2315-49), information et aide au logement (L. 2315-50) et égalité professionnelle (L. 2315-56)." },
   ],
   plan: {
     priorite: 3,
-    action: "Constituer les commissions du comité dues à l'effectif, ou vérifier ce qu'un accord d'entreprise a aménagé.",
+    action: "Constituer, à défaut d'accord L. 2315-45, les commissions supplétives du comité : formation, information et aide au logement, égalité professionnelle.",
     etapes: [
-      "Lister les commissions dues à l'effectif dans le module d'audit du comité.",
-      "Les constituer par accord ou par le règlement intérieur du comité.",
+      "Vérifier d'abord si un accord d'entreprise (L. 2315-45) organise les commissions : lui seul peut y déroger.",
+      "À défaut d'accord, faire constituer les trois commissions par délibération du comité (le modèle joint donne les délibérations complètes).",
+      "Doter chaque commission de membres, d'un rythme de réunions et de moyens, et le consigner au règlement intérieur du comité.",
     ],
     acteur: "Direction et CSE",
-    delai: "Dès le franchissement du seuil",
-    risque: "Fonctionnement irrégulier du comité — l'audit détaillé et les articles se trouvent dans le module dédié.",
-    modele: { page: "audit-cse.html", nom: "module d'audit du comité" },
+    delai: "Dès le franchissement du seuil de trois cents salariés",
+    risque: "Fonctionnement irrégulier du comité et contestation de ses consultations préparées sans les commissions dues — l'audit détaillé se fait dans le module comité.",
+    modele: { page: "audit-cse.html", nom: "délibérations de constitution des commissions (modèle joint au plan)" },
+  },
+});
+
+item({
+  id: "SOC-INS-COMMISSION-ECO", categorie: "instances",
+  intitule: "Commission économique du CSE (entreprise d'au moins 1 000 salariés, à défaut d'accord)",
+  articles: ["L2315-45", "L2315-46"].filter(lu),
+  articlesSouhaites: ["L2315-45", "L2315-46"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = auSeuil(1000)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " La commission économique n'est due, à défaut d'accord L. 2315-45, qu'à partir de mille salariés (L. 2315-46)." };
+    return { du: true, motif: s.motif + " À défaut d'accord d'entreprise prévu à l'article L. 2315-45, une commission économique est créée au sein du comité social et économique ou du comité central : elle étudie les documents économiques et financiers recueillis par le comité et toute question qu'il lui soumet (L. 2315-46)." };
+  },
+  verifs: [
+    { cle: "commissionEcoConstituee", libelle: "Un accord organise-t-il les commissions — ou, à défaut, la commission économique est-elle constituée (au niveau du comité ou du comité central) ?", format: "oui / non", regle: "oui",
+      motifNC: "Ni accord L. 2315-45, ni commission économique constituée : à mille salariés, L. 2315-46 impose sa création au sein du comité social et économique ou du comité central." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Constituer la commission économique du comité (ou du comité central), à défaut d'accord L. 2315-45.",
+    etapes: [
+      "Vérifier si un accord d'entreprise organise les commissions — lui seul dispense du régime supplétif.",
+      "À défaut, faire adopter la délibération de constitution (le modèle joint la rédige) au bon niveau : comité unique, ou comité central dans une entreprise à établissements.",
+      "Organiser le flux des documents économiques et financiers vers la commission, en lien avec la BDESE.",
+    ],
+    acteur: "Direction et CSE (ou CSE central)",
+    delai: "Dès le franchissement du seuil de mille salariés",
+    risque: "Consultations économiques du comité fragilisées : la commission due n'a pas préparé les documents — l'audit détaillé se fait dans le module comité.",
+    modele: { page: "audit-cse.html", nom: "délibération de constitution de la commission économique (modèle joint au plan)" },
+  },
+});
+
+item({
+  id: "SOC-INS-COMMISSION-MARCHES", categorie: "instances",
+  intitule: "Commission des marchés du CSE (critère : les comptes du comité, pas l'effectif de l'entreprise)",
+  articles: ["L2315-44-1", "D2315-29"].filter(lu),
+  articlesSouhaites: ["L2315-44-1", "D2315-29"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = M.seuilDouzeMois(p, 11);
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.atteint) return { du: false, motif: s.motif + " Sans comité, la commission des marchés n'a pas de support." };
+    const c = M.ouiNon(p, "comiteSeuilsComptes", "Le comité dépasse-t-il, pour au moins deux des trois critères tenant à ses propres comptes (cinquante salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan), les seuils réglementaires ?");
+    if (!c.connu) return { du: null, motif: "Le critère de la commission des marchés n'est pas l'effectif de l'entreprise mais les comptes du comité lui-même (L. 2315-44-1, D. 2315-29). " + c.motif };
+    if (!c.vrai) return { du: false, motif: "Le comité ne dépasse pas au moins deux des trois seuils de D. 2315-29 (nombre de salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan) : la commission des marchés n'est pas due — le critère tient aux comptes du comité, pas à l'effectif de l'entreprise ; recontrôlez à chaque clôture des comptes du comité." };
+    return { du: true, motif: "Le comité dépasse, pour au moins deux des trois critères, les seuils de D. 2315-29 : une commission des marchés doit être créée en son sein (L. 2315-44-1). Le critère tient aux comptes du comité — pas à l'effectif de l'entreprise ; le seuil de passage en commission des marchés est fixé à 30 000 euros (D. 2315-29, dernier alinéa)." };
+  },
+  verifs: [
+    { cle: "commissionMarchesConstituee", libelle: "La commission des marchés est-elle constituée au sein du comité ?", format: "oui / non", regle: "oui",
+      motifNC: "Le comité dépasse les seuils de D. 2315-29 et aucune commission des marchés n'est constituée : L. 2315-44-1 l'impose — les marchés du comité au-delà de 30 000 euros (D. 2315-29) doivent passer par elle." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Faire constituer la commission des marchés au sein du comité — c'est une obligation du comité, que l'employeur a intérêt à signaler.",
+    etapes: [
+      "Faire vérifier les comptes du comité au regard des trois critères de D. 2315-29 (salariés du comité à la clôture, ressources annuelles, total du bilan) : deux dépassés déclenchent l'obligation.",
+      "Faire adopter la délibération de constitution et fixer, dans le règlement intérieur du comité, les modalités de fonctionnement de la commission (le modèle joint donne la trame).",
+      "Faire passer par la commission les marchés dont le montant dépasse 30 000 euros (D. 2315-29, dernier alinéa).",
+    ],
+    acteur: "CSE (l'employeur signale l'obligation ; la commission est celle du comité)",
+    delai: "À la clôture des comptes du comité qui révèle le dépassement",
+    risque: "Marchés du comité passés hors procédure : responsabilité des élus gestionnaires et contestation des engagements — l'audit détaillé se fait dans le module comité.",
+    modele: { page: "audit-cse.html", nom: "délibération et règlement de la commission des marchés (modèle joint au plan)" },
+  },
+});
+
+item({
+  id: "SOC-INS-FORMATION-ELUS", categorie: "instances",
+  intitule: "Formation santé, sécurité et conditions de travail des élus du CSE et du référent harcèlement sexuel",
+  articles: ["L2315-18", "L2315-16"].filter(lu),
+  articlesSouhaites: ["L2315-18", "L2315-16"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = M.seuilDouzeMois(p, 11);
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.atteint) return { du: false, motif: s.motif + " La formation santé-sécurité des élus suit le comité : sans comité dû, elle n'a pas de bénéficiaires — elle naîtra avec lui." };
+    return { du: true, motif: s.motif + " Dès qu'un comité existe — donc dès onze salariés, pas seulement à trois cents —, ses membres et le référent harcèlement sexuel du comité bénéficient de la formation nécessaire en santé, sécurité et conditions de travail : cinq jours au moins au premier mandat, trois jours au renouvellement (cinq pour les membres de la CSSCT dans les entreprises d'au moins trois cents salariés) ; le financement est pris en charge par l'employeur (L. 2315-18), et le temps de formation est pris sur le temps de travail, rémunéré comme tel, sans imputation sur les heures de délégation (L. 2315-16)." };
+  },
+  verifs: [
+    { cle: "formationFaite", libelle: "Tous les membres de la délégation du personnel (titulaires et suppléants) et le référent harcèlement du comité ont-ils reçu la formation — cinq jours au premier mandat, trois au renouvellement (cinq pour la CSSCT à partir de 300) ?", format: "oui / non", regle: "oui",
+      motifNC: "Des élus du comité (ou le référent harcèlement) n'ont pas reçu leur formation santé-sécurité : L. 2315-18 l'impose dès qu'un comité existe — cinq jours au moins au premier mandat ; programmez les sessions manquantes." },
+    { cle: "priseEnCharge", libelle: "Le financement est-il pris en charge par l'employeur, et le temps de formation payé comme temps de travail sans imputation sur les heures de délégation ?", format: "oui / non", regle: "oui",
+      motifNC: "La prise en charge n'est pas établie : le financement de la formation incombe à l'employeur (L. 2315-18, dernier alinéa) et le temps de formation est rémunéré comme temps de travail, sans déduction des heures de délégation (L. 2315-16)." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Programmer et financer la formation santé-sécurité de tous les élus du comité et du référent harcèlement.",
+    etapes: [
+      "Recenser les bénéficiaires : tous les membres de la délégation du personnel (titulaires et suppléants) et le référent harcèlement du comité — et repérer premiers mandats et renouvellements, qui commandent la durée.",
+      "Choisir un organisme habilité et arrêter le calendrier (le modèle joint programme les sessions et chiffre le budget).",
+      "Payer le temps de formation comme temps de travail, sans l'imputer sur les heures de délégation, et prendre en charge le coût.",
+    ],
+    acteur: "Direction / ressources humaines, avec le comité",
+    delai: "Dès le début de chaque mandat — les élus non formés le restent tout le mandat si personne ne programme",
+    risque: "Des élus non formés fragilisent toutes les attributions santé-sécurité du comité, et le refus de prise en charge s'analyse en entrave — l'audit détaillé se fait dans le module comité.",
+    modele: { page: "audit-cse.html", nom: "programmation et budget de la formation des élus (modèle joint au plan)" },
+  },
+});
+
+item({
+  id: "SOC-INS-REUNIONS-SST", categorie: "instances",
+  intitule: "Quatre réunions annuelles au moins du CSE portant sur la santé, la sécurité et les conditions de travail",
+  articles: ["L2315-27"].filter(lu),
+  articlesSouhaites: ["L2315-27"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = auSeuil(50)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " La règle des quatre réunions annuelles santé-sécurité (L. 2315-27) s'applique au fonctionnement du comité des entreprises d'au moins cinquante salariés." };
+    return { du: true, motif: s.motif + " Au moins quatre réunions du comité portent annuellement, en tout ou partie, sur ses attributions en matière de santé, sécurité et conditions de travail — plus souvent en cas de besoin, et le comité est en outre réuni après tout accident grave ou événement grave (L. 2315-27). L'employeur informe chaque année l'inspection du travail, le médecin du travail et l'agent des services de prévention des organismes de sécurité sociale du calendrier de ces réunions, et leur confirme chacune par écrit au moins quinze jours à l'avance." };
+  },
+  verifs: [
+    { cle: "quatreReunions", libelle: "Au moins quatre réunions du comité ont-elles porté, sur les douze derniers mois, en tout ou partie sur la santé, la sécurité et les conditions de travail ?", format: "oui / non", regle: "oui",
+      motifNC: "Moins de quatre réunions santé-sécurité sur l'année : L. 2315-27 en impose au moins quatre — inscrivez le point à l'ordre du jour des prochaines réunions et rattrapez le calendrier." },
+    { cle: "calendrierCommunique", libelle: "Le calendrier annuel de ces réunions est-il communiqué à l'inspection du travail, au médecin du travail et à l'agent des services de prévention, chaque réunion étant confirmée par écrit quinze jours à l'avance ?", format: "oui / non", regle: "oui",
+      motifNC: "Le calendrier des réunions santé-sécurité n'est pas communiqué : L. 2315-27 impose d'informer annuellement l'inspection du travail, le médecin du travail et l'agent des services de prévention, et de confirmer chaque réunion par écrit au moins quinze jours à l'avance." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Caler le calendrier annuel des réunions santé-sécurité du comité et les communications qui l'accompagnent.",
+    etapes: [
+      "Fixer au moins quatre réunions de l'année portant, en tout ou partie, sur la santé, la sécurité et les conditions de travail (le modèle joint propose un calendrier).",
+      "Communiquer ce calendrier à l'inspection du travail, au médecin du travail et à l'agent des services de prévention des organismes de sécurité sociale.",
+      "Confirmer chaque réunion par écrit à ces destinataires au moins quinze jours à l'avance, et le tracer.",
+    ],
+    acteur: "Direction (présidence du comité)",
+    delai: "Calendrier à poser en début d'année ou de mandat",
+    risque: "Réunions santé-sécurité insuffisantes ou non annoncées : fonctionnement irrégulier du comité — et l'inspection peut convoquer le comité et le présider en cas de défaillance de l'employeur (L. 2315-27).",
+    modele: { page: "audit-cse.html", nom: "calendrier annuel et courriers d'information (modèle joint au plan)" },
   },
 });
 
@@ -594,6 +726,31 @@ item({
 });
 
 item({
+  id: "SOC-AFF-EGA-REMU", categorie: "affichages et informations",
+  intitule: "Information sur les textes d'égalité de rémunération entre les femmes et les hommes (L. 3221-1 à L. 3221-7)",
+  articles: ["R3221-2"].filter(lu),
+  articlesSouhaites: ["R3221-2"],
+  module: null,
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "informationFaite", libelle: "Le texte des articles L. 3221-1 à L. 3221-7 (et de leurs textes d'application) est-il porté, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail et des candidats à l'embauche ?", format: "oui / non", regle: "oui",
+      motifNC: "Les textes sur l'égalité de rémunération entre les femmes et les hommes ne sont pas portés à la connaissance des salariés et candidats : R. 3221-2 impose cette information, par tout moyen, dans les lieux de travail et à l'embauche." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Porter à la connaissance des salariés et des candidats les textes sur l'égalité de rémunération femmes-hommes.",
+    etapes: [
+      "Préparer le support reprenant les articles L. 3221-1 à L. 3221-7 en vigueur et leurs textes d'application (le modèle joint donne l'affiche).",
+      "Le diffuser par tout moyen aux personnes ayant accès aux lieux de travail et aux candidats à l'embauche, et dater la mise en place.",
+    ],
+    acteur: "Ressources humaines",
+    delai: "Immédiat",
+    risque: "Manquement d'information retenu dans les contentieux d'égalité salariale — formulation prudente : l'article d'amende n'a pas été vérifié ici.",
+    modele: { page: "documents.html", nom: "note d'information (modèle « note-rh »)" },
+  },
+});
+
+item({
   id: "SOC-AFF-COORDONNEES", categorie: "affichages et informations",
   intitule: "Affichage des coordonnées : inspection du travail, médecin du travail, services de secours d'urgence",
   articles: ["D4711-1"].filter(lu),
@@ -682,6 +839,39 @@ item({
     acteur: "Ressources humaines",
     delai: "Immédiat",
     risque: "En litige sur les heures supplémentaires, l'absence d'affichage et de décompte se retourne contre l'employeur : c'est lui qui doit justifier les horaires.",
+    modele: null,
+  },
+});
+
+item({
+  id: "SOC-AFF-DECOMPTE", categorie: "affichages et informations",
+  intitule: "Décompte individuel de la durée du travail des salariés hors horaire collectif, et documents tenus à disposition",
+  articles: ["L3171-2", "L3171-3"].filter(lu),
+  articlesSouhaites: ["L3171-2", "L3171-3"],
+  module: null,
+  condition: p => {
+    const h = M.ouiNon(p, "salariesHorsHoraire", "Des salariés travaillent-ils en dehors d'un horaire collectif uniforme (horaires individualisés, équipes, forfaits, itinérants) ?");
+    if (!h.connu) return { du: null, motif: h.motif };
+    if (!h.vrai) return { du: false, motif: "Tous les salariés déclarés suivent le même horaire collectif : c'est l'affichage de l'horaire (L. 3171-1) qui en tient lieu — le décompte individuel de L. 3171-2 n'a pas d'objet tant que cette situation dure." };
+    return { du: true, motif: "Des salariés ne suivent pas le même horaire collectif : l'employeur établit, pour chacun d'eux, les documents nécessaires au décompte de la durée de travail, des repos compensateurs acquis et de leur prise effective — documents que le comité peut consulter (L. 3171-2) — et tient à la disposition de l'inspection du travail les documents permettant de comptabiliser le temps de travail accompli par chaque salarié (L. 3171-3)." };
+  },
+  verifs: [
+    { cle: "decompteEtabli", libelle: "Les documents de décompte individuels (durée du travail, repos compensateurs acquis et pris) sont-ils établis pour chaque salarié hors horaire collectif ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun décompte individuel établi pour les salariés hors horaire collectif : L. 3171-2 l'impose — et en litige d'heures supplémentaires, l'absence de décompte se retourne contre l'employeur." },
+    { cle: "documentsDisponibles", libelle: "Ces documents sont-ils tenus à la disposition de l'inspection du travail, et consultables par le comité ?", format: "oui / non", regle: "oui",
+      motifNC: "Les documents de comptabilisation du temps de travail ne sont pas tenus à disposition : L. 3171-3 impose leur mise à disposition de l'agent de contrôle, et L. 3171-2 leur consultation par le comité." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Organiser le décompte individuel du temps de travail des salariés hors horaire collectif et la conservation des documents.",
+    etapes: [
+      "Recenser les populations hors horaire collectif (horaires individualisés, équipes successives, forfaits, itinérants) et choisir le mode de décompte de chacune.",
+      "Établir les documents : durée de travail, repos compensateurs acquis et leur prise effective, salarié par salarié (le modèle joint donne la trame).",
+      "Les tenir à la disposition de l'inspection du travail et les rendre consultables par le comité ; définir la durée de conservation avec votre conseil (textes réglementaires non vérifiés ici).",
+    ],
+    acteur: "Ressources humaines / paie",
+    delai: "Sous quelques semaines : chaque mois sans décompte est un mois indéfendable en litige",
+    risque: "En litige sur les heures supplémentaires, c'est l'employeur qui doit produire les éléments de décompte : sans documents, les décomptes du salarié l'emportent — et l'inspection peut relever l'absence de documents de L. 3171-3.",
     modele: null,
   },
 });
@@ -955,15 +1145,15 @@ item({
 item({
   id: "SOC-SST-VIP", categorie: "santé-sécurité",
   intitule: "Visite d'information et de prévention (et suivi de l'état de santé des salariés)",
-  articles: ["R4624-10"].filter(lu),
-  articlesSouhaites: ["R4624-10"],
+  articles: ["R4624-10", "R4624-16"].filter(lu),
+  articlesSouhaites: ["R4624-10", "R4624-16"],
   module: null,
   condition: toutEmployeur,
   verifs: [
     { cle: "embauchesVues", libelle: "Chaque salarié a-t-il bénéficié de sa visite d'information et de prévention dans le délai suivant la prise de poste ?", format: "oui / non", regle: "oui",
       motifNC: "Des salariés n'ont pas eu leur visite d'information et de prévention : programmez les visites en retard — le délai court à compter de la prise de poste, et certains postes appellent un suivi renforcé ou une visite avant affectation." },
-    { cle: "suiviPeriodique", libelle: "Le suivi périodique est-il à jour (périodicité fixée par le médecin du travail) ?", format: "oui / non", regle: "oui",
-      motifNC: "Le suivi périodique n'est pas à jour : demandez au service de prévention l'état des visites et reprogrammez les échéances dépassées." },
+    { cle: "suiviPeriodique", libelle: "Le suivi périodique est-il à jour — périodicité fixée par le médecin du travail, qui ne peut excéder cinq ans (R. 4624-16) ?", format: "oui / non", regle: "oui",
+      motifNC: "Le suivi périodique n'est pas à jour : la visite se renouvelle à la périodicité fixée par le médecin du travail, sans pouvoir excéder cinq ans (R. 4624-16) — demandez au service de prévention l'état des visites et reprogrammez les échéances dépassées." },
   ],
   plan: {
     priorite: 2,
@@ -976,6 +1166,39 @@ item({
     acteur: "Ressources humaines, avec le service de prévention",
     delai: "Visites en retard : sous quelques semaines",
     risque: "Un salarié non vu par la médecine du travail, puis inapte ou accidenté, se retourne contre l'employeur : le manquement au suivi médical est systématiquement retenu.",
+    modele: null,
+  },
+});
+
+item({
+  id: "SOC-SST-POSTES-RISQUES", categorie: "santé-sécurité",
+  intitule: "Postes à risques particuliers : suivi individuel renforcé et liste des postes",
+  articles: ["R4624-22", "R4624-23"].filter(lu),
+  articlesSouhaites: ["R4624-22", "R4624-23"],
+  module: null,
+  condition: p => {
+    const r = M.ouiNon(p, "postesRisquesParticuliers", "Des salariés sont-ils affectés à des postes présentant des risques particuliers (amiante, plomb, agents cancérogènes-mutagènes-reprotoxiques, agents biologiques des groupes 3 et 4, rayonnements ionisants, risque hyperbare, montage-démontage d'échafaudages, ou postes soumis à un examen d'aptitude spécifique) ?");
+    if (!r.connu) return { du: null, motif: r.motif };
+    if (!r.vrai) return { du: false, motif: "Aucun poste à risques particuliers déclaré au sens de R. 4624-23 : le suivi individuel renforcé n'a pas de bénéficiaires — recontrôlez à chaque évolution des postes, et l'employeur peut aussi compléter la liste de sa propre initiative (R. 4624-23, III)." };
+    return { du: true, motif: "Des postes à risques particuliers sont déclarés : chaque travailleur qui y est affecté bénéficie d'un suivi individuel renforcé de son état de santé (R. 4624-22). Si l'employeur complète la liste des postes au-delà des catégories légales, cette liste est motivée par écrit, prise après avis du médecin du travail et du comité s'il existe, transmise au service de prévention et mise à jour tous les ans (R. 4624-23, III)." };
+  },
+  verifs: [
+    { cle: "suiviRenforceEnPlace", libelle: "Chaque salarié affecté à un poste à risques particuliers bénéficie-t-il du suivi individuel renforcé (examen avant affectation, périodicité renforcée) ?", format: "oui / non", regle: "oui",
+      motifNC: "Des salariés de postes à risques particuliers n'ont pas leur suivi individuel renforcé : R. 4624-22 l'impose — signalez les postes au service de prévention et programmez les examens manquants." },
+    { cle: "listeEtablie", libelle: "La liste des postes concernés est-elle établie avec le service de prévention — et, si l'employeur l'a complétée, motivée par écrit, prise après avis du médecin du travail et du comité, transmise au service et mise à jour annuellement ?", format: "oui / non", regle: "oui",
+      motifNC: "La liste des postes à risques n'est pas formalisée : sans elle, le service de prévention ne peut pas classer les salariés en suivi renforcé — établissez-la, et si vous la complétez au-delà des catégories légales, respectez le formalisme de R. 4624-23, III (motivation écrite, avis, transmission, mise à jour annuelle)." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Établir la liste des postes à risques particuliers et mettre en place le suivi individuel renforcé des salariés concernés.",
+    etapes: [
+      "Recenser les postes entrant dans les catégories de R. 4624-23, I et II (amiante, plomb, CMR, agents biologiques 3 et 4, rayonnements ionisants, hyperbare, échafaudages, examens d'aptitude spécifiques), en cohérence avec le document unique.",
+      "Décider des compléments éventuels (R. 4624-23, III) : motivation écrite, avis du médecin du travail et du comité, transmission au service de prévention, mise à jour annuelle.",
+      "Transmettre la liste au service de prévention et faire programmer les examens avant affectation et le suivi renforcé.",
+    ],
+    acteur: "Direction / ressources humaines, avec le médecin du travail et le comité",
+    delai: "Avant toute nouvelle affectation à un poste concerné ; régularisation des postes occupés sous quelques semaines",
+    risque: "Un salarié d'un poste à risques sans suivi renforcé, puis accidenté ou inapte, se retourne contre l'employeur : le défaut de suivi médical renforcé pèse lourd dans la faute inexcusable.",
     modele: null,
   },
 });
@@ -1108,6 +1331,39 @@ item({
     acteur: "Direction, expert-comptable, instances",
     delai: "Échéance liée à la clôture de l'exercice suivant l'assujettissement : faites-la caler par votre expert",
     risque: "À défaut d'accord dans les délais, régime d'autorité (moins favorable à l'employeur) et perte possible d'exonérations — chiffrage à faire établir par votre expert.",
+    modele: null,
+  },
+});
+
+item({
+  id: "SOC-EPA-LIVRET", categorie: "épargne et protection sociale",
+  intitule: "Livret d'épargne salariale remis à chaque embauche (entreprise proposant un dispositif)",
+  articles: ["L3341-6"].filter(lu),
+  articlesSouhaites: ["L3341-6"],
+  module: null,
+  condition: p => {
+    const e = M.ouiNon(p, "epargneSalariale", "Un dispositif d'épargne salariale (intéressement, participation, plan d'épargne d'entreprise ou de retraite) est-il en place ?");
+    if (!e.connu) return { du: null, motif: e.motif };
+    if (!e.vrai) return { du: false, motif: "Aucun dispositif d'épargne salariale déclaré : le livret d'épargne salariale n'a pas d'objet — il le retrouvera avec le premier dispositif, et la participation devient obligatoire à partir de cinquante salariés maintenus." };
+    return { du: true, motif: "Un dispositif d'épargne salariale est en place : tout salarié reçoit, lors de la conclusion de son contrat de travail, un livret d'épargne salariale présentant les dispositifs de l'entreprise, également porté à la connaissance des représentants du personnel — le cas échéant via la BDESE (L. 3341-6)." };
+  },
+  verifs: [
+    { cle: "livretRemis", libelle: "Le livret d'épargne salariale est-il remis à chaque salarié lors de la conclusion de son contrat de travail ?", format: "oui / non", regle: "oui",
+      motifNC: "Le livret d'épargne salariale n'est pas remis à l'embauche : L. 3341-6 l'impose à toute entreprise proposant un dispositif — intégrez-le au dossier d'embauche, contre émargement." },
+    { cle: "livretElus", libelle: "Le livret est-il porté à la connaissance des représentants du personnel (le cas échéant via la BDESE) ?", format: "oui / non", regle: "oui",
+      motifNC: "Le livret n'est pas porté à la connaissance des représentants du personnel : L. 3341-6 le prévoit, le cas échéant comme élément de la BDESE — versez-le." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Établir le livret d'épargne salariale et l'intégrer au parcours d'embauche.",
+    etapes: [
+      "Rédiger le livret : présentation de chaque dispositif en place (intéressement, participation, plans d'épargne), modalités d'affectation et de déblocage — le modèle joint donne le sommaire complet.",
+      "Le remettre à chaque nouvelle embauche, contre émargement, et le porter à la connaissance des représentants du personnel (BDESE le cas échéant).",
+      "Le mettre à jour à chaque évolution des dispositifs.",
+    ],
+    acteur: "Ressources humaines / paie",
+    delai: "Avant la prochaine embauche",
+    risque: "Un salarié non informé de ses droits d'épargne salariale peut contester les affectations par défaut et les délais qui lui ont été opposés — l'information manquante se retourne contre l'employeur.",
     modele: null,
   },
 });
@@ -1763,24 +2019,167 @@ const MODELES = {
       noteFin("la composition, les modalités et la formation des membres s'auditent en détail dans le module « santé, sécurité et conditions de travail » (audit-sst.html).")],
   }; },
 
-  "SOC-INS-COMMISSIONS": p => ({
-    titre: "Délibérations types : les commissions du comité",
-    lignes: [...entete(p, "constitution des commissions du comité social et économique dues à l'effectif"),
-      h("1. Commission de la formation"),
-      par(`« Le comité social et économique de ${nomE(p)} constitue une commission de la formation chargée de préparer ses délibérations en matière de formation professionnelle. Membres : ${ex("cinq élus, présidence assurée par Sacha LEROY")} ; réunions : ${ex("deux par an, avant chaque consultation concernée")}. »`),
-      h("2. Commission d'information et d'aide au logement"),
-      par(`« La commission d'information et d'aide au logement facilite l'accès des salariés à la propriété et à la location. Membres : ${ex("trois élus")} ; elle examine ${ex("les demandes d'aides Action Logement et en rend compte au comité une fois par an")}. »`),
-      h("3. Commission de l'égalité professionnelle"),
-      par(`« La commission de l'égalité professionnelle prépare les délibérations du comité sur la politique sociale dans son volet égalité femmes-hommes, à partir des données de la base (BDESE, rubrique égalité). Membres : ${ex("quatre élus")} ; elle établit ${ex("un relevé annuel d'écarts et de propositions")}. »`),
-      h("4. Règles communes (exemple)"),
-      puce(`Désignation par résolution du comité, le ${ex(plusJours(p, 21))} ; durée : celle des mandats en cours.`),
-      puce(`Moyens : ${ex("temps de réunion payé comme temps de travail, accès aux rubriques utiles de la BDESE")}.`),
-      par("Les seuils et attributions précis de chaque commission tiennent aux articles propres du module comité — le présent modèle donne des délibérations prêtes à adapter, non les seuils, qui se vérifient dans le module."),
-      ...aPers(["Le nombre de membres et les noms, commission par commission",
-        "Le rythme de réunions et les moyens réellement alloués",
-        "Ce qu'un accord d'entreprise a pu aménager (composition, attributions)"]),
-      noteFin("les articles fondant chaque commission et leurs seuils exacts s'auditent dans le module « comité social et économique ».")],
+  "SOC-INS-COMMISSIONS": p => {
+    const n = effN(p);
+    const membres = k => (n === null ? k : Math.max(3, Math.min(k + 2, Math.round(k + n / 900))));
+    return {
+    titre: "Délibération de constitution des commissions du comité (régime supplétif)",
+    lignes: [...entete(p, "constitution des commissions supplétives du comité : formation, information et aide au logement, égalité professionnelle"),
+      h("0. À lire avant tout : ces commissions ne jouent qu'À DÉFAUT D'ACCORD"),
+      par("Un accord d'entreprise conclu dans les conditions du premier alinéa de l'article L. 2232-12 peut prévoir la création de commissions supplémentaires pour l'examen de problèmes particuliers (L. 2315-45). Les commissions ci-dessous sont le RÉGIME SUPPLÉTIF : elles s'imposent « en l'absence d'accord prévu à l'article L. 2315-45 ». Première vérification, donc : existe-t-il un accord qui organise les commissions ? S'il existe, c'est lui qui commande, et cette délibération se réécrit sur son plan."),
+      puce("Commission de la formation — à défaut d'accord, dans les entreprises d'au moins trois cents salariés (L. 2315-49)."),
+      puce("Commission d'information et d'aide au logement — à défaut d'accord, dans les entreprises d'au moins trois cents salariés ; les entreprises de moins de trois cents salariés peuvent se grouper pour la former (L. 2315-50)."),
+      puce("Commission de l'égalité professionnelle — à défaut d'accord, dans les entreprises d'au moins trois cents salariés (L. 2315-56)."),
+      puce("Les rapports des commissions sont soumis à la délibération du comité ; l'employeur peut leur adjoindre, avec voix consultative, des experts et techniciens de l'entreprise choisis hors du comité, tenus au secret professionnel et à l'obligation de discrétion (L. 2315-45)."),
+      h("1. Délibération — préambule (à porter au procès-verbal)"),
+      par(`« Le comité social et économique de ${nomE(p)} (${eff(p)} salariés), réuni le ${ex(plusJours(p, 21))} sous la présidence de ${ex("Dominique BERNARD, directeur général")}, constate qu'aucun accord d'entreprise au sens de l'article L. 2315-45 n'organise ses commissions${n !== null && n >= 1000 ? " — l'effectif appelant en outre une commission économique, objet d'une délibération distincte (L. 2315-46)" : ""}. En conséquence, il constitue les commissions ci-après, pour une durée prenant fin avec les mandats en cours. »`),
+      h("2. Commission de la formation (L. 2315-49)"),
+      par(`« Il est constitué une commission de la formation, composée de ${ex(String(membres(5)) + " membres")}, dont ${ex("Sacha LEROY, rapporteur")}. Elle est chargée : 1° de préparer les délibérations du comité prévues aux 1° et 3° de l'article L. 2312-17 dans les domaines qui relèvent de sa compétence ; 2° d'étudier les moyens permettant de favoriser l'expression des salariés en matière de formation et de participer à leur information dans ce domaine ; 3° d'étudier les problèmes spécifiques concernant l'emploi et le travail des jeunes et des travailleurs handicapés. Réunions : ${ex("deux par an, avant chaque consultation concernée — les " + plusJours(p, 60) + " et " + plusJours(p, 240))}. »`),
+      h("3. Commission d'information et d'aide au logement (L. 2315-50, L. 2315-51)"),
+      par(`« Il est constitué une commission d'information et d'aide au logement, composée de ${ex(String(membres(3)) + " membres")}, dont ${ex("Andrea COSTA, rapporteure")}. Elle facilite le logement et l'accession des salariés à la propriété et à la location de locaux d'habitation. À cet effet : 1° elle recherche les possibilités d'offre de logements correspondant aux besoins du personnel, en liaison avec les organismes habilités à collecter la participation des employeurs à l'effort de construction ; 2° elle informe les salariés sur leurs conditions d'accès à la propriété ou à la location et les assiste dans les démarches d'obtention des aides financières auxquelles ils peuvent prétendre. Réunions : ${ex("deux par an ; compte rendu annuel au comité")}. »`),
+      h("4. Commission de l'égalité professionnelle (L. 2315-56)"),
+      par(`« Il est constitué une commission de l'égalité professionnelle, composée de ${ex(String(membres(4)) + " membres")}, dont ${ex("Camille MARTIN, rapporteure")}. Elle est notamment chargée de préparer les délibérations du comité prévues au 3° de l'article L. 2312-17, dans les domaines qui relèvent de sa compétence. Elle travaille à partir des données de la base de données économiques, sociales et environnementales (rubrique égalité professionnelle) et de l'index publié. Réunions : ${ex("deux par an, dont une avant la consultation sur la politique sociale")}. »`),
+      h("5. Moyens et fonctionnement communs (exemple)"),
+      puce(`Temps de réunion : ${ex("payé comme temps de travail, non imputé sur les heures de délégation")} — à caler sur les règles applicables et sur votre accord éventuel.`),
+      puce(`Accès aux informations : ${ex("rubriques utiles de la BDESE ouvertes en lecture aux membres de chaque commission")}.`),
+      puce(`Experts et techniciens adjoints avec voix consultative (L. 2315-45) : ${ex("le responsable formation pour la commission formation, le contrôleur de gestion sociale pour l'égalité")} — soumis au secret professionnel et à l'obligation de discrétion.`),
+      puce(`Rapports : chaque commission remet un rapport soumis à la délibération du comité — calendrier : ${ex("rapport formation en " + plusJours(p, 75).slice(0, 7) + ", rapport égalité en " + plusJours(p, 200).slice(0, 7))}.`),
+      h("6. Cas des entreprises de moins de trois cents salariés"),
+      par("Elles ne sont pas tenues par ce régime supplétif ; l'article L. 2315-50 leur ouvre en revanche la possibilité de se grouper entre elles pour former la commission d'information et d'aide au logement — une piste utile aux petits effectifs sur un même bassin."),
+      ...aPers(["L'existence (ou non) d'un accord L. 2315-45 : c'est la première question, et elle change tout",
+        "Le nombre de membres et les noms, commission par commission",
+        "Le rythme de réunions, les moyens et les experts adjoints",
+        "Les dates de délibération et de remise des rapports"]),
+      noteFin("le fonctionnement complet du comité et de ses commissions (heures, budgets, consultations préparées par les commissions) s'audite dans le module « comité social et économique ».")],
+  }; },
+
+  "SOC-INS-COMMISSION-ECO": p => ({
+    titre: "Délibération de constitution de la commission économique (1 000 salariés)",
+    lignes: [...entete(p, "création de la commission économique du comité, à défaut d'accord (L. 2315-46)"),
+      h("1. Le cadre, lu à la source"),
+      puce("En l'absence d'accord prévu à l'article L. 2315-45, dans les entreprises d'au moins mille salariés, une commission économique est créée au sein du comité social et économique OU du comité social et économique central (L. 2315-46)."),
+      puce("Elle est chargée notamment d'étudier les documents économiques et financiers recueillis par le comité et toute question que ce dernier lui soumet (L. 2315-46)."),
+      puce("Première vérification : un accord d'entreprise organise-t-il déjà les commissions (L. 2315-45) ? S'il existe, il commande — cette délibération ne vaut qu'à défaut."),
+      h("2. Choisir le niveau : comité unique ou comité central"),
+      par(`${nomE(p)} déclare ${eff(p)} salariés. Dans une entreprise à établissements distincts, la commission économique se constitue au niveau du comité central — c'est là que remontent les documents économiques et financiers consolidés ; dans une entreprise à comité unique, au niveau de ce comité. Niveau retenu dans l'exemple : ${ex("comité social et économique central")}.`),
+      h("3. Délibération (à porter au procès-verbal)"),
+      par(`« Le comité social et économique ${ex("central")} de ${nomE(p)}, réuni le ${ex(plusJours(p, 28))}, constate qu'aucun accord au sens de l'article L. 2315-45 n'organise ses commissions et que l'effectif de l'entreprise atteint mille salariés. En conséquence, il crée en son sein une commission économique, composée de ${ex("cinq membres")} : ${ex("Sacha LEROY (rapporteur), Camille MARTIN, Dominique BERNARD, Andrea COSTA, Paul DURAND")}. La commission étudie les documents économiques et financiers recueillis par le comité et toute question que celui-ci lui soumet. Elle rend compte au comité par un rapport soumis à sa délibération. Durée : celle des mandats en cours. »`),
+      h("4. Programme de travail (exemple chiffré)"),
+      puce(`Réunions : ${ex("deux par an au moins — les " + plusJours(p, 45) + " et " + plusJours(p, 225))}, dont une en préparation de la consultation sur la situation économique et financière.`),
+      puce(`Documents étudiés : ${ex("comptes annuels et rapport de gestion, comptes prévisionnels, situation de trésorerie, rubriques financières de la BDESE, documents remis à l'expert-comptable du comité")}.`),
+      puce(`Experts et techniciens adjoints avec voix consultative (L. 2315-45) : ${ex("le directeur administratif et financier, invité sur les points de méthode")} — secret professionnel et obligation de discrétion applicables.`),
+      puce(`Questions soumises par le comité : ${ex("effets du plan d'investissement sur l'emploi, structure de l'endettement, comparaison des marges par établissement")}.`),
+      h("5. Articulation"),
+      puce("Avec la BDESE : la commission travaille d'abord sur les rubriques financières de la base — vérifiez qu'elles sont alimentées avant la première réunion."),
+      puce("Avec l'expertise comptable du comité : la commission prépare et exploite, elle ne remplace pas le recours à l'expert lorsque le comité le décide."),
+      ...aPers(["L'existence d'un accord L. 2315-45, qui écarte ce régime supplétif",
+        "Le niveau retenu (comité unique ou comité central) et les noms des membres",
+        "Le calendrier des réunions et la liste des documents réellement remis"]),
+      noteFin("les consultations économiques du comité, leurs délais et l'expertise s'auditent dans le module « comité social et économique ».")],
   }),
+
+  "SOC-INS-COMMISSION-MARCHES": p => ({
+    titre: "Commission des marchés du comité : délibération et procédure d'achat",
+    lignes: [...entete(p, "création de la commission des marchés au sein du comité (L. 2315-44-1, D. 2315-29)"),
+      h("1. Le critère : les comptes du comité, pas l'effectif de l'entreprise"),
+      puce("Une commission des marchés est créée au sein du comité social et économique qui dépasse, pour au moins deux des trois critères mentionnés au II de l'article L. 2315-64, des seuils fixés par décret (L. 2315-44-1)."),
+      puce("Ces seuils sont : 1° le nombre de cinquante salariés du comité à la clôture d'un exercice ; 2° le montant de ressources annuelles prévu au 2° de l'article R. 612-1 du code de commerce, ressources définies à l'article D. 2315-34 ; 3° le montant du total du bilan prévu au 3° de l'article R. 612-1 du code de commerce (D. 2315-29)."),
+      puce("Le seuil mentionné à l'article L. 2315-44-2 — celui à partir duquel un marché passe par la commission — est fixé à 30 000 euros (D. 2315-29, dernier alinéa)."),
+      puce(`Conséquence pratique : l'effectif de l'entreprise (${eff(p)} salariés ici) n'entre pas dans le test. Ce sont les comptes du comité qui décident — le trésorier et l'expert-comptable du comité les tiennent.`),
+      h("2. Le test, à faire à chaque clôture des comptes du comité (exemple chiffré)"),
+      puce(`Critère 1 — salariés du comité à la clôture de l'exercice ${ex(String(Number(jour0(p).slice(0, 4)) - 1))} : ${ex("6 salariés — seuil de cinquante NON dépassé")}.`),
+      puce(`Critère 2 — ressources annuelles (D. 2315-34) : ${ex("1 920 000 € — seuil du 2° de R. 612-1 du code de commerce dépassé (montant à reprendre du texte en vigueur : il n'a pas été vérifié au relais, R. 612-1 relevant du code de commerce)")}.`),
+      puce(`Critère 3 — total du bilan du comité : ${ex("2 400 000 € — seuil du 3° de R. 612-1 dépassé")}.`),
+      puce(`Résultat de l'exemple : deux des trois critères dépassés → la commission des marchés est due. Deux suffisent : ce n'est pas un cumul des trois.`),
+      h("3. Délibération de constitution (à porter au procès-verbal du comité)"),
+      par(`« Le comité social et économique de ${nomE(p)}, réuni le ${ex(plusJours(p, 30))}, constate qu'il dépasse, pour au moins deux des trois critères de l'article D. 2315-29, les seuils réglementaires. En conséquence, il crée en son sein une commission des marchés, composée de ${ex("trois membres : Andrea COSTA (trésorière, rapporteure), Sacha LEROY, Paul DURAND")}. La commission choisit les fournisseurs et prestataires du comité pour les marchés dont le montant dépasse 30 000 euros, et rend compte au comité. Durée : celle des mandats en cours. »`),
+      h("4. Procédure d'achat au-delà de 30 000 euros (exemple)"),
+      puce(`Expression du besoin et cahier des charges par le comité : ${ex("prestation de voyages et séjours, budget prévisionnel 145 000 €")}.`),
+      puce(`Consultation d'au moins ${ex("trois")} prestataires ; ouverture et analyse des offres par la commission le ${ex(plusJours(p, 60))} — critères de choix arrêtés à l'avance et écrits.`),
+      puce(`Choix motivé, porté à la délibération du comité, et rapport annuel de la commission joint aux comptes du comité.`),
+      puce("Conflits d'intérêts : chaque membre déclare les liens éventuels avec les candidats — la déclaration est consignée."),
+      h("5. Qui fait quoi"),
+      par("La commission est une obligation DU COMITÉ : c'est lui qui la crée et la fait fonctionner. L'employeur n'en est pas le maître d'œuvre — mais il a intérêt à signaler l'obligation par écrit au comité, car des marchés passés hors procédure fragilisent la gestion des activités sociales et culturelles et alimentent les contentieux internes."),
+      ...aPers(["Les chiffres réels des comptes du comité (les trois critères se testent sur eux)",
+        "Les montants des seuils du 2° et du 3° de R. 612-1 du code de commerce, à reprendre du texte en vigueur — non vérifiés ici, ce code n'étant pas servi par le relais",
+        "Les membres de la commission et les critères de choix des fournisseurs",
+        "La procédure interne d'achat et son seuil de déclenchement (30 000 euros au plus tard)"]),
+      noteFin("les comptes du comité, leur certification et leur présentation s'auditent dans le module « comité social et économique ».")],
+  }),
+
+  "SOC-INS-FORMATION-ELUS": p => {
+    const n = effN(p);
+    const d = r2314(p);
+    const titulaires = d ? d.titulaires : null;
+    const benef = titulaires !== null ? titulaires * 2 + 1 : null; /* titulaires + suppléants + référent */
+    const cout = benef !== null ? benef * 5 * 400 : null;
+    return {
+    titre: "Formation santé-sécurité des élus : programmation et budget",
+    lignes: [...entete(p, "formation en santé, sécurité et conditions de travail des membres du comité et du référent (L. 2315-18, L. 2315-16)"),
+      h("1. Ce que la loi impose, lu à la source"),
+      puce("Les membres de la délégation du personnel du comité social et économique ET le référent prévu au dernier alinéa de l'article L. 2314-1 (référent harcèlement du comité) bénéficient de la formation nécessaire à l'exercice de leurs missions en matière de santé, de sécurité et de conditions de travail (L. 2315-18)."),
+      puce("Durée minimale : CINQ JOURS lors du premier mandat des membres de la délégation du personnel."),
+      puce("En cas de renouvellement du mandat, durée minimale : trois jours pour chaque membre, quelle que soit la taille de l'entreprise ; CINQ jours pour les membres de la commission santé, sécurité et conditions de travail dans les entreprises d'au moins trois cents salariés (L. 2315-18, 1° et 2°)."),
+      puce("Le financement de cette formation est pris en charge par l'employeur, dans des conditions prévues par décret en Conseil d'État (L. 2315-18, dernier alinéa)."),
+      puce("Le temps consacré aux formations est pris sur le temps de travail et rémunéré comme tel ; il n'est pas déduit des heures de délégation (L. 2315-16)."),
+      puce("À retenir : l'obligation naît avec le comité — donc dès onze salariés, et non à trois cents. Le seuil de trois cents ne joue que sur la durée du renouvellement des membres de la CSSCT."),
+      h("2. Recensement des bénéficiaires (chiffré pour l'effectif déclaré)"),
+      titulaires !== null
+        ? puce(`Pour ${eff(p)} salariés, la table de l'article R. 2314-1 (extraite par le module comité) donne ${titulaires} titulaires — et autant de suppléants : ${ex(String(titulaires * 2) + " élus")}, plus le référent harcèlement désigné par le comité, soit ${ex(String(benef) + " personnes à former")}.`)
+        : puce("Le nombre d'élus se lit dans la table de l'article R. 2314-1 : renseignez l'effectif pour qu'il se calcule — la formation vise tous les membres de la délégation du personnel et le référent du comité."),
+      puce(`Répartition premiers mandats / renouvellements : ${ex(benef !== null ? String(Math.ceil(benef * 0.6)) + " premiers mandats (5 jours) et " + String(benef - Math.ceil(benef * 0.6)) + " renouvellements (3 jours, 5 pour les membres de la CSSCT à partir de trois cents salariés)" : "à établir élu par élu")}.`),
+      h("3. Programmation (exemple daté)"),
+      puce(`Choix de l'organisme : ${ex("organisme agréé retenu après consultation de trois offres, décision le " + plusJours(p, 20))}.`),
+      puce(`Session 1 — premiers mandats, cinq jours : ${ex("du " + plusJours(p, 45) + " au " + plusJours(p, 49))}.`),
+      puce(`Session 2 — renouvellements, trois jours : ${ex("du " + plusJours(p, 75) + " au " + plusJours(p, 77))}.`),
+      n !== null && n >= 300 ? puce(`Session 3 — membres de la CSSCT en renouvellement, cinq jours (entreprise d'au moins trois cents salariés) : ${ex("du " + plusJours(p, 100) + " au " + plusJours(p, 104))}.`) : puce("Session CSSCT : sans objet sous trois cents salariés — la durée de cinq jours au renouvellement ne vise que les membres de la CSSCT des entreprises d'au moins trois cents salariés."),
+      puce(`Convocations envoyées aux élus et au référent, ordre du jour du comité mentionnant la programmation : le ${ex(plusJours(p, 25))}.`),
+      h("4. Budget (exemple chiffré — coûts indicatifs à remplacer par vos devis)"),
+      puce(cout !== null
+        ? `Coût pédagogique : ${ex(String(benef) + " personnes × 5 jours × 400 € = " + cout.toLocaleString("fr-FR") + " €")} — hypothèse haute (tous en premier mandat).`
+        : `Coût pédagogique : ${ex("nombre de bénéficiaires × durée × prix journée de l'organisme")}.`),
+      puce(`Frais annexes : ${ex("déplacements et repas, 120 € par personne et par session")}.`),
+      puce(`Maintien de salaire pendant la formation : ${ex("temps payé comme temps de travail, sans imputation sur les heures de délégation (L. 2315-16) — à provisionner en masse salariale, pas en budget formation")}.`),
+      puce("Prise en charge : le financement de la formation santé-sécurité incombe à l'employeur (L. 2315-18) ; les modalités relèvent d'un décret en Conseil d'État, non vérifié ici — faites confirmer le circuit de facturation avant engagement."),
+      h("5. Traces à conserver"),
+      puce(`Convocations, attestations de présence et attestations de fin de formation, par élu : ${ex("archivées au dossier du comité et au SIRH")}.`),
+      puce(`Mention au procès-verbal du comité de la programmation et de sa réalisation : ${ex("réunions des " + plusJours(p, 25) + " et " + plusJours(p, 110))}.`),
+      ...aPers(["La liste nominative réelle des élus (titulaires ET suppléants) et du référent du comité",
+        "Le partage premiers mandats / renouvellements, qui commande les durées",
+        "L'organisme retenu et le prix réel de la journée (l'exemple retient 400 €, à remplacer par vos devis)",
+        "Les dates de sessions, compatibles avec l'activité"]),
+      noteFin("la formation des élus, ses conditions et le contentieux de la prise en charge s'auditent dans le module « comité social et économique ».")],
+  }; },
+
+  "SOC-INS-REUNIONS-SST": p => {
+    const an = Number(jour0(p).slice(0, 4));
+    return {
+    titre: "Calendrier annuel des réunions santé-sécurité du comité et courriers d'information",
+    lignes: [...entete(p, "quatre réunions annuelles au moins portant sur la santé, la sécurité et les conditions de travail (L. 2315-27)"),
+      h("1. La règle, lue à la source"),
+      puce("Au moins quatre réunions du comité portent annuellement, en tout ou partie, sur ses attributions en matière de santé, sécurité et conditions de travail — plus fréquemment en cas de besoin, notamment dans les branches d'activité présentant des risques particuliers."),
+      puce("Le comité est en outre réuni à la suite de tout accident ayant entraîné ou ayant pu entraîner des conséquences graves, en cas d'événement grave lié à l'activité ayant porté ou pu porter atteinte à la santé publique ou à l'environnement, ou à la demande motivée de deux de ses membres représentants du personnel sur ces sujets."),
+      puce("Lorsque l'employeur est défaillant, et à la demande d'au moins la moitié des membres du comité, celui-ci peut être convoqué par l'agent de contrôle de l'inspection du travail et siéger sous sa présidence."),
+      puce("L'employeur INFORME ANNUELLEMENT l'agent de contrôle de l'inspection du travail, le médecin du travail et l'agent des services de prévention des organismes de sécurité sociale du calendrier retenu pour ces réunions, et leur CONFIRME PAR ÉCRIT chaque réunion au moins quinze jours à l'avance."),
+      puce("Ces quatre réunions ne s'ajoutent pas aux réunions du comité : ce sont des réunions du comité dont l'ordre du jour porte, en tout ou partie, sur la santé et la sécurité."),
+      h("2. Calendrier annuel " + an + " (exemple daté)"),
+      puce(`Réunion 1 — ${ex(plusJours(p, 20))} : bilan annuel de la situation générale de santé-sécurité et programme annuel de prévention ; suites du document unique.`),
+      puce(`Réunion 2 — ${ex(plusJours(p, 110))} : inspections trimestrielles et suites, accidents et presque-accidents du trimestre, plan d'actions.`),
+      puce(`Réunion 3 — ${ex(plusJours(p, 200))} : rapport annuel du médecin du travail et fiche d'entreprise, suivi des postes à risques particuliers.`),
+      puce(`Réunion 4 — ${ex(plusJours(p, 290))} : bilan des actions de l'année, priorités de l'année suivante, révision du document unique.`),
+      puce(`Réunions supplémentaires prévisibles : ${ex("une réunion après tout accident grave, sous 48 heures ; réunion exceptionnelle sur demande motivée de deux élus")}.`),
+      h("3. Courrier annuel d'information (trame)"),
+      par(`« À l'agent de contrôle de l'inspection du travail — unité de contrôle ${ex("n° 3")} ; au médecin du travail, ${ex("service AST Prévention")} ; à l'agent des services de prévention de ${ex("la CARSAT")}. Madame, Monsieur, en application de l'article L. 2315-27 du code du travail, ${nomE(p)} (${eff(p)} salariés) vous communique le calendrier des réunions du comité social et économique consacrées, en tout ou partie, aux sujets relevant de la santé, de la sécurité et des conditions de travail pour l'année ${ex(String(an))} : ${ex(plusJours(p, 20) + ", " + plusJours(p, 110) + ", " + plusJours(p, 200) + " et " + plusJours(p, 290))}. Chacune de ces réunions vous sera confirmée par écrit au moins quinze jours à l'avance. Vous êtes invités à y assister. ${ex("Camille MARTIN, directrice des ressources humaines")}, le ${ex(plusJours(p, 5))}. »`),
+      h("4. Courrier de confirmation à J-15 (trame)"),
+      par(`« Madame, Monsieur, conformément à l'article L. 2315-27, nous vous confirmons la tenue de la réunion du comité social et économique consacrée aux sujets de santé, de sécurité et de conditions de travail, le ${ex(plusJours(p, 20))} à ${ex("14 heures")}, ${ex("salle du conseil, siège de Villeneuve-Nord")}. Ordre du jour joint. ${ex("Camille MARTIN")}, le ${ex(plusJours(p, 5))}. »`),
+      h("5. Tenue de la preuve"),
+      puce(`Registre des envois : ${ex("courriels avec accusé de réception, archivés au dossier du comité")} — l'information annuelle et chaque confirmation à J-15 doivent pouvoir être produites.`),
+      puce(`Ordres du jour et procès-verbaux mentionnant explicitement les points santé-sécurité : ${ex("mention « point santé, sécurité et conditions de travail » en tête d'ordre du jour")} — c'est ce qui prouve que quatre réunions y ont porté.`),
+      ...aPers(["Les quatre dates réelles, calées sur le rythme de vos réunions",
+        "Les destinataires exacts (unité de contrôle, service de prévention et de santé au travail, organisme de sécurité sociale compétent)",
+        "Les ordres du jour et le circuit d'archivage des envois"]),
+      noteFin("le nombre total de réunions dues, les délais de consultation et les ordres du jour s'auditent dans le module « comité social et économique » (contrôles CSE-CTL-CON-05 et CSE-CTL-CON-06).")],
+  }; },
 
   "SOC-INS-GROUPE": p => ({
     titre: "Courrier à l'entreprise dominante : constitution du comité de groupe",
@@ -2057,6 +2456,68 @@ const MODELES = {
         "Le mode de décompte des salariés hors horaire collectif (et le régime conventionnel des roulants, à compléter selon la convention)"])],
   }),
 
+  "SOC-AFF-DECOMPTE": p => {
+    const s = secteurProfil(p);
+    const n = effN(p);
+    const hors = n !== null ? Math.max(1, Math.round(n * 0.35)) : 40;
+    return {
+    titre: "Décompte du temps de travail hors horaire collectif : documents et procédure",
+    lignes: [...entete(p, "documents de décompte de la durée du travail et des repos compensateurs (L. 3171-2, L. 3171-3)"),
+      h("1. Les deux obligations, lues à la source"),
+      puce("Lorsque tous les salariés occupés dans un service ou un atelier ne travaillent pas selon le même horaire collectif, l'employeur établit les documents nécessaires au décompte de la durée de travail, des repos compensateurs acquis et de leur prise effective, pour chacun des salariés concernés. Le comité social et économique peut consulter ces documents (L. 3171-2)."),
+      puce("L'employeur tient à la disposition de l'agent de contrôle de l'inspection du travail les documents permettant de comptabiliser le temps de travail accompli par chaque salarié ; la nature de ces documents et la durée pendant laquelle ils sont tenus à disposition sont déterminées par voie réglementaire (L. 3171-3)."),
+      puce("À noter : L. 3171-3 renvoie à un texte réglementaire pour la nature des documents et la durée de conservation — ce texte n'a pas été vérifié ici, rien n'en est affirmé : faites confirmer la durée par votre conseil."),
+      h("2. Cartographie des populations hors horaire collectif (exemple pour une activité " + s.nom + ")"),
+      puce(`${ex(s.unites[0][0])} — mode de décompte : ${ex("relevé individuel hebdomadaire validé par le responsable ; chronotachygraphe le cas échéant")} — effectif : ${ex("28 salariés")}.`),
+      puce(`Équipes successives / horaires postés : ${ex("planning cyclique nominatif, horodatage des prises de poste")} — effectif : ${ex("15 salariés")}.`),
+      puce(`Horaires individualisés (badgeage) : ${ex("compteur individuel de crédit-débit, remis chaque mois au salarié")} — effectif : ${ex("22 salariés")}.`),
+      puce(`Forfaits en jours : ${ex("décompte du nombre de jours travaillés, contrôle de la charge et des repos — document mensuel signé")} — effectif : ${ex("9 salariés")}.`),
+      puce(`Total hors horaire collectif dans l'exemple : ${ex(String(hors) + " salariés sur " + eff(p))}.`),
+      h("3. Le document individuel type (contenu)"),
+      puce("Identité du salarié, service, période couverte, mode d'organisation applicable ;"),
+      puce("heures de travail accomplies jour par jour, et total hebdomadaire ;"),
+      puce("heures supplémentaires accomplies et leur traitement (paiement ou repos compensateur de remplacement) ;"),
+      puce("repos compensateurs ACQUIS sur la période et repos EFFECTIVEMENT PRIS, avec les dates — L. 3171-2 exige les deux ;"),
+      puce("visa du salarié et du responsable, date d'établissement."),
+      h("4. Exemple rempli (fictif)"),
+      par(ex("DURAND Paul — exploitation — semaine du " + plusJours(p, -14) + " au " + plusJours(p, -8) + " : lundi 8 h 15, mardi 9 h, mercredi 7 h 45, jeudi 9 h 30, vendredi 8 h — total 42 h 30, dont 7 h 30 supplémentaires ; contrepartie : 3 h payées, 4 h 30 en repos compensateur de remplacement. Repos acquis au compteur : 21 h 15. Repos pris sur la période : 7 h le " + plusJours(p, -10) + ". Visas : le salarié, le responsable d'exploitation.")),
+      h("5. Conservation et mise à disposition"),
+      puce(`Support : ${ex("module temps du SIRH, extraction PDF mensuelle horodatée et archivée")}.`),
+      puce(`Tenue à la disposition de l'agent de contrôle de l'inspection du travail (L. 3171-3) : ${ex("extraction disponible sous 24 heures, procédure écrite communiquée à l'encadrement")} — durée de conservation à confirmer sur le texte réglementaire applicable.`),
+      puce(`Consultation par le comité (L. 3171-2) : ${ex("modalités portées au règlement intérieur du comité — consultation sur place, sur demande, en présence du responsable RH")}.`),
+      puce(`Remise au salarié : ${ex("récapitulatif mensuel joint au bulletin de paie")} — non exigé par les articles lus ici, mais c'est la meilleure preuve d'un décompte contradictoire.`),
+      h("6. Pourquoi ce point se traite avant le contentieux"),
+      par("En litige d'heures supplémentaires, le salarié présente des éléments suffisamment précis, et c'est à l'employeur de produire ses propres éléments de décompte. Sans documents, il n'a rien à opposer : l'obligation documentaire de L. 3171-2 et L. 3171-3 est aussi sa première protection."),
+      ...aPers(["La cartographie réelle de vos populations et de leurs modes d'organisation",
+        "Le support de décompte retenu et son paramétrage (repos acquis ET pris)",
+        "La durée de conservation, à caler sur le texte réglementaire en vigueur",
+        "Les modalités de consultation par le comité et de remise au salarié"])],
+  }; },
+
+  "SOC-AFF-EGA-REMU": p => ({
+    titre: "Affiche complète : égalité de rémunération entre les femmes et les hommes (R. 3221-2)",
+    lignes: [...entete(p, "information sur les textes d'égalité de rémunération (R. 3221-2)"),
+      h("1. Ce que le texte impose, lu à la source"),
+      par("Les dispositions des articles L. 3221-1 à L. 3221-7 du code du travail sont portées, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail, ainsi qu'aux candidats à l'embauche. Il en est de même pour les dispositions réglementaires prises pour l'application de ces articles (R. 3221-2)."),
+      par("Deux publics, donc : les personnes ayant accès aux lieux de travail — salariés, intérimaires, prestataires — ET les candidats à l'embauche. Une affiche en salle de pause ne couvre pas le second."),
+      h("2. Texte de l'affiche"),
+      par(`« ${nomE(p)} — Égalité de rémunération entre les femmes et les hommes.`),
+      par("Conformément à l'article R. 3221-2 du code du travail, sont portées à votre connaissance les dispositions des articles L. 3221-1 à L. 3221-7 du code du travail relatives à l'égalité de rémunération entre les femmes et les hommes, ainsi que les dispositions réglementaires prises pour leur application : [reproduire ici le texte en vigueur des articles L. 3221-1 à L. 3221-7 — sept articles, à reprendre intégralement de la version en vigueur à la date d'affichage]."),
+      par(`Pour toute question ou réclamation sur ce sujet : ${ex("Camille MARTIN, DRH — poste 4312")} ; référent égalité du comité social et économique : ${ex("Sacha LEROY")} ; inspection du travail : ${ex("unité de contrôle 3, 01 23 45 67 90")}. Affiché le ${ex(plusJours(p, 2))}. »`),
+      h("3. Mise en place, côté salariés et côté candidats (exemple)"),
+      puce(`Lieux de travail : ${ex("panneau d'affichage de chaque site (3), salle de pause, vestiaires")}.`),
+      puce(`Candidats à l'embauche : ${ex("affichage à l'accueil et dans les salles d'entretien ; page « nos engagements » du site carrières ; mention et lien dans chaque offre d'emploi et dans l'accusé de réception des candidatures")}.`),
+      puce(`Support numérique : ${ex("intranet RH, rubrique « vos droits », et remise avec le livret d'accueil")} — « par tout moyen » autorise le numérique, à condition que l'accès soit effectif pour tous.`),
+      h("4. Articulation avec les autres informations obligatoires"),
+      puce("Ne pas confondre avec l'information sur les discriminations (L. 1142-6, articles 225-1 à 225-4 du code pénal) ni avec la publication de l'index (L. 1142-8) : trois obligations distinctes, trois supports — le présent modèle ne couvre que R. 3221-2."),
+      puce(`Regroupement pratique : ${ex("un panneau « égalité et non-discrimination » réunissant les trois informations, chacune identifiée par son fondement")}.`),
+      h("5. Mise à jour"),
+      puce(`Vérification annuelle de la version des articles reproduits : ${ex("chaque 1er septembre, responsable : Camille MARTIN")} — un texte périmé ne remplit pas l'obligation.`),
+      ...aPers(["Le texte en vigueur des articles L. 3221-1 à L. 3221-7 et de leurs textes d'application (à reproduire intégralement)",
+        "Les emplacements réels côté salariés ET côté candidats",
+        "Les interlocuteurs mentionnés et la date d'affichage"])],
+  }),
+
   "SOC-AFF-CONVENTION": p => ({
     titre: "Avis complet : convention collective applicable (R. 2262-1)",
     lignes: [...entete(p, "information des salariés sur les textes conventionnels applicables"),
@@ -2264,6 +2725,44 @@ const MODELES = {
         "La procédure d'embauche modifiée et son responsable"])],
   }),
 
+  "SOC-SST-POSTES-RISQUES": p => {
+    const s = secteurProfil(p);
+    const n = effN(p);
+    const concernes = n !== null ? Math.max(1, Math.round(n * 0.12)) : 15;
+    return {
+    titre: "Liste des postes à risques particuliers et suivi individuel renforcé",
+    lignes: [...entete(p, "postes à risques particuliers et suivi individuel renforcé (R. 4624-22, R. 4624-23)"),
+      h("1. Les catégories légales, lues à la source (R. 4624-23, I)"),
+      par("Les postes présentant des risques particuliers mentionnés au premier alinéa de l'article L. 4624-2 sont ceux exposant les travailleurs :"),
+      puce("1° à l'amiante ; 2° au plomb ; 3° aux agents cancérogènes, mutagènes ou toxiques pour la reproduction mentionnés à l'article R. 4412-60 ;"),
+      puce("4° aux agents biologiques des groupes 3 et 4 mentionnés à l'article R. 4421-3 ; 5° aux rayonnements ionisants ; 6° au risque hyperbare ;"),
+      puce("7° au risque de chute de hauteur lors des opérations de montage et de démontage d'échafaudages."),
+      puce("Présente également des risques particuliers tout poste dont l'affectation est conditionnée à un examen d'aptitude spécifique prévu par le code du travail (R. 4624-23, II)."),
+      puce("Tout travailleur affecté à l'un de ces postes bénéficie d'un suivi individuel renforcé de son état de santé (R. 4624-22)."),
+      h("2. Les compléments décidés par l'employeur : un formalisme strict (R. 4624-23, III)"),
+      puce("L'employeur peut compléter la liste s'il le juge nécessaire — mais alors : après avis du ou des médecins concernés ET du comité social et économique s'il existe ; en cohérence avec l'évaluation des risques (L. 4121-3) et, le cas échéant, la fiche d'entreprise (R. 4624-46)."),
+      puce("La liste est transmise au service de prévention et de santé au travail, tenue à disposition de l'administration du travail et des services de prévention des organismes de sécurité sociale, et MISE À JOUR TOUS LES ANS."),
+      puce("L'employeur MOTIVE PAR ÉCRIT l'inscription de tout poste sur cette liste."),
+      h("3. Liste des postes de " + nomE(p) + " (exemple pour une activité " + s.nom + ")"),
+      puce(`Poste : ${ex(s.unites[1] ? s.unites[1][0] : "Atelier")} — catégorie : ${ex("risque de chute de hauteur lors du montage-démontage d'échafaudages (R. 4624-23, I, 7°)")} — effectif concerné : ${ex("6 salariés")} — motivation : ${ex("interventions programmées sur échafaudages, cotées priorité 1 au document unique")}.`),
+      puce(`Poste : ${ex("Atelier peinture / produits")} — catégorie : ${ex("agents CMR de R. 4412-60 (I, 3°)")} — effectif : ${ex("4 salariés")} — motivation : ${ex("fiches de données de sécurité des produits utilisés, mesurages d'exposition du " + plusJours(p, -180))}.`),
+      puce(`Poste : ${ex("Maintenance électrique haute tension")} — catégorie : ${ex("poste conditionné à un examen d'aptitude spécifique (II)")} — effectif : ${ex("3 salariés")}.`),
+      puce(`Poste complété par l'employeur (III) : ${ex("cariste en zone de coactivité intense")} — motivation écrite : ${ex("densité de circulation et coactivité relevées au document unique ; avis favorable du médecin du travail du " + plusJours(p, -30) + " ; avis du comité recueilli en réunion du " + plusJours(p, -20))}.`),
+      puce(`Total exposé dans l'exemple : ${ex(String(concernes) + " salariés sur " + eff(p))}.`),
+      h("4. Le suivi renforcé, en pratique (exemple daté)"),
+      puce(`Examen médical d'aptitude AVANT affectation pour tout nouveau salarié d'un poste listé : ${ex("blocage de l'affectation dans le SIRH tant que l'avis n'est pas rendu")}.`),
+      puce(`Périodicité renforcée fixée par le médecin du travail : ${ex("visite intermédiaire à mi-période, périodicité individualisée notifiée par le service")} — l'exemple retient ${ex("un examen tous les deux ans, visite intermédiaire l'année médiane")}.`),
+      puce(`Rattrapage des salariés déjà en poste sans suivi : ${ex("liste de 5 salariés transmise au service le " + plusJours(p, 7) + ", examens programmés avant le " + plusJours(p, 60))}.`),
+      h("5. Vie de la liste"),
+      puce(`Transmission au service de prévention et de santé au travail : le ${ex(plusJours(p, 10))} — accusé conservé.`),
+      puce(`Mise à jour annuelle : portée à l'agenda le ${ex(plusJours(p, 365))} ; révision à chaque création de poste ou changement de procédé.`),
+      puce(`Articulation avec le document unique et la fiche d'entreprise : ${ex("les unités de travail cotées priorité 1 sont revues à chaque mise à jour du DUERP")}.`),
+      ...aPers(["Les postes réels et les catégories dont ils relèvent — l'évaluation ne se délègue pas à un modèle",
+        "La motivation écrite de chaque poste ajouté au titre du III, et les avis recueillis",
+        "Les effectifs exposés et l'état réel du suivi médical",
+        "La date de transmission au service et l'échéance de mise à jour annuelle"])],
+  }; },
+
   "SOC-SST-FORMATION-SECU": p => {
     const s = secteurProfil(p);
     return {
@@ -2357,6 +2856,35 @@ const MODELES = {
         "La formule de répartition et le support de gestion choisis",
         "Les dates de négociation, de signature et de dépôt",
         "L'échéance légale exacte, calée par l'expert"])],
+  }),
+
+  "SOC-EPA-LIVRET": p => ({
+    titre: "Livret d'épargne salariale : sommaire complet et exemple rempli",
+    lignes: [...entete(p, "livret d'épargne salariale remis à la conclusion du contrat de travail (L. 3341-6)"),
+      h("1. L'obligation, lue à la source"),
+      par("Tout salarié d'une entreprise proposant un dispositif d'intéressement, de participation, un plan d'épargne entreprise, un plan d'épargne interentreprises, un plan d'épargne pour la retraite collectif ou un plan d'épargne retraite d'entreprise collectif reçoit, LORS DE LA CONCLUSION DE SON CONTRAT DE TRAVAIL, un livret d'épargne salariale présentant les dispositifs mis en place au sein de l'entreprise. Le livret est également porté à la connaissance des représentants du personnel, le cas échéant en tant qu'élément de la base de données économiques, sociales et environnementales établie en application de l'article L. 2312-18 (L. 3341-6)."),
+      par("Deux points souvent manqués : la remise se fait À LA CONCLUSION DU CONTRAT, pas au premier versement ; et les représentants du personnel en sont destinataires, la BDESE étant le véhicule naturel."),
+      h("2. Sommaire du livret de " + nomE(p) + " (structure complète)"),
+      puce("Page 1 — Ce qu'est l'épargne salariale : les dispositifs en place dans l'entreprise, en une page, avec la date de leur mise en place et leur échéance."),
+      puce(`Fiche A — Intéressement : ${ex("accord du " + plusJours(p, -400) + ", triennal ; formule liée au résultat d'exploitation et à un critère qualité ; prime moyenne versée l'an dernier : 640 €")} ; date de versement, choix perception immédiate / placement, délai de choix.`),
+      puce(`Fiche B — Participation : ${ex("accord du " + plusJours(p, -700) + " ; réserve spéciale de participation de 1 240 000 € au titre du dernier exercice ; répartition 50 % uniforme, 50 % proportionnelle au salaire")} ; règles d'indisponibilité et cas de déblocage anticipé.`),
+      puce(`Fiche C — Plan d'épargne d'entreprise : ${ex("teneur de compte Épargne Horizon ; abondement employeur de 100 % dans la limite de 800 € par an ; cinq supports de placement, du monétaire à l'actions")} ; frais à la charge de l'entreprise et à la charge du salarié.`),
+      puce(`Fiche D — Plan d'épargne retraite d'entreprise collectif : ${ex("mis en place le " + plusJours(p, -300) + " ; abondement 50 % dans la limite de 500 € ; gestion pilotée par horizon de retraite par défaut")} ; modalités de sortie.`),
+      puce("Fiche E — Vos choix et vos délais : où et comment exprimer un choix, ce qui se passe à défaut de choix (affectation par défaut), comment modifier une affectation."),
+      puce("Fiche F — Déblocages anticipés : la liste des cas applicables à chaque dispositif, et la procédure interne pour les demander."),
+      puce("Fiche G — Que devient votre épargne si vous quittez l'entreprise : état récapitulatif remis au départ, frais de tenue de compte après le départ, coordonnées du teneur de compte."),
+      puce(`Fiche H — Vos interlocuteurs : ${ex("service paie (poste 4310), teneur de compte Épargne Horizon (0 800 000 000, espace en ligne), et les représentants du personnel")}.`),
+      h("3. Circuit de remise (exemple daté)"),
+      puce(`Intégration au dossier d'embauche : ${ex("le livret est joint au contrat, remis contre émargement le jour de la signature — case bloquante dans le SIRH")}, à compter du ${ex(plusJours(p, 15))}.`),
+      puce(`Salariés déjà présents jamais destinataires : ${ex("campagne de rattrapage, remise avec la paie de " + plusJours(p, 45).slice(0, 7))} — la loi vise la conclusion du contrat, mais un salarié non informé conteste utilement les affectations par défaut.`),
+      puce(`Communication aux représentants du personnel : ${ex("versement du livret à la rubrique « rémunération des salariés et dirigeants » de la BDESE le " + plusJours(p, 20) + ", et information en réunion du comité")}.`),
+      puce(`Mise à jour : ${ex("à chaque avenant d'accord et au moins une fois par an — version datée en pied de page")}.`),
+      h("4. Ce qui ne s'affirme pas ici"),
+      par("Les règles de fond de chaque dispositif (plafonds, régime social et fiscal, cas de déblocage, délais de versement) relèvent de textes que le relais de cette application ne sert pas tous : reprenez-les des accords eux-mêmes et des notices du teneur de compte, et faites relire le livret avant diffusion. Seul l'article L. 3341-6, lu à la source, fonde ici l'obligation de remise."),
+      ...aPers(["La liste réelle de vos dispositifs et les références de leurs accords",
+        "Les chiffres de chaque fiche (formule, abondement, montants versés) — l'exemple est fictif",
+        "Le teneur de compte et les interlocuteurs",
+        "La date d'entrée en vigueur du circuit de remise et la campagne de rattrapage"])],
   }),
 
   "SOC-EPA-SANTE": p => ({
@@ -2463,7 +2991,7 @@ q("entreprise", "Dénomination de l'entreprise", "texte",
 q("dateAudit", "Date à laquelle la situation est décrite", "AAAA-MM-JJ",
   "Les délais (mise à jour du document unique, cycles d'entretiens…) se mesurent à cette date.");
 q("effectif", "Effectif de l'entreprise (salariés)", "nombre",
-  "C'est lui qui ouvre ou ferme la plupart des obligations : 11 (comité), 20 (emploi des travailleurs handicapés), 50 (règlement intérieur, BDESE, index, participation…), 250 (référent harcèlement), 300 (CSSCT, commissions).");
+  "C'est lui qui ouvre ou ferme la plupart des obligations : 11 (comité, et formation santé-sécurité de ses élus), 20 (emploi des travailleurs handicapés), 50 (règlement intérieur, BDESE, index, participation, quatre réunions santé-sécurité), 250 (référent harcèlement), 300 (CSSCT, commissions formation/logement/égalité), 1 000 (commission économique). La commission des marchés, elle, ne dépend pas de l'effectif de l'entreprise mais des comptes du comité.");
 q("seuilDepuis12Mois", "Ce niveau d'effectif est-il atteint depuis au moins douze mois consécutifs ?", "oui / non",
   "Plusieurs obligations ne naissent qu'après un maintien du seuil dans la durée : un franchissement récent ne les déclenche pas encore.");
 q("secteur", "Secteur d'activité", "texte",
@@ -2480,6 +3008,14 @@ q("accordsCollectifs", "Des accords collectifs d'entreprise sont-ils en vigueur 
   "Un accord (méthode, égalité, participation…) peut aménager les périodicités et les contenus : versez-les aux modules dédiés.");
 q("matieresInflammables", "Des matières inflammables sont-elles manipulées ?", "oui / non",
   "Elles imposent la consigne de sécurité incendie quel que soit l'effectif.");
+q("salariesHorsHoraire", "Des salariés travaillent-ils en dehors d'un horaire collectif uniforme (horaires individualisés, équipes, forfaits, itinérants) ?", "oui / non",
+  "Dès qu'un salarié ne suit pas l'horaire collectif affiché, l'employeur doit établir pour lui les documents de décompte de la durée du travail et des repos compensateurs (L. 3171-2).");
+q("postesRisquesParticuliers", "Des salariés occupent-ils des postes à risques particuliers (amiante, plomb, agents cancérogènes, agents biologiques 3 et 4, rayonnements ionisants, hyperbare, échafaudages, postes à examen d'aptitude) ?", "oui / non",
+  "Ces postes ouvrent le suivi individuel renforcé de l'état de santé et la liste formalisée des postes (R. 4624-22, R. 4624-23).");
+q("comiteSeuilsComptes", "Le comité dépasse-t-il, pour au moins deux des trois critères tenant à SES PROPRES comptes (salariés du comité à la clôture, ressources annuelles, total du bilan), les seuils réglementaires ?", "oui / non",
+  "C'est le critère de la commission des marchés : il tient aux comptes du comité, pas à l'effectif de l'entreprise (L. 2315-44-1, D. 2315-29). Le trésorier du comité ou son expert-comptable a la réponse.");
+q("epargneSalariale", "Un dispositif d'épargne salariale (intéressement, participation, plan d'épargne) est-il en place ?", "oui / non",
+  "Il déclenche la remise du livret d'épargne salariale à chaque embauche (L. 3341-6).");
 q("cadres", "L'entreprise emploie-t-elle des cadres ?", "oui / non",
   "La prévoyance des cadres est une obligation conventionnelle au coût de carence très élevé.");
 q("projetLicenciementEco", "Un licenciement pour motif économique est-il envisagé ou en cours ?", "oui / non",
@@ -2730,6 +3266,96 @@ __def("./textes-social.json", function(module){ module.exports = {
   "id": "LEGIARTI000035651159",
   "date": "2026-08-19",
   "texte": "Sont informées, par tout moyen, de l'organisation des élections et invitées à négocier le protocole d'accord préélectoral et à établir les listes de leurs candidats aux fonctions de membre de la délégation du personnel les organisations syndicales qui satisfont aux critères de respect des valeurs républicaines et d'indépendance, légalement constituées depuis au moins deux ans et dont le champ professionnel et géographique couvre l'entreprise ou l'établissement concernés. Les organisations syndicales reconnues représentatives dans l'entreprise ou l'établissement, celles ayant constitué une section syndicale dans l'entreprise ou l'établissement, ainsi que les syndicats affiliés à une organisation syndicale représentative au niveau national et interprofessionnel y sont également invités par courrier. Dans le cas d'un renouvellement de l'institution, cette invitation est effectuée deux mois avant l'expiration du mandat des délégués en exercice. Le premier tour des élections a lieu dans la quinzaine précédant l'expiration de ce mandat. L'invitation à négocier mentionnée au présent article doit parvenir au plus tard quinze jours avant la date de la première réunion de négociation. Par dérogation aux premier et deuxième alinéas, dans les entreprises dont l'effectif est compris entre onze et vingt salariés, l'employeur invite les organisations syndicales mentionnées aux mêmes alinéas à cette négociation à la condition qu'au moins un salarié se soit porté candidat aux élections dans un délai de trente jours à compter de l'information prévue à l'article L. 2314-4 . Le salarié bénéficie de la protection prévue aux articles L. 2411-7 , L. 2412-3 et L. 2413-1 à compter de la date à laquelle l'employeur a eu connaissance de l'imminence de sa candidature."
+ },
+ "L2315-45": {
+  "id": "LEGIARTI000036262551",
+  "date": "2026-08-19",
+  "texte": "Un accord d'entreprise conclu dans les conditions prévues au premier alinéa de l'article L. 2232-12 peut prévoir la création de commissions supplémentaires pour l'examen de problèmes particuliers. Le cas échéant, l'employeur peut adjoindre à ces commissions avec voix consultative des experts et des techniciens appartenant à l'entreprise et choisis en dehors du comité. Les dispositions de l'article L. 2315-3 relatives au secret professionnel et à l'obligation de discrétion leur sont applicables. Les rapports des commissions sont soumis à la délibération du comité."
+ },
+ "L2315-46": {
+  "id": "LEGIARTI000035626485",
+  "date": "2026-08-19",
+  "texte": "En l'absence d'accord prévu à l'article L. 2315-45 , dans les entreprises d'au moins mille salariés, une commission économique est créée au sein du comité social et économique ou du comité social et économique central. Cette commission est chargée notamment d'étudier les documents économiques et financiers recueillis par le comité et toute question que ce dernier lui soumet."
+ },
+ "L2315-49": {
+  "id": "LEGIARTI000035626493",
+  "date": "2026-08-19",
+  "texte": "En l'absence d'accord prévu à l'article L. 2315-45 , dans les entreprises d'au moins trois cents salariés, le comité social et économique constitue une commission de la formation. Cette commission est chargée : 1° De préparer les délibérations du comité prévues aux 1° et 3° de l'article L. 2312-17 dans les domaines qui relèvent de sa compétence ; 2° D'étudier les moyens permettant de favoriser l'expression des salariés en matière de formation et de participer à leur information dans ce domaine ; 3° D'étudier les problèmes spécifiques concernant l'emploi et le travail des jeunes et des travailleurs handicapés."
+ },
+ "L2315-50": {
+  "id": "LEGIARTI000035626497",
+  "date": "2026-08-19",
+  "texte": "En l'absence d'accord prévu à l'article L. 2315-45 , dans les entreprises d'au moins trois cents salariés, une commission d'information et d'aide au logement des salariés est créée au sein du comité social et économique. Les entreprises de moins de trois cents salariés peuvent se grouper entre elles pour former cette commission."
+ },
+ "L2315-51": {
+  "id": "LEGIARTI000035626499",
+  "date": "2026-08-19",
+  "texte": "La commission d'information et d'aide au logement facilite le logement et l'accession des salariés à la propriété et à la location des locaux d'habitation. A cet effet, la commission : 1° Recherche les possibilités d'offre de logements correspondant aux besoins du personnel, en liaison avec les organismes habilités à collecter la participation des employeurs à l'effort de construction ; 2° Informe les salariés sur leurs conditions d'accès à la propriété ou à la location d'un logement et les assiste dans les démarches nécessaires pour l'obtention des aides financières auxquelles ils peuvent prétendre."
+ },
+ "L2315-56": {
+  "id": "LEGIARTI000036262545",
+  "date": "2026-08-19",
+  "texte": "En l'absence d'accord prévu à l'article L. 2315-45 , dans les entreprises d'au moins trois cents salariés, une commission de l'égalité professionnelle est créée au sein du comité social et économique. Cette commission est notamment chargée de préparer les délibérations du comité prévues au 3° de l'article L. 2312-17 , dans les domaines qui relèvent de sa compétence."
+ },
+ "L2315-44-1": {
+  "id": "LEGIARTI000036760263",
+  "date": "2026-08-19",
+  "texte": "Une commission des marchés est créée au sein du comité social et économique qui dépasse, pour au moins deux des trois critères mentionnés au II de l'article L. 2315-64 , des seuils fixés par décret."
+ },
+ "D2315-29": {
+  "id": "LEGIARTI000037538198",
+  "date": "2026-08-19",
+  "texte": "Une commission des marchés est créée au sein du comité social et économique qui dépasse, pour au moins deux des trois critères, les seuils suivants : 1° Le nombre de cinquante salariés à la clôture d'un exercice ; 2° Le montant prévu au 2° de l'article R. 612-1 du code de commerce de ressources annuelles définies à l'article D. 2315-34 ; 3° Le montant du total du bilan prévu au 3° de l'article R. 612-1 du code de commerce . Le seuil mentionné à l'article L. 2315-44-2 est fixé à 30 000 euros."
+ },
+ "L2315-18": {
+  "id": "LEGIARTI000043894249",
+  "date": "2026-08-19",
+  "texte": "Les membres de la délégation du personnel du comité social et économique et le référent prévu au dernier alinéa de l'article L. 2314-1 bénéficient de la formation nécessaire à l'exercice de leurs missions en matière de santé, de sécurité et de conditions de travail prévues au chapitre II du présent titre, dans des conditions déterminées par décret en Conseil d'Etat. La formation est d'une durée minimale de cinq jours lors du premier mandat des membres de la délégation du personnel. En cas de renouvellement de ce mandat, la formation est d'une durée minimale : 1° De trois jours pour chaque membre de la délégation du personnel, quelle que soit la taille de l'entreprise ; 2° De cinq jours pour les membres de la commission santé, sécurité et conditions de travail dans les entreprises d'au moins trois cents salariés. Sans préjudice des dispositions de l'article L. 2315-22-1 , le financement de la formation prévue au premier alinéa du présent article est pris en charge par l'employeur dans des conditions prévues par décret en Conseil d'Etat."
+ },
+ "L2315-16": {
+  "id": "LEGIARTI000035621179",
+  "date": "2026-08-19",
+  "texte": "Le temps consacré aux formations prévues au présent chapitre est pris sur le temps de travail et est rémunéré comme tel. Il n'est pas déduit des heures de délégation."
+ },
+ "L2315-27": {
+  "id": "LEGIARTI000036761943",
+  "date": "2026-08-19",
+  "texte": "Au moins quatre réunions du comité social et économique portent annuellement en tout ou partie sur les attributions du comité en matière de santé, sécurité et conditions de travail, plus fréquemment en cas de besoin, notamment dans les branches d'activité présentant des risques particuliers. Le comité est en outre réuni à la suite de tout accident ayant entraîné ou ayant pu entraîner des conséquences graves, ainsi qu'en cas d'événement grave lié à l'activité de l'entreprise, ayant porté atteinte ou ayant pu porter atteinte à la santé publique ou à l'environnement ou à la demande motivée de deux de ses membres représentants du personnel, sur les sujets relevant de la santé, de la sécurité ou des conditions de travail. Lorsque l'employeur est défaillant, et à la demande d'au moins la moitié des membres du comité social et économique, celui-ci peut être convoqué par l'agent de contrôle de l'inspection du travail mentionné à l'article L. 8112-1 et siéger sous sa présidence. L'employeur informe annuellement l'agent de contrôle de l'inspection du travail mentionné à l'article L. 8112-1 , le médecin du travail et l'agent des services de prévention des organismes de sécurité sociale du calendrier retenu pour les réunions consacrées aux sujets relevant de la santé, de la sécurité ou des conditions de travail, et leur confirme par écrit au moins quinze jours à l'avance la tenue de ces réunions."
+ },
+ "R4624-16": {
+  "id": "LEGIARTI000033769063",
+  "date": "2026-08-19",
+  "texte": "Le travailleur bénéficie d'un renouvellement de la visite d'information et de prévention initiale, réalisée par un professionnel de santé mentionné au premier alinéa de l'article L. 4624-1 , selon une périodicité qui ne peut excéder cinq ans. Ce délai, qui prend en compte les conditions de travail, l'âge et l'état de santé du salarié, ainsi que les risques auxquels il est exposé, est fixé par le médecin du travail dans le cadre du protocole mentionné à l'article L. 4624-1."
+ },
+ "R4624-22": {
+  "id": "LEGIARTI000033769092",
+  "date": "2026-08-19",
+  "texte": "Tout travailleur affecté à un poste présentant des risques particuliers pour sa santé ou sa sécurité ou pour celles de ses collègues ou des tiers évoluant dans l'environnement immédiat de travail défini à l'article R. 4624-23 bénéficie d'un suivi individuel renforcé de son état de santé selon des modalités définies par la présente sous-section."
+ },
+ "R4624-23": {
+  "id": "LEGIARTI000053786012",
+  "date": "2026-08-19",
+  "texte": "I.-Les postes présentant des risques particuliers mentionnés au premier alinéa de l'article L. 4624-2 sont ceux exposant les travailleurs : 1° A l'amiante ; 2° Au plomb ; 3° Aux agents cancérogènes, mutagènes ou toxiques pour la reproduction mentionnés à l'article R. 4412-60 ; 4° Aux agents biologiques des groupes 3 et 4 mentionnés à l'article R. 4421-3 ; 5° Aux rayonnements ionisants ; 6° Au risque hyperbare ; 7° Au risque de chute de hauteur lors des opérations de montage et de démontage d'échafaudages. II.-Présente également des risques particuliers tout poste pour lequel l'affectation sur celui-ci est conditionnée à un examen d'aptitude spécifique prévu par le présent code. III.-S'il le juge nécessaire, l'employeur complète la liste des postes entrant dans les catégories mentionnées au I. par des postes présentant des risques particuliers pour la santé ou la sécurité du travailleur ou pour celles de ses collègues ou des tiers évoluant dans l'environnement immédiat de travail mentionnés au premier alinéa de l'article L. 4624-2, après avis du ou des médecins concernés et du comité social et économique s'il existe, en cohérence avec l'évaluation des risques prévue à l'article L. 4121-3 et, le cas échéant, la fiche d'entreprise prévue à l'article R. 4624-46 . Cette liste est transmise au service de prévention et de santé au travail, tenue à disposition du directeur régional des entreprises, de la concurrence, de la consommation, du travail et de l'emploi et des services de prévention des organismes de sécurité sociale et mise à jour tous les ans. L'employeur motive par écrit l'inscription de tout poste sur cette liste. IV.-Le Conseil d'orientation des conditions de travail est consulté tous les trois ans sur la mise à jour éventuelle de la liste mentionnée au I du présent article."
+ },
+ "L3171-2": {
+  "id": "LEGIARTI000035653247",
+  "date": "2026-08-19",
+  "texte": "Lorsque tous les salariés occupés dans un service ou un atelier ne travaillent pas selon le même horaire collectif, l'employeur établit les documents nécessaires au décompte de la durée de travail, des repos compensateurs acquis et de leur prise effective, pour chacun des salariés concernés. Le comité social et économique peut consulter ces documents."
+ },
+ "L3171-3": {
+  "id": "LEGIARTI000033025188",
+  "date": "2026-08-19",
+  "texte": "L'employeur tient à la disposition de l'agent de contrôle de l'inspection du travail mentionné à l'article L. 8112-1 les documents permettant de comptabiliser le temps de travail accompli par chaque salarié. La nature des documents et la durée pendant laquelle ils sont tenus à disposition sont déterminées par voie réglementaire."
+ },
+ "R3221-2": {
+  "id": "LEGIARTI000033292519",
+  "date": "2026-08-19",
+  "texte": "Les dispositions des articles L. 3221-1 à L. 3221-7 du code du travail sont portées, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail, ainsi qu'aux candidats à l'embauche. Il en est de même pour les dispositions réglementaires pris pour l'application de ces articles."
+ },
+ "L3341-6": {
+  "id": "LEGIARTI000043975313",
+  "date": "2026-08-19",
+  "texte": "Tout salarié d'une entreprise proposant un dispositif d'intéressement, de participation, un plan d'épargne entreprise, un plan d'épargne interentreprises, un plan d'épargne pour la retraite collectif ou un plan d'épargne retraite d'entreprise collectif reçoit, lors de la conclusion de son contrat de travail, un livret d'épargne salariale présentant les dispositifs mis en place au sein de l'entreprise. Le livret d'épargne salariale est également porté à la connaissance des représentants du personnel, le cas échéant en tant qu'élément de la base de données économiques, sociales et environnementales établie en application de l'article L. 2312-18 ."
  }
 }; });
 

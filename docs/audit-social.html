@@ -222,7 +222,8 @@
   renvoie pour l'audit fin.</p>
   <ul class="etapes">
     <li><b>1. Votre profil</b> — effectif, ancienneté du seuil, secteur, convention, groupe,
-    établissements : huit questions qui ouvrent ou ferment chaque obligation.</li>
+    établissements, organisation du temps de travail, postes à risques : les questions qui ouvrent
+    ou ferment chaque obligation.</li>
     <li><b>2. La liste s'ouvre</b> — chaque obligation avec sa source, lue au relais Légifrance ;
     vous cochez « je l'ai » ou « je ne l'ai pas ».</li>
     <li><b>3. Le manquant d'abord</b> — un plan d'action daté et priorisé : étapes, responsable,
@@ -427,15 +428,22 @@ elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
      moteur la traite alors comme non renseignée, ce qu'il sait faire. */
   function majVisibilite() {
     var eff = $("formulaire").querySelector('[name="effectif"]');
-    var seuil = $("formulaire").querySelector('[name="seuilDepuis12Mois"]');
-    if (!eff || !seuil) return;
+    if (!eff) return;
     var n = eff.value.trim() === "" ? null : Number(eff.value);
-    var cacher = n !== null && !isNaN(n) && n < 11;
-    var lab = seuil.closest("label");
-    if (cacher) {
-      if (seuil.value) { seuil.value = ""; delete ETAT.profil.seuilDepuis12Mois; enregistrer(); }
-      lab.style.display = "none";
-    } else lab.style.display = "";
+    var sousOnze = n !== null && !isNaN(n) && n < 11;
+    /* Sous onze salariés : aucun seuil d'effectif en jeu, et pas de comité —
+       la question du maintien du seuil et celle des comptes du comité (critère
+       de la commission des marchés) n'ont pas d'objet. Le moteur traite alors
+       leur réponse comme non renseignée, ce qu'il sait faire. */
+    [["seuilDepuis12Mois", sousOnze], ["comiteSeuilsComptes", sousOnze]].forEach(function (paire) {
+      var el = $("formulaire").querySelector('[name="' + paire[0] + '"]');
+      if (!el) return;
+      var lab = el.closest("label");
+      if (paire[1]) {
+        if (el.value) { el.value = ""; delete ETAT.profil[paire[0]]; enregistrer(); }
+        lab.style.display = "none";
+      } else lab.style.display = "";
+    });
   }
   function lireFormulaire() {
     var p = {};
@@ -452,8 +460,9 @@ elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
     var n = Object.keys(ETAT.profil).length;
     var total = A.questions.length;
     /* Une question masquée (sans objet au vu du profil) ne compte pas. */
-    var seuil = $("formulaire").querySelector('[name="seuilDepuis12Mois"]');
-    if (seuil && seuil.closest("label").style.display === "none") total--;
+    Array.prototype.forEach.call($("formulaire").querySelectorAll("label"), function (lab) {
+      if (lab.style.display === "none") total--;
+    });
     $("compteur").textContent = n + " / " + total + " réponses";
   }
 
@@ -734,7 +743,9 @@ elle laisse l'obligation « à préciser » — l'audit ne devine pas.</p>
     ETAT.profil = { entreprise: "SOCIÉTÉ D'EXEMPLE SAS", dateAudit: new Date().toISOString().slice(0, 10),
       effectif: 60, seuilDepuis12Mois: "oui", secteur: "services", conventionCollective: "Bureaux d'études techniques (Syntec, IDCC 1486)",
       groupe: "non", etablissementsDistincts: "non", sectionSyndicale: "oui", accordsCollectifs: "non",
-      matieresInflammables: "non", cadres: "oui", projetLicenciementEco: "non" };
+      matieresInflammables: "non", cadres: "oui", projetLicenciementEco: "non",
+      salariesHorsHoraire: "oui", postesRisquesParticuliers: "non", comiteSeuilsComptes: "non",
+      epargneSalariale: "non" };
     enregistrer(); construireFormulaire(); majCompteur();
     message("Exemple chargé : 60 salariés, secteur services. Générez la liste.");
   });

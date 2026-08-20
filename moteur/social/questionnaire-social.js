@@ -34,7 +34,7 @@ q("entreprise", "Dénomination de l'entreprise", "texte",
 q("dateAudit", "Date à laquelle la situation est décrite", "AAAA-MM-JJ",
   "Les délais (mise à jour du document unique, cycles d'entretiens…) se mesurent à cette date.");
 q("effectif", "Effectif de l'entreprise (salariés)", "nombre",
-  "C'est lui qui ouvre ou ferme la plupart des obligations : 11 (comité), 20 (emploi des travailleurs handicapés), 50 (règlement intérieur, BDESE, index, participation…), 250 (référent harcèlement), 300 (CSSCT, commissions).");
+  "C'est lui qui ouvre ou ferme la plupart des obligations : 11 (comité, et formation santé-sécurité de ses élus), 20 (emploi des travailleurs handicapés), 50 (règlement intérieur, BDESE, index, participation, quatre réunions santé-sécurité), 250 (référent harcèlement), 300 (CSSCT, commissions formation/logement/égalité), 1 000 (commission économique). La commission des marchés, elle, ne dépend pas de l'effectif de l'entreprise mais des comptes du comité.");
 q("seuilDepuis12Mois", "Ce niveau d'effectif est-il atteint depuis au moins douze mois consécutifs ?", "oui / non",
   "Plusieurs obligations ne naissent qu'après un maintien du seuil dans la durée : un franchissement récent ne les déclenche pas encore.");
 q("secteur", "Secteur d'activité", "texte",
@@ -51,6 +51,14 @@ q("accordsCollectifs", "Des accords collectifs d'entreprise sont-ils en vigueur 
   "Un accord (méthode, égalité, participation…) peut aménager les périodicités et les contenus : versez-les aux modules dédiés.");
 q("matieresInflammables", "Des matières inflammables sont-elles manipulées ?", "oui / non",
   "Elles imposent la consigne de sécurité incendie quel que soit l'effectif.");
+q("salariesHorsHoraire", "Des salariés travaillent-ils en dehors d'un horaire collectif uniforme (horaires individualisés, équipes, forfaits, itinérants) ?", "oui / non",
+  "Dès qu'un salarié ne suit pas l'horaire collectif affiché, l'employeur doit établir pour lui les documents de décompte de la durée du travail et des repos compensateurs (L. 3171-2).");
+q("postesRisquesParticuliers", "Des salariés occupent-ils des postes à risques particuliers (amiante, plomb, agents cancérogènes, agents biologiques 3 et 4, rayonnements ionisants, hyperbare, échafaudages, postes à examen d'aptitude) ?", "oui / non",
+  "Ces postes ouvrent le suivi individuel renforcé de l'état de santé et la liste formalisée des postes (R. 4624-22, R. 4624-23).");
+q("comiteSeuilsComptes", "Le comité dépasse-t-il, pour au moins deux des trois critères tenant à SES PROPRES comptes (salariés du comité à la clôture, ressources annuelles, total du bilan), les seuils réglementaires ?", "oui / non",
+  "C'est le critère de la commission des marchés : il tient aux comptes du comité, pas à l'effectif de l'entreprise (L. 2315-44-1, D. 2315-29). Le trésorier du comité ou son expert-comptable a la réponse.");
+q("epargneSalariale", "Un dispositif d'épargne salariale (intéressement, participation, plan d'épargne) est-il en place ?", "oui / non",
+  "Il déclenche la remise du livret d'épargne salariale à chaque embauche (L. 3341-6).");
 q("cadres", "L'entreprise emploie-t-elle des cadres ?", "oui / non",
   "La prévoyance des cadres est une obligation conventionnelle au coût de carence très élevé.");
 q("projetLicenciementEco", "Un licenciement pour motif économique est-il envisagé ou en cours ?", "oui / non",

@@ -192,31 +192,163 @@ item({
 
 item({
   id: "SOC-INS-COMMISSIONS", categorie: "instances",
-  intitule: "Autres commissions du CSE (formation, information et aide au logement, égalité professionnelle)",
-  articles: [],
-  articlesSouhaites: [],
+  intitule: "Commissions du CSE à défaut d'accord : formation, information et aide au logement, égalité professionnelle",
+  articles: ["L2315-45", "L2315-49", "L2315-50", "L2315-51", "L2315-56"].filter(lu),
+  articlesSouhaites: ["L2315-45", "L2315-49", "L2315-50", "L2315-51", "L2315-56"],
   module: { nom: "comité social et économique", page: "audit-cse.html" },
   condition: p => {
     const s = auSeuil(300)(p);
     if (s.du === null) return s;
-    if (!s.du) return { du: false, motif: s.motif + " Les commissions supplémentaires du comité naissent, pour l'essentiel, à partir de trois cents salariés." };
-    return { du: true, motif: s.motif + " Les commissions du comité (formation, information et aide au logement, égalité professionnelle) doivent être constituées — leurs articles précis sont vérifiés dans le module dédié." };
+    if (!s.du) return { du: false, motif: s.motif + " Les commissions supplétives du comité (formation, information et aide au logement, égalité professionnelle) naissent à partir de trois cents salariés — et seulement en l'absence d'accord d'entreprise prévu à l'article L. 2315-45." };
+    return { du: true, motif: s.motif + " Ces commissions ne jouent qu'À DÉFAUT D'ACCORD : un accord d'entreprise (L. 2315-45) peut organiser les commissions autrement. En son absence, le comité constitue une commission de la formation (L. 2315-49), une commission d'information et d'aide au logement (L. 2315-50, missions à L. 2315-51) et une commission de l'égalité professionnelle (L. 2315-56)." };
   },
   verifs: [
-    { cle: "commissionsConstituees", libelle: "Ces commissions sont-elles constituées ?", format: "oui / non", regle: "oui",
-      motifNC: "Les commissions dues à partir de trois cents salariés ne sont pas déclarées constituées : constituez-les, ou vérifiez dans le module comité ce qu'un accord a pu aménager." },
+    { cle: "commissionsConstituees", libelle: "Un accord d'entreprise (L. 2315-45) organise-t-il les commissions — ou, à défaut d'accord, les trois commissions supplétives (formation, logement, égalité professionnelle) sont-elles constituées ?", format: "oui / non", regle: "oui",
+      motifNC: "Ni accord organisant les commissions, ni commissions supplétives constituées : à trois cents salariés et à défaut d'accord L. 2315-45, le comité doit constituer les commissions formation (L. 2315-49), information et aide au logement (L. 2315-50) et égalité professionnelle (L. 2315-56)." },
   ],
   plan: {
     priorite: 3,
-    action: "Constituer les commissions du comité dues à l'effectif, ou vérifier ce qu'un accord d'entreprise a aménagé.",
+    action: "Constituer, à défaut d'accord L. 2315-45, les commissions supplétives du comité : formation, information et aide au logement, égalité professionnelle.",
     etapes: [
-      "Lister les commissions dues à l'effectif dans le module d'audit du comité.",
-      "Les constituer par accord ou par le règlement intérieur du comité.",
+      "Vérifier d'abord si un accord d'entreprise (L. 2315-45) organise les commissions : lui seul peut y déroger.",
+      "À défaut d'accord, faire constituer les trois commissions par délibération du comité (le modèle joint donne les délibérations complètes).",
+      "Doter chaque commission de membres, d'un rythme de réunions et de moyens, et le consigner au règlement intérieur du comité.",
     ],
     acteur: "Direction et CSE",
-    delai: "Dès le franchissement du seuil",
-    risque: "Fonctionnement irrégulier du comité — l'audit détaillé et les articles se trouvent dans le module dédié.",
-    modele: { page: "audit-cse.html", nom: "module d'audit du comité" },
+    delai: "Dès le franchissement du seuil de trois cents salariés",
+    risque: "Fonctionnement irrégulier du comité et contestation de ses consultations préparées sans les commissions dues — l'audit détaillé se fait dans le module comité.",
+    modele: { page: "audit-cse.html", nom: "délibérations de constitution des commissions (modèle joint au plan)" },
+  },
+});
+
+item({
+  id: "SOC-INS-COMMISSION-ECO", categorie: "instances",
+  intitule: "Commission économique du CSE (entreprise d'au moins 1 000 salariés, à défaut d'accord)",
+  articles: ["L2315-45", "L2315-46"].filter(lu),
+  articlesSouhaites: ["L2315-45", "L2315-46"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = auSeuil(1000)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " La commission économique n'est due, à défaut d'accord L. 2315-45, qu'à partir de mille salariés (L. 2315-46)." };
+    return { du: true, motif: s.motif + " À défaut d'accord d'entreprise prévu à l'article L. 2315-45, une commission économique est créée au sein du comité social et économique ou du comité central : elle étudie les documents économiques et financiers recueillis par le comité et toute question qu'il lui soumet (L. 2315-46)." };
+  },
+  verifs: [
+    { cle: "commissionEcoConstituee", libelle: "Un accord organise-t-il les commissions — ou, à défaut, la commission économique est-elle constituée (au niveau du comité ou du comité central) ?", format: "oui / non", regle: "oui",
+      motifNC: "Ni accord L. 2315-45, ni commission économique constituée : à mille salariés, L. 2315-46 impose sa création au sein du comité social et économique ou du comité central." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Constituer la commission économique du comité (ou du comité central), à défaut d'accord L. 2315-45.",
+    etapes: [
+      "Vérifier si un accord d'entreprise organise les commissions — lui seul dispense du régime supplétif.",
+      "À défaut, faire adopter la délibération de constitution (le modèle joint la rédige) au bon niveau : comité unique, ou comité central dans une entreprise à établissements.",
+      "Organiser le flux des documents économiques et financiers vers la commission, en lien avec la BDESE.",
+    ],
+    acteur: "Direction et CSE (ou CSE central)",
+    delai: "Dès le franchissement du seuil de mille salariés",
+    risque: "Consultations économiques du comité fragilisées : la commission due n'a pas préparé les documents — l'audit détaillé se fait dans le module comité.",
+    modele: { page: "audit-cse.html", nom: "délibération de constitution de la commission économique (modèle joint au plan)" },
+  },
+});
+
+item({
+  id: "SOC-INS-COMMISSION-MARCHES", categorie: "instances",
+  intitule: "Commission des marchés du CSE (critère : les comptes du comité, pas l'effectif de l'entreprise)",
+  articles: ["L2315-44-1", "D2315-29"].filter(lu),
+  articlesSouhaites: ["L2315-44-1", "D2315-29"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = M.seuilDouzeMois(p, 11);
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.atteint) return { du: false, motif: s.motif + " Sans comité, la commission des marchés n'a pas de support." };
+    const c = M.ouiNon(p, "comiteSeuilsComptes", "Le comité dépasse-t-il, pour au moins deux des trois critères tenant à ses propres comptes (cinquante salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan), les seuils réglementaires ?");
+    if (!c.connu) return { du: null, motif: "Le critère de la commission des marchés n'est pas l'effectif de l'entreprise mais les comptes du comité lui-même (L. 2315-44-1, D. 2315-29). " + c.motif };
+    if (!c.vrai) return { du: false, motif: "Le comité ne dépasse pas au moins deux des trois seuils de D. 2315-29 (nombre de salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan) : la commission des marchés n'est pas due — le critère tient aux comptes du comité, pas à l'effectif de l'entreprise ; recontrôlez à chaque clôture des comptes du comité." };
+    return { du: true, motif: "Le comité dépasse, pour au moins deux des trois critères, les seuils de D. 2315-29 : une commission des marchés doit être créée en son sein (L. 2315-44-1). Le critère tient aux comptes du comité — pas à l'effectif de l'entreprise ; le seuil de passage en commission des marchés est fixé à 30 000 euros (D. 2315-29, dernier alinéa)." };
+  },
+  verifs: [
+    { cle: "commissionMarchesConstituee", libelle: "La commission des marchés est-elle constituée au sein du comité ?", format: "oui / non", regle: "oui",
+      motifNC: "Le comité dépasse les seuils de D. 2315-29 et aucune commission des marchés n'est constituée : L. 2315-44-1 l'impose — les marchés du comité au-delà de 30 000 euros (D. 2315-29) doivent passer par elle." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Faire constituer la commission des marchés au sein du comité — c'est une obligation du comité, que l'employeur a intérêt à signaler.",
+    etapes: [
+      "Faire vérifier les comptes du comité au regard des trois critères de D. 2315-29 (salariés du comité à la clôture, ressources annuelles, total du bilan) : deux dépassés déclenchent l'obligation.",
+      "Faire adopter la délibération de constitution et fixer, dans le règlement intérieur du comité, les modalités de fonctionnement de la commission (le modèle joint donne la trame).",
+      "Faire passer par la commission les marchés dont le montant dépasse 30 000 euros (D. 2315-29, dernier alinéa).",
+    ],
+    acteur: "CSE (l'employeur signale l'obligation ; la commission est celle du comité)",
+    delai: "À la clôture des comptes du comité qui révèle le dépassement",
+    risque: "Marchés du comité passés hors procédure : responsabilité des élus gestionnaires et contestation des engagements — l'audit détaillé se fait dans le module comité.",
+    modele: { page: "audit-cse.html", nom: "délibération et règlement de la commission des marchés (modèle joint au plan)" },
+  },
+});
+
+item({
+  id: "SOC-INS-FORMATION-ELUS", categorie: "instances",
+  intitule: "Formation santé, sécurité et conditions de travail des élus du CSE et du référent harcèlement sexuel",
+  articles: ["L2315-18", "L2315-16"].filter(lu),
+  articlesSouhaites: ["L2315-18", "L2315-16"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = M.seuilDouzeMois(p, 11);
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.atteint) return { du: false, motif: s.motif + " La formation santé-sécurité des élus suit le comité : sans comité dû, elle n'a pas de bénéficiaires — elle naîtra avec lui." };
+    return { du: true, motif: s.motif + " Dès qu'un comité existe — donc dès onze salariés, pas seulement à trois cents —, ses membres et le référent harcèlement sexuel du comité bénéficient de la formation nécessaire en santé, sécurité et conditions de travail : cinq jours au moins au premier mandat, trois jours au renouvellement (cinq pour les membres de la CSSCT dans les entreprises d'au moins trois cents salariés) ; le financement est pris en charge par l'employeur (L. 2315-18), et le temps de formation est pris sur le temps de travail, rémunéré comme tel, sans imputation sur les heures de délégation (L. 2315-16)." };
+  },
+  verifs: [
+    { cle: "formationFaite", libelle: "Tous les membres de la délégation du personnel (titulaires et suppléants) et le référent harcèlement du comité ont-ils reçu la formation — cinq jours au premier mandat, trois au renouvellement (cinq pour la CSSCT à partir de 300) ?", format: "oui / non", regle: "oui",
+      motifNC: "Des élus du comité (ou le référent harcèlement) n'ont pas reçu leur formation santé-sécurité : L. 2315-18 l'impose dès qu'un comité existe — cinq jours au moins au premier mandat ; programmez les sessions manquantes." },
+    { cle: "priseEnCharge", libelle: "Le financement est-il pris en charge par l'employeur, et le temps de formation payé comme temps de travail sans imputation sur les heures de délégation ?", format: "oui / non", regle: "oui",
+      motifNC: "La prise en charge n'est pas établie : le financement de la formation incombe à l'employeur (L. 2315-18, dernier alinéa) et le temps de formation est rémunéré comme temps de travail, sans déduction des heures de délégation (L. 2315-16)." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Programmer et financer la formation santé-sécurité de tous les élus du comité et du référent harcèlement.",
+    etapes: [
+      "Recenser les bénéficiaires : tous les membres de la délégation du personnel (titulaires et suppléants) et le référent harcèlement du comité — et repérer premiers mandats et renouvellements, qui commandent la durée.",
+      "Choisir un organisme habilité et arrêter le calendrier (le modèle joint programme les sessions et chiffre le budget).",
+      "Payer le temps de formation comme temps de travail, sans l'imputer sur les heures de délégation, et prendre en charge le coût.",
+    ],
+    acteur: "Direction / ressources humaines, avec le comité",
+    delai: "Dès le début de chaque mandat — les élus non formés le restent tout le mandat si personne ne programme",
+    risque: "Des élus non formés fragilisent toutes les attributions santé-sécurité du comité, et le refus de prise en charge s'analyse en entrave — l'audit détaillé se fait dans le module comité.",
+    modele: { page: "audit-cse.html", nom: "programmation et budget de la formation des élus (modèle joint au plan)" },
+  },
+});
+
+item({
+  id: "SOC-INS-REUNIONS-SST", categorie: "instances",
+  intitule: "Quatre réunions annuelles au moins du CSE portant sur la santé, la sécurité et les conditions de travail",
+  articles: ["L2315-27"].filter(lu),
+  articlesSouhaites: ["L2315-27"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = auSeuil(50)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " La règle des quatre réunions annuelles santé-sécurité (L. 2315-27) s'applique au fonctionnement du comité des entreprises d'au moins cinquante salariés." };
+    return { du: true, motif: s.motif + " Au moins quatre réunions du comité portent annuellement, en tout ou partie, sur ses attributions en matière de santé, sécurité et conditions de travail — plus souvent en cas de besoin, et le comité est en outre réuni après tout accident grave ou événement grave (L. 2315-27). L'employeur informe chaque année l'inspection du travail, le médecin du travail et l'agent des services de prévention des organismes de sécurité sociale du calendrier de ces réunions, et leur confirme chacune par écrit au moins quinze jours à l'avance." };
+  },
+  verifs: [
+    { cle: "quatreReunions", libelle: "Au moins quatre réunions du comité ont-elles porté, sur les douze derniers mois, en tout ou partie sur la santé, la sécurité et les conditions de travail ?", format: "oui / non", regle: "oui",
+      motifNC: "Moins de quatre réunions santé-sécurité sur l'année : L. 2315-27 en impose au moins quatre — inscrivez le point à l'ordre du jour des prochaines réunions et rattrapez le calendrier." },
+    { cle: "calendrierCommunique", libelle: "Le calendrier annuel de ces réunions est-il communiqué à l'inspection du travail, au médecin du travail et à l'agent des services de prévention, chaque réunion étant confirmée par écrit quinze jours à l'avance ?", format: "oui / non", regle: "oui",
+      motifNC: "Le calendrier des réunions santé-sécurité n'est pas communiqué : L. 2315-27 impose d'informer annuellement l'inspection du travail, le médecin du travail et l'agent des services de prévention, et de confirmer chaque réunion par écrit au moins quinze jours à l'avance." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Caler le calendrier annuel des réunions santé-sécurité du comité et les communications qui l'accompagnent.",
+    etapes: [
+      "Fixer au moins quatre réunions de l'année portant, en tout ou partie, sur la santé, la sécurité et les conditions de travail (le modèle joint propose un calendrier).",
+      "Communiquer ce calendrier à l'inspection du travail, au médecin du travail et à l'agent des services de prévention des organismes de sécurité sociale.",
+      "Confirmer chaque réunion par écrit à ces destinataires au moins quinze jours à l'avance, et le tracer.",
+    ],
+    acteur: "Direction (présidence du comité)",
+    delai: "Calendrier à poser en début d'année ou de mandat",
+    risque: "Réunions santé-sécurité insuffisantes ou non annoncées : fonctionnement irrégulier du comité — et l'inspection peut convoquer le comité et le présider en cas de défaillance de l'employeur (L. 2315-27).",
+    modele: { page: "audit-cse.html", nom: "calendrier annuel et courriers d'information (modèle joint au plan)" },
   },
 });
 
@@ -511,6 +643,31 @@ item({
 });
 
 item({
+  id: "SOC-AFF-EGA-REMU", categorie: "affichages et informations",
+  intitule: "Information sur les textes d'égalité de rémunération entre les femmes et les hommes (L. 3221-1 à L. 3221-7)",
+  articles: ["R3221-2"].filter(lu),
+  articlesSouhaites: ["R3221-2"],
+  module: null,
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "informationFaite", libelle: "Le texte des articles L. 3221-1 à L. 3221-7 (et de leurs textes d'application) est-il porté, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail et des candidats à l'embauche ?", format: "oui / non", regle: "oui",
+      motifNC: "Les textes sur l'égalité de rémunération entre les femmes et les hommes ne sont pas portés à la connaissance des salariés et candidats : R. 3221-2 impose cette information, par tout moyen, dans les lieux de travail et à l'embauche." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Porter à la connaissance des salariés et des candidats les textes sur l'égalité de rémunération femmes-hommes.",
+    etapes: [
+      "Préparer le support reprenant les articles L. 3221-1 à L. 3221-7 en vigueur et leurs textes d'application (le modèle joint donne l'affiche).",
+      "Le diffuser par tout moyen aux personnes ayant accès aux lieux de travail et aux candidats à l'embauche, et dater la mise en place.",
+    ],
+    acteur: "Ressources humaines",
+    delai: "Immédiat",
+    risque: "Manquement d'information retenu dans les contentieux d'égalité salariale — formulation prudente : l'article d'amende n'a pas été vérifié ici.",
+    modele: { page: "documents.html", nom: "note d'information (modèle « note-rh »)" },
+  },
+});
+
+item({
   id: "SOC-AFF-COORDONNEES", categorie: "affichages et informations",
   intitule: "Affichage des coordonnées : inspection du travail, médecin du travail, services de secours d'urgence",
   articles: ["D4711-1"].filter(lu),
@@ -599,6 +756,39 @@ item({
     acteur: "Ressources humaines",
     delai: "Immédiat",
     risque: "En litige sur les heures supplémentaires, l'absence d'affichage et de décompte se retourne contre l'employeur : c'est lui qui doit justifier les horaires.",
+    modele: null,
+  },
+});
+
+item({
+  id: "SOC-AFF-DECOMPTE", categorie: "affichages et informations",
+  intitule: "Décompte individuel de la durée du travail des salariés hors horaire collectif, et documents tenus à disposition",
+  articles: ["L3171-2", "L3171-3"].filter(lu),
+  articlesSouhaites: ["L3171-2", "L3171-3"],
+  module: null,
+  condition: p => {
+    const h = M.ouiNon(p, "salariesHorsHoraire", "Des salariés travaillent-ils en dehors d'un horaire collectif uniforme (horaires individualisés, équipes, forfaits, itinérants) ?");
+    if (!h.connu) return { du: null, motif: h.motif };
+    if (!h.vrai) return { du: false, motif: "Tous les salariés déclarés suivent le même horaire collectif : c'est l'affichage de l'horaire (L. 3171-1) qui en tient lieu — le décompte individuel de L. 3171-2 n'a pas d'objet tant que cette situation dure." };
+    return { du: true, motif: "Des salariés ne suivent pas le même horaire collectif : l'employeur établit, pour chacun d'eux, les documents nécessaires au décompte de la durée de travail, des repos compensateurs acquis et de leur prise effective — documents que le comité peut consulter (L. 3171-2) — et tient à la disposition de l'inspection du travail les documents permettant de comptabiliser le temps de travail accompli par chaque salarié (L. 3171-3)." };
+  },
+  verifs: [
+    { cle: "decompteEtabli", libelle: "Les documents de décompte individuels (durée du travail, repos compensateurs acquis et pris) sont-ils établis pour chaque salarié hors horaire collectif ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun décompte individuel établi pour les salariés hors horaire collectif : L. 3171-2 l'impose — et en litige d'heures supplémentaires, l'absence de décompte se retourne contre l'employeur." },
+    { cle: "documentsDisponibles", libelle: "Ces documents sont-ils tenus à la disposition de l'inspection du travail, et consultables par le comité ?", format: "oui / non", regle: "oui",
+      motifNC: "Les documents de comptabilisation du temps de travail ne sont pas tenus à disposition : L. 3171-3 impose leur mise à disposition de l'agent de contrôle, et L. 3171-2 leur consultation par le comité." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Organiser le décompte individuel du temps de travail des salariés hors horaire collectif et la conservation des documents.",
+    etapes: [
+      "Recenser les populations hors horaire collectif (horaires individualisés, équipes successives, forfaits, itinérants) et choisir le mode de décompte de chacune.",
+      "Établir les documents : durée de travail, repos compensateurs acquis et leur prise effective, salarié par salarié (le modèle joint donne la trame).",
+      "Les tenir à la disposition de l'inspection du travail et les rendre consultables par le comité ; définir la durée de conservation avec votre conseil (textes réglementaires non vérifiés ici).",
+    ],
+    acteur: "Ressources humaines / paie",
+    delai: "Sous quelques semaines : chaque mois sans décompte est un mois indéfendable en litige",
+    risque: "En litige sur les heures supplémentaires, c'est l'employeur qui doit produire les éléments de décompte : sans documents, les décomptes du salarié l'emportent — et l'inspection peut relever l'absence de documents de L. 3171-3.",
     modele: null,
   },
 });
@@ -872,15 +1062,15 @@ item({
 item({
   id: "SOC-SST-VIP", categorie: "santé-sécurité",
   intitule: "Visite d'information et de prévention (et suivi de l'état de santé des salariés)",
-  articles: ["R4624-10"].filter(lu),
-  articlesSouhaites: ["R4624-10"],
+  articles: ["R4624-10", "R4624-16"].filter(lu),
+  articlesSouhaites: ["R4624-10", "R4624-16"],
   module: null,
   condition: toutEmployeur,
   verifs: [
     { cle: "embauchesVues", libelle: "Chaque salarié a-t-il bénéficié de sa visite d'information et de prévention dans le délai suivant la prise de poste ?", format: "oui / non", regle: "oui",
       motifNC: "Des salariés n'ont pas eu leur visite d'information et de prévention : programmez les visites en retard — le délai court à compter de la prise de poste, et certains postes appellent un suivi renforcé ou une visite avant affectation." },
-    { cle: "suiviPeriodique", libelle: "Le suivi périodique est-il à jour (périodicité fixée par le médecin du travail) ?", format: "oui / non", regle: "oui",
-      motifNC: "Le suivi périodique n'est pas à jour : demandez au service de prévention l'état des visites et reprogrammez les échéances dépassées." },
+    { cle: "suiviPeriodique", libelle: "Le suivi périodique est-il à jour — périodicité fixée par le médecin du travail, qui ne peut excéder cinq ans (R. 4624-16) ?", format: "oui / non", regle: "oui",
+      motifNC: "Le suivi périodique n'est pas à jour : la visite se renouvelle à la périodicité fixée par le médecin du travail, sans pouvoir excéder cinq ans (R. 4624-16) — demandez au service de prévention l'état des visites et reprogrammez les échéances dépassées." },
   ],
   plan: {
     priorite: 2,
@@ -893,6 +1083,39 @@ item({
     acteur: "Ressources humaines, avec le service de prévention",
     delai: "Visites en retard : sous quelques semaines",
     risque: "Un salarié non vu par la médecine du travail, puis inapte ou accidenté, se retourne contre l'employeur : le manquement au suivi médical est systématiquement retenu.",
+    modele: null,
+  },
+});
+
+item({
+  id: "SOC-SST-POSTES-RISQUES", categorie: "santé-sécurité",
+  intitule: "Postes à risques particuliers : suivi individuel renforcé et liste des postes",
+  articles: ["R4624-22", "R4624-23"].filter(lu),
+  articlesSouhaites: ["R4624-22", "R4624-23"],
+  module: null,
+  condition: p => {
+    const r = M.ouiNon(p, "postesRisquesParticuliers", "Des salariés sont-ils affectés à des postes présentant des risques particuliers (amiante, plomb, agents cancérogènes-mutagènes-reprotoxiques, agents biologiques des groupes 3 et 4, rayonnements ionisants, risque hyperbare, montage-démontage d'échafaudages, ou postes soumis à un examen d'aptitude spécifique) ?");
+    if (!r.connu) return { du: null, motif: r.motif };
+    if (!r.vrai) return { du: false, motif: "Aucun poste à risques particuliers déclaré au sens de R. 4624-23 : le suivi individuel renforcé n'a pas de bénéficiaires — recontrôlez à chaque évolution des postes, et l'employeur peut aussi compléter la liste de sa propre initiative (R. 4624-23, III)." };
+    return { du: true, motif: "Des postes à risques particuliers sont déclarés : chaque travailleur qui y est affecté bénéficie d'un suivi individuel renforcé de son état de santé (R. 4624-22). Si l'employeur complète la liste des postes au-delà des catégories légales, cette liste est motivée par écrit, prise après avis du médecin du travail et du comité s'il existe, transmise au service de prévention et mise à jour tous les ans (R. 4624-23, III)." };
+  },
+  verifs: [
+    { cle: "suiviRenforceEnPlace", libelle: "Chaque salarié affecté à un poste à risques particuliers bénéficie-t-il du suivi individuel renforcé (examen avant affectation, périodicité renforcée) ?", format: "oui / non", regle: "oui",
+      motifNC: "Des salariés de postes à risques particuliers n'ont pas leur suivi individuel renforcé : R. 4624-22 l'impose — signalez les postes au service de prévention et programmez les examens manquants." },
+    { cle: "listeEtablie", libelle: "La liste des postes concernés est-elle établie avec le service de prévention — et, si l'employeur l'a complétée, motivée par écrit, prise après avis du médecin du travail et du comité, transmise au service et mise à jour annuellement ?", format: "oui / non", regle: "oui",
+      motifNC: "La liste des postes à risques n'est pas formalisée : sans elle, le service de prévention ne peut pas classer les salariés en suivi renforcé — établissez-la, et si vous la complétez au-delà des catégories légales, respectez le formalisme de R. 4624-23, III (motivation écrite, avis, transmission, mise à jour annuelle)." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Établir la liste des postes à risques particuliers et mettre en place le suivi individuel renforcé des salariés concernés.",
+    etapes: [
+      "Recenser les postes entrant dans les catégories de R. 4624-23, I et II (amiante, plomb, CMR, agents biologiques 3 et 4, rayonnements ionisants, hyperbare, échafaudages, examens d'aptitude spécifiques), en cohérence avec le document unique.",
+      "Décider des compléments éventuels (R. 4624-23, III) : motivation écrite, avis du médecin du travail et du comité, transmission au service de prévention, mise à jour annuelle.",
+      "Transmettre la liste au service de prévention et faire programmer les examens avant affectation et le suivi renforcé.",
+    ],
+    acteur: "Direction / ressources humaines, avec le médecin du travail et le comité",
+    delai: "Avant toute nouvelle affectation à un poste concerné ; régularisation des postes occupés sous quelques semaines",
+    risque: "Un salarié d'un poste à risques sans suivi renforcé, puis accidenté ou inapte, se retourne contre l'employeur : le défaut de suivi médical renforcé pèse lourd dans la faute inexcusable.",
     modele: null,
   },
 });
@@ -1025,6 +1248,39 @@ item({
     acteur: "Direction, expert-comptable, instances",
     delai: "Échéance liée à la clôture de l'exercice suivant l'assujettissement : faites-la caler par votre expert",
     risque: "À défaut d'accord dans les délais, régime d'autorité (moins favorable à l'employeur) et perte possible d'exonérations — chiffrage à faire établir par votre expert.",
+    modele: null,
+  },
+});
+
+item({
+  id: "SOC-EPA-LIVRET", categorie: "épargne et protection sociale",
+  intitule: "Livret d'épargne salariale remis à chaque embauche (entreprise proposant un dispositif)",
+  articles: ["L3341-6"].filter(lu),
+  articlesSouhaites: ["L3341-6"],
+  module: null,
+  condition: p => {
+    const e = M.ouiNon(p, "epargneSalariale", "Un dispositif d'épargne salariale (intéressement, participation, plan d'épargne d'entreprise ou de retraite) est-il en place ?");
+    if (!e.connu) return { du: null, motif: e.motif };
+    if (!e.vrai) return { du: false, motif: "Aucun dispositif d'épargne salariale déclaré : le livret d'épargne salariale n'a pas d'objet — il le retrouvera avec le premier dispositif, et la participation devient obligatoire à partir de cinquante salariés maintenus." };
+    return { du: true, motif: "Un dispositif d'épargne salariale est en place : tout salarié reçoit, lors de la conclusion de son contrat de travail, un livret d'épargne salariale présentant les dispositifs de l'entreprise, également porté à la connaissance des représentants du personnel — le cas échéant via la BDESE (L. 3341-6)." };
+  },
+  verifs: [
+    { cle: "livretRemis", libelle: "Le livret d'épargne salariale est-il remis à chaque salarié lors de la conclusion de son contrat de travail ?", format: "oui / non", regle: "oui",
+      motifNC: "Le livret d'épargne salariale n'est pas remis à l'embauche : L. 3341-6 l'impose à toute entreprise proposant un dispositif — intégrez-le au dossier d'embauche, contre émargement." },
+    { cle: "livretElus", libelle: "Le livret est-il porté à la connaissance des représentants du personnel (le cas échéant via la BDESE) ?", format: "oui / non", regle: "oui",
+      motifNC: "Le livret n'est pas porté à la connaissance des représentants du personnel : L. 3341-6 le prévoit, le cas échéant comme élément de la BDESE — versez-le." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Établir le livret d'épargne salariale et l'intégrer au parcours d'embauche.",
+    etapes: [
+      "Rédiger le livret : présentation de chaque dispositif en place (intéressement, participation, plans d'épargne), modalités d'affectation et de déblocage — le modèle joint donne le sommaire complet.",
+      "Le remettre à chaque nouvelle embauche, contre émargement, et le porter à la connaissance des représentants du personnel (BDESE le cas échéant).",
+      "Le mettre à jour à chaque évolution des dispositifs.",
+    ],
+    acteur: "Ressources humaines / paie",
+    delai: "Avant la prochaine embauche",
+    risque: "Un salarié non informé de ses droits d'épargne salariale peut contester les affectations par défaut et les délais qui lui ont été opposés — l'information manquante se retourne contre l'employeur.",
     modele: null,
   },
 });
