@@ -39,6 +39,20 @@ Trois modules ont rejoint la même chaîne, chacun avec son dossier et son
   le filtre de code du relais attend le NOM du code, pas l'identifiant
   `LEGITEXT…` — sans lui, le relais sert l'homonyme d'un autre code.
   Publication : `node publier-sst.js`.
+- **`discipline/`** — la discipline et le règlement intérieur (L. 1311-2,
+  L. 1321-1 à L. 1321-6, L. 1322-1 à L. 1322-3, L. 1331-1 à L. 1333-3 et leurs
+  articles réglementaires) : 25 contrôles, 29 articles dont 8 repris du module
+  social, relus à la source sans écart. Premier module côté relations
+  individuelles. Le point central est la **garantie de fond** conventionnelle ou
+  de règlement intérieur (Soc., 8 septembre 2021, n° 19-15.039 ; Soc.,
+  3 mai 2011, n° 10-14.104 ; Soc., 22 septembre 2021, n° 18-22.204 ; Soc.,
+  20 mars 2024, n° 22-17.292) : non suivie, elle rend une non-conformité
+  motivée ; suivie tardivement ou imparfaitement, un « risque à vérifier » avec
+  le critère du juge. L'entretien préalable se décide sur l'INCIDENCE de la
+  sanction, pas sur son étiquette. La capture a mesuré que R. 1321-3, R. 1321-5,
+  L. 1322-1 et R. 1332-3 ne prononcent pas les mots qu'on attend d'eux : le
+  critère de contenu porte sur le renvoi qu'ils font, jamais sur une lecture
+  unique. Publication : `node publier-discipline.js`.
 - **`social/`** — l'audit social chapeau : le référentiel des obligations de
   l'employeur (33 obligations en huit catégories, 34 articles lus au relais en
   lectures doubles concordantes avec critère de contenu), l'assujettissement

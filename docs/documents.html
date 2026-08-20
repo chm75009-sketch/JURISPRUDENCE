@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1F3864">
 <link rel="icon" href="icons/icon-180.png">
-<title>Documents — relations collectives</title>
-<!-- Générateur de documents pour la gestion quotidienne des relations
-     collectives : convocation et ordre du jour du CSE, trame de procès-verbal,
+<title>Documents — relations collectives et discipline</title>
+<!-- Générateur de documents pour la gestion quotidienne des relations du
+     travail : convocation et ordre du jour du CSE, trame de procès-verbal,
      accord de méthode et procès-verbal de désaccord de la négociation
      obligatoire, note d'information, réponse à une réclamation, procédure de
-     signalement harcèlement, canevas d'enquête interne.
+     signalement harcèlement, canevas d'enquête interne — et, côté relations
+     individuelles, les trames de la discipline : convocation à entretien
+     préalable à sanction, notification d'avertissement, notification de mise à
+     pied disciplinaire, échelle des sanctions du règlement intérieur.
 
      Tout se passe dans le navigateur : un formulaire court, un document
      généré à l'écran, imprimable en PDF et copiable en texte. Rien n'est
@@ -19,8 +22,8 @@
      Chaque mention juridique s'appuie sur un article lu à la source et
      identifié par sa version (LEGIARTI), repris des textes vérifiés du
      dépôt (moteur/cse/textes_cse.json, moteur/nao/textes-nao.json,
-     moteur/sst/textes-sst.json) ou de docs/textes-documents.json pour les
-     compléments vérifiés au relais. -->
+     moteur/sst/textes-sst.json, moteur/discipline/textes-discipline.json) ou de
+     docs/textes-documents.json pour les compléments vérifiés au relais. -->
 <style>
   :root{
     --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
@@ -149,16 +152,19 @@
   <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
   · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
   · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
+  · <a href="audit-sst.html">santé-sécurité (SST)</a> · <a href="audit-discipline.html">discipline et règlement intérieur</a>
   · <a href="agenda.html">agenda</a> · <a href="guides.html">guides</a></span>
 </div>
 
 <header>
   <p class="fil">Application Jurisprudence</p>
-  <h1>Documents — relations collectives</h1>
-  <p class="chapo"><b>Cette page prépare les documents de la gestion quotidienne des relations
-  collectives</b> — convocation et ordre du jour du comité, trame de procès-verbal, accord de méthode
-  et procès-verbal de désaccord de la négociation obligatoire, note d'information, réponse écrite à
-  une réclamation, procédure de signalement harcèlement, canevas d'enquête interne. Un formulaire
+  <h1>Documents — relations collectives et discipline</h1>
+  <p class="chapo"><b>Cette page prépare les documents de la gestion quotidienne</b> — côté collectif :
+  convocation et ordre du jour du comité, trame de procès-verbal, accord de méthode et procès-verbal
+  de désaccord de la négociation obligatoire, note d'information, réponse écrite à une réclamation,
+  procédure de signalement harcèlement, canevas d'enquête interne ; côté individuel :
+  <b>convocation à entretien préalable à sanction, notification d'avertissement motivée, notification
+  de mise à pied disciplinaire, trame d'échelle des sanctions du règlement intérieur</b>. Un formulaire
   court, un document à l'écran, imprimable en PDF et copiable en texte.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
   que sur ce poste.</p>
 </header>
@@ -169,9 +175,16 @@
   mentions imposées par le code du travail y sont, chacune fondée sur un article lu à la source et
   identifié par sa version en pied de document. Ce que vous saisissez reste sur ce poste, et le
   brouillon de chaque modèle est retrouvé à la prochaine visite.</p>
+  <p>Chaque document porte sa <b>structure intégrale</b>, un <b>exemple fictif marqué
+  « [exemple] »</b> partout où le formulaire est vide — un modèle sans exemple n'est qu'une coquille,
+  un exemple non marqué serait un piège — et la liste des <b>champs à personnaliser</b> en fin de
+  document.</p>
   <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne remplace ni la négociation ni le
   conseil — elle donne une trame conforme aux textes, que vous restez libre d'adapter. Un champ non
-  rempli apparaît comme un blanc à compléter, jamais comme une valeur inventée.</p>
+  rempli apparaît comme un exemple marqué ou comme un blanc à compléter, jamais comme une valeur
+  posée pour vraie. Elle ne lit aucune convention collective : ce que la vôtre impose en plus de la
+  loi — conseil de discipline, commission paritaire, avis préalable — doit être recopié à la main,
+  et c'est souvent ce qui décide du sort d'un litige.</p>
 </div>
 
 <h2 class="titre-zone">1. Choisissez un modèle</h2>
@@ -246,7 +259,31 @@
     "D1151-1":  { id: "LEGIARTI000038025995", quoi: "coordonnées à porter à la connaissance : médecin du travail, inspection du travail, Défenseur des droits, référent employeur, référent du comité" },
     "L2314-1":  { id: "LEGIARTI000037389707", quoi: "référent harcèlement sexuel et agissements sexistes désigné par le comité social et économique parmi ses membres" },
     "L4121-1":  { id: "LEGIARTI000035640828", quoi: "obligation de sécurité : l'employeur prend les mesures nécessaires pour protéger la santé physique et mentale des travailleurs" },
-    "L4121-2":  { id: "LEGIARTI000033019913", quoi: "principes généraux de prévention ; la planification intègre les risques liés au harcèlement moral, au harcèlement sexuel et aux agissements sexistes (7°)" }
+    "L4121-2":  { id: "LEGIARTI000033019913", quoi: "principes généraux de prévention ; la planification intègre les risques liés au harcèlement moral, au harcèlement sexuel et aux agissements sexistes (7°)" },
+    /* Discipline et règlement intérieur — articles repris de
+       moteur/discipline/textes-discipline.json, capturés au relais en lectures
+       doubles concordantes avec critère de contenu, et relus à la source
+       (29 articles, 29 concordants, aucun écart). */
+    "L1311-2":  { id: "LEGIARTI000038610176", quoi: "règlement intérieur obligatoire à partir de cinquante salariés, au terme d'un délai de douze mois à compter du franchissement du seuil" },
+    "L1321-1":  { id: "LEGIARTI000006901432", quoi: "l'employeur y fixe exclusivement les mesures de santé et sécurité, les conditions de participation au rétablissement de conditions protectrices, et les règles générales et permanentes de discipline, notamment la nature et l'échelle des sanctions" },
+    "L1321-2":  { id: "LEGIARTI000045391757", quoi: "le règlement intérieur rappelle les droits de la défense, les dispositions sur les harcèlements et les agissements sexistes, et l'existence du dispositif de protection des lanceurs d'alerte" },
+    "L1321-3":  { id: "LEGIARTI000033975667", quoi: "le règlement intérieur ne peut contenir de dispositions contraires aux textes, de restrictions non justifiées ni proportionnées, ni de dispositions discriminatoires" },
+    "L1321-4":  { id: "LEGIARTI000054140230", quoi: "avis du comité social et économique avant introduction ; entrée en vigueur postérieure d'un mois aux formalités de publicité ; communication à l'inspecteur du travail ; mêmes règles en cas de modification ou de retrait" },
+    "R1321-1":  { id: "LEGIARTI000033292501", quoi: "le règlement intérieur est porté par tout moyen à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux d'embauche" },
+    "R1321-2":  { id: "LEGIARTI000018536915", quoi: "dépôt au greffe du conseil de prud'hommes du ressort de l'entreprise ou de l'établissement" },
+    "R1321-4":  { id: "LEGIARTI000018536911", quoi: "le texte du règlement intérieur est transmis à l'inspecteur du travail en deux exemplaires" },
+    "L1331-1":  { id: "LEGIARTI000006901445", quoi: "constitue une sanction toute mesure, autre que les observations verbales, prise à la suite d'un agissement considéré comme fautif" },
+    "L1331-2":  { id: "LEGIARTI000006901446", quoi: "les amendes et autres sanctions pécuniaires sont interdites ; toute disposition ou stipulation contraire est réputée non écrite" },
+    "L1332-1":  { id: "LEGIARTI000006901447", quoi: "aucune sanction sans que le salarié soit informé, dans le même temps et par écrit, des griefs retenus contre lui" },
+    "L1332-2":  { id: "LEGIARTI000025560074", quoi: "convocation sauf avertissement sans incidence ; assistance par une personne du personnel ; motif indiqué et explications recueillies ; sanction ni moins de deux jours ouvrables ni plus d'un mois après l'entretien ; motivée et notifiée" },
+    "L1332-3":  { id: "LEGIARTI000006901449", quoi: "mise à pied conservatoire : aucune sanction définitive sans que la procédure de L. 1332-2 ait été respectée" },
+    "L1332-4":  { id: "LEGIARTI000006901450", quoi: "aucun fait fautif ne peut donner lieu à poursuites disciplinaires au-delà de deux mois à compter du jour où l'employeur en a eu connaissance, sauf poursuites pénales dans le même délai" },
+    "L1332-5":  { id: "LEGIARTI000006901451", quoi: "aucune sanction antérieure de plus de trois ans à l'engagement des poursuites ne peut être invoquée à l'appui d'une nouvelle sanction" },
+    "R1332-1":  { id: "LEGIARTI000018536889", quoi: "la lettre de convocation indique l'objet, la date, l'heure et le lieu de l'entretien, rappelle le droit d'être assisté par une personne du personnel, et est remise contre récépissé ou adressée par lettre recommandée dans le délai de deux mois" },
+    "R1332-2":  { id: "LEGIARTI000018536887", quoi: "la sanction fait l'objet d'une décision écrite et motivée, notifiée par lettre remise contre récépissé ou par lettre recommandée dans le délai d'un mois" },
+    "R1332-3":  { id: "LEGIARTI000018536885", quoi: "le délai d'un mois expire à vingt-quatre heures le jour du mois suivant portant le même quantième ; à défaut, le dernier jour du mois ; prorogation au premier jour ouvrable si le terme est un samedi, un dimanche ou un jour férié ou chômé" },
+    "L1333-1":  { id: "LEGIARTI000006901453", quoi: "le conseil de prud'hommes apprécie la régularité de la procédure et si les faits sont de nature à justifier une sanction ; si un doute subsiste, il profite au salarié" },
+    "L1333-2":  { id: "LEGIARTI000006901454", quoi: "le conseil de prud'hommes peut annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise" }
   };
   function refArt(n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }
 
@@ -272,6 +309,40 @@
   function joursEntre(a, b) {
     if (!a || !b) return null;
     return Math.round((new Date(b + "T12:00:00") - new Date(a + "T12:00:00")) / 86400000);
+  }
+
+  /* Les jours ouvrables — tous les jours sauf le dimanche et les jours fériés.
+     Cette page ne tient pas le calendrier des jours fériés : elle compte les
+     jours non dominicaux et le dit là où le résultat est serré. */
+  function joursOuvrablesEntre(a, b) {
+    if (!a || !b) return null;
+    var t = new Date(a + "T12:00:00Z"), fin = new Date(b + "T12:00:00Z"), n = 0;
+    if (fin < t) return null;
+    while (t < fin) { t.setUTCDate(t.getUTCDate() + 1); if (t.getUTCDay() !== 0) n++; }
+    return n;
+  }
+  /* Le même quantième, n mois plus tard : la règle de comptage de R. 1332-3,
+     qui vaut aussi pour les deux mois de L. 1332-4. */
+  function moisApres(iso, n) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return null;
+    var m = iso.split("-").map(Number), an = m[0] + Math.floor((m[1] - 1 + n) / 12),
+        mo = ((m[1] - 1 + n) % 12) + 1;
+    var dernier = new Date(Date.UTC(an, mo, 0)).getUTCDate();
+    var j = Math.min(m[2], dernier);
+    return an + "-" + String(mo).padStart(2, "0") + "-" + String(j).padStart(2, "0");
+  }
+  /* L'exemple fictif : une valeur plausible, marquée comme telle, là où le
+     formulaire est vide. Un modèle sans exemple n'est qu'une coquille ; un
+     exemple non marqué serait un piège. */
+  function exemple(txt) { return '<span class="champ-vide">' + e(txt) + " [exemple]</span>"; }
+  function chEx(valeur, exempleTxt) { return valeur ? e(valeur) : exemple(exempleTxt); }
+  function chExDate(iso, exempleIso) {
+    return iso ? e(dateFr(iso)) : exemple(dateFr(exempleIso) || exempleIso);
+  }
+  /* Les champs à personnaliser, listés à la fin du document. */
+  function aPersonnaliser(liste) {
+    return '<div class="pied-textes"><b>À personnaliser avant usage :</b> ' +
+      liste.map(function (x) { return e(x); }).join(" · ") + ".</div>";
   }
 
   /* Pied de document : les articles cités, avec leur version. */
@@ -830,6 +901,446 @@
         return "L'ouverture de l'enquête est antérieure au signalement : l'une des deux dates est erronée.";
       return "";
     }
+  },
+
+  /* ================================================================== */
+  /* Discipline et règlement intérieur — quatre trames.                 */
+  /*                                                                    */
+  /* Même standard que les autres modèles du dépôt : la STRUCTURE       */
+  /* INTÉGRALE du document, un EXEMPLE FICTIF marqué « [exemple] »      */
+  /* partout où le formulaire est vide, et la liste des CHAMPS À        */
+  /* PERSONNALISER en fin de document. Chaque mention juridique         */
+  /* s'appuie sur un article lu à la source, identifié par sa version.  */
+  /* ================================================================== */
+
+  {
+    cle: "convocation-sanction",
+    nom: "Convocation à entretien préalable à sanction",
+    resume: "Les quatre mentions de R. 1332-1 — objet, date, heure et lieu, droit d'être assisté par une personne du personnel — et le délai de deux mois de L. 1332-4.",
+    articles: ["L1332-2", "R1332-1", "L1332-4", "L1332-3", "L1331-1"],
+    sections: [
+      { titre: "L'entreprise et le salarié", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "representant", nom: "Signataire (nom, qualité)", t: "text" },
+        { c: "salarie", nom: "Salarié (nom, prénom)", t: "text" },
+        { c: "fonction", nom: "Emploi occupé", t: "text" },
+        { c: "dateEnvoi", nom: "Date d'envoi ou de remise de la convocation", t: "date",
+          aide: "C'est cette date qui engage les poursuites disciplinaires : elle doit intervenir dans les deux mois de la connaissance des faits (art. L. 1332-4 et R. 1332-1)." },
+        { c: "modeRemise", nom: "Mode de remise", t: "select", options: ["remise contre récépissé", "lettre recommandée avec avis de réception"],
+          aide: "R. 1332-1 n'ouvre que ces deux voies." }
+      ]},
+      { titre: "L'entretien et les faits", champs: [
+        { c: "dateEntretien", nom: "Date de l'entretien", t: "date" },
+        { c: "heure", nom: "Heure", t: "time" },
+        { c: "lieu", nom: "Lieu (adresse précise, bureau)", t: "text" },
+        { c: "dateConnaissance", nom: "Date à laquelle l'employeur a eu connaissance des faits", t: "date",
+          aide: "Point de départ du délai de deux mois de l'article L. 1332-4." },
+        { c: "objet", nom: "Objet de l'entretien — les faits, en une phrase, sans qualification", t: "textarea", pleine: true,
+          aide: "R. 1332-1 impose d'indiquer l'objet de l'entretien. Décrire les faits sans les qualifier ni annoncer la sanction : elle n'est pas encore décidée." },
+        { c: "misePied", nom: "Mise à pied conservatoire", t: "cases", pleine: true, options: [
+          "Une mise à pied conservatoire à effet immédiat est prononcée dans l'attente de la décision"
+        ], aide: "La mise à pied conservatoire n'est pas une sanction : aucune sanction définitive ne peut être prise sans que la procédure de l'article L. 1332-2 ait été respectée (art. L. 1332-3)." }
+      ]}
+    ],
+    composer: function (v) {
+      var mp = (v.misePied || []).length;
+      var mode = v.modeRemise || "lettre recommandée avec avis de réception";
+      return enteteFeuille(v.entreprise, chExDate(v.dateEnvoi, "2026-06-22")) +
+        "<p>" + chEx(v.salarie, "Madame Claire BERTIN") + "<br>" + chEx(v.fonction, "opératrice de production") + "</p>" +
+        "<p class=\"note\">" + e(mode) + "</p>" +
+        '<h2 class="titre-doc">Convocation à un entretien préalable<br>à une éventuelle sanction disciplinaire</h2>' +
+        "<p>Madame, Monsieur,</p>" +
+        "<p>Nous sommes conduits à envisager une sanction disciplinaire à votre égard. Conformément " +
+        "aux articles L. 1332-2 et R. 1332-1 du code du travail, nous vous convoquons à un entretien " +
+        "préalable qui se tiendra le <b>" + chExDate(v.dateEntretien, "2026-06-30") + "</b> à <b>" +
+        chEx(v.heure, "10 h 00") + "</b>, " + chEx(v.lieu, "au siège de la société, bureau de la direction des ressources humaines, 12 rue des Ateliers") + ".</p>" +
+        "<h3>Objet de l'entretien</h3>" +
+        "<p>" + chEx(v.objet, "Absence de votre poste les 8, 9 et 10 juin 2026 sans autorisation ni justificatif, et refus opposé le 11 juin 2026 à la demande de votre responsable d'atelier de reprendre le poste de conditionnement") + "</p>" +
+        "<p>Au cours de cet entretien, nous vous indiquerons le motif de la sanction envisagée et " +
+        "recueillerons vos explications (art. L. 1332-2 du code du travail). Aucune décision n'est " +
+        "prise à ce jour.</p>" +
+        "<h3>Votre droit d'être assisté</h3>" +
+        "<p>Vous pouvez vous faire assister lors de cet entretien par une personne de votre choix " +
+        "appartenant au personnel de l'entreprise (art. L. 1332-2 et R. 1332-1 du code du travail).</p>" +
+        (mp ? "<h3>Mise à pied conservatoire</h3>" +
+          "<p>Compte tenu de la nature des faits, votre présence dans l'entreprise étant incompatible " +
+          "avec leur examen, vous êtes mis à pied à titre conservatoire à compter de la notification " +
+          "de la présente. Cette mesure n'est pas une sanction : elle est prise dans l'attente de la " +
+          "décision, et aucune sanction définitive relative à ces faits ne sera prise sans que la " +
+          "procédure prévue à l'article L. 1332-2 du code du travail ait été respectée (art. L. 1332-3).</p>" : "") +
+        "<p>Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées.</p>" +
+        '<div class="signatures"><div>' + chEx(v.representant, "Jean MOREAU, directeur des ressources humaines") +
+        "<br>" + ch(v.entreprise, "dénomination de l'entreprise") + "</div></div>" +
+        aPersonnaliser(["le nom et l'emploi du salarié", "la date, l'heure et le lieu exacts de l'entretien",
+          "l'objet — les faits, décrits sans qualification", "le mode de remise effectivement retenu",
+          "le délai que votre convention collective impose éventuellement entre la convocation et l'entretien",
+          "la mise à pied conservatoire, à ne cocher que si elle est réellement indispensable"]) +
+        piedTextes(["L1332-2", "R1332-1", "L1332-4", "L1332-3", "L1331-1"]);
+    },
+    verifier: function (v) {
+      if (v.dateConnaissance && v.dateEnvoi) {
+        var limite = moisApres(v.dateConnaissance, 2);
+        if (limite && v.dateEnvoi > limite)
+          return "Les poursuites seraient engagées le " + dateFr(v.dateEnvoi) + ", alors que le délai " +
+            "de deux mois de l'article L. 1332-4 expirait le " + dateFr(limite) + " : aucun fait fautif " +
+            "ne peut donner lieu à lui seul à des poursuites disciplinaires au-delà de ce délai, à moins " +
+            "qu'il ait donné lieu dans le même délai à l'exercice de poursuites pénales.";
+      }
+      var j = joursEntre(v.dateEnvoi, v.dateEntretien);
+      if (j !== null && j < 0)
+        return "L'entretien serait antérieur à la convocation : l'une des deux dates est erronée.";
+      if (j !== null && j < 1)
+        return "L'entretien est fixé le jour même de la convocation. Le code du travail ne fixe pas de " +
+          "délai minimum entre la convocation et l'entretien en matière disciplinaire — contrairement au " +
+          "licenciement — mais votre convention collective en prévoit souvent un, et le salarié doit " +
+          "pouvoir préparer sa défense et trouver la personne qui l'assistera. Vérifiez-la.";
+      return "";
+    }
+  },
+
+  {
+    cle: "avertissement",
+    nom: "Notification d'avertissement motivée",
+    resume: "L'écrit qui porte les griefs (L. 1332-1) : faits datés et circonstanciés, explications recueillies, rappel des règles, sans sanction pécuniaire.",
+    articles: ["L1332-1", "L1331-1", "L1332-4", "L1332-2", "L1331-2", "L1333-2"],
+    sections: [
+      { titre: "L'entreprise et le salarié", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "representant", nom: "Signataire (nom, qualité)", t: "text" },
+        { c: "salarie", nom: "Salarié (nom, prénom)", t: "text" },
+        { c: "fonction", nom: "Emploi occupé", t: "text" },
+        { c: "dateNotification", nom: "Date de notification", t: "date" },
+        { c: "modeRemise", nom: "Mode de notification", t: "select", options: ["remise contre récépissé", "lettre recommandée avec avis de réception"],
+          aide: "R. 1332-2 n'ouvre que ces deux voies pour la sanction elle-même." }
+      ]},
+      { titre: "Les faits et la procédure", champs: [
+        { c: "dateConnaissance", nom: "Date à laquelle l'employeur a eu connaissance des faits", t: "date",
+          aide: "Point de départ du délai de deux mois de l'article L. 1332-4." },
+        { c: "faits", nom: "Les faits reprochés — un par ligne, datés et circonstanciés", t: "textarea", pleine: true,
+          aide: "« Aucune sanction ne peut être prise à l'encontre du salarié sans que celui-ci soit informé, dans le même temps et par écrit, des griefs retenus contre lui » (art. L. 1332-1). Un avertissement qui se borne à « votre comportement » ne met pas le salarié en mesure de le discuter." },
+        { c: "entretien", nom: "Un entretien préalable a-t-il été tenu ?", t: "cases", pleine: true, options: [
+          "Un entretien préalable a été tenu avant la présente notification"
+        ], aide: "L'entretien n'est pas dû pour un avertissement sans incidence sur la présence, la fonction, la carrière ou la rémunération (art. L. 1332-2) — SAUF si le règlement intérieur ou la convention collective subordonnent le licenciement à l'existence de sanctions antérieures : la clause institue alors une garantie de fond et l'entretien devient obligatoire (Soc., 3 mai 2011, n° 10-14.104 ; Soc., 22 septembre 2021, n° 18-22.204)." },
+        { c: "dateEntretien", nom: "Date de l'entretien, le cas échéant", t: "date" },
+        { c: "explications", nom: "Explications recueillies et réponse apportée", t: "textarea", pleine: true },
+        { c: "attendu", nom: "Ce qui est attendu pour l'avenir", t: "textarea", pleine: true }
+      ]}
+    ],
+    composer: function (v) {
+      var faits = lignes(v.faits);
+      var entretien = (v.entretien || []).length;
+      var mode = v.modeRemise || "lettre recommandée avec avis de réception";
+      return enteteFeuille(v.entreprise, chExDate(v.dateNotification, "2026-07-06")) +
+        "<p>" + chEx(v.salarie, "Madame Claire BERTIN") + "<br>" + chEx(v.fonction, "opératrice de production") + "</p>" +
+        "<p class=\"note\">" + e(mode) + "</p>" +
+        '<h2 class="titre-doc">Notification d\'un avertissement</h2>' +
+        "<p>Madame, Monsieur,</p>" +
+        (entretien
+          ? "<p>Nous vous avons reçue en entretien le <b>" + chExDate(v.dateEntretien, "2026-06-30") +
+            "</b>, au cours duquel nous vous avons indiqué le motif de la sanction envisagée et " +
+            "recueilli vos explications (art. L. 1332-2 du code du travail).</p>"
+          : "<p>La présente vous informe par écrit, conformément à l'article L. 1332-1 du code du " +
+            "travail, des griefs retenus contre vous.</p>") +
+        "<h3>Les faits reprochés</h3>" +
+        (faits.length
+          ? "<ul>" + faits.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Le 8 juin 2026, absence de votre poste de 8 h 00 à 16 h 00 sans autorisation préalable ni justificatif produit dans les 48 heures, contrairement à l'article 5 du règlement intérieur") + "</li>" +
+            "<li>" + exemple("Le 11 juin 2026 à 9 h 15, refus opposé à M. Ledoux, responsable d'atelier, de rejoindre le poste de conditionnement auquel vous étiez affectée pour la journée") + "</li></ul>") +
+        "<h3>Vos explications</h3>" +
+        "<p>" + chEx(v.explications, "Vous avez indiqué avoir rencontré une difficulté de garde d'enfant le 8 juin. Nous en prenons acte, mais cette circonstance ne vous dispensait pas d'informer votre responsable le jour même, ce que vous n'avez pas fait, et elle est sans rapport avec le refus du 11 juin.") + "</p>" +
+        "<h3>La décision</h3>" +
+        "<p>Ces faits ne peuvent être admis. En conséquence, nous vous notifions un <b>avertissement</b>, " +
+        "qui sera versé à votre dossier. Cette sanction ne s'accompagne d'aucune retenue sur votre " +
+        "rémunération : les amendes et autres sanctions pécuniaires sont interdites (art. L. 1331-2 du " +
+        "code du travail).</p>" +
+        "<h3>Pour l'avenir</h3>" +
+        "<p>" + chEx(v.attendu, "Nous attendons le strict respect des horaires, l'information immédiate de votre responsable en cas d'empêchement, et l'exécution des affectations décidées dans le cadre de votre qualification.") + "</p>" +
+        "<p>Nous vous rappelons qu'aucune sanction antérieure de plus de trois ans à l'engagement de " +
+        "poursuites disciplinaires ne peut être invoquée à l'appui d'une nouvelle sanction " +
+        "(art. L. 1332-5 du code du travail).</p>" +
+        "<p>Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées.</p>" +
+        '<div class="signatures"><div>' + chEx(v.representant, "Jean MOREAU, directeur des ressources humaines") +
+        "<br>" + ch(v.entreprise, "dénomination de l'entreprise") + "</div></div>" +
+        aPersonnaliser(["les faits, datés et circonstanciés — c'est la seule partie qui fasse la valeur du document",
+          "les explications réellement recueillies", "ce qui est attendu pour l'avenir",
+          "le mode de notification", "la vérification préalable : votre règlement intérieur ou votre convention collective imposent-ils un entretien avant tout avertissement ?"]) +
+        piedTextes(["L1332-1", "L1331-1", "L1332-4", "L1332-2", "L1331-2", "L1333-2"]);
+    },
+    verifier: function (v) {
+      if (v.dateConnaissance && v.dateNotification && !(v.entretien || []).length) {
+        var lim = moisApres(v.dateConnaissance, 2);
+        if (lim && v.dateNotification > lim)
+          return "La sanction serait notifiée le " + dateFr(v.dateNotification) + ", alors que le délai " +
+            "de deux mois de l'article L. 1332-4 expirait le " + dateFr(lim) + " : sans convocation " +
+            "antérieure, c'est la notification qui engage les poursuites.";
+      }
+      if ((v.entretien || []).length && v.dateEntretien && v.dateNotification) {
+        var ouv = joursOuvrablesEntre(v.dateEntretien, v.dateNotification);
+        if (ouv === null)
+          return "La notification serait antérieure à l'entretien : l'une des deux dates est erronée.";
+        if (ouv < 2)
+          return "La sanction ne peut intervenir moins de deux jours ouvrables après le jour fixé pour " +
+            "l'entretien (art. L. 1332-2) : il n'y en a ici que " + ouv + " (jours ouvrables comptés hors " +
+            "dimanche, les jours fériés n'étant pas connus de cette page).";
+        var un = moisApres(v.dateEntretien, 1);
+        if (un && v.dateNotification > un)
+          return "La sanction ne peut intervenir plus d'un mois après le jour fixé pour l'entretien " +
+            "(art. L. 1332-2, le délai se comptant selon l'article R. 1332-3) : le terme était le " +
+            dateFr(un) + ". Des avertissements notifiés plus d'un mois après l'entretien ont été annulés " +
+            "(Soc., 16 avril 2008, n° 06-41.999).";
+      }
+      return "";
+    }
+  },
+
+  {
+    cle: "mise-a-pied",
+    nom: "Notification de mise à pied disciplinaire",
+    resume: "La sanction qui suspend le contrat et la rémunération : durée bornée par le règlement intérieur, dates de début et de fin, délais de L. 1332-2.",
+    articles: ["L1332-2", "R1332-2", "R1332-3", "L1332-1", "L1321-1", "L1331-2", "L1333-2"],
+    sections: [
+      { titre: "L'entreprise et le salarié", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "representant", nom: "Signataire (nom, qualité)", t: "text" },
+        { c: "salarie", nom: "Salarié (nom, prénom)", t: "text" },
+        { c: "fonction", nom: "Emploi occupé", t: "text" },
+        { c: "dateNotification", nom: "Date de notification", t: "date" },
+        { c: "modeRemise", nom: "Mode de notification", t: "select", options: ["remise contre récépissé", "lettre recommandée avec avis de réception"] }
+      ]},
+      { titre: "La procédure et les faits", champs: [
+        { c: "dateConnaissance", nom: "Date à laquelle l'employeur a eu connaissance des faits", t: "date" },
+        { c: "dateEntretien", nom: "Date de l'entretien préalable", t: "date",
+          aide: "L'entretien est toujours dû : la mise à pied disciplinaire suspend le contrat et la rémunération, elle a donc une incidence sur la présence et la rémunération (art. L. 1332-2)." },
+        { c: "faits", nom: "Les faits reprochés — un par ligne, datés et circonstanciés", t: "textarea", pleine: true },
+        { c: "explications", nom: "Explications recueillies et réponse apportée", t: "textarea", pleine: true }
+      ]},
+      { titre: "La sanction", champs: [
+        { c: "duree", nom: "Durée de la mise à pied, en jours", t: "number" },
+        { c: "dureeMaxRI", nom: "Durée maximale prévue par le règlement intérieur, en jours", t: "number",
+          aide: "Une mise à pied disciplinaire n'est licite que si le règlement intérieur en précise la durée maximale (Soc., 26 octobre 2010, n° 09-42.740)." },
+        { c: "dateDebut", nom: "Premier jour de la mise à pied", t: "date" },
+        { c: "dateFin", nom: "Dernier jour de la mise à pied", t: "date" }
+      ]}
+    ],
+    composer: function (v) {
+      var faits = lignes(v.faits);
+      var mode = v.modeRemise || "lettre recommandée avec avis de réception";
+      return enteteFeuille(v.entreprise, chExDate(v.dateNotification, "2026-07-06")) +
+        "<p>" + chEx(v.salarie, "Monsieur Karim HADJ") + "<br>" + chEx(v.fonction, "cariste, atelier logistique") + "</p>" +
+        "<p class=\"note\">" + e(mode) + "</p>" +
+        '<h2 class="titre-doc">Notification d\'une mise à pied disciplinaire</h2>' +
+        "<p>Monsieur, Madame,</p>" +
+        "<p>Nous vous avons reçu en entretien préalable le <b>" + chExDate(v.dateEntretien, "2026-06-30") +
+        "</b>, au cours duquel nous vous avons indiqué le motif de la sanction envisagée et recueilli " +
+        "vos explications (art. L. 1332-2 du code du travail). Vous pouviez vous y faire assister par " +
+        "une personne de votre choix appartenant au personnel de l'entreprise.</p>" +
+        "<h3>Les faits reprochés</h3>" +
+        (faits.length
+          ? "<ul>" + faits.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Le 15 juin 2026 à 14 h 20, conduite du chariot élévateur n° 3 dans l'allée centrale à une vitesse manifestement excessive, sans avertisseur, alors que deux préparateurs de commandes y circulaient à pied") + "</li>" +
+            "<li>" + exemple("Le même jour, refus de vous soumettre au contrôle de conformité du chariot demandé par le responsable sécurité, contrairement à l'article 12 du règlement intérieur") + "</li></ul>") +
+        "<h3>Vos explications</h3>" +
+        "<p>" + chEx(v.explications, "Vous avez invoqué la pression du planning de chargement. Nous entendons cette contrainte, mais elle ne peut justifier la mise en danger de vos collègues, ni le refus d'un contrôle de sécurité.") + "</p>" +
+        "<h3>La décision</h3>" +
+        "<p>Ces faits justifient une sanction. Nous vous notifions une <b>mise à pied disciplinaire de " +
+        chEx(v.duree, "3") + " jour(s)</b>, prévue par le règlement intérieur de l'entreprise, qui en " +
+        "fixe la durée maximale à " + chEx(v.dureeMaxRI, "5") + " jour(s) (art. L. 1321-1, 3° du code du " +
+        "travail).</p>" +
+        "<p>Cette mise à pied prendra effet du <b>" + chExDate(v.dateDebut, "2026-07-13") + "</b> au <b>" +
+        chExDate(v.dateFin, "2026-07-15") + "</b> inclus. Pendant cette période, votre contrat de travail " +
+        "est suspendu : vous ne devez pas vous présenter dans l'entreprise, et votre rémunération n'est " +
+        "pas due pour ces journées. Cette perte de rémunération est la conséquence de la suspension du " +
+        "contrat, et non une sanction pécuniaire, lesquelles sont interdites (art. L. 1331-2 du code du " +
+        "travail).</p>" +
+        "<p>À l'issue de cette période, vous reprendrez vos fonctions dans les conditions habituelles.</p>" +
+        "<p>Nous vous prions d'agréer, Monsieur, Madame, l'expression de nos salutations distinguées.</p>" +
+        '<div class="signatures"><div>' + chEx(v.representant, "Jean MOREAU, directeur des ressources humaines") +
+        "<br>" + ch(v.entreprise, "dénomination de l'entreprise") + "</div></div>" +
+        aPersonnaliser(["les faits, datés et circonstanciés", "les explications réellement recueillies",
+          "la durée retenue, qui doit rester dans la limite fixée par votre règlement intérieur",
+          "les dates de début et de fin", "le mode de notification",
+          "la vérification préalable : votre convention collective impose-t-elle une consultation (conseil de discipline, commission paritaire) avant la sanction ?"]) +
+        piedTextes(["L1332-2", "R1332-2", "R1332-3", "L1332-1", "L1321-1", "L1331-2", "L1333-2"]);
+    },
+    verifier: function (v) {
+      var d = parseInt(v.duree, 10), max = parseInt(v.dureeMaxRI, 10);
+      if (!isNaN(d) && !isNaN(max) && d > max)
+        return "La mise à pied de " + d + " jour(s) excède la durée maximale de " + max + " jour(s) que " +
+          "le règlement intérieur fixe : une mise à pied disciplinaire n'est licite que si le règlement " +
+          "précise sa durée maximale, et la sanction ne peut excéder l'échelle qu'il fixe (art. L. 1321-1, 3° ; " +
+          "Soc., 26 octobre 2010, n° 09-42.740).";
+      if (v.dateConnaissance && v.dateEntretien) {
+        var lim = moisApres(v.dateConnaissance, 2);
+        if (lim && v.dateEntretien > lim)
+          return "L'entretien se tiendrait le " + dateFr(v.dateEntretien) + ", au-delà du délai de deux " +
+            "mois de l'article L. 1332-4, qui expirait le " + dateFr(lim) + ". Vérifiez la date d'envoi de " +
+            "la convocation : c'est elle qui engage les poursuites.";
+      }
+      if (v.dateEntretien && v.dateNotification) {
+        var ouv = joursOuvrablesEntre(v.dateEntretien, v.dateNotification);
+        if (ouv === null)
+          return "La notification serait antérieure à l'entretien : l'une des deux dates est erronée.";
+        if (ouv < 2)
+          return "La sanction ne peut intervenir moins de deux jours ouvrables après le jour fixé pour " +
+            "l'entretien (art. L. 1332-2) : il n'y en a ici que " + ouv + ".";
+        var un = moisApres(v.dateEntretien, 1);
+        if (un && v.dateNotification > un)
+          return "La sanction ne peut intervenir plus d'un mois après le jour fixé pour l'entretien " +
+            "(art. L. 1332-2 et R. 1332-3) : le terme était le " + dateFr(un) + ".";
+      }
+      var j = joursEntre(v.dateDebut, v.dateFin);
+      if (j !== null && j < 0)
+        return "Le dernier jour de la mise à pied est antérieur au premier : l'une des deux dates est erronée.";
+      if (v.dateNotification && v.dateDebut && joursEntre(v.dateNotification, v.dateDebut) < 0)
+        return "La mise à pied commencerait avant sa notification : l'une des deux dates est erronée.";
+      return "";
+    }
+  },
+
+  {
+    cle: "echelle-sanctions",
+    nom: "Trame d'échelle des sanctions (règlement intérieur)",
+    resume: "L'article disciplinaire du règlement intérieur : nature et échelle des sanctions, durée maximale de la mise à pied, rappels imposés, et les formalités qui rendent le texte opposable.",
+    articles: ["L1321-1", "L1321-2", "L1321-3", "L1321-4", "R1321-1", "R1321-2", "R1321-4", "L1311-2", "L1331-1", "L1331-2", "L1332-1", "L1332-2"],
+    sections: [
+      { titre: "L'entreprise", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "effectif", nom: "Effectif de l'entreprise", t: "number", profil: "effectif",
+          aide: "Le règlement intérieur est obligatoire à partir de cinquante salariés, au terme d'un délai de douze mois à compter du franchissement du seuil (art. L. 1311-2)." },
+        { c: "dateNote", nom: "Date de la version rédigée", t: "date" },
+        { c: "dateEntreeVigueur", nom: "Date d'entrée en vigueur envisagée", t: "date",
+          aide: "Elle doit être postérieure d'un mois à l'accomplissement des formalités de publicité (art. L. 1321-4), le délai courant de la dernière des formalités de publicité et de dépôt (art. R. 1321-3)." },
+        { c: "dateFormalites", nom: "Date de la dernière des formalités de publicité et de dépôt", t: "date" }
+      ]},
+      { titre: "L'échelle", champs: [
+        { c: "sanctions", nom: "Sanctions retenues, de la plus légère à la plus lourde", t: "cases", pleine: true, options: [
+          "L'avertissement", "Le blâme", "La mise à pied disciplinaire",
+          "La mutation disciplinaire", "La rétrogradation", "Le licenciement pour cause réelle et sérieuse",
+          "Le licenciement pour faute grave", "Le licenciement pour faute lourde"
+        ], aide: "Une sanction autre que le licenciement ne peut être prononcée que si elle est prévue par le règlement intérieur, chez l'employeur tenu d'en établir un (Soc., 23 mars 2017, n° 15-23.090 ; Soc., 26 octobre 2010, n° 09-42.740)." },
+        { c: "dureeMaxMisePied", nom: "Durée maximale de la mise à pied disciplinaire, en jours", t: "number",
+          aide: "Sans durée maximale inscrite au règlement, la mise à pied disciplinaire n'est pas licite (Soc., 26 octobre 2010, n° 09-42.740)." },
+        { c: "procedureConventionnelle", nom: "Procédure imposée par la convention collective avant toute sanction, le cas échéant", t: "textarea", pleine: true,
+          aide: "Conseil de discipline, commission paritaire, avis préalable : une procédure conventionnelle non suivie est assimilée à la violation d'une garantie de fond (Soc., 8 septembre 2021, n° 19-15.039). Recopiez la clause telle qu'elle figure dans votre convention." }
+      ]}
+    ],
+    composer: function (v) {
+      var choisies = v.sanctions || [];
+      var liste = choisies.length ? choisies : [
+        "L'avertissement", "Le blâme", "La mise à pied disciplinaire",
+        "La mutation disciplinaire", "La rétrogradation",
+        "Le licenciement pour cause réelle et sérieuse", "Le licenciement pour faute grave",
+        "Le licenciement pour faute lourde"];
+      var marque = choisies.length ? function (x) { return e(x); } : function (x) { return exemple(x); };
+      var eff = parseInt(v.effectif, 10);
+      var seuil = isNaN(eff) ? "" :
+        (eff >= 50
+          ? "L'effectif déclaré (" + eff + " salariés) atteint le seuil de cinquante : l'établissement d'un règlement intérieur est obligatoire (art. L. 1311-2 du code du travail), au terme d'un délai de douze mois à compter du franchissement du seuil."
+          : "L'effectif déclaré (" + eff + " salariés) est inférieur à cinquante : l'établissement d'un règlement intérieur n'est pas obligatoire (art. L. 1311-2). S'il en existe un, il obéit néanmoins à toutes les règles de contenu et à toutes les formalités des articles L. 1321-1 à L. 1321-6, qui ne posent aucun seuil.");
+      return enteteFeuille(v.entreprise, chExDate(v.dateNote, "2026-08-20")) +
+        '<h2 class="titre-doc">Règlement intérieur<br>Titre « Discipline » — nature et échelle des sanctions</h2>' +
+        '<p class="sous-titre">Trame à insérer dans le règlement intérieur — art. L. 1321-1, 3° du code du travail</p>' +
+        (seuil ? "<p>" + e(seuil) + "</p>" : "") +
+        "<h3>Article — Définition de la sanction</h3>" +
+        "<p>Constitue une sanction toute mesure, autre que les observations verbales, prise par " +
+        "l'employeur à la suite d'un agissement du salarié considéré par lui comme fautif, que cette " +
+        "mesure soit de nature à affecter immédiatement ou non la présence du salarié dans " +
+        "l'entreprise, sa fonction, sa carrière ou sa rémunération (art. L. 1331-1 du code du travail).</p>" +
+        "<h3>Article — Échelle des sanctions</h3>" +
+        "<p>Selon la gravité des faits, leur caractère répété et les circonstances, l'une des " +
+        "sanctions suivantes pourra être prononcée, sans que cet ordre impose une progression " +
+        "obligatoire :</p><ol>" +
+        liste.map(function (x) {
+          var sup = "";
+          if (/mise à pied/i.test(x))
+            sup = " — d'une durée maximale de " + chEx(v.dureeMaxMisePied, "5") + " jour(s) ouvré(s), " +
+              "entraînant la suspension du contrat de travail et de la rémunération pendant cette durée";
+          if (/rétrogradation|mutation/i.test(x))
+            sup = " — cette sanction emportant modification du contrat de travail, elle ne peut être " +
+              "imposée au salarié : son refus ne constitue pas une faute, l'employeur pouvant alors " +
+              "prononcer une autre sanction";
+          return "<li>" + marque(x) + sup + "</li>";
+        }).join("") + "</ol>" +
+        "<h3>Article — Sanctions interdites</h3>" +
+        "<p>Les amendes et autres sanctions pécuniaires sont interdites ; toute disposition ou " +
+        "stipulation contraire est réputée non écrite (art. L. 1331-2 du code du travail). Aucune " +
+        "retenue sur la rémunération ne peut être opérée à titre de sanction ; la perte de " +
+        "rémunération résultant d'une mise à pied disciplinaire régulièrement prononcée est la " +
+        "conséquence de la suspension du contrat, et non une sanction pécuniaire.</p>" +
+        "<h3>Article — Droits de la défense</h3>" +
+        "<p>Aucune sanction ne peut être prise sans que le salarié soit informé, dans le même temps et " +
+        "par écrit, des griefs retenus contre lui (art. L. 1332-1 du code du travail).</p>" +
+        "<p>Lorsque l'employeur envisage une sanction, il convoque le salarié en lui précisant l'objet " +
+        "de la convocation, sauf si la sanction envisagée est un avertissement ou une sanction de même " +
+        "nature n'ayant pas d'incidence, immédiate ou non, sur la présence dans l'entreprise, la " +
+        "fonction, la carrière ou la rémunération. Le salarié peut se faire assister lors de son " +
+        "audition par une personne de son choix appartenant au personnel de l'entreprise. Au cours de " +
+        "l'entretien, l'employeur indique le motif de la sanction envisagée et recueille les " +
+        "explications du salarié. La sanction ne peut intervenir moins de deux jours ouvrables, ni plus " +
+        "d'un mois après le jour fixé pour l'entretien ; elle est motivée et notifiée à l'intéressé " +
+        "(art. L. 1332-2 du code du travail).</p>" +
+        "<p>Aucun fait fautif ne peut donner lieu à lui seul à l'engagement de poursuites disciplinaires " +
+        "au-delà d'un délai de deux mois à compter du jour où l'employeur en a eu connaissance, à moins " +
+        "que ce fait ait donné lieu dans le même délai à l'exercice de poursuites pénales " +
+        "(art. L. 1332-4). Aucune sanction antérieure de plus de trois ans à l'engagement des poursuites " +
+        "ne peut être invoquée à l'appui d'une nouvelle sanction (art. L. 1332-5).</p>" +
+        "<h3>Article — Procédure conventionnelle</h3>" +
+        "<p>" + chEx(v.procedureConventionnelle, "Conformément à l'article 27 de la convention collective applicable, toute sanction autre que l'avertissement est précédée de l'avis d'une commission paritaire de discipline, saisie au moins huit jours avant la décision et composée de deux représentants de la direction et de deux représentants du personnel.") + "</p>" +
+        '<p class="note">La consultation d\'un organisme chargé, en vertu d\'une disposition conventionnelle ' +
+        "ou d'un règlement intérieur, de donner son avis sur un licenciement envisagé constitue une " +
+        "garantie de fond : le licenciement prononcé sans cette consultation ne peut avoir de cause " +
+        "réelle et sérieuse (Soc., 8 septembre 2021, n° 19-15.039). Ne recopiez ici que ce que votre " +
+        "convention prévoit réellement : cette page ne lit pas les conventions collectives.</p>" +
+        "<h3>Article — Rappels imposés par l'article L. 1321-2</h3>" +
+        "<p>Le présent règlement rappelle : 1° les dispositions relatives aux droits de la défense des " +
+        "salariés définies aux articles L. 1332-1 à L. 1332-3 du code du travail ou par la convention " +
+        "collective applicable ; 2° les dispositions relatives aux harcèlements moral et sexuel et aux " +
+        "agissements sexistes prévues par le code du travail ; 3° l'existence du dispositif de " +
+        "protection des lanceurs d'alerte prévu au chapitre II de la loi n° 2016-1691 du " +
+        "9 décembre 2016.</p>" +
+        "<h3>Article — Limites du pouvoir réglementaire de l'employeur</h3>" +
+        "<p>Le présent règlement ne comporte aucune disposition contraire aux lois et règlements ni aux " +
+        "stipulations des conventions et accords collectifs applicables, aucune restriction aux droits " +
+        "des personnes et aux libertés individuelles et collectives qui ne serait justifiée par la " +
+        "nature de la tâche à accomplir et proportionnée au but recherché, ni aucune disposition " +
+        "discriminant les salariés (art. L. 1321-3 du code du travail).</p>" +
+        "<h3>Entrée en vigueur et formalités</h3>" +
+        "<p>Le présent règlement, ou la présente modification, ne peut être introduit qu'après avoir été " +
+        "soumis à l'avis du comité social et économique. Il est porté, par tout moyen, à la connaissance " +
+        "des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche " +
+        "(art. R. 1321-1), déposé au greffe du conseil de prud'hommes du ressort de l'entreprise ou de " +
+        "l'établissement (art. R. 1321-2), et communiqué à l'inspecteur du travail en deux exemplaires, " +
+        "accompagné de l'avis du comité (art. L. 1321-4 et R. 1321-4). Sa date d'entrée en vigueur, " +
+        "fixée au <b>" + chExDate(v.dateEntreeVigueur, "2026-10-15") + "</b>, est postérieure d'un mois à " +
+        "l'accomplissement des formalités de publicité, le délai courant à compter de la dernière en " +
+        "date des formalités de publicité et de dépôt, intervenue le <b>" +
+        chExDate(v.dateFormalites, "2026-09-02") + "</b> (art. L. 1321-4 et R. 1321-3). Ces règles " +
+        "s'appliquent également en cas de modification ou de retrait de clauses.</p>" +
+        '<div class="signatures"><div>Pour l\'entreprise<br>' + ch(v.entreprise, "dénomination") + "</div></div>" +
+        aPersonnaliser(["l'échelle réellement retenue et son ordre",
+          "la durée maximale de la mise à pied — sans elle, la sanction n'est pas licite",
+          "la clause conventionnelle, recopiée depuis votre convention collective",
+          "les dates des formalités et de l'entrée en vigueur",
+          "l'articulation avec les autres titres du règlement (santé et sécurité, participation au rétablissement de conditions protectrices)"]) +
+        piedTextes(["L1321-1", "L1321-2", "L1321-3", "L1321-4", "R1321-1", "R1321-2", "R1321-4", "L1311-2", "L1331-1", "L1331-2", "L1332-1", "L1332-2"]);
+    },
+    verifier: function (v) {
+      var d = parseInt(v.dureeMaxMisePied, 10);
+      var mp = (v.sanctions || []).some(function (x) { return /mise à pied/i.test(x); });
+      if (mp && isNaN(d))
+        return "La mise à pied disciplinaire est retenue dans l'échelle, mais aucune durée maximale " +
+          "n'est indiquée : une mise à pied disciplinaire prévue par le règlement intérieur n'est licite " +
+          "que si ce règlement précise sa durée maximale (Soc., 26 octobre 2010, n° 09-42.740).";
+      if (v.dateFormalites && v.dateEntreeVigueur) {
+        var plancher = moisApres(v.dateFormalites, 1);
+        if (plancher && v.dateEntreeVigueur <= plancher)
+          return "L'entrée en vigueur est fixée au " + dateFr(v.dateEntreeVigueur) + ", alors que la " +
+            "date doit être postérieure d'un mois à l'accomplissement des formalités (art. L. 1321-4), " +
+            "le délai courant de la dernière des formalités de publicité et de dépôt (art. R. 1321-3) : " +
+            "la date la plus proche possible était le " + dateFr(plancher) + " exclu.";
+      }
+      return "";
+    }
   }];
 
   /* ------------------------------------------------------------------ */
@@ -874,6 +1385,13 @@
     var interieur;
     if (champ.t === "textarea")
       interieur = '<textarea id="ch-' + champ.c + '" name="' + champ.c + '"></textarea>';
+    /* Un menu déroulant partout où les réponses sont connues : c'est la règle
+       du dépôt, appliquée ici comme dans les formulaires d'audit. La première
+       option est vide — un choix par défaut serait une réponse inventée. */
+    else if (champ.t === "select")
+      interieur = '<select id="ch-' + champ.c + '" name="' + champ.c + '"><option value=""></option>' +
+        champ.options.map(function (o) { return '<option value="' + e(o) + '">' + e(o) + "</option>"; }).join("") +
+        "</select>";
     else
       interieur = '<input id="ch-' + champ.c + '" name="' + champ.c + '" type="' + champ.t + '"' +
         (champ.t === "number" ? ' min="0" step="1"' : "") + ">";

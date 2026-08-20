@@ -180,6 +180,72 @@
       { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 250; },
         champs: ["referentEmployeur"] },
     ],
+    MoteurDiscipline: [
+      /* Sans règlement intérieur, ni son contenu ni ses formalités n'ont
+         d'objet — les contrôles rendent « sans objet » (garde siRI). La date
+         de franchissement du seuil, elle, RESTE demandée : c'est elle qui
+         permet de dire si l'absence de règlement est déjà un manquement. */
+      { si: { champ: "ri.existe", vaut: ["oui"] },
+        champs: ["ri.contenuSanteSecurite", "ri.contenuParticipation", "ri.contenuDiscipline",
+          "ri.echelleSanctions", "ri.misePiedDureeMax", "ri.misePiedDureeMaxJours",
+          "ri.rappelDroitsDefense", "ri.rappelHarcelement", "ri.rappelLanceursAlerte",
+          "ri.clausesInterdites", "ri.clauseNeutralite", "ri.neutraliteJustifieeProportionnee",
+          "ri.redigeFrancais", "ri.avisCSE", "ri.publicite", "ri.depotGreffe",
+          "ri.communicationInspection", "ri.communicationDeuxExemplaires",
+          "ri.dateDerniereFormalite", "ri.dateEntreeVigueur",
+          "ri.modifieDepuis", "ri.modificationsFormalites",
+          "ri.notesServiceGenerales", "ri.notesServiceFormalites",
+          "ri.demandeInspection", "ri.suiteDemandeInspection", "sanction.prevueRI"] },
+      { si: { champ: "ri.misePiedDureeMax", vaut: ["oui"] }, champs: ["ri.misePiedDureeMaxJours"] },
+      { si: { champ: "ri.clauseNeutralite", vaut: ["oui"] }, champs: ["ri.neutraliteJustifieeProportionnee"] },
+      { si: { champ: "ri.modifieDepuis", vaut: ["oui"] }, champs: ["ri.modificationsFormalites"] },
+      { si: { champ: "ri.notesServiceGenerales", vaut: ["oui"] }, champs: ["ri.notesServiceFormalites"] },
+      { si: { champ: "ri.demandeInspection", vaut: ["oui"] }, champs: ["ri.suiteDemandeInspection"] },
+      { si: { champ: "ri.communicationInspection", vaut: ["oui"] }, champs: ["ri.communicationDeuxExemplaires"] },
+      /* Sans comité, l'avis de L. 1321-4 n'a pas d'objet (garde du contrôle). */
+      { si: { champ: "cse.existe", vaut: ["oui"] }, champs: ["ri.avisCSE"] },
+      /* La date de franchissement du seuil ne se demande qu'au-delà de
+         cinquante salariés : en deçà, le règlement intérieur est facultatif. */
+      { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 50; },
+        champs: ["ri.dateFranchissementSeuil"] },
+      /* Sans sanction auditée, toute la procédure disciplinaire est sans objet. */
+      { si: { champ: "sanction.auditee", vaut: ["oui"] },
+        champs: ["sanction.nature", "sanction.incidence", "sanction.prevueRI",
+          "sanction.dureeMisePiedJours", "sanction.griefsEcrits", "sanction.retenueSalaire",
+          "sanction.salarieProtege", "sanction.dateConnaissance", "sanction.poursuitesPenales",
+          "sanction.sanctionsAnterieuresInvoquees", "sanction.dateSanctionAnterieurePlusAncienne",
+          "sanction.dateConvocation", "sanction.dateEntretien", "sanction.dateNotification",
+          "sanction.convocationEnvoyee", "sanction.convocationObjet",
+          "sanction.convocationDateHeureLieu", "sanction.convocationAssistance",
+          "sanction.convocationRemise", "sanction.entretienTenu",
+          "sanction.notificationEcrite", "sanction.notificationMotivee",
+          "sanction.notificationRemise", "sanction.misePiedConservatoire",
+          "garantie.procedureApplicable", "garantie.source", "garantie.nature",
+          "garantie.suivie", "garantie.droitsDefensePrives", "garantie.influenceDecision",
+          "garantie.licenciementSubordonneSanctions"] },
+      /* L'incidence sur la présence, la fonction, la carrière ou la rémunération
+         n'est demandée que là où elle n'est pas établie par la nature même de la
+         sanction — mêmes lectures que M.NATURES. */
+      { si: { champ: "sanction.nature", vaut: ["avertissement", "blâme", "autre sanction"] },
+        champs: ["sanction.incidence"] },
+      { si: { champ: "sanction.nature", vaut: ["mise à pied disciplinaire"] },
+        champs: ["sanction.dureeMisePiedJours"] },
+      { si: { champ: "sanction.sanctionsAnterieuresInvoquees", vaut: ["oui"] },
+        champs: ["sanction.dateSanctionAnterieurePlusAncienne"] },
+      { si: { champ: "sanction.convocationEnvoyee", vaut: ["oui"] },
+        champs: ["sanction.dateConvocation", "sanction.convocationObjet",
+          "sanction.convocationDateHeureLieu", "sanction.convocationAssistance",
+          "sanction.convocationRemise"] },
+      { si: { champ: "sanction.entretienTenu", vaut: ["oui"] }, champs: ["sanction.dateEntretien"] },
+      { si: { champ: "garantie.procedureApplicable", vaut: ["oui"] },
+        champs: ["garantie.source", "garantie.nature", "garantie.suivie",
+          "garantie.droitsDefensePrives", "garantie.influenceDecision"] },
+      /* Les deux branches du critère du juge ne se posent que si la procédure a
+         été suivie tardivement ou imparfaitement (Soc., 20 mars 2024,
+         n° 22-17.292). */
+      { si: { champ: "garantie.suivie", vaut: ["tardivement ou imparfaitement"] },
+        champs: ["garantie.droitsDefensePrives", "garantie.influenceDecision"] },
+    ],
   };
   var REGLES_VISIBILITE = DEPENDANCES[window.__MOTEUR || ""] || [];
   var form = document.getElementById("formulaire");
