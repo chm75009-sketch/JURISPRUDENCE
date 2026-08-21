@@ -1,0 +1,13 @@
+{
+ "date": "2026-08-21",
+ "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
+ "code": "Code du travail",
+ "articles": {},
+ "note": "Aucun des 120 articles de la liste n'a été écarté : tous ont deux lectures espacées concordantes et portent le fragment de contenu attendu. Un seul numéro a été retiré de la liste avant capture : L. 2315-40, pour lequel le relais répond « trouve : false » à deux lectures espacées — il n'existe pas sous ce numéro dans le code du travail à la date lue. Aucune étape des parcours ne s'y appuie.",
+ "retiresAvantCapture": {
+  "L2315-40": {
+   "motif": "le relais répond « trouve : false » à deux lectures espacées (21 août 2026)",
+   "cite": false
+  }
+ }
+}

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1F3864">
+<link rel="icon" href="icons/icon-180.png">
+<title>Parcours guidés — les procédures pas à pas</title>
+<!-- Les parcours guidés : une couche opératoire au-dessus des audits.
+
+     L'audit dit ce qui ne va pas. Le parcours dit quoi faire, dans quel ordre,
+     pour quand, et avec quel document. Chaque parcours pose d'abord la question
+     « êtes-vous prêt ? » — la liste de ce qu'il faut avoir réuni —, puis
+     déroule les étapes dans l'ordre, chacune avec son fondement lu à la source,
+     son délai calculé depuis les dates du dossier, et le modèle de document
+     correspondant, pré-rempli du profil de l'entreprise.
+
+     Tout se passe dans le navigateur : le profil et l'avancement sont écrits
+     dans le stockage local du poste, rien n'est envoyé.
+
+     TEXTES — 120 articles du code du travail lus au relais Légifrance le
+     21 août 2026, chacun en deux lectures espacées concordantes, filtre par NOM
+     du code (« Code du travail ») et critère de contenu contre les homonymes.
+     La capture et son journal sont dans le dépôt :
+       moteur/parcours/capturer-textes-parcours.js
+       moteur/parcours/textes-parcours.json            (120 articles confirmés)
+       moteur/parcours/textes-parcours-non-confirmes.json (vide : aucun écarté)
+     Un article que la capture n'a pas confirmé n'est pas cité ici.
+
+     Deux homonymes historiques du dépôt ont été redressés au passage : sous le
+     filtre par nom du code, L. 2242-1 rend bien l'article du code du travail
+     (LEGIARTI000043893962) et non l'article du code général des collectivités
+     territoriales, et L. 2242-10 rend LEGIARTI000035627827 et non un article
+     d'un autre code. Ce sont les versions citées ici.
+
+     NON CONFIRMÉ, ET DONC JAMAIS CITÉ : L. 2315-40 — le relais répond
+     « trouvé : faux » à deux lectures espacées. Aucune étape ne s'y appuie.
+
+     JURISPRUDENCE — 21 arrêts de la chambre sociale lus à la source par l'API
+     Judilibre le 21 août 2026 ; aucune réponse « relaxed » n'a été retenue.
+     Sommaires et identifiants : moteur/parcours/jurisprudence-parcours.json -->
+<style>
+  :root{
+    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
+    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
+    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papier);color:var(--corps);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .page{max-width:1040px;margin:0 auto;padding:0 20px 90px}
+  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
+  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
+  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
+  .chapo{color:var(--gris);max-width:66ch;margin:0}
+  header a{color:var(--bleu)}
+
+  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
+    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
+    margin:0 -20px 0;padding:10px 20px}
+  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
+  button.retour:hover{filter:brightness(1.12)}
+  .retour-ou{font-size:13px;color:var(--gris)}
+  .retour-ou a{color:var(--bleu)}
+
+  h2.titre-zone{font:600 21px/1.3 system-ui;color:var(--encre);margin:38px 0 4px}
+  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:74ch}
+  .note{color:var(--gris);font-size:13.5px}
+
+  .presentation{border:1px solid var(--filet);background:var(--surface);
+    border-radius:4px;padding:18px 20px;margin:22px 0 0}
+  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui;color:var(--encre)}
+  .presentation p{margin:0 0 10px;max-width:76ch}
+  .presentation p:last-child{margin-bottom:0}
+
+  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
+    padding:16px 18px 20px;margin:0 0 16px}
+  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px 20px}
+  label{display:block;font-size:14px}
+  label .nom{display:block;color:var(--encre);margin-bottom:4px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
+    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
+  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
+  .pleine{grid-column:1/-1}
+
+  /* Le choix du parcours : six cartes, une seule active. */
+  .parcours-cartes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin:18px 0 0}
+  .carte{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
+    padding:13px 15px;cursor:pointer;text-align:left;font:inherit;color:var(--corps);position:relative}
+  .carte b{display:block;color:var(--encre);font-size:15.5px;margin-bottom:3px}
+  .carte span.res{font-size:13px;color:var(--gris);line-height:1.45;display:block}
+  .carte:hover{border-color:var(--bleu)}
+  .carte.actif{border-color:var(--bleu);outline:2px solid var(--bleu);outline-offset:-1px}
+  .carte.actif b{color:var(--bleu)}
+  .carte .avance{display:block;margin-top:8px;font:600 11.5px/1 system-ui;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--gris)}
+  .carte .avance.fini{color:var(--vert)}
+  .carte .avance.retard{color:var(--rouge)}
+
+  /* Le préalable : « êtes-vous prêt ? » */
+  .prealable{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px}
+  .item{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-top:1px solid var(--gris-f);font-size:14.5px}
+  .item:first-child{border-top:none}
+  .item input{width:auto;margin:3px 0 0;flex:0 0 auto}
+  .item .txt{flex:1}
+  .item .txt b{color:var(--encre);font-weight:600}
+  .item .genre{display:inline-block;font:600 10.5px/1 system-ui;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--bleu);background:#eef2f9;border-radius:99px;padding:4px 8px;margin-right:7px;vertical-align:2px}
+  .item .genre.piece{color:var(--ardoise);background:#eef0f4}
+  .item .genre.doc{color:var(--vert);background:var(--vert-f)}
+  .item .aide-champ{margin-top:3px}
+  .manque{border:1px solid var(--orange);background:var(--orange-f);color:var(--orange);
+    border-radius:3px;padding:11px 13px;margin:14px 0 0;font-size:14px}
+  .manque b{display:block;margin-bottom:5px}
+  .manque ul{margin:0;padding-left:20px}
+  .pret{border:1px solid var(--vert);background:var(--vert-f);color:var(--vert);
+    border-radius:3px;padding:11px 13px;margin:14px 0 0;font-size:14px}
+
+  /* La progression */
+  .progression{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
+    padding:14px 16px;margin:18px 0 0}
+  .barre-fond{height:10px;border-radius:99px;background:var(--gris-f);overflow:hidden;margin:9px 0 8px}
+  .barre-part{height:100%;background:var(--vert);width:0;transition:width .25s}
+  .compte{font-size:13.5px;color:var(--gris)}
+  .compte b{color:var(--encre)}
+  .compte .r{color:var(--rouge);font-weight:600}
+
+  /* Les étapes */
+  .etape{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
+    padding:15px 17px;margin:12px 0 0;border-left:4px solid var(--filet)}
+  .etape.faite{border-left-color:var(--vert);background:#fbfdfc}
+  .etape.retard{border-left-color:var(--rouge)}
+  .etape-tete{display:flex;gap:11px;align-items:flex-start;flex-wrap:wrap}
+  .etape-num{flex:0 0 auto;width:28px;height:28px;border-radius:99px;background:var(--gris-f);
+    color:var(--encre);font:600 13px/28px system-ui;text-align:center}
+  .etape.faite .etape-num{background:var(--vert);color:#fff}
+  .etape.retard .etape-num{background:var(--rouge);color:#fff}
+  .etape-titre{flex:1 1 240px;font:600 16px/1.35 system-ui;color:var(--encre);margin:2px 0 0}
+  .etat{flex:0 0 auto;font:600 11.5px/1 system-ui;letter-spacing:.06em;text-transform:uppercase;
+    border-radius:99px;padding:6px 10px;background:var(--gris-f);color:var(--gris);margin-top:3px}
+  .etat.faite{background:var(--vert-f);color:var(--vert)}
+  .etat.retard{background:var(--rouge-f);color:var(--rouge)}
+  .etape-corps{margin:9px 0 0 39px}
+  @media (max-width:560px){ .etape-corps{margin-left:0} }
+  .etape-corps p{margin:0 0 8px;font-size:14.5px}
+  .echeance{display:inline-block;border:1px solid var(--filet);border-radius:3px;
+    padding:7px 11px;font-size:13.5px;background:var(--gris-f);margin:0 0 9px}
+  .echeance.retard{border-color:var(--rouge);background:var(--rouge-f);color:var(--rouge);font-weight:600}
+  .echeance.proche{border-color:var(--orange);background:var(--orange-f);color:var(--orange)}
+  .fondement{font-size:12.5px;color:var(--gris);margin:8px 0 0;line-height:1.55}
+  .fondement .ident{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap;font-size:11.5px}
+  .juris{border-left:3px solid var(--ardoise);background:var(--gris-f);border-radius:0 3px 3px 0;
+    padding:9px 12px;margin:9px 0 0;font-size:13px;color:var(--corps)}
+  .juris b{color:var(--encre)}
+  .juris + .juris{margin-top:6px}
+  .conv{border-left:3px solid var(--orange);background:var(--orange-f);border-radius:0 3px 3px 0;
+    padding:9px 12px;margin:9px 0 0;font-size:13px;color:var(--orange)}
+  .actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:11px 0 0}
+  .actions a.doc{font:600 13.5px/1 system-ui;text-decoration:none;padding:9px 13px;border-radius:3px;
+    border:1px solid var(--bleu);color:var(--bleu);background:var(--surface)}
+  .actions a.doc:hover{background:#eef2f9}
+  .coche{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--corps)}
+  .coche input{width:auto}
+  .date-fait{max-width:190px}
+
+  button{font:600 15px/1 system-ui;padding:11px 18px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
+  button.second{background:var(--surface);color:var(--bleu)}
+  button:hover{filter:brightness(1.1)}
+  .barre-outils{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 0}
+  @media (max-width:560px){ .barre-outils button{flex:1 1 46%;padding:11px 8px;font-size:14px} }
+
+  /* Le récapitulatif imprimable */
+  #recap{display:none;margin-top:28px}
+  .feuille{background:var(--surface);border:1px solid var(--filet);border-radius:4px;
+    padding:clamp(22px,5vw,48px);max-width:840px;margin:0 auto;
+    font:15px/1.62 Georgia,"Times New Roman",serif;color:#1a1d22}
+  .feuille h2.titre-doc{font:700 19px/1.3 Georgia,serif;text-align:center;margin:0 0 4px;
+    text-transform:uppercase;letter-spacing:.04em}
+  .feuille .sous-titre{text-align:center;font-size:14px;color:#444;margin:0 0 22px}
+  .feuille h3{font:700 15px/1.4 Georgia,serif;margin:20px 0 6px}
+  .feuille p{margin:0 0 9px}
+  .feuille ul,.feuille ol{margin:0 0 10px;padding-left:22px}
+  .feuille li{margin:0 0 5px}
+  .feuille table{border-collapse:collapse;width:100%;font-size:13px;margin:0 0 12px}
+  .feuille th,.feuille td{border:1px solid #b9bec7;padding:6px 9px;text-align:left;vertical-align:top}
+  .feuille th{background:#eef0f4;font-weight:700}
+  .feuille .pied-textes{margin-top:30px;padding-top:10px;border-top:1px solid #d5d8de;
+    font:11.5px/1.55 system-ui;color:#8a9099}
+  .feuille .ident{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
+  .feuille .en-retard{color:#8E1B1B;font-weight:700}
+
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
+
+  /* À l'impression, seul le récapitulatif sort. */
+  @media print{
+    body{background:#fff}
+    .retour-barre,header,.presentation,.parcours-cartes,#zone-profil,#zone-prealable,
+    #zone-dates,#zone-etapes,#zone-progression,.barre-outils,h2.titre-zone,footer,#message{display:none !important}
+    .page{max-width:none;padding:0}
+    #recap{display:block !important;margin:0}
+    .feuille{border:none;border-radius:0;max-width:none;padding:0;font-size:12pt}
+    .feuille .pied-textes{font-size:8pt}
+  }
+
+  #message{display:none;margin:14px 0 0;padding:10px 12px;border-radius:3px;
+    border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="retour-barre">
+  <button type="button" id="btn-retour" class="retour">← Retour</button>
+  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a>
+  · <a href="audit-social.html">audit social</a> · <a href="audit-cse.html">comité</a>
+  · <a href="audit-nao.html">négociation (NAO)</a> · <a href="audit-sst.html">santé-sécurité</a>
+  · <a href="audit-discipline.html">discipline</a> · <a href="agenda.html">agenda</a>
+  · <a href="documents.html">documents</a> · <a href="guides.html">guides</a></span>
+</div>
+
+<header>
+  <p class="fil">Application Jurisprudence</p>
+  <h1>Parcours guidés — les procédures pas à pas</h1>
+  <p class="chapo"><b>L'audit dit ce qui ne va pas ; le parcours dit quoi faire.</b> Six procédures
+  réelles, découpées en étapes datées : ce qu'il faut avoir réuni avant de commencer, les étapes dans
+  l'ordre avec leur fondement lu à la source et leur délai calculé depuis vos dates, le document à
+  produire à chaque étape — pré-rempli de votre profil —, et un état d'avancement qui vous attend à la
+  réouverture.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé
+  ailleurs que sur ce poste.</p>
+</header>
+
+<div class="presentation">
+  <h2>Comment un parcours fonctionne</h2>
+  <p><b>1. Votre entreprise.</b> Effectif, secteur, convention, groupe, établissements, présence d'un
+  comité et de sections syndicales. Ce profil est partagé avec les audits et le générateur de
+  documents : renseigné ici, il est repris partout. Il sert surtout à <b>masquer les étapes sans
+  objet</b> — une commission de la formation n'a pas à figurer dans le parcours d'une entreprise de
+  quarante salariés.</p>
+  <p><b>2. Êtes-vous prêt ?</b> La liste des informations, documents et pièces à réunir avant
+  d'engager la procédure. Cochez ce que vous avez ; ce qui reste décoché est repris en tête, nommément,
+  sous « ce qui manque ».</p>
+  <p><b>3. Les dates du dossier.</b> Quelques dates seulement — celles dont les délais dépendent. Les
+  échéances se calculent aussitôt, et une date dépassée est signalée en rouge.</p>
+  <p><b>4. Les étapes.</b> Dans l'ordre, chacune avec l'article qui la fonde (numéro <i>et</i>
+  identifiant de version — un article change sans changer de numéro), la jurisprudence lorsqu'elle
+  éclaire l'étape, le délai, et le lien vers le modèle de document correspondant.</p>
+  <p><b>5. J'en suis où.</b> Cochez les étapes franchies : la barre de progression, le compte des
+  retards et l'état de chaque étape sont enregistrés sur ce poste et retrouvés à la réouverture.
+  Le récapitulatif s'imprime — ce qui est fait, ce qui reste, les échéances.</p>
+  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne lit pas votre convention collective.
+  Partout où le conventionnel peut ajouter une étape — un conseil de discipline, un avis préalable, une
+  périodicité de négociation, une commission supplémentaire —, elle le signale et vous renvoie à votre
+  texte, sans jamais affirmer ce qu'il contient. Elle ne remplace ni la négociation ni le conseil, et
+  ne se substitue pas à la décision de l'administration ou du juge.</p>
+</div>
+
+<h2 class="titre-zone">1. Votre entreprise</h2>
+<p class="aide">Ce profil ouvre les parcours et masque les étapes sans objet. Il est partagé avec les
+audits et le générateur de documents : ce que vous saisissez ici est repris là-bas, et inversement.</p>
+<div id="zone-profil"><form id="form-profil" autocomplete="off"></form></div>
+
+<h2 class="titre-zone">2. Choisissez un parcours</h2>
+<div class="parcours-cartes" id="cartes" role="tablist"></div>
+
+<div id="zone-prealable"></div>
+<div id="zone-dates"></div>
+<div id="zone-progression"></div>
+<div id="zone-etapes"></div>
+
+<div class="barre-outils" id="outils" style="display:none">
+  <button type="button" id="btn-recap">Récapitulatif imprimable</button>
+  <button type="button" class="second" id="btn-imprimer">Imprimer / PDF</button>
+  <button type="button" class="second" id="btn-vider">Réinitialiser ce parcours</button>
+</div>
+<p id="message" role="status"></p>
+
+<div id="recap"><div class="feuille" id="feuille-recap"></div></div>
+
+<footer>
+  <p>Chaque article cité est identifié par le numéro <b>et</b> par l'identifiant de la version lue
+  (<span style="font-family:ui-monospace,monospace">LEGIARTI…</span>) : un article peut être modifié
+  sans changer de numéro. Les 120 articles de cette page ont été lus au relais Légifrance le
+  21 août 2026, chacun en deux lectures espacées concordantes, filtre par nom du code et critère de
+  contenu contre les homonymes. Les 21 arrêts cités ont été lus à la source par l'API Judilibre le
+  même jour ; aucune réponse relaxée n'a été retenue. Cette page ne cite rien qu'elle n'ait lu.</p>
+</footer>
+</div>
+
+<script src="idcc.js"></script>
+<script src="parcours.js"></script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

@@ -15,6 +15,16 @@
      préalable à sanction, notification d'avertissement, notification de mise à
      pied disciplinaire, échelle des sanctions du règlement intérieur.
 
+     S'y ajoutent les cinq trames appelées par les parcours guidés
+     (docs/parcours.html) : mise en demeure, courrier d'alerte (danger grave et
+     imminent, atteinte aux droits des personnes, alerte économique), compte
+     rendu de réunion de commission, délibération de désignation des membres
+     d'une commission, résolution de recours à l'expert.
+
+     La page accepte « ?modele=<clé>&pre=<JSON encodé> » : elle ouvre le modèle
+     demandé et y verse les valeurs transmises, dans les seuls champs que le
+     modèle déclare et seulement là où le brouillon est vide.
+
      Tout se passe dans le navigateur : un formulaire court, un document
      généré à l'écran, imprimable en PDF et copiable en texte. Rien n'est
      envoyé, rien n'est conservé ailleurs que sur ce poste (localStorage).
@@ -153,7 +163,7 @@
   · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
   · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
   · <a href="audit-sst.html">santé-sécurité (SST)</a> · <a href="audit-discipline.html">discipline et règlement intérieur</a>
-  · <a href="agenda.html">agenda</a> · <a href="guides.html">guides</a></span>
+  · <a href="parcours.html">parcours guidés</a> · <a href="agenda.html">agenda</a> · <a href="guides.html">guides</a></span>
 </div>
 
 <header>
@@ -164,7 +174,10 @@
   de désaccord de la négociation obligatoire, note d'information, réponse écrite à une réclamation,
   procédure de signalement harcèlement, canevas d'enquête interne ; côté individuel :
   <b>convocation à entretien préalable à sanction, notification d'avertissement motivée, notification
-  de mise à pied disciplinaire, trame d'échelle des sanctions du règlement intérieur</b>. Un formulaire
+  de mise à pied disciplinaire, trame d'échelle des sanctions du règlement intérieur</b> ; et les
+  trames des <a href="parcours.html">parcours guidés</a> : <b>mise en demeure, courrier d'alerte,
+  compte rendu de réunion de commission, délibération de désignation des membres d'une commission,
+  résolution de recours à l'expert</b>. Un formulaire
   court, un document à l'écran, imprimable en PDF et copiable en texte.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
   que sur ce poste.</p>
 </header>
@@ -179,6 +192,11 @@
   « [exemple] »</b> partout où le formulaire est vide — un modèle sans exemple n'est qu'une coquille,
   un exemple non marqué serait un piège — et la liste des <b>champs à personnaliser</b> en fin de
   document.</p>
+  <p>Un modèle peut être ouvert <b>déjà rempli</b> depuis une autre page : c'est ce que font les
+  <a href="parcours.html">parcours guidés</a>, dont chaque étape renvoie ici avec ce que le profil de
+  l'entreprise et les dates du dossier donnent déjà. Les valeurs proposées ne sont posées que dans les
+  champs du modèle, et seulement là où votre brouillon est vide : ce que vous avez saisi l'emporte
+  toujours.</p>
   <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne remplace ni la négociation ni le
   conseil — elle donne une trame conforme aux textes, que vous restez libre d'adapter. Un champ non
   rempli apparaît comme un exemple marqué ou comme un blanc à compléter, jamais comme une valeur
@@ -283,7 +301,35 @@
     "R1332-2":  { id: "LEGIARTI000018536887", quoi: "la sanction fait l'objet d'une décision écrite et motivée, notifiée par lettre remise contre récépissé ou par lettre recommandée dans le délai d'un mois" },
     "R1332-3":  { id: "LEGIARTI000018536885", quoi: "le délai d'un mois expire à vingt-quatre heures le jour du mois suivant portant le même quantième ; à défaut, le dernier jour du mois ; prorogation au premier jour ouvrable si le terme est un samedi, un dimanche ou un jour férié ou chômé" },
     "L1333-1":  { id: "LEGIARTI000006901453", quoi: "le conseil de prud'hommes apprécie la régularité de la procédure et si les faits sont de nature à justifier une sanction ; si un doute subsiste, il profite au salarié" },
-    "L1333-2":  { id: "LEGIARTI000006901454", quoi: "le conseil de prud'hommes peut annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise" }
+    "L1333-2":  { id: "LEGIARTI000006901454", quoi: "le conseil de prud'hommes peut annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise" },
+    /* Commissions, expertise et droits d'alerte du comité — articles ajoutés
+       pour les modèles appelés par les parcours guidés. Provenance :
+       moteur/parcours/textes-parcours.json, capture du 21 août 2026, deux
+       lectures espacées concordantes chacune, filtre par NOM du code
+       (« Code du travail ») et critère de contenu contre les homonymes. */
+    "L2315-32": { id: "LEGIARTI000035624869", quoi: "les résolutions du comité social et économique sont prises à la majorité des membres présents" },
+    "L2315-38": { id: "LEGIARTI000035626459", quoi: "la commission santé, sécurité et conditions de travail reçoit, par délégation du comité, tout ou partie des attributions relatives à la santé, à la sécurité et aux conditions de travail, à l'exception du recours à un expert et des attributions consultatives du comité" },
+    "L2315-39": { id: "LEGIARTI000036262434", quoi: "commission présidée par l'employeur ; au minimum trois membres représentants du personnel, dont au moins un du second collège ou, le cas échéant, du troisième ; désignés par le comité parmi ses membres, par une résolution adoptée selon les modalités de l'article L. 2315-32, pour une durée qui prend fin avec celle du mandat des élus" },
+    "L2315-44-2": { id: "LEGIARTI000036760270", quoi: "au-delà d'un seuil fixé par décret, le comité détermine, sur proposition de la commission des marchés, les critères de choix des fournisseurs et la procédure d'achat ; la commission choisit les fournisseurs et rend compte de ces choix au moins une fois par an au comité" },
+    "L2315-44-3": { id: "LEGIARTI000036760281", quoi: "les membres de la commission des marchés sont désignés parmi les membres titulaires ; le règlement intérieur du comité fixe le fonctionnement, le nombre de membres, les modalités de désignation et la durée du mandat" },
+    "L2315-45": { id: "LEGIARTI000036262551", quoi: "un accord d'entreprise peut prévoir des commissions supplémentaires pour l'examen de problèmes particuliers ; les rapports des commissions sont soumis à la délibération du comité" },
+    "L2315-48": { id: "LEGIARTI000035626489", quoi: "la commission économique se réunit au moins deux fois par an ; elle peut demander à entendre tout cadre supérieur ou dirigeant après accord de l'employeur" },
+    "L2314-33": { id: "LEGIARTI000052437191", quoi: "les membres de la délégation du personnel sont élus pour quatre ans ; l'article énumère les cas de fin anticipée du mandat" },
+    "L2315-78": { id: "LEGIARTI000036262525", quoi: "le comité peut, le cas échéant sur proposition des commissions constituées en son sein, décider de recourir à un expert-comptable ou à un expert habilité" },
+    "L2315-80": { id: "LEGIARTI000036761908", quoi: "prise en charge des frais d'expertise : par l'employeur dans les cas énumérés ; 20 % par le comité sur son budget de fonctionnement et 80 % par l'employeur pour la consultation sur les orientations stratégiques et les consultations ponctuelles" },
+    "L2315-81": { id: "LEGIARTI000036262523", quoi: "par dérogation, le comité peut faire appel à tout type d'expertise rémunérée par ses soins pour la préparation de ses travaux" },
+    "L2315-87": { id: "LEGIARTI000036262509", quoi: "recours à un expert-comptable en vue de la consultation sur les orientations stratégiques" },
+    "L2315-88": { id: "LEGIARTI000036262505", quoi: "recours à un expert-comptable en vue de la consultation sur la situation économique et financière" },
+    "L2315-94": { id: "LEGIARTI000043975185", quoi: "recours à un expert habilité en cas de risque grave identifié et actuel, en cas d'introduction de nouvelles technologies ou de projet important modifiant les conditions de travail, et, à partir de trois cents salariés, pour préparer la négociation sur l'égalité professionnelle" },
+    "R2315-45": { id: "LEGIARTI000036434273", quoi: "l'expert demande à l'employeur, au plus tard dans les trois jours de sa désignation, les informations complémentaires nécessaires ; l'employeur répond dans les cinq jours" },
+    "R2315-46": { id: "LEGIARTI000036434275", quoi: "l'expert notifie à l'employeur le coût prévisionnel, l'étendue et la durée de l'expertise dans un délai de dix jours à compter de sa désignation" },
+    "L4131-2":  { id: "LEGIARTI000035653297", quoi: "le représentant du personnel au comité qui constate une cause de danger grave et imminent en alerte immédiatement l'employeur selon la procédure de l'article L. 4132-2" },
+    "L4132-2":  { id: "LEGIARTI000035653288", quoi: "le représentant consigne son avis par écrit ; l'employeur procède immédiatement à une enquête avec lui et prend les dispositions nécessaires pour y remédier" },
+    "D4132-1":  { id: "LEGIARTI000036484010", quoi: "l'avis est consigné sur un registre spécial coté et authentifié, daté et signé, indiquant les postes concernés, la nature et la cause du danger, le nom des travailleurs exposés" },
+    "L2312-59": { id: "LEGIARTI000038791189", quoi: "atteinte aux droits des personnes, à leur santé physique et mentale ou aux libertés individuelles : saisine immédiate de l'employeur, qui procède sans délai à une enquête avec le membre de la délégation et prend les dispositions nécessaires" },
+    "L2312-63": { id: "LEGIARTI000035610999", quoi: "droit d'alerte économique : demande d'explications inscrite de droit à l'ordre du jour de la prochaine séance ; à défaut de réponse suffisante, rapport transmis à l'employeur et au commissaire aux comptes" },
+    "L2312-64": { id: "LEGIARTI000035611001", quoi: "le comité ou la commission économique peut se faire assister une fois par exercice de l'expert-comptable, convoquer le commissaire aux comptes et s'adjoindre deux salariés avec voix consultative" },
+    "L2312-65": { id: "LEGIARTI000035611003", quoi: "le rapport conclut en émettant un avis sur l'opportunité de saisir l'organe d'administration ou de surveillance ; le comité en décide à la majorité des membres présents" }
   };
   function refArt(n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }
 
@@ -1341,6 +1387,545 @@
       }
       return "";
     }
+  },
+
+  /* ------------------------------------------------------------------ */
+  /* Les cinq modèles appelés par les parcours guidés (parcours.html).   */
+  /* Même standard que les précédents : structure intégrale, exemple     */
+  /* fictif chiffré marqué « [exemple] » partout où le formulaire est    */
+  /* vide, et liste des champs à personnaliser en fin de document.       */
+  /* ------------------------------------------------------------------ */
+
+  {
+    cle: "mise-en-demeure",
+    nom: "Mise en demeure",
+    resume: "L'écrit qui somme d'exécuter : l'obligation et sa source, ce qui a été constaté, ce qui est demandé, le délai, et ce qui suivra à défaut.",
+    articles: ["L1331-1", "L1332-2"],
+    sections: [
+      { titre: "L'expéditeur et le destinataire", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "signataire", nom: "Signataire (nom, qualité)", t: "text" },
+        { c: "sens", nom: "Sens de la mise en demeure", t: "select", options: [
+          "de l'employeur à un salarié",
+          "de l'employeur à un tiers (prestataire, fournisseur)",
+          "du comité social et économique à l'employeur",
+          "d'une organisation syndicale à l'employeur"
+        ], aide: "Il commande la formule d'adresse et l'avertissement affiché : adressée par l'employeur à un salarié à la suite d'un agissement qu'il tient pour fautif, une mise en demeure peut, selon son contenu, constituer une sanction au sens de l'article L. 1331-1." },
+        { c: "destinataire", nom: "Destinataire (nom, qualité, adresse)", t: "text" },
+        { c: "dateLettre", nom: "Date de la lettre", t: "date" },
+        { c: "modeRemise", nom: "Mode de remise", t: "select",
+          options: ["lettre remise en main propre contre récépissé", "lettre recommandée avec avis de réception"] }
+      ]},
+      { titre: "L'obligation et ce qui est demandé", champs: [
+        { c: "objet", nom: "Objet, en une phrase", t: "text" },
+        { c: "source", nom: "Source de l'obligation (texte, convention, accord, contrat, règlement intérieur, commande)", t: "textarea", pleine: true,
+          aide: "Citez la référence exacte. Elle est reproduite telle quelle, sous votre responsabilité : cette page ne vérifie pas ce que vous saisissez ici." },
+        { c: "constats", nom: "Ce qui a été constaté (un fait daté par ligne)", t: "textarea", pleine: true },
+        { c: "demande", nom: "Ce qui est demandé, précisément", t: "textarea", pleine: true },
+        { c: "delaiJours", nom: "Délai accordé (jours)", t: "number" },
+        { c: "dateLimite", nom: "Date limite d'exécution", t: "date" },
+        { c: "suites", nom: "Ce qui suivra à défaut d'exécution", t: "textarea", pleine: true,
+          aide: "Annoncez ce que vous êtes en droit de faire, et rien de plus : une menace excessive se retourne." }
+      ]}
+    ],
+    composer: function (v) {
+      var faits = lignes(v.constats), suites = lignes(v.suites);
+      var limite = v.dateLimite ||
+        (v.dateLettre && v.delaiJours ? (function () {
+          var d = new Date(v.dateLettre + "T12:00:00Z");
+          d.setUTCDate(d.getUTCDate() + parseInt(v.delaiJours, 10));
+          return d.toISOString().slice(0, 10);
+        })() : "");
+      var salarie = v.sens === "de l'employeur à un salarié";
+      return enteteFeuille(v.entreprise, chDate(v.dateLettre, "date de la lettre")) +
+        '<h2 class="titre-doc">Mise en demeure</h2>' +
+        '<p class="sous-titre">' + chEx(v.modeRemise, "lettre recommandée avec avis de réception") + "</p>" +
+        "<p>À l'attention de " + chEx(v.destinataire, "M. Antoine Rivière, chef d'équipe, 14 rue des Ormes, 59000 Lille") + "</p>" +
+        "<h3>Objet</h3><p><b>" + chEx(v.objet, "Absence de restitution du véhicule de service") + "</b></p>" +
+        "<h3>L'obligation dont l'exécution est demandée</h3>" +
+        "<p>" + chEx(v.source, "Article 7 du contrat de travail du 3 mars 2021 : le véhicule de service est restitué à première demande de l'employeur") + "</p>" +
+        "<h3>Ce qui a été constaté</h3>" +
+        (faits.length
+          ? "<ul>" + faits.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Le 4 août 2026, demande écrite de restitution adressée par courriel") + "</li>" +
+            "<li>" + exemple("Le 12 août 2026, relance restée sans réponse") + "</li></ul>") +
+        "<h3>Ce qui est demandé</h3>" +
+        "<p>" + chEx(v.demande, "Restituer le véhicule immatriculé EX-123-AB au siège, ainsi que la carte carburant et les clés") + "</p>" +
+        "<h3>Délai</h3>" +
+        "<p>Il vous est demandé d'y procéder <b>au plus tard le " +
+        (limite ? e(dateFr(limite)) : exemple(dateFr("2026-09-05"))) + "</b>" +
+        (v.delaiJours ? ", soit dans un délai de " + e(v.delaiJours) + " jours à compter de la présente" : "") +
+        ".</p>" +
+        "<h3>À défaut</h3>" +
+        (suites.length
+          ? "<ul>" + suites.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Engagement des voies de droit utiles pour obtenir la restitution") + "</li></ul>") +
+        (salarie
+          ? "<h3>Portée de la présente</h3><p>La présente lettre est une mise en demeure d'exécuter : " +
+            "elle ne prononce aucune sanction disciplinaire. Si des poursuites disciplinaires devaient " +
+            "être engagées, elles le seraient dans les formes de l'article L. 1332-2 du code du travail.</p>"
+          : "") +
+        '<div class="signatures"><div>Fait le ' + chDate(v.dateLettre, "date") + "<br>" +
+        chEx(v.signataire, "Mme Claire Vasseur, directrice des ressources humaines") + "</div></div>" +
+        aPersonnaliser(["destinataire et adresse", "objet", "source exacte de l'obligation",
+          "faits constatés et leurs dates", "demande", "délai et date limite", "suites annoncées",
+          "signataire"]) +
+        piedTextes(["L1331-1", "L1332-2"]);
+    },
+    verifier: function (v) {
+      if (v.sens === "de l'employeur à un salarié")
+        return "Adressée par l'employeur à un salarié, une mise en demeure qui reproche un agissement " +
+          "tenu pour fautif peut, selon son contenu, constituer une sanction au sens de l'article " +
+          "L. 1331-1 — constitue une sanction toute mesure, autre que les observations verbales, prise " +
+          "à la suite d'un agissement considéré comme fautif. Si vous entendez sanctionner, suivez la " +
+          "procédure de l'article L. 1332-2 ; si vous entendez seulement demander l'exécution d'une " +
+          "obligation, tenez-vous-en à la demande, sans qualification de faute.";
+      return "";
+    }
+  },
+
+  {
+    cle: "alerte",
+    nom: "Courrier d'alerte",
+    resume: "Les trois alertes du comité : danger grave et imminent, atteinte aux droits des personnes, situation économique préoccupante — chacune avec sa forme et sa suite.",
+    articles: ["L4131-2", "L4132-2", "D4132-1", "L2312-59", "L2312-63", "L2312-64", "L2312-65"],
+    sections: [
+      { titre: "L'auteur et l'objet", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "auteur", nom: "Auteur de l'alerte (nom, qualité)", t: "text",
+          aide: "Membre de la délégation du personnel au comité social et économique." },
+        { c: "destinataire", nom: "Destinataire (nom, qualité)", t: "text" },
+        { c: "dateAlerte", nom: "Date de l'alerte", t: "date" },
+        { c: "type", nom: "Type d'alerte", t: "select", options: [
+          "danger grave et imminent (art. L. 4131-2)",
+          "atteinte aux droits des personnes (art. L. 2312-59)",
+          "situation économique préoccupante (art. L. 2312-63)"
+        ], aide: "Chaque alerte a sa forme et sa suite : l'application les distingue et n'écrit que ce que le texte prévoit." }
+      ]},
+      { titre: "Les faits", champs: [
+        { c: "postes", nom: "Postes de travail concernés (un par ligne)", t: "textarea", pleine: true,
+          aide: "Mention imposée pour l'alerte danger grave et imminent (art. D. 4132-1, 1°)." },
+        { c: "nature", nom: "Nature et cause de la situation constatée", t: "textarea", pleine: true },
+        { c: "personnes", nom: "Travailleurs exposés ou concernés (un par ligne)", t: "textarea", pleine: true,
+          aide: "Mention imposée pour l'alerte danger grave et imminent (art. D. 4132-1, 3°)." },
+        { c: "constatation", nom: "Comment la situation a été constatée", t: "textarea", pleine: true },
+        { c: "demande", nom: "Ce qui est demandé à l'employeur", t: "textarea", pleine: true }
+      ]}
+    ],
+    composer: function (v) {
+      var t = String(v.type || "");
+      var dgi = t.indexOf("danger") === 0, droits = t.indexOf("atteinte") === 0, eco = t.indexOf("situation") === 0;
+      var postes = lignes(v.postes), pers = lignes(v.personnes);
+      var titre = dgi ? "Avis de danger grave et imminent"
+        : droits ? "Alerte — atteinte aux droits des personnes"
+        : eco ? "Alerte économique" : "Courrier d'alerte";
+      var arts = dgi ? ["L4131-2", "L4132-2", "D4132-1"]
+        : droits ? ["L2312-59"] : eco ? ["L2312-63", "L2312-64", "L2312-65"]
+        : ["L4131-2", "L2312-59", "L2312-63"];
+      return enteteFeuille(v.entreprise, chDate(v.dateAlerte, "date de l'alerte")) +
+        '<h2 class="titre-doc">' + e(titre) + "</h2>" +
+        '<p class="sous-titre">' +
+        (dgi ? "Avis consigné au registre spécial (art. D. 4132-1 du code du travail)"
+             : "Alerte du comité social et économique") + "</p>" +
+        "<p>De : " + chEx(v.auteur, "Mme Sonia Delcroix, membre titulaire de la délégation du personnel au CSE") + "<br>" +
+        "À : " + chEx(v.destinataire, "M. le directeur d'établissement") + "</p>" +
+        (dgi
+          ? "<h3>Postes de travail concernés</h3>" +
+            (postes.length
+              ? "<ul>" + postes.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+              : "<ul><li>" + exemple("Ligne de conditionnement n° 3 — poste d'ensachage") + "</li></ul>")
+          : "") +
+        "<h3>" + (dgi ? "Nature et cause du danger" : droits ? "Atteinte constatée" : "Faits de nature à affecter de manière préoccupante la situation économique") + "</h3>" +
+        "<p>" + chEx(v.nature, dgi
+          ? "Protecteur de la trémie déposé depuis le 10 août 2026 ; accès direct aux pièces mobiles"
+          : droits
+            ? "Propos répétés à connotation sexiste tenus par un responsable d'équipe envers deux salariées, signalés le 12 août 2026"
+            : "Perte de 42 % du carnet de commandes sur le premier semestre 2026 et retard de trois mois dans le paiement des fournisseurs") + "</p>" +
+        (dgi
+          ? "<h3>Travailleurs exposés</h3>" +
+            (pers.length
+              ? "<ul>" + pers.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+              : "<ul><li>" + exemple("Trois opérateurs de l'équipe du matin") + "</li></ul>")
+          : (pers.length
+              ? "<h3>Personnes concernées</h3><ul>" + pers.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+              : "")) +
+        "<h3>Comment la situation a été constatée</h3>" +
+        "<p>" + chEx(v.constatation, "Constat direct lors de la visite de l'atelier du 18 août 2026, confirmé par deux salariés du poste") + "</p>" +
+        "<h3>Ce qui est demandé</h3>" +
+        "<p>" + chEx(v.demande, dgi
+          ? "Procéder immédiatement à l'enquête prévue par l'article L. 4132-2 et prendre les dispositions nécessaires pour faire cesser le danger"
+          : droits
+            ? "Procéder sans délai à l'enquête prévue par l'article L. 2312-59 et prendre les dispositions nécessaires pour remédier à la situation"
+            : "Fournir au comité les explications demandées, la demande étant inscrite de droit à l'ordre du jour de la prochaine séance") + "</p>" +
+        "<h3>Suite prévue par le code du travail</h3>" +
+        (dgi
+          ? "<p>L'avis est consigné par écrit sur le registre spécial dont les pages sont numérotées et " +
+            "authentifiées par le tampon du comité ; il est daté et signé. L'employeur procède " +
+            "immédiatement à une enquête avec le représentant qui lui a signalé le danger et prend les " +
+            "dispositions nécessaires pour y remédier (art. L. 4132-2 et D. 4132-1).</p>"
+          : droits
+            ? "<p>L'employeur procède sans délai à une enquête avec le membre de la délégation du " +
+              "personnel et prend les dispositions nécessaires pour remédier à la situation. En cas de " +
+              "carence de l'employeur ou de divergence sur la réalité de l'atteinte, et à défaut de " +
+              "solution trouvée, la saisine du conseil de prud'hommes est ouverte dans les conditions " +
+              "de l'article L. 2312-59.</p>"
+            : "<p>La demande d'explications est inscrite de droit à l'ordre du jour de la prochaine " +
+              "séance du comité. Si le comité n'obtient pas de réponse suffisante, ou si celle-ci " +
+              "confirme le caractère préoccupant de la situation, il établit un rapport — établi par la " +
+              "commission économique dans les entreprises d'au moins mille salariés en l'absence " +
+              "d'accord — transmis à l'employeur et au commissaire aux comptes. Le comité peut se faire " +
+              "assister, une fois par exercice comptable, de l'expert-comptable, convoquer le " +
+              "commissaire aux comptes et s'adjoindre deux salariés avec voix consultative. Le rapport " +
+              "conclut en émettant un avis sur l'opportunité de saisir l'organe d'administration ou de " +
+              "surveillance ; le comité en décide à la majorité des membres présents " +
+              "(art. L. 2312-63 à L. 2312-65).</p>") +
+        '<div class="signatures"><div>Fait le ' + chDate(v.dateAlerte, "date") + "<br>" +
+        chEx(v.auteur, "Mme Sonia Delcroix, membre titulaire de la délégation du personnel au CSE") + "</div>" +
+        "<div>Reçu le ____________<br>Pour l'employeur</div></div>" +
+        aPersonnaliser(["auteur et destinataire", "postes et travailleurs concernés",
+          "nature et cause de la situation", "circonstances du constat", "demande"]) +
+        piedTextes(arts);
+    },
+    verifier: function (v) {
+      if (String(v.type || "").indexOf("danger") === 0 && !lignes(v.postes).length)
+        return "L'avis de danger grave et imminent doit indiquer les postes de travail concernés par la " +
+          "cause du danger, la nature et la cause de ce danger, et le nom des travailleurs exposés " +
+          "(art. D. 4132-1). Les postes ne sont pas renseignés : le document sortira avec un exemple " +
+          "marqué, à remplacer avant usage.";
+      return "";
+    }
+  },
+
+  {
+    cle: "cr-commission",
+    nom: "Compte rendu de réunion de commission",
+    resume: "Ce qui fait exister le travail d'une commission du comité : participants, ordre du jour, travaux, propositions soumises à la délibération du comité.",
+    articles: ["L2315-38", "L2315-45", "L2315-44-2", "L2315-48"],
+    sections: [
+      { titre: "La commission et la réunion", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "commission", nom: "Commission", t: "select", options: [
+          "commission santé, sécurité et conditions de travail",
+          "commission économique",
+          "commission de la formation",
+          "commission d'information et d'aide au logement",
+          "commission de l'égalité professionnelle",
+          "commission des marchés",
+          "commission supplémentaire (accord d'entreprise)"
+        ] },
+        { c: "dateReunion", nom: "Date de la réunion", t: "date" },
+        { c: "lieu", nom: "Lieu", t: "text" },
+        { c: "president", nom: "Président de séance (nom, qualité)", t: "text" },
+        { c: "rapporteur", nom: "Rapporteur (nom)", t: "text" }
+      ]},
+      { titre: "Les travaux", champs: [
+        { c: "presents", nom: "Membres présents (un par ligne)", t: "textarea", pleine: true },
+        { c: "invites", nom: "Invités, experts, techniciens (un par ligne)", t: "textarea", pleine: true,
+          aide: "L'employeur peut adjoindre aux commissions supplémentaires, avec voix consultative, des experts et techniciens de l'entreprise choisis en dehors du comité (art. L. 2315-45) ; le secret professionnel et l'obligation de discrétion leur sont applicables." },
+        { c: "ordreDuJour", nom: "Ordre du jour (un point par ligne)", t: "textarea", pleine: true },
+        { c: "travaux", nom: "Travaux et échanges, point par point", t: "textarea", pleine: true },
+        { c: "propositions", nom: "Propositions soumises à la délibération du comité (une par ligne)", t: "textarea", pleine: true,
+          aide: "Les rapports des commissions sont soumis à la délibération du comité (art. L. 2315-45)." },
+        { c: "dateComite", nom: "Réunion du comité à laquelle le compte rendu est présenté", t: "date" }
+      ]}
+    ],
+    composer: function (v) {
+      var pres = lignes(v.presents), inv = lignes(v.invites),
+          odj = lignes(v.ordreDuJour), props = lignes(v.propositions);
+      var marches = v.commission === "commission des marchés";
+      return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
+        '<h2 class="titre-doc">Compte rendu de réunion<br>de la ' +
+        chEx(v.commission, "commission santé, sécurité et conditions de travail") + "</h2>" +
+        '<p class="sous-titre">Réunion du ' + chExDate(v.dateReunion, "2026-09-15") +
+        " — " + chEx(v.lieu, "salle du conseil, siège social") + "</p>" +
+        "<h3>Présidence et rapporteur</h3>" +
+        "<p>Présidence : " + chEx(v.president, "M. Julien Marchand, directeur d'établissement") + "<br>" +
+        "Rapporteur : " + chEx(v.rapporteur, "Mme Sonia Delcroix") + "</p>" +
+        "<h3>Membres présents</h3>" +
+        (pres.length
+          ? "<ul>" + pres.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Mme Sonia Delcroix, titulaire, second collège") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd, titulaire, premier collège") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux, suppléante, troisième collège") + "</li></ul>") +
+        (inv.length
+          ? "<h3>Invités, experts et techniciens</h3><ul>" +
+            inv.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>" +
+            "<p>Le secret professionnel et l'obligation de discrétion leur sont applicables.</p>"
+          : "") +
+        "<h3>Ordre du jour</h3>" +
+        (odj.length
+          ? "<ol>" + odj.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
+          : "<ol><li>" + exemple("Suites de l'inspection du 2 septembre 2026 sur la ligne n° 3") + "</li>" +
+            "<li>" + exemple("Examen du projet de mise à jour du document unique") + "</li>" +
+            "<li>" + exemple("Préparation des propositions au comité") + "</li></ol>") +
+        "<h3>Travaux</h3>" +
+        "<p>" + chEx(v.travaux, "Point 1 — la commission a constaté que le protecteur de la trémie avait été remplacé le 8 septembre 2026 et que la consigne d'arrêt machine avait été affichée au poste. Point 2 — la commission a relevé que trois unités de travail sur douze n'avaient pas été revues depuis 2024 et propose de les traiter en priorité.") + "</p>" +
+        "<h3>Propositions soumises à la délibération du comité</h3>" +
+        (props.length
+          ? "<ol>" + props.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
+          : "<ol><li>" + exemple("Inscrire au programme annuel de prévention la révision des trois unités de travail identifiées") + "</li>" +
+            "<li>" + exemple("Proposer au comité de recourir à un expert habilité au titre du risque grave identifié sur la ligne n° 3") + "</li></ol>") +
+        "<h3>Portée du présent compte rendu</h3>" +
+        "<p>La commission travaille pour le comité : ses rapports sont soumis à la délibération du " +
+        "comité (art. L. 2315-45). " +
+        (marches
+          ? "La commission des marchés rend compte de ses choix de fournisseurs et de prestataires, " +
+            "au moins une fois par an, au comité, selon les modalités déterminées par le règlement " +
+            "intérieur du comité (art. L. 2315-44-2). "
+          : "") +
+        "Le présent compte rendu sera présenté au comité lors de sa réunion du " +
+        chExDate(v.dateComite, "2026-09-29") + ".</p>" +
+        "<p>La délégation reçue par la commission santé, sécurité et conditions de travail ne s'étend " +
+        "ni au recours à un expert ni aux attributions consultatives du comité (art. L. 2315-38) : " +
+        "les avis restent rendus par le comité.</p>" +
+        '<div class="signatures"><div>Le rapporteur<br>' + chEx(v.rapporteur, "Mme Sonia Delcroix") + "</div>" +
+        "<div>Le président de séance<br>" + chEx(v.president, "M. Julien Marchand") + "</div></div>" +
+        aPersonnaliser(["commission", "date et lieu", "présidence et rapporteur", "membres présents",
+          "invités", "ordre du jour", "travaux", "propositions au comité", "date de la réunion du comité"]) +
+        piedTextes(marches ? ["L2315-45", "L2315-44-2", "L2315-38"] : ["L2315-45", "L2315-38", "L2315-48"]);
+    }
+  },
+
+  {
+    cle: "designation-commission",
+    nom: "Délibération de désignation des membres d'une commission",
+    resume: "La résolution qui désigne : sièges à pourvoir, candidats, vote à la majorité des membres présents, durée du mandat, siège du second ou du troisième collège.",
+    articles: ["L2315-39", "L2315-32", "L2315-44-3", "L2314-33", "L2315-45"],
+    sections: [
+      { titre: "Le comité et la réunion", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "commission", nom: "Commission dont les membres sont désignés", t: "select", options: [
+          "commission santé, sécurité et conditions de travail",
+          "commission économique",
+          "commission de la formation",
+          "commission d'information et d'aide au logement",
+          "commission de l'égalité professionnelle",
+          "commission des marchés",
+          "commission supplémentaire (accord d'entreprise)"
+        ] },
+        { c: "dateReunion", nom: "Date de la réunion du comité", t: "date" },
+        { c: "president", nom: "Président du comité (nom, qualité)", t: "text" },
+        { c: "secretaire", nom: "Secrétaire du comité (nom)", t: "text" },
+        { c: "source", nom: "Origine des modalités de mise en place", t: "select", options: [
+          "accord d'entreprise (art. L. 2315-41)",
+          "accord employeur / comité, à défaut de délégué syndical (art. L. 2315-42)",
+          "règlement intérieur du comité, à défaut d'accord (art. L. 2315-44)"
+        ] }
+      ]},
+      { titre: "Le vote", champs: [
+        { c: "sieges", nom: "Nombre de sièges à pourvoir", t: "number",
+          aide: "La commission santé, sécurité et conditions de travail comprend au minimum trois membres représentants du personnel ; la commission économique au maximum cinq (art. L. 2315-39 et L. 2315-47)." },
+        { c: "candidats", nom: "Candidats (un par ligne : nom, collège, titulaire ou suppléant)", t: "textarea", pleine: true },
+        { c: "votants", nom: "Nombre de membres présents ayant voix délibérative", t: "number" },
+        { c: "resultats", nom: "Résultats du vote (une ligne par candidat : nom, voix obtenues)", t: "textarea", pleine: true },
+        { c: "designes", nom: "Membres désignés (un par ligne)", t: "textarea", pleine: true },
+        { c: "troisiemeCollege", nom: "Collèges", t: "cases", pleine: true, options: [
+          "Un troisième collège est institué : un siège au moins revient à un élu le représentant"
+        ], aide: "Article L. 2315-39, dont les dispositions sont d'ordre public : au moins un représentant du second collège, ou le cas échéant du troisième." },
+        { c: "dateFinMandat", nom: "Date de fin du mandat des élus du comité", t: "date",
+          aide: "La durée du mandat des membres désignés prend fin avec celle du mandat des élus (art. L. 2315-39)." }
+      ]}
+    ],
+    composer: function (v) {
+      var cand = lignes(v.candidats), res = lignes(v.resultats), des = lignes(v.designes);
+      var marches = v.commission === "commission des marchés";
+      var troisieme = (v.troisiemeCollege || []).length > 0;
+      return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
+        '<h2 class="titre-doc">Délibération du comité social et économique<br>Désignation des membres de la ' +
+        chEx(v.commission, "commission santé, sécurité et conditions de travail") + "</h2>" +
+        '<p class="sous-titre">Réunion du ' + chExDate(v.dateReunion, "2026-09-15") + "</p>" +
+        "<h3>Cadre de la désignation</h3>" +
+        "<p>Le comité social et économique, réuni sous la présidence de " +
+        chEx(v.president, "M. Julien Marchand, directeur d'établissement") + ", le secrétariat étant assuré par " +
+        chEx(v.secretaire, "Mme Sonia Delcroix") + ", procède à la désignation des membres de la " +
+        chEx(v.commission, "commission santé, sécurité et conditions de travail") + ".</p>" +
+        "<p>Les modalités de mise en place résultent de : " +
+        chEx(v.source, "accord d'entreprise (art. L. 2315-41)") + ".</p>" +
+        (marches
+          ? "<p>Les membres de la commission des marchés sont désignés parmi les membres titulaires du " +
+            "comité ; le règlement intérieur du comité fixe les modalités de leur désignation et la " +
+            "durée de leur mandat (art. L. 2315-44-3).</p>"
+          : "<p>Les membres sont désignés par le comité parmi ses membres, par une résolution adoptée " +
+            "selon les modalités définies à l'article L. 2315-32 — soit à la majorité des membres " +
+            "présents —, pour une durée qui prend fin avec celle du mandat des membres élus du comité " +
+            "(art. L. 2315-39).</p>") +
+        (troisieme
+          ? "<p>Un troisième collège électoral étant institué, un siège au moins est attribué à un élu " +
+            "le représentant (art. L. 2315-39).</p>"
+          : "") +
+        "<h3>Sièges à pourvoir et candidatures</h3>" +
+        "<p>Sièges à pourvoir : <b>" + chEx(v.sieges, "4") + "</b>.</p>" +
+        (cand.length
+          ? "<ul>" + cand.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Mme Sonia Delcroix — second collège — titulaire") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd — premier collège — titulaire") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux — troisième collège — suppléante") + "</li>" +
+            "<li>" + exemple("M. Antoine Rivière — premier collège — suppléant") + "</li></ul>") +
+        "<h3>Résolution et vote</h3>" +
+        "<p>Résolution soumise au vote : <i>« Le comité social et économique désigne les membres de la " +
+        chEx(v.commission, "commission santé, sécurité et conditions de travail") +
+        " dont les noms suivent, pour une durée qui prend fin avec celle du mandat des membres élus du comité. »</i></p>" +
+        "<p>Membres présents ayant voix délibérative : <b>" + chEx(v.votants, "11") + "</b>.</p>" +
+        (res.length
+          ? "<table><tr><th>Candidat</th><th>Voix obtenues</th></tr>" +
+            res.map(function (l) {
+              var m = l.split(/\s*[:;,]\s*(?=[^:;,]*$)/);
+              return "<tr><td>" + e(m[0]) + "</td><td>" + e(m[1] || "") + "</td></tr>";
+            }).join("") + "</table>"
+          : "<table><tr><th>Candidat</th><th>Voix obtenues</th></tr>" +
+            "<tr><td>" + exemple("Mme Sonia Delcroix") + "</td><td>" + exemple("9") + "</td></tr>" +
+            "<tr><td>" + exemple("M. Karim Belaïd") + "</td><td>" + exemple("8") + "</td></tr>" +
+            "<tr><td>" + exemple("Mme Hélène Roux") + "</td><td>" + exemple("7") + "</td></tr>" +
+            "<tr><td>" + exemple("M. Antoine Rivière") + "</td><td>" + exemple("6") + "</td></tr></table>") +
+        "<h3>Membres désignés</h3>" +
+        (des.length
+          ? "<ol>" + des.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
+          : "<ol><li>" + exemple("Mme Sonia Delcroix — second collège") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd — premier collège") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux — troisième collège") + "</li>" +
+            "<li>" + exemple("M. Antoine Rivière — premier collège") + "</li></ol>") +
+        "<h3>Durée du mandat</h3>" +
+        "<p>Le mandat des membres désignés prend fin avec celui des membres élus du comité, soit le " +
+        chExDate(v.dateFinMandat, "2029-11-30") + ".</p>" +
+        '<div class="signatures"><div>Le secrétaire du comité<br>' + chEx(v.secretaire, "Mme Sonia Delcroix") + "</div>" +
+        "<div>Le président du comité<br>" + chEx(v.president, "M. Julien Marchand") + "</div></div>" +
+        aPersonnaliser(["commission", "date de la réunion", "présidence et secrétariat",
+          "origine des modalités", "sièges à pourvoir", "candidats", "nombre de votants",
+          "résultats du vote", "membres désignés", "date de fin du mandat"]) +
+        piedTextes(marches ? ["L2315-44-3", "L2315-32", "L2314-33"]
+                           : ["L2315-39", "L2315-32", "L2314-33"]);
+    },
+    verifier: function (v) {
+      var s = parseInt(v.sieges, 10);
+      if (v.commission === "commission santé, sécurité et conditions de travail" && !isNaN(s) && s < 3)
+        return "La commission santé, sécurité et conditions de travail comprend au minimum trois membres " +
+          "représentants du personnel (art. L. 2315-39) ; " + s + " siège(s) seulement sont indiqués.";
+      if (v.commission === "commission économique" && !isNaN(s) && s > 5)
+        return "La commission économique comprend au maximum cinq membres représentants du personnel " +
+          "(art. L. 2315-47) ; " + s + " sièges sont indiqués.";
+      return "";
+    }
+  },
+
+  {
+    cle: "resolution-expert",
+    nom: "Résolution de recours à l'expert",
+    resume: "La délibération par laquelle le comité décide l'expertise : cas de recours, objet, expert désigné, vote à la majorité des présents, financement, délais de l'expert.",
+    articles: ["L2315-78", "L2315-32", "L2315-87", "L2315-88", "L2315-94", "L2315-80", "L2315-81", "R2315-45", "R2315-46", "L2315-38"],
+    sections: [
+      { titre: "Le comité et la réunion", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "dateReunion", nom: "Date de la réunion du comité", t: "date" },
+        { c: "president", nom: "Président du comité (nom, qualité)", t: "text" },
+        { c: "secretaire", nom: "Secrétaire du comité (nom)", t: "text" },
+        { c: "surProposition", nom: "Origine de la proposition", t: "cases", pleine: true, options: [
+          "La décision est prise sur proposition d'une commission constituée au sein du comité"
+        ], aide: "Le comité peut décider de recourir à un expert « le cas échéant sur proposition des commissions constituées en son sein » (art. L. 2315-78). La décision, elle, appartient au comité : elle ne se délègue pas (art. L. 2315-38)." }
+      ]},
+      { titre: "L'expertise", champs: [
+        { c: "cas", nom: "Cas de recours", t: "select", options: [
+          "consultation sur les orientations stratégiques (art. L. 2315-87)",
+          "consultation sur la situation économique et financière (art. L. 2315-88)",
+          "risque grave, identifié et actuel (art. L. 2315-94, 1°)",
+          "nouvelles technologies ou projet important modifiant les conditions de travail (art. L. 2315-94, 2°)",
+          "préparation de la négociation sur l'égalité professionnelle (art. L. 2315-94, 3°)",
+          "expertise libre rémunérée par le comité (art. L. 2315-81)"
+        ] },
+        { c: "objet", nom: "Objet et périmètre de la mission", t: "textarea", pleine: true },
+        { c: "expert", nom: "Expert désigné (nom, qualité, habilitation)", t: "text" },
+        { c: "votants", nom: "Nombre de membres présents ayant voix délibérative", t: "number" },
+        { c: "pour", nom: "Voix pour", t: "number" },
+        { c: "contre", nom: "Voix contre", t: "number" },
+        { c: "abstentions", nom: "Abstentions", t: "number" },
+        { c: "dateDesignation", nom: "Date de la désignation de l'expert", t: "date",
+          aide: "Elle ouvre les délais de l'expert : trois jours pour demander les informations complémentaires, dix jours pour notifier le coût prévisionnel, l'étendue et la durée (art. R. 2315-45 et R. 2315-46)." }
+      ]}
+    ],
+    composer: function (v) {
+      var cas = String(v.cas || "");
+      var libre = cas.indexOf("expertise libre") === 0;
+      var employeur = cas.indexOf("situation économique") === 0 || cas.indexOf("risque grave") === 0 ||
+        cas.indexOf("nouvelles technologies") === 0;
+      var partage = cas.indexOf("orientations stratégiques") === 0;
+      var d = v.dateDesignation;
+      function plus(n) {
+        if (!d) return null;
+        var x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() + n);
+        return x.toISOString().slice(0, 10);
+      }
+      var arts = ["L2315-78", "L2315-32", "L2315-38"];
+      if (cas.indexOf("orientations stratégiques") === 0) arts.push("L2315-87");
+      if (cas.indexOf("situation économique") === 0) arts.push("L2315-88");
+      if (cas.indexOf("risque grave") === 0 || cas.indexOf("nouvelles technologies") === 0 ||
+          cas.indexOf("préparation de la négociation") === 0) arts.push("L2315-94");
+      arts.push(libre ? "L2315-81" : "L2315-80", "R2315-45", "R2315-46");
+      return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
+        '<h2 class="titre-doc">Résolution du comité social et économique<br>Recours à un expert</h2>' +
+        '<p class="sous-titre">Réunion du ' + chExDate(v.dateReunion, "2026-09-15") + "</p>" +
+        "<h3>Cadre de la décision</h3>" +
+        "<p>Le comité social et économique, réuni sous la présidence de " +
+        chEx(v.president, "M. Julien Marchand, directeur d'établissement") + ", le secrétariat étant assuré par " +
+        chEx(v.secretaire, "Mme Sonia Delcroix") + ", décide de recourir à un expert.</p>" +
+        ((v.surProposition || []).length
+          ? "<p>La décision est prise sur proposition d'une commission constituée au sein du comité, " +
+            "conformément à l'article L. 2315-78. La décision de recourir à l'expert appartient au " +
+            "comité et ne peut lui être déléguée (art. L. 2315-38).</p>"
+          : "<p>La décision de recourir à l'expert appartient au comité : elle ne peut être déléguée à " +
+            "une commission (art. L. 2315-38).</p>") +
+        "<h3>Cas de recours</h3><p>" +
+        chEx(v.cas, "risque grave, identifié et actuel (art. L. 2315-94, 1°)") + "</p>" +
+        "<h3>Objet et périmètre de la mission</h3><p>" +
+        chEx(v.objet, "Analyse du risque constaté sur la ligne de conditionnement n° 3 — organisation du travail, état des protecteurs, historique des presque-accidents depuis janvier 2025 — et propositions de mesures de prévention") + "</p>" +
+        "<h3>Expert désigné</h3><p>" +
+        chEx(v.expert, "Cabinet Prévention & Travail, expert habilité, agrément n° 2024-118") + "</p>" +
+        "<h3>Vote</h3>" +
+        "<p>Résolution soumise au vote : <i>« Le comité social et économique décide de recourir à " +
+        "l'expertise ci-dessus définie et désigne l'expert nommé. »</i></p>" +
+        "<table><tr><th>Membres présents ayant voix délibérative</th><td>" + chEx(v.votants, "11") + "</td></tr>" +
+        "<tr><th>Pour</th><td>" + chEx(v.pour, "9") + "</td></tr>" +
+        "<tr><th>Contre</th><td>" + chEx(v.contre, "1") + "</td></tr>" +
+        "<tr><th>Abstentions</th><td>" + chEx(v.abstentions, "1") + "</td></tr></table>" +
+        "<p>Les résolutions du comité sont prises à la majorité des membres présents " +
+        "(art. L. 2315-32) ; le président ne participe pas au vote lorsqu'il consulte les membres élus " +
+        "en tant que délégation du personnel.</p>" +
+        "<h3>Financement</h3>" +
+        "<p>" + (libre
+          ? "L'expertise est rémunérée par le comité sur ses propres ressources, par dérogation aux " +
+            "articles L. 2315-78 et L. 2315-80 (art. L. 2315-81)."
+          : employeur
+            ? "Les frais d'expertise sont pris en charge par l'employeur (art. L. 2315-80, 1°)."
+            : partage
+              ? "Les frais d'expertise sont pris en charge à hauteur de 20 % par le comité sur son " +
+                "budget de fonctionnement et de 80 % par l'employeur (art. L. 2315-80, 2°) ; ils le " +
+                "sont intégralement par l'employeur lorsque le budget de fonctionnement est " +
+                "insuffisant et n'a pas donné lieu à transfert d'excédent au cours des trois années " +
+                "précédentes (art. L. 2315-80, 3°)."
+              : vide("règle de prise en charge applicable au cas retenu")) + "</p>" +
+        "<h3>Délais de l'expert</h3>" +
+        "<p>L'expert demande à l'employeur, au plus tard dans les trois jours de sa désignation, toutes " +
+        "les informations complémentaires qu'il juge nécessaires ; l'employeur répond dans les cinq " +
+        "jours (art. R. 2315-45). L'expert notifie à l'employeur le coût prévisionnel, l'étendue et la " +
+        "durée de l'expertise dans un délai de dix jours à compter de sa désignation (art. R. 2315-46).</p>" +
+        "<table><tr><th>Désignation</th><td>" + chExDate(v.dateDesignation, "2026-09-15") + "</td></tr>" +
+        "<tr><th>Demande d'informations complémentaires — au plus tard</th><td>" +
+        (d ? e(dateFr(plus(3))) : exemple(dateFr("2026-09-18"))) + "</td></tr>" +
+        "<tr><th>Notification du coût, de l'étendue et de la durée — au plus tard</th><td>" +
+        (d ? e(dateFr(plus(10))) : exemple(dateFr("2026-09-25"))) + "</td></tr></table>" +
+        '<div class="signatures"><div>Le secrétaire du comité<br>' + chEx(v.secretaire, "Mme Sonia Delcroix") + "</div>" +
+        "<div>Le président du comité<br>" + chEx(v.president, "M. Julien Marchand") + "</div></div>" +
+        aPersonnaliser(["date de la réunion", "présidence et secrétariat", "cas de recours",
+          "objet et périmètre de la mission", "expert désigné", "résultats du vote",
+          "date de désignation"]) +
+        piedTextes(arts);
+    },
+    verifier: function (v) {
+      var p = parseInt(v.pour, 10), n = parseInt(v.votants, 10);
+      if (!isNaN(p) && !isNaN(n) && p * 2 <= n)
+        return "Les résolutions du comité sont prises à la majorité des membres présents " +
+          "(art. L. 2315-32) : " + p + " voix pour sur " + n + " membres présents n'atteignent pas " +
+          "cette majorité.";
+      return "";
+    }
   }];
 
   /* ------------------------------------------------------------------ */
@@ -1521,8 +2106,62 @@
     else location.href = "./";
   });
 
+  /* ------------------------------------------------------------------ */
+  /* Ouverture d'un modèle pré-rempli depuis une autre page.             */
+  /*                                                                     */
+  /* « documents.html?modele=<clé>&pre=<JSON encodé> » ouvre le modèle   */
+  /* demandé et y verse les valeurs transmises. Ce sont les parcours     */
+  /* guidés qui s'en servent : chaque étape renvoie ici avec ce que le   */
+  /* profil de l'entreprise et les dates du dossier donnent déjà.        */
+  /*                                                                     */
+  /* Deux précautions. Les valeurs transmises ne sont versées que dans   */
+  /* les champs QUE LE MODÈLE DÉCLARE : une clé inconnue est ignorée,    */
+  /* jamais écrite. Et elles ne sont posées que là où le brouillon est   */
+  /* vide — ce que l'utilisateur a saisi ici l'emporte toujours sur ce   */
+  /* qu'une autre page propose.                                          */
+  function appliquerPre(m, pre) {
+    var v = lireValeurs(m), touche = false;
+    m.sections.forEach(function (s) {
+      s.champs.forEach(function (c) {
+        if (!(c.c in pre)) return;
+        var val = pre[c.c];
+        if (c.t === "cases") {
+          if (!Array.isArray(val) || !val.length) return;
+          if ((v[c.c] || []).length) return;
+          /* Une option qui n'existe pas dans le modèle n'est pas cochée. */
+          val = val.filter(function (x) { return c.options.indexOf(x) >= 0; });
+          if (!val.length) return;
+        } else {
+          if (val === null || val === undefined || String(val) === "") return;
+          if (v[c.c]) return;
+          val = String(val);
+        }
+        v[c.c] = val;
+        touche = true;
+      });
+    });
+    if (!touche) return false;
+    remplir(m, v);
+    ecrireBrouillon(m.cle, lireValeurs(m));
+    return true;
+  }
+
   construireCartes();
-  choisir(MODELES[0]);
+
+  var params = new URLSearchParams(location.search);
+  var demande = params.get("modele");
+  var vise = MODELES.filter(function (m) { return m.cle === demande; })[0];
+  choisir(vise || MODELES[0]);
+  if (vise) {
+    var pre = null;
+    try { pre = JSON.parse(params.get("pre") || "null"); } catch (_) { pre = null; }
+    var pose = pre && typeof pre === "object" && !Array.isArray(pre) ? appliquerPre(vise, pre) : false;
+    message(pose
+      ? "Modèle ouvert et pré-rempli avec les données de votre profil et de votre parcours. Relisez, complétez, puis générez le document."
+      : "Modèle ouvert. Complétez le formulaire, puis générez le document.");
+    var carte = $("modele-" + vise.cle);
+    if (carte) carte.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   if ("serviceWorker" in navigator)
     window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
