@@ -123,4 +123,14 @@ function referentEmployeurDu(f) {
     motif: `Effectif de ${e.valeur} salariés (moins de deux cent cinquante) : le référent employeur de L. 1153-5-1 n'est pas obligatoire. Le référent du comité social et économique (L. 2314-1), lui, ne dépend pas de ce seuil.` };
 }
 
-module.exports = { SEUILS, effectif, suitesEvaluation, majDuerp, cssctDue, referentEmployeurDu };
+/* Les causes de fin anticipée du mandat. L. 2314-33, deuxième phrase : « Les
+   fonctions de ces membres prennent fin par le décès, la démission, la rupture
+   du contrat de travail, la perte des conditions requises pour être éligible. »
+   Elles seules autorisent le comité à remplacer un membre de la commission
+   avant le terme du mandat des élus, et aucun accord n'y déroge. */
+const FINS_ANTICIPEES = ["décès", "démission", "rupture du contrat de travail",
+  "perte des conditions requises pour être éligible"];
+const finAnticipeeMandat = cause => FINS_ANTICIPEES.includes(cause);
+
+module.exports = { SEUILS, effectif, suitesEvaluation, majDuerp, cssctDue, referentEmployeurDu,
+  FINS_ANTICIPEES, finAnticipeeMandat };

@@ -27,6 +27,8 @@
   "nbMembres": 4,
   "membreSecondCollege": "oui",
   "designesParCSE": "oui",
+  "remplacementEnCoursDeMandat": "non",
+  "causeRemplacement": "",
   "modalitesFixees": "règlement intérieur",
   "delegationConforme": "oui"
  },

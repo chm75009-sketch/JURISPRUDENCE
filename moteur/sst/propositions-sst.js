@@ -11,6 +11,7 @@
 const fs = require("fs"), path = require("path");
 const V = require("../commun/propositions.js");
 
+const M = require("./moteur-sst.js");
 const lire = n => fs.readFileSync(path.join(__dirname, n), "utf8");
 const SOURCES = ["controles-sst.js", "moteur-sst.js"].map(lire);
 
@@ -55,6 +56,10 @@ const P = {
     aide: "Au moins un des trois membres minimum vient du second collège (agents de maîtrise et techniciens) ou, le cas échéant, du troisième (cadres)." },
   "cssct.designesParCSE": { valeurs: OUI_NON, libre: false,
     aide: "Les membres de la commission sont désignés par le comité, parmi ses membres, par résolution, pour la durée du mandat." },
+  "cssct.remplacementEnCoursDeMandat": { valeurs: OUI_NON, libre: false,
+    aide: "Les membres de la commission sont désignés pour une durée qui prend fin avec le mandat des élus du comité (L. 2315-39). Hors les fins anticipées de mandat de L. 2314-33, le comité ne peut pas les remplacer — et aucun accord d'entreprise n'y déroge (Soc., 28 mai 2026, n° 24-22.914)." },
+  "cssct.causeRemplacement": { valeurs: M.FINS_ANTICIPEES, libre: true,
+    aide: "Seules les causes de L. 2314-33 autorisent le remplacement : décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible. Toute autre cause — perte de confiance, réorganisation, nouvel équilibre syndical — expose la délibération à l'annulation." },
   "cssct.modalitesFixees": {
     valeurs: ["accord d'entreprise", "accord avec le comité", "règlement intérieur", "aucune"], libre: false,
     aide: "Nombre de membres, missions déléguées, fonctionnement, heures de délégation, formation, moyens : un accord d'entreprise les fixe ; sans délégué syndical, un accord avec le comité ; à défaut d'accord, le règlement intérieur du comité doit le faire." },

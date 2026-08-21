@@ -85,6 +85,80 @@ cas("commission sans membre du bon collège", {
 cas("commission régulière", {
   effectif: 700, nbCadres: 40, cssct: true,
   membresCssct: [{ college: 1 }, { college: 2 }, { college: 3 }] });
+
+/* Les commissions du comité : désignation, remplacement, délégation, modalités,
+   formation, et les commissions supplétives selon l'effectif et le régime. */
+cas("commission désignée sans résolution du comité", {
+  effectif: 700, nbCadres: 40, cssct: true,
+  designationCssct: { resolution: false } });
+cas("résolution adoptée à une autre majorité que celle des membres présents", {
+  effectif: 700, nbCadres: 40, cssct: true,
+  designationCssct: { resolution: true, majoriteMembresPresents: false } });
+cas("désignation régulière", {
+  effectif: 700, nbCadres: 40, cssct: true,
+  designationCssct: { resolution: true, majoriteMembresPresents: true } });
+cas("membres de la commission remplacés sans cause de fin de mandat", {
+  effectif: 700, cssct: true,
+  remplacementCssct: { effectue: true, cause: "recomposition de l'équilibre syndical" } });
+cas("remplacement pour démission", {
+  effectif: 700, cssct: true,
+  remplacementCssct: { effectue: true, cause: "démission" } });
+cas("aucun remplacement depuis la désignation", {
+  effectif: 700, cssct: true, remplacementCssct: { effectue: false } });
+cas("avis et expert délégués à la commission", {
+  effectif: 700, cssct: true,
+  delegationCssct: { avisDelegue: true, expertDelegue: true } });
+cas("délégation dans les limites de L. 2315-38", {
+  effectif: 700, cssct: true,
+  delegationCssct: { avisDelegue: false, expertDelegue: false } });
+cas("commission sans règles écrites", {
+  effectif: 700, cssct: true, sourceModalitesCssct: "aucune" });
+cas("modalités fixées par le règlement intérieur du comité", {
+  effectif: 700, cssct: true, sourceModalitesCssct: "règlement intérieur du comité" });
+cas("modalités fixées par accord d'entreprise", {
+  effectif: 700, cssct: true, sourceModalitesCssct: "accord d'entreprise" });
+cas("formation de la commission écourtée au renouvellement à 700 salariés", {
+  effectif: 700, cssct: true, mandatRenouvele: true, joursFormationSSCT: 3 });
+cas("formation de la commission suffisante au renouvellement sous trois cents salariés", {
+  effectif: 180, cssct: true, mandatRenouvele: true, joursFormationSSCT: 3 });
+cas("formation de cinq jours au premier mandat", {
+  effectif: 700, cssct: true, mandatRenouvele: false, joursFormationSSCT: 5 });
+cas("commissions supplétives absentes à quatre cents salariés", {
+  effectif: 400, accordCommissions: false, commissionsConstituees: [] });
+cas("commissions supplétives partiellement constituées", {
+  effectif: 400, accordCommissions: false, commissionsConstituees: ["formation"] });
+cas("les trois commissions supplétives constituées", {
+  effectif: 400, accordCommissions: false,
+  commissionsConstituees: ["formation", "logement", "égalité professionnelle"] });
+cas("accord L. 2315-45 organisant les commissions", {
+  effectif: 1200, accordCommissions: true });
+cas("commission économique absente à mille deux cents salariés", {
+  effectif: 1200, accordCommissions: false, commissionEconomique: false });
+cas("commission économique sans représentant des cadres", {
+  effectif: 1200, accordCommissions: false, commissionEconomique: true,
+  membresCommissionEconomique: [{ cadre: false }, { cadre: false }] });
+cas("commission économique au-delà de cinq membres", {
+  effectif: 1200, accordCommissions: false, commissionEconomique: true,
+  membresCommissionEconomique: [{ cadre: true }, { cadre: false }, { cadre: false },
+    { cadre: false }, { cadre: false }, { cadre: false }] });
+cas("commission économique régulière", {
+  effectif: 1200, accordCommissions: false, commissionEconomique: true,
+  membresCommissionEconomique: [{ cadre: true }, { cadre: false }, { cadre: false }] });
+cas("commission des marchés due et absente", {
+  effectif: 900, comiteExistant: true, seuilsComptesComite: true, commissionMarches: false });
+cas("commission des marchés créée", {
+  effectif: 900, comiteExistant: true, seuilsComptesComite: true, commissionMarches: true });
+cas("comptes du comité en deçà des seuils", {
+  effectif: 900, comiteExistant: true, seuilsComptesComite: false });
+cas("expertise décidée par la commission", {
+  effectif: 800, expertise: { cas: "risque grave", decideePar: "la commission santé, sécurité et conditions de travail" } });
+cas("expertise décidée par l'employeur", {
+  effectif: 800, expertise: { cas: "risque grave", decideePar: "l'employeur" } });
+cas("expertise décidée par le comité", {
+  effectif: 800, expertise: { cas: "risque grave", decideePar: "le comité social et économique" } });
+cas("expertise sur risque grave pendant un licenciement collectif", {
+  effectif: 800, nbLicenciements: 24,
+  expertise: { cas: "risque grave", decideePar: "le comité social et économique" } });
 cas("subvention de fonctionnement insuffisante", {
   effectif: 800, masseSalariale: 30000000, subventionVersee: 40000 });
 cas("subvention de fonctionnement conforme", {

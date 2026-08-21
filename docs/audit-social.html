@@ -186,6 +186,43 @@
     body.print-general #bloc-liste,body.print-general #bloc-manquant,body.print-general #bloc-existant{display:none}
     body.print-liste #bloc-manquant,body.print-liste #bloc-existant,body.print-liste #bloc-general{display:none}
   }
+
+  /* La note de régime, en tête de page et repliée par défaut.
+
+     Elle répond à la question qui commande toutes les autres : ce texte
+     s'impose-t-il, mon accord peut-il en disposer autrement, ou n'est-il là
+     qu'à défaut d'accord ? Trois étages, trois couleurs, et chaque affirmation
+     rattachée à son article. Repliée, elle n'encombre pas ; dépliée, elle
+     tient sur un écran. */
+  details.regime{border:1px solid var(--bleu);border-radius:4px;
+    background:var(--surface);margin:22px 0 0}
+  details.regime>summary{cursor:pointer;list-style:none;padding:13px 16px;
+    font:600 15px/1.35 system-ui;color:var(--bleu);display:flex;gap:9px;align-items:baseline}
+  details.regime>summary::-webkit-details-marker{display:none}
+  details.regime>summary::after{content:"deplier";margin-left:auto;font:400 12px/1.4 system-ui;
+    color:var(--gris);white-space:nowrap}
+  details.regime[open]>summary::after{content:"replier"}
+  details.regime>summary::before{content:"\25B8";flex:0 0 auto;color:var(--bleu)}
+  details.regime[open]>summary::before{content:"\25BE"}
+  details.regime>summary:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+  details.regime .corps{padding:14px 16px 18px;border-top:1px solid var(--filet)}
+  details.regime .corps>p{margin:0 0 12px;max-width:78ch;font-size:14.5px}
+  details.regime .corps>p:last-child{margin-bottom:0}
+  ul.etages{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px}
+  ul.etages li{border-left:4px solid var(--bleu);background:var(--gris-f);
+    padding:9px 13px;border-radius:0 3px 3px 0;font-size:14px}
+  ul.etages li>b{display:block;color:var(--encre);margin-bottom:4px}
+  ul.etages li.op{border-left-color:var(--rouge)}
+  ul.etages li.neg{border-left-color:var(--orange)}
+  ul.etages li.sup{border-left-color:var(--vert)}
+  ul.etages .art{color:var(--gris);font:500 12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  details.regime .chute{border-top:1px solid var(--filet);padding-top:11px;color:var(--corps);
+    font-size:14px}
+  @media print{
+    details.regime{break-inside:avoid}
+    details.regime .corps{display:block}
+    details.regime>summary::after{content:""}
+  }
 </style>
 </head>
 <body>
@@ -237,6 +274,47 @@
   d'audit détaillés, et ne délivre aucun blanc-seing : un rapport tout vert dit « rien ne bloque en
   l'état des réponses », pas « rien ne bloquera ».</p>
 </div>
+
+<details class="regime" id="regime">
+  <summary>Avant de commencer&nbsp;: comment lire une obligation, en trois étages</summary>
+  <div class="corps">
+  <p>Cette page passe en revue quarante et une obligations. Aucune ne se lit sans se demander
+  d'abord de quel étage elle relève&nbsp;: la même page peut porter une obligation qu'aucun accord
+  n'écarte et, deux lignes plus bas, une obligation qui ne joue qu'à défaut d'accord. La liste des
+  obligations le dit pour chacune&nbsp;; voici la grille.</p>
+  <ul class="etages">
+    <li class="op"><b>1. Ordre public — ce qu'aucun accord ne peut écarter</b>
+    L'obligation existe dès que son seuil est franchi, et le texte ne réserve aucun accord.
+    Exemples de cette page&nbsp;: le document unique d'évaluation des risques, dû dès le premier
+    salarié&nbsp;; le règlement intérieur, obligatoire à partir de cinquante salariés&nbsp;; la
+    commission santé, sécurité et conditions de travail, créée à partir de trois cents salariés,
+    dont la composition et les limites de la délégation sont d'ordre public.
+    <span class="art">L. 4121-3 · R. 4121-1 · L. 1311-2 · L. 2315-36 · L. 2315-38 · L. 2315-39</span></li>
+
+    <li class="neg"><b>2. Le champ de la négociation — ce que l'accord peut régler</b>
+    Le texte renvoie expressément à un accord, qui organise l'obligation sans la faire disparaître.
+    Exemples&nbsp;: l'accord de l'article L. 2315-45 qui prévoit la création de commissions
+    supplémentaires du comité&nbsp;; l'accord de l'article L. 2315-41 qui fixe le nombre de membres,
+    les missions déléguées et les moyens de la commission santé-sécurité&nbsp;; l'accord de méthode
+    de l'article L. 2242-11 qui fixe les thèmes et la périodicité des négociations obligatoires.
+    <span class="art">L. 2315-41 · L. 2315-45 · L. 2242-10 · L. 2242-11</span></li>
+
+    <li class="sup"><b>3. Les dispositions supplétives — ce qui s'applique à défaut d'accord</b>
+    Le texte commence par «&nbsp;en l'absence d'accord&nbsp;» ou «&nbsp;à défaut d'accord&nbsp;».
+    Exemples&nbsp;: les commissions formation, logement et égalité professionnelle à trois cents
+    salariés et la commission économique à mille, qui ne sont dues qu'en l'absence de l'accord de
+    l'article L. 2315-45&nbsp;; le calendrier annuel des négociations obligatoires, qui ne s'applique
+    qu'à défaut de l'accord de l'article L. 2242-11 — ou en cas de non-respect de ses stipulations.
+    <span class="art">L. 2315-46 · L. 2315-49 · L. 2315-50 · L. 2315-56 · L. 2315-44 · L. 2242-13</span></li>
+  </ul>
+  <p class="chute">Le test tient en une lecture&nbsp;: relisez la première ligne de l'article. Si
+  elle ne mentionne aucun accord, l'obligation s'impose telle quelle. Si elle renvoie à un accord,
+  cherchez cet accord avant de conclure. Si elle commence par «&nbsp;en l'absence d'accord&nbsp;»,
+  l'obligation n'est due que faute d'accord — et l'audit vous demandera d'abord si cet accord
+  existe. Les modules détaillés — comité, négociations, santé-sécurité, base de données — appliquent
+  la même grille, contrôle par contrôle.</p>
+  </div>
+</details>
 
 <div class="temps" id="fil-temps">
   <span data-t="1" class="actif">1 · Profil</span>

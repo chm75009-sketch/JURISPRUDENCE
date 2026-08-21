@@ -12,10 +12,10 @@ source : le chargement de la grille échoue si un article cité manque.
 | | `economique/` | `cse/` |
 |---|---|---|
 | Domaine | Licenciement pour motif économique, article L. 1233-3 | Comité social et économique, deuxième partie, livre III |
-| Articles lus sur Légifrance | 200 | 368 |
+| Articles lus sur Légifrance | 200 | 374 |
 | Règles | 236 | 40 |
-| Contrôles | 68 dont 8 de cohérence et 8 de détection | 38 dont 2 de cohérence et 3 de détection |
-| Cas de contrôle | 73 cas contradictoires | 59 cas moteur + 63 cas contradictoires |
+| Contrôles | 68 dont 8 de cohérence et 8 de détection | 47 dont 2 de cohérence et 3 de détection |
+| Cas de contrôle | 73 cas contradictoires | 59 cas moteur + 92 cas contradictoires |
 | Corpus de jurisprudence | 474 arrêts publiés dépouillés | 163 arrêts publiés classés sur 11 rubriques |
 | Contre-audit versé au dépôt | `economique/CONTRE-AUDIT-MOTEUR-ECONOMIQUE.md` | `cse/CONTRE-AUDIT-MODULE-CSE.md` |
 
@@ -32,9 +32,13 @@ Trois modules ont rejoint la même chaîne, chacun avec son dossier et son
 - **`nao/`** — la négociation obligatoire (L. 2242-1 et suivants) :
   17 contrôles, 25 articles, quatre thèmes et leurs périodicités, exposition
   aux pénalités jamais « blanchie ». Publication : `node publier-nao.js`.
+  Le dépôt de textes a été recapturé le 21 août 2026 avec le filtre par NOM du
+  code : quatre articles étaient des homonymes d'autres codes — L. 2242-1 rendu
+  depuis le code général des collectivités territoriales, L. 2242-6, L. 2242-7
+  et L. 2242-10 depuis le code des transports.
 - **`sst/`** — la santé, la sécurité et les conditions de travail (L. 4121-1
-  et suivants, L. 2315-36 et suivants, L. 1152-1 et suivants) : 19 contrôles,
-  30 articles dont 11 repris du module CSE, quatre seuils lus à la source
+  et suivants, L. 2315-36 et suivants, L. 1152-1 et suivants) : 20 contrôles,
+  33 articles dont 14 repris du module CSE, quatre seuils lus à la source
   (11, 50, 250, 300), exposition jamais « blanchie ». La capture a mesuré que
   le filtre de code du relais attend le NOM du code, pas l'identifiant
   `LEGITEXT…` — sans lui, le relais sert l'homonyme d'un autre code.
@@ -81,7 +85,7 @@ python3 ../commun/word_py.py _audit_items.json Audit.docx "Titre"
 cd moteur/cse
 node publier-cse.js            # toute la chaîne, puis le manifeste
 node tests-cse.js              # 59 cas sur les seuils, délais, budgets et la parité
-node tests-controles-cse.js    # 63 cas × 38 contrôles = 2394 verdicts
+node tests-controles-cse.js    # 92 cas × 47 contrôles = 4324 verdicts
 node audit-cse.js fiche-cse.json
 node questionnaire-cse.js      # le questionnaire vierge, et son contrôle de non-divergence
 node verifier-textes.js        # relit les 368 articles à la source — demande le réseau
@@ -118,6 +122,44 @@ node cse_recueil.js            # le recueil de jurisprudence classé
   parité de l'article L. 2314-30 s'arrête et le dit lorsque l'arrondi
   arithmétique des deux sexes ne retombe pas sur le nombre de candidats : le
   texte ne règle pas ce cas et aucun arrêt publié du corpus ne le tranche.
+
+## Les commissions du comité, et la règle de lecture des trois étages
+
+Ajouté au module CSE le 21 août 2026, et posé en tête des pages d'audit du
+comité, de la NAO, de la santé-sécurité et du panorama social : le droit d'un
+domaine se lit à trois étages — ordre public, champ de la négociation,
+dispositions supplétives — et la différence tient aux mots de l'article.
+
+- `L. 2315-36` dit « une commission santé, sécurité et conditions de travail
+  **est créée** » : aucun accord ne la supprime. Sa composition (`L. 2315-39`)
+  et les limites de sa délégation (`L. 2315-38`) sont d'ordre public.
+- `L. 2315-49`, `L. 2315-50`, `L. 2315-56` et `L. 2315-46` disent « **en
+  l'absence d'accord prévu à l'article L. 2315-45** » : les commissions
+  formation, logement, égalité professionnelle (300 salariés) et économique
+  (1 000 salariés) ne s'imposent qu'à défaut d'accord.
+- Même partage côté NAO : l'accord de méthode (`L. 2242-10`, `L. 2242-11`)
+  contre le supplétif de `L. 2242-13`, qui reprend « à défaut d'accord **ou en
+  cas de non-respect de ses stipulations** ».
+
+Les contrôles du module CSE suivent ce partage : `CSE-CTL-SST-01` à `-07` pour
+la commission santé-sécurité (mise en place, collège réservé, désignation par
+résolution, remplacement en cours de mandat, limites de la délégation, source
+des modalités, durée de la formation) et `CSE-CTL-COM-01` à `-03` pour les
+commissions supplétives, la commission économique et la commission des marchés.
+`CSE-CTL-EXP-04` vérifie que la décision de recourir à l'expert est bien celle
+du comité.
+
+Les décisions citées dans leurs motifs ont été lues à la source dans Judilibre
+le 21 août 2026 (réponse non relaxée) :
+
+| Décision | Contrôles |
+|---|---|
+| Soc., 27 nov. 2019, n° 19-14.224 (publié) — désignation par vote à la majorité des membres présents, sans résolution préalable | `CSE-CTL-SST-03`, `SST-CTL-CSS-02` |
+| Soc., 26 févr. 2025, n° 24-12.295 (publié) — L. 2315-39 d'ordre public, un siège au troisième collège là où il existe | `CSE-CTL-SST-02`, `SST-CTL-CSS-02` |
+| Soc., 11 févr. 2026, n° 24-16.408 — rappel du caractère d'ordre public de L. 2315-39 | `CSE-CTL-SST-03`, `SST-CTL-CSS-02` |
+| Soc., 28 mai 2026, n° 24-22.914 (publié) — pas de remplacement avant le terme du mandat, hors L. 2314-33 | `CSE-CTL-SST-04`, `SST-CTL-CSS-06` |
+| Soc., 13 mai 2026, n° 25-12.560 — L. 2315-38 d'ordre public : ni l'avis ni l'expert ne se délèguent | `CSE-CTL-SST-05`, `CSE-CTL-EXP-04`, `SST-CTL-CSS-04` |
+| Soc., 18 mars 2026, n° 23-22.270 (publié) — le comité décide l'expertise, le cas échéant sur proposition de ses commissions (L. 1233-34) | `CSE-CTL-EXP-03`, `CSE-CTL-EXP-04`, `SST-CTL-CSS-04` |
 
 ## Génération des documents
 

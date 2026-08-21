@@ -82,3 +82,11 @@ console.log("compteurs : " + JSON.stringify(manifeste.compteurs));
 if (jamais.length) console.log(`règles jamais déclenchées par les fiches du dépôt : ${jamais.map(r => r.id).join(", ")}`);
 const ko = rapport.jets || rapport.confVide || rapport.detectionConforme.length || rapport.jamaisEnDefaut.length;
 if (ko) { console.error("ÉCHEC — la chaîne de contrôle n'est pas verte."); process.exit(1); }
+
+/* L'empaquetage pour le navigateur clôt la chaîne, comme dans les autres
+   modules. Il était tenu à la main, et le fichier servi par docs/ pouvait donc
+   rester en arrière d'une version des contrôles sans que rien ne le dise : un
+   contrôle ajouté au dépôt n'existait pas pour l'utilisateur. */
+etape(7, "empaquetage pour le navigateur", "../commun/empaqueter.js",
+  path.join(ICI, "../../docs/moteur-cse.js"), "audit-cse.js", "MoteurCSE");
+console.log("publication du module comité : tout est vert");

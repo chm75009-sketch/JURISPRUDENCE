@@ -37,7 +37,16 @@ const A = {
 "CSE-CTL-MOY-03": { faire: "Rétablir le paiement des heures de délégation à l'échéance normale, et saisir le juge si l'usage est contesté.", quand: NOW },
 "CSE-CTL-MOY-04": { faire: "Organiser la formation en santé, sécurité et conditions de travail, cinq jours au minimum, et verser les attestations.", quand: AV_DEC },
 "CSE-CTL-SST-01": { faire: "Mettre en place la commission santé, sécurité et conditions de travail.", quand: AV_CON },
-"CSE-CTL-SST-02": { faire: "Compléter la commission : trois membres au minimum, dont au moins un du second ou du troisième collège.", quand: AV_CON },
+"CSE-CTL-SST-02": { faire: "Compléter la commission : trois membres au minimum, dont au moins un du second ou du troisième collège. Là où un troisième collège est institué, le siège lui revient (Soc., 26 février 2025, n° 24-12.295).", quand: AV_CON },
+"CSE-CTL-SST-03": { faire: "Faire désigner les membres de la commission par une résolution du comité adoptée à la majorité des membres présents, et en conserver le procès-verbal. Aucune résolution préalable fixant les modalités de l'élection n'est requise (Soc., 27 novembre 2019, n° 19-14.224).", quand: AV_CON },
+"CSE-CTL-SST-04": { faire: "Rétablir les membres de la commission initialement désignés : hors les fins anticipées de mandat de L. 2314-33, aucun remplacement n'est possible avant le terme du mandat des élus, et aucun accord n'y déroge (Soc., 28 mai 2026, n° 24-22.914).", quand: NOW },
+"CSE-CTL-SST-05": { faire: "Ramener la délégation dans les limites de L. 2315-38 : les attributions consultatives et le recours à l'expert restent au comité, quelles que soient les stipulations de l'accord.", quand: AV_CON },
+"CSE-CTL-SST-06": { faire: "Fixer les modalités de la commission — les six points de L. 2315-41 — par accord, ou à défaut par le règlement intérieur du comité.", quand: AV_CON },
+"CSE-CTL-SST-07": { faire: "Compléter la formation santé, sécurité et conditions de travail des membres de la commission jusqu'à la durée minimale applicable, aux frais de l'employeur.", quand: AV_DEC },
+"CSE-CTL-COM-01": { faire: "Constituer, à défaut d'accord L. 2315-45, les commissions de la formation, d'information et d'aide au logement et de l'égalité professionnelle, par délibération du comité.", quand: AV_DEC },
+"CSE-CTL-COM-02": { faire: "Créer la commission économique au sein du comité ou du comité central, avec cinq membres au plus dont un représentant des cadres, à défaut d'accord L. 2315-45.", quand: AV_DEC },
+"CSE-CTL-COM-03": { faire: "Créer la commission des marchés au sein du comité, dont les comptes dépassent au moins deux des trois seuils de D. 2315-29.", quand: AV_DEC },
+"CSE-CTL-EXP-04": { faire: "Faire délibérer le comité lui-même sur le recours à l'expertise : la commission peut la proposer, elle ne peut pas la décider.", quand: AV_DEC },
 "CSE-CTL-BUD-01": { faire: "Régulariser la subvention de fonctionnement au taux légal, sur l'assiette de l'article L. 2312-83.", quand: NOW },
 "CSE-CTL-BUD-02": { faire: "Ramener la contribution aux activités sociales au moins au rapport de l'année précédente, ou verser l'accord qui la fixe.", quand: NOW },
 "CSE-CTL-BUD-03": { faire: "Supprimer la condition d'ancienneté qui restreint l'accès aux activités sociales et culturelles.", quand: NOW },
@@ -62,6 +71,8 @@ const INTERDITS = {
 "CSE-CTL-ELE-03": "Ne tenez pas le scrutin sur ce protocole : il ne remplit pas la condition de double majorité.",
 "CSE-CTL-ELE-05": "Ne déposez pas ces listes : leur composition entraînerait l'annulation d'élections, sans remplacement possible.",
 "CSE-CTL-PER-03": "Ne faites plus fonctionner les représentants de proximité : aucun accord ne les institue.",
+"CSE-CTL-SST-05": "Ne recueillez pas l'avis du comité auprès de la seule commission, et ne lui laissez pas décider de l'expertise : L. 2315-38 est d'ordre public.",
+"CSE-CTL-EXP-04": "Ne poursuivez pas l'expertise sur cette délibération : la décision de recourir à l'expert appartient au comité.",
 };
 const SUSPENS = {
 "CSE-CTL-REC-01": "Ne concluez rien tant que la lisibilité des données n'a pas été vérifiée.",
@@ -73,6 +84,8 @@ const SUSPENS = {
 "CSE-CTL-ELE-03": "Ne tenez pas le scrutin tant que la validité du protocole n'a pas été vérifiée.",
 "CSE-CTL-ELE-05": "Ne déposez pas les listes tant que leur composition n'a pas été vérifiée.",
 "CSE-CTL-PER-03": "Ne faites pas fonctionner de représentants de proximité tant que l'accord qui les institue n'a pas été vérifié.",
+"CSE-CTL-SST-05": "Ne recueillez pas l'avis du comité tant que l'étendue de la délégation consentie à la commission n'a pas été vérifiée.",
+"CSE-CTL-EXP-04": "Ne poursuivez pas l'expertise tant que l'auteur de la délibération n'a pas été vérifié.",
 };
 const interdit = (id, etat) => etat === "non conforme"
   ? (INTERDITS[id] || "Ne poursuivez pas avant correction de ce point.")
@@ -91,6 +104,14 @@ const GRAVITE = {
  "CSE-CTL-MEP-03": CR, "CSE-CTL-ELE-02": CR, "CSE-CTL-ELE-04": CR, "CSE-CTL-CON-01": CR,
  "CSE-CTL-CON-02": CR, "CSE-CTL-MOY-01": CR, "CSE-CTL-MOY-03": CR, "CSE-CTL-BUD-01": CR,
  "CSE-CTL-EXP-02": CR, "CSE-CTL-SST-02": CR, "CSE-CTL-ELE-07": CR,
+ /* Les commissions. Deux d'entre elles sont bloquantes parce qu'un texte
+    d'ordre public s'oppose à la poursuite : une délégation qui empiète sur
+    l'avis ou sur l'expert vicie la consultation elle-même (L. 2315-38), et une
+    expertise décidée par la commission est nulle. */
+ "CSE-CTL-SST-05": B, "CSE-CTL-EXP-04": B,
+ "CSE-CTL-SST-03": CR, "CSE-CTL-SST-04": CR,
+ "CSE-CTL-SST-06": IM, "CSE-CTL-SST-07": IM,
+ "CSE-CTL-COM-01": IM, "CSE-CTL-COM-02": IM, "CSE-CTL-COM-03": IM,
  "CSE-CTL-MEP-01": IM, "CSE-CTL-MEP-04": IM, "CSE-CTL-PER-01": IM, "CSE-CTL-PER-02": IM,
  "CSE-CTL-ELE-01": IM, "CSE-CTL-ELE-06": IM, "CSE-CTL-CON-03": IM, "CSE-CTL-CON-05": IM,
  "CSE-CTL-CON-06": IM, "CSE-CTL-MOY-02": IM, "CSE-CTL-MOY-04": IM, "CSE-CTL-BUD-02": IM,

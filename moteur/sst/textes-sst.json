@@ -186,5 +186,20 @@
   "id": "LEGIARTI000043893927",
   "texte": "Dans le cadre de la consultation sur la politique sociale, l'employeur présente également au comité social et économique : 1° Un rapport annuel écrit faisant le bilan de la situation générale de la santé, de la sécurité et des conditions de travail dans l'entreprise et des actions menées au cours de l'année écoulée dans ces domaines. Les questions du travail de nuit et de prévention des effets de l'exposition aux facteurs de risques professionnels mentionnés à l'article L. 4161-1 sont traitées spécifiquement ; 2° Le programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail mentionné au 1° du III de l'article L. 4121-3-1 . Lors de l'avis rendu sur le rapport et sur le programme annuels de prévention, le comité peut proposer un ordre de priorité et l'adoption de mesures supplémentaires. Lorsque certaines des mesures prévues par l'employeur ou demandées par le comité n'ont pas été prises au cours de l'année concernée par le programme, l'employeur énonce les motifs de cette inexécution, en annexe au rapport annuel. Le procès-verbal de la réunion du comité consacrée à l'examen du rapport et du programme est joint à toute demande présentée par l'employeur en vue d'obtenir des marchés publics, des participations publiques, des subventions, des primes de toute nature ou des avantages sociaux ou fiscaux.",
   "source": "moteur/cse/textes_cse.json — vérifié à la source par moteur/cse/verifier-textes.js (relecture du 15 août 2026, aucun écart)"
+ },
+ "L2314-33": {
+  "id": "LEGIARTI000052437191",
+  "texte": "Les membres de la délégation du personnel du comité social et économique sont élus pour quatre ans. Les fonctions de ces membres prennent fin par le décès, la démission, la rupture du contrat de travail, la perte des conditions requises pour être éligible. Ils conservent leur mandat en cas de changement de catégorie professionnelle.",
+  "source": "moteur/cse/textes_cse.json — relu à la source le 21 août 2026, deux lectures concordantes, relais filtré par NOM du code"
+ },
+ "L2315-32": {
+  "id": "LEGIARTI000035624869",
+  "texte": "Les résolutions du comité social et économique sont prises à la majorité des membres présents. Le président du comité social et économique ne participe pas au vote lorsqu'il consulte les membres élus du comité en tant que délégation du personnel.",
+  "source": "moteur/cse/textes_cse.json — relu à la source le 21 août 2026, deux lectures concordantes, relais filtré par NOM du code"
+ },
+ "L2314-11": {
+  "id": "LEGIARTI000036262481",
+  "texte": "Les membres de la délégation du personnel du comité social et économique sont élus sur des listes établies par les organisations syndicales pour chaque catégorie de personnel : - d'une part, par le collège des ouvriers et employés ; - d'autre part, par le collège des ingénieurs, chefs de service, techniciens, agents de maîtrise et assimilés. Dans les entreprises d'au moins cinq cent un salariés, les ingénieurs, les chefs de service et cadres administratifs, commerciaux ou techniques assimilés ont au moins un délégué titulaire au sein du second collège, élu dans les mêmes conditions. En outre, dans les entreprises, quel que soit leur effectif, dont le nombre des ingénieurs, chefs de service et cadres administratifs, commerciaux ou techniques assimilés sur le plan de la classification est au moins égal à vingt-cinq au moment de la constitution ou du renouvellement de l'instance, ces catégories constituent un troisième collège. Par dérogation aux alinéas précédents, dans les établissements ou les entreprises n'élisant qu'un membre de la délégation du personnel titulaire et un membre de la délégation du personnel suppléant, il est mis en place pour chacune de ces élections, un collège électoral unique regroupant l'ensemble des catégories professionnelles.",
+  "source": "moteur/cse/textes_cse.json — relu à la source le 21 août 2026, deux lectures concordantes, relais filtré par NOM du code"
  }
 }

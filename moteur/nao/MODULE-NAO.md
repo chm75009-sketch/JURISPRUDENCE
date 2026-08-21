@@ -61,6 +61,25 @@ deux lectures concordantes de l'article du code du travail
 désormais ces homonymes à part : ils ne concluent ni à la concordance ni à
 l'écart.
 
+**Recapture du 21 août 2026 — quatre articles étaient des homonymes.** La
+capture initiale passait au relais l'identifiant `LEGITEXT000006072050` au lieu
+du NOM du code. L'identifiant désactive le filtre : la recherche se fait alors
+par pertinence, et le relais sert l'article d'un autre code portant le même
+numéro. Le dépôt portait ainsi, sous des numéros du code du travail, quatre
+articles étrangers :
+
+| Numéro | Ce que le dépôt portait | Le bon article, relu le 21 août 2026 |
+|---|---|---|
+| `L. 2242-1` | « Le conseil municipal statue sur l'acceptation des dons et legs faits à la commune » (code général des collectivités territoriales, `LEGIARTI000006390466`) | l'obligation quadriennale de négocier, `LEGIARTI000043893962` |
+| `L. 2242-6` | le voyage habituel sans titre de transport (code des transports, `LEGIARTI000032285967`) | les conditions de dépôt d'un accord salaires et l'engagement sérieux et loyal, `LEGIARTI000035627858` |
+| `L. 2242-7` | l'outrage à un agent d'exploitant de transport (code des transports, `LEGIARTI000030902077`) | la pénalité salaires, `LEGIARTI000035627851` |
+| `L. 2242-10` | la diffusion de messages signalant la présence de contrôleurs (code des transports, `LEGIARTI000032284434`) | la négociation ouvrant l'accord de méthode, `LEGIARTI000035627827` |
+
+Les contrôles, eux, énonçaient la bonne règle : c'est le dépôt de textes qui
+était faux, non le raisonnement. `capturer-textes-nao.js` et
+`verifier-textes-nao.js` passent désormais « Code du travail », et la relecture
+du 21 août 2026 rend **25 articles, 25 concordants, 0 écart**.
+
 ## La chaîne de publication
 
 `node publier-nao.js` : tests contradictoires (15 dossiers, tout contrôle
@@ -81,3 +100,21 @@ conclut « conforme ».
 - ~~La BDESE nourrit la négociation~~ — **croisé** : le contrôle
   NAO-CTL-CON-03 vérifie que la négociation égalité s'est appuyée sur les
   données de la base (L. 2242-17, 2°), et renvoie au module BDESE.
+
+## La jurisprudence rattachée aux contrôles
+
+Décisions lues à la source dans Judilibre le 21 août 2026, réponse non relaxée,
+citées pour ce qu'elles disent et rien de plus :
+
+| Décision | Ce qu'elle dit | Contrôles |
+|---|---|---|
+| Soc., 15 avr. 2026, n° 24-15.653 (publié) | « les négociations obligatoires ne peuvent être considérées comme ayant pris fin avant l'établissement d'un procès-verbal de désaccord » (L. 2242-1, L. 2242-4, L. 2242-5) | `NAO-CTL-UNI-01`, `NAO-CTL-ISS-01` |
+| Soc., 3 avr. 2024, n° 22-15.784 (publié) | un accord de droit commun peut définir, dans les entreprises à établissements distincts, les niveaux auxquels la négociation obligatoire est conduite (L. 2242-1, L. 2242-10) | `NAO-CTL-REG-02` |
+| Soc., 11 sept. 2024, n° 23-14.333 (publié) | l'obligation de négocier sur la gestion des emplois et des parcours professionnels suppose une ou plusieurs organisations représentatives **au niveau de l'entreprise** | `NAO-CTL-REG-01` |
+| 2e Civ., 7 nov. 2019, n° 18-21.499 (publié) | l'employeur est seulement tenu d'engager la négociation annuelle sur les salaires, non de parvenir à un accord, pour bénéficier de la réduction de cotisations de L. 241-13, III, du code de la sécurité sociale | `NAO-CTL-ISS-01`, `NAO-CTL-PEN-01` |
+
+La première décision est celle qui change le plus de choses en pratique : elle
+soude l'interdiction des décisions unilatérales (L. 2242-4) au procès-verbal de
+désaccord (L. 2242-5). Tant que le procès-verbal n'est pas établi, la
+négociation est en cours — et l'employeur ne peut pas décider seul dans les
+matières traitées.

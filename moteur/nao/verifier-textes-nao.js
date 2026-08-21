@@ -17,7 +17,8 @@ const { execFileSync } = require("child_process");
 const T = JSON.parse(fs.readFileSync(__dirname + "/textes-nao.json", "utf8"));
 const DATE = process.argv[2] || new Date().toISOString().slice(0, 10);
 const RELAIS = "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance";
-const CODE = "LEGITEXT000006072050";
+/* Le NOM du code, jamais l'identifiant LEGITEXT : voir capturer-textes-nao.js. */
+const CODE = "Code du travail";
 
 const net = s => String(s || "").replace(/\s+/g, " ").trim();
 const dors = ms => { const t = Date.now(); while (Date.now() - t < ms); };

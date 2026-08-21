@@ -41,13 +41,14 @@ classe pour le document unique absent ou périmé (R. 4741-1), amende de
 L. 4741-1, un an et 3 750 € pour les discriminations consécutives à un
 harcèlement (L. 1155-2).
 
-## Les dix-neuf contrôles
+## Les vingt contrôles
 
 Document unique (8) : existence, inventaire par unité de travail, mise à jour
 annuelle, mise à jour événementielle, suites (programme ou liste), conservation
 et affichage, consultation du comité, transmission au service de prévention ·
-CSSCT (5) : création, composition, modalités, limites de la délégation,
-formation des élus · Harcèlement (5) : référent employeur, référent du comité,
+CSSCT (6) : création, composition, modalités, limites de la délégation,
+formation des élus, remplacement des membres en cours de mandat ·
+Harcèlement (5) : référent employeur, référent du comité,
 information obligatoire, prévention organisée, réaction au signalement ·
 Exposition (1, jamais conforme).
 
@@ -56,11 +57,13 @@ objet. Une donnée non renseignée ne produit jamais « conforme ».
 
 ## Les textes
 
-30 articles avec leur identifiant `LEGIARTI…` (`textes-sst.json`) : 19 capturés
+33 articles avec leur identifiant `LEGIARTI…` (`textes-sst.json`) : 19 capturés
 au relais Légifrance en lectures doubles concordantes avec critère de contenu,
-et 11 repris de `moteur/cse/textes_cse.json` (CSSCT, référent du comité,
-formation, L. 2312-27), déjà vérifiés à la source par le module CSE. Relecture
-complète du 19 août 2026 : 30 concordants, 0 écart (`verifier-textes-sst.js`).
+et 14 repris de `moteur/cse/textes_cse.json` (CSSCT, référent du comité,
+formation, L. 2312-27, et depuis le 21 août 2026 L. 2314-11, L. 2314-33 et
+L. 2315-32, que les contrôles de composition et de remplacement citent), déjà
+vérifiés à la source par le module CSE. Relecture complète du 21 août 2026 :
+33 concordants, 0 écart (`verifier-textes-sst.js`).
 
 La capture a mesuré un piège nouveau : le filtre `NOM_CODE` du relais attend le
 **nom** du code (« Code du travail »), pas l'identifiant `LEGITEXT…`. Avec
@@ -72,7 +75,7 @@ cherche) a détecté les dix-neuf homonymes ; aucun n'a été codé.
 
 ## La chaîne de publication
 
-`node publier-sst.js` : tests contradictoires (22 dossiers — tout contrôle a
+`node publier-sst.js` : tests contradictoires (25 dossiers — tout contrôle a
 dit « non » au moins une fois, exposition comprise), non-divergence
 questionnaire/contrôles dans les deux sens, propositions vérifiées dans les
 deux sens, manifeste avec compteurs mesurés, empaquetage navigateur
@@ -92,3 +95,21 @@ conclut « conforme ».
 - **La faute inexcusable** (sécurité sociale) n'est pas citée : son texte
   relève d'un code que le relais de l'application ne sert pas — on ne cite pas
   ce qu'on n'a pas lu.
+
+## La jurisprudence rattachée aux contrôles
+
+Les contrôles de la commission citent, dans leurs motifs et dans leur
+fondement, les décisions lues à la source dans Judilibre le 21 août 2026
+(réponse non relaxée, aucune requête relâchée retenue) :
+
+| Décision | Ce qu'elle dit | Contrôle |
+|---|---|---|
+| Soc., 27 nov. 2019, n° 19-14.224 (publié) | la désignation des membres de la CSSCT, que sa mise en place soit obligatoire ou conventionnelle, résulte d'un vote à la majorité des voix des membres présents, sans résolution préalable fixant les modalités de l'élection | `SST-CTL-CSS-02` |
+| Soc., 26 févr. 2025, n° 24-12.295 (publié) | L. 2315-39 étant d'ordre public, là où un troisième collège est institué, un siège au moins revient à un élu de ce collège | `SST-CTL-CSS-02` |
+| Soc., 11 févr. 2026, n° 24-16.408 | rappelle le caractère d'ordre public de L. 2315-39 ; un accord ne peut pas s'entendre comme imposant une désignation proportionnelle au résultat électoral | `SST-CTL-CSS-02` |
+| Soc., 13 mai 2026, n° 25-12.560 | L. 2315-38 est d'ordre public : ni les attributions consultatives ni le recours à l'expert ne se délèguent à la commission | `SST-CTL-CSS-04` |
+| Soc., 18 mars 2026, n° 23-22.270 (publié) | le comité peut décider d'une expertise, le cas échéant sur proposition des commissions constituées en son sein (L. 1233-34) | `SST-CTL-CSS-04` |
+| Soc., 28 mai 2026, n° 24-22.914 (publié) | sauf fin anticipée de mandat au sens de L. 2314-33, le comité ne peut pas remplacer les membres d'une CSSCT avant le terme du mandat des élus | `SST-CTL-CSS-06` |
+
+Aucune n'est invoquée au-delà de ce qu'elle dit : le sommaire publié, quand il
+existe, fixe la limite.

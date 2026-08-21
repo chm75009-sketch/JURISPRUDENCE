@@ -60,6 +60,16 @@ const CAS = [
     f: avec(f => { f.cssct.delegationConforme = "non"; }) },
   { nom: "Élus jamais formés à la santé-sécurité", attendu: ["SST-CTL-CSS-05"],
     f: avec(f => { f.formationSSCT = "non"; }) },
+  { nom: "Membres de la commission remplacés en cours de mandat, hors fin anticipée",
+    attendu: ["SST-CTL-CSS-06"],
+    f: avec(f => { f.cssct.remplacementEnCoursDeMandat = "oui";
+      f.cssct.causeRemplacement = "recomposition de l'équilibre syndical"; }) },
+  { nom: "Remplacement pour démission d'un membre de la commission", attendu: [],
+    f: avec(f => { f.cssct.remplacementEnCoursDeMandat = "oui";
+      f.cssct.causeRemplacement = "démission"; }) },
+  { nom: "Remplacement déclaré sans cause renseignée", attendu: [],
+    f: avec(f => { f.cssct.remplacementEnCoursDeMandat = "oui";
+      f.cssct.causeRemplacement = ""; }) },
   { nom: "Quatre cent vingt salariés sans référent employeur", attendu: ["SST-CTL-HAR-01"],
     f: avec(f => { f.referentEmployeur = "non"; }) },
   { nom: "Comité sans référent harcèlement", attendu: ["SST-CTL-HAR-02"],

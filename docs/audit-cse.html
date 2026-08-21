@@ -194,6 +194,43 @@
   button:disabled{opacity:.45;cursor:default}
   @media print{ .retour,#message{display:none} }
   @media print{ .barre,form,header a,footer{display:none} .page{padding:0} }
+
+  /* La note de régime, en tête de page et repliée par défaut.
+
+     Elle répond à la question qui commande toutes les autres : ce texte
+     s'impose-t-il, mon accord peut-il en disposer autrement, ou n'est-il là
+     qu'à défaut d'accord ? Trois étages, trois couleurs, et chaque affirmation
+     rattachée à son article. Repliée, elle n'encombre pas ; dépliée, elle
+     tient sur un écran. */
+  details.regime{border:1px solid var(--bleu);border-radius:4px;
+    background:var(--surface);margin:22px 0 0}
+  details.regime>summary{cursor:pointer;list-style:none;padding:13px 16px;
+    font:600 15px/1.35 system-ui;color:var(--bleu);display:flex;gap:9px;align-items:baseline}
+  details.regime>summary::-webkit-details-marker{display:none}
+  details.regime>summary::after{content:"deplier";margin-left:auto;font:400 12px/1.4 system-ui;
+    color:var(--gris);white-space:nowrap}
+  details.regime[open]>summary::after{content:"replier"}
+  details.regime>summary::before{content:"\25B8";flex:0 0 auto;color:var(--bleu)}
+  details.regime[open]>summary::before{content:"\25BE"}
+  details.regime>summary:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+  details.regime .corps{padding:14px 16px 18px;border-top:1px solid var(--filet)}
+  details.regime .corps>p{margin:0 0 12px;max-width:78ch;font-size:14.5px}
+  details.regime .corps>p:last-child{margin-bottom:0}
+  ul.etages{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px}
+  ul.etages li{border-left:4px solid var(--bleu);background:var(--gris-f);
+    padding:9px 13px;border-radius:0 3px 3px 0;font-size:14px}
+  ul.etages li>b{display:block;color:var(--encre);margin-bottom:4px}
+  ul.etages li.op{border-left-color:var(--rouge)}
+  ul.etages li.neg{border-left-color:var(--orange)}
+  ul.etages li.sup{border-left-color:var(--vert)}
+  ul.etages .art{color:var(--gris);font:500 12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  details.regime .chute{border-top:1px solid var(--filet);padding-top:11px;color:var(--corps);
+    font-size:14px}
+  @media print{
+    details.regime{break-inside:avoid}
+    details.regime .corps{display:block}
+    details.regime>summary::after{content:""}
+  }
 </style>
 </head>
 <body>
@@ -236,6 +273,57 @@
   délégation, la durée des mandats et la périodicité des consultations — et elle ne qualifie pas le délit
   d'entrave. Quand un texte ne tranche pas une question, elle le dit au lieu de choisir.</p>
 </div>
+
+<details class="regime" id="regime">
+  <summary>Avant de commencer&nbsp;: les trois étages du droit du comité</summary>
+  <div class="corps">
+  <p>Deux commissions naissent au même seuil de trois cents salariés, et pourtant l'une
+  ne se négocie pas quand les autres ne s'imposent qu'à défaut d'accord. La différence tient
+  aux mots des textes, et elle commande tout l'audit&nbsp;: voici les trois étages.</p>
+  <ul class="etages">
+    <li class="op"><b>1. Ordre public — ce qu'aucun accord ne peut écarter</b>
+    La commission santé, sécurité et conditions de travail <strong>est créée</strong>
+    dans les entreprises et les établissements distincts d'au moins trois cents salariés et dans les
+    établissements mentionnés aux articles L. 4521-1 et suivants&nbsp;: le texte ne réserve aucun
+    accord. Sa composition — présidence par l'employeur, trois membres au minimum dont au moins un
+    du second ou, le cas échéant, du troisième collège, désignés par le comité parmi ses membres par
+    une résolution adoptée à la majorité des membres présents, pour une durée qui prend fin avec
+    celle du mandat des élus — est d'ordre public, de même que les limites de sa délégation&nbsp;:
+    jamais les attributions consultatives, jamais le recours à l'expert.
+    <span class="art">L. 2315-36 · L. 2315-38 · L. 2315-39 · L. 2315-32 · L. 2314-11 · L. 2314-33 —
+    Soc., 26 févr. 2025, n° 24-12.295 ; Soc., 13 mai 2026, n° 25-12.560 ;
+    Soc., 28 mai 2026, n° 24-22.914 ; Soc., 11 févr. 2026, n° 24-16.408</span></li>
+
+    <li class="neg"><b>2. Le champ de la négociation — ce que l'accord peut régler</b>
+    L'accord d'entreprise défini à l'article L. 2313-2 fixe les modalités de mise en place de la ou
+    des commissions santé-sécurité&nbsp;: nombre de membres, missions déléguées et leurs modalités
+    d'exercice, fonctionnement et heures de délégation, formation, moyens le cas échéant. En
+    l'absence de délégué syndical, c'est un accord entre l'employeur et le comité adopté à la
+    majorité des titulaires. En dehors des cas où la commission est obligatoire, un accord peut
+    aussi en créer et en fixer le nombre et le périmètre. Et un accord conclu dans les conditions du
+    premier alinéa de l'article L. 2232-12 peut prévoir la création de commissions supplémentaires
+    pour l'examen de problèmes particuliers.
+    <span class="art">L. 2315-41 · L. 2315-42 · L. 2315-43 · L. 2315-45</span></li>
+
+    <li class="sup"><b>3. Les dispositions supplétives — ce qui s'applique à défaut d'accord</b>
+    À défaut d'accord, le règlement intérieur du comité définit les modalités de la commission
+    santé-sécurité. Et surtout&nbsp;: «&nbsp;en l'absence d'accord prévu à l'article L. 2315-45&nbsp;»,
+    le comité constitue, à partir de trois cents salariés, une commission de la formation, une
+    commission d'information et d'aide au logement et une commission de l'égalité professionnelle ;
+    à partir de mille salariés, une commission économique de cinq membres au plus dont au moins un
+    représentant des cadres, réunie au moins deux fois par an. La commission des marchés, elle, ne
+    dépend pas de l'effectif de l'entreprise mais des comptes du comité.
+    <span class="art">L. 2315-44 · L. 2315-49 · L. 2315-50 · L. 2315-51 · L. 2315-56 ·
+    L. 2315-46 · L. 2315-47 · L. 2315-48 · L. 2315-44-1 · D. 2315-29</span></li>
+  </ul>
+  <p class="chute">La règle de lecture tient en une phrase&nbsp;: cherchez les mots
+  «&nbsp;en l'absence d'accord&nbsp;» ou «&nbsp;à défaut d'accord&nbsp;» en tête de l'article.
+  L'article L. 2315-36 ne les porte pas — la commission santé-sécurité est due, et aucun accord ne
+  la supprime. Les articles L. 2315-46, L. 2315-49, L. 2315-50 et L. 2315-56 les portent — ces
+  quatre commissions se négocient. L'audit applique cette distinction contrôle par contrôle, et vous
+  demande donc d'abord si un accord de l'article L. 2315-45 existe.</p>
+  </div>
+</details>
 
 <div class="enc" style="margin-top:22px">
   <p class="sh">Une donnée non renseignée ne produit jamais « conforme »</p>
@@ -301,7 +389,21 @@
       "reunionsTenues": "8",
       "reunionsSante": "2",
       "formationsDispensees": "[\"formation économique\"]",
-      "cssct": "non",
+      "cssct": "oui",
+      "membresCssct": "[{\"college\": 1}, {\"college\": 2}, {\"college\": 2}]",
+      "designationCssct": "{\"resolution\": true, \"majoriteMembresPresents\": false}",
+      "remplacementCssct": "{\"effectue\": true, \"cause\": \"recomposition de l'équilibre syndical\"}",
+      "delegationCssct": "{\"avisDelegue\": true, \"expertDelegue\": false}",
+      "sourceModalitesCssct": "accord d'entreprise",
+      "mandatRenouvele": "oui",
+      "joursFormationSSCT": "3",
+      "accordCommissions": "non",
+      "commissionsConstituees": "[\"formation\"]",
+      "commissionEconomique": "non",
+      "membresCommissionEconomique": "[]",
+      "seuilsComptesComite": "non",
+      "commissionMarches": "non",
+      "expertise": "{\"cas\": \"risque grave\", \"partEmployeur\": 100, \"decideePar\": \"la commission santé, sécurité et conditions de travail\"}",
       "masseSalariale": "16800000",
       "masseSalarialeN1": "16200000",
       "subventionVersee": "28000",

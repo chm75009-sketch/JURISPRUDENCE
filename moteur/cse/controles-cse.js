@@ -54,6 +54,21 @@ const surEffectif = (f, v) => {
     : `${v.motif} Cette mise hors du champ repose sur l'effectif déclaré, or ${d.motif} : le contrôle pourrait s'appliquer, et sa conclusion changer, une fois l'effectif rétabli.` };
 };
 
+/* Les décisions, citées telles qu'elles ont été lues.
+
+   Chacune a été lue à la source dans la base Judilibre de la Cour de cassation
+   le 21 août 2026, réponse non relaxée, et n'est citée que pour ce qu'elle dit.
+   Une décision n'est jamais invoquée pour une solution plus large que la
+   sienne : le sommaire publié, quand il existe, fixe la limite. */
+const ARRETS = {
+  designation: "Soc., 27 novembre 2019, n° 19-14.224, publié : « la désignation des membres d'une CSSCT, que sa mise en place soit obligatoire ou conventionnelle, résulte d'un vote des membres du CSE à la majorité des voix des membres présents lors du vote, sans qu'il soit besoin d'une résolution préalable fixant les modalités de l'élection ». La Cour tire cette solution de la combinaison de L. 2315-39 et de L. 2315-32, alinéa 1, aux termes duquel les résolutions du comité sont prises à la majorité des membres présents.",
+  designationOrdrePublic: "Soc., 11 février 2026, n° 24-16.408 : la Cour rappelle que les dispositions de L. 2315-39 sont d'ordre public, et retient qu'une stipulation d'accord attribuant « un siège à chaque organisation syndicale représentée au CSE, par ordre de représentativité » ne peut pas être interprétée comme imposant une désignation proportionnelle au résultat électoral de chaque syndicat, une telle interprétation étant contraire aux articles L. 2315-32 et L. 2315-39.",
+  troisiemeCollege: "Soc., 26 février 2025, n° 24-12.295, publié : « Il résulte de l'article L. 2315-39 du code du travail dont les dispositions sont d'ordre public que, dans les entreprises ou établissements où est institué, en application de l'article L. 2314-11 du code du travail, un troisième collège électoral, un siège au moins à la commission santé, sécurité et conditions de travail doit être attribué à un élu au comité social et économique représentant le troisième collège. » L'arrêt casse le jugement qui voyait dans L. 2315-39 une simple alternative entre le second et le troisième collège.",
+  remplacement: "Soc., 28 mai 2026, n° 24-22.914, publié : « Sauf dans les cas de fin anticipée de mandat énumérés à l'article L. 2314-33 du code du travail, le comité social et économique ne peut procéder au remplacement des membres d'une commission santé, sécurité et conditions de travail initialement désignés avant le terme du mandat des membres élus du comité. » La Cour précise que ni un accord d'entreprise ne peut y déroger, L. 2315-39 étant d'ordre public. Elle statuait sur L. 2314-33 dans sa version antérieure à la loi n° 2025-989 du 24 octobre 2025 ; les causes de fin anticipée qu'elle énumère — décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible — sont celles de la version lue au dépôt (LEGIARTI000052437191).",
+  delegation: "Soc., 13 mai 2026, n° 25-12.560 : « Aux termes de l'article L. 2315-38 du même code, dont les dispositions sont d'ordre public, la commission santé, sécurité et conditions de travail se voit confier, par délégation du comité social et économique, tout ou partie des attributions du comité relatives à la santé, à la sécurité et aux conditions de travail, à l'exception du recours à un expert prévu à la sous-section 10 et des attributions consultatives du comité. » L'accord en cause réservait expressément au comité le recueil de l'avis et la décision de recourir à l'expert.",
+  expertiseCommissions: "Soc., 18 mars 2026, n° 23-22.270, publié : le comité social et économique peut, « le cas échéant sur proposition des commissions constituées en son sein », décider de recourir à une expertise lors de la première réunion prévue à l'article L. 1233-30 (L. 1233-34). La Cour en déduit que lorsque l'introduction de nouvelles technologies ou un projet important entraîne des licenciements économiques et donne lieu à un plan de sauvegarde de l'emploi, la faculté de recourir à une expertise portant sur l'incidence du projet sur les conditions de santé, de sécurité et de travail ne peut s'exercer que dans les conditions de L. 1233-34 : une délibération distincte fondée sur L. 2315-94, 2°, est nulle.",
+};
+
 const C = [];
 const c = (id, rubrique, objet, fondement, fn) => C.push({ id, rubrique, objet, fondement, verdict: fn });
 
@@ -348,21 +363,163 @@ c("CSE-CTL-SST-01", "Santé et sécurité", "La commission santé, sécurité et
            ? { etat: NC, motif: "Aucune commission alors qu'elle est obligatoire : " + s.motif }
            : { etat: MANQ, motif: "L'existence de la commission n'est pas renseignée, alors qu'elle est obligatoire : " + s.motif }); })());
 
-c("CSE-CTL-SST-02", "Santé et sécurité", "La composition de la commission respecte-t-elle le siège réservé au second ou au troisième collège ?", ["L. 2315-39"],
+c("CSE-CTL-SST-02", "Santé et sécurité", "La composition de la commission respecte-t-elle le siège réservé au second ou au troisième collège ?",
+ ["L. 2315-39", "L. 2314-11", "Soc., 26 février 2025, n° 24-12.295"],
  f => f.cssct !== true
    ? { etat: SO, motif: "Aucune commission en place." }
    : neant(f, "membresCssct")
-     ? { etat: NC, motif: "La commission est déclarée en place, mais aucun membre n'y est désigné. Elle doit comprendre au moins trois représentants du personnel, dont au moins un du second ou, le cas échéant, du troisième collège." }
+     ? { etat: NC, motif: "La commission est déclarée en place, mais aucun membre n'y est désigné. Elle doit comprendre au moins trois représentants du personnel, dont au moins un du second ou, le cas échéant, du troisième collège. " + ARRETS.troisiemeCollege }
    : vide(f.membresCssct)
      ? { etat: MANQ, motif: "La composition de la commission n'est pas renseignée." }
      : (() => { const n = f.membresCssct.length;
          const col = M.colleges(f);
-         const attendu = col && col.nombre === 3 ? "troisième" : "second";
-         const ok = f.membresCssct.some(m => m.college === (col && col.nombre === 3 ? 3 : 2));
-         if (n < 3) return { etat: NC, motif: `${n} membre(s) désigné(s) : le minimum est de trois représentants du personnel.` };
-         return ok
-           ? { etat: CONF, motif: `${n} membres désignés, dont au moins un du ${attendu} collège.` }
-           : { etat: NC, motif: `${n} membres désignés, mais aucun du ${attendu} collège. Les dispositions de l'article L. 2315-39 sont d'ordre public.` }; })());
+         const troisieme = !!(col && col.nombre === 3);
+         const attendu = troisieme ? "troisième" : "second";
+         const ok = f.membresCssct.some(m => m.college === (troisieme ? 3 : 2));
+         if (n < 3) return { etat: NC, motif: `${n} membre(s) désigné(s) : le minimum est de trois représentants du personnel (L. 2315-39).` };
+         if (ok) return { etat: CONF, motif: `${n} membres désignés, dont au moins un du ${attendu} collège.` +
+           (troisieme ? " " + ARRETS.troisiemeCollege : "") };
+         return { etat: NC, motif: `${n} membres désignés, mais aucun du ${attendu} collège. Les dispositions de l'article L. 2315-39 sont d'ordre public. ` +
+           (troisieme
+             ? `Un troisième collège est institué dans l'entreprise (${col.motif}) : le siège lui revient. ${ARRETS.troisiemeCollege}`
+             : ARRETS.troisiemeCollege) }; })());
+
+c("CSE-CTL-SST-03", "Santé et sécurité", "Les membres de la commission ont-ils été désignés par une résolution du comité adoptée à la majorité des membres présents ?",
+ ["L. 2315-39", "L. 2315-32", "Soc., 27 novembre 2019, n° 19-14.224", "Soc., 11 février 2026, n° 24-16.408"],
+ f => { if (f.cssct !== true) return { etat: SO, motif: "Aucune commission en place : il n'y a pas de désignation à contrôler." };
+   const d = f.designationCssct || {};
+   if (vide(d.resolution) && vide(d.majoriteMembresPresents))
+     return { etat: MANQ, motif: "Les conditions de désignation des membres de la commission ne sont pas renseignées. " + ARRETS.designation };
+   if (d.resolution === false)
+     return { etat: NC, motif: "Les membres de la commission n'ont pas été désignés par une résolution du comité : L. 2315-39 impose qu'ils le soient par le comité, parmi ses membres, par une résolution adoptée selon les modalités de L. 2315-32. " + ARRETS.designation };
+   if (vide(d.resolution))
+     return { etat: MANQ, motif: "Il n'est pas indiqué si les membres ont été désignés par une résolution du comité (L. 2315-39). " + ARRETS.designation };
+   if (vide(d.majoriteMembresPresents))
+     return { etat: MANQ, motif: "La résolution est déclarée, mais la règle de majorité appliquée n'est pas renseignée : L. 2315-32, alinéa 1, exige la majorité des membres présents. " + ARRETS.designation };
+   if (d.majoriteMembresPresents === false)
+     return { etat: NC, motif: "La résolution de désignation n'a pas été adoptée à la majorité des membres présents : c'est la règle de L. 2315-32, alinéa 1, à laquelle L. 2315-39 renvoie, et elle vaut que la commission soit obligatoire ou conventionnelle. " + ARRETS.designation + " " + ARRETS.designationOrdrePublic };
+   return { etat: CONF, motif: "Les membres de la commission ont été désignés par une résolution du comité adoptée à la majorité des membres présents (L. 2315-39 et L. 2315-32). " + ARRETS.designation };
+ });
+
+c("CSE-CTL-SST-04", "Santé et sécurité", "Des membres de la commission ont-ils été remplacés avant le terme du mandat des élus ?",
+ ["L. 2315-39", "L. 2314-33", "Soc., 28 mai 2026, n° 24-22.914"],
+ f => { if (f.cssct !== true) return { etat: SO, motif: "Aucune commission en place : il n'y a pas de remplacement à contrôler." };
+   const r = f.remplacementCssct || {};
+   if (vide(r.effectue))
+     return { etat: MANQ, motif: "Il n'est pas indiqué si le comité a procédé au remplacement de membres de la commission depuis leur désignation. " + ARRETS.remplacement };
+   if (r.effectue === false)
+     return { etat: CONF, motif: "Aucun remplacement n'est intervenu depuis la désignation initiale : les mandats des membres de la commission courent jusqu'au terme de celui des élus du comité (L. 2315-39). " + ARRETS.remplacement };
+   if (vide(r.cause))
+     return { etat: MANQ, motif: "Un remplacement est déclaré, mais sa cause n'est pas renseignée : seules les fins anticipées de mandat énumérées à L. 2314-33 l'autorisent. " + ARRETS.remplacement };
+   if (M.finAnticipeeMandat(r.cause))
+     return { etat: CONF, motif: `Le remplacement est intervenu pour une cause de fin anticipée du mandat au sens de L. 2314-33 — ${r.cause}. ` + ARRETS.remplacement };
+   return { etat: NC, motif: `Un membre de la commission a été remplacé pour une cause — ${r.cause} — qui ne figure pas parmi les fins anticipées de mandat de L. 2314-33 (décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible). ` + ARRETS.remplacement };
+ });
+
+c("CSE-CTL-SST-05", "Santé et sécurité", "La délégation consentie à la commission laisse-t-elle au comité l'avis et le recours à l'expert ?",
+ ["L. 2315-38", "Soc., 13 mai 2026, n° 25-12.560"],
+ f => { if (f.cssct !== true) return { etat: SO, motif: "Aucune commission en place : il n'y a pas de délégation à contrôler." };
+   const d = f.delegationCssct || {};
+   if (vide(d.avisDelegue) && vide(d.expertDelegue))
+     return { etat: MANQ, motif: "Le contenu de la délégation consentie à la commission n'est pas renseigné. " + ARRETS.delegation };
+   const griefs = [], manques = [];
+   if (vide(d.avisDelegue)) manques.push("les attributions consultatives — le comité rend-il lui-même ses avis ?");
+   else if (d.avisDelegue === true) griefs.push("les attributions consultatives du comité lui ont été déléguées : un avis rendu par la seule commission serait irrégulier");
+   if (vide(d.expertDelegue)) manques.push("le recours à l'expert — la décision appartient-elle encore au comité ?");
+   else if (d.expertDelegue === true) griefs.push("la décision de recourir à un expert lui a été déléguée, quand la sous-section 10 la réserve au comité");
+   if (griefs.length)
+     return { etat: NC, motif: `La délégation consentie à la commission excède ce que L. 2315-38 permet : ${griefs.join(" ; ")}. Ce texte est d'ordre public : les stipulations de l'accord qui l'organise ne peuvent pas y déroger. ` + ARRETS.delegation };
+   if (manques.length)
+     return { etat: MANQ, motif: `La délégation est incomplètement décrite — il manque : ${manques.join(" ; ")} (L. 2315-38). ` + ARRETS.delegation };
+   return { etat: CONF, motif: "La délégation consentie à la commission laisse au comité ses attributions consultatives et la décision de recourir à un expert, comme L. 2315-38 l'impose. " + ARRETS.delegation };
+ });
+
+c("CSE-CTL-SST-06", "Santé et sécurité", "Les modalités de la commission sont-elles fixées par un accord ou, à défaut, par le règlement intérieur du comité ?",
+ ["L. 2315-41", "L. 2315-42", "L. 2315-43", "L. 2315-44"],
+ f => { if (f.cssct !== true) return { etat: SO, motif: "Aucune commission en place : il n'y a pas de modalités à contrôler." };
+   const s = f.sourceModalitesCssct;
+   if (vide(s)) return { etat: MANQ, motif: "La source des modalités de la commission n'est pas renseignée : nombre de membres, missions déléguées, modalités de fonctionnement et heures de délégation, modalités de formation et, le cas échéant, moyens alloués (L. 2315-41, 1° à 6°). Un accord d'entreprise les fixe (L. 2315-41) ; en l'absence de délégué syndical, un accord entre l'employeur et le comité adopté à la majorité des titulaires (L. 2315-42) ; en dehors des cas de L. 2315-36 et L. 2315-37, un accord peut aussi fixer le nombre et le périmètre des commissions (L. 2315-43) ; à défaut d'accord, le règlement intérieur du comité les définit (L. 2315-44)." };
+   if (s === "aucune")
+     return { etat: NC, motif: "Rien ne fixe les modalités de la commission. À défaut d'accord prévu aux articles L. 2315-41 et L. 2315-42, c'est le règlement intérieur du comité qui doit définir les modalités mentionnées aux 1° à 6° de L. 2315-41 (L. 2315-44). Une commission sans règles écrites n'a ni missions ni moyens établis, et l'étendue de la délégation qu'elle exerce ne peut pas être vérifiée." };
+   const source = M.SOURCES_MODALITES_CSSCT[s];
+   if (!source) return { etat: MANQ, motif: `La source déclarée (« ${s} ») n'est pas reconnue : répondez « accord d'entreprise », « accord avec le comité », « règlement intérieur du comité » — ou « aucune ».` };
+   return { etat: CONF, motif: `Les modalités de la commission sont fixées par ${source.libelle} (${source.texte}). Elles portent sur les six points de L. 2315-41 : nombre de membres, missions déléguées et leurs modalités d'exercice, fonctionnement et heures de délégation, formation, moyens le cas échéant, et le cas échéant la formation spécifique aux risques particuliers de l'activité.` };
+ });
+
+c("CSE-CTL-SST-07", "Santé et sécurité", "Les membres de la commission ont-ils reçu la formation santé, sécurité et conditions de travail pour la durée minimale applicable ?",
+ ["L. 2315-18", "L. 2315-41, 4°"],
+ f => { if (f.cssct !== true) return { etat: SO, motif: "Aucune commission en place : la durée renforcée de L. 2315-18, 2°, n'a pas d'objet — la formation de tous les membres de la délégation est contrôlée par CSE-CTL-MOY-04." };
+   if (typeof f.effectif !== "number")
+     return { etat: MANQ, motif: "L'effectif n'est pas renseigné : la durée minimale de la formation en dépend au renouvellement du mandat (cinq jours pour les membres de la commission dans les entreprises d'au moins trois cents salariés, L. 2315-18, 2°)." };
+   if (vide(f.mandatRenouvele))
+     return { etat: MANQ, motif: "Il n'est pas indiqué s'il s'agit du premier mandat ou d'un renouvellement : la durée minimale est de cinq jours lors du premier mandat, et de trois jours au renouvellement — cinq pour les membres de la commission dans les entreprises d'au moins trois cents salariés (L. 2315-18)." };
+   const d = M.dureeFormationSSCT(f);
+   if (typeof f.joursFormationSSCT !== "number")
+     return { etat: MANQ, motif: `La durée de formation effectivement dispensée aux membres de la commission n'est pas renseignée. ${d.motif} Son financement est pris en charge par l'employeur (L. 2315-18, dernier alinéa).` };
+   if (f.joursFormationSSCT < d.jours)
+     return { etat: NC, motif: `${f.joursFormationSSCT} jour(s) de formation dispensés aux membres de la commission, pour ${d.jours} au minimum. ${d.motif} L'accord qui organise la commission fixe les modalités de cette formation (L. 2315-41, 4°), mais il ne peut pas descendre sous le plancher de L. 2315-18.` };
+   return { etat: CONF, motif: `${f.joursFormationSSCT} jour(s) de formation dispensés aux membres de la commission, pour un minimum de ${d.jours}. ${d.motif}` };
+ });
+
+/* ---------------- Les commissions du comité ---------------- */
+c("CSE-CTL-COM-01", "Commissions", "Les commissions de la formation, du logement et de l'égalité professionnelle sont-elles constituées à défaut d'accord ?",
+ ["L. 2315-45", "L. 2315-49", "L. 2315-50", "L. 2315-51", "L. 2315-56"],
+ f => { const s = M.commissionsSuppletives(f);
+   if (s.du === null) return { etat: MANQ, motif: s.motif };
+   if (s.du === false) return { etat: SO, motif: s.motif };
+   if (vide(f.accordCommissions))
+     return { etat: MANQ, motif: s.motif + " Il n'est pas indiqué si un accord d'entreprise conclu dans les conditions du premier alinéa de L. 2232-12 prévoit la création de commissions supplémentaires (L. 2315-45) : c'est cet accord, et lui seul, qui écarte le régime supplétif." };
+   if (f.accordCommissions === true)
+     return { etat: CONF, motif: s.motif + " Un accord d'entreprise prévu à l'article L. 2315-45 organise les commissions : les trois commissions supplétives de L. 2315-49, L. 2315-50 et L. 2315-56 ne s'imposent qu'« en l'absence d'accord prévu à l'article L. 2315-45 ». Le contenu de cet accord n'est pas lu par la base : vérifiez qu'il couvre bien les objets confiés à ces commissions." };
+   if (neant(f, "commissionsConstituees"))
+     return { etat: NC, motif: s.motif + " Aucun accord L. 2315-45 et aucune commission constituée : les trois commissions supplétives sont dues." };
+   if (vide(f.commissionsConstituees))
+     return { etat: MANQ, motif: s.motif + " Les commissions effectivement constituées ne sont pas renseignées." };
+   const absentes = M.COMMISSIONS_300.filter(x => !f.commissionsConstituees.includes(x.cle));
+   if (absentes.length)
+     return { etat: NC, motif: s.motif + ` À défaut d'accord prévu à l'article L. 2315-45, ${absentes.length} commission(s) manquent : ${absentes.map(x => `${x.libelle} (${x.texte})`).join(" ; ")}.` };
+   return { etat: CONF, motif: s.motif + " À défaut d'accord L. 2315-45, les trois commissions supplétives sont constituées : formation (L. 2315-49), information et aide au logement (L. 2315-50, missions à L. 2315-51) et égalité professionnelle (L. 2315-56)." };
+ });
+
+c("CSE-CTL-COM-02", "Commissions", "La commission économique est-elle créée à mille salariés, à défaut d'accord, et comprend-elle un représentant des cadres ?",
+ ["L. 2315-45", "L. 2315-46", "L. 2315-47", "L. 2315-48"],
+ f => { const e = M.commissionEconomique(f);
+   if (e.du === null) return { etat: MANQ, motif: e.motif };
+   if (e.du === false) return { etat: SO, motif: e.motif };
+   if (vide(f.accordCommissions))
+     return { etat: MANQ, motif: e.motif + " Il n'est pas indiqué si un accord d'entreprise prévu à l'article L. 2315-45 organise les commissions : L. 2315-46 ne joue qu'« en l'absence d'accord prévu à l'article L. 2315-45 »." };
+   if (f.accordCommissions === true)
+     return { etat: CONF, motif: e.motif + " Un accord d'entreprise prévu à l'article L. 2315-45 organise les commissions : la commission économique supplétive de L. 2315-46 ne s'impose pas. Le contenu de cet accord n'est pas lu par la base." };
+   if (vide(f.commissionEconomique))
+     return { etat: MANQ, motif: e.motif + " L'existence de la commission économique n'est pas renseignée." };
+   if (f.commissionEconomique === false)
+     return { etat: NC, motif: e.motif + " Elle n'est pas créée, et aucun accord L. 2315-45 ne l'écarte." };
+   if (neant(f, "membresCommissionEconomique"))
+     return { etat: NC, motif: e.motif + " Elle est déclarée créée, mais aucun membre n'y est désigné : elle comprend au maximum cinq membres représentants du personnel, dont au moins un représentant de la catégorie des cadres, désignés par le comité parmi ses membres (L. 2315-47)." };
+   if (vide(f.membresCommissionEconomique))
+     return { etat: MANQ, motif: e.motif + " La composition de la commission économique n'est pas renseignée (L. 2315-47)." };
+   const n = f.membresCommissionEconomique.length;
+   const cadres = f.membresCommissionEconomique.filter(m => m && m.cadre === true).length;
+   if (n > 5)
+     return { etat: NC, motif: `${n} membres désignés à la commission économique : L. 2315-47 en fixe le maximum à cinq.` };
+   if (!cadres)
+     return { etat: NC, motif: `${n} membre(s) désigné(s) à la commission économique, mais aucun représentant de la catégorie des cadres : L. 2315-47 en impose au moins un.` };
+   return { etat: CONF, motif: `${n} membre(s) désigné(s) à la commission économique, dont ${cadres} représentant(s) de la catégorie des cadres (L. 2315-47). Elle se réunit au moins deux fois par an et peut se faire assister par l'expert-comptable qui assiste le comité (L. 2315-48).` };
+ });
+
+c("CSE-CTL-COM-03", "Commissions", "Une commission des marchés est-elle créée quand les comptes du comité dépassent deux des trois seuils ?",
+ ["L. 2315-44-1", "D. 2315-29"],
+ f => { if (f.comiteExistant === false) return { etat: SO, motif: "Aucun comité : la commission des marchés n'a pas de support." };
+   if (vide(f.seuilsComptesComite))
+     return { etat: MANQ, motif: "Le critère de la commission des marchés n'est pas l'effectif de l'entreprise mais les comptes du comité lui-même : nombre de salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan (D. 2315-29). Il n'est pas indiqué si le comité dépasse au moins deux de ces trois seuils. Ce point se recontrôle à chaque clôture des comptes du comité." };
+   if (f.seuilsComptesComite === false)
+     return { etat: SO, motif: "Le comité ne dépasse pas au moins deux des trois seuils de D. 2315-29 : la commission des marchés n'est pas due (L. 2315-44-1). Le critère tient aux comptes du comité, non à l'effectif de l'entreprise — recontrôlez à chaque clôture." };
+   if (vide(f.commissionMarches))
+     return { etat: MANQ, motif: "Le comité dépasse au moins deux des trois seuils de D. 2315-29, mais l'existence de la commission des marchés n'est pas renseignée (L. 2315-44-1)." };
+   if (f.commissionMarches === false)
+     return { etat: NC, motif: "Le comité dépasse, pour au moins deux des trois critères, les seuils de D. 2315-29, et aucune commission des marchés n'est créée en son sein : L. 2315-44-1 l'impose." };
+   return { etat: CONF, motif: "Une commission des marchés est créée au sein du comité, qui dépasse au moins deux des trois seuils de D. 2315-29 (L. 2315-44-1)." };
+ });
 
 /* ---------------- Budgets ---------------- */
 c("CSE-CTL-BUD-01", "Budgets", "La subvention de fonctionnement versée atteint-elle le taux légal ?", ["L. 2315-61"],
@@ -415,12 +572,31 @@ c("CSE-CTL-EXP-02", "Expertises", "La contestation de l'expertise a-t-elle été
            ? { etat: NC, motif: `${e.jours} jours entre le point de départ et la saisine : le délai est de dix jours. Le délai ne court qu'à compter du lendemain de l'acte, et la date de saisine s'entend de celle de l'assignation.` }
            : { etat: CONF, motif: `${e.jours} jours entre le point de départ et la saisine, dans le délai de dix jours.` }; })());
 
-c("CSE-CTL-EXP-03", "Expertises", "Une expertise a-t-elle été décidée sur un fondement qui ne la prévoit pas ?", ["L. 1233-34", "L. 2315-92"],
+c("CSE-CTL-EXP-03", "Expertises", "Une expertise a-t-elle été décidée sur un fondement qui ne la prévoit pas ?",
+ ["L. 1233-34", "L. 2315-92", "L. 2315-94", "Soc., 18 mars 2026, n° 23-22.270"],
  f => (vide(f.expertise) || typeof f.nbLicenciements !== "number")
    ? { etat: SO, motif: "Aucune expertise liée à un licenciement collectif." }
    : (f.expertise.cas === "licenciement collectif pour motif économique" && f.nbLicenciements < 10
      ? { etat: NC, motif: `Une expertise est décidée sur le fondement de l'article L. 1233-34 pour ${f.nbLicenciements} licenciement(s). Aucune mesure d'expertise n'est prévue en deçà de dix salariés dans une même période de trente jours.` }
-     : { etat: CONF, motif: "Le cas de recours à l'expertise correspond au fondement invoqué." }));
+     : (f.nbLicenciements >= 10 && f.expertise.cas === "risque grave"
+       ? { etat: RISQ, motif: `Une expertise est décidée sur le fondement du risque grave (L. 2315-94, 1°) alors que ${f.nbLicenciements} licenciements sont envisagés sur trente jours. Vérifiez que le projet en cause n'est pas celui qui donne lieu au plan de sauvegarde de l'emploi : ${ARRETS.expertiseCommissions}` }
+       : { etat: CONF, motif: "Le cas de recours à l'expertise correspond au fondement invoqué." })));
+
+c("CSE-CTL-EXP-04", "Expertises", "La décision de recourir à l'expertise a-t-elle été prise par le comité lui-même ?",
+ ["L. 1233-34", "L. 2315-38", "Soc., 18 mars 2026, n° 23-22.270", "Soc., 13 mai 2026, n° 25-12.560"],
+ f => { if (vide(f.expertise) || vide(f.expertise.cas))
+     return { etat: SO, motif: "Aucune expertise en cours : il n'y a pas de décision à contrôler." };
+   const qui = f.expertise.decideePar;
+   if (vide(qui))
+     return { etat: MANQ, motif: "L'auteur de la décision de recourir à l'expertise n'est pas renseigné. La décision appartient au comité social et économique — le cas échéant sur proposition des commissions constituées en son sein (L. 1233-34) —, et le recours à l'expert ne peut jamais être délégué à la commission santé, sécurité et conditions de travail (L. 2315-38). " + ARRETS.expertiseCommissions };
+   if (qui === "la commission santé, sécurité et conditions de travail")
+     return { etat: NC, motif: "La décision de recourir à l'expertise a été prise par la commission santé, sécurité et conditions de travail. L. 2315-38 exclut expressément le recours à l'expert des attributions qui peuvent lui être déléguées, et ce texte est d'ordre public : aucune stipulation d'accord ne peut en disposer autrement. La commission peut proposer l'expertise ; c'est le comité qui la décide. " + ARRETS.delegation + " " + ARRETS.expertiseCommissions };
+   if (qui === "l'employeur")
+     return { etat: NC, motif: "La décision de recourir à l'expertise est attribuée à l'employeur. Le recours à l'expert est une prérogative du comité social et économique, qui en délibère (L. 1233-34, L. 2315-38) ; l'employeur, lui, peut la contester devant le juge dans les dix jours (contrôle CSE-CTL-EXP-02)." };
+   if (qui === "le comité social et économique")
+     return { etat: CONF, motif: "La décision de recourir à l'expertise a été prise par le comité social et économique lui-même. Il peut la prendre, le cas échéant, sur proposition des commissions constituées en son sein — c'est là ce que les commissions apportent à l'expertise, et la seule chose qu'elles y apportent. " + ARRETS.expertiseCommissions };
+   return { etat: MANQ, motif: `L'auteur déclaré de la décision (« ${qui} ») n'est pas reconnu : répondez « le comité social et économique », « la commission santé, sécurité et conditions de travail » ou « l'employeur ».` };
+ });
 
 /* ---------------- Détection : jamais de conclusion de conformité ---------------- */
 const DETECTION = new Set(["CSE-CTL-DET-01", "CSE-CTL-DET-02", "CSE-CTL-DET-03"]);
@@ -453,6 +629,7 @@ c("CSE-CTL-DET-03", "À faire examiner", "Des faits susceptibles de caractérise
    les contrôles qui lisent l'effectif. */
 const SUR_EFFECTIF = new Set(["CSE-CTL-CON-01", "CSE-CTL-CON-05", "CSE-CTL-CON-06",
   "CSE-CTL-MOY-01", "CSE-CTL-MOY-02", "CSE-CTL-SST-01", "CSE-CTL-SST-02",
+  "CSE-CTL-SST-07", "CSE-CTL-COM-01", "CSE-CTL-COM-02",
   "CSE-CTL-BUD-01", "CSE-CTL-BUD-02"]);
 for (const ctl of C) {
   if (!SUR_EFFECTIF.has(ctl.id)) continue;

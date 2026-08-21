@@ -10,7 +10,13 @@ const { execFileSync } = require("child_process");
 
 const DATE = process.argv[2] || new Date().toISOString().slice(0, 10);
 const RELAIS = "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance";
-const CODE = "LEGITEXT000006072050";
+/* Le filtre du relais attend le NOM du code (« Code du travail »), jamais un
+   identifiant LEGITEXT : avec un LEGITEXT le filtre ne porte pas, la recherche
+   se fait par pertinence, et le relais sert des homonymes d'autres codes. Ce
+   module en a porté quatre — L. 2242-1 rendu depuis le code général des
+   collectivités territoriales, L. 2242-6, L. 2242-7 et L. 2242-10 depuis le
+   code des transports. Mesuré le 21 août 2026. */
+const CODE = "Code du travail";
 const net = s => String(s || "").replace(/\s+/g, " ").trim();
 const dors = ms => { const t = Date.now(); while (Date.now() - t < ms); };
 

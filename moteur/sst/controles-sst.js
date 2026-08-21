@@ -28,6 +28,24 @@ const vide = x => x === undefined || x === null || x === "" ||
 const dit = x => x === true || x === "oui";
 const nie = x => x === false || x === "non";
 
+/* Les décisions, citées telles qu'elles ont été lues.
+
+   Chacune a été lue à la source dans la base Judilibre de la Cour de cassation
+   le 21 août 2026, réponse non relaxée, et n'est citée que pour ce qu'elle dit.
+   Elles portent toutes sur la commission santé, sécurité et conditions de
+   travail, et elles disent la même chose sous quatre angles : les articles
+   L. 2315-38 et L. 2315-39 sont d'ordre public, et l'accord qui organise la
+   commission ne peut ni élargir sa délégation ni changer les règles de sa
+   composition. */
+const ARRETS = {
+  designation: "Soc., 27 novembre 2019, n° 19-14.224, publié : « la désignation des membres d'une CSSCT, que sa mise en place soit obligatoire ou conventionnelle, résulte d'un vote des membres du CSE à la majorité des voix des membres présents lors du vote, sans qu'il soit besoin d'une résolution préalable fixant les modalités de l'élection » — solution tirée de L. 2315-39 combiné à L. 2315-32, alinéa 1.",
+  designationOrdrePublic: "Soc., 11 février 2026, n° 24-16.408 : les dispositions de L. 2315-39 sont d'ordre public ; une stipulation d'accord attribuant « un siège à chaque organisation syndicale représentée au CSE, par ordre de représentativité » ne peut pas s'entendre comme imposant une désignation proportionnelle au résultat électoral de chaque syndicat, une telle lecture étant contraire à L. 2315-32 et L. 2315-39.",
+  troisiemeCollege: "Soc., 26 février 2025, n° 24-12.295, publié : « Il résulte de l'article L. 2315-39 du code du travail dont les dispositions sont d'ordre public que, dans les entreprises ou établissements où est institué, en application de l'article L. 2314-11 du code du travail, un troisième collège électoral, un siège au moins à la commission santé, sécurité et conditions de travail doit être attribué à un élu au comité social et économique représentant le troisième collège. »",
+  remplacement: "Soc., 28 mai 2026, n° 24-22.914, publié : « Sauf dans les cas de fin anticipée de mandat énumérés à l'article L. 2314-33 du code du travail, le comité social et économique ne peut procéder au remplacement des membres d'une commission santé, sécurité et conditions de travail initialement désignés avant le terme du mandat des membres élus du comité » — et sans qu'un accord d'entreprise puisse y déroger. Les causes de fin anticipée sont le décès, la démission, la rupture du contrat de travail et la perte des conditions requises pour être éligible.",
+  delegation: "Soc., 13 mai 2026, n° 25-12.560 : « Aux termes de l'article L. 2315-38 du même code, dont les dispositions sont d'ordre public, la commission santé, sécurité et conditions de travail se voit confier, par délégation du comité social et économique, tout ou partie des attributions du comité relatives à la santé, à la sécurité et aux conditions de travail, à l'exception du recours à un expert prévu à la sous-section 10 et des attributions consultatives du comité. »",
+  expertise: "Soc., 18 mars 2026, n° 23-22.270, publié : le comité peut décider d'une expertise « le cas échéant sur proposition des commissions constituées en son sein » (L. 1233-34). La proposition appartient donc aux commissions ; la décision reste au comité.",
+};
+
 const C = [];
 const ctl = (id, rubrique, objet, fondement, verdict) => C.push({ id, rubrique, objet, fondement, verdict });
 
@@ -183,19 +201,25 @@ function siCommission(f, suite) {
 
 ctl("SST-CTL-CSS-02", "Commission santé, sécurité et conditions de travail",
   "La composition de la commission respecte-t-elle L. 2315-39 — présidence, trois membres au moins dont un du second collège, désignation par le comité ?",
-  ["L. 2315-39"],
+  ["L. 2315-39", "Soc., 27 novembre 2019, n° 19-14.224", "Soc., 26 février 2025, n° 24-12.295",
+   "Soc., 11 février 2026, n° 24-16.408"],
   f => siCommission(f, c => {
     if (vide(c.presideeEmployeur) && vide(c.nbMembres) && vide(c.membreSecondCollege) && vide(c.designesParCSE))
-      return { etat: MANQ, motif: "La composition de la commission n'est pas décrite : L. 2315-39 impose la présidence par l'employeur ou son représentant, au minimum trois membres représentants du personnel dont au moins un du second collège (ou du troisième), désignés par le comité parmi ses membres." };
+      return { etat: MANQ, motif: "La composition de la commission n'est pas décrite : L. 2315-39 impose la présidence par l'employeur ou son représentant, au minimum trois membres représentants du personnel dont au moins un du second collège (ou du troisième), désignés par le comité parmi ses membres. " + ARRETS.designation };
     const griefs = [], manques = [];
     if (vide(c.presideeEmployeur)) manques.push("la présidence"); else if (nie(c.presideeEmployeur)) griefs.push("la commission n'est pas présidée par l'employeur ou son représentant");
     const n = typeof c.nbMembres === "number" ? c.nbMembres : (c.nbMembres ? Number(c.nbMembres) : null);
     if (n === null || !isFinite(n)) manques.push("le nombre de membres"); else if (n < 3) griefs.push(`elle ne comprend que ${n} membre(s) représentant(s) du personnel, pour trois au minimum`);
     if (vide(c.membreSecondCollege)) manques.push("la présence d'un membre du second collège"); else if (nie(c.membreSecondCollege)) griefs.push("aucun membre du second collège (ou, le cas échéant, du troisième) n'y siège");
     if (vide(c.designesParCSE)) manques.push("le mode de désignation"); else if (nie(c.designesParCSE)) griefs.push("ses membres ne sont pas désignés par le comité parmi ses membres, par une résolution adoptée selon les modalités de L. 2315-32");
-    if (griefs.length) return { etat: NC, motif: `La composition de la commission ne respecte pas L. 2315-39 : ${griefs.join(" ; ")}.` };
+    if (griefs.length) {
+      const collegeEnCause = nie(c.membreSecondCollege), designationEnCause = nie(c.designesParCSE);
+      return { etat: NC, motif: `La composition de la commission ne respecte pas L. 2315-39 : ${griefs.join(" ; ")}.` +
+        (collegeEnCause ? " Là où un troisième collège est institué, le siège lui revient. " + ARRETS.troisiemeCollege : "") +
+        (designationEnCause ? " " + ARRETS.designation + " " + ARRETS.designationOrdrePublic : "") };
+    }
     if (manques.length) return { etat: MANQ, motif: `La composition de la commission est incomplètement décrite — il manque : ${manques.join(" ; ")} (L. 2315-39).` };
-    return { etat: CONF, motif: "Présidence par l'employeur ou son représentant, au moins trois membres dont un du second collège, désignés par le comité parmi ses membres : la composition respecte L. 2315-39." };
+    return { etat: CONF, motif: "Présidence par l'employeur ou son représentant, au moins trois membres dont un du second collège, désignés par le comité parmi ses membres : la composition respecte L. 2315-39. Ces dispositions sont d'ordre public — un accord ne peut ni les écarter ni les réécrire. " + ARRETS.designationOrdrePublic };
   }));
 
 const MODALITES_CSSCT = ["accord d'entreprise", "accord avec le comité", "règlement intérieur"];
@@ -211,16 +235,16 @@ ctl("SST-CTL-CSS-03", "Commission santé, sécurité et conditions de travail",
 
 ctl("SST-CTL-CSS-04", "Commission santé, sécurité et conditions de travail",
   "La délégation confiée à la commission respecte-t-elle ses limites — jamais le recours à l'expert ni les attributions consultatives du comité ?",
-  ["L. 2315-38"],
+  ["L. 2315-38", "Soc., 13 mai 2026, n° 25-12.560", "Soc., 18 mars 2026, n° 23-22.270"],
   f => siCommission(f, c => {
-    if (vide(c.delegationConforme)) return { etat: MANQ, motif: "Il n'est pas indiqué si la délégation confiée à la commission exclut le recours à un expert et les attributions consultatives du comité, que L. 2315-38 interdit de déléguer." };
-    if (nie(c.delegationConforme)) return { etat: NC, motif: "La délégation confiée à la commission empiète sur ce que L. 2315-38 interdit de déléguer : le recours à un expert et les attributions consultatives restent au comité social et économique lui-même. Une consultation rendue par la seule commission serait irrégulière." };
-    return { etat: CONF, motif: "La délégation confiée à la commission exclut le recours à l'expert et les attributions consultatives du comité, conformément à L. 2315-38." };
+    if (vide(c.delegationConforme)) return { etat: MANQ, motif: "Il n'est pas indiqué si la délégation confiée à la commission exclut le recours à un expert et les attributions consultatives du comité, que L. 2315-38 interdit de déléguer. " + ARRETS.delegation };
+    if (nie(c.delegationConforme)) return { etat: NC, motif: "La délégation confiée à la commission empiète sur ce que L. 2315-38 interdit de déléguer : le recours à un expert et les attributions consultatives restent au comité social et économique lui-même. Une consultation rendue par la seule commission serait irrégulière. Ce texte est d'ordre public : les stipulations de l'accord qui organise la commission ne peuvent pas en disposer autrement. " + ARRETS.delegation + " La commission n'est pas pour autant hors du chemin de l'expertise : " + ARRETS.expertise };
+    return { etat: CONF, motif: "La délégation confiée à la commission exclut le recours à l'expert et les attributions consultatives du comité, conformément à L. 2315-38. " + ARRETS.delegation + " " + ARRETS.expertise };
   }));
 
 ctl("SST-CTL-CSS-05", "Commission santé, sécurité et conditions de travail",
   "Les élus bénéficient-ils de la formation santé, sécurité et conditions de travail — cinq jours au premier mandat, trois au renouvellement, cinq pour la commission à partir de trois cents salariés ?",
-  ["L. 2315-18"],
+  ["L. 2315-18", "L. 2315-41, 4°"],
   f => {
     const cse = f.cse || {};
     if (vide(cse.existe)) return { etat: MANQ, motif: "Il n'est pas indiqué si un comité social et économique existe : la formation de L. 2315-18 bénéficie aux membres de la délégation du personnel et au référent harcèlement du comité." };
@@ -229,6 +253,21 @@ ctl("SST-CTL-CSS-05", "Commission santé, sécurité et conditions de travail",
     if (nie(f.formationSSCT)) return { etat: NC, motif: "Les membres de la délégation du personnel n'ont pas bénéficié de la formation santé, sécurité et conditions de travail : L. 2315-18 l'impose — cinq jours au moins au premier mandat, trois jours au renouvellement (cinq pour les membres de la commission dans les entreprises d'au moins trois cents salariés), financée par l'employeur." };
     return { etat: CONF, motif: "La formation santé, sécurité et conditions de travail des élus est assurée, conformément à L. 2315-18." };
   });
+
+ctl("SST-CTL-CSS-06", "Commission santé, sécurité et conditions de travail",
+  "Des membres de la commission ont-ils été remplacés avant le terme du mandat des élus ?",
+  ["L. 2315-39", "L. 2314-33", "Soc., 28 mai 2026, n° 24-22.914"],
+  f => siCommission(f, c => {
+    if (vide(c.remplacementEnCoursDeMandat))
+      return { etat: MANQ, motif: "Il n'est pas indiqué si le comité a remplacé des membres de la commission depuis leur désignation initiale. Leur mandat prend fin avec celui des membres élus du comité (L. 2315-39). " + ARRETS.remplacement };
+    if (nie(c.remplacementEnCoursDeMandat))
+      return { etat: CONF, motif: "Aucun remplacement depuis la désignation initiale : les mandats des membres de la commission courent jusqu'au terme de celui des élus du comité (L. 2315-39). " + ARRETS.remplacement };
+    if (vide(c.causeRemplacement))
+      return { etat: MANQ, motif: "Un remplacement est déclaré, mais sa cause n'est pas renseignée : seules les fins anticipées de mandat de L. 2314-33 l'autorisent — décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible. " + ARRETS.remplacement };
+    if (M.finAnticipeeMandat(c.causeRemplacement))
+      return { etat: CONF, motif: `Le remplacement est intervenu pour une cause de fin anticipée du mandat au sens de L. 2314-33 — ${c.causeRemplacement}. ` + ARRETS.remplacement };
+    return { etat: NC, motif: `Un membre de la commission a été remplacé pour une cause — ${c.causeRemplacement} — qui ne figure pas parmi les fins anticipées de mandat de L. 2314-33. La délibération de remplacement encourt l'annulation, et aucun accord d'entreprise ne peut y déroger. ` + ARRETS.remplacement };
+  }));
 
 /* ------------------------------------------------------------ le harcèlement */
 

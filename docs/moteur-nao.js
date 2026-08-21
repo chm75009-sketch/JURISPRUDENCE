@@ -4,7 +4,7 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : b341f552d312
+   Empreinte du moteur au moment de l'empaquetage : 5840101e6c12
    {"articlesLus":25,"themes":4,"mentionsAccordMethode":5,"controles":17,"exposition":1,"coherence":0,"donneesDemandees":31,"casContradictoires":15,"verdicts":289,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0}
 */
 (function (global) {
@@ -21,7 +21,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"négociation obligatoire en entreprise","date":"2026-08-20","empreinte":"b341f552d312","fichiers":{"audit-nao-client.js":"65d55e7e32a0","capturer-textes-nao.js":"287d81d2ea1c","controles-nao.js":"d9315ad2c8b8","dates.js":"5d945470174f","fiche-nao.json":"024305b6b0ab","moteur-nao.js":"7bb1df1b203e","outils.js":"6defb2be2a2b","propositions-nao.js":"6b34f8a501b8","questionnaire-nao.js":"95b08d4cec5d","tests-nao.js":"47348a66d9a8","textes-nao.json":"889bda7d970d","verifier-textes-nao.js":"b44a05c8c286"},"compteurs":{"articlesLus":25,"themes":4,"mentionsAccordMethode":5,"controles":17,"exposition":1,"coherence":0,"donneesDemandees":31,"casContradictoires":15,"verdicts":289,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0},"textesRelus":{"date":"2026-08-18","articles":25,"concordants":15,"ecarts":0,"sansConclusion":10}};
+  var __MANIFESTE = {"domaine":"négociation obligatoire en entreprise","date":"2026-08-21","empreinte":"5840101e6c12","fichiers":{"audit-nao-client.js":"65d55e7e32a0","capturer-textes-nao.js":"bcd982d41682","controles-nao.js":"debed55e84ee","dates.js":"5d945470174f","fiche-nao.json":"024305b6b0ab","moteur-nao.js":"7bb1df1b203e","outils.js":"6defb2be2a2b","propositions-nao.js":"6b34f8a501b8","questionnaire-nao.js":"95b08d4cec5d","tests-nao.js":"47348a66d9a8","textes-nao.json":"c1d78ef830d2","verifier-textes-nao.js":"ab8c5ba9fb97"},"compteurs":{"articlesLus":25,"themes":4,"mentionsAccordMethode":5,"controles":17,"exposition":1,"coherence":0,"donneesDemandees":31,"casContradictoires":15,"verdicts":289,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0},"textesRelus":{"date":"2026-08-21","articles":25,"concordants":25,"ecarts":0,"sansConclusion":0}};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -420,6 +420,19 @@ function siRegimeConnu(f, suite) {
 
 const nego = (f, cle) => (f.negos || {})[cle] || {};
 
+/* Les décisions, citées telles qu'elles ont été lues.
+
+   Chacune a été lue à la source dans la base Judilibre de la Cour de cassation
+   le 21 août 2026, réponse non relaxée, et n'est citée que pour ce qu'elle dit.
+   Le sommaire publié, quand il existe, fixe la limite de ce qu'on lui fait
+   dire : rien n'est étendu au-delà. */
+const ARRETS = {
+  finDesNegociations: "Soc., 15 avril 2026, n° 24-15.653, publié : « Il résulte des articles L. 2242-1, L. 2242-4 et L. 2242-5 du code du travail que les négociations obligatoires ne peuvent être considérées comme ayant pris fin avant l'établissement d'un procès-verbal de désaccord. » La Cour censure la cour d'appel qui avait tenu la négociation pour close alors que le procès-verbal de désaccord avait été établi le 16 avril quand le syndicat avait accepté la dernière proposition le 12 : à cette date, les négociations étaient toujours en cours.",
+  niveauxParAccord: "Soc., 3 avril 2024, n° 22-15.784, publié : « Il résulte de l'article L. 2242-1 du code du travail […] et de l'article L. 2242-10 du même code qu'un accord collectif négocié et signé aux conditions de droit commun peut définir, dans les entreprises comportant des établissements distincts, les niveaux auxquels la négociation obligatoire visée à l'article L. 2242-1 du code du travail est conduite. » L'accord en cause, intitulé accord de méthode, identifiait trois périmètres de négociation et les sujets de chacun.",
+  gepp: "Soc., 11 septembre 2024, n° 23-14.333, publié : « Il résulte des articles L. 2242-2, L. 2242-20 du code du travail et L. 2312-22 du même code […] que l'obligation de négociation sur la gestion des emplois et des parcours professionnels est subordonnée à l'existence d'une ou plusieurs organisations syndicales représentatives au niveau de l'entreprise. » Une désignation limitée à un établissement ne suffit donc pas à faire courir le délai.",
+  engagerNonConclure: "2e Civ., 7 novembre 2019, n° 18-21.499, publié : « L'employeur est seulement tenu, pour bénéficier de la réduction des cotisations à sa charge sur les bas salaires prévue par l'article L. 241-13, III, du code de la sécurité sociale, d'engager la négociation annuelle obligatoire prévue par l'article L. 2242-8, 1°, du code du travail, et non de parvenir à la conclusion d'un accord. » L'arrêt approuve la cour d'appel qui avait retenu que l'ouverture des négociations en 2014 justifiait l'exonération de cette année-là, peu important que l'accord n'ait été conclu qu'en janvier 2015.",
+};
+
 const C = [];
 const ctl = (id, rubrique, objet, fondement, verdict) => C.push({ id, rubrique, objet, fondement, verdict });
 
@@ -427,15 +440,19 @@ const ctl = (id, rubrique, objet, fondement, verdict) => C.push({ id, rubrique, 
 
 ctl("NAO-CTL-REG-01", "Régime applicable",
   "L'assujettissement à l'obligation de négocier est-il établi ?",
-  ["L. 2242-1"],
-  f => siAssujetti(f, a => ({ etat: CONF, motif: a.motif })));
+  ["L. 2242-1", "L. 2242-2", "Soc., 11 septembre 2024, n° 23-14.333"],
+  f => siAssujetti(f, a => ({ etat: CONF, motif: a.motif +
+    " La représentativité s'apprécie au niveau de l'entreprise, non d'un seul établissement : " + ARRETS.gepp })));
 
 ctl("NAO-CTL-REG-02", "Régime applicable",
   "Le calendrier qui s'impose à l'entreprise est-il identifié — accord de méthode conforme, ou régime supplétif ?",
-  ["L. 2242-10", "L. 2242-11", "L. 2242-13"],
+  ["L. 2242-10", "L. 2242-11", "L. 2242-13", "Soc., 3 avril 2024, n° 22-15.784"],
   f => siRegimeConnu(f, r => {
-    if (r.accordInvalide) return { etat: NC, motif: r.motif };
-    return { etat: CONF, motif: r.motif };
+    if (r.accordInvalide) return { etat: NC, motif: r.motif + " " + ARRETS.niveauxParAccord };
+    return { etat: CONF, motif: r.motif +
+      (r.regime === "accord de méthode"
+        ? " Ce que l'accord de L. 2242-11 peut régler dépasse la seule périodicité : " + ARRETS.niveauxParAccord
+        : " Rien n'interdit d'ouvrir la négociation de L. 2242-10 : elle peut être engagée à l'initiative de l'employeur comme à la demande d'une organisation syndicale représentative, et l'accord qui en sort peut aussi fixer les niveaux de négociation. " + ARRETS.niveauxParAccord) };
   }));
 
 /* -------------------------------------------------------- les périodicités */
@@ -514,20 +531,20 @@ ctl("NAO-CTL-LOY-02", "Loyauté de la négociation",
 
 ctl("NAO-CTL-UNI-01", "Loyauté de la négociation",
   "Des décisions unilatérales ont-elles été prises dans les matières en cours de négociation ?",
-  ["L. 2242-4"],
+  ["L. 2242-4", "L. 2242-5", "Soc., 15 avril 2026, n° 24-15.653"],
   f => siAssujetti(f, () => {
     const d = f.decisionUnilaterale || {};
-    if (vide(d.prise)) return { etat: MANQ, motif: "Il n'est pas indiqué si des décisions unilatérales concernant la collectivité des salariés ont été arrêtées pendant une négociation en cours." };
-    if (nie(d.prise)) return { etat: CONF, motif: "Aucune décision unilatérale n'a été arrêtée dans les matières en cours de négociation : L. 2242-4 est respecté." };
-    if (dit(d.urgence)) return { etat: RISQ, motif: `Une décision unilatérale a été prise pendant la négociation${vide(d.matiere) ? "" : " (" + d.matiere + ")"}, l'urgence étant invoquée. L. 2242-4 la réserve au cas où « l'urgence le justifie » : cette justification s'apprécie au fond, elle doit pouvoir être documentée.` };
-    return { etat: NC, motif: `Une décision unilatérale concernant la collectivité des salariés a été arrêtée pendant la négociation${vide(d.matiere) ? "" : " (" + d.matiere + ")"}, sans urgence justifiée : L. 2242-4 l'interdit tant que la négociation est en cours.` };
+    if (vide(d.prise)) return { etat: MANQ, motif: "Il n'est pas indiqué si des décisions unilatérales concernant la collectivité des salariés ont été arrêtées pendant une négociation en cours. La question de la date compte autant que celle du contenu : " + ARRETS.finDesNegociations };
+    if (nie(d.prise)) return { etat: CONF, motif: "Aucune décision unilatérale n'a été arrêtée dans les matières en cours de négociation : L. 2242-4 est respecté. Le terme de la négociation ne se décrète pas : " + ARRETS.finDesNegociations };
+    if (dit(d.urgence)) return { etat: RISQ, motif: `Une décision unilatérale a été prise pendant la négociation${vide(d.matiere) ? "" : " (" + d.matiere + ")"}, l'urgence étant invoquée. L. 2242-4 la réserve au cas où « l'urgence le justifie » : cette justification s'apprécie au fond, elle doit pouvoir être documentée. ` + ARRETS.finDesNegociations };
+    return { etat: NC, motif: `Une décision unilatérale concernant la collectivité des salariés a été arrêtée pendant la négociation${vide(d.matiere) ? "" : " (" + d.matiere + ")"}, sans urgence justifiée : L. 2242-4 l'interdit tant que la négociation est en cours. Une clôture annoncée par l'employeur ne suffit pas à faire courir de nouveau sa liberté de décider : ` + ARRETS.finDesNegociations };
   }));
 
 /* -------------------------------------------------------------- l'issue */
 
 ctl("NAO-CTL-ISS-01", "Issue des négociations",
   "Chaque négociation terminée s'est-elle conclue par un accord déposé ou un procès-verbal de désaccord déposé ?",
-  ["L. 2242-5", "R. 2242-1"],
+  ["L. 2242-5", "R. 2242-1", "Soc., 15 avril 2026, n° 24-15.653", "2e Civ., 7 novembre 2019, n° 18-21.499"],
   f => siAssujetti(f, () => {
     const griefs = [], vus = [];
     for (const t of Object.values(M.THEMES)) {
@@ -539,9 +556,9 @@ ctl("NAO-CTL-ISS-01", "Issue des négociations",
       if (n.issue === "PV de désaccord" && !dit(n.depot))
         griefs.push(`« ${t.titre} » : procès-verbal de désaccord non déposé — L. 2242-5 et R. 2242-1 imposent son dépôt dans les conditions de D. 2231-2, avec les dernières propositions des parties et les mesures que l'employeur entend appliquer unilatéralement`);
     }
-    if (!vus.length) return { etat: MANQ, motif: "Aucune négociation n'est déclarée terminée (accord ou procès-verbal de désaccord) : l'issue ne peut pas être contrôlée." };
-    if (griefs.length) return { etat: NC, motif: griefs.join(" ; ") + "." };
-    return { etat: CONF, motif: `Chaque négociation terminée a son issue formalisée et déposée (${vus.length} négociation(s)).` };
+    if (!vus.length) return { etat: MANQ, motif: "Aucune négociation n'est déclarée terminée (accord ou procès-verbal de désaccord) : l'issue ne peut pas être contrôlée. Le procès-verbal de désaccord n'est pas une formalité de classement — il marque le terme de la négociation. " + ARRETS.finDesNegociations };
+    if (griefs.length) return { etat: NC, motif: griefs.join(" ; ") + ". " + ARRETS.finDesNegociations };
+    return { etat: CONF, motif: `Chaque négociation terminée a son issue formalisée et déposée (${vus.length} négociation(s)). L'obligation porte sur la négociation, non sur sa conclusion : ${ARRETS.engagerNonConclure} Mais l'échec doit être constaté : ${ARRETS.finDesNegociations}` };
   }));
 
 /* ------------------------------------------------------------- l'égalité */
@@ -629,17 +646,17 @@ ctl("NAO-CTL-CON-03", "Contenu des négociations",
 
 ctl("NAO-CTL-PEN-01", "Exposition aux sanctions",
   "À quoi l'entreprise s'expose-t-elle en l'état du dossier ?",
-  ["L. 2242-7", "L. 2242-8", "L. 2243-1", "L. 2243-2"],
+  ["L. 2242-7", "L. 2242-8", "L. 2243-1", "L. 2243-2", "2e Civ., 7 novembre 2019, n° 18-21.499"],
   f => siRegimeConnu(f, () => {
     const e = M.echeances(f);
     const retards = Object.values(e.themes).filter(t => t.etat === "en retard");
     const inconnus = Object.values(e.themes).filter(t => /jamais engagée|inexploitables/.test(t.etat) && t.du === true);
     if (retards.length) {
       const l = retards.map(t => `« ${t.titre} »`).join(", ");
-      return { etat: NC, motif: `Négociation(s) hors périodicité : ${l}. L'exposition est triple — le délit d'entrave de L. 2243-1 et L. 2243-2 (un an d'emprisonnement, 3 750 € d'amende), la pénalité salaires de L. 2242-7 s'agissant de la rémunération, la pénalité de 1 % de L. 2242-8 s'agissant de l'égalité. Le montant en est fixé par l'administration selon les efforts constatés : c'est une exposition, pas un chiffrage.` };
+      return { etat: NC, motif: `Négociation(s) hors périodicité : ${l}. L'exposition est triple — le délit d'entrave de L. 2243-1 et L. 2243-2 (un an d'emprisonnement, 3 750 € d'amende), la pénalité salaires de L. 2242-7 s'agissant de la rémunération, la pénalité de 1 % de L. 2242-8 s'agissant de l'égalité. Le montant en est fixé par l'administration selon les efforts constatés : c'est une exposition, pas un chiffrage. Ce qui est reproché ici est de n'avoir pas engagé la négociation, non de n'avoir pas conclu : ${ARRETS.engagerNonConclure}` };
     }
     if (inconnus.length) return { etat: MANQ, motif: "Des négociations dues n'ont pas de date d'engagement renseignée : l'exposition ne peut pas être appréciée." };
-    return { etat: RISQ, motif: "Aucun manquement de périodicité constaté en l'état du dossier. L'exposition n'est pas nulle pour autant : la loyauté de chaque négociation (L. 2242-6, L. 2242-14) et la couverture égalité (L. 2242-8) s'apprécient en continu — ce contrôle ne prononce jamais un blanc-seing." };
+    return { etat: RISQ, motif: "Aucun manquement de périodicité constaté en l'état du dossier. L'exposition n'est pas nulle pour autant : la loyauté de chaque négociation (L. 2242-6, L. 2242-14) et la couverture égalité (L. 2242-8) s'apprécient en continu — ce contrôle ne prononce jamais un blanc-seing. " + ARRETS.engagerNonConclure };
   }));
 
 /* Les contrôles qui, par construction, ne rendent jamais « conforme ». */

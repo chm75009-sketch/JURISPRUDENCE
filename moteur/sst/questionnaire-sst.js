@@ -98,6 +98,8 @@ q("La commission santé-sécurité (CSSCT)", "cssct.membreSecondCollege", "Au mo
 q("La commission santé-sécurité (CSSCT)", "cssct.designesParCSE", "Ses membres sont-ils désignés par le comité parmi ses membres ?", "oui / non", "résolution de désignation");
 q("La commission santé-sécurité (CSSCT)", "cssct.modalitesFixees", "Qu'est-ce qui fixe ses modalités — accord d'entreprise, accord avec le comité, règlement intérieur, ou rien ?", "liste", "l'accord ou le règlement intérieur");
 q("La commission santé-sécurité (CSSCT)", "cssct.delegationConforme", "La délégation confiée exclut-elle le recours à l'expert et les attributions consultatives ?", "oui / non", "texte de la délégation");
+q("La commission santé-sécurité (CSSCT)", "cssct.remplacementEnCoursDeMandat", "Des membres de la commission ont-ils été remplacés depuis leur désignation initiale ?", "oui / non", "délibération de remplacement");
+q("La commission santé-sécurité (CSSCT)", "cssct.causeRemplacement", "Si oui, pour quelle cause ?", "texte", "délibération de remplacement et pièce justifiant la cause");
 q("La commission santé-sécurité (CSSCT)", "formationSSCT", "Les élus (et le référent harcèlement du comité) ont-ils reçu la formation santé, sécurité et conditions de travail ?", "oui / non", "attestations de formation");
 
 q("Le harcèlement", "referentEmployeur", "À partir de deux cent cinquante salariés : le référent employeur harcèlement sexuel est-il désigné ?", "oui / non", "note de désignation");

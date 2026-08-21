@@ -194,6 +194,43 @@
   button:disabled{opacity:.45;cursor:default}
   @media print{ .retour,#message{display:none} }
   @media print{ .barre,form,header a,footer{display:none} .page{padding:0} }
+
+  /* La note de régime, en tête de page et repliée par défaut.
+
+     Elle répond à la question qui commande toutes les autres : ce texte
+     s'impose-t-il, mon accord peut-il en disposer autrement, ou n'est-il là
+     qu'à défaut d'accord ? Trois étages, trois couleurs, et chaque affirmation
+     rattachée à son article. Repliée, elle n'encombre pas ; dépliée, elle
+     tient sur un écran. */
+  details.regime{border:1px solid var(--bleu);border-radius:4px;
+    background:var(--surface);margin:22px 0 0}
+  details.regime>summary{cursor:pointer;list-style:none;padding:13px 16px;
+    font:600 15px/1.35 system-ui;color:var(--bleu);display:flex;gap:9px;align-items:baseline}
+  details.regime>summary::-webkit-details-marker{display:none}
+  details.regime>summary::after{content:"deplier";margin-left:auto;font:400 12px/1.4 system-ui;
+    color:var(--gris);white-space:nowrap}
+  details.regime[open]>summary::after{content:"replier"}
+  details.regime>summary::before{content:"\25B8";flex:0 0 auto;color:var(--bleu)}
+  details.regime[open]>summary::before{content:"\25BE"}
+  details.regime>summary:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+  details.regime .corps{padding:14px 16px 18px;border-top:1px solid var(--filet)}
+  details.regime .corps>p{margin:0 0 12px;max-width:78ch;font-size:14.5px}
+  details.regime .corps>p:last-child{margin-bottom:0}
+  ul.etages{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px}
+  ul.etages li{border-left:4px solid var(--bleu);background:var(--gris-f);
+    padding:9px 13px;border-radius:0 3px 3px 0;font-size:14px}
+  ul.etages li>b{display:block;color:var(--encre);margin-bottom:4px}
+  ul.etages li.op{border-left-color:var(--rouge)}
+  ul.etages li.neg{border-left-color:var(--orange)}
+  ul.etages li.sup{border-left-color:var(--vert)}
+  ul.etages .art{color:var(--gris);font:500 12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  details.regime .chute{border-top:1px solid var(--filet);padding-top:11px;color:var(--corps);
+    font-size:14px}
+  @media print{
+    details.regime{break-inside:avoid}
+    details.regime .corps{display:block}
+    details.regime>summary::after{content:""}
+  }
 </style>
 </head>
 <body>
@@ -240,6 +277,56 @@
   la loi oblige à négocier, pas à conclure — l'échec loyal se constate par un procès-verbal de
   désaccord, déposé.</p>
 </div>
+
+<details class="regime" id="regime">
+  <summary>Avant de commencer&nbsp;: les trois étages de la négociation obligatoire</summary>
+  <div class="corps">
+  <p>La question qui commande votre calendrier n'est pas «&nbsp;quand ai-je négocié&nbsp;?&nbsp;»
+  mais «&nbsp;ai-je un accord de méthode, et est-il tenu&nbsp;?&nbsp;». Voici les trois étages.</p>
+  <ul class="etages">
+    <li class="op"><b>1. Ordre public — ce qu'aucun accord ne peut écarter</b>
+    L'obligation de négocier elle-même&nbsp;: là où sont constituées une ou plusieurs sections
+    syndicales d'organisations représentatives, l'employeur engage les négociations sur la
+    rémunération et sur l'égalité professionnelle, et, à partir de trois cents salariés, celles sur
+    la gestion des emplois et des parcours professionnels et sur les salariés expérimentés. Tant
+    qu'une négociation est en cours, l'employeur ne peut, dans les matières traitées, arrêter de
+    décisions unilatérales concernant la collectivité des salariés, sauf si l'urgence le justifie —
+    et la négociation ne prend pas fin avant l'établissement d'un procès-verbal de désaccord. Elle
+    doit être engagée sérieusement et loyalement&nbsp;: convocation des organisations
+    représentatives, lieu et calendrier des réunions, informations nécessaires remises.
+    <span class="art">L. 2242-1 · L. 2242-2 · L. 2242-2-1 · L. 2242-4 · L. 2242-5 · L. 2242-6 ·
+    L. 2242-14 · R. 2242-1 — Soc., 15 avr. 2026, n° 24-15.653 ; Soc., 11 sept. 2024, n° 23-14.333</span></li>
+
+    <li class="neg"><b>2. Le champ de la négociation — ce que l'accord de méthode peut régler</b>
+    Une négociation peut être engagée, à l'initiative de l'employeur ou à la demande d'une
+    organisation syndicale représentative, pour préciser le calendrier, la périodicité, les thèmes et
+    les modalités de négociation dans le groupe, l'entreprise ou l'établissement. L'accord qui en
+    sort fixe les thèmes et leur périodicité — de telle sorte qu'au moins tous les quatre ans soient
+    négociés les thèmes légaux —, le contenu de chacun, le calendrier et les lieux des réunions, les
+    informations remises aux négociateurs et la date de leur remise, et les modalités de suivi des
+    engagements. Sa durée ne peut excéder quatre ans. Il peut aussi définir, dans les entreprises à
+    établissements distincts, les niveaux auxquels la négociation obligatoire est conduite.
+    <span class="art">L. 2242-10 · L. 2242-11 · L. 2242-12 —
+    Soc., 3 avr. 2024, n° 22-15.784</span></li>
+
+    <li class="sup"><b>3. Les dispositions supplétives — ce qui s'applique à défaut d'accord</b>
+    «&nbsp;À défaut d'accord prévu à l'article L. 2242-11 <strong>ou en cas de
+    non-respect de ses stipulations</strong>&nbsp;»&nbsp;: chaque année une négociation sur la
+    rémunération, le temps de travail et le partage de la valeur ajoutée&nbsp;; chaque année une
+    négociation sur l'égalité professionnelle et la qualité de vie et des conditions de travail&nbsp;;
+    tous les trois ans, à partir de trois cents salariés, une négociation sur la gestion des emplois
+    et des parcours professionnels, puis une négociation sur l'emploi des salariés expérimentés.
+    À défaut d'accord sur l'égalité, un plan d'action annuel, déposé.
+    <span class="art">L. 2242-13 · L. 2242-3 · L. 2242-15 · L. 2242-17 · L. 2242-20 · L. 2242-21</span></li>
+  </ul>
+  <p class="chute">Le point que l'on manque le plus souvent est le second membre de la phrase de
+  l'article L. 2242-13&nbsp;: «&nbsp;ou en cas de non-respect de ses stipulations&nbsp;». Un accord
+  de méthode qui n'est pas tenu ne fait plus écran — le calendrier annuel reprend, sans qu'il soit
+  besoin de dénoncer l'accord. C'est pourquoi l'audit vous demande à la fois si l'accord existe,
+  s'il est versé, quelle en est la durée et quelles mentions il porte&nbsp;: un accord incomplet
+  laisse s'appliquer le régime supplétif.</p>
+  </div>
+</details>
 
 <div class="enc" style="margin-top:22px">
   <p class="sh">L'exposition se mesure, elle ne se blanchit pas</p>

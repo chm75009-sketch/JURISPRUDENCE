@@ -1,24 +1,24 @@
 {
- "date": "2026-08-18",
+ "date": "2026-08-21",
  "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
  "articles": 25,
- "concordants": 15,
+ "concordants": 25,
  "ecarts": 0,
- "douteux": 10,
+ "douteux": 0,
  "detail": [
   {
    "numero": "L2242-1",
-   "attendu": "LEGIARTI000006390466",
-   "lu": "LEGIARTI000006390466",
+   "attendu": "LEGIARTI000043893962",
+   "lu": "LEGIARTI000043893962",
    "etat": "concordant",
    "ecartCaracteres": 0
   },
   {
    "numero": "L2242-2",
    "attendu": "LEGIARTI000036262221",
-   "lu": "LEGIARTI000023084134",
-   "etat": "homonyme servi",
-   "ecartCaracteres": 1
+   "lu": "LEGIARTI000036262221",
+   "etat": "concordant",
+   "ecartCaracteres": 0
   },
   {
    "numero": "L2242-2-1",
@@ -30,36 +30,36 @@
   {
    "numero": "L2242-3",
    "attendu": "LEGIARTI000037389684",
-   "lu": "LEGIARTI000006390468",
-   "etat": "lectures discordantes",
-   "ecartCaracteres": 955
+   "lu": "LEGIARTI000037389684",
+   "etat": "concordant",
+   "ecartCaracteres": 0
   },
   {
    "numero": "L2242-4",
    "attendu": "LEGIARTI000052437071",
-   "lu": "LEGIARTI000047053409",
-   "etat": "lectures discordantes",
-   "ecartCaracteres": 2704
+   "lu": "LEGIARTI000052437071",
+   "etat": "concordant",
+   "ecartCaracteres": 0
   },
   {
    "numero": "L2242-5",
    "attendu": "LEGIARTI000035627862",
-   "lu": "LEGIARTI000032286054",
-   "etat": "lectures discordantes",
-   "ecartCaracteres": 184
+   "lu": "LEGIARTI000035627862",
+   "etat": "concordant",
+   "ecartCaracteres": 0
   },
   {
    "numero": "L2242-6",
-   "attendu": "LEGIARTI000032285967",
+   "attendu": "LEGIARTI000035627858",
    "lu": "LEGIARTI000035627858",
-   "etat": "homonyme servi",
-   "ecartCaracteres": 438
+   "etat": "concordant",
+   "ecartCaracteres": 0
   },
   {
    "numero": "L2242-7",
-   "attendu": "LEGIARTI000030902077",
-   "lu": "LEGIARTI000030902077",
-   "etat": "lectures discordantes",
+   "attendu": "LEGIARTI000035627851",
+   "lu": "LEGIARTI000035627851",
+   "etat": "concordant",
    "ecartCaracteres": 0
   },
   {
@@ -72,15 +72,15 @@
   {
    "numero": "L2242-9",
    "attendu": "LEGIARTI000035627834",
-   "lu": "LEGIARTI000029333691",
-   "etat": "lectures discordantes",
-   "ecartCaracteres": 1485
+   "lu": "LEGIARTI000035627834",
+   "etat": "concordant",
+   "ecartCaracteres": 0
   },
   {
    "numero": "L2242-10",
-   "attendu": "LEGIARTI000032284434",
-   "lu": "LEGIARTI000032284434",
-   "etat": "lectures discordantes",
+   "attendu": "LEGIARTI000035627827",
+   "lu": "LEGIARTI000035627827",
+   "etat": "concordant",
    "ecartCaracteres": 0
   },
   {
@@ -163,9 +163,9 @@
   {
    "numero": "L2243-1",
    "attendu": "LEGIARTI000031086617",
-   "lu": "LEGIARTI000045211932",
-   "etat": "homonyme servi",
-   "ecartCaracteres": 76
+   "lu": "LEGIARTI000031086617",
+   "etat": "concordant",
+   "ecartCaracteres": 0
   },
   {
    "numero": "L2243-2",
@@ -177,9 +177,9 @@
   {
    "numero": "R2242-1",
    "attendu": "LEGIARTI000036222825",
-   "lu": "LEGIARTI000053731750",
-   "etat": "homonyme servi",
-   "ecartCaracteres": 816
+   "lu": "LEGIARTI000036222825",
+   "etat": "concordant",
+   "ecartCaracteres": 0
   }
  ]
 }

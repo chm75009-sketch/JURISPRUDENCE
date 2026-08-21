@@ -194,6 +194,43 @@
   button:disabled{opacity:.45;cursor:default}
   @media print{ .retour,#message{display:none} }
   @media print{ .barre,form,header a,footer{display:none} .page{padding:0} }
+
+  /* La note de régime, en tête de page et repliée par défaut.
+
+     Elle répond à la question qui commande toutes les autres : ce texte
+     s'impose-t-il, mon accord peut-il en disposer autrement, ou n'est-il là
+     qu'à défaut d'accord ? Trois étages, trois couleurs, et chaque affirmation
+     rattachée à son article. Repliée, elle n'encombre pas ; dépliée, elle
+     tient sur un écran. */
+  details.regime{border:1px solid var(--bleu);border-radius:4px;
+    background:var(--surface);margin:22px 0 0}
+  details.regime>summary{cursor:pointer;list-style:none;padding:13px 16px;
+    font:600 15px/1.35 system-ui;color:var(--bleu);display:flex;gap:9px;align-items:baseline}
+  details.regime>summary::-webkit-details-marker{display:none}
+  details.regime>summary::after{content:"deplier";margin-left:auto;font:400 12px/1.4 system-ui;
+    color:var(--gris);white-space:nowrap}
+  details.regime[open]>summary::after{content:"replier"}
+  details.regime>summary::before{content:"\25B8";flex:0 0 auto;color:var(--bleu)}
+  details.regime[open]>summary::before{content:"\25BE"}
+  details.regime>summary:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
+  details.regime .corps{padding:14px 16px 18px;border-top:1px solid var(--filet)}
+  details.regime .corps>p{margin:0 0 12px;max-width:78ch;font-size:14.5px}
+  details.regime .corps>p:last-child{margin-bottom:0}
+  ul.etages{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px}
+  ul.etages li{border-left:4px solid var(--bleu);background:var(--gris-f);
+    padding:9px 13px;border-radius:0 3px 3px 0;font-size:14px}
+  ul.etages li>b{display:block;color:var(--encre);margin-bottom:4px}
+  ul.etages li.op{border-left-color:var(--rouge)}
+  ul.etages li.neg{border-left-color:var(--orange)}
+  ul.etages li.sup{border-left-color:var(--vert)}
+  ul.etages .art{color:var(--gris);font:500 12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  details.regime .chute{border-top:1px solid var(--filet);padding-top:11px;color:var(--corps);
+    font-size:14px}
+  @media print{
+    details.regime{break-inside:avoid}
+    details.regime .corps{display:block}
+    details.regime>summary::after{content:""}
+  }
 </style>
 </head>
 <body>
@@ -242,6 +279,52 @@
   prévention suffisent</b> : leur suffisance s'apprécie au fond — quand des mesures existent, le
   rapport dit « risque à vérifier », jamais « conforme ».</p>
 </div>
+
+<details class="regime" id="regime">
+  <summary>Avant de commencer&nbsp;: les trois étages de la santé-sécurité</summary>
+  <div class="corps">
+  <p>En santé-sécurité, le premier étage est plus large qu'ailleurs&nbsp;: l'essentiel ne se négocie
+  pas. Ce qui se négocie porte sur l'organisation de la commission, jamais sur l'obligation de
+  prévention elle-même.</p>
+  <ul class="etages">
+    <li class="op"><b>1. Ordre public — ce qu'aucun accord ne peut écarter</b>
+    L'employeur prend les mesures nécessaires pour assurer la sécurité et protéger la santé physique
+    et mentale des travailleurs, évalue les risques et transcrit les résultats de cette évaluation
+    dans un document unique&nbsp;: dû dès le premier salarié, sans seuil et sans accord possible. La
+    commission santé, sécurité et conditions de travail est créée à partir de trois cents salariés,
+    dans les établissements distincts de trois cents salariés et dans les établissements à hauts
+    risques&nbsp;; en deçà, l'inspecteur du travail peut l'imposer. Sa composition et sa désignation
+    sont d'ordre public, comme les limites de sa délégation&nbsp;: ni les attributions consultatives
+    du comité ni le recours à l'expert ne peuvent lui être délégués. La formation en santé, sécurité
+    et conditions de travail a un plancher légal, à la charge de l'employeur.
+    <span class="art">L. 4121-1 · L. 4121-2 · L. 4121-3 · L. 4121-3-1 · R. 4121-1 · R. 4121-2 ·
+    L. 2315-36 · L. 2315-37 · L. 2315-38 · L. 2315-39 · L. 2315-18 —
+    Soc., 26 févr. 2025, n° 24-12.295 ; Soc., 13 mai 2026, n° 25-12.560 ;
+    Soc., 28 mai 2026, n° 24-22.914</span></li>
+
+    <li class="neg"><b>2. Le champ de la négociation — ce que l'accord peut régler</b>
+    L'accord d'entreprise fixe les modalités de mise en place de la ou des commissions&nbsp;: nombre
+    de membres, missions déléguées et leurs modalités d'exercice, fonctionnement et heures de
+    délégation, modalités de la formation, moyens le cas échéant, et le cas échéant une formation
+    spécifique aux risques particuliers de l'activité. Sans délégué syndical, un accord entre
+    l'employeur et le comité, adopté à la majorité des titulaires. En dehors des cas où la commission
+    est obligatoire, un accord peut en créer et en fixer le nombre et le périmètre.
+    <span class="art">L. 2315-41 · L. 2315-42 · L. 2315-43</span></li>
+
+    <li class="sup"><b>3. Les dispositions supplétives — ce qui s'applique à défaut d'accord</b>
+    À défaut d'accord, le règlement intérieur du comité définit les six points de l'article
+    L. 2315-41&nbsp;; à défaut de l'accord de l'article L. 2315-43, l'employeur peut fixer le nombre
+    et le périmètre des commissions. Les suites de l'évaluation des risques suivent le même
+    partage&nbsp;: programme annuel de prévention à partir de cinquante salariés, liste d'actions
+    consignée dans le document unique en deçà.
+    <span class="art">L. 2315-44 · L. 4121-3-1, III · L. 2312-27, 2°</span></li>
+  </ul>
+  <p class="chute">La conséquence pratique&nbsp;: un accord peut organiser la commission, il ne peut
+  pas la remplacer. Une délégation qui lui confierait l'avis du comité ou la décision de recourir à
+  l'expert serait sans effet — l'article L. 2315-38 est d'ordre public — et l'audit la relève comme
+  telle, quelles que soient les stipulations de l'accord versé.</p>
+  </div>
+</details>
 
 <div class="enc" style="margin-top:22px">
   <p class="sh">L'exposition se mesure, elle ne se blanchit pas</p>

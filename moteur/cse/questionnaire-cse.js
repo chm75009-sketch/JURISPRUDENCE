@@ -122,11 +122,23 @@ q("Fonctionnement", "formationsDispensees", "Formations dispensées aux élus", 
 q("Santé et sécurité", "cssct", "Une commission santé, sécurité et conditions de travail est-elle en place ?", "oui / non", "accord ou résolution de désignation");
 q("Santé et sécurité", "seveso", "L'établissement relève-t-il des articles L. 4521-1 et suivants ?", "oui / non", "arrêté de classement");
 q("Santé et sécurité", "membresCssct", "Membres de la commission, avec le collège de chacun", "liste d'objets", "résolution de désignation");
+q("Santé et sécurité", "designationCssct", "Désignation des membres : une résolution du comité a-t-elle été adoptée, et à la majorité des membres présents ?", "objet", "procès-verbal de la réunion et résolution");
+q("Santé et sécurité", "remplacementCssct", "Des membres de la commission ont-ils été remplacés depuis leur désignation, et pour quelle cause ?", "objet", "délibération de remplacement");
+q("Santé et sécurité", "delegationCssct", "Délégation consentie à la commission : les attributions consultatives et le recours à l'expert lui sont-ils délégués ?", "objet", "accord ou règlement intérieur du comité");
+q("Santé et sécurité", "sourceModalitesCssct", "Ce qui fixe les modalités de la commission : accord d'entreprise, accord avec le comité, règlement intérieur du comité, ou rien", "texte", "l'accord ou le règlement intérieur du comité");
+q("Santé et sécurité", "mandatRenouvele", "Le mandat des membres de la commission est-il un renouvellement ?", "oui / non", "procès-verbaux des deux dernières élections");
+q("Santé et sécurité", "joursFormationSSCT", "Nombre de jours de formation santé, sécurité et conditions de travail dispensés aux membres de la commission", "nombre", "attestations de formation");
+q("Commissions", "accordCommissions", "Un accord d'entreprise prévu à l'article L. 2315-45 organise-t-il les commissions du comité ?", "oui / non", "accord d'entreprise, en intégralité");
+q("Commissions", "commissionsConstituees", "Commissions supplétives effectivement constituées à défaut d'accord", "liste", "délibérations de constitution");
+q("Commissions", "commissionEconomique", "Une commission économique est-elle créée au sein du comité ou du comité central ?", "oui / non", "délibération de constitution");
+q("Commissions", "membresCommissionEconomique", "Membres de la commission économique, en indiquant lesquels représentent la catégorie des cadres", "liste d'objets", "délibération de désignation");
+q("Commissions", "seuilsComptesComite", "Les comptes du comité dépassent-ils au moins deux des trois seuils de l'article D. 2315-29 ?", "oui / non", "comptes annuels du comité et rapport du trésorier");
+q("Commissions", "commissionMarches", "Une commission des marchés est-elle créée au sein du comité ?", "oui / non", "délibération de constitution");
 q("Budgets", "subventionVersee", "Subvention de fonctionnement versée sur l'exercice", "euros", "justificatifs de versement");
 q("Budgets", "ascAnneeN", "Contribution aux activités sociales et culturelles de l'exercice", "euros", "justificatifs de versement");
 q("Budgets", "ascAnneeN1", "Même contribution, exercice précédent", "euros", "justificatifs de versement");
 q("Budgets", "ancienneteASC", "L'accès aux activités sociales est-il subordonné à une condition d'ancienneté ?", "oui / non", "règlement des activités sociales");
-q("Expertises", "expertise", "Expertise en cours : cas de recours, part employeur, date du point de départ, date de saisine du juge", "objet", "délibération, cahier des charges");
+q("Expertises", "expertise", "Expertise en cours : cas de recours, part employeur, date du point de départ, date de saisine du juge, auteur de la décision de recourir à l'expert", "objet", "délibération, cahier des charges");
 q("Expertises", "nbLicenciements", "Nombre de licenciements économiques envisagés sur trente jours", "nombre", "projet de licenciement");
 q("Normes", "accordsCse", "Accords collectifs applicables au comité", "liste", "accords versés en intégralité");
 q("Normes", "contentieuxCse", "Contentieux ou procédure en cours concernant le comité", "texte", "actes de procédure");
@@ -159,7 +171,9 @@ for (const rub of RUBS) {
 }
 
 h1("Annexe · Registre des contrôles");
-p("Les trente-cinq contrôles exécutés, leur objet, leur fondement et leur portée. Un contrôle marqué « détection » ne conclut jamais à la conformité : il signale une situation qui appelle un examen extérieur à l'application.");
+/* Le nombre était écrit en toutes lettres, et faux dès qu'un contrôle
+   s'ajoutait. Il se compte. */
+p(`Les ${C.length} contrôles exécutés, leur objet, leur fondement et leur portée. Un contrôle marqué « détection » ne conclut jamais à la conformité : il signale une situation qui appelle un examen extérieur à l'application. Les décisions citées en fondement ont été lues à la source dans la base Judilibre de la Cour de cassation.`);
 tab(["Contrôle", "Rubrique", "Objet", "Priorité", "Fondement", "Type"],
   C.map(x => [x.id, x.rubrique, x.objet, ACT.gr(x.id), (x.fondement || []).join(" · ") || "—",
     DETECTION.has(x.id) ? "détection" : "conformité"]));

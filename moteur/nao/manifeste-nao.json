@@ -1,11 +1,11 @@
 {
  "domaine": "négociation obligatoire en entreprise",
- "date": "2026-08-20",
- "empreinte": "b341f552d312",
+ "date": "2026-08-21",
+ "empreinte": "5840101e6c12",
  "fichiers": {
   "audit-nao-client.js": "65d55e7e32a0",
-  "capturer-textes-nao.js": "287d81d2ea1c",
-  "controles-nao.js": "d9315ad2c8b8",
+  "capturer-textes-nao.js": "bcd982d41682",
+  "controles-nao.js": "debed55e84ee",
   "dates.js": "5d945470174f",
   "fiche-nao.json": "024305b6b0ab",
   "moteur-nao.js": "7bb1df1b203e",
@@ -13,8 +13,8 @@
   "propositions-nao.js": "6b34f8a501b8",
   "questionnaire-nao.js": "95b08d4cec5d",
   "tests-nao.js": "47348a66d9a8",
-  "textes-nao.json": "889bda7d970d",
-  "verifier-textes-nao.js": "b44a05c8c286"
+  "textes-nao.json": "c1d78ef830d2",
+  "verifier-textes-nao.js": "ab8c5ba9fb97"
  },
  "compteurs": {
   "articlesLus": 25,
@@ -31,10 +31,10 @@
   "expositionConcluantConforme": 0
  },
  "textesRelus": {
-  "date": "2026-08-18",
+  "date": "2026-08-21",
   "articles": 25,
-  "concordants": 15,
+  "concordants": 25,
   "ecarts": 0,
-  "sansConclusion": 10
+  "sansConclusion": 0
  }
 }

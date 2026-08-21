@@ -301,8 +301,81 @@ function electionsPartielles(o = {}) {
     portee: "Les élections partielles pourvoient tous les sièges vacants dans les collèges intéressés, sur la base des dispositions en vigueur lors de l'élection précédente ; les candidats sont élus pour la durée du mandat restant à courir." };
 }
 
+/* Les causes de fin anticipée du mandat. L. 2314-33, deuxième phrase : « Les
+   fonctions de ces membres prennent fin par le décès, la démission, la rupture
+   du contrat de travail, la perte des conditions requises pour être éligible. »
+   Ce sont elles, et elles seules, qui autorisent le comité à remplacer un
+   membre de la commission santé, sécurité et conditions de travail avant le
+   terme du mandat des élus. */
+const FINS_ANTICIPEES = ["décès", "démission", "rupture du contrat de travail",
+  "perte des conditions requises pour être éligible"];
+const finAnticipeeMandat = cause => FINS_ANTICIPEES.includes(cause);
+
+/* Ce qui peut fixer les modalités de la commission santé, sécurité et
+   conditions de travail : l'ordre des sources est celui des textes. */
+const SOURCES_MODALITES_CSSCT = {
+  "accord d'entreprise": { texte: "L. 2315-41",
+    libelle: "un accord d'entreprise défini à l'article L. 2313-2" },
+  "accord avec le comité": { texte: "L. 2315-42",
+    libelle: "un accord entre l'employeur et le comité, adopté à la majorité des membres titulaires élus, en l'absence de délégué syndical" },
+  "règlement intérieur du comité": { texte: "L. 2315-44",
+    libelle: "le règlement intérieur du comité, à défaut d'accord" },
+};
+
+/* La formation en santé, sécurité et conditions de travail. L. 2315-18 :
+   cinq jours au minimum lors du premier mandat ; en cas de renouvellement,
+   trois jours pour chaque membre de la délégation quelle que soit la taille de
+   l'entreprise, cinq jours pour les membres de la commission dans les
+   entreprises d'au moins trois cents salariés. */
+function dureeFormationSSCT(o = {}) {
+  const renouvelle = o.mandatRenouvele === true;
+  const e = o.effectif;
+  if (!renouvelle)
+    return { jours: 5, texte: "L. 2315-18",
+      motif: "La formation est d'une durée minimale de cinq jours lors du premier mandat des membres de la délégation du personnel (L. 2315-18)." };
+  const grande = typeof e === "number" && e >= 300;
+  return { jours: grande ? 5 : 3, texte: grande ? "L. 2315-18, 2°" : "L. 2315-18, 1°",
+    motif: grande
+      ? "Le mandat est renouvelé : la durée minimale est de cinq jours pour les membres de la commission santé, sécurité et conditions de travail dans les entreprises d'au moins trois cents salariés (L. 2315-18, 2°)."
+      : "Le mandat est renouvelé : la durée minimale est de trois jours pour chaque membre de la délégation du personnel, quelle que soit la taille de l'entreprise (L. 2315-18, 1°). Les cinq jours du 2° ne sont dus qu'à partir de trois cents salariés." };
+}
+
+/* Les trois commissions supplétives du seuil de trois cents salariés. Elles ne
+   naissent qu'« en l'absence d'accord prévu à l'article L. 2315-45 » : c'est la
+   différence de régime avec la commission santé, sécurité et conditions de
+   travail, que L. 2315-36 impose sans réserve d'accord. */
+const COMMISSIONS_300 = [
+  { cle: "formation", libelle: "la commission de la formation", texte: "L. 2315-49" },
+  { cle: "logement", libelle: "la commission d'information et d'aide au logement", texte: "L. 2315-50" },
+  { cle: "égalité professionnelle", libelle: "la commission de l'égalité professionnelle", texte: "L. 2315-56" },
+];
+function commissionsSuppletives(o = {}) {
+  const e = o.effectif;
+  if (typeof e !== "number")
+    return { du: null, motif: "L'effectif n'est pas renseigné : le seuil de trois cents salariés des commissions supplétives ne peut pas être apprécié." };
+  if (e < 300)
+    return { du: false, texte: "L. 2315-49",
+      motif: `Effectif de ${e} salariés : les commissions de la formation (L. 2315-49), d'information et d'aide au logement (L. 2315-50) et de l'égalité professionnelle (L. 2315-56) ne sont dues qu'à partir de trois cents salariés — et seulement en l'absence d'accord prévu à l'article L. 2315-45. Les entreprises de moins de trois cents salariés peuvent toutefois se grouper entre elles pour former la commission d'information et d'aide au logement (L. 2315-50).` };
+  return { du: true, texte: "L. 2315-49",
+    motif: `Effectif de ${e} salariés : le seuil de trois cents est atteint.` };
+}
+
+/* La commission économique. L. 2315-46 : « En l'absence d'accord prévu à
+   l'article L. 2315-45, dans les entreprises d'au moins mille salariés ». */
+function commissionEconomique(o = {}) {
+  const e = o.effectif;
+  if (typeof e !== "number")
+    return { du: null, motif: "L'effectif n'est pas renseigné : le seuil de mille salariés de la commission économique ne peut pas être apprécié." };
+  if (e < 1000)
+    return { du: false, texte: "L. 2315-46",
+      motif: `Effectif de ${e} salariés : la commission économique n'est due, à défaut d'accord prévu à l'article L. 2315-45, qu'à partir de mille salariés (L. 2315-46).` };
+  return { du: true, texte: "L. 2315-46",
+    motif: `Effectif de ${e} salariés : à défaut d'accord prévu à l'article L. 2315-45, une commission économique est créée au sein du comité social et économique ou du comité social et économique central. Elle est chargée notamment d'étudier les documents économiques et financiers recueillis par le comité et toute question que ce dernier lui soumet (L. 2315-46).` };
+}
+
 module.exports = { R2314_1, tranche, delegation, seuilAtteint, attributions, ATTRIBUTIONS,
   SEUILS_EFFECTIF, coherenceEffectif,
   delaiConsultation, budgetFonctionnement, cssct, reunions, colleges, listeParitaire,
   financementExpertise, EXPERTISES, contestationExpertise, delaiContestation, mandat,
-  electionsPartielles };
+  electionsPartielles, FINS_ANTICIPEES, finAnticipeeMandat, SOURCES_MODALITES_CSSCT,
+  dureeFormationSSCT, COMMISSIONS_300, commissionsSuppletives, commissionEconomique };
