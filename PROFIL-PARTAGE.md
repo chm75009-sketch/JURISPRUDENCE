@@ -106,7 +106,7 @@ n'y en avait pas.
 | Dépôt | Fichier | Ce qu'il fait |
 |---|---|---|
 | JURISPRUDENCE | `docs/profil.js` | `Profil.exporter()`, `Profil.telecharger()`, `Profil.importer(objet)`, `Profil.importerFichier(fichier, apres)`. Les deux boutons sont rendus par `Profil.rendre()` — la fiche client de `audit-social.html`. |
-| JURIS EXPERT | `index.html` — page « Paramétrage entreprise » | `jxProfilExporter()` / `jxProfilImporter()`, mêmes clés, même version. |
+| JURIS EXPERT | `index.html` — page « Paramétrage entreprise » | `jxProfilExporter()`, `jxProfilTelecharger()`, `jxProfilImporter(objet)`, `jxProfilImporterFichier(input)`. Mêmes clés, même version. |
 
 Les alias historiques de JURISPRUDENCE (`denominationSociale`, `entreprise`,
 `nom`, `convention`, `idcc`, `activite`, `siege`) sont **lus** mais jamais
@@ -123,3 +123,32 @@ comportement voulu.
 
 Toute évolution se répercute dans les deux dépôts, dans ce fichier et dans le
 commentaire de tête de `docs/profil.js`.
+
+## Ce que JURIS EXPERT ne transporte pas — et pourquoi
+
+Le format est commun ; les deux fiches ne le sont pas. Trois champs restent
+volontairement en arrière, parce que les remplir serait supposer.
+
+**L'effectif** n'est exporté par JURIS EXPERT que lorsqu'il est **calculé** par
+le registre du personnel. Sa fiche ne connaît sinon qu'une **tranche** — « 50 à
+249 salariés ». Écrire `50` parce que la tranche commence à 50 serait inventer
+un chiffre que personne n'a saisi. À l'inverse, un effectif exact venu d'ici se
+range dans la tranche qui le contient : ce n'est pas une déduction, c'est un
+classement plus large d'une donnée plus précise.
+
+**Le secteur** ne s'importe pas dans JURIS EXPERT. Là-bas, un secteur est un
+**code** (`transport`, `banque`, `batiment`…) qui commande tout l'affichage ;
+ici, c'est un champ à menu avec saisie libre. Reconnaître « transport et
+logistique » comme le code `transport` serait une supposition. Le champ est donc
+lu, signalé au client, et laissé à son choix. L'export de Juris Expert, lui,
+part sous l'intitulé lisible du secteur — que cette application accepte en
+saisie libre.
+
+**Le groupe n'est pas la même question des deux côtés.** Ici : « l'entreprise
+appartient-elle à un groupe ? ». Là-bas : « entreprise ou groupe d'au moins
+1 000 salariés ? ». Une réponse à l'une ne répond pas à l'autre. Rien ne passe
+entre elles.
+
+**Ce qui n'est pas repris n'est pas perdu.** Juris Expert conserve à l'identique
+les champs qu'il ne sait pas lire et les réémet à l'export suivant : un
+aller-retour ne dégrade rien.

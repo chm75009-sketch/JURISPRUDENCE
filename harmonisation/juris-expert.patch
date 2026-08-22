@@ -1,0 +1,584 @@
+diff --git a/PROFIL-PARTAGE.md b/PROFIL-PARTAGE.md
+new file mode 100644
+index 0000000..e678509
+--- /dev/null
++++ b/PROFIL-PARTAGE.md
+@@ -0,0 +1,153 @@
++# Le profil d'entreprise partagé — format d'échange « profil-entreprise », version 1
++
++Deux applications, un seul client, les mêmes questions. **JURISPRUDENCE**
++diagnostique et fonde : quelles obligations pèsent sur l'entreprise, quels
++articles les portent, quelle jurisprudence les éclaire, dans quel ordre on les
++régularise. **JURIS EXPERT** produit : le contrat, le règlement intérieur, le
++registre du personnel, les documents des élections professionnelles, les
++accords et procès-verbaux de la négociation.
++
++Les deux demandaient la dénomination, le SIRET, l'adresse, l'effectif, le
++secteur et la convention collective. Deux fois. Ce document fixe le format qui
++met fin au doublon.
++
++## Le principe
++
++**Un fichier, pas un serveur.** Aucune synchronisation, aucun compte, aucune
++requête. Le profil descend d'un côté sous la forme d'un fichier `.json` et
++remonte de l'autre. Les données restent sur le poste du client, à sa main : il
++voit le fichier, il le déplace, il le supprime.
++
++C'est délibéré. Le SIRET, le courriel et le téléphone d'un client sont des
++données personnelles ; un serveur commun aurait exigé un traitement, un
++responsable et une durée de conservation. Un fichier n'exige rien.
++
++## Le schéma
++
++```json
++{
++  "format": "profil-entreprise",
++  "version": 1,
++  "emisPar": "JURISPRUDENCE — audits et parcours",
++  "emisLe": "2026-08-22T19:40:12.000Z",
++  "entreprise": {
++    "denomination": "SARL EXEMPLE",
++    "siret": "12345678900012",
++    "adresse": "3 rue de la Paix, 75002 Paris",
++    "responsable": "Mme Dupont, gérante",
++    "courriel": "contact@exemple.fr",
++    "telephone": "0123456789",
++    "effectif": "62",
++    "secteur": "transport et logistique",
++    "conventionCollective": "0016 — transports routiers",
++    "groupe": "non",
++    "etablissementsDistincts": "oui",
++    "nbEtablissements": "3"
++  }
++}
++```
++
++### L'enveloppe
++
++| Clé | Type | Obligatoire | Ce qu'elle dit |
++|---|---|---|---|
++| `format` | chaîne | oui | Vaut toujours `"profil-entreprise"`. Un fichier qui ne le porte pas est refusé. |
++| `version` | entier | oui | Vaut `1`. Une version inconnue est **refusée**, jamais interprétée au jugé. |
++| `emisPar` | chaîne | non | Le nom de l'application émettrice. Affiché à l'import, sans conséquence. |
++| `emisLe` | chaîne | non | Date d'émission, ISO 8601. Informative. |
++| `entreprise` | objet | oui | Les douze champs ci-dessous. |
++
++### Les douze champs de l'entreprise
++
++| Clé | Type | Valeurs | Ce qu'elle commande |
++|---|---|---|---|
++| `denomination` | chaîne | libre | En-tête de tous les rapports, courriers et modèles. |
++| `siret` | chaîne | 14 chiffres | Identifie l'établissement. N'est envoyé nulle part. |
++| `adresse` | chaîne | libre | En-tête des courriers (convocations, notifications, dépôts). |
++| `responsable` | chaîne | libre | Nom et qualité de la personne qui signe. |
++| `courriel` | chaîne | courriel | Coordonnée portée sur les documents produits. |
++| `telephone` | chaîne | libre | Idem. |
++| `effectif` | chaîne numérique | entier ≥ 0 | **Ouvre ou ferme la plupart des obligations** : 11, 20, 50, 250, 300, 1 000 sont des seuils du code du travail. Vide, rien n'est conclu. |
++| `secteur` | chaîne | libre, ou l'un de : `transport et logistique`, `industrie`, `bâtiment et travaux publics`, `commerce`, `services` | Oriente la convention et le contenu des modèles. |
++| `conventionCollective` | chaîne | libre (IDCC ou intitulé) | Signale où le conventionnel peut ajouter une obligation. |
++| `groupe` | chaîne fermée | `oui`, `non`, `en cours`, ou texte libre | Déclenche le comité de groupe. |
++| `etablissementsDistincts` | chaîne fermée | idem | Comités d'établissement, comité central, registres par établissement. |
++| `nbEtablissements` | chaîne numérique | entier ≥ 0 | Facultatif. |
++
++### Les réponses fermées
++
++`groupe` et `etablissementsDistincts` prennent quatre valeurs :
++`oui`, `non`, `en cours`, `autre`. **Seules `oui` et `non` concluent.**
++`en cours` et `autre` sont remis aux moteurs comme une donnée absente : le
++contrôle rend au mieux « à vérifier », jamais « conforme ». Une réponse hors
++cadre peut aussi être un texte libre — elle ne conclut pas davantage.
++
++Tous les champs sont transportés en **chaînes de caractères**, y compris
++`effectif` et `nbEtablissements`. C'est le format de saisie des deux
++applications ; convertir à l'écriture aurait introduit une divergence là où il
++n'y en avait pas.
++
++## Les règles d'import — celles qui comptent
++
++1. **Rien n'est deviné.** Un champ absent du fichier reste absent. Il ne prend
++   pas de valeur par défaut.
++2. **Un vide n'écrase pas un plein.** Un champ présent mais vide est ignoré :
++   importer un profil incomplet ne détruit pas ce qui était déjà saisi.
++3. **L'import est une fusion**, pas un remplacement. Les champs que le fichier
++   ne porte pas restent tels quels.
++4. **Une version inconnue est refusée.** Le fichier n'est pas lu « au mieux » :
++   il est rejeté avec un message qui dit pourquoi.
++5. **Rien d'autre ne voyage.** Ni réponses d'audit, ni brouillons de documents,
++   ni avancement de parcours, ni pièces. Le format ne transporte que
++   l'identité de l'entreprise.
++
++## Où c'est écrit
++
++| Dépôt | Fichier | Ce qu'il fait |
++|---|---|---|
++| JURISPRUDENCE | `docs/profil.js` | `Profil.exporter()`, `Profil.telecharger()`, `Profil.importer(objet)`, `Profil.importerFichier(fichier, apres)`. Les deux boutons sont rendus par `Profil.rendre()` — la fiche client de `audit-social.html`. |
++| JURIS EXPERT | `index.html` — page « Paramétrage entreprise » | `jxProfilExporter()`, `jxProfilTelecharger()`, `jxProfilImporter(objet)`, `jxProfilImporterFichier(input)`. Mêmes clés, même version. |
++
++Les alias historiques de JURISPRUDENCE (`denominationSociale`, `entreprise`,
++`nom`, `convention`, `idcc`, `activite`, `siege`) sont **lus** mais jamais
++écrits dans le fichier d'échange : le format n'expose que les douze clés
++ci-dessus.
++
++## Faire évoluer le format
++
++Un champ ajouté qui reste facultatif ne change pas la version : les deux côtés
++ignorent ce qu'ils ne connaissent pas, et la règle 1 protège le reste. Un champ
++renommé, supprimé, ou dont les valeurs changent de sens **change la version** —
++et l'ancien lecteur refusera alors le nouveau fichier, ce qui est le
++comportement voulu.
++
++Toute évolution se répercute dans les deux dépôts, dans ce fichier et dans le
++commentaire de tête de `docs/profil.js`.
++
++## Ce que JURIS EXPERT ne transporte pas — et pourquoi
++
++Le format est commun ; les deux fiches ne le sont pas. Trois champs restent
++volontairement en arrière, parce que les remplir serait supposer.
++
++**L'effectif** n'est exporté par JURIS EXPERT que lorsqu'il est **calculé** par
++le registre du personnel. La fiche n'y connaît sinon qu'une **tranche** — « 50 à
++249 salariés ». Écrire `50` parce que la tranche commence à 50 serait inventer
++un chiffre que personne n'a saisi. À l'inverse, un effectif exact reçu de
++JURISPRUDENCE se range dans la tranche qui le contient : ce n'est pas une
++déduction, c'est un classement plus large d'une donnée plus précise.
++
++**Le secteur** ne s'importe pas dans JURIS EXPERT. Là-bas, un secteur est un
++**code** (`transport`, `banque`, `batiment`…) qui commande tout l'affichage de
++l'application ; ici, c'est un texte libre. Reconnaître « transport et
++logistique » comme le code `transport` serait une supposition. Le champ est donc
++lu, signalé au client, et laissé à son choix. L'export, lui, part sous
++l'intitulé lisible du secteur — que JURISPRUDENCE accepte en saisie libre.
++
++**Le groupe n'est pas la même question des deux côtés.** JURISPRUDENCE demande
++« l'entreprise appartient-elle à un groupe ? » ; JURIS EXPERT demande
++« entreprise ou groupe d'au moins 1 000 salariés ? ». Une réponse à l'une ne
++répond pas à l'autre. Rien ne passe entre elles.
++
++**Ce qui n'est pas repris n'est pas perdu.** JURIS EXPERT conserve à l'identique
++les champs qu'il ne sait pas lire et les réémet à l'export suivant : un
++aller-retour A → B → A ne dégrade rien.
+diff --git a/index.html b/index.html
+index 325186e..1e86266 100644
+--- a/index.html
++++ b/index.html
+@@ -1126,7 +1126,7 @@ function jxReprise(){
+   });
+ }
+ try{ jxReprise(); }catch(e){}
+-var JX_BUILD = 'v2026-08-21.210';
++var JX_BUILD = 'v2026-08-22.211';
+ // Pastille de version affichée dans l'en-tête : dit d'un coup d'oeil quelle
+ // version est réellement chargée dans le navigateur (cache du service worker).
+ try{ (function(){
+@@ -1136,6 +1136,13 @@ try{ (function(){
+ })(); }catch(e){}
+ // Historique des versions (affiché sur la page Nouveautés — à compléter à chaque publication)
+ var JX_CHANGELOG = [
++ {v:'v2026-08-22.211', d:'22 août 2026', t:[
++   'LES DEUX APPLICATIONS SE PARLENT. Celle-ci PRODUIT le document ; JURISPRUDENCE dit ce que la loi exige, avec l\u2019article lu \u00e0 la source et son identifiant de version. Dix-huit pages portent d\u00e9sormais, en bas, un renvoi discret vers l\u2019audit et le parcours correspondants — r\u00e8glement int\u00e9rieur, discipline, registre du personnel, \u00e9lections, installation et r\u00e9union du comit\u00e9, budgets, r\u00e9clamations, consultations, n\u00e9gociations, PSE, harc\u00e8lement, embauche.',
++   'Un renvoi n\u2019est pas un d\u00e9tour impos\u00e9 : il est au BAS de la page, il ne d\u00e9place aucun titre ni aucun bouton, et il s\u2019ouvre dans un autre onglet. La table qui le d\u00e9crit est \u00e9crite UNE fois — pas dix-huit pages retouch\u00e9es \u00e0 la main.',
++   'LA FICHE ENTREPRISE S\u2019EMPORTE. Page Param\u00e9trage : un bouton t\u00e9l\u00e9charge un fichier .json que JURISPRUDENCE relit, et r\u00e9ciproquement. Format \u00ab profil-entreprise \u00bb version 1, d\u00e9crit dans PROFIL-PARTAGE.md. Ni serveur, ni compte, ni synchronisation : le fichier reste sur votre poste.',
++   'RIEN N\u2019EST DEVIN\u00c9 \u00e0 l\u2019\u00e9change. L\u2019effectif ne part que s\u2019il est CALCUL\u00c9 par le registre : \u00e9crire \u00ab 50 \u00bb parce que la tranche commence \u00e0 50 serait inventer un chiffre. Le secteur ne s\u2019importe pas — ici c\u2019est un code qui commande l\u2019affichage, l\u00e0-bas un texte libre. Et \u00ab groupe d\u2019au moins 1 000 salari\u00e9s \u00bb n\u2019est pas \u00ab appartient \u00e0 un groupe \u00bb : deux questions diff\u00e9rentes, rien ne passe de l\u2019une \u00e0 l\u2019autre. Ce qui n\u2019est pas repris est conserv\u00e9 tel quel et rendu \u00e0 l\u2019export suivant.',
++   'Les liens \u00ab #/module \u00bb sont d\u00e9sormais lus : arriver de JURISPRUDENCE sur \u00ab \u2026/index.html#/ri \u00bb ouvre le r\u00e8glement int\u00e9rieur, et non l\u2019accueil. Le contr\u00f4le d\u2019acc\u00e8s n\u2019est pas contourn\u00e9 : le fragment passe par goPage comme n\u2019importe quelle navigation.'
++ ]},
+  {v:'v2026-08-21.210', d:'21 août 2026', t:[
+    'DEUX PARCOURS DE PLUS — le DOCUMENT UNIQUE et les NÉGOCIATIONS OBLIGATOIRES. Six parcours en tout, 53 étapes, toutes datées et fondées sur un article relu à la source.',
+    'Le document unique : l\u2019impact différencié de l\u2019exposition selon le sexe (L.4121-3) et les ambiances thermiques (R.4121-1), que la plupart des documents omettent ; l\u2019annexe des proportions de salariés exposés (R.4121-1-1) ; la mise à jour annuelle dès ONZE salariés et aux deux autres occasions de R.4121-2 ; la conservation QUARANTE ANS (R.4121-4). Le programme annuel de prévention n\u2019apparaît qu\u2019à cinquante.',
+@@ -4765,6 +4772,16 @@ Exemple :<br>
+ <div class="fg"><label class="fl">Téléphone</label><input id="p-tel" inputmode="numeric"/></div>
+ <div id="p-fiche-compte" style="font-size:11.5px;color:#9a9585;margin-top:10px;line-height:1.6"></div>
+ <button onclick="jxViderFiche()" style="margin-top:8px;padding:10px 14px;border:1px solid #7a4a4a;border-radius:9px;background:rgba(224,92,92,.10);color:#e8b0b0;font-size:12.5px;cursor:pointer;font-family:inherit">Ce n’est pas mon entreprise — retirer cette fiche de ce compte</button>
++
++<!-- La fiche s'emporte : format « profil-entreprise », version 1, commun aux
++     deux applications. Le fichier reste sur le poste : rien n'est envoye. -->
++<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.10)">
++  <div style="font-size:12.5px;color:#9a9585;line-height:1.7">Cette fiche s’emporte : un fichier <b>.json</b> qui se télécharge ici et se relit dans <b>JURISPRUDENCE</b> — l’application qui audite la conformité —, et réciproquement. Il ne contient que l’identité de l’entreprise, ne part sur aucun réseau, et un import n’écrase jamais un champ déjà rempli par un champ vide.</div>
++  <button onclick="jxProfilTelecharger()" style="margin-top:8px;padding:10px 14px;border:none;border-radius:9px;background:#c9a84c;color:#000;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit">Télécharger la fiche (.json)</button>
++  <button onclick="jxProfilChoisir()" style="margin-top:8px;margin-left:6px;padding:10px 14px;border:1px solid rgba(255,255,255,.18);border-radius:9px;background:rgba(255,255,255,.06);color:#e8e4d8;font-size:12.5px;cursor:pointer;font-family:inherit">Importer une fiche…</button>
++  <input type="file" id="p-echange-fichier" accept="application/json,.json" style="display:none" onchange="jxProfilImporterFichier(this)"/>
++  <div id="p-echange-etat" style="font-size:12px;margin-top:8px;line-height:1.6"></div>
++</div>
+ </div>
+ 
+ <div class="card" id="p-autor-transport" style="display:none">
+@@ -7459,6 +7476,10 @@ function goPage(id){
+   try{ jxEntrer(id); }catch(e){}
+   if(id==='home'){ try{ jxHomeAlertes(); }catch(e){} }
+   try{ if(typeof jxInjectPicker==='function') jxInjectPicker(id); }catch(e){}
++  /* Le renvoi vers JURISPRUDENCE, au bas des pages dont l'obligation est
++     auditee la-bas. Une table, une fonction : pas dix-huit pages ecrites a
++     la main. */
++  try{ if(typeof jxpRenvoi==='function') jxpRenvoi(id); }catch(e){}
+   try{ if(typeof window.salRefresh==='function') window.salRefresh(); }catch(e){}
+ }
+ /* LE MODULE CONTRAT PARLAIT TRANSPORT A TOUT LE MONDE. Les categories
+@@ -17914,7 +17935,7 @@ function _fixMojibake(s){
+   if(/Ã|Â|â€|ï»¿/.test(s)){ try{ var d=decodeURIComponent(escape(s)); if(d.indexOf('�')<0) s=d; }catch(e){} }
+   return s.replace(/^﻿/,'');
+ }
+-function _rhDeacc(s){ try{ return s.normalize('NFD').replace(/[̀-ͯ]/g,''); }catch(e){ return s.replace(/[éèê]/g,'e').replace(/[àâ]/g,'a'); } }
++function _rhDeacc(s){ try{ return s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); }catch(e){ return s.replace(/[éèê]/g,'e').replace(/[àâ]/g,'a'); } }
+ function _rhIngestLines(lines){
+   if(lines.length<2){ alert('Fichier vide ou illisible.'); return null; }
+   // repérage de la ligne d'en-tête (exports RH avec titre + lignes vides en tête)
+@@ -32024,5 +32045,340 @@ function negoDoc(type){
+   setInterval(apply,2000);
+ })();
+ </script>
++
++<!-- ═══════════════════════════════════════════════════════════════════════
++     LE PONT VERS JURISPRUDENCE — l'autre application de la juriste.
++
++     LE PARTAGE, ARRÊTÉ. Cette application PRODUIT : le contrat, le règlement
++     intérieur, le registre du personnel, les documents des élections, les
++     accords et procès-verbaux de la négociation — imprimables, prêts à
++     signer. JURISPRUDENCE DIAGNOSTIQUE et FONDE : quelles obligations pèsent
++     sur l'entreprise, quels articles les portent — lus au relais Légifrance,
++     avec leur identifiant de version LEGIARTI —, quelle jurisprudence les
++     éclaire, dans quel ordre on les régularise.
++
++     Ce bloc fait deux choses, et deux seulement.
++
++     1. UN RENVOI DISCRET AU BAS DES PAGES CONCERNÉES. Pas dans dix-huit
++        pages écrites à la main : une table, une fonction, un appel dans
++        goPage. Un défaut se corrige par classe ; un ajout se pose de même.
++        Le renvoi se pose EN FIN de page — il ne déplace aucun titre, aucun
++        bouton, aucune barre.
++
++     2. LE FRAGMENT D'ADRESSE. JURISPRUDENCE renvoie ici vers « #/ri »,
++        « #/cseinst »… Sans lecture du fragment, ces liens ouvraient
++        l'accueil. On le lit désormais au chargement, une seule fois, et
++        uniquement vers une page qui existe : le contrôle d'accès de goPage
++        n'est pas contourné.
++
++     LES ADRESSES ONT ÉTÉ VÉRIFIÉES — réponse 200 sur chacune des pages
++     citées — et non devinées. Le chemin porte « /docs/ » : c'est là que
++     JURISPRUDENCE publie. Aucune requête n'est faite d'ici : ce sont des
++     liens, rien de plus.
++     ═══════════════════════════════════════════════════════════════════ -->
++<script>
++var JXP_BASE = 'https://chm75009-sketch.github.io/JURISPRUDENCE/docs/';
++
++/* page de cette application → { audit, parcours } de JURISPRUDENCE.
++   `a` : le module d'audit qui contrôle la conformité de l'obligation.
++   `p` : le parcours guidé qui déroule la procédure, étape datée par étape.
++   `n` : le nom du parcours, tel qu'il s'affiche là-bas.
++   Une page absente de cette table ne porte aucun renvoi — c'est voulu :
++   on ne renvoie que là où l'obligation est réellement auditée. */
++var JXP = {
++  ri:            { a:'audit-discipline.html', an:'discipline et règlement intérieur', p:'ri',           n:'Établir ou mettre à jour le règlement intérieur' },
++  disciplinaire: { a:'audit-discipline.html', an:'discipline et règlement intérieur', p:'sanction',     n:'Sanctionner un salarié' },
++  personnel:     { a:'audit-social.html',     an:'social — les 41 obligations',       p:'registre',     n:'Tenir le registre unique du personnel' },
++  embauche:      { a:'audit-social.html',     an:'social — les 41 obligations',       p:'registre',     n:'Tenir le registre unique du personnel' },
++  auditsoc:      { a:'audit-social.html',     an:'social — les 41 obligations',       p:null,           n:null },
++  audit:         { a:'audit-social.html',     an:'social — les 41 obligations',       p:null,           n:null },
++  harcele:       { a:'audit-social.html',     an:'social — les 41 obligations',       p:'affichages',   n:'Mettre en place les affichages et informations obligatoires' },
++  harcprev:      { a:'audit-social.html',     an:'social — les 41 obligations',       p:'affichages',   n:'Mettre en place les affichages et informations obligatoires' },
++  cse:           { a:'audit-cse.html',        an:'comité social et économique',       p:null,           n:null },
++  cseinst:       { a:'audit-cse.html',        an:'comité social et économique',       p:'installation', n:'Installer le CSE : la première réunion' },
++  csereu:        { a:'audit-cse.html',        an:'comité social et économique',       p:'reunion',      n:'Tenir une réunion du CSE' },
++  csercl:        { a:'audit-cse.html',        an:'comité social et économique',       p:'reunion',      n:'Tenir une réunion du CSE' },
++  csebud:        { a:'audit-cse.html',        an:'comité social et économique',       p:null,           n:null },
++  csefonc:       { a:'audit-cse.html',        an:'comité social et économique',       p:null,           n:null },
++  csediag:       { a:'audit-cse.html',        an:'comité social et économique',       p:null,           n:null },
++  csecns:        { a:'audit-bdese.html',      an:'base de données (BDESE)',           p:'bdese',        n:'Constituer la base de données (BDESE)' },
++  nego:          { a:'audit-nao.html',        an:'négociation obligatoire (NAO)',     p:'nao',          n:'Conduire les négociations obligatoires (NAO)' },
++  pse:           { a:'audit-pse.html',        an:'plan de sauvegarde de l’emploi',    p:null,           n:null }
++};
++
++function jxpEsc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
++  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
++
++/* Le renvoi, posé une fois par page et remis à jour ensuite. */
++function jxpRenvoi(id){
++  var d = JXP[id]; if(!d) return;
++  var pg = document.getElementById('pg-'+id); if(!pg) return;
++  var box = document.getElementById('jxp-'+id);
++  if(!box){
++    box = document.createElement('div');
++    box.id = 'jxp-'+id;
++    box.className = 'card';
++    box.style.cssText = 'margin-top:10px;border:1px dashed rgba(255,255,255,.16);background:rgba(255,255,255,.02)';
++    pg.appendChild(box);
++  }
++  var h = '<div style="font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:#9a9585">'
++        + 'Le même sujet, vu du côté de la conformité</div>'
++        + '<div style="font-size:12.5px;line-height:1.7;color:#c9c4b8;margin-top:6px">'
++        + 'Cette page produit le document. <b>JURISPRUDENCE</b> dit ce que la loi exige, '
++        + 'avec l’article lu à la source et son identifiant de version : '
++        + '<a href="' + jxpEsc(JXP_BASE + d.a) + '" target="_blank" rel="noopener" '
++        + 'style="color:#c9a84c;font-weight:700">vérifier votre conformité — audit '
++        + jxpEsc(d.an) + ' ↗</a>';
++  if(d.p) h += ' · <a href="' + jxpEsc(JXP_BASE + 'parcours.html?p=' + d.p) + '" target="_blank" '
++        + 'rel="noopener" style="color:#c9a84c;font-weight:700">la procédure pas à pas — « '
++        + jxpEsc(d.n) + ' » ↗</a>';
++  h += '.</div>';
++  if(box.innerHTML !== h) box.innerHTML = h;
++}
++
++/* Le fragment d'adresse : « …/index.html#/ri » ouvre la page « ri ».
++   Lu une seule fois, au chargement, et seulement vers une page existante.
++   Le fragment n'est jamais écrit : la navigation de l'application reste ce
++   qu'elle était, et aucune page ne change de comportement sans fragment. */
++function jxpFragment(){
++  var f = '';
++  try{ f = String(location.hash||''); }catch(e){ return; }
++  var m = /^#\/?([A-Za-z0-9_-]+)$/.exec(f);
++  if(!m) return;
++  var id = m[1];
++  if(!document.getElementById('pg-'+id)) return;
++  try{ goPage(id); }catch(e){}
++}
++try{
++  if(document.readyState!=='loading') setTimeout(jxpFragment, 600);
++  else document.addEventListener('DOMContentLoaded', function(){ setTimeout(jxpFragment, 600); });
++}catch(e){}
++</script>
++
++<!-- ═══════════════════════════════════════════════════════════════════════
++     LA FICHE ENTREPRISE S'EMPORTE — format « profil-entreprise », version 1.
++
++     Les deux applications posaient les mêmes questions : dénomination,
++     SIRET, adresse, effectif, secteur, convention. Deux fois. Un fichier
++     JSON descend d'ici et remonte là-bas, et réciproquement. Ni serveur, ni
++     compte, ni synchronisation : le SIRET et le courriel d'un client sont
++     des données personnelles, et un fichier n'exige ni responsable de
++     traitement ni durée de conservation.
++
++     Le schéma est décrit dans PROFIL-PARTAGE.md, à la racine des deux
++     dépôts. Il ne change pas sans changer de numéro de version.
++
++     CE QUI N'EST PAS DÉDUIT — et c'est l'essentiel.
++
++     • L'EFFECTIF n'est exporté que s'il est CALCULÉ (registre du personnel).
++       La fiche ne connaît sinon qu'une TRANCHE : écrire « 50 » parce que la
++       tranche commence à 50 serait inventer un chiffre. La tranche reste
++       ici ; le fichier n'en dit rien.
++     • À l'import, un effectif exact se range dans la tranche qui le
++       contient. Ce n'est pas une déduction : c'est un classement plus large
++       d'une donnée plus précise.
++     • LE SECTEUR ne s'importe pas. Ici, un secteur est un CODE qui commande
++       tout l'affichage ; là-bas, c'est un texte libre. Reconnaître
++       « transport et logistique » comme le code « transport » serait une
++       supposition. Le fichier est donc lu, et le champ laissé au client.
++     • LE GROUPE n'est PAS le même champ des deux côtés : ici la question est
++       « entreprise ou groupe d'au moins 1 000 salariés », là-bas « appartient
++       à un groupe ». Deux questions différentes : aucune ne répond à
++       l'autre, et rien n'est transporté entre elles.
++     • CE QUI N'EST PAS COMPRIS N'EST PAS PERDU : les champs que cette
++       application ne sait pas lire sont conservés tels quels et réémis à
++       l'export suivant. Un aller-retour ne dégrade rien.
++     ═══════════════════════════════════════════════════════════════════ -->
++<script>
++var JXPROF_FORMAT = 'profil-entreprise';
++var JXPROF_VERSION = 1;
++var JXPROF_APP = 'JURIS EXPERT MCH — générateurs de documents';
++
++/* Ce que cette fiche sait dire, dans le vocabulaire commun. */
++function jxProfilExporter(){
++  var f = (typeof E!=='undefined' && E) ? E : {};
++  var out = {};
++  /* Ce qu'un import précédent portait et que l'on ne sait pas lire :
++     conservé à l'identique, réémis en premier, puis recouvert par ce que
++     cette application connaît réellement. */
++  try{
++    var garde = f.profilEchange;
++    if(garde && typeof garde==='object')
++      Object.keys(garde).forEach(function(k){
++        var v = garde[k];
++        if(v!==undefined && v!==null && String(v).trim()!=='') out[k]=String(v);
++      });
++  }catch(e){}
++
++  function jxpPose(cle, val){
++    if(val===undefined || val===null) return;
++    val = String(val).trim();
++    if(val==='') return;
++    out[cle] = val;
++  }
++  jxpPose('denomination', f.nom);
++  jxpPose('siret', f.siret);
++  jxpPose('adresse', f.adresse);
++  jxpPose('responsable', [f.dirigeant, f.qualite].filter(function(x){
++    return x && String(x).trim()!==''; }).join(', '));
++  jxpPose('courriel', f.email);
++  jxpPose('telephone', f.tel);
++  /* L'effectif CALCULÉ, et lui seul. Une tranche n'est pas un chiffre. */
++  try{
++    var n = (typeof cseEffectif==='function') ? cseEffectif() : null;
++    if(n!==null && isFinite(n)) jxpPose('effectif', String(n));
++  }catch(e){}
++  /* Le secteur part sous son intitulé lisible : là-bas, le champ accepte
++     le texte libre. */
++  try{
++    if(f.secteur && typeof SECTEUR_LAB!=='undefined' && SECTEUR_LAB[f.secteur])
++      jxpPose('secteur', SECTEUR_LAB[f.secteur]);
++  }catch(e){}
++  /* La convention : celle qui a été confirmée, ou celle qui a été précisée.
++     « je ne sais pas » et « aucune » ne sont pas une convention : rien ne
++     part. */
++  try{
++    if(f.ccn==='autre') jxpPose('conventionCollective', f.ccnAutre);
++    else if(f.ccn==='secteur' && typeof SECTEUR_LAB!=='undefined' && SECTEUR_LAB[f.secteur])
++      jxpPose('conventionCollective', SECTEUR_LAB[f.secteur]);
++  }catch(e){}
++  if(f.etabs==='un') jxpPose('etablissementsDistincts','non');
++  else if(f.etabs==='plusieurs') jxpPose('etablissementsDistincts','oui');
++  if(f.etabs==='plusieurs' && f.etabsListe){
++    var lignes = String(f.etabsListe).split('\n').map(function(x){ return x.trim(); })
++      .filter(function(x){ return x!==''; });
++    if(lignes.length) jxpPose('nbEtablissements', String(lignes.length));
++  }
++  return { format: JXPROF_FORMAT, version: JXPROF_VERSION, emisPar: JXPROF_APP,
++           emisLe: new Date().toISOString(), entreprise: out };
++}
++
++function jxProfilNomFichier(){
++  var f = (typeof E!=='undefined' && E) ? E : {};
++  var d = String(f.nom||'').normalize('NFD').replace(/[̀-ͯ]/g,'')
++    .replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'').toLowerCase();
++  return 'profil-entreprise' + (d?('-'+d):'') + '-' +
++    new Date().toISOString().slice(0,10) + '.json';
++}
++
++function jxProfilTelecharger(){
++  try{
++    var texte = JSON.stringify(jxProfilExporter(), null, 1);
++    var url = URL.createObjectURL(new Blob([texte], {type:'application/json'}));
++    var a = document.createElement('a');
++    a.href = url; a.download = jxProfilNomFichier();
++    document.body.appendChild(a); a.click(); a.remove();
++    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
++    jxProfilDire('Fiche téléchargée. Elle s’importe dans JURISPRUDENCE, sous la fiche client de l’audit social.', true);
++  }catch(e){ jxProfilDire('Le téléchargement n’a pas abouti sur ce navigateur.', false); }
++}
++
++function jxProfilDire(msg, ok){
++  var z = document.getElementById('p-echange-etat');
++  if(!z) return;
++  z.textContent = msg;
++  z.style.color = ok ? '#8fbf9f' : '#e0a0a0';
++}
++
++/* La lecture d'un fichier reçu. Rien n'est deviné, rien n'est écrasé par du
++   vide : jxEntEcrire fusionne, et un champ absent du fichier reste ce
++   qu'il était. */
++function jxProfilImporter(objet){
++  if(!objet || typeof objet!=='object')
++    return { ok:false, message:'Fichier illisible : ce n’est pas du JSON.' };
++  if(objet.format!==JXPROF_FORMAT)
++    return { ok:false, message:'Ce fichier n’est pas un profil d’entreprise (champ « format » attendu : « '+JXPROF_FORMAT+' »).' };
++  if(objet.version!==JXPROF_VERSION)
++    return { ok:false, message:'Version de format inconnue ('+JSON.stringify(objet.version)+') : cette application lit la version '+JXPROF_VERSION+'.' };
++  var src = objet.entreprise;
++  if(!src || typeof src!=='object')
++    return { ok:false, message:'Le fichier ne porte aucune entreprise.' };
++
++  function v(c){
++    var x = src[c];
++    if(x===undefined || x===null) return '';
++    return String(x).trim();
++  }
++  var neuf = {}, pris = [], ignores = [];
++  function prend(cible, val, nom){
++    if(!val) return;
++    neuf[cible] = val; pris.push(nom||cible);
++  }
++  prend('nom', v('denomination'), 'dénomination');
++  prend('siret', v('siret'), 'SIRET');
++  prend('adresse', v('adresse'), 'adresse');
++  prend('email', v('courriel'), 'courriel');
++  prend('tel', v('telephone'), 'téléphone');
++  /* Le responsable arrive en une chaîne « Nom, qualité ». On ne la coupe
++     que si la qualité y figure telle qu'elle est proposée ici ; sinon tout
++     va au nom, et rien n'est inventé. */
++  var resp = v('responsable');
++  if(resp){
++    var m = /^(.*?),\s*(Gérant|Président|Directeur Général)\s*$/.exec(resp);
++    if(m){ prend('dirigeant', m[1].trim(), 'dirigeant'); prend('qualite', m[2], 'qualité'); }
++    else prend('dirigeant', resp, 'dirigeant');
++  }
++  var ccn = v('conventionCollective');
++  if(ccn){ neuf.ccn='autre'; neuf.ccnAutre=ccn; pris.push('convention collective'); }
++  var ed = v('etablissementsDistincts');
++  if(ed==='oui'){ neuf.etabs='plusieurs'; pris.push('établissements distincts'); }
++  else if(ed==='non'){ neuf.etabs='un'; pris.push('établissements distincts'); }
++  /* L'effectif exact se range dans SA tranche : un chiffre plus précis
++     entre dans un intervalle plus large, ce n'est pas une supposition. */
++  var eff = v('effectif');
++  if(eff && /^\d+$/.test(eff)){
++    try{
++      var n = parseInt(eff,10), t=null;
++      jxTranches().forEach(function(x){ if(n>=x.min && (x.max===null || n<=x.max)) t=x; });
++      if(t){ neuf.effectif=t.v; pris.push('effectif ('+eff+' salariés → « '+t.lib+' »)'); }
++    }catch(e){}
++  }
++  if(v('secteur')) ignores.push('secteur');
++  if(v('groupe')) ignores.push('groupe');
++  if(v('nbEtablissements')) ignores.push('nombre d’établissements');
++
++  /* Rien de perdu : ce qui n'a pas été repris reste dans la fiche, à
++     l'identique, et repartira à l'export suivant. */
++  var garde = {};
++  Object.keys(src).forEach(function(k){
++    var x = src[k];
++    if(x===undefined || x===null || String(x).trim()==='') return;
++    garde[k] = String(x);
++  });
++  if(Object.keys(garde).length) neuf.profilEchange = garde;
++
++  if(!pris.length)
++    return { ok:false, message:'Le fichier ne porte aucun champ que cette fiche sache reprendre.' };
++  if(typeof E==='undefined' || !E)
++    return { ok:false, message:'La fiche entreprise n’est pas chargée.' };
++  Object.keys(neuf).forEach(function(k){ E[k]=neuf[k]; });
++  if(!jxEntEcrire(E)) return { ok:false, message:'L’enregistrement a échoué sur cet appareil.' };
++  try{ chargerParametres(); }catch(e){}
++  try{ updateHeroTop(); }catch(e){}
++  return { ok:true, message: pris.length+' champ(s) repris : '+pris.join(', ')+'.'
++    + (ignores.length ? ' Non repris, pour ne rien supposer : '+ignores.join(', ')
++      +' — à choisir vous-même ci-dessus.' : '') };
++}
++
++function jxProfilImporterFichier(input){
++  var f = input && input.files && input.files[0];
++  if(!f) return;
++  var lect = new FileReader();
++  lect.onload = function(){
++    var o=null;
++    try{ o = JSON.parse(String(lect.result)); }catch(e){ o=null; }
++    var r = jxProfilImporter(o);
++    jxProfilDire(r.message, r.ok);
++  };
++  lect.onerror = function(){ jxProfilDire('Le fichier n’a pas pu être lu.', false); };
++  lect.readAsText(f);
++  input.value='';
++}
++
++function jxProfilChoisir(){
++  var i = document.getElementById('p-echange-fichier');
++  if(i) i.click();
++}
++</script>
+ </body>
+ </html>
+diff --git a/sw.js b/sw.js
+index b5a0329..2ab18d4 100644
+--- a/sw.js
++++ b/sw.js
+@@ -1,5 +1,5 @@
+ /* Service worker — Juris Expert MCH (PWA installable + hors ligne + mise à jour forcée) */
+-const CACHE = 'jem-v193';
++const CACHE = 'jem-v194';
+ const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
+   './vendor/xlsx.full.min.js', './vendor/jszip.min.js',
+   /* Les pages annexes atteignables depuis le menu ou l'accueil. Elles
+diff --git a/version.json b/version.json
+index 2d8fb15..c188949 100644
+--- a/version.json
++++ b/version.json
+@@ -1 +1 @@
+-{"build": "v2026-08-21.210"}
+\ No newline at end of file
++{"build": "v2026-08-22.211"}
+\ No newline at end of file
