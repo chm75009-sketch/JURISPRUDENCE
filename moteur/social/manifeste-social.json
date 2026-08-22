@@ -1,7 +1,7 @@
 {
  "domaine": "audit social — le chapeau des obligations de l'employeur",
  "date": "2026-08-22",
- "empreinte": "de209504faf6",
+ "empreinte": "a120bdc66cc1",
  "fichiers": {
   "audit-social-client.js": "11d7bb8dfbe1",
   "capturer-textes-social-2.js": "4d61e2c885d8",
@@ -14,7 +14,7 @@
   "moteur-social.js": "6e23710d673f",
   "plan-social.js": "2ac32fc089ad",
   "questionnaire-social.js": "923723e4ea5d",
-  "referentiel-social.js": "6148e99fa8aa",
+  "referentiel-social.js": "c130bcd1bd25",
   "tests-social.js": "7d77207443b3",
   "textes-social-non-confirmes.json": "ff595f9c4875",
   "textes-social.json": "6ed5ebf7af68",
@@ -47,6 +47,8 @@
   "obligationsLieesAUnParcours": 29,
   "obligationsLieesAUnDocument": 28,
   "obligationsSansParcours": 12,
+  "outilsJurisExpert": 14,
+  "obligationsLieesAUnOutilJurisExpert": 10,
   "obligationsAvecModeleComplet": 41,
   "liensDeRegularisationMorts": 0
  },

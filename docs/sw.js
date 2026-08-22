@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.2";
+const CACHE = "jurisprudence-5.3";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -58,6 +58,13 @@ const ESSENTIELS = [
      générateur de documents et les huit audits détaillés. Sans elle, la
      première étape du parcours client ne s'affiche pas. */
   "./profil.js",
+  /* La table des outils de Juris Expert : l'autre application de la juriste,
+     celle qui imprime le document final. Ce fichier ne contient que des liens
+     — il ne charge rien, il n'appelle rien. Il est mis en cache parce que le
+     guide de régularisation, les parcours et le générateur de documents le
+     lisent : sans lui, les renvois disparaissent silencieusement au lieu de
+     s'afficher. */
+  "./juris-expert.js",
   /* Le sélecteur de convention collective et la liste officielle des IDCC
      (54 Ko) : sans eux, le champ convention retombe en saisie libre — il
      fonctionne, mais la liste doit être là hors connexion comme le reste. */

@@ -66,9 +66,14 @@ const clesPresentes = (src, motif) =>
   new Set([...src.matchAll(motif)].map(m => m[1]));
 const CLES_PARCOURS = clesPresentes(PARCOURS_SRC, /^\s{4}cle:\s*"([a-z0-9-]+)"/gm);
 const CLES_DOCS = clesPresentes(DOCS_SRC, /^\s{4}cle:\s*"([a-z0-9-]+)"/gm);
+/* Les outils de Juris Expert : mesurés sur docs/juris-expert.js, pas sur une
+   liste recopiée. Un renvoi vers un outil qui n'existe pas est un lien mort
+   comme un autre — et il envoie le client chez le voisin pour rien. */
+const JX_SRC = fs.readFileSync(path.join(ICI, "../../docs/juris-expert.js"), "utf8");
+const CLES_JX = clesPresentes(JX_SRC, /^\s{4}"([a-z0-9-]+)":\s*\{$/gm);
 
 let liensMorts = [], obligationsAvecParcours = 0, obligationsAvecDocument = 0,
-    obligationsSansParcours = [];
+    obligationsSansParcours = [], obligationsAvecOutilJX = 0;
 for (const it of R.REF) {
   const g = it.regularisation || {};
   if (g.parcours) {
@@ -79,7 +84,12 @@ for (const it of R.REF) {
     obligationsAvecDocument++;
     if (!CLES_DOCS.has(g.document)) liensMorts.push(`${it.id} → document « ${g.document} »`);
   }
+  if (g.jx) {
+    obligationsAvecOutilJX++;
+    if (!CLES_JX.has(g.jx)) liensMorts.push(`${it.id} → outil Juris Expert « ${g.jx} »`);
+  }
 }
+if (!CLES_JX.size) liensMorts.push("docs/juris-expert.js ne déclare aucun outil : la table n'a pas été lue");
 /* Les parcours nommés par le référentiel mais absents de la page, et
    l'inverse : le référentiel ne doit pas promettre un parcours qui n'existe
    pas, et un parcours ajouté doit être nommé quelque part. */
@@ -122,6 +132,8 @@ const manifeste = {
     obligationsLieesAUnParcours: obligationsAvecParcours,
     obligationsLieesAUnDocument: obligationsAvecDocument,
     obligationsSansParcours: obligationsSansParcours.length,
+    outilsJurisExpert: CLES_JX.size,
+    obligationsLieesAUnOutilJurisExpert: obligationsAvecOutilJX,
     obligationsAvecModeleComplet: R.REF.filter(x => !!MODELES_SOC[x.id]).length,
     liensDeRegularisationMorts: liensMorts.length,
   },

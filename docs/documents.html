@@ -73,6 +73,14 @@
 
   h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
   .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:70ch}
+  /* Le renvoi de tête, pour les modèles dont Juris Expert imprime la version
+     complète. Le modèle reste ici — il montre la structure et l'article ;
+     le renvoi dit seulement où se fabrique la feuille à signer. */
+  .renvoi-jx{font-size:13.5px;margin:0 0 14px;padding:10px 12px;max-width:70ch;
+    border-radius:0 3px 3px 0;background:var(--gris-f);border-left:3px solid var(--gris);
+    color:var(--gris);line-height:1.55}
+  .renvoi-jx a{color:var(--encre);font-weight:600}
+  .renvoi-jx a::after{content:" ↗";font-size:11px;color:var(--gris)}
   .note{color:var(--gris);font-size:13.5px}
 
   .presentation{border:1px solid var(--filet);background:var(--surface);
@@ -251,6 +259,7 @@
 </div>
 
 <script src="profil.js"></script>
+<script src="juris-expert.js"></script>
 <script>
 "use strict";
 (function () {
@@ -2920,9 +2929,50 @@
     return "<label" + pleine + '><span class="nom">' + e(champ.nom) + "</span>" + interieur + aide + "</label>";
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Les modèles dont Juris Expert imprime la version complète.          */
+  /* ------------------------------------------------------------------ */
+  /* Le partage arrêté entre les deux applications : celle-ci diagnostique et
+     fonde, Juris Expert produit. Les modèles ci-dessous ont un équivalent
+     complet et imprimable là-bas — vérifié dans son code, pas supposé
+     d'après un titre. Ils RESTENT ici : ils montrent la structure, l'article
+     qui la commande et l'exemple pré-rempli, et une trame ouverte sur le
+     poste vaut mieux qu'un renvoi obligatoire. On signale seulement, en tête,
+     où se trouve la feuille à signer.
+
+     Ce qui n'est pas dans cette table n'a pas d'équivalent vérifié chez Juris
+     Expert : la note d'information, la mise en demeure, le courrier d'alerte,
+     le compte rendu de commission, la délibération de désignation, la
+     résolution d'expertise et le procès-verbal de remise-reprise n'y
+     renvoient donc pas. */
+  var DOUBLONS_JX = {
+    "convocation":             "cse-reunion",
+    "pv-cse":                  "cse-reunion",
+    "reclamation":             "cse-reclamations",
+    "accord-methode":          "nego",
+    "pv-desaccord":            "nego",
+    "signalement-harcelement": "harcelement",
+    "enquete-interne":         "harcelement",
+    "convocation-sanction":    "discipline",
+    "avertissement":           "discipline",
+    "mise-a-pied":             "discipline",
+    "echelle-sanctions":       "ri",
+    "convocation-installation": "cse-installation",
+    "odj-installation":        "cse-installation",
+    "pv-installation":         "cse-installation",
+    "ri-comite":               "cse-installation",
+    "demande-documentation-eco": "cse-installation",
+  };
+
+  function bandeauJX(m) {
+    var cle = DOUBLONS_JX[m.cle];
+    if (!cle || !window.JurisExpert || !JurisExpert.existe(cle)) return "";
+    return JurisExpert.bandeau(cle);
+  }
+
   function construireFormulaire(m) {
     var f = $("formulaire");
-    f.innerHTML = m.sections.map(function (s) {
+    f.innerHTML = bandeauJX(m) + m.sections.map(function (s) {
       return "<fieldset><legend>" + e(s.titre) + '</legend><div class="grille">' +
         s.champs.map(champHtml).join("") + "</div></fieldset>";
     }).join("") +

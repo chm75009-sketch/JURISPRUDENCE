@@ -104,6 +104,127 @@
 
   function effacer() { try { localStorage.removeItem(CLE); } catch (_) {} }
 
+  /* ------------------------------------------------------- échange --- */
+  /* LE FORMAT COMMUN AUX DEUX APPLICATIONS DE LA JURISTE.
+
+     Les deux applications posent les mêmes questions d'entreprise, et les
+     posaient deux fois. Le client saisissait sa dénomination, son SIRET, son
+     effectif et sa convention ici, puis les ressaisissait là-bas. Le format
+     ci-dessous met fin à ce doublon sans serveur, sans compte et sans
+     synchronisation : un fichier JSON descend d'un côté, remonte de l'autre.
+
+     LE SCHÉMA — « profil-entreprise », version 1. Il est documenté au fichier
+     PROFIL-PARTAGE.md, à la racine des deux dépôts, et il ne change pas sans
+     changer de numéro de version.
+
+       { "format": "profil-entreprise",
+         "version": 1,
+         "emisPar": "…",              nom de l'application émettrice
+         "emisLe": "2026-08-22T…Z",   date d'émission, ISO 8601
+         "entreprise": { … } }        les douze champs ci-dessous
+
+     LES DOUZE CHAMPS. denomination, siret, adresse, responsable, courriel,
+     telephone, effectif, secteur, conventionCollective, groupe,
+     etablissementsDistincts, nbEtablissements. Ce sont exactement les clés de
+     IDENTITE : le format n'invente rien, il expose ce que l'application tient
+     déjà.
+
+     CE QUI EST INTERDIT. Un import n'efface jamais un champ renseigné avec
+     une valeur vide : la fusion ne retient d'un fichier que ce qu'il porte
+     réellement. Et rien n'est deviné — un champ absent du fichier reste
+     absent, il ne prend pas de valeur par défaut.
+
+     CE QUI NE VOYAGE PAS. Les réponses d'audit, les brouillons de documents,
+     l'avancement des parcours : ils restent sur leur poste. Le format ne
+     transporte que l'identité de l'entreprise. */
+  var FORMAT = "profil-entreprise";
+  var VERSION_FORMAT = 1;
+  var APPLICATION = "JURISPRUDENCE — audits et parcours";
+
+  function champsEchanges() {
+    return IDENTITE.map(function (ch) { return ch.c; });
+  }
+
+  /* L'objet à écrire dans le fichier. Un champ vide n'y figure pas : on
+     n'exporte pas du vide qui écraserait du plein à l'arrivée. */
+  function exporter() {
+    var p = lire(), e = {};
+    champsEchanges().forEach(function (c) {
+      var v = p[c];
+      if (v === undefined || v === null || String(v).trim() === "") return;
+      e[c] = String(v).trim();
+    });
+    return { format: FORMAT, version: VERSION_FORMAT, emisPar: APPLICATION,
+      emisLe: new Date().toISOString(), entreprise: e };
+  }
+
+  /* Le nom du fichier : la dénomination si on l'a, la date sinon. */
+  function nomFichier() {
+    var p = lire();
+    var d = String(p.denomination || "").trim()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
+    return "profil-entreprise" + (d ? "-" + d : "") + "-" +
+      new Date().toISOString().slice(0, 10) + ".json";
+  }
+
+  /* Le téléchargement. Aucune requête : le fichier est fabriqué dans la page
+     et remis au navigateur. */
+  function telecharger() {
+    var texte = JSON.stringify(exporter(), null, 1);
+    var url = URL.createObjectURL(new Blob([texte], { type: "application/json" }));
+    var a = document.createElement("a");
+    a.href = url; a.download = nomFichier();
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    return true;
+  }
+
+  /* La lecture d'un fichier reçu. Rend { ok, message, champs } — jamais une
+     exception : un fichier illisible n'est pas une panne de l'application.
+     Le format et la version sont vérifiés ; un fichier d'une version
+     inconnue est refusé plutôt qu'interprété au jugé. */
+  function importer(objet) {
+    if (!objet || typeof objet !== "object")
+      return { ok: false, message: "Fichier illisible : ce n'est pas du JSON." };
+    if (objet.format !== FORMAT)
+      return { ok: false, message: "Ce fichier n'est pas un profil d'entreprise (" +
+        'champ « format » attendu : « ' + FORMAT + ' »).' };
+    if (objet.version !== VERSION_FORMAT)
+      return { ok: false, message: "Version de format inconnue (" + JSON.stringify(objet.version) +
+        ") : cette page lit la version " + VERSION_FORMAT + "." };
+    var src = objet.entreprise;
+    if (!src || typeof src !== "object")
+      return { ok: false, message: "Le fichier ne porte aucune entreprise." };
+    var patch = {}, pris = [];
+    champsEchanges().forEach(function (c) {
+      var v = src[c];
+      if (v === undefined || v === null || String(v).trim() === "") return;
+      patch[c] = String(v).trim();
+      pris.push(c);
+    });
+    if (!pris.length)
+      return { ok: false, message: "Le fichier ne porte aucun champ renseigné." };
+    ecrire(patch);
+    return { ok: true, champs: pris,
+      message: pris.length + " champ(s) repris" +
+        (objet.emisPar ? " du profil émis par " + String(objet.emisPar) : "") + "." };
+  }
+
+  /* Le fichier choisi dans un <input type="file">. */
+  function importerFichier(fichier, apres) {
+    var lecteur = new FileReader();
+    lecteur.onload = function () {
+      var o = null;
+      try { o = JSON.parse(String(lecteur.result)); } catch (_) { o = null; }
+      apres(importer(o));
+    };
+    lecteur.onerror = function () {
+      apres({ ok: false, message: "Le fichier n'a pas pu être lu." });
+    };
+    lecteur.readAsText(fichier);
+  }
+
   /* La fiche est-elle assez remplie pour ouvrir un audit ? La dénomination et
      l'effectif suffisent — le reste enrichit, il ne bloque pas. */
   function suffisante(p) {
@@ -189,7 +310,25 @@
       (options.aide ? '<p class="aide-champ" style="margin:0 0 12px">' + e(options.aide) + "</p>" : "") +
       '<div class="grille">' +
       champs.map(function (ch) { return champHtml(ch, p[ch.c], prefixe); }).join("") +
-      "</div></fieldset>";
+      "</div>" +
+      /* L'échange avec l'autre application de la juriste. Deux boutons, un
+         fichier, rien d'autre : ni serveur, ni compte, ni synchronisation.
+         `options.echange: false` les retire — une page qui ne veut pas de
+         cette sortie n'a pas à l'afficher. */
+      (options.echange === false ? "" :
+        '<div class="echange-profil" style="margin:14px 0 0;padding-top:12px;' +
+        'border-top:1px solid #dcdfe4">' +
+        '<p class="aide-champ" style="margin:0 0 8px">Cette fiche s\'emporte : ' +
+        'un fichier <b>.json</b> qui se télécharge ici et se relit dans Juris Expert, ' +
+        'et réciproquement. Il ne contient que l\'identité de l\'entreprise — ni réponses ' +
+        'd\'audit, ni brouillons, ni avancement — et ne part sur aucun réseau.</p>' +
+        '<button type="button" id="' + e(prefixe) + '-exporter">Télécharger la fiche (.json)</button> ' +
+        '<button type="button" id="' + e(prefixe) + '-importer-ouvrir">Importer une fiche…</button>' +
+        '<input type="file" accept="application/json,.json" id="' + e(prefixe) + '-importer" ' +
+        'style="display:none">' +
+        '<p class="aide-champ" id="' + e(prefixe) + '-echange-etat" style="margin:8px 0 0"></p>' +
+        "</div>") +
+      "</fieldset>";
 
     /* Les saisies libres : celles des menus « — autre — » et « autre ». */
     champs.forEach(function (ch) {
@@ -220,6 +359,36 @@
       if (typeof options.onChange === "function") options.onChange(np);
     }
 
+    /* Les deux boutons de l'échange. Un import réussi redessine la fiche :
+       les champs repris doivent apparaître sans que l'on recharge la page. */
+    var bExp = conteneur.querySelector("#" + CSS.escape(prefixe + "-exporter"));
+    var bImp = conteneur.querySelector("#" + CSS.escape(prefixe + "-importer-ouvrir"));
+    var fImp = conteneur.querySelector("#" + CSS.escape(prefixe + "-importer"));
+    var etat = conteneur.querySelector("#" + CSS.escape(prefixe + "-echange-etat"));
+    function dire(msg, ok) {
+      if (!etat) return;
+      etat.textContent = msg;
+      etat.style.color = ok ? "#2a6b4f" : "#8a2b2b";
+    }
+    if (bExp) bExp.addEventListener("click", function () {
+      try { telecharger(); dire("Fiche téléchargée. Importez-la dans Juris Expert.", true); }
+      catch (_) { dire("Le téléchargement n'a pas abouti sur ce navigateur.", false); }
+    });
+    if (bImp && fImp) {
+      bImp.addEventListener("click", function () { fImp.value = ""; fImp.click(); });
+      fImp.addEventListener("change", function () {
+        var f = fImp.files && fImp.files[0];
+        if (!f) return;
+        importerFichier(f, function (r) {
+          dire(r.message, r.ok);
+          if (r.ok) {
+            rendre(conteneur, options);
+            if (typeof options.onChange === "function") options.onChange(lire());
+          }
+        });
+      });
+    }
+
     conteneur.addEventListener("input", majorer);
     conteneur.addEventListener("change", majorer);
     return { majorer: majorer };
@@ -231,5 +400,10 @@
     lire: lire, ecrire: ecrire, effacer: effacer,
     suffisante: suffisante, manquants: manquants,
     champHtml: champHtml, lireChamp: lireChamp, rendre: rendre,
+    /* L'échange avec Juris Expert — format « profil-entreprise », version 1.
+       Documenté dans PROFIL-PARTAGE.md, à la racine des deux dépôts. */
+    FORMAT: FORMAT, VERSION_FORMAT: VERSION_FORMAT, APPLICATION: APPLICATION,
+    champsEchanges: champsEchanges, exporter: exporter, importer: importer,
+    nomFichier: nomFichier, telecharger: telecharger, importerFichier: importerFichier,
   };
 })();

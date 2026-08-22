@@ -1388,7 +1388,7 @@ item({
 /* ══════════════════ la régularisation : obligation → parcours → modèle ══
 
    Une obligation manquante n'est utile au client que si l'application lui dit
-   AUSSI comment la combler. Deux liens, et deux seulement :
+   AUSSI comment la combler. Trois liens, et trois seulement :
 
    - LE PARCOURS (parcours.html?p=<clé>) : la procédure pas à pas, étape par
      étape, chacune fondée sur un article lu à la source et se terminant par
@@ -1397,6 +1397,16 @@ item({
    - LE DOCUMENT (documents.html?modele=<clé>) : la trame imprimable et
      pré-remplie du courrier, du procès-verbal ou de la délibération que
      l'étape appelle. C'est le « avec quoi ».
+
+   - L'OUTIL DE JURIS EXPERT (docs/juris-expert.js) : là où le document final,
+     complet et prêt à imprimer, se fabrique. Le partage entre les deux
+     applications de la juriste a été arrêté ainsi — celle-ci diagnostique et
+     fonde, Juris Expert produit. Une obligation ne porte ce lien que si Juris
+     Expert produit RÉELLEMENT le document correspondant : les élections
+     professionnelles, le règlement intérieur, le registre unique du personnel,
+     le plan de sauvegarde de l'emploi, les documents de la négociation, ceux
+     du comité et la procédure de signalement du harcèlement. Partout ailleurs
+     le lien est `null`, et le client reste dans cette application.
 
    S'y ajoute, pour les quarante et une obligations sans exception, le MODÈLE
    COMPLET de l'obligation elle-même — structure intégrale, exemple chiffré,
@@ -1475,6 +1485,77 @@ const LIAISONS = {
   "SOC-CCN-OBLIGATIONS":         { parcours: null,           document: null },
 };
 
+/* ─── l'outil de Juris Expert qui produit le document final ───────────────
+
+   Une clé de docs/juris-expert.js, ou `null`. `null` n'est pas un oubli :
+   c'est la réponse « Juris Expert ne produit pas ce document-là », et alors
+   le client reste ici, avec le modèle interne et le parcours.
+
+   La règle de remplissage est étroite, à dessein : on ne renvoie que là où
+   Juris Expert imprime RÉELLEMENT la pièce — vérifié dans son code, pas
+   supposé d'après un titre de page. Les élections professionnelles relèvent
+   entièrement de Juris Expert, par décision de l'utilisatrice ; le règlement
+   intérieur, le registre unique du personnel, le plan de sauvegarde de
+   l'emploi, les documents de la négociation obligatoire, ceux de la réunion
+   du comité et la procédure de signalement du harcèlement y ont chacun leur
+   générateur.
+
+   Ce qui n'y est pas ne s'y trouve pas : le document unique, la base de
+   données, l'index de l'égalité, l'obligation d'emploi, les affichages, les
+   registres de sécurité, les visites médicales, les entretiens de parcours,
+   l'épargne salariale. Pour ceux-là, le modèle interne reste le seul. */
+const JX = {
+  /* instances */
+  "SOC-INS-CSE":                 "elections",
+  "SOC-INS-CSE-ETAB":            "elections",
+  "SOC-INS-CSSCT":               null,
+  "SOC-INS-COMMISSIONS":         null,
+  "SOC-INS-COMMISSION-ECO":      null,
+  "SOC-INS-COMMISSION-MARCHES":  null,
+  "SOC-INS-FORMATION-ELUS":      null,
+  "SOC-INS-REUNIONS-SST":        "cse-reunion",
+  "SOC-INS-GROUPE":              null,
+  "SOC-INS-REF-HARCELEMENT":     "harcelement",
+  /* documents obligatoires */
+  "SOC-DOC-RI":                  "ri",
+  "SOC-DOC-DUERP":               null,
+  "SOC-DOC-BDESE":               null,
+  "SOC-DOC-INDEX":               null,
+  "SOC-DOC-OETH":                null,
+  /* affichages et informations */
+  "SOC-AFF-HARCELEMENT":         "harcelement",
+  "SOC-AFF-EGALITE":             null,
+  "SOC-AFF-EGA-REMU":            null,
+  "SOC-AFF-COORDONNEES":         null,
+  "SOC-AFF-CONSIGNE-INCENDIE":   null,
+  "SOC-AFF-HORAIRES":            null,
+  "SOC-AFF-DECOMPTE":            null,
+  "SOC-AFF-CONVENTION":          null,
+  "SOC-AFF-FUMER":               null,
+  /* registres */
+  "SOC-REG-PERSONNEL":           "registre",
+  "SOC-REG-SECURITE":            null,
+  "SOC-REG-DGI":                 null,
+  /* négociations */
+  "SOC-NEG-NAO":                 "nego",
+  "SOC-NEG-EGALITE":             "nego",
+  "SOC-NEG-PSE":                 "pse",
+  /* santé-sécurité */
+  "SOC-SST-SPST":                null,
+  "SOC-SST-VIP":                 null,
+  "SOC-SST-POSTES-RISQUES":      null,
+  "SOC-SST-FORMATION-SECU":      null,
+  /* formation et entretiens */
+  "SOC-FOR-ENTRETIENS":          null,
+  "SOC-FOR-ADAPTATION":          null,
+  /* épargne et protection sociale */
+  "SOC-EPA-PARTICIPATION":       null,
+  "SOC-EPA-LIVRET":              null,
+  "SOC-EPA-SANTE":               null,
+  "SOC-EPA-PREVOYANCE-CADRES":   null,
+  "SOC-CCN-OBLIGATIONS":         null,
+};
+
 /* ─── la garde finale : aucun item ne cite un article non lu ─── */
 for (const it of REF) {
   for (const n of it.articles) art(n);
@@ -1488,10 +1569,16 @@ for (const it of REF) {
   const L = LIAISONS[it.id];
   if (L.parcours && !PARCOURS_NOMS[L.parcours])
     throw new Error(`référentiel social : ${it.id} renvoie au parcours inconnu « ${L.parcours} ».`);
+  /* Même règle pour l'outil de Juris Expert : déclaré pour chaque item,
+     fût-ce à null. La clé elle-même est confrontée à docs/juris-expert.js à
+     la publication — ici on ne vérifie que la déclaration. */
+  if (!Object.prototype.hasOwnProperty.call(JX, it.id))
+    throw new Error(`référentiel social : l'obligation ${it.id} n'a pas d'outil Juris Expert déclaré (fût-ce à null).`);
   it.regularisation = {
     parcours: L.parcours || null,
     parcoursNom: L.parcours ? PARCOURS_NOMS[L.parcours] : null,
     document: L.document || null,
+    jx: JX[it.id] || null,
   };
   it.fondement = it.module && !it.articles.length
     ? `audit détaillé dans le module « ${it.module.nom} » (${it.module.page})` + (it.articlesSouhaites.length ? " — " + fondement(it.articlesSouhaites) : "")
@@ -1507,7 +1594,7 @@ const parCategorie = () => {
 };
 
 module.exports = { REF, CATEGORIES, TEXTES, lu, jol, fondement, parCategorie,
-  LIAISONS, PARCOURS_NOMS };
+  LIAISONS, PARCOURS_NOMS, JX };
 
 if (require.main === module) {
   const pc = parCategorie();

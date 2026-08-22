@@ -131,6 +131,12 @@
   .obl.a-preciser{border-left-color:var(--orange);background:var(--orange-f)}
   .obl .renvoi{font-size:13px;margin:6px 0 0}
   .obl .renvoi a{color:var(--bleu);font-weight:600}
+  /* Le renvoi vers Juris Expert, l'application qui imprime le document final.
+     Il se distingue à l'œil des liens internes : on quitte l'application. */
+  a.jx{color:var(--encre);font-weight:600;border-bottom:1px dotted var(--gris)}
+  a.jx::after{content:" ↗";font-size:11px;color:var(--gris)}
+  .renvoi-jx{font-size:13px;margin:8px 0 0;padding:8px 10px;border-radius:3px;
+    background:var(--gris-f);border-left:3px solid var(--gris)}
   .coches{display:flex;gap:14px;margin:10px 0 0;flex-wrap:wrap;font-size:14px}
   .coches label{display:flex;align-items:center;gap:6px;width:auto;cursor:pointer;
     border:1px solid var(--filet);border-radius:99px;padding:6px 14px;background:var(--gris-f)}
@@ -480,6 +486,7 @@ donnée manquante.</p>
 <script src="moteur-social.js"></script>
 <script src="idcc.js"></script>
 <script src="profil.js"></script>
+<script src="juris-expert.js"></script>
 <script>
 (function () {
   "use strict";
@@ -936,6 +943,11 @@ donnée manquante.</p>
         e(g.parcoursNom) + " » →</a>");
     if (g.document)
       l.push('<a href="' + e(lienDocument(g.document, a.intitule)) + '">Document à produire →</a>');
+    /* Le document FINAL, complet et prêt à imprimer, quand c'est Juris Expert
+       qui le fabrique. Le partage entre les deux applications est arrêté :
+       ici on constate et on fonde, là-bas on produit. */
+    if (g.jx && window.JurisExpert && JurisExpert.existe(g.jx))
+      l.push(JurisExpert.ancre(g.jx, "Document final dans Juris Expert : " + JurisExpert.nom(g.jx)));
     if (a.module)
       l.push('<a href="' + e(a.module.page) + '">Audit détaillé : ' + e(a.module.nom) + " →</a>");
     l.push('<a href="#t5" data-regulariser="' + e(a.id) + '">Régulariser cet élément (étape 5) →</a>');
@@ -1080,6 +1092,14 @@ donnée manquante.</p>
         : '<p class="aide">Aucun modèle pré-rempli pour ce point : les étapes ci-dessous en tiennent lieu.</p>') +
       (g.document ? '<p class="renvoi"><a href="' + e(lienDocument(g.document, a.intitule)) +
         '">Ouvrir le document à produire, pré-rempli de votre fiche client →</a></p>' : "") +
+      /* Là où Juris Expert imprime la pièce finale, on le dit ici plutôt que
+         de laisser le client chercher : le modèle ci-dessus donne la
+         structure et l'article, l'outil donne le document à signer. */
+      (g.jx && window.JurisExpert && JurisExpert.existe(g.jx)
+        ? '<p class="renvoi-jx">Le document final, complet et prêt à imprimer, se génère dans ' +
+          '<a class="jx" href="' + e(JurisExpert.lien(g.jx)) + '" target="_blank" rel="noopener">' +
+          "Juris Expert — " + e(JurisExpert.nom(g.jx)) + "</a> : " + e(JurisExpert.quoi(g.jx)) + ".</p>"
+        : "") +
 
       "<h3>b. La procédure, étape par étape, jusqu'à la validation</h3>" +
       (g.parcours

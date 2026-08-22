@@ -453,6 +453,7 @@
     nom: "Sanctionner un salarié",
     resume: "De la connaissance des faits à la notification motivée : prescription de deux mois, procédure du règlement intérieur ou de la convention, convocation, entretien, plancher de deux jours ouvrables, plafond d'un mois.",
     audit: { href: "audit-discipline.html", nom: "l'audit discipline et règlement intérieur" },
+    jx: "discipline",
     donnees: [
       { c: "salarie", nom: "Salarié concerné (nom, fonction)", t: "text" },
       { c: "nature", nom: "Sanction envisagée", t: "select",
@@ -522,6 +523,7 @@
             dateConnaissance: D.dateConnaissance, dateEnvoi: D.dateConvocation,
             misePied: ["Une mise à pied conservatoire à effet immédiat est prononcée dans l'attente de la décision"] }; } } },
       { id: "s5", nom: "Convoquer le salarié à l'entretien préalable",
+        jx: "discipline",
         quoi: "La lettre indique l'objet de l'entretien, précise la date, l'heure et le lieu, et rappelle que le salarié peut se faire assister par une personne de son choix appartenant au personnel. Elle est remise contre récépissé ou adressée par lettre recommandée.",
         fond: ["L1332-2", "R1332-1"], juris: ["09-43.079", "11-28.109"],
         /* L'entretien n'est pas exigé pour un avertissement sans incidence :
@@ -554,6 +556,7 @@
           return { iso: D.dateEntretien, libelle: "Entretien fixé au " + dateFr(D.dateEntretien) };
         } },
       { id: "s7", nom: "Notifier la sanction, écrite et motivée",
+        jx: "discipline",
         quoi: "La décision est écrite et motivée : elle porte les griefs, datés et circonstanciés. Elle est notifiée contre récépissé ou par lettre recommandée. Renvoyer à l'entretien préalable ne suffit pas à informer le salarié des griefs.",
         fond: ["L1332-1", "L1332-2", "R1332-2", "R1332-3", "L1331-2"], juris: ["91-43.815"],
         quand: function (D) {
@@ -568,6 +571,7 @@
             dateEntretien: D.dateEntretien, dateNotification: D.dateNotification,
             dateConnaissance: D.dateConnaissance }; } } },
       { id: "s8", nom: "Notifier la mise à pied disciplinaire",
+        jx: "discipline",
         quoi: "La mise à pied disciplinaire suspend le contrat et la rémunération : sa durée doit être bornée par le règlement intérieur, et ses dates de début et de fin précisées.",
         fond: ["L1331-1", "L1332-2", "R1332-2"],
         si: function (P, D) { return D.nature === "mise à pied disciplinaire" ? true : (D.nature ? false : null); },
@@ -594,6 +598,7 @@
     nom: "Conduire les négociations obligatoires (NAO)",
     resume: "De l'ouverture au dépôt : régime applicable — accord de méthode ou supplétif —, convocation de la première réunion, informations remises, loyauté, issue (accord ou procès-verbal de désaccord), dépôt.",
     audit: { href: "audit-nao.html", nom: "l'audit de la négociation obligatoire" },
+    jx: "nego",
     donnees: [
       { c: "theme", nom: "Thème de la négociation engagée", t: "select",
         options: ["rémunération, temps de travail et partage de la valeur ajoutée",
@@ -664,6 +669,7 @@
               : "Périodicité annuelle du régime supplétif (art. L. 2242-13, 1° et 2°). Un accord de méthode peut porter la périodicité jusqu'à quatre ans (art. L. 2242-11)." };
         } },
       { id: "n4", nom: "Convoquer et tenir la première réunion",
+        jx: "nego",
         quoi: "Lors de la première réunion sont précisés le lieu et le calendrier des réunions, les informations que l'employeur remettra aux négociateurs, et la date de cette remise.",
         fond: ["L2242-14"],
         quand: function (D) {
@@ -671,6 +677,7 @@
           return { iso: D.datePremiereReunion, libelle: "Première réunion le " + dateFr(D.datePremiereReunion) };
         } },
       { id: "n5", nom: "Remettre les informations annoncées",
+        jx: "nego",
         quoi: "Les informations promises à la première réunion doivent l'être à la date annoncée : c'est de leur remise que se juge la loyauté de la négociation.",
         fond: ["L2242-14", "L2242-11"],
         quand: function (D) {
@@ -684,6 +691,7 @@
         quoi: "Tant que la négociation est en cours, l'employeur ne peut, dans les matières traitées, arrêter de décisions unilatérales concernant la collectivité des salariés, sauf si l'urgence le justifie.",
         fond: ["L2242-4"], juris: ["24-15.653"] },
       { id: "n7", nom: "Conclure : accord, ou procès-verbal de désaccord",
+        jx: "nego",
         quoi: "Si un accord est conclu, sa validité suppose la signature de l'employeur et d'organisations représentatives ayant recueilli plus de 50 % des suffrages exprimés en faveur d'organisations représentatives au premier tour des dernières élections des titulaires au comité ; à défaut, l'accord signé au-delà de 30 % de ces suffrages peut être soumis à l'approbation des salariés. À défaut d'accord, le procès-verbal de désaccord consigne, en leur dernier état, les propositions respectives des parties et les mesures que l'employeur entend appliquer unilatéralement.",
         fond: ["L2242-5", "L2232-12"], juris: ["24-15.653"],
         quand: function (D) {
@@ -849,6 +857,7 @@
     nom: "Tenir une réunion du CSE",
     resume: "Périodicité, ordre du jour établi conjointement, communication trois jours au moins avant, informations et délais d'avis, réclamations, procès-verbal, diffusion et suites.",
     audit: { href: "audit-cse.html", nom: "l'audit du comité social et économique" },
+    jx: "cse-reunion",
     donnees: [
       { c: "dateReunion", nom: "Date de la réunion", t: "date" },
       { c: "heure", nom: "Heure", t: "time" },
@@ -902,9 +911,11 @@
                         : "Au moins une réunion tous les deux mois en dessous de trois cents salariés, à défaut d'accord (art. L. 2315-28)." };
         } },
       { id: "r2", nom: "Établir l'ordre du jour conjointement",
+        jx: "cse-reunion",
         quoi: "L'ordre du jour de chaque réunion est établi par le président et le secrétaire. Les consultations rendues obligatoires par un texte ou par un accord collectif y sont inscrites de plein droit par l'un ou par l'autre. Lorsque la réunion se tient à la demande de la majorité des membres, les questions jointes à la demande y sont inscrites.",
         fond: ["L2315-29", "L2315-31"], juris: ["11-28.324"] },
       { id: "r3", nom: "Communiquer l'ordre du jour trois jours au moins avant",
+        jx: "cse-reunion",
         quoi: "L'ordre du jour est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale, trois jours au moins avant la réunion.",
         fond: ["L2315-30"],
         quand: function (D) {
@@ -952,6 +963,7 @@
         doc: { modele: "reclamation", nom: "Réponse écrite à une réclamation",
           pre: function (P, D) { return { entreprise: P.denomination, dateReunion: D.dateReunion }; } } },
       { id: "r7", nom: "Établir le procès-verbal",
+        jx: "cse-reunion",
         quoi: "Les délibérations sont consignées dans un procès-verbal établi par le secrétaire, dans un délai fixé par accord ou, à défaut, par décret : quinze jours suivant la réunion — trois jours dans la consultation de l'article L. 1233-30, un jour lorsque l'entreprise est en redressement ou en liquidation judiciaire. Si une nouvelle réunion est prévue dans ce délai, le procès-verbal est établi avant elle.",
         fond: ["L2315-34", "D2315-26"],
         quand: function (D) {
@@ -983,6 +995,7 @@
     nom: "Établir ou mettre à jour le règlement intérieur",
     resume: "Contenu obligatoire et contenu interdit, avis du comité, dépôt au greffe, communication à l'inspection du travail en deux exemplaires, publicité, entrée en vigueur différée d'un mois.",
     audit: { href: "audit-discipline.html", nom: "l'audit discipline et règlement intérieur" },
+    jx: "ri",
     donnees: [
       { c: "operation", nom: "S'agit-il d'un premier règlement ou d'une modification ?", t: "select",
         options: ["premier règlement intérieur", "modification", "retrait de clauses"] },
@@ -1028,6 +1041,7 @@
         },
         si: function (P) { return seuil(P, 50); } },
       { id: "i2", nom: "Écrire le contenu obligatoire — et rien d'autre",
+        jx: "ri",
         quoi: "L'employeur y fixe exclusivement trois matières : les mesures d'application de la réglementation santé et sécurité, les conditions de participation des salariés au rétablissement de conditions protectrices, et les règles générales et permanentes de discipline, notamment la nature et l'échelle des sanctions. Le règlement rappelle en outre les droits de la défense, les dispositions sur les harcèlements et les agissements sexistes, et l'existence du dispositif de protection des lanceurs d'alerte. Il est rédigé en français.",
         fond: ["L1321-1", "L1321-2", "L1321-6"],
         conv: "les droits de la défense qu'elle définit — l'article L. 1321-2, 1°, renvoie expressément à la convention collective applicable — et toute procédure disciplinaire conventionnelle à reprendre dans le règlement",
@@ -1054,6 +1068,7 @@
         fond: ["L1321-4", "L1322-1"], juris: ["19-15.737"],
         si: function (P, D) { return D.operation === "modification" || D.operation === "retrait de clauses" ? true : (D.operation ? false : null); } },
       { id: "i6", nom: "Déposer au greffe du conseil de prud'hommes",
+        jx: "ri",
         quoi: "Le règlement intérieur est déposé au greffe du conseil de prud'hommes du ressort de l'entreprise ou de l'établissement.",
         fond: ["R1321-2"],
         quand: function (D) {
@@ -1239,6 +1254,7 @@
     nom: "Installer le CSE : la première réunion",
     resume: "La réunion qui suit les élections : convocation par le seul président, bureau élu parmi les titulaires, référent harcèlement, commissions, règlement intérieur du comité, budgets et moyens, transition avec le comité sortant, et la documentation économique et financière due un mois après l'élection.",
     audit: { href: "audit-cse.html", nom: "l'audit du comité social et économique" },
+    jx: "cse-installation",
     donnees: [
       { c: "dateElections", nom: "Date de proclamation des résultats des élections", t: "date",
         aide: "C'est d'elle que court le délai d'un mois de l'article L. 2312-57 — la documentation économique et financière — et c'est d'elle que se compte la durée de quatre ans des mandats (art. L. 2314-33)." },
@@ -1307,6 +1323,7 @@
     ],
     etapes: [
       { id: "i1", nom: "Convoquer la première réunion — le président seul, faute de secrétaire",
+        jx: "cse-installation",
         quoi: "L'ordre du jour de chaque réunion est établi par le président et le secrétaire (art. L. 2315-29). À l'installation, il n'y a pas encore de secrétaire : aucun texte lu ne règle ce cas. En pratique, la convocation et l'ordre du jour de cette seule réunion sont établis par le président — c'est une nécessité, pas une règle légale, et il vaut mieux le dire dans la convocation que le laisser croire. Le délai de communication, lui, s'applique : l'ordre du jour est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale, trois jours au moins avant la réunion.",
         fond: ["L2315-29", "L2315-30", "L2315-23"],
         quand: function (D) {
@@ -1416,6 +1433,7 @@
         } },
 
       { id: "i9", nom: "Adopter le règlement intérieur du comité",
+        jx: "cse-installation",
         quoi: "Le comité détermine, dans un règlement intérieur, les modalités de son fonctionnement et celles de ses rapports avec les salariés. C'est lui qui règle ce que la loi laisse ouvert : rôle du bureau, convocation et déroulement des séances, votes, procès-verbaux, commissions à défaut d'accord, modalités d'arrêté des comptes et de leur rapport, accès aux archives. Une limite : sauf accord de l'employeur, il ne peut comporter de clauses lui imposant des obligations ne résultant pas de dispositions légales — et cet accord constitue un engagement unilatéral, qu'il peut dénoncer à l'issue d'un délai raisonnable après avoir informé les élus.",
         fond: ["L2315-24", "L2315-32", "L2315-44", "L2315-68", "L2315-69"],
         juris: ["11-28.324"],
@@ -1447,6 +1465,7 @@
             dateCloture: D.dateClotureExercice }; } } },
 
       { id: "i11", nom: "Ouvrir les budgets : subvention de fonctionnement et contribution aux activités sociales",
+        jx: "cse-budgets",
         quoi: "Deux budgets, deux régimes. La subvention de fonctionnement est due par l'employeur, à hauteur de 0,20 % de la masse salariale brute de cinquante à moins de deux mille salariés, et de 0,22 % à partir de deux mille. La contribution aux activités sociales et culturelles est fixée par accord d'entreprise ; à défaut, son rapport à la masse salariale brute ne peut être inférieur à celui de l'année précédente. La masse salariale brute est définie à l'article L. 2312-83. L'excédent annuel de l'un peut être transféré à l'autre par délibération, dans la limite de 10 % pour l'excédent des activités sociales et culturelles.",
         fond: ["L2315-61", "L2315-62", "L2312-81", "L2312-82", "L2312-83", "L2312-84",
           "R2312-49", "R2312-51", "L2315-64", "L2315-65", "D2315-33", "L2315-73", "L2315-76"],
@@ -1602,6 +1621,7 @@
         doc: { modele: "note-rh", nom: "Note d'information aux salariés",
           pre: function (P, D) { return { entreprise: P.denomination, objet: "Information sur l'égalité de rémunération — articles L. 3221-1 à L. 3221-7", date: D.dateReleve }; } } },
       { id: "a3", nom: "Informer sur les harcèlements moral et sexuel et les agissements sexistes",
+        jx: "harcelement",
         quoi: "Le texte de l'article 222-33-2 du code pénal pour le harcèlement moral ; le texte de l'article 222-33 et les actions contentieuses civiles et pénales ouvertes pour le harcèlement sexuel, dans les lieux de travail comme dans les locaux d'embauche. L'information s'accompagne des coordonnées utiles — médecin du travail, inspection du travail, Défenseur des droits, référents.",
         fond: ["L1152-4", "L1153-5"],
         doc: { modele: "signalement-harcelement", nom: "Procédure de signalement harcèlement",
@@ -1656,6 +1676,7 @@
     nom: "Tenir le registre unique du personnel",
     resume: "Un registre par établissement, dans l'ordre des embauches et de façon indélébile : les treize mentions de l'article D. 1221-23, la partie spécifique aux stagiaires et volontaires, la copie des titres de travail des salariés étrangers, la mise à jour au fil des événements, et la mise à disposition du comité et des agents de contrôle.",
     audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
+    jx: "registre",
     donnees: [
       { c: "etablissement", nom: "Établissement concerné", t: "text",
         aide: "Le registre est tenu dans TOUT établissement où sont employés des salariés (art. L. 1221-13) : un registre par établissement, pas un pour l'entreprise." },
@@ -1685,6 +1706,7 @@
     ],
     etapes: [
       { id: "r1", nom: "Ouvrir un registre par établissement",
+        jx: "registre",
         quoi: "Un registre unique du personnel est tenu dans tout établissement où sont employés des salariés. Si l'entreprise compte plusieurs établissements, elle compte autant de registres — la centralisation ne dispense pas de la tenue sur place.",
         fond: ["L1221-13"],
         quand: function (D) {
@@ -1699,6 +1721,7 @@
         fond: ["L1221-13"],
         si: function (P, D) { return D.stagiaires === "non" ? false : true; } },
       { id: "r4", nom: "Porter les treize indications complémentaires",
+        jx: "registre",
         quoi: "Nationalité ; date de naissance ; sexe ; emploi ; qualification ; dates d'entrée et de sortie ; date de l'autorisation d'embauche ou de licenciement lorsqu'elle est requise, ou à défaut de la demande ; titre valant autorisation de travail pour les travailleurs étrangers ; et les mentions « contrat à durée déterminée », « salarié temporaire » avec le nom et l'adresse de l'entreprise de travail temporaire, « mis à disposition par un groupement d'employeurs » avec sa dénomination et son adresse, « salarié à temps partiel », « apprenti » ou « contrat de professionnalisation ».",
         fond: ["D1221-23"] },
       { id: "r5", nom: "Annexer la copie des titres de travail des salariés étrangers",
@@ -2225,6 +2248,27 @@
   }
 
   /* ================================================================== */
+  /* LE RENVOI VERS JURIS EXPERT                                        */
+  /* ================================================================== */
+  /* Le partage entre les deux applications de la juriste : celle-ci
+     diagnostique et fonde — quelles obligations, quels articles, quelle
+     jurisprudence, quelles étapes — et Juris Expert produit le document
+     final, complet et prêt à imprimer. Une étape qui appelle une pièce que
+     Juris Expert fabrique porte donc `jx: "<clé>"`, et le lien s'affiche à
+     côté du modèle interne, jamais à sa place : le modèle montre la
+     structure et l'article, l'outil donne la feuille à signer.
+
+     La table des outils vit dans docs/juris-expert.js. Si elle n'est pas
+     chargée, rien ne s'affiche et rien ne casse — aucune étape ne dépend de
+     ce renvoi. */
+  function jxDispo(cle) {
+    return !!(cle && window.JurisExpert && window.JurisExpert.existe(cle));
+  }
+  function lienJX(cle, libelle) {
+    return jxDispo(cle) ? window.JurisExpert.ancre(cle, libelle) : "";
+  }
+
+  /* ================================================================== */
   /* LE RENDU                                                            */
   /* ================================================================== */
   var ACTIF = null;
@@ -2381,11 +2425,15 @@
         var cv = s.conv ? '<div class="conv">' + e(conv(PROFIL, s.conv)) + "</div>" : "";
         var doc = s.doc ? '<a class="doc" href="' + e(lienDoc(s.doc, D)) + '">Produire : ' +
           e(s.doc.nom) + " →</a>" : "";
+        /* Le document final, quand c'est Juris Expert qui l'imprime. */
+        var jx = lienJX(s.jx, jxDispo(s.jx)
+          ? "Document final : " + window.JurisExpert.nom(s.jx) + " (Juris Expert)"
+          : "");
         return '<div class="etape" data-bloc="' + e(s.id) + '" id="etape-' + p.cle + "-" + s.id + '">' +
           '<div class="etape-tete"><span class="etape-num">' + n + "</span>" +
           '<span class="etape-titre">' + e(s.nom) + '</span><span class="etat"></span></div>' +
           '<div class="etape-corps"><p>' + e(s.quoi) + "</p>" + ech + fond + juris + cv +
-          '<div class="actions">' + doc +
+          '<div class="actions">' + doc + jx +
           '<label class="coche"><input type="checkbox" data-etape="' + e(s.id) + '"' +
           (x.faite ? " checked" : "") + "> étape franchie</label>" +
           '<input class="date-fait" type="date" data-etape-date="' + e(s.id) + '" value="' +
@@ -2453,7 +2501,24 @@
       '<div class="barre-fond"><div class="barre-part" style="width:' + pct + '%"></div></div>' +
       '<div class="compte">L\'avancement est enregistré sur ce poste : vous le retrouverez à la ' +
       'réouverture de la page.' + (p.audit ? ' Pour contrôler l\'existant, ouvrez <a href="' +
-      e(p.audit.href) + '">' + e(p.audit.nom) + "</a>." : "") + "</div>";
+      e(p.audit.href) + '">' + e(p.audit.nom) + "</a>." : "") + "</div>" +
+      /* Où s'imprime le document final de ce parcours. Le renvoi est nommé
+         une fois, en tête, plutôt que répété à chaque étape. */
+      (jxDispo(p.jx)
+        ? '<div class="renvoi-jx">Les documents finaux de ce parcours — ' +
+          e(window.JurisExpert.quoi(p.jx)) + ' — se génèrent, complets et prêts à imprimer, dans ' +
+          '<a class="jx" href="' + e(window.JurisExpert.lien(p.jx)) + '" target="_blank" ' +
+          'rel="noopener">Juris Expert — ' + e(window.JurisExpert.nom(p.jx)) + "</a>.</div>"
+        : "") +
+      /* Les élections professionnelles relèvent entièrement de Juris Expert :
+         ce parcours commence après elles, et le dit. */
+      (p.cle === "installation" && jxDispo("elections")
+        ? '<div class="renvoi-jx">Ce parcours commence <b>après</b> la proclamation des résultats. ' +
+          "Les élections elles-mêmes — " + e(window.JurisExpert.quoi("elections")) + " — se " +
+          'conduisent dans <a class="jx" href="' + e(window.JurisExpert.lien("elections")) +
+          '" target="_blank" rel="noopener">Juris Expert — ' +
+          e(window.JurisExpert.nom("elections")) + "</a>.</div>"
+        : "");
   }
 
   /* ================================================================== */

@@ -180,6 +180,15 @@
   .actions a.doc{font:600 13.5px/1 system-ui;text-decoration:none;padding:9px 13px;border-radius:3px;
     border:1px solid var(--bleu);color:var(--bleu);background:var(--surface)}
   .actions a.doc:hover{background:#eef2f9}
+  /* Le renvoi vers Juris Expert : le document final s'y imprime. Le bouton
+     est volontairement plus sobre que celui du modèle interne — on sort de
+     l'application, et la sortie ne doit pas primer sur l'étape. */
+  .actions a.jx{font:600 13.5px/1 system-ui;text-decoration:none;padding:9px 13px;border-radius:3px;
+    border:1px dashed var(--gris);color:var(--corps);background:var(--gris-f)}
+  .actions a.jx:hover{background:#eceef1}
+  .renvoi-jx{font-size:13px;margin:9px 0 0;padding:9px 12px;border-radius:0 3px 3px 0;
+    background:var(--gris-f);border-left:3px solid var(--gris);color:var(--corps)}
+  .renvoi-jx a{color:var(--encre);font-weight:600}
   .coche{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--corps)}
   .coche input{width:auto}
   .date-fait{max-width:190px}
@@ -319,6 +328,7 @@ réponse nuancée.</p>
 
 <script src="idcc.js"></script>
 <script src="profil.js"></script>
+<script src="juris-expert.js"></script>
 <script src="parcours.js"></script>
 <script src="assistant.js" defer></script>
 </body>
