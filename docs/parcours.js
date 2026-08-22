@@ -9,12 +9,25 @@
      — un ÉTAT, écrit dans le stockage local du poste, qui répond à la seule
        question qui compte à la réouverture : j'en suis où.
 
-   RÈGLE TENUE ICI : rien n'est affirmé qui n'ait été lu. Les 120 articles cités
+   RÈGLE TENUE ICI : rien n'est affirmé qui n'ait été lu. Les 166 articles cités
    viennent de moteur/parcours/textes-parcours.json — capture du 21 août 2026,
-   deux lectures espacées concordantes chacune, filtre par NOM du code et
-   critère de contenu. Les 21 arrêts viennent de
-   moteur/parcours/jurisprudence-parcours.json — API Judilibre, aucune réponse
-   relaxée retenue. Le conventionnel n'est JAMAIS affirmé : il est signalé.  */
+   120 articles — et de moteur/parcours/textes-installation.json — capture du
+   22 août 2026, 75 articles dont 46 nouveaux, les 29 autres redemandés sans un
+   seul écart d'identifiant de version. Chacun a été lu deux fois au moins,
+   requêtes espacées, filtre par NOM du code et critère de contenu ; une lecture
+   « élargie » — filtre relâché par le relais — est écartée comme une réponse
+   relaxée de Judilibre. Les 24 arrêts viennent de
+   moteur/parcours/jurisprudence-parcours.json et de
+   moteur/parcours/jurisprudence-installation.json — API Judilibre, recherche
+   par numéro de pourvoi, aucune réponse relaxée retenue.
+   Le conventionnel n'est JAMAIS affirmé : il est signalé.
+
+   CE QUI N'A PAS ÉTÉ TROUVÉ, ET QUI N'EST DONC PAS AFFIRMÉ : aucun article du
+   code du travail lu au relais n'organise la remise-reprise entre un comité
+   social et économique sortant et le comité entrant. L'article R. 2323-38, qui
+   l'imposait au comité d'entreprise, répond « trouvé : faux ». Le parcours
+   d'installation le dit à l'étape i10 et renvoie au règlement intérieur du
+   comité (art. L. 2315-24) plutôt que d'inventer une règle.  */
 "use strict";
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -185,16 +198,76 @@
     "L2312-27": { id: "LEGIARTI000043893927", quoi: "dans le cadre de la consultation sur la politique sociale, l'employeur présente au comité le rapport annuel sur la santé, la sécurité et les conditions de travail et le programme annuel de prévention ; le comité peut proposer un ordre de priorité et des mesures supplémentaires" },
     "L4741-1": { id: "LEGIARTI000032376248", quoi: "amende de 10 000 euros pour l'employeur qui méconnaît par sa faute personnelle les dispositions énumérées, appliquée autant de fois qu'il y a de travailleurs concernés" },
     "R4741-1": { id: "LEGIARTI000018527390", quoi: "le fait de ne pas transcrire ou de ne pas mettre à jour les résultats de l'évaluation des risques dans les conditions de R. 4121-1 et R. 4121-2 est puni de l'amende prévue pour les contraventions de la cinquième classe" },
+
+    /* ---------------------------------------------------------------- */
+    /* Parcours « Installer le CSE : la première réunion ».              */
+    /* Quarante-six articles ajoutés le 22 août 2026 : capture           */
+    /* moteur/parcours/capturer-textes-installation.js, deux lectures    */
+    /* espacées concordantes chacune, filtre par NOM du code et critère  */
+    /* de contenu. Une lecture « élargie » — filtre relâché par le       */
+    /* relais — est écartée comme une réponse relaxée de Judilibre.      */
+    /* Les vingt-neuf autres articles du parcours étaient déjà au        */
+    /* référentiel : la capture les a redemandés, sans un seul écart     */
+    /* d'identifiant de version.                                        */
+    /* ---------------------------------------------------------------- */
+    "L2312-57": { id: "LEGIARTI000035610702", quoi: "à défaut d'accord, un mois après chaque élection du comité, l'employeur lui communique une documentation économique et financière précisant la forme juridique de l'entreprise et son organisation, les perspectives économiques, le cas échéant la position de l'entreprise au sein du groupe, et, compte tenu des informations dont il dispose, la répartition du capital entre les actionnaires détenant plus de 10 % du capital et la position de l'entreprise dans la branche" },
+    "L2315-23": { id: "LEGIARTI000035624835", quoi: "le comité est doté de la personnalité civile et gère son patrimoine ; il est présidé par l'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative ; le comité désigne, parmi ses membres titulaires, un secrétaire et un trésorier" },
+    "L2315-24": { id: "LEGIARTI000036761946", quoi: "le comité détermine, dans un règlement intérieur, les modalités de son fonctionnement et celles de ses rapports avec les salariés ; sauf accord de l'employeur, ce règlement ne peut comporter de clauses lui imposant des obligations ne résultant pas de dispositions légales — cet accord constitue un engagement unilatéral de l'employeur, dénonçable à l'issue d'un délai raisonnable et après information des membres" },
+    "L2314-1":  { id: "LEGIARTI000037389707", quoi: "le comité comprend l'employeur et une délégation du personnel comportant un nombre égal de titulaires et de suppléants, déterminé par décret selon l'effectif ; le suppléant assiste aux réunions en l'absence du titulaire ; un référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes est désigné par le comité parmi ses membres, par une résolution adoptée selon les modalités de L. 2315-32, pour une durée qui prend fin avec celle du mandat des élus" },
+    "R2314-1":  { id: "LEGIARTI000036481896", quoi: "à défaut de stipulations d'accord, le nombre de membres de la délégation du personnel et le nombre mensuel d'heures de délégation sont fixés par le tableau de cet article, selon l'effectif de l'entreprise ou de chaque établissement distinct ; ce nombre d'heures peut être augmenté en cas de circonstances exceptionnelles" },
+    "L2315-7":  { id: "LEGIARTI000035651243", quoi: "l'employeur laisse le temps nécessaire à l'exercice de leurs fonctions à chacun des membres titulaires et, à partir de cinq cent un salariés, aux représentants syndicaux au comité ; le nombre d'heures fixé par décret ne peut être inférieur à dix heures par mois en dessous de cinquante salariés et à seize heures dans les autres entreprises" },
+    "L2315-9":  { id: "LEGIARTI000035651237", quoi: "un décret en Conseil d'État détermine les conditions dans lesquelles les titulaires peuvent, chaque mois, répartir entre eux et avec les suppléants le crédit d'heures de délégation dont ils disposent" },
+    "L2315-11": { id: "LEGIARTI000036262458", quoi: "est payé comme temps de travail effectif, et non déduit des heures de délégation, le temps passé à la recherche de mesures préventives en situation d'urgence et de gravité, aux réunions du comité et de ses commissions dans la limite d'une durée globale, et aux enquêtes menées après un accident du travail grave ou des incidents révélant un risque grave" },
+    "L2315-14": { id: "LEGIARTI000035621169", quoi: "les élus et les représentants syndicaux peuvent, durant les heures de délégation, se déplacer hors de l'entreprise, et circuler librement dans l'entreprise pour y prendre tous contacts nécessaires" },
+    "L2315-15": { id: "LEGIARTI000035621173", quoi: "les membres de la délégation du personnel peuvent faire afficher les renseignements qu'ils ont pour rôle de porter à la connaissance du personnel, sur les emplacements destinés aux communications syndicales et aux portes d'entrée des lieux de travail" },
+    "L2315-25": { id: "LEGIARTI000035624843", quoi: "l'employeur met à la disposition du comité un local aménagé et le matériel nécessaire à l'exercice de ses fonctions" },
+    "L2315-26": { id: "LEGIARTI000035624845", quoi: "le comité peut organiser, dans le local mis à sa disposition, des réunions d'information internes au personnel, et inviter des personnalités extérieures ; ces réunions ont lieu en dehors du temps de travail des participants" },
+    "L2315-3":  { id: "LEGIARTI000035651256", quoi: "les membres de la délégation du personnel sont tenus au secret professionnel pour toutes les questions relatives aux procédés de fabrication ; eux et les représentants syndicaux sont tenus à une obligation de discrétion à l'égard des informations revêtant un caractère confidentiel et présentées comme telles par l'employeur" },
+    "L2315-4":  { id: "LEGIARTI000035651253", quoi: "le recours à la visioconférence peut être autorisé par accord entre l'employeur et les membres élus ; en l'absence d'accord, il est limité à trois réunions par année civile" },
+    "L2312-72": { id: "LEGIARTI000035611295", quoi: "dans les sociétés, deux membres de la délégation du personnel — l'un des cadres, techniciens et agents de maîtrise, l'autre des employés et ouvriers — assistent avec voix consultative à toutes les séances du conseil d'administration ou de surveillance ; la délégation est portée à quatre membres là où trois collèges électoraux sont constitués" },
+    "L2312-73": { id: "LEGIARTI000035611297", quoi: "ces membres ont droit aux mêmes documents que ceux adressés aux membres du conseil ; ils peuvent lui soumettre les vœux du comité, sur lesquels il donne un avis motivé" },
+    "L2312-75": { id: "LEGIARTI000035611301", quoi: "dans les sociétés anonymes et en commandite par actions dont le conseil comprend déjà au moins un administrateur ou membre élu ou désigné par les salariés, la représentation du comité auprès du conseil est assurée par un seul membre titulaire du comité, désigné par lui" },
+    "L2312-76": { id: "LEGIARTI000035611303", quoi: "dans les sociétés par actions simplifiées, les statuts précisent l'organe social auprès duquel les membres de la délégation du personnel exercent ces droits" },
+    "L2315-61": { id: "LEGIARTI000036761916", quoi: "l'employeur verse au comité une subvention de fonctionnement annuelle de 0,20 % de la masse salariale brute de cinquante à moins de deux mille salariés, et de 0,22 % à partir de deux mille ; elle s'ajoute à la contribution aux activités sociales et culturelles ; le comité peut, par délibération, en consacrer une partie à la formation des délégués syndicaux et des représentants de proximité, ou en transférer une part de l'excédent annuel aux activités sociales et culturelles" },
+    "L2315-62": { id: "LEGIARTI000035627344", quoi: "dans les entreprises à plusieurs comités d'établissement, le budget de fonctionnement du comité central est déterminé par accord entre le comité central et les comités d'établissement ; à défaut, par décret en Conseil d'État" },
+    "L2312-81": { id: "LEGIARTI000036761976", quoi: "la contribution versée chaque année par l'employeur pour financer les institutions sociales du comité est fixée par accord d'entreprise ; à défaut d'accord, le rapport de cette contribution à la masse salariale brute ne peut être inférieur au même rapport existant pour l'année précédente" },
+    "L2312-82": { id: "LEGIARTI000035611321", quoi: "dans les entreprises à plusieurs comités d'établissement, le montant global de la contribution est déterminé au niveau de l'entreprise ; sa répartition entre les comités d'établissement est fixée par accord au prorata des effectifs ou de la masse salariale, ou des deux ; à défaut d'accord, au prorata de la masse salariale de chaque établissement" },
+    "L2312-83": { id: "LEGIARTI000036761969", quoi: "la masse salariale brute est constituée de l'ensemble des gains et rémunérations soumis à cotisations de sécurité sociale, à l'exception des indemnités versées à l'occasion de la rupture du contrat à durée indéterminée" },
+    "L2312-84": { id: "LEGIARTI000035611325", quoi: "en cas de reliquat budgétaire, les membres de la délégation du personnel peuvent décider, par délibération, de transférer tout ou partie de l'excédent annuel du budget des activités sociales et culturelles au budget de fonctionnement ou à des associations, dans les conditions et limites fixées par décret" },
+    "R2312-49": { id: "LEGIARTI000036413334", quoi: "les ressources du comité en matière d'activités sociales et culturelles : sommes versées par l'employeur pour les institutions sociales qui ne sont pas légalement à sa charge, remboursement obligatoire des primes d'assurance de responsabilité civile du comité, cotisations facultatives des salariés, subventions publiques ou syndicales, dons et legs, recettes des manifestations, revenus des biens du comité" },
+    "R2312-51": { id: "LEGIARTI000036413338", quoi: "le transfert de l'excédent annuel du budget des activités sociales et culturelles vers le budget de fonctionnement ou vers des associations est possible dans la limite de 10 % de cet excédent ; la somme et ses modalités d'utilisation sont inscrites dans les comptes annuels et dans le rapport de gestion" },
+    "R2312-52": { id: "LEGIARTI000036413340", quoi: "en cas de cessation définitive de l'activité de l'entreprise, le comité décide de l'affectation des biens dont il dispose ; la liquidation est opérée par ses soins sous la surveillance de l'administration du travail ; la dévolution du solde se fait au crédit d'un autre comité ou d'institutions sociales d'intérêt général — les biens ne peuvent être répartis entre les salariés ou entre les membres du comité" },
+    "L2312-18": { id: "LEGIARTI000052437125", quoi: "une base de données économiques, sociales et environnementales rassemble l'ensemble des informations nécessaires aux consultations et informations récurrentes que l'employeur met à disposition du comité" },
+    "L2312-21": { id: "LEGIARTI000043975329", quoi: "un accord d'entreprise ou, en l'absence de délégué syndical, un accord entre l'employeur et le comité adopté à la majorité des titulaires définit l'organisation, l'architecture, le contenu de la base de données et ses modalités de fonctionnement, notamment les droits d'accès" },
+    "L2312-36": { id: "LEGIARTI000048533625", quoi: "en l'absence d'accord, la base de données rassemble les informations énumérées par cet article et est accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central et aux délégués syndicaux" },
+    "L2315-16": { id: "LEGIARTI000035621179", quoi: "le temps consacré aux formations du chapitre est pris sur le temps de travail et rémunéré comme tel ; il n'est pas déduit des heures de délégation" },
+    "L2315-17": { id: "LEGIARTI000054140233", quoi: "les formations sont dispensées par un organisme enregistré auprès de l'autorité administrative ou par un organisme de L. 2145-5 ; elles sont renouvelées lorsque les représentants ont exercé leur mandat pendant quatre ans, consécutifs ou non" },
+    "L2315-63": { id: "LEGIARTI000043975219", quoi: "dans les entreprises d'au moins cinquante salariés, les membres titulaires élus pour la première fois bénéficient, dans les conditions et limites de L. 2145-11, d'un stage de formation économique d'une durée maximale de cinq jours ; le financement est pris en charge par le comité, et la formation s'impute sur la durée du congé de formation économique, sociale, environnementale et syndicale" },
+    "L2145-11": { id: "LEGIARTI000043975272", quoi: "le congé de formation économique, sociale et environnementale et de formation syndicale est de droit, sauf si l'employeur estime, après avis conforme du comité, que l'absence aurait des conséquences préjudiciables à la production et à la bonne marche de l'entreprise ; le refus est motivé et peut être contesté devant le bureau de jugement du conseil de prud'hommes" },
+    "L2315-64": { id: "LEGIARTI000035627352", quoi: "le comité est soumis aux obligations comptables de l'article L. 123-12 du code de commerce ; ses comptes annuels sont établis selon un règlement de l'Autorité des normes comptables ; en dessous de deux des trois seuils fixés par décret, il peut adopter une présentation simplifiée" },
+    "L2315-65": { id: "LEGIARTI000035627354", quoi: "le comité dont les ressources annuelles n'excèdent pas un seuil fixé par décret peut tenir un livre retraçant chronologiquement les montants et l'origine des dépenses et des recettes, et établir une fois par an un état de synthèse simplifié sur son patrimoine et ses engagements en cours" },
+    "L2315-68": { id: "LEGIARTI000035627360", quoi: "les comptes annuels du comité sont arrêtés, selon des modalités prévues par son règlement intérieur, par des membres élus désignés par lui et en son sein ; ils sont approuvés par les membres élus réunis en séance plénière ; cette réunion porte sur ce seul sujet et fait l'objet d'un procès-verbal spécifique" },
+    "L2315-69": { id: "LEGIARTI000036262535", quoi: "le comité établit, selon des modalités prévues par son règlement intérieur, un rapport présentant des informations qualitatives sur ses activités et sur sa gestion financière, présenté aux élus lors de la séance plénière d'approbation des comptes" },
+    "L2315-70": { id: "LEGIARTI000035627364", quoi: "le trésorier ou, le cas échéant, le commissaire aux comptes présente un rapport sur les conventions passées, directement ou indirectement, entre le comité et l'un de ses membres ; il est présenté lors de la séance plénière d'approbation des comptes" },
+    "L2315-71": { id: "LEGIARTI000036262527", quoi: "au plus tard trois jours avant la séance plénière d'approbation, les membres chargés d'arrêter les comptes les communiquent aux membres du comité, accompagnés du rapport de gestion" },
+    "L2315-72": { id: "LEGIARTI000035627368", quoi: "le comité porte à la connaissance des salariés de l'entreprise, par tout moyen, ses comptes annuels accompagnés du rapport de gestion" },
+    "L2315-73": { id: "LEGIARTI000048539746", quoi: "au-delà de deux des trois seuils fixés par décret, le comité nomme au moins un commissaire aux comptes et un suppléant, distincts de ceux de l'entreprise ; le coût de la certification est pris en charge par le comité sur sa subvention de fonctionnement" },
+    "L2315-75": { id: "LEGIARTI000035627374", quoi: "les comptes annuels et les pièces justificatives qui s'y rapportent sont conservés pendant dix ans à compter de la clôture de l'exercice auquel ils se rapportent" },
+    "L2315-76": { id: "LEGIARTI000035627376", quoi: "le comité dont les ressources excèdent le seuil de L. 2315-65 sans dépasser deux des trois seuils de L. 2315-64 confie la mission de présentation de ses comptes annuels à un expert-comptable, à ses frais sur sa subvention de fonctionnement" },
+    "D2315-33": { id: "LEGIARTI000036433847", quoi: "les seuils de la présentation simplifiée : cinquante salariés à la clôture d'un exercice, et les montants de ressources annuelles et de total de bilan de l'article R. 612-1 du code de commerce" },
+    "D2315-27": { id: "LEGIARTI000036433683", quoi: "l'employeur ou la délégation du personnel peuvent décider du recours à l'enregistrement ou à la sténographie des séances ; l'employeur ne peut s'y opposer, sauf délibérations portant sur des informations confidentielles ; la personne extérieure appelée à sténographier est tenue à la même obligation de discrétion" },
   };
 
 
   /* ------------------------------------------------------------------ */
-  /* La jurisprudence. Vingt et un arrêts de la chambre sociale lus à la */
-  /* source par l'API Judilibre le 21 août 2026 ; aucune réponse relaxée */
-  /* n'a été retenue. Le texte cité est le sommaire publié — ou, pour    */
-  /* les deux arrêts qui n'en portent pas, les motifs lus dans l'arrêt.  */
-  /* Identifiants et sommaires intégraux :                              */
+  /* La jurisprudence. Vingt-quatre arrêts de la chambre sociale lus à  */
+  /* la source par l'API Judilibre — vingt et un le 21 août 2026, trois  */
+  /* le 22 août 2026 pour le parcours d'installation ; aucune réponse    */
+  /* relaxée n'a été retenue. Le texte cité est le sommaire publié — ou, */
+  /* pour les deux arrêts qui n'en portent pas, les motifs lus dans      */
+  /* l'arrêt. Identifiants et sommaires intégraux :                      */
   /* moteur/parcours/jurisprudence-parcours.json                        */
+  /* moteur/parcours/jurisprudence-installation.json                    */
   /* ------------------------------------------------------------------ */
   var JURIS = {
     "19-14.224": { d: "Soc. 27 novembre 2019, n° 19-14.224", p: "publié au Bulletin",
@@ -239,6 +312,17 @@
       t: "Ne méconnaît pas l'obligation légale de prendre les mesures nécessaires pour assurer la sécurité et protéger la santé physique et mentale des travailleurs l'employeur qui justifie avoir pris toutes les mesures prévues par les articles L. 4121-1 et L. 4121-2." },
     "11-28.324": { d: "Soc. 15 janvier 2013, n° 11-28.324", p: "publié au Bulletin",
       t: "Le pouvoir de convoquer inclut nécessairement le pouvoir de fixer la date de la réunion, sauf accord entre la majorité des élus et l'employeur ; le règlement intérieur de l'instance ne peut inclure de dispositions concernant une mesure relevant des prérogatives de l'employeur, sauf pour celui-ci à répondre d'un éventuel abus. (Arrêt rendu sur les articles L. 2325-14 et L. 2325-2, applicables au comité d'entreprise avant l'ordonnance du 22 septembre 2017.)" },
+
+    /* --- parcours « Installer le CSE » : trois arrêts lus à la source par
+       l'API Judilibre le 22 août 2026, recherchés par numéro de pourvoi,
+       aucune réponse relaxée retenue. Identifiants et sommaires intégraux :
+       moteur/parcours/jurisprudence-installation.json --- */
+    "88-20.411": { d: "Soc. 10 juillet 1991, n° 88-20.411", p: "publié au Bulletin",
+      t: "En application de l'article L. 433-1 du code du travail, le chef d'établissement est membre du comité d'établissement et doit, à ce titre et conformément à l'article L. 434-2 du même code, participer à la désignation du secrétaire du comité, ce vote ne constituant pas la consultation des membres élus du comité en tant que délégation du personnel. (Arrêt rendu sur les articles L. 433-1 et L. 434-2, textes du comité d'entreprise antérieurs à l'ordonnance du 22 septembre 2017 ; la composition du comité et la désignation du secrétaire relèvent aujourd'hui des articles L. 2314-1 et L. 2315-23.)" },
+    "25-10.126": { d: "Soc. 8 juillet 2026, n° 25-10.126", p: "publié au Bulletin",
+      t: "Il résulte des articles L. 2315-64, L. 2315-68, L. 2315-69 et L. 2315-71 du code du travail que tous les membres du comité social et économique ont un égal accès aux archives et aux documents administratifs et comptables dudit comité." },
+    "09-12.758": { d: "Soc. 1er juin 2010, n° 09-12.758", p: "publié au Bulletin — texte de fondement abrogé depuis",
+      t: "Selon l'article R. 2323-38 du code du travail, les membres du comité sortant rendent compte de leur gestion au nouveau comité et remettent aux nouveaux membres tous documents concernant l'administration et l'activité du comité. Cette obligation de remise à l'occasion de la reddition des comptes a été édictée au profit du comité lui-même, pour assurer la continuité de son fonctionnement, et non au profit de chacun de ses membres : la demande du président du comité, non mandaté par celui-ci pour agir en justice, est irrecevable. (ATTENTION : l'article R. 2323-38, propre au comité d'entreprise, n'est plus en vigueur — interrogé au relais Légifrance le 22 août 2026 sous le filtre « Code du travail », il répond « trouvé : faux ». Aucun article lu ce jour ne reprend cette obligation pour le comité social et économique. L'arrêt est cité pour la raison d'être de la reddition de comptes, non comme un fondement actuel.)" },
   };
 
   /* ------------------------------------------------------------------ */
@@ -298,7 +382,7 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* LES SIX PARCOURS                                                    */
+  /* LES SEPT PARCOURS                                                   */
   /* ------------------------------------------------------------------ */
   var PARCOURS = [
 
@@ -1064,6 +1148,342 @@
     ]
   },
 
+  /* ================================================================== */
+  /* 7. INSTALLER LE CSE : LA PREMIÈRE RÉUNION                          */
+  /*                                                                    */
+  /* Ce parcours est celui de la réunion qui suit les élections — à ne  */
+  /* pas confondre avec « Tenir une réunion du CSE », qui est celui de  */
+  /* la réunion ordinaire. Deux points méritent d'être signalés, parce  */
+  /* qu'ils touchent aux limites de ce que le code dit :                */
+  /*                                                                    */
+  /* — la CONVOCATION de cette première réunion. L'article L. 2315-29   */
+  /*   veut un ordre du jour établi par le président ET le secrétaire.  */
+  /*   À l'installation, il n'y a pas encore de secrétaire : le code ne */
+  /*   règle pas le cas. L'étape le dit, et ne présente pas comme une   */
+  /*   règle légale ce qui n'est qu'une nécessité pratique.             */
+  /*                                                                    */
+  /* — la TRANSITION entre le comité sortant et le comité entrant. Les  */
+  /*   textes ont été cherchés au relais : le comité a la personnalité  */
+  /*   civile et gère son patrimoine (L. 2315-23) ; la dévolution des   */
+  /*   biens n'est organisée qu'en cas de CESSATION DÉFINITIVE de       */
+  /*   l'activité de l'entreprise (R. 2312-52) ; les comptes s'arrêtent */
+  /*   et s'approuvent selon L. 2315-68 à L. 2315-72 et se conservent   */
+  /*   dix ans (L. 2315-75). AUCUN article lu le 22 août 2026 n'organise*/
+  /*   de remise-reprise entre l'ancien et le nouveau comité. L'article */
+  /*   R. 2323-38, qui l'imposait au comité d'entreprise, répond au     */
+  /*   relais « trouvé : faux » — il n'est plus en vigueur. L'étape est */
+  /*   donc formulée en question ouverte, à régler par le règlement     */
+  /*   intérieur du comité, et le dit expressément.                     */
+  /* ================================================================== */
+  {
+    cle: "installation",
+    nom: "Installer le CSE : la première réunion",
+    resume: "La réunion qui suit les élections : convocation par le seul président, bureau élu parmi les titulaires, référent harcèlement, commissions, règlement intérieur du comité, budgets et moyens, transition avec le comité sortant, et la documentation économique et financière due un mois après l'élection.",
+    audit: { href: "audit-cse.html", nom: "l'audit du comité social et économique" },
+    donnees: [
+      { c: "dateElections", nom: "Date de proclamation des résultats des élections", t: "date",
+        aide: "C'est d'elle que court le délai d'un mois de l'article L. 2312-57 — la documentation économique et financière — et c'est d'elle que se compte la durée de quatre ans des mandats (art. L. 2314-33)." },
+      { c: "dateInstallation", nom: "Date de la réunion d'installation", t: "date" },
+      { c: "heure", nom: "Heure", t: "time" },
+      { c: "lieu", nom: "Lieu (et lien de visioconférence, le cas échéant)", t: "text",
+        aide: "En l'absence d'accord, le recours à la visioconférence est limité à trois réunions par année civile (art. L. 2315-4)." },
+      { c: "president", nom: "Président du comité (nom, qualité)", t: "text",
+        aide: "L'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative (art. L. 2315-23)." },
+      { c: "dateEnvoiConvocation", nom: "Date d'envoi de la convocation et de l'ordre du jour", t: "date" },
+      { c: "nbTitulaires", nom: "Nombre de titulaires élus", t: "number",
+        aide: "Le nombre est fixé par l'accord ou, à défaut, par le tableau de l'article R. 2314-1, selon l'effectif." },
+      { c: "troisiemeCollege", nom: "Un troisième collège électoral est-il institué ?", t: "oui-non",
+        aide: "Il commande un siège à la commission santé, sécurité et conditions de travail (art. L. 2315-39) et porte à quatre la délégation au conseil d'administration ou de surveillance (art. L. 2312-72)." },
+      { c: "premierMandat", nom: "Des titulaires sont-ils élus pour la première fois ?", t: "oui-non",
+        aide: "Ils ont droit au stage de formation économique de cinq jours au plus (art. L. 2315-63) et à cinq jours de formation santé-sécurité (art. L. 2315-18)." },
+      { c: "forme", nom: "Forme de l'entreprise", t: "select",
+        options: ["société anonyme ou société en commandite par actions",
+          "société par actions simplifiée", "autre société",
+          "l'entreprise n'est pas une société"],
+        aide: "Elle commande la représentation du comité au conseil d'administration ou de surveillance (art. L. 2312-72 à L. 2312-76)." },
+      { c: "administrateurSalarie", nom: "Le conseil comprend-il déjà un administrateur ou un membre élu ou désigné par les salariés ?", t: "oui-non",
+        si: function (P, D) { return D.forme === "société anonyme ou société en commandite par actions" ? true
+          : (D.forme && D.forme !== "société anonyme ou société en commandite par actions" ? false : null); },
+        aide: "Dans ce cas, la représentation du comité auprès du conseil est assurée par un seul membre titulaire (art. L. 2312-75)." },
+      { c: "comitePrecedent", nom: "Un comité était-il en place avant ces élections ?", t: "oui-non" },
+      { c: "dateFinMandatPrecedent", nom: "Date de fin du mandat des élus sortants", t: "date",
+        si: function (P, D) { return D.comitePrecedent === "oui" ? true : (D.comitePrecedent === "non" ? false : null); } },
+      { c: "dateClotureExercice", nom: "Date de clôture du dernier exercice du comité", t: "date",
+        si: function (P, D) { return D.comitePrecedent === "oui" ? true : (D.comitePrecedent === "non" ? false : null); },
+        aide: "Les comptes annuels et leurs pièces justificatives se conservent dix ans à compter de cette date (art. L. 2315-75)." },
+      { c: "accordCse", nom: "Un accord fixe-t-il le fonctionnement du comité (commissions, délais, périodicité) ?", t: "oui-non" },
+      { c: "accordBdese", nom: "Un accord définit-il la base de données économiques, sociales et environnementales ?", t: "oui-non",
+        aide: "Accord d'entreprise ou, en l'absence de délégué syndical, accord entre l'employeur et le comité adopté à la majorité des titulaires (art. L. 2312-21)." },
+      { c: "dateDocEco", nom: "Date de communication de la documentation économique et financière", t: "date",
+        aide: "Due à défaut d'accord, un mois après chaque élection (art. L. 2312-57)." },
+      { c: "dateRI", nom: "Date d'adoption du règlement intérieur du comité", t: "date" },
+      { c: "datePV", nom: "Date d'établissement du procès-verbal d'installation", t: "date" },
+    ],
+    prealable: [
+      { id: "pvelec", g: "document", nom: "Les procès-verbaux des élections, des deux tours",
+        aide: "Ils nomment les titulaires et les suppléants, collège par collège : le bureau, le référent et les commissions se désignent parmi les membres du comité (art. L. 2315-23, L. 2314-1, L. 2315-39)." },
+      { id: "protocole", g: "document", nom: "Le protocole d'accord préélectoral",
+        aide: "Il porte la composition des collèges — dont l'existence, ou non, d'un troisième collège." },
+      { id: "effin", g: "information", nom: "L'effectif de l'entreprise et de chaque établissement distinct",
+        aide: "Il commande le nombre d'élus et les heures de délégation (art. R. 2314-1), la commission santé-sécurité (300, art. L. 2315-36), la commission économique (1 000, art. L. 2315-46), et le taux de la subvention de fonctionnement (2 000, art. L. 2315-61)." },
+      { id: "accords", g: "document", nom: "Les accords applicables au comité",
+        aide: "Accord de mise en place et périmètre des établissements distincts, accord sur les commissions (art. L. 2315-41 et L. 2315-42), accord sur la base de données (art. L. 2312-21), accord sur les délais de consultation, accord sur la visioconférence (art. L. 2315-4)." },
+      { id: "masse", g: "information", nom: "La masse salariale brute de l'entreprise",
+        aide: "Assiette des deux budgets : 0,20 % ou 0,22 % pour le fonctionnement (art. L. 2315-61), et le rapport de l'année précédente pour les activités sociales et culturelles à défaut d'accord (art. L. 2312-81). Sa définition est à l'article L. 2312-83." },
+      { id: "docsortant", g: "document", nom: "Les documents du comité sortant : comptes annuels arrêtés et approuvés, rapport de gestion, rapport sur les conventions",
+        aide: "Articles L. 2315-64 à L. 2315-72. Ils se conservent dix ans avec leurs pièces justificatives (art. L. 2315-75). Tous les membres du comité y ont un égal accès (Soc. 8 juillet 2026, n° 25-10.126).",
+        si: function (P, D) { return D.comitePrecedent === "oui" ? true : (D.comitePrecedent === "non" ? false : null); } },
+      { id: "tresorerie", g: "pièce", nom: "L'état de la trésorerie, des engagements et des contrats en cours du comité",
+        aide: "Comptes bancaires et mandataires, prestataires, assurances, subventions engagées, personnel employé par le comité, biens meubles et immeubles. Aucun texte lu n'organise leur remise : c'est au règlement intérieur du comité de le faire (art. L. 2315-24).",
+        si: function (P, D) { return D.comitePrecedent === "oui" ? true : (D.comitePrecedent === "non" ? false : null); } },
+      { id: "risortant", g: "document", nom: "Le règlement intérieur du comité précédent",
+        aide: "Il n'est pas reconduit de plein droit par l'effet des élections : le comité nouvellement élu détermine son règlement intérieur (art. L. 2315-24). Le reprendre suppose une résolution qui l'adopte.",
+        si: function (P, D) { return D.comitePrecedent === "oui" ? true : (D.comitePrecedent === "non" ? false : null); } },
+      { id: "candid", g: "information", nom: "Les candidatures au secrétariat, à la trésorerie, au référent harcèlement et aux commissions",
+        aide: "Le secrétaire et le trésorier se désignent parmi les membres titulaires (art. L. 2315-23) ; le référent harcèlement parmi les membres du comité (art. L. 2314-1)." },
+      { id: "local", g: "information", nom: "Le local aménagé et le matériel mis à disposition",
+        aide: "L'employeur met à la disposition du comité un local aménagé et le matériel nécessaire (art. L. 2315-25)." },
+      { id: "ccninst", g: "document", nom: "La convention collective, au titre des institutions représentatives",
+        aide: "Elle peut ajouter des moyens, des commissions ou une périodicité propres." },
+    ],
+    etapes: [
+      { id: "i1", nom: "Convoquer la première réunion — le président seul, faute de secrétaire",
+        quoi: "L'ordre du jour de chaque réunion est établi par le président et le secrétaire (art. L. 2315-29). À l'installation, il n'y a pas encore de secrétaire : aucun texte lu ne règle ce cas. En pratique, la convocation et l'ordre du jour de cette seule réunion sont établis par le président — c'est une nécessité, pas une règle légale, et il vaut mieux le dire dans la convocation que le laisser croire. Le délai de communication, lui, s'applique : l'ordre du jour est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale, trois jours au moins avant la réunion.",
+        fond: ["L2315-29", "L2315-30", "L2315-23"],
+        quand: function (D) {
+          if (!D.dateInstallation) return null;
+          var t = jours(D.dateInstallation, -3);
+          return { iso: t, libelle: "Envoi au plus tard le " + dateFr(t),
+            note: D.dateEnvoiConvocation
+              ? ("Envoi renseigné au " + dateFr(D.dateEnvoiConvocation) + " — soit " +
+                 joursEntre(D.dateEnvoiConvocation, D.dateInstallation) + " jour(s) avant la réunion.")
+              : "Trois jours au moins avant la réunion (art. L. 2315-30)." };
+        },
+        doc: { modele: "convocation-installation", nom: "Convocation à la réunion d'installation",
+          pre: function (P, D) { return { entreprise: P.denomination, effectif: P.effectif,
+            president: D.president, dateReunion: D.dateInstallation, heure: D.heure, lieu: D.lieu,
+            dateEnvoi: D.dateEnvoiConvocation, dateElections: D.dateElections }; } } },
+
+      { id: "i2", nom: "Arrêter l'ordre du jour de l'installation, point par point",
+        quoi: "Une réunion d'installation qui n'aurait pas prévu ses désignations les renvoie toutes à la réunion suivante. L'ordre du jour type : constatation de la composition du comité et de la personnalité civile ; élection du secrétaire et du trésorier ; désignation du référent harcèlement ; désignation des membres de la commission santé, sécurité et conditions de travail et des autres commissions ; désignation, s'il y a lieu, des représentants au conseil d'administration ou de surveillance ; adoption du règlement intérieur du comité ; ouverture des budgets et des comptes bancaires ; moyens — heures, local, matériel, affichage, visioconférence ; accès à la base de données ; formations ; transition avec le comité sortant ; calendrier des réunions ; documentation économique et financière due un mois après l'élection.",
+        fond: ["L2315-29", "L2315-23", "L2315-24", "L2314-1", "L2315-39", "L2312-57"],
+        doc: { modele: "odj-installation", nom: "Ordre du jour de la réunion d'installation",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            president: D.president, dateReunion: D.dateInstallation, heure: D.heure, lieu: D.lieu,
+            options: [].concat(
+              D.comitePrecedent === "oui" ? ["Transition avec le comité sortant : reddition de gestion, remise des documents et des archives"] : [],
+              D.forme && D.forme !== "l'entreprise n'est pas une société" ? ["Désignation des représentants au conseil d'administration ou de surveillance"] : []
+            ) }; } } },
+
+      { id: "i3", nom: "Constater la composition du comité et sa personnalité civile",
+        quoi: "Le comité comprend l'employeur et une délégation du personnel comportant un nombre égal de titulaires et de suppléants ; le suppléant assiste aux réunions en l'absence du titulaire. Le comité est doté de la personnalité civile et gère son patrimoine : il peut ouvrir un compte, contracter, ester en justice. Il est présidé par l'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative. Les mandats sont ouverts pour quatre ans.",
+        fond: ["L2314-1", "R2314-1", "L2315-23", "L2314-33"],
+        quand: function (D) {
+          if (!D.dateElections) return null;
+          var fin = moisApres(D.dateElections, 48);
+          return { iso: null, libelle: "Mandats ouverts le " + dateFr(D.dateElections) +
+            " — terme des quatre ans le " + dateFr(fin),
+            note: "Les membres de la délégation du personnel sont élus pour quatre ans (art. L. 2314-33) ; " +
+              "un accord de branche, de groupe ou d'entreprise peut fixer une durée plus courte, entre deux et quatre ans." };
+        } },
+
+      { id: "i4", nom: "Élire le secrétaire et le trésorier parmi les titulaires",
+        quoi: "Le comité désigne, parmi ses membres titulaires, un secrétaire et un trésorier. La résolution se prend à la majorité des membres présents. Le président du comité — l'employeur ou son représentant — est membre du comité : il participe à ce vote, qui ne constitue pas la consultation des élus en tant que délégation du personnel.",
+        fond: ["L2315-23", "L2315-32"], juris: ["88-20.411"],
+        quand: function (D) {
+          if (!D.dateInstallation) return null;
+          return { iso: D.dateInstallation, libelle: "Élection du bureau en réunion du " + dateFr(D.dateInstallation),
+            note: "Sans secrétaire, l'ordre du jour des réunions suivantes ne peut pas être établi conjointement (art. L. 2315-29), et le procès-verbal n'a personne pour l'établir (art. L. 2315-34)." };
+        },
+        doc: { modele: "pv-installation", nom: "Procès-verbal d'installation avec les résolutions",
+          pre: function (P, D) { return { entreprise: P.denomination, dateReunion: D.dateInstallation,
+            lieu: D.lieu, president: D.president, dateElections: D.dateElections,
+            nbTitulaires: D.nbTitulaires,
+            resolutions: [].concat(
+              ["Élection du secrétaire", "Élection du trésorier", "Désignation du référent harcèlement"],
+              D.troisiemeCollege === "oui" ? ["Désignation des membres de la CSSCT — siège du troisième collège"] : [],
+              D.comitePrecedent === "oui" ? ["Transition avec le comité sortant"] : []
+            ) }; } } },
+
+      { id: "i5", nom: "Désigner le référent harcèlement du comité",
+        quoi: "Un référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes est désigné par le comité parmi ses membres, sous la forme d'une résolution adoptée à la majorité des membres présents, pour une durée qui prend fin avec celle du mandat des élus. Il bénéficie, comme les élus, de la formation santé, sécurité et conditions de travail.",
+        fond: ["L2314-1", "L2315-32", "L2315-18"],
+        quand: function (D) {
+          if (!D.dateInstallation) return null;
+          return { iso: D.dateInstallation, libelle: "Désignation en réunion du " + dateFr(D.dateInstallation) };
+        } },
+
+      { id: "i6", nom: "Désigner les membres de la commission santé, sécurité et conditions de travail",
+        quoi: "La commission est présidée par l'employeur ou son représentant et comprend au minimum trois membres représentants du personnel, dont au moins un du second collège ou, le cas échéant, du troisième. Ses membres sont désignés par le comité parmi ses membres, par une résolution adoptée à la majorité des membres présents, pour une durée qui prend fin avec celle du mandat des élus. Elle est obligatoire dans les entreprises et établissements distincts d'au moins trois cents salariés et dans les établissements des articles L. 4521-1 et suivants ; en deçà, l'inspecteur du travail peut l'imposer, et rien n'interdit de la créer par accord.",
+        fond: ["L2315-36", "L2315-37", "L2315-38", "L2315-39", "L2315-32"],
+        juris: ["19-14.224", "24-12.295", "24-22.914"],
+        quand: function (D) {
+          if (!D.dateInstallation) return null;
+          return { iso: D.dateInstallation, libelle: "Désignation en réunion du " + dateFr(D.dateInstallation),
+            note: "Sauf dans les cas de fin anticipée de mandat de l'article L. 2314-33, les membres désignés ne peuvent pas être remplacés avant le terme du mandat des élus." };
+        },
+        doc: { modele: "designation-commission", nom: "Délibération de désignation des membres",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            commission: "commission santé, sécurité et conditions de travail",
+            dateReunion: D.dateInstallation, president: D.president,
+            source: D.accordCse === "oui" ? "accord d'entreprise (art. L. 2315-41)"
+                                          : "règlement intérieur du comité, à défaut d'accord (art. L. 2315-44)",
+            dateFinMandat: D.dateElections ? moisApres(D.dateElections, 48) : "",
+            troisiemeCollege: D.troisiemeCollege === "oui"
+              ? ["Un troisième collège est institué : un siège au moins revient à un élu le représentant"] : [] }; } } },
+
+      { id: "i7", nom: "Constituer les autres commissions",
+        quoi: "L'accord d'entreprise fixe les modalités de mise en place des commissions ; en l'absence de délégué syndical, un accord entre l'employeur et le comité adopté à la majorité des titulaires y pourvoit ; à défaut d'accord, le règlement intérieur du comité les définit. À défaut d'accord de l'article L. 2315-45 : commission économique à partir de mille salariés, commissions de la formation, du logement et de l'égalité professionnelle à partir de trois cents. La commission des marchés se crée au-delà de deux des trois seuils du décret. Le parcours « Constituer les commissions du CSE » déroule chacune d'elles.",
+        fond: ["L2315-41", "L2315-42", "L2315-44", "L2315-45", "L2315-46", "L2315-47",
+          "L2315-49", "L2315-50", "L2315-56", "L2315-44-1", "L2315-44-3", "D2315-29"],
+        conv: "des commissions conventionnelles supplémentaires et les moyens qui leur sont attachés" },
+
+      { id: "i8", nom: "Désigner les représentants au conseil d'administration ou de surveillance",
+        quoi: "Dans les sociétés, deux membres de la délégation du personnel — l'un des cadres, techniciens et agents de maîtrise, l'autre des employés et ouvriers — assistent avec voix consultative à toutes les séances du conseil ; là où trois collèges électoraux sont constitués, la délégation est portée à quatre membres. Ils ont droit aux mêmes documents que les membres du conseil et peuvent lui soumettre les vœux du comité, sur lesquels il donne un avis motivé. Dans les sociétés anonymes et en commandite par actions dont le conseil comprend déjà un administrateur élu ou désigné par les salariés, la représentation est assurée par un seul membre titulaire désigné par le comité. Dans les sociétés par actions simplifiées, ce sont les statuts qui désignent l'organe social concerné.",
+        fond: ["L2312-72", "L2312-73", "L2312-75", "L2312-76", "L2315-32"],
+        si: function (P, D) {
+          if (D.forme === "l'entreprise n'est pas une société") return false;
+          return D.forme ? true : null;
+        },
+        quand: function (D) {
+          if (!D.dateInstallation) return null;
+          var un = D.administrateurSalarie === "oui";
+          return { iso: D.dateInstallation, libelle: "Désignation en réunion du " + dateFr(D.dateInstallation),
+            note: un
+              ? "Le conseil comprenant déjà un administrateur ou un membre élu ou désigné par les salariés, la représentation du comité est assurée par un seul membre titulaire (art. L. 2312-75)."
+              : (D.troisiemeCollege === "oui"
+                ? "Trois collèges étant institués, la délégation au conseil est portée à quatre membres (art. L. 2312-72)."
+                : "Deux membres, l'un des cadres, techniciens et agents de maîtrise, l'autre des employés et ouvriers (art. L. 2312-72).") };
+        } },
+
+      { id: "i9", nom: "Adopter le règlement intérieur du comité",
+        quoi: "Le comité détermine, dans un règlement intérieur, les modalités de son fonctionnement et celles de ses rapports avec les salariés. C'est lui qui règle ce que la loi laisse ouvert : rôle du bureau, convocation et déroulement des séances, votes, procès-verbaux, commissions à défaut d'accord, modalités d'arrêté des comptes et de leur rapport, accès aux archives. Une limite : sauf accord de l'employeur, il ne peut comporter de clauses lui imposant des obligations ne résultant pas de dispositions légales — et cet accord constitue un engagement unilatéral, qu'il peut dénoncer à l'issue d'un délai raisonnable après avoir informé les élus.",
+        fond: ["L2315-24", "L2315-32", "L2315-44", "L2315-68", "L2315-69"],
+        juris: ["11-28.324"],
+        quand: function (D) {
+          if (!D.dateRI) return null;
+          return { iso: D.dateRI, libelle: "Règlement intérieur adopté le " + dateFr(D.dateRI),
+            note: "Le code ne fixe pas de délai. Mais le règlement intérieur commande les modalités d'arrêté des comptes (art. L. 2315-68) et le contenu du rapport de gestion (art. L. 2315-69) : l'adopter tard, c'est arrêter le premier exercice sans règle." };
+        },
+        doc: { modele: "ri-comite", nom: "Règlement intérieur du comité",
+          pre: function (P, D) { return { entreprise: P.denomination, effectif: P.effectif,
+            dateAdoption: D.dateRI, dateReunion: D.dateInstallation }; } } },
+
+      { id: "i10", nom: "Régler la transition avec le comité sortant — ce que le code dit, et ce qu'il ne dit pas",
+        quoi: "Ce point est le moins écrit du parcours, et il vaut mieux le savoir. CE QUI EST ÉCRIT : le comité est doté de la personnalité civile et gère son patrimoine (art. L. 2315-23) — le renouvellement des mandats change les personnes, non la personne morale ; les comptes annuels sont arrêtés selon les modalités du règlement intérieur par des membres élus désignés par le comité, approuvés en séance plénière consacrée à ce seul sujet et faisant l'objet d'un procès-verbal spécifique (art. L. 2315-68), accompagnés du rapport de gestion (art. L. 2315-69) et du rapport du trésorier sur les conventions passées avec un membre (art. L. 2315-70), communiqués trois jours au moins avant (art. L. 2315-71) puis portés à la connaissance des salariés (art. L. 2315-72) ; les comptes et leurs pièces justificatives se conservent dix ans (art. L. 2315-75) ; la dévolution des biens n'est organisée qu'en cas de cessation définitive de l'activité de l'entreprise, et les biens ne peuvent jamais être répartis entre les salariés ou entre les membres du comité (art. R. 2312-52). CE QUI N'EST PAS ÉCRIT : aucun article du code du travail lu au relais le 22 août 2026 n'organise de remise-reprise entre le comité sortant et le comité entrant. L'article R. 2323-38, qui imposait aux membres du comité d'entreprise sortant de rendre compte de leur gestion au nouveau comité et de lui remettre tous les documents, n'est plus en vigueur. À vérifier, donc, et à régler par le règlement intérieur du comité (art. L. 2315-24) : inventaire des biens, comptes bancaires et mandataires, contrats et engagements en cours, salariés employés par le comité, assurances, archives et pièces justificatives, sort du règlement intérieur précédent et des accords conclus avec le comité sortant.",
+        fond: ["L2315-23", "L2315-64", "L2315-65", "L2315-68", "L2315-69", "L2315-70",
+          "L2315-71", "L2315-72", "L2315-75", "R2312-52", "L2315-24"],
+        juris: ["25-10.126", "09-12.758"],
+        si: function (P, D) { return D.comitePrecedent === "oui" ? true : (D.comitePrecedent === "non" ? false : null); },
+        quand: function (D) {
+          if (!D.dateClotureExercice) return null;
+          var dix = moisApres(D.dateClotureExercice, 120);
+          return { iso: null, libelle: "Comptes et pièces justificatives à conserver jusqu'au " + dateFr(dix),
+            note: "Dix ans à compter de la clôture de l'exercice auquel ils se rapportent (art. L. 2315-75). " +
+              "Cette échéance-là est écrite ; la remise elle-même ne l'est pas." };
+        },
+        doc: { modele: "remise-reprise", nom: "Procès-verbal de remise-reprise entre comités",
+          pre: function (P, D) { return { entreprise: P.denomination, dateReunion: D.dateInstallation,
+            dateElections: D.dateElections, dateFinMandatPrecedent: D.dateFinMandatPrecedent,
+            dateCloture: D.dateClotureExercice }; } } },
+
+      { id: "i11", nom: "Ouvrir les budgets : subvention de fonctionnement et contribution aux activités sociales",
+        quoi: "Deux budgets, deux régimes. La subvention de fonctionnement est due par l'employeur, à hauteur de 0,20 % de la masse salariale brute de cinquante à moins de deux mille salariés, et de 0,22 % à partir de deux mille. La contribution aux activités sociales et culturelles est fixée par accord d'entreprise ; à défaut, son rapport à la masse salariale brute ne peut être inférieur à celui de l'année précédente. La masse salariale brute est définie à l'article L. 2312-83. L'excédent annuel de l'un peut être transféré à l'autre par délibération, dans la limite de 10 % pour l'excédent des activités sociales et culturelles.",
+        fond: ["L2315-61", "L2315-62", "L2312-81", "L2312-82", "L2312-83", "L2312-84",
+          "R2312-49", "R2312-51", "L2315-64", "L2315-65", "D2315-33", "L2315-73", "L2315-76"],
+        quand: function (D, P) {
+          var x = nb(P.effectif);
+          if (x === null) return null;
+          return { iso: null,
+            libelle: "Subvention de fonctionnement : " + (x >= 2000 ? "0,22 %" : "0,20 %") + " de la masse salariale brute",
+            note: x >= 2000
+              ? "Taux de 0,22 % à partir de deux mille salariés (art. L. 2315-61, 2°)."
+              : (x >= 50 ? "Taux de 0,20 % de cinquante à moins de deux mille salariés (art. L. 2315-61, 1°)."
+                         : "L'article L. 2315-61 fixe le taux pour les entreprises de cinquante salariés et plus ; effectif renseigné : " + x + ".") };
+        } },
+
+      { id: "i12", nom: "Arrêter les moyens : heures, local, déplacements, affichage, visioconférence",
+        quoi: "L'employeur laisse aux titulaires le temps nécessaire à l'exercice de leurs fonctions ; à défaut de stipulations d'accord, le nombre mensuel d'heures est celui du tableau de l'article R. 2314-1, augmentable en cas de circonstances exceptionnelles, et les titulaires peuvent le répartir entre eux et avec les suppléants. Le temps passé aux réunions du comité et de ses commissions, aux enquêtes après accident grave et à la recherche de mesures préventives en situation d'urgence est payé comme temps de travail effectif et n'est pas déduit du crédit d'heures. Les élus circulent librement dans l'entreprise et peuvent se déplacer au-dehors durant leurs heures de délégation, et faire afficher les renseignements qu'ils ont pour rôle de porter à la connaissance du personnel. L'employeur met à disposition un local aménagé et le matériel nécessaire ; le comité peut y organiser des réunions d'information, en dehors du temps de travail. En l'absence d'accord, la visioconférence est limitée à trois réunions par année civile.",
+        fond: ["L2315-7", "R2314-1", "L2315-9", "L2315-11", "L2315-14", "L2315-15",
+          "L2315-25", "L2315-26", "L2315-4", "L2315-3"],
+        conv: "des heures de délégation, des moyens ou des facilités supérieurs à ceux du code" },
+
+      { id: "i13", nom: "Ouvrir l'accès à la base de données économiques, sociales et environnementales",
+        quoi: "La base de données rassemble l'ensemble des informations nécessaires aux consultations et informations récurrentes. Un accord d'entreprise — ou, en l'absence de délégué syndical, un accord entre l'employeur et le comité adopté à la majorité des titulaires — définit son organisation, son architecture, son contenu et ses modalités de fonctionnement, notamment les droits d'accès. À défaut d'accord, elle rassemble les informations énumérées à l'article L. 2312-36 et est accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central et aux délégués syndicaux.",
+        fond: ["L2312-18", "L2312-21", "L2312-36"],
+        quand: function (D) {
+          if (!D.accordBdese) return null;
+          return { iso: null,
+            libelle: D.accordBdese === "oui" ? "Droits d'accès fixés par votre accord" : "Régime supplétif de l'article L. 2312-36",
+            note: D.accordBdese === "oui"
+              ? "L'accord de l'article L. 2312-21 définit les droits d'accès : reportez-vous à sa stipulation."
+              : "À défaut d'accord, la base est accessible en permanence aux élus et aux délégués syndicaux (art. L. 2312-36)." };
+        } },
+
+      { id: "i14", nom: "Obtenir la documentation économique et financière — un mois après l'élection",
+        quoi: "À défaut d'accord, un mois après chaque élection du comité, l'employeur lui communique une documentation économique et financière précisant : la forme juridique de l'entreprise et son organisation ; les perspectives économiques telles qu'elles peuvent être envisagées ; le cas échéant, la position de l'entreprise au sein du groupe ; et, compte tenu des informations dont l'employeur dispose, la répartition du capital entre les actionnaires détenant plus de 10 % du capital et la position de l'entreprise dans sa branche d'activité. Cette obligation ne se demande pas : elle est due d'office, et elle est datée.",
+        fond: ["L2312-57"],
+        quand: function (D) {
+          if (!D.dateElections) return null;
+          var t = moisApres(D.dateElections, 1);
+          return { iso: t, libelle: "Documentation due au plus tard le " + dateFr(t),
+            note: D.dateDocEco
+              ? ("Communication renseignée au " + dateFr(D.dateDocEco) + " — soit " +
+                 joursEntre(D.dateElections, D.dateDocEco) + " jour(s) après l'élection.")
+              : "Un mois après chaque élection du comité, à défaut d'accord (art. L. 2312-57)." };
+        },
+        doc: { modele: "demande-documentation-eco", nom: "Demande de communication de la documentation économique et financière",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            dateElections: D.dateElections, president: D.president,
+            dateEcheance: D.dateElections ? moisApres(D.dateElections, 1) : "" }; } } },
+
+      { id: "i15", nom: "Engager les formations : santé-sécurité et formation économique",
+        quoi: "Deux formations distinctes, deux financements distincts. La formation santé, sécurité et conditions de travail est d'une durée minimale de cinq jours lors du premier mandat, de trois jours par élu en cas de renouvellement — de cinq jours pour les membres de la commission santé-sécurité à partir de trois cents salariés — et son financement est à la charge de l'employeur ; le référent harcèlement en bénéficie aussi. Le stage de formation économique, d'une durée maximale de cinq jours, bénéficie aux titulaires élus pour la première fois dans les entreprises d'au moins cinquante salariés ; il est financé par le comité et s'impute sur le congé de formation économique, sociale, environnementale et syndicale. Dans les deux cas, le temps de formation est pris sur le temps de travail, rémunéré comme tel, et n'est pas déduit des heures de délégation.",
+        fond: ["L2315-18", "L2315-63", "L2145-11", "L2315-16", "L2315-17"],
+        quand: function (D) {
+          if (!D.dateElections) return null;
+          return { iso: null,
+            libelle: D.premierMandat === "oui"
+              ? "Premier mandat : cinq jours de formation santé-sécurité et jusqu'à cinq jours de formation économique"
+              : "Formations à programmer",
+            note: "Le code ne fixe pas de date butoir : il fixe des durées minimales et répartit le financement. " +
+              "Une formation repoussée reste une formation due. Les formations sont renouvelées lorsque les " +
+              "représentants ont exercé leur mandat pendant quatre ans, consécutifs ou non (art. L. 2315-17)." };
+        } },
+
+      { id: "i16", nom: "Fixer le calendrier des réunions ordinaires",
+        quoi: "À défaut d'accord, le comité se réunit au moins une fois par mois à partir de trois cents salariés, au moins une fois tous les deux mois en dessous. Au moins quatre réunions par an portent, en tout ou partie, sur la santé, la sécurité et les conditions de travail. À partir de la réunion suivante, l'ordre du jour est établi conjointement par le président et le secrétaire, et communiqué trois jours au moins avant. Le parcours « Tenir une réunion du CSE » déroule la réunion ordinaire.",
+        fond: ["L2315-28", "L2315-27", "L2315-29", "L2315-30"],
+        conv: "une périodicité de réunions ou des réunions supplémentaires propres à la branche",
+        quand: function (D, P) {
+          if (!D.dateInstallation) return null;
+          var trois = seuil(P, 300);
+          if (trois === null) return { iso: null, libelle: "Installation le " + dateFr(D.dateInstallation),
+            note: "Renseignez l'effectif dans le profil pour connaître la périodicité supplétive (art. L. 2315-28)." };
+          var t = moisApres(D.dateInstallation, trois ? 1 : 2);
+          return { iso: null, libelle: "Prochaine réunion ordinaire avant le " + dateFr(t),
+            note: trois ? "Au moins une réunion par mois à partir de trois cents salariés, à défaut d'accord (art. L. 2315-28)."
+                        : "Au moins une réunion tous les deux mois en dessous de trois cents salariés, à défaut d'accord (art. L. 2315-28)." };
+        } },
+
+      { id: "i17", nom: "Établir et diffuser le procès-verbal d'installation",
+        quoi: "Les délibérations sont consignées dans un procès-verbal établi par le secrétaire — celui que la réunion vient d'élire — dans un délai fixé par accord ou, à défaut, dans les quinze jours suivant la réunion, ou avant la réunion suivante si elle intervient plus tôt. Il peut, après adoption, être affiché ou diffusé dans l'entreprise par le secrétaire. L'employeur ou la délégation du personnel peuvent décider du recours à l'enregistrement ou à la sténographie des séances.",
+        fond: ["L2315-34", "L2315-35", "D2315-26", "D2315-27"],
+        quand: function (D) {
+          if (!D.dateInstallation) return null;
+          var t = jours(D.dateInstallation, 15);
+          return { iso: t, libelle: "Procès-verbal à établir au plus tard le " + dateFr(t),
+            note: D.datePV
+              ? ("Établissement renseigné au " + dateFr(D.datePV) + ".")
+              : "Quinze jours à défaut d'accord (art. D. 2315-26) ; ou avant la réunion suivante si elle intervient plus tôt." };
+        },
+        doc: { modele: "pv-installation", nom: "Procès-verbal d'installation avec les résolutions",
+          pre: function (P, D) { return { entreprise: P.denomination, dateReunion: D.dateInstallation,
+            lieu: D.lieu, president: D.president, dateElections: D.dateElections,
+            nbTitulaires: D.nbTitulaires }; } } },
+    ]
+  },
+
   ];
 
 
@@ -1520,7 +1940,8 @@
       Object.keys(articles).map(function (a) {
         return "art. " + refArt(a) + ' <span class="ident">' + TEXTES[a].id + "</span>";
       }).join(" · ") +
-      ". Lectures du 21 août 2026 au relais Légifrance, deux lectures espacées concordantes chacune. " +
+      ". Lectures des 21 et 22 août 2026 au relais Légifrance, deux lectures espacées concordantes " +
+      "chacune, filtre par nom du code et critère de contenu contre les homonymes. " +
       "Ce récapitulatif est produit par l'application Jurisprudence à partir des seules données saisies " +
       "sur ce poste ; il ne constitue pas une consultation juridique et ne se substitue ni au conseil " +
       "d'un avocat, ni à la décision de l'administration ou du juge. L'application ne lit aucune " +

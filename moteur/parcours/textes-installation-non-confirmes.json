@@ -1,0 +1,37 @@
+{
+ "date": "2026-08-22",
+ "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
+ "code": "Code du travail",
+ "articles": {},
+ "note": "Un article non confirmé n'entre pas au référentiel et n'est jamais cité par le parcours d'installation.",
+ "retiresAvantCapture": {
+  "R2323-38": {
+   "motif": "le relais répond « trouvé : faux » sous filtre « Code du travail » à la date du jour : l'article du comité d'entreprise qui imposait aux membres du comité sortant de rendre compte de leur gestion au nouveau comité et de lui remettre tous les documents n'est plus en vigueur. Aucun article du code lu ce jour ne reprend cette obligation pour le comité social et économique.",
+   "cite": false
+  },
+  "D2315-24": {
+   "motif": "le relais répond « trouvé : faux » : ce numéro n'existe pas à la date lue",
+   "cite": false
+  },
+  "D2315-25": {
+   "motif": "le relais répond « trouvé : faux » : ce numéro n'existe pas à la date lue",
+   "cite": false
+  },
+  "D2315-28": {
+   "motif": "le relais répond « trouvé : faux » : ce numéro n'existe pas à la date lue",
+   "cite": false
+  },
+  "D2315-30": {
+   "motif": "le relais répond « trouvé : faux » : ce numéro n'existe pas à la date lue",
+   "cite": false
+  },
+  "D2315-31": {
+   "motif": "le relais répond « trouvé : faux » : ce numéro n'existe pas à la date lue",
+   "cite": false
+  },
+  "D2315-32": {
+   "motif": "le relais répond « trouvé : faux » : ce numéro n'existe pas à la date lue",
+   "cite": false
+  }
+ }
+}

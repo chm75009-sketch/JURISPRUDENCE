@@ -1,0 +1,527 @@
+{
+ "L2312-57": {
+  "id": "LEGIARTI000035610702",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "A défaut d'accord, un mois après chaque élection du comité social et économique, l'employeur lui communique une documentation économique et financière précisant : 1° La forme juridique de l'entreprise et son organisation ; 2° Les perspectives économiques de l'entreprise telles qu'elles peuvent être envisagées ; 3° Le cas échéant, la position de l'entreprise au sein du groupe ; 4° Compte tenu des informations dont dispose l'employeur, la répartition du capital entre les actionnaires détenant plus de 10 % du capital et la position de l'entreprise dans la branche d'activité à laquelle elle appartient."
+ },
+ "L2315-23": {
+  "id": "LEGIARTI000035624835",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le comité social et économique est doté de la personnalité civile et gère son patrimoine. Il est présidé par l'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative. Le comité désigne, parmi ses membres titulaires, un secrétaire et un trésorier."
+ },
+ "L2315-24": {
+  "id": "LEGIARTI000036761946",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le comité social et économique détermine, dans un règlement intérieur, les modalités de son fonctionnement et celles de ses rapports avec les salariés de l'entreprise, pour l'exercice des missions qui lui sont conférées par le chapitre II du présent titre. Sauf accord de l'employeur, un règlement intérieur ne peut comporter des clauses lui imposant des obligations ne résultant pas de dispositions légales. Cet accord constitue un engagement unilatéral de l'employeur que celui-ci peut dénoncer à l'issue d'un délai raisonnable et après en avoir informé les membres de la délégation du personnel du comité social et économique."
+ },
+ "L2315-32": {
+  "id": "LEGIARTI000035624869",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les résolutions du comité social et économique sont prises à la majorité des membres présents. Le président du comité social et économique ne participe pas au vote lorsqu'il consulte les membres élus du comité en tant que délégation du personnel."
+ },
+ "L2314-1": {
+  "id": "LEGIARTI000037389707",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le comité social et économique comprend l'employeur et une délégation du personnel comportant un nombre de membres déterminé par décret en Conseil d'Etat compte tenu du nombre des salariés. La délégation du personnel comporte un nombre égal de titulaires et de suppléants. Le suppléant assiste aux réunions en l'absence du titulaire. Le nombre de membres et le nombre d'heures de délégation peuvent être modifiés par accord dans les conditions prévues par l'article L. 2314-7 . Un référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes est désigné par le comité social et économique parmi ses membres, sous la forme d'une résolution adoptée selon les modalités définies à l'article L. 2315-32 , pour une durée qui prend fin avec celle du mandat des membres élus du comité."
+ },
+ "R2314-1": {
+  "id": "LEGIARTI000036481896",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "A défaut de stipulations dans l'accord prévu au troisième alinéa de l'article L. 2314-1 , le nombre de membres de la délégation du personnel du comité social et économique prévu à l'article L. 2314-1 est défini dans le tableau ci-après. A défaut de stipulations dans l'accord prévu à l'article L. 2314-7 , le temps mensuel nécessaire à l'exercice de leurs fonctions par les représentants mentionnés au 1° de l'article L. 2315-7 est fixé dans les limites d'une durée définie dans le tableau ci-après. Ce nombre d'heures peut être augmenté en cas de circonstances exceptionnelles. Lorsque les membres du comité social et économique sont également représentants de proximité, le temps nécessaire à l'exercice de leurs fonctions défini par l'accord prévu à l'article L. 2313-7 peut rester inchangé par rapport au temps dont ils disposent en vertu de l'accord prévu à l'article L. 2314-7 ou, à défaut du tableau ci-dessous. Les effectifs s'apprécient dans le cadre de l'entreprise ou dans le cadre de chaque établissement distinct. Effectif (nombre de salariés) Nombre de titulaires Nombre mensuel d'heures de délégation Total heures de délégation 11 à 24 1 10 10 25 à 49 2 10 20 50 à 74 4 18 72 75 à 99 5 19 95 100 à 124 6 21 126 125 à 149 7 21 147 150 à 174 8 21 168 175 à 199 9 21 189 200 à 249 10 22 220 250 à 299 11 22 242 300 à 399 11 22 242 400 à 499 12 22 264 500 à 599 13 24 312 600 à 699 14 24 336 700 à 799 14 24 336 800 à 899 15 24 360 900 à 999 16 24 384 1000 à 1249 17 24 408 1250 à 1499 18 24 432 1500 à 1749 20 26 520 1750 à 1999 21 26 546 2000 à 2249 22 26 572 2250 à 2499 23 26 598 2500 à 2749 24 26 624 2750 à 2999 24 26 624 3000 à 3249 25 26 650 3250 à 3499 25 26 650 3500 à 3749 26 27 702 3750 à 3999 26 27 702 4000 à 4249 26 28 728 4250 à 4499 27 28 756 4500 à 4749 27 28 756 4750 à 4999 28 28 784 5000 à 5249 29 29 841 5250 à 5499 29 29 841 5500 à 5749 29 29 841 5750 à 5999 30 29 870 6000 à 6249 31 29 899 6250 à 6499 31 29 899 6500 à 6749 31 29 899 6750 à 6999 31 30 930 7000 à 7249 32 30 960 7250 à 7499 32 30 960 7500 à 7749 32 31 992 7750 à 7999 32 32 1024 8000 à 8249 32 32 1024 8250 à 8499 33 32 1056 8500 à 8749 33 32 1056 8750 à 8999 33 32 1056 9000 à 9249 34 32 1088 9250 à 9499 34 32 1088 9500 à 9749 34 32 1088 9750 à 9999 34 34 1156 10000 35 34 1190"
+ },
+ "L2314-33": {
+  "id": "LEGIARTI000052437191",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les membres de la délégation du personnel du comité social et économique sont élus pour quatre ans. Les fonctions de ces membres prennent fin par le décès, la démission, la rupture du contrat de travail, la perte des conditions requises pour être éligible. Ils conservent leur mandat en cas de changement de catégorie professionnelle."
+ },
+ "L2315-7": {
+  "id": "LEGIARTI000035651243",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "L'employeur laisse le temps nécessaire à l'exercice de leurs fonctions : 1° A chacun des membres titulaires constituant la délégation du personnel du comité social et économique ; 2° Aux représentants syndicaux au comité social et économique dans les entreprises d'au moins cinq cent un salariés ; 3° Aux représentants syndicaux au comité social et économique central d'entreprise dans les entreprises d'au moins cinq cent un salariés dont aucun des établissements distincts n'atteint ce seuil. Le nombre d'heures de délégation des représentants mentionnés aux 1° à 3°, fixé par décret en Conseil d'Etat en fonction à la fois des effectifs de l'entreprise ou de l'établissement et du nombre de membres de la délégation, ne peut être inférieur à dix heures par mois dans les entreprises de moins de cinquante salariés et à seize heures dans les autres entreprises."
+ },
+ "L2315-9": {
+  "id": "LEGIARTI000035651237",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Un décret en Conseil d'Etat détermine les conditions dans lesquelles les membres titulaires de la délégation du personnel du comité social et économique peuvent, chaque mois, répartir entre eux et avec les membres suppléants le crédit d'heures de délégation dont ils disposent."
+ },
+ "L2315-11": {
+  "id": "LEGIARTI000036262458",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Est également payé comme temps de travail effectif le temps passé par les membres de la délégation du personnel du comité social et économique : 1° A la recherche de mesures préventives dans toute situation d'urgence et de gravité, notamment lors de la mise en œuvre de la procédure de danger grave et imminent prévue à l' article L. 4132-2 ; 2° Aux réunions du comité et de ses commissions, dans ce cas dans la limite d'une durée globale fixée par accord d'entreprise ou à défaut par décret en Conseil d'Etat ; 3° Aux enquêtes menées après un accident du travail grave ou des incidents répétés ayant révélé un risque grave ou une maladie professionnelle ou à caractère professionnel grave ; Ce temps n'est pas déduit des heures de délégation prévues pour les membres titulaires de la délégation du personnel du comité social et économique."
+ },
+ "L2315-25": {
+  "id": "LEGIARTI000035624843",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "L'employeur met à la disposition du comité social et économique un local aménagé et le matériel nécessaire à l'exercice de ses fonctions."
+ },
+ "L2315-26": {
+  "id": "LEGIARTI000035624845",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le comité social et économique peut organiser, dans le local mis à sa disposition, des réunions d'information, internes au personnel, portant notamment sur des problèmes d'actualité. Le comité peut inviter des personnalités extérieures, syndicales ou autres, dans les conditions prévues par les dispositions des articles L. 2142-10 et L. 2142-11 . Ces réunions ont lieu en dehors du temps de travail des participants. Toutefois, les membres de la délégation du personnel du comité social et économique peuvent se réunir sur leur temps de délégation."
+ },
+ "L2315-3": {
+  "id": "LEGIARTI000035651256",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les membres de la délégation du personnel du comité social et économique sont tenus au secret professionnel pour toutes les questions relatives aux procédés de fabrication. Les membres de la délégation du personnel du comité social et économique et les représentants syndicaux sont tenus à une obligation de discrétion à l'égard des informations revêtant un caractère confidentiel et présentées comme telles par l'employeur."
+ },
+ "L2315-4": {
+  "id": "LEGIARTI000035651253",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le recours à la visioconférence pour réunir le comité social et économique peut être autorisé par accord entre l'employeur et les membres élus de la délégation du personnel du comité. En l'absence d'accord, ce recours est limité à trois réunions par année civile. Un décret détermine les conditions dans lesquelles le comité social et économique peut, dans ce cadre, procéder à un vote à bulletin secret."
+ },
+ "L2315-36": {
+  "id": "LEGIARTI000035626455",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Une commission santé, sécurité et conditions de travail est créée au sein du comité social et économique dans : 1° Les entreprises d'au moins trois cent salariés ; 2° Les établissements distincts d'au moins trois cent salariés ; 3° Les établissements mentionnés aux articles L. 4521-1 et suivants."
+ },
+ "L2315-37": {
+  "id": "LEGIARTI000036262445",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Dans les entreprises et établissements distincts de moins de trois cents salariés, l'inspecteur du travail peut imposer la création d'une commission santé, sécurité et conditions de travail lorsque cette mesure est nécessaire, notamment en raison de la nature des activités, de l'agencement ou de l'équipement des locaux. Cette décision peut être contestée devant le directeur régional des entreprises, de la concurrence, de la consommation, du travail et de l'emploi."
+ },
+ "L2315-38": {
+  "id": "LEGIARTI000035626459",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "La commission santé, sécurité et conditions de travail se voit confier, par délégation du comité social et économique, tout ou partie des attributions du comité relatives à la santé, à la sécurité et aux conditions de travail, à l'exception du recours à un expert prévu à la sous-section 10 et des attributions consultatives du comité."
+ },
+ "L2315-39": {
+  "id": "LEGIARTI000036262434",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "La commission est présidée par l'employeur ou son représentant. Elle comprend au minimum trois membres représentants du personnel, dont au moins un représentant du second collège, ou le cas échéant du troisième collège prévus à l'article L. 2314-11 . Les membres de la commission santé, sécurité et conditions de travail sont désignés par le comité social et économique parmi ses membres, par une résolution adoptée selon les modalités définies à l'article L. 2315-32 , pour une durée qui prend fin avec celle du mandat des membres élus du comité. Lorsque l'accord confie tout ou partie des attributions du comité social et économique à la commission santé, sécurité et conditions de travail, les dispositions de l' article L. 2314-3 s'appliquent aux réunions de la commission. L'employeur peut se faire assister par des collaborateurs appartenant à l'entreprise et choisis en dehors du comité. Ensemble, ils ne peuvent pas être en nombre supérieur à celui des représentants du personnel titulaires. Les dispositions de l'article L. 2315-3 relatives au secret professionnel et à l'obligation de discrétion leur sont applicables."
+ },
+ "L2315-41": {
+  "id": "LEGIARTI000035626467",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "L'accord d'entreprise défini à l'article L. 2313-2 fixe les modalités de mise en place de la ou des commissions santé, sécurité et conditions de travail en application des articles L. 2315-36 et L. 2315-37 , en définissant : 1° Le nombre de membres de la ou des commissions ; 2° Les missions déléguées à la ou les commissions par le comité social et économique et leurs modalités d'exercice ; 3° Leurs modalités de fonctionnement, notamment le nombre d'heures de délégation dont bénéficient les membres de la ou des commissions pour l'exercice de leurs missions ; 4° Les modalités de leur formation conformément aux articles L. 2315-16 à L. 2315-18 ; 5° Le cas échéant, les moyens qui leur sont alloués ; 6° Le cas échéant, les conditions et modalités dans lesquelles une formation spécifique correspondant aux risques ou facteurs de risques particuliers, en rapport avec l'activité de l'entreprise peut être dispensée aux membres de la commission."
+ },
+ "L2315-42": {
+  "id": "LEGIARTI000035626469",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En l'absence de délégué syndical, un accord entre l'employeur et le comité social et économique, adopté à la majorité des membres titulaires élus de la délégation du personnel du comité, fixe les modalités de mise en place de la ou des commissions santé, sécurité et conditions de travail mentionnées aux 1° à 6° de l'article L. 2315-41 ."
+ },
+ "L2315-43": {
+  "id": "LEGIARTI000035626471",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En dehors des cas prévus aux articles L. 2315-36 et L. 2315-37 , l'accord d'entreprise défini à l'article L. 2313-2 ou en l'absence de délégué syndical, un accord entre l'employeur et le comité social et économique, adopté à la majorité des membres titulaires élus de la délégation du personnel du comité peut fixer le nombre et le périmètre de mise en place de la ou des commissions santé, sécurité et conditions de travail et définir les modalités mentionnées aux 1° à 6° de l'article L. 2315-41 ."
+ },
+ "L2315-44": {
+  "id": "LEGIARTI000036262426",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En l'absence d'accord prévu aux articles L. 2315-41 et L. 2315-42 , le règlement intérieur du comité social et économique définit les modalités mentionnées aux 1° à 6° de l'article L. 2315-41. En l'absence d'accord prévu à l'article L. 2315-43 , l'employeur peut fixer le nombre et le périmètre de mise en place d'une ou plusieurs commissions santé, sécurité et conditions de travail. Le règlement intérieur du comité social et économique définit les modalités mentionnées aux 1° à 6° de l'article L. 2315-41."
+ },
+ "L2315-44-1": {
+  "id": "LEGIARTI000036760263",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Une commission des marchés est créée au sein du comité social et économique qui dépasse, pour au moins deux des trois critères mentionnés au II de l'article L. 2315-64 , des seuils fixés par décret."
+ },
+ "L2315-44-3": {
+  "id": "LEGIARTI000036760281",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les membres de la commission des marchés sont désignés par le comité social et économique parmi ses membres titulaires. Le règlement intérieur du comité social et économique fixe les modalités de fonctionnement de la commission, le nombre de ses membres, les modalités de leur désignation et la durée de leur mandat."
+ },
+ "L2315-45": {
+  "id": "LEGIARTI000036262551",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Un accord d'entreprise conclu dans les conditions prévues au premier alinéa de l'article L. 2232-12 peut prévoir la création de commissions supplémentaires pour l'examen de problèmes particuliers. Le cas échéant, l'employeur peut adjoindre à ces commissions avec voix consultative des experts et des techniciens appartenant à l'entreprise et choisis en dehors du comité. Les dispositions de l'article L. 2315-3 relatives au secret professionnel et à l'obligation de discrétion leur sont applicables. Les rapports des commissions sont soumis à la délibération du comité."
+ },
+ "L2315-46": {
+  "id": "LEGIARTI000035626485",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En l'absence d'accord prévu à l'article L. 2315-45 , dans les entreprises d'au moins mille salariés, une commission économique est créée au sein du comité social et économique ou du comité social et économique central. Cette commission est chargée notamment d'étudier les documents économiques et financiers recueillis par le comité et toute question que ce dernier lui soumet."
+ },
+ "L2315-47": {
+  "id": "LEGIARTI000035626487",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "La commission est présidée par l'employeur ou son représentant. La commission économique comprend au maximum cinq membres représentants du personnel, dont au moins un représentant de la catégorie des cadres. Ils sont désignés par le comité social et économique ou le comité social et économique central parmi leurs membres."
+ },
+ "L2315-49": {
+  "id": "LEGIARTI000035626493",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En l'absence d'accord prévu à l'article L. 2315-45 , dans les entreprises d'au moins trois cents salariés, le comité social et économique constitue une commission de la formation. Cette commission est chargée : 1° De préparer les délibérations du comité prévues aux 1° et 3° de l'article L. 2312-17 dans les domaines qui relèvent de sa compétence ; 2° D'étudier les moyens permettant de favoriser l'expression des salariés en matière de formation et de participer à leur information dans ce domaine ; 3° D'étudier les problèmes spécifiques concernant l'emploi et le travail des jeunes et des travailleurs handicapés."
+ },
+ "L2315-50": {
+  "id": "LEGIARTI000035626497",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En l'absence d'accord prévu à l'article L. 2315-45 , dans les entreprises d'au moins trois cents salariés, une commission d'information et d'aide au logement des salariés est créée au sein du comité social et économique. Les entreprises de moins de trois cents salariés peuvent se grouper entre elles pour former cette commission."
+ },
+ "L2315-56": {
+  "id": "LEGIARTI000036262545",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En l'absence d'accord prévu à l'article L. 2315-45 , dans les entreprises d'au moins trois cents salariés, une commission de l'égalité professionnelle est créée au sein du comité social et économique. Cette commission est notamment chargée de préparer les délibérations du comité prévues au 3° de l'article L. 2312-17 , dans les domaines qui relèvent de sa compétence."
+ },
+ "D2315-29": {
+  "id": "LEGIARTI000037538198",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Une commission des marchés est créée au sein du comité social et économique qui dépasse, pour au moins deux des trois critères, les seuils suivants : 1° Le nombre de cinquante salariés à la clôture d'un exercice ; 2° Le montant prévu au 2° de l'article R. 612-1 du code de commerce de ressources annuelles définies à l'article D. 2315-34 ; 3° Le montant du total du bilan prévu au 3° de l'article R. 612-1 du code de commerce . Le seuil mentionné à l'article L. 2315-44-2 est fixé à 30 000 euros."
+ },
+ "L2312-72": {
+  "id": "LEGIARTI000035611295",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Dans les sociétés, deux membres de la délégation du personnel du comité social et économique et appartenant l'un à la catégorie des cadres techniciens et agents de maîtrise, l'autre à la catégorie des employés et ouvriers, assistent avec voix consultative à toutes les séances du conseil d'administration ou du conseil de surveillance, selon le cas. Dans les sociétés où sont constitués trois collèges électoraux, en application de l'article L. 2314-11 , la délégation du personnel au conseil d'administration ou au conseil de surveillance est portée à quatre membres. Deux de ces membres appartiennent à la catégorie des ouvriers et employés, le troisième à la catégorie de la maîtrise et le quatrième à la catégorie des ingénieurs, chefs de service et cadres administratifs, commerciaux ou techniques assimilés sur le plan de la classification."
+ },
+ "L2312-73": {
+  "id": "LEGIARTI000035611297",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les membres de la délégation du personnel au conseil d'administration ou au conseil de surveillance ont droit aux mêmes documents que ceux adressés ou remis aux membres de ces instances à l'occasion de leurs réunions. Ils peuvent soumettre les vœux du comité social et économique au conseil d'administration ou au conseil de surveillance, lequel donne un avis motivé sur ces vœux."
+ },
+ "L2312-75": {
+  "id": "LEGIARTI000035611301",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Dans les sociétés anonymes et les sociétés en commandite par actions dans lesquelles le conseil d'administration ou de surveillance comprend au moins un administrateur ou un membre élu ou désigné par les salariés au titre des articles L. 225-27 , L. 225-27-1 , L. 225-79 , L. 225-79-2 et L. 226-5-1 du code de commerce, la représentation du comité social et économique auprès de ces conseils est assurée par un membre titulaire du comité social et économique désigné par ce dernier."
+ },
+ "L2312-76": {
+  "id": "LEGIARTI000035611303",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Dans les sociétés par actions simplifiées, les statuts précisent l'organe social auprès duquel les membres de la délégation du personnel du comité social et économique exercent les droits définis par la présente sous-section."
+ },
+ "L2315-61": {
+  "id": "LEGIARTI000036761916",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "L'employeur verse au comité social et économique une subvention de fonctionnement d'un montant annuel équivalent à : 1° 0,20 % de la masse salariale brute dans les entreprises de cinquante à moins de deux mille salariés ; 2° 0,22 % de la masse salariale brute dans les entreprises d'au moins deux mille salariés. Ce montant s'ajoute à la subvention destinée aux activités sociales et culturelles, sauf si l'employeur fait déjà bénéficier le comité d'une somme ou de moyens en personnel équivalents à 0,22 % de la masse salariale brute. Le comité social et économique peut décider, par une délibération, de consacrer une partie de son budget de fonctionnement au financement de la formation des délégués syndicaux de l'entreprise ainsi qu'à la formation des représentants de proximité, lorsqu'ils existent. Il peut également décider, par une délibération, de transférer une partie du montant de l'excédent annuel du budget de fonctionnement au financement des activités sociales et culturelles, dans des conditions et limites fixées par décret en Conseil d'Etat. Cette somme et ses modalités d'utilisation sont inscrites, d'une part, dans les comptes annuels du comité social et économique ou, le cas échéant, dans les documents mentionnés à l'article L. 2315-65 et, d'autre part, dans le rapport mentionné à l'article L. 2315-69 . Pour l'application des dispositions du présent article, la masse salariale brute est constituée par l'ensemble des gains et rémunérations soumis à cotisations de sécurité sociale en application des dispositions de l'article L. 242-1 du code de la sécurité sociale ou de l' article L. 741-10 du code rural et de la pêche maritime , à l'exception des indemnités versées à l'occasion de la rupture du contrat de travail à durée indéterminée. Lorsque le financement des frais d'expertise est pris en charge par l'employeur en application du 3° de l'article L. 2315-80 du présent code, le comité social et économique ne peut pas décider de transférer d'excédents du budget de fonctionnement au financement des activités sociales et culturelles pendant les trois années suivantes."
+ },
+ "L2315-62": {
+  "id": "LEGIARTI000035627344",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Dans les entreprises comportant plusieurs comités sociaux et économiques d'établissement, le budget de fonctionnement du comité social et économique central est déterminé par accord entre le comité central et les comités d'établissement. A défaut d'accord, les modalités de constitution du budget de fonctionnement du comité central sont déterminées par décret en Conseil d'Etat"
+ },
+ "L2312-81": {
+  "id": "LEGIARTI000036761976",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "La contribution versée chaque année par l'employeur pour financer des institutions sociales du comité social et économique est fixée par accord d'entreprise. A défaut d'accord, le rapport de cette contribution à la masse salariale brute ne peut être inférieur au même rapport existant pour l'année précédente."
+ },
+ "L2312-82": {
+  "id": "LEGIARTI000035611321",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Dans les entreprises comportant plusieurs comités sociaux et économiques d'établissement, la détermination du montant global de la contribution patronale versée pour financer les activités sociales et culturelles du comité est effectuée au niveau de l'entreprise dans les conditions prévues à l'article L. 2312-81 . La répartition de la contribution entre les comités d'établissement est fixée par un accord d'entreprise au prorata des effectifs des établissements ou de leur masse salariale ou de ces deux critères combinés. A défaut d'accord, cette répartition est effectuée au prorata de la masse salariale de chaque établissement."
+ },
+ "L2312-83": {
+  "id": "LEGIARTI000036761969",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Pour l'application du présent paragraphe, la masse salariale brute est constituée par l'ensemble des gains et rémunérations soumis à cotisations de sécurité sociale en application des dispositions de l'article L. 242-1 du code de la sécurité sociale ou de l' article L. 741-10 du code rural et de la pêche maritime , à l'exception des indemnités versées à l'occasion de la rupture du contrat de travail à durée indéterminée."
+ },
+ "L2312-84": {
+  "id": "LEGIARTI000035611325",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En cas de reliquat budgétaire les membres de la délégation du personnel du comité social et économique peuvent décider, par une délibération, de transférer tout ou partie du montant de l'excédent annuel du budget destiné aux activités sociales et culturelles au budget de fonctionnement ou à des associations dans des conditions et limites fixées par décret en Conseil d'Etat."
+ },
+ "R2312-49": {
+  "id": "LEGIARTI000036413334",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les ressources du comité social et économique en matière d'activités sociales et culturelles sont constituées par : 1° Les sommes versées par l'employeur pour le fonctionnement des institutions sociales de l'entreprise qui ne sont pas légalement à sa charge, à l'exclusion des sommes affectées aux retraités ; 2° Les sommes précédemment versées par l'employeur aux caisses d'allocations familiales et organismes analogues, pour les institutions financées par ces caisses et qui fonctionnent au sein de l'entreprise ; 3° Le remboursement obligatoire par l'employeur des primes d'assurances dues par le comité pour couvrir sa responsabilité civile ; 4° Les cotisations facultatives des salariés de l'entreprise dont le comité fixe éventuellement les conditions de perception et les effets ; 5° Les subventions accordées par les collectivités publiques ou les organisations syndicales ; 6° Les dons et legs ; 7° Les recettes procurées par les manifestations organisées par le comité ; 8° Les revenus des biens meubles et immeubles du comité ; 9° Tout ou partie du montant de l'excédent annuel du budget de fonctionnement versé par l'employeur, après délibération du comité, en application du cinquième alinéa de l'article L. 2315-61 ."
+ },
+ "R2312-51": {
+  "id": "LEGIARTI000036413338",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En cas de reliquat budgétaire, l'excédent annuel du budget destiné aux activités sociales et culturelles peut être transféré au budget de fonctionnement ou à des associations conformément à l'article L. 2312-84 , dans la limite de 10 % de cet excédent. Cette somme et ses modalités d'utilisation sont inscrites, d'une part, dans les comptes annuels du comité social et économique ou, le cas échéant, dans les documents mentionnés à l'article L. 2315-65 et, d'autre part, dans le rapport mentionné à l'article L. 2315-69 . Lorsque la partie de l'excédent est transférée à une ou plusieurs associations humanitaires reconnues d'utilité publique afin de favoriser les actions locales ou régionales de lutte contre l'exclusion ou des actions de réinsertion sociale, la délibération du comité social et économique précise les destinataires des sommes et, le cas échéant, la répartition des sommes transférées."
+ },
+ "R2312-52": {
+  "id": "LEGIARTI000036413340",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En cas de cessation définitive de l'activité de l'entreprise, le comité social et économique décide de l'affectation des biens dont il dispose. La liquidation est opérée par ses soins, sous la surveillance du directeur régional des entreprises, de la concurrence, de la consommation, du travail et de l'emploi. La dévolution du solde des biens est réalisée au crédit : 1° Soit d'un autre comité social ou économique ou d'un comité des activités sociales et culturelles interentreprises, notamment dans le cas où la majorité des salariés est destinée à être intégrée dans le cadre de ces entreprises ; 2° Soit d'institutions sociales d'intérêt général dont la désignation est, autant que possible, conforme aux vœux exprimés par les salariés intéressés. Les biens ne peuvent être répartis entre les salariés ou les membres du comité."
+ },
+ "L2312-18": {
+  "id": "LEGIARTI000052437125",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Une base de données économiques, sociales et environnementales rassemble l'ensemble des informations nécessaires aux consultations et informations récurrentes que l'employeur met à disposition du comité social et économique. Ces informations comportent en particulier l'ensemble des indicateurs relatifs à l'égalité professionnelle entre les femmes et les hommes, notamment sur les écarts de rémunération et de répartition entre les femmes et les hommes parmi les cadres dirigeants et les membres des instances dirigeantes définies à l' article L. 23-12-1 du code de commerce , et les informations sur la méthodologie et le contenu des indicateurs prévus à l'article L. 1142-8 du présent code. Ces informations comportent également un bilan de la mise en œuvre des actions de formation entreprises à l'issue des entretiens mentionnés à l' article L. 6315-1 ou des périodes de reconversion mentionnées à l' article L. 6324-1 . Les éléments d'information transmis de manière récurrente au comité sont mis à la disposition de leurs membres dans la base de données et cette mise à disposition actualisée vaut communication des rapports et informations au comité, dans les conditions et limites fixées par un décret en Conseil d'Etat. Lorsque les dispositions du présent code prévoient également la transmission à l'autorité administrative des rapports et informations mentionnés au troisième alinéa, les éléments d'information qu'ils contiennent sont mis à la disposition de l'autorité administrative à partir de la base de données et la mise à disposition actualisée vaut transmission à cette autorité."
+ },
+ "L2312-21": {
+  "id": "LEGIARTI000043975329",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Un accord d'entreprise conclu dans les conditions prévues au premier alinéa de l'article L. 2232-12 ou, en l'absence de délégué syndical, un accord entre l'employeur et le comité social et économique, adopté à la majorité des membres titulaires de la délégation du personnel du comité, définit : 1° L'organisation, l'architecture et le contenu de la base de données économiques, sociales et environnementales ; 2° Les modalités de fonctionnement de la base de données économiques, sociales et environnementales, notamment les droits d'accès et le niveau de mise en place de la base dans les entreprises comportant des établissements distincts, son support, ses modalités de consultation et d'utilisation. La base de données comporte au moins les thèmes suivants : l'investissement social, l'investissement matériel et immatériel, l'égalité professionnelle entre les femmes et les hommes au sein de l'entreprise, les fonds propres, l'endettement, l'ensemble des éléments de la rémunération des salariés et dirigeants, les activités sociales et culturelles, la rémunération des financeurs, les flux financiers à destination de l'entreprise et les conséquences environnementales de l'activité de l'entreprise. L'accord peut également intégrer dans la base de données les informations nécessaires aux négociations obligatoires prévues à l'article L. 2242-1 , au 1° de l'article L. 2242-11 ou à l'article L. 2242-13 et aux consultations ponctuelles du comité social et économique prévues à l'article L. 2312-8 et à la sous-section 4. L'organisation, l'architecture, le contenu et les modalités de fonctionnement de la base de données sont tels qu'ils permettent au comité social et économique et, le cas échéant, aux délégués syndicaux d'exercer utilement leurs compétences. A défaut d'accord prévu à l'alinéa premier, un accord de branche peut définir l'organisation, l'architecture, le contenu et les modalités de fonctionnement de la base de données économiques, sociales et environnementales dans les entreprises de moins de trois cents salariés."
+ },
+ "L2312-36": {
+  "id": "LEGIARTI000048533625",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "En l'absence d'accord prévu à l' article L. 2312-21 , une base de données économiques, sociales et environnementales, mise régulièrement à jour, rassemble un ensemble d'informations que l'employeur met à disposition du comité social et économique. La base de données est accessible en permanence aux membres de la délégation du personnel du comité social et économique ainsi qu'aux membres de la délégation du personnel du comité social et économique central d'entreprise, et aux délégués syndicaux. Les informations contenues dans la base de données portent sur les thèmes suivants : 1° Investissements : investissement social (emploi, évolution et répartition des contrats précaires, des stages et des emplois à temps partiel, formation professionnelle, évolution professionnelle et conditions de travail), investissement matériel et immatériel ; 2° Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise : diagnostic et analyse de la situation comparée des femmes et des hommes pour chacune des catégories professionnelles de l'entreprise en matière d'embauche, de formation, de promotion professionnelle, de qualification, de classification, de conditions de travail, de sécurité et de santé au travail, de rémunération effective et d'articulation entre l'activité professionnelle et la vie personnelle et familiale, analyse des écarts de salaires et de déroulement de carrière en fonction de l'âge, de la qualification et de l'ancienneté, évolution des taux de promotion respectifs des femmes et des hommes par métiers dans l'entreprise, part des femmes et des hommes dans le conseil d'administration ; 3° Fonds propres et endettement ; 4° Ensemble des éléments de la rémunération des salariés et dirigeants ; 5° Activités sociales et culturelles ; 6° Rémunération des financeurs ; 7° Flux financiers à destination de l'entreprise, notamment aides publiques et crédits d'impôts ; 8° Sous-traitance ; 9° Le cas échéant, transferts commerciaux et financiers entre les entités du groupe ; 10° Conséquences environnementales de l'activité de l'entreprise. Ces informations portent sur les deux années précédentes et l'année en cours et intègrent des perspectives sur les trois années suivantes. Le contenu de ces informations ainsi que les modalités de fonctionnement de la base sont déterminés par un décret en Conseil d'Etat, le contenu pouvant varier selon que l'effectif de l'entreprise est inférieur ou au moins égal à trois cents salariés. Les membres de la délégation du personnel du comité social et économique, du comité social et économique central d'entreprise et les délégués syndicaux sont tenus à une obligation de discrétion à l'égard des informations contenues dans la base de données revêtant un caractère confidentiel et présentées comme telles par l'employeur."
+ },
+ "L2315-16": {
+  "id": "LEGIARTI000035621179",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le temps consacré aux formations prévues au présent chapitre est pris sur le temps de travail et est rémunéré comme tel. Il n'est pas déduit des heures de délégation."
+ },
+ "L2315-17": {
+  "id": "LEGIARTI000054140233",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les formations sont dispensées soit par un organisme enregistré auprès de l'autorité administrative dans les conditions prévues aux articles L. 6351-1 à L. 6351-8, soit par un des organismes mentionnés à l'article L. 2145-5 . Ces formations sont renouvelées lorsque les représentants ont exercé leur mandat pendant quatre ans, consécutifs ou non."
+ },
+ "L2315-18": {
+  "id": "LEGIARTI000043894249",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les membres de la délégation du personnel du comité social et économique et le référent prévu au dernier alinéa de l'article L. 2314-1 bénéficient de la formation nécessaire à l'exercice de leurs missions en matière de santé, de sécurité et de conditions de travail prévues au chapitre II du présent titre, dans des conditions déterminées par décret en Conseil d'Etat. La formation est d'une durée minimale de cinq jours lors du premier mandat des membres de la délégation du personnel. En cas de renouvellement de ce mandat, la formation est d'une durée minimale : 1° De trois jours pour chaque membre de la délégation du personnel, quelle que soit la taille de l'entreprise ; 2° De cinq jours pour les membres de la commission santé, sécurité et conditions de travail dans les entreprises d'au moins trois cents salariés. Sans préjudice des dispositions de l'article L. 2315-22-1 , le financement de la formation prévue au premier alinéa du présent article est pris en charge par l'employeur dans des conditions prévues par décret en Conseil d'Etat."
+ },
+ "L2315-63": {
+  "id": "LEGIARTI000043975219",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Dans les entreprises d'au moins cinquante salariés, les membres titulaires du comité social et économique élus pour la première fois bénéficient, dans les conditions et limites prévues à l'article L. 2145-11 , d'un stage de formation économique d'une durée maximale de cinq jours. Le financement de la formation est pris en charge par le comité social et économique. Cette formation peut notamment porter sur les conséquences environnementales de l'activité des entreprises. Cette formation est imputée sur la durée du congé de formation économique, sociale, environnementale et syndicale prévu aux articles L. 2145-5 et suivants."
+ },
+ "L2145-11": {
+  "id": "LEGIARTI000043975272",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le congé de formation économique, sociale et environnementale et de formation syndicale est de droit, sauf dans le cas où l'employeur estime, après avis conforme du comité social et économique, que cette absence pourrait avoir des conséquences préjudiciables à la production et à la bonne marche de l'entreprise. Le refus du congé par l'employeur est motivé. En cas de différend, le refus de l'employeur peut être directement contesté devant le bureau de jugement du conseil de prud'hommes dans des conditions fixées par décret en Conseil d'Etat."
+ },
+ "L2315-64": {
+  "id": "LEGIARTI000035627352",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "I.-Le comité social et économique est soumis aux obligations comptables définies à l' article L. 123-12 du code de commerce . Ses comptes annuels sont établis selon les modalités définies par un règlement de l'Autorité des normes comptables. II.-Le comité social et économique dont le nombre de salariés, les ressources annuelles et le total du bilan n'excèdent pas, à la clôture d'un exercice, pour au moins deux de ces trois critères, des seuils fixés par décret peut adopter une présentation simplifiée de ses comptes, selon des modalités fixées par un règlement de l'Autorité des normes comptables, et n'enregistrer ses créances et ses dettes qu'à la clôture de l'exercice."
+ },
+ "L2315-65": {
+  "id": "LEGIARTI000035627354",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Par dérogation à l'article L. 2315-64 , le comité social et économique dont les ressources annuelles n'excèdent pas un seuil fixé par décret peut s'acquitter de ses obligations comptables en tenant un livre retraçant chronologiquement les montants et l'origine des dépenses qu'il réalise et des recettes qu'il perçoit et en établissant, une fois par an, un état de synthèse simplifié portant sur des informations complémentaires relatives à son patrimoine et à ses engagements en cours. Le contenu et les modalités de présentation de cet état sont définis par un règlement de l'Autorité des normes comptables."
+ },
+ "L2315-68": {
+  "id": "LEGIARTI000035627360",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les comptes annuels du comité social et économique sont arrêtés, selon des modalités prévues par son règlement intérieur, par des membres élus du comité social et économique désignés par lui et au sein de ses membres élus. Les documents ainsi arrêtés sont mis à la disposition, le cas échéant, du ou des commissaires aux comptes mentionnés à l'article L. 2315-73 . Ils sont approuvés par les membres élus du comité réunis en séance plénière. La réunion au cours de laquelle les comptes sont approuvés porte sur ce seul sujet. Elle fait l'objet d'un procès-verbal spécifique. Le présent article s'applique également aux documents mentionnés à l'article L. 2315-65 ."
+ },
+ "L2315-69": {
+  "id": "LEGIARTI000036262535",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le comité social et économique établit, selon des modalités prévues par son règlement intérieur, un rapport présentant des informations qualitatives sur ses activités et sur sa gestion financière, de nature à éclairer l'analyse des comptes par les membres élus du comité et les salariés de l'entreprise. Lorsque le comité social et économique établit des comptes consolidés, le rapport porte sur l'ensemble constitué par le comité social et économique et les entités qu'il contrôle, mentionnées à l'article L. 2315-67 . Le contenu du rapport, déterminé par décret, varie selon que le comité social et économique relève des I ou II de l'article L. 2315-64 ou de l'article L. 2315-65 . Ce rapport est présenté aux membres élus du comité social et économique lors de la réunion en séance plénière mentionnée à l'article L. 2315-68 ."
+ },
+ "L2315-70": {
+  "id": "LEGIARTI000035627364",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le trésorier du comité social et économique ou, le cas échéant, le commissaire aux comptes présente un rapport sur les conventions passées, directement, indirectement ou par personne interposée, entre le comité social et économique et l'un de ses membres. Ce rapport est présenté aux membres élus du comité social et économique lors de la réunion en séance plénière mentionnée au troisième alinéa de l'article L. 2315-68 ."
+ },
+ "L2315-71": {
+  "id": "LEGIARTI000036262527",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Au plus tard trois jours avant la réunion en séance plénière mentionnée au troisième alinéa de l'article L. 2315-68 , les membres du comité social et économique chargés d'arrêter les comptes du comité communiquent aux membres du comité social et économique les comptes annuels ou, le cas échéant, les documents mentionnés à l'article L. 2315-65 , accompagnés du rapport mentionné à l'article L. 2315-69 ."
+ },
+ "L2315-72": {
+  "id": "LEGIARTI000035627368",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le comité social et économique porte à la connaissance des salariés de l'entreprise, par tout moyen, ses comptes annuels ou, le cas échéant, les documents mentionnés à l'article L. 2315-65 , accompagnés du rapport mentionné à l'article L. 2315-69 ."
+ },
+ "L2315-73": {
+  "id": "LEGIARTI000048539746",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Lorsque le comité social et économique dépasse, pour au moins deux des trois critères mentionnés au II de l'article L. 2315-64 , des seuils fixés par décret, il est tenu de nommer au moins un commissaire aux comptes et un suppléant, distincts de ceux de l'entreprise. Le comité social et économique tenu d'établir des comptes consolidés nomme deux commissaires aux comptes en application de l' article L. 821-41 du code de commerce . Le coût de la certification des comptes est pris en charge par le comité social et économique sur sa subvention de fonctionnement."
+ },
+ "L2315-75": {
+  "id": "LEGIARTI000035627374",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les comptes annuels et, le cas échéant, les documents mentionnés à l'article L. 2315-65 , ainsi que les pièces justificatives qui s'y rapportent, sont conservés pendant dix ans à compter de la date de clôture de l'exercice auquel ils se rapportent."
+ },
+ "L2315-76": {
+  "id": "LEGIARTI000035627376",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le comité social et économique dont les ressources annuelles excèdent le seuil prévu à l'article L. 2315-65 et qui n'excèdent pas, pour au moins deux des trois critères mentionnés au II de l'article L. 2315-64 , des seuils fixés par décret confie la mission de présentation de ses comptes annuels à un expert-comptable. Le coût de la mission de présentation de ses comptes est pris en charge par le comité social et économique sur sa subvention de fonctionnement."
+ },
+ "D2315-33": {
+  "id": "LEGIARTI000036433847",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les seuils mentionnés au II de l'article L. 2315-64 permettant au comité social et économique d'adopter une présentation simplifiée de ses comptes et de n'enregistrer ses créances et ses dettes qu'à la clôture de l'exercice sont fixés : 1° A cinquante pour le nombre de salariés à la clôture d'un exercice ; 2° Au montant prévu au 2° de l'article R. 612-1 du code de commerce des ressources annuelles définies à l'article D. 2315-34 ; 3° Au montant du total du bilan prévu au 3° de l'article R. 612-1 du code de commerce ."
+ },
+ "L2315-27": {
+  "id": "LEGIARTI000036761943",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Au moins quatre réunions du comité social et économique portent annuellement en tout ou partie sur les attributions du comité en matière de santé, sécurité et conditions de travail, plus fréquemment en cas de besoin, notamment dans les branches d'activité présentant des risques particuliers. Le comité est en outre réuni à la suite de tout accident ayant entraîné ou ayant pu entraîner des conséquences graves, ainsi qu'en cas d'événement grave lié à l'activité de l'entreprise, ayant porté atteinte ou ayant pu porter atteinte à la santé publique ou à l'environnement ou à la demande motivée de deux de ses membres représentants du personnel, sur les sujets relevant de la santé, de la sécurité ou des conditions de travail. Lorsque l'employeur est défaillant, et à la demande d'au moins la moitié des membres du comité social et économique, celui-ci peut être convoqué par l'agent de contrôle de l'inspection du travail mentionné à l'article L. 8112-1 et siéger sous sa présidence. L'employeur informe annuellement l'agent de contrôle de l'inspection du travail mentionné à l'article L. 8112-1 , le médecin du travail et l'agent des services de prévention des organismes de sécurité sociale du calendrier retenu pour les réunions consacrées aux sujets relevant de la santé, de la sécurité ou des conditions de travail, et leur confirme par écrit au moins quinze jours à l'avance la tenue de ces réunions."
+ },
+ "L2315-28": {
+  "id": "LEGIARTI000035624857",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "A défaut d'accord prévu à l'article 2312-19 , dans les entreprises d'au moins trois cents salariés, le comité social et économique se réunit au moins une fois par mois sur convocation de l'employeur ou de son représentant. Dans les entreprises de moins de trois cents salariés, le comité se réunit au moins une fois tous les deux mois. Le comité peut tenir une seconde réunion à la demande de la majorité de ses membres."
+ },
+ "L2315-29": {
+  "id": "LEGIARTI000035624861",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "L'ordre du jour de chaque réunion du comité social et économique est établi par le président et le secrétaire. Les consultations rendues obligatoires par une disposition législative ou réglementaire ou par un accord collectif de travail sont inscrites de plein droit à l'ordre du jour par le président ou le secrétaire."
+ },
+ "L2315-30": {
+  "id": "LEGIARTI000035624863",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "L'ordre du jour des réunions du comité social et économique est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail mentionné à l'article L. 8112-1 ainsi qu'à l'agent des services de prévention des organismes de sécurité sociale trois jours au moins avant la réunion."
+ },
+ "L2315-34": {
+  "id": "LEGIARTI000036262447",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les délibérations du comité social et économique sont consignées dans un procès-verbal établi par le secrétaire du comité dans un délai et selon des modalités définis par un accord conclu dans les conditions prévues au premier alinéa de l' article L. 2312-16 ou, à défaut, par un décret. A l'issue du délai mentionné au premier alinéa, le procès-verbal est transmis à l'employeur, qui fait connaître lors de la réunion du comité suivant cette transmission sa décision motivée sur les propositions qui lui ont été soumises. Les déclarations sont consignées dans le procès-verbal. Un décret définit les conditions dans lesquelles il peut être recouru à l'enregistrement ou à la sténographie des séances de l'instance."
+ },
+ "L2315-35": {
+  "id": "LEGIARTI000035624877",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le procès-verbal des réunions du comité social et économique peut, après avoir été adopté, être affiché ou diffusé dans l'entreprise par le secrétaire du comité, selon des modalités précisées par le règlement intérieur du comité."
+ },
+ "D2315-26": {
+  "id": "LEGIARTI000036433681",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "A défaut d'accord prévu par l'article L. 2315-34 , le procès-verbal est établi et transmis à l'employeur par le secrétaire du comité social et économique dans les quinze jours suivant la réunion à laquelle il se rapporte ou, si une nouvelle réunion est prévue dans ce délai de quinze jours, avant cette réunion. Dans le cadre de la consultation prévue à l'article L. 1233-30 , le procès-verbal est établi et transmis à l'employeur par le secrétaire du comité dans un délai de trois jours suivant la réunion à laquelle il se rapporte ou, si une nouvelle réunion est prévue dans ce délai de trois jours, avant cette réunion. Lorsque l'entreprise est en redressement ou en liquidation judiciaire, ce délai est d'un jour. A défaut d'accord, le procès-verbal établi par le secrétaire du comité contient au moins le résumé des délibérations du comité et la décision motivée de l'employeur sur les propositions faites lors de la précédente réunion."
+ },
+ "D2315-27": {
+  "id": "LEGIARTI000036433683",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "L'employeur ou la délégation du personnel du comité social et économique peuvent décider du recours à l'enregistrement ou à la sténographie des séances du comité social et économique prévu à l'article L. 2315-34 . Lorsque cette décision émane du comité social et économique, l'employeur ne peut s'y opposer sauf lorsque les délibérations portent sur des informations revêtant un caractère confidentiel au sens de l'article L. 2315-3 et qu'il présente comme telles. Lorsqu'il est fait appel à une personne extérieure pour sténographier les séances du comité, celle-ci est tenue à la même obligation de discrétion que les membres du comité social et économique. Sauf si un accord entre l'employeur et les membres élus du comité social et économique en dispose autrement, les frais liés à l'enregistrement et à la sténographie sont pris en charge par l'employeur lorsque la décision de recourir à ces moyens émane de ce dernier."
+ },
+ "L2312-8": {
+  "id": "LEGIARTI000043975196",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "I. - Le comité social et économique a pour mission d'assurer une expression collective des salariés permettant la prise en compte permanente de leurs intérêts dans les décisions relatives à la gestion et à l'évolution économique et financière de l'entreprise, à l'organisation du travail, à la formation professionnelle et aux techniques de production, notamment au regard des conséquences environnementales de ces décisions. II. - Le comité est informé et consulté sur les questions intéressant l'organisation, la gestion et la marche générale de l'entreprise, notamment sur: 1° Les mesures de nature à affecter le volume ou la structure des effectifs ; 2° La modification de son organisation économique ou juridique ; 3° Les conditions d'emploi, de travail, notamment la durée du travail, et la formation professionnelle ; 4° L'introduction de nouvelles technologies, tout aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail ; 5° Les mesures prises en vue de faciliter la mise, la remise ou le maintien au travail des accidentés du travail, des invalides de guerre, des invalides civils, des personnes atteintes de maladies chroniques évolutives et des travailleurs handicapés, notamment sur l'aménagement des postes de travail. III. - Le comité est informé et consulté sur les conséquences environnementales des mesures mentionnées au II du présent article. IV. - Le comité social et économique mis en place dans les entreprises d'au moins cinquante salariés exerce également les attributions prévues à la section 2."
+ },
+ "L2312-15": {
+  "id": "LEGIARTI000038791194",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le comité social et économique émet des avis et des vœux dans l'exercice de ses attributions consultatives. Il dispose à cette fin d'un délai d'examen suffisant et d'informations précises et écrites transmises ou mises à disposition par l'employeur, et de la réponse motivée de l'employeur à ses propres observations. Il a également accès à l'information utile détenue par les administrations publiques et les organismes agissant pour leur compte, conformément aux dispositions légales relatives à l'accès aux documents administratifs. Le comité peut, s'il estime ne pas disposer d'éléments suffisants, saisir le président du tribunal judiciaire statuant selon la procédure accélérée au fond, pour qu'il ordonne la communication par l'employeur des éléments manquants. Cette saisine n'a pas pour effet de prolonger le délai dont dispose le comité pour rendre son avis. Toutefois, en cas de difficultés particulières d'accès aux informations nécessaires à la formulation de l'avis motivé du comité, le juge peut décider la prolongation du délai prévu au deuxième alinéa. L'employeur rend compte, en la motivant, de la suite donnée aux avis et vœux du comité."
+ },
+ "L2315-14": {
+  "id": "LEGIARTI000035621169",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Pour l'exercice de leurs fonctions, les membres élus de la délégation du personnel du comité social et économique et les représentants syndicaux au comité peuvent, durant les heures de délégation, se déplacer hors de l'entreprise. Ils peuvent également, tant durant les heures de délégation qu'en dehors de leurs heures habituelles de travail, circuler librement dans l'entreprise et y prendre tous contacts nécessaires à l'accomplissement de leur mission, notamment auprès d'un salarié à son poste de travail, sous réserve de ne pas apporter de gêne importante à l'accomplissement du travail des salariés."
+ },
+ "L2315-15": {
+  "id": "LEGIARTI000035621173",
+  "date": "2026-08-22",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Les membres de la délégation du personnel du comité social et économique peuvent faire afficher les renseignements qu'ils ont pour rôle de porter à la connaissance du personnel sur des emplacements obligatoirement prévus et destinés aux communications syndicales, ainsi qu'aux portes d'entrée des lieux de travail."
+ }
+}

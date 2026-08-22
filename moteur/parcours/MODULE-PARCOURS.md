@@ -8,7 +8,7 @@ Ce module ne contient pas de moteur : il n'y a rien à calculer qu'une date et u
 visibilité, et cela tient dans la page. Ce qu'il contient, c'est **la preuve des
 textes** — la seule chose qui ne doit jamais être écrite de mémoire.
 
-## Les six parcours
+## Les sept parcours
 
 | clé | parcours | étapes | audit de contrôle |
 |---|---|---|---|
@@ -16,6 +16,7 @@ textes** — la seule chose qui ne doit jamais être écrite de mémoire.
 | `nao` | Conduire les négociations obligatoires | 10 | `audit-nao.html` |
 | `commissions` | Constituer les commissions du CSE | 14 | `audit-cse.html` |
 | `reunion` | Tenir une réunion du CSE | 9 | `audit-cse.html` |
+| `installation` | Installer le CSE : la première réunion | 17 | `audit-cse.html` |
 | `ri` | Établir ou mettre à jour le règlement intérieur | 11 | `audit-discipline.html` |
 | `duerp` | Mettre à jour le DUERP | 10 | `audit-sst.html` |
 
@@ -57,6 +58,65 @@ en deux.
 `L. 2315-40` a été retiré de la liste : le relais répond « trouvé : faux » à deux
 lectures espacées. Aucune étape ne s'y appuie.
 
+### Seconde capture — le parcours d'installation (22 août 2026)
+
+`capturer-textes-installation.js` → `textes-installation.json` (**75 articles
+confirmés**, 0 non confirmé) et `textes-installation-non-confirmes.json`.
+Quarante-six de ces articles sont nouveaux ; les vingt-neuf autres étaient déjà au
+référentiel et ont été redemandés — **aucun écart d'identifiant de version**.
+
+Une précaution s'ajoute au protocole : le relais renvoie un drapeau `elargi`
+lorsqu'il a dû **relâcher le filtre par nom du code** pour trouver quelque chose.
+Une lecture élargie est désormais écartée comme une réponse `relaxed` de
+Judilibre — c'est exactement le mécanisme par lequel les homonymes entrent.
+
+Numéros cherchés et **non retenus**, consignés dans le fichier des non confirmés :
+
+* `R. 2323-38` — l'article du comité d'entreprise qui imposait aux membres du
+  comité sortant de *rendre compte de leur gestion au nouveau comité et de
+  remettre aux nouveaux membres tous documents concernant l'administration et
+  l'activité du comité*. Le relais répond « trouvé : faux » sous le filtre
+  « Code du travail » à la date du jour : **il n'est plus en vigueur**. Aucun
+  article lu ce jour ne reprend cette obligation pour le comité social et
+  économique ;
+* `D. 2315-24`, `D. 2315-25`, `D. 2315-28`, `D. 2315-30` à `D. 2315-32` — ces
+  numéros n'existent pas à la date lue.
+
+### Ce que le code dit de la transition entre deux comités — et ce qu'il n'en dit pas
+
+C'est le point le plus attendu du parcours d'installation, et c'est celui où il
+faut le plus se retenir d'écrire.
+
+**Ce qui est écrit et lu à la source :**
+
+* `L. 2315-23` — le comité est **doté de la personnalité civile** et gère son
+  patrimoine. Le renouvellement des mandats change les personnes, non la personne
+  morale : il n'y a ni dissolution ni transfert de patrimoine ;
+* `L. 2315-64` et `L. 2315-65` — obligations comptables, présentation simplifiée
+  en dessous des seuils de `D. 2315-33`, livre chronologique en dessous du seuil
+  de ressources ;
+* `L. 2315-68` — les comptes annuels sont **arrêtés selon les modalités prévues
+  par le règlement intérieur du comité**, par des membres élus désignés par lui et
+  en son sein, puis approuvés en séance plénière consacrée à ce seul sujet, avec
+  procès-verbal spécifique ;
+* `L. 2315-69`, `L. 2315-70`, `L. 2315-71`, `L. 2315-72` — rapport de gestion,
+  rapport du trésorier sur les conventions passées avec un membre, communication
+  trois jours au moins avant la séance, information des salariés ;
+* `L. 2315-75` — **conservation dix ans** des comptes et de leurs pièces
+  justificatives, à compter de la clôture de l'exercice ;
+* `R. 2312-52` — la **dévolution des biens** n'est organisée qu'en cas de
+  *cessation définitive de l'activité de l'entreprise* ; les biens ne peuvent
+  alors être répartis ni entre les salariés ni entre les membres du comité.
+
+**Ce qui n'est pas écrit :** aucun article du code du travail lu au relais le
+22 août 2026 n'organise la remise-reprise entre le comité sortant et le comité
+entrant — ni la forme, ni le délai, ni l'inventaire, ni le sort des contrats et
+engagements en cours, ni celui du règlement intérieur du comité précédent, ni
+celui des accords conclus avec le comité sortant. L'étape `i10` du parcours le
+dit expressément, et renvoie au **règlement intérieur du comité** (`L. 2315-24`),
+seul instrument que le code désigne pour régler ce que la loi laisse ouvert. Le
+modèle `remise-reprise` porte le même avertissement en tête du document.
+
 ## La jurisprudence
 
 `jurisprudence-parcours.json` — **21 arrêts de la chambre sociale**, lus à la
@@ -85,6 +145,27 @@ Rattachements principaux :
 * NAO — Soc. 15 avr. 2026 n° 24-15.653 ;
 * DUERP — Soc. 25 nov. 2015 n° 14-24.444 ;
 * réunion — Soc. 15 janv. 2013 n° 11-28.324.
+
+`jurisprudence-installation.json` — **3 arrêts supplémentaires**, lus à la source
+le 22 août 2026 par `capturer-jurisprudence-installation.js`, recherche **par
+numéro de pourvoi**, aucune réponse `relaxed` retenue :
+
+* **Soc. 10 juill. 1991, n° 88-20.411**, publié au Bulletin — le chef
+  d'établissement, membre du comité, participe à la désignation du secrétaire, ce
+  vote ne constituant pas la consultation des élus en tant que délégation du
+  personnel. *Arrêt rendu sur les articles L. 433-1 et L. 434-2, textes du comité
+  d'entreprise ; la citation le précise.*
+* **Soc. 8 juill. 2026, n° 25-10.126**, publié au Bulletin — il résulte des
+  articles L. 2315-64, L. 2315-68, L. 2315-69 et L. 2315-71 que **tous les membres
+  du comité ont un égal accès aux archives et aux documents administratifs et
+  comptables** du comité. C'est le seul appui jurisprudentiel actuel de l'étape de
+  transition.
+* **Soc. 1er juin 2010, n° 09-12.758**, publié au Bulletin — sur l'article
+  R. 2323-38 : la reddition de comptes du comité sortant et la remise des
+  documents ont été édictées **au profit du comité lui-même**, pour assurer la
+  continuité de son fonctionnement, et non au profit de chacun de ses membres.
+  *Cité pour la raison d'être de la reddition, non comme fondement actuel :
+  R. 2323-38 n'est plus en vigueur.*
 
 ## L'adaptation au profil
 
@@ -122,3 +203,26 @@ standard du dépôt (structure intégrale, exemple fictif chiffré marqué
 « [exemple] », liste des champs à personnaliser) : `mise-en-demeure`, `alerte`
 (danger grave et imminent, atteinte aux droits des personnes, alerte économique),
 `cr-commission`, `designation-commission`, `resolution-expert`.
+
+Six autres l'ont été le 22 août 2026 pour le parcours d'installation, au même
+standard : `convocation-installation`, `odj-installation`, `pv-installation`
+(résolutions rédigées, numérotées dans l'ordre où elles sont rendues),
+`ri-comite`, `demande-documentation-eco`, `remise-reprise`. L'étape `i6`
+réutilise `designation-commission`, déjà en place.
+
+Deux d'entre eux portent un avertissement, parce qu'il le faut :
+
+* `convocation-installation` — `L. 2315-29` veut un ordre du jour établi par le
+  président **et** le secrétaire ; à l'installation il n'y a pas encore de
+  secrétaire. Le document dit dans son corps que l'établissement par le seul
+  président est une nécessité et non une règle légale, et qu'elle cesse dès la
+  réunion suivante ;
+* `remise-reprise` — aucun texte lu n'organise cette remise (voir plus haut).
+  Le modèle l'écrit en tête.
+
+**Un défaut préexistant, constaté et non corrigé ici :** huit des dix-sept modèles
+antérieurs — `convocation`, `pv-cse`, `accord-methode`, `pv-desaccord`,
+`note-rh`, `reclamation`, `signalement-harcelement`, `enquete-interne` —
+n'appellent ni `exemple()` ni `aPersonnaliser()`, et `convocation-sanction`
+n'appelle pas `exemple()`. Ils ne sont donc pas au standard que le dépôt s'est
+donné depuis. Les onze autres, dont les six de l'installation, le sont.

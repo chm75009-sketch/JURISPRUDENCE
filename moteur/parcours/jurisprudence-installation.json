@@ -1,0 +1,85 @@
+{
+ "source": "API Judilibre (Cour de cassation)",
+ "date": "2026-08-22",
+ "regle": "recherche par numéro de pourvoi, réponse relaxée écartée, sommaire publié seul retenu",
+ "decisions": {
+  "88-20.411": {
+   "judilibre": "6079b15a9ba5988459c51cbc",
+   "chambre": "Chambre sociale",
+   "date": "1991-07-10",
+   "numero": "88-20.411",
+   "solution": "Rejet",
+   "publication": [
+    "Publié au Bulletin"
+   ],
+   "sommaire": "En application de l'article L. 433-1 du Code du travail, le chef d'établissement est membre du comité d'établissement et doit, à ce titre et conformément à l'article L. 434-2 du même Code, participer à la désignation du secrétaire du comité, ce vote ne constituant pas la consultation des membres élus du comité, en tant que délégation du personnel."
+  },
+  "25-10.126": {
+   "judilibre": "6a4de52793c619cd1f8437c3",
+   "chambre": "Chambre sociale",
+   "date": "2026-07-08",
+   "numero": "25-10.126",
+   "solution": "Rejet",
+   "publication": [
+    "Publié au Bulletin"
+   ],
+   "sommaire": "Il résulte des articles L. 2315-64, L. 2315-68, L. 2315-69 et L. 2315-71 du code du travail que tous les membres du comité social et économique ont  un égal accès aux archives et aux documents administratifs et comptables dudit comité"
+  },
+  "09-12.758": {
+   "judilibre": "6079baad9ba5988459c56fef",
+   "chambre": "Chambre sociale",
+   "date": "2010-06-01",
+   "numero": "09-12.758",
+   "solution": "Rejet",
+   "publication": [
+    "Publié au Bulletin"
+   ],
+   "sommaire": "Selon l'article R. 2323-38 du code du travail, les membres du comité sortant rendent compte de leur gestion au nouveau comité et remettent aux nouveaux membres tous documents concernant l'administration et l'activité du comité.\nN'encourt dès lors pas la cassation, l'arrêt qui a retenu que cette obligation de remise des documents à l'occasion de la reddition des comptes a été édictée au profit du comité d'entreprise lui-même pour assurer la continuité de son fonctionnement et non de celui de chacun de ses membres, et a décidé que la demande du président du comité qui n'avait pas été mandaté par celui-ci pour agir en justice, était irrecevable"
+  },
+  "19-14.224": {
+   "judilibre": "5fca61cceb012b49a0aa0436",
+   "chambre": "Chambre sociale",
+   "date": "2019-11-27",
+   "numero": "19-14.224",
+   "solution": "Rejet",
+   "publication": [
+    "Publié au Bulletin"
+   ],
+   "sommaire": "Selon l'article L. 2315-39 du code du travail, les membres de la commission santé, sécurité et conditions de travail (CSSCT) sont désignés par le comité social et économique (CSE) parmi ses membres, par une résolution adoptée selon les modalités définies à l'article L. 2315-32 du code du travail, pour une durée qui prend fin avec celle du mandat des membres élus du comité. Selon l'article L. 2315-32, alinéa 1, du même code, les résolutions du comité social et économique sont prises à la majorité des membres présents.\nIl en ressort que la désignation des membres d'une CSSCT, que sa mise en place soit obligatoire ou conventionnelle, résulte d'un vote des membres du CSE à la majorité des voix des membres présents lors du vote, sans qu'il soit besoin d'une résolution préalable fixant les modalités de l'élection"
+  },
+  "24-12.295": {
+   "judilibre": "67bebe52ab77563075a59390",
+   "chambre": "Chambre sociale",
+   "date": "2025-02-26",
+   "numero": "24-12.295",
+   "solution": "Cassation",
+   "publication": [
+    "Publié au Bulletin"
+   ],
+   "sommaire": "Il résulte de l'article L. 2315-39 du code du travail dont les dispositions sont d'ordre public que, dans les entreprises ou établissements où est institué, en application de l'article L. 2314-11 du code du travail, un troisième collège électoral, un siège au moins à la commission santé, sécurité et conditions de travail doit être attribué à un élu au comité social et économique représentant le troisième collège"
+  },
+  "24-22.914": {
+   "judilibre": "6a17df22cdc6046d4732a894",
+   "chambre": "Chambre sociale",
+   "date": "2026-05-28",
+   "numero": "24-22.914",
+   "solution": "Rejet",
+   "publication": [
+    "Publié au Bulletin"
+   ],
+   "sommaire": "Sauf dans les cas de fin anticipée de mandat énumérés à l'article L.2314-33 du code du travail, le comité social et économique ne peut procéder au remplacement des membres d'une commission santé, sécurité et conditions de travail initialement désignés avant avant le terme du mandat des membres élus du comité"
+  },
+  "11-28.324": {
+   "judilibre": "6079bdaa9ba5988459c57134",
+   "chambre": "Chambre sociale",
+   "date": "2013-01-15",
+   "numero": "11-28.324",
+   "solution": "Rejet",
+   "publication": [
+    "Publié au Bulletin"
+   ],
+   "sommaire": "Une cour d'appel déduit à bon droit de l'article L. 2325-14 du code du travail que le pouvoir de convoquer inclut nécessairement le pouvoir de fixer la date de la réunion du comité d'entreprise, sauf accord entre la majorité des élus du comité d'entreprise et l'employeur, et que si, en application de l'article L. 2325-2 du code du travail, le comité d'entreprise détermine, dans son règlement intérieur, les modalités de son fonctionnement, ce texte ne lui permet pas d'inclure dans ce règlement des dispositions concernant une mesure qui relève des prérogatives de l'employeur, sauf pour celui-ci à répondre d'un éventuel abus dans leur exercice"
+  }
+ },
+ "nonRetenus": {}
+}

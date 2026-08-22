@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.0";
+const CACHE = "jurisprudence-5.1";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -27,7 +27,9 @@ const ESSENTIELS = [
      et son moteur ne dépendent d'aucun réseau — le profil et l'avancement sont
      lus dans le stockage local du poste, les délais se calculent sur place.
      Une procédure engagée hors connexion est justement le cas où l'échéance
-     compte le plus : elle doit s'ouvrir. */
+     compte le plus : elle doit s'ouvrir.
+     Sept parcours depuis le 22 août 2026 : le septième, « Installer le CSE :
+     la première réunion », est celui qui suit les élections. */
   "./parcours.html", "./parcours.js",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
   /* Les audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un

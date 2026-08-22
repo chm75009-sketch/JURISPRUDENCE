@@ -21,6 +21,17 @@
      rendu de réunion de commission, délibération de désignation des membres
      d'une commission, résolution de recours à l'expert.
 
+     Et, depuis le 22 août 2026, les six trames du parcours « Installer le CSE :
+     la première réunion » : convocation à la réunion d'installation, ordre du
+     jour de l'installation, procès-verbal d'installation avec les résolutions
+     rédigées, règlement intérieur du comité, demande de la documentation
+     économique et financière de l'article L. 2312-57, et procès-verbal de
+     remise-reprise entre comité sortant et comité entrant. Ce dernier porte un
+     avertissement, parce qu'il le faut : AUCUN article du code du travail lu au
+     relais Légifrance le 22 août 2026 n'organise cette remise. L'article
+     R. 2323-38, qui l'imposait au comité d'entreprise, répond « trouvé : faux ».
+     Le modèle est donc une trame de bonne administration, et le dit.
+
      La page accepte « ?modele=<clé>&pre=<JSON encodé> » : elle ouvre le modèle
      demandé et y verse les valeurs transmises, dans les seuls champs que le
      modèle déclare et seulement là où le brouillon est vide.
@@ -177,8 +188,11 @@
   de mise à pied disciplinaire, trame d'échelle des sanctions du règlement intérieur</b> ; et les
   trames des <a href="parcours.html">parcours guidés</a> : <b>mise en demeure, courrier d'alerte,
   compte rendu de réunion de commission, délibération de désignation des membres d'une commission,
-  résolution de recours à l'expert</b>. Un formulaire
-  court, un document à l'écran, imprimable en PDF et copiable en texte.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
+  résolution de recours à l'expert</b> ; et celles de l'installation du comité :
+  <b>convocation et ordre du jour de la réunion d'installation, procès-verbal
+  d'installation avec les résolutions rédigées, règlement intérieur du comité, demande de la
+  documentation économique et financière, procès-verbal de remise-reprise entre comités</b>.
+  Un formulaire court, un document à l'écran, imprimable en PDF et copiable en texte.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
   que sur ce poste.</p>
 </header>
 
@@ -329,7 +343,42 @@
     "L2312-59": { id: "LEGIARTI000038791189", quoi: "atteinte aux droits des personnes, à leur santé physique et mentale ou aux libertés individuelles : saisine immédiate de l'employeur, qui procède sans délai à une enquête avec le membre de la délégation et prend les dispositions nécessaires" },
     "L2312-63": { id: "LEGIARTI000035610999", quoi: "droit d'alerte économique : demande d'explications inscrite de droit à l'ordre du jour de la prochaine séance ; à défaut de réponse suffisante, rapport transmis à l'employeur et au commissaire aux comptes" },
     "L2312-64": { id: "LEGIARTI000035611001", quoi: "le comité ou la commission économique peut se faire assister une fois par exercice de l'expert-comptable, convoquer le commissaire aux comptes et s'adjoindre deux salariés avec voix consultative" },
-    "L2312-65": { id: "LEGIARTI000035611003", quoi: "le rapport conclut en émettant un avis sur l'opportunité de saisir l'organe d'administration ou de surveillance ; le comité en décide à la majorité des membres présents" }
+    "L2312-65": { id: "LEGIARTI000035611003", quoi: "le rapport conclut en émettant un avis sur l'opportunité de saisir l'organe d'administration ou de surveillance ; le comité en décide à la majorité des membres présents" },
+    /* Installation du comité, règlement intérieur du comité, budgets, comptes
+       et transition entre comités — articles ajoutés pour les six modèles du
+       parcours « Installer le CSE : la première réunion ». Provenance :
+       moteur/parcours/textes-installation.json, capture du 22 août 2026, deux
+       lectures espacées concordantes chacune, filtre par NOM du code
+       (« Code du travail ») et critère de contenu contre les homonymes. */
+    "L2315-23": { id: "LEGIARTI000035624835", quoi: "le comité est doté de la personnalité civile et gère son patrimoine ; il est présidé par l'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative ; le comité désigne, parmi ses membres titulaires, un secrétaire et un trésorier" },
+    "L2315-24": { id: "LEGIARTI000036761946", quoi: "le comité détermine, dans un règlement intérieur, les modalités de son fonctionnement et celles de ses rapports avec les salariés ; sauf accord de l'employeur, ce règlement ne peut comporter de clauses lui imposant des obligations ne résultant pas de dispositions légales — cet accord constitue un engagement unilatéral de l'employeur, dénonçable à l'issue d'un délai raisonnable et après information des membres" },
+    "L2315-3":  { id: "LEGIARTI000035651256", quoi: "secret professionnel pour les questions relatives aux procédés de fabrication ; obligation de discrétion à l'égard des informations revêtant un caractère confidentiel et présentées comme telles par l'employeur" },
+    "L2315-4":  { id: "LEGIARTI000035651253", quoi: "le recours à la visioconférence peut être autorisé par accord entre l'employeur et les membres élus ; en l'absence d'accord, il est limité à trois réunions par année civile" },
+    "L2315-7":  { id: "LEGIARTI000035651243", quoi: "l'employeur laisse le temps nécessaire à l'exercice de leurs fonctions aux titulaires et, à partir de cinq cent un salariés, aux représentants syndicaux ; le nombre d'heures fixé par décret ne peut être inférieur à dix heures par mois en dessous de cinquante salariés et à seize heures dans les autres entreprises" },
+    "R2314-1":  { id: "LEGIARTI000036481896", quoi: "à défaut de stipulations d'accord, le nombre de membres de la délégation du personnel et le nombre mensuel d'heures de délégation sont fixés par le tableau de cet article selon l'effectif ; ce nombre d'heures peut être augmenté en cas de circonstances exceptionnelles" },
+    "L2315-15": { id: "LEGIARTI000035621173", quoi: "les membres de la délégation du personnel peuvent faire afficher les renseignements qu'ils ont pour rôle de porter à la connaissance du personnel, sur les emplacements destinés aux communications syndicales et aux portes d'entrée des lieux de travail" },
+    "L2315-25": { id: "LEGIARTI000035624843", quoi: "l'employeur met à la disposition du comité un local aménagé et le matériel nécessaire à l'exercice de ses fonctions" },
+    "L2315-18": { id: "LEGIARTI000043894249", quoi: "formation santé, sécurité et conditions de travail : cinq jours au moins lors du premier mandat ; en cas de renouvellement, trois jours par élu et cinq jours pour les membres de la commission santé-sécurité à partir de trois cents salariés ; financement à la charge de l'employeur ; le référent harcèlement en bénéficie" },
+    "L2315-63": { id: "LEGIARTI000043975219", quoi: "à partir de cinquante salariés, les titulaires élus pour la première fois bénéficient d'un stage de formation économique d'une durée maximale de cinq jours, financé par le comité et imputé sur le congé de formation économique, sociale, environnementale et syndicale" },
+    "L2312-57": { id: "LEGIARTI000035610702", quoi: "à défaut d'accord, un mois après chaque élection du comité, l'employeur lui communique une documentation économique et financière précisant la forme juridique de l'entreprise et son organisation, les perspectives économiques, le cas échéant la position de l'entreprise au sein du groupe, et, compte tenu des informations dont il dispose, la répartition du capital entre les actionnaires détenant plus de 10 % du capital et la position de l'entreprise dans la branche" },
+    "L2312-15": { id: "LEGIARTI000038791194", quoi: "le comité émet des avis et des vœux ; il dispose d'un délai d'examen suffisant et d'informations précises et écrites transmises ou mises à disposition par l'employeur, ainsi que de sa réponse motivée à ses observations" },
+    "L2312-18": { id: "LEGIARTI000052437125", quoi: "une base de données économiques, sociales et environnementales rassemble l'ensemble des informations nécessaires aux consultations et informations récurrentes que l'employeur met à disposition du comité" },
+    "L2312-36": { id: "LEGIARTI000048533625", quoi: "en l'absence d'accord, la base de données rassemble les informations énumérées par cet article et est accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central et aux délégués syndicaux" },
+    "L2315-44": { id: "LEGIARTI000036262426", quoi: "à défaut d'accord, le règlement intérieur du comité définit les modalités de mise en place des commissions ; à défaut de l'accord de L. 2315-43, l'employeur peut fixer leur nombre et leur périmètre" },
+    "L2315-61": { id: "LEGIARTI000036761916", quoi: "subvention de fonctionnement annuelle de 0,20 % de la masse salariale brute de cinquante à moins de deux mille salariés, de 0,22 % à partir de deux mille ; elle s'ajoute à la contribution aux activités sociales et culturelles ; le comité peut, par délibération, en affecter une partie à la formation des délégués syndicaux et des représentants de proximité" },
+    "L2312-81": { id: "LEGIARTI000036761976", quoi: "la contribution versée chaque année par l'employeur pour financer les institutions sociales du comité est fixée par accord d'entreprise ; à défaut, son rapport à la masse salariale brute ne peut être inférieur au même rapport existant pour l'année précédente" },
+    "L2312-83": { id: "LEGIARTI000036761969", quoi: "la masse salariale brute est constituée de l'ensemble des gains et rémunérations soumis à cotisations de sécurité sociale, à l'exception des indemnités versées à l'occasion de la rupture du contrat à durée indéterminée" },
+    "L2312-84": { id: "LEGIARTI000035611325", quoi: "en cas de reliquat budgétaire, les élus peuvent décider par délibération de transférer tout ou partie de l'excédent annuel du budget des activités sociales et culturelles au budget de fonctionnement ou à des associations" },
+    "R2312-51": { id: "LEGIARTI000036413338", quoi: "ce transfert est possible dans la limite de 10 % de l'excédent ; la somme et ses modalités d'utilisation sont inscrites dans les comptes annuels et dans le rapport de gestion" },
+    "L2315-64": { id: "LEGIARTI000035627352", quoi: "le comité est soumis aux obligations comptables de l'article L. 123-12 du code de commerce ; ses comptes annuels sont établis selon un règlement de l'Autorité des normes comptables ; en dessous de deux des trois seuils fixés par décret, il peut adopter une présentation simplifiée" },
+    "L2315-65": { id: "LEGIARTI000035627354", quoi: "le comité dont les ressources annuelles n'excèdent pas un seuil fixé par décret peut tenir un livre retraçant chronologiquement les dépenses et les recettes et établir une fois par an un état de synthèse simplifié sur son patrimoine et ses engagements en cours" },
+    "L2315-68": { id: "LEGIARTI000035627360", quoi: "les comptes annuels sont arrêtés, selon des modalités prévues par le règlement intérieur du comité, par des membres élus désignés par lui et en son sein ; ils sont approuvés par les membres élus réunis en séance plénière, consacrée à ce seul sujet et faisant l'objet d'un procès-verbal spécifique" },
+    "L2315-69": { id: "LEGIARTI000036262535", quoi: "le comité établit, selon des modalités prévues par son règlement intérieur, un rapport présentant des informations qualitatives sur ses activités et sur sa gestion financière, présenté aux élus lors de la séance plénière d'approbation des comptes" },
+    "L2315-70": { id: "LEGIARTI000035627364", quoi: "le trésorier ou, le cas échéant, le commissaire aux comptes présente un rapport sur les conventions passées, directement ou indirectement, entre le comité et l'un de ses membres" },
+    "L2315-71": { id: "LEGIARTI000036262527", quoi: "au plus tard trois jours avant la séance plénière d'approbation, les membres chargés d'arrêter les comptes les communiquent aux membres du comité, accompagnés du rapport de gestion" },
+    "L2315-72": { id: "LEGIARTI000035627368", quoi: "le comité porte à la connaissance des salariés de l'entreprise, par tout moyen, ses comptes annuels accompagnés du rapport de gestion" },
+    "L2315-75": { id: "LEGIARTI000035627374", quoi: "les comptes annuels et les pièces justificatives qui s'y rapportent sont conservés pendant dix ans à compter de la clôture de l'exercice auquel ils se rapportent" },
+    "R2312-52": { id: "LEGIARTI000036413340", quoi: "en cas de cessation définitive de l'activité de l'entreprise, le comité décide de l'affectation des biens dont il dispose ; la dévolution du solde se fait au crédit d'un autre comité ou d'institutions sociales d'intérêt général — les biens ne peuvent être répartis entre les salariés ou entre les membres du comité" }
   };
   function refArt(n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }
 
@@ -1925,6 +1974,884 @@
           "(art. L. 2315-32) : " + p + " voix pour sur " + n + " membres présents n'atteignent pas " +
           "cette majorité.";
       return "";
+    }
+  },
+
+  /* ==================================================================== */
+  /* Les six modèles du parcours « Installer le CSE : la première         */
+  /* réunion ». Deux d'entre eux touchent à des questions que le code ne  */
+  /* règle pas, et le disent au lieu de les combler :                     */
+  /*                                                                      */
+  /* — la CONVOCATION d'installation. L'article L. 2315-29 veut un ordre  */
+  /*   du jour établi par le président ET le secrétaire ; à l'installation*/
+  /*   il n'y a pas encore de secrétaire. Le modèle est donc établi par le*/
+  /*   seul président, et l'écrit dans le corps du document.              */
+  /*                                                                      */
+  /* — la REMISE-REPRISE entre comité sortant et comité entrant. Aucun    */
+  /*   article du code du travail lu au relais le 22 août 2026 ne         */
+  /*   l'organise ; R. 2323-38, qui l'imposait au comité d'entreprise,    */
+  /*   répond « trouvé : faux ». Le modèle est une trame prudente : il    */
+  /*   énumère ce qu'il faut constater, s'appuie sur les seules règles    */
+  /*   écrites (comptes, conservation, personnalité civile) et renvoie au */
+  /*   règlement intérieur du comité pour le reste.                       */
+  /* ==================================================================== */
+
+  {
+    cle: "convocation-installation",
+    nom: "Convocation à la réunion d'installation du CSE",
+    resume: "La première réunion après les élections, convoquée par le seul président faute de secrétaire : destinataires, délai de trois jours, pièces jointes, et ce que le code ne règle pas.",
+    articles: ["L2315-29", "L2315-30", "L2315-23", "L2315-32", "L2315-4"],
+    sections: [
+      { titre: "L'entreprise et la réunion", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "effectif", nom: "Effectif de l'entreprise", t: "number", profil: "effectif" },
+        { c: "president", nom: "Président du comité (nom, qualité)", t: "text",
+          aide: "L'employeur ou son représentant (art. L. 2315-23)." },
+        { c: "dateElections", nom: "Date de proclamation des résultats des élections", t: "date" },
+        { c: "dateReunion", nom: "Date de la réunion d'installation", t: "date" },
+        { c: "heure", nom: "Heure", t: "time" },
+        { c: "lieu", nom: "Lieu (et lien de visioconférence, le cas échéant)", t: "text" },
+        { c: "dateEnvoi", nom: "Date d'envoi de la convocation", t: "date",
+          aide: "L'ordre du jour est communiqué trois jours au moins avant la réunion (art. L. 2315-30)." }
+      ]},
+      { titre: "Destinataires et pièces jointes", champs: [
+        { c: "destinataires", nom: "Membres convoqués (un par ligne : nom, titulaire ou suppléant, collège)", t: "textarea", pleine: true },
+        { c: "autresDestinataires", nom: "Autres destinataires de l'ordre du jour (un par ligne)", t: "textarea", pleine: true,
+          aide: "L'ordre du jour est communiqué à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale (art. L. 2315-30)." },
+        { c: "pieces", nom: "Pièces jointes (une par ligne)", t: "textarea", pleine: true },
+        { c: "visio", nom: "Modalités de tenue", t: "select", options: [
+          "réunion en présentiel",
+          "réunion en visioconférence (accord entre l'employeur et les membres élus)",
+          "réunion en visioconférence (en l'absence d'accord : trois réunions par année civile au plus)"
+        ] }
+      ]}
+    ],
+    composer: function (v) {
+      var dest = lignes(v.destinataires), autres = lignes(v.autresDestinataires), pj = lignes(v.pieces);
+      var ecart = joursEntre(v.dateEnvoi, v.dateReunion);
+      return enteteFeuille(v.entreprise, chDate(v.dateEnvoi, "date d'envoi")) +
+        '<h2 class="titre-doc">Convocation à la réunion d\'installation<br>du comité social et économique</h2>' +
+        '<p class="sous-titre">Réunion du ' + chExDate(v.dateReunion, "2026-09-21") +
+        " à " + chEx(v.heure, "09:00") + " — " + chEx(v.lieu, "salle du conseil, siège social") + "</p>" +
+        "<h3>Objet</h3>" +
+        "<p>À la suite des élections dont les résultats ont été proclamés le " +
+        chExDate(v.dateElections, "2026-09-08") + ", les membres de la délégation du personnel du " +
+        "comité social et économique de " + chEx(v.entreprise, "la société Ardenne Plasturgie") +
+        " sont convoqués à la réunion d'installation du comité.</p>" +
+        "<h3>Qui établit la présente convocation, et pourquoi</h3>" +
+        "<p>L'ordre du jour de chaque réunion du comité est établi conjointement par le président et " +
+        "le secrétaire (art. L. 2315-29). Le comité n'ayant pas encore de secrétaire — sa désignation " +
+        "est précisément l'objet de cette réunion —, la présente convocation et l'ordre du jour qui " +
+        "l'accompagne sont établis par le seul président. <b>Aucune disposition du code du travail ne " +
+        "règle ce cas :</b> il ne s'agit pas d'une règle légale mais d'une nécessité, et elle cessera " +
+        "dès la présente réunion. À compter de la réunion suivante, l'ordre du jour sera établi " +
+        "conjointement avec le secrétaire élu.</p>" +
+        "<h3>Délai de communication</h3>" +
+        "<p>L'ordre du jour est communiqué par le président aux membres du comité, à l'agent de " +
+        "contrôle de l'inspection du travail et à l'agent des services de prévention des organismes " +
+        "de sécurité sociale, trois jours au moins avant la réunion (art. L. 2315-30).</p>" +
+        (ecart !== null
+          ? "<p>Envoi le " + chDate(v.dateEnvoi, "") + " pour une réunion le " + chDate(v.dateReunion, "") +
+            ", soit <b>" + ecart + " jour(s)</b>." +
+            (ecart < 3 ? " <b>Ce délai est inférieur à trois jours.</b>" : "") + "</p>"
+          : "<p>" + exemple("Envoi le 15 septembre 2026 pour une réunion le 21 septembre 2026, soit six jours") + ".</p>") +
+        "<h3>Membres convoqués</h3>" +
+        (dest.length
+          ? "<ul>" + dest.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Mme Sonia Delcroix — titulaire — second collège") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd — titulaire — premier collège") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux — suppléante — premier collège") + "</li>" +
+            "<li>" + exemple("M. Antoine Rivière — suppléant — second collège") + "</li></ul>") +
+        "<p>Le suppléant assiste aux réunions en l'absence du titulaire (art. L. 2314-1).</p>" +
+        "<h3>Autres destinataires de l'ordre du jour</h3>" +
+        (autres.length
+          ? "<ul>" + autres.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Agent de contrôle de l'inspection du travail — unité de contrôle des Ardennes") + "</li>" +
+            "<li>" + exemple("Agent des services de prévention de la caisse d'assurance retraite et de la santé au travail") + "</li></ul>") +
+        "<h3>Modalités de tenue</h3>" +
+        "<p>" + chEx(v.visio, "réunion en présentiel") + ". En l'absence d'accord entre l'employeur et " +
+        "les membres élus, le recours à la visioconférence est limité à trois réunions par année " +
+        "civile (art. L. 2315-4).</p>" +
+        "<h3>Pièces jointes</h3>" +
+        (pj.length
+          ? "<ul>" + pj.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Ordre du jour de la réunion d'installation") + "</li>" +
+            "<li>" + exemple("Procès-verbaux des deux tours des élections") + "</li>" +
+            "<li>" + exemple("Projet de règlement intérieur du comité") + "</li>" +
+            "<li>" + exemple("Note sur les moyens mis à la disposition du comité : local, matériel, heures de délégation") + "</li></ul>") +
+        "<p>Les résolutions du comité sont prises à la majorité des membres présents (art. L. 2315-32).</p>" +
+        '<div class="signatures"><div>Le président du comité<br>' +
+        chEx(v.president, "M. Julien Marchand, directeur général") + "</div></div>" +
+        aPersonnaliser(["dénomination et effectif", "date des élections", "date, heure et lieu de la réunion",
+          "date d'envoi", "liste des membres convoqués", "autres destinataires", "modalités de tenue",
+          "pièces jointes", "nom et qualité du président"]) +
+        piedTextes(["L2315-29", "L2315-30", "L2315-23", "L2315-32", "L2315-4"]);
+    },
+    verifier: function (v) {
+      var n = joursEntre(v.dateEnvoi, v.dateReunion);
+      if (n !== null && n < 3)
+        return "L'ordre du jour est communiqué trois jours au moins avant la réunion (art. L. 2315-30) : " +
+          "l'envoi indiqué précède la réunion de " + n + " jour(s).";
+      return "";
+    }
+  },
+
+  {
+    cle: "odj-installation",
+    nom: "Ordre du jour de la réunion d'installation",
+    resume: "Le point par point de l'installation : composition, bureau, référent harcèlement, commissions, règlement intérieur, budgets, moyens, formations, transition, calendrier, documentation de L. 2312-57.",
+    articles: ["L2315-29", "L2315-23", "L2314-1", "L2315-39", "L2315-24", "L2312-57", "L2315-61", "L2312-81"],
+    sections: [
+      { titre: "La réunion", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "president", nom: "Président du comité (nom, qualité)", t: "text" },
+        { c: "dateReunion", nom: "Date de la réunion d'installation", t: "date" },
+        { c: "heure", nom: "Heure", t: "time" },
+        { c: "lieu", nom: "Lieu", t: "text" }
+      ]},
+      { titre: "Points facultatifs et ajouts", champs: [
+        { c: "options", nom: "Points à ajouter selon la situation", t: "cases", pleine: true, options: [
+          "Transition avec le comité sortant : reddition de gestion, remise des documents et des archives",
+          "Désignation des représentants au conseil d'administration ou de surveillance",
+          "Désignation des membres de la commission économique (au moins mille salariés)",
+          "Désignation des membres de la commission des marchés",
+          "Désignation d'un ou plusieurs commissaires aux comptes du comité"
+        ] },
+        { c: "ajouts", nom: "Autres points propres à votre dossier (un par ligne)", t: "textarea", pleine: true },
+        { c: "duree", nom: "Durée prévisionnelle de la réunion", t: "text" }
+      ]}
+    ],
+    composer: function (v) {
+      var opts = v.options || [], sup = lignes(v.ajouts);
+      var points = [
+        ["Constatation de la composition du comité et de sa personnalité civile",
+         "Lecture des procès-verbaux des élections ; titulaires et suppléants par collège ; durée des mandats. Le comité est doté de la personnalité civile et gère son patrimoine ; il est présidé par l'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative (art. L. 2315-23 et L. 2314-1)."],
+        ["Élection du secrétaire du comité",
+         "Désignation parmi les membres titulaires, par une résolution adoptée à la majorité des membres présents (art. L. 2315-23 et L. 2315-32)."],
+        ["Élection du trésorier du comité",
+         "Désignation parmi les membres titulaires, dans les mêmes formes (art. L. 2315-23)."],
+        ["Désignation du référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes",
+         "Désignation par le comité parmi ses membres, par une résolution adoptée selon les modalités de l'article L. 2315-32, pour une durée qui prend fin avec celle du mandat des élus (art. L. 2314-1, dernier alinéa)."],
+        ["Désignation des membres de la commission santé, sécurité et conditions de travail",
+         "Au minimum trois membres représentants du personnel, dont au moins un du second collège ou, le cas échéant, du troisième ; désignation par résolution adoptée à la majorité des membres présents (art. L. 2315-39)."],
+        ["Adoption du règlement intérieur du comité",
+         "Modalités de fonctionnement du comité et de ses rapports avec les salariés ; modalités d'arrêté des comptes et contenu du rapport de gestion (art. L. 2315-24, L. 2315-68 et L. 2315-69). Sauf accord de l'employeur, il ne peut lui imposer d'obligations ne résultant pas de dispositions légales."],
+        ["Ouverture des budgets et des comptes bancaires",
+         "Subvention de fonctionnement — 0,20 % ou 0,22 % de la masse salariale brute selon l'effectif (art. L. 2315-61) — et contribution aux activités sociales et culturelles (art. L. 2312-81) ; désignation des mandataires des comptes."],
+        ["Moyens du comité",
+         "Heures de délégation et leur répartition, local aménagé et matériel, affichage, déplacements, visioconférence, accès à la base de données économiques, sociales et environnementales (art. L. 2315-7, L. 2315-15, L. 2315-25, L. 2315-4 et L. 2312-18)."],
+        ["Formations des élus",
+         "Formation santé, sécurité et conditions de travail (art. L. 2315-18) et stage de formation économique des titulaires élus pour la première fois (art. L. 2315-63) : organismes, dates, financement."],
+        ["Calendrier des réunions ordinaires",
+         "Périodicité, dates retenues et réunions consacrées, en tout ou partie, à la santé, à la sécurité et aux conditions de travail."],
+        ["Documentation économique et financière due un mois après l'élection",
+         "À défaut d'accord, l'employeur communique au comité, un mois après chaque élection, une documentation précisant la forme juridique de l'entreprise et son organisation, les perspectives économiques, le cas échéant sa position au sein du groupe, la répartition du capital entre les actionnaires détenant plus de 10 % du capital et la position de l'entreprise dans la branche (art. L. 2312-57)."],
+        ["Questions diverses", ""]
+      ];
+      /* Les points facultatifs s'insèrent avant le calendrier et les questions
+         diverses : un ordre du jour se lit dans l'ordre où la séance se tient. */
+      var LIBELLES = {
+        "Transition avec le comité sortant : reddition de gestion, remise des documents et des archives":
+          "Constatation de l'état du patrimoine, de la trésorerie, des engagements et des contrats en cours ; remise des comptes annuels arrêtés et approuvés, du rapport de gestion, du rapport sur les conventions et des pièces justificatives (art. L. 2315-64 à L. 2315-72 et L. 2315-75) ; sort du règlement intérieur du comité précédent. Aucun article du code ne fixe la forme de cette remise : c'est au règlement intérieur du comité de la régler (art. L. 2315-24).",
+        "Désignation des représentants au conseil d'administration ou de surveillance":
+          "Deux membres de la délégation du personnel — quatre là où trois collèges sont institués —, ou un seul membre titulaire lorsque le conseil comprend déjà un administrateur élu ou désigné par les salariés (art. L. 2312-72 et L. 2312-75).",
+        "Désignation des membres de la commission économique (au moins mille salariés)":
+          "Au maximum cinq membres représentants du personnel dont au moins un cadre, désignés par le comité parmi ses membres (art. L. 2315-46 et L. 2315-47).",
+        "Désignation des membres de la commission des marchés":
+          "Désignation parmi les membres titulaires ; le règlement intérieur du comité fixe le fonctionnement, le nombre de membres et la durée du mandat (art. L. 2315-44-3).",
+        "Désignation d'un ou plusieurs commissaires aux comptes du comité":
+          "Au-delà de deux des trois seuils fixés par décret, le comité nomme au moins un commissaire aux comptes et un suppléant, distincts de ceux de l'entreprise (art. L. 2315-73)."
+      };
+      var facultatifs = opts.map(function (o) { return [o, LIBELLES[o] || ""]; });
+      var tous = points.slice(0, 10)
+        .concat(facultatifs)
+        .concat(sup.map(function (l) { return [l, ""]; }))
+        .concat([points[10], points[11]]);
+      var n = 0;
+      return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
+        '<h2 class="titre-doc">Ordre du jour<br>Réunion d\'installation du comité social et économique</h2>' +
+        '<p class="sous-titre">' + chExDate(v.dateReunion, "2026-09-21") + " à " +
+        chEx(v.heure, "09:00") + " — " + chEx(v.lieu, "salle du conseil, siège social") +
+        (v.duree ? " — durée prévue : " + e(v.duree) : " — " + exemple("durée prévue : trois heures")) + "</p>" +
+        "<p>Ordre du jour établi par le président du comité, " +
+        chEx(v.president, "M. Julien Marchand, directeur général") + ". Le comité n'ayant pas encore " +
+        "de secrétaire, l'établissement conjoint prévu par l'article L. 2315-29 n'est pas possible " +
+        "pour cette seule réunion ; il le sera dès la suivante.</p>" +
+        "<ol>" + tous.map(function (p) {
+          n++;
+          return "<li><b>" + e(p[0]) + "</b>" + (p[1] ? "<br>" + e(p[1]) : "") + "</li>";
+        }).join("") + "</ol>" +
+        "<p>Les consultations rendues obligatoires par une disposition législative ou réglementaire " +
+        "ou par un accord collectif sont inscrites de plein droit à l'ordre du jour (art. L. 2315-29).</p>" +
+        '<div class="signatures"><div>Le président du comité<br>' +
+        chEx(v.president, "M. Julien Marchand") + "</div></div>" +
+        aPersonnaliser(["dénomination", "date, heure, lieu et durée", "nom et qualité du président",
+          "points facultatifs retenus", "points propres au dossier", "ordre des points"]) +
+        piedTextes(["L2315-29", "L2315-23", "L2314-1", "L2315-39", "L2315-24", "L2312-57", "L2315-61", "L2312-81"]);
+    }
+  },
+
+  {
+    cle: "pv-installation",
+    nom: "Procès-verbal d'installation du CSE, résolutions rédigées",
+    resume: "Le procès-verbal de la première réunion avec le texte des résolutions : élection du secrétaire et du trésorier, référent harcèlement, désignations, adoption du règlement intérieur, votes et résultats.",
+    articles: ["L2315-23", "L2315-32", "L2314-1", "L2315-39", "L2315-34", "L2315-35", "D2315-26", "L2314-33", "L2315-24"],
+    sections: [
+      { titre: "La séance", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "dateElections", nom: "Date de proclamation des résultats des élections", t: "date" },
+        { c: "dateReunion", nom: "Date de la réunion d'installation", t: "date" },
+        { c: "lieu", nom: "Lieu", t: "text" },
+        { c: "president", nom: "Président du comité (nom, qualité)", t: "text" },
+        { c: "nbTitulaires", nom: "Nombre de titulaires élus", t: "number" },
+        { c: "presents", nom: "Membres présents (un par ligne : nom, titulaire ou suppléant, collège)", t: "textarea", pleine: true },
+        { c: "absents", nom: "Membres absents ou excusés (un par ligne)", t: "textarea", pleine: true },
+        { c: "votants", nom: "Nombre de membres présents ayant voix délibérative", t: "number",
+          aide: "Les résolutions sont prises à la majorité des membres présents (art. L. 2315-32)." }
+      ]},
+      { titre: "Les résolutions", champs: [
+        { c: "resolutions", nom: "Résolutions soumises au vote", t: "cases", pleine: true, options: [
+          "Élection du secrétaire",
+          "Élection du trésorier",
+          "Désignation du référent harcèlement",
+          "Désignation des membres de la CSSCT",
+          "Désignation des membres de la CSSCT — siège du troisième collège",
+          "Adoption du règlement intérieur du comité",
+          "Désignation des représentants au conseil d'administration ou de surveillance",
+          "Transition avec le comité sortant"
+        ] },
+        { c: "secretaire", nom: "Secrétaire élu (nom, collège)", t: "text" },
+        { c: "voixSecretaire", nom: "Voix obtenues par le secrétaire", t: "number" },
+        { c: "tresorier", nom: "Trésorier élu (nom, collège)", t: "text" },
+        { c: "voixTresorier", nom: "Voix obtenues par le trésorier", t: "number" },
+        { c: "referent", nom: "Référent harcèlement désigné (nom)", t: "text" },
+        { c: "membresCsst", nom: "Membres désignés à la commission santé, sécurité et conditions de travail (un par ligne)", t: "textarea", pleine: true },
+        { c: "representantsConseil", nom: "Représentants au conseil d'administration ou de surveillance (un par ligne)", t: "textarea", pleine: true },
+        { c: "dateFinMandat", nom: "Terme des mandats", t: "date",
+          aide: "Quatre ans, sauf durée plus courte fixée par accord (art. L. 2314-33)." },
+        { c: "divers", nom: "Autres délibérations et échanges", t: "textarea", pleine: true }
+      ]}
+    ],
+    composer: function (v) {
+      var pres = lignes(v.presents), abs = lignes(v.absents),
+          cs = lignes(v.membresCsst), rc = lignes(v.representantsConseil);
+      var res = v.resolutions || [];
+      /* Formulaire vide : le modèle doit montrer sa structure intégrale, pas une
+         coquille. On déroule alors le jeu de résolutions que toute installation
+         comporte, entièrement en exemples marqués. */
+      var rien = !res.length;
+      if (rien) res = ["Élection du secrétaire", "Élection du trésorier",
+        "Désignation du référent harcèlement", "Désignation des membres de la CSSCT",
+        "Adoption du règlement intérieur du comité"];
+      var a = function (x) { return res.indexOf(x) >= 0; };
+      /* Les résolutions se numérotent dans l'ordre où elles sont rendues : un
+         numéro fixe par nature de résolution laisserait des trous dès qu'une
+         séance n'en adopte pas une. */
+      var rn = 0, num = function () { return "Résolution n° " + (++rn) + " — "; };
+      var bloc = function (titre, texte, resultat) {
+        return "<h3>" + num() + e(titre) + "</h3><p><i>« " + texte + " »</i></p><p>" + resultat + "</p>";
+      };
+      var majorite = "Résolution adoptée à la majorité des membres présents (art. L. 2315-32). " +
+        "Membres présents ayant voix délibérative : <b>" + chEx(v.votants, "11") + "</b>.";
+      return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
+        '<h2 class="titre-doc">Procès-verbal de la réunion d\'installation<br>du comité social et économique</h2>' +
+        '<p class="sous-titre">Séance du ' + chExDate(v.dateReunion, "2026-09-21") + " — " +
+        chEx(v.lieu, "salle du conseil, siège social") + "</p>" +
+        "<h3>Constitution du comité</h3>" +
+        "<p>À la suite des élections dont les résultats ont été proclamés le " +
+        chExDate(v.dateElections, "2026-09-08") + ", le comité social et économique de " +
+        chEx(v.entreprise, "la société Ardenne Plasturgie") + " est réuni pour la première fois, sous " +
+        "la présidence de " + chEx(v.president, "M. Julien Marchand, directeur général") + ".</p>" +
+        "<p>Le comité comprend l'employeur et une délégation du personnel de <b>" +
+        chEx(v.nbTitulaires, "6") + "</b> titulaires et d'autant de suppléants ; le suppléant assiste " +
+        "aux réunions en l'absence du titulaire (art. L. 2314-1). Le comité est doté de la " +
+        "personnalité civile et gère son patrimoine (art. L. 2315-23). Les mandats prennent fin le " +
+        chExDate(v.dateFinMandat, "2030-09-08") + " (art. L. 2314-33).</p>" +
+        "<h3>Membres présents</h3>" +
+        (pres.length
+          ? "<ul>" + pres.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Mme Sonia Delcroix — titulaire — second collège") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd — titulaire — premier collège") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux — titulaire — premier collège") + "</li>" +
+            "<li>" + exemple("M. Antoine Rivière — titulaire — second collège") + "</li></ul>") +
+        (abs.length
+          ? "<h3>Membres absents ou excusés</h3><ul>" +
+            abs.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "") +
+        (rien
+          ? "<h3>Résolutions</h3><p>" +
+            exemple("Les résolutions ci-dessous sont celles qu'une installation comporte ordinairement ; cochez dans le formulaire celles que votre séance a réellement adoptées, et ajoutez-y le cas échéant la désignation des représentants au conseil et la transition avec le comité sortant") +
+            "</p>"
+          : "") +
+        (a("Élection du secrétaire")
+          ? bloc("élection du secrétaire",
+              "Le comité social et économique désigne " + chEx(v.secretaire, "Mme Sonia Delcroix, second collège") +
+              ", membre titulaire, en qualité de secrétaire du comité, pour une durée qui prend fin avec celle du mandat des membres élus.",
+              majorite + " Voix pour : <b>" + chEx(v.voixSecretaire, "9") + "</b>. " +
+              "Le secrétaire est désigné parmi les membres titulaires (art. L. 2315-23). Le président du " +
+              "comité, membre de celui-ci, participe à ce vote, qui ne constitue pas la consultation des " +
+              "élus en tant que délégation du personnel.")
+          : "") +
+        (a("Élection du trésorier")
+          ? bloc("élection du trésorier",
+              "Le comité social et économique désigne " + chEx(v.tresorier, "M. Karim Belaïd, premier collège") +
+              ", membre titulaire, en qualité de trésorier du comité, pour une durée qui prend fin avec celle du mandat des membres élus.",
+              majorite + " Voix pour : <b>" + chEx(v.voixTresorier, "8") + "</b>. " +
+              "Le trésorier présente chaque année le rapport sur les conventions passées entre le comité " +
+              "et l'un de ses membres (art. L. 2315-70).")
+          : "") +
+        (a("Désignation du référent harcèlement")
+          ? bloc("désignation du référent harcèlement",
+              "Le comité social et économique désigne " + chEx(v.referent, "Mme Hélène Roux") +
+              ", membre du comité, en qualité de référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes, pour une durée qui prend fin avec celle du mandat des membres élus.",
+              majorite + " Désignation prévue au dernier alinéa de l'article L. 2314-1, par résolution " +
+              "adoptée selon les modalités de l'article L. 2315-32. Le référent bénéficie de la formation " +
+              "santé, sécurité et conditions de travail (art. L. 2315-18).")
+          : "") +
+        (a("Désignation des membres de la CSSCT") || a("Désignation des membres de la CSSCT — siège du troisième collège")
+          ? "<h3>" + num() + "désignation des membres de la commission santé, sécurité et conditions de travail</h3>" +
+            "<p><i>« Le comité social et économique désigne les membres de la commission santé, sécurité " +
+            "et conditions de travail dont les noms suivent, pour une durée qui prend fin avec celle du " +
+            "mandat des membres élus du comité. »</i></p>" +
+            (cs.length
+              ? "<ol>" + cs.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
+              : "<ol><li>" + exemple("Mme Sonia Delcroix — second collège") + "</li>" +
+                "<li>" + exemple("M. Karim Belaïd — premier collège") + "</li>" +
+                "<li>" + exemple("Mme Hélène Roux — premier collège") + "</li></ol>") +
+            "<p>" + majorite + " La commission comprend au minimum trois membres représentants du " +
+            "personnel, dont au moins un du second collège ou, le cas échéant, du troisième " +
+            "(art. L. 2315-39).</p>" +
+            (a("Désignation des membres de la CSSCT — siège du troisième collège")
+              ? "<p>Un troisième collège électoral étant institué, un siège au moins est attribué à un " +
+                "élu le représentant (art. L. 2315-39, dont les dispositions sont d'ordre public).</p>"
+              : "")
+          : "") +
+        (a("Désignation des représentants au conseil d'administration ou de surveillance")
+          ? "<h3>" + num() + "désignation des représentants au conseil d'administration ou de surveillance</h3>" +
+            "<p><i>« Le comité social et économique désigne, pour le représenter avec voix consultative " +
+            "aux séances du conseil d'administration ou du conseil de surveillance, les membres dont les " +
+            "noms suivent. »</i></p>" +
+            (rc.length
+              ? "<ol>" + rc.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
+              : "<ol><li>" + exemple("M. Antoine Rivière — catégorie des employés et ouvriers") + "</li>" +
+                "<li>" + exemple("Mme Sonia Delcroix — catégorie des cadres, techniciens et agents de maîtrise") + "</li></ol>") +
+            "<p>" + majorite + " Articles L. 2312-72 et L. 2312-75. Ces membres ont droit aux mêmes " +
+            "documents que ceux adressés aux membres du conseil et peuvent lui soumettre les vœux du " +
+            "comité (art. L. 2312-73).</p>"
+          : "") +
+        (a("Adoption du règlement intérieur du comité")
+          ? bloc("adoption du règlement intérieur du comité",
+              "Le comité social et économique adopte le règlement intérieur annexé au présent procès-verbal, qui détermine les modalités de son fonctionnement et celles de ses rapports avec les salariés de l'entreprise.",
+              majorite + " Article L. 2315-24. Sauf accord de l'employeur, ce règlement ne peut comporter " +
+              "de clauses lui imposant des obligations ne résultant pas de dispositions légales ; un tel " +
+              "accord constitue un engagement unilatéral de l'employeur, qu'il peut dénoncer à l'issue " +
+              "d'un délai raisonnable après en avoir informé les élus.")
+          : "") +
+        (a("Transition avec le comité sortant")
+          ? bloc("transition avec le comité sortant",
+              "Le comité social et économique constate la remise, par les membres du comité précédent, des comptes annuels arrêtés et approuvés, du rapport de gestion, du rapport sur les conventions, des pièces justificatives et des archives du comité, ainsi que l'état des biens, de la trésorerie, des contrats et des engagements en cours ; il charge le secrétaire et le trésorier d'en dresser l'inventaire contradictoire.",
+              majorite + " Le comité étant doté de la personnalité civile (art. L. 2315-23), le " +
+              "renouvellement des mandats change les personnes et non la personne morale. Les comptes et " +
+              "leurs pièces justificatives se conservent dix ans (art. L. 2315-75), et tous les membres du " +
+              "comité y ont un égal accès. <b>Aucun article du code du travail lu à la source n'organise " +
+              "la forme de cette remise :</b> il appartient au règlement intérieur du comité de la régler " +
+              "(art. L. 2315-24).")
+          : "") +
+        (v.divers
+          ? "<h3>Autres délibérations et échanges</h3><p>" + e(v.divers) + "</p>"
+          : "<h3>Autres délibérations et échanges</h3><p>" +
+            exemple("Le président a présenté les moyens mis à la disposition du comité : local situé au bâtiment B, mobilier, ligne téléphonique et poste informatique dédié. Le comité a fixé au 19 octobre 2026 la date de sa prochaine réunion ordinaire.") + "</p>") +
+        "<h3>Établissement et diffusion du procès-verbal</h3>" +
+        "<p>Les délibérations sont consignées dans un procès-verbal établi par le secrétaire dans un " +
+        "délai fixé par accord ou, à défaut, dans les quinze jours suivant la réunion — ou avant la " +
+        "réunion suivante si elle intervient plus tôt (art. L. 2315-34 et D. 2315-26). Après adoption, " +
+        "il peut être affiché ou diffusé dans l'entreprise par le secrétaire (art. L. 2315-35).</p>" +
+        '<div class="signatures"><div>Le secrétaire du comité<br>' +
+        chEx(v.secretaire, "Mme Sonia Delcroix") + "</div>" +
+        "<div>Le président du comité<br>" + chEx(v.president, "M. Julien Marchand") + "</div></div>" +
+        aPersonnaliser(["dénomination", "dates des élections et de la réunion", "lieu", "présidence",
+          "nombre de titulaires", "membres présents et absents", "nombre de votants",
+          "résolutions retenues", "noms des élus et désignés", "voix obtenues",
+          "terme des mandats", "autres délibérations"]) +
+        piedTextes(["L2315-23", "L2315-32", "L2314-1", "L2315-39", "L2315-24",
+          "L2315-34", "D2315-26", "L2314-33"]);
+    },
+    verifier: function (v) {
+      var n = parseInt(v.votants, 10);
+      var s = parseInt(v.voixSecretaire, 10), t = parseInt(v.voixTresorier, 10);
+      if (!isNaN(n) && !isNaN(s) && s * 2 <= n)
+        return "Les résolutions du comité sont prises à la majorité des membres présents " +
+          "(art. L. 2315-32) : " + s + " voix sur " + n + " membres présents n'atteignent pas cette " +
+          "majorité pour l'élection du secrétaire.";
+      if (!isNaN(n) && !isNaN(t) && t * 2 <= n)
+        return "Les résolutions du comité sont prises à la majorité des membres présents " +
+          "(art. L. 2315-32) : " + t + " voix sur " + n + " membres présents n'atteignent pas cette " +
+          "majorité pour l'élection du trésorier.";
+      var cs = lignes(v.membresCsst);
+      if (cs.length && cs.length < 3)
+        return "La commission santé, sécurité et conditions de travail comprend au minimum trois " +
+          "membres représentants du personnel (art. L. 2315-39) ; " + cs.length + " sont désignés.";
+      return "";
+    }
+  },
+
+  {
+    cle: "ri-comite",
+    nom: "Règlement intérieur du comité social et économique",
+    resume: "La trame complète : bureau, réunions et convocations, votes, procès-verbaux, commissions, budgets et comptes, confidentialité, archives — et la limite de l'article L. 2315-24.",
+    articles: ["L2315-24", "L2315-23", "L2315-32", "L2315-34", "L2315-44", "L2315-68", "L2315-69", "L2315-3", "L2315-4", "L2315-61", "L2312-81"],
+    sections: [
+      { titre: "Le comité", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "effectif", nom: "Effectif de l'entreprise", t: "number", profil: "effectif" },
+        { c: "perimetre", nom: "Périmètre du comité", t: "select", options: [
+          "comité social et économique d'entreprise",
+          "comité social et économique d'établissement",
+          "comité social et économique central d'entreprise"
+        ] },
+        { c: "dateReunion", nom: "Réunion au cours de laquelle le règlement est adopté", t: "date" },
+        { c: "dateAdoption", nom: "Date d'entrée en vigueur du règlement intérieur", t: "date" },
+        { c: "secretaire", nom: "Secrétaire du comité (nom)", t: "text" },
+        { c: "president", nom: "Président du comité (nom, qualité)", t: "text" }
+      ]},
+      { titre: "Les choix à arrêter", champs: [
+        { c: "periodicite", nom: "Périodicité des réunions ordinaires", t: "select", options: [
+          "une réunion par mois", "une réunion tous les deux mois",
+          "périodicité fixée par accord collectif"
+        ], aide: "À défaut d'accord : au moins une fois par mois à partir de trois cents salariés, au moins une fois tous les deux mois en deçà (art. L. 2315-28)." },
+        { c: "delaiPV", nom: "Délai d'établissement du procès-verbal", t: "text",
+          aide: "À défaut d'accord, quinze jours suivant la réunion (art. D. 2315-26)." },
+        { c: "arreteComptes", nom: "Membres chargés d'arrêter les comptes annuels", t: "text",
+          aide: "Ils sont désignés par le comité et en son sein, selon des modalités prévues par le présent règlement (art. L. 2315-68)." },
+        { c: "bureauElargi", nom: "Composition du bureau", t: "select", options: [
+          "secrétaire et trésorier",
+          "secrétaire, secrétaire adjoint, trésorier et trésorier adjoint",
+          "autre composition, précisée ci-dessous"
+        ] },
+        { c: "commissions", nom: "Commissions dont le présent règlement fixe les modalités (une par ligne)", t: "textarea", pleine: true,
+          aide: "À défaut d'accord, c'est le règlement intérieur du comité qui les définit (art. L. 2315-44)." },
+        { c: "clausesEmployeur", nom: "Clauses appelant l'accord de l'employeur (une par ligne)", t: "textarea", pleine: true,
+          aide: "Sauf accord de l'employeur, le règlement intérieur ne peut lui imposer d'obligations ne résultant pas de dispositions légales (art. L. 2315-24). Listez ici ce qui excède la loi." },
+        { c: "ajouts", nom: "Articles supplémentaires propres à votre comité (un par ligne)", t: "textarea", pleine: true }
+      ]}
+    ],
+    composer: function (v) {
+      var com = lignes(v.commissions), cl = lignes(v.clausesEmployeur), aj = lignes(v.ajouts);
+      var n = 0, art = function (titre, corps) {
+        n++;
+        return "<h3>Article " + n + " — " + e(titre) + "</h3>" + corps;
+      };
+      return enteteFeuille(v.entreprise, chDate(v.dateAdoption, "date d'entrée en vigueur")) +
+        '<h2 class="titre-doc">Règlement intérieur<br>du comité social et économique</h2>' +
+        '<p class="sous-titre">' + chEx(v.perimetre, "comité social et économique d'entreprise") +
+        " — adopté en réunion du " + chExDate(v.dateReunion, "2026-09-21") +
+        ", en vigueur au " + chExDate(v.dateAdoption, "2026-09-21") + "</p>" +
+        "<p>Le comité social et économique de " + chEx(v.entreprise, "la société Ardenne Plasturgie") +
+        " détermine, dans le présent règlement intérieur, les modalités de son fonctionnement et celles " +
+        "de ses rapports avec les salariés de l'entreprise, pour l'exercice des missions qui lui sont " +
+        "conférées par le code du travail (art. L. 2315-24).</p>" +
+
+        art("Objet, portée et limite du présent règlement",
+          "<p>Le présent règlement s'applique au comité, à ses membres et à ses commissions. Il ne peut " +
+          "déroger aux dispositions légales et réglementaires ni aux stipulations des accords " +
+          "collectifs applicables.</p>" +
+          "<p><b>Limite légale.</b> Sauf accord de l'employeur, un règlement intérieur du comité ne peut " +
+          "comporter des clauses lui imposant des obligations ne résultant pas de dispositions légales " +
+          "(art. L. 2315-24). Un tel accord constitue un engagement unilatéral de l'employeur, que " +
+          "celui-ci peut dénoncer à l'issue d'un délai raisonnable et après en avoir informé les membres " +
+          "de la délégation du personnel. Le règlement intérieur du comité ne peut davantage inclure de " +
+          "dispositions portant sur une mesure relevant des prérogatives de l'employeur.</p>" +
+          (cl.length
+            ? "<p>Les clauses suivantes excèdent les dispositions légales et n'ont d'effet qu'en vertu de " +
+              "l'accord exprès de l'employeur :</p><ul>" +
+              cl.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+            : "<p>" + exemple("Clauses appelant l'accord exprès de l'employeur : prise en charge des frais de déplacement des élus aux réunions préparatoires ; mise à disposition d'un second local pour les activités sociales et culturelles") + "</p>")) +
+
+        art("Composition et présidence",
+          "<p>Le comité comprend l'employeur et une délégation du personnel comportant un nombre égal de " +
+          "titulaires et de suppléants ; le suppléant assiste aux réunions en l'absence du titulaire " +
+          "(art. L. 2314-1). Le comité est présidé par l'employeur ou son représentant, assisté " +
+          "éventuellement de trois collaborateurs qui ont voix consultative (art. L. 2315-23).</p>" +
+          "<p>Le comité est doté de la personnalité civile et gère son patrimoine (art. L. 2315-23).</p>") +
+
+        art("Le bureau",
+          "<p>Le comité désigne, parmi ses membres titulaires, un secrétaire et un trésorier " +
+          "(art. L. 2315-23). Composition retenue : " +
+          chEx(v.bureauElargi, "secrétaire, secrétaire adjoint, trésorier et trésorier adjoint") + ".</p>" +
+          "<p><b>Le secrétaire</b> établit l'ordre du jour conjointement avec le président " +
+          "(art. L. 2315-29), rédige les procès-verbaux (art. L. 2315-34), les diffuse après adoption " +
+          "(art. L. 2315-35), tient les archives du comité et assure la correspondance courante.</p>" +
+          "<p><b>Le trésorier</b> tient la comptabilité du comité, prépare les comptes annuels, présente " +
+          "le rapport sur les conventions passées entre le comité et l'un de ses membres " +
+          "(art. L. 2315-70) et rend compte de la gestion des deux budgets à chaque réunion où le comité " +
+          "le demande.</p>" +
+          "<p>Les membres du bureau sont désignés par résolution adoptée à la majorité des membres " +
+          "présents (art. L. 2315-32) ; leur mandat prend fin avec celui des membres élus du comité. En " +
+          "cas de vacance, le comité pourvoit au remplacement à sa plus prochaine réunion.</p>") +
+
+        art("Le référent harcèlement",
+          "<p>Un référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes " +
+          "est désigné par le comité parmi ses membres, par résolution adoptée selon les modalités de " +
+          "l'article L. 2315-32, pour une durée qui prend fin avec celle du mandat des élus " +
+          "(art. L. 2314-1, dernier alinéa). Il bénéficie de la formation prévue à l'article " +
+          "L. 2315-18.</p>") +
+
+        art("Réunions, convocation et ordre du jour",
+          "<p>Périodicité retenue : " + chEx(v.periodicite, "une réunion tous les deux mois") + ". À " +
+          "défaut d'accord, le comité se réunit au moins une fois par mois à partir de trois cents " +
+          "salariés, au moins une fois tous les deux mois en deçà (art. L. 2315-28) ; au moins quatre " +
+          "réunions par an portent, en tout ou partie, sur la santé, la sécurité et les conditions de " +
+          "travail (art. L. 2315-27).</p>" +
+          "<p>L'ordre du jour est établi conjointement par le président et le secrétaire ; les " +
+          "consultations rendues obligatoires par un texte ou un accord y sont inscrites de plein droit " +
+          "par l'un ou par l'autre (art. L. 2315-29). Il est communiqué par le président aux membres du " +
+          "comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de " +
+          "prévention des organismes de sécurité sociale, trois jours au moins avant la réunion " +
+          "(art. L. 2315-30).</p>" +
+          "<p>Le recours à la visioconférence est autorisé dans les conditions convenues avec " +
+          "l'employeur ; en l'absence d'accord, il est limité à trois réunions par année civile " +
+          "(art. L. 2315-4).</p>") +
+
+        art("Votes et résolutions",
+          "<p>Les résolutions du comité sont prises à la majorité des membres présents " +
+          "(art. L. 2315-32). Le vote a lieu à main levée, sauf lorsqu'il porte sur une personne ou " +
+          "lorsqu'un membre demande le scrutin secret. Les suppléants ne prennent part au vote qu'en " +
+          "l'absence du titulaire qu'ils remplacent.</p>" +
+          "<p>Le président du comité, membre de celui-ci, participe aux votes relatifs au " +
+          "fonctionnement interne du comité — notamment à la désignation du secrétaire. Il ne participe " +
+          "pas aux consultations dans lesquelles le comité est appelé à se prononcer en tant que " +
+          "délégation du personnel.</p>") +
+
+        art("Procès-verbaux",
+          "<p>Les délibérations sont consignées dans un procès-verbal établi par le secrétaire. Délai " +
+          "retenu : " + chEx(v.delaiPV, "quinze jours suivant la réunion, ou avant la réunion suivante si elle intervient plus tôt") +
+          " (art. L. 2315-34 et D. 2315-26). Le procès-verbal est transmis à l'employeur, qui fait " +
+          "connaître sa décision motivée sur les propositions lors de la réunion suivante " +
+          "(art. L. 2315-34). Après adoption, il peut être affiché ou diffusé dans l'entreprise par le " +
+          "secrétaire (art. L. 2315-35).</p>" +
+          "<p>Le recours à l'enregistrement ou à la sténographie des séances peut être décidé par " +
+          "l'employeur ou par la délégation du personnel ; l'employeur ne peut s'y opposer, sauf pour les " +
+          "délibérations portant sur des informations confidentielles au sens de l'article L. 2315-3. La " +
+          "personne extérieure appelée à sténographier est tenue à la même obligation de discrétion que " +
+          "les membres du comité (art. D. 2315-27).</p>") +
+
+        art("Commissions",
+          "<p>À défaut d'accord, le présent règlement définit les modalités de mise en place et de " +
+          "fonctionnement des commissions du comité (art. L. 2315-44). Leurs membres sont désignés par " +
+          "le comité parmi ses membres, par résolution adoptée à la majorité des membres présents " +
+          "(art. L. 2315-32) ; leur mandat prend fin avec celui des élus. Les rapports des commissions " +
+          "sont soumis à la délibération du comité (art. L. 2315-45).</p>" +
+          (com.length
+            ? "<ul>" + com.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+            : "<ul><li>" + exemple("Commission santé, sécurité et conditions de travail — quatre membres, dont un du second collège ; deux réunions par trimestre") + "</li>" +
+              "<li>" + exemple("Commission des activités sociales et culturelles — trois membres ; compte rendu semestriel au comité") + "</li></ul>")) +
+
+        art("Budgets",
+          "<p>Le comité dispose de deux budgets distincts, qui ne se confondent pas.</p>" +
+          "<p><b>Budget de fonctionnement.</b> L'employeur verse une subvention annuelle de 0,20 % de la " +
+          "masse salariale brute dans les entreprises de cinquante à moins de deux mille salariés, et de " +
+          "0,22 % à partir de deux mille (art. L. 2315-61). Le comité peut, par délibération, en " +
+          "consacrer une partie à la formation des délégués syndicaux et des représentants de proximité, " +
+          "et en transférer une part de l'excédent annuel aux activités sociales et culturelles.</p>" +
+          "<p><b>Contribution aux activités sociales et culturelles.</b> Elle est fixée par accord " +
+          "d'entreprise ; à défaut, son rapport à la masse salariale brute ne peut être inférieur au même " +
+          "rapport existant pour l'année précédente (art. L. 2312-81). La masse salariale brute est celle " +
+          "définie à l'article L. 2312-83. L'excédent annuel peut être transféré au budget de " +
+          "fonctionnement ou à des associations, dans la limite de 10 % (art. L. 2312-84 et " +
+          "R. 2312-51).</p>" +
+          "<p>Les comptes bancaires sont ouverts au nom du comité, qui a la personnalité civile. Les " +
+          "mandataires sont le trésorier et, à défaut, le secrétaire ; toute dépense supérieure au seuil " +
+          "fixé par le comité requiert une délibération préalable.</p>") +
+
+        art("Comptes annuels, rapport de gestion et archives",
+          "<p>Le comité est soumis aux obligations comptables de l'article L. 123-12 du code de commerce " +
+          "(art. L. 2315-64) ; en dessous du seuil de ressources fixé par décret, il peut tenir un livre " +
+          "chronologique des dépenses et des recettes et un état de synthèse simplifié " +
+          "(art. L. 2315-65).</p>" +
+          "<p>Les comptes annuels sont arrêtés par " +
+          chEx(v.arreteComptes, "le trésorier et deux membres élus désignés par le comité") +
+          ", membres élus désignés par le comité et en son sein (art. L. 2315-68). Ils sont approuvés " +
+          "par les membres élus réunis en séance plénière ; cette réunion porte sur ce seul sujet et " +
+          "fait l'objet d'un procès-verbal spécifique.</p>" +
+          "<p>Le comité établit un rapport présentant des informations qualitatives sur ses activités et " +
+          "sur sa gestion financière (art. L. 2315-69). Les comptes et ce rapport sont communiqués aux " +
+          "membres au plus tard trois jours avant la séance plénière (art. L. 2315-71), puis portés à la " +
+          "connaissance des salariés par tout moyen (art. L. 2315-72).</p>" +
+          "<p>Les comptes annuels et les pièces justificatives qui s'y rapportent sont conservés pendant " +
+          "dix ans à compter de la clôture de l'exercice (art. L. 2315-75). <b>Tous les membres du " +
+          "comité ont un égal accès aux archives et aux documents administratifs et comptables du " +
+          "comité</b> ; les modalités matérielles de consultation sont arrêtées par le secrétaire et " +
+          "portées à la connaissance des membres.</p>") +
+
+        art("Confidentialité et discrétion",
+          "<p>Les membres de la délégation du personnel sont tenus au secret professionnel pour toutes " +
+          "les questions relatives aux procédés de fabrication ; eux et les représentants syndicaux sont " +
+          "tenus à une obligation de discrétion à l'égard des informations revêtant un caractère " +
+          "confidentiel et présentées comme telles par l'employeur (art. L. 2315-3). La même obligation " +
+          "s'impose aux personnes extérieures admises aux travaux du comité ou de ses commissions.</p>") +
+
+        art("Transmission au comité suivant",
+          "<p>À l'expiration des mandats, le secrétaire et le trésorier établissent, avec le président, " +
+          "un état des biens, de la trésorerie, des contrats et des engagements en cours, et remettent " +
+          "au comité nouvellement élu les comptes annuels arrêtés et approuvés, le rapport de gestion, " +
+          "le rapport sur les conventions, les pièces justificatives et les archives du comité. Un " +
+          "procès-verbal de remise contradictoire en est dressé.</p>" +
+          "<p><b>Cette obligation est de source conventionnelle et non légale :</b> aucun article du " +
+          "code du travail lu à la source n'organise la remise-reprise entre un comité sortant et le " +
+          "comité entrant. Le présent article la crée pour ce comité, et c'est précisément le rôle que " +
+          "l'article L. 2315-24 assigne au règlement intérieur.</p>") +
+
+        art("Révision et publicité",
+          "<p>Le présent règlement peut être révisé par résolution du comité adoptée à la majorité des " +
+          "membres présents. Toute clause imposant à l'employeur une obligation ne résultant pas de " +
+          "dispositions légales ne prend effet qu'avec son accord (art. L. 2315-24). Le règlement est " +
+          "porté à la connaissance des membres du comité et tenu à la disposition des salariés.</p>") +
+
+        (aj.length
+          ? "<h3>Articles supplémentaires</h3><ol>" +
+            aj.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
+          : "") +
+
+        '<div class="signatures"><div>Le secrétaire du comité<br>' +
+        chEx(v.secretaire, "Mme Sonia Delcroix") + "</div>" +
+        "<div>Le président du comité<br>" + chEx(v.president, "M. Julien Marchand") + "</div></div>" +
+        aPersonnaliser(["dénomination et effectif", "périmètre du comité", "dates d'adoption et d'entrée en vigueur",
+          "composition du bureau", "périodicité des réunions", "délai du procès-verbal",
+          "membres chargés d'arrêter les comptes", "commissions et leurs modalités",
+          "clauses appelant l'accord de l'employeur", "seuil de dépense soumis à délibération",
+          "articles supplémentaires"]) +
+        piedTextes(["L2315-24", "L2315-23", "L2315-32", "L2315-34", "L2315-44", "L2315-68",
+          "L2315-69", "L2315-3", "L2315-4", "L2315-61", "L2312-81", "L2315-75"]);
+    }
+  },
+
+  {
+    cle: "demande-documentation-eco",
+    nom: "Demande de la documentation économique et financière (L. 2312-57)",
+    resume: "Le courrier qui rappelle l'échéance d'un mois après l'élection et énumère les quatre rubriques dues : forme juridique, perspectives économiques, position dans le groupe, répartition du capital.",
+    articles: ["L2312-57", "L2312-15", "L2312-18"],
+    sections: [
+      { titre: "Le comité et l'employeur", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "president", nom: "Destinataire : président du comité (nom, qualité)", t: "text" },
+        { c: "secretaire", nom: "Signataire : secrétaire du comité (nom)", t: "text" },
+        { c: "dateElections", nom: "Date de proclamation des résultats des élections", t: "date" },
+        { c: "dateEcheance", nom: "Échéance : un mois après l'élection", t: "date",
+          aide: "Article L. 2312-57. À défaut d'accord, la documentation est due un mois après chaque élection." },
+        { c: "dateCourrier", nom: "Date du courrier", t: "date" },
+        { c: "accord", nom: "Un accord règle-t-il cette communication ?", t: "select", options: [
+          "aucun accord : le régime supplétif de l'article L. 2312-57 s'applique",
+          "un accord règle cette communication : ses stipulations l'emportent"
+        ] }
+      ]},
+      { titre: "Précisions", champs: [
+        { c: "rubriques", nom: "Rubriques manquantes ou incomplètes", t: "cases", pleine: true, options: [
+          "1° La forme juridique de l'entreprise et son organisation",
+          "2° Les perspectives économiques de l'entreprise telles qu'elles peuvent être envisagées",
+          "3° Le cas échéant, la position de l'entreprise au sein du groupe",
+          "4° La répartition du capital entre les actionnaires détenant plus de 10 % du capital et la position de l'entreprise dans la branche d'activité"
+        ] },
+        { c: "precisions", nom: "Précisions ou pièces déjà reçues", t: "textarea", pleine: true },
+        { c: "delaiReponse", nom: "Délai de réponse demandé", t: "text" }
+      ]}
+    ],
+    composer: function (v) {
+      var r = v.rubriques || [];
+      var retard = (v.dateEcheance && v.dateCourrier && v.dateCourrier > v.dateEcheance);
+      var toutes = [
+        "1° La forme juridique de l'entreprise et son organisation",
+        "2° Les perspectives économiques de l'entreprise telles qu'elles peuvent être envisagées",
+        "3° Le cas échéant, la position de l'entreprise au sein du groupe",
+        "4° La répartition du capital entre les actionnaires détenant plus de 10 % du capital et la position de l'entreprise dans la branche d'activité"
+      ];
+      return enteteFeuille(v.entreprise, chDate(v.dateCourrier, "date du courrier")) +
+        '<h2 class="titre-doc">Demande de communication<br>de la documentation économique et financière</h2>' +
+        '<p class="sous-titre">Article L. 2312-57 du code du travail — élection du ' +
+        chExDate(v.dateElections, "2026-09-08") + "</p>" +
+        "<p>À l'attention de " + chEx(v.president, "M. Julien Marchand, directeur général, président du comité social et économique") + ",</p>" +
+        "<h3>L'obligation</h3>" +
+        "<p>À défaut d'accord, un mois après chaque élection du comité social et économique, l'employeur " +
+        "lui communique une documentation économique et financière précisant :</p>" +
+        "<ol>" + toutes.map(function (t) {
+          var vise = r.length === 0 || r.indexOf(t) >= 0;
+          return "<li>" + (vise ? "<b>" + e(t.replace(/^\d° /, "")) + "</b>" : e(t.replace(/^\d° /, ""))) + "</li>";
+        }).join("") + "</ol>" +
+        "<p>Situation retenue : " +
+        chEx(v.accord, "aucun accord : le régime supplétif de l'article L. 2312-57 s'applique") + ".</p>" +
+        "<h3>L'échéance</h3>" +
+        "<p>Les résultats des élections ayant été proclamés le " +
+        chExDate(v.dateElections, "2026-09-08") + ", la documentation était due au plus tard le " +
+        chExDate(v.dateEcheance, "2026-10-08") + ".</p>" +
+        (retard
+          ? "<p><b>Cette échéance est dépassée à la date du présent courrier.</b> Le comité en prend acte " +
+            "et sollicite la communication de la documentation sans délai.</p>"
+          : "<p>Le comité rappelle cette échéance et sollicite la communication de la documentation dans " +
+            "le délai imparti.</p>") +
+        (r.length
+          ? "<h3>Ce qui manque</h3><p>Les rubriques suivantes n'ont pas été communiquées, ou l'ont été de " +
+            "manière incomplète :</p><ul>" +
+            r.map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ul>"
+          : "<h3>Ce qui manque</h3><p>" +
+            exemple("Les quatre rubriques de l'article L. 2312-57 n'ont fait l'objet d'aucune communication à ce jour") + "</p>") +
+        (v.precisions
+          ? "<h3>Pièces déjà reçues et précisions</h3><p>" + e(v.precisions) + "</p>"
+          : "<h3>Pièces déjà reçues et précisions</h3><p>" +
+            exemple("Le comité a reçu le 25 septembre 2026 une note de deux pages sur l'organigramme de la société ; elle ne comporte ni les perspectives économiques, ni la répartition du capital.") + "</p>") +
+        "<h3>Réponse attendue</h3>" +
+        "<p>" + chEx(v.delaiReponse, "sous quinze jours à compter de la réception du présent courrier") +
+        ". Le comité rappelle qu'il dispose, pour l'exercice de ses attributions, d'informations " +
+        "précises et écrites transmises ou mises à disposition par l'employeur (art. L. 2312-15), et " +
+        "que la base de données économiques, sociales et environnementales rassemble les informations " +
+        "nécessaires aux consultations et informations récurrentes (art. L. 2312-18) — sans se " +
+        "substituer à la documentation propre à l'article L. 2312-57.</p>" +
+        '<div class="signatures"><div>Le secrétaire du comité<br>' +
+        chEx(v.secretaire, "Mme Sonia Delcroix") + "</div></div>" +
+        aPersonnaliser(["dénomination", "destinataire", "signataire", "date des élections",
+          "échéance d'un mois", "date du courrier", "rubriques manquantes", "pièces déjà reçues",
+          "délai de réponse demandé"]) +
+        piedTextes(["L2312-57", "L2312-15", "L2312-18"]);
+    },
+    verifier: function (v) {
+      if (v.dateElections && v.dateEcheance) {
+        var attendu = moisApres(v.dateElections, 1);
+        if (attendu && v.dateEcheance !== attendu)
+          return "L'article L. 2312-57 fixe l'échéance à un mois après l'élection : pour une " +
+            "proclamation le " + dateFr(v.dateElections) + ", l'échéance tombe le " + dateFr(attendu) +
+            ", et non le " + dateFr(v.dateEcheance) + ".";
+      }
+      return "";
+    }
+  },
+
+  {
+    cle: "remise-reprise",
+    nom: "Procès-verbal de remise-reprise entre comité sortant et comité entrant",
+    resume: "Trame prudente : aucun texte lu n'organise cette remise. Le modèle constate ce qui est écrit — comptes, conservation, personnalité civile — et énumère ce qui reste à régler par le règlement intérieur.",
+    articles: ["L2315-23", "L2315-64", "L2315-65", "L2315-68", "L2315-69", "L2315-70", "L2315-71", "L2315-72", "L2315-75", "R2312-52", "L2315-24"],
+    sections: [
+      { titre: "Les deux comités", champs: [
+        { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
+        { c: "dateElections", nom: "Date de proclamation des résultats des nouvelles élections", t: "date" },
+        { c: "dateFinMandatPrecedent", nom: "Date de fin du mandat des élus sortants", t: "date" },
+        { c: "dateReunion", nom: "Date de la remise", t: "date" },
+        { c: "dateCloture", nom: "Date de clôture du dernier exercice du comité", t: "date",
+          aide: "Les comptes et leurs pièces justificatives se conservent dix ans à compter de cette date (art. L. 2315-75)." },
+        { c: "sortants", nom: "Représentants du comité sortant (un par ligne : nom, fonction)", t: "textarea", pleine: true },
+        { c: "entrants", nom: "Représentants du comité entrant (un par ligne : nom, fonction)", t: "textarea", pleine: true }
+      ]},
+      { titre: "Ce qui est remis", champs: [
+        { c: "remis", nom: "Documents et pièces remis", t: "cases", pleine: true, options: [
+          "Comptes annuels du dernier exercice, arrêtés et approuvés (art. L. 2315-68)",
+          "Livre chronologique des dépenses et des recettes et état de synthèse simplifié (art. L. 2315-65)",
+          "Rapport sur les activités et la gestion financière (art. L. 2315-69)",
+          "Rapport sur les conventions passées entre le comité et l'un de ses membres (art. L. 2315-70)",
+          "Pièces justificatives des dix derniers exercices (art. L. 2315-75)",
+          "Procès-verbaux des réunions du comité précédent",
+          "Règlement intérieur du comité précédent",
+          "Relevés et accès aux comptes bancaires du comité",
+          "Contrats et engagements en cours (prestataires, assurances, locations)",
+          "Contrats de travail des salariés employés par le comité",
+          "Inventaire des biens meubles et immeubles du comité",
+          "Archives et supports informatiques du comité"
+        ] },
+        { c: "tresorerie", nom: "État de la trésorerie à la date de la remise", t: "textarea", pleine: true },
+        { c: "engagements", nom: "Engagements et contrats en cours", t: "textarea", pleine: true },
+        { c: "reserves", nom: "Réserves, pièces manquantes et suites", t: "textarea", pleine: true },
+        { c: "sortRI", nom: "Sort du règlement intérieur du comité précédent", t: "select", options: [
+          "le comité entrant l'adopte par résolution, sans modification",
+          "le comité entrant l'adopte par résolution, après modification",
+          "le comité entrant établit un nouveau règlement intérieur",
+          "point renvoyé à une réunion ultérieure"
+        ] }
+      ]}
+    ],
+    composer: function (v) {
+      var so = lignes(v.sortants), en = lignes(v.entrants), rm = v.remis || [];
+      var dix = v.dateCloture ? moisApres(v.dateCloture, 120) : null;
+      return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la remise")) +
+        '<h2 class="titre-doc">Procès-verbal de remise-reprise<br>entre le comité sortant et le comité entrant</h2>' +
+        '<p class="sous-titre">Remise du ' + chExDate(v.dateReunion, "2026-09-21") +
+        " — élections proclamées le " + chExDate(v.dateElections, "2026-09-08") + "</p>" +
+
+        "<h3>Avertissement sur la portée du présent document</h3>" +
+        "<p><b>Aucun article du code du travail ne prescrit ce procès-verbal.</b> Les textes ont été " +
+        "recherchés : le comité social et économique est doté de la personnalité civile et gère son " +
+        "patrimoine (art. L. 2315-23) — le renouvellement des mandats change les personnes, non la " +
+        "personne morale ; la dévolution des biens n'est organisée qu'en cas de <i>cessation définitive " +
+        "de l'activité de l'entreprise</i>, et les biens ne peuvent alors être répartis ni entre les " +
+        "salariés ni entre les membres du comité (art. R. 2312-52). L'article R. 2323-38, qui imposait " +
+        "aux membres du comité d'entreprise sortant de rendre compte de leur gestion au nouveau comité " +
+        "et de lui remettre tous les documents, <b>n'est plus en vigueur</b>. Le présent document est " +
+        "donc une trame de bonne administration, non l'exécution d'une obligation légale ; il appartient " +
+        "au règlement intérieur du comité de la créer (art. L. 2315-24).</p>" +
+
+        "<h3>Les parties</h3>" +
+        "<p><b>Pour le comité sortant</b>, dont le mandat des élus a pris fin le " +
+        chExDate(v.dateFinMandatPrecedent, "2026-09-08") + " :</p>" +
+        (so.length
+          ? "<ul>" + so.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("M. Paul Vasseur — secrétaire sortant") + "</li>" +
+            "<li>" + exemple("Mme Nadia Berthier — trésorière sortante") + "</li></ul>") +
+        "<p><b>Pour le comité entrant</b>, installé à la suite des élections proclamées le " +
+        chExDate(v.dateElections, "2026-09-08") + " :</p>" +
+        (en.length
+          ? "<ul>" + en.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Mme Sonia Delcroix — secrétaire") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd — trésorier") + "</li></ul>") +
+
+        "<h3>Documents et pièces remis</h3>" +
+        (rm.length
+          ? "<ul>" + rm.map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ul>"
+          : "<ul><li>" + exemple("Comptes annuels du dernier exercice, arrêtés et approuvés (art. L. 2315-68)") + "</li>" +
+            "<li>" + exemple("Rapport sur les activités et la gestion financière (art. L. 2315-69)") + "</li>" +
+            "<li>" + exemple("Pièces justificatives des dix derniers exercices (art. L. 2315-75)") + "</li>" +
+            "<li>" + exemple("Relevés et accès aux comptes bancaires du comité") + "</li>" +
+            "<li>" + exemple("Inventaire des biens meubles et immeubles du comité") + "</li></ul>") +
+        "<p>Les comptes annuels sont arrêtés par des membres élus désignés par le comité et en son sein, " +
+        "selon les modalités prévues par son règlement intérieur, puis approuvés en séance plénière " +
+        "consacrée à ce seul sujet et faisant l'objet d'un procès-verbal spécifique (art. L. 2315-68) ; " +
+        "ils sont accompagnés du rapport de gestion (art. L. 2315-69) et du rapport du trésorier sur les " +
+        "conventions passées avec un membre (art. L. 2315-70), communiqués trois jours au moins avant la " +
+        "séance (art. L. 2315-71), puis portés à la connaissance des salariés par tout moyen " +
+        "(art. L. 2315-72).</p>" +
+        "<p><b>Conservation.</b> Les comptes annuels et les pièces justificatives qui s'y rapportent sont " +
+        "conservés pendant dix ans à compter de la clôture de l'exercice auquel ils se rapportent " +
+        "(art. L. 2315-75)." +
+        (dix ? " Pour l'exercice clos le " + chDate(v.dateCloture, "") + ", cette conservation court " +
+               "jusqu'au <b>" + e(dateFr(dix)) + "</b>." : "") + "</p>" +
+        "<p><b>Accès.</b> Tous les membres du comité social et économique ont un égal accès aux archives " +
+        "et aux documents administratifs et comptables du comité.</p>" +
+
+        "<h3>État de la trésorerie</h3>" +
+        "<p>" + chEx(v.tresorerie, "Compte courant n° … : 42 380,15 € ; livret : 15 000,00 € ; caisse : 210,40 €. Budget de fonctionnement : 8 940,00 € ; budget des activités sociales et culturelles : 48 650,55 €. Les deux budgets sont suivis séparément.") + "</p>" +
+
+        "<h3>Engagements et contrats en cours</h3>" +
+        "<p>" + chEx(v.engagements, "Contrat de billetterie en ligne, échéance au 31 décembre 2026, 3 600 € par an ; assurance responsabilité civile du comité, échéance au 30 juin 2027 ; commande de chèques-cadeaux de fin d'année, 12 000 €, à confirmer avant le 15 novembre 2026.") + "</p>" +
+
+        "<h3>Sort du règlement intérieur du comité précédent</h3>" +
+        "<p>Décision retenue : " +
+        chEx(v.sortRI, "le comité entrant l'adopte par résolution, après modification") + ".</p>" +
+        "<p>Le règlement intérieur du comité n'est pas reconduit de plein droit par l'effet des " +
+        "élections : c'est le comité qui détermine, dans un règlement intérieur, les modalités de son " +
+        "fonctionnement (art. L. 2315-24). Le reprendre suppose donc une résolution qui l'adopte.</p>" +
+
+        "<h3>Réserves, pièces manquantes et suites</h3>" +
+        "<p>" + chEx(v.reserves, "Les justificatifs des dépenses du deuxième trimestre 2025 n'ont pas été retrouvés ; le comité sortant s'engage à les transmettre avant le 15 octobre 2026. Aucune autre réserve n'est formulée.") + "</p>" +
+        "<p>Points à régler par le règlement intérieur du comité, faute de texte : forme et délai de la " +
+        "remise, inventaire contradictoire, transfert des mandats bancaires, sort des accords et " +
+        "conventions conclus par le comité précédent, conservation et accès aux archives, responsabilité " +
+        "des pièces manquantes.</p>" +
+
+        '<div class="signatures"><div>Pour le comité sortant<br>' +
+        (so.length ? e(so[0]) : exemple("M. Paul Vasseur, secrétaire sortant")) + "</div>" +
+        "<div>Pour le comité entrant<br>" +
+        (en.length ? e(en[0]) : exemple("Mme Sonia Delcroix, secrétaire")) + "</div></div>" +
+        aPersonnaliser(["dénomination", "dates des élections, de fin de mandat et de la remise",
+          "date de clôture de l'exercice", "représentants des deux comités", "documents remis",
+          "état de la trésorerie", "engagements et contrats en cours",
+          "sort du règlement intérieur précédent", "réserves et pièces manquantes"]) +
+        piedTextes(["L2315-23", "L2315-64", "L2315-68", "L2315-69", "L2315-70", "L2315-71",
+          "L2315-72", "L2315-75", "R2312-52", "L2315-24"]);
     }
   }];
 

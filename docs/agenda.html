@@ -26,6 +26,10 @@
        L. 2314-4    LEGIARTI000035651165  (information du personnel tous les
                     quatre ans ; premier tour au plus tard le 90e jour suivant)
        L. 2314-33   LEGIARTI000052437191  (élus pour quatre ans)
+       L. 2312-57   LEGIARTI000035610702  (documentation économique et
+                    financière : un mois après chaque élection, à défaut
+                    d'accord ; lu au relais le 22 août 2026, deux lectures
+                    espacées concordantes, filtre par nom du code)
        L. 2242-2    LEGIARTI000036262221  (GEPP : 300 salariés)
        L. 2242-2-1  LEGIARTI000052432470  (salariés expérimentés : 300 salariés)
        L. 2242-11   LEGIARTI000052437060  (accord de méthode : quatre ans au plus)
@@ -226,7 +230,9 @@
     <li>L.&nbsp;1142-8 <span class="ident">LEGIARTI000044605453</span>,
         D.&nbsp;1142-4 <span class="ident">LEGIARTI000045250060</span> — index de l'égalité professionnelle&nbsp;;
         L.&nbsp;2314-4 <span class="ident">LEGIARTI000035651165</span>,
-        L.&nbsp;2314-33 <span class="ident">LEGIARTI000052437191</span> — élections.</li>
+        L.&nbsp;2314-33 <span class="ident">LEGIARTI000052437191</span> — élections&nbsp;;
+        L.&nbsp;2312-57 <span class="ident">LEGIARTI000035610702</span> — documentation économique
+        et financière due un mois après chaque élection.</li>
   </ul>
   <p>L.&nbsp;2242-1 n'a pas pu être confirmé au relais pendant la construction de cette page (des
   homonymes d'autres codes ont été servis)&nbsp;: il n'est pas cité — les périodicités des thèmes
@@ -595,6 +601,27 @@
         detail: "Quatre-vingt-dix jours avant la fin des mandats, pour que le premier tour puisse se tenir avant leur terme.",
         prov: d.dateDernieresElections.source,
       });
+      /* La documentation économique et financière due un mois après chaque
+         élection (L. 2312-57, LEGIARTI000035610702, lu au relais Légifrance le
+         22 août 2026 en deux lectures espacées concordantes). L'échéance est
+         ferme, l'obligation supplétive et automatique : elle ne se demande pas.
+         Fenêtre d'affichage : de six mois avant à douze mois après aujourd'hui.
+         Une obligation manquée mérite d'être vue — mais une élection vieille de
+         trois ans n'a plus sa place dans un échéancier, et le parcours
+         d'installation, lui, garde la trace du retard sans limite de temps. */
+      var docEco = plusMois(elections, 1);
+      if (estDate(docEco) && docEco >= plusMois(AUJ, -6) && docEco <= plusMois(AUJ, 12)) {
+        lignes.push({
+          tri: docEco, quand: enFr(docEco),
+          titre: "Communiquer au CSE la documentation économique et financière",
+          fondement: "L. 2312-57 (à défaut d'accord, un mois après chaque élection du comité)",
+          docs: "forme juridique de l'entreprise et son organisation ; perspectives économiques ; le cas échéant, position de l'entreprise au sein du groupe ; répartition du capital entre les actionnaires détenant plus de 10 % du capital et position de l'entreprise dans la branche",
+          retard: passee(docEco),
+          detail: "Élections proclamées le " + enFr(elections) + " ; l'obligation est supplétive et " +
+            "automatique — elle n'a pas à être demandée par le comité.",
+          prov: d.dateDernieresElections.source,
+        });
+      }
       lignes.push({
         tri: fin, quand: enFr(fin),
         titre: "Fin des mandats des élus du CSE — le renouvellement doit être acquis",

@@ -18,13 +18,19 @@
      Tout se passe dans le navigateur : le profil et l'avancement sont écrits
      dans le stockage local du poste, rien n'est envoyé.
 
-     TEXTES — 120 articles du code du travail lus au relais Légifrance le
-     21 août 2026, chacun en deux lectures espacées concordantes, filtre par NOM
-     du code (« Code du travail ») et critère de contenu contre les homonymes.
-     La capture et son journal sont dans le dépôt :
+     TEXTES — 166 articles du code du travail lus au relais Légifrance, chacun
+     en deux lectures espacées concordantes, filtre par NOM du code (« Code du
+     travail ») et critère de contenu contre les homonymes. Les captures et
+     leurs journaux sont dans le dépôt :
        moteur/parcours/capturer-textes-parcours.js
        moteur/parcours/textes-parcours.json            (120 articles confirmés)
        moteur/parcours/textes-parcours-non-confirmes.json (vide : aucun écarté)
+       moteur/parcours/capturer-textes-installation.js
+       moteur/parcours/textes-installation.json        (75 confirmés, dont 46 nouveaux)
+       moteur/parcours/textes-installation-non-confirmes.json (vide : aucun écarté)
+     La seconde capture a redemandé les 29 articles déjà au référentiel : aucun
+     écart d'identifiant de version. Une lecture « élargie » — le relais ayant
+     relâché le filtre par nom du code — est écartée comme une réponse relaxée.
      Un article que la capture n'a pas confirmé n'est pas cité ici.
 
      Deux homonymes historiques du dépôt ont été redressés au passage : sous le
@@ -35,10 +41,18 @@
 
      NON CONFIRMÉ, ET DONC JAMAIS CITÉ : L. 2315-40 — le relais répond
      « trouvé : faux » à deux lectures espacées. Aucune étape ne s'y appuie.
+     Même réponse pour R. 2323-38, l'article qui imposait au comité d'entreprise
+     sortant de rendre compte de sa gestion au nouveau comité et de lui remettre
+     tous les documents : il n'est plus en vigueur, et aucun article lu ne le
+     reprend pour le comité social et économique. Le parcours d'installation le
+     dit et renvoie au règlement intérieur du comité — il n'invente pas la règle
+     manquante.
 
-     JURISPRUDENCE — 21 arrêts de la chambre sociale lus à la source par l'API
-     Judilibre le 21 août 2026 ; aucune réponse « relaxed » n'a été retenue.
-     Sommaires et identifiants : moteur/parcours/jurisprudence-parcours.json -->
+     JURISPRUDENCE — 24 arrêts de la chambre sociale lus à la source par l'API
+     Judilibre les 21 et 22 août 2026 ; aucune réponse « relaxed » n'a été
+     retenue. Sommaires et identifiants :
+       moteur/parcours/jurisprudence-parcours.json
+       moteur/parcours/jurisprudence-installation.json -->
 <style>
   :root{
     --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
@@ -87,7 +101,7 @@
   .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
   .pleine{grid-column:1/-1}
 
-  /* Le choix du parcours : six cartes, une seule active. */
+  /* Le choix du parcours : sept cartes, une seule active. */
   .parcours-cartes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin:18px 0 0}
   .carte{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
     padding:13px 15px;cursor:pointer;text-align:left;font:inherit;color:var(--corps);position:relative}
@@ -226,7 +240,7 @@
 <header>
   <p class="fil">Application Jurisprudence</p>
   <h1>Parcours guidés — les procédures pas à pas</h1>
-  <p class="chapo"><b>L'audit dit ce qui ne va pas ; le parcours dit quoi faire.</b> Six procédures
+  <p class="chapo"><b>L'audit dit ce qui ne va pas ; le parcours dit quoi faire.</b> Sept procédures
   réelles, découpées en étapes datées : ce qu'il faut avoir réuni avant de commencer, les étapes dans
   l'ordre avec leur fondement lu à la source et leur délai calculé depuis vos dates, le document à
   produire à chaque étape — pré-rempli de votre profil —, et un état d'avancement qui vous attend à la
@@ -284,10 +298,12 @@ audits et le générateur de documents : ce que vous saisissez ici est repris l�
 <footer>
   <p>Chaque article cité est identifié par le numéro <b>et</b> par l'identifiant de la version lue
   (<span style="font-family:ui-monospace,monospace">LEGIARTI…</span>) : un article peut être modifié
-  sans changer de numéro. Les 120 articles de cette page ont été lus au relais Légifrance le
-  21 août 2026, chacun en deux lectures espacées concordantes, filtre par nom du code et critère de
-  contenu contre les homonymes. Les 21 arrêts cités ont été lus à la source par l'API Judilibre le
-  même jour ; aucune réponse relaxée n'a été retenue. Cette page ne cite rien qu'elle n'ait lu.</p>
+  sans changer de numéro. Les 166 articles de cette page ont été lus au relais Légifrance les 21 et
+  22 août 2026, chacun en deux lectures espacées concordantes, filtre par nom du code et critère de
+  contenu contre les homonymes. Les 24 arrêts cités ont été lus à la source par l'API Judilibre les
+  mêmes jours ; aucune réponse relaxée n'a été retenue. Cette page ne cite rien qu'elle n'ait lu —
+  et lorsqu'elle n'a rien trouvé, comme sur la remise-reprise entre un comité sortant et le comité
+  entrant, elle le dit au lieu de combler le vide.</p>
 </footer>
 </div>
 
