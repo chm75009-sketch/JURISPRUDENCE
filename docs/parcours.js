@@ -256,6 +256,49 @@
     "L2315-76": { id: "LEGIARTI000035627376", quoi: "le comité dont les ressources excèdent le seuil de L. 2315-65 sans dépasser deux des trois seuils de L. 2315-64 confie la mission de présentation de ses comptes annuels à un expert-comptable, à ses frais sur sa subvention de fonctionnement" },
     "D2315-33": { id: "LEGIARTI000036433847", quoi: "les seuils de la présentation simplifiée : cinquante salariés à la clôture d'un exercice, et les montants de ressources annuelles et de total de bilan de l'article R. 612-1 du code de commerce" },
     "D2315-27": { id: "LEGIARTI000036433683", quoi: "l'employeur ou la délégation du personnel peuvent décider du recours à l'enregistrement ou à la sténographie des séances ; l'employeur ne peut s'y opposer, sauf délibérations portant sur des informations confidentielles ; la personne extérieure appelée à sténographier est tenue à la même obligation de discrétion" },
+
+    /* --- les cinq parcours de régularisation ajoutés le 22 août 2026 :
+       affichages obligatoires, registre unique du personnel, base de données,
+       index de l'égalité professionnelle, entretiens de parcours
+       professionnel. Vingt-huit articles capturés au relais Légifrance ce
+       jour-là, chacun en deux lectures espacées concordantes, filtre par NOM
+       du code et critère de contenu contre les homonymes ; les dix-neuf déjà
+       présents au dépôt ont été redemandés sans un seul écart d'identifiant de
+       version. Capture et journal :
+         moteur/parcours/capturer-textes-regularisation.js
+         moteur/parcours/textes-regularisation.json            (32 confirmés)
+         moteur/parcours/textes-regularisation-non-confirmes.json
+       NON CONFIRMÉ, ET DONC JAMAIS CITÉ : D. 1221-26 — le relais ne rend
+       aucun texte à cinq lectures espacées sous le filtre « Code du travail ».
+       Aucune étape ne s'y appuie. --- */
+    "L1142-6": { id: "LEGIARTI000029144893", quoi: "dans les lieux de travail ainsi que dans les locaux ou à la porte des locaux où se fait l'embauche, les personnes sont informées par tout moyen du texte des articles 225-1 à 225-4 du code pénal" },
+    "R3221-2": { id: "LEGIARTI000033292519", quoi: "les dispositions des articles L. 3221-1 à L. 3221-7 et leurs textes d'application sont portées, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ainsi qu'aux candidats à l'embauche" },
+    "D4711-1": { id: "LEGIARTI000018527636", quoi: "l'employeur affiche, dans des locaux normalement accessibles aux travailleurs, l'adresse et le numéro d'appel du médecin du travail ou du service de santé au travail, des services de secours d'urgence, et de l'inspection du travail avec le nom de l'inspecteur compétent" },
+    "L4711-5": { id: "LEGIARTI000006903389", quoi: "lorsque les informations des articles L. 4711-1 et L. 4711-2 doivent figurer dans des registres distincts, l'employeur est autorisé à les réunir dans un registre unique dès lors que cette mesure facilite leur conservation et leur consultation" },
+    "R4227-37": { id: "LEGIARTI000024769379", quoi: "dans les établissements de l'article R. 4227-34, une consigne de sécurité incendie est établie et affichée de manière très apparente, dans chaque local dont l'effectif dépasse cinq personnes ou dans chaque dégagement desservant un groupe de locaux" },
+    "L3171-1": { id: "LEGIARTI000033021067", quoi: "l'employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos ; en cas d'organisation sur une période de référence, l'affichage comprend la répartition de la durée du travail" },
+    "R2262-1": { id: "LEGIARTI000048288541", quoi: "à défaut d'autres modalités prévues par un accord de l'article L. 2262-5, l'employeur informe le salarié des conventions et accords applicables, tient un exemplaire à jour à la disposition des salariés sur le lieu de travail, et le met à disposition sur l'intranet lorsqu'il en existe un" },
+    "L1152-4": { id: "LEGIARTI000029144897", quoi: "l'employeur prend toutes dispositions nécessaires en vue de prévenir les agissements de harcèlement moral ; les personnes sont informées par tout moyen du texte de l'article 222-33-2 du code pénal" },
+    "L1153-5": { id: "LEGIARTI000037389712", quoi: "l'employeur prend toutes dispositions nécessaires en vue de prévenir les faits de harcèlement sexuel, d'y mettre un terme et de les sanctionner ; dans les lieux de travail et les locaux d'embauche, les personnes sont informées par tout moyen du texte de l'article 222-33 du code pénal et des actions contentieuses ouvertes" },
+    "L2142-3": { id: "LEGIARTI000035652705", quoi: "l'affichage des communications syndicales s'effectue librement sur des panneaux réservés à cet usage, distincts de ceux affectés aux communications du comité ; un exemplaire est transmis à l'employeur simultanément à l'affichage" },
+    "L1221-13": { id: "LEGIARTI000033971569", quoi: "un registre unique du personnel est tenu dans tout établissement où sont employés des salariés ; les noms et prénoms de tous les salariés y sont inscrits dans l'ordre des embauches, au moment de l'embauche et de façon indélébile ; les stagiaires et volontaires en service civique sont inscrits dans l'ordre d'arrivée, dans une partie spécifique du registre" },
+    "L1221-15": { id: "LEGIARTI000035653242", quoi: "le registre unique du personnel est tenu à la disposition du comité social et économique et des fonctionnaires et agents chargés de veiller à l'application du code du travail et du code de la sécurité sociale" },
+    "D1221-23": { id: "LEGIARTI000018537878", quoi: "les indications complémentaires portées pour chaque salarié : nationalité, date de naissance, sexe, emploi, qualification, dates d'entrée et de sortie, date de l'autorisation d'embauche ou de licenciement lorsqu'elle est requise, titre autorisant l'activité salariée pour les travailleurs étrangers, et les mentions « contrat à durée déterminée », « salarié temporaire », « mis à disposition par un groupement d'employeurs », « salarié à temps partiel », « apprenti » ou « contrat de professionnalisation »" },
+    "D1221-24": { id: "LEGIARTI000036483477", quoi: "une copie des titres autorisant l'exercice d'une activité salariée des travailleurs étrangers est annexée au registre et rendue accessible aux membres de la délégation du personnel du comité et aux agents de contrôle, dans l'établissement ou sur chaque chantier où ces travailleurs sont employés" },
+    "D1221-25": { id: "LEGIARTI000029825324", quoi: "les mentions relatives à des événements postérieurs à l'embauche du salarié ou à l'arrivée du stagiaire sont portées sur le registre au moment où ceux-ci surviennent" },
+    "D1221-27": { id: "LEGIARTI000036483458", quoi: "lorsque l'employeur recourt à un support de substitution, les exigences des articles D. 8113-2 et D. 8113-3 sont applicables et il adresse à l'inspection du travail l'avis du comité prévu à l'article L. 2315-5" },
+    "R2312-8": { id: "LEGIARTI000049905537", quoi: "à défaut d'accord, contenu de la base de données dans les entreprises de moins de trois cents salariés : les rubriques et sous-rubriques y sont énumérées thème par thème" },
+    "R2312-9": { id: "LEGIARTI000049905524", quoi: "à défaut d'accord, contenu de la base de données dans les entreprises d'au moins trois cents salariés : les rubriques et sous-rubriques y sont énumérées thème par thème, sous forme de tableau" },
+    "L1142-9": { id: "LEGIARTI000044605442", quoi: "lorsque les résultats se situent en deçà du niveau défini par décret, la négociation sur l'égalité professionnelle porte aussi sur les mesures de correction et, le cas échéant, sur la programmation de mesures financières de rattrapage salarial ; à défaut d'accord, ces mesures sont arrêtées par décision de l'employeur après consultation du comité, déposée auprès de l'autorité administrative, et publiées à l'extérieur comme au sein de l'entreprise" },
+    "L1142-10": { id: "LEGIARTI000051289090", quoi: "en deçà du niveau défini par décret, l'entreprise dispose d'un délai de trois ans pour se mettre en conformité ; à l'expiration de ce délai, une pénalité financière d'un maximum de 1 % des rémunérations peut être appliquée par l'autorité administrative, un délai supplémentaire d'un an pouvant être accordé au vu des efforts constatés" },
+    "L1142-11": { id: "LEGIARTI000045951643", quoi: "dans les entreprises qui, pour le troisième exercice consécutif, emploient au moins mille salariés, l'employeur publie chaque année les écarts éventuels de représentation entre les femmes et les hommes parmi les cadres dirigeants et les membres des instances dirigeantes ; la proportion de chaque sexe ne peut y être inférieure à 30 %" },
+    "D1142-2": { id: "LEGIARTI000038026011", quoi: "pour les entreprises de plus de deux cent cinquante salariés, les cinq indicateurs : écart de rémunération, écart de taux d'augmentations individuelles hors promotions, écart de taux de promotions, pourcentage de salariées augmentées au retour de congé de maternité, et nombre de salariés du sexe sous-représenté parmi les dix plus hautes rémunérations" },
+    "D1142-3": { id: "LEGIARTI000038026019", quoi: "le niveau de résultat obtenu au regard des indicateurs est déterminé selon les modalités fixées aux annexes I et II du chapitre" },
+    "D1142-4": { id: "LEGIARTI000045250060", quoi: "le niveau de résultat et les résultats de chaque indicateur sont publiés annuellement, au plus tard le 1er mars de l'année en cours au titre de l'année précédente, de manière visible et lisible sur le site internet de l'entreprise lorsqu'il en existe un — à défaut, portés à la connaissance des salariés par tout moyen — et restent consultables jusqu'à la publication de l'année suivante" },
+    "D1142-5": { id: "LEGIARTI000045250047", quoi: "les indicateurs et le niveau de résultat sont mis à la disposition du comité social et économique selon la même périodicité, dans les conditions du deuxième alinéa de l'article L. 2312-18, présentés par catégorie socio-professionnelle ou niveau hiérarchique et accompagnés des précisions utiles à leur compréhension ; l'ensemble est télédéclaré aux services du ministre chargé du travail" },
+    "D1142-6": { id: "LEGIARTI000045250040", quoi: "les mesures de correction et la programmation de rattrapage salarial doivent être mises en œuvre dès lors que le niveau de résultat est inférieur à soixante-quinze points ; elles sont publiées sur le site internet de l'entreprise sur la même page que le résultat, dès le dépôt de l'accord ou de la décision unilatérale, et restent consultables jusqu'à l'obtention d'un résultat au moins égal à soixante-quinze points" },
+    "L6315-1": { id: "LEGIARTI000053279288", quoi: "à l'embauche, le salarié est informé qu'il bénéficie d'un entretien de parcours professionnel au cours de la première année ; tout salarié en bénéficie ensuite tous les quatre ans ; l'entretien ne porte pas sur l'évaluation du travail, se déroule pendant le temps de travail, donne lieu à un document dont une copie est remise au salarié, et est proposé systématiquement au retour des congés et absences longues énumérés ; tous les huit ans, il fait un état des lieux récapitulatif du parcours" },
+    "L6321-1": { id: "LEGIARTI000052437104", quoi: "l'employeur assure l'adaptation des salariés à leur poste de travail et veille au maintien de leur capacité à occuper un emploi, au regard notamment de l'évolution des emplois, des technologies et des organisations" },
   };
 
 
@@ -331,11 +374,18 @@
   /* et l'assistant la joint à son contexte. Cette page est la première  */
   /* qui l'écrit — jusqu'ici, personne ne la remplissait.                */
   /* ------------------------------------------------------------------ */
-  var CLE_PROFIL = "profil-entreprise";
-  var SECTEURS = ["transport et logistique", "industrie", "bâtiment et travaux publics",
-    "commerce", "services"];
+  var CLE_PROFIL = (window.Profil && window.Profil.CLE) || "profil-entreprise";
+  var SECTEURS = (window.Profil && window.Profil.SECTEURS) ||
+    ["transport et logistique", "industrie", "bâtiment et travaux publics",
+      "commerce", "services"];
 
-  var CHAMPS_PROFIL = [
+  /* La FICHE CLIENT — dénomination, SIRET, adresse, responsable, courriel,
+     téléphone, effectif, secteur, convention, groupe, établissements — vit
+     dans docs/profil.js, qui est la source unique de la clé partagée. Cette
+     page y ajoute les seules questions qui lui sont propres : ce qui ouvre ou
+     masque une étape de parcours. Si profil.js n'est pas chargé (page servie
+     seule), la liste minimale d'origine reste en place : rien ne casse. */
+  var CHAMPS_FICHE = (window.Profil && window.Profil.IDENTITE) || [
     { c: "denomination", nom: "Dénomination de l'entreprise", t: "text" },
     { c: "effectif", nom: "Effectif de l'entreprise", t: "number",
       aide: "Il commande à lui seul une bonne part des étapes : 11, 50, 300, 1 000 sont des seuils du code du travail. Laissé vide, aucune étape n'est masquée — cette page ne devine pas." },
@@ -344,6 +394,9 @@
       aide: "Elle n'est jamais lue par l'application : elle sert à nommer le texte que vous devrez vérifier vous-même là où le conventionnel peut ajouter une étape." },
     { c: "groupe", nom: "L'entreprise appartient-elle à un groupe ?", t: "oui-non" },
     { c: "etablissementsDistincts", nom: "Plusieurs établissements distincts ?", t: "oui-non" },
+  ];
+
+  var CHAMPS_PARCOURS = [
     { c: "cseExiste", nom: "Un comité social et économique est-il en place ?", t: "oui-non" },
     { c: "sectionsSyndicales", nom: "Une ou plusieurs sections syndicales d'organisations représentatives ?", t: "oui-non",
       aide: "C'est la condition d'assujettissement à la négociation obligatoire (art. L. 2242-1)." },
@@ -353,6 +406,12 @@
     { c: "totalBilan", nom: "Total du bilan du comité (euros)", t: "number",
       aide: "Second critère de la commission des marchés. Facultatif." },
   ];
+
+  /* Le profil complet de la page : la fiche client, puis ce qui lui est
+     propre. Un champ déclaré des deux côtés n'est rendu qu'une fois. */
+  var CHAMPS_PROFIL = CHAMPS_FICHE.concat(CHAMPS_PARCOURS.filter(function (ch) {
+    return !CHAMPS_FICHE.some(function (x) { return x.c === ch.c; });
+  }));
 
 
   /* ------------------------------------------------------------------ */
@@ -382,7 +441,7 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* LES SEPT PARCOURS                                                   */
+  /* LES DOUZE PARCOURS                                                  */
   /* ------------------------------------------------------------------ */
   var PARCOURS = [
 
@@ -1484,6 +1543,466 @@
     ]
   },
 
+  /* ================================================================== */
+  /* 8. METTRE EN PLACE LES AFFICHAGES ET INFORMATIONS OBLIGATOIRES     */
+  /* ================================================================== */
+  /* Un affichage ne coûte rien et se contrôle en dix minutes : c'est le
+     premier chapitre du procès-verbal d'un agent de contrôle. Ce parcours
+     ne dit rien de plus que ce que les articles lus disent — et il dit
+     quand un texte parle d'« affichage » (L. 3171-1, R. 4227-37, D. 4711-1)
+     et quand il parle d'« information par tout moyen » (L. 1142-6,
+     L. 1152-4, L. 1153-5, R. 3221-2) : les deux ne s'accomplissent pas de
+     la même façon, et l'un ne vaut pas l'autre. */
+  {
+    cle: "affichages",
+    nom: "Mettre en place les affichages et informations obligatoires",
+    resume: "Ce qui s'affiche et ce qui s'informe « par tout moyen » : égalité et non-discrimination, égalité de rémunération, harcèlements, coordonnées des secours et des services, horaires collectifs, consigne incendie, convention collective, panneaux syndicaux — puis le relevé daté qui prouve que c'est fait.",
+    audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
+    donnees: [
+      { c: "dateReleve", nom: "Date du relevé des affichages", t: "date",
+        aide: "C'est la date que portera le constat : sans elle, rien ne prouve que l'affichage était en place ce jour-là." },
+      { c: "lieux", nom: "Lieux de travail et locaux d'embauche concernés", t: "text",
+        aide: "Chaque site, chaque atelier, chaque local d'embauche : l'information est due là où les personnes se trouvent." },
+      { c: "supportInformation", nom: "Support retenu pour l'information « par tout moyen »", t: "select",
+        options: ["affichage papier", "intranet", "livret remis à l'embauche", "courriel nominatif", "plusieurs supports"],
+        aide: "Les textes qui disent « par tout moyen » n'imposent pas l'affichage : ils imposent que l'information atteigne les personnes, et que vous puissiez le prouver." },
+      { c: "matieresInflammables", nom: "Des matières inflammables sont-elles manipulées, ou l'effectif d'un local dépasse-t-il cinq personnes ?", t: "oui-non",
+        aide: "C'est ce qui déclenche la consigne de sécurité incendie de l'article R. 4227-37." },
+      { c: "horaireCollectif", nom: "Les salariés suivent-ils tous un horaire collectif uniforme ?", t: "oui-non",
+        aide: "Si oui, l'horaire s'affiche (art. L. 3171-1). Sinon, le décompte est individuel et ce parcours renvoie à l'audit social." },
+      { c: "sectionSyndicale", nom: "Une section syndicale est-elle constituée ?", t: "oui-non" },
+    ],
+    prealable: [
+      { id: "textes", g: "document", nom: "Le texte des articles 225-1 à 225-4 et 222-33, 222-33-2 du code pénal",
+        aide: "Ce sont les textes que la loi impose de porter à la connaissance des personnes — pas un résumé, le texte." },
+      { id: "coordonnees", g: "information", nom: "Les coordonnées à jour : médecin du travail ou service de prévention, secours d'urgence, inspection du travail et nom de l'inspecteur",
+        aide: "L'article D. 4711-1 impose l'adresse ET le numéro d'appel, et le nom de l'inspecteur compétent." },
+      { id: "referents", g: "information", nom: "Les référents harcèlement désignés (celui du comité, et celui de l'employeur à partir de 250 salariés)",
+        aide: "Leurs coordonnées accompagnent l'information sur le harcèlement sexuel." },
+      { id: "ccn", g: "document", nom: "Un exemplaire à jour de la convention collective et de ses avenants",
+        aide: "L'article R. 2262-1 impose de le tenir à la disposition des salariés sur le lieu de travail, et de le mettre sur l'intranet lorsqu'il en existe un." },
+      { id: "horaires", g: "information", nom: "Les heures de début et de fin du travail et la durée des repos",
+        aide: "C'est l'objet même de l'affichage de l'article L. 3171-1.",
+        si: function (P, D) { return D.horaireCollectif === "non" ? false : true; } },
+      { id: "panneaux", g: "pièce", nom: "Les panneaux : ceux du comité, et ceux — distincts — des sections syndicales",
+        aide: "L'article L. 2142-3 exige que les panneaux syndicaux soient distincts de ceux du comité.",
+        si: function (P, D) { return D.sectionSyndicale === "non" ? false : true; } },
+      { id: "appareil", g: "pièce", nom: "De quoi photographier ou horodater chaque affichage",
+        aide: "Une photographie datée est la seule preuve simple qu'un affichage était en place. Sans elle, « je l'ai affiché » ne vaut rien devant un agent de contrôle." },
+    ],
+    etapes: [
+      { id: "a1", nom: "Informer sur l'égalité de traitement et la non-discrimination",
+        quoi: "Dans les lieux de travail ainsi que dans les locaux ou à la porte des locaux où se fait l'embauche, portez par tout moyen à la connaissance des personnes le texte des articles 225-1 à 225-4 du code pénal. Le texte, pas un résumé : c'est ce que l'article impose.",
+        fond: ["L1142-6"],
+        doc: { modele: "note-rh", nom: "Note d'information aux salariés",
+          pre: function (P, D) { return { entreprise: P.denomination, objet: "Information sur la non-discrimination — articles 225-1 à 225-4 du code pénal", date: D.dateReleve }; } } },
+      { id: "a2", nom: "Informer sur l'égalité de rémunération entre les femmes et les hommes",
+        quoi: "Les dispositions des articles L. 3221-1 à L. 3221-7 et leurs textes d'application sont portées, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ainsi qu'aux candidats à l'embauche. Les candidats aussi : c'est le point que l'on oublie.",
+        fond: ["R3221-2"],
+        doc: { modele: "note-rh", nom: "Note d'information aux salariés",
+          pre: function (P, D) { return { entreprise: P.denomination, objet: "Information sur l'égalité de rémunération — articles L. 3221-1 à L. 3221-7", date: D.dateReleve }; } } },
+      { id: "a3", nom: "Informer sur les harcèlements moral et sexuel et les agissements sexistes",
+        quoi: "Le texte de l'article 222-33-2 du code pénal pour le harcèlement moral ; le texte de l'article 222-33 et les actions contentieuses civiles et pénales ouvertes pour le harcèlement sexuel, dans les lieux de travail comme dans les locaux d'embauche. L'information s'accompagne des coordonnées utiles — médecin du travail, inspection du travail, Défenseur des droits, référents.",
+        fond: ["L1152-4", "L1153-5"],
+        doc: { modele: "signalement-harcelement", nom: "Procédure de signalement harcèlement",
+          pre: function (P, D) { return { entreprise: P.denomination, date: D.dateReleve }; } } },
+      { id: "a4", nom: "Afficher les coordonnées du médecin du travail, des secours et de l'inspection du travail",
+        quoi: "Celui-là s'affiche, et dans des locaux normalement accessibles aux travailleurs : adresse et numéro d'appel du médecin du travail ou du service compétent, des services de secours d'urgence, de l'inspection du travail — avec le nom de l'inspecteur compétent.",
+        fond: ["D4711-1"] },
+      { id: "a5", nom: "Établir et afficher la consigne de sécurité incendie",
+        quoi: "La consigne est établie et affichée « de manière très apparente » : dans chaque local dont l'effectif dépasse cinq personnes, et dans chaque local ou dégagement desservant un groupe de locaux dans les autres cas.",
+        fond: ["R4227-37"],
+        si: function (P, D) { return D.matieresInflammables === "non" ? false : true; } },
+      { id: "a6", nom: "Afficher l'horaire collectif et les repos",
+        quoi: "L'employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos. Lorsque la durée du travail est organisée sur une période de référence, l'affichage comprend la répartition de la durée du travail dans ce cadre.",
+        fond: ["L3171-1"],
+        si: function (P, D) { return D.horaireCollectif === "non" ? false : true; } },
+      { id: "a7", nom: "Informer sur la convention collective et tenir un exemplaire à disposition",
+        quoi: "À défaut d'autres modalités prévues par un accord, l'employeur informe le salarié des conventions et accords applicables, tient un exemplaire à jour à la disposition des salariés sur le lieu de travail, et le met à disposition sur l'intranet lorsqu'il en existe un.",
+        fond: ["R2262-1"],
+        conv: "les modalités d'information que votre convention prévoit elle-même — l'article R. 2262-1 ne joue qu'« à défaut d'autres modalités prévues par une convention ou un accord »",
+        doc: { modele: "note-rh", nom: "Avis d'information sur la convention collective",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Convention collective applicable : " + (P.conventionCollective || "à renseigner dans la fiche client") + " — modalités de consultation",
+            date: D.dateReleve }; } } },
+      { id: "a8", nom: "Mettre à disposition les panneaux syndicaux, distincts de ceux du comité",
+        quoi: "L'affichage des communications syndicales s'effectue librement sur des panneaux réservés à cet usage, distincts de ceux affectés aux communications du comité. Un exemplaire des communications est transmis à l'employeur simultanément à l'affichage ; les modalités de mise à disposition se fixent par accord avec l'employeur.",
+        fond: ["L2142-3"],
+        si: function (P, D) { return D.sectionSyndicale === "non" ? false : true; } },
+      { id: "a9", nom: "Réunir les registres de santé-sécurité en un registre unique, si vous le souhaitez",
+        quoi: "Lorsqu'il est prévu que les informations des articles L. 4711-1 et L. 4711-2 figurent dans des registres distincts, l'employeur est autorisé à les réunir dans un registre unique dès lors que cette mesure facilite leur conservation et leur consultation. C'est une faculté, pas une obligation.",
+        fond: ["L4711-5"] },
+      { id: "a10", nom: "VALIDATION — dresser le relevé daté des affichages et informations",
+        quoi: "Parcourez chaque lieu de travail et chaque local d'embauche, photographiez chaque affichage, datez le relevé, et conservez-le. Pour ce qui est dû « par tout moyen », conservez la preuve du support : accusé de diffusion, capture de l'intranet, émargement du livret. Ce relevé est la pièce que vous produirez au contrôle de l'existant de l'audit social — et le parcours n'est terminé que lorsqu'il existe.",
+        fond: ["L1142-6", "R3221-2", "D4711-1", "L1152-4", "L1153-5"],
+        quand: function (D) {
+          if (!D.dateReleve) return null;
+          var t = jours(D.dateReleve, 365);
+          return { iso: t, libelle: "Relevé à refaire au plus tard le " + dateFr(t),
+            note: "Aucun texte n'impose de refaire le relevé chaque année : c'est une prudence de gestion. Les coordonnées de l'article D. 4711-1 changent (inspecteur, service de prévention), et un affichage décroché ne se voit que lorsqu'on le regarde." };
+        },
+        doc: { modele: "note-rh", nom: "Relevé des affichages — note de constat",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Relevé des affichages et informations obligatoires" + (D.lieux ? " — " + D.lieux : ""),
+            date: D.dateReleve }; } } },
+    ]
+  },
+
+  /* ================================================================== */
+  /* 9. TENIR LE REGISTRE UNIQUE DU PERSONNEL                          */
+  /* ================================================================== */
+  {
+    cle: "registre",
+    nom: "Tenir le registre unique du personnel",
+    resume: "Un registre par établissement, dans l'ordre des embauches et de façon indélébile : les treize mentions de l'article D. 1221-23, la partie spécifique aux stagiaires et volontaires, la copie des titres de travail des salariés étrangers, la mise à jour au fil des événements, et la mise à disposition du comité et des agents de contrôle.",
+    audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
+    donnees: [
+      { c: "etablissement", nom: "Établissement concerné", t: "text",
+        aide: "Le registre est tenu dans TOUT établissement où sont employés des salariés (art. L. 1221-13) : un registre par établissement, pas un pour l'entreprise." },
+      { c: "dateOuverture", nom: "Date d'ouverture ou de reprise du registre", t: "date" },
+      { c: "support", nom: "Support du registre", t: "select",
+        options: ["papier relié", "support de substitution informatique"],
+        aide: "Un support de substitution appelle les exigences des articles D. 8113-2 et D. 8113-3, et l'avis du comité adressé à l'inspection du travail (art. D. 1221-27)." },
+      { c: "stagiaires", nom: "L'établissement accueille-t-il des stagiaires ou des volontaires en service civique ?", t: "oui-non" },
+      { c: "etrangers", nom: "L'établissement emploie-t-il des travailleurs étrangers soumis à titre de travail ?", t: "oui-non" },
+      { c: "interimaires", nom: "L'établissement recourt-il à des salariés temporaires ou à un groupement d'employeurs ?", t: "oui-non" },
+      { c: "dateAvisCSE", nom: "Date de l'avis du comité sur le support de substitution", t: "date",
+        si: function (P, D) { return D.support === "support de substitution informatique" ? true : (D.support ? false : null); } },
+    ],
+    prealable: [
+      { id: "liste", g: "information", nom: "La liste de tous les salariés, dans l'ordre chronologique des embauches",
+        aide: "L'ordre des embauches n'est pas décoratif : c'est ce que l'article L. 1221-13 impose, et c'est ce qu'un agent de contrôle vérifie d'abord." },
+      { id: "mentions", g: "information", nom: "Pour chacun : nationalité, date de naissance, sexe, emploi, qualification, dates d'entrée et de sortie",
+        aide: "Les six premières des treize indications complémentaires de l'article D. 1221-23." },
+      { id: "titres", g: "pièce", nom: "La copie des titres autorisant l'activité salariée des travailleurs étrangers",
+        aide: "Elle est annexée au registre et rendue accessible aux élus et aux agents de contrôle (art. D. 1221-24).",
+        si: function (P, D) { return D.etrangers === "non" ? false : true; } },
+      { id: "autorisations", g: "pièce", nom: "Les dates des autorisations d'embauche ou de licenciement, lorsqu'une autorisation est requise",
+        aide: "Septième indication de l'article D. 1221-23 : à défaut d'autorisation, la date de la demande." },
+      { id: "avis", g: "document", nom: "L'avis du comité social et économique sur le support de substitution",
+        aide: "L'article D. 1221-27 impose de l'adresser à l'inspection du travail.",
+        si: function (P, D) { return D.support === "support de substitution informatique" ? true : (D.support ? false : null); } },
+    ],
+    etapes: [
+      { id: "r1", nom: "Ouvrir un registre par établissement",
+        quoi: "Un registre unique du personnel est tenu dans tout établissement où sont employés des salariés. Si l'entreprise compte plusieurs établissements, elle compte autant de registres — la centralisation ne dispense pas de la tenue sur place.",
+        fond: ["L1221-13"],
+        quand: function (D) {
+          if (!D.dateOuverture) return null;
+          return { iso: D.dateOuverture, libelle: "Registre ouvert le " + dateFr(D.dateOuverture) };
+        } },
+      { id: "r2", nom: "Inscrire les noms et prénoms dans l'ordre des embauches, de façon indélébile",
+        quoi: "Les mentions sont portées sur le registre au moment de l'embauche et de façon indélébile. « Au moment de l'embauche » : pas à la fin du mois, pas quand le contrat est signé — au moment où le salarié entre.",
+        fond: ["L1221-13"] },
+      { id: "r3", nom: "Ouvrir la partie spécifique aux stagiaires et aux volontaires en service civique",
+        quoi: "Les nom et prénoms des stagiaires et des personnes volontaires en service civique accueillis dans l'établissement sont inscrits dans l'ordre d'arrivée, dans une partie spécifique du registre — distincte de celle des salariés.",
+        fond: ["L1221-13"],
+        si: function (P, D) { return D.stagiaires === "non" ? false : true; } },
+      { id: "r4", nom: "Porter les treize indications complémentaires",
+        quoi: "Nationalité ; date de naissance ; sexe ; emploi ; qualification ; dates d'entrée et de sortie ; date de l'autorisation d'embauche ou de licenciement lorsqu'elle est requise, ou à défaut de la demande ; titre valant autorisation de travail pour les travailleurs étrangers ; et les mentions « contrat à durée déterminée », « salarié temporaire » avec le nom et l'adresse de l'entreprise de travail temporaire, « mis à disposition par un groupement d'employeurs » avec sa dénomination et son adresse, « salarié à temps partiel », « apprenti » ou « contrat de professionnalisation ».",
+        fond: ["D1221-23"] },
+      { id: "r5", nom: "Annexer la copie des titres de travail des salariés étrangers",
+        quoi: "Elle est annexée au registre et rendue accessible aux membres de la délégation du personnel du comité et aux agents de contrôle. Elle est tenue à leur disposition soit dans l'établissement, soit sur chaque chantier ou lieu de travail distinct où ces travailleurs sont employés.",
+        fond: ["D1221-24"],
+        si: function (P, D) { return D.etrangers === "non" ? false : true; } },
+      { id: "r6", nom: "Mettre à jour au moment où l'événement survient",
+        quoi: "Les mentions relatives à des événements postérieurs à l'embauche du salarié, ou à l'arrivée du stagiaire, sont portées sur le registre au moment où ceux-ci surviennent. Une sortie inscrite trois mois plus tard est une sortie non inscrite.",
+        fond: ["D1221-25"] },
+      { id: "r7", nom: "Régulariser le support de substitution informatique",
+        quoi: "Lorsque l'employeur recourt à un support de substitution, les exigences des articles D. 8113-2 et D. 8113-3 sont applicables, et il adresse à l'inspection du travail l'avis du comité social et économique prévu à l'article L. 2315-5.",
+        fond: ["D1221-27"],
+        si: function (P, D) { return D.support === "support de substitution informatique" ? true : (D.support ? false : null); },
+        quand: function (D) {
+          if (!D.dateAvisCSE) return null;
+          return { iso: D.dateAvisCSE, libelle: "Avis du comité recueilli le " + dateFr(D.dateAvisCSE),
+            note: "L'article D. 1221-27 impose d'adresser cet avis à l'inspection du travail ; il ne fixe pas de délai." };
+        } },
+      { id: "r8", nom: "VALIDATION — tenir le registre à la disposition du comité et des agents de contrôle",
+        quoi: "Le registre est tenu à la disposition du comité social et économique et des fonctionnaires et agents chargés de veiller à l'application du code du travail et du code de la sécurité sociale. Datez cette mise à disposition, dites où le registre se consulte, et informez-en les élus par écrit : le parcours n'est terminé que lorsque le registre est consultable et que quelqu'un le sait.",
+        fond: ["L1221-15"],
+        doc: { modele: "note-rh", nom: "Note aux élus — mise à disposition du registre",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Registre unique du personnel" + (D.etablissement ? " — établissement " + D.etablissement : "") + " : lieu et modalités de consultation",
+            date: D.dateOuverture }; } } },
+    ]
+  },
+
+  /* ================================================================== */
+  /* 10. CONSTITUER LA BASE DE DONNÉES (BDESE)                         */
+  /* ================================================================== */
+  {
+    cle: "bdese",
+    nom: "Constituer la base de données (BDESE)",
+    resume: "L'accord d'abord, le régime supplétif ensuite : ce que l'accord de l'article L. 2312-21 peut définir, ce que la base doit contenir à défaut d'accord selon l'effectif (R. 2312-8 sous trois cents, R. 2312-9 au-delà), l'accès permanent des élus et des délégués syndicaux, et la mise à disposition qui vaut communication.",
+    audit: { href: "audit-bdese.html", nom: "le module d'audit de la base (BDESE)" },
+    donnees: [
+      { c: "accordBdese", nom: "Un accord définit-il l'organisation, l'architecture, le contenu et le fonctionnement de la base ?", t: "oui-non",
+        aide: "Accord d'entreprise de l'article L. 2232-12 ou, en l'absence de délégué syndical, accord entre l'employeur et le comité adopté à la majorité des titulaires (art. L. 2312-21)." },
+      { c: "accordBranche", nom: "À défaut, un accord de branche définit-il la base ?", t: "oui-non",
+        aide: "L'article L. 2312-21 ne l'ouvre qu'aux entreprises de moins de trois cents salariés.",
+        si: function (P, D) { return D.accordBdese === "oui" ? false : true; } },
+      { c: "support", nom: "Support de la base", t: "select",
+        options: ["informatique", "papier"],
+        aide: "L'article L. 2312-36 impose l'accès permanent : un support papier rend cet accès difficile à assurer, sans être interdit." },
+      { c: "dateMiseADisposition", nom: "Date de mise à disposition (ou de dernière actualisation)", t: "date" },
+      { c: "etablissementsDistincts", nom: "L'entreprise comporte-t-elle des établissements distincts ?", t: "oui-non",
+        aide: "L'accord fixe alors le niveau de mise en place de la base (art. L. 2312-21)." },
+    ],
+    prealable: [
+      { id: "accord", g: "document", nom: "L'accord qui définit la base, s'il existe",
+        aide: "C'est lui qui commande : le régime supplétif de l'article L. 2312-36 ne s'applique qu'« en l'absence d'accord prévu à l'article L. 2312-21 »." },
+      { id: "rubriques", g: "information", nom: "Les données des deux années précédentes, de l'année en cours, et les perspectives sur les trois années suivantes",
+        aide: "C'est la profondeur temporelle que l'article L. 2312-36 impose au régime supplétif." },
+      { id: "index", g: "information", nom: "Les indicateurs de l'index de l'égalité et les informations sur leur méthodologie",
+        aide: "L'article L. 2312-18 les range expressément dans la base, avec les écarts de représentation parmi les cadres dirigeants et les instances dirigeantes." },
+      { id: "formations", g: "information", nom: "Le bilan des actions de formation entreprises à l'issue des entretiens de parcours professionnel",
+        aide: "L'article L. 2312-18 l'inscrit également dans la base, aux côtés des périodes de reconversion de l'article L. 6324-1." },
+      { id: "acces", g: "information", nom: "La liste des élus et des délégués syndicaux à qui l'accès est dû",
+        aide: "Membres de la délégation du personnel du comité, du comité central, et délégués syndicaux (art. L. 2312-36)." },
+    ],
+    etapes: [
+      { id: "b1", nom: "Déterminer le régime : accord, accord de branche, ou supplétif",
+        quoi: "Un accord d'entreprise — ou, en l'absence de délégué syndical, un accord entre l'employeur et le comité adopté à la majorité des titulaires — définit l'organisation, l'architecture et le contenu de la base, ainsi que ses modalités de fonctionnement : droits d'accès, niveau de mise en place dans les entreprises à établissements distincts, support, modalités de consultation et d'utilisation. À défaut, un accord de branche peut le faire dans les entreprises de moins de trois cents salariés.",
+        fond: ["L2312-21"] },
+      { id: "b2", nom: "Vérifier les dix thèmes que la base comporte au moins",
+        quoi: "Même sous accord, la base comporte au moins : l'investissement social, l'investissement matériel et immatériel, l'égalité professionnelle entre les femmes et les hommes, les fonds propres, l'endettement, l'ensemble des éléments de rémunération des salariés et dirigeants, les activités sociales et culturelles, la rémunération des financeurs, les flux financiers à destination de l'entreprise, et les conséquences environnementales de l'activité.",
+        fond: ["L2312-21"] },
+      { id: "b3", nom: "À défaut d'accord, reprendre le contenu supplétif propre à l'effectif",
+        quoi: "En l'absence d'accord, la base rassemble les informations que l'article L. 2312-36 énumère, sur les deux années précédentes et l'année en cours, avec des perspectives sur les trois années suivantes. Le détail des rubriques est fixé par l'article R. 2312-8 sous trois cents salariés, et par l'article R. 2312-9 au-delà. Le module d'audit dédié en donne la liste exacte, rubrique par rubrique.",
+        fond: ["L2312-36", "R2312-8", "R2312-9"] },
+      { id: "b4", nom: "Y verser les indicateurs de l'égalité et le bilan des formations",
+        quoi: "La base comporte en particulier l'ensemble des indicateurs relatifs à l'égalité professionnelle — dont les écarts de rémunération et de répartition parmi les cadres dirigeants et les membres des instances dirigeantes —, les informations sur la méthodologie et le contenu des indicateurs de l'article L. 1142-8, et un bilan de la mise en œuvre des actions de formation entreprises à l'issue des entretiens de parcours professionnel.",
+        fond: ["L2312-18", "L1142-8", "L6315-1"] },
+      { id: "b5", nom: "Ouvrir l'accès permanent aux élus et aux délégués syndicaux",
+        quoi: "La base est accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central d'entreprise et aux délégués syndicaux. « En permanence » : pas sur demande, pas pendant les réunions.",
+        fond: ["L2312-36"] },
+      { id: "b6", nom: "Notifier la mise à disposition — elle vaut communication",
+        quoi: "Les éléments d'information transmis de manière récurrente au comité sont mis à sa disposition dans la base, et cette mise à disposition actualisée vaut communication des rapports et informations au comité, dans les conditions et limites fixées par décret en Conseil d'État. Datez-la : c'est de cette date que se compte le délai d'examen du comité.",
+        fond: ["L2312-18"],
+        quand: function (D) {
+          if (!D.dateMiseADisposition) return null;
+          return { iso: D.dateMiseADisposition,
+            libelle: "Mise à disposition actualisée le " + dateFr(D.dateMiseADisposition),
+            note: "C'est la date qui vaut communication au comité (art. L. 2312-18). Les délais dans lesquels l'avis est rendu s'auditent dans le module BDESE." };
+        },
+        doc: { modele: "note-rh", nom: "Note aux élus — mise à disposition de la base",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Base de données économiques, sociales et environnementales : accès et actualisation",
+            date: D.dateMiseADisposition }; } } },
+      { id: "b7", nom: "VALIDATION — auditer la base rubrique par rubrique dans le module dédié",
+        quoi: "Le chapeau dit que la base est due et comment elle se constitue ; il ne dit pas si la vôtre est complète. Ouvrez le module d'audit de la base : il confronte votre contenu au plancher applicable, rubrique par rubrique, et rend un verdict par rubrique. Le parcours n'est terminé que lorsque cet audit a été passé.",
+        fond: ["L2312-36", "R2312-8", "R2312-9"] },
+    ]
+  },
+
+  /* ================================================================== */
+  /* 11. CALCULER ET PUBLIER L'INDEX DE L'ÉGALITÉ PROFESSIONNELLE      */
+  /* ================================================================== */
+  {
+    cle: "index",
+    nom: "Calculer et publier l'index de l'égalité professionnelle",
+    resume: "Les cinq indicateurs, le niveau de résultat, la publication au plus tard le 1er mars sur le site de l'entreprise, la mise à disposition du comité, la télédéclaration — et, sous soixante-quinze points, les mesures de correction publiées et le délai de trois ans avant pénalité.",
+    audit: { href: "audit-nao.html", nom: "le module d'audit des négociations (NAO)" },
+    donnees: [
+      { c: "anneeReference", nom: "Année de référence (l'année dont on publie les résultats)", t: "text",
+        aide: "La publication se fait au titre de l'année précédente (art. D. 1142-4)." },
+      { c: "datePublication", nom: "Date de publication du niveau de résultat", t: "date",
+        aide: "Au plus tard le 1er mars de l'année en cours (art. D. 1142-4)." },
+      { c: "siteInternet", nom: "L'entreprise dispose-t-elle d'un site internet ?", t: "oui-non",
+        aide: "S'il en existe un, la publication s'y fait de manière visible et lisible. À défaut, les résultats sont portés à la connaissance des salariés par tout moyen (art. D. 1142-4)." },
+      { c: "niveauResultat", nom: "Niveau de résultat obtenu (sur 100 points)", t: "number",
+        aide: "Sous soixante-quinze points, les mesures de correction de l'article L. 1142-9 doivent être mises en œuvre (art. D. 1142-6)." },
+      { c: "dateDepotMesures", nom: "Date de dépôt de l'accord ou de la décision portant les mesures de correction", t: "date",
+        si: function (P, D) { var n = nb(D.niveauResultat); return n === null ? null : (n < 75); } },
+      { c: "millesalaries", nom: "L'entreprise emploie-t-elle au moins mille salariés pour le troisième exercice consécutif ?", t: "oui-non",
+        aide: "C'est le seuil de la publication des écarts de représentation parmi les cadres dirigeants et les instances dirigeantes (art. L. 1142-11)." },
+    ],
+    prealable: [
+      { id: "paie", g: "information", nom: "Les données de rémunération par sexe, par tranche d'âge et par catégorie de postes équivalents",
+        aide: "C'est l'assiette du premier indicateur de l'article D. 1142-2." },
+      { id: "augmentations", g: "information", nom: "Les taux d'augmentations individuelles hors promotions, et les taux de promotions, par sexe",
+        aide: "Deuxième et troisième indicateurs de l'article D. 1142-2." },
+      { id: "maternite", g: "information", nom: "Les retours de congé de maternité de la période, et les augmentations intervenues pendant le congé",
+        aide: "Quatrième indicateur : le pourcentage de salariées augmentées dans l'année de leur retour, si des augmentations sont intervenues pendant le congé." },
+      { id: "dixplus", g: "information", nom: "Les dix plus hautes rémunérations de l'entreprise et leur répartition par sexe",
+        aide: "Cinquième indicateur : le nombre de salariés du sexe sous-représenté parmi ces dix." },
+      { id: "annexes", g: "document", nom: "Les annexes I et II du chapitre, qui fixent les modalités de calcul",
+        aide: "Les articles D. 1142-2 et D. 1142-3 y renvoient expressément : les indicateurs et le niveau de résultat se calculent selon ces annexes, non selon une méthode maison." },
+      { id: "ues", g: "information", nom: "Le périmètre : entreprise, ou unité économique et sociale",
+        aide: "En cas de comité constitué au niveau d'une UES reconnue par accord ou par décision de justice, les indicateurs sont calculés au niveau de l'UES (art. D. 1142-2)." },
+    ],
+    etapes: [
+      { id: "x1", nom: "Vérifier l'assujettissement et le périmètre de calcul",
+        quoi: "L'obligation vise les entreprises d'au moins cinquante salariés : l'employeur publie chaque année l'ensemble des indicateurs relatifs aux écarts de rémunération entre les femmes et les hommes et aux actions mises en œuvre pour les supprimer, selon des modalités et une méthodologie définies par décret.",
+        fond: ["L1142-8"] },
+      { id: "x2", nom: "Calculer les cinq indicateurs",
+        quoi: "Écart de rémunération, calculé à partir de la moyenne des rémunérations des femmes comparée à celle des hommes par tranche d'âge et par catégorie de postes équivalents ; écart de taux d'augmentations individuelles hors promotions ; écart de taux de promotions ; pourcentage de salariées augmentées dans l'année de leur retour de congé de maternité ; nombre de salariés du sexe sous-représenté parmi les dix plus hautes rémunérations. Les modalités de calcul sont celles de l'annexe I.",
+        fond: ["D1142-2"] },
+      { id: "x3", nom: "Déterminer le niveau de résultat",
+        quoi: "Le niveau de résultat obtenu au regard des indicateurs est déterminé selon les modalités fixées aux annexes I et II du chapitre. C'est ce niveau — et non chaque indicateur pris isolément — qui commande la suite.",
+        fond: ["D1142-3"] },
+      { id: "x4", nom: "Publier au plus tard le 1er mars",
+        quoi: "Le niveau de résultat et les résultats de chaque indicateur sont publiés annuellement, au plus tard le 1er mars de l'année en cours au titre de l'année précédente, de manière visible et lisible sur le site internet de l'entreprise lorsqu'il en existe un. Ils y restent consultables au moins jusqu'à la publication de l'année suivante. À défaut de site internet, ils sont portés à la connaissance des salariés par tout moyen.",
+        fond: ["D1142-4"],
+        quand: function (D) {
+          if (!D.anneeReference || !/^\d{4}$/.test(String(D.anneeReference).trim())) return null;
+          var t = (Number(D.anneeReference) + 1) + "-03-01";
+          return { iso: t, libelle: "Publication due au plus tard le " + dateFr(t),
+            note: "L'article D. 1142-4 fixe cette échéance au 1er mars de l'année en cours, au titre de l'année précédente." };
+        },
+        doc: { modele: "note-rh", nom: "Note de publication de l'index",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Index de l'égalité professionnelle — résultats " + (D.anneeReference || "") +
+              (D.niveauResultat ? " : " + D.niveauResultat + " points sur 100" : ""),
+            date: D.datePublication }; } } },
+      { id: "x5", nom: "Mettre les indicateurs à la disposition du comité et télédéclarer",
+        quoi: "Les indicateurs et le niveau de résultat sont mis à la disposition du comité social et économique, selon la même périodicité, dans les conditions du deuxième alinéa de l'article L. 2312-18 — c'est-à-dire dans la base de données. Les résultats sont présentés par catégorie socio-professionnelle, niveau ou coefficient hiérarchique, accompagnés des précisions utiles à leur compréhension. Lorsqu'un indicateur n'a pas pu être calculé, l'information du comité en explique les raisons. L'ensemble est télédéclaré aux services du ministre chargé du travail.",
+        fond: ["D1142-5", "L2312-18"] },
+      { id: "x6", nom: "Sous soixante-quinze points : arrêter et publier les mesures de correction",
+        quoi: "Les mesures de correction et, le cas échéant, la programmation de mesures financières de rattrapage salarial doivent être mises en œuvre dès lors que le niveau de résultat est inférieur à soixante-quinze points. La négociation sur l'égalité professionnelle porte alors aussi sur ces mesures ; à défaut d'accord, elles sont arrêtées par décision de l'employeur après consultation du comité, et déposées auprès de l'autorité administrative. Elles sont publiées sur le site de l'entreprise, sur la même page que le résultat, dès le dépôt de l'accord ou de la décision, et y restent jusqu'à l'obtention d'un résultat au moins égal à soixante-quinze points.",
+        fond: ["L1142-9", "D1142-6"],
+        si: function (P, D) { var n = nb(D.niveauResultat); return n === null ? null : (n < 75); },
+        quand: function (D) {
+          if (!D.dateDepotMesures) return null;
+          return { iso: D.dateDepotMesures, libelle: "Mesures déposées le " + dateFr(D.dateDepotMesures),
+            note: "La publication des mesures est due dès lors que l'accord ou la décision unilatérale est déposé (art. D. 1142-6)." };
+        },
+        doc: { modele: "note-rh", nom: "Note de publication des mesures de correction",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Index de l'égalité professionnelle — mesures de correction et rattrapage salarial",
+            date: D.dateDepotMesures }; } } },
+      { id: "x7", nom: "Mesurer le délai de trois ans et l'exposition à la pénalité",
+        quoi: "En deçà du niveau défini par décret, l'entreprise dispose d'un délai de trois ans pour se mettre en conformité. À l'expiration de ce délai, si les résultats sont toujours en deçà, l'employeur peut se voir appliquer une pénalité financière fixée au maximum à 1 % des rémunérations, par décision de l'autorité administrative. Un délai supplémentaire d'un an peut être accordé au vu des efforts constatés et des motifs de la défaillance.",
+        fond: ["L1142-10"],
+        si: function (P, D) { var n = nb(D.niveauResultat); return n === null ? null : (n < 75); },
+        quand: function (D) {
+          if (!D.datePublication) return null;
+          var t = moisApres(D.datePublication, 36);
+          return { iso: t, libelle: "Mise en conformité attendue avant le " + dateFr(t),
+            note: "Trois ans comptés depuis la publication renseignée. L'article L. 1142-10 fixe le délai sans en préciser le point de départ exact : cette date est un repère de gestion, non une échéance dont le texte garantirait le calcul." };
+        } },
+      { id: "x8", nom: "À partir de mille salariés : publier les écarts de représentation",
+        quoi: "Dans les entreprises qui, pour le troisième exercice consécutif, emploient au moins mille salariés, l'employeur publie chaque année les écarts éventuels de représentation entre les femmes et les hommes parmi les cadres dirigeants d'une part, et les membres des instances dirigeantes d'autre part. La proportion de personnes de chaque sexe au sein de chacun de ces ensembles ne peut être inférieure à 30 %.",
+        fond: ["L1142-11"],
+        si: function (P, D) { return D.millesalaries === "non" ? false : (D.millesalaries === "oui" ? true : null); } },
+      { id: "x9", nom: "VALIDATION — conserver la preuve de la publication et de la télédéclaration",
+        quoi: "Conservez la capture datée de la page de publication, l'accusé de télédéclaration, et le procès-verbal de la réunion où les indicateurs ont été mis à la disposition du comité. Le module d'audit des négociations mesure ensuite l'exposition à la pénalité sur l'égalité. Le parcours n'est terminé que lorsque ces trois preuves existent.",
+        fond: ["D1142-4", "D1142-5"] },
+    ]
+  },
+
+  /* ================================================================== */
+  /* 12. ORGANISER LES ENTRETIENS DE PARCOURS PROFESSIONNEL            */
+  /* ================================================================== */
+  /* L'article L. 6315-1 a été réécrit : il ne parle plus d'« entretien
+     professionnel » mais d'« entretien de parcours professionnel ». La
+     version lue le 22 août 2026 est LEGIARTI000053279288 — c'est elle, et
+     son vocabulaire, que ce parcours suit. */
+  {
+    cle: "entretiens",
+    nom: "Organiser les entretiens de parcours professionnel",
+    resume: "L'information à l'embauche, l'entretien de la première année puis tous les quatre ans, les cinq sujets qu'il couvre, ce qu'il ne peut pas être (une évaluation du travail), les retours d'absences longues, le document remis au salarié, l'état des lieux des huit ans et son abondement du compte personnel de formation.",
+    audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
+    donnees: [
+      { c: "salarie", nom: "Salarié concerné (ou campagne : « tous les salariés »)", t: "text" },
+      { c: "dateEmbauche", nom: "Date d'embauche", t: "date",
+        aide: "L'entretien de la première année et le cycle des quatre ans s'y ancrent." },
+      { c: "dateDernierEntretien", nom: "Date du dernier entretien de parcours professionnel", t: "date" },
+      { c: "retourAbsence", nom: "Le salarié reprend-il son activité à l'issue d'un congé ou d'une absence longue ?", t: "oui-non",
+        aide: "Congés de maternité ou d'adoption, congé supplémentaire de naissance, congé parental, congé de proche aidant, congé sabbatique, mobilité volontaire sécurisée, temps partiel de l'article L. 1225-47, arrêt longue maladie, ou fin de mandat syndical." },
+      { c: "dateReprise", nom: "Date de reprise d'activité", t: "date",
+        si: function (P, D) { return D.retourAbsence === "oui" ? true : (D.retourAbsence === "non" ? false : null); } },
+      { c: "accordPeriodicite", nom: "Un accord fixe-t-il une périodicité différente des entretiens ?", t: "oui-non",
+        aide: "L'article L. 6315-1, III, l'autorise sans que la périodicité puisse excéder quatre ans." },
+      { c: "visiteMiCarriere", nom: "Une visite médicale de mi-carrière a-t-elle eu lieu ?", t: "oui-non",
+        aide: "L'entretien est alors organisé dans un délai de deux mois à compter de cette visite (art. L. 6315-1, IV)." },
+      { c: "dateVisiteMiCarriere", nom: "Date de la visite de mi-carrière", t: "date",
+        si: function (P, D) { return D.visiteMiCarriere === "oui" ? true : (D.visiteMiCarriere === "non" ? false : null); } },
+    ],
+    prealable: [
+      { id: "historique", g: "information", nom: "L'historique des entretiens du salarié sur les huit dernières années",
+        aide: "L'état des lieux récapitulatif vérifie que le salarié a bien bénéficié des entretiens prévus au cours de ces huit ans." },
+      { id: "formations", g: "information", nom: "Les actions de formation suivies, les certifications acquises, les progressions salariales ou professionnelles",
+        aide: "Ce sont les trois points que l'état des lieux des huit ans apprécie." },
+      { id: "trame", g: "document", nom: "La trame de l'entretien, couvrant les cinq sujets de l'article L. 6315-1, I",
+        aide: "Compétences et qualifications mobilisées et leur évolution possible ; situation et parcours au regard des évolutions des métiers ; besoins de formation ; souhaits d'évolution ; activation du compte personnel de formation, abondements et conseil en évolution professionnelle." },
+      { id: "conducteur", g: "information", nom: "Qui conduit l'entretien : un supérieur hiérarchique ou un représentant de la direction",
+        aide: "L'article L. 6315-1 le précise, et impose que l'entretien se déroule pendant le temps de travail." },
+      { id: "ccn", g: "document", nom: "L'accord de branche ou d'entreprise, s'il en existe un sur le sujet",
+        aide: "Il peut définir un cadre et des critères d'abondement du compte personnel de formation, d'autres modalités d'appréciation du parcours, et une périodicité différente — sans excéder quatre ans." },
+    ],
+    etapes: [
+      { id: "e1", nom: "Informer le salarié à l'embauche",
+        quoi: "À l'occasion de son embauche, le salarié est informé qu'il bénéficie d'un entretien de parcours professionnel avec son employeur au cours de la première année suivant son embauche. Cette information est due à l'embauche — elle se prouve, donc elle s'écrit.",
+        fond: ["L6315-1"],
+        quand: function (D) {
+          if (!D.dateEmbauche) return null;
+          var t = moisApres(D.dateEmbauche, 12);
+          return { iso: t, libelle: "Premier entretien à tenir avant le " + dateFr(t),
+            note: "L'article L. 6315-1, I, situe le premier entretien « au cours de la première année suivant son embauche »." };
+        },
+        doc: { modele: "note-rh", nom: "Note d'information à l'embauche",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Entretien de parcours professionnel : information du salarié " + (D.salarie || ""),
+            date: D.dateEmbauche }; } } },
+      { id: "e2", nom: "Tenir l'entretien de la première année, puis tous les quatre ans",
+        quoi: "Tout salarié restant employé dans la même entreprise bénéficie d'un entretien de parcours professionnel tous les quatre ans. Un accord collectif d'entreprise ou, à défaut, de branche peut prévoir une périodicité différente, sans qu'elle excède quatre ans.",
+        fond: ["L6315-1"],
+        conv: "la périodicité que votre accord de branche ou d'entreprise fixe, et les critères collectifs d'abondement du compte personnel de formation qu'il peut définir (art. L. 6315-1, III)",
+        quand: function (D) {
+          if (!D.dateDernierEntretien) return null;
+          var t = moisApres(D.dateDernierEntretien, 48);
+          return { iso: t, libelle: "Entretien suivant dû avant le " + dateFr(t),
+            note: "Quatre ans depuis le " + dateFr(D.dateDernierEntretien) + ". Un accord peut retenir une périodicité plus courte, jamais plus longue." };
+        } },
+      { id: "e3", nom: "Couvrir les cinq sujets — et ne pas évaluer le travail",
+        quoi: "L'entretien est consacré aux compétences et qualifications mobilisées et à leur évolution possible ; à la situation et au parcours professionnels au regard des évolutions des métiers ; aux besoins de formation ; aux souhaits d'évolution — l'entretien pouvant ouvrir la voie à une reconversion, à un projet de transition, à un bilan de compétences ou à une validation des acquis ; et à l'activation du compte personnel de formation, aux abondements que l'employeur peut financer et au conseil en évolution professionnelle. L'entretien de parcours professionnel NE PORTE PAS sur l'évaluation du travail du salarié : c'est le texte qui le dit.",
+        fond: ["L6315-1"] },
+      { id: "e4", nom: "Proposer l'entretien au retour d'une absence longue",
+        quoi: "L'entretien est proposé systématiquement au salarié qui reprend son activité à l'issue des congés de maternité et d'adoption, d'un congé supplémentaire de naissance, d'un congé parental d'éducation, d'un congé de proche aidant, d'un congé sabbatique, d'une période de mobilité volontaire sécurisée, d'une période d'activité à temps partiel de l'article L. 1225-47, d'un arrêt longue maladie ou d'un mandat syndical — s'il n'a bénéficié d'aucun entretien au cours des douze mois précédant sa reprise. À l'initiative du salarié, il peut avoir lieu avant la reprise de poste.",
+        fond: ["L6315-1"],
+        si: function (P, D) { return D.retourAbsence === "non" ? false : true; },
+        quand: function (D) {
+          if (!D.dateReprise) return null;
+          return { iso: D.dateReprise, libelle: "Reprise d'activité le " + dateFr(D.dateReprise),
+            note: "L'article L. 6315-1 ne fixe pas de délai chiffré après la reprise : il impose que l'entretien soit « proposé systématiquement ». Proposez-le par écrit, et datez la proposition." };
+        } },
+      { id: "e5", nom: "Articuler l'entretien avec la visite médicale de mi-carrière",
+        quoi: "L'entretien est organisé dans un délai de deux mois à compter de la visite médicale de mi-carrière prévue à l'article L. 4624-2-2. L'employeur ne peut pas avoir accès aux données de santé du salarié ; les mesures proposées par le médecin du travail sont évoquées au cours de l'entretien. Y sont abordés, s'il y a lieu, l'adaptation ou l'aménagement des missions et du poste, la prévention de l'usure professionnelle, les besoins de formation et les souhaits de mobilité ou de reconversion.",
+        fond: ["L6315-1"],
+        si: function (P, D) { return D.visiteMiCarriere === "non" ? false : (D.visiteMiCarriere === "oui" ? true : null); },
+        quand: function (D) {
+          if (!D.dateVisiteMiCarriere) return null;
+          var t = moisApres(D.dateVisiteMiCarriere, 2);
+          return { iso: t, libelle: "Entretien à tenir avant le " + dateFr(t),
+            note: "Deux mois depuis la visite de mi-carrière (art. L. 6315-1, IV)." };
+        } },
+      { id: "e6", nom: "Rédiger le document et en remettre copie au salarié",
+        quoi: "L'entretien donne lieu à la rédaction d'un document dont une copie est remise au salarié. Sans ce document, l'entretien n'est pas prouvé — et un entretien non prouvé est un entretien qui n'a pas eu lieu.",
+        fond: ["L6315-1"],
+        doc: { modele: "note-rh", nom: "Compte rendu d'entretien de parcours professionnel",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Entretien de parcours professionnel — " + (D.salarie || "salarié à renseigner"),
+            date: D.dateDernierEntretien }; } } },
+      { id: "e7", nom: "Faire l'état des lieux récapitulatif des huit ans",
+        quoi: "Tous les huit ans, l'entretien fait un état des lieux récapitulatif du parcours professionnel du salarié — le premier après l'embauche pouvant être réalisé sept ans après le premier entretien. Cet état des lieux, qui donne lieu à un document dont copie est remise au salarié, vérifie que le salarié a bénéficié des entretiens prévus, et apprécie s'il a suivi au moins une action de formation, acquis des éléments de certification par la formation ou par validation des acquis, et bénéficié d'une progression salariale ou professionnelle.",
+        fond: ["L6315-1"],
+        quand: function (D) {
+          if (!D.dateEmbauche) return null;
+          var t = moisApres(D.dateEmbauche, 96);
+          return { iso: t, libelle: "État des lieux des huit ans dû avant le " + dateFr(t),
+            note: "Huit ans depuis l'embauche du " + dateFr(D.dateEmbauche) + ". La durée s'apprécie par référence à l'ancienneté du salarié dans l'entreprise." };
+        } },
+      { id: "e8", nom: "À partir de cinquante salariés : vérifier l'abondement du compte personnel de formation",
+        quoi: "Dans les entreprises d'au moins cinquante salariés, lorsque au cours de ces huit années le salarié n'a pas bénéficié des entretiens prévus ET d'au moins une formation autre que celle de l'article L. 6321-2, son compte personnel de formation est abondé dans les conditions de l'article L. 6323-13. L'effectif et le franchissement du seuil s'apprécient selon l'article L. 130-1 du code de la sécurité sociale.",
+        fond: ["L6315-1"],
+        si: function (P) { return seuil(P, 50); } },
+      { id: "e9", nom: "VALIDATION — rattacher les entretiens à l'obligation d'adaptation, et archiver",
+        quoi: "L'employeur assure l'adaptation des salariés à leur poste de travail et veille au maintien de leur capacité à occuper un emploi : les besoins de formation relevés en entretien nourrissent cette obligation, et le bilan des actions entreprises à l'issue des entretiens entre dans la base de données. Archivez les documents remis, datez la campagne, et portez le bilan à la base. Le parcours n'est terminé que lorsque ce bilan existe.",
+        fond: ["L6321-1", "L2312-18"] },
+    ]
+  },
+
   ];
 
 
@@ -1540,11 +2059,23 @@
     var id = prefixe + "-" + ch.c.replace(/\./g, "_");
     var aide = ch.aide ? '<p class="aide-champ">' + e(ch.aide) + "</p>" : "";
     var interieur;
+    /* Une réponse fermée porte QUATRE valeurs : oui, non, en cours, autre.
+       « oui » et « non » concluent. « en cours » et « autre » ne concluent
+       jamais : les conditions d'affichage des étapes ne les tiennent ni pour
+       un oui ni pour un non — elles rendent alors « indéterminé », donc
+       VISIBLE. Une régularisation commencée n'est pas une régularisation
+       faite, et l'application ne masque rien sur une réponse nuancée. */
     if (ch.t === "oui-non") {
+      var VAL4 = (window.Profil && window.Profil.VALEURS) || ["oui", "non", "en cours", "autre"];
+      var vLibre = valeur && VAL4.indexOf(String(valeur)) < 0;
+      var vChoisi = vLibre ? "autre" : String(valeur == null ? "" : valeur);
       interieur = '<select id="' + id + '" data-champ="' + e(ch.c) + '"><option value=""></option>' +
-        ["oui", "non"].map(function (o) {
-          return '<option' + (valeur === o ? " selected" : "") + ">" + o + "</option>";
-        }).join("") + "</select>";
+        VAL4.map(function (o) {
+          return '<option value="' + o + '"' + (vChoisi === o ? " selected" : "") + ">" + o + "</option>";
+        }).join("") + "</select>" +
+        '<input type="text" id="' + id + '-libre" data-libre="' + e(ch.c) + '" placeholder="précisez" ' +
+        'style="margin-top:6px' + (vLibre ? "" : ";display:none") + '" value="' +
+        (vLibre ? e(valeur) : "") + '">';
     } else if (ch.t === "select") {
       var connu = (ch.options || []).indexOf(String(valeur)) >= 0;
       interieur = '<select id="' + id + '" data-champ="' + e(ch.c) + '"><option value=""></option>' +
@@ -1575,17 +2106,10 @@
       CHAMPS_PROFIL.map(function (ch) { return champHtml(ch, PROFIL[ch.c], "pr"); }).join("") +
       "</div></fieldset>";
 
-    /* Le « — autre — » du secteur alimente la même valeur : rien ne change
-       pour les consommateurs du profil, qui lisent une chaîne. */
-    var sel = $("pr-secteur"), libre = $("pr-secteur-libre");
-    if (sel && libre) {
-      sel.addEventListener("change", function () {
-        libre.style.display = sel.value === "__autre" ? "" : "none";
-        if (sel.value !== "__autre") libre.value = "";
-        majProfil();
-      });
-      libre.addEventListener("input", majProfil);
-    }
+    /* Les saisies libres : le « — autre — » du secteur comme le « autre » des
+       réponses fermées alimentent la même valeur — rien ne change pour les
+       consommateurs du profil, qui lisent une chaîne. */
+    brancherLibres(f, "pr", CHAMPS_PROFIL, majProfil);
     var cc = $("pr-conventionCollective");
     if (cc && window.IDCC && window.IDCC.attacher) window.IDCC.attacher(cc);
 
@@ -1593,15 +2117,41 @@
     f.addEventListener("change", majProfil);
   }
 
+  /* Un menu qui ouvre une saisie libre : « — autre — » des listes, « autre »
+     des réponses fermées. Le champ libre est vidé dès qu'on le referme, pour
+     qu'une valeur abandonnée ne survive pas à son menu. */
+  function brancherLibres(racine, prefixe, champs, apres) {
+    champs.forEach(function (ch) {
+      var id = prefixe + "-" + String(ch.c).replace(/\./g, "_");
+      var sel = racine.querySelector("#" + id.replace(/([^\w-])/g, "\\$1"));
+      var libre = racine.querySelector("#" + (id + "-libre").replace(/([^\w-])/g, "\\$1"));
+      if (!sel || !libre) return;
+      sel.addEventListener("change", function () {
+        var ouvert = sel.value === "__autre" || sel.value === "autre";
+        libre.style.display = ouvert ? "" : "none";
+        if (!ouvert) libre.value = "";
+        apres();
+      });
+      libre.addEventListener("input", apres);
+    });
+  }
+  /* Lire un champ rendu par champHtml : le menu, ou la saisie libre. */
+  function valeurChamp(ch, prefixe) {
+    var id = prefixe + "-" + String(ch.c).replace(/\./g, "_");
+    var el = $(id);
+    if (!el) return undefined;
+    var v = el.value;
+    if ((ch.autre && v === "__autre") || (ch.t === "oui-non" && v === "autre")) {
+      var l = $(id + "-libre");
+      v = l ? l.value.trim() : "";
+    }
+    return v;
+  }
+
   function majProfil() {
     CHAMPS_PROFIL.forEach(function (ch) {
-      var el = $("pr-" + ch.c);
-      if (!el) return;
-      var v = el.value;
-      if (ch.autre && v === "__autre") {
-        var l = $("pr-" + ch.c + "-libre");
-        v = l ? l.value.trim() : "";
-      }
+      var v = valeurChamp(ch, "pr");
+      if (v === undefined) return;
       PROFIL[ch.c] = v;
     });
     ecrireProfil();
@@ -1772,8 +2322,8 @@
     var fd = $("form-donnees");
     function majDonnees() {
       champs.forEach(function (c) {
-        var el = $("dn-" + c.c);
-        if (el) D[c.c] = el.value;
+        var v = valeurChamp(c, "dn");
+        if (v !== undefined) D[c.c] = v;
       });
       enregistrer(); rendre(); majCartes();
     }
@@ -1781,6 +2331,21 @@
        complet s'impose. Sur un champ texte, on attend qu'il perde le focus —
        reconstruire à chaque frappe le lui ferait perdre. */
     fd.addEventListener("change", majDonnees);
+    /* La saisie libre d'un « autre » ne déclenche pas « change » à chaque
+       frappe : on la branche comme sur le profil, mais sans rendu complet —
+       il ferait perdre le focus. */
+    champs.forEach(function (c) {
+      if (c.t !== "oui-non" && !c.autre) return;
+      var l = $("dn-" + String(c.c).replace(/\./g, "_") + "-libre");
+      var s = $("dn-" + String(c.c).replace(/\./g, "_"));
+      if (!l || !s) return;
+      s.addEventListener("change", function () {
+        var ouvert = s.value === "__autre" || s.value === "autre";
+        l.style.display = ouvert ? "" : "none";
+        if (!ouvert) l.value = "";
+      });
+      l.addEventListener("blur", majDonnees);
+    });
 
     /* --- la progression --- */
     $("zone-progression").innerHTML = '<h2 class="titre-zone">5. J\'en suis où</h2>' +

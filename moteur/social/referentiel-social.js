@@ -435,8 +435,12 @@ item({
       motifNC: "Le règlement intérieur ne rappelle pas les dispositions relatives aux harcèlements et agissements sexistes : ce contenu est obligatoire — complétez-le à la prochaine révision." },
     { cle: "avisCSE", libelle: "L'avis du CSE a-t-il été recueilli (texte initial et chaque modification) ?", format: "oui / non", regle: "oui",
       motifNC: "L'avis du comité n'est pas établi : sans cette consultation, le règlement intérieur n'est pas opposable — reprenez la procédure." },
-    { cle: "depotEtPublicite", libelle: "Dépôt (greffe des prud'hommes, inspection du travail) et publicité faits ?", format: "oui / non", regle: "oui",
-      motifNC: "Les formalités de dépôt et de publicité ne sont pas établies : elles conditionnent l'entrée en vigueur du texte — accomplissez-les et conservez les récépissés." },
+    { cle: "depotGreffe", libelle: "A-t-il été déposé au greffe du conseil de prud'hommes du ressort ?", format: "oui / non", regle: "oui",
+      motifNC: "Le dépôt au greffe du conseil de prud'hommes n'est pas établi : il conditionne, avec la publicité, le point de départ du délai d'un mois qui précède l'entrée en vigueur — déposez et conservez le récépissé." },
+    { cle: "communicationInspection", libelle: "A-t-il été transmis à l'inspection du travail, accompagné de l'avis du comité ?", format: "oui / non", regle: "oui",
+      motifNC: "La transmission à l'inspection du travail, avec l'avis du comité, n'est pas établie : accomplissez-la et conservez la preuve de l'envoi." },
+    { cle: "publicite", libelle: "Est-il affiché ou porté par tout moyen à la connaissance des personnes ayant accès aux lieux de travail et aux locaux d'embauche ?", format: "oui / non", regle: "oui",
+      motifNC: "La publicité auprès des salariés n'est pas établie : elle conditionne, avec le dépôt, l'entrée en vigueur du texte — affichez ou diffusez, et datez cette diffusion." },
     { cle: "dateDerniereRevision", libelle: "Date de la dernière révision", format: "AAAA-MM-JJ", regle: "date" },
   ],
   plan: {
@@ -501,7 +505,7 @@ item({
       : " La base de données n'est due qu'à partir de cinquante salariés.") };
   },
   verifs: [
-    { cle: "bdeseExiste", libelle: "La base existe-t-elle et est-elle tenue à jour ?", format: "oui / non", regle: "oui",
+    { cle: "bdeseExiste", libelle: "Avez-vous une base de données économiques, sociales et environnementales, et a-t-elle été actualisée au cours des douze derniers mois ?", format: "oui / non", regle: "oui",
       motifNC: "Aucune base de données déclarée alors que le seuil de cinquante salariés est atteint : sans elle, les consultations du comité sont irrégulières — constituez-la, puis auditez-la dans le module dédié." },
   ],
   plan: {
@@ -569,7 +573,7 @@ item({
   verifs: [
     { cle: "declarationFaite", libelle: "La déclaration annuelle (via la DSN) est-elle faite ?", format: "oui / non", regle: "oui",
       motifNC: "La déclaration annuelle de l'obligation d'emploi n'est pas établie : régularisez-la — son absence expose à la contribution majorée." },
-    { cle: "obligationSatisfaite", libelle: "L'obligation est-elle satisfaite (emploi direct, contribution, accord agréé) ?", format: "oui / non", regle: "oui",
+    { cle: "obligationSatisfaite", libelle: "Pour la dernière année, avez-vous employé des bénéficiaires, versé la contribution ou appliqué un accord agréé ?", format: "oui / non", regle: "oui",
       motifNC: "L'obligation d'emploi n'est pas couverte (ni emploi direct suffisant, ni contribution, ni accord agréé) : chiffrez l'écart et choisissez la voie de régularisation." },
   ],
   plan: {
@@ -805,8 +809,10 @@ item({
     return { du: true, motif: `Convention déclarée : « ${String(p.conventionCollective).trim()} ». Les salariés doivent être informés des textes conventionnels applicables — avis, exemplaire tenu à disposition, mention sur le bulletin de paie.` };
   },
   verifs: [
-    { cle: "avisEtAcces", libelle: "L'avis est-il communiqué et un exemplaire à jour tenu à la disposition des salariés (ou sur l'intranet) ?", format: "oui / non", regle: "oui",
-      motifNC: "L'information sur la convention collective n'est pas organisée : communiquez l'avis, tenez un exemplaire à jour à disposition (ou en ligne), vérifiez la mention au bulletin de paie." },
+    { cle: "avisEtAcces", libelle: "L'avis indiquant la convention applicable et les modalités de sa consultation est-il communiqué aux salariés ?", format: "oui / non", regle: "oui",
+      motifNC: "L'avis d'information sur la convention collective n'est pas communiqué : rédigez-le et diffusez-le selon les modalités de l'article R. 2262-1 — ou selon celles que votre accord prévoit." },
+    { cle: "exemplaireDisponible", libelle: "Un exemplaire à jour de la convention est-il tenu à la disposition des salariés sur le lieu de travail (ou mis en ligne sur l'intranet) ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun exemplaire à jour n'est tenu à la disposition des salariés : procurez-vous le texte consolidé et ses avenants, et rendez-le consultable sur le lieu de travail ou sur l'intranet." },
   ],
   plan: {
     priorite: 3,
@@ -1069,7 +1075,7 @@ item({
   verifs: [
     { cle: "embauchesVues", libelle: "Chaque salarié a-t-il bénéficié de sa visite d'information et de prévention dans le délai suivant la prise de poste ?", format: "oui / non", regle: "oui",
       motifNC: "Des salariés n'ont pas eu leur visite d'information et de prévention : programmez les visites en retard — le délai court à compter de la prise de poste, et certains postes appellent un suivi renforcé ou une visite avant affectation." },
-    { cle: "suiviPeriodique", libelle: "Le suivi périodique est-il à jour — périodicité fixée par le médecin du travail, qui ne peut excéder cinq ans (R. 4624-16) ?", format: "oui / non", regle: "oui",
+    { cle: "suiviPeriodique", libelle: "Chaque salarié a-t-il eu sa dernière visite périodique dans le délai fixé par le médecin du travail (cinq ans au plus, R. 4624-16) ?", format: "oui / non", regle: "oui",
       motifNC: "Le suivi périodique n'est pas à jour : la visite se renouvelle à la périodicité fixée par le médecin du travail, sans pouvoir excéder cinq ans (R. 4624-16) — demandez au service de prévention l'état des visites et reprogrammez les échéances dépassées." },
   ],
   plan: {
@@ -1294,9 +1300,9 @@ item({
   generique: "Cette obligation relève du code de la sécurité sociale, que le relais de l'application ne sert pas : aucun article n'est cité ni vérifié ici. La généralisation de la couverture santé d'entreprise (panier minimal, financement patronal au moins pour moitié, acte fondateur formalisé) est à vérifier sur les textes en vigueur et votre convention.",
   condition: toutEmployeur,
   verifs: [
-    { cle: "contratEnPlace", libelle: "Un contrat collectif santé couvrant tous les salariés (sauf dispenses valables) est-il en place ?", format: "oui / non", regle: "oui",
+    { cle: "contratEnPlace", libelle: "Avez-vous souscrit un contrat collectif santé couvrant l'ensemble des salariés ?", format: "oui / non", regle: "oui",
       motifNC: "Aucune complémentaire santé collective déclarée : mettez-la en place — l'obligation est générale, et la convention collective peut imposer des garanties supérieures." },
-    { cle: "acteFondateur", libelle: "L'acte fondateur (accord, référendum ou décision unilatérale écrite) et les dispenses sont-ils formalisés ?", format: "oui / non", regle: "oui",
+    { cle: "acteFondateur", libelle: "L'acte fondateur (accord, référendum ou décision unilatérale) est-il écrit, et les dispenses individuelles recueillies par écrit ?", format: "oui / non", regle: "oui",
       motifNC: "Le régime existe mais son acte fondateur ou les dispenses ne sont pas formalisés : régularisez l'écrit — les exonérations sociales en dépendent." },
   ],
   plan: {
@@ -1328,7 +1334,7 @@ item({
     return { du: true, motif: "L'entreprise emploie des cadres : la prévoyance des cadres est une obligation d'origine conventionnelle (accord national interprofessionnel et conventions de branche) — selon la convention collective applicable : à vérifier. Le relais de l'application ne sert que le code du travail : rien de précis n'est affirmé ici." };
   },
   verifs: [
-    { cle: "contratEnPlace", libelle: "Un contrat de prévoyance couvrant les cadres, avec la cotisation patronale dédiée affectée en priorité au risque décès, est-il en place ?", format: "oui / non", regle: "oui",
+    { cle: "contratEnPlace", libelle: "Avez-vous souscrit un contrat de prévoyance pour les cadres, et la cotisation patronale dédiée est-elle affectée en priorité au risque décès ?", format: "oui / non", regle: "oui",
       motifNC: "Aucune prévoyance cadres déclarée : c'est le manquement le plus coûteux du domaine — en cas de décès d'un cadre non couvert, l'employeur doit un capital aux ayants droit. Vérifiez la convention et couvrez le risque sans délai." },
   ],
   plan: {
@@ -1359,10 +1365,10 @@ item({
     return { du: true, motif: `La convention « ${String(p.conventionCollective).trim()} » ajoute ses propres obligations : salaires minima, primes, prévoyance, classification, jours conventionnels… Selon la convention collective applicable : à vérifier — le relais de l'application ne sert que le code du travail, rien de précis n'est affirmé ici.` };
   },
   verifs: [
-    { cle: "verificationFaite", libelle: "Une vérification de conformité aux obligations de la branche (minima, primes, prévoyance…) a-t-elle été faite récemment ?", format: "oui / non", regle: "oui",
-      motifNC: "Aucune vérification de conformité conventionnelle déclarée : faites passer en revue minima, primes, classification et prévoyance de branche — un rappel de prime conventionnelle se prescrit en années, pas en mois." },
-    { cle: "dateVerification", libelle: "Date de la dernière vérification", format: "AAAA-MM-JJ", regle: "ageMaxMois", mois: 24,
-      motifNC: "La dernière vérification conventionnelle date de plus de deux ans : les avenants de branche tombent chaque année — refaites la revue." },
+    { cle: "verificationFaite", libelle: "Avez-vous relevé les obligations de votre branche (minima, primes, prévoyance…) et confronté vos pratiques à ce relevé ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucune revue conventionnelle déclarée : faites passer en revue minima, primes, classification et prévoyance de branche — un rappel de prime conventionnelle se prescrit en années, pas en mois." },
+    { cle: "dateVerification", libelle: "Date de la dernière revue", format: "AAAA-MM-JJ", regle: "ageMaxMois", mois: 24,
+      motifNC: "La dernière revue conventionnelle date de plus de deux ans : les avenants de branche tombent chaque année — refaites-la." },
   ],
   plan: {
     priorite: 3,
@@ -1379,11 +1385,114 @@ item({
   },
 });
 
+/* ══════════════════ la régularisation : obligation → parcours → modèle ══
+
+   Une obligation manquante n'est utile au client que si l'application lui dit
+   AUSSI comment la combler. Deux liens, et deux seulement :
+
+   - LE PARCOURS (parcours.html?p=<clé>) : la procédure pas à pas, étape par
+     étape, chacune fondée sur un article lu à la source et se terminant par
+     une étape de validation. C'est le « comment ».
+
+   - LE DOCUMENT (documents.html?modele=<clé>) : la trame imprimable et
+     pré-remplie du courrier, du procès-verbal ou de la délibération que
+     l'étape appelle. C'est le « avec quoi ».
+
+   S'y ajoute, pour les quarante et une obligations sans exception, le MODÈLE
+   COMPLET de l'obligation elle-même — structure intégrale, exemple chiffré,
+   champs à personnaliser — engendré par modeles-social.js à partir du profil.
+
+   CE QUI N'A PAS DE PARCOURS LE DIT. Une obligation sans procédure guidée
+   porte `parcours: null` : le guide de régularisation affiche alors ses
+   étapes propres et le renvoi au module d'audit dédié, plutôt qu'un lien qui
+   ne mènerait nulle part. Les clés de parcours et de documents sont vérifiées
+   à la publication (publier-social.js) contre docs/parcours.js et
+   docs/documents.html : un lien mort fait échouer la chaîne.               */
+const PARCOURS_NOMS = {
+  sanction: "Sanctionner un salarié",
+  nao: "Conduire les négociations obligatoires (NAO)",
+  commissions: "Constituer les commissions du CSE",
+  reunion: "Tenir une réunion du CSE",
+  ri: "Établir ou mettre à jour le règlement intérieur",
+  duerp: "Mettre à jour le DUERP",
+  installation: "Installer le CSE : la première réunion",
+  affichages: "Mettre en place les affichages et informations obligatoires",
+  registre: "Tenir le registre unique du personnel",
+  bdese: "Constituer la base de données (BDESE)",
+  index: "Calculer et publier l'index de l'égalité professionnelle",
+  entretiens: "Organiser les entretiens de parcours professionnel",
+};
+
+const LIAISONS = {
+  /* instances */
+  "SOC-INS-CSE":                 { parcours: "installation", document: "convocation-installation" },
+  "SOC-INS-CSE-ETAB":            { parcours: "installation", document: "convocation-installation" },
+  "SOC-INS-CSSCT":               { parcours: "commissions",  document: "designation-commission" },
+  "SOC-INS-COMMISSIONS":         { parcours: "commissions",  document: "designation-commission" },
+  "SOC-INS-COMMISSION-ECO":      { parcours: "commissions",  document: "designation-commission" },
+  "SOC-INS-COMMISSION-MARCHES":  { parcours: "commissions",  document: "designation-commission" },
+  "SOC-INS-FORMATION-ELUS":      { parcours: "commissions",  document: "cr-commission" },
+  "SOC-INS-REUNIONS-SST":        { parcours: "reunion",      document: "convocation" },
+  "SOC-INS-GROUPE":              { parcours: null,           document: null },
+  "SOC-INS-REF-HARCELEMENT":     { parcours: "installation", document: "pv-installation" },
+  /* documents obligatoires */
+  "SOC-DOC-RI":                  { parcours: "ri",           document: "echelle-sanctions" },
+  "SOC-DOC-DUERP":               { parcours: "duerp",        document: null },
+  "SOC-DOC-BDESE":               { parcours: "bdese",        document: "demande-documentation-eco" },
+  "SOC-DOC-INDEX":               { parcours: "index",        document: "note-rh" },
+  "SOC-DOC-OETH":                { parcours: null,           document: null },
+  /* affichages et informations */
+  "SOC-AFF-HARCELEMENT":         { parcours: "affichages",   document: "signalement-harcelement" },
+  "SOC-AFF-EGALITE":             { parcours: "affichages",   document: "note-rh" },
+  "SOC-AFF-EGA-REMU":            { parcours: "affichages",   document: "note-rh" },
+  "SOC-AFF-COORDONNEES":         { parcours: "affichages",   document: "note-rh" },
+  "SOC-AFF-CONSIGNE-INCENDIE":   { parcours: "affichages",   document: "note-rh" },
+  "SOC-AFF-HORAIRES":            { parcours: "affichages",   document: "note-rh" },
+  "SOC-AFF-DECOMPTE":            { parcours: "affichages",   document: "note-rh" },
+  "SOC-AFF-CONVENTION":          { parcours: "affichages",   document: "note-rh" },
+  "SOC-AFF-FUMER":               { parcours: "affichages",   document: "note-rh" },
+  /* registres */
+  "SOC-REG-PERSONNEL":           { parcours: "registre",     document: "note-rh" },
+  "SOC-REG-SECURITE":            { parcours: null,           document: null },
+  "SOC-REG-DGI":                 { parcours: null,           document: "alerte" },
+  /* négociations */
+  "SOC-NEG-NAO":                 { parcours: "nao",          document: "accord-methode" },
+  "SOC-NEG-EGALITE":             { parcours: "nao",          document: "accord-methode" },
+  "SOC-NEG-PSE":                 { parcours: null,           document: null },
+  /* santé-sécurité */
+  "SOC-SST-SPST":                { parcours: null,           document: null },
+  "SOC-SST-VIP":                 { parcours: null,           document: null },
+  "SOC-SST-POSTES-RISQUES":      { parcours: "duerp",        document: null },
+  "SOC-SST-FORMATION-SECU":      { parcours: "duerp",        document: null },
+  /* formation et entretiens */
+  "SOC-FOR-ENTRETIENS":          { parcours: "entretiens",   document: "note-rh" },
+  "SOC-FOR-ADAPTATION":          { parcours: "entretiens",   document: "note-rh" },
+  /* épargne et protection sociale */
+  "SOC-EPA-PARTICIPATION":       { parcours: null,           document: null },
+  "SOC-EPA-LIVRET":              { parcours: null,           document: "note-rh" },
+  "SOC-EPA-SANTE":               { parcours: null,           document: null },
+  "SOC-EPA-PREVOYANCE-CADRES":   { parcours: null,           document: null },
+  "SOC-CCN-OBLIGATIONS":         { parcours: null,           document: null },
+};
+
 /* ─── la garde finale : aucun item ne cite un article non lu ─── */
 for (const it of REF) {
   for (const n of it.articles) art(n);
   if (!CATEGORIES.includes(it.categorie))
     throw new Error(`référentiel social : catégorie inconnue « ${it.categorie} » (${it.id})`);
+  /* La liaison de régularisation : elle doit être DÉCLARÉE pour chaque item,
+     fût-ce à null. Un oubli n'est pas une absence de parcours — c'est un
+     oubli, et il fait échouer le chargement. */
+  if (!Object.prototype.hasOwnProperty.call(LIAISONS, it.id))
+    throw new Error(`référentiel social : l'obligation ${it.id} n'a pas de liaison de régularisation déclarée (parcours et document, fût-ce à null).`);
+  const L = LIAISONS[it.id];
+  if (L.parcours && !PARCOURS_NOMS[L.parcours])
+    throw new Error(`référentiel social : ${it.id} renvoie au parcours inconnu « ${L.parcours} ».`);
+  it.regularisation = {
+    parcours: L.parcours || null,
+    parcoursNom: L.parcours ? PARCOURS_NOMS[L.parcours] : null,
+    document: L.document || null,
+  };
   it.fondement = it.module && !it.articles.length
     ? `audit détaillé dans le module « ${it.module.nom} » (${it.module.page})` + (it.articlesSouhaites.length ? " — " + fondement(it.articlesSouhaites) : "")
     : it.convention ? "selon la convention collective applicable : à vérifier — le relais ne sert que le code du travail"
@@ -1397,7 +1506,8 @@ const parCategorie = () => {
   return o;
 };
 
-module.exports = { REF, CATEGORIES, TEXTES, lu, jol, fondement, parCategorie };
+module.exports = { REF, CATEGORIES, TEXTES, lu, jol, fondement, parCategorie,
+  LIAISONS, PARCOURS_NOMS };
 
 if (require.main === module) {
   const pc = parCategorie();

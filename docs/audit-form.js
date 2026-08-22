@@ -317,6 +317,90 @@
   }
   var AUTRE = "— autre —";
 
+  /* ------------------------------------------- les quatre valeurs fermées
+
+     Toute question fermée de l'application offre désormais QUATRE réponses :
+     oui, non, en cours, autre. C'est ce que le client a sous les yeux quand il
+     décrit sa situation — une régularisation engagée n'est ni un oui ni un
+     non, et une situation hors cadre mérite d'être décrite.
+
+     CE QUE LES MOTEURS EN REÇOIVENT. Rien. « en cours » et « autre » ne sont
+     PAS transmis : la fiche remise au moteur ne porte pas le champ, exactement
+     comme si la question n'avait pas été répondue. Le contrôle rend alors
+     « donnée manquante » — jamais « conforme », jamais « sans objet ». C'est
+     la seule traduction honnête : le moteur ne connaît que « vrai » et
+     « faux », et une réponse nuancée n'est ni l'un ni l'autre. Aucun moteur
+     n'a été modifié pour cela.
+
+     CE QUI N'EST PAS PERDU. La nuance est enregistrée à côté, dans le
+     brouillon, et rappelée sous la question comme dans le rapport : le client
+     lit noir sur blanc que sa réponse « en cours » n'a rien conclu, et
+     pourquoi.
+
+     Avant ce changement, une valeur autre que « oui » était traitée comme un
+     « non » par la ligne `poser(f, cle, v === "oui")` : « en cours » aurait
+     valu « non », et un « non » se conclut, lui. C'était le piège à éviter. */
+  var VALEURS4 = (window.Profil && window.Profil.VALEURS) || ["oui", "non", "en cours", "autre"];
+  var AUTRE4 = "autre";
+  /* Les champs rendus en question fermée, et la forme que le moteur en
+     attend : « chaine » lorsqu'il compare à « oui » (menu des propositions),
+     « booleen » lorsqu'il lit un vrai/faux (format « oui / non » du
+     questionnaire). La distinction n'est pas cosmétique : elle préserve
+     exactement ce que chaque moteur recevait avant. */
+  var FERMES = {};
+  function estFerme(cle, t) {
+    var p = PROP[cle];
+    /* Sans proposition du moteur, c'est le format du questionnaire qui dit
+       si la question est fermée — comme avant ce changement. */
+    if (!p) return t === "oui-non" || t === "cause";
+    /* Avec proposition : seules les propositions qui SONT « oui » et « non »
+       deviennent des questions fermées à quatre valeurs. Une liste de causes
+       de licenciement ou de supports de base de données garde la sienne, et un
+       menu qui offre déjà une troisième valeur — « je ne sais pas » — la garde
+       aussi : elle a été mise là exprès. */
+    if (p.multiple || !Array.isArray(p.valeurs)) return false;
+    if ((p.autres || []).length) return false;
+    return p.valeurs.length === 2 && p.valeurs.indexOf("oui") >= 0 && p.valeurs.indexOf("non") >= 0;
+  }
+  var CONCLUT4 = { oui: true, non: true };
+  function conclut4(v) { return CONCLUT4[String(v == null ? "" : v).trim()] === true; }
+
+  /* Le rappel posé sous chaque question fermée, montré seulement quand la
+     réponse ne conclut pas. */
+  function nuanceNote(cle) {
+    var p = document.createElement("p");
+    p.className = "aide-champ nuance";
+    p.id = "nuance-" + cle;
+    p.style.display = "none";
+    p.style.color = "#9C5A05";
+    return p;
+  }
+  function majNuance(cle) {
+    var s = document.getElementById("c-" + cle);
+    var n = document.getElementById("nuance-" + cle);
+    if (!s || !n) return;
+    if (conclut4(s.value) || s.value === "") { n.style.display = "none"; n.textContent = ""; return; }
+    var libre = document.querySelector('[data-nuance="' + cle + '"]');
+    var txt = s.value === AUTRE4 && libre && libre.value.trim() ? " (« " + libre.value.trim() + " »)" : "";
+    n.textContent = "Réponse « " + s.value + " »" + txt +
+      " : elle décrit votre situation, mais elle ne conclut pas. L'audit la traite comme une donnée " +
+      "non renseignée — le contrôle rendra « donnée manquante », jamais « conforme ». Répondez « oui » " +
+      "ou « non » lorsque la situation sera tranchée.";
+    n.style.display = "";
+  }
+  /* Ce que le client a répondu quand ce n'est ni oui ni non : gardé pour le
+     brouillon et pour le rapport, jamais pour le moteur. */
+  function nuances() {
+    var out = {};
+    Array.prototype.forEach.call(document.querySelectorAll("[data-nuance]"), function (l) {
+      var cle = l.getAttribute("data-nuance");
+      var s = document.getElementById("c-" + cle);
+      if (!s || conclut4(s.value) || s.value === "") return;
+      out[cle] = s.value === AUTRE4 ? (l.value.trim() || AUTRE4) : s.value;
+    });
+    return out;
+  }
+
   /* ------------------------------------------------- lecture d'un tableur ou
      d'un document Word.
 
@@ -768,6 +852,42 @@
         return;
       }
 
+      /* UNE QUESTION FERMÉE : quatre valeurs, et deux seulement concluent.
+
+         Deux chemins y menaient jusqu'ici. Les questions dont le moteur ne
+         propose rien passaient par le format « oui / non » du questionnaire.
+         Celles dont le moteur propose exactement « oui » et « non » — la
+         plupart, dans les modules SST, discipline et NAO — passaient par le
+         menu des propositions, et n'auraient reçu que deux valeurs. Elles
+         prennent désormais le même chemin : la question fermée est une
+         question fermée, quel que soit l'endroit d'où viennent ses valeurs. */
+      if (estFerme(cle, t)) {
+        var prop = PROP[cle];
+        e = document.createElement("select");
+        options(e, [""].concat(VALEURS4), "");
+        FERMES[cle] = prop ? "chaine" : "booleen";
+        var libre4 = document.createElement("input");
+        libre4.type = "text"; libre4.className = "libre";
+        libre4.placeholder = "précisez";
+        libre4.style.display = "none";
+        libre4.setAttribute("data-nuance", cle);
+        e.addEventListener("change", function () {
+          var ouvert = e.value === AUTRE4;
+          libre4.style.display = ouvert ? "" : "none";
+          if (!ouvert) libre4.value = "";
+          majNuance(cle);
+        });
+        libre4.addEventListener("input", function () { majNuance(cle); });
+        lab.appendChild(e); lab.appendChild(libre4);
+        if (prop && prop.aide) lab.appendChild(aide(prop.aide));
+        lab.appendChild(nuanceNote(cle));
+        e.name = cle; e.id = "c-" + cle;
+        if (APPELEES[cle]) e.addEventListener("change", function () { majAppel(cle); });
+        if (APPELEES[cle]) lab.appendChild(appel(cle, APPELEES[cle]));
+        g.appendChild(lab);
+        return;
+      }
+
       /* Une question à valeurs connues : un menu, et « autre » à la fin lorsque
          la base accepte autre chose. */
       if (p && !p.multiple) {
@@ -819,11 +939,7 @@
         return;
       }
 
-      if (t === "oui-non" || t === "cause") {
-        e = document.createElement("select");
-        options(e, ["", "oui", "non"], "");
-        if (APPELEES[cle]) e.addEventListener("change", function () { majAppel(cle); });
-      } else if (t === "json") {
+      if (t === "json") {
         e = document.createElement("textarea");
         /* Une liste se tape une par ligne. Le format JSON était la seule entrée
            possible, et il tenait lieu de barrière : personne ne compose des
@@ -896,7 +1012,7 @@
           });
         } else if (typeDe(c[2]) === "oui-non") {
           e = document.createElement("select");
-          ["", "oui", "non"].forEach(function (v) {
+          [""].concat(VALEURS4).forEach(function (v) {
             var o = document.createElement("option"); o.value = v; o.textContent = v || "—"; e.appendChild(o);
           });
         } else {
@@ -985,6 +1101,10 @@
         /* La colonne dit ce qu'elle attend : « 2026 » reste une période écrite,
            il n'y a aucune raison d'en faire un nombre parce qu'elle en a l'air. */
         var t = typeDe(e.getAttribute("data-format") || "");
+        /* Une cellule fermée répondue « en cours » ou « autre » ne conclut
+           pas : la ligne compte comme renseignée, mais la cellule n'est pas
+           posée — le moteur la lira comme absente, jamais comme un « non ». */
+        if (t === "oui-non" && !conclut4(v)) return;
         o[e.getAttribute("data-sous")] = v === "oui" ? true : (v === "non" ? false
           : (t === "nombre" ? cellule(v) : v));
       });
@@ -1160,6 +1280,12 @@
       if (e.classList.contains("libre") && e.getAttribute("data-multiple") !== "1")
         e.style.display = "none";
     }
+    /* Une question fermée vidée l'est aussi de sa nuance : sa saisie libre se
+       referme, et le rappel qui l'accompagnait disparaît. */
+    var l4 = document.querySelector('[data-nuance="' + cle + '"]');
+    if (l4) { l4.value = ""; l4.style.display = "none"; }
+    var n4 = document.getElementById("nuance-" + cle);
+    if (n4) { n4.textContent = ""; n4.style.display = "none"; }
   }
   function appliquerVisibilite() {
     if (!REGLES_VISIBILITE.length) return;
@@ -1170,7 +1296,13 @@
       if (typeof r.si === "function") cacher = r.si(texteDeChamp, nombreDeChamp) === false;
       else {
         var v = texteDeChamp(r.si.champ);
-        cacher = v !== "" && r.si.vaut.indexOf(v) < 0;
+        /* Un pilote dont la réponse NE CONCLUT PAS ne masque rien : « en
+           cours » et « autre » sont des réponses indéterminées, et la règle du
+           dépôt est qu'une donnée indéterminée laisse la question visible. Sans
+           cette garde, répondre « en cours » aurait fait disparaître des
+           questions comme si l'on avait répondu « non ». */
+        var indetermine = FERMES[r.si.champ] && !conclut4(v);
+        cacher = v !== "" && !indetermine && r.si.vaut.indexOf(v) < 0;
       }
       if (cacher) r.champs.forEach(function (c) { caches[c] = true; });
     });
@@ -1195,6 +1327,16 @@
   function valeurDe(cle) {
     var e = document.getElementById("c-" + cle);
     var p = PROP[cle];
+    /* Une question fermée se lit sur son menu, jamais sur le menu des
+       propositions : elle n'en a pas. */
+    if (FERMES[cle]) {
+      if (!e) return null;
+      if (e.value === AUTRE4) {
+        var l4 = document.querySelector('[data-nuance="' + cle + '"]');
+        return (l4 && l4.value.trim()) || AUTRE4;
+      }
+      return e.value || null;
+    }
     if (p && p.multiple) {
       var l = Array.prototype.filter.call(
         document.querySelectorAll('[data-champ="' + cle + '"]'),
@@ -1231,9 +1373,19 @@
         if (estColonne(cle)) return;
         var v = valeurDe(cle);
         if (v === null || v === "" || v === undefined) return;   /* vide = silence, non néant */
+        /* Une réponse fermée ne passe au moteur que si elle conclut. « en
+           cours » et « autre » sont tenus pour non renseignés : le champ n'est
+           pas posé du tout, et le contrôle rend « donnée manquante ». Écrire
+           `v === "oui"` sans cette garde aurait fait d'« en cours » un « non »,
+           qui, lui, se conclut. */
+        if (FERMES[cle]) {
+          if (!conclut4(v)) return;
+          poser(f, cle, FERMES[cle] === "booleen" ? v === "oui" : v);
+          return;
+        }
         if (p) { poser(f, cle, p.objet && p.multiple
           ? v.map(function (x) { var o = {}; o[p.objet] = x; return o; }) : v); return; }
-        if (t === "oui-non") { poser(f, cle, v === "oui"); return; }
+        if (t === "oui-non") { if (conclut4(v)) poser(f, cle, v === "oui"); return; }
         if (t === "nombre") {
           var n = Number(String(v).replace(/\s/g, "").replace(",", "."));
           poser(f, cle, isNaN(n) ? v : (/chiffres/.test(ch[2]) ? v : n));
@@ -1467,6 +1619,26 @@
         ". Rien n'a été perdu — corrigez la saisie et relancez.</div>";
       return;
     }
+    /* Les réponses qui ne concluent pas sont dites au rapport, nommément :
+       le lecteur doit savoir sur quoi l'audit ne s'est pas prononcé, et
+       pourquoi. Elles sont insérées AVANT le pied, pour être lues. */
+    var nuancees = nuances();
+    var clesNuancees = Object.keys(nuancees);
+    if (clesNuancees.length) {
+      var libelles = {};
+      M.champs.forEach(function (rub) {
+        rub[1].forEach(function (ch) { libelles[ch[0]] = ch[1]; });
+      });
+      items = items.concat([
+        { k: "h1", t: "Ce sur quoi l'audit ne s'est pas prononcé" },
+        { k: "p", t: clesNuancees.length + " question(s) ont reçu une réponse qui ne conclut pas — " +
+          "« en cours » ou « autre ». Elles décrivent votre situation, mais aucun contrôle ne peut " +
+          "s'y appuyer : elles ont été remises au moteur comme des données non renseignées, et les " +
+          "contrôles correspondants rendent « donnée manquante ». Aucun d'eux ne rend « conforme »." },
+      ]).concat(clesNuancees.map(function (c) {
+        return { k: "puce", t: (libelles[c] || c) + " — réponse : « " + nuancees[c] + " »" };
+      }));
+    }
     items = items.concat(PIED_RAPPORT);
     DERNIER = items;
     sortie.innerHTML = '<div class="retour">' +
@@ -1478,7 +1650,18 @@
     document.getElementById("revenir").addEventListener("click", revenir);
     document.getElementById("word").addEventListener("click", enWord);
     document.getElementById("pdf").addEventListener("click", function () { window.print(); });
-    try { localStorage.setItem(CLE, JSON.stringify(r.f)); } catch (e) {}
+    /* Le brouillon garde la fiche remise au moteur ET les réponses nuancées
+       qui, elles, n'y figurent pas : sans cela, un « en cours » saisi hier
+       reviendrait vide demain. La clé réservée « __nuances » ne peut pas
+       entrer en collision avec un champ du questionnaire, dont aucun ne
+       commence par deux traits bas. */
+    try {
+      var sauv = {};
+      Object.keys(r.f).forEach(function (k) { sauv[k] = r.f[k]; });
+      var nz = nuances();
+      if (Object.keys(nz).length) sauv.__nuances = nz;
+      localStorage.setItem(CLE, JSON.stringify(sauv));
+    } catch (e) {}
     /* Le bouton « précédent » du téléphone ramène au formulaire au lieu de
        quitter la page : c'est le geste que tout le monde fait d'abord. */
     try { history.pushState({ audit: true }, "", "#resultat"); } catch (e) {}
@@ -1599,7 +1782,24 @@
   }
 
   /* --------------------------------------------------- remplir et effacer */
+  /* Reposer les réponses nuancées d'un brouillon : le menu sur « en cours »
+     ou « autre », la saisie libre rouverte, et le rappel remis sous la
+     question. */
+  function poserNuances(nz) {
+    if (!nz || typeof nz !== "object") return;
+    Object.keys(nz).forEach(function (cle) {
+      var s = document.getElementById("c-" + cle);
+      var l = document.querySelector('[data-nuance="' + cle + '"]');
+      if (!s || !l) return;
+      var v = String(nz[cle]);
+      if (VALEURS4.indexOf(v) >= 0 && v !== AUTRE4) { s.value = v; l.value = ""; l.style.display = "none"; }
+      else { s.value = AUTRE4; l.value = v === AUTRE4 ? "" : v; l.style.display = ""; }
+      majNuance(cle);
+    });
+  }
+
   function ecrire(cle, v) {
+    if (cle === "__nuances") { poserNuances(v); return; }
     var p = PROP[cle], e = document.getElementById("c-" + cle);
     /* Une famille-tableau se remplit ligne à ligne. */
     if (TABLEAUX.indexOf(cle) >= 0) {
@@ -1629,6 +1829,18 @@
         if (cb) cb.checked = true; else reste.push(x);
       });
       if (e) e.value = reste.join(", ");
+      return;
+    }
+    if (FERMES[cle]) {
+      if (!e) return;
+      var v4 = typeof v === "boolean" ? (v ? "oui" : "non") : String(v);
+      var l4 = document.querySelector('[data-nuance="' + cle + '"]');
+      if (VALEURS4.indexOf(v4) >= 0 && v4 !== AUTRE4) {
+        e.value = v4; if (l4) { l4.value = ""; l4.style.display = "none"; }
+      } else if (v4 !== "" && l4) {
+        e.value = AUTRE4; l4.value = v4; l4.style.display = "";
+      }
+      majNuance(cle);
       return;
     }
     if (p) {
@@ -1674,6 +1886,9 @@
     form.reset();
     Array.prototype.forEach.call(document.querySelectorAll('.libre'), function (e) {
       e.value = ""; if (e.getAttribute("data-multiple") !== "1") e.style.display = "none";
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.nuance'), function (e) {
+      e.textContent = ""; e.style.display = "none";
     });
     TABLEAUX.forEach(function (fam) {
       var env = document.querySelector('[data-liste="' + fam + '"]');

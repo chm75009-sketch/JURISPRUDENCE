@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.1";
+const CACHE = "jurisprudence-5.2";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -28,8 +28,10 @@ const ESSENTIELS = [
      lus dans le stockage local du poste, les délais se calculent sur place.
      Une procédure engagée hors connexion est justement le cas où l'échéance
      compte le plus : elle doit s'ouvrir.
-     Sept parcours depuis le 22 août 2026 : le septième, « Installer le CSE :
-     la première réunion », est celui qui suit les élections. */
+     Douze parcours depuis le 22 août 2026 : aux sept premiers s'ajoutent les
+     cinq parcours de régularisation appelés par le guide de l'audit social —
+     affichages obligatoires, registre unique du personnel, base de données,
+     index de l'égalité professionnelle, entretiens de parcours professionnel. */
   "./parcours.html", "./parcours.js",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
   /* Les audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
@@ -49,8 +51,13 @@ const ESSENTIELS = [
   /* L'audit social chapeau : le point d'entrée des obligations, qui renvoie
      aux modules détaillés. */
   "./audit-social.html", "./moteur-social.js",
-  /* Le formulaire est commun aux quatre pages : sans lui, elles s'ouvrent vides. */
+  /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
   "./audit-form.js", "./audit-export.js",
+  /* La fiche client : la source unique du profil partagé (clé
+     « profil-entreprise »), lue et écrite par l'audit social, les parcours, le
+     générateur de documents et les huit audits détaillés. Sans elle, la
+     première étape du parcours client ne s'affiche pas. */
+  "./profil.js",
   /* Le sélecteur de convention collective et la liste officielle des IDCC
      (54 Ko) : sans eux, le champ convention retombe en saisie libre — il
      fonctionne, mais la liste doit être là hors connexion comme le reste. */

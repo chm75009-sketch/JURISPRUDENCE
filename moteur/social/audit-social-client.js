@@ -37,7 +37,12 @@ function synthese(profil, dossier) {
 module.exports = {
   referentiel: R.REF.map(it => ({ id: it.id, categorie: it.categorie, intitule: it.intitule,
     fondement: it.fondement, module: it.module || null, convention: !!it.convention,
-    generique: it.generique || null, articles: it.articles, verifs: it.verifs || [] })),
+    generique: it.generique || null, articles: it.articles, verifs: it.verifs || [],
+    regularisation: it.regularisation || null })),
+  /* Obligation → parcours guidé → document : les liaisons de l'étape 5,
+     déclarées au référentiel et vérifiées à la publication. */
+  liaisons: R.LIAISONS,
+  parcoursNoms: R.PARCOURS_NOMS,
   categories: R.CATEGORIES,
   textes: R.TEXTES,
   questions: Q.LIGNES,
@@ -45,5 +50,6 @@ module.exports = {
   verdicts: C.verdicts,
   etats: C.ETATS,
   plan: P.plan,
+  action: P.action,
   synthese,
 };

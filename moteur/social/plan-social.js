@@ -40,6 +40,11 @@ function plan(p, dossier) {
          questionnaire — jamais une trame générique quand on peut mieux. */
       modeleAdapte: MODELES[it.id] ? MODELES[it.id](p) : null,
       module: it.module || null,
+      /* La régularisation : le parcours pas à pas qui conduit l'obligation
+         jusqu'à sa validation, et la trame du document qu'il faut produire.
+         Déclarés item par item dans le référentiel, vérifiés à la
+         publication — jamais un lien vers ce qui n'existe pas. */
+      regularisation: it.regularisation || null,
     };
     if (x.etat === "non conforme") actions.push(base);
     else if (x.etat === "risque à vérifier") aVerifier.push(base);
@@ -57,4 +62,35 @@ function plan(p, dossier) {
   };
 }
 
-module.exports = { plan, NIVEAUX };
+/* La carte d'UNE obligation, quel que soit son état.
+
+   Le plan ne rend que ce qui appelle une action ; l'étape « régulariser
+   élément par élément » a besoin de la carte complète d'un point choisi —
+   fût-il sans réponse, fût-il déjà déclaré fait. C'est la même carte, faite
+   de la même matière : rien n'est calculé ici qui ne le soit dans plan().
+
+   Rend null si l'obligation n'existe pas, ou si le profil ne l'assujettit
+   pas : on ne guide pas la régularisation d'une obligation qui n'est pas due. */
+function action(p, id, dossier) {
+  const it = R.REF.find(x => x.id === id);
+  if (!it) return null;
+  let a;
+  try { a = it.condition(p); }
+  catch (e) { return null; }
+  if (a.du !== true) return null;
+  const v = C.verdictItem(it, p, dossier || {});
+  return {
+    id: it.id, categorie: it.categorie, intitule: it.intitule,
+    etat: v.etat, constat: v.motif, fondement: it.fondement,
+    priorite: it.plan.priorite, niveau: NIVEAUX[it.plan.priorite],
+    action: it.plan.action, etapes: it.plan.etapes, acteur: it.plan.acteur,
+    delai: it.plan.delai, risque: it.plan.risque,
+    modele: it.plan.modele || { page: null, nom: "modèle à établir" },
+    modeleAdapte: MODELES[it.id] ? MODELES[it.id](p) : null,
+    module: it.module || null,
+    regularisation: it.regularisation || null,
+    verifs: it.verifs || [],
+  };
+}
+
+module.exports = { plan, action, NIVEAUX };

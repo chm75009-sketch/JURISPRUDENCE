@@ -85,9 +85,9 @@ q("Le règlement intérieur", "ri.misePiedDureeMaxJours", "Cette durée maximale
 q("Le règlement intérieur", "ri.rappelDroitsDefense", "Rappelle-t-il les droits de la défense des salariés (L. 1332-1 à L. 1332-3, ou convention collective) ?", "oui / non", "le règlement intérieur lui-même");
 q("Le règlement intérieur", "ri.rappelHarcelement", "Rappelle-t-il les dispositions sur les harcèlements moral et sexuel et les agissements sexistes ?", "oui / non", "le règlement intérieur lui-même");
 q("Le règlement intérieur", "ri.rappelLanceursAlerte", "Rappelle-t-il l'existence du dispositif de protection des lanceurs d'alerte ?", "oui / non", "le règlement intérieur lui-même");
-q("Le règlement intérieur", "ri.clausesInterdites", "Comporte-t-il des clauses prohibées par L. 1321-3 (contraires aux textes, restrictions non justifiées, discriminations) ?", "oui / non", "le règlement intérieur lui-même");
+q("Le règlement intérieur", "ri.clausesInterdites", "Sa relecture au regard de l'article L. 1321-3 a-t-elle relevé des clauses à retirer — contraires aux lois, règlements ou textes conventionnels, restrictions non justifiées par la nature de la tâche ni proportionnées, dispositions discriminatoires ?", "oui / non", "le règlement intérieur lui-même, et la note de relecture");
 q("Le règlement intérieur", "ri.clauseNeutralite", "Comporte-t-il une clause de neutralité (L. 1321-2-1) ?", "oui / non", "le règlement intérieur lui-même");
-q("Le règlement intérieur", "ri.neutraliteJustifieeProportionnee", "Cette clause est-elle justifiée par d'autres libertés ou par les nécessités du bon fonctionnement, et proportionnée ?", "oui / non", "note de justification, fiches de poste");
+q("Le règlement intérieur", "ri.neutraliteJustifieeProportionnee", "Le texte énonce-t-il ce qui justifie cette clause — autres libertés et droits fondamentaux, ou nécessités du bon fonctionnement — et en limite-t-il la portée au but recherché ?", "oui / non", "note de justification, fiches de poste");
 q("Le règlement intérieur", "ri.redigeFrancais", "Est-il rédigé en français (L. 1321-6) ?", "oui / non", "le règlement intérieur lui-même");
 
 q("Les formalités du règlement intérieur", "ri.avisCSE", "A-t-il été soumis à l'avis du comité social et économique avant son introduction ?", "oui / non", "procès-verbal de la réunion et avis rendu");
@@ -136,8 +136,8 @@ q("La garantie de fond", "garantie.procedureApplicable", "Une convention collect
 q("La garantie de fond", "garantie.source", "D'où vient cette procédure ?", "liste", "la convention collective, le règlement intérieur");
 q("La garantie de fond", "garantie.nature", "En quoi consiste-t-elle ?", "liste", "la clause elle-même");
 q("La garantie de fond", "garantie.suivie", "A-t-elle été suivie avant le prononcé de la sanction ?", "liste", "convocation de l'organisme, avis rendu, procès-verbal");
-q("La garantie de fond", "garantie.droitsDefensePrives", "L'irrégularité a-t-elle privé le salarié de la possibilité d'assurer utilement sa défense ?", "oui / non", "chronologie de la procédure, pièces échangées");
-q("La garantie de fond", "garantie.influenceDecision", "Est-elle susceptible d'avoir exercé une influence sur la décision finale ?", "oui / non", "avis rendu, motifs de la décision");
+q("La garantie de fond", "garantie.droitsDefensePrives", "En fait, le salarié a-t-il été empêché d'assurer utilement sa défense — informations reçues trop tard, pièces non communiquées, assistance non offerte ?", "oui / non", "chronologie de la procédure, pièces échangées");
+q("La garantie de fond", "garantie.influenceDecision", "En fait, cette irrégularité a-t-elle pu peser sur la décision finale — avis non rendu, rendu après coup, ou non pris en compte dans les motifs ?", "oui / non", "avis rendu, motifs de la décision");
 q("La garantie de fond", "garantie.licenciementSubordonneSanctions", "Le règlement intérieur ou la convention collective subordonnent-ils le licenciement à l'existence de sanctions antérieures ?", "oui / non", "la clause elle-même");
 
 q("Pièces", "pieces", "Pièces versées au dossier", "liste d'objets", "les pièces elles-mêmes");

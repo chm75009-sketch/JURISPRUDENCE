@@ -250,6 +250,7 @@
 </footer>
 </div>
 
+<script src="profil.js"></script>
 <script>
 "use strict";
 (function () {
@@ -458,14 +459,23 @@
   /* ------------------------------------------------------------------ */
   /* Profil d'entreprise : si une autre page l'a rempli, on préremplit.  */
   /* ------------------------------------------------------------------ */
+  /* La fiche client est tenue par docs/profil.js : une seule définition pour
+     toute l'application. Si elle n'est pas chargée, la lecture directe de la
+     clé reste en place — cette page n'a jamais dépendu d'un autre script. */
   function lireProfil() {
     try {
-      var p = JSON.parse(localStorage.getItem("profil-entreprise") || "null");
+      var p = window.Profil ? window.Profil.lire()
+        : JSON.parse(localStorage.getItem("profil-entreprise") || "null");
       if (!p || typeof p !== "object") return {};
       return {
         entreprise: p.denomination || p.denominationSociale || p.entreprise || p.nom || "",
         effectif: p.effectif || "",
-        adresse: p.adresse || p.siege || ""
+        adresse: p.adresse || p.siege || "",
+        responsable: p.responsable || "",
+        courriel: p.courriel || "",
+        telephone: p.telephone || "",
+        siret: p.siret || "",
+        conventionCollective: p.conventionCollective || p.convention || p.idcc || ""
       };
     } catch (_) { return {}; }
   }

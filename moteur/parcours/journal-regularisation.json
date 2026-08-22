@@ -1,0 +1,240 @@
+{
+ "date": "2026-08-22",
+ "code": "Code du travail",
+ "demandes": 33,
+ "confirmes": 32,
+ "ecartes": 1,
+ "journal": [
+  {
+   "numero": "L1142-6",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "R3221-2",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D4711-1",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L4711-5",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "R4227-37",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L3171-1",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "R2262-1",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L1152-4",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L1153-5",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L2142-3",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L1221-13",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L1221-15",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1221-23",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1221-24",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1221-25",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1221-26",
+   "confirme": false,
+   "lectures": 0,
+   "elargis": 0,
+   "versions": 0
+  },
+  {
+   "numero": "D1221-27",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L2312-18",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L2312-21",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L2312-36",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "R2312-8",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "R2312-9",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L1142-8",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L1142-9",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L1142-10",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L1142-11",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1142-2",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1142-3",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1142-4",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1142-5",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "D1142-6",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L6315-1",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  },
+  {
+   "numero": "L6321-1",
+   "confirme": true,
+   "lectures": 2,
+   "elargis": 0,
+   "versions": 1
+  }
+ ]
+}

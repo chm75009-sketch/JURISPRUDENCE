@@ -1,7 +1,7 @@
 {
  "objet": "registre d'exécution des tests",
  "version": "4128d1964f41",
- "execute": "2026-08-22 07:50:52",
+ "execute": "2026-08-22 20:46:06",
  "manifeste": {
   "empreinte": "4128d1964f41",
   "fichier": "manifeste-controles.json"
@@ -59,7 +59,7 @@
    "verdict": "succès",
    "constat": "La pièce déclare couvrir le périmètre « secteur d'activité du groupe », mais les sociétés qui composent ce secteur ne sont pas énumérées. 1 société(s) française(s) du groupe pourraient en relever : SŒUR (usinage). Une étiquette de périmètre n'est pas une couve",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-002",
@@ -72,7 +72,7 @@
    "verdict": "succès",
    "constat": "12 licenciements sur trente jours et un comité social et économique en place : la procédure d'entretien préalable ne s'applique pas. Un entretien est pourtant déclaré le 2026-05-04. Le tenir n'est pas irrégulier, mais il n'ouvre aucun délai opposable : la noti",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-003",
@@ -85,7 +85,7 @@
    "verdict": "succès",
    "constat": "Moins de dix licenciements sur trente jours : l'entretien préalable est dû pour chaque salarié. Aucune date d'entretien n'est déclarée.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-004",
@@ -98,7 +98,7 @@
    "verdict": "succès",
    "constat": "Le licenciement du salarié qui refuse l'application d'un accord de performance collective repose sur un motif spécifique qui constitue une cause réelle et sérieuse : il n'est pas un licenciement pour motif économique. Le soumettre au régime de l'article L. 123",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-005",
@@ -111,7 +111,7 @@
    "verdict": "succès",
    "constat": "Reconstitution incohérente pour 2025 : résultat d'exploitation -1870 plus 1000 de flux intragroupe donnent -870, alors que le résultat reconstitué déclaré est 4000. L'écart est de 4870. Une reconstitution qui ne se recalcule pas ne démontre rien.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-006",
@@ -124,7 +124,7 @@
    "verdict": "succès",
    "constat": "Jugement de liquidation du 2026-04-01, notification du 2026-05-15, soit 44 jours. La garantie couvre les ruptures intervenant dans les vingt et un jours, un plan de sauvegarde de l'emploi étant élaboré suivant le jugement, soit jusqu'au 2026-04-22. Hors de cet",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-007",
@@ -137,7 +137,7 @@
    "verdict": "succès",
    "constat": "En redressement comme en liquidation, les licenciements présentant un caractère urgent, inévitable et indispensable sont autorisés par ordonnance du juge-commissaire. Aucune ordonnance n'est déclarée : la notification serait dépourvue de fondement.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-008",
@@ -150,7 +150,7 @@
    "verdict": "succès",
    "constat": "Procédure collective déclarée, mais la nature de la procédure — sauvegarde, redressement ou liquidation, la date du jugement d'ouverture ou de liquidation, la qualité de celui qui met en œuvre le plan — employeur, administrateur ou liquidateur n'est pas rensei",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-009",
@@ -163,7 +163,7 @@
    "verdict": "succès",
    "constat": "La cessation est déclarée complète et définitive, mais 1 société(s) du groupe exercent la même activité : SŒUR FRANCE (en France). La cessation s'apprécie au niveau de l'entreprise, mais la poursuite de la même activité dans le groupe nourrit le débat sur le c",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-010",
@@ -176,7 +176,7 @@
    "verdict": "succès",
    "constat": "La cessation est déclarée incomplète ou non définitive. L'article L. 1233-3, 4° ne vise que la cessation complète et définitive de l'activité de l'entreprise : une cessation partielle relève, le cas échéant, d'un autre cas.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-011",
@@ -189,7 +189,7 @@
    "verdict": "succès",
    "constat": "Notification du 2015-06-01 : version « avant le 1er décembre 2016 », qui porte « difficultés économiques », sans définition ni indicateur. Le seuil trimestriel chiffré n'existait pas et n'est donc pas opposé au dossier. Le périmètre retenu est le secteur d'act",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-012",
@@ -202,7 +202,7 @@
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : dateNotification = « 2026-02-30 » — date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-013",
@@ -215,7 +215,7 @@
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : effectif = « -12 » — valeur négative. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-014",
@@ -228,7 +228,7 @@
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : nbLicenciements = « 9.5 » — valeur décimale, alors qu'il s'agit d'un dénombrement. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-015",
@@ -241,7 +241,7 @@
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : dateEntretien = « 02/06/2026 » — date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ. Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-016",
@@ -254,7 +254,7 @@
    "verdict": "succès",
    "constat": "1 donnée(s) impossible(s) ou incohérente(s) : effectifEtablissement = « 900 » — supérieur à l'effectif de l'entreprise (320). Tant qu'elles ne sont pas corrigées, les verdicts qui les utilisent ne valent rien.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-017",
@@ -267,7 +267,7 @@
    "verdict": "succès",
    "constat": "1 poste(s) déclaré(s) à la fois disponible(s) au reclassement et supprimé(s) dans l'entreprise : Régleur. Un poste ne peut pas être les deux : ou l'emploi est supprimé, ou il est disponible, et la démonstration de la suppression tombe.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-018",
@@ -280,7 +280,7 @@
    "verdict": "succès",
    "constat": "1 poste(s) proposé(s) simultanément à plusieurs salariés : Régleur | A | L — 3 destinataires. Le nombre d'offres ne vaut pas nombre de postes : une liste commune est admise, mais elle doit alors préciser les critères de départage entre les salariés candidats a",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-019",
@@ -293,7 +293,7 @@
    "verdict": "succès",
    "constat": "3 des quatre critères de l'article L. 1233-5 prennent la même valeur pour tous les salariés — charges de famille, ancienneté, situation rendant la réinsertion difficile — et ne départagent donc personne. Les quatre critères sont formellement présents et matéri",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-020",
@@ -306,7 +306,7 @@
    "verdict": "succès",
    "constat": "1 salarié(s) protégé(s) dont l'autorisation a été REFUSÉE : P1 (élu). Le licenciement notifié malgré un refus est nul, et le fait de passer outre est pénalement sanctionné.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-021",
@@ -319,7 +319,7 @@
    "verdict": "succès",
    "constat": "1 autorisation(s) postérieure(s) à la notification du 2026-06-15 : P1 — 2026-07-01. L'autorisation doit précéder la notification, non la suivre.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-022",
@@ -332,7 +332,7 @@
    "verdict": "succès",
    "constat": "9 licenciement(s) envisagé(s), 1 déjà prononcé(s) dans la même période — soit 10 salariés sur une même période de trente jours. Le projet porte sur moins de dix salariés, mais la fenêtre de trente jours en compte 10 : le régime du licenciement collectif d'au m",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-023",
@@ -345,7 +345,7 @@
    "verdict": "succès",
    "constat": "11 salariés ont refusé la modification d'un élément essentiel de leur contrat : leur licenciement est à lui seul soumis au régime du licenciement collectif (L. 1233-25), quand bien même aucun autre licenciement ne serait envisagé. Si la procédure a été conduit",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-024",
@@ -358,7 +358,7 @@
    "verdict": "succès",
    "constat": "13 licenciements économiques ont été prononcés sur les trois mois consécutifs précédents, sans jamais atteindre dix sur une même période de trente jours. Tout nouveau licenciement économique envisagé au cours des trois mois suivants est soumis au régime du lic",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-025",
@@ -371,7 +371,7 @@
    "verdict": "succès",
    "constat": "1 offre(s) sur 2 émanent d'une société non établie sur le territoire national : B. L'obligation de reclassement est limitée au territoire national : ces offres ne la satisfont pas et ne peuvent être décomptées.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-026",
@@ -384,7 +384,7 @@
    "verdict": "succès",
    "constat": "Fermeture d'un établissement dans une entreprise d'au moins mille salariés : la recherche d'un repreneur doit être engagée dès l'information du comité, et celui-ci informé de son déroulement. Rien n'est déclaré.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-027",
@@ -397,7 +397,7 @@
    "verdict": "succès",
    "constat": "1 catégorie(s) réduite(s) à un seul salarié, occupée(s) par un salarié protégé : Chef d'atelier zone Est. Une catégorie professionnelle regroupe les salariés exerçant des fonctions de même nature supposant une formation professionnelle commune ; une catégorie ",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-028",
@@ -410,7 +410,7 @@
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois court depuis la première réunion du 2026-03-23 et expire le 2026-05-23 : la notification prévue le 2026-05-01 lui est antérieure. Le comité n'est pas encore réputé consulté.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-029",
@@ -423,7 +423,7 @@
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois court depuis la première réunion du 2026-03-23 et expire le 2026-05-23 : la notification prévue le 2026-04-01 lui est antérieure. Le comité n'est pas encore réputé consulté.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-030",
@@ -436,7 +436,7 @@
    "verdict": "succès",
    "constat": "1 poste(s) recensés comme disponibles n'ont fait l'objet d'aucune offre et d'aucun motif d'exclusion : Cariste (B).",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-031",
@@ -449,7 +449,7 @@
    "verdict": "succès",
    "constat": "1 offre(s) sur 2 ne comportent pas toutes les mentions exigées : intitulé et descriptif du poste, nom de l'employeur, nature du contrat, localisation, rémunération, classification.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-032",
@@ -462,7 +462,7 @@
    "verdict": "succès",
    "constat": "Aucun poste n'est recensé, ni aucune absence de poste attestée, pour : B. Une société du périmètre non interrogée est un manquement.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-033",
@@ -475,7 +475,7 @@
    "verdict": "succès",
    "constat": "État des postes daté du 2026-06-20, postérieur à la notification du 2026-06-15. Le reclassement s'apprécie au jour du licenciement.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-034",
@@ -488,7 +488,7 @@
    "verdict": "succès",
    "constat": "1 offre(s) n'indiquent aucun délai de réponse. Sans délai identifiable, le silence du salarié ne peut pas être opposé comme un refus.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-035",
@@ -501,7 +501,7 @@
    "verdict": "succès",
    "constat": "1 poste(s) de catégorie inférieure proposés sans accord exprès du salarié.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-036",
@@ -514,7 +514,7 @@
    "verdict": "succès",
    "constat": "1 pièce(s) sont seulement cochées comme versées, sans nom de fichier, date, période couverte, auteur, version ni périmètre. Une case cochée n'établit ni la date, ni le périmètre, ni la complétude.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-037",
@@ -527,7 +527,7 @@
    "verdict": "succès",
    "constat": "1 pièce(s) sont postérieures à la notification du 2026-06-15 : etat-postes (2026-07-01). Une pièce postérieure ne peut pas justifier un acte antérieur.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-038",
@@ -540,7 +540,7 @@
    "verdict": "succès",
    "constat": "1 pièce(s) déposées mais non lues : etat-postes. Le dépôt n'est pas la lecture, et la lecture n'est pas la conformité.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-039",
@@ -553,7 +553,7 @@
    "verdict": "succès",
    "constat": "La convocation du 2026-03-25 est postérieure à la première réunion.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-040",
@@ -566,7 +566,7 @@
    "verdict": "succès",
    "constat": "2 jour(s) entre la convocation et la première réunion. Le code ne fixe pas de délai chiffré ici, mais les renseignements devant être adressés « avec la convocation », un délai aussi court prive le comité de tout examen — et c'est sur ce terrain que la consulta",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-041",
@@ -579,7 +579,7 @@
    "verdict": "succès",
    "constat": "4 établissements distincts, et le comité central n'a pas été réuni. Il doit l'être dès lors que les mesures excèdent le pouvoir des chefs d'établissement ou portent sur plusieurs établissements (L. 1233-9).",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-042",
@@ -592,7 +592,7 @@
    "verdict": "succès",
    "constat": "Aucun comité et aucun procès-verbal de carence : l'absence d'institution ne dispense pas, elle doit être établie.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-043",
@@ -605,7 +605,7 @@
    "verdict": "succès",
    "constat": "Le septième renseignement — les conséquences en matière de santé, de sécurité ou de conditions de travail — n'est pas renseigné. Son omission vicie la consultation.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-044",
@@ -618,7 +618,7 @@
    "verdict": "succès",
    "constat": "Notification du 2026-03-10 : elle ne peut intervenir qu'au plus tôt le lendemain de la date prévue pour la première réunion, le 2026-03-23 (L. 1233-46).",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-045",
@@ -631,7 +631,7 @@
    "verdict": "succès",
    "constat": "Effectif de l'établissement (400) supérieur à celui de l'entreprise (320).",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-046",
@@ -644,7 +644,7 @@
    "verdict": "succès",
    "constat": "Un accord collectif est déclaré fixer le périmètre d'application des critères d'ordre, mais il n'est pas versé. Le périmètre de l'établissement ne se défend que par cet accord : tant qu'il n'est pas produit, ni son existence, ni son champ, ni sa date ne sont v",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-047",
@@ -657,7 +657,7 @@
    "verdict": "succès",
    "constat": "Le périmètre retenu est l'établissement, sans accord collectif le prévoyant. À défaut d'accord, ce périmètre ne peut être inférieur à la zone d'emplois où sont situés les établissements concernés.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-048",
@@ -670,7 +670,7 @@
    "verdict": "succès",
    "constat": "41 % des suffrages : l'accord doit être signé par des organisations ayant recueilli au moins 50 % des suffrages exprimés au premier tour des dernières élections des titulaires au comité.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-049",
@@ -683,7 +683,7 @@
    "verdict": "succès",
    "constat": "Mesures énoncées sans aucun chiffre : evitement, reclassementInterne, formation, creation. L'administration apprécie la proportionnalité des moyens ; une mesure non chiffrée n'est pas appréciable.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-050",
@@ -696,7 +696,7 @@
    "verdict": "succès",
    "constat": "Projet de plan daté du 2026-03-20, postérieur à la convocation du 2026-03-09 : il doit être adressé avec elle.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-051",
@@ -709,7 +709,7 @@
    "verdict": "succès",
    "constat": "Notification prévue le 2026-06-15, décision administrative le 2026-06-20 : la notification ne peut intervenir qu'après.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-052",
@@ -722,7 +722,7 @@
    "verdict": "succès",
    "constat": "1 salarié(s) protégé(s) sans autorisation obtenue : X (membre du CSE). Aucune notification ne peut intervenir avant l'autorisation.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-053",
@@ -735,7 +735,7 @@
    "verdict": "succès",
    "constat": "1 contrat(s) précaire(s) ou recrutement(s) portent sur un emploi déclaré supprimé : Régleur.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-054",
@@ -748,7 +748,7 @@
    "verdict": "succès",
    "constat": "L'absence de poste ne repose que sur une attestation interne (La DRH). Un état des mouvements de personnel ou un registre daté vaut mieux qu'une affirmation de l'employeur sur lui-même.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-055",
@@ -761,7 +761,7 @@
    "verdict": "succès",
    "constat": "Aucune liste de postes disponibles n'a été fournie. L'obligation de reclassement ne peut donc pas être contrôlée.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-056",
@@ -774,7 +774,7 @@
    "verdict": "succès",
    "constat": "2 poste(s) recensé(s). L'existence de cette liste est déclarée mais l'état daté n'est pas versé : la loyauté de la recherche reste invérifiable.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-057",
@@ -787,7 +787,7 @@
    "verdict": "succès",
    "constat": "L'absence de poste n'est pas attestée. « Il n'y a pas de manquement à l'obligation de reclassement si l'employeur justifie de l'absence de poste disponible » — encore faut-il le justifier (Cass. soc. 2 juillet 2014, n° 13-12.048).",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-058",
@@ -800,7 +800,7 @@
    "verdict": "succès",
    "constat": "Aucune formation n'est renseignée alors que la cause invoquée est une mutation technologique : c'est le terrain sur lequel le litige se noue.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-059",
@@ -813,7 +813,7 @@
    "verdict": "succès",
    "constat": "1 salarié(s) destinataires pour 3 licenciements envisagés : 2 salarié(s) n'ont reçu aucune offre.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-060",
@@ -826,7 +826,7 @@
    "verdict": "succès",
    "constat": "Écart entre les suppressions déclarées (1) et le nombre de licenciements (22). Un écart non expliqué affaiblit la démonstration.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-061",
@@ -839,7 +839,7 @@
    "verdict": "succès",
    "constat": "Aucune pièce comptable n'est renseignée.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-062",
@@ -852,7 +852,7 @@
    "verdict": "succès",
    "constat": "Rien n'indique que les données portent sur le secteur d'activité du groupe plutôt que sur la seule entreprise. « Il incombe à l'employeur de démontrer, dans le périmètre pertinent, la réalité et le sérieux du motif » (Cass. soc. 31 mars 2021, n° 19-26.054).",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-063",
@@ -865,7 +865,7 @@
    "verdict": "succès",
    "constat": "La mutation n'est pas décrite : outil abandonné, outil nouveau, date de mise en service, montant.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-064",
@@ -878,7 +878,7 @@
    "verdict": "succès",
    "constat": "1 réunion(s) tenue(s) pour 2 exigée(s) dans ce régime.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-065",
@@ -891,7 +891,7 @@
    "verdict": "succès",
    "constat": "7 jours entre les deux réunions : le minimum de quinze jours n'est pas respecté (L. 1233-30, I).",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-066",
@@ -904,7 +904,7 @@
    "verdict": "succès",
    "constat": "Le document des sept renseignements de l'article L. 1233-31 n'est pas versé. Il doit être adressé « avec la convocation », non remis en séance.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-067",
@@ -917,7 +917,7 @@
    "verdict": "succès",
    "constat": "Aucun avis rendu. Le délai de deux mois, courant depuis la première réunion du 2026-03-23, expire le 2026-05-23 ; à cette date le comité est réputé avoir été consulté. Aucune notification ne doit intervenir avant.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-068",
@@ -930,7 +930,7 @@
    "verdict": "succès",
    "constat": "Le plan ne renseigne pas : modalités de suivi de la mise en œuvre. Ces mesures sont examinées par l'administration au regard des moyens de l'entreprise, de l'unité économique et sociale ou du groupe.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-069",
@@ -943,7 +943,7 @@
    "verdict": "succès",
    "constat": "Les comptes du groupe ne sont pas versés. Un plan calibré sur les seuls moyens de la filiale est le motif de refus d'homologation le plus fréquent.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-070",
@@ -956,7 +956,7 @@
    "verdict": "succès",
    "constat": "La voie n'est pas arrêtée. Elle détermine tout le calendrier et se choisit avant la première réunion.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-071",
@@ -969,7 +969,7 @@
    "verdict": "succès",
    "constat": "La convention collective n'est pas versée. Les accords d'entreprise ne sont pas versés. Tant qu'ils ne le sont pas, l'audit applique la loi seule, alors que ces textes priment sur les critères d'ordre, les délais et l'indemnité.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-072",
@@ -982,7 +982,7 @@
    "verdict": "succès",
    "constat": "Les pièces comptables enregistrées ne déclarent pas couvrir le secteur d'activité du groupe. La démonstration risque de porter sur la seule entreprise.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-073",
@@ -995,7 +995,7 @@
    "verdict": "succès",
    "constat": "IDCC 1486 déclaré, mais aucune convention versée comme pièce datée. L'application peut la récupérer dans KALI, mais rien n'établit que c'est celle que vous appliquez.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   },
   {
    "cas": "T-074",
@@ -1008,7 +1008,7 @@
    "verdict": "succès",
    "constat": "Accords annoncés comme versés, mais aucun n'est enregistré comme lu : leur articulation avec la loi n'a pas été faite.",
    "version": "4128d1964f41",
-   "execute": "2026-08-22 07:50:52"
+   "execute": "2026-08-22 20:46:06"
   }
  ]
 }

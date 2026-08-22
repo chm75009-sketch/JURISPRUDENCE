@@ -157,6 +157,7 @@ function applicables(p) {
     return { id: it.id, categorie: it.categorie, intitule: it.intitule,
       fondement: it.fondement, module: it.module || null,
       convention: !!it.convention, generique: it.generique || null,
+      regularisation: it.regularisation || null,
       du: a.du, motif: a.motif, verifs: it.verifs || [] };
   });
 }

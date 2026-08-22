@@ -30,6 +30,7 @@ const R = require("./referentiel-social.js");
 const C = require("./controles-social.js");
 const P = require("./plan-social.js");
 const Q = require("./questionnaire-social.js");
+const { MODELES: MODELES_SOC } = require("./modeles-social.js");
 const T = JSON.parse(fs.readFileSync(path.join(ICI, "textes-social.json"), "utf8"));
 const NC = JSON.parse(fs.readFileSync(path.join(ICI, "textes-social-non-confirmes.json"), "utf8"));
 
@@ -54,6 +55,36 @@ for (const it of R.REF) {
 let citationsInterdites = 0;
 for (const it of R.REF) for (const n of it.articles)
   if (NC.articles && NC.articles[n]) citationsInterdites++;
+
+/* Les liens de régularisation : un lien mort est un mensonge fait au client.
+   Chaque clé de parcours doit exister dans docs/parcours.js, chaque clé de
+   document dans docs/documents.html — mesuré sur les fichiers eux-mêmes, non
+   sur une liste tenue à la main. */
+const PARCOURS_SRC = fs.readFileSync(path.join(ICI, "../../docs/parcours.js"), "utf8");
+const DOCS_SRC = fs.readFileSync(path.join(ICI, "../../docs/documents.html"), "utf8");
+const clesPresentes = (src, motif) =>
+  new Set([...src.matchAll(motif)].map(m => m[1]));
+const CLES_PARCOURS = clesPresentes(PARCOURS_SRC, /^\s{4}cle:\s*"([a-z0-9-]+)"/gm);
+const CLES_DOCS = clesPresentes(DOCS_SRC, /^\s{4}cle:\s*"([a-z0-9-]+)"/gm);
+
+let liensMorts = [], obligationsAvecParcours = 0, obligationsAvecDocument = 0,
+    obligationsSansParcours = [];
+for (const it of R.REF) {
+  const g = it.regularisation || {};
+  if (g.parcours) {
+    obligationsAvecParcours++;
+    if (!CLES_PARCOURS.has(g.parcours)) liensMorts.push(`${it.id} → parcours « ${g.parcours} »`);
+  } else obligationsSansParcours.push(it.id);
+  if (g.document) {
+    obligationsAvecDocument++;
+    if (!CLES_DOCS.has(g.document)) liensMorts.push(`${it.id} → document « ${g.document} »`);
+  }
+}
+/* Les parcours nommés par le référentiel mais absents de la page, et
+   l'inverse : le référentiel ne doit pas promettre un parcours qui n'existe
+   pas, et un parcours ajouté doit être nommé quelque part. */
+for (const cle of Object.keys(R.PARCOURS_NOMS))
+  if (!CLES_PARCOURS.has(cle)) liensMorts.push(`table des noms → parcours « ${cle} » absent de docs/parcours.js`);
 
 const FICHIERS = fs.readdirSync(ICI)
   .filter(x => /\.js$/.test(x) && x !== "publier-social.js"
@@ -87,12 +118,19 @@ const manifeste = {
     conformitesOuSansObjetSurProfilVide: conformitesSurVide,
     conclusionsConformesInterdites: conclusionsInterdites,
     citationsDArticlesNonConfirmes: citationsInterdites,
+    parcoursDeRegularisation: CLES_PARCOURS.size,
+    obligationsLieesAUnParcours: obligationsAvecParcours,
+    obligationsLieesAUnDocument: obligationsAvecDocument,
+    obligationsSansParcours: obligationsSansParcours.length,
+    obligationsAvecModeleComplet: R.REF.filter(x => !!MODELES_SOC[x.id]).length,
+    liensDeRegularisationMorts: liensMorts.length,
   },
+  obligationsSansParcours,
 };
 
-if (conformitesSurVide || conclusionsInterdites || citationsInterdites) {
+if (conformitesSurVide || conclusionsInterdites || citationsInterdites || liensMorts.length) {
   console.error("ÉCHEC — la chaîne a produit ce qu'elle interdit :",
-    JSON.stringify({ conformitesSurVide, conclusionsInterdites, citationsInterdites }));
+    JSON.stringify({ conformitesSurVide, conclusionsInterdites, citationsInterdites, liensMorts }));
   process.exit(1);
 }
 
