@@ -1,0 +1,435 @@
+diff --git a/index.html b/index.html
+index 325186e..b44e7b3 100644
+--- a/index.html
++++ b/index.html
+@@ -1126,7 +1126,7 @@ function jxReprise(){
+   });
+ }
+ try{ jxReprise(); }catch(e){}
+-var JX_BUILD = 'v2026-08-21.210';
++var JX_BUILD = 'v2026-08-23.211';
+ // Pastille de version affichée dans l'en-tête : dit d'un coup d'oeil quelle
+ // version est réellement chargée dans le navigateur (cache du service worker).
+ try{ (function(){
+@@ -1136,6 +1136,14 @@ try{ (function(){
+ })(); }catch(e){}
+ // Historique des versions (affiché sur la page Nouveautés — à compléter à chaque publication)
+ var JX_CHANGELOG = [
++ {v:'v2026-08-23.211', d:'23 août 2026', t:[
++   'SIX PARCOURS DE PLUS — les commissions du comité, les affichages et informations obligatoires, le registre unique du personnel, la base de données économiques et sociales, l\u2019index de l\u2019égalité professionnelle, les entretiens de parcours professionnel. Douze parcours en tout. Ils viennent de JURISPRUDENCE, l\u2019application jumelle : elle les portait, celle-ci ne les portait pas.',
++   'Les commissions : la commission santé-sécurité s\u2019impose AUSSI par établissement d\u2019au moins trois cents salariés (L.2315-36) ; sa composition est d\u2019ordre public (L.2315-39) ; ni l\u2019expertise ni les consultations ne se délèguent (L.2315-38) ; la commission des marchés ne suit PAS l\u2019effectif de l\u2019entreprise mais les comptes du comité (L.2315-44-1, D.2315-29).',
++   'Les affichages : neuf informations, chacune avec son support propre — le code dit tantôt « afficher » (D.4711-1, R.4227-37, L.3171-1), tantôt « informer par tout moyen » (L.1142-6, R.3221-2, L.1152-4, L.1153-5). Les panneaux syndicaux sont DISTINCTS de ceux du comité (L.2142-3).',
++   'L\u2019index : les cinq indicateurs de D.1142-2, le niveau de résultat de D.1142-3, la publication au 1er mars de D.1142-4, la mise à disposition du comité de D.1142-5, les mesures de correction sous SOIXANTE-QUINZE points de D.1142-6, et le délai de TROIS ANS avec la pénalité de 1 % de L.1142-10.',
++   'SEPT OBLIGATIONS DE PLUS À L\u2019AUDIT SOCIAL — 152 en tout : comité de groupe (L.2331-1), signalisation de l\u2019interdiction de fumer et de vapoter (code de la santé publique, à vérifier), couverture égalité par accord OU plan d\u2019action déposé, licenciement économique et plan de sauvegarde, livret d\u2019épargne salariale (L.3341-6), prévoyance des cadres (conventionnelle, à vérifier), revue de conformité à la convention collective.',
++   'Ce qui n\u2019a pas été relu à la source n\u2019est pas cité : la signalisation « fumer », la prévoyance des cadres et la revue conventionnelle le disent en toutes lettres au lieu d\u2019affirmer.',
++ ]},
+  {v:'v2026-08-21.210', d:'21 août 2026', t:[
+    'DEUX PARCOURS DE PLUS — le DOCUMENT UNIQUE et les NÉGOCIATIONS OBLIGATOIRES. Six parcours en tout, 53 étapes, toutes datées et fondées sur un article relu à la source.',
+    'Le document unique : l\u2019impact différencié de l\u2019exposition selon le sexe (L.4121-3) et les ambiances thermiques (R.4121-1), que la plupart des documents omettent ; l\u2019annexe des proportions de salariés exposés (R.4121-1-1) ; la mise à jour annuelle dès ONZE salariés et aux deux autres occasions de R.4121-2 ; la conservation QUARANTE ANS (R.4121-4). Le programme annuel de prévention n\u2019apparaît qu\u2019à cinquante.',
+@@ -29917,6 +29925,45 @@ var AUS_OBLIG=[
+   sanc:'délit d’entrave',
+   act:'Établir le bilan social sur l’année écoulée et les deux précédentes, et le soumettre au comité — et à chaque comité d’établissement d’au moins 300 salariés',
+   doc:'bilansocial', verif:['Chaque indicateur porte trois exercices','Les huit domaines de L.2312-30 sont couverts','Le procès-verbal de consultation existe au niveau central et pour chaque établissement de 300 salariés ou plus']}
++,
++ /* ── Les sept obligations venues de JURISPRUDENCE : celles que son
++    référentiel social porte et que cet audit ne portait pas. Chacune est
++    fondée sur un article relu à la source, ou dit explicitement qu'elle ne
++    l'est pas — le relais de JURISPRUDENCE ne sert que le code du travail. ── */
++ {id:'groupecomite', lib:'Comité de groupe', s:0, src:'L.2331-1', r:2,
++  sanc:'défaut de représentation au niveau du groupe — l’article de sanction n’a pas été relu : formulation prudente, à faire chiffrer',
++  act:'Faire constituer le comité de groupe au niveau de l’entreprise dominante',
++  verif:['L’entreprise appartient à un groupe au sens de L.2331-1 : une entreprise dominante dont le siège social est situé en France, et les entreprises qu’elle contrôle','Un comité de groupe est constitué au niveau de l’entreprise dominante','Sa composition est arrêtée et les représentants sont désignés','Sinon : l’entreprise n’appartient à aucun groupe, et l’obligation est sans objet']},
++ {id:'fumer', lib:'Signalisation de l’interdiction de fumer et de vapoter', s:0,
++  src:'code de la santé publique — HORS du code du travail : à vérifier sur les textes en vigueur, rien n’est affirmé ici', r:3,
++  sanc:'amendes prévues par le code de la santé publique — non vérifiées ici : formulation prudente',
++  act:'Apposer la signalisation aux entrées et dans les locaux fermés et couverts, après vérification des textes applicables',
++  verif:['La signalisation d’interdiction de fumer est apparente aux entrées et dans les locaux fermés et couverts','L’interdiction de vapoter est signalée dans les locaux à usage collectif qui accueillent des postes de travail','Les véhicules à usage collectif sont traités','Le rappel figure au règlement intérieur lorsqu’il en existe un']},
++ {id:'egacouv', lib:'Couverture égalité professionnelle : accord, ou à défaut plan d’action déposé', s:[50,'L.2242-1, 2° · plan d’action à défaut d’accord, R.2242-2'], r:1,
++  sanc:'pénalité financière assise sur les rémunérations des périodes non couvertes',
++  act:'Négocier l’accord d’égalité professionnelle ou, à défaut, arrêter et déposer le plan d’action annuel',
++  page:'nego',
++  verif:['Un accord d’égalité professionnelle est en vigueur, ou à défaut un plan d’action annuel a été arrêté','Le plan d’action, s’il en tient lieu, porte des objectifs de progression et des actions chiffrées sur le nombre de domaines requis','Il a été déposé, et sa synthèse portée à la connaissance des salariés','ATTENTION : l’obligation de COUVERTURE ne suppose pas de délégué syndical — sans accord possible, le plan d’action unilatéral reste dû']},
++ {id:'psemodule', lib:'Licenciement collectif pour motif économique : procédure et plan de sauvegarde de l’emploi', s:0,
++  src:'procédure et plan de sauvegarde de l’emploi — page dédiée de l’application', r:1,
++  sanc:'nullité de la procédure, réintégrations et indemnités',
++  act:'Passer le projet à la page « plan de sauvegarde de l’emploi » AVANT toute notification',
++  page:'pse',
++  verif:['Aucun projet de licenciement pour motif économique n’est envisagé — ou, s’il l’est, il a été passé à la page dédiée','Le motif économique est qualifié et daté','La procédure d’information et de consultation du comité est engagée dans l’ordre','Les obligations de reclassement sont documentées avant toute notification']},
++ {id:'livret', lib:'Livret d’épargne salariale remis à l’embauche', s:0, src:'L.3341-6', r:3,
++  sanc:'un salarié non informé de ses droits peut contester les affectations par défaut et les délais qui lui ont été opposés',
++  act:'Établir le livret d’épargne salariale et l’intégrer au parcours d’embauche',
++  verif:['Un dispositif d’épargne salariale existe dans l’entreprise (intéressement, participation, plan d’épargne) — sinon l’obligation est sans objet','Le livret est remis à chaque salarié lors de la conclusion de son contrat de travail','Il présente les dispositifs en place dans l’entreprise','Il est porté à la connaissance des représentants du personnel, le cas échéant par la base de données']},
++ {id:'prevcadres', lib:'Prévoyance des cadres — cotisation patronale dédiée, priorité au risque décès', s:0,
++  src:'textes conventionnels — HORS du code du travail : À VÉRIFIER, rien n’est affirmé ici', r:1,
++  sanc:'en cas de décès d’un cadre non couvert, un capital est dû aux ayants droit selon les textes conventionnels — montant à vérifier, il n’est pas affirmé ici',
++  act:'Souscrire ou vérifier le contrat de prévoyance des cadres, sur le texte conventionnel applicable',
++  verif:['L’entreprise emploie des cadres — sinon l’obligation est sans objet','Un contrat de prévoyance couvre les cadres','La cotisation patronale dédiée est affectée en priorité au risque décès, selon les textes conventionnels applicables','Le taux et l’assiette ont été confrontés au texte conventionnel : c’est lui qui décide, pas cette application']},
++ {id:'ccnrevue', lib:'Revue de conformité à la convention collective', s:0,
++  src:'convention collective applicable — À VÉRIFIER : le relais ne sert que le code du travail', r:2,
++  sanc:'rappels de salaires et de primes sur la période non prescrite — selon la convention applicable',
++  act:'Passer l’entreprise en revue de conformité conventionnelle, sur le texte de la convention et de ses avenants',
++  verif:['La convention collective applicable est identifiée par l’activité réelle de l’entreprise','Le texte consolidé et ses avenants les plus récents ont été téléchargés','Classification, minima, primes, prévoyance, jours conventionnels et maintien de salaire ont été confrontés aux pratiques','Les écarts relevés sont chiffrés et un calendrier de correction est arrêté','La date de la dernière revue est connue']}
+ ];
+ /* Lit les etablissements de la fiche societe : « Nom, effectif » par ligne.
+    Une ligne illisible est ignoree, jamais devinee. */
+@@ -31430,6 +31477,341 @@ var PARCOURS={
+     doc:['nego:bordereau','Bordereau de dépôt']}
+   ]
+  }
++,
++ /* ══════════════════════════════════════════════════════════════════════
++    Les six parcours venus de JURISPRUDENCE — ceux que ses douze parcours
++    portaient et que ces six-ci ne portaient pas. Même règle qu'ici : chaque
++    étape dit son article, relu à la source ; ce qui dépend d'un accord est
++    signalé, jamais affirmé ; ce qui n'a pas été lu n'est pas cité.
++    ══════════════════════════════════════════════════════════════════════ */
++
++ commissions:{
++  titre:'Constituer les commissions du comité',
++  sous:'L’accord d’abord, le supplétif ensuite : la commission santé-sécurité et sa composition d’ordre public, les trois commissions de trois cents salariés, la commission économique de mille, et celle des marchés — qui ne suit pas l’effectif de l’entreprise mais les comptes du comité.',
++  seuil:[300,'L.2315-36 et L.2315-45 pour le régime supplétif'],
++  pre:[
++   {k:'acc', q:'doc', lib:'L’accord d’entreprise sur le comité, s’il en existe un : c’est lui qui organise les commissions avant tout régime supplétif (L.2315-45)'},
++   {k:'ric', q:'doc', lib:'Le règlement intérieur du comité — il complète l’accord sur le fonctionnement des commissions'},
++   {k:'eff', q:'info', lib:'L’effectif de l’entreprise ET celui de chaque établissement distinct : la commission santé-sécurité s’impose aussi par établissement d’au moins trois cents salariés'},
++   {k:'liste', q:'info', lib:'La liste des membres titulaires et suppléants du comité, avec leur collège'},
++   {k:'cptes', q:'info', lib:'Les comptes du comité : effectif du comité à la clôture, ressources annuelles, total du bilan — ce sont eux, et non l’effectif de l’entreprise, qui commandent la commission des marchés (L.2315-44-1, D.2315-29)'},
++   {k:'form', q:'info', lib:'L’état des formations santé-sécurité déjà suivies par les élus et par le référent harcèlement'},
++   {k:'odj', q:'doc', lib:'L’ordre du jour de la réunion où les désignations seront portées'},
++  ],
++  dates:[
++   {k:'reu', lib:'Réunion du comité où les commissions seront constituées', aide:'Aucun texte n’impose de délai pour la constitution : c’est la date que vous retenez qui commande le reste.'},
++  ],
++  etapes:[
++   {k:'voie', n:'1', lib:'Choisir la voie : l’accord d’abord, le règlement intérieur du comité ensuite',
++    src:'L.2315-45 — un accord d’entreprise peut prévoir des commissions supplémentaires et fixer les modalités de celles qui sont dues ; à défaut d’accord seulement, le régime supplétif s’applique',
++    note:'Cherchez l’accord AVANT d’appliquer le supplétif : appliquer le régime légal alors qu’un accord existe, c’est méconnaître l’accord.',
++    doc:['commissions','Guide des commissions']},
++   {k:'cssct', n:'2', lib:'Créer la commission santé, sécurité et conditions de travail',
++    src:'L.2315-36 — la commission est créée dans les entreprises d’au moins trois cents salariés, dans les établissements distincts d’au moins trois cents salariés, et dans ceux mentionnés aux articles L.4521-1 et suivants',
++    note:'Le seuil s’apprécie AUSSI par établissement : une entreprise de deux cent soixante salariés avec un site de trois cent dix la doit. L’inspecteur du travail peut en outre l’imposer (L.2315-37).',
++    doc:['commissions','Guide des commissions']},
++   {k:'compo', n:'3', lib:'Fixer la composition de la commission santé-sécurité',
++    src:'L.2315-39 — la commission comprend au moins trois membres représentants du personnel, dont au moins un du deuxième collège ou, le cas échéant, du troisième ; ces dispositions sont d’ordre public',
++    note:'« Au moins » : l’accord peut en prévoir davantage, jamais moins. La règle du collège n’est pas décorative — c’est elle qui est vérifiée en premier.',
++    doc:['pvbureau','PV de désignation']},
++   {k:'attrib', n:'4', lib:'Délimiter les attributions déléguées — et ce qui ne se délègue pas',
++    src:'L.2315-38 — le comité peut déléguer à la commission tout ou partie de ses attributions relatives à la santé, à la sécurité et aux conditions de travail, à l’EXCEPTION du recours à un expert et des attributions consultatives du comité',
++    note:'Une délégation qui déborde ces limites est sans effet : la consultation reste au comité, et l’expertise aussi.'},
++   {k:'trois', n:'5', lib:'Constituer les trois commissions dues à trois cents salariés, à défaut d’accord',
++    min:300,
++    src:'à défaut d’accord (L.2315-45) : commission de la formation L.2315-49 · commission d’information et d’aide au logement L.2315-50 et L.2315-51 · commission de l’égalité professionnelle L.2315-56',
++    note:'Ces trois commissions sont constituées AU SEIN du comité : leurs membres sont désignés par lui, et elles lui rendent compte.',
++    doc:['commissions','Guide des commissions']},
++   {k:'eco', n:'6', lib:'Constituer la commission économique',
++    min:1000,
++    src:'à défaut d’accord : L.2315-46 — une commission économique est créée dans les entreprises d’au moins mille salariés',
++    note:'Elle est présidée par l’employeur et se réunit au moins deux fois par an. C’est la seule commission dont le seuil est de mille salariés.',
++    doc:['commissions','Guide des commissions']},
++   {k:'marches', n:'7', lib:'Constituer la commission des marchés — sur les comptes du COMITÉ, pas sur l’effectif',
++    src:'L.2315-44-1 et D.2315-29 — la commission des marchés est créée au sein du comité qui dépasse, pour deux des trois critères, les seuils fixés : cinquante salariés du comité à la clôture d’un exercice, et les montants de ressources annuelles et de total de bilan que D.2315-29 fixe par renvoi',
++    note:'C’est le piège le plus fréquent : un comité de sept mille salariés dont les comptes restent sous les seuils ne la doit pas ; un comité plus petit qui les dépasse la doit. Le trésorier ou l’expert-comptable du comité a la réponse.',
++    doc:['commissions','Guide des commissions']},
++   {k:'design', n:'8', lib:'Désigner les membres par une résolution du comité',
++    src:'L.2315-32 — les résolutions du comité sont prises à la majorité des membres présents ; le président ne participe pas au vote lorsqu’il consulte les membres élus en tant que délégation du personnel',
++    echLib:'la date de réunion que vous avez retenue',
++    ech:function(D){ return D.reu||''; },
++    note:'Une désignation qui ne figure pas au procès-verbal n’existe pas : portez-la à l’ordre du jour, faites-la voter, consignez-la.',
++    doc:['pvbureau','PV de désignation']},
++   {k:'former', n:'9', lib:'Former les élus, et le référent harcèlement',
++    src:'L.2315-18 — les membres de la délégation du personnel du comité et le référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes bénéficient de la formation nécessaire à l’exercice de leurs missions en matière de santé, de sécurité et de conditions de travail · L.2315-16 — cette formation est prise sur le temps de travail, rémunérée comme tel, et n’est pas déduite des heures de délégation',
++    note:'La formation est due dès qu’un comité existe, et pas seulement à trois cents salariés : ne la retardez pas jusqu’à la constitution des commissions.',
++    doc:['formelus','Formation des élus']},
++   {k:'rendre', n:'10', lib:'Tenir la première réunion de chaque commission et rendre compte au comité',
++    src:'les commissions sont constituées au sein du comité : elles instruisent, il décide — l’expertise et les consultations restent à lui (L.2315-38)',
++    note:'Datez la première réunion, désignez un rapporteur, et faites porter le compte rendu à l’ordre du jour du comité : sans cela, une commission constituée sur le papier ne produit rien.',
++    doc:['commissions','Guide des commissions']},
++  ]
++ },
++
++ affichages:{
++  titre:'Mettre en place les affichages et informations obligatoires',
++  sous:'Neuf informations dues par tout employeur, chacune avec son article et son support. Ce qui s’affiche, ce qui se diffuse « par tout moyen », ce qui se tient à disposition — et le relevé daté qui prouve que tout est en place.',
++  pre:[
++   {k:'lieux', q:'info', lib:'La liste des lieux où travaillent des salariés, et des locaux où se fait l’embauche — l’affichage se fait aux deux endroits'},
++   {k:'spst', q:'info', lib:'L’adresse et le numéro d’appel du service de prévention et de santé au travail, et le nom du médecin du travail'},
++   {k:'insp', q:'info', lib:'L’adresse, le numéro d’appel et le nom de l’agent de contrôle de l’inspection du travail compétent'},
++   {k:'secours', q:'info', lib:'Les numéros des services de secours d’urgence'},
++   {k:'ccn', q:'doc', lib:'L’intitulé exact de la convention collective applicable et un exemplaire à jour'},
++   {k:'horaires', q:'info', lib:'L’horaire collectif réel de chaque atelier, service ou équipe, et les heures et durées des repos'},
++   {k:'plans', q:'doc', lib:'Les plans des locaux, pour la consigne de sécurité incendie et les dégagements'},
++   {k:'syndic', q:'info', lib:'La liste des sections syndicales constituées, pour leurs panneaux distincts de ceux du comité'},
++  ],
++  dates:[
++   {k:'releve', lib:'Date du relevé des affichages', aide:'Aucun texte n’impose de refaire le relevé chaque année : c’est une prudence de gestion. Les coordonnées changent, et un affichage décroché ne se voit que lorsqu’on le regarde.'},
++  ],
++  etapes:[
++   {k:'discrim', n:'1', lib:'Informer sur l’interdiction des discriminations',
++    src:'L.1142-6 — dans les lieux de travail ainsi que dans les locaux ou à la porte des locaux où se fait l’embauche, les personnes sont informées par tout moyen du texte des articles 225-1 à 225-4 du code pénal',
++    note:'« Par tout moyen » : l’affichage n’est pas imposé, l’information l’est. Mais c’est à l’employeur de prouver qu’elle a été donnée.',
++    doc:['affichages','Pack des informations obligatoires']},
++   {k:'egarem', n:'2', lib:'Informer sur l’égalité de rémunération entre les femmes et les hommes',
++    src:'R.3221-2 — les dispositions des articles L.3221-1 à L.3221-7 et de leurs textes d’application sont portées, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ainsi qu’aux candidats à l’embauche',
++    note:'Les candidats sont visés au même titre que les salariés : l’information a donc sa place là où se fait l’embauche.',
++    doc:['affichages','Pack des informations obligatoires']},
++   {k:'harcel', n:'3', lib:'Informer sur les harcèlements moral et sexuel et les agissements sexistes',
++    src:'L.1152-4 — l’employeur prend toutes dispositions nécessaires en vue de prévenir les agissements de harcèlement moral, et les personnes sont informées par tout moyen du texte de l’article 222-33-2 du code pénal · L.1153-5 — même règle pour le harcèlement sexuel, avec le texte de l’article 222-33 du code pénal, les actions contentieuses ouvertes et les coordonnées des autorités et services compétents',
++    note:'L’article L.1153-5 exige davantage que le texte pénal : les coordonnées des autorités et services compétents doivent y figurer, à jour.',
++    doc:['affichages','Pack des informations obligatoires']},
++   {k:'coord', n:'4', lib:'Afficher les coordonnées du médecin du travail, des secours et de l’inspection',
++    src:'D.4711-1 — l’employeur affiche, dans des locaux normalement accessibles aux travailleurs, l’adresse et le numéro d’appel du médecin du travail ou du service de santé au travail, des services de secours d’urgence, et de l’inspection du travail avec le nom de l’inspecteur compétent',
++    note:'Ici le texte dit AFFICHER, pas « informer par tout moyen ». Et il exige le NOM de l’agent compétent : une adresse générique ne suffit pas.',
++    doc:['affichages','Pack des informations obligatoires']},
++   {k:'incendie', n:'5', lib:'Établir et afficher la consigne de sécurité incendie',
++    src:'R.4227-37 — dans les établissements mentionnés à l’article R.4227-34, une consigne de sécurité incendie est établie et affichée de manière très apparente, dans chaque local dont l’effectif dépasse cinq personnes ou dans chaque dégagement desservant un groupe de locaux',
++    note:'La consigne se double d’exercices et d’essais périodiques, et le registre qui les consigne se tient à disposition de l’inspection du travail.',
++    doc:['incendie','Consigne de sécurité incendie']},
++   {k:'horaires', n:'6', lib:'Afficher l’horaire collectif et les repos',
++    src:'L.3171-1 — l’employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos ; en cas d’organisation du travail sur une période de référence, l’affichage comprend la répartition de la durée du travail',
++    note:'L’affichage porte sur l’horaire RÉEL de chaque atelier, service ou équipe. Dès qu’un salarié n’y est pas soumis, ce sont les documents individuels de décompte qui prennent le relais.',
++    doc:['decompte','Décompte de la durée du travail']},
++   {k:'ccn', n:'7', lib:'Informer sur la convention collective et tenir un exemplaire à disposition',
++    src:'R.2262-1 — à défaut d’autres modalités prévues par un accord pris en application de l’article L.2262-5, l’employeur informe le salarié des conventions et accords applicables, tient un exemplaire à jour à la disposition des salariés sur le lieu de travail, et le met à disposition sur l’intranet lorsqu’il en existe un',
++    note:'Trois obligations distinctes en un seul article : informer, tenir à disposition, publier à l’intranet s’il en existe un. Les trois se vérifient séparément.',
++    doc:['aviscc','Avis — convention collective']},
++   {k:'syndic', n:'8', lib:'Mettre à disposition les panneaux syndicaux, distincts de ceux du comité',
++    src:'L.2142-3 — l’affichage des communications syndicales s’effectue librement sur des panneaux réservés à cet usage, DISTINCTS de ceux affectés aux communications du comité ; un exemplaire des communications est transmis à l’employeur simultanément à l’affichage',
++    note:'« Distincts » se prend au mot : un panneau partagé n’est pas conforme. Et l’employeur reçoit copie, il n’autorise pas.'},
++   {k:'registres', n:'9', lib:'Réunir les registres de santé-sécurité en un registre unique, si vous le souhaitez',
++    src:'L.4711-5 — lorsque les informations des articles L.4711-1 et L.4711-2 doivent figurer dans des registres distincts, l’employeur est autorisé à les réunir dans un registre unique dès lors que cette mesure facilite leur conservation et leur consultation',
++    note:'C’est une faculté, pas une obligation : elle simplifie le contrôle, elle ne le remplace pas.'},
++   {k:'releve', n:'10', lib:'VALIDATION — dresser le relevé daté des affichages et informations',
++    src:'aucun texte n’impose ce relevé : c’est la preuve que l’employeur constitue pour lui-même, faute de quoi il lui faudra démontrer un affichage passé sans en avoir gardé trace',
++    echLib:'un an après le relevé, par prudence de gestion',
++    ech:function(D){ return D.releve?parcJours(D.releve,365):''; },
++    note:'Photographiez chaque emplacement, datez, listez ce qui manque et qui s’en charge. Le parcours n’est terminé que lorsque le relevé existe.',
++    doc:['affichages','Pack des informations obligatoires']},
++  ]
++ },
++
++ registre:{
++  titre:'Tenir le registre unique du personnel',
++  sous:'Un registre par établissement, dans l’ordre des embauches et de façon indélébile : les indications de D.1221-23, la partie spécifique aux stagiaires, la copie des titres de travail, la mise à jour au fil des événements, et la mise à disposition du comité et des agents de contrôle.',
++  pre:[
++   {k:'liste', q:'info', lib:'La liste de tous les salariés, dans l’ordre CHRONOLOGIQUE des embauches — c’est ce qu’un agent de contrôle vérifie d’abord'},
++   {k:'mentions', q:'info', lib:'Pour chacun : nationalité, date de naissance, sexe, emploi, qualification, dates d’entrée et de sortie'},
++   {k:'titres', q:'piece', lib:'La copie des titres autorisant l’activité salariée des travailleurs étrangers'},
++   {k:'autoris', q:'piece', lib:'Les dates des autorisations d’embauche ou de licenciement, lorsqu’une autorisation est requise — à défaut, la date de la demande'},
++   {k:'stag', q:'info', lib:'La liste des stagiaires et des volontaires en service civique accueillis, dans leur ordre d’arrivée'},
++   {k:'etabs', q:'info', lib:'La liste des établissements où sont employés des salariés : un registre par établissement, la centralisation ne dispense pas de la tenue sur place'},
++   {k:'avis', q:'doc', lib:'L’avis du comité social et économique sur le support de substitution informatique, s’il en est fait usage'},
++  ],
++  dates:[
++   {k:'ouv', lib:'Date d’ouverture ou de reprise du registre', aide:'Elle date la tenue et sert de repère au contrôle.'},
++   {k:'avis', lib:'Date de l’avis du comité sur le support de substitution', aide:'L’article D.1221-27 impose d’adresser cet avis à l’inspection du travail ; il ne fixe pas de délai.'},
++  ],
++  etapes:[
++   {k:'ouvrir', n:'1', lib:'Ouvrir un registre par établissement',
++    src:'L.1221-13 — un registre unique du personnel est tenu dans TOUT établissement où sont employés des salariés',
++    echLib:'la date d’ouverture que vous avez retenue',
++    ech:function(D){ return D.ouv||''; },
++    note:'Si l’entreprise compte plusieurs établissements, elle compte autant de registres. Un registre unique centralisé au siège ne satisfait pas le texte.'},
++   {k:'ordre', n:'2', lib:'Inscrire les noms et prénoms dans l’ordre des embauches, de façon indélébile',
++    src:'L.1221-13 — les mentions sont portées sur le registre au moment de l’embauche et de façon indélébile',
++    note:'« Au moment de l’embauche » : pas à la fin du mois, pas quand le contrat revient signé — au moment où le salarié entre.'},
++   {k:'stag', n:'3', lib:'Ouvrir la partie spécifique aux stagiaires et aux volontaires en service civique',
++    src:'L.1221-13 — les nom et prénoms des stagiaires et des personnes volontaires en service civique accueillis dans l’établissement sont inscrits dans l’ordre d’arrivée, dans une partie SPÉCIFIQUE du registre',
++    note:'Une partie spécifique, donc distincte de celle des salariés : les mélanger est la deuxième irrégularité la plus fréquente sur ce registre.'},
++   {k:'mentions', n:'4', lib:'Porter les indications complémentaires de D.1221-23',
++    src:'D.1221-23 — nationalité, date de naissance, sexe, emploi, qualification, dates d’entrée et de sortie, date de l’autorisation d’embauche ou de licenciement lorsqu’elle est requise, titre autorisant l’activité salariée pour les travailleurs étrangers, et les mentions « contrat à durée déterminée », « salarié temporaire », « mis à disposition par un groupement d’employeurs », « salarié à temps partiel », « apprenti » ou « contrat de professionnalisation »',
++    note:'Le module Personnel de cette application tient ces colonnes et les imprime : il n’y a pas de raison de les tenir à la main.'},
++   {k:'titres', n:'5', lib:'Annexer la copie des titres de travail des salariés étrangers',
++    src:'D.1221-24 — une copie des titres autorisant l’exercice d’une activité salariée est annexée au registre et rendue accessible aux membres de la délégation du personnel du comité et aux agents de contrôle, dans l’établissement ou sur chaque chantier où ces travailleurs sont employés',
++    note:'« Sur chaque chantier » : pour une activité mobile, la copie suit le salarié, elle ne reste pas au siège.'},
++   {k:'maj', n:'6', lib:'Mettre à jour au moment où l’événement survient',
++    src:'D.1221-25 — les mentions relatives à des événements postérieurs à l’embauche du salarié, ou à l’arrivée du stagiaire, sont portées sur le registre au moment où ceux-ci surviennent',
++    note:'Une sortie inscrite trois mois plus tard est une sortie non inscrite.'},
++   {k:'subst', n:'7', lib:'Régulariser le support de substitution informatique',
++    src:'D.1221-27 — lorsque l’employeur recourt à un support de substitution, les exigences des articles D.8113-2 et D.8113-3 sont applicables, et il adresse à l’inspection du travail l’avis du comité prévu à l’article L.2315-5',
++    echLib:'la date d’avis que vous avez saisie',
++    ech:function(D){ return D.avis||''; },
++    note:'Le texte n’impose pas de délai pour cet envoi : ce qu’il impose, c’est qu’il ait lieu — et qu’il puisse se prouver.'},
++   {k:'dispo', n:'8', lib:'VALIDATION — tenir le registre à la disposition du comité et des agents de contrôle',
++    src:'L.1221-15 — le registre unique du personnel est tenu à la disposition du comité social et économique et des fonctionnaires et agents chargés de veiller à l’application du code du travail et du code de la sécurité sociale',
++    note:'Datez cette mise à disposition, dites où le registre se consulte, et informez-en les élus par écrit : le parcours n’est terminé que lorsque le registre est consultable et que quelqu’un le sait.'},
++  ]
++ },
++
++ bdese:{
++  titre:'Constituer la base de données économiques, sociales et environnementales',
++  sous:'L’accord d’abord, le régime supplétif ensuite : ce qu’un accord peut définir, ce que la base doit contenir à défaut selon l’effectif, l’accès permanent des élus et des délégués syndicaux, et la mise à disposition qui vaut communication.',
++  seuil:[50,'L.2312-18'],
++  pre:[
++   {k:'acc', q:'doc', lib:'L’accord d’entreprise définissant l’organisation, l’architecture, le contenu et les modalités de fonctionnement de la base, s’il en existe un (L.2312-21)'},
++   {k:'branche', q:'doc', lib:'À défaut, l’accord de branche — L.2312-21 ne l’ouvre qu’aux entreprises de moins de trois cents salariés'},
++   {k:'eff', q:'info', lib:'L’effectif de l’entreprise : c’est lui qui désigne le contenu supplétif applicable, celui de R.2312-8 ou celui de R.2312-9'},
++   {k:'compta', q:'doc', lib:'Les comptes des deux exercices précédents et les prévisions de l’exercice en cours'},
++   {k:'social', q:'doc', lib:'Les données sociales : effectifs, contrats, rémunérations, formation, conditions de travail'},
++   {k:'egalite', q:'info', lib:'Les indicateurs relatifs à l’égalité professionnelle entre les femmes et les hommes'},
++   {k:'support', q:'info', lib:'Le support retenu — informatique ou papier — et le moyen d’en assurer l’accès permanent'},
++   {k:'elus', q:'info', lib:'La liste des membres du comité et des délégués syndicaux, qui doivent y accéder en permanence'},
++  ],
++  dates:[
++   {k:'dispo', lib:'Date de mise à disposition, ou de dernière actualisation', aide:'C’est elle qui fait courir le délai d’examen des consultations récurrentes : la mise à disposition vaut communication.'},
++  ],
++  etapes:[
++   {k:'regime', n:'1', lib:'Déterminer le régime : accord, accord de branche, ou supplétif',
++    src:'L.2312-21 — un accord d’entreprise ou, en l’absence de délégué syndical, un accord entre l’employeur et le comité adopté à la majorité des membres titulaires, définit l’organisation, l’architecture, le contenu et les modalités de fonctionnement de la base ; à défaut, un accord de branche pour les entreprises de moins de trois cents salariés',
++    note:'Trois voies dans l’ordre. Appliquer le supplétif alors qu’un accord existe, c’est méconnaître l’accord ; l’inverse est une carence.'},
++   {k:'themes', n:'2', lib:'Vérifier les thèmes que la base comporte au moins',
++    src:'L.2312-18 — la base comporte l’ensemble des informations nécessaires aux consultations et informations récurrentes que l’employeur met à disposition du comité ; l’accord ne peut réduire en deçà des thèmes que ce texte énumère',
++    note:'Même sous accord, un thème manquant est un thème manquant : l’accord organise, il ne retranche pas.'},
++   {k:'supple', n:'3', lib:'À défaut d’accord, reprendre le contenu supplétif propre à l’effectif',
++    src:'R.2312-8 — contenu à défaut d’accord dans les entreprises de moins de trois cents salariés · R.2312-9 — contenu à défaut d’accord dans les entreprises d’au moins trois cents salariés',
++    note:'Les deux tableaux ne se ressemblent pas : le second est nettement plus détaillé. Prenez celui de votre effectif, rubrique par rubrique.'},
++   {k:'egalite', n:'4', lib:'Y verser les indicateurs d’égalité et le bilan des formations',
++    src:'L.2312-36 — la base comporte notamment les informations relatives à l’égalité professionnelle entre les femmes et les hommes, dont les indicateurs et les écarts de rémunération',
++    note:'C’est la même matière que l’index et que la négociation sur l’égalité : les trois doivent dire la même chose, sous peine d’être opposés l’un à l’autre.'},
++   {k:'acces', n:'5', lib:'Ouvrir l’accès permanent aux élus et aux délégués syndicaux',
++    src:'L.2312-36 — la base est accessible en permanence aux membres de la délégation du personnel du comité social et économique et aux délégués syndicaux',
++    note:'« En permanence » : un envoi ponctuel de fichiers n’est pas un accès permanent. Un support papier n’est pas interdit, mais il rend cet accès difficile à assurer.'},
++   {k:'notif', n:'6', lib:'Notifier la mise à disposition — elle vaut communication',
++    src:'la mise à disposition dans la base des éléments d’information vaut communication des rapports et informations au comité (L.2312-18) : c’est de cette mise à disposition que court le délai d’examen',
++    echLib:'la date de mise à disposition que vous avez saisie',
++    ech:function(D){ return D.dispo||''; },
++    note:'Notifiez-la par écrit et datez-la : sans cette date, le délai d’examen ne court pas, et la consultation reste ouverte.'},
++   {k:'audit', n:'7', lib:'VALIDATION — auditer la base rubrique par rubrique',
++    src:'aucun texte n’impose cet audit : c’est la vérification que la base contient réellement ce que le régime applicable exige, rubrique par rubrique',
++    note:'Le parcours n’est terminé que lorsque chaque rubrique due a été pointée présente ou manquante, avec un responsable et une échéance pour chaque manque.'},
++  ]
++ },
++
++ index:{
++  titre:'Calculer et publier l’index de l’égalité professionnelle',
++  sous:'Cinq indicateurs, un résultat sur cent, une publication au 1er mars, une mise à disposition du comité et une télédéclaration — et, sous le seuil, des mesures de correction à publier et un délai de trois ans qui court.',
++  seuil:[50,'L.1142-8'],
++  pre:[
++   {k:'paie', q:'doc', lib:'Les données de paie de la période de référence : rémunérations, catégories, âges, sexes'},
++   {k:'augm', q:'info', lib:'La liste des augmentations individuelles et des promotions de la période'},
++   {k:'mat', q:'info', lib:'La liste des salariées revenues de congé de maternité pendant la période'},
++   {k:'hautes', q:'info', lib:'Les dix plus hautes rémunérations et leur répartition par sexe'},
++   {k:'periode', q:'info', lib:'La période de référence retenue et son caractère constant d’une année sur l’autre'},
++   {k:'outil', q:'doc', lib:'L’outil de calcul utilisé et la trace des paramètres retenus — c’est lui qu’il faudra pouvoir montrer'},
++  ],
++  dates:[
++   {k:'cloture', lib:'Clôture de la période de référence retenue', aide:'Elle commande la date de publication : au plus tard le 1er mars suivant.'},
++   {k:'pub', lib:'Date de publication de l’index', aide:'Elle date la preuve à conserver, et fait courir le délai de correction en cas de résultat insuffisant.'},
++  ],
++  etapes:[
++   {k:'assuj', n:'1', lib:'Vérifier l’assujettissement et le périmètre de calcul',
++    src:'L.1142-8 — dans les entreprises d’au moins cinquante salariés, l’employeur publie chaque année des indicateurs relatifs aux écarts de rémunération entre les femmes et les hommes et aux actions mises en œuvre pour les supprimer',
++    note:'Le périmètre est celui de l’entreprise, non de l’établissement. La période de référence se choisit une fois et ne se change pas au gré du résultat.'},
++   {k:'calcul', n:'2', lib:'Calculer les cinq indicateurs',
++    src:'D.1142-2 — pour les entreprises de plus de deux cent cinquante salariés, les cinq indicateurs sont : l’écart de rémunération, l’écart de taux d’augmentations individuelles hors promotions, l’écart de taux de promotions, le pourcentage de salariées augmentées au retour de congé de maternité, et le nombre de salariés du sexe sous-représenté parmi les dix plus hautes rémunérations',
++    note:'En deçà de deux cent cinquante salariés, la liste des indicateurs n’est pas la même : prenez la version du texte qui vise votre effectif. Conservez la feuille de calcul et les paramètres retenus.'},
++   {k:'niveau', n:'3', lib:'Déterminer le niveau de résultat',
++    src:'D.1142-3 — le niveau de résultat obtenu au regard des indicateurs est déterminé selon les modalités fixées aux annexes du chapitre',
++    note:'Le résultat se calcule sur cent points. Un indicateur incalculable n’est pas un indicateur nul : le texte prévoit son traitement, vérifiez-le.'},
++   {k:'publier', n:'4', lib:'Publier au plus tard le 1er mars',
++    src:'D.1142-4 — le niveau de résultat et les résultats de chaque indicateur sont publiés annuellement, au plus tard le 1er mars de l’année en cours au titre de l’année précédente, de manière visible et lisible sur le site internet de l’entreprise lorsqu’il en existe un',
++    echLib:'au plus tard le 1er mars suivant la clôture',
++    ech:function(D){ if(!D.cloture) return ''; var a=parseInt(String(D.cloture).slice(0,4),10); return (a+1)+'-03-01'; },
++    note:'« Visible et lisible » : une page à trois clics de profondeur ne l’est pas. Conservez une capture datée de la page publiée.'},
++   {k:'cse', n:'5', lib:'Mettre les indicateurs à la disposition du comité et télédéclarer',
++    src:'D.1142-5 — les indicateurs et le niveau de résultat sont mis à la disposition du comité social et économique selon la même périodicité, dans les conditions du deuxième alinéa de l’article L.2312-18, présentés par catégorie socio-professionnelle',
++    note:'Trois destinataires distincts : le public, le comité, l’administration. Un seul des trois oublié suffit à caractériser le manquement.'},
++   {k:'correction', n:'6', lib:'Sous soixante-quinze points : arrêter et publier les mesures de correction',
++    src:'L.1142-9 — lorsque les résultats se situent en deçà du niveau défini par décret, la négociation sur l’égalité professionnelle porte aussi sur les mesures de correction et, le cas échéant, sur la programmation de mesures financières de rattrapage salarial · D.1142-6 — ces mesures doivent être mises en œuvre dès lors que le niveau de résultat est inférieur à SOIXANTE-QUINZE points, et elles sont publiées sur le site internet de l’entreprise',
++    note:'Les mesures se négocient d’abord ; à défaut d’accord, elles sont décidées unilatéralement après consultation du comité. Elles se publient comme l’index lui-même.'},
++   {k:'delai', n:'7', lib:'Mesurer le délai de trois ans et l’exposition à la pénalité',
++    src:'L.1142-10 — en deçà du niveau défini par décret, l’entreprise dispose d’un délai de TROIS ANS pour se mettre en conformité ; à l’expiration de ce délai, une pénalité financière d’un maximum de 1 % des rémunérations peut être appliquée',
++    echLib:'trois ans après la publication du résultat insuffisant',
++    ech:function(D){ return D.pub?parcMois(D.pub,36):''; },
++    note:'Le délai court de la publication, non de la constatation interne : datez la publication et posez l’échéance.'},
++   {k:'mille', n:'8', lib:'À partir de mille salariés : publier les écarts de représentation',
++    min:1000,
++    src:'L.1142-11 — dans les entreprises qui, pour le troisième exercice consécutif, emploient au moins mille salariés, l’employeur publie chaque année les écarts éventuels de représentation entre les femmes et les hommes parmi les cadres dirigeants et les membres des instances dirigeantes',
++    note:'C’est une publication DISTINCTE de l’index : elle a son propre périmètre et son propre calendrier.'},
++   {k:'preuve', n:'9', lib:'VALIDATION — conserver la preuve de la publication et de la télédéclaration',
++    src:'aucun texte n’impose de dossier de preuve : c’est ce qui manque toujours au moment du contrôle',
++    echLib:'la date de publication que vous avez saisie',
++    ech:function(D){ return D.pub||''; },
++    note:'Capture datée de la page publiée, accusé de télédéclaration, procès-verbal de mise à disposition au comité, feuille de calcul et paramètres. Le parcours n’est terminé que lorsque ces quatre pièces existent.'},
++  ]
++ },
++
++ entretiens:{
++  titre:'Organiser les entretiens de parcours professionnel',
++  sous:'Un entretien la première année, puis tous les quatre ans au plus, un état des lieux tous les huit ans, cinq sujets à couvrir et un sujet à ne pas aborder — et, dès cinquante salariés, l’abondement correctif qui sanctionne l’oubli.',
++  pre:[
++   {k:'liste', q:'info', lib:'La liste des salariés avec leur date d’entrée et la date de leur dernier entretien'},
++   {k:'huit', q:'info', lib:'La liste de ceux qui atteignent huit ans de présence dans l’année : l’état des lieux récapitulatif leur est dû'},
++   {k:'form', q:'info', lib:'Les formations suivies par chacun, en distinguant celles qui conditionnent l’exercice de l’activité des autres'},
++   {k:'abs', q:'info', lib:'La liste des absences longues achevées : maternité, adoption, parental, proche aidant, sabbatique, mandat, arrêt long'},
++   {k:'trame', q:'doc', lib:'La trame d’entretien, et la preuve qu’elle ne sert pas à évaluer le travail'},
++   {k:'copie', q:'doc', lib:'Le modèle de document remis au salarié, dont il conserve copie'},
++  ],
++  dates:[
++   {k:'embauche', lib:'Date d’embauche du salarié concerné', aide:'Le premier entretien est dû dans l’année qui suit ; l’état des lieux, tous les huit ans.'},
++   {k:'dernier', lib:'Date du dernier entretien tenu', aide:'Le suivant est dû au plus tard quatre ans après.'},
++  ],
++  etapes:[
++   {k:'info', n:'1', lib:'Informer le salarié à l’embauche',
++    src:'L.6315-1 — le salarié est informé, lors de son embauche, qu’il bénéficie tous les deux ans d’un entretien professionnel consacré à ses perspectives d’évolution professionnelle ; la version en vigueur lue à la source porte un entretien dans l’année suivant l’embauche puis tous les quatre ans au plus',
++    note:'La périodicité a changé : ne recopiez pas une trame ancienne. C’est la version en vigueur à votre date qui commande, et c’est elle qui est citée ici.'},
++   {k:'premier', n:'2', lib:'Tenir l’entretien de la première année',
++    src:'L.6315-1 — l’entretien professionnel est proposé dans l’année qui suit l’embauche',
++    echLib:'un an après l’embauche',
++    ech:function(D){ return D.embauche?parcMois(D.embauche,12):''; },
++    note:'« Proposé » n’est pas « tenu » : gardez trace de la proposition ET de la tenue, ou du refus du salarié.',
++    doc:['entretien','Trame d’entretien professionnel']},
++   {k:'suivant', n:'3', lib:'Renouveler tous les quatre ans au plus',
++    src:'L.6315-1 — l’entretien est ensuite renouvelé selon la périodicité que fixe le texte en vigueur, quatre ans au plus dans la version lue à la source ; un accord d’entreprise ou de branche peut fixer une périodicité différente',
++    echLib:'quatre ans après le dernier entretien',
++    ech:function(D){ return D.dernier?parcMois(D.dernier,48):''; },
++    note:'Vérifiez d’abord s’il existe un accord : il peut fixer une autre périodicité, et c’est alors lui qui s’applique.',
++    doc:['entretien','Trame d’entretien professionnel']},
++   {k:'sujets', n:'4', lib:'Couvrir les sujets dus — et ne pas évaluer le travail',
++    src:'L.6315-1 — l’entretien est consacré aux perspectives d’évolution professionnelle, notamment en termes de qualifications et d’emploi ; il comporte des informations relatives à la validation des acquis de l’expérience, à l’activation du compte personnel de formation, aux abondements que l’employeur est susceptible de financer et au conseil en évolution professionnelle',
++    note:'L’entretien professionnel NE PORTE PAS sur l’évaluation du travail du salarié : le texte le dit. Mêler les deux dans une même trame est le défaut le plus fréquent, et il prive l’entretien de sa qualification.',
++    doc:['entretien','Trame d’entretien professionnel']},
++   {k:'retour', n:'5', lib:'Proposer l’entretien au retour d’une absence longue',
++    src:'L.6315-1 — l’entretien est proposé systématiquement au salarié qui reprend son activité à l’issue des congés et absences que ce texte énumère, dont le congé de maternité, le congé parental, le congé de proche aidant, le congé sabbatique, la période de mobilité volontaire sécurisée, un arrêt longue maladie ou un mandat syndical',
++    note:'« Systématiquement » : la proposition ne dépend pas d’une demande du salarié. Elle se trace au retour, pas au prochain cycle.',
++    doc:['entretien','Trame d’entretien professionnel']},
++   {k:'doc', n:'6', lib:'Rédiger le document et en remettre copie au salarié',
++    src:'L.6315-1 — chaque entretien donne lieu à la rédaction d’un document dont une copie est remise au salarié',
++    note:'Sans copie remise, l’entretien ne se prouve pas — et un entretien qui ne se prouve pas n’a pas eu lieu au regard de l’abondement correctif.',
++    doc:['entretien','Trame d’entretien professionnel']},
++   {k:'huit', n:'7', lib:'Faire l’état des lieux récapitulatif des huit ans',
++    src:'L.6315-1 — tous les huit ans, l’entretien professionnel fait un état des lieux récapitulatif du parcours professionnel du salarié ; cet état des lieux permet de vérifier qu’il a bénéficié des entretiens et d’apprécier s’il a suivi au moins une action de formation, acquis des éléments de certification, ou bénéficié d’une progression salariale ou professionnelle',
++    echLib:'huit ans après l’embauche',
++    ech:function(D){ return D.embauche?parcMois(D.embauche,96):''; },
++    note:'C’est cet état des lieux qui déclenche — ou écarte — l’abondement correctif. Sans lui, l’entreprise ne sait pas ce qu’elle doit.',
++    doc:['entretien','Trame d’entretien professionnel']},
++   {k:'abond', n:'8', lib:'Vérifier l’abondement correctif du compte personnel de formation',
++    min:50,
++    src:'L.6323-13 — dans les entreprises d’au moins cinquante salariés, lorsque au cours de ces huit années le salarié n’a pas bénéficié des entretiens prévus ET d’au moins une formation autre que celle qui conditionne l’exercice de son activité, son compte personnel de formation est abondé',
++    note:'Les deux conditions se cumulent : entretiens tenus ET formation non obligatoire suivie. Une seule des deux manque, et l’abondement est dû.'},
++   {k:'archiver', n:'9', lib:'VALIDATION — rattacher les entretiens à l’obligation d’adaptation, et archiver',
++    src:'L.6321-1 — l’employeur assure l’adaptation des salariés à leur poste de travail et veille au maintien de leur capacité à occuper un emploi, au regard notamment de l’évolution des emplois, des technologies et des organisations',
++    note:'Les besoins relevés en entretien nourrissent cette obligation, et le bilan des actions entreprises à l’issue des entretiens entre dans la base de données. Le parcours n’est terminé que lorsque ce bilan existe.'},
++  ]
++ }
+ };
+ 
+ function parcRender(){
+diff --git a/sw.js b/sw.js
+index b5a0329..2ab18d4 100644
+--- a/sw.js
++++ b/sw.js
+@@ -1,5 +1,5 @@
+ /* Service worker — Juris Expert MCH (PWA installable + hors ligne + mise à jour forcée) */
+-const CACHE = 'jem-v193';
++const CACHE = 'jem-v194';
+ const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png',
+   './vendor/xlsx.full.min.js', './vendor/jszip.min.js',
+   /* Les pages annexes atteignables depuis le menu ou l'accueil. Elles
+diff --git a/version.json b/version.json
+index 2d8fb15..89e442b 100644
+--- a/version.json
++++ b/version.json
+@@ -1 +1 @@
+-{"build": "v2026-08-21.210"}
+\ No newline at end of file
++{"build": "v2026-08-23.211"}

@@ -24,7 +24,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"comité social et économique","date":"2026-08-22","empreinte":"c491bd9a9d95","fichiers":{"_r2314_1.json":"572dbb2da415","actions-cse.js":"9d6432fd028f","audit-cse.js":"f9613f2bfc8a","controles-cse.js":"6932d5b4442f","cse_corpus.json":"ea46040a4b05","dates.js":"b6d7e587bec3","grille-cse.js":"3dbd69ab4ead","moteur-cse.js":"7d205f19bfb5","publier-cse.js":"442f5fcd074a","questionnaire-cse.js":"8ef4416bfacc","sonde.js":"ac23bba7af98","tests-controles-cse.js":"4402f6e0b244","tests-cse.js":"6f47db6df965","textes_cse.json":"809a8d40897d","valider-cse.js":"ef7bcb36b10e"},"compteurs":{"articlesLus":374,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":47,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":92,"verdicts":4324,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0},"reglesJamaisDeclenchees":[]};
+  var __MANIFESTE = {"domaine":"comité social et économique","date":"2026-08-23","empreinte":"c491bd9a9d95","fichiers":{"_r2314_1.json":"572dbb2da415","actions-cse.js":"9d6432fd028f","audit-cse.js":"f9613f2bfc8a","controles-cse.js":"6932d5b4442f","cse_corpus.json":"ea46040a4b05","dates.js":"b6d7e587bec3","grille-cse.js":"3dbd69ab4ead","moteur-cse.js":"7d205f19bfb5","publier-cse.js":"442f5fcd074a","questionnaire-cse.js":"8ef4416bfacc","sonde.js":"ac23bba7af98","tests-controles-cse.js":"4402f6e0b244","tests-cse.js":"6f47db6df965","textes_cse.json":"809a8d40897d","valider-cse.js":"ef7bcb36b10e"},"compteurs":{"articlesLus":374,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":47,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":92,"verdicts":4324,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0},"reglesJamaisDeclenchees":[]};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -2315,7 +2315,7 @@ __def("./textes_cse.json", function(module){ module.exports = {"L2311-1":{"id":"
 
 __def("./manifeste-cse.json", function(module){ module.exports = {
  "domaine": "comité social et économique",
- "date": "2026-08-22",
+ "date": "2026-08-23",
  "empreinte": "c491bd9a9d95",
  "fichiers": {
   "_r2314_1.json": "572dbb2da415",

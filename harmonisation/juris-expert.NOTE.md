@@ -158,9 +158,19 @@ serveur, ni compte, ni synchronisation. Le schéma est dans
 
 ---
 
-## Ce que le patch NE fait PAS, et qui reste à décider
+## Ce que le patch NE fait PAS — et qui a été traité depuis, le 23 août 2026
 
-**Le recouvrement des audits n'est pas traité.** Juris Expert a son propre
+> **Mise à jour.** Le paragraphe ci-dessous décrivait, au 22 août, le seul point
+> laissé en suspens : le recouvrement des deux audits et des deux jeux de
+> parcours. Il a été traité le 23 août. La comparaison item par item est dans
+> `CORRESPONDANCE.md` ; les quarante-neuf obligations et les trois parcours que
+> JURISPRUDENCE devait à Juris Expert sont entrés ici ; les sept obligations et
+> les six parcours que Juris Expert doit à JURISPRUDENCE attendent dans
+> `juris-expert-complements.patch`, expliqué par sa propre note. Rien n'a été
+> fusionné de force : les deux applications gardent leur fonction, elles ne se
+> laissent plus de trous.
+
+**Le recouvrement des audits n'était pas traité.** Juris Expert a son propre
 audit social (`AUS_OBLIG`, **145 items**) et ses propres parcours guidés ;
 JURISPRUDENCE a son référentiel (**41 obligations**, chacune fondée sur des
 articles lus au relais avec leur LEGIARTI) et ses **12** parcours. Selon le

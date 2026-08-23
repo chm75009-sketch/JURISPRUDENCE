@@ -299,6 +299,49 @@
     "D1142-6": { id: "LEGIARTI000045250040", quoi: "les mesures de correction et la programmation de rattrapage salarial doivent être mises en œuvre dès lors que le niveau de résultat est inférieur à soixante-quinze points ; elles sont publiées sur le site internet de l'entreprise sur la même page que le résultat, dès le dépôt de l'accord ou de la décision unilatérale, et restent consultables jusqu'à l'obtention d'un résultat au moins égal à soixante-quinze points" },
     "L6315-1": { id: "LEGIARTI000053279288", quoi: "à l'embauche, le salarié est informé qu'il bénéficie d'un entretien de parcours professionnel au cours de la première année ; tout salarié en bénéficie ensuite tous les quatre ans ; l'entretien ne porte pas sur l'évaluation du travail, se déroule pendant le temps de travail, donne lieu à un document dont une copie est remise au salarié, et est proposé systématiquement au retour des congés et absences longues énumérés ; tous les huit ans, il fait un état des lieux récapitulatif du parcours" },
     "L6321-1": { id: "LEGIARTI000052437104", quoi: "l'employeur assure l'adaptation des salariés à leur poste de travail et veille au maintien de leur capacité à occuper un emploi, au regard notamment de l'évolution des emplois, des technologies et des organisations" },
+    /* ── embauche, contrat et information du salarié — capture du 23 août 2026,
+       deux lectures concordantes espacées, filtre par NOM du code ── */
+    "L1221-10": { id: "LEGIARTI000006900849", quoi: "l'embauche d'un salarié ne peut intervenir qu'après déclaration nominative accomplie par l'employeur auprès des organismes de protection sociale désignés à cet effet ; la déclaration est accomplie dans tous les lieux de travail où sont employés des salariés" },
+    "L1221-11": { id: "LEGIARTI000006900850", quoi: "le non-respect de l'obligation de déclaration préalable à l'embauche, constaté par les agents mentionnés à l'article L. 8271-7, entraîne une pénalité dont le montant est égal à trois cents fois le taux horaire du minimum garanti de l'article L. 3231-12" },
+    "L1221-5-1": { id: "LEGIARTI000047285930", quoi: "l'employeur remet au salarié un ou plusieurs documents écrits contenant les informations principales relatives à la relation de travail ; le salarié qui ne les a pas reçues ne peut saisir le juge qu'après avoir mis l'employeur en demeure de les communiquer ou de les compléter" },
+    "R1221-34": { id: "LEGIARTI000048288642", quoi: "les documents de l'article L. 1221-5-1 comportent au moins : l'identité des parties, le ou les lieux de travail et l'adresse de l'employeur si elle est distincte, l'intitulé du poste et les fonctions, la date d'embauche, la date de fin ou la durée prévue pour un contrat à durée déterminée, l'identité de l'entreprise utilisatrice pour un salarié temporaire, la durée et les conditions de la période d'essai, le droit à la formation, la durée du congé payé ou ses modalités de calcul, et les autres rubriques qu'il énumère" },
+    "R1221-35": { id: "LEGIARTI000048288640", quoi: "les informations des 7° à 12° et 14° de R. 1221-34 peuvent prendre la forme d'un renvoi aux dispositions applicables ; celles des 1° à 5°, 7° et 11° et 12° sont communiquées au plus tard le septième jour calendaire à compter de la date d'embauche, les autres au plus tard un mois après cette date" },
+    "L1221-19": { id: "LEGIARTI000019071113", quoi: "le contrat à durée indéterminée peut comporter une période d'essai dont la durée maximale est de deux mois pour les ouvriers et employés, trois mois pour les agents de maîtrise et techniciens, quatre mois pour les cadres" },
+    "L1221-21": { id: "LEGIARTI000019071109", quoi: "la période d'essai peut être renouvelée une fois si un accord de branche étendu le prévoit et en fixe les conditions et durées ; renouvellement compris, elle ne peut dépasser quatre mois pour les ouvriers et employés, six mois pour les agents de maîtrise et techniciens, huit mois pour les cadres" },
+    "L1221-25": { id: "LEGIARTI000029144958", quoi: "lorsque l'employeur met fin à l'essai, le salarié est prévenu dans un délai qui ne peut être inférieur à vingt-quatre heures en deçà de huit jours de présence, quarante-huit heures entre huit jours et un mois, deux semaines après un mois, un mois après trois mois ; l'essai ne peut être prolongé du fait du délai, et son inexécution ouvre droit à une indemnité compensatrice sauf faute grave" },
+    "L1221-26": { id: "LEGIARTI000019071093", quoi: "lorsque le salarié met fin à la période d'essai, il respecte un délai de prévenance de quarante-huit heures, ramené à vingt-quatre heures si sa durée de présence dans l'entreprise est inférieure à huit jours" },
+    "L1221-8": { id: "LEGIARTI000006900847", quoi: "le candidat à un emploi est expressément informé, préalablement à leur mise en œuvre, des méthodes et techniques d'aide au recrutement utilisées à son égard ; les résultats obtenus sont confidentiels et ces méthodes doivent être pertinentes au regard de la finalité poursuivie" },
+    "L1221-9": { id: "LEGIARTI000006900848", quoi: "aucune information concernant personnellement un candidat à un emploi ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance" },
+    "L1222-4": { id: "LEGIARTI000006900861", quoi: "aucune information concernant personnellement un salarié ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance" },
+    "L1242-2": { id: "LEGIARTI000037312980", quoi: "un contrat à durée déterminée ne peut être conclu que pour l'exécution d'une tâche précise et temporaire, et seulement dans les cas énumérés : remplacement d'un salarié absent, passé provisoirement à temps partiel, dont le contrat est suspendu, parti définitivement avant suppression du poste après consultation du comité, ou attendu en contrat à durée indéterminée ; accroissement temporaire d'activité ; emplois à caractère saisonnier ou d'usage ; remplacement d'un chef d'entreprise ou d'exploitation" },
+    "L1242-12": { id: "LEGIARTI000006901206", quoi: "le contrat à durée déterminée est établi par écrit et comporte la définition précise de son motif ; à défaut, il est réputé conclu pour une durée indéterminée. Il comporte notamment le nom et la qualification de la personne remplacée, la date du terme et le cas échéant une clause de renouvellement, la durée minimale à défaut de terme précis, la désignation du poste, l'intitulé de la convention collective applicable, la durée de la période d'essai et le montant de la rémunération" },
+    "L1242-13": { id: "LEGIARTI000006901207", quoi: "le contrat de travail est transmis au salarié, au plus tard, dans les deux jours ouvrables suivant l'embauche" },
+    "L1244-3": { id: "LEGIARTI000035644007", quoi: "à l'expiration d'un contrat à durée déterminée, il ne peut être recouru, pour pourvoir le poste du salarié dont le contrat a pris fin, ni à un contrat à durée déterminée ni à un contrat temporaire avant l'expiration d'un délai de carence calculé en fonction de la durée du contrat, renouvellements inclus ; les jours pris en compte sont les jours d'ouverture de l'entreprise ou de l'établissement" },
+    "L1244-3-1": { id: "LEGIARTI000035639421", quoi: "à défaut de stipulation dans la convention ou l'accord de branche, le délai de carence est égal au tiers de la durée du contrat venu à expiration si celui-ci, renouvellements inclus, est de quatorze jours ou plus, et à la moitié de cette durée s'il est inférieur à quatorze jours" },
+    "L1243-8": { id: "LEGIARTI000006901219", quoi: "lorsque les relations contractuelles ne se poursuivent pas par un contrat à durée indéterminée, le salarié a droit à une indemnité de fin de contrat égale à 10 % de la rémunération totale brute versée ; elle s'ajoute à cette rémunération, est versée à l'issue du contrat en même temps que le dernier salaire et figure sur le bulletin correspondant" },
+    "L4141-1": { id: "LEGIARTI000027326445", quoi: "l'employeur organise et dispense une information des travailleurs sur les risques pour la santé et la sécurité et les mesures prises pour y remédier, ainsi que sur les risques que les produits ou procédés peuvent faire peser sur la santé publique ou l'environnement" },
+    "L4141-2": { id: "LEGIARTI000006903166", quoi: "l'employeur organise une formation pratique et appropriée à la sécurité au bénéfice des travailleurs qu'il embauche, de ceux qui changent de poste ou de technique, des salariés temporaires, et à la demande du médecin du travail de ceux qui reprennent après un arrêt d'au moins vingt et un jours" },
+    "R4624-10": { id: "LEGIARTI000033769085", quoi: "tout travailleur bénéficie d'une visite d'information et de prévention réalisée par l'un des professionnels de santé mentionnés au premier alinéa de l'article L. 4624-1, dans un délai qui n'excède pas trois mois à compter de la prise effective du poste de travail" },
+    /* ── congés payés et journée de solidarité ── */
+    "L3141-3": { id: "LEGIARTI000033020826", quoi: "le salarié a droit à un congé de deux jours et demi ouvrables par mois de travail effectif chez le même employeur ; la durée totale du congé exigible ne peut excéder trente jours ouvrables" },
+    "L3141-13": { id: "LEGIARTI000033020772", quoi: "les congés sont pris dans une période qui comprend dans tous les cas la période du 1er mai au 31 octobre de chaque année" },
+    "L3141-15": { id: "LEGIARTI000033020765", quoi: "un accord d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche fixe la période de prise des congés, l'ordre des départs pendant cette période, et les délais que doit respecter l'employeur s'il entend modifier l'ordre et les dates de départs" },
+    "L3141-16": { id: "LEGIARTI000035652687", quoi: "à défaut de stipulation conventionnelle, l'employeur définit après avis, le cas échéant, du comité social et économique la période de prise des congés et l'ordre des départs, en tenant compte de la situation de famille des bénéficiaires, de la durée de leurs services chez l'employeur et de leur activité éventuelle chez un ou plusieurs autres employeurs, et il ne peut, sauf circonstances exceptionnelles, modifier l'ordre et les dates de départ moins d'un mois avant la date prévue" },
+    "D3141-5": { id: "LEGIARTI000033515945", quoi: "la période de prise des congés payés est portée par l'employeur à la connaissance des salariés au moins deux mois avant l'ouverture de cette période" },
+    "D3141-6": { id: "LEGIARTI000033515942", quoi: "l'ordre des départs en congé est communiqué, par tout moyen, à chaque salarié un mois avant son départ" },
+    "L3133-7": { id: "LEGIARTI000033020869", quoi: "la journée de solidarité, instituée en vue d'assurer le financement des actions en faveur de l'autonomie des personnes âgées ou handicapées, prend la forme d'une journée supplémentaire de travail non rémunérée pour les salariés et d'une contribution pour les employeurs" },
+    "L3133-8": { id: "LEGIARTI000033020862", quoi: "le travail accompli, dans la limite de sept heures, durant la journée de solidarité ne donne pas lieu à rémunération pour les salariés mensualisés ; pour les salariés en forfait annuel en jours, dans la limite de la valeur d'une journée de travail ; pour les salariés à temps partiel, la limite de sept heures est réduite proportionnellement à la durée contractuelle" },
+    /* ── fin du contrat ── */
+    "L1234-19": { id: "LEGIARTI000006901138", quoi: "à l'expiration du contrat de travail, l'employeur délivre au salarié un certificat dont le contenu est déterminé par voie réglementaire" },
+    "D1234-6": { id: "LEGIARTI000029544357", quoi: "le certificat de travail contient EXCLUSIVEMENT la date d'entrée du salarié et celle de sa sortie, et la nature de l'emploi ou des emplois successivement occupés avec les périodes pendant lesquelles ces emplois ont été tenus ; les deux autres mentions que l'article portait sont abrogées" },
+    "L1234-20": { id: "LEGIARTI000019071122", quoi: "le solde de tout compte, établi par l'employeur et dont le salarié lui donne reçu, fait l'inventaire des sommes versées lors de la rupture ; le reçu peut être dénoncé dans les six mois qui suivent sa signature, délai au-delà duquel il devient libératoire pour l'employeur pour les sommes qui y sont mentionnées" },
+    "R1234-9": { id: "LEGIARTI000049816309", quoi: "l'employeur délivre au salarié, au moment de l'expiration ou de la rupture du contrat, les attestations et justifications lui permettant d'exercer ses droits aux prestations de l'article L. 5421-2, et les transmet sans délai à l'opérateur France Travail ; les employeurs d'au moins onze salariés effectuent cette transmission par voie électronique, sauf impossibilité pour une cause qui leur est étrangère" },
+    "L1226-2": { id: "LEGIARTI000035653236", quoi: "lorsque le salarié victime d'une maladie ou d'un accident non professionnel est déclaré inapte à reprendre l'emploi qu'il occupait, l'employeur lui propose un autre emploi approprié à ses capacités, au sein de l'entreprise ou des entreprises du groupe situées sur le territoire national et dont l'organisation, les activités ou le lieu d'exploitation assurent la permutation de tout ou partie du personnel" },
+    "L1226-4": { id: "LEGIARTI000025560071", quoi: "lorsque, à l'issue d'un délai d'un mois à compter de la date de l'examen médical de reprise, le salarié déclaré inapte n'est ni reclassé ni licencié, l'employeur lui verse dès l'expiration de ce délai le salaire correspondant à l'emploi qu'il occupait avant la suspension de son contrat ; en cas de licenciement, le préavis n'est pas exécuté mais il est pris en compte pour le calcul de l'indemnité" },
+    "L1237-11": { id: "LEGIARTI000019071187", quoi: "l'employeur et le salarié peuvent convenir en commun des conditions de la rupture du contrat qui les lie ; la rupture conventionnelle, exclusive du licenciement ou de la démission, ne peut être imposée par l'une ou l'autre des parties et résulte d'une convention signée par elles, soumise aux dispositions destinées à garantir la liberté du consentement" },
+    "L1237-13": { id: "LEGIARTI000019071182", quoi: "la convention de rupture définit les conditions de celle-ci, notamment le montant de l'indemnité spécifique qui ne peut être inférieur à celui de l'indemnité de l'article L. 1234-9 ; elle fixe la date de rupture, qui ne peut intervenir avant le lendemain du jour de l'homologation ; chaque partie dispose, à compter de la signature, de quinze jours calendaires pour se rétracter, par lettre adressée par tout moyen attestant de sa date de réception" },
+    "L1237-14": { id: "LEGIARTI000019071180", quoi: "à l'issue du délai de rétractation, la partie la plus diligente adresse une demande d'homologation à l'autorité administrative avec un exemplaire de la convention ; l'autorité dispose de quinze jours ouvrables d'instruction à compter de la réception ; à défaut de notification dans ce délai, l'homologation est réputée acquise ; la validité de la convention est subordonnée à son homologation" },
+    "L2411-3": { id: "LEGIARTI000006902294", quoi: "le licenciement d'un délégué syndical ne peut intervenir qu'après autorisation de l'inspecteur du travail ; l'autorisation est également requise pour l'ancien délégué syndical durant les douze mois suivant la cessation de ses fonctions s'il les a exercées au moins un an, et lorsque la lettre de désignation a été reçue par l'employeur avant la convocation à l'entretien préalable" },
   };
 
 
@@ -441,7 +484,7 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* LES DOUZE PARCOURS                                                  */
+  /* LES QUINZE PARCOURS                                                 */
   /* ------------------------------------------------------------------ */
   var PARCOURS = [
 
@@ -2023,6 +2066,343 @@
       { id: "e9", nom: "VALIDATION — rattacher les entretiens à l'obligation d'adaptation, et archiver",
         quoi: "L'employeur assure l'adaptation des salariés à leur poste de travail et veille au maintien de leur capacité à occuper un emploi : les besoins de formation relevés en entretien nourrissent cette obligation, et le bilan des actions entreprises à l'issue des entretiens entre dans la base de données. Archivez les documents remis, datez la campagne, et portez le bilan à la base. Le parcours n'est terminé que lorsque ce bilan existe.",
         fond: ["L6321-1", "L2312-18"] },
+    ]
+  },
+
+  /* ================================================================== */
+  /* 13. EMBAUCHER : LES FORMALITÉS OBLIGATOIRES                        */
+  /* ================================================================== */
+  {
+    cle: "embauche",
+    nom: "Embaucher : les formalités obligatoires",
+    resume: "De la déclaration préalable à la visite d'information et de prévention : ce qui se fait AVANT l'entrée, ce qui se remet au salarié et dans quels délais, ce que le contrat à durée déterminée exige de plus, et les deux formalités de sécurité que l'urgence fait le plus souvent oublier.",
+    audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
+    jx: "embauche",
+    donnees: [
+      { c: "salarieEmbauche", nom: "Salarié embauché (nom, emploi)", t: "text" },
+      { c: "typeContrat", nom: "Type de contrat", t: "select",
+        options: ["contrat à durée indéterminée", "contrat à durée déterminée", "contrat d'apprentissage ou de professionnalisation", "autre"],
+        aide: "Le contrat à durée déterminée ajoute l'écrit à peine de requalification, le délai de transmission de deux jours ouvrables, le délai de carence et l'indemnité de fin de contrat." },
+      { c: "categorie", nom: "Catégorie professionnelle", t: "select",
+        options: ["ouvrier ou employé", "agent de maîtrise ou technicien", "cadre", "autre"],
+        aide: "Elle commande la durée maximale de la période d'essai (art. L. 1221-19)." },
+      { c: "dateEmbauche", nom: "Date d'entrée effective", t: "date",
+        aide: "Elle est le point de départ des délais d'information (art. R. 1221-35) et de la visite d'information et de prévention (art. R. 4624-10)." },
+      { c: "dateDPAE", nom: "Date de la déclaration préalable à l'embauche", t: "date",
+        aide: "Elle doit précéder l'entrée : l'article L. 1221-10 le dit sans réserve." },
+      { c: "essai", nom: "Le contrat comporte-t-il une période d'essai ?", t: "oui-non" },
+      { c: "posteARisques", nom: "Le poste figure-t-il sur la liste des postes présentant des risques particuliers ?", t: "oui-non",
+        aide: "Si oui, et si le salarié est en contrat court ou stagiaire, la formation renforcée à la sécurité est due (art. L. 4154-2, audité dans l'audit social)." },
+      { c: "dispositifsCollecte", nom: "Des dispositifs de collecte d'informations sont-ils en place (badgeage, géolocalisation, vidéo) ?", t: "oui-non",
+        aide: "Ils doivent avoir été portés à la connaissance du salarié préalablement (art. L. 1222-4) — et du candidat pendant le recrutement (art. L. 1221-9)." },
+    ],
+    prealable: [
+      { id: "identite", g: "information", nom: "L'identité complète du salarié et, s'il est étranger, le titre l'autorisant à exercer une activité salariée",
+        aide: "Le titre se copie et s'annexe au registre unique du personnel (art. D. 1221-24)." },
+      { id: "poste", g: "information", nom: "L'intitulé du poste, les fonctions, la classification et la rémunération",
+        aide: "Ce sont des rubriques du document d'information de l'article R. 1221-34." },
+      { id: "ccn", g: "document", nom: "La convention collective applicable, pour la classification, les minima et la durée d'essai",
+        aide: "L'application ne lit aucune convention : elle signale l'endroit où la vôtre peut ajouter une règle." },
+      { id: "trame", g: "document", nom: "La trame de contrat de travail à jour des rubriques de l'article R. 1221-34" },
+      { id: "spst", g: "information", nom: "Les coordonnées du service de prévention et de santé au travail auquel l'entreprise adhère" },
+      { id: "duerp", g: "document", nom: "Le document unique, pour l'information sur les risques du poste",
+        aide: "L'information de l'article L. 4141-1 se tire du document unique : sans lui, elle n'a pas de contenu." },
+      { id: "motif", g: "information", nom: "Le motif précis du recours, si le contrat est à durée déterminée",
+        aide: "« Surcroît d'activité » sans autre précision ne suffit pas : l'article L. 1242-12 exige la définition PRÉCISE du motif.",
+        si: function (P, D) { return D.typeContrat === "contrat à durée déterminée" ? true : (D.typeContrat ? false : null); } },
+      { id: "carence", g: "information", nom: "La date de fin du dernier contrat conclu sur le même poste, pour calculer le délai de carence",
+        aide: "Le délai se calcule sur la durée du contrat précédent, renouvellements inclus (art. L. 1244-3 et, à défaut d'accord, L. 1244-3-1).",
+        si: function (P, D) { return D.typeContrat === "contrat à durée déterminée" ? true : (D.typeContrat ? false : null); } },
+    ],
+    etapes: [
+      { id: "b1", nom: "Déclarer AVANT l'entrée",
+        jx: "embauche",
+        quoi: "L'embauche d'un salarié ne peut intervenir qu'après déclaration nominative accomplie auprès des organismes de protection sociale désignés à cet effet. La déclaration est accomplie dans tous les lieux de travail où sont employés des salariés. L'ordre des mots compte : d'abord la déclaration, ensuite l'entrée — un remplacement urgent ne renverse pas cet ordre.",
+        fond: ["L1221-10", "L1221-11"],
+        quand: function (D) {
+          if (!D.dateDPAE) return null;
+          var lib = "Déclaration accomplie le " + dateFr(D.dateDPAE);
+          if (D.dateEmbauche) {
+            var j = joursEntre(D.dateDPAE, D.dateEmbauche);
+            if (j !== null && j < 0) return { iso: D.dateDPAE, libelle: lib,
+              note: "ATTENTION : la déclaration est postérieure à l'entrée du salarié. L'article L. 1221-10 exige l'inverse. Traitez ce point avec votre conseil avant toute autre chose." };
+            return { iso: D.dateDPAE, libelle: lib, note: "Entrée le " + dateFr(D.dateEmbauche) + " : la déclaration la précède bien." };
+          }
+          return { iso: D.dateDPAE, libelle: lib };
+        } },
+      { id: "b2", nom: "Établir le contrat, et l'écrire quand la loi l'exige",
+        jx: "embauche",
+        quoi: "Le contrat à durée déterminée est établi par écrit et comporte la définition précise de son motif ; à défaut, il est réputé conclu pour une durée indéterminée. Il porte notamment le nom et la qualification de la personne remplacée, la date du terme ou la durée minimale, la désignation du poste, l'intitulé de la convention collective, la durée de la période d'essai et le montant de la rémunération. Le recours n'est ouvert que dans les cas énumérés par l'article L. 1242-2, et pour une tâche précise et temporaire.",
+        fond: ["L1242-12", "L1242-2"],
+        si: function (P, D) { return D.typeContrat === "contrat à durée déterminée" ? true : (D.typeContrat ? false : null); } },
+      { id: "b3", nom: "Transmettre le contrat à durée déterminée dans les deux jours ouvrables",
+        quoi: "Le contrat de travail est transmis au salarié, au plus tard, dans les deux jours ouvrables suivant l'embauche. Datez la transmission et conservez-en la preuve : c'est un délai court, souvent tenu en fait et jamais prouvé.",
+        fond: ["L1242-13"],
+        si: function (P, D) { return D.typeContrat === "contrat à durée déterminée" ? true : (D.typeContrat ? false : null); },
+        quand: function (D) {
+          if (!D.dateEmbauche) return null;
+          var t = joursOuvrablesApres(D.dateEmbauche, 2);
+          return { iso: t, libelle: "Transmission au plus tard le " + dateFr(t),
+            note: "Deux jours OUVRABLES (art. L. 1242-13) : cette page ne tient pas le calendrier des jours fériés — recalez la date si l'un d'eux tombe dans l'intervalle." };
+        } },
+      { id: "b4", nom: "Vérifier le délai de carence si le poste vient d'être occupé en contrat court",
+        quoi: "À l'expiration d'un contrat à durée déterminée, il ne peut être recouru, pour pourvoir le poste du salarié dont le contrat a pris fin, ni à un contrat à durée déterminée ni à un contrat temporaire avant l'expiration d'un délai de carence, calculé en fonction de la durée du contrat renouvellements inclus. À défaut de stipulation conventionnelle, ce délai est du tiers de la durée du contrat expiré s'il était de quatorze jours ou plus, de la moitié s'il était plus court. Les jours pris en compte sont les jours d'ouverture de l'entreprise.",
+        fond: ["L1244-3", "L1244-3-1"],
+        si: function (P, D) { return D.typeContrat === "contrat à durée déterminée" ? true : (D.typeContrat ? false : null); },
+        conv: "un délai de carence propre, ou des cas dans lesquels il ne s'applique pas" },
+      { id: "b5", nom: "Écrire la clause d'essai à la bonne durée",
+        quoi: "La période d'essai du contrat à durée indéterminée ne peut excéder deux mois pour les ouvriers et employés, trois mois pour les agents de maîtrise et techniciens, quatre mois pour les cadres. Elle ne peut être renouvelée qu'une fois, si un accord de branche étendu le prévoit et en fixe les conditions et durées ; renouvellement compris, elle ne peut dépasser quatre, six et huit mois selon la même échelle. Une durée excessive est privée d'effet : la rupture intervenue au-delà s'analyse en licenciement.",
+        fond: ["L1221-19", "L1221-21"],
+        si: function (P, D) { return D.essai === "non" ? false : true; },
+        quand: function (D) {
+          if (!D.dateEmbauche || !D.categorie) return null;
+          var m = D.categorie === "cadre" ? 4 : (D.categorie === "agent de maîtrise ou technicien" ? 3 : (D.categorie === "ouvrier ou employé" ? 2 : null));
+          if (m === null) return null;
+          var t = moisApres(D.dateEmbauche, m);
+          return { iso: t, libelle: "Terme maximal de l'essai initial : " + dateFr(t),
+            note: "Maximum légal pour cette catégorie (art. L. 1221-19). Votre convention collective peut prévoir une durée plus courte : c'est elle qui s'applique alors." };
+        },
+        conv: "une durée d'essai plus courte, ou les conditions du renouvellement" },
+      { id: "b6", nom: "Remettre les informations sur la relation de travail, dans les délais de chaque rubrique",
+        quoi: "L'employeur remet au salarié un ou plusieurs documents écrits contenant les informations principales relatives à la relation de travail. L'article R. 1221-34 en énumère le contenu ; l'article R. 1221-35 fixe les délais : les rubriques 1° à 5°, 7°, 11° et 12° au plus tard le septième jour calendaire à compter de l'embauche, les autres au plus tard un mois après. Certaines rubriques peuvent prendre la forme d'un renvoi aux dispositions applicables.",
+        fond: ["L1221-5-1", "R1221-34", "R1221-35"],
+        quand: function (D) {
+          if (!D.dateEmbauche) return null;
+          var t7 = jours(D.dateEmbauche, 7), t30 = moisApres(D.dateEmbauche, 1);
+          return { iso: t7, libelle: "Premier lot d'informations au plus tard le " + dateFr(t7),
+            note: "Le reste au plus tard le " + dateFr(t30) + " (art. R. 1221-35). Faites accuser réception : la charge de la preuve pèse sur l'employeur." };
+        } },
+      { id: "b7", nom: "Inscrire au registre unique du personnel, au moment de l'embauche",
+        jx: "registre",
+        quoi: "Les noms et prénoms de tous les salariés sont inscrits dans l'ordre des embauches, au moment de l'embauche et de façon indélébile, avec les indications complémentaires de l'article D. 1221-23. « Au moment de l'embauche » : pas à la fin du mois.",
+        fond: ["L1221-13", "D1221-23"] },
+      { id: "b8", nom: "Informer sur les risques et former à la sécurité",
+        quoi: "L'employeur organise et dispense une information des travailleurs sur les risques pour la santé et la sécurité et les mesures prises pour y remédier (art. L. 4141-1), et organise une formation pratique et appropriée à la sécurité au bénéfice des travailleurs qu'il embauche (art. L. 4141-2). Les deux se font à l'entrée, et se tracent par émargement. Sur un poste à risques particuliers, un salarié en contrat court ou un stagiaire bénéficie en outre d'une formation renforcée.",
+        fond: ["L4141-1", "L4141-2"] },
+      { id: "b9", nom: "Informer des dispositifs de collecte en place",
+        quoi: "Aucune information concernant personnellement un candidat, puis un salarié, ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance. Badgeage, géolocalisation, vidéosurveillance, outils de suivi de l'activité : chacun s'annonce, par écrit, avant d'être opposable. Le candidat, lui, est expressément informé des méthodes et techniques d'aide au recrutement employées.",
+        fond: ["L1221-8", "L1221-9", "L1222-4"],
+        si: function (P, D) { return D.dispositifsCollecte === "non" ? false : true; } },
+      { id: "b10", nom: "VALIDATION — demander la visite d'information et de prévention, et clore le dossier",
+        quoi: "Tout travailleur bénéficie d'une visite d'information et de prévention dans un délai qui n'excède pas trois mois à compter de la prise effective du poste. La demande au service de prévention et de santé au travail se fait dès l'entrée : c'est la formalité que l'urgence fait le plus souvent oublier, et l'une des plus simples à prouver. Datez la demande, classez l'accusé, et le dossier d'embauche est complet.",
+        fond: ["R4624-10"],
+        quand: function (D) {
+          if (!D.dateEmbauche) return null;
+          var t = moisApres(D.dateEmbauche, 3);
+          return { iso: t, libelle: "Visite d'information et de prévention au plus tard le " + dateFr(t),
+            note: "Trois mois à compter de la prise effective du poste (art. R. 4624-10). Un suivi individuel renforcé obéit à d'autres règles : voyez l'audit social." };
+        },
+        doc: { modele: "note-rh", nom: "Demande de visite au service de prévention et de santé au travail",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Demande de visite d'information et de prévention" + (D.salarieEmbauche ? " — " + D.salarieEmbauche : ""),
+            date: D.dateEmbauche }; } } },
+    ]
+  },
+
+  /* ================================================================== */
+  /* 14. ORGANISER LES CONGÉS PAYÉS                                     */
+  /* ================================================================== */
+  {
+    cle: "conges",
+    nom: "Organiser les congés payés",
+    resume: "Quatre échéances et un compteur : la période de prise, annoncée deux mois avant son ouverture ; l'ordre des départs, défini sur des critères et communiqué un mois avant chaque départ ; l'interdiction de modifier à moins d'un mois ; et la journée de solidarité, dont les modalités se fixent au lieu de se subir.",
+    audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
+    donnees: [
+      { c: "accordConges", nom: "Un accord d'entreprise ou de branche fixe-t-il la période de prise et l'ordre des départs ?", t: "oui-non",
+        aide: "L'article L. 3141-15 lui donne la main ; l'article L. 3141-16 ne s'applique qu'à défaut." },
+      { c: "debutPeriode", nom: "Date d'ouverture de la période de prise retenue", t: "date",
+        aide: "La période doit comprendre, dans tous les cas, celle du 1er mai au 31 octobre (art. L. 3141-13)." },
+      { c: "dateAvisCSEConges", nom: "Date de l'avis du comité social et économique sur la période et l'ordre", t: "date",
+        aide: "L'avis n'est requis, à défaut d'accord, que s'il existe un comité (art. L. 3141-16).",
+        si: function (P, D) { return D.accordConges === "oui" ? false : true; } },
+      { c: "dateInfoPeriode", nom: "Date à laquelle la période a été portée à la connaissance des salariés", t: "date" },
+      { c: "premierDepart", nom: "Date du premier départ prévu", t: "date",
+        aide: "Elle sert à mesurer le délai d'un mois de communication de l'ordre des départs (art. D. 3141-6)." },
+      { c: "solidarite", nom: "Les modalités de la journée de solidarité sont-elles fixées ?", t: "oui-non" },
+      { c: "tempsPartielConges", nom: "L'entreprise emploie-t-elle des salariés à temps partiel ?", t: "oui-non",
+        aide: "La limite de sept heures de la journée de solidarité est réduite proportionnellement à leur durée contractuelle (art. L. 3133-8)." },
+    ],
+    prealable: [
+      { id: "compteurs", g: "information", nom: "Les compteurs de congés acquis et pris, salarié par salarié",
+        aide: "Deux jours et demi ouvrables par mois de travail effectif, trente jours ouvrables au plus (art. L. 3141-3)." },
+      { id: "accord", g: "document", nom: "L'accord d'entreprise ou de branche fixant la période et l'ordre, s'il en existe un",
+        si: function (P, D) { return D.accordConges === "non" ? false : true; } },
+      { id: "ccnconges", g: "document", nom: "La convention collective, au titre « congés »",
+        aide: "Elle peut ajouter des jours, fixer une autre période, ou d'autres critères d'ordre. L'application ne la lit pas." },
+      { id: "contraintes", g: "information", nom: "Les contraintes d'activité de l'année (saisonnalité, fermeture, chantiers)" },
+      { id: "situations", g: "information", nom: "Les situations de famille et anciennetés utiles aux critères de l'ordre des départs",
+        aide: "Ce sont les critères que l'article L. 3141-16 nomme, à défaut de stipulation conventionnelle." },
+    ],
+    etapes: [
+      { id: "c1", nom: "Vérifier les compteurs d'acquisition",
+        quoi: "Le salarié a droit à un congé de deux jours et demi ouvrables par mois de travail effectif chez le même employeur, la durée totale exigible ne pouvant excéder trente jours ouvrables. Le compteur se tient salarié par salarié et se porte au bulletin. Le traitement des périodes d'arrêt de travail au regard de l'acquisition n'est pas tranché ici : faites-le vérifier par votre conseil sur les textes en vigueur.",
+        fond: ["L3141-3"],
+        conv: "des jours supplémentaires, une autre période de référence, ou des règles propres aux absences" },
+      { id: "c2", nom: "Fixer la période de prise — par l'accord d'abord",
+        quoi: "Un accord d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche fixe la période de prise des congés, l'ordre des départs pendant cette période, et les délais que doit respecter l'employeur s'il entend modifier l'ordre et les dates. Cherchez l'accord avant de décider : à défaut seulement, l'employeur définit lui-même, après avis du comité social et économique s'il en existe un.",
+        fond: ["L3141-15", "L3141-16"] },
+      { id: "c3", nom: "Vérifier que la période comprend le 1er mai au 31 octobre",
+        quoi: "Les congés sont pris dans une période qui comprend dans tous les cas la période du 1er mai au 31 octobre de chaque année. C'est un plancher : la période retenue peut être plus large, jamais plus étroite.",
+        fond: ["L3141-13"],
+        quand: function (D) {
+          if (!D.debutPeriode) return null;
+          return { iso: D.debutPeriode, libelle: "Période de prise ouverte le " + dateFr(D.debutPeriode),
+            note: "Vérifiez qu'elle englobe le 1er mai — 31 octobre de l'année considérée (art. L. 3141-13)." };
+        } },
+      { id: "c4", nom: "Annoncer la période deux mois avant son ouverture",
+        quoi: "La période de prise des congés payés est portée par l'employeur à la connaissance des salariés au moins deux mois avant l'ouverture de cette période. Affichez, envoyez, datez : c'est un délai que l'on tient facilement et que l'on prouve rarement.",
+        fond: ["D3141-5"],
+        quand: function (D) {
+          if (!D.debutPeriode) return null;
+          var t = moisApres(D.debutPeriode, -2);
+          var note = "Deux mois avant l'ouverture (art. D. 3141-5).";
+          if (D.dateInfoPeriode) {
+            var j = joursEntre(D.dateInfoPeriode, D.debutPeriode);
+            note += j !== null && j < 60
+              ? " ATTENTION : l'information a été donnée le " + dateFr(D.dateInfoPeriode) + ", soit " + j + " jours avant l'ouverture — le délai n'est pas tenu."
+              : " Information donnée le " + dateFr(D.dateInfoPeriode) + " : le délai est tenu.";
+          }
+          return { iso: t, libelle: "Information des salariés au plus tard le " + dateFr(t), note: note };
+        },
+        doc: { modele: "note-rh", nom: "Note d'information — période de prise des congés",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Période de prise des congés payés", date: D.dateInfoPeriode || D.debutPeriode }; } } },
+      { id: "c5", nom: "Définir l'ordre des départs sur les critères de la loi",
+        quoi: "À défaut de stipulation conventionnelle, l'employeur définit l'ordre des départs après avis, le cas échéant, du comité social et économique, en tenant compte de la situation de famille des bénéficiaires — notamment les possibilités de congé du conjoint ou du partenaire, et la présence au foyer d'un enfant ou d'un adulte handicapé ou d'une personne âgée en perte d'autonomie —, de la durée des services chez l'employeur, et de leur activité éventuelle chez un ou plusieurs autres employeurs.",
+        fond: ["L3141-16"],
+        si: function (P, D) { return D.accordConges === "oui" ? false : true; },
+        quand: function (D) {
+          if (!D.dateAvisCSEConges) return null;
+          return { iso: D.dateAvisCSEConges, libelle: "Avis du comité recueilli le " + dateFr(D.dateAvisCSEConges) };
+        } },
+      { id: "c6", nom: "Communiquer l'ordre des départs un mois avant chaque départ",
+        quoi: "L'ordre des départs en congé est communiqué, par tout moyen, à chaque salarié un mois avant son départ. « Par tout moyen » n'affranchit pas de la preuve : gardez trace de l'envoi ou de l'affichage.",
+        fond: ["D3141-6"],
+        quand: function (D) {
+          if (!D.premierDepart) return null;
+          var t = moisApres(D.premierDepart, -1);
+          return { iso: t, libelle: "Communication au plus tard le " + dateFr(t),
+            note: "Un mois avant le départ du " + dateFr(D.premierDepart) + " (art. D. 3141-6)." };
+        } },
+      { id: "c7", nom: "Ne plus modifier à moins d'un mois, sauf circonstances exceptionnelles",
+        quoi: "Sauf circonstances exceptionnelles, l'ordre et les dates de départ ne peuvent être modifiés dans le délai d'un mois avant la date prévue. Écrivez la procédure interne : qui décide, quelle circonstance est invoquée, et comment le salarié en est informé — une modification tardive non motivée se paie en dommages-intérêts.",
+        fond: ["L3141-16"] },
+      { id: "c8", nom: "Fixer les modalités de la journée de solidarité",
+        quoi: "La journée de solidarité prend la forme d'une journée supplémentaire de travail non rémunérée pour les salariés et d'une contribution pour les employeurs. Le travail accompli, dans la limite de sept heures, ne donne pas lieu à rémunération ; pour les salariés en forfait annuel en jours, dans la limite de la valeur d'une journée ; pour les salariés à temps partiel, la limite de sept heures est réduite proportionnellement à la durée contractuelle. Au-delà de la limite, les heures sont des heures de travail à rémunérer.",
+        fond: ["L3133-7", "L3133-8"],
+        si: function (P, D) { return D.solidarite === "oui" ? true : (D.solidarite === "non" ? true : null); },
+        conv: "les modalités d'accomplissement de la journée de solidarité" },
+      { id: "c9", nom: "VALIDATION — mettre le paramétrage de paie en accord avec les décisions prises",
+        quoi: "Compteurs portés au bulletin, prorata de la journée de solidarité pour les temps partiels, retenues correctement calculées : le parcours n'est terminé que lorsque la paie applique ce qui a été décidé. Datez le contrôle, nommez le responsable, et archivez la décision, l'avis du comité s'il y en a eu un, la note diffusée et la preuve de sa diffusion.",
+        fond: ["L3141-3", "L3133-8"],
+        doc: { modele: "note-rh", nom: "Note de contrôle du paramétrage des congés",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Congés payés et journée de solidarité — contrôle du paramétrage",
+            date: D.debutPeriode }; } } },
+    ]
+  },
+
+  /* ================================================================== */
+  /* 15. ÉTABLIR LES DOCUMENTS DE FIN DE CONTRAT                        */
+  /* ================================================================== */
+  {
+    cle: "findecontrat",
+    nom: "Établir les documents de fin de contrat",
+    resume: "Ce qui se remet au dernier jour, et rien d'autre : le certificat de travail aux mentions exclusives de l'article D. 1234-6, le reçu pour solde de tout compte en double exemplaire, l'attestation destinée à l'assurance chômage. Plus les deux chemins particuliers : la rupture conventionnelle et l'inaptitude.",
+    audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
+    jx: "discipline",
+    donnees: [
+      { c: "salarieSortie", nom: "Salarié concerné (nom, emploi)", t: "text" },
+      { c: "motifSortie", nom: "Cause de la fin du contrat", t: "select",
+        options: ["démission", "licenciement", "rupture conventionnelle individuelle", "fin de contrat à durée déterminée",
+          "rupture de période d'essai", "inaptitude", "départ ou mise à la retraite", "autre"],
+        aide: "Le certificat, le reçu et l'attestation sont dus quelle que soit la cause. Les deux chemins particuliers ci-dessous ne s'ouvrent que pour la rupture conventionnelle et l'inaptitude." },
+      { c: "dateSortie", nom: "Date d'expiration du contrat", t: "date" },
+      { c: "protege", nom: "Le salarié est-il ou a-t-il été titulaire d'un mandat représentatif ?", t: "oui-non",
+        aide: "Si oui, l'autorisation de l'inspection du travail peut être requise AVANT toute rupture, y compris conventionnelle (art. L. 2411-3 pour le délégué syndical ; les autres mandats obéissent à leurs propres textes, audités dans le module comité)." },
+      { c: "dateSignatureRC", nom: "Date de signature de la convention de rupture", t: "date",
+        si: function (P, D) { return D.motifSortie === "rupture conventionnelle individuelle" ? true : (D.motifSortie ? false : null); } },
+      { c: "dateExamenReprise", nom: "Date de l'examen médical de reprise ayant constaté l'inaptitude", t: "date",
+        si: function (P, D) { return D.motifSortie === "inaptitude" ? true : (D.motifSortie ? false : null); } },
+    ],
+    prealable: [
+      { id: "solde", g: "information", nom: "Le détail chiffré des sommes dues : salaire, congés, préavis, indemnités",
+        aide: "Le reçu pour solde de tout compte fait l'inventaire des sommes versées : un reçu global sans inventaire ne remplit pas sa fonction." },
+      { id: "dates", g: "information", nom: "Les dates d'entrée et de sortie, et la nature des emplois successivement occupés",
+        aide: "Ce sont EXACTEMENT les mentions du certificat de travail (art. D. 1234-6) — et les seules." },
+      { id: "ccnsortie", g: "document", nom: "La convention collective, au titre « rupture du contrat »",
+        aide: "Préavis, indemnités et procédures conventionnels peuvent être plus favorables : l'application ne les lit pas." },
+      { id: "mandats", g: "information", nom: "La liste à jour des mandats en cours, des anciens mandats encore protégés et des candidatures",
+        aide: "Elle se consulte AVANT toute rupture, quelle qu'en soit la forme." },
+      { id: "portabilite", g: "document", nom: "Les documents d'information sur la portabilité des couvertures santé et prévoyance",
+        aide: "Ces dispositifs relèvent d'autres codes que le code du travail : l'application ne les vérifie pas, elle rappelle seulement de ne pas les oublier." },
+    ],
+    etapes: [
+      { id: "f1", nom: "Vérifier la liste des salariés protégés AVANT toute rupture",
+        quoi: "Le licenciement d'un délégué syndical ne peut intervenir qu'après autorisation de l'inspecteur du travail ; l'autorisation vaut aussi pour l'ancien délégué syndical durant les douze mois suivant la cessation de ses fonctions s'il les a exercées au moins un an, et lorsque la lettre de désignation a été reçue avant la convocation à l'entretien préalable. Les autres mandats obéissent à leurs propres textes : l'audit du comité les traite. Une rupture prononcée sans autorisation est nulle.",
+        fond: ["L2411-3"],
+        si: function (P, D) { return D.protege === "non" ? false : true; } },
+      { id: "f2", nom: "Rupture conventionnelle : entretiens, indemnité, rétractation",
+        quoi: "L'employeur et le salarié peuvent convenir en commun des conditions de la rupture ; elle ne peut être imposée par l'une ou l'autre des parties et résulte d'une convention signée par elles. La convention fixe le montant de l'indemnité spécifique, qui ne peut être inférieur à celui de l'indemnité légale de licenciement, et la date de rupture, qui ne peut intervenir avant le lendemain du jour de l'homologation. Chaque partie dispose de quinze jours calendaires à compter de la signature pour se rétracter.",
+        fond: ["L1237-11", "L1237-13"],
+        si: function (P, D) { return D.motifSortie === "rupture conventionnelle individuelle" ? true : (D.motifSortie ? false : null); },
+        quand: function (D) {
+          if (!D.dateSignatureRC) return null;
+          var t = jours(D.dateSignatureRC, 15);
+          return { iso: t, libelle: "Fin du délai de rétractation le " + dateFr(t),
+            note: "Quinze jours CALENDAIRES à compter de la signature (art. L. 1237-13). La demande d'homologation ne peut partir avant." };
+        },
+        conv: "une indemnité conventionnelle plus favorable que l'indemnité légale" },
+      { id: "f3", nom: "Rupture conventionnelle : demander l'homologation",
+        quoi: "À l'issue du délai de rétractation, la partie la plus diligente adresse une demande d'homologation à l'autorité administrative, avec un exemplaire de la convention. L'autorité dispose de quinze jours ouvrables d'instruction à compter de la réception ; à défaut de notification dans ce délai, l'homologation est réputée acquise. La validité de la convention est subordonnée à son homologation.",
+        fond: ["L1237-14"],
+        si: function (P, D) { return D.motifSortie === "rupture conventionnelle individuelle" ? true : (D.motifSortie ? false : null); },
+        quand: function (D) {
+          if (!D.dateSignatureRC) return null;
+          var t = jours(D.dateSignatureRC, 16);
+          return { iso: t, libelle: "Demande d'homologation à adresser à partir du " + dateFr(t),
+            note: "Le lendemain de la fin du délai de rétractation. Comptez ensuite quinze jours OUVRABLES d'instruction (art. L. 1237-14)." };
+        } },
+      { id: "f4", nom: "Inaptitude : rechercher le reclassement et documenter la recherche",
+        quoi: "Lorsque le salarié victime d'une maladie ou d'un accident non professionnel est déclaré inapte à reprendre l'emploi qu'il occupait, l'employeur lui propose un autre emploi approprié à ses capacités, au sein de l'entreprise ou des entreprises du groupe situées sur le territoire national et dont l'organisation, les activités ou le lieu d'exploitation assurent la permutation de tout ou partie du personnel. Une recherche non tracée équivaut à une recherche non faite : tenez le registre des postes examinés et des réponses reçues.",
+        fond: ["L1226-2"],
+        si: function (P, D) { return D.motifSortie === "inaptitude" ? true : (D.motifSortie ? false : null); } },
+      { id: "f5", nom: "Inaptitude : reprendre le paiement du salaire au terme d'un mois",
+        quoi: "Lorsque, à l'issue d'un délai d'un mois à compter de la date de l'examen médical de reprise, le salarié déclaré inapte n'est ni reclassé ni licencié, l'employeur lui verse dès l'expiration de ce délai le salaire correspondant à l'emploi qu'il occupait avant la suspension de son contrat. La reprise est automatique : elle ne suppose ni demande ni mise en demeure.",
+        fond: ["L1226-4"],
+        si: function (P, D) { return D.motifSortie === "inaptitude" ? true : (D.motifSortie ? false : null); },
+        quand: function (D) {
+          if (!D.dateExamenReprise) return null;
+          var t = moisApres(D.dateExamenReprise, 1);
+          return { iso: t, libelle: "Reprise du paiement du salaire au " + dateFr(t),
+            note: "Un mois à compter de l'examen médical de reprise (art. L. 1226-4). Posez l'alerte en paie dès la réception de l'avis." };
+        } },
+      { id: "f6", nom: "Établir le certificat de travail — et rien de plus que ses mentions",
+        quoi: "À l'expiration du contrat de travail, l'employeur délivre au salarié un certificat dont le contenu est déterminé par voie réglementaire. L'article D. 1234-6, dans sa version lue à la source, énonce que le certificat contient EXCLUSIVEMENT la date d'entrée et celle de sortie, et la nature de l'emploi ou des emplois successivement occupés avec les périodes correspondantes. Les deux autres mentions qu'il portait autrefois sont abrogées : n'ajoutez rien.",
+        fond: ["L1234-19", "D1234-6"],
+        quand: function (D) {
+          if (!D.dateSortie) return null;
+          return { iso: D.dateSortie, libelle: "Certificat délivré le " + dateFr(D.dateSortie),
+            note: "À l'expiration du contrat : le certificat ne s'envoie pas la semaine suivante." };
+        } },
+      { id: "f7", nom: "Établir le reçu pour solde de tout compte, en double exemplaire",
+        quoi: "Le solde de tout compte, établi par l'employeur et dont le salarié lui donne reçu, fait l'inventaire des sommes versées lors de la rupture. Le reçu peut être dénoncé dans les six mois qui suivent sa signature, délai au-delà duquel il devient libératoire pour l'employeur — pour les seules sommes qui y sont mentionnées. C'est pourquoi l'inventaire compte : ce qui n'y figure pas n'est pas couvert.",
+        fond: ["L1234-20"] },
+      { id: "f8", nom: "Délivrer et transmettre l'attestation destinée à l'assurance chômage",
+        quoi: "L'employeur délivre au salarié, au moment de l'expiration ou de la rupture du contrat, les attestations et justifications lui permettant d'exercer ses droits aux prestations, et les transmet sans délai à l'opérateur France Travail. Les employeurs d'au moins onze salariés effectuent cette transmission par voie électronique, sauf impossibilité pour une cause qui leur est étrangère.",
+        fond: ["R1234-9"],
+        quand: function (D) {
+          if (!D.dateSortie) return null;
+          return { iso: D.dateSortie, libelle: "Attestation délivrée et transmise le " + dateFr(D.dateSortie),
+            note: "« Sans délai » pour la transmission : un envoi différé retarde l'indemnisation du salarié et se répare." };
+        } },
+      { id: "f9", nom: "VALIDATION — clore le dossier de sortie et en garder la trace",
+        quoi: "Liasse remise et datée, accusé de transmission de l'attestation classé, exemplaires du reçu conservés, information sur la portabilité des couvertures donnée. Nommez le responsable du contrôle de sortie et gardez la liste signée : le parcours n'est terminé que lorsque quelqu'un a vérifié, et signé, que rien ne manque.",
+        fond: ["L1234-19", "L1234-20", "R1234-9"],
+        doc: { modele: "note-rh", nom: "Liste de contrôle de sortie",
+          pre: function (P, D) { return { entreprise: P.denomination,
+            objet: "Documents de fin de contrat" + (D.salarieSortie ? " — " + D.salarieSortie : ""),
+            date: D.dateSortie }; } } },
     ]
   },
 

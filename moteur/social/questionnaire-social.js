@@ -64,6 +64,29 @@ q("cadres", "L'entreprise emploie-t-elle des cadres ?", "oui / non",
 q("projetLicenciementEco", "Un licenciement pour motif économique est-il envisagé ou en cours ?", "oui / non",
   "S'il l'est, les modules licenciement économique et PSE doivent être passés avant toute notification.");
 
+/* Les neuf questions ajoutées avec les matières venues de l'audit voisin :
+   durée du travail, contrats courts, santé au travail au poste. Chacune
+   commande des obligations qui, sans elle, resteraient indéterminées — le
+   référentiel ne suppose jamais qu'une situation existe ou n'existe pas. */
+q("heuresSupplementaires", "Des heures supplémentaires sont-elles accomplies ?", "oui / non",
+  "Elles ouvrent le contingent annuel et, au-delà, la contrepartie obligatoire en repos (L. 3121-30, L. 3121-33, D. 3121-24, L. 3121-38).");
+q("forfaitJours", "Des salariés sont-ils soumis à un forfait annuel en jours ?", "oui / non",
+  "Le forfait suppose un accord collectif, une convention individuelle écrite, un document de contrôle des journées et un suivi de la charge de travail (L. 3121-64, L. 3121-65, L. 3121-60). Sans accord conforme, il est privé d'effet.");
+q("tempsPartiel", "L'entreprise emploie-t-elle des salariés à temps partiel ?", "oui / non",
+  "Le temps partiel appelle un contrat écrit portant la durée et sa répartition, une durée minimale, la majoration de toutes les heures complémentaires et une priorité d'accès aux emplois à temps complet.");
+q("contratsCourts", "L'entreprise recourt-elle à des contrats à durée déterminée, à l'intérim ou à des stagiaires ?", "oui / non",
+  "Les contrats courts appellent l'écrit et son motif précis, le délai de transmission, le délai de carence, l'indemnité de fin de contrat — et, sur les postes à risques, une formation renforcée à la sécurité.");
+q("travailNuit", "Des salariés travaillent-ils la nuit ?", "oui / non",
+  "Le recours au travail de nuit est exceptionnel et justifié ; il suppose un accord ou une autorisation, des contreparties et un suivi médical régulier (L. 3122-1, L. 3122-2).");
+q("jeunesTravailleurs", "L'entreprise emploie-t-elle ou accueille-t-elle des travailleurs de moins de dix-huit ans (apprentis, stagiaires, jeunes en contrat) ?", "oui / non",
+  "Certains travaux leur sont interdits, et toute dérogation suit une procédure encadrée (L. 4153-8, L. 4153-9, R. 4153-40).");
+q("entreprisesExterieures", "Des entreprises extérieures interviennent-elles dans vos locaux, ou des opérations de chargement ou de déchargement y sont-elles réalisées par un transporteur ?", "oui / non",
+  "L'inspection commune préalable et le plan de prévention écrit sont dus (R. 4512-6) ; les opérations de chargement ou de déchargement font l'objet d'un protocole de sécurité (R. 4515-4).");
+q("postesEcran", "Des salariés travaillent-ils habituellement sur écran de visualisation ?", "oui / non",
+  "L'information et la formation à l'utilisation du poste sont dues avant la première affectation et à chaque modification importante (R. 4542-16), avec un examen approprié des yeux et de la vue.");
+q("agentsChimiques", "Des agents chimiques dangereux (produits d'entretien industriels, solvants, carburants, peintures, gaz) sont-ils utilisés ou stockés ?", "oui / non",
+  "Ils appellent les fiches de données de sécurité, l'information des travailleurs et du comité (R. 4412-38) et une notice de poste par situation de travail exposante (R. 4412-39). Les produits d'entretien en relèvent souvent : ne répondez « non » qu'après vérification.");
+
 /* ─────────────────────────── la garantie, dans les deux sens ─────────── */
 const lusParLeCode = new Set();
 for (const m of (SOURCES || "").matchAll(/\bp\.([a-zA-Z_][a-zA-Z0-9_]*)/g)) lusParLeCode.add(m[1]);

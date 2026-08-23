@@ -34,6 +34,12 @@ const BASE = {
   accordsCollectifs: "non", sectionSyndicale: "non", matieresInflammables: "non",
   cadres: "non", projetLicenciementEco: "non", salariesHorsHoraire: "non",
   postesRisquesParticuliers: "non", comiteSeuilsComptes: "non", epargneSalariale: "non",
+  /* les neuf réponses ajoutées avec les matières venues de l'audit voisin :
+     au socle elles valent « non », de sorte que les obligations qu'elles
+     commandent soient explicitement NON dues — jamais indéterminées. */
+  heuresSupplementaires: "non", forfaitJours: "non", tempsPartiel: "non",
+  contratsCourts: "non", travailNuit: "non", jeunesTravailleurs: "non",
+  entreprisesExterieures: "non", postesEcran: "non", agentsChimiques: "non",
 };
 const profil = (effectif, mod) => Object.assign({}, BASE, { effectif }, mod || {});
 
@@ -112,7 +118,10 @@ for (const cas of ATTENDUS) {
 const MAX = profil(1000, { groupe: "oui", etablissementsDistincts: "oui", sectionSyndicale: "oui",
   matieresInflammables: "oui", cadres: "oui", projetLicenciementEco: "oui", accordsCollectifs: "oui",
   salariesHorsHoraire: "oui", postesRisquesParticuliers: "oui", comiteSeuilsComptes: "oui",
-  epargneSalariale: "oui" });
+  epargneSalariale: "oui", heuresSupplementaires: "oui", forfaitJours: "oui",
+  tempsPartiel: "oui", contratsCourts: "oui", travailNuit: "oui",
+  jeunesTravailleurs: "oui", entreprisesExterieures: "oui", postesEcran: "oui",
+  agentsChimiques: "oui" });
 {
   const a = C.applicables(MAX);
   for (const x of a) ok(x.du === true, `profil maximal : ${x.id} devrait être dû, rend ${x.du}`);
@@ -241,7 +250,10 @@ for (const it of R.REF) for (const n of it.articles)
     groupe: "oui", etablissementsDistincts: "oui", sectionSyndicale: "oui",
     matieresInflammables: "oui", cadres: "oui", projetLicenciementEco: "oui",
     salariesHorsHoraire: "oui", postesRisquesParticuliers: "oui",
-    comiteSeuilsComptes: "oui", epargneSalariale: "oui" });
+    comiteSeuilsComptes: "oui", epargneSalariale: "oui",
+    heuresSupplementaires: "oui", forfaitJours: "oui", tempsPartiel: "oui",
+    contratsCourts: "oui", travailNuit: "oui", jeunesTravailleurs: "oui",
+    entreprisesExterieures: "oui", postesEcran: "oui", agentsChimiques: "oui" });
   for (const it of R.REF) {
     ok(!!MODELES[it.id], `${it.id} : aucun modèle adapté`);
     if (!MODELES[it.id]) continue;

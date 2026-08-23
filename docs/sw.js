@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.4";
+const CACHE = "jurisprudence-5.5";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -28,10 +28,13 @@ const ESSENTIELS = [
      lus dans le stockage local du poste, les délais se calculent sur place.
      Une procédure engagée hors connexion est justement le cas où l'échéance
      compte le plus : elle doit s'ouvrir.
-     Douze parcours depuis le 22 août 2026 : aux sept premiers s'ajoutent les
-     cinq parcours de régularisation appelés par le guide de l'audit social —
-     affichages obligatoires, registre unique du personnel, base de données,
-     index de l'égalité professionnelle, entretiens de parcours professionnel. */
+     Quinze parcours depuis le 23 août 2026 : aux sept premiers se sont
+     ajoutés les cinq parcours de régularisation appelés par le guide de
+     l'audit social — affichages obligatoires, registre unique du personnel,
+     base de données, index de l'égalité professionnelle, entretiens de
+     parcours professionnel —, puis les trois nés de l'harmonisation avec
+     Juris Expert : embaucher, organiser les congés payés, établir les
+     documents de fin de contrat. */
   "./parcours.html", "./parcours.js",
   /* L'équipe, ses droits et son journal. Le module est chargé par TOUTES les
      pages : sans lui hors connexion, elles s'ouvriraient sans identification

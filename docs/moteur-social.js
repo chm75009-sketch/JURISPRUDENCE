@@ -4,8 +4,8 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : a120bdc66cc1
-   {"obligations":41,"parCategorie":{"instances":10,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":3,"santé-sécurité":4,"formation et entretiens":2,"épargne et protection sociale":5},"articlesLus":62,"articlesNonConfirmes":1,"articlesCites":62,"renvoisModules":16,"itemsConventionnels":2,"itemsGeneriques":2,"questionsOrientation":17,"questionsVerification":70,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0,"parcoursDeRegularisation":12,"obligationsLieesAUnParcours":29,"obligationsLieesAUnDocument":28,"obligationsSansParcours":12,"outilsJurisExpert":14,"obligationsLieesAUnOutilJurisExpert":10,"obligationsAvecModeleComplet":41,"liensDeRegularisationMorts":0}
+   Empreinte du moteur au moment de l'empaquetage : 8c6d427c67d8
+   {"obligations":90,"parCategorie":{"instances":12,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":5,"santé-sécurité":20,"formation et entretiens":4,"épargne et protection sociale":5,"durée du travail et repos":7,"congés et jours":4,"embauche et contrat":5,"fin du contrat":4,"égalité et non-discrimination":7},"articlesLus":172,"articlesNonConfirmes":1,"articlesCites":170,"renvoisModules":20,"itemsConventionnels":4,"itemsGeneriques":2,"questionsOrientation":26,"questionsVerification":196,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0,"parcoursDeRegularisation":15,"obligationsLieesAUnParcours":55,"obligationsLieesAUnDocument":77,"obligationsSansParcours":35,"outilsJurisExpert":14,"obligationsLieesAUnOutilJurisExpert":21,"obligationsAvecModeleComplet":90,"liensDeRegularisationMorts":0}
 */
 (function (global) {
   "use strict";
@@ -21,7 +21,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"audit social — le chapeau des obligations de l'employeur","date":"2026-08-22","empreinte":"a120bdc66cc1","fichiers":{"audit-social-client.js":"11d7bb8dfbe1","capturer-textes-social-2.js":"4d61e2c885d8","capturer-textes-social-3.js":"ae2db2f3a775","capturer-textes-social-4.js":"5cb24e703a38","capturer-textes-social.js":"f79e801d9e31","controles-social.js":"a96e281768f1","generer-donnees-modeles.js":"f8f64294ce6d","modeles-social.js":"5325269df019","moteur-social.js":"6e23710d673f","plan-social.js":"2ac32fc089ad","questionnaire-social.js":"923723e4ea5d","referentiel-social.js":"c130bcd1bd25","tests-social.js":"7d77207443b3","textes-social-non-confirmes.json":"ff595f9c4875","textes-social.json":"6ed5ebf7af68","verifier-textes-social.js":"de5da88f7ad0"},"compteurs":{"obligations":41,"parCategorie":{"instances":10,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":3,"santé-sécurité":4,"formation et entretiens":2,"épargne et protection sociale":5},"articlesLus":62,"articlesNonConfirmes":1,"articlesCites":62,"renvoisModules":16,"itemsConventionnels":2,"itemsGeneriques":2,"questionsOrientation":17,"questionsVerification":70,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0,"parcoursDeRegularisation":12,"obligationsLieesAUnParcours":29,"obligationsLieesAUnDocument":28,"obligationsSansParcours":12,"outilsJurisExpert":14,"obligationsLieesAUnOutilJurisExpert":10,"obligationsAvecModeleComplet":41,"liensDeRegularisationMorts":0},"obligationsSansParcours":["SOC-INS-GROUPE","SOC-DOC-OETH","SOC-REG-SECURITE","SOC-REG-DGI","SOC-NEG-PSE","SOC-SST-SPST","SOC-SST-VIP","SOC-EPA-PARTICIPATION","SOC-EPA-LIVRET","SOC-EPA-SANTE","SOC-EPA-PREVOYANCE-CADRES","SOC-CCN-OBLIGATIONS"],"textesRelus":{"date":"2026-08-20","articles":62,"concordants":62,"ecarts":0,"sansConclusion":0}};
+  var __MANIFESTE = {"domaine":"audit social — le chapeau des obligations de l'employeur","date":"2026-08-23","empreinte":"8c6d427c67d8","fichiers":{"audit-social-client.js":"11d7bb8dfbe1","capture-social.js":"d3d65a65713b","capturer-textes-social-2.js":"4d61e2c885d8","capturer-textes-social-3.js":"ae2db2f3a775","capturer-textes-social-4.js":"5cb24e703a38","capturer-textes-social-5.js":"115f14c3e26e","capturer-textes-social-6.js":"67b93643e93a","capturer-textes-social-7.js":"86e7efab177f","capturer-textes-social-8.js":"f4eea7de7b5c","capturer-textes-social.js":"f79e801d9e31","controles-social.js":"a96e281768f1","generer-donnees-modeles.js":"f8f64294ce6d","modeles-social.js":"8a61ed942add","moteur-social.js":"6e23710d673f","plan-social.js":"2ac32fc089ad","questionnaire-social.js":"a7186da93796","referentiel-social.js":"f44505512582","tests-social.js":"804771b063ba","textes-social-non-confirmes.json":"3528ca5e5f07","textes-social.json":"a1477ffbae0c","verifier-textes-social.js":"de5da88f7ad0"},"compteurs":{"obligations":90,"parCategorie":{"instances":12,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":5,"santé-sécurité":20,"formation et entretiens":4,"épargne et protection sociale":5,"durée du travail et repos":7,"congés et jours":4,"embauche et contrat":5,"fin du contrat":4,"égalité et non-discrimination":7},"articlesLus":172,"articlesNonConfirmes":1,"articlesCites":170,"renvoisModules":20,"itemsConventionnels":4,"itemsGeneriques":2,"questionsOrientation":26,"questionsVerification":196,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0,"parcoursDeRegularisation":15,"obligationsLieesAUnParcours":55,"obligationsLieesAUnDocument":77,"obligationsSansParcours":35,"outilsJurisExpert":14,"obligationsLieesAUnOutilJurisExpert":21,"obligationsAvecModeleComplet":90,"liensDeRegularisationMorts":0},"obligationsSansParcours":["SOC-INS-GROUPE","SOC-DOC-OETH","SOC-REG-SECURITE","SOC-REG-DGI","SOC-NEG-PSE","SOC-SST-SPST","SOC-SST-VIP","SOC-EPA-PARTICIPATION","SOC-EPA-LIVRET","SOC-EPA-SANTE","SOC-EPA-PREVOYANCE-CADRES","SOC-CCN-OBLIGATIONS","SOC-DUR-MAXIMA","SOC-DUR-PAUSE","SOC-DUR-REPOS","SOC-DUR-CONTINGENT","SOC-DUR-FORFAIT","SOC-DUR-TPARTIEL","SOC-DUR-PAIE","SOC-EGA-DISCRIMINATION","SOC-EGA-HANDICAP","SOC-EGA-REFERENT-HANDICAP","SOC-EGA-RECRUTEURS","SOC-EGA-ALERTE","SOC-SST-ACCIDENT-GRAVE","SOC-SST-SUIVI-CONTRAT","SOC-SST-FICHE-ENTREPRISE","SOC-SST-EXTERIEURES","SOC-SST-NUIT","SOC-SST-JEUNES","SOC-SST-LOCAUX","SOC-SST-ECRAN","SOC-FOR-CONTRIBUTION","SOC-INS-SECTION-SYNDICALE","SOC-INS-PROTEGES"],"textesRelus":{"date":"2026-08-23","articles":172,"concordants":172,"ecarts":0,"sansConclusion":0}};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -152,6 +152,11 @@ const CATEGORIES = [
   "santé-sécurité",
   "formation et entretiens",
   "épargne et protection sociale",
+  "durée du travail et repos",
+  "congés et jours",
+  "embauche et contrat",
+  "fin du contrat",
+  "égalité et non-discrimination",
 ];
 
 /* Les conditions les plus courantes, écrites une fois. */
@@ -1474,6 +1479,1542 @@ item({
   },
 });
 
+/* ═══════════════════════════════ 9. durée du travail et repos ══ */
+
+item({
+  id: "SOC-DUR-MAXIMA", categorie: "durée du travail et repos",
+  intitule: "Durées maximales de travail : quotidienne, hebdomadaire, et moyenne sur douze semaines",
+  articles: ["L3121-18", "L3121-20", "L3121-22"].filter(lu),
+  articlesSouhaites: ["L3121-18", "L3121-20", "L3121-22"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "plafondsRespectes", libelle: "Les plafonds de dix heures par jour, quarante-huit heures par semaine et quarante-quatre heures en moyenne sur douze semaines consécutives sont-ils respectés pour tous les salariés ?", format: "oui / non", regle: "oui",
+      motifNC: "Un dépassement des durées maximales est déclaré : reprenez les plannings de la période, identifiez les salariés et les semaines concernés, corrigez l'organisation, et vérifiez si une dérogation existe — la convention collective ou une autorisation administrative peut aménager certains plafonds, ce que cette application ne peut pas affirmer." },
+    { cle: "controleDure", libelle: "Un contrôle des durées est-il fait avant chaque paie (plannings, badgeage, relevés) ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun contrôle périodique des durées n'est déclaré : sans relevé, un dépassement ne se voit qu'au contentieux. Mettez en place un contrôle mensuel documenté." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Contrôler les durées maximales de travail et documenter ce contrôle.",
+    etapes: [
+      "Recenser les organisations du travail en place (horaire collectif, équipes, forfaits, itinérants, astreintes) et le mode de décompte de chacune.",
+      "Extraire, sur les douze dernières semaines, les durées quotidiennes et hebdomadaires par salarié.",
+      "Traiter les dépassements : réorganisation, embauche, recours encadré aux dérogations — et vérifier si votre convention collective en ouvre.",
+      "Instituer un contrôle mensuel avant paie, avec trace écrite du contrôle et de ses suites.",
+    ],
+    acteur: "Direction, encadrement d'exploitation et paie",
+    delai: "Contrôle à instituer sous un mois ; régularisation des dépassements immédiate",
+    risque: "Le dépassement des durées maximales est une infraction constatée par l'inspection du travail et nourrit les demandes de dommages-intérêts ; l'article de sanction n'a pas été lu au relais pour cet audit — faites chiffrer le risque par votre conseil.",
+    modele: { page: "documents.html", nom: "tableau de contrôle des durées maximales" },
+  },
+});
+
+item({
+  id: "SOC-DUR-PAUSE", categorie: "durée du travail et repos",
+  intitule: "Temps de pause : vingt minutes consécutives dès six heures de travail quotidien",
+  articles: ["L3121-16"].filter(lu),
+  articlesSouhaites: ["L3121-16"],
+  convention: true,
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "pauseAccordee", libelle: "Une pause d'au moins vingt minutes consécutives est-elle accordée dès que le temps de travail quotidien atteint six heures ?", format: "oui / non", regle: "oui",
+      motifNC: "La pause n'est pas assurée : organisez-la et tracez-la dans les plannings. Votre convention collective peut prévoir des dispositions plus favorables — vérifiez-les, cette application ne lit que le code du travail." },
+    { cle: "pauseTracee", libelle: "La pause figure-t-elle dans les plannings ou les relevés de temps ?", format: "oui / non", regle: "oui",
+      motifNC: "La pause n'est pas tracée : en cas de litige, c'est à l'employeur de démontrer qu'il l'a accordée. Faites-la apparaître au relevé." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Organiser et tracer la pause de vingt minutes.",
+    etapes: [
+      "Repérer les postes dont la journée atteint ou dépasse six heures.",
+      "Inscrire la pause dans les plannings, en précisant si elle est rémunérée ou non selon votre convention et vos usages.",
+      "Informer l'encadrement : la pause ne se cumule pas avec des interruptions de quelques minutes — elle est consécutive.",
+    ],
+    acteur: "Encadrement d'exploitation, avec la paie",
+    delai: "Immédiat",
+    risque: "L'absence de pause donne lieu à des rappels de salaire et à des dommages-intérêts distincts ; le régime de rémunération de la pause relève de la convention collective, à vérifier.",
+    modele: { page: "documents.html", nom: "note de service — organisation des pauses" },
+  },
+});
+
+item({
+  id: "SOC-DUR-REPOS", categorie: "durée du travail et repos",
+  intitule: "Repos quotidien de onze heures et repos hebdomadaire",
+  articles: ["L3131-1", "L3132-1", "L3132-2"].filter(lu),
+  articlesSouhaites: ["L3131-1", "L3132-1", "L3132-2"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "reposQuotidien", libelle: "Le repos quotidien de onze heures consécutives est-il assuré entre deux journées de travail ?", format: "oui / non", regle: "oui",
+      motifNC: "Le repos quotidien n'est pas assuré : reprenez les enchaînements de services (fermeture puis ouverture, astreintes, déplacements) et corrigez les plannings. Les dérogations sont encadrées : ne les supposez pas, vérifiez-les." },
+    { cle: "reposHebdomadaire", libelle: "Aucun salarié ne travaille plus de six jours par semaine, et le repos hebdomadaire est-il assuré ?", format: "oui / non", regle: "oui",
+      motifNC: "Le repos hebdomadaire n'est pas assuré : c'est l'une des irrégularités les plus lourdement sanctionnées, et elle se lit directement sur les plannings. Corrigez sans attendre." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Garantir les repos quotidien et hebdomadaire, et en conserver la preuve.",
+    etapes: [
+      "Contrôler, sur les plannings réels et non théoriques, l'intervalle entre la fin d'un service et la reprise du suivant.",
+      "Contrôler le nombre de jours travaillés par semaine civile, salarié par salarié.",
+      "Traiter les situations à risque : astreintes, dépannages, déplacements longs, remplacements de dernière minute.",
+      "Documenter le contrôle et ses suites — la preuve du respect des repos incombe à l'employeur.",
+    ],
+    acteur: "Direction et encadrement d'exploitation",
+    delai: "Immédiat",
+    risque: "Le non-respect des repos est constaté par l'inspection du travail et ouvre des dommages-intérêts sans que le salarié ait à démontrer un préjudice ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "tableau de contrôle des repos" },
+  },
+});
+
+item({
+  id: "SOC-DUR-CONTINGENT", categorie: "durée du travail et repos",
+  intitule: "Contingent annuel d'heures supplémentaires et contrepartie obligatoire en repos",
+  articles: ["L3121-30", "L3121-33", "D3121-24", "L3121-38"].filter(lu),
+  articlesSouhaites: ["L3121-30", "L3121-33", "D3121-24", "L3121-38"],
+  condition: p => {
+    const s = M.ouiNon(p, "heuresSupplementaires", "Des heures supplémentaires sont-elles accomplies ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucune heure supplémentaire n'est déclarée : le contingent annuel et la contrepartie obligatoire en repos n'ont pas d'objet. Si des heures sont accomplies sans être déclarées, c'est ce point-là qu'il faut traiter d'abord." };
+    return { du: true, motif: "Des heures supplémentaires sont accomplies : le contingent annuel s'applique, et son dépassement ouvre la contrepartie obligatoire en repos." };
+  },
+  verifs: [
+    { cle: "contingentConnu", libelle: "Le contingent annuel applicable est-il identifié (accord d'entreprise ou de branche, à défaut deux cent vingt heures) ?", format: "oui / non", regle: "oui",
+      motifNC: "Le contingent applicable n'est pas identifié : cherchez d'abord l'accord d'entreprise ou d'établissement, à défaut l'accord de branche ; à défaut d'accord, le contingent réglementaire de deux cent vingt heures par salarié s'applique (D. 3121-24)." },
+    { cle: "suiviIndividuel", libelle: "Un décompte individuel des heures supplémentaires imputées sur le contingent est-il tenu ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun décompte individuel n'est tenu : sans lui, ni le contingent ni la contrepartie en repos ne peuvent être suivis, et le salarié qui réclame est en position favorable." },
+    { cle: "contrepartieRepos", libelle: "La contrepartie obligatoire en repos due au-delà du contingent est-elle calculée et ouverte aux salariés concernés ?", format: "oui / non", regle: "oui",
+      motifNC: "La contrepartie obligatoire en repos n'est pas ouverte : elle est due de plein droit au-delà du contingent, elle se cumule avec la majoration salariale, et son absence se rattrape en indemnité." },
+    { cle: "avisComite", libelle: "Le comité social et économique a-t-il été consulté ou informé sur le recours aux heures supplémentaires, lorsqu'un comité existe ?", format: "oui / non", regle: "oui",
+      motifNC: "Le comité n'a pas été associé : lorsqu'un comité existe, le recours aux heures supplémentaires entre dans les sujets qu'il examine — l'audit du comité (module dédié) précise les cas de consultation." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Identifier le contingent applicable, tenir le décompte individuel et ouvrir la contrepartie obligatoire en repos.",
+    etapes: [
+      "Rechercher l'accord d'entreprise ou de branche fixant le contingent ; à défaut, retenir le contingent réglementaire.",
+      "Ouvrir un compteur individuel d'heures supplémentaires imputées sur le contingent, alimenté chaque mois.",
+      "Calculer la contrepartie obligatoire en repos due aux salariés qui ont dépassé le contingent, et la porter au bulletin ou à une annexe d'information.",
+      "Rattraper les périodes passées : reconstituer les compteurs sur la période non prescrite, avec votre conseil.",
+    ],
+    acteur: "Paie et direction, avec l'expert-comptable ou le conseil",
+    delai: "Compteur ouvert sous un mois ; rattrapage à chiffrer",
+    risque: "Le dépassement non compensé se transforme en rappels d'indemnité, en dommages-intérêts et, si les heures ne sont pas déclarées, en travail dissimulé — un chef de demande lourd. Faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "tableau du contingent et de la contrepartie en repos" },
+  },
+});
+
+item({
+  id: "SOC-DUR-FORFAIT", categorie: "durée du travail et repos",
+  intitule: "Forfait annuel en jours : accord collectif, convention individuelle, décompte et suivi de la charge",
+  articles: ["L3121-64", "L3121-65", "L3121-60"].filter(lu),
+  articlesSouhaites: ["L3121-64", "L3121-65", "L3121-60"],
+  condition: p => {
+    const s = M.ouiNon(p, "forfaitJours", "Des salariés sont-ils soumis à un forfait annuel en jours ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucun salarié n'est déclaré en forfait annuel en jours : les obligations propres au forfait n'ont pas d'objet." };
+    return { du: true, motif: "Des salariés sont en forfait annuel en jours : l'accord collectif, la convention individuelle écrite, le décompte des journées et le suivi de la charge de travail sont dus." };
+  },
+  verifs: [
+    { cle: "accordForfait", libelle: "Un accord collectif autorise-t-il le forfait annuel en jours, et fixe-t-il ses garanties (suivi de la charge, droit à la déconnexion, entretien) ?", format: "oui / non", regle: "oui",
+      motifNC: "Sans accord collectif conforme, la convention individuelle de forfait est privée d'effet : le salarié peut réclamer le paiement de ses heures supplémentaires sur toute la période non prescrite. C'est le risque financier le plus lourd de cette rubrique." },
+    { cle: "conventionIndividuelle", libelle: "Chaque salarié concerné a-t-il signé une convention individuelle de forfait écrite ?", format: "oui / non", regle: "oui",
+      motifNC: "La convention individuelle écrite manque pour tout ou partie des salariés concernés : le forfait ne se présume pas, il se signe. Régularisez par avenant." },
+    { cle: "decompteJours", libelle: "Un document de contrôle faisant apparaître le nombre et la date des journées ou demi-journées travaillées est-il établi ?", format: "oui / non", regle: "oui",
+      motifNC: "Le document de contrôle n'est pas établi : c'est l'une des garanties du forfait, et son absence fragilise l'ensemble du dispositif." },
+    { cle: "entretienCharge", libelle: "Un entretien sur la charge de travail, l'organisation, l'articulation vie professionnelle et vie personnelle et la rémunération est-il tenu chaque année ?", format: "oui / non", regle: "oui",
+      motifNC: "L'entretien annuel de charge n'est pas tenu : l'employeur doit s'assurer régulièrement que la charge de travail est raisonnable et permet une bonne répartition dans le temps (L. 3121-60). Programmez-le et documentez-le." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Sécuriser les forfaits annuels en jours : accord, conventions individuelles, décompte, entretiens.",
+    etapes: [
+      "Vérifier que l'accord collectif applicable prévoit bien les garanties exigées ; s'il est ancien ou muet, le renégocier ou le compléter.",
+      "Recenser les salariés en forfait et vérifier l'existence d'une convention individuelle écrite pour chacun.",
+      "Mettre en place le document de contrôle mensuel des journées travaillées, renseigné par le salarié et validé par l'employeur.",
+      "Programmer l'entretien annuel de charge, en conserver le compte rendu écrit, et tracer les suites données aux alertes.",
+    ],
+    acteur: "Direction des ressources humaines, avec les managers concernés",
+    delai: "Conventions et décompte sous deux mois ; entretien dans les douze mois",
+    risque: "Un forfait privé d'effet fait basculer le salarié au décompte horaire de droit commun : rappels d'heures supplémentaires, congés et repos sur la période non prescrite. Faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "convention individuelle de forfait et document de contrôle" },
+  },
+});
+
+item({
+  id: "SOC-DUR-TPARTIEL", categorie: "durée du travail et repos",
+  intitule: "Temps partiel : contrat écrit et ses mentions, durée minimale, heures complémentaires, priorité d'accès",
+  articles: ["L3123-6", "L3123-7", "L3123-27", "L3123-8", "L3123-3"].filter(lu),
+  articlesSouhaites: ["L3123-6", "L3123-7", "L3123-27", "L3123-8", "L3123-3"],
+  condition: p => {
+    const s = M.ouiNon(p, "tempsPartiel", "L'entreprise emploie-t-elle des salariés à temps partiel ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucun salarié à temps partiel n'est déclaré : les obligations propres au temps partiel n'ont pas d'objet." };
+    return { du: true, motif: "L'entreprise emploie des salariés à temps partiel : le contrat écrit et ses mentions, la durée minimale, la majoration des heures complémentaires et la priorité d'accès s'appliquent." };
+  },
+  verifs: [
+    { cle: "contratEcrit", libelle: "Chaque salarié à temps partiel a-t-il un contrat écrit portant la durée du travail et sa répartition ?", format: "oui / non", regle: "oui",
+      motifNC: "Le contrat écrit manque, ou ne porte pas la durée et sa répartition : à défaut, le contrat est présumé à temps complet, et c'est à l'employeur de renverser la présomption. Régularisez par avenant sans attendre." },
+    { cle: "dureeMinimale", libelle: "La durée minimale de travail est-elle respectée, ou une dérogation régulière est-elle documentée (demande écrite et motivée du salarié, accord de branche étendu) ?", format: "oui / non", regle: "oui",
+      motifNC: "La durée minimale n'est pas respectée et aucune dérogation n'est documentée : la durée minimale se fixe par convention ou accord de branche étendu (L. 3123-7) et, à défaut d'accord, à vingt-quatre heures par semaine (L. 3123-27). Vérifiez votre branche avant toute conclusion." },
+    { cle: "majorationHC", libelle: "Toutes les heures complémentaires sont-elles majorées ?", format: "oui / non", regle: "oui",
+      motifNC: "Des heures complémentaires ne sont pas majorées : chacune d'elles ouvre droit à majoration (L. 3123-8). Le taux peut être aménagé par accord de branche étendu — vérifiez-le, il n'est pas affirmé ici." },
+    { cle: "prioriteAcces", libelle: "Les salariés à temps partiel sont-ils informés des emplois à temps complet disponibles et leur priorité est-elle respectée ?", format: "oui / non", regle: "oui",
+      motifNC: "La priorité d'accès n'est pas mise en œuvre : les salariés à temps partiel ont priorité pour l'attribution d'un emploi à temps complet ressortissant à leur catégorie professionnelle, et l'employeur porte à leur connaissance la liste des emplois disponibles." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Mettre en conformité les contrats à temps partiel et le traitement des heures complémentaires.",
+    etapes: [
+      "Recenser les contrats à temps partiel et vérifier, un par un, l'écrit et ses mentions obligatoires.",
+      "Confronter les durées contractuelles à la durée minimale applicable dans votre branche, et documenter chaque dérogation.",
+      "Vérifier en paie la majoration de toutes les heures complémentaires, sur la période non prescrite.",
+      "Organiser l'information des salariés à temps partiel sur les emplois à temps complet disponibles.",
+    ],
+    acteur: "Ressources humaines et paie",
+    delai: "Recensement sous un mois ; régularisations à suivre",
+    risque: "Le défaut d'écrit fait présumer le temps complet : requalification et rappels de salaire sur la période non prescrite. Le défaut de majoration se rattrape en rappels. Faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "avenant de régularisation d'un contrat à temps partiel" },
+  },
+});
+
+item({
+  id: "SOC-DUR-PAIE", categorie: "durée du travail et repos",
+  intitule: "Mensualisation de la rémunération et acompte de quinzaine",
+  articles: ["L3242-1"].filter(lu),
+  articlesSouhaites: ["L3242-1"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "paiementMensuel", libelle: "La rémunération est-elle versée une fois par mois, à date fixe ?", format: "oui / non", regle: "oui",
+      motifNC: "Le paiement mensuel n'est pas assuré : la rémunération des salariés est mensuelle et indépendante, pour un horaire de travail effectif déterminé, du nombre de jours travaillés dans le mois. Fixez une date de paie et tenez-la." },
+    { cle: "acompteQuinzaine", libelle: "Un acompte correspondant, pour une quinzaine, à la moitié de la rémunération mensuelle est-il versé au salarié qui le demande ?", format: "oui / non", regle: "oui",
+      motifNC: "L'acompte de quinzaine n'est pas servi sur demande : il est dû au salarié qui le demande, et son refus est une irrégularité simple à établir." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Assurer le paiement mensuel à date fixe et le service de l'acompte de quinzaine.",
+    etapes: [
+      "Fixer et annoncer la date de paie, et s'y tenir.",
+      "Instituer une procédure écrite de demande d'acompte, accessible à tous les salariés.",
+      "Vérifier que les bulletins portent bien les acomptes versés.",
+    ],
+    acteur: "Paie",
+    delai: "Sous un mois",
+    risque: "Le retard de paiement du salaire ouvre des dommages-intérêts et, réitéré, peut justifier une prise d'acte de rupture aux torts de l'employeur — faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "procédure d'acompte et calendrier de paie" },
+  },
+});
+
+/* ═══════════════════════════════════════ 10. congés et jours ══ */
+
+item({
+  id: "SOC-CON-ACQUISITION", categorie: "congés et jours",
+  intitule: "Acquisition des congés payés : deux jours et demi ouvrables par mois de travail",
+  articles: ["L3141-3"].filter(lu),
+  articlesSouhaites: ["L3141-3"],
+  convention: true,
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "compteurCP", libelle: "Un compteur de congés payés est-il tenu pour chaque salarié et porté au bulletin de paie ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun compteur individuel n'est tenu : sans lui, ni l'acquisition ni la prise ne se prouvent, et le contentieux se règle au détriment de l'employeur. Ouvrez un compteur par salarié." },
+    { cle: "acquisitionMaladie", libelle: "L'acquisition de congés pendant les périodes d'arrêt de travail a-t-elle été revue avec votre conseil ?", format: "oui / non", regle: "oui",
+      motifNC: "Le traitement des arrêts de travail au regard de l'acquisition des congés n'a pas été revu : le sujet a évolué et il est financièrement lourd. Cette application ne tranche pas — faites-le vérifier par votre conseil sur les textes en vigueur." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Tenir le compteur de congés payés de chaque salarié et faire vérifier le traitement des absences.",
+    etapes: [
+      "Ouvrir ou fiabiliser le compteur individuel : acquis, pris, solde, période de rattachement.",
+      "Porter le compteur au bulletin de paie.",
+      "Faire vérifier par votre conseil, sur les textes en vigueur, l'acquisition pendant les arrêts de travail et l'information due au salarié à la reprise.",
+      "Comparer avec votre convention collective : elle peut être plus favorable — cette application ne la lit pas.",
+    ],
+    acteur: "Paie, avec le conseil de l'entreprise",
+    delai: "Compteur sous un mois",
+    risque: "Un compteur absent ou faux se solde en rappels d'indemnité de congés payés sur la période non prescrite, majorés des congés sur rappels. Faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "état individuel des congés payés" },
+  },
+});
+
+item({
+  id: "SOC-CON-PERIODE", categorie: "congés et jours",
+  intitule: "Période de prise des congés payés et information des salariés",
+  articles: ["L3141-13", "D3141-5"].filter(lu),
+  articlesSouhaites: ["L3141-13", "D3141-5"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "periodeFixee", libelle: "La période de prise des congés est-elle fixée, et comprend-elle en tout état de cause la période du 1er mai au 31 octobre de chaque année ?", format: "oui / non", regle: "oui",
+      motifNC: "La période de prise n'est pas fixée, ou ne couvre pas le 1er mai au 31 octobre : fixez-la — par accord s'il en existe un, à défaut par décision de l'employeur après avis du comité." },
+    { cle: "informationDeuxMois", libelle: "La période de prise est-elle portée à la connaissance des salariés au moins deux mois avant son ouverture ?", format: "oui / non", regle: "oui",
+      motifNC: "L'information n'est pas donnée deux mois avant l'ouverture de la période (D. 3141-5) : c'est un délai simple à tenir et simple à prouver — affichez et datez." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Fixer la période de prise des congés et l'annoncer deux mois avant son ouverture.",
+    etapes: [
+      "Rechercher l'accord d'entreprise ou de branche qui fixe la période ; à défaut, arrêter la période après avis du comité social et économique.",
+      "Vérifier qu'elle comprend le 1er mai au 31 octobre.",
+      "Diffuser l'information au moins deux mois avant l'ouverture, par affichage et par écrit individuel, et conserver la preuve de la diffusion.",
+    ],
+    acteur: "Ressources humaines",
+    delai: "Au plus tard deux mois avant l'ouverture de la période",
+    risque: "L'employeur qui n'a pas mis le salarié en mesure de prendre ses congés en doit l'indemnité : le défaut d'information a un coût direct.",
+    modele: { page: "documents.html", nom: "note d'information — période de prise des congés" },
+  },
+});
+
+item({
+  id: "SOC-CON-ORDRE", categorie: "congés et jours",
+  intitule: "Ordre des départs en congé : critères, communication et délai de modification",
+  articles: ["L3141-15", "L3141-16", "D3141-6"].filter(lu),
+  articlesSouhaites: ["L3141-15", "L3141-16", "D3141-6"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "criteresDefinis", libelle: "Les critères de l'ordre des départs sont-ils définis (situation de famille, ancienneté, activité chez d'autres employeurs) ?", format: "oui / non", regle: "oui",
+      motifNC: "Les critères de l'ordre des départs ne sont pas définis : à défaut de stipulation conventionnelle, l'employeur les fixe après avis du comité, en tenant compte notamment de la situation de famille, de l'ancienneté et de l'activité éventuelle chez d'autres employeurs (L. 3141-16)." },
+    { cle: "ordreCommunique", libelle: "L'ordre des départs est-il communiqué à chaque salarié au moins un mois avant son départ ?", format: "oui / non", regle: "oui",
+      motifNC: "L'ordre des départs n'est pas communiqué un mois avant (D. 3141-6) : la communication se fait par tout moyen, elle se date, et elle se prouve." },
+    { cle: "delaiModification", libelle: "L'ordre et les dates sont-ils tenus dès lors qu'on est à moins d'un mois de la date prévue, sauf circonstances exceptionnelles ?", format: "oui / non", regle: "oui",
+      motifNC: "Des modifications sont opérées à moins d'un mois de la date prévue hors circonstances exceptionnelles : la modification tardive engage l'employeur et se paie en dommages-intérêts. Formalisez la règle et l'exception." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Formaliser l'ordre des départs, le communiquer un mois avant et respecter le délai de modification.",
+    etapes: [
+      "Rechercher les stipulations conventionnelles sur l'ordre des départs ; à défaut, arrêter les critères après avis du comité.",
+      "Établir le tableau des départs par service et le communiquer individuellement, un mois au moins avant chaque départ.",
+      "Écrire la procédure de modification exceptionnelle : qui décide, sur quel motif, avec quelle trace.",
+    ],
+    acteur: "Ressources humaines et encadrement",
+    delai: "Avant l'ouverture de la période de prise",
+    risque: "Une modification tardive ou un refus non motivé se traduisent par des dommages-intérêts et détériorent le dialogue social ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "tableau de l'ordre des départs et note de communication" },
+  },
+});
+
+item({
+  id: "SOC-CON-SOLIDARITE", categorie: "congés et jours",
+  intitule: "Journée de solidarité : modalités fixées et travail accompli dans la limite de sept heures",
+  articles: ["L3133-7", "L3133-8"].filter(lu),
+  articlesSouhaites: ["L3133-7", "L3133-8"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "modalitesFixees", libelle: "Les modalités d'accomplissement de la journée de solidarité sont-elles fixées (accord, ou à défaut décision de l'employeur après avis du comité) ?", format: "oui / non", regle: "oui",
+      motifNC: "Les modalités ne sont pas fixées : la journée de solidarité ne s'improvise pas au fil de l'année. Fixez-les par accord, à défaut par décision unilatérale après consultation du comité, et informez les salariés." },
+    { cle: "limiteSeptHeures", libelle: "Le travail accompli au titre de la journée de solidarité reste-t-il dans la limite de sept heures, non rémunéré, et proratisé pour les temps partiels ?", format: "oui / non", regle: "oui",
+      motifNC: "La limite de sept heures n'est pas tenue, ou le prorata des temps partiels n'est pas fait : au-delà de la limite, les heures sont des heures de travail à rémunérer normalement." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Fixer et documenter les modalités de la journée de solidarité.",
+    etapes: [
+      "Rechercher l'accord applicable ; à défaut, consulter le comité social et économique puis arrêter la décision.",
+      "Informer les salariés par écrit, en précisant la date ou le mode d'accomplissement retenu.",
+      "Vérifier le paramétrage en paie, notamment le prorata des salariés à temps partiel.",
+    ],
+    acteur: "Ressources humaines et paie",
+    delai: "Avant l'échéance retenue",
+    risque: "Des heures accomplies au-delà de la limite sans rémunération donnent lieu à rappels de salaire ; l'absence de modalités fixées fragilise toute retenue opérée.",
+    modele: { page: "documents.html", nom: "décision et note d'information — journée de solidarité" },
+  },
+});
+
+/* ═══════════════════════════════════ 11. embauche et contrat ══ */
+
+item({
+  id: "SOC-EMB-DPAE", categorie: "embauche et contrat",
+  intitule: "Déclaration préalable à l'embauche (DPAE)",
+  articles: ["L1221-10", "L1221-11"].filter(lu),
+  articlesSouhaites: ["L1221-10", "L1221-11"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "dpaeSystematique", libelle: "Une déclaration préalable à l'embauche est-elle faite avant l'entrée de chaque salarié, sans exception ?", format: "oui / non", regle: "oui",
+      motifNC: "La déclaration préalable n'est pas systématique : l'embauche ne peut intervenir qu'après déclaration nominative auprès de l'organisme de recouvrement. C'est l'irrégularité la plus lourdement traitée, parce qu'elle ouvre la qualification de travail dissimulé." },
+    { cle: "accusesConserves", libelle: "Les accusés de réception de l'organisme sont-ils archivés et rapprochables du registre du personnel ?", format: "oui / non", regle: "oui",
+      motifNC: "Les accusés ne sont pas archivés : sans eux, la déclaration ne se prouve pas. Archivez-les et rapprochez-les nominativement du registre unique du personnel." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Rendre la déclaration préalable à l'embauche systématique et prouvable.",
+    etapes: [
+      "Rapprocher, salarié par salarié, le registre unique du personnel et les accusés de déclaration.",
+      "Traiter sans délai les embauches sans déclaration retrouvée, avec votre conseil.",
+      "Instituer un point de contrôle avant chaque entrée : pas de déclaration, pas d'entrée.",
+      "Archiver les accusés dans un dossier unique, accessible en cas de contrôle.",
+    ],
+    acteur: "Ressources humaines, avec la paie",
+    delai: "Contrôle immédiat ; régularisation sans délai",
+    risque: "L'omission ouvre la qualification de travail dissimulé, avec ses conséquences pénales, sociales et prud'homales (indemnité forfaitaire) ; l'article de sanction n'a pas été lu au relais pour cet audit — faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "procédure d'embauche et liste de contrôle" },
+  },
+});
+
+item({
+  id: "SOC-EMB-INFORMATION", categorie: "embauche et contrat",
+  intitule: "Documents d'information sur la relation de travail remis au salarié",
+  articles: ["L1221-5-1", "R1221-34", "R1221-35"].filter(lu),
+  articlesSouhaites: ["L1221-5-1", "R1221-34", "R1221-35"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "documentsRemis", libelle: "Chaque salarié reçoit-il, dans les délais, un ou plusieurs documents portant les informations principales relatives à la relation de travail ?", format: "oui / non", regle: "oui",
+      motifNC: "Les documents d'information ne sont pas remis : l'employeur remet au salarié un ou plusieurs documents écrits contenant les informations principales relatives à la relation de travail (L. 1221-5-1). Un contrat de travail complet peut y suffire — encore faut-il vérifier qu'il porte bien toutes les rubriques de R. 1221-34." },
+    { cle: "rubriquesCompletes", libelle: "Les rubriques réglementaires sont-elles toutes couvertes (identité des parties, lieu, poste, dates, durée du travail, rémunération, congés, procédures de rupture, convention collective, protection sociale, formation) ?", format: "oui / non", regle: "oui",
+      motifNC: "Les rubriques ne sont pas toutes couvertes : reprenez l'énumération de l'article R. 1221-34 et complétez le document ou le contrat type. Une remise partielle ne vaut pas remise." },
+    { cle: "preuveRemise", libelle: "La remise est-elle datée et prouvable (récépissé, signature, envoi horodaté) ?", format: "oui / non", regle: "oui",
+      motifNC: "La remise n'est pas prouvable : datez-la et faites-en accuser réception. La charge de la preuve pèse sur l'employeur." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Établir le document d'information sur la relation de travail et le remettre contre récépissé.",
+    etapes: [
+      "Comparer votre contrat type à l'énumération de l'article R. 1221-34, rubrique par rubrique.",
+      "Compléter le contrat, ou établir un document d'information distinct pour les rubriques manquantes.",
+      "Organiser la remise et la preuve de la remise dès l'entrée du salarié.",
+      "Traiter le cas des salariés en poste qui en font la demande.",
+    ],
+    acteur: "Ressources humaines",
+    delai: "Contrat type révisé sous un mois",
+    risque: "Le défaut de remise expose à une mise en demeure puis à une action du salarié ; le sujet est récent et contrôlé — faites relire votre contrat type par votre conseil.",
+    modele: { page: "documents.html", nom: "document d'information sur la relation de travail" },
+  },
+});
+
+item({
+  id: "SOC-EMB-ESSAI", categorie: "embauche et contrat",
+  intitule: "Période d'essai : durée, renouvellement et délai de prévenance",
+  articles: ["L1221-19", "L1221-21", "L1221-25", "L1221-26"].filter(lu),
+  articlesSouhaites: ["L1221-19", "L1221-21", "L1221-25", "L1221-26"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "dureeConforme", libelle: "La durée de la période d'essai stipulée aux contrats respecte-t-elle les maxima légaux selon la catégorie du salarié ?", format: "oui / non", regle: "oui",
+      motifNC: "Une durée d'essai excède les maxima : la stipulation excessive est privée d'effet, et la rupture intervenue au-delà s'analyse en licenciement sans cause réelle et sérieuse. Corrigez le contrat type." },
+    { cle: "renouvellementEncadre", libelle: "Le renouvellement, lorsqu'il est pratiqué, est-il prévu par un accord de branche étendu, stipulé au contrat et accepté par écrit par le salarié pendant l'essai ?", format: "oui / non", regle: "oui",
+      motifNC: "Le renouvellement n'est pas encadré : il suppose un accord de branche étendu qui en fixe les conditions et les durées, une stipulation expresse au contrat ou à la lettre d'engagement, et l'accord exprès du salarié recueilli pendant l'essai." },
+    { cle: "prevenanceRespectee", libelle: "Le délai de prévenance est-il respecté lorsque l'employeur met fin à l'essai, et par le salarié lorsqu'il en prend l'initiative ?", format: "oui / non", regle: "oui",
+      motifNC: "Le délai de prévenance n'est pas respecté : sa méconnaissance par l'employeur ouvre une indemnité compensatrice, calculée sur la période non exécutée. Intégrez le délai au processus de rupture d'essai." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Mettre le contrat type et le processus de rupture d'essai en conformité.",
+    etapes: [
+      "Confronter les durées d'essai du contrat type aux maxima légaux, par catégorie.",
+      "Vérifier dans la convention de branche l'existence et les conditions du renouvellement.",
+      "Écrire le processus de rupture d'essai : qui décide, avec quel délai de prévenance, avec quelle lettre.",
+      "Recenser les essais en cours pour vérifier qu'aucun n'est irrégulier.",
+    ],
+    acteur: "Ressources humaines",
+    delai: "Contrat type révisé sous un mois",
+    risque: "Une rupture d'essai irrégulière s'analyse en licenciement sans cause réelle et sérieuse ; le défaut de prévenance ouvre une indemnité. Faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "clause d'essai et lettre de rupture d'essai" },
+  },
+});
+
+item({
+  id: "SOC-EMB-RECRUTEMENT", categorie: "embauche et contrat",
+  intitule: "Information du candidat sur les méthodes de recrutement et du salarié sur les dispositifs de collecte",
+  articles: ["L1221-8", "L1221-9", "L1222-4"].filter(lu),
+  articlesSouhaites: ["L1221-8", "L1221-9", "L1222-4"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "candidatInforme", libelle: "Le candidat est-il expressément informé, préalablement à leur mise en œuvre, des méthodes et techniques d'aide au recrutement utilisées ?", format: "oui / non", regle: "oui",
+      motifNC: "Le candidat n'est pas informé des méthodes et techniques employées : l'information est préalable et expresse. Elle se pose en une phrase dans l'annonce et la convocation à l'entretien." },
+    { cle: "pertinence", libelle: "Les informations demandées au candidat ont-elles pour seule finalité d'apprécier son aptitude à occuper l'emploi, et présentent-elles un lien direct et nécessaire avec celui-ci ?", format: "oui / non", regle: "oui",
+      motifNC: "Des informations sans lien direct et nécessaire avec l'emploi sont recueillies : réduisez le questionnaire de recrutement à ce qui apprécie l'aptitude professionnelle." },
+    { cle: "dispositifsAnnonces", libelle: "Les salariés sont-ils informés préalablement des dispositifs de collecte d'informations les concernant personnellement (badgeage, géolocalisation, vidéo, outils de suivi) ?", format: "oui / non", regle: "oui",
+      motifNC: "Un dispositif de collecte n'a pas été porté préalablement à la connaissance des salariés : une information recueillie par un dispositif non annoncé est inopposable au salarié, et la sanction fondée sur elle tombe avec elle. Informez, et faites-le par écrit." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Écrire et diffuser l'information due aux candidats et aux salariés sur les méthodes et les dispositifs.",
+    etapes: [
+      "Recenser les méthodes d'aide au recrutement employées (tests, mises en situation, entretiens structurés, outils automatisés) et les annoncer dans l'annonce et la convocation.",
+      "Revoir le questionnaire de recrutement pour n'y laisser que ce qui apprécie l'aptitude professionnelle.",
+      "Recenser les dispositifs de collecte en place et vérifier, pour chacun, la preuve de l'information préalable des salariés et de la consultation du comité lorsqu'il existe.",
+      "Faire le lien avec vos obligations en matière de données personnelles, hors du champ du code du travail — cette application ne les vérifie pas.",
+    ],
+    acteur: "Ressources humaines, avec le référent données personnelles s'il en existe un",
+    delai: "Sous deux mois",
+    risque: "Une preuve obtenue par un dispositif non annoncé est écartée, et la mesure qu'elle fondait tombe. Le sujet croise la réglementation sur les données personnelles, qui n'est pas lue par cette application.",
+    modele: { page: "documents.html", nom: "note d'information — méthodes de recrutement et dispositifs de collecte" },
+  },
+});
+
+item({
+  id: "SOC-EMB-CDD", categorie: "embauche et contrat",
+  intitule: "Contrat à durée déterminée : écrit et motif, transmission, délai de carence, indemnité de fin de contrat",
+  articles: ["L1242-12", "L1242-2", "L1242-13", "L1244-3", "L1244-3-1", "L1243-8"].filter(lu),
+  articlesSouhaites: ["L1242-12", "L1242-2", "L1242-13", "L1244-3", "L1244-3-1", "L1243-8"],
+  condition: p => {
+    const s = M.ouiNon(p, "contratsCourts", "L'entreprise recourt-elle à des contrats à durée déterminée, à l'intérim ou à des stagiaires ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucun recours aux contrats courts n'est déclaré : les obligations propres au contrat à durée déterminée n'ont pas d'objet." };
+    return { du: true, motif: "L'entreprise recourt à des contrats courts : l'écrit et son motif, le délai de transmission, le délai de carence et l'indemnité de fin de contrat s'appliquent." };
+  },
+  verifs: [
+    { cle: "ecritMotif", libelle: "Chaque contrat à durée déterminée est-il écrit et porte-t-il la définition précise de son motif ?", format: "oui / non", regle: "oui",
+      motifNC: "Un contrat n'est pas écrit, ou son motif n'est pas précis : à défaut d'écrit comportant la définition précise du motif, le contrat est réputé conclu à durée indéterminée. C'est la requalification la plus fréquente." },
+    { cle: "casRecours", libelle: "Chaque contrat correspond-il à l'un des cas de recours autorisés, et non à un emploi lié à l'activité normale et permanente de l'entreprise ?", format: "oui / non", regle: "oui",
+      motifNC: "Un contrat ne correspond pas à un cas de recours autorisé : un contrat à durée déterminée ne peut avoir ni pour objet ni pour effet de pourvoir durablement un emploi lié à l'activité normale et permanente de l'entreprise." },
+    { cle: "transmission", libelle: "Le contrat est-il transmis au salarié au plus tard dans les deux jours ouvrables suivant l'embauche ?", format: "oui / non", regle: "oui",
+      motifNC: "Le contrat n'est pas transmis dans les deux jours ouvrables suivant l'embauche (L. 1242-13) : datez la transmission et conservez-en la preuve." },
+    { cle: "carence", libelle: "Le délai de carence entre deux contrats sur le même poste est-il calculé et respecté ?", format: "oui / non", regle: "oui",
+      motifNC: "Le délai de carence n'est pas respecté : il se calcule sur la durée du contrat précédent, renouvellement inclus, selon les règles de la convention ou de l'accord de branche étendu ; à défaut d'accord, selon l'article L. 1244-3-1. Les cas où il ne s'applique pas sont limitativement énumérés — ne les supposez pas." },
+    { cle: "precarite", libelle: "L'indemnité de fin de contrat est-elle versée lorsqu'elle est due ?", format: "oui / non", regle: "oui",
+      motifNC: "L'indemnité de fin de contrat n'est pas versée : elle est due lorsque la relation ne se poursuit pas par un contrat à durée indéterminée, sauf les cas d'exclusion prévus par la loi. Vérifiez la période non prescrite." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Mettre en conformité le recours aux contrats à durée déterminée.",
+    etapes: [
+      "Recenser les contrats en cours et des vingt-quatre derniers mois : motif, date de signature, date de transmission, poste.",
+      "Repérer les successions de contrats sur un même poste et vérifier le délai de carence appliqué.",
+      "Vérifier en paie le versement de l'indemnité de fin de contrat, cas d'exclusion compris.",
+      "Réviser le contrat type et instituer un contrôle avant chaque signature.",
+    ],
+    acteur: "Ressources humaines et paie, avec le conseil de l'entreprise",
+    delai: "Recensement sous un mois",
+    risque: "La requalification en contrat à durée indéterminée emporte indemnité de requalification, indemnités de rupture et, le cas échéant, licenciement sans cause réelle et sérieuse. Faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "grille de contrôle des contrats à durée déterminée" },
+  },
+});
+
+/* ══════════════════════════════════════ 12. fin du contrat ══ */
+
+item({
+  id: "SOC-FIN-DOCUMENTS", categorie: "fin du contrat",
+  intitule: "Documents de fin de contrat : certificat de travail, reçu pour solde de tout compte, attestation destinée à l'assurance chômage",
+  articles: ["L1234-19", "D1234-6", "L1234-20", "R1234-9"].filter(lu),
+  articlesSouhaites: ["L1234-19", "D1234-6", "L1234-20", "R1234-9"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "certificat", libelle: "Un certificat de travail portant les mentions réglementaires est-il délivré à l'expiration de chaque contrat ?", format: "oui / non", regle: "oui",
+      motifNC: "Le certificat de travail n'est pas délivré systématiquement : il est dû à l'expiration du contrat, quelle qu'en soit la cause, et ses mentions sont fixées par l'article D. 1234-6." },
+    { cle: "soldeToutCompte", libelle: "Un reçu pour solde de tout compte détaillant les sommes versées est-il établi et remis en double exemplaire ?", format: "oui / non", regle: "oui",
+      motifNC: "Le reçu pour solde de tout compte n'est pas établi ou n'est pas détaillé : le reçu fait l'inventaire des sommes versées, et sa mention doit être conforme — un reçu irrégulier ne produit pas l'effet libératoire que l'employeur en attend." },
+    { cle: "attestation", libelle: "L'attestation destinée à l'organisme d'assurance chômage est-elle délivrée au salarié et transmise à l'organisme ?", format: "oui / non", regle: "oui",
+      motifNC: "L'attestation n'est pas délivrée ou n'est pas transmise : son défaut retarde l'indemnisation du salarié et se répare en dommages-intérêts, sans qu'il ait à démontrer un préjudice particulier." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Établir la liasse de fin de contrat et la remettre systématiquement.",
+    etapes: [
+      "Constituer une liasse type : certificat de travail, reçu pour solde de tout compte en double exemplaire, attestation destinée à l'assurance chômage, information sur la portabilité des couvertures.",
+      "Vérifier les mentions du certificat au regard de l'article D. 1234-6.",
+      "Instituer un contrôle de sortie : aucun départ sans liasse remise et datée.",
+      "Rattraper les sorties récentes pour lesquelles un document manque.",
+    ],
+    acteur: "Ressources humaines et paie",
+    delai: "Liasse type sous quinze jours",
+    risque: "La remise tardive ou incomplète ouvre des dommages-intérêts et prive le reçu de son effet libératoire ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "liasse de fin de contrat" },
+  },
+});
+
+item({
+  id: "SOC-FIN-LICENCIEMENT", categorie: "fin du contrat",
+  intitule: "Licenciement pour motif personnel : convocation, entretien, notification et précision des motifs",
+  articles: ["L1232-2", "L1232-4", "L1232-6", "L1235-2", "R1232-13"].filter(lu),
+  articlesSouhaites: ["L1232-2", "L1232-4", "L1232-6", "L1235-2", "R1232-13"],
+  module: { nom: "discipline et règlement intérieur", page: "audit-discipline.html" },
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "convocationConforme", libelle: "La lettre de convocation à l'entretien préalable indique-t-elle l'objet, la date, l'heure et le lieu, et rappelle-t-elle la faculté de se faire assister ?", format: "oui / non", regle: "oui",
+      motifNC: "La convocation n'est pas conforme : elle indique l'objet de l'entretien, précise la date, l'heure et le lieu, et rappelle la faculté pour le salarié de se faire assister — par une personne de l'entreprise ou, en l'absence d'institutions représentatives, par un conseiller extérieur inscrit sur la liste départementale." },
+    { cle: "delaiCinqJours", libelle: "L'entretien se tient-il au moins cinq jours ouvrables après la présentation de la lettre de convocation ?", format: "oui / non", regle: "oui",
+      motifNC: "Le délai de cinq jours ouvrables n'est pas respecté : le délai court de la présentation de la lettre, non de son envoi. Un entretien tenu trop tôt est une irrégularité de procédure indemnisée." },
+    { cle: "notificationMotivee", libelle: "La lettre de licenciement énonce-t-elle le ou les motifs invoqués, et est-elle envoyée dans les délais ?", format: "oui / non", regle: "oui",
+      motifNC: "La lettre n'énonce pas les motifs, ou n'est pas envoyée dans les délais : la lettre fixe les limites du litige — un motif qui n'y figure pas ne pourra pas être invoqué devant le juge." },
+    { cle: "precisionMotifs", libelle: "La procédure de précision des motifs, dans les quinze jours de la notification, est-elle connue et suivie ?", format: "oui / non", regle: "oui",
+      motifNC: "La procédure de précision des motifs n'est pas suivie : l'employeur peut préciser les motifs après la notification, dans les conditions et délais de l'article R. 1232-13 ; à défaut, l'insuffisance de motivation ne prive pas nécessairement le licenciement de cause, mais elle ouvre une indemnité." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Écrire et tenir la procédure de licenciement pour motif personnel, du premier courrier à la précision des motifs.",
+    etapes: [
+      "Établir les trames de convocation et de notification, et les faire relire par votre conseil.",
+      "Écrire le calendrier type : présentation de la convocation, entretien à cinq jours ouvrables au moins, notification, fenêtre de précision des motifs.",
+      "Former l'encadrement à la conduite de l'entretien : indiquer le motif, recueillir les explications, ne rien décider à l'entretien.",
+      "Conduire l'audit détaillé de la matière disciplinaire dans le module « discipline et règlement intérieur ».",
+    ],
+    acteur: "Direction et ressources humaines, avec le conseil de l'entreprise",
+    delai: "Trames et calendrier avant toute nouvelle procédure",
+    risque: "Une procédure irrégulière ouvre une indemnité distincte ; une lettre insuffisamment motivée fragilise le fond du licenciement. Faites chiffrer par votre conseil.",
+    modele: { page: "audit-discipline.html", nom: "module d'audit de la discipline (questionnaire complet)" },
+  },
+});
+
+item({
+  id: "SOC-FIN-RUPTURE-CONV", categorie: "fin du contrat",
+  intitule: "Rupture conventionnelle individuelle : entretiens, indemnité, rétractation et homologation",
+  articles: ["L1237-11", "L1237-13", "L1237-14"].filter(lu),
+  articlesSouhaites: ["L1237-11", "L1237-13", "L1237-14"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "entretiens", libelle: "La convention est-elle précédée d'un ou plusieurs entretiens, et le salarié est-il informé de la faculté de se faire assister ?", format: "oui / non", regle: "oui",
+      motifNC: "Les entretiens ne sont pas organisés, ou l'information sur l'assistance n'est pas donnée : la rupture conventionnelle résulte d'une convention signée par les parties, qui garantit la liberté du consentement — les entretiens en sont la trace." },
+    { cle: "indemnite", libelle: "L'indemnité spécifique de rupture conventionnelle est-elle au moins égale à l'indemnité légale de licenciement ?", format: "oui / non", regle: "oui",
+      motifNC: "L'indemnité est inférieure au minimum : le montant ne peut être inférieur à celui de l'indemnité légale de licenciement. Recalculez-le, et vérifiez si votre convention collective impose davantage." },
+    { cle: "retractation", libelle: "Le délai de rétractation de quinze jours calendaires est-il respecté avant l'envoi de la demande d'homologation ?", format: "oui / non", regle: "oui",
+      motifNC: "Le délai de rétractation n'est pas respecté : chacune des parties dispose de quinze jours calendaires à compter de la signature. Une demande envoyée trop tôt vicie la procédure." },
+    { cle: "homologation", libelle: "La demande d'homologation est-elle adressée à l'autorité administrative et sa décision conservée ?", format: "oui / non", regle: "oui",
+      motifNC: "La demande d'homologation n'est pas adressée, ou la décision n'est pas conservée : sans homologation, la convention ne produit pas d'effet et la rupture reste sans cause." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Sécuriser le processus de rupture conventionnelle individuelle.",
+    etapes: [
+      "Établir la trame de convocation à l'entretien, avec la mention de la faculté d'assistance.",
+      "Calculer l'indemnité, en comparant l'indemnité légale et, le cas échéant, l'indemnité conventionnelle — cette application ne lit pas la convention collective.",
+      "Tenir le calendrier : signature, quinze jours calendaires de rétractation, demande d'homologation, décision.",
+      "Archiver la convention, les preuves de remise et la décision d'homologation.",
+    ],
+    acteur: "Ressources humaines, avec le conseil de l'entreprise",
+    delai: "Trames disponibles avant toute nouvelle rupture",
+    risque: "Un consentement vicié ou un délai non tenu fait requalifier la rupture en licenciement sans cause réelle et sérieuse. Faites apprécier chaque dossier par votre conseil.",
+    modele: { page: "documents.html", nom: "calendrier et trames de rupture conventionnelle" },
+  },
+});
+
+item({
+  id: "SOC-FIN-INAPTITUDE", categorie: "fin du contrat",
+  intitule: "Inaptitude constatée par le médecin du travail : recherche de reclassement et reprise du paiement du salaire",
+  articles: ["L1226-2", "L1226-4"].filter(lu),
+  articlesSouhaites: ["L1226-2", "L1226-4"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "reclassementRecherche", libelle: "En cas d'inaptitude, une recherche de reclassement est-elle menée et documentée, en tenant compte des conclusions écrites du médecin du travail et de ses indications ?", format: "oui / non", regle: "oui",
+      motifNC: "La recherche de reclassement n'est pas menée ou n'est pas documentée : l'employeur propose un autre emploi approprié aux capacités du salarié, au vu des conclusions écrites du médecin du travail. Une recherche non tracée équivaut à une recherche non faite." },
+    { cle: "avisComite", libelle: "Le comité social et économique est-il consulté sur les propositions de reclassement lorsqu'un comité existe ?", format: "oui / non", regle: "oui",
+      motifNC: "Le comité n'est pas consulté sur le reclassement : la consultation est une étape à part entière, et son omission se répare en dommages-intérêts." },
+    { cle: "repriseSalaire", libelle: "Le salaire est-il repris au terme d'un mois si le salarié n'est ni reclassé ni licencié ?", format: "oui / non", regle: "oui",
+      motifNC: "Le salaire n'est pas repris au terme du délai d'un mois à compter de la date de l'examen médical de reprise : la reprise est automatique et se rattrape en rappels de salaire, sans faute à établir." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Écrire la procédure d'inaptitude : reclassement documenté, consultation du comité, reprise du salaire au terme du mois.",
+    etapes: [
+      "Instituer une alerte à la date de l'avis d'inaptitude, avec l'échéance du délai d'un mois.",
+      "Constituer le dossier de recherche de reclassement : postes examinés, échanges avec le médecin du travail, réponses reçues.",
+      "Consulter le comité social et économique sur les propositions, et en conserver le procès-verbal.",
+      "Faire relire par votre conseil chaque dossier avant toute notification de licenciement pour inaptitude.",
+    ],
+    acteur: "Ressources humaines, avec le service de prévention et de santé au travail et le conseil de l'entreprise",
+    delai: "Alerte dès la réception de l'avis ; échéance à un mois",
+    risque: "Le défaut de reclassement documenté prive le licenciement de cause réelle et sérieuse ; l'absence de reprise du salaire ouvre des rappels immédiats. Faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "dossier de reclassement après inaptitude" },
+  },
+});
+
+/* ═══════════════════════════ 13. égalité et non-discrimination ══ */
+
+item({
+  id: "SOC-EGA-REMUNERATION", categorie: "égalité et non-discrimination",
+  intitule: "Égalité de rémunération entre les femmes et les hommes pour un même travail ou un travail de valeur égale",
+  articles: ["L3221-2"].filter(lu),
+  articlesSouhaites: ["L3221-2"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "comparaisonFaite", libelle: "Une comparaison des rémunérations à emploi et ancienneté comparables a-t-elle été faite entre les femmes et les hommes ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucune comparaison n'est faite : sans elle, un écart injustifié ne se voit pas, et il se découvre au contentieux. Conduisez la comparaison poste par poste." },
+    { cle: "ecartsTraites", libelle: "Les écarts constatés sont-ils expliqués par des éléments objectifs et matériellement vérifiables, ou corrigés ?", format: "oui / non", regle: "oui",
+      motifNC: "Des écarts subsistent sans explication objective : l'employeur assure, pour un même travail ou un travail de valeur égale, l'égalité de rémunération. Corrigez, ou documentez l'élément objectif qui justifie l'écart." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Comparer les rémunérations à travail de valeur égale et traiter les écarts.",
+    etapes: [
+      "Constituer les groupes de comparaison : même emploi, ou emplois de valeur égale au regard des connaissances, de l'expérience, des responsabilités et de la charge physique ou nerveuse.",
+      "Calculer les écarts et rechercher, pour chacun, l'élément objectif et matériellement vérifiable qui l'expliquerait.",
+      "Corriger les écarts injustifiés et documenter la correction.",
+      "Rapprocher ce travail de l'index de l'égalité professionnelle et de la négociation sur l'égalité, si l'entreprise y est tenue.",
+    ],
+    acteur: "Ressources humaines et direction",
+    delai: "Comparaison sous trois mois",
+    risque: "Un écart injustifié se rattrape en rappels de salaire sur la période non prescrite, majorés des congés payés afférents ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "grille de comparaison des rémunérations" },
+  },
+});
+
+item({
+  id: "SOC-EGA-DISCRIMINATION", categorie: "égalité et non-discrimination",
+  intitule: "Interdiction des discriminations dans les décisions de gestion du personnel",
+  articles: ["L1132-1", "L1132-4"].filter(lu),
+  articlesSouhaites: ["L1132-1", "L1132-4"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "criteresObjectifs", libelle: "Les décisions de recrutement, d'affectation, de rémunération, de formation et de promotion reposent-elles sur des critères objectifs, écrits et traçables ?", format: "oui / non", regle: "oui",
+      motifNC: "Les décisions ne reposent pas sur des critères écrits et traçables : en matière de discrimination, le salarié présente des éléments de fait, et c'est à l'employeur de prouver que sa décision est justifiée par des éléments objectifs étrangers à toute discrimination. Sans trace, la preuve est impossible." },
+    { cle: "encadrementForme", libelle: "L'encadrement qui décide en matière de recrutement et de gestion des carrières est-il sensibilisé aux critères prohibés ?", format: "oui / non", regle: "oui",
+      motifNC: "L'encadrement n'est pas sensibilisé : les décisions litigieuses se prennent au niveau des managers, et c'est l'entreprise qui répond. Organisez une sensibilisation et gardez-en la trace." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Documenter les critères de décision et sensibiliser ceux qui décident.",
+    etapes: [
+      "Écrire les critères de recrutement, d'augmentation et de promotion, et les rendre opposables en interne.",
+      "Conserver, pour chaque décision, la trace du critère appliqué.",
+      "Sensibiliser l'encadrement aux critères prohibés et à la charge de la preuve.",
+      "Rapprocher ce travail des affichages d'information sur les discriminations, dus par ailleurs.",
+    ],
+    acteur: "Direction et ressources humaines",
+    delai: "Critères écrits sous deux mois",
+    risque: "Toute disposition ou tout acte discriminatoire est nul, et la réparation intégrale du préjudice est due ; les demandes se cumulent avec celles tirées du harcèlement. Faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "note de critères objectifs de décision" },
+  },
+});
+
+item({
+  id: "SOC-EGA-SEXISME", categorie: "égalité et non-discrimination",
+  intitule: "Interdiction des agissements sexistes",
+  articles: ["L1142-2-1"].filter(lu),
+  articlesSouhaites: ["L1142-2-1"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "regleEcrite", libelle: "L'interdiction des agissements sexistes est-elle écrite et diffusée (règlement intérieur lorsqu'il en existe un, note de service, livret d'accueil) ?", format: "oui / non", regle: "oui",
+      motifNC: "L'interdiction n'est pas écrite ni diffusée : nul ne doit subir d'agissement sexiste, défini comme tout agissement lié au sexe d'une personne, ayant pour objet ou pour effet de porter atteinte à sa dignité ou de créer un environnement intimidant, hostile, dégradant, humiliant ou offensant." },
+    { cle: "traitementSignalements", libelle: "Une voie de signalement existe-t-elle, et les signalements reçus sont-ils traités et tracés ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucune voie de signalement identifiée n'existe, ou les signalements ne sont pas tracés : l'inaction de l'employeur après signalement est le grief le plus fréquemment retenu contre lui." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Écrire l'interdiction, ouvrir une voie de signalement et traiter les signalements.",
+    etapes: [
+      "Faire figurer l'interdiction dans le règlement intérieur s'il en existe un, sinon dans une note de service diffusée.",
+      "Désigner la voie de signalement et la faire connaître, en articulation avec les référents harcèlement lorsqu'ils existent.",
+      "Écrire la procédure de traitement : accusé de réception, enquête, mesures, information du signalant.",
+      "Rapprocher ce travail de l'évaluation des risques, qui inclut les agissements sexistes.",
+    ],
+    acteur: "Direction, ressources humaines et référents harcèlement",
+    delai: "Sous deux mois",
+    risque: "L'agissement sexiste non traité nourrit les demandes au titre du manquement à l'obligation de sécurité et du harcèlement ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "note de service — interdiction des agissements sexistes" },
+  },
+});
+
+item({
+  id: "SOC-EGA-HANDICAP", categorie: "égalité et non-discrimination",
+  intitule: "Mesures appropriées pour l'accès à l'emploi et le maintien dans l'emploi des travailleurs handicapés",
+  articles: ["L5213-6"].filter(lu),
+  articlesSouhaites: ["L5213-6"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "mesuresExaminees", libelle: "Les mesures appropriées d'aménagement du poste et de l'organisation sont-elles examinées pour chaque situation connue de handicap ?", format: "oui / non", regle: "oui",
+      motifNC: "L'examen n'est pas fait : l'employeur prend, en fonction des besoins dans une situation concrète, les mesures appropriées pour permettre aux travailleurs handicapés d'accéder à un emploi, de le conserver, de l'exercer et d'y progresser. Le refus de prendre ces mesures peut être constitutif d'une discrimination." },
+    { cle: "refusMotives", libelle: "Lorsqu'une mesure n'est pas prise, la charge disproportionnée invoquée est-elle documentée, aides publiques comprises ?", format: "oui / non", regle: "oui",
+      motifNC: "Le refus n'est pas documenté : la charge doit être disproportionnée, appréciée en tenant compte des aides qui peuvent compenser tout ou partie des dépenses. Écrivez l'analyse, chiffres à l'appui." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Instituer l'examen des mesures appropriées et documenter chaque décision.",
+    etapes: [
+      "Recenser les situations connues, en lien avec le médecin du travail et dans le respect du secret médical.",
+      "Examiner, pour chacune, les aménagements possibles : poste, horaires, outils, télétravail, accessibilité.",
+      "Chiffrer le coût net après aides mobilisables avant d'invoquer une charge disproportionnée.",
+      "Conserver la trace écrite de l'examen et de la décision.",
+    ],
+    acteur: "Ressources humaines, avec le service de prévention et de santé au travail",
+    delai: "Examen à instituer sous deux mois",
+    risque: "Le refus non justifié de mesures appropriées est traité comme une discrimination, avec nullité de la mesure et réparation intégrale ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "fiche d'examen des mesures appropriées" },
+  },
+});
+
+item({
+  id: "SOC-EGA-REFERENT-HANDICAP", categorie: "égalité et non-discrimination",
+  intitule: "Référent handicap chargé d'orienter, d'informer et d'accompagner (entreprise d'au moins deux cent cinquante salariés)",
+  articles: ["L5213-6-1"].filter(lu),
+  articlesSouhaites: ["L5213-6-1"],
+  condition: p => {
+    const s = auSeuil(250)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " Le référent handicap est exigé dans les entreprises d'au moins deux cent cinquante salariés — rien n'interdit d'en désigner un en deçà." };
+    return { du: true, motif: s.motif + " Un référent chargé d'orienter, d'informer et d'accompagner les personnes en situation de handicap doit être désigné." };
+  },
+  verifs: [
+    { cle: "referentDesigne", libelle: "Un référent handicap est-il désigné ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun référent handicap n'est désigné alors que le seuil est atteint : la désignation est écrite, et le référent est identifiable par les salariés." },
+    { cle: "referentConnu", libelle: "Son nom et ses coordonnées sont-ils portés à la connaissance des salariés ?", format: "oui / non", regle: "oui",
+      motifNC: "Le référent n'est pas connu des salariés : un référent que personne ne peut nommer ne remplit pas sa fonction. Diffusez son identité et ses coordonnées." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Désigner le référent handicap et le faire connaître.",
+    etapes: [
+      "Choisir le référent et écrire sa lettre de mission : orienter, informer, accompagner.",
+      "Lui donner le temps et la formation nécessaires.",
+      "Diffuser son identité et ses coordonnées, et les tenir à jour.",
+    ],
+    acteur: "Direction et ressources humaines",
+    delai: "Sous un mois",
+    risque: "L'absence de référent est relevée en contrôle et affaiblit la défense de l'entreprise sur les dossiers d'aménagement de poste ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "lettre de mission du référent handicap" },
+  },
+});
+
+item({
+  id: "SOC-EGA-RECRUTEURS", categorie: "égalité et non-discrimination",
+  intitule: "Formation à la non-discrimination à l'embauche des personnes chargées du recrutement (entreprise d'au moins trois cents salariés)",
+  articles: ["L1131-2"].filter(lu),
+  articlesSouhaites: ["L1131-2"],
+  condition: p => {
+    const s = auSeuil(300)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " La formation obligatoire des personnes chargées du recrutement vise les entreprises d'au moins trois cents salariés — rien n'interdit de la conduire en deçà." };
+    return { du: true, motif: s.motif + " Les salariés chargés des missions de recrutement doivent recevoir une formation à la non-discrimination à l'embauche." };
+  },
+  verifs: [
+    { cle: "recruteursIdentifies", libelle: "Les salariés chargés des missions de recrutement sont-ils identifiés ?", format: "oui / non", regle: "oui",
+      motifNC: "Les personnes chargées du recrutement ne sont pas identifiées : la liste est le préalable de la formation. Recensez-les, y compris les managers qui recrutent occasionnellement." },
+    { cle: "formationSuivie", libelle: "Ont-ils suivi une formation à la non-discrimination à l'embauche, à une périodicité au moins quinquennale ?", format: "oui / non", regle: "oui",
+      motifNC: "La formation n'est pas suivie : elle est due au moins une fois tous les cinq ans, et son attestation se conserve." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Recenser les recruteurs et organiser leur formation à la non-discrimination.",
+    etapes: [
+      "Établir la liste des personnes qui participent aux décisions de recrutement.",
+      "Programmer la formation et conserver les attestations.",
+      "Tenir un échéancier des renouvellements.",
+    ],
+    acteur: "Ressources humaines",
+    delai: "Programmation sous trois mois",
+    risque: "L'absence de formation est un élément relevé au soutien des demandes fondées sur la discrimination à l'embauche ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "plan de formation à la non-discrimination à l'embauche" },
+  },
+});
+
+item({
+  id: "SOC-EGA-ALERTE", categorie: "égalité et non-discrimination",
+  intitule: "Protection du salarié qui signale ou témoigne de faits constitutifs d'un délit ou d'un crime",
+  articles: ["L1132-3-3"].filter(lu),
+  articlesSouhaites: ["L1132-3-3"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "procedureSignalement", libelle: "Une procédure de recueil et de traitement des signalements existe-t-elle, et est-elle portée à la connaissance des salariés ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucune procédure de signalement n'est connue des salariés : sans voie identifiée, les signalements arrivent par des canaux qui exposent l'entreprise, et la protection du signalant se plaide contre elle." },
+    { cle: "aucuneMesure", libelle: "Est-il assuré qu'aucune mesure défavorable n'est prise à raison d'un signalement ou d'un témoignage ?", format: "oui / non", regle: "oui",
+      motifNC: "La règle n'est pas assurée : aucune personne ne peut faire l'objet d'une mesure défavorable pour avoir signalé ou témoigné de faits constitutifs d'un délit ou d'un crime. La mesure prise en méconnaissance de cette règle est nulle." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Ouvrir une voie de signalement, la faire connaître et protéger le signalant.",
+    etapes: [
+      "Écrire la procédure : qui reçoit, sous quelle forme, avec quelle confidentialité, dans quels délais.",
+      "La diffuser par tout moyen, et l'articuler avec le règlement intérieur s'il en existe un.",
+      "Instituer un contrôle des décisions prises à l'égard d'un salarié ayant signalé, pendant la période sensible.",
+      "Faire vérifier par votre conseil l'articulation avec le dispositif général de protection des lanceurs d'alerte, qui n'est pas lu par cette application.",
+    ],
+    acteur: "Direction, ressources humaines et conseil de l'entreprise",
+    delai: "Sous trois mois",
+    risque: "La mesure prise à raison d'un signalement est nulle, avec réintégration possible et réparation intégrale ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "procédure de recueil et de traitement des signalements" },
+  },
+});
+
+/* ── suite de la catégorie « santé-sécurité » : ce que l'audit voisin
+      couvrait et que le chapeau ignorait ─────────────────────────────── */
+
+item({
+  id: "SOC-SST-INFO-RISQUES", categorie: "santé-sécurité",
+  intitule: "Information des travailleurs sur les risques pour leur santé et leur sécurité",
+  articles: ["L4141-1"].filter(lu),
+  articlesSouhaites: ["L4141-1"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "informationOrganisee", libelle: "Une information sur les risques et les mesures prises pour y remédier est-elle organisée et dispensée à chaque travailleur ?", format: "oui / non", regle: "oui",
+      motifNC: "L'information sur les risques n'est pas organisée : l'employeur organise et dispense une information des travailleurs sur les risques pour la santé et la sécurité et sur les mesures prises pour y remédier (L. 4141-1). Elle se distingue de la formation à la sécurité : c'est l'information, en amont." },
+    { cle: "informationTracee", libelle: "Cette information est-elle datée et traçable pour chaque salarié (émargement, livret d'accueil remis, support conservé) ?", format: "oui / non", regle: "oui",
+      motifNC: "L'information n'est pas traçable : en cas d'accident, l'employeur doit démontrer qu'il l'a délivrée. Faites émarger, conservez les supports." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Organiser et tracer l'information des travailleurs sur les risques.",
+    etapes: [
+      "Reprendre le document unique et en tirer, par unité de travail, les risques à porter à la connaissance des salariés.",
+      "Écrire un support d'information par unité de travail, et le remettre à l'entrée puis à chaque changement.",
+      "Faire émarger la remise et conserver les supports datés.",
+      "Articuler cette information avec la formation pratique à la sécurité, qui reste due par ailleurs.",
+    ],
+    acteur: "Direction, encadrement et salarié compétent en prévention",
+    delai: "Sous deux mois",
+    risque: "Le défaut d'information nourrit la faute inexcusable en cas d'accident et le manquement à l'obligation de sécurité ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "support d'information sur les risques par unité de travail" },
+  },
+});
+
+item({
+  id: "SOC-SST-FORMATION-RENFORCEE", categorie: "santé-sécurité",
+  intitule: "Formation renforcée à la sécurité des salariés en contrat court affectés à des postes à risques, et liste de ces postes",
+  articles: ["L4154-2"].filter(lu),
+  articlesSouhaites: ["L4154-2"],
+  condition: p => {
+    const s = M.ouiNon(p, "contratsCourts", "L'entreprise recourt-elle à des contrats à durée déterminée, à l'intérim ou à des stagiaires ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucun recours aux contrats courts n'est déclaré : la formation renforcée qui leur est propre n'a pas d'objet." };
+    return { du: true, motif: "L'entreprise recourt à des contrats courts : ceux qui sont affectés à des postes présentant des risques particuliers bénéficient d'une formation renforcée à la sécurité, et la liste de ces postes doit être établie." };
+  },
+  verifs: [
+    { cle: "listePostes", libelle: "La liste des postes présentant des risques particuliers pour la santé ou la sécurité est-elle établie et tenue à jour ?", format: "oui / non", regle: "oui",
+      motifNC: "La liste des postes à risques particuliers n'est pas établie : elle conditionne la formation renforcée, elle s'établit après avis du médecin du travail et du comité, et elle se tient à jour." },
+    { cle: "formationDispensee", libelle: "Les salariés en contrat court affectés à ces postes reçoivent-ils une formation renforcée à la sécurité, ainsi qu'un accueil et une information adaptés ?", format: "oui / non", regle: "oui",
+      motifNC: "La formation renforcée n'est pas dispensée : c'est précisément sur ces postes et ces contrats que la sinistralité est la plus forte, et l'omission pèse lourd en cas d'accident." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Établir la liste des postes à risques particuliers et dispenser la formation renforcée.",
+    etapes: [
+      "Établir la liste des postes à risques particuliers, après avis du médecin du travail et du comité social et économique lorsqu'il existe.",
+      "Recenser les salariés en contrat court affectés à ces postes.",
+      "Organiser la formation renforcée, l'accueil et l'information adaptés, et en conserver la trace.",
+      "Transmettre la liste à l'entreprise de travail temporaire lorsque des intérimaires sont concernés.",
+    ],
+    acteur: "Direction, salarié compétent en prévention et service de prévention et de santé au travail",
+    delai: "Liste sous un mois ; formation avant toute nouvelle affectation",
+    risque: "En cas d'accident sur un poste à risques sans formation renforcée, la faute inexcusable est fréquemment retenue ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "liste des postes à risques et programme de formation renforcée" },
+  },
+});
+
+item({
+  id: "SOC-SST-SECOURS", categorie: "santé-sécurité",
+  intitule: "Matériel de premiers secours, secouristes formés et protocole écrit des soins d'urgence",
+  articles: ["R4224-14", "R4224-15", "R4224-16"].filter(lu),
+  articlesSouhaites: ["R4224-14", "R4224-15", "R4224-16"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "materielPresent", libelle: "Les lieux de travail sont-ils équipés d'un matériel de premiers secours adapté, accessible et signalé ?", format: "oui / non", regle: "oui",
+      motifNC: "Le matériel de premiers secours manque, n'est pas adapté ou n'est pas signalé : les lieux de travail en sont équipés, le matériel fait l'objet d'une signalisation par panneaux, et il doit être accessible." },
+    { cle: "secouristeForme", libelle: "Au moins un membre du personnel a-t-il reçu la formation de secouriste, dans les ateliers où sont accomplis des travaux dangereux et sur les chantiers concernés ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun secouriste formé n'est déclaré là où il est exigé : un membre du personnel reçoit la formation nécessaire pour donner les premiers secours en cas d'urgence, et ces salariés ne peuvent remplacer les infirmiers." },
+    { cle: "protocoleEcrit", libelle: "Les mesures d'organisation des soins d'urgence sont-elles fixées par écrit, prises après avis du médecin du travail, et adaptées à la nature des risques ?", format: "oui / non", regle: "oui",
+      motifNC: "Le protocole écrit des soins d'urgence manque : en l'absence d'infirmier, ou lorsque leur nombre ne permet pas d'assurer une présence permanente, l'employeur prend, après avis du médecin du travail, les mesures nécessaires — consignées dans un document tenu à disposition de l'inspection du travail." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Équiper, former et écrire l'organisation des secours.",
+    etapes: [
+      "Recenser les lieux de travail et vérifier la présence, le contenu, l'accessibilité et la signalisation du matériel de premiers secours.",
+      "Programmer la formation de secouristes, en couvrant les horaires et les sites réels.",
+      "Écrire le protocole des soins d'urgence après avis du médecin du travail, et le tenir à disposition de l'inspection du travail.",
+      "Afficher les coordonnées des services de secours — obligation distincte, également due.",
+    ],
+    acteur: "Direction, salarié compétent en prévention, service de prévention et de santé au travail",
+    delai: "Sous deux mois",
+    risque: "L'absence d'organisation écrite des secours est relevée en contrôle et pèse lourdement en cas d'accident ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "protocole d'organisation des secours" },
+  },
+});
+
+item({
+  id: "SOC-SST-INCENDIE-MOYENS", categorie: "santé-sécurité",
+  intitule: "Moyens de lutte contre l'incendie : extincteurs, dégagements et vérification",
+  articles: ["R4227-29", "R4227-4"].filter(lu),
+  articlesSouhaites: ["R4227-29", "R4227-4"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "extincteurs", libelle: "Le premier secours contre l'incendie est-il assuré par des extincteurs en nombre suffisant, maintenus en bon état et appropriés aux risques ?", format: "oui / non", regle: "oui",
+      motifNC: "Les moyens de premier secours contre l'incendie sont insuffisants ou ne sont pas maintenus : le nombre, l'implantation et la nature des extincteurs se déterminent au regard des risques présents — appareils électriques, liquides inflammables, matières combustibles." },
+    { cle: "degagements", libelle: "Les dégagements sont-ils libres de tout obstacle et jamais encombrés ?", format: "oui / non", regle: "oui",
+      motifNC: "Des dégagements sont encombrés : les dégagements doivent être toujours libres — aucun matériel ne doit y faire obstacle. C'est le constat le plus immédiat que fait un contrôleur, et le plus dangereux en cas de sinistre." },
+    { cle: "verificationPeriodique", libelle: "Les moyens de lutte contre l'incendie sont-ils vérifiés périodiquement et les rapports conservés au registre de sécurité ?", format: "oui / non", regle: "oui",
+      motifNC: "Les vérifications ne sont pas faites ou ne sont pas conservées : elles se rangent au registre de sécurité, avec les suites données aux observations." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Mettre à niveau les moyens de lutte contre l'incendie et libérer les dégagements.",
+    etapes: [
+      "Faire l'inventaire des extincteurs par bâtiment et par risque, et compléter le parc.",
+      "Faire une tournée des dégagements et supprimer tout encombrement, puis instituer un contrôle périodique.",
+      "Contractualiser la vérification périodique et ranger les rapports au registre de sécurité.",
+      "Articuler avec la consigne de sécurité incendie et les exercices, dus par ailleurs.",
+    ],
+    acteur: "Services généraux et salarié compétent en prévention",
+    delai: "Tournée immédiate ; mise à niveau sous deux mois",
+    risque: "L'encombrement d'un dégagement et l'insuffisance des moyens sont retenus au premier chef en cas de sinistre ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "inventaire des moyens de secours et tournée des dégagements" },
+  },
+});
+
+item({
+  id: "SOC-SST-ACCIDENT-GRAVE", categorie: "santé-sécurité",
+  intitule: "Information de l'inspection du travail en cas d'accident du travail mortel",
+  articles: ["R4121-5"].filter(lu),
+  articlesSouhaites: ["R4121-5"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "procedureConnue", libelle: "La procédure d'information immédiate de l'inspection du travail en cas d'accident mortel est-elle écrite et connue de l'encadrement d'astreinte ?", format: "oui / non", regle: "oui",
+      motifNC: "La procédure n'est pas écrite ni connue : l'information de l'agent de contrôle de l'inspection du travail est due immédiatement, et au plus tard dans les douze heures suivant le décès du travailleur — sauf à établir que l'employeur n'a pu en avoir connaissance dans ce délai. Douze heures se comptent aussi la nuit et le week-end : la procédure doit vivre en dehors des heures de bureau." },
+    { cle: "coordonneesDisponibles", libelle: "Les coordonnées de l'inspection du travail compétente sont-elles immédiatement disponibles pour ceux qui devraient l'appeler ?", format: "oui / non", regle: "oui",
+      motifNC: "Les coordonnées ne sont pas disponibles là où il faudrait : mettez-les dans la procédure d'astreinte, pas seulement sur le panneau d'affichage." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Écrire la procédure d'alerte en cas d'accident mortel et la mettre entre les mains de l'astreinte.",
+    etapes: [
+      "Écrire la chaîne d'alerte : qui constate, qui prévient, dans quel ordre, avec quels numéros.",
+      "Y faire figurer le délai de douze heures et les coordonnées de l'agent de contrôle compétent.",
+      "Diffuser la procédure à l'encadrement et à l'astreinte, et la réviser chaque année.",
+      "Prévoir la préservation des lieux et la conduite à tenir avec le comité social et économique.",
+    ],
+    acteur: "Direction et encadrement d'astreinte",
+    delai: "Sous quinze jours",
+    risque: "Le défaut d'information dans le délai est une infraction distincte, qui s'ajoute aux suites de l'accident lui-même ; l'article de sanction n'a pas été lu au relais pour cet audit — faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "procédure d'alerte en cas d'accident grave ou mortel" },
+  },
+});
+
+item({
+  id: "SOC-SST-SUIVI-CONTRAT", categorie: "santé-sécurité",
+  intitule: "Suivi médical au fil du contrat : visite de reprise, visite de mi-carrière, information du médecin, suites données aux avis",
+  articles: ["R4624-31", "R4624-29", "R4624-33", "L4624-2-2", "L4624-6"].filter(lu),
+  articlesSouhaites: ["R4624-31", "R4624-29", "R4624-33", "L4624-2-2", "L4624-6"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "visiteReprise", libelle: "Une visite de reprise est-elle organisée dans les cas où elle est due (congé de maternité, absence pour maladie professionnelle, absence d'au moins trente jours pour accident du travail, maladie ou accident non professionnel) ?", format: "oui / non", regle: "oui",
+      motifNC: "La visite de reprise n'est pas organisée : elle incombe à l'employeur, elle se déclenche à la reprise et non à la demande du salarié, et son omission fait obstacle à la reprise effective du travail." },
+    { cle: "informationMedecin", libelle: "Le médecin du travail est-il informé de tout arrêt de travail d'une durée inférieure à trente jours pour cause d'accident du travail ?", format: "oui / non", regle: "oui",
+      motifNC: "Le médecin du travail n'est pas informé des arrêts courts pour accident du travail : cette information lui permet d'apprécier l'opportunité d'une visite de reprise et d'un aménagement de poste." },
+    { cle: "miCarriere", libelle: "La visite de mi-carrière est-elle organisée pour les salariés concernés ?", format: "oui / non", regle: "oui",
+      motifNC: "La visite de mi-carrière n'est pas organisée : elle a pour objet d'établir un état des lieux de l'adéquation entre le poste et l'état de santé, d'évaluer les risques de désinsertion professionnelle et de sensibiliser au vieillissement au travail." },
+    { cle: "suitesAvis", libelle: "Les avis, propositions et indications du médecin du travail sont-ils pris en considération, et tout refus est-il motivé par écrit au salarié et au médecin ?", format: "oui / non", regle: "oui",
+      motifNC: "Les suites données aux avis du médecin du travail ne sont pas formalisées : l'employeur prend en considération l'avis et les indications du médecin ; en cas de refus, il fait connaître par écrit au travailleur et au médecin du travail les motifs qui s'opposent à ce qu'il y soit donné suite. Un refus silencieux est un manquement." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Instituer le suivi médical au fil du contrat, du signalement de l'arrêt à la réponse écrite aux avis.",
+    etapes: [
+      "Brancher la gestion des absences sur le déclenchement automatique des visites de reprise dues.",
+      "Instituer l'information systématique du médecin du travail pour les arrêts courts liés à un accident du travail.",
+      "Repérer les salariés concernés par la visite de mi-carrière et les convoquer.",
+      "Écrire le circuit des avis du médecin : réception, décision, réponse écrite motivée en cas de refus, archivage.",
+    ],
+    acteur: "Ressources humaines, avec le service de prévention et de santé au travail",
+    delai: "Circuit en place sous deux mois",
+    risque: "L'absence de visite de reprise et le silence gardé sur un avis médical sont des manquements à l'obligation de sécurité, régulièrement sanctionnés ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "circuit du suivi médical et réponse aux avis du médecin du travail" },
+  },
+});
+
+item({
+  id: "SOC-SST-FICHE-ENTREPRISE", categorie: "santé-sécurité",
+  intitule: "Fiche d'entreprise établie par le service de prévention et de santé au travail, et document annuel qui lui est adressé",
+  articles: ["R4624-46", "R4624-47", "D4622-22"].filter(lu),
+  articlesSouhaites: ["R4624-46", "R4624-47", "D4622-22"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "ficheEtablie", libelle: "La fiche d'entreprise a-t-elle été établie par le service de prévention et de santé au travail, et est-elle à jour ?", format: "oui / non", regle: "oui",
+      motifNC: "La fiche d'entreprise n'est pas établie ou n'est pas à jour : elle identifie les risques et les effectifs exposés. Elle est établie par le service auquel vous adhérez — relancez-le par écrit, et conservez la relance." },
+    { cle: "fichePresentee", libelle: "La fiche est-elle transmise à l'employeur, tenue à disposition de l'agent de contrôle et présentée au comité social et économique lorsqu'il existe ?", format: "oui / non", regle: "oui",
+      motifNC: "La fiche n'est pas diffusée comme elle doit l'être : transmise à l'employeur, tenue à disposition de l'agent de contrôle de l'inspection du travail et du médecin inspecteur, présentée au comité en même temps que le bilan annuel." },
+    { cle: "documentAnnuel", libelle: "Le document annuel demandé par le service de prévention et de santé au travail lui est-il adressé ?", format: "oui / non", regle: "oui",
+      motifNC: "Le document annuel n'est pas adressé au service : c'est lui qui permet au service de connaître les effectifs, les risques et les postes, et son défaut désorganise le suivi médical de vos salariés." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Obtenir et diffuser la fiche d'entreprise, et adresser le document annuel au service de santé au travail.",
+    etapes: [
+      "Demander par écrit au service la fiche d'entreprise ou sa mise à jour, et conserver la demande.",
+      "À réception, la porter à l'ordre du jour du comité et la ranger avec les documents tenus à disposition de l'inspection.",
+      "Instituer l'envoi du document annuel au service, à date fixe.",
+      "Rapprocher les risques de la fiche de ceux du document unique : un écart entre les deux se remarque.",
+    ],
+    acteur: "Direction, avec le service de prévention et de santé au travail",
+    delai: "Demande écrite sous quinze jours",
+    risque: "L'absence de fiche d'entreprise prive l'employeur d'un élément de preuve de sa démarche de prévention et signale un suivi défaillant ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "demande de fiche d'entreprise et document annuel au service de santé" },
+  },
+});
+
+item({
+  id: "SOC-SST-SALARIE-COMPETENT", categorie: "santé-sécurité",
+  intitule: "Salarié compétent désigné pour s'occuper des activités de protection et de prévention des risques",
+  articles: ["L4644-1"].filter(lu),
+  articlesSouhaites: ["L4644-1"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "salarieDesigne", libelle: "Un ou plusieurs salariés compétents sont-ils désignés pour s'occuper des activités de protection et de prévention des risques professionnels ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucun salarié compétent n'est désigné : l'employeur désigne un ou plusieurs salariés compétents pour s'occuper des activités de protection et de prévention des risques professionnels de l'entreprise. La désignation est écrite et, lorsqu'un comité existe, elle intervient après avis de celui-ci." },
+    { cle: "moyensDonnes", libelle: "Dispose-t-il du temps, de la formation et des moyens nécessaires à sa mission ?", format: "oui / non", regle: "oui",
+      motifNC: "Le salarié compétent n'a ni temps ni moyens identifiés : une désignation sans moyens est une désignation de façade, et elle se retourne contre l'employeur." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Désigner le salarié compétent en prévention et lui donner les moyens de sa mission.",
+    etapes: [
+      "Recueillir l'avis du comité social et économique lorsqu'il existe.",
+      "Écrire la désignation et la lettre de mission : périmètre, temps alloué, rattachement, moyens.",
+      "Organiser sa formation en prévention des risques.",
+      "À défaut de compétences internes, faire appel aux intervenants extérieurs prévus par l'article L. 4644-1, sans que cela dispense de la désignation.",
+    ],
+    acteur: "Direction, après avis du comité",
+    delai: "Sous deux mois",
+    risque: "L'absence de désignation est relevée en contrôle et affaiblit la démonstration d'une organisation de la prévention ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "désignation et lettre de mission du salarié compétent" },
+  },
+});
+
+item({
+  id: "SOC-SST-EPI", categorie: "santé-sécurité",
+  intitule: "Équipements de protection individuelle : fourniture gratuite, entretien et remplacement",
+  articles: ["R4323-95", "R4323-91"].filter(lu),
+  articlesSouhaites: ["R4323-95", "R4323-91"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "fournitureGratuite", libelle: "Les équipements de protection individuelle et les vêtements de travail sont-ils fournis gratuitement par l'employeur ?", format: "oui / non", regle: "oui",
+      motifNC: "Les équipements ne sont pas fournis gratuitement : ils le sont, ainsi que leur entretien et leur remplacement — aucune participation du salarié n'est admise, ni directe ni par retenue." },
+    { cle: "entretienRemplacement", libelle: "Leur entretien, leurs réparations et leur remplacement sont-ils assurés en bon état de fonctionnement et d'hygiène ?", format: "oui / non", regle: "oui",
+      motifNC: "L'entretien et le remplacement ne sont pas assurés : un équipement usé ne protège plus. Instituez un contrôle périodique et un circuit de remplacement à la demande." },
+    { cle: "portEffectif", libelle: "Le port effectif est-il contrôlé et la consigne rappelée par écrit ?", format: "oui / non", regle: "oui",
+      motifNC: "Le port effectif n'est pas contrôlé : l'employeur doit non seulement fournir, mais veiller à l'utilisation effective. Écrivez la consigne, contrôlez, et tracez le contrôle." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Assurer la fourniture gratuite, l'entretien et le port effectif des équipements de protection.",
+    etapes: [
+      "Reprendre le document unique et déterminer, par unité de travail, les équipements nécessaires — après avoir vérifié que la protection collective a bien été privilégiée.",
+      "Vérifier qu'aucune participation financière n'est demandée au salarié.",
+      "Instituer la dotation contre émargement, l'entretien et le remplacement à la demande.",
+      "Écrire la consigne de port et contrôler son application, avec trace du contrôle.",
+    ],
+    acteur: "Direction, encadrement et salarié compétent en prévention",
+    delai: "Sous deux mois",
+    risque: "Le défaut de fourniture ou de contrôle du port est retenu au titre de la faute inexcusable en cas d'accident ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "dotation d'équipements de protection et consigne de port" },
+  },
+});
+
+item({
+  id: "SOC-SST-EXTERIEURES", categorie: "santé-sécurité",
+  intitule: "Entreprises extérieures : plan de prévention, et protocole de sécurité des opérations de chargement ou de déchargement",
+  articles: ["R4512-6", "R4515-4"].filter(lu),
+  articlesSouhaites: ["R4512-6", "R4515-4"],
+  condition: p => {
+    const s = M.ouiNon(p, "entreprisesExterieures", "Des entreprises extérieures interviennent-elles dans vos locaux, ou des opérations de chargement ou de déchargement y sont-elles réalisées par un transporteur ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucune intervention d'entreprise extérieure ni opération de chargement ou de déchargement n'est déclarée : le plan de prévention et le protocole de sécurité n'ont pas d'objet." };
+    return { du: true, motif: "Des entreprises extérieures interviennent ou des opérations de chargement et de déchargement sont réalisées : l'inspection commune préalable, le plan de prévention et le protocole de sécurité s'imposent." };
+  },
+  verifs: [
+    { cle: "inspectionCommune", libelle: "Une inspection commune préalable des lieux est-elle organisée avec chaque entreprise extérieure avant le début des travaux ?", format: "oui / non", regle: "oui",
+      motifNC: "L'inspection commune préalable n'est pas organisée : c'est elle qui recueille les informations dont le plan de prévention est tiré. Sans elle, le plan n'est qu'un formulaire." },
+    { cle: "planPrevention", libelle: "Un plan de prévention écrit est-il arrêté avant le début des travaux, définissant les mesures prises par chaque entreprise ?", format: "oui / non", regle: "oui",
+      motifNC: "Le plan de prévention écrit manque : il est arrêté avant le commencement des travaux et définit les mesures prises par chaque entreprise en vue de prévenir les risques liés à l'interférence entre les activités, les installations et les matériels." },
+    { cle: "protocoleSecurite", libelle: "Les opérations de chargement ou de déchargement font-elles l'objet d'un protocole de sécurité écrit ?", format: "oui / non", regle: "oui",
+      motifNC: "Le protocole de sécurité manque : les opérations de chargement ou de déchargement font l'objet d'un document écrit, échangé entre l'entreprise d'accueil et le transporteur." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Organiser l'inspection commune, écrire le plan de prévention et le protocole de sécurité.",
+    etapes: [
+      "Recenser les entreprises extérieures intervenantes et les transporteurs habituels.",
+      "Organiser l'inspection commune préalable avec chacune, et en dresser le compte rendu.",
+      "Arrêter le plan de prévention écrit avant le début des travaux, et le tenir à jour à chaque évolution.",
+      "Établir le protocole de sécurité type des opérations de chargement et de déchargement, et l'échanger avec chaque transporteur.",
+    ],
+    acteur: "Direction, exploitation et salarié compétent en prévention",
+    delai: "Avant toute nouvelle intervention",
+    risque: "L'absence de plan de prévention ou de protocole est constatée en contrôle et pèse lourd en cas d'accident de coactivité, y compris à l'égard du salarié d'une autre entreprise ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "plan de prévention et protocole de sécurité" },
+  },
+});
+
+item({
+  id: "SOC-SST-NUIT", categorie: "santé-sécurité",
+  intitule: "Travail de nuit : recours exceptionnel, justifié, et suivi des travailleurs de nuit",
+  articles: ["L3122-1", "L3122-2"].filter(lu),
+  articlesSouhaites: ["L3122-1", "L3122-2"],
+  condition: p => {
+    const s = M.ouiNon(p, "travailNuit", "Des salariés travaillent-ils la nuit ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucun travail de nuit n'est déclaré : les obligations propres au travail de nuit n'ont pas d'objet." };
+    return { du: true, motif: "Des salariés travaillent la nuit : le recours doit être exceptionnel, justifié, mis en place par accord ou à défaut par autorisation, et les travailleurs de nuit bénéficient d'un suivi et de contreparties." };
+  },
+  verifs: [
+    { cle: "justification", libelle: "Le recours au travail de nuit est-il justifié par la nécessité d'assurer la continuité de l'activité économique ou des services d'utilité sociale, et cette justification est-elle écrite ?", format: "oui / non", regle: "oui",
+      motifNC: "La justification n'est pas écrite : le recours au travail de nuit est exceptionnel ; il prend en compte les impératifs de protection de la santé et de la sécurité et est justifié par la nécessité d'assurer la continuité de l'activité économique ou des services d'utilité sociale. Un recours non justifié est contestable dans son principe." },
+    { cle: "cadreCollectif", libelle: "Le travail de nuit est-il mis en place par un accord collectif, ou à défaut par autorisation de l'inspection du travail ?", format: "oui / non", regle: "oui",
+      motifNC: "Le cadre collectif manque : sans accord ni autorisation, le recours au travail de nuit est irrégulier, et les salariés concernés peuvent en demander la cessation et réparation." },
+    { cle: "contrepartiesSuivi", libelle: "Les contreparties et le suivi médical régulier des travailleurs de nuit sont-ils assurés ?", format: "oui / non", regle: "oui",
+      motifNC: "Les contreparties et le suivi ne sont pas assurés : le travailleur de nuit bénéficie de contreparties, notamment sous forme de repos compensateur, et d'un suivi individuel régulier de son état de santé. Les modalités relèvent de l'accord et des textes réglementaires — vérifiez-les." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Régulariser le cadre du travail de nuit et assurer contreparties et suivi.",
+    etapes: [
+      "Écrire la justification du recours, activité par activité.",
+      "Vérifier l'existence d'un accord de branche ou d'entreprise ; à défaut, engager la négociation ou solliciter l'autorisation.",
+      "Identifier les travailleurs de nuit au sens de la définition légale, et vérifier leurs contreparties.",
+      "Organiser le suivi médical régulier avec le service de prévention et de santé au travail.",
+    ],
+    acteur: "Direction, avec les organisations syndicales et le service de santé au travail",
+    delai: "Sous trois mois",
+    risque: "Un recours irrégulier au travail de nuit ouvre des dommages-intérêts et peut être interrompu en référé ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "note de justification et suivi du travail de nuit" },
+  },
+});
+
+item({
+  id: "SOC-SST-JEUNES", categorie: "santé-sécurité",
+  intitule: "Jeunes travailleurs de moins de dix-huit ans : travaux interdits et procédure de dérogation",
+  articles: ["L4153-8", "L4153-9", "R4153-40"].filter(lu),
+  articlesSouhaites: ["L4153-8", "L4153-9", "R4153-40"],
+  condition: p => {
+    const s = M.ouiNon(p, "jeunesTravailleurs", "L'entreprise emploie-t-elle ou accueille-t-elle des travailleurs de moins de dix-huit ans (apprentis, stagiaires, jeunes en contrat) ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucun travailleur de moins de dix-huit ans n'est déclaré : les règles propres aux jeunes travailleurs n'ont pas d'objet." };
+    return { du: true, motif: "L'entreprise emploie ou accueille des travailleurs de moins de dix-huit ans : l'interdiction des travaux les exposant à des risques pour leur santé ou leur sécurité s'applique, et toute dérogation suit une procédure encadrée." };
+  },
+  verifs: [
+    { cle: "travauxRecenses", libelle: "Les travaux confiés aux jeunes de moins de dix-huit ans ont-ils été confrontés à la liste des travaux interdits ?", format: "oui / non", regle: "oui",
+      motifNC: "La confrontation n'a pas été faite : il est interdit d'employer des travailleurs de moins de dix-huit ans à certaines catégories de travaux les exposant à des risques pour leur santé, leur sécurité, leur moralité ou excédant leurs forces. Faites l'inventaire poste par poste." },
+    { cle: "derogationRegulieres", libelle: "Lorsque des travaux réglementés sont confiés, la procédure de dérogation est-elle suivie (avis médical, information de l'inspection du travail, encadrement, formation) ?", format: "oui / non", regle: "oui",
+      motifNC: "La procédure de dérogation n'est pas suivie : la dérogation ne se présume pas et ne s'obtient pas oralement. Reprenez la procédure réglementaire avant toute affectation." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Recenser les travaux confiés aux jeunes et régulariser les dérogations.",
+    etapes: [
+      "Recenser les jeunes accueillis et les tâches réellement confiées, tuteurs compris.",
+      "Confronter ces tâches aux catégories de travaux interdits et réglementés.",
+      "Suspendre immédiatement les affectations irrégulières.",
+      "Engager, pour les travaux réglementés qui restent nécessaires, la procédure de dérogation avec l'avis médical et l'information de l'inspection du travail.",
+    ],
+    acteur: "Direction, tuteurs et service de prévention et de santé au travail",
+    delai: "Recensement immédiat",
+    risque: "L'accident d'un mineur sur un travail interdit engage la responsabilité de l'employeur au plus haut niveau ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "recensement des travaux confiés aux jeunes travailleurs" },
+  },
+});
+
+item({
+  id: "SOC-SST-LOCAUX", categorie: "santé-sécurité",
+  intitule: "Locaux : sanitaires, vestiaires et restauration",
+  articles: ["R4228-10", "R4228-19"].filter(lu),
+  articlesSouhaites: ["R4228-10", "R4228-19"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "sanitaires", libelle: "Les cabinets d'aisances, lavabos et vestiaires sont-ils en nombre suffisant, séparés pour le personnel féminin et masculin, et tenus en état de propreté ?", format: "oui / non", regle: "oui",
+      motifNC: "Les installations sanitaires sont insuffisantes ou ne sont pas conformes : le nombre, la séparation et l'entretien sont réglementés, et le constat se fait à l'œil nu lors d'un contrôle." },
+    { cle: "restauration", libelle: "L'interdiction de prendre les repas dans les locaux affectés au travail est-elle respectée, et un emplacement ou un local de restauration est-il mis à disposition ?", format: "oui / non", regle: "oui",
+      motifNC: "Les salariés prennent leurs repas dans les locaux de travail sans emplacement dédié : la mise à disposition d'un emplacement ou d'un local de restauration est réglementée, et les conditions dépendent du nombre de salariés souhaitant y prendre leur repas — vérifiez le seuil applicable dans le texte." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Mettre les installations sanitaires et de restauration en conformité.",
+    etapes: [
+      "Faire l'état des lieux des sanitaires, vestiaires et lavabos, site par site.",
+      "Vérifier le nombre, la séparation et l'entretien, et programmer les travaux nécessaires.",
+      "Déterminer le nombre de salariés souhaitant prendre leur repas sur place et en tirer les conséquences sur le local ou l'emplacement de restauration.",
+      "Consulter le comité social et économique sur les aménagements projetés.",
+    ],
+    acteur: "Services généraux, avec le comité social et économique",
+    delai: "État des lieux sous un mois",
+    risque: "Les installations sanitaires et de restauration sont un point de contrôle immédiat de l'inspection du travail, susceptible de mise en demeure ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "état des lieux des installations sanitaires et de restauration" },
+  },
+});
+
+item({
+  id: "SOC-SST-ECRAN", categorie: "santé-sécurité",
+  intitule: "Travail sur écran de visualisation : information, formation et examen des yeux",
+  articles: ["R4542-16"].filter(lu),
+  articlesSouhaites: ["R4542-16"],
+  condition: p => {
+    const s = M.ouiNon(p, "postesEcran", "Des salariés travaillent-ils habituellement sur écran de visualisation ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucun poste sur écran n'est déclaré : les obligations propres au travail sur écran n'ont pas d'objet." };
+    return { du: true, motif: "Des salariés travaillent habituellement sur écran : l'information, la formation à l'utilisation du poste et l'examen approprié des yeux et de la vue sont dus." };
+  },
+  verifs: [
+    { cle: "formationPoste", libelle: "Les salariés reçoivent-ils une information et une formation sur les modalités d'utilisation de l'écran et de l'équipement, avant leur première affectation et à chaque modification importante du poste ?", format: "oui / non", regle: "oui",
+      motifNC: "L'information et la formation à l'utilisation du poste sur écran ne sont pas dispensées : elles sont dues avant la première affectation et lors de toute modification importante du poste." },
+    { cle: "examenYeux", libelle: "Un examen approprié des yeux et de la vue est-il proposé aux salariés concernés ?", format: "oui / non", regle: "oui",
+      motifNC: "L'examen des yeux et de la vue n'est pas organisé : il se conduit avec le service de prévention et de santé au travail. Sollicitez-le par écrit." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Informer, former et faire examiner les salariés sur écran.",
+    etapes: [
+      "Recenser les postes sur écran et les salariés qui les occupent habituellement.",
+      "Établir un support d'information sur l'aménagement du poste, les pauses et les postures, et le remettre contre émargement.",
+      "Solliciter le service de prévention et de santé au travail pour l'examen des yeux et de la vue.",
+      "Reprendre le poste après chaque modification importante.",
+    ],
+    acteur: "Ressources humaines et service de prévention et de santé au travail",
+    delai: "Sous trois mois",
+    risque: "Les troubles liés au travail sur écran alimentent les demandes au titre du manquement à l'obligation de sécurité ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "information et suivi des postes sur écran" },
+  },
+});
+
+item({
+  id: "SOC-SST-CHIMIQUE", categorie: "santé-sécurité",
+  intitule: "Agents chimiques : fiches de données de sécurité et notice de poste",
+  articles: ["R4412-38", "R4412-39"].filter(lu),
+  articlesSouhaites: ["R4412-38", "R4412-39"],
+  condition: p => {
+    const s = M.ouiNon(p, "agentsChimiques", "Des agents chimiques dangereux (produits d'entretien industriels, solvants, carburants, peintures, gaz) sont-ils utilisés ou stockés ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucun agent chimique dangereux n'est déclaré : les obligations propres au risque chimique n'ont pas d'objet. Vérifiez tout de même les produits d'entretien : ils en relèvent souvent." };
+    return { du: true, motif: "Des agents chimiques dangereux sont utilisés ou stockés : les fiches de données de sécurité et la notice de poste sont dues, et l'évaluation du risque chimique s'impose." };
+  },
+  verifs: [
+    { cle: "fdsRassemblees", libelle: "Les fiches de données de sécurité de tous les produits présents sont-elles rassemblées, à jour et accessibles ?", format: "oui / non", regle: "oui",
+      motifNC: "Les fiches de données de sécurité ne sont pas rassemblées ou ne sont pas à jour : elles sont fournies par le fournisseur, elles conditionnent l'évaluation du risque, et leur absence rend cette évaluation impossible à démontrer." },
+    { cle: "noticePoste", libelle: "Une notice de poste est-elle établie pour chaque poste exposé, informant des risques et des précautions à prendre ?", format: "oui / non", regle: "oui",
+      motifNC: "La notice de poste n'est pas établie : l'employeur établit une notice pour chaque poste ou situation de travail exposant à des agents chimiques dangereux, destinée à informer des risques et des dispositions prises pour les éviter." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Rassembler les fiches de données de sécurité et établir les notices de poste.",
+    etapes: [
+      "Inventorier tous les produits présents, y compris ceux des services généraux et de l'entretien.",
+      "Réclamer aux fournisseurs les fiches de données de sécurité manquantes ou obsolètes.",
+      "Établir une notice par poste exposé, après avis du médecin du travail, et la remettre aux salariés.",
+      "Reporter les risques chimiques dans le document unique et, le cas échéant, dans l'annexe des facteurs de risques.",
+    ],
+    acteur: "Salarié compétent en prévention, avec le médecin du travail",
+    delai: "Inventaire sous un mois",
+    risque: "L'exposition chimique non évaluée est le terrain d'élection de la faute inexcusable et des maladies professionnelles ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "inventaire des produits et notice de poste" },
+  },
+});
+
+item({
+  id: "SOC-SST-DUERP-ANNEXE", categorie: "santé-sécurité",
+  intitule: "Annexe du document unique : données collectives d'exposition et proportion de salariés exposés",
+  articles: ["R4121-1-1"].filter(lu),
+  articlesSouhaites: ["R4121-1-1"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "annexeEtablie", libelle: "L'annexe du document unique consignant les données collectives d'exposition aux facteurs de risques professionnels est-elle établie ?", format: "oui / non", regle: "oui",
+      motifNC: "L'annexe du document unique n'est pas établie : elle consigne les données collectives utiles à l'évaluation des expositions individuelles aux facteurs de risques professionnels, et elle est distincte du corps du document." },
+    { cle: "proportionChiffree", libelle: "La proportion de salariés exposés au-delà des seuils y est-elle chiffrée et actualisée ?", format: "oui / non", regle: "oui",
+      motifNC: "La proportion de salariés exposés n'est pas chiffrée : c'est précisément ce que l'annexe doit porter, et c'est ce qui est confronté à vos déclarations sociales." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Établir l'annexe du document unique et y chiffrer les expositions.",
+    etapes: [
+      "Identifier, par unité de travail, les facteurs de risques professionnels présents.",
+      "Mesurer ou estimer les expositions et déterminer la proportion de salariés au-delà des seuils.",
+      "Consigner ces données en annexe du document unique, et les actualiser à chaque mise à jour.",
+      "Rapprocher l'annexe de vos déclarations sociales : un écart entre les deux se remarque.",
+    ],
+    acteur: "Salarié compétent en prévention, avec la paie et le service de santé au travail",
+    delai: "Sous trois mois",
+    risque: "Une annexe absente ou en écart avec les déclarations expose à un redressement au titre de la prévention de l'exposition et fragilise la défense en cas de maladie professionnelle ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "annexe du document unique — données collectives d'exposition" },
+  },
+});
+
+/* ── suite de « formation et entretiens » ──────────────────────────── */
+
+item({
+  id: "SOC-FOR-CONTRIBUTION", categorie: "formation et entretiens",
+  intitule: "Contribution au développement de la formation professionnelle et de l'alternance",
+  articles: ["L6131-1"].filter(lu),
+  articlesSouhaites: ["L6131-1"],
+  condition: toutEmployeur,
+  verifs: [
+    { cle: "contributionVersee", libelle: "Les contributions dues au titre de la formation professionnelle et de l'alternance sont-elles déclarées et versées aux échéances ?", format: "oui / non", regle: "oui",
+      motifNC: "Les contributions ne sont pas déclarées ou pas versées : les employeurs concourent au développement de la formation professionnelle et de l'alternance par le financement direct d'actions et par le versement d'une contribution. Le recouvrement est contrôlé, et le retard se majore." },
+    { cle: "assietteVerifiee", libelle: "L'assiette et les taux appliqués ont-ils été vérifiés avec votre expert-comptable au regard de l'effectif ?", format: "oui / non", regle: "oui",
+      motifNC: "L'assiette et les taux n'ont pas été vérifiés : ils varient selon l'effectif et la nature des contrats. Faites-les revoir — une erreur d'assiette se répète mois après mois." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Vérifier l'assiette, les taux et le versement des contributions formation et alternance.",
+    etapes: [
+      "Rapprocher l'effectif retenu pour les contributions de l'effectif réel.",
+      "Vérifier avec l'expert-comptable les taux appliqués et les éventuelles contributions supplémentaires.",
+      "Contrôler les versements des douze derniers mois et régulariser les écarts.",
+    ],
+    acteur: "Paie et expert-comptable",
+    delai: "Sous deux mois",
+    risque: "Un défaut ou une insuffisance de versement se redresse avec majorations ; faites chiffrer par votre expert-comptable.",
+    modele: { page: "documents.html", nom: "note de contrôle des contributions formation" },
+  },
+});
+
+item({
+  id: "SOC-FOR-ABONDEMENT", categorie: "formation et entretiens",
+  intitule: "Abondement correctif du compte personnel de formation (entreprise d'au moins cinquante salariés)",
+  articles: ["L6323-13"].filter(lu),
+  articlesSouhaites: ["L6323-13"],
+  condition: p => {
+    const s = auSeuil(50)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " L'abondement correctif du compte personnel de formation vise les entreprises d'au moins cinquante salariés." };
+    return { du: true, motif: s.motif + " Le salarié qui n'a pas bénéficié des entretiens prévus et d'au moins une formation autre que celle conditionnant l'exercice de son activité ouvre droit à un abondement correctif de son compte personnel de formation." };
+  },
+  verifs: [
+    { cle: "etatDesLieuxFait", libelle: "L'état des lieux récapitulatif du parcours professionnel a-t-il été fait pour chaque salarié à l'échéance des six ans ?", format: "oui / non", regle: "oui",
+      motifNC: "L'état des lieux récapitulatif n'est pas fait : c'est lui qui déclenche, ou écarte, l'abondement correctif. Sans lui, l'entreprise ne sait pas ce qu'elle doit." },
+    { cle: "abondementVerse", libelle: "L'abondement correctif a-t-il été versé pour les salariés qui y ont droit ?", format: "oui / non", regle: "oui",
+      motifNC: "L'abondement correctif n'a pas été versé : il est dû lorsque les conditions de l'article L. 6323-13 sont réunies, et son défaut est régularisé auprès de l'organisme, avec les suites financières que cela comporte." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Faire l'état des lieux à six ans et verser l'abondement correctif dû.",
+    etapes: [
+      "Recenser les salariés atteignant six ans de présence et vérifier la tenue des entretiens.",
+      "Vérifier, pour chacun, s'il a suivi au moins une formation autre que celle conditionnant l'exercice de son activité.",
+      "Établir l'état des lieux écrit et en remettre une copie au salarié.",
+      "Déclarer et verser l'abondement correctif dû, avec l'expert-comptable.",
+    ],
+    acteur: "Ressources humaines et paie",
+    delai: "À chaque échéance de six ans",
+    risque: "L'abondement non versé se régularise avec pénalité, et le défaut d'entretien alimente les demandes de dommages-intérêts pour manquement à l'obligation d'employabilité ; faites chiffrer par votre conseil.",
+    modele: { page: "documents.html", nom: "état des lieux récapitulatif à six ans" },
+  },
+});
+
+/* ── suite de « instances » : la section syndicale ─────────────────── */
+
+item({
+  id: "SOC-INS-SECTION-SYNDICALE", categorie: "instances",
+  intitule: "Moyens de la section syndicale : affichage des communications, diffusion des tracts, local",
+  articles: ["L2142-3", "L2142-4", "L2142-8"].filter(lu),
+  articlesSouhaites: ["L2142-3", "L2142-4", "L2142-8"],
+  condition: p => {
+    const s = M.ouiNon(p, "sectionSyndicale", "Une section syndicale d'organisation représentative est-elle constituée ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucune section syndicale n'est déclarée : les moyens qui lui sont dus n'ont pas d'objet. Ils naîtront le jour où une section sera constituée." };
+    return { du: true, motif: "Une section syndicale est constituée : les panneaux d'affichage distincts, la libre diffusion des publications et tracts et, selon l'effectif, la mise à disposition d'un local sont dus." };
+  },
+  verifs: [
+    { cle: "panneaux", libelle: "Des panneaux d'affichage distincts de ceux du comité social et économique sont-ils mis à la disposition de chaque section syndicale ?", format: "oui / non", regle: "oui",
+      motifNC: "Les panneaux syndicaux manquent, ou ne sont pas distincts de ceux du comité : l'affichage des communications syndicales s'effectue librement sur des panneaux réservés à cet usage, distincts de ceux affectés aux communications des délégués du personnel et du comité." },
+    { cle: "tracts", libelle: "La diffusion des publications et tracts est-elle libre dans les conditions prévues par la loi ?", format: "oui / non", regle: "oui",
+      motifNC: "La diffusion des publications et tracts est entravée : elle peut être librement opérée dans l'enceinte de l'entreprise, aux heures d'entrée et de sortie du travail. Une entrave se poursuit comme telle." },
+    { cle: "local", libelle: "Le local dû selon l'effectif est-il mis à disposition (local commun à partir de deux cents salariés, local propre à chaque section représentative à partir de mille) ?", format: "oui / non", regle: "oui",
+      motifNC: "Le local dû n'est pas mis à disposition : dans les entreprises ou établissements d'au moins deux cents salariés, l'employeur met un local commun à la disposition des sections syndicales ; dans celles d'au moins mille salariés, un local convenable, aménagé et doté du matériel nécessaire, à la disposition de chaque section syndicale d'organisation représentative." },
+  ],
+  plan: {
+    priorite: 2,
+    action: "Mettre à disposition les moyens dus à la section syndicale.",
+    etapes: [
+      "Installer les panneaux d'affichage réservés, distincts de ceux du comité, et en informer les organisations.",
+      "Écrire, avec les organisations, les modalités pratiques de diffusion des tracts, dans le respect de la liberté qu'elles tiennent de la loi.",
+      "Selon l'effectif, affecter le local dû, l'aménager et le doter du matériel nécessaire.",
+      "Formaliser l'accord ou la décision par un écrit remis aux délégués syndicaux.",
+    ],
+    acteur: "Direction, avec les délégués syndicaux",
+    delai: "Sous un mois",
+    risque: "Le refus des moyens dus est constitutif d'entrave, poursuivie comme telle ; faites apprécier par votre conseil.",
+    modele: { page: "documents.html", nom: "note de mise à disposition des moyens syndicaux" },
+  },
+});
+
+item({
+  id: "SOC-INS-PROTEGES", categorie: "instances",
+  intitule: "Salariés protégés : autorisation de l'inspection du travail avant toute rupture",
+  articles: ["L2411-3"].filter(lu),
+  articlesSouhaites: ["L2411-3"],
+  module: { nom: "comité social et économique", page: "audit-cse.html" },
+  condition: p => {
+    const s = M.ouiNon(p, "sectionSyndicale", "Une section syndicale d'organisation représentative est-elle constituée ?");
+    if (!s.connu) return { du: null, motif: s.motif };
+    if (!s.vrai) return { du: false, motif: "Aucune section syndicale n'est déclarée : la protection propre au délégué syndical n'a pas d'objet ici. Attention : les élus du comité sont protégés indépendamment de ce point — l'audit du comité le traite." };
+    return { du: true, motif: "Une section syndicale est constituée : le licenciement d'un délégué syndical ne peut intervenir qu'après autorisation de l'inspecteur du travail. La protection des élus du comité relève, elle, du module dédié." };
+  },
+  verifs: [
+    { cle: "listeTenue", libelle: "La liste à jour des salariés protégés est-elle tenue, avec la date de fin de la période de protection de chacun ?", format: "oui / non", regle: "oui",
+      motifNC: "La liste des salariés protégés n'est pas tenue : c'est elle qui évite la rupture irrégulière. Elle inclut les mandats en cours, les anciens mandats encore protégés et les candidats." },
+    { cle: "procedureConnue", libelle: "La procédure d'autorisation préalable est-elle connue de ceux qui décident des ruptures ?", format: "oui / non", regle: "oui",
+      motifNC: "La procédure d'autorisation n'est pas connue : une rupture prononcée sans autorisation est nulle, et la réintégration peut être demandée avec les salaires de la période d'éviction." },
+  ],
+  plan: {
+    priorite: 1,
+    action: "Tenir la liste des salariés protégés et faire connaître la procédure d'autorisation.",
+    etapes: [
+      "Établir la liste des mandats en cours, des anciens mandats encore protégés et des candidats, avec les dates de fin de protection.",
+      "Instituer un contrôle obligatoire de cette liste avant toute rupture, quelle qu'en soit la forme.",
+      "Écrire la procédure : consultation du comité lorsqu'elle est requise, demande d'autorisation, délais, décision.",
+      "Conduire l'audit détaillé de la protection des élus dans le module « comité social et économique ».",
+    ],
+    acteur: "Direction et ressources humaines, avec le conseil de l'entreprise",
+    delai: "Liste sous quinze jours",
+    risque: "Une rupture sans autorisation est nulle : réintégration et salaires de la période d'éviction, outre les suites pénales de l'entrave. Faites chiffrer par votre conseil.",
+    modele: { page: "audit-cse.html", nom: "module d'audit du comité (protection des élus)" },
+  },
+});
+
+/* ── suite de « négociations » ─────────────────────────────────────── */
+
+item({
+  id: "SOC-NEG-DECONNEXION", categorie: "négociations",
+  intitule: "Droit à la déconnexion : accord, ou à défaut charte élaborée après avis du comité",
+  articles: ["L2242-17"].filter(lu),
+  articlesSouhaites: ["L2242-17"],
+  module: { nom: "négociation obligatoire (NAO)", page: "audit-nao.html" },
+  condition: p => {
+    const s = auSeuil(50)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " Le droit à la déconnexion figure parmi les thèmes de la négociation obligatoire, laquelle suppose un effectif d'au moins cinquante salariés et une section syndicale d'organisation représentative." };
+    const d = M.ouiNon(p, "sectionSyndicale", "Une section syndicale d'organisation représentative est-elle constituée ?");
+    if (!d.connu) return { du: null, motif: d.motif };
+    if (!d.vrai) return { du: false, motif: "Aucune section syndicale d'organisation représentative n'est déclarée : la négociation obligatoire n'est pas due, et avec elle le thème de la déconnexion. Rien n'interdit d'établir une charte." };
+    return { du: true, motif: s.motif + " Une section syndicale est constituée : le droit à la déconnexion entre dans la négociation obligatoire ; à défaut d'accord, l'employeur élabore une charte après avis du comité." };
+  },
+  verifs: [
+    { cle: "accordOuCharte", libelle: "Un accord traite-t-il des modalités du plein exercice du droit à la déconnexion, ou une charte a-t-elle été élaborée après avis du comité ?", format: "oui / non", regle: "oui",
+      motifNC: "Ni accord ni charte : le thème doit être traité dans la négociation obligatoire ; à défaut d'accord, l'employeur élabore une charte, après avis du comité social et économique, définissant ces modalités et prévoyant des actions de formation et de sensibilisation." },
+    { cle: "actionsSensibilisation", libelle: "Des actions de formation et de sensibilisation à un usage raisonnable des outils numériques sont-elles prévues ?", format: "oui / non", regle: "oui",
+      motifNC: "Aucune action de formation ou de sensibilisation n'est prévue : la charte doit en prévoir, à destination des salariés et du personnel d'encadrement et de direction." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Traiter le droit à la déconnexion dans la négociation, ou à défaut par charte.",
+    etapes: [
+      "Porter le thème à l'ordre du jour de la négociation obligatoire.",
+      "À défaut d'accord, préparer une charte : plages de déconnexion, règles d'usage de la messagerie, articulation avec le forfait en jours.",
+      "Recueillir l'avis du comité social et économique sur la charte.",
+      "Programmer les actions de formation et de sensibilisation, encadrement compris.",
+    ],
+    acteur: "Direction, avec les délégués syndicaux et le comité",
+    delai: "À la prochaine négociation obligatoire",
+    risque: "L'absence de traitement du thème s'ajoute au grief de manquement à l'obligation de sécurité en cas de contentieux sur la charge de travail ; faites apprécier par votre conseil.",
+    modele: { page: "audit-nao.html", nom: "module d'audit de la négociation obligatoire" },
+  },
+});
+
+item({
+  id: "SOC-NEG-PARTAGE-VALEUR", categorie: "négociations",
+  intitule: "Négociation sur les conséquences d'une augmentation exceptionnelle du bénéfice",
+  articles: ["L3346-1"].filter(lu),
+  articlesSouhaites: ["L3346-1"],
+  module: { nom: "négociation obligatoire (NAO)", page: "audit-nao.html" },
+  condition: p => {
+    const s = auSeuil(50)(p);
+    if (s.du === null) return s;
+    if (!s.du) return { du: false, motif: s.motif + " L'obligation d'engager une négociation sur les conséquences d'une augmentation exceptionnelle du bénéfice vise les entreprises tenues de mettre en place un régime de participation." };
+    const d = M.ouiNon(p, "sectionSyndicale", "Une section syndicale d'organisation représentative est-elle constituée ?");
+    if (!d.connu) return { du: null, motif: d.motif };
+    if (!d.vrai) return { du: false, motif: "Aucune section syndicale d'organisation représentative n'est déclarée : la négociation prévue par l'article L. 3346-1 suppose la présence d'un délégué syndical. Faites vérifier votre situation par votre conseil." };
+    return { du: true, motif: s.motif + " L'entreprise est tenue de mettre en place un régime de participation et un délégué syndical est présent : la négociation sur les conséquences d'une augmentation exceptionnelle du bénéfice est due." };
+  },
+  verifs: [
+    { cle: "definitionNegociee", libelle: "La définition de l'augmentation exceptionnelle du bénéfice a-t-elle été négociée, et les conséquences de son constat prévues ?", format: "oui / non", regle: "oui",
+      motifNC: "La négociation n'a pas été engagée : l'entreprise tenue de mettre en place un régime de participation doit engager une négociation sur la définition d'une augmentation exceptionnelle de son bénéfice et sur les conséquences à en tirer pour les salariés." },
+    { cle: "traceNegociation", libelle: "La négociation est-elle tracée par un accord ou un procès-verbal de désaccord ?", format: "oui / non", regle: "oui",
+      motifNC: "La négociation n'est pas tracée : accord ou procès-verbal de désaccord, il faut un écrit — c'est lui qui prouve que l'obligation a été remplie." },
+  ],
+  plan: {
+    priorite: 3,
+    action: "Engager la négociation sur les conséquences d'une augmentation exceptionnelle du bénéfice.",
+    etapes: [
+      "Vérifier avec l'expert-comptable si l'entreprise est tenue de mettre en place un régime de participation.",
+      "Convoquer les délégués syndicaux et porter le thème à l'ordre du jour.",
+      "Négocier la définition de l'augmentation exceptionnelle et les conséquences pour les salariés.",
+      "Conclure par un accord ou, à défaut, par un procès-verbal de désaccord, et le déposer.",
+    ],
+    acteur: "Direction, avec les délégués syndicaux et l'expert-comptable",
+    delai: "À rapprocher du calendrier de la négociation obligatoire",
+    risque: "L'omission d'un thème de négociation obligatoire expose aux mêmes suites que l'absence de négociation ; l'audit détaillé se fait dans le module « négociation obligatoire ».",
+    modele: { page: "audit-nao.html", nom: "module d'audit de la négociation obligatoire" },
+  },
+});
+
 /* ══════════════════ la régularisation : obligation → parcours → modèle ══
 
    Une obligation manquante n'est utile au client que si l'application lui dit
@@ -1520,6 +3061,9 @@ const PARCOURS_NOMS = {
   bdese: "Constituer la base de données (BDESE)",
   index: "Calculer et publier l'index de l'égalité professionnelle",
   entretiens: "Organiser les entretiens de parcours professionnel",
+  embauche: "Embaucher : les formalités obligatoires",
+  conges: "Organiser les congés payés",
+  findecontrat: "Établir les documents de fin de contrat",
 };
 
 const LIAISONS = {
@@ -1572,6 +3116,64 @@ const LIAISONS = {
   "SOC-EPA-SANTE":               { parcours: null,           document: null },
   "SOC-EPA-PREVOYANCE-CADRES":   { parcours: null,           document: null },
   "SOC-CCN-OBLIGATIONS":         { parcours: null,           document: null },
+  /* durée du travail et repos */
+  "SOC-DUR-MAXIMA":              { parcours: null,          document: "note-rh" },
+  "SOC-DUR-PAUSE":               { parcours: null,          document: "note-rh" },
+  "SOC-DUR-REPOS":               { parcours: null,          document: "note-rh" },
+  "SOC-DUR-CONTINGENT":          { parcours: null,          document: "note-rh" },
+  "SOC-DUR-FORFAIT":             { parcours: null,          document: "note-rh" },
+  "SOC-DUR-TPARTIEL":            { parcours: null,          document: "note-rh" },
+  "SOC-DUR-PAIE":                { parcours: null,          document: "note-rh" },
+  /* congés et jours */
+  "SOC-CON-ACQUISITION":         { parcours: "conges",       document: "note-rh" },
+  "SOC-CON-PERIODE":             { parcours: "conges",       document: "note-rh" },
+  "SOC-CON-ORDRE":               { parcours: "conges",       document: "note-rh" },
+  "SOC-CON-SOLIDARITE":          { parcours: "conges",       document: "note-rh" },
+  /* embauche et contrat */
+  "SOC-EMB-DPAE":                { parcours: "embauche",     document: "note-rh" },
+  "SOC-EMB-INFORMATION":         { parcours: "embauche",     document: "note-rh" },
+  "SOC-EMB-ESSAI":               { parcours: "embauche",     document: "note-rh" },
+  "SOC-EMB-RECRUTEMENT":         { parcours: "embauche",     document: "note-rh" },
+  "SOC-EMB-CDD":                 { parcours: "embauche",     document: "note-rh" },
+  /* fin du contrat */
+  "SOC-FIN-DOCUMENTS":           { parcours: "findecontrat", document: "note-rh" },
+  "SOC-FIN-LICENCIEMENT":        { parcours: "sanction",     document: "convocation-sanction" },
+  "SOC-FIN-RUPTURE-CONV":        { parcours: "findecontrat", document: "note-rh" },
+  "SOC-FIN-INAPTITUDE":          { parcours: "findecontrat", document: "note-rh" },
+  /* égalité et non-discrimination */
+  "SOC-EGA-REMUNERATION":        { parcours: "index",        document: "note-rh" },
+  "SOC-EGA-DISCRIMINATION":      { parcours: null,           document: "note-rh" },
+  "SOC-EGA-SEXISME":             { parcours: "affichages",   document: "signalement-harcelement" },
+  "SOC-EGA-HANDICAP":            { parcours: null,           document: "note-rh" },
+  "SOC-EGA-REFERENT-HANDICAP":   { parcours: null,           document: "note-rh" },
+  "SOC-EGA-RECRUTEURS":          { parcours: null,           document: "note-rh" },
+  "SOC-EGA-ALERTE":              { parcours: null,           document: "alerte" },
+  /* santé-sécurité (suite) */
+  "SOC-SST-INFO-RISQUES":        { parcours: "duerp",        document: "note-rh" },
+  "SOC-SST-FORMATION-RENFORCEE": { parcours: "duerp",        document: "note-rh" },
+  "SOC-SST-SECOURS":             { parcours: "affichages",   document: "note-rh" },
+  "SOC-SST-INCENDIE-MOYENS":     { parcours: "affichages",   document: "note-rh" },
+  "SOC-SST-ACCIDENT-GRAVE":      { parcours: null,           document: "note-rh" },
+  "SOC-SST-SUIVI-CONTRAT":       { parcours: null,           document: "note-rh" },
+  "SOC-SST-FICHE-ENTREPRISE":    { parcours: null,           document: "note-rh" },
+  "SOC-SST-SALARIE-COMPETENT":   { parcours: "duerp",        document: "note-rh" },
+  "SOC-SST-EPI":                 { parcours: "duerp",        document: "note-rh" },
+  "SOC-SST-EXTERIEURES":         { parcours: null,           document: "note-rh" },
+  "SOC-SST-NUIT":                { parcours: null,           document: "note-rh" },
+  "SOC-SST-JEUNES":              { parcours: null,           document: "note-rh" },
+  "SOC-SST-LOCAUX":              { parcours: null,           document: "note-rh" },
+  "SOC-SST-ECRAN":               { parcours: null,           document: "note-rh" },
+  "SOC-SST-CHIMIQUE":            { parcours: "duerp",        document: "note-rh" },
+  "SOC-SST-DUERP-ANNEXE":        { parcours: "duerp",        document: "note-rh" },
+  /* formation et entretiens (suite) */
+  "SOC-FOR-CONTRIBUTION":        { parcours: null,           document: "note-rh" },
+  "SOC-FOR-ABONDEMENT":          { parcours: "entretiens",   document: "note-rh" },
+  /* instances (suite) */
+  "SOC-INS-SECTION-SYNDICALE":   { parcours: null,           document: "note-rh" },
+  "SOC-INS-PROTEGES":            { parcours: null,           document: "note-rh" },
+  /* négociations (suite) */
+  "SOC-NEG-DECONNEXION":         { parcours: "nao",          document: "note-rh" },
+  "SOC-NEG-PARTAGE-VALEUR":      { parcours: "nao",          document: "pv-desaccord" },
 };
 
 /* ─── l'outil de Juris Expert qui produit le document final ───────────────
@@ -1643,6 +3245,64 @@ const JX = {
   "SOC-EPA-SANTE":               null,
   "SOC-EPA-PREVOYANCE-CADRES":   null,
   "SOC-CCN-OBLIGATIONS":         null,
+  /* durée du travail et repos */
+  "SOC-DUR-MAXIMA":              null,
+  "SOC-DUR-PAUSE":               null,
+  "SOC-DUR-REPOS":               null,
+  "SOC-DUR-CONTINGENT":          null,
+  "SOC-DUR-FORFAIT":             null,
+  "SOC-DUR-TPARTIEL":            null,
+  "SOC-DUR-PAIE":                null,
+  /* congés et jours */
+  "SOC-CON-ACQUISITION":         null,
+  "SOC-CON-PERIODE":             null,
+  "SOC-CON-ORDRE":               null,
+  "SOC-CON-SOLIDARITE":          null,
+  /* embauche et contrat */
+  "SOC-EMB-DPAE":                "embauche",
+  "SOC-EMB-INFORMATION":         "embauche",
+  "SOC-EMB-ESSAI":               "embauche",
+  "SOC-EMB-RECRUTEMENT":         "embauche",
+  "SOC-EMB-CDD":                 "embauche",
+  /* fin du contrat */
+  "SOC-FIN-DOCUMENTS":           "discipline",
+  "SOC-FIN-LICENCIEMENT":        "discipline",
+  "SOC-FIN-RUPTURE-CONV":        "discipline",
+  "SOC-FIN-INAPTITUDE":          null,
+  /* égalité et non-discrimination */
+  "SOC-EGA-REMUNERATION":        null,
+  "SOC-EGA-DISCRIMINATION":      null,
+  "SOC-EGA-SEXISME":             "harcelement",
+  "SOC-EGA-HANDICAP":            null,
+  "SOC-EGA-REFERENT-HANDICAP":   null,
+  "SOC-EGA-RECRUTEURS":          null,
+  "SOC-EGA-ALERTE":              null,
+  /* santé-sécurité (suite) */
+  "SOC-SST-INFO-RISQUES":        null,
+  "SOC-SST-FORMATION-RENFORCEE": null,
+  "SOC-SST-SECOURS":             null,
+  "SOC-SST-INCENDIE-MOYENS":     null,
+  "SOC-SST-ACCIDENT-GRAVE":      null,
+  "SOC-SST-SUIVI-CONTRAT":       null,
+  "SOC-SST-FICHE-ENTREPRISE":    null,
+  "SOC-SST-SALARIE-COMPETENT":   null,
+  "SOC-SST-EPI":                 null,
+  "SOC-SST-EXTERIEURES":         null,
+  "SOC-SST-NUIT":                null,
+  "SOC-SST-JEUNES":              null,
+  "SOC-SST-LOCAUX":              null,
+  "SOC-SST-ECRAN":               null,
+  "SOC-SST-CHIMIQUE":            null,
+  "SOC-SST-DUERP-ANNEXE":        null,
+  /* formation et entretiens (suite) */
+  "SOC-FOR-CONTRIBUTION":        null,
+  "SOC-FOR-ABONDEMENT":          null,
+  /* instances (suite) */
+  "SOC-INS-SECTION-SYNDICALE":   null,
+  "SOC-INS-PROTEGES":            null,
+  /* négociations (suite) */
+  "SOC-NEG-DECONNEXION":         "nego",
+  "SOC-NEG-PARTAGE-VALEUR":      "nego",
 };
 
 /* ─── la garde finale : aucun item ne cite un article non lu ─── */
@@ -3188,6 +4848,1109 @@ const MODELES = {
         "Chaque ligne de la grille, vérifiée sur le texte conventionnel — les états ci-dessus sont fictifs",
         "Le chiffrage des rappels et la période de reprise (la prescription se vérifie avec votre conseil)"])],
   }),
+
+  /* ──────────────────────────────── durée du travail et repos ───────── */
+
+  "SOC-DUR-MAXIMA": p => ({
+    titre: "Tableau de contrôle des durées maximales de travail",
+    lignes: [...entete(p, "contrôle des durées maximales (L. 3121-18, L. 3121-20, L. 3121-22)"),
+      h("1. Les plafonds contrôlés"),
+      puce("Durée quotidienne : dix heures de travail effectif au plus par salarié (L. 3121-18), sauf dérogation prévue par le texte."),
+      puce("Durée hebdomadaire absolue : quarante-huit heures au cours d'une même semaine (L. 3121-20)."),
+      puce("Durée hebdomadaire moyenne : quarante-quatre heures sur une période quelconque de douze semaines consécutives (L. 3121-22), sauf accord ou autorisation en disposant autrement."),
+      h("2. Périmètre du contrôle (exemple)"),
+      puce(`Unités contrôlées : ${ex(secteurProfil(p).unites.map(u => u[0]).join(", "))}.`),
+      puce(`Source des données : ${ex("badgeage et feuilles de route, extraction mensuelle du logiciel de gestion des temps")}.`),
+      puce(`Effectif couvert : ${eff(p)} salariés — dont ${ex("48 conducteurs et 12 personnels de quai en horaires décalés")}.`),
+      h("3. Tableau type (une ligne par salarié et par semaine)"),
+      par("Colonnes : salarié · semaine (année-numéro) · heures par jour (lundi à dimanche) · maximum quotidien atteint · total hebdomadaire · moyenne glissante sur douze semaines · dépassement constaté (oui/non) · suite donnée · visa du responsable."),
+      par(ex("MARTIN Camille — semaine 2026-24 — 9 / 10 / 9,5 / 10 / 8 / 0 / 0 — maximum quotidien 10 h — total 46,5 h — moyenne douze semaines 42,1 h — dépassement : non")),
+      par(ex("OKAFOR Ngozi — semaine 2026-24 — 11 / 10 / 10 / 10 / 9 / 4 / 0 — maximum quotidien 11 h — total 54 h — DÉPASSEMENT quotidien et hebdomadaire — suite : réorganisation de la tournée du lundi, entretien avec l'exploitation le " + plusJours(p, 3))),
+      h("4. Rythme et traces"),
+      puce(`Contrôle mensuel avant paie, le ${ex("cinquième jour ouvré du mois")} ; responsable : ${ex("Dominique BERNARD, responsable d'exploitation")}.`),
+      puce("Chaque dépassement est daté, motivé, et sa suite écrite. Le tableau est conservé et tenu à disposition de l'inspection du travail."),
+      puce(`Dérogations éventuelles : ${ex("aucune à ce jour")} — une dérogation se lit dans un accord ou une autorisation, elle ne se suppose pas : vérifiez ${ccn(p)}.`),
+      ...aPers(["Les unités de travail et la source réelle des relevés",
+        "Les lignes du tableau, remplies sur vos données",
+        "Le responsable du contrôle et sa date mensuelle",
+        "Les dérogations applicables, vérifiées sur l'accord ou l'autorisation"])],
+  }),
+
+  "SOC-DUR-PAUSE": p => ({
+    titre: "Note de service : organisation de la pause de vingt minutes",
+    lignes: [...entete(p, "organisation et traçabilité du temps de pause (L. 3121-16)"),
+      h("1. La règle"),
+      par(`Dès que le temps de travail quotidien atteint six heures, le salarié bénéficie d'un temps de pause d'une durée minimale de vingt minutes consécutives (L. 3121-16). « Consécutives » se prend au mot : deux interruptions de dix minutes ne valent pas une pause. Des dispositions conventionnelles ou un accord peuvent être plus favorables — reportez-vous à ${ccn(p)}, que cette application ne lit pas.`),
+      h("2. Organisation retenue par unité (exemple)"),
+      ...secteurProfil(p).unites.slice(0, 3).map(u => puce(`${u[0]} : pause de ${ex("20 minutes")} prise ${ex("entre la quatrième et la sixième heure de service, par roulement")}.`)),
+      puce(`Salariés en déplacement : ${ex("pause prise sur l'aire de repos, tracée sur la feuille de route")}.`),
+      h("3. Rémunération"),
+      par(`Le caractère rémunéré ou non de la pause dépend de la convention collective, des accords applicables et des usages de l'entreprise : ${ex("à compléter selon " + ccn(p))}. Rien n'est affirmé ici — vérifiez le texte conventionnel avant d'écrire la règle.`),
+      h("4. Traçabilité"),
+      puce(`La pause figure au planning et au relevé de temps : ${ex("colonne « pause » du logiciel de gestion des temps, alimentée par le badgeage")}.`),
+      puce(`Contrôle par sondage : ${ex("dix relevés par mois et par unité")} — responsable : ${ex("Dominique BERNARD")}.`),
+      puce(`Diffusion de la présente note : affichage et remise individuelle le ${ex(plusJours(p, 7))}.`),
+      ...aPers(["Les horaires de pause réellement retenus par unité",
+        "Le régime de rémunération, vérifié sur votre convention collective",
+        "Le support de traçabilité et le responsable du contrôle"])],
+  }),
+
+  "SOC-DUR-REPOS": p => ({
+    titre: "Tableau de contrôle des repos quotidien et hebdomadaire",
+    lignes: [...entete(p, "contrôle des repos (L. 3131-1, L. 3132-1, L. 3132-2)"),
+      h("1. Les règles contrôlées"),
+      puce("Repos quotidien : onze heures consécutives au moins entre deux journées de travail (L. 3131-1)."),
+      puce("Repos hebdomadaire : il est interdit de faire travailler un même salarié plus de six jours par semaine (L. 3132-1)."),
+      puce("Durée du repos hebdomadaire : vingt-quatre heures consécutives au minimum, auxquelles s'ajoutent les heures consécutives de repos quotidien (L. 3132-2). L'addition des deux — trente-cinq heures — n'est pas une citation du texte : c'est un calcul, à refaire selon le repos quotidien effectivement pris."),
+      h("2. Situations à risque dans l'activité déclarée (exemple)"),
+      puce(`${ex("Fermeture tardive suivie d'une ouverture matinale")} — intervalle réel mesuré : ${ex("9 h 30, insuffisant")}.`),
+      puce(`${ex("Astreintes et interventions de nuit")} — l'intervention pendant l'astreinte n'est pas du repos : recalculez l'intervalle.`),
+      puce(`${ex("Remplacements de dernière minute le samedi")} — septième jour travaillé : interdit.`),
+      h("3. Tableau type"),
+      par("Colonnes : salarié · semaine · fin de service J · reprise J+1 · intervalle · jours travaillés dans la semaine · repos hebdomadaire pris (date, durée) · anomalie · suite donnée."),
+      par(ex("MARTIN Camille — semaine 2026-24 — fin mardi 21 h 00 / reprise mercredi 5 h 30 — intervalle 8 h 30 — ANOMALIE repos quotidien — suite : décalage de la prise de service au " + plusJours(p, 2) + ", note à l'exploitation")),
+      par(ex("OKAFOR Ngozi — semaine 2026-24 — 6 jours travaillés, repos hebdomadaire dimanche 0 h – 24 h, précédé de 11 h de repos quotidien — conforme")),
+      h("4. Tenue"),
+      puce(`Contrôle hebdomadaire, le ${ex("lundi matin")}, par ${ex("l'exploitation")} ; anomalies remontées à la direction sous 48 heures.`),
+      puce("Le tableau est conservé : la preuve du respect des repos incombe à l'employeur."),
+      ...aPers(["Les situations à risque propres à votre organisation",
+        "Les lignes du tableau, remplies sur vos plannings réels",
+        "Le rythme du contrôle et son responsable"])],
+  }),
+
+  "SOC-DUR-CONTINGENT": p => ({
+    titre: "Tableau du contingent d'heures supplémentaires et de la contrepartie obligatoire en repos",
+    lignes: [...entete(p, "suivi du contingent annuel et de la contrepartie obligatoire en repos"),
+      h("1. Le contingent applicable"),
+      puce(`Accord d'entreprise ou d'établissement fixant le contingent : ${ex("aucun")} — à rechercher en premier (L. 3121-33).`),
+      puce(`À défaut, accord de branche : ${ex("à vérifier dans " + ccn(p))} — cette application ne lit pas la convention collective.`),
+      puce("À défaut d'accord, le contingent est de deux cent vingt heures par salarié et par an (D. 3121-24)."),
+      puce(`Contingent retenu pour le suivi : ${ex("220 heures")} — à confirmer sur le texte applicable.`),
+      h("2. Le compteur individuel (exemple)"),
+      par("Colonnes : salarié · heures supplémentaires du mois · imputées sur le contingent · cumul annuel · solde de contingent · heures hors contingent · contrepartie obligatoire en repos acquise · repos pris · solde."),
+      par(ex("MARTIN Camille — juin : 14 h — cumul 196 h — solde 24 h — hors contingent 0 — contrepartie 0")),
+      par(ex("OKAFOR Ngozi — juin : 22 h — cumul 238 h — contingent dépassé de 18 h — contrepartie obligatoire en repos acquise sur ces 18 h — repos à ouvrir avant le " + plusJours(p, 60))),
+      h("3. La contrepartie obligatoire en repos"),
+      par("À défaut d'accord, la contrepartie obligatoire sous forme de repos due au titre des heures accomplies au-delà du contingent est fixée par l'article L. 3121-38 ; son taux dépend de l'effectif de l'entreprise. Vérifiez le taux applicable au vôtre avant de l'annoncer aux salariés : il n'est pas affirmé ici."),
+      puce(`Information des salariés : ${ex("mention au bulletin de paie et note annexée, dès l'ouverture du droit")}.`),
+      h("4. Consultation et rattrapage"),
+      puce(`Comité social et économique : ${ex("point porté à l'ordre du jour de la réunion du " + plusJours(p, 30))} — lorsqu'un comité existe.`),
+      puce(`Reconstitution des compteurs sur la période non prescrite : ${ex("exercices 2024 et 2025, avec l'expert-comptable")} — provision estimée ${ex("11 000 €")}.`),
+      ...aPers(["Le contingent réellement applicable, lu dans l'accord ou la convention",
+        "Le taux de la contrepartie obligatoire en repos pour votre effectif",
+        "Les compteurs individuels, remplis sur vos données de paie",
+        "L'étendue du rattrapage, arrêtée avec votre conseil"])],
+  }),
+
+  "SOC-DUR-FORFAIT": p => ({
+    titre: "Convention individuelle de forfait annuel en jours et document de contrôle",
+    lignes: [...entete(p, "sécurisation des forfaits annuels en jours (L. 3121-64, L. 3121-65, L. 3121-60)"),
+      h("1. L'accord collectif — le préalable"),
+      par("L'accord prévoyant la conclusion de conventions individuelles de forfait en heures ou en jours sur l'année détermine les catégories de salariés susceptibles d'en conclure, la période de référence, le nombre d'heures ou de jours compris dans le forfait, les conditions de prise en compte des absences, des arrivées et des départs, et les caractéristiques principales des conventions (L. 3121-64)."),
+      puce(`Accord applicable : ${ex("accord de branche du secteur " + (q(p.secteur) || "d'activité") + " — à vérifier, cette application ne lit pas la convention collective")}.`),
+      puce("Si l'accord est muet sur le suivi de la charge, le droit à la déconnexion ou l'entretien, l'article L. 3121-65 impose à l'employeur d'y suppléer lui-même : document de contrôle, contrôle de la charge, entretien annuel."),
+      h("2. Trame de convention individuelle (exemple)"),
+      par(ex("Entre " + nomE(p) + " et Monsieur Alex DUVAL, responsable d'exploitation, statut cadre. — Article 1 : autonomie dans l'organisation de son emploi du temps, sans que la nature de ses fonctions permette de le soumettre à l'horaire collectif. — Article 2 : forfait de 216 jours travaillés par an, journée de solidarité incluse, sur la période du 1er janvier au 31 décembre. — Article 3 : rémunération annuelle brute de 52 000 €, en contrepartie du forfait. — Article 4 : document de contrôle mensuel, entretien annuel de charge, droit à la déconnexion. Fait à … le " + plusJours(p, 10) + ", en deux exemplaires.")),
+      h("3. Document de contrôle mensuel"),
+      par("Colonnes : date · journée ou demi-journée travaillée · repos hebdomadaire · congé · jour de repos du forfait · absence · observation du salarié sur sa charge · visa du salarié · visa de l'employeur."),
+      par(ex("Juin 2026 — 20 journées travaillées, 2 demi-journées, 8 jours de repos hebdomadaire, 1 jour de repos du forfait. Observation du salarié : « charge tenable, hors semaine 24 ». Visa employeur le " + plusJours(p, 5))),
+      h("4. Entretien annuel de charge"),
+      puce(`Date programmée : ${ex(plusJours(p, 45))} — porte sur la charge de travail, l'organisation, l'articulation entre l'activité professionnelle et la vie personnelle, et la rémunération.`),
+      puce("L'employeur s'assure régulièrement que la charge de travail est raisonnable et permet une bonne répartition dans le temps (L. 3121-60) : l'entretien annuel n'y suffit pas s'il ignore les alertes de l'année."),
+      ...aPers(["L'accord collectif réellement applicable et ses stipulations",
+        "Les salariés concernés, leur nombre de jours et leur rémunération",
+        "Le support du document de contrôle et son circuit de visa",
+        "Le calendrier des entretiens et le traitement des alertes"])],
+  }),
+
+  "SOC-DUR-TPARTIEL": p => ({
+    titre: "Avenant de régularisation d'un contrat à temps partiel et grille de contrôle",
+    lignes: [...entete(p, "mise en conformité des contrats à temps partiel"),
+      h("1. Les mentions du contrat (L. 3123-6)"),
+      puce("Le contrat du salarié à temps partiel est un contrat écrit."),
+      puce("Il mentionne la qualification, les éléments de la rémunération, la durée hebdomadaire ou mensuelle prévue et, sauf pour les salariés des associations et entreprises d'aide à domicile et les salariés relevant d'un accord d'aménagement du temps de travail, la répartition de la durée entre les jours de la semaine ou les semaines du mois."),
+      puce("Il mentionne les cas dans lesquels une modification éventuelle de cette répartition peut intervenir, ainsi que la nature de cette modification ; les modalités de communication des horaires de travail pour chaque journée travaillée ; les limites dans lesquelles peuvent être accomplies des heures complémentaires."),
+      h("2. Grille de contrôle (exemple)"),
+      par("Colonnes : salarié · durée contractuelle · répartition écrite (oui/non) · durée minimale respectée · dérogation documentée · heures complémentaires du mois · majoration appliquée · priorité d'accès notifiée."),
+      par(ex("MARTIN Camille — 24 h/semaine — répartition écrite : oui — durée minimale : conforme — heures complémentaires juin : 3 h — majorées : oui")),
+      par(ex("OKAFOR Ngozi — 18 h/semaine — répartition écrite : NON — dérogation à la durée minimale : demande écrite du salarié absente — heures complémentaires juin : 6 h — majoration : NON. Deux régularisations à conduire.")),
+      h("3. Trame d'avenant"),
+      par(ex("Avenant au contrat de travail de Madame Ngozi OKAFOR, préparatrice de commandes. — Article 1 : la durée de travail est fixée à 18 heures par semaine, réparties comme suit : lundi 8 h – 12 h, mardi 8 h – 12 h, jeudi 8 h – 13 h, vendredi 8 h – 13 h. — Article 2 : la répartition ne peut être modifiée que dans les cas suivants : remplacement d'un salarié absent, surcroît temporaire d'activité, réorganisation d'un service ; la modification est notifiée sept jours au moins à l'avance. — Article 3 : les heures complémentaires ne peuvent excéder la limite prévue par le texte applicable et donnent lieu à majoration. — Article 4 : la salariée bénéficie d'une priorité pour l'attribution d'un emploi à temps complet ressortissant à sa catégorie professionnelle. Fait le " + plusJours(p, 12) + ".")),
+      h("4. Durée minimale et priorité d'accès"),
+      puce(`Durée minimale applicable : fixée par convention ou accord de branche étendu (L. 3123-7) ; à défaut d'accord, vingt-quatre heures par semaine (L. 3123-27). Vérifiez ${ccn(p)} avant de conclure.`),
+      puce(`Liste des emplois disponibles portée à la connaissance des salariés à temps partiel : ${ex("affichage mensuel et envoi individuel, le premier lundi du mois")}.`),
+      ...aPers(["Les contrats réellement concernés et les régularisations à conduire",
+        "La durée minimale applicable dans votre branche",
+        "Le taux de majoration des heures complémentaires applicable",
+        "Les modalités d'information sur les emplois disponibles"])],
+  }),
+
+  "SOC-DUR-PAIE": p => ({
+    titre: "Calendrier de paie et procédure d'acompte de quinzaine",
+    lignes: [...entete(p, "mensualisation de la rémunération et acompte (L. 3242-1)"),
+      h("1. La règle"),
+      par("La rémunération des salariés est mensuelle et indépendante, pour un horaire de travail effectif déterminé, du nombre de jours travaillés dans le mois. Le paiement de la rémunération est effectué une fois par mois. Un acompte correspondant, pour une quinzaine, à la moitié de la rémunération mensuelle, est versé au salarié qui en fait la demande (L. 3242-1)."),
+      h("2. Calendrier de paie (exemple)"),
+      puce(`Date de virement : ${ex("le dernier jour ouvré du mois")} — annoncée aux salariés et tenue.`),
+      puce(`Clôture des éléments variables : ${ex("le 20 du mois")} ; contrôle des durées et des heures supplémentaires : ${ex("le 21")}.`),
+      puce(`Édition et remise des bulletins : ${ex("dématérialisée, coffre-fort numérique, le jour du virement")}.`),
+      h("3. Procédure d'acompte"),
+      puce(`Demande : ${ex("formulaire interne ou courriel au service paie, avant le 10 du mois")} — aucune motivation n'est exigée du salarié.`),
+      puce(`Montant : la moitié de la rémunération mensuelle pour une quinzaine — exemple : ${ex("salaire mensuel brut 2 100 €, acompte 1 050 € brut")}.`),
+      puce(`Versement : ${ex("le 15 du mois, par virement")} ; l'acompte figure au bulletin du mois et est déduit du solde.`),
+      puce(`Responsable : ${ex("Dominique BERNARD, gestionnaire de paie")} ; délai de réponse : ${ex("deux jours ouvrés")}.`),
+      h("4. Diffusion"),
+      puce(`La procédure est portée à la connaissance de tous les salariés : ${ex("livret d'accueil, intranet et affichage, mise à jour le " + plusJours(p, 7))}.`),
+      ...aPers(["Votre date de virement et le calendrier de clôture",
+        "Le circuit et le délai de traitement des demandes d'acompte",
+        "Le responsable désigné et le support de diffusion"])],
+  }),
+
+  /* ────────────────────────────────────────── congés et jours ───────── */
+
+  "SOC-CON-ACQUISITION": p => ({
+    titre: "État individuel des congés payés et points à faire vérifier",
+    lignes: [...entete(p, "acquisition et suivi des congés payés (L. 3141-3)"),
+      h("1. La règle d'acquisition"),
+      par(`Le salarié a droit à un congé de deux jours et demi ouvrables par mois de travail effectif chez le même employeur ; la durée totale du congé exigible ne peut excéder trente jours ouvrables (L. 3141-3). ${ccn(p)} peut être plus favorable : vérifiez-le, cette application ne lit que le code du travail.`),
+      h("2. État individuel (exemple)"),
+      par("Colonnes : salarié · période de référence · jours acquis · jours pris · solde · jours reportés · observations."),
+      par(ex("MARTIN Camille — période du 1er juin 2025 au 31 mai 2026 — acquis 30 jours ouvrables — pris 22 — solde 8 — à solder avant le " + plusJours(p, 120))),
+      par(ex("OKAFOR Ngozi — entrée le " + plusJours(p, -400) + " — acquis 27,5 jours — pris 10 — solde 17,5 — arrêt de travail du 3 au 28 mars : traitement à faire vérifier")),
+      h("3. Le point à faire vérifier — et qui n'est pas tranché ici"),
+      par("Le traitement des périodes d'arrêt de travail au regard de l'acquisition des congés, et l'information due au salarié à sa reprise, ont évolué et emportent des conséquences financières importantes. Cette application ne tranche pas : faites vérifier par votre conseil, sur les textes en vigueur à la date de votre audit, la période à reprendre et le mode de calcul."),
+      h("4. Tenue et information"),
+      puce(`Compteur porté au bulletin de paie : ${ex("oui, acquis / pris / solde, à jour au mois précédent")}.`),
+      puce(`Information annuelle des salariés sur leur solde et la date limite de prise : ${ex("courriel individuel le " + plusJours(p, 30))}.`),
+      puce(`Responsable du compteur : ${ex("Dominique BERNARD, gestionnaire de paie")}.`),
+      ...aPers(["Les périodes de référence et les compteurs réels",
+        "Le traitement des arrêts de travail, arrêté avec votre conseil",
+        "Les règles conventionnelles plus favorables, vérifiées sur le texte"])],
+  }),
+
+  "SOC-CON-PERIODE": p => ({
+    titre: "Note d'information : période de prise des congés payés",
+    lignes: [...entete(p, "fixation et annonce de la période de prise (L. 3141-13, D. 3141-5)"),
+      h("1. La règle"),
+      par("Les congés sont pris dans une période qui comprend dans tous les cas la période du 1er mai au 31 octobre de chaque année (L. 3141-13). La période de prise est portée par l'employeur à la connaissance des salariés au moins deux mois avant l'ouverture de cette période (D. 3141-5)."),
+      h("2. Décision (exemple)"),
+      puce(`Période de prise retenue : ${ex("du 1er mai 2026 au 30 avril 2027")} — elle comprend bien la période du 1er mai au 31 octobre.`),
+      puce(`Fondement de la décision : ${ex("aucun accord d'entreprise ni de branche ne fixe la période ; décision de l'employeur après avis du comité social et économique du " + plusJours(p, -30))}.`),
+      puce(`Contraintes d'activité prises en compte : ${ex("pic saisonnier de juillet et août sur l'exploitation, fermeture technique de l'atelier la première semaine d'août")}.`),
+      h("3. Texte de la note"),
+      par(ex("« " + nomE(p) + " informe l'ensemble du personnel que la période de prise des congés payés est fixée du 1er mai 2026 au 30 avril 2027. Les demandes de congé sont déposées auprès du responsable hiérarchique, au plus tard le 15 mars 2026 pour les congés d'été. L'ordre des départs sera communiqué à chacun un mois au moins avant son départ. Fait le " + plusJours(p, 5) + ". »")),
+      h("4. Diffusion et preuve"),
+      puce(`Affichage sur les panneaux du personnel, le ${ex(plusJours(p, 5))} — photographie de l'affichage conservée.`),
+      puce(`Envoi individuel : ${ex("courriel professionnel et remise en main propre pour les salariés sans accès numérique, émargement conservé")}.`),
+      puce(`Contrôle du délai : la diffusion intervient au moins deux mois avant l'ouverture — ici ${ex("le 5 février au plus tard pour une période ouvrant le 1er mai")}.`),
+      ...aPers(["La période réellement retenue et son fondement (accord ou décision après avis)",
+        "La date d'avis du comité social et économique",
+        "Les dates de dépôt des demandes et les contraintes d'activité",
+        "Le support de diffusion et la preuve conservée"])],
+  }),
+
+  "SOC-CON-ORDRE": p => ({
+    titre: "Tableau de l'ordre des départs en congé et note de communication",
+    lignes: [...entete(p, "ordre des départs : critères, communication, modification (L. 3141-15, L. 3141-16, D. 3141-6)"),
+      h("1. Les critères"),
+      par("À défaut de stipulation dans la convention ou l'accord, l'employeur définit l'ordre des départs après avis du comité social et économique, en tenant compte de la situation de famille des bénéficiaires — notamment des possibilités de congé du conjoint ou du partenaire, et de la présence au foyer d'un enfant ou d'un adulte handicapé ou d'une personne âgée en perte d'autonomie —, de la durée de leurs services chez l'employeur, et de leur activité éventuelle chez un ou plusieurs autres employeurs (L. 3141-16)."),
+      puce(`Critères retenus et leur ordre : ${ex("1. contraintes de service — 2. situation de famille — 3. ancienneté — 4. rotation par rapport à l'année précédente")}.`),
+      h("2. Tableau des départs (exemple)"),
+      par("Colonnes : service · salarié · dates demandées · dates retenues · critère décisif · date de communication · observations."),
+      par(ex("Exploitation — MARTIN Camille — 13/07 au 02/08 — retenu — situation de famille (enfant scolarisé) — communiqué le " + plusJours(p, 20))),
+      par(ex("Exploitation — OKAFOR Ngozi — 13/07 au 02/08 — reporté au 03/08 au 23/08 — contrainte de service (deux départs simultanés impossibles), rotation : la salariée était prioritaire l'an dernier — communiqué le " + plusJours(p, 20))),
+      h("3. Communication"),
+      puce("L'ordre des départs est communiqué, par tout moyen, à chaque salarié un mois au moins avant son départ (D. 3141-6)."),
+      puce(`Mode retenu : ${ex("courriel individuel et affichage du tableau par service")} — preuve de la communication conservée.`),
+      h("4. Modification"),
+      par("Sauf circonstances exceptionnelles, l'ordre et les dates de départ ne peuvent être modifiés dans le délai d'un mois avant la date prévue (L. 3141-16)."),
+      puce(`Procédure interne : ${ex("toute demande de modification à moins d'un mois est soumise à la direction, qui écrit la circonstance exceptionnelle invoquée et en informe le salarié par écrit")}.`),
+      ...aPers(["Les critères retenus et l'avis du comité qui les précède",
+        "Le tableau réel des départs, par service",
+        "Le mode de communication et la preuve conservée",
+        "La procédure interne de modification exceptionnelle"])],
+  }),
+
+  "SOC-CON-SOLIDARITE": p => ({
+    titre: "Décision et note d'information : journée de solidarité",
+    lignes: [...entete(p, "modalités de la journée de solidarité (L. 3133-7, L. 3133-8)"),
+      h("1. La règle"),
+      par("La journée de solidarité, instituée en vue d'assurer le financement d'actions en faveur de l'autonomie des personnes âgées ou handicapées, prend la forme d'une journée supplémentaire de travail non rémunérée pour les salariés et d'une contribution pour les employeurs (L. 3133-7). Le travail accompli, dans la limite de sept heures, durant cette journée ne donne pas lieu à rémunération ; pour les salariés à temps partiel, cette limite est réduite proportionnellement à la durée contractuelle (L. 3133-8)."),
+      h("2. Modalités retenues (exemple)"),
+      puce(`Fondement : ${ex("aucun accord d'entreprise ni de branche ne fixe les modalités ; décision de l'employeur après consultation du comité social et économique du " + plusJours(p, -20))}.`),
+      puce(`Modalité retenue : ${ex("travail d'un jour de réduction du temps de travail, fixé au lundi de Pentecôte")}.`),
+      puce(`Salariés à temps partiel : ${ex("limite proratisée — pour un contrat de 24 h par semaine, 4 h 48 au lieu de 7 h")}.`),
+      puce(`Forfaits en jours : ${ex("la journée de solidarité est incluse dans le nombre de jours du forfait")}.`),
+      h("3. Texte de la note"),
+      par(ex("« " + nomE(p) + " informe le personnel que la journée de solidarité pour l'année 2026 sera accomplie le lundi 25 mai. Les salariés à temps partiel accompliront une durée proportionnelle à leur durée contractuelle. Ce travail ne donne pas lieu à rémunération dans la limite légale. Fait le " + plusJours(p, 6) + ". »")),
+      h("4. Paie et traçabilité"),
+      puce(`Paramétrage en paie : ${ex("code absence dédié, contrôle du prorata des temps partiels avant la paie du mois concerné")}.`),
+      puce(`Conservation : décision, avis du comité, note diffusée et preuve de diffusion, dans le dossier « durée du travail ».`),
+      ...aPers(["La modalité réellement retenue et son fondement",
+        "La date d'avis ou de consultation du comité",
+        "Le prorata appliqué aux temps partiels et le paramétrage en paie"])],
+  }),
+
+  /* ─────────────────────────────────────── embauche et contrat ──────── */
+
+  "SOC-EMB-DPAE": p => ({
+    titre: "Procédure d'embauche et liste de contrôle avant l'entrée du salarié",
+    lignes: [...entete(p, "déclaration préalable à l'embauche et formalités d'entrée (L. 1221-10, L. 1221-11)"),
+      h("1. La règle"),
+      par("L'embauche d'un salarié ne peut intervenir qu'après déclaration nominative accomplie par l'employeur auprès des organismes de protection sociale désignés à cet effet (L. 1221-10). Le non-respect de cette obligation entraîne les conséquences prévues par l'article L. 1221-11."),
+      h("2. Liste de contrôle avant l'entrée (exemple)"),
+      puce(`Déclaration préalable adressée et accusé reçu : ${ex("le " + plusJours(p, -2) + ", accusé n° 2026-XXXX archivé")}.`),
+      puce(`Contrat de travail signé ou, à défaut, remis dans le délai applicable au type de contrat.`),
+      puce(`Document d'information sur la relation de travail remis contre récépissé.`),
+      puce(`Inscription au registre unique du personnel, au moment de l'embauche et de façon indélébile.`),
+      puce(`Adhésion au service de prévention et de santé au travail et demande de visite d'information et de prévention : ${ex("demande adressée le jour de l'entrée")}.`),
+      puce(`Formation à la sécurité au poste, information sur les risques, remise des équipements de protection : ${ex("le premier jour, émargement conservé")}.`),
+      puce(`Livret d'épargne salariale si un dispositif existe ; information sur la complémentaire santé et la prévoyance.`),
+      h("3. Rapprochement de contrôle"),
+      par(`Tous les ${ex("trimestres")}, le registre unique du personnel est rapproché des accusés de déclaration : une ligne du registre sans accusé correspondant est une alerte à traiter immédiatement avec votre conseil.`),
+      par(ex("Rapprochement du " + plusJours(p, -10) + " : " + eff(p) + " lignes de registre, " + eff(p) + " accusés retrouvés — aucun écart.")),
+      h("4. Responsabilités"),
+      puce(`Responsable des déclarations : ${ex("Dominique BERNARD, gestionnaire de paie")} ; suppléant : ${ex("Camille MARTIN")}.`),
+      puce("Règle interne : pas de déclaration, pas d'entrée. Aucune exception, y compris pour un remplacement urgent."),
+      ...aPers(["Les étapes réellement applicables à votre organisation",
+        "Le rythme du rapprochement registre / accusés",
+        "Les personnes responsables et leur suppléance"])],
+  }),
+
+  "SOC-EMB-INFORMATION": p => ({
+    titre: "Document d'information sur la relation de travail",
+    lignes: [...entete(p, "informations principales relatives à la relation de travail (L. 1221-5-1, R. 1221-34, R. 1221-35)"),
+      h("1. La règle"),
+      par("L'employeur remet au salarié un ou plusieurs documents écrits contenant les informations principales relatives à la relation de travail (L. 1221-5-1). L'article R. 1221-34 en fixe le contenu et l'article R. 1221-35 les délais de communication selon les rubriques. Un contrat de travail complet peut valoir document d'information — à condition qu'il porte réellement toutes les rubriques."),
+      h("2. Les rubriques, et leur couverture par votre contrat type (exemple)"),
+      puce(`Identité des parties : ${ex("couverte par le contrat type")}.`),
+      puce(`Lieu de travail et, à défaut de lieu fixe, principe d'affectation en divers lieux : ${ex("couverte")}.`),
+      puce(`Intitulé du poste, fonctions, catégorie d'emploi : ${ex("couverte")}.`),
+      puce(`Date d'embauche ; pour un contrat à durée déterminée, date de fin ou durée prévue : ${ex("couverte")}.`),
+      puce(`Durée du travail et modalités relatives aux heures supplémentaires : ${ex("PARTIELLE — la mention des heures supplémentaires manque au contrat type")}.`),
+      puce(`Éléments constitutifs de la rémunération, périodicité et mode de versement : ${ex("couverte")}.`),
+      puce(`Congés payés et autres congés ; durée de la période d'essai : ${ex("couverte")}.`),
+      puce(`Procédure à observer en cas de cessation de la relation de travail : ${ex("MANQUANTE")}.`),
+      puce(`Droit à la formation assuré par l'employeur : ${ex("MANQUANTE")}.`),
+      puce(`Conventions et accords collectifs applicables : ${ex("couverte — " + ccn(p))}.`),
+      puce(`Organismes de protection sociale et protections en matière de sécurité sociale : ${ex("MANQUANTE")}.`),
+      h("3. Modèle de complément à remettre"),
+      par(ex("« Complément d'information à la relation de travail — " + nomE(p) + " — Madame Ngozi OKAFOR. En complément de votre contrat du " + plusJours(p, -60) + " : les heures supplémentaires sont accomplies à la demande écrite de la hiérarchie et rémunérées selon les taux légaux et conventionnels ; la cessation de la relation de travail obéit aux règles de préavis et de procédure du code du travail et de la convention collective applicable ; vous bénéficiez du plan de développement des compétences de l'entreprise ; l'entreprise cotise auprès des organismes de retraite et de prévoyance mentionnés en annexe. Remis le " + plusJours(p, 3) + ", contre récépissé. »")),
+      h("4. Remise et preuve"),
+      puce(`Remise contre récépissé signé, ou envoi horodaté : ${ex("récépissé archivé au dossier individuel")}.`),
+      puce(`Salariés déjà en poste : le document est remis à ceux qui en font la demande — ${ex("procédure de demande annoncée par note du " + plusJours(p, 7))}.`),
+      ...aPers(["La couverture réelle de chaque rubrique par votre contrat type",
+        "Le texte du complément, adapté à votre organisation",
+        "Le circuit de remise et la conservation des récépissés"])],
+  }),
+
+  "SOC-EMB-ESSAI": p => ({
+    titre: "Clause de période d'essai et lettre de rupture d'essai",
+    lignes: [...entete(p, "période d'essai : durée, renouvellement, prévenance (L. 1221-19, L. 1221-21, L. 1221-25, L. 1221-26)"),
+      h("1. Les règles"),
+      puce("Le contrat à durée indéterminée peut comporter une période d'essai dont la durée maximale varie selon la catégorie professionnelle du salarié (L. 1221-19)."),
+      puce("La période d'essai peut être renouvelée une fois si un accord de branche étendu le prévoit ; cet accord fixe les conditions et les durées de renouvellement (L. 1221-21). Le renouvellement suppose en outre une stipulation au contrat et l'accord exprès du salarié, recueilli pendant l'essai."),
+      puce("Lorsque l'employeur met fin à l'essai, un délai de prévenance est dû, dont la durée croît avec la présence du salarié (L. 1221-25) ; lorsque le salarié y met fin, un délai plus court s'impose à lui (L. 1221-26)."),
+      h("2. Clause type (exemple)"),
+      par(ex("« Le présent contrat est conclu sous réserve d'une période d'essai de quatre mois, à compter du " + plusJours(p, 10) + ". Cette période pourra être renouvelée une fois, pour une durée de quatre mois au plus, dans les conditions prévues par la convention collective applicable et sous réserve de l'accord exprès et écrit du salarié recueilli avant le terme de la période initiale. Chacune des parties pourra mettre fin à l'essai dans le respect du délai de prévenance légal. »")),
+      h("3. Lettre de rupture d'essai (exemple)"),
+      par(ex("« Madame, Nous vous informons qu'il est mis fin à votre période d'essai, débutée le " + plusJours(p, -70) + ". Compte tenu de votre présence dans l'entreprise, un délai de prévenance de deux semaines s'applique : votre contrat prendra donc fin le " + plusJours(p, 14) + ". Votre certificat de travail, votre reçu pour solde de tout compte et votre attestation destinée à l'assurance chômage vous seront remis à cette date. Fait le " + plusJours(p, 0) + ". »")),
+      h("4. Contrôle des essais en cours"),
+      par("Colonnes : salarié · catégorie · début d'essai · durée initiale · terme · renouvellement (fondement, accord écrit) · délai de prévenance applicable."),
+      par(ex("MARTIN Camille — cadre — début " + plusJours(p, -100) + " — 4 mois — terme " + plusJours(p, 20) + " — renouvellement envisagé : accord de branche à vérifier")),
+      ...aPers(["Les durées d'essai par catégorie, confrontées aux maxima légaux",
+        "Les conditions de renouvellement, lues dans l'accord de branche étendu",
+        "Les délais de prévenance appliqués selon la présence du salarié",
+        "La liste des essais en cours et leurs termes"])],
+  }),
+
+  "SOC-EMB-RECRUTEMENT": p => ({
+    titre: "Note d'information : méthodes de recrutement et dispositifs de collecte",
+    lignes: [...entete(p, "information des candidats et des salariés (L. 1221-8, L. 1221-9, L. 1222-4)"),
+      h("1. Les règles"),
+      puce("Le candidat à un emploi est expressément informé, préalablement à leur mise en œuvre, des méthodes et techniques d'aide au recrutement utilisées à son égard (L. 1221-8). Les informations demandées ne peuvent avoir comme finalité que d'apprécier sa capacité à occuper l'emploi proposé ou ses aptitudes professionnelles, et elles doivent présenter un lien direct et nécessaire avec l'emploi."),
+      puce("Aucune information concernant personnellement un candidat ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance (L. 1221-9)."),
+      puce("Aucune information concernant personnellement un salarié ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance (L. 1222-4)."),
+      h("2. Méthodes employées, à annoncer (exemple)"),
+      puce(`${ex("Entretien structuré avec grille d'évaluation commune")} — annoncé dans la convocation.`),
+      puce(`${ex("Mise en situation professionnelle d'une heure sur le poste de préparation de commandes")} — annoncée dans l'annonce et la convocation.`),
+      puce(`${ex("Vérification des références professionnelles, avec l'accord du candidat")} — annoncée et recueillie par écrit.`),
+      h("3. Dispositifs de collecte en place, à annoncer aux salariés (exemple)"),
+      puce(`${ex("Badgeage d'entrée et de sortie")} — information par note de service et mention au règlement intérieur lorsqu'il en existe un.`),
+      puce(`${ex("Géolocalisation des véhicules de service, active pendant le temps de service uniquement")} — information individuelle écrite, avis du comité social et économique du ${ex(plusJours(p, -40))}.`),
+      puce(`${ex("Vidéosurveillance des quais, sans visualisation des postes de travail")} — panneaux d'information et note aux salariés.`),
+      h("4. Texte de la note aux salariés"),
+      par(ex("« " + nomE(p) + " informe les salariés des dispositifs de collecte d'informations les concernant : badgeage, géolocalisation des véhicules pendant le temps de service, vidéosurveillance des zones de quai. Chacun de ces dispositifs poursuit une finalité déterminée, exposée en annexe, et ses données sont conservées pour une durée limitée. Aucune information recueillie par un dispositif non porté à votre connaissance ne pourra vous être opposée. Fait le " + plusJours(p, 5) + ". »")),
+      par("Le sujet croise la réglementation sur les données personnelles, qui n'est pas du code du travail et n'est donc pas vérifiée par cette application : faites-la traiter par ailleurs."),
+      ...aPers(["Les méthodes de recrutement réellement employées",
+        "L'inventaire des dispositifs de collecte et leurs finalités",
+        "Les dates d'avis du comité social et économique",
+        "Le traitement des données personnelles, à conduire hors de cette application"])],
+  }),
+
+  "SOC-EMB-CDD": p => ({
+    titre: "Grille de contrôle des contrats à durée déterminée",
+    lignes: [...entete(p, "conformité du recours aux contrats à durée déterminée"),
+      h("1. Les règles contrôlées"),
+      puce("Le contrat est établi par écrit et comporte la définition précise de son motif ; à défaut, il est réputé conclu à durée indéterminée (L. 1242-12)."),
+      puce("Le recours n'est ouvert que dans les cas énumérés par l'article L. 1242-2, et le contrat ne peut avoir ni pour objet ni pour effet de pourvoir durablement un emploi lié à l'activité normale et permanente de l'entreprise."),
+      puce("Le contrat est transmis au salarié au plus tard dans les deux jours ouvrables suivant l'embauche (L. 1242-13)."),
+      puce("À l'expiration d'un contrat, il ne peut être recouru, pour pourvoir le poste, à un nouveau contrat à durée déterminée avant l'expiration d'un délai de carence (L. 1244-3) ; à défaut d'accord, ce délai est calculé selon l'article L. 1244-3-1."),
+      puce("Une indemnité de fin de contrat est due lorsque la relation ne se poursuit pas par un contrat à durée indéterminée (L. 1243-8), sauf les cas d'exclusion prévus par la loi."),
+      h("2. Grille (exemple)"),
+      par("Colonnes : salarié · poste · motif écrit · cas de recours · date d'embauche · date de transmission · contrat précédent sur le poste · délai de carence appliqué · indemnité de fin de contrat versée."),
+      par(ex("OKAFOR Ngozi — préparatrice de commandes — motif : remplacement de M. DURAND, absent pour maladie — cas de recours : remplacement — embauche le " + plusJours(p, -60) + " — transmission le " + plusJours(p, -59) + " — conforme")),
+      par(ex("LEROY Sacha — préparateur de commandes — motif : « surcroît d'activité » sans autre précision — TROISIÈME contrat consécutif sur le même poste en dix mois — carence non appliquée — deux griefs : motif imprécis et recours pour pourvoir durablement un emploi permanent")),
+      h("3. Suites"),
+      puce(`Contrats à régulariser immédiatement : ${ex("2")} ; dossiers à faire chiffrer par le conseil : ${ex("1")}.`),
+      puce(`Contrôle institué avant chaque signature : ${ex("visa du responsable des ressources humaines sur la grille, obligatoire")}.`),
+      puce(`Vérification en paie de l'indemnité de fin de contrat sur ${ex("les vingt-quatre derniers mois")}.`),
+      ...aPers(["La liste réelle des contrats et leurs motifs",
+        "Les successions de contrats sur un même poste",
+        "Les cas d'exclusion de l'indemnité, vérifiés au cas par cas",
+        "L'étendue de la reprise, arrêtée avec votre conseil"])],
+  }),
+
+  /* ────────────────────────────────────────── fin du contrat ────────── */
+
+  "SOC-FIN-DOCUMENTS": p => ({
+    titre: "Liasse de fin de contrat : certificat, reçu pour solde de tout compte, attestation",
+    lignes: [...entete(p, "documents remis à l'expiration du contrat (L. 1234-19, D. 1234-6, L. 1234-20, R. 1234-9)"),
+      h("1. Certificat de travail"),
+      par("À l'expiration du contrat de travail, l'employeur délivre au salarié un certificat dont le contenu est déterminé par voie réglementaire (L. 1234-19). L'article D. 1234-6, dans sa version lue à la source, énonce que le certificat contient EXCLUSIVEMENT la date d'entrée du salarié et celle de sa sortie, et la nature de l'emploi ou des emplois successivement occupés avec les périodes pendant lesquelles ils l'ont été. Les deux autres mentions qu'il portait autrefois sont abrogées : n'ajoutez rien au certificat que ce que ce texte énumère."),
+      par(ex("« Certificat de travail — " + nomE(p) + " certifie que Madame Ngozi OKAFOR a été employée du " + plusJours(p, -400) + " au " + plusJours(p, -1) + " en qualité de préparatrice de commandes, puis de cheffe d'équipe à compter du " + plusJours(p, -120) + ". Fait le " + plusJours(p, 0) + " pour servir et valoir ce que de droit. »")),
+      h("2. Reçu pour solde de tout compte"),
+      par("Le reçu pour solde de tout compte, délivré par l'employeur et dont le salarié lui donne reçu, fait l'inventaire des sommes versées lors de la rupture du contrat (L. 1234-20). Il est établi en double exemplaire, mention en étant faite sur le reçu."),
+      par(ex("« Inventaire des sommes versées : salaire du mois 1 620,00 € brut — indemnité compensatrice de congés payés (17,5 jours) 1 134,00 € brut — indemnité de préavis 0,00 € (préavis effectué) — indemnité légale de licenciement 1 890,00 € — total brut 4 644,00 €, net à payer 3 810,25 €. Reçu en double exemplaire le " + plusJours(p, 0) + ". »")),
+      h("3. Attestation destinée à l'assurance chômage"),
+      par("L'employeur délivre au salarié, au moment de l'expiration ou de la rupture du contrat, les attestations et justifications lui permettant d'exercer ses droits aux prestations, et les transmet à l'organisme dans les conditions de l'article R. 1234-9."),
+      puce(`Transmission : ${ex("dématérialisée depuis le logiciel de paie, le jour du départ, accusé conservé")}.`),
+      h("4. Contrôle de sortie"),
+      puce(`Aucun départ sans liasse remise et datée : ${ex("liste de contrôle signée par le gestionnaire de paie et le responsable hiérarchique")}.`),
+      puce(`Rattrapage des sorties des ${ex("douze")} derniers mois : ${ex("3 attestations manquantes, régularisées le " + plusJours(p, 7))}.`),
+      ...aPers(["Les mentions du certificat, vérifiées sur l'article D. 1234-6",
+        "L'inventaire réel des sommes versées",
+        "Le circuit de transmission de l'attestation et sa preuve",
+        "La liste des sorties à rattraper"])],
+  }),
+
+  "SOC-FIN-LICENCIEMENT": p => ({
+    titre: "Calendrier et trames de la procédure de licenciement pour motif personnel",
+    lignes: [...entete(p, "procédure de licenciement pour motif personnel (L. 1232-2, L. 1232-4, L. 1232-6, L. 1235-2, R. 1232-13)"),
+      h("1. Le calendrier"),
+      puce(`Convocation à l'entretien préalable, remise en main propre contre décharge ou envoyée en recommandé : ${ex("le " + plusJours(p, 0))}.`),
+      puce(`Présentation de la lettre : ${ex("le " + plusJours(p, 2))} — c'est de cette date que court le délai, non de l'envoi.`),
+      puce(`Entretien préalable, cinq jours ouvrables au moins après la présentation : ${ex("le " + plusJours(p, 10))}.`),
+      puce(`Notification, ni trop tôt ni trop tard selon les délais applicables : ${ex("le " + plusJours(p, 14))}.`),
+      puce(`Fenêtre de précision des motifs : dans les quinze jours suivant la notification, dans les conditions de l'article R. 1232-13 — ${ex("jusqu'au " + plusJours(p, 29))}.`),
+      h("2. Trame de convocation"),
+      par(ex("« Madame, Nous vous convoquons à un entretien préalable à une éventuelle mesure de licenciement, qui se tiendra le " + plusJours(p, 10) + " à 10 heures, au siège de " + nomE(p) + ", bureau de la direction. Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. [En l'absence d'institutions représentatives du personnel : vous pouvez vous faire assister par un conseiller de votre choix inscrit sur la liste dressée par l'autorité administrative, dont l'adresse et les modalités de consultation sont les suivantes : …] Fait le " + plusJours(p, 0) + ". »")),
+      h("3. Trame de notification"),
+      par(ex("« Madame, À la suite de notre entretien du " + plusJours(p, 10) + ", au cours duquel vous étiez assistée de Monsieur Sacha LEROY, nous vous notifions votre licenciement pour les motifs suivants : [énoncé précis, daté et circonstancié de chaque grief — la lettre fixe les limites du litige]. Votre préavis, d'une durée de …, débutera à la date de première présentation de la présente. Fait le " + plusJours(p, 14) + ". »")),
+      h("4. Points de vigilance"),
+      puce("Un motif absent de la lettre ne pourra pas être invoqué devant le juge : l'énoncé est écrit avant l'envoi, jamais après."),
+      puce(`Salarié protégé : vérifier la liste avant toute convocation — ${ex("contrôle systématique par le service des ressources humaines")}.`),
+      puce("Matière disciplinaire : les délais de la procédure disciplinaire s'ajoutent — l'audit détaillé se fait dans le module dédié."),
+      ...aPers(["Les dates réelles du calendrier",
+        "L'énoncé des motifs, précis et daté, relu par votre conseil",
+        "La mention d'assistance adaptée à la présence ou non d'institutions représentatives"]),
+      noteFin("l'audit complet de la matière disciplinaire se fait dans le module « discipline et règlement intérieur » (audit-discipline.html).")],
+  }),
+
+  "SOC-FIN-RUPTURE-CONV": p => ({
+    titre: "Calendrier et trames de la rupture conventionnelle individuelle",
+    lignes: [...entete(p, "rupture conventionnelle individuelle (L. 1237-11, L. 1237-13, L. 1237-14)"),
+      h("1. Les règles"),
+      puce("L'employeur et le salarié peuvent convenir en commun des conditions de la rupture du contrat à durée indéterminée qui les lie ; la rupture conventionnelle résulte d'une convention signée par les parties et garantit la liberté du consentement (L. 1237-11)."),
+      puce("La convention définit les conditions de la rupture, notamment le montant de l'indemnité spécifique, qui ne peut être inférieur à celui de l'indemnité légale de licenciement, et la date de rupture. À compter de la signature, chaque partie dispose d'un délai de quinze jours calendaires pour se rétracter (L. 1237-13)."),
+      puce("À l'issue du délai de rétractation, la partie la plus diligente adresse une demande d'homologation à l'autorité administrative (L. 1237-14)."),
+      h("2. Calendrier (exemple)"),
+      puce(`Convocation au premier entretien, avec mention de la faculté d'assistance : ${ex("le " + plusJours(p, 0))}.`),
+      puce(`Premier entretien : ${ex("le " + plusJours(p, 7))} ; second entretien : ${ex("le " + plusJours(p, 12))}.`),
+      puce(`Signature de la convention, un exemplaire remis à chaque partie : ${ex("le " + plusJours(p, 12))}.`),
+      puce(`Fin du délai de rétractation de quinze jours calendaires : ${ex("le " + plusJours(p, 27))}.`),
+      puce(`Demande d'homologation adressée : ${ex("le " + plusJours(p, 28))} ; décision attendue à l'issue du délai d'instruction.`),
+      puce(`Date de rupture envisagée, postérieure à l'homologation : ${ex("le " + plusJours(p, 50))}.`),
+      h("3. Trame de convocation"),
+      par(ex("« Madame, Faisant suite à votre demande, nous vous proposons un entretien en vue d'examiner ensemble les conditions d'une éventuelle rupture conventionnelle de votre contrat de travail. Cet entretien se tiendra le " + plusJours(p, 7) + " à 14 heures. Vous pouvez vous y faire assister par une personne de votre choix appartenant au personnel de l'entreprise. Fait le " + plusJours(p, 0) + ". »")),
+      h("4. Calcul de l'indemnité"),
+      par(ex("Ancienneté : 6 ans et 4 mois — salaire de référence retenu : 2 250 € — indemnité légale de licenciement calculée : 3 750 € — indemnité conventionnelle éventuellement plus favorable : à vérifier sur " + ccn(p) + " — indemnité spécifique retenue : 3 900 €.")),
+      par("Le montant conventionnel n'est pas affirmé ici : cette application ne lit que le code du travail. Comparez les deux avant de signer."),
+      ...aPers(["Les dates réelles du calendrier",
+        "Le calcul de l'indemnité et la comparaison avec l'indemnité conventionnelle",
+        "La date de rupture retenue, postérieure à l'homologation"])],
+  }),
+
+  "SOC-FIN-INAPTITUDE": p => ({
+    titre: "Dossier de reclassement après avis d'inaptitude",
+    lignes: [...entete(p, "inaptitude : reclassement et reprise du salaire (L. 1226-2, L. 1226-4)"),
+      h("1. Les règles"),
+      puce("Lorsque le salarié victime d'une maladie ou d'un accident non professionnel est déclaré inapte par le médecin du travail à reprendre l'emploi qu'il occupait, l'employeur lui propose un autre emploi approprié à ses capacités, au vu des conclusions écrites du médecin du travail et des indications qu'il formule (L. 1226-2)."),
+      puce("Lorsque, à l'issue d'un délai d'un mois à compter de la date de l'examen médical de reprise, le salarié n'est pas reclassé dans l'entreprise ou s'il n'est pas licencié, l'employeur lui verse, dès l'expiration de ce délai, le salaire correspondant à l'emploi qu'il occupait avant la suspension de son contrat (L. 1226-4)."),
+      h("2. Chronologie du dossier (exemple)"),
+      puce(`Examen médical de reprise : ${ex("le " + plusJours(p, 0))} — avis d'inaptitude notifié le même jour.`),
+      puce(`Échéance du délai d'un mois : ${ex("le " + plusJours(p, 30))} — alerte posée dans l'agenda du service.`),
+      puce(`Échanges écrits avec le médecin du travail sur les postes envisageables : ${ex("courriers des " + plusJours(p, 3) + " et " + plusJours(p, 12))}.`),
+      puce(`Consultation du comité social et économique sur les propositions : ${ex("réunion du " + plusJours(p, 18) + ", procès-verbal conservé")}.`),
+      h("3. Registre des postes examinés"),
+      par("Colonnes : poste examiné · site · compatibilité avec les indications du médecin · aménagement envisagé · réponse du salarié · motif du rejet."),
+      par(ex("Agent administratif exploitation — siège — compatible sous réserve d'un siège ergonomique et d'une limitation du port de charges — proposé le " + plusJours(p, 20) + " — refusé par la salariée le " + plusJours(p, 24))),
+      par(ex("Préparateur de commandes poste allégé — plateforme nord — incompatible : port de charges supérieur aux limitations — écarté, avis du médecin du " + plusJours(p, 12))),
+      h("4. Suites"),
+      puce(`Reprise du paiement du salaire au ${ex(plusJours(p, 30))} si ni reclassement ni licenciement — paramétrage en paie fait le ${ex(plusJours(p, 25))}.`),
+      puce("Aucune notification de licenciement pour inaptitude sans relecture du dossier par votre conseil."),
+      ...aPers(["Les dates réelles de l'examen et du délai d'un mois",
+        "La liste des postes examinés, site par site",
+        "Les échanges avec le médecin du travail et l'avis du comité"])],
+  }),
+
+  /* ─────────────────────────── égalité et non-discrimination ───────── */
+
+  "SOC-EGA-REMUNERATION": p => ({
+    titre: "Grille de comparaison des rémunérations à travail de valeur égale",
+    lignes: [...entete(p, "égalité de rémunération entre les femmes et les hommes (L. 3221-2)"),
+      h("1. La règle"),
+      par("Tout employeur assure, pour un même travail ou pour un travail de valeur égale, l'égalité de rémunération entre les femmes et les hommes (L. 3221-2). Sont considérés comme de valeur égale les travaux qui exigent des salariés un ensemble comparable de connaissances professionnelles consacrées par un titre, un diplôme ou une pratique professionnelle, de capacités découlant de l'expérience acquise, de responsabilités et de charge physique ou nerveuse."),
+      h("2. Groupes de comparaison (exemple)"),
+      ...secteurProfil(p).unites.slice(0, 3).map(u => puce(`${u[0]} : ${ex("emplois regroupés par niveau de responsabilité et de qualification, indépendamment de l'intitulé du poste")}.`)),
+      puce(`Attention aux emplois différents mais de valeur égale : ${ex("cheffe d'équipe administrative et chef d'équipe de quai, mêmes niveaux de responsabilité et de qualification")} — c'est là que les écarts se logent.`),
+      h("3. Grille"),
+      par("Colonnes : groupe · salarié · sexe · ancienneté · coefficient · rémunération annuelle brute · écart à la moyenne du groupe · élément objectif invoqué · suite donnée."),
+      par(ex("Groupe « encadrement d'exploitation » — MARTIN Camille — F — 6 ans — coefficient 150 — 34 200 € — écart −7,4 % — élément objectif invoqué : aucun — CORRECTION à opérer")),
+      par(ex("Groupe « encadrement d'exploitation » — DUVAL Alex — H — 6 ans — coefficient 150 — 36 900 € — écart +2,1 % — sans objet")),
+      h("4. Suites"),
+      puce(`Écarts injustifiés corrigés à la paie de ${ex(plusJours(p, 40).slice(0, 7))} ; enveloppe : ${ex("9 200 € en année pleine")}.`),
+      puce(`Rapprochement avec l'index de l'égalité professionnelle et la négociation sur l'égalité : ${ex("résultats croisés lors de la réunion du " + plusJours(p, 60))}, lorsque l'entreprise y est tenue.`),
+      puce(`Revue reconduite chaque année, avant la négociation annuelle — responsable : ${ex("Camille MARTIN")}.`),
+      ...aPers(["Les groupes de comparaison, construits sur vos emplois réels",
+        "Les rémunérations et les écarts, calculés sur vos données",
+        "Les éléments objectifs invoqués, écrits et vérifiables",
+        "L'enveloppe de correction et son calendrier"])],
+  }),
+
+  "SOC-EGA-DISCRIMINATION": p => ({
+    titre: "Note de critères objectifs de décision en gestion du personnel",
+    lignes: [...entete(p, "décisions fondées sur des critères objectifs (L. 1132-1, L. 1132-4)"),
+      h("1. La règle"),
+      par("Aucune personne ne peut être écartée d'une procédure de recrutement ou de nomination, ni faire l'objet d'une mesure discriminatoire, directe ou indirecte, en raison de l'un des critères énumérés par l'article L. 1132-1. Toute disposition ou tout acte pris à l'égard d'un salarié en méconnaissance de ces dispositions est nul (L. 1132-4)."),
+      par("En contentieux, le salarié présente des éléments de fait laissant supposer l'existence d'une discrimination ; il incombe alors à l'employeur de prouver que sa décision est justifiée par des éléments objectifs étrangers à toute discrimination. Sans trace écrite, cette preuve est impossible."),
+      h("2. Critères écrits (exemple)"),
+      puce(`Recrutement : ${ex("grille d'évaluation commune à tous les candidats — expérience sur poste équivalent, habilitations détenues, disponibilité aux horaires du poste, résultat de la mise en situation")}.`),
+      puce(`Augmentation individuelle : ${ex("tenue des objectifs de l'année, polyvalence acquise, contribution à la sécurité — pondération 40/30/30")}.`),
+      puce(`Promotion : ${ex("réussite au poste actuel depuis douze mois au moins, formation d'encadrement suivie, avis motivé du responsable de service")}.`),
+      puce(`Attribution des heures supplémentaires et des astreintes : ${ex("rotation documentée, hors contrainte médicale")}.`),
+      h("3. Traçabilité"),
+      par("Colonnes : décision · salarié · date · critère appliqué · pièce justificative · signataire."),
+      par(ex("Augmentation refusée — LEROY Sacha — " + plusJours(p, -30) + " — objectifs atteints à 62 %, seuil interne 80 % — fiche d'évaluation annuelle — visa D. BERNARD")),
+      h("4. Sensibilisation"),
+      puce(`Encadrement sensibilisé aux critères prohibés et à la charge de la preuve : ${ex("session de deux heures le " + plusJours(p, 30) + ", émargement conservé")}.`),
+      puce("Rappel : l'affichage d'information sur les discriminations est une obligation distincte, également due."),
+      ...aPers(["Les critères réellement appliqués dans votre entreprise",
+        "Le support de traçabilité des décisions",
+        "Le programme et la date de la sensibilisation de l'encadrement"])],
+  }),
+
+  "SOC-EGA-SEXISME": p => ({
+    titre: "Note de service : interdiction des agissements sexistes et voie de signalement",
+    lignes: [...entete(p, "interdiction des agissements sexistes (L. 1142-2-1)"),
+      h("1. La règle, telle qu'elle doit être écrite"),
+      par("Nul ne doit subir d'agissement sexiste, défini comme tout agissement lié au sexe d'une personne, ayant pour objet ou pour effet de porter atteinte à sa dignité ou de créer un environnement intimidant, hostile, dégradant, humiliant ou offensant (L. 1142-2-1)."),
+      h("2. Ce que la note précise (exemple)"),
+      puce(`Exemples d'agissements visés : ${ex("propos ou plaisanteries fondés sur le sexe, remarques sur l'apparence, attribution systématique des tâches subalternes selon le sexe, mise à l'écart de réunions")}.`),
+      puce(`Champ : ${ex("l'ensemble des lieux et des temps de travail, y compris les déplacements, les repas d'équipe et les échanges numériques professionnels")}.`),
+      puce(`Suites possibles : ${ex("mesures disciplinaires selon l'échelle du règlement intérieur")} — lorsqu'un règlement intérieur existe, l'interdiction y figure.`),
+      h("3. Voie de signalement"),
+      puce(`Destinataires : ${ex("le référent harcèlement du comité, la référente désignée par l'employeur, ou la direction des ressources humaines — au choix de la personne")}.`),
+      puce(`Forme : ${ex("écrit, courriel ou entretien dont il est dressé compte rendu")} ; accusé de réception sous ${ex("quarante-huit heures")}.`),
+      puce(`Traitement : ${ex("entretien avec la personne signalante sous une semaine, enquête contradictoire, mesures conservatoires si nécessaire, retour écrit au signalant")}.`),
+      puce(`Confidentialité : ${ex("dossier tenu à part, accès limité aux personnes chargées de l'enquête")}.`),
+      h("4. Texte de la note"),
+      par(ex("« " + nomE(p) + " rappelle que nul ne doit subir d'agissement sexiste. Toute personne s'estimant victime ou témoin peut saisir la référente harcèlement, le référent du comité social et économique ou la direction. Chaque signalement fait l'objet d'un accusé de réception, d'un examen et d'une réponse écrite. Aucune mesure défavorable ne sera prise à l'encontre d'une personne ayant signalé de bonne foi. Fait le " + plusJours(p, 5) + ". »")),
+      ...aPers(["Les exemples adaptés à votre activité",
+        "Les destinataires réels du signalement et leurs coordonnées",
+        "Les délais de traitement que vous vous engagez à tenir"])],
+  }),
+
+  "SOC-EGA-HANDICAP": p => ({
+    titre: "Fiche d'examen des mesures appropriées d'aménagement",
+    lignes: [...entete(p, "mesures appropriées pour les travailleurs handicapés (L. 5213-6)"),
+      h("1. La règle"),
+      par("Afin de garantir le respect du principe d'égalité de traitement, l'employeur prend, en fonction des besoins dans une situation concrète, les mesures appropriées pour permettre aux travailleurs handicapés d'accéder à un emploi ou de conserver un emploi correspondant à leur qualification, de l'exercer et d'y progresser, ou pour qu'une formation adaptée à leurs besoins leur soit dispensée. Le refus de prendre ces mesures peut être constitutif d'une discrimination, sauf si les charges consécutives à leur mise en œuvre sont disproportionnées, compte tenu des aides qui peuvent compenser en tout ou partie les dépenses supportées (L. 5213-6)."),
+      h("2. Fiche d'examen (exemple)"),
+      puce(`Salarié : ${ex("Monsieur Alex DUVAL, préparateur de commandes, reconnaissance de la qualité de travailleur handicapé")}.`),
+      puce(`Situation concrète et besoins : ${ex("limitation du port de charges à 10 kg, alternance des postures, pas de travail en hauteur — indications du médecin du travail du " + plusJours(p, -20))}.`),
+      puce(`Mesures examinées : ${ex("aide à la manutention sur le poste, réaménagement de la zone de picking, adaptation du plan de charge, transfert partiel sur poste administratif")}.`),
+      puce(`Coût brut estimé : ${ex("14 500 €")} — aides mobilisables : ${ex("8 000 €")} — coût net : ${ex("6 500 €")}.`),
+      puce(`Décision : ${ex("mesures retenues, mise en œuvre au " + plusJours(p, 45))} — motivation écrite conservée.`),
+      h("3. Si une mesure n'est pas retenue"),
+      par(`La charge disproportionnée s'apprécie APRÈS aides. Écrivez l'analyse : coût brut, aides sollicitées et réponses obtenues, coût net, capacité de l'entreprise, solutions alternatives examinées. ${ex("Un refus non chiffré est traité comme un refus non justifié.")}`),
+      h("4. Suivi"),
+      puce(`Revue des aménagements en place : ${ex("annuelle, avec le médecin du travail")} ; interlocuteur interne : ${ex("le référent handicap lorsqu'il en existe un")}.`),
+      puce("Le secret médical est respecté : la fiche porte les limitations fonctionnelles, jamais le diagnostic."),
+      ...aPers(["Les situations réellement examinées et les indications du médecin",
+        "Les coûts et les aides effectivement chiffrés",
+        "La motivation écrite de chaque décision"])],
+  }),
+
+  "SOC-EGA-REFERENT-HANDICAP": p => ({
+    titre: "Lettre de mission du référent handicap",
+    lignes: [...entete(p, "désignation du référent handicap (L. 5213-6-1)"),
+      h("1. La règle"),
+      par(`Dans toute entreprise employant au moins deux cent cinquante salariés est désigné un référent chargé d'orienter, d'informer et d'accompagner les personnes en situation de handicap (L. 5213-6-1). L'effectif déclaré de ${nomE(p)} est de ${eff(p)} salariés.`),
+      h("2. Lettre de mission (exemple)"),
+      par(ex("« Madame Camille MARTIN, Vous êtes désignée référente handicap de " + nomE(p) + " à compter du " + plusJours(p, 10) + ". Votre mission est d'orienter, d'informer et d'accompagner les personnes en situation de handicap. Elle comprend : l'accueil et l'orientation des salariés qui vous sollicitent ; l'information sur les démarches de reconnaissance et sur les aides mobilisables ; l'appui aux services dans l'examen des mesures d'aménagement ; le lien avec le médecin du travail et les organismes compétents ; le suivi des aménagements en place. Vous disposez de deux journées par mois pour cette mission et d'une formation de trois jours financée par l'entreprise. Vos coordonnées seront portées à la connaissance de l'ensemble du personnel. »")),
+      h("3. Publicité de la désignation"),
+      puce(`Affichage sur les panneaux du personnel et publication à l'intranet : ${ex("le " + plusJours(p, 12))}.`),
+      puce(`Mention au livret d'accueil et dans la note d'entrée des nouveaux embauchés : ${ex("mise à jour le " + plusJours(p, 20))}.`),
+      puce(`Information du comité social et économique : ${ex("point à l'ordre du jour de la réunion du " + plusJours(p, 25))}.`),
+      h("4. Articulation"),
+      puce("Le référent handicap n'est ni le médecin du travail ni le référent harcèlement : les rôles se distinguent et se disent."),
+      puce(`Rendez-vous de suivi de la mission : ${ex("semestriel, avec la direction des ressources humaines")}.`),
+      ...aPers(["Le nom du référent et le temps réellement alloué",
+        "Le contenu de la formation prévue",
+        "Les supports et dates de publicité de la désignation"])],
+  }),
+
+  "SOC-EGA-RECRUTEURS": p => ({
+    titre: "Plan de formation à la non-discrimination à l'embauche",
+    lignes: [...entete(p, "formation des personnes chargées du recrutement (L. 1131-2)"),
+      h("1. La règle"),
+      par(`Dans toute entreprise employant au moins trois cents salariés, les salariés chargés des missions de recrutement reçoivent une formation à la non-discrimination à l'embauche au moins une fois tous les cinq ans (L. 1131-2). L'effectif déclaré de ${nomE(p)} est de ${eff(p)} salariés.`),
+      h("2. Recensement des personnes concernées (exemple)"),
+      puce(`Ressources humaines : ${ex("3 personnes — chargée de recrutement, responsable RH, assistante RH")}.`),
+      puce(`Encadrement qui participe aux décisions de recrutement : ${ex("11 responsables de service et chefs d'équipe")}.`),
+      puce(`Direction : ${ex("2 personnes participant aux entretiens finaux")}.`),
+      puce(`Total : ${ex("16 personnes")} — le recensement inclut ceux qui recrutent occasionnellement, souvent oubliés.`),
+      h("3. Programme et calendrier"),
+      puce(`Contenu : ${ex("les critères prohibés, la charge de la preuve, la conduite de l'entretien, la grille d'évaluation commune, les pièges des critères indirects (mobilité, disponibilité, apparence)")}.`),
+      puce(`Format : ${ex("une demi-journée par groupe de huit, deux sessions")} — dates : ${ex(plusJours(p, 40) + " et " + plusJours(p, 47))}.`),
+      puce(`Organisme : ${ex("prestataire externe")} ; attestations individuelles conservées au dossier.`),
+      h("4. Échéancier des renouvellements"),
+      par("Colonnes : personne · fonction · date de la dernière formation · échéance quinquennale · statut."),
+      par(ex("MARTIN Camille — responsable RH — formation du " + plusJours(p, 40) + " — échéance quinquennale : cinq ans après cette date — à jour")),
+      ...aPers(["La liste réelle des personnes qui participent aux recrutements",
+        "Le programme, l'organisme et les dates retenues",
+        "L'échéancier des renouvellements et son responsable"])],
+  }),
+
+  "SOC-EGA-ALERTE": p => ({
+    titre: "Procédure de recueil et de traitement des signalements",
+    lignes: [...entete(p, "protection de la personne qui signale ou témoigne (L. 1132-3-3)"),
+      h("1. La règle"),
+      par("Aucune personne ayant témoigné, de bonne foi, de faits constitutifs d'un délit ou d'un crime dont elle aurait eu connaissance dans l'exercice de ses fonctions, ou les ayant relatés, ne peut faire l'objet des mesures défavorables énumérées par l'article L. 1132-3-3. Toute mesure prise en méconnaissance de ces dispositions est nulle."),
+      h("2. La voie de signalement (exemple)"),
+      puce(`Destinataires : ${ex("la direction des ressources humaines, ou à défaut la direction générale, ou le référent désigné")} — le choix appartient à la personne qui signale.`),
+      puce(`Forme : ${ex("écrit remis en main propre, courriel dédié, ou entretien dont il est dressé un compte rendu signé")}.`),
+      puce(`Accusé de réception : ${ex("sous quarante-huit heures ouvrées, par écrit")}.`),
+      puce(`Confidentialité : ${ex("identité du signalant connue des seules personnes chargées du traitement ; dossier conservé à part")}.`),
+      h("3. Le traitement"),
+      puce(`Examen de recevabilité et premiers actes : ${ex("sous une semaine")}.`),
+      puce(`Enquête : ${ex("contradictoire, écrite, conduite par deux personnes dont une extérieure au service concerné")}.`),
+      puce(`Retour écrit au signalant sur les suites : ${ex("sous trois mois")}.`),
+      puce(`Mesures conservatoires si nécessaire : ${ex("éloignement de la personne mise en cause, jamais du signalant")}.`),
+      h("4. La protection, en pratique"),
+      par(ex("« Pendant les douze mois suivant un signalement, toute décision défavorable envisagée à l'égard du signalant — sanction, mutation, refus d'augmentation, non-renouvellement — est soumise au visa préalable de la direction des ressources humaines, qui vérifie et écrit son motif. »")),
+      par("Le dispositif général de protection des lanceurs d'alerte, qui n'est pas du code du travail, s'articule avec la présente procédure : faites-le vérifier par votre conseil — cette application ne le lit pas."),
+      ...aPers(["Les destinataires réels et leurs coordonnées",
+        "Les délais que vous vous engagez à tenir",
+        "L'articulation avec le dispositif général de protection des lanceurs d'alerte"])],
+  }),
+
+  /* ─────────────────────── santé-sécurité (suite) ───────────────────── */
+
+  "SOC-SST-INFO-RISQUES": p => ({
+    titre: "Support d'information sur les risques, par unité de travail",
+    lignes: [...entete(p, "information des travailleurs sur les risques (L. 4141-1)"),
+      h("1. La règle"),
+      par("L'employeur organise et dispense une information des travailleurs sur les risques pour la santé et la sécurité et sur les mesures prises pour y remédier (L. 4141-1). Cette information se distingue de la formation pratique à la sécurité, qui reste due par ailleurs : l'une explique le risque, l'autre apprend le geste."),
+      h("2. Le support, unité par unité (exemple, tiré du document unique)"),
+      ...secteurProfil(p).unites.map(u => puce(`${u[0]} — risques : ${u[1]} ; mesures prises : ${u[2]}.`)),
+      h("3. Ce que le support dit à chaque salarié"),
+      puce(`Les risques de SON poste, nommés et expliqués — ${ex("pas la liste générale de l'entreprise")}.`),
+      puce(`Les mesures de prévention en place et ce qu'elles attendent de lui : ${ex("port des équipements, respect du plan de circulation, signalement des anomalies")}.`),
+      puce(`La conduite à tenir en cas d'incident : ${ex("qui alerter, où se trouve le matériel de premiers secours, comment évacuer")}.`),
+      puce(`Ses droits : ${ex("droit d'alerte et de retrait en cas de danger grave et imminent, registre spécial et coordonnées des élus")}.`),
+      h("4. Quand et comment"),
+      puce(`À l'entrée du salarié, à chaque changement de poste, et lors de toute évolution du document unique : ${ex("remise contre émargement, support daté et versionné")}.`),
+      puce(`Responsable : ${ex("le salarié compétent en prévention, avec l'encadrement de l'unité")} ; archivage : ${ex("dossier « prévention » et dossier individuel")}.`),
+      ...aPers(["Les unités et les risques réellement issus de votre document unique",
+        "Le contenu du support pour chaque poste",
+        "Le circuit de remise et d'émargement"])],
+  }),
+
+  "SOC-SST-FORMATION-RENFORCEE": p => ({
+    titre: "Liste des postes à risques particuliers et programme de formation renforcée",
+    lignes: [...entete(p, "formation renforcée des salariés en contrat court (L. 4154-2)"),
+      h("1. La règle"),
+      par("Les salariés titulaires d'un contrat de travail à durée déterminée, les salariés temporaires et les stagiaires affectés à des postes de travail présentant des risques particuliers pour leur santé ou leur sécurité bénéficient d'une formation renforcée à la sécurité ainsi que d'un accueil et d'une information adaptés dans l'entreprise. La liste de ces postes est établie par l'employeur, après avis du médecin du travail et du comité social et économique lorsqu'il existe (L. 4154-2)."),
+      h("2. Liste des postes (exemple)"),
+      ...secteurProfil(p).unites.slice(0, 3).map(u => puce(`${u[0]} : ${ex("poste retenu au titre des risques suivants — " + u[1])}.`)),
+      puce(`Avis du médecin du travail recueilli le ${ex(plusJours(p, -25))} ; avis du comité social et économique du ${ex(plusJours(p, -15))}.`),
+      puce(`Mise à jour : ${ex("annuelle, et à chaque création ou modification de poste")}.`),
+      h("3. Programme de formation renforcée"),
+      puce(`Durée : ${ex("une journée avant toute prise de poste, contre une demi-journée pour l'accueil général")}.`),
+      puce(`Contenu : ${ex("risques du poste, gestes et postures, consignes de sécurité, équipements de protection, conduite à tenir en cas d'incident, droit d'alerte et de retrait")}.`),
+      puce(`Formateur : ${ex("le salarié compétent en prévention, assisté du chef d'équipe")} ; évaluation en fin de session, émargement conservé.`),
+      h("4. Cas des salariés temporaires"),
+      puce(`La liste des postes est transmise à l'entreprise de travail temporaire : ${ex("envoi du " + plusJours(p, 5) + ", accusé conservé")}.`),
+      puce(`Le contrat de mise à disposition mentionne le caractère à risques du poste : ${ex("clause type révisée")}.`),
+      ...aPers(["La liste réelle des postes à risques et les avis qui la précèdent",
+        "Le contenu et la durée de la formation renforcée",
+        "Le circuit de transmission aux entreprises de travail temporaire"])],
+  }),
+
+  "SOC-SST-SECOURS": p => ({
+    titre: "Protocole d'organisation des secours et inventaire du matériel",
+    lignes: [...entete(p, "premiers secours et organisation des soins d'urgence (R. 4224-14, R. 4224-15, R. 4224-16)"),
+      h("1. Les règles"),
+      puce("Les lieux de travail sont équipés d'un matériel de premiers secours adapté à la nature des risques et facilement accessible (R. 4224-14). Ce matériel fait l'objet d'une signalisation."),
+      puce("Un membre du personnel reçoit la formation de secouriste nécessaire pour donner les premiers secours en cas d'urgence, dans les ateliers où sont accomplis des travaux dangereux et sur les chantiers employant du personnel effectuant des travaux dangereux (R. 4224-15). Ces salariés ne peuvent remplacer les infirmiers."),
+      puce("En l'absence d'infirmiers, ou lorsque leur nombre ne permet pas d'assurer une présence permanente, l'employeur prend, après avis du médecin du travail, les mesures nécessaires pour assurer les premiers secours aux accidentés et aux malades ; ces mesures, consignées dans un document tenu à disposition de l'agent de contrôle de l'inspection du travail, sont adaptées à la nature des risques (R. 4224-16)."),
+      h("2. Inventaire du matériel (exemple)"),
+      puce(`Trousses de premiers secours : ${ex("6 — accueil, quai, atelier, bureaux, 2 véhicules d'intervention")} ; contenu défini avec le médecin du travail, vérifié ${ex("tous les trimestres")}.`),
+      puce(`Défibrillateur : ${ex("1, hall d'accueil, contrat de maintenance annuel")} ; signalisation par panneaux normalisés.`),
+      puce(`Point de rassemblement et accès pompiers : ${ex("parking nord, plan affiché aux trois issues")}.`),
+      h("3. Secouristes"),
+      par("Colonnes : nom · site · horaire couvert · date de formation · date de recyclage."),
+      par(ex("LEROY Sacha — plateforme — équipe du matin — formé le " + plusJours(p, -300) + " — recyclage prévu le " + plusJours(p, 60))),
+      par(ex("DUVAL Alex — atelier — équipe d'après-midi — formé le " + plusJours(p, -200) + " — à jour")),
+      puce(`Couverture des horaires : ${ex("matin et après-midi couverts ; équipe de nuit NON couverte — formation à programmer")}.`),
+      h("4. Le protocole écrit"),
+      par(ex("« En l'absence d'infirmier, les premiers secours sont assurés par les secouristes désignés. En cas d'urgence : 1. protéger et alerter le secouriste de service ; 2. appeler le 15 ou le 112 depuis le poste d'accueil ; 3. prévenir la direction et le membre du comité social et économique ; 4. guider les secours depuis l'entrée principale ; 5. renseigner le registre et, s'il y a lieu, déclarer l'accident. Protocole établi après avis du médecin du travail du " + plusJours(p, -25) + ", tenu à la disposition de l'inspection du travail. »")),
+      ...aPers(["L'inventaire réel du matériel et son emplacement",
+        "La liste des secouristes et la couverture de tous les horaires",
+        "Le protocole, arrêté après avis de votre médecin du travail"])],
+  }),
+
+  "SOC-SST-INCENDIE-MOYENS": p => ({
+    titre: "Inventaire des moyens de lutte contre l'incendie et tournée des dégagements",
+    lignes: [...entete(p, "moyens de secours contre l'incendie et dégagements (R. 4227-29, R. 4227-4)"),
+      h("1. Les règles"),
+      puce("Le premier secours contre l'incendie est assuré par des extincteurs en nombre suffisant et maintenus en bon état de fonctionnement (R. 4227-29). Il en existe au moins un par niveau, et leur nature est appropriée aux risques."),
+      puce("Les établissements comportent des dégagements tels que dégagements, escaliers, chemins de circulation, répartis de manière à permettre une évacuation rapide, et toujours libres (R. 4227-4)."),
+      h("2. Inventaire (exemple)"),
+      par("Colonnes : bâtiment · niveau · emplacement · type d'extincteur · risque couvert · date de vérification · état."),
+      par(ex("Bâtiment A — rez-de-chaussée — hall — eau pulvérisée 6 L — matières combustibles — vérifié le " + plusJours(p, -120) + " — conforme")),
+      par(ex("Bâtiment A — atelier — près du tableau électrique — CO2 5 kg — risque électrique — vérifié le " + plusJours(p, -120) + " — conforme")),
+      par(ex("Bâtiment B — quai — deux points — poudre polyvalente 9 kg — stockage et engins — VÉRIFICATION ÉCHUE, à programmer avant le " + plusJours(p, 20))),
+      h("3. Tournée des dégagements"),
+      par("Colonnes : dégagement · encombrement constaté · action · date · visa."),
+      par(ex("Issue de secours quai nord — palettes stockées devant la porte — dégagement immédiat et marquage au sol de la zone interdite — " + plusJours(p, 1) + " — visa services généraux")),
+      puce(`Tournée instituée : ${ex("hebdomadaire, le vendredi, par le responsable des services généraux")} ; anomalie traitée le jour même.`),
+      h("4. Traces"),
+      puce("Rapports de vérification et comptes rendus de tournée rangés au registre de sécurité, avec les suites données."),
+      puce(`Articulation : consigne de sécurité incendie, exercices et signalisation sont des obligations distinctes — ${ex("exercice semestriel programmé le " + plusJours(p, 45))}.`),
+      ...aPers(["L'inventaire réel des moyens, bâtiment par bâtiment",
+        "Le contrat de vérification et son échéancier",
+        "Le rythme de la tournée des dégagements et son responsable"])],
+  }),
+
+  "SOC-SST-ACCIDENT-GRAVE": p => ({
+    titre: "Procédure d'alerte en cas d'accident grave ou mortel",
+    lignes: [...entete(p, "information de l'inspection du travail en cas d'accident mortel (R. 4121-5)"),
+      h("1. La règle"),
+      par("Lorsqu'un travailleur est victime d'un accident du travail ayant entraîné son décès, l'employeur en informe l'agent de contrôle de l'inspection du travail immédiatement et au plus tard dans les douze heures qui suivent le décès, sauf s'il établit qu'il n'a pu avoir connaissance du décès que postérieurement à ce délai (R. 4121-5). Douze heures se comptent aussi la nuit, le samedi et le dimanche : la procédure doit vivre hors des heures de bureau."),
+      h("2. La chaîne d'alerte (exemple)"),
+      puce(`1. Le témoin ou le secouriste alerte les secours (15 ou 112) et le responsable de site : ${ex("appel immédiat")}.`),
+      puce(`2. Le responsable de site prévient le cadre d'astreinte : ${ex("Dominique BERNARD, 06 XX XX XX XX")}.`),
+      puce(`3. Le cadre d'astreinte prévient la direction et informe l'agent de contrôle de l'inspection du travail : ${ex("unité de contrôle territorialement compétente — téléphone et courriel figurant en annexe de la présente procédure")}.`),
+      puce(`4. Le cadre d'astreinte informe le secrétaire du comité social et économique et convoque une réunion : ${ex("dans les vingt-quatre heures")}.`),
+      puce(`5. Les lieux sont préservés en l'état, sauf nécessité de secours : ${ex("périmètre balisé, photographies datées")}.`),
+      h("3. Les traces à constituer"),
+      puce(`Main courante horodatée de tous les appels : ${ex("heure du décès constaté, heure d'appel à l'inspection, interlocuteur")}.`),
+      puce(`Déclaration d'accident du travail dans les délais qui lui sont propres, et copie conservée cinq ans avec les autres documents de sécurité.`),
+      puce(`Enquête conjointe employeur / comité social et économique : ${ex("engagée sous 48 heures, compte rendu écrit")}.`),
+      h("4. Diffusion et révision"),
+      puce(`Procédure remise à ${ex("l'ensemble des responsables de site et des cadres d'astreinte")}, contre émargement, le ${ex(plusJours(p, 7))}.`),
+      puce(`Révision annuelle des coordonnées : ${ex("chaque janvier")} — une inspection dont le numéro a changé est une procédure morte.`),
+      ...aPers(["Les noms et numéros réels de la chaîne d'astreinte",
+        "Les coordonnées à jour de votre unité de contrôle",
+        "Le circuit d'information du comité social et économique"])],
+  }),
+
+  "SOC-SST-SUIVI-CONTRAT": p => ({
+    titre: "Circuit du suivi médical et réponse écrite aux avis du médecin du travail",
+    lignes: [...entete(p, "visites de reprise et de mi-carrière, information du médecin, suites des avis"),
+      h("1. Les règles"),
+      puce("Le travailleur bénéficie d'un examen de reprise du travail par le médecin du travail dans les cas énumérés par l'article R. 4624-31, à l'initiative de l'employeur."),
+      puce("En vue de favoriser le maintien dans l'emploi, une visite de préreprise peut être organisée dans les conditions de l'article R. 4624-29."),
+      puce("Le médecin du travail est informé par l'employeur de tout arrêt de travail d'une durée inférieure à trente jours pour cause d'accident du travail (R. 4624-33)."),
+      puce("Le travailleur est examiné par le médecin du travail au cours d'une visite de mi-carrière, dans les conditions de l'article L. 4624-2-2."),
+      puce("L'employeur est tenu de prendre en considération l'avis et les indications ou les propositions émis par le médecin du travail ; en cas de refus, il fait connaître par écrit au travailleur et au médecin du travail les motifs qui s'opposent à ce qu'il y soit donné suite (L. 4624-6)."),
+      h("2. Le circuit (exemple)"),
+      puce(`Déclenchement automatique : ${ex("le logiciel de gestion des absences signale, dès la saisie de la reprise, tout arrêt entrant dans les cas de l'article R. 4624-31")}.`),
+      puce(`Demande de visite adressée au service de prévention et de santé au travail : ${ex("le jour de la reprise, par le portail du service")}.`),
+      puce(`Information du médecin pour les arrêts courts liés à un accident du travail : ${ex("envoi hebdomadaire de la liste, tous les lundis")}.`),
+      puce(`Visites de mi-carrière : ${ex("liste des salariés concernés extraite chaque trimestre, convocations envoyées")}.`),
+      h("3. La réponse écrite à un avis (exemple)"),
+      par(ex("« Docteur, Nous avons bien reçu votre avis du " + plusJours(p, -10) + " concernant Monsieur Alex DUVAL, préconisant une limitation du port de charges à 10 kg et l'alternance des postures. Nous mettons en œuvre la première préconisation à compter du " + plusJours(p, 5) + " par la mise à disposition d'une aide à la manutention. La seconde ne peut être suivie en l'état sur le poste actuel : l'organisation de la ligne ne permet pas l'alternance demandée sans réorganisation complète, dont le coût net après aides est estimé à 42 000 €. Nous examinons un reclassement sur le poste de … et vous en tiendrons informé. Copie de la présente est adressée au salarié. »")),
+      h("4. Traces"),
+      puce("Chaque avis reçoit une décision écrite, datée, adressée au salarié et au médecin — y compris lorsqu'elle est positive."),
+      puce(`Registre des avis et des suites : ${ex("tenu par le service des ressources humaines, revu chaque trimestre")}.`),
+      ...aPers(["Le mode de déclenchement des visites dans votre outil de gestion",
+        "Le rythme d'information du médecin pour les arrêts courts",
+        "Le texte de la réponse, adapté à chaque avis"])],
+  }),
+
+  "SOC-SST-FICHE-ENTREPRISE": p => ({
+    titre: "Demande de fiche d'entreprise et document annuel au service de santé au travail",
+    lignes: [...entete(p, "fiche d'entreprise et document annuel (R. 4624-46, R. 4624-47, D. 4622-22)"),
+      h("1. Les règles"),
+      puce("Pour chaque entreprise ou établissement, le médecin du travail ou, dans les conditions de l'article R. 4624-46, un membre de l'équipe pluridisciplinaire, établit et met à jour une fiche d'entreprise sur laquelle figurent notamment les risques professionnels et les effectifs de salariés qui y sont exposés."),
+      puce("Pour les entreprises adhérentes à un service de prévention et de santé au travail interentreprises, la fiche est établie dans les conditions et les délais de l'article R. 4624-47 ; elle est transmise à l'employeur et tenue à la disposition des agents de contrôle."),
+      puce("Les droits et obligations réciproques du service de prévention et de santé au travail et de l'employeur adhérent sont fixés dans les conditions de l'article D. 4622-22, qui prévoit notamment le document que l'employeur adresse au service."),
+      h("2. Lettre de demande (exemple)"),
+      par(ex("« Madame, Monsieur, " + nomE(p) + ", adhérente à votre service, n'a pas reçu de fiche d'entreprise à jour. Notre effectif est de " + eff(p) + " salariés, répartis sur " + (p.etablissementsDistincts === "oui" ? "plusieurs établissements" : "un établissement") + ", dans le secteur " + (q(p.secteur) || "d'activité déclaré") + ". Nous vous prions de bien vouloir établir ou actualiser cette fiche et de nous la transmettre. Nous tenons à votre disposition notre document unique dans sa version du " + plusJours(p, -60) + " et la liste de nos unités de travail. Fait le " + plusJours(p, 3) + ". »")),
+      h("3. Le document annuel adressé au service"),
+      puce(`Contenu type : ${ex("effectifs par catégorie et par site, mouvements de l'année, postes à risques particuliers, produits utilisés, accidents et maladies déclarés, évolutions d'organisation")}.`),
+      puce(`Date d'envoi retenue : ${ex("chaque année avant le 31 mars")} ; responsable : ${ex("Camille MARTIN")}.`),
+      h("4. À réception de la fiche"),
+      puce(`Présentation au comité social et économique en même temps que le bilan annuel : ${ex("réunion du " + plusJours(p, 60))}.`),
+      puce(`Rangement avec les documents tenus à disposition de l'inspection du travail et du médecin inspecteur.`),
+      puce(`Rapprochement avec le document unique : ${ex("tout risque figurant à la fiche et absent du document unique est repris dans la mise à jour suivante")}.`),
+      ...aPers(["Le nom et les coordonnées de votre service de prévention et de santé au travail",
+        "Le contenu et la date d'envoi du document annuel",
+        "La date de présentation de la fiche au comité"])],
+  }),
+
+  "SOC-SST-SALARIE-COMPETENT": p => ({
+    titre: "Désignation et lettre de mission du salarié compétent en prévention",
+    lignes: [...entete(p, "salarié compétent en prévention des risques (L. 4644-1)"),
+      h("1. La règle"),
+      par("L'employeur désigne un ou plusieurs salariés compétents pour s'occuper des activités de protection et de prévention des risques professionnels de l'entreprise (L. 4644-1). Le ou les salariés ainsi désignés disposent du temps nécessaire et des moyens requis. À défaut, si les compétences dans l'entreprise ne permettent pas d'organiser ces activités, l'employeur peut faire appel aux intervenants extérieurs prévus par ce texte — sans que cela le dispense de la désignation."),
+      h("2. Décision de désignation (exemple)"),
+      par(ex("« Après avis du comité social et économique recueilli le " + plusJours(p, -20) + ", " + nomE(p) + " désigne Monsieur Sacha LEROY, responsable maintenance, en qualité de salarié compétent pour s'occuper des activités de protection et de prévention des risques professionnels, à compter du " + plusJours(p, 10) + ". »")),
+      h("3. Lettre de mission"),
+      puce(`Périmètre : ${ex("l'ensemble des sites de l'entreprise")} ; rattachement : ${ex("direction générale, pour l'exercice de la mission")}.`),
+      puce(`Missions : ${ex("tenue et mise à jour du document unique et de son annexe ; animation du programme de prévention ; suivi des vérifications périodiques et du registre de sécurité ; préparation des points santé-sécurité du comité ; accueil sécurité des nouveaux entrants ; suivi des accidents et des presque-accidents")}.`),
+      puce(`Temps alloué : ${ex("une journée par semaine, dégagée du planning d'exploitation")}.`),
+      puce(`Moyens : ${ex("formation initiale de cinq jours en prévention des risques, budget matériel annuel de 6 000 €, accès aux données d'accidentologie")}.`),
+      puce(`Recours extérieur complémentaire : ${ex("intervenant en prévention des risques professionnels du service de santé au travail, sollicité sur le risque chimique")}.`),
+      h("4. Information"),
+      puce(`Le nom du salarié compétent est porté à la connaissance du personnel : ${ex("affichage et note du " + plusJours(p, 12))}, et communiqué au service de prévention et de santé au travail.`),
+      puce(`Point de suivi de la mission avec la direction : ${ex("trimestriel")}.`),
+      ...aPers(["Le nom du salarié désigné et la date d'avis du comité",
+        "Le périmètre, les missions et le temps réellement alloués",
+        "La formation prévue et son financement"])],
+  }),
+
+  "SOC-SST-EPI": p => ({
+    titre: "Dotation d'équipements de protection individuelle et consigne de port",
+    lignes: [...entete(p, "équipements de protection individuelle (R. 4323-91, R. 4323-95)"),
+      h("1. Les règles"),
+      puce("Les équipements de protection individuelle sont appropriés aux risques à prévenir et aux conditions dans lesquelles le travail est accompli ; ils ne doivent pas être eux-mêmes source de risques supplémentaires (R. 4323-91)."),
+      puce("Les équipements de protection individuelle et les vêtements de travail sont fournis gratuitement par l'employeur, qui assure leur bon fonctionnement et leur maintien dans un état hygiénique satisfaisant par les entretiens, réparations et remplacements nécessaires (R. 4323-95)."),
+      puce("La protection collective prime : l'équipement individuel n'intervient que lorsque le risque n'a pu être évité ni traité collectivement — cette justification s'écrit dans le document unique."),
+      h("2. Dotation par unité (exemple)"),
+      ...secteurProfil(p).unites.slice(0, 3).map(u => puce(`${u[0]} — risques : ${u[1]} — dotation : ${ex("équipements adaptés à ces risques, choisis avec le médecin du travail et les élus")}.`)),
+      puce(`Dotation individuelle remise contre émargement, avec explication d'usage : ${ex("fiche de dotation signée, conservée au dossier")}.`),
+      h("3. Entretien et remplacement"),
+      puce(`Entretien : ${ex("nettoyage des vêtements de travail pris en charge par l'entreprise — prestataire externe, ramassage hebdomadaire")}. Aucune participation du salarié, ni directe ni par retenue.`),
+      puce(`Remplacement : ${ex("sur simple demande auprès du chef d'équipe, sans justification, stock tampon au magasin")}.`),
+      puce(`Contrôle périodique de l'état : ${ex("mensuel, par le chef d'équipe, tracé sur la fiche d'unité")}.`),
+      h("4. Consigne de port"),
+      par(ex("« Le port des équipements remis est obligatoire dans les zones signalées et pour les tâches listées en annexe. Tout équipement détérioré est remplacé sans délai, sur simple demande. Le non-port constaté fait l'objet d'un rappel écrit, puis relève de l'échelle des sanctions du règlement intérieur. Consigne diffusée le " + plusJours(p, 6) + ". »")),
+      ...aPers(["Les équipements réellement nécessaires, unité par unité",
+        "Le circuit d'entretien et de remplacement",
+        "Le rythme du contrôle du port et sa traçabilité"])],
+  }),
+
+  "SOC-SST-EXTERIEURES": p => ({
+    titre: "Plan de prévention et protocole de sécurité",
+    lignes: [...entete(p, "entreprises extérieures et opérations de chargement (R. 4512-6, R. 4515-4)"),
+      h("1. Les règles"),
+      puce("Au vu des informations et éléments recueillis au cours de l'inspection commune préalable, les chefs des entreprises utilisatrice et extérieures arrêtent d'un commun accord, avant le début des travaux, un plan de prévention définissant les mesures prises par chaque entreprise en vue de prévenir les risques pouvant résulter de l'interférence entre les activités, les installations et matériels (R. 4512-6). Ce plan est établi par écrit dans les cas que ce texte prévoit."),
+      puce("Les opérations de chargement ou de déchargement font l'objet d'un document écrit, dit protocole de sécurité, échangé entre l'entreprise d'accueil et le transporteur (R. 4515-4)."),
+      h("2. Inspection commune préalable (exemple)"),
+      puce(`Date : ${ex(plusJours(p, 3))} — participants : ${ex("responsable de site, salarié compétent en prévention, chef de l'entreprise extérieure, un membre du comité social et économique")}.`),
+      puce(`Périmètre reconnu : ${ex("atelier, quai nord, local technique, voies de circulation empruntées")}.`),
+      puce(`Compte rendu écrit et signé : ${ex("annexé au plan de prévention")}.`),
+      h("3. Plan de prévention — sommaire type"),
+      puce(`Identification des entreprises, des travaux, des dates et des effectifs concernés : ${ex("réfection de la toiture du bâtiment B, du " + plusJours(p, 10) + " au " + plusJours(p, 40) + ", 4 intervenants")}.`),
+      puce(`Risques d'interférence identifiés : ${ex("circulation d'engins sous la zone de travail, chute d'objets, coactivité avec le quai")}.`),
+      puce(`Mesures arrêtées par chaque entreprise : ${ex("balisage de la zone au sol, interdiction de circulation sous nacelle, horaires décalés, consignation électrique")}.`),
+      puce(`Organisation des secours et des alertes communes ; liste des travaux dangereux ; personnes chargées du suivi de chaque côté.`),
+      h("4. Protocole de sécurité — sommaire type"),
+      puce(`Renseignements de l'entreprise d'accueil : ${ex("consignes de sécurité du site, plan de circulation, lieu de livraison, matériels de manutention, moyens de secours")}.`),
+      puce(`Renseignements du transporteur : ${ex("caractéristiques du véhicule, nature des marchandises, modalités de manutention")}.`),
+      puce(`Protocole établi une fois pour les opérations à caractère répétitif : ${ex("protocole type signé avec les 6 transporteurs habituels, révision annuelle")}.`),
+      ...aPers(["La liste des entreprises extérieures et des transporteurs concernés",
+        "Les risques d'interférence propres à votre site",
+        "Les mesures arrêtées et les personnes chargées du suivi"])],
+  }),
+
+  "SOC-SST-NUIT": p => ({
+    titre: "Note de justification et suivi du travail de nuit",
+    lignes: [...entete(p, "recours au travail de nuit (L. 3122-1, L. 3122-2)"),
+      h("1. Les règles"),
+      puce("Le recours au travail de nuit est exceptionnel. Il prend en compte les impératifs de protection de la santé et de la sécurité des travailleurs et est justifié par la nécessité d'assurer la continuité de l'activité économique ou des services d'utilité sociale (L. 3122-1)."),
+      puce("Tout travail effectué au cours d'une période d'au moins neuf heures consécutives comprenant l'intervalle entre minuit et cinq heures est considéré comme du travail de nuit, dans les conditions de l'article L. 3122-2."),
+      h("2. Justification écrite (exemple)"),
+      par(ex("« L'activité de " + nomE(p) + " impose une exploitation nocturne : les tournées de distribution doivent être chargées entre 2 h et 5 h pour permettre la livraison des clients à l'ouverture. L'arrêt de cette plage entraînerait la rupture de la chaîne de livraison et la perte du service rendu. Le recours au travail de nuit est donc justifié par la nécessité d'assurer la continuité de l'activité économique. Cette justification est réexaminée chaque année. »")),
+      h("3. Cadre collectif et périmètre"),
+      puce(`Accord applicable : ${ex("à vérifier dans " + ccn(p) + " — cette application ne lit pas la convention collective")}. À défaut d'accord, l'autorisation de l'inspection du travail est requise dans les conditions prévues par les textes.`),
+      puce(`Salariés concernés : ${ex("12 conducteurs et 4 agents de quai")} ; qualification de « travailleur de nuit » examinée individuellement selon la définition légale.`),
+      puce(`Contreparties : ${ex("repos compensateur et majoration prévus par l'accord applicable — à vérifier sur le texte, non affirmés ici")}.`),
+      h("4. Suivi et prévention"),
+      puce(`Suivi individuel régulier de l'état de santé, organisé avec le service de prévention et de santé au travail : ${ex("liste transmise le " + plusJours(p, 5) + ", visites programmées")}.`),
+      puce(`Mesures de prévention propres à la nuit : ${ex("éclairage renforcé des quais, pause allongée, encadrement présent, transport de retour organisé")}.`),
+      puce(`Point annuel avec le comité social et économique : ${ex("réunion du " + plusJours(p, 60))}.`),
+      ...aPers(["La justification réelle du recours, activité par activité",
+        "L'accord ou l'autorisation qui fonde le cadre collectif",
+        "Les contreparties applicables, lues dans le texte",
+        "Le calendrier du suivi médical"])],
+  }),
+
+  "SOC-SST-JEUNES": p => ({
+    titre: "Recensement des travaux confiés aux travailleurs de moins de dix-huit ans",
+    lignes: [...entete(p, "jeunes travailleurs : travaux interdits et dérogations (L. 4153-8, L. 4153-9, R. 4153-40)"),
+      h("1. Les règles"),
+      puce("Il est interdit d'employer des travailleurs de moins de dix-huit ans à certaines catégories de travaux les exposant à des risques pour leur santé, leur sécurité, leur moralité ou excédant leurs forces (L. 4153-8)."),
+      puce("Par dérogation, certains de ces travaux peuvent être accomplis par des jeunes en formation professionnelle, dans les conditions fixées par l'article L. 4153-9 et les textes pris pour son application."),
+      puce("L'employeur ou le responsable de l'établissement mentionné à l'article L. 4111-1 peut affecter des jeunes aux travaux réglementés dans les conditions et sous les garanties de l'article R. 4153-40."),
+      h("2. Recensement (exemple)"),
+      par("Colonnes : jeune · âge · statut (apprenti, stagiaire, contrat) · unité · tâches réellement confiées · travail interdit ou réglementé · décision."),
+      par(ex("MOREAU Louis — 17 ans — apprenti mécanicien — atelier — dépose de roues, vidanges, utilisation du pont élévateur — travail réglementé (utilisation d'équipements de levage) — dérogation à formaliser")),
+      par(ex("PETIT Inès — 16 ans — stagiaire — quai — conduite d'un transpalette électrique autoporté — TRAVAIL RÉGLEMENTÉ, affectation suspendue le " + plusJours(p, 0) + " dans l'attente de la procédure")),
+      h("3. La procédure de dérogation"),
+      puce(`Évaluation des risques préalable, actualisée, couvrant le poste du jeune : ${ex("mise à jour du document unique du " + plusJours(p, -30))}.`),
+      puce(`Avis médical d'aptitude délivré chaque année : ${ex("visites programmées le " + plusJours(p, 15))}.`),
+      puce(`Information de l'agent de contrôle de l'inspection du travail, dans les formes et délais prévus par les textes : ${ex("courrier du " + plusJours(p, 10) + ", accusé conservé")}.`),
+      puce(`Encadrement par une personne compétente et formation à la sécurité du poste : ${ex("tuteur désigné, formation d'une journée avant reprise du poste")}.`),
+      h("4. Tenue"),
+      puce(`Recensement revu à chaque arrivée et au moins ${ex("deux fois par an")} ; responsable : ${ex("le salarié compétent en prévention, avec les tuteurs")}.`),
+      puce("Les tâches réellement confiées, et non celles du référentiel de formation, sont ce qui se recense : c'est l'écart entre les deux qui crée le risque."),
+      ...aPers(["La liste réelle des jeunes accueillis et des tâches confiées",
+        "Les avis médicaux et leur date de renouvellement",
+        "La forme et le destinataire exacts de l'information à l'inspection du travail"])],
+  }),
+
+  "SOC-SST-LOCAUX": p => ({
+    titre: "État des lieux des installations sanitaires et de restauration",
+    lignes: [...entete(p, "sanitaires, vestiaires et restauration (R. 4228-10, R. 4228-19)"),
+      h("1. Les règles"),
+      puce("Il existe au moins un cabinet d'aisance et un urinoir pour vingt hommes et deux cabinets pour vingt femmes, dans les conditions fixées par l'article R. 4228-10 ; les cabinets d'aisance réservés aux femmes comportent un récipient pour garnitures périodiques."),
+      puce("Il est interdit de laisser les travailleurs prendre leur repas dans les locaux affectés au travail (R. 4228-19). La mise à disposition d'un emplacement ou d'un local de restauration obéit aux conditions fixées par les textes, dont le seuil dépend du nombre de travailleurs souhaitant y prendre leur repas — vérifiez-le sur le texte applicable."),
+      h("2. État des lieux (exemple)"),
+      par("Colonnes : site · effectif · cabinets hommes · urinoirs · cabinets femmes · lavabos · vestiaires · état · écart constaté."),
+      par(ex("Siège — 48 salariés dont 20 femmes — 2 cabinets hommes, 2 urinoirs, 2 cabinets femmes, 6 lavabos, vestiaires séparés — conforme")),
+      par(ex("Plateforme — 62 salariés dont 12 femmes — 3 cabinets hommes, 3 urinoirs, 1 cabinet femmes — ÉCART : deux cabinets requis pour les femmes — travaux à programmer avant le " + plusJours(p, 90))),
+      h("3. Restauration"),
+      puce(`Nombre de salariés souhaitant prendre leur repas sur place : ${ex("recensé par sondage — 34 sur la plateforme, 12 au siège")}.`),
+      puce(`Existant : ${ex("salle de pause de 24 m² équipée de deux micro-ondes, d'un réfrigérateur et de tables — insuffisante aux heures de pointe")}.`),
+      puce(`Constat de repas pris au poste : ${ex("observé sur le quai — à faire cesser, avec la mise à disposition d'un emplacement conforme")}.`),
+      h("4. Suites"),
+      puce(`Consultation du comité social et économique sur les aménagements projetés : ${ex("réunion du " + plusJours(p, 30))}.`),
+      puce(`Budget et calendrier : ${ex("28 000 €, travaux au troisième trimestre")} ; responsable : ${ex("services généraux")}.`),
+      puce(`Propreté et entretien : ${ex("nettoyage quotidien, contrôle hebdomadaire tracé")}.`),
+      ...aPers(["L'état des lieux réel, site par site",
+        "Le nombre de salariés souhaitant se restaurer sur place",
+        "Le seuil et les conditions applicables, vérifiés sur le texte",
+        "Le budget et le calendrier des travaux"])],
+  }),
+
+  "SOC-SST-ECRAN": p => ({
+    titre: "Information et suivi des postes de travail sur écran",
+    lignes: [...entete(p, "travail sur écran de visualisation (R. 4542-16)"),
+      h("1. La règle"),
+      par("L'employeur assure l'information et la formation des travailleurs sur les modalités d'utilisation de l'écran et de l'équipement de travail dans lequel cet écran est intégré, dans les conditions de l'article R. 4542-16 : avant la première affectation à un travail sur écran de visualisation et à chaque modification importante du poste."),
+      h("2. Recensement (exemple)"),
+      puce(`Postes concernés : ${ex("22 postes — administration, exploitation, comptabilité, accueil")}.`),
+      puce(`Durée quotidienne moyenne sur écran : ${ex("de 4 à 7 heures selon les postes")}.`),
+      puce(`Postes en télétravail partiel : ${ex("6 — l'information porte aussi sur l'installation à domicile")}.`),
+      h("3. Contenu de l'information"),
+      puce(`Réglage du siège, de la hauteur de l'écran, de la distance et de l'éclairage : ${ex("fiche illustrée remise à chaque poste")}.`),
+      puce(`Organisation de la journée : ${ex("interruption de la tâche sur écran par une autre activité toutes les deux heures, ou pause visuelle")}.`),
+      puce(`Signes à signaler : ${ex("fatigue visuelle, céphalées, douleurs cervicales ou du poignet — qui prévenir et comment")}.`),
+      puce(`Remise contre émargement, à l'affectation et à chaque modification importante : ${ex("dernière campagne le " + plusJours(p, -180))}.`),
+      h("4. Examen des yeux et de la vue"),
+      puce(`Sollicitation du service de prévention et de santé au travail : ${ex("courrier du " + plusJours(p, 5) + " demandant l'examen approprié pour les 22 salariés concernés")}.`),
+      puce(`Suites : ${ex("prise en charge des dispositifs de correction spéciaux lorsque le médecin les préconise et que les textes le prévoient — à vérifier")}.`),
+      puce(`Aménagements réalisés : ${ex("8 sièges ergonomiques, 12 supports d'écran, 4 souris verticales — budget 6 400 €")}.`),
+      ...aPers(["Le recensement réel des postes sur écran",
+        "Le contenu de la fiche d'information et sa remise",
+        "La demande d'examen adressée à votre service de santé au travail"])],
+  }),
+
+  "SOC-SST-CHIMIQUE": p => ({
+    titre: "Inventaire des produits chimiques et notice de poste",
+    lignes: [...entete(p, "agents chimiques : information et notice de poste (R. 4412-38, R. 4412-39)"),
+      h("1. Les règles"),
+      puce("L'employeur veille à ce que les travailleurs ainsi que le comité social et économique reçoivent des informations sur les agents chimiques dangereux présents, dans les conditions de l'article R. 4412-38 : identification, risques, valeurs limites, précautions, accès aux fiches de données de sécurité."),
+      puce("L'employeur établit une notice, dénommée notice de poste, pour chaque poste de travail ou situation de travail exposant les travailleurs à des agents chimiques dangereux (R. 4412-39). Elle les informe des risques encourus et des dispositions prises pour les éviter."),
+      h("2. Inventaire (exemple)"),
+      par("Colonnes : produit · unité · usage · quantité stockée · fiche de données de sécurité (date) · mentions de danger · substitution examinée."),
+      par(ex("Dégraissant industriel — atelier — nettoyage des pièces — 40 L — fiche du " + plusJours(p, -400) + " — H315, H319 — substitution examinée : produit aqueux testé, à généraliser")),
+      par(ex("Carburant gazole — cuve extérieure — approvisionnement de la flotte — 5 000 L — fiche du " + plusJours(p, -200) + " — H226, H351 — substitution : sans objet")),
+      par(ex("Produit d'entretien sanitaires — services généraux — nettoyage — 20 L — FICHE MANQUANTE, à réclamer au fournisseur")),
+      h("3. Notice de poste (exemple)"),
+      par(ex("« Notice de poste — Nettoyage des pièces, atelier. Produit : dégraissant industriel. Risques : irritation cutanée et oculaire. Mesures collectives : aspiration à la source, local ventilé. Équipements individuels : gants nitrile, lunettes de protection. Interdictions : ne jamais transvaser dans un contenant non étiqueté ; ne jamais mélanger avec un autre produit. Conduite à tenir en cas de projection : rincer 15 minutes à l'eau, consulter, prévenir le chef d'équipe. Fiche de données de sécurité consultable au classeur du magasin et sur l'intranet. Établie après avis du médecin du travail du " + plusJours(p, -25) + ". »")),
+      h("4. Suites"),
+      puce(`Fiches manquantes réclamées aux fournisseurs : ${ex("3 relances envoyées le " + plusJours(p, 4))}.`),
+      puce(`Risques chimiques reportés au document unique et, le cas échéant, à son annexe : ${ex("mise à jour du " + plusJours(p, 30))}.`),
+      puce(`Information du comité social et économique : ${ex("point à l'ordre du jour du " + plusJours(p, 45))}.`),
+      ...aPers(["L'inventaire réel de tous les produits, entretien compris",
+        "Les notices de poste, établies après avis du médecin du travail",
+        "Les relances aux fournisseurs pour les fiches manquantes"])],
+  }),
+
+  "SOC-SST-DUERP-ANNEXE": p => ({
+    titre: "Annexe du document unique : données collectives d'exposition",
+    lignes: [...entete(p, "annexe du document unique (R. 4121-1-1)"),
+      h("1. La règle"),
+      par("L'employeur consigne, en annexe du document unique, les données collectives utiles à l'évaluation des expositions individuelles aux facteurs de risques professionnels, ainsi que la proportion de salariés exposés au-delà des seuils, dans les conditions de l'article R. 4121-1-1. L'annexe est distincte du corps du document et se met à jour avec lui."),
+      h("2. Tableau des données collectives (exemple)"),
+      par("Colonnes : unité de travail · facteur de risque · mode de mesure ou d'estimation · effectif de l'unité · effectif exposé au-delà du seuil · proportion · période de référence."),
+      ...secteurProfil(p).unites.slice(0, 3).map(u => par(ex(u[0] + " — facteur identifié à partir des risques suivants : " + u[1] + " — estimation fondée sur les plannings et les mesures d'ambiance — effectif de l'unité et effectif exposé à renseigner sur vos données"))),
+      par(ex("Quai et entrepôt — travail de nuit — plannings de l'exercice — 62 salariés — 16 exposés au-delà du seuil — 25,8 % — période du 1er janvier au 31 décembre")),
+      h("3. Concordance avec les déclarations sociales"),
+      puce(`Rapprochement fait le ${ex(plusJours(p, -15))} entre l'annexe et les déclarations : ${ex("écart de 2 salariés sur le facteur « travail de nuit », corrigé")}.`),
+      puce("Un écart entre l'annexe et la déclaration se remarque : traitez-le avant qu'il ne soit relevé."),
+      h("4. Tenue"),
+      puce(`Mise à jour à chaque mise à jour du document unique, et au moins ${ex("chaque année")} ; responsable : ${ex("le salarié compétent en prévention, avec la paie")}.`),
+      puce(`Présentation au comité social et économique en même temps que le document unique : ${ex("réunion du " + plusJours(p, 40))}.`),
+      puce(`Conservation avec le document unique et ses versions antérieures, dans les mêmes conditions.`),
+      ...aPers(["Les facteurs de risques réellement présents, unité par unité",
+        "Les effectifs exposés et la proportion, calculés sur vos données",
+        "Le rapprochement avec vos déclarations sociales"])],
+  }),
+
+  /* ─────────────────── formation et entretiens (suite) ──────────────── */
+
+  "SOC-FOR-CONTRIBUTION": p => ({
+    titre: "Note de contrôle des contributions formation et alternance",
+    lignes: [...entete(p, "contribution au développement de la formation et de l'alternance (L. 6131-1)"),
+      h("1. La règle"),
+      par("Les employeurs concourent au développement de la formation professionnelle et de l'alternance, notamment par le financement direct d'actions et par le versement des contributions prévues par l'article L. 6131-1. Les taux et les assiettes varient selon l'effectif et la nature des contrats : ils se vérifient chaque année."),
+      h("2. Effectif retenu (exemple)"),
+      puce(`Effectif déclaré à l'audit : ${eff(p)} salariés.`),
+      puce(`Effectif retenu pour les contributions : ${ex("calculé selon les règles de décompte propres à chaque contribution — à confirmer avec l'expert-comptable")}.`),
+      puce(`Franchissement de seuil dans l'année : ${ex("non")} — un franchissement modifie les taux et se signale.`),
+      h("3. Contrôle des versements (exemple)"),
+      par("Colonnes : période · assiette déclarée · taux appliqué · montant versé · date · écart constaté."),
+      par(ex("Janvier à juin — masse salariale 1 240 000 € — taux appliqués selon la déclaration sociale nominative — versé mensuellement — aucun écart")),
+      par(ex("Exercice précédent — REGULARISATION : 3 apprentis non intégrés à l'assiette, incidence 1 850 € — corrigée sur la déclaration du " + plusJours(p, 30))),
+      h("4. Suites"),
+      puce(`Revue annuelle avec l'expert-comptable, avant la clôture : ${ex("prévue le " + plusJours(p, 60))}.`),
+      puce(`Conservation des justificatifs de versement et des dépenses de formation imputables : ${ex("dossier « formation » de l'exercice")}.`),
+      puce(`Articulation avec le plan de développement des compétences et, lorsqu'un comité existe, avec sa consultation sur la formation.`),
+      ...aPers(["L'effectif retenu pour chaque contribution",
+        "Les taux et assiettes applicables à votre situation",
+        "Les écarts constatés et leur régularisation"])],
+  }),
+
+  "SOC-FOR-ABONDEMENT": p => ({
+    titre: "État des lieux récapitulatif à six ans et abondement correctif",
+    lignes: [...entete(p, "abondement correctif du compte personnel de formation (L. 6323-13)"),
+      h("1. La règle"),
+      par(`Dans les entreprises d'au moins cinquante salariés, lorsque le salarié n'a pas bénéficié des entretiens prévus et d'au moins une formation autre que celle qui conditionne l'exercice de son activité, son compte personnel de formation est abondé dans les conditions de l'article L. 6323-13. L'effectif déclaré de ${nomE(p)} est de ${eff(p)} salariés.`),
+      h("2. Recensement des échéances (exemple)"),
+      par("Colonnes : salarié · date d'entrée · échéance des six ans · entretiens tenus (dates) · formation non obligatoire suivie · abondement dû."),
+      par(ex("MARTIN Camille — entrée le 12/09/2020 — échéance 12/09/2026 — entretiens : 2021, 2023, 2025 — formation « conduite de réunion » en 2024 — abondement non dû")),
+      par(ex("LEROY Sacha — entrée le 03/03/2020 — échéance 03/03/2026 — entretiens : 2022 seulement — aucune formation hors habilitations obligatoires — ABONDEMENT DÛ")),
+      h("3. L'état des lieux écrit"),
+      par(ex("« État des lieux récapitulatif du parcours professionnel de Monsieur Sacha LEROY, au terme de six années de présence. Entretiens professionnels tenus : un seul, le 14/04/2022. Formations suivies : renouvellement des habilitations électriques (2021, 2024) — formations conditionnant l'exercice de l'activité. Progression salariale ou professionnelle : passage au coefficient 140 en 2023. Certification obtenue : aucune. Conclusion : les conditions de l'article L. 6323-13 ne sont pas remplies ; un abondement correctif est dû. Copie remise au salarié le " + plusJours(p, 10) + ". »")),
+      h("4. Suites"),
+      puce(`Abondement déclaré et versé : ${ex("2 salariés concernés, déclaration du " + plusJours(p, 20) + ", avec l'expert-comptable")}.`),
+      puce(`Prévention : ${ex("alerte automatique posée à 5 ans et 6 mois de présence, pour tenir les entretiens avant l'échéance")}.`),
+      puce(`Rattrapage du cycle d'entretiens : ${ex("12 entretiens programmés au dernier trimestre")}.`),
+      ...aPers(["Les dates d'entrée et les échéances réelles",
+        "La liste des entretiens tenus et des formations suivies",
+        "Le calcul et la déclaration de l'abondement, avec votre expert-comptable"])],
+  }),
+
+  /* ────────────────────────────── instances (suite) ─────────────────── */
+
+  "SOC-INS-SECTION-SYNDICALE": p => ({
+    titre: "Note de mise à disposition des moyens de la section syndicale",
+    lignes: [...entete(p, "moyens de la section syndicale (L. 2142-3, L. 2142-4, L. 2142-8)"),
+      h("1. Les règles"),
+      puce("L'affichage des communications syndicales s'effectue librement sur des panneaux réservés à cet usage, distincts de ceux affectés aux communications des délégués du personnel et du comité social et économique ; un exemplaire des communications est transmis à l'employeur simultanément à l'affichage (L. 2142-3)."),
+      puce("Les publications et tracts de nature syndicale peuvent être librement diffusés aux travailleurs de l'entreprise dans l'enceinte de celle-ci, aux heures d'entrée et de sortie du travail (L. 2142-4)."),
+      puce("Dans les entreprises ou établissements d'au moins deux cents salariés, l'employeur met à la disposition des sections syndicales un local commun ; dans ceux d'au moins mille salariés, un local convenable, aménagé et doté du matériel nécessaire à leur fonctionnement, à la disposition de chaque section syndicale d'organisation représentative (L. 2142-8)."),
+      h("2. Ce qui est mis à disposition (exemple)"),
+      puce(`Panneaux : ${ex("un panneau par organisation représentative, format A0, hall d'accueil et salle de pause de la plateforme — distincts de ceux du comité")}.`),
+      puce(`Local : ${ex("selon l'effectif de " + eff(p) + " salariés — local commun de 18 m², bâtiment A, équipé d'une table, de six chaises, d'une armoire fermant à clé, d'un poste informatique et d'une ligne téléphonique")}.`),
+      puce(`Accès : ${ex("clé remise à chaque délégué syndical, accès libre pendant les heures d'ouverture du site")}.`),
+      puce(`Diffusion des tracts : ${ex("aux heures d'entrée et de sortie, aux trois accès du site — aucune autorisation préalable n'est requise")}.`),
+      h("3. Texte de la note"),
+      par(ex("« " + nomE(p) + " met à la disposition des sections syndicales, à compter du " + plusJours(p, 10) + " : des panneaux d'affichage réservés, distincts de ceux du comité social et économique, dans le hall d'accueil et la salle de pause ; un local commun situé bâtiment A, aménagé et doté du matériel nécessaire. La diffusion des publications et tracts s'effectue librement dans l'enceinte de l'entreprise aux heures d'entrée et de sortie du travail. Fait le " + plusJours(p, 5) + ". »")),
+      h("4. Traces"),
+      puce(`Note remise à chaque délégué syndical contre récépissé, et copie au dossier « relations sociales ».`),
+      puce(`Un exemplaire des communications affichées est transmis à l'employeur simultanément à l'affichage : ${ex("boîte aux lettres dédiée à la direction")}.`),
+      ...aPers(["Le nombre et l'emplacement réels des panneaux",
+        "Le local affecté, sa surface et son équipement, selon votre effectif",
+        "Les modalités d'accès convenues avec les délégués syndicaux"])],
+  }),
+
+  "SOC-INS-PROTEGES": p => ({
+    titre: "Liste des salariés protégés et procédure d'autorisation préalable",
+    lignes: [...entete(p, "protection des représentants du personnel (L. 2411-3)"),
+      h("1. La règle"),
+      par("Le licenciement d'un délégué syndical ne peut intervenir qu'après autorisation de l'inspecteur du travail (L. 2411-3). La même exigence, dans les conditions qui leur sont propres, protège les autres représentants du personnel : l'audit détaillé se fait dans le module « comité social et économique »."),
+      h("2. La liste (exemple)"),
+      par("Colonnes : salarié · mandat · date de désignation ou d'élection · fin de mandat · fin de la période de protection · observations."),
+      par(ex("COSTA Ana — déléguée syndicale — désignée le 12/02/2025 — mandat en cours — protection en cours")),
+      par(ex("DURAND Pierre — ancien membre titulaire du comité — mandat expiré le 30/06/2025 — protection prolongée après la fin du mandat, durée à vérifier au cas par cas")),
+      par(ex("LEROY Sacha — candidat non élu aux dernières élections — protection à durée limitée après le scrutin, à vérifier")),
+      h("3. La procédure interne"),
+      puce(`Contrôle obligatoire de la liste avant TOUTE rupture, quelle qu'en soit la forme : ${ex("licenciement, rupture conventionnelle, rupture de période d'essai, non-renouvellement d'un contrat à durée déterminée, transfert")}.`),
+      puce(`Visa du responsable des ressources humaines attestant du contrôle : ${ex("case obligatoire du formulaire interne de rupture")}.`),
+      puce(`En cas de mandat : consultation du comité lorsqu'elle est requise, puis demande motivée d'autorisation à l'inspecteur du travail, avec l'assistance de votre conseil.`),
+      h("4. Tenue de la liste"),
+      puce(`Mise à jour à chaque élection, désignation, démission ou fin de mandat : ${ex("responsable — Camille MARTIN, mise à jour du " + plusJours(p, -5))}.`),
+      puce("Les durées de protection après la fin d'un mandat ne sont pas affirmées ici : elles se vérifient au cas par cas avec votre conseil."),
+      ...aPers(["La liste réelle des mandats, anciens mandats et candidatures",
+        "Les durées de protection applicables, vérifiées au cas par cas",
+        "Le point de contrôle inséré dans votre processus de rupture"]),
+      noteFin("l'audit complet de la protection des élus se fait dans le module « comité social et économique » (audit-cse.html).")],
+  }),
+
+  /* ───────────────────────────── négociations (suite) ───────────────── */
+
+  "SOC-NEG-DECONNEXION": p => ({
+    titre: "Charte du droit à la déconnexion et sa mise en négociation",
+    lignes: [...entete(p, "droit à la déconnexion (L. 2242-17)"),
+      h("1. La règle"),
+      par("La négociation obligatoire porte notamment sur les modalités du plein exercice par le salarié de son droit à la déconnexion et sur la mise en place par l'entreprise de dispositifs de régulation de l'utilisation des outils numériques, en vue d'assurer le respect des temps de repos et de congé ainsi que de la vie personnelle et familiale. À défaut d'accord, l'employeur élabore une charte, après avis du comité social et économique, définissant ces modalités et prévoyant la mise en œuvre d'actions de formation et de sensibilisation à un usage raisonnable des outils numériques (L. 2242-17)."),
+      h("2. État des lieux (exemple)"),
+      puce(`Thème porté à la négociation : ${ex("oui, réunion du " + plusJours(p, -60) + " — sans accord à ce jour")}.`),
+      puce(`Pratiques constatées : ${ex("courriels envoyés après 21 h par l'encadrement, notifications actives sur les téléphones professionnels le week-end")}.`),
+      puce(`Populations les plus exposées : ${ex("cadres au forfait en jours et encadrement d'exploitation")}.`),
+      h("3. Texte de la charte (exemple)"),
+      par(ex("« Article 1 — Plages de déconnexion. Aucun salarié n'est tenu de répondre à un courriel, un message ou un appel professionnel entre 20 h et 7 h, ni pendant ses repos hebdomadaires et ses congés. Article 2 — Envois différés. L'encadrement utilise l'envoi différé pour tout message rédigé en dehors de ces plages. Article 3 — Astreintes. Seules les astreintes formalisées dérogent au présent article ; elles sont rémunérées comme telles. Article 4 — Réunions. Aucune réunion n'est programmée avant 8 h 30 ni après 18 h. Article 5 — Absences. Un message d'absence indiquant l'interlocuteur de remplacement est activé à chaque congé. Article 6 — Suivi. Un point annuel est fait avec le comité social et économique. Charte élaborée après avis du comité du " + plusJours(p, 20) + ". »")),
+      h("4. Formation et sensibilisation"),
+      puce(`Encadrement et direction : ${ex("session d'une demi-journée sur la charge de travail et l'usage des outils, le " + plusJours(p, 50))}.`),
+      puce(`Ensemble des salariés : ${ex("note d'information et rappel annuel")}.`),
+      puce(`Articulation avec le forfait annuel en jours : la charte est un élément du suivi de la charge de travail.`),
+      ...aPers(["L'état réel de la négociation sur ce thème",
+        "Les plages et règles retenues, adaptées à votre activité",
+        "La date d'avis du comité et le programme de sensibilisation"]),
+      noteFin("l'audit complet de la négociation obligatoire se fait dans le module « négociation obligatoire (NAO) » (audit-nao.html).")],
+  }),
+
+  "SOC-NEG-PARTAGE-VALEUR": p => ({
+    titre: "Ouverture de la négociation sur l'augmentation exceptionnelle du bénéfice",
+    lignes: [...entete(p, "conséquences d'une augmentation exceptionnelle du bénéfice (L. 3346-1)"),
+      h("1. La règle"),
+      par("Lorsqu'une entreprise qui est tenue de mettre en place un régime de participation dispose d'un ou plusieurs délégués syndicaux, elle engage une négociation sur la définition d'une augmentation exceptionnelle de son bénéfice et sur les conséquences à en tirer pour les salariés, dans les conditions de l'article L. 3346-1."),
+      h("2. Vérification préalable (exemple)"),
+      puce(`Entreprise tenue de mettre en place un régime de participation : ${ex("oui — effectif de " + eff(p) + " salariés, condition de durée vérifiée avec l'expert-comptable")}.`),
+      puce(`Délégués syndicaux présents : ${ex("deux — A. COSTA et P. DURAND")}.`),
+      puce(`Négociation déjà engagée : ${ex("non — à ouvrir")}.`),
+      h("3. Lettre d'invitation à négocier"),
+      par(ex("« Mesdames, Messieurs les délégués syndicaux, " + nomE(p) + " vous invite à ouvrir la négociation prévue à l'article L. 3346-1 du code du travail, portant sur la définition d'une augmentation exceptionnelle de son bénéfice et sur les conséquences à en tirer pour les salariés. Une première réunion se tiendra le " + plusJours(p, 21) + " à 14 heures, au siège. Les informations suivantes vous seront remises au plus tard huit jours avant : comptes des trois derniers exercices, résultat net et son évolution, éléments de contexte du secteur, données de la participation et de l'intéressement en vigueur. Fait le " + plusJours(p, 5) + ". »")),
+      h("4. Points à traiter et sortie"),
+      puce(`Définition retenue de l'augmentation exceptionnelle : ${ex("critère chiffré, par exemple un résultat net supérieur d'un pourcentage défini à la moyenne des trois exercices précédents — à négocier, rien n'est imposé ici")}.`),
+      puce(`Conséquences envisagées : ${ex("supplément de participation ou d'intéressement, abondement d'un plan d'épargne, prime de partage de la valeur — le choix appartient à la négociation")}.`),
+      puce(`Sortie : accord signé et déposé, ou procès-verbal de désaccord consignant les dernières propositions de chaque partie.`),
+      puce(`Calendrier retenu : ${ex("trois réunions, les " + plusJours(p, 21) + ", " + plusJours(p, 42) + " et " + plusJours(p, 63))}.`),
+      ...aPers(["La vérification que l'entreprise est tenue de mettre en place la participation",
+        "Les délégués syndicaux réellement présents",
+        "Les informations remises et le calendrier des réunions"]),
+      noteFin("l'audit complet de la négociation obligatoire se fait dans le module « négociation obligatoire (NAO) » (audit-nao.html).")],
+  }),
+
 };
 
 module.exports = { MODELES };
@@ -3260,6 +6023,29 @@ q("cadres", "L'entreprise emploie-t-elle des cadres ?", "oui / non",
   "La prévoyance des cadres est une obligation conventionnelle au coût de carence très élevé.");
 q("projetLicenciementEco", "Un licenciement pour motif économique est-il envisagé ou en cours ?", "oui / non",
   "S'il l'est, les modules licenciement économique et PSE doivent être passés avant toute notification.");
+
+/* Les neuf questions ajoutées avec les matières venues de l'audit voisin :
+   durée du travail, contrats courts, santé au travail au poste. Chacune
+   commande des obligations qui, sans elle, resteraient indéterminées — le
+   référentiel ne suppose jamais qu'une situation existe ou n'existe pas. */
+q("heuresSupplementaires", "Des heures supplémentaires sont-elles accomplies ?", "oui / non",
+  "Elles ouvrent le contingent annuel et, au-delà, la contrepartie obligatoire en repos (L. 3121-30, L. 3121-33, D. 3121-24, L. 3121-38).");
+q("forfaitJours", "Des salariés sont-ils soumis à un forfait annuel en jours ?", "oui / non",
+  "Le forfait suppose un accord collectif, une convention individuelle écrite, un document de contrôle des journées et un suivi de la charge de travail (L. 3121-64, L. 3121-65, L. 3121-60). Sans accord conforme, il est privé d'effet.");
+q("tempsPartiel", "L'entreprise emploie-t-elle des salariés à temps partiel ?", "oui / non",
+  "Le temps partiel appelle un contrat écrit portant la durée et sa répartition, une durée minimale, la majoration de toutes les heures complémentaires et une priorité d'accès aux emplois à temps complet.");
+q("contratsCourts", "L'entreprise recourt-elle à des contrats à durée déterminée, à l'intérim ou à des stagiaires ?", "oui / non",
+  "Les contrats courts appellent l'écrit et son motif précis, le délai de transmission, le délai de carence, l'indemnité de fin de contrat — et, sur les postes à risques, une formation renforcée à la sécurité.");
+q("travailNuit", "Des salariés travaillent-ils la nuit ?", "oui / non",
+  "Le recours au travail de nuit est exceptionnel et justifié ; il suppose un accord ou une autorisation, des contreparties et un suivi médical régulier (L. 3122-1, L. 3122-2).");
+q("jeunesTravailleurs", "L'entreprise emploie-t-elle ou accueille-t-elle des travailleurs de moins de dix-huit ans (apprentis, stagiaires, jeunes en contrat) ?", "oui / non",
+  "Certains travaux leur sont interdits, et toute dérogation suit une procédure encadrée (L. 4153-8, L. 4153-9, R. 4153-40).");
+q("entreprisesExterieures", "Des entreprises extérieures interviennent-elles dans vos locaux, ou des opérations de chargement ou de déchargement y sont-elles réalisées par un transporteur ?", "oui / non",
+  "L'inspection commune préalable et le plan de prévention écrit sont dus (R. 4512-6) ; les opérations de chargement ou de déchargement font l'objet d'un protocole de sécurité (R. 4515-4).");
+q("postesEcran", "Des salariés travaillent-ils habituellement sur écran de visualisation ?", "oui / non",
+  "L'information et la formation à l'utilisation du poste sont dues avant la première affectation et à chaque modification importante (R. 4542-16), avec un examen approprié des yeux et de la vue.");
+q("agentsChimiques", "Des agents chimiques dangereux (produits d'entretien industriels, solvants, carburants, peintures, gaz) sont-ils utilisés ou stockés ?", "oui / non",
+  "Ils appellent les fiches de données de sécurité, l'information des travailleurs et du comité (R. 4412-38) et une notice de poste par situation de travail exposante (R. 4412-39). Les produits d'entretien en relèvent souvent : ne répondez « non » qu'après vérification.");
 
 /* ─────────────────────────── la garantie, dans les deux sens ─────────── */
 const lusParLeCode = new Set();
@@ -3596,6 +6382,556 @@ __def("./textes-social.json", function(module){ module.exports = {
   "id": "LEGIARTI000043975313",
   "date": "2026-08-19",
   "texte": "Tout salarié d'une entreprise proposant un dispositif d'intéressement, de participation, un plan d'épargne entreprise, un plan d'épargne interentreprises, un plan d'épargne pour la retraite collectif ou un plan d'épargne retraite d'entreprise collectif reçoit, lors de la conclusion de son contrat de travail, un livret d'épargne salariale présentant les dispositifs mis en place au sein de l'entreprise. Le livret d'épargne salariale est également porté à la connaissance des représentants du personnel, le cas échéant en tant qu'élément de la base de données économiques, sociales et environnementales établie en application de l'article L. 2312-18 ."
+ },
+ "L3121-18": {
+  "id": "LEGIARTI000033020428",
+  "date": "2026-08-23",
+  "texte": "La durée quotidienne de travail effectif par salarié ne peut excéder dix heures, sauf : 1° En cas de dérogation accordée par l'inspecteur du travail dans des conditions déterminées par décret ; 2° En cas d'urgence, dans des conditions déterminées par décret ; 3° Dans les cas prévus à l'article L. 3121-19 ."
+ },
+ "L3121-20": {
+  "id": "LEGIARTI000033020414",
+  "date": "2026-08-23",
+  "texte": "Au cours d'une même semaine, la durée maximale hebdomadaire de travail est de quarante-huit heures."
+ },
+ "L3121-22": {
+  "id": "LEGIARTI000033020402",
+  "date": "2026-08-23",
+  "texte": "La durée hebdomadaire de travail calculée sur une période quelconque de douze semaines consécutives ne peut dépasser quarante-quatre heures, sauf dans les cas prévus aux articles L. 3121-23 à L. 3121-25 ."
+ },
+ "L3121-16": {
+  "id": "LEGIARTI000033020444",
+  "date": "2026-08-23",
+  "texte": "Dès que le temps de travail quotidien atteint six heures, le salarié bénéficie d'un temps de pause d'une durée minimale de vingt minutes consécutives."
+ },
+ "L3131-1": {
+  "id": "LEGIARTI000033020918",
+  "date": "2026-08-23",
+  "texte": "Tout salarié bénéficie d'un repos quotidien d'une durée minimale de onze heures consécutives, sauf dans les cas prévus aux articles L. 3131-2 et L. 3131-3 ou en cas d'urgence, dans des conditions déterminées par décret."
+ },
+ "L3132-1": {
+  "id": "LEGIARTI000006902580",
+  "date": "2026-08-23",
+  "texte": "Il est interdit de faire travailler un même salarié plus de six jours par semaine."
+ },
+ "L3121-30": {
+  "id": "LEGIARTI000033020367",
+  "date": "2026-08-23",
+  "texte": "Des heures supplémentaires peuvent être accomplies dans la limite d'un contingent annuel. Les heures effectuées au delà de ce contingent annuel ouvrent droit à une contrepartie obligatoire sous forme de repos. Les heures prises en compte pour le calcul du contingent annuel d'heures supplémentaires sont celles accomplies au delà de la durée légale. Les heures supplémentaires ouvrant droit au repos compensateur équivalent mentionné à l'article L. 3121-28 et celles accomplies dans les cas de travaux urgents énumérés à l'article L. 3132-4 ne s'imputent pas sur le contingent annuel d'heures supplémentaires."
+ },
+ "L3121-33": {
+  "id": "LEGIARTI000038610166",
+  "date": "2026-08-23",
+  "texte": "I.-Une convention ou un accord collectif d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche : 1° Prévoit le ou les taux de majoration des heures supplémentaires accomplies au-delà de la durée légale ou de la durée considérée comme équivalente. Ce taux ne peut être inférieur à 10 % ; 2° Définit le contingent annuel prévu à l'article L. 3121-30 ; 3° Fixe l'ensemble des conditions d'accomplissement d'heures supplémentaires au-delà du contingent annuel ainsi que la durée, les caractéristiques et les conditions de prise de la contrepartie obligatoire sous forme de repos prévue au même article L. 3121-30. Cette contrepartie obligatoire ne peut être inférieure à 50 % des heures supplémentaires accomplies au-delà du contingent annuel mentionné audit article L. 3121-30 pour les entreprises de vingt salariés au plus, et à 100 % de ces mêmes heures pour les entreprises de plus de vingt salariés. L'effectif salarié et le franchissement du seuil de vingt salariés sont déterminés selon les modalités prévues à l'article L. 130-1 du code de la sécurité sociale . Les heures supplémentaires sont accomplies, dans la limite du contingent annuel applicable dans l'entreprise, après information du comité social et économique. Les heures supplémentaires sont accomplies, au-delà du contingent annuel applicable dans l'entreprise, après avis du comité social et économique. II.-Une convention ou un accord collectif d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche peut également : 1° Prévoir qu'une contrepartie sous forme de repos est accordée au titre des heures supplémentaires accomplies dans la limite du contingent ; 2° Prévoir le remplacement de tout ou partie du paiement des heures supplémentaires, ainsi que des majorations, par un repos compensateur équivalent. III.-Une convention ou un accord d'entreprise peut adapter les conditions et les modalités d'attribution et de prise du repos compensateur de remplacement."
+ },
+ "D3121-24": {
+  "id": "LEGIARTI000033509251",
+  "date": "2026-08-23",
+  "texte": "A défaut d'accord prévu au I de l'article L. 3121-33 , le contingent annuel d'heures supplémentaires est fixé à deux cent vingt heures par salarié. Le premier alinéa ne s'applique pas aux salariés mentionnés à l'article L. 3121-56 qui ont conclu une convention de forfait en heures sur l'année."
+ },
+ "L3121-65": {
+  "id": "LEGIARTI000036262800",
+  "date": "2026-08-23",
+  "texte": "I.-A défaut de stipulations conventionnelles prévues aux 1° et 2° du II de l'article L. 3121-64 , une convention individuelle de forfait en jours peut être valablement conclue sous réserve du respect des dispositions suivantes : 1° L'employeur établit un document de contrôle faisant apparaître le nombre et la date des journées ou demi-journées travaillées. Sous la responsabilité de l'employeur, ce document peut être renseigné par le salarié ; 2° L'employeur s'assure que la charge de travail du salarié est compatible avec le respect des temps de repos quotidiens et hebdomadaires ; 3° L'employeur organise une fois par an un entretien avec le salarié pour évoquer sa charge de travail, qui doit être raisonnable, l'organisation de son travail, l'articulation entre son activité professionnelle et sa vie personnelle ainsi que sa rémunération. II.-A défaut de stipulations conventionnelles prévues au 3° du II de l'article L. 3121-64, les modalités d'exercice par le salarié de son droit à la déconnexion sont définies par l'employeur et communiquées par tout moyen aux salariés concernés. Dans les entreprises d'au moins cinquante salariés, ces modalités sont conformes à la charte mentionnée au 7° de l'article L. 2242-17 ."
+ },
+ "L3121-60": {
+  "id": "LEGIARTI000033003246",
+  "date": "2026-08-23",
+  "texte": "L'employeur s'assure régulièrement que la charge de travail du salarié est raisonnable et permet une bonne répartition dans le temps de son travail."
+ },
+ "D3171-16": {
+  "id": "LEGIARTI000033515983",
+  "date": "2026-08-23",
+  "texte": "L'employeur tient à la disposition de l'inspection du travail : 1° Pendant une durée d'un an, y compris dans le cas d'horaires individualisés, ou pendant une durée équivalente à la période de référence en cas d'aménagement du temps de travail sur une période supérieure à l'année, les documents existant dans l'entreprise ou l'établissement permettant de comptabiliser les heures de travail accomplies par chaque salarié ; 2° Pendant une durée d'un an, le document récapitulant le nombre d'heures d'astreinte accompli chaque mois par le salarié ainsi que la compensation correspondante ; 3° Pendant une durée de trois ans, les documents existant dans l'entreprise ou l'établissement permettant de comptabiliser le nombre de jours de travail accomplis par les salariés intéressés par des conventions de forfait."
+ },
+ "L3123-6": {
+  "id": "LEGIARTI000033020080",
+  "date": "2026-08-23",
+  "texte": "Le contrat de travail du salarié à temps partiel est un contrat écrit. Il mentionne : 1° La qualification du salarié, les éléments de la rémunération, la durée hebdomadaire ou mensuelle prévue et, sauf pour les salariés des associations et entreprises d'aide à domicile et les salariés relevant d'un accord collectif conclu en application de l'article L. 3121-44 , la répartition de la durée du travail entre les jours de la semaine ou les semaines du mois ; 2° Les cas dans lesquels une modification éventuelle de cette répartition peut intervenir ainsi que la nature de cette modification ; 3° Les modalités selon lesquelles les horaires de travail pour chaque journée travaillée sont communiqués par écrit au salarié. Dans les associations et entreprises d'aide à domicile, les horaires de travail sont communiqués par écrit chaque mois au salarié ; 4° Les limites dans lesquelles peuvent être accomplies des heures complémentaires au delà de la durée de travail fixée par le contrat. L'avenant au contrat de travail prévu à l'article L. 3123-22 mentionne les modalités selon lesquelles des compléments d'heures peuvent être accomplis au delà de la durée fixée par le contrat."
+ },
+ "L3123-8": {
+  "id": "LEGIARTI000033020061",
+  "date": "2026-08-23",
+  "texte": "Chacune des heures complémentaires accomplies donne lieu à une majoration de salaire."
+ },
+ "L3123-7": {
+  "id": "LEGIARTI000047453545",
+  "date": "2026-08-23",
+  "texte": "Le salarié à temps partiel bénéficie d'une durée minimale de travail hebdomadaire déterminée selon les modalités fixées aux articles L. 3123-19 et L. 3123-27 . Le premier alinéa du présent article n'est pas applicable : 1° Aux contrats d'une durée au plus égale à sept jours ; 2° Aux contrats à durée déterminée conclus au titre du 1° de l'article L. 1242-2 ; 3° Aux contrats de travail temporaire conclus au titre du 1° de l'article L. 1251-6 pour le remplacement d'un salarié absent. 4° Aux contrats de travail à durée indéterminée conclus dans le cadre d'un cumul avec l'un des contrats prévus aux articles L. 5132-5 , L. 5132-11-1 ou L. 5132-15-1 , afin d'atteindre une durée globale d'activité correspondant à un temps plein ou au moins égale à la durée mentionnée à l'article L. 3123-27. Une durée de travail inférieure à celle prévue au premier alinéa du présent article peut être fixée à la demande du salarié soit pour lui permettre de faire face à des contraintes personnelles, soit pour lui permettre de cumuler plusieurs activités afin d'atteindre une durée globale d'activité correspondant à un temps plein ou au moins égale à la durée mentionnée au même premier alinéa. Cette demande est écrite et motivée. Une durée de travail inférieure à celle prévue audit premier alinéa peut être fixée, à sa demande, au bénéfice du salarié ayant atteint l'âge prévu au premier alinéa de l' article L. 161-22-1-5 du code de la sécurité sociale . Une durée de travail inférieure à celle prévue au premier alinéa, compatible avec ses études, est fixée de droit, à sa demande, au bénéfice du salarié âgé de moins de vingt-six ans poursuivant ses études."
+ },
+ "L3123-27": {
+  "id": "LEGIARTI000033019953",
+  "date": "2026-08-23",
+  "texte": "A défaut d'accord prévu à l'article L. 3123-19 , la durée minimale de travail du salarié à temps partiel est fixée à vingt-quatre heures par semaine ou, le cas échéant, à l'équivalent mensuel de cette durée ou à l'équivalent calculé sur la période prévue par un accord collectif conclu en application de l'article L. 3121-44 ."
+ },
+ "L3123-3": {
+  "id": "LEGIARTI000036262948",
+  "date": "2026-08-23",
+  "texte": "Les salariés à temps partiel qui souhaitent occuper ou reprendre un emploi d'une durée au moins égale à celle mentionnée au premier alinéa de l'article L. 3123-7 ou un emploi à temps complet et les salariés à temps complet qui souhaitent occuper ou reprendre un emploi à temps partiel dans le même établissement ou, à défaut, dans la même entreprise ont priorité pour l'attribution d'un emploi ressortissant à leur catégorie professionnelle ou d'un emploi équivalent ou, si une convention ou un accord d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche étendu le prévoit, d'un emploi présentant des caractéristiques différentes. L'employeur porte à la connaissance de ces salariés la liste des emplois disponibles correspondants."
+ },
+ "L3141-3": {
+  "id": "LEGIARTI000033020826",
+  "date": "2026-08-23",
+  "texte": "Le salarié a droit à un congé de deux jours et demi ouvrables par mois de travail effectif chez le même employeur. La durée totale du congé exigible ne peut excéder trente jours ouvrables."
+ },
+ "L3141-13": {
+  "id": "LEGIARTI000033020772",
+  "date": "2026-08-23",
+  "texte": "Les congés sont pris dans une période qui comprend dans tous les cas la période du 1er mai au 31 octobre de chaque année."
+ },
+ "L3141-15": {
+  "id": "LEGIARTI000033020765",
+  "date": "2026-08-23",
+  "texte": "Un accord d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche fixe : 1° La période de prise des congés ; 2° L'ordre des départs pendant cette période ; 3° Les délais que doit respecter l'employeur s'il entend modifier l'ordre et les dates de départs."
+ },
+ "L3141-16": {
+  "id": "LEGIARTI000035652687",
+  "date": "2026-08-23",
+  "texte": "A défaut de stipulation dans la convention ou l'accord conclus en application de l'article L. 3141-15 , l'employeur : 1° Définit après avis, le cas échéant, du comité social et économique : a) La période de prise des congés ; b) L'ordre des départs, en tenant compte des critères suivants : -la situation de famille des bénéficiaires, notamment les possibilités de congé, dans le secteur privé ou la fonction publique, du conjoint ou du partenaire lié par un pacte civil de solidarité, ainsi que la présence au sein du foyer d'un enfant ou d'un adulte handicapé ou d'une personne âgée en perte d'autonomie ; -la durée de leurs services chez l'employeur ; -leur activité chez un ou plusieurs autres employeurs ; 2° Ne peut, sauf en cas de circonstances exceptionnelles, modifier l'ordre et les dates de départ moins d'un mois avant la date de départ prévue."
+ },
+ "D3141-5": {
+  "id": "LEGIARTI000033515945",
+  "date": "2026-08-23",
+  "texte": "La période de prise des congés payés est portée par l'employeur à la connaissance des salariés au moins deux mois avant l'ouverture de cette période."
+ },
+ "D3141-6": {
+  "id": "LEGIARTI000033515942",
+  "date": "2026-08-23",
+  "texte": "L'ordre des départs en congé est communiqué, par tout moyen, à chaque salarié un mois avant son départ."
+ },
+ "L3133-7": {
+  "id": "LEGIARTI000033020869",
+  "date": "2026-08-23",
+  "texte": "La journée de solidarité instituée en vue d'assurer le financement des actions en faveur de l'autonomie des personnes âgées ou handicapées prend la forme : 1° D'une journée supplémentaire de travail non rémunérée pour les salariés ; 2° De la contribution prévue au 1° de l'article L. 14-10-4 du code de l'action sociale et des familles pour les employeurs."
+ },
+ "L3133-8": {
+  "id": "LEGIARTI000033020862",
+  "date": "2026-08-23",
+  "texte": "Le travail accompli, dans la limite de sept heures, durant la journée de solidarité ne donne pas lieu à rémunération : 1° Pour les salariés mensualisés, dans cette limite de sept heures ; 2° Pour les salariés dont la rémunération est calculée par référence à un nombre annuel de jours de travail conformément à l'article L. 3121-58 , dans la limite de la valeur d'une journée de travail. Pour les salariés à temps partiel, la limite de sept heures prévue au 1° du présent article est réduite proportionnellement à la durée contractuelle."
+ },
+ "L3242-1": {
+  "id": "LEGIARTI000006902858",
+  "date": "2026-08-23",
+  "texte": "La rémunération des salariés est mensuelle et indépendante, pour un horaire de travail effectif déterminé, du nombre de jours travaillés dans le mois. Le paiement mensuel neutralise les conséquences de la répartition inégale des jours entre les douze mois de l'année. Pour un horaire équivalent à la durée légale hebdomadaire, la rémunération mensuelle due au salarié se calcule en multipliant la rémunération horaire par les 52/12 de la durée légale hebdomadaire. Le paiement de la rémunération est effectué une fois par mois. Un acompte correspondant, pour une quinzaine, à la moitié de la rémunération mensuelle, est versé au salarié qui en fait la demande. Ces dispositions ne s'appliquent pas aux salariés travaillant à domicile, aux salariés saisonniers, aux salariés intermittents et aux salariés temporaires."
+ },
+ "L1221-10": {
+  "id": "LEGIARTI000006900849",
+  "date": "2026-08-23",
+  "texte": "L'embauche d'un salarié ne peut intervenir qu'après déclaration nominative accomplie par l'employeur auprès des organismes de protection sociale désignés à cet effet. L'employeur accomplit cette déclaration dans tous les lieux de travail où sont employés des salariés."
+ },
+ "L1221-11": {
+  "id": "LEGIARTI000006900850",
+  "date": "2026-08-23",
+  "texte": "Le non-respect de l'obligation de déclaration préalable à l'embauche, constaté par les agents mentionnés à l'article L. 8271-7 , entraîne une pénalité dont le montant est égal à trois cents fois le taux horaire du minimum garanti prévu à l'article L. 3231-12 ."
+ },
+ "L1221-5-1": {
+  "id": "LEGIARTI000047285930",
+  "date": "2026-08-23",
+  "texte": "L'employeur remet au salarié un ou plusieurs documents écrits contenant les informations principales relatives à la relation de travail. Un salarié qui n'a pas reçu les informations mentionnées au premier alinéa ne peut saisir le juge compétent afin de les obtenir qu'après avoir mis en demeure son employeur de lui communiquer les documents requis ou, le cas échéant, de compléter les documents remis. Un décret en Conseil d'Etat fixe les modalités d'application du présent article, notamment la liste des informations devant figurer dans les documents mentionnés au premier alinéa."
+ },
+ "R1221-34": {
+  "id": "LEGIARTI000048288642",
+  "date": "2026-08-23",
+  "texte": "Les documents mentionnés à l'article L. 1221-5-1 comportent au moins les informations suivantes : 1° L'identité des parties à la relation de travail ; 2° Le lieu ou les lieux de travail et, si elle est distincte, l'adresse de l'employeur ; 3° L'intitulé du poste, les fonctions, la catégorie socioprofessionnelle ou la catégorie d'emploi ; 4° La date d'embauche ; 5° Dans le cas d'une relation de travail à durée déterminée, la date de fin ou la durée prévue de celle-ci ; 6° Dans le cas du salarié temporaire mentionné à l'article L. 1251-1 , l'identité de l'entreprise utilisatrice, lorsqu'elle est connue et aussitôt qu'elle l'est ; 7° Le cas échéant, la durée et les conditions de la période d'essai ; 8° Le droit à la formation assuré par l'employeur conformément à l'article L. 6321-1 ; 9° La durée du congé payé auquel le salarié a droit, ou les modalités de calcul de cette durée ; 10° La procédure à observer par l'employeur et le salarié en cas de cessation de leur relation de travail ; 11° Les éléments constitutifs de la rémunération mentionnés à l'article L. 3221-3 , indiqués séparément, y compris les majorations pour les heures supplémentaires, ainsi que la périodicité et les modalités de paiement de cette rémunération ; 12° La durée de travail quotidienne, hebdomadaire, mensuelle ou ses modalités d'aménagement sur une autre période de référence lorsqu'il est fait application des dispositions des articles L. 3121-41 à L. 3121-47 , les conditions dans lesquelles le salarié peut être conduit à effectuer des heures supplémentaires ou complémentaires, ainsi que, le cas échéant, toute modalité concernant les changements d'équipe en cas d'organisation du travail en équipes successives alternantes ; 13° Les conventions et accords collectifs applicables au salarié dans l'entreprise ou l'établissement ; 14° Les régimes obligatoires auxquels est affilié le salarié, la mention des contrats de protection sociale complémentaire dont les salariés bénéficient collectivement en application d'un accord collectif ou d'une décision unilatérale de l'employeur ainsi que, le cas échéant, les conditions d'ancienneté qui y sont attachées."
+ },
+ "R1221-35": {
+  "id": "LEGIARTI000048288640",
+  "date": "2026-08-23",
+  "texte": "La communication des informations mentionnées aux 7° à 12° et 14° de l'article R. 1221-34 peut prendre la forme d'un renvoi aux dispositions législatives et réglementaires ou aux stipulations conventionnelles applicables. Les informations mentionnées aux 1° à 5°, 7° et aux 11° et 12° du même article sont communiquées individuellement au salarié au plus tard le septième jour calendaire à compter de la date d'embauche. Les autres informations sont communiquées au plus tard un mois à compter de la même date."
+ },
+ "L1221-19": {
+  "id": "LEGIARTI000019071113",
+  "date": "2026-08-23",
+  "texte": "Le contrat de travail à durée indéterminée peut comporter une période d'essai dont la durée maximale est : 1° Pour les ouvriers et les employés, de deux mois ; 2° Pour les agents de maîtrise et les techniciens, de trois mois ; 3° Pour les cadres, de quatre mois."
+ },
+ "L1221-21": {
+  "id": "LEGIARTI000019071109",
+  "date": "2026-08-23",
+  "texte": "La période d'essai peut être renouvelée une fois si un accord de branche étendu le prévoit. Cet accord fixe les conditions et les durées de renouvellement. La durée de la période d'essai, renouvellement compris, ne peut pas dépasser : 1° Quatre mois pour les ouvriers et employés ; 2° Six mois pour les agents de maîtrise et techniciens ; 3° Huit mois pour les cadres."
+ },
+ "L1221-25": {
+  "id": "LEGIARTI000029144958",
+  "date": "2026-08-23",
+  "texte": "Lorsqu'il est mis fin, par l'employeur, au contrat en cours ou au terme de la période d'essai définie aux articles L. 1221-19 à L. 1221-24 ou à l'article L. 1242-10 pour les contrats stipulant une période d'essai d'au moins une semaine, le salarié est prévenu dans un délai qui ne peut être inférieur à : 1° Vingt-quatre heures en deçà de huit jours de présence ; 2° Quarante-huit heures entre huit jours et un mois de présence ; 3° Deux semaines après un mois de présence ; 4° Un mois après trois mois de présence. La période d'essai, renouvellement inclus, ne peut être prolongée du fait de la durée du délai de prévenance. Lorsque le délai de prévenance n'a pas été respecté, son inexécution ouvre droit pour le salarié, sauf s'il a commis une faute grave, à une indemnité compensatrice. Cette indemnité est égale au montant des salaires et avantages que le salarié aurait perçus s'il avait accompli son travail jusqu'à l'expiration du délai de prévenance, indemnité compensatrice de congés payés comprise."
+ },
+ "L1221-26": {
+  "id": "LEGIARTI000019071093",
+  "date": "2026-08-23",
+  "texte": "Lorsqu'il est mis fin à la période d'essai par le salarié, celui-ci respecte un délai de prévenance de quarante-huit heures. Ce délai est ramené à vingt-quatre heures si la durée de présence du salarié dans l'entreprise est inférieure à huit jours."
+ },
+ "L1221-8": {
+  "id": "LEGIARTI000006900847",
+  "date": "2026-08-23",
+  "texte": "Le candidat à un emploi est expressément informé, préalablement à leur mise en oeuvre, des méthodes et techniques d'aide au recrutement utilisées à son égard. Les résultats obtenus sont confidentiels. Les méthodes et techniques d'aide au recrutement ou d'évaluation des candidats à un emploi doivent être pertinentes au regard de la finalité poursuivie."
+ },
+ "L1221-9": {
+  "id": "LEGIARTI000006900848",
+  "date": "2026-08-23",
+  "texte": "Aucune information concernant personnellement un candidat à un emploi ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance."
+ },
+ "L1242-12": {
+  "id": "LEGIARTI000006901206",
+  "date": "2026-08-23",
+  "texte": "Le contrat de travail à durée déterminée est établi par écrit et comporte la définition précise de son motif. A défaut, il est réputé conclu pour une durée indéterminée. Il comporte notamment : 1° Le nom et la qualification professionnelle de la personne remplacée lorsqu'il est conclu au titre des 1°, 4° et 5° de l'article L. 1242-2 ; 2° La date du terme et, le cas échéant, une clause de renouvellement lorsqu'il comporte un terme précis ; 3° La durée minimale pour laquelle il est conclu lorsqu'il ne comporte pas de terme précis ; 4° La désignation du poste de travail en précisant, le cas échéant, si celui-ci figure sur la liste des postes de travail présentant des risques particuliers pour la santé ou la sécurité des salariés prévue à l'article L. 4154-2 , la désignation de l'emploi occupé ou, lorsque le contrat est conclu pour assurer un complément de formation professionnelle au salarié au titre du 2° de l'article L. 1242-3 , la désignation de la nature des activités auxquelles participe le salarié dans l'entreprise ; 5° L'intitulé de la convention collective applicable ; 6° La durée de la période d'essai éventuellement prévue ; 7° Le montant de la rémunération et de ses différentes composantes, y compris les primes et accessoires de salaire s'il en existe ; 8° Le nom et l'adresse de la caisse de retraite complémentaire ainsi que, le cas échéant, ceux de l'organisme de prévoyance."
+ },
+ "L1242-2": {
+  "id": "LEGIARTI000037312980",
+  "date": "2026-08-23",
+  "texte": "Sous réserve des dispositions de l'article L. 1242-3 , un contrat de travail à durée déterminée ne peut être conclu que pour l'exécution d'une tâche précise et temporaire, et seulement dans les cas suivants : 1° Remplacement d'un salarié en cas : a) D'absence ; b) De passage provisoire à temps partiel, conclu par avenant à son contrat de travail ou par échange écrit entre ce salarié et son employeur ; c) De suspension de son contrat de travail ; d) De départ définitif précédant la suppression de son poste de travail après consultation du comité social et économique, s'il existe ; e) D'attente de l'entrée en service effective du salarié recruté par contrat à durée indéterminée appelé à le remplacer ; 2° Accroissement temporaire de l'activité de l'entreprise ; 3° Emplois à caractère saisonnier, dont les tâches sont appelées à se répéter chaque année selon une périodicité à peu près fixe, en fonction du rythme des saisons ou des modes de vie collectifs ou emplois pour lesquels, dans certains secteurs d'activité définis par décret ou par convention ou accord collectif de travail étendu, il est d'usage constant de ne pas recourir au contrat de travail à durée indéterminée en raison de la nature de l'activité exercée et du caractère par nature temporaire de ces emplois. Lorsque la durée du contrat de travail est inférieure à un mois, un seul bulletin de paie est émis par l'employeur ; 4° Remplacement d'un chef d'entreprise artisanale, industrielle ou commerciale, d'une personne exerçant une profession libérale, de son conjoint participant effectivement à l'activité de l'entreprise à titre professionnel et habituel ou d'un associé non salarié d'une société civile professionnelle, d'une société civile de moyens d'une société d'exercice libéral ou de toute autre personne morale exerçant une profession libérale ; 5° Remplacement du chef d'une exploitation agricole ou d'une entreprise mentionnée aux 1° à 4° de l'article L. 722-1 du code rural et de la pêche maritime , d'un aide familial, d'un associé d'exploitation, ou de leur conjoint mentionné à l'article L. 722-10 du même code dès lors qu'il participe effectivement à l'activité de l'exploitation agricole ou de l'entreprise ; 6° Recrutement d'ingénieurs et de cadres, au sens des conventions collectives, en vue de la réalisation d'un objet défini lorsqu'un accord de branche étendu ou, à défaut, un accord d'entreprise le prévoit et qu'il définit : a) Les nécessités économiques auxquelles ces contrats sont susceptibles d'apporter une réponse adaptée ; b) Les conditions dans lesquelles les salariés sous contrat à durée déterminée à objet défini bénéficient de garanties relatives à l'aide au reclassement, à la validation des acquis de l'expérience, à la priorité de réembauche et à l'accès à la formation professionnelle continue et peuvent, au cours du délai de prévenance, mobiliser les moyens disponibles pour organiser la suite de leur parcours professionnel ; c) Les conditions dans lesquelles les salariés sous contrat à durée déterminée à objet défini ont priorité d'accès aux emplois en contrat à durée indéterminée dans l'entreprise."
+ },
+ "L1242-13": {
+  "id": "LEGIARTI000006901207",
+  "date": "2026-08-23",
+  "texte": "Le contrat de travail est transmis au salarié, au plus tard, dans les deux jours ouvrables suivant l'embauche."
+ },
+ "L1244-3": {
+  "id": "LEGIARTI000035644007",
+  "date": "2026-08-23",
+  "texte": "A l'expiration d'un contrat de travail à durée déterminée, il ne peut être recouru, pour pourvoir le poste du salarié dont le contrat a pris fin, ni à un contrat à durée déterminée ni à un contrat de travail temporaire, avant l'expiration d'un délai de carence calculé en fonction de la durée du contrat incluant, le cas échéant, son ou ses renouvellements. Les jours pris en compte pour apprécier le délai devant séparer les deux contrats sont les jours d'ouverture de l'entreprise ou de l'établissement concerné. Sans préjudice des dispositions de l' article L. 1242-1 , une convention ou un accord de branche étendu peut fixer les modalités de calcul de ce délai de carence."
+ },
+ "L1244-3-1": {
+  "id": "LEGIARTI000035639421",
+  "date": "2026-08-23",
+  "texte": "A défaut de stipulation dans la convention ou l'accord de branche conclu en application de l'article L. 1244-3 , ce délai de carence est égal : 1° Au tiers de la durée du contrat venu à expiration si la durée du contrat incluant, le cas échéant, son ou ses renouvellements, est de quatorze jours ou plus ; 2° A la moitié de la durée du contrat venu à expiration si la durée du contrat incluant, le cas échéant, son ou ses renouvellements, est inférieure à quatorze jours. Les jours pris en compte pour apprécier le délai devant séparer les deux contrats sont les jours d'ouverture de l'entreprise ou de l'établissement concerné."
+ },
+ "L1243-8": {
+  "id": "LEGIARTI000006901219",
+  "date": "2026-08-23",
+  "texte": "Lorsque, à l'issue d'un contrat de travail à durée déterminée, les relations contractuelles de travail ne se poursuivent pas par un contrat à durée indéterminée, le salarié a droit, à titre de complément de salaire, à une indemnité de fin de contrat destinée à compenser la précarité de sa situation. Cette indemnité est égale à 10 % de la rémunération totale brute versée au salarié. Elle s'ajoute à la rémunération totale brute due au salarié. Elle est versée à l'issue du contrat en même temps que le dernier salaire et figure sur le bulletin de salaire correspondant."
+ },
+ "D1234-6": {
+  "id": "LEGIARTI000029544357",
+  "date": "2026-08-23",
+  "texte": "Le certificat de travail contient exclusivement les mentions suivantes : 1° La date d'entrée du salarié et celle de sa sortie ; 2° La nature de l'emploi ou des emplois successivement occupés et les périodes pendant lesquelles ces emplois ont été tenus. 3° Abrogé ; 4° Abrogé."
+ },
+ "L1234-20": {
+  "id": "LEGIARTI000019071122",
+  "date": "2026-08-23",
+  "texte": "Le solde de tout compte, établi par l'employeur et dont le salarié lui donne reçu, fait l'inventaire des sommes versées au salarié lors de la rupture du contrat de travail. Le reçu pour solde de tout compte peut être dénoncé dans les six mois qui suivent sa signature, délai au-delà duquel il devient libératoire pour l'employeur pour les sommes qui y sont mentionnées."
+ },
+ "R1234-9": {
+  "id": "LEGIARTI000049816309",
+  "date": "2026-08-23",
+  "texte": "L'employeur délivre au salarié, au moment de l'expiration ou de la rupture du contrat de travail, les attestations et justifications qui lui permettent d'exercer ses droits aux prestations mentionnées à l'article L. 5421-2 et transmet sans délai ces mêmes attestations à l'opérateur France Travail. Les employeurs d'au moins onze salariés effectuent cette transmission à l'opérateur France Travail par voie électronique, sauf impossibilité pour une cause qui leur est étrangère, selon des modalités précisées par un arrêté du ministre chargé de l'emploi. (1)"
+ },
+ "L1232-2": {
+  "id": "LEGIARTI000006901000",
+  "date": "2026-08-23",
+  "texte": "L'employeur qui envisage de licencier un salarié le convoque, avant toute décision, à un entretien préalable. La convocation est effectuée par lettre recommandée ou par lettre remise en main propre contre décharge. Cette lettre indique l'objet de la convocation. L'entretien préalable ne peut avoir lieu moins de cinq jours ouvrables après la présentation de la lettre recommandée ou la remise en main propre de la lettre de convocation."
+ },
+ "L1232-4": {
+  "id": "LEGIARTI000006901002",
+  "date": "2026-08-23",
+  "texte": "Lors de son audition, le salarié peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise. Lorsqu'il n'y a pas d'institutions représentatives du personnel dans l'entreprise, le salarié peut se faire assister soit par une personne de son choix appartenant au personnel de l'entreprise, soit par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative. La lettre de convocation à l'entretien préalable adressée au salarié mentionne la possibilité de recourir à un conseiller du salarié et précise l'adresse des services dans lesquels la liste de ces conseillers est tenue à sa disposition."
+ },
+ "L1232-6": {
+  "id": "LEGIARTI000036762096",
+  "date": "2026-08-23",
+  "texte": "Lorsque l'employeur décide de licencier un salarié, il lui notifie sa décision par lettre recommandée avec avis de réception. Cette lettre comporte l'énoncé du ou des motifs invoqués par l'employeur. Elle ne peut être expédiée moins de deux jours ouvrables après la date prévue de l'entretien préalable au licenciement auquel le salarié a été convoqué. Un décret en Conseil d'Etat détermine les modalités d'application du présent article. Un arrêté du ministre chargé du travail fixe les modèles que l'employeur peut utiliser pour procéder à la notification du licenciement."
+ },
+ "L1235-2": {
+  "id": "LEGIARTI000036261950",
+  "date": "2026-08-23",
+  "texte": "Les motifs énoncés dans la lettre de licenciement prévue aux articles L. 1232-6 , L. 1233-16 et L. 1233-42 peuvent, après la notification de celle-ci, être précisés par l'employeur, soit à son initiative soit à la demande du salarié, dans des délais et conditions fixés par décret en Conseil d'Etat. La lettre de licenciement, précisée le cas échéant par l'employeur, fixe les limites du litige en ce qui concerne les motifs de licenciement. A défaut pour le salarié d'avoir formé auprès de l'employeur une demande en application de l'alinéa premier, l'irrégularité que constitue une insuffisance de motivation de la lettre de licenciement ne prive pas, à elle seule, le licenciement de cause réelle et sérieuse et ouvre droit à une indemnité qui ne peut excéder un mois de salaire. En l'absence de cause réelle et sérieuse du licenciement, le préjudice résultant du vice de motivation de la lettre de rupture est réparé par l'indemnité allouée conformément aux dispositions de l' article L. 1235-3 . Lorsqu'une irrégularité a été commise au cours de la procédure, notamment si le licenciement d'un salarié intervient sans que la procédure requise aux articles L. 1232-2, L. 1232-3, L. 1232-4 , L. 1233-11 , L. 1233-12 et L. 1233-13 ait été observée ou sans que la procédure conventionnelle ou statutaire de consultation préalable au licenciement ait été respectée, mais pour une cause réelle et sérieuse, le juge accorde au salarié, à la charge de l'employeur, une indemnité qui ne peut être supérieure à un mois de salaire."
+ },
+ "R1232-13": {
+  "id": "LEGIARTI000036212577",
+  "date": "2026-08-23",
+  "texte": "Dans les quinze jours suivant la notification du licenciement, le salarié peut, par lettre recommandée avec avis de réception ou remise contre récépissé, demander à l'employeur des précisions sur les motifs énoncés dans la lettre de licenciement. L'employeur dispose d'un délai de quinze jours après la réception de la demande du salarié pour apporter des précisions s'il le souhaite. Il communique ces précisions au salarié par lettre recommandée avec avis de réception ou remise contre récépissé. Dans un délai de quinze jours suivant la notification du licenciement et selon les mêmes formes, l'employeur peut, à son initiative, préciser les motifs du licenciement."
+ },
+ "L1237-11": {
+  "id": "LEGIARTI000019071187",
+  "date": "2026-08-23",
+  "texte": "L'employeur et le salarié peuvent convenir en commun des conditions de la rupture du contrat de travail qui les lie. La rupture conventionnelle, exclusive du licenciement ou de la démission, ne peut être imposée par l'une ou l'autre des parties. Elle résulte d'une convention signée par les parties au contrat. Elle est soumise aux dispositions de la présente section destinées à garantir la liberté du consentement des parties."
+ },
+ "L1237-13": {
+  "id": "LEGIARTI000019071182",
+  "date": "2026-08-23",
+  "texte": "La convention de rupture définit les conditions de celle-ci, notamment le montant de l'indemnité spécifique de rupture conventionnelle qui ne peut pas être inférieur à celui de l'indemnité prévue à l'article L. 1234-9 . Elle fixe la date de rupture du contrat de travail, qui ne peut intervenir avant le lendemain du jour de l'homologation. A compter de la date de sa signature par les deux parties, chacune d'entre elles dispose d'un délai de quinze jours calendaires pour exercer son droit de rétractation. Ce droit est exercé sous la forme d'une lettre adressée par tout moyen attestant de sa date de réception par l'autre partie."
+ },
+ "L1237-14": {
+  "id": "LEGIARTI000019071180",
+  "date": "2026-08-23",
+  "texte": "A l'issue du délai de rétractation, la partie la plus diligente adresse une demande d'homologation à l'autorité administrative, avec un exemplaire de la convention de rupture. Un arrêté du ministre chargé du travail fixe le modèle de cette demande. L'autorité administrative dispose d'un délai d'instruction de quinze jours ouvrables, à compter de la réception de la demande, pour s'assurer du respect des conditions prévues à la présente section et de la liberté de consentement des parties. A défaut de notification dans ce délai, l'homologation est réputée acquise et l'autorité administrative est dessaisie. La validité de la convention est subordonnée à son homologation. L'homologation ne peut faire l'objet d'un litige distinct de celui relatif à la convention. Tout litige concernant la convention, l'homologation ou le refus d'homologation relève de la compétence du conseil des prud'hommes, à l'exclusion de tout autre recours contentieux ou administratif. Le recours juridictionnel doit être formé, à peine d'irrecevabilité, avant l'expiration d'un délai de douze mois à compter de la date d'homologation de la convention."
+ },
+ "L1226-2": {
+  "id": "LEGIARTI000035653236",
+  "date": "2026-08-23",
+  "texte": "Lorsque le salarié victime d'une maladie ou d'un accident non professionnel est déclaré inapte par le médecin du travail, en application de l'article L. 4624-4 , à reprendre l'emploi qu'il occupait précédemment, l'employeur lui propose un autre emploi approprié à ses capacités, au sein de l'entreprise ou des entreprises du groupe auquel elle appartient le cas échéant, situées sur le territoire national et dont l'organisation, les activités ou le lieu d'exploitation assurent la permutation de tout ou partie du personnel. Pour l'application du présent article, la notion de groupe désigne le groupe formé par une entreprise appelée entreprise dominante et les entreprises qu'elle contrôle dans les conditions définies à l'article L. 233-1 , aux I et II de l'article L. 233-3 et à l'article L. 233-16 du code de commerce. Cette proposition prend en compte, après avis du comité social et économique lorsqu'il existe, les conclusions écrites du médecin du travail et les indications qu'il formule sur les capacités du salarié à exercer l'une des tâches existantes dans l'entreprise. Le médecin du travail formule également des indications sur la capacité du salarié à bénéficier d'une formation le préparant à occuper un poste adapté. L'emploi proposé est aussi comparable que possible à l'emploi précédemment occupé, au besoin par la mise en oeuvre de mesures telles que mutations, aménagements, adaptations ou transformations de postes existants ou aménagement du temps de travail."
+ },
+ "L1226-4": {
+  "id": "LEGIARTI000025560071",
+  "date": "2026-08-23",
+  "texte": "Lorsque, à l'issue d'un délai d'un mois à compter de la date de l'examen médical de reprise du travail, le salarié déclaré inapte n'est pas reclassé dans l'entreprise ou s'il n'est pas licencié, l'employeur lui verse, dès l'expiration de ce délai, le salaire correspondant à l'emploi que celui-ci occupait avant la suspension de son contrat de travail. Ces dispositions s'appliquent également en cas d'inaptitude à tout emploi dans l'entreprise constatée par le médecin du travail. En cas de licenciement, le préavis n'est pas exécuté et le contrat de travail est rompu à la date de notification du licenciement. Le préavis est néanmoins pris en compte pour le calcul de l'indemnité mentionnée à l'article L. 1234-9 . Par dérogation à l'article L. 1234-5 , l'inexécution du préavis ne donne pas lieu au versement d'une indemnité compensatrice."
+ },
+ "L3221-2": {
+  "id": "LEGIARTI000006902818",
+  "date": "2026-08-23",
+  "texte": "Tout employeur assure, pour un même travail ou pour un travail de valeur égale, l'égalité de rémunération entre les femmes et les hommes."
+ },
+ "L1132-1": {
+  "id": "LEGIARTI000045391841",
+  "date": "2026-08-23",
+  "texte": "Aucune personne ne peut être écartée d'une procédure de recrutement ou de nomination ou de l'accès à un stage ou à une période de formation en entreprise, aucun salarié ne peut être sanctionné, licencié ou faire l'objet d'une mesure discriminatoire, directe ou indirecte, telle que définie à l'article 1er de la loi n° 2008-496 du 27 mai 2008 portant diverses dispositions d'adaptation au droit communautaire dans le domaine de la lutte contre les discriminations, notamment en matière de rémunération, au sens de l'article L. 3221-3 , de mesures d'intéressement ou de distribution d'actions, de formation, de reclassement, d'affectation, de qualification, de classification, de promotion professionnelle, d'horaires de travail, d'évaluation de la performance, de mutation ou de renouvellement de contrat en raison de son origine, de son sexe, de ses mœurs, de son orientation sexuelle, de son identité de genre, de son âge, de sa situation de famille ou de sa grossesse, de ses caractéristiques génétiques, de la particulière vulnérabilité résultant de sa situation économique, apparente ou connue de son auteur, de son appartenance ou de sa non-appartenance, vraie ou supposée, à une ethnie, une nation ou une prétendue race, de ses opinions politiques, de ses activités syndicales ou mutualistes, de son exercice d'un mandat électif, de ses convictions religieuses, de son apparence physique, de son nom de famille, de son lieu de résidence ou de sa domiciliation bancaire, ou en raison de son état de santé, de sa perte d'autonomie ou de son handicap, de sa capacité à s'exprimer dans une langue autre que le français, de sa qualité de lanceur d'alerte, de facilitateur ou de personne en lien avec un lanceur d'alerte, au sens, respectivement, du I de l'article 6 et des 1° et 2° de l' article 6-1 de la loi n° 2016-1691 du 9 décembre 2016 relative à la transparence, à la lutte contre la corruption et à la modernisation de la vie économique."
+ },
+ "L1142-2-1": {
+  "id": "LEGIARTI000031072447",
+  "date": "2026-08-23",
+  "texte": "Nul ne doit subir d'agissement sexiste, défini comme tout agissement lié au sexe d'une personne, ayant pour objet ou pour effet de porter atteinte à sa dignité ou de créer un environnement intimidant, hostile, dégradant, humiliant ou offensant."
+ },
+ "L5213-6": {
+  "id": "LEGIARTI000048589854",
+  "date": "2026-08-23",
+  "texte": "Afin de garantir le respect du principe d'égalité de traitement à l'égard des travailleurs handicapés, l'employeur prend, en fonction des besoins dans une situation concrète, les mesures appropriées pour permettre aux travailleurs mentionnés aux 1° à 4° et 9° à 11° de l'article L. 5212-13 d'accéder à un emploi ou de conserver un emploi correspondant à leur qualification, de l'exercer ou d'y progresser ou pour qu'une formation adaptée à leurs besoins leur soit dispensée. L'employeur s'assure que les logiciels installés sur le poste de travail des personnes handicapées et nécessaires à leur exercice professionnel sont accessibles. Il s'assure également que le poste de travail des personnes handicapées est accessible en télétravail. En cas de changement d'employeur, la conservation des équipements contribuant à l'adaptation du poste de travail des travailleurs handicapés, lorsqu'il comporte les mêmes caractéristiques dans la nouvelle entreprise, peut être prévue par convention entre les deux entreprises concernées. Cette convention peut également être conclue entre une entreprise privée et un employeur public au sens de l' article L. 131-8 du code général de la fonction publique . Ces mesures sont prises sous réserve que les charges consécutives à leur mise en oeuvre ne soient pas disproportionnées, compte tenu de l'aide prévue à l'article L. 5213-10 qui peut compenser en tout ou partie les dépenses supportées à ce titre par l'employeur. Le refus de prendre des mesures au sens du premier alinéa peut être constitutif d'une discrimination au sens de l'article L. 1133-3."
+ },
+ "L5213-6-1": {
+  "id": "LEGIARTI000043894133",
+  "date": "2026-08-23",
+  "texte": "Dans toute entreprise employant au moins deux cent cinquante salariés, est désigné un référent chargé d'orienter, d'informer et d'accompagner les personnes en situation de handicap. Pour l'application du présent article, l'effectif salarié et le franchissement du seuil de deux cent cinquante salariés sont déterminés selon les modalités prévues à l' article L. 130-1 du code de la sécurité sociale. A la demande du travailleur concerné, le référent participe au rendez-vous de liaison prévu à l' article L. 1226-1-3 du présent code ainsi qu'aux échanges organisés sur le fondement du dernier alinéa du I de l'article L. 4624-2-2 . Dans les deux cas, il est tenu à une obligation de discrétion à l'égard des informations à caractère personnel qu'il est amené à connaître."
+ },
+ "L1131-2": {
+  "id": "LEGIARTI000033957410",
+  "date": "2026-08-23",
+  "texte": "Dans toute entreprise employant au moins trois cents salariés et dans toute entreprise spécialisée dans le recrutement, les employés chargés des missions de recrutement reçoivent une formation à la non-discrimination à l'embauche au moins une fois tous les cinq ans."
+ },
+ "L6131-1": {
+  "id": "LEGIARTI000043709709",
+  "date": "2026-08-23",
+  "texte": "I.-Les employeurs concourent au développement de la formation professionnelle et de l'apprentissage par : 1° Le financement direct des actions de formation de leurs salariés ; 2° Le versement de la contribution unique à la formation professionnelle et à l'alternance mentionnée à l'article L. 6131-2 ; 3° Le versement de la contribution supplémentaire à l'apprentissage mentionnée à l'article L. 6242-1 ; 4° Le versement de la contribution dédiée au financement du compte personnel de formation pour les titulaires d'un contrat à durée déterminée mentionnée à l'article L. 6331-6 ; 5° Le versement, le cas échéant, des contributions supplémentaires ayant pour objet le développement de la formation professionnelle continue prévues par un accord professionnel national conclu en application de l'article L. 6332-1-2 . II.-Le I ne s'applique pas à l'Etat, aux établissements publics de santé, sociaux et médico-sociaux relevant de la fonction publique hospitalière, aux groupements de coopération sanitaire mentionnés aux articles L. 6133-1 et L. 6133-4 du code de la santé publique, aux groupements de coopération sociale et médico-sociale mentionnés à l' article L. 312-7 du code de l'action sociale et des familles , aux collectivités territoriales et à leurs établissements publics à caractère administratif ainsi qu'aux employeurs dont l'entreprise ne comporte pas d'établissement en France mentionnés à l' article L. 243-1-2 du code de la sécurité sociale ."
+ },
+ "L6323-13": {
+  "id": "LEGIARTI000052437094",
+  "date": "2026-08-23",
+  "texte": "Dans les entreprises d'au moins cinquante salariés, lorsque le salarié n'a pas bénéficié, durant les huit ans précédant l'entretien mentionné au II de l'article L. 6315-1 , des entretiens prévus au même article L. 6315-1 et d'au moins une formation autre que celle mentionnée à l'article L. 6321-2 , un abondement est inscrit à son compte dans des conditions définies par décret en Conseil d'Etat et l'entreprise verse une somme dont le montant, fixé par décret en Conseil d'Etat, ne peut excéder six fois le montant annuel mentionné à l'article L. 6323-11 . Le salarié est informé de ce versement. Dans le cadre des contrôles menés par les agents mentionnés à l'article L. 6361-5 , lorsque l'entreprise n'a pas opéré le versement prévu au premier alinéa du présent article ou a opéré un versement insuffisant, elle est mise en demeure de procéder au versement de l'insuffisance constatée dans le respect de la procédure contradictoire mentionnée à l'article L. 6362-10 . A défaut, l'entreprise verse au Trésor public un montant équivalent à l'insuffisance constatée majorée de 100 %. Ce versement est établi et recouvré selon les modalités ainsi que sous les sûretés, garanties et sanctions applicables aux taxes sur le chiffre d'affaires. Le contrôle et le contentieux de ce versement sont opérés selon les règles applicables en matière de taxe sur le chiffre d'affaires. Pour l'application du premier alinéa du présent article, l'effectif salarié et le franchissement du seuil de cinquante salariés sont déterminés selon les modalités prévues à l'article L. 130-1 du code de la sécurité sociale."
+ },
+ "L4141-1": {
+  "id": "LEGIARTI000027326445",
+  "date": "2026-08-23",
+  "texte": "L'employeur organise et dispense une information des travailleurs sur les risques pour la santé et la sécurité et les mesures prises pour y remédier. Il organise et dispense également une information des travailleurs sur les risques que peuvent faire peser sur la santé publique ou l'environnement les produits ou procédés de fabrication utilisés ou mis en œuvre par l'établissement ainsi que sur les mesures prises pour y remédier."
+ },
+ "L4154-2": {
+  "id": "LEGIARTI000035653199",
+  "date": "2026-08-23",
+  "texte": "Les salariés titulaires d'un contrat de travail à durée déterminée, les salariés temporaires et les stagiaires en entreprise affectés à des postes de travail présentant des risques particuliers pour leur santé ou leur sécurité bénéficient d'une formation renforcée à la sécurité ainsi que d'un accueil et d'une information adaptés dans l'entreprise dans laquelle ils sont employés. La liste de ces postes de travail est établie par l'employeur, après avis du médecin du travail et du comité social et économique, s'il existe. Elle est tenue à la disposition de l'agent de contrôle de l'inspection du travail mentionné à l'article L. 8112-1 ."
+ },
+ "R4224-14": {
+  "id": "LEGIARTI000018532205",
+  "date": "2026-08-23",
+  "texte": "Les lieux de travail sont équipés d'un matériel de premiers secours adapté à la nature des risques et facilement accessible."
+ },
+ "R4224-15": {
+  "id": "LEGIARTI000018532203",
+  "date": "2026-08-23",
+  "texte": "Un membre du personnel reçoit la formation de secouriste nécessaire pour donner les premiers secours en cas d'urgence dans : 1° Chaque atelier où sont accomplis des travaux dangereux ; 2° Chaque chantier employant vingt travailleurs au moins pendant plus de quinze jours où sont réalisés des travaux dangereux. Les travailleurs ainsi formés ne peuvent remplacer les infirmiers."
+ },
+ "R4224-16": {
+  "id": "LEGIARTI000043128580",
+  "date": "2026-08-23",
+  "texte": "En l'absence d'infirmiers, ou lorsque leur nombre ne permet pas d'assurer une présence permanente, l'employeur prend, après avis du médecin du travail, les mesures nécessaires pour assurer les premiers secours aux accidentés et aux malades. Ces mesures qui sont prises en liaison notamment avec les services de secours d'urgence extérieurs à l'entreprise sont adaptées à la nature des risques. Ces mesures sont consignées dans un document tenu à la disposition de l'agent de contrôle de l'inspection du travail."
+ },
+ "R4227-29": {
+  "id": "LEGIARTI000018532079",
+  "date": "2026-08-23",
+  "texte": "Le premier secours contre l'incendie est assuré par des extincteurs en nombre suffisant et maintenus en bon état de fonctionnement. Il existe au moins un extincteur portatif à eau pulvérisée d'une capacité minimale de 6 litres pour 200 mètres carrés de plancher. Il existe au moins un appareil par niveau. Lorsque les locaux présentent des risques d'incendie particuliers, notamment des risques électriques, ils sont dotés d'extincteurs dont le nombre et le type sont appropriés aux risques."
+ },
+ "R4121-5": {
+  "id": "LEGIARTI000047665981",
+  "date": "2026-08-23",
+  "texte": "Lorsqu'un travailleur est victime d'un accident du travail ayant entraîné son décès, l'employeur informe l'agent de contrôle de l'inspection du travail compétent pour le lieu de survenance de l'accident immédiatement et au plus tard dans les douze heures qui suivent le décès du travailleur, sauf s'il établit qu'il n'a pu avoir connaissance du décès que postérieurement à l'expiration de ce délai. Dans ce cas, le délai de douze heures imparti à l'employeur pour informer l'agent de contrôle de l'inspection du travail court à compter du moment où l'employeur a connaissance du décès du travailleur. Cette information est communiquée par tout moyen permettant de conférer date certaine à cet envoi. Elle comporte les éléments suivants : 1° Le nom ou la raison sociale ainsi que les adresses postale et électronique, les coordonnées téléphoniques de l'entreprise ou de l'établissement qui emploie le travailleur au moment de l'accident ; 2° Le cas échéant, le nom ou la raison sociale ainsi que les adresses postale et électronique, les coordonnées téléphoniques de l'entreprise ou de l'établissement dans lequel l'accident s'est produit si celui-ci est différent de l'entreprise ou établissement employeur ; 3° Les noms, prénoms, date de naissance de la victime ; 4° Les date, heure, lieu et circonstances de l'accident ; 5° L'identité et les coordonnées des témoins, le cas échéant."
+ },
+ "R4624-33": {
+  "id": "LEGIARTI000045371018",
+  "date": "2026-08-23",
+  "texte": "Le médecin du travail est informé par l'employeur de tout arrêt de travail d'une durée inférieure à trente jours pour cause d'accident du travail afin de pouvoir apprécier, notamment, l'opportunité d'un nouvel examen médical et, avec l'équipe pluridisciplinaire, de préconiser des mesures de prévention des risques professionnels."
+ },
+ "R4624-31": {
+  "id": "LEGIARTI000054250639",
+  "date": "2026-08-23",
+  "texte": "Le travailleur bénéficie d'un examen de reprise du travail par le médecin du travail : 1° Après un congé de maternité ; 2° Après une absence pour cause de maladie professionnelle ; 3° Après une absence d'au moins trente jours pour cause d'accident du travail ; 4° Après une absence d'au moins soixante jours pour cause de maladie ou d'accident non professionnel. Dès que l'employeur a connaissance de la date de la fin de l'arrêt de travail, il saisit le service de prévention et de santé au travail qui organise l'examen de reprise le jour de la reprise effective du travail par le travailleur, et au plus tard dans un délai de huit jours qui suivent cette reprise. Par dérogation aux dispositions des alinéas précédents, et sauf demande du médecin du travail, de l'employeur ou du travailleur, la visite de reprise n'est pas requise si l'ensemble des conditions suivantes sont réunies : 1° Le travailleur a bénéficié d'une visite de préreprise prévue à l'article L. 4624-2-4 dans les trente jours précédant sa reprise effective du travail ; 2° Lors de cette visite de préreprise, le médecin du travail a conclu qu'aucune mesure individuelle d'aménagement, d'adaptation ou de transformation du poste ni aucune mesure d'aménagement du temps de travail n'était nécessaire en vue de la reprise."
+ },
+ "L4624-2-2": {
+  "id": "LEGIARTI000054527125",
+  "date": "2026-08-23",
+  "texte": "I. - Le travailleur est examiné par le médecin du travail au cours d'une visite médicale de mi-carrière organisée à une échéance déterminée par accord de branche ou, à défaut, durant l'année civile du quarante-cinquième anniversaire du travailleur. Cet examen médical peut être anticipé et organisé conjointement avec une autre visite médicale lorsque le travailleur doit être examiné par le médecin du travail deux ans avant l'échéance prévue au premier alinéa du présent I. Il peut être réalisé dès le retour à l'emploi du travailleur dès lors qu'il satisfait aux conditions déterminées par l'accord de branche prévu au même premier alinéa ou, à défaut, qu'il est âgé d'au moins quarante-cinq ans. L'examen médical vise à : 1° Etablir un état des lieux de l'adéquation entre le poste de travail et l'état de santé du travailleur, à date, en tenant compte des expositions à des facteurs de risques professionnels auxquelles il a été soumis ; 2° Evaluer les risques de désinsertion professionnelle, en prenant en compte l'évolution des capacités du travailleur en fonction de son parcours professionnel, de son âge et de son état de santé ; 3° Sensibiliser le travailleur aux enjeux du vieillissement au travail et sur la prévention des risques professionnels ; 4° Sensibiliser le travailleur à certains enjeux de santé publique susceptibles d'affecter sa santé au travail, notamment aux facteurs de risques cardio-neuro-vasculaires mentionnés à l'article L. 1411-6-2 du code de la santé publique. Un dépistage précoce des maladies cardio-neuro-vasculaires et des maladies cardiaques structurelles est proposé au travailleur lors de cet examen. Le médecin du travail peut proposer, par écrit et après échange avec le travailleur et l'employeur, les mesures prévues à l' article L. 4624-3 . II. - La visite médicale de mi-carrière peut être réalisée par un infirmier de santé au travail exerçant en pratique avancée. Celui-ci ne peut proposer les mesures mentionnées au dernier alinéa du I. A l'issue de la visite, l'infirmier peut, s'il l'estime nécessaire, orienter sans délai le travailleur vers le médecin du travail."
+ },
+ "L4624-6": {
+  "id": "LEGIARTI000033014760",
+  "date": "2026-08-23",
+  "texte": "L'employeur est tenu de prendre en considération l'avis et les indications ou les propositions émis par le médecin du travail en application des articles L. 4624-2 à L. 4624-4 . En cas de refus, l'employeur fait connaître par écrit au travailleur et au médecin du travail les motifs qui s'opposent à ce qu'il y soit donné suite."
+ },
+ "R4624-46": {
+  "id": "LEGIARTI000045677119",
+  "date": "2026-08-23",
+  "texte": "Pour chaque entreprise ou établissement, le médecin du travail ou, dans les services de prévention et de santé au travail interentreprises, l'équipe pluridisciplinaire établit et met à jour une fiche d'entreprise ou d'établissement sur laquelle figurent, notamment, les risques professionnels et les effectifs de salariés qui y sont exposés."
+ },
+ "R4624-47": {
+  "id": "LEGIARTI000045676758",
+  "date": "2026-08-23",
+  "texte": "Pour les entreprises adhérentes à un service de prévention et de santé au travail interentreprises, la fiche d'entreprise est établie dans l'année qui suit l'adhésion de l'entreprise ou de l'établissement à ce service."
+ },
+ "L4644-1": {
+  "id": "LEGIARTI000043893856",
+  "date": "2026-08-23",
+  "texte": "I.-L'employeur désigne un ou plusieurs salariés compétents pour s'occuper des activités de protection et de prévention des risques professionnels de l'entreprise. Le ou les salariés ainsi désignés par l'employeur bénéficient d'une formation en matière de santé au travail dans les conditions prévues aux articles L. 2315-16 à L. 2315-18 . A défaut, si les compétences dans l'entreprise ne permettent pas d'organiser ces activités, l'employeur peut faire appel, après avis du comité social et économique, aux intervenants en prévention des risques professionnels appartenant au service de prévention et de santé au travail interentreprises auquel il adhère ou dûment enregistrés auprès de l'autorité administrative disposant de compétences dans le domaine de la prévention des risques professionnels et de l'amélioration des conditions de travail. L'employeur peut aussi faire appel aux services de prévention des caisses de sécurité sociale avec l'appui de l'Institut national de recherche et de sécurité dans le cadre des programmes de prévention mentionnés à l'article L. 422-5 du code de la sécurité sociale, à l'organisme professionnel de prévention du bâtiment et des travaux publics et à l'Agence nationale pour l'amélioration des conditions de travail et son réseau. Cet appel aux compétences est réalisé dans des conditions garantissant les règles d'indépendance des professions médicales et l'indépendance des personnes et organismes mentionnés au présent I. Ces conditions sont déterminées par décret en Conseil d'Etat. II.-Les modalités d'application du présent article sont déterminées par décret."
+ },
+ "R4323-95": {
+  "id": "LEGIARTI000018531306",
+  "date": "2026-08-23",
+  "texte": "Les équipements de protection individuelle et les vêtements de travail mentionnés à l'article R. 4321-4 sont fournis gratuitement par l'employeur qui assure leur bon fonctionnement et leur maintien dans un état hygiénique satisfaisant par les entretiens, réparations et remplacements nécessaires. Ces dispositions ne font pas obstacle aux conditions de fournitures des équipements de protection individuelle prévues par l'article L. 1251-23 , pour les salariés temporaires."
+ },
+ "R4512-6": {
+  "id": "LEGIARTI000018529785",
+  "date": "2026-08-23",
+  "texte": "Au vu des informations et éléments recueillis au cours de l'inspection commune préalable, les chefs des entreprises utilisatrice et extérieures procèdent en commun à une analyse des risques pouvant résulter de l'interférence entre les activités, installations et matériels. Lorsque ces risques existent, les employeurs arrêtent d'un commun accord, avant le début des travaux, un plan de prévention définissant les mesures prises par chaque entreprise en vue de prévenir ces risques."
+ },
+ "R4515-4": {
+  "id": "LEGIARTI000018529684",
+  "date": "2026-08-23",
+  "texte": "Les opérations de chargement ou de déchargement, font l'objet d'un document écrit, dit « protocole de sécurité », remplaçant le plan de prévention."
+ },
+ "L3122-1": {
+  "id": "LEGIARTI000033020190",
+  "date": "2026-08-23",
+  "texte": "Le recours au travail de nuit est exceptionnel. Il prend en compte les impératifs de protection de la santé et de la sécurité des travailleurs et est justifié par la nécessité d'assurer la continuité de l'activité économique ou des services d'utilité sociale."
+ },
+ "L3122-2": {
+  "id": "LEGIARTI000033020186",
+  "date": "2026-08-23",
+  "texte": "Tout travail effectué au cours d'une période d'au moins neuf heures consécutives comprenant l'intervalle entre minuit et 5 heures est considéré comme du travail de nuit. La période de travail de nuit commence au plus tôt à 21 heures et s'achève au plus tard à 7 heures."
+ },
+ "L4153-8": {
+  "id": "LEGIARTI000006903187",
+  "date": "2026-08-23",
+  "texte": "Il est interdit d'employer des travailleurs de moins de dix-huit ans à certaines catégories de travaux les exposant à des risques pour leur santé, leur sécurité, leur moralité ou excédant leurs forces. Ces catégories de travaux sont déterminées par voie réglementaire."
+ },
+ "L2142-3": {
+  "id": "LEGIARTI000035652705",
+  "date": "2026-08-23",
+  "texte": "L'affichage des communications syndicales s'effectue librement sur des panneaux réservés à cet usage, distincts de ceux affectés aux communications du comité social et économique. Un exemplaire des communications syndicales est transmis à l'employeur, simultanément à l'affichage. Les panneaux sont mis à la disposition de chaque section syndicale suivant des modalités fixées par accord avec l'employeur."
+ },
+ "L2142-4": {
+  "id": "LEGIARTI000006901617",
+  "date": "2026-08-23",
+  "texte": "Les publications et tracts de nature syndicale peuvent être librement diffusés aux travailleurs de l'entreprise dans l'enceinte de celle-ci aux heures d'entrée et de sortie du travail."
+ },
+ "L2142-8": {
+  "id": "LEGIARTI000025578958",
+  "date": "2026-08-23",
+  "texte": "Dans les entreprises ou établissements d'au moins deux cents salariés, l'employeur met à la disposition des sections syndicales un local commun convenant à l'exercice de la mission de leurs délégués. Dans les entreprises ou établissements d'au moins mille salariés, l'employeur met en outre à la disposition de chaque section syndicale constituée par une organisation syndicale représentative dans l'entreprise ou l'établissement un local convenable, aménagé et doté du matériel nécessaire à son fonctionnement."
+ },
+ "L2411-3": {
+  "id": "LEGIARTI000006902294",
+  "date": "2026-08-23",
+  "texte": "Le licenciement d'un délégué syndical ne peut intervenir qu'après autorisation de l'inspecteur du travail. Cette autorisation est également requise pour le licenciement de l'ancien délégué syndical, durant les douze mois suivant la date de cessation de ses fonctions, s'il a exercé ces dernières pendant au moins un an. Elle est également requise lorsque la lettre du syndicat notifiant à l'employeur la désignation du délégué syndical a été reçue par l'employeur ou lorsque le salarié a fait la preuve que l'employeur a eu connaissance de l'imminence de sa désignation comme délégué syndical, avant que le salarié ait été convoqué à l'entretien préalable au licenciement."
+ },
+ "L3346-1": {
+  "id": "LEGIARTI000048488858",
+  "date": "2026-08-23",
+  "texte": "I.-Lorsqu'une entreprise qui est tenue de mettre en place un régime de participation en application des articles L. 3322-1 à L. 3322-5 et qui dispose d'un ou de plusieurs délégués syndicaux a ouvert une négociation pour mettre en œuvre un dispositif d'intéressement ou de participation, cette négociation porte également sur la définition d'une augmentation exceptionnelle de son bénéfice défini au 1° de l'article L. 3324-1 et sur les modalités de partage de la valeur avec les salariés qui en découlent. Pour l'application du premier alinéa du présent I, la définition de l'augmentation exceptionnelle du bénéfice prend en compte des critères tels que la taille de l'entreprise, le secteur d'activité, la survenance d'une ou de plusieurs opérations de rachat d'actions de l'entreprise suivie de leur annulation dès lors que ces opérations n'ont pas été précédées des attributions aux salariés dans les conditions prévues aux articles L. 225-197-1 à L. 225-197-5 , L. 22-10-59 et L. 22-10-60 du code de commerce, les bénéfices réalisés lors des années précédentes ou les événements exceptionnels externes à l'entreprise intervenus avant la réalisation du bénéfice. Le partage de la valeur mentionné au premier alinéa du présent I peut être mis en œuvre : 1° Soit par le versement du supplément de participation prévu à l'article L. 3324-9 ; 2° Soit par le versement du supplément d'intéressement prévu à l'article L. 3314-10 , lorsqu'un dispositif d'intéressement s'applique dans l'entreprise ; 3° Soit par l'ouverture d'une nouvelle négociation ayant pour objet de mettre en place un dispositif d'intéressement défini à l'article L. 3312-1 lorsqu'il n'existe pas dans l'entreprise, de verser un supplément mentionné aux articles L. 3314-10 et L. 3324-9 si l'accord en application duquel il est versé a donné lieu à un versement, d'abonder un plan d'épargne mentionné aux articles L. 3332-1, L. 3333-2 , L. 3334-2 ou L. 3334-4 du présent code ou à l' article L. 224-13 du code monétaire et financier ou de verser la prime de partage de la valeur mentionnée à l' article 1er de la loi n° 2022-1158 du 16 août 2022 portant mesures d'urgence pour la protection du pouvoir d'achat. II.-Le présent article ne s'applique pas aux entreprises qui ont mis en place un accord de participation ou d'intéressement comprenant déjà une clause spécifique prenant en compte les bénéfices exceptionnels ou un régime de participation comportant une base de calcul conduisant à un résultat plus favorable que la formule prévue à l'article L. 3324-1."
+ },
+ "L2242-17": {
+  "id": "LEGIARTI000043893940",
+  "date": "2026-08-23",
+  "texte": "La négociation annuelle sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail porte sur : 1° L'articulation entre la vie personnelle et la vie professionnelle pour les salariés ; 2° Les objectifs et les mesures permettant d'atteindre l'égalité professionnelle entre les femmes et les hommes, notamment en matière de suppression des écarts de rémunération, d'accès à l'emploi, de formation professionnelle, de déroulement de carrière et de promotion professionnelle, de conditions de travail et d'emploi, en particulier pour les salariés à temps partiel, et de mixité des emplois. Cette négociation s'appuie sur les données mentionnées au 2° de l'article L. 2312-36 . Cette négociation porte également sur l'application de l'article L. 241-3-1 du code de la sécurité sociale et sur les conditions dans lesquelles l'employeur peut prendre en charge tout ou partie du supplément de cotisations ; 3° Les mesures permettant de lutter contre toute discrimination en matière de recrutement, d'emploi et d'accès à la formation professionnelle, en favorisant notamment les conditions d'accès aux critères définis aux II et III de l'article L. 6315-1 ; 4° Les mesures relatives à l'insertion professionnelle et au maintien dans l'emploi des travailleurs handicapés, notamment les conditions d'accès à l'emploi, à la formation et à la promotion professionnelles, les conditions de travail et d'emploi et les actions de sensibilisation de l'ensemble du personnel au handicap ; 5° Les modalités de définition d'un régime de prévoyance et, dans des conditions au moins aussi favorables que celles prévues à l'article L. 911-7 du code de la sécurité sociale, d'un régime de remboursements complémentaires de frais occasionnés par une maladie, une maternité ou un accident, à défaut de couverture par un accord de branche ou un accord d'entreprise. Dans les entreprises de travaux forestiers mentionnées au 3° de l'article L. 722-1 du code rural et de la pêche maritime, la négociation définie au premier alinéa du présent 5° porte sur l'accès aux garanties collectives mentionnées à l'article L. 911-2 du code de la sécurité sociale ; 6° L'exercice du droit d'expression directe et collective des salariés prévu au chapitre Ier du titre VIII du présent livre, notamment au moyen des outils numériques disponibles dans l'entreprise ; 7° Les modalités du plein exercice par le salarié de son droit à la déconnexion et la mise en place par l'entreprise de dispositifs de régulation de l'utilisation des outils numériques, en vue d'assurer le respect des temps de repos et de congé ainsi que de la vie personnelle et familiale. A défaut d'accord, l'employeur élabore une charte, après avis du comité social et économique. Cette charte définit ces modalités de l'exercice du droit à la déconnexion et prévoit en outre la mise en œuvre, à destination des salariés et du personnel d'encadrement et de direction, d'actions de formation et de sensibilisation à un usage raisonnable des outils numériques. 8° Dans les entreprises mentionnées à l'article L. 2143-3 du présent code et dont cinquante salariés au moins sont employés sur un même site, les mesures visant à améliorer la mobilité des salariés entre leur lieu de résidence habituelle et leur lieu de travail, notamment en réduisant le coût de la mobilité, en incitant à l'usage des modes de transport vertueux ainsi que par la prise en charge des frais mentionnés aux articles L. 3261-3 et L. 3261-3-1 ."
+ },
+ "L3132-2": {
+  "id": "LEGIARTI000006902581",
+  "date": "2026-08-23",
+  "texte": "Le repos hebdomadaire a une durée minimale de vingt-quatre heures consécutives auxquelles s'ajoutent les heures consécutives de repos quotidien prévu au chapitre Ier."
+ },
+ "L3121-38": {
+  "id": "LEGIARTI000038610163",
+  "date": "2026-08-23",
+  "texte": "A défaut d'accord, la contrepartie obligatoire sous forme de repos mentionnée à l'article L. 3121-30 est fixée à 50 % des heures supplémentaires accomplies au-delà du contingent annuel mentionné au même article L. 3121-30 pour les entreprises de vingt salariés au plus, et à 100 % de ces mêmes heures pour les entreprises de plus de vingt salariés. Pour l'application du premier alinéa du présent article, l'effectif salarié et le franchissement du seuil de vingt salariés sont déterminés selon les modalités prévues à l'article L. 130-1 du code de la sécurité sociale."
+ },
+ "L3121-64": {
+  "id": "LEGIARTI000036262805",
+  "date": "2026-08-23",
+  "texte": "I.-L'accord prévoyant la conclusion de conventions individuelles de forfait en heures ou en jours sur l'année détermine : 1° Les catégories de salariés susceptibles de conclure une convention individuelle de forfait, dans le respect des articles L. 3121-56 et L. 3121-58 ; 2° La période de référence du forfait, qui peut être l'année civile ou toute autre période de douze mois consécutifs ; 3° Le nombre d'heures ou de jours compris dans le forfait, dans la limite de deux cent dix-huit jours s'agissant du forfait en jours ; 4° Les conditions de prise en compte, pour la rémunération des salariés, des absences ainsi que des arrivées et départs en cours de période ; 5° Les caractéristiques principales des conventions individuelles, qui doivent notamment fixer le nombre d'heures ou de jours compris dans le forfait. II.-L'accord autorisant la conclusion de conventions individuelles de forfait en jours détermine : 1° Les modalités selon lesquelles l'employeur assure l'évaluation et le suivi régulier de la charge de travail du salarié ; 2° Les modalités selon lesquelles l'employeur et le salarié communiquent périodiquement sur la charge de travail du salarié, sur l'articulation entre son activité professionnelle et sa vie personnelle, sur sa rémunération ainsi que sur l'organisation du travail dans l'entreprise ; 3° Les modalités selon lesquelles le salarié peut exercer son droit à la déconnexion prévu au 7° de l'article L. 2242-17 . L'accord peut fixer le nombre maximal de jours travaillés dans l'année lorsque le salarié renonce à une partie de ses jours de repos en application de l'article L. 3121-59 . Ce nombre de jours doit être compatible avec les dispositions du titre III du présent livre relatives au repos quotidien, au repos hebdomadaire et aux jours fériés chômés dans l'entreprise et avec celles du titre IV relatives aux congés payés."
+ },
+ "D3171-8": {
+  "id": "LEGIARTI000018533970",
+  "date": "2026-08-23",
+  "texte": "Lorsque les salariés d'un atelier, d'un service ou d'une équipe, au sens de l'article D. 3171-7 , ne travaillent pas selon le même horaire collectif de travail affiché, la durée du travail de chaque salarié concerné est décomptée selon les modalités suivantes : 1° Quotidiennement, par enregistrement, selon tous moyens, des heures de début et de fin de chaque période de travail ou par le relevé du nombre d'heures de travail accomplies ; 2° Chaque semaine, par récapitulation selon tous moyens du nombre d'heures de travail accomplies par chaque salarié."
+ },
+ "L1222-4": {
+  "id": "LEGIARTI000006900861",
+  "date": "2026-08-23",
+  "texte": "Aucune information concernant personnellement un salarié ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance."
+ },
+ "L1234-19": {
+  "id": "LEGIARTI000006901138",
+  "date": "2026-08-23",
+  "texte": "A l'expiration du contrat de travail, l'employeur délivre au salarié un certificat dont le contenu est déterminé par voie réglementaire."
+ },
+ "L1132-4": {
+  "id": "LEGIARTI000045391813",
+  "date": "2026-08-23",
+  "texte": "Toute disposition ou tout acte pris à l'égard d'un salarié en méconnaissance des dispositions du présent chapitre ou du II de l'article 10-1 de la loi n° 2016-1691 du 9 décembre 2016 relative à la transparence, à la lutte contre la corruption et à la modernisation de la vie économique est nul."
+ },
+ "L1132-3-3": {
+  "id": "LEGIARTI000045391816",
+  "date": "2026-08-23",
+  "texte": "Aucune personne ayant témoigné, de bonne foi, de faits constitutifs d'un délit ou d'un crime dont elle a eu connaissance dans l'exercice de ses fonctions ou ayant relaté de tels faits ne peut faire l'objet des mesures mentionnées à l'article L. 1121-2 . Les personnes mentionnées au premier alinéa du présent article bénéficient des protections prévues aux I et III de l'article 10-1 et aux articles 12 à 13-1 de la loi n° 2016-1691 du 9 décembre 2016 relative à la transparence, à la lutte contre la corruption et à la modernisation de la vie économique."
+ },
+ "R4542-16": {
+  "id": "LEGIARTI000018528838",
+  "date": "2026-08-23",
+  "texte": "L'employeur assure l'information et la formation des travailleurs sur les modalités d'utilisation de l'écran et de l'équipement de travail dans lequel cet écran est intégré. Chaque travailleur en bénéficie avant sa première affectation à un travail sur écran de visualisation et chaque fois que l'organisation du poste de travail est modifiée de manière substantielle."
+ },
+ "R4121-1-1": {
+  "id": "LEGIARTI000031818152",
+  "date": "2026-08-23",
+  "texte": "L'employeur consigne, en annexe du document unique : 1° Les données collectives utiles à l'évaluation des expositions individuelles aux facteurs de risques mentionnés à l'article L. 4161-1 de nature à faciliter la déclaration mentionnée à cet article, le cas échéant à partir de l'identification de postes, métiers ou situations de travail figurant dans un accord collectif étendu ou un référentiel professionnel de branche homologué mentionnés à l'article L. 4161-2 ; 2° La proportion de salariés exposés aux facteurs de risques professionnels mentionnés à l'article L. 4161-1, au-delà des seuils prévus au même article. Cette proportion est actualisée en tant que de besoin lors de la mise à jour du document unique."
+ },
+ "D4622-22": {
+  "id": "LEGIARTI000045676988",
+  "date": "2026-08-23",
+  "texte": "Les droits et obligations réciproques du service de prévention et de santé au travail interentreprises et de ses adhérents sont déterminés dans les statuts ou le règlement intérieur de celui-ci. Ces statuts et ce règlement sont communiqués à l'entreprise, lors de la demande d'adhésion, avec la grille des cotisations du service de prévention et de santé au travail interentreprises et un document détaillant les contreparties individualisées de l'adhésion. L'employeur adresse au service de prévention et de santé au travail un document précisant le nombre et la catégorie des travailleurs à suivre et les risques professionnels auxquels ils sont exposés, notamment les risques mentionnés à l'article R. 4624-23 , qui permettent au travailleur de bénéficier d'un suivi individuel renforcé de son état de santé. Ce document est établi en cohérence avec l'évaluation des risques prévue à l'article L. 4121-3 et le recensement des postes exposés à des facteurs de risques prévu à l'article R. 4624-46 après avis du ou des médecins du travail concernés ainsi que du comité social et économique s'il existe. Ce document est mis à jour chaque année selon les mêmes modalités. Il est tenu à disposition du directeur régional des entreprises, de la concurrence, de la consommation, du travail et de l'emploi."
+ },
+ "R4227-4": {
+  "id": "LEGIARTI000018532137",
+  "date": "2026-08-23",
+  "texte": "Les établissements comportent des dégagements tels que portes, couloirs, circulations, escaliers, rampes, répartis de manière à permettre une évacuation rapide de tous les occupants dans des conditions de sécurité maximale. Ces dégagements sont toujours libres. Aucun objet, marchandise ou matériel ne doit faire obstacle à la circulation des personnes ou réduire la largeur des dégagements au-dessous des minima fixés à l'article R. 4227-5 . Ces dégagements sont disposés de manière à éviter les culs-de-sac."
+ },
+ "R4323-91": {
+  "id": "LEGIARTI000018531314",
+  "date": "2026-08-23",
+  "texte": "Les équipements de protection individuelle sont appropriés aux risques à prévenir et aux conditions dans lesquelles le travail est accompli. Ils ne sont pas eux-mêmes à l'origine de risques supplémentaires. Ils doivent pouvoir être portés, le cas échéant, après ajustement, dans des conditions compatibles avec le travail à accomplir et avec les principes de l'ergonomie."
+ },
+ "L4153-9": {
+  "id": "LEGIARTI000006903188",
+  "date": "2026-08-23",
+  "texte": "Par dérogation aux dispositions de l'article L. 4153-8 , les travailleurs de moins de dix-huit ans ne peuvent être employés à certaines catégories de travaux mentionnés à ce même article que sous certaines conditions déterminées par voie réglementaire."
+ },
+ "R4624-29": {
+  "id": "LEGIARTI000045371016",
+  "date": "2026-08-23",
+  "texte": "En vue de favoriser le maintien dans l'emploi, les travailleurs en arrêt de travail d'une durée de plus de trente jours peuvent bénéficier d'une visite de préreprise."
+ },
+ "R4228-10": {
+  "id": "LEGIARTI000018531982",
+  "date": "2026-08-23",
+  "texte": "Il existe au moins un cabinet d'aisance et un urinoir pour vingt hommes et deux cabinets pour vingt femmes. L'effectif pris en compte est le nombre maximal de travailleurs présents simultanément dans l'établissement. Un cabinet au moins comporte un poste d'eau. Dans les établissements employant un personnel mixte, les cabinets d'aisance sont séparés pour le personnel féminin et masculin. Les cabinets d'aisance réservés aux femmes comportent un récipient pour garnitures périodiques."
+ },
+ "R4228-19": {
+  "id": "LEGIARTI000018531960",
+  "date": "2026-08-23",
+  "texte": "Il est interdit de laisser les travailleurs prendre leur repas dans les locaux affectés au travail."
+ },
+ "R4412-38": {
+  "id": "LEGIARTI000036483735",
+  "date": "2026-08-23",
+  "texte": "L'employeur veille à ce que les travailleurs ainsi que le comité social et économique : 1° Reçoivent des informations sous des formes appropriées et périodiquement actualisées sur les agents chimiques dangereux se trouvant sur le lieu de travail, telles que notamment leurs noms, les risques pour la santé et la sécurité qu'ils comportent et, le cas échéant, les valeurs limites d'exposition professionnelle et les valeurs limites biologiques qui leur sont applicables ; 2° Aient accès aux fiches de données de sécurité fournies par le fournisseur des agents chimiques ; 3° Reçoivent une formation et des informations sur les précautions à prendre pour assurer leur protection et celle des autres travailleurs présents sur le lieu de travail. Sont notamment portées à leur connaissance les consignes relatives aux mesures d'hygiène à respecter et à l'utilisation des équipements de protection individuelle."
+ },
+ "R4412-39": {
+  "id": "LEGIARTI000018530861",
+  "date": "2026-08-23",
+  "texte": "L'employeur établit une notice, dénommée notice de poste, pour chaque poste de travail ou situation de travail exposant les travailleurs à des agents chimiques dangereux. Cette notice, actualisée en tant que de besoin, est destinée à informer les travailleurs des risques auxquels leur travail peut les exposer et des dispositions prises pour les éviter. La notice rappelle les règles d'hygiène applicables ainsi que, le cas échéant, les consignes relatives à l'emploi des équipements de protection collective ou individuelle."
+ },
+ "R4153-40": {
+  "id": "LEGIARTI000033769318",
+  "date": "2026-08-23",
+  "texte": "L'employeur ou le responsable de l'établissement mentionné à l'article L. 4111-1 et le chef d'établissement mentionné aux articles R. 4153-38 et R. 4153-39 peuvent, pour une durée de trois ans à compter de l'envoi de la déclaration prévue à l'article R. 4153-41 , affecter des jeunes aux travaux interdits susceptibles de dérogation mentionnés à la section 2 du présent chapitre, sous réserve de satisfaire aux conditions suivantes : 1° Avoir procédé à l'évaluation prévue aux articles L. 4121-3 et suivants, comprenant une évaluation des risques existants pour les jeunes et liés à leur travail ; cette évaluation est préalable à l'affectation des jeunes à leurs postes de travail ; 2° Avoir, à la suite de cette évaluation, mis en œuvre les actions de prévention prévues au deuxième alinéa de l'article L. 4121-3 ; 3° Avant toute affectation du jeune à ces travaux : a) Pour l'employeur, en application des articles L. 4141-1 et suivants, avoir informé le jeune sur les risques pour sa santé et sa sécurité et les mesures prises pour y remédier et lui avoir dispensé la formation à la sécurité en s'assurant qu'elle est adaptée à son âge, son niveau de formation et son expérience professionnelle ; b) Pour le chef d'établissement, lui avoir dispensé la formation à la sécurité prévue dans le cadre de la formation professionnelle assurée, adaptée à son âge, son niveau de formation et son expérience professionnelle et en avoir organisé l'évaluation. Dans les établissements mentionnés au 4° de l'article R. 4153-39 , par dérogation aux dispositions qui précèdent, le chef d'établissement doit avoir mis en œuvre l'information et la formation mentionnées au a ou, lorsque la formation assurée conduit à un diplôme technologique ou professionnel, avoir mis en œuvre la formation à la sécurité et son évaluation mentionnées au b. 4° Assurer l'encadrement du jeune en formation par une personne compétente durant l'exécution de ces travaux ; 5° Avoir obtenu, pour chaque jeune, la délivrance d'un avis médical d'aptitude. Cet avis médical est délivré chaque année soit par le médecin du travail pour les salariés, soit par le médecin chargé du suivi médical des élèves et des étudiants, des stagiaires de la formation professionnelle ou des jeunes accueillis dans les établissements mentionnés au 4° de l'article R. 4153-39. Tout jeune affecté aux travaux mentionnés au premier alinéa bénéficie du suivi individuel renforcé de son état de santé prévu aux articles R. 4624-22 à R. 4624-28 en application du II de l'article R. 4624-23 ."
  }
 }; });
 

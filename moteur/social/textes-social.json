@@ -308,5 +308,555 @@
   "id": "LEGIARTI000043975313",
   "date": "2026-08-19",
   "texte": "Tout salarié d'une entreprise proposant un dispositif d'intéressement, de participation, un plan d'épargne entreprise, un plan d'épargne interentreprises, un plan d'épargne pour la retraite collectif ou un plan d'épargne retraite d'entreprise collectif reçoit, lors de la conclusion de son contrat de travail, un livret d'épargne salariale présentant les dispositifs mis en place au sein de l'entreprise. Le livret d'épargne salariale est également porté à la connaissance des représentants du personnel, le cas échéant en tant qu'élément de la base de données économiques, sociales et environnementales établie en application de l'article L. 2312-18 ."
+ },
+ "L3121-18": {
+  "id": "LEGIARTI000033020428",
+  "date": "2026-08-23",
+  "texte": "La durée quotidienne de travail effectif par salarié ne peut excéder dix heures, sauf : 1° En cas de dérogation accordée par l'inspecteur du travail dans des conditions déterminées par décret ; 2° En cas d'urgence, dans des conditions déterminées par décret ; 3° Dans les cas prévus à l'article L. 3121-19 ."
+ },
+ "L3121-20": {
+  "id": "LEGIARTI000033020414",
+  "date": "2026-08-23",
+  "texte": "Au cours d'une même semaine, la durée maximale hebdomadaire de travail est de quarante-huit heures."
+ },
+ "L3121-22": {
+  "id": "LEGIARTI000033020402",
+  "date": "2026-08-23",
+  "texte": "La durée hebdomadaire de travail calculée sur une période quelconque de douze semaines consécutives ne peut dépasser quarante-quatre heures, sauf dans les cas prévus aux articles L. 3121-23 à L. 3121-25 ."
+ },
+ "L3121-16": {
+  "id": "LEGIARTI000033020444",
+  "date": "2026-08-23",
+  "texte": "Dès que le temps de travail quotidien atteint six heures, le salarié bénéficie d'un temps de pause d'une durée minimale de vingt minutes consécutives."
+ },
+ "L3131-1": {
+  "id": "LEGIARTI000033020918",
+  "date": "2026-08-23",
+  "texte": "Tout salarié bénéficie d'un repos quotidien d'une durée minimale de onze heures consécutives, sauf dans les cas prévus aux articles L. 3131-2 et L. 3131-3 ou en cas d'urgence, dans des conditions déterminées par décret."
+ },
+ "L3132-1": {
+  "id": "LEGIARTI000006902580",
+  "date": "2026-08-23",
+  "texte": "Il est interdit de faire travailler un même salarié plus de six jours par semaine."
+ },
+ "L3121-30": {
+  "id": "LEGIARTI000033020367",
+  "date": "2026-08-23",
+  "texte": "Des heures supplémentaires peuvent être accomplies dans la limite d'un contingent annuel. Les heures effectuées au delà de ce contingent annuel ouvrent droit à une contrepartie obligatoire sous forme de repos. Les heures prises en compte pour le calcul du contingent annuel d'heures supplémentaires sont celles accomplies au delà de la durée légale. Les heures supplémentaires ouvrant droit au repos compensateur équivalent mentionné à l'article L. 3121-28 et celles accomplies dans les cas de travaux urgents énumérés à l'article L. 3132-4 ne s'imputent pas sur le contingent annuel d'heures supplémentaires."
+ },
+ "L3121-33": {
+  "id": "LEGIARTI000038610166",
+  "date": "2026-08-23",
+  "texte": "I.-Une convention ou un accord collectif d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche : 1° Prévoit le ou les taux de majoration des heures supplémentaires accomplies au-delà de la durée légale ou de la durée considérée comme équivalente. Ce taux ne peut être inférieur à 10 % ; 2° Définit le contingent annuel prévu à l'article L. 3121-30 ; 3° Fixe l'ensemble des conditions d'accomplissement d'heures supplémentaires au-delà du contingent annuel ainsi que la durée, les caractéristiques et les conditions de prise de la contrepartie obligatoire sous forme de repos prévue au même article L. 3121-30. Cette contrepartie obligatoire ne peut être inférieure à 50 % des heures supplémentaires accomplies au-delà du contingent annuel mentionné audit article L. 3121-30 pour les entreprises de vingt salariés au plus, et à 100 % de ces mêmes heures pour les entreprises de plus de vingt salariés. L'effectif salarié et le franchissement du seuil de vingt salariés sont déterminés selon les modalités prévues à l'article L. 130-1 du code de la sécurité sociale . Les heures supplémentaires sont accomplies, dans la limite du contingent annuel applicable dans l'entreprise, après information du comité social et économique. Les heures supplémentaires sont accomplies, au-delà du contingent annuel applicable dans l'entreprise, après avis du comité social et économique. II.-Une convention ou un accord collectif d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche peut également : 1° Prévoir qu'une contrepartie sous forme de repos est accordée au titre des heures supplémentaires accomplies dans la limite du contingent ; 2° Prévoir le remplacement de tout ou partie du paiement des heures supplémentaires, ainsi que des majorations, par un repos compensateur équivalent. III.-Une convention ou un accord d'entreprise peut adapter les conditions et les modalités d'attribution et de prise du repos compensateur de remplacement."
+ },
+ "D3121-24": {
+  "id": "LEGIARTI000033509251",
+  "date": "2026-08-23",
+  "texte": "A défaut d'accord prévu au I de l'article L. 3121-33 , le contingent annuel d'heures supplémentaires est fixé à deux cent vingt heures par salarié. Le premier alinéa ne s'applique pas aux salariés mentionnés à l'article L. 3121-56 qui ont conclu une convention de forfait en heures sur l'année."
+ },
+ "L3121-65": {
+  "id": "LEGIARTI000036262800",
+  "date": "2026-08-23",
+  "texte": "I.-A défaut de stipulations conventionnelles prévues aux 1° et 2° du II de l'article L. 3121-64 , une convention individuelle de forfait en jours peut être valablement conclue sous réserve du respect des dispositions suivantes : 1° L'employeur établit un document de contrôle faisant apparaître le nombre et la date des journées ou demi-journées travaillées. Sous la responsabilité de l'employeur, ce document peut être renseigné par le salarié ; 2° L'employeur s'assure que la charge de travail du salarié est compatible avec le respect des temps de repos quotidiens et hebdomadaires ; 3° L'employeur organise une fois par an un entretien avec le salarié pour évoquer sa charge de travail, qui doit être raisonnable, l'organisation de son travail, l'articulation entre son activité professionnelle et sa vie personnelle ainsi que sa rémunération. II.-A défaut de stipulations conventionnelles prévues au 3° du II de l'article L. 3121-64, les modalités d'exercice par le salarié de son droit à la déconnexion sont définies par l'employeur et communiquées par tout moyen aux salariés concernés. Dans les entreprises d'au moins cinquante salariés, ces modalités sont conformes à la charte mentionnée au 7° de l'article L. 2242-17 ."
+ },
+ "L3121-60": {
+  "id": "LEGIARTI000033003246",
+  "date": "2026-08-23",
+  "texte": "L'employeur s'assure régulièrement que la charge de travail du salarié est raisonnable et permet une bonne répartition dans le temps de son travail."
+ },
+ "D3171-16": {
+  "id": "LEGIARTI000033515983",
+  "date": "2026-08-23",
+  "texte": "L'employeur tient à la disposition de l'inspection du travail : 1° Pendant une durée d'un an, y compris dans le cas d'horaires individualisés, ou pendant une durée équivalente à la période de référence en cas d'aménagement du temps de travail sur une période supérieure à l'année, les documents existant dans l'entreprise ou l'établissement permettant de comptabiliser les heures de travail accomplies par chaque salarié ; 2° Pendant une durée d'un an, le document récapitulant le nombre d'heures d'astreinte accompli chaque mois par le salarié ainsi que la compensation correspondante ; 3° Pendant une durée de trois ans, les documents existant dans l'entreprise ou l'établissement permettant de comptabiliser le nombre de jours de travail accomplis par les salariés intéressés par des conventions de forfait."
+ },
+ "L3123-6": {
+  "id": "LEGIARTI000033020080",
+  "date": "2026-08-23",
+  "texte": "Le contrat de travail du salarié à temps partiel est un contrat écrit. Il mentionne : 1° La qualification du salarié, les éléments de la rémunération, la durée hebdomadaire ou mensuelle prévue et, sauf pour les salariés des associations et entreprises d'aide à domicile et les salariés relevant d'un accord collectif conclu en application de l'article L. 3121-44 , la répartition de la durée du travail entre les jours de la semaine ou les semaines du mois ; 2° Les cas dans lesquels une modification éventuelle de cette répartition peut intervenir ainsi que la nature de cette modification ; 3° Les modalités selon lesquelles les horaires de travail pour chaque journée travaillée sont communiqués par écrit au salarié. Dans les associations et entreprises d'aide à domicile, les horaires de travail sont communiqués par écrit chaque mois au salarié ; 4° Les limites dans lesquelles peuvent être accomplies des heures complémentaires au delà de la durée de travail fixée par le contrat. L'avenant au contrat de travail prévu à l'article L. 3123-22 mentionne les modalités selon lesquelles des compléments d'heures peuvent être accomplis au delà de la durée fixée par le contrat."
+ },
+ "L3123-8": {
+  "id": "LEGIARTI000033020061",
+  "date": "2026-08-23",
+  "texte": "Chacune des heures complémentaires accomplies donne lieu à une majoration de salaire."
+ },
+ "L3123-7": {
+  "id": "LEGIARTI000047453545",
+  "date": "2026-08-23",
+  "texte": "Le salarié à temps partiel bénéficie d'une durée minimale de travail hebdomadaire déterminée selon les modalités fixées aux articles L. 3123-19 et L. 3123-27 . Le premier alinéa du présent article n'est pas applicable : 1° Aux contrats d'une durée au plus égale à sept jours ; 2° Aux contrats à durée déterminée conclus au titre du 1° de l'article L. 1242-2 ; 3° Aux contrats de travail temporaire conclus au titre du 1° de l'article L. 1251-6 pour le remplacement d'un salarié absent. 4° Aux contrats de travail à durée indéterminée conclus dans le cadre d'un cumul avec l'un des contrats prévus aux articles L. 5132-5 , L. 5132-11-1 ou L. 5132-15-1 , afin d'atteindre une durée globale d'activité correspondant à un temps plein ou au moins égale à la durée mentionnée à l'article L. 3123-27. Une durée de travail inférieure à celle prévue au premier alinéa du présent article peut être fixée à la demande du salarié soit pour lui permettre de faire face à des contraintes personnelles, soit pour lui permettre de cumuler plusieurs activités afin d'atteindre une durée globale d'activité correspondant à un temps plein ou au moins égale à la durée mentionnée au même premier alinéa. Cette demande est écrite et motivée. Une durée de travail inférieure à celle prévue audit premier alinéa peut être fixée, à sa demande, au bénéfice du salarié ayant atteint l'âge prévu au premier alinéa de l' article L. 161-22-1-5 du code de la sécurité sociale . Une durée de travail inférieure à celle prévue au premier alinéa, compatible avec ses études, est fixée de droit, à sa demande, au bénéfice du salarié âgé de moins de vingt-six ans poursuivant ses études."
+ },
+ "L3123-27": {
+  "id": "LEGIARTI000033019953",
+  "date": "2026-08-23",
+  "texte": "A défaut d'accord prévu à l'article L. 3123-19 , la durée minimale de travail du salarié à temps partiel est fixée à vingt-quatre heures par semaine ou, le cas échéant, à l'équivalent mensuel de cette durée ou à l'équivalent calculé sur la période prévue par un accord collectif conclu en application de l'article L. 3121-44 ."
+ },
+ "L3123-3": {
+  "id": "LEGIARTI000036262948",
+  "date": "2026-08-23",
+  "texte": "Les salariés à temps partiel qui souhaitent occuper ou reprendre un emploi d'une durée au moins égale à celle mentionnée au premier alinéa de l'article L. 3123-7 ou un emploi à temps complet et les salariés à temps complet qui souhaitent occuper ou reprendre un emploi à temps partiel dans le même établissement ou, à défaut, dans la même entreprise ont priorité pour l'attribution d'un emploi ressortissant à leur catégorie professionnelle ou d'un emploi équivalent ou, si une convention ou un accord d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche étendu le prévoit, d'un emploi présentant des caractéristiques différentes. L'employeur porte à la connaissance de ces salariés la liste des emplois disponibles correspondants."
+ },
+ "L3141-3": {
+  "id": "LEGIARTI000033020826",
+  "date": "2026-08-23",
+  "texte": "Le salarié a droit à un congé de deux jours et demi ouvrables par mois de travail effectif chez le même employeur. La durée totale du congé exigible ne peut excéder trente jours ouvrables."
+ },
+ "L3141-13": {
+  "id": "LEGIARTI000033020772",
+  "date": "2026-08-23",
+  "texte": "Les congés sont pris dans une période qui comprend dans tous les cas la période du 1er mai au 31 octobre de chaque année."
+ },
+ "L3141-15": {
+  "id": "LEGIARTI000033020765",
+  "date": "2026-08-23",
+  "texte": "Un accord d'entreprise ou d'établissement ou, à défaut, une convention ou un accord de branche fixe : 1° La période de prise des congés ; 2° L'ordre des départs pendant cette période ; 3° Les délais que doit respecter l'employeur s'il entend modifier l'ordre et les dates de départs."
+ },
+ "L3141-16": {
+  "id": "LEGIARTI000035652687",
+  "date": "2026-08-23",
+  "texte": "A défaut de stipulation dans la convention ou l'accord conclus en application de l'article L. 3141-15 , l'employeur : 1° Définit après avis, le cas échéant, du comité social et économique : a) La période de prise des congés ; b) L'ordre des départs, en tenant compte des critères suivants : -la situation de famille des bénéficiaires, notamment les possibilités de congé, dans le secteur privé ou la fonction publique, du conjoint ou du partenaire lié par un pacte civil de solidarité, ainsi que la présence au sein du foyer d'un enfant ou d'un adulte handicapé ou d'une personne âgée en perte d'autonomie ; -la durée de leurs services chez l'employeur ; -leur activité chez un ou plusieurs autres employeurs ; 2° Ne peut, sauf en cas de circonstances exceptionnelles, modifier l'ordre et les dates de départ moins d'un mois avant la date de départ prévue."
+ },
+ "D3141-5": {
+  "id": "LEGIARTI000033515945",
+  "date": "2026-08-23",
+  "texte": "La période de prise des congés payés est portée par l'employeur à la connaissance des salariés au moins deux mois avant l'ouverture de cette période."
+ },
+ "D3141-6": {
+  "id": "LEGIARTI000033515942",
+  "date": "2026-08-23",
+  "texte": "L'ordre des départs en congé est communiqué, par tout moyen, à chaque salarié un mois avant son départ."
+ },
+ "L3133-7": {
+  "id": "LEGIARTI000033020869",
+  "date": "2026-08-23",
+  "texte": "La journée de solidarité instituée en vue d'assurer le financement des actions en faveur de l'autonomie des personnes âgées ou handicapées prend la forme : 1° D'une journée supplémentaire de travail non rémunérée pour les salariés ; 2° De la contribution prévue au 1° de l'article L. 14-10-4 du code de l'action sociale et des familles pour les employeurs."
+ },
+ "L3133-8": {
+  "id": "LEGIARTI000033020862",
+  "date": "2026-08-23",
+  "texte": "Le travail accompli, dans la limite de sept heures, durant la journée de solidarité ne donne pas lieu à rémunération : 1° Pour les salariés mensualisés, dans cette limite de sept heures ; 2° Pour les salariés dont la rémunération est calculée par référence à un nombre annuel de jours de travail conformément à l'article L. 3121-58 , dans la limite de la valeur d'une journée de travail. Pour les salariés à temps partiel, la limite de sept heures prévue au 1° du présent article est réduite proportionnellement à la durée contractuelle."
+ },
+ "L3242-1": {
+  "id": "LEGIARTI000006902858",
+  "date": "2026-08-23",
+  "texte": "La rémunération des salariés est mensuelle et indépendante, pour un horaire de travail effectif déterminé, du nombre de jours travaillés dans le mois. Le paiement mensuel neutralise les conséquences de la répartition inégale des jours entre les douze mois de l'année. Pour un horaire équivalent à la durée légale hebdomadaire, la rémunération mensuelle due au salarié se calcule en multipliant la rémunération horaire par les 52/12 de la durée légale hebdomadaire. Le paiement de la rémunération est effectué une fois par mois. Un acompte correspondant, pour une quinzaine, à la moitié de la rémunération mensuelle, est versé au salarié qui en fait la demande. Ces dispositions ne s'appliquent pas aux salariés travaillant à domicile, aux salariés saisonniers, aux salariés intermittents et aux salariés temporaires."
+ },
+ "L1221-10": {
+  "id": "LEGIARTI000006900849",
+  "date": "2026-08-23",
+  "texte": "L'embauche d'un salarié ne peut intervenir qu'après déclaration nominative accomplie par l'employeur auprès des organismes de protection sociale désignés à cet effet. L'employeur accomplit cette déclaration dans tous les lieux de travail où sont employés des salariés."
+ },
+ "L1221-11": {
+  "id": "LEGIARTI000006900850",
+  "date": "2026-08-23",
+  "texte": "Le non-respect de l'obligation de déclaration préalable à l'embauche, constaté par les agents mentionnés à l'article L. 8271-7 , entraîne une pénalité dont le montant est égal à trois cents fois le taux horaire du minimum garanti prévu à l'article L. 3231-12 ."
+ },
+ "L1221-5-1": {
+  "id": "LEGIARTI000047285930",
+  "date": "2026-08-23",
+  "texte": "L'employeur remet au salarié un ou plusieurs documents écrits contenant les informations principales relatives à la relation de travail. Un salarié qui n'a pas reçu les informations mentionnées au premier alinéa ne peut saisir le juge compétent afin de les obtenir qu'après avoir mis en demeure son employeur de lui communiquer les documents requis ou, le cas échéant, de compléter les documents remis. Un décret en Conseil d'Etat fixe les modalités d'application du présent article, notamment la liste des informations devant figurer dans les documents mentionnés au premier alinéa."
+ },
+ "R1221-34": {
+  "id": "LEGIARTI000048288642",
+  "date": "2026-08-23",
+  "texte": "Les documents mentionnés à l'article L. 1221-5-1 comportent au moins les informations suivantes : 1° L'identité des parties à la relation de travail ; 2° Le lieu ou les lieux de travail et, si elle est distincte, l'adresse de l'employeur ; 3° L'intitulé du poste, les fonctions, la catégorie socioprofessionnelle ou la catégorie d'emploi ; 4° La date d'embauche ; 5° Dans le cas d'une relation de travail à durée déterminée, la date de fin ou la durée prévue de celle-ci ; 6° Dans le cas du salarié temporaire mentionné à l'article L. 1251-1 , l'identité de l'entreprise utilisatrice, lorsqu'elle est connue et aussitôt qu'elle l'est ; 7° Le cas échéant, la durée et les conditions de la période d'essai ; 8° Le droit à la formation assuré par l'employeur conformément à l'article L. 6321-1 ; 9° La durée du congé payé auquel le salarié a droit, ou les modalités de calcul de cette durée ; 10° La procédure à observer par l'employeur et le salarié en cas de cessation de leur relation de travail ; 11° Les éléments constitutifs de la rémunération mentionnés à l'article L. 3221-3 , indiqués séparément, y compris les majorations pour les heures supplémentaires, ainsi que la périodicité et les modalités de paiement de cette rémunération ; 12° La durée de travail quotidienne, hebdomadaire, mensuelle ou ses modalités d'aménagement sur une autre période de référence lorsqu'il est fait application des dispositions des articles L. 3121-41 à L. 3121-47 , les conditions dans lesquelles le salarié peut être conduit à effectuer des heures supplémentaires ou complémentaires, ainsi que, le cas échéant, toute modalité concernant les changements d'équipe en cas d'organisation du travail en équipes successives alternantes ; 13° Les conventions et accords collectifs applicables au salarié dans l'entreprise ou l'établissement ; 14° Les régimes obligatoires auxquels est affilié le salarié, la mention des contrats de protection sociale complémentaire dont les salariés bénéficient collectivement en application d'un accord collectif ou d'une décision unilatérale de l'employeur ainsi que, le cas échéant, les conditions d'ancienneté qui y sont attachées."
+ },
+ "R1221-35": {
+  "id": "LEGIARTI000048288640",
+  "date": "2026-08-23",
+  "texte": "La communication des informations mentionnées aux 7° à 12° et 14° de l'article R. 1221-34 peut prendre la forme d'un renvoi aux dispositions législatives et réglementaires ou aux stipulations conventionnelles applicables. Les informations mentionnées aux 1° à 5°, 7° et aux 11° et 12° du même article sont communiquées individuellement au salarié au plus tard le septième jour calendaire à compter de la date d'embauche. Les autres informations sont communiquées au plus tard un mois à compter de la même date."
+ },
+ "L1221-19": {
+  "id": "LEGIARTI000019071113",
+  "date": "2026-08-23",
+  "texte": "Le contrat de travail à durée indéterminée peut comporter une période d'essai dont la durée maximale est : 1° Pour les ouvriers et les employés, de deux mois ; 2° Pour les agents de maîtrise et les techniciens, de trois mois ; 3° Pour les cadres, de quatre mois."
+ },
+ "L1221-21": {
+  "id": "LEGIARTI000019071109",
+  "date": "2026-08-23",
+  "texte": "La période d'essai peut être renouvelée une fois si un accord de branche étendu le prévoit. Cet accord fixe les conditions et les durées de renouvellement. La durée de la période d'essai, renouvellement compris, ne peut pas dépasser : 1° Quatre mois pour les ouvriers et employés ; 2° Six mois pour les agents de maîtrise et techniciens ; 3° Huit mois pour les cadres."
+ },
+ "L1221-25": {
+  "id": "LEGIARTI000029144958",
+  "date": "2026-08-23",
+  "texte": "Lorsqu'il est mis fin, par l'employeur, au contrat en cours ou au terme de la période d'essai définie aux articles L. 1221-19 à L. 1221-24 ou à l'article L. 1242-10 pour les contrats stipulant une période d'essai d'au moins une semaine, le salarié est prévenu dans un délai qui ne peut être inférieur à : 1° Vingt-quatre heures en deçà de huit jours de présence ; 2° Quarante-huit heures entre huit jours et un mois de présence ; 3° Deux semaines après un mois de présence ; 4° Un mois après trois mois de présence. La période d'essai, renouvellement inclus, ne peut être prolongée du fait de la durée du délai de prévenance. Lorsque le délai de prévenance n'a pas été respecté, son inexécution ouvre droit pour le salarié, sauf s'il a commis une faute grave, à une indemnité compensatrice. Cette indemnité est égale au montant des salaires et avantages que le salarié aurait perçus s'il avait accompli son travail jusqu'à l'expiration du délai de prévenance, indemnité compensatrice de congés payés comprise."
+ },
+ "L1221-26": {
+  "id": "LEGIARTI000019071093",
+  "date": "2026-08-23",
+  "texte": "Lorsqu'il est mis fin à la période d'essai par le salarié, celui-ci respecte un délai de prévenance de quarante-huit heures. Ce délai est ramené à vingt-quatre heures si la durée de présence du salarié dans l'entreprise est inférieure à huit jours."
+ },
+ "L1221-8": {
+  "id": "LEGIARTI000006900847",
+  "date": "2026-08-23",
+  "texte": "Le candidat à un emploi est expressément informé, préalablement à leur mise en oeuvre, des méthodes et techniques d'aide au recrutement utilisées à son égard. Les résultats obtenus sont confidentiels. Les méthodes et techniques d'aide au recrutement ou d'évaluation des candidats à un emploi doivent être pertinentes au regard de la finalité poursuivie."
+ },
+ "L1221-9": {
+  "id": "LEGIARTI000006900848",
+  "date": "2026-08-23",
+  "texte": "Aucune information concernant personnellement un candidat à un emploi ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance."
+ },
+ "L1242-12": {
+  "id": "LEGIARTI000006901206",
+  "date": "2026-08-23",
+  "texte": "Le contrat de travail à durée déterminée est établi par écrit et comporte la définition précise de son motif. A défaut, il est réputé conclu pour une durée indéterminée. Il comporte notamment : 1° Le nom et la qualification professionnelle de la personne remplacée lorsqu'il est conclu au titre des 1°, 4° et 5° de l'article L. 1242-2 ; 2° La date du terme et, le cas échéant, une clause de renouvellement lorsqu'il comporte un terme précis ; 3° La durée minimale pour laquelle il est conclu lorsqu'il ne comporte pas de terme précis ; 4° La désignation du poste de travail en précisant, le cas échéant, si celui-ci figure sur la liste des postes de travail présentant des risques particuliers pour la santé ou la sécurité des salariés prévue à l'article L. 4154-2 , la désignation de l'emploi occupé ou, lorsque le contrat est conclu pour assurer un complément de formation professionnelle au salarié au titre du 2° de l'article L. 1242-3 , la désignation de la nature des activités auxquelles participe le salarié dans l'entreprise ; 5° L'intitulé de la convention collective applicable ; 6° La durée de la période d'essai éventuellement prévue ; 7° Le montant de la rémunération et de ses différentes composantes, y compris les primes et accessoires de salaire s'il en existe ; 8° Le nom et l'adresse de la caisse de retraite complémentaire ainsi que, le cas échéant, ceux de l'organisme de prévoyance."
+ },
+ "L1242-2": {
+  "id": "LEGIARTI000037312980",
+  "date": "2026-08-23",
+  "texte": "Sous réserve des dispositions de l'article L. 1242-3 , un contrat de travail à durée déterminée ne peut être conclu que pour l'exécution d'une tâche précise et temporaire, et seulement dans les cas suivants : 1° Remplacement d'un salarié en cas : a) D'absence ; b) De passage provisoire à temps partiel, conclu par avenant à son contrat de travail ou par échange écrit entre ce salarié et son employeur ; c) De suspension de son contrat de travail ; d) De départ définitif précédant la suppression de son poste de travail après consultation du comité social et économique, s'il existe ; e) D'attente de l'entrée en service effective du salarié recruté par contrat à durée indéterminée appelé à le remplacer ; 2° Accroissement temporaire de l'activité de l'entreprise ; 3° Emplois à caractère saisonnier, dont les tâches sont appelées à se répéter chaque année selon une périodicité à peu près fixe, en fonction du rythme des saisons ou des modes de vie collectifs ou emplois pour lesquels, dans certains secteurs d'activité définis par décret ou par convention ou accord collectif de travail étendu, il est d'usage constant de ne pas recourir au contrat de travail à durée indéterminée en raison de la nature de l'activité exercée et du caractère par nature temporaire de ces emplois. Lorsque la durée du contrat de travail est inférieure à un mois, un seul bulletin de paie est émis par l'employeur ; 4° Remplacement d'un chef d'entreprise artisanale, industrielle ou commerciale, d'une personne exerçant une profession libérale, de son conjoint participant effectivement à l'activité de l'entreprise à titre professionnel et habituel ou d'un associé non salarié d'une société civile professionnelle, d'une société civile de moyens d'une société d'exercice libéral ou de toute autre personne morale exerçant une profession libérale ; 5° Remplacement du chef d'une exploitation agricole ou d'une entreprise mentionnée aux 1° à 4° de l'article L. 722-1 du code rural et de la pêche maritime , d'un aide familial, d'un associé d'exploitation, ou de leur conjoint mentionné à l'article L. 722-10 du même code dès lors qu'il participe effectivement à l'activité de l'exploitation agricole ou de l'entreprise ; 6° Recrutement d'ingénieurs et de cadres, au sens des conventions collectives, en vue de la réalisation d'un objet défini lorsqu'un accord de branche étendu ou, à défaut, un accord d'entreprise le prévoit et qu'il définit : a) Les nécessités économiques auxquelles ces contrats sont susceptibles d'apporter une réponse adaptée ; b) Les conditions dans lesquelles les salariés sous contrat à durée déterminée à objet défini bénéficient de garanties relatives à l'aide au reclassement, à la validation des acquis de l'expérience, à la priorité de réembauche et à l'accès à la formation professionnelle continue et peuvent, au cours du délai de prévenance, mobiliser les moyens disponibles pour organiser la suite de leur parcours professionnel ; c) Les conditions dans lesquelles les salariés sous contrat à durée déterminée à objet défini ont priorité d'accès aux emplois en contrat à durée indéterminée dans l'entreprise."
+ },
+ "L1242-13": {
+  "id": "LEGIARTI000006901207",
+  "date": "2026-08-23",
+  "texte": "Le contrat de travail est transmis au salarié, au plus tard, dans les deux jours ouvrables suivant l'embauche."
+ },
+ "L1244-3": {
+  "id": "LEGIARTI000035644007",
+  "date": "2026-08-23",
+  "texte": "A l'expiration d'un contrat de travail à durée déterminée, il ne peut être recouru, pour pourvoir le poste du salarié dont le contrat a pris fin, ni à un contrat à durée déterminée ni à un contrat de travail temporaire, avant l'expiration d'un délai de carence calculé en fonction de la durée du contrat incluant, le cas échéant, son ou ses renouvellements. Les jours pris en compte pour apprécier le délai devant séparer les deux contrats sont les jours d'ouverture de l'entreprise ou de l'établissement concerné. Sans préjudice des dispositions de l' article L. 1242-1 , une convention ou un accord de branche étendu peut fixer les modalités de calcul de ce délai de carence."
+ },
+ "L1244-3-1": {
+  "id": "LEGIARTI000035639421",
+  "date": "2026-08-23",
+  "texte": "A défaut de stipulation dans la convention ou l'accord de branche conclu en application de l'article L. 1244-3 , ce délai de carence est égal : 1° Au tiers de la durée du contrat venu à expiration si la durée du contrat incluant, le cas échéant, son ou ses renouvellements, est de quatorze jours ou plus ; 2° A la moitié de la durée du contrat venu à expiration si la durée du contrat incluant, le cas échéant, son ou ses renouvellements, est inférieure à quatorze jours. Les jours pris en compte pour apprécier le délai devant séparer les deux contrats sont les jours d'ouverture de l'entreprise ou de l'établissement concerné."
+ },
+ "L1243-8": {
+  "id": "LEGIARTI000006901219",
+  "date": "2026-08-23",
+  "texte": "Lorsque, à l'issue d'un contrat de travail à durée déterminée, les relations contractuelles de travail ne se poursuivent pas par un contrat à durée indéterminée, le salarié a droit, à titre de complément de salaire, à une indemnité de fin de contrat destinée à compenser la précarité de sa situation. Cette indemnité est égale à 10 % de la rémunération totale brute versée au salarié. Elle s'ajoute à la rémunération totale brute due au salarié. Elle est versée à l'issue du contrat en même temps que le dernier salaire et figure sur le bulletin de salaire correspondant."
+ },
+ "D1234-6": {
+  "id": "LEGIARTI000029544357",
+  "date": "2026-08-23",
+  "texte": "Le certificat de travail contient exclusivement les mentions suivantes : 1° La date d'entrée du salarié et celle de sa sortie ; 2° La nature de l'emploi ou des emplois successivement occupés et les périodes pendant lesquelles ces emplois ont été tenus. 3° Abrogé ; 4° Abrogé."
+ },
+ "L1234-20": {
+  "id": "LEGIARTI000019071122",
+  "date": "2026-08-23",
+  "texte": "Le solde de tout compte, établi par l'employeur et dont le salarié lui donne reçu, fait l'inventaire des sommes versées au salarié lors de la rupture du contrat de travail. Le reçu pour solde de tout compte peut être dénoncé dans les six mois qui suivent sa signature, délai au-delà duquel il devient libératoire pour l'employeur pour les sommes qui y sont mentionnées."
+ },
+ "R1234-9": {
+  "id": "LEGIARTI000049816309",
+  "date": "2026-08-23",
+  "texte": "L'employeur délivre au salarié, au moment de l'expiration ou de la rupture du contrat de travail, les attestations et justifications qui lui permettent d'exercer ses droits aux prestations mentionnées à l'article L. 5421-2 et transmet sans délai ces mêmes attestations à l'opérateur France Travail. Les employeurs d'au moins onze salariés effectuent cette transmission à l'opérateur France Travail par voie électronique, sauf impossibilité pour une cause qui leur est étrangère, selon des modalités précisées par un arrêté du ministre chargé de l'emploi. (1)"
+ },
+ "L1232-2": {
+  "id": "LEGIARTI000006901000",
+  "date": "2026-08-23",
+  "texte": "L'employeur qui envisage de licencier un salarié le convoque, avant toute décision, à un entretien préalable. La convocation est effectuée par lettre recommandée ou par lettre remise en main propre contre décharge. Cette lettre indique l'objet de la convocation. L'entretien préalable ne peut avoir lieu moins de cinq jours ouvrables après la présentation de la lettre recommandée ou la remise en main propre de la lettre de convocation."
+ },
+ "L1232-4": {
+  "id": "LEGIARTI000006901002",
+  "date": "2026-08-23",
+  "texte": "Lors de son audition, le salarié peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise. Lorsqu'il n'y a pas d'institutions représentatives du personnel dans l'entreprise, le salarié peut se faire assister soit par une personne de son choix appartenant au personnel de l'entreprise, soit par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative. La lettre de convocation à l'entretien préalable adressée au salarié mentionne la possibilité de recourir à un conseiller du salarié et précise l'adresse des services dans lesquels la liste de ces conseillers est tenue à sa disposition."
+ },
+ "L1232-6": {
+  "id": "LEGIARTI000036762096",
+  "date": "2026-08-23",
+  "texte": "Lorsque l'employeur décide de licencier un salarié, il lui notifie sa décision par lettre recommandée avec avis de réception. Cette lettre comporte l'énoncé du ou des motifs invoqués par l'employeur. Elle ne peut être expédiée moins de deux jours ouvrables après la date prévue de l'entretien préalable au licenciement auquel le salarié a été convoqué. Un décret en Conseil d'Etat détermine les modalités d'application du présent article. Un arrêté du ministre chargé du travail fixe les modèles que l'employeur peut utiliser pour procéder à la notification du licenciement."
+ },
+ "L1235-2": {
+  "id": "LEGIARTI000036261950",
+  "date": "2026-08-23",
+  "texte": "Les motifs énoncés dans la lettre de licenciement prévue aux articles L. 1232-6 , L. 1233-16 et L. 1233-42 peuvent, après la notification de celle-ci, être précisés par l'employeur, soit à son initiative soit à la demande du salarié, dans des délais et conditions fixés par décret en Conseil d'Etat. La lettre de licenciement, précisée le cas échéant par l'employeur, fixe les limites du litige en ce qui concerne les motifs de licenciement. A défaut pour le salarié d'avoir formé auprès de l'employeur une demande en application de l'alinéa premier, l'irrégularité que constitue une insuffisance de motivation de la lettre de licenciement ne prive pas, à elle seule, le licenciement de cause réelle et sérieuse et ouvre droit à une indemnité qui ne peut excéder un mois de salaire. En l'absence de cause réelle et sérieuse du licenciement, le préjudice résultant du vice de motivation de la lettre de rupture est réparé par l'indemnité allouée conformément aux dispositions de l' article L. 1235-3 . Lorsqu'une irrégularité a été commise au cours de la procédure, notamment si le licenciement d'un salarié intervient sans que la procédure requise aux articles L. 1232-2, L. 1232-3, L. 1232-4 , L. 1233-11 , L. 1233-12 et L. 1233-13 ait été observée ou sans que la procédure conventionnelle ou statutaire de consultation préalable au licenciement ait été respectée, mais pour une cause réelle et sérieuse, le juge accorde au salarié, à la charge de l'employeur, une indemnité qui ne peut être supérieure à un mois de salaire."
+ },
+ "R1232-13": {
+  "id": "LEGIARTI000036212577",
+  "date": "2026-08-23",
+  "texte": "Dans les quinze jours suivant la notification du licenciement, le salarié peut, par lettre recommandée avec avis de réception ou remise contre récépissé, demander à l'employeur des précisions sur les motifs énoncés dans la lettre de licenciement. L'employeur dispose d'un délai de quinze jours après la réception de la demande du salarié pour apporter des précisions s'il le souhaite. Il communique ces précisions au salarié par lettre recommandée avec avis de réception ou remise contre récépissé. Dans un délai de quinze jours suivant la notification du licenciement et selon les mêmes formes, l'employeur peut, à son initiative, préciser les motifs du licenciement."
+ },
+ "L1237-11": {
+  "id": "LEGIARTI000019071187",
+  "date": "2026-08-23",
+  "texte": "L'employeur et le salarié peuvent convenir en commun des conditions de la rupture du contrat de travail qui les lie. La rupture conventionnelle, exclusive du licenciement ou de la démission, ne peut être imposée par l'une ou l'autre des parties. Elle résulte d'une convention signée par les parties au contrat. Elle est soumise aux dispositions de la présente section destinées à garantir la liberté du consentement des parties."
+ },
+ "L1237-13": {
+  "id": "LEGIARTI000019071182",
+  "date": "2026-08-23",
+  "texte": "La convention de rupture définit les conditions de celle-ci, notamment le montant de l'indemnité spécifique de rupture conventionnelle qui ne peut pas être inférieur à celui de l'indemnité prévue à l'article L. 1234-9 . Elle fixe la date de rupture du contrat de travail, qui ne peut intervenir avant le lendemain du jour de l'homologation. A compter de la date de sa signature par les deux parties, chacune d'entre elles dispose d'un délai de quinze jours calendaires pour exercer son droit de rétractation. Ce droit est exercé sous la forme d'une lettre adressée par tout moyen attestant de sa date de réception par l'autre partie."
+ },
+ "L1237-14": {
+  "id": "LEGIARTI000019071180",
+  "date": "2026-08-23",
+  "texte": "A l'issue du délai de rétractation, la partie la plus diligente adresse une demande d'homologation à l'autorité administrative, avec un exemplaire de la convention de rupture. Un arrêté du ministre chargé du travail fixe le modèle de cette demande. L'autorité administrative dispose d'un délai d'instruction de quinze jours ouvrables, à compter de la réception de la demande, pour s'assurer du respect des conditions prévues à la présente section et de la liberté de consentement des parties. A défaut de notification dans ce délai, l'homologation est réputée acquise et l'autorité administrative est dessaisie. La validité de la convention est subordonnée à son homologation. L'homologation ne peut faire l'objet d'un litige distinct de celui relatif à la convention. Tout litige concernant la convention, l'homologation ou le refus d'homologation relève de la compétence du conseil des prud'hommes, à l'exclusion de tout autre recours contentieux ou administratif. Le recours juridictionnel doit être formé, à peine d'irrecevabilité, avant l'expiration d'un délai de douze mois à compter de la date d'homologation de la convention."
+ },
+ "L1226-2": {
+  "id": "LEGIARTI000035653236",
+  "date": "2026-08-23",
+  "texte": "Lorsque le salarié victime d'une maladie ou d'un accident non professionnel est déclaré inapte par le médecin du travail, en application de l'article L. 4624-4 , à reprendre l'emploi qu'il occupait précédemment, l'employeur lui propose un autre emploi approprié à ses capacités, au sein de l'entreprise ou des entreprises du groupe auquel elle appartient le cas échéant, situées sur le territoire national et dont l'organisation, les activités ou le lieu d'exploitation assurent la permutation de tout ou partie du personnel. Pour l'application du présent article, la notion de groupe désigne le groupe formé par une entreprise appelée entreprise dominante et les entreprises qu'elle contrôle dans les conditions définies à l'article L. 233-1 , aux I et II de l'article L. 233-3 et à l'article L. 233-16 du code de commerce. Cette proposition prend en compte, après avis du comité social et économique lorsqu'il existe, les conclusions écrites du médecin du travail et les indications qu'il formule sur les capacités du salarié à exercer l'une des tâches existantes dans l'entreprise. Le médecin du travail formule également des indications sur la capacité du salarié à bénéficier d'une formation le préparant à occuper un poste adapté. L'emploi proposé est aussi comparable que possible à l'emploi précédemment occupé, au besoin par la mise en oeuvre de mesures telles que mutations, aménagements, adaptations ou transformations de postes existants ou aménagement du temps de travail."
+ },
+ "L1226-4": {
+  "id": "LEGIARTI000025560071",
+  "date": "2026-08-23",
+  "texte": "Lorsque, à l'issue d'un délai d'un mois à compter de la date de l'examen médical de reprise du travail, le salarié déclaré inapte n'est pas reclassé dans l'entreprise ou s'il n'est pas licencié, l'employeur lui verse, dès l'expiration de ce délai, le salaire correspondant à l'emploi que celui-ci occupait avant la suspension de son contrat de travail. Ces dispositions s'appliquent également en cas d'inaptitude à tout emploi dans l'entreprise constatée par le médecin du travail. En cas de licenciement, le préavis n'est pas exécuté et le contrat de travail est rompu à la date de notification du licenciement. Le préavis est néanmoins pris en compte pour le calcul de l'indemnité mentionnée à l'article L. 1234-9 . Par dérogation à l'article L. 1234-5 , l'inexécution du préavis ne donne pas lieu au versement d'une indemnité compensatrice."
+ },
+ "L3221-2": {
+  "id": "LEGIARTI000006902818",
+  "date": "2026-08-23",
+  "texte": "Tout employeur assure, pour un même travail ou pour un travail de valeur égale, l'égalité de rémunération entre les femmes et les hommes."
+ },
+ "L1132-1": {
+  "id": "LEGIARTI000045391841",
+  "date": "2026-08-23",
+  "texte": "Aucune personne ne peut être écartée d'une procédure de recrutement ou de nomination ou de l'accès à un stage ou à une période de formation en entreprise, aucun salarié ne peut être sanctionné, licencié ou faire l'objet d'une mesure discriminatoire, directe ou indirecte, telle que définie à l'article 1er de la loi n° 2008-496 du 27 mai 2008 portant diverses dispositions d'adaptation au droit communautaire dans le domaine de la lutte contre les discriminations, notamment en matière de rémunération, au sens de l'article L. 3221-3 , de mesures d'intéressement ou de distribution d'actions, de formation, de reclassement, d'affectation, de qualification, de classification, de promotion professionnelle, d'horaires de travail, d'évaluation de la performance, de mutation ou de renouvellement de contrat en raison de son origine, de son sexe, de ses mœurs, de son orientation sexuelle, de son identité de genre, de son âge, de sa situation de famille ou de sa grossesse, de ses caractéristiques génétiques, de la particulière vulnérabilité résultant de sa situation économique, apparente ou connue de son auteur, de son appartenance ou de sa non-appartenance, vraie ou supposée, à une ethnie, une nation ou une prétendue race, de ses opinions politiques, de ses activités syndicales ou mutualistes, de son exercice d'un mandat électif, de ses convictions religieuses, de son apparence physique, de son nom de famille, de son lieu de résidence ou de sa domiciliation bancaire, ou en raison de son état de santé, de sa perte d'autonomie ou de son handicap, de sa capacité à s'exprimer dans une langue autre que le français, de sa qualité de lanceur d'alerte, de facilitateur ou de personne en lien avec un lanceur d'alerte, au sens, respectivement, du I de l'article 6 et des 1° et 2° de l' article 6-1 de la loi n° 2016-1691 du 9 décembre 2016 relative à la transparence, à la lutte contre la corruption et à la modernisation de la vie économique."
+ },
+ "L1142-2-1": {
+  "id": "LEGIARTI000031072447",
+  "date": "2026-08-23",
+  "texte": "Nul ne doit subir d'agissement sexiste, défini comme tout agissement lié au sexe d'une personne, ayant pour objet ou pour effet de porter atteinte à sa dignité ou de créer un environnement intimidant, hostile, dégradant, humiliant ou offensant."
+ },
+ "L5213-6": {
+  "id": "LEGIARTI000048589854",
+  "date": "2026-08-23",
+  "texte": "Afin de garantir le respect du principe d'égalité de traitement à l'égard des travailleurs handicapés, l'employeur prend, en fonction des besoins dans une situation concrète, les mesures appropriées pour permettre aux travailleurs mentionnés aux 1° à 4° et 9° à 11° de l'article L. 5212-13 d'accéder à un emploi ou de conserver un emploi correspondant à leur qualification, de l'exercer ou d'y progresser ou pour qu'une formation adaptée à leurs besoins leur soit dispensée. L'employeur s'assure que les logiciels installés sur le poste de travail des personnes handicapées et nécessaires à leur exercice professionnel sont accessibles. Il s'assure également que le poste de travail des personnes handicapées est accessible en télétravail. En cas de changement d'employeur, la conservation des équipements contribuant à l'adaptation du poste de travail des travailleurs handicapés, lorsqu'il comporte les mêmes caractéristiques dans la nouvelle entreprise, peut être prévue par convention entre les deux entreprises concernées. Cette convention peut également être conclue entre une entreprise privée et un employeur public au sens de l' article L. 131-8 du code général de la fonction publique . Ces mesures sont prises sous réserve que les charges consécutives à leur mise en oeuvre ne soient pas disproportionnées, compte tenu de l'aide prévue à l'article L. 5213-10 qui peut compenser en tout ou partie les dépenses supportées à ce titre par l'employeur. Le refus de prendre des mesures au sens du premier alinéa peut être constitutif d'une discrimination au sens de l'article L. 1133-3."
+ },
+ "L5213-6-1": {
+  "id": "LEGIARTI000043894133",
+  "date": "2026-08-23",
+  "texte": "Dans toute entreprise employant au moins deux cent cinquante salariés, est désigné un référent chargé d'orienter, d'informer et d'accompagner les personnes en situation de handicap. Pour l'application du présent article, l'effectif salarié et le franchissement du seuil de deux cent cinquante salariés sont déterminés selon les modalités prévues à l' article L. 130-1 du code de la sécurité sociale. A la demande du travailleur concerné, le référent participe au rendez-vous de liaison prévu à l' article L. 1226-1-3 du présent code ainsi qu'aux échanges organisés sur le fondement du dernier alinéa du I de l'article L. 4624-2-2 . Dans les deux cas, il est tenu à une obligation de discrétion à l'égard des informations à caractère personnel qu'il est amené à connaître."
+ },
+ "L1131-2": {
+  "id": "LEGIARTI000033957410",
+  "date": "2026-08-23",
+  "texte": "Dans toute entreprise employant au moins trois cents salariés et dans toute entreprise spécialisée dans le recrutement, les employés chargés des missions de recrutement reçoivent une formation à la non-discrimination à l'embauche au moins une fois tous les cinq ans."
+ },
+ "L6131-1": {
+  "id": "LEGIARTI000043709709",
+  "date": "2026-08-23",
+  "texte": "I.-Les employeurs concourent au développement de la formation professionnelle et de l'apprentissage par : 1° Le financement direct des actions de formation de leurs salariés ; 2° Le versement de la contribution unique à la formation professionnelle et à l'alternance mentionnée à l'article L. 6131-2 ; 3° Le versement de la contribution supplémentaire à l'apprentissage mentionnée à l'article L. 6242-1 ; 4° Le versement de la contribution dédiée au financement du compte personnel de formation pour les titulaires d'un contrat à durée déterminée mentionnée à l'article L. 6331-6 ; 5° Le versement, le cas échéant, des contributions supplémentaires ayant pour objet le développement de la formation professionnelle continue prévues par un accord professionnel national conclu en application de l'article L. 6332-1-2 . II.-Le I ne s'applique pas à l'Etat, aux établissements publics de santé, sociaux et médico-sociaux relevant de la fonction publique hospitalière, aux groupements de coopération sanitaire mentionnés aux articles L. 6133-1 et L. 6133-4 du code de la santé publique, aux groupements de coopération sociale et médico-sociale mentionnés à l' article L. 312-7 du code de l'action sociale et des familles , aux collectivités territoriales et à leurs établissements publics à caractère administratif ainsi qu'aux employeurs dont l'entreprise ne comporte pas d'établissement en France mentionnés à l' article L. 243-1-2 du code de la sécurité sociale ."
+ },
+ "L6323-13": {
+  "id": "LEGIARTI000052437094",
+  "date": "2026-08-23",
+  "texte": "Dans les entreprises d'au moins cinquante salariés, lorsque le salarié n'a pas bénéficié, durant les huit ans précédant l'entretien mentionné au II de l'article L. 6315-1 , des entretiens prévus au même article L. 6315-1 et d'au moins une formation autre que celle mentionnée à l'article L. 6321-2 , un abondement est inscrit à son compte dans des conditions définies par décret en Conseil d'Etat et l'entreprise verse une somme dont le montant, fixé par décret en Conseil d'Etat, ne peut excéder six fois le montant annuel mentionné à l'article L. 6323-11 . Le salarié est informé de ce versement. Dans le cadre des contrôles menés par les agents mentionnés à l'article L. 6361-5 , lorsque l'entreprise n'a pas opéré le versement prévu au premier alinéa du présent article ou a opéré un versement insuffisant, elle est mise en demeure de procéder au versement de l'insuffisance constatée dans le respect de la procédure contradictoire mentionnée à l'article L. 6362-10 . A défaut, l'entreprise verse au Trésor public un montant équivalent à l'insuffisance constatée majorée de 100 %. Ce versement est établi et recouvré selon les modalités ainsi que sous les sûretés, garanties et sanctions applicables aux taxes sur le chiffre d'affaires. Le contrôle et le contentieux de ce versement sont opérés selon les règles applicables en matière de taxe sur le chiffre d'affaires. Pour l'application du premier alinéa du présent article, l'effectif salarié et le franchissement du seuil de cinquante salariés sont déterminés selon les modalités prévues à l'article L. 130-1 du code de la sécurité sociale."
+ },
+ "L4141-1": {
+  "id": "LEGIARTI000027326445",
+  "date": "2026-08-23",
+  "texte": "L'employeur organise et dispense une information des travailleurs sur les risques pour la santé et la sécurité et les mesures prises pour y remédier. Il organise et dispense également une information des travailleurs sur les risques que peuvent faire peser sur la santé publique ou l'environnement les produits ou procédés de fabrication utilisés ou mis en œuvre par l'établissement ainsi que sur les mesures prises pour y remédier."
+ },
+ "L4154-2": {
+  "id": "LEGIARTI000035653199",
+  "date": "2026-08-23",
+  "texte": "Les salariés titulaires d'un contrat de travail à durée déterminée, les salariés temporaires et les stagiaires en entreprise affectés à des postes de travail présentant des risques particuliers pour leur santé ou leur sécurité bénéficient d'une formation renforcée à la sécurité ainsi que d'un accueil et d'une information adaptés dans l'entreprise dans laquelle ils sont employés. La liste de ces postes de travail est établie par l'employeur, après avis du médecin du travail et du comité social et économique, s'il existe. Elle est tenue à la disposition de l'agent de contrôle de l'inspection du travail mentionné à l'article L. 8112-1 ."
+ },
+ "R4224-14": {
+  "id": "LEGIARTI000018532205",
+  "date": "2026-08-23",
+  "texte": "Les lieux de travail sont équipés d'un matériel de premiers secours adapté à la nature des risques et facilement accessible."
+ },
+ "R4224-15": {
+  "id": "LEGIARTI000018532203",
+  "date": "2026-08-23",
+  "texte": "Un membre du personnel reçoit la formation de secouriste nécessaire pour donner les premiers secours en cas d'urgence dans : 1° Chaque atelier où sont accomplis des travaux dangereux ; 2° Chaque chantier employant vingt travailleurs au moins pendant plus de quinze jours où sont réalisés des travaux dangereux. Les travailleurs ainsi formés ne peuvent remplacer les infirmiers."
+ },
+ "R4224-16": {
+  "id": "LEGIARTI000043128580",
+  "date": "2026-08-23",
+  "texte": "En l'absence d'infirmiers, ou lorsque leur nombre ne permet pas d'assurer une présence permanente, l'employeur prend, après avis du médecin du travail, les mesures nécessaires pour assurer les premiers secours aux accidentés et aux malades. Ces mesures qui sont prises en liaison notamment avec les services de secours d'urgence extérieurs à l'entreprise sont adaptées à la nature des risques. Ces mesures sont consignées dans un document tenu à la disposition de l'agent de contrôle de l'inspection du travail."
+ },
+ "R4227-29": {
+  "id": "LEGIARTI000018532079",
+  "date": "2026-08-23",
+  "texte": "Le premier secours contre l'incendie est assuré par des extincteurs en nombre suffisant et maintenus en bon état de fonctionnement. Il existe au moins un extincteur portatif à eau pulvérisée d'une capacité minimale de 6 litres pour 200 mètres carrés de plancher. Il existe au moins un appareil par niveau. Lorsque les locaux présentent des risques d'incendie particuliers, notamment des risques électriques, ils sont dotés d'extincteurs dont le nombre et le type sont appropriés aux risques."
+ },
+ "R4121-5": {
+  "id": "LEGIARTI000047665981",
+  "date": "2026-08-23",
+  "texte": "Lorsqu'un travailleur est victime d'un accident du travail ayant entraîné son décès, l'employeur informe l'agent de contrôle de l'inspection du travail compétent pour le lieu de survenance de l'accident immédiatement et au plus tard dans les douze heures qui suivent le décès du travailleur, sauf s'il établit qu'il n'a pu avoir connaissance du décès que postérieurement à l'expiration de ce délai. Dans ce cas, le délai de douze heures imparti à l'employeur pour informer l'agent de contrôle de l'inspection du travail court à compter du moment où l'employeur a connaissance du décès du travailleur. Cette information est communiquée par tout moyen permettant de conférer date certaine à cet envoi. Elle comporte les éléments suivants : 1° Le nom ou la raison sociale ainsi que les adresses postale et électronique, les coordonnées téléphoniques de l'entreprise ou de l'établissement qui emploie le travailleur au moment de l'accident ; 2° Le cas échéant, le nom ou la raison sociale ainsi que les adresses postale et électronique, les coordonnées téléphoniques de l'entreprise ou de l'établissement dans lequel l'accident s'est produit si celui-ci est différent de l'entreprise ou établissement employeur ; 3° Les noms, prénoms, date de naissance de la victime ; 4° Les date, heure, lieu et circonstances de l'accident ; 5° L'identité et les coordonnées des témoins, le cas échéant."
+ },
+ "R4624-33": {
+  "id": "LEGIARTI000045371018",
+  "date": "2026-08-23",
+  "texte": "Le médecin du travail est informé par l'employeur de tout arrêt de travail d'une durée inférieure à trente jours pour cause d'accident du travail afin de pouvoir apprécier, notamment, l'opportunité d'un nouvel examen médical et, avec l'équipe pluridisciplinaire, de préconiser des mesures de prévention des risques professionnels."
+ },
+ "R4624-31": {
+  "id": "LEGIARTI000054250639",
+  "date": "2026-08-23",
+  "texte": "Le travailleur bénéficie d'un examen de reprise du travail par le médecin du travail : 1° Après un congé de maternité ; 2° Après une absence pour cause de maladie professionnelle ; 3° Après une absence d'au moins trente jours pour cause d'accident du travail ; 4° Après une absence d'au moins soixante jours pour cause de maladie ou d'accident non professionnel. Dès que l'employeur a connaissance de la date de la fin de l'arrêt de travail, il saisit le service de prévention et de santé au travail qui organise l'examen de reprise le jour de la reprise effective du travail par le travailleur, et au plus tard dans un délai de huit jours qui suivent cette reprise. Par dérogation aux dispositions des alinéas précédents, et sauf demande du médecin du travail, de l'employeur ou du travailleur, la visite de reprise n'est pas requise si l'ensemble des conditions suivantes sont réunies : 1° Le travailleur a bénéficié d'une visite de préreprise prévue à l'article L. 4624-2-4 dans les trente jours précédant sa reprise effective du travail ; 2° Lors de cette visite de préreprise, le médecin du travail a conclu qu'aucune mesure individuelle d'aménagement, d'adaptation ou de transformation du poste ni aucune mesure d'aménagement du temps de travail n'était nécessaire en vue de la reprise."
+ },
+ "L4624-2-2": {
+  "id": "LEGIARTI000054527125",
+  "date": "2026-08-23",
+  "texte": "I. - Le travailleur est examiné par le médecin du travail au cours d'une visite médicale de mi-carrière organisée à une échéance déterminée par accord de branche ou, à défaut, durant l'année civile du quarante-cinquième anniversaire du travailleur. Cet examen médical peut être anticipé et organisé conjointement avec une autre visite médicale lorsque le travailleur doit être examiné par le médecin du travail deux ans avant l'échéance prévue au premier alinéa du présent I. Il peut être réalisé dès le retour à l'emploi du travailleur dès lors qu'il satisfait aux conditions déterminées par l'accord de branche prévu au même premier alinéa ou, à défaut, qu'il est âgé d'au moins quarante-cinq ans. L'examen médical vise à : 1° Etablir un état des lieux de l'adéquation entre le poste de travail et l'état de santé du travailleur, à date, en tenant compte des expositions à des facteurs de risques professionnels auxquelles il a été soumis ; 2° Evaluer les risques de désinsertion professionnelle, en prenant en compte l'évolution des capacités du travailleur en fonction de son parcours professionnel, de son âge et de son état de santé ; 3° Sensibiliser le travailleur aux enjeux du vieillissement au travail et sur la prévention des risques professionnels ; 4° Sensibiliser le travailleur à certains enjeux de santé publique susceptibles d'affecter sa santé au travail, notamment aux facteurs de risques cardio-neuro-vasculaires mentionnés à l'article L. 1411-6-2 du code de la santé publique. Un dépistage précoce des maladies cardio-neuro-vasculaires et des maladies cardiaques structurelles est proposé au travailleur lors de cet examen. Le médecin du travail peut proposer, par écrit et après échange avec le travailleur et l'employeur, les mesures prévues à l' article L. 4624-3 . II. - La visite médicale de mi-carrière peut être réalisée par un infirmier de santé au travail exerçant en pratique avancée. Celui-ci ne peut proposer les mesures mentionnées au dernier alinéa du I. A l'issue de la visite, l'infirmier peut, s'il l'estime nécessaire, orienter sans délai le travailleur vers le médecin du travail."
+ },
+ "L4624-6": {
+  "id": "LEGIARTI000033014760",
+  "date": "2026-08-23",
+  "texte": "L'employeur est tenu de prendre en considération l'avis et les indications ou les propositions émis par le médecin du travail en application des articles L. 4624-2 à L. 4624-4 . En cas de refus, l'employeur fait connaître par écrit au travailleur et au médecin du travail les motifs qui s'opposent à ce qu'il y soit donné suite."
+ },
+ "R4624-46": {
+  "id": "LEGIARTI000045677119",
+  "date": "2026-08-23",
+  "texte": "Pour chaque entreprise ou établissement, le médecin du travail ou, dans les services de prévention et de santé au travail interentreprises, l'équipe pluridisciplinaire établit et met à jour une fiche d'entreprise ou d'établissement sur laquelle figurent, notamment, les risques professionnels et les effectifs de salariés qui y sont exposés."
+ },
+ "R4624-47": {
+  "id": "LEGIARTI000045676758",
+  "date": "2026-08-23",
+  "texte": "Pour les entreprises adhérentes à un service de prévention et de santé au travail interentreprises, la fiche d'entreprise est établie dans l'année qui suit l'adhésion de l'entreprise ou de l'établissement à ce service."
+ },
+ "L4644-1": {
+  "id": "LEGIARTI000043893856",
+  "date": "2026-08-23",
+  "texte": "I.-L'employeur désigne un ou plusieurs salariés compétents pour s'occuper des activités de protection et de prévention des risques professionnels de l'entreprise. Le ou les salariés ainsi désignés par l'employeur bénéficient d'une formation en matière de santé au travail dans les conditions prévues aux articles L. 2315-16 à L. 2315-18 . A défaut, si les compétences dans l'entreprise ne permettent pas d'organiser ces activités, l'employeur peut faire appel, après avis du comité social et économique, aux intervenants en prévention des risques professionnels appartenant au service de prévention et de santé au travail interentreprises auquel il adhère ou dûment enregistrés auprès de l'autorité administrative disposant de compétences dans le domaine de la prévention des risques professionnels et de l'amélioration des conditions de travail. L'employeur peut aussi faire appel aux services de prévention des caisses de sécurité sociale avec l'appui de l'Institut national de recherche et de sécurité dans le cadre des programmes de prévention mentionnés à l'article L. 422-5 du code de la sécurité sociale, à l'organisme professionnel de prévention du bâtiment et des travaux publics et à l'Agence nationale pour l'amélioration des conditions de travail et son réseau. Cet appel aux compétences est réalisé dans des conditions garantissant les règles d'indépendance des professions médicales et l'indépendance des personnes et organismes mentionnés au présent I. Ces conditions sont déterminées par décret en Conseil d'Etat. II.-Les modalités d'application du présent article sont déterminées par décret."
+ },
+ "R4323-95": {
+  "id": "LEGIARTI000018531306",
+  "date": "2026-08-23",
+  "texte": "Les équipements de protection individuelle et les vêtements de travail mentionnés à l'article R. 4321-4 sont fournis gratuitement par l'employeur qui assure leur bon fonctionnement et leur maintien dans un état hygiénique satisfaisant par les entretiens, réparations et remplacements nécessaires. Ces dispositions ne font pas obstacle aux conditions de fournitures des équipements de protection individuelle prévues par l'article L. 1251-23 , pour les salariés temporaires."
+ },
+ "R4512-6": {
+  "id": "LEGIARTI000018529785",
+  "date": "2026-08-23",
+  "texte": "Au vu des informations et éléments recueillis au cours de l'inspection commune préalable, les chefs des entreprises utilisatrice et extérieures procèdent en commun à une analyse des risques pouvant résulter de l'interférence entre les activités, installations et matériels. Lorsque ces risques existent, les employeurs arrêtent d'un commun accord, avant le début des travaux, un plan de prévention définissant les mesures prises par chaque entreprise en vue de prévenir ces risques."
+ },
+ "R4515-4": {
+  "id": "LEGIARTI000018529684",
+  "date": "2026-08-23",
+  "texte": "Les opérations de chargement ou de déchargement, font l'objet d'un document écrit, dit « protocole de sécurité », remplaçant le plan de prévention."
+ },
+ "L3122-1": {
+  "id": "LEGIARTI000033020190",
+  "date": "2026-08-23",
+  "texte": "Le recours au travail de nuit est exceptionnel. Il prend en compte les impératifs de protection de la santé et de la sécurité des travailleurs et est justifié par la nécessité d'assurer la continuité de l'activité économique ou des services d'utilité sociale."
+ },
+ "L3122-2": {
+  "id": "LEGIARTI000033020186",
+  "date": "2026-08-23",
+  "texte": "Tout travail effectué au cours d'une période d'au moins neuf heures consécutives comprenant l'intervalle entre minuit et 5 heures est considéré comme du travail de nuit. La période de travail de nuit commence au plus tôt à 21 heures et s'achève au plus tard à 7 heures."
+ },
+ "L4153-8": {
+  "id": "LEGIARTI000006903187",
+  "date": "2026-08-23",
+  "texte": "Il est interdit d'employer des travailleurs de moins de dix-huit ans à certaines catégories de travaux les exposant à des risques pour leur santé, leur sécurité, leur moralité ou excédant leurs forces. Ces catégories de travaux sont déterminées par voie réglementaire."
+ },
+ "L2142-3": {
+  "id": "LEGIARTI000035652705",
+  "date": "2026-08-23",
+  "texte": "L'affichage des communications syndicales s'effectue librement sur des panneaux réservés à cet usage, distincts de ceux affectés aux communications du comité social et économique. Un exemplaire des communications syndicales est transmis à l'employeur, simultanément à l'affichage. Les panneaux sont mis à la disposition de chaque section syndicale suivant des modalités fixées par accord avec l'employeur."
+ },
+ "L2142-4": {
+  "id": "LEGIARTI000006901617",
+  "date": "2026-08-23",
+  "texte": "Les publications et tracts de nature syndicale peuvent être librement diffusés aux travailleurs de l'entreprise dans l'enceinte de celle-ci aux heures d'entrée et de sortie du travail."
+ },
+ "L2142-8": {
+  "id": "LEGIARTI000025578958",
+  "date": "2026-08-23",
+  "texte": "Dans les entreprises ou établissements d'au moins deux cents salariés, l'employeur met à la disposition des sections syndicales un local commun convenant à l'exercice de la mission de leurs délégués. Dans les entreprises ou établissements d'au moins mille salariés, l'employeur met en outre à la disposition de chaque section syndicale constituée par une organisation syndicale représentative dans l'entreprise ou l'établissement un local convenable, aménagé et doté du matériel nécessaire à son fonctionnement."
+ },
+ "L2411-3": {
+  "id": "LEGIARTI000006902294",
+  "date": "2026-08-23",
+  "texte": "Le licenciement d'un délégué syndical ne peut intervenir qu'après autorisation de l'inspecteur du travail. Cette autorisation est également requise pour le licenciement de l'ancien délégué syndical, durant les douze mois suivant la date de cessation de ses fonctions, s'il a exercé ces dernières pendant au moins un an. Elle est également requise lorsque la lettre du syndicat notifiant à l'employeur la désignation du délégué syndical a été reçue par l'employeur ou lorsque le salarié a fait la preuve que l'employeur a eu connaissance de l'imminence de sa désignation comme délégué syndical, avant que le salarié ait été convoqué à l'entretien préalable au licenciement."
+ },
+ "L3346-1": {
+  "id": "LEGIARTI000048488858",
+  "date": "2026-08-23",
+  "texte": "I.-Lorsqu'une entreprise qui est tenue de mettre en place un régime de participation en application des articles L. 3322-1 à L. 3322-5 et qui dispose d'un ou de plusieurs délégués syndicaux a ouvert une négociation pour mettre en œuvre un dispositif d'intéressement ou de participation, cette négociation porte également sur la définition d'une augmentation exceptionnelle de son bénéfice défini au 1° de l'article L. 3324-1 et sur les modalités de partage de la valeur avec les salariés qui en découlent. Pour l'application du premier alinéa du présent I, la définition de l'augmentation exceptionnelle du bénéfice prend en compte des critères tels que la taille de l'entreprise, le secteur d'activité, la survenance d'une ou de plusieurs opérations de rachat d'actions de l'entreprise suivie de leur annulation dès lors que ces opérations n'ont pas été précédées des attributions aux salariés dans les conditions prévues aux articles L. 225-197-1 à L. 225-197-5 , L. 22-10-59 et L. 22-10-60 du code de commerce, les bénéfices réalisés lors des années précédentes ou les événements exceptionnels externes à l'entreprise intervenus avant la réalisation du bénéfice. Le partage de la valeur mentionné au premier alinéa du présent I peut être mis en œuvre : 1° Soit par le versement du supplément de participation prévu à l'article L. 3324-9 ; 2° Soit par le versement du supplément d'intéressement prévu à l'article L. 3314-10 , lorsqu'un dispositif d'intéressement s'applique dans l'entreprise ; 3° Soit par l'ouverture d'une nouvelle négociation ayant pour objet de mettre en place un dispositif d'intéressement défini à l'article L. 3312-1 lorsqu'il n'existe pas dans l'entreprise, de verser un supplément mentionné aux articles L. 3314-10 et L. 3324-9 si l'accord en application duquel il est versé a donné lieu à un versement, d'abonder un plan d'épargne mentionné aux articles L. 3332-1, L. 3333-2 , L. 3334-2 ou L. 3334-4 du présent code ou à l' article L. 224-13 du code monétaire et financier ou de verser la prime de partage de la valeur mentionnée à l' article 1er de la loi n° 2022-1158 du 16 août 2022 portant mesures d'urgence pour la protection du pouvoir d'achat. II.-Le présent article ne s'applique pas aux entreprises qui ont mis en place un accord de participation ou d'intéressement comprenant déjà une clause spécifique prenant en compte les bénéfices exceptionnels ou un régime de participation comportant une base de calcul conduisant à un résultat plus favorable que la formule prévue à l'article L. 3324-1."
+ },
+ "L2242-17": {
+  "id": "LEGIARTI000043893940",
+  "date": "2026-08-23",
+  "texte": "La négociation annuelle sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail porte sur : 1° L'articulation entre la vie personnelle et la vie professionnelle pour les salariés ; 2° Les objectifs et les mesures permettant d'atteindre l'égalité professionnelle entre les femmes et les hommes, notamment en matière de suppression des écarts de rémunération, d'accès à l'emploi, de formation professionnelle, de déroulement de carrière et de promotion professionnelle, de conditions de travail et d'emploi, en particulier pour les salariés à temps partiel, et de mixité des emplois. Cette négociation s'appuie sur les données mentionnées au 2° de l'article L. 2312-36 . Cette négociation porte également sur l'application de l'article L. 241-3-1 du code de la sécurité sociale et sur les conditions dans lesquelles l'employeur peut prendre en charge tout ou partie du supplément de cotisations ; 3° Les mesures permettant de lutter contre toute discrimination en matière de recrutement, d'emploi et d'accès à la formation professionnelle, en favorisant notamment les conditions d'accès aux critères définis aux II et III de l'article L. 6315-1 ; 4° Les mesures relatives à l'insertion professionnelle et au maintien dans l'emploi des travailleurs handicapés, notamment les conditions d'accès à l'emploi, à la formation et à la promotion professionnelles, les conditions de travail et d'emploi et les actions de sensibilisation de l'ensemble du personnel au handicap ; 5° Les modalités de définition d'un régime de prévoyance et, dans des conditions au moins aussi favorables que celles prévues à l'article L. 911-7 du code de la sécurité sociale, d'un régime de remboursements complémentaires de frais occasionnés par une maladie, une maternité ou un accident, à défaut de couverture par un accord de branche ou un accord d'entreprise. Dans les entreprises de travaux forestiers mentionnées au 3° de l'article L. 722-1 du code rural et de la pêche maritime, la négociation définie au premier alinéa du présent 5° porte sur l'accès aux garanties collectives mentionnées à l'article L. 911-2 du code de la sécurité sociale ; 6° L'exercice du droit d'expression directe et collective des salariés prévu au chapitre Ier du titre VIII du présent livre, notamment au moyen des outils numériques disponibles dans l'entreprise ; 7° Les modalités du plein exercice par le salarié de son droit à la déconnexion et la mise en place par l'entreprise de dispositifs de régulation de l'utilisation des outils numériques, en vue d'assurer le respect des temps de repos et de congé ainsi que de la vie personnelle et familiale. A défaut d'accord, l'employeur élabore une charte, après avis du comité social et économique. Cette charte définit ces modalités de l'exercice du droit à la déconnexion et prévoit en outre la mise en œuvre, à destination des salariés et du personnel d'encadrement et de direction, d'actions de formation et de sensibilisation à un usage raisonnable des outils numériques. 8° Dans les entreprises mentionnées à l'article L. 2143-3 du présent code et dont cinquante salariés au moins sont employés sur un même site, les mesures visant à améliorer la mobilité des salariés entre leur lieu de résidence habituelle et leur lieu de travail, notamment en réduisant le coût de la mobilité, en incitant à l'usage des modes de transport vertueux ainsi que par la prise en charge des frais mentionnés aux articles L. 3261-3 et L. 3261-3-1 ."
+ },
+ "L3132-2": {
+  "id": "LEGIARTI000006902581",
+  "date": "2026-08-23",
+  "texte": "Le repos hebdomadaire a une durée minimale de vingt-quatre heures consécutives auxquelles s'ajoutent les heures consécutives de repos quotidien prévu au chapitre Ier."
+ },
+ "L3121-38": {
+  "id": "LEGIARTI000038610163",
+  "date": "2026-08-23",
+  "texte": "A défaut d'accord, la contrepartie obligatoire sous forme de repos mentionnée à l'article L. 3121-30 est fixée à 50 % des heures supplémentaires accomplies au-delà du contingent annuel mentionné au même article L. 3121-30 pour les entreprises de vingt salariés au plus, et à 100 % de ces mêmes heures pour les entreprises de plus de vingt salariés. Pour l'application du premier alinéa du présent article, l'effectif salarié et le franchissement du seuil de vingt salariés sont déterminés selon les modalités prévues à l'article L. 130-1 du code de la sécurité sociale."
+ },
+ "L3121-64": {
+  "id": "LEGIARTI000036262805",
+  "date": "2026-08-23",
+  "texte": "I.-L'accord prévoyant la conclusion de conventions individuelles de forfait en heures ou en jours sur l'année détermine : 1° Les catégories de salariés susceptibles de conclure une convention individuelle de forfait, dans le respect des articles L. 3121-56 et L. 3121-58 ; 2° La période de référence du forfait, qui peut être l'année civile ou toute autre période de douze mois consécutifs ; 3° Le nombre d'heures ou de jours compris dans le forfait, dans la limite de deux cent dix-huit jours s'agissant du forfait en jours ; 4° Les conditions de prise en compte, pour la rémunération des salariés, des absences ainsi que des arrivées et départs en cours de période ; 5° Les caractéristiques principales des conventions individuelles, qui doivent notamment fixer le nombre d'heures ou de jours compris dans le forfait. II.-L'accord autorisant la conclusion de conventions individuelles de forfait en jours détermine : 1° Les modalités selon lesquelles l'employeur assure l'évaluation et le suivi régulier de la charge de travail du salarié ; 2° Les modalités selon lesquelles l'employeur et le salarié communiquent périodiquement sur la charge de travail du salarié, sur l'articulation entre son activité professionnelle et sa vie personnelle, sur sa rémunération ainsi que sur l'organisation du travail dans l'entreprise ; 3° Les modalités selon lesquelles le salarié peut exercer son droit à la déconnexion prévu au 7° de l'article L. 2242-17 . L'accord peut fixer le nombre maximal de jours travaillés dans l'année lorsque le salarié renonce à une partie de ses jours de repos en application de l'article L. 3121-59 . Ce nombre de jours doit être compatible avec les dispositions du titre III du présent livre relatives au repos quotidien, au repos hebdomadaire et aux jours fériés chômés dans l'entreprise et avec celles du titre IV relatives aux congés payés."
+ },
+ "D3171-8": {
+  "id": "LEGIARTI000018533970",
+  "date": "2026-08-23",
+  "texte": "Lorsque les salariés d'un atelier, d'un service ou d'une équipe, au sens de l'article D. 3171-7 , ne travaillent pas selon le même horaire collectif de travail affiché, la durée du travail de chaque salarié concerné est décomptée selon les modalités suivantes : 1° Quotidiennement, par enregistrement, selon tous moyens, des heures de début et de fin de chaque période de travail ou par le relevé du nombre d'heures de travail accomplies ; 2° Chaque semaine, par récapitulation selon tous moyens du nombre d'heures de travail accomplies par chaque salarié."
+ },
+ "L1222-4": {
+  "id": "LEGIARTI000006900861",
+  "date": "2026-08-23",
+  "texte": "Aucune information concernant personnellement un salarié ne peut être collectée par un dispositif qui n'a pas été porté préalablement à sa connaissance."
+ },
+ "L1234-19": {
+  "id": "LEGIARTI000006901138",
+  "date": "2026-08-23",
+  "texte": "A l'expiration du contrat de travail, l'employeur délivre au salarié un certificat dont le contenu est déterminé par voie réglementaire."
+ },
+ "L1132-4": {
+  "id": "LEGIARTI000045391813",
+  "date": "2026-08-23",
+  "texte": "Toute disposition ou tout acte pris à l'égard d'un salarié en méconnaissance des dispositions du présent chapitre ou du II de l'article 10-1 de la loi n° 2016-1691 du 9 décembre 2016 relative à la transparence, à la lutte contre la corruption et à la modernisation de la vie économique est nul."
+ },
+ "L1132-3-3": {
+  "id": "LEGIARTI000045391816",
+  "date": "2026-08-23",
+  "texte": "Aucune personne ayant témoigné, de bonne foi, de faits constitutifs d'un délit ou d'un crime dont elle a eu connaissance dans l'exercice de ses fonctions ou ayant relaté de tels faits ne peut faire l'objet des mesures mentionnées à l'article L. 1121-2 . Les personnes mentionnées au premier alinéa du présent article bénéficient des protections prévues aux I et III de l'article 10-1 et aux articles 12 à 13-1 de la loi n° 2016-1691 du 9 décembre 2016 relative à la transparence, à la lutte contre la corruption et à la modernisation de la vie économique."
+ },
+ "R4542-16": {
+  "id": "LEGIARTI000018528838",
+  "date": "2026-08-23",
+  "texte": "L'employeur assure l'information et la formation des travailleurs sur les modalités d'utilisation de l'écran et de l'équipement de travail dans lequel cet écran est intégré. Chaque travailleur en bénéficie avant sa première affectation à un travail sur écran de visualisation et chaque fois que l'organisation du poste de travail est modifiée de manière substantielle."
+ },
+ "R4121-1-1": {
+  "id": "LEGIARTI000031818152",
+  "date": "2026-08-23",
+  "texte": "L'employeur consigne, en annexe du document unique : 1° Les données collectives utiles à l'évaluation des expositions individuelles aux facteurs de risques mentionnés à l'article L. 4161-1 de nature à faciliter la déclaration mentionnée à cet article, le cas échéant à partir de l'identification de postes, métiers ou situations de travail figurant dans un accord collectif étendu ou un référentiel professionnel de branche homologué mentionnés à l'article L. 4161-2 ; 2° La proportion de salariés exposés aux facteurs de risques professionnels mentionnés à l'article L. 4161-1, au-delà des seuils prévus au même article. Cette proportion est actualisée en tant que de besoin lors de la mise à jour du document unique."
+ },
+ "D4622-22": {
+  "id": "LEGIARTI000045676988",
+  "date": "2026-08-23",
+  "texte": "Les droits et obligations réciproques du service de prévention et de santé au travail interentreprises et de ses adhérents sont déterminés dans les statuts ou le règlement intérieur de celui-ci. Ces statuts et ce règlement sont communiqués à l'entreprise, lors de la demande d'adhésion, avec la grille des cotisations du service de prévention et de santé au travail interentreprises et un document détaillant les contreparties individualisées de l'adhésion. L'employeur adresse au service de prévention et de santé au travail un document précisant le nombre et la catégorie des travailleurs à suivre et les risques professionnels auxquels ils sont exposés, notamment les risques mentionnés à l'article R. 4624-23 , qui permettent au travailleur de bénéficier d'un suivi individuel renforcé de son état de santé. Ce document est établi en cohérence avec l'évaluation des risques prévue à l'article L. 4121-3 et le recensement des postes exposés à des facteurs de risques prévu à l'article R. 4624-46 après avis du ou des médecins du travail concernés ainsi que du comité social et économique s'il existe. Ce document est mis à jour chaque année selon les mêmes modalités. Il est tenu à disposition du directeur régional des entreprises, de la concurrence, de la consommation, du travail et de l'emploi."
+ },
+ "R4227-4": {
+  "id": "LEGIARTI000018532137",
+  "date": "2026-08-23",
+  "texte": "Les établissements comportent des dégagements tels que portes, couloirs, circulations, escaliers, rampes, répartis de manière à permettre une évacuation rapide de tous les occupants dans des conditions de sécurité maximale. Ces dégagements sont toujours libres. Aucun objet, marchandise ou matériel ne doit faire obstacle à la circulation des personnes ou réduire la largeur des dégagements au-dessous des minima fixés à l'article R. 4227-5 . Ces dégagements sont disposés de manière à éviter les culs-de-sac."
+ },
+ "R4323-91": {
+  "id": "LEGIARTI000018531314",
+  "date": "2026-08-23",
+  "texte": "Les équipements de protection individuelle sont appropriés aux risques à prévenir et aux conditions dans lesquelles le travail est accompli. Ils ne sont pas eux-mêmes à l'origine de risques supplémentaires. Ils doivent pouvoir être portés, le cas échéant, après ajustement, dans des conditions compatibles avec le travail à accomplir et avec les principes de l'ergonomie."
+ },
+ "L4153-9": {
+  "id": "LEGIARTI000006903188",
+  "date": "2026-08-23",
+  "texte": "Par dérogation aux dispositions de l'article L. 4153-8 , les travailleurs de moins de dix-huit ans ne peuvent être employés à certaines catégories de travaux mentionnés à ce même article que sous certaines conditions déterminées par voie réglementaire."
+ },
+ "R4624-29": {
+  "id": "LEGIARTI000045371016",
+  "date": "2026-08-23",
+  "texte": "En vue de favoriser le maintien dans l'emploi, les travailleurs en arrêt de travail d'une durée de plus de trente jours peuvent bénéficier d'une visite de préreprise."
+ },
+ "R4228-10": {
+  "id": "LEGIARTI000018531982",
+  "date": "2026-08-23",
+  "texte": "Il existe au moins un cabinet d'aisance et un urinoir pour vingt hommes et deux cabinets pour vingt femmes. L'effectif pris en compte est le nombre maximal de travailleurs présents simultanément dans l'établissement. Un cabinet au moins comporte un poste d'eau. Dans les établissements employant un personnel mixte, les cabinets d'aisance sont séparés pour le personnel féminin et masculin. Les cabinets d'aisance réservés aux femmes comportent un récipient pour garnitures périodiques."
+ },
+ "R4228-19": {
+  "id": "LEGIARTI000018531960",
+  "date": "2026-08-23",
+  "texte": "Il est interdit de laisser les travailleurs prendre leur repas dans les locaux affectés au travail."
+ },
+ "R4412-38": {
+  "id": "LEGIARTI000036483735",
+  "date": "2026-08-23",
+  "texte": "L'employeur veille à ce que les travailleurs ainsi que le comité social et économique : 1° Reçoivent des informations sous des formes appropriées et périodiquement actualisées sur les agents chimiques dangereux se trouvant sur le lieu de travail, telles que notamment leurs noms, les risques pour la santé et la sécurité qu'ils comportent et, le cas échéant, les valeurs limites d'exposition professionnelle et les valeurs limites biologiques qui leur sont applicables ; 2° Aient accès aux fiches de données de sécurité fournies par le fournisseur des agents chimiques ; 3° Reçoivent une formation et des informations sur les précautions à prendre pour assurer leur protection et celle des autres travailleurs présents sur le lieu de travail. Sont notamment portées à leur connaissance les consignes relatives aux mesures d'hygiène à respecter et à l'utilisation des équipements de protection individuelle."
+ },
+ "R4412-39": {
+  "id": "LEGIARTI000018530861",
+  "date": "2026-08-23",
+  "texte": "L'employeur établit une notice, dénommée notice de poste, pour chaque poste de travail ou situation de travail exposant les travailleurs à des agents chimiques dangereux. Cette notice, actualisée en tant que de besoin, est destinée à informer les travailleurs des risques auxquels leur travail peut les exposer et des dispositions prises pour les éviter. La notice rappelle les règles d'hygiène applicables ainsi que, le cas échéant, les consignes relatives à l'emploi des équipements de protection collective ou individuelle."
+ },
+ "R4153-40": {
+  "id": "LEGIARTI000033769318",
+  "date": "2026-08-23",
+  "texte": "L'employeur ou le responsable de l'établissement mentionné à l'article L. 4111-1 et le chef d'établissement mentionné aux articles R. 4153-38 et R. 4153-39 peuvent, pour une durée de trois ans à compter de l'envoi de la déclaration prévue à l'article R. 4153-41 , affecter des jeunes aux travaux interdits susceptibles de dérogation mentionnés à la section 2 du présent chapitre, sous réserve de satisfaire aux conditions suivantes : 1° Avoir procédé à l'évaluation prévue aux articles L. 4121-3 et suivants, comprenant une évaluation des risques existants pour les jeunes et liés à leur travail ; cette évaluation est préalable à l'affectation des jeunes à leurs postes de travail ; 2° Avoir, à la suite de cette évaluation, mis en œuvre les actions de prévention prévues au deuxième alinéa de l'article L. 4121-3 ; 3° Avant toute affectation du jeune à ces travaux : a) Pour l'employeur, en application des articles L. 4141-1 et suivants, avoir informé le jeune sur les risques pour sa santé et sa sécurité et les mesures prises pour y remédier et lui avoir dispensé la formation à la sécurité en s'assurant qu'elle est adaptée à son âge, son niveau de formation et son expérience professionnelle ; b) Pour le chef d'établissement, lui avoir dispensé la formation à la sécurité prévue dans le cadre de la formation professionnelle assurée, adaptée à son âge, son niveau de formation et son expérience professionnelle et en avoir organisé l'évaluation. Dans les établissements mentionnés au 4° de l'article R. 4153-39 , par dérogation aux dispositions qui précèdent, le chef d'établissement doit avoir mis en œuvre l'information et la formation mentionnées au a ou, lorsque la formation assurée conduit à un diplôme technologique ou professionnel, avoir mis en œuvre la formation à la sécurité et son évaluation mentionnées au b. 4° Assurer l'encadrement du jeune en formation par une personne compétente durant l'exécution de ces travaux ; 5° Avoir obtenu, pour chaque jeune, la délivrance d'un avis médical d'aptitude. Cet avis médical est délivré chaque année soit par le médecin du travail pour les salariés, soit par le médecin chargé du suivi médical des élèves et des étudiants, des stagiaires de la formation professionnelle ou des jeunes accueillis dans les établissements mentionnés au 4° de l'article R. 4153-39. Tout jeune affecté aux travaux mentionnés au premier alinéa bénéficie du suivi individuel renforcé de son état de santé prévu aux articles R. 4624-22 à R. 4624-28 en application du II de l'article R. 4624-23 ."
  }
 }
