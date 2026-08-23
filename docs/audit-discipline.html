@@ -13,6 +13,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Audit — discipline et règlement intérieur</title>
+<!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
+     tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
+     Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
+<script src="droits.js"></script>
 <!-- Premier module côté relations individuelles. La page ne diffère des autres
      pages d'audit que par le moteur chargé, le libellé et le dossier d'exemple :
      le formulaire, l'export et l'assistant sont communs (audit-form.js). -->

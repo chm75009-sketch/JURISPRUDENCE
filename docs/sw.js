@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.3";
+const CACHE = "jurisprudence-5.4";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -33,6 +33,11 @@ const ESSENTIELS = [
      affichages obligatoires, registre unique du personnel, base de données,
      index de l'égalité professionnelle, entretiens de parcours professionnel. */
   "./parcours.html", "./parcours.js",
+  /* L'équipe, ses droits et son journal. Le module est chargé par TOUTES les
+     pages : sans lui hors connexion, elles s'ouvriraient sans identification
+     et sans journal — c'est-à-dire autrement qu'en ligne. La page
+     d'administration suit, pour que les droits se règlent aussi sans réseau. */
+  "./droits.js", "./equipe.html", "./DROITS.md",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
   /* Les audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
      mégaoctet, et c'est délibéré : une page d'audit installée qui échouerait

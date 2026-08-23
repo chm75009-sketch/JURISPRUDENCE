@@ -6,6 +6,10 @@
 <meta name="theme-color" content="#1F3864">
 <link rel="icon" href="icons/icon-180.png">
 <title>Agenda social — échéancier des obligations collectives</title>
+<!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
+     tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
+     Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
+<script src="droits.js"></script>
 <!-- Tout se passe dans le navigateur : les brouillons des audits sont lus dans
      le stockage local du poste, l'échéancier se calcule ici, rien n'est envoyé.
 

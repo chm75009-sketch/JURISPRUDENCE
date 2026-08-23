@@ -13,6 +13,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Audit — base de données économiques, sociales et environnementales</title>
+<!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
+     tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
+     Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
+<script src="droits.js"></script>
 <!-- Cette page sert les deux moteurs : le script chargé et le libellé changent,
      tout le reste est commun. Voir audit-cse.html, qui ne diffère que par eux. -->
 <!-- Tout se passe dans le navigateur : le moteur est chargé comme un script

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1F3864">
+<link rel="icon" href="icons/icon-180.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>Équipe — droits et journal</title>
+<!-- Le point unique d'autorisation. Cette page ne teste aucun droit à la main :
+     elle interroge Droits.peut / Droits.peutAdmin, et enregistre par Journal. -->
+<script src="droits.js"></script>
+<style>
+  :root{
+    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
+    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36;
+    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--papier);color:var(--corps);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .page{max-width:1000px;margin:0 auto;padding:0 20px 80px}
+  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
+    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
+    margin:0 -20px 0;padding:10px 20px}
+  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
+  button.retour:hover{filter:brightness(1.12)}
+  .retour-ou{font-size:13px;color:var(--gris)}
+  .retour-ou a{color:var(--bleu)}
+  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
+  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
+  h1{font:600 clamp(26px,4vw,34px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
+  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 6px}
+  h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:22px 0 8px}
+  .chapo{color:var(--gris);max-width:70ch;margin:0}
+  .note{color:var(--gris);font-size:14px}
+
+  /* La phrase d'honnêteté. Elle est en tête, en plein, et elle ne se replie
+     pas : ce n'est pas une mention légale, c'est la nature du dispositif. */
+  .verite{background:var(--orange-f);border:1px solid #e5d9c4;border-left:4px solid var(--orange);
+    border-radius:10px;padding:14px 18px;margin:20px 0 0;color:#4a3a1c;font-size:14.5px}
+  .verite b{color:#3a2d13}
+
+  .carte{background:var(--surface);border:1px solid var(--filet);border-radius:12px;
+    padding:18px 20px;margin:16px 0}
+  .rang{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .photo{width:56px;height:56px;border-radius:50%;object-fit:cover;background:#e8ebf0;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font:600 19px/1 system-ui;color:var(--gris)}
+  .qui{flex:1 1 200px;min-width:0}
+  .qui .nom{font:600 16px/1.3 system-ui;color:var(--encre)}
+  .qui .fonction{font-size:13.5px;color:var(--gris)}
+  .etiq{display:inline-block;font:600 11px/1 system-ui;letter-spacing:.06em;text-transform:uppercase;
+    padding:5px 9px;border-radius:99px;margin-left:8px;vertical-align:2px}
+  .etiq.admin{background:var(--vert-f);color:var(--vert);border:1px solid #bcd8c7}
+  .etiq.moi{background:#eef1f8;color:var(--bleu);border:1px solid #c9d3e8}
+
+  button.act{font:600 14px/1 system-ui;padding:9px 14px;border-radius:99px;border:1px solid var(--filet);
+    background:#fff;color:var(--corps);cursor:pointer}
+  button.act:hover{background:var(--gris-f)}
+  button.act.principal{background:var(--bleu);border-color:var(--bleu);color:#fff}
+  button.act.principal:hover{filter:brightness(1.12)}
+  button.act.danger{color:var(--rouge);border-color:#e3c9c9}
+  button.act.danger:hover{background:var(--rouge-f)}
+  button.act[disabled]{opacity:.45;cursor:not-allowed}
+
+  label.champ{display:block;margin:12px 0 0}
+  label.champ span{display:block;font:600 13.5px/1.4 system-ui;color:var(--encre);margin-bottom:4px}
+  input[type=text],input[type=password],input[type=date],select{
+    font:15px/1.4 system-ui;padding:9px 11px;border:1px solid var(--filet);border-radius:8px;
+    background:#fff;color:var(--corps);width:100%;max-width:440px}
+  input[type=file]{font:14px/1.4 system-ui;max-width:440px}
+  .aide{color:var(--gris);font-size:13px;margin:3px 0 0;max-width:66ch}
+
+  table.matrice{border-collapse:collapse;width:100%;margin:10px 0 0;font-size:14px}
+  table.matrice th,table.matrice td{border:1px solid var(--filet);padding:7px 8px;text-align:center}
+  table.matrice th:first-child,table.matrice td:first-child{text-align:left}
+  table.matrice thead th{background:var(--gris-f);font:600 12.5px/1.3 system-ui;color:var(--encre);
+    position:sticky;top:0}
+  table.matrice tbody tr:nth-child(odd){background:#fcfcfd}
+  .defile{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  table.journal{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:10px}
+  table.journal th,table.journal td{border-bottom:1px solid var(--filet);padding:7px 8px;text-align:left;vertical-align:top}
+  table.journal thead th{background:var(--gris-f);font:600 12.5px/1.3 system-ui;color:var(--encre);white-space:nowrap}
+  td.h{white-space:nowrap;color:var(--gris)}
+  .t-connexion{color:var(--vert);font-weight:600}
+  .t-deconnexion{color:var(--gris)}
+  .t-acte{color:var(--bleu)}
+  .t-refus{color:var(--rouge);font-weight:600}
+  .t-administration{color:var(--orange);font-weight:600}
+
+  .filtres{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin:10px 0 0}
+  .filtres label.champ{margin:0}
+  .filtres input,.filtres select{max-width:220px}
+  .vide{color:var(--gris);font-size:14px;padding:16px 0}
+  .compte{font-size:13px;color:var(--gris);margin:8px 0 0}
+  .barre-act{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  @media (max-width:520px){ .photo{width:46px;height:46px;font-size:16px} }
+  @media print{ .retour-barre,.barre-act,.filtres{display:none} }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="retour-barre">
+  <button type="button" id="btn-retour" class="retour">&#8592; Retour</button>
+  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a>
+  · <a href="audit-social.html">audit social</a>
+  · <a href="parcours.html">parcours guidés</a>
+  · <a href="documents.html">documents</a>
+  · <a href="agenda.html">agenda</a>
+  · <a href="guides.html">guides</a></span>
+</div>
+
+<header>
+  <p class="fil">Application Jurisprudence</p>
+  <h1>Équipe, droits et journal</h1>
+  <p class="chapo">L'administrateur crée les utilisateurs, coche ce que chacun peut faire module par
+  module, et lit le journal des connexions et des actes. Tant qu'aucun utilisateur n'existe,
+  l'application fonctionne exactement comme avant : ouverte, sans connexion, sans journal.</p>
+  <div class="verite">
+    <b>Ce que ces droits font, et ce qu'ils ne font pas.</b> Tant que l'application fonctionne sans
+    serveur, <b>les droits sont organisationnels et non sécuritaires</b> : ils répartissent le travail
+    dans une équipe de bonne foi, ils ne protègent pas les données. Quiconque a accès à ce poste peut
+    les contourner — la console du navigateur suffit. Les codes d'accès ne sont pas enregistrés en
+    clair (condensat SHA-256 avec un sel par utilisateur), ce qui protège de la lecture accidentelle,
+    non d'un utilisateur déterminé. Le passage à un serveur est prévu : il est décrit dans
+    <b>docs/DROITS.md</b>, et il ne demandera de retoucher aucune page.
+  </div>
+</header>
+
+<!-- ================================================== premier lancement -->
+<section id="sec-premier" hidden>
+  <h2>Premier lancement — créer l'administrateur</h2>
+  <p class="note">Aucun utilisateur n'existe. Le premier créé est administrateur : il a tous les
+  droits sur tous les modules et lui seul pourra ensuite constituer l'équipe. Notez son code
+  d'accès : il n'est pas récupérable — un code perdu se remplace en effaçant l'équipe (voir
+  DROITS.md).</p>
+  <div class="carte">
+    <label class="champ"><span>Nom</span>
+      <input type="text" id="p-nom" autocomplete="off" placeholder="Prénom et nom"></label>
+    <label class="champ"><span>Fonction</span>
+      <input type="text" id="p-fonction" autocomplete="off" placeholder="Juriste, assistante, responsable…"></label>
+    <label class="champ"><span>Code d'accès (quatre caractères au moins)</span>
+      <input type="password" id="p-code" autocomplete="new-password"></label>
+    <label class="champ"><span>Photo (facultative)</span>
+      <input type="file" id="p-photo" accept="image/*"></label>
+    <p class="aide">L'image est recadrée en carré, réduite à 256 pixels de côté et rangée dans ce
+    navigateur. Rien n'est envoyé nulle part.</p>
+    <div id="p-apercu" class="rang" style="margin-top:12px" hidden></div>
+    <div class="barre-act">
+      <button type="button" class="act principal" id="p-creer">Créer l'administrateur</button>
+    </div>
+    <p class="aide" id="p-message" role="alert"></p>
+  </div>
+</section>
+
+<!-- ====================================================== les utilisateurs -->
+<section id="sec-equipe" hidden>
+  <h2>L'équipe</h2>
+  <p class="note" id="equipe-etat"></p>
+  <div id="liste-utilisateurs"></div>
+  <div class="barre-act">
+    <button type="button" class="act principal" id="btn-nouveau">Créer un utilisateur</button>
+    <button type="button" class="act" id="btn-changer-session">Changer d'utilisateur</button>
+  </div>
+</section>
+
+<!-- ========================================================== création -->
+<section id="sec-creation" hidden>
+  <h2 id="titre-creation">Nouvel utilisateur</h2>
+  <div class="carte">
+    <label class="champ"><span>Nom</span>
+      <input type="text" id="c-nom" autocomplete="off"></label>
+    <label class="champ"><span>Fonction</span>
+      <input type="text" id="c-fonction" autocomplete="off"></label>
+    <label class="champ" id="bloc-code"><span>Code d'accès (quatre caractères au moins)</span>
+      <input type="password" id="c-code" autocomplete="new-password"></label>
+    <label class="champ"><span>Photo (facultative)</span>
+      <input type="file" id="c-photo" accept="image/*"></label>
+    <div id="c-apercu" class="rang" style="margin-top:12px" hidden></div>
+
+    <h3>Champ d'intervention</h3>
+    <p class="aide">Cochez, module par module, ce que cette personne peut faire. Une case décochée
+    n'est pas une panne : le module refuse proprement et le dit.</p>
+    <label class="champ" style="margin-top:10px">
+      <span><input type="checkbox" id="c-admin"> Administrateur — tous les droits, sur tous les modules</span></label>
+    <div class="barre-act" style="margin-top:8px">
+      <button type="button" class="act" id="c-tout">Tout cocher</button>
+      <button type="button" class="act" id="c-rien">Tout décocher</button>
+      <button type="button" class="act" id="c-lecture">Consultation seule</button>
+    </div>
+    <div class="defile">
+      <table class="matrice" id="matrice"><thead></thead><tbody></tbody></table>
+    </div>
+
+    <h3>Droits d'administration</h3>
+    <p class="aide">Ils portent sur l'équipe elle-même, non sur un module.</p>
+    <div id="matrice-admin"></div>
+
+    <div class="barre-act">
+      <button type="button" class="act principal" id="c-enregistrer">Enregistrer</button>
+      <button type="button" class="act" id="c-annuler">Annuler</button>
+    </div>
+    <p class="aide" id="c-message" role="alert"></p>
+  </div>
+</section>
+
+<!-- ============================================================ journal -->
+<section id="sec-journal" hidden>
+  <h2>Journal</h2>
+  <p class="note">Deux journaux dans un seul : les <b>connexions</b> (qui, quel jour, à quelle heure)
+  et les <b>actes</b> (qui a fait quoi, quand, sur quel module). Les refus y figurent aussi — ils
+  disent quel droit manque à qui.</p>
+
+  <div class="filtres">
+    <label class="champ"><span>Utilisateur</span><select id="f-utilisateur"><option value="">tous</option></select></label>
+    <label class="champ"><span>Module</span><select id="f-module"><option value="">tous</option></select></label>
+    <label class="champ"><span>Type</span><select id="f-type">
+      <option value="">tous</option>
+      <option value="connexion">connexions</option>
+      <option value="deconnexion">déconnexions</option>
+      <option value="acte">actes</option>
+      <option value="refus">refus</option>
+      <option value="administration">administration</option>
+    </select></label>
+    <label class="champ"><span>Du</span><input type="date" id="f-du"></label>
+    <label class="champ"><span>Au</span><input type="date" id="f-au"></label>
+    <label class="champ"><span>Contient</span><input type="text" id="f-texte" placeholder="mot du détail"></label>
+    <button type="button" class="act" id="f-vider">Vider les filtres</button>
+  </div>
+
+  <p class="compte" id="journal-compte"></p>
+  <div class="defile">
+    <table class="journal" id="table-journal">
+      <thead><tr><th>Date</th><th>Heure</th><th>Utilisateur</th><th>Type</th><th>Module</th><th>Action</th><th>Détail</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p class="vide" id="journal-vide" hidden>Aucune entrée ne correspond à ces filtres.</p>
+
+  <div class="barre-act">
+    <button type="button" class="act" id="j-csv">Exporter en CSV</button>
+    <button type="button" class="act" id="j-json">Exporter en JSON</button>
+    <button type="button" class="act" id="j-imprimer">Imprimer</button>
+    <button type="button" class="act danger" id="j-purger">Effacer le journal</button>
+  </div>
+  <p class="aide">L'export porte sur les lignes affichées, filtres compris. Le CSV s'ouvre dans un
+  tableur ; le JSON conserve l'horodatage complet et les identifiants.</p>
+</section>
+
+<footer class="note" style="margin-top:36px;border-top:1px solid var(--filet);padding-top:14px">
+  Le contrat technique — schéma des données, interface du fournisseur, marche à suivre le jour de la
+  bascule sur un serveur — est écrit dans <b>docs/DROITS.md</b>.
+</footer>
+
+</div>
+
+<script>
+"use strict";
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function e(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function initiales(nom) {
+    var m = String(nom || "?").trim().split(/\s+/);
+    return ((m[0] || "?")[0] + (m.length > 1 ? m[m.length - 1][0] : "")).toUpperCase();
+  }
+  function vignette(u, classe) {
+    if (u && u.photo) return '<img class="' + classe + '" src="' + e(u.photo) + '" alt="">';
+    return '<span class="' + classe + '">' + e(initiales(u && u.nom)) + "</span>";
+  }
+
+  $("btn-retour").addEventListener("click", function () {
+    if (history.length > 1) history.back(); else location.href = "./";
+  });
+
+  /* ------------------------------------------------- état de la page --- */
+  var photoCourante = "";     // photo choisie pour la création en cours
+  var editeId = null;         // utilisateur en cours de modification, s'il y en a un
+  var journalCourant = [];    // les lignes affichées, pour l'export
+
+  /* ------------------------------------------------------- la matrice --- */
+  function construireMatrice() {
+    var thead = $("matrice").tHead, tbody = $("matrice").tBodies[0];
+    var ligne = "<tr><th>Module</th>";
+    Droits.ACTIONS.forEach(function (a) {
+      ligne += '<th title="' + e(a.aide) + '">' + e(a.nom) + "</th>";
+    });
+    thead.innerHTML = ligne + "</tr>";
+
+    tbody.innerHTML = Droits.MODULES.map(function (m) {
+      var l = "<tr><td>" + e(m.nom) + "</td>";
+      Droits.ACTIONS.forEach(function (a) {
+        l += '<td><input type="checkbox" data-m="' + e(m.id) + '" data-a="' + e(a.id) +
+             '" aria-label="' + e(m.nom + " — " + a.nom) + '"></td>';
+      });
+      return l + "</tr>";
+    }).join("");
+
+    $("matrice-admin").innerHTML = Droits.ACTIONS_ADMIN.map(function (a) {
+      return '<label class="champ" style="margin:6px 0"><span><input type="checkbox" data-adm="' +
+             e(a.id) + '"> ' + e(a.nom) + "</span></label>";
+    }).join("");
+  }
+
+  function lireMatrice() {
+    var d = {};
+    Array.prototype.forEach.call($("matrice").querySelectorAll("input[data-m]"), function (c) {
+      var m = c.getAttribute("data-m");
+      if (!d[m]) d[m] = {};
+      d[m][c.getAttribute("data-a")] = c.checked;
+    });
+    return d;
+  }
+  function lireMatriceAdmin() {
+    var d = {};
+    Array.prototype.forEach.call($("matrice-admin").querySelectorAll("input[data-adm]"), function (c) {
+      d[c.getAttribute("data-adm")] = c.checked;
+    });
+    return d;
+  }
+  function poserMatrice(droits, droitsAdmin) {
+    Array.prototype.forEach.call($("matrice").querySelectorAll("input[data-m]"), function (c) {
+      var m = droits && droits[c.getAttribute("data-m")];
+      c.checked = !!(m && m[c.getAttribute("data-a")] === true);
+    });
+    Array.prototype.forEach.call($("matrice-admin").querySelectorAll("input[data-adm]"), function (c) {
+      c.checked = !!(droitsAdmin && droitsAdmin[c.getAttribute("data-adm")] === true);
+    });
+  }
+  function cocherToutes(valeur, seulementConsulter) {
+    Array.prototype.forEach.call($("matrice").querySelectorAll("input[data-m]"), function (c) {
+      c.checked = seulementConsulter ? (c.getAttribute("data-a") === "consulter") : valeur;
+    });
+  }
+
+  /* ------------------------------------------------------ les photos --- */
+  function brancherPhoto(champId, apercuId, message) {
+    $(champId).addEventListener("change", function () {
+      var f = this.files && this.files[0];
+      if (!f) { photoCourante = ""; $(apercuId).hidden = true; return; }
+      Droits.photo(f).then(function (data) {
+        photoCourante = data;
+        $(apercuId).hidden = false;
+        $(apercuId).innerHTML = vignette({ photo: data }, "photo") +
+          '<span class="note">Photo réduite à 256 pixels de côté (' +
+          Math.round(data.length / 1024) + " Ko), rangée dans ce navigateur.</span>";
+        if (message) $(message).textContent = "";
+      }).catch(function (ex) {
+        photoCourante = "";
+        $(apercuId).hidden = true;
+        if (message) $(message).textContent = ex && ex.message ? ex.message : "Photo refusée.";
+      });
+    });
+  }
+
+  /* ============================================ premier administrateur === */
+  brancherPhoto("p-photo", "p-apercu", "p-message");
+  $("p-creer").addEventListener("click", function () {
+    $("p-message").textContent = "";
+    Droits.creer({
+      nom: $("p-nom").value,
+      fonction: $("p-fonction").value,
+      code: $("p-code").value,
+      photo: photoCourante,
+      admin: true
+    }).then(function (u) {
+      /* Le premier administrateur est connecté aussitôt : sans cela, la page
+         se refermerait sur un écran de connexion à l'instant même où il vient
+         de saisir son code. */
+      return Droits.connecter(u.id, $("p-code").value);
+    }).then(function () {
+      photoCourante = "";
+      peindre();
+    }).catch(function (ex) {
+      $("p-message").textContent = ex && ex.message ? ex.message : "Création impossible.";
+    });
+  });
+
+  /* ================================================ création / édition === */
+  brancherPhoto("c-photo", "c-apercu", "c-message");
+
+  function ouvrirCreation(u) {
+    editeId = u ? u.id : null;
+    photoCourante = u ? (u.photo || "") : "";
+    $("titre-creation").textContent = u ? "Modifier — " + u.nom : "Nouvel utilisateur";
+    $("c-nom").value = u ? u.nom : "";
+    $("c-fonction").value = u ? (u.fonction || "") : "";
+    $("c-code").value = "";
+    $("c-photo").value = "";
+    $("bloc-code").querySelector("span").textContent = u
+      ? "Nouveau code d'accès (laisser vide pour le conserver)"
+      : "Code d'accès (quatre caractères au moins)";
+    $("c-admin").checked = u ? !!u.admin : false;
+    poserMatrice(u ? u.droits : null, u ? u.droitsAdmin : null);
+    $("c-apercu").hidden = !photoCourante;
+    if (photoCourante) $("c-apercu").innerHTML = vignette({ photo: photoCourante }, "photo") +
+      '<span class="note">Photo actuelle.</span>';
+    $("c-message").textContent = "";
+    $("sec-creation").hidden = false;
+    majAdmin();
+    $("sec-creation").scrollIntoView({ behavior: "smooth", block: "start" });
+    $("c-nom").focus();
+  }
+
+  function majAdmin() {
+    var a = $("c-admin").checked;
+    Array.prototype.forEach.call(
+      $("sec-creation").querySelectorAll("input[data-m],input[data-adm]"),
+      function (c) { c.disabled = a; if (a) c.checked = true; });
+    ["c-tout", "c-rien", "c-lecture"].forEach(function (id) { $(id).disabled = a; });
+  }
+  $("c-admin").addEventListener("change", majAdmin);
+  $("c-tout").addEventListener("click", function () { cocherToutes(true, false); });
+  $("c-rien").addEventListener("click", function () { cocherToutes(false, false); });
+  $("c-lecture").addEventListener("click", function () { cocherToutes(false, true); });
+  $("c-annuler").addEventListener("click", function () {
+    $("sec-creation").hidden = true; editeId = null; photoCourante = "";
+  });
+
+  $("c-enregistrer").addEventListener("click", function () {
+    $("c-message").textContent = "";
+    var champs = {
+      nom: $("c-nom").value,
+      fonction: $("c-fonction").value,
+      photo: photoCourante,
+      admin: $("c-admin").checked,
+      droits: lireMatrice(),
+      droitsAdmin: lireMatriceAdmin()
+    };
+    var suite;
+    if (editeId) {
+      var id = editeId, code = $("c-code").value;
+      suite = Droits.modifier(id, champs).then(function () {
+        return code ? Droits.changerCode(id, code) : null;
+      });
+    } else {
+      champs.code = $("c-code").value;
+      suite = Droits.creer(champs);
+    }
+    suite.then(function () {
+      $("sec-creation").hidden = true;
+      editeId = null; photoCourante = "";
+      peindre();
+    }).catch(function (ex) {
+      $("c-message").textContent = ex && ex.message ? ex.message : "Enregistrement impossible.";
+    });
+  });
+
+  $("btn-nouveau").addEventListener("click", function () {
+    if (!Droits.peutAdmin("creerUtilisateur")) {
+      alert("Vous n'avez pas le droit de créer un utilisateur.");
+      return;
+    }
+    ouvrirCreation(null);
+  });
+
+  $("btn-changer-session").addEventListener("click", function () {
+    Droits.deconnecter().then(function () { Droits.ecranConnexion(); });
+  });
+
+  /* ================================================== liste de l'équipe === */
+  function peindreListe() {
+    return Droits.listerUtilisateurs().then(function (liste) {
+      var moi = Droits.utilisateur();
+      var boite = $("liste-utilisateurs");
+      if (!liste.length) { boite.innerHTML = ""; return liste; }
+      boite.innerHTML = liste.map(function (u) {
+        var modules = 0;
+        Droits.MODULES.forEach(function (m) {
+          var d = u.droits && u.droits[m.id];
+          if (d && (d.consulter || d.saisir || d.produire || d.exporter)) modules++;
+        });
+        return '<div class="carte"><div class="rang">' +
+          vignette(u, "photo") +
+          '<div class="qui"><div class="nom">' + e(u.nom) +
+            (u.admin ? '<span class="etiq admin">administrateur</span>' : "") +
+            (moi && moi.id === u.id ? '<span class="etiq moi">vous</span>' : "") +
+          "</div>" +
+          '<div class="fonction">' + e(u.fonction || "fonction non précisée") + " — " +
+            (u.admin ? "tous les modules" : modules + " module" + (modules > 1 ? "s" : "") + " ouvert" + (modules > 1 ? "s" : "")) +
+          "</div></div>" +
+          '<div class="barre-act" style="margin:0">' +
+            '<button type="button" class="act" data-modifier="' + e(u.id) + '">Droits</button>' +
+            '<button type="button" class="act" data-code="' + e(u.id) + '">Code</button>' +
+            '<button type="button" class="act danger" data-supprimer="' + e(u.id) + '">Supprimer</button>' +
+          "</div></div></div>";
+      }).join("");
+
+      Array.prototype.forEach.call(boite.querySelectorAll("[data-modifier]"), function (b) {
+        b.addEventListener("click", function () {
+          var id = b.getAttribute("data-modifier");
+          if (!Droits.peutAdmin("accorderDroits")) { alert("Vous n'avez pas le droit de modifier les droits d'un utilisateur."); return; }
+          var u = liste.filter(function (x) { return x.id === id; })[0];
+          if (u) ouvrirCreation(u);
+        });
+      });
+      Array.prototype.forEach.call(boite.querySelectorAll("[data-code]"), function (b) {
+        b.addEventListener("click", function () {
+          var id = b.getAttribute("data-code");
+          if (!Droits.peutAdmin("changerCode")) { alert("Vous n'avez pas le droit de changer un code d'accès."); return; }
+          var c = prompt("Nouveau code d'accès (quatre caractères au moins) :");
+          if (c == null) return;
+          Droits.changerCode(id, c).then(peindre).catch(function (ex) { alert(ex.message); });
+        });
+      });
+      Array.prototype.forEach.call(boite.querySelectorAll("[data-supprimer]"), function (b) {
+        b.addEventListener("click", function () {
+          var id = b.getAttribute("data-supprimer");
+          var u = liste.filter(function (x) { return x.id === id; })[0];
+          if (!Droits.peutAdmin("supprimerUtilisateur")) { alert("Vous n'avez pas le droit de supprimer un utilisateur."); return; }
+          if (!confirm("Supprimer « " + (u ? u.nom : id) + " » ? Ses entrées de journal sont conservées.")) return;
+          Droits.supprimer(id).then(peindre).catch(function (ex) { alert(ex.message); });
+        });
+      });
+      return liste;
+    });
+  }
+
+  /* ========================================================== journal === */
+  function filtres() {
+    return {
+      utilisateur: $("f-utilisateur").value,
+      module: $("f-module").value,
+      type: $("f-type").value,
+      du: $("f-du").value,
+      au: $("f-au").value,
+      texte: $("f-texte").value.trim()
+    };
+  }
+
+  function peindreJournal() {
+    return Journal.lire(filtres()).then(function (entrees) {
+      entrees = entrees.slice().sort(function (a, b) {
+        return a.horodatage < b.horodatage ? 1 : a.horodatage > b.horodatage ? -1 : 0;
+      });
+      journalCourant = entrees;
+      var tbody = $("table-journal").tBodies[0];
+      tbody.innerHTML = entrees.map(function (x) {
+        var d = new Date(x.horodatage);
+        return "<tr>" +
+          '<td class="h">' + e(isNaN(d) ? x.horodatage : d.toLocaleDateString("fr-FR")) + "</td>" +
+          '<td class="h">' + e(isNaN(d) ? "" : d.toLocaleTimeString("fr-FR")) + "</td>" +
+          "<td>" + e(x.nom || x.utilisateur || "—") + "</td>" +
+          '<td class="t-' + e(x.type) + '">' + e(x.type) + "</td>" +
+          "<td>" + e(Droits.nomModule(x.module) || "—") + "</td>" +
+          "<td>" + e(x.action || "—") + "</td>" +
+          "<td>" + e(x.detail || "") + "</td>" +
+          "</tr>";
+      }).join("");
+      $("journal-vide").hidden = entrees.length > 0;
+      $("table-journal").hidden = entrees.length === 0;
+      $("journal-compte").textContent = entrees.length
+        ? entrees.length + " entrée" + (entrees.length > 1 ? "s" : "") + " affichée" + (entrees.length > 1 ? "s" : "")
+        : "";
+      return entrees;
+    });
+  }
+
+  ["f-utilisateur", "f-module", "f-type", "f-du", "f-au"].forEach(function (id) {
+    $(id).addEventListener("change", peindreJournal);
+  });
+  $("f-texte").addEventListener("input", peindreJournal);
+  $("f-vider").addEventListener("click", function () {
+    ["f-utilisateur", "f-module", "f-type", "f-du", "f-au", "f-texte"].forEach(function (id) { $(id).value = ""; });
+    peindreJournal();
+  });
+
+  function telecharger(nom, contenu, type) {
+    var b = new Blob([contenu], { type: type });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(b);
+    a.download = nom;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      try { URL.revokeObjectURL(a.href); } catch (_) {}
+      if (a.parentNode) a.parentNode.removeChild(a);
+    }, 1500);
+  }
+  function horodate() {
+    var d = new Date();
+    function n(x) { return (x < 10 ? "0" : "") + x; }
+    return d.getFullYear() + n(d.getMonth() + 1) + n(d.getDate()) + "-" + n(d.getHours()) + n(d.getMinutes());
+  }
+
+  $("j-csv").addEventListener("click", function () {
+    telecharger("journal-equipe-" + horodate() + ".csv", Journal.csv(journalCourant), "text/csv;charset=utf-8");
+  });
+  $("j-json").addEventListener("click", function () {
+    telecharger("journal-equipe-" + horodate() + ".json",
+      JSON.stringify({ format: "journal-equipe", schema: Droits.SCHEMA, entrees: journalCourant }, null, 2),
+      "application/json;charset=utf-8");
+  });
+  $("j-imprimer").addEventListener("click", function () { window.print(); });
+  $("j-purger").addEventListener("click", function () {
+    if (!Droits.peutAdmin("accorderDroits")) { alert("Vous n'avez pas le droit d'effacer le journal."); return; }
+    if (!confirm("Effacer tout le journal ? Les connexions et les actes déjà enregistrés seront perdus.")) return;
+    Journal.purger().then(function () {
+      Journal.administration("accorderDroits", "Journal effacé");
+      peindreJournal();
+    });
+  });
+
+  function remplirFiltres(liste) {
+    var sel = $("f-utilisateur"), garde = sel.value;
+    sel.innerHTML = '<option value="">tous</option>' + liste.map(function (u) {
+      return '<option value="' + e(u.id) + '">' + e(u.nom) + "</option>";
+    }).join("");
+    sel.value = garde;
+    var sm = $("f-module"), gm = sm.value;
+    sm.innerHTML = '<option value="">tous</option>' + Droits.MODULES.map(function (m) {
+      return '<option value="' + e(m.id) + '">' + e(m.nom) + "</option>";
+    }).join("");
+    sm.value = gm;
+  }
+
+  /* ============================================================ peinture === */
+  function peindre() {
+    var ouvert = Droits.modeOuvert();
+    var moi = Droits.utilisateur();
+    $("sec-premier").hidden = !ouvert;
+    $("sec-equipe").hidden = ouvert;
+    $("sec-journal").hidden = ouvert;
+    if (ouvert) {
+      $("sec-creation").hidden = true;
+      return Promise.resolve();
+    }
+    $("equipe-etat").textContent = moi
+      ? "Connecté : " + moi.nom + (moi.fonction ? " — " + moi.fonction : "") +
+        (moi.admin ? " (administrateur)" : "")
+      : "Personne n'est connecté.";
+    $("btn-nouveau").disabled = !Droits.peutAdmin("creerUtilisateur");
+    return peindreListe().then(function (liste) {
+      remplirFiltres(liste);
+      return peindreJournal();
+    });
+  }
+
+  Droits.quandPret(function () {
+    construireMatrice();
+    peindre();
+  });
+  /* Une connexion ou une déconnexion faite depuis l'écran de droits.js ne
+     passe pas par cette page : c'est l'abonnement qui la lui apprend. */
+  Droits.surChangement(function () { peindre(); });
+})();
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

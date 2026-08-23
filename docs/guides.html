@@ -6,6 +6,10 @@
 <meta name="theme-color" content="#1F3864">
 <link rel="icon" href="icons/icon-180.png">
 <title>Guides — Application Jurisprudence</title>
+<!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
+     tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
+     Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
+<script src="droits.js"></script>
 <style>
   :root{
     --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
@@ -54,7 +58,8 @@
   · <a href="audit-discipline.html">discipline et règlement intérieur</a>
   · <a href="audit-social.html">audit social</a>
   · <a href="parcours.html">parcours guidés</a>
-  · <a href="agenda.html">agenda</a></span>
+  · <a href="agenda.html">agenda</a>
+  · <a href="equipe.html">équipe</a></span>
 </div>
 
 <header>
@@ -596,6 +601,41 @@
     fermeture. Il exige la connexion — c'est le seul élément de l'application dans ce cas —
     et ne se substitue ni à votre analyse ni au conseil : une affirmation qu'il n'a pas pu
     vérifier aux sources est annoncée comme telle.</p>
+  </div>
+</details>
+
+<details>
+  <summary><h2>Équipe, droits et journal</h2></summary>
+  <div class="corps-guide">
+    <h3>À quoi il sert</h3>
+    <p>Travailler à plusieurs sur le même poste sans se marcher dessus : l'administrateur crée
+    les membres de l'équipe (nom, fonction, code d'accès, photo), coche module par module ce que
+    chacun peut faire — consulter, saisir, produire, exporter — et lit le journal de ce qui a été
+    fait, par qui et quand.</p>
+    <h3>Comment s'en servir</h3>
+    <ol>
+      <li>Ouvrez <a href="equipe.html">Équipe</a>. Au premier lancement, un seul écran :
+      créer l'administrateur. Il a tous les droits, et lui seul pourra ensuite constituer
+      l'équipe. <b>Notez son code : il n'est pas récupérable.</b></li>
+      <li>Créez ensuite chaque utilisateur et cochez son champ d'intervention. Trois raccourcis
+      aident : « tout cocher », « tout décocher », « consultation seule ».</li>
+      <li>Au lancement suivant, l'application demande qui travaille : on choisit sa photo, on
+      saisit son code. Le bouton « Changer » en bas à gauche de chaque page permet de passer
+      la main.</li>
+      <li>Le journal se lit et se filtre sur la même page — par utilisateur, par module, par
+      type, par dates, par mot — et s'exporte en CSV ou en JSON, filtres compris.</li>
+      <li>Un module non coché ne provoque pas de panne : la page le dit et propose de changer
+      d'utilisateur. Un module ouvert en lecture seule affiche un bandeau et gèle ses champs.</li>
+    </ol>
+    <h3>Ce qu'il ne fait pas</h3>
+    <p class="note">Il ne protège pas les données. <b>Tant que l'application fonctionne sans
+    serveur, ces droits sont organisationnels et non sécuritaires</b> : ils répartissent le
+    travail dans une équipe de bonne foi, mais quiconque a accès au poste peut les contourner —
+    la console du navigateur suffit. Les codes ne sont pas enregistrés en clair (condensat
+    SHA-256 avec un sel par utilisateur), ce qui protège de la lecture accidentelle, non d'un
+    utilisateur déterminé. Tant qu'aucun utilisateur n'a été créé, rien ne change : ni écran de
+    connexion, ni journal. Le passage à un serveur est prévu et documenté dans
+    <b>docs/DROITS.md</b> : il ne demandera de retoucher aucune page.</p>
   </div>
 </details>
 

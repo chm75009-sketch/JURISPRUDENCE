@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jurisprudence — recherche Judilibre</title>
+<!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
+     tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
+     Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
+<script src="droits.js"></script>
 <meta name="description" content="Recherche jurisprudentielle dans la base ouverte Judilibre. Chaque décision affichée correspond exactement à la demande.">
 <meta name="theme-color" content="#8b1e2d">
 <link rel="manifest" href="manifest.json">
@@ -170,6 +174,9 @@
       <a href="audit-discipline.html" class="lien-audit" title="Auditer une sanction et le règlement intérieur : contenu et formalités du règlement, prescription des faits, entretien préalable, délais, notification motivée, garanties de fond conventionnelles">Audit · discipline et règlement intérieur</a>
       <a href="agenda.html" class="lien-audit" title="L'échéancier des douze prochains mois des obligations collectives, construit depuis les audits">Agenda social</a>
       <a href="documents.html" class="lien-audit" title="Convocation et ordre du jour du CSE, trame de procès-verbal, accord de méthode et PV de désaccord NAO, note d'information, réponse à une réclamation, procédure de signalement harcèlement, canevas d'enquête interne — les trames de la discipline : convocation à entretien préalable à sanction, avertissement motivé, mise à pied disciplinaire, échelle des sanctions du règlement intérieur — et celles des parcours guidés : mise en demeure, courrier d'alerte, compte rendu de commission, délibération de désignation, résolution de recours à l'expert — et celles de l'installation du comité : convocation et ordre du jour de la réunion d'installation, procès-verbal d'installation, règlement intérieur du comité, demande de la documentation économique et financière, procès-verbal de remise-reprise entre comités">Documents · relations collectives et discipline</a>
+      <!-- L'équipe et ses droits. Entrée de second rang : on y va pour
+           administrer, pas pour travailler. -->
+      <a href="equipe.html" class="lien-audit" title="Créer les utilisateurs de l'équipe, cocher ce que chacun peut faire module par module, lire et exporter le journal des connexions et des actes">Équipe · droits et journal</a>
       <span id="etat-version"></span>
     </div>
   </div>
@@ -490,7 +497,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "4.3 — 22 août 2026";
+const VERSION = "4.4 — 23 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
