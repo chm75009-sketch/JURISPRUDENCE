@@ -201,5 +201,19 @@
   "id": "LEGIARTI000036262481",
   "texte": "Les membres de la délégation du personnel du comité social et économique sont élus sur des listes établies par les organisations syndicales pour chaque catégorie de personnel : - d'une part, par le collège des ouvriers et employés ; - d'autre part, par le collège des ingénieurs, chefs de service, techniciens, agents de maîtrise et assimilés. Dans les entreprises d'au moins cinq cent un salariés, les ingénieurs, les chefs de service et cadres administratifs, commerciaux ou techniques assimilés ont au moins un délégué titulaire au sein du second collège, élu dans les mêmes conditions. En outre, dans les entreprises, quel que soit leur effectif, dont le nombre des ingénieurs, chefs de service et cadres administratifs, commerciaux ou techniques assimilés sur le plan de la classification est au moins égal à vingt-cinq au moment de la constitution ou du renouvellement de l'instance, ces catégories constituent un troisième collège. Par dérogation aux alinéas précédents, dans les établissements ou les entreprises n'élisant qu'un membre de la délégation du personnel titulaire et un membre de la délégation du personnel suppléant, il est mis en place pour chacune de ces élections, un collège électoral unique regroupant l'ensemble des catégories professionnelles.",
   "source": "moteur/cse/textes_cse.json — relu à la source le 21 août 2026, deux lectures concordantes, relais filtré par NOM du code"
+ },
+ "R4741-3": {
+  "id": "LEGIARTI000020398000",
+  "date": "2026-08-24",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le fait de méconnaître les dispositions des articles L. 4711-1 à L. 4711-5 ainsi que celles des articles D. 4711-1 à D. 4711-3 relatives aux documents et affichages obligatoires est puni de l'amende prévue pour les contraventions de la quatrième classe. L'amende est appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées au titre du présent article."
+ },
+ "L2317-1": {
+  "id": "LEGIARTI000035634273",
+  "date": "2026-08-24",
+  "lectures": 2,
+  "concordantes": true,
+  "texte": "Le fait d'apporter une entrave soit à la constitution d'un comité social et économique, d'un comité social et économique d'établissement ou d'un comité social et économique central, soit à la libre désignation de leurs membres, notamment par la méconnaissance des dispositions des articles L. 2314-1 à L. 2314-9 est puni d'un emprisonnement d'un an et d'une amende de 7 500 €. Le fait d'apporter une entrave à leur fonctionnement régulier est puni d'une amende de 7 500 €."
  }
 }

@@ -52,6 +52,20 @@ const NUMEROS = {
   "L4741-1":   /amende/i,
   "R4741-1":   /cinquième classe/i,
   "L1155-2":   /harcèlement/i,
+  /* Ajoutés le 24 août 2026, pour que le module cesse de taire des peines qui
+     existent. Deux textes, et deux frontières à tenir :
+     — R. 4741-3 punit la méconnaissance des articles L. 4711-1 à L. 4711-5 et
+       D. 4711-1 à D. 4711-3, « relatives aux documents et affichages
+       obligatoires ». Son énumération est close, et R. 4121-4 — l'avis d'accès
+       au document unique — n'y figure pas. Le texte est capté pour que cette
+       frontière soit vérifiable sur pièce, non pour être invoqué sur le
+       document unique : il n'est cité nulle part dans la régularisation.
+     — L. 2317-1 punit l'entrave au comité social et économique. Il est capté
+       ici parce que deux contrôles de ce module portent sur le comité : la
+       consultation sur le document unique, et la commission santé, sécurité et
+       conditions de travail. Le module CSE le cite déjà dans les mêmes termes. */
+  "R4741-3":   /documents et affichages obligatoires/i,
+  "L2317-1":   /entrave.{0,80}comité social et économique/i,
   /* Le harcèlement : définitions, protection, prévention, référents */
   "L1152-1":   /harcèlement moral/i,
   "L1152-2":   /harcèlement moral/i,

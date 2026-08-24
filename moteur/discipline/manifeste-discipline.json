@@ -1,10 +1,10 @@
 {
  "domaine": "discipline et règlement intérieur",
  "date": "2026-08-24",
- "empreinte": "49588ec558c8",
+ "empreinte": "d159cbbff0a8",
  "fichiers": {
   "audit-discipline-client.js": "bd1c7d46739b",
-  "capturer-textes-discipline.js": "dcbb46ca15d2",
+  "capturer-textes-discipline.js": "d944486c715f",
   "controles-discipline.js": "299bf1c64777",
   "dates.js": "5d945470174f",
   "fiche-discipline.json": "b26efd82ccf5",
@@ -12,13 +12,13 @@
   "outils.js": "6defb2be2a2b",
   "propositions-discipline.js": "1d9fdaeebce4",
   "questionnaire-discipline.js": "f24a95116025",
-  "regularisation-discipline.js": "4763a688837c",
+  "regularisation-discipline.js": "4665227fcaa7",
   "tests-discipline.js": "7f7c196f35a8",
-  "textes-discipline.json": "7a92b04a4f9f",
+  "textes-discipline.json": "2b24f89c0608",
   "verifier-textes-discipline.js": "4b42770e1257"
  },
  "compteurs": {
-  "articlesLus": 29,
+  "articlesLus": 32,
   "articlesReprisDuModuleSocial": 8,
   "natures": 8,
   "controles": 25,
@@ -32,9 +32,9 @@
   "expositionConcluantConforme": 0
  },
  "textesRelus": {
-  "date": "2026-08-19",
-  "articles": 29,
-  "concordants": 29,
+  "date": "2026-08-24",
+  "articles": 32,
+  "concordants": 32,
   "ecarts": 0,
   "sansConclusion": 0
  }

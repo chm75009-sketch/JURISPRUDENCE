@@ -67,7 +67,24 @@ const NUMEROS = {
   "L1333-2": /annuler une sanction|sanction/i,
   "L1333-3": /licenciement|sanction/i,
 
-
+  /* Les textes répressifs, ajoutés le 24 août 2026. Le corpus n'en portait
+     aucun : le module ne cotait donc aucun manquement en gravité 1, faute
+     d'avoir lu la peine. Ces trois-là existent, et ils se lisent.
+     — R. 1323-1 est le texte pénal du règlement intérieur : il punit la
+       méconnaissance des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à
+       R. 1321-5. Son énumération s'arrête à L. 1322-4 : elle ne touche PAS la
+       procédure disciplinaire des articles L. 1332-1 et suivants.
+     — L. 1334-1 est le texte pénal de la sanction pécuniaire, et lui seul :
+       il ne vise que l'article L. 1331-2.
+     — L. 2317-1 punit l'entrave au comité social et économique ; le règlement
+       intérieur ne peut être introduit qu'après son avis (L. 1321-4).
+     Le relais sert, sous ces numéros, des homonymes d'autres codes : L. 1334-1
+     ramène le saturnisme du code de la santé publique, L. 1323-1 l'aptitude
+     des personnes chargées de la conduite. Le critère de contenu ci-dessous
+     est écrit pour eux. */
+  "R1323-1": /contraventions de la quatrième classe/i,
+  "L1334-1": /amende ou une sanction pécuniaire/i,
+  "L2317-1": /entrave.{0,80}comité social et économique/i,
 };
 
 function lire(numero) {

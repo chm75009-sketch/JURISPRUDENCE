@@ -16,19 +16,39 @@
      verifs     la grille du second temps : ce qu'on redemande à qui déclare
                 l'obligation en place, et ce qui est attendu en réponse
 
-   POURQUOI AUCUNE ENTRÉE N'EST COTÉE 1 NI 2, ET POURQUOI C'EST VOULU.
-   Les degrés 1 et 2 annoncent une sanction pénale ou une pénalité financière.
-   Le corpus de ce module — textes-discipline.json — ne contient aucun texte
-   répressif : ni article pénal, ni article de pénalité. Coter un manquement 1
-   ou 2 reviendrait donc à annoncer une amende que personne ici n'a lue, et le
-   dépôt interdit d'affirmer ce qui n'a pas été lu à la source. Ce que les
-   textes lus disent, en revanche, et qui fonde le degré 3 partout : le conseil
-   de prud'hommes « peut annuler une sanction irrégulière en la forme ou
-   injustifiée ou disproportionnée à la faute commise » (L. 1333-2), et
-   l'inspecteur du travail « peut à tout moment exiger le retrait ou la
-   modification des dispositions contraires aux articles L. 1321-1 à L. 1321-3
-   et L. 1321-6 » (L. 1322-1). C'est la sanction qui tombe, ou la clause qui
-   saute : c'est le degré 3.
+   OÙ SONT LES DEGRÉS 1 ET 2, ET POURQUOI LÀ SEULEMENT.
+   Jusqu'au 24 août 2026, aucune entrée n'était cotée 1 ni 2, et l'en-tête en
+   donnait la raison : le corpus du module ne contenait aucun texte répressif,
+   et le dépôt interdit d'annoncer une amende que personne n'a lue. La
+   précaution était juste, le constat était incomplet — ces textes existent.
+   Trois ont été lus à la source le 24 août 2026, deux lectures concordantes
+   chacun, et versés dans textes-discipline.json :
+     R. 1323-1 (LEGIARTI000037899552) — « Le fait de méconnaître les
+       dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à
+       R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue
+       pour les contraventions de la quatrième classe. » L'énumération couvre
+       tout le chapitre du règlement intérieur : les douze contrôles
+       DIS-CTL-RI-01 à DIS-CTL-RI-12 passent au degré 1.
+     L. 1334-1 (LEGIARTI000006901456) — « Le fait d'infliger une amende ou une
+       sanction pécuniaire en méconnaissance des dispositions de l'article
+       L. 1331-2 est puni d'une amende de 3 750 euros. » Il ne vise que
+       L. 1331-2 : DIS-CTL-SAN-02, et lui seul, passe au degré 1.
+     L. 2317-1 (LEGIARTI000035634273) — l'entrave au comité social et
+       économique, « punie d'une amende de 7 500 € » pour ce qui est du
+       fonctionnement régulier. Cité en second fondement là où le comité doit
+       être consulté sur le règlement intérieur ou sur ses modifications
+       (DIS-CTL-RI-06, DIS-CTL-RI-11).
+   Le degré 2 — pénalité financière — ne sert toujours pas dans ce fichier, et
+   c'est délibéré : aucun texte lu n'attache de pénalité financière à ces
+   manquements. Ce qui reste au degré 3 y reste parce qu'aucun texte répressif
+   ne l'atteint ; le commentaire placé devant DIS-CTL-SAN-01 dit précisément
+   lesquels, et pourquoi. Ce que les textes lus disent là, et qui fonde le
+   degré 3 : le conseil de prud'hommes « peut annuler une sanction irrégulière
+   en la forme ou injustifiée ou disproportionnée à la faute commise »
+   (L. 1333-2), et l'inspecteur du travail « peut à tout moment exiger le
+   retrait ou la modification des dispositions contraires aux articles
+   L. 1321-1 à L. 1321-3 et L. 1321-6 » (L. 1322-1). C'est la sanction qui
+   tombe, ou la clause qui saute : c'est le degré 3.
 
    CE QUE CE FICHIER NE DIT JAMAIS. Il ne dit pas qu'une sanction est justifiée,
    ni qu'elle est proportionnée : la réalité des faits, leur caractère fautif et
@@ -54,9 +74,9 @@ const GRAVITES = {
 const R = {
 
   "DIS-CTL-RI-01": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Établir un règlement intérieur et lui faire suivre les quatre formalités : avis du comité social et économique, publicité, dépôt au greffe du conseil de prud'hommes, communication à l'inspecteur du travail.",
-    risque: "L'entreprise d'au moins cinquante salariés est tenue d'en établir un (L. 1311-2). Sans règlement intérieur, l'employeur n'a aucune échelle de sanctions à opposer : la nature et l'échelle des sanctions sont ce que L. 1321-1, 3°, réserve au règlement, et une sanction qui ne s'y trouve pas ne peut pas être prononcée — le contrôle DIS-CTL-SAN-03 le dit avec la décision qu'il cite.",
+    risque: "L'entreprise d'au moins cinquante salariés est tenue d'en établir un (L. 1311-2). « Le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe » (R. 1323-1) : L. 1311-2, qui pose l'obligation même, ouvre cette énumération. Sans règlement intérieur, l'employeur n'a en outre aucune échelle de sanctions à opposer : la nature et l'échelle des sanctions sont ce que L. 1321-1, 3°, réserve au règlement, et une sanction qui ne s'y trouve pas ne peut pas être prononcée — le contrôle DIS-CTL-SAN-03 le dit avec la décision qu'il cite.",
     delai: "Deux à trois mois : la rédaction, la consultation du comité, puis le mois qui doit séparer la dernière formalité de l'entrée en vigueur.",
     document: "Règlement intérieur — projet soumis à l'avis du comité social et économique",
     etapes: [
@@ -74,9 +94,9 @@ const R = {
   },
 
   "DIS-CTL-RI-02": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Compléter le règlement intérieur pour qu'il porte les trois matières que L. 1321-1 lui réserve, puis refaire les formalités.",
-    risque: "L. 1321-1 énumère ce que l'employeur y fixe exclusivement ; un règlement qui laisse une de ces matières de côté est contraire à ce texte, et l'inspecteur du travail peut à tout moment en exiger la modification (L. 1322-1).",
+    risque: "L. 1321-1 énumère ce que l'employeur y fixe exclusivement ; un règlement qui laisse une de ces matières de côté est contraire à ce texte. « Le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe » (R. 1323-1), et L. 1321-1 est dans cette énumération. L'inspecteur du travail peut en outre à tout moment en exiger la modification (L. 1322-1).",
     delai: "Deux mois : la rédaction de l'avenant, l'avis du comité, puis le mois qui précède l'entrée en vigueur.",
     document: "Avenant au règlement intérieur — les trois matières de L. 1321-1",
     etapes: [
@@ -93,9 +113,9 @@ const R = {
   },
 
   "DIS-CTL-RI-03": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Inscrire au règlement intérieur la nature et l'échelle des sanctions, et y préciser la durée maximale de la mise à pied disciplinaire.",
-    risque: "C'est le point qui fait tomber les sanctions. La nature et l'échelle des sanctions sont ce que L. 1321-1, 3°, réserve au règlement intérieur ; une sanction qui n'y figure pas ne peut pas être prononcée, et une mise à pied disciplinaire dont le règlement ne précise pas la durée maximale n'est pas licite — les contrôles DIS-CTL-SAN-03 et DIS-CTL-SAN-04 citent les décisions qui le jugent. Le conseil de prud'hommes annule la sanction irrégulière en la forme (L. 1333-2).",
+    risque: "C'est le point qui fait tomber les sanctions. La nature et l'échelle des sanctions sont ce que L. 1321-1, 3°, réserve au règlement intérieur ; une sanction qui n'y figure pas ne peut pas être prononcée, et une mise à pied disciplinaire dont le règlement ne précise pas la durée maximale n'est pas licite — les contrôles DIS-CTL-SAN-03 et DIS-CTL-SAN-04 citent les décisions qui le jugent. Le conseil de prud'hommes annule la sanction irrégulière en la forme (L. 1333-2). Le règlement qui ne fixe pas cette échelle méconnaît L. 1321-1, et « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe » (R. 1323-1).",
     delai: "Deux mois, avenant et formalités comprises. Aucune sanction nouvelle ne devrait être prononcée entre-temps sur le fondement d'une échelle absente.",
     document: "Avenant au règlement intérieur — échelle des sanctions et durée maximale de la mise à pied",
     etapes: [
@@ -112,9 +132,9 @@ const R = {
   },
 
   "DIS-CTL-RI-04": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Ajouter au règlement intérieur les trois rappels que L. 1321-2 lui impose de faire.",
-    risque: "L. 1321-2 est rédigé à l'impératif : le règlement intérieur « rappelle » les droits de la défense des articles L. 1332-1 à L. 1332-3, les dispositions sur les harcèlements moral et sexuel et les agissements sexistes, et l'existence du dispositif de protection des lanceurs d'alerte. Un règlement qui ne les rappelle pas est contraire à ce texte, et l'inspecteur du travail peut à tout moment en exiger la modification (L. 1322-1).",
+    risque: "L. 1321-2 est rédigé à l'impératif : le règlement intérieur « rappelle » les droits de la défense des articles L. 1332-1 à L. 1332-3, les dispositions sur les harcèlements moral et sexuel et les agissements sexistes, et l'existence du dispositif de protection des lanceurs d'alerte. Un règlement qui ne les rappelle pas est contraire à ce texte, et « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe » (R. 1323-1) — L. 1321-2 est dans cette énumération. L'inspecteur du travail peut en outre à tout moment en exiger la modification (L. 1322-1).",
     delai: "Deux mois, avenant et formalités comprises.",
     document: "Avenant au règlement intérieur — les rappels de L. 1321-2",
     etapes: [
@@ -131,9 +151,9 @@ const R = {
   },
 
   "DIS-CTL-RI-05": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Retirer du règlement intérieur les clauses que L. 1321-3 prohibe, et documenter la justification et la proportionnalité de toute clause de neutralité qui y demeure.",
-    risque: "L. 1321-3 interdit les dispositions contraires aux lois, règlements et stipulations conventionnelles, les restrictions aux droits des personnes et aux libertés qui ne seraient ni justifiées par la nature de la tâche à accomplir ni proportionnées au but recherché, et les dispositions discriminatoires. L'inspecteur du travail peut à tout moment en exiger le retrait ou la modification (L. 1322-1) ; et une sanction prise sur le fondement d'une clause prohibée est une sanction sans support.",
+    risque: "L. 1321-3 interdit les dispositions contraires aux lois, règlements et stipulations conventionnelles, les restrictions aux droits des personnes et aux libertés qui ne seraient ni justifiées par la nature de la tâche à accomplir ni proportionnées au but recherché, et les dispositions discriminatoires. L'inspecteur du travail peut à tout moment en exiger le retrait ou la modification (L. 1322-1) ; et une sanction prise sur le fondement d'une clause prohibée est une sanction sans support. Le règlement qui porte une telle clause méconnaît L. 1321-3, et « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe » (R. 1323-1).",
     delai: "Un mois pour l'examen clause par clause, deux de plus pour l'avenant et ses formalités.",
     document: "Note de revue des clauses du règlement intérieur au regard de L. 1321-3 et L. 1321-2-1",
     etapes: [
@@ -150,9 +170,9 @@ const R = {
   },
 
   "DIS-CTL-RI-06": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Soumettre le règlement intérieur à l'avis du comité social et économique, et ne l'introduire qu'ensuite.",
-    risque: "L. 1321-4 dispose que le règlement intérieur « ne peut être introduit qu'après avoir été soumis à l'avis du comité social et économique ». Introduit sans cet avis, il l'a été en méconnaissance de la condition que le texte pose ; et l'avis est en outre la pièce qui doit accompagner le règlement communiqué à l'inspecteur du travail.",
+    risque: "L. 1321-4 dispose que le règlement intérieur « ne peut être introduit qu'après avoir été soumis à l'avis du comité social et économique ». Introduit sans cet avis, il l'a été en méconnaissance de la condition que le texte pose ; et l'avis est en outre la pièce qui doit accompagner le règlement communiqué à l'inspecteur du travail. Deux textes répressifs se rencontrent ici. « Le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe » (R. 1323-1), et L. 1321-4 est dans cette énumération. Par ailleurs, « le fait d'apporter une entrave à leur fonctionnement régulier est puni d'une amende de 7 500 € » (L. 2317-1) : la consultation qui n'a pas eu lieu expose l'employeur à cette qualification, qu'il appartient au juge de retenir ou d'écarter.",
     delai: "Un mois pour la consultation, un mois de plus avant l'entrée en vigueur de la version régularisée.",
     document: "Ordre du jour et procès-verbal de consultation du comité social et économique sur le règlement intérieur",
     etapes: [
@@ -168,9 +188,9 @@ const R = {
   },
 
   "DIS-CTL-RI-07": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Porter le règlement intérieur à la connaissance des personnes ayant accès aux lieux de travail, et reporter son entrée en vigueur à un mois au moins après la dernière des formalités de publicité et de dépôt.",
-    risque: "R. 1321-1 impose que le règlement soit porté, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche. L. 1321-4 exige que la date d'entrée en vigueur soit postérieure d'un mois à l'accomplissement des formalités de publicité, ce délai courant de la dernière en date des formalités de publicité et de dépôt (R. 1321-3). Une entrée en vigueur anticipée prive de support toute sanction prise dans l'intervalle sur le fondement du règlement.",
+    risque: "R. 1321-1 impose que le règlement soit porté, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche. L. 1321-4 exige que la date d'entrée en vigueur soit postérieure d'un mois à l'accomplissement des formalités de publicité, ce délai courant de la dernière en date des formalités de publicité et de dépôt (R. 1321-3). Une entrée en vigueur anticipée prive de support toute sanction prise dans l'intervalle sur le fondement du règlement. R. 1321-1, R. 1321-3 et L. 1321-4 sont tous trois dans l'énumération de R. 1323-1 : « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe ».",
     delai: "Quelques jours pour la publicité, puis le mois qu'impose le texte.",
     document: "Attestation de publicité du règlement intérieur et note fixant sa date d'entrée en vigueur",
     etapes: [
@@ -187,9 +207,9 @@ const R = {
   },
 
   "DIS-CTL-RI-08": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Déposer le règlement intérieur au greffe du conseil de prud'hommes du ressort de l'entreprise ou de l'établissement.",
-    risque: "R. 1321-2 impose ce dépôt, et R. 1321-3 fait courir de la dernière en date des formalités de publicité et de dépôt le délai d'un mois qui précède l'entrée en vigueur : tant que le dépôt n'est pas fait, ce délai n'a pas commencé de courir, et la date d'entrée en vigueur inscrite au règlement ne vaut pas.",
+    risque: "R. 1321-2 impose ce dépôt, et R. 1321-3 fait courir de la dernière en date des formalités de publicité et de dépôt le délai d'un mois qui précède l'entrée en vigueur : tant que le dépôt n'est pas fait, ce délai n'a pas commencé de courir, et la date d'entrée en vigueur inscrite au règlement ne vaut pas. Ces deux articles réglementaires sont dans l'énumération de R. 1323-1 : « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe ».",
     delai: "Quelques jours pour le dépôt ; un mois ensuite avant que l'entrée en vigueur puisse être fixée.",
     document: "Lettre de dépôt du règlement intérieur au greffe du conseil de prud'hommes",
     etapes: [
@@ -204,10 +224,17 @@ const R = {
     ],
   },
 
+  /* Ce contrôle passe de 4 à 1 le 24 août 2026, et le saut mérite d'être
+     expliqué. Civilement, la carence est bénigne : le contrôle relève,
+     décision à l'appui, qu'elle ne prive pas le salarié de se prévaloir du
+     règlement. Pénalement, elle ne l'est pas : L. 1321-4 et R. 1321-4 sont
+     tous deux dans l'énumération de R. 1323-1. Le degré dit la nature de
+     l'exposition, non la peine du travail à faire — l'envoi de deux
+     exemplaires reste l'affaire d'une heure, et le délai le dit. */
   "DIS-CTL-RI-09": {
-    gravite: 4,
+    gravite: 1,
     quoiFaire: "Transmettre à l'inspecteur du travail le texte du règlement intérieur en deux exemplaires, accompagné de l'avis du comité social et économique.",
-    risque: "L. 1321-4 impose que le règlement, accompagné de l'avis du comité social et économique, soit communiqué à l'inspecteur du travail en même temps qu'il fait l'objet des mesures de publicité, et R. 1321-4 précise qu'il est transmis en deux exemplaires. Cette carence est la seule du chapitre dont le contrôle DIS-CTL-RI-09 relève, décision à l'appui, qu'elle ne prive pas le salarié de se prévaloir du règlement : elle se répare par un envoi, mais elle ouvre la voie à l'exigence de retrait ou de modification de L. 1322-1 sur un texte que l'inspection n'a jamais vu.",
+    risque: "L. 1321-4 impose que le règlement, accompagné de l'avis du comité social et économique, soit communiqué à l'inspecteur du travail en même temps qu'il fait l'objet des mesures de publicité, et R. 1321-4 précise qu'il est transmis en deux exemplaires. Cette carence est la seule du chapitre dont le contrôle DIS-CTL-RI-09 relève, décision à l'appui, qu'elle ne prive pas le salarié de se prévaloir du règlement : elle se répare par un envoi, mais elle ouvre la voie à l'exigence de retrait ou de modification de L. 1322-1 sur un texte que l'inspection n'a jamais vu. Sur le terrain pénal, en revanche, elle est traitée comme les autres : L. 1321-4 et R. 1321-4 figurent dans l'énumération de R. 1323-1, aux termes duquel « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe ».",
     delai: "Quelques jours : c'est un envoi.",
     document: "Lettre de transmission du règlement intérieur à l'inspecteur du travail, en deux exemplaires",
     etapes: [
@@ -223,9 +250,9 @@ const R = {
   },
 
   "DIS-CTL-RI-10": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Rédiger en français le règlement intérieur et tout document comportant des obligations pour le salarié, les traductions n'étant qu'un accompagnement.",
-    risque: "L. 1321-6 impose la rédaction en français, et étend l'exigence à tout document comportant des obligations pour le salarié ou des dispositions dont la connaissance est nécessaire à l'exécution de son travail. L'inspecteur du travail peut à tout moment exiger le retrait ou la modification des dispositions contraires à ce texte (L. 1322-1).",
+    risque: "L. 1321-6 impose la rédaction en français, et étend l'exigence à tout document comportant des obligations pour le salarié ou des dispositions dont la connaissance est nécessaire à l'exécution de son travail. L'inspecteur du travail peut à tout moment exiger le retrait ou la modification des dispositions contraires à ce texte (L. 1322-1). L. 1321-6 est dans l'énumération de R. 1323-1 : « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe ».",
     delai: "Un mois pour la version française, deux de plus pour les formalités de l'avenant.",
     document: "Version française du règlement intérieur et des documents portant obligations pour le salarié",
     etapes: [
@@ -241,9 +268,9 @@ const R = {
   },
 
   "DIS-CTL-RI-11": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Refaire, pour chaque modification ou retrait de clause et pour chaque note de service à portée générale et permanente, les formalités du titre.",
-    risque: "L. 1321-4 dispose que ses dispositions « s'appliquent également en cas de modification ou de retrait des clauses du règlement intérieur », et L. 1321-5 considère les notes de service comportant des obligations générales et permanentes dans les matières de L. 1321-1 et L. 1321-2 comme des adjonctions au règlement, soumises en toute hypothèse aux dispositions du titre. Une modification introduite sans ces formalités n'a pas été régulièrement introduite ; une note de service prise à leur place n'échappe pas à la règle en changeant de nom.",
+    risque: "L. 1321-4 dispose que ses dispositions « s'appliquent également en cas de modification ou de retrait des clauses du règlement intérieur », et L. 1321-5 considère les notes de service comportant des obligations générales et permanentes dans les matières de L. 1321-1 et L. 1321-2 comme des adjonctions au règlement, soumises en toute hypothèse aux dispositions du titre. Une modification introduite sans ces formalités n'a pas été régulièrement introduite ; une note de service prise à leur place n'échappe pas à la règle en changeant de nom. L. 1321-4 et L. 1321-5 sont l'un et l'autre dans l'énumération de R. 1323-1 : « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe ». Et la modification soustraite à l'avis du comité social et économique expose en outre à l'amende de 7 500 € que L. 2317-1 attache à l'entrave au fonctionnement régulier du comité.",
     delai: "Deux mois par vague de modifications : consultation, formalités, puis le mois qui précède l'entrée en vigueur.",
     document: "Récapitulatif daté des modifications et notes de service, avec les formalités accomplies pour chacune",
     etapes: [
@@ -260,9 +287,9 @@ const R = {
   },
 
   "DIS-CTL-RI-12": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Exécuter la demande de retrait ou de modification formée par l'inspecteur du travail, ou former le recours hiérarchique que L. 1322-3 ouvre.",
-    risque: "L. 1322-1 permet à l'inspecteur du travail d'exiger à tout moment le retrait ou la modification des dispositions contraires aux articles L. 1321-1 à L. 1321-3 et L. 1321-6. Sa décision est motivée, notifiée à l'employeur et communiquée pour information aux membres du comité social et économique (L. 1322-2). La seule voie que le texte ouvre contre elle est le recours hiérarchique (L. 1322-3) : ne rien faire n'en est pas une, et laisse en vigueur une disposition dont l'irrégularité est désormais actée par écrit.",
+    risque: "L. 1322-1 permet à l'inspecteur du travail d'exiger à tout moment le retrait ou la modification des dispositions contraires aux articles L. 1321-1 à L. 1321-3 et L. 1321-6. Sa décision est motivée, notifiée à l'employeur et communiquée pour information aux membres du comité social et économique (L. 1322-2). La seule voie que le texte ouvre contre elle est le recours hiérarchique (L. 1322-3) : ne rien faire n'en est pas une, et laisse en vigueur une disposition dont l'irrégularité est désormais actée par écrit. L'énumération de R. 1323-1 court jusqu'à L. 1322-4 : « le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur, est puni de l'amende prévue pour les contraventions de la quatrième classe ». La décision restée sans effet laisse donc subsister, en même temps que la clause, la disposition méconnue qu'elle désigne.",
     delai: "Quelques semaines pour l'avenant ; le recours hiérarchique, s'il est choisi, se forme sans attendre.",
     document: "Avenant de retrait ou de modification des dispositions visées par l'inspecteur du travail",
     etapes: [
@@ -277,6 +304,30 @@ const R = {
       { cle: "ri12Recours", question: "Un recours hiérarchique a-t-il été formé, et à quelle date ?", attendu: "La date et la copie du recours (L. 1322-3), ou la mention expresse qu'aucun n'a été formé." },
     ],
   },
+
+  /* ------------------------------------------------------- les sanctions */
+
+  /* CE QUE R. 1323-1 NE COUVRE PAS, ET QU'IL NE FAUT PAS « CORRIGER ».
+     R. 1323-1 punit la méconnaissance des articles « L. 1311-2 à L. 1322-4 et
+     R. 1321-1 à R. 1321-5 ». L'énumération s'arrête à L. 1322-4 : elle
+     n'atteint ni L. 1331-1, ni les articles L. 1332-1 à L. 1332-5 de la
+     procédure disciplinaire, ni les articles R. 1332-1 à R. 1332-3 qui les
+     appliquent. Et L. 1334-1, seul autre texte répressif du titre, ne vise
+     qu'un article : L. 1331-2.
+     Conséquence, tenue article par article : de DIS-CTL-SAN-01 à
+     DIS-CTL-SAN-12, seul DIS-CTL-SAN-02 — la sanction pécuniaire — est coté 1.
+     Tous les autres restent au degré 3, non par prudence rédactionnelle mais
+     parce qu'aucun texte lu ne les punit : ce que risque l'employeur est
+     l'annulation de la sanction par le conseil de prud'hommes (L. 1333-2), et
+     c'est exactement ce que le degré 3 annonce. Relever l'un d'eux
+     reviendrait à annoncer une amende qu'aucun texte ne porte.
+     Deux cas frontaliers, notés pour qu'on n'y revienne pas : DIS-CTL-SAN-03
+     et DIS-CTL-SAN-04 citent L. 1321-1, 3°, qui est bien dans l'énumération de
+     R. 1323-1 — mais ce qu'ils contrôlent n'est pas le contenu du règlement
+     intérieur (c'est l'objet de DIS-CTL-RI-03, coté 1) : c'est le fait de
+     prononcer une sanction hors de l'échelle que le règlement fixe. Sortir de
+     son propre règlement n'est pas méconnaître L. 1321-1, et aucun texte lu ne
+     l'érige en infraction. Ils restent au degré 3. */
 
   "DIS-CTL-SAN-01": {
     gravite: 3,
@@ -297,9 +348,9 @@ const R = {
   },
 
   "DIS-CTL-SAN-02": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Supprimer toute amende ou retenue sur la rémunération qui ne soit pas la conséquence d'une suspension du contrat, et restituer les sommes retenues.",
-    risque: "« Les amendes ou autres sanctions pécuniaires sont interdites. Toute disposition ou stipulation contraire est réputée non écrite » (L. 1331-2). L'interdiction est absolue : elle ne se négocie ni par le contrat ni par le règlement intérieur. Le conseil de prud'hommes peut annuler la sanction (L. 1333-2), et la somme retenue reste due.",
+    risque: "« Les amendes ou autres sanctions pécuniaires sont interdites. Toute disposition ou stipulation contraire est réputée non écrite » (L. 1331-2). L'interdiction est absolue : elle ne se négocie ni par le contrat ni par le règlement intérieur. Elle est en outre la seule du chapitre que le code assortit d'une peine : « le fait d'infliger une amende ou une sanction pécuniaire en méconnaissance des dispositions de l'article L. 1331-2 est puni d'une amende de 3 750 euros » (L. 1334-1). Le conseil de prud'hommes peut par ailleurs annuler la sanction (L. 1333-2), et la somme retenue reste due.",
     delai: "Immédiat : la retenue se répare sur la paie suivante.",
     document: "Note de retrait de la sanction pécuniaire et régularisation de paie",
     etapes: [

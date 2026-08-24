@@ -1,10 +1,10 @@
 {
  "domaine": "santé, sécurité et conditions de travail",
  "date": "2026-08-24",
- "empreinte": "4e2c83869eb6",
+ "empreinte": "19a14ca63db1",
  "fichiers": {
   "audit-sst-client.js": "b237c1b4307b",
-  "capturer-textes-sst.js": "3f8f7ed89946",
+  "capturer-textes-sst.js": "340314f6b97d",
   "controles-sst.js": "f8bcbcda721f",
   "dates.js": "5d945470174f",
   "fiche-sst.json": "53b3c1bcc029",
@@ -12,13 +12,13 @@
   "outils.js": "6defb2be2a2b",
   "propositions-sst.js": "c76cdd6a592b",
   "questionnaire-sst.js": "718105a89609",
-  "regularisation-sst.js": "6bfa130c39db",
+  "regularisation-sst.js": "20abf01c8876",
   "tests-sst.js": "bd9530ab3d9f",
-  "textes-sst.json": "7e05a8526f91",
+  "textes-sst.json": "dbc0ad855c9c",
   "verifier-textes-sst.js": "888058562548"
  },
  "compteurs": {
-  "articlesLus": 33,
+  "articlesLus": 35,
   "articlesReprisDuModuleCSE": 14,
   "seuils": 4,
   "controles": 20,
@@ -32,9 +32,9 @@
   "expositionConcluantConforme": 0
  },
  "textesRelus": {
-  "date": "2026-08-21",
-  "articles": 33,
-  "concordants": 33,
+  "date": "2026-08-24",
+  "articles": 35,
+  "concordants": 35,
   "ecarts": 0,
   "sansConclusion": 0
  }

@@ -1,8 +1,8 @@
 {
- "date": "2026-08-21",
+ "date": "2026-08-24",
  "relais": "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance",
- "articles": 33,
- "concordants": 33,
+ "articles": 35,
+ "concordants": 35,
  "ecarts": 0,
  "douteux": 0,
  "detail": [
@@ -234,6 +234,20 @@
    "numero": "L2314-11",
    "attendu": "LEGIARTI000036262481",
    "lu": "LEGIARTI000036262481",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "R4741-3",
+   "attendu": "LEGIARTI000020398000",
+   "lu": "LEGIARTI000020398000",
+   "etat": "concordant",
+   "ecartCaracteres": 0
+  },
+  {
+   "numero": "L2317-1",
+   "attendu": "LEGIARTI000035634273",
+   "lu": "LEGIARTI000035634273",
    "etat": "concordant",
    "ecartCaracteres": 0
   }

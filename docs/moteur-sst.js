@@ -4,8 +4,8 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : 4e2c83869eb6
-   {"articlesLus":33,"articlesReprisDuModuleCSE":14,"seuils":4,"controles":20,"exposition":1,"coherence":0,"donneesDemandees":40,"casContradictoires":25,"verdicts":540,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0}
+   Empreinte du moteur au moment de l'empaquetage : 19a14ca63db1
+   {"articlesLus":35,"articlesReprisDuModuleCSE":14,"seuils":4,"controles":20,"exposition":1,"coherence":0,"donneesDemandees":40,"casContradictoires":25,"verdicts":540,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0}
 */
 (function (global) {
   "use strict";
@@ -21,7 +21,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"santé, sécurité et conditions de travail","date":"2026-08-24","empreinte":"4e2c83869eb6","fichiers":{"audit-sst-client.js":"b237c1b4307b","capturer-textes-sst.js":"3f8f7ed89946","controles-sst.js":"f8bcbcda721f","dates.js":"5d945470174f","fiche-sst.json":"53b3c1bcc029","moteur-sst.js":"26a0813dc4b0","outils.js":"6defb2be2a2b","propositions-sst.js":"c76cdd6a592b","questionnaire-sst.js":"718105a89609","regularisation-sst.js":"6bfa130c39db","tests-sst.js":"bd9530ab3d9f","textes-sst.json":"7e05a8526f91","verifier-textes-sst.js":"888058562548"},"compteurs":{"articlesLus":33,"articlesReprisDuModuleCSE":14,"seuils":4,"controles":20,"exposition":1,"coherence":0,"donneesDemandees":40,"casContradictoires":25,"verdicts":540,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0},"textesRelus":{"date":"2026-08-21","articles":33,"concordants":33,"ecarts":0,"sansConclusion":0}};
+  var __MANIFESTE = {"domaine":"santé, sécurité et conditions de travail","date":"2026-08-24","empreinte":"19a14ca63db1","fichiers":{"audit-sst-client.js":"b237c1b4307b","capturer-textes-sst.js":"340314f6b97d","controles-sst.js":"f8bcbcda721f","dates.js":"5d945470174f","fiche-sst.json":"53b3c1bcc029","moteur-sst.js":"26a0813dc4b0","outils.js":"6defb2be2a2b","propositions-sst.js":"c76cdd6a592b","questionnaire-sst.js":"718105a89609","regularisation-sst.js":"20abf01c8876","tests-sst.js":"bd9530ab3d9f","textes-sst.json":"dbc0ad855c9c","verifier-textes-sst.js":"888058562548"},"compteurs":{"articlesLus":35,"articlesReprisDuModuleCSE":14,"seuils":4,"controles":20,"exposition":1,"coherence":0,"donneesDemandees":40,"casContradictoires":25,"verdicts":540,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0},"textesRelus":{"date":"2026-08-24","articles":35,"concordants":35,"ecarts":0,"sansConclusion":0}};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -750,6 +750,29 @@ __def("./regularisation-sst.js", function(module, exports, require){
    Aucune pénalité financière n'est prévue par les textes captés pour ce
    domaine : le degré 2 ne sert pas dans ce fichier, et c'est délibéré.
 
+   CE QUI A CHANGÉ LE 24 AOÛT 2026. Le corpus a été complété par deux textes
+   répressifs qui manquaient, lus à la source, deux lectures concordantes
+   chacun, et versés dans textes-sst.json :
+     L. 2317-1 (LEGIARTI000035634273) — l'entrave au comité social et
+       économique. « Le fait d'apporter une entrave à leur fonctionnement
+       régulier est puni d'une amende de 7 500 €. » Deux contrôles de ce
+       module portent sur le comité et passent au degré 1 : la consultation
+       sur le document unique (SST-CTL-DUE-07) et la commission santé,
+       sécurité et conditions de travail qui n'est pas créée là où elle est
+       due (SST-CTL-CSS-01). Le module CSE cite le même texte dans les mêmes
+       termes, et cote ces deux points au même degré.
+     R. 4741-3 (LEGIARTI000020398000) — les documents et affichages
+       obligatoires. Il n'est invoqué nulle part : il est capté parce que son
+       intitulé pouvait laisser croire qu'il atteignait l'avis d'accès au
+       document unique de R. 4121-4, et la lecture montre qu'il ne l'atteint
+       pas. Un texte capté pour fermer une hypothèse vaut un texte capté pour
+       en ouvrir une.
+   Ce qui n'a pas bougé n'a pas bougé par défaut de texte, et non par
+   prudence : trois commentaires de bloc, devant SST-CTL-DUE-05,
+   SST-CTL-CSS-02 et SST-CTL-HAR-01, disent article par article ce que les
+   textes répressifs captés n'atteignent pas. Ils sont là pour qu'on ne
+   « corrige » pas ces degrés sans avoir relu.
+
    Les articles cités ont été lus à la source ; leur identifiant de version est
    dans textes-sst.json, et publier-sst.js confronte les deux. */
 
@@ -847,6 +870,31 @@ const R = {
     ],
   },
 
+  /* CE QUE LES TEXTES RÉPRESSIFS CAPTÉS N'ATTEIGNENT PAS, DANS CE BLOC.
+     R. 4741-1 ne punit qu'une chose : le défaut de transcription et le défaut
+     de mise à jour « dans les conditions prévues aux articles R. 4121-1 et
+     R. 4121-2 ». Il ne va pas plus loin. Ne sont donc atteints ni le III de
+     L. 4121-3-1 (programme annuel ou liste d'actions, SST-CTL-DUE-05), ni son
+     V et R. 4121-4 (conservation des versions et avis d'accès affiché,
+     SST-CTL-DUE-06), ni son VI (transmission au service de prévention et de
+     santé au travail, SST-CTL-DUE-08).
+     L. 4741-1 ne les rattrape pas non plus : son énumération vise, pour le
+     livre Ier de la quatrième partie, les « Titres Ier, III et IV » — le titre
+     II, celui des principes généraux de prévention où vivent L. 4121-1 à
+     L. 4121-3-1, en est absent. C'est la lecture qu'un auteur du module avait
+     déjà faite ; elle a été refaite à la source le 24 août 2026 et elle tient.
+     R. 4741-3 ne les rattrape pas davantage, quoique son objet — « les
+     documents et affichages obligatoires » — puisse le laisser croire. Son
+     énumération, lue à la source le 24 août 2026 et versée telle quelle dans
+     textes-sst.json, est close : « les articles L. 4711-1 à L. 4711-5 ainsi
+     que […] les articles D. 4711-1 à D. 4711-3 ». R. 4121-4, qui porte l'avis
+     d'accès au document unique, n'y est pas, et aucun de ces numéros n'est
+     celui d'un article du titre II du livre Ier. Le contenu de ces huit
+     articles n'a pas été capté ici : il n'a pas à l'être, puisque c'est
+     l'énumération, et elle seule, qui décide de la portée du texte pénal.
+     Ces trois contrôles restent donc au degré 3 ou 4. Ce n'est pas un oubli :
+     c'est le résultat de la lecture. */
+
   "SST-CTL-DUE-05": {
     gravite: 3,
     quoiFaire: "Faire déboucher l'évaluation sur ce que le seuil commande : programme annuel de prévention à partir de cinquante salariés, liste d'actions consignée dans le document unique en deçà.",
@@ -891,9 +939,9 @@ const R = {
   },
 
   "SST-CTL-DUE-07": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Consulter le comité social et économique sur le document unique et sur chacune de ses mises à jour.",
-    risque: "L. 4121-3, 1°, impose que le comité social et économique soit consulté sur le document unique d'évaluation des risques professionnels et sur ses mises à jour. Faute de consultation, le comité et sa commission sont privés de la contribution à l'évaluation des risques que le texte leur reconnaît, et le document adopté sans avis est contestable.",
+    risque: "L. 4121-3, 1°, impose que le comité social et économique soit consulté sur le document unique d'évaluation des risques professionnels et sur ses mises à jour. Faute de consultation, le comité et sa commission sont privés de la contribution à l'évaluation des risques que le texte leur reconnaît, et le document adopté sans avis est contestable. Le manquement n'est pas seulement civil : « le fait d'apporter une entrave à leur fonctionnement régulier est puni d'une amende de 7 500 € » (L. 2317-1). La consultation que la loi impose et qui n'a pas eu lieu expose l'employeur à cette qualification, qu'il appartient au juge de retenir ou d'écarter.",
     delai: "Le temps d'une réunion, convoquée selon les règles propres au comité.",
     document: "Ordre du jour et procès-verbal de la consultation du comité sur le document unique",
     etapes: [
@@ -931,9 +979,9 @@ const R = {
   /* ----------------------------------------------------------------- la CSSCT */
 
   "SST-CTL-CSS-01": {
-    gravite: 3,
+    gravite: 1,
     quoiFaire: "Créer la commission santé, sécurité et conditions de travail au sein du comité social et économique.",
-    risque: "La commission est créée dans les entreprises et les établissements distincts d'au moins trois cents salariés ainsi que dans les établissements mentionnés aux articles L. 4521-1 et suivants (L. 2315-36) ; en deçà de trois cents salariés, l'inspecteur du travail peut en imposer la création lorsque cette mesure est nécessaire, notamment en raison de la nature des activités, de l'agencement ou de l'équipement des locaux (L. 2315-37). Là où elle est due et n'existe pas, les attributions du comité en matière de santé, de sécurité et de conditions de travail ne sont pas organisées et l'obligation reste ouverte.",
+    risque: "La commission est créée dans les entreprises et les établissements distincts d'au moins trois cents salariés ainsi que dans les établissements mentionnés aux articles L. 4521-1 et suivants (L. 2315-36) ; en deçà de trois cents salariés, l'inspecteur du travail peut en imposer la création lorsque cette mesure est nécessaire, notamment en raison de la nature des activités, de l'agencement ou de l'équipement des locaux (L. 2315-37). Là où elle est due et n'existe pas, les attributions du comité en matière de santé, de sécurité et de conditions de travail ne sont pas organisées et l'obligation reste ouverte. « Le fait d'apporter une entrave à leur fonctionnement régulier est puni d'une amende de 7 500 € » (L. 2317-1) : la commission absente là où elle est due expose l'employeur à cette qualification. Le module CSE cote le même manquement au même degré, dans les mêmes termes (CSE-CTL-SST-01).",
     delai: "Deux à trois mois : il faut d'abord ce qui fixe les modalités, puis la résolution de désignation.",
     document: "Accord de mise en place de la commission santé, sécurité et conditions de travail, et résolution de désignation de ses membres",
     etapes: [
@@ -949,6 +997,21 @@ const R = {
       { cle: "css01Perimetre", question: "Combien de commissions existent, et sur quel périmètre chacune ?", attendu: "Le périmètre retenu, confronté à la liste des établissements distincts d'au moins trois cents salariés." },
     ],
   },
+
+  /* CE QUE L. 2317-1 N'ATTEINT PAS, DANS CE BLOC.
+     L. 2317-1 punit deux choses, et deux seulement : l'entrave à la
+     constitution du comité ou à la libre désignation de ses membres, et
+     l'entrave à son fonctionnement régulier. La commission qui n'est pas
+     créée là où elle est due relève du second cas — c'est SST-CTL-CSS-01, coté
+     1. Les cinq contrôles qui suivent portent sur autre chose : la composition
+     de la commission (CSS-02), les modalités fixées par accord ou par le
+     règlement intérieur du comité (CSS-03), les limites de la délégation
+     (CSS-04), la formation des élus (CSS-05), le remplacement des membres
+     avant terme (CSS-06). Ce sont des irrégularités que le juge annule, non
+     des faits que le texte pénal désigne, et l'employeur n'en est même pas
+     toujours l'auteur : la désignation et le remplacement des membres
+     appartiennent au comité. Ils restent au degré 3 ou 4 — c'est aussi la
+     cotation que le module CSE retient pour les mêmes points. */
 
   "SST-CTL-CSS-02": {
     gravite: 3,
@@ -1052,6 +1115,21 @@ const R = {
   },
 
   /* ------------------------------------------------------------ le harcèlement */
+
+  /* CE QUE L. 1155-2 N'ATTEINT PAS, DANS CE BLOC.
+     Le seul texte répressif du corpus en matière de harcèlement punit « les
+     faits de discriminations commis à la suite d'un harcèlement moral ou
+     sexuel définis aux articles L. 1152-2, L. 1153-2 et L. 1153-3 » : il vise
+     les représailles, non l'organisation de la prévention. Il fonde donc
+     SST-CTL-HAR-05, où un signalement est resté sans réaction, et lui seul.
+     La désignation des référents (HAR-01, HAR-02), l'information obligatoire
+     (HAR-03) et l'organisation de la prévention (HAR-04) ne sont visées par
+     aucun texte répressif capté : le harcèlement moral et le harcèlement
+     sexuel sont eux-mêmes punis par les articles 222-33-2 et 222-33 du code
+     pénal, que L. 1152-4 et L. 1153-5 obligent à afficher, mais le relais
+     Légifrance du dépôt ne sert que le code du travail et le dépôt interdit
+     de citer un autre code sans l'avoir lu à la source. Ces quatre contrôles
+     restent donc au degré 3 ou 4. */
 
   "SST-CTL-HAR-01": {
     gravite: 4,
