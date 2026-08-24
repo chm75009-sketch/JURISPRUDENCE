@@ -7,6 +7,8 @@ const O = require("./outils.js");
 const GRILLE = require("./grille-cse.js");
 const { C: CONTROLES, ETATS, DETECTION, COHERENCE } = require("./controles-cse.js");
 const ACT = require("./actions-cse.js");
+const { R: REG } = require("./regularisation-cse.js");
+const DT = require("../commun/parcours-deux-temps.js");
 const T = JSON.parse(fs.readFileSync(__dirname + "/textes_cse.json", "utf8"));
 /* Le manifeste porte les compteurs mesurés à la publication — dont le nombre de
    règles qu'aucun dossier d'épreuve n'a jamais déclenchées, publié au rapport. */
@@ -230,6 +232,34 @@ function audit(f) {
   return A.D;
 }
 module.exports = audit;
+
+/* Les verdicts bruts, tels que la page en a besoin pour le parcours : le
+   rapport ci-dessus les met en forme, il ne les rend pas. Un contrôle qui jette
+   ne fait pas tomber le parcours — il rend « donnée manquante », comme dans le
+   corps du rapport, et le motif dit pourquoi. */
+function verdicts(f) {
+  const v = {};
+  for (const c of CONTROLES) {
+    try { v[c.id] = c.verdict(f); }
+    catch (e) { v[c.id] = { etat: ETATS.MANQ, motif: "Contrôle non exécutable : " + e.message }; }
+  }
+  return v;
+}
+
+/* Le parcours en deux temps — corriger ce qui manque, puis vérifier ce qui est
+   déclaré. `etat` porte ce que la page a recueilli : les corrections déclarées
+   faites et les réponses à la grille de vérification. Rien n'est calculé ici
+   qui ne vienne des contrôles et de la régularisation. */
+function parcours(f, etat) {
+  return DT.parcours(CONTROLES, REG, verdicts(f), etat);
+}
+
+module.exports.verdicts = verdicts;
+module.exports.parcours = parcours;
+module.exports.regularisation = REG;
+module.exports.controles = CONTROLES;
+module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };
+
 if (require.main === module) {
   const f = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
   const items = audit(f);

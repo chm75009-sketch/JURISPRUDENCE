@@ -24,6 +24,10 @@ etape(2, "cas contradictoires sur les contrôles", "tests-controles-cse.js");
 etape(3, "questionnaire et contrôle de non-divergence, dans les deux sens", "questionnaire-cse.js");
 etape(4, "propositions du formulaire, vérifiées dans les deux sens", "propositions-cse.js");
 etape(5, "audit du dossier de référence", "audit-cse.js", "fiche-cse.json");
+/* La régularisation est vérifiée pour elle-même : un contrôle sans issue écrite
+   — fût-elle un null motivé — laisserait le client devant un manquement sans
+   procédure. Le script échoue alors, et la publication avec lui. */
+etape(6, "régularisations : chaque contrôle a son issue", "regularisation-cse.js");
 
 const rapport = JSON.parse(fs.readFileSync(path.join(ICI, "rapport-tests-cse.json"), "utf8"));
 const T = JSON.parse(fs.readFileSync(path.join(ICI, "textes_cse.json"), "utf8"));
@@ -40,7 +44,7 @@ const SONDE = require("./sonde.js");
 const jamais = SONDE.reglesJamaisDeclenchees(GRILLE);
 
 const FICHIERS = fs.readdirSync(ICI)
-  .filter(x => /^(moteur|grille|controles|actions|audit|questionnaire|valider|sonde|dates|tests|tests-controles|publier)-?(cse)?\.js$/.test(x)
+  .filter(x => /^(moteur|grille|controles|actions|audit|questionnaire|valider|sonde|dates|tests|tests-controles|regularisation|publier)-?(cse)?\.js$/.test(x)
             || /^(textes_cse|cse_corpus|_r2314_1)\.json$/.test(x))
   .sort();
 const empreintes = {};
@@ -76,7 +80,7 @@ const manifeste = {
 };
 fs.writeFileSync(path.join(ICI, "manifeste-cse.json"), JSON.stringify(manifeste, null, 1) + "\n");
 
-console.log("6. manifeste");
+console.log("7. manifeste");
 console.log(`empreinte : ${empreinte}`);
 console.log("compteurs : " + JSON.stringify(manifeste.compteurs));
 if (jamais.length) console.log(`règles jamais déclenchées par les fiches du dépôt : ${jamais.map(r => r.id).join(", ")}`);
@@ -87,6 +91,6 @@ if (ko) { console.error("ÉCHEC — la chaîne de contrôle n'est pas verte."); 
    modules. Il était tenu à la main, et le fichier servi par docs/ pouvait donc
    rester en arrière d'une version des contrôles sans que rien ne le dise : un
    contrôle ajouté au dépôt n'existait pas pour l'utilisateur. */
-etape(7, "empaquetage pour le navigateur", "../commun/empaqueter.js",
+etape(8, "empaquetage pour le navigateur", "../commun/empaqueter.js",
   path.join(ICI, "../../docs/moteur-cse.js"), "audit-cse.js", "MoteurCSE");
 console.log("publication du module comité : tout est vert");
