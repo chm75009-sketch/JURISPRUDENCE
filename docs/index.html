@@ -147,15 +147,15 @@
         <li><a href="audit-cse.html" data-seuil="11"><span><b>Comité social et économique</b>
           <small>Élections, consultations, moyens, commissions</small></span>
           <span class="marque" data-marque="11">dès 11 salariés</span></a></li>
-        <li><a href="audit-sst.html"><span><b>Santé, sécurité et conditions de travail</b>
-          <small>Document unique, prévention, harcèlement</small></span>
-          <span class="marque">toute taille</span></a></li>
+        <li><a href="audit-sst.html" data-interne="300" data-quoi="la commission santé-sécurité"><span><b>Santé, sécurité et conditions de travail</b>
+          <small>Document unique, prévention, harcèlement — et la commission santé-sécurité, créée à partir de 300 salariés<span data-note></span></small></span>
+          <span class="marque">dès le 1<sup>er</sup> salarié</span></a></li>
         <li><a href="duerp.html"><span><b>Tenir mon document unique</b>
           <small>Les unités de travail, les risques dans chacune, et ce que l'évaluation doit produire</small></span>
           <span class="marque du">l'outil</span></a></li>
-        <li><a href="audit-discipline.html"><span><b>Discipline et règlement intérieur</b>
-          <small>Sanction, entretien, délais — règlement obligatoire dès 50 salariés</small></span>
-          <span class="marque">toute taille</span></a></li>
+        <li><a href="audit-discipline.html" data-interne="50" data-quoi="le règlement intérieur" data-precision="au terme des douze mois qui suivent le franchissement du seuil"><span><b>Discipline et règlement intérieur</b>
+          <small>Sanction, entretien préalable, délais — et le règlement intérieur, obligatoire à partir de 50 salariés<span data-note></span></small></span>
+          <span class="marque">dès le 1<sup>er</sup> salarié</span></a></li>
         <li><a href="audit-bdese.html" data-seuil="11"><span><b>Base de données économiques et sociales</b>
           <small>Les dix thèmes, sur six années</small></span>
           <span class="marque" data-marque="11">avec un comité</span></a></li>
@@ -323,9 +323,30 @@
         + eff + " salarié" + (eff > 1 ? "s" : "") + " — et la condition est dite à chaque fois.";
   }
 
-  /* Marquer ce qui n'est pas dû à cette taille. « Hors de votre taille » serait
-     trop étroit : la condition n'est pas toujours un effectif. On garde donc
-     l'intitulé de la condition, et on ne grise que ce qu'un seuil écarte. */
+  /* Un module peut être dû dès le premier salarié et contenir une obligation
+     qui, elle, a son propre seuil : la discipline s'applique à toute taille,
+     mais le règlement intérieur n'est obligatoire qu'à cinquante ; la
+     santé-sécurité de même, avec la commission créée à trois cents. La pastille
+     dit ce qui déclenche le MODULE ; cette note dit où en est l'entreprise sur
+     le seuil interne. Sans elle, la ligne annonçait « toute taille » à côté
+     d'un « dès 50 salariés », et les deux se contredisaient à l'œil. */
+  if (eff !== null) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-interne]"), function (a) {
+      var seuil = parseInt(a.getAttribute("data-interne"), 10);
+      var quoi = a.getAttribute("data-quoi") || "cette obligation";
+      var note = a.querySelector("[data-note]");
+      if (!note || !seuil) return;
+      /* « s'impose » plutôt que « est dû » : le verbe ne s'accorde pas, et la
+         formule vaut pour le règlement intérieur comme pour la commission. */
+      var prec = a.getAttribute("data-precision");
+      note.textContent = eff >= seuil
+        ? " — à " + eff + " salariés, " + quoi + " s'impose" + (prec ? ", " + prec : "") + "."
+        : " — à " + eff + " salariés, " + quoi + " ne s'impose pas encore ; le reste du module, si.";
+      note.style.color = eff >= seuil ? "#1F3864" : "#8a5b10";
+      note.style.fontWeight = "600";
+    });
+  }
+
   if (eff !== null) {
     Array.prototype.forEach.call(document.querySelectorAll("[data-seuil]"), function (a) {
       var seuil = parseInt(a.getAttribute("data-seuil"), 10);
