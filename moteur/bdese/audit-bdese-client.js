@@ -173,9 +173,53 @@ function parcours(f, etat) {
   return DT.parcours(C, REG, verdicts(f), etat);
 }
 
+/* La grille due, et les six millésimes.
+
+   L'audit dit si la base est complète ; la page « ma base de données » la fait
+   remplir. Elle a donc besoin du découpage du décret, que contenu-bdese.js
+   produit déjà — il n'est pas refait ici, il est simplement rendu accessible.
+
+   La grille ne se choisit pas au hasard : elle dépend de l'effectif, et elle
+   n'est due qu'À DÉFAUT d'accord. Un accord d'entreprise définit l'organisation,
+   l'architecture et le contenu de la base (L. 2312-21) et il prime. La fonction
+   rend donc null quand un accord existe, et null quand l'effectif est inconnu :
+   elle refuse de servir une grille que rien ne commande. */
+function grilleDue(effectif, accordExiste) {
+  if (accordExiste === true) return null;
+  /* Number(null) vaut zéro, et zéro est un effectif : sans ce garde, une fiche
+     muette recevait la grille des petites entreprises comme si elle en avait
+     une. Le silence n'est pas une réponse, ici comme ailleurs. */
+  if (effectif === null || effectif === undefined || String(effectif).trim() === "") return null;
+  const e = Number(effectif);
+  if (!Number.isFinite(e) || e < 0) return null;
+  const B = CONTENU.construire();
+  return e >= 300 ? B.contenu["au moins300"] : B.contenu["moins300"];
+}
+
+/* Les six années de chaque ligne. L. 2312-36 : les informations « portent sur
+   les deux années précédentes et l'année en cours et intègrent des perspectives
+   sur les trois années suivantes ». Une base à une seule colonne est le premier
+   oubli du terrain — elle ne montre ni l'évolution passée ni la trajectoire. */
+function millesimes(anneeEnCours) {
+  const a = Number(anneeEnCours);
+  if (!Number.isFinite(a)) return [];
+  return [
+    { annee: a - 2, nature: "réalisé" },
+    { annee: a - 1, nature: "réalisé" },
+    { annee: a, nature: "année en cours" },
+    { annee: a + 1, nature: "perspective" },
+    { annee: a + 2, nature: "perspective" },
+    { annee: a + 3, nature: "perspective" },
+  ];
+}
+
 module.exports = audit;
 module.exports.verdicts = verdicts;
 module.exports.parcours = parcours;
 module.exports.regularisation = REG;
 module.exports.controles = C;
 module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };
+module.exports.contenu = () => CONTENU.construire();
+module.exports.grilleDue = grilleDue;
+module.exports.millesimes = millesimes;
+module.exports.plancher = PLANCHER;

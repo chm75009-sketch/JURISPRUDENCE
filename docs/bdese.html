@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ma base de données économiques, sociales et environnementales</title>
+<link rel="manifest" href="manifest-audit-bdese.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  L'OUTIL, ET POURQUOI IL NE RESSEMBLE PAS À UN AUDIT
+
+  L'audit dit si la base est complète. Il ne la remplit pas, et c'est bien ce
+  qui manquait : dire à une entreprise « votre base est incomplète » ne
+  l'avance pas. Ce qui l'avance, c'est le cadre — les thèmes, leurs
+  sous-ensembles, leurs rubriques, et sous chaque rubrique la ligne à
+  renseigner, sur les six années dues.
+
+  Quatre principes gouvernent cette page.
+
+  1. LA GRILLE N'EST PAS ÉCRITE ICI. Elle est découpée du texte des décrets par
+     moteur/bdese/contenu-bdese.js, dont la couverture est mesurée à cent pour
+     cent sur les deux articles. Si le décret change et que la capture est
+     refaite, la grille suit. Aucune rubrique n'est recopiée à la main.
+
+  2. ELLE N'EST DUE QU'À DÉFAUT D'ACCORD. L'accord de L. 2312-21 définit
+     l'organisation, l'architecture et le contenu de la base, et il prime. La
+     page demande donc d'abord si un tel accord existe, et refuse d'afficher une
+     grille que rien ne commande — plutôt que d'en servir une au hasard.
+
+  3. SIX MILLÉSIMES, JAMAIS UN. L. 2312-36 : les informations « portent sur les
+     deux années précédentes et l'année en cours et intègrent des perspectives
+     sur les trois années suivantes ». Une base à une seule colonne est le
+     premier oubli du terrain.
+
+  4. CE QUI MANQUE SE VOIT. Les cases vides sortent entre crochets dans le
+     document produit — visibles, jamais inventées. C'est la convention du
+     module d'organisation des élections, et elle vaut ici.
+
+  Tout reste sur ce poste : rien n'est envoyé.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a,header.site button{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);background:transparent;color:#fff;text-decoration:none;cursor:pointer}
+  header.site a:hover,header.site button:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:26px 0 8px;letter-spacing:-.01em}
+  .aide{margin:0 0 16px;color:var(--encre-2);font-size:14.5px;max-width:76ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  label.ch{display:grid;gap:4px}
+  label.ch .nom{font:600 12px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  label.ch input,label.ch select{font:inherit;font-size:14.5px;padding:9px 11px;
+    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre)}
+  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+
+  .theme{border:1px solid var(--filet);border-radius:11px;margin:10px 0;background:var(--carte);overflow:hidden}
+  .theme>summary{padding:12px 15px;cursor:pointer;display:grid;
+    grid-template-columns:auto 1fr auto;gap:12px;align-items:center;list-style:none}
+  .theme>summary::-webkit-details-marker{display:none}
+  .theme>summary:hover{background:var(--creux)}
+  .theme .num{width:26px;height:26px;border-radius:7px;background:var(--bleu-clair);color:var(--bleu);
+    font:600 12px/26px system-ui;text-align:center}
+  .theme .tt{font:600 15px/1.3 system-ui}
+  .theme .tt small{display:block;font-weight:400;color:var(--encre-3);font-size:12.5px;margin-top:1px}
+  .jauge{font:600 11px/1 system-ui;padding:5px 9px;border-radius:5px;white-space:nowrap;
+    background:var(--creux);color:var(--encre-2)}
+  .jauge.pleine{background:var(--vert-clair);color:var(--vert)}
+  .jauge.vide{background:var(--ambre-clair);color:var(--ambre)}
+  .theme .corps{padding:4px 15px 14px;border-top:1px solid var(--filet)}
+
+  .section{margin:14px 0 0}
+  .section>h4{margin:0 0 2px;font:600 13.5px/1.3 system-ui;color:var(--bleu)}
+  .sujet{margin:10px 0 0;padding:10px 12px;border:1px solid var(--filet);border-radius:9px;background:var(--fond)}
+  .sujet>.st{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
+  .sujet>.st b{font:600 13.5px/1.4 system-ui}
+  .dt{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--encre-3)}
+  .dt input{font:inherit;font-size:12.5px;padding:5px 7px;border:1px solid var(--filet-2);border-radius:6px}
+  .dt .vieux{color:var(--ambre);font-weight:600}
+
+  .tbl{overflow-x:auto;margin-top:8px}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}
+  th,td{border:1px solid var(--filet);padding:5px 7px;text-align:left;vertical-align:top}
+  thead th{background:var(--creux);font:600 11.5px/1.3 system-ui;color:var(--encre-2);white-space:nowrap}
+  thead th.persp{background:var(--ambre-clair);color:var(--ambre)}
+  td.lib{min-width:250px;max-width:420px;line-height:1.45}
+  td input{width:100%;font:inherit;font-size:12.5px;padding:5px 6px;border:1px solid transparent;
+    border-radius:5px;background:transparent;color:var(--encre);font-variant-numeric:tabular-nums}
+  td input:focus{border-color:var(--bleu);background:var(--carte);outline:none}
+  td input.rempli{background:var(--vert-clair)}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+
+  textarea{width:100%;min-height:150px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:10px;border:1px solid var(--filet-2);border-radius:8px;resize:vertical}
+  pre#doc{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:66vh;overflow:auto}
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  @media print{.onglets,.barre,header.site,.dt input{display:none}
+    .theme .corps{display:block !important}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Ma base de données <span>— économique, sociale et environnementale</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">← Accueil</a>
+      <a href="audit-bdese.html">Auditer ma base</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="cadre" class="actif">1 · Le cadre</button>
+    <button data-o="grille">2 · La grille</button>
+    <button data-o="paie">3 · Reprendre la paie</button>
+    <button data-o="acces">4 · La mise à disposition</button>
+    <button data-o="doc">5 · Le document</button>
+  </div>
+
+  <!-- ══════ 1 · LE CADRE ══════ -->
+  <section id="o-cadre">
+    <h2>Le cadre : ce qui commande votre grille</h2>
+    <p class="aide">Deux questions décident du contenu de votre base. La première n'est pas
+    l'effectif : c'est l'existence d'un accord. L'accord de l'article L. 2312-21 définit
+    l'organisation, l'architecture et le contenu de la base — il prime sur le décret, qui ne
+    s'applique qu'à défaut. L'effectif ne décide qu'ensuite, entre les deux tableaux
+    réglementaires.</p>
+
+    <div class="carte">
+      <div class="champs">
+        <label class="ch"><span class="nom">Dénomination</span>
+          <input id="c-nom" placeholder="Raison sociale">
+          <span class="sous">Reprise de votre fiche entreprise si elle est remplie.</span></label>
+        <label class="ch"><span class="nom">Effectif</span>
+          <input id="c-eff" type="number" min="0" placeholder="Nombre de salariés">
+          <span class="sous">Il départage R. 2312-8 (moins de 300) et R. 2312-9 (300 et plus).</span></label>
+        <label class="ch"><span class="nom">Année en cours</span>
+          <input id="c-annee" type="number" min="2000" max="2100">
+          <span class="sous">Elle fixe les six millésimes : deux passés, l'année en cours, trois à venir.</span></label>
+        <label class="ch"><span class="nom">Un accord de L. 2312-21 existe-t-il ?</span>
+          <select id="c-accord">
+            <option value="">— répondre —</option>
+            <option value="non">Non</option>
+            <option value="oui">Oui</option>
+            <option value="sais-pas">Je ne sais pas</option>
+          </select>
+          <span class="sous">Accord d'entreprise, ou accord entre l'employeur et le comité à défaut de délégué syndical.</span></label>
+      </div>
+      <div id="verdict-cadre"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LA GRILLE ══════ -->
+  <section id="o-grille" class="cache">
+    <h2>La grille due</h2>
+    <p class="aide">Thème par thème, sous-ensemble par sous-ensemble, la ligne à renseigner sur
+    les six années. Datez chaque rubrique quand vous la mettez à jour : c'est la seule manière
+    de tenir l'obligation d'une base « mise régulièrement à jour » sans tout reprendre une fois
+    l'an dans la douleur.</p>
+    <div id="etat-grille"></div>
+    <div id="grille"></div>
+  </section>
+
+  <!-- ══════ 3 · LA PAIE ══════ -->
+  <section id="o-paie" class="cache">
+    <h2>Reprendre ce que la paie sait déjà</h2>
+    <p class="aide">Une bonne part de la base sort de la paie : effectifs par contrat, entrées
+    et sorties, rémunérations, absences. Collez ici un tableau à deux colonnes — le libellé, puis
+    la valeur — exporté de votre logiciel ou d'un tableur. Rien n'est rempli en silence :
+    l'outil propose les correspondances, vous les acceptez.</p>
+
+    <div class="carte">
+      <label class="ch"><span class="nom">Année à alimenter</span>
+        <select id="p-annee"></select></label>
+      <p class="aide" style="margin:12px 0 6px">Un libellé et une valeur par ligne, séparés par
+      une tabulation, un point-virgule ou une barre verticale.</p>
+      <textarea id="p-source" placeholder="Effectif total au 31/12&#9;412
+Nombre de salariés en contrat à durée indéterminée&#9;376
+Nombre de salariés en contrat à durée déterminée&#9;28"></textarea>
+      <div class="barre">
+        <button class="btn" id="p-analyser">Chercher les correspondances</button>
+        <button class="btn second" id="p-vider">Vider</button>
+      </div>
+      <div id="p-resultat"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 4 · LA MISE À DISPOSITION ══════ -->
+  <section id="o-acces" class="cache">
+    <h2>La mise à disposition</h2>
+    <p class="aide">La base est accessible en permanence aux membres de la délégation du personnel
+    du comité, à ceux du comité central s'il en existe un, et aux délégués syndicaux. Une base
+    parfaite que personne ne peut consulter ne remplit pas l'obligation. Consignez ici qui y accède,
+    depuis quand, et ce qui est présenté comme confidentiel.</p>
+
+    <div class="carte">
+      <div class="champs">
+        <label class="ch"><span class="nom">Support</span>
+          <select id="a-support">
+            <option value="">— répondre —</option>
+            <option>Informatique</option>
+            <option>Papier</option>
+            <option>Les deux</option>
+          </select>
+          <span class="sous">Le support papier n'est admis qu'en dessous de trois cents salariés.</span></label>
+        <label class="ch"><span class="nom">Où elle se consulte</span>
+          <input id="a-lieu" placeholder="Adresse du fichier, du dossier partagé ou du local">
+          <span class="sous">Précisez de façon qu'un élu puisse s'y rendre seul.</span></label>
+        <label class="ch"><span class="nom">Accès ouvert depuis le</span>
+          <input id="a-depuis" type="date"></label>
+        <label class="ch"><span class="nom">Accès permanent ?</span>
+          <select id="a-permanent">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui — consultable à tout moment</option>
+            <option value="non">Non — sur demande ou à heures fixes</option>
+          </select></label>
+      </div>
+      <label class="ch" style="margin-top:14px"><span class="nom">Qui y a accès, nominativement</span>
+        <textarea id="a-personnes" style="min-height:90px"
+          placeholder="Un par ligne : nom, qualité (élu titulaire, suppléant, délégué syndical), date d'ouverture de l'accès"></textarea></label>
+      <label class="ch" style="margin-top:14px"><span class="nom">Informations présentées comme confidentielles</span>
+        <textarea id="a-confidentiel" style="min-height:70px"
+          placeholder="Lesquelles, et pourquoi. L'obligation de discrétion ne joue que sur ce qui revêt un caractère confidentiel ET est présenté comme tel."></textarea></label>
+      <div id="verdict-acces"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 5 · LE DOCUMENT ══════ -->
+  <section id="o-doc" class="cache">
+    <h2>Le document</h2>
+    <p class="aide">La base telle qu'elle est aujourd'hui, prête à être mise à disposition.
+    Les cases vides sortent entre crochets : elles se voient, elles ne sont pas inventées.</p>
+    <div class="barre">
+      <button class="btn" id="d-produire">Produire le document</button>
+      <button class="btn second" id="d-copier">Copier le texte</button>
+      <button class="btn second" id="d-imprimer">Imprimer / PDF</button>
+    </div>
+    <pre id="doc"></pre>
+  </section>
+
+  <footer>
+    Tout reste sur ce poste : rien n'est envoyé. La grille est découpée du texte des décrets,
+    dont la couverture est mesurée à cent pour cent — elle n'est pas recopiée.
+    Cet outil assiste votre démarche&nbsp;; il ne remplace ni votre conseil, ni la décision du juge.
+  </footer>
+</main>
+
+<script src="droits.js"></script>
+<script src="moteur-bdese.js"></script>
+<script src="profil.js"></script>
+<script>
+(function () {
+  "use strict";
+  var M = window.MoteurBDESE.audit;
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); };
+
+  var CLE = "bdese-base";
+  var E = (function () {
+    try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; }
+    catch (e) { return {}; }
+  })();
+  E.cadre = E.cadre || {};
+  E.valeurs = E.valeurs || {};      /* clé de ligne → { année : valeur } */
+  E.dates = E.dates || {};          /* clé de rubrique → AAAA-MM-JJ */
+  E.acces = E.acces || {};
+  function garder() { try { localStorage.setItem(CLE, JSON.stringify(E)); } catch (e) {} }
+
+  /* La fiche entreprise sert de source : on ne redemande pas ce qui est su. */
+  (function reprendre() {
+    var p = null;
+    try { p = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
+    if (p) {
+      if (!E.cadre.nom) E.cadre.nom = p.denomination || p.entreprise || "";
+      if (E.cadre.effectif == null && p.effectif != null && p.effectif !== "")
+        E.cadre.effectif = p.effectif;
+    }
+    if (!E.cadre.annee) E.cadre.annee = new Date().getFullYear();
+  })();
+
+  /* ---------------------------------------------------------- les onglets */
+  function ouvrir(nom) {
+    ["cadre", "grille", "paie", "acces", "doc"].forEach(function (o) {
+      $("o-" + o).className = o === nom ? "" : "cache";
+    });
+    Array.prototype.forEach.call($("onglets").children, function (b) {
+      b.className = b.getAttribute("data-o") === nom ? "actif" : "";
+    });
+    if (nom === "grille") rendreGrille();
+    if (nom === "paie") remplirAnnees();
+    if (nom === "acces") verdictAcces();
+  }
+  Array.prototype.forEach.call($("onglets").children, function (b) {
+    b.addEventListener("click", function () { ouvrir(b.getAttribute("data-o")); });
+  });
+
+  /* ------------------------------------------------------------ le cadre */
+  function lireCadre() {
+    E.cadre.nom = $("c-nom").value.trim();
+    E.cadre.effectif = $("c-eff").value.trim();
+    E.cadre.annee = $("c-annee").value.trim();
+    E.cadre.accord = $("c-accord").value;
+    garder(); verdictCadre();
+  }
+  ["c-nom", "c-eff", "c-annee", "c-accord"].forEach(function (id) {
+    $(id).addEventListener("change", lireCadre);
+    $(id).addEventListener("input", lireCadre);
+  });
+
+  function grille() {
+    if (E.cadre.accord !== "non") return null;
+    return M.grilleDue(E.cadre.effectif, false);
+  }
+
+  function verdictCadre() {
+    var h = "";
+    if (E.cadre.accord === "oui")
+      h = '<div class="avis info"><b>Votre accord commande le contenu</b>' +
+        "L'article L. 2312-21 laisse à l'accord le soin de définir l'organisation, l'architecture " +
+        "et le contenu de la base. Le décret ne s'applique donc pas, et cet outil ne peut pas monter " +
+        "votre grille à votre place : reprenez celle de l'accord. Un seul plancher demeure — les dix " +
+        "thèmes que la base comporte « au moins », qu'aucun accord ne descend.</div>";
+    else if (E.cadre.accord === "sais-pas")
+      h = '<div class="avis att"><b>À établir avant toute chose</b>' +
+        "Le régime supplétif ne s'applique pas « à défaut d'avoir cherché » : il s'applique en " +
+        "l'absence d'accord, ce qui est un fait. Cherchez un accord d'entreprise, ou un accord entre " +
+        "l'employeur et le comité conclu à défaut de délégué syndical, puis revenez.</div>";
+    else if (E.cadre.accord === "non") {
+      var g = grille();
+      if (!g)
+        h = '<div class="avis att"><b>L\'effectif manque</b>' +
+          "Sans lui, on ne sait pas lequel des deux tableaux s'applique — et servir celui des petites " +
+          "entreprises par défaut serait une conclusion tirée du silence.</div>";
+      else {
+        var c = compteGrille(g);
+        h = '<div class="avis ok"><b>Votre grille : article ' + ech(g.article.replace("R", "R. ")) + "</b>" +
+          ech(g.seuil.charAt(0).toUpperCase() + g.seuil.slice(1)) + ". " +
+          c.themes + " thèmes, " + c.sujets + " rubriques, " + c.lignes + " lignes à renseigner, " +
+          "sur six millésimes — " + M.millesimes(E.cadre.annee).map(function (m) { return m.annee; }).join(", ") +
+          ". Version lue : " + ech(g.version) + ".</div>";
+      }
+    }
+    $("verdict-cadre").innerHTML = h;
+  }
+
+  function compteGrille(g) {
+    var s = 0, l = 0;
+    g.rubriques.forEach(function (t) {
+      t.sections.forEach(function (sec) {
+        sec.sujets.forEach(function (su) { s++; l += 1 + (su.informations || []).length; });
+      });
+    });
+    return { themes: g.rubriques.length, sujets: s, lignes: l };
+  }
+
+  /* ------------------------------------------------------- la grille
+
+     Chaque ligne a une clé stable : le numéro du thème, la lettre de la
+     section, celle du sujet, puis le rang de l'information. Elle survit à un
+     rechargement, et elle ne bouge pas si le décret ne bouge pas. */
+  function cleSujet(t, si, su) { return t.n + "/" + (si.lettre || "-") + "/" + (su.lettre || "-"); }
+  function cleLigne(t, si, su, i) { return cleSujet(t, si, su) + "/" + i; }
+
+  function lignesDe(su) {
+    var l = (su.informations || []).slice();
+    /* Un sujet sans information détaillée est lui-même la ligne à renseigner :
+       « Fonds propres » n'a pas de sous-ligne, il se remplit tel quel. */
+    return l.length ? l : [su.intitule];
+  }
+
+  function rendreGrille() {
+    var g = grille();
+    if (!g) {
+      $("etat-grille").innerHTML = '<div class="avis att"><b>Rien à afficher pour l\'instant</b>' +
+        "Répondez d'abord au cadre : sans accord établi et sans effectif, aucune grille ne s'impose.</div>";
+      $("grille").innerHTML = ""; return;
+    }
+    var ans = M.millesimes(E.cadre.annee);
+    var c = compteGrille(g);
+    var remplies = Object.keys(E.valeurs).reduce(function (n, k) {
+      return n + Object.keys(E.valeurs[k] || {}).filter(function (a) {
+        return String(E.valeurs[k][a]).trim() !== ""; }).length; }, 0);
+    $("etat-grille").innerHTML = '<div class="avis info"><b>' + ech(g.article.replace("R", "R. ")) +
+      " — " + ech(g.seuil) + "</b>" + c.lignes + " lignes × 6 millésimes. " +
+      remplies + " case(s) renseignée(s). Les trois dernières colonnes sont des perspectives : " +
+      "elles admettent des grandes tendances, à défaut de chiffres.</div>";
+
+    var h = "";
+    g.rubriques.forEach(function (t) {
+      var total = 0, pleines = 0;
+      t.sections.forEach(function (si) { si.sujets.forEach(function (su) {
+        lignesDe(su).forEach(function (_, i) {
+          total++;
+          var v = E.valeurs[cleLigne(t, si, su, i)] || {};
+          if (Object.keys(v).some(function (a) { return String(v[a]).trim() !== ""; })) pleines++;
+        });
+      }); });
+      var cls = pleines === 0 ? "vide" : (pleines === total ? "pleine" : "");
+      h += '<details class="theme"><summary><span class="num">' + t.n + "°</span>" +
+        '<span class="tt">' + ech(t.titre) +
+        (t.plancher ? "" : '<small>Ce thème ne figure pas au plancher de L. 2312-21 : un accord pourrait l\'écarter.</small>') +
+        "</span>" +
+        '<span class="jauge ' + cls + '">' + pleines + " / " + total + "</span></summary>" +
+        '<div class="corps">';
+
+      t.sections.forEach(function (si, isec) {
+        h += '<div class="section">';
+        if (si.titre) h += "<h4>" + ech((si.lettre ? si.lettre + " — " : "") + si.titre) + "</h4>";
+        si.sujets.forEach(function (su) {
+          var ks = cleSujet(t, si, su);
+          var d = E.dates[ks] || "";
+          var vieux = d && (Date.now() - Date.parse(d)) > 365 * 864e5;
+          h += '<div class="sujet"><div class="st"><b>' +
+            ech((su.lettre ? su.lettre + ") " : "") + (su.intitule || "(sans intitulé)")) + "</b>" +
+            '<span class="dt">Mise à jour <input type="date" data-date="' + ech(ks) + '" value="' + ech(d) + '">' +
+            (vieux ? '<span class="vieux">plus d\'un an</span>' : "") + "</span></div>";
+          h += '<div class="tbl"><table><thead><tr><th class="lib">L\'information à renseigner</th>' +
+            ans.map(function (m) {
+              return '<th' + (m.nature === "perspective" ? ' class="persp"' : "") + ">" + m.annee +
+                "<br><span style=\"font-weight:400\">" + m.nature + "</span></th>"; }).join("") +
+            "</tr></thead><tbody>";
+          lignesDe(su).forEach(function (lib, i) {
+            var kl = cleLigne(t, si, su, i), v = E.valeurs[kl] || {};
+            h += '<tr><td class="lib">' + ech(lib) + "</td>" +
+              ans.map(function (m) {
+                var val = v[m.annee] == null ? "" : v[m.annee];
+                return "<td><input data-ligne=\"" + ech(kl) + "\" data-annee=\"" + m.annee + "\"" +
+                  (String(val).trim() ? ' class="rempli"' : "") +
+                  " value=\"" + ech(val) + "\"></td>"; }).join("") +
+              "</tr>";
+          });
+          h += "</tbody></table></div></div>";
+        });
+        h += "</div>";
+      });
+      h += "</div></details>";
+    });
+    $("grille").innerHTML = h;
+
+    Array.prototype.forEach.call($("grille").querySelectorAll("[data-ligne]"), function (i) {
+      i.addEventListener("change", function () {
+        var k = i.getAttribute("data-ligne"), a = i.getAttribute("data-annee");
+        E.valeurs[k] = E.valeurs[k] || {};
+        if (i.value.trim() === "") delete E.valeurs[k][a]; else E.valeurs[k][a] = i.value;
+        i.className = i.value.trim() ? "rempli" : "";
+        garder();
+      });
+    });
+    Array.prototype.forEach.call($("grille").querySelectorAll("[data-date]"), function (i) {
+      i.addEventListener("change", function () {
+        var k = i.getAttribute("data-date");
+        if (i.value) E.dates[k] = i.value; else delete E.dates[k];
+        garder();
+      });
+    });
+  }
+
+  /* ------------------------------------------------------- la paie
+
+     Le rapprochement se fait sur les mots, et il est PROPOSÉ, jamais appliqué
+     seul : une correspondance approximative qui se poserait d'elle-même
+     mettrait un chiffre faux dans une base que le comité lira. */
+  function normaliser(s) {
+    return String(s || "").toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, " ").trim();
+  }
+  function motsUtiles(s) {
+    return normaliser(s).split(" ").filter(function (m) {
+      return m.length > 3 && ["dans","pour","avec","selon","leur","cette","dont","chaque","entre"].indexOf(m) < 0;
+    });
+  }
+
+  function remplirAnnees() {
+    var ans = M.millesimes(E.cadre.annee);
+    $("p-annee").innerHTML = ans.map(function (m) {
+      return '<option value="' + m.annee + '"' + (m.nature === "année en cours" ? " selected" : "") +
+        ">" + m.annee + " — " + m.nature + "</option>"; }).join("");
+  }
+
+  $("p-vider").addEventListener("click", function () {
+    $("p-source").value = ""; $("p-resultat").innerHTML = "";
+  });
+
+  $("p-analyser").addEventListener("click", function () {
+    var g = grille();
+    if (!g) { $("p-resultat").innerHTML = '<div class="avis att"><b>Renseignez d\'abord le cadre</b>' +
+      "Sans grille, il n'y a rien à alimenter.</div>"; return; }
+    var annee = $("p-annee").value;
+    var lignes = $("p-source").value.split("\n").map(function (l) {
+      var p = l.split(/\t|;|\|/);
+      return p.length >= 2 ? { lib: p[0].trim(), val: p.slice(1).join(" ").trim() } : null;
+    }).filter(function (x) { return x && x.lib && x.val; });
+    if (!lignes.length) { $("p-resultat").innerHTML = '<div class="avis att"><b>Rien de lisible</b>' +
+      "Chaque ligne doit porter un libellé, puis une valeur, séparés par une tabulation, " +
+      "un point-virgule ou une barre verticale.</div>"; return; }
+
+    /* Toutes les lignes de la grille, avec leurs mots. */
+    var cibles = [];
+    g.rubriques.forEach(function (t) { t.sections.forEach(function (si) { si.sujets.forEach(function (su) {
+      lignesDe(su).forEach(function (lib, i) {
+        cibles.push({ cle: cleLigne(t, si, su, i), lib: lib, mots: motsUtiles(lib), theme: t.n + "° " + t.titre });
+      });
+    }); }); });
+
+    var props = [], sans = [];
+    lignes.forEach(function (l, idx) {
+      var mots = motsUtiles(l.lib), meilleur = null, score = 0;
+      cibles.forEach(function (c) {
+        if (!c.mots.length) return;
+        var communs = c.mots.filter(function (m) { return mots.indexOf(m) >= 0; }).length;
+        var s = communs / Math.max(c.mots.length, mots.length);
+        if (s > score) { score = s; meilleur = c; }
+      });
+      if (meilleur && score >= 0.5) props.push({ i: idx, source: l, cible: meilleur, score: score });
+      else sans.push(l);
+    });
+
+    var h = "";
+    if (props.length) {
+      h += '<div class="avis info"><b>' + props.length + " correspondance(s) proposée(s) pour " + annee + "</b>" +
+        "Vérifiez-les une par une : le rapprochement se fait sur les mots, il n'a aucune valeur juridique. " +
+        "Rien n'est écrit tant que vous n'avez pas accepté.</div>";
+      h += '<div class="tbl"><table><thead><tr><th>Votre libellé</th><th>Valeur</th>' +
+        "<th>Ligne de la grille</th><th>Proximité</th><th></th></tr></thead><tbody>";
+      props.forEach(function (p, k) {
+        h += "<tr><td>" + ech(p.source.lib) + "</td><td>" + ech(p.source.val) + "</td>" +
+          '<td class="lib">' + ech(p.cible.lib) + "<br><small style=\"color:#8a939c\">" +
+          ech(p.cible.theme) + "</small></td><td>" + Math.round(p.score * 100) + " %</td>" +
+          '<td><label style="display:flex;gap:6px;align-items:center;font-size:12.5px">' +
+          '<input type="checkbox" data-prop="' + k + '" checked> retenir</label></td></tr>';
+      });
+      h += "</tbody></table></div>" +
+        '<div class="barre"><button class="btn" id="p-appliquer">Écrire les lignes retenues</button></div>';
+    } else {
+      h += '<div class="avis att"><b>Aucune correspondance sûre</b>' +
+        "Aucun libellé n'a atteint le seuil de proximité. Renseignez ces lignes à la main : " +
+        "mieux vaut une case vide qu'un chiffre posé au mauvais endroit.</div>";
+    }
+    if (sans.length)
+      h += '<div class="avis att"><b>' + sans.length + " ligne(s) sans correspondance</b>" +
+        ech(sans.slice(0, 12).map(function (l) { return l.lib; }).join(" · ")) +
+        (sans.length > 12 ? " …" : "") + "</div>";
+    $("p-resultat").innerHTML = h;
+
+    var appl = $("p-appliquer");
+    if (appl) appl.addEventListener("click", function () {
+      var n = 0;
+      Array.prototype.forEach.call($("p-resultat").querySelectorAll("[data-prop]"), function (cb) {
+        if (!cb.checked) return;
+        var p = props[Number(cb.getAttribute("data-prop"))];
+        E.valeurs[p.cible.cle] = E.valeurs[p.cible.cle] || {};
+        E.valeurs[p.cible.cle][annee] = p.source.val;
+        n++;
+      });
+      garder();
+      $("p-resultat").innerHTML = '<div class="avis ok"><b>' + n + " ligne(s) écrite(s) pour " + annee + "</b>" +
+        "Ouvrez la grille pour les vérifier, et datez les rubriques concernées.</div>";
+    });
+  });
+
+  /* --------------------------------------------------- la mise à disposition */
+  ["a-support", "a-lieu", "a-depuis", "a-permanent", "a-personnes", "a-confidentiel"].forEach(function (id) {
+    var el = $(id);
+    el.addEventListener("change", function () { E.acces[id] = el.value; garder(); verdictAcces(); });
+    el.addEventListener("input", function () { E.acces[id] = el.value; garder(); });
+  });
+
+  function verdictAcces() {
+    var a = E.acces, m = [];
+    if (a["a-permanent"] === "non")
+      m.push('<div class="avis non"><b>L\'accès n\'est pas permanent</b>' +
+        "La base est accessible en permanence aux membres de la délégation du personnel du comité, " +
+        "à ceux du comité central et aux délégués syndicaux. Un accès sur demande ou à heures fixes " +
+        "ne satisfait pas cette exigence.</div>");
+    var eff = Number(E.cadre.effectif);
+    if (a["a-support"] === "Papier" && Number.isFinite(eff) && eff >= 300)
+      m.push('<div class="avis non"><b>Le support papier ne convient plus à cette taille</b>' +
+        "À partir de trois cents salariés, la base est tenue sur support informatique.</div>");
+    if (!String(a["a-personnes"] || "").trim())
+      m.push('<div class="avis att"><b>Personne n\'est nommé</b>' +
+        "Dire « les élus y ont accès » ne se prouve pas. Nommez-les, avec la date d'ouverture " +
+        "de leur accès : c'est ce qui établira la mise à disposition si elle est contestée.</div>");
+    if (!m.length && a["a-permanent"] === "oui")
+      m.push('<div class="avis ok"><b>Rien ne bloque en l\'état de vos réponses</b>' +
+        "Cela ne vaut pas quitus : la mise à disposition se prouve par des faits, pas par une case cochée.</div>");
+    $("verdict-acces").innerHTML = m.join("");
+  }
+
+  /* ------------------------------------------------------------ le document */
+  function produire() {
+    var g = grille();
+    if (!g) return "Le cadre n'est pas établi : aucune grille ne s'impose encore.";
+    var ans = M.millesimes(E.cadre.annee);
+    var L = [];
+    var crochets = function (v) { return String(v || "").trim() === "" ? "[à renseigner]" : String(v).trim(); };
+
+    L.push("BASE DE DONNÉES ÉCONOMIQUES, SOCIALES ET ENVIRONNEMENTALES");
+    L.push((E.cadre.nom || "[DÉNOMINATION]").toUpperCase());
+    L.push("");
+    L.push("Contenu établi en l'absence d'accord prévu à l'article L. 2312-21, selon l'article " +
+      g.article.replace("R", "R. ") + " — " + g.seuil + ".");
+    L.push("Version du texte lue : " + g.version + ".");
+    L.push("Millésimes : " + ans.map(function (m) { return m.annee + " (" + m.nature + ")"; }).join(", ") + ".");
+    L.push("");
+    L.push("Les informations non renseignées apparaissent entre crochets : elles sont visibles, " +
+      "elles ne sont pas inventées.");
+    L.push("");
+
+    var vides = 0, total = 0;
+    g.rubriques.forEach(function (t) {
+      L.push(""); L.push("═══ " + t.n + "° " + t.titre.toUpperCase() + " ═══");
+      if (!t.plancher) L.push("(Ce thème ne figure pas au plancher de L. 2312-21.)");
+      t.sections.forEach(function (si) {
+        if (si.titre) { L.push(""); L.push((si.lettre ? si.lettre + " — " : "") + si.titre); }
+        si.sujets.forEach(function (su) {
+          var ks = cleSujet(t, si, su);
+          L.push("");
+          L.push("  " + (su.lettre ? su.lettre + ") " : "") + (su.intitule || ""));
+          L.push("  Dernière mise à jour : " + (E.dates[ks] || "[non datée]"));
+          lignesDe(su).forEach(function (lib, i) {
+            var v = E.valeurs[cleLigne(t, si, su, i)] || {};
+            L.push("    - " + lib);
+            L.push("      " + ans.map(function (m) {
+              total++;
+              var x = v[m.annee];
+              if (String(x || "").trim() === "") vides++;
+              return m.annee + " : " + crochets(x);
+            }).join("  |  "));
+          });
+        });
+      });
+    });
+
+    L.push(""); L.push("═══ MISE À DISPOSITION ═══");
+    L.push("Support : " + crochets(E.acces["a-support"]));
+    L.push("Lieu de consultation : " + crochets(E.acces["a-lieu"]));
+    L.push("Accès ouvert depuis le : " + crochets(E.acces["a-depuis"]));
+    L.push("Accès permanent : " + crochets(E.acces["a-permanent"]));
+    L.push("Personnes ayant accès :");
+    (String(E.acces["a-personnes"] || "").split("\n").filter(function (x) { return x.trim(); }) || [])
+      .forEach(function (x) { L.push("  - " + x.trim()); });
+    if (!String(E.acces["a-personnes"] || "").trim()) L.push("  [à renseigner]");
+    L.push("Informations présentées comme confidentielles : " + crochets(E.acces["a-confidentiel"]));
+
+    L.push(""); L.push("═══ CE QUE CE DOCUMENT NE DIT PAS ═══");
+    L.push(vides + " case(s) sur " + total + " restent à renseigner. Une base incomplète mise à " +
+      "disposition reste une base incomplète : le comité peut le relever, et le délai de sa " +
+      "consultation ne court pas tant qu'il n'a pas reçu les informations nécessaires.");
+    L.push("");
+    L.push("Ce document reprend vos saisies et la grille du décret lue à la source. Il ne vaut " +
+      "pas quitus : il ne dit rien de ce que votre convention collective ou vos accords ajoutent.");
+    return L.join("\n");
+  }
+
+  $("d-produire").addEventListener("click", function () { $("doc").textContent = produire(); });
+  $("d-copier").addEventListener("click", function () {
+    if (!$("doc").textContent) $("doc").textContent = produire();
+    if (navigator.clipboard) navigator.clipboard.writeText($("doc").textContent);
+  });
+  $("d-imprimer").addEventListener("click", function () {
+    if (!$("doc").textContent) $("doc").textContent = produire();
+    window.print();
+  });
+
+  /* ---------------------------------------------------------- l'amorçage */
+  $("c-nom").value = E.cadre.nom || "";
+  $("c-eff").value = E.cadre.effectif == null ? "" : E.cadre.effectif;
+  $("c-annee").value = E.cadre.annee || "";
+  $("c-accord").value = E.cadre.accord || "";
+  ["a-support", "a-lieu", "a-depuis", "a-permanent", "a-personnes", "a-confidentiel"].forEach(function (id) {
+    if (E.acces[id] != null) $(id).value = E.acces[id];
+  });
+  verdictCadre();
+  garder();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

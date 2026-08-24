@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.7";
+const CACHE = "jurisprudence-5.8";
 const ESSENTIELS = [
   "./", "./index.html", "./recherche.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -49,7 +49,7 @@ const ESSENTIELS = [
   "./audit.html", "./moteur-eco.js",
   "./audit-cse.html", "./moteur-cse.js",
   "./audit-pse.html", "./moteur-pse.js",
-  "./audit-bdese.html", "./moteur-bdese.js",
+  "./audit-bdese.html", "./bdese.html", "./moteur-bdese.js",
   "./audit-nao.html", "./moteur-nao.js",
   "./audit-sst.html", "./moteur-sst.js",
   /* Le premier module côté relations individuelles : discipline et règlement
