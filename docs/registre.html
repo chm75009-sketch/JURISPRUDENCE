@@ -1,0 +1,1413 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon registre unique du personnel</title>
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  L'OUTIL, ET POURQUOI IL NE RESSEMBLE PAS À UN AUDIT
+
+  L'audit dit si le registre est en règle. Il ne le tient pas — et c'est
+  exactement ce qui manque au terrain : dire à une entreprise « votre registre
+  n'est pas à jour » ne l'avance pas. Ce qui l'avance, c'est le cadre : une
+  ligne par salarié, dans l'ordre des embauches, avec les colonnes que le
+  décret énumère, et la mention particulière portée en face de celui qu'elle
+  concerne.
+
+  Cinq principes gouvernent cette page.
+
+  1. AUCUNE COLONNE N'EST INVENTÉE. Chaque colonne, chaque mention porte le
+     texte qui la commande — L. 1221-13 pour les noms et l'ordre des embauches,
+     les treize indications de D. 1221-23 pour le reste. Les textes sont
+     reproduits en bas de l'écran « Le cadre », tels qu'ils ont été lus, avec
+     leur identifiant de version. Ce que le dépôt n'a pas capté n'est pas
+     affiché : la page le dit au lieu de le combler.
+
+  2. L'ORDRE N'EST PAS DÉCORATIF. « Les noms et prénoms de tous les salariés
+     sont inscrits dans l'ordre des embauches » (L. 1221-13). Le tableau est
+     donc trié par date d'entrée, et une ligne sans date d'entrée est signalée
+     comme non ordonnable — parce qu'elle l'est.
+
+  3. LES SITUATIONS NE SE DEVINENT PAS. Une case non cochée voudrait dire
+     « non » sans que personne ne l'ait dit. Les questions qui commandent une
+     mention particulière (autorisation requise, travailleur étranger, nature
+     du contrat, temps partiel) se répondent : tant qu'elles ne le sont pas, la
+     ligne est « à établir », ni conforme ni fautive.
+
+  4. L'IMPORT PROPOSE, IL N'ÉCRIT PAS. Un export de paie est rapproché colonne
+     par colonne, le rapprochement est montré, et rien n'entre dans le registre
+     avant que la correspondance ait été acceptée.
+
+  5. CE QUI MANQUE SE VOIT. Dans le document produit, les mentions absentes
+     sortent entre crochets — visibles, jamais inventées. C'est la convention
+     de la base de données et du module des élections, et elle vaut ici.
+
+  Tout reste sur ce poste : rien n'est envoyé.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a,header.site button{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);background:transparent;color:#fff;text-decoration:none;cursor:pointer}
+  header.site a:hover,header.site button:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:26px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15.5px/1.3 system-ui;margin:20px 0 6px}
+  .aide{margin:0 0 16px;color:var(--encre-2);font-size:14.5px;max-width:76ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  label.ch{display:grid;gap:4px}
+  label.ch .nom{font:600 12px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  label.ch input,label.ch select,label.ch textarea{font:inherit;font-size:14.5px;padding:9px 11px;
+    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre)}
+  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+  .avis ul{margin:6px 0 0;padding-left:20px}
+
+  .tbl{overflow-x:auto;margin-top:8px}
+  table{border-collapse:collapse;width:100%;min-width:900px;font-size:13px;background:var(--carte)}
+  th,td{border:1px solid var(--filet);padding:5px 7px;text-align:left;vertical-align:top}
+  thead th{background:var(--creux);font:600 11.5px/1.3 system-ui;color:var(--encre-2);white-space:nowrap}
+  thead th small{display:block;font-weight:400;color:var(--encre-3);font-size:10.5px;letter-spacing:0}
+  td input,td select{width:100%;font:inherit;font-size:12.5px;padding:5px 6px;border:1px solid transparent;
+    border-radius:5px;background:transparent;color:var(--encre)}
+  td input:focus,td select:focus{border-color:var(--bleu);background:var(--carte);outline:none}
+  td input.rempli{background:var(--vert-clair)}
+  td.rang{text-align:right;color:var(--encre-3);font-variant-numeric:tabular-nums;width:34px}
+  tr.detail>td{background:var(--creux)}
+  .sup{border:none;background:transparent;color:var(--rouge);font:700 14px/1 system-ui;cursor:pointer}
+  .plier{border:1px solid var(--filet-2);background:var(--carte);border-radius:6px;
+    font:600 11.5px/1 system-ui;padding:6px 8px;cursor:pointer;white-space:nowrap}
+
+  .jauge{display:inline-block;font:600 11px/1 system-ui;padding:5px 8px;border-radius:5px;white-space:nowrap;
+    background:var(--creux);color:var(--encre-2)}
+  .jauge.ok{background:var(--vert-clair);color:var(--vert)}
+  .jauge.att{background:var(--ambre-clair);color:var(--ambre)}
+  .jauge.non{background:var(--rouge-clair);color:var(--rouge)}
+
+  .bloc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:4px 0 10px}
+  .bloc label{display:grid;gap:3px;font-size:12.5px;color:var(--encre-2)}
+  .bloc label b{font:600 11.5px/1.3 system-ui;letter-spacing:.02em;text-transform:uppercase;color:var(--encre-3)}
+  .bloc label i{font-style:normal;color:var(--encre-3);font-size:11.5px}
+  .bloc input,.bloc select{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--filet-2);
+    border-radius:6px;background:var(--carte);color:var(--encre)}
+  .manque{font-size:12.5px;line-height:1.5;margin:2px 0 0;padding-left:18px}
+  .manque li{margin:1px 0}
+  .art{color:var(--encre-3);font-size:11.5px}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+
+  textarea{width:100%;min-height:150px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:10px;border:1px solid var(--filet-2);border-radius:8px;resize:vertical}
+  pre#doc{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:66vh;overflow:auto}
+  details.texte{border:1px solid var(--filet);border-radius:10px;background:var(--carte);margin:8px 0}
+  details.texte>summary{padding:11px 14px;cursor:pointer;font:600 13.5px/1.3 system-ui}
+  details.texte>summary:hover{background:var(--creux)}
+  details.texte .corps{padding:0 14px 14px;font-size:13.5px;line-height:1.6;color:var(--encre-2)}
+  details.texte .corps .ver{display:block;font-size:11.5px;color:var(--encre-3);margin-bottom:6px}
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  /* À l'impression, on imprime l'écran ouvert — et rien d'autre. Faire
+     réapparaître les onglets cachés sortirait six écrans quand l'utilisateur
+     en demande un : le document, ou le registre à l'écran. */
+  @media print{.onglets,.barre,header.site,.sup,.plier{display:none}
+    pre#doc{max-height:none;border:none;padding:0}
+    .tbl{overflow-x:visible}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Mon registre unique <span>— du personnel</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">← Accueil</a>
+      <a href="audit-social.html">Auditer mes obligations</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="cadre" class="actif">1 · Le cadre</button>
+    <button data-o="registre">2 · Le registre</button>
+    <button data-o="accueillis">3 · Stagiaires et volontaires</button>
+    <button data-o="import">4 · Reprendre un export</button>
+    <button data-o="tenue">5 · La tenue</button>
+    <button data-o="doc">6 · Le document</button>
+  </div>
+
+  <!-- ══════ 1 · LE CADRE ══════ -->
+  <section id="o-cadre">
+    <h2>Le cadre : quel établissement, quel registre</h2>
+    <p class="aide">Le registre unique du personnel est tenu <b>dans tout établissement</b> où sont
+    employés des salariés (L. 1221-13). Ce n'est donc pas un registre par entreprise : une
+    entreprise à trois établissements en tient trois. Cette page en tient un — celui que vous
+    nommez ici.</p>
+
+    <div class="carte">
+      <div class="champs">
+        <label class="ch"><span class="nom">Dénomination</span>
+          <input id="c-nom" placeholder="Raison sociale">
+          <span class="sous">Reprise de votre fiche entreprise si elle est remplie.</span></label>
+        <label class="ch"><span class="nom">Établissement concerné</span>
+          <input id="c-etab" placeholder="Siège, agence de Lyon, chantier…">
+          <span class="sous">Le registre est tenu dans tout établissement où sont employés des salariés (L. 1221-13).</span></label>
+        <label class="ch"><span class="nom">Adresse de l'établissement</span>
+          <input id="c-adresse" placeholder="Adresse où le registre est tenu"></label>
+        <label class="ch"><span class="nom">Effectif de l'entreprise</span>
+          <input id="c-eff" type="number" min="0" placeholder="Nombre de salariés">
+          <span class="sous">Repris de votre fiche. Le registre ne dépend d'aucun seuil : il est dû dès le premier salarié.</span></label>
+      </div>
+      <div id="verdict-cadre"></div>
+    </div>
+
+    <h3>Les textes, tels qu'ils ont été lus</h3>
+    <p class="aide">Chaque colonne et chaque mention de cette page vient de l'un de ces six
+    articles. L'identifiant <code>LEGIARTI…</code> désigne la version lue : un article peut être
+    modifié sans changer de numéro, et le numéro seul ne dit pas laquelle.</p>
+    <div id="textes"></div>
+
+    <div class="avis att"><b>Ce que cette page ne porte pas</b>
+    L'article L. 1221-13 renvoie au pouvoir réglementaire le soin de définir les indications
+    complémentaires propres aux stagiaires et aux personnes volontaires en service civique.
+    Ce texte réglementaire n'a pas été capté dans ce dépôt : la partie spécifique de l'écran 3
+    ne demande donc que ce que L. 1221-13 énonce lui-même — les noms, les prénoms et l'ordre
+    d'arrivée. Aucune autre colonne n'y est ajoutée, faute de texte lu pour la fonder.</div>
+  </section>
+
+  <!-- ══════ 2 · LE REGISTRE ══════ -->
+  <section id="o-registre" class="cache">
+    <h2>Le registre</h2>
+    <p class="aide">Une ligne par salarié, <b>dans l'ordre des embauches</b> (L. 1221-13). Le
+    tableau se trie tout seul sur la date d'entrée : c'est le texte qui commande l'ordre, pas
+    l'ordre de saisie. Les mentions particulières — celles que le décret n'attache qu'à certaines
+    situations — se déplient ligne par ligne, en face de l'intéressé.</p>
+    <div id="etat-registre"></div>
+    <div class="barre">
+      <button class="btn" id="r-ajouter">+ Ajouter un salarié</button>
+      <button class="btn second" id="r-import">Reprendre un export</button>
+    </div>
+    <div id="registre"></div>
+    <div id="synthese-registre"></div>
+  </section>
+
+  <!-- ══════ 3 · LA PARTIE SPÉCIFIQUE ══════ -->
+  <section id="o-accueillis" class="cache">
+    <h2>La partie spécifique : stagiaires et volontaires en service civique</h2>
+    <p class="aide">« Les nom et prénoms des stagiaires et des personnes volontaires en service
+    civique […] accueillis dans l'établissement sont inscrits dans l'ordre d'arrivée, dans une
+    partie spécifique du registre unique du personnel » (L. 1221-13). Partie spécifique : elle
+    est distincte de celle des salariés, et c'est pourquoi elle a son propre écran ici.</p>
+    <div id="etat-accueillis"></div>
+    <div class="barre">
+      <button class="btn" id="a-ajouter">+ Ajouter une personne accueillie</button>
+    </div>
+    <div id="accueillis"></div>
+  </section>
+
+  <!-- ══════ 4 · L'IMPORT ══════ -->
+  <section id="o-import" class="cache">
+    <h2>Reprendre ce que la paie sait déjà</h2>
+    <p class="aide">L'essentiel du registre existe déjà dans le logiciel de paie. Collez ici le
+    tableau exporté — une ligne d'intitulés, puis une ligne par salarié, les colonnes séparées par
+    une tabulation, un point-virgule ou une barre verticale. L'outil <b>propose</b> un
+    rapprochement colonne par colonne&nbsp;; vous le corrigez, et rien n'entre dans le registre
+    avant que vous l'ayez demandé.</p>
+
+    <div class="carte">
+      <textarea id="i-source" placeholder="Nom&#9;Prénom&#9;Date d'entrée&#9;Emploi&#9;Qualification&#9;Contrat
+MARTIN&#9;Paul&#9;01/06/2021&#9;Cariste&#9;Niveau 2&#9;CDI
+DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
+      <div class="barre">
+        <button class="btn" id="i-analyser">Proposer les correspondances</button>
+        <button class="btn second" id="i-vider">Vider</button>
+      </div>
+      <div id="i-resultat"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 5 · LA TENUE ══════ -->
+  <section id="o-tenue" class="cache">
+    <h2>La tenue : où, depuis quand, et devant qui</h2>
+    <p class="aide">Un registre parfait que personne ne peut consulter ne remplit pas
+    l'obligation. L'article L. 1221-15 désigne lui-même ceux devant qui il est tenu à
+    disposition : la page les reprend tels quels, sans en ajouter ni en retrancher.</p>
+
+    <div class="carte">
+      <div class="champs">
+        <label class="ch"><span class="nom">Support</span>
+          <select id="t-support">
+            <option value="">— répondre —</option>
+            <option value="papier">Registre tenu sur support papier</option>
+            <option value="substitution">Support de substitution (informatique)</option>
+          </select>
+          <span class="sous">Le support de substitution appelle l'article D. 1221-27 : exigences des articles D. 8113-2 et D. 8113-3, et avis du comité adressé à l'inspection du travail.</span></label>
+        <label class="ch"><span class="nom">Où le registre se consulte</span>
+          <input id="t-lieu" placeholder="Local, bureau, chemin du fichier">
+          <span class="sous">Précisez de façon qu'un élu ou un agent de contrôle puisse s'y rendre seul.</span></label>
+        <label class="ch"><span class="nom">Tenu depuis le</span>
+          <input id="t-depuis" type="date"></label>
+        <label class="ch"><span class="nom">Avis du comité social et économique recueilli le</span>
+          <input id="t-avis" type="date">
+          <span class="sous">D. 1221-27, en cas de support de substitution seulement.</span></label>
+        <label class="ch"><span class="nom">Avis adressé à l'inspection du travail le</span>
+          <input id="t-envoi" type="date">
+          <span class="sous">D. 1221-27 impose de l'adresser ; il ne fixe pas de délai.</span></label>
+        <label class="ch"><span class="nom">Élus informés du lieu de consultation le</span>
+          <input id="t-info" type="date">
+          <span class="sous">Aucun texte lu ici n'impose cette information : L. 1221-15 impose la mise à disposition. La dater reste le seul moyen de la prouver.</span></label>
+      </div>
+      <label class="ch" style="margin-top:14px"><span class="nom">Où la copie des titres des travailleurs étrangers est tenue à disposition</span>
+        <textarea id="t-chantiers" style="min-height:70px"
+          placeholder="L'établissement, ou chaque chantier ou lieu de travail distinct où ces travailleurs sont employés (D. 1221-24)."></textarea></label>
+      <div id="verdict-tenue"></div>
+    </div>
+
+    <div class="avis info"><b>Devant qui le registre est tenu à disposition — L. 1221-15</b>
+      « Le registre unique du personnel est tenu à la disposition du comité social et économique
+      et des fonctionnaires et agents chargés de veiller à l'application du présent code et du
+      code de la sécurité sociale. »</div>
+    <div class="avis info"><b>La copie des titres des travailleurs étrangers — D. 1221-24</b>
+      Elle est annexée au registre et rendue accessible aux membres de la délégation du personnel
+      du comité social et économique et aux fonctionnaires et agents chargés de veiller à
+      l'application du présent code et du code de la sécurité sociale. Elle est tenue à leur
+      disposition soit dans l'établissement, soit sur chaque chantier ou lieu de travail distinct
+      de l'établissement pour ceux des travailleurs étrangers qui y sont employés.</div>
+  </section>
+
+  <!-- ══════ 6 · LE DOCUMENT ══════ -->
+  <section id="o-doc" class="cache">
+    <h2>Le document</h2>
+    <p class="aide">Le registre tel qu'il est aujourd'hui, prêt à être présenté. Les mentions
+    absentes sortent entre crochets : elles se voient, elles ne sont pas inventées.</p>
+    <div class="barre">
+      <button class="btn" id="d-produire">Produire le document</button>
+      <button class="btn second" id="d-copier">Copier le texte</button>
+      <button class="btn second" id="d-imprimer">Imprimer / PDF</button>
+    </div>
+    <pre id="doc"></pre>
+  </section>
+
+  <footer>
+    Tout reste sur ce poste : rien n'est envoyé. Les colonnes et les mentions sont celles des
+    articles L. 1221-13, L. 1221-15, D. 1221-23, D. 1221-24, D. 1221-25 et D. 1221-27, reproduits
+    sur l'écran « Le cadre » avec leur identifiant de version.
+    Cet outil assiste votre démarche&nbsp;; il ne remplace ni votre conseil, ni la décision du juge.
+  </footer>
+</main>
+
+<script src="droits.js"></script>
+<script src="profil.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); };
+
+  /* ══════════════════════════════════════════════════════════ LES TEXTES
+
+     Reproduits mot pour mot depuis les textes captés du dépôt
+     (moteur/social/textes-social.json et moteur/parcours/textes-regularisation.json),
+     avec l'identifiant de version et la date de lecture. Rien n'est reformulé :
+     ce qui est cité ici a été lu à la source. */
+  var TEXTES = {
+    "L1221-13": {
+        "id": "LEGIARTI000033971569",
+        "date": "2026-08-19",
+        "texte": "Un registre unique du personnel est tenu dans tout établissement où sont employés des salariés. Les noms et prénoms de tous les salariés sont inscrits dans l'ordre des embauches. Ces mentions sont portées sur le registre au moment de l'embauche et de façon indélébile. Les nom et prénoms des stagiaires et des personnes volontaires en service civique au sens de l' article L. 120-1 du code du service national accueillis dans l'établissement sont inscrits dans l'ordre d'arrivée, dans une partie spécifique du registre unique du personnel. Les indications complémentaires à mentionner sur ce registre, soit pour l'ensemble des salariés, soit pour certaines catégories seulement, soit pour les stagiaires et les personnes volontaires en service civique mentionnés au troisième alinéa, sont définies par voie réglementaire."
+    },
+    "D1221-23": {
+        "id": "LEGIARTI000018537878",
+        "date": "2026-08-19",
+        "texte": "Les indications complémentaires portées sur le registre unique du personnel pour chaque salarié, mentionnées au troisième alinéa de l'article L. 1221-13 , sont les suivantes : 1° La nationalité ; 2° La date de naissance ; 3° Le sexe ; 4° L'emploi ; 5° La qualification ; 6° Les dates d'entrée et de sortie de l'établissement ; 7° Lorsqu'une autorisation d'embauche ou de licenciement est requise, la date de cette autorisation ou, à défaut, la date de la demande d'autorisation ; 8° Pour les travailleurs étrangers assujettis à la possession d'un titre autorisant l'exercice d'une activité salariée, le type et le numéro d'ordre du titre valant autorisation de travail ; 9° Pour les travailleurs titulaires d'un contrat de travail à durée déterminée, la mention « contrat à durée déterminée » ; 10° Pour les salariés temporaires, la mention « salarié temporaire » ainsi que le nom et l'adresse de l'entreprise de travail temporaire ; 11° Pour les travailleurs mis à disposition par un groupement d'employeurs, la mention « mis à disposition par un groupement d'employeurs » ainsi que la dénomination et l'adresse de ce dernier ; 12° Pour les salariés à temps partiel, la mention « salarié à temps partiel » ; 13° Pour les jeunes travailleurs titulaires d'un contrat d'apprentissage ou de professionnalisation, la mention « apprenti » ou « contrat de professionnalisation »."
+    },
+    "D1221-25": {
+        "id": "LEGIARTI000029825324",
+        "date": "2026-08-22",
+        "texte": "Les mentions relatives à des événements postérieurs à l'embauche du salarié, ou à l'arrivée du stagiaire sont portées sur le registre unique du personnel au moment où ceux-ci surviennent."
+    },
+    "L1221-15": {
+        "id": "LEGIARTI000035653242",
+        "date": "2026-08-22",
+        "texte": "Le registre unique du personnel est tenu à la disposition du comité social et économique et des fonctionnaires et agents chargés de veiller à l'application du présent code et du code de la sécurité sociale ."
+    },
+    "D1221-24": {
+        "id": "LEGIARTI000036483477",
+        "date": "2026-08-22",
+        "texte": "Une copie des titres autorisant l'exercice d'une activité salariée des travailleurs étrangers est annexée au registre unique du personnel et rendue accessible aux membres de la délégation du personnel du comité social et économique et aux fonctionnaires et agents chargés de veiller à l'application du présent code et du code de la sécurité sociale. Elle est tenue à leur disposition soit dans l'établissement, soit sur chaque chantier ou lieu de travail distinct de l'établissement pour ceux des travailleurs étrangers qui y sont employés."
+    },
+    "D1221-27": {
+        "id": "LEGIARTI000036483458",
+        "date": "2026-08-22",
+        "texte": "Lorsque l'employeur recourt à un support de substitution pour la tenue du registre unique du personnel, les exigences des articles D. 8113-2 et D. 8113-3 sont applicables. Dans ce cas, l'employeur adresse à l'inspection du travail l'avis du comité social et économique prévu à l'article L. 2315-5 ."
+    }
+};
+
+  var ORDRE_TEXTES = ["L1221-13", "D1221-23", "D1221-25", "L1221-15", "D1221-24", "D1221-27"];
+  var TITRES_TEXTES = {
+    "L1221-13": "L. 1221-13 — le registre, les noms, l'ordre des embauches",
+    "D1221-23": "D. 1221-23 — les treize indications complémentaires",
+    "D1221-25": "D. 1221-25 — les événements postérieurs à l'embauche",
+    "L1221-15": "L. 1221-15 — devant qui le registre est tenu à disposition",
+    "D1221-24": "D. 1221-24 — la copie des titres des travailleurs étrangers",
+    "D1221-27": "D. 1221-27 — le support de substitution",
+  };
+  var art = function (n) { return n.replace(/^([LDR])/, "$1. "); };
+
+  /* ═══════════════════════════════════════════════════════ LE STOCKAGE */
+  var CLE = "registre-personnel";
+  var E = (function () {
+    try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; }
+    catch (e) { return {}; }
+  })();
+  E.cadre = E.cadre || {};
+  E.salaries = E.salaries || [];       /* la partie « salariés » du registre  */
+  E.accueillis = E.accueillis || [];   /* la partie spécifique de L. 1221-13  */
+  E.tenue = E.tenue || {};
+  function garder() { try { localStorage.setItem(CLE, JSON.stringify(E)); } catch (e) {} }
+
+  /* La fiche entreprise sert de source : on ne redemande jamais ce qui est su. */
+  (function reprendre() {
+    var p = null;
+    try {
+      p = (window.Profil && window.Profil.lire) ? window.Profil.lire()
+        : JSON.parse(localStorage.getItem("profil-entreprise") || "null");
+    } catch (e) { p = null; }
+    E.profil = null;
+    if (p) {
+      E.profil = p;
+      if (!E.cadre.nom) E.cadre.nom = p.denomination || p.entreprise || p.nom || "";
+      if (!E.cadre.adresse) E.cadre.adresse = p.adresse || p.siege || "";
+      if ((E.cadre.effectif == null || E.cadre.effectif === "") && p.effectif != null && p.effectif !== "")
+        E.cadre.effectif = p.effectif;
+    }
+  })();
+
+  /* ════════════════════════════════════════ CE QUE LE REGISTRE PORTE
+
+     Les colonnes dues pour TOUT salarié. « fond » cite l'article qui les
+     commande : L. 1221-13 pour les noms, D. 1221-23 pour les indications
+     complémentaires, avec le rang de l'énumération. */
+  var COLONNES = [
+    { c: "nom",   lib: "Nom",              fond: "L. 1221-13",     t: "text",  du: true },
+    { c: "pre",   lib: "Prénoms",          fond: "L. 1221-13",     t: "text",  du: true },
+    { c: "nat",   lib: "Nationalité",      fond: "D. 1221-23, 1°", t: "text",  du: true },
+    { c: "nais",  lib: "Date de naissance",fond: "D. 1221-23, 2°", t: "date",  du: true },
+    { c: "sexe",  lib: "Sexe",             fond: "D. 1221-23, 3°", t: "sexe",  du: true },
+    { c: "emp",   lib: "Emploi",           fond: "D. 1221-23, 4°", t: "text",  du: true },
+    { c: "qua",   lib: "Qualification",    fond: "D. 1221-23, 5°", t: "text",  du: true },
+    { c: "ent",   lib: "Date d'entrée",    fond: "D. 1221-23, 6°", t: "date",  du: true },
+    /* La date de sortie est due par le même 6°, mais elle n'existe qu'au
+       départ : l'absence de sortie n'est pas un manque, c'est un salarié
+       présent. D. 1221-25 commande en revanche de la porter au moment où elle
+       survient — non trois mois plus tard. */
+    { c: "sor",   lib: "Date de sortie",   fond: "D. 1221-23, 6°", t: "date",  du: false },
+  ];
+
+  var NATURES = [
+    { v: "",            lib: "— à établir —" },
+    { v: "cdi",         lib: "Contrat à durée indéterminée" },
+    { v: "cdd",         lib: "Contrat à durée déterminée" },
+    { v: "temporaire",  lib: "Salarié temporaire" },
+    { v: "groupement",  lib: "Mis à disposition par un groupement d'employeurs" },
+    { v: "apprenti",    lib: "Contrat d'apprentissage" },
+    { v: "pro",         lib: "Contrat de professionnalisation" },
+    { v: "autre",       lib: "Autre situation — à préciser" },
+  ];
+
+  function neuf() {
+    return { id: "s" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      nom: "", pre: "", nat: "", nais: "", sexe: "", emp: "", qua: "", ent: "", sor: "",
+      nature: "", natAutre: "", part: "", aut: "", autD: "", autDem: "",
+      etr: "", titT: "", titN: "", titCop: "", ettN: "", ettA: "", gpeN: "", gpeA: "", insc: "" };
+  }
+
+  var vide = function (x) { return String(x == null ? "" : x).trim() === ""; };
+
+  /* ──────────────────────────────────────────── ce qui manque à une ligne
+
+     Deux listes, et elles ne disent pas la même chose. « manques » : une
+     mention due par le texte est absente. « aEtablir » : une question dont
+     dépend une mention n'a pas été tranchée — la ligne n'est ni conforme ni
+     fautive, elle est indécise, et l'écrire est plus honnête que de compter
+     un silence comme un « non ». */
+  function manques(s) {
+    var m = [];
+    COLONNES.forEach(function (col) {
+      if (col.du && vide(s[col.c])) m.push({ quoi: col.lib, fond: col.fond });
+    });
+    if (s.aut === "oui" && vide(s.autD) && vide(s.autDem))
+      m.push({ quoi: "Date de l'autorisation d'embauche ou de licenciement, ou à défaut de la demande",
+        fond: "D. 1221-23, 7°" });
+    if (s.etr === "oui") {
+      if (vide(s.titT)) m.push({ quoi: "Type du titre valant autorisation de travail", fond: "D. 1221-23, 8°" });
+      if (vide(s.titN)) m.push({ quoi: "Numéro d'ordre du titre valant autorisation de travail", fond: "D. 1221-23, 8°" });
+      if (s.titCop !== "oui") m.push({ quoi: "Copie du titre annexée au registre et rendue accessible", fond: "D. 1221-24" });
+    }
+    if (s.nature === "temporaire") {
+      if (vide(s.ettN)) m.push({ quoi: "Nom de l'entreprise de travail temporaire", fond: "D. 1221-23, 10°" });
+      if (vide(s.ettA)) m.push({ quoi: "Adresse de l'entreprise de travail temporaire", fond: "D. 1221-23, 10°" });
+    }
+    if (s.nature === "groupement") {
+      if (vide(s.gpeN)) m.push({ quoi: "Dénomination du groupement d'employeurs", fond: "D. 1221-23, 11°" });
+      if (vide(s.gpeA)) m.push({ quoi: "Adresse du groupement d'employeurs", fond: "D. 1221-23, 11°" });
+    }
+    if (s.nature === "autre" && vide(s.natAutre))
+      m.push({ quoi: "Situation à préciser", fond: "D. 1221-23, 9° à 13°" });
+    return m;
+  }
+
+  function aEtablir(s) {
+    var q = [];
+    if (vide(s.nature)) q.push({ quoi: "Nature du contrat : de quelle situation relève ce salarié ?",
+      fond: "D. 1221-23, 9° à 13°" });
+    if (vide(s.part)) q.push({ quoi: "Temps complet ou temps partiel ?", fond: "D. 1221-23, 12°" });
+    if (vide(s.aut)) q.push({ quoi: "Une autorisation d'embauche ou de licenciement est-elle requise ?",
+      fond: "D. 1221-23, 7°" });
+    if (vide(s.etr)) q.push({ quoi: "Travailleur étranger assujetti à la possession d'un titre autorisant l'exercice d'une activité salariée ?",
+      fond: "D. 1221-23, 8°" });
+    return q;
+  }
+
+  /* Les mentions littérales que le décret fait porter. Le texte les écrit
+     entre guillemets : elles sont reprises telles quelles, jamais reformulées. */
+  function mentions(s) {
+    var L = [];
+    if (s.nature === "cdd") L.push({ t: "« contrat à durée déterminée »", fond: "D. 1221-23, 9°" });
+    if (s.nature === "temporaire") L.push({ t: "« salarié temporaire » — " +
+      (vide(s.ettN) ? "[nom de l'entreprise de travail temporaire]" : s.ettN) + ", " +
+      (vide(s.ettA) ? "[adresse de l'entreprise de travail temporaire]" : s.ettA), fond: "D. 1221-23, 10°" });
+    if (s.nature === "groupement") L.push({ t: "« mis à disposition par un groupement d'employeurs » — " +
+      (vide(s.gpeN) ? "[dénomination du groupement]" : s.gpeN) + ", " +
+      (vide(s.gpeA) ? "[adresse du groupement]" : s.gpeA), fond: "D. 1221-23, 11°" });
+    if (s.part === "partiel") L.push({ t: "« salarié à temps partiel »", fond: "D. 1221-23, 12°" });
+    if (s.nature === "apprenti") L.push({ t: "« apprenti »", fond: "D. 1221-23, 13°" });
+    if (s.nature === "pro") L.push({ t: "« contrat de professionnalisation »", fond: "D. 1221-23, 13°" });
+    if (s.aut === "oui") L.push({ t: "Autorisation d'embauche ou de licenciement : " +
+      (vide(s.autD) ? (vide(s.autDem) ? "[date de l'autorisation ou, à défaut, de la demande]"
+        : "demande du " + s.autDem) : "autorisation du " + s.autD), fond: "D. 1221-23, 7°" });
+    if (s.etr === "oui") L.push({ t: "Titre valant autorisation de travail : type " +
+      (vide(s.titT) ? "[type du titre]" : s.titT) + ", n° d'ordre " +
+      (vide(s.titN) ? "[numéro d'ordre]" : s.titN), fond: "D. 1221-23, 8°" });
+    if (s.nature === "autre" && !vide(s.natAutre))
+      L.push({ t: s.natAutre, fond: "situation déclarée, hors énumération de D. 1221-23" });
+    return L;
+  }
+
+  function etat(s) {
+    var m = manques(s), q = aEtablir(s);
+    if (m.length) return { cls: "non", txt: m.length + " manque" + (m.length > 1 ? "s" : "") };
+    if (q.length) return { cls: "att", txt: "à établir" };
+    return { cls: "ok", txt: "complète" };
+  }
+
+  /* L'ordre des embauches — L. 1221-13. Ce n'est pas une commodité
+     d'affichage : le texte l'impose. Une ligne sans date d'entrée ne peut pas
+     être placée ; elle est renvoyée en fin de tableau et signalée. */
+  function ordonnes() {
+    var avec = E.salaries.filter(function (s) { return !vide(s.ent); });
+    var sans = E.salaries.filter(function (s) { return vide(s.ent); });
+    avec.sort(function (a, b) { return a.ent < b.ent ? -1 : (a.ent > b.ent ? 1 : 0); });
+    return avec.concat(sans);
+  }
+  function parId(id) {
+    for (var i = 0; i < E.salaries.length; i++) if (E.salaries[i].id === id) return E.salaries[i];
+    return null;
+  }
+
+  /* ═══════════════════════════════════════════════════════ LES ONGLETS */
+  var ONGLETS = ["cadre", "registre", "accueillis", "import", "tenue", "doc"];
+  function ouvrir(nom) {
+    ONGLETS.forEach(function (o) { $("o-" + o).className = o === nom ? "" : "cache"; });
+    Array.prototype.forEach.call($("onglets").children, function (b) {
+      b.className = b.getAttribute("data-o") === nom ? "actif" : "";
+    });
+    if (nom === "registre") rendreRegistre();
+    if (nom === "accueillis") rendreAccueillis();
+    if (nom === "tenue") verdictTenue();
+    window.scrollTo(0, 0);
+  }
+  Array.prototype.forEach.call($("onglets").children, function (b) {
+    b.addEventListener("click", function () { ouvrir(b.getAttribute("data-o")); });
+  });
+
+  /* ══════════════════════════════════════════════════════════ LE CADRE */
+  function lireCadre() {
+    E.cadre.nom = $("c-nom").value.trim();
+    E.cadre.etab = $("c-etab").value.trim();
+    E.cadre.adresse = $("c-adresse").value.trim();
+    E.cadre.effectif = $("c-eff").value.trim();
+    garder(); verdictCadre();
+  }
+  ["c-nom", "c-etab", "c-adresse", "c-eff"].forEach(function (id) {
+    $(id).addEventListener("change", lireCadre);
+    $(id).addEventListener("input", lireCadre);
+  });
+
+  function verdictCadre() {
+    var h = "";
+    var p = E.profil || {};
+    var nb = Number(p.nbEtablissements);
+    if (p.etablissementsDistincts === "oui" || (isFinite(nb) && nb > 1))
+      h += '<div class="avis att"><b>Votre fiche indique plusieurs établissements</b>' +
+        (isFinite(nb) && nb > 1 ? "Elle en compte " + nb + ". " : "") +
+        "Le registre est tenu <b>dans tout établissement</b> où sont employés des salariés " +
+        "(L. 1221-13) : un registre par établissement, pas un registre d'entreprise. " +
+        "Cette page en tient un — celui que vous nommez ci-dessus. Reprenez-la pour chacun " +
+        "des autres, ou tenez-les séparément.</div>";
+    if (vide(E.cadre.etab))
+      h += '<div class="avis att"><b>L\'établissement n\'est pas nommé</b>' +
+        "Sans lui, le document produit ne dira pas de quel établissement il est le registre — " +
+        "et L. 1221-13 en fait précisément l'unité de tenue.</div>";
+    var n = E.salaries.length, eff = Number(E.cadre.effectif);
+    if (n && isFinite(eff) && eff > 0)
+      h += '<div class="avis info"><b>' + n + " ligne(s) au registre de cet établissement</b>" +
+        "Votre fiche porte un effectif d'entreprise de " + eff + ". Les deux nombres n'ont pas à " +
+        "coïncider : le registre recense les salariés d'un établissement, entrés et sortis, " +
+        "il ne décompte pas un effectif.</div>";
+    $("verdict-cadre").innerHTML = h;
+  }
+
+  function rendreTextes() {
+    $("textes").innerHTML = ORDRE_TEXTES.map(function (n) {
+      var t = TEXTES[n];
+      if (!t) return "";
+      return '<details class="texte"><summary>' + ech(TITRES_TEXTES[n] || art(n)) + "</summary>" +
+        '<div class="corps"><span class="ver">Version lue : ' + ech(t.id) +
+        " — lecture du " + ech(t.date) + "</span>" + ech(t.texte) + "</div></details>";
+    }).join("");
+  }
+
+  /* ═══════════════════════════════════════════════════════ LE REGISTRE */
+  var ouverts = {};   /* les lignes dépliées, conservées d'un rendu à l'autre */
+
+  function champ(s, col) {
+    var v = s[col.c] == null ? "" : s[col.c];
+    var plein = String(v).trim() !== "";
+    if (col.t === "sexe") {
+      /* Un export de paie écrit « F », « H », « 1 ». La valeur importée qui ne
+         figure pas dans la liste est ajoutée à la liste plutôt qu'effacée de
+         l'écran : sinon le contrôle la compte comme renseignée quand la case
+         paraît vide — la pire des deux situations. */
+      var opts = ["", "Féminin", "Masculin"];
+      if (plein && opts.indexOf(v) < 0) opts.push(v);
+      return '<select data-id="' + ech(s.id) + '" data-c="sexe"' + (plein ? ' class="rempli"' : "") + '>' +
+        opts.map(function (o) {
+          return '<option value="' + ech(o) + '"' + (v === o ? " selected" : "") + ">" +
+            (o === "" ? "— ?" : ech(o)) + "</option>"; }).join("") + "</select>";
+    }
+    return '<input type="' + (col.t === "date" ? "date" : "text") + '" data-id="' + ech(s.id) +
+      '" data-c="' + col.c + '" value="' + ech(v) + '"' + (plein ? ' class="rempli"' : "") + ">";
+  }
+
+  function detail(s) {
+    var e = function (c, lib, sous, type) {
+      return '<label><b>' + ech(lib) + "</b>" +
+        '<input type="' + (type || "text") + '" data-id="' + ech(s.id) + '" data-c="' + c +
+        '" value="' + ech(s[c] || "") + '">' + (sous ? "<i>" + ech(sous) + "</i>" : "") + "</label>";
+    };
+    var sel = function (c, lib, opts, sous) {
+      return '<label><b>' + ech(lib) + "</b><select data-id=\"" + ech(s.id) + '" data-c="' + c + '">' +
+        opts.map(function (o) {
+          return '<option value="' + ech(o.v) + '"' + ((s[c] || "") === o.v ? " selected" : "") + ">" +
+            ech(o.lib) + "</option>"; }).join("") + "</select>" +
+        (sous ? "<i>" + ech(sous) + "</i>" : "") + "</label>";
+    };
+    var ouiNon = [{ v: "", lib: "— à établir —" }, { v: "non", lib: "Non" }, { v: "oui", lib: "Oui" }];
+
+    var h = '<div style="padding:6px 2px 10px">';
+
+    h += "<h3 style=\"margin:4px 0 2px;font-size:13.5px\">Les mentions particulières</h3>" +
+      '<p class="art" style="margin:0 0 8px">Le décret ne les attache qu\'à certaines situations. ' +
+      'Elles se portent en face de l\'intéressé, et nulle part ailleurs.</p>';
+
+    h += '<div class="bloc">' +
+      sel("nature", "Nature du contrat", NATURES, "D. 1221-23, 9° à 13°") +
+      sel("part", "Temps de travail", [{ v: "", lib: "— à établir —" },
+        { v: "complet", lib: "Temps complet" }, { v: "partiel", lib: "Temps partiel" }],
+        "D. 1221-23, 12° : la mention « salarié à temps partiel »");
+    if (s.nature === "autre") h += e("natAutre", "Préciser la situation", "Hors énumération de D. 1221-23 : rien n'y est présumé.");
+    if (s.nature === "temporaire") {
+      h += e("ettN", "Entreprise de travail temporaire — nom", "D. 1221-23, 10°");
+      h += e("ettA", "Entreprise de travail temporaire — adresse", "D. 1221-23, 10°");
+    }
+    if (s.nature === "groupement") {
+      h += e("gpeN", "Groupement d'employeurs — dénomination", "D. 1221-23, 11°");
+      h += e("gpeA", "Groupement d'employeurs — adresse", "D. 1221-23, 11°");
+    }
+    h += "</div>";
+
+    h += '<div class="bloc">' +
+      sel("aut", "Une autorisation d'embauche ou de licenciement est-elle requise ?", ouiNon, "D. 1221-23, 7°");
+    if (s.aut === "oui") {
+      h += e("autD", "Date de l'autorisation", "D. 1221-23, 7°", "date");
+      h += e("autDem", "À défaut, date de la demande", "D. 1221-23, 7°", "date");
+    }
+    h += "</div>";
+
+    h += '<div class="bloc">' +
+      sel("etr", "Travailleur étranger assujetti à la possession d'un titre autorisant l'exercice d'une activité salariée ?",
+        ouiNon, "D. 1221-23, 8°");
+    if (s.etr === "oui") {
+      h += e("titT", "Type du titre", "D. 1221-23, 8°");
+      h += e("titN", "Numéro d'ordre du titre", "D. 1221-23, 8°");
+      h += sel("titCop", "Copie annexée au registre et rendue accessible ?", ouiNon, "D. 1221-24");
+    }
+    h += "</div>";
+
+    h += '<div class="bloc">' +
+      e("insc", "Mention portée au registre le", "L. 1221-13 : au moment de l'embauche, de façon indélébile. D. 1221-25 pour les événements postérieurs.", "date") +
+      "</div>";
+
+    var m = manques(s), q = aEtablir(s);
+    if (m.length)
+      h += '<div class="avis non"><b>Ce qui manque à cette ligne</b><ul class="manque">' +
+        m.map(function (x) { return "<li>" + ech(x.quoi) + ' <span class="art">— ' + ech(x.fond) + "</span></li>"; }).join("") +
+        "</ul></div>";
+    if (q.length)
+      h += '<div class="avis att"><b>Ce qui n\'est pas encore tranché</b>' +
+        "Tant que ces questions restent sans réponse, on ne sait pas si une mention est due. " +
+        "Un silence n'est pas un « non ».<ul class=\"manque\">" +
+        q.map(function (x) { return "<li>" + ech(x.quoi) + ' <span class="art">— ' + ech(x.fond) + "</span></li>"; }).join("") +
+        "</ul></div>";
+    if (!m.length && !q.length) {
+      var men = mentions(s);
+      h += '<div class="avis ok"><b>Cette ligne porte tout ce que les textes lus exigent</b>' +
+        (men.length ? "Mentions portées : " + ech(men.map(function (x) { return x.t; }).join(" ; ")) + "."
+          : "Aucune mention particulière n'est due dans la situation déclarée.") +
+        " Cela ne vaut pas quitus : le registre se tient au moment de l'embauche et de façon " +
+        "indélébile (L. 1221-13), ce qu'une saisie a posteriori ne rattrape pas.</div>";
+    }
+    if (!vide(s.ent) && !vide(s.insc) && s.insc > s.ent)
+      h += '<div class="avis att"><b>Inscription postérieure à l\'entrée</b>' +
+        "Les mentions sont portées sur le registre <b>au moment de l'embauche</b> (L. 1221-13). " +
+        "L'écart est ici de " + Math.round((Date.parse(s.insc) - Date.parse(s.ent)) / 864e5) +
+        " jour(s). Il ne s'efface pas : il se constate.</div>";
+    if (!vide(s.sor) && !vide(s.ent) && s.sor < s.ent)
+      h += '<div class="avis non"><b>La sortie précède l\'entrée</b>' +
+        "Les deux dates ne peuvent pas être dans cet ordre.</div>";
+
+    return h + "</div>";
+  }
+
+  function rendreRegistre() {
+    var L = ordonnes();
+    var nb = L.length;
+    var c = { ok: 0, att: 0, non: 0 };
+    L.forEach(function (s) { c[etat(s).cls]++; });
+    var sansDate = L.filter(function (s) { return vide(s.ent); }).length;
+
+    $("etat-registre").innerHTML = !nb
+      ? '<div class="avis att"><b>Le registre est vide</b>' +
+        "Un registre unique du personnel est tenu dans tout établissement où sont employés des " +
+        "salariés (L. 1221-13). Ajoutez une ligne, ou reprenez un export de paie sur l'écran 4.</div>"
+      : '<div class="avis info"><b>' + nb + " ligne(s), dans l'ordre des embauches</b>" +
+        c.ok + " complète(s) · " + c.att + " à établir · " + c.non + " avec un manque." +
+        (sansDate ? " " + sansDate + " ligne(s) sans date d'entrée : elles ne peuvent pas être " +
+          "placées dans l'ordre des embauches qu'impose L. 1221-13, et se rangent en fin de tableau." : "") +
+        "</div>";
+
+    if (!nb) { $("registre").innerHTML = ""; $("synthese-registre").innerHTML = ""; return; }
+
+    /* Le contrôle est la DEUXIÈME colonne, avant même le nom. Placé en fin de
+       ligne, il sortait de l'écran sur un tableau de douze colonnes : ce qui
+       manque ne se voyait qu'en faisant défiler, c'est-à-dire ne se voyait
+       pas. */
+    var h = '<div class="tbl"><table><thead><tr><th class="rang">N°</th>' +
+      "<th>Contrôle</th>" +
+      COLONNES.map(function (col) {
+        return "<th>" + ech(col.lib) + "<small>" + ech(col.fond) + "</small></th>"; }).join("") +
+      "<th>Mentions particulières<small>D. 1221-23, 7° à 13°</small></th>" +
+      "<th></th></tr></thead><tbody>";
+
+    L.forEach(function (s, i) {
+      var et = etat(s), ouvert = !!ouverts[s.id];
+      h += '<tr><td class="rang">' + (vide(s.ent) ? "—" : (i + 1)) + "</td>" +
+        '<td><span class="jauge ' + et.cls + '">' + ech(et.txt) + "</span></td>" +
+        COLONNES.map(function (col) { return "<td>" + champ(s, col) + "</td>"; }).join("") +
+        '<td><button class="plier" data-plier="' + ech(s.id) + '">' +
+        (ouvert ? "Replier" : "Déplier") + "</button></td>" +
+        '<td style="text-align:center"><button class="sup" data-sup="' + ech(s.id) + '" title="Retirer la ligne">✕</button></td></tr>';
+    });
+    h += "</tbody></table></div>";
+
+    /* Les mentions particulières se déplient SOUS le tableau, pas dedans.
+
+       Placées dans une ligne du tableau, elles héritaient de sa largeur — plus
+       d'un millier de pixels — et sortaient de l'écran par la droite : la
+       moitié des questions ne se voyaient qu'en faisant défiler. Sous le
+       tableau, chaque ligne dépliée occupe la largeur de la page, et l'on voit
+       d'un coup ce qui est dû et ce qui manque. */
+    L.forEach(function (s, i) {
+      if (!ouverts[s.id]) return;
+      h += '<div class="carte"><h3 style="margin:0">Ligne ' +
+        (vide(s.ent) ? "non ordonnable" : "n° " + (i + 1)) + " — " +
+        ech(vide(s.nom) && vide(s.pre) ? "(sans nom)" : (s.nom + " " + s.pre).trim()) +
+        ' <button class="plier" data-plier="' + ech(s.id) + '" style="margin-left:8px">Replier</button></h3>' +
+        detail(s) + "</div>";
+    });
+    $("registre").innerHTML = h;
+
+    /* La synthèse : une ligne incomplète doit se voir sans qu'on la déplie. */
+    var incompletes = L.filter(function (s) { return manques(s).length; });
+    var indecises = L.filter(function (s) { return !manques(s).length && aEtablir(s).length; });
+    var nom = function (s) { return vide(s.nom) && vide(s.pre) ? "(ligne sans nom)"
+      : (s.nom + " " + s.pre).trim(); };
+    var sh = "";
+    if (incompletes.length)
+      sh += '<div class="avis non"><b>' + incompletes.length + " ligne(s) incomplète(s)</b><ul class=\"manque\">" +
+        incompletes.map(function (s) {
+          return "<li><b>" + ech(nom(s)) + "</b> — " +
+            manques(s).map(function (x) { return ech(x.quoi) + ' <span class="art">(' + ech(x.fond) + ")</span>"; }).join(" ; ") +
+            "</li>"; }).join("") + "</ul></div>";
+    if (indecises.length)
+      sh += '<div class="avis att"><b>' + indecises.length + " ligne(s) dont la situation n'est pas tranchée</b>" +
+        ech(indecises.map(nom).join(" · ")) +
+        ". Dépliez-les : tant que la nature du contrat, le temps de travail, l'autorisation et le " +
+        "titre de travail ne sont pas renseignés, on ne sait pas quelles mentions de D. 1221-23 sont dues.</div>";
+    if (!incompletes.length && !indecises.length)
+      sh += '<div class="avis ok"><b>Chaque ligne porte les mentions des textes lus</b>' +
+        "Cela ne vaut pas quitus : le registre se tient au moment de l'embauche et de façon indélébile " +
+        "(L. 1221-13), et les événements postérieurs s'y portent au moment où ils surviennent " +
+        "(D. 1221-25). Ce que cet écran vérifie, c'est le contenu — pas la date à laquelle il y a été mis.</div>";
+    $("synthese-registre").innerHTML = sh;
+
+    /* Les écouteurs. On écrit à la frappe (« input ») pour ne rien perdre, et
+       l'on redessine seulement au « change » : redessiner à chaque touche
+       ferait perdre le curseur. */
+    Array.prototype.forEach.call($("registre").querySelectorAll("[data-c]"), function (el) {
+      var ecrire = function () {
+        var s = parId(el.getAttribute("data-id"));
+        if (!s) return;
+        s[el.getAttribute("data-c")] = el.value;
+        garder();
+      };
+      el.addEventListener("input", ecrire);
+      el.addEventListener("change", function () { ecrire(); rendreRegistre(); });
+    });
+    Array.prototype.forEach.call($("registre").querySelectorAll("[data-plier]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-plier");
+        if (ouverts[id]) delete ouverts[id]; else ouverts[id] = true;
+        rendreRegistre();
+      });
+    });
+    Array.prototype.forEach.call($("registre").querySelectorAll("[data-sup]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-sup"), s = parId(id);
+        if (!s) return;
+        if (!window.confirm("Retirer " + (vide(s.nom) ? "cette ligne" : s.nom + " " + s.pre) +
+          " du registre ?\n\nLe registre se tient de façon indélébile (L. 1221-13) : une ligne " +
+          "retirée ici l'est de votre saisie, pas de l'histoire de l'établissement.")) return;
+        E.salaries = E.salaries.filter(function (x) { return x.id !== id; });
+        delete ouverts[id];
+        garder(); rendreRegistre(); verdictCadre();
+      });
+    });
+  }
+
+  $("r-ajouter").addEventListener("click", function () {
+    var s = neuf();
+    E.salaries.push(s);
+    ouverts[s.id] = true;
+    garder(); rendreRegistre(); verdictCadre();
+  });
+  $("r-import").addEventListener("click", function () { ouvrir("import"); });
+
+  /* ═════════════════════════════════════════ LA PARTIE SPÉCIFIQUE
+
+     L. 1221-13 énonce lui-même ce qu'elle porte : les nom et prénoms, dans
+     l'ordre d'arrivée. Les indications complémentaires propres aux stagiaires
+     et aux volontaires sont renvoyées au pouvoir réglementaire, et ce texte
+     n'a pas été capté dans ce dépôt : aucune autre colonne n'est demandée
+     ici. Ce qui n'est pas lu n'est pas exigé. */
+  function rendreAccueillis() {
+    var L = E.accueillis.slice();
+    L.sort(function (a, b) {
+      if (vide(a.arr) && vide(b.arr)) return 0;
+      if (vide(a.arr)) return 1;
+      if (vide(b.arr)) return -1;
+      return a.arr < b.arr ? -1 : (a.arr > b.arr ? 1 : 0);
+    });
+    $("etat-accueillis").innerHTML = !L.length
+      ? '<div class="avis att"><b>Aucune personne accueillie n\'est inscrite</b>' +
+        "Si l'établissement n'accueille ni stagiaire ni volontaire en service civique, cette partie " +
+        "reste vide et c'est régulier. Si elle en accueille, leurs nom et prénoms s'y inscrivent " +
+        "dans l'ordre d'arrivée (L. 1221-13).</div>"
+      : '<div class="avis info"><b>' + L.length + " personne(s) accueillie(s), dans l'ordre d'arrivée</b>" +
+        "Partie spécifique du registre unique, distincte de celle des salariés (L. 1221-13).</div>";
+
+    var h = "";
+    if (L.length) {
+      h = '<div class="tbl"><table style="min-width:640px"><thead><tr><th class="rang">N°</th>' +
+        "<th>Nom<small>L. 1221-13</small></th><th>Prénoms<small>L. 1221-13</small></th>" +
+        "<th>Qualité<small>L. 1221-13</small></th>" +
+        "<th>Date d'arrivée<small>établit l'ordre d'arrivée — L. 1221-13</small></th>" +
+        "<th>Contrôle</th><th></th></tr></thead><tbody>";
+      L.forEach(function (a, i) {
+        var m = [];
+        if (vide(a.nom)) m.push("Nom");
+        if (vide(a.pre)) m.push("Prénoms");
+        if (vide(a.qualite)) m.push("Qualité");
+        if (vide(a.arr)) m.push("Date d'arrivée");
+        h += '<tr><td class="rang">' + (vide(a.arr) ? "—" : (i + 1)) + "</td>" +
+          '<td><input data-aid="' + ech(a.id) + '" data-c="nom" value="' + ech(a.nom || "") + '"' +
+            (vide(a.nom) ? "" : ' class="rempli"') + "></td>" +
+          '<td><input data-aid="' + ech(a.id) + '" data-c="pre" value="' + ech(a.pre || "") + '"' +
+            (vide(a.pre) ? "" : ' class="rempli"') + "></td>" +
+          '<td><select data-aid="' + ech(a.id) + '" data-c="qualite">' +
+            [["", "— ?"], ["stagiaire", "Stagiaire"],
+             ["volontaire", "Volontaire en service civique"]].map(function (o) {
+              return '<option value="' + o[0] + '"' + ((a.qualite || "") === o[0] ? " selected" : "") +
+                ">" + o[1] + "</option>"; }).join("") + "</select></td>" +
+          '<td><input type="date" data-aid="' + ech(a.id) + '" data-c="arr" value="' + ech(a.arr || "") + '"' +
+            (vide(a.arr) ? "" : ' class="rempli"') + "></td>" +
+          "<td>" + (m.length
+            ? '<span class="jauge non">' + m.join(", ") + "</span>"
+            : '<span class="jauge ok">complète</span>') + "</td>" +
+          '<td style="text-align:center"><button class="sup" data-asup="' + ech(a.id) + '">✕</button></td></tr>';
+      });
+      h += "</tbody></table></div>" +
+        '<div class="avis att" style="margin-top:12px"><b>Pourquoi il n\'y a pas d\'autre colonne ici</b>' +
+        "L. 1221-13 renvoie à un texte réglementaire le soin de fixer les indications complémentaires " +
+        "propres aux stagiaires et aux volontaires en service civique. Ce texte n'a pas été lu à la " +
+        "source dans ce dépôt : aucune colonne n'est ajoutée sur une simple présomption. " +
+        "Vérifiez-le avant de présenter cette partie comme complète.</div>";
+    }
+    $("accueillis").innerHTML = h;
+
+    Array.prototype.forEach.call($("accueillis").querySelectorAll("[data-aid]"), function (el) {
+      var ecrire = function () {
+        var id = el.getAttribute("data-aid");
+        E.accueillis.forEach(function (a) {
+          if (a.id === id) a[el.getAttribute("data-c")] = el.value; });
+        garder();
+      };
+      el.addEventListener("input", ecrire);
+      el.addEventListener("change", function () { ecrire(); rendreAccueillis(); });
+    });
+    Array.prototype.forEach.call($("accueillis").querySelectorAll("[data-asup]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-asup");
+        if (!window.confirm("Retirer cette personne de la partie spécifique ?")) return;
+        E.accueillis = E.accueillis.filter(function (a) { return a.id !== id; });
+        garder(); rendreAccueillis();
+      });
+    });
+  }
+
+  $("a-ajouter").addEventListener("click", function () {
+    E.accueillis.push({ id: "a" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      nom: "", pre: "", qualite: "", arr: "" });
+    garder(); rendreAccueillis();
+  });
+
+  /* ══════════════════════════════════════════════════════════ L'IMPORT
+
+     Le rapprochement est PROPOSÉ, jamais appliqué seul. Une colonne mal
+     rapprochée mettrait une qualification dans la case « emploi » d'un
+     registre que l'inspection du travail lira : mieux vaut une case vide
+     qu'une donnée posée au mauvais endroit. */
+  var CIBLES = [
+    { c: "",     lib: "— ne pas importer —", mots: [] },
+    { c: "nom",  lib: "Nom", mots: ["nom de famille", "nom", "patronyme"], hors: ["prenom", "etablissement", "entreprise"] },
+    { c: "pre",  lib: "Prénoms", mots: ["prenoms", "prenom"] },
+    { c: "nat",  lib: "Nationalité", mots: ["nationalite"] },
+    { c: "nais", lib: "Date de naissance", mots: ["date de naissance", "naissance", "ne le", "nee le"] },
+    { c: "sexe", lib: "Sexe", mots: ["sexe", "genre", "civilite"] },
+    { c: "emp",  lib: "Emploi", mots: ["emploi", "poste", "fonction", "metier"] },
+    { c: "qua",  lib: "Qualification", mots: ["qualification", "classification", "coefficient", "niveau", "categorie"] },
+    { c: "ent",  lib: "Date d'entrée", mots: ["date d entree", "date entree", "entree", "embauche", "anciennete", "debut"], hors: ["sortie"] },
+    { c: "sor",  lib: "Date de sortie", mots: ["date de sortie", "sortie", "depart", "fin de contrat"] },
+    { c: "_nat", lib: "Nature du contrat (propose la mention de D. 1221-23)", mots: ["type de contrat", "nature du contrat", "contrat", "statut"] },
+    { c: "_tps", lib: "Temps de travail (propose « salarié à temps partiel »)", mots: ["temps de travail", "quotite", "horaire", "heures", "duree du travail", "temps"] },
+    { c: "titT", lib: "Type du titre de travail", mots: ["titre de sejour", "type de titre", "autorisation de travail", "titre"] },
+    { c: "titN", lib: "Numéro d'ordre du titre", mots: ["numero du titre", "numero de titre", "n titre"] },
+  ];
+
+  function sansAccent(s) {
+    try { return String(s == null ? "" : s).normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); }
+    catch (e) { return String(s == null ? "" : s).toLowerCase().trim(); }
+  }
+  function separateur(lignes) {
+    var meilleur = "\t", score = -1;
+    ["\t", ";", "|", ","].forEach(function (c) {
+      var n = 0, vues = 0;
+      for (var i = 0; i < lignes.length && vues < 15; i++) {
+        if (!lignes[i].trim()) continue;
+        vues++; n += lignes[i].split(c).length - 1;
+      }
+      if (n > score) { score = n; meilleur = c; }
+    });
+    return meilleur;
+  }
+  function proposeCible(titre) {
+    var t = sansAccent(titre);
+    if (!t) return "";
+    for (var i = 1; i < CIBLES.length; i++) {
+      var cb = CIBLES[i];
+      for (var m = 0; m < cb.mots.length; m++) {
+        if (t.indexOf(cb.mots[m]) >= 0) {
+          if (cb.hors && cb.hors.some(function (x) { return t.indexOf(x) >= 0; })) continue;
+          return cb.c;
+        }
+      }
+    }
+    return "";
+  }
+  /* Les dates arrivent en « 01/09/2008 » ; les champs attendent
+     « 2008-09-01 ». Une date illisible n'est pas devinée : elle est comptée
+     et signalée. */
+  function dateIso(v) {
+    var s = String(v == null ? "" : v).trim();
+    if (!s) return "";
+    var m = s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/);
+    if (m) return m[1] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[3]).slice(-2);
+    m = s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/);
+    if (m) return m[3] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2);
+    m = s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2})$/);
+    if (m) { var an = parseInt(m[3], 10); an += (an > 50 ? 1900 : 2000);
+      return an + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2); }
+    return "";
+  }
+  function natureDe(txt) {
+    var t = sansAccent(txt);
+    if (!t) return "";
+    if (/apprenti|apprentissage/.test(t)) return "apprenti";
+    if (/professionnalisation|contrat pro|^pro$/.test(t)) return "pro";
+    if (/interim|temporaire|mission|ett/.test(t)) return "temporaire";
+    if (/groupement/.test(t)) return "groupement";
+    if (/cdd|duree determinee/.test(t)) return "cdd";
+    if (/cdi|duree indeterminee/.test(t)) return "cdi";
+    return "";
+  }
+  function sexeDe(txt) {
+    var t = sansAccent(txt);
+    if (/^(f|femme|feminin|mme|madame)$/.test(t)) return "Féminin";
+    if (/^(m|h|homme|masculin|mr|monsieur)$/.test(t)) return "Masculin";
+    return "";
+  }
+  function tempsDe(txt) {
+    /* Le pourcentage se cherche sur la chaîne BRUTE : sansAccent efface la
+       ponctuation, et « 80 % » y devenait « 80 » — la quotité était perdue et
+       la mention « salarié à temps partiel » n'était plus proposée. */
+    var brut = String(txt == null ? "" : txt);
+    var pc = brut.match(/(\d{1,3})(?:[.,]\d+)?\s*%/);
+    if (pc) { var q = parseFloat(pc[1]); if (q > 0 && q < 100) return "partiel"; if (q >= 100) return "complet"; }
+    var t = sansAccent(brut);
+    if (!t) return "";
+    if (/temps plein|plein temps|complet/.test(t)) return "complet";
+    if (/temps partiel|partiel/.test(t)) return "partiel";
+    return "";
+  }
+
+  var IMPORT = null;   /* l'analyse en cours : rien n'est écrit tant qu'on n'a pas cliqué */
+
+  $("i-vider").addEventListener("click", function () {
+    $("i-source").value = ""; $("i-resultat").innerHTML = ""; IMPORT = null;
+  });
+
+  $("i-analyser").addEventListener("click", function () {
+    var brut = $("i-source").value;
+    var lignes = brut.replace(/^﻿/, "").split(/\r?\n/)
+      .filter(function (l) { return l.trim() && l.trim().charAt(0) !== "#"; });
+    if (lignes.length < 2) {
+      $("i-resultat").innerHTML = '<div class="avis att"><b>Rien de lisible</b>' +
+        "Il faut une ligne d'intitulés, puis au moins une ligne de salarié, les colonnes séparées " +
+        "par une tabulation, un point-virgule ou une barre verticale.</div>";
+      IMPORT = null; return;
+    }
+    var sep = separateur(lignes);
+    var decoupe = function (l) { return l.split(sep).map(function (x) {
+      return x.trim().replace(/^["']|["']$/g, ""); }); };
+
+    /* L'en-tête n'est pas toujours la première ligne : les exports de paie
+       commencent par un titre. On retient celle qui reconnaît le plus de
+       colonnes. */
+    var hdr = 0, meilleur = -1;
+    for (var k = 0; k < Math.min(lignes.length, 8); k++) {
+      var n = decoupe(lignes[k]).filter(function (t) { return proposeCible(t) !== ""; }).length;
+      if (n > meilleur) { meilleur = n; hdr = k; }
+    }
+    var titres = decoupe(lignes[hdr]);
+    var corps = [];
+    for (var i = hdr + 1; i < lignes.length; i++) corps.push(decoupe(lignes[i]));
+
+    IMPORT = { titres: titres, corps: corps, hdr: hdr,
+      cibles: titres.map(function (t) { return proposeCible(t); }) };
+
+    var h = '<div class="avis ' + (meilleur > 0 ? "info" : "att") + '"><b>' +
+      (meilleur > 0 ? meilleur + " colonne(s) reconnue(s) sur " + titres.length
+        : "Aucune colonne reconnue") + "</b>" +
+      "Ligne d'intitulés retenue : la " + (hdr + 1) + "<sup>e</sup>. " + corps.length +
+      " ligne(s) de données. <b>Rien n'est encore écrit.</b> Corrigez chaque rapprochement " +
+      "ci-dessous, vérifiez l'aperçu, puis demandez l'ajout.</div>";
+
+    h += '<div class="tbl"><table style="min-width:720px"><thead><tr>' +
+      "<th>Votre colonne</th><th>Trois premières valeurs</th>" +
+      "<th>Colonne du registre</th></tr></thead><tbody>";
+    titres.forEach(function (t, j) {
+      var ex = corps.slice(0, 3).map(function (r) { return r[j] == null ? "" : r[j]; })
+        .filter(function (x) { return String(x).trim(); });
+      h += "<tr><td><b>" + ech(t || "(sans intitulé)") + "</b></td>" +
+        '<td class="art">' + ech(ex.join(" · ") || "—") + "</td>" +
+        '<td><select data-col="' + j + '">' + CIBLES.map(function (cb) {
+          return '<option value="' + cb.c + '"' + (IMPORT.cibles[j] === cb.c ? " selected" : "") +
+            ">" + ech(cb.lib) + "</option>"; }).join("") + "</select></td></tr>";
+    });
+    h += "</tbody></table></div><div id=\"i-apercu\"></div>";
+    $("i-resultat").innerHTML = h;
+
+    Array.prototype.forEach.call($("i-resultat").querySelectorAll("[data-col]"), function (sel) {
+      sel.addEventListener("change", function () {
+        IMPORT.cibles[Number(sel.getAttribute("data-col"))] = sel.value;
+        rendreApercu();
+      });
+    });
+    rendreApercu();
+  });
+
+  function ligneImportee(r) {
+    var s = neuf(), brutNature = "", brutTemps = "", dateKo = 0;
+    IMPORT.cibles.forEach(function (c, j) {
+      var v = r[j] == null ? "" : String(r[j]).trim();
+      if (!c || !v) return;
+      if (c === "_nat") { brutNature = v; return; }
+      if (c === "_tps") { brutTemps = v; return; }
+      if (c === "nais" || c === "ent" || c === "sor") {
+        var d = dateIso(v);
+        if (!d) dateKo++; else s[c] = d;
+        return;
+      }
+      s[c] = v;
+    });
+    s.nature = natureDe(brutNature);
+    s.part = tempsDe(brutTemps);
+    if (s.sexe) s.sexe = sexeDe(s.sexe) || s.sexe;
+    return { s: s, brutNature: brutNature, brutTemps: brutTemps, dateKo: dateKo };
+  }
+
+  function rendreApercu() {
+    if (!IMPORT) return;
+    var retenues = IMPORT.cibles.filter(function (c) { return c; });
+    if (!retenues.length) {
+      $("i-apercu").innerHTML = '<div class="avis att"><b>Aucune colonne rapprochée</b>' +
+        "Tant qu'aucune colonne n'est rapprochée, il n'y a rien à ajouter.</div>";
+      return;
+    }
+    var apercu = IMPORT.corps.slice(0, 5).map(ligneImportee);
+    var datesKo = 0, natureKo = 0, tempsKo = 0;
+    IMPORT.corps.forEach(function (r) {
+      var o = ligneImportee(r);
+      datesKo += o.dateKo;
+      if (o.brutNature && !o.s.nature) natureKo++;
+      if (o.brutTemps && !o.s.part) tempsKo++;
+    });
+
+    var h = "<h3>L'aperçu — ce qui sera écrit</h3>" +
+      "<p class=\"art\">Les cinq premières lignes, telles qu'elles entreraient au registre.</p>" +
+      '<div class="tbl"><table><thead><tr>' +
+      COLONNES.map(function (col) { return "<th>" + ech(col.lib) + "</th>"; }).join("") +
+      "<th>Nature</th><th>Temps</th></tr></thead><tbody>";
+    apercu.forEach(function (o) {
+      h += "<tr>" + COLONNES.map(function (col) {
+        return '<td class="art">' + ech(o.s[col.c] || "—") + "</td>"; }).join("") +
+        '<td class="art">' + ech(o.s.nature ? (NATURES.filter(function (n) { return n.v === o.s.nature; })[0] || {}).lib : "— à établir —") + "</td>" +
+        '<td class="art">' + ech(o.s.part === "partiel" ? "Temps partiel" : (o.s.part === "complet" ? "Temps complet" : "— à établir —")) + "</td></tr>";
+    });
+    h += "</tbody></table></div>";
+
+    var alertes = [];
+    if (datesKo) alertes.push(datesKo + " date(s) illisible(s) — attendu jj/mm/aaaa ou aaaa-mm-jj. " +
+      "Elles resteront vides : une date n'est pas devinée.");
+    if (natureKo) alertes.push(natureKo + " libellé(s) de contrat non reconnu(s) : la nature restera " +
+      "« à établir », et les mentions de D. 1221-23 (9° à 13°) ne seront pas proposées.");
+    if (tempsKo) alertes.push(tempsKo + " libellé(s) de temps de travail non reconnu(s) : la mention " +
+      "« salarié à temps partiel » (D. 1221-23, 12°) ne sera pas proposée.");
+    if (alertes.length)
+      h += '<div class="avis att"><b>Ce qui ne sera pas repris</b><ul class="manque"><li>' +
+        alertes.map(ech).join("</li><li>") + "</li></ul></div>";
+
+    h += '<div class="avis info"><b>Rien n\'est écrit avant votre clic</b>' +
+      "Les lignes ajoutées viendront s'ajouter à celles déjà présentes, sans en remplacer aucune, " +
+      "et le registre se remettra dans l'ordre des embauches (L. 1221-13). Les mentions " +
+      "particulières restent à vérifier ligne par ligne : aucune n'est réputée acquise.</div>" +
+      '<div class="barre"><button class="btn" id="i-ecrire">Ajouter les ' + IMPORT.corps.length +
+      " ligne(s) au registre</button></div>";
+    $("i-apercu").innerHTML = h;
+
+    $("i-ecrire").addEventListener("click", function () {
+      var n = 0;
+      IMPORT.corps.forEach(function (r) {
+        var o = ligneImportee(r);
+        if (vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp)) return;   /* ligne vide : rien à écrire */
+        E.salaries.push(o.s); n++;
+      });
+      garder();
+      $("i-apercu").innerHTML = '<div class="avis ok"><b>' + n + " ligne(s) ajoutée(s)</b>" +
+        "Ouvrez « Le registre » : les lignes y sont classées dans l'ordre des embauches, et le " +
+        "contrôle dit, ligne par ligne, ce qui manque encore.</div>";
+      IMPORT = null;
+      verdictCadre();
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════════ LA TENUE */
+  ["t-support", "t-lieu", "t-depuis", "t-avis", "t-envoi", "t-info", "t-chantiers"].forEach(function (id) {
+    var el = $(id);
+    el.addEventListener("input", function () { E.tenue[id] = el.value; garder(); });
+    el.addEventListener("change", function () { E.tenue[id] = el.value; garder(); verdictTenue(); });
+  });
+
+  function verdictTenue() {
+    var t = E.tenue, m = [];
+    if (t["t-support"] === "substitution") {
+      var sans = [];
+      if (vide(t["t-avis"])) sans.push("l'avis du comité social et économique n'est pas daté");
+      if (vide(t["t-envoi"])) sans.push("son envoi à l'inspection du travail n'est pas daté");
+      if (sans.length)
+        m.push('<div class="avis non"><b>Support de substitution : D. 1221-27 n\'est pas satisfait</b>' +
+          "Lorsque l'employeur recourt à un support de substitution, les exigences des articles " +
+          "D. 8113-2 et D. 8113-3 sont applicables, et il adresse à l'inspection du travail l'avis " +
+          "du comité social et économique prévu à l'article L. 2315-5. Or " + sans.join(", et ") + ". " +
+          "Ces deux articles D. 8113-2 et D. 8113-3 n'ont pas été lus dans ce dépôt : vérifiez-les " +
+          "à la source avant de tenir le support pour régulier.</div>");
+      else
+        m.push('<div class="avis att"><b>Support de substitution : ce qui reste à vérifier</b>' +
+          "L'avis du comité est daté et son envoi à l'inspection l'est aussi. Restent les exigences " +
+          "des articles D. 8113-2 et D. 8113-3, auxquelles D. 1221-27 renvoie : elles n'ont pas été " +
+          "lues dans ce dépôt et cette page ne les contrôle pas.</div>");
+    }
+    if (vide(t["t-lieu"]))
+      m.push('<div class="avis att"><b>Le lieu de consultation n\'est pas renseigné</b>' +
+        "Le registre est tenu à la disposition du comité social et économique et des fonctionnaires " +
+        "et agents chargés de veiller à l'application du code du travail et du code de la sécurité " +
+        "sociale (L. 1221-15). Dire « il est à la disposition » sans dire où ne se prouve pas.</div>");
+    var etrangers = E.salaries.filter(function (s) { return s.etr === "oui"; });
+    if (etrangers.length) {
+      var sansCopie = etrangers.filter(function (s) { return s.titCop !== "oui"; });
+      m.push('<div class="' + (sansCopie.length || vide(t["t-chantiers"]) ? "avis non" : "avis ok") +
+        '"><b>' + etrangers.length + " travailleur(s) étranger(s) assujetti(s) à un titre</b>" +
+        (sansCopie.length ? sansCopie.length + " ligne(s) sans copie du titre annexée. " : "") +
+        (vide(t["t-chantiers"]) ? "Le lieu où la copie est tenue à disposition n'est pas indiqué. " : "") +
+        "La copie des titres est annexée au registre et rendue accessible aux membres de la " +
+        "délégation du personnel du comité et aux agents de contrôle, dans l'établissement ou sur " +
+        "chaque chantier ou lieu de travail distinct où ces travailleurs sont employés (D. 1221-24).</div>");
+    }
+    if (vide(t["t-depuis"]))
+      m.push('<div class="avis att"><b>La date de tenue n\'est pas renseignée</b>' +
+        "« Depuis quand » n'est pas une formalité : c'est ce qui distingue un registre tenu d'un " +
+        "registre reconstitué la veille d'un contrôle.</div>");
+    if (!m.length)
+      m.push('<div class="avis ok"><b>Rien ne bloque en l\'état de vos réponses</b>' +
+        "Cela ne vaut pas quitus : la mise à disposition se prouve par des faits — un registre " +
+        "consultable, et des élus qui savent où il est —, pas par une case cochée.</div>");
+    $("verdict-tenue").innerHTML = m.join("");
+  }
+
+  /* ══════════════════════════════════════════════════════════ LE DOCUMENT */
+  function croch(v, quoi) {
+    return vide(v) ? "[" + (quoi || "à renseigner") + "]" : String(v).trim();
+  }
+  function produire() {
+    var L = [], n = 0, manqueTotal = 0, indecisTotal = 0;
+    var lignes = ordonnes();
+
+    L.push("REGISTRE UNIQUE DU PERSONNEL");
+    L.push((E.cadre.nom || "[DÉNOMINATION]").toUpperCase());
+    L.push("Établissement : " + croch(E.cadre.etab, "établissement à nommer"));
+    if (!vide(E.cadre.adresse)) L.push("Adresse : " + E.cadre.adresse);
+    L.push("Édité le " + new Date().toISOString().slice(0, 10));
+    L.push("");
+    L.push("Tenu au titre de l'article L. 1221-13 du code du travail : un registre unique du");
+    L.push("personnel est tenu dans tout établissement où sont employés des salariés. Les noms et");
+    L.push("prénoms de tous les salariés sont inscrits dans l'ordre des embauches. Les indications");
+    L.push("complémentaires sont celles de l'article D. 1221-23.");
+    L.push("");
+    L.push("Les mentions non renseignées apparaissent entre crochets : elles sont visibles, elles");
+    L.push("ne sont pas inventées.");
+    L.push("");
+    L.push("═══ I. LES SALARIÉS, DANS L'ORDRE DES EMBAUCHES (L. 1221-13) ═══");
+
+    if (!lignes.length) {
+      L.push("");
+      L.push("  [aucune ligne saisie — un registre est pourtant dû dès le premier salarié, L. 1221-13]");
+    }
+    lignes.forEach(function (s) {
+      n++;
+      var m = manques(s), q = aEtablir(s);
+      manqueTotal += m.length; indecisTotal += q.length;
+      L.push("");
+      L.push("── N° " + (vide(s.ent) ? "(non ordonnable)" : n) + " ────────────────────────────────────────");
+      L.push("  Nom : " + croch(s.nom) + "        Prénoms : " + croch(s.pre) + "   (L. 1221-13)");
+      L.push("  Nationalité : " + croch(s.nat) + "   (D. 1221-23, 1°)");
+      L.push("  Date de naissance : " + croch(s.nais) + "   (D. 1221-23, 2°)");
+      L.push("  Sexe : " + croch(s.sexe) + "   (D. 1221-23, 3°)");
+      L.push("  Emploi : " + croch(s.emp) + "   (D. 1221-23, 4°)");
+      L.push("  Qualification : " + croch(s.qua) + "   (D. 1221-23, 5°)");
+      L.push("  Date d'entrée dans l'établissement : " + croch(s.ent) + "   (D. 1221-23, 6°)");
+      L.push("  Date de sortie de l'établissement : " +
+        (vide(s.sor) ? "sans objet — salarié présent" : s.sor) + "   (D. 1221-23, 6°)");
+      var men = mentions(s);
+      if (men.length) {
+        L.push("  Mentions particulières :");
+        men.forEach(function (x) { L.push("    · " + x.t + "   (" + x.fond + ")"); });
+      } else if (s.nature === "cdi" && s.part === "complet") {
+        L.push("  Mentions particulières : aucune — contrat à durée indéterminée à temps complet.");
+      }
+      if (!vide(s.insc)) L.push("  Mention portée au registre le : " + s.insc + "   (L. 1221-13, D. 1221-25)");
+      if (q.length) {
+        L.push("  À établir :");
+        q.forEach(function (x) { L.push("    · [" + x.quoi + "]   (" + x.fond + ")"); });
+      }
+    });
+
+    L.push("");
+    L.push("═══ II. PARTIE SPÉCIFIQUE — STAGIAIRES ET VOLONTAIRES EN SERVICE CIVIQUE (L. 1221-13) ═══");
+    var A = E.accueillis.slice().sort(function (a, b) {
+      if (vide(a.arr) && vide(b.arr)) return 0;
+      if (vide(a.arr)) return 1;
+      if (vide(b.arr)) return -1;
+      return a.arr < b.arr ? -1 : (a.arr > b.arr ? 1 : 0);
+    });
+    if (!A.length) {
+      L.push("");
+      L.push("  Aucune personne accueillie inscrite. Si l'établissement en accueille, leurs nom et");
+      L.push("  prénoms s'inscrivent ici dans l'ordre d'arrivée (L. 1221-13).");
+    }
+    A.forEach(function (a, i) {
+      L.push("");
+      L.push("  N° " + (vide(a.arr) ? "(non ordonnable)" : (i + 1)) + " — " + croch(a.nom) + " " + croch(a.pre) +
+        " — " + croch(a.qualite === "stagiaire" ? "stagiaire"
+          : (a.qualite === "volontaire" ? "volontaire en service civique" : ""), "qualité à préciser") +
+        " — arrivée le " + croch(a.arr));
+    });
+    L.push("");
+    L.push("  Les indications complémentaires propres aux stagiaires et aux volontaires sont");
+    L.push("  définies par voie réglementaire (L. 1221-13). Ce texte réglementaire n'a pas été lu");
+    L.push("  à la source pour établir ce document : cette partie ne porte que les noms, prénoms");
+    L.push("  et l'ordre d'arrivée. Elle ne peut donc pas être présentée comme complète sans cette");
+    L.push("  vérification.");
+
+    L.push("");
+    L.push("═══ III. LA TENUE ═══");
+    var t = E.tenue;
+    L.push("Support : " + croch(t["t-support"] === "papier" ? "papier"
+      : (t["t-support"] === "substitution" ? "support de substitution (informatique)" : "")));
+    L.push("Lieu de consultation : " + croch(t["t-lieu"]));
+    L.push("Tenu depuis le : " + croch(t["t-depuis"]));
+    if (t["t-support"] === "substitution") {
+      L.push("Avis du comité social et économique recueilli le : " + croch(t["t-avis"]) + "   (D. 1221-27)");
+      L.push("Avis adressé à l'inspection du travail le : " + croch(t["t-envoi"]) + "   (D. 1221-27)");
+      L.push("D. 1221-27 rend en outre applicables les exigences des articles D. 8113-2 et D. 8113-3,");
+      L.push("qui n'ont pas été lus pour établir ce document.");
+    }
+    L.push("Élus informés du lieu de consultation le : " + croch(t["t-info"]));
+    L.push("");
+    L.push("Tenu à la disposition, aux termes de l'article L. 1221-15 : « du comité social et");
+    L.push("économique et des fonctionnaires et agents chargés de veiller à l'application du");
+    L.push("présent code et du code de la sécurité sociale ».");
+    var etr = E.salaries.filter(function (s) { return s.etr === "oui"; });
+    if (etr.length) {
+      L.push("");
+      L.push("Copie des titres des travailleurs étrangers (D. 1221-24) : annexée au registre et rendue");
+      L.push("accessible aux membres de la délégation du personnel du comité social et économique et");
+      L.push("aux fonctionnaires et agents chargés de veiller à l'application du présent code et du");
+      L.push("code de la sécurité sociale.");
+      L.push("Tenue à disposition : " + croch(t["t-chantiers"]));
+      L.push("Lignes concernées : " + etr.map(function (s) {
+        return (s.nom + " " + s.pre).trim() + (s.titCop === "oui" ? " (copie annexée)" : " [copie non annexée]");
+      }).join(" ; "));
+    }
+
+    L.push("");
+    L.push("═══ CE QUE CE DOCUMENT NE PROUVE PAS ═══");
+    L.push(manqueTotal + " mention(s) manquante(s) et " + indecisTotal + " situation(s) non tranchée(s) sur " +
+      lignes.length + " ligne(s).");
+    L.push("");
+    L.push("Ce document restitue une saisie ; il n'est pas le registre. L'article L. 1221-13 exige");
+    L.push("que les mentions soient portées au moment de l'embauche et de façon indélébile, et");
+    L.push("l'article D. 1221-25 que les événements postérieurs à l'embauche du salarié ou à");
+    L.push("l'arrivée du stagiaire y soient portés au moment où ils surviennent. Une édition faite");
+    L.push("aujourd'hui ne dit rien de la date à laquelle chaque mention a été inscrite.");
+    L.push("");
+    L.push("Il ne dit rien non plus de ce que votre convention collective ou vos accords ajoutent,");
+    L.push("ni des sanctions encourues : aucun texte de sanction n'a été lu pour l'établir.");
+    L.push("");
+    L.push("Textes lus pour établir ce document :");
+    ORDRE_TEXTES.forEach(function (k) {
+      var x = TEXTES[k];
+      if (x) L.push("  " + art(k) + " — version " + x.id + " — lecture du " + x.date);
+    });
+    return L.join("\n");
+  }
+
+  $("d-produire").addEventListener("click", function () { $("doc").textContent = produire(); });
+  $("d-copier").addEventListener("click", function () {
+    if (!$("doc").textContent) $("doc").textContent = produire();
+    if (navigator.clipboard) navigator.clipboard.writeText($("doc").textContent);
+  });
+  $("d-imprimer").addEventListener("click", function () {
+    if (!$("doc").textContent) $("doc").textContent = produire();
+    window.print();
+  });
+
+  /* ══════════════════════════════════════════════════════════ L'AMORÇAGE */
+  $("c-nom").value = E.cadre.nom || "";
+  $("c-etab").value = E.cadre.etab || "";
+  $("c-adresse").value = E.cadre.adresse || "";
+  $("c-eff").value = E.cadre.effectif == null ? "" : E.cadre.effectif;
+  ["t-support", "t-lieu", "t-depuis", "t-avis", "t-envoi", "t-info", "t-chantiers"].forEach(function (id) {
+    if (E.tenue[id] != null) $(id).value = E.tenue[id];
+  });
+  rendreTextes();
+  verdictCadre();
+  garder();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

@@ -12,9 +12,12 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.8";
+const CACHE = "jurisprudence-6.0";
 const ESSENTIELS = [
   "./", "./index.html", "./recherche.html", "./manifest.json",
+  /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
+     et le 404 passait pour une erreur de chargement à chaque essai. */
+  "./favicon.ico",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
      reconnaissance de la matière instantanée et disponible hors connexion. */
   "./vocabulaire.json",
@@ -51,6 +54,11 @@ const ESSENTIELS = [
   "./audit-pse.html", "./moteur-pse.js",
   "./audit-bdese.html", "./bdese.html", "./moteur-bdese.js",
   "./audit-nao.html", "./moteur-nao.js",
+  /* Le plan d'action pour l'égalité professionnelle : l'outil, pas l'audit. La
+     page est autonome — les textes qu'elle cite sont dans son code, le plan
+     vit dans le stockage local. Elle doit donc s'ouvrir hors connexion comme
+     le reste. */
+  "./egalite.html",
   "./audit-sst.html", "./moteur-sst.js",
   /* Le premier module côté relations individuelles : discipline et règlement
      intérieur. Même raison que les autres — un audit installé qui échouerait
@@ -59,6 +67,12 @@ const ESSENTIELS = [
   /* L'audit social chapeau : le point d'entrée des obligations, qui renvoie
      aux modules détaillés. */
   "./audit-social.html", "./moteur-social.js",
+  /* Le registre unique du personnel : l'outil, pas l'audit. Tout est dans la
+     page — les six articles qui la commandent y sont reproduits, et les lignes
+     du registre vivent dans le stockage local du poste. Une entreprise qui
+     tient son registre sans réseau doit pouvoir l'ouvrir : c'est justement le
+     document qu'un agent de contrôle demande sur place. */
+  "./registre.html",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
   "./audit-form.js", "./audit-export.js", "./parcours-deux-temps.js",
   /* La fiche client : la source unique du profil partagé (clé
