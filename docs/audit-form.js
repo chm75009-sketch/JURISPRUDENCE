@@ -2064,11 +2064,40 @@
   compter();
   majAnnuler();
 
+  /* Le pied disait trois choses fausses, et la dernière était la pire.
+
+     — « — règles » : seuls deux modules sur huit comptent des « règles » ;
+       les six autres n'en ont pas, et le tiret s'affichait comme un trou.
+     — « 0 de détection » : le compteur s'appelle « exposition » dans six
+       modules sur huit. La page annonçait donc zéro contrôle d'exposition
+       deux lignes après en avoir affiché un. Elle se contredisait seule.
+     — « articles relus sur Légifrance le 15 août 2026 » était ÉCRIT EN DUR,
+       identique sur les huit pages, quelle que soit la date réelle. Or les
+       modules ont été relus les 16, 21, 23 et 24 août. Une application dont
+       toute la valeur tient à ce que chaque texte est lu à la source, avec sa
+       date, ne peut pas inventer cette date : elle la lit dans le manifeste,
+       ou elle se tait. */
   var m = M.manifeste || {}, c = m.compteurs || {};
-  document.getElementById("pied").innerHTML =
-    "Moteur " + ech(m.empreinte || "—") + " · " + ech(c.regles || "—") + " règles, " +
-    ech(c.controles || "—") + " contrôles dont " + ech(c.coherence || 0) + " de cohérence et " +
-    ech(c.detection || 0) + " de détection · articles relus sur Légifrance le 15 août 2026." +
+  var bouts = ["Moteur " + ech(m.empreinte || "—")];
+  if (c.regles) bouts.push(ech(c.regles) + " règles");
+  if (c.controles) {
+    var det = c.detection !== undefined ? c.detection : c.exposition;
+    bouts.push(ech(c.controles) + " contrôles" +
+      (c.coherence ? ", dont " + ech(c.coherence) + " de cohérence" : "") +
+      (det ? (c.coherence ? " et " : ", dont ") + ech(det) + " d'exposition" : ""));
+  }
+  var relus = m.textesRelus;
+  if (relus && relus.date) {
+    var d = relus.date.split("-");
+    var MOIS = ["janvier","février","mars","avril","mai","juin","juillet",
+                "août","septembre","octobre","novembre","décembre"];
+    bouts.push("textes relus à la source le " + Number(d[2]) + " " + MOIS[Number(d[1]) - 1] +
+      " " + d[0] + (relus.articles ? " — " + ech(relus.articles) + " articles, " +
+      ech(relus.ecarts || 0) + " écart" + ((relus.ecarts || 0) > 1 ? "s" : "") : ""));
+  } else {
+    bouts.push("date de relecture des textes non consignée");
+  }
+  document.getElementById("pied").innerHTML = bouts.join(" · ") + "." +
     " Cet audit est une aide à la préparation du dossier : il ne remplace ni l'analyse d'un conseil," +
     " ni la décision qui vous appartient.";
 })();
