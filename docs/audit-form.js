@@ -1665,8 +1665,29 @@
     /* Le bouton « précédent » du téléphone ramène au formulaire au lieu de
        quitter la page : c'est le geste que tout le monde fait d'abord. */
     try { history.pushState({ audit: true }, "", "#resultat"); } catch (e) {}
+    monterParcours(r.f);
     sortie.scrollIntoView({ behavior: "smooth" });
     compter();
+  }
+
+  /* Le parcours en deux temps, sous le rapport.
+
+     Il ne s'affiche que si le module l'a prévu — son paquet expose alors
+     « audit.parcours ». Les modules qui ne l'exposent pas encore ne voient
+     rien changer : la page s'arrête au rapport, comme avant. */
+  var PARCOURS = null;
+  function monterParcours(f) {
+    if (!window.ParcoursDeuxTemps) return;
+    var hote = document.getElementById("parcours-deux-temps");
+    if (!hote) {
+      hote = document.createElement("div");
+      hote.id = "parcours-deux-temps";
+      sortie.appendChild(hote);
+    }
+    PARCOURS = window.ParcoursDeuxTemps.monter({
+      moteur: M, hote: hote, cle: CLE, fiche: function () { return f; },
+    });
+    if (!PARCOURS) hote.parentNode.removeChild(hote);
   }
 
   var DERNIER = null;
@@ -1906,10 +1927,35 @@
   form.addEventListener("change", compter);
   Object.keys(APPELEES).forEach(majAppel);
 
-  /* Le brouillon reste sur le poste : on ne perd pas une saisie longue. */
+  /* Le brouillon reste sur le poste : on ne perd pas une saisie longue.
+
+     Il est enregistré sous la forme que le moteur lit — « negos » portant un
+     objet — alors que les champs de l'écran s'appellent « negos.remuneration ».
+     Sans remise à plat, ces champs revenaient vides après un rechargement : la
+     saisie était bien conservée, mais le formulaire ne la montrait plus, et
+     l'audit relancé rendait « donnée manquante » là où il concluait la veille.
+     Mesuré sur le module NAO : seize contrôles conclus tombaient à un. */
+  function aplatir(objet, prefixe, sortie) {
+    Object.keys(objet).forEach(function (k) {
+      var cle = prefixe ? prefixe + "." + k : k, v = objet[k];
+      /* Un tableau, une valeur simple ou une famille-tableau déclarée se
+         posent tels quels : seuls les objets nus se déplient. */
+      if (v && typeof v === "object" && !Array.isArray(v) &&
+          TABLEAUX.indexOf(cle) < 0 && !document.getElementById("c-" + cle))
+        aplatir(v, cle, sortie);
+      else sortie[cle] = v;
+    });
+    return sortie;
+  }
   try {
     var b = JSON.parse(localStorage.getItem(CLE) || "null");
-    if (b) Object.keys(b).forEach(function (k) { ecrire(k, b[k]); });
+    if (b) {
+      var nuancesSauvees = b.__nuances;
+      delete b.__nuances;
+      var plat = aplatir(b, "", {});
+      Object.keys(plat).forEach(function (k) { ecrire(k, plat[k]); });
+      if (nuancesSauvees) ecrire("__nuances", nuancesSauvees);
+    }
   } catch (e) {}
 
   /* ------------------------------------------------ la barre d'actions

@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.5";
+const CACHE = "jurisprudence-5.6";
 const ESSENTIELS = [
   "./", "./index.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
@@ -60,7 +60,7 @@ const ESSENTIELS = [
      aux modules détaillés. */
   "./audit-social.html", "./moteur-social.js",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
-  "./audit-form.js", "./audit-export.js",
+  "./audit-form.js", "./audit-export.js", "./parcours-deux-temps.js",
   /* La fiche client : la source unique du profil partagé (clé
      « profil-entreprise »), lue et écrite par l'audit social, les parcours, le
      générateur de documents et les huit audits détaillés. Sans elle, la
