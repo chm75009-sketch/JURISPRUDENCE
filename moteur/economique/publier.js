@@ -22,7 +22,20 @@ console.log("2. propositions du formulaire, vérifiées dans les deux sens");
   }
 }
 
-console.log("3. manifeste des contrôles");
+/* Le parcours de régularisation se publie comme le reste : un contrôle sans
+   issue écrite ferait un audit qui constate sans dire quoi faire. L'écart se
+   voit ici, il ne se découvre pas devant le client. */
+console.log("3. régularisation : chaque contrôle a son issue, chaque issue son contrôle");
+{
+  const { ECARTS } = require("./regularisation-eco.js");
+  if (ECARTS.length) {
+    ECARTS.forEach(e => console.error("ÉCART — " + e));
+    console.error("ÉCHEC — un contrôle constaterait un manquement sans que rien ne dise comment y remédier.");
+    process.exit(1);
+  }
+}
+
+console.log("4. manifeste des contrôles");
 const MAN=require("./manifeste.js");
 const m0=MAN.construire(); const v=MAN.verifier();
 /* Les empreintes individuelles en tête : c'est elles qui disent lequel des sept
@@ -42,7 +55,7 @@ m.objets={
 };
 fs.writeFileSync("manifeste-controles.json", JSON.stringify(m,null,1));
 
-console.log("4. estampillage du registre d'exécution");
+console.log("5. estampillage du registre d'exécution");
 const R=JSON.parse(fs.readFileSync("rapport-tests.json","utf8"));
 const couverts=new Set(R.cas.map(c=>c.controle));
 const enrichi={
@@ -63,7 +76,7 @@ const enrichi={
 };
 fs.writeFileSync("rapport-tests.json", JSON.stringify(enrichi,null,1));
 
-console.log("5. estampillage du dossier de référence");
+console.log("6. estampillage du dossier de référence");
 const D=JSON.parse(fs.readFileSync("dossier-reference.json","utf8"));
 fs.writeFileSync("dossier-reference.json", JSON.stringify({
  objet:"dossier de référence des cas contradictoires",

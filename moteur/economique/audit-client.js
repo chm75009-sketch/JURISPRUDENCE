@@ -462,3 +462,38 @@ function audit(f) {
   return A.D;
 }
 module.exports = audit;
+
+/* --- Le parcours en deux temps ---------------------------------------------
+
+   Le rapport ci-dessus met en forme ce que les contrôles ont rendu ; il ne
+   rend pas les verdicts eux-mêmes. La page en a besoin bruts pour dérouler le
+   parcours : d'abord corriger ce qui manque, ensuite seulement vérifier ce qui
+   n'est déclaré que par le client. Les deux fonctions qui suivent servent à
+   cela, et rien d'autre — aucune règle de droit n'est introduite ici. */
+const REG = require("./regularisation-eco.js");
+const DT = require("../commun/parcours-deux-temps.js");
+
+/* Les verdicts bruts, contrôle par contrôle. Un contrôle qui lève une
+   exception ne fait pas tomber la page : il rend « donnée manquante », état
+   dont aucune conclusion n'est tirée, dans aucun sens. */
+function verdicts(f) {
+  const v = {};
+  for (const c of CONTROLES) {
+    try { v[c.id] = c.verdict(f); }
+    catch (e) { v[c.id] = { etat: ETATS.MANQ, motif: "Contrôle non exécutable : " + e.message }; }
+  }
+  return v;
+}
+
+/* `etat` porte ce que la page a recueilli : les corrections déclarées faites
+   au premier temps, et les réponses à la grille du second. Les deux viennent
+   de la page, jamais du moteur. */
+function parcours(f, etat) {
+  return DT.parcours(CONTROLES, REG.R, verdicts(f), etat);
+}
+
+module.exports.verdicts = verdicts;
+module.exports.parcours = parcours;
+module.exports.regularisation = REG.R;
+module.exports.controles = CONTROLES;
+module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };
