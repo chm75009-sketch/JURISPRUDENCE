@@ -1,0 +1,1557 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon plan d'action pour l'égalité professionnelle</title>
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  L'OUTIL, ET POURQUOI IL NE RESSEMBLE PAS À UN AUDIT
+
+  L'audit dit si l'entreprise est couverte. Il n'écrit pas le plan, et c'est
+  bien ce qui manquait : dire à une entreprise « vous n'êtes couverte ni par un
+  accord ni par un plan » ne l'avance pas. Ce qui l'avance, c'est le cadre —
+  l'évaluation de l'année écoulée, les objectifs de l'année à venir, les actions
+  qui les servent, leur coût, et le dépôt — tenu à jour d'une année sur l'autre
+  sans tout réécrire.
+
+  Cinq principes gouvernent cette page.
+
+  1. LE PLAN N'EST DÛ QU'À DÉFAUT D'ACCORD. L. 2242-3 : « En l'absence d'accord
+     relatif à l'égalité professionnelle entre les femmes et les hommes à
+     l'issue de la négociation mentionnée au 2° de l'article L. 2242-1,
+     l'employeur établit un plan d'action annuel ». La page demande donc d'abord
+     si un accord est en vigueur, et refuse de monter un plan que rien ne
+     commande — plutôt que d'en servir un au hasard.
+
+  2. L'ORDRE DU TEXTE EST L'ORDRE DES ÉCRANS. L. 2242-3 énonce une suite, et
+     cette suite n'est pas décorative : « APRÈS AVOIR ÉVALUÉ les objectifs fixés
+     et les mesures prises au cours de l'année écoulée, ce plan d'action, fondé
+     sur des critères clairs, précis et opérationnels, détermine les objectifs
+     de progression prévus pour l'année à venir, définit les actions
+     qualitatives et quantitatives permettant de les atteindre et évalue leur
+     coût. » Le bilan vient donc AVANT les objectifs, et le coût n'est pas une
+     option : un plan sans chiffrage est incomplet.
+
+  3. LE REPORT EST LE CŒUR DE L'OUTIL. Les objectifs de l'année N deviennent le
+     bilan de l'année N+1. C'est la seule manière de tenir un plan ANNUEL sans
+     repartir de la page blanche chaque année, et c'est ce qui rend l'évaluation
+     de l'année écoulée possible : on ne peut évaluer que des objectifs qui ont
+     été écrits quelque part.
+
+  4. CE QUI MANQUE SE VOIT. Les cases vides sortent entre crochets dans le
+     document produit — visibles, jamais inventées. C'est la convention du
+     module de la base de données, et elle vaut ici.
+
+  5. RIEN N'EST AFFIRMÉ QUI N'AIT ÉTÉ LU. Tous les extraits d'articles affichés
+     par cette page sont recopiés des captures du dépôt, avec l'identifiant de
+     version qui dit LAQUELLE des versions successives a été lue :
+       — L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-17 : moteur/nao/textes-nao.json
+       — L. 1142-8 à L. 1142-11, D. 1142-2 à D. 1142-6 :
+         moteur/parcours/textes-regularisation.json
+     Là où le dépôt n'a pas capté le texte, la page ne dit rien et le dit :
+       — D. 1142-2-1 (les indicateurs de l'index dans les entreprises de
+         cinquante à deux cent cinquante salariés) n'est pas capté. La page
+         demande donc le résultat et la date de publication, sans détailler des
+         indicateurs qu'elle n'a pas lus.
+       — Les annexes I et II auxquelles D. 1142-3 renvoie (modalités de calcul,
+         pondérations, barème) ne sont pas captées. La page ne dit donc pas sur
+         combien de points l'index est noté ; elle ne compare qu'au seul seuil
+         que D. 1142-6 énonce en toutes lettres : soixante-quinze points.
+
+  Tout reste sur ce poste : rien n'est envoyé.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a,header.site button{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);background:transparent;color:#fff;text-decoration:none;cursor:pointer}
+  header.site a:hover,header.site button:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:26px 0 8px;letter-spacing:-.01em}
+  h3.sst{font:600 15.5px/1.3 system-ui;margin:22px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 16px;color:var(--encre-2);font-size:14.5px;max-width:76ch}
+  .aide q{font-style:italic}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  label.ch{display:grid;gap:4px}
+  label.ch .nom{font:600 12px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  label.ch input,label.ch select,label.ch textarea{font:inherit;font-size:14.5px;padding:9px 11px;
+    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre)}
+  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
+  label.ch.pleine{grid-column:1/-1}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+  .avis .art{font-weight:600;white-space:nowrap;border-bottom:1px dotted currentColor;cursor:help}
+
+  .fiche{border:1px solid var(--filet);border-radius:11px;background:var(--carte);margin:12px 0;overflow:hidden}
+  .fiche>.tete{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+    padding:10px 14px;background:var(--creux);border-bottom:1px solid var(--filet)}
+  .fiche>.tete b{font:600 13.5px/1.35 system-ui}
+  .fiche>.corps{padding:12px 14px}
+  .fiche .rang{width:26px;height:26px;border-radius:7px;background:var(--bleu-clair);color:var(--bleu);
+    font:600 12px/26px system-ui;text-align:center;display:inline-block;margin-right:8px}
+  .sup{font:500 12px/1 system-ui;padding:6px 9px;border-radius:6px;border:1px solid var(--filet-2);
+    background:var(--carte);color:var(--rouge);cursor:pointer}
+  .sup:hover{background:var(--rouge-clair)}
+  .jauge{font:600 11px/1 system-ui;padding:5px 9px;border-radius:5px;white-space:nowrap;
+    background:var(--creux);color:var(--encre-2)}
+  .jauge.pleine{background:var(--vert-clair);color:var(--vert)}
+  .jauge.vide{background:var(--ambre-clair);color:var(--ambre)}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+  .btn.rouge{background:var(--rouge);border-color:var(--rouge);color:#fff}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  textarea{width:100%;min-height:64px;font:inherit;font-size:14px;line-height:1.5;
+    padding:9px 11px;border:1px solid var(--filet-2);border-radius:7px;resize:vertical}
+  pre#doc{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:66vh;overflow:auto}
+  .cache{display:none}
+
+  details.textes{margin:26px 0 0;border:1px solid var(--filet);border-radius:11px;background:var(--carte)}
+  details.textes>summary{padding:12px 15px;cursor:pointer;font:600 13.5px/1.3 system-ui}
+  details.textes .corps{padding:0 15px 14px;font-size:13.5px;line-height:1.6;color:var(--encre-2)}
+  details.textes h4{margin:14px 0 3px;font:600 13px/1.3 system-ui;color:var(--bleu)}
+  details.textes .id{font:400 11.5px/1.3 ui-monospace,Menlo,monospace;color:var(--encre-3)}
+
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  @media print{.onglets,.barre,header.site,.sup,details.textes{display:none}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Mon plan d'action <span>— égalité professionnelle entre les femmes et les hommes</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">← Accueil</a>
+      <a href="audit-nao.html">Auditer mes négociations</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="cadre" class="actif">1 · Le cadre</button>
+    <button data-o="bilan">2 · L'année écoulée</button>
+    <button data-o="objectifs">3 · Les objectifs</button>
+    <button data-o="actions">4 · Les actions et leur coût</button>
+    <button data-o="index">5 · L'index</button>
+    <button data-o="depot">6 · Le dépôt</button>
+    <button data-o="report">7 · L'année suivante</button>
+    <button data-o="doc">8 · Le document</button>
+  </div>
+
+  <!-- ══════ 1 · LE CADRE ══════ -->
+  <section id="o-cadre">
+    <h2>Le cadre : ce qui commande votre plan</h2>
+    <p class="aide">Une question décide de tout, et ce n'est pas l'effectif : l'existence d'un accord.
+    Le plan d'action n'est dû qu'<b>à défaut d'accord</b> relatif à l'égalité professionnelle
+    (article L. 2242-3). Si un accord est en vigueur, cet outil vous le dira et ne montera pas
+    un plan que rien ne commande.</p>
+
+    <div class="carte">
+      <div class="champs">
+        <label class="ch"><span class="nom">Dénomination</span>
+          <input id="c-nom" placeholder="Raison sociale">
+          <span class="sous">Reprise de votre fiche entreprise si elle est remplie.</span></label>
+        <label class="ch"><span class="nom">Effectif</span>
+          <input id="c-eff" type="number" min="0" placeholder="Nombre de salariés">
+          <span class="sous">Cinquante salariés commandent la pénalité de L. 2242-8 et l'index de
+          L. 1142-8 ; trois cents, le procès-verbal de désaccord.</span></label>
+        <label class="ch"><span class="nom">Année du plan</span>
+          <input id="c-annee" type="number" min="2000" max="2100">
+          <span class="sous">L'année à venir. L'année écoulée s'en déduit : elle est celle du bilan.</span></label>
+        <label class="ch"><span class="nom">Un accord d'égalité professionnelle est-il en vigueur ?</span>
+          <select id="c-accord">
+            <option value="">— répondre —</option>
+            <option value="non">Non</option>
+            <option value="oui">Oui</option>
+            <option value="sais-pas">Je ne sais pas</option>
+          </select>
+          <span class="sous">L'accord issu de la négociation du 2° de l'article L. 2242-1.</span></label>
+        <label class="ch"><span class="nom">Une section syndicale représentative est-elle constituée ?</span>
+          <select id="c-sections">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+          <span class="sous">L. 2242-1 n'ouvre la négociation que là où elle l'est. La pénalité de
+          L. 2242-8, elle, vise l'entreprise d'au moins cinquante salariés non couverte.</span></label>
+        <label class="ch" id="w-accord-ref"><span class="nom">Référence et date de l'accord</span>
+          <input id="c-accord-ref" placeholder="Intitulé, date de signature, date de dépôt">
+          <span class="sous">Un « oui » n'est pas une preuve : c'est le texte déposé qui l'établit.</span></label>
+        <label class="ch" id="w-accord-fin"><span class="nom">L'accord court jusqu'au</span>
+          <input id="c-accord-fin" type="date">
+          <span class="sous">À son terme, sans renouvellement, le plan d'action redevient dû.</span></label>
+      </div>
+      <div id="verdict-cadre"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LE BILAN ══════ -->
+  <section id="o-bilan" class="cache">
+    <h2>L'année écoulée : <span id="b-annee"></span></h2>
+    <p class="aide">L. 2242-3 en fait le préalable exprès, et dans cet ordre : c'est
+    <q>après avoir évalué les objectifs fixés et les mesures prises au cours de l'année écoulée</q>
+    que le plan détermine les objectifs de l'année à venir. Un plan qui commence par ses objectifs
+    saute l'étape que le texte impose d'abord.</p>
+    <div id="etat-bilan"></div>
+    <div id="bilan"></div>
+    <div class="barre" id="barre-bilan">
+      <button class="btn" id="b-ajouter">Ajouter un objectif de l'année écoulée</button>
+    </div>
+    <div class="carte" id="carte-suivi">
+      <label class="ch pleine"><span class="nom">Modalités de suivi de la réalisation des objectifs et des mesures</span>
+        <textarea id="b-suivi" placeholder="Qui suit, à quelle fréquence, sur quels indicateurs, devant quelle instance."></textarea>
+        <span class="sous">L. 2242-8 : « Les modalités de suivi de la réalisation des objectifs et des
+        mesures de l'accord et du plan d'action sont fixées par décret. » Écrivez celles que vous
+        retenez : c'est ce qui rendra le bilan de l'an prochain possible.</span></label>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LES OBJECTIFS ══════ -->
+  <section id="o-objectifs" class="cache">
+    <h2>Les objectifs de progression : <span id="ob-annee"></span></h2>
+    <p class="aide">Le texte exige des critères <q>clairs, précis et opérationnels</q>. Un objectif
+    sans indicateur ni cible chiffrée n'en est pas un : il ne pourra pas être évalué l'année
+    prochaine, et c'est précisément cette évaluation que L. 2242-3 imposera alors.</p>
+    <div id="etat-objectifs"></div>
+    <div id="objectifs"></div>
+    <div class="barre" id="barre-objectifs">
+      <button class="btn" id="ob-ajouter">Ajouter un objectif de progression</button>
+    </div>
+  </section>
+
+  <!-- ══════ 4 · LES ACTIONS ══════ -->
+  <section id="o-actions" class="cache">
+    <h2>Les actions, et leur coût</h2>
+    <p class="aide">L. 2242-3 : le plan <q>définit les actions qualitatives et quantitatives
+    permettant de les atteindre et évalue leur coût</q>. Chaque action se rattache à un objectif —
+    une action qui ne sert aucun objectif n'a pas sa place dans le plan — et chacune porte son
+    chiffrage. Un plan sans coût est incomplet au regard du texte.</p>
+    <div id="etat-actions"></div>
+    <div id="actions"></div>
+    <div class="barre" id="barre-actions">
+      <button class="btn" id="ac-ajouter">Ajouter une action</button>
+    </div>
+  </section>
+
+  <!-- ══════ 5 · L'INDEX ══════ -->
+  <section id="o-index" class="cache">
+    <h2>L'index de l'égalité professionnelle</h2>
+    <p class="aide">Obligation distincte du plan : elle ne dépend pas de l'existence d'un accord.
+    L. 1142-8 : dans les entreprises d'au moins cinquante salariés, l'employeur publie chaque année
+    l'ensemble des indicateurs relatifs aux écarts de rémunération entre les femmes et les hommes
+    et aux actions mises en œuvre pour les supprimer.</p>
+    <div id="etat-index"></div>
+    <div class="carte" id="carte-index">
+      <div class="champs">
+        <label class="ch"><span class="nom">Année au titre de laquelle l'index est calculé</span>
+          <input id="i-annee" type="number" min="2000" max="2100">
+          <span class="sous">D. 1142-4 : la publication a lieu au plus tard le 1<sup>er</sup> mars de
+          l'année en cours, au titre de l'année précédente.</span></label>
+        <label class="ch"><span class="nom">Niveau de résultat obtenu (en points)</span>
+          <input id="i-resultat" type="number" min="0" max="100" step="1" placeholder="Le résultat publié">
+          <span class="sous">D. 1142-6 fixe le seul seuil que cet outil connaisse : soixante-quinze
+          points. Le barème et les pondérations sont aux annexes I et II, que le dépôt n'a pas
+          captées — l'outil ne les détaille donc pas.</span></label>
+        <label class="ch"><span class="nom">Date de publication</span>
+          <input id="i-date" type="date"></label>
+        <label class="ch"><span class="nom">Où il est publié</span>
+          <input id="i-ou" placeholder="Adresse de la page du site, ou mode de diffusion retenu">
+          <span class="sous">D. 1142-4 : sur le site internet de l'entreprise lorsqu'il en existe un,
+          de manière visible et lisible ; à défaut, porté à la connaissance des salariés par tout moyen.</span></label>
+        <label class="ch"><span class="nom">Mis à disposition du comité social et économique ?</span>
+          <select id="i-cse">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+          <span class="sous">D. 1142-5, avec les précisions de méthode et la répartition des salariés.</span></label>
+        <label class="ch"><span class="nom">Télédéclaré aux services du ministre chargé du travail ?</span>
+          <select id="i-declare">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+          <span class="sous">D. 1142-5, dernier alinéa.</span></label>
+      </div>
+      <div id="i-indicateurs"></div>
+      <div id="i-correction"></div>
+      <div id="i-dirigeants"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 6 · LE DÉPÔT ══════ -->
+  <section id="o-depot" class="cache">
+    <h2>Le dépôt</h2>
+    <p class="aide">Dernière phrase du deuxième alinéa de L. 2242-3 : <q>Ce plan d'action est déposé
+    auprès de l'autorité administrative.</q> Un plan écrit mais non déposé ne remplit pas
+    l'obligation — et c'est le récépissé, non la déclaration, qui l'établit.</p>
+    <div id="etat-depot"></div>
+    <div class="carte" id="carte-depot">
+      <div class="champs">
+        <label class="ch"><span class="nom">Date du dépôt</span>
+          <input id="d-date" type="date"></label>
+        <label class="ch"><span class="nom">Autorité destinataire</span>
+          <input id="d-autorite" placeholder="Service déconcentré compétent, ou téléprocédure utilisée"></label>
+        <label class="ch"><span class="nom">Référence du récépissé</span>
+          <input id="d-recepisse" placeholder="Numéro ou référence de l'accusé de réception">
+          <span class="sous">Un « oui » n'est pas une preuve. Conservez la pièce avec le plan.</span></label>
+        <label class="ch" id="w-pv"><span class="nom">Procès-verbal de désaccord établi ?</span>
+          <select id="d-pv">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+          <span class="sous">L. 2242-8 : dans les entreprises d'au moins trois cents salariés, le
+          défaut d'accord est attesté par un procès-verbal de désaccord.</span></label>
+        <label class="ch"><span class="nom">Consultation du comité social et économique</span>
+          <input id="d-cse" type="date">
+          <span class="sous">Date de la réunion, si le plan lui a été présenté.</span></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ 7 · LE REPORT ══════ -->
+  <section id="o-report" class="cache">
+    <h2>Passer à l'année suivante</h2>
+    <p class="aide">Le plan est annuel. L'évaluation que L. 2242-3 impose porte sur
+    <q>les objectifs fixés et les mesures prises au cours de l'année écoulée</q> — autrement dit sur
+    ce que vous avez écrit ici l'an dernier. C'est ce report qui rend l'obligation tenable : les
+    objectifs de l'année N deviennent le bilan de l'année N+1, et rien n'est à réécrire.</p>
+    <div id="etat-report"></div>
+    <div id="report-form"></div>
+    <div id="archives"></div>
+  </section>
+
+  <!-- ══════ 8 · LE DOCUMENT ══════ -->
+  <section id="o-doc" class="cache">
+    <h2>Le document</h2>
+    <p class="aide">Le plan tel qu'il est, prêt à être déposé. Les éléments non renseignés sortent
+    entre crochets : ils se voient, ils ne sont pas inventés.</p>
+    <div class="barre">
+      <button class="btn" id="doc-produire">Produire le document</button>
+      <button class="btn second" id="doc-copier">Copier le texte</button>
+      <button class="btn second" id="doc-imprimer">Imprimer / PDF</button>
+    </div>
+    <pre id="doc"></pre>
+  </section>
+
+  <details class="textes">
+    <summary>Les textes lus, in extenso — avec l'identifiant de la version</summary>
+    <div class="corps" id="corps-textes"></div>
+  </details>
+
+  <footer>
+    Tout reste sur ce poste : rien n'est envoyé. Les extraits d'articles affichés sont recopiés des
+    captures du dépôt, avec leur identifiant de version. Là où le dépôt n'a pas capté le texte —
+    les indicateurs de l'index dans les entreprises de cinquante à deux cent cinquante salariés,
+    les annexes de calcul —, cette page ne dit rien et le signale.
+    Cet outil assiste votre démarche&nbsp;; il ne remplace ni votre conseil, ni la décision du juge.
+  </footer>
+</main>
+
+<script src="droits.js"></script>
+<script src="profil.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); };
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES TEXTES
+
+     Recopiés des captures du dépôt, jamais de mémoire. L'identifiant de version
+     accompagne chaque article : un article peut être modifié sans changer de
+     numéro, et seul le LEGIARTI dit laquelle des versions successives a été lue.
+     ══════════════════════════════════════════════════════════════════════════ */
+  var TEXTES = [
+    { n: "L. 2242-1", id: "LEGIARTI000043893962", src: "moteur/nao/textes-nao.json", lu: "2026-08-21",
+      t: "Dans les entreprises où sont constituées une ou plusieurs sections syndicales d'organisations représentatives, l'employeur engage au moins une fois tous les quatre ans : 1° Une négociation sur la rémunération, notamment les salaires effectifs, le temps de travail et le partage de la valeur ajoutée dans l'entreprise ; 2° Une négociation sur l'égalité professionnelle entre les femmes et les hommes, portant notamment sur les mesures visant à supprimer les écarts de rémunération, et la qualité de vie et des conditions de travail." },
+    { n: "L. 2242-3", id: "LEGIARTI000037389684", src: "moteur/nao/textes-nao.json", lu: "2026-08-21",
+      t: "En l'absence d'accord relatif à l'égalité professionnelle entre les femmes et les hommes à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1, l'employeur établit un plan d'action annuel destiné à assurer l'égalité professionnelle entre les femmes et les hommes. Après avoir évalué les objectifs fixés et les mesures prises au cours de l'année écoulée, ce plan d'action, fondé sur des critères clairs, précis et opérationnels, détermine les objectifs de progression prévus pour l'année à venir, définit les actions qualitatives et quantitatives permettant de les atteindre et évalue leur coût. Ce plan d'action est déposé auprès de l'autorité administrative. En l'absence d'accord prévoyant les mesures visant à supprimer les écarts de rémunération entre les femmes et les hommes, la négociation sur les salaires effectifs prévue au 1° de l'article L. 2242-1 porte également sur la programmation de mesures permettant de supprimer les écarts de rémunération et les différences de déroulement de carrière entre les femmes et les hommes." },
+    { n: "L. 2242-8", id: "LEGIARTI000051289082", src: "moteur/nao/textes-nao.json", lu: "2026-08-21",
+      t: "Les entreprises d'au moins cinquante salariés sont soumises à une pénalité à la charge de l'employeur en l'absence d'accord relatif à l'égalité professionnelle entre les femmes et les hommes à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1 ou, à défaut d'accord, par un plan d'action mentionné à l'article L. 2242-3. Les modalités de suivi de la réalisation des objectifs et des mesures de l'accord et du plan d'action sont fixées par décret. Dans les entreprises d'au moins 300 salariés, ce défaut d'accord est attesté par un procès-verbal de désaccord. La pénalité prévue au premier alinéa du présent article peut également être appliquée, dans des conditions déterminées par décret, en l'absence de publication des informations prévues à l'article L. 1142-8 ou en l'absence de mesures définies dans les conditions prévues à l'article L. 1142-9. Le montant de la pénalité prévue au premier alinéa du présent article est fixé au maximum à 1 % des rémunérations et gains au sens du premier alinéa de l'article L. 242-1 du code de la sécurité sociale et du premier alinéa de l'article L. 741-10 du code rural et de la pêche maritime versés aux travailleurs salariés ou assimilés au cours des périodes au titre desquelles l'entreprise ne respecte pas l'une des obligations mentionnées aux premier et deuxième alinéas du présent article. Le montant est fixé par l'autorité administrative, dans des conditions prévues par décret en Conseil d'Etat, en fonction des efforts constatés dans l'entreprise en matière d'égalité professionnelle et salariale entre les femmes et les hommes ainsi que des motifs de sa défaillance quant au respect des obligations fixées aux mêmes premier et deuxième alinéas. Le produit de cette pénalité est affecté à la branche mentionnée au 3° de l'article L. 200-2 du code de la sécurité sociale." },
+    { n: "L. 2242-17", id: "LEGIARTI000043893940", src: "moteur/nao/textes-nao.json", lu: "2026-08-21",
+      t: "La négociation annuelle sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail porte sur : 1° L'articulation entre la vie personnelle et la vie professionnelle pour les salariés ; 2° Les objectifs et les mesures permettant d'atteindre l'égalité professionnelle entre les femmes et les hommes, notamment en matière de suppression des écarts de rémunération, d'accès à l'emploi, de formation professionnelle, de déroulement de carrière et de promotion professionnelle, de conditions de travail et d'emploi, en particulier pour les salariés à temps partiel, et de mixité des emplois. Cette négociation s'appuie sur les données mentionnées au 2° de l'article L. 2312-36. […] 3° Les mesures permettant de lutter contre toute discrimination en matière de recrutement, d'emploi et d'accès à la formation professionnelle […] ; 4° Les mesures relatives à l'insertion professionnelle et au maintien dans l'emploi des travailleurs handicapés […] ; 5° Les modalités de définition d'un régime de prévoyance […] ; 6° L'exercice du droit d'expression directe et collective des salariés […] ; 7° Les modalités du plein exercice par le salarié de son droit à la déconnexion […] 8° Dans les entreprises mentionnées à l'article L. 2143-3 du présent code et dont cinquante salariés au moins sont employés sur un même site, les mesures visant à améliorer la mobilité des salariés entre leur lieu de résidence habituelle et leur lieu de travail […]." },
+    { n: "L. 1142-8", id: "LEGIARTI000044605453", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Dans les entreprises d'au moins cinquante salariés, l'employeur publie chaque année l'ensemble des indicateurs relatifs aux écarts de rémunération entre les femmes et les hommes et aux actions mises en œuvre pour les supprimer, selon des modalités et une méthodologie définies par décret. Par dérogation aux articles L. 311-6 et L. 312-1-2 du code des relations entre le public et l'administration, l'ensemble de ces indicateurs est rendu public sur le site internet du ministère chargé du travail, dans des conditions déterminées par décret." },
+    { n: "L. 1142-9", id: "LEGIARTI000044605442", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Dans les entreprises d'au moins cinquante salariés, lorsque les résultats obtenus par l'entreprise au regard des indicateurs mentionnés à l'article L. 1142-8 se situent en-deçà d'un niveau défini par décret, la négociation sur l'égalité professionnelle prévue au 2° de l'article L. 2242-1 porte également sur les mesures adéquates et pertinentes de correction et, le cas échéant, sur la programmation, annuelle ou pluriannuelle, de mesures financières de rattrapage salarial. En l'absence d'accord prévoyant de telles mesures, celles-ci sont déterminées par décision de l'employeur, après consultation du comité social et économique. La décision est déposée auprès de l'autorité administrative dans les mêmes conditions que le plan d'action mentionné à l'article L. 2242-3. L'autorité administrative peut présenter des observations sur les mesures prévues par l'accord ou la décision de l'employeur. L'employeur soumis à l'obligation prévue au premier alinéa du présent article publie, par une communication externe et au sein de l'entreprise, les mesures de correction, selon des modalités définies par décret." },
+    { n: "L. 1142-10", id: "LEGIARTI000051289090", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Dans les entreprises d'au moins cinquante salariés, lorsque les résultats obtenus par l'entreprise, au regard des indicateurs mentionnés à l'article L. 1142-8, se situent en deçà d'un niveau défini par décret, l'entreprise dispose d'un délai de trois ans pour se mettre en conformité. A l'expiration de ce délai, si les résultats obtenus sont toujours en deçà du niveau défini par décret, l'employeur peut se voir appliquer une pénalité financière. Dès lors qu'une pénalité lui est appliquée sur le fondement du présent alinéa, l'employeur ne peut se voir appliquer la pénalité financière prévue à l'article L. 2242-8. Le montant de la pénalité prévue au premier alinéa du présent article est fixé au maximum à 1 % des rémunérations et gains […]. En fonction des efforts constatés dans l'entreprise en matière d'égalité salariale entre les femmes et les hommes ainsi que des motifs de sa défaillance, un délai supplémentaire d'un an peut lui être accordé pour se mettre en conformité." },
+    { n: "L. 1142-11", id: "LEGIARTI000045951643", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Dans les entreprises qui, pour le troisième exercice consécutif, emploient au moins mille salariés, l'employeur publie chaque année les écarts éventuels de représentation entre les femmes et les hommes parmi les cadres dirigeants au sens de l'article L. 3111-2 du présent code, d'une part, et les membres des instances dirigeantes définies à l'article L. 23-12-1 du code de commerce, d'autre part. Par dérogation aux articles L. 311-6 et L. 312-1-2 du code des relations entre le public et l'administration, ces écarts de représentation sont rendus publics sur le site internet du ministère chargé du travail, dans des conditions définies par décret. La proportion de personnes de chaque sexe au sein de chacun des ensembles mentionnés au premier alinéa du présent article ne peut être inférieure à 30 %." },
+    { n: "D. 1142-2", id: "LEGIARTI000038026011", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Pour les entreprises de plus de deux cent cinquante salariés, les indicateurs mentionnés à l'article L. 1142-8 sont les suivants : 1° L'écart de rémunération entre les femmes et les hommes, calculé à partir de la moyenne de la rémunération des femmes comparée à celle des hommes, par tranche d'âge et par catégorie de postes équivalents ; 2° L'écart de taux d'augmentations individuelles de salaire ne correspondant pas à des promotions entre les femmes et les hommes ; 3° L'écart de taux de promotions entre les femmes et les hommes ; 4° Le pourcentage de salariées ayant bénéficié d'une augmentation dans l'année de leur retour de congé de maternité, si des augmentations sont intervenues au cours de la période pendant laquelle le congé a été pris ; 5° Le nombre de salariés du sexe sous-représenté parmi les dix salariés ayant perçu les plus hautes rémunérations. Ces indicateurs sont calculés selon les modalités définies à l'annexe I figurant à la fin du présent chapitre. En cas de constitution d'un comité social et économique au niveau d'une unité économique et sociale reconnue par accord collectif ou par décision de justice entre plusieurs entreprises juridiquement distinctes, les indicateurs sont calculés au niveau de l'unité économique et sociale." },
+    { n: "D. 1142-3", id: "LEGIARTI000038026019", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Le niveau de résultat obtenu par l'entreprise au regard des indicateurs définis aux articles D. 1142-2 et D. 1142-2-1 est déterminé selon les modalités fixées aux annexes I et II figurant à la fin du présent chapitre." },
+    { n: "D. 1142-4", id: "LEGIARTI000045250060", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Le niveau de résultat mentionné à l'article D. 1142-3 et les résultats obtenus pour chaque indicateur mentionné aux articles D. 1142-2 et D. 1142-2-1 sont publiés annuellement, au plus tard le 1er mars de l'année en cours, au titre de l'année précédente, de manière visible et lisible, sur le site internet de l'entreprise lorsqu'il en existe un. Ils sont consultables sur le site internet de l'entreprise au moins jusqu'à la publication, l'année suivante, du niveau de résultat et des résultats obtenus au titre de l'année en cours. A défaut de site internet, ils sont portés à la connaissance des salariés par tout moyen. La publication des informations mentionnées au premier alinéa est actualisée sur le site internet du ministère chargé du travail, chaque année au plus tard le 31 décembre, par les services du ministre chargé du travail." },
+    { n: "D. 1142-5", id: "LEGIARTI000045250047", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Les indicateurs définis aux articles D. 1142-2 et D. 1142-2-1, ainsi que le niveau de résultat mentionné à l'article D. 1142-3, sont mis à la disposition du comité social et économique, selon la périodicité fixée au premier alinéa de l'article D. 1142-4, dans les conditions prévues au deuxième alinéa de l'article L. 2312-18. Les résultats sont présentés par catégorie socio-professionnelle, niveau ou coefficient hiérarchique ou selon les niveaux de la méthode de cotation des postes de l'entreprise. Ces informations sont accompagnées de toutes les précisions utiles à leur compréhension, notamment relatives à la méthodologie appliquée et à la répartition des salariés par catégorie socio-professionnelle ou selon les niveaux de la méthode de cotation des postes de l'entreprise. […] L'ensemble de ces informations est également transmis aux services du ministre chargé du travail selon une procédure de télédéclaration définie par arrêté du ministre chargé du travail." },
+    { n: "D. 1142-6", id: "LEGIARTI000045250040", src: "moteur/parcours/textes-regularisation.json", lu: "2026-08-22",
+      t: "Les mesures de correction et, le cas échéant, la programmation de mesures financières de rattrapage salarial, prévues à l'article L. 1142-9, doivent être mises en œuvre dès lors que le niveau de résultat mentionné à l'article D. 1142-3 est inférieur à soixante-quinze points. Elles sont publiées sur le site internet de l'entreprise lorsqu'il en existe un, sur la même page que le niveau de résultat et les résultats mentionnés à l'article D. 1142-4, dès lors que l'accord ou la décision unilatérale est déposé dans les conditions prévues à l'article D. 2231-4 du même code. Elles sont consultables sur le site internet de l'entreprise jusqu'à ce que celle-ci obtienne un niveau de résultat au moins égal à soixante-quinze points. En outre, l'employeur les porte à la connaissance des salariés par tout moyen." },
+  ];
+  var PAR_NUM = {};
+  TEXTES.forEach(function (a) { PAR_NUM[a.n] = a; });
+
+  /* Chaque phrase juridique porte son article : `art()` produit la mention, et
+     l'infobulle donne le texte lu et son identifiant de version. */
+  function art(n) {
+    var a = PAR_NUM[n];
+    if (!a) return ech(n);
+    return '<span class="art" title="' + ech(a.t.slice(0, 700) + (a.t.length > 700 ? " […]" : "") +
+      "\n\n" + a.id + " — lu le " + a.lu) + '">' + ech(n) + "</span>";
+  }
+
+  $("corps-textes").innerHTML = TEXTES.map(function (a) {
+    return "<h4>Article " + ech(a.n) + '</h4><div class="id">' + ech(a.id) +
+      " — capté dans " + ech(a.src) + ", lu le " + ech(a.lu) + "</div><p>" + ech(a.t) + "</p>";
+  }).join("");
+
+  /* Les thèmes proposés aux objectifs viennent des 1° et 2° de L. 2242-17 :
+     ils ne sont pas inventés, ils sont découpés du texte ci-dessus. */
+  var THEMES = [
+    "Suppression des écarts de rémunération",
+    "Accès à l'emploi",
+    "Formation professionnelle",
+    "Déroulement de carrière et promotion professionnelle",
+    "Conditions de travail et d'emploi, en particulier pour les salariés à temps partiel",
+    "Mixité des emplois",
+    "Articulation entre la vie personnelle et la vie professionnelle",
+    "Autre thème",
+  ];
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LE DOSSIER
+
+     Une seule clé, un seul objet, écrit à chaque frappe. Rien ne part d'ici.
+     ══════════════════════════════════════════════════════════════════════════ */
+  var CLE = "egalite-plan";
+  var E = (function () {
+    try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; }
+    catch (e) { return {}; }
+  })();
+  E.cadre = E.cadre || {};
+  E.bilan = E.bilan || {};                 /* { suivi, lignes: [] } */
+  E.bilan.lignes = E.bilan.lignes || [];
+  E.objectifs = E.objectifs || [];
+  E.actions = E.actions || [];
+  E.index = E.index || {};
+  E.depot = E.depot || {};
+  E.archives = E.archives || [];           /* les années closes, jamais réécrites */
+
+  function garder() { try { localStorage.setItem(CLE, JSON.stringify(E)); } catch (e) {} }
+  function uid() { return "x" + Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4); }
+
+  /* La fiche entreprise est la source : on ne redemande jamais ce qui est su. */
+  (function reprendre() {
+    var p = null;
+    try { p = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
+    if (p) {
+      if (!E.cadre.nom)
+        E.cadre.nom = p.denomination || p.denominationSociale || p.entreprise || p.nom || "";
+      if ((E.cadre.effectif == null || E.cadre.effectif === "") && p.effectif != null && p.effectif !== "")
+        E.cadre.effectif = p.effectif;
+    }
+    if (!E.cadre.annee) E.cadre.annee = new Date().getFullYear();
+  })();
+
+  function annee() { var n = Number(E.cadre.annee); return Number.isFinite(n) && n > 1900 ? n : null; }
+  function anneeEcoulee() { var n = annee(); return n == null ? null : n - 1; }
+  function effectif() { var n = Number(E.cadre.effectif); return Number.isFinite(n) && n > 0 ? n : null; }
+  function planDu() { return E.cadre.accord === "non"; }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES ONGLETS — une chose par écran
+     ══════════════════════════════════════════════════════════════════════════ */
+  var ONGLETS = ["cadre", "bilan", "objectifs", "actions", "index", "depot", "report", "doc"];
+  function ouvrir(nom) {
+    ONGLETS.forEach(function (o) { $("o-" + o).className = o === nom ? "" : "cache"; });
+    Array.prototype.forEach.call($("onglets").children, function (b) {
+      b.className = b.getAttribute("data-o") === nom ? "actif" : "";
+    });
+    if (nom === "bilan") rendreBilan();
+    if (nom === "objectifs") rendreObjectifs();
+    if (nom === "actions") rendreActions();
+    if (nom === "index") rendreIndex();
+    if (nom === "depot") rendreDepot();
+    if (nom === "report") rendreReport();
+  }
+  Array.prototype.forEach.call($("onglets").children, function (b) {
+    b.addEventListener("click", function () { ouvrir(b.getAttribute("data-o")); });
+  });
+
+  /* Le liage générique des champs de liste : data-l = la liste, data-i =
+     l'identifiant de la ligne, data-c = le champ. Rien n'est re-rendu à la
+     frappe — cela ferait perdre le curseur ; seuls les compteurs se
+     rafraîchissent. */
+  function liste(nom) {
+    if (nom === "bilan") return E.bilan.lignes;
+    if (nom === "objectifs") return E.objectifs;
+    if (nom === "actions") return E.actions;
+    return [];
+  }
+  function trouver(nom, id) {
+    var l = liste(nom), i;
+    for (i = 0; i < l.length; i++) if (l[i].id === id) return l[i];
+    return null;
+  }
+  function brancher(racine, apres) {
+    Array.prototype.forEach.call(racine.querySelectorAll("[data-l]"), function (el) {
+      var maj = function () {
+        var o = trouver(el.getAttribute("data-l"), el.getAttribute("data-i"));
+        if (!o) return;
+        o[el.getAttribute("data-c")] = el.value;
+        garder();
+        if (apres) apres();
+      };
+      el.addEventListener("input", maj);
+      el.addEventListener("change", maj);
+    });
+    Array.prototype.forEach.call(racine.querySelectorAll("[data-sup]"), function (b) {
+      b.addEventListener("click", function () {
+        var p = b.getAttribute("data-sup").split("|"), nom = p[0], id = p[1];
+        var l = liste(nom), i;
+        for (i = 0; i < l.length; i++) if (l[i].id === id) { l.splice(i, 1); break; }
+        /* Une action orpheline vaut mieux qu'une action supprimée en silence :
+           elle est détachée, et l'écran le signale. */
+        if (nom === "objectifs")
+          E.actions.forEach(function (a) { if (a.objectif === id) a.objectif = ""; });
+        garder();
+        if (nom === "bilan") rendreBilan();
+        if (nom === "objectifs") rendreObjectifs();
+        if (nom === "actions") rendreActions();
+      });
+    });
+  }
+
+  function ch(nom, id, champ, libelle, o, type, ph, sous, pleine) {
+    var v = o[champ] == null ? "" : o[champ];
+    var att = ' data-l="' + ech(nom) + '" data-i="' + ech(id) + '" data-c="' + ech(champ) + '"';
+    var corps;
+    if (type === "zone")
+      corps = "<textarea" + att + ' placeholder="' + ech(ph || "") + '">' + ech(v) + "</textarea>";
+    else if (type && type.indexOf("select:") === 0) {
+      var opts = type.slice(7).split("¤");
+      corps = "<select" + att + '><option value="">— répondre —</option>' +
+        opts.map(function (x) {
+          var val = x, lib = x, k = x.indexOf("=");
+          if (k >= 0) { val = x.slice(0, k); lib = x.slice(k + 1); }
+          return '<option value="' + ech(val) + '"' + (String(v) === val ? " selected" : "") + ">" +
+            ech(lib) + "</option>"; }).join("") + "</select>";
+    } else
+      corps = "<input type=\"" + (type || "text") + "\"" + att + ' value="' + ech(v) +
+        '" placeholder="' + ech(ph || "") + '">';
+    return '<label class="ch' + (pleine ? " pleine" : "") + '"><span class="nom">' + ech(libelle) +
+      "</span>" + corps + (sous ? '<span class="sous">' + sous + "</span>" : "") + "</label>";
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     1 · LE CADRE
+     ══════════════════════════════════════════════════════════════════════════ */
+  ["c-nom", "c-eff", "c-annee", "c-accord", "c-sections", "c-accord-ref", "c-accord-fin"]
+    .forEach(function (id) {
+      var el = $(id);
+      var maj = function () {
+        E.cadre.nom = $("c-nom").value.trim();
+        E.cadre.effectif = $("c-eff").value.trim();
+        E.cadre.annee = $("c-annee").value.trim();
+        E.cadre.accord = $("c-accord").value;
+        E.cadre.sections = $("c-sections").value;
+        E.cadre.accordRef = $("c-accord-ref").value;
+        E.cadre.accordFin = $("c-accord-fin").value;
+        garder(); verdictCadre();
+      };
+      el.addEventListener("input", maj);
+      el.addEventListener("change", maj);
+    });
+
+  function verdictCadre() {
+    var h = "", eff = effectif(), a = E.cadre.accord;
+
+    $("w-accord-ref").style.display = a === "oui" ? "" : "none";
+    $("w-accord-fin").style.display = a === "oui" ? "" : "none";
+
+    if (a === "oui") {
+      h += '<div class="avis info"><b>Le plan d\'action n\'est pas dû</b>' +
+        art("L. 2242-3") + " n'impose le plan d'action annuel qu'« en l'absence d'accord relatif à " +
+        "l'égalité professionnelle entre les femmes et les hommes à l'issue de la négociation " +
+        "mentionnée au 2° de l'article L. 2242-1 ». Un accord est en vigueur : c'est lui qui porte " +
+        "vos objectifs et vos mesures, et cet outil ne montera pas un plan que rien ne commande. " +
+        "Les écrans du plan restent fermés ; celui de l'index reste ouvert, car " + art("L. 1142-8") +
+        " ne dépend pas de l'existence d'un accord.</div>";
+      if (!String(E.cadre.accordRef || "").trim())
+        h += '<div class="avis att"><b>Un « oui » n\'est pas une preuve</b>' +
+          "Notez l'intitulé de l'accord, sa date de signature et sa date de dépôt. C'est le texte " +
+          "déposé qui établit la couverture, pas la réponse à cette question.</div>";
+      if (E.cadre.accordFin) {
+        var reste = Math.round((Date.parse(E.cadre.accordFin) - Date.now()) / 864e5);
+        if (reste < 0)
+          h += '<div class="avis non"><b>L\'accord est arrivé à son terme</b>' +
+            "Sans renouvellement, l'entreprise n'est plus couverte : le plan d'action de " +
+            art("L. 2242-3") + " redevient dû, et " + art("L. 2242-8") + " retrouve son assiette.</div>";
+        else if (reste < 180)
+          h += '<div class="avis att"><b>L\'accord s\'achève dans ' + reste + " jours</b>" +
+            "Rouvrez la négociation avant le terme : entre l'expiration et la conclusion suivante, " +
+            "l'entreprise n'est couverte ni par un accord ni par un plan.</div>";
+      }
+    } else if (a === "sais-pas") {
+      h += '<div class="avis att"><b>À établir avant toute chose</b>' +
+        "Le plan d'action ne se déclenche pas « à défaut d'avoir cherché » : il se déclenche en " +
+        "l'absence d'accord, ce qui est un fait. Cherchez l'accord d'entreprise relatif à l'égalité " +
+        "professionnelle, vérifiez son terme, puis revenez.</div>";
+    } else if (a === "non") {
+      h += '<div class="avis ok"><b>Le plan d\'action annuel est dû</b>' + art("L. 2242-3") +
+        " : l'employeur établit un plan d'action annuel qui, après avoir évalué les objectifs fixés " +
+        "et les mesures prises au cours de l'année écoulée, détermine les objectifs de progression " +
+        "de l'année à venir, définit les actions qualitatives et quantitatives permettant de les " +
+        "atteindre, évalue leur coût, et est déposé auprès de l'autorité administrative. " +
+        "Les cinq écrans qui suivent sont dans cet ordre.</div>";
+      if (eff != null && eff >= 50)
+        h += '<div class="avis att"><b>Ce que le défaut de couverture coûte</b>' + art("L. 2242-8") +
+          " : les entreprises d'au moins cinquante salariés sont soumises à une pénalité en " +
+          "l'absence d'accord ou, à défaut d'accord, de plan d'action. Son montant est fixé au " +
+          "maximum à 1 % des rémunérations et gains versés au cours des périodes non couvertes." +
+          (eff >= 300 ? " Au-delà de trois cents salariés, le même article ajoute que ce défaut " +
+            "d'accord est attesté par un procès-verbal de désaccord : sans lui, le dossier est " +
+            "incomplet — l'écran du dépôt le redemande." : "") + "</div>";
+      if (eff != null && eff < 50)
+        h += '<div class="avis info"><b>En dessous de cinquante salariés</b>' + art("L. 2242-8") +
+          " ne vise que les entreprises d'au moins cinquante salariés, et " + art("L. 1142-8") +
+          " également. Le plan reste l'issue de la négociation de " + art("L. 2242-1") +
+          " si elle est ouverte, mais la pénalité et l'index ne vous atteignent pas à cet effectif.</div>";
+      if (eff == null)
+        h += '<div class="avis att"><b>L\'effectif manque</b>' +
+          "Sans lui, l'outil ne peut rien dire du seuil de cinquante salariés — celui de la pénalité " +
+          "et de l'index — ni de celui de trois cents, qui commande le procès-verbal de désaccord. " +
+          "Il ne le déduira pas du silence.</div>";
+      if (E.cadre.sections === "non")
+        h += '<div class="avis info"><b>Sans section syndicale, la négociation n\'est pas ouverte</b>' +
+          art("L. 2242-1") + " ne vise que « les entreprises où sont constituées une ou plusieurs " +
+          "sections syndicales d'organisations représentatives ». Mais " + art("L. 2242-8") +
+          " soumet à pénalité l'entreprise d'au moins cinquante salariés qui n'est couverte ni par " +
+          "un accord ni par un plan d'action : le plan reste donc l'issue à tenir.</div>";
+    }
+    $("verdict-cadre").innerHTML = h;
+  }
+
+  /* Le message unique servi par tous les écrans du plan quand rien ne le commande. */
+  function ferme(ou) {
+    if (E.cadre.accord === "oui")
+      return '<div class="avis info"><b>Écran fermé : un accord est en vigueur</b>' +
+        art("L. 2242-3") + " ne commande le plan d'action qu'à défaut d'accord. Reprenez les " +
+        "objectifs et les mesures de votre accord — cet outil n'écrira pas à côté d'eux un plan " +
+        "que le texte n'impose pas.</div>";
+    return '<div class="avis att"><b>Répondez d\'abord au cadre</b>' +
+      "Tant que l'existence d'un accord n'est pas établie, on ne sait pas si un plan d'action est " +
+      "dû — et " + ou + " ne s'impose pas encore.</div>";
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     2 · LE BILAN DE L'ANNÉE ÉCOULÉE — avant les objectifs, comme le texte
+     ══════════════════════════════════════════════════════════════════════════ */
+  var ETATS = "select:atteint=Atteint¤partiel=Partiellement atteint¤non=Non atteint¤" +
+    "sans-objet=Devenu sans objet";
+
+  $("b-suivi").addEventListener("input", function () {
+    E.bilan.suivi = $("b-suivi").value; garder();
+  });
+
+  $("b-ajouter").addEventListener("click", function () {
+    E.bilan.lignes.push({ id: uid(), theme: "", objectif: "", indicateur: "", cible: "",
+      resultat: "", etat: "", mesures: "", manques: "" });
+    garder(); rendreBilan();
+    var f = $("bilan").lastChild;
+    if (f) { var i = f.querySelector("input,textarea,select"); if (i) i.focus(); }
+  });
+
+  function rendreBilan() {
+    $("b-annee").textContent = anneeEcoulee() == null ? "année à préciser" : anneeEcoulee();
+    var ouvert = planDu();
+    $("barre-bilan").style.display = ouvert ? "" : "none";
+    $("carte-suivi").style.display = ouvert ? "" : "none";
+    if (!ouvert) { $("etat-bilan").innerHTML = ferme("l'évaluation de l'année écoulée");
+      $("bilan").innerHTML = ""; return; }
+
+    var L = E.bilan.lignes;
+    var evalues = L.filter(function (x) { return x.etat; }).length;
+    var h = '<div class="avis ' + (L.length === 0 ? "att" : (evalues === L.length ? "ok" : "info")) +
+      '"><b>' + L.length + " objectif(s) de l'année écoulée, " + evalues + " évalué(s)</b>";
+    if (L.length === 0)
+      h += "Aucun objectif n'est inscrit pour l'année écoulée. Si c'est le premier plan de " +
+        "l'entreprise, dites-le : l'absence de plan antérieur est un fait, et le document le " +
+        "portera tel quel plutôt que d'inventer un bilan. Sinon, saisissez ici les objectifs du " +
+        "plan précédent — l'an prochain, le report les inscrira tout seul.";
+    else
+      h += "L'évaluation porte sur deux choses que " + art("L. 2242-3") + " nomme séparément : " +
+        "les objectifs fixés, et les mesures prises. Renseignez les deux.";
+    h += "</div>";
+    $("etat-bilan").innerHTML = h;
+
+    $("bilan").innerHTML = L.map(function (o, i) {
+      return '<div class="fiche"><div class="tete"><b><span class="rang">' + (i + 1) +
+        "</span>" + ech(o.objectif || "Objectif de l'année écoulée") + "</b>" +
+        '<span style="display:flex;gap:8px;align-items:center">' +
+        '<span class="jauge ' + (o.etat ? "pleine" : "vide") + '">' +
+        (o.etat ? "évalué" : "à évaluer") + "</span>" +
+        '<button class="sup" data-sup="bilan|' + ech(o.id) + '">Retirer</button></span></div>' +
+        '<div class="corps"><div class="champs">' +
+        ch("bilan", o.id, "objectif", "Objectif qui avait été fixé", o, "text",
+          "Tel qu'il figurait au plan précédent", null, true) +
+        ch("bilan", o.id, "theme", "Thème", o, "select:" + THEMES.join("¤"),
+          "", "Les thèmes des 1° et 2° de L. 2242-17.") +
+        ch("bilan", o.id, "indicateur", "Indicateur retenu", o, "text", "Ce qui se mesure") +
+        ch("bilan", o.id, "cible", "Cible qui avait été fixée", o, "text", "La valeur visée") +
+        ch("bilan", o.id, "resultat", "Résultat constaté", o, "text", "La valeur atteinte") +
+        ch("bilan", o.id, "etat", "Où en est-on ?", o, ETATS) +
+        ch("bilan", o.id, "mesures", "Mesures effectivement prises", o, "zone",
+          "Ce qui a été fait, quand, et par qui.", null, true) +
+        ch("bilan", o.id, "manques", "Ce qui n'a pas été fait, et pourquoi", o, "zone",
+          "Le texte demande une évaluation, pas un compte rendu de réussites.", null, true) +
+        "</div></div></div>";
+    }).join("");
+
+    $("b-suivi").value = E.bilan.suivi || "";
+    brancher($("bilan"), function () {
+      var n = E.bilan.lignes.filter(function (x) { return x.etat; }).length;
+      var b = $("etat-bilan").querySelector("b");
+      if (b) b.textContent = E.bilan.lignes.length + " objectif(s) de l'année écoulée, " + n + " évalué(s)";
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     3 · LES OBJECTIFS DE PROGRESSION
+     ══════════════════════════════════════════════════════════════════════════ */
+  $("ob-ajouter").addEventListener("click", function () {
+    E.objectifs.push({ id: uid(), theme: "", intitule: "", indicateur: "", depart: "",
+      cible: "", echeance: "" });
+    garder(); rendreObjectifs();
+    var f = $("objectifs").lastChild;
+    if (f) { var i = f.querySelector("input,textarea,select"); if (i) i.focus(); }
+  });
+
+  function coutAction(a) {
+    var n = Number(String(a.cout == null ? "" : a.cout).replace(/\s/g, "").replace(",", "."));
+    return Number.isFinite(n) && String(a.cout).trim() !== "" ? n : null;
+  }
+  function euros(n) {
+    return n.toLocaleString("fr-FR", { maximumFractionDigits: 0 }) + " €";
+  }
+  function actionsDe(id) {
+    return E.actions.filter(function (a) { return a.objectif === id; });
+  }
+
+  function rendreObjectifs() {
+    $("ob-annee").textContent = annee() == null ? "année à préciser" : annee();
+    var ouvert = planDu();
+    $("barre-objectifs").style.display = ouvert ? "" : "none";
+    if (!ouvert) { $("etat-objectifs").innerHTML = ferme("la fixation des objectifs");
+      $("objectifs").innerHTML = ""; return; }
+
+    var O = E.objectifs;
+    var complets = O.filter(function (o) {
+      return String(o.intitule || "").trim() && String(o.indicateur || "").trim() &&
+        String(o.cible || "").trim(); }).length;
+    $("etat-objectifs").innerHTML = '<div class="avis ' +
+      (O.length === 0 ? "att" : (complets === O.length ? "ok" : "info")) + '"><b>' +
+      O.length + " objectif(s), " + complets + " avec indicateur et cible</b>" +
+      (O.length === 0
+        ? "Aucun objectif n'est fixé. Sans objectif de progression, il n'y a pas de plan au sens de " +
+          art("L. 2242-3") + "."
+        : "Le texte exige des critères clairs, précis et opérationnels : un objectif sans indicateur " +
+          "ni cible ne sera pas évaluable l'an prochain, et c'est cette évaluation que le texte " +
+          "imposera alors comme préalable.") + "</div>";
+
+    $("objectifs").innerHTML = O.map(function (o, i) {
+      var acts = actionsDe(o.id);
+      var chiffrees = acts.filter(function (a) { return coutAction(a) != null; }).length;
+      return '<div class="fiche"><div class="tete"><b><span class="rang">' + (i + 1) + "</span>" +
+        ech(o.intitule || "Objectif de progression") + "</b>" +
+        '<span style="display:flex;gap:8px;align-items:center">' +
+        '<span class="jauge ' + (acts.length === 0 ? "vide" : (chiffrees === acts.length ? "pleine" : "")) +
+        '">' + acts.length + " action(s), " + chiffrees + " chiffrée(s)</span>" +
+        '<button class="sup" data-sup="objectifs|' + ech(o.id) + '">Retirer</button></span></div>' +
+        '<div class="corps"><div class="champs">' +
+        ch("objectifs", o.id, "intitule", "Objectif de progression", o, "text",
+          "Ce que l'entreprise vise pour l'année à venir", null, true) +
+        ch("objectifs", o.id, "theme", "Thème", o, "select:" + THEMES.join("¤"),
+          "", "Les thèmes des 1° et 2° de L. 2242-17.") +
+        ch("objectifs", o.id, "indicateur", "Indicateur", o, "text", "Ce qui se mesure, et comment",
+          "Il doit être clair, précis et opérationnel (L. 2242-3).") +
+        ch("objectifs", o.id, "depart", "Valeur de départ", o, "text", "La situation constatée aujourd'hui",
+          "Sans point de départ, aucune progression ne se mesure.") +
+        ch("objectifs", o.id, "cible", "Cible chiffrée", o, "text", "La valeur visée") +
+        ch("objectifs", o.id, "echeance", "Échéance", o, "date") +
+        "</div>" +
+        (acts.length === 0
+          ? '<div class="avis att" style="margin-bottom:0"><b>Aucune action ne sert cet objectif</b>' +
+            art("L. 2242-3") + " demande que le plan définisse les actions permettant d'atteindre les " +
+            "objectifs. Un objectif sans action est un vœu : ouvrez l'écran 4.</div>"
+          : "") +
+        "</div></div>";
+    }).join("");
+
+    brancher($("objectifs"));
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     4 · LES ACTIONS ET LEUR COÛT
+     ══════════════════════════════════════════════════════════════════════════ */
+  $("ac-ajouter").addEventListener("click", function () {
+    E.actions.push({ id: uid(), objectif: E.objectifs.length === 1 ? E.objectifs[0].id : "",
+      intitule: "", nature: "", detail: "", responsable: "", echeance: "", cout: "", coutNote: "" });
+    garder(); rendreActions();
+    var f = $("actions").lastChild;
+    if (f) { var i = f.querySelector("input,textarea,select"); if (i) i.focus(); }
+  });
+
+  function rendreActions() {
+    var ouvert = planDu();
+    $("barre-actions").style.display = ouvert ? "" : "none";
+    if (!ouvert) { $("etat-actions").innerHTML = ferme("la définition des actions");
+      $("actions").innerHTML = ""; return; }
+
+    if (E.objectifs.length === 0) {
+      $("etat-actions").innerHTML = '<div class="avis att"><b>Fixez d\'abord vos objectifs</b>' +
+        "Les actions que " + art("L. 2242-3") + " demande sont celles « permettant de les atteindre » : " +
+        "elles se rattachent à un objectif. Ouvrez l'écran 3 avant celui-ci.</div>";
+      $("actions").innerHTML = ""; $("barre-actions").style.display = "none"; return;
+    }
+
+    var A = E.actions;
+    var chiffrees = A.filter(function (a) { return coutAction(a) != null; });
+    var total = chiffrees.reduce(function (s, a) { return s + coutAction(a); }, 0);
+    var orphelines = A.filter(function (a) { return !a.objectif; }).length;
+
+    $("etat-actions").innerHTML = '<div class="avis ' +
+      (A.length === 0 ? "att" : (chiffrees.length === A.length ? "ok" : "info")) + '"><b id="ac-compte">' +
+      A.length + " action(s), " + chiffrees.length + " chiffrée(s) — coût évalué : " + euros(total) +
+      "</b>" + art("L. 2242-3") + " impose que le plan « évalue leur coût ». Une action non chiffrée " +
+      "sortira du document avec la mention [coût non évalué] : elle se verra, elle ne sera pas " +
+      "inventée." + (A.length && chiffrees.length < A.length
+        ? " Il reste " + (A.length - chiffrees.length) + " action(s) sans chiffrage." : "") + "</div>" +
+      (orphelines ? '<div class="avis non"><b>' + orphelines + " action(s) sans objectif</b>" +
+        "Une action qui ne sert aucun objectif n'a pas sa place dans le plan. Rattachez-la, ou " +
+        "retirez-la.</div>" : "");
+
+    var opts = E.objectifs.map(function (o, i) {
+      return o.id + "=" + (i + 1) + ". " + (o.intitule || "objectif sans intitulé"); }).join("¤");
+
+    $("actions").innerHTML = A.map(function (a, i) {
+      var c = coutAction(a);
+      return '<div class="fiche"><div class="tete"><b><span class="rang">' + (i + 1) + "</span>" +
+        ech(a.intitule || "Action") + "</b>" +
+        '<span style="display:flex;gap:8px;align-items:center">' +
+        '<span class="jauge ' + (c == null ? "vide" : "pleine") + '">' +
+        (c == null ? "coût non évalué" : euros(c)) + "</span>" +
+        '<button class="sup" data-sup="actions|' + ech(a.id) + '">Retirer</button></span></div>' +
+        '<div class="corps"><div class="champs">' +
+        ch("actions", a.id, "intitule", "Action", a, "text", "Ce qui sera fait", null, true) +
+        ch("actions", a.id, "objectif", "Objectif servi", a, "select:" + opts, "",
+          "L. 2242-3 : les actions « permettant de les atteindre ».") +
+        ch("actions", a.id, "nature", "Nature", a,
+          "select:qualitative=Qualitative¤quantitative=Quantitative¤" +
+          "les-deux=Qualitative et quantitative", "",
+          "Le texte demande les deux : « les actions qualitatives et quantitatives ».") +
+        ch("actions", a.id, "responsable", "Qui la porte", a, "text", "Nom, qualité") +
+        ch("actions", a.id, "echeance", "Échéance", a, "date") +
+        ch("actions", a.id, "cout", "Coût évalué (en euros)", a, "number", "0",
+          "« Évalue leur coût » : l'évaluation suffit, l'absence de chiffre non.") +
+        ch("actions", a.id, "coutNote", "Comment ce coût est établi", a, "text",
+          "Devis, coût interne, temps passé valorisé…") +
+        ch("actions", a.id, "detail", "Précisions", a, "zone",
+          "Modalités, publics visés, calendrier de mise en œuvre.", null, true) +
+        "</div></div></div>";
+    }).join("");
+
+    brancher($("actions"), function () {
+      var ch2 = E.actions.filter(function (a) { return coutAction(a) != null; });
+      var t = ch2.reduce(function (s, a) { return s + coutAction(a); }, 0);
+      var b = $("ac-compte");
+      if (b) b.textContent = E.actions.length + " action(s), " + ch2.length +
+        " chiffrée(s) — coût évalué : " + euros(t);
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     5 · L'INDEX
+
+     Ce que la page peut dire, elle le tient de D. 1142-2, D. 1142-4, D. 1142-5
+     et D. 1142-6. Ce qu'elle ne peut pas dire, elle ne le dit pas : les
+     indicateurs des entreprises de cinquante à deux cent cinquante salariés
+     relèvent de D. 1142-2-1, que le dépôt n'a pas capté, et le barème relève
+     des annexes I et II, qui ne le sont pas davantage.
+     ══════════════════════════════════════════════════════════════════════════ */
+  ["i-annee", "i-resultat", "i-date", "i-ou", "i-cse", "i-declare"].forEach(function (id) {
+    var el = $(id);
+    var maj = function () { E.index[id] = el.value; garder(); };
+    el.addEventListener("input", maj);
+    el.addEventListener("change", function () { maj(); rendreIndex(); });
+  });
+
+  function rendreIndex() {
+    ["i-annee", "i-resultat", "i-date", "i-ou", "i-cse", "i-declare"].forEach(function (id) {
+      if (E.index[id] != null && $(id).value !== E.index[id]) $(id).value = E.index[id];
+    });
+    if (!$("i-annee").value && anneeEcoulee() != null) {
+      $("i-annee").value = anneeEcoulee(); E.index["i-annee"] = String(anneeEcoulee()); garder();
+    }
+
+    var eff = effectif(), h = "";
+    if (eff == null)
+      h = '<div class="avis att"><b>L\'effectif manque</b>' + art("L. 1142-8") +
+        " ne vise que les entreprises d'au moins cinquante salariés. Sans effectif, l'outil ne " +
+        "conclut pas — ni dans un sens, ni dans l'autre.</div>";
+    else if (eff < 50)
+      h = '<div class="avis info"><b>L\'index n\'est pas dû à cet effectif</b>' + art("L. 1142-8") +
+        " vise « les entreprises d'au moins cinquante salariés ». Avec " + eff +
+        " salariés, la publication annuelle des indicateurs ne s'impose pas.</div>";
+    else
+      h = '<div class="avis ok"><b>La publication est due chaque année</b>' + art("L. 1142-8") +
+        " : l'employeur publie chaque année l'ensemble des indicateurs relatifs aux écarts de " +
+        "rémunération entre les femmes et les hommes et aux actions mises en œuvre pour les " +
+        "supprimer. " + art("D. 1142-4") + " en fixe la date : au plus tard le 1<sup>er</sup> mars " +
+        "de l'année en cours, au titre de l'année précédente, de manière visible et lisible sur le " +
+        "site internet de l'entreprise lorsqu'il en existe un ; à défaut de site, l'information est " +
+        "portée à la connaissance des salariés par tout moyen. " + art("L. 2242-8") +
+        " ajoute que la pénalité peut être appliquée en l'absence de publication.</div>";
+    $("etat-index").innerHTML = h;
+    $("carte-index").style.display = (eff != null && eff < 50) ? "none" : "";
+
+    /* Les indicateurs : listés seulement là où le texte capté les porte. */
+    var hi = "";
+    if (eff != null && eff > 250) {
+      hi = '<h3 class="sst">Les cinq indicateurs — ' + art("D. 1142-2") + "</h3>" +
+        '<p class="aide" style="margin-bottom:8px">Pour les entreprises de plus de deux cent ' +
+        "cinquante salariés, le texte les énumère ainsi :</p><ol style=\"margin:0 0 4px;padding-left:22px;" +
+        "font-size:14px;line-height:1.6;color:var(--encre-2)\">" +
+        "<li>L'écart de rémunération entre les femmes et les hommes, calculé à partir de la moyenne " +
+        "de la rémunération des femmes comparée à celle des hommes, par tranche d'âge et par " +
+        "catégorie de postes équivalents ;</li>" +
+        "<li>L'écart de taux d'augmentations individuelles de salaire ne correspondant pas à des " +
+        "promotions entre les femmes et les hommes ;</li>" +
+        "<li>L'écart de taux de promotions entre les femmes et les hommes ;</li>" +
+        "<li>Le pourcentage de salariées ayant bénéficié d'une augmentation dans l'année de leur " +
+        "retour de congé de maternité, si des augmentations sont intervenues au cours de la période " +
+        "pendant laquelle le congé a été pris ;</li>" +
+        "<li>Le nombre de salariés du sexe sous-représenté parmi les dix salariés ayant perçu les " +
+        "plus hautes rémunérations.</li></ol>" +
+        '<p class="aide" style="margin:8px 0 0">Les modalités de calcul sont à l\'annexe I à laquelle ' +
+        art("D. 1142-3") + " renvoie. Cette annexe n'est pas captée dans le dépôt : l'outil ne " +
+        "calcule donc rien, il enregistre le résultat que vous avez publié.</p>";
+    } else if (eff != null && eff >= 50) {
+      hi = '<div class="avis att"><b>Les indicateurs de votre tranche ne sont pas décrits ici</b>' +
+        art("D. 1142-2") + " n'énumère les cinq indicateurs que « pour les entreprises de plus de " +
+        "deux cent cinquante salariés ». Entre cinquante et deux cent cinquante, ils relèvent de " +
+        "l'article D. 1142-2-1, que le dépôt n'a pas capté : l'outil ne les détaillera pas de " +
+        "mémoire. Il enregistre le résultat que vous avez publié et sa date — ce qui suffit à " +
+        "établir la publication de " + art("L. 1142-8") + ".</div>";
+    }
+    $("i-indicateurs").innerHTML = hi;
+
+    /* La date : D. 1142-4 la fixe au 1er mars de l'année en cours. */
+    var hd = "";
+    var d = E.index["i-date"], at = Number(E.index["i-annee"]);
+    if (d && Number.isFinite(at)) {
+      var limite = Date.parse((at + 1) + "-03-01");
+      if (Date.parse(d) > limite)
+        hd += '<div class="avis non"><b>Publication tardive</b>' + art("D. 1142-4") +
+          " fixe la publication au plus tard le 1<sup>er</sup> mars de l'année en cours, au titre de " +
+          "l'année précédente : pour l'année " + at + ", au plus tard le 1<sup>er</sup> mars " +
+          (at + 1) + ". Le retard se constate ; il ne s'efface pas par une publication ultérieure.</div>";
+    }
+
+    /* Le seuil : le seul que le texte capté énonce en toutes lettres. */
+    var r = Number(E.index["i-resultat"]);
+    if (String(E.index["i-resultat"] || "").trim() !== "" && Number.isFinite(r)) {
+      if (r < 75) {
+        E.index.correction = E.index.correction || {};
+        hd += '<div class="avis non"><b>En deçà de soixante-quinze points : des mesures de ' +
+          "correction sont dues</b>" + art("D. 1142-6") + " : les mesures de correction et, le cas " +
+          "échéant, la programmation de mesures financières de rattrapage salarial prévues à " +
+          art("L. 1142-9") + " doivent être mises en œuvre dès lors que le niveau de résultat est " +
+          "inférieur à soixante-quinze points. Elles sont publiées sur le site de l'entreprise, sur " +
+          "la même page que le résultat, et restent consultables jusqu'à ce que l'entreprise " +
+          "obtienne au moins soixante-quinze points. " + art("L. 1142-9") + " précise qu'à défaut " +
+          "d'accord les mesures sont déterminées par décision de l'employeur, après consultation du " +
+          "comité social et économique, et déposées auprès de l'autorité administrative dans les " +
+          "mêmes conditions que le plan d'action. " + art("L. 1142-10") + " ouvre un délai de trois " +
+          "ans pour se mettre en conformité, au terme duquel une pénalité peut être appliquée.</div>" +
+          '<div class="carte"><div class="champs">' +
+          '<label class="ch pleine"><span class="nom">Mesures de correction retenues</span>' +
+          '<textarea id="ix-mesures" placeholder="Les mesures adéquates et pertinentes, indicateur par indicateur.">' +
+          ech(E.index.correction.mesures || "") + "</textarea></label>" +
+          '<label class="ch pleine"><span class="nom">Calendrier de mise en œuvre</span>' +
+          '<textarea id="ix-calendrier" placeholder="Échéances, et le cas échéant programmation annuelle ou pluriannuelle du rattrapage salarial.">' +
+          ech(E.index.correction.calendrier || "") + "</textarea></label>" +
+          '<label class="ch"><span class="nom">Enveloppe de rattrapage salarial</span>' +
+          '<input id="ix-enveloppe" value="' + ech(E.index.correction.enveloppe || "") +
+          '" placeholder="Montant, ou « sans objet »"></label>' +
+          '<label class="ch"><span class="nom">Consultation du comité social et économique</span>' +
+          '<input id="ix-cse" type="date" value="' + ech(E.index.correction.cse || "") + '">' +
+          '<span class="sous">L. 1142-9 : à défaut d\'accord, décision de l\'employeur après consultation du comité.</span></label>' +
+          '<label class="ch"><span class="nom">Dépôt de l\'accord ou de la décision</span>' +
+          '<input id="ix-depot" type="date" value="' + ech(E.index.correction.depot || "") + '"></label>' +
+          '<label class="ch"><span class="nom">Mesures publiées le</span>' +
+          '<input id="ix-publication" type="date" value="' + ech(E.index.correction.publication || "") + '">' +
+          '<span class="sous">Sur la même page que le résultat (D. 1142-6).</span></label>' +
+          "</div></div>";
+      } else {
+        hd += '<div class="avis ok"><b>Au moins soixante-quinze points</b>' + art("D. 1142-6") +
+          " ne commande de mesures de correction qu'en deçà de soixante-quinze points. Cela ne dit " +
+          "rien du reste : la publication, la mise à disposition du comité et la télédéclaration " +
+          "restent dues.</div>";
+      }
+    }
+    if (E.index["i-cse"] === "non")
+      hd += '<div class="avis non"><b>Le comité n\'a pas reçu les indicateurs</b>' + art("D. 1142-5") +
+        " : les indicateurs et le niveau de résultat sont mis à la disposition du comité social et " +
+        "économique, présentés par catégorie socio-professionnelle, niveau ou coefficient " +
+        "hiérarchique, accompagnés des précisions utiles à leur compréhension.</div>";
+    if (E.index["i-declare"] === "non")
+      hd += '<div class="avis non"><b>La télédéclaration n\'est pas faite</b>' + art("D. 1142-5") +
+        ", dernier alinéa : l'ensemble de ces informations est également transmis aux services du " +
+        "ministre chargé du travail selon une procédure de télédéclaration.</div>";
+    if (String(E.index["i-resultat"] || "").trim() !== "" && !String(E.index["i-ou"] || "").trim())
+      hd += '<div class="avis att"><b>Un résultat calculé n\'est pas un résultat publié</b>' +
+        art("D. 1142-4") + " impose la publication, de manière visible et lisible. Indiquez où elle " +
+        "se trouve — l'adresse de la page, ou le moyen retenu à défaut de site internet.</div>";
+    $("i-correction").innerHTML = hd;
+
+    [["ix-mesures", "mesures"], ["ix-calendrier", "calendrier"], ["ix-enveloppe", "enveloppe"],
+     ["ix-cse", "cse"], ["ix-depot", "depot"], ["ix-publication", "publication"]]
+      .forEach(function (p) {
+        var el = $(p[0]); if (!el) return;
+        el.addEventListener("input", function () {
+          E.index.correction = E.index.correction || {};
+          E.index.correction[p[1]] = el.value; garder();
+        });
+      });
+
+    /* Les écarts de représentation : seulement au-delà de mille salariés. */
+    var hr = "";
+    if (eff != null && eff >= 1000) {
+      E.index.dirigeants = E.index.dirigeants || {};
+      hr = '<h3 class="sst">Les écarts de représentation — ' + art("L. 1142-11") + "</h3>" +
+        '<p class="aide" style="margin-bottom:8px">Obligation distincte, due dans les entreprises ' +
+        "qui, pour le troisième exercice consécutif, emploient au moins mille salariés. Le texte " +
+        "ajoute que la proportion de personnes de chaque sexe au sein de chacun des deux ensembles " +
+        "ne peut être inférieure à 30 %.</p><div class=\"champs\">" +
+        '<label class="ch"><span class="nom">Troisième exercice consécutif à mille salariés ?</span>' +
+        '<select id="ix-d-seuil"><option value="">— répondre —</option>' +
+        '<option value="oui"' + (E.index.dirigeants.seuil === "oui" ? " selected" : "") + ">Oui</option>" +
+        '<option value="non"' + (E.index.dirigeants.seuil === "non" ? " selected" : "") + ">Non</option>" +
+        "</select></label>" +
+        '<label class="ch"><span class="nom">Part de chaque sexe parmi les cadres dirigeants</span>' +
+        '<input id="ix-d-cadres" value="' + ech(E.index.dirigeants.cadres || "") +
+        '" placeholder="ex. 38 % de femmes / 62 % d\'hommes"></label>' +
+        '<label class="ch"><span class="nom">Part de chaque sexe dans les instances dirigeantes</span>' +
+        '<input id="ix-d-instances" value="' + ech(E.index.dirigeants.instances || "") +
+        '" placeholder="ex. 25 % de femmes / 75 % d\'hommes"></label>' +
+        '<label class="ch"><span class="nom">Publiés le</span>' +
+        '<input id="ix-d-date" type="date" value="' + ech(E.index.dirigeants.date || "") + '"></label>' +
+        "</div>";
+    }
+    $("i-dirigeants").innerHTML = hr;
+    [["ix-d-seuil", "seuil"], ["ix-d-cadres", "cadres"], ["ix-d-instances", "instances"],
+     ["ix-d-date", "date"]].forEach(function (p) {
+      var el = $(p[0]); if (!el) return;
+      var maj = function () {
+        E.index.dirigeants = E.index.dirigeants || {};
+        E.index.dirigeants[p[1]] = el.value; garder();
+      };
+      el.addEventListener("input", maj); el.addEventListener("change", maj);
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     6 · LE DÉPÔT
+     ══════════════════════════════════════════════════════════════════════════ */
+  ["d-date", "d-autorite", "d-recepisse", "d-pv", "d-cse"].forEach(function (id) {
+    var el = $(id);
+    var maj = function () { E.depot[id] = el.value; garder(); };
+    el.addEventListener("input", maj);
+    el.addEventListener("change", function () { maj(); rendreDepot(); });
+  });
+
+  function rendreDepot() {
+    ["d-date", "d-autorite", "d-recepisse", "d-pv", "d-cse"].forEach(function (id) {
+      if (E.depot[id] != null && $(id).value !== E.depot[id]) $(id).value = E.depot[id];
+    });
+    var ouvert = planDu();
+    $("carte-depot").style.display = ouvert ? "" : "none";
+    if (!ouvert) { $("etat-depot").innerHTML = ferme("le dépôt du plan"); return; }
+
+    var eff = effectif(), h = "";
+    $("w-pv").style.display = (eff != null && eff >= 300) ? "" : "none";
+
+    if (!E.depot["d-date"])
+      h += '<div class="avis att"><b>Le plan n\'est pas déposé</b>' + art("L. 2242-3") +
+        " : « Ce plan d'action est déposé auprès de l'autorité administrative. » Tant que la date " +
+        "manque, l'entreprise n'est pas couverte au sens de " + art("L. 2242-8") + ".</div>";
+    else if (!String(E.depot["d-recepisse"] || "").trim())
+      h += '<div class="avis att"><b>Le dépôt se prouve par le récépissé</b>' +
+        "La date que vous avez saisie est une déclaration. Conservez l'accusé de réception avec le " +
+        "plan : c'est lui qui établira le dépôt s'il est contesté.</div>";
+    else
+      h += '<div class="avis ok"><b>Dépôt renseigné et justifié</b>' +
+        "Cela ne vaut pas quitus sur le contenu du plan : le dépôt établit la formalité, pas la " +
+        "qualité des objectifs ni la réalité des actions.</div>";
+
+    if (eff != null && eff >= 300 && E.depot["d-pv"] !== "oui")
+      h += '<div class="avis non"><b>Le procès-verbal de désaccord manque</b>' + art("L. 2242-8") +
+        " : « Dans les entreprises d'au moins 300 salariés, ce défaut d'accord est attesté par un " +
+        "procès-verbal de désaccord. » Au-delà de ce seuil, le plan seul ne suffit pas à établir " +
+        "que l'accord a été recherché.</div>";
+    $("etat-depot").innerHTML = h;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     7 · LE REPORT
+
+     Le geste central de l'outil. Les objectifs de l'année N deviennent le bilan
+     de l'année N+1 : c'est exactement ce que L. 2242-3 demande d'évaluer, et
+     personne ne le retape. L'année close est archivée telle quelle — le
+     document peut la ressortir, elle ne se réécrit pas.
+     ══════════════════════════════════════════════════════════════════════════ */
+  function rendreReport() {
+    var n = annee();
+    if (!planDu() || n == null) {
+      $("etat-report").innerHTML = ferme("le report d'une année sur l'autre");
+      $("report-form").innerHTML = ""; rendreArchives(); return;
+    }
+    $("etat-report").innerHTML = '<div class="avis info"><b>De ' + n + " à " + (n + 1) + "</b>" +
+      "Le report fait trois choses, et rien d'autre : il archive l'année " + n + " telle qu'elle est ; " +
+      "il inscrit vos " + E.objectifs.length + " objectif(s) de " + n + " comme les objectifs à " +
+      "évaluer au bilan de " + (n + 1) + " ; il fait de " + (n + 1) + " l'année du plan. " +
+      "Le bilan actuel (" + E.bilan.lignes.length + " ligne(s)) part à l'archive avec l'année " + n + ".</div>";
+
+    $("report-form").innerHTML = '<div class="carte">' +
+      '<label style="display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;font-size:14.5px">' +
+      '<input type="checkbox" id="r-obj" checked style="margin-top:4px">' +
+      "<span>Reprendre les objectifs de " + n + " comme base de " + (n + 1) + ".<br>" +
+      '<small style="color:var(--encre-3)">Un objectif non atteint se reconduit le plus souvent. ' +
+      "Vous les modifierez ensuite — mais rien ne vous dispense de les réexaminer : " +
+      art("L. 2242-3") + " veut des objectifs déterminés pour l'année à venir, pas reconduits sans " +
+      "regard.</small></span></label>" +
+      '<label style="display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;font-size:14.5px">' +
+      '<input type="checkbox" id="r-act" checked style="margin-top:4px">' +
+      "<span>Reprendre les actions et leur chiffrage.<br>" +
+      '<small style="color:var(--encre-3)">Sans cette case, les actions sont archivées et l\'année ' +
+      "repart sans aucune action.</small></span></label>" +
+      '<div class="barre" style="margin-bottom:0">' +
+      '<button class="btn" id="r-preparer">Préparer le passage à ' + (n + 1) + "</button></div>" +
+      '<div id="r-confirmation"></div></div>';
+
+    $("r-preparer").addEventListener("click", function () {
+      var repObj = $("r-obj").checked, repAct = $("r-act").checked;
+      $("r-confirmation").innerHTML = '<div class="avis att"><b>Vérifiez avant de valider</b>' +
+        "L'année " + n + " sera archivée : " + E.objectifs.length + " objectif(s), " +
+        E.actions.length + " action(s), " + E.bilan.lignes.length + " ligne(s) de bilan. " +
+        "Le bilan de " + (n + 1) + " comptera " + E.objectifs.length + " ligne(s) à évaluer. " +
+        (repObj ? "Les objectifs seront repris" : "Les objectifs repartiront à zéro") + " ; " +
+        (repAct ? "les actions seront reprises" : "les actions repartiront à zéro") + ". " +
+        "Ce geste ne s'annule pas — l'archive, elle, reste consultable.</div>" +
+        '<div class="barre" style="margin-bottom:0">' +
+        '<button class="btn rouge" id="r-valider">Clore ' + n + " et ouvrir " + (n + 1) + "</button>" +
+        '<button class="btn second" id="r-annuler">Annuler</button></div>';
+      $("r-annuler").addEventListener("click", function () { $("r-confirmation").innerHTML = ""; });
+      $("r-valider").addEventListener("click", function () { reporter(repObj, repAct); });
+    });
+    rendreArchives();
+  }
+
+  function reporter(repObj, repAct) {
+    var n = annee();
+    if (n == null) return;
+    var copie = function (x) { return JSON.parse(JSON.stringify(x)); };
+
+    E.archives.push({
+      annee: n,
+      bilan: copie(E.bilan),
+      objectifs: copie(E.objectifs),
+      actions: copie(E.actions),
+      index: copie(E.index),
+      depot: copie(E.depot),
+      cloture: new Date().toISOString().slice(0, 10),
+    });
+
+    /* Le cœur : chaque objectif de N devient une ligne du bilan de N+1, avec son
+       indicateur et sa cible — le résultat, lui, reste à constater. */
+    E.bilan = {
+      suivi: E.bilan.suivi || "",
+      lignes: E.objectifs.map(function (o) {
+        return { id: uid(), theme: o.theme || "", objectif: o.intitule || "",
+          indicateur: o.indicateur || "", cible: o.cible || "",
+          resultat: "", etat: "", mesures: "", manques: "" };
+      }),
+    };
+
+    if (!repObj) { E.objectifs = []; E.actions = []; }
+    else if (!repAct) E.actions = [];
+    /* Si les objectifs sont repris, leurs identifiants sont conservés : les
+       actions restent attachées à l'objectif qu'elles servent. */
+
+    E.depot = {};
+    E.index = { "i-annee": String(n), "i-ou": E.index["i-ou"] || "" };
+    E.cadre.annee = n + 1;
+    garder();
+
+    $("c-annee").value = E.cadre.annee;
+    verdictCadre();
+    ouvrir("bilan");
+    $("etat-bilan").insertAdjacentHTML("afterbegin",
+      '<div class="avis ok"><b>Année ' + n + " close, année " + (n + 1) + " ouverte</b>" +
+      "Les objectifs de " + n + " sont devenus les lignes à évaluer ci-dessous. Constatez le " +
+      "résultat de chacun, dites ce qui a été fait et ce qui ne l'a pas été : " + art("L. 2242-3") +
+      " en fait le préalable des objectifs de " + (n + 1) + ".</div>");
+  }
+
+  function rendreArchives() {
+    if (!E.archives.length) { $("archives").innerHTML = ""; return; }
+    $("archives").innerHTML = '<h3 class="sst">Les années closes</h3>' +
+      E.archives.slice().reverse().map(function (a) {
+        var t = a.actions.reduce(function (s, x) { var c = coutAction(x); return s + (c || 0); }, 0);
+        return '<div class="fiche"><div class="tete"><b>Année ' + ech(a.annee) + "</b>" +
+          '<span class="jauge">' + a.objectifs.length + " objectif(s) · " + a.actions.length +
+          " action(s) · " + euros(t) + " · close le " + ech(a.cloture) + "</span></div>" +
+          '<div class="corps" style="font-size:13.5px;color:var(--encre-2)">' +
+          (a.objectifs.length
+            ? "<ul style=\"margin:0;padding-left:20px\">" + a.objectifs.map(function (o) {
+                return "<li>" + ech(o.intitule || "objectif sans intitulé") +
+                  (o.cible ? " — cible : " + ech(o.cible) : "") + "</li>"; }).join("") + "</ul>"
+            : "Aucun objectif n'avait été inscrit pour cette année.") +
+          "</div></div>";
+      }).join("");
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     8 · LE DOCUMENT — les manques entre crochets, jamais comblés
+     ══════════════════════════════════════════════════════════════════════════ */
+  var manquants = 0;
+  function cro(v, quoi) {
+    if (String(v == null ? "" : v).trim() === "") { manquants++; return "[" + (quoi || "à renseigner") + "]"; }
+    return String(v).trim();
+  }
+  function bloc(txt, largeur) {
+    /* Un pavé de texte replié à la largeur du document, indentation comprise. */
+    var l = largeur || 78, mots = String(txt).split(/\s+/), ligne = "", out = [];
+    mots.forEach(function (m) {
+      if ((ligne + " " + m).trim().length > l) { out.push(ligne.trim()); ligne = m; }
+      else ligne += " " + m;
+    });
+    if (ligne.trim()) out.push(ligne.trim());
+    return out;
+  }
+
+  function produire() {
+    manquants = 0;
+    var L = [], n = annee(), ne = anneeEcoulee();
+
+    if (E.cadre.accord === "oui")
+      return "Un accord relatif à l'égalité professionnelle est déclaré en vigueur.\n\n" +
+        "L'article L. 2242-3 (LEGIARTI000037389684) n'impose le plan d'action annuel qu'en " +
+        "l'absence d'un tel accord. Aucun plan n'est donc produit ici.\n\n" +
+        "Accord déclaré : " + cro(E.cadre.accordRef, "référence et date de l'accord") + ".\n" +
+        "Terme : " + cro(E.cadre.accordFin, "date de fin") + ".\n\n" +
+        "L'index de l'égalité professionnelle (L. 1142-8, LEGIARTI000044605453) reste dû " +
+        "indépendamment de cet accord : renseignez l'écran 5.";
+    if (!planDu())
+      return "Le cadre n'est pas établi : tant que l'existence d'un accord relatif à l'égalité " +
+        "professionnelle n'est pas tranchée, on ne sait pas si un plan d'action est dû " +
+        "(article L. 2242-3).";
+
+    L.push("PLAN D'ACTION ANNUEL POUR L'ÉGALITÉ PROFESSIONNELLE");
+    L.push("ENTRE LES FEMMES ET LES HOMMES");
+    L.push("");
+    L.push((E.cadre.nom || "[DÉNOMINATION]").toUpperCase());
+    L.push("Année du plan : " + (n == null ? "[année]" : n));
+    L.push("Effectif : " + cro(E.cadre.effectif, "effectif"));
+    L.push("");
+    L.push("Établi en l'absence d'accord relatif à l'égalité professionnelle entre les femmes et");
+    L.push("les hommes à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1,");
+    L.push("en application de l'article L. 2242-3 du code du travail (LEGIARTI000037389684).");
+    L.push("");
+    L.push("Les éléments non renseignés apparaissent entre crochets : ils sont visibles,");
+    L.push("ils ne sont pas inventés.");
+
+    /* I — l'évaluation, que le texte place avant tout le reste. */
+    L.push(""); L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("I. ÉVALUATION DE L'ANNÉE ÉCOULÉE — " + (ne == null ? "[année]" : ne));
+    L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("");
+    bloc("L'article L. 2242-3 fait de cette évaluation le préalable exprès du plan : c'est " +
+      "« après avoir évalué les objectifs fixés et les mesures prises au cours de l'année " +
+      "écoulée » que le plan détermine les objectifs de l'année à venir.").forEach(function (x) { L.push(x); });
+    L.push("");
+    if (!E.bilan.lignes.length) {
+      L.push("[Aucun objectif n'est inscrit au titre de l'année écoulée.]");
+      L.push("S'il s'agit du premier plan d'action de l'entreprise, il convient de l'indiquer");
+      L.push("expressément ; à défaut, l'évaluation exigée par L. 2242-3 fait défaut.");
+      manquants++;
+    } else {
+      E.bilan.lignes.forEach(function (o, i) {
+        var etats = { atteint: "Atteint", partiel: "Partiellement atteint", non: "Non atteint",
+          "sans-objet": "Devenu sans objet" };
+        L.push((i + 1) + ". " + cro(o.objectif, "objectif de l'année écoulée"));
+        if (o.theme) L.push("   Thème : " + o.theme);
+        L.push("   Indicateur : " + cro(o.indicateur, "indicateur"));
+        L.push("   Cible fixée : " + cro(o.cible, "cible") +
+          "   |   Résultat constaté : " + cro(o.resultat, "résultat"));
+        L.push("   Évaluation : " + (etats[o.etat] || cro("", "évaluation")));
+        L.push("   Mesures prises :");
+        bloc(String(o.mesures || "").trim() || "[mesures prises à décrire]", 70)
+          .forEach(function (x) { L.push("      " + x); });
+        if (!String(o.mesures || "").trim()) manquants++;
+        L.push("   Ce qui n'a pas été fait, et pourquoi :");
+        bloc(String(o.manques || "").trim() || "[à renseigner, ou « sans objet »]", 70)
+          .forEach(function (x) { L.push("      " + x); });
+        if (!String(o.manques || "").trim()) manquants++;
+        L.push("");
+      });
+    }
+    L.push("Modalités de suivi retenues (L. 2242-8, LEGIARTI000051289082) :");
+    bloc(String(E.bilan.suivi || "").trim() || "[modalités de suivi à définir]", 74)
+      .forEach(function (x) { L.push("   " + x); });
+    if (!String(E.bilan.suivi || "").trim()) manquants++;
+
+    /* II — les objectifs. */
+    L.push(""); L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("II. OBJECTIFS DE PROGRESSION POUR L'ANNÉE " + (n == null ? "[année]" : n));
+    L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("");
+    bloc("Fondés sur des critères clairs, précis et opérationnels (L. 2242-3). Les thèmes sont " +
+      "ceux des 1° et 2° de l'article L. 2242-17 (LEGIARTI000043893940).")
+      .forEach(function (x) { L.push(x); });
+    L.push("");
+    if (!E.objectifs.length) { L.push("[Aucun objectif de progression n'est fixé.]"); manquants++; }
+    else E.objectifs.forEach(function (o, i) {
+      L.push((i + 1) + ". " + cro(o.intitule, "objectif de progression"));
+      L.push("   Thème : " + cro(o.theme, "thème"));
+      L.push("   Indicateur : " + cro(o.indicateur, "indicateur"));
+      L.push("   Valeur de départ : " + cro(o.depart, "valeur de départ") +
+        "   |   Cible : " + cro(o.cible, "cible chiffrée"));
+      L.push("   Échéance : " + cro(o.echeance, "échéance"));
+      L.push("");
+    });
+
+    /* III — les actions et leur coût. */
+    L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("III. ACTIONS RETENUES ET ÉVALUATION DE LEUR COÛT");
+    L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("");
+    bloc("L'article L. 2242-3 impose que le plan définisse « les actions qualitatives et " +
+      "quantitatives permettant de les atteindre » et « évalue leur coût ».")
+      .forEach(function (x) { L.push(x); });
+    L.push("");
+    var totalC = 0, nonChiffrees = 0;
+    if (!E.actions.length) { L.push("[Aucune action n'est définie.]"); manquants++; }
+    else E.objectifs.concat([{ id: "", intitule: "Actions non rattachées à un objectif" }])
+      .forEach(function (o) {
+        var acts = E.actions.filter(function (a) { return (a.objectif || "") === o.id; });
+        if (!acts.length) return;
+        L.push("— Objectif : " + (o.intitule || "[objectif sans intitulé]"));
+        acts.forEach(function (a) {
+          var c = coutAction(a);
+          if (c == null) nonChiffrees++; else totalC += c;
+          L.push("   • " + cro(a.intitule, "intitulé de l'action"));
+          L.push("     Nature : " + (a.nature === "qualitative" ? "qualitative"
+            : a.nature === "quantitative" ? "quantitative"
+            : a.nature === "les-deux" ? "qualitative et quantitative" : cro("", "nature")));
+          L.push("     Responsable : " + cro(a.responsable, "responsable") +
+            "   |   Échéance : " + cro(a.echeance, "échéance"));
+          L.push("     Coût évalué : " + (c == null ? "[coût non évalué]" : euros(c)) +
+            (String(a.coutNote || "").trim() ? "   (" + a.coutNote.trim() + ")" : ""));
+          if (c == null) manquants++;
+          if (String(a.detail || "").trim())
+            bloc(a.detail.trim(), 68).forEach(function (x) { L.push("     " + x); });
+        });
+        L.push("");
+      });
+    L.push("Coût total évalué : " + euros(totalC) +
+      (nonChiffrees ? "   —   " + nonChiffrees + " action(s) non chiffrée(s)" : ""));
+
+    /* IV — l'index. */
+    L.push(""); L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("IV. INDEX DE L'ÉGALITÉ PROFESSIONNELLE");
+    L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("");
+    var eff = effectif();
+    if (eff != null && eff < 50) {
+      L.push("Sans objet : l'article L. 1142-8 (LEGIARTI000044605453) ne vise que les entreprises");
+      L.push("d'au moins cinquante salariés.");
+    } else {
+      L.push("Article L. 1142-8 (LEGIARTI000044605453) ; publication : article D. 1142-4");
+      L.push("(LEGIARTI000045250060), au plus tard le 1er mars de l'année en cours, au titre de");
+      L.push("l'année précédente.");
+      L.push("");
+      L.push("Année de référence : " + cro(E.index["i-annee"], "année"));
+      L.push("Niveau de résultat : " + cro(E.index["i-resultat"], "résultat") + " points");
+      L.push("Publié le : " + cro(E.index["i-date"], "date de publication"));
+      L.push("Publié ici : " + cro(E.index["i-ou"], "lieu de publication"));
+      L.push("Mis à disposition du comité social et économique (D. 1142-5) : " +
+        cro(E.index["i-cse"], "oui ou non"));
+      L.push("Télédéclaré au ministère chargé du travail (D. 1142-5) : " +
+        cro(E.index["i-declare"], "oui ou non"));
+      var r = Number(E.index["i-resultat"]);
+      if (String(E.index["i-resultat"] || "").trim() !== "" && Number.isFinite(r) && r < 75) {
+        var co = E.index.correction || {};
+        L.push("");
+        L.push("Résultat inférieur à soixante-quinze points : mesures de correction dues");
+        L.push("(article D. 1142-6, LEGIARTI000045250040 ; article L. 1142-9,");
+        L.push("LEGIARTI000044605442).");
+        L.push("Mesures de correction :");
+        bloc(String(co.mesures || "").trim() || "[mesures de correction à définir]", 74)
+          .forEach(function (x) { L.push("   " + x); });
+        if (!String(co.mesures || "").trim()) manquants++;
+        L.push("Calendrier :");
+        bloc(String(co.calendrier || "").trim() || "[calendrier à définir]", 74)
+          .forEach(function (x) { L.push("   " + x); });
+        if (!String(co.calendrier || "").trim()) manquants++;
+        L.push("Enveloppe de rattrapage salarial : " + cro(co.enveloppe, "montant ou « sans objet »"));
+        L.push("Consultation du comité social et économique : " + cro(co.cse, "date"));
+        L.push("Dépôt de l'accord ou de la décision : " + cro(co.depot, "date"));
+        L.push("Mesures publiées le : " + cro(co.publication, "date"));
+      }
+      if (eff != null && eff >= 1000) {
+        var di = E.index.dirigeants || {};
+        L.push("");
+        L.push("Écarts de représentation (article L. 1142-11, LEGIARTI000045951643) :");
+        L.push("Troisième exercice consécutif à mille salariés : " + cro(di.seuil, "oui ou non"));
+        L.push("Cadres dirigeants : " + cro(di.cadres, "répartition"));
+        L.push("Instances dirigeantes : " + cro(di.instances, "répartition"));
+        L.push("Publiés le : " + cro(di.date, "date"));
+      }
+    }
+
+    /* V — le dépôt. */
+    L.push(""); L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("V. DÉPÔT");
+    L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("");
+    L.push("Article L. 2242-3 : « Ce plan d'action est déposé auprès de l'autorité");
+    L.push("administrative. »");
+    L.push("");
+    L.push("Date du dépôt : " + cro(E.depot["d-date"], "date"));
+    L.push("Autorité destinataire : " + cro(E.depot["d-autorite"], "autorité"));
+    L.push("Récépissé : " + cro(E.depot["d-recepisse"], "référence du récépissé"));
+    if (eff != null && eff >= 300)
+      L.push("Procès-verbal de désaccord (L. 2242-8, entreprises d'au moins 300 salariés) : " +
+        cro(E.depot["d-pv"], "oui ou non"));
+    L.push("Présentation au comité social et économique : " + cro(E.depot["d-cse"], "date"));
+
+    /* Les années closes. */
+    if (E.archives.length) {
+      L.push(""); L.push("═══════════════════════════════════════════════════════════════════");
+      L.push("HISTORIQUE — LES ANNÉES CLOSES");
+      L.push("═══════════════════════════════════════════════════════════════════");
+      E.archives.forEach(function (a) {
+        L.push("");
+        L.push("Année " + a.annee + " — close le " + a.cloture + " : " + a.objectifs.length +
+          " objectif(s), " + a.actions.length + " action(s).");
+        a.objectifs.forEach(function (o) {
+          L.push("   • " + (o.intitule || "[objectif sans intitulé]") +
+            (o.cible ? " — cible : " + o.cible : ""));
+        });
+      });
+    }
+
+    /* VI — ce que le document ne prouve pas. */
+    L.push(""); L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("CE QUE CE DOCUMENT NE PROUVE PAS");
+    L.push("═══════════════════════════════════════════════════════════════════");
+    L.push("");
+    bloc(manquants + " élément(s) restent entre crochets. Un plan incomplet déposé reste un plan " +
+      "incomplet : le dépôt établit la formalité, non la qualité des objectifs ni la réalité des " +
+      "actions.").forEach(function (x) { L.push(x); });
+    L.push("");
+    bloc("Ce document reprend vos saisies. Il ne prouve pas que la négociation a été engagée ni " +
+      "qu'elle a été loyale — cela se prouve par les convocations, les informations remises et le " +
+      "procès-verbal. Il ne prouve pas davantage l'exécution des actions annoncées : c'est le bilan " +
+      "de l'année prochaine, que l'article L. 2242-3 imposera, qui en rendra compte.")
+      .forEach(function (x) { L.push(x); });
+    L.push("");
+    bloc("Il ne dit rien de ce que votre convention collective ou vos accords ajoutent. Les " +
+      "indicateurs de l'index dans les entreprises de cinquante à deux cent cinquante salariés " +
+      "(article D. 1142-2-1) et les modalités de calcul des annexes I et II ne sont pas repris ici : " +
+      "ces textes ne sont pas captés dans le dépôt, et rien n'est écrit de mémoire.")
+      .forEach(function (x) { L.push(x); });
+    L.push("");
+    L.push("Fait à " + "[lieu]" + ", le " + "[date]" + ".");
+    L.push("");
+    L.push("Signature de l'employeur ou de son représentant :");
+    return L.join("\n");
+  }
+
+  $("doc-produire").addEventListener("click", function () { $("doc").textContent = produire(); });
+  $("doc-copier").addEventListener("click", function () {
+    if (!$("doc").textContent) $("doc").textContent = produire();
+    if (navigator.clipboard) navigator.clipboard.writeText($("doc").textContent);
+  });
+  $("doc-imprimer").addEventListener("click", function () {
+    if (!$("doc").textContent) $("doc").textContent = produire();
+    window.print();
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     L'AMORÇAGE
+     ══════════════════════════════════════════════════════════════════════════ */
+  $("c-nom").value = E.cadre.nom || "";
+  $("c-eff").value = E.cadre.effectif == null ? "" : E.cadre.effectif;
+  $("c-annee").value = E.cadre.annee || "";
+  $("c-accord").value = E.cadre.accord || "";
+  $("c-sections").value = E.cadre.sections || "";
+  $("c-accord-ref").value = E.cadre.accordRef || "";
+  $("c-accord-fin").value = E.cadre.accordFin || "";
+  verdictCadre();
+  garder();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>
