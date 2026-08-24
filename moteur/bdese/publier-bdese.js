@@ -20,6 +20,7 @@ etape(3, "cas d'épreuve du moteur de régime", "cas-regime.js");
 etape(4, "dossiers contradictoires sur les contrôles", "tests-bdese.js");
 etape(5, "questionnaire et non-divergence, dans les deux sens", "questionnaire-bdese.js");
 etape(6, "propositions du formulaire, vérifiées dans les deux sens", "propositions-bdese.js");
+etape(7, "régularisation : chaque contrôle a son issue, chaque issue son contrôle", "regularisation-bdese.js");
 
 const { C, DETECTION, COHERENCE } = require("./controles-bdese.js");
 const CONTENU = require("./contenu-bdese.js");
@@ -131,11 +132,11 @@ try {
 }
 
 fs.writeFileSync(path.join(ICI, "manifeste-bdese.json"), JSON.stringify(manifeste, null, 1));
-console.log(`7. manifeste écrit — empreinte ${empreinte} · état : ${manifeste.etatPublication}`);
+console.log(`8. manifeste écrit — empreinte ${empreinte} · état : ${manifeste.etatPublication}`);
 if (!catalogueExhaustif)
   console.log(`   catalogue réglementaire NON exhaustif — couverture ${couvertures.join(" % et ")} %, critère de sortie ${SEUIL_CATALOGUE} %.`);
 console.log("   " + JSON.stringify(manifeste.compteurs));
 
-etape(8, "empaquetage pour le navigateur", "../commun/empaqueter.js",
+etape(9, "empaquetage pour le navigateur", "../commun/empaqueter.js",
   path.join(ICI, "../../docs/moteur-bdese.js"), "audit-bdese-client.js", "MoteurBDESE");
 console.log("publication du module BDESE : tout est vert");

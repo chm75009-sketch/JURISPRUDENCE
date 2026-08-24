@@ -348,6 +348,21 @@ for (const [id, r] of Object.entries(R)) {
       if (!v.cle || !v.question || !v.attendu)
         ECARTS.push(`${id} : une vérification est incomplète (clé, question, attendu)`);
 }
+/* L'unicité des clés de vérification. Deux clés identiques feraient répondre
+   une question à la place d'une autre : la réponse de la seconde écraserait
+   silencieusement celle de la première, et le verdict porterait sur autre chose
+   que ce qui a été demandé. Le garde vient des modules PSE, discipline, BDESE
+   et santé-sécurité, où il a été posé avant d'exister ici. */
+{
+  const vues = new Map();
+  for (const [id, r] of Object.entries(R)) {
+    if (!r || !Array.isArray(r.verifs)) continue;
+    for (const v of r.verifs) {
+      if (vues.has(v.cle)) ECARTS.push(`${id} : la clé « ${v.cle} » est déjà employée par ${vues.get(v.cle)}`);
+      else vues.set(v.cle, id);
+    }
+  }
+}
 
 module.exports = { R, GRAVITES, ECARTS };
 

@@ -59,7 +59,7 @@
      inscrit dans les droits enregistrés et dans le journal. Le libellé, lui,
      peut être réécrit sans conséquence. */
   var MODULES = [
-    { id: "recherche",        nom: "Recherche de jurisprudence",        page: "index.html" },
+    { id: "recherche",        nom: "Recherche de jurisprudence",        page: "recherche.html" },
     { id: "audit-social",     nom: "Audit social — le point complet",   page: "audit-social.html" },
     { id: "audit-economique", nom: "Audit — licenciement économique",   page: "audit.html" },
     { id: "audit-cse",        nom: "Audit — comité social et économique", page: "audit-cse.html" },

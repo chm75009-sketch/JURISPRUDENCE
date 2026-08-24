@@ -12,9 +12,9 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-5.6";
+const CACHE = "jurisprudence-5.7";
 const ESSENTIELS = [
-  "./", "./index.html", "./manifest.json",
+  "./", "./index.html", "./recherche.html", "./manifest.json",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
      reconnaissance de la matière instantanée et disponible hors connexion. */
   "./vocabulaire.json",

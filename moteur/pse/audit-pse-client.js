@@ -11,6 +11,8 @@ const M = require("./moteur-pse.js");
 const { C, ETATS, DETECTION, COHERENCE } = require("./controles-pse.js");
 const { L1233_62 } = require("./mesures.js");
 const GRILLE = require("./grille-pse.js");
+const { R } = require("./regularisation-pse.js");
+const DT = require("../commun/parcours-deux-temps.js");
 
 const { CONF, NC, RISQ, MANQ, SO } = ETATS;
 const euros = n => (typeof n === "number" && isFinite(n) ? n.toLocaleString("fr-FR") + " €" : "—");
@@ -129,4 +131,27 @@ function audit(f) {
   return A.D;
 }
 
+/* Les verdicts bruts, tels que la page en a besoin pour le parcours : le
+   rapport ci-dessus les met en forme, il ne les rend pas. */
+function verdicts(f) {
+  const v = {};
+  for (const c of C) {
+    try { v[c.id] = c.verdict(f); }
+    catch (e) { v[c.id] = { etat: MANQ, motif: "Contrôle non exécutable : " + e.message }; }
+  }
+  return v;
+}
+
+/* Le parcours en deux temps — corriger ce qui manque, puis vérifier ce qui est
+   déclaré. `etat` porte ce que la page a recueilli : les corrections déclarées
+   faites et les réponses à la grille de vérification. */
+function parcours(f, etat) {
+  return DT.parcours(C, R, verdicts(f), etat);
+}
+
 module.exports = audit;
+module.exports.verdicts = verdicts;
+module.exports.parcours = parcours;
+module.exports.regularisation = R;
+module.exports.controles = C;
+module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };

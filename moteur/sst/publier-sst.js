@@ -22,6 +22,7 @@ const etape = (n, quoi, fichier, ...args) => {
 etape(1, "dossiers contradictoires sur les contrôles", "tests-sst.js");
 etape(2, "questionnaire et non-divergence, dans les deux sens", "questionnaire-sst.js");
 etape(3, "propositions du formulaire, vérifiées dans les deux sens", "propositions-sst.js");
+etape(4, "régularisation : chaque contrôle a son issue, chaque issue son contrôle", "regularisation-sst.js");
 
 const { C, DETECTION, COHERENCE } = require("./controles-sst.js");
 const { CAS, BASE, verdicts } = require("./tests-sst.js");
@@ -91,9 +92,9 @@ try {
 
 fs.writeFileSync(path.join(ICI, "manifeste-sst.json"), JSON.stringify(manifeste, null, 1));
 
-console.log(`4. manifeste écrit — empreinte ${empreinte}`);
+console.log(`5. manifeste écrit — empreinte ${empreinte}`);
 console.log("   " + JSON.stringify(manifeste.compteurs));
 
-etape(5, "empaquetage pour le navigateur", "../commun/empaqueter.js",
+etape(6, "empaquetage pour le navigateur", "../commun/empaqueter.js",
   path.join(ICI, "../../docs/moteur-sst.js"), "audit-sst-client.js", "MoteurSST");
 console.log("publication du module SST : tout est vert");

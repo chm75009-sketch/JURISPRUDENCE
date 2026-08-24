@@ -24,6 +24,7 @@ etape(2, "dossiers contradictoires sur les contrôles", "tests-pse.js");
 etape(3, "questionnaire et non-divergence, dans les deux sens", "questionnaire-pse.js");
 etape(4, "propositions du formulaire, vérifiées dans les deux sens", "propositions-pse.js");
 etape(5, "grille de jurisprudence et corpus des arrêts", "grille-pse.js");
+etape(6, "régularisation : chaque contrôle a son issue, chaque issue son contrôle", "regularisation-pse.js");
 
 const { C, DETECTION, COHERENCE } = require("./controles-pse.js");
 const { L1233_62 } = require("./mesures.js");
@@ -98,9 +99,9 @@ try {
 
 fs.writeFileSync(path.join(ICI, "manifeste-pse.json"), JSON.stringify(manifeste, null, 1));
 
-console.log(`6. manifeste écrit — empreinte ${empreinte}`);
+console.log(`7. manifeste écrit — empreinte ${empreinte}`);
 console.log("   " + JSON.stringify(manifeste.compteurs));
 
-etape(7, "empaquetage pour le navigateur", "../commun/empaqueter.js",
+etape(8, "empaquetage pour le navigateur", "../commun/empaqueter.js",
   path.join(ICI, "../../docs/moteur-pse.js"), "audit-pse-client.js", "MoteurPSE");
 console.log("publication du module PSE : tout est vert");

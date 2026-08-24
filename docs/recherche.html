@@ -1,0 +1,3127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recherche — jurisprudence et textes</title>
+<!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
+     tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
+     Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
+<script src="droits.js"></script>
+<meta name="description" content="Recherche jurisprudentielle dans la base ouverte Judilibre. Chaque décision affichée correspond exactement à la demande.">
+<meta name="theme-color" content="#8b1e2d">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Jurisprudence">
+<style>
+  :root{
+    --ink:#1c2430; --muted:#5b6a7c; --line:#dde4ec; --bg:#f4f6f9; --card:#fff;
+    --accent:#8b1e2d; --accent-soft:#f7e9eb; --link:#1d4ed8;
+    --ok:#166534; --ok-soft:#e8f5ec; --warn:#92400e; --warn-soft:#fdf3e3;
+    --err:#8a1f1f; --err-soft:#fdecec;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+  a{color:var(--link)}
+  mark{background:#fdeaa2;color:inherit;border-radius:2px}
+  .wrap{max-width:920px;margin:0 auto;padding:0 16px 56px}
+
+  header.site{background:linear-gradient(135deg,#1c2430,#37220f 60%,#5a1b26);color:#fff;padding:22px 0}
+  header.site h1{margin:0;font-size:22px;letter-spacing:.2px}
+  header.site h1 span{color:#f0c9ce}
+  header.site .etat{margin-top:8px;font-size:13px;color:#cfd6df;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  header.site button{font:inherit;font-size:12.5px;padding:3px 10px;border-radius:99px;
+    border:1px solid #ffffff55;background:transparent;color:#fff;cursor:pointer}
+  header.site button:hover{background:#ffffff22}
+  .pastille{display:inline-block;width:8px;height:8px;border-radius:99px;background:#c9a227}
+  .pastille.ok{background:#54c27a}
+
+  .carte{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:16px}
+  h2{margin:0 0 14px;font-size:17px}
+  label.champ{display:block;font-size:13px;color:var(--muted);margin-bottom:12px}
+  label.champ b{display:block;color:var(--ink);margin-bottom:5px;font-size:13.5px;font-weight:600}
+  input[type=text],input[type=search],input[type=password],input[type=date],select{
+    font:inherit;font-size:16px;width:100%;padding:10px 12px;border:1px solid var(--line);
+    border-radius:10px;background:#fff;color:var(--ink)}
+  input:focus,select:focus{outline:2px solid #8b1e2d33;border-color:var(--accent)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:600px){.duo{grid-template-columns:1fr}}
+  .cases{display:flex;gap:6px;flex-wrap:wrap}
+  .cases label{display:flex;gap:6px;align-items:center;font-size:14px;cursor:pointer;
+    border:1px solid var(--line);border-radius:99px;padding:6px 12px;background:#fff}
+  .cases label:has(input:checked){border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+  .bloc-titre{font-size:13.5px;font-weight:600;margin-bottom:6px}
+
+  .boutons{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
+  button.principal{font:inherit;font-size:15px;font-weight:600;padding:11px 24px;border-radius:10px;
+    border:none;background:var(--accent);color:#fff;cursor:pointer}
+  button.principal:hover{background:#6f1824}
+  button.second{font:inherit;font-size:14px;padding:9px 15px;border-radius:10px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);cursor:pointer}
+  button.second:hover{border-color:var(--accent);color:var(--accent)}
+  button[disabled]{opacity:.45;cursor:not-allowed}
+
+  details.affiner{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+  details.affiner > summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--accent);list-style:none}
+  details.affiner > summary::-webkit-details-marker{display:none}
+  details.affiner > summary::before{content:"▸ "}
+  details.affiner[open] > summary::before{content:"▾ "}
+  details.affiner .corps{padding-top:14px}
+
+  .note{font-size:13px;color:var(--muted)}
+  .msg{border-radius:10px;padding:11px 13px;font-size:14px;margin-top:12px}
+  .msg.err{background:var(--err-soft);border:1px solid #f3c3c3;color:var(--err)}
+  .msg.info{background:var(--warn-soft);border:1px solid #ecd9b0;color:var(--warn)}
+  .msg.ok{background:var(--ok-soft);border:1px solid #bfe3c8;color:var(--ok)}
+
+  .garantie{display:flex;gap:9px;align-items:flex-start;background:var(--ok-soft);border:1px solid #bfe3c8;
+    color:#14532d;border-radius:12px;padding:11px 13px;font-size:13.5px;margin-top:16px}
+  .garantie b{font-weight:600}
+
+  .filtres{background:var(--warn-soft);border:1px solid #ecd9b0;border-radius:12px;padding:9px 12px;
+    margin-top:12px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;font-size:13px}
+  .filtres .t{font-weight:600;color:var(--warn)}
+  .filtres .f{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #e3cfa4;
+    border-radius:99px;padding:3px 5px 3px 10px}
+  .filtres .f button{font:inherit;font-size:14px;line-height:1;border:none;background:none;
+    color:var(--warn);cursor:pointer;padding:0 3px}
+  .filtres .tout{font:inherit;font-size:12.5px;padding:4px 11px;border-radius:99px;border:1px solid var(--warn);
+    background:#fff;color:var(--warn);cursor:pointer;margin-left:auto}
+
+  .compte{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .compte .n{font-size:20px;font-weight:700;color:var(--accent)}
+
+  .fiche{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px;margin-top:11px}
+  .fiche .tete{display:flex;gap:7px;flex-wrap:wrap;align-items:baseline;margin-bottom:7px}
+  .fiche .jur{font-weight:700}
+  .fiche .date{color:var(--muted)}
+  .badge{font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);background:var(--bg);color:var(--muted)}
+  .badge.pub{background:var(--ok-soft);color:var(--ok);border-color:#bfe3c8}
+  .badge.sol{background:var(--accent-soft);color:var(--accent);border-color:#ecc9ce}
+  .fiche .resume{background:var(--accent-soft);border:1px solid #ecc9ce;border-radius:9px;
+    padding:9px 11px;font-size:13.5px;color:#5a2a31;margin:8px 0}
+  .fiche .extraits{font-size:14px;color:#33404f;margin:8px 0}
+  .fiche .extraits em{background:#fdeaa2;font-style:normal;border-radius:2px}
+  .fiche .pied{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;align-items:center;margin-top:9px}
+  .fiche .pied button{font:inherit;font-size:13.5px;border:none;background:none;color:var(--link);
+    cursor:pointer;padding:0;text-decoration:underline}
+
+  .pages{display:flex;gap:10px;justify-content:center;align-items:center;margin:20px 0}
+  .pages span{font-size:13.5px;color:var(--muted)}
+
+  dialog{border:none;border-radius:16px;max-width:880px;width:94vw;max-height:88vh;padding:0}
+  dialog::backdrop{background:#0b1220aa}
+  .dlg-tete{position:sticky;top:0;background:var(--card);display:flex;justify-content:space-between;gap:10px;
+    align-items:flex-start;padding:16px 20px 11px;border-bottom:1px solid var(--line)}
+  .dlg-tete h3{margin:0;font-size:16px}
+  .dlg-corps{padding:15px 20px 24px;overflow-wrap:break-word}
+  .dlg-corps .sommaire{background:var(--accent-soft);border:1px solid #ecc9ce;border-radius:10px;
+    padding:11px 13px;font-size:14px;margin-bottom:13px}
+  .dlg-corps pre{white-space:pre-wrap;font:14px/1.65 Georgia,'Times New Roman',serif;margin:0}
+  .dlg-corps .texte-art{font:15px/1.65 Georgia,'Times New Roman',serif;white-space:pre-wrap}
+  .fermer{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;
+    border-radius:9px;padding:6px 12px;cursor:pointer;flex-shrink:0}
+  button.ccnlien{font:inherit;font-size:inherit;border:none;background:#f0eaf6;color:#5b2d82;
+    padding:0 3px;border-radius:4px;cursor:pointer;text-align:left}
+  button.ccnlien:hover{background:#e3d7ef;text-decoration:underline}
+  button.art{font:inherit;font-size:inherit;border:none;background:#eef3ff;color:var(--link);
+    border-bottom:1px dotted var(--link);cursor:pointer;padding:0 2px;border-radius:3px}
+
+  .progression{margin-top:10px;font-size:13.5px;color:var(--muted)}
+  .progression .barre{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
+  .progression .barre i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+
+  footer{margin-top:34px;font-size:12.5px;color:var(--muted);text-align:center}
+  .cache{display:none !important}
+  /* Le lien vers l'audit : même gabarit que les boutons de la barre d'état,
+     pour qu'il se lise comme une seconde entrée et non comme un ornement. */
+  .lien-audit{display:inline-block;padding:4px 10px;border:1px solid currentColor;
+    border-radius:3px;text-decoration:none;font-weight:600;font-size:inherit}
+  .lien-audit:hover{filter:brightness(1.15)}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1><span>Jurisprudence</span> — recherche Judilibre</h1>
+    <div class="etat">
+      <span><span class="pastille" id="voyant"></span> <span id="etat-cle">clé non configurée</span></span>
+      <button id="btn-cle" type="button">Changer la clé</button>
+      <span id="etat-hote"></span>
+      <button id="btn-adresse" type="button" title="Copier l'adresse de l'application">Copier l'adresse</button>
+      <button id="btn-avert" type="button" title="Ce que fait cet outil, et ce qu'il ne fait pas">Avertissement d'usage</button>
+      <a href="index.html" class="lien-audit" title="Revenir à l'accueil">← Accueil</a>
+      <a href="guides.html" class="lien-audit">Guides d'utilisation</a>
+      <span id="etat-version"></span>
+    </div>
+  </div>
+</header>
+
+<dialog id="dlg-avertissement" style="max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;font:15px/1.55 system-ui;color:#1c2126">
+  <h2 style="margin:0 0 12px;font:600 19px/1.3 system-ui">Avertissement d'usage</h2>
+  <p style="margin:0 0 10px">Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
+  avocat, ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
+  <p style="margin:0 0 10px">Les décisions affichées sont celles que l'API Judilibre de la Cour de cassation
+  renvoie à votre recherche, et les articles ceux que Légifrance renvoie à la date demandée. Une recherche
+  n'est jamais exhaustive : l'absence de résultat ne prouve pas l'absence de jurisprudence.</p>
+  <p style="margin:0 0 10px">Les résultats ne constituent pas une consultation juridique et n'engagent pas
+  leur auteur. La décision, et la responsabilité qui l'accompagne, restent les vôtres.</p>
+  <p style="margin:0 0 10px">Votre clé API reste dans votre navigateur ; elle n'est ni transmise ni conservée
+  ailleurs.</p>
+  <form method="dialog" style="margin-top:14px"><button style="font:inherit;padding:8px 18px;border-radius:8px;border:1px solid #d8dbe0;background:#f6f7f9;cursor:pointer">Fermer</button></form>
+</dialog>
+
+<div id="maj" class="cache">
+  <div class="wrap" style="padding-top:10px">
+    <div class="msg ok" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <span><b>Une nouvelle version est disponible.</b> Celle affichée date de votre dernière ouverture.</span>
+      <button class="second" id="btn-maj" type="button" style="margin-left:auto">Recharger maintenant</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===================== Clé API ===================== -->
+  <section class="carte" id="carte-cle">
+    <h2>Votre clé Judilibre</h2>
+    <p class="note">Clé personnelle et gratuite, délivrée par <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>
+      (compte → application en <b>production</b> → souscrire l'API <b>JUDILIBRE</b> → « API Key »).
+      Elle reste dans ce navigateur et n'est envoyée qu'à l'API officielle.</p>
+    <div class="duo" style="margin-top:12px">
+      <label class="champ"><b>Clé API</b><input type="password" id="in-cle" placeholder="ex. a1b2c3d4-…" autocomplete="off"></label>
+      <div style="align-self:end;margin-bottom:12px"><button class="principal" id="btn-tester" type="button">Enregistrer</button></div>
+    </div>
+    <div id="msg-cle"></div>
+  </section>
+
+  <!-- ===================== Recherche ===================== -->
+  <section class="carte">
+    <h2>Recherche</h2>
+
+    <label class="champ"><b>Que cherchez-vous ?</b>
+      <input type="search" id="q" placeholder="ex. clause de non-concurrence">
+    </label>
+    <div class="boutons" style="margin:-6px 0 12px">
+      <button class="second" id="btn-mots" type="button">Trouver les bons mots-clés</button>
+      <span class="note" style="align-self:center">Décrivez votre sujet en français courant —
+        « faux CV », « salarié qui ment sur ses diplômes ». L'application ira lire les décisions
+        pour vous dire quelles formules les juges emploient réellement, et combien il en existe.</span>
+    </div>
+    <div id="mots-matieres"></div>
+    <div id="mots-zone"></div>
+
+    <div class="bloc-titre">Comment interpréter ces mots</div>
+    <div class="cases" id="modes" style="margin-bottom:14px">
+      <label><input type="radio" name="mode" value="exact" checked> Expression exacte</label>
+      <label><input type="radio" name="mode" value="and"> Tous les mots</label>
+      <label><input type="radio" name="mode" value="or"> Au moins un mot</label>
+    </div>
+
+    <div class="bloc-titre">Juridictions</div>
+    <div class="cases" style="margin-bottom:14px">
+      <label><input type="checkbox" id="j-cc" checked> Cour de cassation</label>
+      <label><input type="checkbox" id="j-ca" checked> Cours d'appel</label>
+      <label><input type="checkbox" id="j-tj"> Tribunaux judiciaires</label>
+      <label><input type="checkbox" id="j-tcom"> Tribunaux de commerce</label>
+    </div>
+
+    <div class="duo">
+      <label class="champ"><b>À partir du</b><input type="date" id="du"></label>
+      <label class="champ"><b>Jusqu'au</b><input type="date" id="au"></label>
+    </div>
+
+    <div class="boutons">
+      <button class="principal" id="btn-chercher" type="button">Rechercher</button>
+      <button class="second" id="btn-reinit" type="button">Réinitialiser</button>
+    </div>
+
+    <details class="affiner" id="affiner">
+      <summary id="resume-affiner">Affiner</summary>
+      <div class="corps">
+        <label class="champ"><b>Modèles de recherche</b>
+          <input type="search" id="modele-filtre" placeholder="Filtrer : bail, preuve, nullité…">
+          <select id="modele" style="margin-top:6px"></select>
+        </label>
+
+        <label class="champ"><b>Mots à exclure <span style="font-weight:400;color:var(--muted)">(séparés par des virgules)</span></b>
+          <input type="text" id="exclure" placeholder="ex. harcèlement sexuel">
+        </label>
+
+        <div class="duo">
+          <label class="champ"><b>Chercher dans</b>
+            <select id="zone">
+              <option value="">Toute la décision</option>
+              <option value="motivations">Motivations</option>
+              <option value="dispositif">Dispositif</option>
+              <option value="moyens">Moyens</option>
+              <option value="expose">Exposé du litige</option>
+              <option value="sommaire">Sommaire et titrage</option>
+            </select>
+          </label>
+          <label class="champ"><b>Trier par</b>
+            <select id="tri">
+              <option value="score">Pertinence</option>
+              <option value="date-desc">Date — récent d'abord</option>
+              <option value="date-asc">Date — ancien d'abord</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="champ"><b>Une juridiction en particulier</b>
+          <input type="search" id="lieu-filtre" placeholder="Filtrer : Paris, Versailles, Aix…">
+          <select id="lieu" style="margin-top:6px"></select>
+        </label>
+
+        <div class="bloc-titre">Chambres de la Cour de cassation</div>
+        <div class="cases" style="margin-bottom:6px">
+          <label><input type="checkbox" class="ch" value="soc"> Sociale</label>
+          <label><input type="checkbox" class="ch" value="cr"> Criminelle</label>
+          <label><input type="checkbox" class="ch" value="civ1"> 1re civile</label>
+          <label><input type="checkbox" class="ch" value="civ2"> 2e civile</label>
+          <label><input type="checkbox" class="ch" value="civ3"> 3e civile</label>
+          <label><input type="checkbox" class="ch" value="comm"> Commerciale</label>
+          <label><input type="checkbox" class="ch" value="pl"> Ass. plénière</label>
+          <label><input type="checkbox" class="ch" value="mi"> Ch. mixte</label>
+        </div>
+        <p class="note" style="margin:0 0 14px">Aucune cochée = toutes les chambres.</p>
+
+        <div class="bloc-titre">Publication</div>
+        <div class="cases" style="margin-bottom:6px">
+          <label><input type="checkbox" class="pub" value="b"> Bulletin</label>
+          <label><input type="checkbox" class="pub" value="r"> Rapport annuel</label>
+          <label><input type="checkbox" class="pub" value="l"> Lettres de chambre</label>
+          <label><input type="checkbox" class="pub" value="c"> Communiqué</label>
+        </div>
+        <p class="note" style="margin:0">« Bulletin » = les arrêts que la Cour juge importants.</p>
+      </div>
+    </details>
+
+    <div id="msg"></div>
+  </section>
+
+  <!-- ===================== Résultats ===================== -->
+  <section id="resultats" class="cache">
+    <div id="filtres" class="cache"></div>
+    <div class="compte">
+      <div><span class="n" id="nb">0</span> <span id="nb-mot">décision</span></div>
+      <div class="note" id="duree"></div>
+    </div>
+    <div id="garantie"></div>
+    <div class="boutons" style="margin-top:12px">
+      <button class="second" id="btn-csv" type="button">Exporter en CSV (Excel)</button>
+      <button class="second" id="btn-html" type="button">Exporter en HTML (lisible)</button>
+      <select id="export-max" style="width:auto">
+        <option value="200">200 premières</option>
+        <option value="1000">1 000 premières</option>
+        <option value="10000">maximum (10 000)</option>
+      </select>
+      <button class="second" id="btn-lien" type="button">Copier le lien</button>
+    </div>
+    <div id="progression" class="progression cache">
+      <span id="prog-texte"></span>
+      <div class="barre"><i id="prog-barre"></i></div>
+    </div>
+    <div id="liste"></div>
+    <div class="pages">
+      <button class="second" id="btn-prec" type="button">← Précédent</button>
+      <span id="page-txt"></span>
+      <select id="par-page" style="width:auto" title="Décisions affichées par page">
+        <option value="10">10 par page</option>
+        <option value="20" selected>20 par page</option>
+        <option value="50">50 par page</option>
+      </select>
+      <button class="second" id="btn-suiv" type="button">Suivant →</button>
+    </div>
+  </section>
+
+  <!-- ============== Conventions collectives (fonds KALI) ============== -->
+  <section class="carte" id="carte-ccn">
+    <h2>Conventions collectives</h2>
+    <p class="note">Le texte officiel des conventions collectives nationales, tel qu'il est publié
+      (fonds KALI de Légifrance). Une convention se désigne par son <b>numéro IDCC</b> —
+      16 pour les transports routiers, 1486 pour les bureaux d'études, 3248 pour la métallurgie —
+      ou se cherche par son intitulé. Chaque texte s'exporte en PDF et en Word, pour être versé aux débats.</p>
+    <div class="duo" style="margin-top:12px">
+      <label class="champ"><b>Numéro IDCC</b>
+        <input id="ccn-idcc" inputmode="numeric" placeholder="ex. 16" autocomplete="off"></label>
+      <label class="champ"><b>ou recherche par intitulé</b>
+        <input id="ccn-q" placeholder="ex. transports routiers" autocomplete="off"></label>
+    </div>
+    <div class="boutons">
+      <button class="principal" id="ccn-ouvrir" type="button">Ouvrir la convention</button>
+      <button class="second" id="ccn-chercher" type="button">Chercher une convention</button>
+    </div>
+    <label class="champ"><b>Chercher dans le texte de la convention</b>
+      <input id="ccn-texte-q" placeholder="ex. coefficient 200, période d'essai, prime d'ancienneté" autocomplete="off"></label>
+    <div class="boutons" style="margin-top:-6px">
+      <button class="second" id="ccn-plein" type="button">Chercher dans la convention</button>
+      <label style="align-self:center"><input type="checkbox" id="ccn-plein-exact"> expression exacte</label>
+      <button class="second" id="ccn-decisions" type="button">Décisions citant cette convention</button>
+    </div>
+    <div id="ccn-msg"></div>
+    <div id="ccn-sommaire"></div>
+  </section>
+
+  <!-- ============== Lois et décrets (fonds LODA) ============== -->
+  <section class="carte" id="carte-loda">
+    <h2>Lois et décrets</h2>
+    <p class="note">Le texte des lois, ordonnances, décrets et arrêtés, tel qu'il est publié
+      (fonds LODA de Légifrance) — c'est là que vivent les lois de financement de la sécurité
+      sociale et les lois ordinaires, que ni les codes ni les conventions collectives ne portent.
+      Un texte se cherche par ses mots, ou se désigne par son <b>NOR</b>, l'identifiant que la
+      publication lui donne.</p>
+    <label class="champ"><b>Que cherchez-vous ?</b>
+      <input id="loda-q" placeholder="ex. contribution sur les indemnités de rupture conventionnelle" autocomplete="off"></label>
+    <div class="boutons">
+      <button class="second" id="loda-mots" type="button">Trouver les bons mots-clés</button>
+    </div>
+    <div id="loda-mots-zone"></div>
+    <div class="duo" style="margin-top:12px">
+      <label class="champ"><b>ou par NOR</b>
+        <input id="loda-nor" placeholder="ex. TRSD2606801L" autocomplete="off"></label>
+      <label class="champ"><b>version en vigueur au</b>
+        <input id="loda-date" type="date" autocomplete="off"></label>
+    </div>
+    <div class="boutons">
+      <button class="principal" id="loda-chercher" type="button">Rechercher</button>
+      <label style="align-self:center"><input type="checkbox" id="loda-exact"> expression exacte</label>
+    </div>
+    <div id="loda-msg"></div>
+    <div id="loda-resultats"></div>
+  </section>
+
+  <footer>
+    Décisions : <a href="https://www.courdecassation.fr/acces-rapide-judilibre" target="_blank" rel="noopener">Judilibre</a>
+    (Cour de cassation, open data, décisions pseudonymisées) · textes :
+    <a href="https://www.legifrance.gouv.fr" target="_blank" rel="noopener">Légifrance</a> (DILA) ·
+    API servies par <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>.
+    Aucune donnée personnelle collectée.
+  </footer>
+</div>
+
+<dialog id="dlg-decision">
+  <div class="dlg-tete">
+    <div><h3 id="dlg-titre">Décision</h3><div class="note" id="dlg-sous"></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="fermer" id="dlg-citer" type="button">Copier la citation</button>
+      <button class="fermer" id="dlg-pdf" type="button">PDF</button>
+      <button class="fermer" id="dlg-word" type="button">Word</button>
+      <button class="fermer" id="dlg-fermer" type="button">Fermer</button>
+    </div>
+  </div>
+  <div class="dlg-corps" id="dlg-corps"></div>
+</dialog>
+
+<dialog id="dlg-article">
+  <div class="dlg-tete">
+    <div><h3 id="art-titre">Article</h3><div class="note" id="art-sous"></div></div>
+    <button class="fermer" id="art-fermer" type="button">Fermer</button>
+  </div>
+  <div class="dlg-corps" id="art-corps"></div>
+</dialog>
+
+<dialog id="dlg-ccn">
+  <div class="dlg-tete">
+    <div><h3 id="ccn-titre">Texte</h3><div class="note" id="ccn-sous"></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input id="ccn-filtre" placeholder="filtrer dans ce texte…" style="width:200px" autocomplete="off">
+      <button class="fermer" id="ccn-pdf" type="button">PDF</button>
+      <button class="fermer" id="ccn-word" type="button">Word</button>
+      <button class="fermer" id="ccn-fermer" type="button">Fermer</button>
+    </div>
+  </div>
+  <div class="dlg-corps" id="ccn-corps"></div>
+</dialog>
+
+<dialog id="dlg-loda">
+  <div class="dlg-tete">
+    <div><h3 id="loda-titre">Texte</h3><div class="note" id="loda-sous"></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input id="loda-filtre" placeholder="filtrer dans ce texte…" style="width:200px" autocomplete="off">
+      <button class="fermer" id="loda-pdf" type="button">PDF</button>
+      <button class="fermer" id="loda-word" type="button">Word</button>
+      <button class="fermer" id="loda-fermer" type="button">Fermer</button>
+    </div>
+  </div>
+  <div class="dlg-corps" id="loda-corps"></div>
+</dialog>
+
+<script>
+"use strict";
+/* ==========================================================================
+   Jurisprudence — recherche Judilibre.
+
+   PRINCIPE DIRECTEUR : fidélité. Aucune décision n'est affichée qui ne
+   corresponde à la demande.
+
+   Ce principe repose sur une mesure, pas sur une intuition. L'API Judilibre a
+   été éprouvée sur des dizaines de décisions dont le texte intégral a été
+   contrôlé mot à mot :
+     · lorsqu'elle ne signale pas d'élargissement, elle est fidèle — 49 décisions
+       vérifiées, aucun écart, y compris sur les flexions (« vice caché » ne
+       ramène jamais « vices cachés ») ;
+     · lorsqu'elle signale un élargissement (champ « relaxed »), elle a
+       silencieusement remplacé la demande par « au moins un mot » — 10 décisions
+       vérifiées, 10 hors sujet.
+   L'élargissement est donc l'unique source d'écart, et il est déclaré par l'API.
+   D'où la règle appliquée ici : une réponse élargie n'est jamais présentée comme
+   répondant à la demande. L'utilisateur est averti et décide.
+   ========================================================================== */
+
+/* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
+   moyen pour le lecteur de savoir ce qu'il utilise, une application installée
+   pouvant rester ouverte plusieurs jours sur une version périmée. */
+const VERSION = "4.5 — 23 août 2026";
+
+const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
+const RELAIS = "/.netlify/functions/legifrance";
+/* Le relais Judilibre de l'application : la clé peut être portée par le site
+   (variable d'environnement Netlify), auquel cas rien n'est demandé ici. */
+const RELAIS_JUDI = /\.netlify\.app$/.test(location.hostname)
+  ? "/.netlify/functions/judilibre"
+  : "https://jurisprudence-recherche.netlify.app/.netlify/functions/judilibre";
+const PAGES_POSSIBLES = [10, 20, 50];
+const PLAFOND = 10000;                       // l'API refuse au-delà
+const CLE_STOCKAGE = "judilibre_keyid";
+
+const $ = id => document.getElementById(id);
+/* Le nombre de décisions par page est un choix du lecteur, pas une constante
+   décidée pour lui. */
+function parPage(){ return Number(($("par-page")||{}).value) || 20; }
+
+/* ------------------------------- Outils ------------------------------- */
+const MOIS = ["janvier","février","mars","avril","mai","juin","juillet","août",
+              "septembre","octobre","novembre","décembre"];
+function dateFr(iso){
+  if(!iso) return "date inconnue";
+  const [a,m,j] = String(iso).slice(0,10).split("-").map(Number);
+  return (a&&m&&j) ? (j===1?"1er":j)+" "+MOIS[m-1]+" "+a : String(iso);
+}
+function echap(s){
+  return String(s??"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+}
+function normaliser(s){
+  return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ");
+}
+function echapRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+function copier(t){
+  if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t);
+  const ta = document.createElement("textarea");
+  ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); }finally{ ta.remove(); }
+  return Promise.resolve();
+}
+function clin(btn, texte){
+  const avant = btn.textContent; btn.textContent = texte;
+  setTimeout(()=>{ btn.textContent = avant; }, 1500);
+}
+function message(html, type){
+  $("msg").innerHTML = html ? '<div class="msg '+(type||"info")+'">'+html+"</div>" : "";
+}
+
+const CHAMBRES = {soc:"ch. sociale", cr:"ch. criminelle", civ1:"1re ch. civile", civ2:"2e ch. civile",
+  civ3:"3e ch. civile", comm:"ch. commerciale", pl:"assemblée plénière", mi:"ch. mixte",
+  ordo:"ordonnance", creun:"chambres réunies"};
+const CHAMBRES_COURT = {soc:"Sociale", cr:"Criminelle", civ1:"1re civile", civ2:"2e civile",
+  civ3:"3e civile", comm:"Commerciale", pl:"Ass. plénière", mi:"Ch. mixte"};
+const ABREV = {soc:"soc.", cr:"crim.", civ1:"1re civ.", civ2:"2e civ.", civ3:"3e civ.",
+  comm:"com.", pl:"ass. plén.", mi:"ch. mixte"};
+const PUBLICATIONS = {b:"Bulletin", r:"Rapport annuel", l:"Lettres de chambre", c:"Communiqué"};
+const MODES = {exact:"expression exacte", and:"tous les mots", or:"au moins un mot"};
+const ZONES = {motivations:"motivations", dispositif:"dispositif", moyens:"moyens",
+  expose:"exposé du litige", sommaire:"sommaire et titrage"};
+
+function juridictionDe(r){
+  const j = String(r.jurisdiction||"").toLowerCase();
+  if(j==="cc") return "Cass. "+(CHAMBRES[String(r.chamber||"").toLowerCase()]||r.chamber||"");
+  if(j==="ca") return (r.location||"Cour d'appel").replace(/^Cour d'appel (de |d')/i, "CA ");
+  return r.location || "Juridiction";
+}
+function numerosDe(r){
+  const a = r.numbers && r.numbers.length ? r.numbers : (r.number?[r.number]:[]);
+  return [...new Set(a)].join(", ");
+}
+function citationDe(r){
+  const j = String(r.jurisdiction||"").toLowerCase();
+  let t;
+  if(j==="cc") t = "Cass. "+(ABREV[String(r.chamber||"").toLowerCase()]||"");
+  else if(j==="ca") t = (r.location||"Cour d'appel").replace(/^Cour d'appel (de |d')/i, "CA ");
+  else t = r.location || "Trib.";
+  const n = numerosDe(r);
+  return t.trim()+", "+dateFr(r.decision_date)+(n?", n° "+n:"")+
+         ((r.publication||[]).includes("b") ? ", publié au bulletin" : "");
+}
+
+/* ------------------------------ Clé API ------------------------------ */
+function cle(){ return localStorage.getItem(CLE_STOCKAGE) || ""; }
+
+function majEtat(){
+  const k = cle();
+  $("etat-cle").textContent = k ? "clé configurée (…"+k.slice(-6)+")" : "clé non configurée";
+  $("voyant").classList.toggle("ok", !!k);
+  $("carte-cle").classList.toggle("cache", !!k);
+  $("etat-hote").textContent = "· " + (location.hostname || "fichier local");
+  $("etat-version").textContent = "· version " + VERSION;
+  /* L'adresse doit pouvoir être transmise à un confrère sans la retaper :
+     installée en plein écran, l'application n'a pas de barre d'adresse d'où
+     la copier. Le lien copié est celui de l'accueil, sans recherche en cours
+     ni fragment — c'est l'application qu'on partage, pas son état. */
+  $("btn-adresse").hidden = !location.protocol.startsWith("http");
+}
+
+/* Appel direct avec la clé personnelle du navigateur — le mode historique,
+   conservé tel quel : c'est le repli, et le chemin de validation d'une clé. */
+async function appelApiDirect(chemin, params){
+  const k = cle();
+  if(!k) throw new Error("PAS_DE_CLE");
+  /* Une requête sans limite de temps peut rester suspendue indéfiniment : la
+     page affiche alors « Vérification… » pour toujours, et rien ne dit à
+     l'utilisateur que l'appel n'aboutira pas. On borne donc l'attente, et l'on
+     nomme la panne au lieu de la laisser deviner. */
+  const minuteur = new AbortController();
+  const arret = setTimeout(()=>minuteur.abort(), 15000);
+  let rep;
+  try{
+    rep = await fetch(API+chemin+"?"+params.toString(),
+      {headers:{"KeyId":k, "accept":"application/json"}, signal: minuteur.signal});
+  }catch(err){
+    if(err && err.name === "AbortError") throw new Error("TROP_LONG");
+    throw err;
+  }finally{ clearTimeout(arret); }
+  if(rep.status===401 || rep.status===403) throw new Error("CLE_REFUSEE");
+  if(rep.status===429) throw new Error("QUOTA");
+  if(!rep.ok) throw new Error("HTTP_"+rep.status);
+  return rep.json();
+}
+
+/* Le relais de l'application d'abord : quand le site porte la clé Judilibre,
+   aucune clé n'est demandée à l'utilisateur. Relais non activé (variable
+   absente, fonction inexistante, clé du site refusée) → repli sur la clé
+   personnelle, exactement comme avant. La règle « relaxed → écarté » vaut
+   dans les deux cas : elle s'applique sur la réponse, pas sur le chemin. */
+let relaisJudi = null;   // null : inconnu · true : actif · false : non activé
+async function appelApi(chemin, params){
+  if(relaisJudi !== false){
+    const minuteur = new AbortController();
+    const arret = setTimeout(()=>minuteur.abort(), 15000);
+    let rep = null;
+    try{
+      rep = await fetch(RELAIS_JUDI, {method:"POST",
+        headers:{"content-type":"application/json"},
+        /* Les paramètres partent en paires : field ou jurisdiction se répètent,
+           un objet les écraserait. Jamais de clé dans ce corps. */
+        body: JSON.stringify({chemin, params:[...params]}),
+        signal: minuteur.signal});
+    }catch(err){
+      if(err && err.name === "AbortError") throw new Error("TROP_LONG");
+      relaisJudi = false;                     // pas de relais joignable : mode historique
+    }finally{ clearTimeout(arret); }
+    if(rep){
+      if(rep.status===404 || rep.status===405 || rep.status===401 || rep.status===403){
+        relaisJudi = false;                   // non déployé, ou clé du site refusée : repli
+      }else if(rep.status===503){
+        const d = await rep.json().catch(()=>null);
+        if(d && d.erreur === "cle-absente") relaisJudi = false;
+        else throw new Error("HTTP_503");
+      }else if(rep.status===429){ throw new Error("QUOTA");
+      }else if(!rep.ok){ throw new Error("HTTP_"+rep.status);
+      }else{
+        if(relaisJudi !== true){
+          relaisJudi = true;
+          /* La connexion est portée par l'application : le bandeau cesse de
+             réclamer une clé. */
+          $("etat-cle").textContent = "connexion de l'application";
+          $("voyant").classList.add("ok");
+          $("carte-cle").classList.add("cache");
+        }
+        return rep.json();
+      }
+    }
+  }
+  return appelApiDirect(chemin, params);
+}
+
+function messageErreur(e){
+  switch(e.message){
+    case "PAS_DE_CLE":  return "Configurez d'abord votre clé Judilibre.";
+    case "CLE_REFUSEE": return "Accès refusé : clé invalide, ou application PISTE non souscrite à l'API JUDILIBRE en production.";
+    case "QUOTA":       return "Quota de requêtes atteint. Patientez quelques instants.";
+    case "TROP_LONG":   return "L'API n'a pas répondu en quinze secondes. Vérifiez la connexion — si vous êtes sur un réseau d'entreprise ou un VPN, il bloque peut-être api.piste.gouv.fr.";
+    default: return (e instanceof TypeError)
+      ? "Impossible de joindre l'API (connexion internet ?)."
+      : "Erreur inattendue : "+e.message;
+  }
+}
+
+$("btn-cle").onclick = ()=>{ $("carte-cle").classList.remove("cache"); $("in-cle").focus(); };
+$("btn-tester").onclick = async ()=>{
+  const k = $("in-cle").value.trim();
+  if(!k){ $("msg-cle").innerHTML = '<div class="msg err">Saisissez une clé.</div>'; return; }
+  /* En navigation privée, le stockage local refuse l'écriture : l'ancienne
+     version levait alors une exception avant d'avoir rien affiché, et le bouton
+     paraissait mort. Un bouton qui ne répond pas est le pire des messages —
+     l'utilisateur croit à une panne de l'application, et cherche du côté de sa
+     clé, qui n'y est pour rien. */
+  try{ localStorage.setItem(CLE_STOCKAGE, k); }
+  catch(err){
+    $("msg-cle").innerHTML = '<div class="msg err">La clé n\'a pas pu être enregistrée : ' +
+      'ce navigateur refuse le stockage local. C\'est le cas en <b>navigation privée</b>. ' +
+      'Ouvrez cette page dans un onglet ordinaire, puis saisissez la clé à nouveau.</div>';
+    return;
+  }
+  $("msg-cle").innerHTML = '<div class="msg info">Vérification…</div>';
+  try{
+    /* La validation d'une clé PERSONNELLE passe en direct : la faire transiter
+       par le relais validerait la clé du site, pas celle qu'on vient de saisir. */
+    await appelApiDirect("/search", new URLSearchParams({query:"droit", page_size:"1"}));
+    $("msg-cle").innerHTML = '<div class="msg ok">Clé valide. Vous pouvez rechercher.</div>';
+    $("in-cle").value = ""; majEtat();
+  }catch(e){
+    localStorage.removeItem(CLE_STOCKAGE); majEtat();
+    $("msg-cle").innerHTML = '<div class="msg err">'+echap(messageErreur(e))+"</div>";
+  }
+};
+
+/* ---------------------------- Données ---------------------------- */
+const CODES = [
+  "Code civil","Code de commerce","Code de déontologie des architectes",
+  "Code de justice administrative","Code de justice militaire (nouveau)",
+  "Code de l'action sociale et des familles",
+  "Code de l'entrée et du séjour des étrangers et du droit d'asile","Code de l'environnement",
+  "Code de l'expropriation pour cause d'utilité publique","Code de l'organisation judiciaire",
+  "Code de l'urbanisme","Code de l'éducation","Code de l'énergie",
+  "Code de la Légion d'honneur, de la Médaille militaire et de l'ordre national du Mérite",
+  "Code de la commande publique","Code de la consommation",
+  "Code de la construction et de l'habitation","Code de la défense",
+  "Code de la famille et de l'aide sociale","Code de la justice pénale des mineurs",
+  "Code de la mutualité","Code de la propriété intellectuelle","Code de la recherche",
+  "Code de la route","Code de la santé publique","Code de la sécurité intérieure",
+  "Code de la sécurité sociale","Code de la voirie routière","Code de procédure civile",
+  "Code de procédure pénale","Code des assurances","Code des communes",
+  "Code des communes de la Nouvelle-Calédonie","Code des douanes","Code des douanes de Mayotte",
+  "Code des impositions sur les biens et services",
+  "Code des instruments monétaires et des médailles","Code des juridictions financières",
+  "Code des pensions civiles et militaires de retraite",
+  "Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance",
+  "Code des pensions militaires d'invalidité et des victimes de guerre",
+  "Code des ports maritimes","Code des postes et des communications électroniques",
+  "Code des procédures civiles d'exécution",
+  "Code des relations entre le public et l'administration","Code des transports",
+  "Code disciplinaire et pénal de la marine marchande","Code du cinéma et de l'image animée",
+  "Code du domaine de l'Etat",
+  "Code du domaine de l'Etat et des collectivités publiques applicable à la collectivité territoriale de Mayotte",
+  "Code du domaine public fluvial et de la navigation intérieure","Code du patrimoine",
+  "Code du service national","Code du sport","Code du travail","Code du travail maritime",
+  "Code forestier (nouveau)","Code général de la fonction publique",
+  "Code général de la propriété des personnes publiques",
+  "Code général des collectivités territoriales","Code général des impôts",
+  "Code général des impôts, annexe IV","Code minier (nouveau)","Code monétaire et financier",
+  "Code pénal","Code pénitentiaire","Code rural (ancien)","Code rural et de la pêche maritime",
+  "Code électoral","Livre des procédures fiscales"
+];
+
+const JURIDICTIONS = {
+  /* 36 cours d'appel */
+  ca: {
+    "ca_agen":"Cour d'appel d'Agen", "ca_aix_provence":"Cour d'appel d'Aix-en-Provence",
+    "ca_amiens":"Cour d'appel d'Amiens", "ca_angers":"Cour d'appel d'Angers",
+    "ca_orleans":"Cour d'appel d'Orléans", "ca_basse_terre":"Cour d'appel de Basse-Terre",
+    "ca_bastia":"Cour d'appel de Bastia", "ca_besancon":"Cour d'appel de Besançon",
+    "ca_bordeaux":"Cour d'appel de Bordeaux", "ca_bourges":"Cour d'appel de Bourges",
+    "ca_caen":"Cour d'appel de Caen", "ca_cayenne":"Cour d'appel de Cayenne",
+    "ca_chambery":"Cour d'appel de Chambéry", "ca_colmar":"Cour d'appel de Colmar",
+    "ca_dijon":"Cour d'appel de Dijon", "ca_douai":"Cour d'appel de Douai",
+    "ca_fort_de_france":"Cour d'appel de Fort-de-France", "ca_grenoble":"Cour d'appel de Grenoble",
+    "ca_limoges":"Cour d'appel de Limoges", "ca_lyon":"Cour d'appel de Lyon",
+    "ca_metz":"Cour d'appel de Metz", "ca_montpellier":"Cour d'appel de Montpellier",
+    "ca_nancy":"Cour d'appel de Nancy", "ca_noumea":"Cour d'appel de Nouméa",
+    "ca_nimes":"Cour d'appel de Nîmes", "ca_papeete":"Cour d'appel de Papeete",
+    "ca_paris":"Cour d'appel de Paris", "ca_pau":"Cour d'appel de Pau",
+    "ca_poitiers":"Cour d'appel de Poitiers", "ca_reims":"Cour d'appel de Reims",
+    "ca_rennes":"Cour d'appel de Rennes", "ca_riom":"Cour d'appel de Riom",
+    "ca_rouen":"Cour d'appel de Rouen",
+    "ca_st_denis_reunion":"Cour d'appel de Saint-Denis de la Réunion",
+    "ca_toulouse":"Cour d'appel de Toulouse", "ca_versailles":"Cour d'appel de Versailles"
+  },
+  /* 174 tribunaux judiciaires */
+  tj: {
+    "tj47001":"Tribunal judiciaire d'Agen", "tj13001":"Tribunal judiciaire d'Aix-en-Provence",
+    "tj2a004":"Tribunal judiciaire d'Ajaccio", "tj73011":"Tribunal judiciaire d'Albertville",
+    "tj81004":"Tribunal judiciaire d'Albi", "tj61001":"Tribunal judiciaire d'Alençon",
+    "tj30007":"Tribunal judiciaire d'Alès", "tj80021":"Tribunal judiciaire d'Amiens",
+    "tj49007":"Tribunal judiciaire d'Angers", "tj16015":"Tribunal judiciaire d'Angoulême",
+    "tj74010":"Tribunal judiciaire d'Annecy", "tj61006":"Tribunal judiciaire d'Argentan",
+    "tj62041":"Tribunal judiciaire d'Arras", "tj32013":"Tribunal judiciaire d'Auch",
+    "tj15014":"Tribunal judiciaire d'Aurillac", "tj89024":"Tribunal judiciaire d'Auxerre",
+    "tj59036":"Tribunal judiciaire d'Avesnes-sur-Helpe", "tj84007":"Tribunal judiciaire d'Avignon",
+    "tj45234":"Tribunal judiciaire d'Orléans", "tj88160":"Tribunal judiciaire d'Épinal",
+    "tj27229":"Tribunal judiciaire d'Évreux", "tj91228":"Tribunal judiciaire d'Évry",
+    "tj55029":"Tribunal judiciaire de Bar-le-Duc", "tj97105":"Tribunal judiciaire de Basse-Terre",
+    "tj2b033":"Tribunal judiciaire de Bastia", "tj64102":"Tribunal judiciaire de Bayonne",
+    "tj60057":"Tribunal judiciaire de Beauvais", "tj90010":"Tribunal judiciaire de Belfort",
+    "tj24037":"Tribunal judiciaire de Bergerac", "tj25056":"Tribunal judiciaire de Besançon",
+    "tj41018":"Tribunal judiciaire de Blois", "tj93008":"Tribunal judiciaire de Bobigny",
+    "tj74042":"Tribunal judiciaire de Bonneville", "tj33063":"Tribunal judiciaire de Bordeaux",
+    "tj62160":"Tribunal judiciaire de Boulogne-sur-Mer",
+    "tj01053":"Tribunal judiciaire de Bourg-en-Bresse", "tj18033":"Tribunal judiciaire de Bourges",
+    "tj38053":"Tribunal judiciaire de Bourgoin-Jallieu", "tj29019":"Tribunal judiciaire de Brest",
+    "tj19031":"Tribunal judiciaire de Brive-la-Gaillarde",
+    "tj62119":"Tribunal judiciaire de Béthune", "tj34032":"Tribunal judiciaire de Béziers",
+    "tj14118":"Tribunal judiciaire de Caen", "tj46042":"Tribunal judiciaire de Cahors",
+    "tj59122":"Tribunal judiciaire de Cambrai", "tj11069":"Tribunal judiciaire de Carcassonne",
+    "tj84031":"Tribunal judiciaire de Carpentras", "tj81065":"Tribunal judiciaire de Castres",
+    "tj97302":"Tribunal judiciaire de Cayenne", "tj71076":"Tribunal judiciaire de Chalon-sur-Saône",
+    "tj51108":"Tribunal judiciaire de Chalons-en-Champagne",
+    "tj73065":"Tribunal judiciaire de Chambéry",
+    "tj08105":"Tribunal judiciaire de Charleville-Mézières",
+    "tj28085":"Tribunal judiciaire de Chartres", "tj52121":"Tribunal judiciaire de Chaumont",
+    "tj50129":"Tribunal judiciaire de Cherbourg-en-Cotentin",
+    "tj36044":"Tribunal judiciaire de Châteauroux",
+    "tj63113":"Tribunal judiciaire de Clermont-Ferrand", "tj68066":"Tribunal judiciaire de Colmar",
+    "tj60159":"Tribunal judiciaire de Compiègne", "tj50147":"Tribunal judiciaire de Coutances",
+    "tj94028":"Tribunal judiciaire de Créteil", "tj03095":"Tribunal judiciaire de Cusset",
+    "tj40088":"Tribunal judiciaire de Dax", "tj76217":"Tribunal judiciaire de Dieppe",
+    "tj04070":"Tribunal judiciaire de Digne-les-Bains", "tj21231":"Tribunal judiciaire de Dijon",
+    "tj39198":"Tribunal judiciaire de Dole (chambre détachée)",
+    "tj59178":"Tribunal judiciaire de Douai", "tj83050":"Tribunal judiciaire de Draguignan",
+    "tj59183":"Tribunal judiciaire de Dunkerque", "tj09122":"Tribunal judiciaire de Foix",
+    "tj77186":"Tribunal judiciaire de Fontainebleau",
+    "tj97209":"Tribunal judiciaire de Fort-de-France", "tj05061":"Tribunal judiciaire de Gap",
+    "tj06069":"Tribunal judiciaire de Grasse", "tj38185":"Tribunal judiciaire de Grenoble",
+    "tj22070":"Tribunal judiciaire de Guingamp (chambre détachée)",
+    "tj23096":"Tribunal judiciaire de Guéret",
+    "tj98811":"Tribunal judiciaire de Kone (section détachée)",
+    "tj85191":"Tribunal judiciaire de La Roche-sur-Yon",
+    "tj17300":"Tribunal judiciaire de La Rochelle", "tj02408":"Tribunal judiciaire de Laon",
+    "tj53130":"Tribunal judiciaire de Laval", "tj33243":"Tribunal judiciaire de Libourne",
+    "tj59350":"Tribunal judiciaire de Lille", "tj87085":"Tribunal judiciaire de Limoges",
+    "tj14366":"Tribunal judiciaire de Lisieux", "tj39300":"Tribunal judiciaire de Lons-le-Saunier",
+    "tj56121":"Tribunal judiciaire de Lorient", "tj69123":"Tribunal judiciaire de Lyon",
+    "tj97611":"Tribunal judiciaire de Mamoudzou",
+    "tj47157":"Tribunal judiciaire de Marmande (chambre détachée)",
+    "tj13055":"Tribunal judiciaire de Marseille", "tj98613":"Tribunal judiciaire de Mata-Utu",
+    "tj77284":"Tribunal judiciaire de Meaux", "tj77288":"Tribunal judiciaire de Melun",
+    "tj48095":"Tribunal judiciaire de Mende", "tj57463":"Tribunal judiciaire de Metz",
+    "tj12145":"Tribunal judiciaire de Millau (chambre détachée)",
+    "tj40192":"Tribunal judiciaire de Mont-de-Marsan", "tj45208":"Tribunal judiciaire de Montargis",
+    "tj82121":"Tribunal judiciaire de Montauban", "tj25388":"Tribunal judiciaire de Montbéliard",
+    "tj03185":"Tribunal judiciaire de Montluçon", "tj34172":"Tribunal judiciaire de Montpellier",
+    "tj03190":"Tribunal judiciaire de Moulins", "tj68224":"Tribunal judiciaire de Mulhouse",
+    "tj71270":"Tribunal judiciaire de Mâcon", "tj54395":"Tribunal judiciaire de Nancy",
+    "tj92050":"Tribunal judiciaire de Nanterre", "tj44109":"Tribunal judiciaire de Nantes",
+    "tj11262":"Tribunal judiciaire de Narbonne", "tj58194":"Tribunal judiciaire de Nevers",
+    "tj06088":"Tribunal judiciaire de Nice", "tj79191":"Tribunal judiciaire de Niort",
+    "tj98818":"Tribunal judiciaire de Nouméa", "tj30189":"Tribunal judiciaire de Nîmes",
+    "tj98735":"Tribunal judiciaire de Papeete", "tj75056":"Tribunal judiciaire de Paris",
+    "tj64445":"Tribunal judiciaire de Pau", "tj66136":"Tribunal judiciaire de Perpignan",
+    "tj97120":"Tribunal judiciaire de Pointe-à-Pitre", "tj86194":"Tribunal judiciaire de Poitiers",
+    "tj95500":"Tribunal judiciaire de Pontoise", "tj07186":"Tribunal judiciaire de Privas",
+    "tj24322":"Tribunal judiciaire de Périgueux", "tj29232":"Tribunal judiciaire de Quimper",
+    "tj51454":"Tribunal judiciaire de Reims", "tj35238":"Tribunal judiciaire de Rennes",
+    "tj42187":"Tribunal judiciaire de Roanne", "tj12202":"Tribunal judiciaire de Rodez",
+    "tj76540":"Tribunal judiciaire de Rouen", "tj22278":"Tribunal judiciaire de Saint-Brieuc",
+    "tj97411":"Tribunal judiciaire de Saint-Denis de La Réunion",
+    "tj42218":"Tribunal judiciaire de Saint-Etienne",
+    "tj31483":"Tribunal judiciaire de Saint-Gaudens",
+    "tj97311":"Tribunal judiciaire de Saint-Laurent-Du-Maroni (chambre détachée)",
+    "tj35288":"Tribunal judiciaire de Saint-Malo",
+    "tj97801":"Tribunal judiciaire de Saint-Martin (chambre détachée)",
+    "tj44184":"Tribunal judiciaire de Saint-Nazaire", "tj62765":"Tribunal judiciaire de Saint-Omer",
+    "tj97416":"Tribunal judiciaire de Saint-Pierre de La Réunion",
+    "tj02691":"Tribunal judiciaire de Saint-Quentin", "tj17415":"Tribunal judiciaire de Saintes",
+    "tj57631":"Tribunal judiciaire de Sarreguemines", "tj49328":"Tribunal judiciaire de Saumur",
+    "tj67437":"Tribunal judiciaire de Saverne", "tj60612":"Tribunal judiciaire de Senlis",
+    "tj89387":"Tribunal judiciaire de Sens", "tj02722":"Tribunal judiciaire de Soissons",
+    "tj67482":"Tribunal judiciaire de Strasbourg", "tj13108":"Tribunal judiciaire de Tarascon",
+    "tj65440":"Tribunal judiciaire de Tarbes", "tj57672":"Tribunal judiciaire de Thionville",
+    "tj74281":"Tribunal judiciaire de Thonon-les-Bains", "tj83137":"Tribunal judiciaire de Toulon",
+    "tj31555":"Tribunal judiciaire de Toulouse", "tj37261":"Tribunal judiciaire de Tours",
+    "tj10387":"Tribunal judiciaire de Troyes", "tj19272":"Tribunal judiciaire de Tulle",
+    "tj54099":"Tribunal judiciaire de Val de Briey", "tj26362":"Tribunal judiciaire de Valence",
+    "tj59606":"Tribunal judiciaire de Valenciennes", "tj56260":"Tribunal judiciaire de Vannes",
+    "tj55545":"Tribunal judiciaire de Verdun", "tj78646":"Tribunal judiciaire de Versailles",
+    "tj70550":"Tribunal judiciaire de Vesoul", "tj38544":"Tribunal judiciaire de Vienne",
+    "tj69264":"Tribunal judiciaire de Villefranche-sur-Saône",
+    "tj85194":"Tribunal judiciaire des Sables-d'Olonne", "tj76351":"Tribunal judiciaire du Havre",
+    "tj72181":"Tribunal judiciaire du Mans", "tj43157":"Tribunal judiciaire du Puy-en-Velay"
+  },
+  /* 141 tribunaux de commerce */
+  tcom: {
+    "4701":"Tribunal de commerce d'Agen", "1301":"Tribunal de commerce d'Aix-en-Provence",
+    "2001":"Tribunal de commerce d'Ajaccio", "8101":"Tribunal de commerce d'Albi",
+    "6101":"Tribunal de commerce d'Alençon", "8002":"Tribunal de commerce d'Amiens",
+    "4901":"Tribunal de commerce d'Angers", "1601":"Tribunal de commerce d'Angoulême",
+    "7401":"Tribunal de commerce d'Annecy", "0601":"Tribunal de commerce d'Antibes",
+    "6201":"Tribunal de commerce d'Arras", "0702":"Tribunal de commerce d'Aubenas",
+    "3201":"Tribunal de commerce d'Auch", "1501":"Tribunal de commerce d'Aurillac",
+    "4502":"Tribunal de commerce d'Orléans", "8801":"Tribunal de commerce d'Épinal",
+    "2702":"Tribunal de commerce d'Évreux", "7801":"Tribunal de commerce d'Évry",
+    "5501":"Tribunal de commerce de Bar-le-Duc", "9711":"Tribunal de commerce de Basse-Terre",
+    "2002":"Tribunal de commerce de Bastia", "6401":"Tribunal de commerce de Bayonne",
+    "6001":"Tribunal de commerce de Beauvais", "9001":"Tribunal de commerce de Belfort",
+    "2401":"Tribunal de commerce de Bergerac", "2701":"Tribunal de commerce de Bernay",
+    "2501":"Tribunal de commerce de Besançon", "4101":"Tribunal de commerce de Blois",
+    "9301":"Tribunal de commerce de Bobigny", "3302":"Tribunal de commerce de Bordeaux",
+    "6202":"Tribunal de commerce de Boulogne-sur-Mer",
+    "0101":"Tribunal de commerce de Bourg-en-Bresse", "1801":"Tribunal de commerce de Bourges",
+    "2901":"Tribunal de commerce de Brest", "5401":"Tribunal de commerce de Briey",
+    "1901":"Tribunal de commerce de Brive-la-Gaillarde", "3402":"Tribunal de commerce de Béziers",
+    "1402":"Tribunal de commerce de Caen", "4601":"Tribunal de commerce de Cahors",
+    "0602":"Tribunal de commerce de Cannes", "1101":"Tribunal de commerce de Carcassonne",
+    "8102":"Tribunal de commerce de Castres", "9731":"Tribunal de commerce de Cayenne",
+    "7102":"Tribunal de commerce de Chalon-sur-Saône",
+    "5101":"Tribunal de commerce de Chalons-en-Champagne",
+    "7301":"Tribunal de commerce de Chambéry", "2801":"Tribunal de commerce de Chartres",
+    "5201":"Tribunal de commerce de Chaumont", "5001":"Tribunal de commerce de Cherbourg",
+    "3601":"Tribunal de commerce de Châteauroux", "6303":"Tribunal de commerce de Clermont-Ferrand",
+    "6002":"Tribunal de commerce de Compiègne", "5002":"Tribunal de commerce de Coutances",
+    "9401":"Tribunal de commerce de Créteil", "0301":"Tribunal de commerce de Cusset",
+    "4001":"Tribunal de commerce de Dax", "7601":"Tribunal de commerce de Dieppe",
+    "2104":"Tribunal de commerce de Dijon", "5952":"Tribunal de commerce de Douai",
+    "8302":"Tribunal de commerce de Draguignan", "5902":"Tribunal de commerce de Dunkerque",
+    "0901":"Tribunal de commerce de Foix", "9721":"Tribunal de commerce de Fort-de-France",
+    "8303":"Tribunal de commerce de Fréjus", "0501":"Tribunal de commerce de Gap",
+    "0603":"Tribunal de commerce de Grasse", "3801":"Tribunal de commerce de Grenoble",
+    "2301":"Tribunal de commerce de Guéret", "8501":"Tribunal de commerce de La Roche-sur-Yon",
+    "1704":"Tribunal de commerce de La Rochelle", "5301":"Tribunal de commerce de Laval",
+    "3303":"Tribunal de commerce de Libourne", "5910":"Tribunal de commerce de Lille Métropole",
+    "1407":"Tribunal de commerce de Lisieux", "3902":"Tribunal de commerce de Lons-le-Saunier",
+    "5601":"Tribunal de commerce de Lorient", "9761":"Tribunal de commerce de Mamoudzou",
+    "0401":"Tribunal de commerce de Manosque", "7701":"Tribunal de commerce de Meaux",
+    "7702":"Tribunal de commerce de Melun", "4801":"Tribunal de commerce de Mende",
+    "4002":"Tribunal de commerce de Mont-de-Marsan", "8201":"Tribunal de commerce de Montauban",
+    "0303":"Tribunal de commerce de Montluçon", "3405":"Tribunal de commerce de Montpellier",
+    "7106":"Tribunal de commerce de Mâcon", "4401":"Tribunal de commerce de Nantes",
+    "1104":"Tribunal de commerce de Narbonne", "5802":"Tribunal de commerce de Nevers",
+    "0605":"Tribunal de commerce de Nice", "7901":"Tribunal de commerce de Niort",
+    "3003":"Tribunal de commerce de Nîmes", "6403":"Tribunal de commerce de Pau",
+    "6601":"Tribunal de commerce de Perpignan", "9712":"Tribunal de commerce de Pointe-à-Pitre",
+    "8602":"Tribunal de commerce de Poitiers", "7802":"Tribunal de commerce de Pontoise",
+    "2402":"Tribunal de commerce de Périgueux", "2903":"Tribunal de commerce de Quimper",
+    "5103":"Tribunal de commerce de Reims", "3501":"Tribunal de commerce de Rennes",
+    "4201":"Tribunal de commerce de Roanne", "1203":"Tribunal de commerce de Rodez",
+    "2602":"Tribunal de commerce de Romans", "7608":"Tribunal de commerce de Rouen",
+    "9741":"Tribunal de commerce de Saint-Denis de La Réunion",
+    "4202":"Tribunal de commerce de Saint-Etienne", "3502":"Tribunal de commerce de Saint-Malo",
+    "4402":"Tribunal de commerce de Saint-Nazaire",
+    "9742":"Tribunal de commerce de Saint-Pierre de La Réunion",
+    "0202":"Tribunal de commerce de Saint-Quentin", "1708":"Tribunal de commerce de Saintes",
+    "1304":"Tribunal de commerce de Salon-de-Provence", "0802":"Tribunal de commerce de Sedan",
+    "8903":"Tribunal de commerce de Sens", "0203":"Tribunal de commerce de Soissons",
+    "1305":"Tribunal de commerce de Tarascon", "6502":"Tribunal de commerce de Tarbes",
+    "7402":"Tribunal de commerce de Thonon-les-Bains", "8305":"Tribunal de commerce de Toulon",
+    "3102":"Tribunal de commerce de Toulouse", "3701":"Tribunal de commerce de Tours",
+    "1001":"Tribunal de commerce de Troyes", "5906":"Tribunal de commerce de Valenciennes",
+    "5602":"Tribunal de commerce de Vannes", "7001":"Tribunal de commerce de Vesoul - Gray",
+    "3802":"Tribunal de commerce de Vienne",
+    "6903":"Tribunal de commerce de Villefranche-sur-Saône - Tarare",
+    "4302":"Tribunal de commerce du Puy-en-Velay",
+    "8901":"Tribunal des activités économiques d'Auxerre",
+    "8401":"Tribunal des activités économiques d'Avignon",
+    "8701":"Tribunal des activités économiques de Limoges",
+    "6901":"Tribunal des activités économiques de Lyon",
+    "1303":"Tribunal des activités économiques de Marseille",
+    "5402":"Tribunal des activités économiques de Nancy",
+    "9201":"Tribunal des activités économiques de Nanterre",
+    "7501":"Tribunal des activités économiques de Paris",
+    "2202":"Tribunal des activités économiques de Saint-Brieuc",
+    "7803":"Tribunal des activités économiques de Versailles",
+    "7606":"Tribunal des activités économiques du Havre",
+    "7202":"Tribunal des activités économiques du Mans"
+  },
+};
+
+const PRESETS = [
+  /* ---------------------------- Harcèlement ---------------------------- */
+  {
+    label: "Harcèlement moral · régime de la preuve (depuis 2016)",
+    note: "Le mécanisme probatoire de l'article L. 1154-1 du code du travail dans sa rédaction issue de la loi du 17 août 2015 : le salarié « présente des éléments de fait laissant supposer l'existence d'un harcèlement », puis l'employeur doit prouver que ses agissements en sont exempts.",
+    c: {q:"laissant supposer l'existence d'un harcèlement", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Harcèlement moral · régime de la preuve (avant 2016)",
+    note: "Ancienne rédaction de l'article L. 1154-1 : le salarié « établit des faits qui permettent de présumer l'existence d'un harcèlement ». Pour retrouver la jurisprudence fondatrice.",
+    c: {q:"permettent de présumer l'existence d'un harcèlement", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Harcèlement moral · appréciation globale (« pris dans leur ensemble »)",
+    note: "La formule par laquelle la chambre sociale impose aux juges du fond d'apprécier les faits « pris dans leur ensemble », et non isolément.",
+    c: {q:"pris dans leur ensemble", mode:"exact", exclure:"harcèlement sexuel", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Harcèlement moral · sans le harcèlement sexuel",
+    note: "Expression exacte « harcèlement moral », avec exclusion locale des décisions mentionnant aussi le harcèlement sexuel. La vérification approfondie contrôle le texte intégral des décisions affichées.",
+    c: {q:"harcèlement moral", mode:"exact", exclure:"harcèlement sexuel", jur:["cc"], ch:["soc"], tri:"date-desc",}
+  },
+  {
+    label: "Harcèlement moral institutionnel (politique d'entreprise)",
+    note: "Le harcèlement moral « institutionnel », résultant d'une politique d'entreprise, consacré par la chambre criminelle dans l'affaire France Télécom. Peu de décisions, mais toutes importantes.",
+    c: {q:"harcèlement moral institutionnel", mode:"exact", jur:["cc","ca"], tri:"date-desc"}
+  },
+  {
+    label: "Nullité du licenciement lié au harcèlement moral",
+    note: "Croise harcèlement moral, licenciement et nullité (art. L. 1152-3 : est nul tout licenciement intervenu en méconnaissance des règles sur le harcèlement).",
+    c: {q:"harcèlement moral licenciement nullité", mode:"and", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+
+  /* --------------------- Représentation du personnel --------------------- */
+  {
+    label: "CSE · consultation obligatoire et défaut de consultation",
+    note: "Les consultations du comité social et économique, instance issue des ordonnances de 2017. Pour les litiges antérieurs, refaites la recherche avec « comité d'entreprise », qui reste la formule employée dans les décisions plus anciennes.",
+    c: {q:"consultation du comité social et économique", mode:"exact", jur:["cc","ca"], tri:"date-desc"}
+  },
+  {
+    label: "CSE · délit d'entrave",
+    note: "L'entrave au fonctionnement des institutions représentatives du personnel. Le contentieux relève du pénal : la chambre criminelle est cochée en plus de la sociale. Rappel : les jugements correctionnels des tribunaux ne figurent pas dans la base ouverte, seules les décisions de la Cour de cassation apparaissent ici.",
+    c: {q:"délit d'entrave", mode:"exact", jur:["cc"], ch:["cr","soc"], tri:"date-desc"}
+  },
+  {
+    label: "CSSCT · commission santé, sécurité et conditions de travail",
+    note: "La commission santé, sécurité et conditions de travail, obligatoire dans les entreprises d'au moins 300 salariés et dans certains établissements à risques. Contentieux récent, donc peu fourni : élargissez aux cours d'appel.",
+    c: {q:"commission santé, sécurité et conditions de travail", mode:"exact", jur:["cc","ca"], tri:"date-desc"}
+  },
+  {
+    label: "BDESE · base de données économiques, sociales et environnementales",
+    note: "Les décisions écrivent le nom complet, presque jamais le sigle : la recherche porte donc sur « base de données économiques ». Cochez les cours d'appel et les tribunaux judiciaires, où se juge l'essentiel de ce contentieux (référés CSE).",
+    c: {q:"base de données économiques", mode:"exact", jur:["cc","ca","tj"], tri:"date-desc"}
+  },
+
+  /* ---------------------- Formation et rupture du contrat ---------------------- */
+  {
+    label: "Faux CV · mensonge et dol à l'embauche",
+    note: "Le contentieux du curriculum vitae mensonger : le mensonge n'entraîne la nullité du contrat que s'il constitue un dol déterminant du consentement, faute de quoi il relève du seul pouvoir disciplinaire. Ajoutez « dol » en mots exigés pour resserrer.",
+    c: {q:"curriculum vitae", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Clause de non-concurrence · validité et contrepartie",
+    note: "Validité de la clause : limitation dans le temps et l'espace, spécificité à l'emploi, et contrepartie financière — condition posée par la chambre sociale depuis 2002.",
+    c: {q:"clause de non-concurrence", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Rupture conventionnelle · vice du consentement",
+    note: "La rupture conventionnelle et sa contestation : consentement vicié, contexte de harcèlement, formalités et délai de rétractation.",
+    c: {q:"rupture conventionnelle", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+
+  /* ------------------------ Discipline et sanctions ------------------------ */
+  {
+    label: "Règlement intérieur · clauses illicites",
+    note: "Le contrôle du contenu du règlement intérieur : restrictions aux libertés devant être justifiées par la nature de la tâche et proportionnées au but recherché (art. L. 1121-1).",
+    c: {q:"règlement intérieur", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Retards répétés · faute et sanction",
+    note: "Les retards répétés comme motif disciplinaire : appréciation de la gravité, proportionnalité de la sanction, exigence d'une mise en garde préalable.",
+    c: {q:"retards répétés", mode:"exact", jur:["cc","ca"], tri:"date-desc"}
+  },
+
+  /* ------------------------------- Preuve ------------------------------- */
+  {
+    label: "Droit à la preuve · preuve illicite ou déloyale",
+    note: "Le « droit à la preuve » qui permet, depuis Ass. plén., 22 décembre 2023 (n° 20-20.648), de produire une preuve illicite ou déloyale si elle est indispensable et proportionnée. Décisif en matière de harcèlement (enregistrements, courriels).",
+    c: {q:"droit à la preuve", mode:"exact", jur:["cc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Heures supplémentaires · régime de la preuve",
+    note: "Le partage de la preuve de l'article L. 3171-4 : le salarié doit présenter des « éléments suffisamment précis » quant aux heures non rémunérées, formule employée depuis l'alignement de 2020 sur le droit de l'Union.",
+    c: {q:"éléments suffisamment précis", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Discrimination · régime de la preuve",
+    note: "Le mécanisme probatoire de l'article L. 1134-1, jumeau de celui du harcèlement : le salarié présente des éléments de fait « laissant supposer l'existence d'une discrimination ».",
+    c: {q:"laissant supposer l'existence d'une discrimination", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+
+  /* --------------------------- Santé et sécurité --------------------------- */
+  {
+    label: "Obligation de sécurité de l'employeur",
+    note: "L'obligation de sécurité (art. L. 4121-1) telle que redéfinie depuis Cass. soc., 25 novembre 2015, n° 14-24.444 (Air France) : l'employeur qui a pris toutes les mesures de prévention peut s'exonérer.",
+    c: {q:"obligation de sécurité", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+  {
+    label: "Inaptitude · obligation de reclassement",
+    note: "L'étendue de l'obligation de reclassement du salarié déclaré inapte : périmètre du groupe, loyauté de la recherche, cas de dispense.",
+    c: {q:"obligation de reclassement", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
+  },
+
+  /* ------------- Autres domaines (civil, commercial, pénal, procédure) ------------- */
+  {
+    label: "Abus de biens sociaux",
+    note: "L'usage des biens ou du crédit de la société contraire à l'intérêt social, à des fins personnelles (art. L. 241-3 et L. 242-6 du code de commerce).",
+    c: {q: "abus de biens sociaux", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"]}
+  },
+  {
+    label: "Abus de confiance",
+    note: "Le détournement d'un bien remis à charge de le rendre ou d'en faire un usage déterminé (art. 314-1 du code pénal).",
+    c: {q: "abus de confiance", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"]}
+  },
+  {
+    label: "Abus de majorité (sociétés)",
+    note: "La décision prise contrairement à l'intérêt social et dans l'unique dessein de favoriser les majoritaires au détriment des minoritaires.",
+    c: {q: "abus de majorité", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Action paulienne",
+    note: "L'action ouverte au créancier pour faire déclarer inopposables les actes accomplis par son débiteur en fraude de ses droits.",
+    c: {q: "action paulienne", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Agent commercial · indemnité de rupture",
+    note: "Le statut d'agent commercial et l'indemnité compensatrice due en cas de cessation du contrat.",
+    c: {q: "agent commercial", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"], pub: ["b"]}
+  },
+  {
+    label: "Assurance · fausse déclaration du risque",
+    note: "La nullité du contrat pour fausse déclaration intentionnelle de l'assuré (art. L. 113-8 du code des assurances).",
+    c: {q: "fausse déclaration intentionnelle", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Astreinte · liquidation",
+    note: "La liquidation de l'astreinte : modulation, suppression, prise en compte du comportement du débiteur.",
+    c: {q: "liquidation de l'astreinte", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Autorité de la chose jugée",
+    note: "L'étendue de la chose jugée : identité de parties, d'objet et de cause, et concentration des moyens.",
+    c: {q: "autorité de la chose jugée", mode: "exact", jur: ["cc"], tri: "date-desc", pub: ["b"]}
+  },
+  {
+    label: "Autorité parentale · exercice",
+    note: "Exercice de l'autorité parentale : résidence de l'enfant, décisions importantes, droit de visite. Peu de décisions sous cette formulation exacte — élargissez aux cours d'appel.",
+    c: {q: "exercice de l'autorité parentale", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"]}
+  },
+  {
+    label: "Bail d'habitation · congé pour reprise",
+    note: "Le congé délivré au locataire pour reprise : bénéficiaire, sincérité du motif, formalisme.",
+    c: {q: "congé pour reprise", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Clause abusive",
+    note: "Le déséquilibre significatif entre les droits et obligations des parties dans les contrats de consommation.",
+    c: {q: "clause abusive", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"]}
+  },
+  {
+    label: "Clause pénale",
+    note: "Le pouvoir du juge de modérer ou d'augmenter la pénalité manifestement excessive ou dérisoire.",
+    c: {q: "clause pénale", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Compétence · exception d'incompétence",
+    note: "Régime de l'exception d'incompétence : moment de la soulever, motivation exigée, effets.",
+    c: {q: "exception d'incompétence", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Concurrence déloyale",
+    note: "Les actes de concurrence déloyale : dénigrement, confusion, désorganisation, parasitisme.",
+    c: {q: "concurrence déloyale", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Contrefaçon",
+    note: "La contrefaçon de droits de propriété intellectuelle : caractérisation, preuve, réparation.",
+    c: {q: "contrefaçon", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm", "civ1"], pub: ["b"]}
+  },
+  {
+    label: "Détention provisoire",
+    note: "Conditions et motivation de la détention provisoire, contrôle de la chambre de l'instruction.",
+    c: {q: "détention provisoire", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"], pub: ["b"]}
+  },
+  {
+    label: "Divorce · prestation compensatoire",
+    note: "La prestation compensatoire : disparité, critères d'attribution, forme et révision.",
+    c: {q: "prestation compensatoire", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"], pub: ["b"]}
+  },
+  {
+    label: "Dol · réticence dolosive",
+    note: "Le silence sur une information déterminante du consentement, cause de nullité du contrat.",
+    c: {q: "réticence dolosive", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Escroquerie",
+    note: "Les manœuvres frauduleuses déterminant la remise de fonds ou de valeurs (art. 313-1 du code pénal).",
+    c: {q: "escroquerie", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"], pub: ["b"]}
+  },
+  {
+    label: "Expertise judiciaire",
+    note: "Régime de l'expertise : mission, respect du contradictoire, valeur des conclusions pour le juge.",
+    c: {q: "expertise judiciaire", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Garantie décennale",
+    note: "La responsabilité décennale des constructeurs : notion d'ouvrage, désordres compromettant la solidité ou la destination.",
+    c: {q: "garantie décennale", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Garde à vue · nullité",
+    note: "Les nullités de la garde à vue : notification des droits, assistance de l'avocat, exigence d'un grief.",
+    c: {q: "nullité de la garde à vue", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"]}
+  },
+  {
+    label: "Indivision",
+    note: "Régime de l'indivision : actes de gestion, indemnité d'occupation, partage.",
+    c: {q: "indivision", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"], pub: ["b"]}
+  },
+  {
+    label: "Licenciement économique · motif",
+    note: "La cause économique : difficultés, mutations technologiques, réorganisation, et périmètre d'appréciation.",
+    c: {q: "motif économique", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["soc"], pub: ["b"]}
+  },
+  {
+    label: "Liquidation judiciaire",
+    note: "Ouverture et effets de la liquidation judiciaire, pouvoirs du liquidateur.",
+    c: {q: "liquidation judiciaire", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"], pub: ["b"]}
+  },
+  {
+    label: "Motivation · défaut de base légale",
+    note: "Le grief tiré du défaut de base légale : la décision ne met pas la Cour en mesure d'exercer son contrôle. Recherche très large — resserrez avec un angle d'analyse ou une matière.",
+    c: {q: "défaut de base légale", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Motivation · défaut de motifs",
+    note: "Le défaut de motifs, cas d'ouverture à cassation (art. 455 du code de procédure civile). Recherche très large : à combiner impérativement avec des filtres.",
+    c: {q: "défaut de motifs", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Obligation d'information · devoir de conseil",
+    note: "Le devoir de conseil du professionnel et la charge de la preuve de son exécution.",
+    c: {q: "devoir de conseil", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Péremption d'instance",
+    note: "La péremption de l'instance faute de diligences des parties pendant deux ans.",
+    c: {q: "péremption de l'instance", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Prescription · interruption",
+    note: "Les causes d'interruption : demande en justice, reconnaissance du droit, mesure d'exécution.",
+    c: {q: "interruption de la prescription", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Procédure collective · période suspecte",
+    note: "Les nullités des actes accomplis entre la cessation des paiements et le jugement d'ouverture.",
+    c: {q: "période suspecte", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Recel",
+    note: "Le recel : détention, dissimulation ou profit d'une chose provenant d'un crime ou d'un délit.",
+    c: {q: "recel", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["cr"], pub: ["b"]}
+  },
+  {
+    label: "Responsabilité · garde de la chose",
+    note: "La responsabilité du fait des choses : détermination du gardien, usage, direction et contrôle.",
+    c: {q: "garde de la chose", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Rupture brutale des relations commerciales",
+    note: "La rupture sans préavis écrit tenant compte de la durée de la relation (art. L. 442-1, II du code de commerce).",
+    c: {q: "rupture brutale des relations commerciales établies", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Servitude de passage",
+    note: "Les servitudes de passage : enclave, titre, prescription, assiette et exercice.",
+    c: {q: "servitude de passage", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Succession · rapport",
+    note: "Le rapport des libéralités à la succession et son incidence sur la réserve.",
+    c: {q: "rapport à la succession", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"]}
+  },
+  {
+    label: "Travail dissimulé",
+    note: "La dissimulation d'emploi salarié ou d'activité, et l'indemnité forfaitaire due au salarié.",
+    c: {q: "travail dissimulé", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["soc", "cr"]}
+  },
+  {
+    label: "Trouble anormal de voisinage",
+    note: "Le trouble excédant les inconvénients normaux du voisinage : responsabilité sans faute.",
+    c: {q: "trouble anormal de voisinage", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Vices cachés",
+    note: "La garantie des vices cachés : défaut rendant la chose impropre à son usage, délai d'action, action rédhibitoire ou estimatoire.",
+    c: {q: "vice caché", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1", "civ3"]}
+  },
+  {
+    label: "Bail commercial · déplafonnement du loyer",
+    note: "Le déplafonnement du loyer lors du renouvellement : motifs et détermination de la valeur locative.",
+    c: {q: "déplafonnement", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Bail commercial · refus de renouvellement",
+    note: "Le refus de renouvellement du bail et l'indemnité d'éviction.",
+    c: {q: "refus de renouvellement", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Cautionnement · disproportion",
+    note: "L'engagement de caution manifestement disproportionné aux biens et revenus de la caution.",
+    c: {q: "manifestement disproportionné", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Copropriété · charges",
+    note: "Répartition et recouvrement des charges de copropriété, contestation des comptes.",
+    c: {q: "charges de copropriété", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ3"]}
+  },
+  {
+    label: "Devoir de mise en garde (banque)",
+    note: "Le devoir de mise en garde du banquier envers l'emprunteur non averti, au regard du risque d'endettement.",
+    c: {q: "devoir de mise en garde", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["comm"]}
+  },
+  {
+    label: "Exécution provisoire",
+    note: "L'exécution provisoire des décisions : de droit ou facultative, arrêt et aménagement.",
+    c: {q: "exécution provisoire", mode: "exact", jur: ["cc"], tri: "date-desc"}
+  },
+  {
+    label: "Force majeure",
+    note: "L'événement imprévisible, irrésistible et extérieur, exonératoire de responsabilité ou libératoire de l'obligation.",
+    c: {q: "force majeure", mode: "exact", jur: ["cc"], tri: "date-desc", pub: ["b"]}
+  },
+  {
+    label: "Usufruit",
+    note: "Droits et obligations de l'usufruitier à l'égard du nu-propriétaire.",
+    c: {q: "usufruitier", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"], pub: ["b"]}
+  },
+];
+
+/* ---------------------- Critères de recherche ----------------------
+   Un objet unique décrit la demande. Il sert au formulaire, au lien
+   partageable, aux modèles et au rappel des filtres actifs : une seule
+   source de vérité, donc aucun réglage ne peut agir en restant invisible. */
+/* La matière retenue s'affiche sous le champ de recherche : un filtre invisible
+   est un piège — on cherche, on ne trouve rien, et l'on ignore pourquoi. */
+function majMatiere(){
+  let z = document.getElementById("matiere-active");
+  if(!z){
+    z = document.createElement("div");
+    z.id = "matiere-active"; z.className = "note"; z.style.margin = "6px 0 0";
+    const champ = document.getElementById("q");
+    champ.parentNode.parentNode.insertBefore(z, champ.parentNode.nextSibling);
+  }
+  if(!window.__THEME){ z.textContent = ""; return; }
+  z.innerHTML = "Recherche restreinte à la matière « <b>"+echap(window.__THEME)+"</b> » "+
+    '<button class="second" id="ote-matiere" type="button" style="padding:2px 8px;font-size:12px">retirer</button>';
+  document.getElementById("ote-matiere").onclick = ()=>{
+    window.__THEME = ""; majMatiere();
+    [...document.querySelectorAll(".mat-u")].forEach(x => { x.classList.remove("principal"); x.classList.add("second"); });
+    chercher(0);
+  };
+}
+
+function lire(){
+  const jur = [];
+  ["cc","ca","tj","tcom"].forEach(j=>{ if($("j-"+j).checked) jur.push(j); });
+  return {
+    q: $("q").value.trim(),
+    mode: (document.querySelector('input[name=mode]:checked')||{}).value || "exact",
+    jur, loc: $("lieu").value,
+    ch: [...document.querySelectorAll(".ch:checked")].map(c=>c.value),
+    pub: [...document.querySelectorAll(".pub:checked")].map(c=>c.value),
+    du: $("du").value, au: $("au").value,
+    zone: $("zone").value, tri: $("tri").value,
+    /* La matière : un thème du titrage officiel de la Cour, posé par le relevé
+       de mots-clés. Il restreint la recherche au champ du droit concerné, ce
+       qu'aucune combinaison de mots ne sait faire. */
+    theme: (window.__THEME || ""),
+    exclure: $("exclure").value.trim(),
+  };
+}
+function ecrire(c){
+  c = c || {};
+  $("q").value = c.q || "";
+  const mode = c.mode || "exact";
+  document.querySelectorAll('input[name=mode]').forEach(r=>{ r.checked = (r.value===mode); });
+  const jur = c.jur || ["cc","ca"];
+  ["cc","ca","tj","tcom"].forEach(j=>{ $("j-"+j).checked = jur.includes(j); });
+  document.querySelectorAll(".ch").forEach(el=>{ el.checked = (c.ch||[]).includes(el.value); });
+  document.querySelectorAll(".pub").forEach(el=>{ el.checked = (c.pub||[]).includes(el.value); });
+  $("du").value = c.du || "";  $("au").value = c.au || "";
+  $("zone").value = c.zone || ""; $("tri").value = c.tri || "score";
+  $("exclure").value = c.exclure || "";
+  /* Liste des juridictions remise à plat : un filtre resté en place
+     empêcherait de retrouver une juridiction enregistrée. */
+  $("lieu-filtre").value = ""; remplirLieux(""); $("lieu").value = c.loc || "";
+  majResumeAffiner();
+}
+
+function parametres(c, page, taille){
+  const p = new URLSearchParams();
+  p.set("query", c.q);
+  p.set("operator", c.mode);
+  p.set("page_size", String(taille));
+  p.set("page", String(page));
+  if(c.tri !== "score"){ p.set("sort","date"); p.set("order", c.tri==="date-asc"?"asc":"desc"); }
+  if(c.du) p.set("date_start", c.du);
+  if(c.au) p.set("date_end", c.au);
+  /* Valeurs imposées par l'API : themes, text, introduction, expose, moyens,
+     motivations, dispositif, annexes, visa, summary. « sommaire » et
+     « titrage » sont refusés (HTTP 400) — ce sont summary et themes. */
+  if(c.zone === "sommaire"){ p.append("field","summary"); p.append("field","themes"); }
+  else if(c.zone) p.append("field", c.zone);
+  c.jur.forEach(j=>p.append("jurisdiction", j));
+  if(c.jur.includes("cc")) c.ch.forEach(v=>p.append("chamber", v));
+  c.pub.forEach(v=>p.append("publication", v));
+  if(c.loc) p.append("location", c.loc);
+  if(c.theme) p.append("theme", c.theme);
+  return p;
+}
+
+/* ------------------------- Modèles et lieux ------------------------- */
+PRESETS.sort((a,b)=>a.label.localeCompare(b.label,"fr"));
+
+function remplirModeles(filtre){
+  const sel = $("modele"), f = normaliser(filtre||"").trim();
+  const liste = PRESETS.map((p,i)=>({p,i})).filter(({p}) => !f || normaliser(p.label+" "+p.note).includes(f));
+  sel.innerHTML = "";
+  const vide = document.createElement("option");
+  vide.value = "";
+  vide.textContent = liste.length ? "— "+liste.length+" modèle"+(liste.length>1?"s":"")+" —"
+                                  : "— aucun modèle ne correspond —";
+  sel.appendChild(vide);
+  for(const {p,i} of liste){
+    const o = document.createElement("option");
+    o.value = String(i); o.textContent = p.label;
+    sel.appendChild(o);
+  }
+}
+function remplirLieux(filtre){
+  const sel = $("lieu"), f = normaliser(filtre||"").trim(), garde = sel.value;
+  const noms = {ca:"Cours d'appel", tj:"Tribunaux judiciaires", tcom:"Tribunaux de commerce"};
+  sel.innerHTML = "";
+  const vide = document.createElement("option");
+  vide.value = ""; vide.textContent = "— toutes celles cochées ci-dessus —";
+  sel.appendChild(vide);
+  for(const type of ["ca","tj","tcom"]){
+    const e = Object.entries(JURIDICTIONS[type]).filter(([,n]) => !f || normaliser(n).includes(f));
+    if(!e.length) continue;
+    const g = document.createElement("optgroup");
+    g.label = noms[type]+" ("+e.length+")";
+    e.forEach(([k,n])=>{ const o = document.createElement("option"); o.value = k; o.textContent = n; g.appendChild(o); });
+    sel.appendChild(g);
+  }
+  if(garde && sel.querySelector('option[value="'+CSS.escape(garde)+'"]')) sel.value = garde;
+}
+
+/* --------------------- Rappel des réglages actifs ---------------------
+   Les réglages vivent dans une section repliée : leur nombre est porté sur
+   le titre, et le détail au-dessus des résultats. Un réglage ne peut donc
+   jamais agir sans être vu — c'est ce qui rendait l'outil déroutant. */
+function reglagesActifs(c){
+  const l = [];
+  if(c.exclure) l.push({cle:"exclure", nom:"Mots exclus", val:c.exclure});
+  if(c.zone)    l.push({cle:"zone", nom:"Zone", val:ZONES[c.zone]||c.zone});
+  if(c.loc)     l.push({cle:"loc", nom:"Juridiction",
+                        val:(JURIDICTIONS.ca[c.loc]||JURIDICTIONS.tj[c.loc]||JURIDICTIONS.tcom[c.loc]||c.loc)});
+  if(c.ch.length)  l.push({cle:"ch", nom:"Chambres", val:c.ch.map(k=>CHAMBRES_COURT[k]||k).join(", ")});
+  if(c.pub.length) l.push({cle:"pub", nom:"Publication", val:c.pub.map(k=>PUBLICATIONS[k]||k).join(", ")});
+  if(c.du || c.au) l.push({cle:"dates", nom:"Période",
+                        val:(c.du?"depuis le "+dateFr(c.du):"")+(c.au?(c.du?", ":"")+"jusqu'au "+dateFr(c.au):"")});
+  if(c.tri !== "score") l.push({cle:"tri", nom:"Tri", val:c.tri==="date-desc"?"date, récent d'abord":"date, ancien d'abord"});
+  return l;
+}
+function effacerReglage(k){
+  if(k==="exclure") $("exclure").value = "";
+  else if(k==="zone") $("zone").value = "";
+  else if(k==="loc") $("lieu").value = "";
+  else if(k==="ch") document.querySelectorAll(".ch").forEach(c=>c.checked=false);
+  else if(k==="pub") document.querySelectorAll(".pub").forEach(c=>c.checked=false);
+  else if(k==="dates"){ $("du").value=""; $("au").value=""; }
+  else if(k==="tri") $("tri").value = "score";
+  majResumeAffiner();
+}
+function majResumeAffiner(){
+  const n = reglagesActifs(lire()).length;
+  $("resume-affiner").textContent = n ? "Affiner — "+n+" réglage"+(n>1?"s":"")+" actif"+(n>1?"s":"") : "Affiner";
+}
+function majFiltres(c){
+  const zone = $("filtres"), l = reglagesActifs(c);
+  if(!l.length){ zone.classList.add("cache"); return; }
+  zone.innerHTML = '<span class="t">Réglages appliqués :</span>' +
+    l.map(x=>'<span class="f"><span><b>'+echap(x.nom)+'</b> : '+echap(x.val)+
+      '</span><button type="button" data-r="'+x.cle+'" title="Retirer">✕</button></span>').join("") +
+    '<button type="button" class="tout">Tout retirer</button>';
+  zone.classList.remove("cache");
+  zone.querySelectorAll("[data-r]").forEach(b=>b.onclick = ()=>{ effacerReglage(b.dataset.r); chercher(0); });
+  zone.querySelector(".tout").onclick = ()=>{
+    ["exclure","zone","loc","ch","pub","dates","tri"].forEach(effacerReglage); chercher(0);
+  };
+}
+
+/* ---------------------------- Recherche ---------------------------- */
+let etat = {page:0, total:0, criteres:null};
+let courants = {};
+
+function exclusions(c){
+  return c.exclure.split(/[;,]/).map(s=>normaliser(s.trim())).filter(Boolean);
+}
+/* Contrôle des exclusions sur ce que la recherche renvoie déjà : extraits,
+   sommaire, matières. Une trouvaille y est certaine ; l'absence ne prouve
+   rien, et l'application le dit plutôt que de le taire. */
+function estExclue(r, mots){
+  if(!mots.length) return false;
+  const h = r.highlights || {};
+  const parts = [r.summary, r.solution, (r.themes||[]).join(" ")];
+  for(const k of Object.keys(h)) parts.push((h[k]||[]).join(" "));
+  const blob = normaliser(parts.filter(Boolean).join(" ").replace(/<\/?em>/g,""));
+  return mots.some(m=>blob.includes(m));
+}
+
+/* Une fiche restitue TOUT ce que l'API renvoie sur la décision : sommaire
+   officiel entier, tous les extraits, toutes les matières. Aucune coupe : les
+   seuils d'affichage sont autant de décisions prises à la place du lecteur, et
+   celui-ci n'a aucun moyen de savoir ce qu'on lui a retiré. */
+function fiche(r){
+  const nums = numerosDe(r);
+  const pub = (r.publication||[]).includes("b");
+  const s = String(r.summary||"").replace(/\s+/g," ").trim();
+  const extraits = ((r.highlights && r.highlights.text) || [])
+    .map(h=>"« … "+echap(h).replace(/&lt;em&gt;/g,"<em>").replace(/&lt;\/em&gt;/g,"</em>")+" … »")
+    .join(" · ");
+  return '<article class="fiche" data-id="'+echap(r.id)+'">'+
+    '<div class="tete">'+
+      '<span class="jur">'+echap(juridictionDe(r))+'</span>'+
+      '<span class="date">'+dateFr(r.decision_date)+'</span>'+
+      (nums ? '<span class="badge">n° '+echap(nums)+'</span>' : "")+
+      (r.solution ? '<span class="badge sol">'+echap(r.solution)+'</span>' : "")+
+      (pub ? '<span class="badge pub">Bulletin</span>' : "")+
+      (r.themes||[]).map(t=>'<span class="badge">'+echap(t)+'</span>').join("")+
+    '</div>'+
+    (s ? '<div class="resume"><b>Sommaire officiel.</b> '+echap(s)+'</div>' : "")+
+    (extraits ? '<div class="extraits">'+extraits+'</div>' : "")+
+    '<div class="pied">'+
+      '<button type="button" class="voir" data-id="'+echap(r.id)+'">Texte intégral</button>'+
+      '<button type="button" class="citer" data-id="'+echap(r.id)+'">Copier la citation</button>'+
+      '<a href="https://www.courdecassation.fr/decision/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener">Fiche officielle ↗</a>'+
+      (r.ecli ? '<span class="note">'+echap(r.ecli)+'</span>' : "")+
+    '</div></article>';
+}
+
+function brancherFiches(){
+  document.querySelectorAll(".voir").forEach(b=>b.onclick = ()=>ouvrirDecision(b.dataset.id));
+  document.querySelectorAll(".citer").forEach(b=>b.onclick = ()=>{
+    const r = courants[b.dataset.id];
+    if(r) copier(citationDe(r)+"\n"+"https://www.courdecassation.fr/decision/"+r.id).then(()=>clin(b,"Copié"));
+  });
+}
+
+async function chercher(page){
+  const c = lire();
+  if(!c.q){ message("Indiquez ce que vous cherchez.", "err"); $("q").focus(); return; }
+  if(!c.jur.length){ message("Cochez au moins une juridiction.", "err"); return; }
+  message("");
+  $("btn-chercher").disabled = true;
+  try{
+    const t0 = performance.now();
+    const d = await appelApi("/search", parametres(c, page, parPage()));
+    etat = {page, total:d.total||0, criteres:c};
+
+    /* ---- Garantie de fidélité ----
+       L'API signale par « relaxed » qu'elle a substitué « au moins un mot » à la
+       demande faute de correspondance. Mesuré : ces résultats sont hors sujet.
+       On ne les présente donc pas comme une réponse. */
+    if(d.relaxed){
+      $("resultats").classList.remove("cache");
+      majFiltres(c);
+      $("nb").textContent = "0"; $("nb-mot").textContent = "décision correspond exactement";
+      $("duree").textContent = "";
+      /* Une phrase entière cherchée « au mot près » ne se trouve jamais : les
+         juges n'écrivent pas comme on parle. C'est le premier conseil à donner,
+         avant toute explication technique — et il vaut mieux qu'il soit
+         actionnable d'un doigt que formulé en principe. */
+      const tropDeMots = c.mode === "exact" && c.q.trim().split(/\s+/).length >= 4;
+      $("garantie").innerHTML = '<div class="msg info">'+
+        (tropDeMots
+          ? "<b>Vous cherchez une phrase entière, au mot près.</b><br>Les juges n'écrivent pas comme on parle : " +
+            "cette phrase n'existe telle quelle dans aucune décision. Deux gestes, au choix :<br><br>" +
+            '<button class="second" id="btn-mots-zero" type="button">Trouver les bons mots-clés</button> ' +
+            '<button class="second" id="btn-tous-mots" type="button">Chercher toutes ces décisions contenant tous ces mots</button>' +
+            "<br><br><span style=\"opacity:.8\">Le détail : </span>"
+          : "<b>Aucune décision ne correspond à votre demande.</b><br>")+
+        "Vous cherchez « "+echap(c.q)+" » en mode <b>"+echap(MODES[c.mode])+"</b> : la base ne contient rien de tel. "+
+        "L'API a proposé d'elle-même un élargissement à « au moins un mot », que nous écartons : "+
+        "il aurait renvoyé "+Number(d.total||0).toLocaleString("fr-FR")+" décisions sans rapport avec votre demande.<br><br>"+
+        '<button class="second" id="btn-elargir" type="button">Voir quand même ces '+
+        Number(d.total||0).toLocaleString("fr-FR")+" décisions élargies</button> "+
+        '<button class="second" id="btn-relacher" type="button">Rechercher « au moins un mot »</button></div>';
+      $("liste").innerHTML = "";
+      $("page-txt").textContent = ""; $("btn-prec").disabled = $("btn-suiv").disabled = true;
+      $("btn-csv").disabled = $("btn-html").disabled = true;
+      if($("btn-mots-zero")) $("btn-mots-zero").onclick = ()=>{
+        $("q").value = c.q; assistantMots();
+        $("mots-zone").scrollIntoView({behavior:"smooth", block:"center"});
+      };
+      if($("btn-tous-mots")) $("btn-tous-mots").onclick = ()=>{
+        document.querySelector('input[name=mode][value="and"]').checked = true;
+        chercher(0);
+      };
+      $("btn-elargir").onclick = ()=>afficherElargies(d, c);
+      $("btn-relacher").onclick = ()=>{
+        document.querySelector('input[name=mode][value="or"]').checked = true;
+        chercher(0);
+      };
+      $("resultats").scrollIntoView({behavior:"smooth", block:"start"});
+      return;
+    }
+
+    const mots = exclusions(c);
+    const recus = d.results || [];
+    const gardees = recus.filter(r=>!estExclue(r, mots));
+    const ecartees = recus.length - gardees.length;
+    courants = {}; gardees.forEach(r=>{ courants[r.id] = r; });
+
+    $("resultats").classList.remove("cache");
+    majFiltres(c);
+    $("nb").textContent = Number(etat.total).toLocaleString("fr-FR");
+    $("nb-mot").textContent = "décision"+(etat.total>1?"s":"")+" trouvée"+(etat.total>1?"s":"");
+    $("duree").textContent = Math.round(performance.now()-t0)+" ms";
+    $("garantie").innerHTML = '<div class="garantie"><span>✓</span><span>'+
+      "Toutes ces décisions contiennent <b>"+echap(MODES[c.mode]==="expression exacte" ? "l'expression exacte" : MODES[c.mode])+
+      "</b> « "+echap(c.q)+" »"+(c.zone?" dans "+echap(ZONES[c.zone]||c.zone):"")+"."+
+      (mots.length ? " "+ecartees+" décision"+(ecartees>1?"s":"")+" de cette page écartée"+(ecartees>1?"s":"")+
+        " par vos mots exclus." : "")+"</span></div>";
+
+    $("liste").innerHTML = gardees.map(fiche).join("") ||
+      '<div class="carte">'+(mots.length
+        ? "Toutes les décisions de cette page ont été écartées par vos mots exclus. Passez à la page suivante ou retirez l'exclusion ci-dessus."
+        : "Aucune décision sur cette page.")+"</div>";
+    brancherFiches();
+
+    const nbPages = Math.max(1, Math.ceil(Math.min(etat.total, PLAFOND)/parPage()));
+    $("page-txt").textContent = "Page "+(page+1)+" sur "+nbPages.toLocaleString("fr-FR")+
+      (etat.total>PLAFOND ? " — l'API s'arrête à 10 000 décisions, affinez par dates" : "");
+    $("btn-prec").disabled = page<=0;
+    $("btn-suiv").disabled = !d.next_page || (page+1)>=nbPages;
+    $("btn-csv").disabled = $("btn-html").disabled = etat.total===0;
+    if(page===0) $("resultats").scrollIntoView({behavior:"smooth", block:"start"});
+  }catch(e){
+    message(echap(messageErreur(e)), "err");
+  }finally{
+    $("btn-chercher").disabled = false;
+  }
+}
+
+/* Les résultats élargis ne sont montrés que sur demande expresse, et chaque
+   fiche reste signalée comme ne répondant pas à la demande initiale. */
+function afficherElargies(d, c){
+  const recus = d.results || [];
+  courants = {}; recus.forEach(r=>{ courants[r.id] = r; });
+  $("nb").textContent = Number(d.total||0).toLocaleString("fr-FR");
+  $("nb-mot").textContent = "décisions élargies (hors demande)";
+  $("garantie").innerHTML = '<div class="msg info"><b>Résultats élargis.</b> Ces décisions ne contiennent '+
+    "<b>pas</b> « "+echap(c.q)+" » tel que demandé : l'API a retenu celles qui contiennent au moins un des mots. "+
+    "À lire comme des pistes, pas comme une réponse.</div>";
+  $("liste").innerHTML = recus.map(fiche).join("");
+  brancherFiches();
+  $("page-txt").textContent = ""; $("btn-prec").disabled = $("btn-suiv").disabled = true;
+}
+
+$("btn-chercher").onclick = ()=>chercher(0);
+$("q").addEventListener("keydown", e=>{ if(e.key==="Enter") chercher(0); });
+$("exclure").addEventListener("keydown", e=>{ if(e.key==="Enter") chercher(0); });
+$("par-page").onchange = ()=>{ if(etat.criteres) chercher(0); };
+$("btn-prec").onclick = ()=>chercher(Math.max(0, etat.page-1));
+$("btn-suiv").onclick = ()=>chercher(etat.page+1);
+$("btn-reinit").onclick = ()=>{
+  ecrire({}); $("modele-filtre").value = ""; remplirModeles("");
+  $("resultats").classList.add("cache"); message(""); $("q").focus();
+};
+
+/* ------------------------- Texte de la décision ------------------------- */
+let ouverte = null;
+
+/* Citations d'articles : « article L. 1154-1 du code du travail », « articles
+   455 et 458 du code de procédure civile », renvois d'alinéas compris. Les
+   numéros sont décrits explicitement — le point de « L. » interdit toute
+   approche fondée sur « tout sauf la ponctuation ». */
+const NUM_ART = "(?:[LRDAlrda]\\.?\\s*)?\\d+(?:-\\d+)*";
+const RE_CITATION = new RegExp(
+  "\\barticles?\\s+("+NUM_ART+"(?:\\s*(?:,|et|à)\\s*"+NUM_ART+")*)"+
+  "(?:\\s*,?\\s*(?:alin[ée]as?|al\\.)\\s*\\w+)?"+
+  "\\s*,?\\s*du\\s+(code\\s+[^,.;:()\\n]{2,60})", "gi");
+
+function numerosArticles(bloc){
+  const propre = bloc.replace(/\b(?:alin[ée]as?|al\.)\s*\d+(?:\s*(?:et|,)\s*\d+)*/gi," ")
+                     .replace(/\b(?:paragraphes?|§|points?)\s*\d+/gi," ");
+  const re = /\b([LRD]\.?\s*\d+(?:-\d+)*|\d+(?:-\d+)+|\d{1,4})\b/g;
+  const vus = new Set(); let m;
+  while((m = re.exec(propre)) && vus.size < 8) vus.add(normaliserNumero(m[1]));
+  return [...vus];
+}
+function normaliserNumero(n){
+  const s = String(n).trim(), m = /^([A-Za-z]+)\.?\s*(.+)$/.exec(s);
+  return (m ? m[1]+m[2] : s).replace(/\s+/g,"");
+}
+function codeOfficiel(libelle){
+  const n = normaliser(libelle).trim().replace(/[.,;:]+$/,"");
+  if(!n) return null;
+  const exact = CODES.find(c=>normaliser(c)===n);
+  if(exact) return exact;
+  let meilleur = null;
+  for(const c of CODES){
+    const nc = normaliser(c);
+    if((n.startsWith(nc) || nc.startsWith(n)) && (!meilleur || nc.length>normaliser(meilleur).length)) meilleur = c;
+  }
+  return meilleur;
+}
+
+function surligner(texteEchappe, q, mode){
+  if(!q) return texteEchappe;
+  const motifs = mode==="exact" ? [q] : q.split(/\s+/).filter(m=>m.length>=3);
+  if(!motifs.length) return texteEchappe;
+  return texteEchappe.replace(new RegExp("("+motifs.map(echapRegex).join("|")+")","gi"), "<mark>$1</mark>");
+}
+/* Découper le texte autour des citations, plutôt qu'y insérer des marqueurs,
+   évite toute interférence entre surlignage et boutons. */
+/* Les conventions collectives citées dans une décision.
+
+   Le pont dans l'autre sens : depuis une décision, ouvrir la convention qu'elle
+   applique. Les juges la désignent presque toujours de la même façon —
+   « la convention collective nationale des transports routiers », « la
+   convention collective des bureaux d'études techniques ». On capture ce
+   groupe nominal, en s'arrêtant à la première ponctuation forte : au-delà,
+   on ramasserait la phrase entière.
+
+   La borne à quatre-vingts signes n'est pas arbitraire : les intitulés les plus
+   longs du fonds KALI tiennent en dessous, et une capture plus large ne
+   retrouverait plus rien. */
+const RE_CCN = new RegExp(
+  "\\bconventions?\\s+collectives?" +
+  "(?:\\s+nationales?)?(?:\\s+[ée]tendue)?" +
+  "(?:\\s+(?:de\\s+la|des|du|de\\s+l'|de|d')\\s*)" +
+  "([^,.;:()\\[\\]\\n]{4,80}?)" +
+  "(?=\\s*(?:[,.;:()]|du\\s+\\d|applicable|en\\s+date|dans\\s+sa|$))", "gi");
+
+function lierConventions(fragment, surlignage){
+  let sortie = "", curseur = 0, m;
+  RE_CCN.lastIndex = 0;
+  while((m = RE_CCN.exec(fragment)) !== null){
+    const nom = m[1].replace(/\s+/g, " ").trim();
+    sortie += surlignage(fragment.slice(curseur, m.index));
+    sortie += nom.length >= 4
+      ? '<button type="button" class="ccnlien" data-nom="'+echap(nom)+
+        '" title="Ouvrir cette convention collective">'+surlignage(m[0])+"</button>"
+      : surlignage(m[0]);
+    curseur = m.index + m[0].length;
+  }
+  return sortie + surlignage(fragment.slice(curseur));
+}
+
+function lierArticles(texteEchappe, surlignage){
+  let sortie = "", curseur = 0, m;
+  RE_CITATION.lastIndex = 0;
+  while((m = RE_CITATION.exec(texteEchappe)) !== null){
+    const nums = numerosArticles(m[1]);
+    sortie += lierConventions(texteEchappe.slice(curseur, m.index), surlignage);
+    sortie += nums.length
+      ? '<button type="button" class="art" data-nums="'+echap(nums.join("|"))+'" data-code="'+echap(m[2])+
+        '">'+surlignage(m[0])+"</button>"
+      : surlignage(m[0]);
+    curseur = m.index + m[0].length;
+  }
+  return sortie + lierConventions(texteEchappe.slice(curseur), surlignage);
+}
+
+async function ouvrirDecision(id){
+  const dlg = $("dlg-decision");
+  $("dlg-titre").textContent = "Chargement…"; $("dlg-sous").textContent = ""; $("dlg-corps").innerHTML = "";
+  ouverte = null; dlg.showModal();
+  try{
+    const d = await appelApi("/decision", new URLSearchParams({id}));
+    ouverte = d;
+    const n = numerosDe(d);
+    $("dlg-titre").textContent = juridictionDe(d)+" — "+dateFr(d.decision_date)+(n?" — n° "+n:"");
+    $("dlg-sous").textContent = [d.ecli, d.solution].filter(Boolean).join(" · ");
+    const c = etat.criteres || {q:"", mode:"exact"};
+    $("dlg-corps").innerHTML =
+      (d.summary ? '<div class="sommaire"><b>Sommaire officiel.</b> '+echap(d.summary)+"</div>" : "")+
+      "<pre>"+lierArticles(echap(d.text||"(texte indisponible)"), t=>surligner(t, c.q, c.mode))+"</pre>";
+    const cites = $("dlg-corps").querySelectorAll("button.art");
+    cites.forEach(b=>b.onclick = ()=>
+      ouvrirArticle(b.dataset.nums.split("|"), b.dataset.code, d.decision_date));
+    /* Le pont dans l'autre sens : de la décision vers la convention qu'elle
+       applique. On renseigne l'écran des conventions et l'on y conduit —
+       plutôt que d'ouvrir une fenêtre de plus par-dessus celle-ci. */
+    $("dlg-corps").querySelectorAll("button.ccnlien").forEach(b=>b.onclick = ()=>{
+      $("dlg-decision").close();
+      $("ccn-q").value = b.dataset.nom;
+      $("ccn-idcc").value = "";
+      $("carte-ccn").scrollIntoView({behavior:"smooth", block:"start"});
+      ccnChercher();
+    });
+    /* La consultation des textes ne se devine pas : on l'annonce, mais seulement
+       quand des articles ont réellement été repérés — sinon c'est une promesse
+       en l'air. */
+    if(cites.length) $("dlg-corps").insertAdjacentHTML("afterbegin",
+      '<div class="msg info" style="margin-top:0">'+cites.length+" citation"+(cites.length>1?"s":"")+
+      " d'article"+(cites.length>1?"s":"")+" repérée"+(cites.length>1?"s":"")+
+      " dans ce texte : <b>cliquez dessus</b> pour lire l'article sur fond bleu, "+
+      "dans sa rédaction applicable au "+dateFr(d.decision_date)+".</div>");
+  }catch(e){
+    $("dlg-titre").textContent = "Erreur";
+    $("dlg-corps").innerHTML = '<div class="msg err">'+echap(messageErreur(e))+"</div>";
+  }
+}
+$("dlg-fermer").onclick = ()=>$("dlg-decision").close();
+$("dlg-citer").onclick = ()=>{
+  if(ouverte) copier(citationDe(ouverte)+"\n"+"https://www.courdecassation.fr/decision/"+ouverte.id)
+    .then(()=>clin($("dlg-citer"), "Copié"));
+};
+$("dlg-pdf").onclick = ()=>{ if(ouverte) imprimerDecision(ouverte); };
+$("dlg-word").onclick = ()=>{
+  if(!ouverte) return;
+  telecharger(nomDecision(ouverte, "docx"), docxDecision(ouverte),
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  clin($("dlg-word"), "Enregistré");
+};
+$("dlg-decision").addEventListener("click", e=>{ if(e.target===$("dlg-decision")) $("dlg-decision").close(); });
+
+/* ------------------------- Articles de code -------------------------
+   Le texte s'affiche dans la page si le déploiement dispose du relais
+   Légifrance ; sinon le clic renvoie au site officiel. Un relais est
+   nécessaire parce que le serveur d'authentification de PISTE refuse (403)
+   toute demande de jeton portant un en-tête « Origin », que tout navigateur
+   ajoute : aucune page web ne peut donc obtenir ce jeton elle-même. */
+let relaisDispo = null;
+
+function urlLegifrance(num, code){
+  return "https://www.legifrance.gouv.fr/search/all?tab_selection=all&query="+
+    encodeURIComponent("article "+num+(code?" "+code:""));
+}
+function replLegifrance(num, code, explication){
+  return '<div class="msg info">'+explication+"</div>"+
+    '<p style="margin-top:14px"><a href="'+echap(urlLegifrance(num, code))+'" target="_blank" rel="noopener">'+
+    "Ouvrir « article "+echap(num)+(code?" — "+echap(code):"")+" » sur Légifrance ↗</a></p>";
+}
+
+async function ouvrirArticle(numeros, libelleCode, dateDecision){
+  const dlg = $("dlg-article"), code = codeOfficiel(libelleCode), liste = [].concat(numeros);
+  if(!dlg.open) dlg.showModal();
+  if(liste.length > 1){
+    $("art-titre").textContent = "Articles cités";
+    $("art-sous").textContent = code || libelleCode || "";
+    $("art-corps").innerHTML = "<p>Cette citation vise plusieurs articles.</p><div class=\"boutons\">"+
+      liste.map(n=>'<button class="second choix" type="button" data-n="'+echap(n)+'">Article '+echap(n)+"</button>").join("")+
+      "</div>";
+    $("art-corps").querySelectorAll(".choix").forEach(b=>b.onclick = ()=>
+      ouvrirArticle([b.dataset.n], libelleCode, dateDecision));
+    return;
+  }
+  const num = liste[0];
+  $("art-titre").textContent = "Article "+num+(code?" — "+code:"");
+  $("art-sous").textContent = dateDecision ? "Version applicable au "+dateFr(dateDecision) : "Version en vigueur";
+  if(relaisDispo === false){
+    $("art-corps").innerHTML = replLegifrance(num, code,
+      "Ce déploiement ne dispose pas du relais Légifrance : le texte ne peut pas être affiché ici.");
+    return;
+  }
+  $("art-corps").innerHTML = '<div class="msg info">Consultation de Légifrance…</div>';
+  try{
+    let rep;
+    try{
+      rep = await fetch(RELAIS, {method:"POST", headers:{"content-type":"application/json"},
+        body: JSON.stringify({numero:num, code, date:dateDecision})});
+    }catch(e){ throw new Error("PAS_DE_RELAIS"); }
+    if(rep.status===404 || rep.status===405) throw new Error("PAS_DE_RELAIS");
+    let d; try{ d = await rep.json(); }catch(e){ throw new Error("PAS_DE_RELAIS"); }
+    if(!rep.ok) throw new Error(d && d.erreur ? d.erreur : "ERREUR");
+    relaisDispo = true;
+    if(!d.trouve){
+      $("art-corps").innerHTML = replLegifrance(num, code,
+        "Article introuvable sur Légifrance à cette date : texte abrogé, renuméroté, ou citation visant un autre recueil que les codes.");
+      return;
+    }
+    $("art-sous").textContent = [
+      dateDecision ? "Version applicable au "+dateFr(dateDecision) : "Version en vigueur",
+      d.etat ? "état : "+String(d.etat).toLowerCase() : "", d.code || code || ""
+    ].filter(Boolean).join(" · ");
+    $("art-corps").innerHTML =
+      (d.elargi ? '<div class="msg info">Introuvable dans le « '+echap(code||"")+
+        ' » : voici l\'article trouvé sous ce numéro dans un autre code.</div>' : "")+
+      '<div class="texte-art">'+echap(d.texte || "(texte indisponible)")+"</div>"+
+      '<p class="note" style="margin-top:13px">Source : Légifrance (DILA) · '+
+      '<a href="https://www.legifrance.gouv.fr/codes/article_lc/'+encodeURIComponent(d.id||"")+
+      '" target="_blank" rel="noopener">Voir sur Légifrance ↗</a></p>';
+  }catch(e){
+    if(e.message === "PAS_DE_RELAIS"){
+      relaisDispo = false;
+      $("art-corps").innerHTML = replLegifrance(num, code,
+        "Ce déploiement ne dispose pas du relais Légifrance : le texte ne peut pas être affiché ici.");
+    }else{
+      $("art-corps").innerHTML = replLegifrance(num, code, "Légifrance n'a pas pu être interrogé.");
+    }
+  }
+}
+$("art-fermer").onclick = ()=>$("dlg-article").close();
+$("dlg-article").addEventListener("click", e=>{ if(e.target===$("dlg-article")) $("dlg-article").close(); });
+
+/* --------------------- Assistant de mots-clés ---------------------
+
+   Le problème : on cherche « faux CV » et l'on ne trouve rien, parce que les
+   juges n'écrivent pas « faux CV ». Ils écrivent « fausses déclarations »,
+   « curriculum vitae mensonger », « mensonge sur les diplômes ». Personne ne
+   peut deviner ces formules, et un assistant qui les inventerait ne vaudrait
+   pas mieux que le hasard.
+
+   La méthode retenue est donc la même que celle qui gouverne le reste de
+   l'application : ne rien affirmer qui ne soit mesuré. On interroge la base
+   avec les mots de l'utilisateur en « au moins un mot », on lit ce que les
+   décisions renvoyées contiennent réellement, on en extrait les expressions
+   qui reviennent — puis on COMPTE chacune d'elles en expression exacte. Ce qui
+   est proposé n'est pas une suggestion : c'est un relevé, chiffré, vérifiable
+   d'un clic.
+
+   Les expressions que l'API ne trouve pas en exact — celles pour lesquelles
+   elle élargit la recherche — sont écartées : les proposer reviendrait à
+   promettre des résultats inexistants.
+   ------------------------------------------------------------------ */
+
+/* Mots vides du français, auxquels s'ajoute la langue de bois judiciaire :
+   sans elle, toute liste d'expressions fréquentes se réduirait à « la cour
+   d'appel », « il résulte de », « aux termes de l'article ». */
+const VIDES = new Set(("au aux avec ce ces dans de des du elle en et eux il ils je la le les leur "+
+  "lui ma mais me meme mes moi mon ne nos notre nous on ou par pas pour qu que qui sa se ses son "+
+  "sur ta te tes toi ton tu un une vos votre vous c d j l m n s t y ete etee etees etes etant "+
+  "suis es est sommes etes sont serai seras sera serons serez seront etais etait etions etiez "+
+  "etaient fus fut fumes futes furent ai as a avons avez ont avais avait avions aviez avaient "+
+  "eus eut eumes eutes eurent aurai auras aura aurons aurez auront ayant eu eue eues plus moins "+
+  "tres bien fait faire dit dire cette cet celui celle ceux dont donc alors ainsi lors lorsque "+
+  "apres avant depuis pendant entre sans sous vers chez selon toute toutes tout tous autre autres "+
+  "meme memes tel telle tels telles quel quelle quels quelles ledit ladite lesdits lesdites "+
+  "cour appel cassation chambre sociale civile commerciale criminelle arret arrets jugement "+
+  "juge juges juridiction pourvoi pourvois moyen moyens branche branches attendu considerant "+
+  "article articles code travail civil procedure penal commerce alinea termes vertu application "+
+  "espece cause litige instance demande demandes partie parties societe monsieur madame salarie "+
+  "salariee salaries employeur contrat travail decision decisions resulte constate retient "+
+  "enonce statuant statue casse annule rejette rejet condamne condamnation somme euros date "+
+  "premier premiere second seconde ci apres dessus dessous savoir egalement notamment").split(" "));
+
+const estVide = m => m.length < 3 || VIDES.has(m);
+
+/* Expressions de 2 à 5 mots, comptées en nombre de décisions distinctes où
+   elles apparaissent — non en occurrences, pour qu'une décision bavarde ne
+   pèse pas plus qu'une autre. */
+/* Les ligatures, et un défaut de la source.
+
+   « œ » et « æ » ne se décomposent pas comme les accents : la normalisation les
+   laisse intacts, et le découpage sur [^a-z0-9] taillerait « manœuvres » en
+   « man » + « uvres ». On les développe donc.
+
+   Mais il y a pire, et cela vient de la base elle-même : Judilibre renvoie
+   « man'uvres » — une apostrophe à la place du œ, séquelle d'un transcodage
+   ancien. Vérifié caractère par caractère sur le texte reçu de l'API. Sans
+   réparation, l'assistant proposerait « man uvres » comme formule employée par
+   les juges, ce qui est faux et ridicule. La liste ci-dessous est celle des
+   mots français courants où le œ se trouve ainsi mutilé ; elle est volontairement
+   fermée, une règle générale sur l'apostrophe abîmerait « aujourd'hui ». */
+const MUTILES = [[/man'uvr/g,"manoeuvr"], [/c'ur/g,"coeur"], [/s'ur/g,"soeur"],
+                 [/v'u/g,"voeu"], [/n'ud/g,"noeud"], [/b'uf/g,"boeuf"],
+                 [/'uvre/g,"oeuvre"], [/c'lio/g,"coelio"], [/f'tus/g,"foetus"]];
+function ligatures(s){
+  let t = String(s||"").replace(/œ/g, "oe").replace(/æ/g, "ae");
+  for(const [r, v] of MUTILES) t = t.replace(r, v);
+  return t;
+}
+
+function expressions(textes){
+  const freq = new Map();
+  for(const t of textes){
+    const vus = new Set();
+    /* Découpage en propositions : une expression ne doit pas enjamber une
+       ponctuation forte, sans quoi on fabrique des suites qui n'existent pas. */
+    for(const phrase of ligatures(normaliser(t)).split(/[.;:!?()«»"]+/)){
+      const mots = phrase.split(/[^a-z0-9]+/).filter(Boolean);
+      for(let n = 2; n <= 5; n++)
+        for(let i = 0; i + n <= mots.length; i++){
+          const suite = mots.slice(i, i + n);
+          /* Une expression utile ne commence ni ne finit par un mot vide, et
+             ne peut pas être faite que de mots vides. */
+          if(estVide(suite[0]) || estVide(suite[n-1])) continue;
+          if(suite.every(estVide)) continue;
+          /* Un millésime ou un numéro n'est jamais un terme de recherche :
+             « plainte le 11 novembre 2021 » ne sert à personne. */
+          if(suite.some(m => /\d/.test(m))) continue;
+          const e = suite.join(" ");
+          if(!vus.has(e)){ vus.add(e); freq.set(e, (freq.get(e)||0) + 1); }
+        }
+    }
+  }
+  return freq;
+}
+
+/* Une expression contenue dans une expression plus longue et aussi fréquente
+   n'apporte rien : on garde la plus précise. */
+function elaguer(liste){
+  return liste.filter(a => !liste.some(b =>
+    b.e !== a.e && b.e.includes(a.e) && b.n >= a.n * 0.8));
+}
+
+async function compter(expression){
+  const p = new URLSearchParams();
+  p.append("query", expression);
+  p.append("operator", "exact");
+  p.append("page_size", "1");
+  for(const j of ["cc","ca"]) p.append("jurisdiction", j);
+  const d = await appelApi("/search", p);
+  return {total: d.total || 0, elargi: !!d.relaxed};
+}
+
+/* ---- Le vocabulaire de la Cour, relevé une fois pour toutes ----
+
+   L'assistant ci-dessous lit des décisions à chaque recherche, ce qui prend du
+   temps et dépend d'un échantillon tiré sur les mots de l'utilisateur — c'est-
+   à-dire précisément ceux qu'il ne faut pas employer. On a donc fait l'analyse
+   une fois : pour chacune des rubriques du titrage officiel, un échantillon de
+   décisions a été lu et les mots qui la caractérisent relevés. Le résultat est
+   `vocabulaire.json` : 593 rubriques, 2 627 mots. Il est chargé avec la page.
+
+   Ce que cela permet : dire, INSTANTANÉMENT et sans aucune requête, sous quelle
+   rubrique la Cour range un sujet décrit en français courant. Un titrage vaut
+   mieux qu'une formule approchée — il restreint la recherche à un champ du
+   droit, ce qu'aucune combinaison de mots ne sait faire. */
+let VOC = null, IDF = null;
+async function vocabulaire(){
+  if(VOC) return VOC;
+  try{
+    VOC = await (await fetch("./vocabulaire.json", {cache: "force-cache"})).json();
+  }catch(e){ VOC = {}; }
+  /* Un mot présent dans cent quarante rubriques — « procédure », « droit » —
+     ne désigne rien. Son poids est l'inverse de sa dispersion. */
+  const dans = new Map();
+  for(const k in VOC) for(const m of VOC[k].m) dans.set(m, (dans.get(m)||0) + 1);
+  const N = Object.keys(VOC).length || 1;
+  IDF = m => Math.log(N / (1 + (dans.get(m)||0)));
+  return VOC;
+}
+
+/* Les rubriques que les mots du sujet désignent.
+
+   Deux poids, et une coupe. Un mot qui figure dans l'INTITULÉ de la rubrique
+   vaut plus qu'un mot relevé dans le corps des décisions : « licenciement »
+   dans « licenciement pour motif économique » désigne la rubrique, le même mot
+   croisé dans les motifs d'une décision de prud'hommes ne fait que passer. Et
+   un mot répandu dans cent rubriques ne compte pas : il ne distingue rien.
+
+   La coupe se fait sur le meilleur score, non sur un seuil absolu : ce qui
+   importe est l'écart entre la première rubrique et les suivantes. */
+function matieresProbables(sujet){
+  if(!VOC) return [];
+  const RAC = m => m.length > 7 ? m.slice(0, 7) : m;
+  const mots = [...new Set(ligatures(normaliser(sujet)).split(/[^a-z0-9]+/)
+    .filter(m => m.length > 3 && !estVide(m)).map(RAC))];
+  if(!mots.length) return [];
+  const out = [];
+  for(const k in VOC){
+    const titre = new Set(ligatures(normaliser(k)).split(/[^a-z0-9]+/)
+      .filter(m => m.length > 3).map(RAC));
+    const corps = new Set(VOC[k].m.map(RAC));
+    let s = 0, touches = 0;
+    for(const r of mots){
+      const poids = IDF(r);
+      if(poids < 1.2) continue;              /* mot trop répandu : il ne dit rien */
+      const w = titre.has(r) ? 2.2 * poids : (corps.has(r) ? poids : 0);
+      if(w){ s += w; touches++; }
+    }
+    if(touches) out.push({t: k, s: s, touches: touches, n: VOC[k].n});
+  }
+  if(!out.length) return [];
+  out.sort((a, b) => b.s - a.s || b.touches - a.touches);
+  return out.filter(x => x.s >= out[0].s * 0.6).slice(0, 6);
+}
+
+function poserMatieres(sujet){
+  const z = $("mots-matieres");
+  const liste = matieresProbables(sujet);
+  if(!liste.length){ z.innerHTML = ""; return; }
+  z.innerHTML = '<div class="fiche"><b>La Cour range ce sujet ici</b>'+
+    '<div class="note" style="margin:4px 0 8px">Rubriques du titrage officiel, reconnues sur '+
+    "les mots de votre phrase — sans aucune requête. Touchez-en une : la recherche est "+
+    "restreinte à ce champ du droit.</div><div>"+
+    liste.map(x => '<button class="second mat-v" type="button" data-t="'+echap(x.t)+'">'+
+      echap(x.t)+' <span class="note">('+x.n.toLocaleString("fr-FR")+")</span></button>").join(" ")+
+    "</div></div>";
+  [...document.querySelectorAll(".mat-v")].forEach(b => b.onclick = ()=>{
+    window.__THEME = (window.__THEME === b.dataset.t) ? "" : b.dataset.t;
+    [...document.querySelectorAll(".mat-v")].forEach(x => {
+      const actif = x.dataset.t === window.__THEME;
+      x.classList.toggle("principal", actif); x.classList.toggle("second", !actif);
+    });
+    majMatiere();
+    chercher(0);
+  });
+}
+
+async function assistantMots(){
+  const sujet = $("q").value.trim();
+  const zone = $("mots-zone");
+  /* Le titrage, d'abord : il ne coûte rien et ne dépend d'aucune clé. */
+  if(sujet.length >= 3){ await vocabulaire(); poserMatieres(sujet); }
+  /* Sans clé personnelle, on n'arrête que si le relais de l'application s'est
+     déjà révélé non activé : sinon, il peut porter la connexion. */
+  if(!cle() && relaisJudi === false) return message("Renseignez d'abord votre clé Judilibre.", "err");
+  if(sujet.length < 3)
+    return message("Décrivez d'abord votre sujet dans le champ ci-dessus.", "info");
+
+  zone.innerHTML = '<div class="msg info">Lecture des décisions en cours…</div>';
+  try{
+    /* 1. Constituer l'échantillon. « Tous les mots » d'abord : « au moins un
+       mot » ramasse n'importe quoi dès qu'un terme est ambigu — sur « faux CV »
+       il ramenait la taxe différentielle sur les véhicules, « CV » y valant
+       cheval fiscal. On ne se rabat sur « au moins un mot » que si l'API n'a
+       rien trouvé, ce qu'elle signale par son indicateur d'élargissement. */
+    const echantillon = async (op) => {
+      const p = new URLSearchParams();
+      p.append("query", sujet);
+      p.append("operator", op);
+      p.append("page_size", "50");
+      p.append("resolve_references", "true");
+      for(const j of ["cc","ca"]) p.append("jurisdiction", j);
+      return appelApi("/search", p);
+    };
+    let d = await echantillon("and"), large = false;
+    if(d.relaxed || !(d.results||[]).length){ d = await echantillon("or"); large = true; }
+    const res = d.results || [];
+    if(!res.length){
+      zone.innerHTML = '<div class="msg err">Aucune décision ne contient même un seul de ces mots. '+
+        "Reformulez avec des termes plus courants.</div>";
+      return;
+    }
+
+    /* 2. Lire ce que ces décisions contiennent réellement. */
+    const textes = [], matieres = new Map();
+    for(const r of res){
+      const bouts = [r.summary || ""].concat((r.highlights && r.highlights.text) || []);
+      textes.push(bouts.join(" ").replace(/<\/?em>/g, ""));
+      for(const m of (r.themes || [])) matieres.set(m, (matieres.get(m)||0) + 1);
+    }
+
+    /* 3. Retenir les expressions récurrentes — mais seulement celles qui
+       parlent DU SUJET.
+
+       Sans cette condition, le relevé remontait la langue commune à toutes les
+       décisions : sur « demande de copie d'e-mail professionnel », il rendait
+       « droits de l'homme » (163 décisions), « convention de sauvegarde des
+       droits » (12 306) et « doit être » (6 763). Des expressions réelles,
+       comptées juste, et sans le moindre rapport avec la question posée — la
+       fréquence dans l'échantillon ne dit rien tant que l'échantillon lui-même
+       est fait de décisions choisies sur des mots courants.
+
+       Une expression n'est donc candidate que si elle contient l'un des mots du
+       sujet, à la racine près : c'est le seul lien qui garantisse qu'elle
+       désigne ce que l'on cherche. */
+    const RACINE = m => m.length > 7 ? m.slice(0, 7) : m;
+    const motsSujet = new Set(ligatures(normaliser(sujet)).split(/[^a-z0-9]+/)
+      .filter(m => m.length > 3 && !estVide(m)).map(RACINE));
+    const parleDuSujet = e => e.split(" ").some(m => motsSujet.has(RACINE(m)));
+
+    const toutes = [...expressions(textes)].map(([e, n]) => ({e, n}));
+    let brut = toutes.filter(x => x.n >= 3 && parleDuSujet(x.e));
+    /* Si rien ne relie l'échantillon au sujet, mieux vaut le dire que rendre
+       la langue de palais : on garde alors les expressions les plus longues,
+       et le relevé porte la réserve. */
+    const horsSujet = brut.length === 0;
+    if(horsSujet) brut = toutes.filter(x => x.n >= 3);
+    brut = brut.sort((a, b) => b.n - a.n || b.e.length - a.e.length);
+    const retenues = elaguer(brut).slice(0, 12);
+    /* Les mots de l'utilisateur sont toujours mesurés : c'est la comparaison
+       qui instruit, pas la seule liste. */
+    const sien = ligatures(normaliser(sujet));
+    if(!retenues.some(x => x.e === sien))
+      retenues.unshift({e: sien, n: 0, sien: true});
+
+    /* 4. Compter chacune en expression exacte. */
+    const lignes = [];
+    for(let i = 0; i < retenues.length; i++){
+      zone.innerHTML = '<div class="msg info">Comptage des expressions… '+
+        (i+1)+" sur "+retenues.length+"</div>";
+      try{
+        const c = await compter(retenues[i].e);
+        lignes.push(Object.assign({}, retenues[i], c));
+      }catch(e){ /* une expression qui échoue ne doit pas tout arrêter */ }
+    }
+
+    /* 5. Classer par spécificité, non par abondance.
+
+       « base légale » revient dans 14 901 décisions : c'est de la langue de
+       palais, elle apparaît partout et n'apprend rien. « entrave au
+       fonctionnement régulier » n'en compte que 40 : elle désigne le sujet.
+       Le rang est donc donné par la fréquence dans l'échantillon rapportée à
+       la fréquence dans la base entière — ce qui est fréquent ici et rare
+       ailleurs caractérise la recherche. */
+    /* Le rang : ce qui est fréquent ICI et rare AILLEURS.
+
+       L'ancien calcul divisait par le logarithme du total, ce qui ne suffisait
+       pas : une expression vue cinquante fois dans l'échantillon et présente
+       dans six mille décisions passait devant une expression vue trois fois et
+       présente dans quarante. C'est l'inverse qu'il faut. On pèse donc chaque
+       expression par sa rareté dans la base entière — la forme classique du
+       rapport entre fréquence locale et fréquence globale. */
+    const utiles = lignes.filter(l => !l.elargi && l.total > 0)
+      .filter(l => l.total < 20000 || l.sien)      // au-delà, c'est de la langue de palais
+      .map(l => Object.assign({}, l, {
+        score: (l.n + 1) * Math.log10(30000 / Math.max(l.total, 3)) }))
+      .sort((a, b) => b.score - a.score);
+    const vaines = lignes.filter(l => l.elargi || !l.total);
+    const mat = [...matieres].sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+    zone.innerHTML =
+      '<div class="msg ok" style="margin-top:12px"><b>Relevé établi sur '+res.length+
+      " décisions lues"+(large ? ", trouvées avec au moins un de vos mots — vos termes ne "+
+        "coexistent dans aucune décision, le relevé est donc moins sûr" : ", contenant toutes "+
+        "vos mots")+".</b> Les nombres sont ceux que l'API renvoie pour chaque expression prise "+
+      "à la lettre, en Cour de cassation et cours d'appel. Les plus caractéristiques sont en "+
+      "tête : une expression fréquente ici et rare ailleurs désigne le sujet. "+
+      (horsSujet ? "<br><b>Réserve :</b> aucune des expressions relevées ne reprend vos mots. "+
+        "Les décisions lues parlent probablement d'autre chose — reformulez avec le terme "+
+        "central de votre question. " : "")+
+      "<b>Cliquez pour l'employer</b> — le relevé reste affiché, vous pouvez en essayer "+
+      "plusieurs de suite. <button class=\"second\" id=\"mots-fermer\" type=\"button\" "+
+      "style=\"margin-left:8px\">Masquer le relevé</button></div>"+
+      (utiles.length ? '<div class="fiche"><b>Formules employées par les juges</b>'+
+        '<table style="width:100%;border-collapse:collapse;margin-top:8px">'+
+        utiles.map(l => '<tr><td style="padding:4px 8px 4px 0">'+
+          '<button class="second mot-u" type="button" data-e="'+echap(l.e)+'">'+echap(l.e)+"</button></td>"+
+          '<td class="note" style="padding:4px 0;white-space:nowrap">'+l.total.toLocaleString("fr-FR")+
+          " décision"+(l.total>1?"s":"")+(l.sien ? " — vos mots" : "")+"</td></tr>").join("")+
+        "</table></div>" : '<div class="msg err">Aucune des expressions relevées n\'existe telle quelle '+
+        "dans la base. Le sujet est peut-être formulé autrement par les juges : essayez d'autres termes.</div>")+
+      (vaines.length ? '<div class="fiche"><b>Écartées</b><div class="note">'+
+        vaines.map(l => echap(l.e)+" — "+(l.elargi ? "n'existe pas telle quelle" : "aucune décision")).join(" · ")+
+        "</div></div>" : "")+
+      (mat.length ? '<div class="fiche"><b>La matière de votre sujet, selon le titrage de la Cour</b>'+
+        '<div class="note" style="margin:4px 0 8px">Ce sont les rubriques sous lesquelles la Cour de cassation '+
+        "range elle-même ces décisions. En toucher une restreint la recherche à ce champ du droit — "+
+        "ce qu'aucune combinaison de mots ne sait faire.</div><div>"+
+        mat.map(m => '<button class="second mat-u" type="button" data-t="'+echap(m[0])+'">'+
+          echap(m[0])+' <span class="note">('+m[1]+")</span></button>").join(" ")+
+        "</div></div>" : "");
+
+    /* Le relevé demeure après un clic — on essaie une formule, on regarde,
+       on en essaie une autre. L'effacer obligerait à tout refaire. */
+    $("mots-fermer").onclick = ()=>{ zone.innerHTML = ""; $("mots-matieres").innerHTML = "";
+      window.__THEME = ""; majMatiere(); };
+    [...document.querySelectorAll(".mat-u")].forEach(b => b.onclick = ()=>{
+      window.__THEME = (window.__THEME === b.dataset.t) ? "" : b.dataset.t;
+      [...document.querySelectorAll(".mat-u")].forEach(x => {
+        const actif = x.dataset.t === window.__THEME;
+        x.classList.toggle("principal", actif); x.classList.toggle("second", !actif);
+      });
+      majMatiere();
+      chercher(0);
+    });
+    [...document.querySelectorAll(".mot-u")].forEach(b => b.onclick = ()=>{
+      $("q").value = b.dataset.e;
+      document.querySelector('input[name="mode"][value="exact"]').checked = true;
+      [...document.querySelectorAll(".mot-u")].forEach(x => {
+        x.classList.remove("principal"); x.classList.add("second");
+      });
+      b.classList.remove("second"); b.classList.add("principal");
+      chercher(0);
+      $("resultats").scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  }catch(e){
+    zone.innerHTML = '<div class="msg err">'+messageErreur(e)+"</div>";
+  }
+}
+$("btn-mots").onclick = assistantMots;
+
+/* ---------------------- Conventions collectives ----------------------
+
+   Même relais, même abonnement que les codes : le fonds KALI de Légifrance.
+   Une convention se désigne par son numéro IDCC ; elle contient des textes
+   — texte de base, annexes, avenants — eux-mêmes faits de sections et
+   d'articles. Ce que l'application affiche est le texte officiel, daté, et
+   rien d'autre : c'est la même exigence que pour les décisions.
+   -------------------------------------------------------------------- */
+let ccnCourant = null, ccnTextes = [], ccnTitre = "";   // texte ouvert, et sommaire de la convention
+
+function ccnMessage(html, type){
+  $("ccn-msg").innerHTML = html ? '<div class="msg '+(type||"info")+'">'+html+"</div>" : "";
+}
+
+function ccnErreur(e){
+  const m = String(e && e.message || e);
+  if(m==="PAS_DE_RELAIS")
+    return "Cette adresse ne dispose pas du relais Légifrance. Les conventions collectives "+
+      'sont consultables sur <a href="https://jurisprudence-recherche.netlify.app" target="_blank" rel="noopener">'+
+      "l'adresse Netlify de l'application</a>.";
+  if(m==="RELAIS_NON_CONFIGURE") return "Le relais Légifrance n'a pas reçu ses identifiants PISTE.";
+  if(m==="API_NON_SOUSCRITE")    return "L'API Légifrance n'est pas souscrite sur ce compte PISTE.";
+  if(m==="QUOTA")                return "Quota PISTE atteint. Réessayez dans quelques minutes.";
+  return "Légifrance n'a pas répondu (" + echap(m) + ").";
+}
+
+async function relais(corps){
+  let rep;
+  try{
+    rep = await fetch(RELAIS, {method:"POST", headers:{"content-type":"application/json"},
+                               body: JSON.stringify(corps)});
+  }catch(e){ throw new Error("PAS_DE_RELAIS"); }
+  if(rep.status===404 || rep.status===405) throw new Error("PAS_DE_RELAIS");
+  let d; try{ d = await rep.json(); }catch(e){ throw new Error("PAS_DE_RELAIS"); }
+  if(d && d.erreur) throw new Error(d.erreur);
+  return d;
+}
+
+async function ccnChercher(){
+  const q = $("ccn-q").value.trim();
+  if(!q) return ccnMessage("Indiquez un intitulé à chercher, ou un numéro IDCC.", "info");
+  ccnMessage("Recherche…", "info"); $("ccn-sommaire").innerHTML = "";
+  try{
+    const d = await relais({action:"ccn-recherche", q});
+    const l = Array.isArray(d) ? d : [];
+    if(!l.length) return ccnMessage("Aucune convention ne porte cet intitulé.", "info");
+    ccnMessage("", "");
+    $("ccn-sommaire").innerHTML = '<div class="msg ok" style="margin-top:12px">'+
+      l.length+" convention"+(l.length>1?"s":"")+" — cliquez pour ouvrir</div>"+
+      l.map(c => '<div class="fiche"><b>'+echap(c.titre||"(sans intitulé)")+"</b>"+
+        (c.idcc ? ' <span class="badge">IDCC '+echap(String(c.idcc))+"</span>" : "")+
+        ' <button class="second ccn-o" type="button" data-idcc="'+echap(String(c.idcc||""))+
+        '" data-id="'+echap(String(c.id||""))+'">Ouvrir</button></div>').join("");
+    [...document.querySelectorAll(".ccn-o")].forEach(b => b.onclick = ()=>{
+      if(b.dataset.idcc) $("ccn-idcc").value = b.dataset.idcc;
+      ccnOuvrir(b.dataset.idcc, b.dataset.id);
+    });
+  }catch(e){ ccnMessage(ccnErreur(e), "err"); }
+}
+
+async function ccnOuvrir(idcc, id){
+  idcc = (idcc || $("ccn-idcc").value).trim();
+  if(!idcc && !id) return ccnMessage("Indiquez le numéro IDCC de la convention (16 pour les transports routiers).", "info");
+  ccnMessage("Ouverture…", "info"); $("ccn-sommaire").innerHTML = "";
+  try{
+    const d = await relais({action:"ccn", idcc, id});
+    if(!d.textes || !d.textes.length)
+      return ccnMessage("Convention trouvée, mais aucun texte n'a pu être lu."+
+        (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "err");
+    ccnMessage("", "");
+    ccnTextes = d.textes; ccnTitre = d.titre || "";
+    /* Une convention compte plusieurs centaines de textes — 500 pour les
+       transports routiers. Une liste brute serait inutilisable : le filtre
+       est donc donné en même temps qu'elle, et non caché ailleurs. */
+    $("ccn-sommaire").innerHTML =
+      '<div class="msg ok" style="margin-top:12px"><b>'+echap(d.titre||("IDCC "+idcc))+"</b> — "+
+      d.textes.length+" texte"+(d.textes.length>1?"s":"")+" : texte de base, annexes, avenants.</div>"+
+      '<label class="champ"><b>Filtrer les textes</b>'+
+      '<input id="ccn-fl" placeholder="ex. ingénieurs et cadres, ou annexe III" autocomplete="off"></label>'+
+      '<div id="ccn-liste"></div>';
+    $("ccn-fl").addEventListener("input", ()=>ccnListe($("ccn-fl").value));
+    ccnListe("");
+  }catch(e){ ccnMessage(ccnErreur(e), "err"); }
+}
+
+function ccnListe(filtre){
+  const f = normaliser(filtre||"");
+  const l = ccnTextes.filter(t => !f || normaliser(t.titre).includes(f));
+  const vus = l.slice(0, 60);
+  $("ccn-liste").innerHTML =
+    (l.length ? '<p class="note">'+l.length+" texte"+(l.length>1?"s":"")+
+      (l.length > vus.length ? " — les "+vus.length+" premiers sont affichés, affinez le filtre" : "")+
+      "</p>" : '<p class="note">Aucun texte ne porte ces mots.</p>')+
+    vus.map(t => '<div class="fiche"><b>'+echap(t.titre)+"</b>"+
+      (t.date ? ' <span class="note">'+echap(t.date)+"</span>" : "")+
+      (t.etat ? ' <span class="badge">'+echap(t.etat)+"</span>" : "")+
+      ' <button class="second ccn-t" type="button" data-id="'+echap(t.id)+'">Lire</button></div>').join("");
+  [...document.querySelectorAll(".ccn-t")].forEach(b => b.onclick = ()=>ccnLire(b.dataset.id));
+}
+
+/* Le contenu des articles arrive en HTML — tableaux de coefficients compris,
+   qu'il faut conserver tels quels. On les insère donc, mais après avoir retiré
+   ce qui peut s'exécuter : le texte vient d'une source officielle, ce n'est pas
+   une raison pour lui accorder les droits d'un script de la page. */
+function nettoyerHtml(html){
+  const d = document.createElement("div");
+  d.innerHTML = String(html||"");
+  d.querySelectorAll("script,style,iframe,object,embed,link,meta,form").forEach(n => n.remove());
+  d.querySelectorAll("*").forEach(n => {
+    [...n.attributes].forEach(a => {
+      const nom = a.name.toLowerCase();
+      if(nom.startsWith("on") || (/^(href|src)$/.test(nom) && /^\s*javascript:/i.test(a.value)))
+        n.removeAttribute(a.name);
+    });
+  });
+  return d.innerHTML;
+}
+
+/* Conversion en texte simple, pour les exports : le navigateur décode les
+   entités mieux qu'une expression régulière ne le ferait. */
+function htmlEnTexte(html){
+  const d = document.createElement("div");
+  d.innerHTML = String(html||"").replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|tr|li|h[1-6])>/gi, "\n").replace(/<\/t[dh]>/gi, "\t");
+  d.querySelectorAll("script,style").forEach(n => n.remove());  // sinon leur code passe en texte
+  return (d.textContent||"").replace(/ /g, " ")
+    .replace(/[ \t]+$/gm, "").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/* Un article sans sa section peut être attribué à tort : dans une nomenclature
+   de classification, c'est le titre de la section — « Groupe 6 » — qui dit à
+   quel groupe la définition se rapporte, l'article n'en portant aucune trace.
+   La section est donc rappelée sur chaque fiche, et le filtre ne peut jamais
+   détacher un article de la sienne. */
+/* Le rendu est le même pour une convention et pour une loi : ce sont les mêmes
+   blocs. Seule l'adresse de vérification change d'un fonds à l'autre, et c'est
+   pourquoi elle est un paramètre plutôt qu'une constante. */
+function ccnHtml(blocs, filtre, base){
+  const racine = base || "https://www.legifrance.gouv.fr/conv_coll/article/";
+  const f = normaliser(filtre||"");
+  let section = null, sectionRendue = null, sortie = "";
+  for(const b of blocs){
+    if(b.type === "section"){ section = b; continue; }
+    const brut = (b.num ? "Article "+b.num+". " : "")+(b.titre||"")+" "+htmlEnTexte(b.html);
+    if(f && !normaliser(brut).includes(f) && !(section && normaliser(section.titre).includes(f))) continue;
+    if(section && section !== sectionRendue){
+      sortie += '<h4 style="margin:18px 0 6px">'+echap(section.titre)+"</h4>";
+      sectionRendue = section;
+    }
+    /* L'identifiant Légifrance accompagne chaque article : c'est la référence
+       qu'on cite dans des écritures, et le lien qui permet de la vérifier. */
+    const ref = b.id
+      ? ' <a class="note" href="'+racine+encodeURIComponent(b.id)+
+        '" target="_blank" rel="noopener">'+echap(b.id)+"</a>"
+      : "";
+    const situe = section
+      ? '<div class="note">dans « '+echap(section.titre)+" »"+
+        (section.id ? " — "+echap(section.id) : "")+"</div>"
+      : "";
+    /* Une décision qui applique un texte conventionnel le cite le plus souvent
+       mot pour mot : chercher une phrase caractéristique de l'article est donc
+       le moyen le plus sûr de retrouver les décisions qui s'en sont servies —
+       plus sûr que son numéro, qui se répète d'une convention à l'autre. */
+    const phrase = phraseCaracteristique(b.html);
+    const vers = phrase
+      ? ' <button class="second art-dec" type="button" data-p="'+echap(phrase)+
+        '" title="Chercher dans Judilibre les décisions citant ce passage">Décisions citant cet article</button>'
+      : "";
+    sortie += '<div class="fiche"><b>'+echap((b.num ? "Article "+b.num : b.titre||"Article"))+"</b>"+ref+vers+
+              situe+'<div class="texte">'+nettoyerHtml(b.html)+"</div></div>";
+  }
+  return sortie || '<p class="note">Rien ne correspond à ce filtre dans ce texte.</p>';
+}
+
+async function ccnLire(id){
+  ccnMessage("Chargement du texte…", "info");
+  try{
+    const d = await relais({action:"ccn-texte", id});
+    if(!d.blocs || !d.blocs.length)
+      return ccnMessage("Texte trouvé, mais son contenu n'a pas pu être lu."+
+        (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "err");
+    ccnCourant = d; ccnMessage("", "");
+    $("ccn-titre").textContent = d.titre || "Texte";
+    /* Le nombre de versions écartées est affiché : une omission silencieuse
+       laisserait croire que le texte est donné en entier. */
+    $("ccn-sous").textContent = [
+      d.date ? "version du "+dateFr(d.date) : "", d.etat, d.id,
+      d.ecartes ? d.ecartes+" version"+(d.ecartes>1?"s":"")+" antérieure"+(d.ecartes>1?"s":"")+" écartée"+(d.ecartes>1?"s":"") : "",
+    ].filter(Boolean).join(" · ");
+    $("ccn-filtre").value = "";
+    $("ccn-corps").innerHTML = ccnHtml(d.blocs, "");
+    brancherArticles();
+    $("dlg-ccn").showModal();
+  }catch(e){ ccnMessage(ccnErreur(e), "err"); }
+}
+
+/* Le texte d'une convention se verse aux débats : mêmes sorties que pour une
+   décision — impression PDF par le navigateur, et vrai .docx. */
+function ccnTexteBrut(){
+  return (ccnCourant.blocs||[]).map(b => b.type==="section"
+    ? "\n"+b.titre+(b.id ? "  ["+b.id+"]" : "")
+    : ((b.num ? "Article "+b.num+". " : "")+(b.titre && !b.num ? b.titre+". " : "")+
+       htmlEnTexte(b.html)+(b.id ? "\n["+b.id+"]" : ""))
+  ).map(s => s.replace(/\s+$/,"")).filter(s => s.trim()).join("\n");
+}
+function ccnSource(){
+  return (ccnCourant.titre||"Convention collective")+
+    (ccnCourant.date ? " — version du "+dateFr(ccnCourant.date) : "")+
+    " — Légifrance, fonds KALI, "+(ccnCourant.id||"");
+}
+function ccnNom(ext){
+  return (normaliser(ccnCourant.titre||"convention").replace(/[^a-z0-9]+/g,"-")
+          .replace(/^-|-$/g,"").slice(0,70) || "convention")+"."+ext;
+}
+
+/* Une phrase caractéristique : assez longue pour être propre à cet article,
+   assez courte pour que la recherche en expression exacte aboutisse. Mesuré :
+   au-delà d'environ 120 signes, l'API n'a plus de correspondance. */
+function phraseCaracteristique(html){
+  const t = htmlEnTexte(html).replace(/\s+/g, " ");
+  const phrases = t.split(/(?<=[.;])\s+/).map(x => x.trim())
+    .filter(x => x.length >= 45 && x.length <= 120 && !/^\d/.test(x));
+  if(phrases.length) return phrases.sort((a, b) => b.length - a.length)[0].replace(/[.;]$/, "");
+  const court = t.slice(0, 110);
+  const coupe = court.lastIndexOf(" ");
+  return court.length >= 45 ? court.slice(0, coupe > 45 ? coupe : court.length) : "";
+}
+
+/* Chercher dans Judilibre depuis un texte conventionnel : la recherche est
+   remplie et lancée, et l'on est amené aux résultats. Rien n'est deviné —
+   l'expression cherchée est celle que l'utilisateur voit à l'écran. */
+function versJudilibre(expression){
+  $("dlg-ccn").close();
+  $("q").value = expression;
+  document.querySelector('input[name="mode"][value="exact"]').checked = true;
+  $("mots-zone").innerHTML = "";
+  chercher(0);
+  $("resultats").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+async function ccnPleinTexte(){
+  const q = $("ccn-texte-q").value.trim();
+  const idcc = $("ccn-idcc").value.trim();
+  if(q.length < 3) return ccnMessage("Indiquez ce que vous cherchez dans la convention.", "info");
+  if(!idcc) return ccnMessage("Indiquez d'abord le numéro IDCC de la convention à explorer.", "info");
+  ccnMessage("Recherche dans la convention…", "info"); $("ccn-sommaire").innerHTML = "";
+  try{
+    const d = await relais({action:"ccn-plein", q, idcc, exact: $("ccn-plein-exact").checked});
+    const l = d.resultats || [];
+    if(!l.length)
+      return ccnMessage("Rien ne correspond dans cette convention."+
+        (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "info");
+    ccnMessage("", "");
+    $("ccn-sommaire").innerHTML =
+      '<div class="msg ok" style="margin-top:12px"><b>'+l.length+" texte"+(l.length>1?"s":"")+
+      " de la convention "+echap(idcc)+" contien"+(l.length>1?"nent":"t")+" « "+echap(q)+" »"+
+      (d.total > l.length ? " — "+d.total+" au total, les "+l.length+" premiers sont affichés" : "")+
+      ".</b></div>"+
+      l.map(r => '<div class="fiche"><b>'+echap(r.titre||"(sans intitulé)")+"</b>"+
+        (r.etat ? ' <span class="badge">'+echap(r.etat)+"</span>" : "")+
+        ' <button class="second ccn-t" type="button" data-id="'+echap(r.id)+'">Lire le texte</button>'+
+        (r.extraits||[]).slice(0,4).map(e => '<div class="texte" style="margin-top:6px">'+
+          (e.num ? "<b>Article "+echap(e.num)+".</b> " : "")+
+          (e.titre && !e.num ? "<b>"+echap(e.titre)+".</b> " : "")+
+          echap(e.texte||"")+"</div>").join("")+
+        "</div>").join("");
+    [...document.querySelectorAll(".ccn-t")].forEach(b => b.onclick = ()=>ccnLire(b.dataset.id));
+  }catch(e){ ccnMessage(ccnErreur(e), "err"); }
+}
+
+$("ccn-ouvrir").onclick = ()=>ccnOuvrir();
+$("ccn-plein").onclick = ccnPleinTexte;
+$("ccn-texte-q").addEventListener("keydown", e=>{ if(e.key==="Enter") ccnPleinTexte(); });
+$("ccn-decisions").onclick = ()=>{
+  /* L'intitulé complet d'une convention n'est presque jamais reproduit tel
+     quel dans une décision : on cherche le nom sous lequel les juges la
+     désignent, c'est-à-dire l'intitulé amputé de sa date et de sa forme
+     développée. Mesuré : 3 447 décisions pour les transports routiers. */
+  const t = (ccnTitre || "").replace(/\s+/g, " ")
+    .replace(/\s+du\s+\d.*$/i, "").replace(/\s*\(.*\)\s*$/, "").trim();
+  if(!t) return ccnMessage("Ouvrez d'abord une convention.", "info");
+  versJudilibre(t);
+};
+$("ccn-chercher").onclick = ccnChercher;
+$("ccn-idcc").addEventListener("keydown", e=>{ if(e.key==="Enter") ccnOuvrir(); });
+$("ccn-q").addEventListener("keydown", e=>{ if(e.key==="Enter") ccnChercher(); });
+function brancherArticles(){
+  [...document.querySelectorAll(".art-dec")].forEach(b =>
+    b.onclick = ()=>versJudilibre(b.dataset.p));
+}
+$("ccn-filtre").addEventListener("input", ()=>{
+  if(ccnCourant){ $("ccn-corps").innerHTML = ccnHtml(ccnCourant.blocs, $("ccn-filtre").value);
+                  brancherArticles(); }
+});
+$("ccn-fermer").onclick = ()=>$("dlg-ccn").close();
+$("dlg-ccn").addEventListener("click", e=>{ if(e.target===$("dlg-ccn")) $("dlg-ccn").close(); });
+$("ccn-pdf").onclick = ()=>{ if(ccnCourant)
+  imprimerTexte(ccnCourant.titre||"Convention collective", ccnSource(), ccnTexteBrut()); };
+$("ccn-word").onclick = ()=>{
+  if(!ccnCourant) return;
+  telecharger(ccnNom("docx"),
+    docxTexte(ccnCourant.titre||"Convention collective", ccnSource(), ccnTexteBrut()),
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  clin($("ccn-word"), "Enregistré");
+};
+
+
+/* ------------------ Copie de la décision : PDF et Word ------------------
+   Une décision doit pouvoir sortir de l'application : jointe à des écritures,
+   versée à un dossier, annotée. Deux formats couvrent tous les usages.
+
+   Le PDF passe par l'impression du navigateur, seul moyen fiable et sans
+   dépendance d'obtenir un PDF fidèle ; l'impression se fait depuis un cadre
+   masqué, ce qui évite les blocages de fenêtres surgissantes.
+
+   Le Word est un vrai .docx — une archive ZIP contenant du XML Office — et non
+   un HTML renommé : un fichier renommé s'ouvre parfois, mais se corrompt au
+   partage et n'est pas ce qui a été demandé. */
+
+function documentDecision(d){
+  const n = numerosDe(d);
+  return {
+    titre: juridictionDe(d)+" — "+dateFr(d.decision_date)+(n?" — n° "+n:""),
+    sousTitre: [d.ecli, d.solution].filter(Boolean).join(" · "),
+    citation: citationDe(d),
+    sommaire: String(d.summary||"").replace(/\s+/g," ").trim(),
+    texte: String(d.text||"").replace(/\r\n?/g,"\n"),
+    lien: "https://www.courdecassation.fr/decision/"+d.id,
+  };
+}
+
+function imprimerDecision(d){
+  const o = documentDecision(d);
+  const html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>'+echap(o.titre)+"</title><style>"+
+    '@page{margin:18mm}body{font:12pt/1.5 Georgia,"Times New Roman",serif;color:#000}'+
+    'h1{font-size:14pt;margin:0 0 2mm}.st{font-size:10pt;color:#444;margin-bottom:6mm}'+
+    '.som{border:1pt solid #999;padding:3mm;margin-bottom:6mm;font-size:11pt}'+
+    'pre{white-space:pre-wrap;font:11pt/1.55 Georgia,"Times New Roman",serif;margin:0}'+
+    '.src{margin-top:8mm;font-size:9pt;color:#444}'+
+    "</style></head><body><h1>"+echap(o.titre)+"</h1>"+
+    '<div class="st">'+echap(o.sousTitre)+"</div>"+
+    (o.sommaire ? '<div class="som"><b>Sommaire officiel.</b> '+echap(o.sommaire)+"</div>" : "")+
+    "<pre>"+echap(o.texte)+"</pre>"+
+    '<div class="src">'+echap(o.citation)+" — source : "+echap(o.lien)+
+    " (Judilibre, Cour de cassation, open data, décision pseudonymisée)</div>"+
+    "</body></html>";
+  const cadre = document.createElement("iframe");
+  cadre.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0";
+  document.body.appendChild(cadre);
+  cadre.srcdoc = html;
+  cadre.onload = ()=>{
+    cadre.contentWindow.focus();
+    cadre.contentWindow.print();
+    setTimeout(()=>cadre.remove(), 60000);
+  };
+}
+
+/* --- Écriture d'une archive ZIP sans compression (méthode « stored ») --- */
+function crc32(octets){
+  let c, table = crc32.t;
+  if(!table){
+    table = crc32.t = new Uint32Array(256);
+    for(let n=0; n<256; n++){
+      c = n;
+      for(let k=0; k<8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      table[n] = c >>> 0;
+    }
+  }
+  let crc = 0xFFFFFFFF;
+  for(let i=0; i<octets.length; i++) crc = (crc >>> 8) ^ table[(crc ^ octets[i]) & 0xFF];
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+function zip(fichiers){
+  const enc = new TextEncoder(), morceaux = [], central = [];
+  let position = 0;
+  const u16 = v => [v & 255, (v >>> 8) & 255];
+  const u32 = v => [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255];
+  for(const {nom, contenu} of fichiers){
+    const data = enc.encode(contenu), nomOctets = enc.encode(nom), somme = crc32(data);
+    const entete = [].concat(u32(0x04034b50), u16(20), u16(0), u16(0), u16(0), u16(0),
+      u32(somme), u32(data.length), u32(data.length), u16(nomOctets.length), u16(0));
+    morceaux.push(new Uint8Array(entete), nomOctets, data);
+    central.push({nom: nomOctets, somme, taille: data.length, position});
+    position += entete.length + nomOctets.length + data.length;
+  }
+  const debutCentral = position;
+  for(const c of central){
+    const e = [].concat(u32(0x02014b50), u16(20), u16(20), u16(0), u16(0), u16(0), u16(0),
+      u32(c.somme), u32(c.taille), u32(c.taille), u16(c.nom.length),
+      u16(0), u16(0), u16(0), u16(0), u32(0), u32(c.position));
+    morceaux.push(new Uint8Array(e), c.nom);
+    position += e.length + c.nom.length;
+  }
+  morceaux.push(new Uint8Array([].concat(u32(0x06054b50), u16(0), u16(0),
+    u16(central.length), u16(central.length), u32(position - debutCentral), u32(debutCentral), u16(0))));
+  const total = morceaux.reduce((s, m) => s + m.length, 0);
+  const sortie = new Uint8Array(total);
+  let o = 0;
+  for(const m of morceaux){ sortie.set(m, o); o += m.length; }
+  return sortie;
+}
+
+function xmlEchap(s){
+  return String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));
+}
+function paragraphe(texte, options){
+  const o = options || {};
+  const style = "<w:pPr>"+(o.gras || o.taille ? "" : "")+
+    '<w:spacing w:after="120"/>'+(o.centre ? '<w:jc w:val="center"/>' : "")+"</w:pPr>";
+  /* L'ordre des éléments de w:rPr est imposé par le schéma Office :
+     w:b, puis w:color, puis w:sz. Word tolère un autre ordre, LibreOffice
+     refuse le fichier — vérifié. */
+  const rpr = "<w:rPr>"+(o.gras ? "<w:b/>" : "")+
+    (o.gris ? '<w:color w:val="555555"/>' : "")+
+    (o.taille ? '<w:sz w:val="'+o.taille+'"/>' : "")+"</w:rPr>";
+  return "<w:p>"+style+"<w:r>"+rpr+'<w:t xml:space="preserve">'+xmlEchap(texte)+"</w:t></w:r></w:p>";
+}
+
+function docxDecision(d){
+  const o = documentDecision(d);
+  const corps =
+    paragraphe(o.titre, {gras:true, taille:28}) +
+    (o.sousTitre ? paragraphe(o.sousTitre, {gris:true, taille:18}) : "") +
+    (o.sommaire ? paragraphe("Sommaire officiel. "+o.sommaire, {taille:20}) : "") +
+    o.texte.split("\n").map(l => paragraphe(l)).join("") +
+    paragraphe(o.citation+" — source : "+o.lien+
+      " (Judilibre, Cour de cassation, open data, décision pseudonymisée)", {gris:true, taille:16});
+  return zipDocx(corps);
+}
+
+/* Emballage OOXML commun à toutes les sorties Word. */
+function zipDocx(corps){
+  return zip([
+    {nom:"[Content_Types].xml", contenu:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'+
+      '<Default Extension="xml" ContentType="application/xml"/>'+
+      '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'+
+      "</Types>"},
+    /* Word se passe de ce fichier, d'autres lecteurs non : on le fournit. */
+    {nom:"word/_rels/document.xml.rels", contenu:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>'},
+    {nom:"_rels/.rels", contenu:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'+
+      "</Relationships>"},
+    {nom:"word/document.xml", contenu:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+
+      corps+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>'+
+      '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134"/></w:sectPr>'+
+      "</w:body></w:document>"},
+  ]);
+}
+
+/* Les deux mêmes sorties, pour un texte quelconque — un texte de convention
+   collective aujourd'hui. Le PDF passe par l'impression du navigateur, seul
+   moyen fidèle et sans dépendance ; le Word est un vrai .docx. */
+function imprimerTexte(titre, source, texte){
+  const html = '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>'+echap(titre)+"</title><style>"+
+    '@page{margin:18mm}body{font:12pt/1.5 Georgia,"Times New Roman",serif;color:#000}'+
+    'h1{font-size:14pt;margin:0 0 2mm}.st{font-size:10pt;color:#444;margin-bottom:6mm}'+
+    'pre{white-space:pre-wrap;font:11pt/1.55 Georgia,"Times New Roman",serif;margin:0}'+
+    '.src{margin-top:8mm;font-size:9pt;color:#444}'+
+    "</style></head><body><h1>"+echap(titre)+"</h1>"+
+    '<div class="st">'+echap(source)+"</div><pre>"+echap(texte)+"</pre>"+
+    '<div class="src">Source : '+echap(source)+" — Légifrance (DILA), open data.</div>"+
+    "</body></html>";
+  const cadre = document.createElement("iframe");
+  cadre.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0";
+  document.body.appendChild(cadre);
+  cadre.srcdoc = html;
+  cadre.onload = ()=>{ cadre.contentWindow.focus(); cadre.contentWindow.print();
+                       setTimeout(()=>cadre.remove(), 60000); };
+}
+
+function docxTexte(titre, source, texte){
+  const corps =
+    paragraphe(titre, {gras:true, taille:28}) +
+    paragraphe(source, {gris:true, taille:18}) +
+    texte.split("\n").map(l => paragraphe(l)).join("") +
+    paragraphe("Source : "+source+" — Légifrance (DILA), open data.", {gris:true, taille:16});
+  return zipDocx(corps);
+}
+
+function nomDecision(d, ext){
+  const base = normaliser(citationDe(d)).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,70);
+  return (base || "decision")+"."+ext;
+}
+
+/* ------------------------------- Export ------------------------------- */
+async function collecter(){
+  const c = etat.criteres;
+  const voulu = Math.min(Number($("export-max").value), etat.total, PLAFOND);
+  const parPage = 50, mots = exclusions(c);
+  const zone = $("progression"), txt = $("prog-texte"), barre = $("prog-barre");
+  zone.classList.remove("cache");
+  const lignes = []; let ecartees = 0;
+  for(let p=0; p*parPage < PLAFOND && lignes.length < voulu; p++){
+    txt.textContent = "Récupération : "+lignes.length+" / "+voulu+" décisions…";
+    barre.style.width = Math.min(100, Math.round(100*lignes.length/voulu))+"%";
+    const d = await appelApi("/search", parametres(c, p, parPage));
+    if(d.relaxed) break;                       // jamais de résultats élargis à l'export
+    for(const r of (d.results||[])){
+      if(estExclue(r, mots)){ ecartees++; continue; }
+      lignes.push({
+        date: String(r.decision_date||"").slice(0,10),
+        juridiction: juridictionDe(r),
+        chambre: String(r.jurisdiction||"").toLowerCase()==="cc"
+          ? (CHAMBRES[String(r.chamber||"").toLowerCase()]||r.chamber||"") : "",
+        numero: numerosDe(r), ecli: r.ecli||"", solution: r.solution||"",
+        publication: (r.publication||[]).join(" "), matieres: (r.themes||[]).join(" / "),
+        citation: citationDe(r),
+        sommaire: String(r.summary||"").replace(/\s+/g," ").trim(),
+        extraits: (((r.highlights&&r.highlights.text)||[]).join(" … ")).replace(/<\/?em>/g,"").replace(/\s+/g," ").trim(),
+        url: "https://www.courdecassation.fr/decision/"+r.id,
+      });
+      if(lignes.length >= voulu) break;
+    }
+    if(!d.next_page) break;
+    await new Promise(r=>setTimeout(r, 250));
+  }
+  zone.classList.add("cache");
+  return {lignes, ecartees};
+}
+
+function telecharger(nom, contenu, type){
+  const url = URL.createObjectURL(new Blob([contenu], {type}));
+  const a = document.createElement("a");
+  a.href = url; a.download = nom; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 5000);
+}
+function nomFichier(ext){
+  const q = normaliser(etat.criteres.q).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50) || "recherche";
+  return "jurisprudence-"+q+"-"+new Date().toISOString().slice(0,10)+"."+ext;
+}
+function pageHtml(lignes){
+  const c = etat.criteres;
+  const titre = "Jurisprudence — « "+c.q+" » ("+MODES[c.mode]+") — "+new Date().toLocaleDateString("fr-FR");
+  return '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">'+
+    '<meta name="viewport" content="width=device-width, initial-scale=1"><title>'+echap(titre)+"</title><style>"+
+    'body{font:14.5px/1.55 Georgia,"Times New Roman",serif;color:#1c2430;max-width:840px;margin:26px auto;padding:0 18px}'+
+    'h1{font-size:19px;margin-bottom:4px}.info{color:#666;font-size:13px;margin-bottom:16px}'+
+    '.d{border-bottom:1px solid #d8d8d8;padding:12px 0}.t{font-weight:bold}'+
+    '.m{color:#666;font-size:12.5px;margin-top:3px}a{color:#1d4ed8;word-break:break-all}'+
+    '.s{background:#f7ecec;border-radius:6px;padding:8px 11px;margin:7px 0;font-size:13.5px}'+
+    '.e{font-size:13.5px;color:#444;margin-top:5px}'+
+    '#f{font:inherit;width:100%;padding:9px 12px;border:1px solid #bbb;border-radius:8px;margin:4px 0}'+
+    '#c{color:#666;font-size:12.5px}@media print{.d{break-inside:avoid}#f,#c{display:none}}'+
+    "</style></head><body><h1>"+echap(titre)+"</h1>"+
+    '<p class="info">'+lignes.length.toLocaleString("fr-FR")+" décision"+(lignes.length>1?"s":"")+
+    ". Toutes contiennent "+echap(MODES[c.mode]==="expression exacte"?"l'expression exacte":MODES[c.mode])+
+    " « "+echap(c.q)+" ». Source : Judilibre, Cour de cassation (open data, décisions pseudonymisées).</p>"+
+    '<input id="f" type="search" placeholder="Filtrer : tapez un ou plusieurs mots…"><div id="c"></div>'+
+    lignes.map(l=>'<div class="d"><div class="t">'+echap(l.citation)+"</div>"+
+      '<div class="m">'+echap([l.ecli, l.matieres].filter(Boolean).join(" · "))+"</div>"+
+      (l.sommaire ? '<div class="s"><b>Sommaire officiel.</b> '+echap(l.sommaire)+"</div>" : "")+
+      (l.extraits ? '<div class="e">« … '+echap(l.extraits)+' … »</div>' : "")+
+      '<div class="m"><a href="'+echap(l.url)+'">'+echap(l.url)+"</a></div></div>").join("")+
+    '<scr'+'ipt>var f=document.getElementById("f"),c=document.getElementById("c"),'+
+    'ds=[].slice.call(document.querySelectorAll(".d"));'+
+    'function n(s){return s.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"")}'+
+    'var tx=ds.map(function(d){return n(d.textContent)});'+
+    'f.oninput=function(){var m=n(f.value).split(/\\s+/).filter(Boolean),k=0;'+
+    'ds.forEach(function(d,i){var ok=m.every(function(x){return tx[i].indexOf(x)>=0});'+
+    'd.style.display=ok?"":"none";if(ok)k++});'+
+    'c.textContent=m.length?k+" décision(s) sur "+ds.length:""};'+
+    "</scr"+"ipt></body></html>";
+}
+
+async function exporter(format){
+  const b = [$("btn-csv"), $("btn-html"), $("btn-chercher")];
+  b.forEach(x=>x.disabled = true);
+  message("");
+  try{
+    const {lignes, ecartees} = await collecter();
+    if(format === "csv"){
+      const cols = ["date","juridiction","chambre","numero","ecli","solution","publication",
+                    "matieres","citation","sommaire","extraits","url"];
+      const cel = v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+      /* ﻿ : indique à Excel que le fichier est en UTF-8 (accents). */
+      telecharger(nomFichier("csv"),
+        "﻿"+cols.join(";")+"\n"+lignes.map(l=>cols.map(c=>cel(l[c])).join(";")).join("\n"),
+        "text/csv;charset=utf-8");
+    }else{
+      telecharger(nomFichier("html"), pageHtml(lignes), "text/html;charset=utf-8");
+    }
+    message(lignes.length.toLocaleString("fr-FR")+" décisions exportées"+
+      (ecartees ? " ("+ecartees+" écartées par vos mots exclus)" : "")+".", "ok");
+  }catch(e){
+    $("progression").classList.add("cache");
+    message("Export interrompu : "+echap(messageErreur(e)), "err");
+  }finally{
+    b.forEach(x=>x.disabled = false);
+    $("btn-csv").disabled = $("btn-html").disabled = etat.total===0;
+  }
+}
+$("btn-csv").onclick = ()=>exporter("csv");
+$("btn-html").onclick = ()=>exporter("html");
+
+/* --------------------------- Lien partageable ---------------------------
+   Le lien encode les critères, jamais la clé : chacun utilise la sienne. */
+$("btn-lien").onclick = ()=>{
+  const c = lire();
+  if(!c.q){ message("Lancez d'abord une recherche.", "err"); return; }
+  copier(location.origin + location.pathname + "#r=" + encodeURIComponent(JSON.stringify(c)))
+    .then(()=>clin($("btn-lien"), "Lien copié"));
+};
+
+/* ------------------------------ Réglages ------------------------------ */
+$("modele-filtre").addEventListener("input", e=>remplirModeles(e.target.value));
+$("modele").onchange = ()=>{
+  const p = PRESETS[Number($("modele").value)];
+  if(!p) return;
+  ecrire(Object.assign({}, p.c));
+  message("<b>"+echap(p.label)+".</b> "+echap(p.note)+" Cliquez sur « Rechercher ».", "info");
+};
+$("lieu-filtre").addEventListener("input", e=>remplirLieux(e.target.value));
+$("lieu").onchange = ()=>{
+  const v = $("lieu").value;
+  if(!v) return majResumeAffiner();
+  const box = v.startsWith("ca_") ? "j-ca" : (v.startsWith("tcom") ? "j-tcom" : "j-tj");
+  if(!$(box).checked){ $(box).checked = true; message("Juridiction choisie : la case correspondante a été cochée.", "info"); }
+  majResumeAffiner();
+};
+document.querySelectorAll("#affiner input, #affiner select").forEach(el=>{
+  el.addEventListener("change", majResumeAffiner);
+  if(el.tagName === "INPUT" && el.type !== "checkbox") el.addEventListener("input", majResumeAffiner);
+});
+
+/* --------------------------- Initialisation --------------------------- */
+/* Installation sur l'appareil, mode hors connexion, et surtout : signalement
+   d'une nouvelle version. Une application installée ne se recharge jamais
+   d'elle-même ; sans cet avertissement, l'utilisateur peut rester des jours sur
+   une version dépassée sans le savoir — ce qui rend incompréhensible tout
+   défaut déjà corrigé. */
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+  window.addEventListener("load", async ()=>{
+    try{
+      const reg = await navigator.serviceWorker.register("sw.js");
+      /* Une nouvelle version prend la main : la page affichée a été chargée
+         sous l'ancienne, elle peut donc être périmée. Exception, le tout
+         premier enregistrement : la page vient du réseau, elle est à jour —
+         d'où un drapeau qui bascule après cette première prise de contrôle,
+         plutôt qu'un état figé au chargement. */
+      let dejaControlee = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.addEventListener("controllerchange", ()=>{
+        if(dejaControlee) $("maj").classList.remove("cache");
+        dejaControlee = true;
+      });
+      reg.update().catch(()=>{});          // l'appli installée peut rester ouverte longtemps
+    }catch(e){}
+  });
+}
+$("btn-maj").onclick = ()=>location.reload();
+$("btn-adresse").onclick = ()=>{
+  copier(location.origin + location.pathname);
+  clin($("btn-adresse"), "Adresse copiée");
+};
+
+/* ==================== Lois et décrets (fonds LODA) ====================
+
+   Même relais, même abonnement, troisième fonds. Ce qui change, c'est ce qu'on
+   y cherche : une loi ne se désigne pas comme une convention. On la trouve par
+   ses mots, ou par son NOR — l'identifiant que la publication lui attribue et
+   qui, lui, ne varie pas.
+
+   L'assistant de mots-clés reprend la doctrine de celui des décisions, parce
+   que le problème est le même : on cherche « malus seniors » et le législateur
+   a écrit « contribution due par les employeurs ». On ne devine pas cette
+   formule, on la relève. On interrogne donc le fonds avec les mots de
+   l'utilisateur, on lit ce que les textes trouvés contiennent réellement, on en
+   extrait les expressions récurrentes — puis on COMPTE chacune en expression
+   exacte. Ce qui est proposé est un relevé chiffré, pas une suggestion.
+   ==================================================================== */
+let lodaCourant = null;
+
+const lodaMessage = (html, type) => {
+  const z = $("loda-msg");
+  z.innerHTML = html ? '<div class="msg '+(type||"info")+'">'+html+"</div>" : "";
+};
+
+function lodaLigne(r){
+  const sous = [r.nature, r.date ? dateFr(r.date) : "", r.nor ? "NOR "+r.nor : "", r.etat]
+    .filter(Boolean).join(" · ");
+  return '<div class="fiche"><b>'+echap(r.titre || "(sans intitulé)")+"</b>"+
+    (sous ? '<div class="note">'+echap(sous)+"</div>" : "")+
+    '<div class="boutons"><button class="second loda-v" type="button" data-id="'+
+    echap(r.id)+'">Texte intégral</button>'+
+    '<a class="note" href="https://www.legifrance.gouv.fr/loda/id/'+encodeURIComponent(r.id)+
+    '" target="_blank" rel="noopener">Vérifier sur Légifrance</a></div></div>';
+}
+
+function lodaBrancher(){
+  [...document.querySelectorAll(".loda-v")].forEach(b => b.onclick = ()=>lodaLire(b.dataset.id));
+}
+
+async function lodaChercher(){
+  const q = $("loda-q").value.trim(), nor = $("loda-nor").value.trim();
+  if(!q && !nor) return lodaMessage("Indiquez des mots à chercher, ou un NOR.", "info");
+  lodaMessage("Recherche…", "info"); $("loda-resultats").innerHTML = "";
+  try{
+    const d = await relais({action:"loda", q, nor, exact: $("loda-exact").checked, taille: 25});
+    const l = d.resultats || [];
+    if(!l.length)
+      return lodaMessage("Aucun texte ne répond à cette recherche."+
+        ($("loda-exact").checked ? " L'expression exacte est exigeante : décochez-la pour élargir." : ""), "info");
+    lodaMessage("", "");
+    /* Le total est celui du fonds, pas celui de la page : le taire laisserait
+       croire que vingt-cinq textes sont tout ce qui existe. */
+    $("loda-resultats").innerHTML = '<div class="msg ok" style="margin-top:12px">'+
+      l.length+" texte"+(l.length>1?"s":"")+" affiché"+(l.length>1?"s":"")+
+      (d.total > l.length ? " sur "+d.total.toLocaleString("fr-FR")+" trouvés" : "")+
+      "</div>"+l.map(lodaLigne).join("");
+    lodaBrancher();
+  }catch(e){ lodaMessage(ccnErreur(e), "err"); }
+}
+
+async function lodaLire(id){
+  lodaMessage("Chargement du texte…", "info");
+  const date = $("loda-date").value || null;
+  try{
+    const d = await relais(Object.assign({action:"loda-texte", id}, date ? {date} : {}));
+    if(!d.blocs || !d.blocs.length)
+      return lodaMessage("Texte trouvé, mais son contenu n'a pas pu être lu."+
+        (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "err");
+    lodaCourant = d; lodaMessage("", "");
+    $("loda-titre").textContent = d.titre || "Texte";
+    $("loda-sous").textContent = [
+      d.nature, d.date ? "version du "+dateFr(d.date) : "", d.etat, d.nor ? "NOR "+d.nor : "", d.id,
+      d.ecartes ? d.ecartes+" article"+(d.ecartes>1?"s":"")+" abrogé"+(d.ecartes>1?"s":"")+" écarté"+(d.ecartes>1?"s":"") : "",
+    ].filter(Boolean).join(" · ");
+    $("loda-filtre").value = "";
+    $("loda-corps").innerHTML = ccnHtml(d.blocs, "", "https://www.legifrance.gouv.fr/loda/article_lc/");
+    brancherArticles();
+    $("dlg-loda").showModal();
+  }catch(e){ lodaMessage(ccnErreur(e), "err"); }
+}
+
+/* L'assistant : on ne propose que ce qu'on a compté. */
+async function assistantMotsLoda(){
+  const sujet = $("loda-q").value.trim();
+  const zone = $("loda-mots-zone");
+  if(sujet.length < 3)
+    return lodaMessage("Décrivez d'abord ce que vous cherchez dans le champ ci-dessus.", "info");
+
+  zone.innerHTML = '<div class="msg info">Lecture des textes en cours…</div>';
+  try{
+    const d = await relais({action:"loda", q:sujet, exact:false, taille:50});
+    const res = d.resultats || [];
+    if(!res.length){
+      zone.innerHTML = '<div class="msg err">Aucun texte ne contient même un seul de ces mots.</div>';
+      return;
+    }
+    /* Ce que le législateur a réellement écrit : les intitulés et les extraits
+       que Légifrance renvoie, pas une reformulation. */
+    const textes = res.map(r => [r.titre].concat(r.extraits||[]).join(" ").replace(/<\/?em>/g, ""));
+
+    const brut = [...expressions(textes)].map(([e, n]) => ({e, n}))
+      .filter(x => x.n >= 2)
+      .sort((a, b) => b.n - a.n || b.e.length - a.e.length);
+    const retenues = elaguer(brut).slice(0, 10);
+    const sien = ligatures(normaliser(sujet));
+    if(!retenues.some(x => x.e === sien)) retenues.unshift({e: sien, n: 0, sien: true});
+
+    const lignes = [];
+    for(let i = 0; i < retenues.length; i++){
+      zone.innerHTML = '<div class="msg info">Comptage des expressions… '+(i+1)+" sur "+retenues.length+"</div>";
+      try{
+        const c = await relais({action:"loda", q:retenues[i].e, exact:true, taille:1});
+        lignes.push(Object.assign({}, retenues[i], {total: Number(c.total)||0}));
+      }catch(e){ /* une expression qui échoue n'arrête pas le relevé */ }
+    }
+
+    /* Même classement que pour les décisions : ce qui est fréquent ici et rare
+       dans le fonds désigne le sujet. L'abondance, elle, n'apprend rien. */
+    const utiles = lignes.filter(l => l.total > 0)
+      .map(l => Object.assign({}, l, {score: (l.n + 1) / Math.pow(Math.log10(l.total + 10), 2)}))
+      .sort((a, b) => b.score - a.score);
+    const vaines = lignes.filter(l => !l.total);
+
+    zone.innerHTML =
+      '<div class="msg ok" style="margin-top:12px"><b>Relevé établi sur '+res.length+
+      " texte"+(res.length>1?"s":"")+" lu"+(res.length>1?"s":"")+".</b> Les nombres sont ceux que "+
+      "Légifrance renvoie pour chaque expression prise à la lettre dans le fonds des lois et "+
+      "décrets. Les plus caractéristiques sont en tête. <b>Cliquez pour l'employer</b>. "+
+      "<button class=\"second\" id=\"loda-mots-fermer\" type=\"button\" style=\"margin-left:8px\">"+
+      "Masquer le relevé</button></div>"+
+      (utiles.length ? '<div class="fiche"><b>Formules employées par le législateur</b>'+
+        '<table style="width:100%;border-collapse:collapse;margin-top:8px">'+
+        utiles.map(l => '<tr><td style="padding:4px 8px 4px 0">'+
+          '<button class="second loda-mot" type="button" data-e="'+echap(l.e)+'">'+echap(l.e)+"</button></td>"+
+          '<td class="note" style="padding:4px 0;white-space:nowrap">'+l.total.toLocaleString("fr-FR")+
+          " texte"+(l.total>1?"s":"")+(l.sien ? " — vos mots" : "")+"</td></tr>").join("")+
+        "</table></div>" : '<div class="msg err">Aucune des expressions relevées n\'existe telle '+
+        "quelle dans le fonds. Essayez d'autres termes.</div>")+
+      (vaines.length ? '<div class="fiche"><b>Écartées</b><div class="note">'+
+        vaines.map(l => echap(l.e)+" — aucun texte").join(" · ")+"</div></div>" : "");
+
+    $("loda-mots-fermer").onclick = ()=>{ zone.innerHTML = ""; };
+    [...document.querySelectorAll(".loda-mot")].forEach(b => b.onclick = ()=>{
+      $("loda-q").value = b.dataset.e;
+      $("loda-exact").checked = true;
+      [...document.querySelectorAll(".loda-mot")].forEach(x => {
+        x.classList.remove("principal"); x.classList.add("second");
+      });
+      b.classList.remove("second"); b.classList.add("principal");
+      lodaChercher();
+      $("loda-resultats").scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  }catch(e){ zone.innerHTML = '<div class="msg err">'+ccnErreur(e)+"</div>"; }
+}
+
+/* Une loi se verse aux débats comme une convention : mêmes sorties, mêmes
+   fonctions. Ce qui change tient au fonds cité en source — il faut pouvoir
+   remonter à ce qui a été lu, et savoir dans quel fonds le chercher. */
+function lodaTexteBrut(){
+  return (lodaCourant.blocs||[]).map(b => b.type==="section"
+    ? "\n"+b.titre+(b.id ? "  ["+b.id+"]" : "")
+    : ((b.num ? "Article "+b.num+". " : "")+(b.titre && !b.num ? b.titre+". " : "")+
+       htmlEnTexte(b.html)+(b.id ? "\n["+b.id+"]" : ""))).join("\n\n");
+}
+function lodaSource(){
+  return (lodaCourant.titre||"Texte")+
+    (lodaCourant.date ? " — version du "+dateFr(lodaCourant.date) : "")+
+    (lodaCourant.nor ? " — NOR "+lodaCourant.nor : "")+
+    " — Légifrance, fonds LODA, "+(lodaCourant.id||"");
+}
+function lodaNom(ext){
+  return (normaliser(lodaCourant.titre||"texte").replace(/[^a-z0-9]+/g,"-")
+          .replace(/^-|-$/g,"").slice(0,70) || "texte")+"."+ext;
+}
+
+$("loda-chercher").onclick = lodaChercher;
+$("loda-mots").onclick = assistantMotsLoda;
+$("loda-fermer").onclick = ()=>$("dlg-loda").close();
+$("loda-pdf").onclick = ()=>{ if(lodaCourant)
+  imprimerTexte(lodaCourant.titre||"Texte", lodaSource(), lodaTexteBrut()); };
+$("loda-word").onclick = ()=>{
+  if(!lodaCourant) return;
+  telecharger(lodaNom("docx"),
+    docxTexte(lodaCourant.titre||"Texte", lodaSource(), lodaTexteBrut()),
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  clin($("loda-word"), "Enregistré");
+};
+$("loda-filtre").oninput = ()=>{
+  if(!lodaCourant) return;
+  $("loda-corps").innerHTML = ccnHtml(lodaCourant.blocs, $("loda-filtre").value,
+                                      "https://www.legifrance.gouv.fr/loda/article_lc/");
+  brancherArticles();
+};
+for(const id of ["loda-q","loda-nor"])
+  $(id).addEventListener("keydown", e=>{ if(e.key==="Enter") lodaChercher(); });
+
+remplirModeles(""); remplirLieux(""); majEtat(); majResumeAffiner();
+
+(function depuisLien(){
+  const m = location.hash.match(/^#r=(.+)$/);
+  if(!m) return;
+  /* Le relais de l'application peut porter la connexion : on tente la
+     recherche même sans clé personnelle — au pire, l'erreur se nomme. */
+  try{ ecrire(JSON.parse(decodeURIComponent(m[1]))); chercher(0); }catch(e){}
+})();
+
+/* Le bouton « Avertissement d'usage ».
+
+   La première pose de ce gestionnaire avait été insérée avant le PREMIER
+   « </body> » du fichier — lequel se trouve à l'intérieur d'une chaîne du
+   script, celle qui construit la page imprimable d'une décision. La chaîne
+   n'était plus fermée, tout le script de la page mourait au chargement, et plus
+   un seul bouton ne répondait — ni « Enregistrer » pour la clé, ni la recherche.
+   Le symptôme était muet et la cause invisible à la relecture : il a fallu
+   ouvrir la page dans un navigateur pour la voir. */
+document.getElementById("btn-avert").addEventListener("click", ()=>{
+  const d = document.getElementById("dlg-avertissement");
+  if(typeof d.showModal === "function") d.showModal(); else d.setAttribute("open","");
+});
+</script>
+<script src="idcc.js" defer></script>
+<script>
+/* Le champ IDCC gagne la liste officielle des conventions (menu filtrant,
+   « Autre » en fin de liste) ; il ne stocke toujours que le numéro. */
+window.addEventListener("DOMContentLoaded", function () {
+  var e = document.getElementById("ccn-idcc");
+  if (e && window.IDCC) {
+    e.setAttribute("data-garde-placeholder", "1");
+    window.IDCC.attacher(e, { stocker: "code", zeros: false });
+  }
+});
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>
