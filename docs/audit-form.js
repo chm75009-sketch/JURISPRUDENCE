@@ -781,9 +781,67 @@
       "fieldset.repliable>legend::before{content:'\\25BE\\00a0';color:#5f6874}" +
       "fieldset.repliable.replie>legend::before{content:'\\25B8\\00a0'}" +
       "fieldset.repliable.replie>.grille{display:none}" +
-      "legend .rempli{font:400 12px/1 system-ui;color:#5f6874;margin-left:8px}";
+      /* Repliée, la rubrique se réduisait à un cadre vide de cinquante et un
+         pixels pour une légende de quatorze : sur téléphone, cinq rectangles
+         blancs à la suite, qui ne disaient rien et n'appelaient aucun geste.
+         Elle épouse désormais sa légende, et le cadre entier est touchable —
+         on tapait dans le vide, et rien ne se passait. */
+      "fieldset.repliable.replie{padding:0 18px 2px;cursor:pointer}" +
+      "fieldset.repliable.replie>legend{padding-bottom:2px}" +
+      "fieldset.repliable.replie:hover{background:#f4f5f7}" +
+      "legend .rempli{font:400 12px/1 system-ui;color:#5f6874;margin-left:8px}" +
+      "legend .rempli.plein{color:#1C5E36;font-weight:600}" +
+      "legend .rempli.vide{color:#8a5b10}";
     document.head.appendChild(st);
   })();
+  /* Le bandeau de navigation, sur téléphone.
+
+     Il alignait dix liens — les huit audits, l'agenda, les guides — et occupait
+     le premier écran entier avant que la page n'ait dit un mot. C'était un
+     palliatif : il n'existait pas d'accueil où se rendre. Il en existe un
+     maintenant, avec ses quatre portes.
+
+     Sur écran étroit, le bandeau se réduit donc à l'essentiel — l'outil de la
+     page s'il y en a un, et l'accueil — et le reste attend derrière un bouton.
+     Sur écran large, rien ne change : la place ne manque pas. */
+  (function bandeauCompact() {
+    var ou = document.querySelector(".retour-ou");
+    if (!ou || ou.dataset.compact) return;
+    ou.dataset.compact = "1";
+
+    var st = document.createElement("style");
+    st.textContent =
+      "@media (max-width:700px){" +
+      ".retour-ou.plie > *:not(.garde):not(#autres-modules){display:none}" +
+      ".retour-ou.plie{font-size:0}" +
+      ".retour-ou.plie .garde,.retour-ou.plie #autres-modules{font-size:14px}" +
+      ".retour-ou .garde{margin-right:10px}" +
+      "#autres-modules{font:500 12.5px/1 system-ui;padding:6px 10px;border-radius:16px;" +
+      "border:1px solid #cdd2d8;background:#fff;color:#5a6470;cursor:pointer}}" +
+      "@media (min-width:701px){#autres-modules{display:none}}";
+    document.head.appendChild(st);
+
+    /* Ce qui reste visible : le lien mis en avant par la page — celui de son
+       outil — et l'accueil. Ils sont marqués, pas déplacés : l'ordre du
+       bandeau reste celui que la page a voulu. */
+    var gras = ou.querySelector("b > a, b");
+    if (gras) (gras.closest("b") || gras).classList.add("garde");
+    Array.prototype.forEach.call(ou.querySelectorAll("a"), function (a) {
+      var t = (a.textContent || "").trim().toLowerCase();
+      if (t === "accueil" || t === "recherche") a.classList.add("garde");
+    });
+
+    var b = document.createElement("button");
+    b.type = "button"; b.id = "autres-modules";
+    b.textContent = "Les autres modules";
+    b.addEventListener("click", function () {
+      var replie = ou.classList.toggle("plie");
+      b.textContent = replie ? "Les autres modules" : "Replier";
+    });
+    ou.appendChild(b);
+    ou.classList.add("plie");
+  })();
+
   var RUBRIQUES_UI = [];
 
   M.champs.forEach(function (rub, iRub) {
@@ -794,6 +852,14 @@
     var etatRub = document.createElement("span"); etatRub.className = "rempli";
     lg.appendChild(etatRub);
     lg.addEventListener("click", function () { fs.classList.toggle("replie"); });
+    /* Repliée, la rubrique s'ouvre où qu'on la touche : viser la légende seule
+       demande une précision que personne n'a sur un téléphone. Ouverte, le
+       cadre redevient inerte — sans quoi cliquer dans un champ la refermerait. */
+    fs.addEventListener("click", function (ev) {
+      if (!fs.classList.contains("replie")) return;
+      if (ev.target === lg || lg.contains(ev.target)) return;
+      fs.classList.remove("replie");
+    });
     RUBRIQUES_UI.push({ fs: fs, etat: etatRub, rub: rub });
     var g = document.createElement("div"); g.className = "grille";
     var faits = {};
@@ -1764,7 +1830,14 @@
         if (!estVisible(fam)) return;
         tout++; if (valeurTableau(fam)) fait++;
       });
-      r.etat.textContent = fait + "/" + tout + " renseigné(s)";
+      /* « 0/5 renseigné(s) » ne disait pas quoi faire. Une rubrique repliée et
+         vide invite maintenant à l'ouvrir ; pleine, elle le dit d'un mot et
+         d'une couleur, pour qu'on sache où l'on en est sans dérouler. */
+      var replie = r.fs.classList.contains("replie");
+      r.etat.className = "rempli" + (fait === 0 ? " vide" : (fait === tout ? " plein" : ""));
+      r.etat.textContent = fait === 0
+        ? (replie ? "rien de renseigné — toucher pour ouvrir" : "rien de renseigné")
+        : (fait === tout ? "complète (" + tout + ")" : fait + " sur " + tout + " renseignés");
     });
 
     etatVifPlusTard();
