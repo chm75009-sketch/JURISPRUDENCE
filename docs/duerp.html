@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon document unique d'évaluation des risques</title>
+<link rel="manifest" href="manifest-audit-sst.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  L'OUTIL, ET CE QU'IL REFUSE DE FAIRE
+
+  L'audit dit si le document unique est en règle. Il ne l'écrit pas, et c'est
+  là que le terrain s'arrête : un employeur qui apprend que son document est
+  périmé n'est pas plus avancé. Ce qui l'avance, c'est le cadre — les unités
+  de travail, l'inventaire des risques dans chacune, et ce que ces résultats
+  doivent produire.
+
+  QUATRE PRINCIPES.
+
+  1. L'UNITÉ DE TRAVAIL D'ABORD. R. 4121-1 n'impose pas un inventaire des
+     risques de l'entreprise : il impose « un inventaire des risques identifiés
+     dans chaque unité de travail ». Un document qui liste des risques sans les
+     rattacher à une unité ne satisfait pas le texte, si complet soit-il. La
+     page fait donc définir les unités avant de parler de risques.
+
+  2. LE SEUIL DE CINQUANTE DÉCIDE DE LA SUITE, ET LUI SEUL. L. 4121-3-1, III :
+     à partir de cinquante salariés, les résultats débouchent sur un programme
+     annuel de prévention, avec pour chaque mesure ses conditions d'exécution,
+     un indicateur de résultat et l'estimation de son coût, les ressources
+     mobilisables et un calendrier. En dessous, sur une liste d'actions de
+     prévention et de protection, consignée dans le document unique. Ce ne sont
+     pas deux versions du même objet : ce sont deux obligations distinctes, et
+     l'outil ouvre l'une ou l'autre.
+
+  3. AUCUNE MÉTHODE DE COTATION N'EST IMPOSÉE. Ni R. 4121-1 ni L. 4121-3 ne
+     prescrivent de coter un risque par une gravité multipliée par une
+     fréquence. L'outil l'offre comme aide au classement, et le dit : c'est un
+     usage, pas une exigence. Le présenter comme une obligation serait inventer
+     du droit.
+
+  4. CE QUI MANQUE SE VOIT. Les cases vides sortent entre crochets dans le
+     document — visibles, jamais inventées.
+
+  Tout reste sur ce poste : rien n'est envoyé.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
+  header.site a:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+  .onglets button:disabled{opacity:.45;cursor:not-allowed}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  label.ch{display:grid;gap:4px}
+  label.ch .nom{font:600 12px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  label.ch input,label.ch select,label.ch textarea{font:inherit;font-size:14.5px;padding:9px 11px;
+    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre)}
+  label.ch textarea{min-height:74px;resize:vertical}
+  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+  .avis .art{display:inline-block;font-size:12px;opacity:.8;margin-top:4px}
+
+  .unite{border:1px solid var(--filet);border-radius:11px;margin:10px 0;background:var(--carte)}
+  .unite>.tt{padding:12px 15px;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
+  .unite>.tt input{font:600 15px/1.3 system-ui;border:1px solid transparent;background:transparent;
+    padding:5px 7px;border-radius:6px;width:100%}
+  .unite>.tt input:focus{border-color:var(--bleu);background:var(--fond);outline:none}
+  .compte{font:600 11px/1 system-ui;padding:5px 9px;border-radius:5px;white-space:nowrap;
+    background:var(--creux);color:var(--encre-2)}
+  .compte.vide{background:var(--ambre-clair);color:var(--ambre)}
+  .compte.pleine{background:var(--vert-clair);color:var(--vert)}
+  .sup{border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-3);
+    border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer}
+  .sup:hover{color:var(--rouge);border-color:var(--rouge)}
+
+  .tbl{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px}
+  th,td{border:1px solid var(--filet);padding:5px 7px;text-align:left;vertical-align:top}
+  thead th{background:var(--creux);font:600 11.5px/1.3 system-ui;color:var(--encre-2);white-space:nowrap}
+  td input,td select,td textarea{width:100%;font:inherit;font-size:12.5px;padding:5px 6px;
+    border:1px solid transparent;border-radius:5px;background:transparent;color:var(--encre)}
+  td input:focus,td select:focus,td textarea:focus{border-color:var(--bleu);background:var(--carte);outline:none}
+  td textarea{min-height:34px;resize:vertical}
+  td.min{width:1%;white-space:nowrap}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+
+  details.txt{border:1px solid var(--filet);border-radius:9px;margin:8px 0;background:var(--carte)}
+  details.txt>summary{padding:9px 13px;cursor:pointer;font:600 12.5px/1.3 system-ui;color:var(--bleu)}
+  details.txt .c{padding:0 14px 12px;font-size:13px;line-height:1.6;color:var(--encre-2)}
+  details.txt .c b{color:var(--encre)}
+
+  pre#doc{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:66vh;overflow:auto}
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  @media print{.onglets,.barre,header.site,.sup{display:none}.cache{display:block !important}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Mon document unique <span>— évaluation des risques professionnels</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">← Accueil</a>
+      <a href="audit-sst.html">Auditer ma santé-sécurité</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="cadre" class="actif">1 · Le cadre</button>
+    <button data-o="unites">2 · Les unités de travail</button>
+    <button data-o="risques">3 · Les risques</button>
+    <button data-o="suites">4 · Ce qui en découle</button>
+    <button data-o="tenue">5 · La tenue</button>
+    <button data-o="doc">6 · Le document</button>
+  </div>
+
+  <!-- ══════ 1 · LE CADRE ══════ -->
+  <section id="o-cadre">
+    <h2>Le cadre</h2>
+    <p class="aide">L'effectif ne change pas le document unique : il change ce que ses résultats
+    doivent produire, et la fréquence de sa mise à jour. Deux seuils, et deux seulement.</p>
+
+    <div class="carte">
+      <div class="champs">
+        <label class="ch"><span class="nom">Dénomination</span>
+          <input id="c-nom" placeholder="Raison sociale">
+          <span class="sous">Reprise de votre fiche entreprise si elle est remplie.</span></label>
+        <label class="ch"><span class="nom">Établissement</span>
+          <input id="c-etab" placeholder="Le site concerné, s'il y en a plusieurs">
+          <span class="sous">R. 4121-1 vise « l'entreprise ou l'établissement ».</span></label>
+        <label class="ch"><span class="nom">Effectif</span>
+          <input id="c-eff" type="number" min="0" placeholder="Nombre de salariés"></label>
+        <label class="ch"><span class="nom">Date de la version en cours</span>
+          <input id="c-date" type="date"></label>
+      </div>
+      <div id="verdict-cadre"></div>
+
+      <details class="txt"><summary>Les textes, tels qu'ils ont été lus</summary>
+        <div class="c" id="textes"></div></details>
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LES UNITÉS ══════ -->
+  <section id="o-unites" class="cache">
+    <h2>Les unités de travail</h2>
+    <p class="aide">C'est le préalable, et il est souvent sauté. L'article R. 4121-1 impose
+    « un inventaire des risques identifiés <b>dans chaque unité de travail</b> de l'entreprise ou
+    de l'établissement ». Un document qui aligne des risques sans les rattacher à une unité ne
+    satisfait pas le texte, si complet soit-il. Découpez d'abord — par métier, par atelier, par
+    poste, par site : le texte ne prescrit pas de méthode, il exige le rattachement.</p>
+
+    <div id="unites"></div>
+    <div class="barre">
+      <button class="btn" id="u-ajouter">Ajouter une unité de travail</button>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LES RISQUES ══════ -->
+  <section id="o-risques" class="cache">
+    <h2>Les risques, unité par unité</h2>
+    <p class="aide">Pour chaque unité, les risques identifiés. R. 4121-1 en nomme une catégorie
+    expressément — les risques liés aux <b>ambiances thermiques</b> —, sans doute parce qu'elle
+    était souvent oubliée&nbsp;: l'outil la rappelle, il ne l'impose pas là où elle n'existe pas.</p>
+    <div class="avis info"><b>La cotation n'est pas une obligation</b>
+      Aucun des textes lus n'impose de coter un risque par une gravité multipliée par une
+      fréquence. Les colonnes le proposent pour vous aider à classer et à prioriser vos mesures ;
+      elles n'ont aucune valeur réglementaire, et un document sans cotation n'est pas irrégulier
+      pour autant.</div>
+    <div id="risques"></div>
+  </section>
+
+  <!-- ══════ 4 · LES SUITES ══════ -->
+  <section id="o-suites" class="cache">
+    <h2>Ce que les résultats doivent produire</h2>
+    <p class="aide" id="suites-aide"></p>
+    <div id="suites"></div>
+  </section>
+
+  <!-- ══════ 5 · LA TENUE ══════ -->
+  <section id="o-tenue" class="cache">
+    <h2>La tenue du document</h2>
+    <p class="aide">Trois obligations distinctes, qu'on confond souvent : la mise à jour,
+    la conservation, et la mise à disposition. Chacune a son texte et son échéance propre.</p>
+
+    <div class="carte">
+      <h3>La mise à jour — R. 4121-2</h3>
+      <p class="aide" style="margin-bottom:10px">Trois cas, et ils s'ajoutent : au moins chaque
+      année à partir de onze salariés ; lors de toute décision d'aménagement important modifiant
+      les conditions de santé et de sécurité ou les conditions de travail ; et lorsqu'une
+      information supplémentaire intéressant l'évaluation d'un risque parvient à l'employeur.</p>
+      <div class="champs">
+        <label class="ch"><span class="nom">Dernière mise à jour annuelle</span>
+          <input id="t-annuelle" type="date"></label>
+        <label class="ch"><span class="nom">Dernier aménagement important</span>
+          <input id="t-amenagement" type="date">
+          <span class="sous">Laissez vide s'il n'y en a pas eu.</span></label>
+        <label class="ch"><span class="nom">Le document a-t-il été mis à jour à cette occasion ?</span>
+          <select id="t-amenagement-fait">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui</option><option value="non">Non</option>
+            <option value="sans-objet">Aucun aménagement important</option>
+          </select></label>
+        <label class="ch"><span class="nom">Information nouvelle sur un risque</span>
+          <select id="t-information">
+            <option value="">— répondre —</option>
+            <option value="non">Aucune depuis la dernière mise à jour</option>
+            <option value="oui-fait">Oui, et le document a été mis à jour</option>
+            <option value="oui-pas-fait">Oui, et le document n'a pas été mis à jour</option>
+          </select></label>
+      </div>
+
+      <h3>La conservation — L. 4121-3-1, V et R. 4121-4</h3>
+      <div class="champs">
+        <label class="ch"><span class="nom">Versions antérieures conservées</span>
+          <select id="t-versions">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui, toutes</option>
+            <option value="partiel">En partie seulement</option>
+            <option value="non">Non</option>
+          </select>
+          <span class="sous">Quarante ans à compter de leur élaboration, durée que le texte fixe comme un plancher.</span></label>
+        <label class="ch"><span class="nom">Sous quelle forme</span>
+          <select id="t-forme">
+            <option value="">— répondre —</option>
+            <option>Papier</option><option>Dématérialisée</option><option>Les deux</option>
+          </select></label>
+      </div>
+
+      <h3>La mise à disposition et l'affichage — R. 4121-4</h3>
+      <div class="champs">
+        <label class="ch"><span class="nom">Avis affiché sur les modalités d'accès</span>
+          <select id="t-avis">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui</option><option value="non">Non</option>
+          </select>
+          <span class="sous">À une place convenable et aisément accessible dans les lieux de travail — et, s'il existe un règlement intérieur, au même emplacement que lui.</span></label>
+        <label class="ch"><span class="nom">Où l'avis est affiché</span>
+          <input id="t-avis-lieu" placeholder="Le lieu exact"></label>
+      </div>
+      <div class="avis info" style="margin-top:12px"><b>Devant qui le document est tenu à disposition</b>
+        Le texte désigne sept catégories, et il ne se paraphrase pas : les travailleurs et anciens
+        travailleurs pour les versions en vigueur pendant leur activité ; les membres de la
+        délégation du personnel du comité social et économique ; le service de prévention et de
+        santé au travail ; les agents du système d'inspection du travail ; les agents des services
+        de prévention des organismes de sécurité sociale ; les agents des organismes professionnels
+        de santé, de sécurité et des conditions de travail ; et les inspecteurs de la
+        radioprotection, pour ce qui concerne les rayonnements ionisants.
+        <span class="art">R. 4121-4</span></div>
+
+      <h3>La transmission et la consultation</h3>
+      <div class="champs">
+        <label class="ch"><span class="nom">Transmis au service de prévention et de santé au travail</span>
+          <select id="t-spst">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui, à chaque mise à jour</option>
+            <option value="partiel">Une fois, pas à chaque mise à jour</option>
+            <option value="non">Non</option>
+          </select>
+          <span class="sous">L. 4121-3-1, VI : à chaque mise à jour.</span></label>
+        <label class="ch"><span class="nom">Comité consulté sur le document et ses mises à jour</span>
+          <select id="t-cse">
+            <option value="">— répondre —</option>
+            <option value="oui">Oui</option><option value="non">Non</option>
+            <option value="pas-de-cse">Il n'y a pas de comité</option>
+          </select>
+          <span class="sous">L. 4121-3 : le comité est consulté sur le document unique et sur ses mises à jour.</span></label>
+        <label class="ch"><span class="nom">Date du dernier avis du comité</span>
+          <input id="t-cse-date" type="date"></label>
+      </div>
+      <div id="verdict-tenue"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 6 · LE DOCUMENT ══════ -->
+  <section id="o-doc" class="cache">
+    <h2>Le document</h2>
+    <p class="aide">Le document unique tel qu'il est aujourd'hui. Les cases vides sortent entre
+    crochets : elles se voient, elles ne sont pas inventées.</p>
+    <div class="barre">
+      <button class="btn" id="d-produire">Produire le document</button>
+      <button class="btn second" id="d-copier">Copier le texte</button>
+      <button class="btn second" id="d-imprimer">Imprimer / PDF</button>
+    </div>
+    <pre id="doc"></pre>
+  </section>
+
+  <footer>
+    Tout reste sur ce poste : rien n'est envoyé. Chaque exigence de cette page porte l'article
+    qui la fonde, lu à la source. Cet outil assiste votre démarche&nbsp;; il ne remplace ni votre
+    conseil, ni la décision de l'inspection du travail ou du juge.
+  </footer>
+</main>
+
+<script src="droits.js"></script>
+<script src="profil.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); };
+
+  /* Les textes, avec leur identifiant de version et la date à laquelle ils ont
+     été lus. Ils viennent de moteur/sst/textes-sst.json : rien n'est réécrit de
+     mémoire, et le lecteur peut vérifier ce sur quoi la page se fonde. */
+  var TEXTES = {
+    "R. 4121-1": { id: "LEGIARTI000023795562", t: "L'employeur transcrit et met à jour dans un document unique les résultats de l'évaluation des risques pour la santé et la sécurité des travailleurs à laquelle il procède en application de l'article L. 4121-3. Cette évaluation comporte un inventaire des risques identifiés dans chaque unité de travail de l'entreprise ou de l'établissement, y compris ceux liés aux ambiances thermiques." },
+    "R. 4121-2": { id: "LEGIARTI000045386446", t: "La mise à jour du document unique d'évaluation des risques professionnels est réalisée : 1° Au moins chaque année dans les entreprises d'au moins onze salariés ; 2° Lors de toute décision d'aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail ; 3° Lorsqu'une information supplémentaire intéressant l'évaluation d'un risque est portée à la connaissance de l'employeur." },
+    "R. 4121-4": { id: "LEGIARTI000045386451", t: "Le document unique d'évaluation des risques professionnels et ses versions antérieures sont tenus, pendant une durée de 40 ans à compter de leur élaboration, à la disposition [des sept catégories que le texte énumère]. Un avis indiquant les modalités d'accès des travailleurs au document unique est affiché à une place convenable et aisément accessible dans les lieux de travail. Dans les entreprises ou établissements dotés d'un règlement intérieur, cet avis est affiché au même emplacement que celui réservé au règlement intérieur." },
+    "L. 4121-3-1, III": { id: "LEGIARTI000043893919", t: "Les résultats de cette évaluation débouchent : 1° Pour les entreprises dont l'effectif est supérieur ou égal à cinquante salariés, sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail qui : a) Fixe la liste détaillée des mesures devant être prises au cours de l'année à venir […] ainsi que, pour chaque mesure, ses conditions d'exécution, des indicateurs de résultat et l'estimation de son coût ; b) Identifie les ressources de l'entreprise pouvant être mobilisées ; c) Comprend un calendrier de mise en œuvre ; 2° Pour les entreprises dont l'effectif est inférieur à cinquante salariés, sur la définition d'actions de prévention des risques et de protection des salariés. La liste de ces actions est consignée dans le document unique d'évaluation des risques professionnels et ses mises à jour." },
+    "L. 4121-3-1, VI": { id: "LEGIARTI000043893919", t: "Le document unique d'évaluation des risques professionnels est transmis par l'employeur à chaque mise à jour au service de prévention et de santé au travail auquel il adhère." },
+    "L. 4121-3": { id: "LEGIARTI000043893923", t: "Le comité social et économique est consulté sur le document unique d'évaluation des risques professionnels et sur ses mises à jour." },
+    "R. 4741-1": { id: "LEGIARTI000018527390", t: "Le fait de ne pas transcrire ou de ne pas mettre à jour les résultats de l'évaluation des risques, dans les conditions prévues aux articles R. 4121-1 et R. 4121-2, est puni de l'amende prévue pour les contraventions de cinquième classe." },
+  };
+
+  var CLE = "duerp-document";
+  var E = (function () {
+    try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; }
+    catch (e) { return {}; }
+  })();
+  E.cadre = E.cadre || {};
+  E.unites = E.unites || [];        /* [{ id, nom, effectif, lieu, risques:[…] }] */
+  E.suites = E.suites || [];        /* mesures du programme, ou actions */
+  E.tenue = E.tenue || {};
+  function garder() { try { localStorage.setItem(CLE, JSON.stringify(E)); } catch (e) {} }
+  var seq = function () { return "u" + Date.now().toString(36) + Math.floor(Math.random() * 1e4).toString(36); };
+
+  (function reprendre() {
+    var p = null;
+    try { p = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
+    if (p) {
+      if (!E.cadre.nom) E.cadre.nom = p.denomination || p.entreprise || "";
+      if (E.cadre.effectif == null && p.effectif != null && p.effectif !== "") E.cadre.effectif = p.effectif;
+    }
+  })();
+
+  function effectif() {
+    var v = E.cadre.effectif;
+    if (v === null || v === undefined || String(v).trim() === "") return null;
+    var n = Number(v);
+    return Number.isFinite(n) && n >= 0 ? n : null;
+  }
+
+  /* ---------------------------------------------------------- les onglets */
+  function ouvrir(nom) {
+    ["cadre","unites","risques","suites","tenue","doc"].forEach(function (o) {
+      $("o-" + o).className = o === nom ? "" : "cache";
+    });
+    Array.prototype.forEach.call($("onglets").children, function (b) {
+      b.className = b.getAttribute("data-o") === nom ? "actif" : "";
+    });
+    if (nom === "unites") rendreUnites();
+    if (nom === "risques") rendreRisques();
+    if (nom === "suites") rendreSuites();
+    if (nom === "tenue") verdictTenue();
+  }
+  Array.prototype.forEach.call($("onglets").children, function (b) {
+    b.addEventListener("click", function () { ouvrir(b.getAttribute("data-o")); });
+  });
+
+  /* ------------------------------------------------------------ le cadre */
+  ["c-nom","c-etab","c-eff","c-date"].forEach(function (id) {
+    var cle = id.slice(2);
+    $(id).addEventListener("input", function () {
+      E.cadre[cle === "eff" ? "effectif" : cle] = $(id).value.trim(); garder(); verdictCadre();
+    });
+  });
+
+  function verdictCadre() {
+    var e = effectif(), h = "";
+    if (e === null) {
+      h = '<div class="avis att"><b>L\'effectif manque</b>' +
+        "Il ne change pas le document unique — celui-ci est dû dès le premier salarié — mais il " +
+        "décide de deux choses : ce que les résultats doivent produire, et à quelle fréquence le " +
+        "document se met à jour.</div>";
+    } else {
+      h += '<div class="avis ' + (e >= 50 ? "info" : "ok") + '"><b>' +
+        (e >= 50 ? "Un programme annuel de prévention est dû" : "Une liste d'actions de prévention est due") + "</b>" +
+        (e >= 50
+          ? "À partir de cinquante salariés, les résultats de l'évaluation débouchent sur un programme " +
+            "annuel de prévention des risques professionnels et d'amélioration des conditions de travail : " +
+            "la liste détaillée des mesures de l'année à venir, avec pour chacune ses conditions " +
+            "d'exécution, un indicateur de résultat et l'estimation de son coût ; les ressources " +
+            "mobilisables ; et un calendrier de mise en œuvre."
+          : "En dessous de cinquante salariés, les résultats débouchent sur la définition d'actions de " +
+            "prévention des risques et de protection des salariés, dont la liste est consignée dans le " +
+            "document unique lui-même et dans ses mises à jour. Ce n'est pas un programme annuel : " +
+            "c'est une obligation distincte, et plus légère.") +
+        '<span class="art">L. 4121-3-1, III</span></div>';
+      h += '<div class="avis ' + (e >= 11 ? "info" : "ok") + '"><b>' +
+        (e >= 11 ? "Mise à jour annuelle" : "Pas de mise à jour annuelle imposée") + "</b>" +
+        (e >= 11
+          ? "À partir de onze salariés, le document se met à jour au moins chaque année."
+          : "En dessous de onze salariés, le texte n'impose pas de mise à jour annuelle. Les deux " +
+            "autres cas demeurent : tout aménagement important, et toute information nouvelle " +
+            "intéressant l'évaluation d'un risque.") +
+        '<span class="art">R. 4121-2</span></div>';
+      h += '<div class="avis non"><b>Ce que l\'absence coûte</b>' +
+        "Ne pas transcrire ou ne pas mettre à jour les résultats de l'évaluation, dans les conditions " +
+        "de R. 4121-1 et R. 4121-2, est puni de l'amende prévue pour les contraventions de cinquième " +
+        "classe. C'est la seule sanction pénale que les textes lus attachent au document unique : " +
+        "elle vise la transcription et la mise à jour, rien d'autre." +
+        '<span class="art">R. 4741-1</span></div>';
+    }
+    $("verdict-cadre").innerHTML = h;
+  }
+
+  $("textes").innerHTML = Object.keys(TEXTES).map(function (k) {
+    return "<p><b>" + ech(k) + "</b> — <span style=\"font-size:11.5px\">" + ech(TEXTES[k].id) +
+      "</span><br>" + ech(TEXTES[k].t) + "</p>"; }).join("");
+
+  /* ------------------------------------------------------- les unités */
+  $("u-ajouter").addEventListener("click", function () {
+    E.unites.push({ id: seq(), nom: "", effectif: "", lieu: "", risques: [] });
+    garder(); rendreUnites();
+  });
+
+  function rendreUnites() {
+    if (!E.unites.length) {
+      $("unites").innerHTML = '<div class="avis att"><b>Aucune unité de travail</b>' +
+        "L'inventaire des risques se fait unité par unité : sans découpage, il n'y a rien à " +
+        "inventorier. Commencez par en ajouter une." +
+        '<span class="art">R. 4121-1</span></div>';
+      return;
+    }
+    $("unites").innerHTML = E.unites.map(function (u, i) {
+      var n = u.risques.length;
+      return '<div class="unite"><div class="tt">' +
+        '<input data-u="' + u.id + '" data-champ="nom" value="' + ech(u.nom) +
+        '" placeholder="Nom de l\'unité — atelier, métier, poste, site…">' +
+        '<span class="compte ' + (n ? "pleine" : "vide") + '">' + n + " risque(s)</span>" +
+        '<button class="sup" data-sup="' + u.id + '">Retirer</button></div>' +
+        '<div style="padding:0 15px 14px"><div class="champs">' +
+        '<label class="ch"><span class="nom">Salariés concernés</span>' +
+        '<input type="number" min="0" data-u="' + u.id + '" data-champ="effectif" value="' + ech(u.effectif) + '"></label>' +
+        '<label class="ch"><span class="nom">Lieu ou périmètre</span>' +
+        '<input data-u="' + u.id + '" data-champ="lieu" value="' + ech(u.lieu) + '"></label>' +
+        "</div></div></div>";
+    }).join("");
+    brancherUnites();
+  }
+
+  function brancherUnites() {
+    Array.prototype.forEach.call($("unites").querySelectorAll("[data-u]"), function (el) {
+      el.addEventListener("input", function () {
+        var u = E.unites.filter(function (x) { return x.id === el.getAttribute("data-u"); })[0];
+        if (u) { u[el.getAttribute("data-champ")] = el.value; garder(); }
+      });
+    });
+    Array.prototype.forEach.call($("unites").querySelectorAll("[data-sup]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-sup");
+        var u = E.unites.filter(function (x) { return x.id === id; })[0];
+        if (u && u.risques.length &&
+            !confirm("Cette unité porte " + u.risques.length + " risque(s). Les retirer aussi ?")) return;
+        E.unites = E.unites.filter(function (x) { return x.id !== id; });
+        garder(); rendreUnites();
+      });
+    });
+  }
+
+  /* ------------------------------------------------------- les risques */
+  function rendreRisques() {
+    if (!E.unites.length) {
+      $("risques").innerHTML = '<div class="avis att"><b>Définissez d\'abord vos unités de travail</b>' +
+        "Le texte n'impose pas un inventaire des risques de l'entreprise, mais un inventaire des " +
+        "risques identifiés dans chaque unité de travail. L'écran 2 vient donc avant celui-ci." +
+        '<span class="art">R. 4121-1</span></div>';
+      return;
+    }
+    $("risques").innerHTML = E.unites.map(function (u) {
+      var h = '<div class="unite"><div class="tt"><b style="font:600 15px/1.3 system-ui;padding:5px 7px">' +
+        ech(u.nom || "(unité sans nom)") + "</b>" +
+        '<span class="compte ' + (u.risques.length ? "pleine" : "vide") + '">' +
+        u.risques.length + " risque(s)</span>" +
+        '<button class="btn second" data-add="' + u.id + '">Ajouter un risque</button></div>' +
+        '<div style="padding:0 15px 14px"><div class="tbl"><table><thead><tr>' +
+        "<th>Le risque identifié</th><th>Situation ou tâche exposante</th>" +
+        "<th class=\"min\">Gravité</th><th class=\"min\">Fréquence</th>" +
+        "<th>Moyens de prévention en place</th><th class=\"min\"></th></tr></thead><tbody>";
+      if (!u.risques.length)
+        h += '<tr><td colspan="6" style="color:#8a939c">Aucun risque inventorié dans cette unité. ' +
+          "Pensez notamment aux ambiances thermiques, que R. 4121-1 nomme expressément.</td></tr>";
+      u.risques.forEach(function (r, i) {
+        var cote = function (champ) {
+          return "<td class=\"min\"><select data-r=\"" + u.id + "|" + i + "\" data-champ=\"" + champ + "\">" +
+            ["", "1", "2", "3", "4"].map(function (v) {
+              return "<option" + (String(r[champ] || "") === v ? " selected" : "") + ">" + v + "</option>"; }).join("") +
+            "</select></td>";
+        };
+        h += "<tr><td><textarea data-r=\"" + u.id + "|" + i + "\" data-champ=\"intitule\">" + ech(r.intitule) + "</textarea></td>" +
+          "<td><textarea data-r=\"" + u.id + "|" + i + "\" data-champ=\"situation\">" + ech(r.situation) + "</textarea></td>" +
+          cote("gravite") + cote("frequence") +
+          "<td><textarea data-r=\"" + u.id + "|" + i + "\" data-champ=\"moyens\">" + ech(r.moyens) + "</textarea></td>" +
+          "<td class=\"min\"><button class=\"sup\" data-rsup=\"" + u.id + "|" + i + "\">×</button></td></tr>";
+      });
+      return h + "</tbody></table></div></div></div>";
+    }).join("");
+    brancherRisques();
+  }
+
+  function trouve(ref) {
+    var p = ref.split("|"), u = E.unites.filter(function (x) { return x.id === p[0]; })[0];
+    return u ? { u: u, i: Number(p[1]) } : null;
+  }
+
+  function brancherRisques() {
+    Array.prototype.forEach.call($("risques").querySelectorAll("[data-add]"), function (b) {
+      b.addEventListener("click", function () {
+        var u = E.unites.filter(function (x) { return x.id === b.getAttribute("data-add"); })[0];
+        if (!u) return;
+        u.risques.push({ intitule: "", situation: "", gravite: "", frequence: "", moyens: "" });
+        garder(); rendreRisques();
+      });
+    });
+    Array.prototype.forEach.call($("risques").querySelectorAll("[data-r]"), function (el) {
+      el.addEventListener("input", function () {
+        var t = trouve(el.getAttribute("data-r"));
+        if (t && t.u.risques[t.i]) { t.u.risques[t.i][el.getAttribute("data-champ")] = el.value; garder(); }
+      });
+      el.addEventListener("change", function () {
+        var t = trouve(el.getAttribute("data-r"));
+        if (t && t.u.risques[t.i]) { t.u.risques[t.i][el.getAttribute("data-champ")] = el.value; garder(); }
+      });
+    });
+    Array.prototype.forEach.call($("risques").querySelectorAll("[data-rsup]"), function (b) {
+      b.addEventListener("click", function () {
+        var t = trouve(b.getAttribute("data-rsup"));
+        if (!t) return;
+        t.u.risques.splice(t.i, 1); garder(); rendreRisques();
+      });
+    });
+  }
+
+  /* ------------------------------------------------------- les suites */
+  function rendreSuites() {
+    var e = effectif();
+    if (e === null) {
+      $("suites-aide").textContent = "";
+      $("suites").innerHTML = '<div class="avis att"><b>L\'effectif manque</b>' +
+        "C'est lui, et lui seul, qui décide entre le programme annuel de prévention et la liste " +
+        "d'actions consignée. Sans lui, servir l'un des deux serait choisir à votre place." +
+        '<span class="art">L. 4121-3-1, III</span></div>';
+      return;
+    }
+    var grand = e >= 50;
+    $("suites-aide").textContent = grand
+      ? "Le programme annuel de prévention. Chaque mesure porte ses conditions d'exécution, un indicateur de résultat et l'estimation de son coût — le texte les exige, et une mesure sans ces trois éléments est incomplète."
+      : "La liste des actions de prévention des risques et de protection des salariés. Elle est consignée dans le document unique lui-même, et dans ses mises à jour.";
+
+    var h = "";
+    if (grand)
+      h += '<div class="carte"><div class="champs">' +
+        '<label class="ch"><span class="nom">Ressources mobilisables</span>' +
+        '<textarea id="s-ressources" placeholder="Les ressources de l\'entreprise pouvant être mobilisées — L. 4121-3-1, III, 1°, b">' +
+        ech(E.tenue.ressources || "") + "</textarea></label>" +
+        '<label class="ch"><span class="nom">Calendrier de mise en œuvre</span>' +
+        '<textarea id="s-calendrier" placeholder="Le calendrier — L. 4121-3-1, III, 1°, c">' +
+        ech(E.tenue.calendrier || "") + "</textarea></label></div></div>";
+
+    h += '<div class="tbl"><table><thead><tr><th>' +
+      (grand ? "La mesure à prendre dans l'année à venir" : "L'action de prévention ou de protection") + "</th>" +
+      "<th>Unité concernée</th>" +
+      (grand ? "<th>Conditions d'exécution</th><th>Indicateur de résultat</th><th class=\"min\">Coût estimé</th>" : "") +
+      "<th class=\"min\">Échéance</th><th class=\"min\"></th></tr></thead><tbody>";
+    if (!E.suites.length)
+      h += '<tr><td colspan="7" style="color:#8a939c">Rien pour l\'instant.</td></tr>';
+    E.suites.forEach(function (m, i) {
+      h += "<tr><td><textarea data-s=\"" + i + "\" data-champ=\"intitule\">" + ech(m.intitule) + "</textarea></td>" +
+        "<td><select data-s=\"" + i + "\" data-champ=\"unite\"><option value=\"\">— toutes —</option>" +
+        E.unites.map(function (u) {
+          return "<option value=\"" + ech(u.id) + "\"" + (m.unite === u.id ? " selected" : "") + ">" +
+            ech(u.nom || "(sans nom)") + "</option>"; }).join("") + "</select></td>" +
+        (grand
+          ? "<td><textarea data-s=\"" + i + "\" data-champ=\"conditions\">" + ech(m.conditions) + "</textarea></td>" +
+            "<td><textarea data-s=\"" + i + "\" data-champ=\"indicateur\">" + ech(m.indicateur) + "</textarea></td>" +
+            "<td class=\"min\"><input data-s=\"" + i + "\" data-champ=\"cout\" value=\"" + ech(m.cout) + "\" placeholder=\"€\"></td>"
+          : "") +
+        "<td class=\"min\"><input type=\"date\" data-s=\"" + i + "\" data-champ=\"echeance\" value=\"" + ech(m.echeance) + "\"></td>" +
+        "<td class=\"min\"><button class=\"sup\" data-ssup=\"" + i + "\">×</button></td></tr>";
+    });
+    h += '</tbody></table></div><div class="barre"><button class="btn" id="s-ajouter">' +
+      (grand ? "Ajouter une mesure" : "Ajouter une action") + "</button></div>";
+
+    /* Ce qui manque, dit sans détour : une mesure incomplète au sens du texte. */
+    if (grand) {
+      var incompletes = E.suites.filter(function (m) {
+        return String(m.intitule || "").trim() &&
+          (!String(m.conditions || "").trim() || !String(m.indicateur || "").trim() || !String(m.cout || "").trim());
+      });
+      if (incompletes.length)
+        h += '<div class="avis non"><b>' + incompletes.length + " mesure(s) incomplète(s)</b>" +
+          "Le texte exige, POUR CHAQUE MESURE, ses conditions d'exécution, un indicateur de résultat " +
+          "et l'estimation de son coût. Une mesure à laquelle il en manque un ne satisfait pas le " +
+          "programme annuel." + '<span class="art">L. 4121-3-1, III, 1°, a</span></div>';
+    }
+    $("suites").innerHTML = h;
+    brancherSuites(grand);
+  }
+
+  function brancherSuites(grand) {
+    var a = $("s-ajouter");
+    if (a) a.addEventListener("click", function () {
+      E.suites.push({ intitule: "", unite: "", conditions: "", indicateur: "", cout: "", echeance: "" });
+      garder(); rendreSuites();
+    });
+    ["s-ressources", "s-calendrier"].forEach(function (id) {
+      var el = $(id);
+      if (el) el.addEventListener("input", function () {
+        E.tenue[id.slice(2)] = el.value; garder();
+      });
+    });
+    Array.prototype.forEach.call($("suites").querySelectorAll("[data-s]"), function (el) {
+      var poser = function () {
+        var m = E.suites[Number(el.getAttribute("data-s"))];
+        if (m) { m[el.getAttribute("data-champ")] = el.value; garder(); }
+      };
+      el.addEventListener("input", poser);
+      el.addEventListener("change", function () { poser(); if (el.tagName === "SELECT") rendreSuites(); });
+    });
+    Array.prototype.forEach.call($("suites").querySelectorAll("[data-ssup]"), function (b) {
+      b.addEventListener("click", function () {
+        E.suites.splice(Number(b.getAttribute("data-ssup")), 1); garder(); rendreSuites();
+      });
+    });
+  }
+
+  /* --------------------------------------------------------- la tenue */
+  ["t-annuelle","t-amenagement","t-amenagement-fait","t-information","t-versions","t-forme",
+   "t-avis","t-avis-lieu","t-spst","t-cse","t-cse-date"].forEach(function (id) {
+    var el = $(id);
+    el.addEventListener("change", function () { E.tenue[id] = el.value; garder(); verdictTenue(); });
+    el.addEventListener("input", function () { E.tenue[id] = el.value; garder(); });
+  });
+
+  function verdictTenue() {
+    var t = E.tenue, e = effectif(), m = [];
+    if (e !== null && e >= 11 && t["t-annuelle"]) {
+      var jours = (Date.now() - Date.parse(t["t-annuelle"])) / 864e5;
+      if (jours > 365)
+        m.push('<div class="avis non"><b>La mise à jour annuelle est dépassée</b>' +
+          "Dernière mise à jour il y a " + Math.round(jours) + " jours. À partir de onze salariés, " +
+          "elle est due au moins chaque année, et son défaut est puni de l'amende prévue pour les " +
+          "contraventions de cinquième classe." + '<span class="art">R. 4121-2, 1° · R. 4741-1</span></div>');
+    }
+    if (t["t-amenagement-fait"] === "non")
+      m.push('<div class="avis non"><b>Un aménagement important n\'a pas donné lieu à mise à jour</b>' +
+        "Le texte l'impose lors de toute décision d'aménagement important modifiant les conditions " +
+        "de santé et de sécurité ou les conditions de travail. Cette mise à jour ne se rattrape pas " +
+        "par la mise à jour annuelle : ce sont deux cas distincts." +
+        '<span class="art">R. 4121-2, 2°</span></div>');
+    if (t["t-information"] === "oui-pas-fait")
+      m.push('<div class="avis non"><b>Une information nouvelle n\'a pas été prise en compte</b>' +
+        "Le document se met à jour lorsqu'une information supplémentaire intéressant l'évaluation " +
+        "d'un risque est portée à la connaissance de l'employeur." +
+        '<span class="art">R. 4121-2, 3°</span></div>');
+    if (t["t-versions"] === "non" || t["t-versions"] === "partiel")
+      m.push('<div class="avis non"><b>Les versions antérieures ne sont pas toutes conservées</b>' +
+        "Elles sont tenues à disposition pendant quarante ans à compter de leur élaboration — durée " +
+        "que la loi fixe comme un plancher. C'est cette conservation qui assure la traçabilité " +
+        "collective des expositions, et un ancien salarié peut la réclamer des années plus tard." +
+        '<span class="art">L. 4121-3-1, V · R. 4121-4</span></div>');
+    if (t["t-avis"] === "non")
+      m.push('<div class="avis non"><b>L\'avis d\'accès n\'est pas affiché</b>' +
+        "Un avis indiquant les modalités d'accès des travailleurs au document unique est affiché à " +
+        "une place convenable et aisément accessible dans les lieux de travail — et, s'il existe un " +
+        "règlement intérieur, au même emplacement que lui. C'est une obligation propre, distincte de " +
+        "la mise à disposition elle-même." + '<span class="art">R. 4121-4</span></div>');
+    if (t["t-spst"] === "non" || t["t-spst"] === "partiel")
+      m.push('<div class="avis att"><b>La transmission au service de prévention et de santé au travail</b>' +
+        "Elle est due à CHAQUE mise à jour, et non une fois pour toutes." +
+        '<span class="art">L. 4121-3-1, VI</span></div>');
+    if (t["t-cse"] === "non")
+      m.push('<div class="avis non"><b>Le comité n\'a pas été consulté</b>' +
+        "Le comité social et économique est consulté sur le document unique et sur ses mises à jour. " +
+        "L'entrave à son fonctionnement régulier est punie de 7 500 euros." +
+        '<span class="art">L. 4121-3 · L. 2317-1</span></div>');
+    if (!m.length)
+      m.push('<div class="avis ok"><b>Rien ne bloque en l\'état de vos réponses</b>' +
+        "Cela ne vaut pas quitus : les questions restées sans réponse ne concluent rien, ni dans " +
+        "un sens ni dans l'autre.</div>");
+    $("verdict-tenue").innerHTML = m.join("");
+  }
+
+  /* ------------------------------------------------------- le document */
+  function produire() {
+    var e = effectif(), L = [];
+    var cro = function (v) { return String(v || "").trim() === "" ? "[à renseigner]" : String(v).trim(); };
+    var vides = 0, total = 0;
+    var compte = function (v) { total++; if (String(v || "").trim() === "") vides++; return cro(v); };
+
+    L.push("DOCUMENT UNIQUE D'ÉVALUATION DES RISQUES PROFESSIONNELS");
+    L.push(cro(E.cadre.nom).toUpperCase() + (E.cadre.etab ? " — " + E.cadre.etab : ""));
+    L.push("");
+    L.push("Version du : " + cro(E.cadre.date));
+    L.push("Effectif : " + (e === null ? "[à renseigner]" : e + " salarié(s)"));
+    L.push("");
+    L.push("Établi en application des articles L. 4121-3, L. 4121-3-1 et R. 4121-1 du code du travail.");
+    L.push("Les informations non renseignées apparaissent entre crochets : elles sont visibles, " +
+      "elles ne sont pas inventées.");
+    L.push("");
+
+    L.push("═══ LES UNITÉS DE TRAVAIL ═══");
+    if (!E.unites.length) L.push("[aucune unité de travail définie — l'inventaire des risques ne peut pas être rattaché]");
+    E.unites.forEach(function (u, i) {
+      L.push("");
+      L.push((i + 1) + ". " + compte(u.nom));
+      L.push("   Salariés concernés : " + compte(u.effectif) + "   Lieu : " + compte(u.lieu));
+      L.push("   Risques identifiés : " + (u.risques.length || "aucun"));
+      if (!u.risques.length) L.push("   [aucun risque inventorié dans cette unité]");
+      u.risques.forEach(function (r, k) {
+        L.push("");
+        L.push("   " + (i + 1) + "." + (k + 1) + " " + compte(r.intitule));
+        L.push("        Situation ou tâche exposante : " + compte(r.situation));
+        var g = String(r.gravite || "").trim(), f = String(r.frequence || "").trim();
+        if (g || f) L.push("        Classement retenu : gravité " + (g || "—") + ", fréquence " + (f || "—") +
+          " (classement interne, aucun texte ne l'impose)");
+        L.push("        Moyens de prévention en place : " + compte(r.moyens));
+      });
+    });
+
+    L.push("");
+    if (e !== null && e >= 50) {
+      L.push("═══ PROGRAMME ANNUEL DE PRÉVENTION DES RISQUES PROFESSIONNELS");
+      L.push("    ET D'AMÉLIORATION DES CONDITIONS DE TRAVAIL ═══");
+      L.push("(L. 4121-3-1, III, 1° — dû à partir de cinquante salariés)");
+      L.push("");
+      L.push("Ressources mobilisables : " + compte(E.tenue.ressources));
+      L.push("Calendrier de mise en œuvre : " + compte(E.tenue.calendrier));
+      L.push("");
+      if (!E.suites.length) L.push("[aucune mesure inscrite au programme]");
+      E.suites.forEach(function (m, i) {
+        var u = E.unites.filter(function (x) { return x.id === m.unite; })[0];
+        L.push((i + 1) + ". " + compte(m.intitule));
+        L.push("   Unité concernée : " + (u ? u.nom || "(sans nom)" : "toutes"));
+        L.push("   Conditions d'exécution : " + compte(m.conditions));
+        L.push("   Indicateur de résultat : " + compte(m.indicateur));
+        L.push("   Coût estimé : " + compte(m.cout));
+        L.push("   Échéance : " + compte(m.echeance));
+        L.push("");
+      });
+    } else if (e !== null) {
+      L.push("═══ ACTIONS DE PRÉVENTION DES RISQUES ET DE PROTECTION DES SALARIÉS ═══");
+      L.push("(L. 4121-3-1, III, 2° — en dessous de cinquante salariés, la liste est consignée ici)");
+      L.push("");
+      if (!E.suites.length) L.push("[aucune action définie]");
+      E.suites.forEach(function (m, i) {
+        var u = E.unites.filter(function (x) { return x.id === m.unite; })[0];
+        L.push((i + 1) + ". " + compte(m.intitule) +
+          "   [unité : " + (u ? u.nom || "(sans nom)" : "toutes") + "]" +
+          "   [échéance : " + cro(m.echeance) + "]");
+      });
+    } else {
+      L.push("═══ CE QUE LES RÉSULTATS DOIVENT PRODUIRE ═══");
+      L.push("[l'effectif n'est pas renseigné : le texte applicable — programme annuel ou liste " +
+        "d'actions — ne peut pas être déterminé]");
+    }
+
+    L.push("");
+    L.push("═══ LA TENUE DU DOCUMENT ═══");
+    L.push("Dernière mise à jour annuelle : " + compte(E.tenue["t-annuelle"]));
+    L.push("Dernier aménagement important : " + cro(E.tenue["t-amenagement"]) +
+      " — mise à jour faite : " + cro(E.tenue["t-amenagement-fait"]));
+    L.push("Information nouvelle sur un risque : " + cro(E.tenue["t-information"]));
+    L.push("Versions antérieures conservées : " + compte(E.tenue["t-versions"]) +
+      " (quarante ans au moins, L. 4121-3-1, V)");
+    L.push("Forme de conservation : " + compte(E.tenue["t-forme"]));
+    L.push("Avis d'accès affiché : " + compte(E.tenue["t-avis"]) + " — " + cro(E.tenue["t-avis-lieu"]));
+    L.push("Transmis au service de prévention et de santé au travail : " + compte(E.tenue["t-spst"]));
+    L.push("Comité consulté : " + compte(E.tenue["t-cse"]) + " — avis du " + cro(E.tenue["t-cse-date"]));
+
+    L.push("");
+    L.push("═══ CE QUE CE DOCUMENT NE DIT PAS ═══");
+    L.push(vides + " information(s) sur " + total + " restent à renseigner.");
+    L.push("Le classement des risques par gravité et fréquence, s'il figure ci-dessus, est un " +
+      "classement interne : aucun des textes lus ne l'impose, et son absence ne rend pas le " +
+      "document irrégulier.");
+    L.push("Ce document reprend vos saisies et les textes lus à la source. Il ne vaut pas quitus : " +
+      "il ne dit rien de ce que votre convention collective, votre branche ou votre activité " +
+      "ajoutent, ni des risques que vous n'auriez pas identifiés.");
+    L.push("");
+    L.push("Textes et versions lues : " +
+      Object.keys(TEXTES).map(function (k) { return k + " (" + TEXTES[k].id + ")"; }).join(" · "));
+    return L.join("\n");
+  }
+
+  $("d-produire").addEventListener("click", function () { $("doc").textContent = produire(); });
+  $("d-copier").addEventListener("click", function () {
+    if (!$("doc").textContent) $("doc").textContent = produire();
+    if (navigator.clipboard) navigator.clipboard.writeText($("doc").textContent);
+  });
+  $("d-imprimer").addEventListener("click", function () {
+    if (!$("doc").textContent) $("doc").textContent = produire();
+    window.print();
+  });
+
+  /* ---------------------------------------------------------- l'amorçage */
+  $("c-nom").value = E.cadre.nom || "";
+  $("c-etab").value = E.cadre.etab || "";
+  $("c-eff").value = E.cadre.effectif == null ? "" : E.cadre.effectif;
+  $("c-date").value = E.cadre.date || "";
+  ["t-annuelle","t-amenagement","t-amenagement-fait","t-information","t-versions","t-forme",
+   "t-avis","t-avis-lieu","t-spst","t-cse","t-cse-date"].forEach(function (id) {
+    if (E.tenue[id] != null) $(id).value = E.tenue[id];
+  });
+  verdictCadre();
+  garder();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

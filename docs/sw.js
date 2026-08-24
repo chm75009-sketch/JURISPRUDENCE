@@ -12,12 +12,14 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-6.0";
+const CACHE = "jurisprudence-6.1";
 const ESSENTIELS = [
   "./", "./index.html", "./recherche.html", "./manifest.json",
   /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
      et le 404 passait pour une erreur de chargement à chaque essai. */
   "./favicon.ico",
+  /* Les trois outils : ils tiennent la donnée que les audits se bornaient à contrôler. */
+  "./duerp.html",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
      reconnaissance de la matière instantanée et disponible hors connexion. */
   "./vocabulaire.json",
