@@ -129,8 +129,23 @@
       '<p class="pc-constat"><b>Ce que l\'audit a constaté.</b> ' + ech(pt.constat) + "</p>" +
       '<p class="pc-risque"><b>Ce que vous risquez.</b> ' + ech(pt.risque) + "</p>";
 
-    if (pt.document)
-      h += '<p class="pc-doc"><b>Le document à produire.</b> ' + ech(pt.document) + "</p>";
+    /* Le document, PRODUIT et non décrit.
+
+       Dire « le document à produire : règlement intérieur » laisse l'employeur
+       devant une page blanche. Quand l'application sait écrire ce document,
+       elle l'écrit — au nom de l'entreprise, avec ses courriers et son
+       calendrier — et le bouton le donne. Le reste des points garde la mention
+       du document attendu, faute de mieux, et c'est ce qui reste à combler. */
+    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(pt.id);
+    if (gen) {
+      h += '<div class="pc-produit"><b>' + ech(gen.nom) + "</b>" +
+        "<span>" + ech(gen.detail || "") + "</span>" +
+        '<button type="button" class="pc-btn" data-produire="' + ech(pt.id) + '">' +
+        "Produire le document</button></div>";
+    } else if (pt.document) {
+      h += '<p class="pc-doc"><b>Le document à produire.</b> ' + ech(pt.document) +
+        ' <i class="pc-apres">— l\'application ne le rédige pas encore.</i></p>';
+    }
 
     h += "<h5>La procédure, dans l'ordre</h5><ol class=\"pc-etapes\">";
     pt.etapes.forEach(function (e) { h += "<li>" + ech(e) + "</li>"; });
@@ -309,6 +324,29 @@
     Array.prototype.forEach.call(this.hote.querySelectorAll("[data-crendu]"), function (el) {
       el.addEventListener("click", function () { self.compteRendu(el.getAttribute("data-crendu")); });
     });
+
+    Array.prototype.forEach.call(this.hote.querySelectorAll("[data-produire]"), function (el) {
+      el.addEventListener("click", function () { self.produire(el.getAttribute("data-produire")); });
+    });
+  };
+
+  /* Produire le document d'un point. Il est écrit avec ce que l'application
+     sait déjà de l'entreprise — sa fiche —, et rien d'autre n'est demandé :
+     ce qui manque sort entre crochets plutôt que d'ouvrir un formulaire de
+     plus avant d'avoir rien donné. */
+  Parcours.prototype.produire = function (id) {
+    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(id);
+    if (!gen) return;
+    var profil = null;
+    try { profil = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
+    var f = this.fiche() || {};
+    if (!profil) profil = {};
+    /* La fiche de l'audit complète le profil : l'une ou l'autre peut être
+       remplie, et l'employeur ne doit pas ressaisir ce qu'il a déjà donné. */
+    if (!profil.denomination && (f.entreprise || f.denomination))
+      profil.denomination = f.entreprise || f.denomination;
+    if (profil.effectif == null && f.effectif != null) profil.effectif = f.effectif;
+    this.montrerTexte(gen.produire({ profil: profil, fiche: f, aujourdhui: new Date() }));
   };
 
   /* ------------------------------------------------------ le compte rendu écrit */
@@ -444,6 +482,10 @@
     ".pc-corps h5{margin:14px 0 6px;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#5C2A54}",
     ".pc-corps p{margin:0 0 8px}",
     ".pc-fondement{color:#5f6874;font-size:12px}",
+    ".pc-produit{margin:12px 0;padding:13px 15px;border:1px solid #b9cbe0;border-radius:9px;background:#eef1f7}",
+    ".pc-produit b{display:block;font-size:14.5px;color:#1F3864;margin-bottom:2px}",
+    ".pc-produit span{display:block;font-size:13px;color:#41485a;line-height:1.5;margin-bottom:10px}",
+    ".pc-apres{color:#8a5b10;font-style:normal;font-size:12.5px}",
     ".pc-etapes{margin:0 0 10px;padding-left:20px;display:grid;gap:5px}",
     ".pc-declare{margin:12px 0;padding:10px 12px;border:1px dashed #b9a3b5;border-radius:8px;background:#faf6f9}",
     ".pc-declare label{display:flex;gap:9px;align-items:flex-start;cursor:pointer;font-weight:600}",

@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-6.1";
+const CACHE = "jurisprudence-6.2";
 const ESSENTIELS = [
   "./", "./index.html", "./recherche.html", "./manifest.json",
   /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
@@ -77,6 +77,8 @@ const ESSENTIELS = [
   "./registre.html",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
   "./audit-form.js", "./audit-export.js", "./parcours-deux-temps.js",
+  /* Les documents que l'application rédige elle-même. */
+  "./documents-produits.js",
   /* La fiche client : la source unique du profil partagé (clé
      « profil-entreprise »), lue et écrite par l'audit social, les parcours, le
      générateur de documents et les huit audits détaillés. Sans elle, la
