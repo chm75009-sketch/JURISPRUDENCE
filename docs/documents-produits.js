@@ -501,5 +501,24 @@
   /* Ce que la page demande : y a-t-il un document pour ce point ? */
   function pour(id) { return Object.prototype.hasOwnProperty.call(D, id) ? D[id] : null; }
 
-  global.DocumentsProduits = { pour: pour, tous: D };
+  /* Les modules déposent leurs générateurs ici, chacun dans son fichier —
+     documents-cse.js, documents-pse.js… Un seul registre, huit sources : c'est
+     ce qui permet de travailler sur un module sans toucher aux sept autres.
+
+     Les outils communs sont passés à celui qui enregistre : rien n'oblige un
+     générateur à réécrire la mise entre crochets ou le formatage des dates,
+     et deux façons d'écrire une date dans deux documents de la même entreprise
+     se remarquent tout de suite. */
+  function ajouter(id, def) {
+    if (!id || !def || typeof def.produire !== "function")
+      throw new Error("documents produits : « " + id + " » n'a pas de fonction produire.");
+    if (Object.prototype.hasOwnProperty.call(D, id))
+      throw new Error("documents produits : « " + id + "  » est déjà enregistré.");
+    D[id] = def;
+  }
+
+  global.DocumentsProduits = {
+    pour: pour, tous: D, ajouter: ajouter,
+    outils: { cro: cro, leJour: leJour, dans: dans, entete: entete },
+  };
 })(typeof window !== "undefined" ? window : this);
