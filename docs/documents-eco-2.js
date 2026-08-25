@@ -3491,6 +3491,580 @@
       return L.join("\n");
     });
 
+  /* ══════════════════════════════════════════════════════════════════════
+     LA QUALITÉ DES DONNÉES
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* Ce que chaque champ doit être — repris à l'identique de
+     moteur/economique/valider.js, qui est le seul juge de la lisibilité d'une
+     donnée. Le fichier n'est pas exposé au navigateur : le document en reprend
+     la table plutôt que d'en inventer une seconde. */
+  var ATTENDU = [
+    ["dateAudit", "date AAAA-MM-JJ", "date"],
+    ["dateEntretien", "date AAAA-MM-JJ", "date"],
+    ["dateNotification", "date AAAA-MM-JJ", "date"],
+    ["dateInfoCSE", "date AAAA-MM-JJ", "date"],
+    ["dateAvisCSE", "date AAAA-MM-JJ, ou « avis non rendu »", "date"],
+    ["dateNotifAdmin", "date AAAA-MM-JJ", "date"],
+    ["effectif", "entier positif", "nombre"],
+    ["effectifEtablissement", "entier positif", "nombre"],
+    ["effectifGroupe", "entier positif", "nombre"],
+    ["nbLicenciements", "entier positif", "nombre"],
+    ["licenciementsRecents30j", "entier positif", "nombre"],
+    ["refusModification", "entier positif", "nombre"],
+    ["licenciements3moisGlissants", "entier positif", "nombre"],
+    ["etablissementsDistincts", "entier positif", "nombre"],
+    ["idcc", "quatre chiffres", "code"],
+    ["siren", "neuf chiffres", "code"],
+    ["cause", "1, 2, 3 ou 4", "code"],
+  ];
+
+  /* Les mêmes vérifications que valider.js, sur la fiche que le document reçoit.
+     Deux natures d'anomalie, et la distinction commande ce qui en découle :
+     « lisibilité », la valeur ne peut pas exister ; « cohérence », deux valeurs
+     parfaitement lisibles se contredisent. */
+  function anomalies(f) {
+    f = f || {};
+    var A = [];
+    var dit = function (champ, valeur, motif, nature) {
+      A.push({ champ: champ, valeur: valeur, motif: motif, nature: nature || "lisibilité" });
+    };
+    var a = function (champ) {
+      return Object.prototype.hasOwnProperty.call(f, champ) && f[champ] !== null && f[champ] !== "";
+    };
+    var estDateISO = function (s) {
+      if (typeof s !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+      var p = s.split("-").map(Number);
+      if (p[1] < 1 || p[1] > 12) return false;
+      var dernier = new Date(Date.UTC(p[0], p[1], 0)).getUTCDate();
+      return p[2] >= 1 && p[2] <= dernier;
+    };
+    var entier = function (x) {
+      return typeof x === "number" && isFinite(x) && Math.floor(x) === x && x >= 0;
+    };
+    ["dateAudit", "dateEntretien", "dateNotification", "dateInfoCSE", "dateNotifAdmin"]
+      .forEach(function (ch) {
+        if (a(ch) && !estDateISO(f[ch]))
+          dit(ch, f[ch], "date inexistante ou format non reconnu — attendu AAAA-MM-JJ");
+      });
+    if (a("dateAvisCSE") && !estDateISO(f.dateAvisCSE) && !/non rendu/i.test(String(f.dateAvisCSE)))
+      dit("dateAvisCSE", f.dateAvisCSE, "ni date valide, ni mention « avis non rendu »");
+    ["effectif", "effectifEtablissement", "effectifGroupe", "nbLicenciements",
+     "licenciementsRecents30j", "refusModification", "licenciements3moisGlissants",
+     "etablissementsDistincts"].forEach(function (ch) {
+      if (a(ch) && !entier(f[ch]))
+        dit(ch, f[ch], typeof f[ch] === "number"
+          ? (f[ch] < 0 ? "valeur négative"
+            : "valeur décimale, alors qu'il s'agit d'un dénombrement")
+          : "valeur non numérique");
+    });
+    if (a("idcc") && !/^\d{4}$/.test(String(f.idcc)))
+      dit("idcc", f.idcc, "un identifiant de convention collective compte quatre chiffres");
+    if (a("siren") && !/^\d{9}$/.test(String(f.siren).replace(/\s/g, "")))
+      dit("siren", f.siren, "un SIREN compte neuf chiffres");
+    if (a("cause") && ["1", "2", "3", "4"].indexOf(String(f.cause)) < 0)
+      dit("cause", f.cause, "la cause est l'un des quatre cas de l'article L. 1233-3");
+    if (estDateISO(f.dateEntretien) && estDateISO(f.dateNotification) &&
+        f.dateNotification < f.dateEntretien)
+      dit("dateNotification", f.dateNotification,
+        "antérieure à l'entretien préalable du " + f.dateEntretien, "cohérence");
+    if (Array.isArray(f.datesReunionsCSE)) {
+      var mauvaises = f.datesReunionsCSE.filter(function (d) { return !estDateISO(d); });
+      if (mauvaises.length)
+        dit("datesReunionsCSE", mauvaises.join(", "), "date(s) inexistante(s) ou mal formée(s)");
+    }
+    if (entier(f.effectif) && entier(f.effectifEtablissement) && f.effectifEtablissement > f.effectif)
+      dit("effectifEtablissement", f.effectifEtablissement,
+        "supérieur à l'effectif de l'entreprise (" + f.effectif + ")", "cohérence");
+    if (entier(f.effectif) && entier(f.effectifGroupe) && f.effectifGroupe < f.effectif)
+      dit("effectifGroupe", f.effectifGroupe,
+        "inférieur à l'effectif de l'entreprise (" + f.effectif +
+        "), alors que celle-ci en fait partie", "cohérence");
+    if (entier(f.nbLicenciements) && entier(f.effectif) && f.nbLicenciements > f.effectif)
+      dit("nbLicenciements", f.nbLicenciements,
+        "supérieur à l'effectif de l'entreprise (" + f.effectif + ")", "cohérence");
+    return A;
+  }
+
+  doc("CTL-VAL-01",
+    "La fiche de correction des données signalées",
+    "La table de ce que chaque champ doit être, le relevé des données que l'audit " +
+    "a signalées comme impossibles ou incohérentes, la fiche de correction " +
+    "champ par champ avec la pièce d'origine, et la marche à suivre pour relancer " +
+    "l'audit.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var an = anomalies(f);
+      var lisib = an.filter(function (x) { return x.nature === "lisibilité"; });
+      var coher = an.filter(function (x) { return x.nature === "cohérence"; });
+      var d0 = aujourd(ctx);
+
+      L = L.concat(entete(ctx, "Fiche de correction des données de l'audit",
+        "contrôle sans fondement textuel propre — voyez la partie I"));
+
+      modeEmploi(L, [
+        "Ce document est le premier à remplir et le seul à remplir en premier. Tant",
+        "qu'une donnée impossible subsiste, les verdicts qui l'utilisent ne valent",
+        "rien : ils peuvent conclure à la conformité comme à la non-conformité sur une",
+        "valeur qui ne peut pas exister. Décider sur un tel rapport, c'est décider",
+        "sans savoir.",
+        "",
+        "Les corrections se font À PARTIR DE LA PIÈCE D'ORIGINE, jamais de mémoire.",
+        "C'est la seule consigne de fond de ce document, et c'est celle qu'on",
+        "contourne le plus volontiers : une date qu'on croit se rappeler se saisit en",
+        "trois secondes, et se conteste pendant des mois.",
+        "",
+        "Puis vous relancez l'audit, et vous ne lisez les verdicts qu'ensuite.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. Ce que ce contrôle fait");
+
+      L.push("CTL-VAL-01 n'a aucun article au champ « fondement », et ce document n'en");
+      L.push("invente pas. Il ne juge rien du droit : il dit seulement si la donnée est");
+      L.push("LISIBLE, et si deux données lisibles se contredisent.");
+      L.push("");
+      L.push("La distinction commande ce qui en découle :");
+      L.push("");
+      L.push("  LISIBILITÉ — la valeur ne peut pas exister : le 30 février, un effectif");
+      L.push("  négatif, neuf licenciements et demi. Aucun contrôle ne peut rien conclure");
+      L.push("  de ce qu'il a lu là, et le moteur le lui interdit.");
+      L.push("");
+      L.push("  COHÉRENCE — deux valeurs parfaitement lisibles se contredisent : un");
+      L.push("  effectif d'établissement supérieur à celui de l'entreprise, une");
+      L.push("  notification antérieure à l'entretien préalable. Ce n'est pas un obstacle à");
+      L.push("  l'examen, c'est son objet : les contrôles doivent au contraire pouvoir le");
+      L.push("  constater.");
+      L.push("");
+      L.push("Une donnée impossible n'est pas un détail de saisie. Elle se propage : le");
+      L.push("nombre de licenciements commande le régime, le régime commande le nombre de");
+      L.push("réunions, le délai d'avis, la saisine de l'administration et le plan de");
+      L.push("sauvegarde de l'emploi. Une erreur d'un chiffre à l'entrée peut faire");
+      L.push("basculer tout un rapport.");
+      L.push("");
+
+      titre(L, "II. Ce que l'audit signale sur cette fiche");
+
+      if (!an.length) {
+        L.push("Aucune anomalie n'est relevée sur les données présentes dans cette fiche :");
+        L.push("les dates sont des dates, les dénombrements sont des entiers positifs, et");
+        L.push("les valeurs ne se contredisent pas entre elles.");
+        L.push("");
+        L.push("Cela ne dit rien de leur EXACTITUDE. « 84 salariés » est lisible et cohérent");
+        L.push("même si l'entreprise en compte 148. Servez-vous du tableau du IV pour");
+        L.push("rapprocher chaque valeur de la pièce qui la porte : c'est le seul contrôle");
+        L.push("qui vaille, et l'application ne peut pas le faire à votre place.");
+        L.push("");
+      } else {
+        if (lisib.length) {
+          L.push("DONNÉES ILLISIBLES — " + lisib.length + " :");
+          L.push("");
+          tableau(L, ["Champ", "Valeur saisie", "Pourquoi elle est impossible"],
+            lisib.map(function (x) {
+              return [x.champ, "« " + String(x.valeur) + " »", x.motif];
+            }));
+          L.push("");
+          L.push("  Tant qu'elles subsistent, les verdicts qui les utilisent ne valent rien.");
+          L.push("");
+        }
+        if (coher.length) {
+          L.push("DONNÉES INCOHÉRENTES ENTRE ELLES — " + coher.length + " :");
+          L.push("");
+          tableau(L, ["Champ", "Valeur saisie", "Contradiction relevée"],
+            coher.map(function (x) {
+              return [x.champ, "« " + String(x.valeur) + " »", x.motif];
+            }));
+          L.push("");
+          L.push("  Celles-ci sont lisibles. Deux issues seulement : l'une des deux valeurs");
+          L.push("  est fausse et se corrige, ou les deux sont exactes et c'est le dossier");
+          L.push("  lui-même qui porte la contradiction — auquel cas elle ne se corrige pas");
+          L.push("  dans la fiche, elle se traite dans le dossier.");
+          L.push("");
+        }
+      }
+
+      titre(L, "III. Ce que chaque champ doit être");
+
+      L.push("La table de référence. Un champ absent n'est pas invalide : il est manquant,");
+      L.push("et les contrôles le disent déjà par ailleurs.");
+      L.push("");
+      tableau(L, ["Champ", "Attendu", "Nature"],
+        ATTENDU.map(function (x) { return [x[0], x[1], x[2]]; }));
+      L.push("");
+      L.push("Et les quatre cohérences vérifiées entre champs :");
+      L.push("");
+      L.push("  — la notification ne peut pas être antérieure à l'entretien préalable ;");
+      L.push("  — l'effectif de l'établissement ne peut pas dépasser celui de l'entreprise ;");
+      L.push("  — l'effectif du groupe ne peut pas être inférieur à celui de l'entreprise,");
+      L.push("    puisque celle-ci en fait partie ;");
+      L.push("  — le nombre de licenciements ne peut pas dépasser l'effectif.");
+      L.push("");
+      L.push("  [Les dates des réunions du comité sont vérifiées une à une : une seule date");
+      L.push("  mal formée dans la liste suffit à la signaler.]");
+      L.push("");
+
+      titre(L, "IV. La fiche de correction");
+
+      L.push("Une ligne par donnée corrigée. La colonne « pièce d'origine » n'est pas");
+      L.push("facultative : c'est elle qui distingue une correction d'une seconde");
+      L.push("approximation.");
+      L.push("");
+      tableau(L, ["Champ", "Valeur saisie", "Valeur retenue", "Pièce d'origine",
+        "Date de la pièce", "Corrigé par", "Le"],
+        an.length ? an.map(function (x) {
+          return [x.champ, "« " + String(x.valeur) + " »", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"];
+        }) : [["[champ]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("OÙ SE LIT CHAQUE DONNÉE :");
+      L.push("");
+      tableau(L, ["Donnée", "Pièce qui la porte"], [
+        ["Effectif de l'entreprise", "registre unique du personnel, déclaration sociale nominative"],
+        ["Effectif de l'établissement", "registre du personnel de l'établissement"],
+        ["Effectif du groupe", "comptes consolidés, ou état fourni par la société mère"],
+        ["Nombre de licenciements envisagés", "note de projet, tableau des suppressions de postes"],
+        ["Licenciements déjà prononcés", "lettres expédiées et leurs preuves d'envoi"],
+        ["Refus de modification", "propositions adressées et réponses des salariés"],
+        ["Date de convocation du comité", "convocation et sa décharge"],
+        ["Dates des réunions", "procès-verbaux des réunions"],
+        ["Date de l'avis", "procès-verbal portant l'avis"],
+        ["Date d'entretien préalable", "convocation à l'entretien"],
+        ["Date de notification", "date d'expédition des lettres, non de leur signature"],
+        ["Date de notification à l'administration", "accusé de réception de la voie dématérialisée"],
+        ["IDCC", "bulletin de paie, ou intitulé exact de la convention appliquée"],
+        ["SIREN", "extrait Kbis"],
+        ["Cause invoquée", "note de projet — l'un des quatre cas de L. 1233-3"],
+      ]);
+      L.push("");
+
+      titre(L, "V. Après la correction");
+
+      L.push("  1. Reportez chaque valeur retenue dans la fiche d'audit.");
+      L.push("  2. RELANCEZ L'AUDIT. Un rapport établi sur des données corrigées n'est pas");
+      L.push("     l'ancien rapport annoté : c'est un autre rapport, et il peut conclure");
+      L.push("     autrement.");
+      L.push("  3. Ne lisez les verdicts qu'ensuite, et jetez l'ancien tirage. Deux");
+      L.push("     rapports contradictoires dans un même dossier se retournent contre");
+      L.push("     celui qui les y a laissés.");
+      L.push("  4. Conservez cette fiche de correction : elle établit que les données ont");
+      L.push("     été vérifiées à la source, et quand.");
+      L.push("");
+      L.push("  Fiche arrêtée le [DATE] par [nom et qualité]. Audit relancé le [DATE].");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous corrigez. Quelques heures suffisent :");
+      L.push("ce sont des saisies à reprendre, non des pièces à construire.");
+      L.push("");
+      L.push("Aujourd'hui encore — vous relancez l'audit. Il n'y a aucune raison");
+      L.push("d'attendre, et une seule de ne pas attendre : tout le reste du travail");
+      L.push("dépend de ce que le rapport dira.");
+      L.push("");
+      L.push("Au plus tard le " + leJour(dans(d0, 2)) + " — les verdicts sont relus sur les");
+      L.push("données corrigées, et les documents des autres contrôles sont régénérés à");
+      L.push("partir de la fiche corrigée. Un document produit avant la correction porte");
+      L.push("les anciennes valeurs : il est à refaire, pas à modifier à la main.");
+      L.push("");
+      L.push("Refaites cette vérification chaque fois qu'une donnée change — un");
+      L.push("licenciement ajouté, une notification différée, une réunion déplacée. Les");
+      L.push("données de ce dossier bougent jusqu'au dernier jour.");
+
+      pied(L, ["L. 1233-3"],
+        "Ce contrôle n'a aucun article au champ « fondement ». La table du III et les\n" +
+        "quatre cohérences du même titre sont reprises de\n" +
+        "moteur/economique/valider.js, qui est le seul juge de la lisibilité d'une\n" +
+        "donnée dans ce module — le document n'en invente pas une seconde.\n" +
+        "\n" +
+        "Ce qui se joue : rien de juridique, et c'est bien le problème. Une donnée\n" +
+        "impossible ne se sanctionne pas ; elle fausse tout ce qui en dépend, sans que\n" +
+        "rien ne le signale ailleurs que dans ce contrôle.");
+      return L.join("\n");
+    });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LA PROCÉDURE COLLECTIVE
+     ══════════════════════════════════════════════════════════════════════ */
+
+  var PROC = {
+    sauvegarde: "sauvegarde", redressement: "redressement judiciaire",
+    liquidation: "liquidation judiciaire",
+  };
+
+  doc("CTL-PCO-01",
+    "La fiche d'identification du régime de la procédure collective",
+    "Les trois données que l'article L. 1233-58 rend indispensables — nature de " +
+    "la procédure, date du jugement, qualité de l'auteur du plan —, le tableau " +
+    "des renvois que ce texte opère selon le seuil et l'effectif, et le bordereau " +
+    "des pièces qui les établissent.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var d0 = aujourd(ctx), eff = effectifDe(ctx), n = nbLic(f);
+      var enPC = f.procedureCollective === true;
+      var type = txt(f.typeProcedure), dJug = f.dateJugement, qual = txt(f.qualiteAuteur);
+      var manque = [];
+      if (!type) manque.push("la nature de la procédure — sauvegarde, redressement ou liquidation");
+      if (!estDate(dJug)) manque.push("la date du jugement d'ouverture ou de liquidation");
+      if (!qual) manque.push("la qualité de celui qui met en œuvre le plan de licenciement");
+
+      L = L.concat(entete(ctx, "Identification du régime de la procédure collective",
+        "article L. 1233-58 du code du travail"));
+
+      modeEmploi(L, [
+        "Trois données, et rien d'autre. Mais tant qu'elles manquent, le régime de",
+        "l'article L. 1233-58 ne peut pas être appliqué — et ce régime n'est pas un",
+        "aménagement de détail : il désigne qui met en œuvre le plan, il renvoie à des",
+        "articles de consultation différents selon le nombre de licenciements et",
+        "l'effectif, il raccourcit les délais de décision de l'administration, et il",
+        "change la sanction encourue.",
+        "",
+        "Ces trois données se lisent sur le jugement et sur l'acte de désignation.",
+        "Elles se saisissent en dix minutes. C'est le meilleur rapport entre le temps",
+        "passé et ce qu'il débloque dans tout le reste du dossier.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. Les trois données");
+
+      tableau(L, ["Donnée", "Ce que la fiche porte", "Où elle se lit"], [
+        ["Procédure collective ouverte ?",
+          f.procedureCollective === true ? "oui" : f.procedureCollective === false ? "non" : "[non renseigné]",
+          "jugement du tribunal"],
+        ["Nature de la procédure", type ? (PROC[type] || type) : "[non renseignée]",
+          "dispositif du jugement"],
+        ["Date du jugement", estDate(dJug) ? jour(dJug) : "[non renseignée]",
+          "en-tête du jugement"],
+        ["Qui met en œuvre le plan", qual || "[non renseignée]",
+          "jugement, acte de désignation"],
+      ]);
+      L.push("");
+      if (!enPC) {
+        L.push("La fiche ne déclare AUCUNE procédure collective. Ce document n'a alors pas");
+        L.push("d'objet — sauf si la situation a changé depuis l'audit, auquel cas");
+        L.push("renseignez les trois données ci-dessus et relancez l'audit avant tout acte");
+        L.push("suivant : l'ouverture d'une procédure collective déplace le régime entier.");
+        L.push("");
+      } else if (manque.length) {
+        L.push("PROCÉDURE COLLECTIVE DÉCLARÉE, MAIS " + manque.length + " DONNÉE(S)");
+        L.push("MANQUANTE(S) :");
+        L.push("");
+        manque.forEach(function (m) { L.push("  — " + m); });
+        L.push("");
+        L.push("Le régime de l'article L. 1233-58 ne peut pas être appliqué en l'état.");
+        L.push("");
+      } else {
+        L.push((PROC[type] || type) + " ouverte le " + jour(dJug) + ", plan de licenciement");
+        L.push("mis en œuvre par " + qual + ". Les trois données sont renseignées : le régime");
+        L.push("de l'article L. 1233-58 peut être appliqué.");
+        L.push("");
+      }
+
+      titre(L, "II. Ce que L. 1233-58 commande, renvoi par renvoi");
+
+      L.push("L. 1233-58, I : « En cas de redressement ou de liquidation judiciaire,");
+      L.push("l'employeur, l'administrateur ou le liquidateur, selon le cas, qui envisage");
+      L.push("des licenciements économiques, met en œuvre un plan de licenciement dans les");
+      L.push("conditions prévues aux articles L. 1233-24-1 à L. 1233-24-4. L'employeur,");
+      L.push("l'administrateur ou le liquidateur, selon le cas, réunit et consulte le");
+      L.push("comité social et économique dans les conditions prévues à l'article");
+      L.push("L. 2323-31 ainsi qu'aux articles : […] »");
+      L.push("");
+      L.push("Les sept renvois, tels que le texte les écrit :");
+      L.push("");
+      tableau(L, ["Renvoi", "Articles", "Cas visé"], [
+        ["1°", "L. 1233-8", "licenciement collectif de moins de dix salariés"],
+        ["2°", "L. 1233-29, premier alinéa",
+          "au moins dix salariés, entreprise de moins de cinquante"],
+        ["3°", "L. 1233-30, I sauf dernier alinéa, et dernier alinéa du II",
+          "au moins dix salariés, entreprise d'au moins cinquante"],
+        ["4°", "L. 1233-34 et L. 1233-35 premier alinéa", "recours à l'expert"],
+        ["5°", "L. 1233-31 à L. 1233-33, L. 1233-48 et L. 1233-63",
+          "renseignements et mesures sociales"],
+        ["6°", "L. 1233-49, L. 1233-61 et L. 1233-62", "plan de sauvegarde de l'emploi"],
+        ["7°", "L. 1233-57-5 et L. 1233-57-6",
+          "au moins dix salariés, entreprise d'au moins cinquante"],
+      ]);
+      L.push("");
+      L.push("  Effectif de l'entreprise ......... " +
+        (eff === null ? "[non renseigné]" : eff + " salariés"));
+      L.push("  Licenciements sur trente jours ... " +
+        (n === null ? "[non renseigné]" : String(n)));
+      L.push("  Renvoi applicable ............... " +
+        (eff === null || n === null ? "[à déterminer une fois ces deux données renseignées]"
+          : n < 10 ? "1° — L. 1233-8"
+          : eff < 50 ? "2° — L. 1233-29, premier alinéa"
+          : "3° — L. 1233-30, I et dernier alinéa du II, et 7°"));
+      L.push("");
+      L.push("Le texte cite aussi les articles L. 2325-35, L. 4614-12-1 et L. 2323-31, qui");
+      L.push("ne sont pas au corpus du module : ils sont nommés, non reproduits.");
+      L.push("");
+      L.push("ET LE PLAN RESTE DÛ. Le 6° renvoie expressément aux articles L. 1233-61 et");
+      L.push("L. 1233-62 : l'ouverture d'une procédure collective ne dispense pas du plan");
+      L.push("de sauvegarde de l'emploi lorsque ses conditions sont réunies.");
+      L.push("");
+
+      titre(L, "III. Les délais, tels que le II de l'article les raccourcit");
+
+      L.push("L. 1233-58, II : « Pour un licenciement d'au moins dix salariés dans une");
+      L.push("entreprise d'au moins cinquante salariés, l'accord mentionné à l'article");
+      L.push("L. 1233-24-1 est validé et le document mentionné à l'article L. 1233-24-4,");
+      L.push("élaboré par l'employeur, l'administrateur ou le liquidateur, est homologué");
+      L.push("dans les conditions fixées aux articles L. 1233-57-1 à L. 1233-57-3, aux");
+      L.push("deuxième et troisième alinéas de l'article L. 1233-57-4 et à l'article");
+      L.push("L. 1233-57-7. »");
+      L.push("");
+      L.push("Puis : « Les délais prévus au premier alinéa de l'article L. 1233-57-4 sont");
+      L.push("ramenés, à compter de la dernière réunion du comité social et économique, à");
+      L.push("HUIT JOURS en cas de redressement judiciaire et à QUATRE JOURS en cas de");
+      L.push("liquidation judiciaire. »");
+      L.push("");
+      var dr2 = derniereReunion(f);
+      tableau(L, ["Procédure", "Délai de décision", "Point de départ"], [
+        ["Redressement judiciaire", "8 jours", "dernière réunion du comité"],
+        ["Liquidation judiciaire", "4 jours", "dernière réunion du comité"],
+        ["Plan de sauvegarde arrêté (L. 1233-58, III)", "8 jours",
+          "réception de la demande, postérieure au jugement arrêtant le plan"],
+      ]);
+      L.push("");
+      if (dr2 && type) {
+        var dl = type === "liquidation" ? 4 : type === "redressement" ? 8 : null;
+        if (dl) {
+          L.push("Votre dernière réunion portée par la fiche est celle du " + jour(dr2) + " :");
+          L.push("le délai de " + dl + " jours expirerait le " + jourPlus(dr2, dl) + ".");
+          L.push("");
+        }
+      }
+      L.push("Et la demande se dépose vite : D. 1233-14 dispose qu'« en cas de procédure de");
+      L.push("sauvegarde, de redressement ou de liquidation judiciaire, la demande est");
+      L.push("envoyée par voie dématérialisée AU PLUS TARD LE LENDEMAIN de la dernière");
+      L.push("réunion du comité social et économique mentionnée aux II et III de l'article");
+      L.push("L. 1233-58 ».");
+      if (dr2) {
+        L.push("");
+        L.push("Soit, pour une dernière réunion du " + jour(dr2) + ", un dépôt au plus tard le");
+        L.push(jourPlus(dr2, 1) + ".");
+      }
+      L.push("");
+      L.push("Ce que le même II ajoute sur la rupture : « L'employeur, l'administrateur ou");
+      L.push("le liquidateur ne peut procéder, SOUS PEINE D'IRRÉGULARITÉ, à la rupture des");
+      L.push("contrats de travail avant la notification de la décision favorable de");
+      L.push("validation ou d'homologation, ou l'expiration des délais mentionnés au");
+      L.push("quatrième alinéa du présent II. »");
+      L.push("");
+      L.push("Et en cas de décision défavorable : « l'employeur, l'administrateur ou le");
+      L.push("liquidateur consulte le comité social et économique dans un délai de trois");
+      L.push("jours. Selon le cas, le document modifié et l'avis du comité social et");
+      L.push("économique ou un avenant à l'accord collectif sont transmis à l'autorité");
+      L.push("administrative, qui se prononce dans un délai de trois jours. »");
+      L.push("");
+      L.push("Enfin, sur le calibrage du plan : « Par dérogation au 1° de l'article");
+      L.push("L. 1233-57-3, sans préjudice de la recherche, selon le cas, par");
+      L.push("l'administrateur, le liquidateur ou l'employeur, en cas de redressement ou de");
+      L.push("liquidation judiciaire, des moyens du groupe auquel l'employeur appartient");
+      L.push("pour l'établissement du plan de sauvegarde de l'emploi, l'autorité");
+      L.push("administrative homologue le plan de sauvegarde de l'emploi après s'être");
+      L.push("assurée du respect par celui-ci des articles L. 1233-61 à L. 1233-63 AU");
+      L.push("REGARD DES MOYENS DONT DISPOSE L'ENTREPRISE. » Voyez le document du contrôle");
+      L.push("CTL-PSE-02.");
+      L.push("");
+      L.push("Un dernier point, souvent utile : L. 1233-59 dispose que « les délais prévus");
+      L.push("à l'article L. 1233-15 pour l'envoi des lettres de licenciement prononcé pour");
+      L.push("un motif économique ne sont pas applicables en cas de redressement ou de");
+      L.push("liquidation judiciaire ».");
+      L.push("");
+
+      titre(L, "IV. La fiche à remplir, et le bordereau des pièces");
+
+      L.push("  Tribunal ......................... [  ]");
+      L.push("  Nature de la procédure ........... ☐ sauvegarde  ☐ redressement judiciaire");
+      L.push("                                     ☐ liquidation judiciaire");
+      L.push("  Date du jugement ................. [  ]");
+      L.push("  Maintien provisoire de l'activité autorisé ? ☐ oui, jusqu'au [  ]  ☐ non");
+      L.push("  Administrateur judiciaire ........ [nom, date de désignation]");
+      L.push("  Mandataire judiciaire ............ [nom, date de désignation]");
+      L.push("  Liquidateur ...................... [nom, date de désignation]");
+      L.push("  Juge-commissaire ................. [nom]");
+      L.push("  Représentant des salariés ........ [nom, date de désignation]");
+      L.push("");
+      L.push("  QUI MET EN ŒUVRE LE PLAN DE LICENCIEMENT (L. 1233-58, I) :");
+      L.push("  ☐ l'employeur  ☐ l'administrateur  ☐ le liquidateur");
+      L.push("  Acte qui le désigne : [  ]");
+      L.push("");
+      L.push("  [Cette dernière case n'est pas une formalité. C'est elle qui dit qui signe");
+      L.push("  la demande de validation ou d'homologation, qui convoque le comité, et qui");
+      L.push("  expédie les lettres. Un acte signé par la mauvaise personne se conteste.]");
+      L.push("");
+      tableau(L, ["Pièce", "Ce qu'elle doit établir", "Date", "Jointe"], [
+        ["Jugement d'ouverture ou de liquidation",
+          "la nature de la procédure et sa date", "[  ]", "☐"],
+        ["Acte de désignation de l'administrateur ou du liquidateur",
+          "la qualité de l'auteur du plan", "[  ]", "☐"],
+        ["Jugement arrêtant le plan de sauvegarde, le cas échéant",
+          "le point de départ des délais du III de L. 1233-58", "[  ]", "☐"],
+        ["Ordonnance du juge-commissaire",
+          "l'autorisation des licenciements (CTL-PCO-02)", "[  ]", "☐"],
+        ["Procès-verbal de carence, à défaut de comité",
+          "l'absence de comité, au sens de L. 1233-49 et D. 1233-10", "[  ]", "☐"],
+      ]);
+      L.push("");
+      L.push("  [Sur le procès-verbal de carence : L. 1233-49 dispose que « lorsque");
+      L.push("  l'entreprise est dépourvue de comité social et économique et est soumise à");
+      L.push("  l'obligation d'établir un plan de sauvegarde de l'emploi, ce plan ainsi que");
+      L.push("  les informations destinées aux représentants du personnel mentionnées à");
+      L.push("  l'article L. 1233-31 sont communiqués à l'autorité administrative en même");
+      L.push("  temps que la notification du projet de licenciement. En outre, le plan est");
+      L.push("  porté à la connaissance des salariés par tout moyen sur les lieux de");
+      L.push("  travail. » Et D. 1233-10 impose de joindre le procès-verbal de carence à la");
+      L.push("  notification du projet, par la voie dématérialisée.]");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous renseignez les trois données et vous");
+      L.push("relancez l'audit. C'est immédiat : elles se lisent sur le jugement.");
+      L.push("");
+      if (estDate(dJug)) {
+        L.push("Jugement du " + jour(dJug) + ", tel que la fiche le porte.");
+        if (type === "liquidation") {
+          L.push("En liquidation judiciaire, la fenêtre de garantie des créances de rupture");
+          L.push("court à compter de ce jugement : quinze jours, ou vingt et un lorsqu'un");
+          L.push("plan de sauvegarde de l'emploi est élaboré (L. 3253-8, 2° c). Soit jusqu'au");
+          L.push(jourPlus(dJug, 15) + " ou au " + jourPlus(dJug, 21) + ". Voyez le document");
+          L.push("du contrôle CTL-PCO-03, qui fait ce calcul.");
+        }
+        L.push("");
+      }
+      L.push("Puis, dans l'ordre : l'ordonnance du juge-commissaire et l'information de");
+      L.push("l'autorité administrative (CTL-PCO-02), la consultation du comité selon le");
+      L.push("renvoi applicable, la demande de validation ou d'homologation au plus tard le");
+      L.push("lendemain de la dernière réunion (D. 1233-14), la décision dans les quatre ou");
+      L.push("huit jours, puis seulement la notification.");
+      L.push("");
+      L.push("Ces délais sont courts, et c'est leur seul défaut : ils ne laissent aucune");
+      L.push("marge à une donnée manquante. Renseignez-les maintenant.");
+
+      pied(L, ["L. 1233-8", "L. 1233-15", "L. 1233-29", "L. 1233-30", "L. 1233-31",
+        "L. 1233-49", "L. 1233-57-1", "L. 1233-57-3", "L. 1233-57-4", "L. 1233-58",
+        "L. 1233-59", "L. 1233-61", "L. 1233-62", "D. 1233-10", "D. 1233-14"],
+        "Les articles L. 2323-31, L. 2325-35, L. 4614-12-1, L. 1233-57-7 et L. 2324-8,\n" +
+        "que L. 1233-58 cite, ne sont pas au corpus du module : ils sont nommés, non\n" +
+        "reproduits. Il en va de même des articles du code de commerce auxquels le\n" +
+        "III de ce texte renvoie.\n" +
+        "\n" +
+        "Ce qui se joue : « L'employeur, l'administrateur ou le liquidateur ne peut\n" +
+        "procéder, sous peine d'irrégularité, à la rupture des contrats de travail\n" +
+        "avant la notification de la décision favorable de validation ou\n" +
+        "d'homologation » (L. 1233-58, II). Et « en cas de licenciements intervenus en\n" +
+        "l'absence de toute décision relative à la validation ou à l'homologation ou\n" +
+        "en cas d'annulation d'une décision ayant procédé à la validation ou à\n" +
+        "l'homologation, le juge octroie au salarié une indemnité à la charge de\n" +
+        "l'employeur qui ne peut être inférieure aux salaires des six derniers mois »\n" +
+        "(même texte) ; les deux premiers alinéas de L. 1235-10 ne sont, eux, pas\n" +
+        "applicables aux entreprises en redressement ou liquidation judiciaires.");
+      return L.join("\n");
+    });
+
   /* Le jour même en « AAAA-MM-JJ », pour comparer une date de la fiche à
      aujourd'hui sans repasser par une Date. */
   function iso0(d) {

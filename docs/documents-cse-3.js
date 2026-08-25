@@ -323,14 +323,20 @@
     return eff >= s;
   }
 
-  function ligneSeuil(eff, s, ceQuiSeDeclenche) {
+  function ligneSeuil(L, eff, s, ceQuiSeDeclenche) {
     if (eff == null) {
-      return "  Effectif de l'entreprise ... [À RENSEIGNER] — le seuil de " + s +
-             " salariés ne peut donc pas être tranché ici.";
+      L.push("  Effectif de l'entreprise ... [À RENSEIGNER]");
+      L.push("  Le seuil de " + s + " salariés ne peut donc pas être tranché ici, et il ne");
+      L.push("  sera pas supposé franchi.");
+      return;
     }
-    return "  Effectif de l'entreprise ... " + eff + " salariés — seuil de " + s +
-           " salariés " + (eff >= s ? "ATTEINT : " + ceQuiSeDeclenche
-                                    : "non atteint à cette date.");
+    L.push("  Effectif de l'entreprise ... " + eff + " salariés");
+    if (eff >= s) {
+      L.push("  Seuil de " + s + " salariés ATTEINT :");
+      L.push("  " + ceQuiSeDeclenche);
+    } else {
+      L.push("  Seuil de " + s + " salariés non atteint à cette date.");
+    }
   }
 
   /* ══════════════════════════════════════════════════════════════════════════
@@ -421,7 +427,7 @@
       }
 
       titre(L, "2 — Le seuil de trois cents salariés");
-      L.push(ligneSeuil(eff, 300, "les trois commissions sont dues, à défaut d'accord."));
+      ligneSeuil(L, eff, 300, "les trois commissions sont dues, à défaut d'accord.");
       L.push("");
       L.push("« Le seuil de trois cents salariés mentionné au présent chapitre est réputé");
       L.push("franchi lorsque l'effectif de l'entreprise dépasse ce seuil PENDANT DOUZE MOIS");
@@ -791,7 +797,7 @@
         ouiNon(f.accordCommissions, "oui / non"));
       L.push("  Une commission économique est-elle déjà créée ? ............ " +
         ouiNon(f.commissionEconomique, "oui / non"));
-      L.push(ligneSeuil(eff, 1000, "la commission économique est due, à défaut d'accord."));
+      ligneSeuil(L, eff, 1000, "la commission économique est due, à défaut d'accord.");
       L.push("");
       if (accord === true) {
         L.push("  UN ACCORD EST DÉCLARÉ : L. 2315-46 ne joue pas, puisqu'il ne s'applique");
@@ -3047,7 +3053,7 @@
       L.push("les effets potentiels du projet sur les conditions de travail » (L. 1233-34).");
       L.push("");
       L.push("  a) EFFECTIF DE L'ENTREPRISE");
-      L.push(ligneSeuil(eff, 50, "la première condition est remplie."));
+      ligneSeuil(L, eff, 50, "la première condition de L. 1233-34 est remplie.");
       L.push("");
       L.push("  b) NOMBRE DE LICENCIEMENTS ENVISAGÉS DANS UNE MÊME PÉRIODE DE TRENTE JOURS");
       if (nbL != null) {
@@ -3570,6 +3576,697 @@
          "L. 2315-94", "R. 2315-45", "R. 2315-46", "R. 2315-49", "R. 2315-50",
          "R. 2315-51"],
         ["L. 1233-30 (première réunion à laquelle L. 1233-34 rattache la décision)"]);
+    },
+  });
+
+  /* ────────────────────────────────────────────────────────────────────────
+     LES DEUX POINTS À FAIRE EXAMINER
+     ──────────────────────────────────────────────────────────────────────── */
+
+  DP.ajouter("CSE-CTL-DET-01", {
+    nom: "La note d'analyse des accords applicables au comité : la grille clause par clause, le relevé des dates et la demande d'examen",
+    detail: "Le relevé des accords avec la date de notification et celle de publication " +
+            "qui font courir le délai de deux mois de L. 2262-14, la grille de ce qu'un " +
+            "accord peut et ne peut pas faire, la conclusion en action en nullité ou en " +
+            "exception d'illégalité, et le courrier de saisine du conseil.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var accords = liste(f.accordsCse);
+      var deleg = objet(f.delegationCssct);
+      var multi = oui(f.etablissementsMultiples);
+      var L = [];
+
+      L = L.concat(entete(ctx, "Analyse des accords collectifs applicables au comité au regard de ses prérogatives légales",
+        "article L. 2262-14 du code du travail"));
+      usage(L);
+
+      L.push("CE QUE CETTE NOTE FAIT, ET CE QU'ELLE NE FAIT PAS");
+      L.push("");
+      L.push("Elle ne lit pas vos accords : l'application ne dispose que de leur existence,");
+      L.push("jamais de leurs stipulations. Elle fait deux choses, et elles sont utiles :");
+      L.push("");
+      L.push("  · elle relève LES DEUX DATES qui ouvrent le délai de deux mois de");
+      L.push("    L. 2262-14, parce que ce délai court sans qu'on s'en aperçoive et qu'il");
+      L.push("    est très court ;");
+      L.push("  · elle donne LA GRILLE de ce qu'un accord peut faire et de ce qu'il ne peut");
+      L.push("    pas faire, texte par texte, de sorte que la relecture professionnelle");
+      L.push("    porte sur les bonnes clauses.");
+      L.push("");
+      L.push("La relecture elle-même appartient à un professionnel. Ce document la prépare");
+      L.push("et la date ; il ne la remplace pas.");
+      L.push("");
+      L.push("CE QUI SE JOUE — un accord peut légalement aménager beaucoup de choses. Il ne");
+      L.push("peut pas priver le comité d'une prérogative que la loi lui reconnaît. La");
+      L.push("clause qui le ferait n'est pas une faute pénale : elle est inopérante, et");
+      L.push("l'acte pris sur son fondement — un avis rendu par la seule commission, une");
+      L.push("expertise décidée par elle — est irrégulier.");
+      L.push("");
+
+      titre(L, "1 — Le relevé des accords et de leurs deux dates");
+      L.push("« Toute action en nullité de tout ou partie d'une convention ou d'un accord");
+      L.push("collectif doit, À PEINE D'IRRECEVABILITÉ, être engagée dans un délai de DEUX");
+      L.push("MOIS à compter : 1° DE LA NOTIFICATION de l'accord d'entreprise prévue à");
+      L.push("l'article L. 2231-5, pour les organisations disposant d'une section syndicale");
+      L.push("dans l'entreprise ; 2° DE LA PUBLICATION de l'accord prévue à l'article");
+      L.push("L. 2231-5-1 dans tous les autres cas. Ce délai s'applique sans préjudice des");
+      L.push("articles L. 1233-24, L. 1235-7-1 et L. 1237-19-8 du code du travail »");
+      L.push("(L. 2262-14).");
+      L.push("");
+      L.push("  Les articles L. 2231-5 et L. 2231-5-1, qui définissent cette notification et");
+      L.push("  cette publication, N'ONT PAS ÉTÉ LUS par l'application : ils sont nommés, et");
+      L.push("  leur contenu n'est ni reproduit ni paraphrasé. De même pour L. 1233-24,");
+      L.push("  L. 1235-7-1 et L. 1237-19-8, que le dernier alinéa réserve.");
+      L.push("");
+      L.push("  DEUX POINTS DE DÉPART, ET ILS NE VISENT PAS LES MÊMES PERSONNES : la");
+      L.push("  notification pour les organisations disposant d'une section syndicale dans");
+      L.push("  l'entreprise ; la publication DANS TOUS LES AUTRES CAS. Relevez donc les");
+      L.push("  deux dates pour chaque accord, sans choisir.");
+      L.push("");
+      L.push("  ┌───────────────────────┬────────────┬────────────┬────────────────────────┐");
+      L.push("  │ Accord                │ Notifié le │ Publié le  │ Deux mois expirent le  │");
+      L.push("  ├───────────────────────┼────────────┼────────────┼────────────────────────┤");
+      if (accords.length) {
+        accords.forEach(function (a) {
+          var s = typeof a === "string" ? a : (a && a.nom) ? a.nom : JSON.stringify(a);
+          L.push("  │ " + pad(s, 21) + " │ [        ] │ [        ] │ [                    ] │");
+        });
+      } else {
+        L.push("  │ [                   ] │ [        ] │ [        ] │ [                    ] │");
+        L.push("  │ [                   ] │ [        ] │ [        ] │ [                    ] │");
+        L.push("  │ [                   ] │ [        ] │ [        ] │ [                    ] │");
+      }
+      L.push("  └───────────────────────┴────────────┴────────────┴────────────────────────┘");
+      L.push("");
+      if (accords.length) {
+        L.push("  Accords déclarés au dossier : " + accords.length + ".");
+        L.push("");
+      } else {
+        L.push("  Aucun accord n'est déclaré au dossier. Vérifiez tout de même : les accords");
+        L.push("  applicables au comité ne portent pas tous le mot « comité » dans leur");
+        L.push("  intitulé — un accord de dialogue social, un accord de groupe, un accord de");
+        L.push("  branche étendu peuvent l'être.");
+        L.push("");
+      }
+      L.push("  À TITRE DE REPÈRE — un accord notifié ou publié aujourd'hui, " + leJour(d0) + ",");
+      L.push("  ouvrirait un délai expirant aux environs du " + leJour(dans(d0, 61)) + ". Deux mois se");
+      L.push("  consomment en une relecture et une décision : ce n'est pas beaucoup.");
+      L.push("");
+      L.push("  LES ACCORDS À CHERCHER EN PRIORITÉ, parce que le module en dépend :");
+      L.push("");
+      L.push("     [ ] l'accord de L. 2313-2 déterminant LE NOMBRE ET LE PÉRIMÈTRE DES");
+      L.push("         ÉTABLISSEMENTS DISTINCTS — ou, en l'absence de délégué syndical,");
+      L.push("         l'accord entre l'employeur et le comité adopté à la majorité des");
+      L.push("         membres titulaires élus (L. 2313-3) ; à défaut des deux, la décision");
+      L.push("         de l'employeur prise compte tenu de L'AUTONOMIE DE GESTION du");
+      L.push("         responsable de l'établissement, notamment en matière de gestion du");
+      L.push("         personnel (L. 2313-4). " +
+        (multi === true ? "LE DOSSIER DÉCLARE PLUSIEURS ÉTABLISSEMENTS" : "[le dossier ne déclare pas"));
+      if (multi === true) {
+        L.push("         DISTINCTS : cet accord ou cette décision est le premier à produire.");
+      } else {
+        L.push("         plusieurs établissements distincts]");
+      }
+      L.push("         Le périmètre lui-même est traité par les documents CSE-CTL-PER de ce");
+      L.push("         module : ne le refaites pas ici, relevez seulement l'accord et ses");
+      L.push("         dates.");
+      L.push("");
+      L.push("     [ ] l'accord de L. 2312-19 sur LE CONTENU, LA PÉRIODICITÉ, LES MODALITÉS");
+      L.push("         ET LES NIVEAUX DES CONSULTATIONS RÉCURRENTES ;");
+      L.push("     [ ] l'accord de L. 2315-45 sur LES COMMISSIONS du comité ;");
+      L.push("     [ ] les accords de L. 2315-41, L. 2315-42 et L. 2315-43 sur LA COMMISSION");
+      L.push("         SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL ;");
+      L.push("     [ ] l'accord de L. 2315-79 sur LE NOMBRE D'EXPERTISES dans le cadre des");
+      L.push("         consultations récurrentes ;");
+      L.push("     [ ] l'accord de L. 2312-81 sur LA CONTRIBUTION AUX ACTIVITÉS SOCIALES, et");
+      L.push("         celui de L. 2312-82 sur sa RÉPARTITION entre comités d'établissement ;");
+      L.push("     [ ] l'accord de L. 2312-16 fixant LES DÉLAIS dans lesquels les avis sont");
+      L.push("         rendus ;");
+      L.push("     [ ] le PROTOCOLE PRÉÉLECTORAL, qui n'est pas un accord d'entreprise mais");
+      L.push("         qui peut modifier le nombre de sièges ou le volume des heures");
+      L.push("         individuelles de délégation (L. 2314-7) ;");
+      L.push("     [ ] LE RÈGLEMENT INTÉRIEUR DU COMITÉ, qui n'est pas un accord non plus,");
+      L.push("         mais qui produit les mêmes effets pratiques (L. 2315-24).");
+      L.push("");
+
+      titre(L, "2 — La grille : ce qu'un accord peut faire");
+      L.push("Ce qui suit vient des textes lus. Une clause qui entre dans l'une de ces cases");
+      L.push("n'a rien d'irrégulier par elle-même.");
+      L.push("");
+      L.push("  · LES CONSULTATIONS RÉCURRENTES — un accord d'entreprise conclu dans les");
+      L.push("    conditions du premier alinéa de L. 2232-12 ou, EN L'ABSENCE DE DÉLÉGUÉ");
+      L.push("    SYNDICAL, un accord entre l'employeur et le comité adopté à la majorité des");
+      L.push("    membres titulaires, peut définir : 1° le contenu, la périodicité et les");
+      L.push("    modalités des consultations récurrentes de L. 2312-17 ainsi que la liste et");
+      L.push("    le contenu des informations nécessaires ; 2° LE NOMBRE DE RÉUNIONS");
+      L.push("    ANNUELLES du comité prévues à L. 2315-27, QUI NE PEUT ÊTRE INFÉRIEUR À");
+      L.push("    SIX ; 3° les niveaux auxquels les consultations sont conduites et leur");
+      L.push("    articulation ; 4° les délais de L. 2312-15 dans lesquels les avis sont");
+      L.push("    rendus. Il peut aussi prévoir un AVIS UNIQUE portant sur tout ou partie des");
+      L.push("    thèmes. « LA PÉRIODICITÉ DES CONSULTATIONS PRÉVUE PAR L'ACCORD NE PEUT ÊTRE");
+      L.push("    SUPÉRIEURE À TROIS ANS » (L. 2312-19).");
+      L.push("");
+      L.push("       DEUX PLANCHERS À VÉRIFIER LIGNE À LIGNE : six réunions au minimum, trois");
+      L.push("       ans au maximum. Ce sont les deux seuls chiffres que L. 2312-19 impose,");
+      L.push("       et ce sont les deux qu'un accord franchit sans le vouloir.");
+      L.push("");
+      L.push("  · LES COMMISSIONS — un accord d'entreprise peut prévoir la création de");
+      L.push("    commissions supplémentaires pour l'examen de problèmes particuliers, et");
+      L.push("    l'employeur peut leur adjoindre des experts et techniciens de l'entreprise");
+      L.push("    avec voix consultative. « LES RAPPORTS DES COMMISSIONS SONT SOUMIS À LA");
+      L.push("    DÉLIBÉRATION DU COMITÉ » (L. 2315-45).");
+      L.push("");
+      L.push("  · LA COMMISSION SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL — l'accord de");
+      L.push("    L. 2313-2 fixe les modalités de mise en place de la ou des commissions en");
+      L.push("    définissant les six points des 1° à 6° de L. 2315-41 : nombre de membres,");
+      L.push("    missions déléguées et leurs modalités d'exercice, modalités de");
+      L.push("    fonctionnement dont les heures de délégation, modalités de formation,");
+      L.push("    moyens alloués, modalités des transports. En l'absence de délégué syndical,");
+      L.push("    l'accord avec le comité y pourvoit (L. 2315-42). Hors les cas de L. 2315-36");
+      L.push("    et L. 2315-37, l'accord peut aussi fixer LE NOMBRE ET LE PÉRIMÈTRE de ces");
+      L.push("    commissions (L. 2315-43).");
+      L.push("");
+      L.push("  · LE NOMBRE D'EXPERTISES — « Un accord d'entreprise, ou à défaut un accord");
+      L.push("    conclu entre l'employeur et le comité social et économique, adopté à la");
+      L.push("    majorité des membres titulaires élus de la délégation du personnel,");
+      L.push("    détermine LE NOMBRE D'EXPERTISES dans le cadre des consultations");
+      L.push("    récurrentes prévues au paragraphe 2 sur une ou plusieurs années »");
+      L.push("    (L. 2315-79). L'accord borne donc le nombre ; il ne supprime pas le");
+      L.push("    recours.");
+      L.push("");
+      L.push("  · LES BUDGETS — la contribution aux activités sociales et culturelles EST");
+      L.push("    FIXÉE PAR ACCORD D'ENTREPRISE (L. 2312-81) ; sa répartition entre comités");
+      L.push("    d'établissement est fixée par accord au prorata des effectifs, de la masse");
+      L.push("    salariale, ou des deux combinés (L. 2312-82). En revanche, la subvention de");
+      L.push("    fonctionnement de L. 2315-61 est fixée par la loi : voir la case suivante.");
+      L.push("");
+      L.push("  · LES ÉTABLISSEMENTS DISTINCTS ET LES REPRÉSENTANTS DE PROXIMITÉ — l'accord");
+      L.push("    de L. 2313-2 détermine le nombre et le périmètre des établissements");
+      L.push("    distincts, et peut mettre en place des représentants de proximité en");
+      L.push("    définissant leur nombre, leurs attributions, les modalités de leur");
+      L.push("    désignation et de leur fonctionnement, dont leurs heures de délégation");
+      L.push("    (L. 2313-7).");
+      L.push("");
+      L.push("  · LE PROTOCOLE PRÉÉLECTORAL — il peut modifier le nombre de sièges ou le");
+      L.push("    volume des heures individuelles de délégation « DÈS LORS QUE LE VOLUME");
+      L.push("    GLOBAL DE CES HEURES, AU SEIN DE CHAQUE COLLÈGE, EST AU MOINS ÉGAL À CELUI");
+      L.push("    RÉSULTANT DES DISPOSITIONS LÉGALES au regard de l'effectif » (L. 2314-7).");
+      L.push("    C'est une condition, pas une faculté : vérifiez-la collège par collège.");
+      L.push("");
+
+      titre(L, "3 — La grille : ce qu'un accord ne peut pas faire");
+      L.push("Ce sont les clauses à relever en priorité pour la relecture. Chacune renvoie");
+      L.push("à un texte lu, et à un document de ce module qui la traite.");
+      L.push("");
+      L.push("  ┌───────────────────────────────────────────┬──────────────┬──────────────┐");
+      L.push("  │ Ce qu'une clause ne peut pas faire        │ Texte        │ Présente ?   │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Déléguer à la commission santé, sécurité  │ L. 2315-38   │ " +
+        pad(deleg.expertDelegue === true ? "OUI (dossier)" : "[oui / non]", 12) + " │");
+      L.push("  │ et conditions de travail LE RECOURS À UN  │ (d'ordre     │              │");
+      L.push("  │ EXPERT prévu à la sous-section 10         │  public)     │              │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Déléguer à cette commission LES           │ L. 2315-38   │ " +
+        pad(deleg.avisDelegue === true ? "OUI (dossier)" : "[oui / non]", 12) + " │");
+      L.push("  │ ATTRIBUTIONS CONSULTATIVES du comité      │              │              │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Prévoir une périodicité des consultations │ L. 2312-19   │ [oui / non]  │");
+      L.push("  │ récurrentes SUPÉRIEURE À TROIS ANS        │              │              │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Fixer un nombre de réunions annuelles     │ L. 2312-19   │ [oui / non]  │");
+      L.push("  │ INFÉRIEUR À SIX                           │              │              │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Modifier LE TAUX de la subvention de      │ L. 2315-61   │ [oui / non]  │");
+      L.push("  │ fonctionnement, que la loi fixe elle-même │              │              │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Écarter la règle selon laquelle les       │ L. 2315-32   │ [oui / non]  │");
+      L.push("  │ résolutions sont prises à la MAJORITÉ DES │              │              │");
+      L.push("  │ MEMBRES PRÉSENTS, le président ne votant  │              │              │");
+      L.push("  │ pas quand il consulte les élus            │              │              │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Composer la commission santé et sécurité  │ L. 2315-39   │ [oui / non]  │");
+      L.push("  │ sans le MINIMUM DE TROIS MEMBRES dont au  │              │              │");
+      L.push("  │ moins un du second — ou du troisième —    │              │              │");
+      L.push("  │ collège, ou hors des membres du comité    │              │              │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Modifier le nombre de sièges ou d'heures  │ L. 2314-7    │ [oui / non]  │");
+      L.push("  │ en abaissant LE VOLUME GLOBAL D'HEURES    │              │              │");
+      L.push("  │ D'UN COLLÈGE sous le volume légal         │              │              │");
+      L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ Imposer à l'employeur, par le RÈGLEMENT   │ L. 2315-24   │ [oui / non]  │");
+      L.push("  │ INTÉRIEUR DU COMITÉ, des obligations ne   │              │              │");
+      L.push("  │ résultant pas de dispositions légales,    │              │              │");
+      L.push("  │ sauf son accord                           │              │              │");
+      L.push("  └───────────────────────────────────────────┴──────────────┴──────────────┘");
+      L.push("");
+      if (deleg.expertDelegue === true || deleg.avisDelegue === true) {
+        L.push("  LE DOSSIER SIGNALE DÉJÀ UNE DÉLÉGATION QUI EXCÈDE L. 2315-38 :");
+        if (deleg.avisDelegue === true)
+          L.push("     · les attributions consultatives du comité sont déléguées ;");
+        if (deleg.expertDelegue === true)
+          L.push("     · le recours à l'expert est délégué ;");
+        L.push("  alors que L. 2315-38 les en exclut expressément l'un et l'autre. Portez");
+        L.push("  cette clause en tête de la relecture. Les documents CSE-CTL-SST et");
+        L.push("  CSE-CTL-EXP-04 de ce module en tirent les conséquences pratiques.");
+        L.push("");
+      }
+      L.push("  UNE PRÉCISION QUI ÉVITE UN CONTRESENS — « les projets d'accord collectif,");
+      L.push("  leur révision ou leur dénonciation NE SONT PAS SOUMIS À LA CONSULTATION DU");
+      L.push("  COMITÉ » (L. 2312-14). L'absence de consultation sur le projet d'accord");
+      L.push("  lui-même n'est donc pas un grief.");
+      L.push("");
+
+      titre(L, "4 — La conclusion : action en nullité ou exception d'illégalité");
+      L.push("Deux voies, et le choix dépend d'une seule chose : la date.");
+      L.push("");
+      L.push("  A — L'ACTION EN NULLITÉ, dans les DEUX MOIS de la notification ou de la");
+      L.push("      publication (L. 2262-14), À PEINE D'IRRECEVABILITÉ. Elle attaque la");
+      L.push("      clause de front et la fait disparaître pour tous.");
+      L.push("");
+      L.push("        Accord concerné ............. [ ]");
+      L.push("        Date de départ retenue ...... [notification du ... / publication du ...]");
+      L.push("        Délai expirant le ........... [ ]");
+      L.push("        Jours restants .............. [ ]");
+      L.push("");
+      L.push("  B — L'EXCEPTION D'ILLÉGALITÉ, quand le délai est passé. L'article L. 2262-14");
+      L.push("      enferme dans deux mois L'ACTION EN NULLITÉ ; il ne dit rien de");
+      L.push("      l'invocation de l'illégalité par voie d'exception, à l'occasion d'un");
+      L.push("      litige où la clause est opposée. C'est la voie qui reste, et elle n'est");
+      L.push("      pas enfermée dans ce délai.");
+      L.push("");
+      L.push("        [L'application ne dispose ici d'aucun texte lu qui organise l'exception");
+      L.push("        d'illégalité : elle en signale la possibilité parce que le fondement du");
+      L.push("        contrôle la retient, et laisse au professionnel le soin d'en apprécier");
+      L.push("        les conditions et la portée.]");
+      L.push("");
+      L.push("  C — CE QU'IL FAUT FAIRE DANS TOUS LES CAS, et tout de suite : NE PLUS SE");
+      L.push("      FONDER SUR LA CLAUSE. Une clause qui prive le comité d'une prérogative");
+      L.push("      légale ne devient pas valable parce que le délai de nullité est passé.");
+      L.push("      L'acte pris sur son fondement reste irrégulier — l'avis rendu par la");
+      L.push("      seule commission, l'expertise décidée par elle. Cessez de vous en");
+      L.push("      prévaloir, et reprenez les actes concernés.");
+      L.push("");
+
+      titre(L, "5 — La note d'analyse, à dater et à signer");
+      L.push("NOTE D'ANALYSE DES CLAUSES DES ACCORDS APPLICABLES AU COMITÉ SOCIAL ET");
+      L.push("ÉCONOMIQUE");
+      L.push("");
+      L.push(nom(ctx));
+      L.push("Établie le " + leJour(d0) + " par [nom et qualité de l'auteur de l'analyse].");
+      L.push("");
+      L.push("1. Accords examinés : [liste, avec pour chacun sa date de signature, de");
+      L.push("   notification et de publication].");
+      L.push("2. Clauses relevées : [article de l'accord · objet · texte du code du travail");
+      L.push("   concerné · appréciation].");
+      L.push("3. Conclusion : [aucune clause ne paraît excéder ce que la loi permet / les");
+      L.push("   clauses suivantes appellent un examen : ...].");
+      L.push("4. Suites proposées : [action en nullité avant le ... / exception");
+      L.push("   d'illégalité / cessation de l'application de la clause / renégociation].");
+      L.push("");
+      L.push("Signature : [ ]");
+      L.push("");
+      L.push("  Cette note est datée et signée pour une raison précise : elle établit QUAND");
+      L.push("  l'entreprise a su. C'est cette date qui distinguera plus tard l'erreur");
+      L.push("  d'appréciation du maintien délibéré d'une clause reconnue inopérante.");
+      L.push("");
+
+      courrier(L, 1, "saisine du conseil pour relecture des accords", [
+        "La base signale que des stipulations existent ; elle ne les lit pas. Ce courrier",
+        "cadre la relecture pour qu'elle porte sur les bonnes clauses et rende un avis",
+        "daté.",
+      ]);
+      papier(L, ctx, ["À l'attention de [conseil / avocat]", "[adresse]"]);
+      L.push("Objet : examen des accords collectifs applicables au comité social et");
+      L.push("économique");
+      L.push("");
+      L.push("Maître, [ou Madame, Monsieur,]");
+      L.push("");
+      L.push("Je vous adresse les accords collectifs applicables au comité social et");
+      L.push("économique de " + nom(ctx) + ", ainsi qu'une grille des points sur lesquels");
+      L.push("j'appelle votre attention.");
+      L.push("");
+      L.push("Je souhaiterais votre avis sur trois questions :");
+      L.push("");
+      L.push("  1. l'une des clauses de ces accords prive-t-elle le comité d'une prérogative");
+      L.push("     que la loi lui reconnaît — notamment au regard de l'article L. 2315-38,");
+      L.push("     qui exclut le recours à l'expert et les attributions consultatives des");
+      L.push("     attributions délégables à la commission santé, sécurité et conditions de");
+      L.push("     travail, et des planchers de l'article L. 2312-19 : six réunions");
+      L.push("     annuelles au minimum, périodicité des consultations de trois ans au");
+      L.push("     maximum ?");
+      L.push("");
+      L.push("  2. dans l'affirmative, le délai de deux mois de l'article L. 2262-14 est-il");
+      L.push("     encore ouvert, au regard des dates de notification et de publication");
+      L.push("     figurant au tableau joint, et quelle voie recommandez-vous ?");
+      L.push("");
+      L.push("  3. quels actes déjà pris sur le fondement de ces clauses appellent une");
+      L.push("     reprise ?");
+      L.push("");
+      L.push("Compte tenu de la brièveté du délai de deux mois, je vous saurais gré de me");
+      L.push("répondre avant le [DATE].");
+      L.push("");
+      salutation(L, ctx, "Je vous prie d'agréer, Maître, l'expression de ma considération distinguée.");
+      L.push("Pièces jointes : accords collectifs en intégralité · tableau des dates ·");
+      L.push("grille des clauses relevées.");
+
+      calendrier(L, [
+        "Aujourd'hui, " + leJour(d0) + " — vous remplissez le tableau du paragraphe 1. Deux dates",
+        "par accord, et rien d'autre : la notification aux organisations disposant d'une",
+        "section syndicale, et la publication. Ce sont elles qui décident de tout le",
+        "reste.",
+        "",
+        "Dans les jours qui suivent — vous cochez la grille du paragraphe 3 sur chaque",
+        "accord, puis vous adressez le courrier 1 avec les accords en intégralité. Un",
+        "extrait ne suffit pas : une clause se lit dans son accord.",
+        "",
+        "Si un accord a été notifié ou publié récemment — comptez DEUX MOIS depuis cette",
+        "date, et remontez de quinze jours pour laisser à votre conseil le temps de",
+        "conclure. Un accord notifié aujourd'hui appellerait une décision avant le",
+        leJour(dans(d0, 45)) + " et une action avant le " + leJour(dans(d0, 61)) + ".",
+        "",
+        "Si le délai est passé — ne renoncez pas pour autant : l'exception d'illégalité",
+        "n'est pas enfermée dans ce délai, et la cessation de l'application de la clause",
+        "ne dépend d'aucun délai du tout.",
+        "",
+        "À CHAQUE NOUVEL ACCORD SIGNÉ — inscrivez immédiatement ses deux dates au tableau.",
+        "C'est la seule discipline qui évite de découvrir un délai le jour où il est",
+        "expiré.",
+      ]);
+
+      return pied(L,
+        ["L. 2262-14", "L. 2312-14", "L. 2312-16", "L. 2312-17", "L. 2312-19",
+         "L. 2312-81", "L. 2312-82", "L. 2313-2", "L. 2313-3", "L. 2313-4",
+         "L. 2313-7", "L. 2314-7", "L. 2315-24", "L. 2315-27", "L. 2315-32",
+         "L. 2315-38", "L. 2315-39", "L. 2315-41", "L. 2315-42", "L. 2315-43",
+         "L. 2315-45", "L. 2315-61", "L. 2315-79", "L. 2232-12"],
+        ["L. 2231-5 (notification de l'accord) et L. 2231-5-1 (publication), qui fixent les deux points de départ du délai de L. 2262-14",
+         "L. 1233-24, L. 1235-7-1 et L. 1237-19-8, réservés par le dernier alinéa de L. 2262-14"]);
+    },
+  });
+
+  /* Le seul des douze points dont le fondement porte une peine. Elle est donc
+     écrite ici — telle que L. 2317-1 la formule, sans l'arrondir — et nulle
+     part ailleurs dans ce fichier. */
+  DP.ajouter("CSE-CTL-DET-03", {
+    nom: "La note de constat des faits signalés et des mesures prises, avec le relevé daté et la saisine du conseil",
+    detail: "Le relevé daté des faits, la distinction que L. 2317-1 opère entre l'entrave " +
+            "à la constitution ou à la libre désignation et l'entrave au fonctionnement " +
+            "régulier, les mesures de cessation immédiate, l'accomplissement de l'acte " +
+            "omis, sa consignation au procès-verbal et le courrier au conseil.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var faits = f.faitsEntrave ? String(f.faitsEntrave).trim() : "";
+      var L = [];
+
+      L = L.concat(entete(ctx, "Constat des faits signalés et des mesures prises",
+        "article L. 2317-1 du code du travail"));
+      usage(L);
+
+      L.push("CE DOCUMENT NE QUALIFIE RIEN, ET C'EST VOULU");
+      L.push("");
+      L.push("L'entrave est une INFRACTION PÉNALE. La qualifier suppose d'apprécier des");
+      L.push("faits, une intention et un contexte : c'est l'office du juge répressif, et");
+      L.push("l'affaire d'un professionnel avant lui. L'application détecte, elle ne");
+      L.push("qualifie pas — et un document qui écrirait « il y a entrave » ou « il n'y a");
+      L.push("pas entrave » serait faux dans les deux sens.");
+      L.push("");
+      L.push("Ce que ce document fait, en revanche, est ce qui compte le jour où la");
+      L.push("question se pose : il DATE LES FAITS, il FAIT CESSER ce qui peut l'être, il");
+      L.push("ACCOMPLIT L'ACTE OMIS et il CONSIGNE le tout. Une régularisation datée vaut");
+      L.push("mieux qu'une déclaration d'intention, et elle vaut infiniment mieux qu'un");
+      L.push("silence.");
+      L.push("");
+
+      titre(L, "1 — Le texte, tel qu'il est");
+      L.push("« Le fait d'apporter une entrave SOIT À LA CONSTITUTION d'un comité social et");
+      L.push("économique, d'un comité social et économique d'établissement ou d'un comité");
+      L.push("social et économique central, SOIT À LA LIBRE DÉSIGNATION DE LEURS MEMBRES,");
+      L.push("notamment par la méconnaissance des dispositions des articles L. 2314-1 à");
+      L.push("L. 2314-9, est puni D'UN EMPRISONNEMENT D'UN AN ET D'UNE AMENDE DE 7 500 €.");
+      L.push("");
+      L.push("Le fait d'apporter une entrave À LEUR FONCTIONNEMENT RÉGULIER est puni D'UNE");
+      L.push("AMENDE DE 7 500 €. » (L. 2317-1)");
+      L.push("");
+      L.push("DEUX INFRACTIONS, DEUX PEINES. Le texte les sépare, et la différence n'est pas");
+      L.push("mince : l'emprisonnement d'un an n'est encouru que pour la première branche.");
+      L.push("Le classement des faits au paragraphe 3 n'est donc pas un exercice de style.");
+      L.push("");
+      L.push("  Ce que le texte NE DIT PAS, et que ce document n'écrira donc pas : il ne");
+      L.push("  dit pas ce qui constitue une entrave. Il vise « notamment » la");
+      L.push("  méconnaissance des articles L. 2314-1 à L. 2314-9 pour la première branche,");
+      L.push("  et rien de plus pour la seconde. L'appréciation reste entière.");
+      L.push("");
+
+      titre(L, "2 — Le relevé daté des faits signalés");
+      if (faits) {
+        L.push("  CE QUE LE DOSSIER SIGNALE, repris tel quel et sans commentaire :");
+        L.push("");
+        faits.split(/\n/).forEach(function (x) { L.push("     " + x); });
+        L.push("");
+        L.push("  Datez chacun de ces faits ci-dessous. Une description sans date ne permet");
+        L.push("  ni de savoir si les faits se poursuivent, ni de mesurer ce qui a été fait");
+        L.push("  depuis.");
+        L.push("");
+      } else {
+        L.push("  Aucun fait n'est décrit au dossier. Remplissez le tableau à partir des");
+        L.push("  signalements reçus : courriers du comité, mentions au procès-verbal,");
+        L.push("  observations de l'inspection du travail, courriers d'élus.");
+        L.push("");
+      }
+      L.push("  ┌────┬────────────┬──────────────────────────────┬────────────┬──────────┐");
+      L.push("  │ N° │ Date du    │ Fait signalé, décrit sans    │ Source du  │ Se       │");
+      L.push("  │    │ fait       │ qualification                │ signalement│ poursuit?│");
+      L.push("  ├────┼────────────┼──────────────────────────────┼────────────┼──────────┤");
+      L.push("  │ 1  │ [        ] │ [                          ] │ [        ] │ [oui/non]│");
+      L.push("  │ 2  │ [        ] │ [                          ] │ [        ] │ [oui/non]│");
+      L.push("  │ 3  │ [        ] │ [                          ] │ [        ] │ [oui/non]│");
+      L.push("  │ 4  │ [        ] │ [                          ] │ [        ] │ [oui/non]│");
+      L.push("  └────┴────────────┴──────────────────────────────┴────────────┴──────────┘");
+      L.push("");
+      L.push("  DEUX RÈGLES D'ÉCRITURE, et elles importent :");
+      L.push("");
+      L.push("  · DÉCRIVEZ, NE QUALIFIEZ PAS. « La réunion du 12 mars n'a pas été");
+      L.push("    convoquée » est un fait ; « entrave au fonctionnement » est une");
+      L.push("    qualification, et elle ne vous appartient pas.");
+      L.push("  · DATEZ CHAQUE FAIT SÉPARÉMENT. Un fait épuisé et un fait qui se poursuit");
+      L.push("    n'appellent pas la même mesure : le premier se régularise, le second se");
+      L.push("    fait cesser d'abord.");
+      L.push("");
+
+      titre(L, "3 — Le classement, selon la distinction du texte");
+      L.push("  A — FAITS TOUCHANT À LA CONSTITUTION DU COMITÉ OU À LA LIBRE DÉSIGNATION DE");
+      L.push("      SES MEMBRES (première branche de L. 2317-1 — un an d'emprisonnement et");
+      L.push("      7 500 € d'amende)");
+      L.push("");
+      L.push("      Le texte vise « notamment la méconnaissance des dispositions des");
+      L.push("      articles L. 2314-1 à L. 2314-9 ». Ces neuf articles ont été lus ; voici");
+      L.push("      ce que chacun impose, pour que le classement se fasse sur le texte :");
+      L.push("");
+      L.push("        [ ] L. 2314-1 — composition du comité : l'employeur et une délégation");
+      L.push("            du personnel comportant UN NOMBRE ÉGAL DE TITULAIRES ET DE");
+      L.push("            SUPPLÉANTS ; le suppléant assiste aux réunions en l'absence du");
+      L.push("            titulaire ; un référent en matière de lutte contre le harcèlement");
+      L.push("            sexuel et les agissements sexistes est désigné par le comité ;");
+      L.push("        [ ] L. 2314-2 — désignation par chaque organisation syndicale");
+      L.push("            représentative d'un REPRÉSENTANT SYNDICAL au comité, qui assiste");
+      L.push("            aux séances avec voix consultative ;");
+      L.push("        [ ] L. 2314-3 — présence, AVEC VOIX CONSULTATIVE, du médecin du");
+      L.push("            travail, du responsable interne du service de sécurité et des");
+      L.push("            autres personnes que ce texte désigne, aux réunions portant sur la");
+      L.push("            santé, la sécurité et les conditions de travail ;");
+      L.push("        [ ] L. 2314-4 — INFORMATION DU PERSONNEL tous les quatre ans de");
+      L.push("            l'organisation des élections, par tout moyen conférant date");
+      L.push("            certaine, avec la date envisagée du premier tour, qui doit se");
+      L.push("            tenir AU PLUS TARD LE QUATRE-VINGT-DIXIÈME JOUR suivant la");
+      L.push("            diffusion ;");
+      L.push("        [ ] L. 2314-5 — INVITATION DES ORGANISATIONS SYNDICALES à négocier le");
+      L.push("            protocole préélectoral et à établir leurs listes ;");
+      L.push("        [ ] L. 2314-6 — condition de VALIDITÉ DU PROTOCOLE : signature par la");
+      L.push("            majorité des organisations ayant participé à sa négociation, dont");
+      L.push("            les organisations représentatives ayant recueilli la majorité des");
+      L.push("            suffrages exprimés aux dernières élections ;");
+      L.push("        [ ] L. 2314-7 — modification du nombre de sièges ou du volume des");
+      L.push("            heures par le protocole, à la condition du volume global par");
+      L.push("            collège ;");
+      L.push("        [ ] L. 2314-8 — engagement de la procédure de L. 2314-5 À LA DEMANDE");
+      L.push("            d'un salarié ou d'une organisation syndicale, DANS LE MOIS suivant");
+      L.push("            la réception de cette demande ;");
+      L.push("        [ ] L. 2314-9 — établissement du PROCÈS-VERBAL DE CARENCE, sa");
+      L.push("            publicité auprès des salariés par tout moyen conférant date");
+      L.push("            certaine, et sa TRANSMISSION DANS LES QUINZE JOURS à l'agent de");
+      L.push("            contrôle de l'inspection du travail.");
+      L.push("");
+      L.push("      Le mot « notamment » signifie que la liste n'est pas limitative : un");
+      L.push("      fait touchant à la constitution ou à la libre désignation peut relever");
+      L.push("      de cette branche sans se rattacher à l'un de ces neuf articles.");
+      L.push("");
+      L.push("  B — FAITS TOUCHANT AU FONCTIONNEMENT RÉGULIER (seconde branche — 7 500 €");
+      L.push("      d'amende)");
+      L.push("");
+      L.push("      Le texte ne les énumère pas. Décrivez-les, sans les qualifier :");
+      L.push("");
+      L.push("        [ ] réunion non tenue ou non convoquée — le [date] ;");
+      L.push("        [ ] information ou document non remis — [lequel], le [date] ;");
+      L.push("        [ ] consultation non menée avant la décision — [laquelle], le [date] ;");
+      L.push("        [ ] moyens retirés ou non fournis — [lesquels], depuis le [date] ;");
+      L.push("        [ ] autre : [                                                    ].");
+      L.push("");
+      L.push("      [Ce classement est une PRÉPARATION à l'examen professionnel, non une");
+      L.push("      qualification. Cochez ce qui décrit les faits ; laissez à votre conseil");
+      L.push("      le soin de dire ce qu'ils sont.]");
+      L.push("");
+
+      titre(L, "4 — Les mesures : faire cesser, puis accomplir");
+      L.push("  A — CE QUI SE FAIT CESSER IMMÉDIATEMENT — sans attendre l'avis du conseil,");
+      L.push("      parce que chaque jour de plus est un jour de plus.");
+      L.push("");
+      L.push("        Fait n° [ ] · mesure : [rétablir les moyens retirés / convoquer la");
+      L.push("        réunion non tenue / communiquer l'information non remise] · prise le");
+      L.push("        [DATE] · pièce : [ ].");
+      L.push("");
+      L.push("        Fait n° [ ] · mesure : [ ] · prise le [DATE] · pièce : [ ].");
+      L.push("");
+      L.push("  B — L'ACTE OMIS, ACCOMPLI DANS LES FORMES QUI LUI SONT PROPRES");
+      L.push("");
+      L.push("      C'est le point où l'on se trompe le plus souvent : on annonce qu'on va");
+      L.push("      régulariser, et l'on omet la forme. Une réunion se convoque avec un");
+      L.push("      ordre du jour établi par le président ET le secrétaire (L. 2315-29) ;");
+      L.push("      une consultation suppose un délai d'examen suffisant et des informations");
+      L.push("      précises et écrites (L. 2312-15) ; une désignation suppose une");
+      L.push("      résolution adoptée à la majorité des membres présents (L. 2315-32).");
+      L.push("");
+      L.push("        Acte omis ................ [ ]");
+      L.push("        Forme requise ............ [ ] — texte : [ ]");
+      L.push("        Accompli le .............. [DATE]");
+      L.push("        Pièce ..................... [ ]");
+      L.push("        Consigné au procès-verbal du comité du [DATE] ? ...... [oui / non]");
+      L.push("");
+      L.push("      LA CONSIGNATION AU PROCÈS-VERBAL N'EST PAS UNE FORMALITÉ. Les");
+      L.push("      délibérations du comité sont consignées dans un procès-verbal établi par");
+      L.push("      le secrétaire (L. 2315-34) : c'est la seule trace contradictoire de ce");
+      L.push("      qui a été fait, et la seule qu'un tiers lira.");
+      L.push("");
+      L.push("  C — CE QUI NE PEUT PAS ÊTRE RÉPARÉ");
+      L.push("");
+      L.push("      Certains faits sont épuisés : une consultation qui n'a pas eu lieu avant");
+      L.push("      une décision déjà exécutée ne se rattrape pas à l'identique. Écrivez-le,");
+      L.push("      plutôt que de faire semblant :");
+      L.push("");
+      L.push("        Fait n° [ ] · ne peut être réparé en l'état, motif : [ ] · mesure");
+      L.push("        prise à la place : [ ].");
+      L.push("");
+
+      titre(L, "5 — La note de constat, datée et signée");
+      L.push("NOTE DE CONSTAT DES FAITS SIGNALÉS ET DES MESURES PRISES");
+      L.push("");
+      L.push(nom(ctx));
+      L.push("Établie le " + leJour(d0) + " par " + signataire(ctx) + ".");
+      L.push("");
+      L.push("1. FAITS SIGNALÉS — [reprendre le tableau du paragraphe 2, daté].");
+      L.push("");
+      L.push("2. CLASSEMENT — [reprendre le paragraphe 3, sans qualification pénale].");
+      L.push("");
+      L.push("3. MESURES DE CESSATION — [reprendre le A du paragraphe 4, avec les dates].");
+      L.push("");
+      L.push("4. ACTES ACCOMPLIS — [reprendre le B, avec les formes suivies et les dates de");
+      L.push("   consignation au procès-verbal].");
+      L.push("");
+      L.push("5. EXAMEN PROFESSIONNEL — les faits ont été soumis à [conseil] le [DATE].");
+      L.push("   La présente note ne comporte aucune qualification : elle constate et elle");
+      L.push("   date.");
+      L.push("");
+      L.push("Signature : " + signataire(ctx));
+      L.push("");
+      L.push("  POURQUOI CETTE NOTE EST SIGNÉE ET DATÉE — parce que la date à laquelle");
+      L.push("  l'employeur a su, et celle à laquelle il a agi, sont les deux seules choses");
+      L.push("  qui distinguent celui qui a laissé faire de celui qui a corrigé.");
+      L.push("");
+
+      courrier(L, 1, "information du comité des mesures prises", [
+        "Aucun texte lu n'impose ce courrier. Il est là parce qu'une régularisation que",
+        "le comité ignore ne produit aucun de ses effets utiles.",
+      ]);
+      papier(L, ctx, ["Aux membres de la délégation du personnel",
+                      "du comité social et économique"]);
+      L.push("Objet : suites données aux points signalés");
+      L.push("");
+      L.push("Mesdames, Messieurs,");
+      L.push("");
+      L.push("Vous avez appelé l'attention de la direction sur [rappeler les faits, sans les");
+      L.push("qualifier], par [courrier / mention au procès-verbal] du [DATE].");
+      L.push("");
+      L.push("Les mesures suivantes ont été prises :");
+      L.push("");
+      L.push("  · [mesure], le [DATE] ;");
+      L.push("  · [mesure], le [DATE] ;");
+      L.push("  · [acte omis accompli], le [DATE].");
+      L.push("");
+      L.push("Je vous propose d'inscrire ce point à l'ordre du jour de la prochaine réunion,");
+      L.push("afin que ces mesures soient consignées au procès-verbal et que vous puissiez");
+      L.push("faire connaître vos observations.");
+      L.push("");
+      salutation(L, ctx);
+      L.push("");
+
+      courrier(L, 2, "saisine du conseil", [
+        "L'entrave est une infraction pénale : la base détecte, elle ne qualifie pas.",
+        "Ce courrier confie la qualification à qui elle revient, et lui donne les faits",
+        "datés plutôt qu'une inquiétude.",
+      ]);
+      papier(L, ctx, ["À l'attention de [conseil / avocat]", "[adresse]"]);
+      L.push("Objet : faits signalés concernant le comité social et économique — demande");
+      L.push("d'examen");
+      L.push("");
+      L.push("Maître, [ou Madame, Monsieur,]");
+      L.push("");
+      L.push("Des faits concernant le fonctionnement du comité social et économique de");
+      L.push(nom(ctx) + " ont été signalés. Je vous en adresse le relevé daté, ainsi que le");
+      L.push("constat des mesures prises.");
+      L.push("");
+      L.push("Je ne procède à aucune qualification : l'article L. 2317-1 du code du travail");
+      L.push("punit l'entrave à la constitution du comité et à la libre désignation de ses");
+      L.push("membres d'un an d'emprisonnement et de 7 500 € d'amende, et l'entrave à son");
+      L.push("fonctionnement régulier de 7 500 € d'amende. Cette qualification relève de");
+      L.push("votre appréciation, non de la mienne.");
+      L.push("");
+      L.push("Je souhaiterais votre avis sur :");
+      L.push("");
+      L.push("  1. la portée des faits relevés au regard de ce texte, et la distinction");
+      L.push("     entre ses deux branches ;");
+      L.push("  2. le caractère suffisant des mesures déjà prises, et celles qu'il");
+      L.push("     conviendrait d'ajouter ;");
+      L.push("  3. les actes qui devraient être repris, et dans quelles formes.");
+      L.push("");
+      salutation(L, ctx, "Je vous prie d'agréer, Maître, l'expression de ma considération distinguée.");
+      L.push("Pièces jointes : relevé daté des faits · note de constat · procès-verbaux et");
+      L.push("courriers cités.");
+
+      calendrier(L, [
+        "Aujourd'hui, " + leJour(d0) + " — deux choses, et dans cet ordre : vous FAITES CESSER ce",
+        "qui se poursuit, et vous DATEZ les faits. La cessation ne se planifie pas ; le",
+        "relevé, si.",
+        "",
+        "Le même jour — courrier 2 au conseil. L'entrave est pénale : plus tôt les faits",
+        "lui parviennent datés, mieux ils seront appréciés.",
+        "",
+        "Dans la semaine, soit avant le " + leJour(dans(d0, 7)) + " — l'acte omis est accompli dans",
+        "les formes qui lui sont propres. Une convocation, une communication, une",
+        "consultation : chacune a sa forme, et c'est la forme qui régularise.",
+        "",
+        "À la prochaine réunion du comité — les mesures sont consignées au procès-verbal",
+        "(L. 2315-34) et le courrier 1 a été adressé. Sans cette consignation, la",
+        "régularisation existe pour vous seul.",
+        "",
+        "Dans les deux mois, soit avant le " + leJour(dans(d0, 61)) + " — vous reprenez le relevé et",
+        "vous vérifiez, fait par fait, que rien ne s'est reconstitué. Un fait qui",
+        "réapparaît après régularisation ne se lit pas du tout comme un fait isolé.",
+      ]);
+
+      return pied(L,
+        ["L. 2312-15", "L. 2314-1", "L. 2314-2", "L. 2314-3", "L. 2314-4",
+         "L. 2314-5", "L. 2314-6", "L. 2314-7", "L. 2314-8", "L. 2314-9",
+         "L. 2315-29", "L. 2315-32", "L. 2315-34", "L. 2317-1"]);
     },
   });
 
