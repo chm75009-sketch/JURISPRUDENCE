@@ -1457,5 +1457,957 @@
     },
   });
 
-/* ==SUITE== */
+  /* ══════════════════════════════════════════════════════════════════════
+     DIS-CTL-SAN-10 — LA DÉCISION ÉCRITE ET MOTIVÉE
+
+     Trois exigences dans une seule phrase de R. 1332-2 : écrite, motivée,
+     notifiée par l'une des deux voies. La deuxième est celle qui se perd —
+     « votre comportement inadapté » n'est pas une motivation, et une sanction
+     qui n'énonce pas ses griefs ne met le salarié en mesure de rien.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("DIS-CTL-SAN-10", {
+    nom: "La lettre de notification de la sanction — décision écrite et motivée",
+    detail: "Les trois exigences confrontées au dossier, la lettre de notification " +
+            "avec ses variantes par nature de sanction, le récépissé, et le retrait " +
+            "de la sanction notifiée sans écrit ou sans motifs.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {}, s = f.sanction || {}, ri = f.ri || {};
+      var m = mesureDe(ctx);
+      var d0 = aujourd(ctx);
+      var b = bornesNotification(s.dateEntretien);
+      var L = entete(ctx, "Notification de la sanction disciplinaire",
+        "articles R. 1332-2 et L. 1332-2 du code du travail");
+
+      L.push("LES DEUX TEXTES, EN ENTIER");
+      L.push("");
+      L.push("« La sanction prévue à l'article L. 1332-2 fait l'objet d'une décision");
+      L.push("écrite et motivée. La décision est notifiée au salarié soit par lettre");
+      L.push("remise contre récépissé, soit par lettre recommandée, dans le délai d'un");
+      L.push("mois prévu par l'article L. 1332-2 » (R. 1332-2).");
+      L.push("");
+      L.push("Et L. 1332-2 le dit dans les mêmes termes : la sanction « est motivée et");
+      L.push("notifiée à l'intéressé ».");
+      L.push("");
+      L.push("TROIS EXIGENCES, ET LA DEUXIÈME EST CELLE QU'ON PERD");
+      L.push("");
+      L.push("  1. ÉCRITE. Une sanction annoncée oralement n'est pas notifiée. Un");
+      L.push("     entretien où l'employeur dit « ce sera un blâme » ne vaut pas");
+      L.push("     décision : le blâme n'existe qu'écrit.");
+      L.push("");
+      L.push("  2. MOTIVÉE. La lettre énonce LES FAITS REPROCHÉS, datés et");
+      L.push("     circonstanciés. « Votre comportement », « vos manquements répétés »,");
+      L.push("     « la dégradation de votre attitude » ne sont pas des motifs : ils ne");
+      L.push("     mettent pas le salarié en mesure de discuter, et ils ne permettent");
+      L.push("     pas au conseil de prud'hommes d'apprécier si « les faits reprochés");
+      L.push("     au salarié sont de nature à justifier une sanction » (L. 1333-1).");
+      L.push("     Une motivation vague se retourne d'ailleurs contre l'employeur au");
+      L.push("     stade de la preuve : « L'employeur fournit au conseil de prud'hommes");
+      L.push("     les éléments retenus pour prendre la sanction » (L. 1333-1) — encore");
+      L.push("     faut-il savoir lesquels.");
+      L.push("");
+      L.push("  3. NOTIFIÉE PAR L'UNE DES DEUX VOIES : lettre remise contre récépissé,");
+      L.push("     ou lettre recommandée. Le texte n'en ouvre pas d'autre. Et dans le");
+      L.push("     délai d'un mois de L. 1332-2 — ce que le générateur DIS-CTL-SAN-09");
+      L.push("     calcule.");
+      L.push("");
+      L.push("CE QUE LE DOSSIER DÉCLARE");
+      L.push("");
+      L.push("  Nature de la sanction ................ " +
+        (m.nature ? m.nature : "[non renseignée]"));
+      L.push("  Sanction prévue par le règlement ..... " + etat(s.prevueRI, "oui", "NON"));
+      L.push("  1. décision écrite ................... " +
+        etat(s.notificationEcrite, "oui", "NON — à reprendre"));
+      L.push("  2. décision motivée .................. " +
+        etat(s.notificationMotivee, "oui", "NON — à reprendre"));
+      L.push("  3. mode de notification .............. " +
+        (rempli(s.notificationRemise)
+          ? (s.notificationRemise === "récépissé" || s.notificationRemise === "lettre recommandée"
+             ? s.notificationRemise + " — l'une des deux voies de R. 1332-2"
+             : String(s.notificationRemise) + " — HORS DES DEUX VOIES DE R. 1332-2")
+          : "[non renseigné]"));
+      L.push("  Date de la notification .............. " +
+        jour(s.dateNotification, "non renseignée"));
+      L.push("");
+
+      if (m.licenciement) {
+        L.push("R. 1332-2 NE RÉGIT PAS VOTRE MESURE.");
+        L.push("");
+        L.push("La mesure déclarée est un licenciement disciplinaire, et L. 1333-3 écarte");
+        L.push("le présent chapitre : la forme et la motivation de la lettre de");
+        L.push("licenciement obéissent aux règles du licenciement, que l'application n'a");
+        L.push("pas lues. Elle n'écrit donc pas cette lettre, et ne vous en propose pas");
+        L.push("de modèle.");
+        L.push("");
+        L = L.concat(blocPrescription(ctx));
+        L = L.concat(blocProtege(ctx));
+        return L.concat(pied("R. 1332-2, L. 1332-2, L. 1333-3, L. 1332-4, L. 1333-1, " +
+          "L. 1333-2", NOTE_ANNULATION)).join("\n");
+      }
+
+      if (estNon(s.notificationEcrite) || estNon(s.notificationMotivee)) {
+        L.push(GROS);
+        L.push("PIÈCE 1 — RETRAIT DE LA SANCTION NOTIFIÉE SANS ÉCRIT OU SANS MOTIFS");
+        L.push(GROS);
+        L.push("");
+        L.push("Le dossier déclare que la décision " +
+          (estNon(s.notificationEcrite) ? "n'a pas fait l'objet d'un écrit" : "n'est pas motivée") +
+          ".");
+        L.push("");
+        L.push("Une lettre motivée envoyée après coup ne répare pas : elle notifierait");
+        L.push("une seconde fois une sanction déjà prise, et hors du mois de L. 1332-2");
+        L.push("si celui-ci est écoulé. Ce qui se fait, c'est le retrait — puis, si le");
+        L.push("délai de deux mois de L. 1332-4 le permet, une procédure reprise.");
+        L.push("");
+        L = L.concat(teteLettre(ctx, true));
+        L.push("Objet : retrait de la mesure notifiée le " +
+          jour(s.dateNotification, "date"));
+        L.push("");
+        L.push("Madame, Monsieur,");
+        L.push("");
+        L.push("Il vous a été notifié le " + jour(s.dateNotification, "date") +
+          " [rappeler la mesure :");
+        L.push((m.nature || "[nature de la mesure]") + "].");
+        L.push("");
+        L.push("L'article R. 1332-2 du code du travail dispose que la sanction fait");
+        L.push("l'objet d'une décision écrite et motivée, notifiée au salarié par lettre");
+        L.push("remise contre récépissé ou par lettre recommandée. Ces conditions");
+        L.push("n'ayant pas été respectées, je retire cette mesure.");
+        L.push("");
+        L.push("Elle est réputée n'avoir jamais été prononcée. Toute mention en sera");
+        L.push("supprimée de votre dossier individuel[, et ses effets sur votre");
+        L.push("rémunération seront régularisés sur la prochaine paie].");
+        L.push("");
+        L = L.concat(signature(ctx));
+        L.push("");
+        L.push("");
+      }
+
+      var n = (estNon(s.notificationEcrite) || estNon(s.notificationMotivee)) ? 2 : 1;
+
+      L.push(GROS);
+      L.push("PIÈCE " + n + " — LETTRE DE NOTIFICATION DE LA SANCTION");
+      L.push(GROS);
+      L.push("");
+      L = L.concat(teteLettre(ctx, true));
+      L.push("Objet : notification d'une sanction disciplinaire");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Vous avez été convoqué(e) par lettre du " +
+        jour(s.dateConvocation, "date") + " à un entretien préalable");
+      L.push("qui s'est tenu le " + jour(s.dateEntretien, "date") +
+        ", au cours duquel je vous ai indiqué le");
+      L.push("motif de la sanction envisagée et recueilli vos explications.");
+      L.push("");
+      L.push("[Si le salarié ne s'est pas présenté : « … qui s'est tenu le [DATE], et");
+      L.push(" auquel vous ne vous êtes pas présenté(e). » Ne taisez pas son absence :");
+      L.push(" elle explique que vos explications ne figurent pas ci-dessous.]");
+      L.push("");
+      L = L.concat(blocGriefs("Les faits qui vous sont reprochés sont les suivants :"));
+      L.push("[Ajouter, pour chaque fait : la règle à laquelle il contrevient — article");
+      L.push(" du règlement intérieur, consigne écrite, instruction — et la pièce qui");
+      L.push(" l'établit.]");
+      L.push("");
+      L.push("[Reprendre ici les explications que vous avez données lors de l'entretien,");
+      L.push(" et dire pourquoi elles ne conduisent pas à renoncer. Cette partie n'est");
+      L.push(" imposée par aucun texte lu — mais une lettre qui ignore ce que le salarié");
+      L.push(" a répondu laisse penser qu'on ne l'a pas écouté, alors que L. 1332-2");
+      L.push(" impose de recueillir ses explications.]");
+      L.push("");
+      L.push("En conséquence, je vous notifie la sanction suivante :");
+      L.push("");
+      if (m.nature === "mise à pied disciplinaire") {
+        L.push("     UNE MISE À PIED DISCIPLINAIRE DE [NOMBRE] JOUR(S),");
+        L.push("     du [DATE DE DÉBUT] au [DATE DE FIN] inclus.");
+        L.push("");
+        L.push("Pendant cette période, votre contrat de travail est suspendu et votre");
+        L.push("rémunération n'est pas due.");
+        L.push("");
+        L.push("[TROIS VÉRIFICATIONS AVANT DE SIGNER :");
+        L.push(" · la mise à pied disciplinaire figure-t-elle dans l'échelle des");
+        L.push("   sanctions du règlement intérieur en vigueur à ce jour ?" +
+          (rempli(s.prevueRI) ? " Le dossier déclare : " + etat(s.prevueRI, "oui", "NON") + "." : ""));
+        L.push(" · le règlement précise-t-il sa DURÉE MAXIMALE, et la durée notifiée");
+        L.push("   ci-dessus la respecte-t-elle ?" +
+          (rempli(ri.misePiedDureeMaxJours)
+            ? " Le dossier porte un maximum de " + ri.misePiedDureeMaxJours + " jours."
+            : ""));
+        L.push(" · la retenue de paie porte-t-elle exactement sur ces jours, et sur");
+        L.push("   aucun autre ? Au-delà, elle n'a plus de support disciplinaire et");
+        L.push("   tombe sous l'interdiction des sanctions pécuniaires (L. 1331-2).");
+        L.push(" Les générateurs DIS-CTL-SAN-03 et DIS-CTL-SAN-04 de cette application");
+        L.push(" traitent des deux premiers points.]");
+      } else if (m.nature === "mutation disciplinaire" || m.nature === "rétrogradation") {
+        L.push("     [NOMMER LA SANCTION telle que l'échelle du règlement intérieur la");
+        L.push("      nomme], à effet du [DATE].");
+        L.push("");
+        L.push("[AVERTISSEMENT PROPRE À CETTE SANCTION : la mutation disciplinaire et la");
+        L.push(" rétrogradation modifient le contrat de travail. Elles ne peuvent pas");
+        L.push(" être imposées : le salarié peut les refuser, et son refus n'est pas en");
+        L.push(" lui-même une faute nouvelle. L'employeur doit alors renoncer, ou");
+        L.push(" engager une autre procédure sur les faits initiaux — sous réserve du");
+        L.push(" délai de deux mois de L. 1332-4. Prévoyez la lettre par laquelle vous");
+        L.push(" lui demandez de se prononcer, et le délai que vous lui laissez.]");
+      } else {
+        L.push("     [NOMMER LA SANCTION telle que l'échelle du règlement intérieur la");
+        L.push("      nomme — avertissement, blâme, ou autre], à effet du [DATE].");
+        L.push("");
+        L.push("[Ne prononcez aucune sanction qui ne figure pas dans cette échelle :");
+        L.push(" c'est l'objet du générateur DIS-CTL-SAN-03 de cette application.]");
+      }
+      L.push("");
+      L.push("Cette sanction sera versée à votre dossier individuel.");
+      L.push("");
+      L.push("[NE PAS ÉCRIRE ICI : « en cas de récidive, un licenciement serait");
+      L.push(" prononcé ». Une menace n'est pas une motivation, elle annonce une");
+      L.push(" décision non prise sur des faits non survenus, et elle se retourne. Si");
+      L.push(" votre règlement intérieur ou votre convention collective subordonnent le");
+      L.push(" licenciement à des sanctions antérieures, la conséquence se lira dans le");
+      L.push(" texte, sans qu'il soit besoin de l'annoncer.]");
+      L.push("");
+      L = L.concat(signature(ctx));
+      L.push("Notification : par lettre remise contre récépissé daté et signé, ou par");
+      L.push("lettre recommandée (R. 1332-2). Conservez la preuve : c'est elle qui fixe");
+      L.push("la date de la sanction.");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE " + (n + 1) + " — RÉCÉPISSÉ DE REMISE");
+      L.push(GROS);
+      L.push("");
+      L.push("     RÉCÉPISSÉ DE REMISE EN MAIN PROPRE");
+      L.push("");
+      L.push("     Je soussigné(e) [NOM, PRÉNOM], [fonction], reconnais avoir reçu ce");
+      L.push("     jour, en main propre, la lettre de " + nomDe(ctx) + " datée du");
+      L.push("     [DATE] me notifiant une sanction disciplinaire.");
+      L.push("");
+      L.push("     Fait à " + lieu(ctx) + ", le [DATE DE LA REMISE].");
+      L.push("");
+      L.push("     Signature du salarié : ................");
+      L.push("");
+      L.push("     [EN CAS DE REFUS DE SIGNER : adressez la lettre par recommandé le");
+      L.push("      jour même. C'est l'autre voie de R. 1332-2, et elle est ouverte sans");
+      L.push("      condition. La date qui comptera sera celle de cet envoi.]");
+      L.push("");
+      L.push("En deux exemplaires : un pour le salarié, un pour le dossier.");
+      L.push("");
+      L.push("");
+
+      if (b) {
+        L.push(GROS);
+        L.push("LA DATE À LAQUELLE CETTE LETTRE DOIT PARTIR");
+        L.push(GROS);
+        L.push("");
+        L.push("Entre le " + jour(b.basse) + " et le " + jour(b.hauteProrogee) +
+          (b.prorogee ? " (terme prorogé depuis le " + jour(b.haute) + ")" : "") + ".");
+        L.push("Le générateur DIS-CTL-SAN-09 détaille ce calcul et ses réserves — les");
+        L.push("jours fériés ou chômés, que l'application ne tient pas.");
+        L.push("");
+        L.push("");
+      }
+
+      L = L.concat(blocBornes(ctx));
+      L = L.concat(blocPrescription(ctx));
+      L = L.concat(blocProtege(ctx));
+
+      L.push(GROS);
+      L.push("VOTRE CALENDRIER");
+      L.push(GROS);
+      L.push("");
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous écrivez les griefs, datés et");
+      L.push("circonstanciés, et vous rassemblez les pièces qui les établissent. C'est");
+      L.push("le travail réel ; le reste de la lettre est de la forme.");
+      L.push("");
+      L.push("Avant de signer — vous relisez trois choses : la sanction figure-t-elle");
+      L.push("dans l'échelle du règlement intérieur ? les griefs sont-ils écrits de");
+      L.push("façon qu'un tiers puisse les comprendre ? la date d'envoi tombe-t-elle");
+      L.push("dans la fenêtre ?");
+      L.push("");
+      L.push("Le jour de l'envoi — récépissé ou dépôt du recommandé, et la preuve au");
+      L.push("dossier.");
+      L.push("");
+      L.push("Ensuite — versement au dossier individuel, et si la sanction emporte des");
+      L.push("effets de paie, consigne écrite au service ou au prestataire, portant les");
+      L.push("dates exactes.");
+
+      return L.concat(pied("R. 1332-2, L. 1332-2, R. 1332-3, L. 1332-1, L. 1331-1, " +
+        "L. 1331-2, L. 1332-4, L. 1333-1, L. 1333-2, L. 1333-3, L. 1321-1, 3°",
+        NOTE_ANNULATION)).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     DIS-CTL-SAN-11 — LA MISE À PIED CONSERVATOIRE
+
+     Une mesure d'attente, et tout le danger tient dans ce mot : une mise à pied
+     conservatoire qui n'est suivie de rien n'est plus une mesure d'attente,
+     c'est une sanction — non notifiée, non motivée, et assortie d'une retenue
+     de salaire. L. 1332-3 ferme la porte dans l'autre sens : aucune sanction
+     définitive sur ces faits sans que la procédure de L. 1332-2 ait été suivie.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("DIS-CTL-SAN-11", {
+    nom: "La mise à pied conservatoire et la procédure qui doit la suivre",
+    detail: "L'écrit qui la qualifie de conservatoire, la convocation engagée sans " +
+            "délai, la fiche d'enchaînement des dates, la consigne de paie et le " +
+            "traitement du cas où rien n'a suivi.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {}, s = f.sanction || {};
+      var m = mesureDe(ctx);
+      var d0 = aujourd(ctx);
+      var L = entete(ctx, "Mise à pied conservatoire et procédure disciplinaire",
+        "article L. 1332-3 du code du travail");
+
+      L.push("LE TEXTE, EN ENTIER — IL TIENT EN UNE PHRASE");
+      L.push("");
+      L.push("« Lorsque les faits reprochés au salarié ont rendu indispensable une");
+      L.push("mesure conservatoire de mise à pied à effet immédiat, aucune sanction");
+      L.push("définitive relative à ces faits ne peut être prise sans que la procédure");
+      L.push("prévue à l'article L. 1332-2 ait été respectée » (L. 1332-3).");
+      L.push("");
+      L.push("CE QUE CETTE PHRASE DIT, ET CE QU'ELLE NE DIT PAS");
+      L.push("");
+      L.push("  · elle suppose que les faits aient RENDU INDISPENSABLE la mesure. Ce");
+      L.push("    n'est pas un mot de style : la mise à pied conservatoire prive le");
+      L.push("    salarié de son travail et de sa rémunération avant toute décision, et");
+      L.push("    ce caractère indispensable se discutera. Écrivez pourquoi ;");
+      L.push("");
+      L.push("  · elle est à EFFET IMMÉDIAT : elle ne se prononce pas trois semaines");
+      L.push("    après les faits. Un employeur qui a laissé le salarié travailler");
+      L.push("    quinze jours dira difficilement que son éloignement était");
+      L.push("    indispensable ;");
+      L.push("");
+      L.push("  · LA MISE À PIED CONSERVATOIRE N'EST PAS UNE SANCTION. Elle attend la");
+      L.push("    décision, elle ne la remplace pas. C'est pourquoi elle ne s'annonce");
+      L.push("    jamais dans les termes d'une sanction — ni « je vous sanctionne d'une");
+      L.push("    mise à pied », ni la mention d'une durée fixée à l'avance comme une");
+      L.push("    peine ;");
+      L.push("");
+      L.push("  · elle N'INTERROMPT PAS le délai de deux mois de L. 1332-4, et elle ne");
+      L.push("    dispense d'aucune formalité. Elle ouvre l'urgence, pas un sursis.");
+      L.push("");
+      L.push("LES DEUX RISQUES, ET ILS SE CUMULENT");
+      L.push("");
+      L.push("  1. LA SANCTION DÉFINITIVE PRISE SANS LA PROCÉDURE est prohibée par");
+      L.push("     L. 1332-3 lui-même. Elle est irrégulière en la forme, et le conseil");
+      L.push("     de prud'hommes peut l'annuler (L. 1333-2).");
+      L.push("");
+      L.push("  2. LA MISE À PIED CONSERVATOIRE LAISSÉE SANS SUITE risque d'être");
+      L.push("     regardée comme une sanction — c'est-à-dire, au sens de L. 1331-1,");
+      L.push("     comme « toute mesure, autre que les observations verbales, prise par");
+      L.push("     l'employeur à la suite d'un agissement du salarié considéré par");
+      L.push("     l'employeur comme fautif, [affectant] immédiatement ou non la");
+      L.push("     présence du salarié dans l'entreprise […] ou sa rémunération ». Une");
+      L.push("     sanction, donc, prononcée sans écrit, sans motivation et sans");
+      L.push("     entretien — avec la retenue de salaire qui l'accompagne.");
+      L.push("");
+      L.push("CE QUE LE DOSSIER DÉCLARE");
+      L.push("");
+      L.push("  Mise à pied conservatoire prononcée ... " +
+        etat(s.misePiedConservatoire, "OUI", "non"));
+      L.push("  Convocation envoyée ................... " +
+        etat(s.convocationEnvoyee, "oui", "NON") +
+        (estISO(s.dateConvocation) ? " — le " + jour(s.dateConvocation) : ""));
+      L.push("  Entretien tenu ........................ " +
+        etat(s.entretienTenu, "oui", "NON") +
+        (estISO(s.dateEntretien) ? " — le " + jour(s.dateEntretien) : ""));
+      L.push("  Sanction définitive notifiée .......... " +
+        jour(s.dateNotification, "non renseignée"));
+      L.push("  Nature de la sanction ................. " +
+        (m.nature ? m.nature : "[non renseignée]"));
+      L.push("");
+
+      if (estNon(s.misePiedConservatoire)) {
+        L.push("VOTRE DOSSIER NE DÉCLARE AUCUNE MISE À PIED CONSERVATOIRE. L. 1332-3");
+        L.push("n'a donc pas d'objet en l'état, et les pièces ci-dessous sont écrites");
+        L.push("pour le jour où la question se posera. Gardez-les : cette mesure se");
+        L.push("prend dans l'urgence, et c'est dans l'urgence qu'on l'écrit mal.");
+        L.push("");
+      }
+
+      if (estOui(s.misePiedConservatoire) &&
+          (estNon(s.convocationEnvoyee) || estNon(s.entretienTenu))) {
+        L.push("VOTRE DOSSIER EST DANS LE CAS QUE L. 1332-3 INTERDIT : une mise à pied");
+        L.push("conservatoire a été prononcée, mais " +
+          (estNon(s.convocationEnvoyee) ? "aucune convocation n'a été envoyée" :
+           "l'entretien n'a pas été tenu") + ".");
+        L.push("");
+        L.push("NE PRONONCEZ AUCUNE SANCTION DÉFINITIVE sur ces faits en l'état : le");
+        L.push("texte l'interdit tant que la procédure de L. 1332-2 n'a pas été");
+        L.push("respectée. Deux choses à faire, dans cet ordre :");
+        L.push("");
+        L.push("  1. vérifier immédiatement le délai de deux mois de L. 1332-4, rappelé");
+        L.push("     plus bas. S'il est encore ouvert, engagez la procédure aujourd'hui");
+        L.push("     (pièce 2) ;");
+        L.push("  2. mettre fin à la mise à pied conservatoire si elle court encore, et");
+        L.push("     décider du sort de la rémunération de cette période (pièce 4). Une");
+        L.push("     mise à pied conservatoire qui ne débouche sur aucune sanction ne");
+        L.push("     justifie plus la retenue.");
+        L.push("");
+      }
+
+      L.push(GROS);
+      L.push("PIÈCE 1 — NOTIFICATION DE LA MISE À PIED CONSERVATOIRE");
+      L.push(GROS);
+      L.push("");
+      L.push("À remettre le jour même. La qualification est tout : écrivez");
+      L.push("« conservatoire », écrivez « dans l'attente », et n'écrivez jamais");
+      L.push("« sanction ».");
+      L.push("");
+      L = L.concat(teteLettre(ctx, true));
+      L.push("Objet : mise à pied conservatoire");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("[EXPOSER SANS QUALIFIER les faits qui ont conduit à cette mesure : ce qui");
+      L.push(" est survenu, quel jour, à quelle heure, où. L'application ne les connaît");
+      L.push(" pas et ne les inventera pas. À ce stade, écrivez « les faits qui vous");
+      L.push(" sont reprochés » ou « les faits portés à ma connaissance » — la");
+      L.push(" qualification viendra, ou ne viendra pas, à l'issue de la procédure.]");
+      L.push("");
+      L.push("Ces faits rendent indispensable votre éloignement immédiat de");
+      L.push("l'entreprise, pour la raison suivante : [ÉCRIRE POURQUOI — risque pour la");
+      L.push("sécurité des personnes, risque pour les biens ou les données, nécessité");
+      L.push("de préserver le déroulement de vérifications, impossibilité de maintenir");
+      L.push("les personnes concernées en présence. C'est cette phrase qui sera lue en");
+      L.push("premier si la mesure est discutée : ne la laissez pas vide.]");
+      L.push("");
+      L.push("Je prononce en conséquence, à effet immédiat, votre MISE À PIED À TITRE");
+      L.push("CONSERVATOIRE, à compter du [DATE] à [HEURE].");
+      L.push("");
+      L.push("CETTE MESURE N'EST PAS UNE SANCTION. Elle est prise dans l'attente de la");
+      L.push("décision qui sera arrêtée à l'issue de la procédure disciplinaire engagée");
+      L.push("par la lettre de convocation qui vous est remise en même temps que la");
+      L.push("présente.");
+      L.push("");
+      L.push("Pendant cette période, vous n'avez pas à vous présenter dans les locaux de");
+      L.push("l'entreprise[, sauf pour l'entretien préalable auquel vous êtes");
+      L.push("convoqué(e)], et vous devez rester joignable à [coordonnées].");
+      L.push("");
+      L.push("[SUR LA RÉMUNÉRATION : n'annoncez ici une retenue que si vous avez arrêté");
+      L.push(" votre position, et sachez qu'elle dépendra de la suite. Si aucune");
+      L.push(" sanction n'est finalement prononcée, ou si la sanction retenue n'est pas");
+      L.push(" une mise à pied disciplinaire couvrant ces jours, la retenue perd son");
+      L.push(" support et tombe sous l'interdiction des sanctions pécuniaires");
+      L.push(" (L. 1331-2), que le générateur DIS-CTL-SAN-02 de cette application");
+      L.push(" traite. La formule prudente : « Le sort de votre rémunération pour cette");
+      L.push(" période sera arrêté à l'issue de la procédure. »]");
+      L.push("");
+      L = L.concat(signature(ctx));
+      L.push("Remise : contre récépissé daté et signé, ou par lettre recommandée. La");
+      L.push("date et l'heure comptent : c'est l'effet immédiat qui justifie la mesure.");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 2 — CONVOCATION À L'ENTRETIEN PRÉALABLE, REMISE EN MÊME TEMPS");
+      L.push(GROS);
+      L.push("");
+      L.push("Les deux lettres partent ensemble. C'est la seule manière d'établir que");
+      L.push("la mise à pied était bien une mesure d'attente : elle attendait quelque");
+      L.push("chose, et ce quelque chose a été engagé le jour même.");
+      L.push("");
+      L = L.concat(teteLettre(ctx, true));
+      L.push("Objet : convocation à un entretien préalable à une éventuelle sanction");
+      L.push("disciplinaire");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Je vous convoque à un entretien préalable à une éventuelle sanction");
+      L.push("disciplinaire.");
+      L.push("");
+      L.push("Cet entretien se tiendra :");
+      L.push("     le ....... [DATE]");
+      L.push("     à ........ [HEURE]");
+      L.push("     à ........ [LIEU PRÉCIS]");
+      L.push("");
+      L.push("Au cours de cet entretien, je vous indiquerai le motif de la sanction");
+      L.push("envisagée et je recueillerai vos explications (L. 1332-2).");
+      L.push("");
+      L.push("Vous pouvez vous faire assister par une personne de votre choix");
+      L.push("appartenant au personnel de l'entreprise.");
+      L.push("");
+      L.push("Il est rappelé que la mise à pied conservatoire qui vous est notifiée");
+      L.push("séparément n'est pas une sanction : elle est prise dans l'attente de la");
+      L.push("décision qui sera arrêtée à l'issue de la présente procédure.");
+      L.push("");
+      L = L.concat(signature(ctx));
+      L.push("");
+      L.push("[Les quatre exigences de R. 1332-1 sont détaillées, avec leur grille de");
+      L.push(" contrôle, par le générateur DIS-CTL-SAN-08 de cette application.]");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 3 — FICHE D'ENCHAÎNEMENT DES DATES");
+      L.push(GROS);
+      L.push("");
+      L.push("C'est cette suite de dates qui dira si la mise à pied était");
+      L.push("conservatoire. Une seule feuille, en tête du dossier.");
+      L.push("");
+      L.push("  1. Faits portés à la connaissance de l'employeur .. " +
+        jour(s.dateConnaissance, "À PORTER"));
+      L.push("  2. Mise à pied conservatoire, début .............. [DATE] à [HEURE]");
+      L.push("  3. Remise de la convocation ...................... " +
+        jour(s.dateConvocation, "À PORTER"));
+      L.push("     [MÊME JOUR QUE LE 2, ou le lendemain au plus tard. Chaque jour");
+      L.push("      d'écart affaiblit la qualification de mesure d'attente.]");
+      L.push("  4. Entretien préalable ........................... " +
+        jour(s.dateEntretien, "À PORTER"));
+      L.push("  5. Notification de la sanction définitive ........ " +
+        jour(s.dateNotification, "À PORTER"));
+      L.push("     [Dans les bornes de L. 1332-2 : voir plus bas.]");
+      L.push("  6. Fin de la mise à pied conservatoire ........... [DATE]");
+      L.push("     [Elle prend fin au plus tard à la notification. Une mise à pied");
+      L.push("      conservatoire qui continue après la décision n'attend plus rien.]");
+      L.push("");
+      if (estISO(s.dateConvocation) && estISO(s.dateNotification)) {
+        var duree = ecartJours(s.dateConvocation, s.dateNotification);
+        L.push("  Dans votre dossier, " + duree + " jours séparent la convocation de la");
+        L.push("  notification. C'est l'ordre de grandeur de la période pendant laquelle");
+        L.push("  le salarié a pu être écarté : plus il est grand, plus le caractère");
+        L.push("  conservatoire de la mesure se discutera.");
+        L.push("");
+      }
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 4 — CONSIGNE DE PAIE, À ÉCRIRE APRÈS LA DÉCISION");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx) + " — note interne du " + leJour(d0));
+      L.push("Objet : traitement en paie de la période de mise à pied conservatoire");
+      L.push("");
+      L.push("  Période concernée : du [DATE] au [DATE].");
+      L.push("");
+      L.push("  Décision prise à l'issue de la procédure : [préciser].");
+      L.push("");
+      L.push("  Traitement retenu — cocher UNE case, et une seule :");
+      L.push("");
+      L.push("  [ ] Une mise à pied DISCIPLINAIRE a été prononcée et couvre ces jours.");
+      L.push("      La retenue porte exactement sur les jours prononcés, et sur aucun");
+      L.push("      autre. Vérifier le nombre.");
+      L.push("");
+      L.push("  [ ] Une autre sanction a été prononcée, ou aucune. La retenue opérée");
+      L.push("      pendant la mise à pied conservatoire n'a plus de support");
+      L.push("      disciplinaire : la rémunération de cette période est RÉGULARISÉE sur");
+      L.push("      la paie de [MOIS], sous une ligne identifiable. Maintenir la retenue");
+      L.push("      reviendrait à infliger une sanction pécuniaire, que L. 1331-2");
+      L.push("      interdit et que L. 1334-1 punit d'une amende de 3 750 euros.");
+      L.push("");
+      L.push("  [ ] La procédure n'a pas été menée à son terme. Même conséquence que la");
+      L.push("      case précédente : régularisation.");
+      L.push("");
+      L.push("  Consigne transmise le [DATE] à [service ou prestataire de paie].");
+      L.push("");
+      L.push(cro((ctx.profil || {}).responsable, "Nom, qualité et signature"));
+      L.push("");
+      L.push("");
+
+      L = L.concat(blocBornes(ctx));
+      L = L.concat(blocPrescription(ctx));
+      L = L.concat(blocProtege(ctx));
+
+      L.push(GROS);
+      L.push("VOTRE CALENDRIER");
+      L.push(GROS);
+      L.push("");
+      L.push("Aujourd'hui, " + leJour(d0) + " — les deux lettres partent ensemble");
+      L.push("(pièces 1 et 2). Si la mise à pied a déjà été prononcée sans convocation,");
+      L.push("la convocation part aujourd'hui, et la fiche d'enchaînement portera");
+      L.push("l'écart réel : ne le maquillez pas.");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 5)) + " environ — l'entretien. Tenez-le vite :");
+      L.push("chaque jour de mise à pied conservatoire est un jour sans salaire pour une");
+      L.push("mesure qui n'est pas une sanction.");
+      L.push("");
+      L.push("Au plus tôt deux jours ouvrables après l'entretien, au plus tard un mois");
+      L.push("après — la notification de la décision (L. 1332-2). La mise à pied");
+      L.push("conservatoire prend fin à cette date au plus tard.");
+      L.push("");
+      L.push("Le jour de la décision — la consigne de paie est écrite (pièce 4). C'est");
+      L.push("l'étape qu'on oublie, et celle qui coûte : la seule peine du chapitre de");
+      L.push("la discipline est attachée à la sanction pécuniaire (L. 1334-1).");
+
+      return L.concat(pied("L. 1332-3, L. 1332-2, R. 1332-1, R. 1332-2, R. 1332-3, " +
+        "L. 1331-1, L. 1331-2, L. 1334-1, L. 1332-4, L. 1333-2",
+        ["Une seule peine est citée dans ce document, et elle ne vise pas la mise à",
+         "pied conservatoire : « Le fait d'infliger une amende ou une sanction",
+         "pécuniaire en méconnaissance des dispositions de l'article L. 1331-2 est",
+         "puni d'une amende de 3 750 euros » (L. 1334-1). Elle est rappelée à propos",
+         "de la retenue de salaire maintenue sans support, et à ce seul endroit.",
+         ""].concat(NOTE_ANNULATION))).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     DIS-CTL-SAN-12 — LA GARANTIE DE FOND
+
+     Le manquement le plus coûteux du module, parce qu'il ne se répare pas. Et
+     le seul dont la source ne soit pas dans le code : elle est dans la
+     convention collective ou dans le règlement intérieur, que l'application ne
+     lit pas. Ce document ne peut donc pas dire ce que votre clause exige — il
+     dit comment la trouver, ce qu'elle entraîne, et ce qui se passe si elle a
+     été manquée.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("DIS-CTL-SAN-12", {
+    nom: "La procédure conventionnelle ou de règlement intérieur — la garantie de fond",
+    detail: "Le relevé de la clause, la saisine de l'organisme, la fiche de suivi des " +
+            "délais conventionnels, et le retrait lorsque la procédure n'a pas été " +
+            "suivie ou l'a été tardivement.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {}, s = f.sanction || {}, g = f.garantie || {};
+      var m = mesureDe(ctx);
+      var p = ctx.profil || {};
+      var d0 = aujourd(ctx);
+      var L = entete(ctx, "Procédure conventionnelle ou de règlement intérieur préalable à la sanction",
+        "garantie de fond — jurisprudence de la chambre sociale, et article L. 1333-2 du code du travail");
+
+      L.push("POURQUOI CE DOCUMENT EST LE PREMIER À LIRE, ET NON LE DERNIER");
+      L.push("");
+      L.push("Les cinq autres écrits de la procédure disciplinaire se corrigent : une");
+      L.push("convocation incomplète se refait, une notification tardive se retire et");
+      L.push("la procédure se reprend. Celui-ci ne se corrige pas. Lorsqu'une");
+      L.push("convention collective ou un règlement intérieur impose une formalité");
+      L.push("avant le prononcé d'une sanction, l'avoir manquée n'est pas un vice de");
+      L.push("forme parmi d'autres.");
+      L.push("");
+      ARRETS.garantieFond.forEach(function (x) { L.push(x); });
+      L.push("");
+      L.push("ET LE RETARD COMPTE AUTANT QUE L'OMISSION :");
+      L.push("");
+      ARRETS.avisTardif.forEach(function (x) { L.push(x); });
+      L.push("");
+      L.push("CE QUE CELA DONNE SELON LA MESURE");
+      L.push("");
+      L.push("  · POUR UN LICENCIEMENT : l'organisme non consulté, et le licenciement");
+      L.push("    ne peut avoir de cause réelle et sérieuse. Ce n'est pas une");
+      L.push("    annulation de sanction, c'est la perte du procès sur le fond.");
+      L.push("  · POUR TOUTE AUTRE SANCTION : la même logique conduit le conseil de");
+      L.push("    prud'hommes à apprécier si la sanction, irrégulière en la forme, doit");
+      L.push("    être annulée — « Le conseil de prud'hommes peut annuler une sanction");
+      L.push("    irrégulière en la forme ou injustifiée ou disproportionnée à la faute");
+      L.push("    commise » (L. 1333-2).");
+      L.push("");
+      L.push("CE QUE L'APPLICATION NE PEUT PAS FAIRE ICI, ET IL FAUT LE DIRE");
+      L.push("");
+      L.push("La source de cette obligation n'est pas dans le code du travail : elle est");
+      L.push("dans VOTRE convention collective ou dans VOTRE règlement intérieur.");
+      L.push("L'application ne les lit pas. Elle ne peut donc dire ni si une telle");
+      L.push("clause existe, ni ce qu'elle exige, ni dans quels délais. Elle dit où");
+      L.push("chercher, et ce qu'il faut faire de ce qu'on trouve.");
+      L.push("");
+      L.push("CE QUE LE DOSSIER DÉCLARE");
+      L.push("");
+      L.push("  Convention collective du profil ....... " +
+        cro(p.conventionCollective, "non renseignée"));
+      L.push("  Procédure conventionnelle ou de");
+      L.push("  règlement intérieur applicable ........ " +
+        (rempli(g.procedureApplicable) ? etat(g.procedureApplicable, "OUI", "non")
+                                       : "[non renseigné]"));
+      L.push("  Source déclarée ....................... " +
+        (rempli(g.source) ? String(g.source) : "[non renseignée]"));
+      L.push("  Nature de la formalité ................ " +
+        (rempli(g.nature) ? String(g.nature) : "[non renseignée]"));
+      L.push("  Accomplie ............................. " +
+        (rempli(g.suivie) ? String(g.suivie) : "[non renseigné]"));
+      L.push("  Droits de la défense privés ........... " +
+        (rempli(g.droitsDefensePrives) ? String(g.droitsDefensePrives) : "[non renseigné]"));
+      L.push("  Influence possible sur la décision .... " +
+        (rempli(g.influenceDecision) ? String(g.influenceDecision) : "[non renseigné]"));
+      L.push("  Mesure auditée ........................ " +
+        (m.nature ? m.nature : "[non renseignée]"));
+      L.push("");
+      if (estNon(g.procedureApplicable)) {
+        L.push("Le dossier déclare qu'aucune procédure conventionnelle ni de règlement");
+        L.push("intérieur ne s'applique. CETTE RÉPONSE SE VÉRIFIE SUR LE TEXTE, pas de");
+        L.push("mémoire : la pièce 1 ci-dessous est faite pour cela. Beaucoup de");
+        L.push("conventions collectives portent un conseil de discipline sans que");
+        L.push("personne dans l'entreprise ne s'en souvienne.");
+        L.push("");
+      } else if (!rempli(g.procedureApplicable)) {
+        L.push("Le dossier ne dit pas si une telle procédure s'applique. C'EST LA");
+        L.push("PREMIÈRE CHOSE À ÉTABLIR, avant même de convoquer : la pièce 1 ci-dessous");
+        L.push("est la grille de relevé.");
+        L.push("");
+      }
+      L.push(TRAIT);
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 1 — RELEVÉ DE LA CLAUSE");
+      L.push(GROS);
+      L.push("");
+      L.push("Une page, remplie AVANT la convocation. Elle vaut mieux qu'un souvenir.");
+      L.push("");
+      L.push("  " + nomDe(ctx) + " — dossier [RÉFÉRENCE]");
+      L.push("  Relevé établi le " + leJour(d0) + " par [NOM, FONCTION].");
+      L.push("");
+      L.push("  1. TEXTES CONSULTÉS");
+      L.push("     · convention collective applicable : " +
+        cro(p.conventionCollective, "À PORTER") + ", IDCC [.....]");
+      L.push("       version consultée : [date de l'édition ou de la mise à jour]");
+      L.push("     · règlement intérieur : version en vigueur au jour des faits,");
+      L.push("       entrée en vigueur le " +
+        jour((f.ri || {}).dateEntreeVigueur, "date à porter"));
+      L.push("     · accords d'entreprise ou d'établissement : [.....]");
+      L.push("     · statut ou usage propre à l'entreprise : [.....]");
+      L.push("");
+      L.push("  2. CE QU'ILS PRÉVOIENT AVANT LE PRONONCÉ D'UNE SANCTION");
+      L.push("     [ ] consultation d'un conseil de discipline ou d'une commission");
+      L.push("         paritaire — article [.....]");
+      L.push("     [ ] entretien supplémentaire, ou entretien devant une autre personne");
+      L.push("         que le supérieur — article [.....]");
+      L.push("     [ ] avis préalable d'une instance ou d'un tiers — article [.....]");
+      L.push("     [ ] délai de réflexion imposé — article [.....]");
+      L.push("     [ ] forme particulière de la convocation ou de la notification —");
+      L.push("         article [.....]");
+      L.push("     [ ] échelle de sanctions propre, ou plafond de sanction —");
+      L.push("         article [.....]");
+      L.push("     [ ] subordination du licenciement à des sanctions antérieures —");
+      L.push("         article [.....]  ← CE POINT CHANGE LA PROCÉDURE DE TOUTE");
+      L.push("         SANCTION, AVERTISSEMENT COMPRIS : voir plus bas.");
+      L.push("     [ ] aucune de ces formalités");
+      L.push("");
+      L.push("  3. CITER LA CLAUSE, MOT POUR MOT");
+      L.push("     [RECOPIER LE TEXTE DE LA CLAUSE. Ne le résumez pas : c'est sa");
+      L.push("      rédaction exacte qui dira ce qui était dû, à qui, et quand.");
+      L.push("      L'application ne l'a pas lue et ne l'écrira pas à votre place.]");
+      L.push("     « ..... »");
+      L.push("");
+      L.push("  4. LES DÉLAIS QUE LA CLAUSE FIXE");
+      L.push("     · délai pour saisir l'organisme : [.....]");
+      L.push("     · délai dans lequel l'avis doit être rendu : [.....]");
+      L.push("     · délai entre l'avis et la notification : [.....]");
+      L.push("     [C'EST LE CALENDRIER CONVENTIONNEL QUI COMMANDE, et une saisine");
+      L.push("      tardive est en elle-même une irrégularité de la procédure");
+      L.push("      disciplinaire (Soc., 20 mars 2024, n° 22-17.292).]");
+      L.push("");
+      L.push("  5. COMPATIBILITÉ AVEC LES DÉLAIS DE LA LOI");
+      L.push("     Les délais conventionnels NE SUSPENDENT PAS ceux du code. La");
+      L.push("     formalité doit tenir dans le mois qui suit l'entretien (L. 1332-2),");
+      L.push("     et l'ensemble dans les deux mois de L. 1332-4.");
+      L.push("     · deux mois de L. 1332-4, terme ....... " +
+        (estISO(s.dateConnaissance) ? jour(moisApres(s.dateConnaissance, 2))
+                                    : "[à calculer : date de connaissance non portée]"));
+      L.push("     · mois de L. 1332-2, terme ............ " +
+        (estISO(s.dateEntretien) ? jour(bornesNotification(s.dateEntretien).hauteProrogee)
+                                 : "[à calculer : date d'entretien non portée]"));
+      L.push("     · la formalité tient-elle dans ces bornes ? [OUI / NON]");
+      L.push("     [SI NON : la difficulté est réelle et elle n'a pas de solution");
+      L.push("      élégante. Anticipez — saisissez l'organisme dès la convocation");
+      L.push("      lorsque la clause le permet, plutôt qu'après l'entretien.]");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 2 — LETTRE DE SAISINE DE L'ORGANISME");
+      L.push(GROS);
+      L.push("");
+      L.push("Modèle générique : l'application ne connaît ni le nom de votre organisme,");
+      L.push("ni sa composition, ni la forme que votre clause impose à sa saisine.");
+      L.push("Reprenez-la sur le texte relevé en pièce 1.");
+      L.push("");
+      L.push(nomDe(ctx));
+      L.push(cro(p.adresse, "adresse du siège"));
+      L.push("");
+      L.push("À [DÉNOMINATION EXACTE DE L'ORGANISME : conseil de discipline, commission");
+      L.push("paritaire, autre]");
+      L.push("[adresse ou modalité de saisine prévue par la clause]");
+      L.push("");
+      L.push(lieu(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Lettre recommandée avec demande d'avis de réception");
+      L.push("[ou la forme que la clause impose — la respecter à la lettre]");
+      L.push("");
+      L.push("Objet : saisine préalable au prononcé d'une sanction disciplinaire");
+      L.push("");
+      L.push("Madame, Monsieur, [ou la formule d'usage propre à l'organisme]");
+      L.push("");
+      L.push("En application de [CITER L'ARTICLE : article ..... de la convention");
+      L.push("collective ..... / article ..... du règlement intérieur], je saisis");
+      L.push("[l'organisme] préalablement au prononcé d'une sanction disciplinaire");
+      L.push("envisagée à l'encontre de [NOM, PRÉNOM], [fonction], entré(e) dans");
+      L.push("l'entreprise le [DATE].");
+      L.push("");
+      L.push("Les faits reprochés sont les suivants :");
+      L.push("");
+      L.push("[LES ÉNONCER, DATÉS ET CIRCONSTANCIÉS. L'organisme ne peut donner un avis");
+      L.push(" utile que sur des faits précis, et l'avis rendu sur un exposé vague ne");
+      L.push(" protégera personne.]");
+      L.push("");
+      L.push("Un entretien préalable [s'est tenu le [DATE] / est fixé au [DATE]].");
+      L.push("[Préciser selon ce que la clause impose : certaines clauses veulent la");
+      L.push(" saisine avant l'entretien, d'autres après. C'est la clause qui décide.]");
+      L.push("");
+      L.push("La sanction envisagée est : [NOMMER].");
+      L.push("");
+      L.push("Sont joints à la présente : [pièces que la clause impose, ou à défaut :");
+      L.push("la lettre de convocation, le compte rendu d'entretien, les pièces");
+      L.push("établissant les faits].");
+      L.push("");
+      L.push("Je vous serais obligé de bien vouloir me faire connaître votre avis");
+      L.push("[dans le délai de ..... prévu par la clause / dans les meilleurs délais],");
+      L.push("le délai d'un mois de l'article L. 1332-2 du code du travail expirant le");
+      L.push((estISO(s.dateEntretien)
+        ? jour(bornesNotification(s.dateEntretien).hauteProrogee)
+        : "[DATE — à calculer depuis le jour fixé pour l'entretien]") + ".");
+      L.push("");
+      L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
+      L.push("distinguée.");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité du signataire"));
+      L.push("");
+      L.push("Conservez : la preuve de l'envoi, sa date, et l'accusé de réception. LA");
+      L.push("DATE DE SAISINE EST UNE PIÈCE À PART ENTIÈRE — c'est elle qui dira si la");
+      L.push("demande d'avis était tardive.");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 3 — TRACE DE L'AVIS RENDU");
+      L.push(GROS);
+      L.push("");
+      L.push("À joindre au dossier, avec la composition de l'organisme : un avis rendu");
+      L.push("par un organisme irrégulièrement composé n'est pas l'avis que la clause");
+      L.push("exigeait.");
+      L.push("");
+      L.push("  Organisme saisi ....................... [.....]");
+      L.push("  Date de la saisine .................... [.....]");
+      L.push("  Date de la séance ..................... [.....]");
+      L.push("  Composition, membre par membre ........ [NOMS et qualités]");
+      L.push("  Le salarié a-t-il été entendu, si la");
+      L.push("  clause le prévoit ? ................... [OUI / NON / non prévu]");
+      L.push("  A-t-il été assisté, si la clause");
+      L.push("  l'ouvre ? ............................. [.....]");
+      L.push("  Avis rendu le ......................... [.....]");
+      L.push("  Sens de l'avis ........................ [.....]");
+      L.push("  Pièce qui le porte .................... [procès-verbal, lettre, extrait]");
+      L.push("");
+      L.push("  [SI L'ORGANISME NE REND PAS D'AVIS DANS LE DÉLAI DE LA CLAUSE : lisez ce");
+      L.push("   que la clause prévoit dans ce cas — avis réputé rendu, faculté de");
+      L.push("   passer outre, relance. Ne décidez rien qu'elle n'autorise pas, et");
+      L.push("   conservez la trace de la relance.]");
+      L.push("");
+      L.push("");
+
+      var manquee = estNon(g.suivie) || g.suivie === "non" ||
+        g.suivie === "tardivement ou imparfaitement";
+
+      L.push(GROS);
+      L.push("PIÈCE 4 — SI LA PROCÉDURE N'A PAS ÉTÉ SUIVIE, OU L'A ÉTÉ TARDIVEMENT");
+      L.push(GROS);
+      L.push("");
+      if (manquee) {
+        L.push("VOTRE DOSSIER EST DANS CE CAS : la procédure est déclarée " +
+          (g.suivie === "tardivement ou imparfaitement"
+            ? "suivie tardivement ou imparfaitement." : "non suivie."));
+        L.push("");
+      }
+      L.push("L'irrégularité ne se répare pas après coup. Saisir l'organisme une fois");
+      L.push("la sanction notifiée ne rétablit rien : l'avis n'a pas pu influer sur une");
+      L.push("décision déjà prise, et c'est précisément ce que la garantie protégeait.");
+      L.push("");
+      L.push("La seule voie est le RETRAIT, puis, si le délai de deux mois de L. 1332-4");
+      L.push("le permet encore, une procédure reprise DEPUIS L'ORIGINE — clause");
+      L.push("relevée, organisme saisi en temps utile, avis rendu, puis sanction.");
+      L.push("");
+      L.push("[SI LA SANCTION N'EST PAS ENCORE NOTIFIÉE : ne la notifiez pas.");
+      L.push(" Accomplissez la formalité d'abord, si les délais le permettent. C'est le");
+      L.push(" seul moment où la situation se rattrape sans rien perdre.]");
+      L.push("");
+      L.push("Lettre de retrait :");
+      L.push("");
+      L = L.concat(teteLettre(ctx, true));
+      L.push("Objet : retrait de la sanction notifiée le " +
+        jour(s.dateNotification, "date"));
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Par lettre du " + jour(s.dateNotification, "date") +
+        ", il vous a été notifié [rappeler la");
+      L.push("mesure : " + (m.nature || "[nature de la mesure]") + "].");
+      L.push("");
+      L.push("Après réexamen, il apparaît que la procédure prévue par [CITER : l'article");
+      L.push("..... de la convention collective ..... / l'article ..... du règlement");
+      L.push("intérieur] [n'a pas été accomplie / n'a pas été accomplie en temps utile]");
+      L.push("avant le prononcé de cette mesure. Je la retire en conséquence.");
+      L.push("");
+      L.push("Elle est réputée n'avoir jamais été prononcée. Toute mention en sera");
+      L.push("supprimée de votre dossier individuel[, et ses effets sur votre");
+      L.push("rémunération seront régularisés sur la prochaine paie].");
+      L.push("");
+      L = L.concat(signature(ctx));
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("LE CAS PARTICULIER QUI CHANGE TOUTE LA PROCÉDURE");
+      L.push(GROS);
+      L.push("");
+      L.push("Une clause mérite d'être cherchée pour elle-même : celle qui subordonne le");
+      L.push("licenciement à l'existence de sanctions antérieures. Elle ne crée pas une");
+      L.push("formalité de plus — elle transforme l'avertissement lui-même en mesure");
+      L.push("susceptible d'influer sur le maintien du salarié dans l'entreprise, et");
+      L.push("impose donc l'entretien préalable là où L. 1332-2 en dispensait.");
+      L.push("");
+      ARRETS.avertissementRI.forEach(function (x) { L.push(x); });
+      L.push("");
+      ARRETS.avertissementCCN.forEach(function (x) { L.push(x); });
+      L.push("");
+      L.push("Dans votre dossier, cette subordination est déclarée : " +
+        (m.subordination === true ? "OUI — l'entretien est dû, quelle que soit la sanction."
+         : m.subordination === false ? "non."
+         : "[non renseignée] — à vérifier sur le texte, c'est décisif."));
+      L.push("");
+      L.push("");
+
+      L = L.concat(blocPrescription(ctx));
+      L = L.concat(blocBornes(ctx));
+      L = L.concat(blocProtege(ctx));
+
+      L.push(GROS);
+      L.push("VOTRE CALENDRIER");
+      L.push(GROS);
+      L.push("");
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous ouvrez la convention collective et");
+      L.push("le règlement intérieur, et vous remplissez la pièce 1. Avant de convoquer,");
+      L.push("avant tout le reste. Une demi-heure, et c'est la demi-heure qui décide du");
+      L.push("procès.");
+      L.push("");
+      L.push("Le même jour, si une formalité existe — vous établissez le calendrier");
+      L.push("conventionnel et vous le confrontez aux deux délais de la loi. S'ils ne");
+      L.push("tiennent pas ensemble, c'est maintenant qu'il faut le savoir.");
+      L.push("");
+      L.push("À la date que la clause impose — la saisine part (pièce 2), sous la forme");
+      L.push("qu'elle prévoit, avec la preuve d'envoi conservée.");
+      L.push("");
+      L.push("À réception de l'avis — la trace est constituée (pièce 3), avec la");
+      L.push("composition de l'organisme.");
+      L.push("");
+      L.push("Après l'avis, et pas avant — la sanction se notifie, dans les bornes de");
+      L.push("L. 1332-2 rappelées ci-dessus.");
+      L.push("");
+      L.push("Ces échéances sont celles de VOTRE clause : l'application ne les connaît");
+      L.push("pas et ne les calcule pas. Les deux seules qu'elle calcule sont celles du");
+      L.push("code, et elles ne bougent pas pour vous laisser le temps.");
+
+      return L.concat(pied("L. 1333-2, L. 1332-2, L. 1332-4, R. 1332-1, R. 1332-2, " +
+        "R. 1332-3, L. 1333-1, L. 1333-3",
+        ["Décisions citées, conservées telles qu'elles ont été lues dans la base",
+         "Judilibre de la Cour de cassation : Soc., 8 septembre 2021, n° 19-15.039,",
+         "publié ; Soc., 20 mars 2024, n° 22-17.292, publié ; Soc., 3 mai 2011,",
+         "n° 10-14.104, publié ; Soc., 22 septembre 2021, n° 18-22.204, publié.",
+         "",
+         "La clause qui fonde l'obligation, elle, n'a pas été lue : elle est dans",
+         "votre convention collective ou dans votre règlement intérieur, que",
+         "l'application ne lit pas. C'est la raison pour laquelle ce document relève",
+         "et ne rédige pas.",
+         ""].concat(NOTE_ANNULATION))).join("\n");
+    },
+  });
+
 })(typeof window !== "undefined" ? window : this);

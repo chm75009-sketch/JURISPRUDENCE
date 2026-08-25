@@ -1800,10 +1800,10 @@
       L.push("  ┌──────────────────────────────────────┬──────────────┬──────────────┐");
       L.push("  │                                      │ Exercice N-1 │ Exercice N   │");
       L.push("  ├──────────────────────────────────────┼──────────────┼──────────────┤");
-      L.push("  │ A · Contribution versée aux activités │ " +
+      L.push("  │ A · Contribution versée aux ASC      │ " +
         pad(ascN1 == null ? "[ ] €" : eur(ascN1), 12) + " │ " +
         pad(ascN == null ? "[ ] €" : eur(ascN), 12) + " │");
-      L.push("  │     sociales et culturelles          │              │              │");
+      L.push("  │     (activités sociales, culturelles)│              │              │");
       L.push("  ├──────────────────────────────────────┼──────────────┼──────────────┤");
       L.push("  │ B · Masse salariale brute            │ " +
         pad(msN1 == null ? "[ ] €" : eur(msN1), 12) + " │ " +
@@ -2145,8 +2145,8 @@
       L.push("comprennent : »");
       L.push("");
       L.push("  ┌────────────────────────────────────────┬───────────┬──────────────────┐");
-      L.push("  │ Catégorie (R. 2312-35)                 │ Ancienneté│ Prestations       │");
-      L.push("  │                                        │ exigée ?  │ concernées        │");
+      L.push("  │ Catégorie (R. 2312-35)                 │ Ancienneté│ Prestations      │");
+      L.push("  │                                        │ exigée ?  │ concernées       │");
       L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
       L.push("  │ 1° Institutions sociales de prévoyance │ [oui/non] │ [ ]              │");
       L.push("  │    et d'entraide — institutions de     │ [durée]   │                  │");
@@ -2715,8 +2715,7 @@
          "L. 2315-81", "L. 2315-82", "L. 2315-83", "L. 2315-84", "L. 2315-86",
          "L. 2315-87", "L. 2315-88", "L. 2315-91", "L. 2315-92", "L. 2315-94",
          "R. 2315-45", "R. 2315-46", "R. 2315-47", "R. 2315-51"],
-        ["L. 2254-2 et L. 1233-24-1 (négociations pour lesquelles le II de L. 2315-92 permet de mandater l'expert-comptable)",
-         "L. 2312-42 à L. 2312-52 (offres publiques d'acquisition, visées par le 4° du I de L. 2315-92)"]);
+        ["L. 2254-2 et L. 1233-24-1 (négociations pour lesquelles le II de L. 2315-92 permet de mandater l'expert-comptable)"]);
     },
   });
 
@@ -3275,8 +3274,7 @@
          "L. 2315-81", "L. 2315-86", "L. 2315-87", "L. 2315-88", "L. 2315-91",
          "L. 2315-92", "L. 2315-94", "R. 2315-49"],
         ["L. 1233-30 (première réunion et délai auxquels L. 1233-34 renvoie)",
-         "L. 1233-24-1 et L. 2254-2 (négociations pour lesquelles un expert peut être mandaté)",
-         "L. 2312-42 à L. 2312-52 (offres publiques d'acquisition)"]);
+         "L. 1233-24-1 et L. 2254-2 (négociations pour lesquelles un expert peut être mandaté)"]);
     },
   });
 
