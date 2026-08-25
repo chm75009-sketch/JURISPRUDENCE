@@ -2367,4 +2367,1210 @@
     },
   });
 
+  /* ────────────────────────────────────────────────────────────────────────
+     LES EXPERTISES
+     ──────────────────────────────────────────────────────────────────────── */
+
+  /* Les quatre documents d'expertise partagent une même erreur de départ, qu'il
+     faut écrire une fois : on croit que la répartition des frais dépend de ce
+     que l'expert a fait, alors qu'elle dépend du CAS DE RECOURS sur lequel la
+     délibération est fondée. Tout part de la délibération. */
+  function casDeRecours(L) {
+    L.push("  LES CAS DE RECOURS, tels que les textes lus les énoncent :");
+    L.push("");
+    L.push("  · L. 2315-87 — recours à un EXPERT-COMPTABLE en vue de la consultation sur");
+    L.push("    les ORIENTATIONS STRATÉGIQUES de l'entreprise (1° de L. 2312-17) ;");
+    L.push("  · L. 2315-88 — expert-comptable en vue de la consultation sur la SITUATION");
+    L.push("    ÉCONOMIQUE ET FINANCIÈRE (2° de L. 2312-17) ;");
+    L.push("  · L. 2315-91 — expert-comptable dans le cadre de la consultation sur la");
+    L.push("    POLITIQUE SOCIALE, LES CONDITIONS DE TRAVAIL ET L'EMPLOI (3° de");
+    L.push("    L. 2312-17) ;");
+    L.push("  · L. 2315-92, I — expert-comptable : 1° opérations de CONCENTRATION");
+    L.push("    (L. 2312-41) ; 2° exercice du DROIT D'ALERTE ÉCONOMIQUE (L. 2312-63 et");
+    L.push("    suivants) ; 3° LICENCIEMENTS COLLECTIFS pour motif économique (L. 1233-34");
+    L.push("    et suivants) ; 4° OFFRES PUBLIQUES D'ACQUISITION (L. 2312-42 à L. 2312-52).");
+    L.push("    Le II ajoute le mandat donné à un expert-comptable pour apporter toute");
+    L.push("    analyse utile aux organisations syndicales en vue des négociations prévues");
+    L.push("    aux articles L. 2254-2 et L. 1233-24-1 ; dans ce dernier cas, l'expert est");
+    L.push("    le même que celui désigné au titre du 3° du I ;");
+    L.push("  · L. 2315-94 — EXPERT HABILITÉ : 1° lorsqu'un RISQUE GRAVE, IDENTIFIÉ ET");
+    L.push("    ACTUEL, révélé ou non par un accident du travail, une maladie");
+    L.push("    professionnelle ou à caractère professionnel, est constaté dans");
+    L.push("    l'établissement ; 2° en cas d'INTRODUCTION DE NOUVELLES TECHNOLOGIES ou de");
+    L.push("    PROJET IMPORTANT modifiant les conditions de santé et de sécurité ou les");
+    L.push("    conditions de travail, prévus au 4° du II de L. 2312-8 ; 3° dans les");
+    L.push("    entreprises D'AU MOINS TROIS CENTS SALARIÉS, en vue de préparer la");
+    L.push("    NÉGOCIATION SUR L'ÉGALITÉ PROFESSIONNELLE ;");
+    L.push("  · L. 2315-81 — par DÉROGATION aux articles L. 2315-78 et L. 2315-80, le");
+    L.push("    comité peut faire appel à TOUT TYPE D'EXPERTISE RÉMUNÉRÉE PAR SES SOINS");
+    L.push("    pour la préparation de ses travaux. C'est l'expertise dite libre : elle est");
+    L.push("    intégralement à sa charge, et c'est le prix de sa liberté.");
+    L.push("");
+  }
+
+  DP.ajouter("CSE-CTL-EXP-01", {
+    nom: "La note de répartition du financement de l'expertise, la lettre d'encadrement du recours et la régularisation des paiements",
+    detail: "La qualification du cas de recours, le tableau de répartition selon les 1°, " +
+            "2° et 3° de L. 2315-80, le calcul chiffré des deux parts, la condition du 3° " +
+            "et sa conséquence sur trois ans, la lettre à l'expert et le courrier de " +
+            "rectification au trésorier.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var e = objet(f.expertise);
+      var cas = e.cas ? String(e.cas) : null;
+      var part = nb(e.partEmployeur);
+      var L = [];
+
+      L = L.concat(entete(ctx, "Répartition du financement de l'expertise",
+        "article L. 2315-80 du code du travail"));
+      usage(L);
+
+      L.push("LE PRINCIPE, ET L'ERREUR QU'IL CORRIGE");
+      L.push("");
+      L.push("« LORSQUE LE COMITÉ SOCIAL ET ÉCONOMIQUE DÉCIDE DU RECOURS À L'EXPERTISE, les");
+      L.push("frais d'expertise sont pris en charge : … » (L. 2315-80). La répartition suit");
+      L.push("donc LE CAS DE RECOURS sur lequel la délibération du comité est fondée — et");
+      L.push("non la nature du rapport rendu, ni le sujet que l'expert a finalement traité,");
+      L.push("ni ce qui a été discuté en séance.");
+      L.push("");
+      L.push("D'où l'ordre de ce document : on qualifie d'abord, on répartit ensuite.");
+      L.push("");
+      L.push("Ce qui se joue : une répartition erronée n'expose à aucune peine. Elle expose");
+      L.push("à ceci — une facture payée par celui qui ne la devait pas, qui se réclame ; et");
+      L.push("surtout, dans le cas du 3°, TROIS ANNÉES PENDANT LESQUELLES LE COMITÉ NE PEUT");
+      L.push("PLUS TRANSFÉRER D'EXCÉDENT de son budget de fonctionnement vers les activités");
+      L.push("sociales et culturelles (L. 2315-61). Cette conséquence-là se paie longtemps.");
+      L.push("");
+
+      titre(L, "1 — La qualification du cas de recours");
+      L.push("  Cas de recours déclaré au dossier ......... " +
+        (cas ? cas : "[À QUALIFIER — reportez-vous à la délibération du comité]"));
+      L.push("  Délibération du comité du ................. [DATE]");
+      L.push("  Fondement visé par la délibération ........ [article visé]");
+      L.push("");
+      L.push("  Si la délibération ne vise aucun article, c'est le premier problème à");
+      L.push("  traiter : sans fondement visé, la répartition ne peut pas être établie et la");
+      L.push("  délibération elle-même est fragile. Le document CSE-CTL-EXP-03 de ce module");
+      L.push("  la reprend.");
+      L.push("");
+      casDeRecours(L);
+
+      titre(L, "2 — La règle de répartition, article en main");
+      L.push("L'article L. 2315-80 pose trois règles, et une seule s'applique :");
+      L.push("");
+      L.push("  1° À LA CHARGE DE L'EMPLOYEUR, pour les consultations prévues par les");
+      L.push("     articles L. 2315-88, L. 2315-91, au 3° de l'article L. 2315-92 et au 1°");
+      L.push("     de l'article L. 2315-94, ainsi qu'au 3° du même article L. 2315-94 EN");
+      L.push("     L'ABSENCE DE TOUT INDICATEUR relatif à l'égalité professionnelle prévu à");
+      L.push("     l'article L. 2312-18.");
+      L.push("");
+      L.push("     Soit, en clair : la situation économique et financière, la politique");
+      L.push("     sociale, le licenciement collectif pour motif économique, le risque grave");
+      L.push("     — et la préparation de la négociation sur l'égalité professionnelle, mais");
+      L.push("     seulement s'il n'existe AUCUN indicateur d'égalité professionnelle dans la");
+      L.push("     base de données économiques, sociales et environnementales.");
+      L.push("");
+      L.push("  2° PAR LE COMITÉ, SUR SON BUDGET DE FONCTIONNEMENT, À HAUTEUR DE 20 %, ET");
+      L.push("     PAR L'EMPLOYEUR À HAUTEUR DE 80 %, concernant la consultation prévue à");
+      L.push("     l'article L. 2315-87 — les orientations stratégiques — ET LES");
+      L.push("     CONSULTATIONS PONCTUELLES hors celles visées au deuxième alinéa.");
+      L.push("");
+      L.push("  3° PAR L'EMPLOYEUR, concernant les consultations mentionnées au 2°, LORSQUE");
+      L.push("     LE BUDGET DE FONCTIONNEMENT DU COMITÉ EST INSUFFISANT pour couvrir le coût");
+      L.push("     de l'expertise ET N'A PAS DONNÉ LIEU À UN TRANSFERT D'EXCÉDENT ANNUEL au");
+      L.push("     budget destiné aux activités sociales et culturelles prévu à l'article");
+      L.push("     L. 2312-84 AU COURS DES TROIS ANNÉES PRÉCÉDENTES.");
+      L.push("");
+      L.push("     Les deux conditions du 3° sont CUMULATIVES : budget insuffisant ET absence");
+      L.push("     de transfert sur trois ans. Un seul transfert dans les trois années");
+      L.push("     précédentes suffit à faire tomber le 3°, et la part de 20 % reste alors");
+      L.push("     à la charge du comité.");
+      L.push("");
+      L.push("  ET, HORS DE CES TROIS RÈGLES — l'expertise libre de L. 2315-81, rémunérée");
+      L.push("  par le comité seul, « par dérogation aux articles L. 2315-78 et L. 2315-80 ».");
+      L.push("");
+
+      titre(L, "3 — Le calcul, chiffré");
+      L.push("  A — COÛT DE L'EXPERTISE ................ [COÛT — hors taxes ou toutes taxes");
+      L.push("      comprises : dites-le, et gardez la même base d'un bout à l'autre.");
+      L.push("      Source : cahier des charges de l'expert, puis facture]");
+      L.push("");
+      L.push("  B — RÈGLE APPLICABLE (cochez UNE case) :");
+      L.push("");
+      L.push("     [ ] 1° de L. 2315-80 — intégralement à la charge de l'employeur");
+      L.push("            Employeur : [A] · Comité : 0 €");
+      L.push("");
+      L.push("     [ ] 2° de L. 2315-80 — 80 % employeur, 20 % comité");
+      L.push("            Employeur = [A] × 0,80 = [ ] €");
+      L.push("            Comité ... = [A] × 0,20 = [ ] € — sur le BUDGET DE FONCTIONNEMENT,");
+      L.push("            et sur lui seul : le budget des activités sociales et culturelles");
+      L.push("            n'a pas à financer une expertise.");
+      L.push("");
+      L.push("            Exemple de lecture, pour vérifier la mécanique : pour un coût de");
+      L.push("            10 000 €, l'employeur doit 8 000 € et le comité 2 000 €.");
+      L.push("");
+      L.push("     [ ] 3° de L. 2315-80 — intégralement à la charge de l'employeur, par");
+      L.push("            exception au 2°, les deux conditions étant réunies");
+      L.push("            Employeur : [A] · Comité : 0 €");
+      L.push("");
+      L.push("     [ ] L. 2315-81 — expertise libre : intégralement à la charge du comité");
+      L.push("            Comité : [A] · Employeur : 0 €");
+      L.push("");
+      if (cas) {
+        L.push("  CE QUE LE DOSSIER DÉCLARE — cas de recours : « " + cas + " ».");
+        if (part != null) {
+          L.push("  Part employeur déclarée : " + part + " %.");
+          L.push("  Confrontez cette part à la règle cochée en B. Si elles diffèrent, c'est");
+          L.push("  la règle qui l'emporte, et le paragraphe 5 régularise les paiements.");
+        } else {
+          L.push("  Aucune part employeur n'est déclarée : relevez-la sur les paiements déjà");
+          L.push("  effectués avant de cocher la case B.");
+        }
+        L.push("");
+      }
+      L.push("  C — LA VÉRIFICATION DU 3°, si la case 3° est cochée");
+      L.push("");
+      L.push("     · Le budget de fonctionnement du comité est-il insuffisant pour couvrir");
+      L.push("       le coût de l'expertise ? ......................... [oui / non]");
+      L.push("       Solde du budget de fonctionnement à la date de la délibération :");
+      L.push("       [ ] € — pièce : comptes du comité ou situation intermédiaire.");
+      L.push("");
+      L.push("     · Le comité a-t-il transféré un excédent annuel du budget de");
+      L.push("       fonctionnement vers les activités sociales et culturelles au cours des");
+      L.push("       TROIS ANNÉES PRÉCÉDENTES (L. 2312-84) ? ........... [oui / non]");
+      L.push("");
+      L.push("          Exercice [ ] ... transfert : [oui / non] · délibération du [DATE]");
+      L.push("          Exercice [ ] ... transfert : [oui / non] · délibération du [DATE]");
+      L.push("          Exercice [ ] ... transfert : [oui / non] · délibération du [DATE]");
+      L.push("");
+      L.push("       Ce sont les DÉLIBÉRATIONS DU COMITÉ qui l'établissent, pas une");
+      L.push("       déclaration : demandez-les au trésorier sur trois exercices.");
+      L.push("");
+      L.push("     Si les deux réponses sont « oui » et « non » dans cet ordre, le 3°");
+      L.push("     s'applique. Sinon, on retombe sur le 2°.");
+      L.push("");
+
+      titre(L, "4 — La conséquence du 3°, qui court sur trois ans");
+      L.push("« Lorsque le financement des frais d'expertise est pris en charge par");
+      L.push("l'employeur en application du 3° de l'article L. 2315-80 du présent code, LE");
+      L.push("COMITÉ SOCIAL ET ÉCONOMIQUE NE PEUT PAS DÉCIDER DE TRANSFÉRER D'EXCÉDENTS DU");
+      L.push("BUDGET DE FONCTIONNEMENT au financement des activités sociales et culturelles");
+      L.push("PENDANT LES TROIS ANNÉES SUIVANTES » (L. 2315-61, dernier alinéa).");
+      L.push("");
+      L.push("  Date de la prise en charge au titre du 3° ......... [DATE]");
+      L.push("  Interdiction de transfert jusqu'au ............... [DATE + 3 ans]");
+      L.push("");
+      L.push("  À titre indicatif, si la prise en charge intervenait aujourd'hui,");
+      L.push("  " + leJour(d0) + ", l'interdiction courrait jusqu'au " +
+        leJour(dans(d0, 1095)) + " environ.");
+      L.push("  [Le texte dit « les trois années suivantes » sans préciser s'il s'agit");
+      L.push("  d'années civiles ou d'exercices : c'est une question d'interprétation que");
+      L.push("  l'application ne tranche pas. Retenez la lecture la plus prudente.]");
+      L.push("");
+      L.push("  À PORTER AU DOSSIER DU COMITÉ — cette interdiction pèse sur le comité, pas");
+      L.push("  sur l'employeur. Elle doit donc être écrite au procès-verbal de la réunion");
+      L.push("  où la prise en charge est constatée, faute de quoi un trésorier suivant");
+      L.push("  délibérera un transfert que la loi lui interdit.");
+      L.push("");
+
+      titre(L, "5 — La régularisation des paiements déjà effectués");
+      L.push("  RELEVÉ");
+      L.push("");
+      L.push("     Date · payeur · montant · pièce");
+      L.push("     [ ] · [employeur / comité] · [ ] € · [facture, ordre de virement]");
+      L.push("     [ ] · [employeur / comité] · [ ] € · [ ]");
+      L.push("     TOTAL PAYÉ ............................ [ ] €");
+      L.push("");
+      L.push("  RÉPARTITION LÉGALE (paragraphe 3) ......... employeur [ ] € · comité [ ] €");
+      L.push("  ÉCART À RÉGULARISER ....................... [ ] € au profit de [ ]");
+      L.push("");
+      L.push("  Si le comité a payé ce que l'employeur devait, l'entreprise lui rembourse");
+      L.push("  la différence, sur le BUDGET DE FONCTIONNEMENT — c'est de là qu'elle est");
+      L.push("  sortie. Si l'employeur a payé ce que le comité devait, la somme reste due");
+      L.push("  par le comité, sauf renonciation expresse de l'entreprise, qui doit alors");
+      L.push("  être écrite.");
+      L.push("");
+      L.push("  UN CAS QUE LE TEXTE PRÉVOIT SÉPARÉMENT — « en cas d'annulation définitive");
+      L.push("  par le juge de la délibération du comité social et économique, LES SOMMES");
+      L.push("  PERÇUES PAR L'EXPERT SONT REMBOURSÉES PAR CE DERNIER À L'EMPLOYEUR. Le");
+      L.push("  comité social et économique peut, à tout moment, décider de les prendre en");
+      L.push("  charge » (L. 2315-86, dernier alinéa). Ce n'est pas la même chose qu'une");
+      L.push("  mauvaise répartition : c'est le sort des sommes après annulation.");
+      L.push("");
+
+      courrier(L, 1, "lettre encadrant le recours à l'expert", [
+        "À adresser à l'expert désigné, dès sa désignation. Elle ne décide rien — le",
+        "comité a décidé — mais elle fixe par écrit ce dont la suite dépendra : le cas de",
+        "recours, la répartition, et les délais que les textes imposent à l'expert.",
+      ]);
+      papier(L, ctx, ["À l'attention de [cabinet / expert désigné]",
+                      "[adresse]"]);
+      L.push("Objet : expertise décidée par le comité social et économique le [DATE] —");
+      L.push("cadre du recours et financement");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Le comité social et économique de " + nom(ctx) + " vous a désigné, par une");
+      L.push("délibération du [DATE], au titre de [cas de recours et article visé].");
+      L.push("");
+      L.push("1. FINANCEMENT. En application de l'article L. 2315-80 du code du travail, les");
+      L.push("frais de cette expertise sont pris en charge [intégralement par l'employeur /");
+      L.push("à hauteur de 80 % par l'employeur et de 20 % par le comité sur son budget de");
+      L.push("fonctionnement], soit [ ] € et [ ] € pour un coût de [ ] €. Vos factures");
+      L.push("seront établies en conséquence, et adressées [préciser : à l'entreprise pour");
+      L.push("sa part, au comité pour la sienne].");
+      L.push("");
+      L.push("2. INFORMATIONS. L'employeur vous fournit les informations nécessaires à");
+      L.push("l'exercice de votre mission (L. 2315-83) et vous avez libre accès dans");
+      L.push("l'entreprise pour les besoins de celle-ci (L. 2315-82). Vous demandez à");
+      L.push("l'employeur, AU PLUS TARD DANS LES TROIS JOURS DE VOTRE DÉSIGNATION, toutes");
+      L.push("les informations complémentaires que vous jugez nécessaires ; l'employeur y");
+      L.push("répond dans les cinq jours (R. 2315-45).");
+      L.push("");
+      L.push("3. COÛT PRÉVISIONNEL. Vous notifiez à l'employeur le coût prévisionnel,");
+      L.push("l'étendue et la durée de l'expertise DANS UN DÉLAI DE DIX JOURS À COMPTER DE");
+      L.push("VOTRE DÉSIGNATION (R. 2315-46). Cette notification fait courir le délai de");
+      L.push("contestation de l'employeur sur ces trois points (L. 2315-86, 3°) : sa date");
+      L.push("doit être certaine.");
+      L.push("");
+      L.push("4. RAPPORT. Vous remettez votre rapport au plus tard quinze jours avant");
+      L.push("l'expiration des délais de consultation du comité (R. 2315-47). [Le cas");
+      L.push("échéant, adapter : huit jours à compter de la notification de la décision de");
+      L.push("l'Autorité de la concurrence ou de la Commission européenne pour le cas du 1°");
+      L.push("de L. 2315-92 ; deux mois à compter de la désignation, renouvelables une fois");
+      L.push("pour deux mois par accord, hors ces cas.]");
+      L.push("");
+      L.push("5. SECRET. Vous êtes tenu aux obligations de secret et de discrétion définies");
+      L.push("à l'article L. 2315-3 (L. 2315-84).");
+      L.push("");
+      L.push("[Le cas échéant, pour une expertise de L. 2315-94 : votre habilitation est une");
+      L.push("certification justifiant de vos compétences, délivrée par un organisme");
+      L.push("certificateur accrédité (R. 2315-51). Merci de nous en adresser copie.]");
+      L.push("");
+      salutation(L, ctx);
+      L.push("");
+
+      courrier(L, 2, "au trésorier du comité — rectification de la répartition", [
+        "À adresser quand la répartition appliquée n'était pas la bonne.",
+      ]);
+      papier(L, ctx, ["À l'attention du trésorier",
+                      "du comité social et économique"]);
+      L.push("Objet : expertise du [DATE] — rectification de la répartition des frais");
+      L.push("");
+      L.push("Madame, Monsieur le Trésorier,");
+      L.push("");
+      L.push("L'expertise décidée par le comité le [DATE] a été engagée au titre de [cas de");
+      L.push("recours]. L'article L. 2315-80 du code du travail en met les frais [à la");
+      L.push("charge de l'employeur / à la charge du comité à hauteur de 20 % et de");
+      L.push("l'employeur à hauteur de 80 %].");
+      L.push("");
+      L.push("Or les paiements effectués s'établissent à [ ] € pour l'entreprise et [ ] €");
+      L.push("pour le comité, soit un écart de [ ] € par rapport à cette répartition.");
+      L.push("");
+      L.push("[Je procède donc au remboursement de [ ] € au budget de fonctionnement du");
+      L.push("comité. / Je vous prie de bien vouloir procéder au versement de [ ] € au");
+      L.push("titre de la part revenant au comité.]");
+      L.push("");
+      L.push("[Le cas échéant : je vous rappelle que, la prise en charge étant intervenue en");
+      L.push("application du 3° de l'article L. 2315-80, le comité ne peut pas décider de");
+      L.push("transférer d'excédents de son budget de fonctionnement au financement des");
+      L.push("activités sociales et culturelles pendant les trois années suivantes");
+      L.push("(L. 2315-61). Il convient d'en porter mention au procès-verbal.]");
+      L.push("");
+      salutation(L, ctx, "Je vous prie d'agréer, Madame, Monsieur le Trésorier, l'expression de ma considération distinguée.");
+
+      calendrier(L, [
+        "Aujourd'hui, " + leJour(d0) + " — vous reprenez la DÉLIBÉRATION du comité et vous notez le",
+        "cas de recours qu'elle vise. Tout part de là : sans elle, aucune case du",
+        "paragraphe 3 ne peut être cochée honnêtement.",
+        "",
+        "Dans les trois jours de la désignation — l'expert demande ses informations",
+        "complémentaires (R. 2315-45) ; l'employeur répond dans les cinq jours. Partie",
+        "aujourd'hui, une désignation appellerait la demande avant le " + leJour(dans(d0, 3)) + " et la",
+        "réponse avant le " + leJour(dans(d0, 8)) + ".",
+        "",
+        "Dans les dix jours de la désignation — l'expert notifie le coût prévisionnel,",
+        "l'étendue et la durée (R. 2315-46), soit avant le " + leJour(dans(d0, 10)) + " pour une",
+        "désignation de ce jour. C'est à cette notification que se raccroche le délai de",
+        "contestation du 3° de L. 2315-86 : le document CSE-CTL-EXP-02 le calcule.",
+        "",
+        "AVANT TOUT PAIEMENT — la répartition se fixe. Une facture payée s'annule mal ;",
+        "une répartition écrite avant paiement ne se discute plus.",
+        "",
+        "Si le 3° s'applique — inscrivez au procès-verbal du comité, le jour même,",
+        "l'interdiction de transfert pour les trois années suivantes (L. 2315-61). C'est",
+        "la seule chose de ce document qui produira encore ses effets dans trois ans.",
+      ]);
+
+      return pied(L,
+        ["L. 2312-8", "L. 2312-17", "L. 2312-18", "L. 2312-41", "L. 2312-63",
+         "L. 2312-84", "L. 2315-3", "L. 2315-61", "L. 2315-78", "L. 2315-80",
+         "L. 2315-81", "L. 2315-82", "L. 2315-83", "L. 2315-84", "L. 2315-86",
+         "L. 2315-87", "L. 2315-88", "L. 2315-91", "L. 2315-92", "L. 2315-94",
+         "R. 2315-45", "R. 2315-46", "R. 2315-47", "R. 2315-51"],
+        ["L. 2254-2 et L. 1233-24-1 (négociations pour lesquelles le II de L. 2315-92 permet de mandater l'expert-comptable)",
+         "L. 2312-42 à L. 2312-52 (offres publiques d'acquisition, visées par le 4° du I de L. 2315-92)"]);
+    },
+  });
+
+  DP.ajouter("CSE-CTL-EXP-02", {
+    nom: "La contestation de l'expertise devant le président du tribunal judiciaire : le calendrier des délais, l'acte et ses mentions",
+    detail: "Le tableau des quatre points de départ de L. 2315-86, le calcul du dixième " +
+            "jour, l'écrit de saisine du président du tribunal judiciaire avec ses " +
+            "mentions, l'effet suspensif, et ce qu'il faut faire quand le délai est expiré.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var e = objet(f.expertise);
+      var objetC = e.objetContestation ? String(e.objetContestation) : null;
+      var dep = dateDe(e.dateDepart);
+      var sais = dateDe(e.dateSaisine);
+      var limite = dep ? dans(dep, 10) : null;
+      var ecart = (dep && sais) ? Math.round((sais - dep) / 86400000) : null;
+      var L = [];
+
+      L = L.concat(entete(ctx, "Contestation de l'expertise devant le président du tribunal judiciaire",
+        "articles L. 2315-86, R. 2315-49 et R. 2315-50 du code du travail"));
+      usage(L);
+
+      L.push("DIX JOURS, ET QUATRE POINTS DE DÉPART DIFFÉRENTS");
+      L.push("");
+      L.push("« Pour chacun des cas de recours prévus à l'article L. 2315-86, l'employeur");
+      L.push("saisit le juge DANS UN DÉLAI DE DIX JOURS » (R. 2315-49). Le délai est le");
+      L.push("même dans les quatre cas ; c'est le POINT DE DÉPART qui change, et c'est là");
+      L.push("que les contestations se perdent : on compte à partir de la réunion où le");
+      L.push("sujet a été évoqué, au lieu de compter à partir de l'acte que le texte");
+      L.push("désigne.");
+      L.push("");
+      L.push("Passé ce délai, la contestation n'est plus recevable, et la délibération du");
+      L.push("comité s'impose. Aucune peine n'est en jeu : ce qui est en jeu, c'est le droit");
+      L.push("de discuter l'expertise, qui s'éteint.");
+      L.push("");
+
+      titre(L, "1 — Que conteste-t-on ? Le tableau des quatre cas");
+      L.push("L'article L. 2315-86 énumère quatre objets, et rattache à chacun son point de");
+      L.push("départ. « Sauf dans le cas prévu à l'article L. 1233-35-1, l'employeur saisit");
+      L.push("le juge judiciaire dans un délai fixé par décret en Conseil d'État de : »");
+      L.push("");
+      L.push("  ┌────┬─────────────────────────────┬──────────────────────────────────────┐");
+      L.push("  │ N° │ Ce qui est contesté         │ Le délai court à compter de…         │");
+      L.push("  ├────┼─────────────────────────────┼──────────────────────────────────────┤");
+      L.push("  │ 1° │ LA NÉCESSITÉ de l'expertise │ la DÉLIBÉRATION du comité décidant   │");
+      L.push("  │    │                             │ le recours à l'expertise             │");
+      L.push("  ├────┼─────────────────────────────┼──────────────────────────────────────┤");
+      L.push("  │ 2° │ LE CHOIX DE L'EXPERT        │ la DÉSIGNATION de l'expert par le    │");
+      L.push("  │    │                             │ comité                               │");
+      L.push("  ├────┼─────────────────────────────┼──────────────────────────────────────┤");
+      L.push("  │ 3° │ LE COÛT PRÉVISIONNEL,       │ la NOTIFICATION à l'employeur du     │");
+      L.push("  │    │ L'ÉTENDUE ou LA DURÉE       │ cahier des charges et des            │");
+      L.push("  │    │                             │ informations prévues à L. 2315-81-1  │");
+      L.push("  ├────┼─────────────────────────────┼──────────────────────────────────────┤");
+      L.push("  │ 4° │ LE COÛT FINAL               │ la NOTIFICATION à l'employeur du     │");
+      L.push("  │    │                             │ coût final de l'expertise            │");
+      L.push("  └────┴─────────────────────────────┴──────────────────────────────────────┘");
+      L.push("");
+      L.push("  L'article L. 2315-81-1, auquel le 3° renvoie pour le contenu des");
+      L.push("  informations notifiées, N'A PAS ÉTÉ LU par l'application : il est nommé ici,");
+      L.push("  et son contenu n'est ni reproduit ni paraphrasé. Reportez-vous-y pour savoir");
+      L.push("  ce que la notification doit comporter — c'est de sa complétude que dépend le");
+      L.push("  point de départ.");
+      L.push("");
+      L.push("  De même, l'article L. 1233-35-1, que L. 2315-86 réserve dès sa première");
+      L.push("  ligne, n'a pas été lu : vérifiez si votre situation en relève AVANT de");
+      L.push("  compter dix jours.");
+      L.push("");
+      L.push("  Objet de la contestation, au dossier ....... " +
+        (objetC ? objetC : "[À DÉTERMINER — cochez l'une des quatre lignes ci-dessus]"));
+      L.push("");
+      L.push("  UNE CONTESTATION, UN OBJET, UN POINT DE DÉPART. Si vous contestez à la fois");
+      L.push("  la nécessité et le coût prévisionnel, ce sont DEUX délais distincts qui");
+      L.push("  courent depuis deux actes distincts. Ne les confondez pas dans un seul");
+      L.push("  calcul.");
+      L.push("");
+
+      titre(L, "2 — Le calcul du délai");
+      L.push("  Acte qui fait courir le délai ....... [délibération / désignation /");
+      L.push("                                        notification], en date du " +
+        (dep ? leJour(dep) : "[DATE]"));
+      L.push("  Pièce qui l'établit ................. [procès-verbal, courrier de");
+      L.push("                                        notification, accusé de réception]");
+      L.push("");
+      if (dep) {
+        L.push("  DÉLAI DE DIX JOURS (R. 2315-49) — dernier jour utile : " + leJour(limite) + ".");
+      } else {
+        L.push("  DÉLAI DE DIX JOURS (R. 2315-49) — dernier jour utile : [date de l'acte");
+        L.push("  + 10 jours].");
+      }
+      L.push("");
+      L.push("  COMPUTATION — le module retient que le délai exprimé en jours ne commence à");
+      L.push("  courir QUE LE LENDEMAIN de l'acte qui le fait courir, par application des");
+      L.push("  ARTICLES 641 ET 642 DU CODE DE PROCÉDURE CIVILE. Ces deux articles sont");
+      L.push("  NOMMÉS : ils n'appartiennent pas au code du travail et l'application ne les");
+      L.push("  a pas lus. Vérifiez-les avant de compter au jour près — un jour d'écart");
+      L.push("  suffit ici.");
+      L.push("");
+      L.push("  LA DATE DE SAISINE s'entend de celle de l'ASSIGNATION devant le président du");
+      L.push("  tribunal judiciaire statuant selon la procédure accélérée au fond.");
+      L.push("");
+      if (dep && sais) {
+        L.push("  AU DOSSIER — acte du " + leJour(dep) + ", saisine du " + leJour(sais) +
+          " : " + ecart + " jour(s) d'écart.");
+        L.push("  " + (ecart <= 10
+          ? "L'écart n'excède pas dix jours : la saisine paraît faite dans le délai, sous"
+          : "L'ÉCART EXCÈDE DIX JOURS : la contestation paraît IRRECEVABLE, sous"));
+        L.push("  réserve de la computation rappelée ci-dessus et de la date exacte de");
+        L.push("  l'assignation.");
+        L.push("");
+      } else if (dep && !sais) {
+        L.push("  AU DOSSIER — l'acte de départ est daté du " + leJour(dep) + " ; aucune saisine");
+        L.push("  n'est déclarée. Le dernier jour utile est le " + leJour(limite) + ".");
+        L.push("");
+      }
+
+      titre(L, "3 — Si le délai est expiré");
+      L.push("N'ENGAGEZ PAS UNE CONTESTATION IRRECEVABLE. Elle coûte, elle retarde, et elle");
+      L.push("ne rétablit rien. Ce qu'il faut faire à la place :");
+      L.push("");
+      L.push("  · TENIR LA DÉLIBÉRATION POUR ACQUISE et reprendre le calendrier de la");
+      L.push("    consultation. L'expertise a lieu ;");
+      L.push("  · vérifier si UN AUTRE OBJET reste contestable : les quatre délais courent");
+      L.push("    depuis quatre actes différents, et celui du coût final (4°) ne court");
+      L.push("    qu'à compter de la notification de ce coût, donc bien après les autres ;");
+      L.push("  · s'assurer que la RÉPARTITION DU FINANCEMENT est correcte : c'est un sujet");
+      L.push("    distinct, qui n'est enfermé dans aucun délai de dix jours, et que le");
+      L.push("    document CSE-CTL-EXP-01 de ce module traite ;");
+      L.push("  · écrire au dossier POURQUOI la contestation n'a pas été engagée. Une");
+      L.push("    renonciation motivée est une décision ; un silence est un oubli.");
+      L.push("");
+      L.push("  Note écrite au dossier : « Le délai de dix jours de l'article R. 2315-49,");
+      L.push("  courant à compter de [acte] du [date], est expiré depuis le [date]. La");
+      L.push("  contestation de [objet] n'est plus recevable. Il est décidé de [reprendre le");
+      L.push("  calendrier de la consultation / réserver la contestation du coût final]. »");
+      L.push("");
+      L.push("  Signée le " + leJour(d0) + " par " + signataire(ctx) + ".");
+      L.push("");
+
+      titre(L, "4 — L'écrit de saisine, et ses mentions");
+      L.push("LE JUGE COMPÉTENT — « Les contestations de l'employeur prévues à l'article");
+      L.push("L. 2315-86 relèvent de la compétence DU PRÉSIDENT DU TRIBUNAL JUDICIAIRE »");
+      L.push("(R. 2315-50). Il statue, dans les cas 1° à 3°, SUIVANT LA PROCÉDURE ACCÉLÉRÉE");
+      L.push("AU FOND DANS LES DIX JOURS SUIVANT SA SAISINE, et sa décision N'EST PAS");
+      L.push("SUSCEPTIBLE D'APPEL (L. 2315-86). « Le délai du pourvoi en cassation formé à");
+      L.push("l'encontre du jugement est de dix jours à compter de sa notification »");
+      L.push("(R. 2315-50).");
+      L.push("");
+      L.push("L'ACTE LUI-MÊME est une assignation, qui se rédige et se délivre par un");
+      L.push("commissaire de justice : l'application n'en produit pas la forme, qui relève");
+      L.push("du code de procédure civile qu'elle n'a pas lu. Ce qui suit est LA MATIÈRE que");
+      L.push("votre conseil y fera figurer, et le rappel des mentions qui, si elles");
+      L.push("manquent, feront perdre la contestation avant tout débat.");
+      L.push("");
+      L.push("  MENTIONS INDISPENSABLES");
+      L.push("");
+      L.push("  1. LES PARTIES — l'entreprise demanderesse : " + nom(ctx) + ", " +
+        cro(((ctx.profil) || {}).adresse, "adresse du siège") + " ;");
+      L.push("     le défendeur : LE COMITÉ SOCIAL ET ÉCONOMIQUE de " + nom(ctx) + ", pris");
+      L.push("     en la personne de son secrétaire. [L'expert désigné est-il appelé à la");
+      L.push("     cause ? À décider avec votre conseil : l'application ne tranche pas.]");
+      L.push("");
+      L.push("  2. LA JURIDICTION — Monsieur le Président du tribunal judiciaire de [ville],");
+      L.push("     statuant selon la procédure accélérée au fond (R. 2315-50, L. 2315-86).");
+      L.push("");
+      L.push("  3. L'OBJET PRÉCIS DE LA CONTESTATION — l'un des quatre cas, et un seul par");
+      L.push("     chef de demande : [la nécessité de l'expertise / le choix de l'expert /");
+      L.push("     le coût prévisionnel, l'étendue ou la durée / le coût final].");
+      L.push("");
+      L.push("  4. L'ACTE DE DÉPART ET SA DATE — [délibération du comité du " +
+        (dep ? leJour(dep) : "[date]") + " /");
+      L.push("     désignation de l'expert du [date] / notification du cahier des charges et");
+      L.push("     des informations de L. 2315-81-1 reçue le [date] / notification du coût");
+      L.push("     final reçue le [date]], établi par [pièce]. C'EST LA MENTION QUI ÉTABLIT");
+      L.push("     LA RECEVABILITÉ : sans elle, le juge ne peut pas vérifier le délai.");
+      L.push("");
+      L.push("  5. LE RESPECT DU DÉLAI — assignation délivrée le [date], soit dans les dix");
+      L.push("     jours de l'acte de départ (R. 2315-49).");
+      L.push("");
+      L.push("  6. LES MOYENS — [ce que vous soutenez : selon le cas, que le fondement");
+      L.push("     invoqué n'est pas réuni, que le coût prévisionnel est disproportionné à");
+      L.push("     l'objet, que l'étendue excède le cas de recours, que la durée n'est pas");
+      L.push("     justifiée. L'application ne rédige pas vos moyens : ils dépendent des");
+      L.push("     faits, qu'elle ne connaît pas.]");
+      L.push("");
+      L.push("  7. LES PIÈCES — procès-verbal de la délibération · lettre de désignation ·");
+      L.push("     cahier des charges et informations notifiés, avec la preuve de leur date");
+      L.push("     de réception · facture ou notification du coût final · le présent");
+      L.push("     calendrier.");
+      L.push("");
+      L.push("  8. LA DEMANDE — [annulation de la délibération / réduction du coût");
+      L.push("     prévisionnel / limitation de l'étendue ou de la durée / réduction du coût");
+      L.push("     final].");
+      L.push("");
+
+      titre(L, "5 — L'effet suspensif, qu'il faut mesurer avant de saisir");
+      L.push("« Cette saisine SUSPEND L'EXÉCUTION DE LA DÉCISION DU COMITÉ, ainsi que LES");
+      L.push("DÉLAIS DANS LESQUELS IL EST CONSULTÉ en application de l'article L. 2312-15,");
+      L.push("JUSQU'À LA NOTIFICATION DU JUGEMENT » (L. 2315-86).");
+      L.push("");
+      L.push("Deux conséquences, et la seconde surprend toujours :");
+      L.push("");
+      L.push("  · l'expertise s'arrête le temps de l'instance ;");
+      L.push("  · MAIS LE DÉLAI DE CONSULTATION S'ARRÊTE AUSSI. L'employeur qui conteste");
+      L.push("    pour gagner du temps sur la consultation ne gagne rien : le compteur");
+      L.push("    reprend à la notification du jugement, et le comité retrouve le solde de");
+      L.push("    son délai d'examen.");
+      L.push("");
+      L.push("  Date de saisine ................. " + (sais ? leJour(sais) : "[DATE]"));
+      L.push("  Délai de consultation suspendu à compter de cette date, jusqu'à la");
+      L.push("  notification du jugement.");
+      L.push("  Solde du délai de consultation restant à courir au jour de la saisine :");
+      L.push("  [ ] jours — à calculer sur le délai applicable à votre consultation.");
+      L.push("");
+      L.push("  ET APRÈS — « en cas d'annulation définitive par le juge de la délibération");
+      L.push("  du comité social et économique, les sommes perçues par l'expert sont");
+      L.push("  remboursées par ce dernier à l'employeur. Le comité social et économique");
+      L.push("  peut, à tout moment, décider de les prendre en charge » (L. 2315-86).");
+      L.push("");
+
+      courrier(L, 1, "information du comité de la saisine du juge", [
+        "Aucun texte lu n'impose ce courrier. Il est là parce que l'effet suspensif joue",
+        "dès la saisine : le comité et l'expert doivent savoir que l'expertise s'arrête,",
+        "faute de quoi l'expert continuera de travailler et de facturer.",
+      ]);
+      papier(L, ctx, ["Aux membres de la délégation du personnel",
+                      "du comité social et économique",
+                      "Copie : [expert désigné]"]);
+      L.push("Objet : saisine du président du tribunal judiciaire — contestation de");
+      L.push("l'expertise décidée le [DATE]");
+      L.push("");
+      L.push("Mesdames, Messieurs,");
+      L.push("");
+      L.push("Par acte du [DATE], l'entreprise a saisi le président du tribunal judiciaire");
+      L.push("de [ville], statuant selon la procédure accélérée au fond, aux fins de");
+      L.push("contester [objet de la contestation], sur le fondement du [1° / 2° / 3° / 4°]");
+      L.push("de l'article L. 2315-86 du code du travail.");
+      L.push("");
+      L.push("Conformément au même article, cette saisine suspend l'exécution de la décision");
+      L.push("du comité ainsi que les délais dans lesquels il est consulté en application de");
+      L.push("l'article L. 2312-15, jusqu'à la notification du jugement. Les travaux");
+      L.push("d'expertise sont donc suspendus à compter de ce jour.");
+      L.push("");
+      L.push("Le juge statue dans les dix jours suivant sa saisine et sa décision n'est pas");
+      L.push("susceptible d'appel. Je vous tiendrai informés de sa notification, à compter de");
+      L.push("laquelle les délais reprendront leur cours.");
+      L.push("");
+      salutation(L, ctx);
+      L.push("Pièce jointe : copie de l'acte de saisine.");
+
+      calendrier(L, (function () {
+        var base = dep || d0;
+        var l = [];
+        l.push("Le point de départ — " + (dep ? "l'acte est daté du " + leJour(dep) + "."
+          : "à dater précisément, sur la pièce elle-même. Tout le calendrier"));
+        if (!dep) l.push("en dépend, et une date approximative ne sert à rien ici.");
+        l.push("");
+        l.push("Jour 1 — le lendemain de l'acte, soit le " + leJour(dans(base, 1)) + " : le délai");
+        l.push("commence à courir (computation rappelée au paragraphe 2).");
+        l.push("");
+        l.push("Au plus tard le " + leJour(dans(base, 10)) + " — L'ASSIGNATION EST DÉLIVRÉE.");
+        l.push("Dix jours, c'est court : il faut le conseil, l'acte et le commissaire de");
+        l.push("justice. Décidez de contester ou non dans les TROIS PREMIERS JOURS, soit");
+        l.push("avant le " + leJour(dans(base, 3)) + ", sans quoi le délai se consommera en");
+        l.push("délibérations internes.");
+        l.push("");
+        l.push("Dans les dix jours de la saisine — le juge statue selon la procédure");
+        l.push("accélérée au fond (L. 2315-86). Une saisine du " + leJour(dans(base, 10)) + " appellerait");
+        l.push("une décision aux environs du " + leJour(dans(base, 20)) + ".");
+        l.push("");
+        l.push("Pas d'appel — la décision n'est pas susceptible d'appel ; le pourvoi en");
+        l.push("cassation se forme dans les DIX JOURS DE LA NOTIFICATION du jugement");
+        l.push("(R. 2315-50). Notifié le [date], le pourvoi devrait être formé dans les dix");
+        l.push("jours qui suivent.");
+        l.push("");
+        l.push("Pendant tout ce temps — l'expertise ET le délai de consultation sont");
+        l.push("suspendus. Reprenez le calcul du délai de consultation à la notification du");
+        l.push("jugement, en repartant du solde, et non de zéro.");
+        return l;
+      })());
+
+      return pied(L,
+        ["L. 2312-15", "L. 2315-80", "L. 2315-86", "R. 2315-49", "R. 2315-50"],
+        ["L. 2315-81-1 (contenu du cahier des charges et des informations dont la notification fait courir le délai du 3°)",
+         "L. 1233-35-1 (cas réservé par la première ligne de L. 2315-86)",
+         "les articles 641 et 642 du code de procédure civile (computation du délai)"]);
+    },
+  });
+
+  DP.ajouter("CSE-CTL-EXP-03", {
+    nom: "La délibération rectifiant le fondement du recours à l'expertise, et le test du seuil de dix licenciements",
+    detail: "Le test des deux conditions de L. 1233-34, la grille des fondements " +
+            "possibles, la délibération rectificative visant le fondement exact, le " +
+            "courrier à l'expert en cas de renonciation et le courrier au secrétaire.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var eff = effectifDe(ctx);
+      var e = objet(f.expertise);
+      var cas = e.cas ? String(e.cas) : null;
+      var nbL = nb(f.nbLicenciements);
+      var L = [];
+
+      L = L.concat(entete(ctx, "Rectification du fondement du recours à l'expertise",
+        "articles L. 1233-34, L. 2315-92 et L. 2315-94 du code du travail"));
+      usage(L);
+
+      L.push("UNE EXPERTISE SANS FONDEMENT N'EST PAS UNE EXPERTISE FRAGILE : ELLE EST SANS");
+      L.push("BASE");
+      L.push("");
+      L.push("Le comité ne peut recourir à un expert que DANS LES CAS PRÉVUS par la loi :");
+      L.push("« Le comité social et économique peut, le cas échéant sur proposition des");
+      L.push("commissions constituées en son sein, décider de recourir à un expert-comptable");
+      L.push("ou à un expert habilité DANS LES CAS PRÉVUS À LA PRÉSENTE SOUS-SECTION »");
+      L.push("(L. 2315-78). Hors ces cas, il reste l'expertise libre de L. 2315-81, qu'il");
+      L.push("rémunère lui-même.");
+      L.push("");
+      L.push("Ce qui se joue : une délibération fondée sur un texte qui ne la prévoit pas ne");
+      L.push("fonde pas l'expertise. Aucune peine n'est encourue ; c'est la délibération qui");
+      L.push("tombe, et avec elle la prise en charge des frais par l'employeur.");
+      L.push("");
+      L.push("  Cas de recours déclaré au dossier ......... " +
+        (cas ? cas : "[À RELEVER SUR LA DÉLIBÉRATION]"));
+      L.push("");
+
+      titre(L, "1 — Le test des deux conditions de L. 1233-34");
+      L.push("« DANS LES ENTREPRISES D'AU MOINS CINQUANTE SALARIÉS, lorsque LE PROJET DE");
+      L.push("LICENCIEMENT CONCERNE AU MOINS DIX SALARIÉS DANS UNE MÊME PÉRIODE DE TRENTE");
+      L.push("JOURS, le comité social et économique peut, LE CAS ÉCHÉANT SUR PROPOSITION DES");
+      L.push("COMMISSIONS CONSTITUÉES EN SON SEIN, décider, LORS DE LA PREMIÈRE RÉUNION");
+      L.push("PRÉVUE À L'ARTICLE L. 1233-30, de recourir à une expertise pouvant porter sur");
+      L.push("les domaines économique et comptable ainsi que sur la santé, la sécurité ou");
+      L.push("les effets potentiels du projet sur les conditions de travail » (L. 1233-34).");
+      L.push("");
+      L.push("  a) EFFECTIF DE L'ENTREPRISE");
+      L.push(ligneSeuil(eff, 50, "la première condition est remplie."));
+      L.push("");
+      L.push("  b) NOMBRE DE LICENCIEMENTS ENVISAGÉS DANS UNE MÊME PÉRIODE DE TRENTE JOURS");
+      if (nbL != null) {
+        L.push("     " + nbL + " licenciement(s) envisagé(s) — seuil de dix salariés " +
+          (nbL >= 10 ? "ATTEINT." : "NON ATTEINT."));
+      } else {
+        L.push("     [NOMBRE] licenciement(s) envisagé(s) — seuil de dix salariés");
+        L.push("     [atteint / non atteint].");
+      }
+      L.push("     Période de trente jours considérée : du [DATE] au [DATE].");
+      L.push("     Pièce : projet de licenciement.");
+      L.push("");
+      L.push("     LA PÉRIODE COMPTE AUTANT QUE LE NOMBRE. Neuf licenciements sur trente");
+      L.push("     jours, puis deux le trente-cinquième jour, ne font pas onze au sens du");
+      L.push("     texte. Datez chaque licenciement envisagé.");
+      L.push("");
+      if (nbL != null && nbL < 10) {
+        L.push("  CONCLUSION AU DOSSIER — le seuil de dix salariés sur trente jours n'est pas");
+        L.push("  atteint. L'expertise NE PEUT PAS être fondée sur L. 1233-34. Deux voies :");
+        L.push("  chercher un autre cas de recours au paragraphe 2, ou renoncer et employer");
+        L.push("  le courrier 2.");
+        L.push("");
+      }
+      L.push("  c) LE MOMENT DE LA DÉCISION — la décision se prend LORS DE LA PREMIÈRE");
+      L.push("     RÉUNION PRÉVUE À L'ARTICLE L. 1233-30. L'article L. 1233-30 n'a pas été");
+      L.push("     lu par l'application : il est NOMMÉ, et vous devez y vérifier de quelle");
+      L.push("     réunion il s'agit et à quelle date elle se tient.");
+      L.push("");
+      L.push("     Date de la première réunion de L. 1233-30 ......... [DATE]");
+      L.push("     Date de la délibération décidant l'expertise ...... [DATE]");
+      L.push("     Les deux dates coïncident-elles ? ................. [oui / non]");
+      L.push("");
+      L.push("  d) CE QUE LE TEXTE AJOUTE, ET QU'ON OUBLIE");
+      L.push("     · l'expert peut être assisté dans les conditions prévues à L. 2315-81 ;");
+      L.push("     · le comité peut ÉGALEMENT mandater un expert afin qu'il apporte toute");
+      L.push("       analyse utile aux organisations syndicales pour mener la négociation");
+      L.push("       prévue à l'article L. 1233-24-1 — article NOMMÉ, non lu ;");
+      L.push("     · LE RAPPORT DE L'EXPERT est remis au comité et, le cas échéant, aux");
+      L.push("       organisations syndicales, AU PLUS TARD QUINZE JOURS AVANT L'EXPIRATION");
+      L.push("       DU DÉLAI mentionné à l'article L. 1233-30 (L. 1233-34).");
+      L.push("");
+
+      titre(L, "2 — La grille des fondements : lequel existe réellement ?");
+      L.push("Parcourez-la dans l'ordre et cochez celui qui correspond aux faits. Si aucun");
+      L.push("ne correspond, il n'y a pas d'expertise financée : il reste l'expertise libre.");
+      L.push("");
+      casDeRecours(L);
+      L.push("  [ ] Aucun de ces cas ne correspond — voir le courrier 2 : renonciation, ou");
+      L.push("      recours à l'expertise libre de L. 2315-81, aux frais du comité.");
+      L.push("");
+      L.push("  POUR LE CAS DU 2° DE L. 2315-94 en particulier — introduction de nouvelles");
+      L.push("  technologies ou projet important modifiant les conditions de santé et de");
+      L.push("  sécurité ou les conditions de travail, prévus au 4° du II de L. 2312-8 :");
+      L.push("");
+      L.push("     Le fondement du contrôle de ce module retient que, LORSQUE CE PROJET");
+      L.push("     ENTRAÎNE DES LICENCIEMENTS ÉCONOMIQUES DONNANT LIEU À UN PLAN DE");
+      L.push("     SAUVEGARDE DE L'EMPLOI, la faculté de recourir à une expertise portant");
+      L.push("     sur l'incidence du projet sur les conditions de santé, de sécurité et de");
+      L.push("     travail NE PEUT S'EXERCER QUE DANS LES CONDITIONS DE L'ARTICLE");
+      L.push("     L. 1233-34 : une délibération distincte fondée sur le 2° de L. 2315-94");
+      L.push("     est alors nulle (Soc., 18 mars 2026, n° 23-22.270, publié).");
+      L.push("");
+      L.push("     Autrement dit : dans cette configuration, on ne prend pas DEUX");
+      L.push("     délibérations — une « santé et sécurité » et une « économique ». On en");
+      L.push("     prend UNE, lors de la première réunion de L. 1233-30, et elle peut porter");
+      L.push("     sur les domaines économique et comptable AINSI QUE sur la santé, la");
+      L.push("     sécurité ou les effets potentiels du projet sur les conditions de travail");
+      L.push("     — L. 1233-34 le dit expressément.");
+      L.push("");
+      L.push("     Le projet donne-t-il lieu à un plan de sauvegarde de l'emploi ? [oui/non]");
+      L.push("     Une délibération distincte a-t-elle été prise sur le 2° de L. 2315-94 ?");
+      L.push("     [oui / non] — si oui, elle est à reprendre.");
+      L.push("");
+
+      titre(L, "3 — La délibération rectificative");
+      L.push(nom(ctx));
+      L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("");
+      L.push("Réunion du [DATE] · point [n°] de l'ordre du jour");
+      L.push("");
+      L.push("DÉLIBÉRATION RECTIFICATIVE — FONDEMENT DU RECOURS À L'EXPERTISE");
+      L.push("");
+      L.push("Le comité social et économique de " + nom(ctx) + ",");
+      L.push("");
+      L.push("VU sa délibération du [DATE] décidant le recours à une expertise sur le");
+      L.push("fondement de [article visé à l'origine] ;");
+      L.push("VU l'article L. 2315-78, aux termes duquel il ne peut décider de recourir à un");
+      L.push("expert-comptable ou à un expert habilité que dans les cas prévus à la");
+      L.push("sous-section 10 ;");
+      L.push("VU [le ou les articles retenus après le test du paragraphe 2] ;");
+      L.push("");
+      L.push("CONSTATANT que [exposer le fait : le nombre de licenciements envisagés sur");
+      L.push("trente jours, l'existence d'un plan de sauvegarde de l'emploi, la nature du");
+      L.push("projet, le risque grave constaté dans l'établissement, l'absence d'indicateur");
+      L.push("d'égalité professionnelle] ;");
+      L.push("");
+      L.push("DÉCIDE :");
+      L.push("");
+      L.push("Article 1 — La délibération du [DATE] est RAPPORTÉE en tant qu'elle vise");
+      L.push("[l'article erroné].");
+      L.push("");
+      L.push("Article 2 — Le comité décide de recourir à une expertise sur le fondement de");
+      L.push("[ARTICLE EXACT], portant sur [objet de l'expertise, décrit en termes qui");
+      L.push("correspondent au cas de recours retenu].");
+      L.push("");
+      L.push("Article 3 — [Le cas échéant : cette expertise, décidée dans le cadre de");
+      L.push("l'article L. 1233-34, porte sur les domaines économique et comptable ainsi que");
+      L.push("sur la santé, la sécurité et les effets potentiels du projet sur les");
+      L.push("conditions de travail, en une seule expertise et par une seule délibération.]");
+      L.push("");
+      L.push("Article 4 — [Le cas échéant : la présente décision est prise sur proposition de");
+      L.push("la commission [nom], formulée le [DATE], conformément à l'article L. 2315-78");
+      L.push("et à l'article L. 1233-34 qui réservent cette faculté de proposition aux");
+      L.push("commissions constituées au sein du comité.]");
+      L.push("");
+      L.push("Article 5 — L'expert désigné est [nom]. Le financement de l'expertise sera");
+      L.push("réparti conformément à l'article L. 2315-80, selon le cas de recours retenu à");
+      L.push("l'article 2.");
+      L.push("");
+      L.push("La délibération est adoptée à la majorité des membres présents, le président ne");
+      L.push("prenant pas part au vote (L. 2315-32), et consignée au procès-verbal");
+      L.push("(L. 2315-34).");
+      L.push("");
+      L.push("Vote : [ ] pour · [ ] contre · [ ] abstention.");
+      L.push("");
+      L.push("Le secrétaire,                             Le président,");
+      L.push("[nom]                                      " + signataire(ctx));
+      L.push("");
+      L.push("  ATTENTION AU DÉLAI QUE CETTE DÉLIBÉRATION ROUVRE — une délibération");
+      L.push("  rectificative décidant le recours à l'expertise fait courir à nouveau, pour");
+      L.push("  l'employeur, le délai de dix jours de contestation de la nécessité de");
+      L.push("  l'expertise (L. 2315-86, 1° ; R. 2315-49). Le document CSE-CTL-EXP-02 le");
+      L.push("  calcule.");
+      L.push("");
+
+      courrier(L, 1, "inscription du point à l'ordre du jour", [
+        "L'ordre du jour est établi par le président ET le secrétaire (L. 2315-29).",
+      ]);
+      papier(L, ctx, ["À l'attention du secrétaire",
+                      "du comité social et économique"]);
+      L.push("Objet : fondement du recours à l'expertise décidée le [DATE]");
+      L.push("");
+      L.push("Monsieur le Secrétaire, [ou Madame la Secrétaire]");
+      L.push("");
+      L.push("La délibération du [DATE] décidant le recours à une expertise vise [article].");
+      L.push("L'examen des conditions de ce texte fait apparaître que [exposer : le seuil de");
+      L.push("dix licenciements sur trente jours n'est pas atteint / le projet donne lieu à");
+      L.push("un plan de sauvegarde de l'emploi et relève donc de L. 1233-34 / le fondement");
+      L.push("visé ne prévoit pas ce cas].");
+      L.push("");
+      L.push("Le comité ne pouvant décider de recourir à un expert que dans les cas prévus à");
+      L.push("la sous-section 10 (L. 2315-78), je vous propose d'inscrire ce point à l'ordre");
+      L.push("du jour de la réunion du [DATE], afin que le comité puisse reprendre sa");
+      L.push("délibération en visant le fondement exact.");
+      L.push("");
+      L.push("Vous trouverez ci-joint la grille des cas de recours et un projet de");
+      L.push("délibération rectificative.");
+      L.push("");
+      salutation(L, ctx, "Je vous prie d'agréer, Monsieur le Secrétaire, l'expression de ma considération distinguée.");
+      L.push("Pièces jointes : grille des cas de recours · projet de délibération.");
+      L.push("");
+
+      courrier(L, 2, "à l'expert — renonciation ou changement de fondement", [
+        "À adresser dès que le constat est fait, et non après la remise du rapport : ce",
+        "qui a été engagé se paie.",
+      ]);
+      papier(L, ctx, ["À l'attention de [cabinet / expert désigné]", "[adresse]"]);
+      L.push("Objet : expertise décidée le [DATE] — fondement du recours");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Vous avez été désigné par une délibération du comité social et économique du");
+      L.push("[DATE], prise sur le fondement de [article].");
+      L.push("");
+      L.push("[VARIANTE 1 — RECTIFICATION] Le comité a repris cette délibération le [DATE]");
+      L.push("pour viser [article exact]. L'objet de votre mission en est [inchangé /");
+      L.push("modifié comme suit : ...]. Le financement en sera réparti selon l'article");
+      L.push("L. 2315-80 dans les conditions attachées à ce cas de recours.");
+      L.push("");
+      L.push("[VARIANTE 2 — RENONCIATION] Les conditions du texte fondant votre désignation");
+      L.push("ne sont pas réunies : [exposer]. Le comité a en conséquence rapporté sa");
+      L.push("délibération le [DATE], et il n'est pas donné suite à cette expertise. Je vous");
+      L.push("prie de bien vouloir nous adresser le décompte des diligences accomplies à ce");
+      L.push("jour.");
+      L.push("");
+      L.push("[VARIANTE 3 — EXPERTISE LIBRE] Le comité a décidé, le [DATE], de poursuivre");
+      L.push("cette expertise sur le fondement de l'article L. 2315-81 du code du travail,");
+      L.push("qui lui permet de faire appel à tout type d'expertise RÉMUNÉRÉE PAR SES SOINS");
+      L.push("pour la préparation de ses travaux. Vos honoraires seront donc réglés par le");
+      L.push("comité, et vos factures lui seront adressées.");
+      L.push("");
+      salutation(L, ctx);
+
+      calendrier(L, [
+        "Aujourd'hui, " + leJour(d0) + " — vous remplissez le test du paragraphe 1 et la grille du",
+        "paragraphe 2. Deux chiffres et une date suffisent : le nombre de licenciements,",
+        "la période de trente jours, la date de la première réunion de L. 1233-30.",
+        "",
+        "Le même jour, si le fondement est erroné — courrier 2 à l'expert. Chaque jour de",
+        "retard est un jour de diligences engagées sur une délibération qui ne tient pas.",
+        "",
+        "Dans les jours qui suivent — courrier 1 au secrétaire pour l'inscription à",
+        "l'ordre du jour (L. 2315-29), puis délibération rectificative à la réunion",
+        "suivante.",
+        "",
+        "À COMPTER DE LA DÉLIBÉRATION RECTIFICATIVE — un nouveau délai de dix jours court",
+        "pour l'employeur qui voudrait contester la nécessité de l'expertise (L. 2315-86,",
+        "1° ; R. 2315-49). Prise aujourd'hui, elle ouvrirait un délai expirant le",
+        leJour(dans(d0, 10)) + ".",
+        "",
+        "Si l'expertise se rattache à L. 1233-34 — le rapport de l'expert est remis au",
+        "plus tard QUINZE JOURS AVANT l'expiration du délai de L. 1233-30. Remontez ce",
+        "délai depuis la date d'expiration, et non depuis la désignation.",
+      ]);
+
+      return pied(L,
+        ["L. 1233-34", "L. 2312-8", "L. 2312-17", "L. 2312-41", "L. 2312-63",
+         "L. 2315-29", "L. 2315-32", "L. 2315-34", "L. 2315-78", "L. 2315-80",
+         "L. 2315-81", "L. 2315-86", "L. 2315-87", "L. 2315-88", "L. 2315-91",
+         "L. 2315-92", "L. 2315-94", "R. 2315-49"],
+        ["L. 1233-30 (première réunion et délai auxquels L. 1233-34 renvoie)",
+         "L. 1233-24-1 et L. 2254-2 (négociations pour lesquelles un expert peut être mandaté)",
+         "L. 2312-42 à L. 2312-52 (offres publiques d'acquisition)"]);
+    },
+  });
+
+  DP.ajouter("CSE-CTL-EXP-04", {
+    nom: "La délibération du comité décidant le recours à l'expertise, et ce que la commission peut seulement proposer",
+    detail: "Le constat de l'auteur réel de la décision, la règle d'ordre public de " +
+            "L. 2315-38, la délibération du comité avec son décompte des voix, la mention " +
+            "distincte de la proposition de la commission, la lettre de désignation de " +
+            "l'expert et sa notification à l'employeur.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var e = objet(f.expertise);
+      var par = e.decideePar ? String(e.decideePar) : null;
+      var parBas = par ? par.toLowerCase() : "";
+      var parCommission = parBas.indexOf("commission") >= 0;
+      var parEmployeur = parBas.indexOf("employeur") >= 0;
+      var L = [];
+
+      L = L.concat(entete(ctx, "Décision de recourir à l'expertise : la délibération du comité",
+        "articles L. 2315-38, L. 2315-78 et L. 1233-34 du code du travail"));
+      usage(L);
+
+      L.push("LE COMITÉ DÉCIDE. LA COMMISSION PROPOSE. L'EMPLOYEUR CONTESTE.");
+      L.push("");
+      L.push("Trois rôles, trois textes, et ils ne se substituent pas :");
+      L.push("");
+      L.push("  · LE COMITÉ DÉCIDE — « Le comité social et économique peut, le cas échéant");
+      L.push("    sur proposition des commissions constituées en son sein, DÉCIDER de");
+      L.push("    recourir à un expert-comptable ou à un expert habilité dans les cas prévus");
+      L.push("    à la présente sous-section » (L. 2315-78) ; « le comité social et");
+      L.push("    économique peut, le cas échéant sur proposition des commissions");
+      L.push("    constituées en son sein, DÉCIDER, lors de la première réunion prévue à");
+      L.push("    l'article L. 1233-30, de recourir à une expertise » (L. 1233-34).");
+      L.push("");
+      L.push("  · LA COMMISSION SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL NE DÉCIDE PAS —");
+      L.push("    « La commission santé, sécurité et conditions de travail se voit confier,");
+      L.push("    par délégation du comité social et économique, tout ou partie des");
+      L.push("    attributions du comité relatives à la santé, à la sécurité et aux");
+      L.push("    conditions de travail, À L'EXCEPTION DU RECOURS À UN EXPERT PRÉVU À LA");
+      L.push("    SOUS-SECTION 10 et des attributions consultatives du comité » (L. 2315-38).");
+      L.push("");
+      L.push("    Le fondement du contrôle de ce module retient que CES DISPOSITIONS SONT");
+      L.push("    D'ORDRE PUBLIC (Soc., 13 mai 2026, n° 25-12.560). Un accord ne peut donc");
+      L.push("    pas y déroger : une clause qui déléguerait le recours à l'expert à la");
+      L.push("    commission ne produit pas d'effet, et la décision prise sur son fondement");
+      L.push("    est irrégulière.");
+      L.push("");
+      L.push("  · L'EMPLOYEUR CONTESTE, il ne décide pas — sa voie est la saisine du");
+      L.push("    président du tribunal judiciaire dans les dix jours (L. 2315-86,");
+      L.push("    R. 2315-49 ; document CSE-CTL-EXP-02 de ce module).");
+      L.push("");
+      L.push("Ce qui se joue : une décision prise par la commission, ou attribuée à");
+      L.push("l'employeur, est irrégulière. Aucune peine n'est encourue de ce chef ; c'est");
+      L.push("la décision qui ne tient pas, et l'expertise engagée sur elle avec.");
+      L.push("");
+
+      titre(L, "1 — Qui a décidé, et sur quelle pièce");
+      L.push("  Auteur de la décision, au dossier ......... " +
+        (par ? par : "[À ÉTABLIR SUR LA PIÈCE]"));
+      L.push("");
+      L.push("  Pièce produite (cochez) :");
+      L.push("     [ ] délibération du comité social et économique du [DATE] ;");
+      L.push("     [ ] compte rendu de la commission santé, sécurité et conditions de");
+      L.push("         travail du [DATE] ;");
+      L.push("     [ ] décision ou courrier de l'employeur du [DATE] ;");
+      L.push("     [ ] aucune pièce — c'est alors le premier problème.");
+      L.push("");
+      if (parCommission) {
+        L.push("  AU DOSSIER, LA DÉCISION ÉMANE DE LA COMMISSION. Elle est à reprendre : le");
+        L.push("  recours à l'expert de la sous-section 10 est EXPRESSÉMENT EXCLU des");
+        L.push("  attributions délégables (L. 2315-38), et ce texte est d'ordre public. La");
+        L.push("  commission a pu PROPOSER l'expertise — L. 2315-78 et L. 1233-34 le");
+        L.push("  prévoient — mais seul le comité peut la DÉCIDER. Le paragraphe 2 produit");
+        L.push("  la délibération, et le paragraphe 3 montre comment la proposition de la");
+        L.push("  commission se consigne sans se confondre avec la décision.");
+        L.push("");
+      } else if (parEmployeur) {
+        L.push("  AU DOSSIER, LA DÉCISION EST ATTRIBUÉE À L'EMPLOYEUR. Elle est à reprendre :");
+        L.push("  le recours à l'expert est une prérogative du comité, qui en délibère");
+        L.push("  (L. 2315-78, L. 1233-34). L'employeur, lui, a une autre voie, et une seule :");
+        L.push("  contester devant le président du tribunal judiciaire dans les dix jours de");
+        L.push("  la délibération (L. 2315-86, 1° ; R. 2315-49 ; R. 2315-50).");
+        L.push("");
+      } else if (par) {
+        L.push("  AU DOSSIER, LA DÉCISION EST ATTRIBUÉE AU COMITÉ. Vérifiez alors les trois");
+        L.push("  points du paragraphe 2 : l'inscription à l'ordre du jour, la majorité des");
+        L.push("  membres présents, et le fait que le président n'ait pas pris part au vote.");
+        L.push("  C'est là que les délibérations régulières deviennent contestables.");
+        L.push("");
+      } else {
+        L.push("  L'AUTEUR N'EST PAS RENSEIGNÉ. Établissez-le sur la pièce elle-même avant");
+        L.push("  toute autre chose : rien ne se déduit ici, et une expertise dont l'auteur");
+        L.push("  de la décision est incertain se conteste sans difficulté.");
+        L.push("");
+      }
+
+      titre(L, "2 — La délibération du comité");
+      L.push(nom(ctx));
+      L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("");
+      L.push("Réunion du [DATE] · point [n°] de l'ordre du jour");
+      L.push("");
+      L.push("Le point a été inscrit à l'ordre du jour établi par le président et le");
+      L.push("secrétaire (L. 2315-29). [Le cas échéant : les consultations rendues");
+      L.push("obligatoires par une disposition législative ou réglementaire ou par un accord");
+      L.push("collectif sont inscrites de plein droit à l'ordre du jour par le président ou");
+      L.push("le secrétaire.]");
+      L.push("");
+      L.push("DÉLIBÉRATION — RECOURS À UNE EXPERTISE");
+      L.push("");
+      L.push("Le comité social et économique de " + nom(ctx) + ",");
+      L.push("");
+      L.push("VU l'article L. 2315-78 du code du travail ;");
+      L.push("VU [l'article qui porte le cas de recours : L. 2315-87, L. 2315-88,");
+      L.push("L. 2315-91, L. 2315-92, L. 2315-94 ou L. 1233-34] ;");
+      L.push("[VU la proposition de la commission [nom] formulée le [DATE] ;]");
+      L.push("");
+      L.push("DÉCIDE :");
+      L.push("");
+      L.push("Article 1 — Le comité décide de RECOURIR À UNE EXPERTISE sur le fondement de");
+      L.push("[ARTICLE], portant sur [objet précis].");
+      L.push("");
+      L.push("Article 2 — Est désigné en qualité d'expert : [nom, qualité, adresse].");
+      L.push("[Pour une expertise de L. 2315-94 : l'expert est habilité, son habilitation");
+      L.push("étant une certification délivrée par un organisme certificateur accrédité");
+      L.push("(R. 2315-51). Copie de la certification est demandée.]");
+      L.push("");
+      L.push("Article 3 — Le financement de l'expertise est réparti conformément à l'article");
+      L.push("L. 2315-80 : [à la charge de l'employeur / 80 % employeur, 20 % comité sur son");
+      L.push("budget de fonctionnement].");
+      L.push("");
+      L.push("Article 4 — Le secrétaire est chargé de notifier la présente délibération à");
+      L.push("l'employeur et à l'expert désigné.");
+      L.push("");
+      L.push("LE VOTE — les résolutions du comité sont prises À LA MAJORITÉ DES MEMBRES");
+      L.push("PRÉSENTS ; le président ne participe pas au vote lorsqu'il consulte les membres");
+      L.push("élus du comité en tant que délégation du personnel (L. 2315-32).");
+      L.push("");
+      L.push("  Membres présents ....... [nombre] · [liste nominative]");
+      L.push("  Le président a-t-il pris part au vote ? ....... NON (L. 2315-32)");
+      L.push("  Voix pour .............. [ ]");
+      L.push("  Voix contre ............ [ ]");
+      L.push("  Abstentions ............ [ ]");
+      L.push("  Résultat ............... [adoptée / rejetée]");
+      L.push("");
+      L.push("  LE DÉCOMPTE DOIT FIGURER AU PROCÈS-VERBAL. C'est lui qui établit la majorité");
+      L.push("  des membres présents ; une mention « adoptée à l'unanimité » sans nombre de");
+      L.push("  présents n'établit rien.");
+      L.push("");
+      L.push("Les délibérations du comité sont consignées dans un procès-verbal établi par le");
+      L.push("secrétaire du comité (L. 2315-34).");
+      L.push("");
+      L.push("Le secrétaire,                             Le président,");
+      L.push("[nom]                                      " + signataire(ctx));
+      L.push("");
+
+      titre(L, "3 — La proposition de la commission, consignée sans être confondue");
+      L.push("C'est là ce que les commissions apportent à l'expertise, et la seule chose");
+      L.push("qu'elles y apportent. Écrivez-la donc SÉPARÉMENT, et à sa place.");
+      L.push("");
+      L.push("  EXTRAIT DU COMPTE RENDU DE LA COMMISSION");
+      L.push("");
+      L.push("     Commission [santé, sécurité et conditions de travail / autre] du [DATE]");
+      L.push("     Membres présents : [ ]");
+      L.push("");
+      L.push("     La commission, ayant examiné [objet], PROPOSE au comité social et");
+      L.push("     économique de recourir à une expertise sur le fondement de [article],");
+      L.push("     portant sur [objet].");
+      L.push("");
+      L.push("     La commission rappelle qu'elle ne dispose pas du pouvoir de décider ce");
+      L.push("     recours : l'article L. 2315-38 exclut expressément le recours à un expert");
+      L.push("     prévu à la sous-section 10 des attributions qui peuvent lui être");
+      L.push("     déléguées. La présente proposition est transmise au comité, à qui il");
+      L.push("     appartient de délibérer.");
+      L.push("");
+      L.push("     Le rapporteur, [nom]");
+      L.push("");
+      L.push("  EXTRAIT DU PROCÈS-VERBAL DU COMITÉ — la proposition et la décision, dans");
+      L.push("  deux paragraphes distincts");
+      L.push("");
+      L.push("     « Le rapporteur de la commission [nom] présente la proposition formulée");
+      L.push("     par celle-ci le [DATE], tendant au recours à une expertise sur le");
+      L.push("     fondement de [article].");
+      L.push("");
+      L.push("     Après en avoir délibéré, LE COMITÉ décide de recourir à cette expertise et");
+      L.push("     désigne [expert]. La délibération est adoptée par [ ] voix pour, [ ]");
+      L.push("     contre, [ ] abstention, sur [ ] membres présents, le président n'ayant");
+      L.push("     pas pris part au vote. »");
+      L.push("");
+      L.push("  SI L'ACCORD OU LE RÈGLEMENT INTÉRIEUR DU COMITÉ DIT LE CONTRAIRE — la clause");
+      L.push("  qui délègue le recours à l'expert à la commission ne produit pas d'effet,");
+      L.push("  L. 2315-38 étant d'ordre public. Signalez-la, et faites-la examiner : c'est");
+      L.push("  l'objet du document CSE-CTL-DET-01 de ce module. En attendant, ne vous");
+      L.push("  fondez pas sur elle.");
+      L.push("");
+
+      courrier(L, 1, "notification de la délibération à l'employeur", [
+        "Cette notification n'est pas une formalité de courtoisie : c'est elle qui met",
+        "l'employeur en mesure de connaître la délibération, et donc de la contester dans",
+        "les dix jours (L. 2315-86, 1° ; R. 2315-49). Sa date doit être certaine.",
+      ]);
+      L.push("Comité social et économique de " + nom(ctx));
+      L.push("");
+      L.push("À l'attention de " + cro(((ctx.profil) || {}).responsable, "l'employeur"));
+      L.push("");
+      L.push(lieu(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Lettre remise en main propre contre décharge, ou adressée par tout moyen");
+      L.push("conférant date certaine à sa réception");
+      L.push("");
+      L.push("Objet : notification de la délibération du [DATE] décidant le recours à une");
+      L.push("expertise");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Le comité social et économique, réuni le [DATE], a décidé de recourir à une");
+      L.push("expertise sur le fondement de l'article [ ] du code du travail, portant sur");
+      L.push("[objet], et a désigné [expert].");
+      L.push("");
+      L.push("Vous trouverez ci-joint l'extrait du procès-verbal portant la délibération et");
+      L.push("le décompte des voix.");
+      L.push("");
+      L.push("Le financement de cette expertise est réparti conformément à l'article");
+      L.push("L. 2315-80 du code du travail.");
+      L.push("");
+      L.push("Le secrétaire du comité,");
+      L.push("[nom]");
+      L.push("");
+      L.push("Pièce jointe : extrait du procès-verbal.");
+      L.push("");
+
+      courrier(L, 2, "lettre de désignation adressée à l'expert", [
+        "Elle ouvre les délais que les textes imposent à l'expert : trois jours pour",
+        "demander les informations complémentaires, dix jours pour notifier le coût",
+        "prévisionnel.",
+      ]);
+      L.push("Comité social et économique de " + nom(ctx));
+      L.push("");
+      L.push("À l'attention de [cabinet / expert]");
+      L.push("[adresse]");
+      L.push("");
+      L.push(lieu(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Objet : votre désignation par le comité social et économique");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Par une délibération du [DATE], adoptée à la majorité des membres présents, le");
+      L.push("comité social et économique de " + nom(ctx) + " vous a désigné en qualité");
+      L.push("d'expert sur le fondement de l'article [ ] du code du travail, pour une");
+      L.push("mission portant sur [objet].");
+      L.push("");
+      L.push("Je vous rappelle que vous demandez à l'employeur, AU PLUS TARD DANS LES TROIS");
+      L.push("JOURS de la présente désignation, toutes les informations complémentaires que");
+      L.push("vous jugez nécessaires à la réalisation de votre mission ; l'employeur y répond");
+      L.push("dans les cinq jours (R. 2315-45). Vous notifiez à l'employeur le coût");
+      L.push("prévisionnel, l'étendue et la durée de l'expertise DANS UN DÉLAI DE DIX JOURS");
+      L.push("à compter de votre désignation (R. 2315-46).");
+      L.push("");
+      L.push("Vous êtes tenu aux obligations de secret et de discrétion définies à l'article");
+      L.push("L. 2315-3 (L. 2315-84), et vous avez libre accès dans l'entreprise pour les");
+      L.push("besoins de votre mission (L. 2315-82).");
+      L.push("");
+      L.push("Le secrétaire du comité,");
+      L.push("[nom]");
+      L.push("");
+      L.push("Pièce jointe : extrait du procès-verbal portant la délibération.");
+
+      calendrier(L, [
+        "Aujourd'hui, " + leJour(d0) + " — vous établissez QUI a décidé, sur la pièce. Une seule",
+        "question, et elle commande tout le reste.",
+        "",
+        "Si la décision émane de la commission ou de l'employeur — le point est inscrit à",
+        "l'ordre du jour de la réunion suivante (L. 2315-29) et le comité délibère. Ne",
+        "laissez pas l'expertise se poursuivre entre-temps sur une décision irrégulière.",
+        "",
+        "Le jour de la délibération — le décompte des voix est porté au procès-verbal, et",
+        "la proposition de la commission y est consignée SÉPARÉMENT de la décision.",
+        "",
+        "Le lendemain — notification à l'employeur (courrier 1) et lettre de désignation à",
+        "l'expert (courrier 2). Notifiée le " + leJour(dans(d0, 1)) + ", la délibération ouvrirait à",
+        "l'employeur un délai de contestation expirant vers le " + leJour(dans(d0, 11)) + ".",
+        "",
+        "Dans les trois jours de la désignation — l'expert demande ses informations",
+        "(R. 2315-45) ; dans les dix jours, il notifie le coût prévisionnel (R. 2315-46).",
+        "",
+        "Et une fois pour toutes — relisez la clause de votre accord ou du règlement",
+        "intérieur du comité qui organise la délégation à la commission. Si elle inclut le",
+        "recours à l'expert, elle est inopérante : L. 2315-38 est d'ordre public.",
+      ]);
+
+      return pied(L,
+        ["L. 1233-34", "L. 2315-3", "L. 2315-29", "L. 2315-32", "L. 2315-34",
+         "L. 2315-38", "L. 2315-78", "L. 2315-80", "L. 2315-82", "L. 2315-84",
+         "L. 2315-86", "L. 2315-87", "L. 2315-88", "L. 2315-91", "L. 2315-92",
+         "L. 2315-94", "R. 2315-45", "R. 2315-46", "R. 2315-49", "R. 2315-50",
+         "R. 2315-51"],
+        ["L. 1233-30 (première réunion à laquelle L. 1233-34 rattache la décision)"]);
+    },
+  });
+
 })(typeof window !== "undefined" ? window : this);

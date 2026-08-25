@@ -399,7 +399,8 @@
   function modeDEmploi(L, quoi) {
     L.push("COMMENT SE SERVIR DE CE DOCUMENT");
     L.push("");
-    L.push("Ce que vous lisez est " + quoi + ", rédigé au nom de votre entreprise.");
+    pousserPlie(L, "Ce que vous lisez est " + quoi + ", rédigé au nom de votre " +
+      "entreprise.", 72, "", "");
     L.push("Ce qui est entre crochets vous appartient : ce sont vos chiffres, vos");
     L.push("dates, vos propositions. L'application ne les connaît pas et ne les");
     L.push("inventera pas — un document qui devinerait votre proposition salariale");
@@ -2516,7 +2517,7 @@
       citer(L, "L2242-4");
       L.push("Quatre éléments, et chacun compte :");
       L.push("");
-      L.push("  1. « TANT QUE LA NÉGOCIATION EST EN COURS » — c'est une interdiction à");
+      L.push("  1. « TANT QUE LA NÉGOCIATION […] EST EN COURS » — c'est une interdiction à");
       L.push("     durée déterminée, mais c'est la fin de la négociation qui en fixe le");
       L.push("     terme, et cette fin ne se décrète pas (voir plus bas).");
       L.push("  2. « DANS LES MATIÈRES TRAITÉES » — l'interdiction ne gèle pas");
@@ -3490,6 +3491,634 @@
          "ni leur calcul, ni la date limite de publication, ni le seuil de résultat qui",
          "déclenche les mesures de correction ne figurent dans ce document. Toute",
          "affirmation sur ces cinq points doit être vérifiée à la source."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LE POINTAGE DES THÈMES
+
+     Les marques ci-dessous sont celles que le questionnaire fait saisir dans
+     « negos.<thème>.themesTraites » ; controles-nao.js les compare aux items
+     légaux. Le document reprend la MÊME table, pour que le pointage qu'il
+     affiche soit exactement celui que l'audit a fait — deux listes divergentes
+     produiraient deux verdicts, et le lecteur ne saurait lequel croire.
+
+     Le libellé de chaque item vient du texte capté, et les numéros aussi.
+     Pour L. 2242-17, ATTENTION : le questionnaire suit six marques, mais le
+     texte compte HUIT points — le droit d'expression directe et collective (6°)
+     et la mobilité domicile-travail (8°) n'ont pas de marque. Ils sont donc
+     affichés comme non pointables plutôt que comme absents : l'audit ne les
+     mesure pas, et le document ne prétend pas le contraire.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  var ITEMS_REMUNERATION = [
+    ["salaires", "1°", "Les salaires effectifs"],
+    ["temps de travail", "2°", "La durée effective et l'organisation du temps de travail, notamment la mise en place du travail à temps partiel"],
+    ["épargne salariale", "3°", "L'intéressement, la participation et l'épargne salariale, à défaut d'accord ou de plan existant"],
+    ["écarts femmes-hommes", "4°", "Le suivi de la mise en œuvre des mesures visant à supprimer les écarts de rémunération et les différences de déroulement de carrière entre les femmes et les hommes"],
+  ];
+  var ITEMS_EGALITE = [
+    ["articulation", "1°", "L'articulation entre la vie personnelle et la vie professionnelle pour les salariés"],
+    ["écarts femmes-hommes", "2°", "Les objectifs et les mesures permettant d'atteindre l'égalité professionnelle, notamment en matière de suppression des écarts de rémunération, d'accès à l'emploi, de formation professionnelle, de déroulement de carrière et de promotion professionnelle, de conditions de travail et d'emploi, et de mixité des emplois"],
+    ["discriminations", "3°", "Les mesures permettant de lutter contre toute discrimination en matière de recrutement, d'emploi et d'accès à la formation professionnelle"],
+    ["handicap", "4°", "Les mesures relatives à l'insertion professionnelle et au maintien dans l'emploi des travailleurs handicapés"],
+    ["prévoyance", "5°", "Les modalités de définition d'un régime de prévoyance et d'un régime de remboursements complémentaires, à défaut de couverture par un accord"],
+    [null, "6°", "L'exercice du droit d'expression directe et collective des salariés, notamment au moyen des outils numériques disponibles dans l'entreprise"],
+    ["déconnexion", "7°", "Les modalités du plein exercice par le salarié de son droit à la déconnexion et la mise en place de dispositifs de régulation de l'utilisation des outils numériques"],
+    [null, "8°", "Dans les entreprises d'au moins cinquante salariés sur un même site, les mesures visant à améliorer la mobilité des salariés entre leur lieu de résidence habituelle et leur lieu de travail"],
+  ];
+
+  /* Le pointage : ce que le dossier déclare traité, ce qu'il ne déclare pas, et
+     ce que l'audit ne mesure pas. Trois états, jamais deux. */
+  function pointage(L, items, traites, article) {
+    var connus = traites.length > 0;
+    L.push("  état    │ n° │ thème");
+    L.push("  ────────┼────┼──────────────────────────────────────────────────────");
+    var absents = [];
+    for (var i = 0; i < items.length; i++) {
+      var marque = items[i][0], num = items[i][1], titre = items[i][2];
+      var st;
+      if (marque === null) st = "[ ? ]   ";
+      else if (!connus) st = "[   ]   ";
+      else if (traites.indexOf(marque) >= 0) st = "TRAITÉ  ";
+      else { st = "ABSENT  "; absents.push(num + " — " + titre); }
+      pousserPlie(L, titre, 52, "  " + st + "│ " + num + " │ ", "          │    │ ");
+    }
+    L.push("");
+    if (!connus) {
+      L.push("  Les thèmes traités ne sont pas renseignés au dossier : le pointage");
+      L.push("  ci-dessus est vide, et il vous revient de le faire sur le procès-verbal.");
+    } else if (absents.length) {
+      L.push("  " + absents.length + " thème(s) de " + article + " ne sont pas rattachés à cette");
+      L.push("  négociation dans votre dossier :");
+      for (var j = 0; j < absents.length; j++)
+        pousserPlie(L, absents[j], 64, "    · ", "      ");
+      L.push("");
+      L.push("  Un thème légal laissé hors de la table doit l'être en connaissance de");
+      L.push("  cause. L'obligation porte sur la NÉGOCIATION du thème, non sur sa");
+      L.push("  conclusion : l'aborder et constater le désaccord suffit ; l'ignorer, non.");
+    } else {
+      L.push("  Tous les thèmes pointables de " + article + " sont rattachés à cette");
+      L.push("  négociation. Vérifiez tout de même sur le procès-verbal : une case cochée");
+      L.push("  au questionnaire ne prouve pas une discussion en séance.");
+    }
+    L.push("");
+    L.push("  [ ? ] — ce thème est dans le texte mais l'audit ne le pointe pas : le");
+    L.push("  questionnaire n'a pas de marque pour lui. Vérifiez-le vous-même sur le");
+    L.push("  procès-verbal ; son absence du pointage n'est pas une dispense.");
+    L.push("");
+    return L;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-CON-01 — LES THÈMES DE LA NÉGOCIATION SUR LA RÉMUNÉRATION
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-CON-01", {
+    nom: "L'ordre du jour complémentaire — les thèmes de L. 2242-15 laissés de côté",
+    detail: "Le pointage des quatre thèmes sur le procès-verbal, l'ordre du jour " +
+            "de la réunion complémentaire, la convocation, les informations " +
+            "propres à chaque thème omis et la consignation au procès-verbal.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "remuneration");
+      var traites = liste(n.themesTraites);
+      var L = entete(ctx, "Ordre du jour complémentaire — les thèmes de la négociation sur la rémunération",
+        "article L. 2242-15 du code du travail");
+
+      modeDEmploi(L, "le pointage des thèmes légaux et l'ordre du jour de la réunion complémentaire");
+
+      L.push("════ LE CONTENU N'EST PAS AU CHOIX ════");
+      L.push("");
+      citer(L, "L2242-15");
+      L.push("Quatre thèmes, énumérés. Une négociation qui en laisse un de côté n'est");
+      L.push("pas complète, et le manquement se constate sur le procès-verbal — pièce");
+      L.push("que les organisations syndicales détiennent aussi.");
+      L.push("");
+
+      L.push("════ LE POINTAGE, SUR VOTRE DOSSIER ════");
+      L.push("");
+      L.push("  Négociation engagée le : " +
+        (vide(n.dateEngagement) ? "[non renseignée]" : jour(n.dateEngagement, "date")));
+      L.push("  Issue : " + (vide(n.issue) ? "[non renseignée]" : n.issue));
+      L.push("");
+      pointage(L, ITEMS_REMUNERATION, traites, "L. 2242-15");
+
+      L.push("════ CE QUI SE JOUE ════");
+      L.push("");
+      L.push("Aucun texte capté n'attache de peine au seul fait d'avoir omis un thème.");
+      L.push("Ce document n'en annonce donc pas. Ce qui se joue est double, et il est");
+      L.push("lu :");
+      L.push("");
+      L.push("  · LA COMPLÉTUDE. L'article L. 2242-15 énumère ce sur quoi la");
+      L.push("    négociation PORTE. Un thème absent du procès-verbal établit qu'elle");
+      L.push("    n'a pas porté sur lui.");
+      L.push("  · LA LOYAUTÉ. L'engagement sérieux et loyal de L. 2242-6 suppose que");
+      L.push("    les organisations aient pu négocier en toute connaissance de cause :");
+      L.push("    un thème jamais mis à l'ordre du jour n'a pas pu l'être.");
+      L.push("");
+      L.push("Et pour le seul thème des salaires effectifs — le 1° —, la pénalité de");
+      L.push("L. 2242-7 vise expressément l'obligation de négociation qui le porte. Le");
+      L.push("document du point NAO-CTL-PER-01 reproduit ce texte en entier.");
+      L.push("");
+
+      destinataires(L);
+
+      L = L.concat(courrierOS(ctx,
+        "convocation à une réunion complémentaire de la négociation sur la rémunération",
+        ["La négociation sur la rémunération, le temps de travail et le partage de la",
+         "valeur ajoutée, engagée le " +
+           (vide(n.dateEngagement) ? "[DATE]" : jour(n.dateEngagement, "date")) + ", n'a pas abordé l'ensemble",
+         "des thèmes que l'article L. 2242-15 du code du travail énumère.",
+         "",
+         "Je vous convoque en conséquence à une réunion complémentaire :",
+         "",
+         "  · date : " + leJour(dans(aujourd(ctx), 21)) + " [à confirmer ou à modifier]",
+         "  · heure : [........]",
+         "  · lieu : [........]",
+         "",
+         "L'ordre du jour de cette réunion, joint au présent courrier, porte sur le ou",
+         "les thèmes restés hors de la négociation.",
+         "",
+         "Les informations propres à ces thèmes vous seront remises le [DATE], avant",
+         "la réunion, afin que vous puissiez négocier en toute connaissance de cause",
+         "(L. 2242-6).",
+         "",
+         "Ce qui se dira sur ces thèmes sera consigné au procès-verbal, qu'un accord",
+         "en sorte ou non : l'obligation porte sur la négociation du thème, non sur sa",
+         "conclusion."],
+        { pj: ["ordre du jour de la réunion complémentaire",
+               "liste des informations qui seront remises et date de leur remise"] }));
+
+      L.push(GROS);
+      L.push("ORDRE DU JOUR DE LA RÉUNION COMPLÉMENTAIRE");
+      L.push(GROS);
+      L.push("");
+      L.push("[Ne conservez que les points restés hors de la négociation. Supprimez les");
+      L.push("autres : une réunion qui rouvre tout n'aboutira pas.]");
+      L.push("");
+      for (var i = 0; i < ITEMS_REMUNERATION.length; i++) {
+        var it = ITEMS_REMUNERATION[i];
+        var vu = traites.length > 0 && traites.indexOf(it[0]) >= 0;
+        L.push("POINT " + it[1] + " — " + it[2].toUpperCase().slice(0, 62));
+        pousserPlie(L, it[2], 68, "  ", "  ");
+        L.push("  État au dossier : " + (traites.length === 0
+          ? "[non renseigné — à pointer sur le procès-verbal]"
+          : (vu ? "déclaré traité — à vérifier sur le procès-verbal"
+                : "ABSENT — à porter à l'ordre du jour")));
+        if (it[0] === "salaires") {
+          L.push("  Informations à remettre : [masse salariale de l'exercice ; salaire de");
+          L.push("  base minimum, moyen et médian par sexe et par catégorie ; évolution");
+          L.push("  sur trois exercices — source : déclaration sociale nominative, base");
+          L.push("  de données économiques, sociales et environnementales.]");
+        } else if (it[0] === "temps de travail") {
+          L.push("  Informations à remettre : [durée collective pratiquée ; heures");
+          L.push("  supplémentaires ; nombre, sexe et qualification des salariés à temps");
+          L.push("  partiel et horaires pratiqués — source : décompte du temps de");
+          L.push("  travail, registre unique du personnel.]");
+          L.push("  Le texte ajoute que la négociation PEUT également porter sur la");
+          L.push("  réduction du temps de travail : c'est une faculté, pas une");
+          L.push("  obligation.");
+        } else if (it[0] === "épargne salariale") {
+          L.push("  Vérifiez d'abord si ce point vous est dû : le 3° ne joue qu'À DÉFAUT");
+          L.push("  d'accord d'intéressement, d'accord de participation, de plan");
+          L.push("  d'épargne d'entreprise, de plan d'épargne pour la mise à la retraite");
+          L.push("  collectif ou d'accord de branche comportant l'un de ces dispositifs.");
+          L.push("  [Dispositifs en vigueur : ......................................]");
+        } else {
+          L.push("  C'est le thème que l'on confond avec le 1°, et il en est distinct :");
+          L.push("  il porte sur le SUIVI de la mise en œuvre des mesures de suppression");
+          L.push("  des écarts. Et si aucun accord ne prévoit ces mesures, le dernier");
+          L.push("  alinéa de L. 2242-3 fait porter la négociation sur les salaires");
+          L.push("  effectifs sur leur PROGRAMMATION — ce n'est plus alors un suivi.");
+          L.push("  [Mesures en vigueur et état de leur mise en œuvre : ...........]");
+        }
+        L.push("");
+      }
+      L.push("POINT COMPLÉMENTAIRE — L'INFORMATION SUR LES MISES À DISPOSITION");
+      L.push("");
+      citer(L, "L2242-16");
+      L.push("");
+
+      L.push(GROS);
+      L.push("MENTION À PORTER AU PROCÈS-VERBAL DE LA RÉUNION COMPLÉMENTAIRE");
+      L.push(GROS);
+      L.push("");
+      L.push("« Le thème [....................], prévu au [..]° de l'article L. 2242-15");
+      L.push("du code du travail, a été abordé lors de la présente réunion. Les");
+      L.push("informations suivantes ont été remises aux négociateurs le [DATE] :");
+      L.push("[....................]. Les propositions des parties ont été les");
+      L.push("suivantes : [employeur : ..........] ; [organisations syndicales :");
+      L.push("..........]. L'issue de la discussion sur ce thème est : [accord /");
+      L.push("désaccord constaté / renvoi à la réunion du ..........]. »");
+      L.push("");
+      L.push("Cette mention est la seule preuve que le thème a été traité. Sans elle,");
+      L.push("il n'existe pas — quelle qu'ait été la discussion en séance.");
+      L.push("");
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous reprenez le procès-verbal et pointez les quatre thèmes,"),
+        suite("un par un, sur le texte de L. 2242-15."),
+        ech(ctx, 5, "les informations propres à chaque thème omis sont réunies."),
+        ech(ctx, 7, "la convocation part, avec l'ordre du jour complémentaire."),
+        ech(ctx, 14, "remise des informations, contre décharge."),
+        ech(ctx, 21, "réunion complémentaire : chaque thème omis est abordé."),
+        ech(ctx, 28, "le procès-verbal porte la mention thème par thème, et il est"),
+        suite("notifié aux organisations syndicales."),
+      ]));
+
+      return L.concat(pied("L. 2242-3, L. 2242-6, L. 2242-15, L. 2242-16",
+        ["Aucune peine n'est annoncée pour l'omission d'un thème : aucun texte capté",
+         "n'en attache à L. 2242-15. La pénalité de L. 2242-7 ne vise que l'obligation",
+         "de négociation sur les salaires effectifs — le 1° — et le document du point",
+         "NAO-CTL-PER-01 la reproduit."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-CON-02 — LES THÈMES DE LA NÉGOCIATION SUR L'ÉGALITÉ
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-CON-02", {
+    nom: "L'ordre du jour complémentaire — les thèmes de L. 2242-17 laissés de côté",
+    detail: "Le pointage des huit points du texte, la convocation à la réunion " +
+            "complémentaire, le sort particulier du droit à la déconnexion et la " +
+            "consignation au procès-verbal.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "egalite");
+      var traites = liste(n.themesTraites);
+      var L = entete(ctx, "Ordre du jour complémentaire — les thèmes de la négociation sur l'égalité professionnelle",
+        "article L. 2242-17 du code du travail");
+
+      modeDEmploi(L, "le pointage des huit points de L. 2242-17 et l'ordre du jour complémentaire");
+
+      L.push("════ HUIT POINTS, ET NON SIX ════");
+      L.push("");
+      citer(L, "L2242-17");
+      L.push("Le texte compte huit numéros. Le questionnaire de l'audit n'en pointe que");
+      L.push("six : le 6° — droit d'expression directe et collective — et le 8° —");
+      L.push("mobilité domicile-travail — n'ont pas de case. Ils sont donc marqués");
+      L.push("« [ ? ] » dans le pointage ci-dessous : l'audit ne les mesure pas, et");
+      L.push("cela ne veut pas dire qu'ils ne vous sont pas dus.");
+      L.push("");
+
+      L.push("════ LE POINTAGE, SUR VOTRE DOSSIER ════");
+      L.push("");
+      L.push("  Négociation engagée le : " +
+        (vide(n.dateEngagement) ? "[non renseignée]" : jour(n.dateEngagement, "date")));
+      L.push("  Issue : " + (vide(n.issue) ? "[non renseignée]" : n.issue));
+      L.push("");
+      pointage(L, ITEMS_EGALITE, traites, "L. 2242-17");
+
+      L.push("════ CE QUI SE JOUE ════");
+      L.push("");
+      L.push("Aucun texte capté n'attache de peine à l'omission d'un thème pris pour");
+      L.push("lui-même. Mais deux conséquences sont lues, et elles ne sont pas");
+      L.push("théoriques :");
+      L.push("");
+      L.push("  · LA COUVERTURE. Si la négociation n'a pas porté sur l'égalité");
+      L.push("    professionnelle telle que le texte la définit, l'accord qui en sort");
+      L.push("    couvre mal — et la pénalité de L. 2242-8 vise l'absence d'accord");
+      L.push("    « relatif à l'égalité professionnelle entre les femmes et les hommes »");
+      L.push("    à l'issue de la négociation du 2° de L. 2242-1.");
+      L.push("  · LA DÉCONNEXION APPELLE UNE CHARTE. Le 7° prévoit qu'à défaut");
+      L.push("    d'accord, l'employeur ÉLABORE une charte, après avis du comité social");
+      L.push("    et économique. Ne pas aborder le thème, c'est se priver de l'accord");
+      L.push("    ET oublier la charte.");
+      L.push("");
+
+      destinataires(L);
+
+      L = L.concat(courrierOS(ctx,
+        "convocation à une réunion complémentaire de la négociation sur l'égalité professionnelle",
+        ["La négociation sur l'égalité professionnelle entre les femmes et les hommes",
+         "et la qualité de vie et des conditions de travail, engagée le " +
+           (vide(n.dateEngagement) ? "[DATE]" : jour(n.dateEngagement, "date")) + ",",
+         "n'a pas abordé l'ensemble des thèmes que l'article L. 2242-17 du code du",
+         "travail énumère.",
+         "",
+         "Je vous convoque en conséquence à une réunion complémentaire :",
+         "",
+         "  · date : " + leJour(dans(aujourd(ctx), 21)) + " [à confirmer ou à modifier]",
+         "  · heure : [........]",
+         "  · lieu : [........]",
+         "",
+         "L'ordre du jour joint porte sur le ou les thèmes restés hors de la",
+         "négociation.",
+         "",
+         "Les données correspondantes issues de la base de données économiques,",
+         "sociales et environnementales vous seront remises le [DATE] : le 2° de",
+         "l'article L. 2242-17 dispose que cette négociation s'appuie sur les données",
+         "mentionnées au 2° de l'article L. 2312-36.",
+         "",
+         "Ce qui se dira sur ces thèmes sera consigné au procès-verbal."],
+        { pj: ["ordre du jour de la réunion complémentaire",
+               "extraction de la base de données",
+               "le cas échéant, rapport de L. 2242-18 sur l'obligation d'emploi des travailleurs handicapés"] }));
+
+      L.push(GROS);
+      L.push("ORDRE DU JOUR DE LA RÉUNION COMPLÉMENTAIRE");
+      L.push(GROS);
+      L.push("");
+      L.push("[Ne conservez que les points restés hors de la négociation.]");
+      L.push("");
+      for (var i = 0; i < ITEMS_EGALITE.length; i++) {
+        var it = ITEMS_EGALITE[i];
+        L.push("POINT " + it[1]);
+        pousserPlie(L, it[2], 68, "  ", "  ");
+        L.push("  État au dossier : " + (it[0] === null
+          ? "non pointé par l'audit — à vérifier sur le procès-verbal"
+          : (traites.length === 0
+            ? "[non renseigné — à pointer sur le procès-verbal]"
+            : (traites.indexOf(it[0]) >= 0
+              ? "déclaré traité — à vérifier sur le procès-verbal"
+              : "ABSENT — à porter à l'ordre du jour"))));
+        if (it[1] === "2°") {
+          L.push("  Ce point s'appuie sur les données de la base : le document du point");
+          L.push("  NAO-CTL-CON-03 prépare l'extraction et son bordereau de remise.");
+          L.push("  [Données : effectifs, rémunérations comparées, promotions, formation,");
+          L.push("  embauches et départs, par sexe et par catégorie.]");
+        } else if (it[1] === "4°") {
+          L.push("  Ce point se négocie sur une base écrite : l'article L. 2242-18 impose");
+          L.push("  un rapport de l'employeur présentant la situation de l'entreprise au");
+          L.push("  regard de l'obligation d'emploi des travailleurs handicapés.");
+          L.push("  [Rapport à établir et à remettre avant la réunion.]");
+        } else if (it[1] === "5°") {
+          L.push("  Ce point n'est dû qu'À DÉFAUT de couverture par un accord de branche");
+          L.push("  ou un accord d'entreprise. [Couverture en vigueur : ..........]");
+        } else if (it[1] === "7°") {
+          L.push("  ATTENTION : à défaut d'accord sur ce point, l'employeur ÉLABORE une");
+          L.push("  charte, après avis du comité social et économique. Cette charte");
+          L.push("  définit les modalités du droit à la déconnexion et prévoit en outre");
+          L.push("  des actions de formation et de sensibilisation à un usage raisonnable");
+          L.push("  des outils numériques, à destination des salariés comme du personnel");
+          L.push("  d'encadrement et de direction. Un désaccord n'éteint donc pas le");
+          L.push("  sujet : il ouvre une obligation nouvelle.");
+          L.push("  [Charte existante : oui, du .......... / non — à élaborer]");
+        } else if (it[1] === "8°") {
+          L.push("  Ce point ne concerne que les entreprises mentionnées à l'article");
+          L.push("  L. 2143-3 dont cinquante salariés au moins sont employés SUR UN MÊME");
+          L.push("  SITE. [Sites et effectif de chacun : .........................]");
+        }
+        L.push("");
+      }
+      L.push("POINT FACULTATIF — LA PRÉVENTION DE L'EXPOSITION AUX FACTEURS DE RISQUES");
+      L.push("");
+      citer(L, "L2242-19");
+      L.push("");
+
+      L.push(GROS);
+      L.push("MENTION À PORTER AU PROCÈS-VERBAL");
+      L.push(GROS);
+      L.push("");
+      L.push("« Le thème [....................], prévu au [..]° de l'article L. 2242-17");
+      L.push("du code du travail, a été abordé lors de la présente réunion. Les données");
+      L.push("suivantes, issues de la base de données économiques, sociales et");
+      L.push("environnementales, ont été remises aux négociateurs le [DATE] :");
+      L.push("[....................]. Les propositions des parties ont été les");
+      L.push("suivantes : [....................]. L'issue de la discussion sur ce thème");
+      L.push("est : [accord / désaccord constaté / renvoi à la réunion du ..........]. »");
+      L.push("");
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous pointez les huit points du texte sur le procès-verbal —"),
+        suite("les six que l'audit mesure, et les deux qu'il ne mesure pas."),
+        ech(ctx, 5, "l'extraction de la base est demandée, et le rapport de"),
+        suite("L. 2242-18 est ouvert si le 4° est concerné."),
+        ech(ctx, 7, "la convocation part, avec l'ordre du jour complémentaire."),
+        ech(ctx, 14, "remise des données et du rapport, contre décharge."),
+        ech(ctx, 21, "réunion complémentaire."),
+        ech(ctx, 28, "le procès-verbal porte la mention point par point."),
+        ech(ctx, 60, "si le 7° s'est achevé sans accord : avis du comité social et"),
+        suite("économique, puis charte de l'employeur sur le droit à la"),
+        suite("déconnexion. Ce n'est pas une option."),
+      ]));
+
+      return L.concat(pied("L. 2242-6, L. 2242-8, L. 2242-17, L. 2242-18, L. 2242-19",
+        ["Les articles L. 2312-36, L. 6315-1, L. 5212-1 et suivants, L. 2143-3,",
+         "L. 3261-3, L. 3261-3-1, L. 4163-3 et L. 4161-1 du code du travail, ainsi que",
+         "les articles L. 241-3-1, L. 911-2 et L. 911-7 du code de la sécurité sociale",
+         "et l'article L. 722-1 du code rural et de la pêche maritime, sont NOMMÉS",
+         "parce que les textes lus les nomment. Aucun n'a été lu à la source par ce",
+         "module."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-CON-03 — L'APPUI SUR LES DONNÉES DE LA BASE
+
+     Fondement : L. 2242-17, 2°. Le renvoi qu'il porte — « les données
+     mentionnées au 2° de l'article L. 2312-36 » — est capté DANS le texte lu ;
+     l'article L. 2312-36 lui-même ne l'est pas. Il est donc NOMMÉ, jamais
+     reproduit, et le document renvoie au module « base de données » pour son
+     contenu.
+
+     MANQUE DANS LE CORPUS DE CE MODULE : L. 2312-36, dont le 2° désigne
+     précisément les données dues. Le bordereau ci-dessous énumère donc des
+     rubriques usuelles ENTRE CROCHETS, en disant qu'elles ne sont pas la liste
+     légale — et il renvoie à la seule source qui la porte.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-CON-03", {
+    nom: "L'extraction de la base de données pour la négociation sur l'égalité",
+    detail: "La demande d'extraction au service qui tient la base, le bordereau " +
+            "de remise daté aux organisations syndicales, la mention à porter au " +
+            "procès-verbal et le renvoi au module qui lit L. 2312-36.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "egalite");
+      var L = entete(ctx, "Appui de la négociation sur l'égalité professionnelle sur les données de la base",
+        "article L. 2242-17, 2°, du code du travail");
+
+      modeDEmploi(L, "la demande d'extraction, le bordereau de remise et la mention au procès-verbal");
+
+      L.push("════ CE QUE LE TEXTE IMPOSE, EN UNE PHRASE ════");
+      L.push("");
+      citerMorceau(L, "L2242-17", "Cette négociation s'appuie sur les données", "Cette négociation porte également");
+      L.push("Ce n'est pas une recommandation : le texte dit « s'appuie ». Des");
+      L.push("négociateurs privés du diagnostic comparé femmes-hommes ne négocient pas");
+      L.push("en connaissance de cause — et L. 2242-6 fait de cette connaissance de");
+      L.push("cause une composante de l'engagement sérieux et loyal :");
+      L.push("");
+      citerMorceau(L, "L2242-6", "L'employeur doit également leur avoir communiqué", null);
+
+      L.push("════ CE QUE CE DOCUMENT NE PEUT PAS VOUS DIRE ════");
+      L.push("");
+      L.push("L'article L. 2312-36, auquel ce 2° renvoie, N'EST PAS dans le corpus lu");
+      L.push("par ce module. La liste exacte des données de son 2° n'est donc ni");
+      L.push("reproduite ni résumée ici : elle ne sera pas devinée.");
+      L.push("");
+      L.push("Deux sources la portent, et l'une est dans cette application :");
+      L.push("");
+      L.push("  · LE MODULE « BASE DE DONNÉES (BDESE) » de cette application lit");
+      L.push("    L. 2312-36 et les articles R. 2312-8 et R. 2312-9 à la source, et il");
+      L.push("    déploie la grille rubrique par rubrique. La rubrique « égalité");
+      L.push("    professionnelle entre les femmes et les hommes » y figure avec son");
+      L.push("    analyse des données chiffrées et sa stratégie d'action. C'est là qu'il");
+      L.push("    faut aller chercher la liste — et non ici.");
+      L.push("  · VOTRE ACCORD, s'il en existe un au sens de L. 2312-21 : il peut");
+      L.push("    définir l'organisation et le contenu de votre base.");
+      L.push("");
+      L.push("Les rubriques du bordereau ci-dessous sont donc écrites ENTRE CROCHETS :");
+      L.push("elles sont les données qu'une négociation sur l'égalité utilise en");
+      L.push("pratique, non la liste légale. Complétez-les depuis votre base réelle.");
+      L.push("");
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · négociation égalité engagée le : " +
+        (vide(n.dateEngagement) ? "[non renseignée]" : jour(n.dateEngagement, "date")));
+      L.push("  · appui sur les données de la base : " +
+        etat(n.appuiBDESE, "OUI", "NON — le texte l'impose"));
+      L.push("");
+      if (estNon(n.appuiBDESE)) {
+        L.push("  → La négociation a été conduite sans s'appuyer sur ces données. La");
+        L.push("    régularisation ne consiste pas à ajouter une phrase au procès-verbal :");
+        L.push("    elle consiste à REMETTRE les données, puis à rouvrir la discussion");
+        L.push("    des points qu'elles éclairent, et à le consigner.");
+        L.push("");
+      }
+
+      L.push(GROS);
+      L.push("ÉTAPE 1 — LA DEMANDE D'EXTRACTION AU SERVICE QUI TIENT LA BASE");
+      L.push(GROS);
+      L.push("");
+      L.push("Note interne — " + nomDe(ctx));
+      L.push("");
+      L.push("À : [service des ressources humaines / service qui tient la base de");
+      L.push("données économiques, sociales et environnementales]");
+      L.push("De : " + signataire(ctx));
+      L.push("Date : " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push("Objet : extraction des données d'égalité professionnelle pour la");
+      L.push("négociation obligatoire");
+      L.push("");
+      L.push("La négociation sur l'égalité professionnelle entre les femmes et les");
+      L.push("hommes et la qualité de vie et des conditions de travail s'appuie, en");
+      L.push("application du 2° de l'article L. 2242-17 du code du travail, sur les");
+      L.push("données mentionnées au 2° de l'article L. 2312-36.");
+      L.push("");
+      L.push("Merci d'extraire ces données de la base et de me les transmettre au plus");
+      L.push("tard le " + leJour(dans(aujourd(ctx), 10)) + ", en précisant pour chacune :");
+      L.push("");
+      L.push("  · la période sur laquelle elle porte ;");
+      L.push("  · la date de sa dernière mise à jour dans la base ;");
+      L.push("  · sa source (déclaration sociale nominative, registre unique du");
+      L.push("    personnel, système de paie) ;");
+      L.push("  · le cas échéant, la mention de confidentialité qui l'accompagne dans");
+      L.push("    la base, et la durée de cette confidentialité.");
+      L.push("");
+      L.push("Si une donnée manque dans la base, le signaler plutôt que de la");
+      L.push("reconstituer pour l'occasion : une donnée absente de la base est un");
+      L.push("manquement à traiter pour lui-même, que le module « base de données »");
+      L.push("de l'application audite.");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("ÉTAPE 2 — LE BORDEREAU DE REMISE AUX ORGANISATIONS SYNDICALES");
+      L.push(GROS);
+      L.push("");
+      L.push("À faire signer le jour de la remise. C'est cette feuille qui prouvera que");
+      L.push("les données ont été remises, et à quelle date.");
+      L.push("");
+      L.push(nomDe(ctx));
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("EXTRACTION DE LA BASE DE DONNÉES ÉCONOMIQUES, SOCIALES ET");
+      L.push("ENVIRONNEMENTALES — DONNÉES D'ÉGALITÉ PROFESSIONNELLE");
+      L.push("");
+      L.push("Remise le " + leJour(dans(aujourd(ctx), 14)) + " [date à confirmer], en application du 2° de");
+      L.push("l'article L. 2242-17 du code du travail.");
+      L.push("");
+      L.push("  donnée remise                        │ période  │ à jour au │ visa");
+      L.push("  ─────────────────────────────────────┼──────────┼───────────┼──────");
+      L.push("  [Effectifs par sexe et par catégorie");
+      L.push("   professionnelle]                    │ [......] │ [.......] │ [..]");
+      L.push("  [Embauches par sexe et par catégorie]│ [......] │ [.......] │ [..]");
+      L.push("  [Départs par sexe et par motif]      │ [......] │ [.......] │ [..]");
+      L.push("  [Rémunération effective comparée par");
+      L.push("   sexe et par catégorie]              │ [......] │ [.......] │ [..]");
+      L.push("  [Promotions par sexe]                │ [......] │ [.......] │ [..]");
+      L.push("  [Formation : bénéficiaires et heures");
+      L.push("   par sexe]                           │ [......] │ [.......] │ [..]");
+      L.push("  [Qualifications et classifications");
+      L.push("   par sexe]                           │ [......] │ [.......] │ [..]");
+      L.push("  [Conditions de travail, santé et");
+      L.push("   sécurité par sexe]                  │ [......] │ [.......] │ [..]");
+      L.push("  [Temps partiel par sexe]             │ [......] │ [.......] │ [..]");
+      L.push("  [.................................] │ [......] │ [.......] │ [..]");
+      L.push("");
+      L.push("  CES RUBRIQUES SONT ENTRE CROCHETS ET CE N'EST PAS UN OUBLI : ce module");
+      L.push("  n'a pas lu l'article L. 2312-36, et il ne prétend donc pas énumérer les");
+      L.push("  données que son 2° désigne. Confrontez ce bordereau à la grille de votre");
+      L.push("  base — le module « base de données (BDESE) » la déploie — et à votre");
+      L.push("  accord s'il en existe un.");
+      L.push("");
+      L.push("  Remis à : [organisation syndicale, nom et qualité du signataire]");
+      L.push("  Date et signature : [.......................................]");
+      L.push("");
+      L.push("");
+
+      L = L.concat(courrierOS(ctx,
+        "remise des données de la base pour la négociation sur l'égalité professionnelle",
+        ["Le 2° de l'article L. 2242-17 du code du travail dispose que la négociation",
+         "sur l'égalité professionnelle entre les femmes et les hommes s'appuie sur",
+         "les données mentionnées au 2° de l'article L. 2312-36.",
+         "",
+         "Je vous remets en conséquence, ci-joint, l'extraction de ces données",
+         "issue de la base de données économiques, sociales et environnementales de",
+         "l'entreprise, arrêtée au [DATE].",
+         "",
+         "Le bordereau joint précise, pour chaque donnée, la période sur laquelle elle",
+         "porte et la date de sa dernière mise à jour. Je vous remercie de bien",
+         "vouloir m'en accuser réception.",
+         "",
+         "Ces données seront examinées lors de la réunion du [DATE], et le",
+         "procès-verbal mentionnera que la négociation s'est appuyée sur elles.",
+         "",
+         "[Le cas échéant : certaines de ces informations sont présentées comme",
+         "confidentielles dans la base ; leur régime de confidentialité est rappelé au",
+         "bordereau.]"],
+        { pj: ["extraction de la base de données",
+               "bordereau de remise, à signer"] }));
+
+      L.push(GROS);
+      L.push("ÉTAPE 3 — LA MENTION À PORTER AU PROCÈS-VERBAL");
+      L.push(GROS);
+      L.push("");
+      L.push("« Conformément au 2° de l'article L. 2242-17 du code du travail, la");
+      L.push("présente négociation s'appuie sur les données mentionnées au 2° de");
+      L.push("l'article L. 2312-36. Ces données ont été extraites de la base de données");
+      L.push("économiques, sociales et environnementales de l'entreprise et remises aux");
+      L.push("organisations syndicales représentatives le [DATE], contre décharge, selon");
+      L.push("le bordereau annexé au présent procès-verbal. Elles ont été présentées et");
+      L.push("discutées en séance ; les observations des organisations syndicales sur");
+      L.push("ces données sont les suivantes : [....................]. »");
+      L.push("");
+      L.push("Sans cette mention, l'appui sur les données ne se prouve pas — et c'est à");
+      L.push("l'employeur qu'il appartiendra de l'établir.");
+      L.push("");
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "la demande d'extraction part au service qui tient la base."),
+        ech(ctx, 10, "l'extraction est livrée, avec pour chaque donnée sa période et"),
+        suite("sa date de mise à jour."),
+        ech(ctx, 12, "vous confrontez l'extraction à la grille de votre base : ce qui"),
+        suite("manque dans la base se signale, il ne se reconstitue pas pour"),
+        suite("l'occasion."),
+        ech(ctx, 14, "remise aux organisations syndicales, contre décharge."),
+        ech(ctx, 21, "réunion : les données sont présentées et discutées."),
+        ech(ctx, 23, "le procès-verbal porte la mention, et le bordereau y est annexé."),
+      ]));
+
+      return L.concat(pied("L. 2242-6, L. 2242-17, 2°",
+        ["L'article L. 2312-36, auquel le 2° de L. 2242-17 renvoie, N'EST PAS dans le",
+         "corpus lu par ce module : il est nommé, et la liste des données de son 2°",
+         "n'est ni reproduite ni résumée. Le module « base de données (BDESE) » de",
+         "cette application le lit à la source et déploie la grille correspondante.",
+         "",
+         "Les rubriques du bordereau sont donc données entre crochets, comme des",
+         "rubriques usuelles à confronter à votre base réelle — non comme la liste",
+         "légale."])).join("\n");
     },
   });
 

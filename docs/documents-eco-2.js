@@ -2700,6 +2700,797 @@
       return L.join("\n");
     });
 
+  /* ══════════════════════════════════════════════════════════════════════
+     LE SEUIL DE DIX
+     ══════════════════════════════════════════════════════════════════════ */
+
+  doc("CTL-SEU-01",
+    "Le tableau de décompte des licenciements sur la fenêtre de trente jours",
+    "Le décompte nominatif et daté, licenciement par licenciement, sur la période " +
+    "de trente jours ; le total ; le régime que ce total commande, article par " +
+    "article ; et la note de régime à verser au dossier.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var c = comptes(f), r = regime(f);
+      var projet = nbf(f.nbLicenciements), recents = nbf(f.licenciementsRecents30j);
+      var refus = nbf(f.refusModification);
+      var total = c ? c.total30j : nbLic(f);
+      var eff = effectifDe(ctx), d0 = aujourd(ctx);
+      var bascule = c && c.projet < 10 && c.total30j >= 10;
+
+      L = L.concat(entete(ctx, "Décompte des licenciements sur une même période de trente jours",
+        "articles L. 1233-28 et L. 1233-61 du code du travail"));
+
+      if (bascule) {
+        irrattrapable(L, [
+          "Le projet porte sur " + c.projet + " licenciement(s), mais la fenêtre de trente",
+          "jours en compte " + c.total30j + ".",
+          "",
+          c.motif,
+          "",
+          "Le régime du licenciement collectif d'au moins dix salariés s'applique donc" +
+            (eff !== null && eff >= 50 ? ", plan de sauvegarde de l'emploi compris." : "."),
+          "",
+          "Une procédure engagée au régime allégé ne se convertit pas en cours de",
+          "route : la consultation, la notification du projet à l'autorité",
+          "administrative et, le cas échéant, le plan sont des actes qui se placent",
+          "AVANT ceux déjà accomplis. On ne les intercale pas après coup.",
+        ], "Il faut reprendre la procédure à son commencement, tant qu'aucune lettre " +
+           "n'est partie. Si des lettres sont déjà parties, la partie VI dit ce qu'il " +
+           "reste à faire, et ce n'est pas une régularisation.");
+      }
+
+      modeEmploi(L, [
+        "Ce document ne dit pas le droit : il COMPTE. Et c'est le compte qui décide",
+        "de tout le reste — une réunion ou deux, un mois d'avis ou quatre, une",
+        "information de l'administration ou une notification préalable, un plan de",
+        "sauvegarde de l'emploi ou rien.",
+        "",
+        "L'unité comptée est LE SALARIÉ DONT LE LICENCIEMENT EST ENVISAGÉ, quel que",
+        "soit le chemin qui y mène : le licenciement projeté, celui déjà prononcé",
+        "dans la même fenêtre, celui qui suit le refus d'une modification du contrat.",
+        "Trois colonnes, un seul total.",
+        "",
+        "Remplissez le tableau du II avec des NOMS et des DATES, pas avec des",
+        "nombres. Un nombre ne se vérifie pas ; une ligne datée se vérifie.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. Les textes que le compte déclenche");
+
+      L.push("L. 1233-8 : « L'employeur qui envisage de procéder à un licenciement collectif");
+      L.push("pour motif économique DE MOINS DE DIX SALARIÉS dans une même période de");
+      L.push("trente jours réunit et consulte le comité social et économique dans les");
+      L.push("entreprises d'au moins onze salariés, dans les conditions prévues par la");
+      L.push("présente sous-section. Le comité social et économique rend son avis dans un");
+      L.push("délai qui ne peut être supérieur, à compter de la date de la première réunion");
+      L.push("au cours de laquelle il est consulté, à un mois. En l'absence d'avis rendu");
+      L.push("dans ce délai, le comité social et économique est réputé avoir été consulté. »");
+      L.push("");
+      L.push("L. 1233-28 : « L'employeur qui envisage de procéder à un licenciement");
+      L.push("collectif pour motif économique D'AU MOINS DIX SALARIÉS dans une même période");
+      L.push("de trente jours réunit et consulte le comité social et économique dans les");
+      L.push("conditions prévues par le présent paragraphe. »");
+      L.push("");
+      L.push("L. 1233-61, premier alinéa : « Dans les entreprises d'au moins cinquante");
+      L.push("salariés, lorsque le projet de licenciement concerne au moins dix salariés");
+      L.push("dans une même période de trente jours, l'employeur établit et met en oeuvre un");
+      L.push("plan de sauvegarde de l'emploi pour éviter les licenciements ou en limiter le");
+      L.push("nombre. »");
+      L.push("");
+      L.push("L. 1233-25 : « Lorsqu'au moins dix salariés ont refusé la modification d'un");
+      L.push("élément essentiel de leur contrat de travail, proposée par leur employeur pour");
+      L.push("l'un des motifs économiques énoncés à l'article L. 1233-3 et que leur");
+      L.push("licenciement est envisagé, celui-ci est soumis aux dispositions applicables en");
+      L.push("cas de licenciement collectif pour motif économique. »");
+      L.push("");
+      L.push("Ces quatre textes comptent la même unité : le salarié dont le licenciement");
+      L.push("est envisagé sur une même période de trente jours. L'article L. 1233-25 règle");
+      L.push("le cas où les refus atteignent dix à eux seuls ; il n'écarte pas ces salariés");
+      L.push("du décompte général lorsqu'ils s'ajoutent à d'autres licenciements. C'est la");
+      L.push("lecture que le moteur du module applique, et le document ne s'en écarte pas.");
+      L.push("");
+      L.push("Le risque de double compte se règle au questionnaire, non ici : la question");
+      L.push("posée est celle des refus « non compris dans le nombre de licenciements");
+      L.push("envisagés ». Vérifiez que vous y avez répondu ainsi.");
+      L.push("");
+
+      titre(L, "II. Le décompte, ligne par ligne");
+
+      L.push("Une ligne par salarié. La date retenue est celle de l'ENVOI de la lettre pour");
+      L.push("un licenciement déjà prononcé, et celle de l'envoi envisagé pour un");
+      L.push("licenciement projeté.");
+      L.push("");
+      L.push("A — LICENCIEMENTS ENVISAGÉS DANS LE PROJET EN COURS");
+      L.push("");
+      tableau(L, ["N°", "Salarié", "Emploi", "Catégorie", "Date d'envoi envisagée", "Pièce"],
+        [["1", "[nom ou matricule]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["2", "[nom ou matricule]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["…", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("  Sous-total A ...... " + (projet === null ? "[  ]" : String(projet)) +
+        (projet === null ? "  (la fiche ne le renseigne pas)" : "  (selon la fiche)"));
+      L.push("");
+      L.push("B — LICENCIEMENTS ÉCONOMIQUES DÉJÀ PRONONCÉS DANS LA MÊME PÉRIODE");
+      L.push("");
+      tableau(L, ["N°", "Salarié", "Emploi", "Date d'envoi de la lettre", "Motif", "Pièce"],
+        [["1", "[nom ou matricule]", "[  ]", "[  ]", "[économique]", "[lettre du ...]"],
+         ["2", "[nom ou matricule]", "[  ]", "[  ]", "[économique]", "[lettre du ...]"]]);
+      L.push("");
+      L.push("  Sous-total B ...... " + (recents === null ? "[  ]" : String(recents)) +
+        (recents === null ? "  (NON RENSEIGNÉ — sans lui, le seuil ne peut pas être vérifié)"
+          : "  (selon la fiche)"));
+      L.push("");
+      L.push("C — LICENCIEMENTS ENVISAGÉS APRÈS REFUS D'UNE MODIFICATION DU CONTRAT");
+      L.push("");
+      tableau(L, ["N°", "Salarié", "Élément essentiel modifié", "Date du refus", "Pièce"],
+        [["1", "[nom ou matricule]", "[  ]", "[  ]", "[lettre de refus du ...]"],
+         ["2", "[nom ou matricule]", "[  ]", "[  ]", "[lettre de refus du ...]"]]);
+      L.push("");
+      L.push("  Sous-total C ...... " + (refus === null ? "[  ]" : String(refus)) +
+        "  — non compris dans A. Le détail se tient dans le document du");
+      L.push("  contrôle CTL-SEU-02.");
+      L.push("");
+      L.push("LA FENÊTRE RETENUE");
+      L.push("");
+      L.push("  Premier jour de la période de trente jours ..... [  ]");
+      L.push("  Dernier jour ................................... [  ]");
+      L.push("  [La période de trente jours est GLISSANTE : elle ne se cale ni sur le mois");
+      L.push("  civil ni sur la date de la première lettre. Faites glisser la fenêtre sur");
+      L.push("  toutes les dates du tableau et retenez celle qui contient le plus de");
+      L.push("  licenciements : c'est elle qui commande, non celle qui vous arrange.]");
+      L.push("");
+
+      titre(L, "III. Le total, et le régime qu'il commande");
+
+      tableau(L, ["Terme", "Nombre", "Source"], [
+        ["A — licenciements envisagés", projet === null ? "[  ]" : String(projet), "nbLicenciements"],
+        ["B — déjà prononcés dans les trente jours", recents === null ? "[  ]" : String(recents), "licenciementsRecents30j"],
+        ["C — après refus de modification", refus === null ? "[  ]" : String(refus), "refusModification"],
+        ["TOTAL SUR LA FENÊTRE", total === null ? "[  ]" : String(total), "A + B + C"],
+      ]);
+      L.push("");
+      if (c) {
+        L.push("Ce que le moteur du module retient : " + c.motif);
+        L.push("");
+      }
+      L.push("  Effectif de l'entreprise ..... " +
+        (eff === null ? "[non renseigné]" : eff + " salariés"));
+      L.push("");
+      L.push("LE RÉGIME QUI EN DÉCOULE :");
+      L.push("");
+      tableau(L, ["Si le total est", "et l'effectif", "alors"], [
+        ["moins de 10", "au moins 11", "L. 1233-8 : une réunion, avis dans un mois"],
+        ["au moins 10", "moins de 50", "L. 1233-28 et L. 1233-29 : deux réunions, " +
+          "séparées de quatorze jours au plus"],
+        ["au moins 10", "au moins 50", "L. 1233-28 et L. 1233-30 : au moins deux réunions " +
+          "espacées d'au moins quinze jours, avis en deux, trois ou quatre mois"],
+        ["au moins 10", "au moins 50", "L. 1233-61 : PLAN DE SAUVEGARDE DE L'EMPLOI"],
+        ["au moins 10", "toute entreprise", "L. 1233-46 : notification du projet à " +
+          "l'autorité administrative"],
+      ]);
+      L.push("");
+      if (r && r.libelle) {
+        L.push("Régime retenu par l'audit : " + r.libelle + ".");
+        if (r.delaiAvis) L.push("Délai d'avis : " + r.delaiAvis + ".");
+        if (r.reunions) L.push("Réunions exigées : " + r.reunions + ".");
+        if (r.pse) L.push("Plan de sauvegarde de l'emploi : dû (L. 1233-61).");
+        L.push("");
+      } else {
+        L.push("Le moteur du module n'est pas chargé sur cette page : le régime n'est pas");
+        L.push("tranché ici. Le tableau ci-dessus énonce les branches ; le rapport d'audit a");
+        L.push("dit laquelle s'applique.");
+        L.push("");
+      }
+      L.push("Et le délai d'envoi des lettres change lui aussi. Sous le régime des moins de");
+      L.push("dix, L. 1233-15 dispose que la lettre « ne peut être expédiée moins de sept");
+      L.push("jours ouvrables à compter de la date prévue de l'entretien préalable […]. Ce");
+      L.push("délai est de quinze jours ouvrables pour le licenciement individuel d'un");
+      L.push("membre du personnel d'encadrement mentionné au 2° de l'article L. 1441-13. »");
+      L.push("Sous le régime des dix et plus, dans une entreprise de moins de cinquante");
+      L.push("salariés, L. 1233-39 fixe un délai courant « à compter de la notification du");
+      L.push("projet de licenciement à l'autorité administrative » qui « ne peut être");
+      L.push("inférieur à trente jours ». Ce ne sont pas les mêmes points de départ.");
+      L.push("");
+
+      titre(L, "IV. La note de régime, à verser au dossier");
+
+      L.push("« NOTE FIXANT LE RÉGIME APPLICABLE AU PROJET DE LICENCIEMENT");
+      L.push("");
+      L.push(nom(ctx) + " — projet de licenciement pour motif économique");
+      L.push("");
+      L.push("Le décompte des licenciements envisagés sur une même période de trente jours,");
+      L.push("établi le [DATE] à partir des pièces énumérées au tableau annexé, s'établit");
+      L.push("comme suit :");
+      L.push("");
+      L.push("  Licenciements envisagés dans le projet .......................... [  ]");
+      L.push("  Licenciements économiques prononcés dans la même période ........ [  ]");
+      L.push("  Licenciements envisagés après refus d'une modification du contrat [  ]");
+      L.push("  TOTAL ........................................................... [  ]");
+      L.push("");
+      L.push("  Période retenue : du [DATE] au [DATE].");
+      L.push("  Effectif de l'entreprise : [  ] salariés.");
+      L.push("");
+      L.push("Il en résulte que le projet relève du régime [du licenciement collectif de");
+      L.push("moins de dix salariés (L. 1233-8) / du licenciement collectif d'au moins dix");
+      L.push("salariés (L. 1233-28)], et [qu'un plan de sauvegarde de l'emploi est dû");
+      L.push("(L. 1233-61) / qu'aucun plan n'est dû].");
+      L.push("");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("");
+      L.push("  [Cette note se date AVANT la convocation du comité. C'est elle qui justifie");
+      L.push("  le régime retenu, et une justification écrite après coup ne justifie rien.]");
+      L.push("");
+
+      titre(L, "V. Ce que le régime collectif ajoute, dans l'ordre");
+
+      L.push("  1. La notification du projet à l'autorité administrative. L. 1233-46 :");
+      L.push("     « L'employeur notifie à l'autorité administrative tout projet de");
+      L.push("     licenciement pour motif économique d'au moins dix salariés dans une même");
+      L.push("     période de trente jours. Lorsque l'entreprise est dotée de représentants");
+      L.push("     du personnel, la notification est faite AU PLUS TÔT LE LENDEMAIN de la");
+      L.push("     date prévue pour la première réunion prévue aux articles L. 1233-29 et");
+      L.push("     L. 1233-30. La notification est accompagnée de tout renseignement");
+      L.push("     concernant la convocation, l'ordre du jour et la tenue de cette");
+      L.push("     réunion. » Elle est adressée par la voie dématérialisée (D. 1233-4).");
+      L.push("  2. La consultation du comité, selon L. 1233-29 ou L. 1233-30.");
+      L.push("  3. La communication simultanée à l'administration de tout ce qui est");
+      L.push("     adressé aux représentants du personnel, et des procès-verbaux");
+      L.push("     (L. 1233-48 ; D. 1233-5).");
+      L.push("  4. Le plan de sauvegarde de l'emploi, si l'effectif atteint cinquante");
+      L.push("     salariés (L. 1233-61), et la demande de validation ou d'homologation");
+      L.push("     (L. 1233-57-1 ; D. 1233-14).");
+      L.push("  5. La notification des licenciements, après la décision administrative");
+      L.push("     (L. 1233-39).");
+      L.push("");
+      L.push("  Les documents des contrôles CTL-CSE et CTL-PSE couvrent chacune de ces");
+      L.push("  étapes. Ce document ne les refait pas : il dit lesquelles sont devenues");
+      L.push("  dues.");
+      L.push("");
+
+      titre(L, "VI. Si la procédure a été conduite au régime allégé");
+
+      L.push("Reprendre la procédure ne veut pas dire ajouter des pièces : cela veut dire");
+      L.push("recommencer les actes dans l'ordre où le texte les place.");
+      L.push("");
+      L.push("  ☐ Aucune lettre de licenciement n'est partie — reprenez au commencement :");
+      L.push("    note de régime, convocation du comité avec les renseignements de");
+      L.push("    L. 1233-31, notification du projet à l'administration, et le reste.");
+      L.push("  ☐ Des lettres sont déjà parties — ne les rappelez pas, ne les réexpédiez");
+      L.push("    pas, n'antidatez rien. Établissez le relevé ci-dessous et remettez-le à");
+      L.push("    votre conseil.");
+      L.push("");
+      tableau(L, ["Salarié", "Lettre expédiée le", "Preuve d'envoi", "Régime suivi"],
+        [["[nom]", "[  ]", "[avis de réception n°]", "[moins de dix]"],
+         ["[nom]", "[  ]", "[avis de réception n°]", "[moins de dix]"]]);
+      L.push("");
+      L.push("  Relevé établi le [DATE] par [nom et qualité], remis à [conseil] le [DATE].");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous établissez le décompte. Une journée");
+      L.push("suffit si les lettres déjà envoyées sont classées ; plusieurs si elles ne le");
+      L.push("sont pas.");
+      L.push("");
+      if (bascule) {
+        L.push("La reprise au régime collectif se compte en semaines, non en jours. Repères,");
+        L.push("si vous convoquiez le comité aujourd'hui :");
+        L.push("");
+        L.push("  Convocation ..................................... " + leJour(d0));
+        L.push("  Première réunion, au plus tôt ................... [selon vos usages]");
+        L.push("  Notification du projet à l'administration ....... au plus tôt le lendemain");
+        L.push("    de la date prévue pour la première réunion (L. 1233-46)");
+        L.push("  Seconde réunion — au moins quinze jours après la première dans une");
+        L.push("    entreprise d'au moins cinquante salariés (L. 1233-30, I), quatorze jours");
+        L.push("    au plus dans une entreprise de moins de cinquante (L. 1233-29)");
+        L.push("  Avis du comité — dans le délai que le régime fixe" +
+          (r && r.delaiAvis ? " : " + r.delaiAvis : ""));
+        L.push("  Demande de validation ou d'homologation, puis quinze ou vingt et un jours");
+        L.push("    de décision (L. 1233-57-4)");
+        L.push("");
+        L.push("Soit, au plus tôt et sans aléa, une notification bien après le " +
+          leJour(dans(d0, 60)) + ".");
+        L.push("");
+      } else {
+        L.push("Refaites ce décompte à chaque fois qu'un licenciement s'ajoute ou se");
+        L.push("retire du projet. Le seuil se franchit d'un salarié, et il se franchit");
+        L.push("sans avertissement : un salarié protégé dont l'autorisation est refusée, un");
+        L.push("salarié dont la notification est différée, un licenciement décidé dans un");
+        L.push("autre service — chacun de ces mouvements déplace le total.");
+        L.push("");
+        L.push("Prochaine vérification conseillée : le " + leJour(dans(d0, 30)) + ", ou le");
+        L.push("jour où un licenciement s'ajoute, selon ce qui vient en premier.");
+        L.push("");
+      }
+      L.push("Le décompte se conserve. C'est lui qui justifiera, plus tard, le régime que");
+      L.push("vous avez retenu — et si vous ne le conservez pas, c'est l'autre partie qui");
+      L.push("fera le compte.");
+
+      pied(L, ["L. 1233-8", "L. 1233-15", "L. 1233-25", "L. 1233-28", "L. 1233-29",
+        "L. 1233-30", "L. 1233-31", "L. 1233-39", "L. 1233-46", "L. 1233-48",
+        "L. 1233-57-1", "L. 1233-57-4", "L. 1233-61", "D. 1233-4", "D. 1233-5",
+        "D. 1233-14"],
+        "L'article L. 1441-13, que L. 1233-15 cite pour le personnel d'encadrement,\n" +
+        "n'est pas au corpus du module : il est nommé, non reproduit.\n" +
+        "\n" +
+        "Ce qui se joue : conduire la procédure au régime des moins de dix salariés\n" +
+        "quand le seuil est franchi, c'est omettre la consultation, la notification du\n" +
+        "projet à l'administration et, le cas échéant, le plan. « Le licenciement\n" +
+        "intervenu en l'absence de toute décision relative à la validation ou à\n" +
+        "l'homologation […] est nul » (L. 1235-10), et le juge peut ordonner la\n" +
+        "poursuite du contrat ou la réintégration, à défaut une indemnité non\n" +
+        "inférieure aux salaires des six derniers mois (L. 1235-11).");
+      return L.join("\n");
+    });
+
+  doc("CTL-SEU-02",
+    "Le décompte des refus de modification du contrat de travail",
+    "Le relevé nominatif des propositions de modification et des refus, avec pour " +
+    "chacun l'élément essentiel modifié, le motif économique invoqué et la date " +
+    "du refus ; le décompte au regard du seuil de dix de l'article L. 1233-25 ; " +
+    "et la note de régime qui en découle.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var c = comptes(f);
+      var refus = nbf(f.refusModification);
+      var eff = effectifDe(ctx), d0 = aujourd(ctx);
+      var declencheur = refus !== null && refus >= 10;
+
+      L = L.concat(entete(ctx, "Décompte des refus de modification du contrat de travail",
+        "article L. 1233-25 du code du travail"));
+
+      if (declencheur) {
+        irrattrapable(L, [
+          "La fiche porte " + refus + " salariés ayant refusé la modification d'un élément",
+          "essentiel de leur contrat de travail.",
+          "",
+          "L. 1233-25 : « Lorsqu'au moins dix salariés ont refusé la modification d'un",
+          "élément essentiel de leur contrat de travail, proposée par leur employeur pour",
+          "l'un des motifs économiques énoncés à l'article L. 1233-3 et que leur",
+          "licenciement est envisagé, celui-ci est soumis aux dispositions applicables en",
+          "cas de licenciement collectif pour motif économique. »",
+          "",
+          "Le seuil est atteint à lui seul, quand bien même aucun autre licenciement ne",
+          "serait envisagé.",
+        ], "Une procédure conduite comme un licenciement de moins de dix salariés est " +
+           "irrégulière dès l'origine, et elle ne se convertit pas : elle se reprend, " +
+           "tant qu'aucune lettre n'est partie.");
+      }
+
+      modeEmploi(L, [
+        "Ce document sert deux fois. D'abord à établir si le seuil de dix refus est",
+        "atteint — auquel cas le régime collectif s'applique à lui seul. Ensuite, et",
+        "même en deçà de dix, à documenter chaque refus : ces salariés entrent dans le",
+        "décompte général de la fenêtre de trente jours, et leur nombre s'ajoute à",
+        "celui des autres licenciements envisagés.",
+        "",
+        "Deux conditions se cumulent dans le texte, et l'une est presque toujours",
+        "oubliée : le refus doit porter sur un ÉLÉMENT ESSENTIEL du contrat, ET la",
+        "modification doit avoir été proposée POUR L'UN DES MOTIFS ÉCONOMIQUES de",
+        "l'article L. 1233-3. Une modification proposée pour un autre motif ne compte",
+        "pas ici. C'est pourquoi le tableau du II a une colonne « motif invoqué » :",
+        "elle n'est pas décorative.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. Le texte, et les deux conditions qu'il pose");
+
+      L.push("L. 1233-25 : « Lorsqu'au moins dix salariés ont refusé la modification d'un");
+      L.push("élément essentiel de leur contrat de travail, proposée par leur employeur pour");
+      L.push("l'un des motifs économiques énoncés à l'article L. 1233-3 et que leur");
+      L.push("licenciement est envisagé, celui-ci est soumis aux dispositions applicables en");
+      L.push("cas de licenciement collectif pour motif économique. »");
+      L.push("");
+      L.push("Les motifs auxquels le texte renvoie sont ceux de L. 1233-3, qui définit le");
+      L.push("licenciement économique comme celui effectué « pour un ou plusieurs motifs");
+      L.push("non inhérents à la personne du salarié résultant d'une suppression ou");
+      L.push("transformation d'emploi ou d'une modification, REFUSÉE PAR LE SALARIÉ, d'un");
+      L.push("élément essentiel du contrat de travail, consécutives notamment : 1° A des");
+      L.push("difficultés économiques […] ; 2° A des mutations technologiques ; 3° A une");
+      L.push("réorganisation de l'entreprise nécessaire à la sauvegarde de sa");
+      L.push("compétitivité ; 4° A la cessation d'activité de l'entreprise. »");
+      L.push("");
+      L.push("Le même article ajoute que « la matérialité de la suppression, de la");
+      L.push("transformation d'emploi ou de la modification d'un élément essentiel du");
+      L.push("contrat de travail s'apprécie au niveau de l'entreprise ».");
+      L.push("");
+      L.push("TROIS QUESTIONS PAR SALARIÉ, et il faut trois oui :");
+      L.push("  1. La modification portait-elle sur un élément ESSENTIEL du contrat ?");
+      L.push("  2. Était-elle proposée pour l'un des quatre motifs de L. 1233-3 ?");
+      L.push("  3. Le licenciement du salarié est-il envisagé à la suite du refus ?");
+      L.push("");
+
+      titre(L, "II. Le relevé, salarié par salarié");
+
+      tableau(L, ["N°", "Salarié", "Élément essentiel modifié", "Motif invoqué",
+        "Proposition du", "Réponse attendue le", "Refus du", "Forme du refus"],
+        [["1", "[nom ou matricule]", "[rémunération / durée / lieu / qualification]",
+          "[1° 2° 3° 4°]", "[  ]", "[  ]", "[  ]", "[écrit / silence / autre]"],
+         ["2", "[nom ou matricule]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["3", "[nom ou matricule]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("  [Une colonne « forme du refus » vide est un problème : ce qui vaut refus,");
+      L.push("  et à quelle date, se lit sur une pièce. Joignez la lettre de proposition et");
+      L.push("  la réponse du salarié, ou la preuve de l'absence de réponse dans le délai");
+      L.push("  imparti.]");
+      L.push("");
+      L.push("  [La colonne « motif invoqué » se remplit à partir de la PROPOSITION");
+      L.push("  elle-même, telle qu'elle a été adressée au salarié, et non du motif que");
+      L.push("  vous retiendriez aujourd'hui. C'est ce qui a été écrit au salarié qui");
+      L.push("  compte.]");
+      L.push("");
+      L.push("  Total des refus remplissant les trois conditions du I ..... [  ]");
+      L.push("  Total déclaré dans la fiche d'audit ....................... " +
+        (refus === null ? "[NON RENSEIGNÉ]" : String(refus)));
+      L.push("");
+      if (refus === null) {
+        L.push("  Le nombre de salariés ayant refusé une modification n'est pas renseigné.");
+        L.push("  Tant qu'il ne l'est pas, ni le seuil de L. 1233-25 ni le décompte de la");
+        L.push("  fenêtre de trente jours ne peuvent être vérifiés.");
+        L.push("");
+      }
+
+      titre(L, "III. Ce que le décompte commande");
+
+      if (c && c.motifRefus) {
+        L.push("Ce que le moteur du module retient : " + c.motifRefus);
+        L.push("");
+      }
+      tableau(L, ["Si le nombre de refus est", "alors"], [
+        ["au moins 10", "L. 1233-25 : le licenciement de ces salariés est à lui seul " +
+          "soumis au régime du licenciement collectif pour motif économique"],
+        ["moins de 10", "L. 1233-25 ne joue pas comme déclencheur autonome, mais ces " +
+          "salariés entrent dans le décompte de la fenêtre de trente jours"],
+      ]);
+      L.push("");
+      L.push("  Refus déclarés ................................ " +
+        (refus === null ? "[  ]" : String(refus)));
+      L.push("  Autres licenciements envisagés ................ " +
+        (nbf(f.nbLicenciements) === null ? "[  ]" : String(nbf(f.nbLicenciements))));
+      L.push("  Déjà prononcés dans les trente jours .......... " +
+        (nbf(f.licenciementsRecents30j) === null ? "[  ]" : String(nbf(f.licenciementsRecents30j))));
+      L.push("  TOTAL SUR LA FENÊTRE .......................... " +
+        (c ? String(c.total30j) : nbLic(f) === null ? "[  ]" : String(nbLic(f))));
+      L.push("  Effectif de l'entreprise ...................... " +
+        (eff === null ? "[  ]" : eff + " salariés"));
+      L.push("");
+      L.push("Le décompte détaillé de la fenêtre se tient dans le document du contrôle");
+      L.push("CTL-SEU-01. Les deux tableaux doivent porter les mêmes nombres : s'ils");
+      L.push("divergent, c'est qu'un salarié a été compté deux fois, ou pas du tout.");
+      L.push("");
+      L.push("  ATTENTION AU DOUBLE COMPTE. La question posée par le questionnaire est");
+      L.push("  celle des refus « NON COMPRIS dans le nombre de licenciements envisagés ».");
+      L.push("  Si vous avez déjà fait figurer ces salariés dans le nombre de licenciements");
+      L.push("  du projet, ne les recomptez pas ici : corrigez l'une des deux réponses et");
+      L.push("  relancez l'audit.");
+      L.push("");
+
+      titre(L, "IV. La note de régime");
+
+      L.push("« NOTE SUR LES REFUS DE MODIFICATION DU CONTRAT DE TRAVAIL");
+      L.push("");
+      L.push(nom(ctx));
+      L.push("");
+      L.push("[Nombre] salariés se sont vu proposer, pour le motif économique mentionné au");
+      L.push("[1° / 2° / 3° / 4°] de l'article L. 1233-3 du code du travail, la modification");
+      L.push("d'un élément essentiel de leur contrat de travail : [décrire l'élément].");
+      L.push("");
+      L.push("[Nombre] d'entre eux l'ont refusée, aux dates portées au tableau annexé. Leur");
+      L.push("licenciement est envisagé.");
+      L.push("");
+      L.push("En conséquence, et par application de l'article L. 1233-25 du code du travail,");
+      L.push("[ces licenciements sont soumis aux dispositions applicables en cas de");
+      L.push("licenciement collectif pour motif économique / le nombre de refus étant");
+      L.push("inférieur à dix, ces salariés sont intégrés au décompte des licenciements");
+      L.push("envisagés sur une même période de trente jours, dont le total s'élève à");
+      L.push("[nombre]].");
+      L.push("");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("");
+      L.push("Pièces annexées : propositions de modification adressées · réponses des");
+      L.push("salariés · tableau du II · décompte de la fenêtre de trente jours");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous établissez le relevé. Les pièces");
+      L.push("existent déjà : ce sont vos propositions et les réponses reçues.");
+      L.push("");
+      L.push("Au plus tard le " + leJour(dans(d0, 7)) + " — le décompte est arrêté, et la");
+      L.push("note de régime est datée. Elle doit précéder la convocation du comité :");
+      L.push("c'est elle qui dit sous quel régime celle-ci est faite.");
+      L.push("");
+      if (declencheur) {
+        L.push("Le seuil de dix étant atteint, la procédure à conduire est celle du");
+        L.push("licenciement collectif : convocation et consultation du comité, notification");
+        L.push("du projet à l'autorité administrative (L. 1233-46), et plan de sauvegarde de");
+        L.push("l'emploi si l'entreprise atteint cinquante salariés (L. 1233-61). Comptez");
+        L.push("plusieurs semaines — une notification avant le " + leJour(dans(d0, 60)));
+        L.push("serait, en pratique, difficile à tenir régulièrement.");
+        L.push("");
+      } else {
+        L.push("Refaites ce relevé si une proposition de modification est encore en cours de");
+        L.push("réponse : un refus supplémentaire déplace le total, et peut faire franchir");
+        L.push("le seuil de dix — celui de L. 1233-25 comme celui de la fenêtre de trente");
+        L.push("jours. Notez la date à laquelle la dernière réponse est attendue : [  ].");
+        L.push("");
+      }
+      L.push("Une proposition de modification encore ouverte n'est pas un refus, et un");
+      L.push("refus n'est pas un licenciement. Datez chacun des trois : c'est la seule");
+      L.push("façon de savoir, un mois plus tard, quel régime s'appliquait quand.");
+
+      pied(L, ["L. 1233-3", "L. 1233-25", "L. 1233-28", "L. 1233-46", "L. 1233-61"],
+        "Ce qui se joue : la procédure conduite au régime allégé alors que le seuil de\n" +
+        "dix refus est atteint est irrégulière, et l'absence de plan de sauvegarde de\n" +
+        "l'emploi expose à la nullité — « en cas d'annulation d'une décision de\n" +
+        "validation […] ou d'homologation […] en raison d'une absence ou d'une\n" +
+        "insuffisance de plan de sauvegarde de l'emploi mentionné à l'article\n" +
+        "L. 1233-61, la procédure de licenciement est nulle » (L. 1235-10).");
+      return L.join("\n");
+    });
+
+  doc("CTL-SEU-03",
+    "Le relevé anti-fractionnement des trois mois consécutifs",
+    "Le relevé mois par mois des licenciements économiques des trois mois " +
+    "précédents, la vérification de la condition d'effectif, le constat du " +
+    "déclenchement ou non de la règle de l'article L. 1233-26, et la note fixant " +
+    "le régime du nouveau projet.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var trois = nbf(f.licenciements3moisGlissants);
+      var c = comptes(f);
+      var eff = effectifDe(ctx), d0 = aujourd(ctx);
+      var declenche = eff !== null && eff >= 50 && trois !== null && trois > 10 &&
+        c && c.total30j < 10;
+
+      L = L.concat(entete(ctx, "Relevé des licenciements économiques des trois mois consécutifs",
+        "article L. 1233-26 du code du travail"));
+
+      if (declenche) {
+        irrattrapable(L, [
+          trois + " licenciements économiques ont été prononcés sur les trois mois",
+          "consécutifs précédents, sans qu'aucune période de trente jours n'en compte dix.",
+          "",
+          "L. 1233-26 : « Lorsqu'une entreprise ou un établissement employant",
+          "habituellement au moins cinquante salariés a procédé pendant trois mois",
+          "consécutifs à des licenciements économiques de plus de dix salariés au total,",
+          "sans atteindre dix salariés dans une même période de trente jours, TOUT",
+          "NOUVEAU LICENCIEMENT ÉCONOMIQUE envisagé au cours des trois mois suivants est",
+          "soumis aux dispositions du présent chapitre. »",
+          "",
+          "La règle est déclenchée. Le nouveau projet relève du régime du licenciement",
+          "collectif, quel que soit le nombre de salariés qu'il concerne.",
+        ], "Conduire la nouvelle procédure au régime allégé la rend irrégulière dès son " +
+           "premier acte. Ce document sert à l'établir, à le dater, et à en tirer le " +
+           "calendrier — non à le corriger après coup.");
+      }
+
+      modeEmploi(L, [
+        "C'est une règle qui se retourne contre l'employeur prudent. Un employeur qui",
+        "étale ses licenciements pour rester sous le seuil de dix sur trente jours",
+        "franchit un autre seuil : celui de dix sur trois mois consécutifs. Et à",
+        "partir de là, TOUT nouveau licenciement économique des trois mois suivants —",
+        "fût-il unique — relève du régime collectif.",
+        "",
+        "Le relevé se fait donc à l'envers du réflexe habituel : on ne compte pas ce",
+        "que le projet contient, on compte ce que les trois mois passés ont contenu.",
+        "",
+        "Deux conditions doivent être réunies, et la première est la plus vite",
+        "vérifiée : l'entreprise ou l'établissement doit employer HABITUELLEMENT au",
+        "moins cinquante salariés. En deçà, l'article ne s'applique pas.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. Le texte");
+
+      L.push("L. 1233-26 : « Lorsqu'une entreprise ou un établissement employant");
+      L.push("habituellement au moins cinquante salariés a procédé pendant trois mois");
+      L.push("consécutifs à des licenciements économiques de plus de dix salariés au total,");
+      L.push("sans atteindre dix salariés dans une même période de trente jours, tout");
+      L.push("nouveau licenciement économique envisagé au cours des trois mois suivants est");
+      L.push("soumis aux dispositions du présent chapitre. »");
+      L.push("");
+      L.push("Quatre conditions, à vérifier dans cet ordre :");
+      L.push("  1. l'entreprise ou l'établissement emploie HABITUELLEMENT au moins");
+      L.push("     cinquante salariés ;");
+      L.push("  2. des licenciements économiques ont été prononcés pendant TROIS MOIS");
+      L.push("     CONSÉCUTIFS ;");
+      L.push("  3. leur total dépasse dix — « PLUS de dix salariés au total », donc onze au");
+      L.push("     moins ;");
+      L.push("  4. sans qu'aucune période de trente jours en ait compté dix.");
+      L.push("");
+      L.push("Si les quatre sont réunies, la conséquence porte sur les TROIS MOIS SUIVANTS,");
+      L.push("et sur « tout nouveau licenciement économique envisagé » — le singulier est");
+      L.push("dans le texte.");
+      L.push("");
+
+      titre(L, "II. La condition d'effectif");
+
+      L.push("  Effectif de l'entreprise ............... " +
+        (eff === null ? "[NON RENSEIGNÉ]" : eff + " salariés"));
+      L.push("  Effectif de l'établissement concerné ... " +
+        (nbf(f.effectifEtablissement) === null ? "[  ]" : nbf(f.effectifEtablissement) + " salariés"));
+      L.push("");
+      if (eff === null) {
+        L.push("  L'effectif n'est pas renseigné : la règle ne peut pas être vérifiée.");
+        L.push("  Renseignez-le et relancez l'audit.");
+      } else if (eff < 50) {
+        L.push("  L'effectif est inférieur à cinquante salariés. L'article L. 1233-26 ne vise");
+        L.push("  que les entreprises ou établissements employant habituellement au moins");
+        L.push("  cinquante salariés : la règle ne trouve pas à s'appliquer.");
+        L.push("");
+        L.push("  Remplissez néanmoins le relevé du III. L'effectif peut changer, et le");
+        L.push("  texte vise aussi l'ÉTABLISSEMENT : un établissement d'au moins cinquante");
+        L.push("  salariés dans une entreprise plus petite n'existe pas, mais l'inverse");
+        L.push("  arrive — et c'est alors l'établissement qu'il faut regarder.");
+      } else {
+        L.push("  L'effectif atteint cinquante salariés : la première condition est remplie.");
+        L.push("  Le mot « habituellement » se vérifie sur la durée, non au jour du projet :");
+        L.push("  [indiquer l'effectif moyen des douze derniers mois, et la pièce qui");
+        L.push("  l'établit].");
+      }
+      L.push("");
+
+      titre(L, "III. Le relevé, mois par mois");
+
+      L.push("Trois mois consécutifs, antérieurs au projet en cours. Une ligne par");
+      L.push("licenciement, groupée par mois.");
+      L.push("");
+      tableau(L, ["Mois", "Période", "Salarié", "Emploi", "Lettre expédiée le", "Motif"],
+        [["M-3", "[du ... au ...]", "[nom ou matricule]", "[  ]", "[  ]", "[économique]"],
+         ["", "", "[nom ou matricule]", "[  ]", "[  ]", "[économique]"],
+         ["M-2", "[du ... au ...]", "[nom ou matricule]", "[  ]", "[  ]", "[économique]"],
+         ["", "", "[nom ou matricule]", "[  ]", "[  ]", "[économique]"],
+         ["M-1", "[du ... au ...]", "[nom ou matricule]", "[  ]", "[  ]", "[économique]"],
+         ["", "", "[nom ou matricule]", "[  ]", "[  ]", "[économique]"]]);
+      L.push("");
+      L.push("  Sous-total M-3 ..... [  ]");
+      L.push("  Sous-total M-2 ..... [  ]");
+      L.push("  Sous-total M-1 ..... [  ]");
+      L.push("  TOTAL SUR LES TROIS MOIS CONSÉCUTIFS ..... " +
+        (trois === null ? "[  ]" : String(trois)) +
+        (trois === null ? "  (non renseigné dans la fiche)" : "  (selon la fiche)"));
+      L.push("");
+      L.push("  [Ne comptez que les licenciements ÉCONOMIQUES. Un licenciement pour motif");
+      L.push("  personnel, une rupture conventionnelle, une démission, une fin de contrat à");
+      L.push("  durée déterminée ne sont pas des licenciements économiques et ne comptent");
+      L.push("  pas ici. Indiquez le motif de chaque rupture : c'est ce qui permettra de");
+      L.push("  justifier une exclusion.]");
+      L.push("");
+      L.push("VÉRIFICATION DE LA QUATRIÈME CONDITION — aucune période de trente jours ne");
+      L.push("doit avoir compté dix licenciements :");
+      L.push("");
+      tableau(L, ["Fenêtre de trente jours examinée", "Licenciements", "Atteint dix ?"],
+        [["[du ... au ...]", "[  ]", "☐ oui ☐ non"],
+         ["[du ... au ...]", "[  ]", "☐ oui ☐ non"],
+         ["[du ... au ...]", "[  ]", "☐ oui ☐ non"]]);
+      L.push("");
+      L.push("  [Faites glisser la fenêtre sur toutes les dates du relevé. Si l'une des");
+      L.push("  fenêtres atteint dix, ce n'est plus L. 1233-26 qui s'applique mais");
+      L.push("  L. 1233-28 — et la procédure aurait dû être collective dès ce moment-là.");
+      L.push("  Voyez alors le document du contrôle CTL-SEU-01.]");
+      L.push("");
+
+      titre(L, "IV. Le constat");
+
+      tableau(L, ["Condition", "Vérifiée ?", "Élément"], [
+        ["Effectif habituel d'au moins cinquante salariés",
+          eff === null ? "[  ]" : (eff >= 50 ? "oui" : "NON"),
+          eff === null ? "[effectif à renseigner]" : eff + " salariés"],
+        ["Licenciements sur trois mois consécutifs", "[  ]", "[dates du relevé]"],
+        ["Total de PLUS de dix salariés",
+          trois === null ? "[  ]" : (trois > 10 ? "oui" : "non"),
+          trois === null ? "[à renseigner]" : trois + " licenciements"],
+        ["Aucune fenêtre de trente jours à dix", "[  ]", "[tableau du III]"],
+      ]);
+      L.push("");
+      if (trois === null) {
+        L.push("Le total des trois mois consécutifs n'est pas renseigné : la règle");
+        L.push("anti-fractionnement ne peut pas être vérifiée. Remplissez le relevé du III,");
+        L.push("reportez le total dans la fiche, et relancez l'audit.");
+      } else if (declenche) {
+        L.push("LES QUATRE CONDITIONS SONT RÉUNIES, selon les données de la fiche. Tout");
+        L.push("nouveau licenciement économique envisagé au cours des trois mois suivants");
+        L.push("est soumis aux dispositions du chapitre — c'est-à-dire au régime du");
+        L.push("licenciement collectif pour motif économique.");
+      } else if (eff !== null && eff >= 50) {
+        L.push("Les conditions ne sont pas toutes réunies selon les données de la fiche : " +
+          trois + " licenciement(s) sur les trois mois précédents. La règle");
+        L.push("anti-fractionnement de l'article L. 1233-26 ne trouve pas à s'appliquer en");
+        L.push("l'état. Refaites le constat à chaque nouveau licenciement : le total des");
+        L.push("trois mois glisse, lui aussi.");
+      } else {
+        L.push("La condition d'effectif n'est pas remplie : le constat s'arrête là. Il se");
+        L.push("refait si l'effectif atteint cinquante salariés.");
+      }
+      L.push("");
+
+      titre(L, "V. La note fixant le régime du nouveau projet");
+
+      L.push("« NOTE SUR L'APPLICATION DE L'ARTICLE L. 1233-26");
+      L.push("");
+      L.push(nom(ctx) + ", employant [  ] salariés.");
+      L.push("");
+      L.push("Au cours des trois mois consécutifs du [DATE] au [DATE], [nombre]");
+      L.push("licenciements pour motif économique ont été prononcés, selon le relevé");
+      L.push("annexé. Aucune période de trente jours n'en a compté dix.");
+      L.push("");
+      L.push("[Le total dépassant dix, tout nouveau licenciement économique envisagé au");
+      L.push("cours des trois mois suivants, soit jusqu'au [DATE], est soumis aux");
+      L.push("dispositions du chapitre III du titre III du livre II de la première partie");
+      L.push("du code du travail, par application de l'article L. 1233-26. Le présent");
+      L.push("projet est en conséquence conduit selon ce régime.]");
+      L.push("");
+      L.push("[ou : Le total n'excédant pas dix, l'article L. 1233-26 ne trouve pas à");
+      L.push("s'appliquer. Le régime du présent projet est celui qui résulte du décompte de");
+      L.push("la fenêtre de trente jours, arrêté par note distincte.]");
+      L.push("");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("");
+      L.push("Ce que le régime collectif ajoute est énuméré au document du contrôle");
+      L.push("CTL-SEU-01, partie V : notification du projet à l'autorité administrative");
+      L.push("(L. 1233-46), consultation du comité selon L. 1233-29 ou L. 1233-30,");
+      L.push("communication simultanée à l'administration (L. 1233-48), et plan de");
+      L.push("sauvegarde de l'emploi si le projet concerne au moins dix salariés dans une");
+      L.push("même période de trente jours et que l'entreprise atteint cinquante salariés");
+      L.push("(L. 1233-61).");
+      L.push("");
+      L.push("  [Attention à ne pas confondre les deux seuils. L. 1233-26 soumet le nouveau");
+      L.push("  projet AUX DISPOSITIONS DU CHAPITRE ; il ne transforme pas un licenciement");
+      L.push("  isolé en projet de dix salariés. Le plan de sauvegarde de l'emploi, lui,");
+      L.push("  reste commandé par le seuil propre de L. 1233-61 : « au moins dix salariés");
+      L.push("  dans une même période de trente jours ». Faites trancher ce point par votre");
+      L.push("  conseil : l'application dit ce que les textes disent, elle ne comble pas");
+      L.push("  leur articulation.]");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous établissez le relevé des trois mois");
+      L.push("précédents. Les pièces existent : ce sont les lettres déjà expédiées.");
+      L.push("");
+      L.push("Les trois mois précédents à examiner courent, en repère de date, du " +
+        leJour(dans(d0, -92)) + " au " + leJour(d0) + ".");
+      L.push("Ajustez ces bornes sur vos mois réels : le texte dit « trois mois");
+      L.push("consécutifs », non « quatre-vingt-douze jours ».");
+      L.push("");
+      if (declenche) {
+        L.push("La règle étant déclenchée, elle produit effet pendant les trois mois");
+        L.push("suivants, soit en repère jusqu'au " + leJour(dans(d0, 92)) + ".");
+        L.push("Tout licenciement économique envisagé d'ici là relève du régime collectif.");
+        L.push("");
+        L.push("Comptez donc, pour ce projet, le calendrier d'une procédure collective :");
+        L.push("convocation, deux réunions, avis, notification du projet à l'administration,");
+        L.push("et le cas échéant demande de validation ou d'homologation. Une notification");
+        L.push("avant le " + leJour(dans(d0, 60)) + " serait, en pratique, difficile à tenir.");
+        L.push("");
+      } else {
+        L.push("Refaites ce relevé avant CHAQUE nouveau licenciement économique. Le total");
+        L.push("des trois mois glisse : un licenciement prononcé aujourd'hui entre dans le");
+        L.push("relevé de demain, et en fait sortir un autre.");
+        L.push("");
+        L.push("Prochaine vérification conseillée : le " + leJour(dans(d0, 30)) + ", ou le");
+        L.push("jour où un nouveau licenciement économique est envisagé.");
+        L.push("");
+      }
+      L.push("Conservez le relevé signé et daté. C'est lui qui justifie le régime retenu —");
+      L.push("et, s'il fait apparaître que la règle n'est pas déclenchée, il justifie aussi");
+      L.push("de ne pas l'avoir appliquée.");
+
+      pied(L, ["L. 1233-26", "L. 1233-28", "L. 1233-29", "L. 1233-30", "L. 1233-46",
+        "L. 1233-48", "L. 1233-61"],
+        "Ce qui se joue : conduire la nouvelle procédure au régime allégé alors que la\n" +
+        "règle anti-fractionnement est déclenchée la rend irrégulière. Si un plan de\n" +
+        "sauvegarde de l'emploi était par ailleurs dû et n'a pas été établi, « le\n" +
+        "licenciement intervenu en l'absence de toute décision relative à la\n" +
+        "validation ou à l'homologation […] est nul » (L. 1235-10).");
+      return L.join("\n");
+    });
+
   /* Le jour même en « AAAA-MM-JJ », pour comparer une date de la fiche à
      aujourd'hui sans repasser par une Date. */
   function iso0(d) {
