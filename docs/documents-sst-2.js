@@ -1364,5 +1364,1264 @@
     },
   });
 
-/* ==SUITE== */
+  /* ══════════════════════════════════════════════════════════════════════
+     SST-CTL-HAR-04 — LA PRÉVENTION ORGANISÉE
+
+     Deux pièces indissociables, et l'ordre compte : le risque s'évalue et se
+     transcrit d'abord (L. 4121-2, 7° ; R. 4121-1), la procédure de signalement
+     et le plan d'action viennent ensuite. Une procédure écrite sans risque
+     évalué décrit un circuit sans savoir ce qui y circulera ; un risque évalué
+     sans procédure laisse le salarié devant une porte fermée.
+
+     Ce document ne dit jamais que les mesures suffisent : la suffisance
+     s'apprécie au fond. Il dit ce qui doit exister, et il l'écrit.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("SST-CTL-HAR-04", {
+    nom: "La prévention du harcèlement : volet du document unique et procédure interne de signalement",
+    detail: "Le volet « harcèlement et agissements sexistes » du document unique, " +
+            "la procédure interne de signalement et de traitement avec ses circuits, " +
+            "ses délais et ses garanties, le plan d'information et de formation, la " +
+            "note de diffusion et le calendrier.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var cse = f.cse || {};
+      var d0 = aujourd(ctx);
+      var au250 = seuil(ctx, 250);
+      var L = entete(ctx, "Prévention du harcèlement et des agissements sexistes",
+        "articles L. 1152-4, L. 1153-5, L. 4121-1, L. 4121-2, 7°, et R. 4121-1 du code du travail");
+
+      L = L.concat(blocTroisTemps());
+      L.push("LA MAILLE DE L'ÉVALUATION");
+      L.push("");
+      L.push("« L'employeur transcrit et met à jour dans un document unique les résultats");
+      L.push("de l'évaluation des risques pour la santé et la sécurité des travailleurs à");
+      L.push("laquelle il procède en application de l'article L. 4121-3. Cette évaluation");
+      L.push("comporte un inventaire des risques identifiés dans chaque unité de travail");
+      L.push("de l'entreprise ou de l'établissement, y compris ceux liés aux ambiances");
+      L.push("thermiques » (R. 4121-1).");
+      L.push("");
+      L.push("Le risque de harcèlement s'inscrit donc UNITÉ DE TRAVAIL PAR UNITÉ DE");
+      L.push("TRAVAIL, comme les autres. Une phrase générale en préambule du document");
+      L.push("unique — « l'entreprise est attentive aux risques psychosociaux » — ne");
+      L.push("vaut pas inventaire : elle ne dit à quoi personne est exposé.");
+      L.push("");
+      L.push("OÙ VOUS EN ÊTES");
+      L.push("");
+      L.push("Risques de harcèlement intégrés à l'évaluation : " +
+        etat(f.risquesHarcelementEvalues, "oui", "NON"));
+      L.push("Dispositions de prévention prises : " +
+        etat(f.mesuresPreventionHarcelement, "oui", "NON"));
+      L.push("Document unique existant : " + etat((f.duerp || {}).existe, "oui", "NON"));
+      L.push("Dernière mise à jour du document unique : " +
+        jour((f.duerp || {}).dateDerniereMaj, "date non renseignée"));
+      if (estISO((f.duerp || {}).dateDerniereMaj)) {
+        L.push("C'est la version qui reçoit le volet ci-dessous — et l'insertion de ce");
+        L.push("volet est elle-même une mise à jour, à dater du jour où vous la faites.");
+      }
+      L.push(ligneEffectif(ctx));
+      L.push("");
+      if (estNon((f.duerp || {}).existe)) {
+        L.push("ATTENTION — le dossier indique qu'il n'existe pas de document unique. Le");
+        L.push("volet ci-dessous n'a alors nulle part où s'inscrire : commencez par le");
+        L.push("document unique lui-même, que le générateur SST-CTL-DUE-01 de cette");
+        L.push("application produit. Le volet « harcèlement » viendra s'y insérer.");
+        L.push("");
+      }
+      L.push(TRAIT);
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 1 — VOLET « HARCÈLEMENT ET AGISSEMENTS SEXISTES » DU DOCUMENT UNIQUE");
+      L.push(GROS);
+      L.push("");
+      L.push("À insérer dans le document unique, unité de travail par unité de travail,");
+      L.push("avec les mêmes colonnes que le reste du document. Ce qui suit est une");
+      L.push("grille : les risques réels de votre entreprise, l'application ne les");
+      L.push("connaît pas et ne les inventera pas.");
+      L.push("");
+      L.push("CE QUI SE REGARDE, ET QUI N'EST PAS UNE MACHINE");
+      L.push("");
+      L.push("Le risque de harcèlement ne se lit pas sur un équipement : il se lit dans");
+      L.push("l'organisation. Les situations qui l'exposent sont connues et se relèvent");
+      L.push("sans enquête — c'est un inventaire, pas une accusation :");
+      L.push("");
+      L.push("  · le travail isolé ou en très petite équipe, où il n'y a pas de témoin ;");
+      L.push("  · le travail de nuit, en horaires décalés, sur site du client ;");
+      L.push("  · les relations hiérarchiques resserrées, où une seule personne décide");
+      L.push("    des plannings, des affectations et de l'évaluation ;");
+      L.push("  · les contacts avec des tiers — clients, usagers, sous-traitants — sur");
+      L.push("    lesquels l'employeur n'a pas d'autorité disciplinaire, mais dont il");
+      L.push("    doit protéger ses salariés ;");
+      L.push("  · les fortes disparités d'âge, d'ancienneté ou de statut dans une même");
+      L.push("    équipe ; les contrats précaires, l'apprentissage, les stages ;");
+      L.push("  · les métiers très déséquilibrés du point de vue du sexe, dans un sens");
+      L.push("    ou dans l'autre ;");
+      L.push("  · les périodes de tension : réorganisation, changement de responsable,");
+      L.push("    surcharge saisonnière.");
+      L.push("");
+      L.push("  Unité de travail   | Situations exposantes | Mesures existantes | Mesures à prendre   | Échéance   | Responsable");
+      L.push("  -------------------|-----------------------|--------------------|---------------------|------------|-------------");
+      L.push("  [.................] | [...................] | [................] | [.................] | [........] | [...........]");
+      L.push("  [.................] | [...................] | [................] | [.................] | [........] | [...........]");
+      L.push("  [.................] | [...................] | [................] | [.................] | [........] | [...........]");
+      L.push("  [.................] | [...................] | [................] | [.................] | [........] | [...........]");
+      L.push("");
+      L.push("[REPRENDRE LA LISTE DE VOS UNITÉS DE TRAVAIL, celle du document unique.");
+      L.push(" Si le harcèlement y apparaît sous une découpe différente du reste du");
+      L.push(" document, personne ne saura les rapprocher.]");
+      L.push("");
+      L.push("Ce volet se met à jour comme le reste du document unique, et notamment");
+      L.push("« lorsqu'une information supplémentaire intéressant l'évaluation d'un");
+      L.push("risque est portée à la connaissance de l'employeur » (R. 4121-2, 3°). UN");
+      L.push("SIGNALEMENT EST UNE TELLE INFORMATION : après tout signalement, ce volet");
+      L.push("se relit, qu'une enquête ait ou non conclu à des faits établis.");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 2 — PROCÉDURE INTERNE DE SIGNALEMENT ET DE TRAITEMENT");
+      L.push(GROS);
+      L.push("");
+      L.push("AVERTISSEMENT SUR CE QUI SUIT — aucun texte lu n'impose une procédure");
+      L.push("écrite, ni n'en fixe le contenu, les circuits ou les délais. Ce que les");
+      L.push("textes imposent, c'est le résultat : prévenir, mettre un terme,");
+      L.push("sanctionner (L. 1152-4 ; L. 1153-5), et prendre les mesures nécessaires");
+      L.push("pour protéger la santé physique et mentale des travailleurs (L. 4121-1).");
+      L.push("La procédure ci-dessous est un MOYEN, proposé parce qu'un employeur qui");
+      L.push("n'a pas décidé à l'avance qui reçoit, qui décide et en combien de temps");
+      L.push("improvise le jour où il reçoit un signalement — et improvise mal. Les");
+      L.push("délais qu'elle porte sont les vôtres : ils ne sont pas dans la loi.");
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
+      L.push("     PROCÉDURE DE SIGNALEMENT ET DE TRAITEMENT DES SITUATIONS DE");
+      L.push("     HARCÈLEMENT MORAL, DE HARCÈLEMENT SEXUEL ET D'AGISSEMENTS SEXISTES");
+      L.push("");
+      L.push("     " + nomDe(ctx));
+      L.push("     Version [N°] — applicable à compter du [DATE]");
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
+      L.push("ARTICLE 1 — OBJET ET CHAMP");
+      L.push("");
+      L.push("La présente procédure s'applique à toute personne travaillant dans");
+      L.push("l'entreprise ou y intervenant : salariés, apprentis, stagiaires,");
+      L.push("intérimaires, salariés d'entreprises extérieures, candidats à l'embauche.");
+      L.push("[Adapter selon votre organisation.]");
+      L.push("");
+      L.push("Elle porte sur les faits définis aux articles L. 1152-1 (harcèlement");
+      L.push("moral) et L. 1153-1 (harcèlement sexuel) du code du travail, ainsi que sur");
+      L.push("les agissements sexistes.");
+      L.push("");
+      L.push("ARTICLE 2 — CE QUE LA LOI DÉFINIT");
+      L.push("");
+      L = L.concat(blocDefinitions());
+      L.push("ARTICLE 3 — QUI PEUT SIGNALER, ET COMMENT");
+      L.push("");
+      L.push("Peut signaler : la personne qui s'estime concernée, toute personne qui a");
+      L.push("été témoin de faits, un membre de la délégation du personnel du comité");
+      L.push("social et économique, le référent du comité, le médecin du travail.");
+      L.push("");
+      L.push("Le signalement peut être fait :");
+      L.push("  · par écrit à [ADRESSE POSTALE / ADRESSE ÉLECTRONIQUE DÉDIÉE] ;");
+      L.push("  · oralement à [FONCTION DE LA PERSONNE DÉSIGNÉE], qui l'écrit aussitôt");
+      L.push("    et le fait relire et signer par celui qui l'a fait ;");
+      L.push("  · [autre voie que vous ouvrez : ligne d'écoute, formulaire].");
+      L.push("");
+      L.push("AUCUNE FORME N'EST IMPOSÉE À CELUI QUI SIGNALE. Un signalement n'a pas à");
+      L.push("être motivé, daté par heure, ni accompagné de preuves : c'est l'enquête");
+      L.push("qui établira, pas le signalement. Un signalement rejeté pour vice de forme");
+      L.push("est un signalement reçu, et il obligera l'entreprise comme les autres.");
+      L.push("");
+      L.push("ARTICLE 4 — QUI REÇOIT");
+      L.push("");
+      L.push("  · [FONCTION] — destinataire principal ;");
+      L.push("  · [FONCTION] — destinataire de remplacement, notamment lorsque le");
+      L.push("    précédent est personnellement concerné, proche des personnes en cause,");
+      L.push("    ou empêché ;");
+      if (au250 === true || au250 === null) {
+        L.push("  · le référent harcèlement sexuel et agissements sexistes de l'employeur");
+        L.push("    (L. 1153-5-1), qui oriente, informe et accompagne" +
+          (au250 === null ? " s'il a été désigné" : "") + " ;");
+      }
+      if (!estNon(cse.existe)) {
+        L.push("  · le référent harcèlement du comité social et économique (L. 2314-1),");
+        L.push("    que la personne peut saisir directement.");
+      }
+      L.push("");
+      L.push("LA RÈGLE DE DÉPORT EST LA PLUS IMPORTANTE DE TOUT L'ARTICLE : celui qui");
+      L.push("est en cause, ou proche des personnes en cause, ne reçoit pas, n'enquête");
+      L.push("pas et ne décide pas. Le prévoir à l'avance évite d'avoir à le décider");
+      L.push("dans l'urgence, sous le regard de l'intéressé.");
+      L.push("");
+      L.push("ARTICLE 5 — LE CIRCUIT, ÉTAPE PAR ÉTAPE");
+      L.push("");
+      L.push("  ÉTAPE 1 — RÉCEPTION ET ACCUSÉ. Le signalement est daté à sa réception et");
+      L.push("  consigné dans un registre tenu par [FONCTION]. Un accusé de réception");
+      L.push("  écrit est remis à son auteur sous [X jours ouvrés — proposé : 2],");
+      L.push("  rappelant la protection dont il bénéficie et indiquant qui suivra le");
+      L.push("  dossier.");
+      L.push("");
+      L.push("  ÉTAPE 2 — MESURES IMMÉDIATES. Sans attendre l'enquête, sont examinées");
+      L.push("  les mesures propres à faire cesser les faits ALLÉGUÉS et à protéger la");
+      L.push("  personne : aménagement des horaires ou des affectations, suspension des");
+      L.push("  contacts entre les personnes concernées, orientation vers le médecin du");
+      L.push("  travail. Délai proposé : [X jours ouvrés — proposé : 3].");
+      L.push("");
+      L.push("  CES MESURES NE SONT PAS DES SANCTIONS et ne se prennent pas au détriment");
+      L.push("  de celui qui signale : le déplacer, changer ses horaires ou l'écarter");
+      L.push("  d'un projet contre son gré peut constituer, à son égard, une mesure que");
+      L.push("  L. 1152-2 et L. 1153-2 interdisent. Quand l'éloignement s'impose, il se");
+      L.push("  discute d'abord avec la personne protégée, et la solution retenue est");
+      L.push("  écrite avec son accord ou, à défaut, avec la raison qui l'a imposée.");
+      L.push("");
+      L.push("  ÉTAPE 3 — DÉCISION D'ENQUÊTER. Une décision écrite fixe l'auteur de");
+      L.push("  l'enquête, son périmètre et son calendrier. Délai proposé : [X jours");
+      L.push("  ouvrés — proposé : 5]. Ne pas enquêter est une décision : si elle est");
+      L.push("  prise, elle s'écrit et se motive.");
+      L.push("");
+      L.push("  ÉTAPE 4 — ENQUÊTE. Auditions de la personne qui signale, de la personne");
+      L.push("  mise en cause et des témoins utiles, recueil des pièces. Durée proposée :");
+      L.push("  [X semaines — proposé : 4 à 6]. Le document SST-CTL-HAR-05 de cette");
+      L.push("  application porte la trame d'audition et la structure du rapport.");
+      L.push("");
+      L.push("  ÉTAPE 5 — RAPPORT. Un rapport écrit et daté expose ce qui a été");
+      L.push("  recherché, ce qui a été constaté et ce qui ne l'a pas été.");
+      L.push("");
+      L.push("  ÉTAPE 6 — SUITES. Mesures pour mettre un terme aux faits ; sanction");
+      L.push("  disciplinaire s'ils sont établis, prise selon la procédure disciplinaire");
+      L.push("  — que le module « discipline » de cette application traite ; mesures");
+      L.push("  d'organisation pour l'avenir. Délai proposé : [X jours ouvrés après le");
+      L.push("  rapport — proposé : 10].");
+      L.push("");
+      L.push("  ÉTAPE 7 — RETOUR AUX PERSONNES. La personne qui a signalé et la personne");
+      L.push("  mise en cause sont informées par écrit de la clôture et du sens de la");
+      L.push("  décision. Le rapport lui-même n'est pas nécessairement communiqué ; ce");
+      L.push("  qui doit l'être, c'est que l'entreprise a instruit et a décidé.");
+      L.push("");
+      L.push("  ÉTAPE 8 — SUIVI. Un point est fait avec la personne qui a signalé à");
+      L.push("  [X semaines — proposé : 4] puis à [X mois — proposé : 3], pour vérifier");
+      L.push("  que les faits ont cessé et qu'aucune mesure défavorable n'a suivi.");
+      L.push("  C'est cette étape qui manque presque toujours, et c'est elle qui donne");
+      L.push("  sa portée à l'obligation d'Y METTRE UN TERME.");
+      L.push("");
+      L.push("ARTICLE 6 — LES GARANTIES");
+      L.push("");
+      L.push("  1. CONFIDENTIALITÉ. L'information circule entre les seules personnes");
+      L.push("     qui doivent en connaître pour instruire et décider. Les documents");
+      L.push("     sont conservés séparément des dossiers du personnel, sous [modalité");
+      L.push("     de conservation]. Aucune communication n'est faite aux collègues, à");
+      L.push("     l'encadrement non concerné, ni à des tiers.");
+      L.push("");
+      L.push("  2. IMPARTIALITÉ. Règle de déport de l'article 4. L'enquête est conduite");
+      L.push("     par [désignation : binôme, dont une personne extérieure au service");
+      L.push("     concerné], et non par le supérieur direct des personnes en cause.");
+      L.push("");
+      L.push("  3. ABSENCE DE PRÉJUGÉ. Aucun écrit de la procédure ne qualifie les faits");
+      L.push("     avant la clôture de l'enquête. Les termes employés sont « les faits");
+      L.push("     signalés », « les faits allégués » — jamais « les faits de");
+      L.push("     harcèlement », tant que rien n'est établi. Cette règle protège aussi");
+      L.push("     l'entreprise : un écrit qui préjuge est une pièce contre elle.");
+      L.push("");
+      L.push("  4. NON-REPRÉSAILLES.");
+      L.push("");
+      L = L.concat(blocProtection());
+      L.push("  5. DROIT DE LA PERSONNE MISE EN CAUSE. Elle est informée de ce qui lui");
+      L.push("     est reproché avant d'être entendue, dans des termes qui lui");
+      L.push("     permettent de répondre, et elle est entendue avant toute conclusion.");
+      L.push("     Une enquête qui conclut sans l'avoir entendue ne vaut rien, ni pour");
+      L.push("     elle ni pour l'entreprise.");
+      L.push("");
+      L.push("  6. ASSISTANCE. [Préciser si la personne entendue peut être accompagnée,");
+      L.push("     et par qui — un salarié de l'entreprise, un membre du comité. Aucun");
+      L.push("     texte lu ne l'impose au stade de l'enquête ; le prévoir apaise les");
+      L.push("     auditions. En revanche, l'assistance lors de l'entretien préalable à");
+      L.push("     une SANCTION est, elle, prévue par L. 1332-2, et le module");
+      L.push("     « discipline » de cette application la traite.]");
+      L.push("");
+      L.push("ARTICLE 7 — CONSERVATION");
+      L.push("");
+      L.push("Le dossier complet — signalement, accusé, mesures immédiates, décision");
+      L.push("d'enquête, comptes rendus d'audition, pièces, rapport, suites, courriers");
+      L.push("de retour, points de suivi — est conservé [durée que vous fixez], sous");
+      L.push("[modalité]. C'est ce dossier, et non le souvenir des personnes, qui");
+      L.push("établira ce que l'entreprise a fait.");
+      L.push("");
+      L.push("ARTICLE 8 — RÉVISION");
+      L.push("");
+      L.push("La présente procédure est réexaminée à chaque mise à jour du document");
+      L.push("unique, et après chaque signalement traité.");
+      L.push("");
+      L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ".");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
+      if (!estNon(cse.existe)) {
+        L.push("[AVANT D'ADOPTER : votre règlement intérieur porte-t-il déjà un article");
+        L.push(" sur le signalement des harcèlements ? Si la présente procédure y ajoute");
+        L.push(" des obligations générales et permanentes, elle relève du règlement");
+        L.push(" intérieur et de ses formalités — avis du comité social et économique,");
+        L.push(" publicité, dépôt, communication à l'inspection. Le module « discipline");
+        L.push(" et règlement intérieur » de cette application les traite. Présenter la");
+        L.push(" procédure au comité est en tout état de cause de bonne méthode : une");
+        L.push(" procédure que les élus découvrent le jour d'un signalement ne sera pas");
+        L.push(" utilisée.]");
+        L.push("");
+      }
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 3 — PLAN D'INFORMATION ET DE FORMATION");
+      L.push(GROS);
+      L.push("");
+      L.push("L'obligation de sécurité comprend expressément « des actions d'information");
+      L.push("et de formation » (L. 4121-1, 2°). Ce qui sera discuté n'est pas");
+      L.push("l'existence du plan, mais sa MISE EN ŒUVRE : dates, destinataires,");
+      L.push("contenus, présences.");
+      L.push("");
+      L.push("  Action                          | Public       | Date | Contenu | Preuve");
+      L.push("  --------------------------------|--------------|------|---------|--------");
+      L.push("  Diffusion de la procédure       | tout le      | [..] | [.....] | [.....]");
+      L.push("                                  | personnel    |      |         |");
+      L.push("  Affichage L. 1152-4 / L. 1153-5 | tous + lieu  | [..] | [.....] | [.....]");
+      L.push("                                  | d'embauche   |      |         |");
+      L.push("  Formation de l'encadrement :    | encadrement  | [..] | [.....] | [.....]");
+      L.push("  repérer, recevoir, ne pas       |              |      |         |");
+      L.push("  qualifier, transmettre          |              |      |         |");
+      L.push("  Information des nouveaux        | embauches    | [..] | [.....] | [.....]");
+      L.push("  entrants (livret d'accueil)     |              |      |         |");
+      if (au250 === true || au250 === null) {
+        L.push("  Formation du référent employeur | référent     | [..] | [.....] | [.....]");
+      }
+      if (!estNon(cse.existe)) {
+        L.push("  Formation du référent du comité | référent CSE | [..] | [.....] | [.....]");
+        L.push("  (L. 2315-18, financée par       |              |      |         |");
+        L.push("  l'employeur)                    |              |      |         |");
+      }
+      L.push("  Point annuel devant le comité   | élus         | [..] | [.....] | [.....]");
+      L.push("");
+      L.push("L'encadrement est le public le plus important de ce tableau : c'est à lui");
+      L.push("que la parole arrive d'abord, et c'est lui qui, faute de savoir quoi en");
+      L.push("faire, l'arrête. Une formation qui apprend à NE PAS qualifier et à");
+      L.push("transmettre vaut mieux qu'une formation juridique.");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 4 — NOTE DE DIFFUSION DE LA PROCÉDURE");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx) + " — note du " + leJour(d0));
+      L.push("Objet : procédure de signalement et de traitement des situations de");
+      L.push("harcèlement et d'agissements sexistes");
+      L.push("");
+      L.push("Mesdames, Messieurs,");
+      L.push("");
+      L.push("Une procédure de signalement et de traitement des situations de");
+      L.push("harcèlement moral, de harcèlement sexuel et d'agissements sexistes est");
+      L.push("mise en place dans l'entreprise à compter du [DATE]. Elle est jointe à la");
+      L.push("présente note et consultable [LIEU / LIEN].");
+      L.push("");
+      L.push("Ce qu'il faut en retenir :");
+      L.push("");
+      L.push("  · à qui parler : [FONCTION / NOM], à [ADRESSE / NUMÉRO]. Vous pouvez");
+      L.push("    aussi vous adresser aux personnes et services dont les coordonnées");
+      L.push("    figurent à l'affichage prévu par l'article D. 1151-1 ;");
+      L.push("  · comment : par écrit ou oralement, sans forme imposée ;");
+      L.push("  · ce qui se passe ensuite : un accusé de réception, l'examen de mesures");
+      L.push("    immédiates, une décision d'enquête, une enquête, un rapport, des");
+      L.push("    suites, et un retour ;");
+      L.push("  · ce que vous risquez en parlant : rien. Aucune personne ayant subi ou");
+      L.push("    refusé de subir de tels faits, ni celle qui, de bonne foi, les a");
+      L.push("    relatés ou en a témoigné, ne peut faire l'objet des mesures");
+      L.push("    mentionnées à l'article L. 1121-2 du code du travail (L. 1152-2 ;");
+      L.push("    L. 1153-2).");
+      L.push("");
+      L.push("Les personnes exerçant une responsabilité d'encadrement sont tenues de");
+      L.push("transmettre sans délai tout signalement qui leur parvient, sans le");
+      L.push("qualifier ni l'apprécier.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("Pièce jointe : la procédure");
+      L.push("Diffusion : [tout le personnel — préciser le support et conserver la");
+      L.push("preuve : émargement, accusé électronique, capture datée]");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("VOTRE CALENDRIER");
+      L.push(GROS);
+      L.push("");
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous relevez vos unités de travail et");
+      L.push("les situations exposantes (pièce 1). Ce relevé se fait avec ceux qui");
+      L.push("connaissent le travail réel, pas depuis un bureau.");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 21)) + " — le volet du document unique est");
+      L.push("rédigé et intégré. C'est l'ordre qui compte : le risque d'abord, la");
+      L.push("procédure ensuite.");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 30)) + " — la procédure est arrêtée (pièce 2) :");
+      L.push("les noms sont portés, les délais choisis, la règle de déport écrite.");
+      L.push("");
+      if (!estNon(cse.existe)) {
+        L.push("Avant l'adoption — présentation au comité social et économique. Le comité");
+        L.push("« est consulté sur le document unique d'évaluation des risques");
+        L.push("professionnels et sur ses mises à jour » (L. 4121-3, 1°) : la mise à jour");
+        L.push("qui porte le volet harcèlement entre dans cette consultation. Prévoyez le");
+        L.push("délai de convocation propre à l'instance.");
+        L.push("");
+      }
+      L.push("Au " + leJour(dans(d0, 45)) + " — la procédure est diffusée (pièce 4),");
+      L.push("l'affichage est en place, et les preuves de diffusion sont conservées.");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 120)) + " — la formation de l'encadrement est");
+      L.push("faite (pièce 3), avec sa feuille de présence.");
+      L.push("");
+      L.push("Avant le " + leJour(dans(d0, 365)) + " — réexamen du volet et de la");
+      L.push("procédure, à l'occasion de la mise à jour du document unique.");
+      L.push("");
+      L.push("Ces durées sont les VÔTRES : aucun texte lu ne fixe de délai pour");
+      L.push("organiser la prévention. Ce que les textes fixent, c'est l'obligation de");
+      L.push("l'organiser — et elle court déjà.");
+      L.push("");
+      L.push("CE QUE CE DOCUMENT NE DIT PAS, ET NE DIRA JAMAIS : que ces mesures");
+      L.push("suffisent. La suffisance des dispositions de prévention s'apprécie AU");
+      L.push("FOND, au vu de ce qui s'est réellement passé dans l'entreprise. Ce");
+      L.push("document dit ce qui doit exister ; il ne délivre aucun quitus.");
+
+      return L.concat(pied("L. 1152-4, L. 1153-5, L. 1152-1, L. 1153-1, L. 1152-2, " +
+        "L. 1153-2, L. 4121-1, L. 4121-2, 7°, L. 4121-3, R. 4121-1, R. 4121-2, " +
+        "L. 1153-5-1, L. 2314-1, L. 2315-18, D. 1151-1",
+        ["Aucune peine n'est annoncée, et le périmètre a été vérifié. R. 4741-1 punit",
+         "une chose et une seule : le défaut de transcription ou de mise à jour « dans",
+         "les conditions prévues aux articles R. 4121-1 et R. 4121-2 » — il atteint",
+         "donc le document unique lui-même, dont le module traite ailleurs (SST-CTL-",
+         "DUE-01 à DUE-04), et non l'organisation de la prévention du harcèlement.",
+         "L. 4741-1 ne rattrape pas les principes généraux de prévention : son",
+         "énumération vise, pour le livre Ier de la quatrième partie, les « Titres",
+         "Ier, III et IV », et le titre II — où vivent L. 4121-1 et L. 4121-2 — en est",
+         "absent. L. 1155-2 ne punit que les discriminations commises à la suite d'un",
+         "harcèlement. Ce qui se joue ici est civil, et il est lourd : l'obligation de",
+         "prévention et l'obligation de sécurité, appréciées au fond.",
+         "",
+         "L. 1121-2 et L. 1142-2-1, nommés ci-dessus, n'ont pas été lus par",
+         "l'application. L. 1332-2, cité pour l'assistance lors de l'entretien",
+         "préalable à une sanction, appartient au corpus du module « discipline »."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     SST-CTL-HAR-05 — LE SIGNALEMENT REÇU : ENQUÊTE, AUDITIONS, RAPPORT, SUITES
+
+     Le seul document du fichier qui s'écrit sous la pression du temps, et le
+     seul où une phrase maladroite se paie. Deux règles l'ont commandé :
+
+     — RIEN N'EST QUALIFIÉ D'AVANCE. La trame d'audition ne pose aucune
+       question qui suppose les faits établis. Le rapport porte trois
+       conclusions possibles, et aucune n'est pré-remplie. « Faits non
+       établis » n'est pas « signalement mensonger » : le rapport le dit, parce
+       que la confusion des deux fonde les représailles que L. 1152-2 et
+       L. 1153-2 interdisent.
+
+     — LES SUITES SE DÉCIDENT DANS LES TROIS SENS. Établis : mesures et
+       sanction. Non établis : mesures d'organisation quand même, s'il y a
+       lieu. Éléments insuffisants : ce que l'on fait pour que la situation ne
+       reste pas en l'état.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("SST-CTL-HAR-05", {
+    nom: "Le signalement reçu : mesures immédiates, enquête, trames d'audition, rapport et suites",
+    detail: "L'accusé de réception, la décision de mesures conservatoires, la lettre " +
+            "de mission d'enquête, les trois trames d'audition — personne qui signale, " +
+            "personne mise en cause, témoins —, la structure du rapport, les courriers " +
+            "de clôture et le calendrier.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var s = f.signalement || {};
+      var cse = f.cse || {};
+      var d0 = aujourd(ctx);
+      var au250 = seuil(ctx, 250);
+      var L = entete(ctx, "Signalement de harcèlement — enquête interne et suites",
+        "articles L. 1153-5, L. 1152-4, L. 4121-1, L. 1152-2 et L. 1153-2 du code du travail");
+
+      L.push("À LIRE AVANT TOUT LE RESTE");
+      L.push("");
+      L.push("Ce document ne dit pas ce qui s'est passé. Il ne le dira à aucun moment.");
+      L.push("L'application ne connaît ni les personnes, ni les faits, ni les pièces :");
+      L.push("tout ce qui les concerne sort ENTRE CROCHETS, et c'est l'employeur qui");
+      L.push("écrit — c'est lui qui sait, et c'est lui qui répondra de ce qu'il aura");
+      L.push("écrit.");
+      L.push("");
+      L.push("Il ne qualifie pas davantage. Aucune pièce produite ici ne parle de");
+      L.push("« faits de harcèlement » avant que l'enquête soit close : elle parle de");
+      L.push("FAITS SIGNALÉS et de FAITS ALLÉGUÉS. Ce n'est pas une précaution de");
+      L.push("style. Un écrit qui qualifie avant d'avoir entendu la personne mise en");
+      L.push("cause est une pièce à charge contre son propre auteur, et il le reste");
+      L.push("quelle que soit l'issue.");
+      L.push("");
+      L = L.concat(blocTroisTemps());
+      L.push("CE QUE VAUDRA VOTRE ENQUÊTE");
+      L.push("");
+      L.push("La valeur probante d'une enquête interne relève de l'appréciation");
+      L.push("souveraine des juges du fond, au regard le cas échéant des autres éléments");
+      L.push("de preuve (Soc., 18 juin 2025, n° 23-19.022, publié). Autrement dit : elle");
+      L.push("ne s'impose à personne, et elle ne vaudra que ce que vaudront ses actes.");
+      L.push("D'où la règle qui commande tout le dossier — TOUT S'ÉCRIT, TOUT SE DATE,");
+      L.push("TOUT SE CONSERVE. Un acte accompli et non consigné n'a pas eu lieu.");
+      L.push("");
+      L.push("OÙ VOUS EN ÊTES");
+      L.push("");
+      L.push("Signalement reçu selon le dossier : " + etat(s.recu, "OUI", "non"));
+      L.push("Enquête menée : " + etat(s.enqueteMenee, "oui", "NON"));
+      L.push("Mesures prises pour mettre un terme aux faits : " +
+        etat(s.mesuresPrises, "oui", "NON"));
+      L.push("");
+      if (estNon(s.enqueteMenee) || estNon(s.mesuresPrises)) {
+        L.push("LE DOSSIER PORTE UN SIGNALEMENT RESTÉ SANS RÉACTION COMPLÈTE. Le temps");
+        L.push("écoulé ne se rattrape pas, mais il s'aggrave à chaque jour : commencez");
+        L.push("par les mesures immédiates (pièce 2), qui ne demandent aucune enquête,");
+        L.push("puis engagez l'enquête. Et écrivez, dans la décision d'enquête, la date");
+        L.push("réelle de réception du signalement : la dissimuler serait ajouter une");
+        L.push("faute à un retard.");
+        L.push("");
+      }
+      L.push(TRAIT);
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 1 — ACCUSÉ DE RÉCEPTION DU SIGNALEMENT");
+      L.push(GROS);
+      L.push("");
+      L.push("Le premier écrit du dossier, et celui qui fixe la date à partir de");
+      L.push("laquelle tout se comptera.");
+      L.push("");
+      L = L.concat(teteLettre(ctx,
+        ["[NOM, PRÉNOM de la personne qui a signalé]", "[fonction et service]"], true));
+      L.push("Objet : réception de votre signalement");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("J'accuse réception du signalement que vous m'avez adressé le [DATE DE");
+      L.push("RÉCEPTION, telle qu'elle est réelle], [par écrit / oralement, consigné le");
+      L.push("même jour et que vous avez relu et signé].");
+      L.push("");
+      L.push("Ce signalement va être instruit. [NOM, FONCTION] en assure le suivi et");
+      L.push("sera votre interlocuteur. Vous serez entendu(e) dans le cadre de cette");
+      L.push("instruction, et informé(e) par écrit de sa clôture.");
+      L.push("");
+      L.push("Sans attendre, [les mesures suivantes sont prises / l'examen des mesures");
+      L.push("immédiates est engagé] : [PRÉCISER, ou renvoyer à la décision jointe].");
+      L.push("");
+      L.push("Je vous rappelle qu'aucune personne ayant subi ou refusé de subir des");
+      L.push("faits de harcèlement, ni celle qui, de bonne foi, les a relatés ou en a");
+      L.push("témoigné, ne peut faire l'objet des mesures mentionnées à l'article");
+      L.push("L. 1121-2 du code du travail (L. 1152-2 ; L. 1153-2). Si vous estimiez");
+      L.push("qu'une décision vous concernant est intervenue à raison de votre");
+      L.push("signalement, faites-le-moi savoir immédiatement.");
+      L.push("");
+      L.push("Vous pouvez à tout moment vous adresser au médecin du travail ou au");
+      L.push("service de santé au travail, à l'inspection du travail, au Défenseur des");
+      L.push("droits" + (estNon(cse.existe) ? "" : ", au comité social et économique et à son référent") +
+        (au250 === false ? "" : ", au référent de l'entreprise") + " :");
+      L.push("leurs coordonnées figurent sur l'affichage prévu par l'article D. 1151-1.");
+      L.push("La présente instruction ne vous prive d'aucune de ces voies.");
+      L.push("");
+      L = L.concat(formulePolitesse(ctx, "Madame, Monsieur"));
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 2 — DÉCISION DE MESURES IMMÉDIATES");
+      L.push(GROS);
+      L.push("");
+      L.push("Ces mesures ne supposent AUCUNE enquête et n'attendent AUCUNE");
+      L.push("qualification : elles portent sur les faits ALLÉGUÉS, et elles se");
+      L.push("justifient par le seul signalement. C'est le sens de l'obligation d'Y");
+      L.push("METTRE UN TERME (L. 1153-5) et de l'obligation de sécurité (L. 4121-1).");
+      L.push("");
+      L.push(nomDe(ctx));
+      L.push("DÉCISION DU " + leJour(d0).toUpperCase() + " — MESURES IMMÉDIATES");
+      L.push("");
+      L.push("1. Signalement reçu le [DATE], par [voie], de [qualité de l'auteur :");
+      L.push("   personne concernée / témoin / membre du comité / médecin du travail].");
+      L.push("");
+      L.push("2. Personnes concernées : [IDENTIFIER, sans qualifier].");
+      L.push("");
+      L.push("3. Mesures arrêtées, à effet immédiat :");
+      L.push("     [ ] suspension des contacts professionnels directs entre les");
+      L.push("         personnes concernées : [modalité]");
+      L.push("     [ ] aménagement des horaires, du planning ou de l'affectation :");
+      L.push("         [préciser QUI est déplacé et POURQUOI ce choix]");
+      L.push("     [ ] retrait provisoire de l'autorité hiérarchique ou de la");
+      L.push("         responsabilité d'évaluation : [préciser]");
+      L.push("     [ ] orientation vers le médecin du travail : [date de la demande]");
+      L.push("     [ ] mise à pied conservatoire de la personne mise en cause :");
+      L.push("         [préciser — c'est une mesure d'attente, non une sanction ; la");
+      L.push("         procédure disciplinaire qui doit la suivre relève du module");
+      L.push("         « discipline » de cette application]");
+      L.push("     [ ] autre : [préciser]");
+      L.push("     [ ] aucune mesure — SI VOUS COCHEZ CETTE CASE, ÉCRIVEZ POURQUOI :");
+      L.push("         [motif]. Ne rien faire est une décision, et c'est celle qui se");
+      L.push("         défend le moins bien.");
+      L.push("");
+      L.push("4. VÉRIFICATION OBLIGATOIRE AVANT DE SIGNER : la mesure retenue pèse-t-elle");
+      L.push("   sur la personne qui a signalé ? Un changement d'horaires, de poste, de");
+      L.push("   site ou d'équipe imposé à celui qui parle peut constituer, à son égard,");
+      L.push("   une mesure que L. 1152-2 et L. 1153-2 interdisent. Si l'éloignement");
+      L.push("   s'impose et qu'aucune autre solution n'existe :");
+      L.push("     · en discuter avec elle AVANT ;");
+      L.push("     · écrire son accord, ou à défaut la raison qui l'a imposé ;");
+      L.push("     · prévoir expressément le retour à la situation antérieure et la");
+      L.push("       date à laquelle il sera examiné : [DATE].");
+      L.push("");
+      L.push("5. Durée et réexamen : ces mesures sont provisoires et seront réexaminées");
+      L.push("   le [DATE], et au plus tard à la clôture de l'enquête.");
+      L.push("");
+      L.push("6. Information des personnes : [qui est informé, de quoi, et par quel");
+      L.push("   écrit].");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 3 — DÉCISION D'ENQUÊTE ET LETTRE DE MISSION");
+      L.push(GROS);
+      L.push("");
+      L.push("Écrire QUI enquête, SUR QUOI et JUSQU'À QUAND avant de commencer : c'est");
+      L.push("ce qui distingue une enquête d'une série de conversations.");
+      L.push("");
+      L.push(nomDe(ctx));
+      L.push("DÉCISION DU " + leJour(d0).toUpperCase() + " — ENQUÊTE INTERNE");
+      L.push("");
+      L.push("1. AUTEUR DE L'ENQUÊTE : [NOMS et qualités].");
+      L.push("   [Composition recommandée : deux personnes, dont une extérieure au");
+      L.push("    service concerné. Aucun texte lu ne l'impose ; l'impartialité, elle,");
+      L.push("    se discutera. Une enquête conduite par le supérieur direct des");
+      L.push("    personnes en cause s'expose à ce reproche avant d'avoir commencé.]");
+      L.push("   Déport : aucun des enquêteurs n'est personnellement concerné par les");
+      L.push("   faits signalés ni proche des personnes en cause. [Le vérifier et");
+      L.push("   l'écrire.]");
+      L.push("");
+      L.push("2. PÉRIMÈTRE : les faits signalés le [DATE], tels qu'ils sont décrits dans");
+      L.push("   le signalement, concernant [PERSONNES] sur la période [DU … AU …].");
+      L.push("   L'enquête peut être étendue si des éléments concordants apparaissent :");
+      L.push("   l'extension est alors écrite et datée par un avenant à la présente");
+      L.push("   décision.");
+      L.push("");
+      L.push("3. ACTES PRÉVUS : audition de la personne qui a signalé ; audition de la");
+      L.push("   personne mise en cause ; audition des témoins utiles [LISTE");
+      L.push("   PRÉVISIONNELLE] ; recueil des pièces [messages, plannings, comptes");
+      L.push("   rendus, courriels — préciser].");
+      L.push("");
+      L.push("4. CALENDRIER : début le [DATE], rapport attendu pour le [DATE].");
+      L.push("   [Proposé : quatre à six semaines. Aucun texte lu ne fixe de durée. Mais");
+      L.push("    une enquête qui dure six mois laisse la situation en l'état pendant");
+      L.push("    six mois, et c'est cela qui se reprochera.]");
+      L.push("");
+      L.push("5. MOYENS : accès à [documents, locaux], temps dégagé, [assistance");
+      L.push("   extérieure éventuelle].");
+      L.push("");
+      L.push("6. CONSIGNES AUX ENQUÊTEURS :");
+      L.push("     · entendre la personne mise en cause AVANT toute conclusion, sur des");
+      L.push("       faits énoncés en termes qui lui permettent de répondre ;");
+      L.push("     · ne qualifier à aucun stade : recueillir, confronter, rapporter ;");
+      L.push("     · consigner chaque audition, la faire relire et signer ;");
+      L.push("     · ne rien promettre à personne — ni l'anonymat des témoins, qui ne");
+      L.push("       peut pas toujours être tenu, ni une issue ;");
+      L.push("     · signaler immédiatement toute situation appelant une mesure");
+      L.push("       nouvelle et urgente.");
+      L.push("");
+      L.push("7. CONFIDENTIALITÉ : les enquêteurs et toute personne entendue sont tenus");
+      L.push("   de ne pas divulguer ce qui est dit au cours de l'enquête.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 4 — CONVOCATION À UNE AUDITION");
+      L.push(GROS);
+      L.push("");
+      L.push("Un même modèle pour les trois qualités, avec la variante indiquée.");
+      L.push("");
+      L = L.concat(teteLettre(ctx,
+        ["[NOM, PRÉNOM]", "[fonction et service]"], false));
+      L.push("Objet : audition dans le cadre d'une enquête interne");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Une enquête interne a été ouverte le [DATE] à la suite d'un signalement.");
+      L.push("Vous êtes invité(e) à être entendu(e) le [DATE] à [HEURE], à [LIEU], par");
+      L.push("[NOMS et qualités des enquêteurs].");
+      L.push("");
+      L.push("[VARIANTE — PERSONNE MISE EN CAUSE, à substituer au paragraphe précédent :");
+      L.push(" Une enquête interne a été ouverte le [DATE]. Des faits vous sont");
+      L.push(" imputés : [LES ÉNONCER, datés et circonstanciés, en termes qui vous");
+      L.push(" permettent de répondre — c'est la condition pour que votre réponse ait un");
+      L.push(" sens]. Vous êtes invité(e) à vous en expliquer le [DATE] à [HEURE], à");
+      L.push(" [LIEU], devant [NOMS].");
+      L.push(" Cette convocation ne préjuge de rien : aucune conclusion n'est arrêtée,");
+      L.push(" et elle ne le sera pas avant que vous ayez été entendu(e).");
+      L.push(" Elle n'est pas une convocation à un entretien préalable à une sanction :");
+      L.push(" si une procédure disciplinaire devait être engagée à l'issue de");
+      L.push(" l'enquête, elle donnerait lieu à une convocation distincte, portant ses");
+      L.push(" propres mentions.]");
+      L.push("");
+      L.push("[VARIANTE — TÉMOIN, à ajouter : Vous êtes entendu(e) en qualité de témoin.");
+      L.push(" Vous n'êtes mis(e) en cause d'aucune manière.]");
+      L.push("");
+      L.push("[Le cas échéant : vous pouvez être accompagné(e) par [préciser qui —");
+      L.push(" un salarié de l'entreprise, un membre du comité social et économique].");
+      L.push(" Aucun texte lu par l'application n'impose cette assistance au stade de");
+      L.push(" l'enquête ; l'entreprise l'ouvre par sa procédure interne.]");
+      L.push("");
+      L.push("Ce qui sera dit au cours de cet entretien sera consigné dans un compte");
+      L.push("rendu que vous relirez et signerez, ou dont vous pourrez refuser la");
+      L.push("signature, ce refus étant alors mentionné.");
+      L.push("");
+      L.push("Il est rappelé qu'aucune personne ayant subi ou refusé de subir des faits");
+      L.push("de harcèlement, ni celle qui, de bonne foi, les a relatés ou en a");
+      L.push("témoigné, ne peut faire l'objet des mesures mentionnées à l'article");
+      L.push("L. 1121-2 du code du travail (L. 1152-2 ; L. 1153-2). Vous êtes par");
+      L.push("ailleurs tenu(e) de ne pas divulguer ce qui sera dit au cours de");
+      L.push("l'enquête.");
+      L.push("");
+      L = L.concat(formulePolitesse(ctx, "Madame, Monsieur"));
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 5 — TRAME D'AUDITION N° 1 : LA PERSONNE QUI A SIGNALÉ");
+      L.push(GROS);
+      L.push("");
+      L.push("COMPTE RENDU D'AUDITION");
+      L.push("Enquête ouverte le [DATE] · Audition n° [.] · " + nomDe(ctx));
+      L.push("");
+      L.push("Date et heure : [.....] — début [..h..] / fin [..h..]");
+      L.push("Lieu : [.....]");
+      L.push("Personne entendue : [NOM, PRÉNOM] — [fonction, service, ancienneté]");
+      L.push("Qualité : personne ayant signalé / personne s'estimant concernée");
+      L.push("Enquêteurs présents : [NOMS et qualités]");
+      L.push("Accompagnant, le cas échéant : [NOM et qualité]");
+      L.push("");
+      L.push("MENTIONS LUES À VOIX HAUTE AU DÉBUT DE L'AUDITION, ET PORTÉES ICI");
+      L.push("");
+      L.push("  1. Objet : recueillir votre récit des faits que vous avez signalés le");
+      L.push("     [DATE]. Nous ne portons aucune appréciation aujourd'hui.");
+      L.push("  2. Confidentialité : ce qui est dit ici ne sera porté qu'à la");
+      L.push("     connaissance des personnes qui doivent en connaître pour instruire et");
+      L.push("     décider. Il vous est demandé la même réserve.");
+      L.push("  3. Non-représailles : aucune personne ayant subi ou refusé de subir des");
+      L.push("     faits de harcèlement, ni celle qui, de bonne foi, les a relatés ou en");
+      L.push("     a témoigné, ne peut faire l'objet des mesures mentionnées à l'article");
+      L.push("     L. 1121-2 du code du travail (L. 1152-2 ; L. 1153-2). Signalez-nous");
+      L.push("     immédiatement toute décision vous concernant qui vous paraîtrait liée");
+      L.push("     à votre signalement.");
+      L.push("  4. Ce compte rendu vous sera relu et soumis à signature. Vous pourrez y");
+      L.push("     faire porter toute rectification ou observation.");
+      L.push("  5. Vous pouvez interrompre l'entretien à tout moment.");
+      L.push("");
+      L.push("LE RÉCIT — QUESTIONS OUVERTES D'ABORD");
+      L.push("");
+      L.push("  Q1. Racontez-nous, avec vos mots, ce qui s'est passé.");
+      L.push("      [LAISSER PARLER SANS INTERROMPRE. Écrire le récit tel qu'il est");
+      L.push("       donné, y compris dans son désordre. Ne pas résumer, ne pas");
+      L.push("       reformuler en termes juridiques.]");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q2. Depuis quand ? Quand cela a-t-il commencé, et quand la dernière");
+      L.push("      fois ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q3. À quelle fréquence, et dans quelles circonstances ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q4. Qui d'autre était présent, ou a pu voir ou entendre ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q5. En avez-vous parlé à quelqu'un, et quand ? À qui, et qu'a-t-on");
+      L.push("      répondu ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q6. Disposez-vous d'éléments matériels — messages, courriels, plannings,");
+      L.push("      notes, certificats ? Pouvez-vous nous les remettre ?");
+      L.push("      Réponse : [.....]     Pièces remises : [LISTE, cotée]");
+      L.push("");
+      L.push("  Q7. Quelles conséquences cela a-t-il eues sur votre travail et sur vous ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q8. Avez-vous consulté le médecin du travail ou un médecin ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q9. Depuis votre signalement, une décision vous concernant est-elle");
+      L.push("      intervenue — horaires, affectation, planning, évaluation, relations");
+      L.push("      de travail ?");
+      L.push("      Réponse : [.....]");
+      L.push("      [CETTE QUESTION EST OBLIGATOIRE. C'est le seul point de l'audition");
+      L.push("       qui porte sur l'entreprise elle-même, et sur ce que L. 1152-2 et");
+      L.push("       L. 1153-2 lui interdisent.]");
+      L.push("");
+      L.push("  Q10. Qu'attendez-vous de l'entreprise aujourd'hui ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q11. Souhaitez-vous ajouter quelque chose que nous n'avons pas demandé ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("CE QU'IL NE FAUT PAS DEMANDER");
+      L.push("");
+      L.push("  · pourquoi la personne n'a pas parlé plus tôt, sur le ton du reproche ;");
+      L.push("  · ce qu'elle portait, comment elle se comportait, ce qu'elle a pu");
+      L.push("    laisser croire ;");
+      L.push("  · si elle est sûre de vouloir « aller jusqu'au bout », formule qui");
+      L.push("    suggère un renoncement ;");
+      L.push("  · si elle mesure les conséquences pour la personne mise en cause.");
+      L.push("  Ces questions n'apportent rien à l'enquête et figureront au dossier.");
+      L.push("");
+      L.push("CLÔTURE");
+      L.push("");
+      L.push("Compte rendu relu par la personne entendue le [DATE].");
+      L.push("Observations ou rectifications : [.....]");
+      L.push("");
+      L.push("Signature de la personne entendue : ................");
+      L.push("[ou : la personne entendue a refusé de signer — mention portée le [DATE]]");
+      L.push("Signatures des enquêteurs : ................");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 6 — TRAME D'AUDITION N° 2 : LA PERSONNE MISE EN CAUSE");
+      L.push(GROS);
+      L.push("");
+      L.push("C'est l'audition la plus délicate, et la plus décisive : une enquête qui");
+      L.push("conclut sans avoir entendu la personne mise en cause sur des faits énoncés");
+      L.push("de manière précise ne vaut rien — ni contre elle, ni pour l'entreprise.");
+      L.push("");
+      L.push("COMPTE RENDU D'AUDITION");
+      L.push("Enquête ouverte le [DATE] · Audition n° [.] · " + nomDe(ctx));
+      L.push("");
+      L.push("Date et heure : [.....] — début [..h..] / fin [..h..]");
+      L.push("Lieu : [.....]");
+      L.push("Personne entendue : [NOM, PRÉNOM] — [fonction, service]");
+      L.push("Qualité : personne mise en cause");
+      L.push("Enquêteurs présents : [NOMS et qualités]");
+      L.push("Accompagnant, le cas échéant : [NOM et qualité]");
+      L.push("");
+      L.push("MENTIONS LUES À VOIX HAUTE AU DÉBUT DE L'AUDITION, ET PORTÉES ICI");
+      L.push("");
+      L.push("  1. Objet : une enquête interne est en cours. Des faits vous sont");
+      L.push("     imputés ; nous allons vous les énoncer et recueillir vos");
+      L.push("     explications.");
+      L.push("  2. AUCUNE CONCLUSION N'EST ARRÊTÉE. Rien n'est établi à ce stade, et");
+      L.push("     rien ne le sera avant que vous ayez été entendu(e) et que l'ensemble");
+      L.push("     des éléments ait été examiné.");
+      L.push("  3. Cet entretien n'est PAS un entretien préalable à une sanction. Si une");
+      L.push("     procédure disciplinaire devait être engagée, elle donnerait lieu à");
+      L.push("     une convocation distincte, avec ses propres mentions et ses propres");
+      L.push("     droits.");
+      L.push("  4. Confidentialité : il vous est demandé de ne pas divulguer ce qui est");
+      L.push("     dit ici, et de ne prendre aucun contact avec les personnes concernées");
+      L.push("     au sujet de cette enquête.");
+      L.push("  5. Ce compte rendu vous sera relu et soumis à signature ; vous pourrez y");
+      L.push("     faire porter toute rectification ou observation.");
+      L.push("");
+      L.push("LES FAITS IMPUTÉS, ÉNONCÉS");
+      L.push("");
+      L.push("  [LES ÉCRIRE ICI, UN PAR UN, DATÉS ET CIRCONSTANCIÉS : ce qui aurait été");
+      L.push("   dit ou fait, quel jour, où, devant qui. Une formule générale — « votre");
+      L.push("   comportement », « des propos déplacés » — ne met pas la personne en");
+      L.push("   mesure de répondre, et rend sa réponse inutilisable.");
+      L.push("");
+      L.push("   Fait 1 : [.....]");
+      L.push("   Fait 2 : [.....]");
+      L.push("   Fait 3 : [.....]");
+      L.push("");
+      L.push("   NE PAS RÉVÉLER ce qui identifierait un témoin lorsque cela n'est pas");
+      L.push("   nécessaire à l'énoncé du fait — mais ne pas énoncer si vaguement que la");
+      L.push("   personne ne puisse pas répondre. L'arbitrage se fait fait par fait, et");
+      L.push("   il s'écrit.]");
+      L.push("");
+      L.push("LES QUESTIONS");
+      L.push("");
+      L.push("  Q1. Que répondez-vous à ce qui vient de vous être énoncé ?");
+      L.push("      [LAISSER RÉPONDRE SANS INTERROMPRE.]");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q2. Fait par fait : ce fait s'est-il produit ? Dans quelles");
+      L.push("      circonstances ? Comment le décrivez-vous ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q3. Comment décrivez-vous vos relations de travail avec [la personne");
+      L.push("      concernée] ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q4. Y a-t-il eu, entre vous, des difficultés antérieures — désaccord,");
+      L.push("      évaluation, sanction, refus ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q5. Quelles personnes peuvent, selon vous, éclairer ces faits ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q6. Disposez-vous d'éléments matériels que vous souhaitez nous remettre ?");
+      L.push("      Réponse : [.....]     Pièces remises : [LISTE, cotée]");
+      L.push("");
+      L.push("  Q7. Souhaitez-vous ajouter quelque chose ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("SI DES ÉLÉMENTS NOUVEAUX APPARAISSENT APRÈS CETTE AUDITION");
+      L.push("");
+      L.push("La personne mise en cause est entendue une seconde fois sur ces éléments");
+      L.push("avant toute conclusion. Une enquête qui recueille un élément décisif après");
+      L.push("l'audition et ne rouvre pas revient à ne pas l'avoir entendue.");
+      L.push("");
+      L.push("CLÔTURE");
+      L.push("");
+      L.push("Compte rendu relu par la personne entendue le [DATE].");
+      L.push("Observations ou rectifications : [.....]");
+      L.push("");
+      L.push("Signature de la personne entendue : ................");
+      L.push("[ou : la personne entendue a refusé de signer — mention portée le [DATE]]");
+      L.push("Signatures des enquêteurs : ................");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 7 — TRAME D'AUDITION N° 3 : LES TÉMOINS");
+      L.push(GROS);
+      L.push("");
+      L.push("COMPTE RENDU D'AUDITION");
+      L.push("Enquête ouverte le [DATE] · Audition n° [.] · " + nomDe(ctx));
+      L.push("");
+      L.push("Date et heure : [.....] — début [..h..] / fin [..h..]");
+      L.push("Lieu : [.....]");
+      L.push("Personne entendue : [NOM, PRÉNOM] — [fonction, service]");
+      L.push("Qualité : témoin — n'est mis(e) en cause d'aucune manière");
+      L.push("Enquêteurs présents : [NOMS et qualités]");
+      L.push("");
+      L.push("MENTIONS LUES À VOIX HAUTE AU DÉBUT DE L'AUDITION, ET PORTÉES ICI");
+      L.push("");
+      L.push("  1. Vous êtes entendu(e) comme témoin. Vous n'êtes mis(e) en cause");
+      L.push("     d'aucune manière.");
+      L.push("  2. Nous vous demandons ce que vous avez PERSONNELLEMENT vu ou entendu.");
+      L.push("     Ce que l'on vous a rapporté a une valeur différente : dites-le, mais");
+      L.push("     dites aussi que cela vous a été rapporté, et par qui.");
+      L.push("  3. Non-représailles : aucune personne ayant, de bonne foi, témoigné de");
+      L.push("     tels faits ou les ayant relatés ne peut faire l'objet des mesures");
+      L.push("     mentionnées à l'article L. 1121-2 du code du travail (L. 1152-2 ;");
+      L.push("     L. 1153-2). Signalez-nous immédiatement toute décision vous");
+      L.push("     concernant qui vous paraîtrait liée à votre témoignage.");
+      L.push("  4. Confidentialité : ce qui est dit ici ne sera porté qu'à la");
+      L.push("     connaissance des personnes qui doivent en connaître. Il vous est");
+      L.push("     demandé la même réserve.");
+      L.push("  5. NOUS NE POUVONS PAS VOUS GARANTIR L'ANONYMAT. Ce compte rendu");
+      L.push("     appartiendra au dossier d'enquête, et certains éléments devront");
+      L.push("     peut-être être énoncés à la personne mise en cause pour qu'elle");
+      L.push("     puisse y répondre. Ne promettez jamais ce que vous ne pourrez pas");
+      L.push("     tenir : une promesse d'anonymat rompue détruit la confiance de tous");
+      L.push("     les témoins suivants.");
+      L.push("  6. Ce compte rendu vous sera relu et soumis à signature.");
+      L.push("");
+      L.push("LES QUESTIONS");
+      L.push("");
+      L.push("  Q1. Depuis quand travaillez-vous avec [les personnes concernées], et");
+      L.push("      dans quelles conditions — mêmes horaires, même lieu, même équipe ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q2. Avez-vous personnellement vu ou entendu quelque chose concernant");
+      L.push("      [décrire l'objet sans le qualifier] ? Si oui, quoi, quand, où ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q3. Comment décririez-vous les relations de travail entre ces personnes ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q4. Quelque chose vous a-t-il été rapporté ? Par qui, et quand ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q5. D'autres personnes ont-elles pu voir ou entendre ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("  Q6. Disposez-vous d'éléments matériels ?");
+      L.push("      Réponse : [.....]     Pièces remises : [LISTE, cotée]");
+      L.push("");
+      L.push("  Q7. Souhaitez-vous ajouter quelque chose ?");
+      L.push("      Réponse : [.....]");
+      L.push("");
+      L.push("CLÔTURE");
+      L.push("");
+      L.push("Compte rendu relu par la personne entendue le [DATE].");
+      L.push("Observations ou rectifications : [.....]");
+      L.push("");
+      L.push("Signature de la personne entendue : ................");
+      L.push("[ou : refus de signer — mention portée le [DATE]]");
+      L.push("Signatures des enquêteurs : ................");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 8 — RAPPORT D'ENQUÊTE");
+      L.push(GROS);
+      L.push("");
+      L.push("            RAPPORT D'ENQUÊTE INTERNE");
+      L.push("            " + nomDe(ctx));
+      L.push("            Établi le [DATE] par [NOMS et qualités des enquêteurs]");
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
+      L.push("1. SAISINE");
+      L.push("");
+      L.push("   1.1 Signalement reçu le [DATE], par [voie : écrit, oral consigné],");
+      L.push("       émanant de [qualité de l'auteur].");
+      L.push("   1.2 Objet du signalement, tel qu'il a été formulé : [REPRENDRE LES");
+      L.push("       TERMES DU SIGNALEMENT, sans les requalifier].");
+      L.push("   1.3 Mesures immédiates arrêtées le [DATE] : [RAPPELER].");
+      L.push("   1.4 Décision d'enquête du [DATE] : auteur(s), périmètre, calendrier.");
+      L.push("   1.5 Déport : [mentionner les vérifications faites sur l'impartialité");
+      L.push("       des enquêteurs].");
+      L.push("");
+      L.push("2. MÉTHODE");
+      L.push("");
+      L.push("   2.1 Ce qui a été fait : [nombre] auditions, [nombre] pièces recueillies,");
+      L.push("       [constatations sur place, le cas échéant].");
+      L.push("   2.2 Comment les personnes ont été entendues : convocation écrite,");
+      L.push("       mentions lues, compte rendu relu et signé.");
+      L.push("   2.3 CE QUI N'A PAS PU ÊTRE FAIT, et pourquoi : [personne qui n'a pas");
+      L.push("       souhaité être entendue, salarié parti de l'entreprise, pièce non");
+      L.push("       retrouvée, période trop ancienne]. CETTE RUBRIQUE EST OBLIGATOIRE.");
+      L.push("       Un rapport qui tait ses limites perd sa crédibilité entière quand");
+      L.push("       l'une d'elles apparaît.");
+      L.push("");
+      L.push("3. ACTES ACCOMPLIS — TABLEAU CHRONOLOGIQUE");
+      L.push("");
+      L.push("   Date | Acte                          | Personne     | Pièce cotée");
+      L.push("   -----|-------------------------------|--------------|-------------");
+      L.push("   [..] | réception du signalement      | [..........] | [P1]");
+      L.push("   [..] | accusé de réception           | [..........] | [P2]");
+      L.push("   [..] | décision de mesures immédiates| [..........] | [P3]");
+      L.push("   [..] | décision d'enquête            | [..........] | [P4]");
+      L.push("   [..] | audition                      | [..........] | [P.]");
+      L.push("   [..] | audition                      | [..........] | [P.]");
+      L.push("   [..] | audition                      | [..........] | [P.]");
+      L.push("   [..] | remise de pièces              | [..........] | [P.]");
+      L.push("");
+      L.push("4. ÉLÉMENTS RECUEILLIS");
+      L.push("");
+      L.push("   Fait par fait, et sans mélanger ce qui est dit et ce qui est conclu.");
+      L.push("");
+      L.push("   FAIT n° 1 — [énoncé, daté, circonstancié]");
+      L.push("     · ce qu'en dit la personne qui a signalé : [.....]");
+      L.push("     · ce qu'en dit la personne mise en cause : [.....]");
+      L.push("     · ce qu'en disent les témoins : [.....]");
+      L.push("     · pièces s'y rapportant : [cotes]");
+      L.push("     · points concordants : [.....]");
+      L.push("     · points contradictoires : [.....]");
+      L.push("");
+      L.push("   FAIT n° 2 — [même structure]");
+      L.push("   FAIT n° 3 — [même structure]");
+      L.push("");
+      L.push("5. ANALYSE");
+      L.push("");
+      L.push("   5.1 Pour chaque fait : les éléments recueillis permettent-ils de le");
+      L.push("       tenir pour établi, et sur quoi repose cette appréciation ?");
+      L.push("   5.2 Rapprochement des faits établis avec les définitions légales,");
+      L.push("       CITÉES et non résumées : L. 1152-1 pour le harcèlement moral,");
+      L.push("       L. 1153-1 pour le harcèlement sexuel. Vérifier notamment, pour");
+      L.push("       L. 1153-1, les cas a) et b) — plusieurs auteurs — et le 2°, où la");
+      L.push("       pression grave n'a pas besoin d'être répétée.");
+      L.push("   5.3 Ce qui, sans relever de ces définitions, révèle un dysfonctionnement");
+      L.push("       de l'organisation du travail : [.....]. Cette rubrique est utile :");
+      L.push("       beaucoup de situations n'entrent pas dans les définitions et");
+      L.push("       appellent pourtant une mesure.");
+      L.push("");
+      L.push("6. CONCLUSIONS");
+      L.push("");
+      L.push("   Une seule case, et elle n'est pas pré-remplie :");
+      L.push("");
+      L.push("   [ ] LES FAITS SONT ÉTABLIS. Lesquels : [.....]. Sur quels éléments :");
+      L.push("       [.....].");
+      L.push("");
+      L.push("   [ ] LES FAITS NE SONT PAS ÉTABLIS. Sur quels éléments : [.....].");
+      L.push("       ATTENTION AU SENS DE CETTE CASE : « non établis » ne veut pas dire");
+      L.push("       « inventés ». Le rapport ne conclut à la mauvaise foi de l'auteur");
+      L.push("       du signalement que s'il l'établit expressément, par des éléments");
+      L.push("       qu'il énonce. À défaut, la protection de L. 1152-2 et L. 1153-2");
+      L.push("       joue pleinement, et toute mesure défavorable prise contre lui");
+      L.push("       serait une représaille.");
+      L.push("");
+      L.push("   [ ] LES ÉLÉMENTS SONT INSUFFISANTS POUR CONCLURE. Pourquoi : [.....].");
+      L.push("       Ce qui a manqué : [.....]. Cette case n'est pas un échec : c'est");
+      L.push("       parfois la seule conclusion honnête. Elle appelle des mesures");
+      L.push("       d'organisation, pas le classement du dossier.");
+      L.push("");
+      L.push("7. SUITES ENVISAGÉES");
+      L.push("");
+      L.push("   7.1 MESURES POUR METTRE UN TERME AUX FAITS ou à la situation :");
+      L.push("       [.....] — L. 1153-5 impose d'y mettre un terme, et cette obligation");
+      L.push("       est distincte de celle de sanctionner.");
+      L.push("   7.2 SANCTION, si les faits sont établis : [proposition]. Elle se prend");
+      L.push("       selon la procédure disciplinaire — convocation, entretien,");
+      L.push("       notification écrite et motivée dans les délais — que le module");
+      L.push("       « discipline » de cette application traite. LE DÉLAI DE DEUX MOIS");
+      L.push("       DE L'ARTICLE L. 1332-4 COURT : vérifiez-le avant toute autre chose.");
+      L.push("   7.3 MESURES D'ORGANISATION, quelle que soit la conclusion : [.....].");
+      L.push("   7.4 MISE À JOUR DU DOCUMENT UNIQUE : le signalement est une information");
+      L.push("       supplémentaire intéressant l'évaluation d'un risque, au sens de");
+      L.push("       R. 4121-2, 3°. Le volet « harcèlement » se relit, que les faits");
+      L.push("       aient été établis ou non.");
+      L.push("   7.5 SUIVI : point avec la personne qui a signalé le [DATE] puis le");
+      L.push("       [DATE], pour vérifier que la situation a cessé et qu'aucune mesure");
+      L.push("       défavorable n'a suivi.");
+      L.push("");
+      L.push("8. PIÈCES ANNEXÉES");
+      L.push("");
+      L.push("   [LISTE COTÉE, dans l'ordre du tableau du 3.]");
+      L.push("");
+      L.push("Fait à " + lieu(ctx) + ", le [DATE].");
+      L.push("Signatures des enquêteurs : ................");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 9 — COURRIERS DE CLÔTURE");
+      L.push(GROS);
+      L.push("");
+      L.push("A — À LA PERSONNE QUI A SIGNALÉ");
+      L.push("");
+      L = L.concat(teteLettre(ctx,
+        ["[NOM, PRÉNOM]", "[fonction et service]"], true));
+      L.push("Objet : clôture de l'instruction de votre signalement du [DATE]");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("L'enquête ouverte à la suite de votre signalement du [DATE] est close. Vous");
+      L.push("avez été entendu(e) le [DATE], ainsi que [nombre] autres personnes.");
+      L.push("");
+      L.push("[CHOISIR UNE SEULE SUITE, celle qui correspond à la conclusion du rapport :");
+      L.push(" — Les faits sont établis. Les mesures suivantes ont été prises : [.....].");
+      L.push("   [Le cas échéant : une procédure disciplinaire a été engagée. Son issue");
+      L.push("   ne peut pas vous être communiquée dans le détail.]");
+      L.push(" — Les faits n'ont pas pu être établis au vu des éléments recueillis. Les");
+      L.push("   mesures suivantes ont néanmoins été prises : [.....].");
+      L.push(" — Les éléments recueillis n'ont pas permis de conclure. Les mesures");
+      L.push("   suivantes ont été prises : [.....].]");
+      L.push("");
+      L.push("Un point sera fait avec vous le [DATE], puis le [DATE].");
+      L.push("");
+      L.push("Je vous rappelle que la protection prévue par les articles L. 1152-2 et");
+      L.push("L. 1153-2 du code du travail continue de vous être acquise : signalez-moi");
+      L.push("immédiatement toute décision vous concernant qui vous paraîtrait liée à");
+      L.push("votre signalement.");
+      L.push("");
+      L = L.concat(formulePolitesse(ctx, "Madame, Monsieur"));
+      L.push("");
+      L.push("B — À LA PERSONNE MISE EN CAUSE");
+      L.push("");
+      L = L.concat(teteLettre(ctx,
+        ["[NOM, PRÉNOM]", "[fonction et service]"], true));
+      L.push("Objet : clôture de l'enquête interne ouverte le [DATE]");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("L'enquête interne ouverte le [DATE], dans le cadre de laquelle vous avez");
+      L.push("été entendu(e) le [DATE], est close.");
+      L.push("");
+      L.push("[CHOISIR UNE SEULE SUITE :");
+      L.push(" — Les faits qui vous étaient imputés n'ont pas été établis. Aucune suite");
+      L.push("   n'y est donnée, et aucune mention n'en sera portée à votre dossier");
+      L.push("   individuel.");
+      L.push(" — Les éléments recueillis n'ont pas permis de conclure. Aucune sanction");
+      L.push("   n'est prononcée. [Le cas échéant : les mesures d'organisation suivantes");
+      L.push("   sont prises, qui ne constituent pas une sanction : .....]");
+      L.push(" — Les faits suivants ont été retenus : [.....]. Vous serez convoqué(e) à");
+      L.push("   un entretien préalable par une lettre distincte, qui vous précisera");
+      L.push("   l'objet de la convocation, la date, l'heure et le lieu de l'entretien,");
+      L.push("   et rappellera votre faculté de vous faire assister. AUCUNE SANCTION");
+      L.push("   N'EST PRONONCÉE PAR LA PRÉSENTE LETTRE.]");
+      L.push("");
+      L.push("[Les mesures provisoires prises le [DATE] sont levées / maintenues");
+      L.push(" jusqu'à [DATE] pour la raison suivante : .....]");
+      L.push("");
+      L = L.concat(formulePolitesse(ctx, "Madame, Monsieur"));
+      L.push("");
+
+      L.push(GROS);
+      L.push("VOTRE CALENDRIER");
+      L.push(GROS);
+      L.push("");
+      L.push("Les délais ci-dessous sont proposés : aucun texte lu n'en fixe. Ce que les");
+      L.push("textes fixent, c'est l'obligation d'agir — et le temps passé sans agir se");
+      L.push("lira sur les dates du dossier.");
+      L.push("");
+      L.push("Aujourd'hui, " + leJour(d0) + " — accusé de réception (pièce 1) et");
+      L.push("examen des mesures immédiates (pièce 2). Ces deux actes ne supposent");
+      L.push("aucune enquête et ne dépendent que de vous.");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 3)) + " au plus tard — les mesures immédiates");
+      L.push("sont arrêtées et écrites, avec la vérification du point 4 : ne pas faire");
+      L.push("peser la mesure sur celui qui a parlé.");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 7)) + " — la décision d'enquête est signée");
+      L.push("(pièce 3) : qui enquête, sur quoi, jusqu'à quand.");
+      L.push("");
+      L.push("Du " + leJour(dans(d0, 8)) + " au " + leJour(dans(d0, 42)) + " — les");
+      L.push("auditions (pièces 4 à 7) et le recueil des pièces. Entendre la personne");
+      L.push("mise en cause AVANT toute conclusion, jamais après.");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 49)) + " — le rapport est établi (pièce 8).");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 56)) + " — les suites sont décidées et les");
+      L.push("courriers de clôture partent (pièce 9).");
+      L.push("");
+      L.push("SI UNE SANCTION EST ENVISAGÉE, UN AUTRE DÉLAI COMMANDE, ET CELUI-LÀ EST");
+      L.push("DANS LA LOI : « Aucun fait fautif ne peut donner lieu à lui seul à");
+      L.push("l'engagement de poursuites disciplinaires au-delà d'un délai de deux mois");
+      L.push("à compter du jour où l'employeur en a eu connaissance » (L. 1332-4, article");
+      L.push("du corpus du module « discipline » de cette application). Compté depuis");
+      L.push("aujourd'hui, ce délai conduirait au " + leJour(dans(d0, 61)) + " environ :");
+      L.push("il peut donc expirer AVANT la fin d'une enquête menée en huit semaines.");
+      L.push("Portez la date de connaissance des faits en tête du dossier, et faites");
+      L.push("vérifier ce point par le module « discipline » avant d'engager quoi que ce");
+      L.push("soit.");
+      L.push("");
+      L.push("Au " + leJour(dans(d0, 84)) + " puis au " + leJour(dans(d0, 175)) + " —");
+      L.push("les points de suivi avec la personne qui a signalé. C'est l'étape que");
+      L.push("l'on saute, et c'est elle qui prouve qu'on a mis un terme.");
+
+      return L.concat(pied("L. 1153-5, L. 1152-4, L. 1152-1, L. 1153-1, L. 1152-2, " +
+        "L. 1153-2, L. 4121-1, L. 1155-2, R. 4121-2, D. 1151-1",
+        ["Décision citée, lue à la source dans la base Judilibre de la Cour de",
+         "cassation, réponse non relaxée : Soc., 18 juin 2025, n° 23-19.022, publié —",
+         "la valeur probante d'une enquête interne relève de l'appréciation souveraine",
+         "des juges du fond, au regard le cas échéant des autres éléments de preuve.",
+         "",
+         "LA SEULE PEINE QUE CE MODULE PUISSE ANNONCER EN MATIÈRE DE HARCÈLEMENT SE",
+         "TROUVE ICI, ET ELLE NE VISE PAS CE QUE L'ON CROIT. « Sont punis d'un an",
+         "d'emprisonnement et d'une amende de 3 750 € les faits de discriminations",
+         "commis à la suite d'un harcèlement moral ou sexuel définis aux articles",
+         "L. 1152-2, L. 1153-2 et L. 1153-3 du présent code. La juridiction peut",
+         "également ordonner, à titre de peine complémentaire, l'affichage du jugement",
+         "aux frais de la personne condamnée dans les conditions prévues à l'article",
+         "131-35 du code pénal et son insertion, intégrale ou par extraits, dans les",
+         "journaux qu'elle désigne. Ces frais ne peuvent excéder le montant maximum de",
+         "l'amende encourue » (L. 1155-2).",
+         "",
+         "Ce texte punit les REPRÉSAILLES — la mesure prise contre celui qui a subi,",
+         "refusé de subir, relaté ou témoigné —, non l'insuffisance d'une enquête ni",
+         "l'absence de prévention. C'est la raison pour laquelle chaque pièce de ce",
+         "dossier rappelle la protection de L. 1152-2 et L. 1153-2, et pourquoi le",
+         "rapport distingue expressément « faits non établis » de « signalement",
+         "mensonger ».",
+         "",
+         "L. 1153-3, l'un des trois articles visés par L. 1155-2, n'a pas été lu par",
+         "l'application : elle le nomme sans en reproduire le contenu. L. 1121-2, les",
+         "articles 10-1 et 12 à 13-1 de la loi n° 2016-1691 du 9 décembre 2016 et",
+         "l'article 131-35 du code pénal ne l'ont pas été davantage.",
+         "",
+         "L. 1332-4, cité pour le délai de deux mois, appartient au corpus du module",
+         "« discipline » (moteur/discipline/textes-discipline.json), où il a été lu à",
+         "la source. Les autres règles de la procédure disciplinaire s'y trouvent."])).join("\n");
+    },
+  });
+
 })(typeof window !== "undefined" ? window : this);

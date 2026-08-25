@@ -148,6 +148,16 @@
     return (n * 100).toFixed(d).replace(".", ",") + " %";
   }
 
+  /* Les tableaux de ce fichier sont dessinés en caractères : une colonne qui
+     déborde casse la ligne du bas et rend le tableau illisible. On complète à
+     la largeur, et on tronque plutôt que de déborder. */
+  function pad(s, n) {
+    var t = String(s == null ? "" : s);
+    if (t.length > n) return t.slice(0, n);
+    while (t.length < n) t += " ";
+    return t;
+  }
+
   function liste(v) {
     if (!v) return [];
     if (Array.isArray(v)) return v;
@@ -1271,6 +1281,1089 @@
          "D. 2315-34 (définition des ressources annuelles du comité)",
          "L. 2315-44-2 (auquel D. 2315-29 rattache le seuil de 30 000 €)",
          "L. 123-12 du code de commerce (obligations comptables visées par L. 2315-64)"]);
+    },
+  });
+
+  /* ────────────────────────────────────────────────────────────────────────
+     LES DEUX BUDGETS
+     ──────────────────────────────────────────────────────────────────────── */
+
+  /* La définition de l'assiette est la même pour les deux budgets, et elle est
+     écrite deux fois dans le code : à L. 2315-61 pour la subvention de
+     fonctionnement, à L. 2312-83 pour la contribution aux activités sociales.
+     Les deux textes sont identiques mot pour mot. On les cite ensemble, une
+     fois, dans un bloc commun aux deux documents : c'est ce qui évite qu'une
+     entreprise applique deux assiettes différentes à deux calculs qui n'en ont
+     qu'une. */
+  function assiette(L) {
+    L.push("L'ASSIETTE — CE QUE LE TEXTE DIT, ET RIEN DE PLUS");
+    L.push("");
+    L.push("« La masse salariale brute est constituée par L'ENSEMBLE DES GAINS ET");
+    L.push("RÉMUNÉRATIONS SOUMIS À COTISATIONS DE SÉCURITÉ SOCIALE en application des");
+    L.push("dispositions de l'article L. 242-1 du code de la sécurité sociale ou de");
+    L.push("l'article L. 741-10 du code rural et de la pêche maritime, À L'EXCEPTION DES");
+    L.push("INDEMNITÉS VERSÉES À L'OCCASION DE LA RUPTURE DU CONTRAT DE TRAVAIL À DURÉE");
+    L.push("INDÉTERMINÉE. »");
+    L.push("");
+    L.push("Cette définition figure deux fois, dans les mêmes termes : au dernier alinéa de");
+    L.push("L. 2315-61 pour la subvention de fonctionnement, et à L. 2312-83 pour la");
+    L.push("contribution aux activités sociales et culturelles. Une seule assiette, donc,");
+    L.push("pour les deux budgets.");
+    L.push("");
+    L.push("  CE QUI ENTRE — tout ce qui est soumis à cotisations de sécurité sociale au");
+    L.push("  sens de L. 242-1 du code de la sécurité sociale (ou de L. 741-10 du code");
+    L.push("  rural et de la pêche maritime pour les employeurs qui en relèvent).");
+    L.push("");
+    L.push("  CE QUI SORT — les indemnités versées à l'occasion de la rupture du contrat de");
+    L.push("  travail À DURÉE INDÉTERMINÉE. C'est la seule exclusion que le texte énonce,");
+    L.push("  et elle vise la rupture du CDI : ce que le texte ne nomme pas, il ne");
+    L.push("  l'exclut pas.");
+    L.push("");
+    L.push("  CE QUE L'APPLICATION N'A PAS LU — l'article L. 242-1 du code de la sécurité");
+    L.push("  sociale et l'article L. 741-10 du code rural. Ils n'appartiennent pas au code");
+    L.push("  du travail et le relais de l'application ne les sert pas. Ils sont donc");
+    L.push("  NOMMÉS ici, jamais paraphrasés. Le périmètre exact de ce qui est « soumis à");
+    L.push("  cotisations » se lit dans ces textes et dans vos déclarations sociales");
+    L.push("  nominatives — pas dans ce document.");
+    L.push("");
+    L.push("  LA PIÈCE QUI PORTE L'ASSIETTE — vos déclarations sociales nominatives de");
+    L.push("  l'exercice, dont le cumul annuel des rémunérations brutes soumises à");
+    L.push("  cotisations constitue le point de départ, DIMINUÉ des indemnités de rupture");
+    L.push("  de CDI qui y figurent. Conservez le détail du retraitement : c'est lui qui");
+    L.push("  sera discuté, jamais le total.");
+    L.push("");
+  }
+
+  DP.ajouter("CSE-CTL-BUD-01", {
+    nom: "La subvention de fonctionnement : note de méthode sur l'assiette, tableau de calcul, ordre de versement, courrier au trésorier et protocole de régularisation de l'arriéré",
+    detail: "La définition de l'assiette article à l'appui, le taux de la tranche, le " +
+            "calcul chiffré du montant dû et du complément, le procès-verbal de versement, " +
+            "le courrier au trésorier du comité et l'échéancier de régularisation.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var eff = effectifDe(ctx);
+      var ms = nb(f.masseSalariale);
+      var verse = nb(f.subventionVersee);
+      var tauxNum = null, tauxTxt = "[0,20 % ou 0,22 % — selon l'effectif]", tranche = "[tranche à déterminer]";
+      if (eff != null) {
+        if (eff >= 2000) { tauxNum = 0.0022; tauxTxt = "0,22 %"; tranche = "entreprises d'au moins deux mille salariés (L. 2315-61, 2°)"; }
+        else if (eff >= 50) { tauxNum = 0.0020; tauxTxt = "0,20 %"; tranche = "entreprises de cinquante à moins de deux mille salariés (L. 2315-61, 1°)"; }
+      }
+      var du = (ms != null && tauxNum != null) ? ms * tauxNum : null;
+      var solde = (du != null && verse != null) ? du - verse : null;
+      var L = [];
+
+      L = L.concat(entete(ctx, "Subvention de fonctionnement du comité : note de méthode, calcul et régularisation",
+        "article L. 2315-61 du code du travail"));
+      usage(L);
+
+      L.push("CE QUI SE JOUE, ET CE QUI NE SE JOUE PAS");
+      L.push("");
+      L.push("Le complément de subvention non versé RESTE DÛ. Ce n'est pas une irrégularité");
+      L.push("formelle qui se corrige en écrivant une note : c'est une dette du budget de");
+      L.push("l'entreprise envers le budget du comité, que le comité peut réclamer, et dont");
+      L.push("le montant se calcule exactement — c'est tout l'objet du paragraphe 3.");
+      L.push("");
+      L.push("Ce document produit, dans l'ordre :");
+      L.push("");
+      L.push("  1. la NOTE DE MÉTHODE sur l'assiette, avec ce qui entre et ce qui sort ;");
+      L.push("  2. le TAUX de la tranche, et la vérification de la tranche ;");
+      L.push("  3. le TABLEAU DE CALCUL de l'exercice, chiffré ;");
+      L.push("  4. la question de L'IMPUTATION — cette subvention s'ajoute-t-elle à celle");
+      L.push("     des activités sociales, ou l'employeur en est-il déjà quitte ? ;");
+      L.push("  5. l'ORDRE DE VERSEMENT et le procès-verbal ;");
+      L.push("  6. le COURRIER AU TRÉSORIER du comité ;");
+      L.push("  7. le PROTOCOLE DE RÉGULARISATION de l'arriéré, avec son échéancier.");
+      L.push("");
+
+      titre(L, "1 — Note de méthode : l'assiette");
+      assiette(L);
+
+      titre(L, "2 — Le taux, et la tranche");
+      L.push("« L'employeur verse au comité social et économique une subvention de");
+      L.push("fonctionnement d'un montant annuel équivalent à : 1° 0,20 % DE LA MASSE");
+      L.push("SALARIALE BRUTE dans les entreprises de CINQUANTE À MOINS DE DEUX MILLE");
+      L.push("salariés ; 2° 0,22 % DE LA MASSE SALARIALE BRUTE dans les entreprises D'AU");
+      L.push("MOINS DEUX MILLE salariés » (L. 2315-61, premier alinéa).");
+      L.push("");
+      if (eff == null) {
+        L.push("  Effectif de l'entreprise ...... [À RENSEIGNER]");
+        L.push("");
+        L.push("  L'EFFECTIF MANQUE : le taux ne peut pas être arrêté ici, et il ne sera pas");
+        L.push("  supposé. Les deux calculs sont donc écrits côte à côte au paragraphe 3 ;");
+        L.push("  rayez celui qui ne s'applique pas une fois l'effectif établi.");
+      } else if (eff < 50) {
+        L.push("  Effectif de l'entreprise ...... " + eff + " salariés.");
+        L.push("");
+        L.push("  L'EFFECTIF DÉCLARÉ EST INFÉRIEUR À CINQUANTE. Le premier alinéa de");
+        L.push("  L. 2315-61 vise les entreprises « de cinquante à moins de deux mille »");
+        L.push("  salariés : en deçà, ce texte ne fixe aucune subvention. Vérifiez d'abord");
+        L.push("  l'effectif et la façon dont le seuil de cinquante salariés a été apprécié");
+        L.push("  — c'est le point CSE-CTL-MEP de ce module qui le traite —, puis reprenez");
+        L.push("  ce document si le seuil est en réalité franchi.");
+      } else {
+        L.push("  Effectif de l'entreprise ...... " + eff + " salariés");
+        L.push("  Tranche applicable ............ " + tranche);
+        L.push("  TAUX RETENU ................... " + tauxTxt);
+        L.push("");
+        if (eff >= 1900 && eff < 2000) {
+          L.push("  ATTENTION — l'effectif est proche du seuil de deux mille salariés. Le taux");
+          L.push("  passe de 0,20 % à 0,22 % au franchissement : reprenez ce calcul dès que");
+          L.push("  l'effectif atteint deux mille.");
+          L.push("");
+        }
+      }
+      L.push("");
+
+      titre(L, "3 — Le tableau de calcul de l'exercice");
+      L.push("Exercice considéré : [DU ..... AU .....]");
+      L.push("");
+      L.push("  A — MASSE SALARIALE BRUTE de l'exercice, au sens du dernier alinéa de");
+      L.push("      L. 2315-61 (gains et rémunérations soumis à cotisations, moins les");
+      L.push("      indemnités de rupture de CDI) ......... " +
+        (ms == null ? "[MASSE SALARIALE BRUTE — à relever sur les déclarations sociales nominatives]"
+                    : eur(ms)));
+      L.push("");
+      if (eff == null || eff < 50) {
+        L.push("  B — TAUX. Les deux hypothèses, puisque l'effectif n'est pas établi :");
+        L.push("");
+        L.push("      · de cinquante à moins de deux mille salariés .......... 0,20 %");
+        L.push("        C = A × 0,0020 = " +
+          (ms == null ? "[A] × 0,0020 = [MONTANT DÛ]" : eur(ms * 0.0020)));
+        L.push("      · au moins deux mille salariés ......................... 0,22 %");
+        L.push("        C = A × 0,0022 = " +
+          (ms == null ? "[A] × 0,0022 = [MONTANT DÛ]" : eur(ms * 0.0022)));
+        L.push("");
+        L.push("      Rayez la ligne qui ne s'applique pas.");
+      } else {
+        L.push("  B — TAUX de la tranche ....................... " + tauxTxt +
+          " (soit " + (tauxNum === 0.0022 ? "0,0022" : "0,0020") + ")");
+        L.push("");
+        L.push("  C — MONTANT ANNUEL DÛ = A × B");
+        L.push("      " + (ms == null
+          ? "[MASSE SALARIALE BRUTE] × " + (tauxNum === 0.0022 ? "0,0022" : "0,0020") + " = [MONTANT DÛ]"
+          : eur(ms) + " × " + (tauxNum === 0.0022 ? "0,0022" : "0,0020") + " = " + eur(du)));
+      }
+      L.push("");
+      L.push("  D — DÉJÀ VERSÉ sur l'exercice, tous versements confondus ...... " +
+        (verse == null ? "[MONTANT VERSÉ — à relever sur les justificatifs de versement]" : eur(verse)));
+      L.push("");
+      L.push("      Détail des versements : [date · montant · pièce], ligne par ligne. Un");
+      L.push("      total sans détail ne prouve rien le jour où il est contesté.");
+      L.push("");
+      L.push("  E — COMPLÉMENT RESTANT DÛ = C − D");
+      if (solde == null) {
+        L.push("      [MONTANT DÛ] − [MONTANT VERSÉ] = [COMPLÉMENT]");
+      } else if (solde > 0) {
+        L.push("      " + eur(du) + " − " + eur(verse) + " = " + eur(solde));
+        L.push("");
+        L.push("      IL RESTE DÛ " + eur(solde) + " AU TITRE DE CET EXERCICE.");
+        L.push("      Cette somme est une dette : elle ne s'éteint pas par l'écoulement de");
+        L.push("      l'exercice, et le comité peut en demander le paiement.");
+      } else if (solde < 0) {
+        L.push("      " + eur(du) + " − " + eur(verse) + " = " + eur(solde));
+        L.push("");
+        L.push("      LE VERSEMENT EXCÈDE LE MONTANT LÉGAL DE " + eur(Math.abs(solde)) + ". Le taux de");
+        L.push("      L. 2315-61 est un MINIMUM légal : rien n'interdit de verser davantage.");
+        L.push("      Vérifiez seulement d'où vient l'excédent — un accord plus favorable, un");
+        L.push("      usage, ou une erreur d'imputation entre les deux budgets, qui ne se");
+        L.push("      confondent pas.");
+      } else {
+        L.push("      " + eur(du) + " − " + eur(verse) + " = " + eur(0));
+        L.push("");
+        L.push("      LE COMPTE EST EXACT au titre de cet exercice.");
+      }
+      L.push("");
+      L.push("  CE QUE CE TABLEAU NE FAIT PAS — il ne remonte pas les exercices antérieurs.");
+      L.push("  Refaites-le, à l'identique, pour chaque exercice où le doute existe ; le");
+      L.push("  paragraphe 7 échelonne ensuite le total.");
+      L.push("");
+
+      titre(L, "4 — L'imputation : cette subvention s'ajoute-t-elle ?");
+      L.push("« Ce montant S'AJOUTE à la subvention destinée aux activités sociales et");
+      L.push("culturelles, SAUF SI l'employeur fait déjà bénéficier le comité d'une somme ou");
+      L.push("de moyens en personnel équivalents à 0,22 % de la masse salariale brute »");
+      L.push("(L. 2315-61, deuxième alinéa).");
+      L.push("");
+      L.push("  L'employeur fait-il déjà bénéficier le comité d'une somme ou de moyens en");
+      L.push("  personnel équivalents à 0,22 % de la masse salariale brute ? ... [oui / non]");
+      L.push("");
+      L.push("  Si oui, détaillez ce qui est fourni et sa valorisation :");
+      L.push("     · sommes versées à un autre titre .......... [ ] €");
+      L.push("     · moyens en personnel mis à disposition .... [ ] € — [nature, temps,");
+      L.push("       méthode de valorisation]");
+      L.push("     · TOTAL ................................... [ ] €");
+      L.push("     · à comparer à 0,22 % de A ................ " +
+        (ms == null ? "[A] × 0,0022 = [ ] €" : eur(ms * 0.0022)));
+      L.push("");
+      L.push("  Le texte pose une équivalence à 0,22 %, quel que soit l'effectif : c'est ce");
+      L.push("  taux-là qui sert de mesure à l'exception, et non celui de votre tranche.");
+      L.push("");
+      L.push("  TROIS AUTRES RÈGLES QUE PORTE LE MÊME ARTICLE, et qu'on oublie :");
+      L.push("");
+      L.push("  · le comité PEUT DÉCIDER, PAR UNE DÉLIBÉRATION, de consacrer une partie de");
+      L.push("    son budget de fonctionnement au financement de la formation des délégués");
+      L.push("    syndicaux de l'entreprise ainsi qu'à la formation des représentants de");
+      L.push("    proximité, lorsqu'ils existent (L. 2315-61) ;");
+      L.push("  · il peut également décider, par une délibération, de TRANSFÉRER UNE PARTIE");
+      L.push("    DE L'EXCÉDENT ANNUEL du budget de fonctionnement au financement des");
+      L.push("    activités sociales et culturelles, dans des conditions et limites fixées");
+      L.push("    par décret en Conseil d'État (L. 2315-61) — le décret n'est pas cité ici :");
+      L.push("    l'application ne l'a pas lu, et la limite ne s'invente pas ;");
+      L.push("  · MAIS lorsque le financement des frais d'expertise est pris en charge par");
+      L.push("    l'employeur en application du 3° de l'article L. 2315-80, LE COMITÉ NE PEUT");
+      L.push("    PAS DÉCIDER DE TRANSFÉRER D'EXCÉDENTS du budget de fonctionnement au");
+      L.push("    financement des activités sociales et culturelles PENDANT LES TROIS ANNÉES");
+      L.push("    SUIVANTES (L. 2315-61, dernier alinéa). Vérifiez ce point avant toute");
+      L.push("    délibération de transfert : il se rattache au document CSE-CTL-EXP-01.");
+      L.push("");
+      L.push("  INSCRIPTION AUX COMPTES — « Cette somme et ses modalités d'utilisation sont");
+      L.push("  inscrites, d'une part, dans les comptes annuels du comité social et");
+      L.push("  économique ou, le cas échéant, dans les documents mentionnés à l'article");
+      L.push("  L. 2315-65 et, d'autre part, dans le rapport mentionné à l'article");
+      L.push("  L. 2315-69 » (L. 2315-61). Le versement ne suffit donc pas : il doit se lire");
+      L.push("  dans les comptes et dans le rapport de gestion du comité.");
+      L.push("");
+
+      titre(L, "5 — L'ordre de versement, et le procès-verbal");
+      L.push("ORDRE DE VERSEMENT");
+      L.push("");
+      L.push(nom(ctx));
+      L.push("");
+      L.push("Objet : versement du complément de subvention de fonctionnement du comité");
+      L.push("social et économique — exercice [ ]");
+      L.push("");
+      L.push("Vu l'article L. 2315-61 du code du travail ;");
+      L.push("Vu le tableau de calcul annexé ;");
+      L.push("");
+      L.push("Il est ordonné le versement, au comité social et économique de " + nom(ctx) + ",");
+      L.push("d'une somme de " + (solde != null && solde > 0 ? eur(solde) : "[COMPLÉMENT]") +
+        " au titre du complément de subvention de");
+      L.push("fonctionnement de l'exercice [ ].");
+      L.push("");
+      L.push("  Compte à créditer : [coordonnées bancaires du comité — à demander au");
+      L.push("  trésorier, jamais reconstituées]");
+      L.push("  Date d'exécution : [DATE]");
+      L.push("  Référence à porter au libellé : « Subvention de fonctionnement L. 2315-61 —");
+      L.push("  complément exercice [ ] » — le libellé compte : c'est lui qui empêchera");
+      L.push("  qu'on impute plus tard ce versement au budget des activités sociales.");
+      L.push("");
+      L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ".");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
+      L.push("PROCÈS-VERBAL DE VERSEMENT — extrait à porter au procès-verbal du comité");
+      L.push("");
+      L.push("Comité social et économique de " + nom(ctx));
+      L.push("Réunion du [DATE]");
+      L.push("");
+      L.push("Point [n°] — Subvention de fonctionnement de l'exercice [ ].");
+      L.push("");
+      L.push("Le président présente le calcul de la subvention de fonctionnement : masse");
+      L.push("salariale brute de l'exercice " +
+        (ms == null ? "[MONTANT]" : eur(ms)) + ", taux de " + tauxTxt + ", soit " +
+        (du == null ? "[MONTANT DÛ]" : eur(du)) + " dus.");
+      L.push("Il indique que " + (verse == null ? "[MONTANT VERSÉ]" : eur(verse)) +
+        " ont été versés et qu'un complément de");
+      L.push((solde != null && solde > 0 ? eur(solde) : "[COMPLÉMENT]") +
+        " a été ordonné le [DATE], porté au compte du comité le [DATE].");
+      L.push("");
+      L.push("Le trésorier confirme la réception et l'inscription de cette somme aux comptes");
+      L.push("annuels du comité, ainsi que la mention de ses modalités d'utilisation dans le");
+      L.push("rapport de l'article L. 2315-69.");
+      L.push("");
+      L.push("Le secrétaire,                             Le président,");
+      L.push("[nom]                                      " + signataire(ctx));
+      L.push("");
+
+      courrier(L, 1, "au trésorier du comité social et économique", [
+        "Ce courrier accompagne le versement. Il porte le calcul, et non seulement le",
+        "montant : c'est le calcul qui permet au trésorier de le vérifier, et c'est sa",
+        "vérification qui clôt le sujet.",
+      ]);
+      papier(L, ctx, ["À l'attention du trésorier",
+                      "du comité social et économique"]);
+      L.push("Objet : subvention de fonctionnement de l'exercice [ ] — calcul et versement");
+      L.push("du complément");
+      L.push("");
+      L.push("Madame, Monsieur le Trésorier,");
+      L.push("");
+      L.push("L'article L. 2315-61 du code du travail fixe la subvention de fonctionnement");
+      L.push("du comité à " + tauxTxt + " de la masse salariale brute, celle-ci étant constituée par");
+      L.push("l'ensemble des gains et rémunérations soumis à cotisations de sécurité sociale,");
+      L.push("à l'exception des indemnités versées à l'occasion de la rupture du contrat de");
+      L.push("travail à durée indéterminée.");
+      L.push("");
+      L.push("Pour l'exercice [ ], le calcul s'établit ainsi :");
+      L.push("");
+      L.push("  masse salariale brute .................. " + (ms == null ? "[ ] €" : eur(ms)));
+      L.push("  taux applicable ........................ " + tauxTxt);
+      L.push("  montant annuel dû ...................... " + (du == null ? "[ ] €" : eur(du)));
+      L.push("  déjà versé ............................. " + (verse == null ? "[ ] €" : eur(verse)));
+      L.push("  COMPLÉMENT VERSÉ CE JOUR ............... " +
+        (solde != null && solde > 0 ? eur(solde) : "[ ] €"));
+      L.push("");
+      L.push("Vous trouverez ci-joint le détail du retraitement de l'assiette et la copie de");
+      L.push("l'ordre de versement. Je vous remercie de bien vouloir en accuser réception et");
+      L.push("de faire inscrire cette somme, ainsi que ses modalités d'utilisation, dans les");
+      L.push("comptes annuels du comité et dans le rapport prévu à l'article L. 2315-69,");
+      L.push("comme l'article L. 2315-61 l'exige.");
+      L.push("");
+      L.push("Si votre propre calcul diffère du mien, faites-le-moi connaître avec le détail");
+      L.push("de votre assiette : c'est sur l'assiette, et non sur le taux, que les écarts");
+      L.push("se logent presque toujours.");
+      L.push("");
+      salutation(L, ctx, "Je vous prie d'agréer, Madame, Monsieur le Trésorier, l'expression de ma considération distinguée.");
+      L.push("Pièces jointes : tableau de calcul · détail du retraitement de l'assiette ·");
+      L.push("ordre de versement.");
+      L.push("");
+
+      titre(L, "7 — Le protocole de régularisation de l'arriéré, et son échéancier");
+      L.push("À n'utiliser que si le complément porte sur PLUSIEURS EXERCICES ou si son");
+      L.push("montant ne peut pas être versé en une fois. Un arriéré se règle d'abord en un");
+      L.push("seul versement : l'échéancier est une facilité, et il se négocie.");
+      L.push("");
+      L.push("PROTOCOLE DE RÉGULARISATION");
+      L.push("");
+      L.push("Entre " + nom(ctx) + ", représentée par " + signataire(ctx) + ",");
+      L.push("et le comité social et économique de " + nom(ctx) + ", représenté par");
+      L.push("[secrétaire et trésorier, autorisés par la délibération du [DATE]],");
+      L.push("");
+      L.push("Article 1 — Reconnaissance de la dette");
+      L.push("Les parties constatent qu'au titre de l'article L. 2315-61 du code du travail,");
+      L.push("il reste dû au comité, au jour de la signature :");
+      L.push("");
+      L.push("     Exercice [ ] .......... [ ] €");
+      L.push("     Exercice [ ] .......... [ ] €");
+      L.push("     Exercice [ ] .......... [ ] €");
+      L.push("     TOTAL ................. " +
+        (solde != null && solde > 0 ? eur(solde) + " (pour le seul exercice calculé ci-dessus)" : "[TOTAL DE L'ARRIÉRÉ]"));
+      L.push("");
+      L.push("Le calcul de chaque exercice est annexé, avec l'assiette retenue et sa pièce.");
+      L.push("");
+      L.push("Article 2 — Échéancier");
+      L.push("Le total est versé selon l'échéancier suivant :");
+      L.push("");
+      var q = (solde != null && solde > 0) ? solde / 4 : null;
+      L.push("     1re échéance — le " + leJour(dans(d0, 30)) + " ......... " + (q == null ? "[ ] €" : eur(q)));
+      L.push("     2e échéance — le " + leJour(dans(d0, 120)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
+      L.push("     3e échéance — le " + leJour(dans(d0, 210)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
+      L.push("     4e échéance — le " + leJour(dans(d0, 300)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
+      L.push("");
+      L.push("     [Ces quatre dates et ce quart sont une PROPOSITION calculée à partir");
+      L.push("     d'aujourd'hui : quatre versements trimestriels sur moins d'un an. Aucun");
+      L.push("     texte lu n'impose de délai de régularisation ; c'est donc une négociation,");
+      L.push("     et le comité peut refuser l'étalement. Adaptez les dates et les");
+      L.push("     montants, ou supprimez cet article et versez en une fois.]");
+      L.push("");
+      L.push("Article 3 — Imputation");
+      L.push("Chaque versement est porté au crédit du budget DE FONCTIONNEMENT du comité,");
+      L.push("avec le libellé « Subvention de fonctionnement L. 2315-61 — arriéré exercice");
+      L.push("[ ] ». Aucun de ces versements ne s'impute sur la contribution aux activités");
+      L.push("sociales et culturelles, qui obéit à l'article L. 2312-81 et fait l'objet d'un");
+      L.push("calcul distinct.");
+      L.push("");
+      L.push("Article 4 — Inscription aux comptes");
+      L.push("Le comité inscrit chaque versement à ses comptes annuels ou aux documents de");
+      L.push("l'article L. 2315-65, et en mentionne les modalités d'utilisation dans le");
+      L.push("rapport de l'article L. 2315-69 (L. 2315-61).");
+      L.push("");
+      L.push("Article 5 — Défaut");
+      L.push("À défaut de versement à l'une des échéances, le solde devient immédiatement");
+      L.push("exigible en totalité.");
+      L.push("");
+      L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ", en deux exemplaires.");
+      L.push("");
+      L.push("Pour l'entreprise,                     Pour le comité,");
+      L.push(signataire(ctx) + "        [secrétaire] · [trésorier]");
+      L.push("");
+
+      calendrier(L, [
+        "Aujourd'hui, " + leJour(d0) + " — vous demandez au service paie le cumul annuel des",
+        "rémunérations brutes soumises à cotisations, et le détail des indemnités de",
+        "rupture de CDI à en retrancher. C'est le seul travail réel de ce document : le",
+        "reste est une multiplication.",
+        "",
+        "Dès l'assiette obtenue — le tableau du paragraphe 3 se remplit en dix minutes et",
+        "donne le complément. Comptez une semaine, soit le " + leJour(dans(d0, 7)) + ".",
+        "",
+        "Le versement — il n'est enfermé dans aucun délai par le texte lu, ce qui ne",
+        "signifie pas qu'il puisse attendre : la somme est due, et elle porte sur un",
+        "exercice qui se clôture. Fixez-vous le " + leJour(dans(d0, 30)) + " au plus tard.",
+        "",
+        "Le même jour — courrier 1 au trésorier, avec le calcul. Sans le calcul, le",
+        "versement ne clôt rien : il reste discutable.",
+        "",
+        "À la réunion suivante du comité — le point est porté au procès-verbal",
+        "(paragraphe 5), et le trésorier confirme l'inscription aux comptes.",
+        "",
+        "À CHAQUE EXERCICE — le calcul se refait. Deux choses le changent : la masse",
+        "salariale, qui bouge chaque année, et le franchissement du seuil de deux mille",
+        "salariés, qui fait passer le taux de 0,20 % à 0,22 %.",
+      ]);
+
+      return pied(L,
+        ["L. 2312-81", "L. 2312-83", "L. 2315-61", "L. 2315-65", "L. 2315-69", "L. 2315-80"],
+        ["L. 242-1 du code de la sécurité sociale et L. 741-10 du code rural et de la pêche maritime (définition des gains et rémunérations soumis à cotisations)",
+         "le décret en Conseil d'État fixant les conditions et limites du transfert d'excédent du budget de fonctionnement vers les activités sociales et culturelles"]);
+    },
+  });
+
+  DP.ajouter("CSE-CTL-BUD-02", {
+    nom: "La contribution aux activités sociales et culturelles : note de méthode sur le rapport, tableau des deux exercices, ordre de versement et protocole de régularisation",
+    detail: "La recherche de l'accord, le calcul du rapport de l'exercice précédent et de " +
+            "celui de l'exercice en cours, le complément nécessaire pour rétablir le " +
+            "plancher, l'ordre de versement, le courrier au trésorier, la répartition entre " +
+            "comités d'établissement et l'échéancier de régularisation.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var ms = nb(f.masseSalariale);
+      var msN1 = nb(f.masseSalarialeN1);
+      var ascN = nb(f.ascAnneeN);
+      var ascN1 = nb(f.ascAnneeN1);
+      var multi = oui(f.etablissementsMultiples);
+      var rN1 = (ascN1 != null && msN1 != null && msN1 > 0) ? ascN1 / msN1 : null;
+      var rN = (ascN != null && ms != null && ms > 0) ? ascN / ms : null;
+      var duN = (rN1 != null && ms != null) ? rN1 * ms : null;
+      var comp = (duN != null && ascN != null) ? duN - ascN : null;
+      var L = [];
+
+      L = L.concat(entete(ctx, "Contribution aux activités sociales et culturelles : note de méthode, calcul du rapport et régularisation",
+        "articles L. 2312-81, L. 2312-82, L. 2312-83 et L. 2312-84 du code du travail"));
+      usage(L);
+
+      L.push("CE QUI SE MESURE ICI N'EST PAS UN MONTANT, C'EST UN RAPPORT");
+      L.push("");
+      L.push("« La contribution versée chaque année par l'employeur pour financer des");
+      L.push("institutions sociales du comité social et économique est FIXÉE PAR ACCORD");
+      L.push("D'ENTREPRISE. À défaut d'accord, LE RAPPORT DE CETTE CONTRIBUTION À LA MASSE");
+      L.push("SALARIALE BRUTE NE PEUT ÊTRE INFÉRIEUR AU MÊME RAPPORT EXISTANT POUR L'ANNÉE");
+      L.push("PRÉCÉDENTE » (L. 2312-81).");
+      L.push("");
+      L.push("D'où l'erreur qui se répète chaque année : verser le même montant que l'an");
+      L.push("passé, et croire l'obligation satisfaite. Elle ne l'est pas. Si la masse");
+      L.push("salariale a progressé et que la contribution est restée stable, LE RAPPORT A");
+      L.push("BAISSÉ, et l'insuffisance est caractérisée — sans qu'aucun montant ait");
+      L.push("diminué.");
+      L.push("");
+      L.push("Ce document produit, dans l'ordre :");
+      L.push("");
+      L.push("  1. la recherche de L'ACCORD, qui écarte le plancher ;");
+      L.push("  2. la NOTE DE MÉTHODE sur l'assiette ;");
+      L.push("  3. le TABLEAU DES DEUX EXERCICES et le calcul du complément ;");
+      L.push("  4. la RÉPARTITION entre comités d'établissement, s'il y en a ;");
+      L.push("  5. l'ORDRE DE VERSEMENT et le procès-verbal ;");
+      L.push("  6. le COURRIER AU TRÉSORIER ;");
+      L.push("  7. le PROTOCOLE DE RÉGULARISATION et son échéancier.");
+      L.push("");
+
+      titre(L, "1 — L'accord d'abord : c'est lui qui fixe la contribution");
+      L.push("Le plancher du rapport ne joue qu'« À DÉFAUT D'ACCORD ». Cherchez donc");
+      L.push("l'accord avant tout calcul :");
+      L.push("");
+      L.push("  Un accord d'entreprise fixe-t-il la contribution aux activités sociales et");
+      L.push("  culturelles ? ..................................... [oui / non]");
+      L.push("");
+      L.push("     Si OUI : accord du [DATE], déposé le [DATE], article [ ]. C'est lui qui");
+      L.push("     fixe la contribution, et le calcul du paragraphe 3 devient une simple");
+      L.push("     vérification de son exécution — comparez ce qui a été versé à ce que");
+      L.push("     l'accord prévoit, et arrêtez-vous là.");
+      L.push("");
+      L.push("     Si NON : le plancher de L. 2312-81 s'applique, et le calcul du");
+      L.push("     paragraphe 3 est l'acte à accomplir.");
+      L.push("");
+      L.push("  ATTENTION à ne pas confondre deux accords : celui qui fixe la CONTRIBUTION");
+      L.push("  (L. 2312-81) et celui qui en fixe la RÉPARTITION entre comités");
+      L.push("  d'établissement (L. 2312-82). Le second n'écarte pas le plancher du premier.");
+      L.push("");
+
+      titre(L, "2 — Note de méthode : l'assiette");
+      assiette(L);
+      L.push("UNE PRÉCISION PROPRE À CE CALCUL — l'assiette doit être LA MÊME POUR LES DEUX");
+      L.push("EXERCICES comparés. Un rapport calculé sur une assiette retraitée cette année");
+      L.push("et sur une assiette brute l'an dernier ne compare rien du tout : c'est la");
+      L.push("première chose qu'on vous opposera. Si votre méthode de retraitement a changé,");
+      L.push("recalculez l'exercice précédent avec la nouvelle méthode et dites-le.");
+      L.push("");
+
+      titre(L, "3 — Le tableau des deux exercices");
+      L.push("  ┌──────────────────────────────────────┬──────────────┬──────────────┐");
+      L.push("  │                                      │ Exercice N-1 │ Exercice N   │");
+      L.push("  ├──────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ A · Contribution versée aux activités │ " +
+        pad(ascN1 == null ? "[ ] €" : eur(ascN1), 12) + " │ " +
+        pad(ascN == null ? "[ ] €" : eur(ascN), 12) + " │");
+      L.push("  │     sociales et culturelles          │              │              │");
+      L.push("  ├──────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ B · Masse salariale brute            │ " +
+        pad(msN1 == null ? "[ ] €" : eur(msN1), 12) + " │ " +
+        pad(ms == null ? "[ ] €" : eur(ms), 12) + " │");
+      L.push("  │     (L. 2312-83)                     │              │              │");
+      L.push("  ├──────────────────────────────────────┼──────────────┼──────────────┤");
+      L.push("  │ C · RAPPORT = A ÷ B                  │ " +
+        pad(rN1 == null ? "[ ] %" : pourcent(rN1), 12) + " │ " +
+        pad(rN == null ? "[ ] %" : pourcent(rN), 12) + " │");
+      L.push("  └──────────────────────────────────────┴──────────────┴──────────────┘");
+      L.push("");
+      L.push("  Pièces : justificatifs de versement pour A · déclarations sociales");
+      L.push("  nominatives retraitées pour B, sur chacun des deux exercices.");
+      L.push("");
+      L.push("  LE TEST — le rapport de l'exercice N est-il au moins égal à celui de");
+      L.push("  l'exercice N-1 ?");
+      L.push("");
+      if (rN != null && rN1 != null) {
+        L.push("     " + pourcent(rN) + " (N) contre " + pourcent(rN1) + " (N-1) — " +
+          (rN >= rN1 ? "LE PLANCHER EST RESPECTÉ." : "LE PLANCHER N'EST PAS RESPECTÉ."));
+      } else {
+        L.push("     [rapport N] contre [rapport N-1] — [respecté / non respecté].");
+      }
+      L.push("");
+      L.push("  LE CALCUL DU DÛ ET DU COMPLÉMENT");
+      L.push("");
+      L.push("  D · CONTRIBUTION MINIMALE DE L'EXERCICE N = rapport N-1 × masse salariale N");
+      if (duN != null) {
+        L.push("      " + pourcent(rN1) + " × " + eur(ms) + " = " + eur(duN));
+      } else {
+        L.push("      [rapport N-1] × [masse salariale N] = [CONTRIBUTION MINIMALE]");
+      }
+      L.push("");
+      L.push("  E · COMPLÉMENT À VERSER = D − contribution déjà versée en N");
+      if (comp != null && comp > 0) {
+        L.push("      " + eur(duN) + " − " + eur(ascN) + " = " + eur(comp));
+        L.push("");
+        L.push("      IL FAUT VERSER " + eur(comp) + " POUR RÉTABLIR LE RAPPORT.");
+        L.push("      Après ce versement, la contribution de l'exercice N s'établira à");
+        L.push("      " + eur(duN) + ", soit " + pourcent(rN1) + " de la masse salariale — exactement le");
+        L.push("      rapport de l'exercice précédent, qui est le plancher légal.");
+      } else if (comp != null && comp <= 0) {
+        L.push("      " + eur(duN) + " − " + eur(ascN) + " = " + eur(comp));
+        L.push("");
+        L.push("      AUCUN COMPLÉMENT N'EST DÛ au titre du plancher : le rapport de");
+        L.push("      l'exercice N est déjà au moins égal à celui de l'exercice précédent.");
+        L.push("      Attention toutefois : le rapport de cette année devient le plancher de");
+        L.push("      l'an prochain. Un rapport élevé cette année engage l'exercice suivant.");
+      } else {
+        L.push("      [CONTRIBUTION MINIMALE] − [déjà versé en N] = [COMPLÉMENT]");
+        L.push("");
+        L.push("      Une fois les quatre montants du tableau relevés, ce calcul se fait en");
+        L.push("      deux opérations : une division pour le rapport N-1, une multiplication");
+        L.push("      pour le dû, une soustraction pour le complément.");
+      }
+      L.push("");
+      L.push("  L'EFFET DE CLIQUET, qu'il faut voir avant de verser : le rapport de");
+      L.push("  l'exercice N devient le plancher de l'exercice N+1. Un versement");
+      L.push("  exceptionnel élève le plancher de l'année suivante. Si le versement est");
+      L.push("  destiné à ne pas se reproduire, dites-le expressément dans l'acte qui le");
+      L.push("  décide — et vérifiez ce que votre accord, s'il en existe un, en dit.");
+      L.push("");
+      L.push("  CE QUE CE CALCUL NE COUVRE PAS — le reliquat budgétaire. « En cas de");
+      L.push("  reliquat budgétaire les membres de la délégation du personnel du comité");
+      L.push("  peuvent décider, par une délibération, de transférer tout ou partie du");
+      L.push("  montant de l'excédent annuel du budget destiné aux activités sociales et");
+      L.push("  culturelles au budget de fonctionnement ou à des associations, dans des");
+      L.push("  conditions et limites fixées par décret en Conseil d'État » (L. 2312-84).");
+      L.push("  C'est une décision DU COMITÉ, pas de l'employeur, et elle ne réduit pas la");
+      L.push("  contribution due.");
+      L.push("");
+
+      titre(L, "4 — La répartition entre comités d'établissement");
+      L.push("  L'entreprise comporte-t-elle plusieurs établissements distincts ? ...... " +
+        ouiNon(f.etablissementsMultiples, "oui / non"));
+      L.push("");
+      if (multi === false) {
+        L.push("  Le dossier déclare un établissement unique : ce paragraphe est sans objet.");
+        L.push("  Conservez-le pour le jour où le périmètre changerait.");
+        L.push("");
+      } else {
+        L.push("  « Dans les entreprises comportant plusieurs comités sociaux et économiques");
+        L.push("  d'établissement, la détermination du MONTANT GLOBAL de la contribution");
+        L.push("  patronale versée pour financer les activités sociales et culturelles du");
+        L.push("  comité est effectuée AU NIVEAU DE L'ENTREPRISE dans les conditions prévues");
+        L.push("  à l'article L. 2312-81. La RÉPARTITION de la contribution entre les comités");
+        L.push("  d'établissement est fixée par un ACCORD D'ENTREPRISE au prorata des");
+        L.push("  effectifs des établissements ou de leur masse salariale ou de ces deux");
+        L.push("  critères combinés. À DÉFAUT D'ACCORD, cette répartition est effectuée AU");
+        L.push("  PRORATA DE LA MASSE SALARIALE DE CHAQUE ÉTABLISSEMENT » (L. 2312-82).");
+        L.push("");
+        L.push("  Deux étages, donc, et dans cet ordre :");
+        L.push("");
+        L.push("     1. le MONTANT GLOBAL se calcule au niveau de l'entreprise — c'est le");
+        L.push("        tableau du paragraphe 3, et lui seul ;");
+        L.push("     2. la RÉPARTITION suit l'accord ; à défaut, elle suit la masse salariale");
+        L.push("        de chaque établissement, et rien d'autre.");
+        L.push("");
+        L.push("  TABLEAU DE RÉPARTITION");
+        L.push("");
+        L.push("     Établissement · masse salariale · part · montant réparti");
+        L.push("     [ ] ...... [ ] € ...... [ ] % ...... [ ] €");
+        L.push("     [ ] ...... [ ] € ...... [ ] % ...... [ ] €");
+        L.push("     [ ] ...... [ ] € ...... [ ] % ...... [ ] €");
+        L.push("     TOTAL .... " + (ms == null ? "[ ] €" : eur(ms)) + " ...... 100 % ...... " +
+          (duN == null ? "[ ] €" : eur(duN)));
+        L.push("");
+        L.push("     Un accord de répartition existe-t-il ? [oui / non] — s'il existe :");
+        L.push("     accord du [DATE], critère retenu : [effectifs / masse salariale / les");
+        L.push("     deux combinés].");
+        L.push("");
+      }
+
+      titre(L, "5 — L'ordre de versement et le procès-verbal");
+      L.push("ORDRE DE VERSEMENT");
+      L.push("");
+      L.push(nom(ctx));
+      L.push("");
+      L.push("Objet : versement du complément de contribution aux activités sociales et");
+      L.push("culturelles — exercice [ ]");
+      L.push("");
+      L.push("Vu l'article L. 2312-81 du code du travail ;");
+      L.push("Vu l'absence d'accord d'entreprise fixant la contribution ;");
+      L.push("Vu le tableau de calcul des rapports annexé ;");
+      L.push("");
+      L.push("Il est ordonné le versement, au comité social et économique de " + nom(ctx) + ",");
+      L.push("d'une somme de " + (comp != null && comp > 0 ? eur(comp) : "[COMPLÉMENT]") +
+        ", portant la contribution de l'exercice");
+      L.push((duN == null ? "à [CONTRIBUTION MINIMALE]" : "à " + eur(duN)) +
+        ", soit un rapport à la masse salariale brute au moins");
+      L.push("égal à celui de l'exercice précédent.");
+      L.push("");
+      L.push("  Référence à porter au libellé : « Contribution activités sociales et");
+      L.push("  culturelles L. 2312-81 — complément exercice [ ] ». Ce libellé n'est pas");
+      L.push("  une formalité : c'est lui qui empêchera qu'on impute plus tard ce versement");
+      L.push("  à la subvention de fonctionnement, qui a son propre calcul et son propre");
+      L.push("  article.");
+      L.push("");
+      L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ".");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
+      L.push("PROCÈS-VERBAL — extrait");
+      L.push("");
+      L.push("Comité social et économique de " + nom(ctx) + " · réunion du [DATE]");
+      L.push("");
+      L.push("Point [n°] — Contribution aux activités sociales et culturelles de");
+      L.push("l'exercice [ ].");
+      L.push("");
+      L.push("Le président expose que, en l'absence d'accord d'entreprise fixant la");
+      L.push("contribution, le rapport de celle-ci à la masse salariale brute ne peut être");
+      L.push("inférieur au rapport de l'année précédente (L. 2312-81). Le rapport de");
+      L.push("l'exercice précédent s'établissait à " + (rN1 == null ? "[ ] %" : pourcent(rN1)) + " ; celui de");
+      L.push("l'exercice en cours, avant complément, à " + (rN == null ? "[ ] %" : pourcent(rN)) + ".");
+      L.push("");
+      L.push("Un complément de " + (comp != null && comp > 0 ? eur(comp) : "[COMPLÉMENT]") +
+        " a été ordonné le [DATE] et porté au compte");
+      L.push("du comité le [DATE], rétablissant le rapport au niveau du plancher légal.");
+      L.push("");
+      L.push("Le trésorier confirme la réception et l'inscription de cette somme aux comptes");
+      L.push("du comité.");
+      L.push("");
+      L.push("Le secrétaire,                             Le président,");
+      L.push("[nom]                                      " + signataire(ctx));
+      L.push("");
+
+      courrier(L, 1, "au trésorier du comité social et économique", [
+        "Ce courrier porte les quatre montants et les deux rapports. C'est la seule",
+        "présentation qui permette au trésorier de refaire le calcul lui-même.",
+      ]);
+      papier(L, ctx, ["À l'attention du trésorier",
+                      "du comité social et économique"]);
+      L.push("Objet : contribution aux activités sociales et culturelles de l'exercice [ ] —");
+      L.push("calcul du rapport et versement du complément");
+      L.push("");
+      L.push("Madame, Monsieur le Trésorier,");
+      L.push("");
+      L.push("En l'absence d'accord d'entreprise fixant la contribution aux activités");
+      L.push("sociales et culturelles, l'article L. 2312-81 du code du travail impose que le");
+      L.push("rapport de cette contribution à la masse salariale brute ne soit pas inférieur");
+      L.push("au même rapport existant pour l'année précédente.");
+      L.push("");
+      L.push("Le calcul s'établit ainsi, sur l'assiette définie à l'article L. 2312-83 :");
+      L.push("");
+      L.push("  Exercice précédent — contribution " + (ascN1 == null ? "[ ] €" : eur(ascN1)) +
+        " · masse salariale " + (msN1 == null ? "[ ] €" : eur(msN1)));
+      L.push("     rapport ....................... " + (rN1 == null ? "[ ] %" : pourcent(rN1)));
+      L.push("  Exercice en cours — contribution " + (ascN == null ? "[ ] €" : eur(ascN)) +
+        " · masse salariale " + (ms == null ? "[ ] €" : eur(ms)));
+      L.push("     rapport avant complément ...... " + (rN == null ? "[ ] %" : pourcent(rN)));
+      L.push("");
+      L.push("  Contribution minimale de l'exercice = rapport précédent × masse salariale");
+      L.push("  de l'exercice = " + (duN == null ? "[ ] €" : eur(duN)));
+      L.push("  COMPLÉMENT VERSÉ CE JOUR ......... " +
+        (comp != null && comp > 0 ? eur(comp) : "[ ] €"));
+      L.push("");
+      L.push("Le détail du retraitement de l'assiette, identique pour les deux exercices,");
+      L.push("est joint. Je vous remercie d'en accuser réception et de faire inscrire cette");
+      L.push("somme aux comptes du comité.");
+      L.push("");
+      L.push("Je rappelle que le budget des activités sociales et culturelles et le budget de");
+      L.push("fonctionnement ne se confondent pas : ce versement s'ajoute à la subvention de");
+      L.push("fonctionnement de l'article L. 2315-61, qui fait l'objet d'un calcul distinct.");
+      L.push("");
+      salutation(L, ctx, "Je vous prie d'agréer, Madame, Monsieur le Trésorier, l'expression de ma considération distinguée.");
+      L.push("Pièces jointes : tableau des deux exercices · détail du retraitement de");
+      L.push("l'assiette · ordre de versement.");
+      L.push("");
+
+      titre(L, "7 — Le protocole de régularisation de l'arriéré");
+      L.push("PROTOCOLE DE RÉGULARISATION");
+      L.push("");
+      L.push("Entre " + nom(ctx) + ", représentée par " + signataire(ctx) + ",");
+      L.push("et le comité social et économique, représenté par [secrétaire et trésorier,");
+      L.push("autorisés par la délibération du [DATE]],");
+      L.push("");
+      L.push("Article 1 — Reconnaissance");
+      L.push("Les parties constatent que, faute d'accord fixant la contribution, le rapport");
+      L.push("de la contribution à la masse salariale brute est demeuré inférieur au rapport");
+      L.push("de l'année précédente sur le ou les exercices suivants, et qu'il reste dû :");
+      L.push("");
+      L.push("     Exercice [ ] — rapport constaté [ ] % contre [ ] % ... [ ] €");
+      L.push("     Exercice [ ] — rapport constaté [ ] % contre [ ] % ... [ ] €");
+      L.push("     TOTAL ................................................ " +
+        (comp != null && comp > 0 ? eur(comp) + " (pour le seul exercice calculé)" : "[TOTAL]"));
+      L.push("");
+      L.push("Article 2 — Échéancier");
+      var q2 = (comp != null && comp > 0) ? comp / 3 : null;
+      L.push("     1re échéance — le " + leJour(dans(d0, 30)) + " ......... " + (q2 == null ? "[ ] €" : eur(q2)));
+      L.push("     2e échéance — le " + leJour(dans(d0, 120)) + " .......... " + (q2 == null ? "[ ] €" : eur(q2)));
+      L.push("     3e échéance — le " + leJour(dans(d0, 210)) + " .......... " + (q2 == null ? "[ ] €" : eur(q2)));
+      L.push("");
+      L.push("     [Trois échéances calculées à partir d'aujourd'hui, à titre de");
+      L.push("     proposition. Aucun texte lu n'impose de délai : c'est une négociation,");
+      L.push("     et le comité peut exiger le versement en une fois.]");
+      L.push("");
+      L.push("Article 3 — Effet sur les exercices suivants");
+      L.push("Les parties conviennent que le rapport rétabli au titre de chaque exercice");
+      L.push("régularisé constitue le rapport de référence pour l'exercice suivant, au sens");
+      L.push("de l'article L. 2312-81. [Vérifiez cette clause : elle est la conséquence");
+      L.push("logique du texte, mais elle engage l'entreprise pour l'avenir.]");
+      L.push("");
+      L.push("Article 4 — Imputation et défaut");
+      L.push("Chaque versement est porté au budget des activités sociales et culturelles,");
+      L.push("distinct du budget de fonctionnement. À défaut de versement à l'une des");
+      L.push("échéances, le solde devient immédiatement exigible.");
+      L.push("");
+      L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ", en deux exemplaires.");
+      L.push("");
+      L.push("Pour l'entreprise,                     Pour le comité,");
+      L.push(signataire(ctx) + "        [secrétaire] · [trésorier]");
+      L.push("");
+
+      calendrier(L, [
+        "Aujourd'hui, " + leJour(d0) + " — vous cherchez l'accord de L. 2312-81. S'il existe, le",
+        "plancher ne joue pas et le travail s'arrête presque là.",
+        "",
+        "Le même jour — vous demandez au service paie les DEUX masses salariales, celle",
+        "de l'exercice et celle de l'exercice précédent, retraitées de la même façon. Ce",
+        "sont deux chiffres, pas un : c'est là que les dossiers s'enlisent.",
+        "",
+        "Dès les quatre montants réunis — le tableau du paragraphe 3 donne les deux",
+        "rapports et le complément. Comptez le " + leJour(dans(d0, 10)) + ".",
+        "",
+        "Le versement — avant la clôture de l'exercice en cours. C'est le seul repère",
+        "utile : le plancher se mesure exercice par exercice, et un complément versé",
+        "après la clôture régularise l'exercice clos sans rien changer au suivant.",
+        "",
+        "Le même jour — courrier 1 au trésorier, avec les deux rapports.",
+        "",
+        "À la réunion suivante du comité — le point est porté au procès-verbal.",
+        "",
+        "L'AN PROCHAIN, à la même date — le rapport rétabli cette année devient le",
+        "plancher. Refaites le calcul : c'est une obligation annuelle, et elle se perd",
+        "toujours de la même façon, en reconduisant un montant au lieu d'un rapport.",
+      ]);
+
+      return pied(L,
+        ["L. 2312-78", "L. 2312-81", "L. 2312-82", "L. 2312-83", "L. 2312-84", "L. 2315-61"],
+        ["L. 242-1 du code de la sécurité sociale et L. 741-10 du code rural et de la pêche maritime (définition des gains et rémunérations soumis à cotisations)",
+         "le décret en Conseil d'État fixant les conditions et limites du transfert de l'excédent des activités sociales et culturelles (L. 2312-84)"]);
+    },
+  });
+
+  DP.ajouter("CSE-CTL-BUD-03", {
+    nom: "La suppression de la condition d'ancienneté d'accès aux activités sociales et culturelles : recensement, délibération, note aux salariés et reprise des refus",
+    detail: "Le recensement des prestations selon la nomenclature de R. 2312-35, la " +
+            "délibération du comité supprimant la condition, la note d'information au " +
+            "personnel, la reprise des demandes refusées et le courrier au secrétaire.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = jour0(ctx);
+      var cond = oui(f.ancienneteASC);
+      var L = [];
+
+      L = L.concat(entete(ctx, "Suppression de la condition d'ancienneté d'accès aux activités sociales et culturelles",
+        "articles L. 2312-78 et R. 2312-35 du code du travail"));
+      usage(L);
+
+      L.push("QUI DÉCIDE, ET DONC QUI SIGNE");
+      L.push("");
+      L.push("« Le comité social et économique ASSURE, CONTRÔLE OU PARTICIPE À LA GESTION de");
+      L.push("toutes les activités sociales et culturelles établies dans l'entreprise");
+      L.push("PRIORITAIREMENT AU BÉNÉFICE DES SALARIÉS, DE LEUR FAMILLE ET DES STAGIAIRES,");
+      L.push("quel qu'en soit le mode de financement, dans des conditions déterminées par");
+      L.push("décret en Conseil d'État » (L. 2312-78).");
+      L.push("");
+      L.push("La gestion de ces activités appartient donc AU COMITÉ. L'acte central de ce");
+      L.push("document est une DÉLIBÉRATION DU COMITÉ, et non une décision de l'employeur :");
+      L.push("une note de la direction supprimant la condition d'ancienneté serait un acte");
+      L.push("pris par celui qui n'a pas le pouvoir de le prendre.");
+      L.push("");
+      L.push("  Une condition d'ancienneté est-elle déclarée ? ......... " +
+        ouiNon(f.ancienneteASC, "oui / non"));
+      L.push("");
+      if (cond === false) {
+        L.push("  Le dossier déclare qu'aucune condition d'ancienneté ne commande l'accès.");
+        L.push("  Servez-vous alors du paragraphe 1 comme d'une VÉRIFICATION : le recensement");
+        L.push("  prestation par prestation fait souvent apparaître une ancienneté résiduelle");
+        L.push("  dans le règlement d'une seule prestation, que la réponse globale masquait.");
+        L.push("");
+      }
+      L.push("  Ce que le texte lu commande, et ce qu'il ne commande pas : L. 2312-78 dit au");
+      L.push("  bénéfice de qui ces activités sont établies — les salariés, leur famille,");
+      L.push("  les stagiaires. Il ne dit rien d'une condition d'ancienneté, ni pour, ni");
+      L.push("  contre. Ce qui se joue est donc ceci : une condition d'ancienneté FERME");
+      L.push("  L'ACCÈS À DES BÉNÉFICIAIRES QUE LE TEXTE VISE, et la décision qui l'institue");
+      L.push("  peut être remise en cause. Aucune peine n'est encourue de ce chef ; c'est la");
+      L.push("  décision, et les refus qu'elle a fondés, qui sont fragiles.");
+      L.push("");
+
+      titre(L, "1 — Le recensement, prestation par prestation");
+      L.push("La nomenclature de R. 2312-35 sert de grille : elle énumère ce que sont les");
+      L.push("activités sociales et culturelles, et elle a l'avantage de ne rien laisser de");
+      L.push("côté. « Les activités sociales et culturelles établies dans l'entreprise au");
+      L.push("bénéfice des salariés OU ANCIENS SALARIÉS de l'entreprise ET DE LEUR FAMILLE");
+      L.push("comprennent : »");
+      L.push("");
+      L.push("  ┌────────────────────────────────────────┬───────────┬──────────────────┐");
+      L.push("  │ Catégorie (R. 2312-35)                 │ Ancienneté│ Prestations       │");
+      L.push("  │                                        │ exigée ?  │ concernées        │");
+      L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
+      L.push("  │ 1° Institutions sociales de prévoyance │ [oui/non] │ [ ]              │");
+      L.push("  │    et d'entraide — institutions de     │ [durée]   │                  │");
+      L.push("  │    retraites, sociétés de secours      │           │                  │");
+      L.push("  │    mutuels                             │           │                  │");
+      L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
+      L.push("  │ 2° Activités tendant à l'amélioration  │ [oui/non] │ [ ]              │");
+      L.push("  │    des conditions de bien-être —       │ [durée]   │                  │");
+      L.push("  │    cantines, coopératives de           │           │                  │");
+      L.push("  │    consommation, logements, jardins    │           │                  │");
+      L.push("  │    familiaux, crèches, colonies de     │           │                  │");
+      L.push("  │    vacances                            │           │                  │");
+      L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
+      L.push("  │ 3° Activités ayant pour objet          │ [oui/non] │ [ ]              │");
+      L.push("  │    l'utilisation des loisirs et        │ [durée]   │                  │");
+      L.push("  │    l'organisation sportive             │           │                  │");
+      L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
+      L.push("  │ 4° Institutions d'ordre professionnel  │ [oui/non] │ [ ]              │");
+      L.push("  │    ou éducatif attachées à l'entreprise│ [durée]   │                  │");
+      L.push("  │    ou dépendant d'elle — centres       │           │                  │");
+      L.push("  │    d'apprentissage et de formation     │           │                  │");
+      L.push("  │    professionnelle, bibliothèques,     │           │                  │");
+      L.push("  │    cercles d'études, cours de culture  │           │                  │");
+      L.push("  │    générale                            │           │                  │");
+      L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
+      L.push("  │ 5° Services sociaux chargés a) de      │ [oui/non] │ [ ]              │");
+      L.push("  │    veiller au bien-être du salarié     │ [durée]   │                  │");
+      L.push("  │    dans l'entreprise, de faciliter son │           │                  │");
+      L.push("  │    adaptation à son travail et de      │           │                  │");
+      L.push("  │    collaborer avec le service de santé │           │                  │");
+      L.push("  │    au travail ; b) de coordonner et de │           │                  │");
+      L.push("  │    promouvoir les réalisations sociales│           │                  │");
+      L.push("  │    décidées par le comité et par       │           │                  │");
+      L.push("  │    l'employeur                         │           │                  │");
+      L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
+      L.push("  │ 6° Le service de santé au travail      │ [oui/non] │ [ ]              │");
+      L.push("  │    institué dans l'entreprise          │ [durée]   │                  │");
+      L.push("  └────────────────────────────────────────┴───────────┴──────────────────┘");
+      L.push("");
+      L.push("  Pièce à joindre : le règlement des activités sociales du comité, ou à défaut");
+      L.push("  les délibérations et notes qui fixent les conditions d'accès de chaque");
+      L.push("  prestation. Une condition d'ancienneté vit rarement dans un seul document.");
+      L.push("");
+      L.push("  DEUX VÉRIFICATIONS QUI SE PERDENT TOUJOURS");
+      L.push("");
+      L.push("  · LES STAGIAIRES. L. 2312-78 les vise expressément, aux côtés des salariés et");
+      L.push("    de leur famille. Une condition d'ancienneté les exclut par construction,");
+      L.push("    puisqu'un stage est bref. Vérifiez prestation par prestation.");
+      L.push("       Les stagiaires ont-ils accès aux activités sociales ? ... [oui / non]");
+      L.push("");
+      L.push("  · LES ANCIENS SALARIÉS ET LA FAMILLE. R. 2312-35 ouvre son énumération par");
+      L.push("    les activités établies « au bénéfice des salariés OU ANCIENS SALARIÉS de");
+      L.push("    l'entreprise ET DE LEUR FAMILLE ». Vérifiez que votre règlement ne les a");
+      L.push("    pas perdus en route.");
+      L.push("       Les ayants droit familiaux sont-ils admis ? ............. [oui / non]");
+      L.push("");
+
+      titre(L, "2 — La délibération du comité");
+      L.push(nom(ctx));
+      L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("");
+      L.push("Réunion du [DATE] · point [n°] de l'ordre du jour");
+      L.push("");
+      L.push("DÉLIBÉRATION — SUPPRESSION DE LA CONDITION D'ANCIENNETÉ D'ACCÈS AUX ACTIVITÉS");
+      L.push("SOCIALES ET CULTURELLES");
+      L.push("");
+      L.push("Le comité social et économique de " + nom(ctx) + ",");
+      L.push("");
+      L.push("VU l'article L. 2312-78 du code du travail, aux termes duquel il assure,");
+      L.push("contrôle ou participe à la gestion de toutes les activités sociales et");
+      L.push("culturelles établies dans l'entreprise prioritairement au bénéfice des");
+      L.push("salariés, de leur famille et des stagiaires ;");
+      L.push("VU l'article R. 2312-35, qui énumère ces activités ;");
+      L.push("VU le recensement annexé, qui identifie les prestations dont l'accès était");
+      L.push("subordonné à une condition d'ancienneté de [durée] ;");
+      L.push("");
+      L.push("DÉCIDE :");
+      L.push("");
+      L.push("Article 1 — La condition d'ancienneté de [durée] qui subordonnait l'accès aux");
+      L.push("prestations suivantes est SUPPRIMÉE, à compter du [DATE D'EFFET] :");
+      L.push("     · [prestation] ;");
+      L.push("     · [prestation] ;");
+      L.push("     · [prestation].");
+      L.push("");
+      L.push("Article 2 — Ont accès aux activités sociales et culturelles du comité, sans");
+      L.push("condition d'ancienneté : les salariés de l'entreprise, LES STAGIAIRES, et");
+      L.push("[préciser les autres bénéficiaires retenus : la famille des salariés, les");
+      L.push("anciens salariés — R. 2312-35 vise les uns et les autres].");
+      L.push("");
+      L.push("Article 3 — [Le cas échéant : les modalités d'attribution, notamment les");
+      L.push("critères de modulation retenus par le comité, sont maintenues. Attention :");
+      L.push("l'application ne se prononce pas ici sur la licéité d'un critère de");
+      L.push("modulation, qui est une question distincte de celle de l'ancienneté et que le");
+      L.push("texte lu ne tranche pas. Faites-la examiner.]");
+      L.push("");
+      L.push("Article 4 — Les demandes refusées sur le fondement de la condition supprimée,");
+      L.push("depuis le [DATE], sont reprises d'office selon les modalités du paragraphe 3.");
+      L.push("");
+      L.push("Article 5 — La présente délibération est portée à la connaissance des salariés");
+      L.push("par la note figurant au paragraphe 4, et le règlement des activités sociales");
+      L.push("est modifié en conséquence.");
+      L.push("");
+      L.push("La délibération est adoptée À LA MAJORITÉ DES MEMBRES PRÉSENTS ; le président");
+      L.push("ne participe pas au vote lorsqu'il consulte les membres élus du comité en tant");
+      L.push("que délégation du personnel (L. 2315-32).");
+      L.push("");
+      L.push("Vote : [ ] pour · [ ] contre · [ ] abstention.");
+      L.push("");
+      L.push("Le secrétaire,                             Le président,");
+      L.push("[nom]                                      " + signataire(ctx));
+      L.push("");
+      L.push("La délibération est consignée au procès-verbal établi par le secrétaire du");
+      L.push("comité (L. 2315-34) ; le procès-verbal peut, après adoption, être affiché ou");
+      L.push("diffusé dans l'entreprise par le secrétaire (L. 2315-35).");
+      L.push("");
+
+      titre(L, "3 — La reprise des demandes refusées");
+      L.push("Supprimer la condition pour l'avenir laisse debout les refus qu'elle a");
+      L.push("fondés. Ce sont eux qui feront le contentieux, pas la clause.");
+      L.push("");
+      L.push("  RELEVÉ DES REFUS");
+      L.push("");
+      L.push("     Date · demandeur · prestation · motif du refus · suite donnée");
+      L.push("     [ ] · [ ] · [ ] · condition d'ancienneté · [reprise / sans objet]");
+      L.push("     [ ] · [ ] · [ ] · condition d'ancienneté · [reprise / sans objet]");
+      L.push("");
+      L.push("  Période couverte : du [DATE] au [DATE]. [Fixez cette période avec le comité.");
+      L.push("  Aucun texte lu n'en détermine l'étendue : c'est une décision de gestion, et");
+      L.push("  elle se motive.]");
+      L.push("");
+      L.push("  Pour chaque refus repris : la prestation est-elle encore attribuable");
+      L.push("  aujourd'hui — un séjour passé ne se rattrape pas —, et sinon, que propose le");
+      L.push("  comité à la place ? [à décider par le comité, qui gère.]");
+      L.push("");
+
+      titre(L, "4 — La note d'information au personnel");
+      L.push(nom(ctx));
+      L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("");
+      L.push("NOTE AU PERSONNEL — " + leJour(d0));
+      L.push("");
+      L.push("Objet : accès aux activités sociales et culturelles — suppression de la");
+      L.push("condition d'ancienneté");
+      L.push("");
+      L.push("Le comité social et économique a décidé, par une délibération du [DATE], de");
+      L.push("supprimer la condition d'ancienneté de [durée] qui subordonnait l'accès aux");
+      L.push("prestations suivantes : [liste].");
+      L.push("");
+      L.push("À compter du [DATE D'EFFET], ont accès à ces prestations, sans condition");
+      L.push("d'ancienneté :");
+      L.push("");
+      L.push("  · l'ensemble des salariés de l'entreprise, quelle que soit la date de leur");
+      L.push("    entrée et la nature de leur contrat ;");
+      L.push("  · LES STAGIAIRES accueillis dans l'entreprise ;");
+      L.push("  · [le cas échéant : les ayants droit familiaux, les anciens salariés].");
+      L.push("");
+      L.push("Les demandes qui ont été refusées depuis le [DATE] au seul motif de");
+      L.push("l'ancienneté sont reprises. Si vous êtes dans ce cas, vous n'avez aucune");
+      L.push("démarche à faire : [préciser — le comité vous recontacte / adressez-vous à");
+      L.push("[qui] avant le [DATE]].");
+      L.push("");
+      L.push("Le règlement des activités sociales et culturelles, modifié en conséquence,");
+      L.push("est consultable [où].");
+      L.push("");
+      L.push("Le secrétaire du comité,");
+      L.push("[nom]");
+      L.push("");
+
+      courrier(L, 1, "inscription du point à l'ordre du jour", [
+        "L'ordre du jour est établi par le président ET le secrétaire (L. 2315-29). La",
+        "décision appartenant au comité, ce courrier ne la prend pas : il la provoque.",
+      ]);
+      papier(L, ctx, ["À l'attention du secrétaire",
+                      "du comité social et économique"]);
+      L.push("Objet : inscription à l'ordre du jour — conditions d'accès aux activités");
+      L.push("sociales et culturelles");
+      L.push("");
+      L.push("Monsieur le Secrétaire, [ou Madame la Secrétaire]");
+      L.push("");
+      L.push("Le recensement des prestations servies par le comité fait apparaître que");
+      L.push("l'accès à [prestations] est subordonné à une condition d'ancienneté de");
+      L.push("[durée].");
+      L.push("");
+      L.push("L'article L. 2312-78 du code du travail établit ces activités prioritairement");
+      L.push("au bénéfice des salariés, de leur famille et des stagiaires. La gestion de ces");
+      L.push("activités appartenant au comité, il lui revient de délibérer sur le maintien");
+      L.push("ou la suppression de cette condition.");
+      L.push("");
+      L.push("Je vous propose d'inscrire ce point à l'ordre du jour de la réunion du [DATE]");
+      L.push("et vous adresse le recensement ainsi qu'un projet de délibération.");
+      L.push("");
+      salutation(L, ctx, "Je vous prie d'agréer, Monsieur le Secrétaire, l'expression de ma considération distinguée.");
+      L.push("Pièces jointes : recensement des prestations · projet de délibération · projet");
+      L.push("de note au personnel.");
+
+      calendrier(L, [
+        "Aujourd'hui, " + leJour(d0) + " — vous ouvrez le recensement du paragraphe 1 sur le",
+        "règlement des activités sociales. Six lignes à remplir : c'est la grille de",
+        "R. 2312-35, et elle est faite pour qu'aucune prestation ne passe au travers.",
+        "",
+        "Dans la semaine, soit le " + leJour(dans(d0, 7)) + " — courrier 1 au secrétaire, pour",
+        "l'inscription à l'ordre du jour (L. 2315-29).",
+        "",
+        "À la réunion suivante — le comité délibère, à la majorité des membres présents,",
+        "le président ne votant pas (L. 2315-32). C'est LE COMITÉ qui décide : une note de",
+        "la direction ne remplacerait pas cette délibération.",
+        "",
+        "Le lendemain de la délibération — la note au personnel est diffusée et le",
+        "règlement des activités sociales est modifié. Une délibération non publiée ne",
+        "change rien pour celui qui s'est vu opposer la condition.",
+        "",
+        "Dans le mois qui suit, soit avant le " + leJour(dans(d0, 60)) + " — la reprise des demandes",
+        "refusées est achevée. C'est la partie la plus longue, et la seule qui",
+        "intéresse vraiment ceux qui ont été écartés.",
+        "",
+        "À chaque nouvelle prestation créée par le comité — reprenez la grille du",
+        "paragraphe 1. Les conditions d'ancienneté reviennent par le règlement d'une",
+        "prestation nouvelle, jamais par la porte principale.",
+      ]);
+
+      return pied(L,
+        ["L. 2312-78", "L. 2315-29", "L. 2315-32", "L. 2315-34", "L. 2315-35", "R. 2312-35"],
+        ["le décret en Conseil d'État déterminant les conditions de gestion des activités sociales et culturelles, la délégation des pouvoirs du comité à des organismes créés par lui, et les règles d'octroi et d'étendue de la personnalité civile (visé par L. 2312-78)"]);
     },
   });
 

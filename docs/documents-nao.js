@@ -1123,4 +1123,1589 @@
     },
   });
 
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-PER-02 — LA NÉGOCIATION SUR L'ÉGALITÉ PROFESSIONNELLE
+
+     Fondement : L. 2242-1, 2° et L. 2242-13. Le contenu vient de L. 2242-17,
+     que le corpus porte en entier — huit points, alors que le questionnaire
+     n'en suit que six. Les huit sont déployés ici : c'est le texte qui décide,
+     pas la grille de saisie.
+
+     L'exposition : L. 2243-1 (qui nomme L. 2242-1) et L. 2242-8 (qui vise
+     l'égalité). Les deux sont captés et visent bien cette obligation.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-PER-02", {
+    nom: "La négociation sur l'égalité professionnelle — convocation, ordre du jour et données de la base",
+    detail: "La convocation de toutes les organisations représentatives, les " +
+            "huit points de L. 2242-17, le rapport handicap de L. 2242-18, le " +
+            "calendrier, les informations dues et les deux issues possibles.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "egalite");
+      var L = entete(ctx, "Négociation sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail",
+        "articles L. 2242-1, 2°, L. 2242-13, 2° et L. 2242-17 du code du travail");
+
+      modeDEmploi(L, "la convocation à la négociation sur l'égalité professionnelle, avec son ordre du jour");
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · dernière négociation engagée le : " +
+        (vide(n.dateEngagement) ? "[AUCUNE DATE RENSEIGNÉE]" : jour(n.dateEngagement, "date")));
+      L.push("  · issue déclarée : " + (vide(n.issue) ? "[non renseignée]" : n.issue));
+      L.push("  · plan d'action à défaut d'accord : " +
+        etat((n.planAction || {}).existe, "OUI", "non"));
+      L.push("  · appui sur les données de la base : " + etat(n.appuiBDESE, "OUI", "non"));
+      var d12 = moisApres(n.dateEngagement, 12);
+      if (d12) {
+        L.push("");
+        L.push("  → Douze mois après cette date, soit le " + leJour(d12) + ", toute");
+        L.push("    organisation syndicale représentative peut imposer l'ouverture de la");
+        L.push("    négociation suivante (L. 2242-13, dernier alinéa).");
+      }
+      L.push("");
+
+      L.push("════ L'OBLIGATION, DANS SES TERMES ════");
+      L.push("");
+      citerMorceau(L, "L2242-1", "2° Une négociation sur l'égalité", null);
+      citerMorceau(L, "L2242-13", "2° Chaque année, une négociation sur l'égalité", "3° Tous les trois ans");
+
+      L = L.concat(expositionL22431([]));
+      L = L.concat(expositionL22428([], ctx));
+
+      destinataires(L);
+
+      L = L.concat(courrierOS(ctx,
+        "convocation à la négociation sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail",
+        ["En application des articles L. 2242-1, 2°, et L. 2242-13, 2°, du code du",
+         "travail, j'engage la négociation sur l'égalité professionnelle entre les",
+         "femmes et les hommes et la qualité de vie et des conditions de travail.",
+         "",
+         "Je vous convoque à la première réunion de cette négociation :",
+         "",
+         "  · date : " + leJour(dans(aujourd(ctx), 21)) + " [à confirmer ou à modifier]",
+         "  · heure : [........]",
+         "  · lieu : [........]",
+         "",
+         "L'ordre du jour reprend les huit points que l'article L. 2242-17 énumère. Il",
+         "figure ci-après.",
+         "",
+         "Conformément au 2° de ce même article, cette négociation s'appuiera sur les",
+         "données mentionnées au 2° de l'article L. 2312-36 — celles de la base de",
+         "données économiques, sociales et environnementales. L'extraction",
+         "correspondante vous sera remise le [DATE], avant la première réunion.",
+         "",
+         "Conformément à l'article L. 2242-18, la négociation sur l'insertion",
+         "professionnelle et le maintien dans l'emploi des travailleurs handicapés se",
+         "déroulera sur la base du rapport que j'établirai et qui vous sera remis en",
+         "même temps."],
+        { pj: ["ordre du jour — les huit points de L. 2242-17",
+               "calendrier prévisionnel des réunions",
+               "extraction de la base de données (données du 2° de L. 2312-36)",
+               "rapport sur la situation au regard de l'obligation d'emploi des travailleurs handicapés (L. 2242-18)"] }));
+
+      L.push(GROS);
+      L.push("ORDRE DU JOUR — LES HUIT POINTS DE L'ARTICLE L. 2242-17");
+      L.push(GROS);
+      L.push("");
+      L.push("Le contenu de cette négociation est énuméré par le texte. Il compte HUIT");
+      L.push("points, et non six : le droit d'expression directe et collective (6°) et");
+      L.push("la mobilité domicile-travail (8°) s'oublient régulièrement.");
+      L.push("");
+      citer(L, "L2242-17");
+      L.push(TRAIT);
+      L.push("");
+      L.push("POINT 1 — L'ARTICULATION ENTRE LA VIE PERSONNELLE ET LA VIE");
+      L.push("PROFESSIONNELLE (1°)");
+      L.push("  [Organisation du temps de travail, congés familiaux, télétravail,");
+      L.push("  réunions tardives, parentalité. Propositions : ................]");
+      L.push("");
+      L.push("POINT 2 — LES OBJECTIFS ET LES MESURES D'ÉGALITÉ PROFESSIONNELLE (2°)");
+      L.push("  Le texte les détaille : suppression des écarts de rémunération, accès à");
+      L.push("  l'emploi, formation professionnelle, déroulement de carrière et");
+      L.push("  promotion professionnelle, conditions de travail et d'emploi — en");
+      L.push("  particulier pour les salariés à temps partiel — et mixité des emplois.");
+      L.push("");
+      citerMorceau(L, "L2242-17", "Cette négociation s'appuie sur les données", "Cette négociation porte également", "  ");
+      L.push("  L'article L. 2312-36, auquel ce 2° renvoie, N'A PAS été lu à la source");
+      L.push("  par ce module : il est nommé, non reproduit. Le module « base de données");
+      L.push("  (BDESE) » de cette application le lit et l'audite pour lui-même.");
+      L.push("");
+      L.push("  Ce 2° porte aussi sur l'application de l'article L. 241-3-1 du code de la");
+      L.push("  sécurité sociale et sur les conditions dans lesquelles l'employeur peut");
+      L.push("  prendre en charge tout ou partie du supplément de cotisations. Cet");
+      L.push("  article du code de la sécurité sociale n'a pas non plus été lu à la");
+      L.push("  source : vérifiez-le avant d'en discuter les termes.");
+      L.push("");
+      L.push("  [Données à verser : effectifs par sexe et par catégorie, rémunérations");
+      L.push("  comparées, promotions, embauches, formation — source : base de données");
+      L.push("  économiques, sociales et environnementales.]");
+      L.push("");
+      L.push("POINT 3 — LA LUTTE CONTRE LES DISCRIMINATIONS (3°)");
+      L.push("  En matière de recrutement, d'emploi et d'accès à la formation");
+      L.push("  professionnelle, en favorisant notamment les conditions d'accès aux");
+      L.push("  critères définis aux II et III de l'article L. 6315-1. Cet article n'a");
+      L.push("  pas été lu à la source par ce module : il est nommé, non reproduit.");
+      L.push("  [Mesures envisagées : .........................................]");
+      L.push("");
+      L.push("POINT 4 — L'INSERTION ET LE MAINTIEN DANS L'EMPLOI DES TRAVAILLEURS");
+      L.push("HANDICAPÉS (4°)");
+      L.push("  Conditions d'accès à l'emploi, à la formation et à la promotion");
+      L.push("  professionnelles, conditions de travail et d'emploi, actions de");
+      L.push("  sensibilisation de l'ensemble du personnel au handicap.");
+      L.push("");
+      citer(L, "L2242-18", "  Et ce point se négocie sur une base écrite :");
+      L.push("  [Rapport à établir : effectif d'assujettissement, bénéficiaires employés,");
+      L.push("  état de l'obligation d'emploi — source : déclaration sociale nominative.");
+      L.push("  Les articles L. 5212-1 et suivants, auxquels L. 2242-18 renvoie, n'ont");
+      L.push("  pas été lus à la source par ce module.]");
+      L.push("");
+      L.push("POINT 5 — PRÉVOYANCE ET REMBOURSEMENTS COMPLÉMENTAIRES (5°)");
+      L.push("  Ce point n'est dû qu'À DÉFAUT de couverture par un accord de branche ou");
+      L.push("  un accord d'entreprise. Vérifiez d'abord ce qui couvre déjà vos salariés.");
+      L.push("  [Couverture en vigueur : ......................................]");
+      L.push("  [Entreprises de travaux forestiers : le texte prévoit une négociation");
+      L.push("  portant sur l'accès aux garanties collectives mentionnées à l'article");
+      L.push("  L. 911-2 du code de la sécurité sociale — article non lu par ce module.]");
+      L.push("");
+      L.push("POINT 6 — LE DROIT D'EXPRESSION DIRECTE ET COLLECTIVE DES SALARIÉS (6°)");
+      L.push("  Notamment au moyen des outils numériques disponibles dans l'entreprise.");
+      L.push("  C'est un point à part entière, et il s'oublie.");
+      L.push("  [Modalités existantes, modalités proposées : ...................]");
+      L.push("");
+      L.push("POINT 7 — LE DROIT À LA DÉCONNEXION (7°)");
+      L.push("  Les modalités du plein exercice par le salarié de son droit à la");
+      L.push("  déconnexion et la mise en place de dispositifs de régulation de");
+      L.push("  l'utilisation des outils numériques, en vue d'assurer le respect des");
+      L.push("  temps de repos et de congé ainsi que de la vie personnelle et familiale.");
+      L.push("");
+      L.push("  À DÉFAUT D'ACCORD SUR CE POINT, LE TEXTE IMPOSE UNE CHARTE. Elle");
+      L.push("  s'élabore après avis du comité social et économique, et elle prévoit en");
+      L.push("  outre des actions de formation et de sensibilisation à un usage");
+      L.push("  raisonnable des outils numériques, à destination des salariés comme du");
+      L.push("  personnel d'encadrement et de direction. Un désaccord sur ce point ne");
+      L.push("  clôt donc pas le sujet : il ouvre une obligation nouvelle.");
+      L.push("");
+      L.push("POINT 8 — LA MOBILITÉ ENTRE LE DOMICILE ET LE LIEU DE TRAVAIL (8°)");
+      L.push("  Ce point ne concerne que les entreprises mentionnées à l'article");
+      L.push("  L. 2143-3 dont cinquante salariés au moins sont employés SUR UN MÊME");
+      L.push("  SITE. Le texte vise la réduction du coût de la mobilité, l'incitation à");
+      L.push("  l'usage des modes de transport vertueux et la prise en charge des frais");
+      L.push("  mentionnés aux articles L. 3261-3 et L. 3261-3-1. Ces trois articles");
+      L.push("  n'ont pas été lus à la source par ce module : ils sont nommés seulement.");
+      L.push("  [Sites de l'entreprise et effectif de chacun : ..................]");
+      L.push("");
+      L.push("POINT 9 — [FACULTATIF] LA PRÉVENTION DE L'EXPOSITION AUX FACTEURS DE");
+      L.push("RISQUES PROFESSIONNELS");
+      L.push("");
+      citer(L, "L2242-19");
+      L.push("  Ce point est une FACULTÉ, non une obligation : le texte dit « peut");
+      L.push("  également porter ». Supprimez-le si vous ne l'ouvrez pas. Notez");
+      L.push("  toutefois l'effet que le texte y attache : l'accord conclu sur ce thème");
+      L.push("  vaut conclusion de l'accord mentionné à l'article L. 4163-3, sous réserve");
+      L.push("  du respect des autres dispositions du chapitre en cause — articles non");
+      L.push("  lus à la source par ce module.");
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
+
+      L.push(GROS);
+      L.push("CALENDRIER PRÉVISIONNEL DES RÉUNIONS");
+      L.push(GROS);
+      L.push("");
+      L.push("À arrêter avec les organisations syndicales lors de la première réunion");
+      L.push("(L. 2242-14). Proposition de départ, comptée depuis aujourd'hui :");
+      L.push("");
+      L.push("  · " + leJour(dans(aujourd(ctx), 14)) + " — remise de l'extraction de la base et du rapport");
+      L.push("    handicap de L. 2242-18.");
+      L.push("  · " + leJour(dans(aujourd(ctx), 21)) + " — première réunion : ouverture, L. 2242-14, examen");
+      L.push("    du diagnostic comparé femmes-hommes.");
+      L.push("  · " + leJour(dans(aujourd(ctx), 42)) + " — deuxième réunion : points 1 à 4.");
+      L.push("  · " + leJour(dans(aujourd(ctx), 63)) + " — troisième réunion : points 5 à 8.");
+      L.push("  · " + leJour(dans(aujourd(ctx), 84)) + " — clôture : accord signé, ou procès-verbal de");
+      L.push("    désaccord (L. 2242-5) — et alors plan d'action de L. 2242-3.");
+      L.push("");
+
+      L.push(GROS);
+      L.push("LES DEUX ISSUES — ET CE QUE LE DÉSACCORD DÉCLENCHE ICI");
+      L.push(GROS);
+      L.push("");
+      L.push("Cette négociation-ci n'a pas deux issues mais trois états, et c'est ce qui");
+      L.push("la distingue de toutes les autres :");
+      L.push("");
+      L.push("  1. Un accord est conclu : il se dépose, et l'entreprise est couverte.");
+      L.push("  2. Aucun accord n'est conclu : un procès-verbal de désaccord est établi");
+      L.push("     (L. 2242-5) ET un plan d'action annuel devient obligatoire.");
+      L.push("  3. Ni accord ni plan d'action : l'entreprise d'au moins cinquante");
+      L.push("     salariés tombe sous la pénalité de L. 2242-8.");
+      L.push("");
+      citer(L, "L2242-3", "Le plan d'action, dans les termes du texte :");
+      L.push("Le document du point NAO-CTL-EGA-01 rédige ce plan d'action.");
+      L.push("");
+      L.push("Et une précision du texte de la pénalité, qui vaut d'être lue deux fois :");
+      L.push("");
+      citerMorceau(L, "L2242-8", "Dans les entreprises d'au moins 300 salariés", "La pénalité prévue");
+      L.push("Dans une entreprise d'au moins trois cents salariés, le procès-verbal de");
+      L.push("désaccord n'est donc pas une pièce de classement : c'est LUI qui atteste");
+      L.push("le défaut d'accord, et sans lui l'entreprise ne peut pas établir sa");
+      L.push("situation devant l'administration.");
+      L.push("");
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous demandez au service qui tient la base l'extraction des"),
+        suite("données du 2° de L. 2312-36, et vous ouvrez le rapport handicap."),
+        ech(ctx, 6, "les convocations partent, avec l'ordre du jour à huit points."),
+        ech(ctx, 14, "remise de l'extraction et du rapport, à la date annoncée."),
+        ech(ctx, 21, "première réunion : L. 2242-14 est rempli et constaté au"),
+        suite("procès-verbal."),
+        ech(ctx, 84, "clôture : accord, ou procès-verbal de désaccord."),
+        ech(ctx, 99, "dépôt de l'accord ou du procès-verbal, récépissé au dossier."),
+        ech(ctx, 114, "à défaut d'accord, le plan d'action annuel de L. 2242-3 est"),
+        suite("établi ET déposé. Un plan non déposé ne couvre pas l'entreprise."),
+      ]));
+
+      return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-5, L. 2242-8, L. 2242-13, " +
+        "L. 2242-14, L. 2242-17, L. 2242-18, L. 2242-19, L. 2243-1",
+        ["Les articles L. 2312-36, L. 6315-1, L. 5212-1 et suivants, L. 2143-3,",
+         "L. 3261-3, L. 3261-3-1, L. 4163-3, L. 1142-8 et L. 1142-9 du code du travail,",
+         "ainsi que les articles L. 241-3-1, L. 911-2 et L. 911-7 du code de la sécurité",
+         "sociale, sont NOMMÉS parce que les textes lus les nomment. Aucun d'eux n'a été",
+         "lu à la source par ce module : leur contenu n'est ni reproduit ni résumé."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-PER-03 — LA NÉGOCIATION SUR LA GESTION DES EMPLOIS
+
+     Fondement : L. 2242-2 et L. 2242-13. Le contenu vient de L. 2242-20, les
+     thèmes facultatifs de L. 2242-21.
+
+     L'exposition : L. 2243-2, et lui seul. Ce texte nomme « les articles
+     L. 2242-1 et L. 2242-20 » — L. 2242-20 est précisément l'article qui porte
+     cette négociation. L. 2242-7 et L. 2242-8 ne la visent PAS : la première ne
+     vise que les salaires effectifs, la seconde que l'égalité. Elles ne sont
+     donc pas annoncées ici, contrairement à ce que suggère la fiche de
+     régularisation.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-PER-03", {
+    nom: "La négociation sur la gestion des emplois et des parcours professionnels",
+    detail: "La vérification du seuil de trois cents salariés, la convocation, " +
+            "les six points de L. 2242-20, les sept thèmes facultatifs de " +
+            "L. 2242-21, le calendrier triennal et le bilan de fin d'accord.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "gepp"), s = seuil300(ctx);
+      var L = entete(ctx, "Négociation sur la gestion des emplois et des parcours professionnels",
+        "articles L. 2242-2, L. 2242-13, 3° et L. 2242-20 du code du travail");
+
+      modeDEmploi(L, "la convocation à la négociation triennale sur la gestion des emplois");
+
+      L.push("════ D'ABORD LE SEUIL : CETTE NÉGOCIATION VOUS EST-ELLE DUE ? ════");
+      L.push("");
+      citer(L, "L2242-2");
+      L.push("Trois voies mènent au seuil, et le texte les donne : l'entreprise, le");
+      L.push("groupe d'entreprises au sens de l'article L. 2331-1, et l'entreprise ou le");
+      L.push("groupe de dimension communautaire au sens des articles L. 2341-1 et");
+      L.push("L. 2341-2 comportant au moins un établissement ou une entreprise d'au");
+      L.push("moins cent cinquante salariés en France. Ces trois articles sont nommés");
+      L.push("par le texte lu ; ils n'ont pas été lus eux-mêmes par ce module.");
+      L.push("");
+      L.push("  · effectif de l'entreprise : " +
+        (s.effectif === null ? "[NON RENSEIGNÉ]" : s.effectif + " salariés"));
+      L.push("  · effectif du groupe : " +
+        (s.groupe === null ? "[non renseigné, ou pas de groupe]" : s.groupe + " salariés"));
+      L.push("  · dimension communautaire : " +
+        etat(F(ctx).dimensionCommunautaire, "OUI", "non"));
+      L.push("");
+      if (s.connu && !s.atteint) {
+        L.push("  → EN L'ÉTAT DU DOSSIER, LE SEUIL N'EST PAS ATTEINT et cette négociation");
+        L.push("    n'est pas due. Ce document reste utile à deux titres : le seuil se");
+        L.push("    vérifie à chaque exercice, et rien n'interdit de négocier ce thème");
+        L.push("    volontairement.");
+      } else if (s.connu) {
+        L.push("  → LE SEUIL EST ATTEINT : la négociation est due, tous les trois ans à");
+        L.push("    défaut d'accord de méthode (L. 2242-13, 3°).");
+      } else {
+        L.push("  → LE SEUIL NE PEUT PAS ÊTRE APPRÉCIÉ faute d'effectif renseigné.");
+        L.push("    Établissez-le avant de conclure quoi que ce soit : l'application ne");
+        L.push("    devine pas un effectif.");
+      }
+      L.push("");
+      L.push("Et une condition que le seuil ne remplace pas :");
+      L.push("");
+      citerArret(L, ARRETS.representativite);
+      L.push("  La représentativité s'apprécie AU NIVEAU DE L'ENTREPRISE. Une");
+      L.push("  désignation limitée à un seul établissement ne suffit pas à faire naître");
+      L.push("  l'obligation.");
+      L.push("");
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · dernière négociation engagée le : " +
+        (vide(n.dateEngagement) ? "[AUCUNE DATE RENSEIGNÉE]" : jour(n.dateEngagement, "date")));
+      L.push("  · issue déclarée : " + (vide(n.issue) ? "[non renseignée]" : n.issue));
+      L.push("  · dépôt : " + etat(n.depot, "OUI", "non"));
+      var d36 = moisApres(n.dateEngagement, 36);
+      if (d36) {
+        L.push("");
+        L.push("  → Trente-six mois après cette date, soit le " + leJour(d36) + ", toute");
+        L.push("    organisation syndicale représentative peut imposer l'ouverture de la");
+        L.push("    négociation suivante (L. 2242-13, dernier alinéa).");
+      }
+      L.push("");
+
+      L = L.concat(expositionL22432([]));
+      L.push("Deux peines existent dans le corpus lu par ce module, et une seule");
+      L.push("s'applique ici. L. 2243-1 ne nomme que L. 2242-1 : il ne couvre pas cette");
+      L.push("négociation. La pénalité salaires de L. 2242-7 ne vise que les salaires");
+      L.push("effectifs, et la pénalité de 1 % de L. 2242-8 ne vise que l'égalité");
+      L.push("professionnelle : ni l'une ni l'autre ne s'applique à la gestion des");
+      L.push("emplois. Ce document ne les annonce donc pas.");
+      L.push("");
+
+      destinataires(L);
+
+      L = L.concat(courrierOS(ctx,
+        "convocation à la négociation sur la gestion des emplois et des parcours professionnels",
+        ["En application des articles L. 2242-2 et L. 2242-13, 3°, du code du travail,",
+         "j'engage la négociation sur la gestion des emplois et des parcours",
+         "professionnels et sur la mixité des métiers.",
+         "",
+         "Je vous convoque à la première réunion de cette négociation :",
+         "",
+         "  · date : " + leJour(dans(aujourd(ctx), 28)) + " [à confirmer ou à modifier]",
+         "  · heure : [........]",
+         "  · lieu : [........]",
+         "",
+         "L'article L. 2242-20 précise que cette négociation est engagée notamment sur",
+         "le fondement des orientations stratégiques de l'entreprise et de leurs",
+         "conséquences. Les éléments correspondants vous seront remis le [DATE], avant",
+         "la première réunion.",
+         "",
+         "L'ordre du jour reprend les six points que ce même article énumère, ainsi",
+         "que les thèmes facultatifs de l'article L. 2242-21 que je vous propose",
+         "d'ajouter. Il figure ci-après.",
+         "",
+         "Cette négociation porte sur des engagements pluriannuels : je vous propose",
+         "un calendrier de [nombre] réunions, joint au présent courrier."],
+        { pj: ["ordre du jour — les six points de L. 2242-20",
+               "calendrier prévisionnel des réunions",
+               "orientations stratégiques de l'entreprise et leurs conséquences",
+               "éléments d'emploi : pyramide des âges, métiers, contrats"] }));
+
+      L.push(GROS);
+      L.push("ORDRE DU JOUR — LES SIX POINTS DE L'ARTICLE L. 2242-20");
+      L.push(GROS);
+      L.push("");
+      citer(L, "L2242-20");
+      L.push(TRAIT);
+      L.push("");
+      L.push("POINT 1 — LE DISPOSITIF DE GESTION PRÉVISIONNELLE DES EMPLOIS ET DES");
+      L.push("COMPÉTENCES (1°)");
+      L.push("  Le texte vise notamment les enjeux de la transition écologique, et les");
+      L.push("  mesures d'accompagnement susceptibles d'y être associées : formation,");
+      L.push("  abondement du compte personnel de formation, validation des acquis de");
+      L.push("  l'expérience, bilan de compétences, accompagnement de la mobilité");
+      L.push("  professionnelle et géographique.");
+      L.push("  [Données à verser : pyramide des âges, métiers en tension, projets de");
+      L.push("  mutation technologique — source : registre unique du personnel, base de");
+      L.push("  données économiques, sociales et environnementales.]");
+      L.push("");
+      L.push("POINT 2 — LES CONDITIONS DE LA MOBILITÉ INTERNE (2°)");
+      L.push("  Le cas échéant, les conditions de la mobilité professionnelle ou");
+      L.push("  géographique interne à l'entreprise prévue à l'article L. 2254-2. Le");
+      L.push("  texte impose une forme : en cas d'accord, ces conditions font l'objet");
+      L.push("  d'un CHAPITRE SPÉCIFIQUE. L'article L. 2254-2 lui-même n'a pas été lu à");
+      L.push("  la source par ce module : il est nommé, non reproduit.");
+      L.push("");
+      L.push("POINT 3 — LES GRANDES ORIENTATIONS À TROIS ANS DE LA FORMATION (3°)");
+      L.push("  Et les objectifs du plan de développement des compétences : catégories");
+      L.push("  de salariés et d'emplois auxquels il est consacré en priorité,");
+      L.push("  compétences et qualifications à acquérir pendant la période de validité");
+      L.push("  de l'accord, critères et modalités d'abondement du compte personnel de");
+      L.push("  formation par l'employeur.");
+      L.push("");
+      L.push("POINT 4 — LES PERSPECTIVES DE RECOURS AUX DIFFÉRENTS CONTRATS (4°)");
+      L.push("  Contrats de travail, travail à temps partiel, stages — et les moyens mis");
+      L.push("  en œuvre pour DIMINUER le recours aux emplois précaires au profit des");
+      L.push("  contrats à durée indéterminée. C'est le texte qui emploie ce mot.");
+      L.push("  [Répartition des contrats sur les trois derniers exercices : ....]");
+      L.push("");
+      L.push("POINT 5 — L'INFORMATION DES ENTREPRISES SOUS-TRAITANTES (5°)");
+      L.push("  Les conditions dans lesquelles elles sont informées des orientations");
+      L.push("  stratégiques de l'entreprise ayant un effet sur leurs métiers, l'emploi");
+      L.push("  et les compétences.");
+      L.push("");
+      L.push("POINT 6 — LE DÉROULEMENT DE CARRIÈRE DES SALARIÉS EXERÇANT DES");
+      L.push("RESPONSABILITÉS SYNDICALES (6°)");
+      L.push("  Et l'exercice de leurs fonctions. Ce point est dans la liste légale : il");
+      L.push("  ne se traite pas « en marge ».");
+      L.push("");
+      L.push("POINT 7 — LE BILAN DE FIN D'ACCORD");
+      L.push("  Le dernier alinéa de L. 2242-20 est bref et impératif : un bilan est");
+      L.push("  réalisé à l'échéance de l'accord. Prévoyez-le dans l'accord lui-même,");
+      L.push("  avec sa date et son auteur, plutôt que de le découvrir au terme.");
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
+      L.push("════ LES THÈMES FACULTATIFS DE L'ARTICLE L. 2242-21 ════");
+      L.push("");
+      L.push("Le texte dit « peut également porter » : ces sept thèmes sont une faculté,");
+      L.push("et non une obligation. Deux d'entre eux produisent toutefois un effet");
+      L.push("juridique propre, et méritent d'être connus avant d'être écartés.");
+      L.push("");
+      citer(L, "L2242-21");
+      L.push("  À retenir : l'accord conclu sur le thème du 7° — les périodes de");
+      L.push("  reconversion externe — vaut conclusion de l'accord mentionné à l'article");
+      L.push("  L. 6324-9. Et le 1° renvoie aux matières des articles L. 1233-21 et");
+      L.push("  L. 1233-22, selon les modalités prévues à ces mêmes articles. Ces trois");
+      L.push("  articles n'ont pas été lus à la source par ce module : ils sont nommés,");
+      L.push("  non reproduits. Le module « licenciement économique » de cette");
+      L.push("  application traite des articles L. 1233-21 et L. 1233-22.");
+      L.push("");
+      L.push("  Thèmes retenus pour cette négociation : [cocher]");
+      L.push("    [ ] 1° matières des articles L. 1233-21 et L. 1233-22");
+      L.push("    [ ] 2° qualification des catégories d'emplois menacés");
+      L.push("    [ ] 3° association des entreprises sous-traitantes au dispositif");
+      L.push("    [ ] 4° participation aux actions de gestion prévisionnelle des");
+      L.push("        emplois et des compétences à l'échelle des territoires");
+      L.push("    [ ] 5° mise en place de congés de mobilité");
+      L.push("    [ ] 6° formation et insertion durable des jeunes, alternance");
+      L.push("    [ ] 7° périodes de reconversion externe");
+      L.push("");
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous vérifiez le seuil de trois cents salariés — entreprise,"),
+        suite("groupe, dimension communautaire — et la représentativité au"),
+        suite("niveau de l'entreprise."),
+        ech(ctx, 10, "les convocations partent, avec l'ordre du jour."),
+        ech(ctx, 21, "remise des orientations stratégiques et des données d'emploi."),
+        ech(ctx, 28, "première réunion : L. 2242-14 y est rempli."),
+        ech(ctx, 90, "réunions de fond : les six points, un par un."),
+        ech(ctx, 150, "clôture : accord, ou procès-verbal de désaccord (L. 2242-5)."),
+        ech(ctx, 165, "dépôt, et récépissé au dossier."),
+        "  · Puis, tous les trois ans : la périodicité de L. 2242-13, 3°, court à",
+        suite("compter de l'engagement de cette négociation, et non de sa clôture."),
+      ]));
+
+      return L.concat(pied("L. 2242-2, L. 2242-5, L. 2242-13, L. 2242-14, L. 2242-20, " +
+        "L. 2242-21, L. 2243-2 ; " + ARRETS.representativite.ref,
+        ["Les articles L. 2331-1, L. 2341-1, L. 2341-2, L. 2254-2, L. 1233-21,",
+         "L. 1233-22, L. 6324-9, L. 1237-18 et suivants et L. 2323-10 sont NOMMÉS parce",
+         "que les textes lus les nomment : aucun n'a été lu à la source par ce module.",
+         "",
+         "Ce document n'annonce ni la pénalité de L. 2242-7 ni celle de L. 2242-8 :",
+         "aucune des deux ne vise cette négociation. Seul L. 2243-2 la couvre, parce",
+         "qu'il nomme l'article L. 2242-20."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-PER-04 — LA NÉGOCIATION SUR LES SALARIÉS EXPÉRIMENTÉS
+
+     Fondement : L. 2242-2-1 et L. 2242-13, 4°.
+
+     AUCUNE PEINE N'EST ANNONCÉE DANS CE DOCUMENT, et c'est une lecture, pas un
+     oubli. L. 2243-1 nomme L. 2242-1 ; L. 2243-2 nomme L. 2242-1 et L. 2242-20.
+     Ni l'un ni l'autre ne nomme L. 2242-2-1. L. 2242-7 ne vise que les salaires
+     effectifs, L. 2242-8 que l'égalité professionnelle. Le corpus capté ne
+     porte donc AUCUNE sanction visant cette négociation-ci. La fiche de
+     régularisation annonce « un an d'emprisonnement et 3 750 € d'amende, la
+     pénalité de L. 2242-7 pouvant s'y ajouter » : aucun texte lu ne la porte,
+     et le document dit ce qui se joue réellement à la place.
+
+     MANQUE DANS LE CORPUS : L. 2242-2-1 pose l'obligation mais n'énumère aucun
+     contenu — il n'existe pas, pour cette négociation, d'article de contenu
+     comparable à L. 2242-15, L. 2242-17 ou L. 2242-20. L'ordre du jour est
+     donc construit sur les seuls termes de L. 2242-2-1, et le document le dit.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-PER-04", {
+    nom: "La négociation sur l'emploi et les conditions de travail des salariés expérimentés",
+    detail: "La vérification du seuil, la convocation, un ordre du jour bâti sur " +
+            "les seuls termes de L. 2242-2-1, le calendrier triennal — et ce qui " +
+            "se joue réellement, faute de texte pénal visant cette négociation.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "experimentes"), s = seuil300(ctx);
+      var L = entete(ctx, "Négociation sur l'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés",
+        "articles L. 2242-2-1 et L. 2242-13, 4° du code du travail");
+
+      modeDEmploi(L, "la convocation à la négociation triennale sur les salariés expérimentés");
+
+      L.push("════ L'OBLIGATION, DANS SES TERMES — ET SON SEUIL ════");
+      L.push("");
+      citer(L, "L2242-2-1");
+      L.push("Deux conditions, et le texte les pose l'une à côté de l'autre : des");
+      L.push("sections syndicales d'organisations représentatives sont constituées, ET");
+      L.push("l'entreprise ou le groupe au sens de l'article L. 2331-1 compte au moins");
+      L.push("trois cents salariés.");
+      L.push("");
+      L.push("  · effectif de l'entreprise : " +
+        (s.effectif === null ? "[NON RENSEIGNÉ]" : s.effectif + " salariés"));
+      L.push("  · effectif du groupe : " +
+        (s.groupe === null ? "[non renseigné, ou pas de groupe]" : s.groupe + " salariés"));
+      L.push("  · sections syndicales représentatives : " +
+        etat(F(ctx).sectionsSyndicales, "OUI", "non — rien n'est dû"));
+      L.push("");
+      if (s.connu && !s.atteint)
+        L.push("  → En l'état du dossier, le seuil n'est pas atteint : cette négociation");
+      else if (s.connu)
+        L.push("  → Le seuil est atteint : la négociation est due, tous les trois ans à");
+      else
+        L.push("  → Le seuil ne peut pas être apprécié faute d'effectif renseigné :");
+      if (s.connu && !s.atteint) L.push("    n'est pas due. Le seuil se revérifie à chaque exercice.");
+      else if (s.connu) L.push("    défaut d'accord de méthode (L. 2242-13, 4°).");
+      else L.push("    établissez-le avant de conclure.");
+      L.push("");
+      citerMorceau(L, "L2242-13", "4° Tous les trois ans", "A défaut d'une initiative");
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · dernière négociation engagée le : " +
+        (vide(n.dateEngagement) ? "[AUCUNE DATE RENSEIGNÉE]" : jour(n.dateEngagement, "date")));
+      L.push("  · issue déclarée : " + (vide(n.issue) ? "[non renseignée]" : n.issue));
+      var d36 = moisApres(n.dateEngagement, 36);
+      if (d36) {
+        L.push("");
+        L.push("  → Trente-six mois après cette date, soit le " + leJour(d36) + ", toute");
+        L.push("    organisation syndicale représentative peut imposer l'ouverture de la");
+        L.push("    négociation suivante (L. 2242-13, dernier alinéa).");
+      }
+      L.push("");
+
+      L.push("════ CE QUI SE JOUE — ET CE QUI NE SE JOUE PAS ════");
+      L.push("");
+      L.push("AUCUNE PEINE N'EST ANNONCÉE ICI, et ce n'est pas un oubli. Le corpus lu");
+      L.push("par ce module porte quatre textes de sanction, et pas un ne vise cette");
+      L.push("négociation :");
+      L.push("");
+      L.push("  · L. 2243-1 ne nomme que l'article L. 2242-1 ;");
+      L.push("  · L. 2243-2 ne nomme que les articles L. 2242-1 et L. 2242-20 ;");
+      L.push("  · L. 2242-7 ne vise que l'obligation de négociation sur les salaires");
+      L.push("    effectifs du 1° de L. 2242-1 ;");
+      L.push("  · L. 2242-8 ne vise que l'égalité professionnelle et les publications");
+      L.push("    qui s'y rattachent.");
+      L.push("");
+      L.push("Aucun ne nomme l'article L. 2242-2-1. Une application qui vous annoncerait");
+      L.push("ici une amende vous ferait négocier sous une menace inexistante — et vous");
+      L.push("découvririez le vide au premier contrôle.");
+      L.push("");
+      L.push("Ce qui se joue réellement, en revanche, se lit dans les textes captés :");
+      L.push("");
+      L.push("  1. L'OBLIGATION EXISTE. L. 2242-2-1 dit « l'employeur engage ». Ne pas");
+      L.push("     l'avoir engagée est un manquement, constatable par l'inspection du");
+      L.push("     travail comme par le juge.");
+      L.push("  2. UNE ORGANISATION SYNDICALE PEUT VOUS L'IMPOSER. Passé trente-six");
+      L.push("     mois depuis la précédente, la négociation s'engage obligatoirement à");
+      L.push("     sa demande, et deux délais courts s'ouvrent alors — huit jours pour");
+      L.push("     transmettre, quinze pour convoquer (L. 2242-13, dernier alinéa).");
+      L.push("  3. VOTRE LIBERTÉ DE DÉCIDER EST SUSPENDUE PENDANT LA NÉGOCIATION.");
+      L.push("     L. 2242-4 vise expressément les négociations des articles L. 2242-1,");
+      L.push("     L. 2242-2 ET L. 2242-2-1 :");
+      L.push("");
+      citer(L, "L2242-4", null);
+      L.push("  4. ET ELLE NE REPREND PAS QUAND VOUS LE DÉCIDEZ :");
+      L.push("");
+      citerArret(L, ARRETS.finDesNegociations);
+
+      destinataires(L);
+
+      L = L.concat(courrierOS(ctx,
+        "convocation à la négociation sur l'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés",
+        ["En application des articles L. 2242-2-1 et L. 2242-13, 4°, du code du",
+         "travail, j'engage la négociation sur l'emploi, le travail et l'amélioration",
+         "des conditions de travail des salariés expérimentés, en considération de",
+         "leur âge.",
+         "",
+         "Je vous convoque à la première réunion de cette négociation :",
+         "",
+         "  · date : " + leJour(dans(aujourd(ctx), 28)) + " [à confirmer ou à modifier]",
+         "  · heure : [........]",
+         "  · lieu : [........]",
+         "",
+         "Les éléments de situation vous seront remis le [DATE], avant la première",
+         "réunion, conformément à ce que l'article L. 2242-14 impose de préciser dès",
+         "l'ouverture.",
+         "",
+         "Je vous précise que l'ordre du jour joint est bâti sur les seuls termes de",
+         "l'article L. 2242-2-1 : à la différence des négociations sur la rémunération",
+         "et sur l'égalité professionnelle, la loi n'énumère pas ici de contenu",
+         "obligatoire. Vos propositions d'ajout sont donc attendues, et elles seront",
+         "portées à l'ordre du jour."],
+        { pj: ["ordre du jour proposé",
+               "calendrier prévisionnel des réunions",
+               "éléments de situation des salariés expérimentés"] }));
+
+      L.push(GROS);
+      L.push("ORDRE DU JOUR PROPOSÉ");
+      L.push(GROS);
+      L.push("");
+      L.push("AVERTISSEMENT, ET IL COMPTE. L'article L. 2242-2-1 pose l'obligation mais");
+      L.push("n'énumère AUCUN contenu : il n'existe pas, pour cette négociation, d'article");
+      L.push("de contenu comparable à L. 2242-15 pour la rémunération, L. 2242-17 pour");
+      L.push("l'égalité ou L. 2242-20 pour la gestion des emplois. L'ordre du jour");
+      L.push("ci-dessous n'est donc pas tiré d'une liste légale — il est construit sur");
+      L.push("les trois objets que le texte nomme lui-même : l'emploi, le travail, et");
+      L.push("l'amélioration des conditions de travail des salariés expérimentés, en");
+      L.push("considération de leur âge. Ajoutez, retirez, réorganisez : rien ici n'est");
+      L.push("imposé par un texte, et le document ne prétend pas le contraire.");
+      L.push("");
+      L.push("POINT 1 — L'EMPLOI DES SALARIÉS EXPÉRIMENTÉS");
+      L.push("  [Effectifs par tranche d'âge, recrutements et départs par tranche d'âge,");
+      L.push("  ancienneté moyenne — source : registre unique du personnel, déclaration");
+      L.push("  sociale nominative.]");
+      L.push("  [Objectifs de recrutement et de maintien dans l'emploi : ........]");
+      L.push("");
+      L.push("POINT 2 — LE TRAVAIL");
+      L.push("  [Postes occupés, accès à la formation et à la promotion, transmission des");
+      L.push("  savoirs et tutorat, évolution des qualifications.]");
+      L.push("");
+      L.push("POINT 3 — L'AMÉLIORATION DES CONDITIONS DE TRAVAIL");
+      L.push("  [Aménagement des postes, horaires, charge de travail, aménagements de fin");
+      L.push("  de carrière, temps partiel de fin de carrière, retraite progressive.");
+      L.push("  Source des données de pénibilité : document unique d'évaluation des");
+      L.push("  risques — le module « santé, sécurité et conditions de travail » de cette");
+      L.push("  application l'audite pour lui-même.]");
+      L.push("");
+      L.push("POINT 4 — LA CONSIDÉRATION DE L'ÂGE");
+      L.push("  Le texte ajoute « en considération de leur âge » : la négociation");
+      L.push("  suppose donc de définir, avec les organisations syndicales, à partir de");
+      L.push("  quel âge ou de quelle ancienneté un salarié est regardé comme");
+      L.push("  expérimenté dans l'entreprise. [Définition retenue : ...........]");
+      L.push("");
+      L.push("POINT 5 — LES PROPOSITIONS DES ORGANISATIONS SYNDICALES");
+      L.push("  [À porter à l'ordre du jour dès leur réception, et à traiter par une");
+      L.push("  réponse motivée : L. 2242-6 range cette réponse dans l'engagement");
+      L.push("  sérieux et loyal des négociations.]");
+      L.push("");
+
+      L.push(GROS);
+      L.push("CALENDRIER PRÉVISIONNEL DES RÉUNIONS");
+      L.push(GROS);
+      L.push("");
+      L.push("  · " + leJour(dans(aujourd(ctx), 21)) + " — remise des éléments de situation.");
+      L.push("  · " + leJour(dans(aujourd(ctx), 28)) + " — première réunion : ouverture, L. 2242-14, définition");
+      L.push("    du périmètre des salariés expérimentés.");
+      L.push("  · " + leJour(dans(aujourd(ctx), 56)) + " — deuxième réunion : emploi et travail.");
+      L.push("  · " + leJour(dans(aujourd(ctx), 84)) + " — troisième réunion : conditions de travail et fins de");
+      L.push("    carrière.");
+      L.push("  · " + leJour(dans(aujourd(ctx), 112)) + " — clôture : accord, ou procès-verbal de désaccord.");
+      L.push("");
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous vérifiez le seuil de trois cents salariés et la présence"),
+        suite("de sections syndicales représentatives : les deux conditions sont"),
+        suite("cumulatives dans le texte."),
+        ech(ctx, 10, "les convocations partent."),
+        ech(ctx, 21, "remise des éléments de situation, à la date annoncée."),
+        ech(ctx, 28, "première réunion."),
+        ech(ctx, 112, "clôture : accord, ou procès-verbal de désaccord (L. 2242-5)."),
+        ech(ctx, 127, "dépôt, et récépissé au dossier."),
+        "  · Puis, tous les trois ans (L. 2242-13, 4°), à compter de l'engagement.",
+      ]));
+
+      return L.concat(pied("L. 2242-2-1, L. 2242-4, L. 2242-5, L. 2242-6, L. 2242-13, " +
+        "L. 2242-14 ; " + ARRETS.finDesNegociations.ref,
+        ["L'article L. 2331-1, auquel L. 2242-2-1 renvoie pour la notion de groupe,",
+         "est nommé et non reproduit : il n'a pas été lu à la source par ce module.",
+         "",
+         "AUCUNE PEINE N'EST ANNONCÉE dans ce document : aucun des textes de sanction",
+         "captés — L. 2242-7, L. 2242-8, L. 2243-1, L. 2243-2 — ne nomme l'article",
+         "L. 2242-2-1. Ce qui est encouru est l'irrégularité elle-même, l'ouverture",
+         "imposée par une organisation syndicale, et l'interdiction de décider",
+         "unilatéralement dans les matières traitées (L. 2242-4).",
+         "",
+         "L'ordre du jour proposé n'est tiré d'aucune liste légale : L. 2242-2-1",
+         "n'énumère pas de contenu. Il est construit sur les termes mêmes du texte."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-DEM-01 — LA DEMANDE SYNDICALE D'OUVERTURE
+
+     Fondement : L. 2242-13, dernier alinéa. Deux délais, comptés en jours
+     depuis la demande — huit pour transmettre, quinze pour convoquer. Quand la
+     date de la demande figure au dossier, les deux échéances sont calculées à
+     partir d'elle ; sinon, elles le sont depuis aujourd'hui, et le document
+     le dit.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-DEM-01", {
+    nom: "La demande syndicale d'ouverture — transmission sous huit jours, convocation sous quinze",
+    detail: "L'accusé de réception daté, la transmission de la demande aux " +
+            "autres organisations représentatives, la convocation des parties, " +
+            "et les deux échéances calculées depuis la date de la demande.",
+    produire: function (ctx) {
+      var d = bloc(ctx, "demandeSyndicale");
+      var ref = dateDe(d.date);
+      var base = ref || aujourd(ctx);
+      var huit = ref ? joursApres(d.date, 8) : dans(aujourd(ctx), 8);
+      var quinze = ref ? joursApres(d.date, 15) : dans(aujourd(ctx), 15);
+      var L = entete(ctx, "Demande syndicale d'ouverture d'une négociation — les deux actes et leurs délais",
+        "article L. 2242-13, dernier alinéa, du code du travail");
+
+      modeDEmploi(L, "le traitement d'une demande syndicale d'ouverture de négociation");
+
+      L.push("════ LE TEXTE, ET LES DEUX DÉLAIS QU'IL POSE ════");
+      L.push("");
+      citerMorceau(L, "L2242-13", "A défaut d'une initiative de l'employeur", null);
+      L.push("Trois règles en trois phrases :");
+      L.push("");
+      L.push("  1. LE POUVOIR D'IMPOSER. Passé douze mois depuis la précédente pour");
+      L.push("     chacune des deux négociations annuelles, trente-six mois pour la");
+      L.push("     négociation triennale, la négociation s'engage OBLIGATOIREMENT à la");
+      L.push("     demande d'une organisation syndicale représentative. L'employeur n'a");
+      L.push("     pas à en apprécier l'opportunité.");
+      L.push("  2. HUIT JOURS POUR TRANSMETTRE. La demande est transmise par");
+      L.push("     l'employeur aux AUTRES organisations représentatives — toutes, y");
+      L.push("     compris celles qui n'ont rien demandé.");
+      L.push("  3. QUINZE JOURS POUR CONVOQUER. Dans les quinze jours qui suivent la");
+      L.push("     demande, l'employeur convoque les parties à la négociation.");
+      L.push("");
+      L.push("Les deux délais courent de la MÊME date — celle de la demande — et non");
+      L.push("l'un après l'autre. Le second n'attend pas le premier.");
+      L.push("");
+
+      L.push("════ VOS TROIS DATES ════");
+      L.push("");
+      L.push("  · demande reçue le : " + (ref ? leJour(ref) : "[DATE DE RÉCEPTION — à établir]"));
+      L.push("  · transmission aux autres organisations le : " +
+        (vide(d.dateTransmissionAutresOS) ? "[NON RENSEIGNÉE]" : jour(d.dateTransmissionAutresOS, "date")));
+      L.push("  · convocation des parties le : " +
+        (vide(d.dateConvocation) ? "[NON RENSEIGNÉE]" : jour(d.dateConvocation, "date")));
+      L.push("");
+      if (!ref) {
+        L.push("  LA DATE DE LA DEMANDE N'EST PAS AU DOSSIER. Les échéances ci-dessous");
+        L.push("  sont donc comptées depuis aujourd'hui, à titre indicatif. Datez la");
+        L.push("  réception avant toute chose : c'est d'elle que courent les deux");
+        L.push("  délais, et une demande non datée se prouve mal.");
+        L.push("");
+      }
+      L.push("  → transmission aux autres organisations, au plus tard le : " + leJour(huit));
+      L.push("  → convocation des parties, au plus tard le : " + leJour(quinze));
+      L.push("");
+      L.push("Ces deux dates sont des TERMES, pas des objectifs. Un jour de retard se");
+      L.push("compte, et se constate sur la preuve d'envoi.");
+      L.push("");
+
+      L = L.concat(expositionL22431([]));
+      L.push("Le texte pénal nomme expressément « la convocation des parties à la");
+      L.push("négociation » parmi les obligations dont la soustraction est punie. Il");
+      L.push("vise les obligations prévues à l'article L. 2242-1 : la convocation");
+      L.push("faisant suite à une demande syndicale ouvre précisément l'une de ces");
+      L.push("négociations. Lisez le texte tel qu'il est écrit ci-dessus avant d'en");
+      L.push("tirer une conclusion sur votre situation.");
+      L.push("");
+
+      L.push(GROS);
+      L.push("ACTE 0 — L'ACCUSÉ DE RÉCEPTION DE LA DEMANDE");
+      L.push(GROS);
+      L.push("");
+      L.push("Il ne vous est imposé par aucun texte lu. Il est pourtant la pièce qui");
+      L.push("fixe la date d'où tout se compte — et cette date, c'est vous qui aurez à");
+      L.push("l'établir si elle est contestée.");
+      L.push("");
+      L = L.concat(courrierOS(ctx,
+        "accusé de réception de votre demande d'ouverture de négociation",
+        ["J'accuse réception de votre demande d'ouverture d'une négociation portant",
+         "sur [THÈME DE LA NÉGOCIATION DEMANDÉE], que vous m'avez adressée et que",
+         "j'ai reçue le " + (ref ? leJour(ref) : "[DATE]") + ".",
+         "",
+         "Conformément au dernier alinéa de l'article L. 2242-13 du code du travail,",
+         "je transmets cette demande aux autres organisations syndicales",
+         "représentatives dans les huit jours, soit au plus tard le " + leJour(huit) + ", et",
+         "je convoque les parties à la négociation dans les quinze jours de votre",
+         "demande, soit au plus tard le " + leJour(quinze) + "."],
+        { a: "À [ORGANISATION SYNDICALE DEMANDERESSE]",
+          a2: "— à l'attention de son délégué syndical",
+          pj: [] }));
+
+      L.push(GROS);
+      L.push("ACTE 1 — LA TRANSMISSION AUX AUTRES ORGANISATIONS (HUIT JOURS)");
+      L.push(GROS);
+      L.push("");
+      L.push("À adresser à TOUTES les autres organisations syndicales représentatives,");
+      L.push("au plus tard le " + leJour(huit) + ". Celle qui a demandé l'ouverture n'a");
+      L.push("pas à recevoir sa propre demande, mais rien n'interdit de la mettre en");
+      L.push("copie — et cela vaut preuve supplémentaire.");
+      L.push("");
+      L = L.concat(courrierOS(ctx,
+        "transmission d'une demande syndicale d'ouverture de négociation",
+        ["Une organisation syndicale représentative dans l'entreprise m'a adressé, le",
+         (ref ? leJour(ref) : "[DATE]") + ", une demande d'ouverture d'une négociation portant sur",
+         "[THÈME DE LA NÉGOCIATION DEMANDÉE].",
+         "",
+         "Conformément au dernier alinéa de l'article L. 2242-13 du code du travail,",
+         "aux termes duquel la demande de négociation formulée par l'organisation",
+         "syndicale est transmise dans les huit jours par l'employeur aux autres",
+         "organisations représentatives, je vous en transmets copie ci-jointe.",
+         "",
+         "Les parties seront convoquées à la négociation dans les quinze jours de",
+         "cette demande, soit au plus tard le " + leJour(quinze) + ". La convocation, avec",
+         "son ordre du jour, vous parviendra séparément."],
+        { pj: ["copie de la demande reçue, datée"] }));
+
+      L.push(GROS);
+      L.push("ACTE 2 — LA CONVOCATION DES PARTIES (QUINZE JOURS)");
+      L.push(GROS);
+      L.push("");
+      L.push("À adresser à TOUTES les organisations représentatives — la demanderesse");
+      L.push("comprise —, au plus tard le " + leJour(quinze) + ".");
+      L.push("");
+      destinataires(L);
+      L = L.concat(courrierOS(ctx,
+        "convocation à la négociation demandée par une organisation syndicale",
+        ["Faisant suite à la demande d'ouverture de négociation reçue le " +
+           (ref ? leJour(ref) : "[DATE]") + ",",
+         "et conformément au dernier alinéa de l'article L. 2242-13 du code du",
+         "travail, je convoque les parties à la négociation portant sur [THÈME].",
+         "",
+         "  · date de la première réunion : [DATE — à fixer sans attendre]",
+         "  · heure : [........]",
+         "  · lieu : [........]",
+         "",
+         "Conformément à l'article L. 2242-14, seront précisés lors de cette première",
+         "réunion le lieu et le calendrier de la ou des réunions, ainsi que les",
+         "informations que je remettrai aux délégués syndicaux et aux salariés",
+         "composant la délégation sur les thèmes prévus par la négociation qui",
+         "s'engage, et la date de cette remise.",
+         "",
+         "Vous voudrez bien me faire connaître la composition de votre délégation."],
+        { pj: ["ordre du jour de la première réunion",
+               "projet de calendrier des réunions"] }));
+
+      bordereau(L, "les pièces à conserver — ce sont elles qui prouvent les délais", [
+        "La demande syndicale elle-même, avec sa date de réception établie (courrier recommandé, décharge, ou courriel horodaté).",
+        "L'accusé de réception adressé à l'organisation demanderesse.",
+        "Les courriers de transmission aux autres organisations, avec leur preuve d'envoi datée.",
+        "La liste des organisations représentatives destinataires, à la date de la transmission.",
+        "Les convocations des parties, avec leur preuve d'envoi datée.",
+        "Le procès-verbal de la première réunion, portant les mentions de L. 2242-14.",
+      ]);
+
+      L = L.concat(calendrier(ctx, [
+        "  · " + leJour(base) + " — la demande est reçue. C'est le jour zéro : les deux",
+        suite("délais courent de cette date, et non de la date à laquelle vous"),
+        suite("l'avez ouverte ou traitée."),
+        "  · " + leJour(dans(base, 1)) + " — accusé de réception adressé à l'organisation",
+        suite("demanderesse, et date de réception établie par écrit."),
+        "  · " + leJour(dans(base, 3)) + " — la liste des organisations représentatives est",
+        suite("arrêtée : c'est elle qui détermine les destinataires."),
+        "  · " + leJour(huit) + " — TERME DU PREMIER DÉLAI : la demande est transmise aux",
+        suite("autres organisations représentatives. Huit jours, pas neuf."),
+        "  · " + leJour(quinze) + " — TERME DU SECOND DÉLAI : les parties sont convoquées.",
+        suite("Quinze jours, pas seize."),
+        "  · La première réunion peut se tenir après le quinzième jour : c'est la",
+        suite("CONVOCATION qui doit être faite dans les quinze jours, non la"),
+        suite("réunion elle-même. Mais elle ne se repousse pas indéfiniment."),
+      ]));
+
+      return L.concat(pied("L. 2242-13, dernier alinéa ; L. 2242-14 ; L. 2243-1",
+        ["Les deux délais sont ceux du texte : huit jours pour la transmission,",
+         "quinze pour la convocation. Le texte ne dit pas s'il s'agit de jours",
+         "ouvrables ou calendaires ; ce document ne le dit pas non plus, et compte en",
+         "jours calendaires — la lecture la plus stricte pour l'employeur, donc la plus",
+         "sûre. Ne pariez pas sur l'autre."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-LOY-01 — LE PROCÈS-VERBAL DE PREMIÈRE RÉUNION
+
+     Fondement : L. 2242-14. Ce que le contrôle appelle « les quatre mentions »
+     tient dans les deux numéros du texte : le lieu et le calendrier (1°), les
+     informations et la date de leur remise (2°).
+
+     AUCUNE PEINE N'EST ANNONCÉE : aucun texte capté n'attache de sanction à
+     L. 2242-14. Ce qui se joue est ailleurs, et il est lu — L. 2242-6 range le
+     lieu, le calendrier et les informations dans l'engagement sérieux et loyal,
+     dont l'attestation conditionne le dépôt d'un accord sur les salaires.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-LOY-01", {
+    nom: "Le procès-verbal de première réunion — lieu, calendrier, informations et date de remise",
+    detail: "Le procès-verbal portant les mentions de L. 2242-14, la liste des " +
+            "informations remises, le bordereau de remise daté et le courrier de " +
+            "notification aux organisations syndicales.",
+    produire: function (ctx) {
+      var r = bloc(ctx, "premiereReunion");
+      var L = entete(ctx, "Procès-verbal de première réunion de négociation",
+        "article L. 2242-14 du code du travail");
+
+      modeDEmploi(L, "le procès-verbal de la première réunion, et le bordereau de remise des informations");
+
+      L.push("════ LE TEXTE, EN ENTIER — IL EST COURT ════");
+      L.push("");
+      citer(L, "L2242-14");
+      L.push("Quatre éléments, en deux numéros : le lieu, le calendrier, les");
+      L.push("informations, la date de leur remise. Aucun n'est facultatif, et aucun ne");
+      L.push("se déduit : ils SONT PRÉCISÉS lors de la première réunion, et le");
+      L.push("procès-verbal en est la trace.");
+      L.push("");
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · date de la première réunion : " +
+        (vide(r.date) ? "[NON RENSEIGNÉE]" : jour(r.date, "date")));
+      L.push("  · lieu et calendrier fixés : " + etat(r.lieuCalendrierFixes, "OUI", "NON"));
+      L.push("  · informations remises : " + etat(r.informationsRemises, "OUI", "NON"));
+      L.push("  · date de remise des informations : " +
+        (vide(r.dateRemiseInformations) ? "[NON RENSEIGNÉE]" : jour(r.dateRemiseInformations, "date")));
+      L.push("");
+      L.push("Une mention manquante ne se rattrape pas par une déclaration : elle se");
+      L.push("rattrape par une réunion de cadrage, où le point est arrêté");
+      L.push("CONTRADICTOIREMENT avec les organisations syndicales, et par un");
+      L.push("procès-verbal qui le constate. Le courrier de convocation à cette réunion");
+      L.push("figure plus bas.");
+      L.push("");
+
+      L.push("════ CE QUI SE JOUE, ET CE QUI NE SE JOUE PAS ════");
+      L.push("");
+      L.push("Aucun texte capté par ce module n'attache de sanction pénale ni de");
+      L.push("pénalité financière au seul manquement à L. 2242-14. Ce document");
+      L.push("n'annonce donc ni amende ni pénalité. Ce qui se joue réellement est");
+      L.push("ailleurs, et il est écrit :");
+      L.push("");
+      citerMorceau(L, "L2242-6", "L'engagement sérieux et loyal", null);
+      L.push("Le lieu, le calendrier et les informations nécessaires sont donc DANS la");
+      L.push("définition de l'engagement sérieux et loyal. Or c'est cet engagement que");
+      L.push("le procès-verbal d'ouverture doit attester pour qu'un accord sur les");
+      L.push("salaires effectifs puisse être déposé (L. 2242-6, premier alinéa). Une");
+      L.push("première réunion bâclée se paie donc au dépôt, plusieurs mois plus tard,");
+      L.push("quand plus rien ne peut être rattrapé.");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PROCÈS-VERBAL DE PREMIÈRE RÉUNION");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx).toUpperCase());
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("NÉGOCIATION : [rémunération, temps de travail et partage de la valeur");
+      L.push("ajoutée (L. 2242-1, 1°) / égalité professionnelle et qualité de vie et des");
+      L.push("conditions de travail (L. 2242-1, 2°) / gestion des emplois et des");
+      L.push("parcours professionnels (L. 2242-2) / salariés expérimentés (L. 2242-2-1)]");
+      L.push("");
+      L.push("PREMIÈRE RÉUNION DU " +
+        (vide(r.date) ? "[DATE]" : jour(r.date, "date").toUpperCase()));
+      L.push("");
+      L.push("PRÉSENTS");
+      L.push("  Pour l'employeur : " + signataire(ctx));
+      L.push("    [et : ............................................]");
+      L.push("  Pour les organisations syndicales représentatives :");
+      L.push("    · [Organisation 1 — délégué syndical, et salariés composant la");
+      L.push("      délégation : ....................................]");
+      L.push("    · [Organisation 2 — ..............................]");
+      L.push("    · [Organisation 3 — ..............................]");
+      L.push("  Absents ou excusés : [..............................]");
+      L.push("");
+      L.push("  [Joindre la feuille d'émargement signée. Une présence contestée sur un");
+      L.push("  procès-verbal sans émargement se conteste facilement.]");
+      L.push("");
+      L.push("ARTICLE 1 — LE LIEU DES RÉUNIONS (L. 2242-14, 1°)");
+      L.push("");
+      L.push("Les réunions de la présente négociation se tiendront à [LIEU PRÉCIS —");
+      L.push("adresse, salle]. [Le cas échéant : les réunions pourront se tenir en");
+      L.push("visioconférence dans les conditions convenues entre les parties, à");
+      L.push("préciser ici.]");
+      L.push("");
+      L.push("ARTICLE 2 — LE CALENDRIER DES RÉUNIONS (L. 2242-14, 1°)");
+      L.push("");
+      L.push("  n° │ date            │ heure  │ objet de la réunion");
+      L.push("  ───┼─────────────────┼────────┼──────────────────────────────────────");
+      L.push("   1 │ " + (vide(r.date) ? "[..............]" : jour(r.date, "date")) +
+        (vide(r.date) ? "" : new Array(Math.max(1, 17 - jour(r.date, "date").length)).join(" ")) +
+        "│ [....] │ ouverture, cadrage");
+      L.push("   2 │ [..............] │ [....] │ [..............................]");
+      L.push("   3 │ [..............] │ [....] │ [..............................]");
+      L.push("   4 │ [..............] │ [....] │ [..............................]");
+      L.push("   5 │ [..............] │ [....] │ clôture : accord ou désaccord");
+      L.push("");
+      L.push("Un calendrier qui se borne à annoncer « des réunions se tiendront au");
+      L.push("premier semestre » ne précise rien : le texte veut des dates.");
+      L.push("");
+      L.push("ARTICLE 3 — LES INFORMATIONS REMISES (L. 2242-14, 2°)");
+      L.push("");
+      L.push("L'employeur remettra aux délégués syndicaux et aux salariés composant la");
+      L.push("délégation les informations suivantes, sur les thèmes prévus par la");
+      L.push("négociation qui s'engage :");
+      L.push("");
+      L.push("  1. [.....................................................]");
+      L.push("  2. [.....................................................]");
+      L.push("  3. [.....................................................]");
+      L.push("  4. [.....................................................]");
+      L.push("  5. [.....................................................]");
+      L.push("  6. [.....................................................]");
+      L.push("");
+      L.push("[La liste des informations propres à chaque négociation figure dans le");
+      L.push("document du point correspondant : NAO-CTL-PER-01 pour la rémunération,");
+      L.push("NAO-CTL-PER-02 pour l'égalité, NAO-CTL-PER-03 pour la gestion des");
+      L.push("emplois, NAO-CTL-PER-04 pour les salariés expérimentés. Reportez-la ici.]");
+      L.push("");
+      L.push("ARTICLE 4 — LA DATE DE REMISE DE CES INFORMATIONS (L. 2242-14, 2°)");
+      L.push("");
+      L.push("Ces informations seront remises le " +
+        (vide(r.dateRemiseInformations) ? "[DATE]" : jour(r.dateRemiseInformations, "date")) + ", selon les modalités");
+      L.push("suivantes : [remise en main propre contre décharge / envoi recommandé /");
+      L.push("mise à disposition dans la base de données économiques, sociales et");
+      L.push("environnementales avec information datée des bénéficiaires].");
+      L.push("");
+      L.push("CETTE DATE SE TIENT. Une date annoncée puis manquée est pire que pas de");
+      L.push("date du tout : elle est écrite, elle est datée, et elle établit le");
+      L.push("manquement toute seule.");
+      L.push("");
+      L.push("ARTICLE 5 — DEMANDES ET OBSERVATIONS DES ORGANISATIONS SYNDICALES");
+      L.push("");
+      L.push("  · [Organisation 1 : ..................................]");
+      L.push("  · [Organisation 2 : ..................................]");
+      L.push("");
+      L.push("[Chacune de ces demandes recevra une réponse motivée : L. 2242-6 en fait");
+      L.push("une composante de l'engagement sérieux et loyal.]");
+      L.push("");
+      L.push("Fait à " + villeDe(ctx) + ", le " +
+        (vide(r.date) ? leJour(aujourd(ctx)) : jour(r.date, "date")));
+      L.push("");
+      L.push("[Signatures — l'employeur et, s'ils l'acceptent, les représentants des");
+      L.push("organisations syndicales. Une signature refusée se mentionne ; elle");
+      L.push("n'empêche pas le procès-verbal d'exister.]");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("BORDEREAU DE REMISE DES INFORMATIONS");
+      L.push(GROS);
+      L.push("");
+      L.push("À faire signer le jour de la remise. C'est cette feuille, et non le");
+      L.push("procès-verbal, qui prouvera que la date annoncée a été tenue.");
+      L.push("");
+      L.push(nomDe(ctx));
+      L.push("");
+      L.push("Informations remises le " +
+        (vide(r.dateRemiseInformations) ? "[DATE]" : jour(r.dateRemiseInformations, "date")) +
+        ", en application de l'article L. 2242-14, 2°,");
+      L.push("du code du travail, dans le cadre de la négociation sur [THÈME].");
+      L.push("");
+      L.push("  document remis                          │ nb pages │ signature");
+      L.push("  ────────────────────────────────────────┼──────────┼────────────");
+      for (var i = 0; i < 6; i++)
+        L.push("  [....................................] │ [......] │ [.........]");
+      L.push("");
+      L.push("  Destinataire : [organisation syndicale, nom et qualité du signataire]");
+      L.push("  Date et signature : [.................................]");
+      L.push("");
+      L.push("");
+
+      L = L.concat(courrierOS(ctx,
+        "notification du procès-verbal de première réunion et remise des informations",
+        ["Vous trouverez ci-joint le procès-verbal de la première réunion de la",
+         "négociation sur [THÈME], tenue le " +
+           (vide(r.date) ? "[DATE]" : jour(r.date, "date")) + ".",
+         "",
+         "Ce procès-verbal précise, conformément à l'article L. 2242-14 du code du",
+         "travail, le lieu et le calendrier de la ou des réunions, ainsi que les",
+         "informations que je remettrai aux délégués syndicaux et aux salariés",
+         "composant la délégation, et la date de cette remise.",
+         "",
+         "Ces informations vous seront remises le " +
+           (vide(r.dateRemiseInformations) ? "[DATE]" : jour(r.dateRemiseInformations, "date")) +
+           ", contre décharge.",
+         "",
+         "Toute observation sur ce procès-verbal peut m'être adressée avant la",
+         "prochaine réunion ; elle y sera examinée et consignée."],
+        { pj: ["procès-verbal de première réunion",
+               "calendrier des réunions",
+               "liste des informations qui seront remises"] }));
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous relisez le procès-verbal existant : porte-t-il les quatre"),
+        suite("éléments ? Une seule absence suffit à ouvrir le sujet."),
+        ech(ctx, 7, "s'il en manque un, convocation d'une réunion de cadrage — le"),
+        suite("calendrier et la liste des informations se fixent"),
+        suite("contradictoirement, jamais par décision unilatérale."),
+        ech(ctx, 21, "réunion de cadrage : les quatre éléments sont arrêtés et"),
+        suite("consignés."),
+        ech(ctx, 23, "le procès-verbal est notifié à toutes les organisations"),
+        suite("convoquées."),
+        ech(ctx, 30, "remise des informations à la date annoncée, contre décharge."),
+      ]));
+
+      return L.concat(pied("L. 2242-6, L. 2242-14",
+        ["Aucune peine n'est annoncée dans ce document : aucun texte capté par ce",
+         "module n'attache de sanction pénale ni de pénalité financière au",
+         "manquement à l'article L. 2242-14 pris isolément. Ce qui est encouru est",
+         "l'impossibilité d'attester l'engagement sérieux et loyal au sens de",
+         "L. 2242-6 — et, s'agissant d'un accord sur les salaires effectifs,",
+         "l'impossibilité de le déposer."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-LOY-02 — LE PROCÈS-VERBAL D'OUVERTURE DES NÉGOCIATIONS SUR LES
+     ÉCARTS DE RÉMUNÉRATION
+
+     Fondement : L. 2242-6. C'est la pièce sans laquelle un accord sur les
+     salaires effectifs ne peut pas être déposé. Le texte est capté en entier,
+     et il porte les quatre composantes de l'engagement sérieux et loyal.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-LOY-02", {
+    nom: "Le procès-verbal d'ouverture des négociations sur les écarts de rémunération femmes-hommes",
+    detail: "La pièce qui conditionne le dépôt d'un accord sur les salaires " +
+            "effectifs : les propositions respectives des parties, l'attestation " +
+            "des quatre composantes de l'engagement loyal, les réponses motivées " +
+            "et le courrier de dépôt avec son bordereau.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "remuneration");
+      var L = entete(ctx, "Procès-verbal d'ouverture des négociations sur les écarts de rémunération entre les femmes et les hommes",
+        "article L. 2242-6 du code du travail");
+
+      modeDEmploi(L, "le procès-verbal sans lequel un accord sur les salaires effectifs ne peut pas être déposé");
+
+      L.push("════ POURQUOI CETTE PIÈCE, ET NON UNE AUTRE ════");
+      L.push("");
+      citer(L, "L2242-6");
+      L.push("Lisez la première phrase deux fois : les accords sur les salaires");
+      L.push("effectifs NE PEUVENT ÊTRE DÉPOSÉS QU'ACCOMPAGNÉS de ce procès-verbal. Ce");
+      L.push("n'est pas une formalité de classement, c'est une condition du dépôt. Et");
+      L.push("sans dépôt, l'accord n'est pas opposable et la période n'est pas");
+      L.push("couverte au regard de la pénalité de L. 2242-7.");
+      L.push("");
+      L.push("Le texte dit aussi ce que ce procès-verbal doit contenir et attester :");
+      L.push("");
+      L.push("  · il CONSIGNE les propositions respectives des parties ;");
+      L.push("  · il ATTESTE que l'employeur a engagé sérieusement et loyalement les");
+      L.push("    négociations.");
+      L.push("");
+      L.push("Et il définit cet engagement par quatre composantes, qui sont autant de");
+      L.push("cases à cocher — et à prouver :");
+      L.push("");
+      L.push("  1. avoir convoqué à la négociation les organisations syndicales");
+      L.push("     représentatives dans l'entreprise ;");
+      L.push("  2. avoir fixé le lieu et le calendrier des réunions ;");
+      L.push("  3. leur avoir communiqué les informations nécessaires pour leur");
+      L.push("     permettre de négocier en toute connaissance de cause ;");
+      L.push("  4. avoir répondu de manière motivée aux éventuelles propositions des");
+      L.push("     organisations syndicales.");
+      L.push("");
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · issue de la négociation sur la rémunération : " +
+        (vide(n.issue) ? "[non renseignée]" : n.issue));
+      L.push("  · procès-verbal d'ouverture sur les écarts : " +
+        etat(n.pvOuvertureEcarts, "OUI", "NON — l'accord ne peut pas être déposé en l'état"));
+      L.push("  · réponses motivées aux propositions syndicales : " +
+        etat(F(ctx).reponsesMotivees, "OUI", "NON — la quatrième composante manque"));
+      L.push("  · dépôt : " + etat(n.depot, "OUI", "non"));
+      L.push("");
+
+      L.push(GROS);
+      L.push("PROCÈS-VERBAL D'OUVERTURE DES NÉGOCIATIONS PORTANT SUR LES ÉCARTS DE");
+      L.push("RÉMUNÉRATION ENTRE LES FEMMES ET LES HOMMES");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx).toUpperCase());
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("Établi en application de l'article L. 2242-6 du code du travail, pour");
+      L.push("accompagner le dépôt de l'accord d'entreprise sur les salaires effectifs");
+      L.push("conclu le [DATE DE L'ACCORD].");
+      L.push("");
+      L.push("ARTICLE 1 — LES PARTIES ET LES RÉUNIONS");
+      L.push("");
+      L.push("Organisations syndicales représentatives convoquées :");
+      L.push("  · [Organisation 1 — convoquée le ......... par .............]");
+      L.push("  · [Organisation 2 — convoquée le ......... par .............]");
+      L.push("  · [Organisation 3 — convoquée le ......... par .............]");
+      L.push("");
+      L.push("TOUTES les organisations représentatives figurent-elles ci-dessus ? Le");
+      L.push("texte exige la convocation des organisations syndicales représentatives");
+      L.push("dans l'entreprise — au pluriel, et sans réserve. Une seule oubliée fait");
+      L.push("tomber l'attestation.");
+      L.push("");
+      L.push("Réunions tenues :");
+      L.push("  · [date] à [lieu] — [objet]");
+      L.push("  · [date] à [lieu] — [objet]");
+      L.push("  · [date] à [lieu] — [objet]");
+      L.push("");
+      L.push("ARTICLE 2 — LES PROPOSITIONS RESPECTIVES DES PARTIES SUR LES ÉCARTS DE");
+      L.push("RÉMUNÉRATION ENTRE LES FEMMES ET LES HOMMES");
+      L.push("");
+      L.push("C'est le cœur de la pièce. Le texte dit « consignant les propositions");
+      L.push("respectives des parties » : les DEUX côtés, et pas seulement le vôtre.");
+      L.push("");
+      L.push("2.1. Diagnostic présenté par l'employeur");
+      L.push("  [Écarts constatés par catégorie professionnelle, par niveau de");
+      L.push("  classification et par tranche d'âge — source : base de données");
+      L.push("  économiques, sociales et environnementales, déclaration sociale");
+      L.push("  nominative. Aucun chiffre n'est écrit ici par l'application : elle ne");
+      L.push("  connaît pas vos rémunérations et ne les inventera pas.]");
+      L.push("");
+      L.push("2.2. Propositions de l'employeur");
+      L.push("  · [Proposition 1 : ..................................]");
+      L.push("  · [Proposition 2 : ..................................]");
+      L.push("  · [Proposition 3 : ..................................]");
+      L.push("");
+      L.push("2.3. Propositions de chaque organisation syndicale");
+      L.push("  · [Organisation 1 — propositions : ..................]");
+      L.push("  · [Organisation 2 — propositions : ..................]");
+      L.push("  · [Organisation 3 — propositions : ..................]");
+      L.push("  · [Organisation n'ayant pas formulé de proposition : le mentionner");
+      L.push("    plutôt que de laisser un blanc.]");
+      L.push("");
+      L.push("ARTICLE 3 — LES RÉPONSES MOTIVÉES DE L'EMPLOYEUR");
+      L.push("");
+      L.push("Une réponse motivée n'est pas un refus : c'est un refus, ou une");
+      L.push("acceptation, ACCOMPAGNÉ DE SES RAISONS. Un « non » sans motif ne remplit");
+      L.push("pas la quatrième composante de L. 2242-6.");
+      L.push("");
+      L.push("  proposition syndicale        │ réponse │ motifs de la réponse");
+      L.push("  ─────────────────────────────┼─────────┼───────────────────────────");
+      for (var k = 0; k < 5; k++)
+        L.push("  [.........................] │ [.....] │ [.......................]");
+      L.push("");
+      L.push("  Date de chaque réponse écrite : [..........................]");
+      L.push("");
+      L.push("ARTICLE 4 — ATTESTATION DE L'ENGAGEMENT SÉRIEUX ET LOYAL");
+      L.push("");
+      L.push("Le soussigné atteste que les négociations ont été engagées sérieusement");
+      L.push("et loyalement, au sens de l'article L. 2242-6 du code du travail :");
+      L.push("");
+      L.push("  [ ] toutes les organisations syndicales représentatives dans");
+      L.push("      l'entreprise ont été convoquées à la négociation ;");
+      L.push("  [ ] le lieu et le calendrier des réunions ont été fixés ;");
+      L.push("  [ ] les informations nécessaires pour permettre de négocier en toute");
+      L.push("      connaissance de cause ont été communiquées, le [DATE] ;");
+      L.push("  [ ] les propositions des organisations syndicales ont reçu une réponse");
+      L.push("      motivée.");
+      L.push("");
+      L.push("Ne cochez que ce qui est vrai et prouvable. Une attestation cochée à la");
+      L.push("légère est une pièce que vous avez signée, et elle vous sera opposée.");
+      L.push("");
+      L.push("Fait à " + villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("[Signatures des organisations syndicales, si elles l'acceptent. Le texte");
+      L.push("ne l'exige pas : il exige que le procès-verbal atteste. Un refus de");
+      L.push("signature se mentionne.]");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("COURRIER — RÉPONSE MOTIVÉE À UNE PROPOSITION SYNDICALE");
+      L.push(GROS);
+      L.push("");
+      L.push("À adresser pour CHAQUE proposition restée sans réponse. Un silence se");
+      L.push("constate, et il se constate sur votre propre dossier.");
+      L.push("");
+      L = L.concat(courrierOS(ctx,
+        "réponse à vos propositions dans la négociation sur la rémunération",
+        ["Vous avez formulé, lors de la réunion du [DATE], les propositions",
+         "suivantes : [RAPPELER CHAQUE PROPOSITION, dans ses termes].",
+         "",
+         "Je vous en donne acte et vous réponds, proposition par proposition :",
+         "",
+         "  · [Proposition 1] : [acceptée / acceptée partiellement / non retenue].",
+         "    Motifs : [....................................................]",
+         "",
+         "  · [Proposition 2] : [acceptée / acceptée partiellement / non retenue].",
+         "    Motifs : [....................................................]",
+         "",
+         "Ces réponses seront consignées au procès-verbal d'ouverture des",
+         "négociations portant sur les écarts de rémunération entre les femmes et les",
+         "hommes, que l'article L. 2242-6 du code du travail impose de joindre au",
+         "dépôt de l'accord sur les salaires effectifs."],
+        { pj: [] }));
+
+      L.push(GROS);
+      L.push("COURRIER — DÉPÔT DE L'ACCORD SUR LES SALAIRES EFFECTIFS");
+      L.push(GROS);
+      L.push("");
+      L.push("ATTENTION AUX MODALITÉS. L'article L. 2242-6 renvoie, pour les conditions");
+      L.push("du dépôt, à l'article L. 2231-6, qui N'A PAS été lu à la source par ce");
+      L.push("module : le support du dépôt, le nombre d'exemplaires et les pièces à");
+      L.push("joindre ne sont donc pas décrits ici. Vérifiez-les avant d'envoyer. Ce");
+      L.push("que ce document garantit, c'est que la pièce que L. 2242-6 exige");
+      L.push("d'accompagner le dépôt existe et est complète.");
+      L.push("");
+      L.push(nomDe(ctx));
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("À l'autorité administrative compétente");
+      L.push("[service de dépôt des accords collectifs — coordonnées à vérifier]");
+      L.push("");
+      L.push(villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push("Objet : dépôt de l'accord d'entreprise sur les salaires effectifs");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Je procède au dépôt de l'accord d'entreprise sur les salaires effectifs");
+      L.push("conclu le [DATE] au sein de " + nomDe(ctx) + ".");
+      L.push("");
+      L.push("Conformément à l'article L. 2242-6 du code du travail, aux termes duquel");
+      L.push("les accords collectifs d'entreprise sur les salaires effectifs ne peuvent");
+      L.push("être déposés qu'accompagnés d'un procès-verbal d'ouverture des");
+      L.push("négociations portant sur les écarts de rémunération entre les femmes et");
+      L.push("les hommes, consignant les propositions respectives des parties, ce");
+      L.push("procès-verbal est joint au présent dépôt.");
+      L.push("");
+      L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
+      L.push("distinguée.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+
+      bordereau(L, "bordereau des pièces du dépôt", [
+        "L'accord d'entreprise sur les salaires effectifs, signé et daté, en autant d'exemplaires que les modalités de dépôt en exigent.",
+        "Le procès-verbal d'ouverture des négociations portant sur les écarts de rémunération entre les femmes et les hommes (L. 2242-6) — pièce sans laquelle le dépôt ne peut pas être reçu.",
+        "Les convocations de toutes les organisations syndicales représentatives, avec leur preuve d'envoi.",
+        "Le procès-verbal de première réunion portant le lieu et le calendrier (L. 2242-14).",
+        "Le bordereau de remise des informations, daté et signé.",
+        "Les réponses motivées aux propositions syndicales, datées.",
+        "[Le cas échéant, les autres pièces exigées par les modalités de dépôt — à vérifier à l'article L. 2231-6, non lu par ce module.]",
+      ]);
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous relevez chaque proposition syndicale restée sans réponse."),
+        ech(ctx, 7, "chaque réponse motivée est écrite, datée et adressée."),
+        ech(ctx, 10, "le procès-verbal d'ouverture est rédigé : propositions des deux"),
+        suite("côtés consignées, quatre composantes attestées."),
+        ech(ctx, 14, "le procès-verbal est communiqué aux organisations syndicales,"),
+        suite("qui peuvent le signer ou refuser — le refus se mentionne."),
+        ech(ctx, 21, "dépôt de l'accord ACCOMPAGNÉ du procès-verbal."),
+        ech(ctx, 35, "le récépissé est au dossier. C'est lui qui prouve le dépôt, et"),
+        suite("non l'accord lui-même."),
+      ]));
+
+      return L.concat(pied("L. 2242-6, L. 2242-14, L. 2242-15, L. 2242-7",
+        ["L'article L. 2231-6, auquel L. 2242-6 renvoie pour les conditions du dépôt,",
+         "n'a PAS été lu à la source par ce module : il est nommé, et les modalités",
+         "matérielles du dépôt ne sont ni décrites ni supposées ici."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-UNI-01 — LE RETRAIT D'UNE DÉCISION UNILATÉRALE
+
+     Fondement : L. 2242-4, L. 2242-5 et Soc., 15 avril 2026, n° 24-15.653.
+
+     AUCUNE PEINE N'EST ANNONCÉE : aucun des quatre textes de sanction captés
+     ne nomme L. 2242-4. La fiche de régularisation classe ce point en gravité 2
+     — « pénalité financière encourue » — et évoque l'entrave : le corpus lu ne
+     porte ni l'une ni l'autre pour cette interdiction. Ce document dit à la
+     place ce qui se joue, et qui est lu : une interdiction, une réserve
+     d'urgence qui se démontre, et une négociation qui n'a pas pris fin.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-UNI-01", {
+    nom: "Le retrait d'une décision unilatérale prise pendant la négociation",
+    detail: "Le relevé des décisions arrêtées depuis l'ouverture, l'examen de " +
+            "l'urgence, la note de retrait ou de suspension, l'information des " +
+            "organisations syndicales et la réouverture du point en séance.",
+    produire: function (ctx) {
+      var d = bloc(ctx, "decisionUnilaterale");
+      var L = entete(ctx, "Retrait d'une décision unilatérale prise dans une matière en cours de négociation",
+        "article L. 2242-4 du code du travail");
+
+      modeDEmploi(L, "la note de retrait d'une décision unilatérale et l'information des organisations syndicales");
+
+      L.push("════ L'INTERDICTION, DANS SES TERMES ════");
+      L.push("");
+      citer(L, "L2242-4");
+      L.push("Quatre éléments, et chacun compte :");
+      L.push("");
+      L.push("  1. « TANT QUE LA NÉGOCIATION EST EN COURS » — c'est une interdiction à");
+      L.push("     durée déterminée, mais c'est la fin de la négociation qui en fixe le");
+      L.push("     terme, et cette fin ne se décrète pas (voir plus bas).");
+      L.push("  2. « DANS LES MATIÈRES TRAITÉES » — l'interdiction ne gèle pas");
+      L.push("     l'entreprise entière : elle porte sur les matières de la négociation");
+      L.push("     en cours. Encore faut-il les avoir délimitées.");
+      L.push("  3. « CONCERNANT LA COLLECTIVITÉ DES SALARIÉS » — une mesure");
+      L.push("     individuelle n'est pas visée par ce texte.");
+      L.push("  4. « SAUF SI L'URGENCE LE JUSTIFIE » — une réserve, et une seule. Elle");
+      L.push("     se démontre par des faits ; elle ne se déclare pas.");
+      L.push("");
+      L.push("Le texte vise les négociations des articles L. 2242-1, L. 2242-2 ET");
+      L.push("L. 2242-2-1 : les quatre négociations obligatoires, sans exception.");
+      L.push("");
+
+      L.push("════ ET LA NÉGOCIATION NE FINIT PAS QUAND VOUS LE DÉCIDEZ ════");
+      L.push("");
+      citerArret(L, ARRETS.finDesNegociations);
+      L.push("C'est le point qui piège : une dernière réunion tenue, une annonce de");
+      L.push("clôture, un délai de réflexion écoulé — rien de tout cela ne met fin aux");
+      L.push("négociations. Tant que le procès-verbal de désaccord n'est pas établi,");
+      L.push("elles sont en cours, et l'interdiction de L. 2242-4 tient. Dans l'affaire");
+      L.push("jugée, le procès-verbal avait été établi le 16 avril quand le syndicat");
+      L.push("avait accepté la dernière proposition le 12 : à cette date, les");
+      L.push("négociations étaient toujours en cours.");
+      L.push("");
+      citer(L, "L2242-5", "Et voici ce qui, seul, y met fin :");
+
+      L.push("════ CE QUI SE JOUE, ET CE QUI NE SE JOUE PAS ════");
+      L.push("");
+      L.push("AUCUNE PEINE N'EST ANNONCÉE DANS CE DOCUMENT. Les quatre textes de");
+      L.push("sanction captés par ce module — L. 2242-7, L. 2242-8, L. 2243-1 et");
+      L.push("L. 2243-2 — visent l'obligation de négocier, la convocation des parties,");
+      L.push("les salaires effectifs et l'égalité professionnelle. Aucun ne nomme");
+      L.push("l'article L. 2242-4, et aucun ne vise l'interdiction de décider");
+      L.push("unilatéralement.");
+      L.push("");
+      L.push("Ce qui se joue réellement, en revanche, tient en trois lignes :");
+      L.push("");
+      L.push("  · la décision a été prise en violation d'une interdiction légale — sa");
+      L.push("    validité est contestable, et c'est devant le juge que cela se règle ;");
+      L.push("  · l'urgence, seule réserve admise, doit être établie par des faits");
+      L.push("    documentés à la date de la décision, et non reconstruits après coup ;");
+      L.push("  · le manquement se verse au débat sur la loyauté de la négociation");
+      L.push("    (L. 2242-6) : décider seul ce que l'on prétend négocier est le");
+      L.push("    contraire d'une négociation loyale.");
+      L.push("");
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · décision unilatérale arrêtée pendant une négociation : " +
+        etat(d.prise, "OUI", "non"));
+      L.push("  · matière concernée : " + (vide(d.matiere) ? "[non renseignée]" : d.matiere));
+      L.push("  · urgence invoquée : " + etat(d.urgence, "OUI — elle doit être démontrée", "non"));
+      L.push("");
+
+      L.push(GROS);
+      L.push("ÉTAPE 1 — LE RELEVÉ DES DÉCISIONS");
+      L.push(GROS);
+      L.push("");
+      L.push("Toutes les décisions arrêtées depuis l'ouverture de chaque négociation en");
+      L.push("cours, sans trier d'avance : c'est le rapprochement avec les matières");
+      L.push("négociées qui trie, pas l'intuition.");
+      L.push("");
+      L.push("  date  │ décision              │ matière   │ dans le champ │ urgence");
+      L.push("        │                       │           │ négocié ?     │ établie ?");
+      L.push("  ──────┼───────────────────────┼───────────┼───────────────┼──────────");
+      for (var i = 0; i < 6; i++)
+        L.push("  [...] │ [...................] │ [.......] │ [OUI / non]   │ [OUI/non]");
+      L.push("");
+      L.push("  Négociations en cours à ce jour, et matières qu'elles traitent :");
+      L.push("  · [Négociation ................ — ouverte le ......... — matières :");
+      L.push("    ..............................................................]");
+      L.push("  · [Négociation ................ — ouverte le ......... — matières :");
+      L.push("    ..............................................................]");
+      L.push("");
+      L.push("  Pour chacune : le procès-verbal de désaccord a-t-il été établi ?");
+      L.push("  [OUI, le ......... / NON — la négociation est donc toujours en cours]");
+      L.push("");
+
+      L.push(GROS);
+      L.push("ÉTAPE 2 — L'EXAMEN DE L'URGENCE, DÉCISION PAR DÉCISION");
+      L.push(GROS);
+      L.push("");
+      L.push("L'urgence est la seule réserve que le texte admette. Elle s'apprécie au");
+      L.push("fond et à la date de la décision. Les questions ci-dessous ne sont pas");
+      L.push("dans le texte : elles servent à voir si les faits y sont.");
+      L.push("");
+      L.push("  · Quel fait a rendu la décision impossible à différer ?");
+      L.push("    [.........................................................]");
+      L.push("  · À quelle date ce fait est-il apparu, et par quelle pièce se");
+      L.push("    prouve-t-il ? [...........................................]");
+      L.push("  · Pourquoi la prochaine réunion de négociation était-elle trop");
+      L.push("    tardive ? [...............................................]");
+      L.push("  · La décision a-t-elle été limitée à ce que l'urgence commandait, ou");
+      L.push("    va-t-elle au-delà ? [.....................................]");
+      L.push("  · Les organisations syndicales en ont-elles été informées");
+      L.push("    immédiatement ? [.........................................]");
+      L.push("");
+      L.push("Si l'une de ces réponses est vide, l'urgence n'est pas documentée. Une");
+      L.push("urgence affirmée et non documentée ne vaut pas mieux qu'une urgence");
+      L.push("absente — sauf qu'elle a été écrite.");
+      L.push("");
+
+      L.push(GROS);
+      L.push("ÉTAPE 3 — LA NOTE DE RETRAIT OU DE SUSPENSION");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx).toUpperCase());
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("NOTE DE RETRAIT D'UNE DÉCISION UNILATÉRALE — " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push("ARTICLE 1 — LA DÉCISION EN CAUSE");
+      L.push("Décision du [DATE], portant sur [OBJET], applicable à [PÉRIMÈTRE].");
+      L.push("Matière concernée : " + (vide(d.matiere) ? "[MATIÈRE]" : d.matiere) + ".");
+      L.push("");
+      L.push("ARTICLE 2 — LA NÉGOCIATION EN COURS");
+      L.push("Négociation sur [THÈME], ouverte le [DATE], portant notamment sur cette");
+      L.push("matière. Aucun procès-verbal de désaccord n'a été établi à ce jour : la");
+      L.push("négociation est donc en cours au sens de l'article L. 2242-4.");
+      L.push("");
+      L.push("ARTICLE 3 — LE CONSTAT");
+      L.push("L'article L. 2242-4 du code du travail interdit à l'employeur, tant que la");
+      L.push("négociation est en cours, d'arrêter dans les matières traitées des");
+      L.push("décisions unilatérales concernant la collectivité des salariés, sauf si");
+      L.push("l'urgence le justifie. L'urgence n'étant pas [établie / invoquée] pour");
+      L.push("cette décision, celle-ci ne pouvait pas être arrêtée.");
+      L.push("");
+      L.push("ARTICLE 4 — LA DÉCISION PRISE CE JOUR");
+      L.push("  [ ] La décision du [DATE] est RETIRÉE, avec effet au [DATE].");
+      L.push("  [ ] La décision du [DATE] est SUSPENDUE jusqu'au terme de la");
+      L.push("      négociation, constaté par accord ou par procès-verbal de désaccord.");
+      L.push("");
+      L.push("  [Traiter le sort des situations constituées entre la décision et son");
+      L.push("  retrait : ce point n'est réglé par aucun texte lu par ce module, et il");
+      L.push("  ne se règle pas d'une formule. Faites-le examiner.]");
+      L.push("");
+      L.push("ARTICLE 5 — LA SUITE");
+      L.push("Le point est réinscrit à l'ordre du jour de la réunion du [DATE] et sera");
+      L.push("traité dans le cadre de la négociation. Le procès-verbal de cette réunion");
+      L.push("mentionnera le retrait.");
+      L.push("");
+      L.push("Fait à " + villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("");
+
+      L = L.concat(courrierOS(ctx,
+        "retrait d'une décision unilatérale et réinscription du point à la négociation",
+        ["Je vous informe que la décision du [DATE] portant sur [OBJET] est",
+         "[retirée / suspendue] à compter du [DATE].",
+         "",
+         "Cette décision touchait à une matière traitée par la négociation sur",
+         "[THÈME], ouverte le [DATE] et toujours en cours : aucun procès-verbal de",
+         "désaccord n'a été établi à ce jour.",
+         "",
+         "L'article L. 2242-4 du code du travail dispose que, tant que la négociation",
+         "mentionnée aux articles L. 2242-1, L. 2242-2 et L. 2242-2-1 est en cours,",
+         "l'employeur ne peut, dans les matières traitées, arrêter de décisions",
+         "unilatérales concernant la collectivité des salariés, sauf si l'urgence le",
+         "justifie.",
+         "",
+         "Le point est réinscrit à l'ordre du jour de la réunion du [DATE]. Vos",
+         "propositions sur ce point seront examinées et recevront une réponse",
+         "motivée."],
+        { pj: ["note de retrait", "ordre du jour de la prochaine réunion"] }));
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous dressez le relevé des décisions arrêtées depuis l'ouverture"),
+        suite("de chaque négociation en cours, et la liste des matières traitées."),
+        ech(ctx, 2, "pour chacune, l'urgence est documentée — ou elle ne l'est pas."),
+        ech(ctx, 5, "la note de retrait ou de suspension est signée. Le retrait est"),
+        suite("immédiat : c'est la décision elle-même qu'il faut reprendre."),
+        ech(ctx, 6, "les organisations syndicales sont informées par écrit."),
+        ech(ctx, 20, "le point est réinscrit à l'ordre du jour et traité en séance ;"),
+        suite("le procès-verbal mentionne le retrait."),
+        "  · Et jusqu'au procès-verbal de désaccord : aucune nouvelle décision",
+        suite("unilatérale dans les matières traitées. La négociation ne prend pas"),
+        suite("fin avant lui."),
+      ]));
+
+      return L.concat(pied("L. 2242-4, L. 2242-5, L. 2242-6 ; " +
+        ARRETS.finDesNegociations.ref,
+        ["Aucune peine n'est annoncée dans ce document : aucun des textes de sanction",
+         "captés par ce module — L. 2242-7, L. 2242-8, L. 2243-1, L. 2243-2 — ne vise",
+         "l'article L. 2242-4. Ce qui est encouru est la contestation de la décision",
+         "elle-même et le grief de déloyauté, non une amende."])).join("\n");
+    },
+  });
+
 })(typeof window !== "undefined" ? window : this);
