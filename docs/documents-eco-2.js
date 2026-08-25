@@ -4065,12 +4065,990 @@
       return L.join("\n");
     });
 
+  doc("CTL-PCO-02",
+    "La requête au juge-commissaire et l'information de l'autorité administrative",
+    "La requête caractérisant l'urgence et le caractère inévitable et " +
+    "indispensable des licenciements, le relevé de l'ordonnance et du périmètre " +
+    "qu'elle autorise, la lettre d'information à l'autorité administrative exigée " +
+    "par l'article L. 1233-60, et l'ordre dans lequel ces actes se placent.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var d0 = aujourd(ctx);
+      var type = txt(f.typeProcedure), qual = txt(f.qualiteAuteur);
+      var ord = txt(f.ordonnanceJugeCommissaire);
+      var dAdm = f.dateNotifAdmin, dNot = f.dateNotification, dJug = f.dateJugement;
+      var rjOuLj = type === "redressement" || type === "liquidation";
+      var manquePrealable = (rjOuLj && !ord) || !estDate(dAdm);
+
+      L = L.concat(entete(ctx, "Autorisation du juge-commissaire et information de l'autorité administrative",
+        "article L. 1233-60 du code du travail"));
+
+      if (manquePrealable && estDate(dNot)) {
+        var quoi2 = [];
+        if (rjOuLj && !ord) {
+          quoi2.push("Aucune ordonnance du juge-commissaire n'est déclarée, alors que la");
+          quoi2.push("procédure est " + (PROC[type] || type) + ".");
+          quoi2.push("");
+          quoi2.push("En redressement comme en liquidation, les licenciements présentant un");
+          quoi2.push("caractère urgent, inévitable et indispensable sont autorisés par");
+          quoi2.push("ordonnance du juge-commissaire. Sans elle, la notification serait");
+          quoi2.push("dépourvue de fondement.");
+          quoi2.push("");
+        }
+        if (!estDate(dAdm)) {
+          quoi2.push("Aucune information de l'autorité administrative n'est déclarée.");
+          quoi2.push("");
+          quoi2.push("L. 1233-60 : « En cas de redressement ou de liquidation judiciaire,");
+          quoi2.push("l'employeur, l'administrateur ou le liquidateur, selon le cas, informe");
+          quoi2.push("l'autorité administrative AVANT DE PROCÉDER à des licenciements pour");
+          quoi2.push("motif économique, dans les conditions prévues aux articles L. 631-17,");
+          quoi2.push("L. 631-19 (II), L. 641-4, dernier alinéa, L. 641-10, troisième alinéa,");
+          quoi2.push("et L. 642-5 du code de commerce. »");
+          quoi2.push("");
+        }
+        quoi2.push("Une notification est pourtant envisagée au " + jour(dNot) + ".");
+        irrattrapable(L, quoi2,
+          "Ces deux actes précèdent la notification ; ils ne se rattrapent pas après " +
+          "elle. Suspendez tout envoi, accomplissez-les dans l'ordre du V, et redatez " +
+          "la notification en conséquence.");
+      }
+
+      modeEmploi(L, [
+        "Deux actes distincts, et ils ne se remplacent pas l'un l'autre.",
+        "",
+        "L'ORDONNANCE DU JUGE-COMMISSAIRE autorise les licenciements. Elle en fixe le",
+        "périmètre : nombre, catégories, parfois nommément. Notifier au-delà de ce que",
+        "l'ordonnance autorise revient à notifier sans autorisation.",
+        "",
+        "L'INFORMATION DE L'AUTORITÉ ADMINISTRATIVE est imposée par l'article",
+        "L. 1233-60, « avant de procéder à des licenciements ». Elle est due même",
+        "quand l'ordonnance a été obtenue, et l'ordonnance ne la dispense pas.",
+        "",
+        "L'application n'a pas lu à la source les articles du code de commerce",
+        "auxquels L. 1233-60 renvoie — L. 631-17, L. 631-19 (II), L. 641-4 dernier",
+        "alinéa, L. 641-10 troisième alinéa, L. 642-5. Ils sont NOMMÉS ici tels que le",
+        "texte lu les nomme, jamais reproduits ni résumés : c'est là que se trouvent",
+        "les conditions et la forme de la requête, et elles doivent être vérifiées à",
+        "la source.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. L'état de votre dossier");
+
+      tableau(L, ["Élément", "Ce que la fiche porte"], [
+        ["Procédure collective", f.procedureCollective === true ? "oui" :
+          f.procedureCollective === false ? "non" : "[non renseigné]"],
+        ["Nature", type ? (PROC[type] || type) : "[non renseignée]"],
+        ["Date du jugement", estDate(dJug) ? jour(dJug) : "[non renseignée]"],
+        ["Qui met en œuvre le plan", qual || "[non renseignée]"],
+        ["Ordonnance du juge-commissaire", ord ? "« " + ord + " »" : "[aucune déclarée]"],
+        ["Autorité administrative informée le", estDate(dAdm) ? jour(dAdm) : "[non renseigné]"],
+        ["Notification envisagée", estDate(dNot) ? jour(dNot) : "[non renseignée]"],
+      ]);
+      L.push("");
+      if (f.procedureCollective !== true) {
+        L.push("  La fiche ne déclare aucune procédure collective : ce document n'a pas");
+        L.push("  d'objet en l'état. Il le retrouve si une procédure est ouverte — auquel");
+        L.push("  cas renseignez la fiche et relancez l'audit avant tout acte suivant.");
+        L.push("");
+      }
+      if (rjOuLj && !ord) {
+        L.push("  L'ordonnance manque. En " + (PROC[type] || type) + ", elle est le");
+        L.push("  fondement même de la notification.");
+        L.push("");
+      }
+      if (!estDate(dAdm)) {
+        L.push("  L'information de l'autorité administrative n'est pas déclarée. Elle est");
+        L.push("  due AVANT de procéder aux licenciements (L. 1233-60), et l'accusé de");
+        L.push("  réception en est la seule preuve.");
+        L.push("");
+      }
+
+      titre(L, "II. La requête au juge-commissaire");
+
+      L.push("Trois caractères à établir, et ils sont cumulatifs : URGENT, INÉVITABLE,");
+      L.push("INDISPENSABLE. Une requête qui les affirme sans les caractériser n'établit");
+      L.push("rien — et ce sont des faits, pas des qualifications : chacun se démontre par");
+      L.push("des dates et des chiffres.");
+      L.push("");
+      L.push(cro((ctx.profil || {}).denomination || f.entreprise, "DÉNOMINATION SOCIALE"));
+      L.push("[ou : cabinet de l'administrateur / du liquidateur, selon la qualité de");
+      L.push("l'auteur du plan — voyez le document du contrôle CTL-PCO-01]");
+      L.push("");
+      L.push("À Monsieur le Juge-commissaire");
+      L.push("Tribunal [de commerce / judiciaire] de [VILLE]");
+      L.push("Procédure n° [  ] — " + (type ? (PROC[type] || type) : "[nature de la procédure]") +
+        " ouverte le " + (estDate(dJug) ? jour(dJug) : "[DATE]"));
+      L.push("");
+      L.push(ville(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Objet : requête aux fins d'autorisation de procéder à des licenciements pour");
+      L.push("motif économique");
+      L.push("");
+      L.push("Monsieur le Juge-commissaire,");
+      L.push("");
+      L.push("[Qualité du requérant : l'employeur / l'administrateur judiciaire / le");
+      L.push("liquidateur, désigné par jugement du [DATE]] sollicite l'autorisation de");
+      L.push("procéder au licenciement pour motif économique de [nombre] salariés.");
+      L.push("");
+      L.push("1. LA SITUATION");
+      L.push("[Exposer l'état de l'entreprise à la date de la requête : activité");
+      L.push("poursuivie ou non, effectif, trésorerie disponible, échéances, maintien");
+      L.push("provisoire de l'activité et son terme. Chaque élément daté et chiffré.]");
+      L.push("");
+      L.push("2. L'URGENCE");
+      L.push("[Dire à quelle échéance précise la décision doit être prise, et ce qui se");
+      L.push("produit si elle ne l'est pas. « L'urgence est caractérisée » n'est pas une");
+      L.push("démonstration ; « la trésorerie disponible au [DATE] est de [montant] et ne");
+      L.push("couvre la masse salariale que jusqu'au [DATE] » en est une.]");
+      L.push("");
+      L.push("3. LE CARACTÈRE INÉVITABLE");
+      L.push("[Dire ce qui a été tenté et n'a pas abouti : recherche de repreneur,");
+      L.push("financement, réduction d'activité, mesures d'évitement. Joindre les pièces.]");
+      L.push("");
+      L.push("4. LE CARACTÈRE INDISPENSABLE");
+      L.push("[Dire pourquoi CES licenciements-là, et pas d'autres : quels postes, quelles");
+      L.push("catégories, et en quoi leur suppression est nécessaire à ce que la procédure");
+      L.push("poursuit.]");
+      L.push("");
+      L.push("5. LE PÉRIMÈTRE DEMANDÉ");
+      L.push("");
+      tableau(L, ["Catégorie professionnelle", "Effectif", "Licenciements demandés"],
+        [["[  ]", "[  ]", "[  ]"], ["[  ]", "[  ]", "[  ]"], ["TOTAL", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("6. L'ÉTAT DE LA PROCÉDURE DE CONSULTATION");
+      L.push("[Indiquer où en est la consultation du comité social et économique, selon le");
+      L.push("renvoi applicable de l'article L. 1233-58, I, et si un plan de sauvegarde de");
+      L.push("l'emploi est en cours d'élaboration.]");
+      L.push("");
+      L.push("Par ces motifs, il est demandé au juge-commissaire d'autoriser les");
+      L.push("licenciements pour motif économique ci-dessus décrits.");
+      L.push("");
+      L.push("Pièces jointes : [jugement · acte de désignation · situation de trésorerie ·");
+      L.push("convocation et procès-verbaux du comité · projet de plan, le cas échéant ·");
+      L.push("tableau des catégories et des suppressions]");
+      L.push("");
+      L.push("[Signature — qualité de l'auteur du plan]");
+      L.push("");
+      L.push("  [AVANT DE DÉPOSER — la forme, le contenu et le circuit de cette requête");
+      L.push("  sont réglés par les articles du code de commerce que L. 1233-60 nomme, et");
+      L.push("  que l'application n'a pas lus. Faites-les vérifier. Ce modèle organise le");
+      L.push("  fond de la démonstration ; il ne garantit pas la forme.]");
+      L.push("");
+
+      titre(L, "III. Le relevé de l'ordonnance");
+
+      L.push("À remplir dès réception, et à relire avant chaque envoi de lettre.");
+      L.push("");
+      L.push("  Date de l'ordonnance ............. [  ]");
+      L.push("  Sens ............................. ☐ autorisation  ☐ refus  ☐ partielle");
+      L.push("  Nombre de licenciements autorisés . [  ]");
+      L.push("  Catégories autorisées ............ [  ]");
+      L.push("  Salariés nommément visés, le cas échéant ..... [  ]");
+      L.push("  Conditions ou réserves portées par l'ordonnance ..... [  ]");
+      L.push("");
+      tableau(L, ["Catégorie", "Demandé", "Autorisé", "Écart", "Notifié"],
+        [["[  ]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["[  ]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["TOTAL", "[  ]", "[  ]", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("  La colonne « écart » est celle qu'on oublie. Une autorisation partielle est");
+      L.push("  une autorisation : elle vaut pour ce qu'elle autorise, et pour rien de");
+      L.push("  plus. Notifier au-delà du périmètre autorisé, c'est notifier sans");
+      L.push("  autorisation pour les salariés en excédent.");
+      L.push("");
+      L.push("  [Si l'ordonnance vise des salariés nommément, la marge d'application des");
+      L.push("  critères d'ordre s'en trouve réduite d'autant. Rapprochez-la du tableau");
+      L.push("  d'application des critères avant d'expédier quoi que ce soit.]");
+      L.push("");
+
+      titre(L, "IV. La lettre d'information à l'autorité administrative");
+
+      L.push("L. 1233-60 : « En cas de redressement ou de liquidation judiciaire,");
+      L.push("l'employeur, l'administrateur ou le liquidateur, selon le cas, informe");
+      L.push("l'autorité administrative avant de procéder à des licenciements pour motif");
+      L.push("économique, dans les conditions prévues aux articles L. 631-17, L. 631-19");
+      L.push("(II), L. 641-4, dernier alinéa, L. 641-10, troisième alinéa, et L. 642-5 du");
+      L.push("code de commerce. »");
+      L.push("");
+      L.push("Ces cinq articles du code de commerce fixent les conditions de cette");
+      L.push("information. L'application ne les a pas lus et ne les énonce pas : vérifiez-y");
+      L.push("la forme et le moment exacts.");
+      L.push("");
+      L.push(nom(ctx));
+      L.push(adresse(ctx));
+      L.push("[ou en-tête de l'administrateur ou du liquidateur, selon le cas]");
+      L.push("");
+      L.push("À l'autorité administrative compétente");
+      L.push("[Direction régionale — adresse]");
+      L.push("");
+      L.push(ville(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Objet : information préalable à des licenciements pour motif économique —");
+      L.push("article L. 1233-60 du code du travail");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("En application de l'article L. 1233-60 du code du travail, je vous informe,");
+      L.push("avant qu'il y soit procédé, des licenciements pour motif économique envisagés");
+      L.push("au sein de " + nom(ctx) + ".");
+      L.push("");
+      L.push("  Nature de la procédure ....... " +
+        (type ? (PROC[type] || type) : "[à préciser]"));
+      L.push("  Jugement du .................. " + (estDate(dJug) ? jour(dJug) : "[DATE]"));
+      L.push("  Tribunal ..................... [  ]");
+      L.push("  Qualité du signataire ........ " + (qual || "[employeur / administrateur / liquidateur]"));
+      L.push("  Effectif de l'entreprise ..... " +
+        (effectifDe(ctx) === null ? "[  ]" : effectifDe(ctx) + " salariés"));
+      L.push("  Licenciements envisagés ...... " +
+        (nbLic(f) === null ? "[  ]" : String(nbLic(f))));
+      L.push("  Catégories concernées ........ [  ]");
+      L.push("  Ordonnance du juge-commissaire du [DATE], autorisant [périmètre]");
+      L.push("  Date envisagée des notifications ..... " +
+        (estDate(dNot) ? jour(dNot) : "[DATE]"));
+      L.push("");
+      L.push("Je vous prie de bien vouloir m'accuser réception de la présente.");
+      L.push("");
+      L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
+      L.push("distinguée.");
+      L.push("");
+      L.push("[Signature — qualité de l'auteur du plan]");
+      L.push("");
+      L.push("Pièces jointes : jugement · acte de désignation · ordonnance du");
+      L.push("juge-commissaire · tableau des catégories et des suppressions");
+      L.push("");
+      L.push("  Envoyée le [DATE] — moyen : [voie dématérialisée / LRAR] — accusé de");
+      L.push("  réception du [DATE], conservé au dossier : ☐");
+      L.push("");
+      L.push("  [Cette information ne se confond pas avec la demande de validation ou");
+      L.push("  d'homologation du plan, ni avec la notification du projet de l'article");
+      L.push("  L. 1233-46. Ce sont trois actes distincts, adressés au même service, et");
+      L.push("  l'un ne vaut pas les autres.]");
+      L.push("");
+
+      titre(L, "V. L'ordre des actes");
+
+      tableau(L, ["Rang", "Acte", "Fondement", "Fait le"], [
+        ["1", "Requête au juge-commissaire", "code de commerce (non lu ici)", "[  ]"],
+        ["2", "Ordonnance autorisant les licenciements", "code de commerce (non lu ici)", "[  ]"],
+        ["3", "Information de l'autorité administrative", "L. 1233-60", "[  ]"],
+        ["4", "Consultation du comité selon le renvoi applicable", "L. 1233-58, I", "[  ]"],
+        ["5", "Demande de validation ou d'homologation, le cas échéant",
+          "L. 1233-58, II ; D. 1233-14", "[  ]"],
+        ["6", "Décision de l'administration — 8 jours en redressement, 4 en liquidation",
+          "L. 1233-58, II", "[  ]"],
+        ["7", "Notification des licenciements", "L. 1233-58, II", "[  ]"],
+      ]);
+      L.push("");
+      L.push("  Aucun rang ne se saute, et aucun ne se rattrape en le plaçant après.");
+      L.push("  Vérifiez que les dates portées dans la colonne de droite sont croissantes :");
+      L.push("  c'est le contrôle le plus rapide et le plus révélateur du dossier.");
+      L.push("");
+      if (estDate(dAdm) && estDate(dNot)) {
+        var e2 = ecart(dAdm, dNot);
+        L.push("  Dans votre fiche : information de l'administration le " + jour(dAdm) + ",");
+        L.push("  notification envisagée le " + jour(dNot) + " — soit " +
+          (e2 === null ? "[  ]" : e2 + " jours") + ".");
+        if (e2 !== null && e2 < 0) {
+          L.push("  L'ordre est INVERSÉ : l'information doit précéder les licenciements.");
+        }
+        L.push("");
+      }
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous déposez la requête et vous préparez");
+      L.push("l'information de l'administration.");
+      L.push("");
+      L.push("L'application n'annonce aucun délai d'obtention de l'ordonnance : elle n'a");
+      L.push("pas lu le texte qui le fixerait, et un délai inventé ferait plus de mal");
+      L.push("qu'une case vide. Demandez-le au greffe, et inscrivez-le ici : [  ].");
+      L.push("");
+      L.push("L'information de l'autorité administrative, elle, est immédiate : elle part");
+      L.push("dès l'ordonnance obtenue, et en tout cas AVANT toute notification.");
+      L.push("");
+      if (estDate(dJug) && type === "liquidation") {
+        L.push("ET LE TEMPS EST COMPTÉ. Le jugement de liquidation date du " + jour(dJug) + " :");
+        L.push("la fenêtre de garantie des créances de rupture expire le " +
+          jourPlus(dJug, 15) + ",");
+        L.push("ou le " + jourPlus(dJug, 21) + " si un plan de sauvegarde de l'emploi est");
+        L.push("élaboré (L. 3253-8, 2° c). Requête, ordonnance, information et notification");
+        L.push("doivent tenir dans cet intervalle. Voyez le document du contrôle CTL-PCO-03.");
+        L.push("");
+      }
+      L.push("Puis la consultation, la demande de validation ou d'homologation au plus tard");
+      L.push("le lendemain de la dernière réunion (D. 1233-14), et la décision dans les");
+      L.push("quatre ou huit jours (L. 1233-58, II).");
+      L.push("");
+      L.push("Ce n'est qu'ensuite que la première lettre part.");
+
+      pied(L, ["L. 1233-46", "L. 1233-58", "L. 1233-60", "L. 3253-8", "D. 1233-14"],
+        "Les articles L. 631-17, L. 631-19 (II), L. 641-4 dernier alinéa, L. 641-10\n" +
+        "troisième alinéa et L. 642-5 du code de commerce, auxquels L. 1233-60\n" +
+        "renvoie, ne sont dans aucun corpus lu par l'application. Ils sont nommés tels\n" +
+        "que le texte lu les nomme, et ni reproduits ni paraphrasés. C'est là que se\n" +
+        "trouvent les conditions de l'ordonnance et de l'information : vérifiez-les à\n" +
+        "la source.\n" +
+        "\n" +
+        "Ce qui se joue : sans ordonnance, la notification est dépourvue de fondement.\n" +
+        "Et « l'employeur, l'administrateur ou le liquidateur ne peut procéder, sous\n" +
+        "peine d'irrégularité, à la rupture des contrats de travail avant la\n" +
+        "notification de la décision favorable de validation ou d'homologation »\n" +
+        "(L. 1233-58, II).");
+      return L.join("\n");
+    });
+
+  doc("CTL-PCO-03",
+    "Le calendrier de notification calé sur la fenêtre de garantie des créances",
+    "Le calcul de la fenêtre de quinze ou vingt et un jours ouverte par le " +
+    "jugement de liquidation, le tableau de contrôle date par date, et — si la " +
+    "fenêtre est expirée — l'état des créances qui ne seraient pas garanties, à " +
+    "établir avec le liquidateur avant toute notification.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var d0 = aujourd(ctx);
+      var type = txt(f.typeProcedure), dJug = f.dateJugement, dNot = f.dateNotification;
+      var r = regime(f);
+      var pse = r ? !!r.pse : null;
+      var jours = pse === null ? null : (pse ? 21 : 15);
+      var e = ecart(dJug, dNot);
+      var horsFenetre = estDate(dJug) && estDate(dNot) && jours !== null && e !== null && e > jours;
+      var avant = e !== null && e < 0;
+
+      L = L.concat(entete(ctx, "Fenêtre de garantie des créances de rupture",
+        "article L. 3253-8 du code du travail"));
+
+      if (horsFenetre || avant) {
+        var quoi3 = [];
+        if (avant) {
+          quoi3.push("La notification est datée du " + jour(dNot) + ", ANTÉRIEURE au jugement");
+          quoi3.push("de liquidation du " + jour(dJug) + ".");
+          quoi3.push("");
+          quoi3.push("La fenêtre de garantie court à compter du jugement : une rupture");
+          quoi3.push("notifiée avant lui n'en relève pas.");
+        } else {
+          quoi3.push("Jugement de liquidation du " + jour(dJug) + ", notification prévue le");
+          quoi3.push(jour(dNot) + ", soit " + e + " jours.");
+          quoi3.push("");
+          quoi3.push("L. 3253-8, 2° c) : l'assurance couvre « les créances résultant de la");
+          quoi3.push("rupture des contrats de travail intervenant : […] c) Dans les quinze");
+          quoi3.push("jours, ou vingt et un jours lorsqu'un plan de sauvegarde de l'emploi est");
+          quoi3.push("élaboré, suivant le jugement de liquidation ».");
+          quoi3.push("");
+          quoi3.push("La fenêtre applicable est de " + jours + " jours et expire le " +
+            jourPlus(dJug, jours) + ".");
+          quoi3.push("Hors d'elle, les créances de rupture ne sont pas garanties.");
+        }
+        irrattrapable(L, quoi3,
+          "Une date de notification ne se change pas rétroactivement, et n'antidatez " +
+          "rien : les créances non garanties resteraient à la charge de la procédure, " +
+          "et l'antidate ajouterait un faux à une difficulté financière. La partie V " +
+          "chiffre ce qui est en jeu.");
+      }
+
+      modeEmploi(L, [
+        "Ce document ne parle pas de régularité de la procédure : il parle d'argent,",
+        "et de qui le paie.",
+        "",
+        "La garantie couvre les créances de rupture intervenant dans une fenêtre qui",
+        "s'ouvre au jugement de liquidation et dure quinze jours — vingt et un lorsqu'un",
+        "plan de sauvegarde de l'emploi est élaboré. Hors de cette fenêtre, indemnités",
+        "et préavis restent à la charge de la procédure, et les salariés ne sont pas",
+        "payés par la garantie.",
+        "",
+        "Deux conséquences pratiques, et elles tirent en sens contraire : il ne faut",
+        "pas notifier trop tard, et il ne faut pas notifier sans avoir accompli ce qui",
+        "doit précéder — ordonnance du juge-commissaire, information de",
+        "l'administration, consultation. Le calendrier est étroit ; il n'est pas",
+        "facultatif.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. Le texte");
+
+      L.push("L. 3253-8, 2° : l'assurance couvre « les créances résultant de la rupture des");
+      L.push("contrats de travail intervenant : a) Pendant la période d'observation ;");
+      L.push("b) Dans le mois suivant le jugement qui arrête le plan de sauvegarde, de");
+      L.push("redressement ou de cession ; c) DANS LES QUINZE JOURS, OU VINGT ET UN JOURS");
+      L.push("LORSQU'UN PLAN DE SAUVEGARDE DE L'EMPLOI EST ÉLABORÉ, SUIVANT LE JUGEMENT DE");
+      L.push("LIQUIDATION ; d) Pendant le maintien provisoire de l'activité autorisé par le");
+      L.push("jugement de liquidation judiciaire et dans les quinze jours, ou vingt et un");
+      L.push("jours lorsqu'un plan de sauvegarde de l'emploi est élaboré, suivant la fin de");
+      L.push("ce maintien de l'activité ».");
+      L.push("");
+      L.push("LE d) EST AUSSI IMPORTANT QUE LE c). Si le jugement de liquidation a autorisé");
+      L.push("un maintien provisoire de l'activité, la fenêtre ne court pas du jugement");
+      L.push("mais de la FIN de ce maintien. Vérifiez le dispositif du jugement avant de");
+      L.push("calculer quoi que ce soit :");
+      L.push("");
+      L.push("  Maintien provisoire de l'activité autorisé ? ☐ oui, jusqu'au [  ]  ☐ non");
+      L.push("  Point de départ retenu : ☐ le jugement (c)  ☐ la fin du maintien (d)");
+      L.push("");
+      L.push("Le même article couvre aussi, au 4°, « les mesures d'accompagnement résultant");
+      L.push("d'un plan de sauvegarde de l'emploi déterminé par un accord collectif");
+      L.push("majoritaire ou par un document élaboré par l'employeur, conformément aux");
+      L.push("articles L. 1233-24-1 à L. 1233-24-4, dès lors qu'il a été validé ou homologué");
+      L.push("dans les conditions prévues à l'article L. 1233-58 avant ou après l'ouverture");
+      L.push("de la procédure de redressement ou de liquidation judiciaire ».");
+      L.push("");
+      L.push("Et il précise que « la garantie des sommes et créances mentionnées aux 1°, 2°");
+      L.push("et 5° inclut les cotisations et contributions sociales et salariales d'origine");
+      L.push("légale, ou d'origine conventionnelle imposée par la loi, ainsi que la retenue");
+      L.push("à la source prévue à l'article 204 A du code général des impôts ».");
+      L.push("");
+
+      titre(L, "II. Le calcul de votre fenêtre");
+
+      if (type && type !== "liquidation") {
+        L.push("La procédure déclarée est une " + (PROC[type] || type) + ". La fenêtre de");
+        L.push("quinze ou vingt et un jours du c) vise les ruptures suivant le JUGEMENT DE");
+        L.push("LIQUIDATION : elle ne s'applique pas en l'état.");
+        L.push("");
+        L.push("Les autres branches du 2° peuvent en revanche jouer : les créances de");
+        L.push("rupture intervenant « pendant la période d'observation » (a) ou « dans le");
+        L.push("mois suivant le jugement qui arrête le plan de sauvegarde, de redressement");
+        L.push("ou de cession » (b). Faites vérifier laquelle s'applique à votre situation.");
+        L.push("");
+      }
+      tableau(L, ["Élément", "Valeur"], [
+        ["Nature de la procédure", type ? (PROC[type] || type) : "[non renseignée]"],
+        ["Date du jugement de liquidation", estDate(dJug) ? jour(dJug) : "[non renseignée]"],
+        ["Un plan de sauvegarde de l'emploi est-il élaboré ?",
+          pse === null ? "[le moteur du module n'est pas chargé]" : (pse ? "oui" : "non")],
+        ["Durée de la fenêtre", jours === null ? "[15 jours, ou 21 avec plan]" : jours + " jours"],
+        ["Dernier jour de la fenêtre",
+          (estDate(dJug) && jours !== null) ? jourPlus(dJug, jours) : "[à calculer]"],
+        ["Notification envisagée", estDate(dNot) ? jour(dNot) : "[non renseignée]"],
+        ["Écart jugement → notification", e === null ? "[non calculable]" : e + " jours"],
+        ["Dans la fenêtre ?", (e === null || jours === null) ? "[  ]"
+          : (e < 0 ? "NON — antérieure au jugement" : e <= jours ? "oui" : "NON — hors fenêtre")],
+      ]);
+      L.push("");
+      if (!estDate(dJug) || !estDate(dNot)) {
+        L.push("  La date du jugement de liquidation ou celle de la notification n'est pas");
+        L.push("  renseignée : la fenêtre ne peut pas être vérifiée. Ce sont deux dates, et");
+        L.push("  elles conditionnent le paiement des salariés.");
+        L.push("");
+      }
+      if (pse === null) {
+        L.push("  Le moteur du module n'est pas chargé : le document ne tranche pas entre");
+        L.push("  quinze et vingt et un jours. Reportez-vous au rapport d'audit, qui a dit");
+        L.push("  si un plan est dû.");
+        L.push("");
+        if (estDate(dJug)) {
+          L.push("  Repères : fenêtre de quinze jours jusqu'au " + jourPlus(dJug, 15) + " ;");
+          L.push("  fenêtre de vingt et un jours jusqu'au " + jourPlus(dJug, 21) + ".");
+          L.push("");
+        }
+      }
+
+      titre(L, "III. Le tableau de contrôle avant notification");
+
+      L.push("Chaque acte préalable doit tenir DANS la fenêtre, avec la notification.");
+      L.push("C'est ce qui rend le calendrier de la liquidation si serré.");
+      L.push("");
+      tableau(L, ["Acte", "Fondement", "Prévu le", "Dans la fenêtre ?"], [
+        ["Jugement de liquidation", "—", estDate(dJug) ? jour(dJug) : "[  ]", "point de départ"],
+        ["Requête et ordonnance du juge-commissaire", "code de commerce (non lu ici)",
+          "[  ]", "☐"],
+        ["Information de l'autorité administrative", "L. 1233-60", "[  ]", "☐"],
+        ["Consultation du comité", "L. 1233-58, I", "[  ]", "☐"],
+        ["Demande de validation ou d'homologation", "D. 1233-14", "[  ]", "☐"],
+        ["Décision de l'administration (4 jours en liquidation)", "L. 1233-58, II", "[  ]", "☐"],
+        ["NOTIFICATION DES LICENCIEMENTS", "L. 1233-58, II",
+          estDate(dNot) ? jour(dNot) : "[  ]", "☐"],
+        ["Dernier jour de la fenêtre", "L. 3253-8, 2° c",
+          (estDate(dJug) && jours !== null) ? jourPlus(dJug, jours) : "[  ]", "—"],
+      ]);
+      L.push("");
+      L.push("  Rappel utile : L. 1233-59 dispose que « les délais prévus à l'article");
+      L.push("  L. 1233-15 pour l'envoi des lettres de licenciement prononcé pour un motif");
+      L.push("  économique ne sont pas applicables en cas de redressement ou de liquidation");
+      L.push("  judiciaire ». Le délai de sept jours ouvrables après l'entretien préalable");
+      L.push("  ne retient donc pas l'envoi ici.");
+      L.push("");
+      L.push("  Mais l'article L. 1233-58, II, le retient : la rupture ne peut intervenir");
+      L.push("  « avant la notification de la décision favorable de validation ou");
+      L.push("  d'homologation, ou l'expiration des délais mentionnés au quatrième alinéa »");
+      L.push("  — quatre jours à compter de la dernière réunion du comité en liquidation.");
+      L.push("  Les deux contraintes se cumulent : il faut être après la décision ET dans");
+      L.push("  la fenêtre.");
+      L.push("");
+
+      titre(L, "IV. Si la fenêtre n'est pas encore expirée");
+
+      L.push("Avancez la notification pour y entrer, à condition que tout ce qui doit la");
+      L.push("précéder soit accompli.");
+      L.push("");
+      L.push("  Jours restants avant l'expiration : " +
+        ((estDate(dJug) && jours !== null)
+          ? (function () {
+              var restant = ecart(iso0(d0), plusJoursISO(dJug, jours));
+              return restant === null ? "[  ]" : String(restant) + " jours";
+            })()
+          : "[  ]"));
+      L.push("");
+      L.push("  ☐ Ordonnance du juge-commissaire obtenue");
+      L.push("  ☐ Autorité administrative informée (L. 1233-60)");
+      L.push("  ☐ Comité consulté selon le renvoi applicable (L. 1233-58, I)");
+      L.push("  ☐ Décision de validation ou d'homologation notifiée, ou délai expiré");
+      L.push("  ☐ Autorisations de l'inspecteur du travail obtenues pour les salariés");
+      L.push("    protégés — la protection joue « y compris lors d'une procédure de");
+      L.push("    sauvegarde, de redressement ou de liquidation judiciaire » (L. 2411-1,");
+      L.push("    lu au corpus du module « comité social et économique »)");
+      L.push("  ☐ Date d'expédition retenue : [  ], dans la fenêtre");
+      L.push("");
+      L.push("  [Si une case reste vide, ne forcez pas l'envoi pour tenir la fenêtre. Une");
+      L.push("  créance non garantie se chiffre ; une rupture irrégulière se plaide, et");
+      L.push("  coûte davantage.]");
+      L.push("");
+
+      titre(L, "V. Si la fenêtre est expirée");
+
+      L.push("N'antidatez rien. Chiffrez, avec le liquidateur, ce qui ne serait pas");
+      L.push("garanti — c'est la seule décision utile à ce stade, et elle se prend sur des");
+      L.push("montants, non sur une impression.");
+      L.push("");
+      tableau(L, ["Salarié", "Ancienneté", "Indemnité de licenciement",
+        "Préavis", "Congés payés", "Total non garanti"],
+        [["[nom ou matricule]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["[nom ou matricule]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["TOTAL", "", "[  ]", "[  ]", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("  [L'indemnité de licenciement est due au salarié titulaire d'un contrat à");
+      L.push("  durée indéterminée « licencié alors qu'il compte 8 mois d'ancienneté");
+      L.push("  ininterrompus au service du même employeur », sauf faute grave, et ses");
+      L.push("  modalités de calcul « sont fonction de la rémunération brute dont le salarié");
+      L.push("  bénéficiait antérieurement à la rupture », déterminées par voie");
+      L.push("  réglementaire (L. 1234-9). Le module du licenciement économique calcule");
+      L.push("  cette indemnité ; reportez ici ses montants plutôt que de les recalculer.]");
+      L.push("");
+      L.push("  Ressources disponibles de la procédure : [montant, à la date du  ]");
+      L.push("  Position du liquidateur : [  ]");
+      L.push("  Décision prise le [DATE], par [nom et qualité].");
+      L.push("");
+      L.push("  [Informez les salariés concernés de la situation. Une créance non garantie");
+      L.push("  découverte au moment du paiement fait plus de dégâts qu'une créance non");
+      L.push("  garantie annoncée.]");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + ".");
+      L.push("");
+      if (estDate(dJug) && jours !== null) {
+        L.push("Jugement de liquidation : " + jour(dJug) + ".");
+        L.push("Dernier jour de la fenêtre de " + jours + " jours : " + jourPlus(dJug, jours) + ".");
+        L.push("");
+        L.push("  Repères intermédiaires :");
+        L.push("    Ordonnance et information de l'administration, au plus tard le " +
+          jourPlus(dJug, Math.max(1, Math.floor(jours / 3))));
+        L.push("    Dernière réunion du comité, au plus tard le " +
+          jourPlus(dJug, Math.max(2, jours - 6)));
+        L.push("    Dépôt de la demande, au plus tard le lendemain de cette réunion");
+        L.push("    (D. 1233-14)");
+        L.push("    Décision de l'administration, quatre jours plus tard (L. 1233-58, II)");
+        L.push("    Notification, avant le " + jourPlus(dJug, jours));
+        L.push("");
+        L.push("  [Ces repères ne sont pas des règles : ce sont des jalons pour tenir dans");
+        L.push("  la fenêtre. Seuls le premier et le dernier jour sont commandés par un");
+        L.push("  texte ; ce qu'il y a entre les deux relève de votre organisation.]");
+        L.push("");
+      } else if (estDate(dJug)) {
+        L.push("Jugement de liquidation : " + jour(dJug) + ". La fenêtre expire le " +
+          jourPlus(dJug, 15));
+        L.push("si aucun plan de sauvegarde de l'emploi n'est élaboré, le " +
+          jourPlus(dJug, 21) + " s'il l'est.");
+        L.push("");
+      } else {
+        L.push("Aucune date de jugement de liquidation n'est portée par la fiche : la");
+        L.push("fenêtre ne peut pas être calculée. C'est la première donnée à renseigner,");
+        L.push("et elle se lit en tête du jugement.");
+        L.push("");
+      }
+      L.push("Refaites ce calcul si le maintien provisoire de l'activité se prolonge : le");
+      L.push("d) de l'article fait alors courir la fenêtre de la FIN de ce maintien, et");
+      L.push("non du jugement.");
+
+      pied(L, ["L. 1233-15", "L. 1233-58", "L. 1233-59", "L. 1233-60", "L. 1234-9",
+        "L. 3253-8", "D. 1233-14"],
+        "L'article L. 3253-6, que L. 3253-8 mentionne pour désigner l'assurance, et\n" +
+        "l'article 204 A du code général des impôts, qu'il cite pour la retenue à la\n" +
+        "source, ne sont pas au corpus du module : ils sont nommés, non reproduits.\n" +
+        "\n" +
+        "Ce qui se joue : hors de la fenêtre, les créances résultant de la rupture ne\n" +
+        "sont pas couvertes par l'assurance de l'article L. 3253-8. Indemnités et\n" +
+        "préavis restent à la charge de la procédure, et les salariés ne sont pas\n" +
+        "payés par la garantie. Ce n'est pas une irrégularité de procédure : c'est une\n" +
+        "charge.");
+      return L.join("\n");
+    });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LA RECHERCHE D'UN REPRENEUR
+     ══════════════════════════════════════════════════════════════════════ */
+
+  doc("CTL-REP-01",
+    "Le dossier de recherche de repreneur : mandat, journal des candidats, rapport au comité",
+    "Le mandat écrit et daté, le journal des contacts et des offres avec les " +
+    "motifs d'écartement, la consultation du comité sur l'offre à laquelle " +
+    "l'entreprise souhaite donner suite, et le rapport de l'article L. 1233-57-20 " +
+    "à présenter avant la fin de la procédure d'information et de consultation.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var d0 = aujourd(ctx), eff = effectifDe(ctx);
+      var ferme = f.fermetureEtablissement;
+      var rech = txt(f.rechercheRepreneur);
+      var rs = reunions(f), dr = derniereReunion(f);
+      var vise = eff !== null && eff >= 1000;
+
+      L = L.concat(entete(ctx, "Dossier de recherche d'un repreneur",
+        "articles L. 1233-57-9 à L. 1233-57-14, L. 1233-57-19 et L. 1233-57-20 du code du travail"));
+
+      modeEmploi(L, [
+        "Une précision qui commande la lecture de tout ce document : les articles",
+        "L. 1233-57-9 à L. 1233-57-16, qui portent l'obligation elle-même, NE SONT",
+        "DANS AUCUN CORPUS LU PAR L'APPLICATION. Ils sont nommés — les textes lus les",
+        "nomment —, mais ni reproduits, ni résumés, ni paraphrasés. Le contenu exact",
+        "de l'obligation, ses conditions et ses exceptions se vérifient à la source.",
+        "",
+        "Ce que l'application a lu, en revanche, ce sont les deux articles qui",
+        "referment la procédure : L. 1233-57-19, sur la consultation du comité",
+        "relative à une offre de reprise, et L. 1233-57-20, sur le rapport à",
+        "présenter avant la fin de la procédure d'information et de consultation. Ces",
+        "deux-là sont reproduits mot pour mot ci-dessous, et ce sont eux que ce",
+        "document sert à exécuter.",
+        "",
+        "Le reste — mandat, journal, motifs d'écartement — n'est pas commandé article",
+        "par article : c'est ce sans quoi le rapport du L. 1233-57-20 ne pourra pas",
+        "être écrit. On ne rend pas compte, à la fin, d'une recherche dont on n'a rien",
+        "consigné au fil de l'eau.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. À qui l'obligation s'adresse");
+
+      tableau(L, ["Condition", "Ce que la fiche porte"], [
+        ["Effectif d'au moins mille salariés",
+          eff === null ? "[non renseigné]" : eff + " salariés — " + (vise ? "condition remplie" : "en deçà du seuil")],
+        ["Fermeture d'un établissement envisagée",
+          ferme === true ? "oui" : ferme === false ? "non" : "[non renseignée]"],
+        ["Recherche engagée, telle que déclarée", rech ? "« " + rech + " »" : "[rien de déclaré]"],
+      ]);
+      L.push("");
+      if (eff === null) {
+        L.push("  L'effectif n'est pas renseigné : l'obligation ne peut pas être vérifiée.");
+        L.push("");
+      } else if (!vise) {
+        L.push("  L'effectif est inférieur à mille salariés. L'obligation de recherche d'un");
+        L.push("  repreneur ne vise que les entreprises d'au moins mille salariés : elle ne");
+        L.push("  s'applique pas en l'état.");
+        L.push("");
+        L.push("  Ce document reste utile à deux titres. D'abord parce que l'effectif du");
+        L.push("  groupe peut compter : vérifiez le périmètre exact que les articles");
+        L.push("  L. 1233-57-9 et suivants retiennent — l'application ne les a pas lus et ne");
+        L.push("  le dit donc pas. Ensuite parce qu'une recherche de repreneur conduite");
+        L.push("  volontairement se documente de la même manière, et sert alors la");
+        L.push("  démonstration des mesures d'évitement du plan.");
+        L.push("");
+      } else if (ferme !== true) {
+        L.push("  L'effectif atteint mille salariés, mais la fermeture d'un établissement");
+        L.push("  n'est pas déclarée" + (ferme === false ? "." : " — la donnée manque.") + " L'obligation est");
+        L.push("  attachée au projet de fermeture : renseignez cette donnée avant de");
+        L.push("  conclure, et relancez l'audit.");
+        L.push("");
+      } else {
+        L.push("  Effectif d'au moins mille salariés et fermeture d'établissement envisagée :");
+        L.push("  l'obligation est en jeu. Le respect des articles L. 1233-57-9 à");
+        L.push("  L. 1233-57-16 est vérifié par l'autorité administrative — voyez le II.");
+        L.push("");
+      }
+
+      titre(L, "II. Ce que l'administration vérifie");
+
+      L.push("Les deux textes du contrôle administratif citent expressément ces articles.");
+      L.push("");
+      L.push("L. 1233-57-2, 4° — pour la validation d'un accord : l'autorité administrative");
+      L.push("s'assure de « la mise en œuvre effective, le cas échéant, des obligations");
+      L.push("prévues aux articles L. 1233-57-9 à L. 1233-57-16, L. 1233-57-19 et");
+      L.push("L. 1233-57-20 ».");
+      L.push("");
+      L.push("L. 1233-57-3 — pour l'homologation d'un document unilatéral : elle vérifie");
+      L.push("« le respect, le cas échéant, des obligations prévues aux articles");
+      L.push("L. 1233-57-9 à L. 1233-57-16, L. 1233-57-19 et L. 1233-57-20 ».");
+      L.push("");
+      L.push("Deux mots à retenir de ces deux phrases. « MISE EN ŒUVRE EFFECTIVE » : ce");
+      L.push("n'est pas l'existence d'un mandat qui est vérifiée, c'est ce qui a été fait.");
+      L.push("Et « LE CAS ÉCHÉANT » : l'administration vérifie d'abord si l'obligation");
+      L.push("s'appliquait — d'où l'intérêt de documenter aussi le cas où elle ne");
+      L.push("s'appliquait pas.");
+      L.push("");
+      L.push("  [Ce que ces obligations contiennent exactement, l'application ne le dit");
+      L.push("  pas : elle n'a pas lu les articles L. 1233-57-9 à L. 1233-57-16. Le mandat,");
+      L.push("  le journal et les motifs d'écartement organisés ci-dessous sont ce qui");
+      L.push("  permet d'établir une mise en œuvre effective, quelle qu'en soit la");
+      L.push("  définition précise. Faites vérifier cette définition à la source.]");
+      L.push("");
+
+      titre(L, "III. Le mandat de recherche");
+
+      L.push("Écrit, daté, et donné DÈS l'information du comité sur le projet de fermeture.");
+      L.push("La date du mandat est la première chose que l'on regardera : un mandat daté");
+      L.push("de la veille du rapport final dit à lui seul que la recherche n'a pas eu");
+      L.push("lieu.");
+      L.push("");
+      L.push("  Mandataire ....................... [nom, qualité, coordonnées]");
+      L.push("  Date du mandat ................... [  ]");
+      L.push("  Date d'information du comité sur le projet de fermeture ..... " +
+        (estDate(f.dateInfoCSE) ? jour(f.dateInfoCSE) : "[  ]"));
+      L.push("  Périmètre de la recherche ........ [établissement(s) concerné(s), activités,");
+      L.push("  actifs, effectif repris envisagé]");
+      L.push("  Moyens mis à disposition ......... [budget, accès aux données, personnes");
+      L.push("  référentes dans l'entreprise]");
+      L.push("  Durée du mandat .................. [du ... au ...]");
+      L.push("  Obligation de compte rendu ....... [périodicité, forme]");
+      L.push("  Confidentialité .................. [modalités]");
+      L.push("");
+      L.push("  [Si la recherche est conduite en interne, sans mandataire extérieur,");
+      L.push("  écrivez-le et désignez nominativement qui en est chargé. « L'entreprise a");
+      L.push("  cherché » n'est imputable à personne, et donc invérifiable.]");
+      L.push("");
+      if (rech) {
+        L.push("Ce que la fiche porte à ce titre : « " + rech + " »");
+        L.push("");
+        L.push("  Reprenez cette mention et complétez-la avec les rubriques ci-dessus : une");
+        L.push("  déclaration n'est pas un mandat.");
+        L.push("");
+      } else if (vise && ferme === true) {
+        L.push("La fiche ne porte AUCUNE indication sur la recherche de repreneur : ni date");
+        L.push("d'engagement, ni mandataire, ni candidat, ni motif d'écartement. C'est ce que");
+        L.push("le contrôle a relevé.");
+        L.push("");
+      }
+
+      titre(L, "IV. Le journal des contacts et des offres");
+
+      L.push("Une ligne par contact, tenue au fil de l'eau. C'est la pièce la plus");
+      L.push("laborieuse et la plus décisive : elle transforme une recherche en recherche");
+      L.push("prouvée.");
+      L.push("");
+      tableau(L, ["N°", "Candidat", "Premier contact", "Nature du contact",
+        "Suite donnée", "Offre reçue le", "Motif d'écartement"],
+        [["1", "[nom ou raison sociale]", "[  ]", "[courrier / entretien / visite]",
+          "[  ]", "[  ]", "[  ]"],
+         ["2", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["3", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("Pour chaque offre reçue, une fiche distincte :");
+      L.push("");
+      L.push("  Auteur de l'offre ................ [  ]");
+      L.push("  Date de réception ................ [  ]");
+      L.push("  Périmètre repris ................. [activités, actifs, sites]");
+      L.push("  Emplois repris ................... [nombre, catégories]");
+      L.push("  Prix et conditions financières ... [  ]");
+      L.push("  Conditions suspensives ........... [  ]");
+      L.push("  Capacité de l'auteur à garantir la pérennité de l'activité et de");
+      L.push("  l'emploi de l'établissement ...... [éléments d'appréciation]");
+      L.push("  Suite donnée ..................... ☐ retenue  ☐ écartée");
+      L.push("  Motif, si écartée ................ [  ]");
+      L.push("");
+      L.push("  [La formule « capacité de l'auteur de l'offre à garantir la pérennité de");
+      L.push("  l'activité et de l'emploi de l'établissement » est celle de l'article");
+      L.push("  L. 1233-57-19 : c'est sur ce terrain que le comité est appelé à donner son");
+      L.push("  avis, et c'est donc sur ce terrain que l'offre doit être documentée.]");
+      L.push("");
+      L.push("  Journal tenu par [nom et qualité], arrêté au [DATE].");
+      L.push("");
+
+      titre(L, "V. La consultation du comité sur l'offre retenue");
+
+      L.push("L. 1233-57-19 : « L'employeur consulte le comité social et économique sur");
+      L.push("toute offre de reprise à laquelle il souhaite donner suite et indique les");
+      L.push("raisons qui le conduisent à accepter cette offre, notamment au regard de la");
+      L.push("capacité de l'auteur de l'offre à garantir la pérennité de l'activité et de");
+      L.push("l'emploi de l'établissement. Le comité social et économique émet un avis sur");
+      L.push("cette offre dans un délai fixé en application de l'article L. 2323-3. Lorsque");
+      L.push("la procédure est aménagée en application de l'article L. 1233-24-2 pour");
+      L.push("favoriser un projet de transfert d'une ou de plusieurs entités économiques");
+      L.push("mentionné à l'article L. 1233-61, l'employeur consulte le comité social et");
+      L.push("économique sur l'offre de reprise dans le délai fixé par l'accord collectif");
+      L.push("mentionné à l'article L. 1233-24-2. »");
+      L.push("");
+      L.push("L'article L. 2323-3, qui fixe le délai de droit commun, n'est pas au corpus du");
+      L.push("module : il est nommé, non reproduit. Vérifiez-y le délai applicable.");
+      L.push("");
+      L.push(nom(ctx));
+      L.push(adresse(ctx));
+      L.push("");
+      L.push("Aux membres de la délégation du personnel");
+      L.push("du comité social et économique");
+      L.push("");
+      L.push(ville(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Objet : consultation sur une offre de reprise");
+      L.push("");
+      L.push("Mesdames, Messieurs,");
+      L.push("");
+      L.push("En application de l'article L. 1233-57-19 du code du travail, je vous consulte");
+      L.push("sur l'offre de reprise présentée par [auteur de l'offre], reçue le [DATE], à");
+      L.push("laquelle l'entreprise souhaite donner suite.");
+      L.push("");
+      L.push("Vous trouverez ci-joint l'offre et ses annexes.");
+      L.push("");
+      L.push("Les raisons qui conduisent l'entreprise à accepter cette offre sont les");
+      L.push("suivantes, notamment au regard de la capacité de son auteur à garantir la");
+      L.push("pérennité de l'activité et de l'emploi de l'établissement : [exposer les");
+      L.push("raisons — nombre d'emplois repris, périmètre d'activité maintenu, moyens");
+      L.push("financiers de l'auteur, projet industriel, engagements pris].");
+      L.push("");
+      L.push("La consultation est ouverte à compter de ce jour ; vous êtes invités à émettre");
+      L.push("votre avis lors de la réunion du [DATE].");
+      L.push("");
+      L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération");
+      L.push("distinguée.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("Pièces jointes : offre de reprise et annexes · note exposant les raisons de");
+      L.push("l'acceptation · journal des contacts et des offres");
+      L.push("");
+
+      titre(L, "VI. Le rapport à présenter avant la fin de la consultation");
+
+      L.push("L. 1233-57-20 : « Avant la fin de la procédure d'information et de");
+      L.push("consultation prévue à l'article L. 1233-30, si aucune offre de reprise n'a été");
+      L.push("reçue ou si l'employeur n'a souhaité donner suite à aucune des offres,");
+      L.push("celui-ci réunit le comité social et économique et lui présente un rapport, qui");
+      L.push("est communiqué à l'autorité administrative. Ce rapport indique : 1° Les");
+      L.push("actions engagées pour rechercher un repreneur ; 2° Les offres de reprise qui");
+      L.push("ont été reçues ainsi que leurs caractéristiques ; 3° Les motifs qui l'ont");
+      L.push("conduit, le cas échéant, à refuser la cession de l'établissement. »");
+      L.push("");
+      L.push("Trois obligations dans une phrase, et la troisième est celle qu'on oublie :");
+      L.push("réunir le comité, lui présenter le rapport, et COMMUNIQUER LE RAPPORT À");
+      L.push("L'AUTORITÉ ADMINISTRATIVE.");
+      L.push("");
+      L.push("Et un moment : AVANT LA FIN de la procédure d'information et de consultation");
+      L.push("prévue à l'article L. 1233-30. Un rapport présenté après l'avis du comité");
+      L.push("n'est pas présenté « avant la fin » de la procédure.");
+      L.push("");
+      L.push("« RAPPORT SUR LA RECHERCHE D'UN REPRENEUR");
+      L.push("Article L. 1233-57-20 du code du travail");
+      L.push("");
+      L.push(nom(ctx) + " — établissement de [  ]");
+      L.push("Présenté au comité social et économique réuni le [DATE]");
+      L.push("");
+      L.push("1° LES ACTIONS ENGAGÉES POUR RECHERCHER UN REPRENEUR");
+      L.push("[Reprendre le mandat et le journal du IV : date d'engagement de la recherche,");
+      L.push("mandataire, périmètre, nombre de candidats contactés, nature et dates des");
+      L.push("contacts, moyens engagés. Des dates et des nombres, non des adjectifs.]");
+      L.push("");
+      L.push("2° LES OFFRES DE REPRISE REÇUES ET LEURS CARACTÉRISTIQUES");
+      L.push("");
+      tableau(L, ["Auteur", "Reçue le", "Périmètre", "Emplois repris", "Conditions"],
+        [["[  ]", "[  ]", "[  ]", "[  ]", "[  ]"],
+         ["[  ]", "[  ]", "[  ]", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("[Si aucune offre n'a été reçue, l'écrire en toutes lettres : « aucune offre de");
+      L.push("reprise n'a été reçue ». Le 2° doit être renseigné même par la négative.]");
+      L.push("");
+      L.push("3° LES MOTIFS DU REFUS DE CESSION, LE CAS ÉCHÉANT");
+      L.push("[Pour chaque offre écartée, le motif : capacité de l'auteur, périmètre");
+      L.push("insuffisant, conditions financières, conditions suspensives non levées,");
+      L.push("absence de projet industriel. Un motif par offre, et rattaché à des éléments.]");
+      L.push("");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("");
+      L.push("  Présenté au comité le [DATE] — porté au procès-verbal : ☐");
+      L.push("  Communiqué à l'autorité administrative le [DATE] — accusé conservé : ☐");
+      L.push("");
+
+      titre(L, "VII. Le suivi de l'information du comité au fil des réunions");
+
+      L.push("Le rapport final ne suffit pas : le comité est informé du déroulement de la");
+      L.push("recherche au fur et à mesure, et cette information se consigne au");
+      L.push("procès-verbal de chaque réunion. C'est ce qui établira, plus tard, que la");
+      L.push("recherche a duré autant que la procédure.");
+      L.push("");
+      tableau(L, ["Réunion du", "Point présenté sur la recherche", "Consigné au PV"],
+        rs.length ? rs.map(function (x) {
+          return [jour(x), "[état de la recherche à cette date]", "☐"];
+        }) : [["[  ]", "[  ]", "☐"], ["[  ]", "[  ]", "☐"]]);
+      L.push("");
+      L.push("  Mention type à porter au procès-verbal : « Le président rend compte de");
+      L.push("  l'état de la recherche d'un repreneur : [nombre] candidats contactés depuis");
+      L.push("  la précédente réunion, [nombre] offres reçues, [nombre] écartées pour les");
+      L.push("  motifs suivants : [  ]. »");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous datez le mandat et vous ouvrez le");
+      L.push("journal. La recherche s'engage DÈS l'information du comité sur le projet de");
+      L.push("fermeture, et non après : c'est la date du mandat qui le prouvera.");
+      L.push("");
+      if (estDate(f.dateInfoCSE)) {
+        L.push("Votre comité a été informé le " + jour(f.dateInfoCSE) + ". Un mandat daté");
+        L.push("d'après cette date se défend d'autant plus mal qu'il est postérieur.");
+        L.push("");
+      }
+      if (rs.length) {
+        L.push("Vos réunions : " + rs.map(function (x) { return jour(x); }).join(" · ") + ".");
+        L.push("À chacune, un point sur la recherche, consigné au procès-verbal.");
+        L.push("");
+      }
+      if (dr) {
+        L.push("Le rapport de l'article L. 1233-57-20 se présente AVANT LA FIN de la");
+        L.push("procédure d'information et de consultation. Votre dernière réunion portée par");
+        L.push("la fiche est celle du " + jour(dr) + " : le rapport doit être présenté au plus");
+        L.push("tard à cette réunion, et non après.");
+        L.push("");
+        L.push("Prévoyez de le communiquer à l'autorité administrative dans la foulée, le " +
+          jourPlus(dr, 1) + " au plus tard — avant, en tout cas, le dépôt de la demande");
+        L.push("de validation ou d'homologation, puisque c'est elle qui vérifie le respect");
+        L.push("de cette obligation (L. 1233-57-2, 4° ; L. 1233-57-3).");
+        L.push("");
+      } else {
+        L.push("La fiche ne porte aucune date de réunion : le terme du rapport ne peut pas");
+        L.push("être calculé. Il se place avant la fin de la procédure d'information et de");
+        L.push("consultation prévue à l'article L. 1233-30.");
+        L.push("");
+      }
+      L.push("Une recherche engagée tard ne se rattrape pas en la prolongeant : elle se");
+      L.push("constate telle qu'elle a eu lieu. Ce qui se rattrape, c'est le compte rendu —");
+      L.push("à condition d'avoir consigné quelque chose à rendre.");
+
+      pied(L, ["L. 1233-30", "L. 1233-57-2", "L. 1233-57-3", "L. 1233-57-19",
+        "L. 1233-57-20", "L. 1233-24-2", "L. 1233-61"],
+        NON_LUS_57_9 + "\n" +
+        "\n" +
+        "L'article L. 2323-3, que L. 1233-57-19 cite pour le délai d'avis du comité,\n" +
+        "n'est pas au corpus du module : il est nommé, non reproduit.\n" +
+        "\n" +
+        "Ce qui se joue : l'autorité administrative vérifie « la mise en œuvre\n" +
+        "effective, le cas échéant, des obligations prévues aux articles L. 1233-57-9\n" +
+        "à L. 1233-57-16, L. 1233-57-19 et L. 1233-57-20 » (L. 1233-57-2, 4° ;\n" +
+        "L. 1233-57-3). Le refus de validation ou d'homologation est donc le premier\n" +
+        "risque, et le licenciement prononcé en l'absence de décision est nul\n" +
+        "(L. 1235-10).");
+      return L.join("\n");
+    });
+
   /* Le jour même en « AAAA-MM-JJ », pour comparer une date de la fiche à
      aujourd'hui sans repasser par une Date. */
   function iso0(d) {
     if (!(d instanceof Date) || isNaN(d.getTime())) return null;
     var m = d.getMonth() + 1, j = d.getDate();
     return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (j < 10 ? "0" : "") + j;
+  }
+  /* Une date de la fiche, décalée de n jours, rendue au même format : c'est ce
+     que « ecart » sait comparer. */
+  function plusJoursISO(s, n) {
+    var d = dISO(s);
+    return d ? iso0(dans(d, n)) : null;
   }
 
 })(typeof window !== "undefined" ? window : this);
