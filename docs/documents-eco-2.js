@@ -2090,4 +2090,622 @@
       return L.join("\n");
     });
 
+  /* ══════════════════════════════════════════════════════════════════════
+     SALARIÉS PROTÉGÉS ET SITUATIONS INDIVIDUELLES
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* La lecture du champ « autorisation », reprise à l'identique du contrôle
+     (moteur/economique/controles.js) : une case remplie n'est pas une
+     autorisation, elle peut porter un refus, une attente ou une mention
+     inintelligible. Deux lectures différentes du même champ, dans le rapport et
+     dans le document, se remarqueraient tout de suite. */
+  function sensAutorisation(s) {
+    if (s == null || s === "") return { sens: "absent" };
+    if (typeof s === "object") return { sens: s.sens || "absent", date: s.date };
+    var t = String(s);
+    var d = (t.match(/\d{4}-\d{2}-\d{2}/) || [])[0];
+    if (/refus|rejet|refusé/i.test(t)) return { sens: "refus", date: d };
+    if (/attente|en cours|instruction/i.test(t)) return { sens: "en attente", date: d };
+    if (d && /accord|autoris|accept/i.test(t)) return { sens: "accord", date: d };
+    if (d && t.trim() === d) return { sens: "accord", date: d };
+    return { sens: "illisible", date: d, brut: t };
+  }
+
+  doc("CTL-PRT-01",
+    "Les demandes d'autorisation de licencier les salariés protégés, et leur registre",
+    "Le recensement nominatif mandat par mandat, la demande d'autorisation à " +
+    "adresser à l'inspecteur du travail pour chacun, le registre de suivi des " +
+    "décisions et de leur antériorité par rapport à la notification, et la " +
+    "conduite à tenir en cas de refus.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var prot = liste(f.salariesProteges).map(function (x) {
+        var o = x || {};
+        return { nom: txt(o.nom), mandat: txt(o.mandat), a: sensAutorisation(o.autorisation) };
+      });
+      var dNot = f.dateNotification, d0 = aujourd(ctx);
+      var refus = prot.filter(function (x) { return x.a.sens === "refus"; });
+      var tardives = prot.filter(function (x) {
+        return x.a.date && estDate(dNot) && x.a.date > dNot;
+      });
+      var manquantes = prot.filter(function (x) {
+        return x.a.sens === "absent" || x.a.sens === "en attente";
+      });
+
+      L = L.concat(entete(ctx, "Salariés protégés — demandes d'autorisation et registre des décisions",
+        "articles L. 2411-1 et L. 2411-5 du code du travail"));
+
+      if (refus.length || tardives.length) {
+        var quoi = [];
+        if (refus.length) {
+          quoi.push("La fiche porte " + refus.length + " salarié(s) protégé(s) dont");
+          quoi.push("l'autorisation a été REFUSÉE : " +
+            refus.map(function (x) {
+              return cro(x.nom, "nom") + " (" + cro(x.mandat, "mandat") + ")";
+            }).join(", ") + ".");
+          quoi.push("");
+        }
+        if (tardives.length) {
+          quoi.push("La fiche porte " + tardives.length + " autorisation(s) datée(s) APRÈS la");
+          quoi.push("notification du " + jour(dNot) + " : " +
+            tardives.map(function (x) {
+              return cro(x.nom, "nom") + " — " + jour(x.a.date);
+            }).join(", ") + ".");
+          quoi.push("");
+        }
+        quoi.push("L'article L. 2411-5 dispose que « le licenciement d'un membre élu de la");
+        quoi.push("délégation du personnel du comité social et économique, titulaire ou");
+        quoi.push("suppléant ou d'un représentant syndical au comité social et économique, ne");
+        quoi.push("peut intervenir qu'APRÈS AUTORISATION de l'inspecteur du travail ».");
+        quoi.push("");
+        quoi.push("Une autorisation qui arrive après la lettre n'est pas une autorisation");
+        quoi.push("préalable : elle ne remplit pas la condition que le texte pose.");
+        irrattrapable(L, quoi,
+          "Ne réexpédiez rien et n'antidatez rien. Retirez du projet tout salarié dont " +
+          "l'autorisation a été refusée, consignez les faits au registre du V, et " +
+          "remettez le tout à votre conseil.");
+      }
+
+      modeEmploi(L, [
+        "Ce document ne dit pas comment se conduit l'instruction d'une demande",
+        "d'autorisation : l'application n'a pas lu à la source les articles qui la",
+        "règlent — forme et contenu de la demande, consultation préalable du comité",
+        "pour certains mandats, enquête contradictoire, délais d'instruction, recours",
+        "hiérarchique. Ils ne sont pas au corpus de ce module, et l'application",
+        "n'énonce pas ce qu'elle n'a pas lu. Faites vérifier ce point.",
+        "",
+        "Ce qu'il fait, en revanche, il le fait entièrement : il recense, il rédige la",
+        "demande, il tient le registre, et il DATE — parce que c'est la date qui se",
+        "discute. L'autorisation doit précéder la notification ; un registre qui",
+        "rapproche les deux dates, salarié par salarié, est la pièce la plus utile du",
+        "dossier.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. Qui est protégé, et ce que la protection exige");
+
+      L.push("Les deux articles ci-dessous sont le fondement du contrôle. Ils ne figurent");
+      L.push("pas au corpus du module « licenciement économique » : ils sont lus dans celui");
+      L.push("du module « comité social et économique » (moteur/cse/textes_cse.json),");
+      L.push("versions LEGIARTI000035652370 et LEGIARTI000035652360. Le dire ici n'est pas");
+      L.push("une précaution de style : c'est ce qui permet de vérifier laquelle des");
+      L.push("versions successives a été lue.");
+      L.push("");
+      L.push("L. 2411-1 : « Bénéficie de la protection contre le licenciement prévue par le");
+      L.push("présent chapitre, y compris lors d'une procédure de sauvegarde, de");
+      L.push("redressement ou de liquidation judiciaire, le salarié investi de l'un des");
+      L.push("mandats suivants : 1° Délégué syndical ; 2° Membre élu à la délégation du");
+      L.push("personnel du comité social et économique ; 3° Représentant syndical au comité");
+      L.push("social et économique ; 4° Représentant de proximité ; 5° Membre de la");
+      L.push("délégation du personnel du comité social et économique interentreprises ;");
+      L.push("6° Membre du groupe spécial de négociation et membre du comité d'entreprise");
+      L.push("européen ; 7° Membre du groupe spécial de négociation et représentant au");
+      L.push("comité de la société européenne ; 7° bis Membre du groupe spécial de");
+      L.push("négociation et représentant au comité de la société coopérative européenne ;");
+      L.push("7° ter Membre du groupe spécial de négociation et représentant au comité de");
+      L.push("la société issue de la fusion transfrontalière ; 8° Représentant du personnel");
+      L.push("d'une entreprise extérieure, désigné à la commission santé, sécurité et");
+      L.push("conditions de travail d'un établissement comprenant au moins une installation");
+      L.push("classée […] ; 9° Membre d'une commission paritaire d'hygiène, de sécurité et");
+      L.push("des conditions de travail en agriculture […] ; 10° Salarié mandaté […]. »");
+      L.push("");
+      L.push("Trois choses à retenir de ce seul article :");
+      L.push("  — la liste est plus longue que « les élus du comité » : le délégué syndical,");
+      L.push("    le représentant de proximité et le salarié mandaté y sont ;");
+      L.push("  — la protection joue « Y COMPRIS lors d'une procédure de sauvegarde, de");
+      L.push("    redressement ou de liquidation judiciaire » — le texte l'écrit, et");
+      L.push("    l'urgence d'une procédure collective n'en dispense pas ;");
+      L.push("  — les mentions abrégées ci-dessus par des points de suspension renvoient à");
+      L.push("    des articles d'autres codes que l'application n'a pas lus : vérifiez le");
+      L.push("    texte intégral si l'un de vos salariés relève des 8°, 9° ou 10°.");
+      L.push("");
+      L.push("L. 2411-5 : « Le licenciement d'un membre élu de la délégation du personnel du");
+      L.push("comité social et économique, titulaire ou suppléant ou d'un représentant");
+      L.push("syndical au comité social et économique, ne peut intervenir qu'après");
+      L.push("autorisation de l'inspecteur du travail. L'ancien membre élu de la délégation");
+      L.push("du personnel du comité social et économique ainsi que l'ancien représentant");
+      L.push("syndical qui, désigné depuis deux ans, n'est pas reconduit dans ses fonctions");
+      L.push("lors du renouvellement du comité bénéficient également de cette protection");
+      L.push("pendant les six premiers mois suivant l'expiration de leur mandat ou la");
+      L.push("disparition de l'institution. »");
+      L.push("");
+      L.push("LES ANCIENS ÉLUS SONT DANS LE TEXTE. C'est l'oubli le plus fréquent : un");
+      L.push("salarié dont le mandat s'est achevé il y a quatre mois, s'il était désigné");
+      L.push("depuis deux ans et n'a pas été reconduit, est encore protégé.");
+      L.push("");
+      L.push("Ce que le document n'énonce pas : l'application n'a pas lu l'article qui fixe");
+      L.push("la conséquence d'une notification intervenue sans autorisation ou malgré un");
+      L.push("refus. Elle ne l'affirme donc pas. Ce qui est certain et lu, c'est la");
+      L.push("condition : le licenciement « ne peut intervenir qu'après autorisation ».");
+      L.push("Une lettre expédiée sans elle ne remplit pas cette condition, et la suite");
+      L.push("appartient à votre conseil.");
+      L.push("");
+
+      titre(L, "II. Le recensement, mandat par mandat");
+
+      if (prot.length) {
+        L.push("Ce que la fiche porte :");
+        L.push("");
+        tableau(L, ["Salarié", "Mandat", "Autorisation déclarée", "Sens lu", "Date lue"],
+          prot.map(function (x) {
+            return [cro(x.nom, "nom"), cro(x.mandat, "mandat"),
+              x.a.brut ? "« " + x.a.brut + " »" : (x.a.date ? x.a.date : "[aucune]"),
+              x.a.sens.toUpperCase(), x.a.date ? jour(x.a.date) : "[  ]"];
+          }));
+        L.push("");
+        if (manquantes.length) {
+          L.push("  " + manquantes.length + " salarié(s) sans autorisation obtenue : " +
+            manquantes.map(function (x) { return cro(x.nom, "nom"); }).join(", ") + ".");
+          L.push("  Aucune notification ne peut intervenir les concernant avant l'autorisation.");
+          L.push("");
+        }
+        var illisibles = prot.filter(function (x) { return x.a.sens === "illisible"; });
+        if (illisibles.length) {
+          L.push("  Mention non interprétable pour " +
+            illisibles.map(function (x) { return cro(x.nom, "nom"); }).join(", ") + ".");
+          L.push("  Attendu : le SENS de la décision — accord, refus ou en attente — ET sa");
+          L.push("  date. « Vu », « OK » ou « dossier envoyé » ne disent ni l'un ni l'autre.");
+          L.push("");
+        }
+        var sansDate = prot.filter(function (x) { return x.a.sens === "accord" && !x.a.date; });
+        if (sansDate.length) {
+          L.push("  Autorisation déclarée mais NON DATÉE pour " +
+            sansDate.map(function (x) { return cro(x.nom, "nom"); }).join(", ") + " :");
+          L.push("  l'antériorité par rapport à la notification n'est pas vérifiable, et");
+          L.push("  c'est précisément ce qu'il faut pouvoir établir.");
+          L.push("");
+        }
+      } else {
+        L.push("La fiche ne porte aucun salarié protégé. Vérifiez-le avant de passer :");
+        L.push("« aucun salarié protégé » et « la question n'a pas été posée » ne sont pas");
+        L.push("la même chose, et la seconde se découvre toujours au mauvais moment.");
+        L.push("");
+      }
+      L.push("À COMPLÉTER — un salarié par ligne, pour tous les mandats de L. 2411-1 :");
+      L.push("");
+      tableau(L, ["Salarié", "Mandat", "Depuis le", "Mandat en cours ?",
+        "Fin de mandat", "Protection courant jusqu'au"], [
+        ["[nom ou matricule]", "[mandat exact]", "[  ]", "☐ oui ☐ non", "[  ]", "[  ]"],
+        ["[nom ou matricule]", "[mandat exact]", "[  ]", "☐ oui ☐ non", "[  ]", "[  ]"],
+        ["[ancien élu non reconduit]", "[mandat exact]", "[  ]", "non", "[  ]",
+          "[six mois après — L. 2411-5]"],
+      ]);
+      L.push("");
+      L.push("  [Reprenez le procès-verbal des élections, les lettres de désignation");
+      L.push("  syndicale et le procès-verbal du dernier renouvellement. Le mandat s'écrit");
+      L.push("  exactement : « membre du CSE » ne dit pas s'il est titulaire ou suppléant,");
+      L.push("  ni de quel comité — d'établissement, central.]");
+      L.push("");
+
+      titre(L, "III. La demande d'autorisation — une par salarié");
+
+      L.push(nom(ctx));
+      L.push(adresse(ctx));
+      L.push("");
+      L.push("Monsieur l'Inspecteur du travail");
+      L.push("[Unité de contrôle compétente — adresse]");
+      L.push("");
+      L.push(ville(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Lettre recommandée avec demande d'avis de réception");
+      L.push("");
+      L.push("Objet : demande d'autorisation de licenciement pour motif économique d'un");
+      L.push("salarié protégé — [NOM DU SALARIÉ], [MANDAT]");
+      L.push("");
+      L.push("Monsieur l'Inspecteur,");
+      L.push("");
+      L.push("En application de l'article L. 2411-5 du code du travail, aux termes duquel");
+      L.push("le licenciement d'un membre élu de la délégation du personnel du comité social");
+      L.push("et économique, titulaire ou suppléant, ou d'un représentant syndical au");
+      L.push("comité, ne peut intervenir qu'après autorisation de l'inspecteur du travail,");
+      L.push("je sollicite l'autorisation de licencier pour motif économique :");
+      L.push("");
+      L.push("  Nom et prénom ............ [  ]");
+      L.push("  Emploi occupé ............ [  ]");
+      L.push("  Ancienneté ............... [  ]");
+      L.push("  Mandat détenu ............ [  ], depuis le [  ]");
+      L.push("  Établissement ............ [  ]");
+      L.push("");
+      L.push("Le projet de licenciement collectif pour motif économique dans lequel s'inscrit");
+      L.push("cette demande porte sur " +
+        (nbLic(f) === null ? "[nombre] salariés" : nbLic(f) + " salariés") +
+        " sur une même période de trente jours.");
+      L.push("");
+      L.push("MOTIF ÉCONOMIQUE INVOQUÉ — [exposer ici, daté et chiffré, le motif au sens de");
+      L.push("l'article L. 1233-3 : difficultés économiques, mutations technologiques,");
+      L.push("réorganisation nécessaire à la sauvegarde de la compétitivité, cessation");
+      L.push("d'activité. Joindre les pièces qui l'établissent. L'application n'écrit pas");
+      L.push("ce motif : il est propre à votre entreprise, et c'est sur lui que la décision");
+      L.push("se prendra.]");
+      L.push("");
+      L.push("SUPPRESSION DE POSTE — [préciser le poste supprimé, l'effectif de la catégorie");
+      L.push("avant et après, et la place du salarié dans l'application des critères d'ordre");
+      L.push("des licenciements].");
+      L.push("");
+      L.push("RECHERCHE DE RECLASSEMENT — [exposer les recherches menées, les offres");
+      L.push("adressées au salarié, écrites et précises, et leurs réponses. Joindre l'état");
+      L.push("daté des postes disponibles et les offres.]");
+      L.push("");
+      L.push("ABSENCE DE LIEN AVEC LE MANDAT — [exposer les éléments qui établissent que la");
+      L.push("mesure envisagée est sans rapport avec le mandat détenu.]");
+      L.push("");
+      L.push("Je me tiens à votre disposition pour toute pièce complémentaire et pour");
+      L.push("l'enquête que vous jugerez utile de conduire.");
+      L.push("");
+      L.push("Je vous prie d'agréer, Monsieur l'Inspecteur, l'expression de ma");
+      L.push("considération distinguée.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("Pièces jointes : [état daté des postes disponibles · offres de reclassement");
+      L.push("adressées et réponses · procès-verbal du comité · procès-verbal des dernières");
+      L.push("élections ou lettre de désignation · éléments du motif économique · le cas");
+      L.push("échéant, plan de sauvegarde de l'emploi et décision administrative]");
+      L.push("");
+      L.push("  [AVANT D'ENVOYER — l'application n'a pas lu les articles qui règlent la");
+      L.push("  procédure de cette demande. Certaines catégories de mandats supposent une");
+      L.push("  consultation préalable du comité, et la demande obéit à des formes et à des");
+      L.push("  délais que ce document n'énonce pas. Faites vérifier ces points avant");
+      L.push("  l'envoi : une demande irrégulière fait perdre le temps de son instruction.]");
+      L.push("");
+
+      titre(L, "IV. Le registre de suivi des décisions");
+
+      L.push("C'est la pièce qui rapproche les deux dates. Elle se tient au fil de l'eau,");
+      L.push("et elle se relit avant chaque envoi de lettre.");
+      L.push("");
+      tableau(L, ["Salarié", "Mandat", "Demande déposée le", "Décision", "Décision du",
+        "Notification prévue le", "Antérieure ?"],
+        prot.length ? prot.map(function (x) {
+          return [cro(x.nom, "nom"), cro(x.mandat, "mandat"), "[  ]",
+            x.a.sens === "accord" ? "accord" : x.a.sens === "refus" ? "REFUS"
+              : x.a.sens === "en attente" ? "en attente" : "[  ]",
+            x.a.date ? jour(x.a.date) : "[  ]",
+            estDate(dNot) ? jour(dNot) : "[  ]",
+            (x.a.date && estDate(dNot)) ? (x.a.date < dNot ? "oui" : "NON") : "[  ]"];
+        }) : [["[nom]", "[mandat]", "[  ]", "[  ]", "[  ]", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("  Une demande en cours d'instruction n'est pas une autorisation. Une case");
+      L.push("  « en attente » interdit l'envoi tout autant qu'une case vide.");
+      L.push("");
+      L.push("  Registre tenu par [nom et qualité], arrêté le [DATE].");
+      L.push("");
+
+      titre(L, "V. En cas de refus");
+
+      L.push("  1. Retirez le salarié du projet. Il n'y a pas de deuxième lecture possible");
+      L.push("     du texte : le licenciement « ne peut intervenir qu'après autorisation »,");
+      L.push("     et il n'y en a pas.");
+      L.push("  2. Ne notifiez rien le concernant, et vérifiez qu'aucune lettre n'est déjà");
+      L.push("     partie.");
+      L.push("  3. Consignez le retrait par écrit, avec sa date, et informez le comité de");
+      L.push("     la modification du périmètre du projet.");
+      L.push("  4. Si le retrait change le nombre de licenciements envisagés, relancez");
+      L.push("     l'audit : le décompte de la fenêtre de trente jours en dépend, et avec");
+      L.push("     lui le régime (documents des contrôles CTL-SEU-01 à CTL-SEU-03).");
+      L.push("  5. Si une lettre est déjà partie malgré un refus, ne tentez aucune");
+      L.push("     régularisation et saisissez immédiatement votre conseil.");
+      L.push("");
+      L.push("  CONSTAT — salarié [nom], mandat [  ], décision de refus du [DATE],");
+      L.push("  notifiée à l'entreprise le [DATE]. Retiré du projet le [DATE].");
+      L.push("  Aucune lettre de licenciement n'a été expédiée : ☐ vérifié le [DATE]");
+      L.push("  par [nom et qualité].");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous recensez et vous déposez les demandes.");
+      L.push("");
+      L.push("La durée de l'instruction n'est pas fixée par un texte que l'application ait");
+      L.push("lu : elle ne l'annonce donc pas. Ce qui est certain, c'est que la");
+      L.push("notification est suspendue jusqu'à la décision, et que ce délai s'ajoute au");
+      L.push("calendrier du projet au lieu de courir en parallèle.");
+      L.push("");
+      if (estDate(dNot)) {
+        L.push("Votre fiche porte une notification envisagée au " + jour(dNot) + ". Chaque");
+        L.push("autorisation doit être ANTÉRIEURE à cette date, non du même jour.");
+        L.push("");
+      }
+      if (estDate((f.pse || {}).dateDecisionAdmin)) {
+        L.push("Votre fiche porte par ailleurs une décision de validation ou d'homologation");
+        L.push("du " + jour(f.pse.dateDecisionAdmin) + ". Les deux conditions se cumulent : la");
+        L.push("lettre part après la décision administrative (L. 1233-39) ET après");
+        L.push("l'autorisation de l'inspecteur du travail (L. 2411-5). C'est la plus tardive");
+        L.push("des deux dates qui commande.");
+        L.push("");
+      }
+      L.push("Le jour de l'envoi — relisez le registre du IV. Une seule ligne sans");
+      L.push("autorisation datée et antérieure suffit à arrêter l'envoi pour ce salarié,");
+      L.push("et pour lui seul : les autres lettres ne sont pas retenues par la sienne.");
+
+      pied(L, ["L. 1233-3", "L. 1233-39"],
+        "Les articles L. 2411-1 et L. 2411-5, fondement de ce contrôle, ne sont pas au\n" +
+        "corpus du module « licenciement économique ». Ils sont reproduits ci-dessus\n" +
+        "depuis le corpus du module « comité social et économique »\n" +
+        "(moteur/cse/textes_cse.json), versions LEGIARTI000035652370 et\n" +
+        "LEGIARTI000035652360.\n" +
+        "\n" +
+        "Ce que ce document N'ÉNONCE PAS : les articles qui règlent la procédure de la\n" +
+        "demande d'autorisation et la conséquence d'un licenciement notifié sans elle\n" +
+        "ne sont lus dans aucun corpus de l'application. Ils ne sont ni reproduits ni\n" +
+        "paraphrasés, et aucune sanction n'est annoncée de ce chef.");
+      return L.join("\n");
+    });
+
+  doc("CTL-IND-01",
+    "La note d'examen individuel des salariés en situation particulière",
+    "Le recensement nominatif des salariés en arrêt, en congé maternité ou " +
+    "déclarés inaptes, la fiche d'examen à remplir pour chacun, la lettre de " +
+    "mission au conseil, et la décision écrite de différer ou non la notification.",
+    function (ctx) {
+      var f = (ctx && ctx.fiche) || {}, L = [];
+      var sus = liste(f.salariesSuspendus);
+      var dNot = f.dateNotification, d0 = aujourd(ctx);
+
+      L = L.concat(entete(ctx, "Note d'examen individuel des salariés en situation particulière",
+        "contrôle sans fondement textuel propre — voyez la partie I"));
+
+      modeEmploi(L, [
+        "Ce document est le seul du module qui ne conclut jamais. Ce n'est pas une",
+        "faiblesse : c'est la seule attitude honnête.",
+        "",
+        "L'arrêt de travail, le congé de maternité et l'inaptitude constatée par le",
+        "médecin du travail obéissent chacun à un régime propre, qui peut interdire ou",
+        "retarder la notification. Ces régimes ne sont pas au corpus du module :",
+        "l'application ne les a pas lus à la source, et elle n'écrira donc ni leurs",
+        "articles, ni leurs conditions, ni leurs exceptions. Un document qui les",
+        "résumerait de mémoire serait pire qu'absent — il ferait croire à un examen",
+        "qui n'a pas eu lieu.",
+        "",
+        "Ce qu'il fait : il recense, il rassemble les pièces, il pose les questions à",
+        "poser, il commande l'examen à qui peut le conduire, et il consigne la",
+        "décision. C'est-à-dire tout ce qui prépare l'examen — et rien de l'examen",
+        "lui-même.",
+      ]);
+
+      rappelDossier(L, ctx);
+
+      titre(L, "I. Ce que ce contrôle établit, et ce qu'il n'établit pas");
+
+      L.push("Le contrôle CTL-IND-01 n'a AUCUN article au champ « fondement ». Ce n'est pas");
+      L.push("un oubli : il ne vérifie le respect d'aucune règle, il SIGNALE une situation");
+      L.push("qui appelle un examen extérieur à la base.");
+      L.push("");
+      L.push("Il ne conclut donc jamais à la conformité. Trois issues seulement :");
+      L.push("  — aucun salarié dans une telle situation n'est déclaré : sans objet ;");
+      L.push("  — la question n'est pas renseignée : donnée manquante ;");
+      L.push("  — des salariés le sont : chacun doit faire l'objet d'un examen distinct.");
+      L.push("");
+      L.push("Ce que l'application sait avec certitude, et qui suffit à justifier la");
+      L.push("prudence : la date de notification n'est pas libre. L'article L. 1233-39");
+      L.push("l'enferme déjà dans un délai courant à compter de la notification du projet à");
+      L.push("l'autorité administrative dans les entreprises de moins de cinquante");
+      L.push("salariés, et après la décision de validation ou d'homologation dans les");
+      L.push("autres. Les régimes propres aux situations recensées ici ajoutent leurs");
+      L.push("propres contraintes à celles-là. Elles se cumulent ; elles ne se compensent");
+      L.push("pas.");
+      L.push("");
+
+      titre(L, "II. Le recensement");
+
+      if (sus.length) {
+        L.push("Ce que la fiche porte :");
+        L.push("");
+        tableau(L, ["Salarié", "Situation déclarée", "Depuis le", "Jusqu'au", "Pièce"],
+          sus.map(function (x) {
+            var o = x || {};
+            return [cro(o.nom, "nom"), cro(o.situation, "situation"), "[  ]", "[  ]", "[  ]"];
+          }));
+        L.push("");
+        L.push("  " + sus.length + " salarié(s) dans une situation particulière. Chacun doit");
+        L.push("  faire l'objet d'un examen distinct, hors du champ de cette base.");
+        L.push("");
+      } else {
+        L.push("La fiche ne porte aucun salarié en arrêt, en congé maternité ou déclaré");
+        L.push("inapte. Deux lectures possibles, et elles n'ont pas la même conséquence :");
+        L.push("il n'y en a pas, ou la question n'a pas été posée. Tranchez-la avant de");
+        L.push("notifier.");
+        L.push("");
+      }
+      L.push("À COMPLÉTER — pour chaque salarié concerné par le projet :");
+      L.push("");
+      tableau(L, ["Salarié", "Emploi", "Nature de la situation", "Début", "Fin prévue",
+        "Pièce au dossier"], [
+        ["[nom ou matricule]", "[  ]", "arrêt de travail", "[  ]", "[  ]",
+          "[avis d'arrêt du ...]"],
+        ["[nom ou matricule]", "[  ]", "congé de maternité", "[  ]", "[  ]",
+          "[attestation, dates]"],
+        ["[nom ou matricule]", "[  ]", "inaptitude constatée", "[  ]", "—",
+          "[avis du médecin du travail du ...]"],
+        ["[nom ou matricule]", "[  ]", "[autre situation à signaler]", "[  ]", "[  ]", "[  ]"],
+      ]);
+      L.push("");
+      L.push("  [Vérifiez cette liste au jour où vous préparez l'envoi, et non au jour de");
+      L.push("  l'audit : un arrêt de travail peut commencer entre les deux. C'est la");
+      L.push("  situation à la date de l'envoi qui compte.]");
+      L.push("");
+
+      titre(L, "III. La fiche d'examen — une par salarié");
+
+      L.push("À remplir par l'entreprise, puis à remettre au professionnel avec les pièces.");
+      L.push("Elle ne comporte aucune appréciation juridique : ce n'est pas son rôle, et");
+      L.push("une appréciation écrite par l'employeur se retourne contre lui.");
+      L.push("");
+      L.push("  Salarié ......................... [nom ou matricule]");
+      L.push("  Emploi et catégorie ............. [  ]");
+      L.push("  Ancienneté ...................... [  ]");
+      L.push("  Salarié protégé ? ............... ☐ oui — mandat : [  ]  ☐ non");
+      L.push("");
+      L.push("  NATURE DE LA SITUATION");
+      L.push("  ☐ Arrêt de travail — origine déclarée : [maladie / accident du travail /");
+      L.push("    maladie professionnelle / non renseignée]");
+      L.push("    Date du premier arrêt : [  ]   Prolongations : [  ]   Fin prévue : [  ]");
+      L.push("  ☐ Congé de maternité ou congé qui le suit — dates : [du ... au ...]");
+      L.push("    Déclaration de grossesse reçue le : [  ]");
+      L.push("  ☐ Inaptitude constatée par le médecin du travail");
+      L.push("    Date de l'avis : [  ]   Mentions portées sur l'avis : [  ]");
+      L.push("    Propositions de reclassement formulées par le médecin : [  ]");
+      L.push("  ☐ Autre : [  ]");
+      L.push("");
+      L.push("  PIÈCES JOINTES À LA FICHE");
+      L.push("  ☐ avis d'arrêt de travail et prolongations");
+      L.push("  ☐ attestation ou justificatif du congé de maternité");
+      L.push("  ☐ avis d'inaptitude du médecin du travail, dans son intégralité");
+      L.push("  ☐ échanges avec le médecin du travail, le cas échéant");
+      L.push("  ☐ contrat de travail et avenants");
+      L.push("  ☐ offres de reclassement adressées et réponses");
+      L.push("  ☐ éléments du motif économique et de la suppression du poste");
+      L.push("");
+      L.push("  CE QUE L'ENTREPRISE ENVISAGE");
+      L.push("  Date de notification envisagée pour ce salarié : " +
+        (estDate(dNot) ? jour(dNot) : "[  ]"));
+      L.push("  Position dans l'application des critères d'ordre : [  ]");
+      L.push("  Reclassement recherché : ☐ oui ☐ non — postes proposés : [  ]");
+      L.push("");
+      L.push("  QUESTIONS POSÉES AU PROFESSIONNEL");
+      L.push("  1. La notification peut-elle intervenir dans cette situation ?");
+      L.push("  2. Si oui, à quelle date au plus tôt, et sous quelles conditions ?");
+      L.push("  3. Si non, jusqu'à quand est-elle empêchée, et par quoi ?");
+      L.push("  4. La situation modifie-t-elle l'application des critères d'ordre ?");
+      L.push("  5. La recherche de reclassement doit-elle être conduite différemment ?");
+      L.push("  6. Des formalités propres s'ajoutent-elles à celles du licenciement");
+      L.push("     économique — avis, délais, mentions dans la lettre ?");
+      L.push("");
+
+      titre(L, "IV. La lettre de mission");
+
+      L.push(nom(ctx));
+      L.push(adresse(ctx));
+      L.push("");
+      L.push("À [Maître / cabinet], [adresse]");
+      L.push("");
+      L.push(ville(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Objet : examen individuel de la situation de " +
+        (sus.length ? sus.length : "[nombre]") + " salarié(s) concerné(s) par un projet");
+      L.push("de licenciement pour motif économique");
+      L.push("");
+      L.push("Maître,");
+      L.push("");
+      L.push(nom(ctx) + " conduit un projet de licenciement pour motif");
+      L.push("économique portant sur " +
+        (nbLic(f) === null ? "[nombre]" : String(nbLic(f))) +
+        " salariés sur une même période de trente jours.");
+      L.push("");
+      L.push("Parmi eux, " + (sus.length ? sus.length : "[nombre]") +
+        " se trouvent dans une situation particulière : arrêt de");
+      L.push("travail, congé de maternité ou inaptitude constatée par le médecin du");
+      L.push("travail. Chacune de ces situations obéit à des règles propres, qui peuvent");
+      L.push("interdire ou retarder la notification.");
+      L.push("");
+      L.push("Je vous confie l'examen individuel de chacune de ces situations et vous prie");
+      L.push("de me faire connaître, salarié par salarié, si la notification peut");
+      L.push("intervenir, à quelle date au plus tôt et sous quelles conditions.");
+      L.push("");
+      L.push("Vous trouverez ci-joint, pour chacun, la fiche d'examen et les pièces qui la");
+      L.push("documentent.");
+      L.push("");
+      L.push("La notification est actuellement envisagée au " +
+        (estDate(dNot) ? jour(dNot) : "[DATE]") + ". Aucune lettre ne");
+      L.push("sera expédiée aux salariés concernés avant réception de votre analyse.");
+      L.push("");
+      L.push("Je vous prie d'agréer, Maître, l'expression de ma considération distinguée.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("Pièces jointes : fiches d'examen individuel · pièces de chaque situation ·");
+      L.push("éléments du projet de licenciement");
+      L.push("");
+
+      titre(L, "V. La décision, consignée");
+
+      L.push("À remplir au retour de l'analyse, et à conserver au dossier. C'est cette");
+      L.push("page qui établira, plus tard, que la question a été posée avant l'envoi et");
+      L.push("non après.");
+      L.push("");
+      tableau(L, ["Salarié", "Analyse reçue le", "Notification possible ?",
+        "Date retenue", "Décision consignée le"],
+        sus.length ? sus.map(function (x) {
+          return [cro((x || {}).nom, "nom"), "[  ]", "☐ oui ☐ non ☐ différée", "[  ]", "[  ]"];
+        }) : [["[nom]", "[  ]", "☐ oui ☐ non ☐ différée", "[  ]", "[  ]"]]);
+      L.push("");
+      L.push("  Pour chaque notification DIFFÉRÉE, écrire :");
+      L.push("  « La notification concernant [nom] est différée au [DATE], pour le motif");
+      L.push("  suivant : [reprendre le motif donné par le conseil]. Décision prise le");
+      L.push("  [DATE] par [nom et qualité]. »");
+      L.push("");
+      L.push("  [Différer une notification peut faire sortir un salarié de la fenêtre de");
+      L.push("  trente jours, ou l'y faire entrer. Relancez l'audit après toute décision de");
+      L.push("  report : le décompte du seuil de dix en dépend, et avec lui le régime tout");
+      L.push("  entier — voyez le document du contrôle CTL-SEU-01.]");
+      L.push("");
+
+      titre(L, "VOTRE CALENDRIER");
+
+      L.push("Aujourd'hui, " + leJour(d0) + " — vous recensez et vous réunissez les pièces.");
+      L.push("");
+      L.push("Comptez une à deux semaines d'examen extérieur PAR SALARIÉ. Ce n'est pas une");
+      L.push("formalité groupée : chaque situation est distincte, et une analyse commune à");
+      L.push("trois salariés dans trois situations différentes n'analyse rien.");
+      L.push("");
+      L.push("Au plus tard le " + leJour(dans(d0, 21)) + " — les analyses sont revenues et");
+      L.push("les décisions sont consignées.");
+      L.push("");
+      if (estDate(dNot)) {
+        var e = ecart(iso0(d0), dNot);
+        L.push("Votre fiche porte une notification envisagée au " + jour(dNot) + ".");
+        if (e !== null && e < 21) {
+          L.push("Il reste " + (e < 0 ? "moins de zéro jour — cette date est passée"
+            : e + " jours") + " : c'est court pour un examen individuel.");
+          L.push("Mieux vaut décaler la notification que de la faire sans l'avoir examinée.");
+        } else {
+          L.push("Le calendrier permet l'examen. Ne le comprimez pas au dernier moment.");
+        }
+        L.push("");
+      }
+      L.push("Le jour de l'envoi — reprenez le tableau du V. Un salarié dont la ligne");
+      L.push("porte « différée » ne reçoit pas de lettre ce jour-là, et le reste du");
+      L.push("projet n'est pas retenu par lui.");
+
+      pied(L, ["L. 1233-39"],
+        "Ce contrôle n'a aucun article au champ « fondement », et ce document n'en\n" +
+        "invente pas. Les régimes propres à l'arrêt de travail, au congé de maternité\n" +
+        "et à l'inaptitude ne sont dans aucun corpus lu par l'application : ils ne\n" +
+        "sont ni cités, ni résumés, ni paraphrasés ici.\n" +
+        "\n" +
+        "Ce qui se joue : l'application ne le dit pas, parce qu'elle ne l'a pas lu.\n" +
+        "C'est précisément pourquoi ce document commande un examen extérieur au lieu\n" +
+        "de conclure.");
+      return L.join("\n");
+    });
+
+  /* Le jour même en « AAAA-MM-JJ », pour comparer une date de la fiche à
+     aujourd'hui sans repasser par une Date. */
+  function iso0(d) {
+    if (!(d instanceof Date) || isNaN(d.getTime())) return null;
+    var m = d.getMonth() + 1, j = d.getDate();
+    return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (j < 10 ? "0" : "") + j;
+  }
+
 })(typeof window !== "undefined" ? window : this);

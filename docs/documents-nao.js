@@ -2708,4 +2708,789 @@
     },
   });
 
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-ISS-01 — LE PROCÈS-VERBAL DE DÉSACCORD
+
+     Fondement : L. 2242-5, R. 2242-1, et les arrêts Soc., 15 avril 2026 et
+     2e Civ., 7 novembre 2019.
+
+     Le corpus n'attache aucune peine à L. 2242-5 pris pour lui-même. Mais il
+     porte une conséquence directe, et elle est lue : le troisième alinéa de
+     L. 2242-8 fait du procès-verbal de désaccord la pièce qui ATTESTE le défaut
+     d'accord dans les entreprises d'au moins trois cents salariés. Sans lui,
+     l'entreprise ne peut pas établir sa situation au regard de la pénalité.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-ISS-01", {
+    nom: "Le procès-verbal de désaccord — propositions en leur dernier état et mesures unilatérales",
+    detail: "Le procès-verbal que L. 2242-5 impose, avec les deux mentions qu'il " +
+            "exige, le courrier de dépôt, le bordereau des pièces et le tableau " +
+            "de l'issue de chacune des quatre négociations.",
+    produire: function (ctx) {
+      var negos = [
+        ["remuneration", "Rémunération, temps de travail et partage de la valeur ajoutée", "L. 2242-1, 1°"],
+        ["egalite", "Égalité professionnelle et qualité de vie et des conditions de travail", "L. 2242-1, 2°"],
+        ["gepp", "Gestion des emplois et des parcours professionnels", "L. 2242-2"],
+        ["experimentes", "Emploi et conditions de travail des salariés expérimentés", "L. 2242-2-1"],
+      ];
+      var s = seuil300(ctx);
+      var L = entete(ctx, "Procès-verbal de désaccord, et son dépôt",
+        "articles L. 2242-5 et R. 2242-1 du code du travail");
+
+      modeDEmploi(L, "le procès-verbal de désaccord et le courrier qui le dépose");
+
+      L.push("════ CE QUE LE TEXTE EXIGE — DEUX MENTIONS, PAS UNE ════");
+      L.push("");
+      citer(L, "L2242-5");
+      L.push("Un procès-verbal de désaccord n'est pas un constat d'échec. Le texte lui");
+      L.push("impose DEUX contenus, et l'oubli du second est le plus fréquent :");
+      L.push("");
+      L.push("  1. LES PROPOSITIONS RESPECTIVES DES PARTIES, EN LEUR DERNIER ÉTAT.");
+      L.push("     Celles de l'employeur ET celles de chaque organisation syndicale,");
+      L.push("     telles qu'elles se présentaient à la fin — non au début, et non");
+      L.push("     résumées en « les parties n'ont pu se mettre d'accord ».");
+      L.push("  2. LES MESURES QUE L'EMPLOYEUR ENTEND APPLIQUER UNILATÉRALEMENT.");
+      L.push("     C'est ce qui fonde ensuite leur opposabilité : des mesures");
+      L.push("     appliquées sans figurer au procès-verbal se défendent mal.");
+      L.push("");
+      L.push("Et le dépôt n'est pas facultatif :");
+      L.push("");
+      citer(L, "R2242-1");
+      L.push("L'article D. 2231-2, auquel R. 2242-1 renvoie, N'A PAS été lu à la source");
+      L.push("par ce module : les modalités matérielles du dépôt — support, destinataire");
+      L.push("précis, pièces jointes — ne sont donc ni décrites ni supposées ici.");
+      L.push("Vérifiez-les avant d'envoyer.");
+      L.push("");
+      L.push("« À l'initiative de la partie la plus diligente » : l'employeur ne peut");
+      L.push("pas attendre que les organisations syndicales s'en chargent. S'il attend,");
+      L.push("il est celui qui n'a pas déposé.");
+      L.push("");
+
+      L.push("════ LA NÉGOCIATION NE FINIT PAS AVANT CE PROCÈS-VERBAL ════");
+      L.push("");
+      citerArret(L, ARRETS.finDesNegociations);
+      L.push("Conséquence pratique, et elle est lourde : tant que le procès-verbal");
+      L.push("n'est pas établi, l'interdiction de l'article L. 2242-4 tient — pas de");
+      L.push("décision unilatérale dans les matières traitées, sauf urgence justifiée.");
+      L.push("Le document du point NAO-CTL-UNI-01 traite cette question.");
+      L.push("");
+      L.push("Mais l'obligation reste d'engager, non de conclure :");
+      L.push("");
+      citerArret(L, ARRETS.engagerNonConclure);
+
+      L.push("════ ET UNE CONSÉQUENCE DIRECTE, POUR L'ÉGALITÉ ════");
+      L.push("");
+      citerMorceau(L, "L2242-8", "Dans les entreprises d'au moins 300 salariés", "La pénalité prévue");
+      L.push("Dans une entreprise d'au moins trois cents salariés, le procès-verbal de");
+      L.push("désaccord sur l'égalité professionnelle est donc la pièce qui ATTESTE le");
+      L.push("défaut d'accord. Sans lui, l'entreprise ne peut pas établir sa situation");
+      L.push("devant l'administration au regard de la pénalité de L. 2242-8.");
+      if (s.connu)
+        L.push("Votre effectif déclaré est de " + (s.effectif === null ? "[non renseigné]" : s.effectif + " salariés") + ".");
+      L.push("");
+
+      L.push("════ L'ISSUE DE CHACUNE DE VOS NÉGOCIATIONS ════");
+      L.push("");
+      L.push("  négociation                              │ issue        │ dépôt");
+      L.push("  ─────────────────────────────────────────┼──────────────┼────────────");
+      for (var i = 0; i < negos.length; i++) {
+        var n = negoDe(ctx, negos[i][0]);
+        var titre = negos[i][1];
+        var court = titre.length > 38 ? titre.slice(0, 38) : titre;
+        while (court.length < 38) court += " ";
+        var iss = vide(n.issue) ? "[non rens.]" : String(n.issue);
+        while (iss.length < 12) iss += " ";
+        L.push("  " + court + " │ " + iss.slice(0, 12) + " │ " +
+          (estOui(n.depot) ? "OUI" : estNon(n.depot) ? "NON" : "[non rens.]"));
+      }
+      L.push("");
+      L.push("Une négociation « en cours » n'appelle pas de procès-verbal de désaccord :");
+      L.push("elle appelle des réunions. Une négociation terminée sans accord et sans");
+      L.push("procès-verbal déposé n'est, elle, ni terminée ni couverte.");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PROCÈS-VERBAL DE DÉSACCORD");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx).toUpperCase());
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("NÉGOCIATION : [rémunération (L. 2242-1, 1°) / égalité professionnelle");
+      L.push("(L. 2242-1, 2°) / gestion des emplois (L. 2242-2) / salariés expérimentés");
+      L.push("(L. 2242-2-1)] — un procès-verbal par négociation, jamais un pour tout.");
+      L.push("");
+      L.push("ARTICLE 1 — LE DÉROULEMENT DE LA NÉGOCIATION");
+      L.push("");
+      L.push("Organisations syndicales représentatives convoquées :");
+      L.push("  · [Organisation 1 — convoquée le .........]");
+      L.push("  · [Organisation 2 — convoquée le .........]");
+      L.push("  · [Organisation 3 — convoquée le .........]");
+      L.push("");
+      L.push("Réunions tenues :");
+      L.push("  · [date] — [objet] — [présents]");
+      L.push("  · [date] — [objet] — [présents]");
+      L.push("  · [date] — [objet] — [présents]");
+      L.push("");
+      L.push("Informations remises aux négociateurs le [DATE], contre décharge");
+      L.push("(L. 2242-14, 2°).");
+      L.push("");
+      L.push("ARTICLE 2 — LES PROPOSITIONS DE L'EMPLOYEUR, EN LEUR DERNIER ÉTAT");
+      L.push("");
+      L.push("Telles qu'elles se présentaient à l'issue de la réunion du [DATE] :");
+      L.push("");
+      L.push("  · [Proposition 1 : ...............................................]");
+      L.push("  · [Proposition 2 : ...............................................]");
+      L.push("  · [Proposition 3 : ...............................................]");
+      L.push("");
+      L.push("[AUCUN CHIFFRE N'EST ÉCRIT ICI PAR L'APPLICATION. Vos propositions sont");
+      L.push("les vôtres : une proposition devinée vous engagerait sur ce que vous");
+      L.push("n'avez pas voulu.]");
+      L.push("");
+      L.push("ARTICLE 3 — LES PROPOSITIONS DES ORGANISATIONS SYNDICALES, EN LEUR");
+      L.push("DERNIER ÉTAT");
+      L.push("");
+      L.push("  [Organisation 1]");
+      L.push("    · [.............................................................]");
+      L.push("    · [.............................................................]");
+      L.push("");
+      L.push("  [Organisation 2]");
+      L.push("    · [.............................................................]");
+      L.push("    · [.............................................................]");
+      L.push("");
+      L.push("  [Organisation n'ayant pas formulé de proposition : le mentionner");
+      L.push("  expressément plutôt que de laisser un blanc.]");
+      L.push("");
+      L.push("Ces propositions sont reproduites telles qu'elles ont été formulées. Une");
+      L.push("organisation qui ne se reconnaîtrait pas dans leur rédaction peut le");
+      L.push("faire consigner : ses observations sont annexées au présent procès-verbal.");
+      L.push("");
+      L.push("ARTICLE 4 — LES RÉPONSES MOTIVÉES DE L'EMPLOYEUR");
+      L.push("");
+      L.push("  · [Proposition syndicale — réponse et motifs : ....................]");
+      L.push("  · [Proposition syndicale — réponse et motifs : ....................]");
+      L.push("");
+      L.push("[L'article L. 2242-6 range la réponse motivée dans l'engagement sérieux et");
+      L.push("loyal des négociations : la faire figurer ici la date et la prouve.]");
+      L.push("");
+      L.push("ARTICLE 5 — LES MESURES QUE L'EMPLOYEUR ENTEND APPLIQUER");
+      L.push("UNILATÉRALEMENT");
+      L.push("");
+      L.push("C'est la mention que L. 2242-5 exige et qu'on oublie. Elle n'est pas une");
+      L.push("menace : elle est ce qui rendra ces mesures opposables.");
+      L.push("");
+      L.push("  mesure                          │ champ      │ date d'application");
+      L.push("  ────────────────────────────────┼────────────┼────────────────────");
+      for (var k = 0; k < 5; k++)
+        L.push("  [............................] │ [........] │ [................]");
+      L.push("");
+      L.push("  [Si l'employeur n'entend appliquer aucune mesure unilatérale, l'écrire :");
+      L.push("  « L'employeur n'entend appliquer aucune mesure unilatérale à l'issue de");
+      L.push("  la présente négociation. » Un silence sur ce point laisse penser que la");
+      L.push("  mention a été oubliée.]");
+      L.push("");
+      L.push("ARTICLE 6 — LE DÉSACCORD");
+      L.push("");
+      L.push("Au terme de la négociation, aucun accord n'a été conclu. Le présent");
+      L.push("procès-verbal est établi en application de l'article L. 2242-5 du code du");
+      L.push("travail. Il sera déposé dans les conditions prévues à l'article D. 2231-2,");
+      L.push("conformément à l'article R. 2242-1.");
+      L.push("");
+      L.push("Fait à " + villeDe(ctx) + ", le " + leJour(aujourd(ctx)) + ", en [nombre] exemplaires.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("[Signatures des organisations syndicales présentes, si elles l'acceptent.");
+      L.push("Un refus de signature se mentionne et n'empêche pas le procès-verbal");
+      L.push("d'exister ni d'être déposé.]");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("COURRIER — DÉPÔT DU PROCÈS-VERBAL DE DÉSACCORD");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx));
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("À l'autorité administrative compétente");
+      L.push("[service de dépôt des accords collectifs — coordonnées à vérifier]");
+      L.push("");
+      L.push(villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push("Objet : dépôt d'un procès-verbal de désaccord (L. 2242-5, R. 2242-1)");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("La négociation obligatoire sur [THÈME], engagée le [DATE] au sein de");
+      L.push(nomDe(ctx) + ", s'est achevée le [DATE] sans qu'un accord ait été conclu.");
+      L.push("");
+      L.push("Conformément à l'article L. 2242-5 du code du travail, un procès-verbal de");
+      L.push("désaccord a été établi, dans lequel sont consignées, en leur dernier état,");
+      L.push("les propositions respectives des parties et les mesures que j'entends");
+      L.push("appliquer unilatéralement.");
+      L.push("");
+      L.push("En application de l'article R. 2242-1, je procède à son dépôt dans les");
+      L.push("conditions prévues à l'article D. 2231-2.");
+      L.push("");
+      L.push("Je vous serais reconnaissant de bien vouloir m'en délivrer récépissé.");
+      L.push("");
+      L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
+      L.push("distinguée.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+
+      bordereau(L, "bordereau des pièces", [
+        "Le procès-verbal de désaccord, daté et signé.",
+        "Les convocations de toutes les organisations syndicales représentatives, avec leur preuve d'envoi.",
+        "Les procès-verbaux ou relevés de chaque réunion, et les feuilles d'émargement.",
+        "Le procès-verbal de première réunion portant les mentions de L. 2242-14.",
+        "Le bordereau de remise des informations, daté et signé.",
+        "Les réponses motivées aux propositions syndicales.",
+        "Les observations éventuelles des organisations syndicales sur la rédaction du procès-verbal, annexées.",
+        "[Le cas échéant, les pièces exigées par les modalités de dépôt de D. 2231-2 — article non lu par ce module.]",
+        "LE RÉCÉPISSÉ DE DÉPÔT, dès sa réception : c'est lui, et non le procès-verbal, qui prouve que le dépôt a eu lieu.",
+      ]);
+
+      L = L.concat(courrierOS(ctx,
+        "communication du procès-verbal de désaccord et de son dépôt",
+        ["Vous trouverez ci-joint le procès-verbal de désaccord établi à l'issue de la",
+         "négociation sur [THÈME], en application de l'article L. 2242-5 du code du",
+         "travail.",
+         "",
+         "Il consigne, en leur dernier état, les propositions respectives des parties",
+         "ainsi que les mesures que j'entends appliquer unilatéralement.",
+         "",
+         "Si la rédaction de vos propositions vous paraît inexacte, faites-le-moi",
+         "savoir : vos observations seront annexées au procès-verbal.",
+         "",
+         "Ce procès-verbal sera déposé conformément à l'article R. 2242-1 du code du",
+         "travail. Copie du récépissé vous sera adressée."],
+        { pj: ["procès-verbal de désaccord"] }));
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "dernière réunion : les propositions des deux côtés sont relevées"),
+        suite("en leur dernier état, séance tenante. Reconstituées trois semaines"),
+        suite("plus tard, elles seront contestées."),
+        ech(ctx, 7, "le procès-verbal est rédigé, avec ses DEUX mentions."),
+        ech(ctx, 10, "il est communiqué aux organisations syndicales, qui peuvent le"),
+        suite("signer, refuser de le signer, ou faire annexer leurs observations."),
+        ech(ctx, 15, "DÉPÔT (L. 2242-5, R. 2242-1). Tant qu'il n'est pas établi, la"),
+        suite("négociation est en cours et L. 2242-4 vous lie."),
+        ech(ctx, 30, "le récépissé est au dossier."),
+      ]));
+
+      return L.concat(pied("L. 2242-4, L. 2242-5, L. 2242-6, L. 2242-8, L. 2242-14, " +
+        "R. 2242-1 ; " + ARRETS.finDesNegociations.ref + " ; " + ARRETS.engagerNonConclure.ref,
+        ["L'article D. 2231-2, auquel R. 2242-1 renvoie pour les conditions du dépôt,",
+         "n'a PAS été lu à la source par ce module : il est nommé, et les modalités",
+         "matérielles du dépôt ne sont ni décrites ni supposées ici.",
+         "",
+         "Aucune peine n'est annoncée pour le seul défaut de procès-verbal : aucun",
+         "texte capté n'en attache à L. 2242-5. Ce qui est encouru est écrit ci-dessus",
+         "— une négociation qui n'a pas pris fin, des mesures unilatérales fragiles, et",
+         "pour l'égalité professionnelle dans les entreprises d'au moins trois cents",
+         "salariés, l'impossibilité d'attester le défaut d'accord (L. 2242-8)."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-EGA-01 — LE PLAN D'ACTION ÉGALITÉ
+
+     Fondement : L. 2242-3. Le texte est capté en entier et il donne le plan du
+     document : évaluation de l'année écoulée d'abord, puis objectifs de
+     progression, puis actions qualitatives et quantitatives, puis coût, puis
+     dépôt. Cet ordre est celui du texte, et il n'est pas indifférent :
+     l'évaluation est un préalable exprès.
+
+     L. 2242-9, capté lui aussi, ouvre une porte que peu d'employeurs
+     connaissent : demander à l'administration d'apprécier la conformité du
+     plan, et lier son appréciation pour un an.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-EGA-01", {
+    nom: "Le plan d'action annuel pour l'égalité professionnelle, et son dépôt",
+    detail: "Le plan que L. 2242-3 impose à défaut d'accord : bilan de l'année " +
+            "écoulée, objectifs de progression, actions chiffrées, coût, dépôt — " +
+            "et la demande d'appréciation de conformité de L. 2242-9.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "egalite"), p = n.planAction || {};
+      if (typeof p === "string") { try { p = JSON.parse(p); } catch (e) { p = {}; } }
+      var an = aujourd(ctx).getFullYear();
+      var L = entete(ctx, "Plan d'action annuel pour l'égalité professionnelle entre les femmes et les hommes",
+        "article L. 2242-3 du code du travail");
+
+      modeDEmploi(L, "le plan d'action annuel que la loi impose à défaut d'accord sur l'égalité professionnelle");
+
+      L.push("════ QUAND CE PLAN EST DÛ, ET CE QU'IL DOIT PORTER ════");
+      L.push("");
+      citer(L, "L2242-3");
+      L.push("Le texte est dense ; il se déplie en cinq obligations, dans cet ordre :");
+      L.push("");
+      L.push("  1. LE PLAN N'EST DÛ QU'EN L'ABSENCE D'ACCORD à l'issue de la");
+      L.push("     négociation du 2° de L. 2242-1. Avec un accord, il n'a pas d'objet.");
+      L.push("  2. L'ÉVALUATION DE L'ANNÉE ÉCOULÉE EST UN PRÉALABLE EXPRÈS : « après");
+      L.push("     avoir évalué les objectifs fixés et les mesures prises au cours de");
+      L.push("     l'année écoulée ». Un plan qui commence par l'année à venir saute");
+      L.push("     une étape que le texte impose.");
+      L.push("  3. LE PLAN EST FONDÉ SUR DES CRITÈRES CLAIRS, PRÉCIS ET OPÉRATIONNELS.");
+      L.push("  4. IL DÉTERMINE LES OBJECTIFS DE PROGRESSION de l'année à venir,");
+      L.push("     DÉFINIT les actions qualitatives et quantitatives permettant de les");
+      L.push("     atteindre, et ÉVALUE LEUR COÛT. Trois verbes, trois obligations : un");
+      L.push("     plan sans chiffrage du coût est incomplet au regard du texte.");
+      L.push("  5. IL EST DÉPOSÉ auprès de l'autorité administrative. Un plan établi et");
+      L.push("     non déposé ne remplit pas le texte.");
+      L.push("");
+      L.push("Et le dernier alinéa ajoute une obligation qui ne concerne pas ce plan");
+      L.push("mais l'autre négociation : en l'absence d'accord prévoyant les mesures");
+      L.push("visant à supprimer les écarts de rémunération, la négociation sur les");
+      L.push("salaires effectifs porte également sur la programmation de ces mesures.");
+      L.push("Le document du point NAO-CTL-PER-01 le reprend à son ordre du jour.");
+      L.push("");
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · issue de la négociation égalité : " +
+        (vide(n.issue) ? "[non renseignée]" : n.issue));
+      L.push("  · plan d'action établi : " + etat(p.existe, "OUI", "NON"));
+      L.push("  · plan d'action déposé : " + etat(p.depot, "OUI", "NON — le texte l'impose"));
+      L.push("");
+      if (n.issue === "accord") {
+        L.push("  → Un accord est déclaré : le plan d'action de L. 2242-3 n'a pas d'objet");
+        L.push("    tant que cet accord est en vigueur. Ce document vous sert alors de");
+        L.push("    grille de relecture — et de modèle pour le jour où l'accord");
+        L.push("    viendra à échéance sans être renouvelé.");
+        L.push("");
+      }
+
+      L = L.concat(expositionL22428([], ctx));
+
+      L.push(GROS);
+      L.push("PLAN D'ACTION ANNUEL POUR L'ÉGALITÉ PROFESSIONNELLE ENTRE LES FEMMES");
+      L.push("ET LES HOMMES");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx).toUpperCase());
+      L.push(adresseDe(ctx));
+      L.push("Convention collective applicable : " + conventionDe(ctx));
+      L.push("");
+      L.push("Établi le " + leJour(aujourd(ctx)) + " en application de l'article L. 2242-3 du");
+      L.push("code du travail, à défaut d'accord relatif à l'égalité professionnelle à");
+      L.push("l'issue de la négociation mentionnée au 2° de l'article L. 2242-1.");
+      L.push("");
+      L.push("Période couverte : année " + (an + 1) + " [ou exercice à préciser].");
+      L.push("");
+      L.push("PARTIE I — L'ÉVALUATION DE L'ANNÉE ÉCOULÉE (le préalable exprès du texte)");
+      L.push("");
+      L.push("I.1. Les objectifs qui avaient été fixés pour " + an);
+      L.push("");
+      L.push("  objectif fixé                    │ indicateur │ cible │ atteint ?");
+      L.push("  ─────────────────────────────────┼────────────┼───────┼───────────");
+      for (var i = 0; i < 5; i++)
+        L.push("  [.............................] │ [........] │ [...] │ [........]");
+      L.push("");
+      L.push("I.2. Les mesures qui avaient été prises");
+      L.push("");
+      L.push("  · [Mesure — mise en œuvre : oui / partiellement / non — commentaire]");
+      L.push("  · [Mesure — mise en œuvre : oui / partiellement / non — commentaire]");
+      L.push("  · [Mesure — mise en œuvre : oui / partiellement / non — commentaire]");
+      L.push("");
+      L.push("I.3. Les actions prévues et NON réalisées, et leurs explications");
+      L.push("");
+      L.push("  · [Action non réalisée — explication : ..........................]");
+      L.push("  · [Action non réalisée — explication : ..........................]");
+      L.push("");
+      L.push("  [Ne sautez pas ce point. Une action annoncée l'an dernier et disparue");
+      L.push("  cette année sans explication se remarque, et se retourne.]");
+      L.push("");
+      L.push("PARTIE II — LE DIAGNOSTIC, SUR DES CRITÈRES CLAIRS, PRÉCIS ET");
+      L.push("OPÉRATIONNELS");
+      L.push("");
+      L.push("[Toutes les données ci-dessous sortent de la base de données économiques,");
+      L.push("sociales et environnementales, de la déclaration sociale nominative et du");
+      L.push("registre unique du personnel. L'application ne les connaît pas et ne les");
+      L.push("invente pas : elle vous dit où les prendre.]");
+      L.push("");
+      L.push("  domaine                    │ femmes  │ hommes  │ écart │ source");
+      L.push("  ───────────────────────────┼─────────┼─────────┼───────┼──────────");
+      L.push("  Effectifs par catégorie    │ [.....] │ [.....] │ [...] │ [......]");
+      L.push("  Embauches de l'exercice    │ [.....] │ [.....] │ [...] │ [......]");
+      L.push("  Rémunération effective     │ [.....] │ [.....] │ [...] │ [......]");
+      L.push("  Promotions                 │ [.....] │ [.....] │ [...] │ [......]");
+      L.push("  Formation                  │ [.....] │ [.....] │ [...] │ [......]");
+      L.push("  Temps partiel              │ [.....] │ [.....] │ [...] │ [......]");
+      L.push("  Départs                    │ [.....] │ [.....] │ [...] │ [......]");
+      L.push("");
+      L.push("PARTIE III — LES OBJECTIFS DE PROGRESSION POUR L'ANNÉE À VENIR");
+      L.push("");
+      L.push("  objectif                         │ indicateur │ cible │ échéance");
+      L.push("  ─────────────────────────────────┼────────────┼───────┼──────────");
+      for (var j = 0; j < 5; j++)
+        L.push("  [.............................] │ [........] │ [...] │ [......]");
+      L.push("");
+      L.push("  [Un objectif sans indicateur n'est pas opérationnel au sens du texte :");
+      L.push("  personne, l'an prochain, ne pourra dire s'il a été atteint.]");
+      L.push("");
+      L.push("PARTIE IV — LES ACTIONS QUALITATIVES ET QUANTITATIVES, ET LEUR COÛT");
+      L.push("");
+      L.push("Le texte exige les trois : les actions, leur nature qualitative ou");
+      L.push("quantitative, et l'évaluation de leur coût.");
+      L.push("");
+      L.push("  action                     │ objectif  │ pilote  │ échéance │ coût");
+      L.push("  ───────────────────────────┼───────────┼─────────┼──────────┼───────");
+      for (var m = 0; m < 7; m++)
+        L.push("  [.......................] │ [.......] │ [.....] │ [......] │ [....]");
+      L.push("");
+      L.push("  COÛT TOTAL ESTIMÉ DU PLAN : [........] euros.");
+      L.push("");
+      L.push("  [Le coût s'évalue action par action, et il se totalise. Un plan qui");
+      L.push("  annonce des actions sans chiffrage ne remplit pas le troisième verbe de");
+      L.push("  L. 2242-3 — « évalue leur coût ».]");
+      L.push("");
+      L.push("PARTIE V — LE SUIVI");
+      L.push("");
+      L.push("[Modalités de suivi de la réalisation des objectifs et des mesures. Le");
+      L.push("deuxième alinéa de L. 2242-8 renvoie leur fixation à un décret, qui n'a");
+      L.push("pas été lu à la source par ce module : vérifiez-le avant d'arrêter vos");
+      L.push("modalités. Prévoyez au minimum qui suit, à quelle fréquence, et sur quels");
+      L.push("indicateurs.]");
+      L.push("");
+      L.push("PARTIE VI — LA PUBLICITÉ ET LE DÉPÔT");
+      L.push("");
+      L.push("Le présent plan est déposé auprès de l'autorité administrative,");
+      L.push("conformément à l'article L. 2242-3.");
+      L.push("");
+      L.push("[Modalités de diffusion interne : à préciser. Le texte lu n'en impose");
+      L.push("aucune ; le silence de la loi n'est pas une raison de ne rien faire.]");
+      L.push("");
+      L.push("Fait à " + villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("COURRIER — DÉPÔT DU PLAN D'ACTION");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx));
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("À l'autorité administrative compétente");
+      L.push("[service compétent — coordonnées à vérifier]");
+      L.push("");
+      L.push(villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push("Objet : dépôt du plan d'action annuel pour l'égalité professionnelle");
+      L.push("entre les femmes et les hommes (L. 2242-3)");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("La négociation sur l'égalité professionnelle entre les femmes et les");
+      L.push("hommes et la qualité de vie et des conditions de travail, engagée le");
+      L.push("[DATE] au sein de " + nomDe(ctx) + ", s'est achevée sans qu'un accord ait");
+      L.push("été conclu.");
+      L.push("");
+      L.push("Conformément à l'article L. 2242-3 du code du travail, j'ai établi un plan");
+      L.push("d'action annuel destiné à assurer l'égalité professionnelle entre les");
+      L.push("femmes et les hommes. Après évaluation des objectifs fixés et des mesures");
+      L.push("prises au cours de l'année écoulée, ce plan détermine les objectifs de");
+      L.push("progression prévus pour l'année à venir, définit les actions qualitatives");
+      L.push("et quantitatives permettant de les atteindre et évalue leur coût.");
+      L.push("");
+      L.push("Je procède à son dépôt et vous serais reconnaissant de bien vouloir m'en");
+      L.push("délivrer récépissé.");
+      L.push("");
+      L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
+      L.push("distinguée.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("Pièces jointes : plan d'action annuel · [procès-verbal de désaccord, s'il");
+      L.push("en a été établi un]");
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("LA PORTE QUE PEU D'EMPLOYEURS CONNAISSENT — L'ARTICLE L. 2242-9");
+      L.push(GROS);
+      L.push("");
+      citer(L, "L2242-9");
+      L.push("Ce que ce texte permet, et ce qu'il coûte :");
+      L.push("");
+      L.push("  · VOUS POUVEZ DEMANDER à l'autorité administrative d'apprécier la");
+      L.push("    conformité de votre plan aux dispositions de L. 2242-8.");
+      L.push("  · SI ELLE RÉPOND QUE LE PLAN EST CONFORME, cette réponse LA LIE pour");
+      L.push("    l'application de la pénalité — pour un plan d'action, pendant la");
+      L.push("    période comprise entre la date de réception de la réponse et le terme");
+      L.push("    de la première année suivant le dépôt du plan.");
+      L.push("  · LE SILENCE VAUT REJET, à l'issue d'un délai fixé par décret en Conseil");
+      L.push("    d'État. Ce décret n'a pas été lu à la source par ce module : le délai");
+      L.push("    n'est donc pas écrit ici.");
+      L.push("  · LA DEMANDE N'EST PLUS RECEVABLE dès lors qu'un contrôle a été engagé.");
+      L.push("    Demandez AVANT, pas pendant : c'est tout l'intérêt du dispositif.");
+      L.push("");
+      L = L.concat(courrierOS(ctx,
+        "demande d'appréciation de la conformité du plan d'action à l'article L. 2242-8",
+        ["En application de l'article L. 2242-9 du code du travail, aux termes duquel",
+         "l'autorité administrative se prononce sur toute demande d'appréciation de la",
+         "conformité d'un accord ou d'un plan d'action aux dispositions de l'article",
+         "L. 2242-8 formulée par un employeur, je sollicite l'appréciation de la",
+         "conformité du plan d'action annuel pour l'égalité professionnelle de",
+         nomDe(ctx) + ", déposé le [DATE].",
+         "",
+         "Ce plan, ci-joint, évalue les objectifs fixés et les mesures prises au cours",
+         "de l'année écoulée, détermine les objectifs de progression de l'année à",
+         "venir, définit les actions qualitatives et quantitatives permettant de les",
+         "atteindre et évalue leur coût.",
+         "",
+         "Je vous précise qu'aucun contrôle sur le respect des dispositions de",
+         "l'article L. 2242-8 n'a été engagé à ma connaissance."],
+        { a: "À l'autorité administrative compétente",
+          a2: "[service compétent — coordonnées à vérifier]",
+          appel: "Madame, Monsieur,",
+          envoi: "Lettre recommandée avec demande d'avis de réception",
+          formule: "Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération distinguée.",
+          pj: ["plan d'action annuel déposé le [DATE]", "récépissé de dépôt"] }));
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous ouvrez l'évaluation de l'année écoulée : objectifs fixés,"),
+        suite("mesures prises, actions non réalisées et leurs explications."),
+        ech(ctx, 10, "le diagnostic chiffré est réuni — base de données, déclaration"),
+        suite("sociale nominative, registre unique du personnel."),
+        ech(ctx, 20, "les objectifs de progression sont arrêtés, avec leurs"),
+        suite("indicateurs. Un objectif sans indicateur ne se suit pas."),
+        ech(ctx, 27, "chaque action reçoit son pilote, son échéance et son coût."),
+        ech(ctx, 30, "le plan est signé."),
+        ech(ctx, 35, "DÉPÔT auprès de l'autorité administrative (L. 2242-3). Un plan"),
+        suite("non déposé ne couvre pas l'entreprise."),
+        ech(ctx, 45, "le récépissé est au dossier, et la demande d'appréciation de"),
+        suite("conformité de L. 2242-9 peut partir — avant tout contrôle."),
+        ech(ctx, 365, "le plan est annuel : l'évaluation de cette année-ci sera le"),
+        suite("préalable du plan suivant. Ouvrez le suivi dès maintenant."),
+      ]));
+
+      return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17",
+        ["Les articles L. 1142-8 et L. 1142-9, nommés par L. 2242-8, et les décrets",
+         "auxquels L. 2242-8 et L. 2242-9 renvoient, n'ont PAS été lus à la source par",
+         "ce module : ni les indicateurs, ni les délais, ni les modalités de suivi ne",
+         "sont décrits ici. Ils sont nommés, et il faut les vérifier."])).join("\n");
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     NAO-CTL-EGA-02 — LA COUVERTURE ET LA PUBLICATION DES ÉCARTS
+
+     Fondement : L. 2242-8. Ce texte est capté ; L. 1142-8 et L. 1142-9, qu'il
+     nomme, NE LE SONT PAS.
+
+     Conséquence tenue dans tout le document : l'index est NOMMÉ, jamais
+     décrit. Ni ses indicateurs, ni sa date de publication, ni le seuil de
+     résultat qui déclenche les mesures de correction ne sont écrits — la fiche
+     de régularisation évoque « au plus tard le 1er mars » et un « seuil
+     réglementaire », mais aucun texte lu ne les porte.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("NAO-CTL-EGA-02", {
+    nom: "La couverture égalité et la publication des écarts de rémunération",
+    detail: "Le constat de couverture — accord ou plan d'action —, la note de " +
+            "publication des informations de L. 1142-8, l'information du comité " +
+            "social et économique et le suivi des mesures de correction.",
+    produire: function (ctx) {
+      var n = negoDe(ctx, "egalite"), p = n.planAction || {};
+      if (typeof p === "string") { try { p = JSON.parse(p); } catch (e) { p = {}; } }
+      var eff = effectifDe(ctx);
+      var index = F(ctx).indexEgalitePublie;
+      var couvert = n.issue === "accord" || estOui(p.existe);
+      var L = entete(ctx, "Couverture égalité professionnelle et publication des écarts de rémunération",
+        "article L. 2242-8 du code du travail");
+
+      modeDEmploi(L, "le constat de couverture et la note de publication des écarts de rémunération");
+
+      L = L.concat(expositionL22428([], ctx));
+
+      L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
+      L.push("");
+      L.push("  · effectif : " + (eff === null ? "[NON RENSEIGNÉ]" : eff + " salariés"));
+      L.push("  · issue de la négociation égalité : " +
+        (vide(n.issue) ? "[non renseignée]" : n.issue));
+      L.push("  · plan d'action établi : " + etat(p.existe, "OUI", "non"));
+      L.push("  · couverture par un accord ou un plan : " +
+        (couvert ? "ACQUISE en l'état des déclarations" : "NON ÉTABLIE"));
+      L.push("  · informations de L. 1142-8 publiées : " + etat(index, "OUI", "NON"));
+      L.push("");
+      if (eff !== null && eff < 50) {
+        L.push("  → Effectif de " + eff + " salariés : la pénalité de L. 2242-8 vise les");
+        L.push("    entreprises d'au moins cinquante salariés. Elle n'est pas encourue en");
+        L.push("    l'état — mais l'obligation de négocier, elle, ne dépend pas de");
+        L.push("    l'effectif : elle naît des sections syndicales (L. 2242-1).");
+        L.push("");
+      }
+      if (!couvert) {
+        L.push("  → LA COUVERTURE N'EST PAS ÉTABLIE. C'est le premier manquement que");
+        L.push("    L. 2242-8 vise, et il se répare d'une seule façon : un accord, ou un");
+        L.push("    plan d'action. Le document du point NAO-CTL-EGA-01 rédige le plan.");
+        L.push("");
+      }
+      if (estNon(index)) {
+        L.push("  → LES INFORMATIONS DE L. 1142-8 NE SONT PAS PUBLIÉES. Le quatrième");
+        L.push("    alinéa de L. 2242-8 permet d'appliquer la pénalité à ce SEUL titre :");
+        L.push("    une entreprise couverte par un accord parfait mais qui ne publie pas");
+        L.push("    reste exposée.");
+        L.push("");
+      }
+
+      L.push("════ CE QUE CE DOCUMENT NE VOUS DIRA PAS, ET POURQUOI ════");
+      L.push("");
+      L.push("L'article L. 1142-8 est NOMMÉ par L. 2242-8, mais il n'a pas été lu à la");
+      L.push("source par ce module. Il en va de même de L. 1142-9, qui porte les mesures");
+      L.push("de correction. En conséquence, et délibérément, ce document N'ÉCRIT PAS :");
+      L.push("");
+      L.push("  · quels indicateurs composent la publication ;");
+      L.push("  · comment ils se calculent ;");
+      L.push("  · à quelle date au plus tard la publication doit intervenir ;");
+      L.push("  · quel niveau de résultat déclenche les mesures de correction ;");
+      L.push("  · dans quel délai ces mesures doivent produire effet.");
+      L.push("");
+      L.push("Une application qui vous donnerait ces cinq réponses de mémoire vous");
+      L.push("ferait publier sur des règles qu'elle n'a pas vérifiées. Allez les lire à");
+      L.push("la source — ce sont cinq questions, et elles ont des réponses écrites.");
+      L.push("");
+      L.push("Ce que ce document fait, en revanche : il monte la pièce qui prouve que");
+      L.push("vous avez publié, et quand.");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 1 — LE CONSTAT DE COUVERTURE");
+      L.push(GROS);
+      L.push("");
+      L.push(nomDe(ctx).toUpperCase());
+      L.push(adresseDe(ctx));
+      L.push("");
+      L.push("CONSTAT DE COUVERTURE AU REGARD DE L'ARTICLE L. 2242-8 — " +
+        leJour(aujourd(ctx)));
+      L.push("");
+      L.push("Effectif de l'entreprise : " +
+        (eff === null ? "[.......]" : eff) + " salariés, établi par [relevé d'effectif");
+      L.push("mensuel / déclarations sociales nominatives de la période].");
+      L.push("");
+      L.push("L'entreprise est couverte par :");
+      L.push("");
+      L.push("  [ ] un accord relatif à l'égalité professionnelle entre les femmes et");
+      L.push("      les hommes, conclu le .............., déposé le ..............,");
+      L.push("      en vigueur jusqu'au .............. ;");
+      L.push("");
+      L.push("  [ ] à défaut d'accord, un plan d'action annuel établi en application de");
+      L.push("      l'article L. 2242-3, établi le .............. et déposé auprès de");
+      L.push("      l'autorité administrative le .............. ;");
+      L.push("");
+      L.push("  [ ] AUCUN DES DEUX — situation à régulariser sans délai : c'est le");
+      L.push("      premier manquement que L. 2242-8 vise.");
+      L.push("");
+      L.push("Dans une entreprise d'au moins trois cents salariés, le défaut d'accord");
+      L.push("est attesté par un procès-verbal de désaccord (L. 2242-8, troisième");
+      L.push("alinéa) : [procès-verbal établi le .............., déposé le ...........].");
+      L.push("");
+      L.push("Publication des informations prévues à l'article L. 1142-8 :");
+      L.push("  [ ] effectuée le .............., sur [adresse du site internet /");
+      L.push("      autre modalité : ..............................] ;");
+      L.push("  [ ] non effectuée — le quatrième alinéa de L. 2242-8 permet d'appliquer");
+      L.push("      la pénalité à ce seul titre.");
+      L.push("");
+      L.push("Mesures définies dans les conditions prévues à l'article L. 1142-9, si");
+      L.push("elles sont dues : [définies le .............. / sans objet / non");
+      L.push("définies]. Ce module n'a pas lu L. 1142-9 : c'est à la source qu'il faut");
+      L.push("vérifier si elles vous sont dues, et lesquelles.");
+      L.push("");
+      L.push("Fait à " + villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("");
+
+      L.push(GROS);
+      L.push("PIÈCE 2 — LA NOTE DE PUBLICATION ET SA PREUVE");
+      L.push(GROS);
+      L.push("");
+      L.push("Publier ne suffit pas : il faut pouvoir établir QUOI a été publié, OÙ, et");
+      L.push("À QUELLE DATE. Cette note est la pièce qui l'établit.");
+      L.push("");
+      L.push(nomDe(ctx).toUpperCase());
+      L.push("");
+      L.push("PUBLICATION DES INFORMATIONS PRÉVUES À L'ARTICLE L. 1142-8 DU CODE DU");
+      L.push("TRAVAIL");
+      L.push("");
+      L.push("  · Période de référence retenue : [..........................]");
+      L.push("  · Date de publication : [..........................]");
+      L.push("  · Support : [adresse exacte de la page du site internet de l'entreprise");
+      L.push("    / à défaut de site, modalité retenue pour porter le résultat à la");
+      L.push("    connaissance des salariés : ..............................]");
+      L.push("  · Contenu publié : [reprendre exactement ce qui a été mis en ligne. Ce");
+      L.push("    module n'ayant pas lu L. 1142-8, il ne préjuge ni du nombre");
+      L.push("    d'indicateurs, ni de leur intitulé, ni de leur mode de calcul.]");
+      L.push("  · Preuve conservée : [capture d'écran datée / constat / attestation du");
+      L.push("    prestataire du site — et son horodatage.]");
+      L.push("  · Déclaration à l'administration : [effectuée le .............., par");
+      L.push("    ..............................]");
+      L.push("  · Information du comité social et économique : [le .............. —");
+      L.push("    joindre l'extrait du procès-verbal de la réunion.]");
+      L.push("");
+      L.push("Si le résultat appelle des mesures au titre de l'article L. 1142-9 :");
+      L.push("  · [mesures définies, calendrier, et modalités de leur suivi]");
+      L.push("  · [Vérifiez à la source ce que L. 1142-9 exige : ce module ne l'a pas");
+      L.push("    lu, et une mesure inventée ne vaut pas mieux qu'une mesure absente.]");
+      L.push("");
+      L.push("Fait à " + villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("");
+
+      L = L.concat(courrierOS(ctx,
+        "publication des informations relatives aux écarts de rémunération entre les femmes et les hommes",
+        ["Je vous informe que les informations prévues à l'article L. 1142-8 du code",
+         "du travail ont été publiées le [DATE], sur [support].",
+         "",
+         "Le résultat obtenu et le détail de sa composition figurent en pièce jointe.",
+         "",
+         "[Le cas échéant :] Ce résultat appelle la définition de mesures dans les",
+         "conditions prévues à l'article L. 1142-9. Ces mesures vous seront soumises",
+         "lors de la réunion du [DATE], et la négociation sur l'égalité",
+         "professionnelle en traitera au titre du 2° de l'article L. 2242-17 —",
+         "suppression des écarts de rémunération.",
+         "",
+         "Je vous rappelle que l'entreprise est couverte par [l'accord d'égalité",
+         "professionnelle du .......... / le plan d'action annuel déposé le ..........].",
+         "",
+         "Copie de la présente est adressée aux membres du comité social et",
+         "économique."],
+        { pj: ["détail des informations publiées",
+               "preuve de publication, datée"] }));
+
+      L = L.concat(calendrier(ctx, [
+        ech(ctx, 0, "vous établissez le constat de couverture : accord, plan"),
+        suite("d'action, ou ni l'un ni l'autre. Ce constat se signe."),
+        ech(ctx, 3, "si la couverture manque, la négociation ou le plan d'action"),
+        suite("s'ouvre immédiatement (documents NAO-CTL-PER-02 et NAO-CTL-EGA-01)."),
+        ech(ctx, 7, "vous allez lire à la source les articles L. 1142-8 et L. 1142-9 :"),
+        suite("indicateurs, mode de calcul, date limite de publication, seuil de"),
+        suite("résultat. Ce module ne les a pas lus et ne les invente pas."),
+        ech(ctx, 30, "calcul des indicateurs sur la période de référence retenue."),
+        ech(ctx, 40, "publication, et preuve horodatée versée au dossier."),
+        ech(ctx, 45, "déclaration à l'administration et information du comité social"),
+        suite("et économique — l'extrait de procès-verbal fait la preuve."),
+        ech(ctx, 60, "si des mesures de correction sont dues, elles sont définies et"),
+        suite("calendrées : leur absence est un manquement distinct."),
+      ]));
+
+      return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17",
+        ["Les articles L. 1142-8 et L. 1142-9 sont NOMMÉS parce que L. 2242-8 les",
+         "nomme. Ils n'ont PAS été lus à la source par ce module : ni les indicateurs,",
+         "ni leur calcul, ni la date limite de publication, ni le seuil de résultat qui",
+         "déclenche les mesures de correction ne figurent dans ce document. Toute",
+         "affirmation sur ces cinq points doit être vérifiée à la source."])).join("\n");
+    },
+  });
+
 })(typeof window !== "undefined" ? window : this);
