@@ -20,7 +20,18 @@ function audit(f) {
     try { return c.verdict(f); } catch (e) { return { etat: MANQ, motif: "Contrôle non exécutable : " + e.message }; }
   })() }));
   const par = e => V.filter(x => x.v.etat === e);
-  const nc = par(NC), rq = par(RISQ), mq = par(MANQ), ok = par(CONF), so = par(SO);
+  const nc = par(NC), rq = par(RISQ), mq = par(MANQ), ok = par(CONF);
+  /* « Sans objet » recouvrait deux choses opposées, et les disait du même mot.
+     Le contrôle qui attend le règlement intérieur — parce que l'entreprise est
+     tenue d'en avoir un et n'en a pas — n'est pas écarté : il s'appliquera le
+     jour où le règlement existera, c'est-à-dire au terme du travail que le
+     rapport demande dans le même souffle. Lui laisser lire « l'exigence ne
+     s'applique pas » au moment où il rédige son règlement est le meilleur
+     moyen de lui faire écrire un règlement incomplet. Ces contrôles sortent
+     donc du bloc « Sans objet » et prennent le leur, juste après les
+     non-conformités. */
+  const att = V.filter(x => x.v.etat === SO && x.v.enAttente);
+  const so = V.filter(x => x.v.etat === SO && !x.v.enAttente);
 
   sur("Audit — discipline et règlement intérieur · sanction, procédure, garanties de fond");
   t1(f.entreprise ? `Discipline et règlement intérieur — ${f.entreprise}` : "Discipline et règlement intérieur");
@@ -61,6 +72,8 @@ function audit(f) {
     }
   };
   bloc("Non conforme", nc, "Un texte n'est pas respecté, ou une garantie de fond a été méconnue. Le motif dit lequel, et pourquoi.");
+  bloc("En attente du règlement intérieur", att,
+    "Ces exigences ne sont PAS écartées. Elles portent sur le contenu et les formalités d'un règlement intérieur que l'entreprise est tenue d'avoir et n'a pas. Le jour où il existera, elles s'appliqueront toutes, immédiatement et sans autre condition. Elles ne sont donc pas à traiter après la rédaction du règlement : elles SONT le cahier des charges de cette rédaction. Le document que l'application produit sous DIS-CTL-RI-01 porte déjà chacune des clauses vérifiées ici.");
   bloc("Risque à vérifier", rq, "La règle dépend d'une appréciation que l'application ne fait pas à votre place.");
   bloc("Donnée manquante", mq, "Aucune conclusion n'en est tirée, dans aucun sens : complétez, puis relancez.");
   bloc("Conforme", ok, null);

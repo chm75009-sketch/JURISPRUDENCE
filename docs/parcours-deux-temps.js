@@ -112,6 +112,29 @@
     return h + "</section>";
   };
 
+  /* Ce que la ligne repliée doit annoncer.
+
+     Elle ne montrait que « ce qu'il faut faire », le degré et le délai. Sur le
+     règlement intérieur, cela donnait une ligne qui se lit comme une liste de
+     formalités, alors que la fiche porte dessous cinq étapes et un règlement
+     entier que l'application rédige. L'employeur refermait sans savoir ce qui
+     l'attendait à l'intérieur.
+
+     La ligne dit donc désormais combien d'étapes la fiche contient, et — c'est
+     le point — que le document est écrit pour lui. C'est la seule information
+     qui décide s'il ouvre ou non. */
+  function annonce(pt) {
+    var l = [];
+    if (pt.degre) l.push(ech(pt.degre));
+    if (pt.delai) l.push(ech(pt.delai));
+    if (pt.etapes && pt.etapes.length)
+      l.push(pt.etapes.length + (pt.etapes.length > 1 ? " étapes" : " étape"));
+    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(pt.id);
+    if (gen) l.push('<b class="pc-redige">document rédigé par l\'application</b>');
+    else if (pt.document) l.push("document à produire");
+    return l.join(" · ");
+  }
+
   Parcours.prototype.cartePointA = function (pt, rang) {
     var ouvert = this.ouvert.A === pt.id;
     var corr = this.etat.corrections[pt.id] || {};
@@ -119,7 +142,7 @@
       '<div class="pc-entete" data-ouvrir="A" data-cible="' + ech(pt.id) + '">' +
       '<span class="pc-rang">' + rang + "</span>" +
       '<div class="pc-titre"><b>' + ech(pt.quoiFaire) + "</b>" +
-      "<small>" + ech(pt.degre) + " · " + ech(pt.delai) + "</small></div>" +
+      "<small>" + annonce(pt) + "</small></div>" +
       '<span class="pc-etiq pc-g' + pt.gravite + '">' + (pt.fait ? "corrigé" : "à faire") + "</span>" +
       "</div>";
 
@@ -470,6 +493,7 @@
     ".pc-rang{width:22px;height:22px;border-radius:50%;background:#f0eaf0;color:#5C2A54;font:600 12px/22px system-ui;text-align:center}",
     ".pc-titre b{display:block;font-size:14.5px;line-height:1.35}",
     ".pc-titre small{display:block;color:#5f6874;font-size:11.5px;margin-top:2px}",
+    ".pc-redige{color:#1b6b3a;font-weight:600}",
     ".pc-etiq{font:600 11px/1 system-ui;letter-spacing:.04em;text-transform:uppercase;padding:5px 9px;border-radius:5px;white-space:nowrap;background:#eef0f3;color:#5f6874}",
     ".pc-etiq.pc-g1{background:#faeaea;color:#a32c2c}",
     ".pc-etiq.pc-g2{background:#f8efdf;color:#8a5b10}",

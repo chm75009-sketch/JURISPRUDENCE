@@ -4,7 +4,7 @@
    de moteur/economique, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : d159cbbff0a8
+   Empreinte du moteur au moment de l'empaquetage : 1289a8e22bda
    {"articlesLus":32,"articlesReprisDuModuleSocial":8,"natures":8,"controles":25,"exposition":1,"coherence":0,"donneesDemandees":65,"casContradictoires":35,"verdicts":925,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0}
 */
 (function (global) {
@@ -21,7 +21,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"discipline et règlement intérieur","date":"2026-08-24","empreinte":"d159cbbff0a8","fichiers":{"audit-discipline-client.js":"bd1c7d46739b","capturer-textes-discipline.js":"d944486c715f","controles-discipline.js":"299bf1c64777","dates.js":"5d945470174f","fiche-discipline.json":"b26efd82ccf5","moteur-discipline.js":"5c8ebf97fed2","outils.js":"6defb2be2a2b","propositions-discipline.js":"1d9fdaeebce4","questionnaire-discipline.js":"f24a95116025","regularisation-discipline.js":"4665227fcaa7","tests-discipline.js":"7f7c196f35a8","textes-discipline.json":"2b24f89c0608","verifier-textes-discipline.js":"4b42770e1257"},"compteurs":{"articlesLus":32,"articlesReprisDuModuleSocial":8,"natures":8,"controles":25,"exposition":1,"coherence":0,"donneesDemandees":65,"casContradictoires":35,"verdicts":925,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0},"textesRelus":{"date":"2026-08-24","articles":32,"concordants":32,"ecarts":0,"sansConclusion":0}};
+  var __MANIFESTE = {"domaine":"discipline et règlement intérieur","date":"2026-08-25","empreinte":"1289a8e22bda","fichiers":{"audit-discipline-client.js":"2f222c836fae","capturer-textes-discipline.js":"d944486c715f","controles-discipline.js":"26d0e34547c1","dates.js":"5d945470174f","fiche-discipline.json":"b26efd82ccf5","moteur-discipline.js":"5c8ebf97fed2","outils.js":"6defb2be2a2b","propositions-discipline.js":"1d9fdaeebce4","questionnaire-discipline.js":"f24a95116025","regularisation-discipline.js":"4665227fcaa7","tests-discipline.js":"7f7c196f35a8","textes-discipline.json":"2b24f89c0608","verifier-textes-discipline.js":"4b42770e1257"},"compteurs":{"articlesLus":32,"articlesReprisDuModuleSocial":8,"natures":8,"controles":25,"exposition":1,"coherence":0,"donneesDemandees":65,"casContradictoires":35,"verdicts":925,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0},"textesRelus":{"date":"2026-08-24","articles":32,"concordants":32,"ecarts":0,"sansConclusion":0}};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -50,7 +50,18 @@ function audit(f) {
     try { return c.verdict(f); } catch (e) { return { etat: MANQ, motif: "Contrôle non exécutable : " + e.message }; }
   })() }));
   const par = e => V.filter(x => x.v.etat === e);
-  const nc = par(NC), rq = par(RISQ), mq = par(MANQ), ok = par(CONF), so = par(SO);
+  const nc = par(NC), rq = par(RISQ), mq = par(MANQ), ok = par(CONF);
+  /* « Sans objet » recouvrait deux choses opposées, et les disait du même mot.
+     Le contrôle qui attend le règlement intérieur — parce que l'entreprise est
+     tenue d'en avoir un et n'en a pas — n'est pas écarté : il s'appliquera le
+     jour où le règlement existera, c'est-à-dire au terme du travail que le
+     rapport demande dans le même souffle. Lui laisser lire « l'exigence ne
+     s'applique pas » au moment où il rédige son règlement est le meilleur
+     moyen de lui faire écrire un règlement incomplet. Ces contrôles sortent
+     donc du bloc « Sans objet » et prennent le leur, juste après les
+     non-conformités. */
+  const att = V.filter(x => x.v.etat === SO && x.v.enAttente);
+  const so = V.filter(x => x.v.etat === SO && !x.v.enAttente);
 
   sur("Audit — discipline et règlement intérieur · sanction, procédure, garanties de fond");
   t1(f.entreprise ? `Discipline et règlement intérieur — ${f.entreprise}` : "Discipline et règlement intérieur");
@@ -91,6 +102,8 @@ function audit(f) {
     }
   };
   bloc("Non conforme", nc, "Un texte n'est pas respecté, ou une garantie de fond a été méconnue. Le motif dit lequel, et pourquoi.");
+  bloc("En attente du règlement intérieur", att,
+    "Ces exigences ne sont PAS écartées. Elles portent sur le contenu et les formalités d'un règlement intérieur que l'entreprise est tenue d'avoir et n'a pas. Le jour où il existera, elles s'appliqueront toutes, immédiatement et sans autre condition. Elles ne sont donc pas à traiter après la rédaction du règlement : elles SONT le cahier des charges de cette rédaction. Le document que l'application produit sous DIS-CTL-RI-01 porte déjà chacune des clauses vérifiées ici.");
   bloc("Risque à vérifier", rq, "La règle dépend d'une appréciation que l'application ne fait pas à votre place.");
   bloc("Donnée manquante", mq, "Aucune conclusion n'en est tirée, dans aucun sens : complétez, puis relancez.");
   bloc("Conforme", ok, null);
@@ -590,11 +603,50 @@ const ctl = (id, rubrique, objet, fondement, verdict) => C.push({ id, rubrique, 
 
 /* Le garde des contrôles qui portent sur le contenu ou les formalités du
    règlement intérieur : sans règlement intérieur, rien ne s'en contrôle —
-   l'obligation d'en établir un, elle, relève de DIS-CTL-RI-01. */
+   l'obligation d'en établir un, elle, relève de DIS-CTL-RI-01.
+
+   MAIS « SANS OBJET » NE VEUT PAS DIRE LA MÊME CHOSE DANS LES DEUX CAS, et
+   c'est le défaut que ce garde portait. Deux situations très différentes
+   recevaient le même mot :
+
+   - le règlement n'est PAS DÛ (moins de cinquante salariés, ou seuil franchi
+     depuis moins de douze mois) et l'entreprise n'en a pas : le contrôle est
+     réellement sans objet, il ne s'appliquera pas tant que rien ne change ;
+
+   - le règlement EST DÛ et l'entreprise n'en a pas : le contrôle n'est pas
+     sans objet, il est EN ATTENTE. Il s'appliquera intégralement le jour où
+     le règlement existera — c'est-à-dire tout de suite, puisque l'employeur
+     est en train d'y être contraint par DIS-CTL-RI-01. Lui laisser lire
+     « n'a pas d'objet » sur les onze contrôles de contenu revient à lui
+     faire croire que le contenu du règlement ne le concerne pas, au moment
+     précis où il s'apprête à le rédiger.
+
+   L'état reste « sans objet » — il n'y en a que cinq dans le dépôt, et rien
+   ne serait gagné à en inventer un sixième que ni le rapport ni le parcours
+   ne sauraient traiter. C'est le motif qui dit la vérité, et il la dit à
+   l'endroit où l'employeur la lit. */
 function siRI(f, suite) {
   const ri = f.ri || {};
   if (vide(ri.existe)) return { etat: MANQ, motif: "Il n'est pas indiqué si l'entreprise s'est dotée d'un règlement intérieur : ni son contenu ni ses formalités ne peuvent être contrôlés." };
-  if (nie(ri.existe)) return { etat: SO, motif: "Aucun règlement intérieur n'existe : ce contrôle n'a pas d'objet — l'obligation d'en établir un, là où elle s'impose, est contrôlée par DIS-CTL-RI-01." };
+  if (nie(ri.existe)) {
+    const d = M.riDu(f);
+    if (d.connu && d.du) return { etat: SO, enAttente: true, motif:
+      "EN ATTENTE DU RÈGLEMENT INTÉRIEUR — ce contrôle n'est pas écarté, il est suspendu. " +
+      "L'entreprise est tenue d'établir un règlement intérieur (DIS-CTL-RI-01) et n'en a pas. " +
+      "Le jour où il existera, cette exigence s'appliquera intégralement, sans délai supplémentaire " +
+      "et sans autre condition : elle est donc à traiter en même temps que la rédaction du règlement, " +
+      "non après. L'application rédige ce règlement pour vous — le document produit sous DIS-CTL-RI-01 " +
+      "porte déjà la clause que ce contrôle vérifiera." };
+    if (!d.connu) return { etat: MANQ, motif:
+      "Aucun règlement intérieur n'existe, et le dossier ne permet pas de dire si l'entreprise est " +
+      "tenue d'en établir un : " + d.motif + " Tant que ce point n'est pas tranché, ce contrôle ne " +
+      "peut être dit ni sans objet ni en attente." };
+    return { etat: SO, motif:
+      "Aucun règlement intérieur n'existe, et l'entreprise n'est pas tenue d'en établir un : " + d.motif +
+      " Ce contrôle est donc réellement sans objet aujourd'hui. Il reprendrait tout son effet si " +
+      "l'entreprise se dotait volontairement d'un règlement — les articles L. 1321-1 à L. 1321-6 ne " +
+      "posent aucun seuil et s'imposent alors en entier." };
+  }
   return suite(ri);
 }
 

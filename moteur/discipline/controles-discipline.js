@@ -56,11 +56,50 @@ const ctl = (id, rubrique, objet, fondement, verdict) => C.push({ id, rubrique, 
 
 /* Le garde des contrôles qui portent sur le contenu ou les formalités du
    règlement intérieur : sans règlement intérieur, rien ne s'en contrôle —
-   l'obligation d'en établir un, elle, relève de DIS-CTL-RI-01. */
+   l'obligation d'en établir un, elle, relève de DIS-CTL-RI-01.
+
+   MAIS « SANS OBJET » NE VEUT PAS DIRE LA MÊME CHOSE DANS LES DEUX CAS, et
+   c'est le défaut que ce garde portait. Deux situations très différentes
+   recevaient le même mot :
+
+   - le règlement n'est PAS DÛ (moins de cinquante salariés, ou seuil franchi
+     depuis moins de douze mois) et l'entreprise n'en a pas : le contrôle est
+     réellement sans objet, il ne s'appliquera pas tant que rien ne change ;
+
+   - le règlement EST DÛ et l'entreprise n'en a pas : le contrôle n'est pas
+     sans objet, il est EN ATTENTE. Il s'appliquera intégralement le jour où
+     le règlement existera — c'est-à-dire tout de suite, puisque l'employeur
+     est en train d'y être contraint par DIS-CTL-RI-01. Lui laisser lire
+     « n'a pas d'objet » sur les onze contrôles de contenu revient à lui
+     faire croire que le contenu du règlement ne le concerne pas, au moment
+     précis où il s'apprête à le rédiger.
+
+   L'état reste « sans objet » — il n'y en a que cinq dans le dépôt, et rien
+   ne serait gagné à en inventer un sixième que ni le rapport ni le parcours
+   ne sauraient traiter. C'est le motif qui dit la vérité, et il la dit à
+   l'endroit où l'employeur la lit. */
 function siRI(f, suite) {
   const ri = f.ri || {};
   if (vide(ri.existe)) return { etat: MANQ, motif: "Il n'est pas indiqué si l'entreprise s'est dotée d'un règlement intérieur : ni son contenu ni ses formalités ne peuvent être contrôlés." };
-  if (nie(ri.existe)) return { etat: SO, motif: "Aucun règlement intérieur n'existe : ce contrôle n'a pas d'objet — l'obligation d'en établir un, là où elle s'impose, est contrôlée par DIS-CTL-RI-01." };
+  if (nie(ri.existe)) {
+    const d = M.riDu(f);
+    if (d.connu && d.du) return { etat: SO, enAttente: true, motif:
+      "EN ATTENTE DU RÈGLEMENT INTÉRIEUR — ce contrôle n'est pas écarté, il est suspendu. " +
+      "L'entreprise est tenue d'établir un règlement intérieur (DIS-CTL-RI-01) et n'en a pas. " +
+      "Le jour où il existera, cette exigence s'appliquera intégralement, sans délai supplémentaire " +
+      "et sans autre condition : elle est donc à traiter en même temps que la rédaction du règlement, " +
+      "non après. L'application rédige ce règlement pour vous — le document produit sous DIS-CTL-RI-01 " +
+      "porte déjà la clause que ce contrôle vérifiera." };
+    if (!d.connu) return { etat: MANQ, motif:
+      "Aucun règlement intérieur n'existe, et le dossier ne permet pas de dire si l'entreprise est " +
+      "tenue d'en établir un : " + d.motif + " Tant que ce point n'est pas tranché, ce contrôle ne " +
+      "peut être dit ni sans objet ni en attente." };
+    return { etat: SO, motif:
+      "Aucun règlement intérieur n'existe, et l'entreprise n'est pas tenue d'en établir un : " + d.motif +
+      " Ce contrôle est donc réellement sans objet aujourd'hui. Il reprendrait tout son effet si " +
+      "l'entreprise se dotait volontairement d'un règlement — les articles L. 1321-1 à L. 1321-6 ne " +
+      "posent aucun seuil et s'imposent alors en entier." };
+  }
   return suite(ri);
 }
 
