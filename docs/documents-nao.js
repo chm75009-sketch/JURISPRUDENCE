@@ -267,7 +267,16 @@
      du code font parfois trois mille caractères : les laisser sur une seule
      ligne rendrait le document illisible dans un traitement de texte. */
   function plier(t, largeur) {
-    var mots = String(t == null ? "" : t).split(/\s+/).filter(Boolean);
+    var bruts = String(t == null ? "" : t).split(/\s+/).filter(Boolean);
+    /* « L. 2242-1 » ne se coupe pas en fin de ligne, ni « n° 24-15.653 » : un
+       numéro d'article ou de pourvoi coupé en deux ne se retrouve plus dans une
+       recherche, et se relit mal. Les deux morceaux voyagent donc ensemble. */
+    var mots = [];
+    for (var q = 0; q < bruts.length; q++) {
+      if (/^([LRD]\.|n°|art\.)$/.test(bruts[q]) && q + 1 < bruts.length) {
+        mots.push(bruts[q] + " " + bruts[q + 1]); q++;
+      } else mots.push(bruts[q]);
+    }
     var out = [], ligne = "";
     for (var i = 0; i < mots.length; i++) {
       if (ligne === "") { ligne = mots[i]; continue; }
@@ -917,10 +926,10 @@
       citer(L, "L2242-1", "Ce que l'employeur engage :");
       citer(L, "L2242-13", "À quel rythme, à défaut d'accord de méthode :");
 
-      L = L.concat(expositionL22431(L2 = []));
+      L = L.concat(expositionL22431([]));
       L = L.concat(expositionL22427([]));
 
-      L = destinataires(L);
+      destinataires(L);
 
       L = L.concat(courrierOS(ctx,
         "convocation à la négociation sur la rémunération, le temps de travail et le partage de la valeur ajoutée",
