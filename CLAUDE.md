@@ -11,6 +11,23 @@ les vérifications ou les corrections tant que l'utilisateur ne le demande pas.
 S'il pose une question fermée, répondre par oui ou non, puis se taire.
 Le détail est disponible sur demande — il n'est jamais fourni d'office.
 
+## Lire — règle absolue, jamais de supposition
+
+**Lire TOUT le document, jusqu'à la dernière page, avant d'en dire quoi que ce soit.**
+Ne jamais se contenter d'un extrait, d'un résumé, d'une restitution automatique, ni
+— surtout — de ce dont on croit se souvenir. La mémoire n'est pas une source.
+
+Un PDF scanné n'a pas de couche texte : compter les pages (`pymupdf.open(f).page_count`),
+les convertir toutes en images, et les lire toutes. Une pièce annoncée « 6 pages » se lit
+en six pages.
+
+Cas mesuré le 26 août 2026 — pièce n° 36 du dossier Bouhali, l'attestation SORRET. Une
+première lecture partielle en avait tiré l'essentiel du récit ; les pages non lues
+portaient trois éléments décisifs : la date de rédaction (6 juin 2025, dix-huit mois après
+les faits et après le jugement), l'aveu du témoin de ne pas se souvenir des propos qu'il
+cite ensuite mot à mot, et un objet de l'appel litigieux différent de celui qu'indique la
+lettre de licenciement. Rien de tout cela n'était devinable depuis les pages lues.
+
 ## Documents Word — règle impérative
 
 **Générer tous les .docx avec `python-docx`, jamais avec la bibliothèque JavaScript `docx`.**
