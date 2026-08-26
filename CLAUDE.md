@@ -17,6 +17,12 @@ Le détail est disponible sur demande — il n'est jamais fourni d'office.
 Ne jamais se contenter d'un extrait, d'un résumé, d'une restitution automatique, ni
 — surtout — de ce dont on croit se souvenir. La mémoire n'est pas une source.
 
+**Un écrit d'avocat se lit en entier, du premier au dernier mot.** Pas de `grep`, pas de
+recherche ciblée, pas de survol : le fichier est ouvert et lu ligne par ligne. Chercher un
+mot ne trouve que ce qu'on a déjà pensé à chercher — c'est justement ce qui fait manquer
+les contradictions. Tant que la lecture intégrale n'est pas faite, ne rien affirmer sur le
+document, et dire « je ne l'ai pas encore lu en entier ».
+
 Un PDF scanné n'a pas de couche texte : compter les pages (`pymupdf.open(f).page_count`),
 les convertir toutes en images, et les lire toutes. Une pièce annoncée « 6 pages » se lit
 en six pages.
