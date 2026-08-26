@@ -1,4 +1,7 @@
 dist/
 
+# le cache d'importation de word_py.py, écrit dès qu'un script l'importe
+__pycache__/
+
 # la clé Judilibre reste locale
 .jk
