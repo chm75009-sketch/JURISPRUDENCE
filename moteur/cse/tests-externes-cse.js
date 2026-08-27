@@ -64,16 +64,37 @@ epreuve("C-02", "Un avis rendu avant la remise des informations est irrecevable"
 });
 
 /* ------------------------------------------------------------------ C-03 */
-epreuve("C-03", "L'article L. 2314-33 est moissonné en entier", () => {
+/* Ces deux épreuves reprochaient au dépôt d'avoir tronqué L. 2314-33 et
+   d'ignorer la limite de trois mandats successifs. Vérification faite à la
+   source, par le relais Légifrance, le 27 août 2026, sur trois lectures
+   concordantes : le dépôt porte LEGIARTI000052437191, 334 caractères, et cette
+   version NE COMPORTE PLUS la limite de mandats. Celle-ci figurait dans la
+   version précédente, LEGIARTI000036761951, 1 189 caractères, en vigueur
+   jusqu'en octobre 2025 — c'est elle que le contre-audit lisait. Le texte
+   moissonné n'était donc pas tronqué : il était à jour.
+
+   Ce qui reste à garantir n'est pas le contenu d'un état du droit, qui change,
+   mais l'accord entre le texte moissonné et ce que le moteur en fait. C'est ce
+   que ces deux épreuves vérifient désormais — et elles échoueront d'elles-mêmes
+   si la limite revient au texte sans revenir au moteur. */
+epreuve("C-03", "L'article L. 2314-33 est moissonné entier, non coupé en route", () => {
   const T = JSON.parse(fs.readFileSync(__dirname + "/textes_cse.json", "utf8"));
-  const t = (T["L2314-33"] || {}).texte || "";
-  return /mandats successifs/.test(t) ||
-    `texte de ${t.length} caractères, sans la limite de trois mandats successifs`;
+  const a = T["L2314-33"] || {}, t = a.texte || "";
+  if (!a.id) return "aucun identifiant de version : impossible de dire quelle version a été lue";
+  if (!/^Les membres de la délégation du personnel/.test(t))
+    return `le texte ne commence pas par l'alinéa 1er : « ${t.slice(0, 60)} »`;
+  return /\.$/.test(t.trim()) ||
+    `texte de ${t.length} caractères s'achevant sans point — coupé : « …${t.slice(-60)} »`;
 });
-epreuve("C-03", "La limite de trois mandats successifs est exploitée", () => {
+epreuve("C-03", "La limite de mandats successifs est exploitée si, et seulement si, le texte la porte", () => {
+  const T = JSON.parse(fs.readFileSync(__dirname + "/textes_cse.json", "utf8"));
+  const porte = /mandats successifs/.test((T["L2314-33"] || {}).texte || "");
   const s = C.map(x => x.verdict.toString()).join(" ") + M.mandat.toString();
-  return /mandatsSuccessifs|nombreMandats|mandats successifs/.test(s) ||
-    "ni le moteur ni les contrôles ne connaissent la limite de mandats";
+  const exploite = /mandatsSuccessifs|nombreMandats|mandats successifs/.test(s);
+  if (porte === exploite) return true;
+  return porte
+    ? "le texte moissonné porte la limite de mandats, mais ni le moteur ni les contrôles ne la connaissent"
+    : "le moteur oppose une limite de mandats que le texte moissonné ne porte pas";
 });
 
 /* ------------------------------------------------------------------ C-04 */
@@ -109,10 +130,20 @@ epreuve("C-07", "Une date impossible ne produit jamais de verdict de conformité
   return !conformes.length ||
     `${conformes.length} conformité(s) sur une date inexistante : ${conformes.map(x => x.id).join(", ")}`;
 });
+/* Même correction que F-16 du module économique : ce qui est interdit, c'est
+   de CONCLURE d'une donnée impossible. Le contrôle de recevabilité, lui, ne
+   conclut pas d'elle — il la dénonce, et c'est son « non conforme » qui bloque
+   le rapport. L'épreuve le comptait comme un verdict de trop et échouait sur
+   le comportement même qu'elle demande. */
 epreuve("C-07", "Un effectif décimal est irrecevable", () => {
   const f = { effectif: 299.6, heuresAccordees: 242, titulairesElus: 11 };
-  const rendus = C.filter(x => { try { const e = x.verdict(f).etat; return e === "conforme" || e === "non conforme"; } catch (e) { return false; } });
-  return !rendus.length || `${rendus.length} verdict(s) rendus sur un effectif de 299,6`;
+  const rendus = C.filter(x => x.id !== "CSE-CTL-REC-01")
+    .filter(x => { try { const e = x.verdict(f).etat; return e === "conforme" || e === "non conforme"; } catch (e) { return false; } });
+  if (rendus.length)
+    return `${rendus.length} verdict(s) rendus sur un effectif de 299,6 : ${rendus.map(x => x.id).join(", ")}`;
+  const rec = verdict("CSE-CTL-REC-01", f);
+  return rec.etat === "non conforme"
+    || `le contrôle de recevabilité ne dénonce pas l'effectif décimal : ${rec.etat}`;
 });
 
 /* ------------------------------------------------------------------ C-08 */

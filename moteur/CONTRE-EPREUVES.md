@@ -5,8 +5,8 @@ contre-audits du 15 août 2026. Elles n'ont qu'une raison d'être : **échouer t
 qu'un constat n'est pas corrigé, passer ensuite.**
 
 ```
-cd moteur/economique && node tests-externes.js       # 20 épreuves, 19 rouges
-cd moteur/cse        && node tests-externes-cse.js   # 18 épreuves, 13 rouges
+cd moteur/economique && node tests-externes.js       # 20 épreuves — 19 rouges à l'origine, 0 aujourd'hui
+cd moteur/cse        && node tests-externes-cse.js   # 18 épreuves — 13 rouges à l'origine, 0 aujourd'hui
 ```
 
 Chaque épreuve porte la référence du constat (`F-01`… pour l'économique,
@@ -55,7 +55,29 @@ de conclure, et une contradiction entre deux valeurs bien formées, qui est au
 contraire ce qu'un contrôle a pour objet de constater. La seconde faisait taire
 quatre cas contradictoires du dépôt. Les anomalies portent désormais leur nature.
 
-### Les quatre épreuves laissées rouges
+### Les quatre épreuves laissées rouges — réécrites le 27 août 2026
+
+L'analyse ci-dessous a été conduite le 15 août 2026 et les quatre épreuves ont
+été laissées rouges à dessein, faute d'avoir tranché. Elle est confirmée, et
+les épreuves sont désormais écrites pour mesurer ce qu'elles voulaient dire :
+**les deux suites passent, 20 sur 20 et 18 sur 18.**
+
+Ce qui a changé n'est pas le moteur — il avait raison dans les quatre cas —
+mais l'énoncé des épreuves :
+
+- **F-16 et C-07** excluent maintenant du décompte le contrôle de recevabilité,
+  et vérifient en outre qu'il dénonce bien l'anomalie. Une épreuve qui interdit
+  le verdict qu'elle réclame ne mesure rien.
+- **C-03** ne demande plus que le texte porte la limite de mandats — elle est
+  abrogée — mais que le texte moissonné ne soit pas coupé en route, et que
+  moteur et texte s'accordent : la limite est exploitée **si, et seulement si,**
+  le texte la porte. L'épreuve échouera donc d'elle-même si la limite revient au
+  texte sans revenir au moteur, ou l'inverse.
+
+L. 2314-33 a été relu trois fois de plus à la source le 27 août 2026 : trois
+lectures concordantes, `LEGIARTI000052437191`, 334 caractères, sans la limite.
+
+### L'analyse du 15 août
 
 **F-16 « Un effectif négatif est irrecevable » et C-07 « Un effectif décimal est
 irrecevable ».** Ces deux épreuves comptent, parmi les verdicts qu'elles

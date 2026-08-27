@@ -111,10 +111,21 @@ epreuve("F-16", "Une date impossible ne produit jamais de verdict de conformité
   const conformes = C.filter(x => { try { return x.verdict(f).etat === "conforme"; } catch (e) { return false; } });
   return !conformes.length || `${conformes.length} conformité(s) sur une date inexistante : ${conformes.map(x => x.id).join(", ")}`;
 });
+/* Ce qu'il faut vérifier est qu'aucun contrôle ne CONCLUE d'une donnée
+   impossible. Le contrôle de recevabilité, lui, ne conclut pas d'elle : il la
+   dénonce, et son « non conforme » est ce qui bloque le rapport. L'épreuve le
+   comptait comme un verdict de trop et échouait donc sur le comportement même
+   qu'elle demande — voir moteur/commun/recevabilite.js, qui l'exempte pour
+   cette raison. Elle l'exempte à son tour, et vérifie en outre qu'il parle. */
 epreuve("F-16", "Un effectif négatif est irrecevable", () => {
   const f = { effectif: -50, nbLicenciements: 12 };
-  const rendus = C.filter(x => { try { const e = x.verdict(f).etat; return e === "conforme" || e === "non conforme"; } catch (e) { return false; } });
-  return !rendus.length || `${rendus.length} verdict(s) rendus sur un effectif de -50`;
+  const rendus = C.filter(x => x.id !== "CTL-VAL-01")
+    .filter(x => { try { const e = x.verdict(f).etat; return e === "conforme" || e === "non conforme"; } catch (e) { return false; } });
+  if (rendus.length)
+    return `${rendus.length} verdict(s) rendus sur un effectif de -50 : ${rendus.map(x => x.id).join(", ")}`;
+  const rec = verdict("CTL-VAL-01", f);
+  return rec.etat === "non conforme"
+    || `le contrôle de recevabilité ne dénonce pas l'effectif négatif : ${rec.etat}`;
 });
 
 /* ------------------------------------------------------------------ F-17 */
