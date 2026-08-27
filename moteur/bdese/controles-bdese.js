@@ -337,6 +337,40 @@ ctl("BDESE-CTL-PRV-01", "Preuve",
       motif: `Éléments réunis : ${elements.join(" ; ")}. Ce module constitue, structure, date et audite le contenu de la base — il ne la met pas à disposition et n'est pas la base. La mise à disposition reste un acte de l'employeur : elle se prouve par le support lui-même, ses traces d'accès et l'information donnée aux bénéficiaires. L'application ne peut pas en attester à votre place, et elle ne le fera pas.` };
   });
 
+/* ------------------------------------------ la base n'est pas due partout
+
+   L'audit annonçait à une entreprise de vingt salariés qu'elle enfreignait
+   L. 2312-21 et R. 2312-8 : dix thèmes du plancher absents, dix rubriques du
+   décret non renseignées. Elle n'enfreignait rien — la base n'était pas due.
+
+   L'article L. 2312-1 partage le chapitre en deux : « Les attributions du
+   comité social et économique des entreprises de moins de cinquante salariés
+   sont définies par la section 2 (…) ; celles des entreprises d'au moins
+   cinquante salariés par la section 3. » L. 2312-18, qui institue la base, est
+   dans la section 3. Et L. 2312-2 ne fait exercer les attributions récurrentes
+   — celles que la base sert — qu'à partir de cinquante salariés atteints
+   pendant douze mois consécutifs. Lu à la source, deux lectures concordantes le
+   27 août 2026 : LEGIARTI000036262407 pour L. 2312-1, LEGIARTI000035650754 pour
+   L. 2312-2.
+
+   Un seul contrôle le disait, BDESE-CTL-DAT-01, et les seize autres continuaient
+   de conclure. Ils se taisent désormais, et ils disent pourquoi. BDESE-CTL-DAT-01
+   est exempté : son « sans objet » EST l'explication, et la répéter dix-sept fois
+   n'apprendrait rien.
+
+   Un effectif non renseigné ne masque rien : l'audit ne devine pas. */
+const HORS_CHAMP = "BDESE-CTL-DAT-01";
+for (const ctl of C) {
+  if (ctl.id === HORS_CHAMP) continue;
+  const brut = ctl.verdict;
+  REC.remplacer(ctl, function (f) {
+    const eff = nb(f.effectif);
+    if (eff === null || eff >= R.SEUIL_ATTRIBUTIONS) return brut(f);
+    return { etat: SO, horsChamp: true,
+      motif: `Effectif de ${eff} salariés. La base de données relève des attributions récurrentes du comité, que L. 2312-1 réserve aux entreprises d'au moins cinquante salariés et que L. 2312-2 ne fait exercer qu'à partir de ce seuil atteint pendant douze mois consécutifs : elle n'est pas due ici, et rien de ce qui suit ne peut être reproché. Le comité, lui, se met en place à onze — les deux seuils sont distincts.` };
+  });
+}
+
 REC.surSilence(C, ["BDESE-CTL-REG-01"]);
 
 module.exports = { C, ETATS, DETECTION, COHERENCE, PLANCHER };

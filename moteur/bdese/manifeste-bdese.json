@@ -10,14 +10,14 @@
   },
   "mention": "Le texte du décret est intégralement consommé par le découpage, ou son reliquat est validé et rattaché à une règle."
  },
- "date": "2026-08-24",
- "empreinte": "2d64658513ca",
+ "date": "2026-08-27",
+ "empreinte": "7c785eceec88",
  "perimetre": "Le module prépare, structure, documente et audite la base. Il ne fournit pas une base collaborative accessible simultanément à plusieurs catégories d'utilisateurs, et il n'est pas la base : la mise à disposition reste un acte de l'employeur.",
  "fichiers": {
   "audit-bdese-client.js": "a958263bce20",
   "cas-regime.js": "2f4cfdd8c433",
   "contenu-bdese.js": "48b4cd8584fa",
-  "controles-bdese.js": "a5df2bb4f35f",
+  "controles-bdese.js": "93bac6a0ff7e",
   "dates.js": "b6d7e587bec3",
   "fiche-bdese.json": "259cf93a565e",
   "outils.js": "7401cc07f5a6",

@@ -125,6 +125,24 @@
         champs: ["periodiciteConsultations", "reunionsAnnuellesAccord"] },
       { si: { champ: "etablissementsDistincts", vaut: ["oui"] },
         champs: ["consultation.centralEtEtablissements"] },
+      /* En dessous de cinquante salariés, la base n'est pas due : L. 2312-1
+         réserve à la section 3 — donc aux entreprises d'au moins cinquante —
+         les attributions dont L. 2312-18 fait relever la base, et L. 2312-2 ne
+         les fait exercer qu'à partir de ce seuil. Les vingt-huit questions qui
+         suivent l'effectif n'ont alors rien à recueillir : le moteur les rend
+         toutes « sans objet ». Un effectif non renseigné ne masque rien. */
+      { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 50; },
+        champs: ["accordEntreprise", "accordEntrepriseVerse", "accordBranche",
+          "accordBrancheVerse", "dateSeuil50Atteint", "dateFinMandat",
+          "dateRenouvellementCSE", "dateSeuil300Franchi",
+          "base.themes", "base.anneesPassees", "base.anneesSuivantes",
+          "base.formePerspectives", "base.informationsNonRenseignables",
+          "base.support", "base.beneficiaires", "base.niveau",
+          "base.dateDerniereMiseAJour", "base.informationMiseAJour", "base.preuveAcces",
+          "accordPeriodiciteConsultations", "periodiciteConsultations",
+          "reunionsAnnuellesAccord", "accordDelaisConsultation",
+          "consultation.dateMiseADisposition", "consultation.nbExpertises",
+          "consultation.centralEtEtablissements", "consultation.dateAvis"] },
     ],
     MoteurNAO: [
       { si: { champ: "groupe", vaut: ["oui"] },
