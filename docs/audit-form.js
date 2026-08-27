@@ -1478,12 +1478,20 @@
     });
     return { f: f, mauvais: mauvais };
   }
-  /* « pse.voie » désigne un sous-champ : la fiche le reconstitue en objet. */
+  /* « pse.voie » désigne un sous-champ : la fiche le reconstitue en objet.
+
+     La reconstitution descend aussi loin que la clé le demande. Écrite pour
+     deux segments, elle écrasait le troisième : « negos.egalite.issue » posait
+     la valeur sur « negos.egalite » et détruisait au passage « depot » et
+     « planAction » déjà posés. Le pendant du formulaire — aplatir() — descend,
+     lui, sans limite de profondeur : les deux doivent se répondre. */
   function poser(o, cle, val) {
-    var p = cle.split(".");
-    if (p.length === 1) { o[cle] = val; return; }
-    o[p[0]] = o[p[0]] || {};
-    o[p[0]][p[1]] = val;
+    var p = cle.split("."), n = o;
+    for (var i = 0; i < p.length - 1; i++) {
+      if (!n[p[i]] || typeof n[p[i]] !== "object" || Array.isArray(n[p[i]])) n[p[i]] = {};
+      n = n[p[i]];
+    }
+    n[p[p.length - 1]] = val;
   }
 
   /* ------------------------------------------------------------ restitution */

@@ -407,10 +407,13 @@
         });
         l.push("");
       }
+      /* Le second temps peut être ouvert alors que le premier ne l'est plus :
+         c'est le cas quand un point en revient refusé. Ne pas annoncer alors
+         qu'il « ne s'ouvrira pas avant » — il est déjà ouvert. */
       l.push(p.tempsA.acheve
         ? "Le premier temps est achevé : tous les manquements relevés sont déclarés corrigés."
-        : "Le premier temps n'est pas achevé : " + p.tempsA.restants + " point(s) restent ouverts. " +
-          "Le second temps ne s'ouvrira pas avant.");
+        : "Le premier temps n'est pas achevé : " + p.tempsA.restants + " point(s) restent ouverts." +
+          (p.tempsB.ouvert ? "" : " Le second temps ne s'ouvrira pas avant."));
     } else {
       l.push("COMPTE RENDU — SECOND TEMPS : CE QUI EST DÉCLARÉ FAIT");
       l.push("");

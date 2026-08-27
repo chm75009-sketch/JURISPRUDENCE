@@ -1,7 +1,7 @@
-/* Moteur d'audit du licenciement économique — version navigateur.
+/* Moteur d'audit « social » — version navigateur (MoteurSocial).
 
    Ce fichier est produit par moteur/commun/empaqueter.js à partir des sources
-   de moteur/economique, et versé au dépôt : le site ne construit rien.
+   de moteur/social, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
    Empreinte du moteur au moment de l'empaquetage : 8c6d427c67d8

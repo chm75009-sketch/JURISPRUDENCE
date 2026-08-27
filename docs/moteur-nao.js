@@ -1,7 +1,7 @@
-/* Moteur d'audit du licenciement économique — version navigateur.
+/* Moteur d'audit « nao » — version navigateur (MoteurNAO).
 
    Ce fichier est produit par moteur/commun/empaqueter.js à partir des sources
-   de moteur/economique, et versé au dépôt : le site ne construit rien.
+   de moteur/nao, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
    Empreinte du moteur au moment de l'empaquetage : 60f5dd24fa3e
@@ -1044,6 +1044,21 @@ for (const [id, r] of Object.entries(R)) {
       if (!v.cle || !v.question || !v.attendu)
         ECARTS.push(`${id} : une vérification est incomplète (clé, question, attendu)`);
 }
+/* L'unicité des clés de vérification. Deux clés identiques feraient répondre
+   une question à la place d'une autre : la réponse de la seconde écraserait
+   silencieusement celle de la première, et le verdict porterait sur autre chose
+   que ce qui a été demandé. Le garde vient des modules PSE, discipline, BDESE
+   et santé-sécurité, où il a été posé avant d'exister ici. */
+{
+  const vues = new Map();
+  for (const [id, r] of Object.entries(R)) {
+    if (!r || !Array.isArray(r.verifs)) continue;
+    for (const v of r.verifs) {
+      if (vues.has(v.cle)) ECARTS.push(`${id} : la clé « ${v.cle} » est déjà employée par ${vues.get(v.cle)}`);
+      else vues.set(v.cle, id);
+    }
+  }
+}
 
 module.exports = { R, GRAVITES, ECARTS };
 
@@ -1224,15 +1239,23 @@ function parcours(C, R, verdicts, etat) {
          liste du premier, et le compteur le dit. */
       refusesDuSecond: refuses,
       restants: restantsA.length + refuses.length,
-      acheve: restantsA.length === 0,
+      /* Achevé veut dire : plus rien à corriger. Un refus du second temps
+         rejoint la liste du premier — le compteur le dit déjà — et il doit
+         donc empêcher l'achèvement, sans quoi le compte rendu annonçait
+         « tous les manquements sont déclarés corrigés » juste au-dessous de
+         la liste de ceux qui reviennent refusés. */
+      acheve: restantsA.length === 0 && refuses.length === 0,
     },
     tempsB: {
       points: jugesB,
       valides: valides.length,
       refuses: refuses.length,
       enAttente: enAttente.length,
-      /* Le second temps ne s'ouvre qu'une fois le premier achevé : c'est
-         l'ordre qui a été arrêté, et la page le fait respecter. */
+      /* Le second temps ne s'ouvre qu'une fois relevés tous les manquements
+         du premier : c'est l'ordre qui a été arrêté, et la page le fait
+         respecter. Il reste ouvert, en revanche, quand un point en revient
+         refusé — sinon le client serait renvoyé corriger sans pouvoir faire
+         revérifier ce qu'il a corrigé. */
       ouvert: restantsA.length === 0,
     },
     compteurs: {

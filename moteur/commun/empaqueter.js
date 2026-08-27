@@ -258,10 +258,17 @@ for (const [nom, src] of MODULES) morceaux.push(
 for (const [nom, txt] of JSONS) morceaux.push(
   `__def(${JSON.stringify("./" + nom)}, function(module){ module.exports = ${txt}; });`);
 
-const sortie = `/* Moteur d'audit du licenciement économique — version navigateur.
+/* L'en-tête nommait « licenciement économique » et « moteur/economique » quel
+   que soit le module empaqueté : sept fichiers sur huit annonçaient une source
+   qui n'était pas la leur, et disaient au lecteur d'aller rejouer l'empaquetage
+   au mauvais endroit. Le répertoire courant est la seule source sûre : c'est
+   depuis lui que l'empaquetage est lancé. */
+const MODULE = path.basename(ICI);
+
+const sortie = `/* Moteur d'audit « ${MODULE} » — version navigateur (${GLOBALE}).
 
    Ce fichier est produit par moteur/commun/empaqueter.js à partir des sources
-   de moteur/economique, et versé au dépôt : le site ne construit rien.
+   de moteur/${MODULE}, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
    Empreinte du moteur au moment de l'empaquetage : ${MAN.empreinte}

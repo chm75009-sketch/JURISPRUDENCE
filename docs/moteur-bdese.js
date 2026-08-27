@@ -1,7 +1,7 @@
-/* Moteur d'audit du licenciement économique — version navigateur.
+/* Moteur d'audit « bdese » — version navigateur (MoteurBDESE).
 
    Ce fichier est produit par moteur/commun/empaqueter.js à partir des sources
-   de moteur/economique, et versé au dépôt : le site ne construit rien.
+   de moteur/bdese, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
    Empreinte du moteur au moment de l'empaquetage : 2d64658513ca
@@ -2026,15 +2026,23 @@ function parcours(C, R, verdicts, etat) {
          liste du premier, et le compteur le dit. */
       refusesDuSecond: refuses,
       restants: restantsA.length + refuses.length,
-      acheve: restantsA.length === 0,
+      /* Achevé veut dire : plus rien à corriger. Un refus du second temps
+         rejoint la liste du premier — le compteur le dit déjà — et il doit
+         donc empêcher l'achèvement, sans quoi le compte rendu annonçait
+         « tous les manquements sont déclarés corrigés » juste au-dessous de
+         la liste de ceux qui reviennent refusés. */
+      acheve: restantsA.length === 0 && refuses.length === 0,
     },
     tempsB: {
       points: jugesB,
       valides: valides.length,
       refuses: refuses.length,
       enAttente: enAttente.length,
-      /* Le second temps ne s'ouvre qu'une fois le premier achevé : c'est
-         l'ordre qui a été arrêté, et la page le fait respecter. */
+      /* Le second temps ne s'ouvre qu'une fois relevés tous les manquements
+         du premier : c'est l'ordre qui a été arrêté, et la page le fait
+         respecter. Il reste ouvert, en revanche, quand un point en revient
+         refusé — sinon le client serait renvoyé corriger sans pouvoir faire
+         revérifier ce qu'il a corrigé. */
       ouvert: restantsA.length === 0,
     },
     compteurs: {
