@@ -72,14 +72,28 @@ const CLES_DOCS = clesPresentes(DOCS_SRC, /^\s{4}cle:\s*"([a-z0-9-]+)"/gm);
 const JX_SRC = fs.readFileSync(path.join(ICI, "../../docs/juris-expert.js"), "utf8");
 const CLES_JX = clesPresentes(JX_SRC, /^\s{4}"([a-z0-9-]+)":\s*\{$/gm);
 
-let liensMorts = [], obligationsAvecParcours = 0, obligationsAvecDocument = 0,
+/* Trente-cinq obligations sur quatre-vingt-dix n'ont pas de parcours guidé, et
+   c'est délibéré : le référentiel l'écrit — « ce qui n'a pas de parcours le
+   dit », `parcours: null`, et le guide affiche alors les étapes propres de
+   l'obligation. Mais rien ne le vérifiait. Une obligation ajoutée sans
+   parcours ET sans étapes propres se serait publiée en silence, et le client
+   se serait trouvé devant un manquement constaté sans rien à faire. La
+   convention est donc tenue par la chaîne, comme le catalogue de
+   régularisation du module SST : l'oubli se voit, il ne se devine pas. */
+let liensMorts = [], sansRienAFaire = [],
+    obligationsAvecParcours = 0, obligationsAvecDocument = 0,
     obligationsSansParcours = [], obligationsAvecOutilJX = 0;
 for (const it of R.REF) {
   const g = it.regularisation || {};
   if (g.parcours) {
     obligationsAvecParcours++;
     if (!CLES_PARCOURS.has(g.parcours)) liensMorts.push(`${it.id} → parcours « ${g.parcours} »`);
-  } else obligationsSansParcours.push(it.id);
+  } else {
+    obligationsSansParcours.push(it.id);
+    const etapes = (it.plan || {}).etapes;
+    if (!Array.isArray(etapes) || !etapes.length)
+      sansRienAFaire.push(`${it.id} — ni parcours guidé, ni étapes propres`);
+  }
   if (g.document) {
     obligationsAvecDocument++;
     if (!CLES_DOCS.has(g.document)) liensMorts.push(`${it.id} → document « ${g.document} »`);
@@ -136,13 +150,16 @@ const manifeste = {
     obligationsLieesAUnOutilJurisExpert: obligationsAvecOutilJX,
     obligationsAvecModeleComplet: R.REF.filter(x => !!MODELES_SOC[x.id]).length,
     liensDeRegularisationMorts: liensMorts.length,
+    obligationsSansParcoursNiEtapes: sansRienAFaire.length,
   },
   obligationsSansParcours,
 };
 
-if (conformitesSurVide || conclusionsInterdites || citationsInterdites || liensMorts.length) {
+if (conformitesSurVide || conclusionsInterdites || citationsInterdites
+    || liensMorts.length || sansRienAFaire.length) {
   console.error("ÉCHEC — la chaîne a produit ce qu'elle interdit :",
-    JSON.stringify({ conformitesSurVide, conclusionsInterdites, citationsInterdites, liensMorts }));
+    JSON.stringify({ conformitesSurVide, conclusionsInterdites, citationsInterdites,
+      liensMorts, sansRienAFaire }));
   process.exit(1);
 }
 

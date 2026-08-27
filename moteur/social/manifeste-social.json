@@ -1,6 +1,6 @@
 {
  "domaine": "audit social — le chapeau des obligations de l'employeur",
- "date": "2026-08-23",
+ "date": "2026-08-27",
  "empreinte": "8c6d427c67d8",
  "fichiers": {
   "audit-social-client.js": "11d7bb8dfbe1",
@@ -60,7 +60,8 @@
   "outilsJurisExpert": 14,
   "obligationsLieesAUnOutilJurisExpert": 21,
   "obligationsAvecModeleComplet": 90,
-  "liensDeRegularisationMorts": 0
+  "liensDeRegularisationMorts": 0,
+  "obligationsSansParcoursNiEtapes": 0
  },
  "obligationsSansParcours": [
   "SOC-INS-GROUPE",
