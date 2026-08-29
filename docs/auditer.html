@@ -138,15 +138,22 @@
      interne (le module reste ouvert dans tous les cas — SST et discipline
      s'appliquent dès le premier salarié, seule une pièce du module a son
      propre seuil). */
+  /* L'ordre suit la dépendance entre modules, pas l'alphabet : le comité
+     d'abord, parce que plusieurs autres audits s'appuient sur son existence
+     ou son avis (le règlement intérieur ne peut être introduit qu'après son
+     avis, la BDESE et la commission SST sont d'abord ses propres outils) ;
+     puis les deux modules qui en dépendent le plus directement ; puis les
+     négociations et le licenciement économique, jusqu'à sa forme la plus
+     lourde, le PSE. */
   var AUDITS = [
     { href: "audit-social.html", princ: true,
       libelle: "Tout auditer — le tour complet (90 obligations, 20 à 30 minutes)" },
     { href: "audit-cse.html", libelle: "Comité social et économique", seuil: 11, comite: true },
-    { href: "audit-sst.html", libelle: "Santé, sécurité et conditions de travail",
-      interne: 300, quoi: "la commission santé-sécurité" },
     { href: "audit-discipline.html", libelle: "Discipline et règlement intérieur",
       interne: 50, quoi: "le règlement intérieur" },
     { href: "audit-bdese.html", libelle: "Base de données économiques et sociales", seuil: 50 },
+    { href: "audit-sst.html", libelle: "Santé, sécurité et conditions de travail",
+      interne: 300, quoi: "la commission santé-sécurité" },
     { href: "audit-nao.html", libelle: "Négociations obligatoires",
       texte: " — dues dès qu'une section syndicale est constituée, quel que soit l'effectif" },
     { href: "audit.html", libelle: "Licenciement pour motif économique",
