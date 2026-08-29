@@ -107,9 +107,23 @@
   dialog p{margin:0 0 10px}
   dialog button{font:inherit;padding:8px 18px;border-radius:8px;border:1px solid var(--filet-2);
     background:var(--creux);cursor:pointer}
+
+  .maj-dispo{display:none;background:var(--bleu-clair);border-bottom:1px solid var(--filet-2)}
+  .maj-dispo.visible{display:block}
+  .maj-dispo .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 20px;
+    font-size:13.5px;color:var(--encre)}
+  .maj-dispo button{margin-left:auto;font:600 13px system-ui;padding:7px 14px;border-radius:8px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer;white-space:nowrap}
 </style>
 </head>
 <body>
+
+<div class="maj-dispo" id="maj-dispo">
+  <div class="wrap">
+    <span><b>Une nouvelle version est disponible.</b> Celle affichée date de votre dernière ouverture.</span>
+    <button type="button" id="btn-maj">Recharger maintenant</button>
+  </div>
+</div>
 
 <header class="site">
   <div class="wrap">
@@ -308,18 +322,26 @@
 
   /* Une mise à jour du service worker prend la main en arrière-plan, sans
      rien dire : la page déjà ouverte continue de faire tourner son ancien
-     code tant qu'elle n'est pas rechargée. Sans ce qui suit, la version
-     affichée dans l'en-tête (lue à chaque fois sur le réseau) peut annoncer
-     la dernière version pendant que le reste de la page exécute encore la
-     précédente — l'écran d'accueil qui rebascule seul en est un symptôme.
-     Le rechargement automatique, dès que le nouveau service worker prend la
-     main, supprime l'écart. */
+     code tant qu'elle n'est pas rechargée. Un rechargement forcé dès la prise
+     de main a été essayé (version 7.9) et s'est révélé pire que le mal : le
+     changement de contrôleur peut survenir à tout moment, y compris pendant
+     qu'on vient de toucher un lien — le rechargement gagnait alors la course
+     contre la navigation et le clic ne menait plus nulle part. On revient au
+     même principe que recherche.html : un bandeau, jamais un rechargement
+     imposé. Le tout premier enregistrement ne compte pas comme une mise à
+     jour — d'où le drapeau qui ne bascule qu'après cette première prise de
+     contrôle. */
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.addEventListener("controllerchange", function () { location.reload(); });
+    var dejaControlee = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (dejaControlee) $("maj-dispo").classList.add("visible");
+      dejaControlee = true;
+    });
     window.addEventListener("load", function () {
       navigator.serviceWorker.register("sw.js").then(function (reg) { reg.update().catch(function () {}); });
     });
   }
+  $("btn-maj").addEventListener("click", function () { location.reload(); });
 })();
 </script>
 <script src="assistant.js" defer></script>

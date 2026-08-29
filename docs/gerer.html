@@ -64,9 +64,23 @@
 
   footer{margin:36px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
     font-size:13px;color:var(--encre-3)}
+
+  .maj-dispo{display:none;background:var(--bleu-clair);border-bottom:1px solid var(--filet-2)}
+  .maj-dispo.visible{display:block}
+  .maj-dispo .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 20px;
+    font-size:13.5px;color:var(--encre)}
+  .maj-dispo button{margin-left:auto;font:600 13px system-ui;padding:7px 14px;border-radius:8px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer;white-space:nowrap}
 </style>
 </head>
 <body>
+
+<div class="maj-dispo" id="maj-dispo">
+  <div class="wrap">
+    <span><b>Une nouvelle version est disponible.</b> Celle affichée date de votre dernière ouverture.</span>
+    <button type="button" id="btn-maj">Recharger maintenant</button>
+  </div>
+</div>
 
 <header class="site">
   <div class="wrap">
@@ -159,12 +173,22 @@
       .catch(function () {});
   } catch (e) {}
 
+  /* Un rechargement forcé à la prise de main du nouveau service worker a été
+     essayé (7.9) : il pouvait gagner la course contre un clic sur un lien en
+     cours de navigation, et le clic ne menait alors plus nulle part. Un
+     bandeau, jamais un rechargement imposé — même principe que
+     recherche.html. */
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.addEventListener("controllerchange", function () { location.reload(); });
+    var dejaControlee = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (dejaControlee) $("maj-dispo").classList.add("visible");
+      dejaControlee = true;
+    });
     window.addEventListener("load", function () {
       navigator.serviceWorker.register("sw.js").then(function (reg) { reg.update().catch(function () {}); });
     });
   }
+  $("btn-maj").addEventListener("click", function () { location.reload(); });
 })();
 </script>
 </body>
