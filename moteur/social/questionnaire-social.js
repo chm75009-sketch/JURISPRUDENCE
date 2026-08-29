@@ -55,8 +55,8 @@ q("salariesHorsHoraire", "Des salariés travaillent-ils en dehors d'un horaire c
   "Dès qu'un salarié ne suit pas l'horaire collectif affiché, l'employeur doit établir pour lui les documents de décompte de la durée du travail et des repos compensateurs (L. 3171-2).");
 q("postesRisquesParticuliers", "Des salariés occupent-ils des postes à risques particuliers (amiante, plomb, agents cancérogènes, agents biologiques 3 et 4, rayonnements ionisants, hyperbare, échafaudages, postes à examen d'aptitude) ?", "oui / non",
   "Ces postes ouvrent le suivi individuel renforcé de l'état de santé et la liste formalisée des postes (R. 4624-22, R. 4624-23).");
-q("comiteSeuilsComptes", "Les comptes du comité dépassent-ils au moins deux des trois critères de l'article D. 2315-29 — cinquante salariés du comité à la clôture d'un exercice, le montant de ressources annuelles et le montant du total de bilan fixés par renvoi à l'article R. 612-1 du code de commerce ?", "oui / non",
-  "C'est le critère de la commission des marchés : il tient aux comptes du comité, pas à l'effectif de l'entreprise (L. 2315-44-1, D. 2315-29). Le trésorier du comité ou son expert-comptable a la réponse.");
+q("comiteSeuilsComptes", "Les comptes du comité social et économique (CSE) dépassent-ils au moins deux des trois critères de l'article D. 2315-29 — cinquante salariés du comité à la clôture d'un exercice, le montant de ressources annuelles et le montant du total de bilan fixés par renvoi à l'article R. 612-1 du code de commerce ?", "oui / non",
+  "C'est le critère de la commission des marchés : il tient aux comptes du CSE, pas à l'effectif de l'entreprise (L. 2315-44-1, D. 2315-29). Le trésorier du CSE ou son expert-comptable a la réponse.");
 q("epargneSalariale", "Un dispositif d'épargne salariale (intéressement, participation, plan d'épargne) est-il en place ?", "oui / non",
   "Il déclenche la remise du livret d'épargne salariale à chaque embauche (L. 3341-6).");
 q("cadres", "L'entreprise emploie-t-elle des cadres ?", "oui / non",
