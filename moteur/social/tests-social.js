@@ -26,6 +26,10 @@ const { CONF, NC, RISQ, MANQ, SO } = C.ETATS;
 const echecs = [];
 const ok = (cond, msg) => { if (!cond) echecs.push(msg); };
 
+/* comiteInstalle vaut « oui » au socle : la plupart des profils types
+   décrivent une entreprise déjà installée, comité compris. Le cas où il ne
+   l'est pas est exercé à part, ci-dessous — c'est le point du bogue du
+   29 août 2026, pas le cas par défaut de ces profils. */
 /* ─────────────────────────────────── les profils types ─────────────── */
 const BASE = {
   entreprise: "SOCIÉTÉ D'ÉPREUVE SAS", dateAudit: "2026-08-19",
@@ -33,7 +37,7 @@ const BASE = {
   secteur: "services", conventionCollective: "convention test (IDCC 0000)",
   accordsCollectifs: "non", sectionSyndicale: "non", matieresInflammables: "non",
   cadres: "non", projetLicenciementEco: "non", salariesHorsHoraire: "non",
-  postesRisquesParticuliers: "non", comiteSeuilsComptes: "non", epargneSalariale: "non",
+  postesRisquesParticuliers: "non", comiteInstalle: "oui", comiteSeuilsComptes: "non", epargneSalariale: "non",
   /* les neuf réponses ajoutées avec les matières venues de l'audit voisin :
      au socle elles valent « non », de sorte que les obligations qu'elles
      commandent soient explicitement NON dues — jamais indéterminées. */
@@ -85,6 +89,16 @@ const ATTENDUS = [
   { nom: "section syndicale", p: profil(60, { sectionSyndicale: "oui" }), dus: ["SOC-NEG-NAO"], nonDus: [] },
   { nom: "seuil non acquis dans la durée", p: profil(60, { seuilDepuis12Mois: "non" }),
     dus: ["SOC-DOC-DUERP"], nonDus: ["SOC-INS-CSE", "SOC-DOC-RI"] },
+  /* Le bogue signalé le 29 août 2026 : un effectif qui ouvre le comité ne dit
+     pas qu'il existe. À trois cent vingt salariés SANS comité effectivement
+     installé, l'obligation d'avoir un comité reste due (SOC-INS-CSE) — mais
+     les six obligations qui vivent EN SON SEIN n'ont pas de support, et la
+     commission des marchés ne doit plus jamais demander les comptes d'un
+     comité dont rien n'établit l'existence. */
+  { nom: "comité non installé malgré l'effectif", p: profil(320, { comiteInstalle: "non" }),
+    dus: ["SOC-INS-CSE"],
+    nonDus: ["SOC-INS-CSSCT", "SOC-INS-COMMISSIONS", "SOC-INS-FORMATION-ELUS",
+      "SOC-INS-REUNIONS-SST", "SOC-INS-COMMISSION-MARCHES"] },
 ];
 
 for (const cas of ATTENDUS) {
@@ -101,6 +115,16 @@ for (const cas of ATTENDUS) {
   const a = Object.fromEntries(C.applicables(profil(60, { seuilDepuis12Mois: "non" })).map(x => [x.id, x]));
   ok(a["SOC-EPA-PARTICIPATION"].du === null,
     "participation au seuil récent : l'assujettissement devrait rester indéterminé (différé légal), rend " + a["SOC-EPA-PARTICIPATION"].du);
+}
+
+/* Sans réponse sur l'installation effective du comité, les six obligations
+   qui en vivent restent indéterminées — jamais « dues » sur la foi du seul
+   effectif, jamais « sans objet » non plus (on ne sait pas). */
+{
+  const a = Object.fromEntries(C.applicables(profil(320, { comiteInstalle: "" })).map(x => [x.id, x]));
+  for (const id of ["SOC-INS-CSSCT", "SOC-INS-COMMISSIONS", "SOC-INS-FORMATION-ELUS", "SOC-INS-REUNIONS-SST"])
+    ok(a[id].du === null,
+      `${id} sans réponse sur l'installation effective du comité : assujettissement attendu indéterminé, rend ${a[id].du}`);
 }
 
 /* ─────────────── 2. le profil vide : rien de conforme, rien d'écarté ── */

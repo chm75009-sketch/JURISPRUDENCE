@@ -88,6 +88,16 @@ const auSeuilDouzeMois = n => p => {
   return { du: s.atteint, motif: s.motif };
 };
 
+/* Six obligations « au sein du comité » : leur condition ne vivait que d'un
+   seuil d'effectif, pris comme substitut de l'existence réelle du comité —
+   or l'effectif dit qui DOIT avoir un comité, jamais qui EN A un. Le fait
+   manquant vit ici, à l'orientation, au même rang que sectionSyndicale : une
+   question d'entreprise, répondue une fois, avant l'audit détaillé du comité
+   (qui vérifie lui, en détail — élections, date — un comité qu'on sait déjà
+   exister). Sans lui, aucune de ces six obligations n'a de support. */
+const comiteInstalle = p => M.ouiNon(p, "comiteInstalle",
+  "Le comité social et économique (CSE) a-t-il été effectivement mis en place (élections organisées) ?");
+
 const REF = [];
 const item = o => { REF.push(o); return o; };
 
@@ -174,6 +184,9 @@ item({
     const s = auSeuil(300)(p);
     if (s.du === null) return s;
     if (!s.du) return { du: false, motif: s.motif + " La commission santé, sécurité et conditions de travail n'est obligatoire qu'à partir de trois cents salariés — l'inspection du travail peut toutefois l'imposer en deçà dans certains cas." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, la commission santé, sécurité et conditions de travail n'a pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique »)." };
     return { du: true, motif: s.motif + " Une commission santé, sécurité et conditions de travail doit être créée au sein du comité." };
   },
   verifs: [
@@ -205,6 +218,9 @@ item({
     const s = auSeuil(300)(p);
     if (s.du === null) return s;
     if (!s.du) return { du: false, motif: s.motif + " Les commissions supplétives du comité (formation, information et aide au logement, égalité professionnelle) naissent à partir de trois cents salariés — et seulement en l'absence d'accord d'entreprise prévu à l'article L. 2315-45." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, ces commissions n'ont pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique »)." };
     return { du: true, motif: s.motif + " Ces commissions ne jouent qu'À DÉFAUT D'ACCORD : un accord d'entreprise (L. 2315-45) peut organiser les commissions autrement. En son absence, le comité constitue une commission de la formation (L. 2315-49), une commission d'information et d'aide au logement (L. 2315-50, missions à L. 2315-51) et une commission de l'égalité professionnelle (L. 2315-56)." };
   },
   verifs: [
@@ -236,6 +252,9 @@ item({
     const s = auSeuil(1000)(p);
     if (s.du === null) return s;
     if (!s.du) return { du: false, motif: s.motif + " La commission économique n'est due, à défaut d'accord L. 2315-45, qu'à partir de mille salariés (L. 2315-46)." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, la commission économique n'a pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique »)." };
     return { du: true, motif: s.motif + " À défaut d'accord d'entreprise prévu à l'article L. 2315-45, une commission économique est créée au sein du comité social et économique ou du comité central : elle étudie les documents économiques et financiers recueillis par le comité et toute question qu'il lui soumet (L. 2315-46)." };
   },
   verifs: [
@@ -267,6 +286,9 @@ item({
     const s = M.seuilDouzeMois(p, 11);
     if (!s.connu) return { du: null, motif: s.motif };
     if (!s.atteint) return { du: false, motif: s.motif + " Sans comité, la commission des marchés n'a pas de support." };
+    const ci = comiteInstalle(p);
+    if (!ci.connu) return { du: null, motif: s.motif + " " + ci.motif };
+    if (!ci.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, la commission des marchés n'a pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique ») — ses comptes ne pourront s'apprécier qu'ensuite." };
     const c = M.ouiNon(p, "comiteSeuilsComptes", "Le comité social et économique (CSE) dépasse-t-il, pour au moins deux des trois critères tenant à ses propres comptes (cinquante salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan), les seuils réglementaires ?");
     if (!c.connu) return { du: null, motif: "Le critère de la commission des marchés n'est pas l'effectif de l'entreprise mais les comptes du comité lui-même (L. 2315-44-1, D. 2315-29). " + c.motif };
     if (!c.vrai) return { du: false, motif: "Le comité ne dépasse pas au moins deux des trois seuils de D. 2315-29 (nombre de salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan) : la commission des marchés n'est pas due — le critère tient aux comptes du comité, pas à l'effectif de l'entreprise ; recontrôlez à chaque clôture des comptes du comité." };
@@ -301,6 +323,9 @@ item({
     const s = M.seuilDouzeMois(p, 11);
     if (!s.connu) return { du: null, motif: s.motif };
     if (!s.atteint) return { du: false, motif: s.motif + " La formation santé-sécurité des élus suit le comité : sans comité dû, elle n'a pas de bénéficiaires — elle naîtra avec lui." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Le comité est dû mais n'est pas encore effectivement mis en place : la formation de ses élus n'a pas encore de bénéficiaires — mettez d'abord le comité en place (voir l'obligation « comité social et économique »), elle naîtra avec lui." };
     return { du: true, motif: s.motif + " Dès qu'un comité existe — donc dès onze salariés, pas seulement à trois cents —, ses membres et le référent harcèlement sexuel du comité bénéficient de la formation nécessaire en santé, sécurité et conditions de travail : cinq jours au moins au premier mandat, trois jours au renouvellement (cinq pour les membres de la CSSCT dans les entreprises d'au moins trois cents salariés) ; le financement est pris en charge par l'employeur (L. 2315-18), et le temps de formation est pris sur le temps de travail, rémunéré comme tel, sans imputation sur les heures de délégation (L. 2315-16)." };
   },
   verifs: [
@@ -334,6 +359,9 @@ item({
     const s = auSeuil(50)(p);
     if (s.du === null) return s;
     if (!s.du) return { du: false, motif: s.motif + " La règle des quatre réunions annuelles santé-sécurité (L. 2315-27) s'applique au fonctionnement du comité des entreprises d'au moins cinquante salariés." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, la règle des quatre réunions santé-sécurité n'a pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique »)." };
     return { du: true, motif: s.motif + " Au moins quatre réunions du comité portent annuellement, en tout ou partie, sur ses attributions en matière de santé, sécurité et conditions de travail — plus souvent en cas de besoin, et le comité est en outre réuni après tout accident grave ou événement grave (L. 2315-27). L'employeur informe chaque année l'inspection du travail, le médecin du travail et l'agent des services de prévention des organismes de sécurité sociale du calendrier de ces réunions, et leur confirme chacune par écrit au moins quinze jours à l'avance." };
   },
   verifs: [

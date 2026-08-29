@@ -4,8 +4,8 @@
    de moteur/social, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : acaf02586fc1
-   {"obligations":90,"parCategorie":{"instances":12,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":5,"santé-sécurité":20,"formation et entretiens":4,"épargne et protection sociale":5,"durée du travail et repos":7,"congés et jours":4,"embauche et contrat":5,"fin du contrat":4,"égalité et non-discrimination":7},"articlesLus":172,"articlesNonConfirmes":1,"articlesCites":170,"renvoisModules":20,"itemsConventionnels":4,"itemsGeneriques":2,"questionsOrientation":26,"questionsVerification":196,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0,"parcoursDeRegularisation":15,"obligationsLieesAUnParcours":55,"obligationsLieesAUnDocument":77,"obligationsSansParcours":35,"outilsJurisExpert":14,"obligationsLieesAUnOutilJurisExpert":21,"obligationsAvecModeleComplet":90,"liensDeRegularisationMorts":0,"obligationsSansParcoursNiEtapes":0}
+   Empreinte du moteur au moment de l'empaquetage : 1d5a93a5d846
+   {"obligations":90,"parCategorie":{"instances":12,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":5,"santé-sécurité":20,"formation et entretiens":4,"épargne et protection sociale":5,"durée du travail et repos":7,"congés et jours":4,"embauche et contrat":5,"fin du contrat":4,"égalité et non-discrimination":7},"articlesLus":172,"articlesNonConfirmes":1,"articlesCites":170,"renvoisModules":20,"itemsConventionnels":4,"itemsGeneriques":2,"questionsOrientation":27,"questionsVerification":196,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0,"parcoursDeRegularisation":15,"obligationsLieesAUnParcours":55,"obligationsLieesAUnDocument":77,"obligationsSansParcours":35,"outilsJurisExpert":14,"obligationsLieesAUnOutilJurisExpert":21,"obligationsAvecModeleComplet":90,"liensDeRegularisationMorts":0,"obligationsSansParcoursNiEtapes":0}
 */
 (function (global) {
   "use strict";
@@ -21,7 +21,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"audit social — le chapeau des obligations de l'employeur","date":"2026-08-29","empreinte":"acaf02586fc1","fichiers":{"audit-social-client.js":"11d7bb8dfbe1","capture-social.js":"d3d65a65713b","capturer-textes-social-2.js":"4d61e2c885d8","capturer-textes-social-3.js":"ae2db2f3a775","capturer-textes-social-4.js":"5cb24e703a38","capturer-textes-social-5.js":"115f14c3e26e","capturer-textes-social-6.js":"67b93643e93a","capturer-textes-social-7.js":"86e7efab177f","capturer-textes-social-8.js":"f4eea7de7b5c","capturer-textes-social.js":"f79e801d9e31","controles-social.js":"a96e281768f1","generer-donnees-modeles.js":"f8f64294ce6d","modeles-social.js":"8a61ed942add","moteur-social.js":"6e23710d673f","plan-social.js":"2ac32fc089ad","questionnaire-social.js":"baa1efb33c4c","referentiel-social.js":"0f6080982a99","tests-social.js":"804771b063ba","textes-social-non-confirmes.json":"3528ca5e5f07","textes-social.json":"a1477ffbae0c","verifier-textes-social.js":"de5da88f7ad0"},"compteurs":{"obligations":90,"parCategorie":{"instances":12,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":5,"santé-sécurité":20,"formation et entretiens":4,"épargne et protection sociale":5,"durée du travail et repos":7,"congés et jours":4,"embauche et contrat":5,"fin du contrat":4,"égalité et non-discrimination":7},"articlesLus":172,"articlesNonConfirmes":1,"articlesCites":170,"renvoisModules":20,"itemsConventionnels":4,"itemsGeneriques":2,"questionsOrientation":26,"questionsVerification":196,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0,"parcoursDeRegularisation":15,"obligationsLieesAUnParcours":55,"obligationsLieesAUnDocument":77,"obligationsSansParcours":35,"outilsJurisExpert":14,"obligationsLieesAUnOutilJurisExpert":21,"obligationsAvecModeleComplet":90,"liensDeRegularisationMorts":0,"obligationsSansParcoursNiEtapes":0},"obligationsSansParcours":["SOC-INS-GROUPE","SOC-DOC-OETH","SOC-REG-SECURITE","SOC-REG-DGI","SOC-NEG-PSE","SOC-SST-SPST","SOC-SST-VIP","SOC-EPA-PARTICIPATION","SOC-EPA-LIVRET","SOC-EPA-SANTE","SOC-EPA-PREVOYANCE-CADRES","SOC-CCN-OBLIGATIONS","SOC-DUR-MAXIMA","SOC-DUR-PAUSE","SOC-DUR-REPOS","SOC-DUR-CONTINGENT","SOC-DUR-FORFAIT","SOC-DUR-TPARTIEL","SOC-DUR-PAIE","SOC-EGA-DISCRIMINATION","SOC-EGA-HANDICAP","SOC-EGA-REFERENT-HANDICAP","SOC-EGA-RECRUTEURS","SOC-EGA-ALERTE","SOC-SST-ACCIDENT-GRAVE","SOC-SST-SUIVI-CONTRAT","SOC-SST-FICHE-ENTREPRISE","SOC-SST-EXTERIEURES","SOC-SST-NUIT","SOC-SST-JEUNES","SOC-SST-LOCAUX","SOC-SST-ECRAN","SOC-FOR-CONTRIBUTION","SOC-INS-SECTION-SYNDICALE","SOC-INS-PROTEGES"],"textesRelus":{"date":"2026-08-23","articles":172,"concordants":172,"ecarts":0,"sansConclusion":0}};
+  var __MANIFESTE = {"domaine":"audit social — le chapeau des obligations de l'employeur","date":"2026-08-29","empreinte":"1d5a93a5d846","fichiers":{"audit-social-client.js":"11d7bb8dfbe1","capture-social.js":"d3d65a65713b","capturer-textes-social-2.js":"4d61e2c885d8","capturer-textes-social-3.js":"ae2db2f3a775","capturer-textes-social-4.js":"5cb24e703a38","capturer-textes-social-5.js":"115f14c3e26e","capturer-textes-social-6.js":"67b93643e93a","capturer-textes-social-7.js":"86e7efab177f","capturer-textes-social-8.js":"f4eea7de7b5c","capturer-textes-social.js":"f79e801d9e31","controles-social.js":"a96e281768f1","generer-donnees-modeles.js":"f8f64294ce6d","modeles-social.js":"8a61ed942add","moteur-social.js":"6e23710d673f","plan-social.js":"2ac32fc089ad","questionnaire-social.js":"1f0b3807350d","referentiel-social.js":"1935cd687899","tests-social.js":"b998488ea963","textes-social-non-confirmes.json":"3528ca5e5f07","textes-social.json":"a1477ffbae0c","verifier-textes-social.js":"de5da88f7ad0"},"compteurs":{"obligations":90,"parCategorie":{"instances":12,"documents obligatoires":5,"affichages et informations":9,"registres":3,"négociations":5,"santé-sécurité":20,"formation et entretiens":4,"épargne et protection sociale":5,"durée du travail et repos":7,"congés et jours":4,"embauche et contrat":5,"fin du contrat":4,"égalité et non-discrimination":7},"articlesLus":172,"articlesNonConfirmes":1,"articlesCites":170,"renvoisModules":20,"itemsConventionnels":4,"itemsGeneriques":2,"questionsOrientation":27,"questionsVerification":196,"conformitesOuSansObjetSurProfilVide":0,"conclusionsConformesInterdites":0,"citationsDArticlesNonConfirmes":0,"parcoursDeRegularisation":15,"obligationsLieesAUnParcours":55,"obligationsLieesAUnDocument":77,"obligationsSansParcours":35,"outilsJurisExpert":14,"obligationsLieesAUnOutilJurisExpert":21,"obligationsAvecModeleComplet":90,"liensDeRegularisationMorts":0,"obligationsSansParcoursNiEtapes":0},"obligationsSansParcours":["SOC-INS-GROUPE","SOC-DOC-OETH","SOC-REG-SECURITE","SOC-REG-DGI","SOC-NEG-PSE","SOC-SST-SPST","SOC-SST-VIP","SOC-EPA-PARTICIPATION","SOC-EPA-LIVRET","SOC-EPA-SANTE","SOC-EPA-PREVOYANCE-CADRES","SOC-CCN-OBLIGATIONS","SOC-DUR-MAXIMA","SOC-DUR-PAUSE","SOC-DUR-REPOS","SOC-DUR-CONTINGENT","SOC-DUR-FORFAIT","SOC-DUR-TPARTIEL","SOC-DUR-PAIE","SOC-EGA-DISCRIMINATION","SOC-EGA-HANDICAP","SOC-EGA-REFERENT-HANDICAP","SOC-EGA-RECRUTEURS","SOC-EGA-ALERTE","SOC-SST-ACCIDENT-GRAVE","SOC-SST-SUIVI-CONTRAT","SOC-SST-FICHE-ENTREPRISE","SOC-SST-EXTERIEURES","SOC-SST-NUIT","SOC-SST-JEUNES","SOC-SST-LOCAUX","SOC-SST-ECRAN","SOC-FOR-CONTRIBUTION","SOC-INS-SECTION-SYNDICALE","SOC-INS-PROTEGES"],"textesRelus":{"date":"2026-08-23","articles":172,"concordants":172,"ecarts":0,"sansConclusion":0}};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -177,6 +177,16 @@ const auSeuilDouzeMois = n => p => {
   return { du: s.atteint, motif: s.motif };
 };
 
+/* Six obligations « au sein du comité » : leur condition ne vivait que d'un
+   seuil d'effectif, pris comme substitut de l'existence réelle du comité —
+   or l'effectif dit qui DOIT avoir un comité, jamais qui EN A un. Le fait
+   manquant vit ici, à l'orientation, au même rang que sectionSyndicale : une
+   question d'entreprise, répondue une fois, avant l'audit détaillé du comité
+   (qui vérifie lui, en détail — élections, date — un comité qu'on sait déjà
+   exister). Sans lui, aucune de ces six obligations n'a de support. */
+const comiteInstalle = p => M.ouiNon(p, "comiteInstalle",
+  "Le comité social et économique (CSE) a-t-il été effectivement mis en place (élections organisées) ?");
+
 const REF = [];
 const item = o => { REF.push(o); return o; };
 
@@ -263,6 +273,9 @@ item({
     const s = auSeuil(300)(p);
     if (s.du === null) return s;
     if (!s.du) return { du: false, motif: s.motif + " La commission santé, sécurité et conditions de travail n'est obligatoire qu'à partir de trois cents salariés — l'inspection du travail peut toutefois l'imposer en deçà dans certains cas." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, la commission santé, sécurité et conditions de travail n'a pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique »)." };
     return { du: true, motif: s.motif + " Une commission santé, sécurité et conditions de travail doit être créée au sein du comité." };
   },
   verifs: [
@@ -294,6 +307,9 @@ item({
     const s = auSeuil(300)(p);
     if (s.du === null) return s;
     if (!s.du) return { du: false, motif: s.motif + " Les commissions supplétives du comité (formation, information et aide au logement, égalité professionnelle) naissent à partir de trois cents salariés — et seulement en l'absence d'accord d'entreprise prévu à l'article L. 2315-45." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, ces commissions n'ont pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique »)." };
     return { du: true, motif: s.motif + " Ces commissions ne jouent qu'À DÉFAUT D'ACCORD : un accord d'entreprise (L. 2315-45) peut organiser les commissions autrement. En son absence, le comité constitue une commission de la formation (L. 2315-49), une commission d'information et d'aide au logement (L. 2315-50, missions à L. 2315-51) et une commission de l'égalité professionnelle (L. 2315-56)." };
   },
   verifs: [
@@ -325,6 +341,9 @@ item({
     const s = auSeuil(1000)(p);
     if (s.du === null) return s;
     if (!s.du) return { du: false, motif: s.motif + " La commission économique n'est due, à défaut d'accord L. 2315-45, qu'à partir de mille salariés (L. 2315-46)." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, la commission économique n'a pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique »)." };
     return { du: true, motif: s.motif + " À défaut d'accord d'entreprise prévu à l'article L. 2315-45, une commission économique est créée au sein du comité social et économique ou du comité central : elle étudie les documents économiques et financiers recueillis par le comité et toute question qu'il lui soumet (L. 2315-46)." };
   },
   verifs: [
@@ -356,6 +375,9 @@ item({
     const s = M.seuilDouzeMois(p, 11);
     if (!s.connu) return { du: null, motif: s.motif };
     if (!s.atteint) return { du: false, motif: s.motif + " Sans comité, la commission des marchés n'a pas de support." };
+    const ci = comiteInstalle(p);
+    if (!ci.connu) return { du: null, motif: s.motif + " " + ci.motif };
+    if (!ci.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, la commission des marchés n'a pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique ») — ses comptes ne pourront s'apprécier qu'ensuite." };
     const c = M.ouiNon(p, "comiteSeuilsComptes", "Le comité social et économique (CSE) dépasse-t-il, pour au moins deux des trois critères tenant à ses propres comptes (cinquante salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan), les seuils réglementaires ?");
     if (!c.connu) return { du: null, motif: "Le critère de la commission des marchés n'est pas l'effectif de l'entreprise mais les comptes du comité lui-même (L. 2315-44-1, D. 2315-29). " + c.motif };
     if (!c.vrai) return { du: false, motif: "Le comité ne dépasse pas au moins deux des trois seuils de D. 2315-29 (nombre de salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan) : la commission des marchés n'est pas due — le critère tient aux comptes du comité, pas à l'effectif de l'entreprise ; recontrôlez à chaque clôture des comptes du comité." };
@@ -390,6 +412,9 @@ item({
     const s = M.seuilDouzeMois(p, 11);
     if (!s.connu) return { du: null, motif: s.motif };
     if (!s.atteint) return { du: false, motif: s.motif + " La formation santé-sécurité des élus suit le comité : sans comité dû, elle n'a pas de bénéficiaires — elle naîtra avec lui." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Le comité est dû mais n'est pas encore effectivement mis en place : la formation de ses élus n'a pas encore de bénéficiaires — mettez d'abord le comité en place (voir l'obligation « comité social et économique »), elle naîtra avec lui." };
     return { du: true, motif: s.motif + " Dès qu'un comité existe — donc dès onze salariés, pas seulement à trois cents —, ses membres et le référent harcèlement sexuel du comité bénéficient de la formation nécessaire en santé, sécurité et conditions de travail : cinq jours au moins au premier mandat, trois jours au renouvellement (cinq pour les membres de la CSSCT dans les entreprises d'au moins trois cents salariés) ; le financement est pris en charge par l'employeur (L. 2315-18), et le temps de formation est pris sur le temps de travail, rémunéré comme tel, sans imputation sur les heures de délégation (L. 2315-16)." };
   },
   verifs: [
@@ -423,6 +448,9 @@ item({
     const s = auSeuil(50)(p);
     if (s.du === null) return s;
     if (!s.du) return { du: false, motif: s.motif + " La règle des quatre réunions annuelles santé-sécurité (L. 2315-27) s'applique au fonctionnement du comité des entreprises d'au moins cinquante salariés." };
+    const c = comiteInstalle(p);
+    if (!c.connu) return { du: null, motif: s.motif + " " + c.motif };
+    if (!c.vrai) return { du: false, motif: s.motif + " Sans comité social et économique effectivement mis en place, la règle des quatre réunions santé-sécurité n'a pas de support : mettez d'abord en place le comité (voir l'obligation « comité social et économique »)." };
     return { du: true, motif: s.motif + " Au moins quatre réunions du comité portent annuellement, en tout ou partie, sur ses attributions en matière de santé, sécurité et conditions de travail — plus souvent en cas de besoin, et le comité est en outre réuni après tout accident grave ou événement grave (L. 2315-27). L'employeur informe chaque année l'inspection du travail, le médecin du travail et l'agent des services de prévention des organismes de sécurité sociale du calendrier de ces réunions, et leur confirme chacune par écrit au moins quinze jours à l'avance." };
   },
   verifs: [
@@ -6015,8 +6043,10 @@ q("salariesHorsHoraire", "Des salariés travaillent-ils en dehors d'un horaire c
   "Dès qu'un salarié ne suit pas l'horaire collectif affiché, l'employeur doit établir pour lui les documents de décompte de la durée du travail et des repos compensateurs (L. 3171-2).");
 q("postesRisquesParticuliers", "Des salariés occupent-ils des postes à risques particuliers (amiante, plomb, agents cancérogènes, agents biologiques 3 et 4, rayonnements ionisants, hyperbare, échafaudages, postes à examen d'aptitude) ?", "oui / non",
   "Ces postes ouvrent le suivi individuel renforcé de l'état de santé et la liste formalisée des postes (R. 4624-22, R. 4624-23).");
+q("comiteInstalle", "Le comité social et économique (CSE) a-t-il été effectivement mis en place (élections organisées) ?", "oui / non",
+  "Ce n'est pas la même chose que « l'effectif l'exige » : un comité peut être dû sans avoir été mis en place. Six obligations — commission santé-sécurité, commissions supplétives, commission économique, commission des marchés, formation des élus, réunions santé-sécurité — vivent au sein du comité et n'ont pas de support tant qu'il n'existe pas réellement ; répondez « non » si les élections n'ont pas eu lieu, même si le seuil est atteint. La page ne pose la question suivante, sur les comptes du comité, que si vous répondez « oui » ici — un comité qui n'existe pas n'a pas de comptes.");
 q("comiteSeuilsComptes", "Les comptes du comité social et économique (CSE) dépassent-ils au moins deux des trois critères de l'article D. 2315-29 — cinquante salariés du comité à la clôture d'un exercice, le montant de ressources annuelles et le montant du total de bilan fixés par renvoi à l'article R. 612-1 du code de commerce ?", "oui / non",
-  "C'est le critère de la commission des marchés : il tient aux comptes du CSE, pas à l'effectif de l'entreprise (L. 2315-44-1, D. 2315-29). Le trésorier du CSE ou son expert-comptable a la réponse.");
+  "C'est le critère de la commission des marchés : il tient aux comptes du CSE, pas à l'effectif de l'entreprise (L. 2315-44-1, D. 2315-29). Le trésorier du CSE ou son expert-comptable a la réponse. Cette question ne se pose que si le comité est effectivement en place — sans comité, elle n'a pas de sens.");
 q("epargneSalariale", "Un dispositif d'épargne salariale (intéressement, participation, plan d'épargne) est-il en place ?", "oui / non",
   "Il déclenche la remise du livret d'épargne salariale à chaque embauche (L. 3341-6).");
 q("cadres", "L'entreprise emploie-t-elle des cadres ?", "oui / non",

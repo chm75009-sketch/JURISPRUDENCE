@@ -680,12 +680,22 @@ donnée manquante.</p>
   /* Sous onze salariés, aucun seuil d'effectif n'est en jeu : la question du
      maintien du seuil disparaît, et sa réponse avec elle — le moteur la traite
      alors comme non renseignée, ce qu'il sait faire. Pas de comité non plus :
-     le critère de la commission des marchés n'a pas d'objet. */
+     la question de sa mise en place effective n'a pas de sens.
+
+     Et sous cette même question — comiteInstalle — une seconde porte : tant
+     que le comité n'est pas déclaré effectivement en place, la question sur
+     SES COMPTES (comiteSeuilsComptes) reste masquée. Elle ne redevient
+     répondable que sur un « oui » explicite : un comité non installé n'a pas
+     de comptes, la question serait sans objet — c'est le bogue signalé le
+     29 août 2026 (l'application demandait les comptes d'un comité dont rien
+     n'établissait l'existence). */
   function majVisibilite() {
     var n = ETAT.profil.effectif;
     n = (n === undefined || n === null || String(n).trim() === "") ? null : Number(n);
     var sousOnze = n !== null && !isNaN(n) && n < 11;
-    [["seuilDepuis12Mois", sousOnze], ["comiteSeuilsComptes", sousOnze]].forEach(function (paire) {
+    var comiteNonConfirme = ETAT.profil.comiteInstalle !== "oui";
+    [["seuilDepuis12Mois", sousOnze], ["comiteInstalle", sousOnze],
+     ["comiteSeuilsComptes", sousOnze || comiteNonConfirme]].forEach(function (paire) {
       var el = $("formulaire").querySelector('[name="' + paire[0] + '"]');
       if (!el) return;
       var lab = el.closest("label");
