@@ -74,6 +74,7 @@
     input.insertAdjacentElement("afterend", boite);
 
     var libre = false;      /* « Autre » choisi : la liste se tait jusqu'au prochain focus */
+    var ignorerProchaineSaisie = false;  /* le seul évènement « input » émis par choisir() */
 
     function valeurDe(c) {
       if (stocker === "code") return zeros ? c.idcc : String(Number(c.idcc));
@@ -81,8 +82,13 @@
     }
     function choisir(c) {
       input.value = valeurDe(c);
-      libre = true;               /* les événements émis ne rouvrent pas la liste */
       fermer();
+      /* Un choix referme la liste, il ne verrouille pas le champ : reprendre
+         la saisie ensuite — sans repasser par un focus — doit la rouvrir.
+         Seul l'évènement synthétique ci-dessous, écho immédiat du choix, ne
+         doit pas la rouvrir tout seul ; ignorerProchaineSaisie ne vaut que
+         pour lui, une fois. */
+      ignorerProchaineSaisie = true;
       input.dispatchEvent(new Event("input", { bubbles: true }));
       input.dispatchEvent(new Event("change", { bubbles: true }));
     }
@@ -142,7 +148,10 @@
     }
 
     input.addEventListener("focus", function () { libre = false; ouvrir(); });
-    input.addEventListener("input", ouvrir);
+    input.addEventListener("input", function () {
+      if (ignorerProchaineSaisie) { ignorerProchaineSaisie = false; return; }
+      ouvrir();
+    });
     input.addEventListener("keydown", function (ev) {
       if (ev.key === "Escape") { libre = true; fermer(); }
     });
