@@ -29,6 +29,25 @@
   var SECTEURS = ["transport et logistique", "industrie",
     "bâtiment et travaux publics", "commerce", "services"];
 
+  /* Mots probables de l'intitulé d'une convention collective pour chaque
+     secteur — pas une correspondance officielle : une convention s'identifie
+     par l'activité réelle de l'entreprise (le champ le rappelle), jamais par
+     ce menu. Sert uniquement à faire remonter des candidats plausibles en
+     tête d'une liste de 328, avant que l'utilisateur ne cherche par lui-même. */
+  var MOTS_SECTEUR = {
+    "transport et logistique": ["transport", "logistique", "routier", "manutention",
+      "messagerie", "déménagement", "transit", "ferroviaire", "aérien", "fluvial"],
+    "industrie": ["industrie", "industrielle", "métallurgie", "chimie", "chimique",
+      "textile", "plasturgie", "papier", "carton", "métallurgique", "sidérurgie",
+      "pharmaceutique", "automobile"],
+    "bâtiment et travaux publics": ["bâtiment", "travaux publics", "btp", "construction",
+      "génie civil", "maçonnerie", "travaux", "chantier"],
+    "commerce": ["commerce", "commerciale", "vente", "distribution", "grande distribution",
+      "détail", "gros", "négoce", "magasin"],
+    "services": ["services", "prestations", "conseil", "bureaux d'études",
+      "nettoyage", "propreté", "gardiennage", "sécurité", "restauration", "hôtellerie"],
+  };
+
   /* La fiche d'inscription : ce que l'on demande au client avant tout audit.
      L'ordre est celui d'une fiche que l'on remplit — l'entreprise, puis qui
      la représente, puis ce qui commande les obligations. */
@@ -346,7 +365,18 @@
     });
 
     var cc = conteneur.querySelector("#" + CSS.escape(prefixe + "-conventionCollective"));
-    if (cc && window.IDCC && window.IDCC.attacher) window.IDCC.attacher(cc);
+    var secteurSel = conteneur.querySelector("#" + CSS.escape(prefixe + "-secteur"));
+    if (cc && window.IDCC && window.IDCC.attacher) {
+      window.IDCC.attacher(cc);
+      if (window.IDCC.definirMots) {
+        var majMots = function () {
+          var s = secteurSel ? secteurSel.value : "";
+          window.IDCC.definirMots(cc, MOTS_SECTEUR[s] || []);
+        };
+        majMots();
+        if (secteurSel) secteurSel.addEventListener("change", majMots);
+      }
+    }
 
     function majorer() {
       var patch = {};

@@ -96,13 +96,32 @@
 
     function montrer(liste, q) {
       var qs = plat(q).split(/\s+/).filter(Boolean);
+      var mots = (input._idccMots || []).map(plat).filter(Boolean);
+      var priorite = !qs.length && mots.length > 0;
       var retenues = [];
-      for (var i = 0; i < liste.length && retenues.length < 80; i++) {
-        var c = liste[i];
-        var cible = c.idcc + " " + String(Number(c.idcc)) + " " + plat(c.intitule);
-        var ok = true;
-        for (var k = 0; k < qs.length; k++) if (cible.indexOf(qs[k]) < 0) { ok = false; break; }
-        if (ok) retenues.push(c);
+      if (priorite) {
+        /* Champ vide, secteur renseigné : on ne filtre rien — 328 conventions
+           restent atteignables — mais celles dont l'intitulé porte un mot du
+           secteur remontent en tête. Une suggestion à vérifier depuis
+           l'activité réelle, jamais une affirmation : le champ reste, comme
+           toujours, une saisie libre assistée. */
+        retenues = liste.slice().sort(function (a, b) {
+          return score(b) - score(a);
+        }).slice(0, 80);
+      } else {
+        for (var i = 0; i < liste.length && retenues.length < 80; i++) {
+          var c = liste[i];
+          var cible = c.idcc + " " + String(Number(c.idcc)) + " " + plat(c.intitule);
+          var ok = true;
+          for (var k = 0; k < qs.length; k++) if (cible.indexOf(qs[k]) < 0) { ok = false; break; }
+          if (ok) retenues.push(c);
+        }
+      }
+      function score(c) {
+        var t = plat(c.intitule);
+        var s = 0;
+        for (var j = 0; j < mots.length; j++) if (t.indexOf(mots[j]) >= 0) s++;
+        return s;
       }
       /* Un numéro tapé en entier remonte sa convention en tête de liste. */
       if (/^\d+$/.test(q.trim())) {
@@ -112,6 +131,9 @@
         });
       }
       var h = "";
+      if (priorite && retenues.length && score(retenues[0]) > 0)
+        h += '<div class="idcc-vide">Conventions dont l\'intitulé évoque votre secteur, en tête — ' +
+          'à vérifier depuis votre activité réelle, pas une affirmation.</div>';
       if (!retenues.length && liste.length)
         h += '<div class="idcc-vide">Aucune convention ne correspond — « Autre » ouvre la saisie libre.</div>';
       retenues.forEach(function (c, i) {
@@ -160,5 +182,12 @@
     });
   }
 
-  window.IDCC = { attacher: attacher, charger: charger };
+  /* Fait remonter, dans la liste ouverte à champ vide, les conventions dont
+     l'intitulé porte un des mots donnés — un secteur choisi ailleurs sur la
+     fiche, par exemple. N'écarte rien, ne filtre rien : une suggestion. */
+  function definirMots(input, mots) {
+    if (input) input._idccMots = mots || [];
+  }
+
+  window.IDCC = { attacher: attacher, charger: charger, definirMots: definirMots };
 })();
