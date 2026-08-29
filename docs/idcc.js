@@ -160,12 +160,24 @@
       });
     }
 
+    /* Le champ contient-il déjà l'intitulé exact d'une convention choisie —
+       à l'instant, ou lors d'une visite précédente, relue depuis la fiche ?
+       Si oui, rouvrir la liste en filtrant sur ce texte entier ne retient
+       plus qu'elle-même : toutes les autres lignes disparaissent, et rien ne
+       dit à l'utilisateur qu'il peut encore taper autre chose. C'est ce qui
+       donnait l'impression d'un champ verrouillé après un premier choix. */
+    function dejaChoisie(liste, val) {
+      var v = String(val || "").trim();
+      if (!v) return false;
+      for (var i = 0; i < liste.length; i++) if (valeurDe(liste[i]) === v) return true;
+      return false;
+    }
     function ouvrir() {
       if (libre) return;
       charger().then(function (liste) {
         if (!liste.length) return;          /* pas de fichier : saisie libre */
         if (document.activeElement !== input) return;
-        montrer(liste, input.value);
+        montrer(liste, dejaChoisie(liste, input.value) ? "" : input.value);
       });
     }
 
