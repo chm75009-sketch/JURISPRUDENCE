@@ -44,7 +44,7 @@ const SONDE = require("./sonde.js");
 const jamais = SONDE.reglesJamaisDeclenchees(GRILLE);
 
 const FICHIERS = fs.readdirSync(ICI)
-  .filter(x => /^(moteur|grille|controles|actions|audit|questionnaire|valider|sonde|dates|tests|tests-controles|regularisation|publier)-?(cse)?\.js$/.test(x)
+  .filter(x => /^(moteur|grille|controles|actions|audit|questionnaire|valider|sonde|dates|tests|tests-controles|regularisation|modeles|publier)-?(cse)?\.js$/.test(x)
             || /^(textes_cse|cse_corpus|_r2314_1)\.json$/.test(x))
   .sort();
 const empreintes = {};

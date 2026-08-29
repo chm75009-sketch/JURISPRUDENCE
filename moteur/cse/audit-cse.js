@@ -8,6 +8,7 @@ const GRILLE = require("./grille-cse.js");
 const { C: CONTROLES, ETATS, DETECTION, COHERENCE } = require("./controles-cse.js");
 const ACT = require("./actions-cse.js");
 const { R: REG } = require("./regularisation-cse.js");
+const { MODELES } = require("./modeles-cse.js");
 const DT = require("../commun/parcours-deux-temps.js");
 const T = JSON.parse(fs.readFileSync(__dirname + "/textes_cse.json", "utf8"));
 /* Le manifeste porte les compteurs mesurés à la publication — dont le nombre de
@@ -254,10 +255,18 @@ function parcours(f, etat) {
   return DT.parcours(CONTROLES, REG, verdicts(f), etat);
 }
 
+/* Le modèle concret d'un point de régularisation — étape 5 du parcours.
+   Chiffré sur le dossier remis, jamais sur un exemple figé : voir
+   modeles-cse.js. Rend null si aucun modèle n'est écrit pour cet id. */
+function modele(f, id) {
+  return typeof MODELES[id] === "function" ? MODELES[id](f) : null;
+}
+
 module.exports.verdicts = verdicts;
 module.exports.parcours = parcours;
 module.exports.regularisation = REG;
 module.exports.controles = CONTROLES;
+module.exports.modele = modele;
 module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };
 
 if (require.main === module) {
