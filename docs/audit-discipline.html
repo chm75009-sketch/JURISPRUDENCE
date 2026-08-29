@@ -3,9 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<!-- Chaque audit s'installe pour lui-même, avec son nom et son icône : sur
-     l'écran d'accueil, trois applications distinctes valent mieux qu'une seule
-     dont on ne sait laquelle des trois pages elle ouvre. -->
 <meta name="theme-color" content="#14524F">
 <link rel="manifest" href="manifest-audit-discipline.json">
 <link rel="apple-touch-icon" href="icons/icon-discipline-180.png">
@@ -17,37 +14,72 @@
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
      Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
 <script src="droits.js"></script>
-<!-- Premier module côté relations individuelles. La page ne diffère des autres
-     pages d'audit que par le moteur chargé, le libellé et le dossier d'exemple :
-     le formulaire, l'export et l'assistant sont communs (audit-form.js). -->
-<!-- Tout se passe dans le navigateur : le moteur est chargé comme un script
-     ordinaire, aucune donnée saisie ne quitte le poste. Il n'y a ni serveur
-     d'application, ni compte, ni envoi. -->
+<!-- LA DISCIPLINE ET LE RÈGLEMENT INTÉRIEUR, EN SIX ÉTAPES — même parcours que
+     l'audit social, la BDESE et le comité (voir docs/audit-bdese.html,
+     docs/audit-cse.html), avec le contenu propre à ce module :
+
+       1. LA FICHE CLIENT — partagée avec toutes les pages (clé « profil-entreprise »).
+
+       2. LE QUESTIONNAIRE DE L'EXISTANT — le règlement intérieur (existence,
+          contenu, formalités) et, s'il y a lieu, la sanction envisagée ou
+          prononcée et la garantie de fond conventionnelle. Quatre valeurs sur
+          toute question fermée — oui, non, en cours, autre — et seules « oui »
+          et « non » concluent.
+
+       3. LE RAPPORT GÉNÉRAL — celui que rend
+          moteur/discipline/audit-discipline-client.js.
+
+       4. LE GUIDE DE RÉGULARISATION — les contrôles non conformes ou à
+          vérifier, du plus grave au moins grave
+          (moteur/discipline/regularisation-discipline.js).
+
+       5. LA RÉGULARISATION, ÉLÉMENT PAR ÉLÉMENT — pour le contrôle choisi : la
+          note chiffrée sur le dossier (moteur/discipline/modeles-discipline.js),
+          la procédure, le document que l'application sait rédiger
+          (docs/documents-produits.js, docs/documents-discipline*.js), et la
+          déclaration « c'est fait ».
+
+       6. LA VÉRIFICATION — les contrôles que l'audit tient pour conformes sur
+          votre seule déclaration (moteur/commun/parcours-deux-temps.js), plus
+          ceux que vous venez de déclarer régularisés à l'étape 5.
+
+     CE QUI NE SE GÉNÉRALISE PAS TEL QUEL, ET C'EST ASSUMÉ :
+
+     — « Sans objet » recouvre ici deux réalités que le moteur distingue déjà
+       (correctif du 25 août 2026) : un contrôle réellement sans objet (le
+       règlement n'est pas dû), et un contrôle EN ATTENTE du règlement
+       intérieur (il est dû, il n'existe pas encore, et l'exigence vaudra dès
+       sa rédaction). L'étape 4 leur donne un bloc à part, distinct du guide
+       de régularisation et des données manquantes — voir « la mise en
+       attente » plus bas dans ce fichier.
+
+     — Le module produit déjà, pour chacun de ses vingt-quatre contrôles
+       régularisables, un document complet (docs/documents-produits.js,
+       docs/documents-discipline.js, docs/documents-discipline-2.js). L'étape 5
+       propose donc « Produire le document » quand un générateur existe, plutôt
+       que la seule mention de son nom que porte le module BDESE. -->
 <style>
   :root{
     --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
-    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
+    --gris:#5f6874; --filet:#dcdfe4; --bleu:#14524F;
     --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
     --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--papier);color:var(--corps);
     font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .page{max-width:1000px;margin:0 auto;padding:0 20px 80px}
+  .page{max-width:1060px;margin:0 auto;padding:0 20px 80px}
   header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
   .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
   h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
-  .chapo{color:var(--gris);max-width:64ch;margin:0}
+  .chapo{color:var(--gris);max-width:66ch;margin:0}
+  header a{color:var(--bleu)}
+  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
+  h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:22px 0 8px}
+  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:72ch}
   .lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;
     color:var(--bleu);text-decoration:underline;cursor:pointer}
-  #dlg-avertissement::backdrop{background:#0b111a99}
-  /* Le retour, visible de partout.
 
-     Installée sur un téléphone, l'application n'a pas la barre du navigateur :
-     pas de flèche « précédent », et le geste de bord ne marche pas toujours.
-     Ouvrir un audit depuis la recherche devenait un aller sans retour. La barre
-     ci-dessous est donc collée en haut, sur toutes les pages d'audit, et elle
-     revient d'où l'on vient — ou à la recherche si l'on est arrivé directement. */
   .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
     align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
     margin:0 -20px 0;padding:10px 20px}
@@ -56,61 +88,61 @@
   button.retour:hover{filter:brightness(1.12)}
   .retour-ou{font-size:13px;color:var(--gris)}
   .retour-ou a{color:var(--bleu)}
-  @media print{ .retour-barre{display:none} }
 
-  header a{color:var(--bleu)}
-  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
-  h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:22px 0 8px}
-  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:70ch}
+  .presentation{border:1px solid var(--filet);background:var(--surface);
+    border-radius:4px;padding:18px 20px;margin:22px 0 0}
+  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
+  .presentation p{margin:0 0 10px;max-width:76ch}
+  .presentation p:last-child{margin-bottom:0}
+  .presentation .etapes{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;padding:0;list-style:none}
+  .presentation .etapes li{flex:1 1 200px;border-left:3px solid var(--bleu);padding:2px 0 2px 10px;
+    font-size:14px;color:var(--corps)}
+  .presentation .etapes b{display:block;color:var(--encre)}
 
+  .temps{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 6px}
+  .temps span{font:600 13px/1 system-ui;padding:8px 12px;border-radius:99px;
+    border:1px solid var(--filet);background:var(--surface);color:var(--gris)}
+  .temps span.actif{border-color:var(--bleu);background:var(--bleu);color:#fff}
+  .temps span.fait{border-color:var(--vert);color:var(--vert)}
+
+  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px 20px;margin:0 0 16px}
+  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
   .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 22px}
   label{display:block;font-size:14px}
   label .nom{display:block;color:var(--encre);margin-bottom:4px}
-  label .cle{color:var(--gris);font:500 12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace}
   input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
     background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
-  textarea{min-height:74px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  textarea{min-height:72px;font:14px/1.5 inherit}
   input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
-  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px 20px;margin:0 0 16px}
-  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
+  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
+  .aide-champ.nuance{color:var(--orange)}
 
   .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
-    padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;z-index:10}
   button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
     background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
   button.second{background:var(--surface);color:var(--bleu)}
   button:hover{filter:brightness(1.1)}
+  button:disabled{opacity:.45;cursor:default}
   .compteur{color:var(--gris);font-size:14px;margin-left:auto}
-
-  /* La barre d'actions sur téléphone.
-
-     Cinq boutons empilés occupaient le tiers bas de l'écran, et le formulaire
-     se lisait par une fente. Sur petit écran, la barre se réduit donc à une
-     ligne : l'action principale, et un bouton « ⋯ » qui déplie les autres au
-     besoin. Rien n'est retiré — tout est à un doigt. */
-  @media (max-width: 640px){
-    .barre{gap:8px}
-    .barre.repliee > button.second:not(#plus),
-    .barre.repliee > .compteur{display:none}
-    .barre > #lancer{flex:1 1 auto}
-    .barre > #plus{flex:0 0 auto;padding:12px 16px}
-    .barre.depliee > #plus{background:var(--surface);color:var(--bleu)}
-    .barre > button{min-height:44px}
-    .barre .compteur{width:100%;margin:2px 0 0;text-align:right}
+  @media (max-width:560px){
+    .barre{gap:8px;padding:10px 0}
+    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
+    .barre button:first-child{flex:1 1 100%}
+    .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
   }
-  @media (min-width: 641px){ #plus{display:none} }
 
+  .rubrique{margin:26px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
+    color:var(--bleu);font:600 15px/1.3 system-ui}
 
-  /* --- restitution --- */
-  #sortie{margin-top:30px}
-  .bandeau{padding:18px 20px;color:#fff;margin:0 0 18px;border-radius:3px}
-  .bandeau .r{font:700 26px/1.15 system-ui;letter-spacing:.4px;margin:0 0 6px}
+  .bandeau{padding:18px 20px;color:#fff;margin:14px 0 18px;border-radius:3px}
+  .bandeau .r{font:700 22px/1.15 system-ui;letter-spacing:.4px;margin:0 0 6px}
   .bandeau .s{margin:0;font-size:15px}
   .b-rouge{background:var(--rouge)} .b-orange{background:var(--orange)}
   .b-vert{background:var(--vert)} .b-gris{background:var(--ardoise)}
-  .etape{margin:22px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
+  .etape-r{margin:22px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
     color:var(--bleu);font:600 15px/1.3 system-ui;display:flex;justify-content:space-between;gap:12px}
-  .etape span{font-weight:400;font-size:13px;color:var(--gris)}
+  .etape-r span{font-weight:400;font-size:13px;color:var(--gris)}
   .acte{border-left:4px solid var(--bleu);background:var(--surface);padding:10px 14px;margin:0 0 7px}
   .acte .t{font-weight:600;color:var(--encre)}
   .acte .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
@@ -120,6 +152,7 @@
   .a-bloquant{border-left-color:var(--rouge);background:var(--rouge-f)}
   .a-critique{border-left-color:var(--orange);background:var(--orange-f)}
   .a-information{border-left-color:#767676;background:var(--gris-f)}
+  .a-attente{border-left-color:var(--bleu);background:#eef4f3}
   .interdit{border:1px solid var(--rouge);background:var(--rouge-f);padding:12px 14px;margin:0 0 8px;border-radius:3px}
   .interdit .t{font-weight:700;color:var(--rouge)}
   .interdit .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
@@ -127,78 +160,79 @@
   .i-examen{border-color:#9aa0a8;background:var(--gris-f)} .i-examen .t{color:#4a4a4a}
   .acquis{margin:0 0 4px;padding-left:20px;text-indent:-20px;font-size:15px}
   .acquis b{color:var(--vert)}
-  .enc{border:1px solid var(--bleu);background:#f4f6fb;padding:12px 14px;margin:14px 0;border-radius:3px}
+  .enc{border:1px solid var(--bleu);background:#eef4f3;padding:12px 14px;margin:14px 0;border-radius:3px}
   .enc .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
   .tab{overflow-x:auto;margin:12px 0}
   table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
   th,td{border:1px solid var(--filet);padding:7px 10px;text-align:left;vertical-align:top}
   th{background:var(--bleu);color:#fff;font-weight:600}
   .note{color:var(--gris);font-size:13.5px}
+  .puce{margin:0 0 4px 18px;text-indent:-18px}
+  hr{border:none;border-top:1px solid var(--filet);margin:18px 0}
   .ident{font:500 11.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8a9099;
     background:#f0f1f4;border-radius:3px;padding:2px 5px;white-space:nowrap}
 
-  .puce{margin:0 0 4px 18px;text-indent:-18px}
-  hr{border:none;border-top:1px solid var(--filet);margin:18px 0}
-  .erreur{border:1px solid var(--rouge);background:var(--rouge-f);color:var(--rouge);
-    padding:12px 14px;border-radius:3px;font-weight:600}
+  .action{border:1px solid var(--filet);border-left:4px solid var(--rouge);background:var(--surface);
+    padding:14px 16px;margin:0 0 12px;border-radius:0 3px 3px 0}
+  .action.verifier{border-left-color:var(--orange)}
+  .action .t{font-weight:700;color:var(--encre)}
+  .action .quoi{margin:6px 0 0;font-size:14.5px}
+  .action .meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:13px;color:var(--gris)}
+  .action .meta b{color:var(--corps)}
+  .action ol{margin:8px 0 0;padding-left:22px;font-size:14px}
+  .action ol li{margin:0 0 4px}
+  .action .risque{font-size:13.5px;color:var(--rouge);margin:8px 0 0}
+  .action.verifier .risque{color:var(--orange)}
+  .prio{font:600 11px/1 system-ui;color:#fff;background:var(--ardoise);padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
+  .p-1{background:var(--rouge)} .p-2{background:var(--orange)} .p-3{background:var(--ardoise)} .p-4{background:#767676}
+  details.modele{margin:10px 0 0;border:1px dashed var(--bleu);border-radius:3px;background:#eef4f3}
+  details.modele summary{cursor:pointer;font:600 13.5px/1.3 system-ui;color:var(--bleu);padding:9px 12px}
+  details.modele .corps{padding:0 14px 14px}
+
+  .produit{margin:12px 0;padding:13px 15px;border:1px solid var(--bleu);border-radius:3px;background:#eef4f3}
+  .produit .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
+  .produit .w{margin:0 0 10px;font-size:13.5px;color:var(--corps)}
+
+  .coches{display:flex;gap:14px;margin:10px 0 0;flex-wrap:wrap;font-size:14px}
+  .coches label{display:flex;align-items:center;gap:6px;width:auto;cursor:pointer;
+    border:1px solid var(--filet);border-radius:99px;padding:6px 14px;background:var(--gris-f)}
+  .coches input{width:auto;margin:0}
+  .coches label:has(input:checked){border-color:var(--bleu);background:#eef4f3;color:var(--encre);font-weight:600}
+
+  .verif-bloc{border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:12px 14px;margin:0 0 10px}
+  .verif-bloc .t{font-weight:600;color:var(--encre);margin:0 0 8px}
+  .verif-q{margin:0 0 10px}
+  .verif-q p{margin:0 0 4px;font-size:13.5px}
+  .verif-q .attendu{color:var(--gris);font-size:12px}
+  .verif-q select{margin-top:4px}
+  .verif-q input.detail{margin-top:5px}
+  .verdict{border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.5;margin:8px 0 0}
+  .verdict b{display:block;margin-bottom:2px}
+  .v-val{background:var(--vert-f);color:#1c5e36}
+  .v-ref{background:var(--rouge-f);color:#8E1B1B}
+  .v-att{background:var(--orange-f);color:#9C5A05}
+
+  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
+    border:1px solid var(--bleu);background:#eef4f3;color:var(--bleu);font-size:14px}
   footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
 
-  /* Propositions, cases à cocher et dépôt de fichier */
-  .cases{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 6px;
-    border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:9px 11px}
-  .case{display:flex;align-items:flex-start;gap:6px;font-size:13.5px;color:var(--corps);
-    width:100%;line-height:1.35}
-  .case input{width:auto;margin:2px 0 0;flex:0 0 auto}
-  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
-  .depot{margin:2px 0 6px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-  button.fichier{font:600 13px/1.25 system-ui;padding:9px 12px;background:#eef2f9;
-    color:var(--bleu);border:1px solid var(--bleu)}
-  label>.depot>button.fichier{flex:1 1 100%}
-  .etat-depot{font-size:12.5px;color:var(--gris);flex:1 1 180px}
-  .etat-depot.ok{color:var(--vert)} .etat-depot.ko{color:var(--rouge)}
-  input.libre{margin-top:6px}
-
-  /* Présentation */
-  .presentation{border:1px solid var(--filet);background:var(--surface);
-    border-radius:4px;padding:18px 20px;margin:22px 0 0}
-  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
-  .presentation p{margin:0 0 10px;max-width:74ch}
-  .presentation p:last-child{margin-bottom:0}
-  .presentation .etapes{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;padding:0;list-style:none}
-  .presentation .etapes li{flex:1 1 190px;border-left:3px solid var(--bleu);padding:2px 0 2px 10px;
-    font-size:14px;color:var(--corps)}
-  .presentation .etapes b{display:block;color:var(--encre)}
-
-  /* Éditeur de tableau : une ligne par entrée */
-  .tableau-champ{grid-column:1/-1;border:1px solid var(--filet);background:var(--surface);
-    border-radius:3px;padding:12px 14px}
-  .tableau-champ>.nom{margin:0 0 8px;font-size:14px;color:var(--encre)}
-  table.saisie{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-x:auto}
-  table.saisie th{background:var(--gris-f);color:var(--bleu);border:1px solid var(--filet);
-    padding:5px 7px;font:600 12px/1.3 system-ui;text-align:left;white-space:nowrap}
-  table.saisie td{border:1px solid var(--filet);padding:3px}
-  table.saisie input,table.saisie select{border:none;padding:5px 6px;font-size:13px;min-width:104px}
-  button.retirer{padding:4px 8px;color:var(--rouge);border-color:var(--filet)}
-
-  /* Sur un téléphone, la barre d'actions ne doit pas manger l'écran. */
-  @media (max-width:560px){
-    .barre{gap:8px;padding:10px 0}
-    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
-    .barre button:first-child{flex:1 1 100%}
-    .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
-    .presentation{padding:15px 16px}
-    .presentation .etapes li{flex:1 1 100%}
+  @media print{
+    .retour-barre,.presentation,.temps,.barre,#message,form,header a,footer,
+    .coches,details.modele summary,.produit button,.no-print{display:none !important}
+    details.modele{border:none} details.modele .corps{border-top:none;padding:8px 0}
+    details.modele[open] .corps{display:block}
+    .page{padding:0}
+    body.print-liste #bloc-general,body.print-liste #bloc-guide,body.print-liste #bloc-item,body.print-liste #bloc-existant{display:none !important}
+    body.print-general #bloc-liste,body.print-general #bloc-guide,body.print-general #bloc-item,body.print-general #bloc-existant{display:none !important}
+    body.print-guide #bloc-liste,body.print-guide #bloc-general,body.print-guide #bloc-item,body.print-guide #bloc-existant{display:none !important}
+    body.print-item #bloc-liste,body.print-item #bloc-general,body.print-item #bloc-guide,body.print-item #bloc-existant{display:none !important}
+    body.print-existant #bloc-liste,body.print-existant #bloc-general,body.print-existant #bloc-guide,body.print-existant #bloc-item{display:none !important}
   }
 
-  /* Retour, message et barre du résultat */
-  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
-    border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}
-  .retour{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px;
-    padding-bottom:14px;border-bottom:1px solid var(--filet)}
-  .retour button{flex:1 1 auto}
-  button:disabled{opacity:.45;cursor:default}
-  @media print{ .retour,#message{display:none} }
-  @media print{ .barre,form,header a,footer{display:none} .page{padding:0} }
+  #dlg-texte{max-width:80ch;width:92vw;border:1px solid var(--filet);border-radius:6px;padding:16px 18px}
+  #dlg-texte .dt-barre{display:flex;gap:8px;margin:0 0 12px}
+  #dlg-texte pre{white-space:pre-wrap;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    margin:0;max-height:70vh;overflow:auto}
 </style>
 </head>
 <body>
@@ -206,195 +240,994 @@
 
 <div class="retour-barre">
   <button type="button" id="btn-retour" class="retour">← Retour</button>
-  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
-  · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
-  · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
-  · <a href="audit-sst.html">santé-sécurité (SST)</a> · <a href="audit-discipline.html">discipline et règlement intérieur</a>
-  · <a href="agenda.html">agenda</a> · <a href="guides.html">guides</a></span>
+  <span class="retour-ou"><a href="./">accueil</a> · <a href="audit.html">licenciement</a>
+  · <a href="audit-social.html">audit social</a> · <a href="audit-cse.html">comité</a>
+  · <a href="audit-bdese.html">base de données</a> · <a href="audit-pse.html">plan de sauvegarde</a>
+  · <a href="audit-nao.html">négociation (NAO)</a> · <a href="audit-sst.html">santé-sécurité (SST)</a>
+  · <a href="agenda.html">agenda</a> · <a href="documents.html">documents</a> · <a href="guides.html">guides</a></span>
 </div>
-
 
 <header>
   <p class="fil">Application Jurisprudence</p>
   <h1>Audit — discipline et règlement intérieur</h1>
-  <p class="chapo"><b>Cette application vérifie une sanction et le règlement intérieur point par point</b> —
-  l'obligation d'établir un règlement intérieur et son contenu, les formalités qui le rendent
-  opposable (avis du comité, publicité, dépôt au greffe, communication à l'inspection), puis la
-  procédure disciplinaire : prescription des faits à deux mois, convocation, entretien, délais,
-  notification motivée — et, surtout, <b>les garanties de fond</b> que la convention collective ou le
-  règlement intérieur ajoutent à la loi.<br>
-  L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
-  <a href="./">Recherche de jurisprudence</a> · <a href="audit.html">Audit du licenciement économique</a> · <a href="audit-cse.html">Audit du comité</a> · <a href="audit-sst.html">Santé-sécurité (SST)</a> · <a href="audit-nao.html">Négociation (NAO)</a>
-  · <button type="button" class="lien-avert" data-avertissement>Avertissement d'usage</button></p>
+  <p class="chapo"><b>Cette application vérifie un règlement intérieur et une sanction, point par
+  point</b> — l'obligation d'établir un règlement, son contenu, les formalités qui le rendent
+  opposable, puis la procédure disciplinaire : prescription des faits à deux mois, convocation,
+  entretien, délais, notification motivée — et <b>les garanties de fond</b> que la convention
+  collective ou le règlement intérieur ajoutent à la loi. Vous répondez au questionnaire :
+  <b>le manquant reçoit un guide de régularisation</b> priorisé, avec pour chaque point une note
+  chiffrée sur votre dossier, la procédure, et le document que l'application rédige elle-même quand
+  elle en est capable ; l'existant est ensuite contrôlé point par point.<br>
+  L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce
+  poste. <button type="button" class="lien-avert" id="btn-avert">Avertissement d'usage</button></p>
 </header>
 
 <div class="presentation">
-  <h2>À quoi sert cette page</h2>
-  <p>Le règlement intérieur est obligatoire à partir de cinquante salariés (art. L. 1311-2 du code du
-  travail), au terme d'un délai de douze mois à compter du franchissement du seuil. C'est lui qui
-  fixe la nature et l'échelle des sanctions : une sanction autre que le licenciement ne peut être
-  prononcée que si elle y est prévue, et une mise à pied disciplinaire n'est licite que si le
-  règlement en précise la durée maximale. Vous décrivez la situation — le règlement intérieur, et
-  s'il y a lieu une sanction envisagée ou prononcée —, l'application la confronte aux articles
-  L. 1311-2, L. 1321-1 à L. 1321-6, L. 1322-1 à L. 1322-3, L. 1331-1 à L. 1333-3 et à leurs articles
-  réglementaires, et vous obtenez un rapport imprimable.</p>
+  <h2>Le parcours, en six étapes</h2>
+  <p>Le règlement intérieur d'abord, la sanction ensuite : l'un commande l'autre, puisqu'une
+  sanction autre que le licenciement ne peut être prononcée que si elle figure dans l'échelle du
+  règlement, chez l'employeur tenu d'en établir un. Votre avancement est enregistré sur ce poste :
+  vous reprenez où vous vous êtes arrêté.</p>
   <ul class="etapes">
-    <li><b>1. Vous répondez</b> sur le règlement intérieur : existe-t-il, que contient-il, a-t-il
-    été soumis à l'avis du comité, publié, déposé au greffe, communiqué à l'inspection ?</li>
-    <li><b>2. Vous décrivez la sanction</b> s'il y en a une : sa nature, la date de connaissance des
-    faits, la convocation, l'entretien, la notification — et la procédure que la convention
-    collective ou le règlement intérieur imposent en plus de la loi.</li>
-    <li><b>3. L'application vérifie</b> chaque exigence une par une, dit sur quoi elle se fonde, et
-    mesure ce à quoi l'employeur s'expose — sans jamais délivrer de blanc-seing.</li>
+    <li><b>1. La fiche client</b> — dénomination, effectif, secteur. Partagée avec les autres pages
+    de l'application.</li>
+    <li><b>2. Le questionnaire de l'existant</b> — le règlement intérieur, la sanction s'il y a
+    lieu, la garantie de fond conventionnelle.</li>
+    <li><b>3. Le rapport général</b> — chaque exigence confrontée aux textes, et ce à quoi
+    l'employeur s'expose.</li>
+    <li><b>4. Le guide de régularisation</b> — les contrôles non conformes ou à vérifier, du plus
+    grave au moins grave.</li>
+    <li><b>5. La régularisation, élément par élément</b> — la note chiffrée sur votre dossier, la
+    procédure, le document produit, et la case « c'est fait ».</li>
+    <li><b>6. La vérification de ce qui est déclaré</b> — les contrôles tenus pour conformes sur
+    votre seule déclaration, contrôlés pièce par pièce.</li>
   </ul>
   <p class="note"><b>Ce que cette page ne fait pas :</b> elle n'apprécie ni la réalité des faits, ni
-  leur caractère fautif, ni la proportionnalité de la sanction à la faute — c'est l'office du conseil
-  de prud'hommes, et si un doute subsiste il profite au salarié (art. L. 1333-1 et L. 1333-2). Elle
-  n'audite pas le statut protecteur du salarié titulaire d'un mandat : elle le <b>signale</b>. Elle
-  n'audite pas non plus la procédure du licenciement disciplinaire, qui n'est pas celle de
-  l'article L. 1332-2 (art. L. 1333-3).</p>
+  leur caractère fautif, ni la proportionnalité de la sanction — c'est l'office du conseil de
+  prud'hommes, et si un doute subsiste il profite au salarié (L. 1333-1 ; L. 1333-2). Elle n'audite
+  pas le statut protecteur du salarié titulaire d'un mandat : elle le <b>signale</b>. Elle n'audite
+  pas la procédure du licenciement disciplinaire, qui n'est pas celle de L. 1332-2 (L. 1333-3).
+  <b>Une réponse « en cours » ou « autre » ne conclut rien</b> : l'audit la traite comme une donnée
+  manquante.</p>
 </div>
 
-<div class="enc" style="margin-top:22px">
-  <p class="sh">La garantie de fond : le point que l'on oublie, et qui coûte le plus cher</p>
-  <p style="margin:0 0 8px">« La consultation d'un organisme chargé, en vertu d'une disposition
-  conventionnelle ou d'un règlement intérieur, de donner son avis sur un licenciement envisagé par un
-  employeur constitue une garantie de fond, en sorte que le licenciement prononcé sans que cet
-  organisme ait été consulté ne peut avoir de cause réelle et sérieuse. L'irrégularité commise dans le
-  déroulement de la procédure disciplinaire prévue par une disposition conventionnelle ou un règlement
-  intérieur, est assimilée à la violation d'une garantie de fond et rend le licenciement sans cause
-  réelle et sérieuse lorsqu'elle a privé le salarié de droits de sa défense ou lorsqu'elle est
-  susceptible d'avoir exercé en l'espèce une influence sur la décision finale de licenciement par
-  l'employeur » (Soc., 8 septembre 2021, n° 19-15.039, publié).</p>
-  <p style="margin:0">Conséquence pratique : <b>un avertissement peut exiger un entretien préalable</b>
-  que la loi n'impose pas, dès lors que le règlement intérieur subordonne le licenciement à l'existence
-  de sanctions antérieures (Soc., 3 mai 2011, n° 10-14.104 ; même solution pour une convention
-  collective, Soc., 22 septembre 2021, n° 18-22.204). Une procédure conventionnelle non suivie rend
-  ici une <b>non-conformité motivée</b> ; suivie tardivement ou imparfaitement, elle rend
-  « risque à vérifier » avec le critère du juge — droits de la défense, influence sur la décision
-  (Soc., 20 mars 2024, n° 22-17.292). Le contrôle d'exposition, lui, ne rend <b>jamais</b>
-  « conforme » : une donnée non renseignée produit « donnée manquante », et le rapport le dit.</p>
+<div class="temps" id="fil-temps" role="navigation" aria-label="Les six étapes de l'audit">
+  <span data-t="1" class="actif">1 · Fiche client</span>
+  <span data-t="2">2 · Questionnaire de l'existant</span>
+  <span data-t="3">3 · Rapport général</span>
+  <span data-t="4">4 · Guide de régularisation</span>
+  <span data-t="5">5 · Régulariser, élément par élément</span>
+  <span data-t="6">6 · Vérification de ce qui est déclaré</span>
 </div>
 
-<form id="formulaire" autocomplete="off"></form>
+<h2 id="t1">1. La fiche client</h2>
+<p class="aide">L'entreprise auditée. Cette fiche est partagée avec les parcours guidés, le générateur de
+documents et les huit audits détaillés — renseignée ici, elle est reprise partout. Elle ne quitte pas ce
+poste.</p>
+<div id="fiche-client"></div>
+
+<h3 id="t1b">Ce qui complète la fiche</h3>
+<p class="aide">La date à laquelle votre situation est décrite. Le reste des questions — règlement
+intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
+<form id="formulaire-fiche" autocomplete="off"></form>
 
 <div class="barre">
-  <button type="button" id="lancer">Lancer l'audit</button>
+  <button type="button" id="generer">Étape 2 : ouvrir le questionnaire de l'existant</button>
   <button type="button" class="second" id="exemple">Charger un dossier d'exemple</button>
   <button type="button" class="second" id="vider">Tout effacer</button>
-  <button type="button" class="second" id="annuler" disabled>Annuler la dernière saisie</button>
-  <button type="button" class="second" id="mot">Word</button>
-  <button type="button" class="second" id="imprimer">Imprimer / PDF</button>
   <span class="compteur" id="compteur"></span>
 </div>
-
 <p id="message" role="status"></p>
 
-<div id="sortie"></div>
+<div id="bloc-liste" style="display:none">
+  <h2 id="t2">2. Le questionnaire de l'existant <span class="note" id="liste-date"></span></h2>
+  <p class="aide">Le règlement intérieur d'abord — son existence commande le reste — puis, s'il y a
+  lieu, la sanction envisagée ou prononcée et la garantie de fond conventionnelle. Quatre réponses
+  possibles aux questions fermées : <b>oui</b> et <b>non</b> concluent ; <b>en cours</b> et
+  <b>autre</b> décrivent votre situation sans rien conclure.</p>
+  <form id="formulaire" autocomplete="off"></form>
+  <div class="barre no-print">
+    <button type="button" id="vers-general">Étape 3 : voir le rapport général</button>
+    <button type="button" class="second" id="imprimer-liste">Imprimer le questionnaire</button>
+    <span class="compteur" id="compteur-questionnaire"></span>
+  </div>
+</div>
+
+<div id="bloc-general" style="display:none">
+  <h2 id="t3">3. Le rapport général de l'audit</h2>
+  <p class="aide">Chaque exigence confrontée aux textes lus à la source, et ce à quoi l'employeur
+  s'expose. Ce rapport se recalcule à chaque étape : il tiendra compte de ce que vous régulariserez
+  à l'étape 5 et de ce que vous vérifierez à l'étape 6.</p>
+  <div id="rapport-general"></div>
+  <div class="barre no-print">
+    <button type="button" id="vers-guide">Étape 4 : ouvrir le guide de régularisation</button>
+    <button type="button" class="second" id="imprimer-general">Imprimer le rapport général</button>
+  </div>
+</div>
+
+<div id="bloc-guide" style="display:none">
+  <h2 id="t4">4. Le guide de régularisation</h2>
+  <p class="aide">Les contrôles non conformes ou à vérifier, du plus grave au moins grave. Chaque
+  point dit l'acte à accomplir, ce qu'on risque à ne pas le faire, et ouvre sa note chiffrée et sa
+  procédure à l'étape 5.</p>
+  <div id="guide"></div>
+  <div class="barre no-print">
+    <button type="button" id="vers-item">Étape 5 : régulariser élément par élément</button>
+    <button type="button" class="second" id="imprimer-guide">Imprimer le guide</button>
+  </div>
+</div>
+
+<div id="bloc-item" style="display:none">
+  <h2 id="t5">5. Régulariser, élément par élément</h2>
+  <p class="aide">Choisissez un contrôle du guide. Vous obtenez la <b>note chiffrée sur votre
+  dossier</b> — établie sur les valeurs saisies à l'étape 2, jamais sur un exemple figé —, la
+  <b>procédure</b> jusqu'à la validation, le <b>document</b> que l'application sait rédiger, et la
+  grille de vérification. Quand c'est fait, dites-le : l'étape 6 le reprendra.</p>
+  <div class="grille" style="margin:0 0 16px">
+    <label><span class="nom">Le contrôle à régulariser</span>
+      <select id="choix-item"></select>
+      <span class="aide-champ">La liste reprend le guide de l'étape 4.</span></label>
+  </div>
+  <div id="fiche-item"></div>
+  <div class="barre no-print">
+    <button type="button" id="vers-existant">Étape 6 : vérifier ce qui est déclaré</button>
+    <button type="button" class="second" id="imprimer-item">Imprimer cette fiche de régularisation</button>
+  </div>
+</div>
+
+<div id="bloc-existant" style="display:none">
+  <h2 id="t6">6. La vérification de ce qui est déclaré</h2>
+  <p class="aide">Les contrôles que l'audit tient pour conformes sur votre seule déclaration à
+  l'étape 2, et ceux que vous venez de déclarer régularisés à l'étape 5. <b>Cocher n'est pas
+  prouver</b> : une case cochée sans détail vérifiable rend « ne conclut pas », jamais « en règle »
+  — et un point refusé retourne au guide de l'étape 4.</p>
+  <div id="verifs"></div>
+  <div class="barre no-print">
+    <button type="button" id="controler">Produire le rapport de régularisation</button>
+    <button type="button" class="second" id="imprimer-existant">Imprimer le rapport de régularisation</button>
+  </div>
+  <div id="rapport-existant"></div>
+</div>
 
 <footer id="pied"></footer>
 </div>
 
-<script src="moteur-discipline.js"></script>
-<script>
-  /* Ce qui distingue cette page : le moteur, la clé du brouillon et le dossier
-     d'exemple. Tout le reste vit dans audit-form.js, commun aux pages d'audit.
+<dialog id="dlg-avertissement" style="max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;font:15px/1.55 system-ui;color:#1c2126">
+  <h2 style="margin:0 0 12px;font:600 19px/1.3 system-ui">Avertissement d'usage</h2>
+  <p style="margin:0 0 10px">Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
+  avocat, ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
+  <p style="margin:0 0 10px">Ce module n'apprécie ni la réalité des faits, ni leur caractère fautif, ni la
+  proportionnalité de la sanction à la faute : c'est l'office du conseil de prud'hommes. Il ne fournit pas
+  d'analyse du statut protecteur d'un salarié titulaire d'un mandat, qu'il se contente de signaler.</p>
+  <form method="dialog" style="margin:14px 0 0;text-align:right">
+    <button style="font:600 14px/1 system-ui;padding:9px 16px;border:1px solid #14524F;background:#14524F;color:#fff;border-radius:6px;cursor:pointer">Fermer</button>
+  </form>
+</dialog>
 
-     Le dossier de discipline est autonome : rien n'est repris d'un autre audit,
-     parce qu'aucune des données qu'il demande n'y figure. */
-  window.__MOTEUR = "MoteurDiscipline";
-  window.__CLE = "audit-discipline-brouillon";
-  window.__EXEMPLE = {
-    "entreprise": "SOCIÉTÉ D'EXEMPLE SAS",
-    "dateAudit": "2026-08-19",
-    "effectif": "240",
-    "cse.existe": "oui",
-    "ri.existe": "oui",
-    "ri.dateFranchissementSeuil": "2019-01-15",
-    "ri.contenuSanteSecurite": "oui",
-    "ri.contenuParticipation": "oui",
-    "ri.contenuDiscipline": "oui",
-    "ri.echelleSanctions": "oui",
-    "ri.misePiedDureeMax": "oui",
-    "ri.misePiedDureeMaxJours": "5",
-    "ri.rappelDroitsDefense": "oui",
-    "ri.rappelHarcelement": "oui",
-    "ri.rappelLanceursAlerte": "oui",
-    "ri.clausesInterdites": "non",
-    "ri.clauseNeutralite": "non",
-    "ri.neutraliteJustifieeProportionnee": "",
-    "ri.avisCSE": "oui",
-    "ri.publicite": "oui",
-    "ri.dateDerniereFormalite": "2019-09-02",
-    "ri.dateEntreeVigueur": "2019-10-15",
-    "ri.depotGreffe": "oui",
-    "ri.communicationInspection": "oui",
-    "ri.communicationDeuxExemplaires": "oui",
-    "ri.redigeFrancais": "oui",
-    "ri.modifieDepuis": "non",
-    "ri.modificationsFormalites": "",
-    "ri.notesServiceGenerales": "non",
-    "ri.notesServiceFormalites": "",
-    "ri.demandeInspection": "non",
-    "ri.suiteDemandeInspection": "",
-    "sanction.auditee": "oui",
-    "sanction.nature": "mise à pied disciplinaire",
-    "sanction.incidence": "",
-    "sanction.griefsEcrits": "oui",
-    "sanction.retenueSalaire": "non",
-    "sanction.prevueRI": "oui",
-    "sanction.dureeMisePiedJours": "2",
-    "sanction.dateConnaissance": "2026-06-15",
-    "sanction.poursuitesPenales": "non",
-    "sanction.sanctionsAnterieuresInvoquees": "non",
-    "sanction.dateSanctionAnterieurePlusAncienne": "",
-    "sanction.convocationEnvoyee": "oui",
-    "sanction.dateConvocation": "2026-06-22",
-    "sanction.convocationObjet": "oui",
-    "sanction.convocationDateHeureLieu": "oui",
-    "sanction.convocationAssistance": "oui",
-    "sanction.convocationRemise": "lettre recommandée",
-    "sanction.entretienTenu": "oui",
-    "sanction.dateEntretien": "2026-06-30",
-    "sanction.dateNotification": "2026-07-06",
-    "sanction.notificationEcrite": "oui",
-    "sanction.notificationMotivee": "oui",
-    "sanction.notificationRemise": "lettre recommandée",
-    "sanction.misePiedConservatoire": "non",
-    "sanction.salarieProtege": "non",
-    "garantie.procedureApplicable": "oui",
-    "garantie.source": "la convention collective",
-    "garantie.nature": "consultation d'un organisme appelé à donner son avis",
-    "garantie.suivie": "oui",
-    "garantie.droitsDefensePrives": "",
-    "garantie.influenceDecision": "",
-    "garantie.licenciementSubordonneSanctions": "non",
-    "pieces": ""
-};
-</script>
-<script src="audit-export.js"></script>
+<dialog id="dlg-texte">
+  <div class="dt-barre">
+    <button type="button" id="dt-copier">Copier le texte</button>
+    <button type="button" id="dt-imprimer" class="second">Imprimer</button>
+    <button type="button" id="dt-fermer" class="second">Fermer</button>
+  </div>
+  <pre id="dt-corps"></pre>
+</dialog>
+
+<script src="moteur-discipline.js"></script>
+<script src="idcc.js"></script>
 <script src="profil.js"></script>
 <script src="documents-produits.js"></script>
 <script src="documents-discipline.js"></script>
 <script src="documents-discipline-2.js"></script>
-<script src="parcours-deux-temps.js"></script>
-<script src="audit-form.js"></script>
 <script>
-  /* L'installation sur l'écran d'accueil suppose un service worker enregistré.
-     Le même sert les deux audits et la recherche : il est à la racine du site,
-     donc sa portée couvre les trois pages. */
-  if ("serviceWorker" in navigator)
-    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
-</script>
+(function () {
+  "use strict";
+  var MOTEUR = window.MoteurDiscipline;
+  var AUD = MOTEUR.audit;
+  var CTRL = MOTEUR.controles;
+  var CHAMPS = MOTEUR.champs || [];
+  var PROPOS = MOTEUR.propositions || {};
+  var P = window.Profil;
+  var CLE = "audit-discipline-brouillon";
+  var $ = function (id) { return document.getElementById(id); };
+  var AUJOURDHUI = new Date().toISOString().slice(0, 10);
 
-<script>
-  /* Revenir d'où l'on vient. À défaut d'historique — l'application a été
-     ouverte directement sur cette page — on rejoint la recherche, qui est la
-     porte d'entrée. On ne laisse jamais le bouton sans effet. */
-  document.getElementById("btn-retour").addEventListener("click", function () {
+  var e = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+
+  /* ------------------------------------------------------------ l'état ---
+     Même convention que la BDESE et le comité : `dossier` et `nuances`
+     séparent ce qui conclut de ce qui ne conclut pas ; `faits` garde ce qui
+     est déclaré régularisé à l'étape 5 ; `controles` garde les réponses aux
+     grilles de vérification (étapes 5 et 6). */
+  var etatVide = function () {
+    return { dossier: {}, nuances: {}, faits: {}, controles: {}, etape: 1 };
+  };
+  var ETAT = etatVide();
+  try {
+    var lu = JSON.parse(localStorage.getItem(CLE) || "null");
+    if (lu && lu.dossier && lu.etape) ETAT = lu;
+  } catch (err) {}
+  if (!ETAT.dossier) ETAT.dossier = {};
+  if (!ETAT.nuances) ETAT.nuances = {};
+  if (!ETAT.faits) ETAT.faits = {};
+  if (!ETAT.controles) ETAT.controles = {};
+  if (!ETAT.etape) ETAT.etape = 1;
+  function enregistrer() { try { localStorage.setItem(CLE, JSON.stringify(ETAT)); } catch (err) {} }
+
+  var VALEURS = (P && P.VALEURS) || ["oui", "non", "en cours", "autre"];
+  var conclut = (P && P.conclut) || function (v) { return v === "oui" || v === "non"; };
+  /* La grille de vérification (étapes 5 et 6) porte une cinquième valeur,
+     « je ne sais pas » : c'est le vocabulaire déjà posé par
+     moteur/commun/parcours-deux-temps.js pour les huit modules — repris ici
+     à l'identique plutôt que de forcer les quatre valeurs de la fiche sur une
+     grille qui n'est pas une question d'orientation. */
+  var REPONSES_GRILLE = ["oui", "non", "en cours", "je ne sais pas", "autre"];
+  function grilleConclut(v) { return v === "oui" || v === "non"; }
+
+  /* --------------------------------------------------- les champs -> `f` ---
+     Les chemins pointés (« ri.existe », « sanction.dateConvocation ») sont
+     ceux que lisent moteur-discipline.js et controles-discipline.js : on les
+     respecte à la lettre, aucun champ n'est renommé. */
+  function assignPath(obj, chemin, val) {
+    var parts = chemin.split(".");
+    var o = obj;
+    for (var i = 0; i < parts.length - 1; i++) { o[parts[i]] = o[parts[i]] || {}; o = o[parts[i]]; }
+    o[parts[parts.length - 1]] = val;
+  }
+  function getPath(obj, chemin) {
+    var parts = chemin.split("."), o = obj;
+    for (var i = 0; i < parts.length; i++) { if (o == null) return undefined; o = o[parts[i]]; }
+    return o;
+  }
+
+  /* Les deux champs que la fiche partagée porte déjà : ils ne sont pas
+     redemandés à l'étape 2. `dateAudit` reste une question propre au module. */
+  var DEPUIS_FICHE = { entreprise: true, effectif: true };
+
+  /* « pieces » est la seule liste du module, et aucun contrôle ne la lit :
+     une ligne de texte par pièce suffit, sur le même principe que la BDESE
+     et le comité pour leurs champs de même forme. */
+  var LISTES_OBJETS = { "pieces": "nom" };
+
+  function construireF() {
+    var p = P ? P.lire() : {};
+    var f = {};
+    f.entreprise = p.denomination || "";
+    if (p.effectif !== undefined && p.effectif !== null && String(p.effectif).trim() !== "" && isFinite(+p.effectif))
+      f.effectif = Number(p.effectif);
+    Object.keys(ETAT.dossier).forEach(function (chemin) {
+      var v = ETAT.dossier[chemin];
+      if (v === undefined || v === null || v === "") return;
+      if (LISTES_OBJETS[chemin]) {
+        var cleObjet = LISTES_OBJETS[chemin];
+        var lignes = String(v).split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
+        assignPath(f, chemin, lignes.map(function (l) { var o = {}; o[cleObjet] = l; return o; }));
+        return;
+      }
+      assignPath(f, chemin, v);
+    });
+    return f;
+  }
+
+  /* ----------------------------------------------------- 1. fiche client --- */
+  function construireFiche() {
+    if (!P) { $("fiche-client").innerHTML =
+      '<p class="aide">La fiche client n\'a pas pu être chargée (profil.js).</p>'; return; }
+    P.rendre($("fiche-client"), {
+      prefixe: "fc",
+      legende: "Fiche client — l'entreprise auditée",
+      aide: "Ces données restent dans ce navigateur. Elles orientent l'audit et pré-remplissent les rapports et les documents produits.",
+      onChange: function () {
+        enregistrer(); majCompteur();
+        if (ETAT.etape >= 2) construireQuestionnaire();
+      },
+    });
+  }
+
+  function construireFormulaireFiche() {
+    var html = '<fieldset><legend>La date de votre situation</legend><div class="grille">' +
+      '<label><span class="nom">Date à laquelle la situation est décrite</span>' +
+      '<input name="dateAudit" type="date" value="' + e(ETAT.dossier.dateAudit || "") + '">' +
+      '<span class="aide-champ">Sert de référence aux délais calculés par le rapport (étape 3).</span></label>' +
+      "</div></fieldset>";
+    $("formulaire-fiche").innerHTML = html;
+    $("formulaire-fiche").addEventListener("change", function (ev) {
+      ETAT.dossier[ev.target.name] = ev.target.value;
+      enregistrer(); majCompteur();
+      if (ETAT.etape >= 2) construireQuestionnaire();
+    });
+  }
+
+  /* ------------------------------------------------ 2. le questionnaire --- */
+  function libellesRubrique() {
+    var out = [];
+    CHAMPS.forEach(function (grp) {
+      var champs = grp[1].filter(function (c) { return !DEPUIS_FICHE[c[0]]; });
+      if (champs.length) out.push([grp[0], champs]);
+    });
+    return out;
+  }
+
+  function menuFerme(nom, val) {
+    var libre = val && VALEURS.indexOf(String(val)) < 0;
+    var choisi = libre ? "autre" : String(val == null ? "" : val);
+    return '<select name="' + e(nom) + '" data-ferme="1"><option value=""></option>' +
+      VALEURS.map(function (o) {
+        return '<option value="' + o + '"' + (choisi === o ? " selected" : "") + ">" + o + "</option>";
+      }).join("") + "</select>" +
+      '<input type="text" data-libre="' + e(nom) + '" placeholder="précisez" ' +
+      'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' +
+      (libre ? e(val) : "") + '">' +
+      '<span class="aide-champ nuance" data-nuance="' + e(nom) + '"></span>';
+  }
+
+  /* Les questions de format « liste » (nature de la sanction, mode de remise,
+     source et nature de la garantie de fond…) proposent les valeurs que le
+     moteur reconnaît, embarquées par l'empaquetage dans MOTEUR.propositions —
+     jamais une liste tenue à la main dans la page. */
+  function menuProposition(nom, val) {
+    var prop = PROPOS[nom] || { valeurs: [] };
+    var opts = (prop.valeurs || []).concat(prop.autres || []);
+    var libre = prop.libre && val && opts.indexOf(String(val)) < 0;
+    var choisi = libre ? "autre" : String(val == null ? "" : val);
+    return '<select name="' + e(nom) + '"' + (prop.libre ? ' data-ferme-libre="1"' : "") + '><option value=""></option>' +
+      opts.map(function (o) { return '<option value="' + e(o) + '"' + (choisi === o ? " selected" : "") + ">" + e(o) + "</option>"; }).join("") +
+      (prop.libre ? '<option value="autre"' + (libre ? " selected" : "") + '>autre (préciser)</option>' : "") +
+      "</select>" +
+      (prop.libre ? '<input type="text" data-libre="' + e(nom) + '" placeholder="précisez" ' +
+        'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' + (libre ? e(val) : "") + '">' : "") +
+      (prop.aide ? '<span class="aide-champ">' + e(prop.aide) + "</span>" : "");
+  }
+
+  function champHtml(chemin, libelle, format) {
+    var val = ETAT.dossier[chemin];
+    if (val === undefined) val = ETAT.nuances[chemin] || "";
+    var champ;
+    if (format === "oui / non") champ = menuFerme(chemin, val);
+    else if (format === "liste") champ = menuProposition(chemin, val);
+    else if (format === "nombre") champ = '<input name="' + e(chemin) + '" type="number" min="0" value="' + e(val) + '">';
+    else if (format === "AAAA-MM-JJ") champ = '<input name="' + e(chemin) + '" type="date" value="' + e(val) + '">';
+    else if (LISTES_OBJETS[chemin])
+      champ = '<textarea name="' + e(chemin) + '" placeholder="une pièce par ligne">' + e(val) + "</textarea>" +
+        '<span class="aide-champ">Une pièce par ligne (« règlement intérieur du 12/03/2024 », etc.).</span>';
+    else champ = '<input name="' + e(chemin) + '" type="text" value="' + e(val) + '">';
+    return '<label><span class="nom">' + e(libelle) + "</span>" + champ + "</label>";
+  }
+
+  function construireQuestionnaire() {
+    var html = "";
+    libellesRubrique().forEach(function (grp) {
+      html += '<fieldset><legend>' + e(grp[0]) + '</legend><div class="grille">';
+      grp[1].forEach(function (c) { html += champHtml(c[0], c[1], c[2]); });
+      html += "</div></fieldset>";
+    });
+    $("formulaire").innerHTML = html;
+    brancherFormulaire();
+    majVisibiliteQuestionnaire(); majNuances(); majCompteurQuestionnaire();
+  }
+
+  function brancherFormulaire() {
+    var f = $("formulaire");
+    Array.prototype.forEach.call(f.querySelectorAll('[data-ferme="1"],[data-ferme-libre="1"]'), function (sel) {
+      var libre = f.querySelector('[data-libre="' + sel.name + '"]');
+      if (!libre) return;
+      sel.addEventListener("change", function () {
+        var ouvert = sel.value === "autre";
+        libre.style.display = ouvert ? "" : "none";
+        if (!ouvert) libre.value = "";
+        lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
+      });
+      libre.addEventListener("input", function () { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); majNuances(); });
+    });
+    f.addEventListener("change", function () {
+      lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
+    });
+    f.addEventListener("input", function (ev) {
+      if (ev.target.tagName === "TEXTAREA") { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); }
+    });
+  }
+
+  function majNuances() {
+    Array.prototype.forEach.call($("formulaire").querySelectorAll("[data-nuance]"), function (n) {
+      var nom = n.getAttribute("data-nuance");
+      var sel = $("formulaire").querySelector('[name="' + nom + '"]');
+      if (!sel) { n.style.display = "none"; return; }
+      if (sel.value === "" || conclut(sel.value)) { n.textContent = ""; n.style.display = "none"; return; }
+      n.textContent = "Réponse « " + sel.value + " » : elle ne conclut pas. Le contrôle restera « donnée manquante ».";
+      n.style.display = "";
+    });
+  }
+
+  function lireQuestionnaire() {
+    Array.prototype.forEach.call($("formulaire").elements, function (el) {
+      if (!el.name) return;
+      var ferme = el.getAttribute("data-ferme") === "1";
+      var fermeLibre = el.getAttribute("data-ferme-libre") === "1";
+      var v = String(el.value == null ? "" : el.value);
+      if ((ferme || fermeLibre) && v === "autre") {
+        var l = $("formulaire").querySelector('[data-libre="' + el.name + '"]');
+        v = l ? l.value.trim() : "";
+        if (v === "") { delete ETAT.dossier[el.name]; delete ETAT.nuances[el.name]; return; }
+        if (ferme) { ETAT.nuances[el.name] = "autre : " + v; delete ETAT.dossier[el.name]; return; }
+        delete ETAT.nuances[el.name]; ETAT.dossier[el.name] = v; return;
+      }
+      if (el.tagName !== "TEXTAREA") v = v.trim();
+      if (v === "") { delete ETAT.dossier[el.name]; delete ETAT.nuances[el.name]; return; }
+      if (ferme && !conclut(v)) { delete ETAT.dossier[el.name]; ETAT.nuances[el.name] = v; return; }
+      delete ETAT.nuances[el.name];
+      ETAT.dossier[el.name] = el.getAttribute("type") === "number" ? Number(v) : v;
+    });
+  }
+
+  /* Le masquage conditionnel. Trois familles :
+       — le contenu et les formalités du règlement intérieur ne se demandent
+         que si un règlement existe ;
+       — la sanction, ses dates, sa procédure et la garantie de fond ne se
+         demandent que si une sanction est soumise à l'audit ;
+       — quelques champs, à l'intérieur de ces groupes, ne se demandent que
+         si la question qui les commande est répondue « oui ».
+     Un champ masqué garde sa valeur : la démasquer la restitue plutôt que de
+     la réclamer une seconde fois. */
+  var CHAMPS_SI_RI = ["ri.contenuSanteSecurite", "ri.contenuParticipation", "ri.contenuDiscipline",
+    "ri.echelleSanctions", "ri.misePiedDureeMax", "ri.misePiedDureeMaxJours",
+    "ri.rappelDroitsDefense", "ri.rappelHarcelement", "ri.rappelLanceursAlerte",
+    "ri.clausesInterdites", "ri.clauseNeutralite", "ri.neutraliteJustifieeProportionnee", "ri.redigeFrancais",
+    "ri.avisCSE", "ri.publicite", "ri.depotGreffe", "ri.communicationInspection", "ri.communicationDeuxExemplaires",
+    "ri.dateDerniereFormalite", "ri.dateEntreeVigueur", "ri.modifieDepuis", "ri.modificationsFormalites",
+    "ri.notesServiceGenerales", "ri.notesServiceFormalites", "ri.demandeInspection", "ri.suiteDemandeInspection"];
+  var CHAMPS_SI_SANCTION = ["sanction.nature", "sanction.incidence", "sanction.prevueRI",
+    "sanction.dureeMisePiedJours", "sanction.griefsEcrits", "sanction.retenueSalaire", "sanction.salarieProtege",
+    "sanction.dateConnaissance", "sanction.poursuitesPenales", "sanction.sanctionsAnterieuresInvoquees",
+    "sanction.dateSanctionAnterieurePlusAncienne", "sanction.dateConvocation", "sanction.dateEntretien",
+    "sanction.dateNotification", "sanction.convocationEnvoyee", "sanction.convocationObjet",
+    "sanction.convocationDateHeureLieu", "sanction.convocationAssistance", "sanction.convocationRemise",
+    "sanction.entretienTenu", "sanction.notificationEcrite", "sanction.notificationMotivee",
+    "sanction.notificationRemise", "sanction.misePiedConservatoire",
+    "garantie.procedureApplicable", "garantie.source", "garantie.nature", "garantie.suivie",
+    "garantie.droitsDefensePrives", "garantie.influenceDecision", "garantie.licenciementSubordonneSanctions"];
+  var NATURES_INCIDENCE_LIBRE = ["avertissement", "blâme", "autre sanction"];
+
+  function majVisibiliteQuestionnaire() {
+    if (!$("formulaire").children.length) return;
+    var f = construireF();
+    var masques = {};
+    if (String((f.ri || {}).existe) !== "oui") CHAMPS_SI_RI.forEach(function (c) { masques[c] = true; });
+    else {
+      if (String((f.ri || {}).misePiedDureeMax) !== "oui") masques["ri.misePiedDureeMaxJours"] = true;
+      if (String((f.ri || {}).clauseNeutralite) !== "oui") masques["ri.neutraliteJustifieeProportionnee"] = true;
+      if (String((f.ri || {}).modifieDepuis) !== "oui") masques["ri.modificationsFormalites"] = true;
+      if (String((f.ri || {}).notesServiceGenerales) !== "oui") masques["ri.notesServiceFormalites"] = true;
+      if (String((f.ri || {}).demandeInspection) !== "oui") masques["ri.suiteDemandeInspection"] = true;
+    }
+    if (String((f.sanction || {}).auditee) !== "oui") CHAMPS_SI_SANCTION.forEach(function (c) { masques[c] = true; });
+    else {
+      var nature = (f.sanction || {}).nature;
+      if (nature && NATURES_INCIDENCE_LIBRE.indexOf(nature) < 0) masques["sanction.incidence"] = true;
+      if (nature !== "mise à pied disciplinaire") masques["sanction.dureeMisePiedJours"] = true;
+      if (String((f.sanction || {}).sanctionsAnterieuresInvoquees) !== "oui") masques["sanction.dateSanctionAnterieurePlusAncienne"] = true;
+      if (String((f.sanction || {}).convocationEnvoyee) !== "oui") {
+        masques["sanction.convocationObjet"] = true; masques["sanction.convocationDateHeureLieu"] = true;
+        masques["sanction.convocationAssistance"] = true; masques["sanction.convocationRemise"] = true;
+      }
+      if (String((f.garantie || {}).procedureApplicable) !== "oui") {
+        masques["garantie.source"] = true; masques["garantie.nature"] = true; masques["garantie.suivie"] = true;
+      }
+      if ((f.garantie || {}).suivie !== "tardivement ou imparfaitement") {
+        masques["garantie.droitsDefensePrives"] = true; masques["garantie.influenceDecision"] = true;
+      }
+    }
+    Array.prototype.forEach.call($("formulaire").querySelectorAll("[name]"), function (el) {
+      var lab = el.closest("label");
+      if (!lab) return;
+      lab.style.display = masques[el.name] ? "none" : "";
+    });
+  }
+
+  function majCompteur() {
+    var f = P ? P.lire() : {};
+    var fTotal = P ? P.IDENTITE.length : 0;
+    var fPris = P ? P.IDENTITE.filter(function (ch) {
+      var v = f[ch.c]; return v !== undefined && v !== null && String(v).trim() !== "";
+    }).length : 0;
+    $("compteur").textContent = "Fiche client : " + fPris + " / " + fTotal;
+  }
+  function majCompteurQuestionnaire() {
+    var total = 0, pris = 0;
+    Array.prototype.forEach.call($("formulaire").querySelectorAll("label"), function (lab) {
+      if (lab.style.display === "none") return;
+      total++;
+      var el = lab.querySelector("[name]");
+      if (el && String(el.value).trim() !== "") pris++;
+    });
+    $("compteur-questionnaire").textContent = pris + " / " + total + " questions répondues";
+  }
+
+  /* ------------------------------------------------------- le renvoi D --- */
+  /* Le classeur de pièces (moteur/commun/outils.js) est le format que
+     rendent le rapport d'audit ET les modèles de régularisation : un seul
+     rendu HTML pour les deux. */
+  function rendreD(items, hote) {
+    var h = "";
+    (items || []).forEach(function (i) {
+      if (i.k === "sur") h += '<p class="note">' + e(i.t) + "</p>";
+      else if (i.k === "t1") h += "<h2>" + e(i.t) + "</h2>";
+      else if (i.k === "trait") h += "<hr>";
+      else if (i.k === "h1") h += "<h2>" + e(i.t) + "</h2>";
+      else if (i.k === "h2") h += "<h3>" + e(i.t) + "</h3>";
+      else if (i.k === "h3") h += "<h3>" + e(i.t) + "</h3>";
+      else if (i.k === "p") h += "<p>" + e(i.t) + "</p>";
+      else if (i.k === "note") h += '<p class="note">' + e(i.t) + "</p>";
+      else if (i.k === "puce") h += '<p class="puce">— ' + e(i.t) + "</p>";
+      else if (i.k === "enc") h += '<div class="enc"><p class="sh">' + e(i.titre) + '</p><p style="margin:0">' + e(i.t) + "</p></div>";
+      else if (i.k === "bandeau") h += '<div class="bandeau b-' + e(i.couleur) + '"><p class="r">' + e(i.t) + '</p><p class="s">' + e(i.sous) + "</p></div>";
+      else if (i.k === "acte") h += '<div class="acte a-' + e(i.priorite) + '"><p class="t">' + e(i.n) + ". " + e(i.t) +
+        '<span class="chip c-' + e(i.priorite) + '">' + e(i.priorite) + '</span></p><p class="w">' +
+        (i.etat ? "<b>" + e(i.etat) + "</b> — " : "") + e(i.pourquoi) + ' <span class="ident">' + e(i.id) + "</span></p></div>";
+      else if (i.k === "interdit") h += '<div class="interdit i-' + e(i.ton || "certain") + '"><p class="t">' + e(i.t) +
+        '</p><p class="w">' + e(i.pourquoi) + ' <span class="ident">' + e(i.id) + "</span></p></div>";
+      else if (i.k === "acquis") h += '<p class="acquis"><b>&#10003;</b> ' + e(i.t) + ' <span class="note">— ' + e(i.base) + "</span></p>";
+      else if (i.k === "table")
+        h += '<div class="tab"><table><tr>' + i.head.map(function (x) { return "<th>" + e(x) + "</th>"; }).join("") + "</tr>" +
+          i.rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + e(c) + "</td>"; }).join("") + "</tr>"; }).join("") +
+          "</table></div>";
+    });
+    if (hote) hote.innerHTML = h;
+    return h;
+  }
+
+  /* --------------------------------------------------- 3. rapport général --- */
+  function construireRapportGeneral() {
+    var f = construireF();
+    var items = AUD(f);
+    rendreD(items, $("rapport-general"));
+  }
+
+  /* ---------------------------------------------- 4/5/6. le parcours ------ */
+  function calculerParcours() {
+    var f = construireF();
+    return { f: f, p: AUD.parcours(f, { faits: ETAT.faits, controles: ETAT.controles }) };
+  }
+
+  var GRAVITES_TXT = { 1: "Sanction pénale encourue", 2: "Pénalité financière encourue",
+    3: "Irrégularité opposable", 4: "Régularisation rapide" };
+
+  function carteAction(pt) {
+    return '<div class="action' + (pt.etat === "risque à vérifier" ? " verifier" : "") + '" id="guide-' + e(pt.id) + '">' +
+      '<div class="t">' + e(pt.objet) + '<span class="prio p-' + pt.gravite + '">' + e(GRAVITES_TXT[pt.gravite] || "") + "</span>" +
+      (pt.fait ? '<span class="chip c-important">déclaré régularisé</span>' : "") + "</div>" +
+      '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
+      '<p class="note">' + e(pt.constat) + "</p>" +
+      '<div class="meta"><span><b>Rubrique :</b> ' + e(pt.rubrique) + "</span><span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
+      '<p class="risque">Risque : ' + e(pt.risque) + "</p>" +
+      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
+      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a></p>' +
+      "</div>";
+  }
+
+  /* Les contrôles « en attente du règlement intérieur » (correctif du
+     25 août 2026) : le règlement est dû, il n'existe pas encore, et ces
+     onze exigences de contenu et de formalités s'appliqueront intégralement
+     dès sa rédaction — elles ne sont ni des manquements séparés à cocher
+     (DIS-CTL-RI-01 les couvre déjà), ni du « sans objet » au sens propre. */
+  function pointsEnAttente(f) {
+    var v = AUD.verdicts(f);
+    return CTRL.C.filter(function (c) { return v[c.id] && v[c.id].etat === "sans objet" && v[c.id].enAttente; })
+      .map(function (c) { return { id: c.id, objet: c.objet, rubrique: c.rubrique, motif: v[c.id].motif }; });
+  }
+
+  function construireGuide() {
+    var r = calculerParcours(), p = r.p;
+    var f = P ? P.lire() : {};
+    var html = '<div class="bandeau ' + (p.tempsA.points.length ? "b-rouge" : "b-vert") + '">' +
+      '<p class="r">' + (p.tempsA.points.length ? p.tempsA.points.length + " contrôle(s) à régulariser" : "Rien à régulariser en l'état des réponses") + "</p>" +
+      '<p class="s">' + e(f.denomination || r.f.entreprise || "") +
+      (r.f.dateAudit ? " — situation au " + e(r.f.dateAudit) : "") + " — guide établi le " + AUJOURDHUI + ".</p></div>";
+
+    if (p.tempsA.points.length) p.tempsA.points.forEach(function (pt) { html += carteAction(pt); });
+    else html += '<p class="aide">Aucun contrôle n\'est non conforme ou à vérifier en l\'état des réponses : passez à l\'étape 6 pour vérifier ce qui est tenu pour conforme.</p>';
+
+    var attente = pointsEnAttente(r.f);
+    if (attente.length) {
+      html += '<h3>En attente du règlement intérieur (' + attente.length + ')</h3>' +
+        '<p class="aide">Ces exigences ne sont <b>pas écartées</b> : le règlement intérieur est dû et n\'existe pas encore ' +
+        '(voir DIS-CTL-RI-01 ci-dessus). Elles s\'appliqueront intégralement, sans délai supplémentaire, dès sa rédaction — ' +
+        'c\'est leur cahier des charges, pas une suite. Le document que « Produire le document » écrit pour DIS-CTL-RI-01 porte ' +
+        'déjà chacune de ces clauses.</p>';
+      attente.forEach(function (a) {
+        html += '<div class="acte a-attente"><p class="t">' + e(a.objet) + '<span class="chip c-important">en attente</span></p>' +
+          '<p class="w">' + e(a.motif) + ' <span class="ident">' + e(a.id) + "</span></p></div>";
+      });
+    }
+
+    /* Les données manquantes ne sont pas des manquements — elles retournent
+       au questionnaire de l'étape 2 — mais les passer sous silence laisserait
+       croire que le guide est complet. */
+    var v = AUD.verdicts(r.f);
+    var manquantes = CTRL.C.filter(function (c) { return (v[c.id] || {}).etat === "donnée manquante"; });
+    if (manquantes.length) {
+      html += '<h3>Ce qui n\'a pas encore de réponse (' + manquantes.length + ')</h3>' +
+        '<p class="aide">Sans réponse, ces contrôles ne se contrôlent pas — ils ne figurent pas comme manquements ci-dessus, ' +
+        'ils retournent au questionnaire de l\'étape 2.</p>';
+      manquantes.forEach(function (c) {
+        html += '<div class="acte"><p class="t">' + e(c.objet) + '<span class="chip c-information">donnée manquante</span></p>' +
+          '<p class="w">' + e((v[c.id] || {}).motif || "") + ' <span class="ident">' + e(c.id) + "</span></p></div>";
+      });
+    }
+    $("guide").innerHTML = html;
+
+    Array.prototype.forEach.call($("guide").querySelectorAll("[data-regulariser]"), function (a) {
+      a.addEventListener("click", function (ev) { ev.preventDefault(); ouvrirItem(a.getAttribute("data-regulariser")); });
+    });
+  }
+
+  /* ------------------------------------------------------- 5. l'élément --- */
+  function majChoixItem() {
+    var r = calculerParcours();
+    var sel = $("choix-item");
+    var courant = sel.value;
+    sel.innerHTML = '<option value="">— choisissez un contrôle —</option>' +
+      r.p.tempsA.points.map(function (pt) {
+        return '<option value="' + e(pt.id) + '">' + e(pt.objet) + (pt.fait ? " (déclaré régularisé)" : "") + "</option>";
+      }).join("");
+    if (courant && r.p.tempsA.points.some(function (pt) { return pt.id === courant; })) sel.value = courant;
+    return r;
+  }
+
+  function ouvrirItem(id) {
+    montrer(Math.max(ETAT.etape, 5));
+    majChoixItem();
+    $("choix-item").value = id;
+    rendreItem(id);
+    $("t5").scrollIntoView({ behavior: "smooth" });
+  }
+
+  function grilleHtml(verifs, reponses, prefixe) {
+    var h = "";
+    (verifs || []).forEach(function (v) {
+      var val = (reponses[v.cle] == null) ? "" : String(reponses[v.cle]);
+      h += '<div class="verif-q"><p><b>' + e(v.question) + "</b></p>" +
+        '<p class="attendu">Attendu : ' + e(v.attendu) + "</p>" +
+        '<select data-cle="' + e(v.cle) + '" data-prefixe="' + e(prefixe) + '"><option value="">— répondre —</option>' +
+        REPONSES_GRILLE.map(function (o) { return '<option value="' + o + '"' + (val === o ? " selected" : "") + ">" + o + "</option>"; }).join("") +
+        "</select>" +
+        '<input class="detail" type="text" data-cle="' + e(v.cle) + '__detail" data-prefixe="' + e(prefixe) +
+        '" placeholder="date, référence, pièce" value="' + e(reponses[v.cle + "__detail"] || "") + '"></div>';
+    });
+    return h;
+  }
+
+  function verdictGrille(verifs, reponses) {
+    var manquantes = [], refusees = [];
+    (verifs || []).forEach(function (v) {
+      var val = reponses[v.cle];
+      if (val === undefined || val === null || String(val).trim() === "" || !grilleConclut(val)) { manquantes.push(v); return; }
+      if (val === "non") refusees.push(v);
+    });
+    if (refusees.length) return { issue: "refusé", classe: "v-ref",
+      motif: "Ce qui était déclaré n'est pas établi : " +
+        refusees.map(function (v) { return "« " + v.question + " » — attendu : " + v.attendu; }).join(" ; ") + "." };
+    if (manquantes.length) return { issue: "ne conclut pas", classe: "v-att",
+      motif: "Il reste à répondre : " + manquantes.map(function (v) { return "« " + v.question + " »"; }).join(" ; ") + "." };
+    return { issue: "validé", classe: "v-val", motif: "Vérifié point par point : ce point passe à « en règle »." };
+  }
+
+  /* Le document que l'application sait rédiger — docs/documents-produits.js,
+     docs/documents-discipline.js et docs/documents-discipline-2.js portent un
+     générateur pour chacun des vingt-quatre contrôles régularisables. */
+  function produireDocument(id) {
+    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(id);
+    if (!gen) return;
+    var profil = P ? P.lire() : {};
+    var f = construireF();
+    var txt = gen.produire({ profil: profil, fiche: f, aujourdhui: new Date() });
+    montrerTexte(txt);
+  }
+  function montrerTexte(txt) {
+    $("dt-corps").textContent = txt;
+    var d = $("dlg-texte");
+    if (d.showModal) d.showModal(); else d.setAttribute("open", "open");
+  }
+
+  function rendreItem(id) {
+    if (!id) { $("fiche-item").innerHTML = '<p class="aide">Choisissez un contrôle dans la liste ci-dessus, ou revenez au guide.</p>'; return; }
+    var r = calculerParcours();
+    var pt = r.p.tempsA.points.filter(function (x) { return x.id === id; })[0];
+    if (!pt) { $("fiche-item").innerHTML = '<p class="aide">Ce contrôle n\'appelle plus de régularisation en l\'état des réponses.</p>'; return; }
+    var modele = AUD.modele(r.f, id);
+    var html = '<div class="action" id="item-' + e(pt.id) + '">' +
+      '<div class="t">' + e(pt.objet) + '<span class="prio p-' + pt.gravite + '">' + e(GRAVITES_TXT[pt.gravite] || "") + "</span>" +
+      (pt.fait ? '<span class="chip c-important">déclaré régularisé' + (ETAT.faits[id] && ETAT.faits[id].le ? " le " + e(ETAT.faits[id].le) : "") + "</span>" : "") + "</div>" +
+      '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
+      '<p class="note">Constat de l\'audit — ' + e(pt.constat) + "</p>" +
+      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>";
+
+    html += "<h3>a. La note chiffrée sur votre dossier</h3>" +
+      '<p class="aide">Établie sur les réponses de l\'étape 2 — dates de la procédure, contenu déclaré du règlement — jamais sur un exemple figé.</p>';
+    if (modele && modele.length) html += '<details class="modele" open><summary>Ouvrir la note</summary><div class="corps">' + rendreD(modele) + "</div></details>";
+    else html += '<p class="aide">Aucune note chiffrée n\'est encore écrite pour ce contrôle.</p>';
+
+    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(pt.id);
+    if (gen) {
+      html += '<div class="produit"><p class="sh">' + e(gen.nom) + '</p><p class="w">' + e(gen.detail || "") + '</p>' +
+        '<button type="button" class="second" data-produire="' + e(pt.id) + '">Produire le document</button></div>';
+    } else if (pt.document) {
+      html += '<p class="note">Document à produire : ' + e(pt.document) + "</p>";
+    }
+
+    html += "<h3>b. La procédure, étape par étape</h3><ol>" + pt.etapes.map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ol>" +
+      '<div class="meta" style="display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:13px;color:#5f6874">' +
+      "<span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
+      '<p class="risque">Risque : ' + e(pt.risque) + "</p>";
+
+    html += "<h3>c. Quand c'est fait, dites-le</h3>" +
+      '<p class="aide">Déclarer un point régularisé ne le rend pas « en règle » : la grille ci-dessous documente comment, et l\'étape 6 le reprend.</p>' +
+      '<div class="coches"><label><input type="checkbox" id="fait-' + e(pt.id) + '"' + (pt.fait ? " checked" : "") + '> j\'ai régularisé ce point</label>' +
+      '<input type="date" id="fait-date-' + e(pt.id) + '" value="' + e((ETAT.faits[id] && ETAT.faits[id].le) || "") + '" aria-label="Date de la régularisation" style="width:auto"></div>';
+
+    html += '<div id="verif-item-' + e(pt.id) + '">' + '<h3>La grille de vérification</h3>' +
+      grilleHtml(pt.verifs, ETAT.controles[id] || {}, id) + '<div id="verdict-item-' + e(pt.id) + '"></div></div>';
+
+    html += "</div>";
+    $("fiche-item").innerHTML = html;
+    afficherVerdictItem(pt);
+
+    var btnProduire = $("fiche-item").querySelector('[data-produire]');
+    if (btnProduire) btnProduire.addEventListener("click", function () { produireDocument(pt.id); });
+
+    var cb = $("fait-" + pt.id), dt = $("fait-date-" + pt.id);
+    cb.addEventListener("change", function () {
+      if (cb.checked) {
+        ETAT.faits[pt.id] = { le: dt.value || AUJOURDHUI };
+        dt.value = ETAT.faits[pt.id].le;
+        message("« " + pt.objet + " » est déclaré régularisé. L'étape 6 le reprendra : une déclaration sans détail vérifiable rendra « ne conclut pas », jamais « en règle ».");
+      } else delete ETAT.faits[pt.id];
+      enregistrer(); construireGuide(); majChoixItem(); rendreItem(pt.id);
+    });
+    dt.addEventListener("change", function () { if (ETAT.faits[pt.id]) { ETAT.faits[pt.id].le = dt.value || AUJOURDHUI; enregistrer(); } });
+
+    Array.prototype.forEach.call($("fiche-item").querySelectorAll("[data-prefixe='" + pt.id + "']"), function (el) {
+      var ev = el.tagName === "SELECT" ? "change" : "input";
+      el.addEventListener(ev, function () {
+        ETAT.controles[pt.id] = ETAT.controles[pt.id] || {};
+        var cle = el.getAttribute("data-cle");
+        if (el.value === "") delete ETAT.controles[pt.id][cle]; else ETAT.controles[pt.id][cle] = el.value;
+        enregistrer();
+        afficherVerdictItem(pt);
+      });
+    });
+  }
+  function afficherVerdictItem(pt) {
+    var d = $("verdict-item-" + pt.id);
+    if (!d) return;
+    var v = verdictGrille(pt.verifs, ETAT.controles[pt.id] || {});
+    d.innerHTML = '<div class="verdict ' + v.classe + '"><b>' + e(v.issue.charAt(0).toUpperCase() + v.issue.slice(1)) + "</b>" + e(v.motif) + "</div>";
+  }
+
+  /* --------------------------------------------------- 6. la vérification --- */
+  function pointsAVerifier() {
+    var r = calculerParcours();
+    var out = r.p.tempsB.points.slice();
+    var dejaB = {}; out.forEach(function (pt) { dejaB[pt.id] = true; });
+    Object.keys(ETAT.faits).forEach(function (id) {
+      if (dejaB[id]) return;
+      var pt = r.p.tempsA.points.filter(function (x) { return x.id === id; })[0];
+      var ctrl = CTRL.C.filter(function (c) { return c.id === id; })[0];
+      if (!pt && !ctrl) return;
+      var objet = (pt && pt.objet) || (ctrl && ctrl.objet) || id;
+      var rubrique = (pt && pt.rubrique) || (ctrl && ctrl.rubrique) || "";
+      var fondement = (pt && pt.fondement) || (ctrl && ctrl.fondement) || [];
+      var verifs = (pt && pt.verifs) || [];
+      var reponses = ETAT.controles[id] || {};
+      var verdict = verifs.length ? verdictGrille(verifs, reponses)
+        : { issue: "non vérifiable", motif: "Aucune grille de vérification n'est écrite pour ce contrôle : il reste déclaré." };
+      out.push({ id: id, rubrique: rubrique, objet: objet, fondement: fondement,
+        declare: "Déclaré régularisé le " + (ETAT.faits[id].le || AUJOURDHUI) + " (étape 5).",
+        verifiable: verifs.length > 0, verifs: verifs, reponses: reponses,
+        verdict: { issue: verdict.issue, motif: verdict.motif }, depuisEtape5: true });
+    });
+    return out;
+  }
+
+  function construireVerifs() {
+    var pts = pointsAVerifier();
+    if (!pts.length) {
+      $("verifs").innerHTML = '<p class="aide">Aucun contrôle n\'est tenu pour conforme et aucun n\'est déclaré régularisé : rien à vérifier ici.</p>';
+      return;
+    }
+    var html = "";
+    pts.forEach(function (pt) {
+      html += '<div class="verif-bloc" data-item="' + e(pt.id) + '"><p class="t">' + e(pt.objet) +
+        (pt.depuisEtape5 ? ' <span class="chip c-important">étape 5</span>' : "") + "</p>" +
+        '<p class="note">' + e(pt.declare) + ' <span class="ident">' + e(pt.id) + "</span></p>";
+      if (!pt.verifiable) html += '<div class="verdict v-att"><b>Non vérifiable</b>' + e(pt.verdict.motif) + "</div>";
+      else html += grilleHtml(pt.verifs, pt.reponses, pt.id) + '<div id="verdict-verif-' + e(pt.id) + '"></div>';
+      html += "</div>";
+    });
+    $("verifs").innerHTML = html;
+    pts.forEach(function (pt) { if (pt.verifiable) majVerdictVerif(pt.id); });
+
+    Array.prototype.forEach.call($("verifs").querySelectorAll("[data-prefixe]"), function (el) {
+      var ev = el.tagName === "SELECT" ? "change" : "input";
+      el.addEventListener(ev, function () {
+        var id = el.getAttribute("data-prefixe");
+        ETAT.controles[id] = ETAT.controles[id] || {};
+        var cle = el.getAttribute("data-cle");
+        if (el.value === "") delete ETAT.controles[id][cle]; else ETAT.controles[id][cle] = el.value;
+        enregistrer(); majVerdictVerif(id);
+      });
+    });
+  }
+  function majVerdictVerif(id) {
+    var d = $("verdict-verif-" + id);
+    if (!d) return;
+    var pt = pointsAVerifier().filter(function (x) { return x.id === id; })[0];
+    if (!pt) return;
+    var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
+    var classe = v.issue === "validé" ? "v-val" : v.issue === "refusé" ? "v-ref" : "v-att";
+    d.innerHTML = '<div class="verdict ' + classe + '"><b>' + e(v.issue.charAt(0).toUpperCase() + v.issue.slice(1)) + "</b>" + e(v.motif) + "</div>";
+  }
+
+  function construireRapportExistant() {
+    var pts = pointsAVerifier();
+    var val = 0, ref = 0, att = 0;
+    pts.forEach(function (pt) {
+      var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
+      if (v.issue === "validé") val++;
+      else if (v.issue === "refusé") { ref++; if (pt.depuisEtape5 && ETAT.faits[pt.id]) delete ETAT.faits[pt.id]; }
+      else att++;
+    });
+    enregistrer();
+    var teinte = ref ? "b-rouge" : (att ? "b-orange" : "b-vert");
+    var f = P ? P.lire() : {};
+    var corps = "";
+    pts.forEach(function (pt) {
+      var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
+      var classe = v.issue === "validé" ? "v-val" : v.issue === "refusé" ? "v-ref" : "v-att";
+      corps += '<div class="acte a-' + (v.issue === "refusé" ? "bloquant" : v.issue === "validé" ? "information" : "critique") + '">' +
+        '<p class="t">' + e(pt.objet) + '<span class="chip ' + (v.issue === "validé" ? "c-information" : v.issue === "refusé" ? "c-bloquant" : "c-critique") + '">' + e(v.issue) + "</span></p>" +
+        '<p class="w">' + e(pt.declare) + " " + e(v.motif) + ' <span class="ident">' + e(pt.id) + "</span></p></div>";
+    });
+    $("rapport-existant").innerHTML =
+      '<div class="bandeau ' + teinte + '"><p class="r">Rapport de régularisation : ' + val + " en règle · " + ref + " refusé(s) · " + att + " ne conclu(en)t pas</p>" +
+      '<p class="s">' + e(f.denomination || "") + " — contrôle du " + AUJOURDHUI + ".</p></div>" +
+      (corps || '<p class="aide">Rien à vérifier.</p>') +
+      (ref ? '<p class="note">Les points refusés sont retirés de la liste des régularisations déclarées : ils réapparaissent au guide de l\'étape 4.</p>' : "");
+    construireGuide(); majChoixItem();
+  }
+
+  /* ------------------------------------------------------- la navigation --- */
+  function montrer(t) {
+    ETAT.etape = Math.max(ETAT.etape || 1, t);
+    enregistrer();
+    $("bloc-liste").style.display = t >= 2 ? "" : "none";
+    $("bloc-general").style.display = t >= 3 ? "" : "none";
+    $("bloc-guide").style.display = t >= 4 ? "" : "none";
+    $("bloc-item").style.display = t >= 5 ? "" : "none";
+    $("bloc-existant").style.display = t >= 6 ? "" : "none";
+    Array.prototype.forEach.call(document.querySelectorAll("#fil-temps span"), function (el) {
+      var n = Number(el.getAttribute("data-t"));
+      el.className = n === t ? "actif" : (n < t ? "fait" : "");
+    });
+  }
+  function imprimer(cible) { document.body.className = "print-" + cible; window.print(); document.body.className = ""; }
+
+  $("generer").addEventListener("click", function () {
+    construireQuestionnaire(); montrer(2);
+    $("t2").scrollIntoView({ behavior: "smooth" });
+  });
+  $("vers-general").addEventListener("click", function () {
+    construireRapportGeneral(); montrer(3);
+    $("t3").scrollIntoView({ behavior: "smooth" });
+  });
+  $("vers-guide").addEventListener("click", function () {
+    construireGuide(); montrer(4);
+    $("t4").scrollIntoView({ behavior: "smooth" });
+  });
+  $("vers-item").addEventListener("click", function () {
+    montrer(5); majChoixItem(); rendreItem($("choix-item").value);
+    $("t5").scrollIntoView({ behavior: "smooth" });
+  });
+  $("vers-existant").addEventListener("click", function () {
+    construireVerifs(); montrer(6);
+    $("t6").scrollIntoView({ behavior: "smooth" });
+  });
+  $("choix-item").addEventListener("change", function () { rendreItem($("choix-item").value); });
+  $("controler").addEventListener("click", function () {
+    construireRapportExistant(); construireRapportGeneral(); construireVerifs();
+    $("rapport-existant").scrollIntoView({ behavior: "smooth" });
+  });
+  $("imprimer-liste").addEventListener("click", function () { imprimer("liste"); });
+  $("imprimer-general").addEventListener("click", function () { imprimer("general"); });
+  $("imprimer-guide").addEventListener("click", function () { imprimer("guide"); });
+  $("imprimer-item").addEventListener("click", function () { imprimer("item"); });
+  $("imprimer-existant").addEventListener("click", function () { imprimer("existant"); });
+
+  $("exemple").addEventListener("click", function () {
+    ETAT = etatVide();
+    if (P) P.ecrire({
+      denomination: "SOCIÉTÉ D'EXEMPLE SAS", siret: "12345678900012",
+      adresse: "12 rue de l'Exemple, 59000 Lille", responsable: "Camille Martin, présidente",
+      courriel: "contact@societe-exemple.fr", telephone: "03 20 00 00 00",
+      effectif: 240, secteur: "services", etablissementsDistincts: "non",
+    });
+    ETAT.dossier = {
+      dateAudit: "2026-08-19", "cse.existe": "oui",
+      "ri.existe": "oui", "ri.dateFranchissementSeuil": "2019-01-15",
+      "ri.contenuSanteSecurite": "oui", "ri.contenuParticipation": "oui", "ri.contenuDiscipline": "oui",
+      "ri.echelleSanctions": "oui", "ri.misePiedDureeMax": "oui", "ri.misePiedDureeMaxJours": 5,
+      "ri.rappelDroitsDefense": "oui", "ri.rappelHarcelement": "oui", "ri.rappelLanceursAlerte": "oui",
+      "ri.clausesInterdites": "non", "ri.clauseNeutralite": "non",
+      "ri.avisCSE": "oui", "ri.publicite": "oui",
+      "ri.dateDerniereFormalite": "2019-09-02", "ri.dateEntreeVigueur": "2019-10-15",
+      "ri.depotGreffe": "oui", "ri.communicationInspection": "oui", "ri.communicationDeuxExemplaires": "oui",
+      "ri.redigeFrancais": "oui", "ri.modifieDepuis": "non", "ri.notesServiceGenerales": "non", "ri.demandeInspection": "non",
+      "sanction.auditee": "oui", "sanction.nature": "mise à pied disciplinaire",
+      "sanction.griefsEcrits": "oui", "sanction.retenueSalaire": "non", "sanction.prevueRI": "oui",
+      "sanction.dureeMisePiedJours": 2, "sanction.dateConnaissance": "2026-06-15", "sanction.poursuitesPenales": "non",
+      "sanction.sanctionsAnterieuresInvoquees": "non",
+      "sanction.convocationEnvoyee": "oui", "sanction.dateConvocation": "2026-06-22",
+      "sanction.convocationObjet": "oui", "sanction.convocationDateHeureLieu": "oui", "sanction.convocationAssistance": "oui",
+      "sanction.convocationRemise": "lettre recommandée", "sanction.entretienTenu": "oui",
+      "sanction.dateEntretien": "2026-06-30", "sanction.dateNotification": "2026-07-06",
+      "sanction.notificationEcrite": "oui", "sanction.notificationMotivee": "oui",
+      "sanction.notificationRemise": "lettre recommandée", "sanction.misePiedConservatoire": "non", "sanction.salarieProtege": "non",
+      "garantie.procedureApplicable": "oui", "garantie.source": "la convention collective",
+      "garantie.nature": "consultation d'un organisme appelé à donner son avis", "garantie.suivie": "oui",
+      "garantie.licenciementSubordonneSanctions": "non",
+    };
+    enregistrer();
+    construireFiche(); construireFormulaireFiche(); majCompteur();
+    message("Exemple chargé : SOCIÉTÉ D'EXEMPLE SAS, 240 salariés. Ouvrez le questionnaire.");
+  });
+  $("vider").addEventListener("click", function () {
+    ETAT = etatVide();
+    if (P) P.effacer();
+    enregistrer();
+    construireFiche(); construireFormulaireFiche(); majCompteur(); montrer(1);
+    message("Tout est effacé — fiche client comprise.");
+  });
+  function message(txt) {
+    var m = $("message"); m.textContent = txt; m.style.display = "block";
+    clearTimeout(message.t); message.t = setTimeout(function () { m.style.display = "none"; }, 8000);
+  }
+
+  $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
+  $("btn-retour").addEventListener("click", function () {
     if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
     else location.href = "./";
   });
+  $("dt-fermer").addEventListener("click", function () { $("dlg-texte").close(); });
+  $("dt-imprimer").addEventListener("click", function () { window.print(); });
+  $("dt-copier").addEventListener("click", function () {
+    var t = $("dt-corps").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+  });
+
+  var man = MOTEUR.manifeste || {};
+  var cpt = man.compteurs || {};
+  $("pied").innerHTML = "Moteur : " + e(man.domaine || "audit discipline") +
+    (man.empreinte ? " — empreinte " + '<span class="ident">' + e(man.empreinte) + "</span>" : "") +
+    (cpt.controles ? " — " + cpt.controles + " contrôles, " + (cpt.articlesLus || 0) + " articles lus à la source" : "") +
+    ". Les données saisies restent dans ce navigateur.";
+
+  construireFiche(); construireFormulaireFiche(); majCompteur();
+
+  (function reprendre() {
+    var t = Number(ETAT.etape) || 1;
+    if (t < 2) return;
+    construireQuestionnaire();
+    if (t >= 3) construireRapportGeneral();
+    if (t >= 4) construireGuide();
+    if (t >= 5) { majChoixItem(); rendreItem($("choix-item").value); }
+    if (t >= 6) construireVerifs();
+    montrer(t);
+  })();
+})();
+</script>
+<script>
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
 </script>
 <script src="assistant.js" defer></script>
 </body>

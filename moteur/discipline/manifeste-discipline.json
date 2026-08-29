@@ -1,13 +1,14 @@
 {
  "domaine": "discipline et règlement intérieur",
- "date": "2026-08-25",
- "empreinte": "1289a8e22bda",
+ "date": "2026-08-29",
+ "empreinte": "af67eda4ab3d",
  "fichiers": {
-  "audit-discipline-client.js": "2f222c836fae",
+  "audit-discipline-client.js": "3f38b5ce15e1",
   "capturer-textes-discipline.js": "d944486c715f",
   "controles-discipline.js": "26d0e34547c1",
   "dates.js": "5d945470174f",
   "fiche-discipline.json": "b26efd82ccf5",
+  "modeles-discipline.js": "4e72843d7ec7",
   "moteur-discipline.js": "5c8ebf97fed2",
   "outils.js": "6defb2be2a2b",
   "propositions-discipline.js": "1d9fdaeebce4",
