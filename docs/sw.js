@@ -12,9 +12,9 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-7.6";
+const CACHE = "jurisprudence-7.7";
 const ESSENTIELS = [
-  "./", "./index.html", "./recherche.html", "./manifest.json",
+  "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
      et le 404 passait pour une erreur de chargement à chaque essai. */
   "./favicon.ico",

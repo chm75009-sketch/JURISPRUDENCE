@@ -71,32 +71,17 @@
   .ficheban-fleche{font:600 13px/1 system-ui;color:var(--bleu);white-space:nowrap}
   .ficheban[hidden]{display:none}
 
-  /* ---------- les deux portes ---------- */
-  .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:16px 0 0}
+  /* ---------- les deux portes — deux boutons, rien d'autre ---------- */
+  .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:16px 0 0}
   .portes[hidden]{display:none}
-  .porte{background:var(--carte);border:1px solid var(--filet-2);border-radius:14px;
-    box-shadow:var(--ombre);overflow:hidden;display:flex;flex-direction:column;grid-column:1/-1}
-  .porte>.tete{padding:20px 20px 14px;border-bottom:1px solid var(--filet)}
-  .porte .n{display:inline-flex;width:26px;height:26px;border-radius:8px;color:#fff;
-    font:600 13px/26px system-ui;justify-content:center;margin-bottom:10px}
-  .porte h3{margin:0 0 5px;font:600 21px/1.2 system-ui;letter-spacing:-.01em}
-  .porte .tete p{margin:0;font-size:14px;color:var(--encre-2);line-height:1.5}
-  .porte ul{list-style:none;margin:0;padding:6px;display:grid;gap:1px;flex:1}
-  .porte li a{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
-    padding:11px 13px;border-radius:9px;text-decoration:none;color:inherit}
-  .porte li a:hover{background:var(--creux)}
-  .porte li b{display:block;font:500 14.5px/1.35 system-ui}
-  .porte li small{display:block;color:var(--encre-3);font-size:12.5px;line-height:1.4;margin-top:1px}
-  .porte li.groupe{grid-column:1/-1;font:700 11px/1 system-ui;letter-spacing:.08em;
-    text-transform:uppercase;color:var(--encre-3);padding:14px 13px 4px}
-  .porte li.groupe:first-child{padding-top:6px}
-  .marque{font:600 10.5px/1 system-ui;letter-spacing:.05em;text-transform:uppercase;
-    padding:5px 8px;border-radius:5px;white-space:nowrap;background:var(--creux);color:var(--encre-2)}
-  .marque.hors{background:var(--ambre-clair);color:var(--ambre)}
-  .marque.du{background:var(--bleu-clair);color:var(--bleu)}
+  .porte-bouton{display:block;background:var(--carte);border:1px solid var(--filet-2);
+    border-radius:14px;box-shadow:var(--ombre);padding:26px 24px;text-decoration:none;color:inherit}
+  .porte-bouton:hover{border-color:var(--bleu)}
+  .porte-bouton .n{display:inline-flex;width:30px;height:30px;border-radius:8px;color:#fff;
+    font:600 14px/30px system-ui;justify-content:center;margin-bottom:12px}
+  .porte-bouton h3{margin:0 0 6px;font:600 24px/1.2 system-ui;letter-spacing:-.01em}
+  .porte-bouton p{margin:0;font-size:14.5px;color:var(--encre-2);line-height:1.5}
   .p1 .n{background:var(--prune)} .p2 .n{background:var(--vert)}
-  .p1{border-color:var(--bleu)} .p1>.tete{background:var(--bleu-clair)}
-  @media (min-width:760px){.p1 ul, .p2 ul{grid-template-columns:1fr 1fr}}
 
   /* ---------- les règles ---------- */
   .regles{margin:44px 0 0;padding:26px 0 0;border-top:1px solid var(--filet)}
@@ -157,101 +142,18 @@
   </a>
 
   <div class="portes" id="ecran-portes" hidden>
-
-    <!-- ══ A — auditer ══ -->
-    <section class="porte p1">
-      <div class="tete">
-        <span class="n">A</span>
-        <h3>Auditer</h3>
-        <p>Faire le point, module par module — ce qui manque, et comment le corriger,
-        jusqu'à la vérification.</p>
-      </div>
-      <ul>
-        <li><a href="audit-social.html"><span><b>Le tour complet des obligations</b>
-          <small>Le point d'entrée : 90 obligations, puis les modules détaillés</small></span>
-          <span class="marque du">à commencer ici</span></a></li>
-        <li><a href="audit-cse.html" data-seuil="11"><span><b>Comité social et économique</b>
-          <small>Élections, consultations, moyens, commissions</small></span>
-          <span class="marque" data-marque="11">dès 11 salariés</span></a></li>
-        <li><a href="audit-sst.html" data-interne="300" data-quoi="la commission santé-sécurité"><span><b>Santé, sécurité et conditions de travail</b>
-          <small>Document unique, prévention, harcèlement — et la commission santé-sécurité, créée à partir de 300 salariés<span data-note></span></small></span>
-          <span class="marque">dès le 1<sup>er</sup> salarié</span></a></li>
-        <li><a href="audit-discipline.html" data-interne="50" data-quoi="le règlement intérieur" data-precision="au terme des douze mois qui suivent le franchissement du seuil"><span><b>Discipline et règlement intérieur</b>
-          <small>Sanction, entretien préalable, délais — et le règlement intérieur, obligatoire à partir de 50 salariés<span data-note></span></small></span>
-          <span class="marque">dès le 1<sup>er</sup> salarié</span></a></li>
-        <li><a href="audit-bdese.html" data-seuil="50"><span><b>Base de données économiques et sociales</b>
-          <small>Les dix thèmes, sur six années — la base sert les attributions récurrentes,
-          qui ne s'exercent qu'à partir de 50 salariés</small></span>
-          <span class="marque" data-marque="50">dès 50 salariés</span></a></li>
-        <li><a href="audit-nao.html"><span><b>Négociations obligatoires</b>
-          <small>Dues dès qu'une section syndicale est constituée, quel que soit l'effectif</small></span>
-          <span class="marque">selon les syndicats</span></a></li>
-        <li><a href="audit.html"><span><b>Licenciement pour motif économique</b>
-          <small>Motif, critères d'ordre, reclassement, consultation</small></span>
-          <span class="marque">si un projet existe</span></a></li>
-        <li><a href="audit-pse.html" data-seuil="50"><span><b>Plan de sauvegarde de l'emploi</b>
-          <small>Dix licenciements sur trente jours, à partir de 50 salariés</small></span>
-          <span class="marque" data-marque="50">dès 50 salariés</span></a></li>
-      </ul>
-    </section>
-
-    <!-- ══ B — gérer ══ -->
-    <section class="porte p2">
-      <div class="tete">
-        <span class="n">B</span>
-        <h3>Gérer</h3>
-        <p>Les outils du quotidien, de l'embauche à la rupture — tenir vos documents,
-        mener une procédure, produire un acte.</p>
-      </div>
-      <ul>
-        <li class="groupe">Embauche</li>
-        <li><a href="registre.html"><span><b>Tenir mon registre du personnel</b>
-          <small>Une ligne par salarié dans l'ordre des embauches, les mentions du décret, ce qui manque</small></span></a></li>
-
-        <li class="groupe">Vie du contrat</li>
-        <li><a href="duerp.html"><span><b>Tenir mon document unique</b>
-          <small>Les unités de travail, les risques dans chacune, et ce que l'évaluation doit produire</small></span></a></li>
-        <li><a href="bdese.html"><span><b>Remplir ma base de données</b>
-          <small>La grille du décret, les six millésimes, la date par rubrique</small></span></a></li>
-        <li><a href="egalite.html"><span><b>Mon plan d'action pour l'égalité professionnelle</b>
-          <small>Bilan de l'année écoulée, objectifs, actions chiffrées, index, dépôt</small></span></a></li>
-        <li><a href="parcours.html#installer-cse"><span><b>Installer le comité après les élections</b>
-          <small>Première réunion, informations dues, documents à remettre</small></span></a></li>
-        <li><a href="parcours.html#sanction"><span><b>Sanctionner un salarié</b>
-          <small>Prescription, entretien, délais, notification motivée</small></span></a></li>
-        <li><a href="parcours.html#nao"><span><b>Conduire les négociations obligatoires</b>
-          <small>Convocation, première réunion, issue déposée</small></span></a></li>
-        <li><a href="documents.html#cse"><span><b>Les actes du comité</b>
-          <small>Convocation, ordre du jour, procès-verbal, règlement intérieur</small></span></a></li>
-        <li><a href="documents.html#discipline"><span><b>Les trames de la discipline</b>
-          <small>Convocation à entretien, avertissement, mise à pied</small></span></a></li>
-        <li><a href="documents.html#nao"><span><b>Les actes de la négociation</b>
-          <small>Accord de méthode, procès-verbal de désaccord</small></span></a></li>
-
-        <li class="groupe">Rupture</li>
-        <li><a href="documents.html"><span><b>Documents de fin de contrat</b>
-          <small>Parmi les 23 modèles : certificat de travail, solde de tout compte, attestation</small></span></a></li>
-
-        <li class="groupe">Au quotidien</li>
-        <li><a href="parcours.html"><span><b>Les parcours guidés</b>
-          <small>Quinze procédures pas à pas, de bout en bout</small></span>
-          <span class="marque du">15 parcours</span></a></li>
-        <li><a href="documents.html"><span><b>Tous les modèles</b>
-          <small>Courriers, actes du comité, documents obligatoires</small></span>
-          <span class="marque du">23 modèles</span></a></li>
-        <li><a href="agenda.html"><span><b>Mon agenda</b>
-          <small>Ce qui tombe dans les douze mois, construit depuis vos audits</small></span></a></li>
-        <li><a href="recherche.html"><span><b>Jurisprudence et textes</b>
-          <small>Cour de cassation, code du travail, lois et décrets — lus à la source</small></span></a></li>
-        <li><a href="recherche.html#conventions"><span><b>Ma convention collective</b>
-          <small>328 conventions, recherche en plein texte</small></span></a></li>
-        <li><a href="equipe.html"><span><b>Mon équipe</b>
-          <small>Les utilisateurs, ce que chacun peut faire, le journal des actes</small></span></a></li>
-        <li><a href="guides.html"><span><b>À quoi sert chaque outil</b>
-          <small>Un guide court par module</small></span></a></li>
-      </ul>
-    </section>
-
+    <a class="porte-bouton p1" href="auditer.html">
+      <span class="n">A</span>
+      <h3>Auditer</h3>
+      <p>Faire le point, module par module — ce qui manque, et comment le corriger,
+      jusqu'à la vérification.</p>
+    </a>
+    <a class="porte-bouton p2" href="gerer.html">
+      <span class="n">B</span>
+      <h3>Gérer</h3>
+      <p>Les outils du quotidien, de l'embauche à la rupture — tenir vos documents,
+      mener une procédure, produire un acte.</p>
+    </a>
   </div>
 
   <!-- ══ les règles ══ -->
@@ -362,42 +264,15 @@
     $("rail-ent-txt").textContent = bits.length ? bits.join(" · ") : "Fiche à compléter";
   }
 
+  /* Les seuils eux-mêmes (data-seuil, data-interne) sont affichés et
+     expliqués sur auditer.html, une fois qu'on y arrive — cette page-ci ne
+     montre plus que les deux boutons, rien à y filtrer. */
   function majSeuils(p) {
     var eff = p && p.effectif != null ? parseInt(p.effectif, 10) : null;
     if (isNaN(eff)) eff = null;
     if (eff === null) return;
     $("sous").textContent = "Ce qui s'affiche tient compte de votre effectif — "
       + eff + " salarié" + (eff > 1 ? "s" : "") + " — et la condition est dite à chaque fois.";
-
-    /* Un module peut être dû dès le premier salarié et contenir une obligation
-       qui, elle, a son propre seuil : la discipline s'applique à toute taille,
-       mais le règlement intérieur n'est obligatoire qu'à cinquante ; la
-       santé-sécurité de même, avec la commission créée à trois cents. La
-       pastille dit ce qui déclenche le MODULE ; cette note dit où en est
-       l'entreprise sur le seuil interne. Sans elle, la ligne annonçait
-       « toute taille » à côté d'un « dès 50 salariés », contradiction à l'œil. */
-    Array.prototype.forEach.call(document.querySelectorAll("[data-interne]"), function (a) {
-      var seuil = parseInt(a.getAttribute("data-interne"), 10);
-      var quoi = a.getAttribute("data-quoi") || "cette obligation";
-      var note = a.querySelector("[data-note]");
-      if (!note || !seuil) return;
-      /* « s'impose » plutôt que « est dû » : le verbe ne s'accorde pas, et la
-         formule vaut pour le règlement intérieur comme pour la commission. */
-      var prec = a.getAttribute("data-precision");
-      note.textContent = eff >= seuil
-        ? " — à " + eff + " salariés, " + quoi + " s'impose" + (prec ? ", " + prec : "") + "."
-        : " — à " + eff + " salariés, " + quoi + " ne s'impose pas encore ; le reste du module, si.";
-      note.style.color = eff >= seuil ? "#1F3864" : "#8a5b10";
-      note.style.fontWeight = "600";
-    });
-
-    Array.prototype.forEach.call(document.querySelectorAll("[data-seuil]"), function (a) {
-      var seuil = parseInt(a.getAttribute("data-seuil"), 10);
-      var m = a.querySelector("[data-marque]");
-      if (!m) return;
-      if (eff < seuil) { m.className = "marque hors"; m.textContent = "ne vous concerne pas — " + m.textContent; }
-      else { m.className = "marque du"; m.textContent = "vous êtes concerné"; }
-    });
   }
 
   basculer();
