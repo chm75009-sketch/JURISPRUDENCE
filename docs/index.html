@@ -306,8 +306,20 @@
       .catch(function () {});
   } catch (e) {}
 
-  if ("serviceWorker" in navigator)
-    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+  /* Une mise à jour du service worker prend la main en arrière-plan, sans
+     rien dire : la page déjà ouverte continue de faire tourner son ancien
+     code tant qu'elle n'est pas rechargée. Sans ce qui suit, la version
+     affichée dans l'en-tête (lue à chaque fois sur le réseau) peut annoncer
+     la dernière version pendant que le reste de la page exécute encore la
+     précédente — l'écran d'accueil qui rebascule seul en est un symptôme.
+     Le rechargement automatique, dès que le nouveau service worker prend la
+     main, supprime l'écart. */
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("controllerchange", function () { location.reload(); });
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").then(function (reg) { reg.update().catch(function () {}); });
+    });
+  }
 })();
 </script>
 <script src="assistant.js" defer></script>

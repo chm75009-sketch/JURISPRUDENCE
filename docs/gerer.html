@@ -158,6 +158,13 @@
       .then(function (m) { if (m && m.version) $("etat-version").textContent = m.version; })
       .catch(function () {});
   } catch (e) {}
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("controllerchange", function () { location.reload(); });
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").then(function (reg) { reg.update().catch(function () {}); });
+    });
+  }
 })();
 </script>
 </body>
