@@ -164,10 +164,17 @@
         : " (dès " + a.seuil + " salariés)";
     }
     if (a.interne != null) {
-      texte += eff !== null
-        ? (eff >= a.interne ? " — " + a.quoi + " s'impose (dès " + a.interne + " salariés)"
-                             : " — " + a.quoi + " pas encore (dès " + a.interne + " salariés)")
-        : " — " + a.quoi + " à partir de " + a.interne + " salariés";
+      /* L'audit lui-même s'applique dès le premier salarié — seule une pièce
+         a son propre seuil, plus haut. Le dire dans cet ordre, sans quoi
+         « (dès 300 salariés) » collé au nom du module se lit comme une
+         condition sur l'audit entier plutôt que sur cette seule pièce. */
+      texte += " — dès le 1er salarié";
+      if (eff !== null)
+        texte += " (" + a.quoi + " "
+          + (eff >= a.interne ? "applicable pour vous" : "pas encore pour vous")
+          + ", à partir de " + a.interne + " salariés)";
+      else
+        texte += " (" + a.quoi + " à partir de " + a.interne + " salariés)";
     }
     if (a.comite) {
       if (profil.groupe === "oui") texte += " + comité de groupe";
