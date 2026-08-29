@@ -70,6 +70,10 @@
   .ficheban span{font-size:13px;color:var(--encre-2)}
   .ficheban-fleche{font:600 13px/1 system-ui;color:var(--bleu);white-space:nowrap}
   .ficheban[hidden]{display:none}
+  .ficheban-continuer{display:block;margin:14px 0 0;font:600 14px system-ui;color:#fff;
+    background:var(--bleu);border:none;border-radius:9px;padding:11px 18px;cursor:pointer}
+  .ficheban-continuer:hover{filter:brightness(1.08)}
+  .ficheban-continuer[hidden]{display:none}
 
   /* ---------- les deux portes — deux boutons, rien d'autre ---------- */
   .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:16px 0 0}
@@ -130,6 +134,7 @@
   <!-- ══ écran 1 : la fiche — rien d'autre tant qu'elle n'est pas complète ══ -->
   <section id="ecran-fiche">
     <div id="fiche-accueil"></div>
+    <button type="button" class="ficheban-continuer" id="continuer-fiche" hidden>Continuer →</button>
   </section>
 
   <!-- ══ écran 2 : deux portes, une fois la fiche complète ══ -->
@@ -219,6 +224,11 @@
       p.secteur && p.conventionCollective);
   }
 
+  /* En ouvrant l'application, on tombe toujours sur la fiche — jamais
+     directement sur les deux boutons, même quand elle est déjà remplie
+     d'une visite précédente. Si elle est déjà complète, un bouton
+     « Continuer » permet de passer aux deux boutons sans la ressaisir ;
+     sinon, la remplir bascule automatiquement l'écran, comme avant. */
   function basculer() {
     var p = profilActuel();
     if (complet(p)) {
@@ -234,6 +244,16 @@
     majSeuils(p);
   }
 
+  function afficherFiche() {
+    var p = profilActuel();
+    $("ecran-fiche").hidden = false;
+    $("ecran-portes").hidden = true;
+    $("ficheban").hidden = true;
+    $("continuer-fiche").hidden = !complet(p);
+    majResume(p);
+    majSeuils(p);
+  }
+
   if (window.Profil && CHAMPS_ACCUEIL.length === 4) {
     window.Profil.rendre($("fiche-accueil"), {
       champs: CHAMPS_ACCUEIL,
@@ -243,11 +263,10 @@
       onChange: basculer,
     });
   }
+  $("continuer-fiche").addEventListener("click", basculer);
   $("ficheban").addEventListener("click", function (e) {
     e.preventDefault();
-    $("ecran-fiche").hidden = false;
-    $("ecran-portes").hidden = true;
-    $("ficheban").hidden = true;
+    afficherFiche();
   });
 
   /* La fiche entreprise sert, module par module, à dire ce qui concerne
@@ -275,7 +294,7 @@
       + eff + " salarié" + (eff > 1 ? "s" : "") + " — et la condition est dite à chaque fois.";
   }
 
-  basculer();
+  afficherFiche();
 
   $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
   $("lien-avert").addEventListener("click", function (e) { e.preventDefault(); $("dlg-avertissement").showModal(); });
