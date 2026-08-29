@@ -290,8 +290,14 @@
           'placeholder="précisez" style="margin-top:6px' + (val && !connu ? "" : ";display:none") +
           '" value="' + (connu ? "" : e(val)) + '">' : "");
     } else if (ch.t === "idcc") {
+      /* Sur iOS, un champ texte vide dans un formulaire ouvre le menu système
+         « Coller / Remplir / Format », qui recouvre le début de la liste
+         juste en dessous. autocomplete="off" ne suffit pas à lui seul à
+         l'écarter : ces quatre attributs, ensemble, réduisent nettement sa
+         fréquence — Safari ne le supprime jamais tout à fait. */
       dedans = '<input id="' + id + '" data-champ="' + e(ch.c) + '" type="text" value="' + e(val) +
-        '" placeholder="numéro IDCC ou intitulé — la liste s\'ouvre à la saisie" autocomplete="off">';
+        '" placeholder="numéro IDCC ou intitulé — la liste s\'ouvre à la saisie" ' +
+        'autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">';
     } else {
       dedans = '<input id="' + id + '" data-champ="' + e(ch.c) + '" type="' + e(ch.t) + '"' +
         (ch.t === "number" ? ' min="0" step="1"' : "") +
