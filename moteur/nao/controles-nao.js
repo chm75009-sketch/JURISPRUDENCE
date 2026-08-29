@@ -290,4 +290,4 @@ const DETECTION = ["NAO-CTL-PEN-01"];
 /* Les contrôles de cohérence interne du dossier. */
 const COHERENCE = [];
 
-module.exports = { C, ETATS, DETECTION, COHERENCE };
+module.exports = { C, ETATS, DETECTION, COHERENCE, ITEMS_REMUNERATION, ITEMS_EGALITE };
