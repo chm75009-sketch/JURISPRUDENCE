@@ -50,19 +50,12 @@
   .question h2{margin:0 0 10px;font:600 clamp(26px,4.2vw,38px)/1.15 system-ui;letter-spacing:-.02em}
   .question p.sous{margin:0;max-width:62ch;color:var(--encre-2)}
 
-  .liste{list-style:none;margin:24px 0 0;padding:0;display:grid;gap:10px}
-  .liste li a{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
-    background:var(--carte);border:1px solid var(--filet-2);border-radius:12px;
-    box-shadow:var(--ombre);padding:16px 18px;text-decoration:none;color:inherit}
-  .liste li a:hover{border-color:var(--bleu)}
-  .liste li b{display:block;font:600 15.5px/1.3 system-ui}
-  .liste li small{display:block;color:var(--encre-3);font-size:13px;line-height:1.45;margin-top:2px}
-  .liste li .note{display:block;color:var(--bleu);font-size:12.5px;margin-top:4px;font-weight:600}
-  .liste li.principal a{border-color:var(--bleu);background:var(--bleu-clair)}
-  .marque{font:600 10.5px/1 system-ui;letter-spacing:.05em;text-transform:uppercase;
-    padding:5px 8px;border-radius:5px;white-space:nowrap;background:var(--creux);color:var(--encre-2)}
-  .marque.hors{background:var(--ambre-clair);color:var(--ambre)}
-  .marque.du{background:var(--bleu-clair);color:var(--bleu)}
+  .choix-audit{margin:28px 0 0}
+  .choix-audit select{width:100%;font:16px/1.4 system-ui;padding:15px 16px;border-radius:10px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre);box-shadow:var(--ombre)}
+  .choix-audit button{display:block;width:100%;margin-top:14px;font:600 16px system-ui;
+    padding:16px 18px;border-radius:10px;border:none;background:var(--bleu);color:#fff;cursor:pointer}
+  .choix-audit button:hover{filter:brightness(1.08)}
 
   footer{margin:36px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
     font-size:13px;color:var(--encre-3)}
@@ -105,34 +98,10 @@
     votre fiche.</p>
   </section>
 
-  <ul class="liste" id="liste-audits">
-    <li class="principal"><a href="audit-social.html"><span><b>Tout auditer — le tour complet</b>
-      <small>90 obligations, puis les modules détaillés. Compter vingt à trente minutes.</small></span>
-      <span class="marque du">à commencer ici</span></a></li>
-    <li><a href="audit-cse.html" data-seuil="11"><span><b>Comité social et économique</b>
-      <small>Élections, consultations, moyens, commissions<span data-note-groupe></span></small>
-      <span class="note" data-note-etab hidden>Concerne aussi le comité central et les comités
-        d'établissement, avec plusieurs établissements distincts.</span></span>
-      <span class="marque" data-marque="11">dès 11 salariés</span></a></li>
-    <li><a href="audit-sst.html" data-interne="300" data-quoi="la commission santé-sécurité"><span><b>Santé, sécurité et conditions de travail</b>
-      <small>Document unique, prévention, harcèlement — et la commission santé-sécurité, créée à partir de 300 salariés<span data-note></span></small></span>
-      <span class="marque">dès le 1<sup>er</sup> salarié</span></a></li>
-    <li><a href="audit-discipline.html" data-interne="50" data-quoi="le règlement intérieur" data-precision="au terme des douze mois qui suivent le franchissement du seuil"><span><b>Discipline et règlement intérieur</b>
-      <small>Sanction, entretien préalable, délais — et le règlement intérieur, obligatoire à partir de 50 salariés<span data-note></span></small></span>
-      <span class="marque">dès le 1<sup>er</sup> salarié</span></a></li>
-    <li><a href="audit-bdese.html" data-seuil="50"><span><b>Base de données économiques et sociales</b>
-      <small>Les dix thèmes, sur six années — sert les attributions récurrentes, à partir de 50 salariés</small></span>
-      <span class="marque" data-marque="50">dès 50 salariés</span></a></li>
-    <li><a href="audit-nao.html"><span><b>Négociations obligatoires</b>
-      <small>Dues dès qu'une section syndicale est constituée, quel que soit l'effectif</small></span>
-      <span class="marque">selon les syndicats</span></a></li>
-    <li><a href="audit.html"><span><b>Licenciement pour motif économique</b>
-      <small>Motif, critères d'ordre, reclassement, consultation</small></span>
-      <span class="marque">si un projet existe</span></a></li>
-    <li><a href="audit-pse.html" data-seuil="50"><span><b>Plan de sauvegarde de l'emploi</b>
-      <small>Dix licenciements sur trente jours, à partir de 50 salariés</small></span>
-      <span class="marque" data-marque="50">dès 50 salariés</span></a></li>
-  </ul>
+  <div class="choix-audit">
+    <select id="select-audit" aria-label="Quel audit voulez-vous faire"></select>
+    <button type="button" id="btn-valider-audit">Attaquer cet audit</button>
+  </div>
 
   <footer>
     Les calculs se font dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
@@ -160,39 +129,61 @@
 
   $("rappel-entreprise").textContent = "Auditer — " + profil.denomination;
   if (eff !== null)
-    $("sous").textContent = "Un tour complet, ou un module à la carte — la liste ci-dessous "
+    $("sous").textContent = "Choisissez un audit, validez, vous y êtes directement — la liste "
       + "tient compte de votre fiche (" + eff + " salarié" + (eff > 1 ? "s" : "") + ").";
 
-  if (eff !== null) {
-    Array.prototype.forEach.call(document.querySelectorAll("[data-interne]"), function (a) {
-      var seuil = parseInt(a.getAttribute("data-interne"), 10);
-      var quoi = a.getAttribute("data-quoi") || "cette obligation";
-      var note = a.querySelector("[data-note]");
-      if (!note || !seuil) return;
-      var prec = a.getAttribute("data-precision");
-      note.textContent = eff >= seuil
-        ? " — à " + eff + " salariés, " + quoi + " s'impose" + (prec ? ", " + prec : "") + "."
-        : " — à " + eff + " salariés, " + quoi + " ne s'impose pas encore ; le reste du module, si.";
-      note.style.color = eff >= seuil ? "#1F3864" : "#8a5b10";
-      note.style.fontWeight = "600";
-    });
-    Array.prototype.forEach.call(document.querySelectorAll("[data-seuil]"), function (a) {
-      var seuil = parseInt(a.getAttribute("data-seuil"), 10);
-      var m = a.querySelector("[data-marque]");
-      if (!m) return;
-      if (eff < seuil) { m.className = "marque hors"; m.textContent = "ne vous concerne pas — " + m.textContent; }
-      else { m.className = "marque du"; m.textContent = "vous êtes concerné"; }
-    });
-  }
+  /* La liste, à plat, dans l'ordre d'affichage. Chaque entrée sait dire si
+     elle concerne l'entreprise (seuil global du module) et, pour certaines,
+     préciser qu'une partie seulement du module dépend d'un second seuil
+     interne (le module reste ouvert dans tous les cas — SST et discipline
+     s'appliquent dès le premier salarié, seule une pièce du module a son
+     propre seuil). */
+  var AUDITS = [
+    { href: "audit-social.html", princ: true,
+      libelle: "Tout auditer — le tour complet (90 obligations, 20 à 30 minutes)" },
+    { href: "audit-cse.html", libelle: "Comité social et économique", seuil: 11, comite: true },
+    { href: "audit-sst.html", libelle: "Santé, sécurité et conditions de travail",
+      interne: 300, quoi: "la commission santé-sécurité" },
+    { href: "audit-discipline.html", libelle: "Discipline et règlement intérieur",
+      interne: 50, quoi: "le règlement intérieur" },
+    { href: "audit-bdese.html", libelle: "Base de données économiques et sociales", seuil: 50 },
+    { href: "audit-nao.html", libelle: "Négociations obligatoires",
+      texte: " — dues dès qu'une section syndicale est constituée, quel que soit l'effectif" },
+    { href: "audit.html", libelle: "Licenciement pour motif économique",
+      texte: " — si un projet existe" },
+    { href: "audit-pse.html", libelle: "Plan de sauvegarde de l'emploi", seuil: 50 },
+  ];
 
-  /* Le groupe et les établissements distincts ne changent pas le module à
-     ouvrir (il n'y a pas de page séparée « comité de groupe ») mais changent
-     ce qu'on y trouve — la ligne du comité le dit, plutôt que de le taire. */
-  var noteGroupe = document.querySelector("[data-note-groupe]");
-  if (noteGroupe && profil.groupe === "oui")
-    noteGroupe.textContent = " — et le comité de groupe, l'entreprise appartenant à un groupe";
-  var noteEtab = document.querySelector("[data-note-etab]");
-  if (noteEtab && profil.etablissementsDistincts === "oui") noteEtab.hidden = false;
+  var select = $("select-audit");
+  AUDITS.forEach(function (a) {
+    var texte = a.libelle;
+    if (a.seuil != null) {
+      texte += eff !== null
+        ? (eff >= a.seuil ? " — vous êtes concerné(e)" : " — ne vous concerne pas")
+          + " (dès " + a.seuil + " salariés)"
+        : " (dès " + a.seuil + " salariés)";
+    }
+    if (a.interne != null) {
+      texte += eff !== null
+        ? (eff >= a.interne ? " — " + a.quoi + " s'impose (dès " + a.interne + " salariés)"
+                             : " — " + a.quoi + " pas encore (dès " + a.interne + " salariés)")
+        : " — " + a.quoi + " à partir de " + a.interne + " salariés";
+    }
+    if (a.comite) {
+      if (profil.groupe === "oui") texte += " + comité de groupe";
+      if (profil.etablissementsDistincts === "oui") texte += " + comité central / établissements";
+    }
+    if (a.texte) texte += a.texte;
+    var opt = document.createElement("option");
+    opt.value = a.href;
+    opt.textContent = texte;
+    if (a.princ) opt.selected = true;
+    select.appendChild(opt);
+  });
+
+  $("btn-valider-audit").addEventListener("click", function () {
+    if (select.value) location.href = select.value;
+  });
 
   try {
     fetch("manifest.json", { cache: "no-store" }).then(function (r) { return r.json(); })
