@@ -13,6 +13,7 @@ const CONTENU = require("./contenu-bdese.js");
 const { C, ETATS, DETECTION, COHERENCE, PLANCHER } = require("./controles-bdese.js");
 const PL = require("./plancher-bdese.js");
 const { R: REG } = require("./regularisation-bdese.js");
+const { MODELES } = require("./modeles-bdese.js");
 const DT = require("../commun/parcours-deux-temps.js");
 
 const { CONF, NC, RISQ, MANQ, SO } = ETATS;
@@ -213,11 +214,19 @@ function millesimes(anneeEnCours) {
   ];
 }
 
+/* Le modèle concret d'un point de régularisation — étape 5 du parcours.
+   Chiffré sur le dossier remis, jamais sur un exemple figé : voir
+   modeles-bdese.js. Rend null si aucun modèle n'est écrit pour cet id. */
+function modele(f, id) {
+  return typeof MODELES[id] === "function" ? MODELES[id](f) : null;
+}
+
 module.exports = audit;
 module.exports.verdicts = verdicts;
 module.exports.parcours = parcours;
 module.exports.regularisation = REG;
 module.exports.controles = C;
+module.exports.modele = modele;
 module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };
 module.exports.contenu = () => CONTENU.construire();
 module.exports.grilleDue = grilleDue;
