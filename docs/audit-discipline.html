@@ -675,8 +675,15 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
        — quelques champs, à l'intérieur de ces groupes, ne se demandent que
          si la question qui les commande est répondue « oui ».
      Un champ masqué garde sa valeur : la démasquer la restitue plutôt que de
-     la réclamer une seconde fois. */
-  var CHAMPS_SI_RI = ["ri.contenuSanteSecurite", "ri.contenuParticipation", "ri.contenuDiscipline",
+     la réclamer une seconde fois.
+
+     « cse.existe » est dans ce premier groupe alors qu'il ne parle pas du
+     règlement lui-même : sa seule utilité est DIS-CTL-RI-06 (l'avis du
+     comité avant l'introduction du règlement), un contrôle lui-même
+     suspendu par siRI() tant qu'aucun règlement n'existe. Le demander avant
+     ne sert donc à rien — il reprend sa place, au bon moment, dès que
+     « ri.existe » passe à oui. */
+  var CHAMPS_SI_RI = ["cse.existe", "ri.contenuSanteSecurite", "ri.contenuParticipation", "ri.contenuDiscipline",
     "ri.echelleSanctions", "ri.misePiedDureeMax", "ri.misePiedDureeMaxJours",
     "ri.rappelDroitsDefense", "ri.rappelHarcelement", "ri.rappelLanceursAlerte",
     "ri.clausesInterdites", "ri.clauseNeutralite", "ri.neutraliteJustifieeProportionnee", "ri.redigeFrancais",
