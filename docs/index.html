@@ -18,8 +18,13 @@
   bon endroit.
 
   Il pose désormais la question que le visiteur se pose déjà — qu'est-ce que
-  vous avez à faire ? — et ouvre quatre portes. La recherche n'a pas disparu :
-  elle est derrière la quatrième, à son adresse propre.
+  vous avez à faire ? Une fiche entreprise à remplir une fois, puis deux
+  portes seulement : auditer (faire le point, module par module) et gérer
+  (les outils du quotidien, de l'embauche à la rupture — procédures,
+  documents, recherche). Quatre portes au départ, deux au bout du compte :
+  la distinction qui comptait pour l'utilisateur n'était pas entre
+  « procédure », « document » et « recherche », mais entre vérifier sa
+  conformité et agir au jour le jour.
 
   Rien n'est supprimé : tout ce qui existait reste accessible, rangé.
 -->
@@ -56,14 +61,23 @@
   .question h2{margin:0 0 10px;font:600 clamp(28px,4.6vw,42px)/1.12 system-ui;letter-spacing:-.02em}
   .question p.sous{margin:0;max-width:62ch;color:var(--encre-2)}
 
-  /* ---------- les quatre portes ---------- */
-  .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:28px 0 0}
+  /* ---------- la fiche, avant tout ---------- */
+  .ficheban{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;
+    margin:28px 0 0;padding:16px 20px;background:var(--bleu-clair);border:1px solid var(--bleu);
+    border-radius:12px;text-decoration:none;color:inherit}
+  .ficheban:hover{filter:brightness(.98)}
+  .ficheban b{display:block;font:600 15px/1.3 system-ui;color:var(--bleu)}
+  .ficheban span{font-size:13px;color:var(--encre-2)}
+  .ficheban-fleche{font:600 13px/1 system-ui;color:var(--bleu);white-space:nowrap}
+
+  /* ---------- les deux portes ---------- */
+  .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:16px 0 0}
   .porte{background:var(--carte);border:1px solid var(--filet-2);border-radius:14px;
-    box-shadow:var(--ombre);overflow:hidden;display:flex;flex-direction:column}
+    box-shadow:var(--ombre);overflow:hidden;display:flex;flex-direction:column;grid-column:1/-1}
   .porte>.tete{padding:20px 20px 14px;border-bottom:1px solid var(--filet)}
   .porte .n{display:inline-flex;width:26px;height:26px;border-radius:8px;color:#fff;
     font:600 13px/26px system-ui;justify-content:center;margin-bottom:10px}
-  .porte h3{margin:0 0 5px;font:600 19px/1.2 system-ui;letter-spacing:-.01em}
+  .porte h3{margin:0 0 5px;font:600 21px/1.2 system-ui;letter-spacing:-.01em}
   .porte .tete p{margin:0;font-size:14px;color:var(--encre-2);line-height:1.5}
   .porte ul{list-style:none;margin:0;padding:6px;display:grid;gap:1px;flex:1}
   .porte li a{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
@@ -71,29 +85,16 @@
   .porte li a:hover{background:var(--creux)}
   .porte li b{display:block;font:500 14.5px/1.35 system-ui}
   .porte li small{display:block;color:var(--encre-3);font-size:12.5px;line-height:1.4;margin-top:1px}
+  .porte li.groupe{grid-column:1/-1;font:700 11px/1 system-ui;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--encre-3);padding:14px 13px 4px}
+  .porte li.groupe:first-child{padding-top:6px}
   .marque{font:600 10.5px/1 system-ui;letter-spacing:.05em;text-transform:uppercase;
     padding:5px 8px;border-radius:5px;white-space:nowrap;background:var(--creux);color:var(--encre-2)}
   .marque.hors{background:var(--ambre-clair);color:var(--ambre)}
   .marque.du{background:var(--bleu-clair);color:var(--bleu)}
   .p1 .n{background:var(--prune)} .p2 .n{background:var(--vert)}
-  .p3 .n{background:var(--bleu)}  .p4 .n{background:var(--encre)}
-
-  /* La première porte — l'audit — est la phase la plus importante : ce sur
-     quoi tout le reste (procédures, documents) se fonde. Elle prend toute la
-     largeur et un traitement distinct ; les trois autres, l'usage quotidien
-     de gestion et de décision une fois l'audit fait, suivent en rang égal. */
-  .p1{grid-column:1/-1;border-color:var(--bleu)}
-  .p1>.tete{background:var(--bleu-clair)}
-  .p1 h3{font-size:21px}
-  @media (min-width:760px){.p1 ul{grid-template-columns:1fr 1fr}}
-
-  /* ---------- la barre permanente ---------- */
-  .rail{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:22px 0 0}
-  .rail a{display:block;text-decoration:none;color:inherit;background:var(--carte);
-    border:1px solid var(--filet);border-radius:12px;padding:14px 16px}
-  .rail a:hover{border-color:var(--filet-2);background:var(--creux)}
-  .rail b{display:block;font:600 14.5px/1.3 system-ui;margin-bottom:2px}
-  .rail span{font-size:13px;color:var(--encre-2);line-height:1.45}
+  .p1{border-color:var(--bleu)} .p1>.tete{background:var(--bleu-clair)}
+  @media (min-width:760px){.p1 ul, .p2 ul{grid-template-columns:1fr 1fr}}
 
   /* ---------- les règles ---------- */
   .regles{margin:44px 0 0;padding:26px 0 0;border-top:1px solid var(--filet)}
@@ -135,18 +136,29 @@
   <section class="question">
     <p class="sur">Bienvenue</p>
     <h2>Qu'est-ce que vous avez à faire&nbsp;?</h2>
-    <p class="sous" id="sous">Quatre portes. Une seule chose à faire par écran, et rien qu'on
+    <p class="sous" id="sous">Une fiche à remplir une fois, deux portes ensuite. Rien qu'on
     vous demande deux fois.</p>
   </section>
 
+  <!-- ══ écran 1 : la fiche ══ -->
+  <a class="ficheban" href="audit-social.html#t1">
+    <div>
+      <b id="rail-ent">Mon entreprise</b>
+      <span id="rail-ent-txt">Effectif, secteur, convention collective — à remplir une fois,
+      reprise partout ci-dessous</span>
+    </div>
+    <span class="ficheban-fleche">Remplir / modifier →</span>
+  </a>
+
+  <!-- ══ écran 2 : deux portes ══ -->
   <div class="portes">
 
-    <!-- ══ 1 ══ -->
+    <!-- ══ A — auditer ══ -->
     <section class="porte p1">
       <div class="tete">
-        <span class="n">1</span>
-        <h3>Faire le point</h3>
-        <p>Où vous en êtes, ce qui manque, et comment le corriger — point par point,
+        <span class="n">A</span>
+        <h3>Auditer</h3>
+        <p>Faire le point, module par module — ce qui manque, et comment le corriger,
         jusqu'à la vérification.</p>
       </div>
       <ul>
@@ -159,9 +171,6 @@
         <li><a href="audit-sst.html" data-interne="300" data-quoi="la commission santé-sécurité"><span><b>Santé, sécurité et conditions de travail</b>
           <small>Document unique, prévention, harcèlement — et la commission santé-sécurité, créée à partir de 300 salariés<span data-note></span></small></span>
           <span class="marque">dès le 1<sup>er</sup> salarié</span></a></li>
-        <li><a href="duerp.html"><span><b>Tenir mon document unique</b>
-          <small>Les unités de travail, les risques dans chacune, et ce que l'évaluation doit produire</small></span>
-          <span class="marque du">l'outil</span></a></li>
         <li><a href="audit-discipline.html" data-interne="50" data-quoi="le règlement intérieur" data-precision="au terme des douze mois qui suivent le franchissement du seuil"><span><b>Discipline et règlement intérieur</b>
           <small>Sanction, entretien préalable, délais — et le règlement intérieur, obligatoire à partir de 50 salariés<span data-note></span></small></span>
           <span class="marque">dès le 1<sup>er</sup> salarié</span></a></li>
@@ -169,15 +178,6 @@
           <small>Les dix thèmes, sur six années — la base sert les attributions récurrentes,
           qui ne s'exercent qu'à partir de 50 salariés</small></span>
           <span class="marque" data-marque="50">dès 50 salariés</span></a></li>
-        <li><a href="bdese.html"><span><b>Remplir ma base de données</b>
-          <small>La grille du décret, les six millésimes, la date par rubrique — l'outil, pas l'audit</small></span>
-          <span class="marque du">l'outil</span></a></li>
-        <li><a href="registre.html"><span><b>Tenir mon registre du personnel</b>
-          <small>Une ligne par salarié dans l'ordre des embauches, les mentions du décret, ce qui manque — l'outil, pas l'audit</small></span>
-          <span class="marque du">l'outil</span></a></li>
-        <li><a href="egalite.html"><span><b>Mon plan d'action pour l'égalité professionnelle</b>
-          <small>Bilan de l'année écoulée, objectifs, actions chiffrées, index, dépôt — l'outil, pas l'audit</small></span>
-          <span class="marque du">l'outil</span></a></li>
         <li><a href="audit-nao.html"><span><b>Négociations obligatoires</b>
           <small>Dues dès qu'une section syndicale est constituée, quel que soit l'effectif</small></span>
           <span class="marque">selon les syndicats</span></a></li>
@@ -190,80 +190,63 @@
       </ul>
     </section>
 
-    <!-- ══ 2 ══ -->
+    <!-- ══ B — gérer ══ -->
     <section class="porte p2">
       <div class="tete">
-        <span class="n">2</span>
-        <h3>Mener une procédure</h3>
-        <p>Une chose à faire, maintenant, avec un délai et des étapes dans un ordre
-        qui ne se discute pas.</p>
+        <span class="n">B</span>
+        <h3>Gérer</h3>
+        <p>Les outils du quotidien, de l'embauche à la rupture — tenir vos documents,
+        mener une procédure, produire un acte.</p>
       </div>
       <ul>
-        <li><a href="parcours.html"><span><b>Les parcours guidés</b>
-          <small>Quinze procédures pas à pas : préalable, étapes datées, délais calculés,
-          documents pré-remplis, validation finale</small></span>
-          <span class="marque du">15 parcours</span></a></li>
+        <li class="groupe">Embauche</li>
+        <li><a href="registre.html"><span><b>Tenir mon registre du personnel</b>
+          <small>Une ligne par salarié dans l'ordre des embauches, les mentions du décret, ce qui manque</small></span></a></li>
+
+        <li class="groupe">Vie du contrat</li>
+        <li><a href="duerp.html"><span><b>Tenir mon document unique</b>
+          <small>Les unités de travail, les risques dans chacune, et ce que l'évaluation doit produire</small></span></a></li>
+        <li><a href="bdese.html"><span><b>Remplir ma base de données</b>
+          <small>La grille du décret, les six millésimes, la date par rubrique</small></span></a></li>
+        <li><a href="egalite.html"><span><b>Mon plan d'action pour l'égalité professionnelle</b>
+          <small>Bilan de l'année écoulée, objectifs, actions chiffrées, index, dépôt</small></span></a></li>
         <li><a href="parcours.html#installer-cse"><span><b>Installer le comité après les élections</b>
           <small>Première réunion, informations dues, documents à remettre</small></span></a></li>
         <li><a href="parcours.html#sanction"><span><b>Sanctionner un salarié</b>
           <small>Prescription, entretien, délais, notification motivée</small></span></a></li>
         <li><a href="parcours.html#nao"><span><b>Conduire les négociations obligatoires</b>
           <small>Convocation, première réunion, issue déposée</small></span></a></li>
-        <li><a href="agenda.html"><span><b>Ce qui tombe dans les douze mois</b>
-          <small>L'échéancier construit depuis vos audits</small></span></a></li>
-      </ul>
-    </section>
-
-    <!-- ══ 3 ══ -->
-    <section class="porte p3">
-      <div class="tete">
-        <span class="n">3</span>
-        <h3>Produire un document</h3>
-        <p>Le modèle complet — structure intégrale, exemple chiffré, champs à
-        personnaliser — pré-rempli de vos données.</p>
-      </div>
-      <ul>
-        <li><a href="documents.html"><span><b>Tous les modèles</b>
-          <small>Courriers, actes du comité, documents obligatoires</small></span>
-          <span class="marque du">23 modèles</span></a></li>
         <li><a href="documents.html#cse"><span><b>Les actes du comité</b>
           <small>Convocation, ordre du jour, procès-verbal, règlement intérieur</small></span></a></li>
         <li><a href="documents.html#discipline"><span><b>Les trames de la discipline</b>
           <small>Convocation à entretien, avertissement, mise à pied</small></span></a></li>
         <li><a href="documents.html#nao"><span><b>Les actes de la négociation</b>
           <small>Accord de méthode, procès-verbal de désaccord</small></span></a></li>
-      </ul>
-    </section>
 
-    <!-- ══ 4 ══ -->
-    <section class="porte p4">
-      <div class="tete">
-        <span class="n">4</span>
-        <h3>Trouver une réponse</h3>
-        <p>Chaque texte lu à la source, avec l'identifiant de la version lue et sa
-        date. C'est ce qui permet de citer sans se faire reprendre.</p>
-      </div>
-      <ul>
+        <li class="groupe">Rupture</li>
+        <li><a href="documents.html"><span><b>Documents de fin de contrat</b>
+          <small>Parmi les 23 modèles : certificat de travail, solde de tout compte, attestation</small></span></a></li>
+
+        <li class="groupe">Au quotidien</li>
+        <li><a href="parcours.html"><span><b>Les parcours guidés</b>
+          <small>Quinze procédures pas à pas, de bout en bout</small></span>
+          <span class="marque du">15 parcours</span></a></li>
+        <li><a href="documents.html"><span><b>Tous les modèles</b>
+          <small>Courriers, actes du comité, documents obligatoires</small></span>
+          <span class="marque du">23 modèles</span></a></li>
+        <li><a href="agenda.html"><span><b>Mon agenda</b>
+          <small>Ce qui tombe dans les douze mois, construit depuis vos audits</small></span></a></li>
         <li><a href="recherche.html"><span><b>Jurisprudence et textes</b>
-          <small>Cour de cassation, code du travail, lois et décrets</small></span>
-          <span class="marque du">la recherche</span></a></li>
+          <small>Cour de cassation, code du travail, lois et décrets — lus à la source</small></span></a></li>
         <li><a href="recherche.html#conventions"><span><b>Ma convention collective</b>
           <small>328 conventions, recherche en plein texte</small></span></a></li>
+        <li><a href="equipe.html"><span><b>Mon équipe</b>
+          <small>Les utilisateurs, ce que chacun peut faire, le journal des actes</small></span></a></li>
         <li><a href="guides.html"><span><b>À quoi sert chaque outil</b>
           <small>Un guide court par module</small></span></a></li>
       </ul>
     </section>
 
-  </div>
-
-  <!-- ══ la barre permanente ══ -->
-  <div class="rail">
-    <a href="audit-social.html#t1"><b id="rail-ent">Mon entreprise</b>
-      <span id="rail-ent-txt">Effectif, secteur, convention — saisis une fois, servis partout</span></a>
-    <a href="agenda.html"><b>Mon agenda</b>
-      <span>Les échéances des douze prochains mois</span></a>
-    <a href="equipe.html"><b>Mon équipe</b>
-      <span>Les utilisateurs, ce que chacun peut faire, le journal des actes</span></a>
   </div>
 
   <!-- ══ les règles ══ -->
@@ -329,7 +312,7 @@
     $("rail-ent").textContent = profil.denomination || profil.entreprise || "Mon entreprise";
     $("rail-ent-txt").textContent = bits.length ? bits.join(" · ") : "Fiche à compléter";
     if (eff !== null)
-      $("sous").textContent = "Quatre portes. Ce qui s'affiche tient compte de votre effectif — "
+      $("sous").textContent = "Ce qui s'affiche tient compte de votre effectif — "
         + eff + " salarié" + (eff > 1 ? "s" : "") + " — et la condition est dite à chaque fois.";
   }
 
