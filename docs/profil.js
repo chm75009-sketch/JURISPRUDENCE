@@ -370,6 +370,23 @@
       libre.addEventListener("input", majorer);
     });
 
+    /* « Nombre d'établissements » n'a de sens que si l'entreprise en compte
+       plusieurs — sinon la question qui vient de répondre « non » à « au
+       moins deux » se voit aussitôt suivie d'une question sur leur nombre,
+       ce qui ne se tient pas. Masqué tant que la réponse n'est pas « oui ». */
+    var etabSel = conteneur.querySelector("#" + CSS.escape(prefixe + "-etablissementsDistincts"));
+    var nbEtabInput = conteneur.querySelector("#" + CSS.escape(prefixe + "-nbEtablissements"));
+    var nbEtabLabel = nbEtabInput ? nbEtabInput.closest("label") : null;
+    if (etabSel && nbEtabLabel) {
+      var majNbEtab = function () {
+        var visible = etabSel.value === "oui";
+        nbEtabLabel.style.display = visible ? "" : "none";
+        if (!visible) nbEtabInput.value = "";
+      };
+      majNbEtab();
+      etabSel.addEventListener("change", majNbEtab);
+    }
+
     var cc = conteneur.querySelector("#" + CSS.escape(prefixe + "-conventionCollective"));
     var secteurSel = conteneur.querySelector("#" + CSS.escape(prefixe + "-secteur"));
     if (cc && window.IDCC && window.IDCC.attacher) {
