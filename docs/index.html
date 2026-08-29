@@ -78,6 +78,15 @@
   .p1 .n{background:var(--prune)} .p2 .n{background:var(--vert)}
   .p3 .n{background:var(--bleu)}  .p4 .n{background:var(--encre)}
 
+  /* La première porte — l'audit — est la phase la plus importante : ce sur
+     quoi tout le reste (procédures, documents) se fonde. Elle prend toute la
+     largeur et un traitement distinct ; les trois autres, l'usage quotidien
+     de gestion et de décision une fois l'audit fait, suivent en rang égal. */
+  .p1{grid-column:1/-1;border-color:var(--bleu)}
+  .p1>.tete{background:var(--bleu-clair)}
+  .p1 h3{font-size:21px}
+  @media (min-width:760px){.p1 ul{grid-template-columns:1fr 1fr}}
+
   /* ---------- la barre permanente ---------- */
   .rail{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:22px 0 0}
   .rail a{display:block;text-decoration:none;color:inherit;background:var(--carte);
