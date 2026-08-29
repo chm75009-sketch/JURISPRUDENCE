@@ -1250,6 +1250,10 @@ unique, commission, harcèlement — se pose à l'étape 2.</p>
 
   (function reprendre() {
     var t = Number(ETAT.etape) || 1;
+    /* La fiche a pu être remplie sur l'écran d'accueil avant même la
+       première visite de ce module : ne pas la remontrer, passer
+       directement à l'étape 2, comme si elle venait d'être validée ici. */
+    if (t < 2 && P) { var pp = P.lire(); if (pp && pp.denomination) t = 2; }
     if (t < 2) return;
     construireQuestionnaire();
     if (t >= 3) construireRapportGeneral();
