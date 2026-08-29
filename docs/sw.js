@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-6.8";
+const CACHE = "jurisprudence-6.9";
 const ESSENTIELS = [
   "./", "./index.html", "./recherche.html", "./manifest.json",
   /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
@@ -142,8 +142,15 @@ self.addEventListener("fetch", e => {
   if (url.origin !== self.location.origin) return;          // API Judilibre, Légifrance, Anthropic
   if (url.pathname.startsWith("/.netlify/")) return;        // relais
 
+  /* GitHub Pages sert index.html (et le reste) avec un en-tête
+     « cache-control: max-age=600 » : sans ce qui suit, fetch(req) peut être
+     satisfait par le cache HTTP du navigateur lui-même, sans passer par le
+     réseau — le repli hors connexion n'a jamais lieu, mais l'utilisateur voit
+     quand même une page vieille de dix minutes, malgré le commentaire
+     ci-dessus. { cache: "reload" } force la vérification réseau à chaque
+     requête ; le résultat continue d'alimenter le cache du service worker. */
   e.respondWith(
-    fetch(req)
+    fetch(req.url, { cache: "reload" })
       .then(rep => {
         if (rep && rep.ok && rep.type === "basic") {
           const copie = rep.clone();
