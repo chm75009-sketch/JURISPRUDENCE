@@ -7,6 +7,7 @@ const O = require("./outils.js");
 const M = require("./moteur-sst.js");
 const { C, ETATS, DETECTION, COHERENCE } = require("./controles-sst.js");
 const { R } = require("./regularisation-sst.js");
+const { MODELES } = require("./modeles-sst.js");
 const DT = require("../commun/parcours-deux-temps.js");
 
 const { CONF, NC, RISQ, MANQ, SO } = ETATS;
@@ -86,9 +87,18 @@ function parcours(f, etat) {
   return DT.parcours(C, R, verdicts(f), etat);
 }
 
+/* Le modèle concret d'un point de régularisation — étape 5 du parcours.
+   Chiffré sur le dossier remis, jamais sur un exemple figé : voir
+   modeles-sst.js. Rend null si aucun modèle n'est écrit pour cet id
+   (SST-CTL-PEN-01, qui mesure l'exposition résultant des autres). */
+function modele(f, id) {
+  return typeof MODELES[id] === "function" ? MODELES[id](f) : null;
+}
+
 module.exports = audit;
 module.exports.verdicts = verdicts;
 module.exports.parcours = parcours;
 module.exports.regularisation = R;
 module.exports.controles = C;
+module.exports.modele = modele;
 module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };
