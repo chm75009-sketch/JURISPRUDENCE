@@ -846,6 +846,9 @@ donnée manquante.</p>
     var teinte = s.nonConformes ? "b-rouge" : (s.risques || s.manquantes ? "b-orange" : "b-vert");
     var f = P ? P.lire() : {};
     var html = '<div class="bandeau ' + teinte + '">' +
+      (s.conformes === 0 && s.risques > 0 ? '<p class="s" style="margin:0 0 6px">Répondre « oui » ouvre la vérification, ' +
+      "ce n'est pas la conclusion : c'est pour cela qu'aucune obligation n'est encore « conforme » " +
+      "ci-dessous — le guide de l'étape 4 dit, pour chacune, sur quelle pièce statuer.</p>" : "") +
       '<p class="r">' + s.applicables + " obligations applicables · " + absents + " déclarée(s) absente(s) · " +
       s.nonConformes + " non conforme(s) · " + s.risques + " à vérifier · " + s.conformes + " conforme(s)</p>" +
       '<p class="s">' + e(p.entreprise || f.denomination || "Entreprise non dénommée") +
