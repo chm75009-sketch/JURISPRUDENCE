@@ -69,9 +69,11 @@
   .ficheban b{display:block;font:600 15px/1.3 system-ui;color:var(--bleu)}
   .ficheban span{font-size:13px;color:var(--encre-2)}
   .ficheban-fleche{font:600 13px/1 system-ui;color:var(--bleu);white-space:nowrap}
+  .ficheban[hidden]{display:none}
 
   /* ---------- les deux portes ---------- */
   .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:16px 0 0}
+  .portes[hidden]{display:none}
   .porte{background:var(--carte);border:1px solid var(--filet-2);border-radius:14px;
     box-shadow:var(--ombre);overflow:hidden;display:flex;flex-direction:column;grid-column:1/-1}
   .porte>.tete{padding:20px 20px 14px;border-bottom:1px solid var(--filet)}
@@ -140,18 +142,21 @@
     vous demande deux fois.</p>
   </section>
 
-  <!-- ══ écran 1 : la fiche ══ -->
-  <a class="ficheban" href="audit-social.html#t1">
+  <!-- ══ écran 1 : la fiche — rien d'autre tant qu'elle n'est pas complète ══ -->
+  <section id="ecran-fiche">
+    <div id="fiche-accueil"></div>
+  </section>
+
+  <!-- ══ écran 2 : deux portes, une fois la fiche complète ══ -->
+  <a class="ficheban" id="ficheban" href="#" hidden>
     <div>
       <b id="rail-ent">Mon entreprise</b>
-      <span id="rail-ent-txt">Effectif, secteur, convention collective — à remplir une fois,
-      reprise partout ci-dessous</span>
+      <span id="rail-ent-txt"></span>
     </div>
-    <span class="ficheban-fleche">Remplir / modifier →</span>
+    <span class="ficheban-fleche">Modifier →</span>
   </a>
 
-  <!-- ══ écran 2 : deux portes ══ -->
-  <div class="portes">
+  <div class="portes" id="ecran-portes" hidden>
 
     <!-- ══ A — auditer ══ -->
     <section class="porte p1">
@@ -288,42 +293,89 @@
 </dialog>
 
 <script src="droits.js"></script>
+<script src="idcc.js"></script>
+<script src="profil.js"></script>
 <script>
 (function () {
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
 
-  /* La fiche entreprise, si elle a été remplie ailleurs. Elle n'est pas
-     redemandée ici : elle est reprise, et elle sert à dire, module par module,
-     ce qui concerne l'entreprise et ce qui ne la concerne pas. La condition est
-     citée telle qu'elle est — un seuil d'effectif quand c'en est un, la
-     présence d'une section syndicale ou d'un comité quand c'est cela. */
-  var profil = null;
-  try { profil = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
+  /* Le premier écran est la fiche, et rien d'autre : nom de la société,
+     effectif, activité, convention collective. Tant que ces quatre champs ne
+     sont pas remplis, les deux portes restent masquées — pas devinées, pas
+     entr'aperçues. Dès qu'ils le sont, l'écran bascule : la fiche se replie
+     en un simple rappel, et les deux portes apparaissent. */
+  var CHAMPS_ACCUEIL = (window.Profil ? window.Profil.IDENTITE : []).filter(function (ch) {
+    return ["denomination", "effectif", "secteur", "conventionCollective"].indexOf(ch.c) >= 0;
+  });
 
-  var eff = profil && profil.effectif != null ? parseInt(profil.effectif, 10) : null;
-  if (isNaN(eff)) eff = null;
-
-  if (profil && (profil.denomination || profil.entreprise || eff !== null)) {
-    var bits = [];
-    if (eff !== null) bits.push(eff + " salarié" + (eff > 1 ? "s" : ""));
-    if (profil.secteur) bits.push(profil.secteur);
-    if (profil.conventionCollective) bits.push(profil.conventionCollective);
-    $("rail-ent").textContent = profil.denomination || profil.entreprise || "Mon entreprise";
-    $("rail-ent-txt").textContent = bits.length ? bits.join(" · ") : "Fiche à compléter";
-    if (eff !== null)
-      $("sous").textContent = "Ce qui s'affiche tient compte de votre effectif — "
-        + eff + " salarié" + (eff > 1 ? "s" : "") + " — et la condition est dite à chaque fois.";
+  function profilActuel() {
+    try { return JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) { return null; }
+  }
+  function complet(p) {
+    return !!(p && p.denomination && p.effectif != null && String(p.effectif) !== "" &&
+      p.secteur && p.conventionCollective);
   }
 
-  /* Un module peut être dû dès le premier salarié et contenir une obligation
-     qui, elle, a son propre seuil : la discipline s'applique à toute taille,
-     mais le règlement intérieur n'est obligatoire qu'à cinquante ; la
-     santé-sécurité de même, avec la commission créée à trois cents. La pastille
-     dit ce qui déclenche le MODULE ; cette note dit où en est l'entreprise sur
-     le seuil interne. Sans elle, la ligne annonçait « toute taille » à côté
-     d'un « dès 50 salariés », et les deux se contredisaient à l'œil. */
-  if (eff !== null) {
+  function basculer() {
+    var p = profilActuel();
+    if (complet(p)) {
+      $("ecran-fiche").hidden = true;
+      $("ecran-portes").hidden = false;
+      $("ficheban").hidden = false;
+    } else {
+      $("ecran-fiche").hidden = false;
+      $("ecran-portes").hidden = true;
+      $("ficheban").hidden = true;
+    }
+    majResume(p);
+    majSeuils(p);
+  }
+
+  if (window.Profil && CHAMPS_ACCUEIL.length === 4) {
+    window.Profil.rendre($("fiche-accueil"), {
+      champs: CHAMPS_ACCUEIL,
+      legende: "Votre entreprise",
+      aide: "Quatre informations, une seule fois : elles ouvrent et referment les obligations de tous les modules ci-dessous, sans jamais être redemandées.",
+      echange: false,
+      onChange: basculer,
+    });
+  }
+  $("ficheban").addEventListener("click", function (e) {
+    e.preventDefault();
+    $("ecran-fiche").hidden = false;
+    $("ecran-portes").hidden = true;
+    $("ficheban").hidden = true;
+  });
+
+  /* La fiche entreprise sert, module par module, à dire ce qui concerne
+     l'entreprise et ce qui ne la concerne pas. La condition est citée telle
+     qu'elle est — un seuil d'effectif quand c'en est un. */
+  function majResume(p) {
+    if (!p) return;
+    var bits = [];
+    var e = p.effectif != null ? parseInt(p.effectif, 10) : null;
+    if (e != null && !isNaN(e)) bits.push(e + " salarié" + (e > 1 ? "s" : ""));
+    if (p.secteur) bits.push(p.secteur);
+    if (p.conventionCollective) bits.push(p.conventionCollective);
+    $("rail-ent").textContent = p.denomination || "Mon entreprise";
+    $("rail-ent-txt").textContent = bits.length ? bits.join(" · ") : "Fiche à compléter";
+  }
+
+  function majSeuils(p) {
+    var eff = p && p.effectif != null ? parseInt(p.effectif, 10) : null;
+    if (isNaN(eff)) eff = null;
+    if (eff === null) return;
+    $("sous").textContent = "Ce qui s'affiche tient compte de votre effectif — "
+      + eff + " salarié" + (eff > 1 ? "s" : "") + " — et la condition est dite à chaque fois.";
+
+    /* Un module peut être dû dès le premier salarié et contenir une obligation
+       qui, elle, a son propre seuil : la discipline s'applique à toute taille,
+       mais le règlement intérieur n'est obligatoire qu'à cinquante ; la
+       santé-sécurité de même, avec la commission créée à trois cents. La
+       pastille dit ce qui déclenche le MODULE ; cette note dit où en est
+       l'entreprise sur le seuil interne. Sans elle, la ligne annonçait
+       « toute taille » à côté d'un « dès 50 salariés », contradiction à l'œil. */
     Array.prototype.forEach.call(document.querySelectorAll("[data-interne]"), function (a) {
       var seuil = parseInt(a.getAttribute("data-interne"), 10);
       var quoi = a.getAttribute("data-quoi") || "cette obligation";
@@ -338,9 +390,7 @@
       note.style.color = eff >= seuil ? "#1F3864" : "#8a5b10";
       note.style.fontWeight = "600";
     });
-  }
 
-  if (eff !== null) {
     Array.prototype.forEach.call(document.querySelectorAll("[data-seuil]"), function (a) {
       var seuil = parseInt(a.getAttribute("data-seuil"), 10);
       var m = a.querySelector("[data-marque]");
@@ -349,6 +399,8 @@
       else { m.className = "marque du"; m.textContent = "vous êtes concerné"; }
     });
   }
+
+  basculer();
 
   $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
   $("lien-avert").addEventListener("click", function (e) { e.preventDefault(); $("dlg-avertissement").showModal(); });
