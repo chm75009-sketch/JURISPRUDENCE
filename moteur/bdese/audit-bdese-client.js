@@ -56,7 +56,7 @@ function audit(f) {
       `Le découpage laisse ${reste} caractère(s) du décret hors de son périmètre. Le critère de sortie est cent pour cent : tant qu'il n'est pas atteint, le catalogue n'est pas exhaustif, et ce rapport ne doit pas être lu comme une vérification de l'intégralité du décret.`);
   else
     enc("État du catalogue réglementaire — complet",
-      `Le texte des articles R. 2312-8 et R. 2312-9 est intégralement rendu : chaque caractère est soit extrait comme contenu, soit reconnu comme structure du découpage — marqueur, numérotation, séparateur (${cv[0].structure} et ${cv[1].structure} caractères respectivement). Aucun reliquat. La chaîne de publication échoue si un seul caractère cesse d'être l'un ou l'autre.`);
+      "Le texte des articles R. 2312-8 et R. 2312-9 a été repris intégralement, sans coupure : ce rapport peut être lu comme complet au regard de ces deux articles.");
 
   enc("Ce que ce module fait, et ce qu'il ne fait pas",
     "Il prépare, structure, documente et audite la base de données. Il ne fournit pas une base collaborative accessible simultanément à plusieurs catégories d'utilisateurs, et il n'est pas la base : la mise à disposition reste un acte de l'employeur, qui se prouve par le support lui-même, ses traces d'accès et l'information donnée aux bénéficiaires.");

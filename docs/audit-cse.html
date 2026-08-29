@@ -496,6 +496,13 @@ poste.</p>
   var P = window.Profil;
   var CLE = "audit-cse-brouillon";
   var $ = function (id) { return document.getElementById(id); };
+  document.getElementById("fil-temps").addEventListener("click", function (e) {
+    var el = e.target.closest("span[data-t]");
+    if (!el || el.style.cursor !== "pointer") return;
+    var n = Number(el.getAttribute("data-t"));
+    var cible = document.getElementById("t" + n);
+    if (cible) cible.scrollIntoView({ behavior: "smooth" });
+  });
   var AUJOURDHUI = new Date().toISOString().slice(0, 10);
 
   var e = function (s) { return String(s == null ? "" : s)
@@ -1322,6 +1329,7 @@ poste.</p>
     Array.prototype.forEach.call(document.querySelectorAll("#fil-temps span"), function (el) {
       var n = Number(el.getAttribute("data-t"));
       el.className = n === t ? "actif" : (n < t ? "fait" : "");
+      el.style.cursor = n <= t ? "pointer" : "default";
     });
   }
   function imprimer(cible) { document.body.className = "print-" + cible; window.print(); document.body.className = ""; }
