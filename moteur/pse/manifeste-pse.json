@@ -1,14 +1,15 @@
 {
  "domaine": "plan de sauvegarde de l'emploi",
- "date": "2026-08-24",
- "empreinte": "3e24dd0eeca6",
+ "date": "2026-08-29",
+ "empreinte": "264a0d27e681",
  "fichiers": {
-  "audit-pse-client.js": "1789b4e0bdae",
+  "audit-pse-client.js": "6f608aeaac20",
   "controles-pse.js": "6d03b8daafc5",
   "dates.js": "b6d7e587bec3",
   "fiche-pse.json": "70b94774f5ff",
   "grille-pse.js": "aa5acbc21302",
   "mesures.js": "5dd166061596",
+  "modeles-pse.js": "92e28e26b2ed",
   "moteur-pse.js": "a6e15d88385d",
   "outils.js": "7401cc07f5a6",
   "propositions-pse.js": "55a3494acac4",
