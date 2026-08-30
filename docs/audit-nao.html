@@ -762,24 +762,44 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
     ETAT.dossier = neufDossier;
   }
 
-  /* Le masquage conditionnel. Cinq familles :
+  /* Le masquage conditionnel. Huit familles :
        — LE VERROU : sans section syndicale, tout le reste du questionnaire
          (hors identité et pièces) se masque, puisque rien n'est dû ;
        — les sous-champs de l'accord de méthode, qui ne se demandent que s'il
-         est déclaré exister ;
+         est déclaré exister — et son détail (durée, mentions, périodicités)
+         que s'il est joint : tant qu'il ne l'est pas, le régime reste
+         indéterminé et le moteur ne lit rien de ce détail ;
        — l'effectif du groupe et l'effectif en France, qui ne se demandent
          que si les questions qui les commandent répondent « oui » ;
        — la matière et l'urgence d'une décision unilatérale, et les dates de
          traitement d'une demande syndicale, sur le même principe ;
-       — deux champs internes aux négociations qui ne valent que dans un cas
-         précis (le procès-verbal d'ouverture sur les écarts, seulement si un
-         accord sur les salaires est déclaré ; le plan d'action égalité,
-         seulement si aucun accord n'est déclaré). */
+       — les champs internes aux négociations qui ne valent que dans un cas
+         précis : le procès-verbal d'ouverture sur les écarts et les réponses
+         motivées, seulement si un accord sur les salaires est déclaré
+         (NAO-CTL-LOY-02 est sans objet sinon) ; le plan d'action égalité,
+         seulement si aucun accord n'est déclaré ; le dépôt de chaque
+         négociation, seulement quand une issue à déposer — accord ou
+         procès-verbal de désaccord — est déclarée (NAO-CTL-ISS-01 ignore ce
+         champ avant) ; les thèmes traités et l'appui sur la BDESE, seulement
+         quand la négociation est déclarée engagée (NAO-CTL-CON-01 à 03 sont
+         sans objet sinon) ;
+       — le déroulé de la première réunion, qui ne se demande qu'une fois la
+         réunion datée : NAO-CTL-LOY-01 reste en attente de cette date et ne
+         lit rien d'autre avant ;
+       — l'index de l'égalité professionnelle, qui ne se demande qu'à partir
+         de cinquante salariés (NAO-CTL-EGA-02 est sans objet en dessous) ;
+       — la date d'engagement des négociations triennales (gestion des
+         emplois, salariés expérimentés), qui ne se demande que si le seuil
+         de trois cents salariés est atteint : en dessous, NAO-CTL-PER-03 et
+         04 sont sans objet — l'issue et le dépôt restent demandés, car une
+         négociation terminée se dépose même quand elle n'était pas due. */
   var RUBRIQUES_CONDITIONNELLES = ["L'accord de méthode", "Les négociations menées", "La conduite",
     "La demande syndicale", "L'égalité professionnelle"];
   var PORTES = [
     { si: function (f) { return !dit((f.accordMethode || {}).existe); },
       champs: ["accordMethode.verse", "accordMethode.dureeAns", "accordMethode.mentions", "accordMethode.periodicites"] },
+    { si: function (f) { return !dit((f.accordMethode || {}).verse); },
+      champs: ["accordMethode.dureeAns", "accordMethode.mentions", "accordMethode.periodicites"] },
     { si: function (f) { return !dit(f.groupe); }, champs: ["effectifGroupe"] },
     { si: function (f) { return !dit(f.dimensionCommunautaire); }, champs: ["effectifFrance"] },
     { si: function (f) { return !dit((f.decisionUnilaterale || {}).prise); },
@@ -787,10 +807,28 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
     { si: function (f) { return !dit((f.demandeSyndicale || {}).recue); },
       champs: ["demandeSyndicale.date", "demandeSyndicale.dateTransmissionAutresOS", "demandeSyndicale.dateConvocation"] },
     { si: function (f) { return ((f.negos || {}).remuneration || {}).issue !== "accord"; },
-      champs: ["negos.remuneration.pvOuvertureEcarts"] },
+      champs: ["negos.remuneration.pvOuvertureEcarts", "reponsesMotivees"] },
     { si: function (f) { return ((f.negos || {}).egalite || {}).issue === "accord"; },
       champs: ["negos.egalite.planAction.existe", "negos.egalite.planAction.depot"] },
+    { si: function (f) { return !String(((f.negos || {}).remuneration || {}).dateEngagement || "").trim(); },
+      champs: ["negos.remuneration.themesTraites"] },
+    { si: function (f) { return !String(((f.negos || {}).egalite || {}).dateEngagement || "").trim(); },
+      champs: ["negos.egalite.themesTraites", "negos.egalite.appuiBDESE"] },
+    { si: function (f) { return !String((f.premiereReunion || {}).date || "").trim(); },
+      champs: ["premiereReunion.lieuCalendrierFixes", "premiereReunion.informationsRemises", "premiereReunion.dateRemiseInformations"] },
+    { si: function (f) { return typeof f.effectif === "number" && f.effectif < 50; },
+      champs: ["indexEgalitePublie"] },
+    { si: function (f) { var s = (MOT.seuil300 || function () { return {}; })(f); return s.connu === true && s.atteint === false; },
+      champs: ["negos.gepp.dateEngagement", "negos.experimentes.dateEngagement"] },
   ];
+  /* Le dépôt d'une négociation ne se demande que lorsqu'une issue à déposer
+     est déclarée : une porte par négociation. */
+  ["remuneration", "egalite", "gepp", "experimentes"].forEach(function (cle) {
+    PORTES.push({ si: function (f) {
+      var issue = ((f.negos || {})[cle] || {}).issue;
+      return issue !== "accord" && issue !== "PV de désaccord";
+    }, champs: ["negos." + cle + ".depot"] });
+  });
   function majVisibiliteQuestionnaire() {
     if (!$("formulaire").children.length) return;
     var f = construireF();
@@ -801,15 +839,27 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
     Array.prototype.forEach.call($("formulaire").querySelectorAll("[data-nom],[data-multi],[data-objet]"), function (el) {
       var nom = el.getAttribute("data-nom") || el.getAttribute("data-multi") || el.getAttribute("data-objet");
       if (!nom || !concernes[nom]) return;
-      var conteneur = el.closest("label") || el.closest(".sous-objet") || el.closest("[data-multi]");
+      /* Un bloc à cocher logé dans un bloc composé (les thèmes traités d'une
+         négociation) se masque avec son enveloppe propre, jamais avec tout
+         le bloc composé qui le contient. */
+      var conteneur = el.closest("label") ||
+        (el.hasAttribute("data-multi") ? el.parentElement : el.closest(".sous-objet") || el.closest("[data-multi]"));
       if (conteneur) conteneur.style.display = masques[nom] ? "none" : "";
     });
 
-    /* Le verrou de la section syndicale : voir la note en tête de ce fichier. */
+    /* Le verrou de la section syndicale : voir la note en tête de ce fichier.
+       Une rubrique conditionnelle dont toutes les questions sont masquées se
+       masque aussi (l'index de l'égalité en dessous de cinquante salariés
+       laisserait sinon un cadre vide). */
     var verrou = nie(f.sectionsSyndicales);
     Array.prototype.forEach.call($("formulaire").querySelectorAll("fieldset"), function (fs) {
       var leg = fs.querySelector("legend");
-      if (leg && RUBRIQUES_CONDITIONNELLES.indexOf(leg.textContent) >= 0) fs.style.display = verrou ? "none" : "";
+      if (!leg || RUBRIQUES_CONDITIONNELLES.indexOf(leg.textContent) < 0) return;
+      var toutMasque = true;
+      Array.prototype.forEach.call(fs.querySelectorAll(".grille > label, .grille > .sous-objet"), function (el) {
+        if (el.style.display !== "none") toutMasque = false;
+      });
+      fs.style.display = (verrou || toutMasque) ? "none" : "";
     });
     $("verrou-nao").style.display = verrou ? "" : "none";
   }
@@ -826,7 +876,9 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
     var total = 0, pris = 0;
     Array.prototype.forEach.call($("formulaire").querySelectorAll("label,[data-multi]"), function (el) {
       if (el.style.display === "none") return;
+      if (el.closest("fieldset") && el.closest("fieldset").style.display === "none") return;
       if (el.tagName === "LABEL" && el.closest(".sous-objet") && el.closest(".sous-objet").style.display === "none") return;
+      if (el.hasAttribute("data-multi") && el.parentElement && el.parentElement.style.display === "none") return;
       if (el.hasAttribute("data-multi") && el.closest("label")) return;
       total++;
       var vide = true;
