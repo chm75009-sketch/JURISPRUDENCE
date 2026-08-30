@@ -628,6 +628,50 @@ seuil, contenu, mise à disposition, consultations — se pose à l'étape 2.</p
     "accordDelaisConsultation", "consultation.dateMiseADisposition", "consultation.nbExpertises",
     "consultation.centralEtEtablissements", "consultation.dateAvis"];
 
+  /* Les questions de détail qui n'ont d'objet que sous une condition — même
+     règle qu'au module discipline (CHAMPS_SI_RI) : un champ dont l'unique
+     utilité est un contrôle lui-même suspendu tant qu'une condition n'est pas
+     remplie reste masqué, et réapparaît au bon moment.
+
+     Les années couvertes et la forme des perspectives ne servent que les
+     contrôles BDESE-CTL-CNT-03 et CNT-04 (moteur/bdese/controles-bdese.js),
+     sans objet hors du régime supplétif : l'article R. 2312-10 ne vaut qu'à
+     défaut d'accord, et l'accord applicable définit lui-même les années. */
+  var CHAMPS_SI_SUPPLETIF = ["base.anneesPassees", "base.anneesSuivantes",
+    "base.formePerspectives", "base.informationsNonRenseignables"];
+
+  /* Le régime supplétif, tel que le détermine moteur/bdese/regime-bdese.js :
+     un accord d'entreprise déclaré l'écarte ; un accord de branche déclaré ne
+     vaut qu'en deçà de trois cents salariés (L. 2312-21, dernier alinéa) — à
+     trois cents et plus, le supplétif reprend son empire ; et un silence sur
+     les deux accords, ou un effectif inconnu, ne conclut rien. */
+  function regimeSuppletif(f) {
+    if (typeof f.effectif !== "number") return false;
+    if (String(f.accordEntreprise) === "oui") return false;
+    if (String(f.accordBranche) === "oui") return f.effectif >= 300;
+    return String(f.accordEntreprise) === "non" || String(f.accordBranche) === "non";
+  }
+
+  /* Les deux calculs de date de regime-bdese.js, repris à l'identique : ils ne
+     servent ici qu'à savoir si la seconde phrase de L. 2312-2 s'applique —
+     c'est-à-dire si la date de renouvellement du comité a un objet. */
+  function ajouterMois(iso, mois) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return null;
+    var d = new Date(iso + "T00:00:00Z");
+    if (isNaN(d.getTime())) return null;
+    var j = d.getUTCDate();
+    d.setUTCMonth(d.getUTCMonth() + mois);
+    if (d.getUTCDate() !== j) d.setUTCDate(0);
+    return d.toISOString().slice(0, 10);
+  }
+  function moisEntre(a, b) {
+    if (!a || !b) return null;
+    var x = new Date(a + "T00:00:00Z"), y = new Date(b + "T00:00:00Z");
+    if (isNaN(x) || isNaN(y)) return null;
+    return (y.getUTCFullYear() - x.getUTCFullYear()) * 12 + (y.getUTCMonth() - x.getUTCMonth())
+      - (y.getUTCDate() < x.getUTCDate() ? 1 : 0);
+  }
+
   function majVisibiliteQuestionnaire() {
     if (!$("formulaire").children.length) return;
     var f = construireF();
@@ -638,8 +682,38 @@ seuil, contenu, mise à disposition, consultations — se pose à l'étape 2.</p
     if (String(f.accordEntreprise) === "oui") { masques["accordBranche"] = true; masques["accordBrancheVerse"] = true; }
     else masques["accordEntrepriseVerse"] = true;
     if (String(f.accordBranche) !== "oui") masques["accordBrancheVerse"] = true;
+    /* À trois cents salariés et plus, l'accord de branche ne peut pas définir
+       la base (L. 2312-21, dernier alinéa) : le régime est supplétif que
+       l'accord soit joint ou non — regime-bdese.js ne lit alors même pas la
+       réponse. Demander la pièce ne servirait rien. */
+    if (typeof eff === "number" && eff >= 300) masques["accordBrancheVerse"] = true;
+    /* La date de franchissement du seuil de trois cents ne sert que le
+       contrôle BDESE-CTL-DAT-02, sans objet en deçà (L. 2312-34). */
+    if (typeof eff === "number" && eff < 300) masques["dateSeuil300Franchi"] = true;
+    /* La date de renouvellement du comité ne sert que la seconde phrase de
+       L. 2312-2 (regime-bdese.js, exigibilite) : le délai ne court du
+       renouvellement que si, au terme des douze mois suivant le seuil de
+       cinquante, le mandat restant à courir est inférieur à un an. */
+    var terme50 = ajouterMois(f.dateSeuil50Atteint, 12);
+    var resteMandat = terme50 ? moisEntre(terme50, f.dateFinMandat) : null;
+    if (resteMandat === null || resteMandat >= 12) masques["dateRenouvellementCSE"] = true;
+    if (!regimeSuppletif(f)) CHAMPS_SI_SUPPLETIF.forEach(function (c) { masques[c] = true; });
+    /* La liste des informations ni chiffrables ni tendancielles n'est lue par
+       BDESE-CTL-CNT-04 que lorsque la forme des perspectives est admise —
+       même détection que le contrôle (/chiffr|tendance|mixte/). */
+    else if (!/chiffr|tendance|mixte/.test(String(f.base && f.base.formePerspectives || "").toLowerCase()))
+      masques["base.informationsNonRenseignables"] = true;
     if (String(f.accordPeriodiciteConsultations) !== "oui") { masques["periodiciteConsultations"] = true; masques["reunionsAnnuellesAccord"] = true; }
-    if (String(f.etablissementsDistincts) !== "oui") masques["consultation.centralEtEtablissements"] = true;
+    /* Quand un accord fixe les délais de consultation, delaiConsultation
+       s'arrête là (connu: false) : BDESE-CTL-CSL-03 ne lit alors ni la date de
+       mise à disposition, ni les expertises, ni le double niveau, ni l'avis. */
+    if (String(f.accordDelaisConsultation) === "oui") {
+      masques["consultation.dateMiseADisposition"] = true; masques["consultation.nbExpertises"] = true;
+      masques["consultation.centralEtEtablissements"] = true; masques["consultation.dateAvis"] = true;
+    }
+    /* Le niveau de mise en place ne sert que BDESE-CTL-ETB-01, sans objet
+       sans établissements distincts. */
+    if (String(f.etablissementsDistincts) !== "oui") { masques["consultation.centralEtEtablissements"] = true; masques["base.niveau"] = true; }
     Array.prototype.forEach.call($("formulaire").querySelectorAll("[name]"), function (el) {
       var lab = el.closest("label");
       if (!lab) return;
