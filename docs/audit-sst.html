@@ -62,10 +62,14 @@
        — moins de code, rien à maintenir pour des champs qui n'existent pas.
 
      — DES PORTES DE CONFORT, PAS DE RÉGIME. Les seules questions masquées
-       sont des questions de détail dont la question qui les commande est
-       « non » — les modalités de la commission quand elle n'existe pas, la
-       cause d'un remplacement quand aucun n'est déclaré, la suite d'un
-       signalement quand aucun n'est reçu. Rien de plus. -->
+       sont des questions de détail dont la question qui les commande n'est
+       pas « oui » — le détail du document unique et les suites de
+       l'évaluation quand le document n'existe pas, les modalités de la
+       commission quand elle n'existe pas, les questions qui supposent un
+       comité quand il n'y en a pas, la présentation du programme quand il
+       n'est pas établi, la cause d'un remplacement quand aucun n'est
+       déclaré, la suite d'un signalement quand aucun n'est reçu. Rien de
+       plus. -->
 <style>
   :root{
     --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
@@ -760,12 +764,23 @@ unique, commission, harcèlement — se pose à l'étape 2.</p>
 
   /* Le masquage conditionnel : de simples portes de confort — une question de
      détail masquée quand la question qui la commande vaut « non » ou
-     « non renseigné ». Aucune ne masque une famille entière de contrôles :
-     chaque seuil de ce module (onze, cinquante, deux cent cinquante, trois
-     cents salariés) reste posé et son « sans objet » vient du contrôle
-     lui-même (controles-sst.js), pas de la page. */
+     « non renseigné ». Chaque champ masqué ici n'est lu par les contrôles
+     qu'à l'intérieur d'un garde qui rend « sans objet » tant que sa porte
+     n'est pas « oui » (controles-sst.js — nie(du.existe), nie(cse.existe),
+     siCommission, dit(survenu), dit(recu)) : le demander avant serait poser
+     une question dont l'unique contrôle est lui-même suspendu. Aucune porte
+     ne repose sur un seuil : chaque seuil de ce module (onze, cinquante,
+     deux cent cinquante, trois cents salariés) reste posé et son « sans
+     objet » vient du contrôle lui-même, pas de la page. */
   var PORTES = [
+    { si: function (f) { return !dit((f.duerp || {}).existe); },
+      champs: ["duerp.dateDerniereMaj", "duerp.unitesTravail", "duerp.versionsConservees",
+        "duerp.avisAffiche", "duerp.consultationCSE", "duerp.transmisSPST",
+        "programmeAnnuel.existe", "programmeAnnuel.presenteCSE", "listeActions.consignee"] },
     { si: function (f) { return !dit((f.evenement || {}).survenu); }, champs: ["evenement.majFaite"] },
+    { si: function (f) { return !dit((f.programmeAnnuel || {}).existe); }, champs: ["programmeAnnuel.presenteCSE"] },
+    { si: function (f) { return !dit((f.cse || {}).existe); },
+      champs: ["duerp.consultationCSE", "programmeAnnuel.presenteCSE", "formationSSCT", "referentCSE"] },
     { si: function (f) { return !dit((f.cssct || {}).existe); },
       champs: ["cssct.presideeEmployeur", "cssct.nbMembres", "cssct.membreSecondCollege",
         "cssct.designesParCSE", "cssct.modalitesFixees", "cssct.delegationConforme",
