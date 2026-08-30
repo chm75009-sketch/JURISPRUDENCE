@@ -965,19 +965,48 @@ poste.</p>
     ETAT.dossier = neufDossier;
   }
 
-  /* Les champs qui n'ont d'objet que si un autre champ répond « oui » :
-     autant de portes ouvertes simultanément, chacune motivée par le texte
-     qu'elle sert — c'est ici, non dans un seuil unique comme à la BDESE, que
-     le comité ne se généralise pas d'un bloc. */
+  /* Les champs qui n'ont d'objet que tant qu'une condition n'est pas remplie —
+     un autre champ répondu « oui », un seuil d'effectif atteint, des élections
+     partielles dues : autant de portes ouvertes simultanément, chacune calquée
+     sur la garde du contrôle qu'elle sert (controles-cse.js) — c'est ici, non
+     dans un seuil unique comme à la BDESE, que le comité ne se généralise pas
+     d'un bloc. Une porte ne se ferme que si le contrôle rend « sans objet »
+     AVANT de lire le champ : un champ que le contrôle réclame en « donnée
+     manquante » avant de conclure (masseSalariale pour BUD-01, heuresAccordees
+     pour MOY-01) reste toujours posé. */
   var PORTES = [
     { si: function (f) { return f.electionsEnCours !== true; },
       champs: ["dateInformationPersonnel", "datePremierTour", "syndicatsInvites", "protocole", "listesDeposees", "voteElectronique"] },
-    { si: function (f) { return f.etablissementsMultiples !== true; }, champs: ["sourceDecoupage"] },
+    /* CSE-CTL-PER-01 et CSE-CTL-CON-04 : sans établissements distincts, ni
+       source de découpage ni niveau de consultation à contrôler. */
+    { si: function (f) { return f.etablissementsMultiples !== true; },
+      champs: ["sourceDecoupage", "instanceConsultee", "mesuresAdaptation"] },
     { si: function (f) { return f.cssct !== true; },
       champs: ["membresCssct", "designationCssct", "remplacementCssct", "delegationCssct", "sourceModalitesCssct", "mandatRenouvele", "joursFormationSSCT"] },
     { si: function (f) { return f.commissionEconomique !== true; }, champs: ["membresCommissionEconomique"] },
     { si: function (f) { return f.seuilsComptesComite !== true; }, champs: ["commissionMarches"] },
     { si: function (f) { return f.accordPeriodicite !== true; }, champs: ["reunionsAccord"] },
+    /* CSE-CTL-COM-03 : « Aucun comité : la commission des marchés n'a pas de
+       support. » La garde est l'inverse des autres — la question reste posée
+       tant que l'existence du comité n'est pas tranchée. */
+    { si: function (f) { return f.comiteExistant === false; },
+      champs: ["seuilsComptesComite", "commissionMarches"] },
+    /* CSE-CTL-CON-01, CON-06, BUD-01 et BUD-02 rendent « sans objet » en deçà
+       de cinquante salariés, avant de lire ces champs. */
+    { si: function (f) { return !(typeof f.effectif === "number" && f.effectif >= 50); },
+      champs: ["consultationsRecurrentes", "reunionsSante", "masseSalarialeN1", "subventionVersee", "ascAnneeN", "ascAnneeN1"] },
+    /* CSE-CTL-COM-01 (trois cents salariés) et COM-02 (mille) : l'accord
+       L. 2315-45 est lu par les deux, dès trois cents. */
+    { si: function (f) { return !(typeof f.effectif === "number" && f.effectif >= 300); },
+      champs: ["accordCommissions", "commissionsConstituees"] },
+    { si: function (f) { return !(typeof f.effectif === "number" && f.effectif >= 1000); },
+      champs: ["commissionEconomique"] },
+    /* CSE-CTL-ELE-07 ne lit partiellesOrganisees qu'une fois les élections
+       partielles dues (L. 2314-10) : même garde, même moteur. */
+    { si: function (f) {
+        var ep = MOTEUR.moteur && MOTEUR.moteur.electionsPartielles ? MOTEUR.moteur.electionsPartielles(f) : null;
+        return !ep || !ep.dues; },
+      champs: ["partiellesOrganisees"] },
   ];
   function majVisibiliteQuestionnaire() {
     if (!$("formulaire").children.length) return;
