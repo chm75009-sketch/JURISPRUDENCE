@@ -69,13 +69,37 @@
       { si: { champ: "cseExistant", vaut: ["oui"] },
         champs: ["cseCentralConsulte", "consequencesSSCT", "expertise"] },
       { si: { champ: "fermetureEtablissement", vaut: ["oui"] }, champs: ["rechercheRepreneur"] },
+      /* La recherche de repreneur (CTL-REP-01) n'est due qu'à partir de
+         mille salariés : sous ce seuil le contrôle est sans objet, la
+         question aussi — la règle se combine avec la fermeture ci-dessus. */
+      { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 1000; },
+        champs: ["rechercheRepreneur"] },
       { si: { champ: "cause", vaut: ["4"] }, champs: ["cessationComplete"] },
       { si: { champ: "cause", vaut: ["3"] }, champs: ["menace"] },
       { si: { champ: "cause", vaut: ["2"] }, champs: ["mutation"] },
-      /* Le plan de sauvegarde n'est jamais dû sous cinquante salariés. */
+      /* La trésorerie (CTL-ECO-01) n'est lue que pour les difficultés
+         économiques (cause 1). */
+      { si: { champ: "cause", vaut: ["1"] }, champs: ["tresorerie"] },
+      /* L'accord de périmètre (CTL-EFF-02) n'est lu que si le périmètre
+         d'application des critères d'ordre désigne l'établissement — même
+         critère que le contrôle. */
+      { si: function (txt) { var v = txt("perimetreOrdre");
+          return v === "" ? null : /etablissement|établissement/i.test(v); },
+        champs: ["accordPerimetreOrdre"] },
+      /* L'ordonnance du juge-commissaire ne se demande qu'en redressement
+         ou liquidation — s'ajoute à la règle procédure collective. */
+      { si: { champ: "typeProcedure", vaut: ["redressement", "liquidation"] },
+        champs: ["ordonnanceJugeCommissaire"] },
+      /* Le CSE central (CTL-CSE-02) suppose au moins deux établissements
+         distincts — s'ajoute à la règle cseExistant. */
+      { si: function (txt, nb) { var n = nb("etablissementsDistincts");
+          return n === null ? null : n >= 2; },
+        champs: ["cseCentralConsulte"] },
+      /* Le plan de sauvegarde n'est jamais dû sous cinquante salariés —
+         et la règle anti-fractionnement (CTL-SEU-03) non plus. */
       { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 50; },
         champs: ["pse.voie", "pse.evitement", "pse.reclassementInterne", "pse.formation",
-          "pse.creation", "pse.suivi", "pse.dateDecisionAdmin"] },
+          "pse.creation", "pse.suivi", "pse.dateDecisionAdmin", "licenciements3moisGlissants"] },
     ],
     MoteurCSE: [
       { si: { champ: "etablissementsMultiples", vaut: ["oui"] },
