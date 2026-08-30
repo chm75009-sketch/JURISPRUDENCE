@@ -688,14 +688,23 @@ donnée manquante.</p>
      répondable que sur un « oui » explicite : un comité non installé n'a pas
      de comptes, la question serait sans objet — c'est le bogue signalé le
      29 août 2026 (l'application demandait les comptes d'un comité dont rien
-     n'établissait l'existence). */
+     n'établissait l'existence).
+
+     Même famille, même porte pour les accords collectifs (accordsCollectifs) :
+     le référentiel ne lit cette réponse qu'à un seul endroit, dans le motif de
+     l'item des négociations obligatoires, et seulement lorsque sectionSyndicale
+     vaut « oui » (referentiel-social.js, item SOC-NEG-NAO). Sans section
+     syndicale déclarée, la réponse ne sert à rien : la question reste masquée
+     tant que sectionSyndicale n'est pas « oui ». */
   function majVisibilite() {
     var n = ETAT.profil.effectif;
     n = (n === undefined || n === null || String(n).trim() === "") ? null : Number(n);
     var sousOnze = n !== null && !isNaN(n) && n < 11;
     var comiteNonConfirme = ETAT.profil.comiteInstalle !== "oui";
+    var sectionNonConfirmee = ETAT.profil.sectionSyndicale !== "oui";
     [["seuilDepuis12Mois", sousOnze], ["comiteInstalle", sousOnze],
-     ["comiteSeuilsComptes", sousOnze || comiteNonConfirme]].forEach(function (paire) {
+     ["comiteSeuilsComptes", sousOnze || comiteNonConfirme],
+     ["accordsCollectifs", sectionNonConfirmee]].forEach(function (paire) {
       var el = $("formulaire").querySelector('[name="' + paire[0] + '"]');
       if (!el) return;
       var lab = el.closest("label");
@@ -1360,7 +1369,8 @@ donnée manquante.</p>
     ETAT.profil = { dateAudit: AUJOURDHUI, seuilDepuis12Mois: "oui",
       sectionSyndicale: "oui", accordsCollectifs: "non",
       matieresInflammables: "non", cadres: "oui", projetLicenciementEco: "non",
-      salariesHorsHoraire: "oui", postesRisquesParticuliers: "non", comiteSeuilsComptes: "non",
+      salariesHorsHoraire: "oui", postesRisquesParticuliers: "non",
+      comiteInstalle: "oui", comiteSeuilsComptes: "non",
       epargneSalariale: "non" };
     enregistrer();
     construireFiche(); construireFormulaire();

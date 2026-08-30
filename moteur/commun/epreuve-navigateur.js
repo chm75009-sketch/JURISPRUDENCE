@@ -101,7 +101,12 @@ function brancher(page, nom) {
     await page.fill("#fc-conventionCollective", "Transports routiers (IDCC 0016)");
     await page.selectOption("#fc-groupe", "non");
     await page.selectOption("#fc-etablissementsDistincts", "non");
-    await page.fill("#fc-nbEtablissements", "1");
+    /* « non » aux établissements distincts : leur nombre se masque (profil.js),
+       il ne se remplit donc pas — on vérifie le masquage au lieu de saisir. */
+    const nbEtabMasque = await page.$eval("#fc-nbEtablissements",
+      el => el.closest("label").style.display === "none");
+    if (nbEtabMasque) ok("« nombre d'établissements » masqué après « non » aux établissements distincts");
+    else ko("« nombre d'établissements » reste visible malgré « non » aux établissements distincts");
     await page.waitForTimeout(250);
 
     const stock = await page.evaluate(() => JSON.parse(localStorage.getItem("profil-entreprise") || "{}"));
@@ -127,6 +132,10 @@ function brancher(page, nom) {
     await page.selectOption('#formulaire [name="cadres"]', "oui");
     await page.selectOption('#formulaire [name="projetLicenciementEco"]', "non");
     await page.selectOption('#formulaire [name="epargneSalariale"]', "non");
+    /* Deux questions à double porte : les comptes du comité ne se demandent
+       qu'après un comité déclaré en place, les accords collectifs qu'après une
+       section syndicale déclarée (sélectionnée « oui » plus haut). */
+    await page.selectOption('#formulaire [name="comiteInstalle"]', "oui");
     await page.selectOption('#formulaire [name="comiteSeuilsComptes"]', "non");
     /* Une réponse « en cours » : elle ne doit rien conclure. */
     await page.selectOption('#formulaire [name="accordsCollectifs"]', "en cours");
