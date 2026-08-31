@@ -262,7 +262,7 @@
   @media print{
     body{background:#fff}
     .retour-barre,header,.presentation,.parcours-cartes,#zone-profil,#zone-prealable,
-    #zone-dates,#zone-etapes,#zone-progression,.barre-outils,h2.titre-zone,footer,#message{display:none !important}
+    #zone-dates,#zone-etapes,#zone-progression,#zone-suite,.barre-outils,h2.titre-zone,footer,#message{display:none !important}
     .page{max-width:none;padding:0}
     #recap{display:block !important;margin:0}
     .feuille{border:none;border-radius:0;max-width:none;padding:0;font-size:12pt}
@@ -276,6 +276,17 @@
     body.print-courrier #dlg-courrier .dt-barre{display:none !important}
     body.print-courrier #dlg-courrier pre{max-height:none;overflow:visible;font-size:11pt}
   }
+
+  .barre-parcours{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;
+    margin:22px 0 0;padding:13px 15px;border:1px solid var(--filet);border-left:4px solid var(--bleu);
+    background:var(--surface);border-radius:0 4px 4px 0}
+  .barre-parcours .bp-txt{flex:1 1 220px;min-width:0}
+  .barre-parcours b{display:block;color:var(--encre);font:600 16px/1.25 system-ui}
+  .barre-parcours span{display:block;font-size:13px;color:var(--gris);margin-top:2px}
+  .barre-parcours .bp-lien{font:600 13px/1 system-ui;padding:9px 13px;border-radius:3px;
+    border:1px solid var(--filet);background:var(--gris-f);color:var(--corps);cursor:pointer}
+  .barre-parcours .bp-lien:hover{border-color:var(--bleu);color:var(--bleu)}
+  @media print{ .barre-parcours{display:none !important} }
 
   #message{display:none;margin:14px 0 0;padding:10px 12px;border-radius:3px;
     border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}
@@ -296,7 +307,7 @@
 <header>
   <p class="fil">Application Jurisprudence</p>
   <h1>Parcours guidés — les procédures pas à pas</h1>
-  <p class="chapo"><b>L'audit dit ce qui ne va pas ; le parcours dit quoi faire.</b> Douze procédures
+  <p class="chapo" id="chapo"><b>L'audit dit ce qui ne va pas ; le parcours dit quoi faire.</b> Douze procédures
   réelles, découpées en étapes datées : ce qu'il faut avoir réuni avant de commencer, les étapes dans
   l'ordre avec leur fondement lu à la source et leur délai calculé depuis vos dates, le document à
   produire à chaque étape — pré-rempli de votre profil —, et un état d'avancement qui vous attend à la
@@ -304,6 +315,17 @@
   ailleurs que sur ce poste.</p>
 </header>
 
+<!-- La barre compacte : ce qu'on voit quand un parcours est ouvert. Tout ce
+     qui précède — la présentation, la fiche client, les quinze vignettes — se
+     replie derrière elle. On vient ici pour une procédure, pas pour relire
+     comment la page fonctionne. -->
+<div class="barre-parcours" id="barre-parcours" hidden>
+  <div class="bp-txt"><b id="bp-nom"></b><span id="bp-ent"></span></div>
+  <button type="button" class="bp-lien" id="bp-changer">Changer de parcours</button>
+  <button type="button" class="bp-lien" id="bp-fiche">Modifier la fiche</button>
+</div>
+
+<div id="bloc-intro">
 <div class="presentation">
   <h2>Comment un parcours fonctionne</h2>
   <p><b>1. Votre entreprise.</b> Effectif, secteur, convention, groupe, établissements, présence d'un
@@ -311,17 +333,19 @@
   documents : renseigné ici, il est repris partout. Il sert surtout à <b>masquer les étapes sans
   objet</b> — une commission de la formation n'a pas à figurer dans le parcours d'une entreprise de
   quarante salariés.</p>
-  <p><b>2. Êtes-vous prêt ?</b> La liste des informations, documents et pièces à réunir avant
-  d'engager la procédure. Cochez ce que vous avez ; ce qui reste décoché est repris en tête, nommément,
-  sous « ce qui manque ».</p>
-  <p><b>3. Les dates du dossier.</b> Quelques dates seulement — celles dont les délais dépendent. Les
-  échéances se calculent aussitôt, et une date dépassée est signalée en rouge.</p>
-  <p><b>4. Les étapes.</b> Dans l'ordre, chacune avec l'article qui la fonde (numéro <i>et</i>
-  identifiant de version — un article change sans changer de numéro), la jurisprudence lorsqu'elle
-  éclaire l'étape, le délai, et le lien vers le modèle de document correspondant.</p>
-  <p><b>5. J'en suis où.</b> Cochez les étapes franchies : la barre de progression, le compte des
-  retards et l'état de chaque étape sont enregistrés sur ce poste et retrouvés à la réouverture.
-  Le récapitulatif s'imprime — ce qui est fait, ce qui reste, les échéances.</p>
+  <p><b>2. Le parcours choisi, cette page se replie.</b> Il ne reste qu'une ligne — le nom de la
+  procédure et celui de votre entreprise — et, dessous, la procédure elle-même. Deux boutons rouvrent
+  ce qui est replié : changer de parcours, modifier la fiche.</p>
+  <p><b>3. La procédure, étape par étape.</b> Dans l'ordre, chacune avec l'article qui la fonde
+  (numéro <i>et</i> identifiant de version — un article change sans changer de numéro), la
+  jurisprudence lorsqu'elle éclaire l'étape, le délai calculé depuis vos dates, <b>ce qu'on risque à
+  ne pas la franchir</b>, le conseil de pratique, et le courrier type que l'application écrit
+  elle-même. Cochez les étapes franchies et datez-les : <b>une date qui consigne un acte se saisit
+  là, sur l'étape</b>, et jamais d'avance — on ne vous demande pas la date d'un dépôt qui n'a pas
+  encore eu lieu.</p>
+  <p><b>4. Ce qu'il faut avoir réuni</b>, sous les étapes : cochez ce que vous avez, ce qui reste
+  décoché est repris nommément. <b>5. Les dates du dossier</b> : celles qui commandent les délais —
+  un franchissement de seuil, une date d'entrée en vigueur —, pas celles que les étapes consignent.</p>
   <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne lit pas votre convention collective.
   Partout où le conventionnel peut ajouter une étape — un conseil de discipline, un avis préalable, une
   périodicité de négociation, une commission supplémentaire —, elle le signale et vous renvoie à votre
@@ -341,11 +365,16 @@ réponse nuancée.</p>
 
 <h2 class="titre-zone">2. Choisissez un parcours</h2>
 <div class="parcours-cartes" id="cartes" role="tablist"></div>
+</div><!-- /bloc-intro -->
 
-<div id="zone-prealable"></div>
-<div id="zone-dates"></div>
+<!-- L'ordre compte : la procédure d'abord. Ce qu'il faut réunir et les dates
+     du dossier se remplissent en chemin, pas avant d'avoir vu ce qu'on a à
+     faire. -->
 <div id="zone-progression"></div>
 <div id="zone-etapes"></div>
+<div id="zone-prealable"></div>
+<div id="zone-dates"></div>
+<div id="zone-suite"></div>
 
 <div class="barre-outils" id="outils" style="display:none">
   <button type="button" id="btn-recap">Récapitulatif imprimable</button>

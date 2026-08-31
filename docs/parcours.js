@@ -1221,6 +1221,7 @@
         fond: ["L1321-3", "L1321-2-1", "L1331-2"],
         risque: "L'inspecteur du travail peut exiger le retrait ou la modification d'une clause prohibée (L. 1322-1), et une sanction prise sur son fondement est une sanction sans support, que le conseil de prud'hommes peut annuler. Une amende ou sanction pécuniaire est réputée non écrite et expose à l'amende de 3 750 euros de L. 1334-1." },
       { id: "i4", nom: "Soumettre à l'avis du comité social et économique",
+        champDate: "dateAvisCSE",
         docProduit: "DIS-CTL-RI-06",
         conseil: "Transmettez le projet aux élus assez tôt pour qu'ils l'aient lu, et faites porter au procès-verbal la mention de l'avis rendu, avec sa date. C'est ce procès-verbal, pas le règlement, qui prouvera plus tard que la formalité a été accomplie — et il accompagnera l'envoi à l'inspection.",
         quoi: "Le règlement intérieur ne peut être introduit qu'après avoir été soumis à l'avis du comité. C'est une formalité substantielle : son défaut ouvre au syndicat la voie du référé en suspension.",
@@ -1243,6 +1244,7 @@
         risque: "Une modification introduite sans ces formalités n'a pas été régulièrement introduite : mêmes sanctions que pour le règlement lui-même (R. 1323-1), et l'amende d'entrave de L. 2317-1 si le comité a été contourné.",
         si: function (P, D) { return D.operation === "modification" || D.operation === "retrait de clauses" ? true : (D.operation ? false : null); } },
       { id: "i6", nom: "Déposer au greffe du conseil de prud'hommes",
+        champDate: "dateDepotGreffe",
         docProduit: "DIS-CTL-RI-08",
         conseil: "Déposez au greffe du ressort de l'établissement concerné, pas du siège quand ils diffèrent, et conservez le récépissé daté. Sans cette date, l'entrée en vigueur ne se calcule pas.",
         jx: "ri",
@@ -1254,6 +1256,7 @@
           return { iso: D.dateDepotGreffe, libelle: "Déposé le " + dateFr(D.dateDepotGreffe) };
         } },
       { id: "i7", nom: "Communiquer à l'inspecteur du travail, en deux exemplaires, avec l'avis du comité",
+        champDate: "dateCommunicationInspection",
         docProduit: "DIS-CTL-RI-09",
         conseil: "Envoyez les deux exemplaires accompagnés de l'avis du comité et gardez la preuve d'envoi. Faites-le le jour même de la publicité : le texte veut que les deux aient lieu en même temps, et deux dates différentes se remarquent.",
         quoi: "En même temps qu'il fait l'objet des mesures de publicité, le règlement intérieur, accompagné de l'avis du comité, est communiqué à l'inspecteur du travail. Le texte lui est transmis en deux exemplaires.",
@@ -1267,6 +1270,7 @@
               ? "L'article L. 1321-4 veut que la communication ait lieu « en même temps » que les mesures de publicité, datées ici au " + dateFr(D.datePublicite) + "." : "" };
         } },
       { id: "i8", nom: "Assurer la publicité",
+        champDate: "datePublicite",
         docProduit: "DIS-CTL-RI-07",
         conseil: "Affichez à un endroit accessible sans demander la permission à personne, et photographiez l'affichage daté. Les locaux d'embauche comptent autant que les lieux de travail — c'est celui-là qu'on oublie.",
         quoi: "Le règlement intérieur est porté, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche.",
@@ -2958,8 +2962,39 @@
     var r = o.si(PROFIL, D || {});
     return r === false ? false : true;
   }
+  /* Les dates qu'une ÉTAPE consigne ne se demandent pas d'avance.
+
+     Défaut signalé le 31 août 2026 : pour un premier règlement intérieur, la
+     page réclamait d'entrée la date du dépôt au greffe, celle des mesures de
+     publicité et celle de la communication à l'inspection du travail — trois
+     dates d'actes qui n'ont pas encore eu lieu, et qui n'auront lieu qu'aux
+     étapes 6, 7 et 8 du parcours qu'on vient d'ouvrir. Demander la date d'une
+     chose à faire avant de l'avoir faite est une question sans objet.
+
+     Ces dates se saisissent désormais là où elles se produisent : sur la case
+     « étape franchie » de l'étape concernée, qui les reverse au dossier pour
+     que les délais se calculent comme avant. Une date d'ENTRÉE — le
+     franchissement du seuil, la date d'entrée en vigueur que le règlement
+     porte — reste demandée d'avance : elle commande, elle ne consigne pas. */
+  function champsConsignes(p) {
+    var m = {};
+    (p.etapes || []).forEach(function (s) { if (s.champDate) m[s.champDate] = s.id; });
+    return m;
+  }
+  /* Report des dates consignées vers le dossier, et retour : une étape déjà
+     datée dans le dossier retrouve sa date à la réouverture. */
+  function reverserDates(p, st, D) {
+    (p.etapes || []).forEach(function (s) {
+      if (!s.champDate) return;
+      var e = st.etapes[s.id];
+      if (e && e.le) D[s.champDate] = e.le;
+      else if (D[s.champDate]) { st.etapes[s.id] = st.etapes[s.id] || {}; st.etapes[s.id].le = D[s.champDate]; }
+      else if (D[s.champDate] !== undefined) D[s.champDate] = "";
+    });
+  }
   function donneesVisibles(p, D) {
-    return p.donnees.filter(function (c) { return visible(c, D); });
+    var consignes = champsConsignes(p);
+    return p.donnees.filter(function (c) { return !consignes[c.c] && visible(c, D); });
   }
   /* Une donnée masquée est VIDÉE — c'est la règle du dépôt (audit-form.js) :
      un champ sans objet doit être traité comme une donnée absente, jamais comme
@@ -3089,17 +3124,43 @@
     rendre();
     $("outils").style.display = "flex";
     $("recap").style.display = "none";
-    $("zone-prealable").scrollIntoView({ behavior: "smooth", block: "start" });
+    /* Un parcours choisi, on est là pour la procédure : la présentation, la
+       fiche client et les quinze vignettes se replient derrière une barre
+       d'une ligne, et l'écran s'ouvre sur les étapes. Deux boutons les
+       rouvrent — changer de parcours, modifier la fiche. */
+    replier(p);
+    $("zone-etapes").scrollIntoView({ block: "start" });
+  }
+
+  function replier(p) {
+    $("bloc-intro").hidden = true;
+    if ($("chapo")) $("chapo").hidden = true;
+    $("barre-parcours").hidden = false;
+    $("bp-nom").textContent = p.nom;
+    var bits = [];
+    if (PROFIL.denomination) bits.push(PROFIL.denomination);
+    var eff = PROFIL.effectif != null ? parseInt(PROFIL.effectif, 10) : null;
+    if (eff != null && !isNaN(eff)) bits.push(eff + " salarié" + (eff > 1 ? "s" : ""));
+    if (PROFIL.secteur) bits.push(PROFIL.secteur);
+    $("bp-ent").textContent = bits.join(" · ");
+  }
+  function deplier(ancre) {
+    $("bloc-intro").hidden = false;
+    if ($("chapo")) $("chapo").hidden = false;
+    $("barre-parcours").hidden = true;
+    var c = $(ancre);
+    if (c) c.scrollIntoView({ block: "start" });
   }
 
   function rendre() {
     var p = ACTIF; if (!p) return;
     var st = etatDe(p.cle), D = st.donnees;
+    reverserDates(p, st, D);
     viderMasquees(p, D);
 
     /* --- le préalable --- */
     var items = prealableVisible(p, D);
-    $("zone-prealable").innerHTML = '<h2 class="titre-zone">3. Êtes-vous prêt ? — ' + e(p.nom) + "</h2>" +
+    $("zone-prealable").innerHTML = '<h2 class="titre-zone">Ce qu\'il faut avoir réuni — ' + e(p.nom) + "</h2>" +
       '<p class="aide">Ce qu\'il faut avoir réuni avant d\'engager la procédure. Cochez ce que vous ' +
       'avez ; ce qui reste décoché est repris ci-dessous, nommément.</p>' +
       '<div class="prealable">' +
@@ -3122,7 +3183,7 @@
 
     /* --- les dates du dossier --- */
     var champs = donneesVisibles(p, D);
-    $("zone-dates").innerHTML = '<h2 class="titre-zone">4. Les dates du dossier</h2>' +
+    $("zone-dates").innerHTML = '<h2 class="titre-zone">Les dates du dossier</h2>' +
       '<p class="aide">Quelques données seulement — celles dont les délais dépendent. Les échéances se ' +
       'recalculent à chaque saisie ; une date dépassée est signalée en rouge.</p>' +
       '<form id="form-donnees" autocomplete="off"><fieldset><legend>' + e(p.nom) + "</legend>" +
@@ -3158,13 +3219,13 @@
     });
 
     /* --- la progression --- */
-    $("zone-progression").innerHTML = '<h2 class="titre-zone">5. J\'en suis où</h2>' +
+    $("zone-progression").innerHTML = '<h2 class="titre-zone">Où vous en êtes</h2>' +
       '<div class="progression" id="bloc-progression"></div>';
 
     /* --- les étapes --- */
     var etapes = etapesVisibles(p, D);
     var n = 0;
-    $("zone-etapes").innerHTML = '<h2 class="titre-zone">6. Les étapes</h2>' +
+    $("zone-etapes").innerHTML = '<h2 class="titre-zone">La procédure, étape par étape</h2>' +
       '<p class="aide">Dans l\'ordre. Chaque étape porte l\'article qui la fonde — numéro <i>et</i> ' +
       'identifiant de version —, la jurisprudence lorsqu\'elle l\'éclaire, le délai calculé depuis vos ' +
       'dates, et le document à produire.</p>' +
@@ -3233,7 +3294,9 @@
         if (x.checked && !st.etapes[id].le) st.etapes[id].le = AUJOURDHUI;
         var champDate = $("zone-etapes").querySelector('[data-etape-date="' + id + '"]');
         if (champDate) champDate.value = st.etapes[id].le || "";
-        enregistrer(); majEtats(); majCartes();
+        reverserDates(p, st, D);
+        enregistrer(); rendre(); majCartes();
+        return;
       });
     });
     [].slice.call($("zone-etapes").querySelectorAll("[data-courrier]")).forEach(function (x) {
@@ -3244,7 +3307,12 @@
         var id = x.getAttribute("data-etape-date");
         if (!st.etapes[id]) st.etapes[id] = {};
         st.etapes[id].le = x.value;
-        enregistrer(); majEtats(); majCartes();
+        /* Une étape qui consigne une date du dossier la reverse : c'est la
+           même date, saisie là où elle se produit. Les échéances des étapes
+           suivantes se recalculent aussitôt. */
+        reverserDates(p, st, D);
+        enregistrer(); rendre(); majCartes();
+        return;
       });
     });
 
@@ -3286,20 +3354,23 @@
       c.total + "</b> — " + pct + " %" +
       (c.retards ? ' · <span class="r">' + c.retards + " en retard</span>" : "") +
       (c.items ? " · préalable : " + c.coches + " / " + c.items : "") + "</div>" +
-      '<div class="barre-fond"><div class="barre-part" style="width:' + pct + '%"></div></div>' +
+      '<div class="barre-fond"><div class="barre-part" style="width:' + pct + '%"></div></div>';
+
+    /* Ce qui accompagne la procédure sans en faire partie — où l'avancement
+       est gardé, où s'imprime le document final, et le parcours qui vient
+       après — est écrit SOUS les étapes, pas au-dessus : on ouvre cette page
+       pour la procédure, on lit le reste quand on l'a parcourue. */
+    var zs = $("zone-suite");
+    if (zs) zs.innerHTML =
       '<div class="compte">L\'avancement est enregistré sur ce poste : vous le retrouverez à la ' +
       'réouverture de la page.' + (p.audit ? ' Pour contrôler l\'existant, ouvrez <a href="' +
       e(p.audit.href) + '">' + e(p.audit.nom) + "</a>." : "") + "</div>" +
-      /* Où s'imprime le document final de ce parcours. Le renvoi est nommé
-         une fois, en tête, plutôt que répété à chaque étape. */
       (jxDispo(p.jx)
         ? '<div class="renvoi-jx">Les documents finaux de ce parcours — ' +
           e(window.JurisExpert.quoi(p.jx)) + ' — se génèrent, complets et prêts à imprimer, dans ' +
           '<a class="jx" href="' + e(window.JurisExpert.lien(p.jx)) + '" target="_blank" ' +
           'rel="noopener">Juris Expert — ' + e(window.JurisExpert.nom(p.jx)) + "</a>.</div>"
         : "") +
-      /* Les élections professionnelles relèvent entièrement de Juris Expert :
-         ce parcours commence après elles, et le dit. */
       (p.cle === "installation" && jxDispo("elections")
         ? '<div class="renvoi-jx">Ce parcours commence <b>après</b> la proclamation des résultats. ' +
           "Les élections elles-mêmes — " + e(window.JurisExpert.quoi("elections")) + " — se " +
@@ -3307,11 +3378,6 @@
           '" target="_blank" rel="noopener">Juris Expert — ' +
           e(window.JurisExpert.nom("elections")) + "</a>.</div>"
         : "") +
-      /* Ce qui vient après. Un parcours terminé n'est pas une fin : le
-         règlement intérieur appelle le document unique, le document unique
-         appelle l'affichage, et ainsi de suite. Le renvoi ne s'ouvre qu'une
-         fois toutes les étapes franchies — proposer la suite avant d'avoir
-         fini celle-ci brouillerait l'ordre. */
       (p.suite && SUITE(p.suite.cle)
         ? '<div class="suite' + (c.total && c.faites >= c.total ? " prete" : "") + '">' +
           "<b>" + (c.total && c.faites >= c.total
@@ -3322,6 +3388,7 @@
           e(SUITE(p.suite.cle).nom) + " » →</a></div>"
         : "");
   }
+
   function SUITE(cle) {
     return PARCOURS.filter(function (x) { return x.cle === cle; })[0] || null;
   }
@@ -3483,6 +3550,8 @@
   $("dt-copier").addEventListener("click", function () {
     if (navigator.clipboard) navigator.clipboard.writeText($("dt-corps").textContent);
   });
+  $("bp-changer").addEventListener("click", function () { deplier("cartes"); });
+  $("bp-fiche").addEventListener("click", function () { deplier("zone-profil"); });
   $("btn-retour").addEventListener("click", function () {
     if (history.length > 1 && document.referrer &&
         new URL(document.referrer, location.href).origin === location.origin) history.back();
