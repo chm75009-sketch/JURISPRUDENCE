@@ -3295,7 +3295,7 @@
            ils ne sont chargés qu'au clic (voir produireCourrier). */
         var courrier = s.docProduit
           ? '<button type="button" class="courrier" data-courrier="' + e(s.docProduit) +
-            '">Écrire le courrier type →</button>'
+            '">Le modèle, à compléter →</button>'
           : "";
         /* Le document final, quand c'est Juris Expert qui l'imprime. */
         var jx = lienJX(s.jx, jxDispo(s.jx)
@@ -3452,6 +3452,34 @@
       document.head.appendChild(sc);
     });
   }
+  /* CE QUI EST À VOUS. Le courrier produit n'est pas une pièce à lire : c'est
+     un projet à compléter, à couper, à enrichir de vos clauses. Ce que
+     l'utilisateur en fait est conservé sur son poste, par parcours et par
+     document, et lui revient tel quel à la réouverture. « Revenir au modèle »
+     rétablit le texte d'origine — le sien est alors effacé, et il en est
+     averti avant. */
+  var COURRIER = null;
+  var CLE_COURRIERS = "parcours-courriers";
+  function tousCourriers() {
+    try { return JSON.parse(localStorage.getItem(CLE_COURRIERS) || "{}") || {}; } catch (_) { return {}; }
+  }
+  function cleCourrier(id) { return (ACTIF ? ACTIF.cle : "?") + "/" + id; }
+  function lireCourrier(id) {
+    var c = tousCourriers()[cleCourrier(id)];
+    return c && typeof c.texte === "string" ? c.texte : null;
+  }
+  function dateCourrier(id) {
+    var c = tousCourriers()[cleCourrier(id)];
+    return c ? c.le : "";
+  }
+  function ecrireCourrier(id, texte) {
+    var t = tousCourriers();
+    if (texte == null) delete t[cleCourrier(id)];
+    else t[cleCourrier(id)] = { texte: texte, le: AUJOURDHUI };
+    try { localStorage.setItem(CLE_COURRIERS, JSON.stringify(t)); } catch (_) {}
+  }
+  function etatCourrier(txt) { var e = $("dt-etat"); if (e) e.textContent = txt || ""; }
+
   function produireCourrier(id, bouton) {
     var famille = String(id).split("-")[0];
     var liste = FICHIERS[famille];
@@ -3471,9 +3499,14 @@
          texte produit — visible, jamais inventé : c'est la règle des
          générateurs eux-mêmes. */
       var st = ACTIF ? etatDe(ACTIF.cle) : { donnees: {} };
-      var txt = gen.produire({ profil: PROFIL, fiche: st.donnees || {}, aujourdhui: new Date() });
+      COURRIER = { id: id, nom: gen.nom,
+        modele: gen.produire({ profil: PROFIL, fiche: st.donnees || {}, aujourdhui: new Date() }) };
       $("dt-titre").textContent = gen.nom;
-      $("dt-corps").textContent = txt;
+      /* La version de l'utilisateur prime sur le modèle : un courrier qu'on a
+         complété la semaine dernière se rouvre tel qu'on l'a laissé. */
+      var mien = lireCourrier(id);
+      $("dt-corps").value = mien != null ? mien : COURRIER.modele;
+      etatCourrier(mien != null ? "Votre version, modifiée le " + (dateFr(dateCourrier(id)) || "—") + "." : "");
       var d = $("dlg-courrier");
       if (d.showModal) d.showModal(); else d.setAttribute("open", "open");
     });
@@ -3565,6 +3598,23 @@
     $("recap").style.display = "none";
     message("Ce parcours a été réinitialisé. Les autres parcours et le profil sont intacts.");
   });
+  /* La saisie est enregistrée au fil de la frappe — pas de bouton
+     « enregistrer » à oublier. */
+  $("dt-corps").addEventListener("input", function () {
+    if (!COURRIER) return;
+    var t = $("dt-corps").value;
+    if (t === COURRIER.modele) { ecrireCourrier(COURRIER.id, null); etatCourrier(""); return; }
+    ecrireCourrier(COURRIER.id, t);
+    etatCourrier("Vos modifications sont enregistrées sur ce poste.");
+  });
+  $("dt-modele").addEventListener("click", function () {
+    if (!COURRIER) return;
+    if ($("dt-corps").value !== COURRIER.modele &&
+        !confirm("Revenir au modèle effacera ce que vous avez écrit dans ce courrier. Continuer ?")) return;
+    $("dt-corps").value = COURRIER.modele;
+    ecrireCourrier(COURRIER.id, null);
+    etatCourrier("Texte d'origine rétabli.");
+  });
   $("dt-fermer").addEventListener("click", function () { $("dlg-courrier").close(); });
   $("dt-imprimer").addEventListener("click", function () {
     /* Sans cette classe, l'impression sortirait le récapitulatif du parcours,
@@ -3574,7 +3624,8 @@
     document.body.classList.remove("print-courrier");
   });
   $("dt-copier").addEventListener("click", function () {
-    if (navigator.clipboard) navigator.clipboard.writeText($("dt-corps").textContent);
+    if (navigator.clipboard) navigator.clipboard.writeText($("dt-corps").value);
+    etatCourrier("Copié.");
   });
   $("bp-changer").addEventListener("click", function () { deplier("cartes"); });
   $("bp-fiche").addEventListener("click", function () { deplier("zone-profil"); });
