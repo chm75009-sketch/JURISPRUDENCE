@@ -3299,16 +3299,24 @@
         var cs = s.conseil
           ? '<div class="conseil"><b>En pratique</b>' + e(s.conseil) + "</div>"
           : "";
+        /* UN SEUL BOUTON PAR ÉTAPE. Le modèle d'abord ; une fois qu'on l'a
+           ouvert, « C'est fait » — qui coche, date du jour et ouvre la
+           suivante. Le lien vers le générateur de documents et celui vers
+           Juris Expert descendent dans le repli : ce sont des chemins de
+           côté, pas l'action de l'étape. Demande du 31 août 2026 : des
+           boutons simples, un seul à la fois, un seul écran. */
+        var vu = !!(st.etapes[s.id] || {}).vu;
         var doc = s.doc ? '<a class="doc" href="' + e(lienDoc(s.doc, D)) + '">Produire : ' +
           e(s.doc.nom) + " →</a>" : "";
         /* Le courrier type que l'application sait écrire elle-même — lettre de
            dépôt au greffe, transmission à l'inspecteur du travail, attestation
            de publicité, avenant, ordre du jour. Les générateurs pèsent lourd :
            ils ne sont chargés qu'au clic (voir produireCourrier). */
-        var courrier = s.docProduit
-          ? '<button type="button" class="courrier" data-courrier="' + e(s.docProduit) +
-            '">Le modèle, à compléter →</button>'
-          : "";
+        var unique = (s.docProduit && !vu && !x.faite)
+          ? '<button type="button" class="agir" data-courrier="' + e(s.docProduit) +
+            '">' + e(s.action || "Le modèle, à compléter") + " →</button>"
+          : '<button type="button" class="agir" data-fait="' + e(s.id) + '">' +
+            (x.faite ? "Revenir sur cette étape" : "C'est fait →") + "</button>";
         /* Le document final, quand c'est Juris Expert qui l'imprime. */
         var jx = lienJX(s.jx, jxDispo(s.jx)
           ? "Document final : " + window.JurisExpert.nom(s.jx) + " (Juris Expert)"
@@ -3331,12 +3339,12 @@
              intérieur » ouvrait sur un paragraphe de droit, le bouton du
              modèle enterré sous la jurisprudence. */
           '<div class="etape-corps">' + ech +
-          '<div class="actions">' + doc + courrier + jx +
-          '<label class="coche"><input type="checkbox" data-etape="' + e(s.id) + '"' +
-          (x.faite ? " checked" : "") + "> étape franchie</label>" +
-          '<input class="date-fait" type="date" data-etape-date="' + e(s.id) + '" value="' +
-          e((st.etapes[s.id] || {}).le || "") + '" aria-label="Date de réalisation">' +
-          "</div>" +
+          '<div class="actions">' + unique + "</div>" +
+          (x.faite
+            ? '<p class="fait-le">Faite le <input class="date-fait" type="date" data-etape-date="' +
+              e(s.id) + '" value="' + e((st.etapes[s.id] || {}).le || "") +
+              '" aria-label="Date de réalisation"></p>'
+            : "") +
           /* LE VERRE D'EAU, PAS LE COURS SUR L'EAU. Ce qui fonde l'étape —
              le texte, l'article et son identifiant de version, l'arrêt, la
              sanction encourue, le conseil de pratique — ne disparaît pas :
@@ -3344,6 +3352,7 @@
              faire, fait. Reproche du 31 août 2026, et il était juste. */
           '<details class="pourquoi"><summary>Pourquoi, et ce qu\'on risque</summary>' +
           "<p>" + e(s.quoi) + "</p>" + fond + juris + cv + rq + cs +
+          (doc || jx ? '<div class="actions">' + doc + jx + "</div>" : "") +
           "</details></div></div>";
       }).join("") +
       /* LA VALIDATION TOTALE. La dernière étape franchie, la procédure est
@@ -3365,14 +3374,12 @@
         : "");
     var btnFini = $("zone-etapes").querySelector("#fini-recap");
     if (btnFini) btnFini.addEventListener("click", function () { recap(); });
-    [].slice.call($("zone-etapes").querySelectorAll("[data-etape]")).forEach(function (x) {
-      x.addEventListener("change", function () {
-        var id = x.getAttribute("data-etape");
+    [].slice.call($("zone-etapes").querySelectorAll("[data-fait]")).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-fait");
         if (!st.etapes[id]) st.etapes[id] = {};
-        st.etapes[id].fait = x.checked;
-        if (x.checked && !st.etapes[id].le) st.etapes[id].le = AUJOURDHUI;
-        var champDate = $("zone-etapes").querySelector('[data-etape-date="' + id + '"]');
-        if (champDate) champDate.value = st.etapes[id].le || "";
+        st.etapes[id].fait = !st.etapes[id].fait;
+        if (st.etapes[id].fait && !st.etapes[id].le) st.etapes[id].le = AUJOURDHUI;
         reverserDates(p, st, D);
         enregistrer(); rendre(); majCartes();
         /* L'étape franchie déclenche la suivante : elle s'ouvre, et on y va. */
@@ -3391,7 +3398,14 @@
       });
     });
     [].slice.call($("zone-etapes").querySelectorAll("[data-courrier]")).forEach(function (x) {
-      x.addEventListener("click", function () { produireCourrier(x.getAttribute("data-courrier"), x); });
+      x.addEventListener("click", function () {
+        /* Le modèle ouvert, l'étape a été engagée : à la fermeture, le bouton
+           devient « C'est fait ». On ne demande pas deux fois la même chose. */
+        var bloc = x.closest(".etape");
+        var ide = bloc && bloc.getAttribute("data-bloc");
+        if (ide) { st.etapes[ide] = st.etapes[ide] || {}; st.etapes[ide].vu = true; enregistrer(); }
+        produireCourrier(x.getAttribute("data-courrier"), x);
+      });
     });
     [].slice.call($("zone-etapes").querySelectorAll("[data-etape-date]")).forEach(function (x) {
       x.addEventListener("change", function () {
@@ -3685,6 +3699,9 @@
     etatCourrier("Texte d'origine rétabli.");
   });
   $("dt-fermer").addEventListener("click", function () { $("dlg-courrier").close(); });
+  /* Le modèle refermé, l'étape se redessine : son bouton dit maintenant
+     « C'est fait ». */
+  $("dlg-courrier").addEventListener("close", function () { if (ACTIF) rendre(); });
   $("dt-imprimer").addEventListener("click", function () {
     /* Sans cette classe, l'impression sortirait le récapitulatif du parcours,
        que la feuille de style d'impression est seule à laisser passer. */

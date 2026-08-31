@@ -239,6 +239,17 @@
   details.pourquoi > p:first-of-type{margin-top:9px}
   @media print{ details.pourquoi{display:none} }
   .actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:11px 0 0}
+  /* Le bouton unique de l'étape : grand, seul, sans concurrent. */
+  .actions button.agir{width:100%;font:600 15.5px/1.25 system-ui;padding:14px 16px;border-radius:4px;
+    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer;text-align:center}
+  .actions button.agir:hover{filter:brightness(1.12)}
+  .etape.faite .actions button.agir{background:var(--surface);color:var(--gris);border-color:var(--filet);
+    font-weight:500;font-size:13.5px;padding:10px 14px}
+  .fait-le{margin:10px 0 0;font-size:13px;color:var(--vert);display:flex;gap:8px;align-items:center}
+  .fait-le input{width:auto;max-width:180px}
+  details.pourquoi .actions{margin-top:12px}
+  details.pourquoi .actions a{font-size:13px}
+
   .actions a.doc{font:600 13.5px/1 system-ui;text-decoration:none;padding:9px 13px;border-radius:3px;
     border:1px solid var(--bleu);color:var(--bleu);background:var(--surface)}
   .actions a.doc:hover{background:#eef2f9}
