@@ -142,22 +142,11 @@
         ' href="parcours.html?p=' + p.p + '">Procédure pas à pas : « ' + p.nom + " » →</a>";
     },
 
-    /* LA BASCULE. Quand le questionnaire apprend que la pièce n'existe pas,
-       il n'a plus rien à demander sur elle : continuer à l'interroger sur le
-       contenu d'un document inexistant serait du temps perdu. On bascule
-       aussitôt sur la procédure qui le fait naître.
-
-       `table` associe le nom d'un champ à { p: parcours, si: fonction }. La
-       bascule ne part que sur la réponse « non » — « en cours » et « autre »
-       ne concluent rien, et « oui » n'appelle pas de création —, et seulement
-       si la pièce est due : `si` le dit quand un seuil commande.
-
-       Appelée depuis le gestionnaire « change » du questionnaire, avec
-       l'événement. */
     /* LA PREMIÈRE PIÈCE MANQUANTE, et l'action qui la crée. Sert au bouton de
        tête de la barre d'actions du questionnaire : quand la pièce n'existe
        pas, l'action principale n'est pas de lire un rapport sur son absence,
-       c'est de la faire. Rend null si rien ne manque. */
+       c'est de la faire. « faire=1 » ouvre le document dès l'arrivée. Rend
+       null si rien ne manque. */
     premiere: function (table, valeur) {
       var trouve = null;
       Object.keys(table || {}).forEach(function (nom) {
@@ -167,37 +156,9 @@
         if (v !== false && String(v) !== "non") return;
         if (typeof b.si === "function" && !b.si()) return;
         if (!PAR_CLE[b.p]) return;
-        trouve = { p: b.p, nom: PAR_CLE[b.p], action: ACTIONS[b.p] || ("Ouvrir « " + PAR_CLE[b.p] + " »") };
-      });
-      return trouve;
-    },
-
-    /* LA BASCULE. Quand le questionnaire apprend que la pièce n'existe pas,
-       il n'a plus rien à demander sur elle : continuer à l'interroger sur le
-       contenu d'un document inexistant serait du temps perdu. On bascule
-       aussitôt sur la procédure qui le fait naître.
-
-       `table` associe le nom d'un champ à { p: parcours, si: fonction }. La
-       bascule ne part que sur la réponse « non » — « en cours » et « autre »
-       ne concluent rien, et « oui » n'appelle pas de création —, et seulement
-       si la pièce est due : `si` le dit quand un seuil commande.
-
-       Appelée depuis le gestionnaire « change » du questionnaire, avec
-       l'événement. */
-    /* LA PREMIÈRE PIÈCE MANQUANTE, et l'action qui la crée. Sert au bouton de
-       tête de la barre d'actions du questionnaire : quand la pièce n'existe
-       pas, l'action principale n'est pas de lire un rapport sur son absence,
-       c'est de la faire. Rend null si rien ne manque. */
-    premiere: function (table, valeur) {
-      var trouve = null;
-      Object.keys(table || {}).forEach(function (nom) {
-        if (trouve) return;
-        var b = table[nom];
-        var v = valeur(nom);
-        if (v !== false && String(v) !== "non") return;
-        if (typeof b.si === "function" && !b.si()) return;
-        if (!PAR_CLE[b.p]) return;
-        trouve = { p: b.p, nom: PAR_CLE[b.p], action: ACTIONS[b.p] || ("Ouvrir « " + PAR_CLE[b.p] + " »") };
+        trouve = { p: b.p, nom: PAR_CLE[b.p],
+                   action: ACTIONS[b.p] || ("Ouvrir « " + PAR_CLE[b.p] + " »"),
+                   lien: "parcours.html?p=" + b.p + "&faire=1" };
       });
       return trouve;
     },
@@ -224,7 +185,12 @@
       if (!b) return false;
       if (String(ev.target.value) !== "non") return false;
       if (typeof b.si === "function" && !b.si()) return false;
-      location.href = "parcours.html?p=" + b.p;
+      /* « faire=1 » : on n'ouvre pas la procédure pour la lire, on l'ouvre
+         pour l'écrire. Le parcours produit aussitôt le document de sa
+         première étape qui en porte un — le règlement intérieur, le document
+         unique — et l'utilisateur atterrit dedans, prêt à compléter.
+         Demande du 31 août 2026 : « il ne doit pas parler, il doit faire ». */
+      location.href = "parcours.html?p=" + b.p + "&faire=1";
       return true;
     },
   };

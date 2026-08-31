@@ -3727,6 +3727,24 @@
   var vise = PARCOURS.filter(function (p) { return p.cle === demande; })[0];
   if (vise) choisir(vise);
 
+  /* « &faire=1 » — on vient de l'audit, où l'on a répondu que la pièce
+     n'existe pas. On n'ouvre pas la procédure pour la lire : le document se
+     produit tout de suite, et l'on est dedans. C'est la première étape non
+     franchie qui porte un modèle qui décide — les étapes de vérification qui
+     la précèdent n'en portent pas, elles ne retiennent donc personne. */
+  if (vise && new URLSearchParams(location.search).get("faire")) {
+    var st0 = etatDe(vise.cle);
+    var aFaire = etapesVisibles(vise, st0.donnees).filter(function (s) {
+      return s.docProduit && !etatEtape(s, st0.donnees, st0.etapes[s.id]).faite;
+    })[0];
+    if (aFaire) {
+      st0.etapes[aFaire.id] = st0.etapes[aFaire.id] || {};
+      st0.etapes[aFaire.id].vu = true;
+      enregistrer();
+      produireCourrier(aFaire.docProduit, null);
+    }
+  }
+
   if ("serviceWorker" in navigator)
     window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
 })();

@@ -868,7 +868,7 @@ unique, commission, harcèlement — se pose à l'étape 2.</p>
     if (!due) { b.hidden = true; return; }
     b.hidden = false;
     b.textContent = due.action;
-    b.onclick = function () { location.href = "parcours.html?p=" + due.p; };
+    b.onclick = function () { location.href = due.lien; };
   }
 
   function majCompteur() {
