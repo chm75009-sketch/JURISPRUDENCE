@@ -267,6 +267,14 @@
     #recap{display:block !important;margin:0}
     .feuille{border:none;border-radius:0;max-width:none;padding:0;font-size:12pt}
     .feuille .pied-textes{font-size:8pt}
+    /* Imprimer depuis le courrier type imprime LE COURRIER, pas le
+       récapitulatif du parcours : le bouton pose une classe sur le corps le
+       temps de l'impression (voir parcours.js). */
+    body.print-courrier #recap{display:none !important}
+    body.print-courrier #dlg-courrier{display:block !important;position:static;border:none;
+      padding:0;margin:0;max-width:none;width:auto;max-height:none;overflow:visible}
+    body.print-courrier #dlg-courrier .dt-barre{display:none !important}
+    body.print-courrier #dlg-courrier pre{max-height:none;overflow:visible;font-size:11pt}
   }
 
   #message{display:none;margin:14px 0 0;padding:10px 12px;border-radius:3px;

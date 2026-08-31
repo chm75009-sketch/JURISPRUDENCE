@@ -3416,7 +3416,13 @@
     message("Ce parcours a été réinitialisé. Les autres parcours et le profil sont intacts.");
   });
   $("dt-fermer").addEventListener("click", function () { $("dlg-courrier").close(); });
-  $("dt-imprimer").addEventListener("click", function () { window.print(); });
+  $("dt-imprimer").addEventListener("click", function () {
+    /* Sans cette classe, l'impression sortirait le récapitulatif du parcours,
+       que la feuille de style d'impression est seule à laisser passer. */
+    document.body.classList.add("print-courrier");
+    window.print();
+    document.body.classList.remove("print-courrier");
+  });
   $("dt-copier").addEventListener("click", function () {
     if (navigator.clipboard) navigator.clipboard.writeText($("dt-corps").textContent);
   });
