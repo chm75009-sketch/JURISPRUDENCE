@@ -2221,6 +2221,7 @@
      son vocabulaire, que ce parcours suit. */
   {
     cle: "entretiens",
+    suite: { cle: "conges", pourquoi: "Les entretiens tenus, reste ce qui se compte chaque année : l'ordre et les dates des congés payés, et l'information qui les rend opposables." },
     nom: "Organiser les entretiens de parcours professionnel",
     resume: "L'information à l'embauche, l'entretien de la première année puis tous les quatre ans, les cinq sujets qu'il couvre, ce qu'il ne peut pas être (une évaluation du travail), les retours d'absences longues, le document remis au salarié, l'état des lieux des huit ans et son abondement du compte personnel de formation.",
     audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
@@ -2347,6 +2348,7 @@
   /* ================================================================== */
   {
     cle: "embauche",
+    suite: { cle: "entretiens", pourquoi: "Le salarié embauché entre aussitôt dans le cycle des entretiens : la visite d'information et de prévention, puis l'entretien professionnel tous les deux ans." },
     nom: "Embaucher : les formalités obligatoires",
     resume: "De la déclaration préalable à la visite d'information et de prévention : ce qui se fait AVANT l'entrée, ce qui se remet au salarié et dans quels délais, ce que le contrat à durée déterminée exige de plus, et les deux formalités de sécurité que l'urgence fait le plus souvent oublier.",
     audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
@@ -2497,6 +2499,7 @@
   /* ================================================================== */
   {
     cle: "conges",
+    suite: { cle: "findecontrat", pourquoi: "Les congés acquis et non pris se retrouvent au solde de tout compte : le parcours de fin de contrat reprend le décompte là où celui-ci le laisse." },
     nom: "Organiser les congés payés",
     resume: "Quatre échéances et un compteur : la période de prise, annoncée deux mois avant son ouverture ; l'ordre des départs, défini sur des critères et communiqué un mois avant chaque départ ; l'interdiction de modifier à moins d'un mois ; et la journée de solidarité, dont les modalités se fixent au lieu de se subir.",
     audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
