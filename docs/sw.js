@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-8.7";
+const CACHE = "jurisprudence-8.8";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
@@ -40,7 +40,7 @@ const ESSENTIELS = [
      parcours professionnel —, puis les trois nés de l'harmonisation avec
      Juris Expert : embaucher, organiser les congés payés, établir les
      documents de fin de contrat. */
-  "./parcours.html", "./parcours.js",
+  "./parcours.html", "./parcours.js", "./parcours-lien.js",
   /* L'équipe, ses droits et son journal. Le module est chargé par TOUTES les
      pages : sans lui hors connexion, elles s'ouvriraient sans identification
      et sans journal — c'est-à-dire autrement qu'en ligne. La page

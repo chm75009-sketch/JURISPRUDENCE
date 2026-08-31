@@ -306,7 +306,23 @@
 <script src="documents-eco-fond.js"></script>
 <script src="documents-eco-2.js"></script>
 <script src="parcours-deux-temps.js"></script>
+<script src="parcours-lien.js"></script>
 <script src="audit-form.js"></script>
+<script>
+  /* Choisir un audit doit mener au questionnaire, pas à une page de
+     présentation : quand la fiche est déjà remplie, la présentation
+     s'efface et l'écran s'ouvre sur le formulaire. */
+  (function () {
+    try {
+      var p = JSON.parse(localStorage.getItem("profil-entreprise") || "null");
+      if (!p || !p.denomination) return;
+      var pres = document.querySelector(".presentation");
+      if (pres) pres.style.display = "none";
+      var f = document.getElementById("formulaire");
+      if (f) f.scrollIntoView();
+    } catch (e) {}
+  })();
+</script>
 <script>
   /* L'installation sur l'écran d'accueil suppose un service worker enregistré.
      Le même sert les deux audits et la recherche : il est à la racine du site,

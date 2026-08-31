@@ -416,6 +416,7 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
 <script src="moteur-discipline.js"></script>
 <script src="idcc.js"></script>
 <script src="profil.js"></script>
+<script src="parcours-lien.js"></script>
 <script src="documents-produits.js"></script>
 <script src="documents-discipline.js"></script>
 <script src="documents-discipline-2.js"></script>
@@ -627,8 +628,17 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
       });
       libre.addEventListener("input", function () { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); majNuances(); });
     });
-    f.addEventListener("change", function () {
+    var BASCULES = { "ri.existe": { p: "ri" } };
+    f.addEventListener("change", function (ev) {
       lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
+      /* Pas de règlement intérieur : on ne pose pas les questions d'un
+         document qui n'existe pas, on bascule directement sur
+         l'accompagnement pratique, pas à pas — modèle, avis du comité,
+         inspection du travail, greffe des prud'hommes, publicité, entrée
+         en vigueur —, chaque étape avec son fondement et la sanction
+         encourue. Le parcours renvoie ici pour la suite de l'audit, et
+         enchaîne ensuite sur le document unique. Voir docs/parcours-lien.js. */
+      if (window.ParcoursLien) ParcoursLien.bascule(ev, BASCULES);
     });
     f.addEventListener("input", function (ev) {
       if (ev.target.tagName === "TEXTAREA") { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); }
@@ -815,7 +825,12 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
       '<div class="meta"><span><b>Rubrique :</b> ' + e(pt.rubrique) + "</span><span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
       '<p class="risque">Risque : ' + e(pt.risque) + "</p>" +
       '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
-      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a></p>' +
+      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a>' +
+      /* Quand la pièce n'existe pas, un constat de plus ne sert à rien : le
+         renvoi mène à la procédure qui la fait naître, pas à une seconde
+         description du manque (docs/parcours-lien.js). */
+      (window.ParcoursLien ? (function (l) { return l ? " · " + l : ""; })(ParcoursLien.lien(pt.id)) : "") +
+      '</p>' +
       "</div>";
   }
 
@@ -954,7 +969,13 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
       (pt.fait ? '<span class="chip c-important">déclaré régularisé' + (ETAT.faits[id] && ETAT.faits[id].le ? " le " + e(ETAT.faits[id].le) : "") + "</span>" : "") + "</div>" +
       '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
       '<p class="note">Constat de l\'audit — ' + e(pt.constat) + "</p>" +
-      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>";
+      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
+      /* L'accompagnement pas à pas, quand la régularisation est une procédure
+         et pas une simple pièce à écrire : consultation, affichage, dépôt,
+         inspection du travail, entrée en vigueur (docs/parcours-lien.js). */
+      (window.ParcoursLien ? (function (l) {
+        return l ? '<p class="note">' + l + "</p>" : "";
+      })(ParcoursLien.lien(pt.id)) : "");
 
     html += "<h3>a. La note chiffrée sur votre dossier</h3>" +
       '<p class="aide">Établie sur les réponses de l\'étape 2 — dates de la procédure, contenu déclaré du règlement — jamais sur un exemple figé.</p>';
@@ -1241,6 +1262,13 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
     if (t >= 5) { majChoixItem(); rendreItem($("choix-item").value); }
     if (t >= 6) construireVerifs();
     montrer(t);
+    /* Choisir un audit doit mener au questionnaire, pas à une page de
+       présentation : la présentation s'efface et l'écran s'ouvre sur
+       l'étape 2 — on remonte si on veut revoir la fiche. */
+    var pres = document.querySelector(".presentation");
+    if (pres) pres.style.display = "none";
+    var q = document.getElementById("t2");
+    if (q) q.scrollIntoView();
   })();
 })();
 </script>

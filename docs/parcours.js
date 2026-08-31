@@ -638,6 +638,7 @@
   /* ================================================================== */
   {
     cle: "nao",
+    suite: { cle: "index", pourquoi: "L'index de l'égalité professionnelle se publie chaque année et nourrit la négociation sur l'égalité : les deux se tiennent." },
     nom: "Conduire les négociations obligatoires (NAO)",
     resume: "De l'ouverture au dépôt : régime applicable — accord de méthode ou supplétif —, convocation de la première réunion, informations remises, loyauté, issue (accord ou procès-verbal de désaccord), dépôt.",
     audit: { href: "audit-nao.html", nom: "l'audit de la négociation obligatoire" },
@@ -897,6 +898,7 @@
   /* ================================================================== */
   {
     cle: "reunion",
+    suite: { cle: "commissions", pourquoi: "Les commissions du comité — santé-sécurité en tête — se constituent une fois le comité en marche." },
     nom: "Tenir une réunion du CSE",
     resume: "Périodicité, ordre du jour établi conjointement, communication trois jours au moins avant, informations et délais d'avis, réclamations, procès-verbal, diffusion et suites.",
     audit: { href: "audit-cse.html", nom: "l'audit du comité social et économique" },
@@ -1035,6 +1037,7 @@
   /* ================================================================== */
   {
     cle: "ri",
+    suite: { cle: "duerp", pourquoi: "Le règlement intérieur porte les mesures d'application de la réglementation santé et sécurité (L. 1321-1, 1°) ; le document unique porte l'évaluation des risques dont ces mesures découlent. Le second se fait après le premier, et l'avis d'accès au document s'affiche au même endroit." },
     nom: "Établir ou mettre à jour le règlement intérieur",
     resume: "Contenu obligatoire et contenu interdit, avis du comité, dépôt au greffe, communication à l'inspection du travail en deux exemplaires, publicité, entrée en vigueur différée d'un mois.",
     audit: { href: "audit-discipline.html", nom: "l'audit discipline et règlement intérieur" },
@@ -1074,8 +1077,10 @@
     ],
     etapes: [
       { id: "i1", nom: "Vérifier l'obligation et son échéance",
+        conseil: "Datez le franchissement du seuil à partir des effectifs mois par mois, pas de mémoire : c'est cette date qui fixe l'échéance des douze mois. Gardez le tableau qui l'établit — c'est la première pièce que l'inspection demandera.",
         quoi: "L'établissement d'un règlement intérieur est obligatoire dans les entreprises ou établissements employant au moins cinquante salariés. L'obligation s'applique au terme d'un délai de douze mois à compter de la date à laquelle le seuil a été atteint pendant douze mois consécutifs.",
         fond: ["L1311-2", "R1321-5"], juris: ["17-16.465"],
+        risque: "Le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur est puni de l'amende prévue pour les contraventions de la quatrième classe (R. 1323-1) — L. 1311-2, qui pose l'obligation même, ouvre cette énumération. Et sans règlement, aucune échelle de sanctions n'existe : chez l'employeur tenu d'en établir un, une sanction autre que le licenciement ne peut être prononcée que si le règlement la prévoit.",
         quand: function (D, P) {
           if (!D.dateFranchissementSeuil) return null;
           var t = moisApres(D.dateFranchissementSeuil, 12);
@@ -1084,19 +1089,25 @@
         },
         si: function (P) { return seuil(P, 50); } },
       { id: "i2", nom: "Écrire le contenu obligatoire — et rien d'autre",
+        conseil: "Écrivez d'abord les trois matières, les rappels ensuite : un règlement qui commence par la discipline oublie presque toujours la santé-sécurité. Relisez-le une dernière fois en vous demandant, pour chaque phrase, de quelle matière elle relève — celles qui ne relèvent d'aucune n'ont rien à y faire.",
         jx: "ri",
         quoi: "L'employeur y fixe exclusivement trois matières : les mesures d'application de la réglementation santé et sécurité, les conditions de participation des salariés au rétablissement de conditions protectrices, et les règles générales et permanentes de discipline, notamment la nature et l'échelle des sanctions. Le règlement rappelle en outre les droits de la défense, les dispositions sur les harcèlements et les agissements sexistes, et l'existence du dispositif de protection des lanceurs d'alerte. Il est rédigé en français.",
         fond: ["L1321-1", "L1321-2", "L1321-6"],
+        risque: "Un règlement qui laisse de côté une matière obligatoire ou omet un rappel imposé méconnaît L. 1321-1 ou L. 1321-2, tous deux dans l'énumération de R. 1323-1 (amende des contraventions de la quatrième classe) ; l'inspecteur du travail peut à tout moment en exiger la modification (L. 1322-1).",
         conv: "les droits de la défense qu'elle définit — l'article L. 1321-2, 1°, renvoie expressément à la convention collective applicable — et toute procédure disciplinaire conventionnelle à reprendre dans le règlement",
         doc: { modele: "echelle-sanctions", nom: "Échelle des sanctions du règlement intérieur",
           pre: function (P, D) { return { entreprise: P.denomination, effectif: P.effectif,
             dateEntreeVigueur: D.dateEntreeVigueur, dateFormalites: D.datePublicite }; } } },
       { id: "i3", nom: "Écarter le contenu interdit",
+        conseil: "Passez en revue chaque restriction en vous posant deux questions dans cet ordre : quelle tâche la justifie, et pourquoi rien de moins strict ne suffirait. Une clause qui ne survit pas à ces deux questions écrites ne survivra pas davantage devant l'inspecteur.",
         quoi: "Le règlement ne peut contenir de dispositions contraires aux lois, règlements, conventions et accords collectifs, ni de restrictions aux droits des personnes et aux libertés qui ne seraient pas justifiées ni proportionnées, ni de dispositions discriminatoires. Une clause de neutralité n'est possible que si elle est justifiée et proportionnée.",
-        fond: ["L1321-3", "L1321-2-1", "L1331-2"] },
+        fond: ["L1321-3", "L1321-2-1", "L1331-2"],
+        risque: "L'inspecteur du travail peut exiger le retrait ou la modification d'une clause prohibée (L. 1322-1), et une sanction prise sur son fondement est une sanction sans support, que le conseil de prud'hommes peut annuler. Une amende ou sanction pécuniaire est réputée non écrite et expose à l'amende de 3 750 euros de L. 1334-1." },
       { id: "i4", nom: "Soumettre à l'avis du comité social et économique",
+        conseil: "Transmettez le projet aux élus assez tôt pour qu'ils l'aient lu, et faites porter au procès-verbal la mention de l'avis rendu, avec sa date. C'est ce procès-verbal, pas le règlement, qui prouvera plus tard que la formalité a été accomplie — et il accompagnera l'envoi à l'inspection.",
         quoi: "Le règlement intérieur ne peut être introduit qu'après avoir été soumis à l'avis du comité. C'est une formalité substantielle : son défaut ouvre au syndicat la voie du référé en suspension.",
         fond: ["L1321-4"], juris: ["21-10.718", "22-19.726"],
+        risque: "Introduit sans l'avis du comité, le règlement l'a été en méconnaissance de L. 1321-4 : amende des contraventions de la quatrième classe (R. 1323-1), suspension en référé ouverte au syndicat, et la consultation omise expose à la qualification d'entrave — 7 500 euros d'amende (L. 2317-1).",
         si: function (P) { return P.cseExiste === "non" ? false : true; },
         quand: function (D) {
           if (!D.dateAvisCSE) return null;
@@ -1107,20 +1118,26 @@
             dateReunion: D.dateAvisCSE,
             points: "Avis du comité sur le projet de règlement intérieur (art. L. 1321-4)" }; } } },
       { id: "i5", nom: "Reconsulter — ou non — en cas de modification",
+        conseil: "Une modification se traite comme un premier règlement : reprenez le circuit entier plutôt que de corriger le texte affiché. La seule dispense — les injonctions de l'inspection auxquelles on ne peut que se conformer — se garde par écrit, avec la décision qui la fonde.",
         quoi: "Les mêmes règles s'appliquent en cas de modification ou de retrait de clauses. Une exception : lorsque les modifications résultent uniquement des injonctions de l'inspection du travail auxquelles l'employeur ne peut que se conformer, il n'y a pas lieu à nouvelle consultation.",
         fond: ["L1321-4", "L1322-1"], juris: ["19-15.737"],
+        risque: "Une modification introduite sans ces formalités n'a pas été régulièrement introduite : mêmes sanctions que pour le règlement lui-même (R. 1323-1), et l'amende d'entrave de L. 2317-1 si le comité a été contourné.",
         si: function (P, D) { return D.operation === "modification" || D.operation === "retrait de clauses" ? true : (D.operation ? false : null); } },
       { id: "i6", nom: "Déposer au greffe du conseil de prud'hommes",
+        conseil: "Déposez au greffe du ressort de l'établissement concerné, pas du siège quand ils diffèrent, et conservez le récépissé daté. Sans cette date, l'entrée en vigueur ne se calcule pas.",
         jx: "ri",
         quoi: "Le règlement intérieur est déposé au greffe du conseil de prud'hommes du ressort de l'entreprise ou de l'établissement.",
         fond: ["R1321-2"],
+        risque: "Tant que le dépôt n'est pas fait, le délai d'un mois de R. 1321-3 n'a pas commencé de courir et la date d'entrée en vigueur inscrite au règlement ne vaut pas ; R. 1321-2 et R. 1321-3 sont dans l'énumération de R. 1323-1 (amende des contraventions de la quatrième classe).",
         quand: function (D) {
           if (!D.dateDepotGreffe) return null;
           return { iso: D.dateDepotGreffe, libelle: "Déposé le " + dateFr(D.dateDepotGreffe) };
         } },
       { id: "i7", nom: "Communiquer à l'inspecteur du travail, en deux exemplaires, avec l'avis du comité",
+        conseil: "Envoyez les deux exemplaires accompagnés de l'avis du comité et gardez la preuve d'envoi. Faites-le le jour même de la publicité : le texte veut que les deux aient lieu en même temps, et deux dates différentes se remarquent.",
         quoi: "En même temps qu'il fait l'objet des mesures de publicité, le règlement intérieur, accompagné de l'avis du comité, est communiqué à l'inspecteur du travail. Le texte lui est transmis en deux exemplaires.",
         fond: ["L1321-4", "R1321-4"],
+        risque: "Cette carence se répare par un envoi et ne prive pas le salarié de se prévaloir du règlement, mais elle ouvre la voie à l'exigence de retrait ou de modification de L. 1322-1 sur un texte que l'inspection n'a jamais vu — et, au pénal, L. 1321-4 et R. 1321-4 sont dans l'énumération de R. 1323-1.",
         quand: function (D) {
           if (!D.dateCommunicationInspection) return null;
           return { iso: D.dateCommunicationInspection,
@@ -1129,15 +1146,19 @@
               ? "L'article L. 1321-4 veut que la communication ait lieu « en même temps » que les mesures de publicité, datées ici au " + dateFr(D.datePublicite) + "." : "" };
         } },
       { id: "i8", nom: "Assurer la publicité",
+        conseil: "Affichez à un endroit accessible sans demander la permission à personne, et photographiez l'affichage daté. Les locaux d'embauche comptent autant que les lieux de travail — c'est celui-là qu'on oublie.",
         quoi: "Le règlement intérieur est porté, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche.",
         fond: ["R1321-1"],
+        risque: "Sans publicité, le délai d'un mois ne court pas et le règlement n'est pas opposable à ceux qui ne pouvaient le connaître ; R. 1321-1 est dans l'énumération de R. 1323-1 (amende des contraventions de la quatrième classe).",
         quand: function (D) {
           if (!D.datePublicite) return null;
           return { iso: D.datePublicite, libelle: "Publicité accomplie le " + dateFr(D.datePublicite) };
         } },
       { id: "i9", nom: "Fixer l'entrée en vigueur — postérieure d'un mois",
+        conseil: "Calculez la date à partir de la dernière des deux formalités, jamais de la première, et inscrivez-la dans le règlement une fois les deux accomplies. Un règlement imprimé avec sa date d'entrée en vigueur avant le dépôt oblige à tout réimprimer.",
         quoi: "Le règlement indique la date de son entrée en vigueur. Cette date doit être postérieure d'un mois à l'accomplissement des formalités de publicité ; le délai court à compter de la dernière en date des formalités de publicité et de dépôt.",
         fond: ["L1321-4", "R1321-3"],
+        risque: "Une entrée en vigueur anticipée prive de support toute sanction prise dans l'intervalle sur le fondement du règlement — et L. 1321-4 comme R. 1321-3 sont dans l'énumération de R. 1323-1.",
         quand: function (D) {
           var f = [D.datePublicite, D.dateDepotGreffe].filter(Boolean).sort();
           if (!f.length) return null;
@@ -1153,11 +1174,15 @@
                 : "") };
         } },
       { id: "i10", nom: "Soumettre les notes de service aux mêmes règles",
+        conseil: "Tenez la liste des notes de service en vigueur et vérifiez une fois l'an lesquelles ajoutent des obligations générales et permanentes : ce sont celles-là qui suivent le circuit du règlement. Pour une note d'urgence en santé-sécurité, l'envoi simultané au secrétaire du comité et à l'inspection se fait le jour même.",
         quoi: "Les notes de service et tout autre document comportant des obligations générales et permanentes dans les matières des articles L. 1321-1 et L. 1321-2 sont considérés comme des adjonctions au règlement intérieur et soumis aux mêmes règles : avis du comité, dépôt, communication, publicité, entrée en vigueur différée. Une seule exception : lorsque l'urgence le justifie, les obligations de santé et de sécurité reçoivent application immédiate — à charge de les communiquer aussitôt et simultanément au secrétaire du comité et à l'inspection du travail.",
-        fond: ["L1321-5"] },
+        fond: ["L1321-5"],
+        risque: "Une note de service prise à la place du règlement n'échappe pas à la règle en changeant de nom : adjonction irrégulièrement introduite (R. 1323-1), et amende d'entrave de 7 500 euros (L. 2317-1) si l'avis du comité a été omis." },
       { id: "i11", nom: "Répondre à une demande de l'inspection du travail",
+        conseil: "Répondez par écrit, dans le délai que la décision indique, en disant ce qui a été retiré ou modifié. Si vous contestez, le recours hiérarchique est la seule voie : le silence ne conserve aucun droit et laisse la clause en l'état.",
         quoi: "L'inspecteur du travail peut à tout moment exiger le retrait ou la modification des dispositions contraires aux articles L. 1321-1 à L. 1321-3 et L. 1321-6. Sa décision est motivée, notifiée à l'employeur et communiquée pour information aux membres du comité ; elle peut faire l'objet d'un recours hiérarchique.",
         fond: ["L1322-1", "L1322-2", "L1322-3"],
+        risque: "Ne rien faire n'est pas une voie de recours : la décision restée sans effet laisse en vigueur une disposition dont l'irrégularité est actée par écrit, et l'énumération de R. 1323-1 court jusqu'à L. 1322-4.",
         doc: { modele: "note-rh", nom: "Note d'information",
           pre: function (P, D) { return { entreprise: P.denomination,
             objet: "Suite donnée à la demande de l'inspection du travail sur le règlement intérieur" }; } } },
@@ -1169,6 +1194,7 @@
   /* ================================================================== */
   {
     cle: "duerp",
+    suite: { cle: "affichages", pourquoi: "L'avis indiquant les modalités d'accès au document unique fait partie des affichages obligatoires : le tableau se met à jour d'un seul geste." },
     nom: "Mettre à jour le DUERP",
     resume: "Inventaire par unité de travail, transcription, mise à jour annuelle et événementielle, suites — programme annuel à partir de cinquante salariés, liste d'actions en deçà —, présentation au comité, conservation quarante ans.",
     audit: { href: "audit-sst.html", nom: "l'audit santé-sécurité (SST)" },
@@ -1206,15 +1232,21 @@
     ],
     etapes: [
       { id: "d1", nom: "Évaluer les risques, unité de travail par unité de travail",
+        conseil: "Découpez d'abord, évaluez ensuite : une liste de risques sans unité de travail se réécrira entièrement. Faites participer ceux qui tiennent les postes — l'évaluation faite au bureau se voit, et se conteste.",
         quoi: "L'employeur, compte tenu de la nature des activités, évalue les risques pour la santé et la sécurité des travailleurs, y compris dans le choix des procédés, des équipements et de l'aménagement des lieux de travail. L'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail, y compris ceux liés aux ambiances thermiques.",
         fond: ["L4121-3", "R4121-1"],
+        risque: "Le document unique est dû par tout employeur, sans seuil d'effectif ; ne pas transcrire les résultats de l'évaluation dans les conditions de R. 4121-1 est puni de l'amende prévue pour les contraventions de la cinquième classe, la récidive étant réprimée conformément au code pénal (R. 4741-1).",
         conv: "les obligations de prévention, les listes de risques ou les moyens propres à la branche, que certaines conventions détaillent unité de travail par unité de travail" },
       { id: "d2", nom: "Transcrire dans le document unique",
+        conseil: "Un tableau suffit : unité, risque, exposition, mesures existantes, action retenue. Datez et signez chaque version, et ne l'écrasez jamais — c'est la version antérieure qui prouve, plus tard, ce qui était connu à l'époque.",
         quoi: "L'employeur transcrit et met à jour dans un document unique les résultats de l'évaluation. Le document répertorie l'ensemble des risques professionnels auxquels sont exposés les travailleurs et assure la traçabilité collective de ces expositions.",
-        fond: ["L4121-3-1", "R4121-1"] },
+        fond: ["L4121-3-1", "R4121-1"],
+        risque: "Un inventaire non transcrit n'existe pas pour le contrôle : même amende de la cinquième classe (R. 4741-1), et la traçabilité collective des expositions que L. 4121-3-1 impose n'est pas assurée." },
       { id: "d3", nom: "Mettre à jour : la périodicité annuelle",
+        conseil: "Inscrivez la revue annuelle à l'agenda plutôt que d'attendre l'échéance : la mise à jour se prépare, elle ne s'improvise pas. Une revue qui ne change rien se consigne aussi — elle prouve que la question a été posée.",
         quoi: "La mise à jour est réalisée au moins chaque année dans les entreprises d'au moins onze salariés.",
         fond: ["R4121-2"],
+        risque: "Ne pas mettre à jour dans les conditions de R. 4121-2 est puni comme le défaut de transcription : amende des contraventions de la cinquième classe (R. 4741-1).",
         si: function (P) { return seuil(P, 11); },
         quand: function (D) {
           if (!D.dateDerniereMaj) return null;
@@ -1223,8 +1255,10 @@
             note: "Un an après la dernière mise à jour, datée du " + dateFr(D.dateDerniereMaj) + " (art. R. 4121-2, 1°)." };
         } },
       { id: "d4", nom: "Mettre à jour : l'événement",
+        conseil: "Traitez l'événement dans les jours qui suivent, pas à la revue annuelle suivante : c'est le décalage entre la date de l'aménagement et celle de la mise à jour qui se reproche. Un accident, une alerte d'un salarié ou une machine nouvelle sont chacun un événement.",
         quoi: "La mise à jour est également réalisée lors de toute décision d'aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail, et lorsqu'une information supplémentaire intéressant l'évaluation d'un risque est portée à la connaissance de l'employeur.",
         fond: ["R4121-2"],
+        risque: "Un document non mis à jour après l'événement décrit une entreprise qui n'existe plus : même amende (R. 4741-1), et l'évaluation périmée fragilise toutes les mesures de prévention qui s'appuient sur elle.",
         si: function (P, D) { return D.evenement === "oui" ? true : (D.evenement === "non" ? false : null); },
         quand: function (D) {
           if (!D.dateEvenement) return null;
@@ -1233,16 +1267,22 @@
             note: "L'article R. 4121-2 ne fixe pas de délai chiffré : la mise à jour est due à raison de l'événement lui-même. Elle est d'autant plus exposée qu'elle tarde." };
         } },
       { id: "d5", nom: "Établir le programme annuel de prévention",
+        conseil: "Chaque mesure porte un responsable, une échéance, un coût et l'indicateur qui dira si elle a produit son effet. Un programme sans indicateur ne se contrôle pas l'année suivante, et c'est l'année suivante qu'on vous le demandera.",
         quoi: "À partir de cinquante salariés, les résultats de l'évaluation débouchent sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail : liste détaillée des mesures de l'année à venir, conditions d'exécution, indicateurs de résultat et estimation du coût de chacune, ressources mobilisables, calendrier de mise en œuvre.",
         fond: ["L4121-3-1"],
+        risque: "Sans programme annuel, les résultats de l'évaluation restent sans suite, en méconnaissance de L. 4121-3-1, III, 1° — et les mesures prévues puis non prises doivent être motivées en annexe du rapport annuel présenté au comité (L. 2312-27).",
         si: function (P) { return seuil(P, 50); } },
       { id: "d6", nom: "Consigner la liste des actions de prévention",
+        conseil: "La liste se consigne dans le document unique lui-même, pas dans un fichier à part : c'est là qu'on la cherchera. Une action par risque prioritaire suffit ; mieux vaut trois actions faites que douze annoncées.",
         quoi: "En dessous de cinquante salariés, les résultats de l'évaluation débouchent sur la définition d'actions de prévention des risques et de protection des salariés, dont la liste est consignée dans le document unique et ses mises à jour.",
         fond: ["L4121-3-1"],
+        risque: "La liste d'actions consignée au document unique est la forme que L. 4121-3-1, III, 2°, donne aux suites de l'évaluation en dessous de cinquante salariés : son absence laisse l'évaluation sans suite, et le document incomplet.",
         si: function (P) { return sousSeuil(P, 50); } },
       { id: "d7", nom: "Présenter au comité le rapport et le programme annuels",
+        conseil: "Inscrivez le point à l'ordre du jour avec le rapport et le programme joints à la convocation, et faites porter l'avis au procès-verbal. Les mesures annoncées l'an dernier et non prises se motivent en annexe : préparez ces motifs avant la réunion, pas pendant.",
         quoi: "Dans le cadre de la consultation sur la politique sociale, l'employeur présente au comité le rapport annuel écrit faisant le bilan de la santé, de la sécurité et des conditions de travail, et le programme annuel de prévention. Le document unique sert à établir ce rapport. Les mesures prévues et non prises doivent être motivées en annexe.",
         fond: ["L2312-27", "R4121-3"],
+        risque: "La consultation omise expose à la qualification d'entrave au fonctionnement régulier du comité — 7 500 euros d'amende (L. 2317-1) — et le programme adopté sans avis est contestable.",
         si: function (P) { return P.cseExiste === "non" ? false : true; },
         quand: function (D) {
           if (!D.dateReunionCSE) return null;
@@ -1254,12 +1294,17 @@
             points: "Rapport annuel santé, sécurité et conditions de travail\nProgramme annuel de prévention des risques professionnels",
             pointSSCT: ["La réunion porte, en tout ou partie, sur la santé, la sécurité et les conditions de travail"] }; } } },
       { id: "d8", nom: "Conserver quarante ans et tenir à disposition",
+        conseil: "Archivez chaque version en PDF daté, hors du poste de travail de celui qui la rédige. Quarante ans dépassent la durée de vie de tout logiciel : un format lisible et une sauvegarde ailleurs valent mieux qu'un outil sophistiqué.",
         quoi: "Le document unique et ses versions antérieures sont tenus, pendant quarante ans à compter de leur élaboration, à la disposition des travailleurs et anciens travailleurs, des élus, du service de prévention et de santé au travail, de l'inspection du travail et des organismes de prévention.",
-        fond: ["R4121-4"] },
+        fond: ["R4121-4"],
+        risque: "Sans les versions successives, la traçabilité collective des expositions est perdue : l'employeur ne peut répondre ni à la demande d'un ancien salarié ni à celle d'un agent de contrôle (L. 4121-3-1, V ; R. 4121-4)." },
       { id: "d9", nom: "Mettre en œuvre les mesures de prévention",
+        conseil: "Le document ne protège personne s'il reste dans un tiroir : ce qui vous défendra, c'est la trace des mesures effectivement prises — bons de commande, comptes rendus, attestations de formation. Classez-les avec le document, pas ailleurs.",
         quoi: "L'évaluation n'est pas une fin : l'employeur prend les mesures nécessaires pour assurer la sécurité et protéger la santé physique et mentale des travailleurs, sur le fondement des principes généraux de prévention — éviter les risques, évaluer ceux qui ne peuvent l'être, les combattre à la source, adapter le travail à l'homme, planifier la prévention en y intégrant les risques liés au harcèlement et aux agissements sexistes.",
-        fond: ["L4121-1", "L4121-2"], juris: ["14-24.444"] },
+        fond: ["L4121-1", "L4121-2"], juris: ["14-24.444"],
+        risque: "En cas d'accident ou de maladie, seul l'employeur qui justifie avoir pris toutes les mesures prévues par L. 4121-1 et L. 4121-2 ne méconnaît pas son obligation de sécurité — c'est la décision citée ci-dessous ; le document unique tenu et suivi est la première de ces justifications." },
       { id: "d10", nom: "Mesurer ce que coûte l'absence",
+        conseil: "Le coût du rattrapage est toujours inférieur à celui du contrôle : si le document manque, écrivez-en une première version imparfaite plutôt que d'attendre la version parfaite. Un document daté d'aujourd'hui vaut mieux qu'un document absent depuis trois ans.",
         quoi: "Ne pas transcrire ou ne pas mettre à jour les résultats de l'évaluation est puni de l'amende prévue pour les contraventions de la cinquième classe ; l'article L. 4741-1 punit d'une amende de 10 000 euros, appliquée autant de fois qu'il y a de travailleurs concernés, la méconnaissance par faute personnelle des dispositions qu'il énumère.",
         fond: ["R4741-1", "L4741-1"] },
     ]
@@ -1294,6 +1339,7 @@
   /* ================================================================== */
   {
     cle: "installation",
+    suite: { cle: "reunion", pourquoi: "Le comité installé, ce sont les réunions ordinaires qui commencent — convocation, ordre du jour conjoint, procès-verbal." },
     nom: "Installer le CSE : la première réunion",
     resume: "La réunion qui suit les élections : convocation par le seul président, bureau élu parmi les titulaires, référent harcèlement, commissions, règlement intérieur du comité, budgets et moyens, transition avec le comité sortant, et la documentation économique et financière due un mois après l'élection.",
     audit: { href: "audit-cse.html", nom: "l'audit du comité social et économique" },
@@ -1617,6 +1663,7 @@
      la même façon, et l'un ne vaut pas l'autre. */
   {
     cle: "affichages",
+    suite: { cle: "registre", pourquoi: "Même série de formalités tenues à la disposition de l'inspection du travail : après le tableau d'affichage, le registre unique du personnel." },
     nom: "Mettre en place les affichages et informations obligatoires",
     resume: "Ce qui s'affiche et ce qui s'informe « par tout moyen » : égalité et non-discrimination, égalité de rémunération, harcèlements, coordonnées des secours et des services, horaires collectifs, consigne incendie, convention collective, panneaux syndicaux — puis le relevé daté qui prouve que c'est fait.",
     audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
@@ -1716,6 +1763,7 @@
   /* ================================================================== */
   {
     cle: "registre",
+    suite: { cle: "embauche", pourquoi: "Le registre s'alimente à chaque embauche : le parcours d'embauche enchaîne les formalités qui l'accompagnent." },
     nom: "Tenir le registre unique du personnel",
     resume: "Un registre par établissement, dans l'ordre des embauches et de façon indélébile : les treize mentions de l'article D. 1221-23, la partie spécifique aux stagiaires et volontaires, la copie des titres de travail des salariés étrangers, la mise à jour au fil des événements, et la mise à disposition du comité et des agents de contrôle.",
     audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
@@ -1798,6 +1846,7 @@
   /* ================================================================== */
   {
     cle: "bdese",
+    suite: { cle: "nao", pourquoi: "La négociation sur l'égalité professionnelle s'appuie sur les données de la base : la base d'abord, la négociation ensuite." },
     nom: "Constituer la base de données (BDESE)",
     resume: "L'accord d'abord, le régime supplétif ensuite : ce que l'accord de l'article L. 2312-21 peut définir, ce que la base doit contenir à défaut d'accord selon l'effectif (R. 2312-8 sous trois cents, R. 2312-9 au-delà), l'accès permanent des élus et des délégués syndicaux, et la mise à disposition qui vaut communication.",
     audit: { href: "audit-bdese.html", nom: "le module d'audit de la base (BDESE)" },
@@ -2803,6 +2852,17 @@
             e(JURIS[j].t) + "</div>";
         }).join("");
         var cv = s.conv ? '<div class="conv">' + e(conv(PROFIL, s.conv)) + "</div>" : "";
+        /* Ce qu'on risque à ne pas franchir l'étape — la peine quand un texte
+           en prévoit une, la conséquence civile sinon. Jamais inventé : une
+           étape sans sanction connue n'affiche rien. */
+        var rq = s.risque
+          ? '<div class="risque"><b>Ce qu\'on risque à ne pas le faire</b>' + e(s.risque) + "</div>"
+          : "";
+        /* Le conseil de pratique : ce qui se fait, se date et se garde. Ce
+           n'est pas du droit — c'est ce qui fait qu'on peut le prouver. */
+        var cs = s.conseil
+          ? '<div class="conseil"><b>En pratique</b>' + e(s.conseil) + "</div>"
+          : "";
         var doc = s.doc ? '<a class="doc" href="' + e(lienDoc(s.doc, D)) + '">Produire : ' +
           e(s.doc.nom) + " →</a>" : "";
         /* Le document final, quand c'est Juris Expert qui l'imprime. */
@@ -2812,7 +2872,7 @@
         return '<div class="etape" data-bloc="' + e(s.id) + '" id="etape-' + p.cle + "-" + s.id + '">' +
           '<div class="etape-tete"><span class="etape-num">' + n + "</span>" +
           '<span class="etape-titre">' + e(s.nom) + '</span><span class="etat"></span></div>' +
-          '<div class="etape-corps"><p>' + e(s.quoi) + "</p>" + ech + fond + juris + cv +
+          '<div class="etape-corps"><p>' + e(s.quoi) + "</p>" + ech + fond + juris + cv + rq + cs +
           '<div class="actions">' + doc + jx +
           '<label class="coche"><input type="checkbox" data-etape="' + e(s.id) + '"' +
           (x.faite ? " checked" : "") + "> étape franchie</label>" +
@@ -2898,7 +2958,24 @@
           'conduisent dans <a class="jx" href="' + e(window.JurisExpert.lien("elections")) +
           '" target="_blank" rel="noopener">Juris Expert — ' +
           e(window.JurisExpert.nom("elections")) + "</a>.</div>"
+        : "") +
+      /* Ce qui vient après. Un parcours terminé n'est pas une fin : le
+         règlement intérieur appelle le document unique, le document unique
+         appelle l'affichage, et ainsi de suite. Le renvoi ne s'ouvre qu'une
+         fois toutes les étapes franchies — proposer la suite avant d'avoir
+         fini celle-ci brouillerait l'ordre. */
+      (p.suite && SUITE(p.suite.cle)
+        ? '<div class="suite' + (c.total && c.faites >= c.total ? " prete" : "") + '">' +
+          "<b>" + (c.total && c.faites >= c.total
+            ? "Ce parcours est terminé — la suite : « " + e(SUITE(p.suite.cle).nom) + " »"
+            : "Ensuite : « " + e(SUITE(p.suite.cle).nom) + " »") + "</b>" +
+          "<p>" + e(p.suite.pourquoi) + "</p>" +
+          '<a href="parcours.html?p=' + e(p.suite.cle) + '">Ouvrir « ' +
+          e(SUITE(p.suite.cle).nom) + " » →</a></div>"
         : "");
+  }
+  function SUITE(cle) {
+    return PARCOURS.filter(function (x) { return x.cle === cle; })[0] || null;
   }
 
   /* ================================================================== */

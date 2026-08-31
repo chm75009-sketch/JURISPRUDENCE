@@ -428,6 +428,7 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
 <script src="moteur-nao.js"></script>
 <script src="idcc.js"></script>
 <script src="profil.js"></script>
+<script src="parcours-lien.js"></script>
 <script src="documents-produits.js"></script>
 <script src="documents-nao.js"></script>
 <script>
@@ -945,7 +946,12 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
       '<div class="meta"><span><b>Rubrique :</b> ' + e(pt.rubrique) + "</span><span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
       '<p class="risque">Risque : ' + e(pt.risque) + "</p>" +
       '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
-      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a></p>' +
+      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a>' +
+      /* Quand la pièce n'existe pas, un constat de plus ne sert à rien : le
+         renvoi mène à la procédure qui la fait naître, pas à une seconde
+         description du manque (docs/parcours-lien.js). */
+      (window.ParcoursLien ? (function (l) { return l ? " · " + l : ""; })(ParcoursLien.lien(pt.id)) : "") +
+      '</p>' +
       "</div>";
   }
 
@@ -1063,7 +1069,13 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
       (pt.fait ? '<span class="chip c-important">déclaré régularisé' + (ETAT.faits[id] && ETAT.faits[id].le ? " le " + e(ETAT.faits[id].le) : "") + "</span>" : "") + "</div>" +
       '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
       '<p class="note">Constat de l\'audit — ' + e(pt.constat) + "</p>" +
-      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>";
+      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
+      /* L'accompagnement pas à pas, quand la régularisation est une procédure
+         et pas une simple pièce à écrire : consultation, affichage, dépôt,
+         inspection du travail, entrée en vigueur (docs/parcours-lien.js). */
+      (window.ParcoursLien ? (function (l) {
+        return l ? '<p class="note">' + l + "</p>" : "";
+      })(ParcoursLien.lien(pt.id)) : "");
 
     html += "<h3>a. La note chiffrée sur votre dossier</h3>" +
       '<p class="aide">Établie sur les réponses de l\'étape 2 — dates de négociation, régime applicable, effectif déclaré — jamais sur un exemple figé.</p>';
@@ -1344,6 +1356,13 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
     if (t >= 5) { majChoixItem(); rendreItem($("choix-item").value); }
     if (t >= 6) construireVerifs();
     montrer(t);
+    /* Choisir un audit doit mener au questionnaire, pas à une page de
+       présentation : la présentation s'efface et l'écran s'ouvre sur
+       l'étape 2 — on remonte si on veut revoir la fiche. */
+    var pres = document.querySelector(".presentation");
+    if (pres) pres.style.display = "none";
+    var q = document.getElementById("t2");
+    if (q) q.scrollIntoView();
   })();
 })();
 </script>

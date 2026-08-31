@@ -1583,10 +1583,15 @@
       return '<p class="etape">' + ech(i.t) + "<span>" + ech(i.compte || "") + "</span></p>";
     },
     acte: function (i) {
+      /* Le renvoi vers la procédure pas à pas, quand un parcours guidé
+         régularise ce contrôle : le constat ne suffit pas, l'utilisateur a
+         besoin des étapes (docs/parcours-lien.js). */
+      var pas = window.ParcoursLien ? ParcoursLien.lien(i.id) : "";
       return '<div class="acte a-' + ech(i.priorite) + '"><p class="t">' + ech(i.n) + ". " + ech(i.t) +
         '<span class="chip c-' + ech(i.priorite) + '">' + ech(i.priorite) + '</span></p><p class="w">' +
         (i.etat ? "<b>" + ech(i.etat) + "</b> — " : "") + nommer(ech(i.pourquoi)) +
-        ' · ' + ech(RUBRIQUE[i.id] || "") + ' <span class="ident">' + ech(i.id) + "</span></p></div>";
+        ' · ' + ech(RUBRIQUE[i.id] || "") + ' <span class="ident">' + ech(i.id) + "</span>" +
+        (pas ? "<br>" + pas : "") + "</p></div>";
     },
     interdit: function (i) {
       return '<div class="interdit i-' + ech(i.ton || "certain") + '"><p class="t">' + ech(i.t) +

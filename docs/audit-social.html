@@ -489,6 +489,7 @@ donnée manquante.</p>
 
 <script src="moteur-social.js"></script>
 <script src="idcc.js"></script>
+<script src="parcours-lien.js"></script>
 <script src="profil.js"></script>
 <script src="juris-expert.js"></script>
 <script>
@@ -1425,6 +1426,13 @@ donnée manquante.</p>
     if (t >= 5) { majChoixItem(); rendreItem($("choix-item").value); }
     if (t >= 6) construireVerifs();
     montrer(t);
+    /* Choisir un audit doit mener au questionnaire, pas à une page de
+       présentation : la présentation s'efface et l'écran s'ouvre sur
+       l'étape 2 — on remonte si on veut revoir la fiche. */
+    var pres = document.querySelector(".presentation");
+    if (pres) pres.style.display = "none";
+    var q = document.getElementById("t2");
+    if (q) q.scrollIntoView();
   })();
 })();
 </script>

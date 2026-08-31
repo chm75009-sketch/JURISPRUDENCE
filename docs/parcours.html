@@ -180,6 +180,17 @@
   .juris + .juris{margin-top:6px}
   .conv{border-left:3px solid var(--orange);background:var(--orange-f);border-radius:0 3px 3px 0;
     padding:9px 12px;margin:9px 0 0;font-size:13px;color:var(--orange)}
+  /* Ce qu'on risque à ne pas franchir l'étape. Il n'y en a pas partout : là
+     où aucun texte ne sanctionne, la ligne dit la conséquence civile — et
+     là où il n'y a ni l'une ni l'autre, elle ne s'affiche pas plutôt que
+     d'inventer une peine. */
+  .risque{border-left:3px solid var(--rouge);background:var(--rouge-f);border-radius:0 3px 3px 0;
+    padding:9px 12px;margin:9px 0 0;font-size:13px;color:var(--rouge)}
+  .risque b{display:block;margin:0 0 3px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+  /* Le conseil de pratique : ce qui se date, se garde et se prouve. */
+  .conseil{border-left:3px solid var(--vert);background:var(--vert-f);border-radius:0 3px 3px 0;
+    padding:9px 12px;margin:9px 0 0;font-size:13px;color:var(--vert)}
+  .conseil b{display:block;margin:0 0 3px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
   .actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:11px 0 0}
   .actions a.doc{font:600 13.5px/1 system-ui;text-decoration:none;padding:9px 13px;border-radius:3px;
     border:1px solid var(--bleu);color:var(--bleu);background:var(--surface)}
@@ -193,6 +204,17 @@
   .renvoi-jx{font-size:13px;margin:9px 0 0;padding:9px 12px;border-radius:0 3px 3px 0;
     background:var(--gris-f);border-left:3px solid var(--gris);color:var(--corps)}
   .renvoi-jx a{color:var(--encre);font-weight:600}
+  /* Ce qui vient après : le parcours suivant, et pourquoi il suit celui-ci.
+     Discret tant que les étapes ne sont pas toutes franchies, mis en avant
+     lorsqu'elles le sont. */
+  .suite{font-size:13px;margin:11px 0 0;padding:11px 13px;border-radius:0 3px 3px 0;
+    background:#eef2f9;border-left:3px solid var(--bleu);color:var(--corps)}
+  .suite.prete{border-left-color:var(--vert);background:var(--vert-f)}
+  .suite b{display:block;color:var(--encre);margin:0 0 4px}
+  .suite p{margin:0 0 8px}
+  .suite a{display:inline-block;font:600 13.5px/1 system-ui;text-decoration:none;
+    padding:9px 13px;border-radius:3px;border:1px solid var(--bleu);color:var(--bleu);background:#fff}
+  .suite a:hover{background:#eef2f9}
   .coche{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--corps)}
   .coche input{width:auto}
   .date-fait{max-width:190px}

@@ -497,6 +497,7 @@ unique, commission, harcèlement — se pose à l'étape 2.</p>
 
 <script src="moteur-sst.js"></script>
 <script src="profil.js"></script>
+<script src="parcours-lien.js"></script>
 <script src="documents-produits.js"></script>
 <script src="documents-sst.js"></script>
 <script src="documents-sst-2.js"></script>
@@ -702,8 +703,23 @@ unique, commission, harcèlement — se pose à l'étape 2.</p>
       });
       libre.addEventListener("input", function () { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); majNuances(); });
     });
-    f.addEventListener("change", function () {
+    /* La bascule vers l'accompagnement : pas de document unique, pas de
+       questions sur son contenu — on part écrire le document. Même chose pour
+       la commission santé-sécurité, mais seulement là où elle est due (trois
+       cents salariés, établissement à hauts risques, ou décision de
+       l'inspecteur du travail). Voir docs/parcours-lien.js. */
+    var BASCULES = {
+      "duerp.existe": { p: "duerp" },
+      "cssct.existe": { p: "commissions", si: function () {
+        var d = construireF();
+        var eff = Number(d.effectif);
+        return (isFinite(eff) && eff >= 300) || d.etablissementDistinct300 === "oui" ||
+          d.etablissementRisqueParticulier === "oui" || d.cssctImposeeInspection === "oui";
+      } },
+    };
+    f.addEventListener("change", function (ev) {
       lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
+      if (window.ParcoursLien) ParcoursLien.bascule(ev, BASCULES);
     });
     f.addEventListener("input", function (ev) {
       if (ev.target.tagName === "TEXTAREA" || ev.target.type === "text" || ev.target.type === "number") {
@@ -880,7 +896,12 @@ unique, commission, harcèlement — se pose à l'étape 2.</p>
       '<div class="meta"><span><b>Rubrique :</b> ' + e(pt.rubrique) + "</span><span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
       '<p class="risque">Risque : ' + e(pt.risque) + "</p>" +
       '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
-      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a></p>' +
+      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a>' +
+      /* Quand la pièce n'existe pas, un constat de plus ne sert à rien : le
+         renvoi mène à la procédure qui la fait naître, pas à une seconde
+         description du manque (docs/parcours-lien.js). */
+      (window.ParcoursLien ? (function (l) { return l ? " · " + l : ""; })(ParcoursLien.lien(pt.id)) : "") +
+      '</p>' +
       "</div>";
   }
 
@@ -995,7 +1016,13 @@ unique, commission, harcèlement — se pose à l'étape 2.</p>
       (pt.fait ? '<span class="chip c-important">déclaré régularisé' + (ETAT.faits[id] && ETAT.faits[id].le ? " le " + e(ETAT.faits[id].le) : "") + "</span>" : "") + "</div>" +
       '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
       '<p class="note">Constat de l\'audit — ' + e(pt.constat) + "</p>" +
-      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>";
+      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
+      /* L'accompagnement pas à pas, quand la régularisation est une procédure
+         et pas une simple pièce à écrire : consultation, affichage, dépôt,
+         inspection du travail, entrée en vigueur (docs/parcours-lien.js). */
+      (window.ParcoursLien ? (function (l) {
+        return l ? '<p class="note">' + l + "</p>" : "";
+      })(ParcoursLien.lien(pt.id)) : "");
 
     html += "<h3>a. La note chiffrée sur votre dossier</h3>" +
       '<p class="aide">Établie sur les réponses de l\'étape 2 — effectif, dates et composition saisis — jamais sur un exemple figé.</p>';
@@ -1276,6 +1303,13 @@ unique, commission, harcèlement — se pose à l'étape 2.</p>
     if (t >= 5) { majChoixItem(); rendreItem($("choix-item").value); }
     if (t >= 6) construireVerifs();
     montrer(t);
+    /* Choisir un audit doit mener au questionnaire, pas à une page de
+       présentation : la présentation s'efface et l'écran s'ouvre sur
+       l'étape 2 — on remonte si on veut revoir la fiche. */
+    var pres = document.querySelector(".presentation");
+    if (pres) pres.style.display = "none";
+    var q = document.getElementById("t2");
+    if (q) q.scrollIntoView();
   })();
 })();
 </script>
