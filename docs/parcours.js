@@ -540,6 +540,8 @@
     ],
     etapes: [
       { id: "s1", nom: "Dater la connaissance des faits et vérifier la prescription",
+        risque: "Aucun fait fautif ne peut donner lieu à lui seul à l'engagement de poursuites disciplinaires au-delà d'un délai de deux mois à compter du jour où l'employeur en a eu connaissance (L. 1332-4). Le délai est de prescription : passé le terme, le fait ne peut plus fonder une sanction, quelle que soit sa gravité, et le conseil de prud'hommes peut annuler la sanction irrégulière en la forme (L. 1333-2). R. 1332-1 impose d'ailleurs que la lettre de convocation soit remise ou adressée dans ce même délai de deux mois.",
+        conseil: "Le point de départ est le jour où l'employeur a eu connaissance des faits, non celui où ils se sont produits ni celui où l'enquête interne s'est achevée : datez-le par la pièce qui l'établit — signalement, constat, rapport reçu — et classez cette pièce avant toute autre. L'erreur courante consiste à laisser courir une enquête au-delà du terme, croyant gagner en solidité ce que l'on perd en recevabilité. Écrivez la date sur une note de dossier le jour même : reconstituée trois mois plus tard, elle ne se prouve plus.",
         quoi: "Écrivez la date, et ce qui la prouve. Au-delà de deux mois à compter du jour où l'employeur a eu connaissance des faits, un fait fautif ne peut plus, à lui seul, donner lieu à l'engagement de poursuites disciplinaires.",
         fond: ["L1332-4"], juris: ["09-43.079", "13-23.348"],
         quand: function (D) {
@@ -550,14 +552,20 @@
               ". L'article R. 1332-3 énonce cette règle de comptage pour le délai d'un mois de l'article L. 1332-2 ; l'article L. 1332-4, lui, dit « deux mois » sans en préciser le décompte." };
         } },
       { id: "s2", nom: "Le cas échéant, tenir compte des poursuites pénales",
+        risque: "La réserve du texte est étroite : elle suppose que les faits aient donné lieu, dans le même délai de deux mois, à l'exercice de poursuites pénales (L. 1332-4). Des poursuites exercées après le terme ne rouvrent rien, et la sanction fondée sur des faits prescrits reste annulable (L. 1333-2).",
+        conseil: "Datez l'acte qui exerce les poursuites, et non le jour où vous en avez été informé : c'est cet acte qui doit tomber dans les deux mois. Conservez au dossier la pièce qui l'établit, car c'est vous qui invoquerez la réserve et donc vous qui devrez la démontrer. Une plainte déposée sans suite ne dispense pas d'agir : mieux vaut engager la procédure disciplinaire en parallèle que de miser sur la réserve.",
         quoi: "Lorsque les faits ont donné lieu, dans le même délai, à l'exercice de poursuites pénales, l'article L. 1332-4 réserve expressément ce cas.",
         fond: ["L1332-4"], juris: ["08-45.243", "11-27.508"],
         si: function (P, D) { return D.poursuitesPenales === "oui" ? true : (D.poursuitesPenales === "non" ? false : null); } },
       { id: "s3", nom: "Vérifier la procédure préalable du règlement intérieur et de la convention",
+        risque: "C'est le manquement le plus coûteux de la procédure, parce qu'il ne se répare pas. La consultation d'un organisme chargé, en vertu d'une disposition conventionnelle ou du règlement intérieur, de donner son avis sur un licenciement envisagé constitue une garantie de fond, et l'irrégularité commise dans le déroulement de la procédure disciplinaire ainsi prévue est assimilée à la violation d'une garantie de fond lorsqu'elle a privé le salarié des droits de sa défense ou qu'elle est susceptible d'avoir exercé une influence sur la décision finale (Soc., 8 septembre 2021, n° 19-15.039). Le caractère tardif de la demande d'avis est lui-même une irrégularité de la procédure disciplinaire (Soc., 20 mars 2024, n° 22-17.292). Pour une sanction autre que le licenciement, le conseil de prud'hommes apprécie si la sanction irrégulière en la forme doit être annulée (L. 1333-2).",
+        conseil: "Ouvrez la convention collective et le règlement intérieur avant de rédiger la convocation, et non après : c'est le calendrier conventionnel qui commande, et une saisine tardive vicie la procédure aussi sûrement qu'une saisine omise. Relevez par écrit la stipulation applicable, le délai qu'elle fixe et la composition de l'organisme, puis conservez la date de saisine, l'avis rendu et la trace de sa communication. Les délais conventionnels ne suspendent pas le mois qui suit l'entretien : construisez le calendrier à rebours depuis la date limite de notification.",
         quoi: "Avant toute convocation, ouvrez le règlement intérieur et la convention collective : conseil de discipline, commission paritaire, avis préalable, délai propre. C'est le point qui décide le plus souvent du sort d'un litige — et il ne se rattrape pas.",
         fond: ["L1321-1", "L1321-2"], juris: ["19-15.039", "22-17.292"],
         conv: "l'existence d'une procédure disciplinaire conventionnelle — organisme à consulter, forme et délai de la saisine, composition" },
       { id: "s4", nom: "Notifier la mise à pied conservatoire",
+        risque: "Aucune sanction définitive relative aux faits ayant motivé une mise à pied conservatoire ne peut être prise sans que la procédure de l'article L. 1332-2 ait été respectée (L. 1332-3). La sanction prononcée sans convocation ni entretien est irrégulière en la forme et peut être annulée (L. 1333-2) ; et la mise à pied qui n'est suivie d'aucune procédure risque d'être regardée comme une sanction, avec la retenue de salaire qui l'accompagne.",
+        conseil: "Qualifiez la mesure dans l'écrit qui la notifie — conservatoire, prise dans l'attente de la décision, et non à titre de sanction — puis engagez la procédure le jour même. Une mise à pied conservatoire est une mesure d'attente : plus elle se prolonge, plus elle ressemble à la sanction qu'elle prétend précéder. Notez ses dates de début et de fin, car c'est sur elles que se calculera la régularisation de paie si la mesure finalement retenue est moindre.",
         quoi: "La mise à pied conservatoire est une mesure d'attente, pas une sanction : elle n'épuise pas le pouvoir disciplinaire, mais aucune sanction définitive ne peut être prise sans que la procédure de l'article L. 1332-2 ait été observée.",
         fond: ["L1332-3"], juris: ["11-27.508"],
         si: function (P, D) { return D.misePiedConservatoire === "oui" ? true : (D.misePiedConservatoire === "non" ? false : null); },
@@ -566,6 +574,8 @@
             dateConnaissance: D.dateConnaissance, dateEnvoi: D.dateConvocation,
             misePied: ["Une mise à pied conservatoire à effet immédiat est prononcée dans l'attente de la décision"] }; } } },
       { id: "s5", nom: "Convoquer le salarié à l'entretien préalable",
+        risque: "La lettre de convocation indique l'objet de l'entretien, précise sa date, son heure et son lieu, rappelle que le salarié peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise, et est remise contre récépissé ou adressée par lettre recommandée dans le délai de deux mois fixé à l'article L. 1332-4 (R. 1332-1). Une convocation privée de la mention d'assistance prive le salarié de sa défense avant même l'entretien, et la sanction qui suit est irrégulière en la forme (L. 1333-2).",
+        conseil: "Vérifiez la lettre mention par mention, à froid, avant l'envoi : les exigences sont brèves, et c'est celle de l'assistance qui tombe le plus souvent. Écrivez l'objet en clair plutôt que de le noyer dans une formule vague. Deux voies de remise seulement sont ouvertes, le récépissé et la lettre recommandée : le courriel, la remise en main propre sans signature ou l'affichage ne prouvent rien, et c'est la date de cette remise qui doit tomber dans les deux mois.",
         jx: "discipline",
         quoi: "La lettre indique l'objet de l'entretien, précise la date, l'heure et le lieu, et rappelle que le salarié peut se faire assister par une personne de son choix appartenant au personnel. Elle est remise contre récépissé ou adressée par lettre recommandée.",
         fond: ["L1332-2", "R1332-1"], juris: ["09-43.079", "11-28.109"],
@@ -587,6 +597,8 @@
             dateEnvoi: D.dateConvocation, dateEntretien: D.dateEntretien,
             dateConnaissance: D.dateConnaissance }; } } },
       { id: "s6", nom: "Tenir l'entretien : indiquer le motif, recueillir les explications",
+        risque: "Au cours de l'entretien, l'employeur indique le motif de la sanction envisagée et recueille les explications du salarié, qui peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise (L. 1332-2). La sanction prise sans l'entretien dû est irrégulière en la forme et peut être annulée (L. 1333-2). L'exception que le texte réserve à l'avertissement tombe lorsque le règlement intérieur ou la convention collective subordonnent le licenciement à l'existence de sanctions antérieures : l'entretien devient alors une garantie de fond (Soc., 3 mai 2011, n° 10-14.104 ; Soc., 22 septembre 2021, n° 18-22.204).",
+        conseil: "Rédigez un compte rendu daté le jour même, portant le motif indiqué, les explications données et le nom de la personne qui a assisté le salarié — ou la mention qu'il y a renoncé. C'est l'employeur qui devra fournir au juge les éléments retenus pour prendre la sanction, et le souvenir d'un entretien n'en est pas un. Faites signer ce compte rendu par les personnes présentes lorsque c'est possible ; à défaut, adressez-le au salarié, sa contestation éventuelle valant elle-même trace de ce qui a été dit.",
         quoi: "Au cours de l'entretien, l'employeur indique le motif de la sanction envisagée et recueille les explications du salarié. Le salarié peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise. Notez ce qui a été dit : c'est ce qui nourrira la motivation.",
         fond: ["L1332-2"],
         si: function (P, D) {
@@ -599,6 +611,8 @@
           return { iso: D.dateEntretien, libelle: "Entretien fixé au " + dateFr(D.dateEntretien) };
         } },
       { id: "s7", nom: "Notifier la sanction, écrite et motivée",
+        risque: "Aucune sanction ne peut être prise sans que le salarié soit informé, dans le même temps et par écrit, des griefs retenus contre lui (L. 1332-1) ; la décision fait l'objet d'un écrit motivé, notifié contre récépissé ou par lettre recommandée (L. 1332-2 ; R. 1332-2). Elle ne peut intervenir moins de deux jours ouvrables ni plus d'un mois après le jour fixé pour l'entretien, ce mois expirant selon la computation de l'article R. 1332-3. Hors de ces bornes, ou faute de motivation, la sanction est irrégulière en la forme et peut être annulée (L. 1333-2) ; et si la mesure notifiée est une amende ou une sanction pécuniaire, elle est interdite et réputée non écrite (L. 1331-2), le fait de l'infliger étant puni d'une amende de 3 750 euros (L. 1334-1).",
+        conseil: "Calculez les deux bornes dès la fin de l'entretien et inscrivez-les au dossier : même quantième le mois suivant à vingt-quatre heures, à défaut le dernier jour du mois suivant, avec prorogation au premier jour ouvrable si ce terme tombe un samedi, un dimanche ou un jour férié — vérifiez ce calendrier à la main. Motivez en énonçant les faits, datés et circonstanciés : renvoyer à l'entretien préalable n'informe de rien, et une formule générale ne se discute pas. Si le mois est écoulé, ne notifiez pas : le cas se traite comme un abandon de la sanction, non comme un rattrapage.",
         jx: "discipline",
         quoi: "La décision est écrite et motivée : elle porte les griefs, datés et circonstanciés. Elle est notifiée contre récépissé ou par lettre recommandée. Renvoyer à l'entretien préalable ne suffit pas à informer le salarié des griefs.",
         fond: ["L1332-1", "L1332-2", "R1332-2", "R1332-3", "L1331-2"], juris: ["91-43.815"],
@@ -614,6 +628,8 @@
             dateEntretien: D.dateEntretien, dateNotification: D.dateNotification,
             dateConnaissance: D.dateConnaissance }; } } },
       { id: "s8", nom: "Notifier la mise à pied disciplinaire",
+        risque: "La mise à pied disciplinaire est une sanction au sens de l'article L. 1331-1 : elle suppose la procédure de l'article L. 1332-2 et une décision écrite et motivée, notifiée contre récépissé ou par lettre recommandée dans le délai d'un mois (R. 1332-2). Une mise à pied dont le règlement intérieur ne précise pas la durée maximale, ou qui excède cette durée, est irrégulière et le conseil de prud'hommes peut l'annuler (L. 1333-2). La retenue opérée sur les jours excédentaires n'est alors plus la conséquence d'une suspension du contrat : elle tombe sous l'interdiction des sanctions pécuniaires (L. 1331-2), dont la méconnaissance est punie d'une amende de 3 750 euros (L. 1334-1).",
+        conseil: "Relevez deux nombres avant de rédiger : la durée maximale que porte le règlement intérieur dans sa version en vigueur à la date de la sanction, et la durée que vous prononcez. Portez les dates de début et de fin dans la lettre elle-même, et non un simple nombre de jours : c'est de ces dates que se déduira la retenue de paie, et une imprécision se paie en jours rendus. Si le règlement ne fixe aucune durée maximale, la question se règle au niveau du règlement, pas dans la lettre de notification.",
         jx: "discipline",
         quoi: "La mise à pied disciplinaire suspend le contrat et la rémunération : sa durée doit être bornée par le règlement intérieur, et ses dates de début et de fin précisées.",
         fond: ["L1331-1", "L1332-2", "R1332-2"],
@@ -622,6 +638,8 @@
           pre: function (P, D) { return { entreprise: P.denomination, salarie: D.salarie,
             dateEntretien: D.dateEntretien, dateNotification: D.dateNotification }; } } },
       { id: "s9", nom: "Classer la sanction et en tenir le compte",
+        risque: "Aucune sanction antérieure de plus de trois ans à l'engagement des poursuites disciplinaires ne peut être invoquée à l'appui d'une nouvelle sanction (L. 1332-5) : la mesure qui ne tient que par un passé disciplinaire prescrit perd son appui. En cas de litige, le conseil de prud'hommes apprécie la régularité de la procédure suivie et si les faits reprochés sont de nature à justifier une sanction ; l'employeur lui fournit les éléments retenus, et si un doute subsiste il profite au salarié (L. 1333-1). Le juge peut annuler la sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise (L. 1333-2).",
+        conseil: "Tenez un relevé daté des sanctions par salarié, portant la date de notification de chacune : c'est elle, et non la date des faits, qui commande le décompte des trois ans. Purgez les dossiers individuels des mentions devenues inutilisables, faute de quoi elles reparaîtront dans une lettre de notification et l'affaibliront. Classez sous une même cote la convocation, la preuve de remise, le compte rendu d'entretien et la notification : c'est ce dossier, et non l'une de ces pièces prise isolément, qui se produira devant le juge.",
         quoi: "Datez et classez : trois ans plus tard, cette sanction ne pourra plus être invoquée à l'appui d'une nouvelle. Le juge, s'il est saisi, apprécie la régularité de la procédure, le caractère fautif des faits et la proportionnalité de la mesure.",
         fond: ["L1332-5", "L1333-1", "L1333-2"],
         quand: function (D) {
@@ -809,15 +827,23 @@
     ],
     etapes: [
       { id: "c1", nom: "Choisir la voie : l'accord d'abord, le règlement intérieur du comité ensuite",
+        risque: "L'ordre des sources n'est pas indifférent : l'accord d'entreprise défini à l'article L. 2313-2 fixe les modalités de mise en place de la commission (L. 2315-41), en l'absence de délégué syndical un accord entre l'employeur et le comité adopté à la majorité des membres titulaires élus y pourvoit (L. 2315-42), et le règlement intérieur du comité ne les définit qu'en l'absence des accords prévus à ces deux articles (L. 2315-44). Une commission dépourvue de règles écrites n'a ni missions ni moyens établis, et l'étendue de la délégation qu'elle exerce ne peut pas être vérifiée.",
+        conseil: "Commencez par établir, par écrit et à une date certaine, s'il existe un délégué syndical et si une négociation a été ouverte : c'est ce constat qui autorise à passer à l'étage suivant, et son absence est le reproche le plus facile à formuler. Reprenez ensuite, point par point, les six modalités à définir — nombre de membres, missions déléguées et leurs modalités d'exercice, fonctionnement et heures de délégation, formation, moyens alloués, formation spécifique aux risques particuliers — en indiquant pour chacune la clause qui la porte. Une commission qui fonctionne sans texte fonctionne tant que personne ne le conteste.",
         quoi: "L'accord d'entreprise fixe les modalités de mise en place : nombre de membres, missions déléguées et leurs modalités d'exercice, fonctionnement et heures de délégation, formation, moyens. En l'absence de délégué syndical, un accord entre l'employeur et le comité, adopté à la majorité des titulaires, y pourvoit. À défaut d'accord, le règlement intérieur du comité définit ces mêmes modalités ; l'employeur peut alors fixer le nombre et le périmètre des commissions.",
         fond: ["L2315-41", "L2315-42", "L2315-43", "L2315-44"] },
       { id: "c2", nom: "La commission santé, sécurité et conditions de travail est-elle obligatoire ?",
+        risque: "Une commission santé, sécurité et conditions de travail est créée au sein du comité dans les entreprises d'au moins trois cents salariés, dans les établissements distincts d'au moins trois cents salariés et dans les établissements mentionnés aux articles L. 4521-1 et suivants (L. 2315-36) ; en deçà, l'inspecteur du travail peut en imposer la création lorsque cette mesure est nécessaire, notamment en raison de la nature des activités, de l'agencement ou de l'équipement des locaux (L. 2315-37). Ne pas la constituer là où elle est due expose l'employeur à l'amende de 7 500 euros que l'article L. 2317-1 attache à l'entrave au fonctionnement régulier du comité.",
+        conseil: "Le seuil se constate sur douze mois consécutifs et sur des relevés mensuels, non sur une déclaration d'effectif : sortez les états de paie et datez le franchissement avant de vous demander si la commission est due. Vérifiez ensuite le seuil au niveau de l'entreprise puis, séparément, au niveau de chaque établissement distinct : une même entreprise peut devoir plusieurs commissions, et c'est l'oubli courant. Conservez la décision de l'inspecteur du travail lorsqu'il y en a une, ainsi que sa date : c'est elle qui fixe l'obligation et son point de départ.",
         quoi: "Elle est créée dans les entreprises et les établissements distincts d'au moins trois cents salariés, et dans les établissements des articles L. 4521-1 et suivants. En deçà, l'inspecteur du travail peut l'imposer ; et rien n'interdit de la créer par accord.",
         fond: ["L2315-36", "L2315-37", "L2315-43"] },
       { id: "c3", nom: "Fixer la composition de la commission santé-sécurité",
+        risque: "La commission est présidée par l'employeur ou son représentant et comprend au minimum trois membres représentants du personnel, dont au moins un représentant du second collège ou, le cas échéant, du troisième collège prévu à l'article L. 2314-11 (L. 2315-39). Ces dispositions sont d'ordre public : lorsqu'un troisième collège est institué, un siège au moins doit être attribué à un élu le représentant, l'arrêt qui n'y voyait qu'une alternative entre le second et le troisième collège ayant été cassé (Soc., 26 février 2025, n° 24-12.295). Une composition irrégulière expose la désignation à l'annulation.",
+        conseil: "Avant le vote, dressez la liste des élus avec, en regard de chaque nom, le collège dans lequel il a été élu : c'est cette colonne, et non l'intitulé du poste occupé, qui décide. Comptez les collaborateurs dont le président entend se faire assister, car ensemble ils ne peuvent pas être en nombre supérieur à celui des représentants du personnel titulaires ; arrêtez cette liste avant la réunion plutôt que dans la salle. Portez au procès-verbal la composition retenue avec le collège de chacun : c'est la pièce qui répondra à la contestation.",
         quoi: "Présidence par l'employeur ou son représentant ; au minimum trois membres représentants du personnel, dont au moins un du second collège ou, le cas échéant, du troisième collège. L'employeur peut se faire assister de collaborateurs, sans dépasser le nombre des représentants du personnel titulaires.",
         fond: ["L2315-39"], juris: ["24-12.295", "24-16.408"] },
       { id: "c4", nom: "Désigner les membres par une résolution du comité",
+        risque: "La désignation des membres de la commission, que sa mise en place soit obligatoire ou conventionnelle, résulte d'un vote des membres du comité à la majorité des voix des membres présents, sans qu'il soit besoin d'une résolution préalable fixant les modalités de l'élection (Soc., 27 novembre 2019, n° 19-14.224), par application des articles L. 2315-39 et L. 2315-32 ; une désignation opérée autrement est irrégulière. Le mandat des membres prend fin avec celui des membres élus du comité (L. 2315-39), et sauf dans les cas de fin anticipée énumérés à l'article L. 2314-33 — décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible — le comité ne peut pas remplacer les membres initialement désignés avant ce terme, aucun accord d'entreprise ne pouvant y déroger (Soc., 28 mai 2026, n° 24-22.914).",
+        conseil: "Inscrivez la désignation à l'ordre du jour et faites-la figurer au procès-verbal avec le décompte des voix rapporté au nombre de membres présents : une désignation « par consensus », sans décompte, ne se démontre pas. Notez au procès-verbal qui a pris part au vote. Et retenez qu'un remplacement en cours de mandat suppose une cause écrite et vérifiable : la prise de nouvelles fonctions, l'indisponibilité ou un changement d'équilibre syndical n'en sont pas.",
         quoi: "Les membres sont désignés par le comité parmi ses membres, par une résolution adoptée selon les modalités de l'article L. 2315-32 — donc à la majorité des membres présents —, pour une durée qui prend fin avec celle du mandat des élus. Une résolution préalable fixant les modalités de l'élection n'est pas nécessaire.",
         fond: ["L2315-39", "L2315-32", "L2314-33"], juris: ["19-14.224", "24-16.408", "24-22.914"],
         quand: function (D) {
@@ -833,9 +859,13 @@
             troisiemeCollege: D.troisiemeCollege === "oui"
               ? ["Un troisième collège est institué : un siège au moins revient à un élu le représentant"] : [] }; } } },
       { id: "c5", nom: "Délimiter les attributions déléguées — et ce qui ne se délègue pas",
+        risque: "La commission se voit confier, par délégation du comité, tout ou partie des attributions relatives à la santé, à la sécurité et aux conditions de travail, à l'exception du recours à un expert et des attributions consultatives du comité (L. 2315-38), disposition d'ordre public (Soc., 13 mai 2026, n° 25-12.560). Un avis rendu par la seule commission, ou une expertise qu'elle aurait décidée, est irrégulier, et l'accord qui l'aurait prévu ne peut pas y suppléer.",
+        conseil: "Écrivez la délégation en deux colonnes : ce qui est confié, et ce qui reste au comité. Relisez l'accord ou le règlement intérieur du comité sous cet angle, car les clauses qui débordent sont rarement explicites — elles se glissent dans un « la commission est consultée sur… ». Reprenez, s'il y en a, les avis rendus et les expertises décidées par la seule commission : ils se refont au comité, et mieux vaut le faire avant qu'un tiers ne le relève.",
         quoi: "La commission reçoit, par délégation du comité, tout ou partie des attributions relatives à la santé, à la sécurité et aux conditions de travail. Deux choses ne se délèguent pas : le recours à un expert et les attributions consultatives du comité.",
         fond: ["L2315-38", "L2315-41"], juris: ["25-12.560"] },
       { id: "c6", nom: "Constituer la commission économique",
+        risque: "En l'absence d'accord prévu à l'article L. 2315-45, dans les entreprises d'au moins mille salariés, une commission économique est créée au sein du comité ou du comité central et chargée notamment d'étudier les documents économiques et financiers qu'il recueille (L. 2315-46). Elle comprend au maximum cinq membres représentants du personnel, dont au moins un représentant de la catégorie des cadres, désignés par le comité parmi ses membres (L. 2315-47), et se réunit au moins deux fois par an (L. 2315-48). Une commission constituée sans cadre, ou au-delà de cinq membres, est irrégulièrement composée ; et le comité qui ne la constitue pas se prive de l'organe que la loi charge de cet examen.",
+        conseil: "Vérifiez d'abord qu'aucun accord n'organise autrement les commissions : le régime supplétif ne joue qu'à défaut, et l'appliquer par-dessus un accord existant crée une commission de trop. Arrêtez le calendrier des deux réunions annuelles dès la constitution et portez-le au procès-verbal ; une commission qui ne se réunit jamais laisse une trace plus embarrassante que son absence. L'audition d'un cadre supérieur ou d'un dirigeant suppose l'accord de l'employeur : demandez-le par écrit et à l'avance.",
         quoi: "À défaut d'accord prévoyant des commissions supplémentaires, une commission économique est créée dans les entreprises d'au moins mille salariés. Elle est présidée par l'employeur, comprend au maximum cinq membres représentants du personnel dont au moins un cadre, et se réunit au moins deux fois par an.",
         fond: ["L2315-45", "L2315-46", "L2315-47", "L2315-48"],
         si: function (P) { return seuil(P, 1000); },
@@ -843,28 +873,40 @@
           pre: function (P, D) { return { entreprise: P.denomination, commission: "commission économique",
             dateReunion: D.dateReunionDesignation, dateFinMandat: D.dateFinMandats }; } } },
       { id: "c7", nom: "Constituer la commission de la formation",
+        risque: "En l'absence d'accord prévu à l'article L. 2315-45, dans les entreprises d'au moins trois cents salariés, le comité constitue une commission de la formation, chargée de préparer ses délibérations prévues aux 1° et 3° de l'article L. 2312-17 dans les domaines qui relèvent de sa compétence, d'étudier les moyens de favoriser l'expression des salariés en matière de formation et les problèmes spécifiques concernant l'emploi et le travail des jeunes et des travailleurs handicapés (L. 2315-49). Sa non-constitution prive ces délibérations de la préparation que la loi organise, et la consultation qui suit peut être discutée à ce titre.",
+        conseil: "Rattachez la constitution au calendrier de la consultation sur la politique sociale : une commission créée après que le comité a délibéré n'aura rien préparé. Fixez dès la résolution ce que la commission remettra et à quelle date, antérieure à la réunion du comité. Et vérifiez le seuil de trois cents salariés sur douze mois consécutifs de relevés, non sur l'effectif du jour.",
         quoi: "À défaut d'accord de l'article L. 2315-45, dans les entreprises d'au moins trois cents salariés, le comité constitue une commission de la formation, chargée de préparer ses délibérations, d'étudier les moyens de favoriser l'expression des salariés en matière de formation et les problèmes d'emploi des jeunes et des travailleurs handicapés.",
         fond: ["L2315-45", "L2315-49"],
         si: function (P) { return seuil(P, 300); } },
       { id: "c8", nom: "Constituer la commission d'information et d'aide au logement",
+        risque: "En l'absence d'accord prévu à l'article L. 2315-45, dans les entreprises d'au moins trois cents salariés, une commission d'information et d'aide au logement est créée au sein du comité (L. 2315-50) ; elle recherche les possibilités d'offre de logements en liaison avec les organismes habilités à collecter la participation des employeurs à l'effort de construction, informe les salariés sur leurs conditions d'accès à la propriété ou à la location et les assiste dans leurs démarches (L. 2315-51). Elle propose en outre, dans chaque entreprise, des critères de classement des salariés candidats, que le comité examine pour avis (L. 2315-52). Faute de commission, ces propositions n'existent pas et l'attribution se fait hors du cadre que le texte organise.",
+        conseil: "Les entreprises de moins de trois cents salariés peuvent se grouper entre elles pour former cette commission : c'est la voie à examiner lorsque le seuil est proche, plutôt que d'attendre de le franchir. Écrivez les critères de classement avant la première demande, et non à son occasion : c'est le classement improvisé qui se conteste. Conservez, pour chaque salarié assisté, la trace des démarches accomplies — c'est la seule preuve du travail de cette commission.",
         quoi: "À défaut d'accord de l'article L. 2315-45, dans les entreprises d'au moins trois cents salariés. Elle recherche les offres de logement, informe les salariés sur l'accès à la propriété ou à la location et les assiste dans leurs démarches ; les entreprises de moins de trois cents salariés peuvent se grouper pour la former.",
         fond: ["L2315-45", "L2315-50", "L2315-51", "L2315-52", "L2315-53"],
         si: function (P) { return seuil(P, 300); } },
       { id: "c9", nom: "Constituer la commission de l'égalité professionnelle",
+        risque: "En l'absence d'accord prévu à l'article L. 2315-45, dans les entreprises d'au moins trois cents salariés, une commission de l'égalité professionnelle est créée au sein du comité et chargée notamment de préparer ses délibérations prévues au 3° de l'article L. 2312-17, dans les domaines qui relèvent de sa compétence (L. 2315-56). Sa non-constitution prive de préparation la consultation sur la politique sociale, dans un domaine où l'insuffisance des informations est le premier terrain de discussion.",
+        conseil: "Faites coïncider les travaux de la commission avec la mise à disposition des indicateurs dans la base de données : elle ne peut préparer qu'à partir de chiffres, et elle les demandera. Distinguez son rôle de celui de la négociation obligatoire : la commission prépare une délibération du comité, elle ne négocie pas, et confondre les deux fait perdre les deux. Datez la remise de son rapport au comité et faites-la figurer à l'ordre du jour.",
         quoi: "À défaut d'accord de l'article L. 2315-45, dans les entreprises d'au moins trois cents salariés. Elle prépare notamment les délibérations du comité sur la politique sociale dans les domaines qui relèvent de sa compétence.",
         fond: ["L2315-45", "L2315-56"],
         si: function (P) { return seuil(P, 300); } },
       { id: "c10", nom: "Constituer la commission des marchés",
+        risque: "Une commission des marchés est créée au sein du comité qui dépasse, pour au moins deux des trois critères, les seuils de l'article D. 2315-29 : cinquante salariés à la clôture d'un exercice, le montant de ressources annuelles et le montant du total du bilan prévus à l'article R. 612-1 du code de commerce (L. 2315-44-1). Ses membres sont désignés parmi les membres titulaires, et le règlement intérieur du comité fixe son fonctionnement, le nombre de ses membres, les modalités de leur désignation et la durée de leur mandat (L. 2315-44-3). Au-delà du seuil de 30 000 euros fixé par le même article D. 2315-29, le comité détermine, sur proposition de la commission, les critères de choix des fournisseurs et la procédure d'achat, la commission choisissant les fournisseurs et rendant compte de ses choix au moins une fois par an (L. 2315-44-2) : faute de commission, ces critères ne sont pas arrêtés et le compte rendu annuel n'a pas lieu.",
+        conseil: "Le critère porte sur les comptes du comité, non sur l'effectif de l'entreprise : c'est à la clôture de chaque exercice, comptes en main, que le dépassement se constate, et l'obligation peut naître d'une année sur l'autre. Tenez un registre des marchés portant, pour chacun, le montant, la date, le fournisseur retenu et le critère appliqué. Le seuil de 30 000 euros se regarde marché par marché : le fractionnement d'un achat en plusieurs commandes est l'irrégularité qui se lit le mieux dans les comptes.",
         quoi: "Elle est créée au sein du comité qui dépasse, pour au moins deux des trois critères, les seuils du décret : cinquante salariés à la clôture d'un exercice, le montant de ressources annuelles et le total du bilan de l'article R. 612-1 du code de commerce. Ses membres sont désignés parmi les titulaires ; le règlement intérieur du comité fixe son fonctionnement. Au-delà de 30 000 euros, le comité détermine, sur proposition de la commission, les critères de choix des fournisseurs et la procédure d'achat ; la commission choisit les fournisseurs et rend compte au moins une fois par an.",
         fond: ["L2315-44-1", "L2315-44-2", "L2315-44-3", "D2315-29"],
         doc: { modele: "designation-commission", nom: "Délibération de désignation des membres",
           pre: function (P, D) { return { entreprise: P.denomination, commission: "commission des marchés",
             dateReunion: D.dateReunionDesignation, dateFinMandat: D.dateFinMandats }; } } },
       { id: "c11", nom: "Créer, s'il y a lieu, les commissions supplémentaires",
+        risque: "Les commissions supplémentaires ne peuvent être créées que par un accord d'entreprise conclu dans les conditions prévues au premier alinéa de l'article L. 2232-12 (L. 2315-45), c'est-à-dire signé par l'employeur et par des organisations syndicales représentatives ayant recueilli plus de 50 % des suffrages exprimés en faveur d'organisations représentatives au premier tour des dernières élections des titulaires au comité. À défaut, l'accord signé au-delà de 30 % de ces suffrages ne vaut que s'il est approuvé par les salariés à la majorité des suffrages exprimés ; faute d'approbation, il est réputé non écrit (L. 2232-12), et les commissions qu'il institue n'ont alors pas de base.",
+        conseil: "Vérifiez le pourcentage avant de signer, sur le procès-verbal des dernières élections et non de mémoire : c'est un calcul, il se pose par écrit et se joint à l'accord. Prévoyez dans l'accord ce que chaque commission remettra et à quelle échéance, faute de quoi elle vivra sans produire. Les experts et techniciens que l'employeur peut adjoindre avec voix consultative sont tenus au secret professionnel et à l'obligation de discrétion : rappelez-le-leur par écrit à leur entrée en fonction.",
         quoi: "Un accord d'entreprise conclu dans les conditions du premier alinéa de l'article L. 2232-12 peut prévoir des commissions supplémentaires pour l'examen de problèmes particuliers. Leurs rapports sont soumis à la délibération du comité.",
         fond: ["L2315-45", "L2232-12"],
         conv: "l'existence de commissions conventionnelles et des moyens qui leur sont attachés" },
       { id: "c12", nom: "Former les élus",
+        risque: "Les membres de la délégation du personnel du comité et le référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes bénéficient de la formation nécessaire à l'exercice de leurs missions en matière de santé, de sécurité et de conditions de travail : cinq jours au minimum lors du premier mandat et, en cas de renouvellement, trois jours pour chaque membre quelle que soit la taille de l'entreprise, cinq jours pour les membres de la commission santé, sécurité et conditions de travail dans les entreprises d'au moins trois cents salariés (L. 2315-18). Le financement est pris en charge par l'employeur, et le temps consacré à la formation est pris sur le temps de travail, rémunéré comme tel, et n'est pas déduit des heures de délégation (L. 2315-16). Un élu non formé exerce des missions pour lesquelles la loi le veut préparé, et les jours dus restent dus.",
+        conseil: "Distinguez dès le départ les deux formations et leurs financements : celle de santé, sécurité et conditions de travail est à la charge de l'employeur, le stage de formation économique est financé par le comité. Recensez les bénéficiaires en séparant premiers mandats et renouvellements, car la durée n'est pas la même, et programmez les sessions au début du mandat plutôt qu'à sa fin. Recueillez les attestations de présence nominatives et datées : elles seules établissent que la formation a été dispensée.",
         quoi: "Les membres de la délégation du personnel et le référent harcèlement bénéficient de la formation nécessaire en matière de santé, de sécurité et de conditions de travail : cinq jours au moins lors du premier mandat ; en cas de renouvellement, trois jours pour chaque élu et cinq jours pour les membres de la commission santé-sécurité dans les entreprises d'au moins trois cents salariés. Le financement est à la charge de l'employeur.",
         fond: ["L2315-18"],
         quand: function (D) {
@@ -875,6 +917,8 @@
             note: "Le code ne fixe pas de date butoir : il fixe une durée minimale et met le financement à la charge de l'employeur. Une formation repoussée reste une formation due." };
         } },
       { id: "c13", nom: "Tenir la première réunion et rendre compte au comité",
+        risque: "Une commission travaille pour le comité : les rapports des commissions sont soumis à la délibération du comité (L. 2315-45), la commission des marchés rend compte de ses choix au moins une fois par an selon les modalités déterminées par le règlement intérieur du comité (L. 2315-44-2), et la commission économique se réunit au moins deux fois par an (L. 2315-48). Une commission qui ne rend pas compte laisse la délibération du comité sans la préparation que la loi organise, et ses travaux, faute d'écrit, ne se démontrent pas.",
+        conseil: "Établissez un compte rendu de chaque réunion, daté et signé, même bref : c'est la pièce qui fait exister le travail de la commission, et rien ne la remplace. Faites inscrire la présentation du rapport à l'ordre du jour du comité, sans quoi il restera dans un dossier. Fixez à la première réunion le rythme et les échéances de l'année et tenez-vous-y : c'est la régularité qui se contrôle, non l'intensité.",
         quoi: "Une commission travaille pour le comité : ses rapports sont soumis à la délibération du comité, et la commission des marchés lui rend compte de ses choix au moins une fois par an. Établissez un compte rendu de chaque réunion : c'est la pièce qui fait exister le travail de la commission.",
         fond: ["L2315-45", "L2315-44-2", "L2315-48"],
         quand: function (D) {
@@ -886,6 +930,8 @@
             commission: "commission santé, sécurité et conditions de travail",
             dateReunion: D.datePremiereReunionCom }; } } },
       { id: "c14", nom: "L'expertise reste au comité",
+        risque: "Le comité peut, le cas échéant sur proposition des commissions constituées en son sein, décider de recourir à un expert-comptable ou à un expert habilité (L. 2315-78 ; L. 2315-94), mais le recours à l'expert est expressément exclu des attributions délégables à la commission santé, sécurité et conditions de travail (L. 2315-38), disposition d'ordre public (Soc., 13 mai 2026, n° 25-12.560). Une expertise décidée par la commission, ou attribuée à l'employeur, est irrégulière. La répartition du coût suit ensuite le cas de recours, l'article L. 2315-80 distinguant la prise en charge par l'employeur, le partage à 20 % et 80 %, et la prise en charge par l'employeur en cas d'insuffisance du budget de fonctionnement.",
+        conseil: "Faites figurer au procès-verbal deux actes distincts : la proposition de la commission, s'il y en a une, et la délibération du comité qui décide. C'est cette délibération et sa date qui ouvrent le délai de dix jours dont l'employeur dispose pour contester, et l'imprécision profite à celui qui conteste. Qualifiez le cas de recours avant de délibérer, car c'est lui qui commande la répartition du coût : lorsque l'employeur a dû suppléer l'insuffisance du budget de fonctionnement, le comité se trouve privé, trois années durant, de la faculté d'en transférer l'excédent aux activités sociales et culturelles.",
         quoi: "Le comité peut, le cas échéant sur proposition des commissions constituées en son sein, décider de recourir à un expert-comptable ou à un expert habilité. La décision, elle, appartient au comité : elle se prend par résolution en réunion, et ne se délègue pas à la commission.",
         fond: ["L2315-78", "L2315-38", "L2315-94", "L2315-80"], juris: ["23-22.270", "25-12.560"],
         doc: { modele: "resolution-expert", nom: "Résolution de recours à l'expert",
@@ -942,6 +988,8 @@
     ],
     etapes: [
       { id: "r1", nom: "Vérifier la périodicité",
+        risque: "À défaut d'accord, le comité se réunit au moins une fois par mois dans les entreprises d'au moins trois cents salariés et au moins une fois tous les deux mois en deçà, une seconde réunion pouvant être tenue à la demande de la majorité de ses membres (L. 2315-28) ; au moins quatre réunions annuelles portent, en tout ou partie, sur ses attributions en matière de santé, de sécurité et de conditions de travail (L. 2315-27). Le fait d'apporter une entrave au fonctionnement régulier du comité est puni d'une amende de 7 500 euros (L. 2317-1). L'article L. 2315-27 prévoit en outre que, lorsque l'employeur est défaillant et à la demande d'au moins la moitié des membres, le comité peut être convoqué par l'agent de contrôle de l'inspection du travail et siéger sous sa présidence.",
+        conseil: "Arrêtez le calendrier de l'année entière dès la première réunion et diffusez-le : les réunions manquées se rattrapent mal, et l'oubli se lit sur une simple liste de dates. Marquez sur ce calendrier les quatre réunions consacrées à la santé et à la sécurité, communiquez-le à l'inspection du travail, au médecin du travail et à l'agent des services de prévention, puis confirmez-leur par écrit la tenue de chacune quinze jours au moins à l'avance — c'est cette confirmation qui s'oublie. Une seconde réunion demandée par la majorité des membres se convoque, elle ne se discute pas.",
         quoi: "À défaut d'accord, le comité se réunit au moins une fois par mois à partir de trois cents salariés, au moins une fois tous les deux mois en dessous. Il peut tenir une seconde réunion à la demande de la majorité de ses membres. Et au moins quatre réunions par an portent, en tout ou partie, sur la santé, la sécurité et les conditions de travail.",
         fond: ["L2315-28", "L2315-27", "L2315-31"],
         conv: "une périodicité de réunions, des délais d'avis ou des réunions supplémentaires propres à la branche",
@@ -956,10 +1004,14 @@
                         : "Au moins une réunion tous les deux mois en dessous de trois cents salariés, à défaut d'accord (art. L. 2315-28)." };
         } },
       { id: "r2", nom: "Établir l'ordre du jour conjointement",
+        risque: "L'ordre du jour de chaque réunion est établi par le président et le secrétaire ; seules les consultations rendues obligatoires par une disposition législative ou réglementaire ou par un accord collectif y sont inscrites de plein droit par l'un ou par l'autre (L. 2315-29). Lorsque le comité se réunit à la demande de la majorité de ses membres, les questions jointes à la demande de convocation sont inscrites à l'ordre du jour (L. 2315-31). Un ordre du jour arrêté unilatéralement en dehors de ces cas expose l'employeur à la qualification d'entrave au fonctionnement régulier du comité, punie d'une amende de 7 500 euros (L. 2317-1), qu'il appartient au juge de retenir ou d'écarter.",
+        conseil: "Conservez la trace de l'échange avec le secrétaire — projet adressé, réponse, arbitrage : c'est l'absence de trace, plus que le désaccord, qui fait présumer l'ordre du jour unilatéral. Distinguez dans le document, par une mention explicite, les points inscrits de plein droit de ceux qui sont convenus ; la distinction se lit alors sans explication. Prévoyez un délai interne d'une semaine pour cet échange, faute de quoi le délai de communication de trois jours sera manqué.",
         jx: "cse-reunion",
         quoi: "L'ordre du jour de chaque réunion est établi par le président et le secrétaire. Les consultations rendues obligatoires par un texte ou par un accord collectif y sont inscrites de plein droit par l'un ou par l'autre. Lorsque la réunion se tient à la demande de la majorité des membres, les questions jointes à la demande y sont inscrites.",
         fond: ["L2315-29", "L2315-31"], juris: ["11-28.324"] },
       { id: "r3", nom: "Communiquer l'ordre du jour trois jours au moins avant",
+        risque: "L'ordre du jour est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale trois jours au moins avant la réunion (L. 2315-30). Une communication tardive, ou faite aux seuls élus, prive les destinataires du temps que le texte leur reconnaît et expose l'employeur à la qualification d'entrave au fonctionnement régulier du comité, punie d'une amende de 7 500 euros (L. 2317-1), qu'il appartient au juge de retenir ou d'écarter.",
+        conseil: "Envoyez le même document, le même jour, aux trois destinataires : ce sont l'inspection du travail et l'agent des services de prévention que l'on omet. Choisissez un mode d'envoi qui date et conservez l'accusé, car trois jours ne se prouvent pas autrement. Joignez les documents nécessaires plutôt que de les annoncer : un point inscrit sans pièce se reporte, et le report coûte une réunion.",
         jx: "cse-reunion",
         quoi: "L'ordre du jour est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale, trois jours au moins avant la réunion.",
         fond: ["L2315-30"],
@@ -977,10 +1029,14 @@
             president: D.president, secretaire: D.secretaire, dateReunion: D.dateReunion,
             heure: D.heure, lieu: D.lieu, dateEnvoi: D.dateOrdreDuJour }; } } },
       { id: "r4", nom: "Remettre les informations nécessaires à l'avis",
+        risque: "Le comité dispose d'un délai d'examen suffisant, d'informations précises et écrites transmises ou mises à disposition par l'employeur, et de la réponse motivée de l'employeur à ses propres observations (L. 2312-15). S'il estime ne pas disposer d'éléments suffisants, il peut saisir le président du tribunal judiciaire statuant selon la procédure accélérée au fond pour qu'il ordonne la communication des éléments manquants, et le juge peut, en cas de difficultés particulières d'accès aux informations, décider la prolongation du délai. Les décisions de l'employeur étant précédées de la consultation du comité (L. 2312-14), la décision prise au terme d'une consultation privée d'informations suffisantes n'a pas été régulièrement précédée de celle-ci.",
+        conseil: "Datez la remise, ou l'information de la mise à disposition dans la base de données, par un bordereau : c'est de cette date que court le délai, et c'est la première chose que l'on vous demandera. Remettez un écrit, même bref, plutôt qu'une présentation en séance ; un diaporama projeté n'est pas une information écrite transmise. Répondez par écrit aux observations avant que l'avis ne soit rendu, et non après : la réponse motivée fait partie de ce dont le comité doit disposer pour se prononcer.",
         quoi: "Le comité émet des avis et des vœux ; il dispose à cette fin d'un délai d'examen suffisant et d'informations précises et écrites transmises ou mises à disposition par l'employeur, ainsi que de la réponse motivée de l'employeur à ses observations.",
         fond: ["L2312-15", "L2312-14", "L2312-8"],
         si: function (P, D) { return D.consultation && D.consultation !== "aucune" ? true : (D.consultation === "aucune" ? false : null); } },
       { id: "r5", nom: "Tenir le délai d'avis",
+        risque: "À l'expiration du délai, le comité est réputé avoir été consulté et avoir rendu un avis négatif (L. 2312-16). À défaut d'accord, ce délai est d'un mois, porté à deux mois en cas d'intervention d'un expert et à trois mois en cas d'intervention d'une ou plusieurs expertises dans une consultation se déroulant à la fois au niveau du comité central et d'un ou plusieurs comités d'établissement (R. 2312-6, I). Un avis recueilli après cette date ne rétablit pas la consultation : l'avis négatif est déjà acquis, et la décision prise ensuite repose sur une consultation irrégulière.",
+        conseil: "Inscrivez au dossier, dès la remise des informations, la date d'expiration calculée : c'est elle qui commande le calendrier des réunions, et non l'inverse. Lorsque les deux niveaux sont consultés, prévoyez que l'avis de chaque comité d'établissement soit rendu et transmis au comité central au plus tard sept jours avant l'échéance de celui-ci : ce décalage de sept jours est le plus souvent manqué. Datez la désignation de l'expert, car c'est elle, et non l'annonce d'une demande d'expertise, qui produit l'allongement du délai.",
         quoi: "L'accord ou, à défaut, le décret fixe les délais dans lesquels les avis sont rendus. À défaut d'accord : un mois ; deux mois en cas d'expertise ; trois mois en cas d'expertises menées à la fois au niveau central et au niveau des établissements. À l'expiration, le comité est réputé consulté et avoir rendu un avis négatif.",
         fond: ["L2312-16", "R2312-6"],
         si: function (P, D) { return D.consultation && D.consultation !== "aucune" ? true : (D.consultation === "aucune" ? false : null); },
@@ -996,6 +1052,8 @@
               " (art. R. 2312-6). Le délai est porté à trois mois en cas d'expertises menées à la fois au niveau du comité central et d'un ou plusieurs comités d'établissement." };
         } },
       { id: "r6", nom: "Traiter les réclamations",
+        risque: "La délégation du personnel présente à l'employeur les réclamations individuelles ou collectives relatives aux salaires, à l'application du code du travail et des autres dispositions légales ainsi que des conventions et accords applicables dans l'entreprise (L. 2312-5). Sauf circonstances exceptionnelles, ses membres remettent à l'employeur une note écrite exposant l'objet des demandes deux jours ouvrables avant la date à laquelle ils doivent être reçus, et l'employeur répond par écrit au plus tard dans les six jours ouvrables suivant la réunion ; les demandes et les réponses motivées sont transcrites sur un registre spécial ou annexées à celui-ci, tenu à la disposition des salariés pendant un jour ouvrable par quinzaine et en dehors de leur temps de travail, ainsi qu'à celle de l'agent de contrôle de l'inspection du travail (L. 2315-22). Ne pas recevoir la délégation, ne pas répondre par écrit ou ne pas tenir ce registre expose l'employeur à la qualification d'entrave au fonctionnement régulier du comité, punie d'une amende de 7 500 euros (L. 2317-1), qu'il appartient au juge de retenir ou d'écarter.",
+        conseil: "Tenez le registre spécial dès la première réclamation plutôt que de le reconstituer : il se contrôle sur place, et son absence se constate en un instant. Répondez par écrit et point par point, en reprenant la numérotation de la note remise ; une réponse d'ensemble laisse subsister autant de réclamations que de points non traités. Comptez les six jours en jours ouvrables à partir de la réunion, et fixez dans l'entreprise le jour ouvrable par quinzaine pendant lequel le registre est consultable.",
         quoi: "La délégation du personnel présente à l'employeur les réclamations individuelles ou collectives. Sauf circonstances exceptionnelles, elle remet une note écrite deux jours ouvrables avant la réunion ; l'employeur répond par écrit, de façon motivée, au plus tard dans les six jours ouvrables suivant la réunion.",
         fond: ["L2312-5", "L2315-22"],
         si: function (P, D) { return D.reclamations === "oui" ? true : (D.reclamations === "non" ? false : null); },
@@ -1008,6 +1066,8 @@
         doc: { modele: "reclamation", nom: "Réponse écrite à une réclamation",
           pre: function (P, D) { return { entreprise: P.denomination, dateReunion: D.dateReunion }; } } },
       { id: "r7", nom: "Établir le procès-verbal",
+        risque: "Les délibérations du comité sont consignées dans un procès-verbal établi par le secrétaire dans un délai et selon des modalités définis par accord ou, à défaut, par décret (L. 2315-34). À défaut d'accord, le procès-verbal est établi et transmis à l'employeur dans les quinze jours suivant la réunion ou, si une nouvelle réunion est prévue dans ce délai, avant celle-ci ; ce délai est de trois jours dans le cadre de la consultation prévue à l'article L. 1233-30, et d'un jour lorsque l'entreprise est en redressement ou en liquidation judiciaire (D. 2315-26). À défaut d'accord, le procès-verbal contient au moins le résumé des délibérations du comité et la décision motivée de l'employeur sur les propositions faites lors de la précédente réunion : sans lui, la réunion n'a pas de trace opposable et la décision motivée n'est pas consignée.",
+        conseil: "Le procès-verbal incombe au secrétaire, mais c'est le calendrier de l'employeur qu'il commande : rappelez l'échéance dès la fin de la réunion, en la datant. Ne laissez pas passer une réunion suivante sans le procès-verbal de la précédente, car le délai se raccourcit d'office dans ce cas. En procédure collective, ou dans une consultation sur un projet de licenciement collectif, le délai se compte en jours et non en semaines : faites prendre les notes pendant la séance plutôt qu'après.",
         jx: "cse-reunion",
         quoi: "Les délibérations sont consignées dans un procès-verbal établi par le secrétaire, dans un délai fixé par accord ou, à défaut, par décret : quinze jours suivant la réunion — trois jours dans la consultation de l'article L. 1233-30, un jour lorsque l'entreprise est en redressement ou en liquidation judiciaire. Si une nouvelle réunion est prévue dans ce délai, le procès-verbal est établi avant elle.",
         fond: ["L2315-34", "D2315-26"],
@@ -1023,9 +1083,13 @@
           pre: function (P, D) { return { entreprise: P.denomination, dateReunion: D.dateReunion,
             lieu: D.lieu, president: D.president, secretaire: D.secretaire }; } } },
       { id: "r8", nom: "Diffuser le procès-verbal après adoption",
+        risque: "Le procès-verbal ne peut être affiché ou diffusé dans l'entreprise qu'après avoir été adopté, par le secrétaire du comité et selon des modalités précisées par le règlement intérieur du comité (L. 2315-35). Une diffusion antérieure à l'adoption, ou opérée par un autre que le secrétaire, sort de ce que le texte permet : ce qui circule alors n'est pas le procès-verbal du comité mais un projet, et il n'engage pas le comité.",
+        conseil: "Faites voter l'adoption au début de la réunion suivante et portez cette adoption au procès-verbal de celle-ci : sans mention d'adoption, la diffusion se conteste. Écrivez dans le règlement intérieur du comité les modalités de l'affichage — support, emplacement, durée, version diffusée — puisque c'est à lui que le texte renvoie. Diffusez la version adoptée et non le projet corrigé après coup, et conservez les deux.",
         quoi: "Le procès-verbal peut, après avoir été adopté, être affiché ou diffusé dans l'entreprise par le secrétaire.",
         fond: ["L2315-35"] },
       { id: "r9", nom: "Répondre aux propositions, et motiver",
+        risque: "Le procès-verbal transmis, l'employeur fait connaître, lors de la réunion du comité suivant cette transmission, sa décision motivée sur les propositions qui lui ont été soumises (L. 2315-34), et il rend compte, en la motivant, de la suite donnée aux avis et vœux du comité (L. 2312-15). À défaut d'accord, cette décision motivée sur les propositions faites lors de la précédente réunion doit d'ailleurs figurer dans le procès-verbal lui-même (D. 2315-26). Le silence, ou la réponse non motivée, expose l'employeur à la qualification d'entrave au fonctionnement régulier du comité, punie d'une amende de 7 500 euros (L. 2317-1), qu'il appartient au juge de retenir ou d'écarter.",
+        conseil: "Tenez un tableau de suivi des propositions, avis et vœux : intitulé, date de la réunion, réponse apportée, date de la réponse. Répondez proposition par proposition en motivant chacune ; une réponse d'ensemble, fût-elle circonstanciée, laisse sans réponse celles qu'elle ne nomme pas. La réponse se donne à la réunion suivante et se consigne au procès-verbal de celle-ci : l'annoncer oralement sans la faire consigner revient à ne pas l'avoir donnée.",
         quoi: "Le procès-verbal transmis, l'employeur fait connaître sa décision motivée sur les propositions qui lui ont été soumises lors de la réunion suivante. Il rend compte, en la motivant, de la suite donnée aux avis et vœux du comité.",
         fond: ["L2315-34", "L2312-15"] },
     ]
@@ -1077,6 +1141,7 @@
     ],
     etapes: [
       { id: "i1", nom: "Vérifier l'obligation et son échéance",
+        docProduit: "DIS-CTL-RI-01",
         conseil: "Datez le franchissement du seuil à partir des effectifs mois par mois, pas de mémoire : c'est cette date qui fixe l'échéance des douze mois. Gardez le tableau qui l'établit — c'est la première pièce que l'inspection demandera.",
         quoi: "L'établissement d'un règlement intérieur est obligatoire dans les entreprises ou établissements employant au moins cinquante salariés. L'obligation s'applique au terme d'un délai de douze mois à compter de la date à laquelle le seuil a été atteint pendant douze mois consécutifs.",
         fond: ["L1311-2", "R1321-5"], juris: ["17-16.465"],
@@ -1089,6 +1154,7 @@
         },
         si: function (P) { return seuil(P, 50); } },
       { id: "i2", nom: "Écrire le contenu obligatoire — et rien d'autre",
+        docProduit: "DIS-CTL-RI-02",
         conseil: "Écrivez d'abord les trois matières, les rappels ensuite : un règlement qui commence par la discipline oublie presque toujours la santé-sécurité. Relisez-le une dernière fois en vous demandant, pour chaque phrase, de quelle matière elle relève — celles qui ne relèvent d'aucune n'ont rien à y faire.",
         jx: "ri",
         quoi: "L'employeur y fixe exclusivement trois matières : les mesures d'application de la réglementation santé et sécurité, les conditions de participation des salariés au rétablissement de conditions protectrices, et les règles générales et permanentes de discipline, notamment la nature et l'échelle des sanctions. Le règlement rappelle en outre les droits de la défense, les dispositions sur les harcèlements et les agissements sexistes, et l'existence du dispositif de protection des lanceurs d'alerte. Il est rédigé en français.",
@@ -1099,11 +1165,13 @@
           pre: function (P, D) { return { entreprise: P.denomination, effectif: P.effectif,
             dateEntreeVigueur: D.dateEntreeVigueur, dateFormalites: D.datePublicite }; } } },
       { id: "i3", nom: "Écarter le contenu interdit",
+        docProduit: "DIS-CTL-RI-05",
         conseil: "Passez en revue chaque restriction en vous posant deux questions dans cet ordre : quelle tâche la justifie, et pourquoi rien de moins strict ne suffirait. Une clause qui ne survit pas à ces deux questions écrites ne survivra pas davantage devant l'inspecteur.",
         quoi: "Le règlement ne peut contenir de dispositions contraires aux lois, règlements, conventions et accords collectifs, ni de restrictions aux droits des personnes et aux libertés qui ne seraient pas justifiées ni proportionnées, ni de dispositions discriminatoires. Une clause de neutralité n'est possible que si elle est justifiée et proportionnée.",
         fond: ["L1321-3", "L1321-2-1", "L1331-2"],
         risque: "L'inspecteur du travail peut exiger le retrait ou la modification d'une clause prohibée (L. 1322-1), et une sanction prise sur son fondement est une sanction sans support, que le conseil de prud'hommes peut annuler. Une amende ou sanction pécuniaire est réputée non écrite et expose à l'amende de 3 750 euros de L. 1334-1." },
       { id: "i4", nom: "Soumettre à l'avis du comité social et économique",
+        docProduit: "DIS-CTL-RI-06",
         conseil: "Transmettez le projet aux élus assez tôt pour qu'ils l'aient lu, et faites porter au procès-verbal la mention de l'avis rendu, avec sa date. C'est ce procès-verbal, pas le règlement, qui prouvera plus tard que la formalité a été accomplie — et il accompagnera l'envoi à l'inspection.",
         quoi: "Le règlement intérieur ne peut être introduit qu'après avoir été soumis à l'avis du comité. C'est une formalité substantielle : son défaut ouvre au syndicat la voie du référé en suspension.",
         fond: ["L1321-4"], juris: ["21-10.718", "22-19.726"],
@@ -1118,12 +1186,14 @@
             dateReunion: D.dateAvisCSE,
             points: "Avis du comité sur le projet de règlement intérieur (art. L. 1321-4)" }; } } },
       { id: "i5", nom: "Reconsulter — ou non — en cas de modification",
+        docProduit: "DIS-CTL-RI-11",
         conseil: "Une modification se traite comme un premier règlement : reprenez le circuit entier plutôt que de corriger le texte affiché. La seule dispense — les injonctions de l'inspection auxquelles on ne peut que se conformer — se garde par écrit, avec la décision qui la fonde.",
         quoi: "Les mêmes règles s'appliquent en cas de modification ou de retrait de clauses. Une exception : lorsque les modifications résultent uniquement des injonctions de l'inspection du travail auxquelles l'employeur ne peut que se conformer, il n'y a pas lieu à nouvelle consultation.",
         fond: ["L1321-4", "L1322-1"], juris: ["19-15.737"],
         risque: "Une modification introduite sans ces formalités n'a pas été régulièrement introduite : mêmes sanctions que pour le règlement lui-même (R. 1323-1), et l'amende d'entrave de L. 2317-1 si le comité a été contourné.",
         si: function (P, D) { return D.operation === "modification" || D.operation === "retrait de clauses" ? true : (D.operation ? false : null); } },
       { id: "i6", nom: "Déposer au greffe du conseil de prud'hommes",
+        docProduit: "DIS-CTL-RI-08",
         conseil: "Déposez au greffe du ressort de l'établissement concerné, pas du siège quand ils diffèrent, et conservez le récépissé daté. Sans cette date, l'entrée en vigueur ne se calcule pas.",
         jx: "ri",
         quoi: "Le règlement intérieur est déposé au greffe du conseil de prud'hommes du ressort de l'entreprise ou de l'établissement.",
@@ -1134,6 +1204,7 @@
           return { iso: D.dateDepotGreffe, libelle: "Déposé le " + dateFr(D.dateDepotGreffe) };
         } },
       { id: "i7", nom: "Communiquer à l'inspecteur du travail, en deux exemplaires, avec l'avis du comité",
+        docProduit: "DIS-CTL-RI-09",
         conseil: "Envoyez les deux exemplaires accompagnés de l'avis du comité et gardez la preuve d'envoi. Faites-le le jour même de la publicité : le texte veut que les deux aient lieu en même temps, et deux dates différentes se remarquent.",
         quoi: "En même temps qu'il fait l'objet des mesures de publicité, le règlement intérieur, accompagné de l'avis du comité, est communiqué à l'inspecteur du travail. Le texte lui est transmis en deux exemplaires.",
         fond: ["L1321-4", "R1321-4"],
@@ -1146,6 +1217,7 @@
               ? "L'article L. 1321-4 veut que la communication ait lieu « en même temps » que les mesures de publicité, datées ici au " + dateFr(D.datePublicite) + "." : "" };
         } },
       { id: "i8", nom: "Assurer la publicité",
+        docProduit: "DIS-CTL-RI-07",
         conseil: "Affichez à un endroit accessible sans demander la permission à personne, et photographiez l'affichage daté. Les locaux d'embauche comptent autant que les lieux de travail — c'est celui-là qu'on oublie.",
         quoi: "Le règlement intérieur est porté, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche.",
         fond: ["R1321-1"],
@@ -1155,6 +1227,7 @@
           return { iso: D.datePublicite, libelle: "Publicité accomplie le " + dateFr(D.datePublicite) };
         } },
       { id: "i9", nom: "Fixer l'entrée en vigueur — postérieure d'un mois",
+        docProduit: "DIS-CTL-RI-07",
         conseil: "Calculez la date à partir de la dernière des deux formalités, jamais de la première, et inscrivez-la dans le règlement une fois les deux accomplies. Un règlement imprimé avec sa date d'entrée en vigueur avant le dépôt oblige à tout réimprimer.",
         quoi: "Le règlement indique la date de son entrée en vigueur. Cette date doit être postérieure d'un mois à l'accomplissement des formalités de publicité ; le délai court à compter de la dernière en date des formalités de publicité et de dépôt.",
         fond: ["L1321-4", "R1321-3"],
@@ -1174,11 +1247,13 @@
                 : "") };
         } },
       { id: "i10", nom: "Soumettre les notes de service aux mêmes règles",
+        docProduit: "DIS-CTL-RI-11",
         conseil: "Tenez la liste des notes de service en vigueur et vérifiez une fois l'an lesquelles ajoutent des obligations générales et permanentes : ce sont celles-là qui suivent le circuit du règlement. Pour une note d'urgence en santé-sécurité, l'envoi simultané au secrétaire du comité et à l'inspection se fait le jour même.",
         quoi: "Les notes de service et tout autre document comportant des obligations générales et permanentes dans les matières des articles L. 1321-1 et L. 1321-2 sont considérés comme des adjonctions au règlement intérieur et soumis aux mêmes règles : avis du comité, dépôt, communication, publicité, entrée en vigueur différée. Une seule exception : lorsque l'urgence le justifie, les obligations de santé et de sécurité reçoivent application immédiate — à charge de les communiquer aussitôt et simultanément au secrétaire du comité et à l'inspection du travail.",
         fond: ["L1321-5"],
         risque: "Une note de service prise à la place du règlement n'échappe pas à la règle en changeant de nom : adjonction irrégulièrement introduite (R. 1323-1), et amende d'entrave de 7 500 euros (L. 2317-1) si l'avis du comité a été omis." },
       { id: "i11", nom: "Répondre à une demande de l'inspection du travail",
+        docProduit: "DIS-CTL-RI-12",
         conseil: "Répondez par écrit, dans le délai que la décision indique, en disant ce qui a été retiré ou modifié. Si vous contestez, le recours hiérarchique est la seule voie : le silence ne conserve aucun droit et laisse la clause en l'état.",
         quoi: "L'inspecteur du travail peut à tout moment exiger le retrait ou la modification des dispositions contraires aux articles L. 1321-1 à L. 1321-3 et L. 1321-6. Sa décision est motivée, notifiée à l'employeur et communiquée pour information aux membres du comité ; elle peut faire l'objet d'un recours hiérarchique.",
         fond: ["L1322-1", "L1322-2", "L1322-3"],
@@ -1232,17 +1307,20 @@
     ],
     etapes: [
       { id: "d1", nom: "Évaluer les risques, unité de travail par unité de travail",
+        docProduit: "SST-CTL-DUE-02",
         conseil: "Découpez d'abord, évaluez ensuite : une liste de risques sans unité de travail se réécrira entièrement. Faites participer ceux qui tiennent les postes — l'évaluation faite au bureau se voit, et se conteste.",
         quoi: "L'employeur, compte tenu de la nature des activités, évalue les risques pour la santé et la sécurité des travailleurs, y compris dans le choix des procédés, des équipements et de l'aménagement des lieux de travail. L'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail, y compris ceux liés aux ambiances thermiques.",
         fond: ["L4121-3", "R4121-1"],
         risque: "Le document unique est dû par tout employeur, sans seuil d'effectif ; ne pas transcrire les résultats de l'évaluation dans les conditions de R. 4121-1 est puni de l'amende prévue pour les contraventions de la cinquième classe, la récidive étant réprimée conformément au code pénal (R. 4741-1).",
         conv: "les obligations de prévention, les listes de risques ou les moyens propres à la branche, que certaines conventions détaillent unité de travail par unité de travail" },
       { id: "d2", nom: "Transcrire dans le document unique",
+        docProduit: "SST-CTL-DUE-01",
         conseil: "Un tableau suffit : unité, risque, exposition, mesures existantes, action retenue. Datez et signez chaque version, et ne l'écrasez jamais — c'est la version antérieure qui prouve, plus tard, ce qui était connu à l'époque.",
         quoi: "L'employeur transcrit et met à jour dans un document unique les résultats de l'évaluation. Le document répertorie l'ensemble des risques professionnels auxquels sont exposés les travailleurs et assure la traçabilité collective de ces expositions.",
         fond: ["L4121-3-1", "R4121-1"],
         risque: "Un inventaire non transcrit n'existe pas pour le contrôle : même amende de la cinquième classe (R. 4741-1), et la traçabilité collective des expositions que L. 4121-3-1 impose n'est pas assurée." },
       { id: "d3", nom: "Mettre à jour : la périodicité annuelle",
+        docProduit: "SST-CTL-DUE-03",
         conseil: "Inscrivez la revue annuelle à l'agenda plutôt que d'attendre l'échéance : la mise à jour se prépare, elle ne s'improvise pas. Une revue qui ne change rien se consigne aussi — elle prouve que la question a été posée.",
         quoi: "La mise à jour est réalisée au moins chaque année dans les entreprises d'au moins onze salariés.",
         fond: ["R4121-2"],
@@ -1255,6 +1333,7 @@
             note: "Un an après la dernière mise à jour, datée du " + dateFr(D.dateDerniereMaj) + " (art. R. 4121-2, 1°)." };
         } },
       { id: "d4", nom: "Mettre à jour : l'événement",
+        docProduit: "SST-CTL-DUE-04",
         conseil: "Traitez l'événement dans les jours qui suivent, pas à la revue annuelle suivante : c'est le décalage entre la date de l'aménagement et celle de la mise à jour qui se reproche. Un accident, une alerte d'un salarié ou une machine nouvelle sont chacun un événement.",
         quoi: "La mise à jour est également réalisée lors de toute décision d'aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail, et lorsqu'une information supplémentaire intéressant l'évaluation d'un risque est portée à la connaissance de l'employeur.",
         fond: ["R4121-2"],
@@ -1267,18 +1346,21 @@
             note: "L'article R. 4121-2 ne fixe pas de délai chiffré : la mise à jour est due à raison de l'événement lui-même. Elle est d'autant plus exposée qu'elle tarde." };
         } },
       { id: "d5", nom: "Établir le programme annuel de prévention",
+        docProduit: "SST-CTL-DUE-05",
         conseil: "Chaque mesure porte un responsable, une échéance, un coût et l'indicateur qui dira si elle a produit son effet. Un programme sans indicateur ne se contrôle pas l'année suivante, et c'est l'année suivante qu'on vous le demandera.",
         quoi: "À partir de cinquante salariés, les résultats de l'évaluation débouchent sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail : liste détaillée des mesures de l'année à venir, conditions d'exécution, indicateurs de résultat et estimation du coût de chacune, ressources mobilisables, calendrier de mise en œuvre.",
         fond: ["L4121-3-1"],
         risque: "Sans programme annuel, les résultats de l'évaluation restent sans suite, en méconnaissance de L. 4121-3-1, III, 1° — et les mesures prévues puis non prises doivent être motivées en annexe du rapport annuel présenté au comité (L. 2312-27).",
         si: function (P) { return seuil(P, 50); } },
       { id: "d6", nom: "Consigner la liste des actions de prévention",
+        docProduit: "SST-CTL-DUE-05",
         conseil: "La liste se consigne dans le document unique lui-même, pas dans un fichier à part : c'est là qu'on la cherchera. Une action par risque prioritaire suffit ; mieux vaut trois actions faites que douze annoncées.",
         quoi: "En dessous de cinquante salariés, les résultats de l'évaluation débouchent sur la définition d'actions de prévention des risques et de protection des salariés, dont la liste est consignée dans le document unique et ses mises à jour.",
         fond: ["L4121-3-1"],
         risque: "La liste d'actions consignée au document unique est la forme que L. 4121-3-1, III, 2°, donne aux suites de l'évaluation en dessous de cinquante salariés : son absence laisse l'évaluation sans suite, et le document incomplet.",
         si: function (P) { return sousSeuil(P, 50); } },
       { id: "d7", nom: "Présenter au comité le rapport et le programme annuels",
+        docProduit: "SST-CTL-DUE-07",
         conseil: "Inscrivez le point à l'ordre du jour avec le rapport et le programme joints à la convocation, et faites porter l'avis au procès-verbal. Les mesures annoncées l'an dernier et non prises se motivent en annexe : préparez ces motifs avant la réunion, pas pendant.",
         quoi: "Dans le cadre de la consultation sur la politique sociale, l'employeur présente au comité le rapport annuel écrit faisant le bilan de la santé, de la sécurité et des conditions de travail, et le programme annuel de prévention. Le document unique sert à établir ce rapport. Les mesures prévues et non prises doivent être motivées en annexe.",
         fond: ["L2312-27", "R4121-3"],
@@ -1294,11 +1376,13 @@
             points: "Rapport annuel santé, sécurité et conditions de travail\nProgramme annuel de prévention des risques professionnels",
             pointSSCT: ["La réunion porte, en tout ou partie, sur la santé, la sécurité et les conditions de travail"] }; } } },
       { id: "d8", nom: "Conserver quarante ans et tenir à disposition",
+        docProduit: "SST-CTL-DUE-06",
         conseil: "Archivez chaque version en PDF daté, hors du poste de travail de celui qui la rédige. Quarante ans dépassent la durée de vie de tout logiciel : un format lisible et une sauvegarde ailleurs valent mieux qu'un outil sophistiqué.",
         quoi: "Le document unique et ses versions antérieures sont tenus, pendant quarante ans à compter de leur élaboration, à la disposition des travailleurs et anciens travailleurs, des élus, du service de prévention et de santé au travail, de l'inspection du travail et des organismes de prévention.",
         fond: ["R4121-4"],
         risque: "Sans les versions successives, la traçabilité collective des expositions est perdue : l'employeur ne peut répondre ni à la demande d'un ancien salarié ni à celle d'un agent de contrôle (L. 4121-3-1, V ; R. 4121-4)." },
       { id: "d9", nom: "Mettre en œuvre les mesures de prévention",
+        docProduit: "SST-CTL-DUE-01",
         conseil: "Le document ne protège personne s'il reste dans un tiroir : ce qui vous défendra, c'est la trace des mesures effectivement prises — bons de commande, comptes rendus, attestations de formation. Classez-les avec le document, pas ailleurs.",
         quoi: "L'évaluation n'est pas une fin : l'employeur prend les mesures nécessaires pour assurer la sécurité et protéger la santé physique et mentale des travailleurs, sur le fondement des principes généraux de prévention — éviter les risques, évaluer ceux qui ne peuvent l'être, les combattre à la source, adapter le travail à l'homme, planifier la prévention en y intégrant les risques liés au harcèlement et aux agissements sexistes.",
         fond: ["L4121-1", "L4121-2"], juris: ["14-24.444"],
@@ -1701,33 +1785,47 @@
     ],
     etapes: [
       { id: "a1", nom: "Informer sur l'égalité de traitement et la non-discrimination",
+        risque: "Aucune contravention n'a été trouvée qui sanctionne spécifiquement le défaut de cette information : l'article L. 1146-1, qui punit d'un an d'emprisonnement et de 3 750 euros la méconnaissance de l'égalité professionnelle, vise les articles L. 1142-1 et L. 1142-2, non l'article L. 1142-6. La conséquence est civile, et elle est réelle : le manquement d'information est retenu contre l'employeur dans les contentieux de discrimination, où il prive la défense de son premier appui.",
+        conseil: "Reproduisez les articles dans leur rédaction en vigueur, sans les résumer ni les commenter, et datez le support. L'oubli le plus fréquent porte sur le local d'embauche, souvent distinct du lieu de travail : siège, agence de recrutement, accueil. Photographiez chaque emplacement et rangez le cliché daté au dossier des affichages.",
         quoi: "Dans les lieux de travail ainsi que dans les locaux ou à la porte des locaux où se fait l'embauche, portez par tout moyen à la connaissance des personnes le texte des articles 225-1 à 225-4 du code pénal. Le texte, pas un résumé : c'est ce que l'article impose.",
         fond: ["L1142-6"],
         doc: { modele: "note-rh", nom: "Note d'information aux salariés",
           pre: function (P, D) { return { entreprise: P.denomination, objet: "Information sur la non-discrimination — articles 225-1 à 225-4 du code pénal", date: D.dateReleve }; } } },
       { id: "a2", nom: "Informer sur l'égalité de rémunération entre les femmes et les hommes",
+        risque: "L'article R. 3222-3 punit de l'amende prévue pour les contraventions de la troisième classe le fait de ne pas communiquer, dans les conditions de l'article R. 3221-2, les articles relatifs à l'égalité de rémunération entre les femmes et les hommes. À distinguer de l'article R. 3222-1, qui frappe d'une contravention de la cinquième classe, appliquée autant de fois qu'il y a de travailleurs rémunérés dans des conditions illégales, la méconnaissance des règles de fond des articles L. 3221-2 à L. 3221-6.",
+        conseil: "Le support doit atteindre deux publics distincts : les personnes qui accèdent aux lieux de travail, et les candidats à l'embauche. Reprenez donc l'information dans le dossier de candidature ou l'accusé de réception, et pas seulement au panneau. Datez la mise à jour à chaque modification des textes.",
         quoi: "Les dispositions des articles L. 3221-1 à L. 3221-7 et leurs textes d'application sont portées, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ainsi qu'aux candidats à l'embauche. Les candidats aussi : c'est le point que l'on oublie.",
         fond: ["R3221-2"],
         doc: { modele: "note-rh", nom: "Note d'information aux salariés",
           pre: function (P, D) { return { entreprise: P.denomination, objet: "Information sur l'égalité de rémunération — articles L. 3221-1 à L. 3221-7", date: D.dateReleve }; } } },
       { id: "a3", nom: "Informer sur les harcèlements moral et sexuel et les agissements sexistes",
+        risque: "Aucun texte lu ne réprime spécifiquement le défaut de cette information ; l'article L. 1155-2 punit d'un an d'emprisonnement et de 3 750 euros les discriminations commises à la suite d'un harcèlement, ce qui est autre chose. Le manquement pèse en revanche lourdement dans tout contentieux de harcèlement : c'est la prévention documentée qui conditionne l'exonération de la responsabilité de l'employeur.",
+        conseil: "Le support ne se limite pas au texte pénal : pour le harcèlement sexuel, il porte aussi les actions contentieuses ouvertes et les coordonnées des autorités, services et référents. Ce sont ces coordonnées qui périment — inspection, médecin du travail, référents désignés. Fixez une revue annuelle et une revue à chaque changement de référent : une information périmée ne vaut pas information.",
         jx: "harcelement",
         quoi: "Le texte de l'article 222-33-2 du code pénal pour le harcèlement moral ; le texte de l'article 222-33 et les actions contentieuses civiles et pénales ouvertes pour le harcèlement sexuel, dans les lieux de travail comme dans les locaux d'embauche. L'information s'accompagne des coordonnées utiles — médecin du travail, inspection du travail, Défenseur des droits, référents.",
         fond: ["L1152-4", "L1153-5"],
         doc: { modele: "signalement-harcelement", nom: "Procédure de signalement harcèlement",
           pre: function (P, D) { return { entreprise: P.denomination, date: D.dateReleve }; } } },
       { id: "a4", nom: "Afficher les coordonnées du médecin du travail, des secours et de l'inspection du travail",
+        risque: "L'article R. 4741-3 punit de l'amende prévue pour les contraventions de la quatrième classe la méconnaissance des articles D. 4711-1 à D. 4711-3 relatifs aux documents et affichages obligatoires ; l'amende est appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. C'est l'affichage le moins coûteux à mettre en place, et l'un des plus chers à omettre.",
+        conseil: "Celui-là s'affiche vraiment — il n'est pas dû « par tout moyen » : prévoyez un support physique dans un local normalement accessible. Le nom de l'inspecteur compétent change au gré des affectations : c'est la mention qui se périme la première. Rapprochez l'affiche du service de prévention et de santé au travail une fois l'an, et datez la vérification.",
         quoi: "Celui-là s'affiche, et dans des locaux normalement accessibles aux travailleurs : adresse et numéro d'appel du médecin du travail ou du service compétent, des services de secours d'urgence, de l'inspection du travail — avec le nom de l'inspecteur compétent.",
         fond: ["D4711-1"] },
       { id: "a5", nom: "Établir et afficher la consigne de sécurité incendie",
+        risque: "L'article L. 4741-1 punit d'une amende de 10 000 euros, appliquée autant de fois qu'il y a de travailleurs concernés, la méconnaissance par faute personnelle des dispositions du titre II du livre II de la quatrième partie, dont relève l'article R. 4227-37. En amont, l'inspection du travail peut mettre en demeure ; en aval, la carence engage la responsabilité de l'employeur si un incendie survient.",
+        conseil: "L'affichage ne suffit pas : la consigne se démontre par les essais et exercices périodiques, qui se datent et se consignent. Désignez les personnes chargées de l'évacuation par leur fonction plutôt que par leur nom, pour que la consigne survive aux départs. Vérifiez que chaque local concerné en porte un exemplaire, et non le seul hall d'entrée.",
         quoi: "La consigne est établie et affichée « de manière très apparente » : dans chaque local dont l'effectif dépasse cinq personnes, et dans chaque local ou dégagement desservant un groupe de locaux dans les autres cas.",
         fond: ["R4227-37"],
         si: function (P, D) { return D.matieresInflammables === "non" ? false : true; } },
       { id: "a6", nom: "Afficher l'horaire collectif et les repos",
+        risque: "L'article R. 3173-2 punit de l'amende prévue pour les contraventions de la quatrième classe la méconnaissance des deux premiers alinéas de l'article L. 3171-1, l'amende étant appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. En litige sur les heures supplémentaires, l'absence d'affichage se retourne en outre contre l'employeur, à qui il revient de justifier des horaires pratiqués.",
+        conseil: "Affichez l'horaire daté et signé, et conservez un exemplaire daté à chaque changement : c'est la série des versions successives qui prouve l'horaire d'une période passée. Pour les salariés qui ne suivent pas l'horaire collectif — horaires individualisés, équipes successives, forfaits, itinérants — l'affichage ne suffit pas : c'est un décompte individuel qu'il faut tenir.",
         quoi: "L'employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos. Lorsque la durée du travail est organisée sur une période de référence, l'affichage comprend la répartition de la durée du travail dans ce cadre.",
         fond: ["L3171-1"],
         si: function (P, D) { return D.horaireCollectif === "non" ? false : true; } },
       { id: "a7", nom: "Informer sur la convention collective et tenir un exemplaire à disposition",
+        risque: "Les contraventions des articles R. 2263-1 et R. 2263-2 visent les articles R. 2262-3 et R. 2262-4, non l'article R. 2262-1 : aucune peine n'a été trouvée pour ce seul manquement. La conséquence est civile et joue à sens unique — le défaut d'information ne dispense pas l'employeur d'appliquer la convention, dont les avantages restent dus aux salariés.",
+        conseil: "Deux obligations distinctes se confondent souvent : informer chaque salarié des textes applicables, et tenir un exemplaire à jour à sa disposition sur le lieu de travail. Un lien intranet vers un texte non consolidé ne remplit ni l'une ni l'autre. Datez la version mise à disposition et suivez les avenants : c'est la mise à jour, plus que la mise en place, qui fait défaut.",
         quoi: "À défaut d'autres modalités prévues par un accord, l'employeur informe le salarié des conventions et accords applicables, tient un exemplaire à jour à la disposition des salariés sur le lieu de travail, et le met à disposition sur l'intranet lorsqu'il en existe un.",
         fond: ["R2262-1"],
         conv: "les modalités d'information que votre convention prévoit elle-même — l'article R. 2262-1 ne joue qu'« à défaut d'autres modalités prévues par une convention ou un accord »",
@@ -1736,13 +1834,19 @@
             objet: "Convention collective applicable : " + (P.conventionCollective || "à renseigner dans la fiche client") + " — modalités de consultation",
             date: D.dateReleve }; } } },
       { id: "a8", nom: "Mettre à disposition les panneaux syndicaux, distincts de ceux du comité",
+        risque: "L'article L. 2146-1 punit d'un emprisonnement d'un an et d'une amende de 3 750 euros l'entrave à l'exercice du droit syndical défini par les articles L. 2141-4, L. 2141-9 et L. 2141-11 à L. 2143-22, au nombre desquels figure l'article L. 2142-3. Refuser les panneaux, les confondre avec ceux du comité ou soumettre l'affichage syndical à une autorisation préalable entre dans ce champ.",
+        conseil: "Deux supports, deux emplacements, une signalétique qui ne prête pas à confusion avec ceux du comité. L'employeur reçoit un exemplaire des communications simultanément à l'affichage : il le reçoit, il ne l'autorise pas — ne répondez jamais par un visa. Formalisez par accord les modalités de mise à disposition, datez-le, et conservez-le avec la liste des sections destinataires.",
         quoi: "L'affichage des communications syndicales s'effectue librement sur des panneaux réservés à cet usage, distincts de ceux affectés aux communications du comité. Un exemplaire des communications est transmis à l'employeur simultanément à l'affichage ; les modalités de mise à disposition se fixent par accord avec l'employeur.",
         fond: ["L2142-3"],
         si: function (P, D) { return D.sectionSyndicale === "non" ? false : true; } },
       { id: "a9", nom: "Réunir les registres de santé-sécurité en un registre unique, si vous le souhaitez",
+        risque: "Réunir les registres est une faculté : ne pas l'exercer n'expose à rien. C'est l'obligation sous-jacente qui est sanctionnée — l'article R. 4741-3 punit de l'amende prévue pour les contraventions de la quatrième classe la méconnaissance des articles L. 4711-1 à L. 4711-5, appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées.",
+        conseil: "N'exercez la faculté que si elle simplifie réellement la consultation : un registre unique mal indexé se produit plus mal qu'une série de classeurs séparés. Si vous réunissez, tenez un sommaire daté renvoyant à chaque catégorie de vérification, et conservez les rapports d'origine. Ce sont les rapports, non le registre, que l'agent de contrôle demande.",
         quoi: "Lorsqu'il est prévu que les informations des articles L. 4711-1 et L. 4711-2 figurent dans des registres distincts, l'employeur est autorisé à les réunir dans un registre unique dès lors que cette mesure facilite leur conservation et leur consultation. C'est une faculté, pas une obligation.",
         fond: ["L4711-5"] },
       { id: "a10", nom: "VALIDATION — dresser le relevé daté des affichages et informations",
+        risque: "Aucun texte n'impose ce relevé : ce qu'on risque à ne pas le tenir est probatoire. Au contrôle, l'employeur ne peut établir que chaque information a bien été portée à la connaissance des intéressés, et les contraventions attachées à chacune des étapes précédentes — R. 4741-3 pour les affichages de sécurité, R. 3173-2 pour l'horaire collectif, R. 3222-3 pour l'égalité de rémunération — se constatent alors sans qu'il ait rien à leur opposer.",
+        conseil: "Faites la tournée site par site, et non depuis un bureau : les affichages manquent là où l'on ne passe pas — réserves, ateliers, agences, chantiers. Photographiez, horodatez, nommez chaque cliché du lieu et de la date. Pour ce qui est dû « par tout moyen », la preuve du support vaut la photographie : accusé de diffusion, capture d'intranet, émargement du livret d'accueil. Refaites la tournée à date fixe une fois l'an.",
         quoi: "Parcourez chaque lieu de travail et chaque local d'embauche, photographiez chaque affichage, datez le relevé, et conservez-le. Pour ce qui est dû « par tout moyen », conservez la preuve du support : accusé de diffusion, capture de l'intranet, émargement du livret. Ce relevé est la pièce que vous produirez au contrôle de l'existant de l'audit social — et le parcours n'est terminé que lorsqu'il existe.",
         fond: ["L1142-6", "R3221-2", "D4711-1", "L1152-4", "L1153-5"],
         quand: function (D) {
@@ -1797,6 +1901,8 @@
     ],
     etapes: [
       { id: "r1", nom: "Ouvrir un registre par établissement",
+        risque: "L'article R. 1227-7 punit de l'amende prévue pour les contraventions de la quatrième classe la méconnaissance de l'article L. 1221-13 relatif au registre unique du personnel ; l'amende est appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. L'absence de registre dans un établissement n'est donc pas une infraction, mais autant d'infractions qu'il y compte de salariés.",
+        conseil: "Ouvrez un registre par établissement, quand bien même la paie serait centralisée : ce qui se demande au contrôle, c'est le registre du site visité, sur-le-champ. Si vous tenez une base centrale, préparez l'extraction par établissement et vérifiez qu'elle s'imprime sur place. Nommez, dans chaque établissement, la personne qui en répond.",
         jx: "registre",
         quoi: "Un registre unique du personnel est tenu dans tout établissement où sont employés des salariés. Si l'entreprise compte plusieurs établissements, elle compte autant de registres — la centralisation ne dispense pas de la tenue sur place.",
         fond: ["L1221-13"],
@@ -1805,24 +1911,36 @@
           return { iso: D.dateOuverture, libelle: "Registre ouvert le " + dateFr(D.dateOuverture) };
         } },
       { id: "r2", nom: "Inscrire les noms et prénoms dans l'ordre des embauches, de façon indélébile",
+        risque: "Même exposition qu'à l'étape précédente : l'article R. 1227-7 sanctionne la méconnaissance de l'article L. 1221-13 de l'amende prévue pour les contraventions de la quatrième classe, appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. Un registre renseigné en fin de mois est, pour les embauches de ce mois, un registre non tenu.",
+        conseil: "Inscrivez à l'entrée du salarié, non à la signature du contrat ni au premier bulletin : c'est le seul moment qui ne se rattrape pas. L'exigence d'indélébilité interdit le crayon et, sur support numérique, l'écrasement silencieux — conservez l'historique des modifications. Un intérimaire ou un salarié d'un jour s'inscrit comme les autres : c'est l'omission la plus fréquente.",
         quoi: "Les mentions sont portées sur le registre au moment de l'embauche et de façon indélébile. « Au moment de l'embauche » : pas à la fin du mois, pas quand le contrat est signé — au moment où le salarié entre.",
         fond: ["L1221-13"] },
       { id: "r3", nom: "Ouvrir la partie spécifique aux stagiaires et aux volontaires en service civique",
+        risque: "L'article L. 1221-13 range cette partie spécifique parmi les mentions du registre, et l'article R. 1227-7 en punit la méconnaissance de l'amende prévue pour les contraventions de la quatrième classe, appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées.",
+        conseil: "Une partie distincte, pas une colonne supplémentaire : mêler stagiaires et salariés dans la même suite fait douter de l'une et de l'autre. L'ordre est celui de l'arrivée, non celui de la signature des conventions. Rapprochez cette partie des conventions conclues avec les établissements d'enseignement une fois par trimestre : c'est là que se voient les accueils oubliés.",
         quoi: "Les nom et prénoms des stagiaires et des personnes volontaires en service civique accueillis dans l'établissement sont inscrits dans l'ordre d'arrivée, dans une partie spécifique du registre — distincte de celle des salariés.",
         fond: ["L1221-13"],
         si: function (P, D) { return D.stagiaires === "non" ? false : true; } },
       { id: "r4", nom: "Porter les treize indications complémentaires",
+        risque: "L'article R. 1227-7 vise expressément les articles D. 1221-23 à R. 1221-26 relatifs au registre unique du personnel et punit leur méconnaissance de l'amende prévue pour les contraventions de la quatrième classe, appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. Une mention manquante expose donc au même titre qu'un registre absent.",
+        conseil: "Construisez le registre à partir de la liste des treize indications, non à partir de ce que produit le logiciel de paie. Les mentions de nature de contrat — « contrat à durée déterminée », « salarié temporaire », « mis à disposition par un groupement d'employeurs », « salarié à temps partiel », « apprenti » — sont celles qui manquent le plus souvent, faute d'être des données de paie. Reprenez les libellés du texte tels quels, sans les abréger.",
         jx: "registre",
         quoi: "Nationalité ; date de naissance ; sexe ; emploi ; qualification ; dates d'entrée et de sortie ; date de l'autorisation d'embauche ou de licenciement lorsqu'elle est requise, ou à défaut de la demande ; titre valant autorisation de travail pour les travailleurs étrangers ; et les mentions « contrat à durée déterminée », « salarié temporaire » avec le nom et l'adresse de l'entreprise de travail temporaire, « mis à disposition par un groupement d'employeurs » avec sa dénomination et son adresse, « salarié à temps partiel », « apprenti » ou « contrat de professionnalisation ».",
         fond: ["D1221-23"] },
       { id: "r5", nom: "Annexer la copie des titres de travail des salariés étrangers",
+        risque: "Même article de sanction : l'article R. 1227-7 punit de l'amende prévue pour les contraventions de la quatrième classe la méconnaissance des articles D. 1221-23 à R. 1221-26, appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. L'exposition dépasse ici le registre — l'emploi d'un travailleur étranger sans titre relève d'un autre régime, plus lourd, qui n'a pas été lu pour ce parcours.",
+        conseil: "Annexez la copie ; ne vous contentez pas d'un numéro reporté dans une colonne. Sur chantier ou sur un lieu de travail distinct, la copie doit être consultable là où les travailleurs sont employés : prévoyez le jeu de copies qui voyage avec l'équipe. Tenez un échéancier des dates de fin de validité — un titre expiré non renouvelé est le point de contrôle le plus immédiat.",
         quoi: "Elle est annexée au registre et rendue accessible aux membres de la délégation du personnel du comité et aux agents de contrôle. Elle est tenue à leur disposition soit dans l'établissement, soit sur chaque chantier ou lieu de travail distinct où ces travailleurs sont employés.",
         fond: ["D1221-24"],
         si: function (P, D) { return D.etrangers === "non" ? false : true; } },
       { id: "r6", nom: "Mettre à jour au moment où l'événement survient",
+        risque: "L'article R. 1227-7 punit de l'amende prévue pour les contraventions de la quatrième classe la méconnaissance des articles D. 1221-23 à R. 1221-26, appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. Une sortie inscrite trois mois plus tard est, pendant trois mois, une mention manquante.",
+        conseil: "Accrochez la mise à jour à l'événement qui la déclenche, non à une revue périodique : dernier jour travaillé, changement de qualification, passage à temps partiel, obtention d'un titre. Le point de fuite est la sortie, que la paie enregistre plus tard que le départ réel. Faites du registre une étape de la procédure de départ, avant la remise des documents de fin de contrat.",
         quoi: "Les mentions relatives à des événements postérieurs à l'embauche du salarié, ou à l'arrivée du stagiaire, sont portées sur le registre au moment où ceux-ci surviennent. Une sortie inscrite trois mois plus tard est une sortie non inscrite.",
         fond: ["D1221-25"] },
       { id: "r7", nom: "Régulariser le support de substitution informatique",
+        risque: "L'énumération de l'article R. 1227-7 s'arrête à l'article R. 1221-26 : aucune contravention n'y sanctionne expressément l'article D. 1221-27. Mais un support de substitution qui ne satisfait pas aux exigences des articles D. 8113-2 et D. 8113-3 ne tient pas lieu de registre, et c'est alors l'obligation de l'article L. 1221-13 elle-même qui est méconnue — avec la contravention de quatrième classe, par personne employée, que l'article R. 1227-7 y attache.",
+        conseil: "Prenez les deux formalités dans l'ordre : l'avis du comité d'abord, son envoi à l'inspection du travail ensuite, chacun daté et conservé. Vérifiez que le support se lit et s'imprime sans manipulation particulière et que rien ne s'y altère : un tableur partagé, modifiable et sans historique, ne remplit pas la condition. Conservez-le aussi longtemps que le registre papier auquel il se substitue.",
         quoi: "Lorsque l'employeur recourt à un support de substitution, les exigences des articles D. 8113-2 et D. 8113-3 sont applicables, et il adresse à l'inspection du travail l'avis du comité social et économique prévu à l'article L. 2315-5.",
         fond: ["D1221-27"],
         si: function (P, D) { return D.support === "support de substitution informatique" ? true : (D.support ? false : null); },
@@ -1832,6 +1950,8 @@
             note: "L'article D. 1221-27 impose d'adresser cet avis à l'inspection du travail ; il ne fixe pas de délai." };
         } },
       { id: "r8", nom: "VALIDATION — tenir le registre à la disposition du comité et des agents de contrôle",
+        risque: "L'article R. 1227-7 cite expressément l'article L. 1221-15 et punit sa méconnaissance de l'amende prévue pour les contraventions de la quatrième classe, appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. Un registre tenu mais introuvable, ou inaccessible aux élus, n'est pas un registre tenu à disposition.",
+        conseil: "Écrivez aux élus où le registre se consulte, sous quel délai et auprès de qui, et gardez la trace de cet envoi : c'est cette lettre, plus que le registre, qui prouve la mise à disposition. Ne subordonnez la consultation ni à un motif ni à un rendez-vous préalable. Refaites l'information à chaque renouvellement du comité et à chaque changement de lieu.",
         quoi: "Le registre est tenu à la disposition du comité social et économique et des fonctionnaires et agents chargés de veiller à l'application du code du travail et du code de la sécurité sociale. Datez cette mise à disposition, dites où le registre se consulte, et informez-en les élus par écrit : le parcours n'est terminé que lorsque le registre est consultable et que quelqu'un le sait.",
         fond: ["L1221-15"],
         doc: { modele: "note-rh", nom: "Note aux élus — mise à disposition du registre",
@@ -1877,21 +1997,33 @@
     ],
     etapes: [
       { id: "b1", nom: "Déterminer le régime : accord, accord de branche, ou supplétif",
+        risque: "Tant que le texte applicable n'est pas identifié, la grille due est inconnue : l'article L. 2312-21 laisse l'accord définir l'organisation, l'architecture et le contenu de la base, et le décret ne s'applique qu'à son défaut. Les deux grilles ne se recouvrent pas, et l'erreur de texte se paie en rubriques manquantes, que le comité oppose ensuite à la régularité des consultations. Le dernier alinéa du même article ne permet à un accord de branche de suppléer qu'à défaut d'accord d'entreprise, et dans les entreprises de moins de trois cents salariés.",
+        conseil: "Commencez par produire la pièce, non par la décrire : l'accord signé, avec sa date et son dépôt, ou le constat écrit qu'il n'en existe aucun. Un dossier qui déclare un accord sans le verser, ou qui invoque le régime supplétif tout en produisant un accord, se contredit lui-même. Datez la réponse et rangez-la en tête du dossier de la base : tout le reste s'y rapporte.",
         quoi: "Un accord d'entreprise — ou, en l'absence de délégué syndical, un accord entre l'employeur et le comité adopté à la majorité des titulaires — définit l'organisation, l'architecture et le contenu de la base, ainsi que ses modalités de fonctionnement : droits d'accès, niveau de mise en place dans les entreprises à établissements distincts, support, modalités de consultation et d'utilisation. À défaut, un accord de branche peut le faire dans les entreprises de moins de trois cents salariés.",
         fond: ["L2312-21"] },
       { id: "b2", nom: "Vérifier les dix thèmes que la base comporte au moins",
+        risque: "Le troisième alinéa de l'article L. 2312-21 dit que la base « comporte au moins » ces thèmes : ce plancher s'impose à tout accord, et la stipulation qui en retire un est, sur ce point, sans effet. Une base amputée ne rassemble pas l'ensemble des informations nécessaires aux consultations récurrentes que l'article L. 2312-18 lui fait porter : la consultation qui s'en réclame peut être jugée irrégulière.",
+        conseil: "Vérifiez thème par thème, en cochant, et non en lisant le sommaire de l'accord : c'est le contenu réellement versé qui compte, pas l'intitulé de la rubrique. Le thème environnemental est le plus récemment ajouté et le plus souvent vide. Notez, pour chaque thème, la date de la dernière alimentation — un thème présent mais figé se voit au premier coup d'œil.",
         quoi: "Même sous accord, la base comporte au moins : l'investissement social, l'investissement matériel et immatériel, l'égalité professionnelle entre les femmes et les hommes, les fonds propres, l'endettement, l'ensemble des éléments de rémunération des salariés et dirigeants, les activités sociales et culturelles, la rémunération des financeurs, les flux financiers à destination de l'entreprise, et les conséquences environnementales de l'activité.",
         fond: ["L2312-21"] },
       { id: "b3", nom: "À défaut d'accord, reprendre le contenu supplétif propre à l'effectif",
+        risque: "En l'absence d'accord, c'est le décret qui fixe le contenu, et les rubriques qu'il énumère sont dues. Une rubrique absente prive le comité d'une information que l'article L. 2312-18 range parmi celles nécessaires à ses consultations récurrentes : la consultation peut être jugée irrégulière et l'avis n'être pas valablement rendu. Les informations portent en outre sur les deux années précédentes et l'année en cours, avec des perspectives sur les trois suivantes — une base qui ne présente qu'un exercice ne les porte pas.",
+        conseil: "Choisissez la grille sur l'effectif avant d'écrire une ligne : sous trois cents salariés et au-delà, les deux listes diffèrent, et l'on ne rattrape pas aisément une base montée sur la mauvaise. Lorsqu'une information ne peut être chiffrée, écrivez-le et dites pourquoi, dans la rubrique elle-même : une case vide sans explication ne se distingue pas d'une information manquante. Faites l'inventaire dans le module d'audit, rubrique par rubrique, plutôt qu'à la lecture.",
         quoi: "En l'absence d'accord, la base rassemble les informations que l'article L. 2312-36 énumère, sur les deux années précédentes et l'année en cours, avec des perspectives sur les trois années suivantes. Le détail des rubriques est fixé par l'article R. 2312-8 sous trois cents salariés, et par l'article R. 2312-9 au-delà. Le module d'audit dédié en donne la liste exacte, rubrique par rubrique.",
         fond: ["L2312-36", "R2312-8", "R2312-9"] },
       { id: "b4", nom: "Y verser les indicateurs de l'égalité et le bilan des formations",
+        risque: "L'article L. 2312-18 range ces éléments parmi ceux que la base comporte « en particulier » : leur absence est une lacune de la base elle-même, et non un simple oubli documentaire. Elle fragilise la consultation sur la politique sociale, qui s'en nourrit, et prive le comité de la méthodologie sans laquelle les indicateurs d'égalité ne se discutent pas. L'exposition propre à la publication de ces indicateurs se mesure, elle, dans le parcours consacré à l'index.",
+        conseil: "Ces éléments viennent d'ailleurs — l'index de l'égalité, les entretiens de parcours — et arrivent donc en retard : calez leur date de versement sur le calendrier de leur production, non sur celui de la base. Versez la méthodologie autant que le résultat : c'est elle que le comité interroge. Datez chaque dépôt.",
         quoi: "La base comporte en particulier l'ensemble des indicateurs relatifs à l'égalité professionnelle — dont les écarts de rémunération et de répartition parmi les cadres dirigeants et les membres des instances dirigeantes —, les informations sur la méthodologie et le contenu des indicateurs de l'article L. 1142-8, et un bilan de la mise en œuvre des actions de formation entreprises à l'issue des entretiens de parcours professionnel.",
         fond: ["L2312-18", "L1142-8", "L6315-1"] },
       { id: "b5", nom: "Ouvrir l'accès permanent aux élus et aux délégués syndicaux",
+        risque: "Le dernier alinéa de l'article L. 2312-36 rend la base accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central et aux délégués syndicaux ; un accord peut organiser les droits d'accès, il ne peut pas les supprimer. Une base qu'une catégorie de bénéficiaires n'atteint pas n'est pas mise à sa disposition, et la consultation qui s'en réclame est contestable. Le refus d'accès peut en outre s'analyser en entrave au fonctionnement régulier du comité, que l'article L. 2317-1 punit d'une amende de 7 500 euros.",
+        conseil: "Ouvrez un compte nominatif à chaque bénéficiaire — les suppléants et les délégués syndicaux sont ceux qu'on oublie — et tenez la liste des accès ouverts avec leurs dates. « En permanence » exclut l'envoi sur demande, la clé remise le jour de la réunion et le mot de passe partagé. Revoyez la liste à chaque renouvellement de mandat et à chaque désignation syndicale.",
         quoi: "La base est accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central d'entreprise et aux délégués syndicaux. « En permanence » : pas sur demande, pas pendant les réunions.",
         fond: ["L2312-36"] },
       { id: "b6", nom: "Notifier la mise à disposition — elle vaut communication",
+        risque: "L'article R. 2312-5 fait courir le délai de consultation de la communication des informations par l'employeur, ou de l'information par l'employeur de leur mise à disposition dans la base. Sans cette information, le délai ne court pas : le comité ne peut être réputé consulté, et l'avis que l'article R. 2312-6 attache au terme du délai — réputé rendu, et négatif, à l'expiration d'un mois à défaut d'accord — ne se produit jamais. La consultation reste ouverte, et la décision prise après elle est exposée.",
+        conseil: "Envoyez un écrit daté qui dit ce qui a été versé, où, et pour quelle consultation : c'est cet écrit qui fait courir le délai, non le dépôt lui-même. Un courriel nominatif avec accusé vaut mieux qu'une notification automatique de plateforme, qui se perd. Rangez-le avec la capture du contenu versé ce jour-là : l'un sans l'autre ne prouve rien.",
         quoi: "Les éléments d'information transmis de manière récurrente au comité sont mis à sa disposition dans la base, et cette mise à disposition actualisée vaut communication des rapports et informations au comité, dans les conditions et limites fixées par décret en Conseil d'État. Datez-la : c'est de cette date que se compte le délai d'examen du comité.",
         fond: ["L2312-18"],
         quand: function (D) {
@@ -1905,6 +2037,8 @@
             objet: "Base de données économiques, sociales et environnementales : accès et actualisation",
             date: D.dateMiseADisposition }; } } },
       { id: "b7", nom: "VALIDATION — auditer la base rubrique par rubrique dans le module dédié",
+        risque: "L'article L. 2312-18 met la base à disposition, et c'est un acte de l'employeur : le module prépare, structure et audite le contenu, il n'est pas la base et il n'atteste pas la mise à disposition. Sans dossier de preuve, l'employeur qui affirme avoir mis la base à disposition ne peut pas le démontrer, ni se prévaloir de la règle du même article selon laquelle la mise à disposition actualisée vaut communication des rapports et informations au comité.",
+        conseil: "Passez l'audit avant la réunion, jamais après : son intérêt est de faire apparaître les rubriques manquantes quand il est encore temps de les combler. Conservez le verdict daté, rubrique par rubrique, avec la version de la base qu'il a examinée. Refaites-le à chaque campagne annuelle — c'est la comparaison de deux verdicts qui montre si la base progresse ou se dégrade.",
         quoi: "Le chapeau dit que la base est due et comment elle se constitue ; il ne dit pas si la vôtre est complète. Ouvrez le module d'audit de la base : il confronte votre contenu au plancher applicable, rubrique par rubrique, et rend un verdict par rubrique. Le parcours n'est terminé que lorsque cet audit a été passé.",
         fond: ["L2312-36", "R2312-8", "R2312-9"] },
     ]
@@ -2865,6 +2999,14 @@
           : "";
         var doc = s.doc ? '<a class="doc" href="' + e(lienDoc(s.doc, D)) + '">Produire : ' +
           e(s.doc.nom) + " →</a>" : "";
+        /* Le courrier type que l'application sait écrire elle-même — lettre de
+           dépôt au greffe, transmission à l'inspecteur du travail, attestation
+           de publicité, avenant, ordre du jour. Les générateurs pèsent lourd :
+           ils ne sont chargés qu'au clic (voir produireCourrier). */
+        var courrier = s.docProduit
+          ? '<button type="button" class="courrier" data-courrier="' + e(s.docProduit) +
+            '">Écrire le courrier type →</button>'
+          : "";
         /* Le document final, quand c'est Juris Expert qui l'imprime. */
         var jx = lienJX(s.jx, jxDispo(s.jx)
           ? "Document final : " + window.JurisExpert.nom(s.jx) + " (Juris Expert)"
@@ -2873,7 +3015,7 @@
           '<div class="etape-tete"><span class="etape-num">' + n + "</span>" +
           '<span class="etape-titre">' + e(s.nom) + '</span><span class="etat"></span></div>' +
           '<div class="etape-corps"><p>' + e(s.quoi) + "</p>" + ech + fond + juris + cv + rq + cs +
-          '<div class="actions">' + doc + jx +
+          '<div class="actions">' + doc + courrier + jx +
           '<label class="coche"><input type="checkbox" data-etape="' + e(s.id) + '"' +
           (x.faite ? " checked" : "") + "> étape franchie</label>" +
           '<input class="date-fait" type="date" data-etape-date="' + e(s.id) + '" value="' +
@@ -2890,6 +3032,9 @@
         if (champDate) champDate.value = st.etapes[id].le || "";
         enregistrer(); majEtats(); majCartes();
       });
+    });
+    [].slice.call($("zone-etapes").querySelectorAll("[data-courrier]")).forEach(function (x) {
+      x.addEventListener("click", function () { produireCourrier(x.getAttribute("data-courrier"), x); });
     });
     [].slice.call($("zone-etapes").querySelectorAll("[data-etape-date]")).forEach(function (x) {
       x.addEventListener("change", function () {
@@ -2979,6 +3124,66 @@
   }
 
   /* ================================================================== */
+  /* LE COURRIER TYPE                                                   */
+  /*                                                                    */
+  /* L'application sait écrire, pour chacun de ses contrôles, le        */
+  /* document qui le régularise : la lettre de dépôt au greffe, celle   */
+  /* de transmission à l'inspecteur du travail en deux exemplaires,     */
+  /* l'attestation de publicité, l'avenant, l'ordre du jour du comité.  */
+  /* Ces générateurs vivent dans docs/documents-*.js et pèsent ensemble */
+  /* près d'un mégaoctet : la page ne les charge qu'au premier clic, et */
+  /* seulement ceux du module concerné. Un téléphone qui consulte un    */
+  /* parcours ne télécharge rien tant qu'il ne demande pas de courrier. */
+  /* ================================================================== */
+  var FICHIERS = {
+    DIS: ["documents-produits.js", "documents-discipline.js", "documents-discipline-2.js"],
+    SST: ["documents-produits.js", "documents-sst.js", "documents-sst-2.js"],
+    CSE: ["documents-produits.js", "documents-cse.js", "documents-cse-2.js", "documents-cse-3.js"],
+    BDESE: ["documents-produits.js", "documents-bdese.js"],
+    NAO: ["documents-produits.js", "documents-nao.js"],
+    PSE: ["documents-produits.js", "documents-pse.js"],
+  };
+  var charges = {};
+  function charger(liste, quand) {
+    var reste = liste.filter(function (f) { return !charges[f]; });
+    if (!reste.length) return quand();
+    var n = reste.length, echec = false;
+    reste.forEach(function (f) {
+      var sc = document.createElement("script");
+      sc.src = f;
+      sc.onload = function () { charges[f] = true; if (!--n && !echec) quand(); };
+      sc.onerror = function () { echec = true; quand(new Error(f)); };
+      document.head.appendChild(sc);
+    });
+  }
+  function produireCourrier(id, bouton) {
+    var famille = String(id).split("-")[0];
+    var liste = FICHIERS[famille];
+    if (!liste) return;
+    var libelle = bouton ? bouton.textContent : "";
+    if (bouton) { bouton.disabled = true; bouton.textContent = "Un instant…"; }
+    charger(liste, function (err) {
+      if (bouton) { bouton.disabled = false; bouton.textContent = libelle; }
+      if (err || !window.DocumentsProduits) {
+        message("Le générateur de ce courrier n'a pas pu être chargé. Réessayez une fois la page rechargée.");
+        return;
+      }
+      var gen = DocumentsProduits.pour(id);
+      if (!gen) { message("Aucun courrier type n'est écrit pour ce point."); return; }
+      /* Le générateur attend la fiche d'audit ; ici nous n'avons que le profil
+         et les dates du parcours. Ce qui manque sort entre crochets dans le
+         texte produit — visible, jamais inventé : c'est la règle des
+         générateurs eux-mêmes. */
+      var st = ACTIF ? etatDe(ACTIF.cle) : { donnees: {} };
+      var txt = gen.produire({ profil: PROFIL, fiche: st.donnees || {}, aujourdhui: new Date() });
+      $("dt-titre").textContent = gen.nom;
+      $("dt-corps").textContent = txt;
+      var d = $("dlg-courrier");
+      if (d.showModal) d.showModal(); else d.setAttribute("open", "open");
+    });
+  }
+
+  /* ================================================================== */
   /* LE RÉCAPITULATIF IMPRIMABLE                                        */
   /* ================================================================== */
   function recap() {
@@ -3063,6 +3268,11 @@
     rendre(); majCartes();
     $("recap").style.display = "none";
     message("Ce parcours a été réinitialisé. Les autres parcours et le profil sont intacts.");
+  });
+  $("dt-fermer").addEventListener("click", function () { $("dlg-courrier").close(); });
+  $("dt-imprimer").addEventListener("click", function () { window.print(); });
+  $("dt-copier").addEventListener("click", function () {
+    if (navigator.clipboard) navigator.clipboard.writeText($("dt-corps").textContent);
   });
   $("btn-retour").addEventListener("click", function () {
     if (history.length > 1 && document.referrer &&
