@@ -1062,6 +1062,11 @@ poste.</p>
     Array.prototype.forEach.call($("formulaire").querySelectorAll("fieldset"), function (fs) {
       var champs = fs.querySelectorAll("label, .sous-objet, .tableau-champ, [data-multi]");
       if (!champs.length) return;
+      /* La rubrique est rouverte avant d'être jugée : masquée au tour
+         précédent, elle se serait déclarée elle-même vide — un champ visible
+         y a pour ancêtre masqué la rubrique, et rien ne l'aurait jamais
+         rouverte. Défaut mesuré le 31 août 2026. */
+      fs.style.display = "";
       var visible = false;
       Array.prototype.forEach.call(champs, function (el) {
         if (el.style.display !== "none" && !el.closest('[style*="display: none"]')) visible = true;

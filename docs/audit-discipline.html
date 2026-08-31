@@ -121,6 +121,14 @@
      l'action principale, pas le rapport. */
   #vers-procedure{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:700}
   #vers-procedure + #vers-general{background:var(--surface);color:var(--bleu)}
+  /* Le repli de la sanction quand l'écran est celui du règlement. */
+  details.aussi{margin:0 0 16px;border-top:1px solid var(--filet);padding-top:12px}
+  details.aussi summary{cursor:pointer;font:600 14px/1.3 system-ui;color:var(--bleu);
+    list-style:none;padding:6px 0}
+  details.aussi summary::-webkit-details-marker{display:none}
+  details.aussi summary::before{content:"▸ "}
+  details.aussi[open] summary::before{content:"▾ "}
+  details.aussi p{margin:8px 0 0}
   .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
     padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;z-index:10}
   button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
@@ -330,6 +338,15 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
   possibles aux questions fermées : <b>oui</b> et <b>non</b> concluent ; <b>en cours</b> et
   <b>autre</b> décrivent votre situation sans rien conclure.</p>
   <form id="formulaire" autocomplete="off"></form>
+  <!-- Sans règlement intérieur, la sanction et les pièces se replient ici :
+       elles restent accessibles d'un clic, mais ne encombrent plus l'écran de
+       celui qui vient créer son règlement. -->
+  <details id="replier-sanction" class="aussi" hidden>
+    <summary>Auditer aussi une sanction</summary>
+    <p class="aide">Le module contrôle également la procédure disciplinaire — prescription des faits,
+    convocation, entretien, délais, notification — et les garanties de fond de votre convention
+    collective. Ouvrez cette ligne si une sanction est en cours.</p>
+  </details>
   <div class="barre no-print">
     <!-- Quand la pièce n'existe pas, l'action principale n'est pas de lire un
          rapport sur son absence : c'est de la faire. Ce bouton prend la tête
@@ -776,12 +793,39 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
     Array.prototype.forEach.call($("formulaire").querySelectorAll("fieldset"), function (fs) {
       var champs = fs.querySelectorAll("label, .sous-objet, .tableau-champ, [data-multi]");
       if (!champs.length) return;
+      /* La rubrique est rouverte avant d'être jugée : masquée au tour
+         précédent, elle se serait déclarée elle-même vide — un champ visible
+         y a pour ancêtre masqué la rubrique, et rien ne l'aurait jamais
+         rouverte. Défaut mesuré le 31 août 2026. */
+      fs.style.display = "";
       var visible = false;
       Array.prototype.forEach.call(champs, function (el) {
         if (el.style.display !== "none" && !el.closest('[style*="display: none"]')) visible = true;
       });
       fs.style.display = visible ? "" : "none";
     });
+
+    /* PAS DE RÈGLEMENT : L'ÉCRAN NE PARLE QUE DU RÈGLEMENT.
+
+       Le module audite deux choses — le règlement intérieur et une sanction —
+       et les posait côte à côte. Répondre « non » au règlement laissait donc
+       l'écran demander, juste dessous, si une sanction est soumise à l'audit
+       et quelles pièces sont versées : deux sujets étrangers à celui qu'on
+       vient d'ouvrir. Reproche du 31 août 2026, et il était fondé.
+
+       La sanction et les pièces se replient donc derrière une ligne, qu'un
+       clic ouvre : rien n'est retiré, un employeur sans règlement peut avoir
+       une sanction à faire contrôler. */
+    var sansRI = String((f.ri || {}).existe) === "non";
+    var repli = $("replier-sanction");
+    Array.prototype.forEach.call($("formulaire").querySelectorAll("fieldset"), function (fs) {
+      var leg = fs.querySelector("legend");
+      if (!leg) return;
+      var t = leg.textContent;
+      if (t !== "La sanction auditée" && t !== "Pièces") return;
+      if (sansRI && !(repli && repli.open)) fs.style.display = "none";
+    });
+    if (repli) repli.hidden = !sansRI;
   }
 
   /* Le bouton de tête de la barre : il n'existe que si une pièce manque, et
@@ -1276,6 +1320,8 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
     clearTimeout(message.t); message.t = setTimeout(function () { m.style.display = "none"; }, 8000);
   }
 
+  /* Ouvrir « Auditer aussi une sanction » réaffiche les deux rubriques. */
+  $("replier-sanction").addEventListener("toggle", function () { majVisibiliteQuestionnaire(); });
   $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
   $("btn-retour").addEventListener("click", function () {
     if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
