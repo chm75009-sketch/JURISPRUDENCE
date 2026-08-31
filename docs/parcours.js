@@ -3250,6 +3250,19 @@
 
     /* --- les étapes --- */
     var etapes = etapesVisibles(p, D);
+    /* L'ENCHAÎNEMENT. Répondre « non » à l'audit veut dire « on le fait
+       ensemble » : la page ne déroule donc pas onze étapes à plat, elle en
+       met UNE en avant — la première qui reste à faire — et replie les
+       autres. On coche, l'étape suivante s'ouvre d'elle-même, et ainsi
+       jusqu'à la dernière, où la situation est régularisée. Une étape repliée
+       n'est pas cachée : son titre reste, et un clic l'ouvre — on doit
+       pouvoir lire la suite avant d'y arriver, ou revenir sur ce qui est
+       fait. */
+    var iCourante = -1;
+    etapes.forEach(function (s, k) {
+      if (iCourante < 0 && !etatEtape(s, D, st.etapes[s.id]).faite) iCourante = k;
+    });
+    var toutFait = iCourante < 0 && etapes.length > 0;
     var n = 0;
     $("zone-etapes").innerHTML = '<h2 class="titre-zone">La procédure, étape par étape</h2>' +
       '<p class="aide">Dans l\'ordre. Chaque étape porte l\'article qui la fonde — numéro <i>et</i> ' +
@@ -3301,9 +3314,13 @@
         var jx = lienJX(s.jx, jxDispo(s.jx)
           ? "Document final : " + window.JurisExpert.nom(s.jx) + " (Juris Expert)"
           : "");
-        return '<div class="etape" data-bloc="' + e(s.id) + '" id="etape-' + p.cle + "-" + s.id + '">' +
+        var rang = n - 1;
+        var classe = rang === iCourante ? " courante" : (rang < iCourante || toutFait ? " close faite-repliee" : " close");
+        return '<div class="etape' + classe + '" data-bloc="' + e(s.id) + '" data-rang="' + rang +
+          '" id="etape-' + p.cle + "-" + s.id + '">' +
           '<div class="etape-tete"><span class="etape-num">' + n + "</span>" +
-          '<span class="etape-titre">' + e(s.nom) + '</span><span class="etat"></span></div>' +
+          '<span class="etape-titre">' + e(s.nom) + '</span><span class="etat"></span>' +
+          (rang === iCourante ? '<span class="maintenant">à faire maintenant</span>' : "") + "</div>" +
           '<div class="etape-corps"><p>' + e(s.quoi) + "</p>" + ech + fond + juris + cv + rq + cs +
           '<div class="actions">' + doc + courrier + jx +
           '<label class="coche"><input type="checkbox" data-etape="' + e(s.id) + '"' +
@@ -3311,7 +3328,26 @@
           '<input class="date-fait" type="date" data-etape-date="' + e(s.id) + '" value="' +
           e((st.etapes[s.id] || {}).le || "") + '" aria-label="Date de réalisation">' +
           "</div></div></div>";
-      }).join("");
+      }).join("") +
+      /* LA VALIDATION TOTALE. La dernière étape franchie, la procédure est
+         allée à son terme : la page le dit, et propose le récapitulatif
+         imprimable — c'est la pièce qui établira, le jour venu, que la
+         régularisation a été conduite, étape par étape et date par date. */
+      (toutFait
+        ? '<div class="fini"><b>Situation régularisée — ' + e(p.nom) + "</b>" +
+          "<p>Les " + etapes.length + " étapes de cette procédure sont franchies. Le récapitulatif " +
+          "imprimable reprend chacune d'elles, sa date et son fondement : gardez-le au dossier." +
+          (p.audit ? " L'audit correspondant peut maintenant être repris — il contrôlera sur pièces " +
+            "ce que vous venez de déclarer." : "") + "</p>" +
+          '<div class="fini-actions"><button type="button" id="fini-recap">Le récapitulatif à imprimer</button>' +
+          (p.audit ? '<a href="' + e(p.audit.href) + '">Reprendre ' + e(p.audit.nom) + " →</a>" : "") +
+          (p.suite && SUITE(p.suite.cle)
+            ? '<a href="parcours.html?p=' + e(p.suite.cle) + '">Enchaîner sur « ' +
+              e(SUITE(p.suite.cle).nom) + " » →</a>" : "") +
+          "</div></div>"
+        : "");
+    var btnFini = $("zone-etapes").querySelector("#fini-recap");
+    if (btnFini) btnFini.addEventListener("click", function () { recap(); });
     [].slice.call($("zone-etapes").querySelectorAll("[data-etape]")).forEach(function (x) {
       x.addEventListener("change", function () {
         var id = x.getAttribute("data-etape");
@@ -3322,7 +3358,19 @@
         if (champDate) champDate.value = st.etapes[id].le || "";
         reverserDates(p, st, D);
         enregistrer(); rendre(); majCartes();
+        /* L'étape franchie déclenche la suivante : elle s'ouvre, et on y va. */
+        var suivante = $("zone-etapes").querySelector(".etape.courante");
+        if (suivante) suivante.scrollIntoView({ behavior: "smooth", block: "start" });
+        else { var fin = $("zone-etapes").querySelector(".fini"); if (fin) fin.scrollIntoView({ behavior: "smooth", block: "start" }); }
         return;
+      });
+    });
+    /* Un clic sur le bandeau ouvre ou referme l'étape : rien n'est verrouillé,
+       on peut lire la suite avant d'y arriver et rouvrir ce qui est fait. */
+    [].slice.call($("zone-etapes").querySelectorAll(".etape-tete")).forEach(function (t) {
+      t.addEventListener("click", function (ev) {
+        if (ev.target.closest("a,button,input,label")) return;
+        t.parentNode.classList.toggle("close");
       });
     });
     [].slice.call($("zone-etapes").querySelectorAll("[data-courrier]")).forEach(function (x) {
@@ -3365,7 +3413,11 @@
       var bloc = $("zone-etapes").querySelector('[data-bloc="' + s.id + '"]');
       if (!bloc) return;
       var x = etatEtape(s, D, st.etapes[s.id]);
-      bloc.className = "etape" + (x.faite ? " faite" : "") + (x.retard ? " retard" : "");
+      /* Réécrire la classe entière effaçait l'enchaînement posé au rendu —
+         l'étape courante, celles qui sont repliées, celle qu'un clic vient
+         d'ouvrir. On ne touche donc qu'aux deux classes d'état. */
+      bloc.classList.toggle("faite", !!x.faite);
+      bloc.classList.toggle("retard", !!x.retard);
       var badge = bloc.querySelector(".etat");
       if (badge) {
         badge.className = "etat" + (x.faite ? " faite" : (x.retard ? " retard" : ""));
