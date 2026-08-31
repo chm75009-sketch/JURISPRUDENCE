@@ -240,20 +240,34 @@
 
   /* En ouvrant l'application, on tombe toujours sur la fiche — jamais
      directement sur les deux boutons, même quand elle est déjà remplie
-     d'une visite précédente. Si elle est déjà complète, un bouton
-     « Continuer » permet de passer aux deux boutons sans la ressaisir ;
-     sinon, la remplir bascule automatiquement l'écran, comme avant. */
+     d'une visite précédente. Le passage aux deux boutons se fait par le
+     bouton « Continuer », et par lui seul.
+
+     L'écran basculait autrefois de lui-même dès que les quatre champs
+     étaient remplis. Le défaut, mesuré le 31 août 2026 : la fiche déjà
+     complète, on efface la dénomination pour la corriger, on tape la
+     première lettre — les quatre champs sont de nouveau remplis, l'écran
+     bascule, et le champ disparaît sous les doigts avant la deuxième
+     lettre. La correction devenait impossible.
+
+     Le remède n'est pas de deviner mieux : c'est de ne plus deviner.
+     La saisie ne fait plus que deux choses — enregistrer, et faire
+     apparaître « Continuer » dès que les quatre champs y sont. Rien ne
+     bouge tant que l'utilisateur n'a pas décidé d'avancer. */
   function basculer() {
     var p = profilActuel();
-    if (complet(p)) {
-      $("ecran-fiche").hidden = true;
-      $("ecran-portes").hidden = false;
-      $("ficheban").hidden = false;
-    } else {
-      $("ecran-fiche").hidden = false;
-      $("ecran-portes").hidden = true;
-      $("ficheban").hidden = true;
-    }
+    $("ecran-fiche").hidden = true;
+    $("ecran-portes").hidden = false;
+    $("ficheban").hidden = false;
+    majResume(p);
+    majSeuils(p);
+  }
+
+  /* Ce que fait une frappe dans la fiche : enregistrer, tenir le rappel à
+     jour, et rien de plus. */
+  function surSaisie() {
+    var p = profilActuel();
+    $("continuer-fiche").hidden = !complet(p);
     majResume(p);
     majSeuils(p);
   }
@@ -274,7 +288,7 @@
       legende: "Votre entreprise",
       aide: "Quatre informations, une seule fois : elles ouvrent et referment les obligations de tous les modules ci-dessous, sans jamais être redemandées.",
       echange: false,
-      onChange: basculer,
+      onChange: surSaisie,
     });
   }
   $("continuer-fiche").addEventListener("click", basculer);
