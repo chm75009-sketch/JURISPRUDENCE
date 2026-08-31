@@ -88,6 +88,27 @@
      d'où la seconde forme reconnue plus bas. */
   RUBRIQUES["CTL-CSE"] = { p: "reunion", nom: "Tenir une réunion du CSE" };
 
+  /* Le nom lisible de chaque parcours, pour l'intitulé du lien. Il double ce
+     que porte docs/parcours.js : cette page-ci ne charge pas les parcours,
+     qui pèsent trop lourd pour un simple libellé. */
+  var PAR_CLE = {
+    ri: "Établir ou mettre à jour le règlement intérieur",
+    duerp: "Mettre à jour le DUERP",
+    sanction: "Sanctionner un salarié",
+    commissions: "Constituer les commissions du CSE",
+    reunion: "Tenir une réunion du CSE",
+    installation: "Installer le CSE : la première réunion",
+    nao: "Conduire les négociations obligatoires",
+    index: "Publier l'index de l'égalité professionnelle",
+    affichages: "Mettre en place les affichages obligatoires",
+    registre: "Tenir le registre unique du personnel",
+    bdese: "Constituer la base de données (BDESE)",
+    entretiens: "Organiser les entretiens de parcours professionnel",
+    embauche: "Embaucher : les formalités obligatoires",
+    conges: "Organiser les congés payés",
+    findecontrat: "Établir les documents de fin de contrat",
+  };
+
   function rubrique(id) {
     var s = String(id || "");
     var m = s.match(/^([A-Z]+-CTL-[A-Z0-9]+)-/) || s.match(/^(CTL-[A-Z0-9]+)-/);
@@ -120,6 +141,45 @@
 
        Appelée depuis le gestionnaire « change » du questionnaire, avec
        l'événement. */
+    /* LE RAPPEL. La bascule ne joue qu'au moment où l'on répond. Rouvrir
+       l'audit le lendemain, la réponse « non » déjà enregistrée, ne
+       déclenchait plus rien : on retombait sur le questionnaire, sans savoir
+       que la procédure attend à côté — défaut signalé le 31 août 2026.
+
+       On ne redirige pas au chargement : l'utilisateur ne pourrait plus
+       revenir modifier sa réponse sans être renvoyé aussitôt. On affiche, en
+       tête du questionnaire, ce qu'il y a à faire et le lien qui y mène.
+
+       `valeur(nom)` rend la réponse enregistrée pour un champ ; la page la
+       connaît, ce fichier non. */
+    rappel: function (form, table, valeur) {
+      if (!form) return;
+      var anc = form.querySelector(".bascule-rappel");
+      if (anc) anc.parentNode.removeChild(anc);
+      var dus = [];
+      Object.keys(table || {}).forEach(function (nom) {
+        var b = table[nom];
+        /* Le module du comité enregistre ses réponses fermées en booléens
+           stricts, les autres en « oui » / « non » : les deux disent la même
+           chose et doivent déclencher le même rappel. */
+        var v = valeur(nom);
+        if (v !== false && String(v) !== "non") return;
+        if (typeof b.si === "function" && !b.si()) return;
+        var p = PAR_CLE[b.p];
+        if (p) dus.push({ cle: b.p, nom: p });
+      });
+      if (!dus.length) return;
+      var h = '<div class="bascule-rappel">' +
+        "<b>Ce qui n'existe pas encore, la procédure le crée</b>" +
+        "<p>Votre réponse « non » ouvre un accompagnement pas à pas — chaque étape avec son " +
+        "fondement, le délai, ce qu'on risque à ne pas la franchir, et le courrier type que " +
+        "l'application écrit pour vous.</p>" +
+        dus.map(function (d) {
+          return '<a href="parcours.html?p=' + d.cle + '">Ouvrir « ' + d.nom + " » →</a>";
+        }).join("") + "</div>";
+      form.insertAdjacentHTML("afterbegin", h);
+    },
+
     bascule: function (ev, table) {
       if (!ev || !ev.target) return false;
       /* Les modules ne nomment pas leurs champs de la même façon : la
