@@ -172,43 +172,34 @@
       return trouve;
     },
 
-    /* LE RAPPEL. La bascule ne joue qu'au moment où l'on répond. Rouvrir
-       l'audit le lendemain, la réponse « non » déjà enregistrée, ne
-       déclenchait plus rien : on retombait sur le questionnaire, sans savoir
-       que la procédure attend à côté — défaut signalé le 31 août 2026.
+    /* LA BASCULE. Quand le questionnaire apprend que la pièce n'existe pas,
+       il n'a plus rien à demander sur elle : continuer à l'interroger sur le
+       contenu d'un document inexistant serait du temps perdu. On bascule
+       aussitôt sur la procédure qui le fait naître.
 
-       On ne redirige pas au chargement : l'utilisateur ne pourrait plus
-       revenir modifier sa réponse sans être renvoyé aussitôt. On affiche, en
-       tête du questionnaire, ce qu'il y a à faire et le lien qui y mène.
+       `table` associe le nom d'un champ à { p: parcours, si: fonction }. La
+       bascule ne part que sur la réponse « non » — « en cours » et « autre »
+       ne concluent rien, et « oui » n'appelle pas de création —, et seulement
+       si la pièce est due : `si` le dit quand un seuil commande.
 
-       `valeur(nom)` rend la réponse enregistrée pour un champ ; la page la
-       connaît, ce fichier non. */
-    rappel: function (form, table, valeur) {
-      if (!form) return;
-      var anc = form.querySelector(".bascule-rappel");
-      if (anc) anc.parentNode.removeChild(anc);
-      var dus = [];
+       Appelée depuis le gestionnaire « change » du questionnaire, avec
+       l'événement. */
+    /* LA PREMIÈRE PIÈCE MANQUANTE, et l'action qui la crée. Sert au bouton de
+       tête de la barre d'actions du questionnaire : quand la pièce n'existe
+       pas, l'action principale n'est pas de lire un rapport sur son absence,
+       c'est de la faire. Rend null si rien ne manque. */
+    premiere: function (table, valeur) {
+      var trouve = null;
       Object.keys(table || {}).forEach(function (nom) {
+        if (trouve) return;
         var b = table[nom];
-        /* Le module du comité enregistre ses réponses fermées en booléens
-           stricts, les autres en « oui » / « non » : les deux disent la même
-           chose et doivent déclencher le même rappel. */
         var v = valeur(nom);
         if (v !== false && String(v) !== "non") return;
         if (typeof b.si === "function" && !b.si()) return;
-        var p = PAR_CLE[b.p];
-        if (p) dus.push({ cle: b.p, nom: p });
+        if (!PAR_CLE[b.p]) return;
+        trouve = { p: b.p, nom: PAR_CLE[b.p], action: ACTIONS[b.p] || ("Ouvrir « " + PAR_CLE[b.p] + " »") };
       });
-      if (!dus.length) return;
-      var h = '<div class="bascule-rappel">' +
-        "<b>Ce qui n'existe pas encore, la procédure le crée</b>" +
-        "<p>Votre réponse « non » ouvre un accompagnement pas à pas — chaque étape avec son " +
-        "fondement, le délai, ce qu'on risque à ne pas la franchir, et le courrier type que " +
-        "l'application écrit pour vous.</p>" +
-        dus.map(function (d) {
-          return '<a href="parcours.html?p=' + d.cle + '">Ouvrir « ' + d.nom + " » →</a>";
-        }).join("") + "</div>";
-      form.insertAdjacentHTML("afterbegin", h);
+      return trouve;
     },
 
     bascule: function (ev, table) {

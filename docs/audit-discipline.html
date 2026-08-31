@@ -136,16 +136,6 @@
     .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
   }
 
-  /* Le rappel de bascule : ce que l'audit ne peut pas contrôler faute
-     d'existence, et la procédure qui le crée. Voir docs/parcours-lien.js. */
-  .bascule-rappel{border:1px solid var(--bleu);border-left:4px solid var(--bleu);
-    background:#eef4f3;border-radius:0 4px 4px 0;padding:14px 16px;margin:0 0 16px}
-  .bascule-rappel b{display:block;color:var(--bleu);font:600 15.5px/1.3 system-ui;margin:0 0 6px}
-  .bascule-rappel p{margin:0 0 10px;font-size:14px;color:var(--corps)}
-  .bascule-rappel a{display:inline-block;margin:0 8px 0 0;font:600 13.5px/1 system-ui;
-    text-decoration:none;padding:10px 14px;border-radius:3px;
-    border:1px solid var(--bleu);background:var(--bleu);color:#fff}
-  .bascule-rappel a:hover{filter:brightness(1.12)}
   .rubrique{margin:26px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
     color:var(--bleu);font:600 15px/1.3 system-ui}
 
@@ -633,11 +623,12 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
     brancherFormulaire();
     majVisibiliteQuestionnaire(); majNuances(); majCompteurQuestionnaire();
     /* La réponse « non » déjà enregistrée d'une visite précédente ne
-       déclenche aucune bascule — on rouvrirait le questionnaire sans savoir
-       que la procédure attend à côté. Le rappel le dit, en tête. */
+       déclenche aucune bascule : c'est le bouton de tête de la barre, collé
+       en bas de l'écran, qui mène alors à la procédure. Un encadré le disait
+       aussi en tête du questionnaire — deux fois la même chose sur le même
+       écran, retiré le 31 août 2026. */
     if (window.ParcoursLien) {
       var lire = function (nom) { return ETAT.dossier[nom]; };
-      ParcoursLien.rappel($("formulaire"), BASCULES, lire);
       majBoutonProcedure(lire);
     }
   }
