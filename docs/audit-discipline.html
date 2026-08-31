@@ -117,6 +117,10 @@
   .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
   .aide-champ.nuance{color:var(--orange)}
 
+  /* Le bouton qui mène à la procédure quand une pièce manque : c'est lui
+     l'action principale, pas le rapport. */
+  #vers-procedure{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:700}
+  #vers-procedure + #vers-general{background:var(--surface);color:var(--bleu)}
   .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
     padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;z-index:10}
   button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
@@ -337,6 +341,11 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
   <b>autre</b> décrivent votre situation sans rien conclure.</p>
   <form id="formulaire" autocomplete="off"></form>
   <div class="barre no-print">
+    <!-- Quand la pièce n'existe pas, l'action principale n'est pas de lire un
+         rapport sur son absence : c'est de la faire. Ce bouton prend la tête
+         de la barre et y reste visible, là où l'encadré du haut disparaît dès
+         qu'on descend (défaut vu le 31 août 2026). -->
+    <button type="button" id="vers-procedure" hidden></button>
     <button type="button" id="vers-general">Étape 3 : voir le rapport général</button>
     <button type="button" class="second" id="imprimer-liste">Imprimer le questionnaire</button>
     <span class="compteur" id="compteur-questionnaire"></span>
@@ -626,10 +635,11 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
     /* La réponse « non » déjà enregistrée d'une visite précédente ne
        déclenche aucune bascule — on rouvrirait le questionnaire sans savoir
        que la procédure attend à côté. Le rappel le dit, en tête. */
-    if (window.ParcoursLien)
-      ParcoursLien.rappel($("formulaire"), BASCULES, function (nom) {
-        return ETAT.dossier[nom];
-      });
+    if (window.ParcoursLien) {
+      var lire = function (nom) { return ETAT.dossier[nom]; };
+      ParcoursLien.rappel($("formulaire"), BASCULES, lire);
+      majBoutonProcedure(lire);
+    }
   }
 
   function brancherFormulaire() {
@@ -781,6 +791,18 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
       });
       fs.style.display = visible ? "" : "none";
     });
+  }
+
+  /* Le bouton de tête de la barre : il n'existe que si une pièce manque, et
+     il dit laquelle. Voir docs/parcours-lien.js pour la table des bascules. */
+  function majBoutonProcedure(lire) {
+    var b = $("vers-procedure");
+    if (!b || !window.ParcoursLien) return;
+    var due = ParcoursLien.premiere(BASCULES, lire);
+    if (!due) { b.hidden = true; return; }
+    b.hidden = false;
+    b.textContent = due.action;
+    b.onclick = function () { location.href = "parcours.html?p=" + due.p; };
   }
 
   function majCompteur() {

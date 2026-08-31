@@ -109,6 +109,19 @@
     findecontrat: "Établir les documents de fin de contrat",
   };
 
+  /* Ce que l'utilisateur a à faire, dit comme il le dirait — « faire le
+     règlement intérieur », non « ouvrir le parcours n° 5 ». */
+  var ACTIONS = {
+    ri: "Faire le règlement intérieur →",
+    duerp: "Faire le document unique →",
+    installation: "Installer le comité →",
+    commissions: "Constituer la commission santé-sécurité →",
+    bdese: "Constituer la base de données →",
+    registre: "Ouvrir le registre du personnel →",
+    index: "Publier l'index de l'égalité →",
+    nao: "Ouvrir les négociations →",
+  };
+
   function rubrique(id) {
     var s = String(id || "");
     var m = s.match(/^([A-Z]+-CTL-[A-Z0-9]+)-/) || s.match(/^(CTL-[A-Z0-9]+)-/);
@@ -141,6 +154,24 @@
 
        Appelée depuis le gestionnaire « change » du questionnaire, avec
        l'événement. */
+    /* LA PREMIÈRE PIÈCE MANQUANTE, et l'action qui la crée. Sert au bouton de
+       tête de la barre d'actions du questionnaire : quand la pièce n'existe
+       pas, l'action principale n'est pas de lire un rapport sur son absence,
+       c'est de la faire. Rend null si rien ne manque. */
+    premiere: function (table, valeur) {
+      var trouve = null;
+      Object.keys(table || {}).forEach(function (nom) {
+        if (trouve) return;
+        var b = table[nom];
+        var v = valeur(nom);
+        if (v !== false && String(v) !== "non") return;
+        if (typeof b.si === "function" && !b.si()) return;
+        if (!PAR_CLE[b.p]) return;
+        trouve = { p: b.p, nom: PAR_CLE[b.p], action: ACTIONS[b.p] || ("Ouvrir « " + PAR_CLE[b.p] + " »") };
+      });
+      return trouve;
+    },
+
     /* LE RAPPEL. La bascule ne joue qu'au moment où l'on répond. Rouvrir
        l'audit le lendemain, la réponse « non » déjà enregistrée, ne
        déclenchait plus rien : on retombait sur le questionnaire, sans savoir
