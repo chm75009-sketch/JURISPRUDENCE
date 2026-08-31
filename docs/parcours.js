@@ -1202,8 +1202,7 @@
         aide: "Le texte lui est transmis en deux exemplaires, accompagné de l'avis du comité (art. L. 1321-4 et R. 1321-4)." },
     ],
     etapes: [
-      { id: "i1", nom: "Vérifier l'obligation et son échéance",
-        docProduit: "DIS-CTL-RI-01",
+      { id: "i1", nom: "Vérifier que vous êtes concerné, et depuis quand",
         conseil: "Datez le franchissement du seuil à partir des effectifs mois par mois, pas de mémoire : c'est cette date qui fixe l'échéance des douze mois. Gardez le tableau qui l'établit — c'est la première pièce que l'inspection demandera.",
         quoi: "L'établissement d'un règlement intérieur est obligatoire dans les entreprises ou établissements employant au moins cinquante salariés. L'obligation s'applique au terme d'un délai de douze mois à compter de la date à laquelle le seuil a été atteint pendant douze mois consécutifs.",
         fond: ["L1311-2", "R1321-5"], juris: ["17-16.465"],
@@ -1215,8 +1214,8 @@
             note: "Douze mois à compter de la date à laquelle le seuil de cinquante salariés a été atteint (art. R. 1321-5)." };
         },
         si: function (P) { return seuil(P, 50); } },
-      { id: "i2", nom: "Écrire le contenu obligatoire — et rien d'autre",
-        docProduit: "DIS-CTL-RI-02",
+      { id: "i2", nom: "Écrire le règlement intérieur",
+        docProduit: "DIS-CTL-RI-01",
         conseil: "Écrivez d'abord les trois matières, les rappels ensuite : un règlement qui commence par la discipline oublie presque toujours la santé-sécurité. Relisez-le une dernière fois en vous demandant, pour chaque phrase, de quelle matière elle relève — celles qui ne relèvent d'aucune n'ont rien à y faire.",
         jx: "ri",
         quoi: "L'employeur y fixe exclusivement trois matières : les mesures d'application de la réglementation santé et sécurité, les conditions de participation des salariés au rétablissement de conditions protectrices, et les règles générales et permanentes de discipline, notamment la nature et l'échelle des sanctions. Le règlement rappelle en outre les droits de la défense, les dispositions sur les harcèlements et les agissements sexistes, et l'existence du dispositif de protection des lanceurs d'alerte. Il est rédigé en français.",
@@ -3338,8 +3337,14 @@
           '<input class="date-fait" type="date" data-etape-date="' + e(s.id) + '" value="' +
           e((st.etapes[s.id] || {}).le || "") + '" aria-label="Date de réalisation">' +
           "</div>" +
+          /* LE VERRE D'EAU, PAS LE COURS SUR L'EAU. Ce qui fonde l'étape —
+             le texte, l'article et son identifiant de version, l'arrêt, la
+             sanction encourue, le conseil de pratique — ne disparaît pas :
+             il se replie. Qui veut savoir pourquoi ouvre la ligne ; qui veut
+             faire, fait. Reproche du 31 août 2026, et il était juste. */
+          '<details class="pourquoi"><summary>Pourquoi, et ce qu\'on risque</summary>' +
           "<p>" + e(s.quoi) + "</p>" + fond + juris + cv + rq + cs +
-          "</div></div>";
+          "</details></div></div>";
       }).join("") +
       /* LA VALIDATION TOTALE. La dernière étape franchie, la procédure est
          allée à son terme : la page le dit, et propose le récapitulatif
