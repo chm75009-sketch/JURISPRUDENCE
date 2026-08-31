@@ -3319,15 +3319,27 @@
         return '<div class="etape' + classe + '" data-bloc="' + e(s.id) + '" data-rang="' + rang +
           '" id="etape-' + p.cle + "-" + s.id + '">' +
           '<div class="etape-tete"><span class="etape-num">' + n + "</span>" +
-          '<span class="etape-titre">' + e(s.nom) + '</span><span class="etat"></span>' +
-          (rang === iCourante ? '<span class="maintenant">à faire maintenant</span>' : "") + "</div>" +
-          '<div class="etape-corps"><p>' + e(s.quoi) + "</p>" + ech + fond + juris + cv + rq + cs +
+          '<span class="etape-titre">' + e(s.nom) + "</span>" +
+          /* Sur l'étape courante, « à faire maintenant » remplace le badge
+             d'état : les deux côte à côte disaient deux fois la même chose. */
+          (rang === iCourante ? '<span class="maintenant">à faire maintenant</span>'
+                              : '<span class="etat"></span>') + "</div>" +
+          /* L'ACTION D'ABORD. On ouvre une étape pour la faire, pas pour lire
+             ce qui la fonde : le modèle à compléter, la case à cocher et la
+             date viennent en tête ; le texte, l'article, la jurisprudence, la
+             sanction et le conseil viennent après, pour qui veut savoir
+             pourquoi. Défaut vu le 31 août 2026 : « Faire le règlement
+             intérieur » ouvrait sur un paragraphe de droit, le bouton du
+             modèle enterré sous la jurisprudence. */
+          '<div class="etape-corps">' + ech +
           '<div class="actions">' + doc + courrier + jx +
           '<label class="coche"><input type="checkbox" data-etape="' + e(s.id) + '"' +
           (x.faite ? " checked" : "") + "> étape franchie</label>" +
           '<input class="date-fait" type="date" data-etape-date="' + e(s.id) + '" value="' +
           e((st.etapes[s.id] || {}).le || "") + '" aria-label="Date de réalisation">' +
-          "</div></div></div>";
+          "</div>" +
+          "<p>" + e(s.quoi) + "</p>" + fond + juris + cv + rq + cs +
+          "</div></div>";
       }).join("") +
       /* LA VALIDATION TOTALE. La dernière étape franchie, la procédure est
          allée à son terme : la page le dit, et propose le récapitulatif

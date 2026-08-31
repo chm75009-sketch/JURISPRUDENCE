@@ -3,7 +3,7 @@
   "short_name": "Jurisprudence",
   "description": "Recherche jurisprudentielle en texte intégral dans la base ouverte Judilibre (Cour de cassation, cours d'appel, tribunaux judiciaires).",
   "lang": "fr",
-  "version": "9.7",
+  "version": "9.8",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
