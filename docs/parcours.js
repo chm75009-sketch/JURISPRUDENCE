@@ -3352,7 +3352,7 @@
           (p.audit ? " L'audit correspondant peut maintenant être repris — il contrôlera sur pièces " +
             "ce que vous venez de déclarer." : "") + "</p>" +
           '<div class="fini-actions"><button type="button" id="fini-recap">Le récapitulatif à imprimer</button>' +
-          (p.audit ? '<a href="' + e(p.audit.href) + '">Reprendre ' + e(p.audit.nom) + " →</a>" : "") +
+          (p.audit ? '<a href="' + e(p.audit.href) + '?revoir=1">Reprendre ' + e(p.audit.nom) + " →</a>" : "") +
           (p.suite && SUITE(p.suite.cle)
             ? '<a href="parcours.html?p=' + e(p.suite.cle) + '">Enchaîner sur « ' +
               e(SUITE(p.suite.cle).nom) + " » →</a>" : "") +
@@ -3454,7 +3454,7 @@
     if (zs) zs.innerHTML =
       '<div class="compte">L\'avancement est enregistré sur ce poste : vous le retrouverez à la ' +
       'réouverture de la page.' + (p.audit ? ' Pour contrôler l\'existant, ouvrez <a href="' +
-      e(p.audit.href) + '">' + e(p.audit.nom) + "</a>." : "") + "</div>" +
+      e(p.audit.href) + '?revoir=1">' + e(p.audit.nom) + "</a>." : "") + "</div>" +
       (jxDispo(p.jx)
         ? '<div class="renvoi-jx">Les documents finaux de ce parcours — ' +
           e(window.JurisExpert.quoi(p.jx)) + ' — se génèrent, complets et prêts à imprimer, dans ' +

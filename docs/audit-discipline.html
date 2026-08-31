@@ -629,6 +629,8 @@ intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
        écran, retiré le 31 août 2026. */
     if (window.ParcoursLien) {
       var lire = function (nom) { return ETAT.dossier[nom]; };
+      /* Répondu « non » : on ne repose pas la question, on va construire. */
+      if (ParcoursLien.basculeAuChargement(BASCULES, lire)) return;
       majBoutonProcedure(lire);
     }
   }
