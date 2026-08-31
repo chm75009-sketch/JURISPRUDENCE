@@ -855,8 +855,6 @@ poste.</p>
         var v = getPath(ETAT.dossier, nom);
         return v !== undefined ? v : ETAT.dossier[nom];
       };
-      /* Répondu « non » : on ne repose pas la question, on va construire. */
-      if (ParcoursLien.basculeAuChargement(BASCULES, lire)) return;
       majBoutonProcedure(lire);
     }
   }

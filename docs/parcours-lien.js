@@ -202,29 +202,15 @@
       return trouve;
     },
 
-    /* « NON » VEUT DIRE : ON CONSTRUIT, TOUT DE SUITE.
+    /* La question est toujours posée : elle est le point d'entrée, et on ne
+       la supprime pas parce qu'on y a déjà répondu. C'est la RÉPONSE « non »
+       qui emmène construire — voir `bascule` ci-dessous. À la réouverture, la
+       réponse est là, et c'est le bouton de tête de la barre d'actions, collé
+       en bas de l'écran, qui mène à la procédure.
 
-       La bascule ne jouait qu'à l'instant de la réponse. En rouvrant le
-       dossier le lendemain, la réponse « non » déjà enregistrée, on
-       retombait sur le questionnaire : il fallait encore cliquer. Une
-       question à laquelle on a répondu « non » n'a pas à être reposée, et
-       la procédure n'a pas à être demandée deux fois.
-
-       Le seul risque est la boucle — l'audit renvoie au parcours, le
-       parcours renvoie à l'audit, qui renvoie au parcours. Le lien de
-       retour du parcours porte donc « ?revoir=1 », et ce paramètre suspend
-       la bascule le temps d'une visite : on peut ainsi revenir corriger sa
-       réponse. */
-    basculeAuChargement: function (table, valeur) {
-      try {
-        if (new URLSearchParams(location.search).get("revoir")) return false;
-      } catch (_) {}
-      var due = this.premiere(table, valeur);
-      if (!due) return false;
-      location.replace("parcours.html?p=" + due.p);
-      return true;
-    },
-
+       Essayé le 31 août 2026 et retiré aussitôt : rediriger dès le chargement.
+       L'audit ne posait alors plus aucune question — on ouvrait « discipline »
+       et on se retrouvait dans la procédure sans avoir rien demandé. */
     bascule: function (ev, table) {
       if (!ev || !ev.target) return false;
       /* Les modules ne nomment pas leurs champs de la même façon : la
