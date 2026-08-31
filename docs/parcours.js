@@ -1431,6 +1431,17 @@
         quoi: "Le document unique et ses versions antérieures sont tenus, pendant quarante ans à compter de leur élaboration, à la disposition des travailleurs et anciens travailleurs, des élus, du service de prévention et de santé au travail, de l'inspection du travail et des organismes de prévention.",
         fond: ["R4121-4"],
         risque: "Sans les versions successives, la traçabilité collective des expositions est perdue : l'employeur ne peut répondre ni à la demande d'un ancien salarié ni à celle d'un agent de contrôle (L. 4121-3-1, V ; R. 4121-4)." },
+      { id: "d8b", nom: "Transmettre le document au service de prévention et de santé au travail",
+        docProduit: "SST-CTL-DUE-08",
+        conseil: "La transmission se fait à chaque mise à jour, pas une fois pour toutes : ajoutez-la à la liste de contrôle de la revue annuelle, au même titre que la consultation du comité. Un courriel daté au service, avec le document en pièce jointe et l'accusé de réception conservé, suffit à l'établir.",
+        quoi: "Le document unique d'évaluation des risques professionnels est transmis par l'employeur, à chaque mise à jour, au service de prévention et de santé au travail auquel il adhère. La transmission est due de plein droit, sans que le service ait à la demander.",
+        fond: ["L4121-3-1"],
+        risque: "Le service de prévention et de santé au travail est l'une des contributions que L. 4121-3 appelle à l'évaluation des risques : privé du document, il ne peut ni l'éclairer ni exercer le suivi qu'il doit aux salariés exposés. Le VI de L. 4121-3-1 pose l'obligation sans l'assortir d'une peine propre ; la carence se constate en revanche au premier contrôle, et affaiblit l'employeur qui prétend avoir pris toutes les mesures nécessaires.",
+        quand: function (D) {
+          if (!D.dateDerniereMaj) return null;
+          return { iso: null, libelle: "Due à la mise à jour du " + dateFr(D.dateDerniereMaj),
+            note: "La transmission suit chaque mise à jour : celle-ci en appelait une." };
+        } },
       { id: "d9", nom: "Mettre en œuvre les mesures de prévention",
         docProduit: "SST-CTL-DUE-01",
         conseil: "Le document ne protège personne s'il reste dans un tiroir : ce qui vous défendra, c'est la trace des mesures effectivement prises — bons de commande, comptes rendus, attestations de formation. Classez-les avec le document, pas ailleurs.",
