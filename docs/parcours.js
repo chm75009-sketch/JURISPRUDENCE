@@ -1560,6 +1560,9 @@
       { c: "dateClotureExercice", nom: "Date de clôture du dernier exercice du comité", t: "date",
         si: function (P, D) { return D.comitePrecedent === "oui" ? true : (D.comitePrecedent === "non" ? false : null); },
         aide: "Les comptes annuels et leurs pièces justificatives se conservent dix ans à compter de cette date (art. L. 2315-75)." },
+      { c: "cssctDue", nom: "La commission santé, sécurité et conditions de travail est-elle due chez vous ?", t: "oui-non",
+        aide: "Elle est créée dans les entreprises et les établissements distincts d'au moins trois cents salariés, et dans les établissements mentionnés aux articles L. 4521-1 et suivants (L. 2315-36). En deçà, l'inspecteur du travail peut l'imposer (L. 2315-37), et un accord peut la créer. Répondez « oui » si vous êtes dans l'un de ces cas.",
+        si: function (P) { return seuil(P, 300) !== true; } },
       { c: "accordCse", nom: "Un accord fixe-t-il le fonctionnement du comité (commissions, délais, périodicité) ?", t: "oui-non" },
       { c: "accordBdese", nom: "Un accord définit-il la base de données économiques, sociales et environnementales ?", t: "oui-non",
         aide: "Accord d'entreprise ou, en l'absence de délégué syndical, accord entre l'employeur et le comité adopté à la majorité des titulaires (art. L. 2312-21)." },
@@ -1677,6 +1680,17 @@
 
       { id: "i6", nom: "Désigner les membres de la commission santé, sécurité et conditions de travail",
         docProduit: "CSE-CTL-SST-01",
+        /* Prescrite sans condition jusqu'au 1er septembre 2026 : un comité de
+           dix-huit salariés se voyait ordonner de désigner une commission qui
+           n'est créée qu'à trois cents salariés, dans les établissements
+           distincts de trois cents, ou dans ceux des articles L. 4521-1 et
+           suivants (L. 2315-36). En deçà elle reste possible — décision de
+           l'inspecteur du travail (L. 2315-37) ou accord —, d'où la question
+           posée plutôt qu'un simple seuil. */
+        si: function (P, D) {
+          if (seuil(P, 300) === true) return true;
+          return D.cssctDue === "oui" ? true : (D.cssctDue === "non" ? false : null);
+        },
         risque: "La commission est créée dans les entreprises et les établissements distincts d'au moins trois cents salariés ; ne pas la constituer là où elle est due caractérise l'entrave au fonctionnement régulier du comité, punie d'une amende de 7 500 € (L. 2317-1). Sa composition est d'ordre public : au minimum trois représentants du personnel, dont au moins un du second collège ou, le cas échéant, du troisième (L. 2315-39), un siège au moins devant revenir au troisième collège lorsqu'il est institué (Soc., 26 février 2025, n° 24-12.295, publié). La désignation résulte d'un vote à la majorité des membres présents (L. 2315-32), sans résolution préalable fixant les modalités de l'élection (Soc., 27 novembre 2019, n° 19-14.224, publié) : opérée autrement, elle est annulable.",
         conseil: "Vérifiez le nombre de collèges avant de composer la commission, et non après : c'est de là que vient l'irrégularité la plus fréquente. Consignez au procès-verbal le collège d'appartenance de chaque désigné, et pas seulement son nom. Retenez que les désignés le sont pour la durée du mandat : hors les cas de fin anticipée de mandat, le comité ne peut pas les remplacer en cours de route.",
         quoi: "La commission est présidée par l'employeur ou son représentant et comprend au minimum trois membres représentants du personnel, dont au moins un du second collège ou, le cas échéant, du troisième. Ses membres sont désignés par le comité parmi ses membres, par une résolution adoptée à la majorité des membres présents, pour une durée qui prend fin avec celle du mandat des élus. Elle est obligatoire dans les entreprises et établissements distincts d'au moins trois cents salariés et dans les établissements des articles L. 4521-1 et suivants ; en deçà, l'inspecteur du travail peut l'imposer, et rien n'interdit de la créer par accord.",
@@ -1698,6 +1712,15 @@
               ? ["Un troisième collège est institué : un siège au moins revient à un élu le représentant"] : [] }; } } },
 
       { id: "i7", nom: "Constituer les autres commissions",
+        /* Aucune de ces commissions n'est due avant trois cents salariés, sauf
+           accord de l'article L. 2315-45. La commission des marchés, qui se
+           déclenche sur les comptes du comité et non sur l'effectif, a sa
+           propre étape dans le parcours des commissions. */
+        si: function (P, D) {
+          if (seuil(P, 300) === true) return true;
+          if (D.accordCse === "oui") return true;
+          return seuil(P, 300) === false ? false : null;
+        },
         risque: "À défaut d'accord de l'article L. 2315-45, la commission économique est créée à partir de mille salariés (L. 2315-46) et les commissions de la formation, d'information et d'aide au logement et de l'égalité professionnelle à partir de trois cents (L. 2315-49, L. 2315-50, L. 2315-56). Ces commissions préparent des délibérations du comité : leur absence prive ces délibérations de leur préparation. La commission des marchés, elle, se déclenche sur les seuils des comptes du comité et non sur l'effectif de l'entreprise (L. 2315-44-1, D. 2315-29).",
         conseil: "Recherchez l'accord avant de constituer quoi que ce soit : les commissions supplétives ne sont dues qu'à défaut d'accord, et constituer par le règlement intérieur ce qu'un accord organise déjà crée deux régimes concurrents. Datez le franchissement des seuils sur les états d'effectif plutôt que sur une impression. Confiez au trésorier la surveillance des seuils de la commission des marchés : ils se lisent dans les comptes du comité, pas dans ceux de l'entreprise.",
         quoi: "L'accord d'entreprise fixe les modalités de mise en place des commissions ; en l'absence de délégué syndical, un accord entre l'employeur et le comité adopté à la majorité des titulaires y pourvoit ; à défaut d'accord, le règlement intérieur du comité les définit. À défaut d'accord de l'article L. 2315-45 : commission économique à partir de mille salariés, commissions de la formation, du logement et de l'égalité professionnelle à partir de trois cents. La commission des marchés se crée au-delà de deux des trois seuils du décret. Le parcours « Constituer les commissions du CSE » déroule chacune d'elles.",
@@ -1763,6 +1786,12 @@
             dateCloture: D.dateClotureExercice }; } } },
 
       { id: "i11", nom: "Ouvrir les budgets : subvention de fonctionnement et contribution aux activités sociales",
+        /* La subvention de fonctionnement n'est due que « dans les entreprises
+           de cinquante à moins de deux mille salariés » et « d'au moins deux
+           mille » (L. 2315-61, 1° et 2°, lu à la source le 1er septembre 2026).
+           Le comité, lui, existe à onze : l'étape était prescrite à des comités
+           qui ne perçoivent aucune subvention. */
+        si: function (P) { return seuil(P, 50); },
         risque: "La subvention de fonctionnement est due à hauteur de 0,20 % de la masse salariale brute de cinquante à moins de deux mille salariés, et de 0,22 % à partir de deux mille (L. 2315-61) : le complément non versé reste dû. La contribution aux activités sociales et culturelles est fixée par accord d'entreprise ; à défaut, son rapport à la masse salariale brute ne peut être inférieur à celui de l'année précédente (L. 2312-81). L'insuffisance se mesure donc en rapport et non en montant : une masse salariale qui progresse plus vite que la contribution suffit à la caractériser.",
         conseil: "Arrêtez d'emblée l'assiette avec l'employeur, par écrit : la masse salariale brute est celle de L. 2312-83, à l'exception des indemnités versées à l'occasion de la rupture d'un contrat à durée indéterminée, et c'est là que naissent la plupart des désaccords. Demandez le détail du calcul et non le seul montant, puis rapprochez-le des déclarations sociales. Ouvrez deux comptes bancaires distincts dès la première réunion : les deux budgets ne se mélangent pas, et tout transfert d'excédent suppose une délibération.",
         jx: "cse-budgets",

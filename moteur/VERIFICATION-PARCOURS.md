@@ -57,8 +57,13 @@ Restent quatre étapes du parcours d'installation du comité, à trancher :
   tout élu quel que soit l'effectif ; seule la formation économique suppose
   cinquante salariés. L'étape reste donc due, mais son texte mêle les deux.
 
-Aucune de ces quatre n'est corrigée à cette heure : les articles n'ont pas
-encore été relus à la source, et rien ne se corrige avant.
+Trois d'entre elles ont été corrigées le 1er septembre 2026, articles relus à
+la source : `i6` ne s'affiche qu'à trois cents salariés ou sur réponse à la
+question ajoutée (L. 2315-36, L. 2315-37), `i7` qu'à trois cents ou en présence
+d'un accord (L. 2315-45), `i11` qu'à cinquante (L. 2315-61, 1°). `i15` est
+laissée en l'état : la formation santé-sécurité y est due à tout élu quel que
+soit l'effectif, seule la formation économique suppose cinquante salariés, et
+l'étape reste donc due — c'est son texte qui mêle les deux.
 
 ## Sept clients simulés — ce qu'ils voient
 
