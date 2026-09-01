@@ -97,11 +97,18 @@ def main():
                 page.wait_for_timeout(150)
                 n = page.evaluate(REMPLIR, "non")
                 faits[m] = n["radios"] + n["selects"]
+                # Le bouton peut être recouvert un instant par la barre d'actions
+                # collante : on le fait défiler à vue et on lui laisse le temps,
+                # sinon l'épreuve se signale elle-même comme un défaut.
                 for b in ("#vers-general", "#vers-guide"):
                     if page.locator(b).count():
-                        try: page.click(b, timeout=3000)
-                        except Exception: anomalies.append((prof["denomination"], m, "bouton bloqué " + b))
-                        page.wait_for_timeout(120)
+                        try:
+                            page.locator(b).scroll_into_view_if_needed(timeout=3000)
+                            page.click(b, timeout=8000)
+                        except Exception as ex:
+                            anomalies.append((prof["denomination"], m,
+                                              "bouton bloqué " + b + " : " + str(ex).split("\n")[0][:80]))
+                        page.wait_for_timeout(150)
                 if n["radios"] + n["selects"] == 0:
                     anomalies.append((prof["denomination"], m, "aucune question fermée trouvée"))
 
