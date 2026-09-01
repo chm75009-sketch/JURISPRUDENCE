@@ -1221,7 +1221,7 @@
     etapes: [
       { id: "i1", nom: "Vérifier que vous êtes concerné, et depuis quand",
         conseil: "Datez le franchissement du seuil à partir des effectifs mois par mois, pas de mémoire : c'est cette date qui fixe l'échéance des douze mois. Gardez le tableau qui l'établit — c'est la première pièce que l'inspection demandera.",
-        quoi: "L'établissement d'un règlement intérieur est obligatoire dans les entreprises ou établissements employant au moins cinquante salariés. L'obligation s'applique au terme d'un délai de douze mois à compter de la date à laquelle le seuil a été atteint pendant douze mois consécutifs.",
+        quoi: "L'établissement d'un règlement intérieur est obligatoire dans les entreprises ou établissements employant au moins cinquante salariés. L'obligation s'applique au terme d'un délai de douze mois à compter de la date à laquelle le seuil a été atteint pendant douze mois consécutifs. En deçà de cinquante salariés, aucun règlement n'est dû : vous pouvez en adopter un, et les étapes qui suivent le construisent, mais rien ne vous y oblige. Sachez-le avant de commencer — un règlement adopté volontairement s'impose ensuite comme les autres, avec les mêmes formalités de consultation, de dépôt et de publicité, et le même mois avant l'entrée en vigueur.",
         fond: ["L1311-2", "R1321-5"], juris: ["17-16.465"],
         risque: "Le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur est puni de l'amende prévue pour les contraventions de la quatrième classe (R. 1323-1) — L. 1311-2, qui pose l'obligation même, ouvre cette énumération. Et sans règlement, aucune échelle de sanctions n'existe : chez l'employeur tenu d'en établir un, une sanction autre que le licenciement ne peut être prononcée que si le règlement la prévoit.",
         quand: function (D, P) {
@@ -1230,7 +1230,14 @@
           return { iso: t, libelle: "Règlement intérieur dû à compter du " + dateFr(t),
             note: "Douze mois à compter de la date à laquelle le seuil de cinquante salariés a été atteint (art. R. 1321-5)." };
         },
-        si: function (P) { return seuil(P, 50); } },
+        /* Cette étape était masquée SOUS cinquante salariés — l'inverse de ce
+           qu'il fallait. Défaut mesuré le 1er septembre 2026 : l'employeur de
+           trente salariés ne voyait pas l'étape qui lui aurait dit qu'il n'est
+           pas tenu d'établir un règlement, et tombait directement sur « Écrire
+           le règlement intérieur ». Elle est désormais montrée à tous : au-delà
+           du seuil elle date l'échéance, en deçà elle dit que le règlement est
+           facultatif — et qu'adopté volontairement, il oblige comme les autres. */
+        conv: "l'existence d'une obligation conventionnelle de règlement intérieur en deçà de cinquante salariés" },
       { id: "i2", nom: "Écrire le règlement intérieur",
         docProduit: "DIS-CTL-RI-01",
         conseil: "Écrivez d'abord les trois matières, les rappels ensuite : un règlement qui commence par la discipline oublie presque toujours la santé-sécurité. Relisez-le une dernière fois en vous demandant, pour chaque phrase, de quelle matière elle relève — celles qui ne relèvent d'aucune n'ont rien à y faire.",
@@ -2991,7 +2998,9 @@
     });
     ecrireProfil();
     if (ACTIF) rendre();
-    majCartes();
+    /* L'effectif décide quels parcours sont dus : le corriger doit refaire la
+       liste, non seulement les compteurs. */
+    construireCartes();
   }
 
   /* ================================================================== */
@@ -3116,13 +3125,55 @@
   /* ================================================================== */
   var ACTIF = null;
 
+  /* LES PARCOURS QUI NE SONT PAS DUS À CET EFFECTIF
+     ===============================================
+
+     Défaut mesuré le 1er septembre 2026, en faisant passer sept effectifs
+     dans les quinze parcours : aucune carte n'était filtrée. Un artisan de
+     huit salariés se voyait proposer d'installer un comité, de constituer la
+     base de données et de publier l'index de l'égalité — trois obligations
+     qu'il n'a pas. Les moteurs d'audit, eux, le savaient déjà : le module
+     BDESE répond « sans objet » sous cinquante salariés en citant L. 2312-1
+     et L. 2312-2.
+
+     Seuls figurent ici les parcours dont l'obligation entière tient à un
+     seuil d'effectif. Le règlement intérieur n'y est pas : il n'est
+     obligatoire qu'à cinquante (L. 1311-2), mais un employeur plus petit peut
+     valablement en adopter un — c'est l'étape « êtes-vous concerné » qui le
+     lui dit. La négociation non plus : elle tient à l'existence d'une section
+     syndicale représentative, non à l'effectif seul.
+
+     Effectif non renseigné : tout s'affiche. On ne retire rien sur une
+     ignorance. */
+  var SEUIL_PARCOURS = {
+    installation: { min: 11, texte: "le comité social et économique est mis en place dans les entreprises d'au moins onze salariés (L. 2311-2)" },
+    reunion: { min: 11, texte: "le comité social et économique est mis en place dans les entreprises d'au moins onze salariés (L. 2311-2)" },
+    commissions: { min: 11, texte: "le comité social et économique est mis en place dans les entreprises d'au moins onze salariés (L. 2311-2)" },
+    bdese: { min: 50, texte: "les attributions récurrentes dont relève la base ne s'exercent qu'à partir de cinquante salariés (L. 2312-1, L. 2312-2)" },
+    index: { min: 50, texte: "l'index est publié dans les entreprises d'au moins cinquante salariés (L. 1142-8)" },
+  };
+
+  function duParcours(p) {
+    var s = SEUIL_PARCOURS[p.cle];
+    if (!s) return true;
+    return seuil(PROFIL, s.min) !== false;
+  }
+
   function construireCartes() {
-    $("cartes").innerHTML = PARCOURS.map(function (p) {
+    var dus = PARCOURS.filter(duParcours);
+    var hors = PARCOURS.filter(function (p) { return !duParcours(p); });
+    $("cartes").innerHTML = dus.map(function (p) {
       return '<button type="button" class="carte" id="carte-' + p.cle + '" role="tab">' +
         "<b>" + e(p.nom) + '</b><span class="res">' + e(p.resume) + "</span>" +
         '<span class="avance" id="avance-' + p.cle + '"></span></button>';
-    }).join("");
-    PARCOURS.forEach(function (p) {
+    }).join("") +
+      (hors.length
+        ? '<p class="hors-seuil">Non dus à votre effectif de ' + e(PROFIL.effectif) +
+          " salariés, et donc retirés de cette liste : " +
+          hors.map(function (p) { return "« " + e(p.nom) + " » — " + e(SEUIL_PARCOURS[p.cle].texte); }).join(" ; ") +
+          ". Ils reviendront au franchissement du seuil.</p>"
+        : "");
+    dus.forEach(function (p) {
       $("carte-" + p.cle).addEventListener("click", function () { choisir(p); });
     });
     majCartes();
