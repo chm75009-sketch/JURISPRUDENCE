@@ -60,6 +60,44 @@ Restent quatre étapes du parcours d'installation du comité, à trancher :
 Aucune de ces quatre n'est corrigée à cette heure : les articles n'ont pas
 encore été relus à la source, et rien ne se corrige avant.
 
+## Sept clients simulés — ce qu'ils voient
+
+Sept profils passés dans les quinze parcours, avec le compte des étapes
+visibles pour chacun : 8, 12, 18, 49, 74, 320 et 1 200 salariés.
+
+**Aucun parcours n'est filtré à l'entrée.** Les quinze cartes sont proposées à
+tout le monde. Un artisan de huit salariés se voit offrir « Installer le CSE »,
+« Tenir une réunion du CSE », « Constituer les commissions du CSE »,
+« Constituer la base de données » et « Publier l'index de l'égalité » — aucune
+de ces obligations n'existe chez lui : le comité se met en place à onze
+(L. 2311-2), les attributions récurrentes dont relève la base ne s'exercent
+qu'à cinquante (L. 2312-1, L. 2312-2), et l'index n'est publié que dans les
+entreprises d'au moins cinquante salariés (L. 1142-8).
+
+**Onze parcours sur quinze rendent exactement le même nombre d'étapes à huit
+salariés et à mille deux cents.** Seuls `ri`, `duerp`, `nao` et `commissions`
+varient avec l'effectif.
+
+**Le règlement intérieur est inversé.** Sous cinquante salariés, l'étape « i1 —
+Vérifier que vous êtes concerné, et depuis quand » est masquée, et l'employeur
+tombe directement sur « i2 — Écrire le règlement intérieur ». C'est le seul
+endroit où il fallait dire que le règlement n'est pas obligatoire (L. 1311-2),
+et c'est le seul endroit où l'application se tait. Le raccourci ouvert le
+31 août 2026 — « non » ouvre aussitôt le document — aggrave le défaut : un
+employeur de trente salariés se voit rédiger un règlement qu'il ne doit pas.
+
+**Le parcours d'installation du comité ne varie jamais** : dix-sept étapes de
+huit à mille deux cents salariés. L'étape `i11` prescrit d'ouvrir la
+subvention de fonctionnement, due de cinquante à moins de deux mille salariés
+(L. 2315-61, 1°, lu à la source le 1er septembre 2026) ; `i6` prescrit de
+désigner la commission santé-sécurité, obligatoire à trois cents ; `i7`
+renvoie à des commissions dues à trois cents et mille.
+
+**Les moteurs d'audit, eux, connaissent ces seuils.** Le module BDESE répond
+« sans objet » sous cinquante salariés en citant L. 2312-1 et L. 2312-2. Ce ne
+sont donc pas les seuils qui manquent au dépôt : ce sont les parcours qui
+ignorent ce que les moteurs savent déjà.
+
 ## Corrigé
 
 - `commissions/c10`, la commission des marchés — condition ajoutée le
