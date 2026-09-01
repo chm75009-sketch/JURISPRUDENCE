@@ -38,7 +38,7 @@ def serveur():
     threading.Thread(target=s.serve_forever, daemon=True).start()
     return s, s.server_address[1]
 
-def profils(n=100):
+def profils(n=int(os.environ.get("N","100"))):
     random.seed(20260901)
     # des effectifs qui encadrent chaque seuil : 10/11, 19/20, 49/50, 299/300,
     # 999/1000, 1999/2000 — le reste au hasard.
@@ -84,13 +84,13 @@ def main():
             page.on("console", lambda m: erreurs.append(m.text) if m.type == "error" else None)
 
             # 1. l'accès, et la fiche écrite comme le ferait le client
-            page.goto(base + "index.html", wait_until="networkidle")
+            page.goto(base + "index.html", wait_until="domcontentloaded")
             page.evaluate("(p) => localStorage.setItem('profil-entreprise', JSON.stringify(p))", prof)
 
             # 2. les huit questionnaires, tous répondus « non »
             faits = {}
             for m in MODULES:
-                page.goto(base + "audit-%s.html" % m, wait_until="networkidle")
+                page.goto(base + "audit-%s.html" % m, wait_until="domcontentloaded")
                 if page.locator("#generer").count():
                     try: page.click("#generer", timeout=3000)
                     except Exception: pass
@@ -106,7 +106,7 @@ def main():
                     anomalies.append((prof["denomination"], m, "aucune question fermée trouvée"))
 
             # 3. les parcours proposés à cet effectif
-            page.goto(base + "parcours.html", wait_until="networkidle")
+            page.goto(base + "parcours.html", wait_until="domcontentloaded")
             page.wait_for_timeout(200)
             cartes = page.evaluate(
                 "() => [...document.querySelectorAll('.carte b')].map(b => b.textContent)")
@@ -125,8 +125,8 @@ def main():
             resume.append({"client": prof["denomination"], "effectif": eff,
                            "questions": sum(faits.values()), "cartes": len(cartes)})
             ctx.close()
-            if (i + 1) % 10 == 0:
-                print("  %d clients passés…" % (i + 1), flush=True)
+            if True:
+                print("  client %d — %s, %d salariés, %d questions, %d cartes" % (i+1, prof["denomination"], eff, sum(faits.values()), len(cartes)), flush=True)
         nav.close()
     srv.shutdown()
 
