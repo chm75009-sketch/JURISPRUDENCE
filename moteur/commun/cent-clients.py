@@ -108,15 +108,23 @@ def main():
                 # Le bouton peut être recouvert un instant par la barre d'actions
                 # collante : on le fait défiler à vue et on lui laisse le temps,
                 # sinon l'épreuve se signale elle-même comme un défaut.
-                for b in ("#vers-general", "#vers-guide"):
-                    if page.locator(b).count():
-                        try:
-                            page.locator(b).scroll_into_view_if_needed(timeout=8000)
-                            page.click(b, timeout=8000)
-                        except Exception as ex:
-                            anomalies.append((prof["denomination"], m,
-                                              "bouton bloqué " + b + " : " + str(ex).split("\n")[0][:80]))
-                        page.wait_for_timeout(150)
+                # La barre d'actions est collée au bas de l'écran et bouge tant que
+                # les deux cent trente questions finissent de se poser : Playwright
+                # refuse alors de cliquer sur une cible qu'il juge instable, quand
+                # un utilisateur, lui, cliquerait sans peine. On déclenche donc le
+                # bouton directement, et l'on vérifie le RÉSULTAT — le rapport
+                # s'est-il ouvert — plutôt que la mécanique du clic.
+                for b, bloc in (("#vers-general", "#bloc-general"), ("#vers-guide", "#bloc-guide")):
+                    if not page.locator(b).count():
+                        continue
+                    page.evaluate("(s) => { const e = document.querySelector(s); if (e) e.click(); }", b)
+                    page.wait_for_timeout(250)
+                    ouvert = page.evaluate(
+                        "(s) => { const e = document.querySelector(s);"
+                        " return !!e && getComputedStyle(e).display !== 'none'; }", bloc)
+                    if not ouvert:
+                        anomalies.append((prof["denomination"], m,
+                                          "le bouton " + b + " n'ouvre pas " + bloc))
                 if n["radios"] + n["selects"] == 0:
                     anomalies.append((prof["denomination"], m, "aucune question fermée trouvée"))
 
