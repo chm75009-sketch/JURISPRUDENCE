@@ -117,11 +117,22 @@ def main():
                 for b, bloc in (("#vers-general", "#bloc-general"), ("#vers-guide", "#bloc-guide")):
                     if not page.locator(b).count():
                         continue
-                    page.evaluate("(s) => { const e = document.querySelector(s); if (e) e.click(); }", b)
-                    page.wait_for_timeout(250)
-                    ouvert = page.evaluate(
-                        "(s) => { const e = document.querySelector(s);"
-                        " return !!e && getComputedStyle(e).display !== 'none'; }", bloc)
+                    avant = page.url
+                    try:
+                        page.evaluate("(s) => { const e = document.querySelector(s); if (e) e.click(); }", b)
+                        page.wait_for_timeout(250)
+                        ouvert = page.evaluate(
+                            "(s) => { const e = document.querySelector(s);"
+                            " return !!e && getComputedStyle(e).display !== 'none'; }", bloc)
+                    except Exception:
+                        # Le contexte a été détruit : la page a navigué. Ce n'est pas
+                        # un défaut en soi — répondre « non » fait basculer vers la
+                        # procédure, c'est voulu —, mais il faut savoir où l'on part.
+                        page.wait_for_timeout(300)
+                        anomalies.append((prof["denomination"], m,
+                                          "navigation pendant " + b + " : " + avant.split("/")[-1] +
+                                          " -> " + page.url.split("/")[-1]))
+                        break
                     if not ouvert:
                         anomalies.append((prof["denomination"], m,
                                           "le bouton " + b + " n'ouvre pas " + bloc))
