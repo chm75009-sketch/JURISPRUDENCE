@@ -32,6 +32,16 @@ signer. C'est la contradiction directe du volet « non » :
 Deux autres sont presque vides : `affichages` (1 document pour 10 étapes) et
 `index` (1 pour 9).
 
+Trois documents ont été écrits le 1er septembre 2026, dans `docs/documents-rh.js`
+(famille RH), articles relus à la source ce jour : le **registre unique du
+personnel** avec ses deux parties et ses treize indications complémentaires
+(L. 1221-13, D. 1221-23 à D. 1221-25), le **certificat de travail** limité aux
+deux seules mentions que le décret autorise (L. 1234-19, D. 1234-6 — ses 3° et
+4° sont abrogés), et le **reçu pour solde de tout compte** en double exemplaire
+avec la mention du double et le délai de dénonciation de six mois (L. 1234-20,
+D. 1234-7). Restent sans document : l'embauche, les entretiens professionnels
+et les congés payés.
+
 ## Ce qui est fautif — étapes prescrivant un acte non dû
 
 Vingt-deux étapes citent un seuil sans porter la condition correspondante.

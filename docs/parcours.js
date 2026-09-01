@@ -2076,6 +2076,7 @@
     ],
     etapes: [
       { id: "r1", nom: "Ouvrir un registre par établissement",
+        docProduit: "RH-CTL-REG-01",
         champDate: "dateOuverture",
         risque: "L'article R. 1227-7 punit de l'amende prévue pour les contraventions de la quatrième classe la méconnaissance de l'article L. 1221-13 relatif au registre unique du personnel ; l'amende est appliquée autant de fois qu'il y a de personnes employées dans des conditions susceptibles d'être sanctionnées. L'absence de registre dans un établissement n'est donc pas une infraction, mais autant d'infractions qu'il y compte de salariés.",
         conseil: "Ouvrez un registre par établissement, quand bien même la paie serait centralisée : ce qui se demande au contrôle, c'est le registre du site visité, sur-le-champ. Si vous tenez une base centrale, préparez l'extraction par établissement et vérifiez qu'elle s'imprime sur place. Nommez, dans chaque établissement, la personne qui en répond.",
@@ -2838,6 +2839,7 @@
             note: "Un mois à compter de l'examen médical de reprise (art. L. 1226-4). Posez l'alerte en paie dès la réception de l'avis." };
         } },
       { id: "f6", nom: "Établir le certificat de travail — et rien de plus que ses mentions",
+        docProduit: "RH-CTL-FIN-01",
         risque: "Le fait de ne pas délivrer au salarié un certificat de travail, en méconnaissance de l'article L. 1234-19, est puni de l'amende prévue pour les contraventions de la quatrième classe (R. 1238-3). Le certificat contient exclusivement la date d'entrée et celle de sortie et la nature des emplois successivement occupés avec les périodes correspondantes (D. 1234-6) ; une mention étrangère à cette liste, en particulier défavorable, sort le certificat de son cadre et ouvre une réparation.",
         conseil: "Établissez un modèle unique de certificat, sans en-tête commerciale bavarde ni appréciation, et interdisez toute variante rédigée au cas par cas — c'est la bonne volonté du rédacteur qui produit les mentions de trop. Vérifiez les dates contre le registre unique du personnel et non contre la mémoire du service. Le certificat est dû à l'expiration du contrat quelle qu'en soit la cause, y compris après une rupture conflictuelle : le retenir en attendant une restitution de matériel est le réflexe le plus coûteux.",
         quoi: "À l'expiration du contrat de travail, l'employeur délivre au salarié un certificat dont le contenu est déterminé par voie réglementaire. L'article D. 1234-6, dans sa version lue à la source, énonce que le certificat contient EXCLUSIVEMENT la date d'entrée et celle de sortie, et la nature de l'emploi ou des emplois successivement occupés avec les périodes correspondantes. Les deux autres mentions qu'il portait autrefois sont abrogées : n'ajoutez rien.",
@@ -2848,6 +2850,7 @@
             note: "À l'expiration du contrat : le certificat ne s'envoie pas la semaine suivante." };
         } },
       { id: "f7", nom: "Établir le reçu pour solde de tout compte, en double exemplaire",
+        docProduit: "RH-CTL-FIN-02",
         risque: "Le reçu pour solde de tout compte peut être dénoncé dans les six mois qui suivent sa signature, délai au-delà duquel il devient libératoire pour l'employeur pour les seules sommes qui y sont mentionnées (L. 1234-20). Un reçu qui n'inventorie pas les sommes versées, ou dont la mention n'est pas conforme, ne produit pas l'effet libératoire attendu : ce qui n'y figure pas n'est jamais couvert.",
         conseil: "Détaillez ligne à ligne — salaire, indemnité compensatrice de congés payés, indemnité de rupture, primes, remboursements — plutôt que de porter un montant global : c'est le détail, et lui seul, qui produit l'effet libératoire. Établissez deux exemplaires, faites-en signer un et remettez l'autre au salarié le jour du départ, avec la mention de cette remise. Ne faites jamais signer un reçu avant le versement effectif ni avant le terme du contrat.",
         quoi: "Le solde de tout compte, établi par l'employeur et dont le salarié lui donne reçu, fait l'inventaire des sommes versées lors de la rupture. Le reçu peut être dénoncé dans les six mois qui suivent sa signature, délai au-delà duquel il devient libératoire pour l'employeur — pour les seules sommes qui y sont mentionnées. C'est pourquoi l'inventaire compte : ce qui n'y figure pas n'est pas couvert.",
@@ -3618,6 +3621,9 @@
     BDESE: ["documents-produits.js", "documents-bdese.js"],
     NAO: ["documents-produits.js", "documents-nao.js"],
     PSE: ["documents-produits.js", "documents-pse.js"],
+    /* La gestion du personnel : registre, embauche, fin de contrat. Ces
+       parcours ne produisaient aucun document jusqu'au 1er septembre 2026. */
+    RH: ["documents-produits.js", "documents-rh.js"],
   };
   var charges = {};
   function charger(liste, quand) {

@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-10.9";
+const CACHE = "jurisprudence-11.0";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
@@ -83,7 +83,7 @@ const ESSENTIELS = [
   "./documents-cse-2.js", "./documents-cse-3.js",
   "./documents-bdese.js", "./documents-sst.js",
   "./documents-sst-2.js", "./documents-discipline-2.js",
-  "./documents-nao.js",
+  "./documents-nao.js", "./documents-rh.js",
   "./documents-eco-procedure.js", "./documents-eco-cse.js",
   "./documents-eco-fond.js", "./documents-eco-2.js",
   /* La fiche client : la source unique du profil partagé (clé
