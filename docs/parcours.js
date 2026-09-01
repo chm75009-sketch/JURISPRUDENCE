@@ -839,6 +839,8 @@
         aide: "À défaut d'accord, c'est lui qui les définit (art. L. 2315-44)." },
       { c: "troisiemeCollege", nom: "Un troisième collège électoral est-il institué ?", t: "oui-non",
         aide: "Il commande l'attribution d'un siège à la commission santé, sécurité et conditions de travail (art. L. 2315-39)." },
+      { c: "seuilsMarches", nom: "Les comptes du comité dépassent-ils deux des trois seuils de la commission des marchés ?", t: "oui-non",
+        aide: "Cinquante salariés employés PAR LE COMITÉ à la clôture d'un exercice, le montant de ressources annuelles et le total du bilan de l'article R. 612-1 du code de commerce (art. L. 2315-44-1 et D. 2315-29). Ces trois critères portent sur les comptes du comité, jamais sur l'effectif de l'entreprise : un comité qui n'emploie personne et dont le budget se compte en dizaines de milliers d'euros n'en franchit aucun. Répondez « non » si vous êtes dans ce cas — l'étape correspondante disparaîtra." },
       { c: "dateReunionDesignation", nom: "Date de la réunion de désignation", t: "date" },
       { c: "dateFinMandats", nom: "Date de fin du mandat des élus", t: "date",
         aide: "La durée du mandat des membres de la commission prend fin avec celle du mandat des élus du comité (art. L. 2315-39)." },
@@ -944,6 +946,21 @@
         conseil: "Le critère porte sur les comptes du comité, non sur l'effectif de l'entreprise : c'est à la clôture de chaque exercice, comptes en main, que le dépassement se constate, et l'obligation peut naître d'une année sur l'autre. Tenez un registre des marchés portant, pour chacun, le montant, la date, le fournisseur retenu et le critère appliqué. Le seuil de 30 000 euros se regarde marché par marché : le fractionnement d'un achat en plusieurs commandes est l'irrégularité qui se lit le mieux dans les comptes.",
         quoi: "Elle est créée au sein du comité qui dépasse, pour au moins deux des trois critères, les seuils du décret : cinquante salariés à la clôture d'un exercice, le montant de ressources annuelles et le total du bilan de l'article R. 612-1 du code de commerce. Ses membres sont désignés parmi les titulaires ; le règlement intérieur du comité fixe son fonctionnement. Au-delà de 30 000 euros, le comité détermine, sur proposition de la commission, les critères de choix des fournisseurs et la procédure d'achat ; la commission choisit les fournisseurs et rend compte au moins une fois par an.",
         fond: ["L2315-44-1", "L2315-44-2", "L2315-44-3", "D2315-29"],
+        /* Les trois critères sont ceux des COMPTES DU COMITÉ (L. 2315-64, II),
+           non l'effectif de l'entreprise : l'étape ne peut donc pas se déduire
+           du profil, elle se demande. Défaut signalé le 1er septembre 2026 —
+           elle s'affichait à un comité de 74 salariés, seule étape du parcours
+           dépourvue de condition quand les commissions économique (1 000),
+           formation, logement et égalité (300) en portaient une.
+
+           Tant que la question n'a pas de réponse, l'étape reste masquée —
+           contrairement aux autres conditions du fichier, qui affichent dans
+           le doute. La raison tient au texte : la commission est créée « au
+           sein du comité QUI DÉPASSE » les seuils, elle n'existe donc pas tant
+           que le dépassement n'est pas constaté, et il ne se constate que
+           comptes en main. La question, elle, reste posée en tête du parcours :
+           rien n'est retiré en silence. */
+        si: function (P, D) { return D.seuilsMarches === "oui"; },
         doc: { modele: "designation-commission", nom: "Délibération de désignation des membres",
           pre: function (P, D) { return { entreprise: P.denomination, commission: "commission des marchés",
             dateReunion: D.dateReunionDesignation, dateFinMandat: D.dateFinMandats }; } } },
