@@ -91,10 +91,18 @@ def main():
             faits = {}
             for m in MODULES:
                 page.goto(base + "audit-%s.html" % m, wait_until="domcontentloaded")
+                # « Étape 2 : ouvrir le questionnaire » commande tout le reste :
+                # si ce clic échoue, le bouton du rapport général demeure masqué
+                # et l'échec se lit plus loin, au mauvais endroit. On le suit donc
+                # pour lui-même.
                 if page.locator("#generer").count():
-                    try: page.click("#generer", timeout=3000)
-                    except Exception: pass
-                page.wait_for_timeout(150)
+                    try:
+                        page.locator("#generer").scroll_into_view_if_needed(timeout=5000)
+                        page.click("#generer", timeout=8000)
+                    except Exception as ex:
+                        anomalies.append((prof["denomination"], m,
+                                          "questionnaire non ouvert : " + str(ex).split("\n")[0][:80]))
+                page.wait_for_timeout(250)
                 n = page.evaluate(REMPLIR, "non")
                 faits[m] = n["radios"] + n["selects"]
                 # Le bouton peut être recouvert un instant par la barre d'actions
@@ -103,7 +111,7 @@ def main():
                 for b in ("#vers-general", "#vers-guide"):
                     if page.locator(b).count():
                         try:
-                            page.locator(b).scroll_into_view_if_needed(timeout=3000)
+                            page.locator(b).scroll_into_view_if_needed(timeout=8000)
                             page.click(b, timeout=8000)
                         except Exception as ex:
                             anomalies.append((prof["denomination"], m,
