@@ -12,6 +12,7 @@ const { C, ETATS, DETECTION } = require("./controles-nao.js");
 const { CONF, NC, RISQ, MANQ, SO } = ETATS;
 
 const BASE = {
+  negosEngagees: "oui",
   entreprise: "SOCIÉTÉ D'EXEMPLE SAS", dateAudit: "2026-08-18",
   effectif: 420, groupe: false, effectifGroupe: null, dimensionCommunautaire: false,
   sectionsSyndicales: "oui",
@@ -40,6 +41,10 @@ const clone = o => JSON.parse(JSON.stringify(o));
 function avec(mod) { const f = clone(BASE); mod(f); return f; }
 
 const CAS = [
+  /* La question d'entrée du module : rien n'a été engagé. Les quatre contrôles
+     de périodicité doivent conclure au manquement, non à la donnée manquante. */
+  { nom: "Aucune négociation engagée", attendu: ["NAO-CTL-PER-01", "NAO-CTL-PER-02", "NAO-CTL-PER-03"],
+    f: avec(f => { f.negosEngagees = "non"; }) },
   { nom: "Accord de méthode de six ans", attendu: ["NAO-CTL-REG-02"],
     f: avec(f => { f.accordMethode = { existe: "oui", verse: "oui", dureeAns: 6,
       mentions: ["themes", "contenu", "calendrier", "informations", "suivi"] }; }) },

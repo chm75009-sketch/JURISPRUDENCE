@@ -467,6 +467,10 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
   var etatVide = function () {
     return { dossier: {}, nuances: {}, faits: {}, controles: {}, etape: 1 };
   };
+  /* La bascule : quel « non » emmène vers quelle procédure. Le nom du champ
+     est celui du questionnaire du moteur (moteur/nao/questionnaire-nao.js). */
+  var BASCULES = { negosEngagees: { p: "nao" } };
+
   var ETAT = etatVide();
   try {
     var lu = JSON.parse(localStorage.getItem(CLE) || "null");
@@ -687,8 +691,12 @@ syndicale, accord de méthode, négociations menées — se pose à l'étape 2.<
       });
       libre.addEventListener("input", function () { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); majNuances(); });
     });
-    f.addEventListener("change", function () {
+    f.addEventListener("change", function (ev) {
       lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
+      /* « Non » n'appelle pas un constat, il appelle la procédure qui engage
+         les négociations. Voir docs/parcours-lien.js. Défaut mesuré le
+         2 septembre 2026 : ce module n'avait aucune bascule. */
+      if (window.ParcoursLien) ParcoursLien.bascule(ev, BASCULES);
     });
     f.addEventListener("input", function (ev) {
       if (ev.target.tagName === "TEXTAREA" || ev.target.type === "text" || ev.target.type === "number") {

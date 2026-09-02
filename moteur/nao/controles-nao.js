@@ -91,6 +91,13 @@ function ctlPeriodicite(id, cle, penalite) {
     f => siRegimeConnu(f, () => {
       const e = M.echeances(f).themes[cle];
       if (e.du === null) return { etat: MANQ, motif: M.seuil300(f).motif };
+      /* La question d'entrée du module, posée avant toute autre : les
+         négociations ont-elles été engagées ? Un « non » ne laisse rien à
+         mesurer — il constitue le manquement. Jusqu'au 2 septembre 2026, cet
+         employeur-là lisait « donnée manquante », c'est-à-dire un reproche de
+         dossier incomplet là où le manquement était entier. */
+      if (nie(f.negosEngagees))
+        return { etat: NC, motif: `Aucune négociation obligatoire n'a été engagée : la périodicité de ${e.periodiciteMois / 12} an(s) ne peut donc pas être tenue${penalite ? ", et " + penalite : ""}. Le parcours « Conduire les négociations obligatoires » en déroule l'engagement, la convocation et le procès-verbal.` };
       if (e.du === false) return { etat: SO, motif: M.seuil300(f).motif };
       if (/jamais engagée/.test(e.etat))
         return { etat: MANQ, motif: `Aucune date d'engagement n'est renseignée pour cette négociation. Si elle n'a réellement jamais été engagée, le manquement est constitué — la périodicité applicable est de ${e.periodiciteMois / 12} an(s)${penalite ? ", et " + penalite : ""}.` };

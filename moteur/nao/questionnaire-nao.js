@@ -89,6 +89,7 @@ q("Identité", "effectifFrance", "Effectif employé en France si le groupe est c
 
 q("Le déclencheur", "sectionsSyndicales", "Une ou plusieurs sections syndicales d'organisations représentatives sont-elles constituées ?", "oui / non", "désignations des délégués syndicaux");
 
+q("Les négociations obligatoires", "negosEngagees", "Avez-vous engagé les négociations obligatoires de la période en cours ?", "oui / non", "procès-verbaux d'ouverture, convocations");
 q("L'accord de méthode", "accordMethode.existe", "Un accord fixe-t-il le calendrier, la périodicité, les thèmes et les modalités des négociations ?", "oui / non", "accord de méthode");
 q("L'accord de méthode", "accordMethode.verse", "Cet accord est-il joint au dossier ?", "oui / non", "l'accord lui-même");
 q("L'accord de méthode", "accordMethode.dureeAns", "Durée de l'accord, en années", "nombre", "l'accord lui-même");
