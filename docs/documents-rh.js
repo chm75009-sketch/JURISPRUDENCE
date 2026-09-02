@@ -608,4 +608,249 @@
     },
   });
 
+
+  /* ════════════════════════════════════════════════════════════════════════
+     LES ENTRETIENS DE PARCOURS PROFESSIONNEL
+     ════════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("RH-CTL-ENT-01", {
+    nom: "Le document d'entretien de parcours professionnel",
+    detail: "Les cinq sujets de l'article L. 6315-1, I, et la copie remise au salarié.",
+    produire: function (ctx) {
+      var p = ctx.profil || {}, d = ctx.donnees || {};
+      var L = entete(ctx, "Entretien de parcours professionnel",
+        "article L. 6315-1, I, du code du travail");
+
+      L.push("Entreprise : " + cro(p.denomination || p.entreprise, "DÉNOMINATION"));
+      L.push("Salarié : " + cro(d.salarie, "NOM ET PRÉNOMS") + " — emploi occupé : [EMPLOI]");
+      L.push("Date d'entrée dans l'entreprise : [DATE]");
+      L.push("Entretien tenu le : " + cro(d.dateEntretien, "DATE") + ", à [HEURE], pendant le temps de travail");
+      L.push("Conduit par : [NOM ET QUALITÉ — supérieur hiérarchique ou représentant de la direction]");
+      L.push("Motif : [premier entretien de la première année / entretien des quatre ans /");
+      L.push("        entretien proposé au retour d'une absence longue]");
+      L.push("");
+      L.push("AVERTISSEMENT, À LIRE AVANT DE COMMENCER");
+      L.push("");
+      L.push("« L'entretien de parcours professionnel ne porte pas sur l'évaluation du");
+      L.push("travail du salarié » (L. 6315-1, I). Un document qui note, apprécie ou");
+      L.push("sanctionne la performance n'est pas cet entretien-là : c'est un entretien");
+      L.push("d'évaluation, et le confondre avec celui-ci fait manquer l'obligation.");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push("1. COMPÉTENCES ET QUALIFICATIONS MOBILISÉES DANS L'EMPLOI ACTUEL,");
+      L.push("   ET LEUR ÉVOLUTION POSSIBLE AU REGARD DES TRANSFORMATIONS DE L'ENTREPRISE");
+      L.push("");
+      L.push("   [À REMPLIR PENDANT L'ENTRETIEN]");
+      L.push("");
+      L.push("2. SITUATION ET PARCOURS PROFESSIONNELS, AU REGARD DES ÉVOLUTIONS DES");
+      L.push("   MÉTIERS ET DES PERSPECTIVES D'EMPLOI DANS L'ENTREPRISE");
+      L.push("");
+      L.push("   [À REMPLIR PENDANT L'ENTRETIEN]");
+      L.push("");
+      L.push("3. BESOINS DE FORMATION — liés à l'activité actuelle, à l'évolution de");
+      L.push("   l'emploi au regard des transformations de l'entreprise, ou à un projet");
+      L.push("   personnel");
+      L.push("");
+      L.push("   [À REMPLIR PENDANT L'ENTRETIEN]");
+      L.push("");
+      L.push("4. SOUHAITS D'ÉVOLUTION PROFESSIONNELLE");
+      L.push("");
+      L.push("   [À REMPLIR PENDANT L'ENTRETIEN]");
+      L.push("");
+      L.push("   Suites envisagées, le cas échéant : reconversion interne ou externe,");
+      L.push("   projet de transition professionnelle, bilan de compétences, validation");
+      L.push("   des acquis de l'expérience. [PRÉCISER]");
+      L.push("");
+      L.push("5. COMPTE PERSONNEL DE FORMATION — activation par le salarié, abondements");
+      L.push("   que l'employeur est susceptible de financer, conseil en évolution");
+      L.push("   professionnelle");
+      L.push("");
+      L.push("   Le salarié a été informé de la possibilité d'activer son compte, des");
+      L.push("   abondements éventuels et du conseil en évolution professionnelle.");
+      L.push("   Observations : [À REMPLIR]");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push("ACTIONS DÉCIDÉES ET ÉCHÉANCES");
+      L.push("");
+      L.push("   [ACTION] — responsable : [QUI] — échéance : [DATE]");
+      L.push("");
+      L.push("Observations du salarié : [ESPACE LAISSÉ AU SALARIÉ]");
+      L.push("");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(ctx.aujourdhui) + ", en deux exemplaires.");
+      L.push("");
+      L.push("Pour l'employeur                           Le salarié");
+      L.push("[NOM ET QUALITÉ]                          " + cro(d.salarie, "Nom et prénoms"));
+      L.push("");
+      L.push("NOTE — L'entretien « donne lieu à la rédaction d'un document dont une copie");
+      L.push("est remise au salarié » (L. 6315-1, I). Remettez cette copie et gardez la");
+      L.push("trace de la remise : c'est elle qui prouve que l'entretien a eu lieu.");
+
+      return L.join("\n");
+    },
+  });
+
+  DP.ajouter("RH-CTL-ENT-02", {
+    nom: "L'état des lieux récapitulatif des huit ans",
+    detail: "Le récapitulatif de l'article L. 6315-1, II, et la copie remise au salarié.",
+    produire: function (ctx) {
+      var p = ctx.profil || {}, d = ctx.donnees || {};
+      var L = entete(ctx, "État des lieux récapitulatif du parcours professionnel",
+        "article L. 6315-1, II, du code du travail");
+
+      L.push("Entreprise : " + cro(p.denomination || p.entreprise, "DÉNOMINATION"));
+      L.push("Salarié : " + cro(d.salarie, "NOM ET PRÉNOMS") + " — ancienneté depuis le [DATE]");
+      L.push("État des lieux établi le : " + leJour(ctx.aujourdhui));
+      L.push("");
+      L.push("Cet état des lieux est fait tous les huit ans, à l'occasion de l'entretien");
+      L.push("de parcours professionnel. Lorsqu'il s'agit du premier après l'embauche, il");
+      L.push("peut être réalisé sept ans après le premier entretien ; la durée s'apprécie");
+      L.push("par référence à l'ancienneté du salarié dans l'entreprise (L. 6315-1, II).");
+      L.push("");
+      L.push("1. LES ENTRETIENS DES HUIT DERNIÈRES ANNÉES");
+      L.push("");
+      L.push("   Date de l'entretien       Motif                  Document remis le");
+      L.push("   [DATE]                    [PREMIER / QUATRE ANS] [DATE]");
+      L.push("   (une ligne par entretien tenu)");
+      L.push("");
+      L.push("   NOTE — L'objet de ce tableau est de « vérifier que le salarié a bénéficié");
+      L.push("   au cours des huit dernières années des entretiens de parcours");
+      L.push("   professionnels prévus au I ». Une ligne manquante est un manquement");
+      L.push("   constaté par l'employeur lui-même : mieux vaut le voir ici qu'ailleurs.");
+      L.push("");
+      L.push("2. LE PARCOURS SUR LA PÉRIODE");
+      L.push("");
+      L.push("   Emplois successivement occupés : [LISTER, AVEC LES PÉRIODES]");
+      L.push("   Actions de formation suivies : [LISTER, AVEC LES DATES ET LES DURÉES]");
+      L.push("   Éléments de certification acquis par la formation ou par la validation");
+      L.push("   des acquis de l'expérience : [LISTER]");
+      L.push("   Progression salariale ou professionnelle : [DÉCRIRE]");
+      L.push("");
+      L.push("3. CONCLUSIONS ET SUITES");
+      L.push("");
+      L.push("   [À REMPLIR]");
+      L.push("");
+      L.push("Observations du salarié : [ESPACE LAISSÉ AU SALARIÉ]");
+      L.push("");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(ctx.aujourdhui) + ", en deux exemplaires.");
+      L.push("");
+      L.push("Pour l'employeur                           Le salarié");
+      L.push("[NOM ET QUALITÉ]                          " + cro(d.salarie, "Nom et prénoms"));
+      L.push("");
+      L.push("NOTE — Comme l'entretien lui-même, cet état des lieux « donne lieu à la");
+      L.push("rédaction d'un document dont une copie est remise au salarié ».");
+
+      return L.join("\n");
+    },
+  });
+
+  /* ════════════════════════════════════════════════════════════════════════
+     LES CONGÉS PAYÉS
+     ════════════════════════════════════════════════════════════════════════ */
+
+  DP.ajouter("RH-CTL-CGP-01", {
+    nom: "L'avis de période de prise des congés",
+    detail: "À porter à la connaissance des salariés deux mois au moins avant " +
+            "l'ouverture de la période.",
+    produire: function (ctx) {
+      var p = ctx.profil || {}, d = ctx.donnees || {};
+      var L = entete(ctx, "Période de prise des congés payés — avis au personnel",
+        "articles L. 3141-13 et D. 3141-5 du code du travail");
+
+      L.push("AVIS AU PERSONNEL");
+      L.push("");
+      L.push("La période de prise des congés payés est fixée du " +
+        cro(d.debutPeriode, "DATE DE DÉBUT") + " au " + cro(d.finPeriode, "DATE DE FIN") + ".");
+      L.push("");
+      L.push("Cette période comprend, comme la loi l'exige dans tous les cas, la période");
+      L.push("du 1er mai au 31 octobre (L. 3141-13).");
+      L.push("");
+      L.push("[LE CAS ÉCHÉANT : cette période est celle que fixe l'accord d'entreprise ou,");
+      L.push("à défaut, la convention ou l'accord de branche du [DATE].]");
+      L.push("");
+      L.push("[À DÉFAUT D'ACCORD : cette période est fixée par l'employeur après avis du");
+      L.push("comité social et économique, recueilli le [DATE].]");
+      L.push("");
+      L.push("Les demandes de congés sont adressées à [DESTINATAIRE] avant le [DATE].");
+      L.push("L'ordre des départs sera communiqué à chaque salarié un mois au moins avant");
+      L.push("son départ.");
+      L.push("");
+      L.push("Affiché le " + leJour(ctx.aujourdhui) + " à " + cro(p.adresse, "lieu d'affichage") + ".");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push("");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("NOTE — LE DÉLAI, ET IL SE COMPTE À REBOURS");
+      L.push("");
+      L.push("« La période de prise des congés payés est portée par l'employeur à la");
+      L.push("connaissance des salariés au moins DEUX MOIS avant l'ouverture de cette");
+      L.push("période » (D. 3141-5). Si la période s'ouvre le 1er mai, l'avis est affiché");
+      L.push("le 1er mars au plus tard. Datez l'affichage et conservez-en la preuve.");
+
+      return L.join("\n");
+    },
+  });
+
+  DP.ajouter("RH-CTL-CGP-02", {
+    nom: "La communication de l'ordre des départs",
+    detail: "L'ordre des départs et ses critères, communiqué un mois au moins " +
+            "avant chaque départ.",
+    produire: function (ctx) {
+      var p = ctx.profil || {}, d = ctx.donnees || {};
+      var L = entete(ctx, "Ordre des départs en congé — communication",
+        "articles L. 3141-16 et D. 3141-6 du code du travail");
+
+      L.push("ORDRE DES DÉPARTS EN CONGÉ");
+      L.push("Période de prise : " + cro(d.debutPeriode, "DATE") + " — " + cro(d.finPeriode, "DATE"));
+      L.push("");
+      L.push("   Salarié                  Dates de congé accordées      Notifié le");
+      L.push("   [NOM ET PRÉNOMS]         du [DATE] au [DATE]           [DATE]");
+      L.push("   (une ligne par salarié)");
+      L.push("");
+      L.push("LES CRITÈRES SUR LESQUELS CET ORDRE A ÉTÉ ARRÊTÉ");
+      L.push("");
+      L.push("[LE CAS ÉCHÉANT : ceux que fixe l'accord d'entreprise ou de branche du");
+      L.push("[DATE], à savoir : ÉNUMÉRER.]");
+      L.push("");
+      L.push("[À DÉFAUT DE STIPULATION CONVENTIONNELLE, les critères de l'article");
+      L.push("L. 3141-16, appliqués à chaque situation :");
+      L.push("  — la situation de famille des bénéficiaires, notamment les possibilités de");
+      L.push("    congé du conjoint ou du partenaire lié par un pacte civil de solidarité,");
+      L.push("    et la présence au foyer d'un enfant ou d'un adulte handicapé ou d'une");
+      L.push("    personne âgée en perte d'autonomie ;");
+      L.push("  — la durée des services chez l'employeur ;");
+      L.push("  — l'activité éventuelle du salarié chez un ou plusieurs autres employeurs.");
+      L.push("L'avis du comité social et économique a été recueilli le [DATE], s'il en");
+      L.push("existe un.]");
+      L.push("");
+      L.push("MOTIF DES DEMANDES NON SATISFAITES");
+      L.push("");
+      L.push("   [NOM] — demande du [DATE] au [DATE] — critère appliqué : [LEQUEL]");
+      L.push("   (une ligne par refus ; une phrase suffit, l'absence de phrase ne suffit");
+      L.push("   jamais)");
+      L.push("");
+      L.push("Communiqué le " + leJour(ctx.aujourdhui) + " par " +
+        cro(d.moyen, "MOYEN — affichage, courriel, remise en main propre") + ".");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push("");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("NOTE — DEUX DÉLAIS À NE PAS CONFONDRE");
+      L.push("");
+      L.push("« L'ordre des départs en congé est communiqué, par tout moyen, à chaque");
+      L.push("salarié UN MOIS avant son départ » (D. 3141-6). Ce délai court par salarié,");
+      L.push("non pour l'ensemble du personnel.");
+      L.push("");
+      L.push("Et une fois l'ordre communiqué, l'employeur « ne peut, sauf circonstances");
+      L.push("exceptionnelles, modifier l'ordre et les dates de départ moins d'un mois");
+      L.push("avant la date prévue » (L. 3141-16, dernier alinéa). Une réorganisation");
+      L.push("prévisible n'est pas une circonstance exceptionnelle.");
+
+      return L.join("\n");
+    },
+  });
+
 })(typeof window !== "undefined" ? window : this);

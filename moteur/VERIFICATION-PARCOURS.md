@@ -21,13 +21,16 @@ renvoient à un générateur enregistré : aucun bouton ne mène à un vide.
 Répondre « non » y mène à des étapes qui expliquent, sans rien donner à
 signer. C'est la contradiction directe du volet « non » :
 
-| parcours | étapes | documents |
-|---|---|---|
-| registre du personnel | 8 | 0 |
-| entretiens professionnels | 9 | 0 |
-| embauche | 10 | 0 |
-| congés payés | 9 | 0 |
-| fin de contrat | 9 | 0 |
+| parcours | étapes | documents au 1er septembre | documents au 2 septembre |
+|---|---|---|---|
+| registre du personnel | 8 | 0 | 1 |
+| entretiens professionnels | 9 | 0 | 2 |
+| embauche | 10 | 0 | 3 |
+| congés payés | 9 | 0 | 2 |
+| fin de contrat | 9 | 0 | 2 |
+
+**Aucun parcours n'est plus sans document.** Les quinze en produisent
+soixante-treize, tous rattachés à un générateur existant.
 
 Deux autres sont presque vides : `affichages` (1 document pour 10 étapes) et
 `index` (1 pour 9).

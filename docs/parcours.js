@@ -2443,6 +2443,7 @@
             note: "Deux mois depuis la visite de mi-carrière (art. L. 6315-1, IV)." };
         } },
       { id: "e6", nom: "Rédiger le document et en remettre copie au salarié",
+        docProduit: "RH-CTL-ENT-01",
         risque: "Sans le document dont copie est remise au salarié, l'entretien n'est pas prouvé, et la charge de cette preuve pèse sur l'employeur. Un entretien tenu mais non formalisé est donc traité comme un entretien qui n'a pas eu lieu : il ne compte pas dans le cycle des huit ans et concourt, dans les entreprises d'au moins cinquante salariés, à l'abondement correctif de l'article L. 6323-13.",
         conseil: "Rédigez et signez le document à la fin de la séance, pas le lendemain : un compte rendu différé n'est jamais écrit. Remettez la copie contre émargement ou par courriel horodaté, et gardez l'original signé dans le dossier individuel — ce sont deux gestes distincts, et c'est le second qui manque le plus souvent. Conservez ces documents au moins la durée du cycle de huit ans, puisqu'ils devront être produits lors de l'état des lieux.",
         quoi: "L'entretien donne lieu à la rédaction d'un document dont une copie est remise au salarié. Sans ce document, l'entretien n'est pas prouvé — et un entretien non prouvé est un entretien qui n'a pas eu lieu.",
@@ -2452,6 +2453,7 @@
             objet: "Entretien de parcours professionnel — " + (D.salarie || "salarié à renseigner"),
             date: D.dateDernierEntretien }; } } },
       { id: "e7", nom: "Faire l'état des lieux récapitulatif des huit ans",
+        docProduit: "RH-CTL-ENT-02",
         risque: "L'état des lieux récapitulatif des huit ans est lui-même un entretien dû, qui donne lieu à un document dont copie est remise au salarié. Son omission prive l'employeur du seul acte qui vérifie que les entretiens ont été tenus et apprécie la formation suivie, les certifications acquises et la progression salariale ou professionnelle : dans les entreprises d'au moins cinquante salariés, c'est ce constat qui déclenche l'abondement de l'article L. 6323-13.",
         conseil: "Faites l'état des lieux sur pièces : les documents des entretiens précédents, les attestations de formation, l'historique de rémunération et de classification, réunis avant la séance. Le premier état des lieux après l'embauche peut être fait sept ans après le premier entretien — retenez cette date, elle évite de découvrir la carence à huit ans, quand elle n'est plus rattrapable. Écrivez ce que vous avez vérifié, y compris lorsque le constat est défavorable : un état des lieux complaisant ne protège de rien.",
         quoi: "Tous les huit ans, l'entretien fait un état des lieux récapitulatif du parcours professionnel du salarié — le premier après l'embauche pouvant être réalisé sept ans après le premier entretien. Cet état des lieux, qui donne lieu à un document dont copie est remise au salarié, vérifie que le salarié a bénéficié des entretiens prévus, et apprécie s'il a suivi au moins une action de formation, acquis des éléments de certification par la formation ou par validation des acquis, et bénéficié d'une progression salariale ou professionnelle.",
@@ -2689,6 +2691,7 @@
             note: "Vérifiez qu'elle englobe le 1er mai — 31 octobre de l'année considérée (art. L. 3141-13)." };
         } },
       { id: "c4", nom: "Annoncer la période deux mois avant son ouverture",
+        docProduit: "RH-CTL-CGP-01",
         champDate: "dateInfoPeriode",
         risque: "La période de prise est portée à la connaissance des salariés au moins deux mois avant son ouverture (D. 3141-5) ; l'article R. 3143-1 étend l'amende de cinquième classe aux décrets pris pour l'application des articles relatifs aux congés payés, prononcée autant de fois qu'il y a de salariés concernés. Surtout, l'employeur qui n'a pas mis le salarié en mesure de prendre ses congés lui en doit l'indemnité, et il ne peut lui opposer la perte de jours qu'il ne l'a pas mis en mesure de poser.",
         conseil: "Comptez les deux mois à rebours de l'ouverture de la période et inscrivez la date d'envoi au calendrier de l'année précédente : c'est un délai facile à tenir et rarement prouvé. Doublez l'affichage d'un écrit individuel — courriel horodaté, note remise contre émargement, mention au bulletin — et conservez la preuve avec la décision. L'affichage seul se conteste : personne ne peut dire à quelle date le panneau a été rempli.",
@@ -2721,6 +2724,7 @@
           return { iso: D.dateAvisCSEConges, libelle: "Avis du comité recueilli le " + dateFr(D.dateAvisCSEConges) };
         } },
       { id: "c6", nom: "Communiquer l'ordre des départs un mois avant chaque départ",
+        docProduit: "RH-CTL-CGP-02",
         risque: "L'ordre des départs est communiqué à chaque salarié un mois avant son départ (D. 3141-6) ; l'article R. 3143-1 étend l'amende de cinquième classe aux décrets pris pour l'application des dispositions relatives aux congés payés, prononcée autant de fois qu'il y a de salariés concernés.",
         conseil: "« Par tout moyen » n'affranchit pas de la preuve : choisissez un moyen daté et systématique — courriel individuel ou mention sur le bulletin — plutôt que l'affichage seul. Communiquez service par service en une fois, à une date arrêtée d'avance, et gardez la liste des destinataires. Le délai d'un mois se compte départ par départ, non à partir de la publication du tableau général : un départ ajouté tardivement doit être communiqué à sa propre échéance.",
         quoi: "L'ordre des départs en congé est communiqué, par tout moyen, à chaque salarié un mois avant son départ. « Par tout moyen » n'affranchit pas de la preuve : gardez trace de l'envoi ou de l'affichage.",
