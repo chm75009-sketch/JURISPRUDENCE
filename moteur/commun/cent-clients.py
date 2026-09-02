@@ -53,7 +53,8 @@ def profils(n=int(os.environ.get("N","100"))):
 
 # Les champs d'entrée de chaque module : ceux dont le « non » fait basculer.
 ENTREE_OUI = """() => {
-  const noms = ['ri.existe', 'duerp.existe', 'comiteExistant', 'base.existe', 'negosEngagees'];
+  const noms = ['ri.existe', 'duerp.existe', 'cssct.existe', 'comiteExistant',
+                'base.existe', 'negosEngagees'];
   noms.forEach(n => {
     document.querySelectorAll('[name="' + n + '"], [data-nom="' + n + '"]').forEach(e => {
       if (e.tagName === 'SELECT') { e.value = 'oui'; }
@@ -68,7 +69,11 @@ REMPLIR = """(rep) => {
   // La question d'entrée est laissée de côté : répondue « non », elle ferait
   // basculer vers la procédure avant que le reste du questionnaire soit rempli,
   // et le rapport ne pourrait plus être éprouvé. Elle l'est séparément, à la fin.
-  const ENTREE = ['ri.existe', 'duerp.existe', 'comiteExistant', 'base.existe', 'negosEngagees'];
+  // « cssct.existe » en fait partie : la santé-sécurité a DEUX questions
+  // d'entrée, le document unique et la commission santé-sécurité, et la
+  // seconde ne bascule qu'à partir de trois cents salariés.
+  const ENTREE = ['ri.existe', 'duerp.existe', 'cssct.existe', 'comiteExistant',
+                  'base.existe', 'negosEngagees'];
   const entree = e => ENTREE.indexOf(e.name || e.getAttribute('data-nom') || '') >= 0;
   document.querySelectorAll('input[type=radio]').forEach(r => {
     if (entree(r)) return;
@@ -170,6 +175,10 @@ def main():
             # « non », et c'est le seul endroit où elle se mesure.
             BASCULE = {"discipline": "ri", "sst": "duerp", "cse": "installation",
                        "bdese": "bdese", "nao": "nao"}
+            # La commission santé-sécurité n'est due qu'à trois cents salariés :
+            # sa bascule ne s'éprouve qu'au-delà.
+            if int(prof["effectif"]) >= 300:
+                pass
             for m, attendu in BASCULE.items():
                 page.goto(base + "audit-%s.html" % m, wait_until="domcontentloaded")
                 if page.locator("#generer").count():
