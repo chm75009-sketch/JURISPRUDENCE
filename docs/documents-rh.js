@@ -1006,19 +1006,63 @@
     var t = String(info).toLowerCase();
     var n = isNaN(eff) ? 100 : eff;
     function part(x) { return Math.max(1, Math.round(n * x)); }
-    if (/montant|masse salariale|rémunération globale|chiffre d'affaires|bénéfice|résultat|capitaux|fonds propres|endettement|impôt|subvention|aide|crédit|coût|dépense|budget|contribution/.test(t))
-      return { unite: "euros", val: (part(0.34) * 1000).toString() };
+    function euros(x) { return (part(x) * 1000).toLocaleString("fr-FR"); }
+
+    /* L'ÉGALITÉ PROFESSIONNELLE D'ABORD : c'est la rubrique la plus contrôlée,
+       et celle où « à renseigner » ne dit rien à personne. Chaque ligne reçoit
+       donc un exemple qui montre la forme attendue — une répartition, un écart,
+       un indicateur de l'index — et non une case vide. */
+    if (/écart|ecart/.test(t) && /rémunération|remuneration|salaire/.test(t))
+      return { unite: "% et euros", val: "cadres : −7,2 % (F 46 800 € / H 50 400 €)",
+               legende: "écart de rémunération moyenne entre femmes et hommes, par catégorie et à poste comparable" };
+    if (/répartition|repartition/.test(t) && /catégorie|categorie|effectif|sexe|femmes|hommes/.test(t))
+      return { unite: "nombre F / H", val: "cadres 8 F / 12 H · employés " + part(0.30) + " F / " + part(0.12) + " H",
+               legende: "effectif de chaque catégorie, femmes et hommes comptés séparément" };
+    if (/promotion|avancement/.test(t))
+      return { unite: "nombre F / H", val: "3 F / 5 H sur l'année",
+               legende: "nombre de salariés promus dans l'année, par sexe" };
+    if (/augmentation/.test(t))
+      return { unite: "% de l'effectif F / H", val: "62 % des femmes / 71 % des hommes",
+               legende: "part des salariés augmentés dans l'année, par sexe" };
+    if (/congé de maternité|maternité|maternite/.test(t))
+      return { unite: "nombre et %", val: "2 retours, 2 augmentées (100 %)",
+               legende: "salariées revenues de congé de maternité et augmentées à leur retour" };
+    if (/dix plus hautes rémunérations|hautes rémunérations/.test(t))
+      return { unite: "nombre F / H", val: "3 F / 7 H",
+               legende: "répartition par sexe des dix plus hautes rémunérations" };
+    if (/index/.test(t))
+      return { unite: "points sur 100", val: "84",
+               legende: "note globale de l'index de l'égalité, et le détail par indicateur" };
+
+    /* Les autres rubriques : l'unité, une valeur d'ordre de grandeur calculée
+       sur l'effectif, et ce qu'on attend en une ligne. */
+    if (/masse salariale/.test(t))
+      return { unite: "euros", val: euros(34), legende: "masse salariale brute de l'exercice" };
+    if (/chiffre d'affaires/.test(t))
+      return { unite: "euros", val: euros(120), legende: "chiffre d'affaires hors taxes de l'exercice" };
+    if (/montant|rémunération globale|bénéfice|résultat|capitaux|fonds propres|endettement|impôt|subvention|aide|crédit|coût|dépense|budget|contribution|investissement/.test(t))
+      return { unite: "euros", val: euros(8), legende: "montant de l'exercice, en euros" };
     if (/taux|pourcentage|part des|proportion|%/.test(t))
-      return { unite: "%", val: "12" };
-    if (/nombre|effectif|évolution des effectifs|répartition/.test(t))
-      return { unite: "nombre", val: part(0.08).toString() };
-    if (/durée|heures|horaire|temps/.test(t))
-      return { unite: "heures", val: "1 607" };
+      return { unite: "%", val: "12 %", legende: "part rapportée à l'effectif ou au total concerné" };
+    if (/ancienneté|anciennete/.test(t))
+      return { unite: "années", val: "6,4 ans en moyenne", legende: "ancienneté moyenne, et sa répartition par tranche" };
+    if (/âge|age moyen|pyramide/.test(t))
+      return { unite: "années", val: "41 ans en moyenne", legende: "âge moyen, et la répartition par tranche d'âge" };
+    if (/nombre|effectif|évolution des effectifs/.test(t))
+      return { unite: "nombre", val: String(part(0.08)), legende: "effectif concerné à la clôture de l'exercice" };
+    if (/durée|heures|horaire|temps de travail/.test(t))
+      return { unite: "heures", val: "1 607 h", legende: "volume horaire annuel, ou la durée collective applicable" };
+    if (/formation/.test(t))
+      return { unite: "nombre et heures", val: part(0.25) + " salariés · " + (part(0.25) * 14) + " heures",
+               legende: "salariés formés dans l'année et volume d'heures" };
+    if (/accident|maladie professionnelle|sécurité/.test(t))
+      return { unite: "nombre et taux", val: "2 accidents · taux de fréquence 18,4",
+               legende: "nombre d'événements et l'indicateur de fréquence ou de gravité" };
     if (/date|calendrier|échéance/.test(t))
-      return { unite: "date", val: "31/12/[ANNÉE]" };
-    if (/liste|nature|motif|type|forme|modalité|description|politique|mesure|action|condition/.test(t))
-      return { unite: "texte", val: "[décrire en une phrase]" };
-    return { unite: "à préciser", val: "[à renseigner]" };
+      return { unite: "date", val: "31/12/[ANNÉE]", legende: "date de l'événement ou de l'arrêté des comptes" };
+    if (/liste|nature|motif|type|forme|modalité|description|politique|mesure|action|condition|convention|accord/.test(t))
+      return { unite: "texte", val: "[une phrase, ou la liste]", legende: "à décrire, en une phrase ou une liste courte" };
+    return { unite: "à préciser", val: "[à renseigner]", legende: "porter la donnée telle que le décret la nomme" };
   }
 
   DP.ajouter("BDESE-CTL-CNT-00", {
@@ -1114,16 +1158,47 @@
       L.push("la liste des informations que vous n'êtes pas en mesure de renseigner, et");
       L.push("dire pourquoi. Une case laissée vide sans cette liste est un manquement.");
       L.push("");
-      L.push("SECONDE PARTIE — LES DIX THÈMES");
+      L.push("SECONDE PARTIE — LES DIX THÈMES, DÉPLOYÉS");
       L.push("");
-      rub.forEach(function (r, i) {
-        L.push("── " + (i + 1) + ". " + r.toUpperCase());
-        L.push("");
-        L.push("   Informations et indicateurs : [À RENSEIGNER, PAR ANNÉE]");
-        L.push("");
-        L.push("   N-2 : [ ]   N-1 : [ ]   N : [ ]   N+1 : [ ]   N+2 : [ ]   N+3 : [ ]");
-        L.push("");
-      });
+      L.push("Chaque ligne est une information que le décret exige. Sous chacune :");
+      L.push("l'unité attendue, un exemple qui montre la forme, et ce qu'on attend en");
+      L.push("une phrase. Effacez l'exemple et portez vos chiffres dans les six cases.");
+      L.push("");
+
+      var G = (typeof window !== "undefined" && window.GRILLE_BDESE) || null;
+      var lignes = G ? (grand ? G.plus300 : G.moins300) : null;
+
+      if (!lignes) {
+        /* Hors navigateur — l'épreuve des moteurs — la grille détaillée n'est
+           pas chargée : on rend les dix thèmes, ce qui suffit à vérifier que le
+           document se produit. */
+        rub.forEach(function (r, i) {
+          L.push("── " + (i + 1) + ". " + r.toUpperCase());
+          L.push("   N-2 [    ]  N-1 [    ]  N [    ]  N+1 [    ]  N+2 [    ]  N+3 [    ]");
+          L.push("");
+        });
+      } else {
+        var rubActuelle = null, sujetActuel = null, nRub = 0;
+        lignes.forEach(function (l) {
+          if (l[0] !== rubActuelle) {
+            rubActuelle = l[0]; sujetActuel = null; nRub++;
+            L.push("");
+            L.push("════ " + nRub + ". " + String(l[0]).toUpperCase() + " ════");
+            L.push("");
+          }
+          if (l[1] && l[1] !== sujetActuel) {
+            sujetActuel = l[1];
+            L.push("  " + l[1]);
+            L.push("");
+          }
+          var e = exempleBDESE(l[3], eff);
+          L.push("   • " + l[3]);
+          L.push("     " + e.unite + " — " + e.legende);
+          L.push("     exemple : " + e.val);
+          L.push("     N-2 [    ]  N-1 [    ]  N [    ]  N+1 [    ]  N+2 [    ]  N+3 [    ]");
+          L.push("");
+        });
+      }
       L.push("NOTE — Ces dix thèmes sont ceux du contenu supplétif de l'article " + art + ",");
       L.push("applicable à défaut d'accord. Quel que soit l'accord que vous concluriez, la");
       L.push("base comporte AU MOINS les thèmes que l'article L. 2312-21 énumère et qu'un");
@@ -1144,9 +1219,60 @@
       L.push("que les informations sur la méthodologie et le contenu des indicateurs de");
       L.push("l'article L. 1142-8 — l'index de l'égalité (L. 2312-18).");
       L.push("");
-      L.push("   Indicateurs de l'index, année [ANNÉE] : [REPORTER LES CINQ OU QUATRE");
-      L.push("   INDICATEURS ET LE TOTAL]");
-      L.push("   Méthodologie retenue : [DÉCRIRE]");
+      var i250 = !isNaN(eff) && eff > 250;
+      L.push("   LES INDICATEURS DE L'INDEX, ANNÉE [ANNÉE] — " +
+        (i250 ? "entreprises de plus de deux cent cinquante salariés (D. 1142-2)"
+              : "entreprises de cinquante à deux cent cinquante salariés (D. 1142-2-1)"));
+      L.push("");
+      L.push("   1. Écart de rémunération entre les femmes et les hommes, calculé à");
+      L.push("      partir de la moyenne de la rémunération des femmes comparée à celle");
+      L.push("      des hommes, par tranche d'âge et par catégorie de postes équivalents");
+      L.push("      exemple : −7,2 % — cadres 46 800 € (F) contre 50 400 € (H) ;");
+      L.push("      employés 27 300 € (F) contre 27 900 € (H) → 33 points sur 40");
+      L.push("      votre valeur : [        ]   points obtenus : [    ]");
+      L.push("");
+      if (i250) {
+        L.push("   2. Écart de taux d'augmentations individuelles de salaire NE");
+        L.push("      CORRESPONDANT PAS à des promotions");
+        L.push("      exemple : 62 % des femmes augmentées contre 71 % des hommes,");
+        L.push("      soit un écart de 9 points → 10 points sur 20");
+        L.push("      votre valeur : [        ]   points obtenus : [    ]");
+        L.push("");
+        L.push("   3. Écart de taux de promotions entre les femmes et les hommes");
+        L.push("      exemple : 4,1 % des femmes promues contre 6,0 % des hommes,");
+        L.push("      soit un écart de 1,9 point → 15 points sur 15");
+        L.push("      votre valeur : [        ]   points obtenus : [    ]");
+        L.push("");
+      } else {
+        L.push("   2. Écart de taux d'augmentations individuelles de salaire entre les");
+        L.push("      femmes et les hommes");
+        L.push("      exemple : 62 % des femmes augmentées contre 71 % des hommes,");
+        L.push("      soit un écart de 9 points → 25 points sur 35");
+        L.push("      votre valeur : [        ]   points obtenus : [    ]");
+        L.push("");
+      }
+      L.push("   " + (i250 ? "4" : "3") + ". Pourcentage de salariées ayant bénéficié d'une augmentation dans");
+      L.push("      l'année " + (i250 ? "de" : "suivant") + " leur retour de congé de maternité, si des");
+      L.push("      augmentations sont intervenues pendant le congé");
+      L.push("      exemple : 2 retours, 2 augmentées → 100 % → 15 points sur 15");
+      L.push("      votre valeur : [        ]   points obtenus : [    ]");
+      L.push("");
+      L.push("   " + (i250 ? "5" : "4") + ". Nombre de salariés du sexe sous-représenté parmi les dix salariés");
+      L.push("      ayant perçu les plus hautes rémunérations");
+      L.push("      exemple : 3 femmes sur 10 → 5 points sur 10");
+      L.push("      votre valeur : [        ]   points obtenus : [    ]");
+      L.push("");
+      L.push("   TOTAL DE L'INDEX : exemple " + (i250 ? "78" : "73") + " sur 100 — le vôtre : [    ] sur 100");
+      L.push("");
+      L.push("   NOTE — Les points de l'exemple illustrent la forme du calcul, non un");
+      L.push("   barème que vous pourriez recopier : les seuils sont fixés par les");
+      L.push("   annexes I et II du chapitre. Et une réserve qui compte : les articles");
+      L.push("   D. 1142-2 et D. 1142-2-1 sont, à ce jour, ABROGÉS À EFFET DIFFÉRÉ.");
+      L.push("   Vérifiez la liste des indicateurs applicable à la date de votre");
+      L.push("   publication avant de la remplir.");
+      L.push("");
+      L.push("   Méthodologie retenue : [DÉCRIRE — période de référence, effectifs pris");
+      L.push("   en compte, catégories de postes équivalents retenues]");
       L.push("");
       L.push("Elle comporte également un bilan de la mise en œuvre des actions de");
       L.push("formation entreprises à l'issue des entretiens de parcours professionnel ou");
