@@ -900,10 +900,82 @@
     ],
   };
 
+  /* L'EXEMPLE CHIFFRÉ. Le client ne part pas d'une case vide : chaque ligne
+     porte l'unité attendue et une valeur d'illustration, calculée sur son
+     effectif quand elle en dépend. Il efface la colonne d'exemple et met ses
+     chiffres. Une grille vide ne se remplit pas ; une grille remplie d'exemples
+     se corrige. */
+  function exempleBDESE(info, eff) {
+    var t = String(info).toLowerCase();
+    var n = isNaN(eff) ? 100 : eff;
+    function part(x) { return Math.max(1, Math.round(n * x)); }
+    if (/montant|masse salariale|rémunération globale|chiffre d'affaires|bénéfice|résultat|capitaux|fonds propres|endettement|impôt|subvention|aide|crédit|coût|dépense|budget|contribution/.test(t))
+      return { unite: "euros", val: (part(0.34) * 1000).toString() };
+    if (/taux|pourcentage|part des|proportion|%/.test(t))
+      return { unite: "%", val: "12" };
+    if (/nombre|effectif|évolution des effectifs|répartition/.test(t))
+      return { unite: "nombre", val: part(0.08).toString() };
+    if (/durée|heures|horaire|temps/.test(t))
+      return { unite: "heures", val: "1 607" };
+    if (/date|calendrier|échéance/.test(t))
+      return { unite: "date", val: "31/12/[ANNÉE]" };
+    if (/liste|nature|motif|type|forme|modalité|description|politique|mesure|action|condition/.test(t))
+      return { unite: "texte", val: "[décrire en une phrase]" };
+    return { unite: "à préciser", val: "[à renseigner]" };
+  }
+
   DP.ajouter("BDESE-CTL-CNT-00", {
     nom: "La base de données économiques, sociales et environnementales",
     detail: "La base elle-même : ses dix thèmes, ses six années, ses modalités " +
             "de mise à disposition.",
+    /* Le tableur : c'est lui l'outil. Le texte qui précède en explique l'usage,
+       il ne le remplace pas. Demande du 2 septembre 2026 : « une structure
+       concrète complète avec modèle précis et exemple concret opérationnel »,
+       « et après c'est au client de mettre ses données ». */
+    tableur: function (ctx) {
+      var p = ctx.profil || {};
+      var eff = parseInt(p.effectif, 10);
+      var grand = !isNaN(eff) && eff >= 300;
+      var G = (typeof window !== "undefined" && window.GRILLE_BDESE) || null;
+      var an = new Date(ctx.aujourdhui || Date.now()).getFullYear();
+      var lignes = [];
+
+      lignes.push(["BASE DE DONNÉES ÉCONOMIQUES, SOCIALES ET ENVIRONNEMENTALES"]);
+      lignes.push([cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE")]);
+      lignes.push(["Effectif : " + (isNaN(eff) ? "à renseigner" : eff + " salariés") +
+                   " — contenu applicable : " + (grand ? "R. 2312-9" : "R. 2312-8")]);
+      lignes.push(["Établie le " + leJour(ctx.aujourdhui)]);
+      lignes.push([]);
+      lignes.push(["MODE D'EMPLOI : la colonne « Exemple » est là pour montrer ce qu'on attend. " +
+                   "Effacez-la et portez vos chiffres dans les six colonnes d'années."]);
+      lignes.push([]);
+      lignes.push(["Rubrique", "Section", "Sujet", "Information à porter", "Unité", "Exemple",
+                   String(an - 2), String(an - 1), String(an) + " (en cours)",
+                   String(an + 1), String(an + 2), String(an + 3)]);
+
+      if (!G) {
+        lignes.push(["La grille détaillée n'a pas pu être chargée.", "", "",
+                     "Rechargez la page : le fichier bdese-grille.js doit être disponible."]);
+        return lignes;
+      }
+      (grand ? G.plus300 : G.moins300).forEach(function (l) {
+        var e = exempleBDESE(l[3], eff);
+        lignes.push([l[0], l[1], l[2], l[3], e.unite, e.val, "", "", "", "", "", ""]);
+      });
+
+      lignes.push([]);
+      lignes.push(["MISE À DISPOSITION"]);
+      lignes.push(["Support", "[papier / informatique — préciser]"]);
+      lignes.push(["Lieu ou adresse d'accès", "[préciser]"]);
+      lignes.push(["Accès permanent", "membres de la délégation du personnel du comité et, le cas échéant, délégués syndicaux"]);
+      lignes.push(["Liste nominative", "[noms]"]);
+      lignes.push(["Dernière mise à jour", "[date]"]);
+      lignes.push(["Information des bénéficiaires", "[moyen retenu, date]"]);
+      lignes.push([]);
+      lignes.push(["Rappel : la mise à disposition actualisée des éléments transmis de manière récurrente " +
+                   "au comité vaut communication des rapports et informations au comité (L. 2312-18)."]);
+      return lignes;
+    },
     produire: function (ctx) {
       var p = ctx.profil || {};
       var eff = parseInt(p.effectif, 10);

@@ -3635,7 +3635,7 @@
     /* documents-rh.js porte la base elle-même (BDESE-CTL-CNT-00), écrite le
        2 septembre 2026 : « non » doit donner la base, non une note sur le
        texte qui la commande. */
-    BDESE: ["documents-produits.js", "documents-bdese.js", "documents-rh.js"],
+    BDESE: ["documents-produits.js", "documents-bdese.js", "documents-rh.js", "bdese-grille.js"],
     NAO: ["documents-produits.js", "documents-nao.js"],
     PSE: ["documents-produits.js", "documents-pse.js"],
     /* La gestion du personnel : registre, embauche, fin de contrat. Ces
@@ -3702,8 +3702,20 @@
          texte produit — visible, jamais inventé : c'est la règle des
          générateurs eux-mêmes. */
       var st = ACTIF ? etatDe(ACTIF.cle) : { donnees: {} };
-      COURRIER = { id: id, nom: gen.nom,
-        modele: gen.produire({ profil: PROFIL, fiche: st.donnees || {}, aujourdhui: new Date() }) };
+      var ctx = { profil: PROFIL, fiche: st.donnees || {}, donnees: st.donnees || {},
+                  aujourdhui: new Date() };
+      COURRIER = { id: id, nom: gen.nom, modele: gen.produire(ctx) };
+      /* CERTAINS DOCUMENTS SONT DES TABLEAUX, PAS DES LETTRES. Une base de
+         données, une grille de contenu, un registre : le client en a besoin
+         dans son tableur, avec ses colonnes et ses lignes, non dans un
+         traitement de texte. Le générateur qui sait le faire porte une fonction
+         « tableur » ; le bouton n'apparaît que pour ceux-là.
+         Demande du 2 septembre 2026 : « une structure concrète complète avec
+         modèle précis et exemple concret opérationnel », « et après c'est au
+         client de mettre ses données ». */
+      TABLEUR = (typeof gen.tableur === "function")
+        ? { nom: gen.nom, lignes: gen.tableur(ctx) } : null;
+      $("dt-tableur").hidden = !TABLEUR;
       $("dt-titre").textContent = gen.nom;
       /* La version de l'utilisateur prime sur le modèle : un courrier qu'on a
          complété la semaine dernière se rouvre tel qu'on l'a laissé. */
@@ -3810,6 +3822,42 @@
     ecrireCourrier(COURRIER.id, t);
     etatCourrier("Vos modifications sont enregistrées sur ce poste.");
   });
+  /* LE TABLEUR — un CSV, et c'est un choix, non un pis-aller. Il s'ouvre dans
+     Excel, dans LibreOffice et dans Numbers sans rien installer, il se lit dans
+     dix ans, et il ne demande aucune bibliothèque : l'application reste un
+     fichier statique qui fonctionne hors ligne.
+
+     Deux précautions pour l'Excel français : la marque d'ordre des octets, sans
+     laquelle les accents sortent en charabia, et le point-virgule comme
+     séparateur, sans lequel toute la ligne atterrit dans la première colonne. */
+  var TABLEUR = null;
+
+  function csv(lignes) {
+    return lignes.map(function (l) {
+      return (l || []).map(function (c) {
+        var v = c == null ? "" : String(c);
+        return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }).join(";");
+    }).join("\r\n");
+  }
+
+  function nomFichier(nom) {
+    return String(nom).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 60);
+  }
+
+  $("dt-tableur").addEventListener("click", function () {
+    if (!TABLEUR) return;
+    var blob = new Blob(["\ufeff" + csv(TABLEUR.lignes)], { type: "text/csv;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = nomFichier(TABLEUR.nom) + ".csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+
   $("dt-modele").addEventListener("click", function () {
     if (!COURRIER) return;
     if ($("dt-corps").value !== COURRIER.modele &&
