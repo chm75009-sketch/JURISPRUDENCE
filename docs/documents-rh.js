@@ -42,6 +42,47 @@
     nom: "Le registre unique du personnel, à ouvrir et à tenir",
     detail: "Le registre lui-même, ses deux parties, ses treize indications " +
             "complémentaires et la règle de mise à jour.",
+    /* LE TABLEUR — un registre est un tableau. Le client le tient dans Excel,
+       une ligne par salarié, dans l'ordre des embauches. Deux lignes d'exemple
+       montrent ce qu'on attend de chaque colonne. */
+    tableur: function (ctx) {
+      var p = ctx.profil || {};
+      var L = [];
+      L.push(["REGISTRE UNIQUE DU PERSONNEL"]);
+      L.push([cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE")]);
+      L.push(["Établissement : " + cro(p.adresse, "adresse de l'établissement")]);
+      L.push(["Ouvert le " + leJour(ctx.aujourdhui) + " — articles L. 1221-13 et D. 1221-23 du code du travail"]);
+      L.push([]);
+      L.push(["MODE D'EMPLOI : un registre PAR ÉTABLISSEMENT. Les salariés dans l'ordre des embauches, " +
+              "les mentions portées au moment de l'embauche et de façon indélébile. Les deux lignes " +
+              "d'exemple sont à effacer."]);
+      L.push([]);
+      L.push(["N° d'ordre", "Nom et prénoms", "Nationalité", "Date de naissance", "Sexe", "Emploi",
+              "Qualification", "Date d'entrée", "Date de sortie",
+              "Date d'autorisation d'embauche ou de licenciement (ou de la demande)",
+              "Titre de travail du travailleur étranger : type et n° d'ordre",
+              "Mention « contrat à durée déterminée »",
+              "Mention « salarié temporaire » + entreprise de travail temporaire",
+              "Mention « mis à disposition par un groupement d'employeurs » + groupement",
+              "Mention « salarié à temps partiel »",
+              "Mention « apprenti » ou « contrat de professionnalisation »"]);
+      L.push(["1", "DUPONT Jean", "française", "12/04/1988", "M", "Conducteur poids lourd",
+              "Ouvrier — coefficient 138 M", "15/09/2026", "", "", "", "", "", "", "", ""]);
+      L.push(["2", "MARTIN Sofia", "portugaise", "03/11/1995", "F", "Agent d'exploitation",
+              "Employé — coefficient 120", "01/10/2026", "", "",
+              "Carte de séjour pluriannuelle n° [NUMÉRO]", "contrat à durée déterminée", "", "",
+              "salarié à temps partiel", ""]);
+      L.push(["3", "[NOM ET PRÉNOMS]", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]);
+      L.push([]);
+      L.push(["SECONDE PARTIE — STAGIAIRES ET VOLONTAIRES EN SERVICE CIVIQUE (partie spécifique, ordre d'arrivée)"]);
+      L.push(["N° d'ordre", "Nom et prénoms", "Qualité", "Date d'arrivée", "Date de départ"]);
+      L.push(["1", "[NOM ET PRÉNOMS]", "stagiaire", "", ""]);
+      L.push([]);
+      L.push(["RAPPEL — Les mentions relatives à des événements postérieurs à l'embauche sont portées " +
+              "AU MOMENT OÙ CEUX-CI SURVIENNENT (D. 1221-25). Une copie des titres de travail des " +
+              "travailleurs étrangers est annexée au registre (D. 1221-24)."]);
+      return L;
+    },
     produire: function (ctx) {
       var p = ctx.profil || {};
       var L = [];
@@ -694,6 +735,33 @@
   DP.ajouter("RH-CTL-ENT-02", {
     nom: "L'état des lieux récapitulatif des huit ans",
     detail: "Le récapitulatif de l'article L. 6315-1, II, et la copie remise au salarié.",
+    tableur: function (ctx) {
+      var p = ctx.profil || {};
+      var an = new Date(ctx.aujourdhui || Date.now()).getFullYear();
+      var L = [];
+      L.push(["ÉTAT DES LIEUX RÉCAPITULATIF DU PARCOURS PROFESSIONNEL — huit ans"]);
+      L.push([cro(p.denomination || p.entreprise, "DÉNOMINATION") + " — article L. 6315-1, II"]);
+      L.push([]);
+      L.push(["MODE D'EMPLOI : un onglet, ou un bloc, par salarié. Les lignes d'exemple montrent ce " +
+              "qu'on attend ; une ligne manquante dans la colonne des entretiens est un manquement " +
+              "que vous constatez vous-même — mieux vaut le voir ici qu'ailleurs."]);
+      L.push([]);
+      L.push(["Salarié", "Ancienneté depuis", "Date de l'entretien", "Motif",
+              "Document remis le", "Emploi occupé à cette date", "Formations suivies depuis",
+              "Certification acquise", "Progression salariale ou professionnelle"]);
+      L.push(["DUPONT Jean", "15/09/" + (an - 8), "12/06/" + (an - 7), "première année",
+              "12/06/" + (an - 7), "Conducteur poids lourd", "FIMO", "—", "—"]);
+      L.push(["DUPONT Jean", "", "20/06/" + (an - 3), "quatre ans", "20/06/" + (an - 3),
+              "Conducteur poids lourd", "FCO, ADR base", "ADR", "coefficient 138 M puis 150"]);
+      L.push(["DUPONT Jean", "", "[DATE]", "état des lieux des huit ans", "[DATE]", "", "", "", ""]);
+      L.push(["[NOM]", "", "", "", "", "", "", "", ""]);
+      L.push([]);
+      L.push(["RAPPEL — L'entretien de parcours professionnel ne porte pas sur l'évaluation du travail " +
+              "du salarié (L. 6315-1, I). L'état des lieux vérifie que les entretiens ont eu lieu au " +
+              "cours des huit dernières années et donne lieu à un document dont une copie est remise " +
+              "au salarié."]);
+      return L;
+    },
     produire: function (ctx) {
       var p = ctx.profil || {}, d = ctx.donnees || {};
       var L = entete(ctx, "État des lieux récapitulatif du parcours professionnel",
@@ -797,6 +865,35 @@
     nom: "La communication de l'ordre des départs",
     detail: "L'ordre des départs et ses critères, communiqué un mois au moins " +
             "avant chaque départ.",
+    tableur: function (ctx) {
+      var p = ctx.profil || {};
+      var an = new Date(ctx.aujourdhui || Date.now()).getFullYear();
+      var L = [];
+      L.push(["ORDRE DES DÉPARTS EN CONGÉ — " + cro(p.denomination || p.entreprise, "DÉNOMINATION")]);
+      L.push(["Période de prise : 1er mai " + an + " au 31 octobre " + an +
+              " [ADAPTER À VOTRE PÉRIODE] — articles L. 3141-16 et D. 3141-6"]);
+      L.push([]);
+      L.push(["MODE D'EMPLOI : une ligne par salarié. La colonne « notifié le » doit être au moins " +
+              "un mois avant le départ, et ce délai se compte PAR SALARIÉ. La colonne « critère » " +
+              "n'est pas facultative pour les demandes refusées : une phrase suffit, l'absence de " +
+              "phrase ne suffit jamais."]);
+      L.push([]);
+      L.push(["Salarié", "Ancienneté", "Situation de famille", "Activité chez un autre employeur",
+              "Congé demandé du", "au", "Congé accordé du", "au", "Décision",
+              "Critère appliqué", "Notifié le", "Moyen"]);
+      L.push(["DUPONT Jean", "3 ans", "conjoint enseignant, deux enfants scolarisés", "non",
+              "01/07/" + an, "26/07/" + an, "01/07/" + an, "26/07/" + an, "accordé",
+              "situation de famille — possibilités de congé du conjoint", "15/05/" + an, "remise en main propre"]);
+      L.push(["MARTIN Sofia", "8 mois", "sans charge de famille", "oui — second employeur",
+              "01/08/" + an, "23/08/" + an, "08/08/" + an, "30/08/" + an, "décalé d'une semaine",
+              "durée des services chez l'employeur", "20/05/" + an, "courriel"]);
+      L.push(["[NOM]", "", "", "", "", "", "", "", "", "", "", ""]);
+      L.push([]);
+      L.push(["RAPPEL — Une fois l'ordre communiqué, l'employeur ne peut, sauf circonstances " +
+              "exceptionnelles, modifier l'ordre et les dates de départ moins d'un mois avant la " +
+              "date prévue (L. 3141-16, dernier alinéa). Une réorganisation prévisible n'en est pas une."]);
+      return L;
+    },
     produire: function (ctx) {
       var p = ctx.profil || {}, d = ctx.donnees || {};
       var L = entete(ctx, "Ordre des départs en congé — communication",

@@ -701,6 +701,53 @@
     nom: "L'inventaire des risques par unité de travail",
     detail: "La découpe des unités, la grille à recopier pour chacune, la note " +
             "de reprise du document unique et le calendrier.",
+    /* LE TABLEUR — l'inventaire des risques est un tableau, pas une lettre.
+       Le client le remplit dans Excel, unité de travail par unité de travail.
+       Chaque ligne porte son exemple, pour qu'il voie ce qu'on attend avant
+       d'effacer et de mettre les siens. Demande du 2 septembre 2026. */
+    tableur: function (ctx) {
+      var p = ctx.profil || {}, f = ctx.fiche || {}, du = f.duerp || {};
+      var unites = (du.unitesTravail && du.unitesTravail.length ? du.unitesTravail : null);
+      var L = [];
+      L.push(["DOCUMENT UNIQUE D'ÉVALUATION DES RISQUES PROFESSIONNELS — INVENTAIRE PAR UNITÉ DE TRAVAIL"]);
+      L.push([cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE")]);
+      L.push(["Établi le " + leJour(ctx.aujourdhui) + " — articles L. 4121-3 et R. 4121-1 du code du travail"]);
+      L.push([]);
+      L.push(["MODE D'EMPLOI : une ligne par risque et par unité de travail. Les deux premières lignes " +
+              "sont des exemples : effacez-les et portez les vôtres. La cotation gravité x fréquence " +
+              "n'est imposée par aucun texte — elle sert à ordonner les actions, gardez celle que vous " +
+              "employez déjà si vous en avez une."]);
+      L.push([]);
+      L.push(["Unité de travail", "Poste ou activité", "Danger identifié", "Situation d'exposition",
+              "Salariés exposés (nombre)", "Gravité (1 à 4)", "Fréquence (1 à 4)", "Criticité",
+              "Mesures de prévention déjà en place", "Mesures à mettre en œuvre",
+              "Responsable", "Échéance", "Date de l'évaluation"]);
+      L.push(["Atelier", "Conduite de chariot élévateur", "Renversement, heurt de piéton",
+              "Circulation dans l'allée centrale aux heures de chargement", "4", "4", "3", "12",
+              "Formation à la conduite, avertisseur sonore",
+              "Marquage au sol séparant piétons et engins ; miroir en sortie d'allée",
+              "Responsable d'atelier", "31/12/" + new Date(ctx.aujourdhui || Date.now()).getFullYear(),
+              leJour(ctx.aujourdhui)]);
+      L.push(["Bureaux", "Saisie sur écran", "Troubles musculo-squelettiques",
+              "Poste de travail non réglable, plus de six heures par jour", "6", "2", "4", "8",
+              "Sièges réglables", "Réglage individuel des postes ; formation aux postures",
+              "Ressources humaines", "30/06/" + (new Date(ctx.aujourdhui || Date.now()).getFullYear() + 1),
+              leJour(ctx.aujourdhui)]);
+      if (unites) unites.forEach(function (u) {
+        L.push([String(u.unite || u), "[poste]", "[danger]", "[situation]", "", "", "", "",
+                "[existant]", "[à faire]", "[qui]", "[quand]", ""]);
+      });
+      else L.push(["[VOTRE UNITÉ DE TRAVAIL]", "[poste]", "[danger]", "[situation]", "", "", "", "",
+                   "[existant]", "[à faire]", "[qui]", "[quand]", ""]);
+      L.push([]);
+      L.push(["RAPPEL — Le document unique transcrit les résultats de l'évaluation des risques et " +
+              "répertorie l'ensemble des risques pour la santé et la sécurité des travailleurs, par " +
+              "unité de travail. Il est mis à jour au moins chaque année dans les entreprises d'au " +
+              "moins onze salariés, lors de toute décision d'aménagement important, et lorsqu'une " +
+              "information supplémentaire intéressant l'évaluation d'un risque est portée à la " +
+              "connaissance de l'employeur (R. 4121-2)."]);
+      return L;
+    },
     produire: function (ctx) {
       var f = ctx.fiche || {}, du = f.duerp || {};
       var d0 = aujourd(ctx);
