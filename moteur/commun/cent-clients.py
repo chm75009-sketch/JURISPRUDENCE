@@ -98,6 +98,7 @@ def main():
     srv, port = serveur()
     base = "http://127.0.0.1:%d/" % port
     anomalies, resume = [], []
+    docs_ouverts = [0]
     with sync_playwright() as pw:
         nav = pw.chromium.launch(executable_path="/opt/pw-browsers/chromium")
         for i, prof in enumerate(profils()):
@@ -208,6 +209,45 @@ def main():
                                       "« non » n'ouvre pas p=" + attendu + " (arrivée : " +
                                       page.url.split("/")[-1][:40] + ")"))
 
+            # 2 ter. LES DOCUMENTS, OUVERTS POUR DE BON. L'épreuve ne les avait
+            # jamais ouverts : elle cliquait le rapport et le guide, comptait les
+            # cartes, et concluait « zéro anomalie » sur une version où le bouton
+            # « Ouvrir la base à remplir » ne répondait pas — les générateurs se
+            # chargeaient dans le désordre. Reproche du 2 septembre 2026, fondé.
+            # On ouvre donc chaque document de chaque parcours proposé, et l'on
+            # vérifie qu'un texte en sort.
+            page.goto(base + "parcours.html", wait_until="domcontentloaded")
+            page.wait_for_timeout(300)
+            cles = page.evaluate(
+                "() => [...document.querySelectorAll('.carte')].map(b => b.id.replace('carte-',''))")
+            for cle in cles:
+                page.goto(base + "parcours.html?p=" + cle, wait_until="domcontentloaded")
+                page.wait_for_timeout(350)
+                docs = page.evaluate(
+                    "() => [...new Set([...document.querySelectorAll('[data-courrier]')]"
+                    ".map(b => b.getAttribute('data-courrier')))]")
+                for d in docs:
+                    try:
+                        page.evaluate(
+                            "(id) => { const b = document.querySelector('[data-courrier=\"' + id + '\"]');"
+                            " if (b) b.click(); }", d)
+                        page.wait_for_timeout(700)
+                        etat = page.evaluate(
+                            "() => ({titre: (document.getElementById('dt-titre')||{}).textContent || '',"
+                            " corps: ((document.getElementById('dt-corps')||{}).value || '').length,"
+                            " tableur: !((document.getElementById('dt-tableur')||{}).hidden)})")
+                        if not etat["titre"] or etat["corps"] < 200:
+                            anomalies.append((prof["denomination"], cle,
+                                              "document " + d + " ne s'ouvre pas (titre « " +
+                                              etat["titre"][:30] + " », " + str(etat["corps"]) + " caractères)"))
+                        else:
+                            docs_ouverts[0] += 1
+                        page.evaluate("() => { const b = document.getElementById('dt-fermer'); if (b) b.click(); }")
+                        page.wait_for_timeout(120)
+                    except Exception as ex:
+                        anomalies.append((prof["denomination"], cle,
+                                          "document " + d + " : " + str(ex).split("\n")[0][:70]))
+
             # 3. les parcours proposés à cet effectif
             page.goto(base + "parcours.html", wait_until="domcontentloaded")
             page.wait_for_timeout(200)
@@ -238,6 +278,7 @@ def main():
     print("questions fermées répondues « non » : de %d à %d par client" % (min(q), max(q)))
     c = [r["cartes"] for r in resume]
     print("parcours proposés : de %d à %d selon l'effectif" % (min(c), max(c)))
+    print("documents ouverts et non vides : %d" % docs_ouverts[0])
     print("anomalies : %d" % len(anomalies))
     vus = set()
     for a in anomalies:
