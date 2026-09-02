@@ -31,6 +31,33 @@ ou trois phrases a été enfreinte à presque chaque réponse, avec titres, list
 et tableaux non demandés, au point que l'utilisatrice a dû redemander les
 consignes qu'elle avait elle-même écrites.
 
+## L'application — l'architecture, et elle ne se discute pas
+
+Énoncée le 1er septembre 2026, reprise en entier dans `PROMPT-ARCHITECTURE.md`.
+Elle est reproduite ici parce que ce fichier-ci est le seul relu à chaque
+démarrage : ailleurs, elle serait oubliée.
+
+**Fiche client → deux boutons → un module → une question fermée → « non » qui
+construit.**
+
+1. **La fiche d'entreprise** est le point d'entrée obligatoire. Effectif exact,
+   convention collective. C'est elle qui commande les seuils, donc tout le
+   reste : un parcours non dû à cet effectif ne s'affiche pas.
+2. **Deux boutons, pas trois** : AUDIT & CONFORMITÉ, GESTION RH DU QUOTIDIEN.
+3. **Chaque module d'audit commence par la question** : « Avez-vous ce document,
+   ce dispositif, ce process ? » — posée en premier, avant toute autre.
+4. **« Non » n'ouvre pas un constat, il ouvre la construction** : le document
+   lui-même, éditable, à l'en-tête de l'entreprise ; puis les courriers du pack
+   administratif ; puis le rétroplanning daté. Pas d'écran intermédiaire, pas
+   d'exposé du droit avant d'agir.
+5. **« Oui » ouvre le contrôle** : dépôt du document existant, diagnostic des
+   clauses illicites ou manquantes, version corrigée. Ce volet n'existe pas
+   encore — c'est le seul manque de fond.
+
+**Le contrôle à passer sur tout écran ajouté ou modifié :** l'utilisateur y
+agit-il, ou y lit-il ? S'il y lit, l'écran est à refaire. « Vous avez bu, oui
+ou non ? Non. Je ramène le verre d'eau » — pas un cours sur l'eau.
+
 ## Réponses — règle générale
 
 **Répondre TRÈS TRÈS COURT.** Deux ou trois phrases, pas davantage. Pas de tableau,
