@@ -51,13 +51,32 @@ def profils(n=int(os.environ.get("N","100"))):
              "conventionCollective": CONVENTIONS[i % len(CONVENTIONS)]}
             for i in range(n)]
 
+# Les champs d'entrée de chaque module : ceux dont le « non » fait basculer.
+ENTREE_OUI = """() => {
+  const noms = ['ri.existe', 'duerp.existe', 'comiteExistant', 'base.existe', 'negosEngagees'];
+  noms.forEach(n => {
+    document.querySelectorAll('[name="' + n + '"], [data-nom="' + n + '"]').forEach(e => {
+      if (e.tagName === 'SELECT') { e.value = 'oui'; }
+      else if (e.type === 'radio') { e.checked = (String(e.value) === 'oui'); }
+      e.dispatchEvent(new Event('change', {bubbles: true}));
+    });
+  });
+}"""
+
 REMPLIR = """(rep) => {
   const out = {radios: 0, selects: 0, textes: 0};
+  // La question d'entrée est laissée de côté : répondue « non », elle ferait
+  // basculer vers la procédure avant que le reste du questionnaire soit rempli,
+  // et le rapport ne pourrait plus être éprouvé. Elle l'est séparément, à la fin.
+  const ENTREE = ['ri.existe', 'duerp.existe', 'comiteExistant', 'base.existe', 'negosEngagees'];
+  const entree = e => ENTREE.indexOf(e.name || e.getAttribute('data-nom') || '') >= 0;
   document.querySelectorAll('input[type=radio]').forEach(r => {
+    if (entree(r)) return;
     if (String(r.value).toLowerCase() === rep) { r.checked = true;
       r.dispatchEvent(new Event('change', {bubbles: true})); out.radios++; }
   });
   document.querySelectorAll('select').forEach(s => {
+    if (entree(s)) return;
     const o = [...s.options].find(o => /^non$/i.test(o.textContent.trim()));
     if (o) { s.value = o.value; s.dispatchEvent(new Event('change', {bubbles: true})); out.selects++; }
   });
@@ -103,6 +122,12 @@ def main():
                         anomalies.append((prof["denomination"], m,
                                           "questionnaire non ouvert : " + str(ex).split("\n")[0][:80]))
                 page.wait_for_timeout(250)
+                # LA QUESTION D'ENTRÉE EST DÉSORMAIS LA PREMIÈRE, et « non » fait
+                # basculer aussitôt vers la procédure. Pour éprouver le rapport et
+                # le guide, il faut donc y répondre « oui » ; la bascule est
+                # éprouvée à part, une fois le module parcouru.
+                page.evaluate(ENTREE_OUI)
+                page.wait_for_timeout(120)
                 n = page.evaluate(REMPLIR, "non")
                 faits[m] = n["radios"] + n["selects"]
                 # Le bouton peut être recouvert un instant par la barre d'actions
@@ -138,6 +163,41 @@ def main():
                                           "le bouton " + b + " n'ouvre pas " + bloc))
                 if n["radios"] + n["selects"] == 0:
                     anomalies.append((prof["denomination"], m, "aucune question fermée trouvée"))
+
+            # 2 bis. LA BASCULE, éprouvée pour elle-même : on revient sur chaque
+            # module, on répond « non » à la seule question d'entrée, et l'on
+            # vérifie que la procédure s'ouvre — c'est la promesse du volet
+            # « non », et c'est le seul endroit où elle se mesure.
+            BASCULE = {"discipline": "ri", "sst": "duerp", "cse": "installation",
+                       "bdese": "bdese", "nao": "nao"}
+            for m, attendu in BASCULE.items():
+                page.goto(base + "audit-%s.html" % m, wait_until="domcontentloaded")
+                if page.locator("#generer").count():
+                    try: page.click("#generer", timeout=6000)
+                    except Exception: pass
+                page.wait_for_timeout(250)
+                try:
+                    page.evaluate("""() => {
+                      const noms = ['ri.existe','duerp.existe','comiteExistant','base.existe','negosEngagees'];
+                      for (const n of noms) {
+                        const e = document.querySelector('[name="'+n+'"], [data-nom="'+n+'"]');
+                        if (!e) continue;
+                        if (e.tagName === 'SELECT') e.value = 'non';
+                        else if (e.type === 'radio') {
+                          const r = document.querySelector('[name="'+n+'"][value="non"], [data-nom="'+n+'"][value="non"]');
+                          if (r) { r.checked = true; r.dispatchEvent(new Event('change',{bubbles:true})); return; }
+                        }
+                        e.dispatchEvent(new Event('change', {bubbles: true}));
+                        return;
+                      }
+                    }""")
+                except Exception:
+                    pass
+                page.wait_for_timeout(900)
+                if ("p=" + attendu) not in page.url:
+                    anomalies.append((prof["denomination"], m,
+                                      "« non » n'ouvre pas p=" + attendu + " (arrivée : " +
+                                      page.url.split("/")[-1][:40] + ")"))
 
             # 3. les parcours proposés à cet effectif
             page.goto(base + "parcours.html", wait_until="domcontentloaded")
