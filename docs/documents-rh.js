@@ -853,4 +853,164 @@
     },
   });
 
+
+  /* ════════════════════════════════════════════════════════════════════════
+     LA BASE DE DONNÉES ELLE-MÊME
+
+     Défaut mesuré le 2 septembre 2026 : répondre « non » à « avez-vous une
+     base de données ? » ouvrait « La note de régime — quel texte commande
+     votre base ». Un employeur qui n'a pas de base n'a pas besoin qu'on lui
+     dise quel texte la commanderait : il a besoin de la base. C'est le même
+     défaut que celui corrigé le 31 août sur le règlement intérieur, au même
+     endroit — le premier document que « non » fait apparaître.
+
+     Ce document est donc la base à remplir : ses dix thèmes, ses six années,
+     et ses modalités de mise à disposition. La note de régime reste à sa
+     place, une étape plus loin, pour celui qui la cherche.
+     ════════════════════════════════════════════════════════════════════════ */
+
+  /* Les rubriques du contenu supplétif, telles que le décret les nomme. Elles
+     sont reprises du découpage vérifié du module (moteur/bdese/contenu-bdese.js),
+     et non recopiées de mémoire. Deux arbres : en deçà de trois cents salariés
+     (R. 2312-8) et au-delà (R. 2312-9). */
+  var RUBRIQUES_BDESE = {
+    moins300: [
+      "Investissements",
+      "Égalité professionnelle entre les femmes et les hommes au sein de l'entreprise",
+      "Fonds propres, endettement et impôts",
+      "Rémunération des salariés et dirigeants, dans l'ensemble de leurs éléments",
+      "Activités sociales et culturelles",
+      "Rémunération des financeurs, en dehors des éléments mentionnés au 4°",
+      "Flux financiers à destination de l'entreprise",
+      "Partenariats",
+      "Pour les entreprises appartenant à un groupe, transferts commerciaux et financiers entre les entités du groupe",
+      "Environnement — politique générale, économie circulaire, changement climatique",
+    ],
+    plus300: [
+      "Investissements",
+      "Égalité professionnelle entre les femmes et les hommes au sein de l'entreprise",
+      "Fonds propres, endettement et impôts",
+      "Rémunération des salariés et dirigeants, dans l'ensemble de leurs éléments",
+      "Représentation du personnel et activités sociales et culturelles",
+      "Rémunération des financeurs, en dehors des éléments mentionnés au 4°",
+      "Flux financiers à destination de l'entreprise",
+      "Partenariats",
+      "Pour les entreprises appartenant à un groupe, transferts commerciaux et financiers entre les entités du groupe",
+      "Environnement — politique générale, économie circulaire, changement climatique",
+    ],
+  };
+
+  DP.ajouter("BDESE-CTL-CNT-00", {
+    nom: "La base de données économiques, sociales et environnementales",
+    detail: "La base elle-même : ses dix thèmes, ses six années, ses modalités " +
+            "de mise à disposition.",
+    produire: function (ctx) {
+      var p = ctx.profil || {};
+      var eff = parseInt(p.effectif, 10);
+      var grand = !isNaN(eff) && eff >= 300;
+      var rub = grand ? RUBRIQUES_BDESE.plus300 : RUBRIQUES_BDESE.moins300;
+      var art = grand ? "R. 2312-9" : "R. 2312-8";
+      var L = entete(ctx, "Base de données économiques, sociales et environnementales",
+        "articles L. 2312-18, L. 2312-21 et " + art + " du code du travail");
+
+      L.push("COMMENT SE SERVIR DE CE DOCUMENT");
+      L.push("");
+      L.push("Ce document EST la base : sa structure est arrêtée, il ne vous reste qu'à");
+      L.push("la remplir. Reportez-la dans votre support — classeur, tableur, intranet —");
+      L.push("ou servez-vous en telle quelle : la loi n'impose aucune forme, elle impose");
+      L.push("un contenu et une mise à disposition.");
+      L.push("");
+      L.push("Ce qui est entre crochets vous appartient : ce sont vos chiffres et vos");
+      L.push("dates. Les lignes qui commencent par NOTE ne font pas partie de la base.");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push("BASE DE DONNÉES ÉCONOMIQUES, SOCIALES ET ENVIRONNEMENTALES");
+      L.push("");
+      L.push(cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE").toUpperCase());
+      L.push("Effectif : " + (isNaN(eff) ? "[EFFECTIF]" : eff + " salariés") +
+        " — contenu applicable : " + art);
+      L.push("Base ouverte le : [DATE]");
+      L.push("");
+      L.push("PREMIÈRE PARTIE — LES SIX ANNÉES");
+      L.push("");
+      L.push("Les informations portent sur les deux années précédentes, l'année en cours");
+      L.push("et les trois années suivantes, sous forme de perspectives.");
+      L.push("");
+      L.push("   N-2 : [ANNÉE]        N-1 : [ANNÉE]        N (en cours) : [ANNÉE]");
+      L.push("   N+1 : [ANNÉE]        N+2 : [ANNÉE]        N+3 : [ANNÉE]");
+      L.push("");
+      L.push("NOTE — Les trois années à venir peuvent être présentées sous forme de");
+      L.push("grandes tendances plutôt que de chiffres. Dans ce cas, la base doit porter");
+      L.push("la liste des informations que vous n'êtes pas en mesure de renseigner, et");
+      L.push("dire pourquoi. Une case laissée vide sans cette liste est un manquement.");
+      L.push("");
+      L.push("SECONDE PARTIE — LES DIX THÈMES");
+      L.push("");
+      rub.forEach(function (r, i) {
+        L.push("── " + (i + 1) + ". " + r.toUpperCase());
+        L.push("");
+        L.push("   Informations et indicateurs : [À RENSEIGNER, PAR ANNÉE]");
+        L.push("");
+        L.push("   N-2 : [ ]   N-1 : [ ]   N : [ ]   N+1 : [ ]   N+2 : [ ]   N+3 : [ ]");
+        L.push("");
+      });
+      L.push("NOTE — Ces dix thèmes sont ceux du contenu supplétif de l'article " + art + ",");
+      L.push("applicable à défaut d'accord. Quel que soit l'accord que vous concluriez, la");
+      L.push("base comporte AU MOINS les thèmes que l'article L. 2312-21 énumère et qu'un");
+      L.push("accord ne peut pas descendre : l'investissement social, l'investissement");
+      L.push("matériel et immatériel, l'égalité professionnelle entre les femmes et les");
+      L.push("hommes au sein de l'entreprise, les fonds propres, l'endettement, l'ensemble");
+      L.push("des éléments de la rémunération des salariés et dirigeants, les activités");
+      L.push("sociales et culturelles, la rémunération des financeurs, les flux financiers");
+      L.push("à destination de l'entreprise et les conséquences environnementales de");
+      L.push("l'activité de l'entreprise.");
+      L.push("");
+      L.push("TROISIÈME PARTIE — L'ÉGALITÉ PROFESSIONNELLE, EN PARTICULIER");
+      L.push("");
+      L.push("La base comporte en particulier l'ensemble des indicateurs relatifs à");
+      L.push("l'égalité professionnelle entre les femmes et les hommes, notamment sur les");
+      L.push("écarts de rémunération et de répartition entre les femmes et les hommes");
+      L.push("parmi les cadres dirigeants et les membres des instances dirigeantes, ainsi");
+      L.push("que les informations sur la méthodologie et le contenu des indicateurs de");
+      L.push("l'article L. 1142-8 — l'index de l'égalité (L. 2312-18).");
+      L.push("");
+      L.push("   Indicateurs de l'index, année [ANNÉE] : [REPORTER LES CINQ OU QUATRE");
+      L.push("   INDICATEURS ET LE TOTAL]");
+      L.push("   Méthodologie retenue : [DÉCRIRE]");
+      L.push("");
+      L.push("Elle comporte également un bilan de la mise en œuvre des actions de");
+      L.push("formation entreprises à l'issue des entretiens de parcours professionnel ou");
+      L.push("des périodes de reconversion (L. 2312-18).");
+      L.push("");
+      L.push("   Bilan, année [ANNÉE] : [À RENSEIGNER]");
+      L.push("");
+      L.push("QUATRIÈME PARTIE — MISE À DISPOSITION ET ACCÈS");
+      L.push("");
+      L.push("Support de la base : [PAPIER / INFORMATIQUE — PRÉCISER LEQUEL].");
+      L.push("Lieu ou adresse d'accès : [PRÉCISER].");
+      L.push("");
+      L.push("Ont accès à la base, de façon permanente : les membres de la délégation du");
+      L.push("personnel du comité social et économique et, le cas échéant, les délégués");
+      L.push("syndicaux. Liste nominative : [NOMS].");
+      L.push("");
+      L.push("Modalités de consultation et d'utilisation : [PRÉCISER — horaires, poste");
+      L.push("dédié, identifiants].");
+      L.push("");
+      L.push("Chaque mise à jour est portée à la connaissance des bénéficiaires par");
+      L.push("[MOYEN RETENU], et consignée au registre tenu à cet effet.");
+      L.push("");
+      L.push("NOTE — La mise à disposition actualisée des éléments transmis de manière");
+      L.push("récurrente au comité VAUT communication des rapports et informations au");
+      L.push("comité (L. 2312-18). C'est l'intérêt de la base, et c'est ce qui rend son");
+      L.push("actualisation décisive : une base figée ne vaut communication de rien.");
+      L.push("");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(ctx.aujourdhui));
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+
+      return L.join("\n");
+    },
+  });
+
 })(typeof window !== "undefined" ? window : this);

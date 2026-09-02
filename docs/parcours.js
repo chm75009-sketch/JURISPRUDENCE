@@ -2174,6 +2174,13 @@
         aide: "Membres de la délégation du personnel du comité, du comité central, et délégués syndicaux (art. L. 2312-36)." },
     ],
     etapes: [
+      { id: "b0", nom: "Constituer la base : le document lui-même",
+        docProduit: "BDESE-CTL-CNT-00",
+        action: "Ouvrir la base à remplir →",
+        risque: "Une base de données économiques, sociales et environnementales rassemble l'ensemble des informations nécessaires aux consultations et informations récurrentes que l'employeur met à disposition du comité social et économique (L. 2312-18). Sans base, ces consultations n'ont pas leur support : la mise à disposition actualisée des éléments transmis de manière récurrente vaut communication des rapports et informations au comité, et cette communication n'a alors pas lieu. La base comporte au moins les thèmes que l'article L. 2312-21 énumère, qu'aucun accord ne peut descendre.",
+        conseil: "Ne cherchez pas d'abord quel texte commande votre contenu : commencez par la structure, elle est la même dans tous les cas pour les dix thèmes du plancher. Le régime — accord d'entreprise, accord de branche ou supplétif du décret — se règle à l'étape suivante et ne fait que préciser le détail des rubriques. Remplissez d'abord les deux exercices passés et l'année en cours, que vous avez ; les trois années à venir peuvent être présentées en grandes tendances, à condition de lister ce que vous n'êtes pas en mesure de renseigner.",
+        quoi: "Le document produit ici est la base : ses dix thèmes, ses six années — deux exercices passés, l'année en cours, trois à venir —, les indicateurs de l'égalité professionnelle et de l'index, le bilan des formations issues des entretiens, et les modalités de mise à disposition et d'accès. Reportez-le dans votre support ou servez-vous en tel quel.",
+        fond: ["L2312-18", "L2312-21"] },
       { id: "b1", nom: "Déterminer le régime : accord, accord de branche, ou supplétif",
         docProduit: "BDESE-CTL-REG-01",
         risque: "Tant que le texte applicable n'est pas identifié, la grille due est inconnue : l'article L. 2312-21 laisse l'accord définir l'organisation, l'architecture et le contenu de la base, et le décret ne s'applique qu'à son défaut. Les deux grilles ne se recouvrent pas, et l'erreur de texte se paie en rubriques manquantes, que le comité oppose ensuite à la régularité des consultations. Le dernier alinéa du même article ne permet à un accord de branche de suppléer qu'à défaut d'accord d'entreprise, et dans les entreprises de moins de trois cents salariés.",
@@ -3625,7 +3632,10 @@
     DIS: ["documents-produits.js", "documents-discipline.js", "documents-discipline-2.js"],
     SST: ["documents-produits.js", "documents-sst.js", "documents-sst-2.js"],
     CSE: ["documents-produits.js", "documents-cse.js", "documents-cse-2.js", "documents-cse-3.js"],
-    BDESE: ["documents-produits.js", "documents-bdese.js"],
+    /* documents-rh.js porte la base elle-même (BDESE-CTL-CNT-00), écrite le
+       2 septembre 2026 : « non » doit donner la base, non une note sur le
+       texte qui la commande. */
+    BDESE: ["documents-produits.js", "documents-bdese.js", "documents-rh.js"],
     NAO: ["documents-produits.js", "documents-nao.js"],
     PSE: ["documents-produits.js", "documents-pse.js"],
     /* La gestion du personnel : registre, embauche, fin de contrat. Ces
