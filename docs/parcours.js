@@ -2524,6 +2524,7 @@
     ],
     etapes: [
       { id: "b1", nom: "Déclarer AVANT l'entrée",
+        docProduit: "RH-CTL-EMB-03",
         champDate: "dateDPAE",
         risque: "Le non-respect de l'obligation de déclaration préalable à l'embauche, constaté par les agents de l'article L. 8271-7, entraîne une pénalité dont le montant est égal à trois cents fois le taux horaire du minimum garanti de l'article L. 3231-12 (L. 1221-11). Se soustraire intentionnellement à cette formalité est en outre réputé travail dissimulé par dissimulation d'emploi salarié au sens de l'article L. 8221-5, et la méconnaissance des interdictions de l'article L. 8221-1 est punie de trois ans d'emprisonnement et de 45 000 euros d'amende (L. 8224-1). S'y ajoutent les conséquences sociales et prud'homales du travail dissimulé, dont l'indemnité forfaitaire.",
         conseil: "Instituez un point de contrôle unique avant chaque entrée : pas d'accusé de déclaration, pas de badge, pas de poste. Archivez les accusés dans un dossier unique, nominatif, rapprochable ligne à ligne du registre unique du personnel — c'est ce rapprochement que demande un contrôle, et il se prépare une fois pour toutes. Le remplacement urgent est la circonstance qui fait sauter l'ordre des opérations : traitez-le comme le cas nominal, la déclaration se fait en quelques minutes.",
@@ -2542,6 +2543,7 @@
           return { iso: D.dateDPAE, libelle: lib };
         } },
       { id: "b2", nom: "Établir le contrat, et l'écrire quand la loi l'exige",
+        docProduit: "RH-CTL-EMB-01",
         risque: "Le contrat à durée déterminée non écrit, ou dont le motif n'est pas précisément défini, est réputé conclu pour une durée indéterminée, l'article L. 1245-1 rattachant expressément cette sanction au premier alinéa de l'article L. 1242-12. Lorsque le conseil de prud'hommes fait droit à la demande de requalification, il accorde au salarié une indemnité à la charge de l'employeur qui ne peut être inférieure à un mois de salaire (L. 1245-2), sans préjudice des règles de rupture du contrat à durée indéterminée. Conclure un contrat qui a pour objet ou pour effet de pourvoir durablement un emploi lié à l'activité normale et permanente de l'entreprise est puni d'une amende de 3 750 euros, portée en cas de récidive à 7 500 euros et à six mois d'emprisonnement (L. 1248-1).",
         conseil: "Le contrat se signe avant la prise de poste, jamais après : un contrat régularisé le surlendemain n'est pas un contrat écrit, c'est un contrat reconstitué. Écrivez le motif en une phrase de fait, avec le nom et la qualification de la personne remplacée ou l'événement précis qui justifie le recours — les formules générales sont ce qui se retourne le plus sûrement contre l'employeur. Faites relire chaque contrat par une seconde personne avant signature, en vérifiant que le motif écrit correspond à la situation réelle du service.",
         jx: "embauche",
@@ -2549,6 +2551,7 @@
         fond: ["L1242-12", "L1242-2"],
         si: function (P, D) { return D.typeContrat === "contrat à durée déterminée" ? true : (D.typeContrat ? false : null); } },
       { id: "b3", nom: "Transmettre le contrat à durée déterminée dans les deux jours ouvrables",
+        docProduit: "RH-CTL-EMB-02",
         risque: "La méconnaissance de l'obligation de transmission dans le délai fixé par l'article L. 1242-13 ne saurait, à elle seule, entraîner la requalification en contrat à durée indéterminée ; elle ouvre en revanche droit, pour le salarié, à une indemnité à la charge de l'employeur, qui ne peut être supérieure à un mois de salaire (L. 1245-1).",
         conseil: "Transmettez le jour de l'embauche, et non au dernier jour du délai : deux jours ouvrables se consomment vite en fin de semaine ou avant un jour férié. Datez la remise — récépissé signé, courriel horodaté, envoi recommandé — et classez la preuve avec le contrat, pas ailleurs. C'est une formalité tenue en fait dans la quasi-totalité des dossiers et prouvée dans presque aucun : c'est la preuve, ici, qui manque.",
         quoi: "Le contrat de travail est transmis au salarié, au plus tard, dans les deux jours ouvrables suivant l'embauche. Datez la transmission et conservez-en la preuve : c'est un délai court, souvent tenu en fait et jamais prouvé.",

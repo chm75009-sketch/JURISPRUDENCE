@@ -295,4 +295,317 @@
     },
   });
 
+
+  /* ════════════════════════════════════════════════════════════════════════
+     L'EMBAUCHE
+
+     Cinq des trente-cinq obligations du module social renvoient au parcours
+     « embauche », et ce parcours ne produisait aucun document : le client y
+     était envoyé et n'y trouvait rien à signer. Trois pièces le comblent —
+     la déclaration préalable, le contrat à durée indéterminée, le contrat à
+     durée déterminée.
+     ════════════════════════════════════════════════════════════════════════ */
+
+  /* Les durées maximales d'essai, telles que L. 1221-19 les fixe, et les
+     plafonds de renouvellement de L. 1221-21. Le renouvellement suppose un
+     accord de branche étendu qui le prévoie : le document le dit, il ne le
+     présume pas. */
+  var ESSAI = {
+    "ouvrier": { max: 2, plafond: 4, nom: "ouvriers et employés" },
+    "employé": { max: 2, plafond: 4, nom: "ouvriers et employés" },
+    "agent de maîtrise": { max: 3, plafond: 6, nom: "agents de maîtrise et techniciens" },
+    "technicien": { max: 3, plafond: 6, nom: "agents de maîtrise et techniciens" },
+    "cadre": { max: 4, plafond: 8, nom: "cadres" },
+  };
+  function essaiDe(cat) {
+    var c = String(cat || "").toLowerCase();
+    var k = Object.keys(ESSAI).filter(function (x) { return c.indexOf(x) >= 0; })[0];
+    return ESSAI[k] || null;
+  }
+
+  function enteteContrat(ctx, titre, fondement) {
+    var p = ctx.profil || {};
+    return entete(ctx, titre, fondement).concat([
+      "ENTRE LES SOUSSIGNÉS :",
+      "",
+      cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE") + ", dont le siège social est situé " +
+        cro(p.adresse, "adresse du siège") + ", " + (p.siret ? "immatriculée sous le numéro SIRET " + p.siret : "[SIRET]") + ",",
+      "représentée par " + cro(p.responsable, "nom et qualité du représentant légal") + ",",
+      "",
+      "Ci-après « l'employeur »,",
+      "",
+      "ET",
+      "",
+      "[NOM ET PRÉNOMS DU SALARIÉ], né(e) le [DATE DE NAISSANCE] à [LIEU],",
+      "demeurant [ADRESSE], de nationalité [NATIONALITÉ],",
+      "numéro de sécurité sociale [NUMÉRO],",
+      "",
+      "Ci-après « le salarié »,",
+      "",
+      "IL A ÉTÉ CONVENU CE QUI SUIT :",
+      "",
+    ]);
+  }
+
+  function clausesCommunes(L, p, d) {
+    var ccn = cro(p.conventionCollective, "INTITULÉ DE LA CONVENTION COLLECTIVE ET IDCC");
+
+    L.push("Article — Convention collective");
+    L.push("Les relations entre les parties sont régies par la convention collective");
+    L.push(ccn + ", dont un exemplaire est tenu à la disposition du salarié.");
+    L.push("");
+    L.push("NOTE — Vérifiez dans cette convention la classification, le coefficient, le");
+    L.push("minimum conventionnel et la durée d'essai qu'elle prévoit : une clause moins");
+    L.push("favorable que la convention est illicite.");
+    L.push("");
+    L.push("Article — Fonctions et classification");
+    L.push("Le salarié est engagé en qualité de " + cro(d.emploi, "INTITULÉ DE L'EMPLOI") + ",");
+    L.push("classification [NIVEAU, ÉCHELON, COEFFICIENT], statut " +
+      cro(d.categorie, "ouvrier / employé / agent de maîtrise / technicien / cadre") + ".");
+    L.push("Ses fonctions sont les suivantes : [DÉCRIRE LES TÂCHES PRINCIPALES].");
+    L.push("");
+    L.push("Article — Lieu de travail");
+    L.push("Le salarié exerce ses fonctions à " + cro(d.lieu, "ADRESSE DU LIEU DE TRAVAIL") + ".");
+    L.push("Cette mention est informative et ne constitue pas une clause de sédentarité.");
+    L.push("");
+    L.push("Article — Durée du travail");
+    L.push("[TEMPS COMPLET : la durée du travail est de trente-cinq heures par semaine,");
+    L.push("réparties selon l'horaire collectif affiché.]");
+    L.push("");
+    L.push("NOTE — TEMPS PARTIEL : si le salarié est à temps partiel, cet article doit");
+    L.push("porter, à peine de requalification, les mentions de l'article L. 3123-6 : la");
+    L.push("qualification, les éléments de la rémunération, la durée hebdomadaire ou");
+    L.push("mensuelle prévue et la répartition de cette durée entre les jours de la");
+    L.push("semaine ou les semaines du mois ; les cas dans lesquels une modification de");
+    L.push("cette répartition peut intervenir et la nature de cette modification ; les");
+    L.push("modalités selon lesquelles les horaires de chaque journée travaillée sont");
+    L.push("communiqués par écrit ; et les limites dans lesquelles des heures");
+    L.push("complémentaires peuvent être accomplies.");
+    L.push("");
+    L.push("Article — Rémunération");
+    L.push("Le salarié perçoit une rémunération mensuelle brute de [MONTANT] euros pour");
+    L.push("l'horaire ci-dessus, versée le [JOUR] de chaque mois.");
+    L.push("[Le cas échéant : primes et accessoires — INTITULÉ, MONTANT, PÉRIODICITÉ.]");
+    L.push("");
+    L.push("Article — Retraite complémentaire et prévoyance");
+    L.push("Le salarié est affilié à la caisse de retraite complémentaire [NOM ET ADRESSE]");
+    L.push("et, le cas échéant, à l'organisme de prévoyance [NOM ET ADRESSE].");
+    L.push("");
+  }
+
+  DP.ajouter("RH-CTL-EMB-01", {
+    nom: "Le contrat de travail à durée indéterminée",
+    detail: "Le contrat rédigé, avec la clause d'essai à la bonne durée et le " +
+            "rappel des mentions du temps partiel.",
+    produire: function (ctx) {
+      var p = ctx.profil || {}, d = ctx.donnees || {};
+      var L = enteteContrat(ctx, "Contrat de travail à durée indéterminée",
+        "articles L. 1221-1 et suivants du code du travail");
+
+      L.push("Article — Engagement");
+      L.push("Le salarié est engagé pour une durée indéterminée à compter du " +
+        cro(d.dateEmbauche, "DATE D'EMBAUCHE") + ".");
+      L.push("Cet engagement est subordonné au résultat de la visite d'information et de");
+      L.push("prévention, ou de l'examen médical d'aptitude lorsque le poste en relève.");
+      L.push("");
+
+      var e = essaiDe(d.categorie);
+      L.push("Article — Période d'essai");
+      if (e) {
+        L.push("Le contrat comporte une période d'essai de [DURÉE] mois, qui court à compter");
+        L.push("du premier jour de travail.");
+        L.push("");
+        L.push("NOTE — Pour un salarié de la catégorie « " + e.nom + " », la durée maximale");
+        L.push("est de " + e.max + " mois (L. 1221-19). Elle ne peut être renouvelée une fois que si");
+        L.push("un accord de branche ÉTENDU le prévoit et en fixe les conditions ; le total,");
+        L.push("renouvellement compris, ne peut alors dépasser " + e.plafond + " mois (L. 1221-21).");
+      } else {
+        L.push("Le contrat comporte une période d'essai de [DURÉE] mois, qui court à compter");
+        L.push("du premier jour de travail.");
+        L.push("");
+        L.push("NOTE — La durée maximale dépend de la catégorie : deux mois pour les ouvriers");
+        L.push("et employés, trois pour les agents de maîtrise et techniciens, quatre pour les");
+        L.push("cadres (L. 1221-19). Le renouvellement suppose un accord de branche étendu qui");
+        L.push("le prévoie ; le total ne peut alors dépasser quatre, six ou huit mois selon la");
+        L.push("catégorie (L. 1221-21).");
+      }
+      L.push("");
+      L.push("NOTE — « La période d'essai et la possibilité de la renouveler ne se présument");
+      L.push("pas. Elles sont expressément stipulées dans la lettre d'engagement ou le");
+      L.push("contrat de travail » (L. 1221-23). Une clause absente, c'est un contrat sans");
+      L.push("essai.");
+      L.push("");
+      L.push("En cas de rupture de l'essai par l'employeur, le salarié est prévenu dans le");
+      L.push("délai de l'article L. 1221-25 : vingt-quatre heures en deçà de huit jours de");
+      L.push("présence, quarante-huit heures entre huit jours et un mois, deux semaines");
+      L.push("après un mois, un mois après trois mois. Ce délai ne prolonge pas l'essai, et");
+      L.push("son inexécution ouvre droit à une indemnité compensatrice.");
+      L.push("");
+
+      clausesCommunes(L, p, d);
+
+      L.push("Article — Obligations générales");
+      L.push("Le salarié se conforme aux instructions qui lui sont données et aux règles");
+      L.push("de sécurité applicables à son poste. Il prend soin, en fonction de sa");
+      L.push("formation et selon ses possibilités, de sa santé et de sa sécurité ainsi que");
+      L.push("de celles des autres personnes concernées par ses actes ou ses omissions au");
+      L.push("travail (L. 4122-1).");
+      L.push("");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(ctx.aujourdhui) + ", en deux exemplaires.");
+      L.push("");
+      L.push("L'employeur                                Le salarié");
+      L.push(cro(p.responsable, "Nom et qualité") + "                    [NOM ET PRÉNOMS]");
+
+      return L.join("\n");
+    },
+  });
+
+  DP.ajouter("RH-CTL-EMB-02", {
+    nom: "Le contrat à durée déterminée",
+    detail: "Les huit mentions que l'article L. 1242-12 impose, et le délai de " +
+            "transmission de deux jours ouvrables.",
+    produire: function (ctx) {
+      var p = ctx.profil || {}, d = ctx.donnees || {};
+      var L = enteteContrat(ctx, "Contrat de travail à durée déterminée",
+        "articles L. 1242-1 et suivants du code du travail");
+
+      L.push("Article 1 — Motif du recours");
+      L.push("Le présent contrat est conclu pour le motif suivant : [ÉNONCER LE MOTIF");
+      L.push("PRÉCIS — remplacement d'un salarié absent, accroissement temporaire");
+      L.push("d'activité, emploi à caractère saisonnier, usage constant du secteur…].");
+      L.push("");
+      L.push("NOTE — C'EST LA MENTION QUI DÉCIDE DE TOUT. L'article L. 1242-12 exige « la");
+      L.push("définition précise de son motif » et ajoute : « À défaut, il est réputé conclu");
+      L.push("pour une durée indéterminée. » Un motif générique, ou l'absence d'écrit,");
+      L.push("entraîne la requalification.");
+      L.push("");
+      L.push("[SI REMPLACEMENT — motifs des 1°, 4° et 5° de L. 1242-2 : nom et qualification");
+      L.push("professionnelle de la personne remplacée : NOM, QUALIFICATION.]");
+      L.push("");
+      L.push("Article 2 — Durée");
+      L.push("[TERME PRÉCIS : le contrat est conclu du [DATE] au [DATE] inclus.");
+      L.push("Le cas échéant, clause de renouvellement : le contrat pourra être renouvelé");
+      L.push("[NOMBRE] fois, pour une durée de [DURÉE], dans la limite de la durée maximale");
+      L.push("applicable.]");
+      L.push("");
+      L.push("[SANS TERME PRÉCIS : le contrat est conclu pour une durée minimale de [DURÉE]");
+      L.push("et prendra fin au retour de la personne remplacée ou à la réalisation de");
+      L.push("l'objet pour lequel il a été conclu.]");
+      L.push("");
+      L.push("Article 3 — Poste de travail");
+      L.push("Le salarié est engagé en qualité de " + cro(d.emploi, "INTITULÉ DE L'EMPLOI") + ",");
+      L.push("classification [NIVEAU, ÉCHELON, COEFFICIENT].");
+      L.push("[Le cas échéant : ce poste figure sur la liste des postes présentant des");
+      L.push("risques particuliers pour la santé ou la sécurité établie en application de");
+      L.push("l'article L. 4154-2, et le salarié bénéficie à ce titre d'une formation");
+      L.push("renforcée à la sécurité.]");
+      L.push("");
+      L.push("Article 4 — Convention collective");
+      L.push("La convention collective applicable est " +
+        cro(p.conventionCollective, "INTITULÉ ET IDCC") + ".");
+      L.push("");
+      L.push("Article 5 — Période d'essai");
+      L.push("Le contrat comporte une période d'essai de [DURÉE].");
+      L.push("");
+      L.push("NOTE — Elle se calcule à raison d'un jour par semaine de contrat, dans la");
+      L.push("limite de deux semaines lorsque la durée initiale est au plus de six mois, et");
+      L.push("d'un mois au-delà (L. 1242-10), sauf usages ou stipulations conventionnelles");
+      L.push("plus favorables. Comme pour le contrat à durée indéterminée, elle ne se");
+      L.push("présume pas et doit être écrite.");
+      L.push("");
+      L.push("Article 6 — Rémunération");
+      L.push("Le salarié perçoit une rémunération mensuelle brute de [MONTANT] euros,");
+      L.push("outre [PRIMES ET ACCESSOIRES, S'IL EN EXISTE].");
+      L.push("À l'issue du contrat, il perçoit l'indemnité de fin de contrat lorsqu'elle est");
+      L.push("due, ainsi que l'indemnité compensatrice de congés payés.");
+      L.push("");
+      L.push("Article 7 — Retraite complémentaire et prévoyance");
+      L.push("Caisse de retraite complémentaire : [NOM ET ADRESSE].");
+      L.push("Organisme de prévoyance, le cas échéant : [NOM ET ADRESSE].");
+      L.push("");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(ctx.aujourdhui) + ", en deux exemplaires.");
+      L.push("");
+      L.push("L'employeur                                Le salarié");
+      L.push(cro(p.responsable, "Nom et qualité") + "                    [NOM ET PRÉNOMS]");
+      L.push("");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("NOTE — LE DÉLAI, À NE PAS MANQUER");
+      L.push("");
+      L.push("« Le contrat de travail est transmis au salarié, au plus tard, dans les deux");
+      L.push("jours ouvrables suivant l'embauche » (L. 1242-13). Faites signer le jour de");
+      L.push("l'embauche, ou transmettez dans ce délai et gardez-en la preuve : la");
+      L.push("transmission tardive est sanctionnée.");
+      L.push("");
+      L.push("Les huit mentions de l'article L. 1242-12, à vérifier une à une avant de");
+      L.push("signer : le motif précis ; le nom et la qualification de la personne");
+      L.push("remplacée s'il s'agit d'un remplacement ; la date du terme et, le cas échéant,");
+      L.push("la clause de renouvellement ; ou la durée minimale s'il n'y a pas de terme");
+      L.push("précis ; la désignation du poste, en précisant s'il figure sur la liste des");
+      L.push("postes à risques particuliers ; l'intitulé de la convention collective ; la");
+      L.push("durée de la période d'essai ; le montant de la rémunération et de ses");
+      L.push("composantes ; le nom et l'adresse de la caisse de retraite complémentaire et,");
+      L.push("le cas échéant, de l'organisme de prévoyance.");
+
+      return L.join("\n");
+    },
+  });
+
+  DP.ajouter("RH-CTL-EMB-03", {
+    nom: "La déclaration préalable à l'embauche",
+    detail: "Les mentions de l'article R. 1221-1, à réunir avant que le salarié " +
+            "ne prenne son poste.",
+    produire: function (ctx) {
+      var p = ctx.profil || {}, d = ctx.donnees || {};
+      var L = entete(ctx, "Déclaration préalable à l'embauche",
+        "articles L. 1221-10 et R. 1221-1 du code du travail");
+
+      L.push("À QUOI SERT CE DOCUMENT");
+      L.push("");
+      L.push("La déclaration elle-même se fait en ligne, auprès de l'URSSAF ou de la");
+      L.push("mutualité sociale agricole. Ce document n'en tient pas lieu : il réunit les");
+      L.push("mentions exigées, pour que la saisie se fasse en une fois et que la preuve en");
+      L.push("soit conservée. Joignez-y l'accusé de réception délivré par l'organisme.");
+      L.push("");
+      L.push("« L'embauche d'un salarié ne peut intervenir qu'APRÈS déclaration nominative");
+      L.push("accomplie par l'employeur auprès des organismes de protection sociale");
+      L.push("désignés à cet effet » (L. 1221-10). Avant, donc — jamais après.");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push("1. L'EMPLOYEUR (R. 1221-1, 1°)");
+      L.push("");
+      L.push("   Dénomination sociale : " + cro(p.denomination || p.entreprise, "DÉNOMINATION"));
+      L.push("   Code APE : " + cro(p.ape, "CODE APE"));
+      L.push("   Adresse : " + cro(p.adresse, "adresse de l'employeur"));
+      L.push("   Numéro SIRET : " + (p.siret || "[SIRET]"));
+      L.push("   Service de santé au travail dont l'employeur dépend : [NOM ET ADRESSE]");
+      L.push("");
+      L.push("2. LE SALARIÉ (R. 1221-1, 2°)");
+      L.push("");
+      L.push("   Nom et prénoms : " + cro(d.salarieEmbauche, "NOM ET PRÉNOMS"));
+      L.push("   Sexe : [F / M]");
+      L.push("   Date et lieu de naissance : [DATE] à [LIEU]");
+      L.push("   Numéro national d'identification, s'il est déjà immatriculé : [NIR]");
+      L.push("");
+      L.push("3. L'EMBAUCHE (R. 1221-1, 3° et 4°)");
+      L.push("");
+      L.push("   Date d'embauche : " + cro(d.dateEmbauche, "DATE"));
+      L.push("   Heure d'embauche : [HEURE]");
+      L.push("   Nature du contrat : [CDI / CDD]");
+      L.push("   Durée du contrat : [DURÉE, POUR UN CDD]");
+      L.push("   Durée de la période d'essai : [DURÉE]");
+      L.push("");
+      L.push("   NOTE — La durée de l'essai n'est à déclarer que pour les contrats à durée");
+      L.push("   indéterminée et les contrats à durée déterminée dont le terme ou la durée");
+      L.push("   minimale excède six mois (R. 1221-1, 4°).");
+      L.push("");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(ctx.aujourdhui));
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+
+      return L.join("\n");
+    },
+  });
+
 })(typeof window !== "undefined" ? window : this);
