@@ -23,6 +23,7 @@ const BASE = {
   dateSeuil50Atteint: "2019-03-01", dateFinMandat: "2029-05-01",
   dateSeuil300Franchi: "2024-02-01",
   base: {
+    existe: "oui",
     /* Les dix rubriques du supplétif de R. 2312-9, telles que le décret les
        nomme : elles sont reprises du découpage, non recopiées à la main. */
     themes: require("./contenu-bdese.js").construire().contenu["au moins300"]

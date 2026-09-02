@@ -415,6 +415,10 @@ seuil, contenu, mise à disposition, consultations — se pose à l'étape 2.</p
   var etatVide = function () {
     return { dossier: {}, nuances: {}, faits: {}, controles: {}, etape: 1 };
   };
+  /* La bascule : quel « non » emmène vers quelle procédure. Le nom du champ
+     est celui du questionnaire du moteur (moteur/bdese/questionnaire-bdese.js). */
+  var BASCULES = { "base.existe": { p: "bdese" } };
+
   var ETAT = etatVide();
   try {
     var lu = JSON.parse(localStorage.getItem(CLE) || "null");
@@ -580,8 +584,12 @@ seuil, contenu, mise à disposition, consultations — se pose à l'étape 2.</p
       libre.addEventListener("input", function () { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); majNuances(); });
     });
 
-    $("formulaire").addEventListener("change", function () {
+    $("formulaire").addEventListener("change", function (ev) {
       lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
+      /* « Non » n'appelle pas un constat, il appelle la procédure qui construit
+         la base. Voir docs/parcours-lien.js. Défaut mesuré le 2 septembre 2026 :
+         ce module était le seul des trois à seuil à n'avoir aucune bascule. */
+      if (window.ParcoursLien) ParcoursLien.bascule(ev, BASCULES);
     });
     $("formulaire").addEventListener("input", function (ev) {
       if (ev.target.tagName === "TEXTAREA") { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); }
@@ -1136,7 +1144,7 @@ seuil, contenu, mise à disposition, consultations — se pose à l'étape 2.</p
       effectif: 420, secteur: "services", etablissementsDistincts: "non",
     });
     ETAT.dossier = {
-      dateAudit: "2026-08-16", accordEntreprise: "non", accordBranche: "non",
+      dateAudit: "2026-08-16", "base.existe": "oui", accordEntreprise: "non", accordBranche: "non",
       dateSeuil50Atteint: "2019-03-01", dateFinMandat: "2029-05-01", dateSeuil300Franchi: "2024-02-01",
       "base.themes": "Investissements\nEgalité professionnelle entre les femmes et les hommes au sein de l'entreprise\nFonds propres, endettement et impôts\nRémunération des salariés et dirigeants, dans l'ensemble de leurs éléments",
       "base.anneesPassees": 2, "base.anneesSuivantes": 3, "base.formePerspectives": "grandes tendances",

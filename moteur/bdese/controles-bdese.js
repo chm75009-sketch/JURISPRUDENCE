@@ -47,10 +47,36 @@ const PLANCHER = PL.PLANCHER;
 const themesDeclares = f => Array.isArray((f.base || {}).themes) ? f.base.themes : null;
 
 /* Le garde commun : rien ne se contrôle sur un régime inconnu. */
+/* LA BASE EXISTE-T-ELLE ? La question précède tout le reste, et elle n'était
+   pas posée. Défaut mesuré le 2 septembre 2026 : le questionnaire attaquait
+   directement le régime — accord d'entreprise, accord de branche —, donc il
+   présupposait une base et demandait seulement comment elle est encadrée. Un
+   employeur qui n'en a pas n'avait rien à répondre, et aucune bascule ne le
+   menait vers le parcours qui la construit.
+
+   Le traitement est celui du règlement intérieur dans le module discipline :
+   quand la base n'existe pas alors qu'elle est due, les contrôles de contenu
+   ne sont pas écartés, ils sont SUSPENDUS. Les écarter reviendrait à faire
+   croire à l'employeur que le contenu de la base ne le concerne pas, au moment
+   précis où il s'apprête à la constituer. */
+function siBase(f, suite) {
+  const b = f.base || {};
+  if (vide(b.existe)) return { etat: MANQ, motif:
+    "Il n'est pas indiqué si l'entreprise dispose d'une base de données économiques, sociales et environnementales : ni son contenu ni sa mise à disposition ne peuvent être contrôlés." };
+  if (nie(b.existe)) return { etat: SO, enAttente: true, motif:
+    "EN ATTENTE DE LA BASE — ce contrôle n'est pas écarté, il est suspendu. L'entreprise n'a pas de base de données, " +
+    "et les attributions récurrentes du comité, dont la base relève, s'exercent à partir de cinquante salariés " +
+    "(L. 2312-1, L. 2312-2). Le jour où la base existera, cette exigence s'appliquera intégralement : elle est donc " +
+    "à traiter en même temps que sa constitution, non après. Le parcours « Constituer la base de données » la construit." };
+  return suite();
+}
+
 function siRegimeConnu(f, suite) {
-  const r = R.regime(f);
-  if (r.regime === R.REGIMES.INDETERMINE) return { etat: MANQ, motif: r.motif };
-  return suite(r);
+  return siBase(f, () => {
+    const r = R.regime(f);
+    if (r.regime === R.REGIMES.INDETERMINE) return { etat: MANQ, motif: r.motif };
+    return suite(r);
+  });
 }
 
 const C = [];

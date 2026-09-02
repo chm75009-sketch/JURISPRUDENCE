@@ -10,6 +10,7 @@
  "dateFinMandat": "2029-05-01",
  "dateSeuil300Franchi": "2024-02-01",
  "base": {
+  "existe": "oui",
   "themes": [
    {
     "theme": "Investissements",
