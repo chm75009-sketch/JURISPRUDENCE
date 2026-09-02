@@ -3831,36 +3831,153 @@
     ecrireCourrier(COURRIER.id, t);
     etatCourrier("Vos modifications sont enregistrées sur ce poste.");
   });
-  /* LE TABLEUR — un CSV, et c'est un choix, non un pis-aller. Il s'ouvre dans
-     Excel, dans LibreOffice et dans Numbers sans rien installer, il se lit dans
-     dix ans, et il ne demande aucune bibliothèque : l'application reste un
-     fichier statique qui fonctionne hors ligne.
+  /* LE TABLEUR — un vrai fichier Excel, écrit à la main.
+     ====================================================
 
-     Deux précautions pour l'Excel français : la marque d'ordre des octets, sans
-     laquelle les accents sortent en charabia, et le point-virgule comme
-     séparateur, sans lequel toute la ligne atterrit dans la première colonne. */
+     Un .xlsx est une archive ZIP contenant du XML. On l'écrit ici sans aucune
+     bibliothèque : l'application reste un fichier statique qui fonctionne hors
+     ligne, et le client reçoit un classeur qui s'ouvre d'un double-clic, avec
+     ses colonnes à la bonne largeur et ses en-têtes en gras — non un CSV qu'il
+     faudrait importer en choisissant un séparateur.
+
+     Le ZIP est écrit en « stocké », sans compression : c'est trois fois plus
+     simple, parfaitement licite, et le fichier reste petit à cette échelle.  */
   var TABLEUR = null;
 
-  function csv(lignes) {
-    return lignes.map(function (l) {
-      return (l || []).map(function (c) {
+  var CRC = (function () {
+    var t = new Uint32Array(256);
+    for (var n = 0; n < 256; n++) {
+      var c = n;
+      for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      t[n] = c >>> 0;
+    }
+    return t;
+  })();
+  function crc32(u8) {
+    var c = 0xFFFFFFFF;
+    for (var i = 0; i < u8.length; i++) c = CRC[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  function octets(txt) { return new TextEncoder().encode(txt); }
+
+  /* Une archive ZIP « stockée », suffisante pour un classeur. */
+  function zip(fichiers) {
+    var morceaux = [], centrale = [], offset = 0;
+    function u32(v) { return [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255]; }
+    function u16(v) { return [v & 255, (v >>> 8) & 255]; }
+    fichiers.forEach(function (f) {
+      var nom = octets(f.nom), don = octets(f.contenu), c = crc32(don);
+      var loc = [].concat([80, 75, 3, 4], u16(20), u16(0), u16(0), u16(0), u16(0),
+        u32(c), u32(don.length), u32(don.length), u16(nom.length), u16(0));
+      morceaux.push(new Uint8Array(loc), nom, don);
+      centrale.push({ nom: nom, crc: c, taille: don.length, offset: offset });
+      offset += loc.length + nom.length + don.length;
+    });
+    var debutCentrale = offset, tailleCentrale = 0;
+    centrale.forEach(function (e) {
+      var cen = [].concat([80, 75, 1, 2], u16(20), u16(20), u16(0), u16(0), u16(0), u16(0),
+        u32(e.crc), u32(e.taille), u32(e.taille), u16(e.nom.length),
+        u16(0), u16(0), u16(0), u16(0), u32(0), u32(e.offset));
+      morceaux.push(new Uint8Array(cen), e.nom);
+      tailleCentrale += cen.length + e.nom.length;
+    });
+    morceaux.push(new Uint8Array([].concat([80, 75, 5, 6], u16(0), u16(0),
+      u16(centrale.length), u16(centrale.length), u32(tailleCentrale), u32(debutCentrale), u16(0))));
+    return new Blob(morceaux, { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  }
+
+  function xmlEch(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/\x00-\x08\x0B\x0C\x0E-\x1F/g, "");
+  }
+  function colonne(n) {
+    var s = "";
+    while (n >= 0) { s = String.fromCharCode(65 + (n % 26)) + s; n = Math.floor(n / 26) - 1; }
+    return s;
+  }
+
+  function xlsx(lignes) {
+    /* Les en-têtes : la première ligne du classeur, et la première ligne large —
+       celle qui porte les noms de colonnes. Elles passent en gras. */
+    var large = -1;
+    lignes.forEach(function (l, i) { if (large < 0 && (l || []).length >= 4) large = i; });
+
+    var largeurs = [];
+    lignes.forEach(function (l) {
+      (l || []).forEach(function (c, j) {
+        var n = Math.min(60, String(c == null ? "" : c).length + 2);
+        if (!largeurs[j] || largeurs[j] < n) largeurs[j] = n;
+      });
+    });
+    var cols = largeurs.map(function (w, j) {
+      return '<col min="' + (j + 1) + '" max="' + (j + 1) + '" width="' + Math.max(10, w) + '" customWidth="1"/>';
+    }).join("");
+
+    var rows = lignes.map(function (l, i) {
+      var gras = (i === 0 || i === large) ? ' s="1"' : "";
+      var cells = (l || []).map(function (c, j) {
         var v = c == null ? "" : String(c);
-        return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
-      }).join(";");
-    }).join("\r\n");
+        if (v === "") return "";
+        var ref = colonne(j) + (i + 1);
+        if (/^-?\d+([.,]\d+)?$/.test(v.replace(/\s/g, "")))
+          return '<c r="' + ref + '"' + gras + '><v>' + v.replace(/\s/g, "").replace(",", ".") + "</v></c>";
+        return '<c r="' + ref + '" t="inlineStr"' + gras + "><is><t xml:space=\"preserve\">" +
+          xmlEch(v) + "</t></is></c>";
+      }).join("");
+      return '<row r="' + (i + 1) + '">' + cells + "</row>";
+    }).join("");
+
+    var feuille = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+      (large >= 0 ? '<sheetViews><sheetView workbookViewId="0"><pane ySplit="' + (large + 1) +
+        '" topLeftCell="A' + (large + 2) + '" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>' : "") +
+      "<cols>" + cols + "</cols><sheetData>" + rows + "</sheetData></worksheet>";
+
+    var styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+      '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font>' +
+      '<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>' +
+      '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
+      '<borders count="1"><border/></borders>' +
+      '<cellStyleXfs count="1"><xf/></cellStyleXfs>' +
+      '<cellXfs count="2"><xf xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+      '<xf xfId="0" fontId="1" applyFont="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+      "</cellXfs></styleSheet>";
+
+    return zip([
+      { nom: "[Content_Types].xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Default Extension="xml" ContentType="application/xml"/>' +
+        '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+        '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>' },
+      { nom: "_rels/.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>' },
+      { nom: "xl/workbook.xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+        '<sheets><sheet name="Base" sheetId="1" r:id="rId1"/></sheets></workbook>' },
+      { nom: "xl/_rels/workbook.xml.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
+        '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>' },
+      { nom: "xl/styles.xml", contenu: styles },
+      { nom: "xl/worksheets/sheet1.xml", contenu: feuille },
+    ]);
   }
 
   function nomFichier(nom) {
-    return String(nom).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    return String(nom).normalize("NFD").replace(/[̀-ͯ]/g, "")
       .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 60);
   }
 
   $("dt-tableur").addEventListener("click", function () {
     if (!TABLEUR) return;
-    var blob = new Blob(["\ufeff" + csv(TABLEUR.lignes)], { type: "text/csv;charset=utf-8" });
     var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = nomFichier(TABLEUR.nom) + ".csv";
+    a.href = URL.createObjectURL(xlsx(TABLEUR.lignes));
+    a.download = nomFichier(TABLEUR.nom) + ".xlsx";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
