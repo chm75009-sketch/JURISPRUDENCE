@@ -81,6 +81,13 @@ const A = O(); const { sur, t1, trait, h1, h2, h3, p, note, puce, enc, tab } = A
 const LIGNES = [];
 const q = (rubrique, champ, libelle, format, piece) => LIGNES.push({ rubrique, champ, libelle, format, piece });
 
+/* LA QUESTION D'ENTRÉE, ET ELLE EST LA PREMIÈRE.
+   Architecture du 1er septembre 2026, reprise dans CLAUDE.md : chaque module
+   commence par « Avez-vous ce document, ce dispositif, ce process ? », posée
+   avant toute autre. Vérifié dans le navigateur le 2 septembre 2026 : elle
+   arrivait en deuxième, en troisième, ou pas du tout dans les premières. */
+q("Comité", "comiteExistant", "Un comité social et économique est-il en place ?", "oui / non", "procès-verbal des élections ou de carence");
+
 q("Identité", "entreprise", "Dénomination sociale et numéro SIREN", "texte", "extrait Kbis");
 q("Identité", "dateAudit", "Date à laquelle la situation est décrite", "AAAA-MM-JJ", "—");
 q("Effectifs", "effectif", "Effectif de l'entreprise au sens de l'article L. 1111-2", "nombre", "registre du personnel");
@@ -92,7 +99,6 @@ q("Périmètre", "etablissementsMultiples", "L'entreprise comporte-t-elle plusie
 q("Périmètre", "sourceDecoupage", "Source du découpage : accord, décision unilatérale, décision administrative", "texte", "accord ou décision, daté");
 q("Périmètre", "ues", "L'entreprise fait-elle partie d'une unité économique et sociale ?", "oui / non", "accord ou décision de justice");
 q("Périmètre", "representantsProximite", "Des représentants de proximité sont-ils en place ?", "oui / non", "accord d'entreprise les instituant");
-q("Comité", "comiteExistant", "Un comité social et économique est-il en place ?", "oui / non", "procès-verbal des élections ou de carence");
 q("Comité", "dateDernieresElections", "Date du premier tour des dernières élections", "AAAA-MM-JJ", "procès-verbal");
 q("Comité", "dureeAccord", "Durée conventionnelle des mandats, si un accord en fixe une", "nombre d'années", "accord de branche, de groupe ou d'entreprise");
 q("Comité", "titulairesElus", "Nombre de titulaires effectivement élus", "nombre", "procès-verbal");

@@ -68,12 +68,18 @@ const LIGNES = [];
 const q = (rubrique, champ, libelle, format, piece) => LIGNES.push({ rubrique, champ, libelle, format, piece });
 const COMPOSES_LISTE = new Set([]);
 
+/* LA QUESTION D'ENTRÉE, ET ELLE EST LA PREMIÈRE.
+   Architecture du 1er septembre 2026, reprise dans CLAUDE.md : chaque module
+   commence par « Avez-vous ce document, ce dispositif, ce process ? », posée
+   avant toute autre. Vérifié dans le navigateur le 2 septembre 2026 : elle
+   arrivait en deuxième, en troisième, ou pas du tout dans les premières. */
+q("Le document unique", "duerp.existe", "Un document unique d'évaluation des risques professionnels existe-t-il ?", "oui / non", "le document unique lui-même");
+
 q("Identité", "entreprise", "Dénomination sociale", "texte", "extrait Kbis");
 q("Identité", "dateAudit", "Date à laquelle la situation est décrite", "AAAA-MM-JJ", "—");
 q("Identité", "effectif", "Effectif de l'entreprise", "nombre", "registre du personnel");
 q("Identité", "cse.existe", "Un comité social et économique existe-t-il ?", "oui / non", "procès-verbal des dernières élections");
 
-q("Le document unique", "duerp.existe", "Un document unique d'évaluation des risques professionnels existe-t-il ?", "oui / non", "le document unique lui-même");
 q("Le document unique", "duerp.dateDerniereMaj", "Date de sa dernière mise à jour (ou de son établissement)", "AAAA-MM-JJ", "page de garde ou historique des versions");
 q("Le document unique", "duerp.unitesTravail", "L'évaluation comporte-t-elle un inventaire des risques par unité de travail ?", "oui / non", "le document unique lui-même");
 q("Le document unique", "duerp.versionsConservees", "Les versions successives sont-elles conservées (quarante ans au moins) ?", "oui / non", "archivage papier ou dématérialisé");

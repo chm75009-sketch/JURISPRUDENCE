@@ -79,6 +79,13 @@ const LIGNES = [];
 const q = (rubrique, champ, libelle, format, piece) => LIGNES.push({ rubrique, champ, libelle, format, piece });
 const COMPOSES_LISTE = new Set([]);
 
+/* LA QUESTION D'ENTRÉE, ET ELLE EST LA PREMIÈRE.
+   Architecture du 1er septembre 2026, reprise dans CLAUDE.md : chaque module
+   commence par « Avez-vous ce document, ce dispositif, ce process ? », posée
+   avant toute autre. Vérifié dans le navigateur le 2 septembre 2026 : elle
+   arrivait en deuxième, en troisième, ou pas du tout dans les premières. */
+q("Les négociations obligatoires", "negosEngagees", "Avez-vous engagé les négociations obligatoires de la période en cours ?", "oui / non", "procès-verbaux d'ouverture, convocations");
+
 q("Identité", "entreprise", "Dénomination sociale", "texte", "extrait Kbis");
 q("Identité", "dateAudit", "Date à laquelle la situation est décrite", "AAAA-MM-JJ", "—");
 q("Identité", "effectif", "Effectif de l'entreprise", "nombre", "registre du personnel");
@@ -89,7 +96,6 @@ q("Identité", "effectifFrance", "Effectif employé en France si le groupe est c
 
 q("Le déclencheur", "sectionsSyndicales", "Une ou plusieurs sections syndicales d'organisations représentatives sont-elles constituées ?", "oui / non", "désignations des délégués syndicaux");
 
-q("Les négociations obligatoires", "negosEngagees", "Avez-vous engagé les négociations obligatoires de la période en cours ?", "oui / non", "procès-verbaux d'ouverture, convocations");
 q("L'accord de méthode", "accordMethode.existe", "Un accord fixe-t-il le calendrier, la périodicité, les thèmes et les modalités des négociations ?", "oui / non", "accord de méthode");
 q("L'accord de méthode", "accordMethode.verse", "Cet accord est-il joint au dossier ?", "oui / non", "l'accord lui-même");
 q("L'accord de méthode", "accordMethode.dureeAns", "Durée de l'accord, en années", "nombre", "l'accord lui-même");

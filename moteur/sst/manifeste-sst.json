@@ -1,7 +1,7 @@
 {
  "domaine": "santé, sécurité et conditions de travail",
- "date": "2026-08-29",
- "empreinte": "fbc9ced431e3",
+ "date": "2026-09-02",
+ "empreinte": "9eca2cb970ce",
  "fichiers": {
   "audit-sst-client.js": "bf6fa6cb1f01",
   "capturer-textes-sst.js": "340314f6b97d",
@@ -12,7 +12,7 @@
   "moteur-sst.js": "26a0813dc4b0",
   "outils.js": "6defb2be2a2b",
   "propositions-sst.js": "c76cdd6a592b",
-  "questionnaire-sst.js": "718105a89609",
+  "questionnaire-sst.js": "721af721f6b2",
   "regularisation-sst.js": "20abf01c8876",
   "tests-sst.js": "bd9530ab3d9f",
   "textes-sst.json": "dbc0ad855c9c",

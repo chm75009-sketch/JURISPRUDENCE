@@ -53,12 +53,18 @@ const LIGNES = [];
 const q = (rubrique, champ, libelle, format, piece) => LIGNES.push({ rubrique, champ, libelle, format, piece });
 const COMPOSES_LISTE = new Set([]);
 
+/* LA QUESTION D'ENTRÉE, ET ELLE EST LA PREMIÈRE.
+   Architecture du 1er septembre 2026, reprise dans CLAUDE.md : chaque module
+   commence par « Avez-vous ce document, ce dispositif, ce process ? », posée
+   avant toute autre. Vérifié dans le navigateur le 2 septembre 2026 : elle
+   arrivait en deuxième, en troisième, ou pas du tout dans les premières. */
+q("La base existe-t-elle ?", "base.existe", "Avez-vous une base de données économiques, sociales et environnementales ?", "oui / non", "la base elle-même");
+
 q("Identité", "entreprise", "Dénomination sociale", "texte", "extrait Kbis");
 q("Identité", "dateAudit", "Date à laquelle la situation est décrite", "AAAA-MM-JJ", "—");
 q("Identité", "effectif", "Effectif de l'entreprise au sens de l'article L. 1111-2", "nombre", "registre du personnel");
 q("Identité", "etablissementsDistincts", "L'entreprise comporte-t-elle plusieurs établissements distincts ?", "oui / non", "accord ou décision de découpage");
 
-q("La base existe-t-elle ?", "base.existe", "Avez-vous une base de données économiques, sociales et environnementales ?", "oui / non", "la base elle-même");
 q("Le régime applicable", "accordEntreprise", "Avez-vous un accord d'entreprise sur la base de données ?", "oui / non", "accord d'entreprise");
 q("Le régime applicable", "accordEntrepriseVerse", "Si oui, l'avez-vous joint ?", "oui / non", "l'accord lui-même");
 q("Le régime applicable", "accordBranche", "Sinon, avez-vous un accord de branche sur la base ?", "oui / non", "accord de branche");

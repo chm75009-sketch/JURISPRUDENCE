@@ -1,7 +1,7 @@
 {
  "domaine": "négociation obligatoire en entreprise",
  "date": "2026-09-02",
- "empreinte": "5f44fb24a518",
+ "empreinte": "ecd1a04e6907",
  "fichiers": {
   "audit-nao-client.js": "603e28ffbdac",
   "capturer-textes-nao.js": "bcd982d41682",
@@ -12,7 +12,7 @@
   "moteur-nao.js": "7bb1df1b203e",
   "outils.js": "6defb2be2a2b",
   "propositions-nao.js": "6b34f8a501b8",
-  "questionnaire-nao.js": "a42cd4060ebb",
+  "questionnaire-nao.js": "e878d5f4d2ec",
   "regularisation-nao.js": "e121df124842",
   "tests-nao.js": "ee8a2414263c",
   "textes-nao.json": "c1d78ef830d2",
