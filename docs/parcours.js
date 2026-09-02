@@ -2176,7 +2176,7 @@
     etapes: [
       { id: "b0", nom: "Constituer la base : le document lui-même",
         docProduit: "BDESE-CTL-CNT-00",
-        action: "Ouvrir la base à remplir →",
+        action: "Ouvrir la base à remplir",
         risque: "Une base de données économiques, sociales et environnementales rassemble l'ensemble des informations nécessaires aux consultations et informations récurrentes que l'employeur met à disposition du comité social et économique (L. 2312-18). Sans base, ces consultations n'ont pas leur support : la mise à disposition actualisée des éléments transmis de manière récurrente vaut communication des rapports et informations au comité, et cette communication n'a alors pas lieu. La base comporte au moins les thèmes que l'article L. 2312-21 énumère, qu'aucun accord ne peut descendre.",
         conseil: "Ne cherchez pas d'abord quel texte commande votre contenu : commencez par la structure, elle est la même dans tous les cas pour les dix thèmes du plancher. Le régime — accord d'entreprise, accord de branche ou supplétif du décret — se règle à l'étape suivante et ne fait que préciser le détail des rubriques. Remplissez d'abord les deux exercices passés et l'année en cours, que vous avez ; les trois années à venir peuvent être présentées en grandes tendances, à condition de lister ce que vous n'êtes pas en mesure de renseigner.",
         quoi: "Le document produit ici est la base : ses dix thèmes, ses six années — deux exercices passés, l'année en cours, trois à venir —, les indicateurs de l'égalité professionnelle et de l'index, le bilan des formations issues des entretiens, et les modalités de mise à disposition et d'accès. Reportez-le dans votre support ou servez-vous en tel quel.",
@@ -3649,6 +3649,15 @@
     var n = reste.length, echec = false;
     reste.forEach(function (f) {
       var sc = document.createElement("script");
+      /* L'ORDRE, ET IL N'EST PAS FACULTATIF. Un script inséré par le code est
+         « async » par défaut : il s'exécute dès qu'il arrive, non à son rang.
+         Or documents-rh.js, documents-discipline.js et tous les autres
+         commencent par vérifier que documents-produits.js est déjà là, et
+         lèvent une erreur sinon. Le bouton restait alors sans effet, au hasard
+         de l'ordre d'arrivée des fichiers.
+         Défaut mesuré le 2 septembre 2026 sur « Ouvrir la base à remplir »,
+         apparu en ajoutant un quatrième fichier à la famille BDESE. */
+      sc.async = false;
       sc.src = f;
       sc.onload = function () { charges[f] = true; if (!--n && !echec) quand(); };
       sc.onerror = function () { echec = true; quand(new Error(f)); };
