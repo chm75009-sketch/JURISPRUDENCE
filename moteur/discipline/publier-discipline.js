@@ -23,6 +23,7 @@ etape(1, "dossiers contradictoires sur les contrôles", "tests-discipline.js");
 etape(2, "questionnaire et non-divergence, dans les deux sens", "questionnaire-discipline.js");
 etape(3, "propositions du formulaire, vérifiées dans les deux sens", "propositions-discipline.js");
 etape(4, "régularisation : chaque contrôle a son issue, chaque issue son contrôle", "regularisation-discipline.js");
+etape(5, "contrôle d'un règlement intérieur existant : cas contradictoires", "tests-controle-ri.js");
 
 const { C, DETECTION, COHERENCE } = require("./controles-discipline.js");
 const { CAS, BASE, verdicts } = require("./tests-discipline.js");
@@ -92,9 +93,9 @@ try {
 
 fs.writeFileSync(path.join(ICI, "manifeste-discipline.json"), JSON.stringify(manifeste, null, 1));
 
-console.log(`5. manifeste écrit — empreinte ${empreinte}`);
+console.log(`6. manifeste écrit — empreinte ${empreinte}`);
 console.log("   " + JSON.stringify(manifeste.compteurs));
 
-etape(6, "empaquetage pour le navigateur", "../commun/empaqueter.js",
+etape(7, "empaquetage pour le navigateur", "../commun/empaqueter.js",
   path.join(ICI, "../../docs/moteur-discipline.js"), "audit-discipline-client.js", "MoteurDiscipline");
 console.log("publication du module « discipline et règlement intérieur » : tout est vert");

@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.1";
+const CACHE = "jurisprudence-12.2";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
@@ -20,6 +20,10 @@ const ESSENTIELS = [
   "./favicon.ico",
   /* Les trois outils : ils tiennent la donnée que les audits se bornaient à contrôler. */
   "./duerp.html",
+  /* La branche « oui » du règlement intérieur : le document existant, déposé
+     et confronté au texte. Le fichier est lu dans la page — rien ne sort du
+     poste —, donc la page doit s'ouvrir hors connexion comme les autres. */
+  "./controler-ri.html",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
      reconnaissance de la matière instantanée et disponible hors connexion. */
   "./vocabulaire.json",

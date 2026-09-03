@@ -9,6 +9,7 @@ const { C, ETATS, DETECTION, COHERENCE, ARRETS } = require("./controles-discipli
 const { R } = require("./regularisation-discipline.js");
 const { MODELES } = require("./modeles-discipline.js");
 const DT = require("../commun/parcours-deux-temps.js");
+const CR = require("./controle-ri.js");
 
 const { CONF, NC, RISQ, MANQ, SO } = ETATS;
 const dit = x => x === true || x === "oui";
@@ -140,3 +141,10 @@ module.exports.regularisation = R;
 module.exports.controles = C;
 module.exports.modele = modele;
 module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };
+
+/* La branche « oui » : le règlement intérieur existe déjà, on le contrôle.
+   Le module rend l'analyse, la version corrigée, et la grille qui les fonde. */
+module.exports.controleRI = {
+  analyser: CR.analyser, corriger: CR.corriger, texteCorrige: CR.texteCorrige,
+  GRILLE: CR.GRILLE, ETATS: CR.ETATS, article: CR.article,
+};

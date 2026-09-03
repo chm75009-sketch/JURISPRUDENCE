@@ -125,6 +125,17 @@
      retire rien en silence. */
   .hors-seuil{grid-column:1/-1;margin:4px 0 0;font-size:13px;line-height:1.5;color:var(--gris)}
 
+  /* La question fermée, avant tout le reste : avez-vous déjà le document ?
+     « Oui » ouvre le contrôle de l'existant, « non » ouvre la construction —
+     et les deux issues sont visibles du même coup d'œil. */
+  .controle-existant{border:1px solid var(--filet);border-left:3px solid var(--bleu);
+    background:var(--surface);border-radius:4px;padding:14px 17px;margin:0 0 18px}
+  .controle-existant>b{display:block;font:600 16px/1.35 system-ui;color:var(--encre);margin-bottom:8px}
+  .controle-existant .deux{display:grid;gap:9px;font-size:14px;line-height:1.55;color:var(--corps)}
+  .controle-existant .deux i{font-style:normal;font-weight:600;color:var(--bleu)}
+  .controle-existant a{color:var(--bleu);font-weight:600;white-space:nowrap}
+  @media (min-width:760px){.controle-existant .deux{grid-template-columns:1fr 1fr;gap:22px}}
+
   /* Le préalable : « êtes-vous prêt ? » */
   .prealable{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px}
   .item{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-top:1px solid var(--gris-f);font-size:14.5px}

@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrôler mon règlement intérieur</title>
+<link rel="manifest" href="manifest-audit-discipline.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LA BRANCHE « OUI ».
+
+  L'application pose une question fermée : « Avez-vous un règlement intérieur ? »
+  Le « non » ouvre la construction — c'est le parcours. Le « oui » ouvrait, jusqu'ici,
+  un questionnaire : quinze cases à cocher sur ce que le règlement contient. Or
+  cocher n'est pas prouver, et l'employeur qui coche « oui, il rappelle les droits
+  de la défense » ne sait pas toujours ce que son règlement dit.
+
+  Cette page prend le document lui-même. Elle le confronte aux matières que
+  L. 1321-1 et L. 1321-2 imposent et à celles que L. 1321-3 et L. 1331-2
+  prohibent, rend les passages pour qu'ils soient lus, et assemble une version
+  corrigée. Trois écrans, trois actes : déposer, choisir, emporter.
+
+  CE QU'ELLE NE FAIT PAS, ET QU'ELLE ÉCRIT.
+
+  Le repérage est lexical. Il voit qu'un sujet est traité ; il ne dit jamais
+  qu'il est bien traité. Il n'existe donc, dans toute cette page, aucun état
+  « conforme » — c'est le module qui le refuse, pas l'écran qui l'oublie. Une
+  matière écrite en d'autres termes que ceux que le module connaît sera dite
+  absente : c'est le prix du procédé, et il vaut mieux relire une clause qui
+  existe que croire complète celle qui manque.
+
+  Rien ne quitte ce poste : le fichier déposé est lu dans le navigateur, et
+  n'est envoyé nulle part.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
+  header.site a:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+  .onglets button:disabled{opacity:.45;cursor:not-allowed}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  textarea#depot{width:100%;min-height:230px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+  input[type=file]{font:inherit;font-size:14px}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+
+  .compteurs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .compteurs .c{font:600 12.5px/1 system-ui;padding:8px 11px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
+  .compteurs .c.abs{background:var(--rouge-clair);color:var(--rouge)}
+  .compteurs .c.ctl{background:var(--ambre-clair);color:var(--ambre)}
+  .compteurs .c.ver{background:var(--bleu-clair);color:var(--bleu)}
+
+  .pt{border:1px solid var(--filet);border-radius:11px;margin:12px 0;background:var(--carte);overflow:hidden}
+  .pt>.tt{padding:12px 15px;display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:start;
+    border-bottom:1px solid var(--filet)}
+  .pt>.tt .obj{font:600 15px/1.35 system-ui}
+  .pt>.tt .fond{font-size:12.5px;color:var(--encre-3);margin-top:2px}
+  .etat{font:600 11px/1 system-ui;padding:6px 9px;border-radius:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+  .etat.absent{background:var(--rouge-clair);color:var(--rouge)}
+  .etat.averifier{background:var(--bleu-clair);color:var(--bleu)}
+  .etat.acontroler{background:var(--ambre-clair);color:var(--ambre)}
+  .etat.sansobjet{background:var(--creux);color:var(--encre-3)}
+  .pt .c{padding:12px 15px;font-size:14px;line-height:1.6;color:var(--encre-2)}
+  .pt .c p{margin:0 0 9px}
+  .pt .c .exige{color:var(--encre)}
+  blockquote{margin:8px 0;padding:9px 13px;border-left:3px solid var(--filet-2);
+    background:var(--creux);border-radius:0 7px 7px 0;font-size:13.5px;color:var(--encre)}
+  blockquote .m{display:block;margin-top:5px;font-size:11.5px;color:var(--encre-3)}
+  .clause{margin:8px 0 0;padding:11px 13px;background:var(--vert-clair);border-radius:8px;
+    font-size:13.5px;line-height:1.55;color:#1b4b2d}
+  .clause p{margin:0 0 6px}
+  label.opt{display:flex;gap:9px;align-items:flex-start;margin:10px 0 0;font-size:13.5px;color:var(--encre)}
+  label.opt input{margin-top:3px}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  details.txt{border:1px solid var(--filet);border-radius:9px;margin:8px 0;background:var(--carte)}
+  details.txt>summary{padding:9px 13px;cursor:pointer;font:600 12.5px/1.3 system-ui;color:var(--bleu)}
+  details.txt .c{padding:0 14px 12px;font-size:13px;line-height:1.6;color:var(--encre-2)}
+
+  pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:64vh;overflow:auto}
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  @media print{.onglets,.barre,header.site{display:none}.cache{display:block !important}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Contrôler mon règlement intérieur <span>— le document existant, confronté au texte</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">← Accueil</a>
+      <a href="audit-discipline.html">Auditer ma discipline</a>
+      <a href="parcours.html?p=ri">Rédiger un règlement</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="depot" class="actif">1 · Le document</button>
+    <button data-o="diag" id="ong-diag" disabled>2 · Ce qu'il faut corriger</button>
+    <button data-o="sortie" id="ong-sortie" disabled>3 · La version corrigée</button>
+  </div>
+
+  <!-- ══════ 1 · LE DOCUMENT ══════ -->
+  <section id="o-depot">
+    <h2>Déposez votre règlement intérieur</h2>
+    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats
+    sont lus directement — <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document,
+    copiez son texte et collez-le ci-dessous.</p>
+
+    <div class="carte">
+      <div class="barre">
+        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
+          Choisir un fichier .docx ou .txt
+          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+        </label>
+        <button class="btn second" id="exemple">Coller un exemple</button>
+        <button class="btn second" id="vider">Vider</button>
+      </div>
+      <div id="lecture"></div>
+      <textarea id="depot" placeholder="Collez ici le texte de votre règlement intérieur, ou choisissez le fichier ci-dessus."></textarea>
+      <div class="barre">
+        <button class="btn" id="controler">Contrôler ce règlement</button>
+      </div>
+      <div id="erreur"></div>
+    </div>
+
+    <div class="avis info">
+      <b>Ce que ce contrôle établit, et ce qu'il n'établit pas</b>
+      Il cherche dans votre texte les matières que la loi impose et celles qu'elle interdit. Trouver
+      un sujet ne prouve pas que la clause est complète ni bien rédigée : c'est pourquoi rien ici
+      n'est jamais dit « conforme ». Ne pas trouver un sujet ne prouve pas davantage qu'il est
+      absent du droit de votre entreprise : il peut figurer dans un accord, une note de service ou
+      la convention collective — ou être rédigé en d'autres termes que ceux que ce contrôle connaît.
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LE DIAGNOSTIC ══════ -->
+  <section id="o-diag" class="cache">
+    <h2>Ce qu'il faut corriger</h2>
+    <p class="aide">Chaque point cite l'article dont il est tiré. Les passages de votre document
+    sont rendus tels qu'ils sont écrits : lisez-les, ce sont eux qui décident.</p>
+    <div class="compteurs" id="compteurs"></div>
+    <div id="points"></div>
+    <div class="barre">
+      <button class="btn" id="vers-sortie">Assembler la version corrigée</button>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LA VERSION CORRIGÉE ══════ -->
+  <section id="o-sortie" class="cache">
+    <h2>La version corrigée</h2>
+    <p class="aide">Votre texte est conservé mot pour mot. Les passages retenus au diagnostic y sont
+    signalés à leur place, et les clauses des matières absentes sont ajoutées à la suite, à déplacer
+    à leur rang. Rien n'est réécrit à votre place : ce que vous emportez, vous l'avez choisi.</p>
+    <div class="barre">
+      <button class="btn" id="dl-docx">Télécharger en Word</button>
+      <button class="btn second" id="dl-txt">Télécharger en texte</button>
+      <button class="btn second" id="copier">Copier</button>
+      <button class="btn second" id="retour-diag">← Revenir au diagnostic</button>
+    </div>
+    <div id="resume"></div>
+    <pre id="sortie"></pre>
+  </section>
+
+  <footer>
+    Les articles cités ont été lus à la source par le module « discipline et règlement intérieur »
+    de cette application, et le contrôle échoue à se charger si l'un d'eux manque. Le repérage est
+    lexical : il ne remplace pas la lecture du règlement, il la conduit.
+  </footer>
+</main>
+
+<script src="moteur-discipline.js"></script>
+<script src="audit-export.js"></script>
+<script>
+(function () {
+  "use strict";
+  var CR = window.MoteurDiscipline && window.MoteurDiscipline.audit &&
+           window.MoteurDiscipline.audit.controleRI;
+  var $ = function (s) { return document.querySelector(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+
+  var analyse = null;
+  var choixInserer = {}, choixSignaler = {};
+
+  /* ---------------------------------------------------------------- */
+  /* Les onglets. Le second et le troisième ne s'ouvrent qu'une fois le
+     document déposé : un écran vide n'apprend rien. */
+  function onglet(nom) {
+    ["depot", "diag", "sortie"].forEach(function (o) {
+      $("#o-" + o).classList.toggle("cache", o !== nom);
+    });
+    Array.prototype.forEach.call($("#onglets").children, function (b) {
+      b.classList.toggle("actif", b.dataset.o === nom);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  Array.prototype.forEach.call($("#onglets").children, function (b) {
+    b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* La lecture d'un .docx, sans bibliothèque : un .docx est une archive
+     zip, et le texte vit dans word/document.xml. On lit le répertoire
+     central pour trouver l'entrée, puis on la décomprime avec le flux
+     natif du navigateur. Aucun octet ne sort de la page. */
+  function u16(v, i) { return v.getUint16(i, true); }
+  function u32(v, i) { return v.getUint32(i, true); }
+
+  function entreeZip(buf, nomVoulu) {
+    var v = new DataView(buf), n = buf.byteLength;
+    /* La fin du répertoire central : signature 0x06054b50, cherchée depuis la fin. */
+    var fin = -1;
+    for (var i = n - 22; i >= 0 && i > n - 65558; i--) if (u32(v, i) === 0x06054b50) { fin = i; break; }
+    if (fin < 0) throw new Error("Ce fichier n'est pas une archive lisible.");
+    var nb = u16(v, fin + 10), pos = u32(v, fin + 16);
+    var dec = new TextDecoder("utf-8");
+    for (var k = 0; k < nb; k++) {
+      if (u32(v, pos) !== 0x02014b50) throw new Error("Répertoire de l'archive illisible.");
+      var methode = u16(v, pos + 10), taille = u32(v, pos + 20);
+      var lnom = u16(v, pos + 28), lextra = u16(v, pos + 30), lcom = u16(v, pos + 32);
+      var debut = u32(v, pos + 42);
+      var nom = dec.decode(new Uint8Array(buf, pos + 46, lnom));
+      if (nom === nomVoulu) {
+        var ln = u16(v, debut + 26), lx = u16(v, debut + 28);
+        var data = new Uint8Array(buf, debut + 30 + ln + lx, taille);
+        return { methode: methode, data: data };
+      }
+      pos += 46 + lnom + lextra + lcom;
+    }
+    throw new Error("Le fichier ne contient pas de document Word (word/document.xml).");
+  }
+
+  function inflater(u8) {
+    if (typeof DecompressionStream !== "function")
+      return Promise.reject(new Error("Ce navigateur ne sait pas décomprimer le fichier. Collez le texte à la place."));
+    var flux = new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    return new Response(flux).arrayBuffer();
+  }
+
+  function texteDeDocumentXml(xml) {
+    /* Un paragraphe par <w:p>, un saut par <w:br/>, le texte des <w:t>. */
+    return xml
+      .replace(/<w:tab[^>]*\/>/g, "\t")
+      .replace(/<w:br[^>]*\/>/g, "\n")
+      .replace(/<\/w:p>/g, "\n")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
+
+  function lireDocx(fichier) {
+    return fichier.arrayBuffer().then(function (buf) {
+      var e = entreeZip(buf, "word/document.xml");
+      if (e.methode === 0) return new TextDecoder("utf-8").decode(e.data);
+      if (e.methode !== 8) throw new Error("Compression inconnue dans ce .docx.");
+      return inflater(e.data).then(function (b) { return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
+    }).then(texteDeDocumentXml);
+  }
+
+  function dit(html, classe) {
+    $("#lecture").innerHTML = html ? '<div class="avis ' + (classe || "info") + '">' + html + "</div>" : "";
+  }
+
+  $("#fichier").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    $("#erreur").innerHTML = "";
+    dit("Lecture de <b>" + ech(f.name) + "</b>…");
+    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    suite.then(function (t) {
+      $("#depot").value = t;
+      dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +
+          " caractères. Relisez-le ci-dessous — c'est ce texte qui sera contrôlé.");
+    }).catch(function (e) {
+      dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
+          " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
+    });
+  });
+
+  $("#vider").addEventListener("click", function () {
+    $("#depot").value = ""; dit(""); $("#erreur").innerHTML = "";
+  });
+
+  $("#exemple").addEventListener("click", function () {
+    $("#depot").value = [
+      "RÈGLEMENT INTÉRIEUR DE LA SOCIÉTÉ EXEMPLE",
+      "",
+      "Article 1 — Le présent règlement s'applique à l'ensemble du personnel.",
+      "Article 2 — Chaque salarié respecte les consignes de sécurité affichées dans les ateliers et porte les équipements de protection individuelle qui lui sont remis.",
+      "Article 3 — Tout retard non justifié donnera lieu à une amende de vingt euros retenue sur le salaire du mois suivant.",
+      "Article 4 — La direction procède à la fouille des sacs et des vestiaires à tout moment et pour l'ensemble des salariés.",
+      "Article 5 — Les sanctions applicables sont l'avertissement, le blâme et la mise à pied disciplinaire.",
+      "Article 6 — L'abandon de poste vaut démission et emporte rupture de plein droit du contrat de travail.",
+      "Article 7 — La période d'essai est de quatre mois, renouvelable une fois.",
+    ].join("\n");
+    dit("Exemple collé : un règlement de sept articles, volontairement fautif. Contrôlez-le pour voir ce que la page en dit.");
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* Le contrôle. */
+  $("#controler").addEventListener("click", function () {
+    var t = $("#depot").value.trim();
+    $("#erreur").innerHTML = "";
+    if (!CR) {
+      $("#erreur").innerHTML = '<div class="avis non"><b>Le module de contrôle ne s\'est pas chargé</b>' +
+        "Rechargez la page. Si le défaut persiste, le fichier moteur-discipline.js est absent ou incomplet.</div>";
+      return;
+    }
+    if (t.length < 200) {
+      $("#erreur").innerHTML = '<div class="avis att"><b>Le texte déposé est trop court pour être un règlement intérieur</b>' +
+        "Il compte " + t.length + " caractères. Déposez le document entier : un contrôle sur un extrait " +
+        "dirait « absent » de tout ce que l'extrait ne contient pas.</div>";
+      return;
+    }
+    analyse = CR.analyser(t);
+    choixInserer = {}; choixSignaler = {};
+    analyse.points.forEach(function (p) {
+      if (p.etat === CR.ETATS.ABSENT && p.clause && !p.sansObjet) choixInserer[p.id] = true;
+      if (p.etat === CR.ETATS.ACONTROLER) choixSignaler[p.id] = true;
+    });
+    $("#ong-diag").disabled = false;
+    $("#ong-sortie").disabled = false;
+    rendreDiagnostic();
+    onglet("diag");
+  });
+
+  function classeEtat(p) {
+    if (p.sansObjet) return "sansobjet";
+    if (p.etat === CR.ETATS.ABSENT) return "absent";
+    if (p.etat === CR.ETATS.ACONTROLER) return "acontroler";
+    return "averifier";
+  }
+
+  function rendreDiagnostic() {
+    var c = analyse.compteurs;
+    $("#compteurs").innerHTML =
+      '<span class="c abs">' + c.absents + " matière" + (c.absents > 1 ? "s" : "") + " absente" + (c.absents > 1 ? "s" : "") + "</span>" +
+      '<span class="c ctl">' + c.aControler + " famille" + (c.aControler > 1 ? "s" : "") + " à contrôler</span>" +
+      '<span class="c ver">' + c.aVerifier + " point" + (c.aVerifier > 1 ? "s" : "") + " à relire</span>" +
+      '<span class="c">' + analyse.phrases.toLocaleString("fr-FR") + " phrases lues</span>";
+
+    var familles = ["contenu obligatoire", "formalités", "contenu prohibé"];
+    var h = "";
+    familles.forEach(function (fam) {
+      var liste = analyse.points.filter(function (p) { return p.famille === fam; });
+      if (!liste.length) return;
+      h += "<h3>" + ech(fam.charAt(0).toUpperCase() + fam.slice(1)) + "</h3>";
+      liste.forEach(function (p) { h += carte(p); });
+    });
+    $("#points").innerHTML = h;
+
+    $("#points").querySelectorAll("input[data-ins]").forEach(function (i) {
+      i.addEventListener("change", function () { choixInserer[i.dataset.ins] = i.checked; });
+    });
+    $("#points").querySelectorAll("input[data-sig]").forEach(function (i) {
+      i.addEventListener("change", function () { choixSignaler[i.dataset.sig] = i.checked; });
+    });
+  }
+
+  function carte(p) {
+    var h = '<div class="pt"><div class="tt"><span class="etat ' + classeEtat(p) + '">' +
+      ech(p.sansObjet ? "sans objet" : p.etat) + "</span>" +
+      '<span><span class="obj">' + ech(p.objet) + "</span>" +
+      '<span class="fond">' + ech(p.id) + " · " +
+      p.fondement.map(function (a) { return ech(CR.article(a)); }).join(", ") + "</span></span>" +
+      "<span></span></div><div class=\"c\">";
+
+    h += '<p class="exige">' + ech(p.exige) + "</p>";
+    h += "<p>" + ech(p.motif) + "</p>";
+
+    if (p.passages && p.passages.length) {
+      p.passages.slice(0, 6).forEach(function (q) {
+        h += "<blockquote>" + ech(q.texte) +
+          (q.marques && q.marques.length ? '<span class="m">repéré sur : ' + ech(q.marques.join(", ")) + "</span>" : "") +
+          "</blockquote>";
+      });
+      if (p.passages.length > 6)
+        h += "<p>… et " + (p.passages.length - 6) + " autre" + (p.passages.length - 6 > 1 ? "s" : "") + " passage" + (p.passages.length - 6 > 1 ? "s" : "") + ".</p>";
+    }
+
+    if (p.critere) h += "<p><b>Ce que le juge vérifie.</b> " + ech(p.critere) + "</p>";
+    if (p.remplacement) h += "<p><b>Ce qu'il faut faire.</b> " + ech(p.remplacement) + "</p>";
+
+    (p.jurisprudence || []).forEach(function (j) {
+      h += '<details class="txt"><summary>La décision, dans ses termes</summary><div class="c">' + ech(j) + "</div></details>";
+    });
+
+    if (p.clause && p.etat === CR.ETATS.ABSENT && !p.sansObjet) {
+      h += '<div class="clause">' + p.clause.map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("") + "</div>";
+      h += '<label class="opt"><input type="checkbox" data-ins="' + ech(p.id) + '" checked> ' +
+        "Insérer cette clause dans la version corrigée</label>";
+    }
+    if (p.etat === CR.ETATS.ACONTROLER) {
+      h += '<label class="opt"><input type="checkbox" data-sig="' + ech(p.id) + '" checked> ' +
+        "Signaler ce passage dans la version corrigée</label>";
+    }
+    return h + "</div></div>";
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* La version corrigée. */
+  function choix() {
+    return {
+      inserer: Object.keys(choixInserer).filter(function (k) { return choixInserer[k]; }),
+      signaler: Object.keys(choixSignaler).filter(function (k) { return choixSignaler[k]; }),
+    };
+  }
+
+  function assembler() {
+    var c = CR.corriger(analyse, choix());
+    $("#resume").innerHTML = '<div class="avis info"><b>' + ech(c.resume) + "</b>" +
+      "Relisez avant diffusion : les clauses ajoutées portent des mentions entre crochets à compléter, " +
+      "et un règlement modifié se soumet de nouveau à l'avis du comité, au dépôt au greffe, à la " +
+      "communication à l'inspection et à la publicité, avant une entrée en vigueur différée d'un mois.</div>";
+    $("#sortie").textContent = CR.texteCorrige(analyse, choix());
+    onglet("sortie");
+  }
+  $("#vers-sortie").addEventListener("click", assembler);
+  $("#retour-diag").addEventListener("click", function () { onglet("diag"); });
+
+  function nomFichier(ext) {
+    return "reglement-interieur-corrige-" + new Date().toISOString().slice(0, 10) + "." + ext;
+  }
+
+  $("#dl-txt").addEventListener("click", function () {
+    window.AuditExport.telecharger($("#sortie").textContent, nomFichier("txt"), "text/plain;charset=utf-8");
+  });
+
+  $("#dl-docx").addEventListener("click", function () {
+    var c = CR.corriger(analyse, choix());
+    var items = [{ k: "sur", t: "Version corrigée au terme du contrôle des articles L. 1321-1 à L. 1321-6, L. 1331-2 · " + c.resume }];
+    c.corps.split(/\n/).forEach(function (l) { items.push({ k: "p", t: l }); });
+    if (c.ajouts.length) {
+      items.push({ k: "trait" }, { k: "h1", t: "Clauses ajoutées au titre du contrôle" });
+      c.ajouts.forEach(function (a) {
+        items.push({ k: "h2", t: a.objet });
+        items.push({ k: "note", t: a.id + " · " + a.fondement.map(CR.article).join(", ") });
+        a.lignes.forEach(function (l) { items.push({ k: "p", t: l }); });
+      });
+    }
+    if (c.notes.length) {
+      items.push({ k: "trait" }, { k: "h1", t: "Passages à contrôler avant diffusion" });
+      c.notes.forEach(function (n) {
+        items.push({ k: "h2", t: n.objet });
+        items.push({ k: "note", t: n.id + " · " + n.fondement.map(CR.article).join(", ") });
+        items.push({ k: "p", t: "Ce que le juge vérifie : " + n.critere });
+        items.push({ k: "p", t: "Ce qu'il faut faire : " + n.remplacement });
+        n.passages.forEach(function (p) { items.push({ k: "puce", t: "« " + p + " »" }); });
+      });
+    }
+    window.AuditExport.telecharger(window.AuditExport.docx(items, "Règlement intérieur — version corrigée"),
+      nomFichier("docx"), "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  $("#copier").addEventListener("click", function () {
+    var t = $("#sortie").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    else { var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a);
+           a.select(); document.execCommand("copy"); a.remove(); }
+    $("#copier").textContent = "Copié";
+    setTimeout(function () { $("#copier").textContent = "Copier"; }, 1600);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,12 +1,15 @@
 {
  "domaine": "discipline et règlement intérieur",
- "date": "2026-09-02",
- "empreinte": "adb9c32adb04",
+ "date": "2026-09-03",
+ "empreinte": "96fc0791379a",
  "fichiers": {
-  "audit-discipline-client.js": "3f38b5ce15e1",
+  "audit-discipline-client.js": "23dae70c5876",
   "capturer-textes-discipline.js": "d944486c715f",
+  "controle-ri.js": "331dbb74419e",
   "controles-discipline.js": "26d0e34547c1",
   "dates.js": "5d945470174f",
+  "epreuve-controle-ri.js": "18d48daf6dcf",
+  "epreuve-parcours-ri.js": "de5ff42b157a",
   "fiche-discipline.json": "b26efd82ccf5",
   "modeles-discipline.js": "4e72843d7ec7",
   "moteur-discipline.js": "5c8ebf97fed2",
@@ -14,6 +17,7 @@
   "propositions-discipline.js": "1d9fdaeebce4",
   "questionnaire-discipline.js": "acdfd4207fc5",
   "regularisation-discipline.js": "4665227fcaa7",
+  "tests-controle-ri.js": "4a7c1f15c77b",
   "tests-discipline.js": "7f7c196f35a8",
   "textes-discipline.json": "2b24f89c0608",
   "verifier-textes-discipline.js": "4b42770e1257"

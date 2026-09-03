@@ -57,6 +57,13 @@ Trois modules ont rejoint la même chaîne, chacun avec son dossier et son
   L. 1322-1 et R. 1332-3 ne prononcent pas les mots qu'on attend d'eux : le
   critère de contenu porte sur le renvoi qu'ils font, jamais sur une lecture
   unique. Publication : `node publier-discipline.js`.
+  Depuis le 3 septembre 2026, le module porte aussi la **branche « oui »** :
+  `controle-ri.js` prend le règlement intérieur déjà en vigueur, le confronte à
+  quinze points — huit matières imposées, deux formalités, cinq familles
+  prohibées —, rend les passages pour qu'ils soient lus et assemble une version
+  corrigée. Le repérage est lexical, et le module refuse pour cette raison tout
+  état « conforme » : absent, à vérifier, à contrôler. L'écran est
+  `docs/controler-ri.html`, où le `.docx` est lu dans le navigateur.
 - **`social/`** — l'audit social chapeau : le référentiel des obligations de
   l'employeur (33 obligations en huit catégories, 34 articles lus au relais en
   lectures doubles concordantes avec critère de contenu), l'assujettissement

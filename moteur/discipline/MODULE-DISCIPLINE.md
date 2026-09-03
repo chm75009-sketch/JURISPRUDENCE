@@ -87,6 +87,63 @@ rétrogradation, licenciement, sanction pécuniaire — en disant pourquoi ; pou
 l'avertissement, le blâme et les sanctions non nommées, elle est **demandée,
 jamais devinée**.
 
+## La branche « oui » : contrôler un règlement intérieur existant
+
+L'architecture de l'application tient en une question fermée. « Avez-vous un
+règlement intérieur ? » — « non » ouvre le parcours qui le construit ; « oui »
+n'ouvrait, jusqu'au 3 septembre 2026, que quinze cases à cocher sur ce qu'il
+contient. Or **cocher n'est pas lire** : l'employeur qui coche « oui, il rappelle
+les droits de la défense » ne sait pas toujours ce que son règlement dit.
+
+`controle-ri.js` prend le **document lui-même**. Il le confronte à quinze points,
+tous fondés sur un article lu à la source, et le chargement **échoue** si l'un
+d'eux manque au dépôt des textes :
+
+| | Points | Fondement |
+|---|---|---|
+| Contenu imposé | 8 | L. 1321-1 (1° à 3°), L. 1321-2 (1° à 3°), L. 1321-4, R. 1321-3, et la durée maximale de la mise à pied (Soc., 26 oct. 2010, n° 09-42.740) |
+| Formalités | 2 | L. 1321-4, R. 1321-1, R. 1321-2, R. 1321-4 |
+| Contenu prohibé | 5 | L. 1331-2, L. 1321-3 (1° à 3°), L. 1321-2-1, et le caractère **exclusif** des trois matières de L. 1321-1 |
+
+**Trois états, et pas un « conforme ».** Le repérage est lexical : il établit
+qu'un sujet est traité, jamais qu'il l'est bien.
+
+- **absent** — aucune marque du sujet. C'est le seul constat négatif que le
+  procédé autorise, et il suffit : une matière imposée qui n'apparaît nulle part
+  n'est pas traitée.
+- **à vérifier** — le sujet est traité ; le passage est rendu à l'écran pour être
+  lu. Ce n'est pas un satisfecit.
+- **à contrôler** — une clause de la famille que L. 1321-3 ou L. 1331-2 prohibent
+  apparaît. Le passage est rendu avec le critère que le juge applique. Le module
+  ne tranche pas la proportionnalité : il la pose.
+
+**La limite est écrite, non comblée.** Une matière rédigée en d'autres termes que
+ceux que le module connaît sera dite absente ; un cas de `tests-controle-ri.js`
+l'établit exprès, plutôt que de laisser croire à une couverture complète. Et
+l'absence d'une famille prohibée ne délivre aucun quitus — le motif le dit.
+
+Les marques sont bornées aux **limites de mot** : sans cela « amende » se lisait
+dans « amendement » et « alerte » dans « alerte incendie ». Deux cas de fausse
+reconnaissance le vérifient.
+
+**La version corrigée n'est pas une réécriture.** Le texte d'origine est conservé
+mot pour mot ; les passages retenus y sont signalés à leur place ; les clauses des
+matières absentes sont ajoutées à la suite, à déplacer à leur rang. L'utilisateur
+choisit ce qu'il insère et ce qu'il signale — un test vérifie que ce qu'il décoche
+n'entre pas dans le document.
+
+L'écran est `docs/controler-ri.html` : déposer, choisir, emporter. Le `.docx` y est
+lu **dans le navigateur** — le répertoire central de l'archive, puis
+`DecompressionStream("deflate-raw")` sur `word/document.xml` — et rien ne quitte
+le poste. Le parcours « règlement intérieur » pose la question fermée **avant** la
+liste de ce qu'il faut réunir, et son « oui » y renvoie.
+
+Deux épreuves de navigateur, hors chaîne de publication car elles supposent
+Playwright : `epreuve-controle-ri.js` (dépôt d'un `.docx` écrit par python-docx,
+diagnostic, version corrigée, aucune pastille « conforme ») et
+`epreuve-parcours-ri.js` (la question fermée est posée, avant le préalable, et son
+lien aboutit).
+
 ## Ce que le module ne fait pas
 
 - Il n'apprécie ni **la réalité des faits**, ni **leur caractère fautif**, ni la
@@ -122,6 +179,7 @@ node verifier-textes-discipline.js [AAAA-MM-JJ]   # relecture à la source
 node tests-discipline.js                          # dossiers contradictoires
 node questionnaire-discipline.js                  # non-divergence, deux sens
 node propositions-discipline.js                   # propositions ↔ code, deux sens
+node tests-controle-ri.js                         # contrôle d'un règlement existant
 node publier-discipline.js                        # rejoue tout, mesure, empaquette
 ```
 

@@ -1184,6 +1184,14 @@
     nom: "Établir ou mettre à jour le règlement intérieur",
     resume: "Contenu obligatoire et contenu interdit, avis du comité, dépôt au greffe, communication à l'inspection du travail en deux exemplaires, publicité, entrée en vigueur différée d'un mois.",
     audit: { href: "audit-discipline.html", nom: "l'audit discipline et règlement intérieur" },
+    /* La question fermée, et ses deux issues. Ce parcours est la branche
+       « non » : il rédige. La branche « oui » ne se traitait, jusqu'ici, que
+       par des cases à cocher — or cocher n'est pas lire. Elle ouvre désormais
+       le contrôle du document lui-même. */
+    controle: { href: "controler-ri.html", nom: "Contrôler le règlement existant",
+      question: "Avez-vous déjà un règlement intérieur ?",
+      oui: "Déposez-le : ses clauses sont confrontées à ce que L. 1321-1 et L. 1321-2 imposent et à ce que L. 1321-3 et L. 1331-2 interdisent, et une version corrigée en sort.",
+      non: "Restez ici : les étapes ci-dessous le construisent, de la rédaction à l'entrée en vigueur." },
     jx: "ri",
     donnees: [
       { c: "operation", nom: "S'agit-il d'un premier règlement ou d'une modification ?", t: "select",
@@ -3299,7 +3307,17 @@
 
     /* --- le préalable --- */
     var items = prealableVisible(p, D);
-    $("zone-prealable").innerHTML = '<h2 class="titre-zone">Ce qu\'il faut avoir réuni — ' + e(p.nom) + "</h2>" +
+    /* La question fermée passe AVANT tout le reste : celui qui a déjà le
+       document n'a rien à rédiger, il a quelque chose à contrôler. Lui faire
+       descendre le parcours de construction pour le découvrir en bas de page
+       serait l'inverse de ce que l'architecture demande. */
+    var blocControle = p.controle
+      ? '<div class="controle-existant"><b>' + e(p.controle.question) + "</b>" +
+        '<div class="deux"><span><i>Oui.</i> ' + e(p.controle.oui) +
+        ' <a href="' + e(p.controle.href) + '">' + e(p.controle.nom) + " →</a></span>" +
+        '<span><i>Non.</i> ' + e(p.controle.non) + "</span></div></div>"
+      : "";
+    $("zone-prealable").innerHTML = blocControle + '<h2 class="titre-zone">Ce qu\'il faut avoir réuni — ' + e(p.nom) + "</h2>" +
       '<p class="aide">Ce qu\'il faut avoir réuni avant d\'engager la procédure. Cochez ce que vous ' +
       'avez ; ce qui reste décoché est repris ci-dessous, nommément.</p>' +
       '<div class="prealable">' +
