@@ -79,6 +79,23 @@ la restitue, on n'agit pas dessus de sa propre initiative. Cas mesuré le
 partage de l'avis d'un autre outil sur un projet de conclusions, sans que
 la correction ait été demandée.
 
+## Écrire — la ponctuation et le ton
+
+Ces deux règles valent partout, sans exception : réponses dans la discussion,
+documents Word et PDF, courriers, contrats, notes, code et commentaires de code.
+
+**Jamais de tiret cadratin.** Le signe long est proscrit, de même que le tiret
+demi-cadratin. On écrit le trait d'union du clavier, celui de la touche 6.
+Quand une incise appelle une pause, on emploie la virgule, les parenthèses,
+le deux-points ou le point : c'est presque toujours meilleur. Les listes à
+puces commencent par ce même trait d'union. Règle posée le 6 septembre 2026.
+
+**Humaniser.** Écrire comme on parle à quelqu'un, pas comme une machine rend
+un résultat. Des phrases de longueur inégale. Des mots ordinaires plutôt que
+du vocabulaire de rapport. Pas de formules de transition automatiques, pas de
+symétries trop régulières, pas de gras semé partout pour signaler l'important.
+Dire les choses directement, au lieu de les annoncer puis de les dire.
+
 ## Lire — règle absolue, jamais de supposition
 
 **Lire TOUT le document, jusqu'à la dernière page, avant d'en dire quoi que ce soit.**
