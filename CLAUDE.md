@@ -143,6 +143,25 @@ SOLIS. Lu vite, ce fut présenté comme une limite à l'autorité de Monsieur SO
 salariée ; l'article ne concerne que le pouvoir disciplinaire sur Monsieur SORRET
 lui-même, salarié de SOLIS. La phrase suivante disait l'inverse de ce qui a été affirmé.
 
+Cas mesuré le 6 septembre 2026 - dossier BERTHET, décision de validation du PSE par la
+DRIEETS du 4 mai 2026. Elle a été lue en entier, huit pages, et pourtant restituée avec un
+mot qui n'y est pas : « seront proposés aux salariés dont le licenciement est envisagé » a
+été rapporté comme une proposition « individuellement, pas seulement diffusés ». La phrase
+qui précède dit l'inverse, puisqu'elle décrit l'envoi d'une liste. Le mot manquant n'a pas
+été inventé au hasard : c'était celui dont le raisonnement en cours avait besoin. Lire en
+entier ne suffit donc pas ; il faut citer, et vérifier que le mot cité figure bien dans la
+citation.
+
+Même jour, deux autres fautes dans le même échange. Une trouvaille présentée comme neuve,
+l'arrêt Cass. soc. 8 janvier 2025 n° 22-24.724, alors qu'il venait d'ici et figurait déjà
+dans les conclusions rédigées ici : avant d'annoncer du nouveau, relire ce qui a déjà été
+produit. Et un « je n'ai pas trouvé » donné trop vite sur cette même décision de validation
+du PSE, sans redemander où chercher.
+
+Le tout dit d'une manière qui prête à la machine une volonté : « ce que je voulais y lire ».
+Il n'y a ni volonté ni souhait. On décrit ce qui a été écrit et ce qui ne l'était pas, sans
+psychologie.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
