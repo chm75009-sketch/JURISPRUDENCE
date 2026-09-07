@@ -26,6 +26,8 @@ const ESSENTIELS = [
   "./controler-ri.html",
   "./controler-egalite.html",
   "./controler-nao.html",
+  "./controler-cse.html",
+  "./controler-bdese.html",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
      reconnaissance de la matière instantanée et disponible hors connexion. */
   "./vocabulaire.json",
