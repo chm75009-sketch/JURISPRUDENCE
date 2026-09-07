@@ -58,6 +58,27 @@ construit.**
 agit-il, ou y lit-il ? S'il y lit, l'écran est à refaire. « Vous avez bu, oui
 ou non ? Non. Je ramène le verre d'eau » — pas un cours sur l'eau.
 
+### Lisibilité, simplicité, présentation : la demande, pas mon idée
+
+Trois mots redemandés un nombre incalculable de fois : **lisibilité,
+simplicité, excellente présentation**. Ils passent avant la richesse du
+contenu, avant l'exhaustivité, avant tout ce que je jugerais meilleur. Ce qui
+est demandé se fait ; ce que je pense être mieux ne se substitue jamais à ce
+qui est demandé.
+
+Le contrôle sur tout écran, tout document produit, toute page livrée : **est-ce
+lisible sur un téléphone ?** Pas lisible en principe, lisible à l'écran, essayé.
+Un tableau ne s'affiche pas en texte à chasse fixe : il se rend en tableau, ou
+il se télécharge en classeur et ne s'affiche pas du tout.
+
+Cas mesuré le 7 septembre 2026 : la base de données économiques et sociales,
+ouverte par le « non » du parcours, sortait dans une zone de texte à chasse
+fixe, colonnes N-2 à N+3 vides et rejetées à la ligne, illisible sur
+téléphone. Le générateur distinguait pourtant bien les deux grilles, R. 2312-8
+sous trois cents salariés et R. 2312-9 au-dessus : le contenu était juste, la
+présentation le rendait inutilisable. Neuf modules avaient été livrés le même
+jour sans qu'aucun écran ait été regardé sur un écran de téléphone.
+
 ## Réponses — règle générale
 
 **Répondre TRÈS TRÈS COURT.** Deux ou trois phrases, pas davantage. Pas de tableau,
