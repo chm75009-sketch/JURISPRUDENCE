@@ -668,6 +668,15 @@
     nom: "Conduire les négociations obligatoires (NAO)",
     resume: "De l'ouverture au dépôt : régime applicable — accord de méthode ou supplétif —, convocation de la première réunion, informations remises, loyauté, issue (accord ou procès-verbal de désaccord), dépôt.",
     audit: { href: "audit-nao.html", nom: "l'audit de la négociation obligatoire" },
+    /* La question fermée, et ses deux issues. Ce parcours est la branche
+       « non » : il conduit la négociation, de la convocation au dépôt. La
+       branche « oui » prend le procès-verbal existant et, pour chaque thème
+       que l'article applicable énumère et qu'il ne couvre pas, affiche le
+       paragraphe rédigé qui le couvre. */
+    controle: { href: "controler-nao.html", nom: "Contrôler le procès-verbal existant",
+      question: "Avez-vous déjà le procès-verbal de cette négociation ?",
+      oui: "Déposez-le : chaque thème de L. 2242-15, L. 2242-17, L. 2242-20 ou L. 2242-2-1 qu'il ne couvre pas s'affiche rédigé, et il en sort le procès-verbal de désaccord ou l'accord signé, plus la convocation à la réunion suivante.",
+      non: "Restez ici : les étapes ci-dessous la conduisent, de la convocation des organisations représentatives au dépôt de l'issue." },
     jx: "nego",
     donnees: [
       { c: "theme", nom: "Thème de la négociation engagée", t: "select",

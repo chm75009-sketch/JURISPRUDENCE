@@ -615,6 +615,15 @@
     $("w-accord-fin").style.display = a === "oui" ? "" : "none";
 
     if (a === "oui") {
+      /* LA BRANCHE « OUI ». Elle ouvrait un écran fermé : le plan n'est pas dû,
+         et rien d'autre. L'accord, lui, n'était jamais regardé. Elle ouvre
+         désormais le contrôle du document lui-même : c'est le point de
+         branchement de controler-egalite.html. */
+      h += '<div class="avis ok"><b>Déposez cet accord : les articles qui lui manquent en sortent rédigés</b>' +
+        "Chaque domaine d'action de l'article R. 2242-2 que votre accord ne couvre pas s'affiche " +
+        "écrit, avec son objectif chiffré, ses actions, ses indicateurs et son échéance, et un " +
+        "bouton l'insère. En sortent l'accord révisé, le courrier de dépôt et la page d'affichage " +
+        "de l'index. <a href=\"controler-egalite.html\"><b>Contrôler mon accord &rarr;</b></a></div>";
       h += '<div class="avis info"><b>Le plan d\'action n\'est pas dû</b>' +
         art("L. 2242-3") + " n'impose le plan d'action annuel qu'« en l'absence d'accord relatif à " +
         "l'égalité professionnelle entre les femmes et les hommes à l'issue de la négociation " +

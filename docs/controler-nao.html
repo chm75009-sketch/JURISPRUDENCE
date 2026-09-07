@@ -1,0 +1,1548 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrôler mon procès-verbal de négociation</title>
+<link rel="manifest" href="manifest-audit-nao.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LA BRANCHE « OUI » DU MODULE NÉGOCIATION OBLIGATOIRE.
+
+  Le parcours pose la question d'entrée : « Avez-vous déjà le procès-verbal de
+  la négociation ? » Le « non » ouvre la construction, c'est le parcours et ses
+  modèles. Le « oui » ouvre cette page.
+
+  ELLE NE NOMME AUCUN MANQUE. Pour chaque thème que l'article applicable
+  énumère et que le procès-verbal déposé ne couvre pas, elle affiche le
+  paragraphe rédigé qui le couvre, éditable, et un bouton l'insère. Un thème
+  déjà traité ne produit rien : ni carte, ni constat, ni exposé du droit.
+
+  AUCUNE QUESTION AVANT LE DOCUMENT. Le premier écran ne demande rien : il prend
+  le fichier. Laquelle des quatre négociations ? Elle est reconnue dans le texte
+  déposé, et la réponse s'affiche À CÔTÉ des paragraphes, corrigeable d'un
+  geste. Les autres questions se posent de même, dans le panneau posé contre le
+  document visible, et seulement celles qui servent à le compléter : le
+  signataire, l'effectif, la date de la réunion suivante. Chaque réponse remplit
+  le document sous les yeux de l'utilisateur.
+
+  L'utilisateur choisit sa sortie :
+    - le procès-verbal de désaccord complet, portant les deux mentions que
+      L. 2242-5 exige, les propositions respectives des parties en leur dernier
+      état et les mesures que l'employeur entend appliquer unilatéralement ;
+    - ou l'accord signé, avec ses articles de forme et son dépôt ;
+  et, dans les deux cas, la convocation à la réunion suivante avec sa date.
+
+  LA MATIÈRE VIENT DU MODULE. Les quatre négociations, leurs fondements et
+  leurs périodicités sont ceux de moteur/nao (moteur-nao.js, controles-nao.js,
+  modeles-nao.js) ; la trame du procès-verbal de désaccord reprend celle du
+  point NAO-CTL-ISS-01 de documents-nao.js. Cette page ne refait pas le module,
+  elle lui donne une entrée par le document existant.
+
+  UNE DIFFÉRENCE ASSUMÉE AVEC LA GRILLE DE SAISIE DU MODULE. Le questionnaire
+  de moteur/nao suit six items pour l'égalité professionnelle ; L. 2242-17 en
+  compte huit, et le sixième y est le droit d'expression, non la déconnexion.
+  Cette page suit le texte, lu à la source : huit points, dans l'ordre de
+  l'article.
+
+  LES TEXTES. Chaque article a été relu au relais Légifrance le 7 septembre
+  2026, deux lectures concordantes, et porte son identifiant de version.
+
+  Rien ne quitte ce poste : le fichier déposé est lu dans le navigateur.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
+  header.site a:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15px/1.3 system-ui;margin:22px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+  .onglets button:disabled{opacity:.45;cursor:not-allowed}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  textarea#depot{width:100%;min-height:220px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+
+  /* Le document à gauche, ce qui reste à compléter à droite, à côté de lui.
+     Aucune question ne précède le document : elles se posent devant lui, et
+     chaque réponse le remplit sous les yeux de l'utilisateur. */
+  .deux{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+  .panneau{position:sticky;top:14px;background:var(--carte);border:1px solid var(--filet);
+    border-radius:12px;padding:14px 15px}
+  .panneau h4{margin:0 0 4px;font:600 12px/1.3 system-ui;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--encre-3)}
+  .panneau p.q{margin:0 0 12px;font-size:12.5px;line-height:1.5;color:var(--encre-2)}
+  @media (max-width:900px){.deux{grid-template-columns:1fr}.panneau{position:static}}
+
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .panneau .champs{grid-template-columns:1fr;gap:12px}
+  label.ch{display:grid;gap:4px}
+  label.ch .nom{font:600 12px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  label.ch input,label.ch select{font:inherit;font-size:14.5px;padding:9px 11px;
+    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre)}
+  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
+  label.ch.pleine{grid-column:1/-1}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+
+  .compteurs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .compteurs .c{font:600 12.5px/1 system-ui;padding:8px 11px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
+  .compteurs .c.abs{background:var(--bleu-clair);color:var(--bleu)}
+  .compteurs .c.ok{background:var(--vert-clair);color:var(--vert)}
+
+  .art{border:1px solid var(--filet);border-radius:11px;margin:14px 0;background:var(--carte);overflow:hidden}
+  .art>.tt{padding:12px 15px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--filet);background:var(--creux)}
+  .art>.tt .obj{font:600 15px/1.35 system-ui}
+  .art>.tt .fond{font-size:12px;color:var(--encre-3)}
+  .art>.corps{padding:12px 15px}
+  .art textarea{width:100%;min-height:200px;font:13px/1.62 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:11px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+  .art .actes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+  .etiq{font:600 11px/1 system-ui;padding:6px 9px;border-radius:5px;white-space:nowrap;
+    text-transform:uppercase;letter-spacing:.04em;background:var(--bleu-clair);color:var(--bleu)}
+  .etiq.pris{background:var(--vert-clair);color:var(--vert)}
+
+  .choix{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+  .choix label{flex:1 1 300px;display:flex;gap:10px;align-items:flex-start;padding:13px 15px;
+    border:1px solid var(--filet-2);border-radius:10px;background:var(--carte);cursor:pointer;font-size:14px}
+  .choix label.actif{border-color:var(--bleu);background:var(--bleu-clair)}
+  .choix label b{display:block;font-size:14.5px;margin-bottom:2px}
+  .choix label span.d{color:var(--encre-2);font-size:13px;line-height:1.5}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+  .btn.petit{font-size:12.5px;padding:8px 11px}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  details.txt{border:1px solid var(--filet);border-radius:9px;margin:8px 0;background:var(--carte)}
+  details.txt>summary{padding:9px 13px;cursor:pointer;font:600 12.5px/1.3 system-ui;color:var(--bleu)}
+  details.txt .c{padding:0 14px 12px;font-size:13px;line-height:1.6;color:var(--encre-2)}
+  details.txt .id{font:400 11.5px/1.3 ui-monospace,Menlo,monospace;color:var(--encre-3)}
+
+  pre.sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:62vh;overflow:auto}
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  @media print{.onglets,.barre,header.site,.choix,.panneau{display:none}.deux{display:block}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Contrôler mon procès-verbal <span>- négociation obligatoire, le document existant complété</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">&larr; Accueil</a>
+      <a href="parcours.html?p=nao">Conduire la négociation</a>
+      <a href="audit-nao.html">Auditer mes négociations</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="depot" class="actif">1 &middot; Le procès-verbal</button>
+    <button data-o="paragraphes" id="ong-par" disabled>2 &middot; Les paragraphes à insérer</button>
+    <button data-o="sortie" id="ong-sortie" disabled>3 &middot; Ce que vous emportez</button>
+  </div>
+
+  <!-- ══════ 1 · LE PROCÈS-VERBAL ══════ -->
+  <section id="o-depot">
+    <h2>Déposez le procès-verbal de votre négociation</h2>
+    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats
+    sont lus directement, <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document, copiez
+    son texte et collez-le ci-dessous.</p>
+
+    <div class="carte">
+      <div class="barre">
+        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
+          Choisir un fichier .docx ou .txt
+          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+        </label>
+        <button class="btn second" id="vider">Vider</button>
+      </div>
+      <div id="lecture"></div>
+      <textarea id="depot" placeholder="Collez ici le texte du procès-verbal, ou choisissez le fichier ci-dessus."></textarea>
+      <div class="barre">
+        <button class="btn" id="controler">Ouvrir les paragraphes à insérer</button>
+      </div>
+      <div id="erreur"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LES PARAGRAPHES ══════ -->
+  <section id="o-paragraphes" class="cache">
+    <h2>Les paragraphes à insérer</h2>
+    <p class="aide">Chacun est rédigé et prêt à coller. Modifiez ce que vous voulez dans la zone,
+    remplacez les valeurs entre crochets par les vôtres, puis insérez.</p>
+    <div class="compteurs" id="compteurs"></div>
+    <div class="deux">
+      <div>
+        <div id="paragraphes"></div>
+        <div class="barre">
+          <button class="btn" id="vers-sortie">Assembler la sortie</button>
+          <button class="btn second" id="tout-inserer">Tout insérer</button>
+        </div>
+      </div>
+      <aside class="panneau">
+        <h4>Pour compléter</h4>
+        <p class="q">La négociation a été reconnue dans le texte déposé. Corrigez-la si elle est
+        mal lue : les paragraphes ci-contre changent aussitôt.</p>
+        <div class="champs">
+          <label class="ch"><span class="nom">Négociation</span>
+            <select id="f-nego">
+              <option value="remuneration">Rémunération, temps de travail et partage de la valeur ajoutée (L. 2242-1, 1°)</option>
+              <option value="egalite">Égalité professionnelle et qualité de vie et des conditions de travail (L. 2242-1, 2°)</option>
+              <option value="gepp">Gestion des emplois et des parcours professionnels (L. 2242-2)</option>
+              <option value="experimentes">Emploi et conditions de travail des salariés expérimentés (L. 2242-2-1)</option>
+            </select>
+            <span class="sous">Un procès-verbal par négociation, jamais un seul pour toutes.</span></label>
+          <label class="ch"><span class="nom">Effectif</span>
+            <input id="f-eff" type="number" min="0">
+            <span class="sous">À partir de trois cents salariés, le procès-verbal de désaccord est
+            la pièce qui atteste le défaut d'accord sur l'égalité (L. 2242-8).</span></label>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LA SORTIE ══════ -->
+  <section id="o-sortie" class="cache">
+    <h2>Ce que vous emportez</h2>
+
+    <div class="choix" id="choix-issue">
+      <label data-issue="desaccord" class="actif">
+        <input type="radio" name="issue" value="desaccord" checked>
+        <span><b>Le procès-verbal de désaccord</b>
+        <span class="d">Aucun accord n'a été conclu. Le document porte les propositions respectives
+        des parties en leur dernier état et les mesures que l'employeur entend appliquer
+        unilatéralement, puis son dépôt.</span></span></label>
+      <label data-issue="accord">
+        <input type="radio" name="issue" value="accord">
+        <span><b>L'accord signé</b>
+        <span class="d">Un accord a été conclu. Le document reprend le contenu négocié, ses articles
+        de forme, ses signataires et son dépôt.</span></span></label>
+    </div>
+
+    <div class="barre">
+      <button class="btn second" id="v-piece">La pièce choisie</button>
+      <button class="btn second" id="v-convoc">La convocation à la réunion suivante</button>
+    </div>
+
+    <div class="deux">
+      <div>
+        <div id="s-piece">
+          <div class="barre">
+            <button class="btn" id="dl-docx">Télécharger en Word</button>
+            <button class="btn second" id="dl-txt">Télécharger en texte</button>
+            <button class="btn second" id="copier">Copier</button>
+          </div>
+          <pre class="sortie" id="sortie"></pre>
+        </div>
+
+        <div id="s-convoc" class="cache">
+          <div class="barre">
+            <button class="btn" id="dl-convoc-docx">Télécharger en Word</button>
+            <button class="btn second" id="copier-convoc">Copier</button>
+          </div>
+          <pre class="sortie" id="convoc"></pre>
+        </div>
+      </div>
+
+      <aside class="panneau">
+        <h4>Pour compléter</h4>
+        <p class="q">Chaque réponse remplit le document ci-contre, à mesure que vous l'écrivez.</p>
+        <div class="champs">
+          <label class="ch"><span class="nom">Dénomination</span><input id="f-nom" placeholder="Raison sociale"></label>
+          <label class="ch"><span class="nom">Adresse du siège</span><input id="f-adresse"></label>
+          <label class="ch"><span class="nom">Signataire (nom, qualité)</span><input id="f-resp"></label>
+          <label class="ch"><span class="nom">Dernière réunion tenue le</span>
+            <input id="f-derniere" type="date"></label>
+          <label class="ch"><span class="nom">Demande syndicale reçue le</span>
+            <input id="f-demande" type="date">
+            <span class="sous">Si elle est datée, la convocation se compte sur les quinze jours de
+            L. 2242-13, dernier alinéa.</span></label>
+        </div>
+        <h4 style="margin-top:16px">La réunion suivante</h4>
+        <div class="champs">
+          <label class="ch"><span class="nom">Date</span>
+            <input id="s-date" type="date">
+            <span class="sous" id="s-date-note"></span></label>
+          <label class="ch"><span class="nom">Heure</span><input id="s-heure" value="09:00"></label>
+          <label class="ch"><span class="nom">Lieu</span>
+            <input id="s-lieu" placeholder="Salle, adresse"></label>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <details class="txt">
+    <summary>Les textes lus, in extenso, avec l'identifiant de version</summary>
+    <div class="c" id="corps-textes"></div>
+  </details>
+
+  <footer>
+    Rien ne quitte ce poste. Le repérage des thèmes déjà traités est lexical : il conduit la lecture
+    du procès-verbal, il ne la remplace pas. Aucune proposition, aucun chiffre n'est écrit à votre
+    place : ce qui vous appartient sort entre crochets.
+  </footer>
+</main>
+
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.getElementById(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES TEXTES
+
+     Relus au relais Légifrance le 7 septembre 2026, deux lectures concordantes
+     chacun. L'identifiant dit LAQUELLE des versions successives a été lue.
+     ══════════════════════════════════════════════════════════════════════════ */
+  var TEXTES = [
+    { n: "L. 2242-1", id: "LEGIARTI000043893962", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Dans les entreprises où sont constituées une ou plusieurs sections syndicales d'organisations représentatives, l'employeur engage au moins une fois tous les quatre ans : 1° Une négociation sur la rémunération, notamment les salaires effectifs, le temps de travail et le partage de la valeur ajoutée dans l'entreprise ; 2° Une négociation sur l'égalité professionnelle entre les femmes et les hommes, portant notamment sur les mesures visant à supprimer les écarts de rémunération, et la qualité de vie et des conditions de travail." },
+    { n: "L. 2242-2-1", id: "LEGIARTI000052432470", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Lorsqu'une ou plusieurs sections syndicales d'organisations représentatives sont constituées dans les entreprises et les groupes d'entreprises, au sens de l'article L. 2331-1, d'au moins trois cents salariés, l'employeur engage, au moins une fois tous les quatre ans, en plus des négociations mentionnées à l'article L. 2242-1, une négociation sur l'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés, en considération de leur âge." },
+    { n: "L. 2242-4", id: "LEGIARTI000052437071", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Tant que la négociation mentionnée aux articles L. 2242-1, L. 2242-2 et L. 2242-2-1 est en cours, l'employeur ne peut, dans les matières traitées, arrêter de décisions unilatérales concernant la collectivité des salariés, sauf si l'urgence le justifie." },
+    { n: "L. 2242-5", id: "LEGIARTI000035627862", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Si, au terme de la négociation, aucun accord n'a été conclu, il est établi un procès-verbal de désaccord dans lequel sont consignées, en leur dernier état, les propositions respectives des parties et les mesures que l'employeur entend appliquer unilatéralement. Ce procès-verbal donne lieu à dépôt, à l'initiative de la partie la plus diligente, dans des conditions prévues par voie réglementaire." },
+    { n: "L. 2242-6", id: "LEGIARTI000035627858", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Les accords collectifs d'entreprise sur les salaires effectifs ne peuvent être déposés auprès de l'autorité administrative, dans les conditions prévues à l'article L. 2231-6, qu'accompagnés d'un procès-verbal d'ouverture des négociations portant sur les écarts de rémunération entre les femmes et les hommes, consignant les propositions respectives des parties. Le procès-verbal atteste que l'employeur a engagé sérieusement et loyalement les négociations. L'engagement sérieux et loyal des négociations implique que, dans les entreprises où sont constituées une ou plusieurs sections syndicales d'organisations représentatives, l'employeur ait convoqué à la négociation les organisations syndicales représentatives dans l'entreprise et fixé le lieu et le calendrier des réunions. L'employeur doit également leur avoir communiqué les informations nécessaires pour leur permettre de négocier en toute connaissance de cause et avoir répondu de manière motivée aux éventuelles propositions des organisations syndicales." },
+    { n: "L. 2242-8", id: "LEGIARTI000051289082", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Les entreprises d'au moins cinquante salariés sont soumises à une pénalité à la charge de l'employeur en l'absence d'accord relatif à l'égalité professionnelle entre les femmes et les hommes à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1 ou, à défaut d'accord, par un plan d'action mentionné à l'article L. 2242-3. Les modalités de suivi de la réalisation des objectifs et des mesures de l'accord et du plan d'action sont fixées par décret. Dans les entreprises d'au moins 300 salariés, ce défaut d'accord est attesté par un procès-verbal de désaccord. […]" },
+    { n: "L. 2242-11", id: "LEGIARTI000052437060", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "L'accord conclu à l'issue de la négociation mentionnée à l'article L. 2242-10 précise : 1° Les thèmes des négociations et leur périodicité, de telle sorte qu'au moins tous les quatre ans soient négociés les thèmes mentionnés aux 1° et 2° de l'article L. 2242-1 et aux articles L. 2242-2 et L. 2242-2-1 ; 2° Le contenu de chacun des thèmes ; 3° Le calendrier et les lieux des réunions ; 4° Les informations que l'employeur remet aux négociateurs sur les thèmes prévus par la négociation qui s'engage et la date de cette remise ; 5° Les modalités selon lesquelles sont suivis les engagements souscrits par les parties. La durée de l'accord ne peut excéder quatre ans." },
+    { n: "L. 2242-13", id: "LEGIARTI000052437044", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "A défaut d'accord prévu à l'article L. 2242-11 ou en cas de non-respect de ses stipulations, l'employeur engage, dans les entreprises mentionnées à ce même article : 1° Chaque année, une négociation sur la rémunération, le temps de travail et le partage de la valeur ajoutée dans l'entreprise […] ; 2° Chaque année, une négociation sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail […] ; 3° Tous les trois ans, dans les entreprises d'au moins trois cents salariés mentionnées à l'article L. 2242-2, une négociation sur la gestion des emplois et des parcours professionnels […] ; 4° Tous les trois ans, dans les entreprises d'au moins trois cents salariés mentionnées à l'article L. 2242-2-1, une négociation sur l'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés, en considération de leur âge […]. A défaut d'une initiative de l'employeur depuis plus de douze mois, pour chacune des deux négociations annuelles, et depuis plus de trente-six mois, pour la négociation triennale, suivant la précédente négociation, cette négociation s'engage obligatoirement à la demande d'une organisation syndicale représentative. La demande de négociation formulée par l'organisation syndicale est transmise dans les huit jours par l'employeur aux autres organisations représentatives. Dans les quinze jours qui suivent la demande formulée par une organisation syndicale, l'employeur convoque les parties à la négociation." },
+    { n: "L. 2242-14", id: "LEGIARTI000035627802", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Lors de la première réunion sont précisés : 1° Le lieu et le calendrier de la ou des réunions ; 2° Les informations que l'employeur remettra aux délégués syndicaux et aux salariés composant la délégation sur les thèmes prévus par la négociation qui s'engage et la date de cette remise." },
+    { n: "L. 2242-15", id: "LEGIARTI000038837123", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "La négociation annuelle sur la rémunération, le temps de travail et le partage de la valeur ajoutée dans l'entreprise porte sur : 1° Les salaires effectifs ; 2° La durée effective et l'organisation du temps de travail, notamment la mise en place du travail à temps partiel. Dans ce cadre, la négociation peut également porter sur la réduction du temps de travail ; 3° L'intéressement, la participation et l'épargne salariale, à défaut d'accord d'intéressement, d'accord de participation, de plan d'épargne d'entreprise, de plan d'épargne pour la mise à la retraite collectif ou d'accord de branche comportant un ou plusieurs de ces dispositifs. […] La même obligation incombe aux groupements d'employeurs ; 4° Le suivi de la mise en œuvre des mesures visant à supprimer les écarts de rémunération et les différences de déroulement de carrière entre les femmes et les hommes." },
+    { n: "L. 2242-16", id: "LEGIARTI000035627789", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "La négociation prévue à l'article L. 2242-15 donne lieu à une information par l'employeur sur les mises à disposition de salariés auprès des organisations syndicales ou des associations d'employeurs mentionnées à l'article L. 2231-1. Dans les entreprises qui ne sont pas soumises à cette obligation annuelle de négocier, l'employeur communique aux salariés qui en font la demande une information sur les mises à disposition de salariés auprès des organisations syndicales ou des associations d'employeurs mentionnées à l'article L. 2231-1." },
+    { n: "L. 2242-17", id: "LEGIARTI000043893940", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "La négociation annuelle sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail porte sur : 1° L'articulation entre la vie personnelle et la vie professionnelle pour les salariés ; 2° Les objectifs et les mesures permettant d'atteindre l'égalité professionnelle entre les femmes et les hommes, notamment en matière de suppression des écarts de rémunération, d'accès à l'emploi, de formation professionnelle, de déroulement de carrière et de promotion professionnelle, de conditions de travail et d'emploi, en particulier pour les salariés à temps partiel, et de mixité des emplois. Cette négociation s'appuie sur les données mentionnées au 2° de l'article L. 2312-36. Cette négociation porte également sur l'application de l'article L. 241-3-1 du code de la sécurité sociale et sur les conditions dans lesquelles l'employeur peut prendre en charge tout ou partie du supplément de cotisations ; 3° Les mesures permettant de lutter contre toute discrimination en matière de recrutement, d'emploi et d'accès à la formation professionnelle, en favorisant notamment les conditions d'accès aux critères définis aux II et III de l'article L. 6315-1 ; 4° Les mesures relatives à l'insertion professionnelle et au maintien dans l'emploi des travailleurs handicapés, notamment les conditions d'accès à l'emploi, à la formation et à la promotion professionnelles, les conditions de travail et d'emploi et les actions de sensibilisation de l'ensemble du personnel au handicap ; 5° Les modalités de définition d'un régime de prévoyance et, dans des conditions au moins aussi favorables que celles prévues à l'article L. 911-7 du code de la sécurité sociale, d'un régime de remboursements complémentaires de frais occasionnés par une maladie, une maternité ou un accident, à défaut de couverture par un accord de branche ou un accord d'entreprise. […] ; 6° L'exercice du droit d'expression directe et collective des salariés prévu au chapitre Ier du titre VIII du présent livre, notamment au moyen des outils numériques disponibles dans l'entreprise ; 7° Les modalités du plein exercice par le salarié de son droit à la déconnexion et la mise en place par l'entreprise de dispositifs de régulation de l'utilisation des outils numériques, en vue d'assurer le respect des temps de repos et de congé ainsi que de la vie personnelle et familiale. A défaut d'accord, l'employeur élabore une charte, après avis du comité social et économique. […] 8° Dans les entreprises mentionnées à l'article L. 2143-3 du présent code et dont cinquante salariés au moins sont employés sur un même site, les mesures visant à améliorer la mobilité des salariés entre leur lieu de résidence habituelle et leur lieu de travail, notamment en réduisant le coût de la mobilité, en incitant à l'usage des modes de transport vertueux ainsi que par la prise en charge des frais mentionnés aux articles L. 3261-3 et L. 3261-3-1." },
+    { n: "L. 2242-18", id: "LEGIARTI000035627777", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "La négociation sur l'insertion professionnelle et le maintien dans l'emploi des travailleurs handicapés se déroule sur la base d'un rapport établi par l'employeur présentant la situation par rapport à l'obligation d'emploi des travailleurs handicapés prévue par les articles L. 5212-1 et suivants." },
+    { n: "L. 2242-20", id: "LEGIARTI000043975202", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Dans les entreprises et les groupes d'entreprises au sens de l'article L. 2331-1 d'au moins trois cents salariés, ainsi que dans les entreprises et groupes d'entreprises de dimension communautaire […], l'employeur engage tous les trois ans […] une négociation sur la gestion des emplois et des parcours professionnels et sur la mixité des métiers portant sur : 1° La mise en place d'un dispositif de gestion prévisionnelle des emplois et des compétences, notamment pour répondre aux enjeux de la transition écologique, ainsi que sur les mesures d'accompagnement susceptibles de lui être associées, en particulier en matière de formation, d'abondement du compte personnel de formation, de validation des acquis de l'expérience, de bilan de compétences ainsi que d'accompagnement de la mobilité professionnelle et géographique des salariés autres que celles prévues dans le cadre de l'article L. 2254-2 ; 2° Le cas échéant, les conditions de la mobilité professionnelle ou géographique interne à l'entreprise prévue à l'article L. 2254-2, qui doivent, en cas d'accord, faire l'objet d'un chapitre spécifique ; 3° Les grandes orientations à trois ans de la formation professionnelle dans l'entreprise et les objectifs du plan de développement des compétences, en particulier les catégories de salariés et d'emplois auxquels ce dernier est consacré en priorité, les compétences et qualifications à acquérir pendant la période de validité de l'accord ainsi que les critères et modalités d'abondement par l'employeur du compte personnel de formation ; 4° Les perspectives de recours par l'employeur aux différents contrats de travail, au travail à temps partiel et aux stages, ainsi que les moyens mis en œuvre pour diminuer le recours aux emplois précaires dans l'entreprise au profit des contrats à durée indéterminée ; 5° Les conditions dans lesquelles les entreprises sous-traitantes sont informées des orientations stratégiques de l'entreprise ayant un effet sur leurs métiers, l'emploi et les compétences ; 6° Le déroulement de carrière des salariés exerçant des responsabilités syndicales et l'exercice de leurs fonctions. Un bilan est réalisé à l'échéance de l'accord." },
+    { n: "L. 2243-1", id: "LEGIARTI000031086617", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Le fait de se soustraire aux obligations prévues à l'article L. 2242-1, relatives à la convocation des parties à la négociation et à l'obligation périodique de négocier, est puni d'un emprisonnement d'un an et d'une amende de 3 750 euros." },
+    { n: "R. 2242-1", id: "LEGIARTI000036222825", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Lorsqu'aucun accord n'a été conclu au terme de la négociation obligatoire en entreprise, le procès-verbal de désaccord établi est déposé dans les conditions prévues à l'article D. 2231-2." },
+    { n: "D. 2231-2", id: "LEGIARTI000036920600", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "I.-Les conventions et accords de branche et les accords professionnels ou interprofessionnels, ainsi que leurs avenants et annexes, sont déposés par la partie la plus diligente auprès des services du ministre chargé du travail. Le dépôt est opéré en deux exemplaires, dont une version sur support papier signée des parties et une version sur support électronique. II.-Les accords de groupe, d'entreprise, d'établissement et interentreprises ainsi que les pièces accompagnant le dépôt prévues aux articles D. 2231-6 et D. 2231-7 sont déposés par le représentant légal du groupe, de l'entreprise ou de l'établissement ou, pour un accord interentreprises, par les représentants légaux de celles-ci. III.-Le déposant remet également un exemplaire de chaque convention ou accord au greffe du conseil de prud'hommes du lieu de conclusion." },
+    { n: "D. 2231-4", id: "LEGIARTI000036920597", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Les accords de groupe, d'entreprise, d'établissement et interentreprises ainsi que les pièces accompagnant le dépôt prévues aux articles D. 2231-6 et D. 2231-7 sont déposés sur la plateforme de téléprocédure du ministère du travail." },
+    { n: "D. 2231-7", id: "LEGIARTI000036920591", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Le dépôt des conventions et accords est accompagné des pièces suivantes : 1° Dans tous les cas, a) De la version signée des parties ; b) D'une copie du courrier, du courrier électronique ou du récépissé ou d'un avis de réception daté de notification du texte à l'ensemble des organisations représentatives à l'issue de la procédure de signature ; 2° Pour les accords de branche, de groupe, d'entreprise, d'établissement et interentreprises, a) D'une version publiable mentionnée à l'article L. 2231-5-1 […] ; b) De l'acte mentionné au I de l'article R. 2231-1-1, s'il y a lieu ; 3° Dans le cas des accords de groupe, d'entreprise, d'établissement et interentreprises : du procès-verbal mentionné au 2° de l'article D. 2232-2, s'il y a lieu ; 4° Dans le cas des accords d'entreprise, c) De la liste mentionnée à l'article D. 2231-6, s'il y a lieu. Un récépissé est délivré au déposant. Le format de ces documents est précisé par arrêté." },
+  ];
+
+  $("corps-textes").innerHTML = TEXTES.map(function (a) {
+    return "<h4 style=\"margin:14px 0 3px;font:600 13px/1.3 system-ui;color:#1F3864\">Article " +
+      ech(a.n) + '</h4><div class="id">' + ech(a.id) + " &middot; état " + ech(a.etat) +
+      " &middot; relu au relais Légifrance le " + ech(a.lu) + ", deux lectures concordantes</div><p>" +
+      ech(a.t) + "</p>";
+  }).join("");
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES QUATRE NÉGOCIATIONS
+
+     Les clés, les titres et les fondements sont ceux de moteur/nao/moteur-nao.js
+     (THEMES) : cette page ne redéfinit pas le module, elle le suit.
+     ══════════════════════════════════════════════════════════════════════════ */
+  var NEGOS = {
+    remuneration: {
+      titre: "Rémunération, temps de travail et partage de la valeur ajoutée dans l'entreprise",
+      fondement: "L. 2242-1, 1°", contenu: "L. 2242-15",
+    },
+    egalite: {
+      titre: "Égalité professionnelle entre les femmes et les hommes et qualité de vie et des conditions de travail",
+      fondement: "L. 2242-1, 2°", contenu: "L. 2242-17",
+    },
+    gepp: {
+      titre: "Gestion des emplois et des parcours professionnels et mixité des métiers",
+      fondement: "L. 2242-2", contenu: "L. 2242-20",
+    },
+    experimentes: {
+      titre: "Emploi, travail et amélioration des conditions de travail des salariés expérimentés",
+      fondement: "L. 2242-2-1", contenu: "L. 2242-2-1",
+    },
+  };
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES THÈMES, ET LE PARAGRAPHE QUI COUVRE CHACUN
+
+     Découpés des articles ci-dessus, dans leur ordre et dans leurs termes. Le
+     paragraphe est écrit pour être collé dans le procès-verbal : il consigne ce
+     qui a été mis sur la table, la position des parties et la suite donnée, et
+     laisse entre crochets ce que l'application ne connaît pas.
+     ══════════════════════════════════════════════════════════════════════════ */
+  function bloc(titre, lignes) { return [titre, ""].concat(lignes).join("\n"); }
+
+  var CADRE = [
+    "Position de l'employeur, en son dernier état : [.....................].",
+    "Position de chaque organisation syndicale représentative, en son dernier",
+    "état :",
+    "  - [organisation 1] : [.............................................] ;",
+    "  - [organisation 2] : [.............................................].",
+    "Réponse motivée de l'employeur aux propositions formulées :",
+    "[..........................................................................].",
+    "Suite retenue : [accord sur ce point / désaccord maintenu / renvoi à la",
+    "réunion du .........].",
+  ];
+
+  var THEMES = {
+    remuneration: [
+      { cle: "salaires", nom: "Les salaires effectifs (L. 2242-15, 1°)",
+        marques: ["salaire effectif", "salaires effectifs", "augmentation generale", "augmentation générale", "grille de salaire", "revalorisation salariale"],
+        texte: bloc("POINT - LES SALAIRES EFFECTIFS (L. 2242-15, 1°)", [
+          "Ont été examinés : les salaires de base réellement versés par catégorie",
+          "professionnelle et par coefficient, les minima conventionnels applicables,",
+          "les augmentations générales et individuelles de l'exercice écoulé, les",
+          "primes et les éléments variables de rémunération, ainsi que l'évolution de",
+          "la masse salariale sur les [3] derniers exercices.",
+          "",
+          "Documents remis aux négociateurs à l'appui de ce point : [état des",
+          "rémunérations par catégorie et par sexe, comparaison avec les minima",
+          "conventionnels, masse salariale des trois derniers exercices].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "temps", nom: "La durée effective et l'organisation du temps de travail (L. 2242-15, 2°)",
+        marques: ["temps de travail", "duree effective", "durée effective", "temps partiel", "organisation du travail", "amenagement du temps", "aménagement du temps"],
+        texte: bloc("POINT - LA DURÉE EFFECTIVE ET L'ORGANISATION DU TEMPS DE TRAVAIL (L. 2242-15, 2°)", [
+          "Ont été examinés : la durée collective du travail et son organisation, le",
+          "volume et la répartition des heures supplémentaires, le recours au travail",
+          "à temps partiel et les conditions de sa mise en place, les horaires",
+          "atypiques et le travail de nuit, ainsi que, dans ce cadre, l'hypothèse",
+          "d'une réduction du temps de travail, que le texte permet d'aborder ici.",
+          "",
+          "État des lieux remis : [durée collective pratiquée, nombre d'heures",
+          "supplémentaires de l'exercice, nombre de salariés à temps partiel par sexe",
+          "et par catégorie].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "epargne", nom: "L'intéressement, la participation et l'épargne salariale (L. 2242-15, 3°)",
+        marques: ["interessement", "intéressement", "participation", "epargne salariale", "épargne salariale", "plan d'epargne", "plan d'épargne"],
+        texte: bloc("POINT - L'INTÉRESSEMENT, LA PARTICIPATION ET L'ÉPARGNE SALARIALE (L. 2242-15, 3°)", [
+          "Dispositifs en vigueur dans l'entreprise, ou couvrant celle-ci par accord",
+          "de branche : [accord d'intéressement du ......... / accord de",
+          "participation du ......... / plan d'épargne d'entreprise du ......... /",
+          "plan d'épargne pour la mise à la retraite collectif du ......... / aucun].",
+          "",
+          "Le 3° de L. 2242-15 ouvre ce point à défaut de l'un de ces dispositifs. En",
+          "l'espèce, la négociation a porté sur [la mise en place de ......... / la",
+          "révision de .........], et, s'il y a lieu, sur l'affectation d'une partie",
+          "des sommes collectées dans le plan d'épargne pour la retraite collectif ou",
+          "le plan d'épargne retraite d'entreprise collectif, et sur l'acquisition de",
+          "parts de fonds investis dans les entreprises solidaires.",
+          "",
+        ].concat(CADRE)) },
+      { cle: "ecarts", nom: "Le suivi des mesures de suppression des écarts de rémunération (L. 2242-15, 4°)",
+        marques: ["ecart de remuneration", "écart de rémunération", "ecarts de remuneration", "écarts de rémunération", "deroulement de carriere", "déroulement de carrière", "rattrapage salarial"],
+        texte: bloc("POINT - LE SUIVI DES MESURES DE SUPPRESSION DES ÉCARTS DE RÉMUNÉRATION ET DES DIFFÉRENCES DE DÉROULEMENT DE CARRIÈRE ENTRE LES FEMMES ET LES HOMMES (L. 2242-15, 4°)", [
+          "Ce point est distinct des salaires effectifs, et c'est celui que l'on",
+          "oublie. Il porte sur le SUIVI de la mise en œuvre des mesures déjà",
+          "arrêtées, et non sur leur seule annonce.",
+          "",
+          "Mesures en vigueur : [accord ou plan d'action égalité du .........,",
+          "articles .........].",
+          "État de leur mise en œuvre : [nombre de situations corrigées, montant",
+          "consacré, part de l'enveloppe consommée].",
+          "Écarts subsistants : [écart moyen par catégorie et par tranche d'âge].",
+          "",
+          "En l'absence d'accord prévoyant les mesures visant à supprimer les écarts",
+          "de rémunération, la présente négociation porte également sur la",
+          "programmation de ces mesures et de la suppression des différences de",
+          "déroulement de carrière : [programmation retenue, échéances, coût].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "mad", nom: "L'information sur les mises à disposition de salariés (L. 2242-16)",
+        marques: ["mise a disposition", "mise à disposition", "mises a disposition", "mises à disposition"],
+        texte: bloc("POINT - L'INFORMATION SUR LES MISES À DISPOSITION DE SALARIÉS (L. 2242-16)", [
+          "La négociation prévue à l'article L. 2242-15 donne lieu à une information",
+          "de l'employeur sur les mises à disposition de salariés auprès des",
+          "organisations syndicales ou des associations d'employeurs mentionnées à",
+          "l'article L. 2231-1.",
+          "",
+          "Information donnée en séance : [aucune mise à disposition au cours de",
+          "l'exercice / mises à disposition : nom de l'organisation, nombre de",
+          "salariés, volume horaire].",
+          "Observations des organisations syndicales : [.......................].",
+        ]) },
+    ],
+    egalite: [
+      { cle: "articulation", nom: "L'articulation entre la vie personnelle et la vie professionnelle (L. 2242-17, 1°)",
+        marques: ["articulation", "vie personnelle", "vie familiale", "parentalite", "parentalité", "conciliation"],
+        texte: bloc("POINT - L'ARTICULATION ENTRE LA VIE PERSONNELLE ET LA VIE PROFESSIONNELLE (L. 2242-17, 1°)", [
+          "Ont été examinés : les horaires de réunion et de travail, les délais de",
+          "prévenance en cas de changement d'horaire, le télétravail et ses",
+          "conditions d'accès, les congés et absences liés à la parentalité, les",
+          "entretiens avant le départ et au retour d'un congé familial, et les",
+          "aménagements accordés aux salariés aidants.",
+          "",
+          "État des lieux remis : [nombre de demandes d'aménagement reçues et suites",
+          "données, nombre de jours de télétravail pris par sexe, nombre de réunions",
+          "tenues hors de la plage horaire commune].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "objectifs", nom: "Les objectifs et mesures d'égalité professionnelle (L. 2242-17, 2°)",
+        marques: ["egalite professionnelle", "égalité professionnelle", "mixite des emplois", "mixité des emplois", "ecarts de remuneration", "écarts de rémunération", "acces a l'emploi", "accès à l'emploi"],
+        texte: bloc("POINT - LES OBJECTIFS ET LES MESURES PERMETTANT D'ATTEINDRE L'ÉGALITÉ PROFESSIONNELLE (L. 2242-17, 2°)", [
+          "Ont été examinés, dans les termes du 2° : la suppression des écarts de",
+          "rémunération, l'accès à l'emploi, la formation professionnelle, le",
+          "déroulement de carrière et la promotion professionnelle, les conditions de",
+          "travail et d'emploi, en particulier pour les salariés à temps partiel, et",
+          "la mixité des emplois.",
+          "",
+          "Cette négociation s'est appuyée sur les données mentionnées au 2° de",
+          "l'article L. 2312-36, c'est-à-dire sur le diagnostic et l'analyse de la",
+          "situation comparée des femmes et des hommes portés par la base de données",
+          "économiques, sociales et environnementales. Données remises le [DATE].",
+          "",
+          "Elle a également porté sur l'application de l'article L. 241-3-1 du code de",
+          "la sécurité sociale et sur les conditions dans lesquelles l'employeur peut",
+          "prendre en charge tout ou partie du supplément de cotisations :",
+          "[position de l'employeur, position des organisations syndicales].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "discrimination", nom: "La lutte contre les discriminations (L. 2242-17, 3°)",
+        marques: ["discrimination", "discriminations", "non-discrimination"],
+        texte: bloc("POINT - LES MESURES DE LUTTE CONTRE TOUTE DISCRIMINATION (L. 2242-17, 3°)", [
+          "Ont été examinées les mesures permettant de lutter contre toute",
+          "discrimination en matière de recrutement, d'emploi et d'accès à la",
+          "formation professionnelle, en favorisant notamment les conditions d'accès",
+          "aux critères définis aux II et III de l'article L. 6315-1.",
+          "",
+          "Mesures existantes : [procédure de recrutement écrite, formation des",
+          "recruteurs, procédure de signalement, référents désignés].",
+          "Mesures discutées : [.....................................................].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "handicap", nom: "L'insertion et le maintien dans l'emploi des travailleurs handicapés (L. 2242-17, 4°)",
+        marques: ["handicap", "travailleurs handicapes", "travailleurs handicapés", "obligation d'emploi"],
+        texte: bloc("POINT - L'INSERTION PROFESSIONNELLE ET LE MAINTIEN DANS L'EMPLOI DES TRAVAILLEURS HANDICAPÉS (L. 2242-17, 4°)", [
+          "Conformément à l'article L. 2242-18, cette négociation s'est déroulée sur",
+          "la base d'un rapport établi par l'employeur présentant la situation de",
+          "l'entreprise par rapport à l'obligation d'emploi des travailleurs",
+          "handicapés prévue par les articles L. 5212-1 et suivants. Rapport remis",
+          "aux négociateurs le [DATE].",
+          "",
+          "Ont été examinés : les conditions d'accès à l'emploi, à la formation et à",
+          "la promotion professionnelles, les conditions de travail et d'emploi, et",
+          "les actions de sensibilisation de l'ensemble du personnel au handicap.",
+          "",
+          "Situation déclarée : [nombre de bénéficiaires de l'obligation d'emploi,",
+          "taux d'emploi, contribution versée le cas échéant].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "prevoyance", nom: "La prévoyance et les remboursements complémentaires (L. 2242-17, 5°)",
+        marques: ["prevoyance", "prévoyance", "remboursements complementaires", "remboursements complémentaires", "complementaire sante", "complémentaire santé", "frais de sante", "frais de santé"],
+        texte: bloc("POINT - LE RÉGIME DE PRÉVOYANCE ET LE RÉGIME DE REMBOURSEMENTS COMPLÉMENTAIRES (L. 2242-17, 5°)", [
+          "Couverture existante : [accord de branche du ......... / accord",
+          "d'entreprise du ......... / décision unilatérale du ......... / aucune].",
+          "",
+          "Le 5° ouvre ce point à défaut de couverture par un accord de branche ou un",
+          "accord d'entreprise, et impose, pour les remboursements complémentaires de",
+          "frais occasionnés par une maladie, une maternité ou un accident, des",
+          "conditions au moins aussi favorables que celles prévues à l'article",
+          "L. 911-7 du code de la sécurité sociale.",
+          "",
+          "Ont été examinés : [garanties, niveau de prise en charge par l'employeur,",
+          "organisme assureur, date d'effet envisagée].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "expression", nom: "Le droit d'expression directe et collective (L. 2242-17, 6°)",
+        marques: ["droit d'expression", "expression directe", "expression collective"],
+        texte: bloc("POINT - L'EXERCICE DU DROIT D'EXPRESSION DIRECTE ET COLLECTIVE DES SALARIÉS (L. 2242-17, 6°)", [
+          "Ont été examinées les modalités d'exercice du droit d'expression directe",
+          "et collective des salariés, notamment au moyen des outils numériques",
+          "disponibles dans l'entreprise : niveau et forme des réunions d'expression,",
+          "fréquence, durée, participation, et suites données aux demandes et avis",
+          "émis.",
+          "",
+          "Modalités actuellement en vigueur : [accord du ......... / aucune].",
+          "Modalités discutées : [......................................].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "deconnexion", nom: "Le droit à la déconnexion (L. 2242-17, 7°)",
+        marques: ["deconnexion", "déconnexion", "outils numeriques", "outils numériques"],
+        texte: bloc("POINT - LES MODALITÉS DU PLEIN EXERCICE DU DROIT À LA DÉCONNEXION (L. 2242-17, 7°)", [
+          "Ont été examinées les modalités du plein exercice par le salarié de son",
+          "droit à la déconnexion et la mise en place de dispositifs de régulation de",
+          "l'utilisation des outils numériques, en vue d'assurer le respect des temps",
+          "de repos et de congé ainsi que de la vie personnelle et familiale :",
+          "plages de connexion, traitement des messages hors temps de travail,",
+          "paramétrage des outils, actions de formation et de sensibilisation à un",
+          "usage raisonnable.",
+          "",
+          "Le 7° le précise : à défaut d'accord sur ce point, l'employeur élabore une",
+          "charte, après avis du comité social et économique. Cette charte définit",
+          "les modalités de l'exercice du droit à la déconnexion et prévoit en outre",
+          "la mise en œuvre, à destination des salariés et du personnel d'encadrement",
+          "et de direction, d'actions de formation et de sensibilisation.",
+          "Suite retenue ici : [accord sur ce point / élaboration d'une charte,",
+          "avis du comité sollicité pour la réunion du .........].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "mobilite", nom: "La mobilité domicile-travail (L. 2242-17, 8°)",
+        marques: ["mobilite des salaries", "mobilité des salariés", "domicile-travail", "domicile travail", "frais de transport", "forfait mobilites", "forfait mobilités"],
+        texte: bloc("POINT - LES MESURES D'AMÉLIORATION DE LA MOBILITÉ ENTRE LE DOMICILE ET LE LIEU DE TRAVAIL (L. 2242-17, 8°)", [
+          "Ce point est dû dans les entreprises mentionnées à l'article L. 2143-3 et",
+          "dont cinquante salariés au moins sont employés sur un même site.",
+          "Situation de l'entreprise au regard de cette condition : [nombre de",
+          "salariés employés sur le site de ......... : ......].",
+          "",
+          "Ont été examinées les mesures visant à améliorer la mobilité des salariés",
+          "entre leur lieu de résidence habituelle et leur lieu de travail, notamment",
+          "en réduisant le coût de la mobilité, en incitant à l'usage des modes de",
+          "transport vertueux et par la prise en charge des frais mentionnés aux",
+          "articles L. 3261-3 et L. 3261-3-1.",
+          "",
+        ].concat(CADRE)) },
+    ],
+    gepp: [
+      { cle: "gpec", nom: "Le dispositif de gestion prévisionnelle des emplois et des compétences (L. 2242-20, 1°)",
+        marques: ["gestion previsionnelle", "gestion prévisionnelle", "gpec", "competences", "compétences", "transition ecologique", "transition écologique"],
+        texte: bloc("POINT - LA MISE EN PLACE D'UN DISPOSITIF DE GESTION PRÉVISIONNELLE DES EMPLOIS ET DES COMPÉTENCES (L. 2242-20, 1°)", [
+          "Ont été examinés : la cartographie des emplois et des compétences, les",
+          "métiers en tension et les métiers menacés, les besoins nés de la",
+          "transition écologique, et les mesures d'accompagnement susceptibles d'être",
+          "associées au dispositif, en particulier la formation, l'abondement du",
+          "compte personnel de formation, la validation des acquis de l'expérience,",
+          "le bilan de compétences et l'accompagnement de la mobilité",
+          "professionnelle et géographique des salariés, autres que celles prévues",
+          "dans le cadre de l'article L. 2254-2.",
+          "",
+          "Diagnostic remis aux négociateurs le [DATE] : [pyramide des âges, emplois",
+          "sensibles, départs prévisibles à trois ans].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "mobiliteinterne", nom: "Les conditions de la mobilité interne (L. 2242-20, 2°)",
+        marques: ["mobilite interne", "mobilité interne", "mobilite professionnelle", "mobilité professionnelle", "mobilite geographique", "mobilité géographique", "l. 2254-2"],
+        texte: bloc("POINT - LES CONDITIONS DE LA MOBILITÉ PROFESSIONNELLE OU GÉOGRAPHIQUE INTERNE (L. 2242-20, 2°)", [
+          "Le 2° ouvre ce point le cas échéant, et précise qu'en cas d'accord ces",
+          "conditions font l'objet d'un chapitre spécifique.",
+          "",
+          "Position de l'entreprise : [aucune mobilité interne au sens de l'article",
+          "L. 2254-2 n'est envisagée à ce stade / les conditions suivantes ont été",
+          "discutées : zone géographique, mesures d'accompagnement, aides à la",
+          "mobilité, délais de prévenance].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "formation", nom: "Les grandes orientations à trois ans de la formation (L. 2242-20, 3°)",
+        marques: ["orientations a trois ans", "orientations à trois ans", "plan de developpement des competences", "plan de développement des compétences", "formation professionnelle", "compte personnel de formation"],
+        texte: bloc("POINT - LES GRANDES ORIENTATIONS À TROIS ANS DE LA FORMATION PROFESSIONNELLE (L. 2242-20, 3°)", [
+          "Ont été examinés : les grandes orientations à trois ans de la formation",
+          "professionnelle dans l'entreprise et les objectifs du plan de",
+          "développement des compétences, en particulier les catégories de salariés",
+          "et d'emplois auxquels ce dernier est consacré en priorité, les compétences",
+          "et qualifications à acquérir pendant la période de validité de l'accord,",
+          "ainsi que les critères et modalités d'abondement par l'employeur du compte",
+          "personnel de formation.",
+          "",
+          "Orientations proposées : [.....................................].",
+          "Budget prévisionnel de formation sur la période : [__] euros.",
+          "",
+        ].concat(CADRE)) },
+      { cle: "contrats", nom: "Les perspectives de recours aux différents contrats (L. 2242-20, 4°)",
+        marques: ["emplois precaires", "emplois précaires", "contrat a duree determinee", "contrat à durée déterminée", "interim", "intérim", "stages", "temps partiel"],
+        texte: bloc("POINT - LES PERSPECTIVES DE RECOURS AUX DIFFÉRENTS CONTRATS DE TRAVAIL (L. 2242-20, 4°)", [
+          "Ont été examinées les perspectives de recours par l'employeur aux",
+          "différents contrats de travail, au travail à temps partiel et aux stages,",
+          "ainsi que les moyens mis en œuvre pour diminuer le recours aux emplois",
+          "précaires dans l'entreprise au profit des contrats à durée indéterminée.",
+          "",
+          "État des lieux remis : [effectifs par type de contrat sur les trois",
+          "derniers exercices, nombre de contrats à durée déterminée et de missions",
+          "d'intérim, nombre de stagiaires, part des temps partiels].",
+          "Objectif chiffré discuté : [ramener la part des contrats précaires de",
+          "[__] % à [__] % au terme de l'accord].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "soustraitance", nom: "L'information des entreprises sous-traitantes (L. 2242-20, 5°)",
+        marques: ["sous-traitant", "sous-traitance", "sous traitants"],
+        texte: bloc("POINT - LES CONDITIONS D'INFORMATION DES ENTREPRISES SOUS-TRAITANTES (L. 2242-20, 5°)", [
+          "Ont été examinées les conditions dans lesquelles les entreprises",
+          "sous-traitantes sont informées des orientations stratégiques de",
+          "l'entreprise ayant un effet sur leurs métiers, l'emploi et les",
+          "compétences.",
+          "",
+          "Sous-traitants concernés : [liste ou catégories].",
+          "Modalités discutées : [réunion annuelle d'information, transmission écrite",
+          "des orientations, délai de prévenance en cas d'évolution].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "syndicaux", nom: "Le déroulement de carrière des salariés exerçant des responsabilités syndicales (L. 2242-20, 6°)",
+        marques: ["responsabilites syndicales", "responsabilités syndicales", "parcours syndical", "mandat syndical", "representant du personnel", "représentant du personnel"],
+        texte: bloc("POINT - LE DÉROULEMENT DE CARRIÈRE DES SALARIÉS EXERÇANT DES RESPONSABILITÉS SYNDICALES (L. 2242-20, 6°)", [
+          "Ont été examinés le déroulement de carrière des salariés exerçant des",
+          "responsabilités syndicales et l'exercice de leurs fonctions : entretien de",
+          "début et de fin de mandat, évolution de la rémunération comparée à celle",
+          "des salariés de même catégorie, accès à la formation, valorisation des",
+          "compétences acquises dans l'exercice du mandat, et conditions matérielles",
+          "d'exercice.",
+          "",
+          "État des lieux remis : [nombre de titulaires de mandat, comparaison des",
+          "rémunérations et des promotions avec celles de leur catégorie].",
+          "",
+        ].concat(CADRE)) },
+      { cle: "bilan", nom: "Le bilan à l'échéance de l'accord (L. 2242-20, dernier alinéa)",
+        marques: ["bilan a l'echeance", "bilan à l'échéance", "bilan de l'accord", "commission de suivi"],
+        texte: bloc("POINT - LE BILAN À L'ÉCHÉANCE DE L'ACCORD (L. 2242-20, dernier alinéa)", [
+          "Le dernier alinéa de L. 2242-20 est bref et sans condition : un bilan est",
+          "réalisé à l'échéance de l'accord.",
+          "",
+          "Modalités retenues : bilan établi au plus tard le [DATE], présenté à",
+          "[la commission de suivi / au comité social et économique / aux",
+          "organisations syndicales signataires], portant sur chacun des six points",
+          "de l'article et sur les indicateurs suivants : [.....................].",
+        ]) },
+    ],
+    experimentes: [
+      { cle: "experimentes", nom: "L'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés (L. 2242-2-1)",
+        marques: ["salaries experimentes", "salariés expérimentés", "seniors", "fin de carriere", "fin de carrière", "en consideration de leur age", "en considération de leur âge"],
+        texte: bloc("POINT - L'EMPLOI, LE TRAVAIL ET L'AMÉLIORATION DES CONDITIONS DE TRAVAIL DES SALARIÉS EXPÉRIMENTÉS (L. 2242-2-1)", [
+          "L'article L. 2242-2-1 ouvre cette négociation sans en énumérer le contenu :",
+          "il vise « l'emploi, le travail et l'amélioration des conditions de travail",
+          "des salariés expérimentés, en considération de leur âge ». Les sujets",
+          "ci-dessous sont donc ceux que les parties ont choisi de mettre sur la",
+          "table, non une liste que le texte imposerait.",
+          "",
+          "Ont été examinés : le maintien dans l'emploi et le recrutement des salariés",
+          "expérimentés, l'aménagement des postes et des horaires en fin de carrière,",
+          "l'accès à la formation et à la reconversion, la transmission des savoirs et",
+          "le tutorat, l'aménagement de la transition entre activité et retraite, et",
+          "la prévention de l'usure professionnelle.",
+          "",
+          "État des lieux remis le [DATE] : [pyramide des âges, effectifs de plus de",
+          "[__] ans par catégorie, embauches et départs de ces salariés sur les trois",
+          "derniers exercices, accidents et restrictions d'aptitude par tranche",
+          "d'âge].",
+          "",
+        ].concat(CADRE)) },
+    ],
+  };
+
+  /* Les mentions de forme, contrôlées quelle que soit la négociation. Elles ne
+     viennent pas du contenu du thème mais de la régularité du procès-verbal
+     lui-même : L. 2242-14 pour la première réunion, L. 2242-6 pour la loyauté,
+     L. 2242-5 pour les deux mentions du désaccord. */
+  var FORME = [
+    { cle: "convocation", nom: "La convocation de toutes les organisations représentatives (L. 2242-6)",
+      marques: ["convoquee", "convoquée", "convoquees", "convoquées", "convocation", "organisations syndicales representatives", "organisations syndicales représentatives"],
+      texte: bloc("ARTICLE - LES PARTIES ET LEUR CONVOCATION", [
+        "Ont été convoquées à la négociation toutes les organisations syndicales",
+        "représentatives dans l'entreprise :",
+        "  - [organisation 1], convoquée le [DATE], représentée par [nom, qualité] ;",
+        "  - [organisation 2], convoquée le [DATE], représentée par [nom, qualité] ;",
+        "  - [organisation 3], convoquée le [DATE], représentée par [nom, qualité].",
+        "",
+        "Pour l'employeur : [nom, qualité], assisté de [nom, qualité].",
+        "",
+        "Une organisation représentative oubliée à la convocation suffit à faire",
+        "tomber l'engagement sérieux et loyal que L. 2242-6 définit : la liste",
+        "ci-dessus se vérifie sur les résultats du premier tour des dernières",
+        "élections professionnelles, non de mémoire.",
+      ]) },
+    { cle: "lieucalendrier", nom: "Le lieu et le calendrier des réunions (L. 2242-14, 1°)",
+      marques: ["calendrier des reunions", "calendrier des réunions", "lieu et le calendrier", "lieu des reunions", "lieu des réunions"],
+      texte: bloc("ARTICLE - LE LIEU ET LE CALENDRIER DES RÉUNIONS (L. 2242-14, 1°)", [
+        "Fixés lors de la première réunion du [DATE], comme L. 2242-14, 1°, l'impose.",
+        "",
+        "Lieu : [salle, adresse].",
+        "Calendrier arrêté :",
+        "  - [DATE] : première réunion, ouverture de la négociation ;",
+        "  - [DATE] : examen des propositions et réponses motivées de l'employeur ;",
+        "  - [DATE] : dernières propositions des parties ;",
+        "  - [DATE] : réunion de clôture.",
+        "",
+        "Modifications intervenues en cours de négociation, et motif : [.........].",
+      ]) },
+    { cle: "informations", nom: "Les informations remises et la date de leur remise (L. 2242-14, 2°)",
+      marques: ["informations remises", "remise des informations", "documents remis", "informations communiquees", "informations communiquées"],
+      texte: bloc("ARTICLE - LES INFORMATIONS REMISES AUX NÉGOCIATEURS ET LA DATE DE LEUR REMISE (L. 2242-14, 2°)", [
+        "Précisées lors de la première réunion, comme L. 2242-14, 2°, l'impose, et",
+        "effectivement remises le [DATE], contre décharge.",
+        "",
+        "Liste des informations remises :",
+        "  1. [.......................................................].",
+        "  2. [.......................................................].",
+        "  3. [.......................................................].",
+        "  4. [.......................................................].",
+        "",
+        "Modalité de remise : [remise en main propre contre décharge / mise à",
+        "disposition dans la base de données économiques, sociales et",
+        "environnementales, avec information datée].",
+        "",
+        "L'article L. 2242-6 range la communication des informations nécessaires",
+        "pour négocier en toute connaissance de cause dans l'engagement sérieux et",
+        "loyal : une date annoncée et non tenue se retourne contre l'employeur.",
+      ]) },
+    { cle: "reponses", nom: "Les réponses motivées aux propositions syndicales (L. 2242-6)",
+      marques: ["reponse motivee", "réponse motivée", "reponses motivees", "réponses motivées"],
+      texte: bloc("ARTICLE - LES RÉPONSES MOTIVÉES DE L'EMPLOYEUR AUX PROPOSITIONS SYNDICALES (L. 2242-6)", [
+        "L'article L. 2242-6 range parmi les conditions de l'engagement sérieux et",
+        "loyal le fait que l'employeur ait « répondu de manière motivée aux",
+        "éventuelles propositions des organisations syndicales ».",
+        "",
+        "  proposition                          | réponse et motifs      | date",
+        "  -------------------------------------+------------------------+--------",
+        "  [..................................] | [....................] | [.....]",
+        "  [..................................] | [....................] | [.....]",
+        "  [..................................] | [....................] | [.....]",
+        "",
+        "Une réponse d'ensemble laisse sans réponse les propositions qu'elle ne",
+        "nomme pas : la réponse se donne proposition par proposition, et se date.",
+      ]) },
+    { cle: "propositions", nom: "Les propositions respectives des parties, en leur dernier état (L. 2242-5)",
+      marques: ["dernier etat", "dernier état", "propositions respectives"],
+      texte: bloc("ARTICLE - LES PROPOSITIONS RESPECTIVES DES PARTIES, EN LEUR DERNIER ÉTAT (L. 2242-5)", [
+        "C'est la première des deux mentions que L. 2242-5 exige. Ce sont les",
+        "propositions telles qu'elles se présentaient à la FIN de la négociation,",
+        "non au début, et non résumées en « les parties n'ont pu se mettre",
+        "d'accord ».",
+        "",
+        "Propositions de l'employeur, à l'issue de la réunion du [DATE] :",
+        "  - [.......................................................] ;",
+        "  - [.......................................................] ;",
+        "  - [.......................................................].",
+        "",
+        "Propositions des organisations syndicales, à la même date :",
+        "  [organisation 1]",
+        "    - [.....................................................] ;",
+        "    - [.....................................................].",
+        "  [organisation 2]",
+        "    - [.....................................................] ;",
+        "    - [.....................................................].",
+        "  [Organisation n'ayant pas formulé de proposition : le mentionner",
+        "  expressément plutôt que de laisser un blanc.]",
+        "",
+        "Ces propositions sont reproduites telles qu'elles ont été formulées. Une",
+        "organisation qui ne se reconnaîtrait pas dans leur rédaction peut le faire",
+        "consigner : ses observations sont annexées au présent procès-verbal.",
+      ]) },
+    { cle: "unilaterales", nom: "Les mesures que l'employeur entend appliquer unilatéralement (L. 2242-5)",
+      marques: ["unilateralement", "unilatéralement", "mesures unilaterales", "mesures unilatérales"],
+      texte: bloc("ARTICLE - LES MESURES QUE L'EMPLOYEUR ENTEND APPLIQUER UNILATÉRALEMENT (L. 2242-5)", [
+        "C'est la seconde mention que L. 2242-5 exige, et celle que l'on oublie.",
+        "Elle n'est pas une menace : elle est ce qui rendra ces mesures opposables.",
+        "",
+        "  mesure                          | champ d'application | date d'effet",
+        "  --------------------------------+---------------------+--------------",
+        "  [.............................] | [.................] | [..........]",
+        "  [.............................] | [.................] | [..........]",
+        "  [.............................] | [.................] | [..........]",
+        "",
+        "[Si l'employeur n'entend appliquer aucune mesure unilatérale, l'écrire :",
+        "« L'employeur n'entend appliquer aucune mesure unilatérale à l'issue de la",
+        "présente négociation. » Un silence sur ce point laisse penser que la",
+        "mention a été oubliée.]",
+        "",
+        "Tant que le procès-verbal de désaccord n'est pas établi, la négociation",
+        "reste en cours, et l'article L. 2242-4 interdit à l'employeur d'arrêter,",
+        "dans les matières traitées, des décisions unilatérales concernant la",
+        "collectivité des salariés, sauf si l'urgence le justifie.",
+      ]) },
+  ];
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LA FICHE ENTREPRISE
+     ══════════════════════════════════════════════════════════════════════════ */
+  var CHAMPS = { "f-nom": "denomination", "f-adresse": "adresse",
+                 "f-resp": "responsable", "f-eff": "effectif" };
+
+  (function chargerFiche() {
+    var p = (window.Profil && window.Profil.lire()) || {};
+    for (var id in CHAMPS) if (p[CHAMPS[id]] != null && p[CHAMPS[id]] !== "") $(id).value = p[CHAMPS[id]];
+    Object.keys(CHAMPS).forEach(function (id) {
+      $(id).addEventListener("change", function () {
+        if (!window.Profil) return;
+        var patch = {}; patch[CHAMPS[id]] = $(id).value.trim();
+        window.Profil.ecrire(patch);
+      });
+    });
+  })();
+
+  function fiche() {
+    var eff = parseInt($("f-eff").value, 10);
+    return {
+      nom: $("f-nom").value.trim() || "[DÉNOMINATION]",
+      adresse: $("f-adresse").value.trim() || "[ADRESSE DU SIÈGE]",
+      resp: $("f-resp").value.trim() || "[NOM ET QUALITÉ DU SIGNATAIRE]",
+      effectif: isFinite(eff) ? eff : null,
+      nego: $("f-nego").value,
+      derniere: $("f-derniere").value,
+      demande: $("f-demande").value,
+    };
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES ONGLETS
+     ══════════════════════════════════════════════════════════════════════════ */
+  function onglet(nom) {
+    ["depot", "paragraphes", "sortie"].forEach(function (o) {
+      $("o-" + o).classList.toggle("cache", o !== nom);
+    });
+    Array.prototype.forEach.call($("onglets").children, function (b) {
+      b.classList.toggle("actif", b.dataset.o === nom);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  Array.prototype.forEach.call($("onglets").children, function (b) {
+    b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LA LECTURE D'UN .DOCX, SANS BIBLIOTHÈQUE
+
+     Même procédé que la page du règlement intérieur : un .docx est une archive
+     zip, le texte vit dans word/document.xml, et le flux natif du navigateur
+     décomprime. Aucun octet ne sort de la page.
+     ══════════════════════════════════════════════════════════════════════════ */
+  function u16(v, i) { return v.getUint16(i, true); }
+  function u32(v, i) { return v.getUint32(i, true); }
+
+  function entreeZip(buf, nomVoulu) {
+    var v = new DataView(buf), n = buf.byteLength;
+    var fin = -1;
+    for (var i = n - 22; i >= 0 && i > n - 65558; i--) if (u32(v, i) === 0x06054b50) { fin = i; break; }
+    if (fin < 0) throw new Error("Ce fichier n'est pas une archive lisible.");
+    var nb = u16(v, fin + 10), pos = u32(v, fin + 16);
+    var dec = new TextDecoder("utf-8");
+    for (var k = 0; k < nb; k++) {
+      if (u32(v, pos) !== 0x02014b50) throw new Error("Répertoire de l'archive illisible.");
+      var methode = u16(v, pos + 10), taille = u32(v, pos + 20);
+      var lnom = u16(v, pos + 28), lextra = u16(v, pos + 30), lcom = u16(v, pos + 32);
+      var debut = u32(v, pos + 42);
+      var nom = dec.decode(new Uint8Array(buf, pos + 46, lnom));
+      if (nom === nomVoulu) {
+        var ln = u16(v, debut + 26), lx = u16(v, debut + 28);
+        return { methode: methode, data: new Uint8Array(buf, debut + 30 + ln + lx, taille) };
+      }
+      pos += 46 + lnom + lextra + lcom;
+    }
+    throw new Error("Le fichier ne contient pas de document Word (word/document.xml).");
+  }
+
+  function inflater(u8) {
+    if (typeof DecompressionStream !== "function")
+      return Promise.reject(new Error("Ce navigateur ne sait pas décomprimer le fichier. Collez le texte à la place."));
+    var flux = new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    return new Response(flux).arrayBuffer();
+  }
+
+  function texteDeDocumentXml(xml) {
+    return xml
+      .replace(/<w:tab[^>]*\/>/g, "\t")
+      .replace(/<w:br[^>]*\/>/g, "\n")
+      .replace(/<\/w:p>/g, "\n")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
+
+  function lireDocx(f) {
+    return f.arrayBuffer().then(function (buf) {
+      var e = entreeZip(buf, "word/document.xml");
+      if (e.methode === 0) return new TextDecoder("utf-8").decode(e.data);
+      if (e.methode !== 8) throw new Error("Compression inconnue dans ce .docx.");
+      return inflater(e.data).then(function (b) { return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
+    }).then(texteDeDocumentXml);
+  }
+
+  function dit(html, classe) {
+    $("lecture").innerHTML = html ? '<div class="avis ' + (classe || "info") + '">' + html + "</div>" : "";
+  }
+
+  $("fichier").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    $("erreur").innerHTML = "";
+    dit("Lecture de <b>" + ech(f.name) + "</b>…");
+    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    suite.then(function (t) {
+      $("depot").value = t;
+      dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +
+          " caractères. Relisez-le ci-dessous, c'est ce texte qui sera repris.");
+    }).catch(function (e) {
+      dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
+          " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
+    });
+  });
+
+  $("vider").addEventListener("click", function () {
+    $("depot").value = ""; dit(""); $("erreur").innerHTML = "";
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LE REPÉRAGE
+     ══════════════════════════════════════════════════════════════════════════ */
+  function normaliser(s) {
+    return String(s || "").toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[’']/g, "'").replace(/\s+/g, " ");
+  }
+
+  var etat = { texte: "", absents: [], nbPresents: 0, retenus: {}, redige: {} };
+
+  /* Quelle négociation ? La question n'est pas posée avant le document : elle
+     est reconnue dans le texte déposé, et la réponse s'affiche à côté des
+     paragraphes, corrigeable d'un geste. À égalité de marques, on ne devine
+     pas : la rémunération, qui est la négociation la plus fréquente, sert de
+     point de départ, et le panneau la donne à corriger. */
+  var MARQUES_NEGO = {
+    remuneration: ["salaires effectifs", "salaire effectif", "partage de la valeur ajoutee",
+      "partage de la valeur ajoutée", "negociation annuelle sur la remuneration",
+      "négociation annuelle sur la rémunération", "l. 2242-15", "augmentation generale", "augmentation générale"],
+    egalite: ["egalite professionnelle", "égalité professionnelle", "femmes et les hommes",
+      "qualite de vie et des conditions de travail", "qualité de vie et des conditions de travail",
+      "l. 2242-17", "mixite des emplois", "mixité des emplois"],
+    gepp: ["gestion des emplois et des parcours", "gestion previsionnelle des emplois",
+      "gestion prévisionnelle des emplois", "gpec", "mixite des metiers", "mixité des métiers", "l. 2242-20"],
+    experimentes: ["salaries experimentes", "salariés expérimentés", "en consideration de leur age",
+      "en considération de leur âge", "l. 2242-2-1"],
+  };
+
+  function deviner(n) {
+    var meilleur = "remuneration", score = 0;
+    Object.keys(MARQUES_NEGO).forEach(function (cle) {
+      var s = MARQUES_NEGO[cle].reduce(function (acc, m) {
+        return acc + (n.indexOf(normaliser(m)) >= 0 ? 1 : 0); }, 0);
+      if (s > score) { score = s; meilleur = cle; }
+    });
+    return meilleur;
+  }
+
+  function analyser() {
+    var n = normaliser(etat.texte);
+    var f = fiche();
+    etat.absents = []; etat.nbPresents = 0; etat.retenus = {}; etat.redige = {};
+    var liste = FORME.map(function (x) { return { fam: "Le procès-verbal lui-même", it: x }; })
+      .concat((THEMES[f.nego] || []).map(function (x) {
+        return { fam: "Les thèmes de l'article " + NEGOS[f.nego].contenu, it: x }; }));
+    liste.forEach(function (e) {
+      var vu = e.it.marques.some(function (m) { return n.indexOf(normaliser(m)) >= 0; });
+      if (vu) { etat.nbPresents++; return; }
+      etat.absents.push(e);
+      etat.redige[e.it.cle] = e.it.texte;
+      etat.retenus[e.it.cle] = true;
+    });
+    rendreParagraphes();
+    assembler();
+  }
+
+  $("controler").addEventListener("click", function () {
+    var t = $("depot").value.trim();
+    $("erreur").innerHTML = "";
+    if (t.length < 150) {
+      $("erreur").innerHTML = '<div class="avis att"><b>Le texte déposé est trop court</b>' +
+        "Il compte " + t.length + " caractères. Déposez le procès-verbal entier : sur un extrait, " +
+        "tous les thèmes que l'extrait ne contient pas seraient rédigés pour rien.</div>";
+      return;
+    }
+    etat.texte = t;
+    $("f-nego").value = deviner(normaliser(t));
+    $("ong-par").disabled = false;
+    $("ong-sortie").disabled = false;
+    proposerDate();
+    analyser();
+    onglet("paragraphes");
+  });
+
+  function rendreParagraphes() {
+    var f = fiche();
+    $("compteurs").innerHTML =
+      '<span class="c">' + ech(NEGOS[f.nego].titre) + "</span>" +
+      '<span class="c ok">' + etat.nbPresents + " point" + (etat.nbPresents > 1 ? "s" : "") +
+      " déjà traité" + (etat.nbPresents > 1 ? "s" : "") + "</span>" +
+      '<span class="c abs">' + etat.absents.length + " paragraphe" + (etat.absents.length > 1 ? "s" : "") +
+      " rédigé" + (etat.absents.length > 1 ? "s" : "") + " ci-dessous</span>";
+
+    var h = "", famille = null;
+    if (!etat.absents.length)
+      h += '<div class="avis ok"><b>Tous les points de cette négociation apparaissent déjà dans votre procès-verbal</b>' +
+        "Le repérage est lexical : il voit qu'un point est abordé, jamais qu'il l'est complètement. " +
+        "Relisez, puis passez à la sortie.</div>";
+    etat.absents.forEach(function (e) {
+      if (e.fam !== famille) { famille = e.fam; h += "<h3>" + ech(famille) + "</h3>"; }
+      h += '<div class="art"><div class="tt"><span><span class="obj">' + ech(e.it.nom) + "</span></span>" +
+        '<span class="etiq" data-etiq="' + ech(e.it.cle) + '">retenu</span></div>' +
+        '<div class="corps"><textarea data-txt="' + ech(e.it.cle) + '">' + ech(etat.redige[e.it.cle]) + "</textarea>" +
+        '<div class="actes">' +
+        '<button class="btn petit" data-ins="' + ech(e.it.cle) + '">Insérer ce paragraphe</button>' +
+        '<button class="btn second petit" data-cop="' + ech(e.it.cle) + '">Copier</button>' +
+        '<button class="btn second petit" data-ret="' + ech(e.it.cle) + '">Retirer</button>' +
+        "</div></div></div>";
+    });
+    $("paragraphes").innerHTML = h;
+
+    $("paragraphes").querySelectorAll("textarea[data-txt]").forEach(function (z) {
+      z.addEventListener("input", function () { etat.redige[z.dataset.txt] = z.value; });
+    });
+    $("paragraphes").querySelectorAll("button[data-ins]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        etat.retenus[b.dataset.ins] = true; marquer(b.dataset.ins); assembler(); onglet("sortie");
+      });
+    });
+    $("paragraphes").querySelectorAll("button[data-cop]").forEach(function (b) {
+      b.addEventListener("click", function () { copier(etat.redige[b.dataset.cop], b); });
+    });
+    etat.absents.forEach(function (e) { marquer(e.it.cle); });
+  }
+
+  /* Le bouton « retirer » reçoit son onclick ici, et lui seul : marquer() est
+     rappelé à chaque bascule, et deux mécanismes sur le même bouton le feraient
+     basculer deux fois par clic. */
+  function marquer(cle) {
+    var e = $("paragraphes").querySelector('[data-etiq="' + cle + '"]');
+    if (!e) return;
+    var pris = etat.retenus[cle];
+    e.className = "etiq" + (pris ? " pris" : "");
+    e.textContent = pris ? "dans la sortie" : "écarté";
+    var b = $("paragraphes").querySelector('[data-ret="' + cle + '"]');
+    if (b) {
+      b.textContent = pris ? "Retirer" : "Remettre";
+      b.onclick = function () { etat.retenus[cle] = !etat.retenus[cle]; marquer(cle); };
+    }
+  }
+
+  $("tout-inserer").addEventListener("click", function () {
+    etat.absents.forEach(function (e) { etat.retenus[e.it.cle] = true; marquer(e.it.cle); });
+    assembler(); onglet("sortie");
+  });
+  $("vers-sortie").addEventListener("click", function () { assembler(); onglet("sortie"); });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES DATES
+
+     La réunion suivante est proposée à trois semaines de la dernière réunion
+     tenue, ou de ce jour à défaut. Si une demande syndicale d'ouverture est
+     datée, le dernier alinéa de L. 2242-13 impose la convocation des parties
+     dans les quinze jours qui suivent cette demande : la date proposée devient
+     alors ce terme, et la note le dit.
+     ══════════════════════════════════════════════════════════════════════════ */
+  function iso(d) { return d.toISOString().slice(0, 10); }
+  function joursApres(isoDate, n) {
+    var d = new Date(isoDate + "T12:00:00");
+    if (isNaN(d.getTime())) return null;
+    d.setDate(d.getDate() + n);
+    return iso(d);
+  }
+  function jourFr(isoDate) {
+    if (!isoDate) return "[DATE]";
+    var d = new Date(isoDate + "T12:00:00");
+    if (isNaN(d.getTime())) return "[DATE]";
+    return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  }
+  function aujourdhui() { return iso(new Date()); }
+
+  function proposerDate() {
+    var f = fiche(), note = "", d;
+    if (f.demande) {
+      d = joursApres(f.demande, 15);
+      note = "Terme des quinze jours qui suivent la demande syndicale du " + jourFr(f.demande) +
+        " : l'employeur convoque les parties dans ce délai (L. 2242-13, dernier alinéa).";
+    } else {
+      d = joursApres(f.derniere || aujourdhui(), 21);
+      note = "Proposée à trois semaines de " +
+        (f.derniere ? "la dernière réunion tenue" : "aujourd'hui") +
+        ". Aucun texte ne fixe ce délai : c'est un rythme, changez-le.";
+    }
+    if (d && !$("s-date").value) $("s-date").value = d;
+    $("s-date-note").textContent = note;
+  }
+  ["f-demande", "f-derniere"].forEach(function (id) {
+    $(id).addEventListener("change", function () { $("s-date").value = ""; proposerDate(); assembler(); });
+  });
+  ["s-date", "s-heure", "s-lieu"].forEach(function (id) {
+    $(id).addEventListener("input", assembler);
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES DEUX SORTIES, ET LA CONVOCATION
+     ══════════════════════════════════════════════════════════════════════════ */
+  var issue = "desaccord";
+  Array.prototype.forEach.call($("choix-issue").querySelectorAll("label"), function (l) {
+    l.addEventListener("click", function () {
+      issue = l.dataset.issue;
+      Array.prototype.forEach.call($("choix-issue").querySelectorAll("label"), function (x) {
+        x.classList.toggle("actif", x === l);
+      });
+      l.querySelector("input").checked = true;
+      assembler();
+    });
+  });
+
+  function retenus() {
+    return etat.absents.filter(function (e) { return etat.retenus[e.it.cle]; });
+  }
+  function villeDe(adresse) {
+    var m = String(adresse || "").match(/\d{5}\s+([A-Za-zÀ-ÿ' -]+)/);
+    return m ? m[1].trim() : "[VILLE]";
+  }
+  function jourFrDate(d) {
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+  }
+
+  function pvDesaccord() {
+    var f = fiche(), N = NEGOS[f.nego], L = [];
+    L.push("PROCÈS-VERBAL DE DÉSACCORD");
+    L.push("");
+    L.push(f.nom.toUpperCase());
+    L.push(f.adresse);
+    L.push("");
+    L.push("NÉGOCIATION : " + N.titre + " (" + N.fondement + ").");
+    L.push("Contenu légal de cette négociation : article " + N.contenu + ".");
+    L.push("Un procès-verbal par négociation, jamais un seul pour toutes.");
+    L.push("");
+    L.push("Établi en application de l'article L. 2242-5 du code du travail : au terme");
+    L.push("de la négociation, aucun accord n'a été conclu.");
+    L.push("");
+    L.push("========================================================================");
+    L.push("LE PROCÈS-VERBAL DÉPOSÉ, REPRIS MOT POUR MOT");
+    L.push("========================================================================");
+    L.push("");
+    L.push(etat.texte);
+    var r = retenus();
+    if (r.length) {
+      L.push("");
+      L.push("========================================================================");
+      L.push("PARAGRAPHES AJOUTÉS");
+      L.push("========================================================================");
+      L.push("");
+      L.push("À déplacer à leur rang. Les valeurs entre crochets sont à compléter :");
+      L.push("aucune proposition, aucun chiffre n'est écrit à votre place.");
+      L.push("");
+      r.forEach(function (e) {
+        L.push(etat.redige[e.it.cle]);
+        L.push("");
+        L.push("------------------------------------------------------------------------");
+        L.push("");
+      });
+    }
+    L.push("========================================================================");
+    L.push("LE DÉSACCORD ET SON DÉPÔT");
+    L.push("========================================================================");
+    L.push("");
+    L.push("Au terme de la négociation, aucun accord n'a été conclu. Le présent");
+    L.push("procès-verbal consigne, en leur dernier état, les propositions respectives");
+    L.push("des parties et les mesures que l'employeur entend appliquer");
+    L.push("unilatéralement, conformément à l'article L. 2242-5.");
+    L.push("");
+    L.push("Il donne lieu à dépôt, à l'initiative de la partie la plus diligente, dans");
+    L.push("les conditions prévues à l'article D. 2231-2 (article R. 2242-1) : le dépôt");
+    L.push("est opéré sur la plateforme de téléprocédure du ministère du travail");
+    L.push("(article D. 2231-4), et un exemplaire est remis au greffe du conseil de");
+    L.push("prud'hommes du lieu de conclusion (article D. 2231-2, III).");
+    L.push("L'employeur ne peut attendre que les organisations syndicales s'en");
+    L.push("chargent : s'il attend, il est celui qui n'a pas déposé.");
+    if (f.effectif !== null && f.effectif >= 300 && f.nego === "egalite") {
+      L.push("");
+      L.push("Effectif déclaré : " + f.effectif + " salariés. Dans les entreprises d'au moins trois");
+      L.push("cents salariés, l'article L. 2242-8 fait du présent procès-verbal la pièce");
+      L.push("qui ATTESTE le défaut d'accord sur l'égalité professionnelle. Sans lui,");
+      L.push("l'entreprise ne peut pas établir sa situation devant l'administration.");
+    }
+    L.push("");
+    L.push("Dépôt prévu le : [DATE]. Récépissé à conserver au dossier.");
+    L.push("");
+    L.push("Fait à " + villeDe(f.adresse) + ", le " + jourFrDate(new Date()) + ", en [nombre] exemplaires.");
+    L.push("");
+    L.push("Pour l'employeur                Pour les organisations syndicales");
+    L.push(f.resp);
+    L.push("                               [organisation 1] : ....................");
+    L.push("                               [organisation 2] : ....................");
+    L.push("");
+    L.push("[La signature du procès-verbal par une organisation syndicale ne vaut pas");
+    L.push("accord : elle atteste la teneur des propositions consignées. Un refus de");
+    L.push("signer se mentionne, avec sa date.]");
+    return L.join("\n");
+  }
+
+  function accordSigne() {
+    var f = fiche(), N = NEGOS[f.nego], L = [];
+    L.push("ACCORD D'ENTREPRISE");
+    L.push(N.titre.toUpperCase());
+    L.push("");
+    L.push("Entre les soussignés :");
+    L.push("");
+    L.push(f.nom + ", dont le siège est " + f.adresse + ", représentée par");
+    L.push(f.resp + ", d'une part,");
+    L.push("");
+    L.push("Et les organisations syndicales représentatives dans l'entreprise :");
+    L.push("  - [organisation 1], représentée par [nom, qualité] ;");
+    L.push("  - [organisation 2], représentée par [nom, qualité],");
+    L.push("d'autre part,");
+    L.push("");
+    L.push("Il a été convenu ce qui suit, à l'issue de la négociation engagée au titre");
+    L.push("de l'article " + N.fondement + " du code du travail, dont le contenu est fixé par");
+    L.push("l'article " + N.contenu + ".");
+    L.push("");
+    L.push("========================================================================");
+    L.push("CE QUI A ÉTÉ NÉGOCIÉ, REPRIS MOT POUR MOT DU PROCÈS-VERBAL DÉPOSÉ");
+    L.push("========================================================================");
+    L.push("");
+    L.push(etat.texte);
+    var r = retenus();
+    if (r.length) {
+      L.push("");
+      L.push("========================================================================");
+      L.push("ARTICLES AJOUTÉS");
+      L.push("========================================================================");
+      L.push("");
+      r.forEach(function (e) {
+        L.push(etat.redige[e.it.cle]);
+        L.push("");
+        L.push("------------------------------------------------------------------------");
+        L.push("");
+      });
+    }
+    L.push("========================================================================");
+    L.push("ARTICLES DE FORME");
+    L.push("========================================================================");
+    L.push("");
+    L.push("ARTICLE - CHAMP D'APPLICATION");
+    L.push("Le présent accord s'applique à l'ensemble des salariés de " + f.nom + ",");
+    L.push("[ou : des établissements de .........].");
+    L.push("");
+    L.push("ARTICLE - DURÉE ET ENTRÉE EN VIGUEUR");
+    L.push("Le présent accord est conclu pour une durée de [__] an(s), du [DATE] au");
+    L.push("[DATE]. Il entre en vigueur le [DATE].");
+    L.push("[Un accord conclu dans l'un des domaines énumérés aux 1° et 2° de");
+    L.push("L. 2242-1 et aux articles L. 2242-2 et L. 2242-2-1 peut fixer la");
+    L.push("périodicité de sa renégociation, dans la limite de quatre ans");
+    L.push("(L. 2242-12) : si vous entendez le faire, écrivez-le ici.]");
+    L.push("");
+    L.push("ARTICLE - SUIVI DE L'ACCORD");
+    L.push("Une commission de suivi composée de [composition] se réunit [périodicité]");
+    L.push("pour examiner les indicateurs suivants : [.....................].");
+    L.push("");
+    L.push("ARTICLE - RÉVISION ET DÉNONCIATION");
+    L.push("Le présent accord peut être révisé ou dénoncé dans les conditions prévues");
+    L.push("par le code du travail. [Préciser les modalités retenues.]");
+    L.push("");
+    L.push("ARTICLE - NOTIFICATION, DÉPÔT ET PUBLICITÉ");
+    L.push("Le présent accord est notifié à l'ensemble des organisations syndicales");
+    L.push("représentatives à l'issue de la procédure de signature, par [lettre remise");
+    L.push("en main propre contre décharge / lettre recommandée avec avis de réception");
+    L.push("/ courrier électronique avec accusé de réception] : la copie de cette");
+    L.push("notification accompagne le dépôt (article D. 2231-7, 1°, b).");
+    L.push("");
+    L.push("Il est déposé sur la plateforme de téléprocédure du ministère du travail");
+    L.push("(article D. 2231-4) par le représentant légal de l'entreprise (article");
+    L.push("D. 2231-2, II), accompagné des pièces énumérées à l'article D. 2231-7 :");
+    L.push("la version signée des parties ; la copie de la notification aux");
+    L.push("organisations représentatives ; la version publiable mentionnée à");
+    L.push("l'article L. 2231-5-1 ; l'acte mentionné au I de l'article R. 2231-1-1,");
+    L.push("s'il y a lieu ; le procès-verbal mentionné au 2° de l'article D. 2232-2,");
+    L.push("s'il y a lieu ; la liste mentionnée à l'article D. 2231-6, s'il y a lieu.");
+    L.push("Un récépissé est délivré au déposant.");
+    L.push("");
+    L.push("Un exemplaire est remis au greffe du conseil de prud'hommes de [VILLE],");
+    L.push("lieu de conclusion (article D. 2231-2, III).");
+    if (f.nego === "remuneration") {
+      L.push("");
+      L.push("ARTICLE - PIÈCE PARTICULIÈRE AUX ACCORDS SUR LES SALAIRES EFFECTIFS");
+      L.push("Le présent accord portant sur les salaires effectifs, il ne peut être");
+      L.push("déposé qu'accompagné du procès-verbal d'ouverture des négociations");
+      L.push("portant sur les écarts de rémunération entre les femmes et les hommes,");
+      L.push("consignant les propositions respectives des parties (article L. 2242-6).");
+      L.push("Ce procès-verbal, établi le [DATE], est joint au dépôt.");
+    }
+    L.push("");
+    L.push("Fait à " + villeDe(f.adresse) + ", le " + jourFrDate(new Date()) + ", en [nombre] exemplaires.");
+    L.push("");
+    L.push("Pour l'employeur                Pour les organisations syndicales");
+    L.push(f.resp);
+    L.push("                               [organisation 1] : ....................");
+    L.push("                               [organisation 2] : ....................");
+    return L.join("\n");
+  }
+
+  function convocation() {
+    var f = fiche(), N = NEGOS[f.nego], L = [];
+    var d = $("s-date").value, h = $("s-heure").value.trim() || "[HEURE]";
+    var lieu = $("s-lieu").value.trim() || "[SALLE, ADRESSE]";
+    L.push(f.nom);
+    L.push(f.adresse);
+    L.push("");
+    L.push("À " + villeDe(f.adresse) + ", le " + jourFrDate(new Date()) + ".");
+    L.push("");
+    L.push("Aux organisations syndicales représentatives dans l'entreprise :");
+    L.push("  - [organisation 1], à l'attention de [nom du délégué syndical] ;");
+    L.push("  - [organisation 2], à l'attention de [nom du délégué syndical] ;");
+    L.push("  - [organisation 3], à l'attention de [nom du délégué syndical].");
+    L.push("");
+    L.push("[Remise en main propre contre décharge, ou lettre recommandée avec avis de");
+    L.push("réception. Toutes les organisations représentatives sont convoquées : une");
+    L.push("seule oubliée suffit à faire tomber l'engagement sérieux et loyal que");
+    L.push("l'article L. 2242-6 définit.]");
+    L.push("");
+    L.push("Objet : convocation à la réunion de négociation du " + jourFr(d) + ".");
+    L.push("");
+    L.push("Madame, Monsieur,");
+    L.push("");
+    L.push("Je vous convie à la prochaine réunion de la négociation portant sur");
+    L.push(N.titre.toLowerCase() + " (" + N.fondement + ").");
+    L.push("");
+    L.push("  Date  : " + jourFr(d));
+    L.push("  Heure : " + h);
+    L.push("  Lieu  : " + lieu);
+    if (f.demande) {
+      L.push("");
+      L.push("Cette convocation fait suite à la demande d'ouverture de négociation");
+      L.push("formulée le " + jourFr(f.demande) + ". Dans les quinze jours qui suivent une telle");
+      L.push("demande, l'employeur convoque les parties à la négociation (L. 2242-13,");
+      L.push("dernier alinéa) ; la demande a par ailleurs été transmise aux autres");
+      L.push("organisations représentatives le [DATE], dans les huit jours de sa");
+      L.push("réception, comme le même alinéa l'impose.");
+    }
+    L.push("");
+    L.push("ORDRE DU JOUR");
+    L.push("");
+    L.push("  1. Approbation du compte rendu de la réunion précédente.");
+    var r = retenus();
+    if (r.length) {
+      var i = 2;
+      r.forEach(function (e) {
+        L.push("  " + i + ". " + e.it.nom + ".");
+        i++;
+      });
+      L.push("  " + i + ". Réponses motivées de l'employeur aux propositions formulées.");
+      L.push("  " + (i + 1) + ". Suite de la négociation, ou clôture.");
+    } else {
+      L.push("  2. [Point à l'ordre du jour].");
+      L.push("  3. Réponses motivées de l'employeur aux propositions formulées.");
+      L.push("  4. Suite de la négociation, ou clôture.");
+    }
+    L.push("");
+    L.push("INFORMATIONS REMISES AVEC LA PRÉSENTE CONVOCATION");
+    L.push("");
+    L.push("  - [document 1] ;");
+    L.push("  - [document 2] ;");
+    L.push("  - [document 3].");
+    L.push("");
+    L.push("Date de remise : " + (d ? jourFr(joursApres(d, -7)) : "[DATE]") + ", soit une semaine avant la");
+    L.push("réunion. Une date annoncée se tient : l'article L. 2242-6 range la");
+    L.push("communication des informations nécessaires pour négocier en toute");
+    L.push("connaissance de cause parmi les conditions de l'engagement sérieux et");
+    L.push("loyal des négociations.");
+    L.push("");
+    L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
+    L.push("distinguée.");
+    L.push("");
+    L.push("");
+    L.push(f.resp);
+    L.push(f.nom);
+    return L.join("\n");
+  }
+
+  function assembler() {
+    if (!etat.texte) return;
+    $("sortie").textContent = issue === "accord" ? accordSigne() : pvDesaccord();
+    $("convoc").textContent = convocation();
+  }
+
+  function vue(quelle) {
+    ["piece", "convoc"].forEach(function (v) {
+      $("s-" + v).classList.toggle("cache", v !== quelle);
+    });
+  }
+  $("v-piece").addEventListener("click", function () { vue("piece"); });
+  $("v-convoc").addEventListener("click", function () { vue("convoc"); });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     EMPORTER
+     ══════════════════════════════════════════════════════════════════════════ */
+  function nomFichier(base, ext) {
+    return base + "-" + new Date().toISOString().slice(0, 10) + "." + ext;
+  }
+  function copier(t, bouton) {
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    else { var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a);
+           a.select(); document.execCommand("copy"); a.remove(); }
+    var avant = bouton.textContent;
+    bouton.textContent = "Copié";
+    setTimeout(function () { bouton.textContent = avant; }, 1600);
+  }
+  function versWord(texte, titre, nom) {
+    var items = [];
+    texte.split(/\n/).forEach(function (l) { items.push({ k: "p", t: l }); });
+    window.AuditExport.telecharger(window.AuditExport.docx(items, titre), nom,
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  }
+
+  $("copier").addEventListener("click", function () { copier($("sortie").textContent, $("copier")); });
+  $("copier-convoc").addEventListener("click", function () { copier($("convoc").textContent, $("copier-convoc")); });
+  $("dl-txt").addEventListener("click", function () {
+    window.AuditExport.telecharger($("sortie").textContent,
+      nomFichier(issue === "accord" ? "nao-accord" : "nao-pv-desaccord", "txt"),
+      "text/plain;charset=utf-8");
+  });
+  $("dl-docx").addEventListener("click", function () {
+    versWord($("sortie").textContent,
+      issue === "accord" ? "Accord d'entreprise" : "Procès-verbal de désaccord",
+      nomFichier(issue === "accord" ? "nao-accord" : "nao-pv-desaccord", "docx"));
+  });
+  $("dl-convoc-docx").addEventListener("click", function () {
+    versWord($("convoc").textContent, "Convocation à la réunion de négociation",
+      nomFichier("nao-convocation", "docx"));
+  });
+
+  /* Une réponse du panneau remplit le document sous les yeux de l'utilisateur.
+     Changer la négociation change la liste des thèmes : le repérage est refait
+     sur le même texte, sans le renvoyer à l'écran du dépôt. */
+  $("f-nego").addEventListener("change", function () { if (etat.texte) analyser(); });
+  $("f-eff").addEventListener("input", function () { if (etat.texte) assembler(); });
+  ["f-nom", "f-adresse", "f-resp"].forEach(function (id) {
+    $(id).addEventListener("input", function () { if (etat.texte) assembler(); });
+  });
+})();
+</script>
+</body>
+</html>

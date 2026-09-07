@@ -23,6 +23,14 @@
   Un domaine déjà couvert ne produit rien : pas de carte, pas de constat, pas
   de cours sur le droit.
 
+  AUCUNE QUESTION AVANT LE DOCUMENT. Le premier écran ne demande rien : il prend
+  le fichier, et le second montre aussitôt les articles écrits. Les questions
+  viennent après, dans le panneau posé À CÔTÉ du document visible, et seulement
+  celles qui servent à le compléter : l'année qui date les échéances, l'effectif
+  qui commande le minimum de domaines, le signataire, les résultats de l'index.
+  Chaque réponse remplit le document sous les yeux de l'utilisateur, et laisse
+  intacts les articles qu'il a lui-même modifiés.
+
   TROIS SORTIES, ET RIEN À RECOPIER À LA MAIN :
     1. le texte révisé, votre document mot pour mot plus les articles retenus ;
     2. le courrier de dépôt sur la plateforme de téléprocédure, rempli des
@@ -81,7 +89,19 @@
     padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
   input[type=file]{font:inherit;font-size:14px}
 
+  /* Le document à gauche, ce qui reste à compléter à droite, à côté de lui.
+     Aucune question ne précède le document : elles se posent devant lui, et
+     chaque réponse le remplit sous les yeux de l'utilisateur. */
+  .deux{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+  .panneau{position:sticky;top:14px;background:var(--carte);border:1px solid var(--filet);
+    border-radius:12px;padding:14px 15px}
+  .panneau h4{margin:0 0 4px;font:600 12px/1.3 system-ui;letter-spacing:.04em;
+    text-transform:uppercase;color:var(--encre-3)}
+  .panneau p.q{margin:0 0 12px;font-size:12.5px;line-height:1.5;color:var(--encre-2)}
+  @media (max-width:900px){.deux{grid-template-columns:1fr}.panneau{position:static}}
+
   .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .panneau .champs{grid-template-columns:1fr;gap:12px}
   label.ch{display:grid;gap:4px}
   label.ch .nom{font:600 12px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
   label.ch input,label.ch select{font:inherit;font-size:14.5px;padding:9px 11px;
@@ -150,7 +170,8 @@
   footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
     font-size:13px;color:var(--encre-3)}
   @media print{
-    .onglets,.barre,header.site,.aide,.carte,.avis,details.txt,footer,h2{display:none}
+    .onglets,.barre,header.site,.aide,.carte,.avis,details.txt,footer,h2,.panneau{display:none}
+    .deux{display:block}
     .affiche{border:none;padding:0}
     body{background:#fff}
   }
@@ -185,31 +206,6 @@
     son texte et collez-le ci-dessous.</p>
 
     <div class="carte">
-      <div class="champs" id="fiche">
-        <label class="ch pleine"><span class="nom">Dénomination</span>
-          <input id="f-nom" placeholder="Raison sociale">
-          <span class="sous">Reprise de votre fiche entreprise, et modifiable ici.</span></label>
-        <label class="ch"><span class="nom">SIRET</span><input id="f-siret" placeholder="14 chiffres"></label>
-        <label class="ch pleine"><span class="nom">Adresse du siège</span><input id="f-adresse"></label>
-        <label class="ch"><span class="nom">Signataire (nom, qualité)</span><input id="f-resp"></label>
-        <label class="ch"><span class="nom">Effectif</span>
-          <input id="f-eff" type="number" min="0">
-          <span class="sous">Trois cents salariés font passer de trois à quatre le nombre minimal de
-          domaines d'action (R. 2242-2).</span></label>
-        <label class="ch"><span class="nom">Année couverte</span>
-          <input id="f-annee" type="number" min="2000" max="2100">
-          <span class="sous">Sert à dater les échéances des articles rédigés.</span></label>
-        <label class="ch"><span class="nom">Nature du document déposé</span>
-          <select id="f-nature">
-            <option value="accord">Accord collectif d'entreprise</option>
-            <option value="plan">Plan d'action unilatéral</option>
-          </select>
-          <span class="sous">Elle commande le courrier de dépôt : les pièces de D. 2231-7
-          accompagnent un accord, pas un plan.</span></label>
-      </div>
-    </div>
-
-    <div class="carte">
       <div class="barre">
         <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
           Choisir un fichier .docx ou .txt
@@ -232,10 +228,28 @@
     <p class="aide">Chacun est rédigé et prêt à coller. Modifiez ce que vous voulez dans la zone,
     remplacez les valeurs entre crochets par les vôtres, puis insérez.</p>
     <div class="compteurs" id="compteurs"></div>
-    <div id="articles"></div>
-    <div class="barre">
-      <button class="btn" id="vers-sortie">Assembler le texte révisé</button>
-      <button class="btn second" id="tout-inserer">Tout insérer</button>
+    <div class="deux">
+      <div>
+        <div id="articles"></div>
+        <div class="barre">
+          <button class="btn" id="vers-sortie">Assembler le texte révisé</button>
+          <button class="btn second" id="tout-inserer">Tout insérer</button>
+        </div>
+      </div>
+      <aside class="panneau">
+        <h4>Pour compléter</h4>
+        <p class="q">Deux réponses, et les articles ci-contre se remplissent sous vos yeux.
+        Ceux que vous avez déjà modifiés à la main ne sont pas touchés.</p>
+        <div class="champs">
+          <label class="ch"><span class="nom">Année couverte</span>
+            <input id="f-annee" type="number" min="2000" max="2100">
+            <span class="sous">Elle date les échéances.</span></label>
+          <label class="ch"><span class="nom">Effectif</span>
+            <input id="f-eff" type="number" min="0">
+            <span class="sous">Trois cents salariés font passer de trois à quatre le nombre
+            minimal de domaines (R. 2242-2).</span></label>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -248,45 +262,61 @@
       <button class="btn second" id="v-index">La page d'affichage de l'index</button>
     </div>
 
-    <div id="s-texte">
-      <p class="aide">Votre texte mot pour mot, les articles retenus ajoutés à la suite, à déplacer
-      à leur rang.</p>
-      <div class="barre">
-        <button class="btn" id="dl-docx">Télécharger en Word</button>
-        <button class="btn second" id="dl-txt">Télécharger en texte</button>
-        <button class="btn second" id="copier">Copier</button>
-      </div>
-      <pre class="sortie" id="sortie"></pre>
-    </div>
-
-    <div id="s-courrier" class="cache">
-      <p class="aide">Rempli des données de votre fiche, avec le bordereau des pièces que
-      D. 2231-7 énumère.</p>
-      <div class="barre">
-        <button class="btn" id="dl-courrier-docx">Télécharger en Word</button>
-        <button class="btn second" id="copier-courrier">Copier</button>
-      </div>
-      <pre class="sortie" id="courrier"></pre>
-    </div>
-
-    <div id="s-index" class="cache">
-      <p class="aide">Complétez les résultats, puis imprimez : cette page seule sort à
-      l'impression.</p>
-      <div class="carte">
-        <div class="champs">
-          <label class="ch"><span class="nom">Année des résultats</span>
-            <input id="x-annee" type="number" min="2000" max="2100"></label>
-          <label class="ch"><span class="nom">Niveau de résultat, en points</span>
-            <input id="x-note" type="number" min="0" max="100"></label>
-          <label class="ch"><span class="nom">Date de publication</span>
-            <input id="x-date" type="date"></label>
+    <div class="deux">
+      <div>
+        <div id="s-texte">
+          <div class="barre">
+            <button class="btn" id="dl-docx">Télécharger en Word</button>
+            <button class="btn second" id="dl-txt">Télécharger en texte</button>
+            <button class="btn second" id="copier">Copier</button>
+          </div>
+          <pre class="sortie" id="sortie"></pre>
         </div>
-        <div class="champs" id="x-indics" style="margin-top:14px"></div>
+
+        <div id="s-courrier" class="cache">
+          <div class="barre">
+            <button class="btn" id="dl-courrier-docx">Télécharger en Word</button>
+            <button class="btn second" id="copier-courrier">Copier</button>
+          </div>
+          <pre class="sortie" id="courrier"></pre>
+        </div>
+
+        <div id="s-index" class="cache">
+          <div class="barre">
+            <button class="btn" id="imprimer-index">Imprimer cette page</button>
+          </div>
+          <div id="affiche"></div>
+        </div>
       </div>
-      <div class="barre">
-        <button class="btn" id="imprimer-index">Imprimer cette page</button>
-      </div>
-      <div id="affiche"></div>
+
+      <aside class="panneau">
+        <h4>Pour compléter</h4>
+        <p class="q">Chaque réponse remplit le document ci-contre, à mesure que vous l'écrivez.</p>
+        <div class="champs">
+          <label class="ch"><span class="nom">Dénomination</span><input id="f-nom" placeholder="Raison sociale"></label>
+          <label class="ch"><span class="nom">SIRET</span><input id="f-siret" placeholder="14 chiffres"></label>
+          <label class="ch"><span class="nom">Adresse du siège</span><input id="f-adresse"></label>
+          <label class="ch"><span class="nom">Signataire (nom, qualité)</span><input id="f-resp"></label>
+          <label class="ch"><span class="nom">Nature du document</span>
+            <select id="f-nature">
+              <option value="accord">Accord collectif d'entreprise</option>
+              <option value="plan">Plan d'action unilatéral</option>
+            </select>
+            <span class="sous">Les pièces de D. 2231-7 accompagnent un accord, pas un plan.</span></label>
+        </div>
+        <div id="panneau-index" class="cache">
+          <h4 style="margin-top:16px">L'index</h4>
+          <div class="champs">
+            <label class="ch"><span class="nom">Année des résultats</span>
+              <input id="x-annee" type="number" min="2000" max="2100"></label>
+            <label class="ch"><span class="nom">Niveau de résultat, en points</span>
+              <input id="x-note" type="number" min="0" max="100"></label>
+            <label class="ch"><span class="nom">Date de publication</span>
+              <input id="x-date" type="date"></label>
+          </div>
+          <div class="champs" id="x-indics" style="margin-top:12px"></div>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -859,7 +889,9 @@
       .replace(/[’']/g, "'").replace(/\s+/g, " ");
   }
 
-  var etat = { texte: "", absents: [], presents: [], retenus: {}, redige: {} };
+  /* `touche` retient les articles que l'utilisateur a modifiés lui-même : une
+     réponse donnée dans le panneau réécrit les autres, jamais ceux-là. */
+  var etat = { texte: "", absents: [], presents: [], retenus: {}, redige: {}, touche: {} };
 
   $("controler").addEventListener("click", function () {
     var t = $("depot").value.trim();
@@ -873,6 +905,7 @@
     var n = normaliser(t);
     etat.texte = t; etat.absents = []; etat.presents = []; etat.retenus = {}; etat.redige = {};
     var f = fiche();
+    etat.touche = {};
     DOMAINES.forEach(function (d) {
       var vu = d.marques.some(function (m) { return n.indexOf(normaliser(m)) >= 0; });
       if (vu) { etat.presents.push(d); return; }
@@ -886,18 +919,22 @@
     onglet("articles");
   });
 
-  function rendreArticles() {
+  function majCompteurs() {
     var f = fiche();
     var minimum = f.effectif === null ? null : (f.effectif >= 300 ? 4 : 3);
+    var retenu = etat.absents.filter(function (d) { return etat.retenus[d.cle]; }).length;
     var c = "";
     c += '<span class="c ok">' + etat.presents.length + " domaine" +
       (etat.presents.length > 1 ? "s" : "") + " déjà couvert" + (etat.presents.length > 1 ? "s" : "") + "</span>";
     c += '<span class="c abs">' + etat.absents.length + " article" +
       (etat.absents.length > 1 ? "s" : "") + " rédigé" + (etat.absents.length > 1 ? "s" : "") + " ci-dessous</span>";
-    if (minimum !== null)
-      c += '<span class="c">' + minimum + " domaines au minimum, effectif de " +
-        f.effectif + " salariés (R. 2242-2)</span>";
+    c += '<span class="c">' + (etat.presents.length + retenu) + " domaines couverts en tout" +
+      (minimum !== null ? ", minimum applicable " + minimum + " (R. 2242-2)" : "") + "</span>";
     $("compteurs").innerHTML = c;
+  }
+
+  function rendreArticles() {
+    majCompteurs();
 
     var h = "";
     if (!etat.absents.length) {
@@ -922,7 +959,9 @@
     $("articles").innerHTML = h;
 
     $("articles").querySelectorAll("textarea[data-txt]").forEach(function (z) {
-      z.addEventListener("input", function () { etat.redige[z.dataset.txt] = z.value; });
+      z.addEventListener("input", function () {
+        etat.redige[z.dataset.txt] = z.value; etat.touche[z.dataset.txt] = true;
+      });
     });
     $("articles").querySelectorAll("button[data-ins]").forEach(function (b) {
       b.addEventListener("click", function () {
@@ -950,6 +989,7 @@
     var b = $("articles").querySelector('[data-ret="' + cle + '"]');
     if (b) b.textContent = pris ? "Retirer de la version révisée" : "Remettre dans la version révisée";
     if (b) b.onclick = function () { etat.retenus[cle] = !etat.retenus[cle]; marquer(cle); };
+    majCompteurs();
   }
 
   $("tout-inserer").addEventListener("click", function () {
@@ -957,6 +997,29 @@
     assembler(); onglet("sortie");
   });
   $("vers-sortie").addEventListener("click", function () { assembler(); onglet("sortie"); });
+
+  /* Une réponse donnée dans le panneau réécrit les articles sous les yeux de
+     l'utilisateur : les échéances se datent, le minimum de domaines se
+     recalcule. Les articles qu'il a modifiés à la main restent tels quels. */
+  function remplirArticles() {
+    if (!etat.absents.length) { majCompteurs(); return; }
+    var f = fiche();
+    etat.absents.forEach(function (d) {
+      if (etat.touche[d.cle]) return;
+      etat.redige[d.cle] = d.article(f.annee, f.effectif).join("\n");
+      var z = $("articles").querySelector('textarea[data-txt="' + d.cle + '"]');
+      if (z) z.value = etat.redige[d.cle];
+    });
+    majCompteurs();
+    if (etat.texte) assembler();
+  }
+  ["f-annee", "f-eff"].forEach(function (id) {
+    $(id).addEventListener("input", remplirArticles);
+  });
+  ["f-nom", "f-siret", "f-adresse", "f-resp", "f-nature"].forEach(function (id) {
+    $(id).addEventListener("input", function () { if (etat.texte) assembler(); });
+    $(id).addEventListener("change", function () { if (etat.texte) assembler(); });
+  });
 
   /* ══════════════════════════════════════════════════════════════════════════
      LES TROIS SORTIES
@@ -1123,6 +1186,9 @@
     ["texte", "courrier", "index"].forEach(function (v) {
       $("s-" + v).classList.toggle("cache", v !== quelle);
     });
+    /* Les champs de l'index ne s'ouvrent qu'avec l'affiche qu'ils remplissent :
+       ailleurs, ils seraient des questions posées pour rien. */
+    $("panneau-index").classList.toggle("cache", quelle !== "index");
   }
   $("v-texte").addEventListener("click", function () { vue("texte"); });
   $("v-courrier").addEventListener("click", function () { vue("courrier"); });

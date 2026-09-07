@@ -24,6 +24,8 @@ const ESSENTIELS = [
      et confronté au texte. Le fichier est lu dans la page — rien ne sort du
      poste —, donc la page doit s'ouvrir hors connexion comme les autres. */
   "./controler-ri.html",
+  "./controler-egalite.html",
+  "./controler-nao.html",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
      reconnaissance de la matière instantanée et disponible hors connexion. */
   "./vocabulaire.json",
