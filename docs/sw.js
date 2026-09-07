@@ -28,6 +28,10 @@ const ESSENTIELS = [
   "./controler-nao.html",
   "./controler-cse.html",
   "./controler-bdese.html",
+  "./controler-duerp.html",
+  "./controler-duerp.js",
+  "./duerp-metiers.js",
+  "./controler-affichages.html",
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
      reconnaissance de la matière instantanée et disponible hors connexion. */
   "./vocabulaire.json",

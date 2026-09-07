@@ -94,6 +94,10 @@
   .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
   .btn.petit{font-size:12.5px;padding:7px 11px}
 
+  details.txt{border:1px solid var(--filet);border-radius:9px;background:var(--carte)}
+  details.txt>summary{padding:9px 13px;cursor:pointer;font:600 12.5px/1.3 system-ui;color:var(--bleu)}
+  details.txt .c{padding:0 14px 12px;font-size:13px;line-height:1.6;color:var(--encre-2)}
+
   .bloc-affiche{margin:26px 0 34px}
   .reglages{background:var(--creux);border:1px solid var(--filet);border-radius:11px;padding:13px 15px;margin:0 0 12px}
   .reglages>b{display:block;font:600 14px/1.3 system-ui;margin-bottom:9px;color:var(--bleu)}
@@ -803,19 +807,34 @@
         "Rien à produire. Passez au relevé daté : c'est lui qui prouvera, dans six mois, ce qui était au mur aujourd'hui.</div>";
       return;
     }
+    /* Les champs ne sont pas un questionnaire préalable : l'affiche est déjà
+       là, entière. On ne demande que ce qui manque encore, à côté d'elle, et
+       chaque frappe la remplit. Ce qui est déjà renseigné se corrige sous le
+       repli, pour ne pas redemander ce qu'on a déjà. */
     $("#affiches").innerHTML = liste.map(function (a) {
+      a.champs.forEach(function (ch) { if (ch.defaut && !v(ch.c)) E.v[ch.c] = ch.defaut; });
+      var vides = a.champs.filter(function (ch) { return !v(ch.c); });
+      var remplis = a.champs.filter(function (ch) { return !!v(ch.c); });
       return '<div class="bloc-affiche" data-aff="' + ech(a.id) + '">' +
         '<div class="reglages hors-impression"><b>' + ech(a.nom) + "</b>" +
-        '<p class="sous" style="margin:0 0 10px;font-size:13px;color:var(--encre-2);line-height:1.5">' + ech(a.pourquoi) + "</p>" +
-        '<div class="champs">' + a.champs.map(champHtml).join("") + "</div>" +
+        '<p class="sous" style="margin:0 0 10px;font-size:13px;color:var(--encre-2);line-height:1.5">' +
+        (vides.length
+          ? "Il reste " + vides.length + " chose" + (vides.length > 1 ? "s" : "") +
+            " à porter sur cette affiche. Chaque réponse la remplit sous vos yeux."
+          : "Rien ne manque sur cette affiche : elle est prête à imprimer.") + "</p>" +
+        '<div class="champs">' + vides.map(champHtml).join("") + "</div>" +
+        (remplis.length
+          ? '<details class="txt" style="margin:10px 0 0"><summary>Corriger ce qui est déjà rempli (' +
+            remplis.length + ")</summary><div class=\"c\"><div class=\"champs\">" +
+            remplis.map(champHtml).join("") + "</div></div></details>"
+          : "") +
+        '<details class="txt" style="margin:8px 0 0"><summary>Le texte qui appelle cette affiche</summary>' +
+        '<div class="c">' + ech(a.pourquoi) + "</div></details>" +
         '<div class="barre" style="margin:12px 0 0"><button class="btn petit" data-imp="' + ech(a.id) + '">Imprimer cette affiche</button>' +
         '<button class="btn second petit" data-fait="' + ech(a.id) + '">Elle est posée, la cocher</button></div></div>' +
         '<div class="cadre-a4"><div class="a4" data-feuille="' + ech(a.id) + '">' + feuilleHtml(a) + "</div></div></div>";
     }).join("");
 
-    liste.forEach(function (a) {
-      a.champs.forEach(function (ch) { if (ch.defaut && !v(ch.c)) E.v[ch.c] = ch.defaut; });
-    });
     garder();
 
     brancherChamps($("#affiches"), function () {
