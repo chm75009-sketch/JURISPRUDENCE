@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.2";
+const CACHE = "jurisprudence-12.3";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -27,6 +27,7 @@ const ESSENTIELS = [
      et confronté au texte. Le fichier est lu dans la page — rien ne sort du
      poste —, donc la page doit s'ouvrir hors connexion comme les autres. */
   "./controler-ri.html",
+  "./controler-discipline.html",
   "./controler-egalite.html",
   "./controler-nao.html",
   "./controler-cse.html",

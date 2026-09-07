@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#16181d">
+<link rel="manifest" href="manifest-audit-discipline.json">
+<link rel="apple-touch-icon" href="icons/icon-discipline-180.png">
+<link rel="icon" href="icons/icon-discipline-180.png">
+<title>Contrôler ma procédure disciplinaire</title>
+<link rel="stylesheet" href="style.css">
+<script src="droits.js"></script>
+
+<!--
+  LA BRANCHE « OUI ».
+
+  La question posée est : « Avez-vous un règlement des sanctions et une
+  procédure disciplinaire écrite ? » Le « non » écrit les six documents
+  (audit-discipline.html). Le « oui » arrive ici, et ici on ne pose aucune
+  question : on prend le document, et pour chaque manque on rend la clause
+  rédigée, prête à être collée à sa place.
+
+  Trois écrans, trois actes : déposer, choisir, emporter.
+
+  CE QUE LE REPÉRAGE FAIT, ET CE QU'IL NE FAIT PAS. Il est lexical. Il voit
+  qu'un sujet est traité ; il ne dit jamais qu'il est bien traité. Aucun point
+  n'est donc dit « conforme » : c'est refusé, pas oublié. Et une clause écrite
+  en d'autres termes que ceux que la page connaît sera dite absente. C'est le
+  prix du procédé : il vaut mieux relire une clause qui existe que croire
+  complète celle qui manque.
+
+  LES TEXTES. Chaque article cité a été demandé deux fois au relais Légifrance
+  le 7 septembre 2026, à plusieurs minutes d'intervalle ; les deux lectures ont
+  rendu le même identifiant de version et le même texte. L'identifiant LEGIARTI
+  est dans la table TEXTES, et le pied de page l'affiche.
+
+  Rien ne quitte ce poste : le fichier déposé est lu dans le navigateur, et
+  n'est envoyé nulle part.
+-->
+
+<style>
+  /* Ce qui est propre à cette page. Le reste vient de style.css. */
+
+  textarea#depot{min-height:240px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}
+
+  .pt{border:1px solid var(--filet);border-radius:var(--r2);margin:var(--e3) 0;
+    background:var(--surface);overflow:hidden}
+  .pt>.tt{padding:11px 15px;display:grid;grid-template-columns:auto 1fr;gap:11px;
+    align-items:start;border-bottom:1px solid var(--filet)}
+  .pt>.tt .obj{font:600 15px/1.35 system-ui;color:var(--encre)}
+  .pt>.tt .fond{display:block;font-size:var(--t1);color:var(--texte-3);margin-top:2px}
+  .etat{font:600 11px/1 system-ui;padding:6px 9px;border-radius:var(--r1);white-space:nowrap;
+    text-transform:uppercase;letter-spacing:.04em}
+  .etat.absent{background:var(--rouge-clair);color:var(--rouge)}
+  .etat.averifier{background:var(--accent-clair);color:var(--accent)}
+  .etat.acontroler{background:var(--ambre-clair);color:var(--ambre)}
+  .etat.sansobjet{background:var(--creux);color:var(--texte-3)}
+  .pt .c{padding:12px 15px;font-size:14px;line-height:1.6;color:var(--texte-2)}
+  .pt .c p{margin:0 0 9px}
+  .pt .c .exige{color:var(--encre)}
+  blockquote{margin:8px 0;padding:9px 13px;border-left:3px solid var(--filet-2);
+    background:var(--creux);border-radius:0 var(--r1) var(--r1) 0;font-size:13.5px;color:var(--encre)}
+  blockquote .m{display:block;margin-top:5px;font-size:11.5px;color:var(--texte-3)}
+
+  /* La clause prête à insérer : c'est elle qu'on vient chercher, elle est donc
+     lisible d'un coup d'oeil et copiable d'un bouton. */
+  .clause{margin:8px 0 0;padding:12px 14px;background:var(--vert-clair);
+    border-radius:var(--r1);font-size:13.5px;line-height:1.55;color:#1b4b2d}
+  .clause p{margin:0 0 6px}
+  .clause p:last-child{margin-bottom:0}
+  .sous-clause{display:flex;flex-wrap:wrap;gap:var(--e2);align-items:center;margin:var(--e2) 0 0}
+  label.opt{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--encre)}
+  label.opt input{width:auto;margin-top:3px}
+
+  pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
+    padding:16px;max-height:64vh;overflow:auto}
+
+  @media print{.barre,.onglets,#o-depot{display:none !important}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Jurisprudence <span>discipline</span></p>
+    <div class="outils">
+      <a href="audit-discipline.html">Revenir à la question</a>
+      <a href="controler-ri.html">Contrôler le règlement intérieur</a>
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button type="button" data-o="depot" class="actif">1 · Le document</button>
+    <button type="button" data-o="diag" id="ong-diag" disabled>2 · Ce qui manque</button>
+    <button type="button" data-o="sortie" id="ong-sortie" disabled>3 · La version complétée</button>
+  </div>
+
+  <!-- ══════ 1 · LE DOCUMENT ══════ -->
+  <section id="o-depot">
+    <h2>Déposez votre règlement des sanctions ou votre procédure disciplinaire</h2>
+    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats
+    sont lus directement, <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document, copiez
+    son texte et collez-le ci-dessous. Le règlement intérieur entier convient aussi : la page ne
+    regarde que ce qui touche à la discipline.</p>
+
+    <div class="carte">
+      <div class="barre">
+        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
+          Choisir un fichier .docx ou .txt
+          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+        </label>
+        <button type="button" class="btn second" id="exemple">Coller un exemple</button>
+        <button type="button" class="btn second" id="vider">Vider</button>
+      </div>
+      <div id="lecture"></div>
+      <textarea id="depot" placeholder="Collez ici le texte de votre règlement des sanctions, de votre procédure disciplinaire ou de votre règlement intérieur."></textarea>
+      <div class="barre">
+        <button type="button" class="btn" id="controler">Contrôler ce document</button>
+      </div>
+      <div id="erreur"></div>
+    </div>
+
+    <div class="avis info">
+      <b>Ce que ce contrôle établit, et ce qu'il n'établit pas</b>
+      Il cherche dans votre texte les exigences que la loi pose à la discipline et les clauses
+      qu'elle interdit. Trouver un sujet ne prouve pas que la clause est complète ni bien rédigée :
+      c'est pourquoi rien ici n'est jamais dit « conforme ». Ne pas le trouver ne prouve pas
+      davantage qu'il manque au droit de votre entreprise : il peut figurer dans un accord, dans la
+      convention collective, ou être rédigé en d'autres termes que ceux que ce contrôle connaît.
+    </div>
+  </section>
+
+  <!-- ══════ 2 · CE QUI MANQUE ══════ -->
+  <section id="o-diag" class="cache">
+    <h2>Ce qui manque, et la clause qui le comble</h2>
+    <p class="aide">Chaque point cite l'article dont il sort. Les passages de votre document sont
+    rendus tels qu'ils sont écrits : ce sont eux qui décident.</p>
+    <div class="compteurs" id="compteurs"></div>
+    <div id="points"></div>
+    <div class="barre">
+      <button type="button" class="btn" id="vers-sortie">Assembler la version complétée</button>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LA VERSION COMPLÉTÉE ══════ -->
+  <section id="o-sortie" class="cache">
+    <h2>La version complétée</h2>
+    <p class="aide">Votre texte est conservé mot pour mot. Les passages retenus au diagnostic y sont
+    signalés à leur place, et les clauses manquantes sont ajoutées à la suite, à déplacer à leur
+    rang. Rien n'est réécrit à votre place.</p>
+    <div class="barre">
+      <button type="button" class="btn" id="dl-docx">Télécharger en Word</button>
+      <button type="button" class="btn second" id="dl-txt">En texte</button>
+      <button type="button" class="btn second" id="copier">Copier</button>
+      <button type="button" class="btn second" id="retour-diag">&larr; Revenir au diagnostic</button>
+    </div>
+    <div id="resume"></div>
+    <pre id="sortie"></pre>
+  </section>
+
+  <footer>
+    Le repérage est lexical : il ne remplace pas la lecture du document, il la conduit.
+    <p style="margin:10px 0 0">Si le document n'existe pas encore, il s'écrit sur
+      <a href="audit-discipline.html">l'écran de la discipline</a> ; le règlement intérieur entier
+      se contrôle sur <a href="controler-ri.html">controler-ri.html</a> et se rédige dans le
+      <a href="parcours.html?p=ri&amp;faire=1">parcours du règlement intérieur</a>.</p>
+    <details>
+      <summary>Les textes lus, avec leur identifiant de version</summary>
+      <div id="sources" style="margin-top:8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.7"></div>
+    </details>
+  </footer>
+</main>
+
+<script src="audit-export.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var $ = function (s) { return document.querySelector(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LES TEXTES.
+
+     Deux lectures au relais Légifrance le 7 septembre 2026, à plusieurs
+     minutes d'intervalle, concordantes pour chacun. L'identifiant de version
+     est conservé : un article change sans changer de numéro.
+     ══════════════════════════════════════════════════════════════════════ */
+  var TEXTES = {
+    "L1321-1": { id: "LEGIARTI000006901432",
+      dit: "le règlement intérieur fixe exclusivement les mesures de santé et de sécurité, la participation au rétablissement de conditions protectrices, et les règles générales et permanentes relatives à la discipline, notamment la nature et l'échelle des sanctions" },
+    "L1321-3": { id: "LEGIARTI000033975667",
+      dit: "le règlement ne peut contenir de dispositions contraires aux lois et aux conventions, de restrictions non justifiées par la nature de la tâche ni proportionnées au but recherché, ni de dispositions discriminatoires" },
+    "L1321-4": { id: "LEGIARTI000054140230",
+      dit: "avis du comité social et économique avant introduction ; entrée en vigueur postérieure d'un mois aux formalités de publicité ; communication à l'inspecteur du travail avec l'avis du comité, en même temps que la publicité ; mêmes règles en cas de modification ou de retrait" },
+    "L1321-5": { id: "LEGIARTI000035653093",
+      dit: "les notes de service et tout document comportant des obligations générales et permanentes dans les matières de L. 1321-1 et L. 1321-2 sont des adjonctions au règlement intérieur et sont soumis aux dispositions du même titre" },
+    "R1321-1": { id: "LEGIARTI000033292501",
+      dit: "le règlement intérieur est porté par tout moyen à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche" },
+    "R1321-2": { id: "LEGIARTI000018536915",
+      dit: "le règlement intérieur est déposé au greffe du conseil de prud'hommes du ressort de l'entreprise ou de l'établissement" },
+    "R1321-3": { id: "LEGIARTI000018536913",
+      dit: "le délai court à compter de la dernière en date des formalités de publicité et de dépôt définies aux articles R. 1321-1 et R. 1321-2" },
+    "R1321-4": { id: "LEGIARTI000018536911",
+      dit: "le texte du règlement intérieur est transmis à l'inspecteur du travail en deux exemplaires" },
+    "L1331-1": { id: "LEGIARTI000006901445",
+      dit: "constitue une sanction toute mesure, autre que les observations verbales, prise à la suite d'un agissement considéré comme fautif, de nature à affecter immédiatement ou non la présence dans l'entreprise, la fonction, la carrière ou la rémunération" },
+    "L1331-2": { id: "LEGIARTI000006901446",
+      dit: "les amendes ou autres sanctions pécuniaires sont interdites ; toute disposition ou stipulation contraire est réputée non écrite" },
+    "L1332-1": { id: "LEGIARTI000006901447",
+      dit: "aucune sanction ne peut être prise sans que le salarié soit informé, dans le même temps et par écrit, des griefs retenus contre lui" },
+    "L1332-2": { id: "LEGIARTI000025560074",
+      dit: "convocation en précisant l'objet, sauf avertissement ou sanction de même nature sans incidence ; assistance par une personne du personnel ; motif indiqué et explications recueillies ; la sanction ne peut intervenir moins de deux jours ouvrables ni plus d'un mois après le jour fixé pour l'entretien ; elle est motivée et notifiée" },
+    "L1332-3": { id: "LEGIARTI000006901449",
+      dit: "après une mise à pied conservatoire, aucune sanction définitive relative à ces faits ne peut être prise sans que la procédure de L. 1332-2 ait été respectée" },
+    "L1332-4": { id: "LEGIARTI000006901450",
+      dit: "aucun fait fautif ne peut donner lieu à lui seul à des poursuites disciplinaires au-delà de deux mois du jour où l'employeur en a eu connaissance, à moins qu'il ait donné lieu dans le même délai à des poursuites pénales" },
+    "L1332-5": { id: "LEGIARTI000006901451",
+      dit: "aucune sanction antérieure de plus de trois ans à l'engagement des poursuites ne peut être invoquée à l'appui d'une nouvelle sanction" },
+    "R1332-1": { id: "LEGIARTI000018536889",
+      dit: "la lettre de convocation indique l'objet, précise la date, l'heure et le lieu, rappelle l'assistance, et est remise contre récépissé ou adressée par lettre recommandée dans le délai de deux mois de L. 1332-4" },
+    "R1332-2": { id: "LEGIARTI000018536887",
+      dit: "la sanction fait l'objet d'une décision écrite et motivée, notifiée par lettre remise contre récépissé ou par lettre recommandée, dans le délai d'un mois de L. 1332-2" },
+    "R1332-3": { id: "LEGIARTI000018536885",
+      dit: "le délai d'un mois expire à vingt-quatre heures le jour du mois suivant de même quantième ; à défaut, le dernier jour du mois suivant ; samedi, dimanche ou jour férié ou chômé, il est prorogé au premier jour ouvrable suivant" },
+    "L1333-1": { id: "LEGIARTI000006901453",
+      dit: "le conseil de prud'hommes apprécie la régularité de la procédure et si les faits sont de nature à justifier une sanction ; si un doute subsiste, il profite au salarié" },
+    "L1333-2": { id: "LEGIARTI000006901454",
+      dit: "le conseil de prud'hommes peut annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise" },
+    "L1333-3": { id: "LEGIARTI000006901455",
+      dit: "lorsque la sanction contestée est un licenciement, les dispositions de ce chapitre ne sont pas applicables : le conseil applique celles relatives à la contestation des irrégularités de licenciement" },
+    "L1232-2": { id: "LEGIARTI000006901000",
+      dit: "convocation avant toute décision, par lettre recommandée ou remise en main propre contre décharge, indiquant l'objet ; l'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation ou la remise" },
+    "L1232-4": { id: "LEGIARTI000006901002",
+      dit: "assistance par une personne du personnel ; sans institution représentative, par un conseiller du salarié, la lettre mentionnant cette possibilité et l'adresse des services où la liste est tenue à disposition" },
+    "L1232-6": { id: "LEGIARTI000036762096",
+      dit: "notification par lettre recommandée avec avis de réception énonçant le ou les motifs, qui ne peut être expédiée moins de deux jours ouvrables après la date prévue de l'entretien" }
+  };
+  function article(a) { return a.replace(/^([LRD])(\d)/, "$1. $2"); }
+  function refs(l) { return l.map(article).join(", "); }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LE REPÉRAGE.
+
+     Le texte est replié : sans accent, sans guillemet typographique, en
+     minuscules, espaces normalisés. On le coupe en phrases sur la ponctuation
+     forte et les sauts de ligne, en gardant la position d'origine pour rendre
+     le passage tel qu'il est écrit.
+
+     La marque est cherchée aux limites de mot : « amende » ne doit pas se lire
+     dans « amendement ». C'est la seule protection que le procédé admette, et
+     elle ne le rend pas exact pour autant.
+     ══════════════════════════════════════════════════════════════════════ */
+  function replier(s) {
+    return String(s || "")
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[’‘‛]/g, "'").replace(/[“”«»]/g, '"')
+      .replace(/\s+/g, " ")
+      .toLowerCase();
+  }
+  function phrases(texte) {
+    var P = [], re = /[^.!?\n]+[.!?]*/g, m;
+    while ((m = re.exec(String(texte || ""))) !== null) {
+      var t = m[0].trim();
+      if (t.length < 3) continue;
+      P.push({ texte: t, debut: m.index, replie: replier(t) });
+    }
+    return P;
+  }
+  function estLettre(c) { return (c >= "a" && c <= "z") || (c >= "0" && c <= "9"); }
+  function contient(replie, marqueur) {
+    var i = replie.indexOf(marqueur);
+    while (i !== -1) {
+      var avant = i === 0 ? "" : replie[i - 1];
+      var apres = replie[i + marqueur.length] || "";
+      if (!estLettre(avant) && !estLettre(apres)) return true;
+      i = replie.indexOf(marqueur, i + 1);
+    }
+    return false;
+  }
+  function reperer(P, marqueurs) {
+    var out = [];
+    P.forEach(function (p) {
+      var vus = marqueurs.filter(function (m) { return contient(p.replie, m); });
+      if (vus.length) out.push({ texte: p.texte, debut: p.debut, marques: vus });
+    });
+    return out;
+  }
+
+  var ABSENT = "absent", AVERIFIER = "à relire", ACONTROLER = "à contrôler";
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LA GRILLE.
+
+     `marqueurs` : les expressions dont la présence signale que le sujet est
+     abordé, écrites repliées. `clause` : ce qui s'ajoute au document quand le
+     sujet n'y est pas, rédigé dans les termes des articles lus.
+     ══════════════════════════════════════════════════════════════════════ */
+  var GRILLE = [
+    /* ------------------------ le règlement des sanctions ---------------- */
+    {
+      id: "DIS-CTR-01", famille: "le règlement des sanctions", fondement: ["L1331-1"],
+      objet: "La définition de la sanction",
+      exige: "Constitue une sanction toute mesure, autre que les observations verbales, prise par l'employeur à la suite d'un agissement du salarié considéré par lui comme fautif, que cette mesure soit de nature à affecter immédiatement ou non la présence du salarié dans l'entreprise, sa fonction, sa carrière ou sa rémunération (L. 1331-1).",
+      marqueurs: ["constitue une sanction", "observations verbales", "observation verbale",
+        "considere par lui comme fautif", "considere comme fautif", "agissement du salarie"],
+      clause: [
+        "CE QU'EST UNE SANCTION",
+        "Constitue une sanction toute mesure, autre que les observations verbales, prise par l'employeur à la suite d'un agissement du salarié considéré par lui comme fautif, que cette mesure soit de nature à affecter immédiatement ou non la présence du salarié dans l'entreprise, sa fonction, sa carrière ou sa rémunération.",
+        "Une observation verbale n'est pas une sanction et n'ouvre pas la procédure disciplinaire."
+      ]
+    },
+    {
+      id: "DIS-CTR-02", famille: "le règlement des sanctions", fondement: ["L1321-1"],
+      objet: "La nature et l'échelle des sanctions",
+      exige: "Le règlement intérieur fixe les règles générales et permanentes relatives à la discipline, notamment la nature et l'échelle des sanctions que peut prendre l'employeur (L. 1321-1, 3°).",
+      marqueurs: ["echelle des sanctions", "avertissement", "blame", "mise a pied",
+        "retrogradation", "mutation disciplinaire"],
+      clause: [
+        "NATURE ET ÉCHELLE DES SANCTIONS",
+        "Selon la gravité des faits reprochés et les circonstances dans lesquelles ils se sont produits, l'employeur peut prononcer l'une des sanctions suivantes, sans que cette énumération lui impose de les épuiser successivement :",
+        "1° l'avertissement ;",
+        "2° le blâme ;",
+        "3° la mise à pied disciplinaire, sans rémunération, d'une durée maximale de [nombre] jours ouvrés ;",
+        "4° la mutation disciplinaire ;",
+        "5° la rétrogradation ;",
+        "6° le licenciement pour cause réelle et sérieuse, pour faute grave ou pour faute lourde.",
+        "La mutation disciplinaire et la rétrogradation emportent modification du contrat de travail : elles ne peuvent être imposées au salarié, qui peut les refuser sans que ce refus constitue par lui-même une faute."
+      ]
+    },
+    {
+      id: "DIS-CTR-03", famille: "le règlement des sanctions", fondement: ["L1321-1"],
+      objet: "La durée maximale de la mise à pied disciplinaire",
+      exige: "Lorsque la mise à pied disciplinaire figure à l'échelle des sanctions, sa durée maximale y est chiffrée. Sans ce chiffre, la sanction n'a pas de borne dans le document.",
+      /* Le sujet n'existe que si la mise à pied est prévue : la question posée
+         est celle de la DURÉE, et elle se cherche dans la phrase qui la porte. */
+      depend: "mise a pied",
+      marqueurs: ["duree maximale", "au maximum", "ne peut exceder", "ne pourra exceder",
+        "jours ouvres", "jours ouvrables"],
+      clause: [
+        "DURÉE MAXIMALE DE LA MISE À PIED DISCIPLINAIRE",
+        "La mise à pied disciplinaire ne peut excéder [nombre] jours ouvrés."
+      ]
+    },
+    {
+      id: "DIS-CTR-04", famille: "le règlement des sanctions", fondement: ["L1331-2"],
+      objet: "L'interdiction des sanctions pécuniaires, rappelée",
+      exige: "Les amendes ou autres sanctions pécuniaires sont interdites ; toute disposition ou stipulation contraire est réputée non écrite (L. 1331-2). Le document gagne à porter ce rappel, qui borne ce que l'encadrement peut décider.",
+      marqueurs: ["sanction pecuniaire", "sanctions pecuniaires", "amendes sont interdites",
+        "reputee non ecrite", "reputees non ecrites"],
+      clause: [
+        "CE QUI NE PEUT JAMAIS ÊTRE UNE SANCTION",
+        "Les amendes et autres sanctions pécuniaires sont interdites. Toute disposition ou stipulation contraire est réputée non écrite.",
+        "Aucune retenue ne peut être opérée sur la rémunération à raison d'un comportement considéré comme fautif. Les retenues correspondant à une absence de travail effectif, notamment pendant une mise à pied, ne sont pas des sanctions pécuniaires : elles sont la conséquence de la suspension du contrat."
+      ]
+    },
+    /* ------------------------ la procédure disciplinaire ---------------- */
+    {
+      id: "DIS-CTR-05", famille: "la procédure disciplinaire", fondement: ["L1332-1"],
+      objet: "L'information écrite des griefs",
+      exige: "Aucune sanction ne peut être prise à l'encontre du salarié sans que celui-ci soit informé, dans le même temps et par écrit, des griefs retenus contre lui (L. 1332-1).",
+      marqueurs: ["griefs retenus", "dans le meme temps et par ecrit", "grief", "griefs"],
+      clause: [
+        "L'INFORMATION ÉCRITE DES GRIEFS",
+        "Aucune sanction ne peut être prise à l'encontre du salarié sans que celui-ci soit informé, dans le même temps et par écrit, des griefs retenus contre lui."
+      ]
+    },
+    {
+      id: "DIS-CTR-06", famille: "la procédure disciplinaire", fondement: ["L1332-2", "R1332-1"],
+      objet: "La convocation à l'entretien préalable et ses quatre mentions",
+      exige: "L'employeur qui envisage une sanction convoque le salarié en lui précisant l'objet de la convocation, sauf avertissement ou sanction de même nature sans incidence (L. 1332-2). La lettre indique l'objet, précise la date, l'heure et le lieu, rappelle l'assistance, et est remise contre récépissé ou adressée par lettre recommandée dans le délai de deux mois de L. 1332-4 (R. 1332-1).",
+      marqueurs: ["entretien prealable", "lettre de convocation", "objet de la convocation",
+        "convoque le salarie", "date, l'heure et le lieu", "contre recepisse"],
+      clause: [
+        "LA CONVOCATION À L'ENTRETIEN PRÉALABLE",
+        "Lorsque l'employeur envisage de prendre une sanction, il convoque le salarié en lui précisant l'objet de la convocation, sauf si la sanction envisagée est un avertissement ou une sanction de même nature n'ayant pas d'incidence, immédiate ou non, sur la présence dans l'entreprise, la fonction, la carrière ou la rémunération du salarié.",
+        "La lettre de convocation indique l'objet de l'entretien, précise sa date, son heure et son lieu, et rappelle que le salarié peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise. Elle est soit remise contre récépissé, soit adressée par lettre recommandée, dans le délai de deux mois fixé à l'article L. 1332-4."
+      ]
+    },
+    {
+      id: "DIS-CTR-07", famille: "la procédure disciplinaire", fondement: ["L1332-2"],
+      objet: "L'assistance du salarié et le déroulement de l'entretien",
+      exige: "Lors de son audition, le salarié peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise. Au cours de l'entretien, l'employeur indique le motif de la sanction envisagée et recueille les explications du salarié (L. 1332-2).",
+      marqueurs: ["se faire assister", "personne de son choix", "appartenant au personnel",
+        "recueille les explications"],
+      clause: [
+        "L'ENTRETIEN",
+        "Lors de son audition, le salarié peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise.",
+        "Au cours de l'entretien, l'employeur indique le motif de la sanction envisagée et recueille les explications du salarié."
+      ]
+    },
+    {
+      id: "DIS-CTR-08", famille: "la procédure disciplinaire", fondement: ["L1332-2", "R1332-2", "R1332-3"],
+      objet: "Les deux bornes de la notification, et la décision écrite et motivée",
+      exige: "La sanction ne peut intervenir moins de deux jours ouvrables ni plus d'un mois après le jour fixé pour l'entretien ; elle est motivée et notifiée à l'intéressé (L. 1332-2). Elle fait l'objet d'une décision écrite et motivée, notifiée par lettre remise contre récépissé ou par lettre recommandée dans ce délai d'un mois (R. 1332-2), lequel se compte de quantième à quantième et se proroge au premier jour ouvrable (R. 1332-3).",
+      marqueurs: ["deux jours ouvrables", "plus d'un mois", "ecrite et motivee",
+        "motivee et notifiee", "quantieme"],
+      clause: [
+        "LES DÉLAIS DE LA SANCTION",
+        "La sanction ne peut intervenir moins de deux jours ouvrables ni plus d'un mois après le jour fixé pour l'entretien. Elle est motivée et notifiée à l'intéressé.",
+        "Elle fait l'objet d'une décision écrite et motivée, notifiée au salarié soit par lettre remise contre récépissé, soit par lettre recommandée, dans ce délai d'un mois.",
+        "Ce délai d'un mois expire à vingt-quatre heures le jour du mois suivant qui porte le même quantième que le jour fixé pour l'entretien ; à défaut d'un quantième identique, il expire le dernier jour du mois suivant à vingt-quatre heures. Lorsque ce dernier jour est un samedi, un dimanche ou un jour férié ou chômé, il est prorogé jusqu'au premier jour ouvrable suivant."
+      ]
+    },
+    {
+      id: "DIS-CTR-09", famille: "la procédure disciplinaire", fondement: ["L1332-4"],
+      objet: "La prescription des faits fautifs, deux mois",
+      exige: "Aucun fait fautif ne peut donner lieu à lui seul à l'engagement de poursuites disciplinaires au-delà d'un délai de deux mois à compter du jour où l'employeur en a eu connaissance, à moins que ce fait ait donné lieu dans le même délai à l'exercice de poursuites pénales (L. 1332-4).",
+      marqueurs: ["poursuites disciplinaires", "fait fautif", "deux mois", "poursuites penales"],
+      clause: [
+        "LA PRESCRIPTION DES FAITS FAUTIFS",
+        "Aucun fait fautif ne peut donner lieu à lui seul à l'engagement de poursuites disciplinaires au-delà d'un délai de deux mois à compter du jour où l'employeur en a eu connaissance, à moins que ce fait ait donné lieu dans le même délai à l'exercice de poursuites pénales."
+      ]
+    },
+    {
+      id: "DIS-CTR-10", famille: "la procédure disciplinaire", fondement: ["L1332-5"],
+      objet: "Les sanctions antérieures de plus de trois ans",
+      exige: "Aucune sanction antérieure de plus de trois ans à l'engagement des poursuites disciplinaires ne peut être invoquée à l'appui d'une nouvelle sanction (L. 1332-5).",
+      marqueurs: ["trois ans", "sanction anterieure", "sanctions anterieures"],
+      clause: [
+        "LES SANCTIONS ANTÉRIEURES",
+        "Aucune sanction antérieure de plus de trois ans à l'engagement des poursuites disciplinaires ne peut être invoquée à l'appui d'une nouvelle sanction."
+      ]
+    },
+    {
+      id: "DIS-CTR-11", famille: "la procédure disciplinaire", fondement: ["L1332-3"],
+      objet: "La mise à pied conservatoire",
+      exige: "Lorsque les faits reprochés ont rendu indispensable une mesure conservatoire de mise à pied à effet immédiat, aucune sanction définitive relative à ces faits ne peut être prise sans que la procédure prévue à l'article L. 1332-2 ait été respectée (L. 1332-3).",
+      marqueurs: ["mise a pied conservatoire", "titre conservatoire", "mesure conservatoire",
+        "effet immediat"],
+      clause: [
+        "LA MISE À PIED CONSERVATOIRE",
+        "Lorsque les faits reprochés au salarié rendent indispensable une mesure conservatoire de mise à pied à effet immédiat, celle-ci n'est pas une sanction : elle suspend le contrat le temps de la procédure.",
+        "Aucune sanction définitive relative à ces faits ne peut être prise sans que la procédure prévue à l'article L. 1332-2 ait été respectée."
+      ]
+    },
+    {
+      id: "DIS-CTR-12", famille: "la procédure disciplinaire", fondement: ["L1232-2", "L1232-4", "L1232-6", "L1333-3"],
+      objet: "Le licenciement disciplinaire et la procédure qui lui est propre",
+      exige: "Le licenciement suppose une convocation par lettre recommandée ou remise en main propre contre décharge indiquant l'objet, un entretien qui ne peut avoir lieu moins de cinq jours ouvrables après la présentation (L. 1232-2), la mention du conseiller du salarié en l'absence d'institution représentative (L. 1232-4), et une notification par lettre recommandée avec avis de réception qui ne peut être expédiée moins de deux jours ouvrables après la date prévue de l'entretien (L. 1232-6). Lorsque la sanction contestée est un licenciement, le conseil de prud'hommes applique les dispositions relatives à la contestation des irrégularités de licenciement (L. 1333-3).",
+      marqueurs: ["cinq jours ouvrables", "conseiller du salarie", "licenciement pour faute",
+        "avis de reception"],
+      clause: [
+        "LE LICENCIEMENT DISCIPLINAIRE",
+        "Lorsque la sanction envisagée est un licenciement, l'employeur convoque le salarié à un entretien préalable avant toute décision, par lettre recommandée ou par lettre remise en main propre contre décharge indiquant l'objet de la convocation ; l'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de la lettre recommandée ou la remise en main propre.",
+        "Le salarié peut se faire assister par une personne de son choix appartenant au personnel de l'entreprise ; en l'absence d'institution représentative du personnel, par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative, la lettre de convocation mentionnant cette possibilité et précisant l'adresse des services où la liste est tenue à sa disposition.",
+        "Le licenciement est notifié par lettre recommandée avec avis de réception comportant l'énoncé du ou des motifs invoqués ; cette lettre ne peut être expédiée moins de deux jours ouvrables après la date prévue de l'entretien."
+      ]
+    },
+    {
+      id: "DIS-CTR-13", famille: "la procédure disciplinaire", fondement: ["L1333-1", "L1333-2"],
+      objet: "La voie de recours du salarié",
+      exige: "Le conseil de prud'hommes apprécie la régularité de la procédure suivie et si les faits reprochés sont de nature à justifier une sanction ; si un doute subsiste, il profite au salarié (L. 1333-1). Il peut annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise (L. 1333-2).",
+      marqueurs: ["conseil de prud'hommes", "prud'hommes", "contester la sanction", "recours"],
+      clause: [
+        "LA CONTESTATION",
+        "Le salarié peut contester la sanction devant le conseil de prud'hommes. Celui-ci apprécie la régularité de la procédure suivie et si les faits reprochés sont de nature à justifier une sanction ; si un doute subsiste, il profite au salarié.",
+        "Le conseil peut annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise."
+      ]
+    },
+    /* ------------------------------ les formalités ---------------------- */
+    {
+      id: "DIS-CTR-14", famille: "les formalités", fondement: ["L1321-4", "L1321-5", "R1321-1", "R1321-2", "R1321-4"],
+      objet: "L'avis du comité, la publicité, le dépôt et la communication à l'inspection",
+      exige: "Un document comportant des obligations générales et permanentes en matière de discipline est une adjonction au règlement intérieur, soumise aux mêmes dispositions (L. 1321-5) : avis du comité social et économique avant introduction, communication à l'inspecteur du travail avec cet avis en même temps que la publicité (L. 1321-4), publicité par tout moyen auprès des personnes ayant accès aux lieux de travail et aux locaux d'embauche (R. 1321-1), dépôt au greffe du conseil de prud'hommes du ressort (R. 1321-2), transmission en deux exemplaires à l'inspecteur du travail (R. 1321-4).",
+      marqueurs: ["comite social et economique", "avis du comite", "greffe",
+        "inspecteur du travail", "inspection du travail", "affichage", "publicite"],
+      clause: [
+        "AVIS DU COMITÉ, PUBLICITÉ, DÉPÔT ET COMMUNICATION",
+        "Le présent document a été soumis à l'avis du comité social et économique lors de sa réunion du [date].",
+        "Il est porté par tout moyen à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche le [date], déposé au greffe du conseil de prud'hommes de [ville du ressort de l'entreprise ou de l'établissement] le [date], et communiqué à l'inspecteur du travail en deux exemplaires, accompagné de l'avis du comité social et économique, en même temps qu'il fait l'objet des mesures de publicité.",
+        "Toute modification ou tout retrait de ses clauses est soumis aux mêmes formalités."
+      ]
+    },
+    {
+      id: "DIS-CTR-15", famille: "les formalités", fondement: ["L1321-4", "R1321-3"],
+      objet: "La date d'entrée en vigueur",
+      exige: "Le document indique la date de son entrée en vigueur, postérieure d'un mois à l'accomplissement des formalités de publicité (L. 1321-4), le délai courant à compter de la dernière en date des formalités de publicité et de dépôt (R. 1321-3).",
+      marqueurs: ["entree en vigueur", "entrera en vigueur", "prend effet le",
+        "applicable a compter du"],
+      clause: [
+        "ENTRÉE EN VIGUEUR",
+        "Le présent document entre en vigueur le [date], cette date étant postérieure d'un mois à l'accomplissement des formalités de publicité, le délai courant à compter de la dernière en date des formalités de publicité et de dépôt."
+      ]
+    },
+    /* ---------------------------- ce qui est prohibé -------------------- */
+    {
+      id: "DIS-CTR-16", famille: "ce qui ne peut pas y figurer", fondement: ["L1331-2"],
+      objet: "Les amendes et autres sanctions pécuniaires",
+      exige: "Les amendes ou autres sanctions pécuniaires sont interdites. Toute disposition ou stipulation contraire est réputée non écrite (L. 1331-2).",
+      prohibe: true,
+      marqueurs: ["amende", "penalite", "retenue sur salaire", "retenue de salaire",
+        "prelevement sur la remuneration", "sanction financiere"],
+      critere: "Une retenue sur salaire n'est licite que si elle correspond à une absence de travail effectif ou à une créance de l'employeur régulièrement établie. Toute somme prélevée à raison d'un comportement fautif est une sanction pécuniaire, quelle que soit la formule employée.",
+      remplacement: "Supprimer la clause. Le comportement visé peut être sanctionné par une sanction de l'échelle, jamais par une somme d'argent."
+    },
+    {
+      id: "DIS-CTR-17", famille: "ce qui ne peut pas y figurer", fondement: ["L1321-3", "L1332-2"],
+      objet: "Les sanctions automatiques et les ruptures de plein droit",
+      exige: "Le règlement ne peut contenir de dispositions contraires aux lois et règlements ni aux stipulations des conventions et accords collectifs applicables (L. 1321-3, 1°). Une sanction se prononce à l'issue de la procédure de L. 1332-2 : elle ne peut découler d'un comportement par le seul effet du document.",
+      prohibe: true,
+      marqueurs: ["automatiquement", "de plein droit", "sans autre formalite",
+        "demission d'office", "considere comme demissionnaire", "vaut demission",
+        "rupture automatique", "entrainera le licenciement"],
+      critere: "La clause fait-elle produire à un comportement du salarié un effet que la loi ne lui donne pas, ou une sanction sans la procédure ? Une sanction annoncée comme automatique prive l'entretien de son objet, puisque l'employeur y indique le motif de la sanction envisagée et recueille les explications du salarié.",
+      remplacement: "Réécrire la clause en réservant la sanction à la décision prise à l'issue de la procédure disciplinaire, et supprimer tout effet de plein droit sur le contrat."
+    },
+    {
+      id: "DIS-CTR-18", famille: "ce qui ne peut pas y figurer", fondement: ["L1321-1"],
+      objet: "Les matières étrangères à la discipline",
+      exige: "Le règlement intérieur fixe exclusivement les trois matières de L. 1321-1 : santé et sécurité, participation au rétablissement de conditions protectrices, règles générales et permanentes de discipline. Ce qui n'y entre pas n'y produit pas d'effet obligatoire.",
+      prohibe: true,
+      marqueurs: ["clause de non-concurrence", "clause de mobilite", "periode d'essai",
+        "remuneration variable", "prime d'anciennete", "conges payes", "forfait jours",
+        "preavis de demission", "frais professionnels"],
+      critere: "La disposition entre-t-elle dans l'une des trois matières de L. 1321-1 ? Sinon, elle relève du contrat de travail, d'un accord collectif ou d'une note d'information, et non du document disciplinaire.",
+      remplacement: "Sortir la clause et la porter dans l'instrument qui lui convient : le contrat de travail, l'accord collectif, ou une note d'information sans portée disciplinaire."
+    }
+  ];
+
+  /* Le chargement échoue si un article cité manque à la table des textes lus :
+     la grille ne doit jamais renvoyer à un texte qui n'a pas été lu. */
+  GRILLE.forEach(function (g) {
+    g.fondement.forEach(function (a) {
+      if (!TEXTES[a]) throw new Error("controler-discipline : l'article " + a + " cité par " +
+        g.id + " n'est pas dans la table des textes lus à la source.");
+    });
+  });
+
+  /* ═══════════════════════════════════════════════════════════ l'analyse */
+  function analyser(texte) {
+    var brut = String(texte || ""), P = phrases(brut), points = [];
+
+    GRILLE.forEach(function (g) {
+      var vue = { id: g.id, famille: g.famille, objet: g.objet, fondement: g.fondement,
+        exige: g.exige, prohibe: !!g.prohibe, clause: g.clause || null,
+        critere: g.critere || null, remplacement: g.remplacement || null };
+
+      if (g.depend) {
+        var porteuses = P.filter(function (p) { return contient(p.replie, g.depend); });
+        if (!porteuses.length) {
+          points.push(Object.assign({}, vue, { etat: ABSENT, passages: [], sansObjet: true,
+            motif: "La mise à pied disciplinaire n'apparaît pas dans le document : la durée maximale n'a pas d'objet tant qu'elle n'est pas prévue. Si vous l'ajoutez à l'échelle, sa durée maximale devient l'affaire de la même clause." }));
+          return;
+        }
+        var avec = porteuses.filter(function (p) {
+          return g.marqueurs.some(function (m) { return contient(p.replie, m); });
+        });
+        points.push(Object.assign({}, vue, {
+          etat: avec.length ? AVERIFIER : ABSENT,
+          passages: (avec.length ? avec : porteuses).map(function (p) {
+            return { texte: p.texte, debut: p.debut, marques: p.marques || [] }; }),
+          motif: avec.length
+            ? "La phrase qui prévoit la mise à pied porte une durée : lisez-la, et vérifiez qu'elle borne bien la sanction et non l'une de ses modalités."
+            : "La mise à pied disciplinaire est prévue, sans qu'une durée maximale apparaisse dans la phrase qui la prévoit."
+        }));
+        return;
+      }
+
+      var trouves = reperer(P, g.marqueurs);
+
+      if (g.prohibe) {
+        points.push(Object.assign({}, vue, {
+          etat: trouves.length ? ACONTROLER : ABSENT,
+          passages: trouves,
+          motif: trouves.length
+            ? trouves.length + " passage" + (trouves.length > 1 ? "s font" : " fait") +
+              " apparaître une clause de cette famille. Le module ne conclut pas à son illicéité : il rend le passage et le critère."
+            : "Aucun passage de cette famille n'a été repéré. Cela ne vaut pas quitus : une clause peut être rédigée en termes que ce repérage ne connaît pas."
+        }));
+        return;
+      }
+
+      points.push(Object.assign({}, vue, {
+        etat: trouves.length ? AVERIFIER : ABSENT,
+        passages: trouves,
+        motif: trouves.length
+          ? "Le sujet est traité dans le document. Lisez le passage : le repérage établit qu'il en est question, jamais que la clause est complète."
+          : "Aucune trace de cette exigence dans le document. La clause ci-dessous la comble."
+      }));
+    });
+
+    return {
+      texte: brut, caracteres: brut.length, phrases: P.length, points: points,
+      compteurs: {
+        absents: points.filter(function (p) { return p.etat === ABSENT && !p.prohibe && !p.sansObjet; }).length,
+        aRelire: points.filter(function (p) { return p.etat === AVERIFIER && !p.sansObjet; }).length,
+        aControler: points.filter(function (p) { return p.etat === ACONTROLER; }).length
+      }
+    };
+  }
+
+  /* ═══════════════════════════════════════════════ la version complétée */
+  function corriger(analyse, choix) {
+    var c = choix || {};
+    var inserer = c.inserer || [], signaler = c.signaler || [];
+
+    /* Les marques, posées de la fin vers le début pour ne pas décaler les
+       positions restantes. */
+    var marques = [];
+    analyse.points.forEach(function (p) {
+      if (!p.prohibe || signaler.indexOf(p.id) === -1) return;
+      p.passages.forEach(function (q) {
+        marques.push({ fin: q.debut + q.texte.length, id: p.id, objet: p.objet });
+      });
+    });
+    marques.sort(function (a, b) { return b.fin - a.fin; });
+
+    var corps = analyse.texte;
+    marques.forEach(function (m) {
+      corps = corps.slice(0, m.fin) + "  [À CONTRÔLER - " + m.id + " : " + m.objet + "]" +
+        corps.slice(m.fin);
+    });
+
+    var ajouts = [], notes = [];
+    analyse.points.forEach(function (p) {
+      if (p.clause && inserer.indexOf(p.id) !== -1)
+        ajouts.push({ id: p.id, objet: p.objet, fondement: p.fondement, lignes: p.clause });
+      if (p.prohibe && signaler.indexOf(p.id) !== -1)
+        notes.push({ id: p.id, objet: p.objet, fondement: p.fondement, critere: p.critere,
+          remplacement: p.remplacement, passages: p.passages.map(function (q) { return q.texte; }) });
+    });
+
+    return { corps: corps, ajouts: ajouts, notes: notes,
+      resume: ajouts.length + (ajouts.length > 1 ? " clauses ajoutées" : " clause ajoutée") + ", " +
+        notes.length + (notes.length > 1 ? " familles signalées" : " famille signalée") + " à contrôler." };
+  }
+
+  function texteComplete(analyse, choix) {
+    var r = corriger(analyse, choix), L = [r.corps.trim(), ""];
+    if (r.ajouts.length) {
+      L.push("", "- - -", "CLAUSES AJOUTÉES AU TITRE DU CONTRÔLE", "");
+      r.ajouts.forEach(function (a) {
+        L.push("[" + a.id + " - " + refs(a.fondement) + "]");
+        a.lignes.forEach(function (l) { L.push(l); });
+        L.push("");
+      });
+    }
+    if (r.notes.length) {
+      L.push("", "- - -", "PASSAGES À CONTRÔLER AVANT DIFFUSION", "");
+      r.notes.forEach(function (n) {
+        L.push("[" + n.id + " - " + n.objet + " - " + refs(n.fondement) + "]");
+        L.push("Critère : " + n.critere);
+        L.push("Ce qu'il faut faire : " + n.remplacement);
+        n.passages.forEach(function (p) { L.push("  « " + p + " »"); });
+        L.push("");
+      });
+    }
+    return L.join("\n");
+  }
+
+  /* ═══════════════════════════════════════════════════════════ les écrans */
+  var analyse = null, choixInserer = {}, choixSignaler = {};
+
+  function onglet(nom) {
+    ["depot", "diag", "sortie"].forEach(function (o) {
+      $("#o-" + o).classList.toggle("cache", o !== nom);
+    });
+    Array.prototype.forEach.call($("#onglets").children, function (b) {
+      b.classList.toggle("actif", b.dataset.o === nom);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  Array.prototype.forEach.call($("#onglets").children, function (b) {
+    b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
+  });
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LA LECTURE D'UN .DOCX, SANS BIBLIOTHÈQUE.
+
+     Un .docx est une archive zip, et le texte vit dans word/document.xml. On
+     lit le répertoire central pour trouver l'entrée, puis on la décomprime
+     avec le flux natif du navigateur. Aucun octet ne sort de la page.
+     ══════════════════════════════════════════════════════════════════════ */
+  function u16(v, i) { return v.getUint16(i, true); }
+  function u32(v, i) { return v.getUint32(i, true); }
+
+  function entreeZip(buf, nomVoulu) {
+    var v = new DataView(buf), n = buf.byteLength, fin = -1;
+    for (var i = n - 22; i >= 0 && i > n - 65558; i--) if (u32(v, i) === 0x06054b50) { fin = i; break; }
+    if (fin < 0) throw new Error("Ce fichier n'est pas une archive lisible.");
+    var nb = u16(v, fin + 10), pos = u32(v, fin + 16), dec = new TextDecoder("utf-8");
+    for (var k = 0; k < nb; k++) {
+      if (u32(v, pos) !== 0x02014b50) throw new Error("Répertoire de l'archive illisible.");
+      var methode = u16(v, pos + 10), taille = u32(v, pos + 20);
+      var lnom = u16(v, pos + 28), lextra = u16(v, pos + 30), lcom = u16(v, pos + 32);
+      var debut = u32(v, pos + 42);
+      var nom = dec.decode(new Uint8Array(buf, pos + 46, lnom));
+      if (nom === nomVoulu) {
+        var ln = u16(v, debut + 26), lx = u16(v, debut + 28);
+        return { methode: methode, data: new Uint8Array(buf, debut + 30 + ln + lx, taille) };
+      }
+      pos += 46 + lnom + lextra + lcom;
+    }
+    throw new Error("Le fichier ne contient pas de document Word (word/document.xml).");
+  }
+  function inflater(u8) {
+    if (typeof DecompressionStream !== "function")
+      return Promise.reject(new Error("Ce navigateur ne sait pas décomprimer le fichier. Collez le texte à la place."));
+    return new Response(new Blob([u8]).stream()
+      .pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer();
+  }
+  function texteDeDocumentXml(xml) {
+    /* Un paragraphe par <w:p>, un saut par <w:br/>, le texte des <w:t>. */
+    return xml
+      .replace(/<w:tab[^>]*\/>/g, "\t")
+      .replace(/<w:br[^>]*\/>/g, "\n")
+      .replace(/<\/w:p>/g, "\n")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
+  function lireDocx(fichier) {
+    return fichier.arrayBuffer().then(function (buf) {
+      var e = entreeZip(buf, "word/document.xml");
+      if (e.methode === 0) return new TextDecoder("utf-8").decode(e.data);
+      if (e.methode !== 8) throw new Error("Compression inconnue dans ce .docx.");
+      return inflater(e.data).then(function (b) {
+        return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
+    }).then(texteDeDocumentXml);
+  }
+
+  function dit(html, classe) {
+    $("#lecture").innerHTML = html ? '<div class="avis ' + (classe || "info") + '">' + html + "</div>" : "";
+  }
+
+  $("#fichier").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    $("#erreur").innerHTML = "";
+    dit("Lecture de <b>" + ech(f.name) + "</b>…");
+    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    suite.then(function (t) {
+      $("#depot").value = t;
+      dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +
+          " caractères. C'est ce texte qui sera contrôlé.");
+    }).catch(function (e) {
+      dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
+          " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
+    });
+  });
+
+  $("#vider").addEventListener("click", function () {
+    $("#depot").value = ""; dit(""); $("#erreur").innerHTML = "";
+  });
+
+  $("#exemple").addEventListener("click", function () {
+    $("#depot").value = [
+      "RÈGLEMENT DISCIPLINAIRE DE LA SOCIÉTÉ EXEMPLE",
+      "",
+      "Article 1 - Le présent règlement s'applique à l'ensemble du personnel.",
+      "Article 2 - Les sanctions applicables sont l'avertissement, le blâme et la mise à pied disciplinaire.",
+      "Article 3 - Tout retard non justifié donnera lieu à une retenue sur salaire de vingt euros.",
+      "Article 4 - Trois avertissements entraîneront automatiquement le licenciement du salarié.",
+      "Article 5 - L'abandon de poste vaut démission et emporte rupture de plein droit du contrat de travail.",
+      "Article 6 - La période d'essai est de quatre mois, renouvelable une fois.",
+      "Article 7 - Le salarié convoqué à un entretien préalable est reçu par son supérieur hiérarchique."
+    ].join("\n");
+    dit("Exemple collé : un règlement disciplinaire de sept articles, volontairement fautif. " +
+        "Contrôlez-le pour voir ce que la page en dit.");
+  });
+
+  $("#controler").addEventListener("click", function () {
+    var t = $("#depot").value.trim();
+    $("#erreur").innerHTML = "";
+    if (t.length < 150) {
+      $("#erreur").innerHTML = '<div class="avis att"><b>Le texte déposé est trop court.</b>' +
+        "Il compte " + t.length + " caractères. Déposez le document entier : un contrôle sur un " +
+        "extrait dirait « absent » de tout ce que l'extrait ne contient pas.</div>";
+      return;
+    }
+    analyse = analyser(t);
+    choixInserer = {}; choixSignaler = {};
+    analyse.points.forEach(function (p) {
+      if (p.etat === ABSENT && p.clause && !p.sansObjet) choixInserer[p.id] = true;
+      if (p.etat === ACONTROLER) choixSignaler[p.id] = true;
+    });
+    $("#ong-diag").disabled = false;
+    $("#ong-sortie").disabled = false;
+    rendreDiagnostic();
+    onglet("diag");
+  });
+
+  function classeEtat(p) {
+    if (p.sansObjet) return "sansobjet";
+    if (p.etat === ABSENT) return "absent";
+    if (p.etat === ACONTROLER) return "acontroler";
+    return "averifier";
+  }
+
+  function carte(p) {
+    var h = '<div class="pt"><div class="tt"><span class="etat ' + classeEtat(p) + '">' +
+      ech(p.sansObjet ? "sans objet" : p.etat) + "</span>" +
+      '<span><span class="obj">' + ech(p.objet) + "</span>" +
+      '<span class="fond">' + ech(p.id) + " · " + ech(refs(p.fondement)) +
+      "</span></span></div><div class=\"c\">";
+
+    h += '<p class="exige">' + ech(p.exige) + "</p>";
+    h += "<p>" + ech(p.motif) + "</p>";
+
+    if (p.passages && p.passages.length) {
+      p.passages.slice(0, 6).forEach(function (q) {
+        h += "<blockquote>" + ech(q.texte) +
+          (q.marques && q.marques.length
+            ? '<span class="m">repéré sur : ' + ech(q.marques.join(", ")) + "</span>" : "") +
+          "</blockquote>";
+      });
+      if (p.passages.length > 6) {
+        var reste = p.passages.length - 6;
+        h += "<p>… et " + reste + " autre" + (reste > 1 ? "s" : "") + " passage" +
+          (reste > 1 ? "s" : "") + ".</p>";
+      }
+    }
+
+    if (p.critere) h += "<p><b>Ce que le juge vérifie.</b> " + ech(p.critere) + "</p>";
+    if (p.remplacement) h += "<p><b>Ce qu'il faut faire.</b> " + ech(p.remplacement) + "</p>";
+
+    if (p.clause && p.etat === ABSENT && !p.sansObjet) {
+      h += '<div class="clause" id="clause-' + ech(p.id) + '">' +
+        p.clause.map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("") + "</div>" +
+        '<div class="sous-clause">' +
+        '<label class="opt"><input type="checkbox" data-ins="' + ech(p.id) + '" checked> ' +
+        "Insérer cette clause dans la version complétée</label>" +
+        '<button type="button" class="btn second petit" data-copier="' + ech(p.id) + '">Copier la clause</button>' +
+        "</div>";
+    }
+    if (p.etat === ACONTROLER) {
+      h += '<label class="opt"><input type="checkbox" data-sig="' + ech(p.id) + '" checked> ' +
+        "Signaler ce passage dans la version complétée</label>";
+    }
+    return h + "</div></div>";
+  }
+
+  function rendreDiagnostic() {
+    var c = analyse.compteurs;
+    $("#compteurs").innerHTML =
+      '<span class="c">' + c.absents + " clause" + (c.absents > 1 ? "s" : "") + " à insérer</span>" +
+      '<span class="c">' + c.aControler + " passage" + (c.aControler > 1 ? "s" : "") + " à contrôler</span>" +
+      '<span class="c">' + c.aRelire + " point" + (c.aRelire > 1 ? "s" : "") + " à relire</span>" +
+      '<span class="c">' + analyse.phrases.toLocaleString("fr-FR") + " phrases lues</span>";
+
+    var familles = ["le règlement des sanctions", "la procédure disciplinaire", "les formalités",
+      "ce qui ne peut pas y figurer"];
+    var h = "";
+    familles.forEach(function (fam) {
+      var liste = analyse.points.filter(function (p) { return p.famille === fam; });
+      if (!liste.length) return;
+      h += "<h3>" + ech(fam.charAt(0).toUpperCase() + fam.slice(1)) + "</h3>";
+      liste.forEach(function (p) { h += carte(p); });
+    });
+    $("#points").innerHTML = h;
+
+    $("#points").querySelectorAll("input[data-ins]").forEach(function (i) {
+      i.addEventListener("change", function () { choixInserer[i.dataset.ins] = i.checked; });
+    });
+    $("#points").querySelectorAll("input[data-sig]").forEach(function (i) {
+      i.addEventListener("change", function () { choixSignaler[i.dataset.sig] = i.checked; });
+    });
+    $("#points").querySelectorAll("button[data-copier]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var p = analyse.points.filter(function (x) { return x.id === b.dataset.copier; })[0];
+        if (!p || !p.clause) return;
+        var t = p.clause.join("\n");
+        if (navigator.clipboard) navigator.clipboard.writeText(t);
+        b.textContent = "Copiée";
+        setTimeout(function () { b.textContent = "Copier la clause"; }, 1600);
+      });
+    });
+  }
+
+  function choix() {
+    return {
+      inserer: Object.keys(choixInserer).filter(function (k) { return choixInserer[k]; }),
+      signaler: Object.keys(choixSignaler).filter(function (k) { return choixSignaler[k]; })
+    };
+  }
+
+  $("#vers-sortie").addEventListener("click", function () {
+    var c = corriger(analyse, choix());
+    $("#resume").innerHTML = '<div class="avis info"><b>' + ech(c.resume) + "</b>" +
+      "Les clauses ajoutées portent des mentions entre crochets à compléter. Un document " +
+      "disciplinaire modifié se soumet de nouveau à l'avis du comité, au dépôt au greffe, à la " +
+      "communication à l'inspection et à la publicité, avant une entrée en vigueur différée d'un " +
+      "mois (" + refs(["L1321-4", "L1321-5", "R1321-3"]) + ").</div>";
+    $("#sortie").textContent = texteComplete(analyse, choix());
+    onglet("sortie");
+  });
+  $("#retour-diag").addEventListener("click", function () { onglet("diag"); });
+
+  function nomFichier(ext) {
+    return "procedure-disciplinaire-completee-" + new Date().toISOString().slice(0, 10) + "." + ext;
+  }
+  $("#dl-txt").addEventListener("click", function () {
+    window.AuditExport.telecharger($("#sortie").textContent, nomFichier("txt"),
+      "text/plain;charset=utf-8");
+  });
+  $("#dl-docx").addEventListener("click", function () {
+    var c = corriger(analyse, choix());
+    var items = [{ k: "sur", t: "Version complétée au terme du contrôle de la discipline · " + c.resume }];
+    c.corps.split(/\n/).forEach(function (l) { items.push({ k: "p", t: l }); });
+    if (c.ajouts.length) {
+      items.push({ k: "trait" }, { k: "h1", t: "Clauses ajoutées au titre du contrôle" });
+      c.ajouts.forEach(function (a) {
+        items.push({ k: "h2", t: a.objet });
+        items.push({ k: "note", t: a.id + " · " + refs(a.fondement) });
+        a.lignes.forEach(function (l) { items.push({ k: "p", t: l }); });
+      });
+    }
+    if (c.notes.length) {
+      items.push({ k: "trait" }, { k: "h1", t: "Passages à contrôler avant diffusion" });
+      c.notes.forEach(function (n) {
+        items.push({ k: "h2", t: n.objet });
+        items.push({ k: "note", t: n.id + " · " + refs(n.fondement) });
+        items.push({ k: "p", t: "Ce que le juge vérifie : " + n.critere });
+        items.push({ k: "p", t: "Ce qu'il faut faire : " + n.remplacement });
+        n.passages.forEach(function (p) { items.push({ k: "puce", t: "« " + p + " »" }); });
+      });
+    }
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Procédure disciplinaire - version complétée"),
+      nomFichier("docx"),
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+  $("#copier").addEventListener("click", function () {
+    var t = $("#sortie").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    $("#copier").textContent = "Copié";
+    setTimeout(function () { $("#copier").textContent = "Copier"; }, 1600);
+  });
+
+  /* Les sources, en pied de page : le numéro, ce qu'il dit, et l'identifiant
+     de version. */
+  (function sources() {
+    var h = "Code du travail, lu au relais Légifrance le 7 septembre 2026, deux lectures " +
+      "concordantes par article.<br><br>";
+    Object.keys(TEXTES).forEach(function (k) {
+      h += ech(article(k)) + " · " + TEXTES[k].id + " · " + ech(TEXTES[k].dit) + "<br>";
+    });
+    $("#sources").innerHTML = h;
+  })();
+})();
+</script>
+<script>
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>
