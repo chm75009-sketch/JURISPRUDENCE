@@ -2761,10 +2761,12 @@
   /* ══════════════════════════════════════════════════════════════════════
      LE RÉFÉRENT HANDICAP
 
-     L. 5213-6-1 : dans toute entreprise employant au moins deux cent cinquante
-     salariés. Le franchissement du seuil s'apprécie selon L. 130-1 du code de
-     la sécurité sociale, que l'application n'a pas lu : elle nomme l'article
-     et ne calcule rien à sa place.
+     L. 5213-6-1 (LEGIARTI000043894133, lu deux fois le 7 septembre 2026) :
+     dans toute entreprise employant au moins deux cent cinquante salariés. Le
+     franchissement du seuil s'apprécie selon L. 130-1 du code de la sécurité
+     sociale, que l'application n'a pas lu : elle nomme l'article et ne calcule
+     rien à sa place. Ne pas confondre ce référent-là avec celui du harcèlement
+     sexuel, qui a le même seuil et un autre objet (L. 1153-5-1).
      ══════════════════════════════════════════════════════════════════════ */
 
   PI.ajouter({

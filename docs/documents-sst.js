@@ -4271,8 +4271,12 @@
             "L. 4132-2 (LEGIARTI000035653288)",
     /* Le registre reçoit l'avis d'un représentant du personnel au comité :
        sans comité, il n'a personne pour l'écrire. La question ne se pose donc
-       qu'à partir de onze salariés, seuil de mise en place du comité, et le
-       document le dit. */
+       qu'à partir de onze salariés : « Un comité social et économique est mis
+       en place dans les entreprises d'au moins onze salariés » (L. 2311-2,
+       LEGIARTI000035609353, lu deux fois le 7 septembre 2026). Le même article
+       ajoute que la mise en place n'est obligatoire que si le seuil est
+       atteint pendant douze mois consécutifs : cet écran ne le vérifie pas,
+       la fiche d'entreprise ne portant que l'effectif du jour. */
     due: function (profil) {
       var n = Number(profil && profil.effectif);
       if (!isFinite(n) || String((profil || {}).effectif || "").trim() === "") return null;
