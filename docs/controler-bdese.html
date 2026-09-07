@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrôler ma base de données (BDESE)</title>
+<link rel="manifest" href="manifest-audit-bdese.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LA BRANCHE « OUI » DU MODULE BASE DE DONNÉES.
+
+  Le « non » construit le classeur. Le « oui » ouvre ceci : on dépose la base
+  existante, et l'écran rend les rubriques entièrement mises en forme, avec
+  leurs lignes et leurs colonnes d'années, prêtes à recevoir des chiffres. Un
+  bouton les insère. On repart avec un classeur, pas avec un constat.
+
+  LA RÈGLE DE CET ÉCRAN : il ne nomme jamais un manque. Il n'y a pas ici de
+  « rubrique absente », pas de note, pas de verdict. Il y a la rubrique déjà
+  mise en forme et le bouton qui l'insère. Le repérage lexical sert seulement
+  à ranger l'écran : il ne juge pas ce qui est écrit dans la base déposée.
+
+  LA GRILLE N'EST PAS ÉCRITE ICI. Elle est découpée du texte du décret par
+  moteur/bdese/contenu-bdese.js, dont la couverture est mesurée à cent pour
+  cent sur les deux articles, et servie par docs/moteur-bdese.js. Rien n'est
+  recopié à la main : si le décret change et que la capture est refaite, la
+  grille suit.
+
+  Rien ne quitte ce poste : le fichier déposé est lu dans le navigateur.
+
+  LES ARTICLES, RELUS À LA SOURCE LE 7 SEPTEMBRE 2026 (relais Légifrance de
+  l'application, trois lectures espacées et concordantes par article, contenu
+  vérifié et non le seul numéro, ce que le dépôt impose depuis les homonymes
+  du 16 août 2026) :
+
+    L. 2312-2   LEGIARTI000035650754   douze mois, attributions récurrentes à cinquante salariés
+    L. 2312-18  LEGIARTI000052437125   la base rassemble les informations, égalité, formations
+    L. 2312-21  LEGIARTI000043975329   l'accord, et les dix thèmes du plancher (alinéa 3)
+    L. 2312-34  LEGIARTI000035609830   seuil de trois cents réputé franchi, un an pour s'y conformer
+    L. 2312-36  LEGIARTI000048533625   à défaut d'accord : accès permanent, thèmes de la base
+    R. 2312-8   LEGIARTI000049905537   contenu supplétif, moins de trois cents salariés
+    R. 2312-9   LEGIARTI000049905524   contenu supplétif, au moins trois cents salariés
+    R. 2312-10  LEGIARTI000036411580   année en cours, deux précédentes, trois suivantes, tendances
+    R. 2312-12  LEGIARTI000036411586   support informatique ou papier selon l'effectif
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
+  header.site a:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+  .onglets button:disabled{opacity:.45;cursor:not-allowed}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  textarea#depot{width:100%;min-height:190px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 18px}
+  .champs label{font-size:13.5px;color:var(--encre-2)}
+  .champs label b{display:block;font-weight:500;color:var(--encre);margin:0 0 4px}
+  .champs input,.champs select{width:100%;padding:8px 10px;border:1px solid var(--filet-2);
+    border-radius:7px;font:15px/1.35 inherit;background:var(--carte);color:var(--encre)}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+
+  .compteurs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .compteurs .c{font:600 12.5px/1 system-ui;padding:8px 11px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
+  .compteurs .c.pose{background:var(--vert-clair);color:var(--vert)}
+  .compteurs .c.ver{background:var(--bleu-clair);color:var(--bleu)}
+
+  .rb{border:1px solid var(--filet);border-radius:11px;margin:12px 0;background:var(--carte);overflow:hidden}
+  .rb>.tt{padding:12px 15px;display:grid;grid-template-columns:1fr auto;gap:11px;align-items:center;
+    border-bottom:1px solid var(--filet)}
+  .rb>.tt .obj{font:600 15px/1.35 system-ui}
+  .rb>.tt .fond{font-size:12.5px;color:var(--encre-3);margin-top:2px}
+  .rb .corps{padding:0}
+  .grille-tab{overflow-x:auto;max-height:420px;overflow-y:auto}
+  table.g{border-collapse:collapse;width:100%;font-size:13px;background:var(--carte)}
+  table.g th,table.g td{border:1px solid var(--filet);padding:5px 8px;text-align:left;vertical-align:top}
+  table.g thead th{background:var(--bleu);color:#fff;font-weight:600;position:sticky;top:0}
+  table.g td.sec{background:var(--creux);font-weight:600;color:var(--bleu)}
+  table.g td.vide{background:#fcfdff;min-width:82px}
+  .btn-ins{font:600 13px/1 system-ui;padding:9px 13px;border-radius:8px;border:1px solid var(--vert);
+    background:var(--vert);color:#fff;cursor:pointer;white-space:nowrap}
+  .btn-ins.mis{background:var(--carte);color:var(--vert)}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;align-items:center}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Contrôler ma base de données <span>économiques, sociales et environnementales</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">← Accueil</a>
+      <a href="audit-bdese.html">Ma base de données</a>
+      <a href="parcours.html?p=bdese">Constituer la base</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="depot" class="actif">1 · Le fichier</button>
+    <button data-o="rubriques" id="ong-rub" disabled>2 · Les rubriques à insérer</button>
+    <button data-o="sortie" id="ong-sortie" disabled>3 · Le classeur</button>
+  </div>
+
+  <!-- ══════ 1 · LE FICHIER ══════ -->
+  <section id="o-depot">
+    <h2>Déposez votre base</h2>
+    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Quatre formats
+    sont lus directement, <b>.xlsx</b>, <b>.csv</b>, <b>.docx</b> et <b>.txt</b> ; pour tout autre,
+    ouvrez le document, copiez son sommaire et collez-le ci-dessous.</p>
+
+    <div class="carte">
+      <div id="hote-depot"></div>
+      <div class="barre">
+        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
+          Choisir un fichier
+          <input type="file" id="fichier" accept=".xlsx,.csv,.docx,.txt,text/plain" style="display:none">
+        </label>
+        <button class="btn second" id="vider">Vider</button>
+      </div>
+      <div id="lecture"></div>
+      <textarea id="depot" placeholder="Collez ici le sommaire ou le contenu de votre base, ou choisissez le fichier ci-dessus."></textarea>
+      <div class="barre">
+        <button class="btn" id="ouvrir">Ouvrir les rubriques</button>
+      </div>
+      <div id="erreur"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LES RUBRIQUES ══════ -->
+  <section id="o-rubriques" class="cache">
+    <h2>Les rubriques, mises en forme</h2>
+    <p class="aide">Chaque rubrique est déployée ligne à ligne, avec ses colonnes d'années. Le bouton
+    l'ajoute au classeur de l'onglet 3, où vous n'aurez plus qu'à porter vos chiffres.</p>
+    <div class="carte" id="hote-rubriques"></div>
+    <div class="compteurs" id="compteurs"></div>
+    <div id="rubriques"></div>
+    <div id="presentes"></div>
+    <div class="barre">
+      <button class="btn" id="vers-sortie">Voir le classeur</button>
+      <button class="btn second" id="tout">Tout insérer</button>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LE CLASSEUR ══════ -->
+  <section id="o-sortie" class="cache">
+    <h2>Le classeur</h2>
+    <p class="aide">Un onglet par rubrique retenue, les lignes du décret déjà en place, les colonnes
+    d'années déjà nommées. Les cases sont vides : ce sont vos chiffres.</p>
+    <div class="barre">
+      <button class="btn" id="dl-xlsx">Télécharger le classeur</button>
+      <button class="btn second" id="dl-csv">Télécharger en CSV</button>
+      <button class="btn second" id="retour-rub">← Revenir aux rubriques</button>
+    </div>
+    <div id="resume"></div>
+  </section>
+
+  <!-- Le panneau unique des champs, déplacé d'un onglet à l'autre : il se
+       tient toujours à côté de ce qui est affiché, jamais devant. -->
+  <div id="champs" class="champs" hidden>
+    <label><b>Entreprise</b><input type="text" id="ent" placeholder="dénomination sociale"></label>
+    <label><b>Effectif</b><input type="number" id="eff" min="0" step="1" placeholder="salariés"></label>
+    <label><b>Année en cours</b><input type="number" id="an" min="1990" max="2200" step="1"></label>
+    <label><b>Un accord définit-il la base ?</b>
+      <select id="acc"><option value="non">non</option><option value="oui">oui</option></select></label>
+  </div>
+
+  <footer>
+    Les articles cités ont été relus à la source par le relais Légifrance de l'application, trois lectures
+    espacées et concordantes chacun, le 7 septembre 2026 ; leurs identifiants de version figurent en
+    commentaire dans le fichier de cette page. Les rubriques et les lignes viennent du découpage du décret
+    par le moteur du module, jamais d'une recopie.
+  </footer>
+</main>
+
+<script src="moteur-bdese.js"></script>
+<script src="profil.js"></script>
+<script>
+(function () {
+  "use strict";
+  var AUD = (window.MoteurBDESE && window.MoteurBDESE.audit) || null;
+  var P = window.Profil || null;
+  var $ = function (s) { return document.querySelector(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+
+  var CTX = null, CHOIX = {}, PRESENTES = {};
+
+  /* ---------------------------------------------------------------- */
+  function onglet(nom) {
+    ["depot", "rubriques", "sortie"].forEach(function (o) {
+      $("#o-" + o).classList.toggle("cache", o !== nom);
+    });
+    Array.prototype.forEach.call($("#onglets").children, function (b) {
+      b.classList.toggle("actif", b.dataset.o === nom);
+    });
+    var hote = nom === "rubriques" ? $("#hote-rubriques") : (nom === "depot" ? $("#hote-depot") : null);
+    var champs = $("#champs");
+    if (hote) { hote.appendChild(champs); champs.hidden = false; }
+    else champs.hidden = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  Array.prototype.forEach.call($("#onglets").children, function (b) {
+    b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* LE ZIP, EN LECTURE. Un .docx comme un .xlsx sont des archives zip. On lit
+     le répertoire central une fois, on garde toutes les entrées, puis on
+     décomprime celles dont on a besoin avec le flux natif du navigateur.
+     Aucun octet ne sort de la page. */
+  function u16(v, i) { return v.getUint16(i, true); }
+  function u32(v, i) { return v.getUint32(i, true); }
+
+  function entreesZip(buf) {
+    var v = new DataView(buf), n = buf.byteLength, out = {};
+    var fin = -1;
+    for (var i = n - 22; i >= 0 && i > n - 65558; i--) if (u32(v, i) === 0x06054b50) { fin = i; break; }
+    if (fin < 0) throw new Error("Ce fichier n'est pas une archive lisible.");
+    var nb = u16(v, fin + 10), pos = u32(v, fin + 16);
+    var dec = new TextDecoder("utf-8");
+    for (var k = 0; k < nb; k++) {
+      if (u32(v, pos) !== 0x02014b50) throw new Error("Répertoire de l'archive illisible.");
+      var methode = u16(v, pos + 10), taille = u32(v, pos + 20);
+      var lnom = u16(v, pos + 28), lextra = u16(v, pos + 30), lcom = u16(v, pos + 32);
+      var debut = u32(v, pos + 42);
+      var nom = dec.decode(new Uint8Array(buf, pos + 46, lnom));
+      var ln = u16(v, debut + 26), lx = u16(v, debut + 28);
+      out[nom] = { methode: methode, data: new Uint8Array(buf, debut + 30 + ln + lx, taille) };
+      pos += 46 + lnom + lextra + lcom;
+    }
+    return out;
+  }
+
+  function inflater(u8) {
+    if (typeof DecompressionStream !== "function")
+      return Promise.reject(new Error("Ce navigateur ne sait pas décomprimer le fichier. Collez le texte à la place."));
+    var flux = new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    return new Response(flux).arrayBuffer();
+  }
+
+  function lireEntree(e) {
+    if (!e) return Promise.resolve("");
+    if (e.methode === 0) return Promise.resolve(new TextDecoder("utf-8").decode(e.data));
+    if (e.methode !== 8) return Promise.reject(new Error("Compression inconnue dans ce fichier."));
+    return inflater(e.data).then(function (b) { return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
+  }
+
+  function sansBalises(xml) {
+    return String(xml).replace(/<[^>]+>/g, " ")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&")
+      .replace(/\s+/g, " ").trim();
+  }
+
+  function lireDocx(fichier) {
+    return fichier.arrayBuffer().then(function (buf) {
+      var z = entreesZip(buf);
+      if (!z["word/document.xml"]) throw new Error("Le fichier ne contient pas de document Word.");
+      return lireEntree(z["word/document.xml"]);
+    }).then(function (xml) {
+      return xml.replace(/<w:tab[^>]*\/>/g, "\t").replace(/<w:br[^>]*\/>/g, "\n")
+        .replace(/<\/w:p>/g, "\n").replace(/<[^>]+>/g, "")
+        .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&")
+        .replace(/\n{3,}/g, "\n\n").trim();
+    });
+  }
+
+  /* Un .xlsx : les libellés vivent soit dans la table des chaînes partagées,
+     soit en clair dans les feuilles. On lit les deux plutôt que l'une des
+     deux : une base montée sous un autre tableur n'emploie pas toujours la
+     table partagée, et son sommaire serait alors invisible. */
+  function lireXlsx(fichier) {
+    return fichier.arrayBuffer().then(function (buf) {
+      var z = entreesZip(buf);
+      var parts = Object.keys(z).filter(function (n) {
+        return n === "xl/sharedStrings.xml" || /^xl\/worksheets\/.*\.xml$/.test(n);
+      });
+      if (!parts.length) throw new Error("Le fichier ne contient pas de feuille de calcul lisible.");
+      return Promise.all(parts.map(function (n) { return lireEntree(z[n]); }));
+    }).then(function (xmls) { return xmls.map(sansBalises).join("\n"); });
+  }
+
+  function dit(html, classe) {
+    $("#lecture").innerHTML = html ? '<div class="avis ' + (classe || "info") + '">' + html + "</div>" : "";
+  }
+
+  $("#fichier").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    $("#erreur").innerHTML = "";
+    dit("Lecture de <b>" + ech(f.name) + "</b>…");
+    var suite;
+    if (/\.xlsx$/i.test(f.name)) suite = lireXlsx(f);
+    else if (/\.docx$/i.test(f.name)) suite = lireDocx(f);
+    else suite = f.text();
+    suite.then(function (t) {
+      $("#depot").value = t;
+      dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") + " caractères.");
+    }).catch(function (e) {
+      dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
+          " Ouvrez le document, copiez son sommaire et collez-le ci-dessous.", "att");
+    });
+  });
+
+  $("#vider").addEventListener("click", function () {
+    $("#depot").value = ""; dit(""); $("#erreur").innerHTML = "";
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* Le dossier. L'effectif commande la grille : R. 2312-8 en deçà de trois
+     cents salariés, R. 2312-9 au-delà. Et la grille du décret n'est due qu'à
+     défaut d'accord : sous accord, ce sont les dix thèmes que l'article
+     L. 2312-21, alinéa 3, met au plancher qui restent dus quoi qu'il arrive. */
+  function nombre(v) {
+    var s = String(v == null ? "" : v).trim();
+    return s !== "" && isFinite(+s) ? Number(s) : null;
+  }
+
+  function contexte() {
+    var c = {
+      ent: $("#ent").value.trim() || "[dénomination sociale]",
+      eff: nombre($("#eff").value),
+      an: nombre($("#an").value) || new Date().getFullYear(),
+      accord: $("#acc").value === "oui",
+    };
+    c.mil = AUD.millesimes(c.an);
+    c.grille = AUD.grilleDue(c.eff, c.accord);
+    c.plancher = AUD.plancher || [];
+    return c;
+  }
+
+  /* Les rubriques à afficher. Sous accord, ou tant que l'effectif n'est pas
+     connu, la grille du décret n'est commandée par rien : on ne la sert pas
+     au hasard. Restent les dix thèmes du plancher, dus dans tous les cas. */
+  function rubriques(c) {
+    if (c.grille) {
+      return c.grille.rubriques.map(function (r) {
+        var lignes = [];
+        (r.sections || []).forEach(function (s) {
+          (s.sujets || []).forEach(function (su) {
+            var infos = (su.informations && su.informations.length) ? su.informations : [su.intitule];
+            infos.forEach(function (i) {
+              lignes.push({ section: (s.lettre ? s.lettre + ". " : "") + s.titre,
+                sujet: (su.lettre ? su.lettre + ") " : "") + su.intitule, info: i });
+            });
+          });
+        });
+        if (!lignes.length) lignes.push({ section: "", sujet: "", info: r.titre });
+        return { id: "r" + r.n, n: r.n, titre: r.titre, lignes: lignes,
+          fond: c.grille.article === "R2312-9" ? "R. 2312-9" : "R. 2312-8",
+          plancher: !!r.plancher };
+      });
+    }
+    return c.plancher.map(function (t, i) {
+      var titre = t.charAt(0).toUpperCase() + t.slice(1);
+      return { id: "p" + (i + 1), n: i + 1, titre: titre,
+        lignes: [{ section: "", sujet: "", info: titre }],
+        fond: "L. 2312-21, al. 3", plancher: true };
+    });
+  }
+
+  function entetes(c) {
+    return ["Section", "Sujet", "Information"]
+      .concat(c.mil.map(function (m) { return m.annee + " (" + m.nature + ")"; }))
+      .concat(["Ne peut être renseigné : raison (R. 2312-10)"]);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Le repérage, lexical, qui ne sert qu'à ranger l'écran. */
+  function normaliser(s) {
+    return String(s || "").toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[’']/g, "'").replace(/\s+/g, " ");
+  }
+  function reperee(rb, t) {
+    var cand = [rb.titre];
+    rb.lignes.slice(0, 40).forEach(function (l) {
+      if (l.section) cand.push(l.section.replace(/^[A-Z]+\.\s*/, ""));
+      if (l.sujet) cand.push(l.sujet.replace(/^[a-z]+\)\s*/, ""));
+    });
+    var vus = {}, n = 0;
+    cand.forEach(function (x) {
+      var k = normaliser(x);
+      if (k.length < 14 || vus[k]) return;
+      vus[k] = true;
+      if (t.indexOf(k) >= 0) n++;
+    });
+    return n >= 2;
+  }
+
+  /* ---------------------------------------------------------------- */
+  $("#ouvrir").addEventListener("click", function () {
+    $("#erreur").innerHTML = "";
+    if (!AUD) {
+      $("#erreur").innerHTML = '<div class="avis non"><b>Le moteur de la base ne s\'est pas chargé</b>' +
+        "Rechargez la page. Si le défaut persiste, le fichier moteur-bdese.js est absent ou incomplet.</div>";
+      return;
+    }
+    CTX = contexte();
+    var t = normaliser($("#depot").value);
+    CHOIX = {}; PRESENTES = {};
+    rubriques(CTX).forEach(function (rb) {
+      PRESENTES[rb.id] = reperee(rb, t);
+      CHOIX[rb.id] = !PRESENTES[rb.id];
+    });
+    $("#ong-rub").disabled = false;
+    $("#ong-sortie").disabled = false;
+    rendre();
+    onglet("rubriques");
+  });
+
+  function rendre() {
+    var liste = rubriques(CTX);
+    var mis = liste.filter(function (rb) { return CHOIX[rb.id]; }).length;
+    var lignes = liste.reduce(function (n, rb) { return n + (CHOIX[rb.id] ? rb.lignes.length : 0); }, 0);
+
+    $("#compteurs").innerHTML =
+      '<span class="c pose">' + mis + " rubrique" + (mis > 1 ? "s" : "") + " retenue" + (mis > 1 ? "s" : "") +
+      ", " + lignes + " ligne" + (lignes > 1 ? "s" : "") + "</span>" +
+      '<span class="c ver">' + (CTX.grille
+        ? (CTX.grille.article === "R2312-9" ? "R. 2312-9, au moins trois cents salariés" : "R. 2312-8, moins de trois cents salariés")
+        : (CTX.accord ? "sous accord : le plancher de L. 2312-21, alinéa 3" : "effectif à renseigner : le plancher de L. 2312-21, alinéa 3")) + "</span>" +
+      '<span class="c">' + CTX.mil.map(function (m) { return m.annee; }).join(" · ") + "</span>";
+
+    var aPoser = liste.filter(function (rb) { return !PRESENTES[rb.id]; });
+    var deja = liste.filter(function (rb) { return PRESENTES[rb.id]; });
+    $("#rubriques").innerHTML = aPoser.map(carte).join("") ||
+      '<p class="aide">Chaque rubrique de cette grille se retrouve déjà dans votre base. Elles sont reprises ci-dessous : vous pouvez en insérer une malgré tout, si la vôtre est plus courte que celle-ci.</p>';
+    $("#presentes").innerHTML = deja.length ? "<h3>Déjà dans votre base</h3>" + deja.map(carte).join("") : "";
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-ins]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-ins");
+        CHOIX[id] = !CHOIX[id];
+        rendre();
+      });
+    });
+  }
+
+  function carte(rb) {
+    var pris = !!CHOIX[rb.id];
+    var head = entetes(CTX);
+    var h = '<div class="rb"><div class="tt"><span><span class="obj">' + rb.n + ". " + ech(rb.titre) + "</span>" +
+      '<span class="fond">' + ech(rb.fond) + " · " + rb.lignes.length + " ligne" + (rb.lignes.length > 1 ? "s" : "") +
+      (rb.plancher ? " · au plancher de L. 2312-21, al. 3" : "") + "</span></span>" +
+      '<button class="btn-ins' + (pris ? "" : " mis") + '" data-ins="' + ech(rb.id) + '">' +
+      (pris ? "Retirer" : "Insérer") + "</button></div>" +
+      '<div class="corps"><div class="grille-tab"><table class="g"><thead><tr>' +
+      head.map(function (x) { return "<th>" + ech(x) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    var secteur = null;
+    rb.lignes.forEach(function (l) {
+      if (l.section && l.section !== secteur) {
+        secteur = l.section;
+        h += '<tr><td class="sec" colspan="' + head.length + '">' + ech(l.section) + "</td></tr>";
+      }
+      h += "<tr><td>" + ech(l.section) + "</td><td>" + ech(l.sujet) + "</td><td>" + ech(l.info) + "</td>" +
+        CTX.mil.map(function () { return '<td class="vide"></td>'; }).join("") + '<td class="vide"></td></tr>';
+    });
+    return h + "</tbody></table></div></div></div>";
+  }
+
+  $("#tout").addEventListener("click", function () {
+    rubriques(CTX).forEach(function (rb) { CHOIX[rb.id] = true; });
+    rendre();
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* LE CLASSEUR .XLSX, ÉCRIT À LA MAIN.
+
+     Pas de bibliothèque : un .xlsx est une archive zip de quelques fichiers
+     XML, et les entrées y sont stockées telles quelles, sans compression.
+     Le même procédé que l'export Word du dépôt (docs/audit-export.js), qui
+     n'écrit pas de classeur : il est donc repris ici, et dans l'écran de la
+     base, plutôt que d'ajouter un fichier au dépôt pour deux pages. */
+  var TABLE = (function () {
+    var t = new Uint32Array(256), c, n, k;
+    for (n = 0; n < 256; n++) { c = n;
+      for (k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
+      t[n] = c >>> 0; }
+    return t;
+  })();
+  function crc32(u) { var c = 0xFFFFFFFF;
+    for (var i = 0; i < u.length; i++) c = TABLE[(c ^ u[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0; }
+  function octets(s) { return new TextEncoder().encode(s); }
+
+  function zip(entrees) {
+    var parts = [], centre = [], offset = 0;
+    function w16(v) { return [v & 255, (v >> 8) & 255]; }
+    function w32(v) { return [v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >>> 24) & 255]; }
+    entrees.forEach(function (e) {
+      var nom = octets(e.nom), data = octets(e.contenu), crc = crc32(data);
+      var local = [].concat(w32(0x04034b50), w16(20), w16(0), w16(0), w16(0), w16(0),
+        w32(crc), w32(data.length), w32(data.length), w16(nom.length), w16(0));
+      parts.push(new Uint8Array(local), nom, data);
+      centre.push({ nom: nom, crc: crc, taille: data.length, offset: offset });
+      offset += local.length + nom.length + data.length;
+    });
+    var debutCentre = offset, centreOctets = [];
+    centre.forEach(function (c) {
+      var h = [].concat(w32(0x02014b50), w16(20), w16(20), w16(0), w16(0), w16(0), w16(0),
+        w32(c.crc), w32(c.taille), w32(c.taille), w16(c.nom.length),
+        w16(0), w16(0), w16(0), w16(0), w32(0), w32(c.offset));
+      centreOctets.push(new Uint8Array(h), c.nom);
+      offset += h.length + c.nom.length;
+    });
+    var fin = new Uint8Array([].concat(w32(0x06054b50), w16(0), w16(0),
+      w16(centre.length), w16(centre.length), w32(offset - debutCentre), w32(debutCentre), w16(0)));
+    var tout = parts.concat(centreOctets, [fin]);
+    var total = tout.reduce(function (n, x) { return n + x.length; }, 0);
+    var out = new Uint8Array(total), p = 0;
+    tout.forEach(function (x) { out.set(x, p); p += x.length; });
+    return out;
+  }
+
+  var echX = function (s) {
+    return String(s == null ? "" : s)
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, "")
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  };
+  function colonne(n) {
+    var s = "";
+    while (n > 0) { var r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = (n - r - 1) / 26; }
+    return s;
+  }
+  /* Excel refuse un nom d'onglet de plus de trente et un caractères, et les
+     signes : \ / ? * [ ]. On coupe sur un espace pour ne pas laisser un mot
+     tranché en deux, et on écarte les doublons. */
+  function nomOnglet(t, pris) {
+    var s = String(t || "Feuille").replace(/[\\\/\?\*\[\]:]/g, " ").replace(/\s+/g, " ").trim();
+    if (s.length > 28) {
+      s = s.slice(0, 28);
+      var e = s.lastIndexOf(" ");
+      if (e > 12) s = s.slice(0, e);
+    }
+    s = s.replace(/[\s,;.\-]+$/, "");
+    if (!s) s = "Feuille";
+    var base = s, n = 2;
+    while (pris[s.toLowerCase()]) { s = base.slice(0, 26) + " " + n; n++; }
+    pris[s.toLowerCase()] = true;
+    return s;
+  }
+  function feuilleXml(lignes, largeurs) {
+    var x = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
+    if (largeurs && largeurs.length) {
+      x += "<cols>";
+      largeurs.forEach(function (l, i) {
+        x += '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + l + '" customWidth="1"/>';
+      });
+      x += "</cols>";
+    }
+    x += "<sheetData>";
+    lignes.forEach(function (ligne, i) {
+      x += '<row r="' + (i + 1) + '">';
+      ligne.forEach(function (cel, j) {
+        if (cel === null || cel === undefined || cel === "") return;
+        x += '<c r="' + colonne(j + 1) + (i + 1) + '" t="inlineStr"><is><t xml:space="preserve">' +
+          echX(cel) + "</t></is></c>";
+      });
+      x += "</row>";
+    });
+    return x + "</sheetData></worksheet>";
+  }
+  function xlsx(feuilles) {
+    var pris = {};
+    var noms = feuilles.map(function (f) { return nomOnglet(f.titre, pris); });
+    var entrees = [
+      { nom: "[Content_Types].xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Default Extension="xml" ContentType="application/xml"/>' +
+        '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+        feuilles.map(function (f, i) {
+          return '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+        }).join("") + "</Types>" },
+      { nom: "_rels/.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+        "</Relationships>" },
+      { nom: "xl/workbook.xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' +
+        noms.map(function (n, i) {
+          return '<sheet name="' + echX(n) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>';
+        }).join("") + "</sheets></workbook>" },
+      { nom: "xl/_rels/workbook.xml.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        feuilles.map(function (f, i) {
+          return '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>';
+        }).join("") + "</Relationships>" },
+    ];
+    feuilles.forEach(function (f, i) {
+      entrees.push({ nom: "xl/worksheets/sheet" + (i + 1) + ".xml", contenu: feuilleXml(f.lignes, f.largeurs) });
+    });
+    return zip(entrees);
+  }
+
+  function telecharger(contenu, nom, type) {
+    var b = new Blob([contenu], { type: type });
+    var u = URL.createObjectURL(b);
+    var a = document.createElement("a");
+    a.href = u; a.setAttribute("download", nom); a.rel = "noopener";
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 2000);
+  }
+
+  /* ---------------------------------------------------------------- */
+  function retenues() {
+    return rubriques(CTX).filter(function (rb) { return CHOIX[rb.id]; });
+  }
+
+  function feuilles() {
+    var head = entetes(CTX);
+    var vides = head.length - 3;
+    var couverture = { titre: "La base", largeurs: [34, 62], lignes: [
+      ["Base de données économiques, sociales et environnementales"],
+      ["Entreprise", CTX.ent],
+      ["Effectif", CTX.eff === null ? "[à renseigner]" : String(CTX.eff)],
+      ["Année en cours", String(CTX.an)],
+      ["Texte qui commande le contenu", CTX.grille
+        ? (CTX.grille.article === "R2312-9" ? "R. 2312-9, à défaut d'accord, au moins trois cents salariés"
+                                            : "R. 2312-8, à défaut d'accord, moins de trois cents salariés")
+        : (CTX.accord ? "L'accord de l'article L. 2312-21. Les dix thèmes du plancher de son alinéa 3 restent dus."
+                      : "Effectif non renseigné : seuls les dix thèmes du plancher de L. 2312-21, alinéa 3, sont repris ici.")],
+      ["Version du texte lue", CTX.grille ? CTX.grille.version : "LEGIARTI000043975329"],
+      ["Millésimes", CTX.mil.map(function (m) { return m.annee + " (" + m.nature + ")"; }).join(", ")],
+      ["Années à venir", "Données chiffrées ou, à défaut, grandes tendances. Les informations qui ne peuvent recevoir ni chiffres ni tendances sont indiquées, avec les raisons, dans la dernière colonne de chaque onglet (R. 2312-10)."],
+      ["Support", CTX.eff !== null && CTX.eff >= 300
+        ? "À défaut d'accord, support informatique (R. 2312-12)."
+        : "À défaut d'accord, support informatique ou papier (R. 2312-12)."],
+      ["Accès", "Accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central et aux délégués syndicaux (L. 2312-36)."],
+    ] };
+    var largeurs = [26, 34, 46].concat(CTX.mil.map(function () { return 14; })).concat([38]);
+    return [couverture].concat(retenues().map(function (rb) {
+      var lignes = [[rb.titre].concat(new Array(head.length - 1).fill("")), head];
+      rb.lignes.forEach(function (l) {
+        lignes.push([l.section, l.sujet, l.info].concat(new Array(vides).fill("")));
+      });
+      return { titre: rb.n + " " + rb.titre, lignes: lignes, largeurs: largeurs };
+    }));
+  }
+
+  function nomFichier(ext) {
+    return "bdese-" + new Date().toISOString().slice(0, 10) + "." + ext;
+  }
+
+  function assembler() {
+    var r = retenues();
+    var n = r.reduce(function (a, rb) { return a + rb.lignes.length; }, 0);
+    $("#resume").innerHTML = '<div class="avis info"><b>' + r.length + " rubrique" + (r.length > 1 ? "s" : "") +
+      ", " + n + " ligne" + (n > 1 ? "s" : "") + ", " + CTX.mil.length + " colonnes d'années.</b>" +
+      "Le classeur porte un onglet par rubrique, plus un onglet de tête qui dit le texte applicable, " +
+      "les millésimes et le support. Rien n'est prérempli : les cases sont à vous.</div>";
+    onglet("sortie");
+  }
+  $("#vers-sortie").addEventListener("click", assembler);
+  $("#retour-rub").addEventListener("click", function () { onglet("rubriques"); });
+
+  $("#dl-xlsx").addEventListener("click", function () {
+    telecharger(xlsx(feuilles()), nomFichier("xlsx"),
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  });
+
+  /* Le CSV pour ceux qui n'ouvrent pas de classeur : point-virgule et
+     signature d'octets, les deux conditions pour qu'un tableur français
+     l'ouvre sans passer par un assistant d'importation. */
+  $("#dl-csv").addEventListener("click", function () {
+    var head = entetes(CTX);
+    var l = [["Rubrique"].concat(head)];
+    retenues().forEach(function (rb) {
+      rb.lignes.forEach(function (x) {
+        l.push([rb.n + ". " + rb.titre, x.section, x.sujet, x.info]
+          .concat(new Array(head.length - 3).fill("")));
+      });
+    });
+    var csv = "﻿" + l.map(function (r) {
+      return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(";");
+    }).join("\r\n");
+    telecharger(csv, nomFichier("csv"), "text/csv;charset=utf-8");
+  });
+
+  /* ---------------------------------------------------------------- */
+  (function prealable() {
+    $("#an").value = new Date().getFullYear();
+    if (P) {
+      var p = P.lire() || {};
+      if (p.denomination) $("#ent").value = p.denomination;
+      if (p.effectif !== undefined && p.effectif !== null && String(p.effectif).trim() !== "")
+        $("#eff").value = p.effectif;
+    }
+    /* Chaque réponse remplit ce qui est déjà à l'écran : les rubriques se
+       redessinent, les colonnes changent de millésime, sans quitter la page. */
+    function majour() {
+      if (!CTX) return;
+      var avant = CTX.grille ? CTX.grille.article : (CTX.accord ? "accord" : "plancher");
+      CTX = contexte();
+      var apres = CTX.grille ? CTX.grille.article : (CTX.accord ? "accord" : "plancher");
+      if (avant !== apres) {
+        var t = normaliser($("#depot").value);
+        CHOIX = {}; PRESENTES = {};
+        rubriques(CTX).forEach(function (rb) {
+          PRESENTES[rb.id] = reperee(rb, t);
+          CHOIX[rb.id] = !PRESENTES[rb.id];
+        });
+      }
+      rendre();
+    }
+    $("#champs").addEventListener("input", majour);
+    $("#champs").addEventListener("change", majour);
+    onglet("depot");
+  })();
+})();
+</script>
+<script>
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+</script>
+</body>
+</html>

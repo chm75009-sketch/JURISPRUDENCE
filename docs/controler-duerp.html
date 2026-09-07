@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon document unique, par métier</title>
+<link rel="manifest" href="manifest-audit-sst.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  L'ÉCRAN NE NOMME PAS UN MANQUE, IL SORT LE BLOC QUI LE COMBLE.
+
+  Dire « unité de travail Plonge absente » ne fait avancer personne : celui qui
+  l'entend a toujours son document unique à écrire. Cette page affiche donc, à
+  la place du constat, l'unité entièrement rédigée - les risques du métier, la
+  situation de travail décrite en une phrase, la gravité, la fréquence, la
+  priorité qui en découle, les mesures de prévention, un responsable et une
+  échéance datée - avec un bouton qui l'insère dans le document. On coche, on
+  emporte, on affiche l'avis d'accès.
+
+  D'OÙ VIENNENT LES UNITÉS. Du métier réel, pas d'une nomenclature abstraite :
+  la restauration donne salle, cuisine, plonge, bar et livraison, le commerce
+  donne caisse, rayon, réception et vente, et ainsi de suite. Le code NAF sert
+  à proposer le bon jeu ; il ne le décide pas, l'utilisateur en change d'un
+  menu.
+
+  CE QUE LA PAGE N'AFFIRME PAS. Les mesures de prévention listées sont des
+  mesures proposées, à retenir ou à écarter, pas l'énoncé de ce qu'un texte
+  imposerait : seuls les articles cités en fin de document sont affirmés, et
+  chacun d'eux a été lu à la source le 7 septembre 2026, trois lectures
+  concordantes, identifiant de version porté à côté.
+
+  LA COTATION N'EST PAS UNE OBLIGATION. Ni L. 4121-3 ni R. 4121-1 n'imposent
+  de coter un risque par une gravité multipliée par une fréquence. C'est une
+  aide au classement, et le document produit le dit en toutes lettres.
+
+  Rien ne sort de ce poste : le fichier déposé est lu dans le navigateur.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
+  header.site a:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+  .onglets button:disabled{opacity:.45;cursor:not-allowed}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px}
+  label.ch{display:grid;gap:4px}
+  label.ch .nom{font:600 11.5px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  label.ch input,label.ch select,label.ch textarea{font:inherit;font-size:14.5px;padding:9px 11px;
+    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre);width:100%}
+  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
+  label.ch.large{grid-column:1/-1}
+
+  textarea#depot{width:100%;min-height:200px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+
+  .deux-portes{display:grid;gap:12px;margin:16px 0}
+  @media (min-width:780px){.deux-portes{grid-template-columns:1fr 1fr}}
+  .porte{border:1px solid var(--filet);border-left:4px solid var(--bleu);border-radius:11px;
+    padding:15px 17px;background:var(--carte)}
+  .porte b{display:block;font:700 17px/1.3 system-ui;margin-bottom:5px}
+  .porte p{margin:0 0 12px;font-size:14px;line-height:1.55;color:var(--encre-2)}
+  .porte.non{border-left-color:var(--vert)}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+
+  .compteurs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .compteurs .c{font:600 12.5px/1 system-ui;padding:8px 11px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
+  .compteurs .c.ins{background:var(--vert-clair);color:var(--vert)}
+  .compteurs .c.dej{background:var(--bleu-clair);color:var(--bleu)}
+  .compteurs .c.urg{background:var(--rouge-clair);color:var(--rouge)}
+
+  .unite{border:1px solid var(--filet);border-radius:12px;margin:16px 0;background:var(--carte);overflow:hidden}
+  .unite>.tt{padding:13px 16px;border-bottom:1px solid var(--filet);background:var(--creux);
+    display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+  .unite>.tt b{font:700 17px/1.3 system-ui}
+  .unite>.tt .qui{display:block;font:400 13px/1.45 system-ui;color:var(--encre-2);margin-top:2px}
+  .unite>.corps{padding:6px 16px 14px}
+
+  .risque{border:1px solid var(--filet);border-radius:10px;margin:12px 0;padding:13px 15px}
+  .risque.insere{border-color:#bcd7c6;background:var(--vert-clair)}
+  .risque>.h{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;margin-bottom:6px}
+  .risque>.h b{font:600 15.5px/1.35 system-ui}
+  .risque .sit{margin:0 0 9px;font-size:14px;line-height:1.55;color:var(--encre)}
+  .risque .sit i{font-style:normal;color:var(--encre-3);font-size:12px;text-transform:uppercase;
+    letter-spacing:.04em;display:block;font-weight:600}
+  .cot{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}
+  .cot span{font:600 11.5px/1 system-ui;padding:6px 9px;border-radius:5px;background:var(--creux);color:var(--encre-2)}
+  .cot span.p1{background:var(--creux);color:var(--encre-2)}
+  .cot span.p2{background:var(--bleu-clair);color:var(--bleu)}
+  .cot span.p3{background:var(--ambre-clair);color:var(--ambre)}
+  .cot span.p4{background:var(--rouge-clair);color:var(--rouge)}
+  .risque ul{margin:0 0 9px;padding-left:20px;font-size:14px;line-height:1.55;color:var(--encre-2)}
+  .risque ul li{margin:0 0 4px}
+  .risque .pied{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0 0}
+  .risque .pied label{display:grid;gap:3px}
+  .risque .pied .nom{font:600 11px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  .risque .pied input{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--filet-2);
+    border-radius:6px;background:var(--carte);color:var(--encre);width:100%}
+  .risque .trouve{font-size:13px;line-height:1.5;color:var(--encre-2);background:var(--bleu-clair);
+    border-radius:7px;padding:8px 11px;margin:0 0 9px}
+  .risque .trouve q{color:var(--encre)}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+  .btn.vert{background:var(--vert);border-color:var(--vert)}
+  .btn.petit{font-size:12.5px;padding:7px 11px}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  details.txt{border:1px solid var(--filet);border-radius:9px;margin:8px 0;background:var(--carte)}
+  details.txt>summary{padding:9px 13px;cursor:pointer;font:600 12.5px/1.3 system-ui;color:var(--bleu)}
+  details.txt .c{padding:0 14px 12px;font-size:13px;line-height:1.6;color:var(--encre-2)}
+  details.txt .c b{color:var(--encre)}
+
+  pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:64vh;overflow:auto}
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  @media print{.onglets,.barre,header.site,.aide{display:none}.cache{display:block !important}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Mon document unique <span>- une unité de travail par poste réel, déjà rédigée</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">Accueil</a>
+      <a href="audit-sst.html">Auditer ma santé-sécurité</a>
+      <a href="duerp.html">Le construire poste par poste</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="depart" class="actif">1 · La question</button>
+    <button data-o="blocs" id="ong-blocs">2 · Le document unique rédigé</button>
+    <button data-o="sortie" id="ong-sortie">3 · Le document à emporter</button>
+  </div>
+
+  <!-- ══════ 1 · LE DÉPART ══════ -->
+  <section id="o-depart">
+    <h2>Avez-vous un document unique ?</h2>
+    <div class="deux-portes">
+      <div class="porte">
+        <b>Oui, je l'ai</b>
+        <p>Déposez-le. Chaque unité de travail du métier et chaque risque sont cherchés dans votre
+        texte ; ceux que la recherche ne retrouve pas vous sont présentés rédigés, prêts à insérer.
+        Le fichier est lu dans votre navigateur et n'est envoyé nulle part.</p>
+        <div class="barre" style="margin:0">
+          <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
+            Choisir un fichier .docx ou .txt
+            <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+          </label>
+          <button class="btn second" id="coller">Coller le texte</button>
+        </div>
+        <div id="lecture"></div>
+        <textarea id="depot" class="cache" placeholder="Collez ici le texte de votre document unique."></textarea>
+        <div class="barre" id="barre-controle" style="margin:10px 0 0">
+          <button class="btn" id="controler">Comparer au métier</button>
+        </div>
+      </div>
+      <div class="porte non">
+        <b>Non, je ne l'ai pas</b>
+        <p>Alors il n'y a rien à constater. L'écran suivant contient le document unique entier :
+        une unité de travail par poste, les risques du métier rédigés, la cotation, les mesures de
+        prévention, le responsable et l'échéance. Vous retirez ce qui ne vous concerne pas.</p>
+        <div class="barre" style="margin:0">
+          <button class="btn vert" id="je-nai-pas">Écrire mon document unique</button>
+        </div>
+      </div>
+    </div>
+
+    <details class="txt"><summary>Les textes, tels qu'ils ont été lus</summary>
+      <div class="c" id="textes"></div></details>
+  </section>
+
+  <!-- ══════ 2 · LES BLOCS ══════ -->
+  <section id="o-blocs" class="cache">
+    <h2>Les unités de travail, rédigées</h2>
+    <p class="aide">Tout est coché par défaut : ce qui reste coché entre dans le document. Le
+    responsable et l'échéance sont modifiables ligne à ligne, et l'échéance est déjà datée.</p>
+    <div class="compteurs" id="compteurs"></div>
+    <div class="barre">
+      <button class="btn second" id="tout-cocher">Tout insérer</button>
+      <button class="btn second" id="tout-decocher">Tout retirer</button>
+      <button class="btn" id="vers-sortie">Assembler le document</button>
+    </div>
+    <div id="blocs"></div>
+    <div class="barre">
+      <button class="btn" id="vers-sortie-2">Assembler le document</button>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LE DOCUMENT ══════ -->
+  <section id="o-sortie" class="cache">
+    <h2>Le document à emporter</h2>
+    <p class="aide">Le document unique tel qu'il sort de vos choix. Les cases laissées vides sortent
+    entre crochets : elles se voient, elles ne sont pas inventées.</p>
+    <div class="barre">
+      <button class="btn" id="dl-docx">Télécharger en Word</button>
+      <button class="btn second" id="dl-txt">Télécharger en texte</button>
+      <button class="btn second" id="copier">Copier</button>
+      <button class="btn second" id="imprimer">Imprimer</button>
+      <button class="btn second" id="retour-blocs">Revenir aux unités</button>
+    </div>
+    <div id="resume"></div>
+    <pre id="sortie"></pre>
+  </section>
+
+  <footer>
+    Les articles cités ont été lus à la source le 7 septembre 2026 et portent leur identifiant de
+    version. Les mesures de prévention proposées ne sont pas l'énoncé d'une obligation : ce sont des
+    mesures à retenir ou à écarter, sous la responsabilité de l'employeur.
+  </footer>
+</main>
+
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script src="duerp-metiers.js"></script>
+<script src="controler-duerp.js"></script>
+</body>
+</html>

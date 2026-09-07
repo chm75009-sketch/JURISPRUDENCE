@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrôler mon protocole préélectoral</title>
+<link rel="manifest" href="manifest-audit-cse.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LA BRANCHE « OUI » DU MODULE COMITÉ.
+
+  Le « non » ouvre la construction. Le « oui » ouvre ceci : on dépose le
+  protocole d'accord préélectoral, ou le procès-verbal du scrutin, et l'écran
+  rend les clauses entièrement rédigées, avec les chiffres de la fiche
+  entreprise dedans. Un bouton les insère. L'utilisateur n'a rien à écrire.
+
+  LA RÈGLE DE CET ÉCRAN : il ne nomme jamais un manque. Il n'y a pas ici de
+  « clause absente », pas de constat, pas de note. Il y a le texte fini, prêt
+  à coller, et le bouton qui l'insère. Le repérage lexical sert seulement à
+  savoir quelle clause proposer en premier : il ne juge pas ce qui est écrit.
+
+  Le nombre de sièges et le nombre de collèges ne sont pas saisis : ils sont
+  calculés sur l'effectif de la fiche entreprise, par le moteur du module
+  comité (docs/moteur-cse.js, tableau de R. 2314-1 et article L. 2314-11).
+
+  Rien ne quitte ce poste : le fichier déposé est lu dans le navigateur.
+
+  LES ARTICLES, RELUS À LA SOURCE LE 7 SEPTEMBRE 2026 (relais Légifrance de
+  l'application, deux lectures espacées et concordantes par article, contenu
+  vérifié et non le seul numéro) :
+
+    L. 2314-1   LEGIARTI000037389707   nombre de membres, titulaires et suppléants en nombre égal
+    L. 2314-4   LEGIARTI000035651165   information du personnel, premier tour au plus tard le 90e jour
+    L. 2314-5   LEGIARTI000035651159   invitation des organisations syndicales, deux mois, quinze jours
+    L. 2314-6   LEGIARTI000035651156   validité du protocole, double majorité
+    L. 2314-7   LEGIARTI000035651150   modification des sièges et des heures, volume global par collège
+    L. 2314-9   LEGIARTI000035651143   procès-verbal de carence
+    L. 2314-11  LEGIARTI000036262481   collèges électoraux, troisième collège, collège unique
+    L. 2314-12  LEGIARTI000036262473   modification des collèges par accord unanime
+    L. 2314-13  LEGIARTI000036262464   répartition du personnel et des sièges, proportion femmes-hommes
+    L. 2314-26  LEGIARTI000035651044   scrutin secret sous enveloppe, vote électronique, votes séparés
+    L. 2314-27  LEGIARTI000035651038   élection pendant le temps de travail
+    L. 2314-28  LEGIARTI000035651032   modalités d'organisation, principes généraux du droit électoral
+    L. 2314-29  LEGIARTI000035651029   deux tours, plus forte moyenne, quinze jours, copie des PV
+    L. 2314-30  LEGIARTI000035651024   composition des listes, femmes et hommes, arrondi
+    L. 2314-31  LEGIARTI000036761956   information des salariés sur la proportion par collège
+    L. 2314-32  LEGIARTI000035615701   contestations, compétence du juge judiciaire
+    L. 2314-33  LEGIARTI000052437191   quatre ans
+    R. 2314-1   LEGIARTI000036481896   tableau des sièges et des heures de délégation
+    R. 2314-2   LEGIARTI000039726069   modalités sans accord, président du tribunal judiciaire
+    R. 2314-3   LEGIARTI000039347724   répartition par le directeur régional, deux mois, quinze jours
+    R. 2314-5   LEGIARTI000036481875   vote électronique, accord ou décision, cahier des charges
+    R. 2314-13  LEGIARTI000036481841   mentions du protocole sur le vote électronique, annexe
+    R. 2314-15  LEGIARTI000036481833   cellule d'assistance technique, scellement
+    R. 2314-16  LEGIARTI000036481830   liste d'émargement, résultats partiels, ouverture du vote sous enveloppe
+    R. 2314-19  LEGIARTI000036481928   quotient électoral
+    R. 2314-20  LEGIARTI000036481925   plus forte moyenne
+    R. 2314-22  LEGIARTI000040341167   transmission du procès-verbal, quinze jours, affichage
+    R. 2314-24  LEGIARTI000039624934   requête, trois jours sur l'électorat, quinze jours sur la régularité
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
+  header.site a:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+  .onglets button:disabled{opacity:.45;cursor:not-allowed}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  textarea#depot{width:100%;min-height:210px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+  input[type=file]{font:inherit;font-size:14px}
+
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px 18px;margin:0 0 6px}
+  .champs label{font-size:13.5px;color:var(--encre-2)}
+  .champs label b{display:block;font-weight:500;color:var(--encre);margin:0 0 4px}
+  .champs input,.champs select{width:100%;padding:8px 10px;border:1px solid var(--filet-2);
+    border-radius:7px;font:15px/1.35 inherit;background:var(--carte);color:var(--encre)}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+
+  .compteurs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .compteurs .c{font:600 12.5px/1 system-ui;padding:8px 11px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
+  .compteurs .c.pose{background:var(--vert-clair);color:var(--vert)}
+  .compteurs .c.ver{background:var(--bleu-clair);color:var(--bleu)}
+
+  .cl{border:1px solid var(--filet);border-radius:11px;margin:12px 0;background:var(--carte);overflow:hidden}
+  .cl>.tt{padding:12px 15px;display:grid;grid-template-columns:1fr auto;gap:11px;align-items:center;
+    border-bottom:1px solid var(--filet)}
+  .cl>.tt .obj{font:600 15px/1.35 system-ui}
+  .cl>.tt .fond{font-size:12.5px;color:var(--encre-3);margin-top:2px}
+  .cl .corps{padding:12px 15px}
+  .texte{padding:12px 14px;background:var(--creux);border-radius:8px;
+    font:14px/1.62 Georgia,"Times New Roman",serif;color:var(--encre)}
+  .texte p{margin:0 0 9px}
+  .texte p:last-child{margin-bottom:0}
+  .texte table{border-collapse:collapse;width:100%;font:13px/1.4 system-ui;margin:4px 0 9px;background:var(--carte)}
+  .texte th,.texte td{border:1px solid var(--filet-2);padding:5px 8px;text-align:left}
+  .texte th{background:var(--bleu-clair);font-weight:600}
+  .btn-ins{font:600 13px/1 system-ui;padding:9px 13px;border-radius:8px;border:1px solid var(--vert);
+    background:var(--vert);color:#fff;cursor:pointer;white-space:nowrap}
+  .btn-ins.mis{background:var(--carte);color:var(--vert)}
+
+  .deja{display:flex;flex-wrap:wrap;gap:7px;margin:6px 0 0}
+  .deja span{font:500 12.5px/1 system-ui;padding:7px 10px;border-radius:7px;
+    background:var(--creux);color:var(--encre-2)}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;align-items:center}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  table.cal{border-collapse:collapse;width:100%;font-size:14px;background:var(--carte);margin:6px 0 14px}
+  table.cal th,table.cal td{border:1px solid var(--filet);padding:8px 10px;text-align:left;vertical-align:top}
+  table.cal th{background:var(--bleu);color:#fff;font-weight:600}
+  table.cal td.j{white-space:nowrap;font-weight:600;width:1%}
+  table.cal td.f{color:var(--encre-3);font-size:12.5px;white-space:nowrap}
+
+  pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:60vh;overflow:auto}
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  @media print{.onglets,.barre,header.site{display:none}.cache{display:block !important}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Contrôler mon protocole préélectoral <span>et le procès-verbal du scrutin</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">← Accueil</a>
+      <a href="audit-cse.html">Auditer mon comité</a>
+      <a href="parcours.html?p=installation">Installer le comité</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="depot" class="actif">1 · Le document</button>
+    <button data-o="clauses" id="ong-clauses" disabled>2 · Les clauses à insérer</button>
+    <button data-o="sortie" id="ong-sortie" disabled>3 · Le protocole et le calendrier</button>
+  </div>
+
+  <!-- ══════ 1 · LE DOCUMENT ══════ -->
+  <section id="o-depot">
+    <h2>Déposez votre protocole ou votre procès-verbal</h2>
+    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats sont
+    lus directement, <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document, copiez son texte
+    et collez-le ci-dessous.</p>
+
+    <div class="carte">
+      <!-- Le panneau des champs est unique. Il suit l'onglet actif : sur
+           l'onglet des clauses, il se tient à côté du texte rédigé, et chaque
+           réponse remplit ce texte sous les yeux de l'utilisateur. Aucun de
+           ces champs ne conditionne l'ouverture : ce qui manque sort entre
+           crochets, jamais en question posée d'avance. -->
+      <div id="hote-depot"></div>
+      <div class="barre">
+        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
+          Choisir un fichier .docx ou .txt
+          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+        </label>
+        <button class="btn second" id="exemple">Coller un exemple</button>
+        <button class="btn second" id="vider">Vider</button>
+      </div>
+      <div id="lecture"></div>
+      <textarea id="depot" placeholder="Collez ici le texte de votre protocole préélectoral ou de votre procès-verbal, ou choisissez le fichier ci-dessus."></textarea>
+      <div class="barre">
+        <button class="btn" id="ouvrir">Ouvrir les clauses</button>
+      </div>
+      <div id="erreur"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LES CLAUSES ══════ -->
+  <section id="o-clauses" class="cache">
+    <h2>Les clauses, rédigées</h2>
+    <p class="aide">Chaque clause est écrite en entier, avec les chiffres de votre entreprise dedans.
+    Le bouton l'insère dans le document de l'onglet 3. Ce qui reste entre crochets vous appartient.</p>
+    <div class="carte" id="hote-clauses"></div>
+    <div class="compteurs" id="compteurs"></div>
+    <div id="clauses"></div>
+    <div id="presentes"></div>
+    <div class="barre">
+      <button class="btn" id="vers-sortie">Voir le protocole et le calendrier</button>
+      <button class="btn second" id="tout">Tout insérer</button>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LE DOCUMENT CORRIGÉ ══════ -->
+  <section id="o-sortie" class="cache">
+    <h2>Le document et le calendrier</h2>
+    <p class="aide">Votre texte est conservé mot pour mot. Les clauses insérées le suivent, dans l'ordre
+    où elles se lisent. Le calendrier est calculé à rebours de la date du premier tour.</p>
+    <div class="barre">
+      <button class="btn" id="dl-docx">Télécharger en Word</button>
+      <button class="btn second" id="dl-txt">Télécharger en texte</button>
+      <button class="btn second" id="copier">Copier</button>
+      <button class="btn second" id="retour-clauses">← Revenir aux clauses</button>
+    </div>
+    <div id="calendrier"></div>
+    <pre id="sortie"></pre>
+  </section>
+
+  <!-- Le panneau unique des champs, déplacé d'un onglet à l'autre. -->
+  <div id="champs" class="champs" hidden>
+    <label><b>Ce document est</b>
+      <select id="nature">
+        <option value="protocole">un protocole d'accord préélectoral</option>
+        <option value="pv">un procès-verbal du scrutin</option>
+      </select></label>
+    <label><b>Entreprise</b><input type="text" id="ent" placeholder="dénomination sociale"></label>
+    <label><b>Effectif</b><input type="number" id="eff" min="0" step="1" placeholder="salariés"></label>
+    <label><b>Ingénieurs et cadres</b><input type="number" id="cad" min="0" step="1" placeholder="nombre"></label>
+    <label><b>Premier tour</b><input type="date" id="d1"></label>
+    <label><b>Fin des mandats en cours</b><input type="date" id="dfin"></label>
+    <label><b>Publication de la liste électorale</b><input type="date" id="dliste"></label>
+    <label><b>Vote électronique</b>
+      <select id="vel"><option value="non">non</option><option value="oui">oui</option></select></label>
+  </div>
+
+  <footer>
+    Les articles cités ont été relus à la source par le relais Légifrance de l'application, deux lectures
+    espacées et concordantes chacun, le 7 septembre 2026 ; leurs identifiants de version figurent en
+    commentaire dans le fichier de cette page. Le nombre de sièges et le nombre de collèges viennent du
+    moteur du module comité, sur l'effectif que vous avez saisi.
+  </footer>
+</main>
+
+<script src="moteur-cse.js"></script>
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script>
+(function () {
+  "use strict";
+  var M = (window.MoteurCSE && window.MoteurCSE.moteur) || null;
+  var P = window.Profil || null;
+  var $ = function (s) { return document.querySelector(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+
+  var CHOIX = {};          /* id de clause -> insérée ou non */
+  var CTX = null;          /* les chiffres du dossier, au moment de l'ouverture */
+  var PRESENTES = {};       /* id de clause -> repérée dans le texte déposé */
+
+  /* ---------------------------------------------------------------- */
+  /* Les onglets. */
+  function onglet(nom) {
+    ["depot", "clauses", "sortie"].forEach(function (o) {
+      $("#o-" + o).classList.toggle("cache", o !== nom);
+    });
+    Array.prototype.forEach.call($("#onglets").children, function (b) {
+      b.classList.toggle("actif", b.dataset.o === nom);
+    });
+    /* Le panneau des champs suit : il se tient toujours à côté de ce que
+       l'utilisateur regarde, jamais devant. */
+    var hote = nom === "clauses" ? $("#hote-clauses") : (nom === "depot" ? $("#hote-depot") : null);
+    var champs = $("#champs");
+    if (hote) { hote.appendChild(champs); champs.hidden = false; }
+    else champs.hidden = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  Array.prototype.forEach.call($("#onglets").children, function (b) {
+    b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* La lecture d'un .docx, sans bibliothèque : un .docx est une archive zip,
+     et le texte vit dans word/document.xml. On lit le répertoire central pour
+     trouver l'entrée, puis on la décomprime avec le flux natif du navigateur.
+     Aucun octet ne sort de la page. Même procédé que docs/controler-ri.html. */
+  function u16(v, i) { return v.getUint16(i, true); }
+  function u32(v, i) { return v.getUint32(i, true); }
+
+  function entreeZip(buf, nomVoulu) {
+    var v = new DataView(buf), n = buf.byteLength;
+    var fin = -1;
+    for (var i = n - 22; i >= 0 && i > n - 65558; i--) if (u32(v, i) === 0x06054b50) { fin = i; break; }
+    if (fin < 0) throw new Error("Ce fichier n'est pas une archive lisible.");
+    var nb = u16(v, fin + 10), pos = u32(v, fin + 16);
+    var dec = new TextDecoder("utf-8");
+    for (var k = 0; k < nb; k++) {
+      if (u32(v, pos) !== 0x02014b50) throw new Error("Répertoire de l'archive illisible.");
+      var methode = u16(v, pos + 10), taille = u32(v, pos + 20);
+      var lnom = u16(v, pos + 28), lextra = u16(v, pos + 30), lcom = u16(v, pos + 32);
+      var debut = u32(v, pos + 42);
+      var nom = dec.decode(new Uint8Array(buf, pos + 46, lnom));
+      if (nom === nomVoulu) {
+        var ln = u16(v, debut + 26), lx = u16(v, debut + 28);
+        return { methode: methode, data: new Uint8Array(buf, debut + 30 + ln + lx, taille) };
+      }
+      pos += 46 + lnom + lextra + lcom;
+    }
+    throw new Error("Le fichier ne contient pas de document Word (word/document.xml).");
+  }
+
+  function inflater(u8) {
+    if (typeof DecompressionStream !== "function")
+      return Promise.reject(new Error("Ce navigateur ne sait pas décomprimer le fichier. Collez le texte à la place."));
+    var flux = new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    return new Response(flux).arrayBuffer();
+  }
+
+  function texteDeDocumentXml(xml) {
+    return xml
+      .replace(/<w:tab[^>]*\/>/g, "\t")
+      .replace(/<w:br[^>]*\/>/g, "\n")
+      .replace(/<\/w:p>/g, "\n")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
+
+  function lireDocx(fichier) {
+    return fichier.arrayBuffer().then(function (buf) {
+      var e = entreeZip(buf, "word/document.xml");
+      if (e.methode === 0) return new TextDecoder("utf-8").decode(e.data);
+      if (e.methode !== 8) throw new Error("Compression inconnue dans ce .docx.");
+      return inflater(e.data).then(function (b) { return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
+    }).then(texteDeDocumentXml);
+  }
+
+  function dit(html, classe) {
+    $("#lecture").innerHTML = html ? '<div class="avis ' + (classe || "info") + '">' + html + "</div>" : "";
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Les dates. Tout se compte en UTC, pour qu'un changement d'heure ne
+     décale pas un délai de recours d'un jour. */
+  function jours(iso, n) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return null;
+    var d = new Date(iso + "T00:00:00Z");
+    if (isNaN(d.getTime())) return null;
+    d.setUTCDate(d.getUTCDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+  function mois(iso, n) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return null;
+    var d = new Date(iso + "T00:00:00Z");
+    if (isNaN(d.getTime())) return null;
+    var j = d.getUTCDate();
+    d.setUTCMonth(d.getUTCMonth() + n);
+    if (d.getUTCDate() !== j) d.setUTCDate(0);
+    return d.toISOString().slice(0, 10);
+  }
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+  function fr(iso) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return "[date]";
+    var p = iso.split("-");
+    return (p[2] === "01" ? "1er" : String(Number(p[2]))) + " " + MOIS[Number(p[1]) - 1] + " " + p[0];
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Le dossier : ce que la fiche entreprise donne, ce que l'écran demande. */
+  function nombre(v) {
+    var s = String(v == null ? "" : v).trim();
+    return s !== "" && isFinite(+s) ? Number(s) : null;
+  }
+
+  function contexte() {
+    var eff = nombre($("#eff").value);
+    var cad = nombre($("#cad").value);
+    var c = {
+      nature: $("#nature").value,
+      ent: $("#ent").value.trim() || "[dénomination sociale]",
+      eff: eff, cad: cad,
+      d1: $("#d1").value, dfin: $("#dfin").value, dliste: $("#dliste").value,
+      vel: $("#vel").value === "oui",
+    };
+    /* Le nombre de sièges et le nombre de collèges ne sont pas saisis : le
+       moteur du module comité les tire du tableau de R. 2314-1 et de
+       l'article L. 2314-11, sur le seul effectif. */
+    c.tr = (M && eff !== null) ? M.tranche(eff) : null;
+    c.tit = c.tr ? c.tr[2] : null;
+    c.heures = c.tr ? c.tr[3] : null;
+    c.col = (M && eff !== null) ? M.colleges({ effectif: eff, nbCadres: cad }) : null;
+    /* Le collège unique de L. 2314-11, dernier alinéa : il ne dépend pas de
+       l'effectif directement, mais du fait que l'entreprise n'élise qu'un
+       titulaire et un suppléant, ce que dit le tableau de R. 2314-1. */
+    c.unique = c.tit === 1;
+    c.nbCol = c.unique ? 1 : (c.col ? c.col.nombre : null);
+    return c;
+  }
+
+  function nomsColleges(c) {
+    if (c.unique) return ["Collège unique"];
+    if (c.nbCol === 3) return ["Premier collège", "Deuxième collège", "Troisième collège"];
+    return ["Premier collège", "Second collège"];
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* LES CLAUSES. Chaque entrée rend son texte fini : des paragraphes, et le
+     cas échéant un tableau. Les crochets marquent ce que seul le client
+     connaît ; rien n'y est inventé à sa place.
+
+     `marques` sert au seul rangement de l'écran : une clause repérée passe
+     en bas de page. Ce repérage est lexical, il ne dit pas que la clause est
+     bien rédigée, et il ne conclut donc jamais rien. */
+  function tab(head, rows) { return { tab: { head: head, rows: rows } }; }
+
+  var CLAUSES = [
+    {
+      id: "champ", pour: "protocole", titre: "Champ et objet du protocole",
+      fond: ["L2314-4", "L2314-5"],
+      marques: ["protocole d'accord preelectoral", "invitation", "informe le personnel"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 1. Champ et objet.",
+          "Le présent protocole d'accord préélectoral règle l'organisation et le déroulement des élections des membres de la délégation du personnel du comité social et économique de " + c.ent + ". L'effectif retenu pour son application est de " + (c.eff === null ? "[effectif]" : c.eff) + " salariés.",
+          "Le personnel a été informé de l'organisation des élections le [date], par tout moyen permettant de conférer date certaine à cette information. Le document diffusé précise la date envisagée pour le premier tour, fixée au " + fr(c.d1) + ". Ce premier tour se tient au plus tard le quatre-vingt-dixième jour suivant la diffusion.",
+          "Ont été informées de l'organisation des élections et invitées à négocier le présent protocole et à établir les listes de leurs candidats les organisations syndicales qui satisfont aux critères de respect des valeurs républicaines et d'indépendance, légalement constituées depuis au moins deux ans et dont le champ professionnel et géographique couvre l'entreprise. Les organisations reconnues représentatives dans l'entreprise, celles y ayant constitué une section syndicale et les syndicats affiliés à une organisation représentative au niveau national et interprofessionnel ont été invités par courrier.",
+          "L'invitation à négocier leur est parvenue le [date], soit au plus tard quinze jours avant la première réunion de négociation, tenue le [date].",
+        ];
+      },
+    },
+    {
+      id: "colleges", pour: "protocole", titre: "Composition des collèges électoraux",
+      fond: ["L2314-11", "L2314-12"],
+      marques: ["college", "ouvriers et employes", "agents de maitrise"], seuil: 2,
+      texte: function (c) {
+        var l = ["Article 2. Collèges électoraux."];
+        if (c.unique) {
+          l.push("L'entreprise n'élit qu'un membre de la délégation du personnel titulaire et un membre suppléant. Il est mis en place, pour chacune de ces élections, un collège électoral unique regroupant l'ensemble des catégories professionnelles.");
+          l.push("Toute modification du nombre et de la composition des collèges électoraux supposerait un accord signé par toutes les organisations syndicales représentatives dans l'entreprise, communiqué à sa demande à l'agent de contrôle de l'inspection du travail.");
+          return l;
+        } else {
+          l.push("Les membres de la délégation du personnel du comité social et économique sont élus sur des listes établies par les organisations syndicales pour chaque catégorie de personnel, dans les collèges suivants :");
+          l.push("- premier collège : les ouvriers et employés ;");
+          l.push("- " + (c.nbCol === 3 ? "deuxième" : "second") + " collège : les ingénieurs, chefs de service, techniciens, agents de maîtrise et assimilés.");
+          if (c.nbCol === 3)
+            l.push("- troisième collège : les ingénieurs, chefs de service et cadres administratifs, commerciaux ou techniques assimilés. Leur nombre sur le plan de la classification est de " + (c.cad === null ? "[nombre]" : c.cad) + " au moment du renouvellement de l'instance, soit au moins vingt-cinq : ces catégories constituent un troisième collège.");
+          else
+            l.push("Le nombre d'ingénieurs, chefs de service et cadres administratifs, commerciaux ou techniques assimilés sur le plan de la classification est de " + (c.cad === null ? "[nombre]" : c.cad) + " au moment du renouvellement de l'instance. Ce nombre étant inférieur à vingt-cinq, il n'est pas constitué de troisième collège.");
+          if (c.eff !== null && c.eff >= 501)
+            l.push("L'entreprise comptant au moins cinq cent un salariés, les ingénieurs, les chefs de service et cadres administratifs, commerciaux ou techniques assimilés ont au moins un délégué titulaire au sein du second collège, élu dans les mêmes conditions.");
+        }
+        l.push("Toute modification du nombre et de la composition des collèges électoraux suppose un accord signé par toutes les organisations syndicales représentatives dans l'entreprise. Un tel accord ne fait pas obstacle à la création du troisième collège. Il est communiqué, à sa demande, à l'agent de contrôle de l'inspection du travail.");
+        return l;
+      },
+    },
+    {
+      id: "sieges", pour: "protocole", titre: "Nombre de sièges et heures de délégation",
+      fond: ["L2314-1", "R2314-1", "L2314-7"],
+      marques: ["titulaire", "suppleant", "heures de delegation"], seuil: 2,
+      texte: function (c) {
+        var l = ["Article 3. Sièges et heures de délégation."];
+        if (c.tr) {
+          l.push("L'effectif de " + c.eff + " salariés relève de la tranche de " + c.tr[0] + " à " + c.tr[1] + " salariés du tableau de l'article R. 2314-1. La délégation du personnel comporte " + c.tit + " membre" + (c.tit > 1 ? "s" : "") + " titulaire" + (c.tit > 1 ? "s" : "") + " et " + c.tit + " membre" + (c.tit > 1 ? "s" : "") + " suppléant" + (c.tit > 1 ? "s" : "") + ", en nombre égal.");
+          l.push("Chaque titulaire dispose de " + c.heures + " heures de délégation par mois, soit un volume global de " + (c.tit * c.heures) + " heures mensuelles pour l'ensemble de la délégation.");
+          l.push("Le présent protocole peut modifier le nombre de sièges ou le volume des heures individuelles de délégation, dès lors que le volume global de ces heures, au sein de chaque collège, reste au moins égal à celui qui résulte du tableau au regard de l'effectif de l'entreprise.");
+        } else {
+          l.push("La délégation du personnel comporte [nombre] membres titulaires et autant de suppléants, en nombre égal, et chaque titulaire dispose de [nombre] heures de délégation par mois. Ces nombres se lisent, au regard de l'effectif, dans le tableau de l'article R. 2314-1. Renseignez l'effectif sur l'écran de dépôt pour qu'ils soient calculés.");
+        }
+        l.push("Le suppléant assiste aux réunions en l'absence du titulaire.");
+        return l;
+      },
+    },
+    {
+      id: "repartition", pour: "protocole", titre: "Répartition du personnel et des sièges",
+      fond: ["L2314-13", "L2314-6", "L2314-31", "R2314-3"],
+      marques: ["repartition du personnel", "proportion de femmes", "repartition des sieges"], seuil: 2,
+      texte: function (c) {
+        var noms = nomsColleges(c);
+        var rows = noms.map(function (n) { return [n, "[  ]", "[  ]", "[  ]", "[  ] %", "[  ] %", "[  ]", "[  ]"]; });
+        rows.push(["Total", "[  ]", "[  ]", "[  ]", "[  ] %", "[  ] %",
+          c.tit === null ? "[  ]" : String(c.tit), c.tit === null ? "[  ]" : String(c.tit)]);
+        return [
+          "Article 4. Répartition du personnel dans les collèges et des sièges entre les catégories.",
+          "La répartition du personnel dans les collèges électoraux et la répartition des sièges entre les différentes catégories de personnel sont arrêtées comme suit :",
+          tab(["Collège", "Inscrits", "Femmes", "Hommes", "Part de femmes", "Part d'hommes", "Sièges titulaires", "Sièges suppléants"], rows),
+          "Le présent article mentionne la proportion de femmes et d'hommes composant chaque collège électoral.",
+          "Dès l'intervention du présent accord sur la répartition du personnel, l'employeur porte cette proportion à la connaissance des salariés, par tout moyen permettant de donner une date certaine à cette information.",
+          "À défaut d'accord sur cette répartition, alors qu'au moins une organisation syndicale a répondu à l'invitation à négocier, l'autorité administrative décide de la répartition entre les collèges électoraux ; le directeur régional statue dans un délai de deux mois à compter de la réception de la contestation, et sa décision peut faire l'objet d'un recours devant le tribunal judiciaire dans les quinze jours suivant sa notification. La saisine de l'autorité administrative suspend le processus électoral jusqu'à la décision et entraîne la prorogation des mandats en cours jusqu'à la proclamation des résultats.",
+        ];
+      },
+    },
+    {
+      id: "scrutin", pour: "protocole", titre: "Modalités du scrutin",
+      fond: ["L2314-26", "L2314-27", "L2314-29"],
+      marques: ["scrutin secret", "deux tours", "plus forte moyenne", "temps de travail"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 5. Modalités du scrutin.",
+          "Le scrutin est de liste à deux tours avec représentation proportionnelle à la plus forte moyenne.",
+          "L'élection a lieu au scrutin secret sous enveloppe. Il est procédé à des votes séparés pour les membres titulaires et pour les membres suppléants, dans chacune des catégories professionnelles formant des collèges distincts.",
+          "Le premier tour se tient le " + fr(c.d1) + ", de [heure] à [heure], à [lieu du bureau de vote]. Au premier tour, chaque liste est établie par les organisations syndicales invitées à négocier le présent protocole.",
+          "Si le nombre des votants est inférieur à la moitié des électeurs inscrits, il est procédé, dans un délai de quinze jours, à un second tour de scrutin pour lequel les électeurs peuvent voter pour des listes autres que celles présentées par une organisation syndicale. Le second tour est fixé au " + fr(jours(c.d1, 15)) + ", aux mêmes heures et au même lieu.",
+          "L'élection a lieu pendant le temps de travail. [Le cas échéant : un accord contraire est conclu entre l'employeur et l'ensemble des organisations syndicales représentatives dans l'entreprise, en raison de (motif, notamment le travail en continu).]",
+          "Lorsque le nom d'un candidat a été raturé, les ratures ne sont pas prises en compte si leur nombre est inférieur à 10 % des suffrages exprimés en faveur de la liste sur laquelle ce candidat figure ; les candidats sont alors proclamés élus dans l'ordre de présentation.",
+          "Le bureau de vote de chaque collège est composé de [président, assesseurs], désignés parmi les électeurs du collège.",
+        ];
+      },
+    },
+    {
+      id: "listes", pour: "protocole", titre: "Listes de candidats, femmes et hommes",
+      fond: ["L2314-30", "L2314-31"],
+      marques: ["nombre de femmes et d'hommes", "alternativement", "liste electorale"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 6. Listes de candidats.",
+          "Pour chaque collège électoral, les listes qui comportent plusieurs candidats sont composées d'un nombre de femmes et d'hommes correspondant à la part de femmes et d'hommes inscrits sur la liste électorale. Elles sont composées alternativement d'un candidat de chaque sexe jusqu'à épuisement des candidats d'un des sexes.",
+          "Lorsque cette règle n'aboutit pas à un nombre entier de candidats à désigner pour chacun des deux sexes, l'arrondi arithmétique se fait à l'entier supérieur en cas de décimale supérieure ou égale à 5, et à l'entier inférieur en cas de décimale strictement inférieure à 5.",
+          "En cas de nombre impair de sièges à pourvoir et de stricte égalité entre les femmes et les hommes inscrits sur les listes électorales, la liste comprend indifféremment un homme ou une femme supplémentaire.",
+          "Lorsque l'application de ces règles conduit à exclure totalement la représentation de l'un ou l'autre sexe, la liste peut comporter un candidat du sexe qui, à défaut, ne serait pas représenté. Ce candidat ne peut être en première position sur la liste.",
+          "Ces règles s'appliquent à la liste des membres titulaires comme à la liste des membres suppléants.",
+          "La liste électorale de chaque collège est publiée le " + fr(c.dliste) + ". Les listes de candidats sont déposées au plus tard le [date], à [service ou personne], contre récépissé.",
+        ];
+      },
+    },
+    {
+      id: "electronique", pour: "protocole", titre: "Vote électronique",
+      fond: ["L2314-26", "R2314-5", "R2314-13"],
+      marques: ["vote electronique", "cahier des charges", "prestataire"], seuil: 2,
+      texte: function (c) {
+        if (!c.vel) {
+          return [
+            "Article 7. Vote électronique.",
+            "L'élection se déroule au scrutin secret sous enveloppe. Il n'est pas recouru au vote électronique. Aucun accord d'entreprise ou de groupe ne l'ouvre, et l'employeur n'en décide pas.",
+          ];
+        }
+        return [
+          "Article 7. Vote électronique.",
+          "L'élection des membres de la délégation du personnel est réalisée par vote électronique [sur le lieu de travail / à distance]. Le recours au vote électronique est ouvert par [l'accord d'entreprise ou de groupe du (date) / la décision de l'employeur du (date), prise à défaut d'accord]. Il vaut aussi, le cas échéant, pour les élections partielles se déroulant en cours de mandat.",
+          "Le prestataire choisi pour le mettre en place est [dénomination du prestataire]. La description détaillée du fonctionnement du système retenu et du déroulement des opérations électorales figure en annexe au présent protocole.",
+          "Un cahier des charges est établi [dans le cadre de l'accord / par l'employeur]. Il est tenu à la disposition des salariés sur le lieu de travail et mis sur l'intranet de l'entreprise.",
+          "Le vote à bulletin secret sous enveloppe [est / n'est pas] exclu.",
+          "Le vote électronique se déroule, pour chaque tour de scrutin, pendant une période délimitée : du " + fr(c.d1) + " à [heure] au " + fr(c.d1) + " à [heure] pour le premier tour, du " + fr(jours(c.d1, 15)) + " à [heure] au " + fr(jours(c.d1, 15)) + " à [heure] pour le second.",
+          "Chaque salarié dispose d'une notice d'information détaillée sur le déroulement des opérations électorales. Les membres de la délégation du personnel et les membres du bureau de vote bénéficient d'une formation sur le système retenu.",
+          "L'employeur met en place une cellule d'assistance technique chargée de veiller au bon fonctionnement et à la surveillance du système, comprenant le cas échéant les représentants du prestataire.",
+        ];
+      },
+    },
+    {
+      id: "depouillement", pour: "protocole", titre: "Dépouillement et attribution des sièges",
+      fond: ["R2314-19", "R2314-20", "R2314-21", "R2314-15", "R2314-16"],
+      marques: ["quotient electoral", "depouillement", "plus forte moyenne"], seuil: 2,
+      texte: function (c) {
+        var l = [
+          "Article 8. Dépouillement et attribution des sièges.",
+          "Le quotient électoral est égal au nombre total des suffrages valablement exprimés par les électeurs du collège, divisé par le nombre de sièges à pourvoir. Chaque liste se voit attribuer autant de sièges que le nombre de voix recueilli par elle contient de fois ce quotient.",
+          "Lorsqu'il n'a été pourvu à aucun siège, ou qu'il reste des sièges à pourvoir, les sièges restants sont attribués sur la base de la plus forte moyenne : le nombre de voix obtenu par chaque liste est divisé par le nombre, augmenté d'une unité, des sièges déjà attribués à cette liste ; les listes sont classées dans l'ordre décroissant des moyennes obtenues, et le premier siège non pourvu est attribué à la liste ayant la plus forte moyenne. L'opération est répétée pour chacun des sièges non pourvus jusqu'au dernier.",
+          "Lorsque deux listes ont la même moyenne et qu'il ne reste qu'un siège à pourvoir, ce siège est attribué à la liste qui a le plus grand nombre de voix. Lorsque deux listes ont recueilli le même nombre de voix, le siège est attribué au plus âgé des deux candidats susceptibles d'être élus.",
+        ];
+        if (c.vel) {
+          l.push("En présence des représentants des listes de candidats, la cellule d'assistance technique procède, avant l'ouverture du vote, à un test du système et vérifie que l'urne électronique est vide, scellée et chiffrée par des clés délivrées à cet effet ; elle procède à un test spécifique du système de dépouillement, à l'issue duquel ce système est scellé ; elle contrôle ce scellement à l'issue des opérations de vote et avant les opérations de dépouillement.");
+          l.push("La liste d'émargement n'est accessible qu'aux membres du bureau de vote, aux fins de contrôle du déroulement du scrutin. Aucun résultat partiel n'est accessible pendant le déroulement du scrutin ; le nombre de votants [peut / ne peut pas] être révélé au cours du scrutin.");
+          l.push("Le vote sous enveloppe n'étant pas exclu, son ouverture n'a lieu qu'après la clôture du vote électronique. Le président du bureau de vote dispose, avant cette ouverture, de la liste d'émargement des électeurs ayant voté par voie électronique.");
+          l.push("L'employeur ou le prestataire conserve sous scellés, jusqu'à l'expiration du délai de recours et, en cas d'action contentieuse, jusqu'à la décision devenue définitive, les fichiers supports comprenant la copie des programmes sources et exécutables, les matériels de vote, les fichiers d'émargement, de résultats et de sauvegarde.");
+        } else {
+          l.push("Le dépouillement est public. Il commence dès la clôture du scrutin, en présence des représentants des listes de candidats qui le souhaitent, et les résultats sont proclamés collège par collège, pour les titulaires puis pour les suppléants.");
+        }
+        return l;
+      },
+    },
+    {
+      id: "propagande", pour: "protocole", titre: "Propagande électorale et moyens des listes",
+      fond: ["L2314-28", "R2314-2"],
+      marques: ["propagande", "profession de foi", "affichage"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Article 9. Propagande électorale et moyens des listes.",
+          "Les modalités d'organisation et de déroulement des opérations électorales font l'objet du présent accord, qui respecte les principes généraux du droit électoral.",
+          "La propagande électorale s'exerce dans les conditions suivantes :",
+          "- des panneaux d'affichage sont réservés à chaque organisation présentant une liste, à [emplacements], à compter du [date] ;",
+          "- les professions de foi sont remises à [service] au plus tard le [date] et diffusées par [moyen] le [date], à l'identique pour chaque liste ;",
+          "- les moyens matériels mis à disposition, les dates et les modes de diffusion sont les mêmes pour toutes les listes ;",
+          "- toute propagande est interdite dans le local de vote et le jour du scrutin.",
+          "Le code du travail ne fixe pas lui-même ces modalités : elles relèvent du présent protocole. Celles sur lesquelles aucun accord n'a pu intervenir peuvent être fixées par le président du tribunal judiciaire, qui statue en dernier ressort selon la procédure accélérée au fond.",
+        ];
+      },
+    },
+    {
+      id: "contentieux", pour: "protocole", titre: "Contestations et délais de recours",
+      fond: ["L2314-32", "R2314-24", "R2314-25"],
+      marques: ["contestation", "tribunal judiciaire", "quinze jours"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 10. Contestations.",
+          "Les contestations relatives à l'électorat, à la composition des listes de candidats, à la régularité des opérations électorales et à la désignation des représentants syndicaux relèvent du juge judiciaire. Le tribunal judiciaire est saisi par voie de requête et statue en dernier ressort.",
+          "La requête portant sur l'électorat n'est recevable que si elle est remise ou adressée dans les trois jours suivant la publication de la liste électorale" + (c.dliste ? ", publiée le " + fr(c.dliste) + ", soit au plus tard le " + fr(jours(c.dliste, 3)) : "") + ".",
+          "La requête portant sur la régularité de l'élection ou sur la désignation de représentants syndicaux n'est recevable que si elle est remise ou adressée dans les quinze jours suivant cette élection ou cette désignation" + (c.d1 ? ", soit au plus tard le " + fr(jours(c.d1, 15)) : "") + ".",
+          "Le tribunal statue dans les dix jours de sa saisine, sans frais ni forme de procédure et sur avertissement qu'il donne trois jours à l'avance à toutes les parties intéressées. Sa décision est notifiée par le greffe dans les trois jours par lettre recommandée avec avis de réception et est susceptible d'un pourvoi en cassation dans un délai de dix jours.",
+        ];
+      },
+    },
+    {
+      id: "duree", pour: "protocole", titre: "Durée des mandats",
+      fond: ["L2314-33"],
+      marques: ["quatre ans", "duree du mandat"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Article 11. Durée des mandats.",
+          "Les membres de la délégation du personnel du comité social et économique sont élus pour quatre ans. Leurs fonctions prennent fin par le décès, la démission, la rupture du contrat de travail ou la perte des conditions requises pour être éligible. Ils conservent leur mandat en cas de changement de catégorie professionnelle.",
+        ];
+      },
+    },
+    {
+      id: "validite", pour: "protocole", titre: "Validité et signature",
+      fond: ["L2314-6"],
+      marques: ["majorite des organisations syndicales", "suffrages exprimes", "signature"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 12. Validité et signature.",
+          "La validité du présent protocole est subordonnée à sa signature par la majorité des organisations syndicales ayant participé à sa négociation, dont les organisations syndicales représentatives ayant recueilli la majorité des suffrages exprimés lors des dernières élections professionnelles ou, lorsque ces résultats ne sont pas disponibles, la majorité des organisations représentatives dans l'entreprise.",
+          "Fait à [lieu], le [date], en [nombre] exemplaires originaux.",
+          "Pour l'entreprise : [nom, qualité, signature]",
+          "Pour les organisations syndicales : [organisation, nom du signataire, signature]",
+        ];
+      },
+    },
+
+    /* ---------------- le procès-verbal ---------------- */
+    {
+      id: "pv-tete", pour: "pv", titre: "En-tête du procès-verbal",
+      fond: ["L2314-26", "L2314-29"],
+      marques: ["proces-verbal", "premier tour", "college"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Procès-verbal des élections des membres de la délégation du personnel du comité social et économique",
+          c.ent + " - effectif : " + (c.eff === null ? "[effectif]" : c.eff) + " salariés.",
+          "Tour de scrutin : [premier / second]. Date : " + fr(c.d1) + ". Collège : [collège]. Catégorie : [titulaires / suppléants].",
+          "Il a été procédé à des votes séparés pour les membres titulaires et pour les membres suppléants, dans chacune des catégories professionnelles formant des collèges distincts.",
+          "Bureau de vote : [président], [assesseurs]. Ouverture du scrutin à [heure], clôture à [heure].",
+        ];
+      },
+    },
+    {
+      id: "pv-resultats", pour: "pv", titre: "Résultats et attribution des sièges",
+      fond: ["R2314-19", "R2314-20", "R2314-21", "L2314-29"],
+      marques: ["suffrages valablement exprimes", "quotient electoral", "sieges attribues"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Résultats du collège.",
+          tab(["", "Nombre"], [
+            ["Électeurs inscrits", "[  ]"],
+            ["Votants", "[  ]"],
+            ["Bulletins blancs et nuls", "[  ]"],
+            ["Suffrages valablement exprimés", "[  ]"],
+            ["Sièges de titulaires à pourvoir dans ce collège", "[  ]" +
+              (c.tit === null ? "" : " (sur les " + c.tit + " que compte l'entreprise)")],
+            ["Quotient électoral (suffrages exprimés divisés par sièges à pourvoir)", "[  ]"],
+          ]),
+          "Le nombre des votants est [supérieur / inférieur] à la moitié des électeurs inscrits. [S'il est inférieur, il est procédé, dans un délai de quinze jours, à un second tour de scrutin pour lequel les électeurs peuvent voter pour des listes autres que celles présentées par une organisation syndicale.]",
+          tab(["Liste", "Voix", "Sièges au quotient", "Sièges à la plus forte moyenne", "Total"],
+            [["[liste]", "[  ]", "[  ]", "[  ]", "[  ]"], ["[liste]", "[  ]", "[  ]", "[  ]", "[  ]"]]),
+          "Les sièges restant à pourvoir ont été attribués à la plus forte moyenne : le nombre de voix obtenu par chaque liste a été divisé par le nombre, augmenté d'une unité, des sièges déjà attribués à cette liste, et le siège a été attribué à la liste ayant la plus forte moyenne.",
+          "Les ratures n'ont pas été prises en compte lorsque leur nombre était inférieur à 10 % des suffrages exprimés en faveur de la liste sur laquelle figurait le candidat raturé ; les candidats ont alors été proclamés élus dans l'ordre de présentation.",
+          "Sont proclamés élus : [nom, prénom, liste, collège, titulaire ou suppléant].",
+        ];
+      },
+    },
+    {
+      id: "pv-transmission", pour: "pv", titre: "Transmission, copies et affichage",
+      fond: ["L2314-29", "R2314-22"],
+      marques: ["quinze jours", "formulaire homologue", "liste nominative"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Transmission et publicité.",
+          "Après la proclamation des résultats, l'employeur transmet, dans les meilleurs délais et par tout moyen, une copie des procès-verbaux aux organisations syndicales de salariés qui ont présenté des listes de candidats aux scrutins concernés ainsi qu'à celles ayant participé à la négociation du protocole d'accord préélectoral.",
+          "Un exemplaire du procès-verbal est transmis par l'employeur au prestataire agissant pour le compte du ministre chargé du travail dans les quinze jours suivant la tenue des élections, au moyen d'un formulaire homologué" + (c.d1 ? ", soit au plus tard le " + fr(jours(c.d1, 15)) : "") + ".",
+          "La liste nominative des membres du comité social et économique est affichée dans les locaux affectés au travail. Elle indique l'emplacement de travail habituel des membres du comité ainsi que, le cas échéant, leur participation à une ou plusieurs commissions du comité.",
+        ];
+      },
+    },
+    {
+      id: "pv-carence", pour: "pv", titre: "Procès-verbal de carence",
+      fond: ["L2314-9"],
+      marques: ["carence", "inspection du travail"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Procès-verbal de carence.",
+          "Le comité social et économique de " + c.ent + " n'a pas été [mis en place / renouvelé] à l'issue du scrutin du " + fr(c.d1) + ", [aucune liste n'ayant été présentée / le nombre de candidats étant insuffisant].",
+          "Le présent procès-verbal de carence est porté à la connaissance des salariés dans l'entreprise, par tout moyen permettant de donner date certaine à cette information.",
+          "Il est transmis dans les quinze jours" + (c.d1 ? ", soit au plus tard le " + fr(jours(c.d1, 15)) : "") + ", par tout moyen permettant de conférer date certaine, à l'agent de contrôle de l'inspection du travail, qui en communique une copie aux organisations syndicales de salariés du département concerné.",
+          "Fait à [lieu], le [date]. [Nom, qualité, signature]",
+        ];
+      },
+    },
+  ];
+
+  var LIB = {
+    L2314_1: "L. 2314-1", L2314_4: "L. 2314-4", L2314_5: "L. 2314-5", L2314_6: "L. 2314-6",
+    L2314_7: "L. 2314-7", L2314_9: "L. 2314-9", L2314_11: "L. 2314-11", L2314_12: "L. 2314-12",
+    L2314_13: "L. 2314-13", L2314_26: "L. 2314-26", L2314_27: "L. 2314-27", L2314_28: "L. 2314-28",
+    L2314_29: "L. 2314-29", L2314_30: "L. 2314-30", L2314_31: "L. 2314-31", L2314_32: "L. 2314-32",
+    L2314_33: "L. 2314-33", R2314_1: "R. 2314-1", R2314_2: "R. 2314-2", R2314_3: "R. 2314-3",
+    R2314_5: "R. 2314-5", R2314_13: "R. 2314-13", R2314_15: "R. 2314-15", R2314_16: "R. 2314-16",
+    R2314_19: "R. 2314-19", R2314_20: "R. 2314-20", R2314_21: "R. 2314-21", R2314_22: "R. 2314-22",
+    R2314_24: "R. 2314-24", R2314_25: "R. 2314-25",
+  };
+  function article(code) { return LIB[String(code).replace("-", "_")] || String(code); }
+
+  /* ---------------------------------------------------------------- */
+  /* Le repérage. Il ne sert qu'à ranger l'écran : une clause déjà traitée
+     dans le document passe en bas, les autres viennent en tête, rédigées. */
+  function normaliser(s) {
+    return String(s || "").toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[’']/g, "'")
+      .replace(/\s+/g, " ");
+  }
+  function reperee(cl, texteNorme) {
+    var n = 0;
+    cl.marques.forEach(function (m) { if (texteNorme.indexOf(normaliser(m)) >= 0) n++; });
+    return n >= (cl.seuil || 1);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Le dépôt. */
+  $("#fichier").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    $("#erreur").innerHTML = "";
+    dit("Lecture de <b>" + ech(f.name) + "</b>…");
+    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    suite.then(function (t) {
+      $("#depot").value = t;
+      dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +
+          " caractères. C'est ce texte qui sera conservé mot pour mot.");
+    }).catch(function (e) {
+      dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
+          " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
+    });
+  });
+
+  $("#vider").addEventListener("click", function () {
+    $("#depot").value = ""; dit(""); $("#erreur").innerHTML = "";
+  });
+
+  $("#exemple").addEventListener("click", function () {
+    $("#depot").value = [
+      "PROTOCOLE D'ACCORD PRÉÉLECTORAL",
+      "",
+      "Entre la société EXEMPLE, et les organisations syndicales soussignées.",
+      "",
+      "Article 1 - Les élections des membres de la délégation du personnel du comité social et économique se tiendront le 15 juin 2027.",
+      "Article 2 - Le personnel est réparti en deux collèges : ouvriers et employés d'une part, agents de maîtrise et cadres d'autre part.",
+      "Article 3 - Le scrutin est secret. Il aura lieu pendant le temps de travail.",
+      "Article 4 - Les listes de candidats devront être déposées huit jours avant le scrutin.",
+      "Article 5 - Le présent protocole prend effet à sa signature.",
+    ].join("\n");
+    dit("Exemple collé : un protocole de cinq articles, volontairement sommaire. Ouvrez les clauses.");
+  });
+
+  $("#ouvrir").addEventListener("click", function () {
+    $("#erreur").innerHTML = "";
+    if (!M) {
+      $("#erreur").innerHTML = '<div class="avis non"><b>Le moteur du comité ne s\'est pas chargé</b>' +
+        "Rechargez la page. Si le défaut persiste, le fichier moteur-cse.js est absent ou incomplet.</div>";
+      return;
+    }
+    CTX = contexte();
+    var t = normaliser($("#depot").value);
+    CHOIX = {}; PRESENTES = {};
+    CLAUSES.forEach(function (cl) {
+      if (cl.pour !== CTX.nature) return;
+      PRESENTES[cl.id] = reperee(cl, t);
+      CHOIX[cl.id] = !PRESENTES[cl.id];
+    });
+    $("#ong-clauses").disabled = false;
+    $("#ong-sortie").disabled = false;
+    rendreClauses();
+    onglet("clauses");
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* Les clauses à l'écran : le texte fini, et le bouton qui l'insère. */
+  function lignesHtml(lignes) {
+    return lignes.map(function (l) {
+      if (l && l.tab)
+        return "<table><tr>" + l.tab.head.map(function (h) { return "<th>" + ech(h) + "</th>"; }).join("") + "</tr>" +
+          l.tab.rows.map(function (r) {
+            return "<tr>" + r.map(function (c) { return "<td>" + ech(c) + "</td>"; }).join("") + "</tr>";
+          }).join("") + "</table>";
+      return "<p>" + ech(l) + "</p>";
+    }).join("");
+  }
+
+  function pourLaNature() {
+    return CLAUSES.filter(function (cl) { return cl.pour === CTX.nature; });
+  }
+
+  function rendreClauses() {
+    var liste = pourLaNature();
+    var aPoser = liste.filter(function (cl) { return !PRESENTES[cl.id]; });
+    var deja = liste.filter(function (cl) { return PRESENTES[cl.id]; });
+
+    var mis = Object.keys(CHOIX).filter(function (k) { return CHOIX[k]; }).length;
+    $("#compteurs").innerHTML =
+      '<span class="c pose">' + mis + " clause" + (mis > 1 ? "s" : "") + " retenue" + (mis > 1 ? "s" : "") + "</span>" +
+      '<span class="c ver">' + (CTX.tit === null ? "sièges à calculer" :
+        CTX.tit + " titulaire" + (CTX.tit > 1 ? "s" : "") + " et autant de suppléants") + "</span>" +
+      '<span class="c ver">' + (CTX.nbCol === null ? "collèges à calculer" :
+        (CTX.unique ? "collège unique" : CTX.nbCol + " collèges")) + "</span>" +
+      '<span class="c">premier tour le ' + ech(fr(CTX.d1)) + "</span>";
+
+    $("#clauses").innerHTML = aPoser.map(carte).join("") ||
+      '<p class="aide">Chaque clause de cette liste se retrouve déjà dans votre texte. Elles sont reprises ci-dessous : vous pouvez tout de même en insérer une, si la vôtre est plus courte que celle-ci.</p>';
+    $("#presentes").innerHTML = deja.length
+      ? "<h3>Déjà dans votre texte</h3>" + deja.map(carte).join("")
+      : "";
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-ins]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-ins");
+        CHOIX[id] = !CHOIX[id];
+        b.textContent = CHOIX[id] ? "Retirer" : "Insérer";
+        b.classList.toggle("mis", !CHOIX[id]);
+        var mis2 = Object.keys(CHOIX).filter(function (k) { return CHOIX[k]; }).length;
+        $("#compteurs").firstChild.textContent = mis2 + " clause" + (mis2 > 1 ? "s" : "") +
+          " retenue" + (mis2 > 1 ? "s" : "");
+      });
+    });
+  }
+
+  function carte(cl) {
+    var pris = !!CHOIX[cl.id];
+    return '<div class="cl"><div class="tt"><span><span class="obj">' + ech(cl.titre) + "</span>" +
+      '<span class="fond">' + cl.fond.map(function (a) { return ech(article(a)); }).join(", ") + "</span></span>" +
+      '<button class="btn-ins' + (pris ? "" : " mis") + '" data-ins="' + ech(cl.id) + '">' +
+      (pris ? "Retirer" : "Insérer") + "</button></div>" +
+      '<div class="corps"><div class="texte">' + lignesHtml(cl.texte(CTX)) + "</div></div></div>";
+  }
+
+  $("#tout").addEventListener("click", function () {
+    pourLaNature().forEach(function (cl) { CHOIX[cl.id] = true; });
+    rendreClauses();
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* Le calendrier, à rebours de la date du premier tour.
+
+     Chaque ligne porte le texte qui la fixe. Les étapes que le code du travail
+     ne date pas ne reçoivent pas de date inventée : elles portent la date que
+     vous avez saisie, ou rien. */
+  function calendrier(c) {
+    var out = [];
+    var d1 = c.d1;
+    out.push({ d: jours(d1, -90), t: "Information du personnel sur l'organisation des élections, par tout moyen conférant date certaine, précisant la date envisagée du premier tour.",
+      f: "L. 2314-4", n: "Date la plus lointaine possible : le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant la diffusion. Diffuser plus tôt oblige à repousser le scrutin." });
+    if (c.dfin) {
+      out.push({ d: mois(c.dfin, -2), t: "Invitation des organisations syndicales à négocier le protocole et à établir leurs listes de candidats.",
+        f: "L. 2314-5", n: "Renouvellement de l'institution : l'invitation est effectuée deux mois avant l'expiration du mandat des délégués en exercice, fixée au " + fr(c.dfin) + "." });
+      out.push({ d: jours(mois(c.dfin, -2), 15), t: "Première réunion de négociation du protocole, au plus tôt.",
+        f: "L. 2314-5", n: "L'invitation à négocier doit parvenir au plus tard quinze jours avant la date de la première réunion." });
+    } else {
+      out.push({ d: null, t: "Invitation des organisations syndicales à négocier le protocole et à établir leurs listes de candidats.",
+        f: "L. 2314-5", n: "S'il s'agit d'un renouvellement, l'invitation est effectuée deux mois avant l'expiration du mandat en cours : renseignez cette date de fin de mandat pour qu'elle soit calculée." });
+      out.push({ d: null, t: "Première réunion de négociation du protocole.",
+        f: "L. 2314-5", n: "Au plus tôt quinze jours après que l'invitation est parvenue aux organisations syndicales." });
+    }
+    out.push({ d: null, t: "Signature du protocole, puis information des salariés sur la proportion de femmes et d'hommes composant chaque collège.",
+      f: "L. 2314-6, L. 2314-13, L. 2314-31", n: "L'information est due dès qu'un accord ou une décision sur la répartition du personnel est intervenu, par tout moyen donnant date certaine. Aucun délai chiffré n'est fixé : c'est la signature qui la déclenche." });
+    if (c.dliste) {
+      out.push({ d: c.dliste, t: "Publication de la liste électorale.",
+        f: "R. 2314-24", n: "Le protocole en fixe la date. C'est de cette publication que court le délai de contestation de l'électorat." });
+      out.push({ d: jours(c.dliste, 3), t: "Fin du délai de contestation de l'électorat.",
+        f: "R. 2314-24", n: "La requête n'est recevable que si elle est remise ou adressée dans les trois jours suivant la publication de la liste électorale." });
+    } else {
+      out.push({ d: null, t: "Publication de la liste électorale, puis délai de trois jours pour contester l'électorat.",
+        f: "R. 2314-24", n: "Renseignez la date de publication pour que le délai de trois jours soit daté." });
+    }
+    out.push({ d: d1, t: "Premier tour du scrutin.",
+      f: "L. 2314-26, L. 2314-29", n: "Scrutin de liste à deux tours, représentation proportionnelle à la plus forte moyenne, scrutin secret sous enveloppe" + (c.vel ? " ou vote électronique" : "") + ", votes séparés pour les titulaires et pour les suppléants dans chaque collège." +
+        (c.dfin ? " Le premier tour a lieu dans la quinzaine précédant l'expiration du mandat, soit entre le " + fr(jours(c.dfin, -15)) + " et le " + fr(c.dfin) + " (L. 2314-5)." : "") });
+    out.push({ d: jours(d1, 15), t: "Second tour, si le nombre des votants au premier tour est inférieur à la moitié des électeurs inscrits.",
+      f: "L. 2314-29", n: "Il y est procédé dans un délai de quinze jours ; les électeurs peuvent alors voter pour des listes autres que celles présentées par une organisation syndicale." });
+    out.push({ d: jours(d1, 15), t: "Transmission d'un exemplaire du procès-verbal au prestataire agissant pour le compte du ministre chargé du travail, au moyen d'un formulaire homologué.",
+      f: "R. 2314-22", n: "Dans les quinze jours suivant la tenue des élections. La copie des procès-verbaux part par ailleurs, dans les meilleurs délais, aux organisations syndicales ayant présenté des listes et à celles ayant négocié le protocole (L. 2314-29)." });
+    out.push({ d: jours(d1, 15), t: "Fin du délai de contestation de la régularité des opérations électorales.",
+      f: "R. 2314-24", n: "La requête n'est recevable que si elle est remise ou adressée dans les quinze jours suivant cette élection." });
+    out.push({ d: mois(d1, 48), t: "Terme des mandats.",
+      f: "L. 2314-33", n: "Les membres de la délégation du personnel sont élus pour quatre ans." });
+    return out;
+  }
+
+  function calendrierHtml(c) {
+    var l = calendrier(c);
+    return '<h3>Le calendrier</h3><table class="cal"><tr><th>Date</th><th>Étape</th><th>Texte</th></tr>' +
+      l.map(function (x) {
+        return '<tr><td class="j">' + ech(x.d ? fr(x.d) : "à fixer") + "</td><td>" + ech(x.t) +
+          '<div style="color:#8a939c;font-size:12.5px;margin-top:3px">' + ech(x.n) + "</div></td>" +
+          '<td class="f">' + ech(x.f) + "</td></tr>";
+      }).join("") + "</table>";
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Le document corrigé. */
+  function lignesTexte(lignes) {
+    var out = [];
+    lignes.forEach(function (l) {
+      if (l && l.tab) {
+        out.push(l.tab.head.join(" | "));
+        l.tab.rows.forEach(function (r) { out.push(r.join(" | ")); });
+        return;
+      }
+      out.push(l);
+    });
+    return out;
+  }
+
+  function retenues() {
+    return pourLaNature().filter(function (cl) { return CHOIX[cl.id]; });
+  }
+
+  function texteFinal() {
+    var t = $("#depot").value.replace(/\s+$/, "");
+    var out = t ? [t] : [];
+    var r = retenues();
+    if (r.length) {
+      out.push("");
+      out.push("========================================");
+      out.push(CTX.nature === "pv" ? "MENTIONS INSÉRÉES AU PROCÈS-VERBAL" : "CLAUSES INSÉRÉES AU PROTOCOLE");
+      out.push("========================================");
+      r.forEach(function (cl) {
+        out.push("");
+        out.push(cl.titre.toUpperCase() + "  (" + cl.fond.map(article).join(", ") + ")");
+        out.push("");
+        lignesTexte(cl.texte(CTX)).forEach(function (x) { out.push(x); });
+      });
+    }
+    out.push("");
+    out.push("========================================");
+    out.push("CALENDRIER");
+    out.push("========================================");
+    calendrier(CTX).forEach(function (x) {
+      out.push("");
+      out.push((x.d ? fr(x.d) : "date à fixer") + "  -  " + x.t);
+      out.push("   " + x.f + ". " + x.n);
+    });
+    return out.join("\n");
+  }
+
+  function assembler() {
+    $("#calendrier").innerHTML = calendrierHtml(CTX);
+    $("#sortie").textContent = texteFinal();
+    onglet("sortie");
+  }
+  $("#vers-sortie").addEventListener("click", assembler);
+  $("#retour-clauses").addEventListener("click", function () { onglet("clauses"); });
+
+  function nomFichier(ext) {
+    return (CTX && CTX.nature === "pv" ? "proces-verbal-elections-" : "protocole-preelectoral-") +
+      new Date().toISOString().slice(0, 10) + "." + ext;
+  }
+
+  $("#dl-txt").addEventListener("click", function () {
+    window.AuditExport.telecharger($("#sortie").textContent, nomFichier("txt"), "text/plain;charset=utf-8");
+  });
+
+  $("#dl-docx").addEventListener("click", function () {
+    var items = [{ k: "sur", t: (CTX.nature === "pv" ? "Procès-verbal" : "Protocole d'accord préélectoral") +
+      " - " + CTX.ent + (CTX.eff === null ? "" : ", " + CTX.eff + " salariés") + " - premier tour le " + fr(CTX.d1) }];
+    var t = $("#depot").value.replace(/\s+$/, "");
+    if (t) t.split(/\n/).forEach(function (l) { items.push({ k: "p", t: l }); });
+    var r = retenues();
+    if (r.length) {
+      items.push({ k: "trait" }, { k: "h1", t: CTX.nature === "pv" ? "Mentions insérées au procès-verbal" : "Clauses insérées au protocole" });
+      r.forEach(function (cl) {
+        items.push({ k: "h2", t: cl.titre });
+        items.push({ k: "note", t: cl.fond.map(article).join(", ") });
+        cl.texte(CTX).forEach(function (l) {
+          if (l && l.tab) items.push({ k: "table", head: l.tab.head, rows: l.tab.rows });
+          else if (/^- /.test(l)) items.push({ k: "puce", t: l.replace(/^- /, "") });
+          else items.push({ k: "p", t: l });
+        });
+      });
+    }
+    items.push({ k: "trait" }, { k: "h1", t: "Calendrier" });
+    items.push({ k: "table", head: ["Date", "Étape", "Texte"],
+      rows: calendrier(CTX).map(function (x) { return [x.d ? fr(x.d) : "à fixer", x.t + " " + x.n, x.f]; }) });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, CTX.nature === "pv" ? "Procès-verbal des élections" : "Protocole d'accord préélectoral"),
+      nomFichier("docx"), "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  $("#copier").addEventListener("click", function () {
+    var t = $("#sortie").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    else { var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a);
+           a.select(); document.execCommand("copy"); a.remove(); }
+    $("#copier").textContent = "Copié";
+    setTimeout(function () { $("#copier").textContent = "Copier"; }, 1600);
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* La fiche entreprise pré-remplit ce qui la concerne : l'effectif commande
+     les sièges et les collèges, et il n'a pas à être ressaisi ici. */
+  (function prealable() {
+    if (P) {
+      var p = P.lire() || {};
+      if (p.denomination) $("#ent").value = p.denomination;
+      if (p.effectif !== undefined && p.effectif !== null && String(p.effectif).trim() !== "")
+        $("#eff").value = p.effectif;
+    }
+    /* Chaque réponse remplit le texte déjà affiché, sans qu'on quitte l'écran :
+       les clauses se réécrivent, le compteur suit, les choix d'insertion sont
+       conservés. */
+    $("#champs").addEventListener("input", function () {
+      if (!CTX) return;
+      var nature = CTX.nature;
+      CTX = contexte();
+      if (CTX.nature !== nature) {
+        var t = normaliser($("#depot").value);
+        CHOIX = {}; PRESENTES = {};
+        CLAUSES.forEach(function (cl) {
+          if (cl.pour !== CTX.nature) return;
+          PRESENTES[cl.id] = reperee(cl, t);
+          CHOIX[cl.id] = !PRESENTES[cl.id];
+        });
+      }
+      rendreClauses();
+    });
+    $("#champs").addEventListener("change", function () {
+      if (CTX) { CTX = contexte(); rendreClauses(); }
+    });
+    onglet("depot");
+  })();
+})();
+</script>
+<script>
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+</script>
+</body>
+</html>
