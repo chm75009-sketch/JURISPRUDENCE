@@ -465,8 +465,14 @@
     }));
   }
 
+  /* Le nom du fichier porte celui de l'entreprise : un classeur qui traîne
+     dans un dossier de téléchargements doit se reconnaître sans être ouvert. */
   function nomFichier(ext) {
-    return "bdese-" + new Date().toISOString().slice(0, 10) + "." + ext;
+    var e = String(CTX && CTX.ent ? CTX.ent : "").normalize("NFD")
+      .replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "").toLowerCase().slice(0, 40);
+    return "bdese" + (e ? "-" + e : "") + "-" +
+      new Date().toISOString().slice(0, 10) + "." + ext;
   }
 
   $("#dl-xlsx").addEventListener("click", function () {
@@ -479,7 +485,19 @@
      l'ouvre sans passer par un assistant d'importation. */
   $("#dl-csv").addEventListener("click", function () {
     var head = entetes(CTX);
-    var l = [["Rubrique"].concat(head)];
+    /* Le CSV n'a qu'une feuille : la couverture du classeur y devient les
+       premières lignes. Sans elles, le fichier ne disait pas de quelle
+       entreprise il était - relevé le 7 septembre 2026. */
+    var l = [
+      ["Base de données économiques, sociales et environnementales"],
+      ["Entreprise", CTX.ent || "[à renseigner]"],
+      ["Effectif", CTX.eff === null ? "[à renseigner]" : String(CTX.eff)],
+      ["Année en cours", String(CTX.an)],
+      ["Texte qui commande le contenu", texteApplicable(CTX)],
+      ["Version du texte lue", CTX.grille ? CTX.grille.version : "LEGIARTI000043975329"],
+      ["Millésimes", CTX.mil.map(function (m) { return m.annee + " (" + m.nature + ")"; }).join(", ")],
+      [],
+      ["Rubrique"].concat(head)];
     rubriques(CTX).forEach(function (r) {
       r.lignes.forEach(function (x) {
         l.push([r.n + ". " + r.titre, x.section, x.sujet, x.info]

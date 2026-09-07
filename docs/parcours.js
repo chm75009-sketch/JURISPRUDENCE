@@ -4051,6 +4051,26 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
   });
 
+  /* Le document s'emporte. Sans ce bouton, le règlement intérieur ouvert par
+     le « non » de l'audit restait dans la fenêtre : on pouvait le copier ou
+     l'imprimer, pas l'enregistrer et le retravailler. Relevé le 7 septembre
+     2026 sur dix fiches d'entreprise. Le Word est écrit par audit-export.js,
+     en OOXML conservateur, pour la raison que le dépôt connaît : les fichiers
+     de la bibliothèque JavaScript « docx » sont refusés par Word. */
+  $("dt-word").addEventListener("click", function () {
+    if (!window.AuditExport) {
+      etatCourrier("Le module d'export n'a pas pu être chargé. Rechargez la page.");
+      return;
+    }
+    var titre = COURRIER ? COURRIER.nom : ($("dt-titre").textContent || "Document");
+    var items = String($("dt-corps").value).split(/\r?\n/).map(function (ligne) {
+      return { k: "p", t: ligne };
+    });
+    AuditExport.telecharger(AuditExport.docx(items, titre), nomFichier(titre) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    etatCourrier("Téléchargé en Word.");
+  });
+
   $("dt-modele").addEventListener("click", function () {
     if (!COURRIER) return;
     if ($("dt-corps").value !== COURRIER.modele &&
