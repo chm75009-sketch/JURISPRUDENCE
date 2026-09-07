@@ -3,1316 +3,1335 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#14524F">
+<meta name="theme-color" content="#16181d">
 <link rel="manifest" href="manifest-audit-discipline.json">
 <link rel="apple-touch-icon" href="icons/icon-discipline-180.png">
 <link rel="icon" href="icons/icon-discipline-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Audit — discipline et règlement intérieur</title>
+<title>Discipline - Jurisprudence</title>
+<link rel="stylesheet" href="style.css">
 <!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
      Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
 <script src="droits.js"></script>
-<!-- LA DISCIPLINE ET LE RÈGLEMENT INTÉRIEUR, EN SIX ÉTAPES — même parcours que
-     l'audit social, la BDESE et le comité (voir docs/audit-bdese.html,
-     docs/audit-cse.html), avec le contenu propre à ce module :
 
-       1. LA FICHE CLIENT — partagée avec toutes les pages (clé « profil-entreprise »).
+<!--
+  UNE QUESTION, DEUX RÉPONSES, ET DANS LES DEUX CAS UN DOCUMENT.
 
-       2. LE QUESTIONNAIRE DE L'EXISTANT — le règlement intérieur (existence,
-          contenu, formalités) et, s'il y a lieu, la sanction envisagée ou
-          prononcée et la garantie de fond conventionnelle. Quatre valeurs sur
-          toute question fermée — oui, non, en cours, autre — et seules « oui »
-          et « non » concluent.
+  « Avez-vous un règlement des sanctions et une procédure disciplinaire
+  écrite ? » Non : les six documents sont déjà écrits au nom de l'entreprise,
+  à droite de l'écran, et les champs qui restent les complètent frappe par
+  frappe. Oui : la page passe la main à controler-discipline.html, qui prend
+  le document existant et rend, pour chaque manque, la clause à insérer.
 
-       3. LE RAPPORT GÉNÉRAL — celui que rend
-          moteur/discipline/audit-discipline-client.js.
+  Il n'y a ni introduction, ni étape numérotée, ni explication sous les
+  champs. Ce que la page affiche à côté du document, ce sont des DATES : le
+  dernier jour pour engager les poursuites, les deux bornes de la
+  notification, l'entrée en vigueur au plus tôt. Elles se calculent, elles ne
+  s'enseignent pas, et chacune porte en petit l'article dont elle sort.
 
-       4. LE GUIDE DE RÉGULARISATION — les contrôles non conformes ou à
-          vérifier, du plus grave au moins grave
-          (moteur/discipline/regularisation-discipline.js).
+  LES SIX DOCUMENTS
+    1. le règlement des sanctions et la procédure disciplinaire ;
+    2. la convocation à l'entretien préalable ;
+    3. la notification d'un avertissement ;
+    4. la notification d'un blâme ;
+    5. la notification d'une mise à pied disciplinaire ;
+    6. la convocation et la notification d'un licenciement disciplinaire.
 
-       5. LA RÉGULARISATION, ÉLÉMENT PAR ÉLÉMENT — pour le contrôle choisi : la
-          note chiffrée sur le dossier (moteur/discipline/modeles-discipline.js),
-          la procédure, le document que l'application sait rédiger
-          (docs/documents-produits.js, docs/documents-discipline*.js), et la
-          déclaration « c'est fait ».
+  LES TEXTES. Chaque article cité ici a été demandé deux fois au relais
+  Légifrance le 7 septembre 2026, à plusieurs minutes d'intervalle, et les
+  deux lectures ont rendu le même identifiant de version et le même texte.
+  L'identifiant LEGIARTI est conservé dans la table TEXTES, à côté du numéro :
+  un article change sans changer de numéro, et seul l'identifiant dit lequel a
+  été lu.
 
-       6. LA VÉRIFICATION — les contrôles que l'audit tient pour conformes sur
-          votre seule déclaration (moteur/commun/parcours-deux-temps.js), plus
-          ceux que vous venez de déclarer régularisés à l'étape 5.
+  CE QUI RESTE ENTRE CROCHETS. Les faits reprochés, jamais écrits à la place
+  de l'employeur ; le conseil de prud'hommes du ressort ; ce que l'application
+  ne sait pas. Un crochet est un champ à remplir, jamais une affirmation.
 
-     CE QUI NE SE GÉNÉRALISE PAS TEL QUEL, ET C'EST ASSUMÉ :
+  Rien ne sort du poste : tout est calculé et rédigé dans le navigateur.
+-->
 
-     — « Sans objet » recouvre ici deux réalités que le moteur distingue déjà
-       (correctif du 25 août 2026) : un contrôle réellement sans objet (le
-       règlement n'est pas dû), et un contrôle EN ATTENTE du règlement
-       intérieur (il est dû, il n'existe pas encore, et l'exigence vaudra dès
-       sa rédaction). L'étape 4 leur donne un bloc à part, distinct du guide
-       de régularisation et des données manquantes — voir « la mise en
-       attente » plus bas dans ce fichier.
-
-     — Le module produit déjà, pour chacun de ses vingt-quatre contrôles
-       régularisables, un document complet (docs/documents-produits.js,
-       docs/documents-discipline.js, docs/documents-discipline-2.js). L'étape 5
-       propose donc « Produire le document » quand un générateur existe, plutôt
-       que la seule mention de son nom que porte le module BDESE. -->
-<link rel="stylesheet" href="style.css">
 <style>
-  .presentation .etapes{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;padding:0;list-style:none}
-  .presentation .etapes li{flex:1 1 200px;border-left:3px solid var(--bleu);padding:2px 0 2px 10px;
-    font-size:14px;color:var(--corps)}
-  .presentation .etapes b{display:block;color:var(--encre)}
+  /* Ce qui est propre à cette page. Tout le reste vient de style.css. */
 
-  .temps{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 6px}
-  .temps span{font:600 13px/1 system-ui;padding:8px 12px;border-radius:99px;
-    border:1px solid var(--filet);background:var(--surface);color:var(--gris)}
-  .temps span.actif{border-color:var(--bleu);background:var(--bleu);color:#fff}
-  .temps span.fait{border-color:var(--vert);color:var(--vert)}
-  textarea{min-height:72px;font:14px/1.5 inherit}
-  .aide-champ.nuance{color:var(--orange)}
+  /* La question d'entrée : elle occupe l'écran, et deux boutons y répondent. */
+  .question{max-width:720px;margin:11vh auto 0;text-align:center}
+  .question h1{font:600 clamp(23px,3.6vw,32px)/1.3 system-ui;margin:0 0 var(--e6)}
+  .question .deux{display:flex;gap:var(--e3);justify-content:center;flex-wrap:wrap}
+  .question .deux button{min-width:170px;font-size:17px;padding:16px 26px}
+  .question .fiche{margin:var(--e6) 0 0;font-size:var(--t2);color:var(--texte-3)}
 
-  /* Le bouton qui mène à la procédure quand une pièce manque : c'est lui
-     l'action principale, pas le rapport. */
-  /* Quand la procédure s'ouvre, c'est elle l'action de l'écran : le rapport
-     général passe alors en second. */
-  #vers-procedure + #vers-general{background:var(--surface);color:var(--accent);
-    border-color:var(--filet-2)}
-  #vers-procedure + #vers-general:hover{background:var(--creux);color:var(--accent-fonce);
-    border-color:var(--filet-2)}
-  /* Le repli de la sanction quand l'écran est celui du règlement. */
-  details.aussi{margin:0 0 16px;border-top:1px solid var(--filet);padding-top:12px}
-  details.aussi summary{cursor:pointer;font:600 14px/1.3 system-ui;color:var(--bleu);
-    list-style:none;padding:6px 0}
-  details.aussi summary::-webkit-details-marker{display:none}
-  details.aussi summary::before{content:"▸ "}
-  details.aussi[open] summary::before{content:"▾ "}
-  details.aussi p{margin:8px 0 0}
-  @media (max-width:560px){
-    .barre{gap:8px;padding:10px 0}
-    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
-    .barre button:first-child{flex:1 1 100%}
-    .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
+  /* Les champs à gauche, le document à droite. Sous 1000 pixels, les champs
+     passent au-dessus : sur un téléphone on remplit, puis on lit. */
+  .plan{display:grid;gap:var(--e5);grid-template-columns:1fr;align-items:start;margin:var(--e4) 0 0}
+  @media (min-width:1000px){
+    .plan{grid-template-columns:330px 1fr}
+    .colonne-champs{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto}
   }
+  .colonne-champs{background:var(--surface);border:1px solid var(--filet-2);
+    border-radius:var(--r2);box-shadow:var(--ombre);padding:var(--e4)}
+  .colonne-champs h2{margin:0 0 var(--e3);font:600 var(--t1)/1 system-ui;
+    text-transform:uppercase;letter-spacing:.09em;color:var(--texte-3)}
+  .colonne-champs label.ch{margin:0 0 var(--e3)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:var(--e2)}
 
-  .rubrique{margin:26px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
-    color:var(--bleu);font:600 15px/1.3 system-ui}
+  /* Les dates. Un chiffre, et sous lui l'article qui le donne. */
+  .dates{display:grid;gap:var(--e2);grid-template-columns:1fr;margin:0 0 var(--e3)}
+  @media (min-width:640px){.dates{grid-template-columns:repeat(auto-fit,minmax(235px,1fr))}}
+  .d{border:1px solid var(--filet);border-left:3px solid var(--accent);
+    border-radius:var(--r1);padding:9px 12px;background:var(--surface)}
+  .d.tard{border-left-color:var(--rouge)}
+  .d.tot{border-left-color:var(--vert)}
+  .d .q{display:block;font:600 var(--t0)/1.3 system-ui;text-transform:uppercase;
+    letter-spacing:.07em;color:var(--texte-3)}
+  .d .v{display:block;font:600 17px/1.3 system-ui;margin:3px 0 1px;color:var(--encre)}
+  .d .f{display:block;font-size:var(--t0);color:var(--texte-3);line-height:1.45}
 
-  .bandeau{padding:18px 20px;color:#fff;margin:14px 0 18px;border-radius:3px}
-  .bandeau .r{font:700 22px/1.15 system-ui;letter-spacing:.4px;margin:0 0 6px}
-  .bandeau .s{margin:0;font-size:15px}
-  .b-rouge{background:var(--rouge)} .b-orange{background:var(--orange)}
-  .b-vert{background:var(--vert)} .b-gris{background:var(--ardoise)}
-  .etape-r{margin:22px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
-    color:var(--bleu);font:600 15px/1.3 system-ui;display:flex;justify-content:space-between;gap:12px}
-  .etape-r span{font-weight:400;font-size:13px;color:var(--gris)}
-  .acte{border-left:4px solid var(--bleu);background:var(--surface);padding:10px 14px;margin:0 0 7px}
-  .acte .t{font-weight:600;color:var(--encre)}
-  .acte .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
-  .chip{font:600 11px/1 system-ui;color:#fff;padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
-  .c-bloquant{background:var(--rouge)}.c-critique{background:var(--orange)}
-  .c-important{background:var(--bleu)}.c-information{background:#767676}
-  .a-bloquant{border-left-color:var(--rouge);background:var(--rouge-f)}
-  .a-critique{border-left-color:var(--orange);background:var(--orange-f)}
-  .a-information{border-left-color:#767676;background:var(--gris-f)}
-  .a-attente{border-left-color:var(--bleu);background:#eef4f3}
-  .interdit{border:1px solid var(--rouge);background:var(--rouge-f);padding:12px 14px;margin:0 0 8px;border-radius:3px}
-  .interdit .t{font-weight:700;color:var(--rouge)}
-  .interdit .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
-  .i-reserve{border-color:var(--orange);background:var(--orange-f)} .i-reserve .t{color:var(--orange)}
-  .i-examen{border-color:#9aa0a8;background:var(--gris-f)} .i-examen .t{color:#4a4a4a}
-  .acquis{margin:0 0 4px;padding-left:20px;text-indent:-20px;font-size:15px}
-  .acquis b{color:var(--vert)}
-  .puce{margin:0 0 4px 18px;text-indent:-18px}
+  /* La feuille : le document tel qu'il sortira sur le papier. */
+  .feuille [contenteditable]{outline:none}
+  .feuille [contenteditable]:focus{background:#fffbe9;border-radius:3px}
+  .feuille .modifie{border-left:2px solid var(--vert);padding-left:8px;margin-left:-10px}
+  .feuille .b-t1{font:700 18px/1.35 system-ui;margin:0 0 6px;text-align:center}
+  .feuille .b-st{font:600 13.5px/1.4 system-ui;margin:0 0 22px;text-align:center;color:var(--texte-2)}
+  .feuille .b-h1{font:700 15px/1.35 system-ui;margin:20px 0 7px}
+  .feuille .b-h2{font:600 14px/1.35 system-ui;margin:15px 0 5px}
+  .feuille .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.68;text-align:justify}
+  .feuille .b-puce{margin:0 0 5px 18px;font-size:14.5px;line-height:1.6}
+  /* Une note de marge s'adresse à l'employeur : elle ne part pas dans le
+     fichier emporté, elle doit donc se voir comme telle. */
+  .feuille .b-note{margin:9px 0 12px;padding:0 0 0 10px;border-left:2px dashed var(--filet-2);
+    font-size:12.5px;font-style:italic;line-height:1.55;color:var(--texte-3)}
+  .feuille .b-vide{height:9px}
+  .feuille .b-trait{border:0;border-top:1px solid var(--filet);margin:20px 0}
+  .feuille .b-saut{border:0;border-top:2px dashed var(--filet-2);margin:30px 0}
+  .feuille .b-sign{margin:20px 0 0;font-size:14.5px;white-space:pre-wrap;line-height:1.7}
 
-  .action{border:1px solid var(--filet);border-left:4px solid var(--rouge);background:var(--surface);
-    padding:14px 16px;margin:0 0 12px;border-radius:0 3px 3px 0}
-  .action.verifier{border-left-color:var(--orange)}
-  .action .t{font-weight:700;color:var(--encre)}
-  .action .quoi{margin:6px 0 0;font-size:14.5px}
-  .action .meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:13px;color:var(--gris)}
-  .action .meta b{color:var(--corps)}
-  .action ol{margin:8px 0 0;padding-left:22px;font-size:14px}
-  .action ol li{margin:0 0 4px}
-  .action .risque{font-size:13.5px;color:var(--rouge);margin:8px 0 0}
-  .action.verifier .risque{color:var(--orange)}
-  .prio{font:600 11px/1 system-ui;color:#fff;background:var(--ardoise);padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
-  .p-1{background:var(--rouge)} .p-2{background:var(--orange)} .p-3{background:var(--ardoise)} .p-4{background:#767676}
-  details.modele{margin:10px 0 0;border:1px dashed var(--bleu);border-radius:3px;background:#eef4f3}
-  details.modele summary{cursor:pointer;font:600 13.5px/1.3 system-ui;color:var(--bleu);padding:9px 12px}
-  details.modele .corps{padding:0 14px 14px}
+  /* Les lettres de formalité : en retrait sous le document, jamais devant. */
+  .annexes{margin:var(--e3) 0 0;font-size:var(--t1);color:var(--texte-3)}
+  .annexes button{margin:0 var(--e1) var(--e1) 0}
 
-  .produit{margin:12px 0;padding:13px 15px;border:1px solid var(--bleu);border-radius:3px;background:#eef4f3}
-  .produit .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
-  .produit .w{margin:0 0 10px;font-size:13.5px;color:var(--corps)}
-
-  .coches{display:flex;gap:14px;margin:10px 0 0;flex-wrap:wrap;font-size:14px}
-  .coches label{display:flex;align-items:center;gap:6px;width:auto;cursor:pointer;
-    border:1px solid var(--filet);border-radius:99px;padding:6px 14px;background:var(--gris-f)}
-  .coches input{width:auto;margin:0}
-  .coches label:has(input:checked){border-color:var(--bleu);background:#eef4f3;color:var(--encre);font-weight:600}
-
-  .verif-bloc{border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:12px 14px;margin:0 0 10px}
-  .verif-bloc .t{font-weight:600;color:var(--encre);margin:0 0 8px}
-  .verif-q{margin:0 0 10px}
-  .verif-q p{margin:0 0 4px;font-size:13.5px}
-  .verif-q .attendu{color:var(--gris);font-size:12px}
-  .verif-q select{margin-top:4px}
-  .verif-q input.detail{margin-top:5px}
-  .verdict{border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.5;margin:8px 0 0}
-  .verdict b{display:block;margin-bottom:2px}
-  .v-val{background:var(--vert-f);color:#1c5e36}
-  .v-ref{background:var(--rouge-f);color:#8E1B1B}
-  .v-att{background:var(--orange-f);color:#9C5A05}
-
-  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
-    border:1px solid var(--bleu);background:#eef4f3;color:var(--bleu);font-size:14px}
+  dialog#dlg{max-width:88ch;width:94vw;border:1px solid var(--filet);
+    border-radius:var(--r2);padding:var(--e4)}
+  dialog#dlg pre{font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    margin:0;max-height:66vh;overflow:auto}
 
   @media print{
-    .retour-barre,.presentation,.temps,.barre,#message,form,header a,footer,
-    .coches,details.modele summary,.produit button,.no-print{display:none !important}
-    details.modele{border:none} details.modele .corps{border-top:none;padding:8px 0}
-    details.modele[open] .corps{display:block}
-    .page{padding:0}
-    body.print-liste #bloc-general,body.print-liste #bloc-guide,body.print-liste #bloc-item,body.print-liste #bloc-existant{display:none !important}
-    body.print-general #bloc-liste,body.print-general #bloc-guide,body.print-general #bloc-item,body.print-general #bloc-existant{display:none !important}
-    body.print-guide #bloc-liste,body.print-guide #bloc-general,body.print-guide #bloc-item,body.print-guide #bloc-existant{display:none !important}
-    body.print-item #bloc-liste,body.print-item #bloc-general,body.print-item #bloc-guide,body.print-item #bloc-existant{display:none !important}
-    body.print-existant #bloc-liste,body.print-existant #bloc-general,body.print-existant #bloc-guide,body.print-existant #bloc-item{display:none !important}
+    .colonne-champs,.dates,.annexes,.barre,.onglets,a.retour,.avis,.note{display:none !important}
+    .plan{display:block}
   }
-
-  #dlg-texte{max-width:80ch;width:92vw;border:1px solid var(--filet);border-radius:6px;padding:16px 18px}
-  #dlg-texte .dt-barre{display:flex;gap:8px;margin:0 0 12px}
-  #dlg-texte pre{white-space:pre-wrap;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
-    margin:0;max-height:70vh;overflow:auto}</style>
+</style>
 </head>
 <body>
+
 <header class="site">
   <div class="wrap">
-    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <p class="marque">Jurisprudence <span>discipline</span></p>
     <div class="outils">
+      <button type="button" id="btn-revenir" hidden>Revenir à la question</button>
+      <a href="controler-discipline.html">Contrôler l'existant</a>
       <a href="index.html">Accueil</a>
+      <span id="etat-version"></span>
     </div>
   </div>
 </header>
 
-<div class="page">
+<main class="wrap">
 
-<div class="retour-barre">
-  <button type="button" id="btn-retour" class="retour">← Retour</button>
-  <span class="retour-ou"><a href="./">accueil</a> · <a href="audit.html">licenciement</a>
-  · <a href="audit-social.html">audit social</a> · <a href="audit-cse.html">comité</a>
-  · <a href="audit-bdese.html">base de données</a> · <a href="audit-pse.html">plan de sauvegarde</a>
-  · <a href="audit-nao.html">négociation (NAO)</a> · <a href="audit-sst.html">santé-sécurité (SST)</a>
-  · <a href="agenda.html">agenda</a> · <a href="documents.html">documents</a> · <a href="guides.html">guides</a></span>
-</div>
+  <!-- ═══════════════════ LA QUESTION D'ENTRÉE ═══════════════════ -->
+  <section class="question" id="ecran-question">
+    <h1>Avez-vous un règlement des sanctions et une procédure disciplinaire écrite ?</h1>
+    <div class="deux">
+      <button type="button" class="second" id="rep-oui">Oui</button>
+      <button type="button" id="rep-non">Non</button>
+    </div>
+    <p class="fiche" id="fiche-rappel"></p>
+  </section>
 
-<header>
-  <p class="fil">Application Jurisprudence</p>
-  <h1>Audit — discipline et règlement intérieur</h1>
-  <p class="chapo"><b>Cette application vérifie un règlement intérieur et une sanction, point par
-  point</b> — l'obligation d'établir un règlement, son contenu, les formalités qui le rendent
-  opposable, puis la procédure disciplinaire : prescription des faits à deux mois, convocation,
-  entretien, délais, notification motivée — et <b>les garanties de fond</b> que la convention
-  collective ou le règlement intérieur ajoutent à la loi. Vous répondez au questionnaire :
-  <b>le manquant reçoit un guide de régularisation</b> priorisé, avec pour chaque point une note
-  chiffrée sur votre dossier, la procédure, et le document que l'application rédige elle-même quand
-  elle en est capable ; l'existant est ensuite contrôlé point par point.<br>
-  L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce
-  poste. <button type="button" class="lien-avert" id="btn-avert">Avertissement d'usage</button></p>
-</header>
+  <!-- ═══════════════ LA SUITE DU « NON » : LES DOCUMENTS ═══════════════ -->
+  <section id="ecran-docs" hidden>
+    <a class="retour" href="auditer.html">&larr; Retour</a>
 
-<div class="presentation">
-  <h2>Le parcours, en six étapes</h2>
-  <p>Le règlement intérieur d'abord, la sanction ensuite : l'un commande l'autre, puisqu'une
-  sanction autre que le licenciement ne peut être prononcée que si elle figure dans l'échelle du
-  règlement, chez l'employeur tenu d'en établir un. Votre avancement est enregistré sur ce poste :
-  vous reprenez où vous vous êtes arrêté.</p>
-  <ul class="etapes">
-    <li><b>1. La fiche client</b> — dénomination, effectif, secteur. Partagée avec les autres pages
-    de l'application.</li>
-    <li><b>2. Le questionnaire de l'existant</b> — le règlement intérieur, la sanction s'il y a
-    lieu, la garantie de fond conventionnelle.</li>
-    <li><b>3. Le rapport général</b> — chaque exigence confrontée aux textes, et ce à quoi
-    l'employeur s'expose.</li>
-    <li><b>4. Le guide de régularisation</b> — les contrôles non conformes ou à vérifier, du plus
-    grave au moins grave.</li>
-    <li><b>5. La régularisation, élément par élément</b> — la note chiffrée sur votre dossier, la
-    procédure, le document produit, et la case « c'est fait ».</li>
-    <li><b>6. La vérification de ce qui est déclaré</b> — les contrôles tenus pour conformes sur
-    votre seule déclaration, contrôlés pièce par pièce.</li>
-  </ul>
-  <p class="note"><b>Ce que cette page ne fait pas :</b> elle n'apprécie ni la réalité des faits, ni
-  leur caractère fautif, ni la proportionnalité de la sanction — c'est l'office du conseil de
-  prud'hommes, et si un doute subsiste il profite au salarié (L. 1333-1 ; L. 1333-2). Elle n'audite
-  pas le statut protecteur du salarié titulaire d'un mandat : elle le <b>signale</b>. Elle n'audite
-  pas la procédure du licenciement disciplinaire, qui n'est pas celle de L. 1332-2 (L. 1333-3).
-  <b>Une réponse « en cours » ou « autre » ne conclut rien</b> : l'audit la traite comme une donnée
-  manquante.</p>
-</div>
+    <div class="onglets" id="onglets">
+      <button type="button" data-o="echelle" class="actif">Le règlement des sanctions</button>
+      <button type="button" data-o="convocation">La convocation</button>
+      <button type="button" data-o="avertissement">L'avertissement</button>
+      <button type="button" data-o="blame">Le blâme</button>
+      <button type="button" data-o="misepied">La mise à pied</button>
+      <button type="button" data-o="licenciement">Le licenciement</button>
+    </div>
 
-<div class="temps" id="fil-temps" role="navigation" aria-label="Les six étapes de l'audit">
-  <span data-t="1" class="actif">1 · Fiche client</span>
-  <span data-t="2">2 · Questionnaire de l'existant</span>
-  <span data-t="3">3 · Rapport général</span>
-  <span data-t="4">4 · Guide de régularisation</span>
-  <span data-t="5">5 · Régulariser, élément par élément</span>
-  <span data-t="6">6 · Vérification de ce qui est déclaré</span>
-</div>
+    <div class="plan">
+      <form class="colonne-champs" id="champs" autocomplete="off" onsubmit="return false">
+        <h2>Ce qui reste à remplir</h2>
 
-<h2 id="t1">1. La fiche client</h2>
-<p class="aide">L'entreprise auditée. Cette fiche est partagée avec les parcours guidés, le générateur de
-documents et les huit audits détaillés — renseignée ici, elle est reprise partout. Elle ne quitte pas ce
-poste.</p>
-<div id="fiche-client"></div>
+        <label class="ch" data-pour="echelle misepied">
+          <span class="nom">Durée maximale de la mise à pied (jours ouvrés)</span>
+          <input type="number" id="c-duree-max" min="1" max="15" step="1" value="3"></label>
 
-<h3 id="t1b">Ce qui complète la fiche</h3>
-<p class="aide">La date à laquelle votre situation est décrite. Le reste des questions — règlement
-intérieur, sanction, garantie de fond — se pose à l'étape 2.</p>
-<form id="formulaire-fiche" autocomplete="off"></form>
+        <label class="ch" data-pour="echelle"><span class="nom">Avis du comité social et économique</span>
+          <input type="date" id="c-avis-cse"></label>
 
-<div class="barre">
-  <button type="button" id="generer">Étape 2 : ouvrir le questionnaire de l'existant</button>
-  <button type="button" class="second" id="exemple">Charger un dossier d'exemple</button>
-  <button type="button" class="second" id="vider">Tout effacer</button>
-  <span class="compteur" id="compteur"></span>
-</div>
-<p id="message" role="status"></p>
+        <label class="ch" data-pour="echelle">
+          <span class="nom">Dernière des formalités de publicité et de dépôt</span>
+          <input type="date" id="c-formalite"></label>
 
-<div id="bloc-liste" style="display:none">
-  <h2 id="t2">2. Le questionnaire de l'existant <span class="note" id="liste-date"></span></h2>
-  <p class="aide">Le règlement intérieur d'abord — son existence commande le reste — puis, s'il y a
-  lieu, la sanction envisagée ou prononcée et la garantie de fond conventionnelle. Quatre réponses
-  possibles aux questions fermées : <b>oui</b> et <b>non</b> concluent ; <b>en cours</b> et
-  <b>autre</b> décrivent votre situation sans rien conclure.</p>
-  <form id="formulaire" autocomplete="off"></form>
-  <!-- Sans règlement intérieur, la sanction et les pièces se replient ici :
-       elles restent accessibles d'un clic, mais ne encombrent plus l'écran de
-       celui qui vient créer son règlement. -->
-  <details id="replier-sanction" class="aussi" hidden>
-    <summary>Auditer aussi une sanction</summary>
-    <p class="aide">Le module contrôle également la procédure disciplinaire — prescription des faits,
-    convocation, entretien, délais, notification — et les garanties de fond de votre convention
-    collective. Ouvrez cette ligne si une sanction est en cours.</p>
-  </details>
-  <div class="barre no-print">
-    <!-- Quand la pièce n'existe pas, l'action principale n'est pas de lire un
-         rapport sur son absence : c'est de la faire. Ce bouton prend la tête
-         de la barre et y reste visible, là où l'encadré du haut disparaît dès
-         qu'on descend (défaut vu le 31 août 2026). -->
-    <button type="button" id="vers-procedure" hidden></button>
-    <button type="button" id="vers-general">Étape 3 : voir le rapport général</button>
-    <button type="button" class="second" id="imprimer-liste">Imprimer le questionnaire</button>
-    <span class="compteur" id="compteur-questionnaire"></span>
+        <label class="ch" data-pour="convocation avertissement blame misepied licenciement">
+          <span class="nom">Nom et prénom du salarié</span>
+          <input type="text" id="c-nom" placeholder="Monsieur Karim BENALI"></label>
+
+        <label class="ch" data-pour="convocation avertissement blame misepied licenciement">
+          <span class="nom">Adresse du salarié</span>
+          <input type="text" id="c-adresse" placeholder="12 rue des Lilas, 95240 Cormeilles"></label>
+
+        <label class="ch" data-pour="licenciement"><span class="nom">Emploi</span>
+          <input type="text" id="c-poste" placeholder="cuisinier"></label>
+
+        <label class="ch" data-pour="convocation avertissement blame misepied licenciement">
+          <span class="nom">Date des faits</span>
+          <input type="date" id="c-faits"></label>
+
+        <label class="ch" data-pour="convocation avertissement blame misepied licenciement">
+          <span class="nom">Date à laquelle vous en avez eu connaissance</span>
+          <input type="date" id="c-connaissance"></label>
+
+        <label class="ch pleine" data-pour="avertissement blame misepied licenciement">
+          <span class="nom">Ce que vous reprochez, dans vos mots</span>
+          <textarea id="c-griefs" placeholder="Le 3 septembre 2026, vous avez quitté votre poste à 19 h 30 sans prévenir, alors que le service commençait, laissant la cuisine sans cuisinier pendant deux heures."></textarea></label>
+
+        <label class="ch" data-pour="convocation"><span class="nom">Sanction envisagée</span>
+          <select id="c-envisagee">
+            <option value="misepied">Mise à pied disciplinaire</option>
+            <option value="mutation">Mutation disciplinaire</option>
+            <option value="retrogradation">Rétrogradation</option>
+            <option value="licenciement">Licenciement</option>
+          </select></label>
+
+        <label class="ch" data-pour="convocation misepied licenciement">
+          <span class="nom">Remise ou présentation de la convocation</span>
+          <input type="date" id="c-convocation"></label>
+
+        <label class="ch" data-pour="convocation misepied licenciement">
+          <span class="nom">Date de l'entretien préalable</span>
+          <input type="date" id="c-entretien"></label>
+
+        <label class="ch" data-pour="convocation misepied licenciement">
+          <span class="nom">Heure et lieu de l'entretien</span>
+          <div class="duo">
+            <input type="time" id="c-heure" value="10:00">
+            <input type="text" id="c-lieu" placeholder="au siège de la société">
+          </div></label>
+
+        <label class="ch" data-pour="misepied"><span class="nom">Durée de la mise à pied (jours ouvrés)</span>
+          <input type="number" id="c-jours" min="1" max="15" step="1" value="2"></label>
+
+        <label class="ch" data-pour="licenciement"><span class="nom">Faute grave</span>
+          <select id="c-grave"><option value="non">Non</option><option value="oui">Oui</option></select></label>
+
+        <label class="ch" data-pour="licenciement"><span class="nom">Date d'entrée dans l'entreprise</span>
+          <input type="date" id="c-entree"></label>
+
+        <label class="ch" data-pour="licenciement">
+          <span class="nom">Le salarié est-il représentant du personnel ?</span>
+          <select id="c-protege"><option value="non">Non</option><option value="oui">Oui</option></select></label>
+
+        <div class="barre" style="margin:var(--e3) 0 0">
+          <button type="button" class="second petit" id="btn-reprendre">Repartir du texte généré</button>
+        </div>
+      </form>
+
+      <div id="doc"></div>
+    </div>
+
+    <footer>
+      Tout est calculé et rédigé dans ce navigateur : aucune donnée de salarié ne part sur un réseau.
+      Le document se corrige directement à l'écran, et les paragraphes corrigés à la main sont
+      conservés quand le reste se réécrit.
+      <p style="margin:10px 0 0">Le document existant se contrôle sur
+        <a href="controler-discipline.html">controler-discipline.html</a>, le règlement intérieur
+        entier sur <a href="controler-ri.html">controler-ri.html</a>, et il se rédige dans le
+        <a href="parcours.html?p=ri&amp;faire=1">parcours du règlement intérieur</a>.</p>
+      <details>
+        <summary>Les textes lus, avec leur identifiant de version</summary>
+        <div id="sources" style="margin-top:8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.7"></div>
+      </details>
+    </footer>
+  </section>
+
+</main>
+
+<dialog id="dlg">
+  <div class="barre" style="margin:0 0 var(--e3)">
+    <button type="button" class="second petit" id="dlg-copier">Copier</button>
+    <button type="button" class="second petit" id="dlg-imprimer">Imprimer</button>
+    <button type="button" class="second petit" id="dlg-fermer">Fermer</button>
   </div>
-</div>
-
-<div id="bloc-general" style="display:none">
-  <h2 id="t3">3. Le rapport général de l'audit</h2>
-  <p class="aide">Chaque exigence confrontée aux textes lus à la source, et ce à quoi l'employeur
-  s'expose. Ce rapport se recalcule à chaque étape : il tiendra compte de ce que vous régulariserez
-  à l'étape 5 et de ce que vous vérifierez à l'étape 6.</p>
-  <div id="rapport-general"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-guide">Étape 4 : ouvrir le guide de régularisation</button>
-    <button type="button" class="second" id="imprimer-general">Imprimer le rapport général</button>
-  </div>
-</div>
-
-<div id="bloc-guide" style="display:none">
-  <h2 id="t4">4. Le guide de régularisation</h2>
-  <p class="aide">Les contrôles non conformes ou à vérifier, du plus grave au moins grave. Chaque
-  point dit l'acte à accomplir, ce qu'on risque à ne pas le faire, et ouvre sa note chiffrée et sa
-  procédure à l'étape 5.</p>
-  <div id="guide"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-item">Étape 5 : régulariser élément par élément</button>
-    <button type="button" class="second" id="imprimer-guide">Imprimer le guide</button>
-  </div>
-</div>
-
-<div id="bloc-item" style="display:none">
-  <h2 id="t5">5. Régulariser, élément par élément</h2>
-  <p class="aide">Choisissez un contrôle du guide. Vous obtenez la <b>note chiffrée sur votre
-  dossier</b> — établie sur les valeurs saisies à l'étape 2, jamais sur un exemple figé —, la
-  <b>procédure</b> jusqu'à la validation, le <b>document</b> que l'application sait rédiger, et la
-  grille de vérification. Quand c'est fait, dites-le : l'étape 6 le reprendra.</p>
-  <div class="grille" style="margin:0 0 16px">
-    <label><span class="nom">Le contrôle à régulariser</span>
-      <select id="choix-item"></select>
-      <span class="aide-champ">La liste reprend le guide de l'étape 4.</span></label>
-  </div>
-  <div id="fiche-item"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-existant">Étape 6 : vérifier ce qui est déclaré</button>
-    <button type="button" class="second" id="imprimer-item">Imprimer cette fiche de régularisation</button>
-  </div>
-</div>
-
-<div id="bloc-existant" style="display:none">
-  <h2 id="t6">6. La vérification de ce qui est déclaré</h2>
-  <p class="aide">Les contrôles que l'audit tient pour conformes sur votre seule déclaration à
-  l'étape 2, et ceux que vous venez de déclarer régularisés à l'étape 5. <b>Cocher n'est pas
-  prouver</b> : une case cochée sans détail vérifiable rend « ne conclut pas », jamais « en règle »
-  — et un point refusé retourne au guide de l'étape 4.</p>
-  <div id="verifs"></div>
-  <div class="barre no-print">
-    <button type="button" id="controler">Produire le rapport de régularisation</button>
-    <button type="button" class="second" id="imprimer-existant">Imprimer le rapport de régularisation</button>
-  </div>
-  <div id="rapport-existant"></div>
-</div>
-
-<footer id="pied"></footer>
-</div>
-
-<dialog id="dlg-avertissement" style="max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;font:15px/1.55 system-ui;color:#1c2126">
-  <h2 style="margin:0 0 12px;font:600 19px/1.3 system-ui">Avertissement d'usage</h2>
-  <p style="margin:0 0 10px">Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
-  avocat, ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
-  <p style="margin:0 0 10px">Ce module n'apprécie ni la réalité des faits, ni leur caractère fautif, ni la
-  proportionnalité de la sanction à la faute : c'est l'office du conseil de prud'hommes. Il ne fournit pas
-  d'analyse du statut protecteur d'un salarié titulaire d'un mandat, qu'il se contente de signaler.</p>
-  <form method="dialog" style="margin:14px 0 0;text-align:right">
-    <button style="font:600 14px/1 system-ui;padding:9px 16px;border:1px solid #14524F;background:#14524F;color:#fff;border-radius:6px;cursor:pointer">Fermer</button>
-  </form>
+  <pre id="dlg-corps"></pre>
 </dialog>
 
-<dialog id="dlg-texte">
-  <div class="dt-barre">
-    <button type="button" id="dt-copier">Copier le texte</button>
-    <button type="button" id="dt-imprimer" class="second">Imprimer</button>
-    <button type="button" id="dt-fermer" class="second">Fermer</button>
-  </div>
-  <pre id="dt-corps"></pre>
-</dialog>
-
-<script src="moteur-discipline.js"></script>
-<script src="idcc.js"></script>
+<script src="audit-export.js"></script>
 <script src="profil.js"></script>
-<script src="parcours-lien.js"></script>
 <script src="documents-produits.js"></script>
 <script src="documents-discipline.js"></script>
 <script src="documents-discipline-2.js"></script>
 <script>
 (function () {
   "use strict";
-  var MOTEUR = window.MoteurDiscipline;
-  var AUD = MOTEUR.audit;
-  var CTRL = MOTEUR.controles;
-  var CHAMPS = MOTEUR.champs || [];
-  var PROPOS = MOTEUR.propositions || {};
-  var P = window.Profil;
-  var CLE = "audit-discipline-brouillon";
-  var $ = function (id) { return document.getElementById(id); };
-  document.getElementById("fil-temps").addEventListener("click", function (e) {
-    var el = e.target.closest("span[data-t]");
-    if (!el || el.style.cursor !== "pointer") return;
-    var n = Number(el.getAttribute("data-t"));
-    var cible = document.getElementById("t" + n);
-    if (cible) cible.scrollIntoView({ behavior: "smooth" });
-  });
-  var AUJOURDHUI = new Date().toISOString().slice(0, 10);
 
-  var e = function (s) { return String(s == null ? "" : s)
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  var $ = function (s) { return document.querySelector(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
 
-  /* ------------------------------------------------------------ l'état ---
-     Même convention que la BDESE et le comité : `dossier` et `nuances`
-     séparent ce qui conclut de ce qui ne conclut pas ; `faits` garde ce qui
-     est déclaré régularisé à l'étape 5 ; `controles` garde les réponses aux
-     grilles de vérification (étapes 5 et 6). */
-  var etatVide = function () {
-    return { dossier: {}, nuances: {}, faits: {}, controles: {}, etape: 1 };
+  /* ═══════════════════════════════════════════════════════════════════════
+     LES TEXTES.
+
+     Chacun a été demandé deux fois au relais Légifrance le 7 septembre 2026,
+     à plusieurs minutes d'intervalle ; les deux lectures ont rendu le même
+     identifiant et le même texte. La colonne « dit » ne reprend que ce qui
+     sert au calcul ou à la rédaction, dans les mots de l'article.
+     ══════════════════════════════════════════════════════════════════════ */
+  var TEXTES = {
+    "L1311-2": { id: "LEGIARTI000038610176",
+      dit: "l'établissement d'un règlement intérieur est obligatoire dans les entreprises ou établissements employant au moins cinquante salariés ; l'obligation s'applique au terme d'un délai de douze mois à compter de la date à laquelle le seuil a été atteint" },
+    "L1321-1": { id: "LEGIARTI000006901432",
+      dit: "le règlement intérieur fixe exclusivement les mesures de santé et de sécurité, la participation au rétablissement de conditions protectrices, et les règles générales et permanentes relatives à la discipline, notamment la nature et l'échelle des sanctions" },
+    "L1321-2": { id: "LEGIARTI000045391757",
+      dit: "le règlement intérieur rappelle les droits de la défense, les dispositions sur les harcèlements et les agissements sexistes, et l'existence du dispositif de protection des lanceurs d'alerte" },
+    "L1321-3": { id: "LEGIARTI000033975667",
+      dit: "le règlement ne peut contenir de dispositions contraires aux lois et aux conventions, de restrictions non justifiées par la nature de la tâche ni proportionnées au but recherché, ni de dispositions discriminatoires" },
+    "L1321-4": { id: "LEGIARTI000054140230",
+      dit: "introduction après avis du comité social et économique ; date d'entrée en vigueur postérieure d'un mois aux formalités de publicité ; communication à l'inspecteur du travail avec l'avis du comité, en même temps que la publicité ; ces règles valent aussi en cas de modification ou de retrait de clauses" },
+    "L1321-5": { id: "LEGIARTI000035653093",
+      dit: "les notes de service et tout autre document comportant des obligations générales et permanentes dans les matières de L. 1321-1 et L. 1321-2 sont des adjonctions au règlement intérieur et sont en toute hypothèse soumis aux dispositions du même titre" },
+    "L1321-6": { id: "LEGIARTI000006901439",
+      dit: "le règlement intérieur est rédigé en français ; il en va de même de tout document comportant des obligations pour le salarié" },
+    "L1322-1": { id: "LEGIARTI000006901440",
+      dit: "l'inspecteur du travail peut à tout moment exiger le retrait ou la modification des dispositions contraires aux articles L. 1321-1 à L. 1321-3 et L. 1321-6" },
+    "R1321-1": { id: "LEGIARTI000033292501",
+      dit: "le règlement intérieur est porté par tout moyen à la connaissance des personnes ayant accès aux lieux de travail ou aux locaux où se fait l'embauche" },
+    "R1321-2": { id: "LEGIARTI000018536915",
+      dit: "le règlement intérieur est déposé au greffe du conseil de prud'hommes du ressort de l'entreprise ou de l'établissement" },
+    "R1321-3": { id: "LEGIARTI000018536913",
+      dit: "le délai court à compter de la dernière en date des formalités de publicité et de dépôt définies aux articles R. 1321-1 et R. 1321-2" },
+    "R1321-4": { id: "LEGIARTI000018536911",
+      dit: "le texte du règlement intérieur est transmis à l'inspecteur du travail en deux exemplaires" },
+    "L1331-1": { id: "LEGIARTI000006901445",
+      dit: "constitue une sanction toute mesure, autre que les observations verbales, prise à la suite d'un agissement considéré comme fautif, de nature à affecter immédiatement ou non la présence dans l'entreprise, la fonction, la carrière ou la rémunération" },
+    "L1331-2": { id: "LEGIARTI000006901446",
+      dit: "les amendes ou autres sanctions pécuniaires sont interdites ; toute disposition ou stipulation contraire est réputée non écrite" },
+    "L1332-1": { id: "LEGIARTI000006901447",
+      dit: "aucune sanction ne peut être prise sans que le salarié soit informé, dans le même temps et par écrit, des griefs retenus contre lui" },
+    "L1332-2": { id: "LEGIARTI000025560074",
+      dit: "convocation en précisant l'objet, sauf avertissement ou sanction de même nature sans incidence ; assistance par une personne du personnel ; motif indiqué et explications recueillies ; la sanction ne peut intervenir moins de deux jours ouvrables ni plus d'un mois après le jour fixé pour l'entretien ; elle est motivée et notifiée" },
+    "L1332-3": { id: "LEGIARTI000006901449",
+      dit: "après une mise à pied conservatoire, aucune sanction définitive relative à ces faits ne peut être prise sans que la procédure de L. 1332-2 ait été respectée" },
+    "L1332-4": { id: "LEGIARTI000006901450",
+      dit: "aucun fait fautif ne peut donner lieu à lui seul à des poursuites disciplinaires au-delà de deux mois du jour où l'employeur en a eu connaissance, à moins qu'il ait donné lieu dans le même délai à des poursuites pénales" },
+    "L1332-5": { id: "LEGIARTI000006901451",
+      dit: "aucune sanction antérieure de plus de trois ans à l'engagement des poursuites ne peut être invoquée à l'appui d'une nouvelle sanction" },
+    "R1332-1": { id: "LEGIARTI000018536889",
+      dit: "la lettre de convocation indique l'objet, précise la date, l'heure et le lieu, rappelle l'assistance, et est remise contre récépissé ou adressée par lettre recommandée dans le délai de deux mois de L. 1332-4" },
+    "R1332-2": { id: "LEGIARTI000018536887",
+      dit: "la sanction fait l'objet d'une décision écrite et motivée, notifiée par lettre remise contre récépissé ou par lettre recommandée, dans le délai d'un mois de L. 1332-2" },
+    "R1332-3": { id: "LEGIARTI000018536885",
+      dit: "le délai d'un mois expire à vingt-quatre heures le jour du mois suivant qui porte le même quantième que le jour fixé pour l'entretien ; à défaut, le dernier jour du mois suivant ; s'il tombe un samedi, un dimanche ou un jour férié ou chômé, il est prorogé jusqu'au premier jour ouvrable suivant" },
+    "L1333-1": { id: "LEGIARTI000006901453",
+      dit: "le conseil de prud'hommes apprécie la régularité de la procédure et si les faits sont de nature à justifier une sanction ; si un doute subsiste, il profite au salarié" },
+    "L1333-2": { id: "LEGIARTI000006901454",
+      dit: "le conseil de prud'hommes peut annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise" },
+    "L1333-3": { id: "LEGIARTI000006901455",
+      dit: "lorsque la sanction contestée est un licenciement, les dispositions de ce chapitre ne sont pas applicables : le conseil applique celles relatives à la contestation des irrégularités de licenciement" },
+    "L1232-2": { id: "LEGIARTI000006901000",
+      dit: "convocation avant toute décision, par lettre recommandée ou remise en main propre contre décharge, indiquant l'objet ; l'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation ou la remise" },
+    "L1232-3": { id: "LEGIARTI000006901001",
+      dit: "au cours de l'entretien, l'employeur indique les motifs de la décision envisagée et recueille les explications du salarié" },
+    "L1232-4": { id: "LEGIARTI000006901002",
+      dit: "assistance par une personne du personnel ; sans institution représentative, par un conseiller du salarié, la lettre mentionnant cette possibilité et précisant l'adresse des services où la liste est tenue à disposition" },
+    "L1232-6": { id: "LEGIARTI000036762096",
+      dit: "notification par lettre recommandée avec avis de réception énonçant le ou les motifs, qui ne peut être expédiée moins de deux jours ouvrables après la date prévue de l'entretien" },
+    "R1232-13": { id: "LEGIARTI000036212577",
+      dit: "le salarié dispose de quinze jours après la notification pour demander des précisions sur les motifs ; l'employeur de quinze jours après réception pour y répondre" },
+    "L1235-2": { id: "LEGIARTI000036261950",
+      dit: "les motifs peuvent être précisés après la notification ; la lettre, précisée le cas échéant, fixe les limites du litige" },
+    "L1234-1": { id: "LEGIARTI000006901112",
+      dit: "hors faute grave : préavis fixé par la loi, la convention ou les usages en deçà de six mois d'ancienneté, un mois de six mois à moins de deux ans, deux mois à partir de deux ans, sauf disposition plus favorable" },
+    "L1234-5": { id: "LEGIARTI000006901118",
+      dit: "indemnité compensatrice lorsque le préavis n'est pas exécuté, sauf faute grave ; la dispense n'entraîne aucune diminution des salaires et avantages" },
+    "L1234-9": { id: "LEGIARTI000035644154",
+      dit: "indemnité de licenciement dès huit mois d'ancienneté ininterrompus au service du même employeur, sauf faute grave" },
+    "L1225-4": { id: "LEGIARTI000033022614",
+      dit: "protection de la salariée enceinte, pendant le congé de maternité et les dix semaines suivantes, sauf faute grave non liée à l'état de grossesse ou impossibilité de maintenir le contrat" },
+    "L1226-9": { id: "LEGIARTI000006900975",
+      dit: "pendant la suspension pour accident du travail ou maladie professionnelle, rupture seulement pour faute grave ou impossibilité de maintenir le contrat" }
   };
-  var ETAT = etatVide();
-  try {
-    var lu = JSON.parse(localStorage.getItem(CLE) || "null");
-    if (lu && lu.dossier && lu.etape) ETAT = lu;
-  } catch (err) {}
-  if (!ETAT.dossier) ETAT.dossier = {};
-  if (!ETAT.nuances) ETAT.nuances = {};
-  if (!ETAT.faits) ETAT.faits = {};
-  if (!ETAT.controles) ETAT.controles = {};
-  if (!ETAT.etape) ETAT.etape = 1;
-  function enregistrer() { try { localStorage.setItem(CLE, JSON.stringify(ETAT)); } catch (err) {} }
-
-  var VALEURS = (P && P.VALEURS) || ["oui", "non", "en cours", "autre"];
-  var conclut = (P && P.conclut) || function (v) { return v === "oui" || v === "non"; };
-  /* La grille de vérification (étapes 5 et 6) porte une cinquième valeur,
-     « je ne sais pas » : c'est le vocabulaire déjà posé par
-     moteur/commun/parcours-deux-temps.js pour les huit modules — repris ici
-     à l'identique plutôt que de forcer les quatre valeurs de la fiche sur une
-     grille qui n'est pas une question d'orientation. */
-  var REPONSES_GRILLE = ["oui", "non", "en cours", "je ne sais pas", "autre"];
-  function grilleConclut(v) { return v === "oui" || v === "non"; }
-
-  /* --------------------------------------------------- les champs -> `f` ---
-     Les chemins pointés (« ri.existe », « sanction.dateConvocation ») sont
-     ceux que lisent moteur-discipline.js et controles-discipline.js : on les
-     respecte à la lettre, aucun champ n'est renommé. */
-  function assignPath(obj, chemin, val) {
-    var parts = chemin.split(".");
-    var o = obj;
-    for (var i = 0; i < parts.length - 1; i++) { o[parts[i]] = o[parts[i]] || {}; o = o[parts[i]]; }
-    o[parts[parts.length - 1]] = val;
-  }
-  function getPath(obj, chemin) {
-    var parts = chemin.split("."), o = obj;
-    for (var i = 0; i < parts.length; i++) { if (o == null) return undefined; o = o[parts[i]]; }
-    return o;
+  /* « L1332-2 » s'écrit « L. 1332-2 » dans un document. */
+  function ref(nums) {
+    return nums.map(function (n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }).join(", ");
   }
 
-  /* Les deux champs que la fiche partagée porte déjà : ils ne sont pas
-     redemandés à l'étape 2. `dateAudit` reste une question propre au module. */
-  var DEPUIS_FICHE = { entreprise: true, effectif: true };
+  /* ═════════════════════════════════════════════ le profil de l'entreprise */
+  var profil = null;
+  try { profil = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
+  if ((!profil || !profil.denomination) && window.Profil) profil = window.Profil.lire();
+  if (!profil) profil = {};
 
-  /* « pieces » est la seule liste du module, et aucun contrôle ne la lit :
-     une ligne de texte par pièce suffit, sur le même principe que la BDESE
-     et le comité pour leurs champs de même forme. */
-  var LISTES_OBJETS = { "pieces": "nom" };
+  function nomSociete() { return profil.denomination || "[dénomination de l'entreprise]"; }
+  function societe() {
+    var t = nomSociete();
+    if (profil.adresse) t += ", dont le siège social est situé " + profil.adresse;
+    if (profil.siret) t += ", identifiée sous le numéro SIRET " + profil.siret;
+    return t;
+  }
+  function signataire() { return profil.responsable || "[nom et qualité du signataire]"; }
+  function ville() {
+    var m = String(profil.adresse || "").match(/\d{5}\s+(.+)$/);
+    return m ? m[1].trim() : "[ville]";
+  }
+  function effectif() {
+    var n = Number(profil.effectif);
+    return isFinite(n) && n > 0 ? n : null;
+  }
 
-  function construireF() {
-    var p = P ? P.lire() : {};
-    var f = {};
-    f.entreprise = p.denomination || "";
-    if (p.effectif !== undefined && p.effectif !== null && String(p.effectif).trim() !== "" && isFinite(+p.effectif))
-      f.effectif = Number(p.effectif);
-    Object.keys(ETAT.dossier).forEach(function (chemin) {
-      var v = ETAT.dossier[chemin];
-      if (v === undefined || v === null || v === "") return;
-      if (LISTES_OBJETS[chemin]) {
-        var cleObjet = LISTES_OBJETS[chemin];
-        var lignes = String(v).split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
-        assignPath(f, chemin, lignes.map(function (l) { var o = {}; o[cleObjet] = l; return o; }));
-        return;
-      }
-      assignPath(f, chemin, v);
+  /* ═══════════════════════════════════════════════════════ dates et calculs */
+  function paques(an) {
+    var a = an % 19, b = Math.floor(an / 100), c = an % 100;
+    var d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+    var g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+    var i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7;
+    var m = Math.floor((a + 11 * h + 22 * l) / 451);
+    var mois = Math.floor((h + l - 7 * m + 114) / 31);
+    var jourM = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(an, mois - 1, jourM);
+  }
+  var cacheFeries = {};
+  function feries(an) {
+    if (cacheFeries[an]) return cacheFeries[an];
+    var p = paques(an), j = 86400000, l = {};
+    function pose(d) { l[d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate()] = true; }
+    [[0, 1], [4, 1], [4, 8], [6, 14], [7, 15], [10, 1], [10, 11], [11, 25]].forEach(function (x) {
+      pose(new Date(an, x[0], x[1]));
     });
-    return f;
+    pose(new Date(p.getTime() + j));          /* lundi de Pâques */
+    pose(new Date(p.getTime() + 39 * j));     /* Ascension */
+    pose(new Date(p.getTime() + 50 * j));     /* lundi de Pentecôte */
+    cacheFeries[an] = l;
+    return l;
+  }
+  function estFerie(d) {
+    return !!feries(d.getFullYear())[d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate()];
+  }
+  /* Jour ouvrable : tous les jours de la semaine sauf le dimanche et les jours
+     fériés. C'est la règle de décompte retenue ici, et elle est dite à
+     l'écran : un calcul qui ne dit pas sa règle ne se vérifie pas. */
+  function estOuvrable(d) { return d.getDay() !== 0 && !estFerie(d); }
+  function jour(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+  function prochainOuvrable(d) { var x = new Date(d.getTime()); while (!estOuvrable(x)) x = jour(x, 1); return x; }
+
+  /* Le premier jour où l'acte peut intervenir quand la loi impose n jours
+     ouvrables « après » un évènement : les n jours pleins s'écoulent, l'acte
+     vient ensuite, et s'il tombe un dimanche ou un férié il attend. */
+  function apresJoursOuvrables(depart, n) {
+    var d = new Date(depart.getTime()), compte = 0;
+    while (compte < n) { d = jour(d, 1); if (estOuvrable(d)) compte++; }
+    return prochainOuvrable(jour(d, 1));
+  }
+  /* Le même quantième, n mois plus tard : la règle que R. 1332-3 énonce pour
+     le délai d'un mois de L. 1332-2, « à défaut d'un quantième identique, le
+     dernier jour du mois suivant ». Le délai de deux mois de L. 1332-4 est
+     compté ici de la même façon ; R. 1332-3 ne le dit que du délai d'un mois,
+     et la page ne lui fait pas dire davantage. */
+  function plusMois(d, n) {
+    var x = new Date(d.getTime()), voulu = x.getDate();
+    x.setMonth(x.getMonth() + n);
+    if (x.getDate() < voulu) x.setDate(0);
+    return x;
+  }
+  /* La prorogation de R. 1332-3 : samedi, dimanche, jour férié ou chômé, le
+     délai va au premier jour ouvrable suivant. Le samedi entre ici dans la
+     liste alors qu'il compte comme ouvrable pour le délai de deux jours :
+     c'est l'article qui le dit, pas une commodité. */
+  function prorogeR13323(d) {
+    var x = new Date(d.getTime());
+    while (x.getDay() === 6 || x.getDay() === 0 || estFerie(x)) x = jour(x, 1);
+    return x;
+  }
+  function iso(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+  function lireDate(id) {
+    var el = $(id); if (!el || !el.value) return null;
+    var p = el.value.split("-");
+    return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  }
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
+    "septembre", "octobre", "novembre", "décembre"];
+  var JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+  function dateFr(d) {
+    if (!d) return "[date]";
+    return (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
+  }
+  function dateFrJour(d) { return d ? JOURS[d.getDay()] + " " + dateFr(d) : "[date]"; }
+  function moisAnnees(d1, d2) {
+    if (!d1 || !d2) return 0;
+    var m = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
+    if (d2.getDate() < d1.getDate()) m--;
+    return Math.max(0, m);
+  }
+  function heureFr(h) { return h ? h.replace(":", " h ") : "[heure]"; }
+  function motNombre(n) {
+    var M = ["zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf",
+      "dix", "onze", "douze", "treize", "quatorze", "quinze"];
+    return M[n] || String(n);
   }
 
-  /* ----------------------------------------------------- 1. fiche client --- */
-  function construireFiche() {
-    if (!P) { $("fiche-client").innerHTML =
-      '<p class="aide">La fiche client n\'a pas pu être chargée (profil.js).</p>'; return; }
-    P.rendre($("fiche-client"), {
-      prefixe: "fc",
-      legende: "Fiche client — l'entreprise auditée",
-      aide: "Ces données restent dans ce navigateur. Elles orientent l'audit et pré-remplissent les rapports et les documents produits.",
-      onChange: function () {
-        enregistrer(); majCompteur();
-        if (ETAT.etape >= 2) construireQuestionnaire();
-      },
+  /* ═══════════════════════════════════════════════════════════════════════
+     LE RENDU.
+
+     Un document est une liste de blocs. Chaque bloc devient une ligne
+     modifiable à l'écran et repart telle quelle dans le .docx. Quand les
+     champs changent, tout est réécrit, sauf les blocs corrigés à la main : la
+     correction est retenue sur une empreinte du texte d'origine, pas sur la
+     place du bloc, pour survivre à l'ajout ou au retrait d'un article.
+     ══════════════════════════════════════════════════════════════════════ */
+  var corrections = {};
+  function empreinte(s) {
+    var h = 5381;
+    for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return "b" + (h >>> 0).toString(36);
+  }
+  function feuilleHtml(blocs, module) {
+    var c = corrections[module] = corrections[module] || {};
+    var h = '<div class="feuille" id="' + module + '-feuille">';
+    blocs.forEach(function (b) {
+      if (b.k === "trait" || b.k === "saut") { h += '<hr class="b-' + b.k + '">'; return; }
+      if (b.k === "vide") { h += '<div class="b-vide"></div>'; return; }
+      var cle = empreinte(b.t);
+      var texte = Object.prototype.hasOwnProperty.call(c, cle) ? c[cle] : b.t;
+      h += '<div class="b-' + b.k + (texte !== b.t ? " modifie" : "") +
+        '" contenteditable="true" data-k="' + b.k + '" data-o="' + cle + '">' +
+        ech(texte) + "</div>";
     });
+    return h + "</div>";
   }
-
-  function construireFormulaireFiche() {
-    var html = '<fieldset><legend>La date de votre situation</legend><div class="grille">' +
-      '<label><span class="nom">Date à laquelle la situation est décrite</span>' +
-      '<input name="dateAudit" type="date" value="' + e(ETAT.dossier.dateAudit || "") + '">' +
-      '<span class="aide-champ">Sert de référence aux délais calculés par le rapport (étape 3).</span></label>' +
-      "</div></fieldset>";
-    $("formulaire-fiche").innerHTML = html;
-    $("formulaire-fiche").addEventListener("change", function (ev) {
-      ETAT.dossier[ev.target.name] = ev.target.value;
-      enregistrer(); majCompteur();
-      if (ETAT.etape >= 2) construireQuestionnaire();
-    });
+  /* innerText rend les retours à la ligne tels qu'ils sont vus ; textContent
+     prend le relais là où innerText n'existe pas. L'espace insécable revient à
+     l'espace ordinaire : Word en ferait un caractère visible. */
+  function texteDe(el) {
+    var t = el.innerText !== undefined && el.innerText !== null ? el.innerText : el.textContent;
+    return String(t).replace(/ /g, " ");
   }
-
-  /* ------------------------------------------------ 2. le questionnaire --- */
-  function libellesRubrique() {
+  function relire(module) {
     var out = [];
-    CHAMPS.forEach(function (grp) {
-      var champs = grp[1].filter(function (c) { return !DEPUIS_FICHE[c[0]]; });
-      if (champs.length) out.push([grp[0], champs]);
+    document.querySelectorAll("#" + module + "-feuille > *").forEach(function (el) {
+      if (el.tagName === "HR") {
+        out.push({ k: el.classList.contains("b-saut") ? "saut" : "trait", t: "" }); return;
+      }
+      if (el.classList.contains("b-vide")) { out.push({ k: "p", t: "" }); return; }
+      out.push({ k: el.getAttribute("data-k"), t: texteDe(el) });
     });
     return out;
   }
-
-  function menuFerme(nom, val) {
-    var libre = val && VALEURS.indexOf(String(val)) < 0;
-    var choisi = libre ? "autre" : String(val == null ? "" : val);
-    return '<select name="' + e(nom) + '" data-ferme="1"><option value=""></option>' +
-      VALEURS.map(function (o) {
-        return '<option value="' + o + '"' + (choisi === o ? " selected" : "") + ">" + o + "</option>";
-      }).join("") + "</select>" +
-      '<input type="text" data-libre="' + e(nom) + '" placeholder="précisez" ' +
-      'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' +
-      (libre ? e(val) : "") + '">' +
-      '<span class="aide-champ nuance" data-nuance="' + e(nom) + '"></span>';
+  var VERS_EXPORT = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "puce",
+    note: "note", sign: "p", trait: "trait", saut: "saut" };
+  /* Ce qui part dans le fichier : le document, et lui seul. Les notes de marge
+     s'adressent à l'employeur, pas au salarié ; elles resteraient déplacées
+     dans une lettre envoyée. Le premier titre devient le titre du fichier
+     plutôt que d'être écrit deux fois. */
+  function pourFichier(module) {
+    var blocs = relire(module).filter(function (b) { return b.k !== "note"; });
+    var titre = blocs.length && blocs[0].k === "t1" ? blocs.shift().t : "";
+    return { titre: titre, blocs: blocs };
   }
-
-  /* Les questions de format « liste » (nature de la sanction, mode de remise,
-     source et nature de la garantie de fond…) proposent les valeurs que le
-     moteur reconnaît, embarquées par l'empaquetage dans MOTEUR.propositions —
-     jamais une liste tenue à la main dans la page. */
-  function menuProposition(nom, val) {
-    var prop = PROPOS[nom] || { valeurs: [] };
-    var opts = (prop.valeurs || []).concat(prop.autres || []);
-    var libre = prop.libre && val && opts.indexOf(String(val)) < 0;
-    var choisi = libre ? "autre" : String(val == null ? "" : val);
-    return '<select name="' + e(nom) + '"' + (prop.libre ? ' data-ferme-libre="1"' : "") + '><option value=""></option>' +
-      opts.map(function (o) { return '<option value="' + e(o) + '"' + (choisi === o ? " selected" : "") + ">" + e(o) + "</option>"; }).join("") +
-      (prop.libre ? '<option value="autre"' + (libre ? " selected" : "") + '>autre (préciser)</option>' : "") +
-      "</select>" +
-      (prop.libre ? '<input type="text" data-libre="' + e(nom) + '" placeholder="précisez" ' +
-        'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' + (libre ? e(val) : "") + '">' : "") +
-      (prop.aide ? '<span class="aide-champ">' + e(prop.aide) + "</span>" : "");
+  function slug(s) {
+    return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase() || "salarie";
   }
-
-  function champHtml(chemin, libelle, format) {
-    var val = ETAT.dossier[chemin];
-    if (val === undefined) val = ETAT.nuances[chemin] || "";
-    var champ;
-    if (format === "oui / non") champ = menuFerme(chemin, val);
-    else if (format === "liste") champ = menuProposition(chemin, val);
-    else if (format === "nombre") champ = '<input name="' + e(chemin) + '" type="number" min="0" value="' + e(val) + '">';
-    else if (format === "AAAA-MM-JJ") champ = '<input name="' + e(chemin) + '" type="date" value="' + e(val) + '">';
-    else if (LISTES_OBJETS[chemin])
-      champ = '<textarea name="' + e(chemin) + '" placeholder="une pièce par ligne">' + e(val) + "</textarea>" +
-        '<span class="aide-champ">Une pièce par ligne (« règlement intérieur du 12/03/2024 », etc.).</span>';
-    else champ = '<input name="' + e(chemin) + '" type="text" value="' + e(val) + '">';
-    return '<label><span class="nom">' + e(libelle) + "</span>" + champ + "</label>";
+  function nomFichier(base, ext) {
+    return base + "-" + new Date().toISOString().slice(0, 10) + "." + ext;
   }
-
-  function construireQuestionnaire() {
-    var html = "";
-    libellesRubrique().forEach(function (grp) {
-      html += '<fieldset><legend>' + e(grp[0]) + '</legend><div class="grille">';
-      grp[1].forEach(function (c) { html += champHtml(c[0], c[1], c[2]); });
-      html += "</div></fieldset>";
-    });
-    $("formulaire").innerHTML = html;
-    brancherFormulaire();
-    majVisibiliteQuestionnaire(); majNuances(); majCompteurQuestionnaire();
-    /* La réponse « non » déjà enregistrée d'une visite précédente ne
-       déclenche aucune bascule : c'est le bouton de tête de la barre, collé
-       en bas de l'écran, qui mène alors à la procédure. Un encadré le disait
-       aussi en tête du questionnaire — deux fois la même chose sur le même
-       écran, retiré le 31 août 2026. */
-    if (window.ParcoursLien) {
-      var lire = function (nom) { return ETAT.dossier[nom]; };
-      majBoutonProcedure(lire);
-    }
+  function carteDate(q, d, f, classe) {
+    return '<div class="d ' + (classe || "") + '"><span class="q">' + ech(q) + "</span>" +
+      '<span class="v">' + ech(typeof d === "string" ? d : dateFrJour(d)) + "</span>" +
+      '<span class="f">' + ech(f) + "</span></div>";
   }
-
-  function brancherFormulaire() {
-    var f = $("formulaire");
-    Array.prototype.forEach.call(f.querySelectorAll('[data-ferme="1"],[data-ferme-libre="1"]'), function (sel) {
-      var libre = f.querySelector('[data-libre="' + sel.name + '"]');
-      if (!libre) return;
-      sel.addEventListener("change", function () {
-        var ouvert = sel.value === "autre";
-        libre.style.display = ouvert ? "" : "none";
-        if (!ouvert) libre.value = "";
-        lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
-      });
-      libre.addEventListener("input", function () { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); majNuances(); });
-    });
-    f.addEventListener("change", function (ev) {
-      lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
-      /* Pas de règlement intérieur : on ne pose pas les questions d'un
-         document qui n'existe pas, on bascule directement sur
-         l'accompagnement pratique, pas à pas — modèle, avis du comité,
-         inspection du travail, greffe des prud'hommes, publicité, entrée
-         en vigueur —, chaque étape avec son fondement et la sanction
-         encourue. Le parcours renvoie ici pour la suite de l'audit, et
-         enchaîne ensuite sur le document unique. Voir docs/parcours-lien.js. */
-      if (window.ParcoursLien) ParcoursLien.bascule(ev, BASCULES);
-    });
-    f.addEventListener("input", function (ev) {
-      if (ev.target.tagName === "TEXTAREA") { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); }
-    });
-  }
-
-  function majNuances() {
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("[data-nuance]"), function (n) {
-      var nom = n.getAttribute("data-nuance");
-      var sel = $("formulaire").querySelector('[name="' + nom + '"]');
-      if (!sel) { n.style.display = "none"; return; }
-      if (sel.value === "" || conclut(sel.value)) { n.textContent = ""; n.style.display = "none"; return; }
-      n.textContent = "Réponse « " + sel.value + " » : elle ne conclut pas. Le contrôle restera « donnée manquante ».";
-      n.style.display = "";
-    });
-  }
-
-  function lireQuestionnaire() {
-    Array.prototype.forEach.call($("formulaire").elements, function (el) {
-      if (!el.name) return;
-      var ferme = el.getAttribute("data-ferme") === "1";
-      var fermeLibre = el.getAttribute("data-ferme-libre") === "1";
-      var v = String(el.value == null ? "" : el.value);
-      if ((ferme || fermeLibre) && v === "autre") {
-        var l = $("formulaire").querySelector('[data-libre="' + el.name + '"]');
-        v = l ? l.value.trim() : "";
-        if (v === "") { delete ETAT.dossier[el.name]; delete ETAT.nuances[el.name]; return; }
-        if (ferme) { ETAT.nuances[el.name] = "autre : " + v; delete ETAT.dossier[el.name]; return; }
-        delete ETAT.nuances[el.name]; ETAT.dossier[el.name] = v; return;
-      }
-      if (el.tagName !== "TEXTAREA") v = v.trim();
-      if (v === "") { delete ETAT.dossier[el.name]; delete ETAT.nuances[el.name]; return; }
-      if (ferme && !conclut(v)) { delete ETAT.dossier[el.name]; ETAT.nuances[el.name] = v; return; }
-      delete ETAT.nuances[el.name];
-      ETAT.dossier[el.name] = el.getAttribute("type") === "number" ? Number(v) : v;
-    });
-  }
-
-  /* La bascule vers l'accompagnement : pas de règlement intérieur, pas de
-     questions sur son contenu (docs/parcours-lien.js). */
-  var BASCULES = { "ri.existe": { p: "ri" } };
-
-  /* Le masquage conditionnel. Trois familles :
-       — le contenu et les formalités du règlement intérieur ne se demandent
-         que si un règlement existe ;
-       — la sanction, ses dates, sa procédure et la garantie de fond ne se
-         demandent que si une sanction est soumise à l'audit ;
-       — quelques champs, à l'intérieur de ces groupes, ne se demandent que
-         si la question qui les commande est répondue « oui ».
-     Un champ masqué garde sa valeur : la démasquer la restitue plutôt que de
-     la réclamer une seconde fois.
-
-     « cse.existe » est dans ce premier groupe alors qu'il ne parle pas du
-     règlement lui-même : sa seule utilité est DIS-CTL-RI-06 (l'avis du
-     comité avant l'introduction du règlement), un contrôle lui-même
-     suspendu par siRI() tant qu'aucun règlement n'existe. Le demander avant
-     ne sert donc à rien — il reprend sa place, au bon moment, dès que
-     « ri.existe » passe à oui. */
-  var CHAMPS_SI_RI = ["cse.existe", "ri.contenuSanteSecurite", "ri.contenuParticipation", "ri.contenuDiscipline",
-    "ri.echelleSanctions", "ri.misePiedDureeMax", "ri.misePiedDureeMaxJours",
-    "ri.rappelDroitsDefense", "ri.rappelHarcelement", "ri.rappelLanceursAlerte",
-    "ri.clausesInterdites", "ri.clauseNeutralite", "ri.neutraliteJustifieeProportionnee", "ri.redigeFrancais",
-    "ri.avisCSE", "ri.publicite", "ri.depotGreffe", "ri.communicationInspection", "ri.communicationDeuxExemplaires",
-    "ri.dateDerniereFormalite", "ri.dateEntreeVigueur", "ri.modifieDepuis", "ri.modificationsFormalites",
-    "ri.notesServiceGenerales", "ri.notesServiceFormalites", "ri.demandeInspection", "ri.suiteDemandeInspection"];
-  var CHAMPS_SI_SANCTION = ["sanction.nature", "sanction.incidence", "sanction.prevueRI",
-    "sanction.dureeMisePiedJours", "sanction.griefsEcrits", "sanction.retenueSalaire", "sanction.salarieProtege",
-    "sanction.dateConnaissance", "sanction.poursuitesPenales", "sanction.sanctionsAnterieuresInvoquees",
-    "sanction.dateSanctionAnterieurePlusAncienne", "sanction.dateConvocation", "sanction.dateEntretien",
-    "sanction.dateNotification", "sanction.convocationEnvoyee", "sanction.convocationObjet",
-    "sanction.convocationDateHeureLieu", "sanction.convocationAssistance", "sanction.convocationRemise",
-    "sanction.entretienTenu", "sanction.notificationEcrite", "sanction.notificationMotivee",
-    "sanction.notificationRemise", "sanction.misePiedConservatoire",
-    "garantie.procedureApplicable", "garantie.source", "garantie.nature", "garantie.suivie",
-    "garantie.droitsDefensePrives", "garantie.influenceDecision", "garantie.licenciementSubordonneSanctions"];
-  var NATURES_INCIDENCE_LIBRE = ["avertissement", "blâme", "autre sanction"];
-
-  function majVisibiliteQuestionnaire() {
-    if (!$("formulaire").children.length) return;
-    var f = construireF();
-    var masques = {};
-    if (String((f.ri || {}).existe) !== "oui") CHAMPS_SI_RI.forEach(function (c) { masques[c] = true; });
-    else {
-      if (String((f.ri || {}).misePiedDureeMax) !== "oui") masques["ri.misePiedDureeMaxJours"] = true;
-      if (String((f.ri || {}).clauseNeutralite) !== "oui") masques["ri.neutraliteJustifieeProportionnee"] = true;
-      if (String((f.ri || {}).modifieDepuis) !== "oui") masques["ri.modificationsFormalites"] = true;
-      if (String((f.ri || {}).notesServiceGenerales) !== "oui") masques["ri.notesServiceFormalites"] = true;
-      if (String((f.ri || {}).demandeInspection) !== "oui") masques["ri.suiteDemandeInspection"] = true;
-    }
-    if (String((f.sanction || {}).auditee) !== "oui") CHAMPS_SI_SANCTION.forEach(function (c) { masques[c] = true; });
-    else {
-      var nature = (f.sanction || {}).nature;
-      if (nature && NATURES_INCIDENCE_LIBRE.indexOf(nature) < 0) masques["sanction.incidence"] = true;
-      if (nature !== "mise à pied disciplinaire") masques["sanction.dureeMisePiedJours"] = true;
-      if (String((f.sanction || {}).sanctionsAnterieuresInvoquees) !== "oui") masques["sanction.dateSanctionAnterieurePlusAncienne"] = true;
-      if (String((f.sanction || {}).convocationEnvoyee) !== "oui") {
-        masques["sanction.convocationObjet"] = true; masques["sanction.convocationDateHeureLieu"] = true;
-        masques["sanction.convocationAssistance"] = true; masques["sanction.convocationRemise"] = true;
-      }
-      if (String((f.garantie || {}).procedureApplicable) !== "oui") {
-        masques["garantie.source"] = true; masques["garantie.nature"] = true; masques["garantie.suivie"] = true;
-      }
-      if ((f.garantie || {}).suivie !== "tardivement ou imparfaitement") {
-        masques["garantie.droitsDefensePrives"] = true; masques["garantie.influenceDecision"] = true;
-      }
-    }
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("[name]"), function (el) {
-      var lab = el.closest("label");
-      if (!lab) return;
-      lab.style.display = masques[el.name] ? "none" : "";
-    });
-
-    /* Une rubrique dont toutes les questions sont masquées se masque elle
-       aussi : un cadre au titre affiché mais vide de tout champ se lit comme
-       un défaut d'affichage, pas comme une question sans objet. Le module de
-       négociation le faisait déjà pour ses rubriques conditionnelles ; la
-       règle vaut pour toutes. */
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("fieldset"), function (fs) {
-      var champs = fs.querySelectorAll("label, .sous-objet, .tableau-champ, [data-multi]");
-      if (!champs.length) return;
-      /* La rubrique est rouverte avant d'être jugée : masquée au tour
-         précédent, elle se serait déclarée elle-même vide — un champ visible
-         y a pour ancêtre masqué la rubrique, et rien ne l'aurait jamais
-         rouverte. Défaut mesuré le 31 août 2026. */
-      fs.style.display = "";
-      var visible = false;
-      Array.prototype.forEach.call(champs, function (el) {
-        if (el.style.display !== "none" && !el.closest('[style*="display: none"]')) visible = true;
-      });
-      fs.style.display = visible ? "" : "none";
-    });
-
-    /* PAS DE RÈGLEMENT : L'ÉCRAN NE PARLE QUE DU RÈGLEMENT.
-
-       Le module audite deux choses — le règlement intérieur et une sanction —
-       et les posait côte à côte. Répondre « non » au règlement laissait donc
-       l'écran demander, juste dessous, si une sanction est soumise à l'audit
-       et quelles pièces sont versées : deux sujets étrangers à celui qu'on
-       vient d'ouvrir. Reproche du 31 août 2026, et il était fondé.
-
-       La sanction et les pièces se replient donc derrière une ligne, qu'un
-       clic ouvre : rien n'est retiré, un employeur sans règlement peut avoir
-       une sanction à faire contrôler. */
-    var sansRI = String((f.ri || {}).existe) === "non";
-    var repli = $("replier-sanction");
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("fieldset"), function (fs) {
-      var leg = fs.querySelector("legend");
-      if (!leg) return;
-      var t = leg.textContent;
-      if (t !== "La sanction auditée" && t !== "Pièces") return;
-      if (sansRI && !(repli && repli.open)) fs.style.display = "none";
-    });
-    if (repli) repli.hidden = !sansRI;
-  }
-
-  /* Le bouton de tête de la barre : il n'existe que si une pièce manque, et
-     il dit laquelle. Voir docs/parcours-lien.js pour la table des bascules. */
-  function majBoutonProcedure(lire) {
-    var b = $("vers-procedure");
-    if (!b || !window.ParcoursLien) return;
-    var due = ParcoursLien.premiere(BASCULES, lire);
-    if (!due) { b.hidden = true; return; }
-    b.hidden = false;
-    b.textContent = due.action;
-    b.onclick = function () { location.href = due.lien; };
-  }
-
-  function majCompteur() {
-    var f = P ? P.lire() : {};
-    var fTotal = P ? P.IDENTITE.length : 0;
-    var fPris = P ? P.IDENTITE.filter(function (ch) {
-      var v = f[ch.c]; return v !== undefined && v !== null && String(v).trim() !== "";
-    }).length : 0;
-    $("compteur").textContent = "Fiche client : " + fPris + " / " + fTotal;
-  }
-  function majCompteurQuestionnaire() {
-    var total = 0, pris = 0;
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("label"), function (lab) {
-      if (lab.style.display === "none") return;
-      total++;
-      var el = lab.querySelector("[name]");
-      if (el && String(el.value).trim() !== "") pris++;
-    });
-    $("compteur-questionnaire").textContent = pris + " / " + total + " questions répondues";
-  }
-
-  /* ------------------------------------------------------- le renvoi D --- */
-  /* Le classeur de pièces (moteur/commun/outils.js) est le format que
-     rendent le rapport d'audit ET les modèles de régularisation : un seul
-     rendu HTML pour les deux. */
-  function rendreD(items, hote) {
-    var h = "";
-    (items || []).forEach(function (i) {
-      if (i.k === "sur") h += '<p class="note">' + e(i.t) + "</p>";
-      else if (i.k === "t1") h += "<h2>" + e(i.t) + "</h2>";
-      else if (i.k === "trait") h += "<hr>";
-      else if (i.k === "h1") h += "<h2>" + e(i.t) + "</h2>";
-      else if (i.k === "h2") h += "<h3>" + e(i.t) + "</h3>";
-      else if (i.k === "h3") h += "<h3>" + e(i.t) + "</h3>";
-      else if (i.k === "p") h += "<p>" + e(i.t) + "</p>";
-      else if (i.k === "note") h += '<p class="note">' + e(i.t) + "</p>";
-      else if (i.k === "puce") h += '<p class="puce">— ' + e(i.t) + "</p>";
-      else if (i.k === "enc") h += '<div class="enc"><p class="sh">' + e(i.titre) + '</p><p style="margin:0">' + e(i.t) + "</p></div>";
-      else if (i.k === "bandeau") h += '<div class="bandeau b-' + e(i.couleur) + '"><p class="r">' + e(i.t) + '</p><p class="s">' + e(i.sous) + "</p></div>";
-      else if (i.k === "acte") h += '<div class="acte a-' + e(i.priorite) + '"><p class="t">' + e(i.n) + ". " + e(i.t) +
-        '<span class="chip c-' + e(i.priorite) + '">' + e(i.priorite) + '</span></p><p class="w">' +
-        (i.etat ? "<b>" + e(i.etat) + "</b> — " : "") + e(i.pourquoi) + ' <span class="ident">' + e(i.id) + "</span></p></div>";
-      else if (i.k === "interdit") h += '<div class="interdit i-' + e(i.ton || "certain") + '"><p class="t">' + e(i.t) +
-        '</p><p class="w">' + e(i.pourquoi) + ' <span class="ident">' + e(i.id) + "</span></p></div>";
-      else if (i.k === "acquis") h += '<p class="acquis"><b>&#10003;</b> ' + e(i.t) + ' <span class="note">— ' + e(i.base) + "</span></p>";
-      else if (i.k === "table")
-        h += '<div class="tab"><table><tr>' + i.head.map(function (x) { return "<th>" + e(x) + "</th>"; }).join("") + "</tr>" +
-          i.rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + e(c) + "</td>"; }).join("") + "</tr>"; }).join("") +
-          "</table></div>";
-    });
-    if (hote) hote.innerHTML = h;
-    return h;
-  }
-
-  /* --------------------------------------------------- 3. rapport général --- */
-  function construireRapportGeneral() {
-    var f = construireF();
-    var items = AUD(f);
-    rendreD(items, $("rapport-general"));
-  }
-
-  /* ---------------------------------------------- 4/5/6. le parcours ------ */
-  function calculerParcours() {
-    var f = construireF();
-    return { f: f, p: AUD.parcours(f, { faits: ETAT.faits, controles: ETAT.controles }) };
-  }
-
-  var GRAVITES_TXT = { 1: "Sanction pénale encourue", 2: "Pénalité financière encourue",
-    3: "Irrégularité opposable", 4: "Régularisation rapide" };
-
-  function carteAction(pt) {
-    return '<div class="action' + (pt.etat === "risque à vérifier" ? " verifier" : "") + '" id="guide-' + e(pt.id) + '">' +
-      '<div class="t">' + e(pt.objet) + '<span class="prio p-' + pt.gravite + '">' + e(GRAVITES_TXT[pt.gravite] || "") + "</span>" +
-      (pt.fait ? '<span class="chip c-important">déclaré régularisé</span>' : "") + "</div>" +
-      '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
-      '<p class="note">' + e(pt.constat) + "</p>" +
-      '<div class="meta"><span><b>Rubrique :</b> ' + e(pt.rubrique) + "</span><span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
-      '<p class="risque">Risque : ' + e(pt.risque) + "</p>" +
-      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
-      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a>' +
-      /* Quand la pièce n'existe pas, un constat de plus ne sert à rien : le
-         renvoi mène à la procédure qui la fait naître, pas à une seconde
-         description du manque (docs/parcours-lien.js). */
-      (window.ParcoursLien ? (function (l) { return l ? " · " + l : ""; })(ParcoursLien.lien(pt.id)) : "") +
-      '</p>' +
+  function barre(module, titre, base) {
+    return '<div class="barre">' +
+      '<button type="button" data-dl="' + module + '" data-titre="' + ech(titre) +
+      '" data-base="' + ech(base) + '">Télécharger en Word</button>' +
+      '<button type="button" class="second" data-txt="' + module + '" data-base="' + ech(base) +
+      '">En texte</button>' +
+      '<button type="button" class="second" data-print="1">Imprimer</button>' +
       "</div>";
   }
-
-  /* Les contrôles « en attente du règlement intérieur » (correctif du
-     25 août 2026) : le règlement est dû, il n'existe pas encore, et ces
-     onze exigences de contenu et de formalités s'appliqueront intégralement
-     dès sa rédaction — elles ne sont ni des manquements séparés à cocher
-     (DIS-CTL-RI-01 les couvre déjà), ni du « sans objet » au sens propre. */
-  function pointsEnAttente(f) {
-    var v = AUD.verdicts(f);
-    return CTRL.C.filter(function (c) { return v[c.id] && v[c.id].etat === "sans objet" && v[c.id].enAttente; })
-      .map(function (c) { return { id: c.id, objet: c.objet, rubrique: c.rubrique, motif: v[c.id].motif }; });
+  function refus(liste) {
+    return '<div class="avis non"><b>Ce document n\'est pas produit.</b>' +
+      liste.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>";
   }
 
-  function construireGuide() {
-    var r = calculerParcours(), p = r.p;
-    var f = P ? P.lire() : {};
-    var html = '<div class="bandeau ' + (p.tempsA.points.length ? "b-rouge" : "b-vert") + '">' +
-      '<p class="r">' + (p.tempsA.points.length ? p.tempsA.points.length + " contrôle(s) à régulariser" : "Rien à régulariser en l'état des réponses") + "</p>" +
-      '<p class="s">' + e(f.denomination || r.f.entreprise || "") +
-      (r.f.dateAudit ? " — situation au " + e(r.f.dateAudit) : "") + " — guide établi le " + AUJOURDHUI + ".</p></div>";
-
-    if (p.tempsA.points.length) p.tempsA.points.forEach(function (pt) { html += carteAction(pt); });
-    else html += '<p class="aide">Aucun contrôle n\'est non conforme ou à vérifier en l\'état des réponses : passez à l\'étape 6 pour vérifier ce qui est tenu pour conforme.</p>';
-
-    var attente = pointsEnAttente(r.f);
-    if (attente.length) {
-      html += '<h3>En attente du règlement intérieur (' + attente.length + ')</h3>' +
-        '<p class="aide">Ces exigences ne sont <b>pas écartées</b> : le règlement intérieur est dû et n\'existe pas encore ' +
-        '(voir DIS-CTL-RI-01 ci-dessus). Elles s\'appliqueront intégralement, sans délai supplémentaire, dès sa rédaction — ' +
-        'c\'est leur cahier des charges, pas une suite. Le document que « Produire le document » écrit pour DIS-CTL-RI-01 porte ' +
-        'déjà chacune de ces clauses.</p>';
-      attente.forEach(function (a) {
-        html += '<div class="acte a-attente"><p class="t">' + e(a.objet) + '<span class="chip c-important">en attente</span></p>' +
-          '<p class="w">' + e(a.motif) + ' <span class="ident">' + e(a.id) + "</span></p></div>";
-      });
-    }
-
-    /* Les données manquantes ne sont pas des manquements — elles retournent
-       au questionnaire de l'étape 2 — mais les passer sous silence laisserait
-       croire que le guide est complet. */
-    var v = AUD.verdicts(r.f);
-    var manquantes = CTRL.C.filter(function (c) { return (v[c.id] || {}).etat === "donnée manquante"; });
-    if (manquantes.length) {
-      html += '<h3>Ce qui n\'a pas encore de réponse (' + manquantes.length + ')</h3>' +
-        '<p class="aide">Sans réponse, ces contrôles ne se contrôlent pas — ils ne figurent pas comme manquements ci-dessus, ' +
-        'ils retournent au questionnaire de l\'étape 2.</p>';
-      manquantes.forEach(function (c) {
-        html += '<div class="acte"><p class="t">' + e(c.objet) + '<span class="chip c-information">donnée manquante</span></p>' +
-          '<p class="w">' + e((v[c.id] || {}).motif || "") + ' <span class="ident">' + e(c.id) + "</span></p></div>";
-      });
-    }
-    $("guide").innerHTML = html;
-
-    Array.prototype.forEach.call($("guide").querySelectorAll("[data-regulariser]"), function (a) {
-      a.addEventListener("click", function (ev) { ev.preventDefault(); ouvrirItem(a.getAttribute("data-regulariser")); });
+  /* ═══════════════════════════════════════════════════ la lecture des champs */
+  function lire() {
+    return {
+      dureeMax: Number($("#c-duree-max").value) || 3,
+      avisCse: lireDate("#c-avis-cse"),
+      formalite: lireDate("#c-formalite"),
+      nom: $("#c-nom").value.trim(),
+      adresse: $("#c-adresse").value.trim(),
+      poste: $("#c-poste").value.trim(),
+      faits: lireDate("#c-faits"),
+      connaissance: lireDate("#c-connaissance") || lireDate("#c-faits"),
+      griefs: $("#c-griefs").value.trim(),
+      envisagee: $("#c-envisagee").value,
+      convocation: lireDate("#c-convocation"),
+      entretien: lireDate("#c-entretien"),
+      heure: $("#c-heure").value,
+      lieu: $("#c-lieu").value.trim() || "au siège de la société",
+      jours: Number($("#c-jours").value) || 1,
+      grave: $("#c-grave").value === "oui",
+      entree: lireDate("#c-entree"),
+      protege: $("#c-protege").value === "oui"
+    };
+  }
+  function nomSalarie(d) { return d.nom || "[nom et prénom du salarié]"; }
+  function civilite(nom) {
+    if (/^\s*madame/i.test(nom)) return "Madame";
+    if (/^\s*monsieur/i.test(nom)) return "Monsieur";
+    return "Madame, Monsieur";
+  }
+  function enTete(b, d, objet, envoi) {
+    var nomS = nomSalarie(d);
+    b.push({ k: "p", t: nomSociete() });
+    if (profil.adresse) b.push({ k: "p", t: profil.adresse });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: nomS });
+    b.push({ k: "p", t: d.adresse || "[adresse du salarié]" });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: ville() + ", le " + dateFr(new Date()) });
+    b.push({ k: "p", t: envoi });
+    b.push({ k: "p", t: "Objet : " + objet });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: civilite(nomS) + "," });
+  }
+  function griefsDans(b, d, consigne) {
+    (d.griefs || consigne).split(/\n+/).forEach(function (l) {
+      if (l.trim()) b.push({ k: "p", t: l.trim() });
     });
   }
-
-  /* ------------------------------------------------------- 5. l'élément --- */
-  function majChoixItem() {
-    var r = calculerParcours();
-    var sel = $("choix-item");
-    var courant = sel.value;
-    sel.innerHTML = '<option value="">— choisissez un contrôle —</option>' +
-      r.p.tempsA.points.map(function (pt) {
-        return '<option value="' + e(pt.id) + '">' + e(pt.objet) + (pt.fait ? " (déclaré régularisé)" : "") + "</option>";
-      }).join("");
-    if (courant && r.p.tempsA.points.some(function (pt) { return pt.id === courant; })) sel.value = courant;
-    return r;
+  function salutation(b, d) {
+    b.push({ k: "p", t: "Nous vous prions d'agréer, " + civilite(nomSalarie(d)) +
+      ", l'expression de nos salutations distinguées." });
+    b.push({ k: "sign", t: "\n" + signataire() + "\n" + nomSociete() });
   }
 
-  function ouvrirItem(id) {
-    montrer(Math.max(ETAT.etape, 5));
-    majChoixItem();
-    $("choix-item").value = id;
-    rendreItem(id);
-    $("t5").scrollIntoView({ behavior: "smooth" });
+  /* ═══════════════════════════════════════════════════════════════════════
+     1. LE RÈGLEMENT DES SANCTIONS ET LA PROCÉDURE DISCIPLINAIRE
+     ══════════════════════════════════════════════════════════════════════ */
+  function reglement(d) {
+    var b = [], n = 0;
+    function p(t) { b.push({ k: "p", t: t }); }
+    function A(t) { n++; b.push({ k: "h1", t: "Article " + n + " - " + t }); }
+    var eff = effectif(), duree = d.dureeMax;
+
+    b.push({ k: "t1", t: "RÈGLEMENT DES SANCTIONS ET PROCÉDURE DISCIPLINAIRE" });
+    b.push({ k: "st", t: nomSociete() + " - règles générales et permanentes relatives à la discipline" });
+
+    A("Objet et champ d'application");
+    p("Le présent document fixe les règles générales et permanentes relatives à la discipline " +
+      "applicables au sein de " + societe() + ", et notamment la nature et l'échelle des sanctions " +
+      "que peut prendre l'employeur (" + ref(["L1321-1"]) + ", 3°).");
+    p("Il s'applique à l'ensemble du personnel, quels que soient la nature du contrat, la fonction " +
+      "occupée et l'ancienneté, ainsi qu'aux personnes mises à disposition et aux stagiaires pour " +
+      "les règles applicables dans les locaux de l'entreprise.");
+    p("Il comporte des obligations générales et permanentes en matière de discipline : il constitue " +
+      "à ce titre une adjonction au règlement intérieur et est soumis aux mêmes dispositions (" +
+      ref(["L1321-5"]) + "). Il est rédigé en français (" + ref(["L1321-6"]) + ").");
+
+    A("Ce qu'est une sanction");
+    p("Constitue une sanction toute mesure, autre que les observations verbales, prise par " +
+      "l'employeur à la suite d'un agissement du salarié considéré par lui comme fautif, que cette " +
+      "mesure soit de nature à affecter immédiatement ou non la présence du salarié dans " +
+      "l'entreprise, sa fonction, sa carrière ou sa rémunération (" + ref(["L1331-1"]) + ").");
+    p("Une observation verbale n'est pas une sanction et n'ouvre pas la procédure décrite aux " +
+      "articles 5 à 8 du présent document.");
+
+    A("L'échelle des sanctions");
+    p("Selon la gravité des faits reprochés et les circonstances dans lesquelles ils se sont " +
+      "produits, l'employeur peut prononcer l'une des sanctions suivantes. Cette énumération ne lui " +
+      "impose pas de les épuiser successivement.");
+    b.push({ k: "puce", t: "1° l'avertissement ;" });
+    b.push({ k: "puce", t: "2° le blâme ;" });
+    b.push({ k: "puce", t: "3° la mise à pied disciplinaire, sans rémunération, d'une durée maximale de " +
+      motNombre(duree) + " (" + duree + ") jours ouvrés ;" });
+    b.push({ k: "puce", t: "4° la mutation disciplinaire ;" });
+    b.push({ k: "puce", t: "5° la rétrogradation ;" });
+    b.push({ k: "puce", t: "6° le licenciement pour cause réelle et sérieuse, pour faute grave ou pour faute lourde." });
+    p("La mutation disciplinaire et la rétrogradation emportent modification du contrat de travail. " +
+      "Elles ne peuvent être imposées au salarié : celui-ci peut les refuser, et ce refus ne " +
+      "constitue pas par lui-même une faute. L'employeur peut alors prononcer, à raison des mêmes " +
+      "faits, une autre sanction de la présente échelle.");
+    b.push({ k: "note", t: "La durée maximale de la mise à pied se saisit à gauche. Une mise à pied " +
+      "prononcée au-delà excède ce que le présent document autorise, et l'onglet « La mise à pied » " +
+      "le signale au moment de la notification." });
+
+    A("Ce qui ne peut jamais être une sanction");
+    p("Les amendes et autres sanctions pécuniaires sont interdites. Toute disposition ou " +
+      "stipulation contraire est réputée non écrite (" + ref(["L1331-2"]) + ").");
+    p("Aucune retenue ne peut être opérée sur la rémunération à raison d'un comportement considéré " +
+      "comme fautif. Les retenues correspondant à une absence de travail effectif, notamment " +
+      "pendant une mise à pied, ne sont pas des sanctions pécuniaires : elles sont la conséquence " +
+      "de la suspension du contrat.");
+
+    A("L'information écrite des griefs");
+    p("Aucune sanction ne peut être prise à l'encontre du salarié sans que celui-ci soit informé, " +
+      "dans le même temps et par écrit, des griefs retenus contre lui (" + ref(["L1332-1"]) + ").");
+
+    A("La convocation à l'entretien préalable");
+    p("Lorsque l'employeur envisage de prendre une sanction, il convoque le salarié en lui " +
+      "précisant l'objet de la convocation, sauf si la sanction envisagée est un avertissement ou " +
+      "une sanction de même nature n'ayant pas d'incidence, immédiate ou non, sur la présence dans " +
+      "l'entreprise, la fonction, la carrière ou la rémunération du salarié (" + ref(["L1332-2"]) + ").");
+    p("La lettre de convocation indique l'objet de l'entretien, précise sa date, son heure et son " +
+      "lieu, et rappelle que le salarié peut se faire assister par une personne de son choix " +
+      "appartenant au personnel de l'entreprise. Elle est soit remise contre récépissé, soit " +
+      "adressée par lettre recommandée, dans le délai de deux mois fixé à l'article " +
+      ref(["L1332-4"]) + " (" + ref(["R1332-1"]) + ").");
+
+    A("L'entretien");
+    p("Lors de son audition, le salarié peut se faire assister par une personne de son choix " +
+      "appartenant au personnel de l'entreprise. Au cours de l'entretien, l'employeur indique le " +
+      "motif de la sanction envisagée et recueille les explications du salarié (" +
+      ref(["L1332-2"]) + ").");
+
+    A("Les délais de la sanction");
+    p("La sanction ne peut intervenir moins de deux jours ouvrables ni plus d'un mois après le jour " +
+      "fixé pour l'entretien. Elle est motivée et notifiée à l'intéressé (" + ref(["L1332-2"]) + ").");
+    p("Elle fait l'objet d'une décision écrite et motivée, notifiée au salarié soit par lettre " +
+      "remise contre récépissé, soit par lettre recommandée, dans ce délai d'un mois (" +
+      ref(["R1332-2"]) + ").");
+    p("Ce délai d'un mois expire à vingt-quatre heures le jour du mois suivant qui porte le même " +
+      "quantième que le jour fixé pour l'entretien ; à défaut d'un quantième identique, il expire le " +
+      "dernier jour du mois suivant à vingt-quatre heures. Lorsque ce dernier jour est un samedi, un " +
+      "dimanche ou un jour férié ou chômé, il est prorogé jusqu'au premier jour ouvrable suivant (" +
+      ref(["R1332-3"]) + ").");
+
+    A("La prescription des faits fautifs");
+    p("Aucun fait fautif ne peut donner lieu à lui seul à l'engagement de poursuites disciplinaires " +
+      "au-delà d'un délai de deux mois à compter du jour où l'employeur en a eu connaissance, à " +
+      "moins que ce fait ait donné lieu dans le même délai à l'exercice de poursuites pénales (" +
+      ref(["L1332-4"]) + ").");
+    p("Aucune sanction antérieure de plus de trois ans à l'engagement des poursuites disciplinaires " +
+      "ne peut être invoquée à l'appui d'une nouvelle sanction (" + ref(["L1332-5"]) + ").");
+
+    A("La mise à pied conservatoire");
+    p("Lorsque les faits reprochés au salarié rendent indispensable une mesure conservatoire de mise " +
+      "à pied à effet immédiat, celle-ci n'est pas une sanction : elle suspend le contrat le temps " +
+      "de la procédure. Aucune sanction définitive relative à ces faits ne peut être prise sans que " +
+      "la procédure prévue à l'article " + ref(["L1332-2"]) + " ait été respectée (" +
+      ref(["L1332-3"]) + ").");
+
+    A("Le licenciement disciplinaire");
+    p("Lorsque la sanction envisagée est un licenciement, l'employeur convoque le salarié à un " +
+      "entretien préalable avant toute décision, par lettre recommandée ou par lettre remise en " +
+      "main propre contre décharge indiquant l'objet de la convocation ; l'entretien ne peut avoir " +
+      "lieu moins de cinq jours ouvrables après la présentation de la lettre recommandée ou la " +
+      "remise en main propre (" + ref(["L1232-2"]) + ").");
+    p("Le salarié peut se faire assister par une personne de son choix appartenant au personnel de " +
+      "l'entreprise ; en l'absence d'institution représentative du personnel, par un conseiller du " +
+      "salarié choisi sur une liste dressée par l'autorité administrative, la lettre de convocation " +
+      "mentionnant cette possibilité et précisant l'adresse des services où la liste est tenue à sa " +
+      "disposition (" + ref(["L1232-4"]) + ").");
+    p("Le licenciement est notifié par lettre recommandée avec avis de réception comportant " +
+      "l'énoncé du ou des motifs invoqués ; cette lettre ne peut être expédiée moins de deux jours " +
+      "ouvrables après la date prévue de l'entretien (" + ref(["L1232-6"]) + "), ni la sanction " +
+      "intervenir plus d'un mois après le jour fixé pour celui-ci (" + ref(["L1332-2"]) + ").");
+
+    A("La contestation");
+    p("Le salarié peut contester la sanction devant le conseil de prud'hommes. Celui-ci apprécie la " +
+      "régularité de la procédure suivie et si les faits reprochés sont de nature à justifier une " +
+      "sanction ; si un doute subsiste, il profite au salarié (" + ref(["L1333-1"]) + "). Il peut " +
+      "annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute " +
+      "commise (" + ref(["L1333-2"]) + ").");
+    p("Lorsque la sanction contestée est un licenciement, le conseil applique les dispositions " +
+      "relatives à la contestation des irrégularités de licenciement (" + ref(["L1333-3"]) + ").");
+
+    A("Avis du comité social et économique, formalités et entrée en vigueur");
+    p("Le présent document a été soumis à l'avis du comité social et économique le " +
+      dateFr(d.avisCse) + " (" + ref(["L1321-4"]) + ").");
+    p("Il est porté par tout moyen à la connaissance des personnes ayant accès aux lieux de travail " +
+      "ou aux locaux où se fait l'embauche (" + ref(["R1321-1"]) + "), déposé au greffe du conseil " +
+      "de prud'hommes de [ville du ressort de l'entreprise ou de l'établissement] (" +
+      ref(["R1321-2"]) + "), et communiqué à l'inspecteur du travail en deux exemplaires, " +
+      "accompagné de l'avis du comité social et économique, en même temps qu'il fait l'objet des " +
+      "mesures de publicité (" + ref(["L1321-4", "R1321-4"]) + ").");
+    var entree = d.formalite ? jour(plusMois(d.formalite, 1), 1) : null;
+    p("Il entre en vigueur le " + dateFr(entree) + ", cette date étant postérieure d'un mois à " +
+      "l'accomplissement des formalités de publicité (" + ref(["L1321-4"]) + "), le délai courant à " +
+      "compter de la dernière en date des formalités de publicité et de dépôt (" +
+      ref(["R1321-3"]) + ").");
+    p("Toute modification ou tout retrait de ses clauses est soumis aux mêmes formalités (" +
+      ref(["L1321-4"]) + ").");
+
+    b.push({ k: "trait", t: "" });
+    b.push({ k: "sign", t: "Fait à " + ville() + ", le " + dateFr(new Date()) + "\n\n" +
+      signataire() + "\n" + nomSociete() });
+
+    if (eff !== null) {
+      b.push({ k: "note", t: eff >= 50
+        ? "Effectif de la fiche : " + eff + " salariés. L'établissement d'un règlement intérieur " +
+          "est obligatoire à partir de cinquante salariés, l'obligation s'appliquant au terme d'un " +
+          "délai de douze mois à compter de la date à laquelle le seuil a été atteint (" +
+          ref(["L1311-2"]) + ")."
+        : "Effectif de la fiche : " + eff + " salariés. Le règlement intérieur n'est obligatoire " +
+          "qu'à partir de cinquante salariés (" + ref(["L1311-2"]) + "). Le présent document reste " +
+          "un document comportant des obligations générales et permanentes en matière de " +
+          "discipline, soumis aux mêmes formalités (" + ref(["L1321-5"]) + ")." });
+    }
+    b.push({ k: "note", t: "L'inspecteur du travail peut à tout moment exiger le retrait ou la " +
+      "modification des dispositions contraires aux articles " + ref(["L1321-1"]) + " à " +
+      ref(["L1321-3"]) + " et " + ref(["L1321-6"]) + " (" + ref(["L1322-1"]) + "). Les rappels " +
+      "qu'impose " + ref(["L1321-2"]) + " au règlement intérieur, sur les harcèlements, les " +
+      "agissements sexistes et les lanceurs d'alerte, ne figurent pas ici : ils appartiennent au " +
+      "règlement lui-même, qui se rédige dans le parcours du règlement intérieur." });
+    return b;
   }
 
-  function grilleHtml(verifs, reponses, prefixe) {
+  function datesReglement(d) {
     var h = "";
-    (verifs || []).forEach(function (v) {
-      var val = (reponses[v.cle] == null) ? "" : String(reponses[v.cle]);
-      h += '<div class="verif-q"><p><b>' + e(v.question) + "</b></p>" +
-        '<p class="attendu">Attendu : ' + e(v.attendu) + "</p>" +
-        '<select data-cle="' + e(v.cle) + '" data-prefixe="' + e(prefixe) + '"><option value="">— répondre —</option>' +
-        REPONSES_GRILLE.map(function (o) { return '<option value="' + o + '"' + (val === o ? " selected" : "") + ">" + o + "</option>"; }).join("") +
-        "</select>" +
-        '<input class="detail" type="text" data-cle="' + e(v.cle) + '__detail" data-prefixe="' + e(prefixe) +
-        '" placeholder="date, référence, pièce" value="' + e(reponses[v.cle + "__detail"] || "") + '"></div>';
-    });
+    if (d.avisCse) {
+      h += carteDate("Avis du comité", d.avisCse,
+        "le document ne peut être introduit qu'après cet avis (" + ref(["L1321-4"]) + ")", "");
+    }
+    if (d.formalite) {
+      var fin = plusMois(d.formalite, 1);
+      h += carteDate("Le mois échoit le", fin,
+        "un mois après la dernière des formalités de publicité et de dépôt (" +
+        ref(["L1321-4", "R1321-3"]) + ")", "");
+      h += carteDate("Entrée en vigueur au plus tôt", jour(fin, 1),
+        "la date doit être postérieure d'un mois aux formalités de publicité (" +
+        ref(["L1321-4"]) + ")", "tot");
+    } else {
+      h += carteDate("Entrée en vigueur au plus tôt", "[date de la dernière formalité à saisir]",
+        "un mois après la dernière des formalités de publicité et de dépôt (" +
+        ref(["L1321-4", "R1321-3"]) + ")", "tot");
+    }
     return h;
   }
 
-  function verdictGrille(verifs, reponses) {
-    var manquantes = [], refusees = [];
-    (verifs || []).forEach(function (v) {
-      var val = reponses[v.cle];
-      if (val === undefined || val === null || String(val).trim() === "" || !grilleConclut(val)) { manquantes.push(v); return; }
-      if (val === "non") refusees.push(v);
-    });
-    if (refusees.length) return { issue: "refusé", classe: "v-ref",
-      motif: "Ce qui était déclaré n'est pas établi : " +
-        refusees.map(function (v) { return "« " + v.question + " » — attendu : " + v.attendu; }).join(" ; ") + "." };
-    if (manquantes.length) return { issue: "ne conclut pas", classe: "v-att",
-      motif: "Il reste à répondre : " + manquantes.map(function (v) { return "« " + v.question + " »"; }).join(" ; ") + "." };
-    return { issue: "validé", classe: "v-val", motif: "Vérifié point par point : ce point passe à « en règle »." };
+  /* Les quatre lettres de formalité, déjà écrites par les générateurs du
+     module (docs/documents-discipline.js). Elles se tiennent sous le
+     document, jamais devant lui. */
+  var FORMALITES = [
+    { id: "DIS-CTL-RI-06", t: "Avis du comité" },
+    { id: "DIS-CTL-RI-07", t: "Publicité et entrée en vigueur" },
+    { id: "DIS-CTL-RI-08", t: "Dépôt au greffe" },
+    { id: "DIS-CTL-RI-09", t: "Inspection du travail" }
+  ];
+  function annexesHtml() {
+    if (!window.DocumentsProduits) return "";
+    var dispo = FORMALITES.filter(function (f) { return !!DocumentsProduits.pour(f.id); });
+    if (!dispo.length) return "";
+    return '<div class="annexes">Les lettres des formalités, déjà écrites : ' +
+      dispo.map(function (f) {
+        return '<button type="button" class="second petit" data-formalite="' + f.id + '">' +
+          ech(f.t) + "</button>";
+      }).join(" ") + "</div>";
   }
 
-  /* Le document que l'application sait rédiger — docs/documents-produits.js,
-     docs/documents-discipline.js et docs/documents-discipline-2.js portent un
-     générateur pour chacun des vingt-quatre contrôles régularisables. */
-  function produireDocument(id) {
-    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(id);
-    if (!gen) return;
-    var profil = P ? P.lire() : {};
-    var f = construireF();
-    var txt = gen.produire({ profil: profil, fiche: f, aujourdhui: new Date() });
-    montrerTexte(txt);
-  }
-  function montrerTexte(txt) {
-    $("dt-corps").textContent = txt;
-    var d = $("dlg-texte");
-    if (d.showModal) d.showModal(); else d.setAttribute("open", "open");
-  }
+  /* ═══════════════════════════════════════════════════════════════════════
+     2. LA CONVOCATION À L'ENTRETIEN PRÉALABLE
+     ══════════════════════════════════════════════════════════════════════ */
+  var ENVISAGEE = {
+    misepied: { nom: "une mise à pied disciplinaire", licenciement: false },
+    mutation: { nom: "une mutation disciplinaire", licenciement: false },
+    retrogradation: { nom: "une rétrogradation", licenciement: false },
+    licenciement: { nom: "un licenciement", licenciement: true }
+  };
 
-  function rendreItem(id) {
-    if (!id) { $("fiche-item").innerHTML = '<p class="aide">Choisissez un contrôle dans la liste ci-dessus, ou revenez au guide.</p>'; return; }
-    var r = calculerParcours();
-    var pt = r.p.tempsA.points.filter(function (x) { return x.id === id; })[0];
-    if (!pt) { $("fiche-item").innerHTML = '<p class="aide">Ce contrôle n\'appelle plus de régularisation en l\'état des réponses.</p>'; return; }
-    var modele = AUD.modele(r.f, id);
-    var html = '<div class="action" id="item-' + e(pt.id) + '">' +
-      '<div class="t">' + e(pt.objet) + '<span class="prio p-' + pt.gravite + '">' + e(GRAVITES_TXT[pt.gravite] || "") + "</span>" +
-      (pt.fait ? '<span class="chip c-important">déclaré régularisé' + (ETAT.faits[id] && ETAT.faits[id].le ? " le " + e(ETAT.faits[id].le) : "") + "</span>" : "") + "</div>" +
-      '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
-      '<p class="note">Constat de l\'audit — ' + e(pt.constat) + "</p>" +
-      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
-      /* L'accompagnement pas à pas, quand la régularisation est une procédure
-         et pas une simple pièce à écrire : consultation, affichage, dépôt,
-         inspection du travail, entrée en vigueur (docs/parcours-lien.js). */
-      (window.ParcoursLien ? (function (l) {
-        return l ? '<p class="note">' + l + "</p>" : "";
-      })(ParcoursLien.lien(pt.id)) : "");
-
-    html += "<h3>a. La note chiffrée sur votre dossier</h3>" +
-      '<p class="aide">Établie sur les réponses de l\'étape 2 — dates de la procédure, contenu déclaré du règlement — jamais sur un exemple figé.</p>';
-    if (modele && modele.length) html += '<details class="modele" open><summary>Ouvrir la note</summary><div class="corps">' + rendreD(modele) + "</div></details>";
-    else html += '<p class="aide">Aucune note chiffrée n\'est encore écrite pour ce contrôle.</p>';
-
-    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(pt.id);
-    if (gen) {
-      html += '<div class="produit"><p class="sh">' + e(gen.nom) + '</p><p class="w">' + e(gen.detail || "") + '</p>' +
-        '<button type="button" class="second" data-produire="' + e(pt.id) + '">Produire le document</button></div>';
-    } else if (pt.document) {
-      html += '<p class="note">Document à produire : ' + e(pt.document) + "</p>";
+  function convocation(d) {
+    var S = ENVISAGEE[d.envisagee] || ENVISAGEE.misepied;
+    var b = [];
+    b.push({ k: "t1", t: "CONVOCATION À UN ENTRETIEN PRÉALABLE" });
+    enTete(b, d, S.licenciement ? "convocation à un entretien préalable au licenciement"
+                                : "convocation à un entretien préalable à une sanction disciplinaire",
+      "Lettre recommandée avec avis de réception ou remise en main propre contre récépissé");
+    b.push({ k: "p", t: S.licenciement
+      ? "Nous envisageons de procéder à votre licenciement."
+      : "Nous envisageons de prendre à votre égard une sanction disciplinaire pouvant aller " +
+        "jusqu'à " + S.nom + "." });
+    b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se " +
+      "tiendra le " + dateFrJour(d.entretien) + " à " + heureFr(d.heure) + ", " + d.lieu + "." });
+    b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons " +
+      (S.licenciement ? "les motifs de la décision envisagée" : "le motif de la sanction envisagée") +
+      " et recueillerons vos explications (" + ref([S.licenciement ? "L1232-3" : "L1332-2"]) + ")." });
+    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix " +
+      "appartenant au personnel de l'entreprise." });
+    if (S.licenciement) {
+      b.push({ k: "p", t: "En l'absence d'institution représentative du personnel dans " +
+        "l'entreprise, vous pouvez également vous faire assister par un conseiller du salarié " +
+        "choisi sur une liste dressée par l'autorité administrative. Cette liste est tenue à votre " +
+        "disposition à la direction départementale de l'emploi, du travail et des solidarités de " +
+        "[département] ainsi qu'à la mairie de " + ville() + " (" + ref(["L1232-4"]) + ")." });
     }
-
-    html += "<h3>b. La procédure, étape par étape</h3><ol>" + pt.etapes.map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ol>" +
-      '<div class="meta" style="display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:13px;color:#5f6874">' +
-      "<span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
-      '<p class="risque">Risque : ' + e(pt.risque) + "</p>";
-
-    html += "<h3>c. Quand c'est fait, dites-le</h3>" +
-      '<p class="aide">Déclarer un point régularisé ne le rend pas « en règle » : la grille ci-dessous documente comment, et l\'étape 6 le reprend.</p>' +
-      '<div class="coches"><label><input type="checkbox" id="fait-' + e(pt.id) + '"' + (pt.fait ? " checked" : "") + '> j\'ai régularisé ce point</label>' +
-      '<input type="date" id="fait-date-' + e(pt.id) + '" value="' + e((ETAT.faits[id] && ETAT.faits[id].le) || "") + '" aria-label="Date de la régularisation" style="width:auto"></div>';
-
-    html += '<div id="verif-item-' + e(pt.id) + '">' + '<h3>La grille de vérification</h3>' +
-      grilleHtml(pt.verifs, ETAT.controles[id] || {}, id) + '<div id="verdict-item-' + e(pt.id) + '"></div></div>';
-
-    html += "</div>";
-    $("fiche-item").innerHTML = html;
-    afficherVerdictItem(pt);
-
-    var btnProduire = $("fiche-item").querySelector('[data-produire]');
-    if (btnProduire) btnProduire.addEventListener("click", function () { produireDocument(pt.id); });
-
-    var cb = $("fait-" + pt.id), dt = $("fait-date-" + pt.id);
-    cb.addEventListener("change", function () {
-      if (cb.checked) {
-        ETAT.faits[pt.id] = { le: dt.value || AUJOURDHUI };
-        dt.value = ETAT.faits[pt.id].le;
-        message("« " + pt.objet + " » est déclaré régularisé. L'étape 6 le reprendra : une déclaration sans détail vérifiable rendra « ne conclut pas », jamais « en règle ».");
-      } else delete ETAT.faits[pt.id];
-      enregistrer(); construireGuide(); majChoixItem(); rendreItem(pt.id);
-    });
-    dt.addEventListener("change", function () { if (ETAT.faits[pt.id]) { ETAT.faits[pt.id].le = dt.value || AUJOURDHUI; enregistrer(); } });
-
-    Array.prototype.forEach.call($("fiche-item").querySelectorAll("[data-prefixe='" + pt.id + "']"), function (el) {
-      var ev = el.tagName === "SELECT" ? "change" : "input";
-      el.addEventListener(ev, function () {
-        ETAT.controles[pt.id] = ETAT.controles[pt.id] || {};
-        var cle = el.getAttribute("data-cle");
-        if (el.value === "") delete ETAT.controles[pt.id][cle]; else ETAT.controles[pt.id][cle] = el.value;
-        enregistrer();
-        afficherVerdictItem(pt);
-      });
-    });
-  }
-  function afficherVerdictItem(pt) {
-    var d = $("verdict-item-" + pt.id);
-    if (!d) return;
-    var v = verdictGrille(pt.verifs, ETAT.controles[pt.id] || {});
-    d.innerHTML = '<div class="verdict ' + v.classe + '"><b>' + e(v.issue.charAt(0).toUpperCase() + v.issue.slice(1)) + "</b>" + e(v.motif) + "</div>";
+    salutation(b, d);
+    b.push({ k: "note", t: S.licenciement
+      ? "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de " +
+        "cette lettre (" + ref(["L1232-2"]) + ")."
+      : "Les quatre mentions de " + ref(["R1332-1"]) + " sont ici : objet, date, heure et lieu, " +
+        "assistance. La lettre est remise contre récépissé ou adressée par lettre recommandée, " +
+        "dans le délai de deux mois de " + ref(["L1332-4"]) + "." });
+    return b;
   }
 
-  /* --------------------------------------------------- 6. la vérification --- */
-  function pointsAVerifier() {
-    var r = calculerParcours();
-    var out = r.p.tempsB.points.slice();
-    var dejaB = {}; out.forEach(function (pt) { dejaB[pt.id] = true; });
-    Object.keys(ETAT.faits).forEach(function (id) {
-      if (dejaB[id]) return;
-      var pt = r.p.tempsA.points.filter(function (x) { return x.id === id; })[0];
-      var ctrl = CTRL.C.filter(function (c) { return c.id === id; })[0];
-      if (!pt && !ctrl) return;
-      var objet = (pt && pt.objet) || (ctrl && ctrl.objet) || id;
-      var rubrique = (pt && pt.rubrique) || (ctrl && ctrl.rubrique) || "";
-      var fondement = (pt && pt.fondement) || (ctrl && ctrl.fondement) || [];
-      var verifs = (pt && pt.verifs) || [];
-      var reponses = ETAT.controles[id] || {};
-      var verdict = verifs.length ? verdictGrille(verifs, reponses)
-        : { issue: "non vérifiable", motif: "Aucune grille de vérification n'est écrite pour ce contrôle : il reste déclaré." };
-      out.push({ id: id, rubrique: rubrique, objet: objet, fondement: fondement,
-        declare: "Déclaré régularisé le " + (ETAT.faits[id].le || AUJOURDHUI) + " (étape 5).",
-        verifiable: verifs.length > 0, verifs: verifs, reponses: reponses,
-        verdict: { issue: verdict.issue, motif: verdict.motif }, depuisEtape5: true });
-    });
-    return out;
+  /* ═══════════════════════════════════════════════════════════════════════
+     3, 4, 5. LES NOTIFICATIONS DE SANCTION
+     ══════════════════════════════════════════════════════════════════════ */
+  var SANCTIONS = {
+    avertissement: { nom: "un avertissement", objet: "notification d'un avertissement",
+      titre: "NOTIFICATION D'UN AVERTISSEMENT", entretien: false },
+    blame: { nom: "un blâme", objet: "notification d'un blâme",
+      titre: "NOTIFICATION D'UN BLÂME", entretien: false },
+    misepied: { nom: "une mise à pied disciplinaire", objet: "notification d'une mise à pied disciplinaire",
+      titre: "NOTIFICATION D'UNE MISE À PIED DISCIPLINAIRE", entretien: true }
+  };
+
+  function notification(d, type) {
+    var S = SANCTIONS[type], b = [];
+    b.push({ k: "t1", t: S.titre });
+    enTete(b, d, S.objet, "Lettre recommandée avec avis de réception ou remise contre récépissé");
+    if (S.entretien) {
+      b.push({ k: "p", t: "Nous vous avons reçu le " + dateFrJour(d.entretien) + " dans le cadre de " +
+        "l'entretien préalable auquel nous vous avions convoqué par lettre du " +
+        (d.convocation ? dateFr(d.convocation) : "[date]") + ". Les explications que vous nous avez " +
+        "données ne nous ont pas permis de modifier notre appréciation des faits." });
+    }
+    b.push({ k: "p", t: "Nous vous notifions par la présente " + S.nom + ", pour les faits " +
+      "suivants, dont nous avons eu connaissance le " + dateFr(d.connaissance) + "." });
+    griefsDans(b, d, "[Rappelez ici les faits, datés et circonstanciés : ce sont eux, et eux seuls, " +
+      "qui fondent la sanction.]");
+    if (type === "misepied") {
+      var deb = d.entretien ? apresJoursOuvrables(d.entretien, 2) : null;
+      b.push({ k: "p", t: "Cette mise à pied disciplinaire est prononcée pour une durée de " +
+        motNombre(d.jours) + " (" + d.jours + ") jour" + (d.jours > 1 ? "s" : "") + " ouvré" +
+        (d.jours > 1 ? "s" : "") + ", " +
+        (deb ? "à compter du " + dateFr(deb) + " inclus" : "du [date] au [date] inclus") +
+        ". Votre contrat de travail sera suspendu pendant cette période, qui ne donnera lieu à " +
+        "aucune rémunération." });
+    }
+    if (!S.entretien) {
+      b.push({ k: "p", t: "Cette sanction n'a d'incidence, immédiate ou non, ni sur votre présence " +
+        "dans l'entreprise, ni sur votre fonction, ni sur votre carrière, ni sur votre " +
+        "rémunération : elle n'appelait pas de convocation préalable (" + ref(["L1332-2"]) + "). " +
+        "Elle vous est notifiée par écrit, avec l'énoncé des griefs retenus contre vous (" +
+        ref(["L1332-1"]) + ")." });
+    }
+    b.push({ k: "p", t: "Nous vous demandons de veiller à ce que de tels faits ne se reproduisent " +
+      "pas. Nous restons à votre disposition pour évoquer votre situation." });
+    salutation(b, d);
+    b.push({ k: "note", t: "La sanction fait l'objet d'une décision écrite et motivée (" +
+      ref(["R1332-2"]) + "). Les faits énoncés ici sont les seuls sur lesquels elle repose : le " +
+      "conseil de prud'hommes apprécie s'ils sont de nature à la justifier, et si un doute subsiste " +
+      "il profite au salarié (" + ref(["L1333-1"]) + ")." });
+    if (!S.entretien) {
+      b.push({ k: "note", t: "Si votre règlement intérieur ou votre convention collective imposent " +
+        "un entretien préalable pour cette sanction, cette lettre ne suffit pas : ouvrez alors " +
+        "l'onglet « La convocation »." });
+    }
+    return b;
   }
 
-  function construireVerifs() {
-    var pts = pointsAVerifier();
-    if (!pts.length) {
-      $("verifs").innerHTML = '<p class="aide">Aucun contrôle n\'est tenu pour conforme et aucun n\'est déclaré régularisé : rien à vérifier ici.</p>';
+  /* ═══════════════════════════════════════════════════════════════════════
+     6. LE LICENCIEMENT DISCIPLINAIRE
+     ══════════════════════════════════════════════════════════════════════ */
+  function preavisDe(mois) {
+    if (mois < 6) return { mot: null,
+      dit: "Votre ancienneté de services continus est inférieure à six mois : la durée du préavis " +
+        "est celle que déterminent la loi, la convention ou l'accord collectif ou, à défaut, les " +
+        "usages pratiqués dans la localité et la profession (" + ref(["L1234-1"]) + ")." };
+    if (mois < 24) return { mot: "un mois", jours: 30 };
+    return { mot: "deux mois", jours: 60 };
+  }
+
+  function licenciement(d, calc) {
+    var b = [];
+    b.push({ k: "t1", t: "CONVOCATION À UN ENTRETIEN PRÉALABLE AU LICENCIEMENT" });
+    enTete(b, d, "convocation à un entretien préalable",
+      "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
+    b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement." });
+    b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se " +
+      "tiendra le " + dateFrJour(d.entretien) + " à " + heureFr(d.heure) + ", " + d.lieu + "." });
+    b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons les motifs de la décision " +
+      "envisagée et recueillerons vos explications (" + ref(["L1232-3"]) + ")." });
+    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix " +
+      "appartenant au personnel de l'entreprise. En l'absence d'institution représentative du " +
+      "personnel dans l'entreprise, vous pouvez également vous faire assister par un conseiller du " +
+      "salarié choisi sur une liste dressée par l'autorité administrative. Cette liste est tenue à " +
+      "votre disposition à la direction départementale de l'emploi, du travail et des solidarités " +
+      "de [département] ainsi qu'à la mairie de " + ville() + " (" + ref(["L1232-4"]) + ")." });
+    if (d.grave) {
+      b.push({ k: "p", t: "Compte tenu de la gravité des faits qui vous sont reprochés, nous vous " +
+        "notifions par la présente une mise à pied à titre conservatoire. Vous cesserez votre " +
+        "activité dès réception de ce courrier et jusqu'à la décision qui sera prise à l'issue de " +
+        "la procédure. Cette mesure conservatoire n'est pas une sanction (" + ref(["L1332-3"]) + ")." });
+    }
+    salutation(b, d);
+    b.push({ k: "note", t: "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la " +
+      "présentation de cette lettre (" + ref(["L1232-2"]) + ")." });
+    b.push({ k: "saut", t: "" });
+
+    b.push({ k: "t1", t: "NOTIFICATION DE LICENCIEMENT" });
+    enTete(b, d, "notification de votre licenciement", "Lettre recommandée avec avis de réception");
+    b.push({ k: "p", t: "Nous vous avons reçu le " + dateFrJour(d.entretien) + " dans le cadre de " +
+      "l'entretien préalable auquel nous vous avions convoqué par lettre du " +
+      (d.convocation ? dateFr(d.convocation) : "[date]") + ". Les explications que vous nous avez " +
+      "données ne nous ont pas permis de modifier notre appréciation de la situation." });
+    b.push({ k: "p", t: "Nous vous notifions par la présente votre licenciement" +
+      (d.grave ? " pour faute grave" : " pour faute") + ", en votre qualité de " +
+      (d.poste || "[emploi]") + ", pour les motifs suivants, dont nous avons eu connaissance le " +
+      dateFr(d.connaissance) + "." });
+    griefsDans(b, d, "[Énoncez ici les motifs, datés et circonstanciés. Ce sont eux qui fixent les " +
+      "limites du litige : ce qui n'y figure pas ne pourra pas être invoqué ensuite.]");
+    if (d.grave) {
+      b.push({ k: "p", t: "Ces faits rendent impossible votre maintien dans l'entreprise. Votre " +
+        "contrat de travail prend fin dès la présentation de cette lettre, sans préavis et sans " +
+        "indemnité de licenciement (" + ref(["L1234-1", "L1234-9"]) + "). La période de mise à pied " +
+        "conservatoire ne vous sera pas rémunérée." });
+    } else {
+      if (calc.pre.mot) {
+        b.push({ k: "p", t: "Vous effectuerez un préavis de " + calc.pre.mot + ", qui débutera à la " +
+          "date de présentation de cette lettre" +
+          (calc.finPreavis ? " et prendra fin le " + dateFr(calc.finPreavis) +
+            " si elle vous est présentée le " + dateFr(calc.totNotif) : "") +
+          " (" + ref(["L1234-1"]) + "). Si nous vous en dispensons, cette dispense n'entraînera " +
+          "aucune diminution des salaires et avantages que vous auriez perçus si vous l'aviez " +
+          "accompli (" + ref(["L1234-5"]) + ")." });
+      } else {
+        b.push({ k: "p", t: calc.pre.dit });
+      }
+      b.push({ k: "p", t: calc.mois >= 8
+        ? "Votre ancienneté étant d'au moins huit mois ininterrompus, vous percevrez l'indemnité de " +
+          "licenciement (" + ref(["L1234-9"]) + "). Son montant vous sera communiqué avec votre " +
+          "solde de tout compte."
+        : "Votre ancienneté est inférieure à huit mois ininterrompus : l'indemnité de licenciement " +
+          "n'est pas due (" + ref(["L1234-9"]) + ")." });
+    }
+    b.push({ k: "p", t: "Vous pouvez, dans les quinze jours suivant la notification de ce " +
+      "licenciement, nous demander des précisions sur les motifs énoncés dans cette lettre, par " +
+      "lettre recommandée avec avis de réception ou remise contre récépissé. Nous disposerons de " +
+      "quinze jours après réception de votre demande pour y répondre (" + ref(["R1232-13"]) + "). " +
+      "Cette lettre, précisée le cas échéant, fixe les limites du litige (" + ref(["L1235-2"]) + ")." });
+    salutation(b, d);
+    b.push({ k: "note", t: "Le préavis conventionnel et le montant de l'indemnité de licenciement " +
+      "se calculent sur la page « Gérer le quotidien », qui lit la convention collective de la " +
+      "fiche d'entreprise." });
+    return b;
+  }
+
+  /* ═══════════════════════════════════════════════════════ les cartes de date */
+  function datesSanction(d, avecEntretien) {
+    var h = "";
+    var limite = d.connaissance ? plusMois(d.connaissance, 2) : null;
+    var prescrit = limite && new Date() > limite;
+    h += carteDate("Dernier jour pour engager les poursuites",
+      limite ? dateFrJour(limite) : "[date de connaissance à saisir]",
+      "deux mois du jour où vous avez eu connaissance des faits (" + ref(["L1332-4"]) + ")",
+      prescrit ? "tard" : "");
+    if (avecEntretien) {
+      h += carteDate("Notification au plus tôt",
+        d.entretien ? dateFrJour(apresJoursOuvrables(d.entretien, 2)) : "[date de l'entretien à saisir]",
+        "deux jours ouvrables après le jour fixé pour l'entretien (" + ref(["L1332-2"]) + ")", "tot");
+      h += carteDate("Notification au plus tard",
+        d.entretien ? dateFrJour(prorogeR13323(plusMois(d.entretien, 1))) : "[date de l'entretien à saisir]",
+        "un mois après le jour fixé pour l'entretien, prorogé au premier jour ouvrable (" +
+        ref(["L1332-2", "R1332-3"]) + ")", "tard");
+    }
+    return { html: h, prescrit: prescrit, limite: limite };
+  }
+  function avisPrescrit() {
+    return '<div class="avis non"><b>Le délai de deux mois est écoulé.</b>Les poursuites ' +
+      "disciplinaires ne peuvent plus être engagées sur ces seuls faits (" + ref(["L1332-4"]) +
+      "), à moins qu'ils aient donné lieu dans le même délai à l'exercice de poursuites pénales.</div>";
+  }
+  function regleDecompte() {
+    return '<div class="note" style="margin:0 0 var(--e3)">Le décompte retient comme jours ' +
+      "ouvrables tous les jours de la semaine sauf le dimanche et les jours fériés. Le délai d'un " +
+      "mois se compte de quantième à quantième et se proroge au premier jour ouvrable lorsqu'il " +
+      "échoit un samedi, un dimanche ou un jour férié ou chômé (" + ref(["R1332-3"]) + ").</div>";
+  }
+
+  /* ═══════════════════════════════════════════════════════════════ le rendu */
+  var COURANT = "echelle";
+
+  function rendre() {
+    var d = lire(), h = "";
+
+    if (COURANT === "echelle") {
+      h += barre("echelle", "Règlement des sanctions et procédure disciplinaire",
+        "reglement-des-sanctions");
+      h += '<div class="dates">' + datesReglement(d) + "</div>";
+      h += feuilleHtml(reglement(d), "echelle");
+      h += annexesHtml();
+      $("#doc").innerHTML = h;
       return;
     }
-    var html = "";
-    pts.forEach(function (pt) {
-      html += '<div class="verif-bloc" data-item="' + e(pt.id) + '"><p class="t">' + e(pt.objet) +
-        (pt.depuisEtape5 ? ' <span class="chip c-important">étape 5</span>' : "") + "</p>" +
-        '<p class="note">' + e(pt.declare) + ' <span class="ident">' + e(pt.id) + "</span></p>";
-      if (!pt.verifiable) html += '<div class="verdict v-att"><b>Non vérifiable</b>' + e(pt.verdict.motif) + "</div>";
-      else html += grilleHtml(pt.verifs, pt.reponses, pt.id) + '<div id="verdict-verif-' + e(pt.id) + '"></div>';
-      html += "</div>";
-    });
-    $("verifs").innerHTML = html;
-    pts.forEach(function (pt) { if (pt.verifiable) majVerdictVerif(pt.id); });
 
-    Array.prototype.forEach.call($("verifs").querySelectorAll("[data-prefixe]"), function (el) {
-      var ev = el.tagName === "SELECT" ? "change" : "input";
-      el.addEventListener(ev, function () {
-        var id = el.getAttribute("data-prefixe");
-        ETAT.controles[id] = ETAT.controles[id] || {};
-        var cle = el.getAttribute("data-cle");
-        if (el.value === "") delete ETAT.controles[id][cle]; else ETAT.controles[id][cle] = el.value;
-        enregistrer(); majVerdictVerif(id);
-      });
-    });
-  }
-  function majVerdictVerif(id) {
-    var d = $("verdict-verif-" + id);
-    if (!d) return;
-    var pt = pointsAVerifier().filter(function (x) { return x.id === id; })[0];
-    if (!pt) return;
-    var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
-    var classe = v.issue === "validé" ? "v-val" : v.issue === "refusé" ? "v-ref" : "v-att";
-    d.innerHTML = '<div class="verdict ' + classe + '"><b>' + e(v.issue.charAt(0).toUpperCase() + v.issue.slice(1)) + "</b>" + e(v.motif) + "</div>";
-  }
+    if (COURANT === "convocation") {
+      var S = ENVISAGEE[d.envisagee] || ENVISAGEE.misepied;
+      var tot5 = d.convocation ? apresJoursOuvrables(d.convocation, 5) : null;
+      h += barre("convocation", "Convocation à un entretien préalable", "convocation-" + slug(d.nom));
+      var c = datesSanction(d, true);
+      h += '<div class="dates">' + c.html;
+      if (S.licenciement) {
+        h += carteDate("Entretien au plus tôt",
+          tot5 ? dateFrJour(tot5) : "[date de convocation à saisir]",
+          "cinq jours ouvrables après la présentation de la convocation (" + ref(["L1232-2"]) + ")", "tot");
+      }
+      h += "</div>";
+      if (c.prescrit) h += avisPrescrit();
+      if (S.licenciement && tot5 && d.entretien && d.entretien < tot5) {
+        h += '<div class="avis att"><b>L\'entretien est fixé trop tôt.</b>Il ne peut avoir lieu ' +
+          "moins de cinq jours ouvrables après la présentation de la convocation (" +
+          ref(["L1232-2"]) + "). Le premier jour possible est le " + ech(dateFrJour(tot5)) + ".</div>";
+      }
+      h += regleDecompte();
+      h += feuilleHtml(convocation(d), "convocation");
+      $("#doc").innerHTML = h;
+      return;
+    }
 
-  function construireRapportExistant() {
-    var pts = pointsAVerifier();
-    var val = 0, ref = 0, att = 0;
-    pts.forEach(function (pt) {
-      var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
-      if (v.issue === "validé") val++;
-      else if (v.issue === "refusé") { ref++; if (pt.depuisEtape5 && ETAT.faits[pt.id]) delete ETAT.faits[pt.id]; }
-      else att++;
-    });
-    enregistrer();
-    var teinte = ref ? "b-rouge" : (att ? "b-orange" : "b-vert");
-    var f = P ? P.lire() : {};
-    var corps = "";
-    pts.forEach(function (pt) {
-      var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
-      var classe = v.issue === "validé" ? "v-val" : v.issue === "refusé" ? "v-ref" : "v-att";
-      corps += '<div class="acte a-' + (v.issue === "refusé" ? "bloquant" : v.issue === "validé" ? "information" : "critique") + '">' +
-        '<p class="t">' + e(pt.objet) + '<span class="chip ' + (v.issue === "validé" ? "c-information" : v.issue === "refusé" ? "c-bloquant" : "c-critique") + '">' + e(v.issue) + "</span></p>" +
-        '<p class="w">' + e(pt.declare) + " " + e(v.motif) + ' <span class="ident">' + e(pt.id) + "</span></p></div>";
-    });
-    $("rapport-existant").innerHTML =
-      '<div class="bandeau ' + teinte + '"><p class="r">Rapport de régularisation : ' + val + " en règle · " + ref + " refusé(s) · " + att + " ne conclu(en)t pas</p>" +
-      '<p class="s">' + e(f.denomination || "") + " — contrôle du " + AUJOURDHUI + ".</p></div>" +
-      (corps || '<p class="aide">Rien à vérifier.</p>') +
-      (ref ? '<p class="note">Les points refusés sont retirés de la liste des régularisations déclarées : ils réapparaissent au guide de l\'étape 4.</p>' : "");
-    construireGuide(); majChoixItem();
-  }
+    if (SANCTIONS[COURANT]) {
+      var avecE = SANCTIONS[COURANT].entretien;
+      h += barre(COURANT, "Notification de sanction", COURANT + "-" + slug(d.nom));
+      var s = datesSanction(d, avecE);
+      h += '<div class="dates">' + s.html + "</div>";
+      if (s.prescrit) h += avisPrescrit();
+      if (avecE && d.entretien && new Date() > prorogeR13323(plusMois(d.entretien, 1))) {
+        h += '<div class="avis att"><b>Le mois qui suit l\'entretien est écoulé.</b>La sanction ne ' +
+          "peut pas intervenir plus d'un mois après le jour fixé pour l'entretien (" +
+          ref(["L1332-2", "R1332-3"]) + ").</div>";
+      }
+      if (COURANT === "misepied" && d.jours > d.dureeMax) {
+        h += '<div class="avis att"><b>La durée dépasse le maximum que vous avez fixé.</b>Le ' +
+          "règlement des sanctions borne la mise à pied à " + d.dureeMax + " jours ouvrés, et " +
+          "celle-ci en compte " + d.jours + ".</div>";
+      }
+      h += regleDecompte();
+      h += feuilleHtml(notification(d, COURANT), COURANT);
+      $("#doc").innerHTML = h;
+      return;
+    }
 
-  /* ------------------------------------------------------- la navigation --- */
-  function montrer(t) {
-    ETAT.etape = Math.max(ETAT.etape || 1, t);
-    enregistrer();
-    $("bloc-liste").style.display = t >= 2 ? "" : "none";
-    $("bloc-general").style.display = t >= 3 ? "" : "none";
-    $("bloc-guide").style.display = t >= 4 ? "" : "none";
-    $("bloc-item").style.display = t >= 5 ? "" : "none";
-    $("bloc-existant").style.display = t >= 6 ? "" : "none";
-    Array.prototype.forEach.call(document.querySelectorAll("#fil-temps span"), function (el) {
-      var n = Number(el.getAttribute("data-t"));
-      el.className = n === t ? "actif" : (n < t ? "fait" : "");
-      el.style.cursor = n <= t ? "pointer" : "default";
-    });
-  }
-  function imprimer(cible) { document.body.className = "print-" + cible; window.print(); document.body.className = ""; }
+    /* Le licenciement. */
+    if (d.protege) {
+      $("#doc").innerHTML = refus(["Le salarié est représentant du personnel : son licenciement " +
+        "suppose l'autorisation de l'inspection du travail, et la procédure n'est pas celle-ci. " +
+        "Les courriers de cette page ne conviennent pas."]);
+      return;
+    }
+    var totEntretien = d.convocation ? apresJoursOuvrables(d.convocation, 5) : null;
+    var totNotif = d.entretien ? apresJoursOuvrables(d.entretien, 2) : null;
+    var tardNotif = d.entretien ? prorogeR13323(plusMois(d.entretien, 1)) : null;
+    var limite = d.connaissance ? plusMois(d.connaissance, 2) : null;
+    var convocTard = limite && d.convocation && d.convocation > limite;
+    var mois = d.entree ? moisAnnees(d.entree, totNotif || new Date()) : 0;
+    var pre = preavisDe(mois);
+    var calc = { mois: mois, pre: pre, totNotif: totNotif,
+      finPreavis: pre.jours && totNotif ? jour(totNotif, pre.jours) : null };
 
-  $("generer").addEventListener("click", function () {
-    construireQuestionnaire(); montrer(2);
-    $("t2").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-general").addEventListener("click", function () {
-    construireRapportGeneral(); montrer(3);
-    $("t3").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-guide").addEventListener("click", function () {
-    construireGuide(); montrer(4);
-    $("t4").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-item").addEventListener("click", function () {
-    montrer(5); majChoixItem(); rendreItem($("choix-item").value);
-    $("t5").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-existant").addEventListener("click", function () {
-    construireVerifs(); montrer(6);
-    $("t6").scrollIntoView({ behavior: "smooth" });
-  });
-  $("choix-item").addEventListener("change", function () { rendreItem($("choix-item").value); });
-  $("controler").addEventListener("click", function () {
-    construireRapportExistant(); construireRapportGeneral(); construireVerifs();
-    $("rapport-existant").scrollIntoView({ behavior: "smooth" });
-  });
-  $("imprimer-liste").addEventListener("click", function () { imprimer("liste"); });
-  $("imprimer-general").addEventListener("click", function () { imprimer("general"); });
-  $("imprimer-guide").addEventListener("click", function () { imprimer("guide"); });
-  $("imprimer-item").addEventListener("click", function () { imprimer("item"); });
-  $("imprimer-existant").addEventListener("click", function () { imprimer("existant"); });
-
-  $("exemple").addEventListener("click", function () {
-    ETAT = etatVide();
-    if (P) P.ecrire({
-      denomination: "SOCIÉTÉ D'EXEMPLE SAS", siret: "12345678900012",
-      adresse: "12 rue de l'Exemple, 59000 Lille", responsable: "Camille Martin, présidente",
-      courriel: "contact@societe-exemple.fr", telephone: "03 20 00 00 00",
-      effectif: 240, secteur: "services", etablissementsDistincts: "non",
-    });
-    ETAT.dossier = {
-      dateAudit: "2026-08-19", "cse.existe": "oui",
-      "ri.existe": "oui", "ri.dateFranchissementSeuil": "2019-01-15",
-      "ri.contenuSanteSecurite": "oui", "ri.contenuParticipation": "oui", "ri.contenuDiscipline": "oui",
-      "ri.echelleSanctions": "oui", "ri.misePiedDureeMax": "oui", "ri.misePiedDureeMaxJours": 5,
-      "ri.rappelDroitsDefense": "oui", "ri.rappelHarcelement": "oui", "ri.rappelLanceursAlerte": "oui",
-      "ri.clausesInterdites": "non", "ri.clauseNeutralite": "non",
-      "ri.avisCSE": "oui", "ri.publicite": "oui",
-      "ri.dateDerniereFormalite": "2019-09-02", "ri.dateEntreeVigueur": "2019-10-15",
-      "ri.depotGreffe": "oui", "ri.communicationInspection": "oui", "ri.communicationDeuxExemplaires": "oui",
-      "ri.redigeFrancais": "oui", "ri.modifieDepuis": "non", "ri.notesServiceGenerales": "non", "ri.demandeInspection": "non",
-      "sanction.auditee": "oui", "sanction.nature": "mise à pied disciplinaire",
-      "sanction.griefsEcrits": "oui", "sanction.retenueSalaire": "non", "sanction.prevueRI": "oui",
-      "sanction.dureeMisePiedJours": 2, "sanction.dateConnaissance": "2026-06-15", "sanction.poursuitesPenales": "non",
-      "sanction.sanctionsAnterieuresInvoquees": "non",
-      "sanction.convocationEnvoyee": "oui", "sanction.dateConvocation": "2026-06-22",
-      "sanction.convocationObjet": "oui", "sanction.convocationDateHeureLieu": "oui", "sanction.convocationAssistance": "oui",
-      "sanction.convocationRemise": "lettre recommandée", "sanction.entretienTenu": "oui",
-      "sanction.dateEntretien": "2026-06-30", "sanction.dateNotification": "2026-07-06",
-      "sanction.notificationEcrite": "oui", "sanction.notificationMotivee": "oui",
-      "sanction.notificationRemise": "lettre recommandée", "sanction.misePiedConservatoire": "non", "sanction.salarieProtege": "non",
-      "garantie.procedureApplicable": "oui", "garantie.source": "la convention collective",
-      "garantie.nature": "consultation d'un organisme appelé à donner son avis", "garantie.suivie": "oui",
-      "garantie.licenciementSubordonneSanctions": "non",
-    };
-    enregistrer();
-    construireFiche(); construireFormulaireFiche(); majCompteur();
-    message("Exemple chargé : SOCIÉTÉ D'EXEMPLE SAS, 240 salariés. Ouvrez le questionnaire.");
-  });
-  $("vider").addEventListener("click", function () {
-    ETAT = etatVide();
-    if (P) P.effacer();
-    enregistrer();
-    construireFiche(); construireFormulaireFiche(); majCompteur(); montrer(1);
-    message("Tout est effacé — fiche client comprise.");
-  });
-  function message(txt) {
-    var m = $("message"); m.textContent = txt; m.style.display = "block";
-    clearTimeout(message.t); message.t = setTimeout(function () { m.style.display = "none"; }, 8000);
+    h += barre("licenciement", "Licenciement disciplinaire", "licenciement-" + slug(d.nom));
+    h += '<div class="dates">';
+    h += carteDate("Dernier jour pour engager les poursuites",
+      limite ? dateFrJour(limite) : "[date de connaissance à saisir]",
+      "deux mois du jour de la connaissance des faits (" + ref(["L1332-4"]) + ")",
+      convocTard ? "tard" : "");
+    h += carteDate("Entretien au plus tôt",
+      totEntretien ? dateFrJour(totEntretien) : "[date de convocation à saisir]",
+      "cinq jours ouvrables après la présentation de la convocation (" + ref(["L1232-2"]) + ")", "tot");
+    h += carteDate("Notification au plus tôt",
+      totNotif ? dateFrJour(totNotif) : "[date de l'entretien à saisir]",
+      "deux jours ouvrables après la date prévue de l'entretien (" + ref(["L1232-6"]) + ")", "tot");
+    h += carteDate("Notification au plus tard",
+      tardNotif ? dateFrJour(tardNotif) : "[date de l'entretien à saisir]",
+      "un mois après le jour fixé pour l'entretien (" + ref(["L1332-2", "R1332-3"]) + ")", "tard");
+    if (!d.grave && calc.finPreavis) {
+      h += carteDate("Fin du préavis", calc.finPreavis,
+        pre.mot + " à compter de la présentation de la lettre (" + ref(["L1234-1"]) + ")", "");
+    }
+    h += "</div>";
+    if (convocTard) {
+      h += '<div class="avis non"><b>La convocation est postérieure au délai de deux mois.</b>' +
+        "Elle est datée du " + ech(dateFr(d.convocation)) + ", alors que les poursuites devaient " +
+        "être engagées avant le " + ech(dateFr(limite)) + " (" + ref(["L1332-4"]) + ").</div>";
+    }
+    if (totEntretien && d.entretien && d.entretien < totEntretien) {
+      h += '<div class="avis att"><b>L\'entretien est fixé trop tôt.</b>Le premier jour possible ' +
+        "est le " + ech(dateFrJour(totEntretien)) + " (" + ref(["L1232-2"]) + ").</div>";
+    }
+    h += '<div class="avis att">Vérifiez avant l\'envoi qu\'aucune protection particulière ne ' +
+      "s'applique : grossesse et maternité (" + ref(["L1225-4"]) + "), accident du travail ou " +
+      "maladie professionnelle (" + ref(["L1226-9"]) + ").</div>";
+    h += regleDecompte();
+    h += feuilleHtml(licenciement(d, calc), "licenciement");
+    $("#doc").innerHTML = h;
   }
 
-  /* Ouvrir « Auditer aussi une sanction » réaffiche les deux rubriques. */
-  $("replier-sanction").addEventListener("toggle", function () { majVisibiliteQuestionnaire(); });
-  $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
-  $("btn-retour").addEventListener("click", function () {
-    if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
-    else location.href = "./";
+  /* ═══════════════════════════════════════════════════════════════ le câblage */
+  function majChamps() {
+    document.querySelectorAll("#champs label.ch").forEach(function (l) {
+      var pour = (l.getAttribute("data-pour") || "").split(/\s+/);
+      l.hidden = pour.indexOf(COURANT) === -1;
+    });
+  }
+  function onglet(nom) {
+    COURANT = nom;
+    Array.prototype.forEach.call($("#onglets").children, function (b) {
+      b.classList.toggle("actif", b.dataset.o === nom);
+    });
+    majChamps(); rendre();
+  }
+  Array.prototype.forEach.call($("#onglets").children, function (b) {
+    b.addEventListener("click", function () { onglet(b.dataset.o); });
   });
-  $("dt-fermer").addEventListener("click", function () { $("dlg-texte").close(); });
-  $("dt-imprimer").addEventListener("click", function () { window.print(); });
-  $("dt-copier").addEventListener("click", function () {
-    var t = $("dt-corps").textContent;
+
+  /* Chaque frappe réécrit le document. */
+  $("#champs").addEventListener("input", rendre);
+  $("#champs").addEventListener("change", rendre);
+
+  /* Une correction faite à la main dans le document est retenue sur le texte
+     d'origine du bloc : elle survit à la réécriture des autres. */
+  document.addEventListener("input", function (ev) {
+    var el = ev.target;
+    if (!el || !el.getAttribute || !el.hasAttribute("contenteditable")) return;
+    var f = el.closest(".feuille");
+    if (!f) return;
+    var module = f.id.replace("-feuille", "");
+    corrections[module] = corrections[module] || {};
+    corrections[module][el.getAttribute("data-o")] = texteDe(el);
+    el.classList.add("modifie");
+  });
+
+  $("#btn-reprendre").addEventListener("click", function () {
+    corrections[COURANT] = {}; rendre();
+  });
+
+  function exporterDocx(module, titre, fichier) {
+    var f = pourFichier(module);
+    var items = f.blocs.map(function (b) { return { k: VERS_EXPORT[b.k] || "p", t: b.t }; });
+    window.AuditExport.telecharger(window.AuditExport.docx(items, f.titre || titre), fichier,
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  }
+  function exporterTxt(module, fichier) {
+    var f = pourFichier(module);
+    var t = (f.titre ? f.titre + "\n\n" : "") + f.blocs.map(function (b) {
+      return b.k === "trait" || b.k === "saut" ? "" : b.t;
+    }).join("\n");
+    window.AuditExport.telecharger(t, fichier, "text/plain;charset=utf-8");
+  }
+  function montrerTexte(t) {
+    $("#dlg-corps").textContent = t;
+    var dl = $("#dlg");
+    if (dl.showModal) dl.showModal(); else dl.setAttribute("open", "open");
+  }
+  $("#dlg-fermer").addEventListener("click", function () { $("#dlg").close(); });
+  $("#dlg-imprimer").addEventListener("click", function () { window.print(); });
+  $("#dlg-copier").addEventListener("click", function () {
+    var t = $("#dlg-corps").textContent;
     if (navigator.clipboard) navigator.clipboard.writeText(t);
   });
 
-  var man = MOTEUR.manifeste || {};
-  var cpt = man.compteurs || {};
-  $("pied").innerHTML = "Moteur : " + e(man.domaine || "audit discipline") +
-    (man.empreinte ? " — empreinte " + '<span class="ident">' + e(man.empreinte) + "</span>" : "") +
-    (cpt.controles ? " — " + cpt.controles + " contrôles, " + (cpt.articlesLus || 0) + " articles lus à la source" : "") +
-    ". Les données saisies restent dans ce navigateur.";
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("button") : null;
+    if (!b) return;
+    if (b.dataset.dl) exporterDocx(b.dataset.dl, b.dataset.titre, nomFichier(b.dataset.base, "docx"));
+    else if (b.dataset.txt) exporterTxt(b.dataset.txt, nomFichier(b.dataset.base, "txt"));
+    else if (b.dataset.print) window.print();
+    else if (b.dataset.formalite) {
+      var gen = window.DocumentsProduits && DocumentsProduits.pour(b.dataset.formalite);
+      if (!gen) return;
+      var d = lire();
+      var fiche = { entreprise: profil.denomination || "", ri: {
+        existe: "oui",
+        dateDerniereFormalite: d.formalite ? iso(d.formalite) : undefined,
+        avisCSE: d.avisCse ? "oui" : undefined,
+        echelleSanctions: "non",
+        misePiedDureeMaxJours: d.dureeMax } };
+      try {
+        montrerTexte(gen.produire({ profil: profil, fiche: fiche, aujourdhui: new Date() }));
+      } catch (err) {
+        montrerTexte("Ce modèle n'a pas pu être produit : " + err.message);
+      }
+    }
+  });
 
-  construireFiche(); construireFormulaireFiche(); majCompteur();
+  /* ═══════════════════════════════════ la question, et ce qu'elle commande */
+  var CLE = "discipline-reponse";
+  function ouvrirDocuments() {
+    $("#ecran-question").hidden = true;
+    $("#ecran-docs").hidden = false;
+    $("#btn-revenir").hidden = false;
+    majChamps(); rendre();
+  }
+  function ouvrirQuestion() {
+    $("#ecran-question").hidden = false;
+    $("#ecran-docs").hidden = true;
+    $("#btn-revenir").hidden = true;
+  }
+  $("#rep-non").addEventListener("click", function () {
+    try { localStorage.setItem(CLE, "non"); } catch (e) {}
+    ouvrirDocuments();
+  });
+  /* Le « oui » n'ouvre pas un questionnaire : il ouvre le dépôt du document
+     existant et son diagnostic, en un clic. */
+  $("#rep-oui").addEventListener("click", function () {
+    try { localStorage.setItem(CLE, "oui"); } catch (e) {}
+    location.href = "controler-discipline.html";
+  });
+  $("#btn-revenir").addEventListener("click", function () {
+    try { localStorage.removeItem(CLE); } catch (e) {}
+    ouvrirQuestion();
+  });
 
-  (function reprendre() {
-    var t = Number(ETAT.etape) || 1;
-    /* La fiche a pu être remplie sur l'écran d'accueil avant même la
-       première visite de ce module : ne pas la remontrer, passer
-       directement à l'étape 2, comme si elle venait d'être validée ici. */
-    if (t < 2 && P) { var pp = P.lire(); if (pp && pp.denomination) t = 2; }
-    if (t < 2) return;
-    construireQuestionnaire();
-    if (t >= 3) construireRapportGeneral();
-    if (t >= 4) construireGuide();
-    if (t >= 5) { majChoixItem(); rendreItem($("choix-item").value); }
-    if (t >= 6) construireVerifs();
-    montrer(t);
-    /* Choisir un audit doit mener au questionnaire, pas à une page de
-       présentation : la présentation s'efface et l'écran s'ouvre sur
-       l'étape 2 — on remonte si on veut revoir la fiche. */
-    var pres = document.querySelector(".presentation");
-    if (pres) pres.style.display = "none";
-    var q = document.getElementById("t2");
-    if (q) q.scrollIntoView();
+  /* Les valeurs de départ, pour que les documents soient écrits avant la
+     première frappe. */
+  (function depart() {
+    var a = new Date();
+    $("#c-faits").value = iso(a);
+    $("#c-connaissance").value = iso(a);
+    $("#c-convocation").value = iso(a);
+    $("#c-entretien").value = iso(apresJoursOuvrables(a, 5));
+    $("#c-lieu").value = "au siège de la société";
+    $("#c-avis-cse").value = iso(a);
+    $("#c-formalite").value = iso(prochainOuvrable(jour(a, 7)));
   })();
+
+  $("#fiche-rappel").textContent = profil.denomination
+    ? profil.denomination + (effectif() !== null ? " - " + effectif() + " salariés" : "")
+    : "Aucune fiche d'entreprise sur ce poste : les documents porteront un crochet à la place du nom.";
+
+  /* Les sources, en pied de page : le numéro, ce qu'il dit, et l'identifiant
+     de version. Sans cet identifiant, un reproche de citation tronquée coûte
+     quatre requêtes datées à écarter. */
+  (function sources() {
+    var h = "Code du travail, lu au relais Légifrance le 7 septembre 2026, deux lectures " +
+      "concordantes par article.<br><br>";
+    Object.keys(TEXTES).forEach(function (k) {
+      h += ech(k.replace(/^([LRD])(\d)/, "$1. $2")) + " · " + TEXTES[k].id + " · " +
+        ech(TEXTES[k].dit) + "<br>";
+    });
+    $("#sources").innerHTML = h;
+  })();
+
+  try {
+    fetch("manifest-audit-discipline.json", { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (m) { if (m && m.version) $("#etat-version").textContent = m.version; })
+      .catch(function () {});
+  } catch (e) {}
+
+  /* La réponse déjà donnée n'est pas redemandée : on retombe où l'on était. */
+  var dejaRepondu = null;
+  try { dejaRepondu = localStorage.getItem(CLE); } catch (e) {}
+  if (dejaRepondu === "non") ouvrirDocuments();
 })();
 </script>
 <script>
