@@ -132,7 +132,15 @@ main.wrap,main.page{display:block}
 
 /* Le bandeau de tête, identique partout : le nom de l'application à gauche,
    le retour à l'accueil et les outils à droite. */
-header.site{background:var(--encre);color:#fff;padding:12px 0}
+/* Le bandeau reste collé en haut de l'écran, même au bas d'une longue page :
+   demande du 7 septembre 2026, « mets-la visible, je ne la vois pas », sur le
+   lien de retour du document unique, six onglets plus bas. */
+header.site{background:var(--encre);color:#fff;padding:12px 0;position:sticky;top:0;z-index:40}
+/* Le bouton de retour : blanc sur le bandeau sombre, 44 px de haut, toujours
+   le premier de la rangée. droits.js l'insère sur chaque page. */
+.outils a.retour{background:#fff;color:var(--encre);border-color:#fff;font-weight:600;
+  min-height:44px;display:inline-flex;align-items:center;padding:0 16px}
+.outils a.retour:hover{background:#e8ebf0;color:var(--encre)}
 header.site .wrap{display:flex;flex-wrap:wrap;gap:var(--e2) var(--e4);
   align-items:center;justify-content:space-between}
 header.site .marque{font:600 15px/1.3 system-ui;letter-spacing:.01em;color:#fff;

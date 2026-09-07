@@ -1171,6 +1171,36 @@
   function amorcer() {
     pretPromesse.then(demarrerPage).catch(function () { leverVerrou(); });
   }
+  /* LE BOUTON DE RETOUR, SUR CHAQUE PAGE. Demande du 7 septembre 2026 :
+     « mets-la visible, je ne la vois pas », sur un document unique ouvert au
+     sixième onglet, le lien d'accueil resté tout en haut d'une page longue.
+     Ce script est chargé par toutes les pages : il pose un bouton « Retour »
+     blanc, en premier dans le bandeau, qui revient à l'écran précédent quand
+     on vient de l'application, et à l'accueil sinon. Le bandeau, lui, est
+     collé en haut de l'écran par style.css. Rien sur l'accueil : il n'y a
+     pas d'écran avant lui. */
+  function poserRetour() {
+    var page = location.pathname.split("/").pop() || "index.html";
+    if (page === "index.html") return;
+    var outils = document.querySelector("header.site .outils");
+    if (!outils || outils.querySelector("a.retour")) return;
+    var a = document.createElement("a");
+    a.className = "retour";
+    a.href = "index.html";
+    a.textContent = "← Retour";
+    a.addEventListener("click", function (ev) {
+      var interne = false;
+      try { interne = !!document.referrer && new URL(document.referrer).origin === location.origin; }
+      catch (_) { interne = false; }
+      if (interne && history.length > 1) { ev.preventDefault(); history.back(); }
+    });
+    outils.insertBefore(a, outils.firstChild);
+  }
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", poserRetour);
+  else
+    poserRetour();
+
   if (document.readyState === "loading")
     document.addEventListener("DOMContentLoaded", amorcer);
   else
