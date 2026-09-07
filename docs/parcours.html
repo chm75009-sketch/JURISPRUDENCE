@@ -60,53 +60,8 @@
      retenue. Sommaires et identifiants :
        moteur/parcours/jurisprudence-parcours.json
        moteur/parcours/jurisprudence-installation.json -->
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
-    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
-    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
-    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--papier);color:var(--corps);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .page{max-width:1040px;margin:0 auto;padding:0 20px 90px}
-  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
-  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
-  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
-  .chapo{color:var(--gris);max-width:66ch;margin:0}
-  header a{color:var(--bleu)}
-
-  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
-    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
-    margin:0 -20px 0;padding:10px 20px}
-  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
-    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
-  button.retour:hover{filter:brightness(1.12)}
-  .retour-ou{font-size:13px;color:var(--gris)}
-  .retour-ou a{color:var(--bleu)}
-
-  h2.titre-zone{font:600 21px/1.3 system-ui;color:var(--encre);margin:38px 0 4px}
-  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:74ch}
-  .note{color:var(--gris);font-size:13.5px}
-
-  .presentation{border:1px solid var(--filet);background:var(--surface);
-    border-radius:4px;padding:18px 20px;margin:22px 0 0}
-  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui;color:var(--encre)}
-  .presentation p{margin:0 0 10px;max-width:76ch}
-  .presentation p:last-child{margin-bottom:0}
-
-  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
-    padding:16px 18px 20px;margin:0 0 16px}
-  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
-  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px 20px}
-  label{display:block;font-size:14px}
-  label .nom{display:block;color:var(--encre);margin-bottom:4px}
-  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
-    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
-  input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
-  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
-  .pleine{grid-column:1/-1}
 
   /* Le choix du parcours : douze cartes, une seule active. */
   .parcours-cartes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin:18px 0 0}
@@ -290,11 +245,6 @@
   .coche{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--corps)}
   .coche input{width:auto}
   .date-fait{max-width:190px}
-
-  button{font:600 15px/1 system-ui;padding:11px 18px;border:1px solid var(--bleu);
-    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
-  button.second{background:var(--surface);color:var(--bleu)}
-  button:hover{filter:brightness(1.1)}
   .barre-outils{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 0}
   @media (max-width:560px){ .barre-outils button{flex:1 1 46%;padding:11px 8px;font-size:14px} }
 
@@ -317,8 +267,6 @@
     font:11.5px/1.55 system-ui;color:#8a9099}
   .feuille .ident{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
   .feuille .en-retard{color:#8E1B1B;font-weight:700}
-
-  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
 
   /* À l'impression, seul le récapitulatif sort. */
   @media print{
@@ -351,10 +299,18 @@
   @media print{ .barre-parcours{display:none !important} }
 
   #message{display:none;margin:14px 0 0;padding:10px 12px;border-radius:3px;
-    border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}
-</style>
+    border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}</style>
 </head>
 <body>
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
 <div class="page">
 
 <div class="retour-barre">

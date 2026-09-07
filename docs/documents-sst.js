@@ -3948,5 +3948,898 @@
     },
   });
 
+  /* ══════════════════════════════════════════════════════════════════════
+     LES PIÈCES QUE L'ÉCRAN SORT SUR « NON »
+
+     POURQUOI UN SECOND FORMAT. Les générateurs ci-dessus rendent du texte
+     brut, bon pour une fenêtre de lecture et pour le presse-papiers. L'écran
+     d'entrée, lui, affiche le document et le laisse corriger à la main pendant
+     que les champs le remplissent : il lui faut des BLOCS, chacun avec son
+     genre, pour savoir ce qui est un titre, ce qui est un paragraphe et ce qui
+     est une note de marge qui ne part pas dans le fichier.
+
+     Une pièce, c'est donc : la question fermée qui l'ouvre, le seuil qui la
+     rend due, les quelques champs que l'application ne peut pas connaître, le
+     document déjà écrit à partir de la fiche d'entreprise, et - pour la
+     branche « oui » - la liste de ce qu'on cherche dans le document déposé,
+     avec le texte prêt à insérer quand on ne l'y trouve pas.
+
+     LE RENVOI RESTE DERRIÈRE. Chaque pièce porte ses articles, mais l'écran
+     ne les met jamais devant le document : ils tiennent dans une ligne
+     dépliable, sous la feuille.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  var PIECES = [];
+
+  function ajouterPiece(p) {
+    if (!p || !p.id || typeof p.blocs !== "function")
+      throw new Error("pièces : « " + (p && p.id) + " » n'a pas de fonction blocs.");
+    for (var i = 0; i < PIECES.length; i++)
+      if (PIECES[i].id === p.id) throw new Error("pièces : « " + p.id + " » est déjà enregistrée.");
+    PIECES.push(p);
+    return p;
+  }
+
+  /* Le constructeur de blocs. Les genres sont ceux de la feuille de
+     docs/gerer.html, et l'export Word les connaît déjà. « note » s'adresse à
+     l'employeur : elle se voit à l'écran et ne part pas dans le fichier. */
+  function feuille() {
+    var L = [];
+    var api = {
+      L: L,
+      t1: function (t) { L.push({ k: "t1", t: t }); return api; },
+      st: function (t) { L.push({ k: "st", t: t }); return api; },
+      h1: function (t) { L.push({ k: "h1", t: t }); return api; },
+      h2: function (t) { L.push({ k: "h2", t: t }); return api; },
+      p: function (t) { L.push({ k: "p", t: t }); return api; },
+      puce: function (t) { L.push({ k: "puce", t: t }); return api; },
+      note: function (t) { L.push({ k: "note", t: t }); return api; },
+      sign: function (t) { L.push({ k: "sign", t: t }); return api; },
+      trait: function () { L.push({ k: "trait", t: "" }); return api; },
+      saut: function () { L.push({ k: "saut", t: "" }); return api; },
+      vide: function () { L.push({ k: "vide", t: "" }); return api; },
+    };
+    return api;
+  }
+
+  /* La valeur d'un champ, ou son crochet. Rien n'est deviné : un crochet se
+     voit, une invention ne se voit pas. */
+  function val(ctx, cle, quoi) {
+    var v = ((ctx && ctx.valeurs) || {})[cle];
+    v = v == null ? "" : String(v).trim();
+    return v === "" ? "[" + (quoi || cle) + "]" : v;
+  }
+  function rempli(ctx, cle) {
+    var v = ((ctx && ctx.valeurs) || {})[cle];
+    return v != null && String(v).trim() !== "";
+  }
+  function dateVal(ctx, cle, quoi) {
+    var v = ((ctx && ctx.valeurs) || {})[cle];
+    return estISO(v) ? leJour(dateDe(v)) : "[" + (quoi || "date") + "]";
+  }
+  function adresseDe(ctx) {
+    return cro(((ctx && ctx.profil) || {}).adresse, "adresse du siège");
+  }
+  function leJourDu(ctx) { return leJour(aujourd(ctx)); }
+  /* La ville, tirée du code postal de l'adresse du siège : la fiche ne la
+     demande pas séparément, et un « Fait à [lieu] » sur un document qu'on
+     signe le jour même se remarque. */
+  function villeDe(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    if (p.ville && String(p.ville).trim() !== "") return String(p.ville).trim();
+    var m = String(p.adresse || "").match(/\d{5}\s+([^,;]+)$/);
+    return m ? m[1].trim() : "[ville]";
+  }
+
+  /* L'en-tête que porte toute pièce : qui l'établit, où, quand. */
+  function teteDocument(f, ctx, titre, sous) {
+    f.t1(titre);
+    if (sous) f.st(sous);
+    f.p(nomDe(ctx));
+    f.p(adresseDe(ctx));
+    f.p("Établi le " + leJourDu(ctx) + " par " + signataire(ctx) + ".");
+    f.trait();
+    return f;
+  }
+
+  global.Pieces = {
+    ajouter: ajouterPiece,
+    liste: function (module) {
+      return PIECES.filter(function (p) {
+        return !module || !p.modules || p.modules.indexOf(module) >= 0;
+      });
+    },
+    pour: function (id) {
+      for (var i = 0; i < PIECES.length; i++) if (PIECES[i].id === id) return PIECES[i];
+      return null;
+    },
+    outils: { feuille: feuille, val: val, rempli: rempli, dateVal: dateVal,
+      teteDocument: teteDocument, nomDe: nomDe, adresseDe: adresseDe,
+      signataire: signataire, leJourDu: leJourDu, aujourd: aujourd, villeDe: villeDe,
+      effectifDe: effectifDe, seuil: seuil, cro: cro, leJour: leJour, dans: dans,
+      estISO: estISO, dateDe: dateDe, isoDe: isoDe, moisApres: moisApres },
+  };
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LA CONSIGNE DE SÉCURITÉ INCENDIE
+
+     Les huit mentions sont celles de R. 4227-38, dans son ordre : c'est lui
+     qui dit ce que la consigne « indique ». Les essais et exercices tous les
+     six mois et leur registre viennent de R. 4227-39, la communication à
+     l'inspection du travail de R. 4227-40.
+
+     R. 4227-37, qui commande l'établissement et l'affichage de la consigne
+     dans les établissements de l'article R. 4227-34, a été lu le 7 septembre
+     2026 dans un état « abrogé à effet différé » : le document le dit à
+     l'endroit où il s'en sert plutôt que de le taire.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  ajouterPiece({
+    id: "PIECE-INCENDIE",
+    modules: ["sst", "social"],
+    titre: "Consigne de sécurité incendie",
+    question: "Avez-vous une consigne de sécurité incendie affichée dans vos locaux ?",
+    fichier: "consigne-securite-incendie",
+    renvoi: "R. 4227-38 (LEGIARTI000024769384), R. 4227-39 (LEGIARTI000024769386), " +
+            "R. 4227-40 (LEGIARTI000018532053), R. 4227-34 (LEGIARTI000018532067), " +
+            "R. 4227-28 (LEGIARTI000018532081), R. 4227-37 (LEGIARTI000024769379)",
+    champs: [
+      { c: "local", nom: "Local ou bâtiment couvert", ph: "atelier de montage, rez-de-chaussée" },
+      { c: "effectifLocal", nom: "Personnes présentes dans ce local", t: "number", ph: "12" },
+      { c: "materiel", nom: "Matériel d'extinction et de secours, et son emplacement",
+        t: "textarea", ph: "3 extincteurs à eau pulvérisée près des issues, 1 extincteur CO2 au tableau électrique, 1 robinet d'incendie armé dans le couloir" },
+      { c: "chargesMateriel", nom: "Qui met ce matériel en action", ph: "MM. Dupont et Kaci, formés le 12 mars 2026" },
+      { c: "chargesEvacuation", nom: "Qui dirige l'évacuation", ph: "Mme Lambert, guide-file ; M. Sow, serre-file" },
+      { c: "handicap", nom: "Espaces d'attente sécurisés, ou mesures équivalentes",
+        ph: "palier du 1er étage, cage d'escalier B, capacité 4 personnes" },
+      { c: "alerte", nom: "Moyens d'alerte", ph: "déclencheurs manuels près des issues, sirène, téléphone de l'accueil" },
+      { c: "chargesPompiers", nom: "Qui avise les sapeurs-pompiers", ph: "l'accueil, à défaut le premier témoin" },
+      { c: "secours", nom: "Adresse et numéro du service de secours de premier appel",
+        ph: "Sapeurs-pompiers : 18 ou 112 - centre de secours de [ville], [adresse]" },
+      { c: "rassemblement", nom: "Point de rassemblement", ph: "parking visiteurs, devant le portail" },
+      { c: "dernierExercice", nom: "Date du dernier exercice", t: "date" },
+    ],
+    blocs: function (ctx) {
+      var f = feuille();
+      teteDocument(f, ctx, "CONSIGNE DE SÉCURITÉ INCENDIE",
+        val(ctx, "local", "local ou bâtiment couvert"));
+      f.p("Cette consigne est affichée de manière très apparente dans le local qu'elle " +
+        "couvre. Toute personne qui y travaille est tenue de l'avoir lue.");
+
+      f.h1("1. Le matériel d'extinction et de secours");
+      f.p(val(ctx, "materiel", "nature, nombre et emplacement du matériel d'extinction et de secours"));
+      f.note("R. 4227-38, 1°. R. 4227-28 met à la charge de l'employeur les mesures " +
+        "nécessaires pour que tout commencement d'incendie puisse être rapidement et " +
+        "efficacement combattu : le matériel énuméré ici doit être celui qui s'y trouve " +
+        "réellement, vérifié et accessible.");
+
+      f.h1("2. Les personnes chargées de mettre ce matériel en action");
+      f.p(val(ctx, "chargesMateriel", "noms et fonctions"));
+      f.note("R. 4227-38, 2°.");
+
+      f.h1("3. Les personnes chargées de diriger l'évacuation");
+      f.p(val(ctx, "chargesEvacuation", "noms et fonctions, guide-file et serre-file"));
+      f.p("Elles dirigent l'évacuation des travailleurs et, le cas échéant, du public " +
+        "présent dans le local.");
+      f.note("R. 4227-38, 3°.");
+
+      f.h1("4. Les mesures liées à la présence de personnes handicapées");
+      f.p("Espaces d'attente sécurisés ou espaces équivalents : " +
+        val(ctx, "handicap", "nombre et localisation"));
+      f.p("Les personnes chargées de l'évacuation vérifient ces espaces avant de quitter " +
+        "le bâtiment et signalent aux sapeurs-pompiers, dès leur arrivée, les personnes " +
+        "qui s'y trouvent.");
+      f.note("R. 4227-38, 4°, qui impose d'indiquer notamment le nombre et la " +
+        "localisation des espaces d'attente sécurisés ou des espaces équivalents.");
+
+      f.h1("5. Les moyens d'alerte");
+      f.p(val(ctx, "alerte", "déclencheurs manuels, sirène, téléphone"));
+      f.note("R. 4227-38, 5°. R. 4227-34 impose un système d'alarme sonore dans les " +
+        "établissements où peuvent se trouver occupées ou réunies habituellement plus de " +
+        "cinquante personnes, ainsi que, quelle que soit leur importance, dans ceux où " +
+        "sont manipulées et mises en œuvre des matières inflammables mentionnées à " +
+        "l'article R. 4227-22.");
+
+      f.h1("6. Les personnes chargées d'aviser les sapeurs-pompiers");
+      f.p(val(ctx, "chargesPompiers", "noms ou fonctions"));
+      f.note("R. 4227-38, 6°.");
+
+      f.h1("7. Le service de secours de premier appel");
+      f.p(val(ctx, "secours", "adresse et numéro d'appel téléphonique"));
+      f.p("Ce numéro est affiché en caractères apparents.");
+      f.note("R. 4227-38, 7°, qui exige les caractères apparents.");
+
+      f.h1("8. Ce que chacun doit faire");
+      f.p("Toute personne qui aperçoit un début d'incendie a le devoir de donner l'alarme " +
+        "et de mettre en œuvre les moyens de premier secours, sans attendre l'arrivée des " +
+        "travailleurs spécialement désignés.");
+      f.puce("Donner l'alarme par le déclencheur le plus proche.");
+      f.puce("Prévenir les sapeurs-pompiers, ou faire prévenir.");
+      f.puce("Attaquer le feu avec le matériel adapté, sans se mettre en danger.");
+      f.puce("Évacuer au signal, sans revenir en arrière, et rejoindre le point de " +
+        "rassemblement : " + val(ctx, "rassemblement", "point de rassemblement") + ".");
+      f.note("R. 4227-38, 8°, pour le devoir de donner l'alarme et de mettre en œuvre les " +
+        "moyens de premier secours. Le point de rassemblement et l'ordre des gestes sont " +
+        "une mise en pratique, pas une exigence du texte lu.");
+
+      f.h1("9. Essais, visites et exercices");
+      f.p("Le matériel fait l'objet d'essais et de visites périodiques. Des exercices sont " +
+        "organisés au cours desquels les travailleurs apprennent à reconnaître les " +
+        "caractéristiques du signal sonore d'alarme générale, à localiser et à utiliser les " +
+        "espaces d'attente sécurisés ou les espaces équivalents, à se servir des moyens de " +
+        "premier secours et à exécuter les diverses manœuvres nécessaires.");
+      f.p("Ces exercices et essais ont lieu au moins tous les six mois. Dernier exercice : " +
+        dateVal(ctx, "dernierExercice", "date du dernier exercice") +
+        (rempli(ctx, "dernierExercice")
+          ? ". Prochain exercice au plus tard le " +
+            (moisApres(ctx.valeurs.dernierExercice, 6)
+              ? leJour(dateDe(moisApres(ctx.valeurs.dernierExercice, 6))) : "[date]") + "."
+          : "."));
+      f.p("Leur date et les observations auxquelles ils donnent lieu sont consignées sur un " +
+        "registre tenu à la disposition de l'inspection du travail.");
+      f.note("R. 4227-39, qui fixe la périodicité de six mois et le registre.");
+
+      f.trait();
+      f.sign("Fait à " + villeDe(ctx) + ", le " + leJourDu(ctx) + "\n\n" + signataire(ctx) +
+        "\n" + nomDe(ctx));
+      f.note("Cette consigne est communiquée à l'inspection du travail (R. 4227-40). " +
+        "Elle est affichée dans chaque local dont l'effectif dépasse cinq personnes et " +
+        "dans les locaux mentionnés à l'article R. 4227-24, et dans chaque local ou " +
+        "dégagement desservant un groupe de locaux dans les autres cas (R. 4227-37, lu le " +
+        "7 septembre 2026 dans un état « abrogé à effet différé » : vérifiez sa rédaction " +
+        "en vigueur au jour où vous affichez).");
+      return f.L;
+    },
+    attendus: [
+      { cle: "materiel", objet: "Le matériel d'extinction et de secours",
+        mots: ["extincteur", "matériel d'extinction", "robinet d'incendie", "moyens d'extinction"],
+        renvoi: "R. 4227-38, 1°",
+        clause: ["Matériel d'extinction et de secours présent dans le local et à ses abords : " +
+          "[nature, nombre et emplacement des extincteurs, robinets d'incendie armés et autres moyens]."] },
+      { cle: "chargesMateriel", objet: "Les personnes chargées de mettre ce matériel en action",
+        mots: ["chargées de mettre", "chargés de mettre", "équipier de première intervention", "mise en action"],
+        renvoi: "R. 4227-38, 2°",
+        clause: ["Personnes chargées de mettre le matériel d'extinction en action : [noms et fonctions]."] },
+      { cle: "chargesEvacuation", objet: "Les personnes chargées de diriger l'évacuation",
+        mots: ["évacuation", "guide-file", "serre-file"],
+        renvoi: "R. 4227-38, 3°",
+        clause: ["Personnes chargées de diriger l'évacuation des travailleurs et, le cas échéant, " +
+          "du public : [noms et fonctions, guide-file et serre-file]."] },
+      { cle: "handicap", objet: "Les mesures liées à la présence de personnes handicapées",
+        mots: ["handicap", "espace d'attente", "espaces d'attente", "attente sécurisé"],
+        renvoi: "R. 4227-38, 4°",
+        clause: ["Mesures spécifiques liées à la présence de personnes handicapées : espaces " +
+          "d'attente sécurisés ou espaces équivalents, [nombre et localisation]. Les personnes " +
+          "chargées de l'évacuation les vérifient et signalent aux sapeurs-pompiers, dès leur " +
+          "arrivée, les personnes qui s'y trouvent."] },
+      { cle: "alerte", objet: "Les moyens d'alerte",
+        mots: ["alerte", "alarme", "déclencheur"],
+        renvoi: "R. 4227-38, 5°",
+        clause: ["Moyens d'alerte : [déclencheurs manuels et leur emplacement, sirène, téléphone]."] },
+      { cle: "chargesPompiers", objet: "Les personnes chargées d'aviser les sapeurs-pompiers",
+        /* « pompiers » tout court suffirait à faire croire le point traité par
+           la première phrase venue : on cherche l'acte, pas le mot. */
+        mots: ["chargées d'aviser", "chargés d'aviser", "aviser les sapeurs-pompiers",
+          "prévenir les sapeurs-pompiers", "alerter les sapeurs-pompiers"],
+        renvoi: "R. 4227-38, 6°",
+        clause: ["Personnes chargées d'aviser les sapeurs-pompiers dès le début d'un incendie : " +
+          "[noms ou fonctions]."] },
+      { cle: "secours", objet: "L'adresse et le numéro du service de secours de premier appel",
+        mots: ["service de secours", "centre de secours", "18 ou 112", "numéro d'appel"],
+        renvoi: "R. 4227-38, 7°",
+        clause: ["Service de secours de premier appel : sapeurs-pompiers, 18 ou 112, centre de " +
+          "secours de [ville], [adresse]. Ce numéro est affiché en caractères apparents."] },
+      { cle: "devoir", objet: "Le devoir de donner l'alarme sans attendre",
+        mots: ["donner l'alarme", "sans attendre", "premier secours"],
+        renvoi: "R. 4227-38, 8°",
+        clause: ["Toute personne qui aperçoit un début d'incendie a le devoir de donner l'alarme " +
+          "et de mettre en œuvre les moyens de premier secours, sans attendre l'arrivée des " +
+          "travailleurs spécialement désignés."] },
+      { cle: "exercices", objet: "Les essais et exercices, au moins tous les six mois",
+        mots: ["exercice", "essais", "six mois", "semestre"],
+        renvoi: "R. 4227-39",
+        clause: ["La présente consigne prévoit des essais et visites périodiques du matériel et " +
+          "des exercices au cours desquels les travailleurs apprennent à reconnaître les " +
+          "caractéristiques du signal sonore d'alarme générale, à localiser et à utiliser les " +
+          "espaces d'attente sécurisés ou les espaces équivalents, à se servir des moyens de " +
+          "premier secours et à exécuter les diverses manœuvres nécessaires. Ces exercices et " +
+          "essais ont lieu au moins tous les six mois ; leur date et les observations auxquelles " +
+          "ils donnent lieu sont consignées sur un registre tenu à la disposition de l'inspection " +
+          "du travail."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LE REGISTRE DES DANGERS GRAVES ET IMMINENTS
+
+     Le registre n'est pas un cahier vierge : D. 4132-1 dit ce que l'avis du
+     représentant doit porter, et il dit aussi comment le registre est tenu -
+     pages numérotées, authentifiées par le tampon du comité. La pièce produite
+     ici est donc la page de garde du registre, son mode d'emploi et le
+     feuillet type que le représentant remplit ; ce que le représentant écrit,
+     l'employeur ne l'écrit pas à sa place.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  ajouterPiece({
+    id: "PIECE-DGI",
+    modules: ["sst", "social"],
+    titre: "Registre des dangers graves et imminents",
+    question: "Avez-vous un registre spécial des dangers graves et imminents ?",
+    fichier: "registre-dangers-graves-imminents",
+    renvoi: "D. 4132-1 (LEGIARTI000036484010), D. 4132-2 (LEGIARTI000036484007), " +
+            "L. 4131-1 (LEGIARTI000006903155), L. 4131-2 (LEGIARTI000035653297), " +
+            "L. 4132-2 (LEGIARTI000035653288)",
+    /* Le registre reçoit l'avis d'un représentant du personnel au comité :
+       sans comité, il n'a personne pour l'écrire. La question ne se pose donc
+       qu'à partir de onze salariés, seuil de mise en place du comité, et le
+       document le dit. */
+    due: function (profil) {
+      var n = Number(profil && profil.effectif);
+      if (!isFinite(n) || String((profil || {}).effectif || "").trim() === "") return null;
+      return n >= 11;
+    },
+    champs: [
+      { c: "lieu", nom: "Où le registre est tenu", ph: "bureau du responsable sécurité, rez-de-chaussée" },
+      { c: "gardien", nom: "Qui en a la garde", ph: "Mme Lambert, responsable sécurité" },
+      { c: "ouvertLe", nom: "Date d'ouverture du registre", t: "date" },
+      { c: "pages", nom: "Nombre de pages numérotées", t: "number", ph: "50" },
+    ],
+    blocs: function (ctx) {
+      var f = feuille();
+      teteDocument(f, ctx, "REGISTRE SPÉCIAL DES DANGERS GRAVES ET IMMINENTS",
+        "Avis des représentants du personnel au comité social et économique");
+      f.p("Registre ouvert le " + dateVal(ctx, "ouvertLe", "date d'ouverture") + ", comportant " +
+        val(ctx, "pages", "nombre") + " pages numérotées, authentifiées par le tampon du comité " +
+        "social et économique.");
+      f.p("Lieu de conservation : " + val(ctx, "lieu", "lieu de conservation") + ". Garde du " +
+        "registre : " + val(ctx, "gardien", "nom et fonction") + ". Il reste à la disposition " +
+        "des représentants du personnel au comité social et économique.");
+      f.note("D. 4132-1 pour la numérotation et le tampon du comité, D. 4132-2 pour la tenue " +
+        "sous la responsabilité de l'employeur et la mise à disposition des représentants.");
+
+      f.h1("À quoi sert ce registre");
+      f.p("Un travailleur qui a un motif raisonnable de penser qu'une situation de travail " +
+        "présente un danger grave et imminent pour sa vie ou sa santé alerte immédiatement " +
+        "l'employeur ; il peut se retirer de cette situation. L'employeur ne peut pas lui " +
+        "demander de reprendre son activité tant que le danger persiste.");
+      f.p("Le représentant du personnel au comité social et économique qui constate une cause " +
+        "de danger grave et imminent, notamment par l'intermédiaire d'un travailleur, en alerte " +
+        "immédiatement l'employeur et consigne son avis sur le présent registre.");
+      f.p("Dès cet avis, l'employeur procède immédiatement à une enquête avec le représentant " +
+        "qui lui a signalé le danger et prend les dispositions nécessaires pour y remédier.");
+      f.note("L. 4131-1 pour l'alerte et le retrait du travailleur, L. 4131-2 pour l'alerte du " +
+        "représentant, L. 4132-2 pour la consignation par écrit et l'enquête immédiate.");
+
+      f.trait();
+      f.h1("Feuillet d'avis nº ....");
+      f.p("Date et heure de l'avis : ..............................................");
+      f.p("Représentant du personnel au comité social et économique : ......................");
+      f.h2("1. Postes de travail concernés par la cause du danger constaté");
+      f.p("..........................................................................");
+      f.h2("2. Nature et cause du danger");
+      f.p("..........................................................................");
+      f.p("..........................................................................");
+      f.h2("3. Nom des travailleurs exposés");
+      f.p("..........................................................................");
+      f.p("Signature du représentant : ....................................");
+      f.note("Les trois rubriques et la signature sont celles que D. 4132-1 exige de l'avis. " +
+        "Elles se remplissent à la main, sur le registre : l'application n'écrit pas l'avis " +
+        "d'un représentant.");
+
+      f.h1("Suites données par l'employeur");
+      f.p("Date et heure de l'enquête menée avec le représentant : ........................");
+      f.p("Personnes présentes : ......................................................");
+      f.p("Constatations : ...........................................................");
+      f.p("Dispositions prises pour remédier au danger, et date d'exécution : ..............");
+      f.p("..........................................................................");
+      f.p("Signature de l'employeur : ................................................");
+      f.note("L. 4132-2 : l'enquête est immédiate et se mène avec le représentant qui a " +
+        "signalé le danger. En cas de divergence sur la réalité du danger ou sur la façon de " +
+        "le faire cesser, la suite de la procédure relève des articles suivants du même " +
+        "chapitre, que l'application n'a pas lus : allez les lire avant de vous en servir.");
+      return f.L;
+    },
+    attendus: [
+      { cle: "numerote", objet: "Des pages numérotées et authentifiées par le tampon du comité",
+        mots: ["numérot", "tampon", "authentifi"],
+        renvoi: "D. 4132-1",
+        clause: ["Le présent registre comporte [nombre] pages numérotées, authentifiées par le " +
+          "tampon du comité social et économique."] },
+      { cle: "postes", objet: "Les postes de travail concernés par la cause du danger",
+        mots: ["poste de travail", "postes de travail", "postes concernés"],
+        renvoi: "D. 4132-1, 1°",
+        clause: ["1. Postes de travail concernés par la cause du danger constaté : ..............."] },
+      { cle: "nature", objet: "La nature et la cause du danger",
+        mots: ["nature et", "cause du danger", "nature du danger"],
+        renvoi: "D. 4132-1, 2°",
+        clause: ["2. Nature et cause du danger : ..............................................."] },
+      { cle: "exposes", objet: "Le nom des travailleurs exposés",
+        mots: ["travailleurs exposés", "salariés exposés", "nom des travailleurs"],
+        renvoi: "D. 4132-1, 3°",
+        clause: ["3. Nom des travailleurs exposés : ..........................................."] },
+      { cle: "date", objet: "L'avis daté et signé",
+        mots: ["daté et signé", "signature", "date de l'avis"],
+        renvoi: "D. 4132-1",
+        clause: ["Chaque avis est daté et signé par le représentant du personnel qui le porte."] },
+      { cle: "enquete", objet: "L'enquête immédiate et les suites données",
+        mots: ["enquête", "dispositions nécessaires", "suites données"],
+        renvoi: "L. 4132-2",
+        clause: ["Suites données par l'employeur : dès l'avis, l'employeur procède immédiatement " +
+          "à une enquête avec le représentant qui lui a signalé le danger et prend les " +
+          "dispositions nécessaires pour y remédier. Date de l'enquête, personnes présentes, " +
+          "constatations et dispositions prises sont portées en regard de l'avis."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LA FICHE D'ENTREPRISE, ET LE DOCUMENT QUE L'EMPLOYEUR ADRESSE AU SERVICE
+
+     Attention au partage des rôles, parce qu'il commande tout le document :
+     la fiche d'entreprise est établie par le médecin du travail ou, dans les
+     services interentreprises, par l'équipe pluridisciplinaire (R. 4624-46).
+     L'employeur ne l'écrit pas. Ce qu'il doit produire, lui, c'est le document
+     de D. 4622-22 - nombre et catégorie des travailleurs à suivre, risques
+     auxquels ils sont exposés - mis à jour chaque année.
+
+     La pièce sort donc les deux : le courrier qui demande la fiche, et le
+     document annuel qui l'accompagne.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  ajouterPiece({
+    id: "PIECE-FICHE-ENTREPRISE",
+    modules: ["sst", "social"],
+    titre: "Fiche d'entreprise du service de santé au travail",
+    question: "Avez-vous la fiche d'entreprise établie par votre service de prévention et de santé au travail ?",
+    fichier: "fiche-entreprise-demande",
+    renvoi: "R. 4624-46 (LEGIARTI000045677119), R. 4624-47 (LEGIARTI000045676758), " +
+            "D. 4622-22 (LEGIARTI000045676988)",
+    champs: [
+      { c: "service", nom: "Service de prévention et de santé au travail", ph: "SPSTI de [ville]" },
+      { c: "adresseService", nom: "Adresse du service", ph: "4 rue des Prés, 59000 Lille" },
+      { c: "medecin", nom: "Médecin du travail", ph: "Docteur [nom]" },
+      { c: "adhesion", nom: "Date d'adhésion au service", t: "date" },
+      { c: "categories", nom: "Catégories de travailleurs et effectifs", t: "textarea",
+        ph: "18 opérateurs de production, 4 caristes, 6 salariés administratifs, 2 techniciens de maintenance" },
+      { c: "risques", nom: "Risques professionnels auxquels ils sont exposés", t: "textarea",
+        ph: "bruit, manutention manuelle, circulation d'engins, produits chimiques d'entretien, travail sur écran" },
+      { c: "renforce", nom: "Postes relevant du suivi individuel renforcé", t: "textarea",
+        ph: "conduite d'engins soumise à autorisation, travaux en hauteur avec montage d'échafaudage" },
+      { c: "avisCSE", nom: "Date de l'avis du comité social et économique", t: "date" },
+      { c: "avisMedecin", nom: "Date de l'avis du médecin du travail", t: "date" },
+    ],
+    blocs: function (ctx) {
+      var f = feuille();
+      f.t1("DEMANDE DE FICHE D'ENTREPRISE");
+      f.st("et document annuel des travailleurs à suivre et des risques");
+      f.p(nomDe(ctx));
+      f.p(adresseDe(ctx));
+      f.vide();
+      f.p(val(ctx, "service", "service de prévention et de santé au travail"));
+      f.p(val(ctx, "adresseService", "adresse du service"));
+      f.p("À l'attention de " + val(ctx, "medecin", "Docteur, médecin du travail"));
+      f.vide();
+      f.p(villeDe(ctx) + ", le " + leJourDu(ctx));
+      f.p("Objet : fiche d'entreprise et document annuel prévu à l'article D. 4622-22");
+      f.vide();
+      f.p("Docteur,");
+      f.p("Notre entreprise adhère à votre service depuis le " +
+        dateVal(ctx, "adhesion", "date d'adhésion") + ". Je n'ai pas, à ce jour, la fiche " +
+        "d'entreprise prévue à l'article R. 4624-46 : je vous demande de l'établir et de me la " +
+        "transmettre.");
+      f.p("Pour chaque entreprise ou établissement, le médecin du travail ou, dans les services " +
+        "de prévention et de santé au travail interentreprises, l'équipe pluridisciplinaire " +
+        "établit et met à jour une fiche d'entreprise ou d'établissement sur laquelle figurent, " +
+        "notamment, les risques professionnels et les effectifs de salariés qui y sont exposés. " +
+        "Pour les entreprises adhérentes à un service interentreprises, elle est établie dans " +
+        "l'année qui suit l'adhésion.");
+      f.p("Vous trouverez ci-après le document que l'article D. 4622-22 met à ma charge : le " +
+        "nombre et la catégorie des travailleurs à suivre et les risques professionnels auxquels " +
+        "ils sont exposés. Il est établi en cohérence avec l'évaluation des risques et le " +
+        "recensement des postes exposés à des facteurs de risques.");
+      f.p("Je vous prie d'agréer, Docteur, l'expression de ma considération distinguée.");
+      f.sign("\n" + signataire(ctx) + "\n" + nomDe(ctx));
+      f.note("R. 4624-46 et R. 4624-47 sont cités dans leurs termes. La fiche d'entreprise " +
+        "n'est pas un document que vous écrivez : elle est établie par le médecin du travail " +
+        "ou l'équipe pluridisciplinaire. Ce courrier la demande, il ne la remplace pas.");
+
+      f.saut();
+      f.t1("DOCUMENT ANNUEL DES TRAVAILLEURS À SUIVRE ET DES RISQUES");
+      f.st("Article D. 4622-22 du code du travail");
+      f.p(nomDe(ctx) + " - " + adresseDe(ctx));
+      f.p("Établi le " + leJourDu(ctx) + ". " + ligneEffectif(ctx));
+      f.h1("1. Nombre et catégorie des travailleurs à suivre");
+      f.p(val(ctx, "categories", "catégories de travailleurs et effectif de chacune"));
+      f.h1("2. Risques professionnels auxquels ils sont exposés");
+      f.p(val(ctx, "risques", "risques, par catégorie de travailleurs"));
+      f.h1("3. Postes relevant d'un suivi individuel renforcé");
+      f.p(val(ctx, "renforce", "postes exposant aux risques mentionnés à l'article R. 4624-23"));
+      f.note("D. 4622-22 renvoie, pour ces postes, aux risques mentionnés à l'article " +
+        "R. 4624-23, que l'application ne reproduit pas : allez le lire pour dresser cette " +
+        "liste, elle commande le suivi individuel renforcé de vos salariés.");
+      f.h1("4. Avis recueillis");
+      f.p("Avis du médecin du travail, le " + dateVal(ctx, "avisMedecin", "date") + ".");
+      f.p("Avis du comité social et économique, le " + dateVal(ctx, "avisCSE", "date") +
+        " (s'il existe).");
+      f.p("Ce document est établi en cohérence avec l'évaluation des risques prévue à l'article " +
+        "L. 4121-3 et avec le recensement des postes exposés à des facteurs de risques prévu à " +
+        "l'article R. 4624-46. Il est mis à jour chaque année selon les mêmes modalités et tenu " +
+        "à disposition de l'administration du travail.");
+      f.sign("\n" + signataire(ctx) + "\n" + nomDe(ctx));
+      f.note("D. 4622-22, dans ses termes : le document est adressé au service, établi après " +
+        "avis du ou des médecins du travail concernés ainsi que du comité social et économique " +
+        "s'il existe, mis à jour chaque année et tenu à disposition.");
+      return f.L;
+    },
+    attendus: [
+      { cle: "risques", objet: "Les risques professionnels de l'entreprise",
+        mots: ["risque", "exposition", "exposé"],
+        renvoi: "R. 4624-46",
+        clause: ["Risques professionnels relevés dans l'entreprise : [liste des risques, par " +
+          "unité de travail]."] },
+      { cle: "effectifs", objet: "Les effectifs de salariés exposés",
+        mots: ["effectif", "salariés exposés", "nombre de salariés"],
+        renvoi: "R. 4624-46",
+        clause: ["Effectifs de salariés exposés à chacun de ces risques : [nombre par risque et " +
+          "par catégorie]."] },
+      { cle: "datee", objet: "Une fiche datée et mise à jour",
+        mots: ["mise à jour", "établie le", "date"],
+        renvoi: "R. 4624-46, R. 4624-47",
+        clause: ["Fiche établie le [date] et mise à jour le [date]. Pour une entreprise " +
+          "adhérente à un service interentreprises, la fiche est établie dans l'année qui suit " +
+          "l'adhésion (R. 4624-47)."] },
+      { cle: "renforce", objet: "Les postes relevant du suivi individuel renforcé",
+        mots: ["suivi individuel renforcé", "R. 4624-23", "surveillance renforcée"],
+        renvoi: "D. 4622-22",
+        clause: ["Postes exposant aux risques mentionnés à l'article R. 4624-23, qui ouvrent le " +
+          "suivi individuel renforcé : [liste des postes]."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LA DÉSIGNATION DU SALARIÉ COMPÉTENT
+
+     L. 4644-1, I : l'employeur DÉSIGNE un ou plusieurs salariés compétents.
+     Ce n'est pas une faculté, et le texte ne pose pas de seuil d'effectif. La
+     pièce sort la décision de désignation et la lettre de mission ; l'avis du
+     comité, lui, ne concerne que le cas où l'employeur fait appel à des
+     intervenants extérieurs faute de compétences dans l'entreprise.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  ajouterPiece({
+    id: "PIECE-SALARIE-COMPETENT",
+    modules: ["sst", "social"],
+    titre: "Désignation du salarié compétent en prévention",
+    question: "Avez-vous désigné un ou plusieurs salariés compétents pour s'occuper de la protection et de la prévention des risques ?",
+    fichier: "designation-salarie-competent",
+    renvoi: "L. 4644-1 (LEGIARTI000043893856)",
+    champs: [
+      { c: "salarie", nom: "Salarié désigné (nom et prénom)", ph: "Madame Sarah BENOÎT" },
+      { c: "fonction", nom: "Sa fonction dans l'entreprise", ph: "responsable maintenance" },
+      { c: "effet", nom: "Date d'effet de la désignation", t: "date" },
+      { c: "temps", nom: "Temps consacré à la mission", ph: "une demi-journée par semaine" },
+      { c: "moyens", nom: "Moyens mis à sa disposition", t: "textarea",
+        ph: "accès au document unique et aux rapports de vérification, budget de 1 500 euros par an, accès aux fiches de données de sécurité, liberté de circuler sur les sites" },
+      { c: "formation", nom: "Formation prévue (organisme, dates)", ph: "[organisme], du 12 au 14 novembre 2026" },
+      { c: "exterieur", nom: "Recours à un intervenant extérieur faute de compétences internes ?",
+        t: "select", options: ["non", "oui"] },
+      { c: "avisCSE", nom: "Date de l'avis du comité (si recours extérieur)", t: "date" },
+    ],
+    blocs: function (ctx) {
+      var f = feuille();
+      var exterieur = String((ctx.valeurs || {}).exterieur || "non") === "oui";
+      teteDocument(f, ctx, "DÉSIGNATION D'UN SALARIÉ COMPÉTENT",
+        "Protection et prévention des risques professionnels");
+      f.p("L'employeur désigne un ou plusieurs salariés compétents pour s'occuper des activités " +
+        "de protection et de prévention des risques professionnels de l'entreprise.");
+      f.p("En conséquence, " + val(ctx, "salarie", "nom et prénom du salarié") + ", " +
+        val(ctx, "fonction", "fonction") + ", est désigné salarié compétent en matière de " +
+        "protection et de prévention des risques professionnels, à compter du " +
+        dateVal(ctx, "effet", "date d'effet") + ".");
+      f.note("L. 4644-1, I, première phrase, dans ses termes.");
+
+      f.h1("La mission");
+      f.p("Le salarié désigné s'occupe des activités de protection et de prévention des risques " +
+        "professionnels de l'entreprise. À ce titre :");
+      f.puce("il participe à l'évaluation des risques et à la tenue à jour du document unique ;");
+      f.puce("il propose les actions de prévention et suit leur exécution ;");
+      f.puce("il tient le lien avec le service de prévention et de santé au travail ;");
+      f.puce("il suit les vérifications périodiques et les contrôles réglementaires ;");
+      f.puce("il est associé à l'analyse des accidents du travail et des situations dangereuses ;");
+      f.puce("il rend compte à la direction et, s'il en existe un, au comité social et " +
+        "économique et à sa commission santé, sécurité et conditions de travail.");
+      f.note("Cette énumération est une proposition de contenu : L. 4644-1 fixe l'objet de la " +
+        "mission - les activités de protection et de prévention - sans en dresser la liste. " +
+        "Retirez ce qui ne correspond pas à votre organisation, ajoutez ce qui y correspond.");
+
+      f.h1("Le temps et les moyens");
+      f.p("Temps consacré à la mission : " + val(ctx, "temps", "temps consacré") + ".");
+      f.p("Moyens mis à disposition : " + val(ctx, "moyens", "moyens matériels, budget, accès aux documents") + ".");
+      f.p("La désignation ne modifie ni le contrat de travail ni la rémunération du salarié. " +
+        "Elle ne transfère pas la responsabilité de l'employeur en matière de santé et de " +
+        "sécurité.");
+      f.note("La dernière phrase n'est pas tirée d'un article lu ici : elle rappelle que " +
+        "l'obligation de sécurité pèse sur l'employeur. Le refus du salarié ne peut pas être " +
+        "sanctionné sur le fondement de ce document.");
+
+      f.h1("La formation");
+      f.p("Le salarié désigné bénéficie d'une formation en matière de santé au travail dans les " +
+        "conditions prévues aux articles L. 2315-16 à L. 2315-18 du code du travail. Formation " +
+        "prévue : " + val(ctx, "formation", "organisme et dates") + ".");
+      f.note("L. 4644-1, I, deuxième phrase, renvoie aux articles L. 2315-16 à L. 2315-18 pour " +
+        "les conditions de cette formation. L'application ne les a pas lus et n'en reproduit " +
+        "donc ni la durée ni le financement : allez les lire avant de commander la formation.");
+
+      if (exterieur) {
+        f.h1("Le recours à des compétences extérieures");
+        f.p("Les compétences disponibles dans l'entreprise ne permettent pas d'organiser ces " +
+          "activités. L'employeur fait donc appel, après avis du comité social et économique " +
+          "rendu le " + dateVal(ctx, "avisCSE", "date de l'avis") + ", aux intervenants en " +
+          "prévention des risques professionnels appartenant au service de prévention et de " +
+          "santé au travail interentreprises auquel l'entreprise adhère, ou dûment enregistrés " +
+          "auprès de l'autorité administrative.");
+        f.note("L. 4644-1, I : ce recours n'intervient qu'À DÉFAUT, si les compétences dans " +
+          "l'entreprise ne permettent pas d'organiser ces activités, et après avis du comité. " +
+          "Il ne dispense pas de la désignation d'un salarié compétent, que le même texte " +
+          "impose en premier lieu. L'employeur peut aussi faire appel aux services de prévention " +
+          "des caisses de sécurité sociale, à l'organisme professionnel de prévention du " +
+          "bâtiment et des travaux publics et à l'Agence nationale pour l'amélioration des " +
+          "conditions de travail et son réseau.");
+      }
+
+      f.trait();
+      f.sign("Fait à " + villeDe(ctx) + ", le " + leJourDu(ctx) + ", en deux exemplaires.\n\n" +
+        "Le salarié désigné" + "                                        " + "Pour l'entreprise\n" +
+        val(ctx, "salarie", "nom") + "                                   " + signataire(ctx));
+      f.note("Remettez un exemplaire au salarié, informez le comité social et économique s'il " +
+        "en existe un, et indiquez le nom du salarié désigné à votre service de prévention et " +
+        "de santé au travail.");
+      return f.L;
+    },
+    attendus: [
+      { cle: "nomme", objet: "Le nom du salarié désigné",
+        mots: ["désigne", "désigné", "est chargé"],
+        renvoi: "L. 4644-1, I",
+        clause: ["[Nom et prénom], [fonction], est désigné salarié compétent pour s'occuper des " +
+          "activités de protection et de prévention des risques professionnels de l'entreprise, " +
+          "à compter du [date]."] },
+      { cle: "mission", objet: "L'objet de la mission",
+        mots: ["protection et", "prévention des risques", "activités de prévention"],
+        renvoi: "L. 4644-1, I",
+        clause: ["Le salarié désigné s'occupe des activités de protection et de prévention des " +
+          "risques professionnels de l'entreprise."] },
+      { cle: "formation", objet: "La formation en matière de santé au travail",
+        mots: ["formation"],
+        renvoi: "L. 4644-1, I",
+        clause: ["Le salarié désigné bénéficie d'une formation en matière de santé au travail " +
+          "dans les conditions prévues aux articles L. 2315-16 à L. 2315-18 du code du travail."] },
+      { cle: "moyens", objet: "Le temps et les moyens de la mission",
+        mots: ["temps", "moyens", "heures"],
+        renvoi: "L. 4644-1",
+        clause: ["Temps consacré à la mission : [durée]. Moyens mis à disposition : [accès aux " +
+          "documents, budget, matériel]."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LE PLAN DE PRÉVENTION
+
+     Deux temps que le document ne mélange pas : l'inspection commune préalable
+     des lieux (R. 4512-2), puis l'analyse commune des risques d'interférence
+     et le plan lui-même (R. 4512-6). L'écrit n'est obligatoire que dans deux
+     cas, et R. 4512-7 les énonce : 400 heures sur douze mois au plus, ou
+     travaux dangereux de la liste ministérielle. En dehors de ces deux cas le
+     plan reste dû dès qu'il y a des risques d'interférence, mais il peut être
+     verbal - le document le dit, et conseille l'écrit sans le présenter comme
+     une obligation.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  ajouterPiece({
+    id: "PIECE-PLAN-PREVENTION",
+    modules: ["sst", "social"],
+    titre: "Plan de prévention avec une entreprise extérieure",
+    question: "Avez-vous un plan de prévention pour les interventions d'entreprises extérieures chez vous ?",
+    fichier: "plan-de-prevention",
+    renvoi: "R. 4511-1 (LEGIARTI000018529829), R. 4512-2 (LEGIARTI000018529795), " +
+            "R. 4512-6 (LEGIARTI000018529785), R. 4512-7 (LEGIARTI000018529783), " +
+            "R. 4512-8 (LEGIARTI000018529781), R. 4512-11 (LEGIARTI000043841178), " +
+            "R. 4512-12 (LEGIARTI000018529773), R. 4512-15 (LEGIARTI000018529763), " +
+            "R. 4515-4 (LEGIARTI000018529684)",
+    champs: [
+      { c: "exterieure", nom: "Entreprise extérieure", ph: "SARL NETTOYAGE PLUS" },
+      { c: "adresseExt", nom: "Son adresse", ph: "8 rue du Moulin, 59000 Lille" },
+      { c: "representantExt", nom: "Son représentant", ph: "M. Karim ALAOUI, gérant" },
+      { c: "operation", nom: "Nature de l'opération", t: "textarea",
+        ph: "nettoyage des vitres en hauteur et des sanitaires, deux passages par semaine" },
+      { c: "lieuOp", nom: "Lieu d'exécution", ph: "bâtiment A, ateliers et bureaux" },
+      { c: "debut", nom: "Date de début", t: "date" },
+      { c: "fin", nom: "Date de fin", t: "date" },
+      { c: "heures", nom: "Heures de travail prévisibles sur douze mois", t: "number", ph: "480" },
+      { c: "dangereux", nom: "Travaux figurant sur la liste des travaux dangereux ?",
+        t: "select", options: ["non", "oui", "je ne sais pas"] },
+      { c: "inspection", nom: "Date de l'inspection commune préalable", t: "date" },
+      { c: "participants", nom: "Participants à l'inspection commune", t: "textarea",
+        ph: "M. Dupont (entreprise utilisatrice), M. Alaoui (entreprise extérieure), Mme Lambert (CSE)" },
+      { c: "phases", nom: "Phases d'activité dangereuses et moyens de prévention", t: "textarea",
+        ph: "travail en hauteur sur nacelle : nacelle vérifiée, port du harnais, zone balisée au sol ; co-activité avec les caristes : interdiction de circulation dans l'allée pendant l'intervention" },
+      { c: "materiels", nom: "Matériels, installations et dispositifs, et leur entretien", t: "textarea",
+        ph: "nacelle fournie par l'entreprise extérieure, vérification périodique à jour ; prises électriques du bâtiment A, contrôlées le 3 mars 2026" },
+      { c: "instructions", nom: "Instructions données aux travailleurs", t: "textarea",
+        ph: "consigne incendie remise, plan d'évacuation affiché, interdiction d'accès au local chaufferie, port du gilet dans les allées de circulation" },
+      { c: "secoursOp", nom: "Organisation des premiers secours", t: "textarea",
+        ph: "infirmerie au rez-de-chaussée, deux sauveteurs secouristes du travail joignables au 4512, défibrillateur à l'accueil" },
+      { c: "participation", nom: "Participation de travailleurs d'une entreprise aux travaux d'une autre", t: "textarea",
+        ph: "aucune ; en cas de besoin, le cariste de l'entreprise utilisatrice assure les manutentions, sous l'autorité de son responsable" },
+      { c: "amiante", nom: "Dossier technique amiante joint ?", t: "select", options: ["oui", "non", "sans objet"] },
+    ],
+    /* L'écrit est obligatoire dans deux cas, et l'écran doit les distinguer :
+       le document produit dit lequel s'applique au dossier saisi. */
+    blocs: function (ctx) {
+      var f = feuille();
+      var v = ctx.valeurs || {};
+      var h = Number(v.heures);
+      var ecrit400 = isFinite(h) && h >= 400;
+      var dangereux = String(v.dangereux || "") === "oui";
+      teteDocument(f, ctx, "PLAN DE PRÉVENTION",
+        "Entreprise utilisatrice et entreprise extérieure");
+
+      f.h1("Les parties");
+      f.p("Entreprise utilisatrice : " + nomDe(ctx) + ", " + adresseDe(ctx) + ", représentée par " +
+        signataire(ctx) + ".");
+      f.p("Entreprise extérieure : " + val(ctx, "exterieure", "dénomination") + ", " +
+        val(ctx, "adresseExt", "adresse") + ", représentée par " +
+        val(ctx, "representantExt", "nom et qualité") + ".");
+      f.note("R. 4511-1 : le titre s'applique dès qu'une entreprise extérieure fait intervenir " +
+        "des travailleurs pour exécuter ou participer à l'exécution d'une opération, quelle que " +
+        "soit sa nature, dans un établissement de l'entreprise utilisatrice, y compris dans ses " +
+        "dépendances ou chantiers.");
+
+      f.h1("L'opération");
+      f.p("Nature : " + val(ctx, "operation", "nature de l'opération"));
+      f.p("Lieu : " + val(ctx, "lieuOp", "lieu d'exécution") + ".");
+      f.p("Période : du " + dateVal(ctx, "debut", "date de début") + " au " +
+        dateVal(ctx, "fin", "date de fin") + ".");
+      f.p("Nombre total d'heures de travail prévisible : " + val(ctx, "heures", "nombre d'heures") +
+        " sur une période inférieure ou égale à douze mois.");
+      f.p(ecrit400 || dangereux
+        ? "Le présent plan est établi par écrit et arrêté avant le commencement des travaux : " +
+          (ecrit400 ? "l'opération représente au moins 400 heures de travail sur une période " +
+            "inférieure ou égale à douze mois" : "") +
+          (ecrit400 && dangereux ? ", et " : "") +
+          (dangereux ? "les travaux à accomplir figurent sur la liste des travaux dangereux " +
+            "fixée par arrêté du ministre chargé du travail" : "") + "."
+        : "En l'état des heures saisies et de la nature des travaux, l'écrit n'est pas imposé " +
+          "par R. 4512-7. Le plan reste dû dès que l'analyse commune révèle des risques " +
+          "d'interférence, et il est ici établi par écrit par prudence : c'est la seule façon " +
+          "de prouver ce qui a été arrêté en commun.");
+      f.note("R. 4512-7 : l'écrit est obligatoire dans deux cas, l'un tenant aux 400 heures - y " +
+        "compris s'il apparaît en cours d'exécution que ce nombre doit être atteint -, l'autre " +
+        "aux travaux dangereux d'une liste fixée par arrêté. L'application n'a pas lu cet " +
+        "arrêté et ne dit pas si vos travaux y figurent.");
+
+      f.h1("L'inspection commune préalable");
+      f.p("Une inspection commune des lieux de travail, des installations qui s'y trouvent et " +
+        "des matériels éventuellement mis à disposition de l'entreprise extérieure a eu lieu le " +
+        dateVal(ctx, "inspection", "date de l'inspection commune") + ", préalablement à " +
+        "l'exécution de l'opération.");
+      f.p("Participants : " + val(ctx, "participants", "noms et qualités"));
+      f.note("R. 4512-2. Elle précède le plan : c'est d'elle que sortent les informations sur " +
+        "lesquelles les chefs d'entreprise analysent ensemble les risques d'interférence " +
+        "(R. 4512-6).");
+
+      f.h1("L'analyse commune des risques d'interférence");
+      f.p("Au vu des informations et éléments recueillis au cours de l'inspection commune " +
+        "préalable, les chefs des entreprises utilisatrice et extérieure ont procédé en commun à " +
+        "une analyse des risques pouvant résulter de l'interférence entre les activités, " +
+        "installations et matériels. Ces risques existent ; les mesures ci-après sont arrêtées " +
+        "d'un commun accord avant le début des travaux.");
+      f.note("R. 4512-6, dans ses termes.");
+
+      f.h1("1. Phases d'activité dangereuses et moyens de prévention correspondants");
+      f.p(val(ctx, "phases", "phases dangereuses et moyens de prévention"));
+      f.h1("2. Adaptation des matériels, installations et dispositifs, et conditions d'entretien");
+      f.p(val(ctx, "materiels", "matériels, installations, dispositifs et leur entretien"));
+      f.h1("3. Instructions à donner aux travailleurs");
+      f.p(val(ctx, "instructions", "instructions données aux travailleurs"));
+      f.h1("4. Organisation des premiers secours en cas d'urgence");
+      f.p(val(ctx, "secoursOp", "organisation des secours et dispositif de l'entreprise utilisatrice"));
+      f.h1("5. Participation de travailleurs d'une entreprise aux travaux d'une autre");
+      f.p(val(ctx, "participation", "conditions de la participation et organisation du commandement"));
+      f.note("Ces cinq points sont les dispositions que R. 4512-8 exige au moins. Ce qui les " +
+        "remplit vient de votre opération : l'application ne connaît ni vos lieux, ni vos " +
+        "matériels, ni vos co-activités.");
+
+      f.h1("Pièces jointes");
+      f.p(String(v.amiante || "") === "oui"
+        ? "Sont joints au présent plan les dossiers techniques regroupant les informations " +
+          "relatives à la recherche et à l'identification des matériaux contenant de l'amiante, " +
+          "ou, le cas échéant, le rapport de repérage de l'amiante."
+        : "Dossiers techniques amiante : " + (String(v.amiante || "") === "sans objet"
+            ? "sans objet pour cette opération."
+            : "[à joindre - voir la note ci-dessous]"));
+      f.note("R. 4512-11 impose de joindre au plan de prévention les dossiers techniques " +
+        "amiante prévus aux articles R. 1334-29-4 à R. 1334-29-6 du code de la santé publique " +
+        "et à l'article R. 126-10 du code de la construction et de l'habitation ou, le cas " +
+        "échéant, le rapport de repérage prévu à l'article R. 4412-97-5 du code du travail. Ces " +
+        "articles-là n'ont pas été lus par l'application : allez les lire.");
+
+      f.trait();
+      f.sign("Fait à " + villeDe(ctx) + ", le " + leJourDu(ctx) + ", avant le commencement des " +
+        "travaux, en deux exemplaires.\n\nPour l'entreprise utilisatrice        Pour l'entreprise extérieure\n" +
+        signataire(ctx) + "                    " + val(ctx, "representantExt", "nom et qualité"));
+
+      if (ecrit400 || dangereux) {
+        f.note("Parce que l'écrit est obligatoire ici : le plan est tenu pendant toute la durée " +
+          "des travaux à la disposition de l'inspection du travail, des agents de prévention des " +
+          "organismes de sécurité sociale et, le cas échéant, de l'OPPBTP ; et le chef de " +
+          "l'entreprise utilisatrice informe par écrit l'inspection du travail de l'ouverture " +
+          "des travaux (R. 4512-12).");
+      }
+      f.note("Avant le début des travaux et sur le lieu même de leur exécution, le chef de " +
+        "l'entreprise extérieure fait connaître aux travailleurs qu'il y affecte les dangers " +
+        "spécifiques auxquels ils sont exposés et les mesures de prévention prises, précise les " +
+        "zones dangereuses et les moyens de les matérialiser, explique l'emploi des dispositifs " +
+        "de protection et montre les voies d'accès, les locaux mis à disposition et les issues " +
+        "de secours (R. 4512-15).");
+      f.note("Pour une opération de chargement ou de déchargement, ce n'est pas un plan de " +
+        "prévention qu'il faut : R. 4515-4 impose un document écrit dit « protocole de " +
+        "sécurité », qui remplace le plan de prévention.");
+      return f.L;
+    },
+    attendus: [
+      { cle: "inspection", objet: "L'inspection commune préalable des lieux",
+        mots: ["inspection commune", "visite préalable", "inspection préalable"],
+        renvoi: "R. 4512-2",
+        clause: ["Une inspection commune des lieux de travail, des installations qui s'y trouvent " +
+          "et des matériels éventuellement mis à disposition de l'entreprise extérieure a eu lieu " +
+          "le [date], préalablement à l'exécution de l'opération. Participants : [noms et qualités]."] },
+      { cle: "analyse", objet: "L'analyse commune des risques d'interférence",
+        mots: ["interférence", "analyse en commun", "analyse des risques"],
+        renvoi: "R. 4512-6",
+        clause: ["Au vu des informations recueillies au cours de l'inspection commune préalable, " +
+          "les chefs des entreprises utilisatrice et extérieures ont procédé en commun à une " +
+          "analyse des risques pouvant résulter de l'interférence entre les activités, " +
+          "installations et matériels."] },
+      { cle: "phases", objet: "Les phases d'activité dangereuses et leurs moyens de prévention",
+        mots: ["phases d'activité", "phase dangereuse", "activités dangereuses"],
+        renvoi: "R. 4512-8, 1°",
+        clause: ["1. Phases d'activité dangereuses et moyens de prévention spécifiques " +
+          "correspondants : [phases et mesures]."] },
+      { cle: "materiels", objet: "L'adaptation des matériels et leurs conditions d'entretien",
+        mots: ["matériel", "installations", "entretien"],
+        renvoi: "R. 4512-8, 2°",
+        clause: ["2. Adaptation des matériels, installations et dispositifs à la nature des " +
+          "opérations à réaliser, et définition de leurs conditions d'entretien : [description]."] },
+      { cle: "instructions", objet: "Les instructions à donner aux travailleurs",
+        mots: ["instruction", "consigne"],
+        renvoi: "R. 4512-8, 3°",
+        clause: ["3. Instructions à donner aux travailleurs : [instructions]."] },
+      { cle: "secours", objet: "L'organisation des premiers secours",
+        mots: ["premiers secours", "secours", "urgence"],
+        renvoi: "R. 4512-8, 4°",
+        clause: ["4. Organisation mise en place pour assurer les premiers secours en cas " +
+          "d'urgence, et description du dispositif mis en place à cet effet par l'entreprise " +
+          "utilisatrice : [organisation]."] },
+      { cle: "participation", objet: "La participation de travailleurs d'une entreprise aux travaux d'une autre",
+        mots: ["participation", "commandement", "coordination"],
+        renvoi: "R. 4512-8, 5°",
+        clause: ["5. Conditions de la participation des travailleurs d'une entreprise aux travaux " +
+          "réalisés par une autre en vue d'assurer la coordination nécessaire au maintien de la " +
+          "sécurité, notamment l'organisation du commandement : [conditions]."] },
+      { cle: "amiante", objet: "Les dossiers techniques amiante joints au plan",
+        mots: ["amiante", "repérage"],
+        renvoi: "R. 4512-11",
+        clause: ["Sont joints au présent plan les dossiers techniques regroupant les informations " +
+          "relatives à la recherche et à l'identification des matériaux contenant de l'amiante, " +
+          "ou, le cas échéant, le rapport de repérage de l'amiante."] },
+      { cle: "disposition", objet: "La tenue à disposition et l'information de l'inspection du travail",
+        mots: ["disposition de l'inspection", "ouverture des travaux", "inspection du travail"],
+        renvoi: "R. 4512-12",
+        clause: ["Le présent plan est tenu, pendant toute la durée des travaux, à la disposition " +
+          "de l'inspection du travail, des agents de prévention des organismes de sécurité " +
+          "sociale et, le cas échéant, de l'OPPBTP. Le chef de l'entreprise utilisatrice informe " +
+          "par écrit l'inspection du travail de l'ouverture des travaux."] },
+    ],
+  });
+
 /* ==SUITE== */
 })(typeof window !== "undefined" ? window : this);

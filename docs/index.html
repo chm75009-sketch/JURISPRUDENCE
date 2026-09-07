@@ -29,91 +29,58 @@
   Rien n'est supprimé : tout ce qui existait reste accessible, rangé.
 -->
 
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
-    --fond:#fbfbfc; --carte:#ffffff; --creux:#f4f5f7;
-    --filet:#e3e6ea; --filet-2:#cdd2d8;
-    --bleu:#1F3864; --bleu-clair:#eef1f7;
-    --prune:#5C2A54; --vert:#1C5E36; --ambre:#8a5b10; --ambre-clair:#f8efdf;
-    --ombre:0 1px 2px rgba(28,33,38,.05), 0 10px 28px -16px rgba(28,33,38,.30);
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--fond);color:var(--encre);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  /* La page d'accueil : la question, la fiche, les deux portes. Tout le
+     reste (bandeau, pied, boutons, champs) vient de style.css. */
 
-  /* ---------- bandeau ---------- */
-  header.site{background:var(--encre);color:#fff;padding:14px 0}
-  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-  header.site h1{margin:0;font:600 17px/1.25 system-ui}
-  header.site h1 span{opacity:.62;font-weight:400}
-  .outils{display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:13px}
-  .outils button,.outils a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
-    border:1px solid rgba(255,255,255,.34);background:transparent;color:#fff;cursor:pointer;text-decoration:none}
-  .outils button:hover,.outils a:hover{background:rgba(255,255,255,.12)}
-  #etat-version{opacity:.55;font-size:11.5px}
-
-  /* ---------- la question ---------- */
-  .question{padding:44px 0 6px}
-  .question p.sur{margin:0 0 8px;font:600 11.5px/1 system-ui;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--encre-3)}
-  .question h2{margin:0 0 10px;font:600 clamp(28px,4.6vw,42px)/1.12 system-ui;letter-spacing:-.02em}
-  .question p.sous{margin:0;max-width:62ch;color:var(--encre-2)}
+  .question{padding:var(--e7) 0 var(--e1)}
+  .question p.sur{margin:0 0 var(--e2)}
+  .question h1{margin:0 0 var(--e3)}
+  .question p.sous{margin:0;max-width:62ch;color:var(--texte-2)}
 
   /* ---------- la fiche, avant tout ---------- */
-  .ficheban{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;
-    margin:28px 0 0;padding:16px 20px;background:var(--bleu-clair);border:1px solid var(--bleu);
-    border-radius:12px;text-decoration:none;color:inherit}
-  .ficheban:hover{filter:brightness(.98)}
-  .ficheban b{display:block;font:600 15px/1.3 system-ui;color:var(--bleu)}
-  .ficheban span{font-size:13px;color:var(--encre-2)}
-  .ficheban-fleche{font:600 13px/1 system-ui;color:var(--bleu);white-space:nowrap}
+  .ficheban{display:flex;flex-wrap:wrap;gap:var(--e2) var(--e4);align-items:center;
+    justify-content:space-between;margin:var(--e5) 0 0;padding:var(--e4) var(--e5);
+    background:var(--accent-clair);border:1px solid var(--accent);
+    border-radius:var(--r2);text-decoration:none;color:inherit}
+  .ficheban:hover{background:#e7ebf3}
+  .ficheban b{display:block;font:600 15px/1.35 system-ui;color:var(--accent)}
+  .ficheban span{font-size:var(--t2);color:var(--texte-2)}
+  .ficheban-fleche{font:600 var(--t2)/1 system-ui;color:var(--accent);white-space:nowrap}
   .ficheban[hidden]{display:none}
-  .ficheban-continuer{display:block;margin:14px 0 0;font:600 14px system-ui;color:#fff;
-    background:var(--bleu);border:none;border-radius:9px;padding:11px 18px;cursor:pointer}
-  .ficheban-continuer:hover{filter:brightness(1.08)}
+  .ficheban-continuer{display:block;margin:var(--e3) 0 0}
   .ficheban-continuer[hidden]{display:none}
 
-  /* ---------- les deux portes — deux boutons, rien d'autre ---------- */
-  .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:16px 0 0}
+  /* ---------- les deux portes : deux boutons, rien d'autre ---------- */
+  .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:var(--e4);margin:var(--e4) 0 0}
   .portes[hidden]{display:none}
-  .porte-bouton{display:block;background:var(--carte);border:1px solid var(--filet-2);
-    border-radius:14px;box-shadow:var(--ombre);padding:26px 24px;text-decoration:none;color:inherit}
-  .porte-bouton:hover{border-color:var(--bleu)}
-  .porte-bouton .n{display:inline-flex;width:30px;height:30px;border-radius:8px;color:#fff;
-    font:600 14px/30px system-ui;justify-content:center;margin-bottom:12px}
-  .porte-bouton h3{margin:0 0 6px;font:600 24px/1.2 system-ui;letter-spacing:-.01em}
-  .porte-bouton p{margin:0;font-size:14.5px;color:var(--encre-2);line-height:1.5}
-  .p1 .n{background:var(--prune)} .p2 .n{background:var(--vert)}
+  .porte-bouton{display:block;background:var(--surface);border:1px solid var(--filet-2);
+    border-radius:var(--r2);box-shadow:var(--ombre);padding:var(--e5);
+    text-decoration:none;color:inherit}
+  .porte-bouton:hover{border-color:var(--accent)}
+  .porte-bouton .n{display:inline-flex;width:28px;height:28px;border-radius:var(--r1);
+    background:var(--accent);color:#fff;font:600 var(--t2)/28px system-ui;
+    justify-content:center;margin-bottom:var(--e3)}
+  .porte-bouton h2{margin:0 0 var(--e1);font:600 22px/1.25 system-ui}
+  .porte-bouton p{margin:0;font-size:var(--t3);color:var(--texte-2)}
 
   /* ---------- les règles ---------- */
-  .regles{margin:44px 0 0;padding:26px 0 0;border-top:1px solid var(--filet)}
-  .regles h3{margin:0 0 4px;font:600 19px/1.2 system-ui}
-  .regles>p{margin:0 0 16px;color:var(--encre-2);font-size:14.5px;max-width:64ch}
+  .regles{margin:var(--e7) 0 0;padding:var(--e5) 0 0;border-top:1px solid var(--filet)}
+  .regles h2{margin:0 0 var(--e1)}
+  .regles>p{margin:0 0 var(--e4);color:var(--texte-2);font-size:var(--t3);max-width:64ch}
   .regles ul{list-style:none;margin:0;padding:0;
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
-  .regles li{background:var(--carte);border:1px solid var(--filet);border-radius:11px;padding:14px 15px}
-  .regles li b{display:block;margin-bottom:4px;font-size:14.5px}
-  .regles li span{font-size:13.5px;color:var(--encre-2);line-height:1.5}
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:var(--e3)}
+  .regles li{background:var(--surface);border:1px solid var(--filet);
+    border-radius:var(--r2);padding:var(--e3) var(--e4)}
+  .regles li b{display:block;margin-bottom:var(--e1);font-size:var(--t3)}
+  .regles li span{font-size:var(--t2);color:var(--texte-2);line-height:1.55}
 
-  footer{margin:36px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
-    font-size:13px;color:var(--encre-3)}
-  footer a{color:var(--encre-2)}
-
-  dialog{max-width:64ch;border:1px solid var(--filet-2);border-radius:12px;padding:22px 24px;
-    font:15px/1.55 system-ui;color:var(--encre)}
-  dialog h2{margin:0 0 12px;font:600 19px/1.3 system-ui}
-  dialog p{margin:0 0 10px}
-  dialog button{font:inherit;padding:8px 18px;border-radius:8px;border:1px solid var(--filet-2);
-    background:var(--creux);cursor:pointer}
-
-  .maj-dispo{display:none;background:var(--bleu-clair);border-bottom:1px solid var(--filet-2)}
-  .maj-dispo.visible{display:block}
-  .maj-dispo .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 20px;
-    font-size:13.5px;color:var(--encre)}
-  .maj-dispo button{margin-left:auto;font:600 13px system-ui;padding:7px 14px;border-radius:8px;
-    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer;white-space:nowrap}
+  dialog{max-width:64ch;border:1px solid var(--filet-2);border-radius:var(--r2);
+    padding:var(--e5);font:15px/1.6 system-ui;color:var(--texte);background:var(--surface)}
+  dialog h2{margin:0 0 var(--e3);font:600 18px/1.3 system-ui}
+  dialog p{margin:0 0 var(--e2)}
 </style>
 </head>
 <body>
@@ -127,7 +94,7 @@
 
 <header class="site">
   <div class="wrap">
-    <h1>Jurisprudence <span>— relations collectives</span></h1>
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
     <div class="outils">
       <button id="btn-avert" type="button">Avertissement d'usage</button>
       <span id="etat-version"></span>
@@ -139,7 +106,7 @@
 
   <section class="question">
     <p class="sur">Bienvenue</p>
-    <h2>Qu'est-ce que vous avez à faire&nbsp;?</h2>
+    <h1>Qu'est-ce que vous avez à faire&nbsp;?</h1>
     <p class="sous" id="sous">Une fiche à remplir une fois, deux portes ensuite. Rien qu'on
     vous demande deux fois.</p>
   </section>
@@ -162,13 +129,13 @@
   <div class="portes" id="ecran-portes" hidden>
     <a class="porte-bouton p1" href="auditer.html">
       <span class="n">A</span>
-      <h3>Auditer</h3>
+      <h2>Auditer</h2>
       <p>Faire le point, module par module — ce qui manque, et comment le corriger,
       jusqu'à la vérification.</p>
     </a>
     <a class="porte-bouton p2" href="gerer.html">
       <span class="n">B</span>
-      <h3>Gérer</h3>
+      <h2>Gérer</h2>
       <p>Les outils du quotidien, de l'embauche à la rupture — tenir vos documents,
       mener une procédure, produire un acte.</p>
     </a>
@@ -176,7 +143,7 @@
 
   <!-- ══ les règles ══ -->
   <section class="regles">
-    <h3>Les cinq règles de l'écran</h3>
+    <h2>Les cinq règles de l'écran</h2>
     <p>Elles valent pour toutes les pages. C'est ce qui fait qu'on s'y retrouve sans mode d'emploi.</p>
     <ul>
       <li><b>Une chose par écran</b><span>Un point à corriger, un document à produire,

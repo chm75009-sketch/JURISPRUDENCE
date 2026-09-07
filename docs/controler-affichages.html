@@ -32,46 +32,11 @@
   Rien ne sort de ce poste. Les coordonnées saisies restent dans le navigateur.
 -->
 
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
-    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
-    --filet:#e3e6ea; --filet-2:#cdd2d8;
-    --bleu:#1F3864; --bleu-clair:#eef1f7;
-    --vert:#1C5E36; --vert-clair:#e9f2ec;
-    --ambre:#8a5b10; --ambre-clair:#f8efdf;
-    --rouge:#a32c2c; --rouge-clair:#faeaea;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--fond);color:var(--encre);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
-  header.site{background:var(--encre);color:#fff;padding:13px 0}
-  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
-  header.site h1 span{opacity:.6;font-weight:400}
-  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
-    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
-  header.site a:hover{background:rgba(255,255,255,.12)}
-
-  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
-  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
-  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
-
-  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
-  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
-    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
-  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
-
-  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
-  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px}
-  label.ch{display:grid;gap:4px}
-  label.ch .nom{font:600 11.5px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
   label.ch input,label.ch select,label.ch textarea{font:inherit;font-size:14.5px;padding:9px 11px;
     border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre);width:100%}
   label.ch textarea{min-height:72px;resize:vertical}
-  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
-  label.ch.large{grid-column:1/-1}
 
   .cases{display:grid;gap:2px}
   label.case{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border:1px solid var(--filet);
@@ -81,22 +46,6 @@
   label.case .f{font-size:12.5px;color:var(--encre-3);margin-top:2px}
   label.case.faite{background:var(--vert-clair);border-color:#cfe3d6}
   label.case.faite b{color:#1b4b2d}
-
-  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
-  .avis b{display:block;margin-bottom:2px}
-  .avis.info{background:var(--bleu-clair);color:#22385c}
-  .avis.att{background:var(--ambre-clair);color:#6b470c}
-  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
-
-  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
-  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
-    background:var(--bleu);color:#fff;cursor:pointer}
-  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
-  .btn.petit{font-size:12.5px;padding:7px 11px}
-
-  details.txt{border:1px solid var(--filet);border-radius:9px;background:var(--carte)}
-  details.txt>summary{padding:9px 13px;cursor:pointer;font:600 12.5px/1.3 system-ui;color:var(--bleu)}
-  details.txt .c{padding:0 14px 12px;font-size:13px;line-height:1.6;color:var(--encre-2)}
 
   .bloc-affiche{margin:26px 0 34px}
   .reglages{background:var(--creux);border:1px solid var(--filet);border-radius:11px;padding:13px 15px;margin:0 0 12px}
@@ -136,10 +85,6 @@
   table.releve .fait{color:var(--vert);font-weight:600}
   table.releve .apposer{color:var(--ambre);font-weight:600}
 
-  .cache{display:none}
-  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
-    font-size:13px;color:var(--encre-3)}
-
   @page{size:A4;margin:0}
   @media print{
     header.site,.onglets,.barre,.aide,.reglages,footer,h2,h3,.avis{display:none !important}
@@ -149,15 +94,14 @@
     .a4{border:0;margin:0;width:210mm;page-break-after:always}
     .hors-impression{display:none !important}
     .cache{display:none !important}
-  }
-</style>
+  }</style>
 </head>
 <body>
 
 <header class="site">
   <div class="wrap">
-    <h1>Mes affichages obligatoires <span>- dix cases, et les affiches qui sortent des cases décochées</span></h1>
-    <div style="display:flex;gap:7px;flex-wrap:wrap">
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <div class="outils">
       <a href="index.html">Accueil</a>
       <a href="audit-social.html">Auditer l'existant</a>
       <a href="parcours.html?p=affichages">Le parcours complet</a>
@@ -166,6 +110,10 @@
 </header>
 
 <main class="wrap">
+
+  <header>
+    <h1>Mes affichages obligatoires <span>- dix cases, et les affiches qui sortent des cases décochées</span></h1>
+  </header>
 
   <div class="onglets" id="onglets">
     <button data-o="cases" class="actif">1 · Ce qui est déjà au mur</button>

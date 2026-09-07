@@ -48,68 +48,11 @@
      de deux lectures concordantes, cette page ne le cite pas : les périodicités
      des thèmes de négociation sont fondées sur L. 2242-13 (supplétif) et sur
      L. 2242-2, L. 2242-2-1 et L. 2242-11, tous relus deux fois. -->
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
-    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
-    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
-    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--papier);color:var(--corps);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .page{max-width:1000px;margin:0 auto;padding:0 20px 80px}
-  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
-  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
-  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
-  .chapo{color:var(--gris);max-width:64ch;margin:0}
-  header a{color:var(--bleu)}
-  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 8px}
-  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:74ch}
-
-  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
-    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
-    margin:0 -20px 0;padding:10px 20px}
-  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
-    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
-  button.retour:hover{filter:brightness(1.12)}
-  .retour-ou{font-size:13px;color:var(--gris)}
-  .retour-ou a{color:var(--bleu)}
-
-  .presentation{border:1px solid var(--filet);background:var(--surface);
-    border-radius:4px;padding:18px 20px;margin:22px 0 0}
-  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
-  .presentation p{margin:0 0 10px;max-width:74ch}
-  .presentation p:last-child{margin-bottom:0}
-  .note{color:var(--gris);font-size:13.5px}
-
-  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
-    padding:16px 18px 20px;margin:16px 0}
-  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
-  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px 22px}
-  label{display:block;font-size:14px}
-  label .nom{display:block;color:var(--encre);margin-bottom:4px}
-  input,select{width:100%;padding:8px 10px;border:1px solid var(--filet);
-    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
-  input:focus,select:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
   .provenance{display:inline-block;font:600 11px/1.5 system-ui;color:var(--vert);
     background:var(--vert-f);border:1px solid #cfe3d6;border-radius:2px;padding:1px 6px;margin-top:4px}
-  .barre{margin:16px 0 0;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-  button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
-    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
-  button.second{background:var(--surface);color:var(--bleu)}
-  button:hover{filter:brightness(1.1)}
-
-  .vide{border:1px solid var(--filet);background:var(--gris-f);color:var(--corps);
-    padding:12px 14px;border-radius:3px;margin:18px 0 0;font-size:14.5px}
-  .enc{border:1px solid var(--bleu);background:#f4f6fb;padding:12px 14px;margin:14px 0;border-radius:3px}
-  .enc .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
   .enc p{margin:0}
-
-  .tab{overflow-x:auto;margin:12px 0}
-  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
-  th,td{border:1px solid var(--filet);padding:8px 10px;text-align:left;vertical-align:top}
-  th{background:var(--bleu);color:#fff;font-weight:600}
   td .quand{font-weight:600;color:var(--encre);white-space:nowrap}
   td .fenetre{color:var(--corps)}
   .badge{display:inline-block;font:600 11px/1 system-ui;color:#fff;background:var(--rouge);
@@ -124,8 +67,6 @@
   .attente .t{font-weight:600;color:var(--encre)}
   .attente .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
 
-  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
-
   @media print{
     .retour-barre,.barre,form,#form-bloc,.presentation,button{display:none !important}
     body{background:#fff}
@@ -136,10 +77,18 @@
     .badge{border:1px solid var(--rouge);color:var(--rouge);background:#fff}
     .badge-doux{border-color:var(--orange);color:var(--orange)}
     a{text-decoration:none;color:inherit}
-  }
-</style>
+  }</style>
 </head>
 <body>
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
 <div class="page">
 
 <div class="retour-barre">

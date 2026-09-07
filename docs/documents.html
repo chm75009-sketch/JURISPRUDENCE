@@ -49,34 +49,8 @@
      dépôt (moteur/cse/textes_cse.json, moteur/nao/textes-nao.json,
      moteur/sst/textes-sst.json, moteur/discipline/textes-discipline.json) ou de
      docs/textes-documents.json pour les compléments vérifiés au relais. -->
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
-    --gris:#5f6874; --filet:#dcdfe4; --bleu:#1F3864;
-    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36;
-    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--papier);color:var(--corps);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .page{max-width:1000px;margin:0 auto;padding:0 20px 80px}
-  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
-  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
-  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
-  .chapo{color:var(--gris);max-width:64ch;margin:0}
-  header a{color:var(--bleu)}
-
-  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
-    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
-    margin:0 -20px 0;padding:10px 20px}
-  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
-    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
-  button.retour:hover{filter:brightness(1.12)}
-  .retour-ou{font-size:13px;color:var(--gris)}
-  .retour-ou a{color:var(--bleu)}
-
-  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
-  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:70ch}
   /* Le renvoi de tête, pour les modèles dont Juris Expert imprime la version
      complète. Le modèle reste ici — il montre la structure et l'article ;
      le renvoi dit seulement où se fabrique la feuille à signer. */
@@ -85,13 +59,6 @@
     color:var(--gris);line-height:1.55}
   .renvoi-jx a{color:var(--encre);font-weight:600}
   .renvoi-jx a::after{content:" ↗";font-size:11px;color:var(--gris)}
-  .note{color:var(--gris);font-size:13.5px}
-
-  .presentation{border:1px solid var(--filet);background:var(--surface);
-    border-radius:4px;padding:18px 20px;margin:22px 0 0}
-  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
-  .presentation p{margin:0 0 10px;max-width:74ch}
-  .presentation p:last-child{margin-bottom:0}
 
   /* Le choix du modèle : huit cartes, une seule active. */
   .modeles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:22px 0 0}
@@ -102,31 +69,8 @@
   .modele:hover{border-color:var(--bleu)}
   .modele.actif{border-color:var(--bleu);outline:2px solid var(--bleu);outline-offset:-1px}
   .modele.actif b{color:var(--bleu)}
-
-  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 22px}
-  label{display:block;font-size:14px}
-  label .nom{display:block;color:var(--encre);margin-bottom:4px}
-  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
-    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
   textarea{min-height:74px;font:14px/1.5 inherit}
-  input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
-  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px 20px;margin:0 0 16px}
-  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
-  .pleine{grid-column:1/-1}
-  .cases{display:flex;flex-direction:column;gap:6px;margin:2px 0 6px;
-    border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:9px 11px}
-  .case{display:flex;align-items:flex-start;gap:7px;font-size:13.5px;color:var(--corps);line-height:1.35}
-  .case input{width:auto;margin:2px 0 0;flex:0 0 auto}
-  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
   .fonde{font-size:12.5px;color:var(--gris);margin:6px 0 0}
-
-  .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
-    padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-  button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
-    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
-  button.second{background:var(--surface);color:var(--bleu)}
-  button:hover{filter:brightness(1.1)}
-  button:disabled{opacity:.45;cursor:default}
   @media (max-width:560px){
     .barre{gap:8px;padding:10px 0}
     .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
@@ -163,8 +107,6 @@
     font:11.5px/1.55 system-ui;color:#8a9099}
   .feuille .pied-textes .ident{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
 
-  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
-
   /* À l'impression, seule la feuille sort — sans cadre ni fond d'écran. */
   @media print{
     body{background:#fff}
@@ -173,10 +115,18 @@
     #docu{margin:0}
     .feuille{border:none;border-radius:0;max-width:none;padding:0;font-size:12.5pt}
     .feuille .pied-textes{font-size:8pt}
-  }
-</style>
+  }</style>
 </head>
 <body>
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
 <div class="page">
 
 <div class="retour-barre">

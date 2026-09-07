@@ -1,1439 +1,164 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#5C2A54">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#16181d">
 <link rel="manifest" href="manifest-audit-social.json">
 <link rel="apple-touch-icon" href="icons/icon-social-180.png">
 <link rel="icon" href="icons/icon-social-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Audit social — obligations de l'employeur</title>
+<title>Audit social - Jurisprudence</title>
+<meta name="description" content="Une question par obligation. Sur « non », le document ou la procédure s'ouvre.">
 <!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
-     Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
+     Voir docs/DROITS.md. -->
 <script src="droits.js"></script>
-<!-- L'AUDIT SOCIAL, EN SIX ÉTAPES — c'est le parcours du client, et la page
-     le porte de bout en bout, numéroté, avec sa progression enregistrée :
 
-       1. LA FICHE CLIENT — dénomination, SIRET, adresse, responsable,
-          coordonnées, effectif, secteur, convention, groupe, établissements.
-          Elle est partagée avec toutes les pages (clé « profil-entreprise »)
-          et c'est elle qui oriente : les seuils d'effectif ouvrent ou ferment
-          les obligations, le secteur nourrit les modèles, la convention dit
-          où le conventionnel peut ajouter.
+<!--
+  CE QUE FAIT CET ÉCRAN, ET CE QU'IL A CESSÉ DE FAIRE.
 
-       2. LE QUESTIONNAIRE DE L'EXISTANT — la liste des obligations dues, et
-          pour chacune la question « l'avez-vous ? ». Les questions portent
-          sur l'EXISTENCE et l'ACCOMPLISSEMENT, jamais sur la conformité : on
-          ne demande pas au client de juger son propre dossier. Chaque réponse
-          fermée offre quatre valeurs — oui, non, en cours, autre.
+  Il ouvrait sur « Ce niveau d'effectif est-il atteint depuis au moins douze
+  mois consécutifs ? », puis seize à dix-huit questions d'orientation, avant
+  tout questionnaire et tout document. Et le « non » à cette première question
+  ne menait nulle part.
 
-       3. LE RAPPORT GÉNÉRAL — l'état de chaque obligation, catégorie par
-          catégorie, avec son fondement et son constat.
+  Il ouvre maintenant sur la seule question qui vaille : avez-vous cette pièce,
+  ce dispositif, ce process ? Une ligne par obligation que le module recense,
+  deux boutons, et le « non » qui construit.
 
-       4. LE GUIDE PRATIQUE DE RÉGULARISATION — tout ce qui manque, priorisé,
-          présenté comme un accompagnement : quoi faire, dans quel ordre, avec
-          quel document, et vers quel parcours guidé.
+  OÙ MÈNE LE « NON », ET IL MÈNE TOUJOURS QUELQUE PART :
 
-       5. LA RÉGULARISATION, ÉLÉMENT PAR ÉLÉMENT — pour l'élément choisi : le
-          modèle complet, la procédure pas à pas (le parcours guidé), le
-          document à produire, et la déclaration « c'est fait ».
+  - pour les obligations que le module rattachait à une procédure guidée, au
+    parcours qui la fait naître, ouvert sur son document (parcours.html?p=…&faire=1) ;
 
-       6. LA VÉRIFICATION DE CE QUI EST DÉCLARÉ FAIT — module par module, les
-          questions de contrôle, et le rapport de régularisation qui reprend
-          ce qui vient d'être régularisé à l'étape 5.
+  - pour celles qui n'avaient aucun parcours - elles étaient trente-cinq, et le
+    « non » y tombait dans le vide -, au document lui-même, écrit ici à partir
+    de la fiche d'entreprise : registre unique de sécurité, registre des
+    dangers graves et imminents, fiche d'entreprise du service de santé au
+    travail, plan de prévention, consigne de sécurité incendie, désignation du
+    salarié compétent et du référent handicap, livret d'épargne salariale,
+    information de l'inspection après un accident mortel, convention
+    individuelle de forfait en jours. Celles qui ne sont pas un écrit - une
+    durée maximale de travail, un repos quotidien, l'interdiction de
+    discriminer - ne sont pas transformées en formulaire pour le plaisir
+    d'avoir une pièce à sortir : elles restent au moteur.
 
-     « EN COURS » ET « AUTRE » NE CONCLUENT JAMAIS. Ils décrivent la situation
-     du client, ils ne sont pas remis au moteur : le contrôle rend « donnée
-     manquante », au mieux « risque à vérifier » — jamais « conforme ». Aucun
-     moteur n'a été modifié pour cela.
+  SUR « OUI », pour les documents écrits ici, on dépose l'existant : chaque
+  mention exigée y est cherchée, celle qu'on n'y trouve pas sort rédigée, prête
+  à insérer.
 
-     Tout se passe dans le navigateur : le moteur est un script ordinaire,
-     aucune donnée saisie ne quitte le poste. -->
-<style>
-  :root{
-    --papier:#f6f7f9; --surface:#fff; --encre:#16181d; --corps:#2b313a;
-    --gris:#5f6874; --filet:#dcdfe4; --bleu:#5C2A54;
-    --rouge:#8E1B1B; --orange:#9C5A05; --vert:#1C5E36; --ardoise:#3C4557;
-    --rouge-f:#faf2f2; --orange-f:#fbf7f1; --vert-f:#eff6f2; --gris-f:#f4f5f7;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--papier);color:var(--corps);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .page{max-width:1060px;margin:0 auto;padding:0 20px 80px}
-  header{padding:36px 0 20px;border-bottom:2px solid var(--encre)}
-  .fil{font:600 11.5px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--bleu);margin:0 0 14px}
-  h1{font:600 clamp(26px,4vw,36px)/1.15 system-ui;color:var(--encre);margin:0 0 10px}
-  .chapo{color:var(--gris);max-width:66ch;margin:0}
-  header a{color:var(--bleu)}
-  h2{font:600 20px/1.3 system-ui;color:var(--encre);margin:34px 0 4px}
-  h3{font:600 15px/1.4 system-ui;color:var(--bleu);margin:22px 0 8px}
-  .aide{color:var(--gris);font-size:14px;margin:0 0 14px;max-width:72ch}
+  CE QUI NE S'AFFICHE PAS : une obligation que la fiche d'entreprise rend non
+  due. C'est l'effectif qui commande, comme partout dans l'application.
 
-  .retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 14px;
-    align-items:center;background:var(--papier);border-bottom:1px solid var(--filet);
-    margin:0 -20px 0;padding:10px 20px}
-  button.retour{font:600 15px/1 system-ui;padding:9px 16px;border-radius:99px;
-    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer}
-  button.retour:hover{filter:brightness(1.12)}
-  .retour-ou{font-size:13px;color:var(--gris)}
-  .retour-ou a{color:var(--bleu)}
+  LES TEXTES. Les documents écrits pour cet écran citent des articles lus au
+  relais Légifrance le 7 septembre 2026, deux lectures concordantes, identifiant
+  LEGIARTI porté sous chaque document. Le reste vient du moteur du module, où
+  cent soixante-douze articles ont été lus à la source.
 
-  .presentation{border:1px solid var(--filet);background:var(--surface);
-    border-radius:4px;padding:18px 20px;margin:22px 0 0}
-  .presentation h2{margin:0 0 10px;font:600 18px/1.3 system-ui}
-  .presentation p{margin:0 0 10px;max-width:76ch}
-  .presentation p:last-child{margin-bottom:0}
-  .presentation .etapes{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;padding:0;list-style:none}
-  .presentation .etapes li{flex:1 1 200px;border-left:3px solid var(--bleu);padding:2px 0 2px 10px;
-    font-size:14px;color:var(--corps)}
-  .presentation .etapes b{display:block;color:var(--encre)}
-
-  /* Le fil des quatre temps */
-  .temps{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 6px}
-  .temps span{font:600 13px/1 system-ui;padding:8px 12px;border-radius:99px;
-    border:1px solid var(--filet);background:var(--surface);color:var(--gris)}
-  .temps span.actif{border-color:var(--bleu);background:var(--bleu);color:#fff}
-  .temps span.fait{border-color:var(--vert);color:var(--vert)}
-
-  fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:4px;padding:16px 18px 20px;margin:0 0 16px}
-  legend{font:600 14px/1 system-ui;color:var(--bleu);padding:0 8px}
-  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 22px}
-  label{display:block;font-size:14px}
-  label .nom{display:block;color:var(--encre);margin-bottom:4px}
-  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--filet);
-    background:var(--surface);color:var(--encre);border-radius:3px;font:15px/1.4 inherit}
-  input:focus,select:focus{outline:2px solid var(--bleu);outline-offset:1px;border-color:var(--bleu)}
-  .aide-champ{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--gris)}
-
-  .barre{position:sticky;bottom:0;background:var(--papier);border-top:1px solid var(--filet);
-    padding:14px 0;margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;z-index:10}
-  button{font:600 15px/1 system-ui;padding:12px 20px;border:1px solid var(--bleu);
-    background:var(--bleu);color:#fff;border-radius:3px;cursor:pointer}
-  button.second{background:var(--surface);color:var(--bleu)}
-  button:hover{filter:brightness(1.1)}
-  button:disabled{opacity:.45;cursor:default}
-  .compteur{color:var(--gris);font-size:14px;margin-left:auto}
-  @media (max-width:560px){
-    .barre{gap:8px;padding:10px 0}
-    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
-    .barre button:first-child{flex:1 1 100%}
-    .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
-  }
-
-  /* La liste des obligations */
-  .categorie{margin:26px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
-    color:var(--bleu);font:600 15px/1.3 system-ui;display:flex;justify-content:space-between;gap:12px}
-  .categorie span{font-weight:400;font-size:13px;color:var(--gris)}
-  .obl{border-left:4px solid var(--bleu);background:var(--surface);padding:12px 14px;margin:0 0 8px;border-radius:0 3px 3px 0}
-  .obl .t{font-weight:600;color:var(--encre)}
-  .obl .fond{font-size:12.5px;color:var(--gris);margin:5px 0 0}
-  .obl .motif{font-size:13.5px;color:var(--corps);margin:6px 0 0}
-  .obl.non-due{border-left-color:#b8bec7;opacity:.75}
-  .obl.a-preciser{border-left-color:var(--orange);background:var(--orange-f)}
-  .obl .renvoi{font-size:13px;margin:6px 0 0}
-  .obl .renvoi a{color:var(--bleu);font-weight:600}
-  /* Le renvoi vers Juris Expert, l'application qui imprime le document final.
-     Il se distingue à l'œil des liens internes : on quitte l'application. */
-  a.jx{color:var(--encre);font-weight:600;border-bottom:1px dotted var(--gris)}
-  a.jx::after{content:" ↗";font-size:11px;color:var(--gris)}
-  .renvoi-jx{font-size:13px;margin:8px 0 0;padding:8px 10px;border-radius:3px;
-    background:var(--gris-f);border-left:3px solid var(--gris)}
-  .coches{display:flex;gap:14px;margin:10px 0 0;flex-wrap:wrap;font-size:14px}
-  .coches label{display:flex;align-items:center;gap:6px;width:auto;cursor:pointer;
-    border:1px solid var(--filet);border-radius:99px;padding:6px 14px;background:var(--gris-f)}
-  .coches input{width:auto;margin:0}
-  .coches label:has(input:checked){border-color:var(--bleu);background:#f3ecf2;color:var(--encre);font-weight:600}
-  .ident{font:500 11.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8a9099;
-    background:#f0f1f4;border-radius:3px;padding:2px 5px;white-space:nowrap}
-
-  /* Verdicts et rapports */
-  .bandeau{padding:18px 20px;color:#fff;margin:14px 0 18px;border-radius:3px}
-  .bandeau .r{font:700 24px/1.15 system-ui;letter-spacing:.4px;margin:0 0 6px}
-  .bandeau .s{margin:0;font-size:15px}
-  .b-rouge{background:var(--rouge)} .b-orange{background:var(--orange)}
-  .b-vert{background:var(--vert)} .b-gris{background:var(--ardoise)} .b-prune{background:var(--bleu)}
-  .verdict{border-left:4px solid #767676;background:var(--surface);padding:10px 14px;margin:0 0 7px}
-  .verdict .t{font-weight:600;color:var(--encre)}
-  .verdict .w{font-size:13.5px;color:var(--corps);margin:4px 0 0}
-  .verdict .fond{font-size:12.5px;color:var(--gris);margin:4px 0 0}
-  .v-nc{border-left-color:var(--rouge);background:var(--rouge-f)}
-  .v-risq{border-left-color:var(--orange);background:var(--orange-f)}
-  .v-conf{border-left-color:var(--vert);background:var(--vert-f)}
-  .v-manq{border-left-color:#9aa0a8;background:var(--gris-f)}
-  .chip{font:600 11px/1 system-ui;color:#fff;padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
-  .c-nc{background:var(--rouge)} .c-risq{background:var(--orange)}
-  .c-conf{background:var(--vert)} .c-manq{background:#767676} .c-so{background:var(--ardoise)}
-
-  /* Le plan d'action */
-  .action{border:1px solid var(--filet);border-left:4px solid var(--rouge);background:var(--surface);
-    padding:14px 16px;margin:0 0 12px;border-radius:0 3px 3px 0}
-  .action.verifier{border-left-color:var(--orange)}
-  .action .t{font-weight:700;color:var(--encre)}
-  .action .quoi{margin:6px 0 0;font-size:14.5px}
-  .action .meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:13px;color:var(--gris)}
-  .action .meta b{color:var(--corps)}
-  .action ol{margin:8px 0 0;padding-left:22px;font-size:14px}
-  .action ol li{margin:0 0 4px}
-  .action .risque{font-size:13.5px;color:var(--rouge);margin:8px 0 0}
-  .action.verifier .risque{color:var(--orange)}
-  .prio{font:600 11px/1 system-ui;color:#fff;background:var(--ardoise);padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
-  .p-1{background:var(--rouge)} .p-2{background:var(--orange)} .p-3{background:var(--ardoise)}
-  details.modele{margin:10px 0 0;border:1px dashed var(--bleu);border-radius:3px;background:#faf7fa}
-  details.modele summary{cursor:pointer;font:600 13.5px/1.3 system-ui;color:var(--bleu);padding:9px 12px}
-  .feuille{background:#fff;border-top:1px dashed var(--filet);padding:14px 16px;font-size:14px}
-  .feuille .ft{font:700 16px/1.3 Georgia,serif;color:var(--encre);margin:0 0 8px}
-  .feuille p{margin:0 0 7px}
-  .feuille .fh{font:600 14px/1.3 system-ui;color:var(--bleu);margin:10px 0 4px}
-  .feuille .fp{margin:0 0 4px 18px;text-indent:-14px}
-  .feuille .fc{color:var(--corps);margin:0 0 4px;font-style:italic}
-
-  .tab{overflow-x:auto;margin:12px 0}
-  table{border-collapse:collapse;width:100%;font-size:14px;background:var(--surface)}
-  th,td{border:1px solid var(--filet);padding:7px 10px;text-align:left;vertical-align:top}
-  th{background:var(--bleu);color:#fff;font-weight:600}
-  .note{color:var(--gris);font-size:13.5px}
-  .enc{border:1px solid var(--bleu);background:#f7f2f6;padding:12px 14px;margin:14px 0;border-radius:3px}
-  .enc .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
-  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
-    border:1px solid var(--bleu);background:#f7f2f6;color:var(--bleu);font-size:14px}
-  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
-  .lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;
-    color:var(--bleu);text-decoration:underline;cursor:pointer}
-
-  /* Vérification de l'existant */
-  .verif-bloc{border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:12px 14px;margin:0 0 10px}
-  .verif-bloc .t{font-weight:600;color:var(--encre);margin:0 0 8px}
-  .verif-q{display:grid;grid-template-columns:minmax(240px,1fr) minmax(130px,220px);gap:6px 14px;
-    align-items:center;margin:0 0 7px;font-size:13.5px}
-  @media (max-width:560px){ .verif-q{grid-template-columns:1fr} }
-
-  /* Évolution depuis le dernier passage */
-  .evolution{border:1px solid var(--vert);background:var(--vert-f);border-radius:3px;padding:12px 14px;margin:14px 0}
-  .evolution .sh{font-weight:600;color:var(--vert);margin:0 0 6px}
-  .evolution p{margin:0 0 4px;font-size:14px}
-
-  /* Impression ciblée : chaque rapport s'imprime seul. */
-  @media print{
-    .retour-barre,.presentation,.temps,.barre,#message,form,header a,footer,
-    .coches,details.modele summary,.no-print,.enc,#fiche-client{display:none !important}
-    details.modele{border:none} details.modele .feuille{border-top:none;padding:8px 0}
-    details.modele[open] .feuille{display:block}
-    .page{padding:0}
-    body.print-liste #bloc-general,body.print-liste #bloc-guide,body.print-liste #bloc-item,body.print-liste #bloc-existant{display:none !important}
-    body.print-general #bloc-liste,body.print-general #bloc-guide,body.print-general #bloc-item,body.print-general #bloc-existant{display:none !important}
-    body.print-guide #bloc-liste,body.print-guide #bloc-general,body.print-guide #bloc-item,body.print-guide #bloc-existant{display:none !important}
-    body.print-item #bloc-liste,body.print-item #bloc-general,body.print-item #bloc-guide,body.print-item #bloc-existant{display:none !important}
-    body.print-existant #bloc-liste,body.print-existant #bloc-general,body.print-existant #bloc-guide,body.print-existant #bloc-item{display:none !important}
-  }
-
-  /* La note de régime, en tête de page et repliée par défaut.
-
-     Elle répond à la question qui commande toutes les autres : ce texte
-     s'impose-t-il, mon accord peut-il en disposer autrement, ou n'est-il là
-     qu'à défaut d'accord ? Trois étages, trois couleurs, et chaque affirmation
-     rattachée à son article. Repliée, elle n'encombre pas ; dépliée, elle
-     tient sur un écran. */
-  details.regime{border:1px solid var(--bleu);border-radius:4px;
-    background:var(--surface);margin:22px 0 0}
-  details.regime>summary{cursor:pointer;list-style:none;padding:13px 16px;
-    font:600 15px/1.35 system-ui;color:var(--bleu);display:flex;gap:9px;align-items:baseline}
-  details.regime>summary::-webkit-details-marker{display:none}
-  details.regime>summary::after{content:"deplier";margin-left:auto;font:400 12px/1.4 system-ui;
-    color:var(--gris);white-space:nowrap}
-  details.regime[open]>summary::after{content:"replier"}
-  details.regime>summary::before{content:"\25B8";flex:0 0 auto;color:var(--bleu)}
-  details.regime[open]>summary::before{content:"\25BE"}
-  details.regime>summary:focus-visible{outline:2px solid var(--bleu);outline-offset:2px}
-  details.regime .corps{padding:14px 16px 18px;border-top:1px solid var(--filet)}
-  details.regime .corps>p{margin:0 0 12px;max-width:78ch;font-size:14.5px}
-  details.regime .corps>p:last-child{margin-bottom:0}
-  ul.etages{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:10px}
-  ul.etages li{border-left:4px solid var(--bleu);background:var(--gris-f);
-    padding:9px 13px;border-radius:0 3px 3px 0;font-size:14px}
-  ul.etages li>b{display:block;color:var(--encre);margin-bottom:4px}
-  ul.etages li.op{border-left-color:var(--rouge)}
-  ul.etages li.neg{border-left-color:var(--orange)}
-  ul.etages li.sup{border-left-color:var(--vert)}
-  ul.etages .art{color:var(--gris);font:500 12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
-  details.regime .chute{border-top:1px solid var(--filet);padding-top:11px;color:var(--corps);
-    font-size:14px}
-  @media print{
-    details.regime{break-inside:avoid}
-    details.regime .corps{display:block}
-    details.regime>summary::after{content:""}
-  }
-</style>
+  Rien ne sort du poste.
+-->
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="page">
 
-<div class="retour-barre">
-  <button type="button" id="btn-retour" class="retour">← Retour</button>
-  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
-  · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
-  · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
-  · <a href="audit-sst.html">santé-sécurité (SST)</a>
-  · <a href="audit-discipline.html">discipline et règlement intérieur</a>
-  · <a href="agenda.html">agenda</a> · <a href="documents.html">documents</a> · <a href="guides.html">guides</a></span>
-</div>
-
-<header>
-  <p class="fil">Application Jurisprudence</p>
-  <h1>Audit social — le point complet des obligations</h1>
-  <p class="chapo"><b>Cette application dresse la liste de ce que votre entreprise doit avoir ou avoir
-  fait</b> — instances, documents, affichages, registres, négociations, santé-sécurité, formation,
-  épargne et protection sociale — en fonction de votre effectif, de votre secteur et de votre
-  convention. Vous cochez ce qui est en place : <b>le manquant reçoit d'abord un plan d'action</b>
-  concret et priorisé, avec des modèles pré-remplis de vos données ; l'existant est ensuite contrôlé
-  point par point. Chaque article cité a été lu à la source (identifiant de version à l'appui) ;
-  ce qui relève de la convention collective est signalé « à vérifier », jamais affirmé.<br>
-  L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce poste.
-  <button type="button" class="lien-avert" id="btn-avert">Avertissement d'usage</button></p>
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Jurisprudence <span>audit social</span></p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+      <a href="audit-sst.html">Santé et sécurité</a>
+      <a href="controler-duerp.html">Document unique</a>
+      <a href="gerer.html">Gérer</a>
+    </div>
+  </div>
 </header>
 
-<div class="presentation">
-  <h2>Le parcours, en six étapes</h2>
-  <p>C'est le point d'entrée de l'audit d'une entreprise : le tour complet, avant de descendre dans le
-  détail. Les sujets qui ont leur propre module — comité, base de données, négociations, plan de
-  sauvegarde, licenciement économique — restent ici au niveau du « dû / pas dû » : la page vous y
-  renvoie pour l'audit fin. Votre avancement est enregistré sur ce poste : vous reprenez où vous
-  vous êtes arrêté.</p>
-  <ul class="etapes">
-    <li><b>1. La fiche client</b> — dénomination, SIRET, adresse, responsable, coordonnées, effectif,
-    secteur, convention, groupe, établissements. Elle oriente tout ce qui suit, et elle est partagée
-    avec les autres pages de l'application.</li>
-    <li><b>2. Le questionnaire de l'existant</b> — chaque obligation due, et pour chacune la question
-    « l'avez-vous ? ». Jamais « est-ce conforme ? » : la conformité, c'est à l'audit de la dire.
-    Quatre réponses possibles : oui, non, en cours, autre.</li>
-    <li><b>3. Le rapport général</b> — l'état de chaque obligation, avec son fondement et son constat.</li>
-    <li><b>4. Le guide pratique de régularisation</b> — tout ce qui manque, priorisé, avec pour chaque
-    point ce qu'il faut faire, dans quel ordre, et avec quel document.</li>
-    <li><b>5. La régularisation, élément par élément</b> — le modèle complet, la procédure pas à pas,
-    le document à produire, et la case « c'est fait ».</li>
-    <li><b>6. La vérification de ce que vous déclarez avoir fait</b> — les questions de contrôle,
-    module par module, et le rapport de régularisation.</li>
-  </ul>
-  <p class="note"><b>Ce que cette page ne fait pas :</b> elle n'affirme rien sur le contenu de votre
-  convention collective (le relais ne sert que le code du travail), ne remplace pas les modules
-  d'audit détaillés, et ne délivre aucun blanc-seing : un rapport tout vert dit « rien ne bloque en
-  l'état des réponses », pas « rien ne bloquera ». <b>Une réponse « en cours » ou « autre » ne
-  conclut rien</b> : l'audit la traite comme une donnée manquante — jamais comme un « non », qui, lui,
-  se conclut, et jamais comme un « oui ».</p>
-</div>
+<main class="wrap"><div id="ecran"></div></main>
 
-<details class="regime" id="regime">
-  <summary>Avant de commencer&nbsp;: comment lire une obligation, en trois étages</summary>
-  <div class="corps">
-  <p>Cette page passe en revue quatre-vingt-dix obligations. Aucune ne se lit sans se demander
-  d'abord de quel étage elle relève&nbsp;: la même page peut porter une obligation qu'aucun accord
-  n'écarte et, deux lignes plus bas, une obligation qui ne joue qu'à défaut d'accord. La liste des
-  obligations le dit pour chacune&nbsp;; voici la grille.</p>
-  <ul class="etages">
-    <li class="op"><b>1. Ordre public — ce qu'aucun accord ne peut écarter</b>
-    L'obligation existe dès que son seuil est franchi, et le texte ne réserve aucun accord.
-    Exemples de cette page&nbsp;: le document unique d'évaluation des risques, dû dès le premier
-    salarié&nbsp;; le règlement intérieur, obligatoire à partir de cinquante salariés&nbsp;; la
-    commission santé, sécurité et conditions de travail, créée à partir de trois cents salariés,
-    dont la composition et les limites de la délégation sont d'ordre public.
-    <span class="art">L. 4121-3 · R. 4121-1 · L. 1311-2 · L. 2315-36 · L. 2315-38 · L. 2315-39</span></li>
-
-    <li class="neg"><b>2. Le champ de la négociation — ce que l'accord peut régler</b>
-    Le texte renvoie expressément à un accord, qui organise l'obligation sans la faire disparaître.
-    Exemples&nbsp;: l'accord de l'article L. 2315-45 qui prévoit la création de commissions
-    supplémentaires du comité&nbsp;; l'accord de l'article L. 2315-41 qui fixe le nombre de membres,
-    les missions déléguées et les moyens de la commission santé-sécurité&nbsp;; l'accord de méthode
-    de l'article L. 2242-11 qui fixe les thèmes et la périodicité des négociations obligatoires.
-    <span class="art">L. 2315-41 · L. 2315-45 · L. 2242-10 · L. 2242-11</span></li>
-
-    <li class="sup"><b>3. Les dispositions supplétives — ce qui s'applique à défaut d'accord</b>
-    Le texte commence par «&nbsp;en l'absence d'accord&nbsp;» ou «&nbsp;à défaut d'accord&nbsp;».
-    Exemples&nbsp;: les commissions formation, logement et égalité professionnelle à trois cents
-    salariés et la commission économique à mille, qui ne sont dues qu'en l'absence de l'accord de
-    l'article L. 2315-45&nbsp;; le calendrier annuel des négociations obligatoires, qui ne s'applique
-    qu'à défaut de l'accord de l'article L. 2242-11 — ou en cas de non-respect de ses stipulations.
-    <span class="art">L. 2315-46 · L. 2315-49 · L. 2315-50 · L. 2315-56 · L. 2315-44 · L. 2242-13</span></li>
-  </ul>
-  <p class="chute">Le test tient en une lecture&nbsp;: relisez la première ligne de l'article. Si
-  elle ne mentionne aucun accord, l'obligation s'impose telle quelle. Si elle renvoie à un accord,
-  cherchez cet accord avant de conclure. Si elle commence par «&nbsp;en l'absence d'accord&nbsp;»,
-  l'obligation n'est due que faute d'accord — et l'audit vous demandera d'abord si cet accord
-  existe. Les modules détaillés — comité, négociations, santé-sécurité, base de données — appliquent
-  la même grille, contrôle par contrôle.</p>
-  </div>
-</details>
-
-<div class="temps" id="fil-temps" role="navigation" aria-label="Les six étapes de l'audit">
-  <span data-t="1" class="actif">1 · Fiche client</span>
-  <span data-t="2">2 · Questionnaire de l'existant</span>
-  <span data-t="3">3 · Rapport général</span>
-  <span data-t="4">4 · Guide de régularisation</span>
-  <span data-t="5">5 · Régulariser, élément par élément</span>
-  <span data-t="6">6 · Vérification de ce qui est fait</span>
-</div>
-
-<h2 id="t1">1. La fiche client</h2>
-<p class="aide">L'entreprise auditée : qui elle est, comment la joindre, et ce qui commande ses
-obligations. Cette fiche est partagée avec les parcours guidés, l'agenda, le générateur de documents
-et les huit audits détaillés — renseignée ici, elle est reprise partout, et inversement. Elle ne
-quitte pas ce poste : aucune requête n'est faite, aucune donnée n'est envoyée.</p>
-<div id="fiche-client"></div>
-
-<h3 id="t1b">Les questions qui ouvrent ou ferment une obligation</h3>
-<p class="aide">Elles complètent la fiche. Chaque réponse ouvre ou ferme des obligations. Une réponse
-absente ne ferme rien : elle laisse l'obligation « à préciser » — l'audit ne devine pas. Une réponse
-« en cours » ou « autre » ne ferme rien non plus, et ne conclut rien : elle est traitée comme une
-donnée manquante.</p>
-<form id="formulaire" autocomplete="off"></form>
-
-<div class="barre">
-  <button type="button" id="generer">Étape 2 : ouvrir le questionnaire de l'existant</button>
-  <button type="button" class="second" id="exemple">Charger un exemple (60 salariés)</button>
-  <button type="button" class="second" id="vider">Tout effacer</button>
-  <span class="compteur" id="compteur"></span>
-</div>
-<p id="message" role="status"></p>
-
-<div id="bloc-liste" style="display:none">
-  <h2 id="t2">2. Le questionnaire de l'existant <span class="note" id="liste-date"></span></h2>
-  <p class="aide">Pour chaque obligation qui vous est applicable, une seule question : <b>l'avez-vous ?</b>
-  Jamais « est-elle conforme ? » — la conformité, c'est le travail de l'audit, pas le vôtre. Quatre
-  réponses : <b>oui</b> et <b>non</b> concluent ; <b>en cours</b> et <b>autre</b> décrivent votre
-  situation sans rien conclure, et l'audit les traite comme une donnée manquante. La source de chaque
-  ligne est citée — article du code du travail lu au relais avec son identifiant de version, renvoi au
-  module d'audit dédié, ou mention « selon la convention collective : à vérifier ».</p>
-  <div id="liste"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-general">Étape 3 : voir le rapport général</button>
-    <button type="button" class="second" id="imprimer-liste">Imprimer le questionnaire</button>
-    <span class="compteur" id="compteur-coches"></span>
-  </div>
-</div>
-
-<div id="bloc-general" style="display:none">
-  <h2 id="t3">3. Le rapport général de l'audit</h2>
-  <p class="aide">L'état de chaque obligation, catégorie par catégorie, avec son fondement et son
-  constat. Ce rapport se recalcule à chaque étape : il tiendra compte de ce que vous régulariserez à
-  l'étape 5 et de ce que vous vérifierez à l'étape 6.</p>
-  <div id="rapport-general"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-guide">Étape 4 : ouvrir le guide de régularisation</button>
-    <button type="button" class="second" id="imprimer-general">Imprimer le rapport général</button>
-  </div>
-</div>
-
-<div id="bloc-guide" style="display:none">
-  <h2 id="t4">4. Le guide pratique de régularisation</h2>
-  <p class="aide">Tout ce qui manque, dans l'ordre où il faut s'en occuper : d'abord ce qui expose le
-  plus — sécurité des personnes, entrave, absence d'institution ou de couverture —, puis les pénalités
-  qui se constatent en contrôle, puis les régularisations rapides. Chaque point dit ce qu'il faut
-  faire, qui le fait, sous quel délai, ce qu'on risque à ne pas le faire — et ouvre, d'un lien, sa
-  procédure pas à pas et son modèle.</p>
-  <div id="guide"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-item">Étape 5 : régulariser élément par élément</button>
-    <button type="button" class="second" id="imprimer-guide">Imprimer le guide</button>
-    <button type="button" class="second" id="copier-guide">Copier le texte</button>
-  </div>
-</div>
-
-<div id="bloc-item" style="display:none">
-  <h2 id="t5">5. Régulariser, élément par élément</h2>
-  <p class="aide">Choisissez un point du guide. Vous obtenez le <b>modèle complet</b> — structure
-  intégrale, exemple chiffré, champs à personnaliser, établi sur la loi lue à la source et renvoyant à
-  votre convention pour ce qui en relève —, la <b>procédure pas à pas</b> jusqu'à la validation, et le
-  <b>document à produire</b>. Quand c'est fait, dites-le : l'étape 6 le reprendra.</p>
-  <div class="grille" style="margin:0 0 16px">
-    <label><span class="nom">L'élément à régulariser</span>
-      <select id="choix-item"></select>
-      <span class="aide-champ">La liste reprend le guide : ce qui manque, ce qui est en cours, et ce
-      qui reste sans réponse.</span></label>
-  </div>
-  <div id="fiche-item"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-existant">Étape 6 : vérifier ce que vous déclarez avoir fait</button>
-    <button type="button" class="second" id="imprimer-item">Imprimer cette fiche de régularisation</button>
-  </div>
-</div>
-
-<div id="bloc-existant" style="display:none">
-  <h2 id="t6">6. La vérification de ce que vous déclarez avoir fait</h2>
-  <p class="aide">Module par module, pour chaque obligation que vous déclarez en place — y compris
-  celles que vous venez de régulariser à l'étape 5 —, quelques vérifications courtes : dates, dépôts,
-  affichages effectifs. <b>Cocher n'est pas prouver</b> : une case cochée sans détail vérifiable rend
-  « risque à vérifier », jamais « conforme ». Ici encore, « en cours » et « autre » ne concluent pas.</p>
-  <div id="verifs"></div>
-  <div class="barre no-print">
-    <button type="button" id="controler">Produire le rapport de régularisation</button>
-    <button type="button" class="second" id="imprimer-existant">Imprimer le rapport de régularisation</button>
-  </div>
-  <div id="rapport-existant"></div>
-</div>
-
-<footer id="pied"></footer>
-</div>
-
-<dialog id="dlg-avertissement" style="max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;font:15px/1.55 system-ui;color:#1c2126">
-  <h2 style="margin:0 0 12px;font:600 19px/1.3 system-ui">Avertissement d'usage</h2>
-  <p style="margin:0 0 10px">Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
-  avocat, ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
-  <p style="margin:0 0 10px">La liste produite est la plus complète que les textes lus à la source permettent :
-  elle n'est pas exhaustive pour autant — votre convention collective, vos accords et votre activité peuvent
-  ajouter des obligations que cette page signale sans les détailler.</p>
-  <form method="dialog" style="margin:14px 0 0;text-align:right">
-    <button style="font:600 14px/1 system-ui;padding:9px 16px;border:1px solid #5C2A54;background:#5C2A54;color:#fff;border-radius:6px;cursor:pointer">Fermer</button>
-  </form>
-</dialog>
-
-<script src="moteur-social.js"></script>
-<script src="idcc.js"></script>
-<script src="parcours-lien.js"></script>
 <script src="profil.js"></script>
-<script src="juris-expert.js"></script>
+<script src="audit-export.js"></script>
+<script src="moteur-social.js"></script>
+<script src="documents-produits.js"></script>
+<script src="documents-sst.js"></script>
+<script src="documents-sst-2.js"></script>
 <script>
 (function () {
   "use strict";
-  var A = window.MoteurSocial.audit;
-  var P = window.Profil;
-  var CLE = "audit-social-brouillon";
-  var CLE_HISTO = "audit-social-historique";
-  var $ = function (id) { return document.getElementById(id); };
-  document.getElementById("fil-temps").addEventListener("click", function (e) {
-    var el = e.target.closest("span[data-t]");
-    if (!el || el.style.cursor !== "pointer") return;
-    var n = Number(el.getAttribute("data-t"));
-    var cible = document.getElementById("t" + n);
-    if (cible) cible.scrollIntoView({ behavior: "smooth" });
-  });
+  var P = window.Pieces;
+  var A = window.MoteurSocial && window.MoteurSocial.audit;
+  var profil = window.Profil ? window.Profil.lire() : {};
 
-  /* ------------------------------------------------------------ l'état ---
+  function dePiece(id, groupe) {
+    var p = P.pour(id);
+    if (!p) return null;
+    return { id: p.id, groupe: groupe, question: p.question, titre: p.titre,
+      piece: p, renvoi: p.renvoi, due: p.due };
+  }
 
-     Tout tient dans un seul objet, enregistré à chaque changement : le
-     brouillon survit à la fermeture, l'étape atteinte est retrouvée à la
-     réouverture, et le suivi dans le temps s'appuie sur l'historique des
-     rapports généraux.
+  var QUESTIONS = [
+    dePiece("PIECE-REGISTRE-SECURITE", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-DGI", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-INCENDIE", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-FICHE-ENTREPRISE", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-SALARIE-COMPETENT", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-PLAN-PREVENTION", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-ACCIDENT-MORTEL", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-REFERENT-HANDICAP", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-LIVRET-EPARGNE", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-FORFAIT-JOURS", "Les pièces que vous devez tenir"),
+  ].filter(Boolean);
 
-     DEUX RÉPERTOIRES DE RÉPONSES, ET C'EST VOULU :
-
-     - `coches` et `reponses` ne portent QUE des réponses concluantes — « oui »,
-       « non », une date. Ce sont elles, et elles seules, qui sont remises au
-       moteur.
-
-     - `nuances` porte les réponses qui ne concluent pas — « en cours »,
-       « autre » et le texte libre qui l'accompagne. Le moteur ne les voit
-       jamais : il lit une donnée absente, et rend « donnée manquante ». Le
-       client, lui, les relit à la réouverture, et le guide de régularisation
-       les reprend nommément — une régularisation engagée n'est pas une
-       régularisation faite, mais ce n'est pas non plus rien.
-
-     `faits` garde ce que le client a déclaré avoir régularisé à l'étape 5,
-     avec sa date : l'étape 6 le reprend, et le rapport le dit.               */
-  var etatVide = function () {
-    return { profil: {}, coches: {}, reponses: {},
-      nuances: { coches: {}, reponses: {} }, faits: {}, etape: 1 };
-  };
-  var ETAT = etatVide();
-  try {
-    var lu = JSON.parse(localStorage.getItem(CLE) || "null");
-    if (lu && lu.profil) ETAT = lu;
-  } catch (e) {}
-  if (!ETAT.nuances) ETAT.nuances = { coches: {}, reponses: {} };
-  if (!ETAT.nuances.coches) ETAT.nuances.coches = {};
-  if (!ETAT.nuances.reponses) ETAT.nuances.reponses = {};
-  if (!ETAT.faits) ETAT.faits = {};
-  if (!ETAT.etape) ETAT.etape = 1;
-  function enregistrer() { try { localStorage.setItem(CLE, JSON.stringify(ETAT)); } catch (e) {} }
-
-  var e = function (s) { return String(s == null ? "" : s)
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
-  var AUJOURDHUI = new Date().toISOString().slice(0, 10);
-
-  /* Les quatre valeurs d'une réponse fermée, et le test qui dit lesquelles
-     concluent. La source est docs/profil.js : une seule définition pour toute
-     l'application. */
-  var VALEURS = (P && P.VALEURS) || ["oui", "non", "en cours", "autre"];
-  var conclut = (P && P.conclut) || function (v) { return v === "oui" || v === "non"; };
-
-  /* ------------------------------------------------------ 1. fiche client ---
-
-     Six champs de la fiche répondent aussi à des questions d'orientation du
-     moteur : la page ne les demande donc pas deux fois. Elle les recopie —
-     ET SEULEMENT LORSQU'ILS CONCLUENT. Un « groupe : en cours » recopié tel
-     quel aurait été lu par le moteur comme une valeur renseignée non égale à
-     « oui », c'est-à-dire comme un « non » : l'obligation serait devenue
-     « sans objet » sur une réponse qui ne disait rien. */
-  var DEPUIS_FICHE = {
-    entreprise: "denomination",
-    effectif: "effectif",
-    secteur: "secteur",
-    conventionCollective: "conventionCollective",
-    groupe: "groupe",
-    etablissementsDistincts: "etablissementsDistincts",
-  };
-  var FERMES_FICHE = { groupe: true, etablissementsDistincts: true };
-
-  function profilDepuisFiche() {
-    var f = P ? P.lire() : {};
-    var out = {};
-    Object.keys(DEPUIS_FICHE).forEach(function (champ) {
-      var v = f[DEPUIS_FICHE[champ]];
-      if (v === undefined || v === null || String(v).trim() === "") return;
-      if (FERMES_FICHE[champ] && !conclut(v)) return;   /* ne conclut pas : rien n'est recopié */
-      out[champ] = champ === "effectif" ? Number(v) : String(v).trim();
+  /* Les obligations du moteur qui ont une procédure guidée : le « non » y
+     mène, ouverte sur son document. Celles que la fiche d'entreprise rend non
+     dues ne sont pas posées ; celles dont l'assujettissement dépend d'une
+     réponse que l'écran ne demande plus le sont, parce qu'un « peut-être » se
+     tranche en ouvrant la pièce, pas en posant une question de plus. */
+  if (A) {
+    var ORDRE = ["instances", "documents obligatoires", "affichages et informations",
+      "registres", "négociations", "santé-sécurité", "formation et entretiens",
+      "congés et jours", "embauche et contrat", "fin du contrat",
+      "égalité et non-discrimination", "épargne et protection sociale",
+      "durée du travail et repos"];
+    /* Une obligation déjà servie par une pièce écrite ici n'est pas reposée :
+       la question serait la même, et la réponse mènerait à un parcours moins
+       direct que le document. */
+    var DEJA = { "SOC-AFF-CONSIGNE-INCENDIE": true, "SOC-SST-SALARIE-COMPETENT": true };
+    var avecParcours = A.applicables(profil).filter(function (o) {
+      return o.du !== false && !DEJA[o.id] && o.regularisation && o.regularisation.parcours;
     });
-    if (out.effectif !== undefined && !isFinite(out.effectif)) delete out.effectif;
-    return out;
-  }
-
-  function construireFiche() {
-    if (!P) { $("fiche-client").innerHTML =
-      '<p class="aide">La fiche client n\'a pas pu être chargée (profil.js).</p>'; return; }
-    P.rendre($("fiche-client"), {
-      prefixe: "fc",
-      legende: "Fiche client — l'entreprise auditée",
-      aide: "Ces données restent dans ce navigateur. Elles pré-remplissent les rapports, les courriers " +
-        "et les modèles, et orientent l'audit : l'effectif ouvre ou ferme les seuils, le secteur " +
-        "nourrit les modèles, la convention dit où le conventionnel peut ajouter une obligation.",
-      onChange: function () {
-        lireFormulaire(); enregistrer(); majVisibilite(); majCompteur();
-        if (ETAT.etape >= 2) construireListe();
-      },
+    avecParcours.sort(function (a, b) {
+      var ia = ORDRE.indexOf(a.categorie), ib = ORDRE.indexOf(b.categorie);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
     });
-  }
-
-  /* --------------------------------- 1 bis. les questions d'orientation ---
-
-     Les six champs déjà posés par la fiche client ne sont pas redemandés. Le
-     reste l'est, avec le même vocabulaire de réponses : quatre valeurs pour
-     les questions fermées, dont deux seulement concluent. */
-  function questionsPropres() {
-    return A.questions.filter(function (q) { return !DEPUIS_FICHE[q.champ]; });
-  }
-
-  /* Le menu à quatre valeurs, et sa saisie libre. La valeur stockée dans le
-     formulaire est la valeur affichée ; c'est `lireFormulaire` qui trie ce qui
-     part au moteur et ce qui reste une nuance. */
-  function menuFerme(nom, val) {
-    var libre = val && VALEURS.indexOf(String(val)) < 0;
-    var choisi = libre ? "autre" : String(val == null ? "" : val);
-    return '<select name="' + e(nom) + '" data-ferme="1"><option value=""></option>' +
-      VALEURS.map(function (o) {
-        return '<option value="' + o + '"' + (choisi === o ? " selected" : "") + ">" + o + "</option>";
-      }).join("") + "</select>" +
-      '<input type="text" data-libre="' + e(nom) + '" placeholder="précisez" ' +
-      'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' +
-      (libre ? e(val) : "") + '">' +
-      '<span class="aide-champ nuance" data-nuance="' + e(nom) + '"></span>';
-  }
-
-  function construireFormulaire() {
-    var html = '<fieldset><legend>Les questions qui ouvrent ou ferment une obligation</legend><div class="grille">';
-    questionsPropres().forEach(function (q) {
-      var val = ETAT.profil[q.champ];
-      if (val === undefined || val === "") val = (ETAT.nuances.coches["__profil-" + q.champ] || "");
-      var champ;
-      if (q.format === "oui / non") champ = menuFerme(q.champ, val);
-      else if (q.format === "nombre") champ = '<input name="' + q.champ + '" type="number" min="0" value="' + e(val) + '">';
-      else if (q.format === "AAAA-MM-JJ") champ = '<input name="' + q.champ + '" type="date" value="' + e(val) + '">';
-      else champ = '<input name="' + q.champ + '" type="text" value="' + e(val) + '">';
-      html += '<label><span class="nom">' + e(q.libelle) + "</span>" + champ +
-        '<span class="aide-champ">' + e(q.aide) + "</span></label>";
-    });
-    html += "</div></fieldset>";
-    $("formulaire").innerHTML = html;
-
-    /* Le « autre » ouvre sa saisie libre, et la referme en la vidant. */
-    Array.prototype.forEach.call($("formulaire").querySelectorAll('[data-ferme="1"]'), function (sel) {
-      var libre = $("formulaire").querySelector('[data-libre="' + sel.name + '"]');
-      sel.addEventListener("change", function () {
-        var ouvert = sel.value === "autre";
-        libre.style.display = ouvert ? "" : "none";
-        if (!ouvert) libre.value = "";
-      });
-      libre.addEventListener("input", function () {
-        lireFormulaire(); enregistrer(); majCompteur(); majNuances();
-      });
-    });
-
-    $("formulaire").addEventListener("change", function () {
-      lireFormulaire(); enregistrer(); majVisibilite(); majCompteur(); majNuances();
-      if (ETAT.etape >= 2) construireListe();
-    });
-    majVisibilite(); majNuances();
-  }
-
-  /* Le rappel posé sous une question qui n'a pas conclu. */
-  function majNuances() {
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("[data-nuance]"), function (n) {
-      var nom = n.getAttribute("data-nuance");
-      var sel = $("formulaire").querySelector('[name="' + nom + '"]');
-      if (!sel) return;
-      if (sel.value === "" || conclut(sel.value)) { n.textContent = ""; n.style.display = "none"; return; }
-      n.textContent = "Réponse « " + sel.value + " » : elle décrit votre situation, mais elle ne " +
-        "conclut pas. L'obligation restera « à préciser », et aucun contrôle ne rendra « conforme ».";
-      n.style.color = "#9C5A05";
-      n.style.display = "";
-    });
-  }
-
-  /* Sous onze salariés, aucun seuil d'effectif n'est en jeu : la question du
-     maintien du seuil disparaît, et sa réponse avec elle — le moteur la traite
-     alors comme non renseignée, ce qu'il sait faire. Pas de comité non plus :
-     la question de sa mise en place effective n'a pas de sens.
-
-     Et sous cette même question — comiteInstalle — une seconde porte : tant
-     que le comité n'est pas déclaré effectivement en place, la question sur
-     SES COMPTES (comiteSeuilsComptes) reste masquée. Elle ne redevient
-     répondable que sur un « oui » explicite : un comité non installé n'a pas
-     de comptes, la question serait sans objet — c'est le bogue signalé le
-     29 août 2026 (l'application demandait les comptes d'un comité dont rien
-     n'établissait l'existence).
-
-     Même famille, même porte pour les accords collectifs (accordsCollectifs) :
-     le référentiel ne lit cette réponse qu'à un seul endroit, dans le motif de
-     l'item des négociations obligatoires, et seulement lorsque sectionSyndicale
-     vaut « oui » (referentiel-social.js, item SOC-NEG-NAO). Sans section
-     syndicale déclarée, la réponse ne sert à rien : la question reste masquée
-     tant que sectionSyndicale n'est pas « oui ». */
-  function majVisibilite() {
-    var n = ETAT.profil.effectif;
-    n = (n === undefined || n === null || String(n).trim() === "") ? null : Number(n);
-    var sousOnze = n !== null && !isNaN(n) && n < 11;
-    var comiteNonConfirme = ETAT.profil.comiteInstalle !== "oui";
-    var sectionNonConfirmee = ETAT.profil.sectionSyndicale !== "oui";
-    [["seuilDepuis12Mois", sousOnze], ["comiteInstalle", sousOnze],
-     ["comiteSeuilsComptes", sousOnze || comiteNonConfirme],
-     ["accordsCollectifs", sectionNonConfirmee]].forEach(function (paire) {
-      var el = $("formulaire").querySelector('[name="' + paire[0] + '"]');
-      if (!el) return;
-      var lab = el.closest("label");
-      if (paire[1]) {
-        if (el.value) { el.value = ""; delete ETAT.profil[paire[0]]; delete ETAT.nuances.coches["__profil-" + paire[0]]; enregistrer(); }
-        lab.style.display = "none";
-      } else lab.style.display = "";
-    });
-  }
-
-  /* Ce qui part au moteur, et ce qui reste une nuance. */
-  function lireFormulaire() {
-    var p = profilDepuisFiche();
-    Array.prototype.forEach.call($("formulaire").elements, function (el) {
-      if (!el.name) return;
-      var v = String(el.value == null ? "" : el.value).trim();
-      var ferme = el.getAttribute("data-ferme") === "1";
-      if (ferme && v === "autre") {
-        var l = $("formulaire").querySelector('[data-libre="' + el.name + '"]');
-        v = l ? l.value.trim() : "";
-      }
-      if (v === "") { delete ETAT.nuances.coches["__profil-" + el.name]; return; }
-      if (ferme && !conclut(v)) {
-        /* Ne conclut pas : le moteur ne la reçoit pas, la page la garde. */
-        ETAT.nuances.coches["__profil-" + el.name] = v;
-        return;
-      }
-      if (ferme) delete ETAT.nuances.coches["__profil-" + el.name];
-      p[el.name] = el.type === "number" ? Number(v) : v;
-    });
-    ETAT.profil = p;
-    return p;
-  }
-
-  function majCompteur() {
-    var pris = 0, total = 0;
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("label"), function (lab) {
-      if (lab.style.display === "none") return;
-      total++;
-      var el = lab.querySelector("[name]");
-      if (el && String(el.value).trim() !== "") pris++;
-    });
-    var f = P ? P.lire() : {};
-    var fTotal = P ? P.IDENTITE.length : 0;
-    var fPris = P ? P.IDENTITE.filter(function (ch) {
-      var v = f[ch.c]; return v !== undefined && v !== null && String(v).trim() !== "";
-    }).length : 0;
-    $("compteur").textContent = "Fiche client : " + fPris + " / " + fTotal +
-      " · orientation : " + pris + " / " + total;
-  }
-
-  /* --------------------------------------- 2. le questionnaire de l'existant --- */
-  var chips = { "non conforme": "c-nc", "risque à vérifier": "c-risq", "conforme": "c-conf",
-    "donnée manquante": "c-manq", "sans objet": "c-so" };
-
-  function reponseCoche(id) {
-    if (ETAT.coches[id]) return ETAT.coches[id];
-    return ETAT.nuances.coches[id] || "";
-  }
-
-  function construireListe() {
-    var p = ETAT.profil;
-    var apps = A.applicables(p);
-    var parCat = {};
-    apps.forEach(function (x) { (parCat[x.categorie] = parCat[x.categorie] || []).push(x); });
-    var html = "";
-    A.categories.forEach(function (cat) {
-      var items = parCat[cat] || [];
-      var dus = items.filter(function (x) { return x.du === true; }).length;
-      html += '<div class="categorie">' + e(cat.charAt(0).toUpperCase() + cat.slice(1)) +
-        "<span>" + dus + " applicable(s) sur " + items.length + "</span></div>";
-      items.forEach(function (x) {
-        var cls = x.du === true ? "" : (x.du === false ? " non-due" : " a-preciser");
-        html += '<div class="obl' + cls + '" id="obl-' + x.id + '">' +
-          '<div class="t">' + e(x.intitule) +
-          (x.du === false ? '<span class="chip c-so">non dû</span>' : "") +
-          (x.du === null ? '<span class="chip c-manq">à préciser</span>' : "") + "</div>" +
-          '<p class="motif">' + e(x.motif) + "</p>" +
-          '<p class="fond">Source : ' + e(x.fondement) + "</p>" +
-          (x.module ? '<p class="renvoi">Audit détaillé : <a href="' + e(x.module.page) + '">module « ' +
-            e(x.module.nom) + " »</a></p>" : "");
-        if (x.du === true) {
-          var v = reponseCoche(x.id);
-          var libre = v && VALEURS.indexOf(v) < 0;
-          var choisi = libre ? "autre" : v;
-          html += '<div class="coches"><label style="border:none;background:none;padding:0;width:100%">' +
-            '<span class="nom">L\'avez-vous ?</span>' +
-            '<select data-coche="' + x.id + '"><option value=""></option>' +
-            VALEURS.map(function (o) {
-              return '<option value="' + o + '"' + (choisi === o ? " selected" : "") + ">" + o + "</option>";
-            }).join("") + "</select>" +
-            '<input type="text" data-coche-libre="' + x.id + '" placeholder="précisez" ' +
-            'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' +
-            (libre ? e(v) : "") + '">' +
-            '<span class="aide-champ" data-coche-note="' + x.id + '"></span>' +
-            "</label></div>";
-        }
-        html += "</div>";
-      });
-    });
-    $("liste").innerHTML = html;
-
-    Array.prototype.forEach.call($("liste").querySelectorAll("[data-coche]"), function (sel) {
-      var id = sel.getAttribute("data-coche");
-      var libre = $("liste").querySelector('[data-coche-libre="' + id + '"]');
-      function poser() {
-        var v = sel.value;
-        if (v === "autre") v = libre.value.trim() || "autre";
-        if (v === "") { delete ETAT.coches[id]; delete ETAT.nuances.coches[id]; }
-        else if (conclut(v)) { ETAT.coches[id] = v; delete ETAT.nuances.coches[id]; }
-        else { delete ETAT.coches[id]; ETAT.nuances.coches[id] = v; }
-        enregistrer(); majCompteurCoches(); noteCoche(id);
-      }
-      sel.addEventListener("change", function () {
-        var ouvert = sel.value === "autre";
-        libre.style.display = ouvert ? "" : "none";
-        if (!ouvert) libre.value = "";
-        poser();
-      });
-      libre.addEventListener("input", poser);
-      noteCoche(id);
-    });
-
-    var d = p.dateAudit ? "Situation décrite au " + p.dateAudit + "." : "";
-    $("liste-date").textContent = d;
-    majCompteurCoches();
-  }
-
-  function noteCoche(id) {
-    var n = $("liste").querySelector('[data-coche-note="' + id + '"]');
-    if (!n) return;
-    var v = reponseCoche(id);
-    if (!v || conclut(v)) { n.textContent = ""; n.style.display = "none"; return; }
-    n.textContent = "« " + v + " » ne conclut pas : l'audit traite cette obligation comme une donnée " +
-      "manquante — elle figurera au guide de régularisation, et aucun contrôle ne la rendra « conforme ».";
-    n.style.color = "#9C5A05";
-    n.style.display = "";
-  }
-
-  function majCompteurCoches() {
-    var apps = A.applicables(ETAT.profil).filter(function (x) { return x.du === true; });
-    var faits = apps.filter(function (x) { return reponseCoche(x.id); }).length;
-    $("compteur-coches").textContent = faits + " / " + apps.length + " obligations répondues";
-  }
-
-  /* --------------------------------------------------- le dossier remis --- */
-  /* Ce que le moteur reçoit : les seules réponses concluantes. C'est la
-     traduction, et elle est unique — tous les rendus la partagent. */
-  function dossier() { return { coches: ETAT.coches, reponses: ETAT.reponses }; }
-
-  /* ------------------------------------------------- 3. rapport général --- */
-  function construireRapportGeneral(consigner) {
-    var p = ETAT.profil;
-    var v = A.verdicts(p, dossier());
-    var s = A.synthese(p, dossier());
-    var absents = Object.keys(ETAT.coches).filter(function (id) { return ETAT.coches[id] === "non"; }).length;
-    var enCours = Object.keys(ETAT.nuances.coches).filter(function (k) { return k.indexOf("__profil-") !== 0; }).length;
-    var teinte = s.nonConformes ? "b-rouge" : (s.risques || s.manquantes ? "b-orange" : "b-vert");
-    var f = P ? P.lire() : {};
-    var html = '<div class="bandeau ' + teinte + '">' +
-      (s.conformes === 0 && s.risques > 0 ? '<p class="s" style="margin:0 0 6px">Répondre « oui » ouvre la vérification, ' +
-      "ce n'est pas la conclusion : c'est pour cela qu'aucune obligation n'est encore « conforme » " +
-      "ci-dessous — le guide de l'étape 4 dit, pour chacune, sur quelle pièce statuer.</p>" : "") +
-      '<p class="r">' + s.applicables + " obligations applicables · " + absents + " déclarée(s) absente(s) · " +
-      s.nonConformes + " non conforme(s) · " + s.risques + " à vérifier · " + s.conformes + " conforme(s)</p>" +
-      '<p class="s">' + e(p.entreprise || f.denomination || "Entreprise non dénommée") +
-      (f.siret ? " — SIRET " + e(f.siret) : "") +
-      (p.dateAudit ? " — situation au " + e(p.dateAudit) : "") +
-      " — rapport établi le " + AUJOURDHUI +
-      ". " + s.manquantes + " donnée(s) manquante(s), " + s.sansObjet + " sans objet, " +
-      s.indetermines + " assujettissement(s) à préciser" +
-      (enCours ? ", " + enCours + " réponse(s) qui ne concluent pas" : "") + ".</p></div>";
-
-    if (enCours) {
-      html += '<div class="enc"><p class="sh">Ce sur quoi l\'audit ne s\'est pas prononcé</p>' +
-        "<p style=\"margin:0\">" + enCours + " obligation(s) ont reçu une réponse « en cours » ou " +
-        "« autre ». Elles décrivent votre situation, mais aucun contrôle ne peut s'y appuyer : elles " +
-        "sont traitées comme des données manquantes, et figurent au guide de régularisation de " +
-        "l'étape 4. Répondez « oui » ou « non » lorsque la situation sera tranchée.</p></div>";
-    }
-
-    /* L'évolution depuis le dernier passage : ce qui a été fait, ce qui reste. */
-    var histo = [];
-    try { histo = JSON.parse(localStorage.getItem(CLE_HISTO) || "[]"); } catch (e2) {}
-    if (histo.length) {
-      var avant = histo[histo.length - 1];
-      var faits = [], restants = [];
-      A.referentiel.forEach(function (x) {
-        var av = avant.etats[x.id], ap = (v[x.id] || {}).etat;
-        var mauvais = function (t) { return t === "non conforme" || t === "risque à vérifier"; };
-        if (mauvais(av) && ap === "conforme") faits.push(x.intitule);
-        else if (mauvais(av) && mauvais(ap)) restants.push(x.intitule);
-      });
-      if (faits.length || restants.length) {
-        html += '<div class="evolution"><p class="sh">Évolution depuis le rapport du ' + e(avant.date) + "</p>";
-        if (faits.length) html += "<p><b>Fait depuis (" + faits.length + ")&nbsp;:</b> " + e(faits.join(" · ")) + "</p>";
-        if (restants.length) html += "<p><b>Restant (" + restants.length + ")&nbsp;:</b> " + e(restants.join(" · ")) + "</p>";
-        html += "</div>";
-      }
-    }
-
-    html += '<div class="tab"><table><thead><tr><th>Obligation</th><th>État</th><th>Constat</th><th>Source</th></tr></thead><tbody>';
-    A.categories.forEach(function (cat) {
-      var items = A.referentiel.filter(function (x) { return x.categorie === cat; });
-      html += '<tr><th colspan="4" style="background:#f0eaef;color:#5C2A54">' +
-        e(cat.charAt(0).toUpperCase() + cat.slice(1)) + "</th></tr>";
-      items.forEach(function (x) {
-        var r = v[x.id] || { etat: "donnée manquante", motif: "" };
-        var nu = ETAT.nuances.coches[x.id];
-        html += "<tr><td>" + e(x.intitule) + "</td>" +
-          '<td><span class="chip ' + (chips[r.etat] || "c-manq") + '">' + e(r.etat) + "</span></td>" +
-          "<td>" + e(r.motif) +
-          (nu ? ' <b>Réponse déclarée : « ' + e(nu) + " » — elle ne conclut pas.</b>" : "") +
-          (ETAT.faits[x.id] ? ' <b>Déclaré régularisé le ' + e(ETAT.faits[x.id].le) + ".</b>" : "") +
-          "</td><td>" + e(x.fondement) + "</td></tr>";
-      });
-    });
-    html += "</tbody></table></div>" +
-      '<p class="note">Chaque article cité a été lu au relais Légifrance de l\'application, en deux ' +
-      'lectures concordantes espacées, et porte son identifiant de version (LEGIARTI). Les obligations ' +
-      'conventionnelles sont signalées « à vérifier » : le relais ne sert que le code du travail. ' +
-      'Ce rapport dit l\'état des réponses données — il ne délivre aucun blanc-seing.</p>';
-    $("rapport-general").innerHTML = html;
-
-    /* L'historique du suivi : un instantané par passage au rapport de
-       régularisation — non à chaque affichage du rapport général, sans quoi
-       la comparaison se ferait avec elle-même. */
-    if (consigner) {
-      var etats = {};
-      A.referentiel.forEach(function (x) { etats[x.id] = (v[x.id] || {}).etat; });
-      histo.push({ date: AUJOURDHUI, synthese: s, etats: etats });
-      while (histo.length > 12) histo.shift();
-      try { localStorage.setItem(CLE_HISTO, JSON.stringify(histo)); } catch (e3) {}
-    }
-  }
-
-  /* ------------------------------- 4. le guide pratique de régularisation --- */
-  function feuille(mod, ouvert) {
-    if (!mod) return "";
-    var corps = mod.lignes.map(function (l) {
-      if (l.t === "h") return '<p class="fh">' + e(l.x) + "</p>";
-      if (l.t === "puce") return '<p class="fp">— ' + e(l.x) + "</p>";
-      if (l.t === "champ") return '<p class="fc">' + e(l.x) + "</p>";
-      return "<p>" + e(l.x) + "</p>";
-    }).join("");
-    return '<details class="modele"' + (ouvert ? " open" : "") + '><summary>Modèle complet, pré-rempli de vos données : ' +
-      e(mod.titre) + "</summary>" +
-      '<div class="feuille"><p class="ft">' + e(mod.titre) + "</p>" + corps + "</div></details>";
-  }
-
-  /* Le lien vers le document à produire, pré-rempli de la fiche client. */
-  function lienDocument(cle, intitule) {
-    if (!cle) return "";
-    var f = P ? P.lire() : {};
-    var pre = {};
-    if (f.denomination) pre.entreprise = f.denomination;
-    if (f.effectif) pre.effectif = f.effectif;
-    if (f.adresse) pre.adresse = f.adresse;
-    if (intitule) pre.objet = intitule;
-    return "documents.html?modele=" + encodeURIComponent(cle) +
-      "&pre=" + encodeURIComponent(JSON.stringify(pre));
-  }
-
-  function liensRegularisation(a) {
-    var g = a.regularisation || {};
-    var l = [];
-    if (g.parcours)
-      l.push('<a href="parcours.html?p=' + e(g.parcours) + '">Procédure pas à pas : « ' +
-        e(g.parcoursNom) + " » →</a>");
-    if (g.document)
-      l.push('<a href="' + e(lienDocument(g.document, a.intitule)) + '">Document à produire →</a>');
-    /* Le document FINAL, complet et prêt à imprimer, quand c'est Juris Expert
-       qui le fabrique. Le partage entre les deux applications est arrêté :
-       ici on constate et on fonde, là-bas on produit. */
-    if (g.jx && window.JurisExpert && JurisExpert.existe(g.jx))
-      l.push(JurisExpert.ancre(g.jx, "Document final dans Juris Expert : " + JurisExpert.nom(g.jx)));
-    if (a.module)
-      l.push('<a href="' + e(a.module.page) + '">Audit détaillé : ' + e(a.module.nom) + " →</a>");
-    l.push('<a href="#t5" data-regulariser="' + e(a.id) + '">Régulariser cet élément (étape 5) →</a>');
-    return '<p class="renvoi">' + l.join(" · ") + "</p>";
-  }
-
-  function carteAction(a, ton, mention) {
-    return '<div class="action' + (ton === "verifier" ? " verifier" : "") + '" id="guide-' + e(a.id) + '">' +
-      '<div class="t">' + e(a.intitule) + '<span class="prio p-' + a.priorite + '">priorité ' + a.priorite + "</span>" +
-      (mention ? '<span class="chip c-manq">' + e(mention) + "</span>" : "") + "</div>" +
-      '<p class="quoi"><b>' + e(a.action) + "</b></p>" +
-      '<p class="note">' + e(a.constat) + "</p>" +
-      "<ol>" + a.etapes.map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ol>" +
-      '<div class="meta"><span><b>Qui :</b> ' + e(a.acteur) + "</span><span><b>Délai indicatif :</b> " +
-      e(a.delai) + "</span></div>" +
-      '<p class="risque">Risque : ' + e(a.risque) + "</p>" +
-      '<p class="fond note">Source : ' + e(a.fondement) + "</p>" +
-      liensRegularisation(a) +
-      feuille(a.modeleAdapte) + "</div>";
-  }
-
-  /* Ce que le guide reprend, et dans quel ordre : ce qui manque, ce qui est
-     engagé, puis ce qui n'a pas de réponse. Un point qui n'appelle rien n'y
-     figure pas — un guide qui liste ce qui va bien ne guide personne. */
-  function aRegulariser() {
-    var pl = A.plan(ETAT.profil, dossier());
-    var toutes = pl.actions.concat(pl.aVerifier);
-    var manquants = toutes.filter(function (a) { return ETAT.coches[a.id] === "non"; });
-    var enCours = [], sansReponse = [];
-    /* Les obligations dont la réponse ne conclut pas : le plan les range en
-       « à compléter » (donnée manquante). On les rouvre en actions complètes,
-       parce qu'elles appellent bel et bien un travail. */
-    var index = {};
-    A.referentiel.forEach(function (x) { index[x.id] = x; });
-    var appsDues = {};
-    A.applicables(ETAT.profil).forEach(function (x) { if (x.du === true) appsDues[x.id] = x; });
-    pl.aCompleter.forEach(function (c) {
-      if (!appsDues[c.id]) return;
-      var carte = A.action(ETAT.profil, c.id);
-      if (!carte) return;
-      carte.constat = c.motif;
-      if (ETAT.nuances.coches[c.id]) {
-        carte.mention = "déclarée « " + ETAT.nuances.coches[c.id] + " »";
-        enCours.push(carte);
-      } else {
-        carte.mention = "sans réponse";
-        sansReponse.push(carte);
-      }
-    });
-    return { manquants: manquants, enCours: enCours, sansReponse: sansReponse,
-      total: manquants.length + enCours.length + sansReponse.length };
-  }
-
-  function construireGuide() {
-    var g = aRegulariser();
-    var f = P ? P.lire() : {};
-    var html = '<div class="bandeau ' + (g.total ? "b-rouge" : "b-vert") + '">' +
-      '<p class="r">' + (g.total ? g.total + " point(s) à régulariser" : "Rien à régulariser en l'état des réponses") + "</p>" +
-      '<p class="s">' + e(ETAT.profil.entreprise || f.denomination || "") +
-      (ETAT.profil.dateAudit ? " — situation au " + e(ETAT.profil.dateAudit) : "") +
-      " — guide établi le " + AUJOURDHUI +
-      ". " + g.manquants.length + " déclaré(s) absent(s), " + g.enCours.length +
-      " en cours ou hors cadre, " + g.sansReponse.length + " sans réponse. " +
-      "Tri : sanctions et expositions fortes d'abord, puis pénalités, puis régularisations rapides.</p></div>";
-
-    if (!g.total)
-      html += '<p class="aide">Aucune obligation déclarée absente, et aucune sans réponse : passez à ' +
-        "l'étape 6 pour vérifier ce que vous déclarez avoir en place.</p>";
-
-    if (g.manquants.length) {
-      html += "<h3>Ce qui manque (" + g.manquants.length + ")</h3>" +
-        '<p class="aide">Vous avez répondu « non ». Chaque point ouvre sa procédure pas à pas et son ' +
-        "modèle complet.</p>";
-      g.manquants.forEach(function (a) { html += carteAction(a, a.etat !== "non conforme" ? "verifier" : "", null); });
-    }
-    if (g.enCours.length) {
-      html += "<h3>Ce qui est engagé, mais pas encore acquis (" + g.enCours.length + ")</h3>" +
-        '<p class="aide">Vous avez répondu « en cours » ou « autre ». L\'audit ne conclut pas sur ces ' +
-        "points : ils restent au guide jusqu'à ce que vous répondiez « oui » ou « non ».</p>";
-      g.enCours.forEach(function (a) { html += carteAction(a, "verifier", a.mention); });
-    }
-    if (g.sansReponse.length) {
-      html += "<h3>Ce qui n'a pas encore de réponse (" + g.sansReponse.length + ")</h3>" +
-        '<p class="aide">Sans réponse, rien ne se contrôle : retournez à l\'étape 2, ou traitez le ' +
-        "point directement s'il vous manque.</p>";
-      g.sansReponse.forEach(function (a) { html += carteAction(a, "verifier", a.mention); });
-    }
-    $("guide").innerHTML = html;
-
-    Array.prototype.forEach.call($("guide").querySelectorAll("[data-regulariser]"), function (a) {
-      a.addEventListener("click", function (ev) {
-        ev.preventDefault();
-        ouvrirItem(a.getAttribute("data-regulariser"));
+    avecParcours.forEach(function (o) {
+      /* Le document unique a son écran, où il s'écrit par métier : c'est là
+         qu'il faut aller, pas dans un parcours qui le décrit. */
+      var duerp = o.id === "SOC-DOC-DUERP";
+      QUESTIONS.push({
+        id: o.id,
+        groupe: o.categorie.charAt(0).toUpperCase() + o.categorie.slice(1),
+        question: o.intitule,
+        titre: duerp ? "Document unique" : o.regularisation.parcoursNom,
+        lien: duerp ? "controler-duerp.html"
+                    : "parcours.html?p=" + o.regularisation.parcours + "&faire=1",
+        lienOui: duerp ? "controler-duerp.html" : null,
+        renvoi: o.fondement || "",
       });
     });
   }
 
-  /* ------------------------------ 5. la régularisation, élément par élément --- */
-  function majChoixItem() {
-    var g = aRegulariser();
-    var toutes = g.manquants.concat(g.enCours, g.sansReponse);
-    var sel = $("choix-item");
-    var courant = sel.value;
-    sel.innerHTML = '<option value="">— choisissez un élément —</option>' +
-      toutes.map(function (a) {
-        return '<option value="' + e(a.id) + '">' + e(a.intitule) +
-          (a.mention ? " (" + e(a.mention) + ")" : "") + "</option>";
-      }).join("");
-    if (courant && toutes.some(function (a) { return a.id === courant; })) sel.value = courant;
-    return toutes;
-  }
-
-  function ouvrirItem(id) {
-    montrer(Math.max(ETAT.etape, 5));
-    majChoixItem();
-    $("choix-item").value = id;
-    rendreItem(id);
-    $("t5").scrollIntoView({ behavior: "smooth" });
-  }
-
-  function rendreItem(id) {
-    if (!id) {
-      $("fiche-item").innerHTML = '<p class="aide">Choisissez un élément dans la liste ci-dessus, ' +
-        "ou revenez au guide et cliquez « Régulariser cet élément ».</p>";
-      return;
-    }
-    var a = A.action(ETAT.profil, id);
-    if (!a) { $("fiche-item").innerHTML = '<p class="aide">Cet élément n\'est pas applicable en l\'état du profil.</p>'; return; }
-    var g = a.regularisation || {};
-    var fait = ETAT.faits[id];
-    var html = '<div class="action" id="item-' + e(a.id) + '">' +
-      '<div class="t">' + e(a.intitule) + '<span class="prio p-' + a.priorite + '">priorité ' + a.priorite + "</span>" +
-      (fait ? '<span class="chip c-conf">déclaré fait le ' + e(fait.le) + "</span>" : "") + "</div>" +
-      '<p class="quoi"><b>' + e(a.action) + "</b></p>" +
-      '<p class="fond note">Source : ' + e(a.fondement) + "</p>" +
-
-      "<h3>a. Le modèle complet</h3>" +
-      '<p class="aide">Structure intégrale, exemple chiffré, champs à personnaliser. Il est établi sur ' +
-      "la loi lue à la source, et renvoie à votre convention collective partout où le conventionnel " +
-      "peut ajouter — il n'affirme jamais ce qu'elle contient.</p>" +
-      (a.modeleAdapte ? feuille(a.modeleAdapte, true)
-        : '<p class="aide">Aucun modèle pré-rempli pour ce point : les étapes ci-dessous en tiennent lieu.</p>') +
-      (g.document ? '<p class="renvoi"><a href="' + e(lienDocument(g.document, a.intitule)) +
-        '">Ouvrir le document à produire, pré-rempli de votre fiche client →</a></p>' : "") +
-      /* Là où Juris Expert imprime la pièce finale, on le dit ici plutôt que
-         de laisser le client chercher : le modèle ci-dessus donne la
-         structure et l'article, l'outil donne le document à signer. */
-      (g.jx && window.JurisExpert && JurisExpert.existe(g.jx)
-        ? '<p class="renvoi-jx">Le document final, complet et prêt à imprimer, se génère dans ' +
-          '<a class="jx" href="' + e(JurisExpert.lien(g.jx)) + '" target="_blank" rel="noopener">' +
-          "Juris Expert — " + e(JurisExpert.nom(g.jx)) + "</a> : " + e(JurisExpert.quoi(g.jx)) + ".</p>"
-        : "") +
-
-      "<h3>b. La procédure, étape par étape, jusqu'à la validation</h3>" +
-      (g.parcours
-        ? '<p class="aide">Le parcours guidé « ' + e(g.parcoursNom) + ' » déroule la procédure : ce qu\'il ' +
-          "faut avoir réuni avant de commencer, les étapes dans l'ordre — chacune avec l'article qui la " +
-          "fonde et son identifiant de version, le délai calculé depuis vos dates, le document à produire " +
-          "—, et une étape finale de validation. Votre avancement y est enregistré.</p>" +
-          '<p class="renvoi"><a href="parcours.html?p=' + e(g.parcours) + '">Ouvrir le parcours « ' +
-          e(g.parcoursNom) + " » →</a></p>"
-        : '<p class="aide">Aucun parcours guidé ne couvre ce point à ce jour : les étapes ci-dessous ' +
-          "sont la procédure, et le module d'audit dédié — lorsqu'il y en a un — la détaille.</p>") +
-      "<ol>" + a.etapes.map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ol>" +
-      '<div class="meta"><span><b>Qui :</b> ' + e(a.acteur) + "</span><span><b>Délai indicatif :</b> " +
-      e(a.delai) + "</span></div>" +
-      '<p class="risque">Risque : ' + e(a.risque) + "</p>" +
-      (a.module ? '<p class="renvoi"><a href="' + e(a.module.page) + '">Audit détaillé : module « ' +
-        e(a.module.nom) + " » →</a></p>" : "") +
-
-      "<h3>c. Quand c'est fait, dites-le</h3>" +
-      '<p class="aide">Déclarer un point régularisé ne le rend pas « conforme » : cela le fait entrer ' +
-      "à l'étape 6, où les questions de vérification décideront. Cocher n'est pas prouver.</p>" +
-      '<div class="coches"><label><input type="checkbox" id="fait-' + e(a.id) + '"' +
-      (fait ? " checked" : "") + "> j'ai régularisé ce point</label>" +
-      '<input type="date" id="fait-date-' + e(a.id) + '" value="' + e(fait ? fait.le : "") +
-      '" aria-label="Date de la régularisation" style="width:auto"></div>' +
-      "</div>";
-    $("fiche-item").innerHTML = html;
-
-    var cb = $("fait-" + a.id), dt = $("fait-date-" + a.id);
-    cb.addEventListener("change", function () {
-      if (cb.checked) {
-        ETAT.faits[a.id] = { le: dt.value || AUJOURDHUI };
-        dt.value = ETAT.faits[a.id].le;
-        /* Déclarer fait, c'est répondre « oui » à la question de l'étape 2 :
-           le point sort du guide et entre au contrôle. */
-        ETAT.coches[a.id] = "oui";
-        delete ETAT.nuances.coches[a.id];
-        message("« " + a.intitule + " » est déclaré régularisé. L'étape 6 le contrôlera : une " +
-          "déclaration sans détail vérifiable rendra « risque à vérifier », jamais « conforme ».");
-      } else {
-        delete ETAT.faits[a.id];
-        delete ETAT.coches[a.id];
-      }
-      enregistrer();
-      if (ETAT.etape >= 2) construireListe();
-      construireGuide(); majChoixItem(); rendreItem(a.id);
-      construireRapportGeneral(false);
-    });
-    dt.addEventListener("change", function () {
-      if (!ETAT.faits[a.id]) return;
-      ETAT.faits[a.id].le = dt.value || AUJOURDHUI;
-      enregistrer();
-    });
-  }
-
-  /* ---------------------- 6. la vérification de ce qui est déclaré fait --- */
-  function construireVerifs() {
-    var apps = A.applicables(ETAT.profil).filter(function (x) {
-      return x.du === true && ETAT.coches[x.id] === "oui";
-    });
-    if (!apps.length) {
-      $("verifs").innerHTML = '<p class="aide">Aucune obligation déclarée en place pour l\'instant : ' +
-        "répondez « oui » à l'étape 2, ou déclarez un point régularisé à l'étape 5.</p>";
-      return;
-    }
-    var html = "";
-    apps.forEach(function (x) {
-      var rep = ETAT.reponses[x.id] || {};
-      var nu = ETAT.nuances.reponses[x.id] || {};
-      var fait = ETAT.faits[x.id];
-      html += '<div class="verif-bloc" data-item="' + x.id + '"><p class="t">' + e(x.intitule) +
-        (fait ? ' <span class="chip c-manq">régularisé le ' + e(fait.le) + " — à vérifier</span>" : "") + "</p>";
-      x.verifs.forEach(function (v) {
-        var val = rep[v.cle] === undefined ? "" : rep[v.cle];
-        if (val === "" && nu[v.cle]) val = nu[v.cle];
-        var champ;
-        if (v.format === "oui / non") {
-          var libre = val && VALEURS.indexOf(String(val)) < 0;
-          var choisi = libre ? "autre" : String(val);
-          champ = '<span><select data-cle="' + v.cle + '"><option value=""></option>' +
-            VALEURS.map(function (o) {
-              return '<option value="' + o + '"' + (choisi === o ? " selected" : "") + ">" + o + "</option>";
-            }).join("") + "</select>" +
-            '<input type="text" data-libre="' + v.cle + '" placeholder="précisez" ' +
-            'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' +
-            (libre ? e(val) : "") + '"></span>';
-        } else {
-          champ = '<input type="date" data-cle="' + v.cle + '" value="' + e(val) + '">';
-        }
-        html += '<div class="verif-q"><span>' + e(v.libelle) + "</span>" + champ + "</div>";
-      });
-      html += "</div>";
-    });
-    $("verifs").innerHTML = html;
-
-    Array.prototype.forEach.call($("verifs").querySelectorAll(".verif-bloc"), function (bloc) {
-      var id = bloc.getAttribute("data-item");
-      function poser(cle) {
-        var sel = bloc.querySelector('[data-cle="' + cle + '"]');
-        var libre = bloc.querySelector('[data-libre="' + cle + '"]');
-        var v = String(sel.value || "").trim();
-        if (libre && v === "autre") v = libre.value.trim() || "autre";
-        ETAT.reponses[id] = ETAT.reponses[id] || {};
-        ETAT.nuances.reponses[id] = ETAT.nuances.reponses[id] || {};
-        var ferme = !!libre;
-        if (v === "") { delete ETAT.reponses[id][cle]; delete ETAT.nuances.reponses[id][cle]; }
-        else if (!ferme || conclut(v)) { ETAT.reponses[id][cle] = v; delete ETAT.nuances.reponses[id][cle]; }
-        else { delete ETAT.reponses[id][cle]; ETAT.nuances.reponses[id][cle] = v; }
-        enregistrer();
-      }
-      Array.prototype.forEach.call(bloc.querySelectorAll("[data-cle]"), function (el) {
-        var cle = el.getAttribute("data-cle");
-        var libre = bloc.querySelector('[data-libre="' + cle + '"]');
-        el.addEventListener("change", function () {
-          if (libre) {
-            var ouvert = el.value === "autre";
-            libre.style.display = ouvert ? "" : "none";
-            if (!ouvert) libre.value = "";
-          }
-          poser(cle);
-        });
-        if (libre) libre.addEventListener("input", function () { poser(cle); });
-      });
-    });
-  }
-
-  function construireRapportExistant() {
-    var v = A.verdicts(ETAT.profil, dossier());
-    var lignes = A.referentiel.filter(function (x) { return ETAT.coches[x.id] === "oui"; });
-    var nc = 0, risq = 0, conf = 0, manq = 0;
-    var corps = "";
-    var ordre = ["non conforme", "risque à vérifier", "donnée manquante", "conforme"];
-    ordre.forEach(function (etat) {
-      lignes.forEach(function (x) {
-        var r = v[x.id]; if (!r || r.etat !== etat) return;
-        if (etat === "non conforme") nc++; else if (etat === "risque à vérifier") risq++;
-        else if (etat === "conforme") conf++; else manq++;
-        var cls = etat === "non conforme" ? "v-nc" : etat === "risque à vérifier" ? "v-risq" :
-          etat === "conforme" ? "v-conf" : "v-manq";
-        var fait = ETAT.faits[x.id];
-        var nu = ETAT.nuances.reponses[x.id] || {};
-        var cles = Object.keys(nu);
-        corps += '<div class="verdict ' + cls + '"><div class="t">' + e(x.intitule) +
-          '<span class="chip ' + chips[etat] + '">' + etat + "</span>" +
-          (fait ? '<span class="chip c-manq">régularisé le ' + e(fait.le) + "</span>" : "") + "</div>" +
-          '<p class="w">' + e(r.motif) + "</p>" +
-          (cles.length ? '<p class="w"><b>Réponses qui ne concluent pas :</b> ' +
-            e(cles.map(function (c) { return c + " → « " + nu[c] + " »"; }).join(" ; ")) +
-            ". Elles ont été remises au moteur comme des données absentes.</p>" : "") +
-          '<p class="fond">Source : ' + e(x.fondement) + "</p></div>";
-      });
-    });
-    var regularises = Object.keys(ETAT.faits).length;
-    var teinte = nc ? "b-rouge" : (risq || manq ? "b-orange" : "b-vert");
-    var f = P ? P.lire() : {};
-    $("rapport-existant").innerHTML =
-      '<div class="bandeau ' + teinte + '"><p class="r">Rapport de régularisation : ' + nc + " non conforme(s) · " +
-      risq + " à vérifier · " + manq + " donnée(s) manquante(s) · " + conf + " conforme(s)</p>" +
-      '<p class="s">' + e(ETAT.profil.entreprise || f.denomination || "") + " — contrôle du " + AUJOURDHUI +
-      (regularises ? " — " + regularises + " point(s) déclaré(s) régularisé(s) à l'étape 5 et repris ici" : "") +
-      ". Une case cochée sans détail vérifiable rend « risque à vérifier », jamais « conforme ».</p></div>" +
-      (corps || '<p class="aide">Aucune obligation déclarée en place : rien à contrôler.</p>');
-  }
-
-  /* ------------------------------------------------------- la navigation --- */
-  function montrer(t) {
-    ETAT.etape = Math.max(ETAT.etape || 1, t);
-    enregistrer();
-    $("bloc-liste").style.display = t >= 2 ? "" : "none";
-    $("bloc-general").style.display = t >= 3 ? "" : "none";
-    $("bloc-guide").style.display = t >= 4 ? "" : "none";
-    $("bloc-item").style.display = t >= 5 ? "" : "none";
-    $("bloc-existant").style.display = t >= 6 ? "" : "none";
-    Array.prototype.forEach.call(document.querySelectorAll("#fil-temps span"), function (el) {
-      var n = Number(el.getAttribute("data-t"));
-      el.className = n === t ? "actif" : (n < t ? "fait" : "");
-      el.style.cursor = n <= t ? "pointer" : "default";
-    });
-  }
-  function imprimer(cible) {
-    document.body.className = "print-" + cible;
-    window.print();
-    document.body.className = "";
-  }
-
-  $("generer").addEventListener("click", function () {
-    lireFormulaire(); enregistrer();
-    construireListe(); montrer(2);
-    $("t2").scrollIntoView({ behavior: "smooth" });
+  window.EcranPieces.demarrer({
+    racine: "ecran",
+    module: "social",
+    titre: "Avez-vous ces documents et ces dispositifs ?",
+    questions: QUESTIONS,
+    pied: "Les documents écrits ici portent leurs articles, avec l'identifiant de version, " +
+      "sous la feuille. Tout est écrit dans ce navigateur : aucune donnée ne part sur un " +
+      "réseau. La santé-sécurité a son écran, <a href=\"audit-sst.html\">ici</a>, et le " +
+      "document unique le sien, <a href=\"controler-duerp.html\">là</a>.",
   });
-  $("vers-general").addEventListener("click", function () {
-    construireRapportGeneral(false); montrer(3);
-    $("t3").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-guide").addEventListener("click", function () {
-    construireGuide(); montrer(4);
-    $("t4").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-item").addEventListener("click", function () {
-    montrer(5); majChoixItem(); rendreItem($("choix-item").value);
-    $("t5").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-existant").addEventListener("click", function () {
-    construireVerifs(); montrer(6);
-    $("t6").scrollIntoView({ behavior: "smooth" });
-  });
-  $("choix-item").addEventListener("change", function () { rendreItem($("choix-item").value); });
-  $("controler").addEventListener("click", function () {
-    construireRapportExistant(); construireRapportGeneral(true); construireGuide(); majChoixItem();
-    $("rapport-existant").scrollIntoView({ behavior: "smooth" });
-  });
-  $("imprimer-liste").addEventListener("click", function () { imprimer("liste"); });
-  $("imprimer-general").addEventListener("click", function () { imprimer("general"); });
-  $("imprimer-guide").addEventListener("click", function () { imprimer("guide"); });
-  $("imprimer-item").addEventListener("click", function () { imprimer("item"); });
-  $("imprimer-existant").addEventListener("click", function () { imprimer("existant"); });
-  $("copier-guide").addEventListener("click", function () {
-    var txt = $("guide").innerText;
-    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject())
-      .then(function () { message("Guide copié dans le presse-papiers."); },
-            function () { message("Copie impossible dans ce navigateur : sélectionnez le texte à la main."); });
-  });
-
-  $("exemple").addEventListener("click", function () {
-    ETAT = etatVide();
-    if (P) P.ecrire({
-      denomination: "SOCIÉTÉ D'EXEMPLE SAS", siret: "12345678900012",
-      adresse: "12 rue de l'Exemple, 59000 Lille", responsable: "Camille Martin, présidente",
-      courriel: "contact@societe-exemple.fr", telephone: "03 20 00 00 00",
-      effectif: 60, secteur: "services",
-      conventionCollective: "Bureaux d'études techniques (Syntec, IDCC 1486)",
-      groupe: "non", etablissementsDistincts: "non", nbEtablissements: 1,
-    });
-    ETAT.profil = { dateAudit: AUJOURDHUI, seuilDepuis12Mois: "oui",
-      sectionSyndicale: "oui", accordsCollectifs: "non",
-      matieresInflammables: "non", cadres: "oui", projetLicenciementEco: "non",
-      salariesHorsHoraire: "oui", postesRisquesParticuliers: "non",
-      comiteInstalle: "oui", comiteSeuilsComptes: "non",
-      epargneSalariale: "non" };
-    enregistrer();
-    construireFiche(); construireFormulaire();
-    lireFormulaire(); enregistrer(); majCompteur();
-    message("Exemple chargé : SOCIÉTÉ D'EXEMPLE SAS, 60 salariés, secteur services. Ouvrez le questionnaire.");
-  });
-  $("vider").addEventListener("click", function () {
-    ETAT = etatVide();
-    if (P) P.effacer();
-    enregistrer();
-    construireFiche(); construireFormulaire(); majCompteur(); montrer(1);
-    message("Tout est effacé — fiche client comprise. L'historique de suivi est conservé : " +
-      "il s'efface avec les données du navigateur.");
-  });
-  function message(txt) {
-    var m = $("message"); m.textContent = txt; m.style.display = "block";
-    clearTimeout(message.t); message.t = setTimeout(function () { m.style.display = "none"; }, 8000);
-  }
-
-  $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
-  $("btn-retour").addEventListener("click", function () {
-    if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
-    else location.href = "./";
-  });
-
-  var man = window.MoteurSocial.manifeste || {};
-  var cpt = man.compteurs || {};
-  $("pied").innerHTML = "Moteur : " + e(man.domaine || "audit social") +
-    (man.empreinte ? " — empreinte " + '<span class="ident">' + e(man.empreinte) + "</span>" : "") +
-    (cpt.obligations ? " — " + cpt.obligations + " obligations, " + cpt.articlesLus +
-      " articles lus à la source" : "") +
-    (cpt.obligationsLieesAUnParcours !== undefined
-      ? ", " + cpt.obligationsLieesAUnParcours + " reliées à un parcours guidé et " +
-        (cpt.obligationsAvecModeleComplet || 0) + " à un modèle complet" : "") +
-    ". Les données saisies restent dans ce navigateur.";
-
-  construireFiche(); construireFormulaire();
-  lireFormulaire(); majCompteur();
-
-  /* La réouverture : on reprend où l'on s'est arrêté, et on reconstruit tout
-     ce qui précède — un guide sans son questionnaire ne se lit pas. */
-  (function reprendre() {
-    var t = Number(ETAT.etape) || 1;
-    /* La fiche a pu être remplie sur l'écran d'accueil avant même la
-       première visite de ce module : ne pas la remontrer, passer
-       directement à l'étape 2, comme si elle venait d'être validée ici. */
-    if (t < 2 && P) { var pp = P.lire(); if (pp && pp.denomination) t = 2; }
-    if (t < 2) return;
-    construireListe();
-    if (t >= 3) construireRapportGeneral(false);
-    if (t >= 4) construireGuide();
-    if (t >= 5) { majChoixItem(); rendreItem($("choix-item").value); }
-    if (t >= 6) construireVerifs();
-    montrer(t);
-    /* Choisir un audit doit mener au questionnaire, pas à une page de
-       présentation : la présentation s'efface et l'écran s'ouvre sur
-       l'étape 2 — on remonte si on veut revoir la fiche. */
-    var pres = document.querySelector(".presentation");
-    if (pres) pres.style.display = "none";
-    var q = document.getElementById("t2");
-    if (q) q.scrollIntoView();
-  })();
 })();
 </script>
 <script>

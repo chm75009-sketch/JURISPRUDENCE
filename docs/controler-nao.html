@@ -52,39 +52,8 @@
   Rien ne quitte ce poste : le fichier déposé est lu dans le navigateur.
 -->
 
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
-    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
-    --filet:#e3e6ea; --filet-2:#cdd2d8;
-    --bleu:#1F3864; --bleu-clair:#eef1f7;
-    --vert:#1C5E36; --vert-clair:#e9f2ec;
-    --ambre:#8a5b10; --ambre-clair:#f8efdf;
-    --rouge:#a32c2c; --rouge-clair:#faeaea;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--fond);color:var(--encre);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
-  header.site{background:var(--encre);color:#fff;padding:13px 0}
-  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
-  header.site h1 span{opacity:.6;font-weight:400}
-  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
-    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
-  header.site a:hover{background:rgba(255,255,255,.12)}
-
-  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
-  h3{font:600 15px/1.3 system-ui;margin:22px 0 6px;color:var(--bleu)}
-  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
-
-  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
-  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
-    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
-  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
-  .onglets button:disabled{opacity:.45;cursor:not-allowed}
-
-  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
   textarea#depot{width:100%;min-height:220px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
     padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
 
@@ -98,25 +67,9 @@
     text-transform:uppercase;color:var(--encre-3)}
   .panneau p.q{margin:0 0 12px;font-size:12.5px;line-height:1.5;color:var(--encre-2)}
   @media (max-width:900px){.deux{grid-template-columns:1fr}.panneau{position:static}}
-
-  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
   .panneau .champs{grid-template-columns:1fr;gap:12px}
-  label.ch{display:grid;gap:4px}
-  label.ch .nom{font:600 12px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
   label.ch input,label.ch select{font:inherit;font-size:14.5px;padding:9px 11px;
     border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre)}
-  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
-  label.ch.pleine{grid-column:1/-1}
-
-  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
-  .avis b{display:block;margin-bottom:2px}
-  .avis.info{background:var(--bleu-clair);color:#22385c}
-  .avis.att{background:var(--ambre-clair);color:#6b470c}
-  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
-  .avis.non{background:var(--rouge-clair);color:#7d2222}
-
-  .compteurs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-  .compteurs .c{font:600 12.5px/1 system-ui;padding:8px 11px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
   .compteurs .c.abs{background:var(--bleu-clair);color:var(--bleu)}
   .compteurs .c.ok{background:var(--vert-clair);color:var(--vert)}
 
@@ -139,35 +92,20 @@
   .choix label.actif{border-color:var(--bleu);background:var(--bleu-clair)}
   .choix label b{display:block;font-size:14.5px;margin-bottom:2px}
   .choix label span.d{color:var(--encre-2);font-size:13px;line-height:1.5}
-
-  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
-  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
-    background:var(--bleu);color:#fff;cursor:pointer}
-  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
-  .btn.petit{font-size:12.5px;padding:8px 11px}
-  .btn:disabled{opacity:.45;cursor:not-allowed}
-
-  details.txt{border:1px solid var(--filet);border-radius:9px;margin:8px 0;background:var(--carte)}
-  details.txt>summary{padding:9px 13px;cursor:pointer;font:600 12.5px/1.3 system-ui;color:var(--bleu)}
-  details.txt .c{padding:0 14px 12px;font-size:13px;line-height:1.6;color:var(--encre-2)}
   details.txt .id{font:400 11.5px/1.3 ui-monospace,Menlo,monospace;color:var(--encre-3)}
 
   pre.sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
     background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
     max-height:62vh;overflow:auto}
-  .cache{display:none}
-  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
-    font-size:13px;color:var(--encre-3)}
-  @media print{.onglets,.barre,header.site,.choix,.panneau{display:none}.deux{display:block}}
-</style>
+  @media print{.onglets,.barre,header.site,.choix,.panneau{display:none}.deux{display:block}}</style>
 </head>
 <body>
 
 <header class="site">
   <div class="wrap">
-    <h1>Contrôler mon procès-verbal <span>- négociation obligatoire, le document existant complété</span></h1>
-    <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <a href="index.html">&larr; Accueil</a>
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
       <a href="parcours.html?p=nao">Conduire la négociation</a>
       <a href="audit-nao.html">Auditer mes négociations</a>
     </div>
@@ -175,6 +113,10 @@
 </header>
 
 <main class="wrap">
+
+  <header>
+    <h1>Contrôler mon procès-verbal <span>- négociation obligatoire, le document existant complété</span></h1>
+  </header>
 
   <div class="onglets" id="onglets">
     <button data-o="depot" class="actif">1 &middot; Le procès-verbal</button>

@@ -44,56 +44,12 @@
     R. 2312-12  LEGIARTI000036411586   support informatique ou papier selon l'effectif
 -->
 
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
-    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
-    --filet:#e3e6ea; --filet-2:#cdd2d8;
-    --bleu:#1F3864; --bleu-clair:#eef1f7;
-    --vert:#1C5E36; --vert-clair:#e9f2ec;
-    --ambre:#8a5b10; --ambre-clair:#f8efdf;
-    --rouge:#a32c2c; --rouge-clair:#faeaea;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--fond);color:var(--encre);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
-  header.site{background:var(--encre);color:#fff;padding:13px 0}
-  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
-  header.site h1 span{opacity:.6;font-weight:400}
-  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
-    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
-  header.site a:hover{background:rgba(255,255,255,.12)}
-
-  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
-  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
-  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
-
-  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
-  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
-    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
-  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
-  .onglets button:disabled{opacity:.45;cursor:not-allowed}
-
-  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
   textarea#depot{width:100%;min-height:190px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
     padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
-
-  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 18px}
-  .champs label{font-size:13.5px;color:var(--encre-2)}
-  .champs label b{display:block;font-weight:500;color:var(--encre);margin:0 0 4px}
   .champs input,.champs select{width:100%;padding:8px 10px;border:1px solid var(--filet-2);
     border-radius:7px;font:15px/1.35 inherit;background:var(--carte);color:var(--encre)}
-
-  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
-  .avis b{display:block;margin-bottom:2px}
-  .avis.info{background:var(--bleu-clair);color:#22385c}
-  .avis.att{background:var(--ambre-clair);color:#6b470c}
-  .avis.non{background:var(--rouge-clair);color:#7d2222}
-
-  .compteurs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-  .compteurs .c{font:600 12.5px/1 system-ui;padding:8px 11px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
   .compteurs .c.pose{background:var(--vert-clair);color:var(--vert)}
   .compteurs .c.ver{background:var(--bleu-clair);color:var(--bleu)}
 
@@ -111,28 +67,15 @@
   table.g td.vide{background:#fcfdff;min-width:82px}
   .btn-ins{font:600 13px/1 system-ui;padding:9px 13px;border-radius:8px;border:1px solid var(--vert);
     background:var(--vert);color:#fff;cursor:pointer;white-space:nowrap}
-  .btn-ins.mis{background:var(--carte);color:var(--vert)}
-
-  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;align-items:center}
-  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
-    background:var(--bleu);color:#fff;cursor:pointer}
-  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
-  .btn:disabled{opacity:.45;cursor:not-allowed}
-  .cache{display:none}
-  /* .champs pose display:grid : sans cette règle, l'attribut hidden ne
-     masquerait rien quand le panneau quitte l'écran. */
-  [hidden]{display:none !important}
-  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
-    font-size:13px;color:var(--encre-3)}
-</style>
+  .btn-ins.mis{background:var(--carte);color:var(--vert)}</style>
 </head>
 <body>
 
 <header class="site">
   <div class="wrap">
-    <h1>Contrôler ma base de données <span>économiques, sociales et environnementales</span></h1>
-    <div style="display:flex;gap:7px;flex-wrap:wrap">
-      <a href="index.html">← Accueil</a>
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
       <a href="audit-bdese.html">Ma base de données</a>
       <a href="parcours.html?p=bdese">Constituer la base</a>
     </div>
@@ -140,6 +83,10 @@
 </header>
 
 <main class="wrap">
+
+  <header>
+    <h1>Contrôler ma base de données <span>économiques, sociales et environnementales</span></h1>
+  </header>
 
   <div class="onglets" id="onglets">
     <button data-o="depot" class="actif">1 · Le fichier</button>

@@ -16,54 +16,21 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Jurisprudence">
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --ink:#1c2430; --muted:#5b6a7c; --line:#dde4ec; --bg:#f4f6f9; --card:#fff;
-    --accent:#8b1e2d; --accent-soft:#f7e9eb; --link:#1d4ed8;
-    --ok:#166534; --ok-soft:#e8f5ec; --warn:#92400e; --warn-soft:#fdf3e3;
-    --err:#8a1f1f; --err-soft:#fdecec;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
-  a{color:var(--link)}
-  mark{background:#fdeaa2;color:inherit;border-radius:2px}
-  .wrap{max-width:920px;margin:0 auto;padding:0 16px 56px}
-
-  header.site{background:linear-gradient(135deg,#1c2430,#37220f 60%,#5a1b26);color:#fff;padding:22px 0}
-  header.site h1{margin:0;font-size:22px;letter-spacing:.2px}
-  header.site h1 span{color:#f0c9ce}
-  header.site .etat{margin-top:8px;font-size:13px;color:#cfd6df;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  header.site button{font:inherit;font-size:12.5px;padding:3px 10px;border-radius:99px;
-    border:1px solid #ffffff55;background:transparent;color:#fff;cursor:pointer}
-  header.site button:hover{background:#ffffff22}
   .pastille{display:inline-block;width:8px;height:8px;border-radius:99px;background:#c9a227}
   .pastille.ok{background:#54c27a}
-
-  .carte{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:16px}
-  h2{margin:0 0 14px;font-size:17px}
-  label.champ{display:block;font-size:13px;color:var(--muted);margin-bottom:12px}
-  label.champ b{display:block;color:var(--ink);margin-bottom:5px;font-size:13.5px;font-weight:600}
-  input[type=text],input[type=search],input[type=password],input[type=date],select{
-    font:inherit;font-size:16px;width:100%;padding:10px 12px;border:1px solid var(--line);
-    border-radius:10px;background:#fff;color:var(--ink)}
-  input:focus,select:focus{outline:2px solid #8b1e2d33;border-color:var(--accent)}
   .duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:600px){.duo{grid-template-columns:1fr}}
-  .cases{display:flex;gap:6px;flex-wrap:wrap}
+  /* Ici les choix sont des pastilles en ligne, pas une liste encadree. */
+  .cases{display:flex;flex-direction:row;flex-wrap:wrap;gap:6px;
+    border:none;background:none;padding:0;margin:6px 0 12px}
   .cases label{display:flex;gap:6px;align-items:center;font-size:14px;cursor:pointer;
     border:1px solid var(--line);border-radius:99px;padding:6px 12px;background:#fff}
   .cases label:has(input:checked){border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
   .bloc-titre{font-size:13.5px;font-weight:600;margin-bottom:6px}
 
   .boutons{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
-  button.principal{font:inherit;font-size:15px;font-weight:600;padding:11px 24px;border-radius:10px;
-    border:none;background:var(--accent);color:#fff;cursor:pointer}
-  button.principal:hover{background:#6f1824}
-  button.second{font:inherit;font-size:14px;padding:9px 15px;border-radius:10px;border:1px solid var(--line);
-    background:#fff;color:var(--ink);cursor:pointer}
-  button.second:hover{border-color:var(--accent);color:var(--accent)}
-  button[disabled]{opacity:.45;cursor:not-allowed}
 
   details.affiner{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
   details.affiner > summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--accent);list-style:none}
@@ -71,21 +38,20 @@
   details.affiner > summary::before{content:"▸ "}
   details.affiner[open] > summary::before{content:"▾ "}
   details.affiner .corps{padding-top:14px}
-
-  .note{font-size:13px;color:var(--muted)}
   .msg{border-radius:10px;padding:11px 13px;font-size:14px;margin-top:12px}
-  .msg.err{background:var(--err-soft);border:1px solid #f3c3c3;color:var(--err)}
-  .msg.info{background:var(--warn-soft);border:1px solid #ecd9b0;color:var(--warn)}
-  .msg.ok{background:var(--ok-soft);border:1px solid #bfe3c8;color:var(--ok)}
+  .msg.err{background:var(--rouge-clair);border:1px solid #e6cccc;color:var(--rouge)}
+  .msg.info{background:var(--ambre-clair);border:1px solid #e8ddc6;color:var(--ambre)}
+  .msg.ok{background:var(--vert-clair);border:1px solid #cbdfd2;color:var(--vert)}
 
-  .garantie{display:flex;gap:9px;align-items:flex-start;background:var(--ok-soft);border:1px solid #bfe3c8;
-    color:#14532d;border-radius:12px;padding:11px 13px;font-size:13.5px;margin-top:16px}
+  .garantie{display:flex;gap:9px;align-items:flex-start;background:var(--vert-clair);
+    border:1px solid #cbdfd2;color:var(--vert);border-radius:var(--r2);padding:11px 13px;
+    font-size:var(--t2);margin-top:var(--e4)}
   .garantie b{font-weight:600}
 
-  .filtres{background:var(--warn-soft);border:1px solid #ecd9b0;border-radius:12px;padding:9px 12px;
+  .filtres{background:var(--ambre-clair);border:1px solid #e8ddc6;border-radius:var(--r2);padding:9px 12px;
     margin-top:12px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;font-size:13px}
   .filtres .t{font-weight:600;color:var(--warn)}
-  .filtres .f{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #e3cfa4;
+  .filtres .f{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #e8ddc6;
     border-radius:99px;padding:3px 5px 3px 10px}
   .filtres .f button{font:inherit;font-size:14px;line-height:1;border:none;background:none;
     color:var(--warn);cursor:pointer;padding:0 3px}
@@ -95,15 +61,16 @@
   .compte{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:18px}
   .compte .n{font-size:20px;font-weight:700;color:var(--accent)}
 
-  .fiche{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 17px;margin-top:11px}
+  .fiche{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
+    padding:var(--e4);margin-top:11px}
   .fiche .tete{display:flex;gap:7px;flex-wrap:wrap;align-items:baseline;margin-bottom:7px}
   .fiche .jur{font-weight:700}
   .fiche .date{color:var(--muted)}
   .badge{font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);background:var(--bg);color:var(--muted)}
-  .badge.pub{background:var(--ok-soft);color:var(--ok);border-color:#bfe3c8}
-  .badge.sol{background:var(--accent-soft);color:var(--accent);border-color:#ecc9ce}
-  .fiche .resume{background:var(--accent-soft);border:1px solid #ecc9ce;border-radius:9px;
-    padding:9px 11px;font-size:13.5px;color:#5a2a31;margin:8px 0}
+  .badge.pub{background:var(--vert-clair);color:var(--vert);border-color:#cbdfd2}
+  .badge.sol{background:var(--accent-clair);color:var(--accent);border-color:#d3dae8}
+  .fiche .resume{background:var(--accent-clair);border:1px solid #d3dae8;border-radius:var(--r1);
+    padding:9px 11px;font-size:var(--t2);color:var(--accent);margin:var(--e2) 0}
   .fiche .extraits{font-size:14px;color:#33404f;margin:8px 0}
   .fiche .extraits em{background:#fdeaa2;font-style:normal;border-radius:2px}
   .fiche .pied{display:flex;gap:14px;flex-wrap:wrap;font-size:13.5px;align-items:center;margin-top:9px}
@@ -112,67 +79,56 @@
 
   .pages{display:flex;gap:10px;justify-content:center;align-items:center;margin:20px 0}
   .pages span{font-size:13.5px;color:var(--muted)}
-
-  dialog{border:none;border-radius:16px;max-width:880px;width:94vw;max-height:88vh;padding:0}
-  dialog::backdrop{background:#0b1220aa}
   .dlg-tete{position:sticky;top:0;background:var(--card);display:flex;justify-content:space-between;gap:10px;
     align-items:flex-start;padding:16px 20px 11px;border-bottom:1px solid var(--line)}
   .dlg-tete h3{margin:0;font-size:16px}
   .dlg-corps{padding:15px 20px 24px;overflow-wrap:break-word}
-  .dlg-corps .sommaire{background:var(--accent-soft);border:1px solid #ecc9ce;border-radius:10px;
+  .dlg-corps .sommaire{background:var(--accent-clair);border:1px solid #d3dae8;border-radius:var(--r1);
     padding:11px 13px;font-size:14px;margin-bottom:13px}
   .dlg-corps pre{white-space:pre-wrap;font:14px/1.65 Georgia,'Times New Roman',serif;margin:0}
   .dlg-corps .texte-art{font:15px/1.65 Georgia,'Times New Roman',serif;white-space:pre-wrap}
-  .fermer{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;
-    border-radius:9px;padding:6px 12px;cursor:pointer;flex-shrink:0}
-  button.ccnlien{font:inherit;font-size:inherit;border:none;background:#f0eaf6;color:#5b2d82;
+  button.ccnlien{font:inherit;font-size:inherit;border:none;background:var(--creux);color:var(--texte);
     padding:0 3px;border-radius:4px;cursor:pointer;text-align:left}
-  button.ccnlien:hover{background:#e3d7ef;text-decoration:underline}
-  button.art{font:inherit;font-size:inherit;border:none;background:#eef3ff;color:var(--link);
-    border-bottom:1px dotted var(--link);cursor:pointer;padding:0 2px;border-radius:3px}
+  button.ccnlien:hover{background:var(--filet);color:var(--encre);text-decoration:underline}
+  button.art{font:inherit;font-size:inherit;border:none;background:var(--accent-clair);color:var(--accent);
+    border-bottom:1px dotted var(--accent);cursor:pointer;padding:0 2px;border-radius:3px}
+  button.art:hover{background:#e3e8f1;color:var(--accent-fonce)}
 
   .progression{margin-top:10px;font-size:13.5px;color:var(--muted)}
-  .progression .barre{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
+  .progression .barre{display:block;height:6px;background:var(--filet);border-radius:99px;
+    overflow:hidden;margin:4px 0 0}
   .progression .barre i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
-
-  footer{margin-top:34px;font-size:12.5px;color:var(--muted);text-align:center}
-  .cache{display:none !important}
-  /* Le lien vers l'audit : même gabarit que les boutons de la barre d'état,
-     pour qu'il se lise comme une seconde entrée et non comme un ornement. */
-  .lien-audit{display:inline-block;padding:4px 10px;border:1px solid currentColor;
-    border-radius:3px;text-decoration:none;font-weight:600;font-size:inherit}
-  .lien-audit:hover{filter:brightness(1.15)}
-</style>
+  .cache{display:none !important}</style>
 </head>
 <body>
 
 <header class="site">
   <div class="wrap">
-    <h1><span>Jurisprudence</span> — recherche Judilibre</h1>
-    <div class="etat">
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <div class="outils etat">
       <span><span class="pastille" id="voyant"></span> <span id="etat-cle">clé non configurée</span></span>
       <button id="btn-cle" type="button">Changer la clé</button>
       <span id="etat-hote"></span>
       <button id="btn-adresse" type="button" title="Copier l'adresse de l'application">Copier l'adresse</button>
       <button id="btn-avert" type="button" title="Ce que fait cet outil, et ce qu'il ne fait pas">Avertissement d'usage</button>
-      <a href="index.html" class="lien-audit" title="Revenir à l'accueil">← Accueil</a>
+      <a href="index.html" title="Revenir à l'accueil">Accueil</a>
       <span id="etat-version"></span>
     </div>
   </div>
 </header>
 
-<dialog id="dlg-avertissement" style="max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;font:15px/1.55 system-ui;color:#1c2126">
-  <h2 style="margin:0 0 12px;font:600 19px/1.3 system-ui">Avertissement d'usage</h2>
-  <p style="margin:0 0 10px">Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
+<dialog id="dlg-avertissement" style="max-width:64ch">
+  <h2 style="margin:0 0 12px">Avertissement d'usage</h2>
+  <p>Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
   avocat, ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
-  <p style="margin:0 0 10px">Les décisions affichées sont celles que l'API Judilibre de la Cour de cassation
+  <p>Les décisions affichées sont celles que l'API Judilibre de la Cour de cassation
   renvoie à votre recherche, et les articles ceux que Légifrance renvoie à la date demandée. Une recherche
   n'est jamais exhaustive : l'absence de résultat ne prouve pas l'absence de jurisprudence.</p>
-  <p style="margin:0 0 10px">Les résultats ne constituent pas une consultation juridique et n'engagent pas
+  <p>Les résultats ne constituent pas une consultation juridique et n'engagent pas
   leur auteur. La décision, et la responsabilité qui l'accompagne, restent les vôtres.</p>
-  <p style="margin:0 0 10px">Votre clé API reste dans votre navigateur ; elle n'est ni transmise ni conservée
+  <p>Votre clé API reste dans votre navigateur ; elle n'est ni transmise ni conservée
   ailleurs.</p>
-  <form method="dialog" style="margin-top:14px"><button style="font:inherit;padding:8px 18px;border-radius:8px;border:1px solid #d8dbe0;background:#f6f7f9;cursor:pointer">Fermer</button></form>
+  <form method="dialog" style="margin-top:14px"><button class="second" type="submit">Fermer</button></form>
 </dialog>
 
 <div id="maj" class="cache">
@@ -185,6 +141,10 @@
 </div>
 
 <div class="wrap">
+
+  <header>
+    <h1>Jurisprudence <span>recherche Judilibre</span></h1>
+  </header>
 
   <!-- ===================== Clé API ===================== -->
   <section class="carte" id="carte-cle">

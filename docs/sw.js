@@ -15,6 +15,9 @@
 const CACHE = "jurisprudence-12.2";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
+  /* La feuille de style de toute l'application : sans elle hors connexion,
+     chaque page s'ouvrirait sans mise en page. */
+  "./style.css",
   /* L'icône : sans elle, chaque page demandait un favicon.ico inexistant,
      et le 404 passait pour une erreur de chargement à chaque essai. */
   "./favicon.ico",

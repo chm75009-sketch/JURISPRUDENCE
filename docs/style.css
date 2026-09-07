@@ -149,8 +149,10 @@ header.site h1 span{opacity:.6;font-weight:400}
 
 /* Le titre de page, sous le bandeau. Un filet le sépare du contenu, rien de
    plus : le poids vient du texte, pas du trait. */
-main>header:not(.site),.page>header:not(.site){padding:var(--e6) 0 var(--e4);
+main>header:not(.site),.page>header:not(.site),.wrap>header:not(.site){padding:var(--e6) 0 var(--e4);
   border-bottom:1px solid var(--filet);margin:0 0 var(--e4)}
+main>header h1 span,.page>header h1 span,.wrap>header h1 span{font-weight:400;color:var(--texte-2)}
+main>header a,.page>header a{color:var(--accent)}
 
 /* La barre de retour des pages profondes. Collée en haut, parce que sur un
    téléphone installé il n'y a pas de flèche « précédent ». Elle est dans la
@@ -195,6 +197,12 @@ button:disabled:hover,.btn:disabled:hover,button[disabled]:hover{background:var(
 button.second:disabled:hover,.btn.second:disabled:hover{background:var(--surface)}
 .btn.petit,button.petit{font-size:var(--t1);padding:8px 12px}
 
+/* Un bouton qui n'agit pas sur le dossier mais ouvre une explication se lit
+   comme un lien, pas comme une commande. */
+.lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;
+  color:var(--accent);text-decoration:underline;cursor:pointer}
+.lien-avert:hover{background:none;color:var(--accent-fonce)}
+
 /* La barre d'actions : les boutons au même endroit sur tous les écrans, en
    bas du bloc qu'ils commandent. */
 .barre{display:flex;flex-wrap:wrap;gap:var(--e2);align-items:center;margin:var(--e4) 0}
@@ -214,12 +222,17 @@ button.second:disabled:hover,.btn.second:disabled:hover{background:var(--surface
 fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:var(--r2);
   padding:var(--e4) var(--e4) var(--e5);margin:0 0 var(--e4)}
 legend{font:600 var(--t3)/1 system-ui;color:var(--accent);padding:0 var(--e2)}
-.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--e4) var(--e5)}
-.champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:var(--e4)}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:var(--e4) var(--e5);align-items:start}
+.champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:var(--e4);align-items:start}
 label{display:block;font-size:var(--t3)}
 label .nom,label.ch .nom,label.champ span{display:block;font:600 var(--t2)/1.35 system-ui;
   color:var(--texte-2);letter-spacing:0;text-transform:none;margin:0 0 var(--e1)}
-label.ch{display:grid;gap:var(--e1)}
+/* Sans « align-content:start », un champ sans phrase d'aide voit sa case
+   s'étirer sur la hauteur du plus grand voisin : deux champs côte à côte ne
+   commencent alors plus à la même ligne. */
+label.ch{display:grid;gap:var(--e1);align-content:start}
 label.ch.large,label.ch.pleine,.pleine{grid-column:1/-1}
 input,select,textarea{width:100%;font:inherit;font-size:15px;line-height:1.4;padding:9px 11px;
   border:1px solid var(--filet-2);border-radius:var(--r1);
@@ -232,7 +245,10 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent-clair);ou
 input:disabled,select:disabled,textarea:disabled{background:var(--creux);color:var(--texte-2);cursor:not-allowed}
 .aide-champ,label.ch .sous,.sous{margin:var(--e1) 0 0;font-size:var(--t1);line-height:1.5;color:var(--texte-2)}
 
-/* Les cases à cocher : la case et sa ligne alignées sur le haut du texte. */
+/* Les cases à cocher : la case et sa ligne alignées sur le haut du texte, et
+   la liste tenue dans un cadre pour qu'on voie où elle commence et finit. */
+.cases{display:flex;flex-direction:column;gap:var(--e2);margin:var(--e1) 0 var(--e2);
+  border:1px solid var(--filet);background:var(--surface);border-radius:var(--r1);padding:10px 12px}
 .case,label.case{display:flex;align-items:flex-start;gap:var(--e2);font-size:var(--t2);
   line-height:1.45;color:var(--texte)}
 .case input,label.case input{width:auto;flex:0 0 auto;margin:3px 0 0}
@@ -250,6 +266,10 @@ caption{caption-side:top;text-align:left;font-size:var(--t1);color:var(--texte-2
 /* Les blocs : la carte, l'encadré, l'avis. Un fond, un filet, rien d'autre. */
 .carte{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
   padding:var(--e4) var(--e4);margin:var(--e3) 0}
+/* Le premier titre d'une carte ne redescend pas : sa marge du haut ferait un
+   trou entre le filet et le texte. */
+.carte>:first-child,.presentation>:first-child,fieldset>:first-child{margin-top:0}
+.carte>:last-child,.presentation>:last-child{margin-bottom:0}
 .presentation{border:1px solid var(--filet);background:var(--surface);border-radius:var(--r2);
   padding:var(--e4) var(--e5);margin:var(--e5) 0 0}
 .presentation h2{margin:0 0 var(--e2);font:600 17px/1.35 system-ui}
@@ -284,6 +304,11 @@ details.txt>summary,details.texte>summary{padding:10px 14px;cursor:pointer;
 details.txt .c,details.texte .corps{padding:0 14px 12px;font-size:var(--t2);
   line-height:1.6;color:var(--texte-2)}
 
+/* Les boîtes de dialogue. */
+dialog{border:1px solid var(--filet-2);border-radius:var(--r2);background:var(--surface);
+  color:var(--texte);padding:var(--e5)}
+dialog::backdrop{background:rgba(11,17,26,.55)}
+
 /* La feuille : le document produit, tel qu'il sortira sur le papier. */
 .feuille{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
   padding:clamp(22px,5vw,48px);margin:0 auto;color:#1a1d22}
@@ -296,6 +321,10 @@ pre{white-space:pre-wrap;word-wrap:break-word}
 @media print{
   body{background:#fff;color:#000}
   header.site,.retour-barre,.maj-dispo,.onglets,.outils{display:none !important}
+  /* Le titre de l'écran ne s'imprime pas au-dessus d'un document produit :
+     la feuille sort seule, comme elle sera signée. Les pages qui impriment
+     leur propre rapport (les audits, l'agenda) gardent le leur. */
+  main>header:not(.site),.wrap>header:not(.site){display:none}
   .wrap,.page{max-width:none;padding:0}
   .carte,.presentation,.feuille,fieldset{box-shadow:none}
   .feuille{border:none;border-radius:0;max-width:none;padding:0}

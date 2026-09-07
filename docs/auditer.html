@@ -16,56 +16,19 @@
   module choisi, qui reprend la même fiche sans la redemander.
 -->
 
+<link rel="stylesheet" href="style.css">
 <style>
-  :root{
-    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
-    --fond:#fbfbfc; --carte:#ffffff; --creux:#f4f5f7;
-    --filet:#e3e6ea; --filet-2:#cdd2d8;
-    --bleu:#1F3864; --bleu-clair:#eef1f7;
-    --prune:#5C2A54; --ambre:#8a5b10; --ambre-clair:#f8efdf;
-    --ombre:0 1px 2px rgba(28,33,38,.05), 0 10px 28px -16px rgba(28,33,38,.30);
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--fond);color:var(--encre);
-    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  /* Un seul choix sur cet écran : la liste des audits, et le bouton qui
+     l'ouvre. Le reste vient de style.css. */
+  .question{padding:var(--e5) 0 var(--e1)}
+  .question p.sur{margin:0 0 var(--e2)}
+  .question h1{margin:0 0 var(--e3)}
+  .question p.sous{margin:0;max-width:62ch;color:var(--texte-2)}
 
-  header.site{background:var(--encre);color:#fff;padding:14px 0}
-  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-  header.site h1{margin:0;font:600 17px/1.25 system-ui}
-  header.site h1 span{opacity:.62;font-weight:400}
-  .outils{display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:13px}
-  .outils button,.outils a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
-    border:1px solid rgba(255,255,255,.34);background:transparent;color:#fff;cursor:pointer;text-decoration:none}
-  .outils button:hover,.outils a:hover{background:rgba(255,255,255,.12)}
-  #etat-version{opacity:.55;font-size:11.5px}
-
-  .retour{display:inline-flex;align-items:center;gap:6px;margin:24px 0 0;font:600 13.5px system-ui;
-    color:var(--encre-2);text-decoration:none}
-  .retour:hover{color:var(--encre)}
-
-  .question{padding:14px 0 6px}
-  .question p.sur{margin:0 0 8px;font:600 11.5px/1 system-ui;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--encre-3)}
-  .question h2{margin:0 0 10px;font:600 clamp(26px,4.2vw,38px)/1.15 system-ui;letter-spacing:-.02em}
-  .question p.sous{margin:0;max-width:62ch;color:var(--encre-2)}
-
-  .choix-audit{margin:28px 0 0}
-  .choix-audit select{width:100%;font:16px/1.4 system-ui;padding:15px 16px;border-radius:10px;
-    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre);box-shadow:var(--ombre)}
-  .choix-audit button{display:block;width:100%;margin-top:14px;font:600 16px system-ui;
-    padding:16px 18px;border-radius:10px;border:none;background:var(--bleu);color:#fff;cursor:pointer}
-  .choix-audit button:hover{filter:brightness(1.08)}
-
-  footer{margin:36px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
-    font-size:13px;color:var(--encre-3)}
-
-  .maj-dispo{display:none;background:var(--bleu-clair);border-bottom:1px solid var(--filet-2)}
-  .maj-dispo.visible{display:block}
-  .maj-dispo .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 20px;
-    font-size:13.5px;color:var(--encre)}
-  .maj-dispo button{margin-left:auto;font:600 13px system-ui;padding:7px 14px;border-radius:8px;
-    border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer;white-space:nowrap}
+  .choix-audit{margin:var(--e5) 0 0}
+  .choix-audit select{font-size:var(--t4);padding:13px 14px}
+  .choix-audit button{display:block;width:100%;margin-top:var(--e3);
+    font-size:15px;padding:14px 18px}
 </style>
 </head>
 <body>
@@ -79,8 +42,9 @@
 
 <header class="site">
   <div class="wrap">
-    <h1>Jurisprudence <span>— relations collectives</span></h1>
+    <p class="marque">Jurisprudence <span>relations collectives</span></p>
     <div class="outils">
+      <a href="index.html">Accueil</a>
       <span id="etat-version"></span>
     </div>
   </div>
@@ -92,7 +56,7 @@
 
   <section class="question">
     <p class="sur" id="rappel-entreprise">Auditer</p>
-    <h2>Quel audit voulez-vous faire&nbsp;?</h2>
+    <h1>Quel audit voulez-vous faire&nbsp;?</h1>
     <p class="sous" id="sous">Un tour complet, ou un module à la carte — la liste tient compte de
     votre fiche.</p>
   </section>

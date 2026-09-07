@@ -2624,4 +2624,1129 @@
     },
   });
 
+  /* ══════════════════════════════════════════════════════════════════════
+     LES PIÈCES DE L'AUDIT SOCIAL QUI N'AVAIENT PAS DE PARCOURS
+
+     Le module social recense quatre-vingt-dix obligations. Trente-cinq
+     n'avaient aucune procédure guidée derrière elles : la question posée, un
+     « non » ne menait nulle part. Celles qui sont un ÉCRIT sont reprises ici,
+     avec le document déjà rédigé. Les autres - une durée maximale de travail,
+     un repos quotidien, une interdiction de discriminer - ne se règlent pas
+     par un document et ne sont pas transformées en formulaire pour le plaisir
+     d'avoir une pièce à sortir.
+
+     Le registre des dangers graves et imminents, la fiche d'entreprise et le
+     plan de prévention manquaient aussi au social : ils sont écrits dans
+     docs/documents-sst.js et servent aux deux écrans, une seule fois écrits.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  var PI = global.Pieces;
+  if (!PI || typeof PI.ajouter !== "function")
+    throw new Error("documents-sst-2.js : documents-sst.js doit être chargé avant.");
+
+  var U = PI.outils;
+  var feuille = U.feuille, val = U.val, dateVal = U.dateVal, teteDocument = U.teteDocument;
+  var nomDe = U.nomDe, adresseDe = U.adresseDe, signataire = U.signataire;
+  var villeDe = U.villeDe, leJourDu = U.leJourDu;
+
+  function effectifNombre(profil) {
+    var v = (profil || {}).effectif;
+    if (v === undefined || v === null || String(v).trim() === "") return null;
+    var n = Number(v);
+    return isFinite(n) ? n : null;
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LE REGISTRE UNIQUE DE SÉCURITÉ
+
+     Prudence sur ce que dit le texte : L. 4711-1 ne dresse pas la liste des
+     vérifications, il dit que les attestations, consignes, résultats et
+     rapports « comportent des mentions obligatoires déterminées par voie
+     réglementaire ». L. 4711-5 autorise seulement à réunir sur un registre
+     unique ce que d'autres textes prévoient de tenir séparément. Le document
+     produit ici est donc un classeur et son sommaire, pas un référentiel des
+     contrôles techniques : ceux-là dépendent de vos installations, et
+     l'application ne les a pas lus.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  PI.ajouter({
+    id: "PIECE-REGISTRE-SECURITE",
+    modules: ["social", "sst"],
+    titre: "Registre unique de sécurité",
+    question: "Avez-vous rassemblé les attestations, rapports et observations relatifs à la santé et à la sécurité ?",
+    fichier: "registre-unique-securite",
+    renvoi: "L. 4711-1 (LEGIARTI000006903383), L. 4711-2 (LEGIARTI000006903384), " +
+            "L. 4711-5 (LEGIARTI000006903389)",
+    champs: [
+      { c: "lieu", nom: "Où le registre est tenu", ph: "bureau des services généraux" },
+      { c: "gardien", nom: "Qui en a la garde", ph: "M. Dupont, responsable des services généraux" },
+      { c: "ouvertLe", nom: "Date d'ouverture", t: "date" },
+      { c: "verifications", nom: "Vérifications périodiques recensées dans l'entreprise", t: "textarea",
+        ph: "installations électriques, extincteurs et robinets d'incendie armés, ascenseur, portes automatiques, chariots élévateurs, échafaudages, aération des ateliers" },
+      { c: "organismes", nom: "Organismes qui les réalisent", t: "textarea",
+        ph: "[organisme] pour l'électricité et les engins, [organisme] pour les moyens de secours" },
+    ],
+    blocs: function (ctx) {
+      var f = feuille();
+      teteDocument(f, ctx, "REGISTRE UNIQUE DE SÉCURITÉ",
+        "Vérifications, contrôles, et observations de l'inspection du travail");
+      f.p("Registre ouvert le " + dateVal(ctx, "ouvertLe", "date d'ouverture") + ".");
+      f.p("Lieu de conservation : " + val(ctx, "lieu", "lieu de conservation") + ". Garde du " +
+        "registre : " + val(ctx, "gardien", "nom et fonction") + ".");
+      f.p("Il réunit les informations que d'autres textes prévoient de faire figurer dans des " +
+        "registres distincts, afin d'en faciliter la conservation et la consultation.");
+      f.note("L. 4711-5 autorise cette réunion en un registre unique « dès lors que cette mesure " +
+        "est de nature à faciliter la conservation et la consultation de ces informations ». " +
+        "Réunir n'est pas remplacer : chaque pièce conserve ses mentions obligatoires.");
+
+      f.h1("Onglet 1 - Attestations, consignes, résultats et rapports de vérification");
+      f.p("Y sont classés les attestations, consignes, résultats et rapports relatifs aux " +
+        "vérifications et contrôles mis à la charge de l'employeur au titre de la santé et de la " +
+        "sécurité au travail.");
+      f.p("Vérifications recensées dans l'entreprise : " +
+        val(ctx, "verifications", "liste des vérifications périodiques"));
+      f.p("Organismes qui les réalisent : " + val(ctx, "organismes", "organismes et coordonnées"));
+      f.p("Tableau de suivi : objet de la vérification | date | organisme | conclusions | " +
+        "observations levées le | prochaine échéance.");
+      f.p("....................  | ..........  | ..........  | ..........  | ..........  | ..........");
+      f.p("....................  | ..........  | ..........  | ..........  | ..........  | ..........");
+      f.note("L. 4711-1 : ces documents comportent des mentions obligatoires déterminées par " +
+        "voie réglementaire. Le rythme et le contenu de chaque vérification dépendent de vos " +
+        "installations et de textes techniques que l'application n'a pas lus : la liste " +
+        "ci-dessus est celle que vous recensez, pas celle qu'un texte imposerait.");
+
+      f.h1("Onglet 2 - Observations et mises en demeure de l'inspection du travail");
+      f.p("Y sont conservées les observations et mises en demeure notifiées par l'inspection du " +
+        "travail en matière de santé et de sécurité, de médecine du travail et de prévention des " +
+        "risques.");
+      f.p("Date de notification | objet | suites données | date d'exécution | pièce justificative");
+      f.p("..........  | ..........  | ..........  | ..........  | ..........");
+      f.note("L. 4711-2, dans ses termes : ces observations et mises en demeure « sont " +
+        "conservées par l'employeur ». Conserver la réponse et la preuve de l'exécution vaut " +
+        "autant que conserver la mise en demeure.");
+
+      f.h1("Onglet 3 - Ce qui reste ailleurs");
+      f.p("Le document unique d'évaluation des risques et ses versions successives, le registre " +
+        "des dangers graves et imminents et les consignes de sécurité incendie ont leur propre " +
+        "régime : ils sont mentionnés ici pour dire où ils se trouvent, et n'y sont pas classés.");
+      f.p("Document unique : ..........   Registre des dangers graves et imminents : ..........   " +
+        "Consignes incendie : ..........");
+      f.trait();
+      f.sign("Fait à " + villeDe(ctx) + ", le " + leJourDu(ctx) + "\n\n" + signataire(ctx) +
+        "\n" + nomDe(ctx));
+      return f.L;
+    },
+    attendus: [
+      { cle: "verifications", objet: "Les attestations, résultats et rapports de vérification",
+        mots: ["vérification", "rapport", "attestation", "contrôle périodique"],
+        renvoi: "L. 4711-1",
+        clause: ["Onglet 1 - Attestations, consignes, résultats et rapports relatifs aux " +
+          "vérifications et contrôles mis à la charge de l'employeur au titre de la santé et de " +
+          "la sécurité au travail : [objet, date, organisme, conclusions, suites]."] },
+      { cle: "inspection", objet: "Les observations et mises en demeure de l'inspection du travail",
+        mots: ["mise en demeure", "observations", "inspection du travail"],
+        renvoi: "L. 4711-2",
+        clause: ["Onglet 2 - Observations et mises en demeure notifiées par l'inspection du " +
+          "travail en matière de santé et de sécurité, de médecine du travail et de prévention " +
+          "des risques, conservées avec les suites qui leur ont été données."] },
+      { cle: "unique", objet: "La réunion des informations en un registre unique",
+        mots: ["registre unique", "réunir", "classeur unique"],
+        renvoi: "L. 4711-5",
+        clause: ["Les informations énumérées aux articles L. 4711-1 et L. 4711-2 sont réunies " +
+          "dans le présent registre unique, cette mesure facilitant leur conservation et leur " +
+          "consultation."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LE RÉFÉRENT HANDICAP
+
+     L. 5213-6-1 : dans toute entreprise employant au moins deux cent cinquante
+     salariés. Le franchissement du seuil s'apprécie selon L. 130-1 du code de
+     la sécurité sociale, que l'application n'a pas lu : elle nomme l'article
+     et ne calcule rien à sa place.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  PI.ajouter({
+    id: "PIECE-REFERENT-HANDICAP",
+    modules: ["social"],
+    titre: "Désignation du référent handicap",
+    question: "Avez-vous désigné un référent chargé d'orienter, d'informer et d'accompagner les personnes en situation de handicap ?",
+    fichier: "designation-referent-handicap",
+    renvoi: "L. 5213-6-1 (LEGIARTI000043894133)",
+    due: function (profil) {
+      var n = effectifNombre(profil);
+      if (n === null) return null;
+      return n >= 250;
+    },
+    champs: [
+      { c: "referent", nom: "Référent désigné (nom et prénom)", ph: "Madame Inès MOREAU" },
+      { c: "fonction", nom: "Sa fonction", ph: "chargée de mission ressources humaines" },
+      { c: "effet", nom: "Date d'effet", t: "date" },
+      { c: "contact", nom: "Comment le joindre", ph: "referent-handicap@[entreprise].fr, poste 4412, bureau B12" },
+      { c: "temps", nom: "Temps consacré à la mission", ph: "un jour par semaine" },
+    ],
+    blocs: function (ctx) {
+      var f = feuille();
+      teteDocument(f, ctx, "DÉSIGNATION DU RÉFÉRENT HANDICAP", null);
+      f.p("Dans toute entreprise employant au moins deux cent cinquante salariés, est désigné un " +
+        "référent chargé d'orienter, d'informer et d'accompagner les personnes en situation de " +
+        "handicap.");
+      f.p(val(ctx, "referent", "nom et prénom") + ", " + val(ctx, "fonction", "fonction") +
+        ", est désigné référent handicap de " + nomDe(ctx) + " à compter du " +
+        dateVal(ctx, "effet", "date d'effet") + ".");
+      f.note("L. 5213-6-1, première phrase. Le même article renvoie, pour l'effectif et le " +
+        "franchissement du seuil, à l'article L. 130-1 du code de la sécurité sociale : " +
+        "l'application ne l'a pas lu et ne calcule pas votre effectif à sa place.");
+
+      f.h1("La mission");
+      f.puce("Orienter les personnes en situation de handicap dans l'entreprise et vers les " +
+        "interlocuteurs qui peuvent les aider.");
+      f.puce("Les informer de leurs droits et des dispositifs qui les concernent.");
+      f.puce("Les accompagner dans leurs démarches, à leur demande.");
+      f.p("À la demande du travailleur concerné, le référent participe au rendez-vous de liaison " +
+        "prévu à l'article L. 1226-1-3 du code du travail, ainsi qu'aux échanges organisés sur le " +
+        "fondement du dernier alinéa du I de l'article L. 4624-2-2.");
+      f.p("Dans les deux cas, il est tenu à une obligation de discrétion à l'égard des " +
+        "informations à caractère personnel qu'il est amené à connaître.");
+      f.note("Ces deux paragraphes reprennent L. 5213-6-1 dans ses termes. Les articles " +
+        "L. 1226-1-3 et L. 4624-2-2 sont nommés parce que L. 5213-6-1 y renvoie : l'application " +
+        "ne les a pas lus et n'en reproduit pas le contenu.");
+
+      f.h1("Les moyens");
+      f.p("Temps consacré à la mission : " + val(ctx, "temps", "temps consacré") + ".");
+      f.p("Le référent est joignable : " + val(ctx, "contact", "courriel, téléphone, bureau") + ".");
+      f.p("Sa désignation et ses coordonnées sont portées à la connaissance de l'ensemble du " +
+        "personnel et affichées avec les autres informations obligatoires.");
+      f.note("La diffusion n'est pas exigée par L. 5213-6-1 : un référent que personne ne peut " +
+        "nommer ni joindre ne remplit aucune de ses trois missions, d'où cette clause.");
+      f.trait();
+      f.sign("Fait à " + villeDe(ctx) + ", le " + leJourDu(ctx) + "\n\n" + signataire(ctx) +
+        "\n" + nomDe(ctx));
+      return f.L;
+    },
+    attendus: [
+      { cle: "nomme", objet: "Le nom du référent désigné",
+        mots: ["référent", "désigné", "handicap"],
+        renvoi: "L. 5213-6-1",
+        clause: ["[Nom et prénom], [fonction], est désigné référent chargé d'orienter, " +
+          "d'informer et d'accompagner les personnes en situation de handicap, à compter du [date]."] },
+      { cle: "mission", objet: "Les trois missions : orienter, informer, accompagner",
+        mots: ["orienter", "informer", "accompagner"],
+        renvoi: "L. 5213-6-1",
+        clause: ["Le référent oriente, informe et accompagne les personnes en situation de " +
+          "handicap."] },
+      { cle: "liaison", objet: "La participation au rendez-vous de liaison, à la demande du salarié",
+        mots: ["rendez-vous de liaison", "L. 1226-1-3", "L. 4624-2-2"],
+        renvoi: "L. 5213-6-1",
+        clause: ["À la demande du travailleur concerné, le référent participe au rendez-vous de " +
+          "liaison prévu à l'article L. 1226-1-3 ainsi qu'aux échanges organisés sur le fondement " +
+          "du dernier alinéa du I de l'article L. 4624-2-2."] },
+      { cle: "discretion", objet: "L'obligation de discrétion",
+        mots: ["discrétion", "confidentialité"],
+        renvoi: "L. 5213-6-1",
+        clause: ["Le référent est tenu à une obligation de discrétion à l'égard des informations " +
+          "à caractère personnel qu'il est amené à connaître."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LE LIVRET D'ÉPARGNE SALARIALE
+
+     L'obligation ne naît que si l'entreprise propose l'un des six dispositifs
+     que L. 3341-6 énumère : la pièce demande donc d'abord lesquels, et refuse
+     de sortir un livret quand aucun n'est coché - un livret qui ne présente
+     rien ne serait pas un document, ce serait un papier.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  PI.ajouter({
+    id: "PIECE-LIVRET-EPARGNE",
+    modules: ["social"],
+    titre: "Livret d'épargne salariale",
+    question: "Remettez-vous un livret d'épargne salariale à chaque embauche ?",
+    fichier: "livret-epargne-salariale",
+    renvoi: "L. 3341-6 (LEGIARTI000043975313)",
+    champs: [
+      { c: "dispositifs", nom: "Dispositifs en place dans l'entreprise", t: "textarea",
+        ph: "accord d'intéressement du 3 mars 2025, plan d'épargne entreprise ouvert le 1er janvier 2020" },
+      { c: "gestionnaire", nom: "Teneur de compte ou gestionnaire", ph: "[établissement], service épargne salariale" },
+      { c: "modalites", nom: "Versements, abondement, déblocage", t: "textarea",
+        ph: "versements volontaires jusqu'à 25 % de la rémunération annuelle, abondement de 100 % dans la limite de 500 euros par an, blocage de cinq ans sauf cas de déblocage anticipé" },
+      { c: "contact", nom: "Qui répond aux questions dans l'entreprise", ph: "service paie, poste 4402" },
+    ],
+    refus: function (ctx) {
+      var d = ((ctx.valeurs || {}).dispositifs || "").trim();
+      if (d !== "") return null;
+      return ["L'obligation de remettre un livret d'épargne salariale ne pèse que sur " +
+        "l'entreprise qui propose un dispositif d'intéressement, de participation, un plan " +
+        "d'épargne entreprise, un plan d'épargne interentreprises, un plan d'épargne pour la " +
+        "retraite collectif ou un plan d'épargne retraite d'entreprise collectif (L. 3341-6).",
+        "Nommez à gauche le ou les dispositifs en place : le livret s'écrira. Si vous n'en avez " +
+        "aucun, il n'y a pas de livret à remettre, et rien à régulariser ici."];
+    },
+    blocs: function (ctx) {
+      var f = feuille();
+      teteDocument(f, ctx, "LIVRET D'ÉPARGNE SALARIALE",
+        "Remis lors de la conclusion du contrat de travail");
+      f.p("Ce livret présente les dispositifs d'épargne salariale mis en place au sein de " +
+        nomDe(ctx) + ". Il vous est remis lors de la conclusion de votre contrat de travail.");
+      f.note("L. 3341-6 : tout salarié d'une entreprise proposant un dispositif d'intéressement, " +
+        "de participation, un plan d'épargne entreprise, un plan d'épargne interentreprises, un " +
+        "plan d'épargne pour la retraite collectif ou un plan d'épargne retraite d'entreprise " +
+        "collectif reçoit ce livret lors de la conclusion de son contrat de travail.");
+
+      f.h1("Les dispositifs en place");
+      f.p(val(ctx, "dispositifs", "dispositifs, avec la date de l'accord ou du règlement"));
+      f.p("Le texte de chaque accord ou règlement est tenu à votre disposition et vous en " +
+        "recevez copie sur simple demande.");
+
+      f.h1("Comment cela fonctionne");
+      f.p(val(ctx, "modalites", "versements, abondement, durée de blocage, cas de déblocage"));
+      f.p("Teneur de compte ou gestionnaire : " + val(ctx, "gestionnaire", "établissement et coordonnées") + ".");
+      f.p("Dans l'entreprise, vos questions se posent à : " + val(ctx, "contact", "service et coordonnées") + ".");
+      f.note("Les montants, plafonds et cas de déblocage ne sont pas écrits par l'application : " +
+        "ils sortent de vos accords et du code du travail sur chaque dispositif, que le module " +
+        "n'a pas lus. Recopiez-les de vos textes, ne les devinez pas.");
+
+      f.h1("Ce qui se passe si vous quittez l'entreprise");
+      f.p("Un état récapitulatif de vos avoirs vous est remis à votre départ. Indiquez au " +
+        "gestionnaire l'adresse à laquelle vous joindre : c'est ce qui évite les avoirs en " +
+        "déshérence.");
+      f.trait();
+      f.sign("Fait à " + villeDe(ctx) + ", le " + leJourDu(ctx) + "\n\n" + signataire(ctx) +
+        "\n" + nomDe(ctx));
+      f.note("Le livret est également porté à la connaissance des représentants du personnel, le " +
+        "cas échéant en tant qu'élément de la base de données économiques, sociales et " +
+        "environnementales établie en application de l'article L. 2312-18 (L. 3341-6, second " +
+        "alinéa). Faites signer un accusé de remise et classez-le au dossier du salarié : " +
+        "l'obligation se prouve par la remise.");
+      return f.L;
+    },
+    attendus: [
+      { cle: "dispositifs", objet: "La présentation des dispositifs mis en place",
+        mots: ["intéressement", "participation", "plan d'épargne", "PERCO", "PERECO"],
+        renvoi: "L. 3341-6",
+        clause: ["Dispositifs d'épargne salariale mis en place dans l'entreprise : [intitulé de " +
+          "chaque accord ou règlement, avec sa date]."] },
+      { cle: "remise", objet: "La remise lors de la conclusion du contrat de travail",
+        mots: ["lors de la conclusion", "à l'embauche", "remis"],
+        renvoi: "L. 3341-6",
+        clause: ["Ce livret est remis au salarié lors de la conclusion de son contrat de travail."] },
+      { cle: "representants", objet: "L'information des représentants du personnel",
+        mots: ["représentants du personnel", "comité social", "base de données"],
+        renvoi: "L. 3341-6",
+        clause: ["Le livret est porté à la connaissance des représentants du personnel, le cas " +
+          "échéant en tant qu'élément de la base de données économiques, sociales et " +
+          "environnementales établie en application de l'article L. 2312-18."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     L'INFORMATION DE L'INSPECTION DU TRAVAIL APRÈS UN ACCIDENT MORTEL
+
+     Douze heures, et cinq éléments : R. 4121-5 est l'un des rares textes qui
+     écrit lui-même le contenu du courrier. Le document le suit point par
+     point, et l'écran le sort d'un clic parce que ce jour-là, personne n'a le
+     temps de chercher comment rédiger.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  PI.ajouter({
+    id: "PIECE-ACCIDENT-MORTEL",
+    modules: ["social", "sst"],
+    titre: "Information de l'inspection du travail après un accident mortel",
+    question: "Savez-vous informer l'inspection du travail dans les douze heures d'un accident du travail mortel ?",
+    fichier: "information-inspection-accident-mortel",
+    renvoi: "R. 4121-5 (LEGIARTI000047665981)",
+    champs: [
+      { c: "agent", nom: "Agent de contrôle et adresse (unité de contrôle du lieu de l'accident)",
+        ph: "DDETS du Nord, unité de contrôle de [ville], [adresse], [courriel]" },
+      { c: "victime", nom: "Nom, prénom de la victime", ph: "Monsieur [nom et prénom]" },
+      { c: "naissance", nom: "Date de naissance de la victime", t: "date" },
+      { c: "quand", nom: "Date et heure de l'accident", ph: "le 7 septembre 2026 à 14 h 20" },
+      { c: "ou", nom: "Lieu de l'accident", ph: "atelier de production, bâtiment A" },
+      { c: "circonstances", nom: "Circonstances", t: "textarea",
+        ph: "chute depuis une passerelle de maintenance pendant le nettoyage de la ligne 3" },
+      { c: "temoins", nom: "Identité et coordonnées des témoins", t: "textarea",
+        ph: "M. [nom], [téléphone] ; Mme [nom], [téléphone]" },
+      { c: "accueil", nom: "Entreprise où l'accident s'est produit, si différente de l'employeur",
+        t: "textarea", ph: "sans objet" },
+      { c: "connaissanceLe", nom: "Date à laquelle vous avez eu connaissance du décès", t: "date" },
+    ],
+    blocs: function (ctx) {
+      var f = feuille();
+      var v = ctx.valeurs || {};
+      f.t1("INFORMATION DE L'INSPECTION DU TRAVAIL");
+      f.st("Accident du travail ayant entraîné le décès d'un travailleur");
+      f.p(nomDe(ctx));
+      f.p(adresseDe(ctx));
+      f.vide();
+      f.p(val(ctx, "agent", "agent de contrôle de l'inspection du travail compétent pour le lieu de l'accident"));
+      f.vide();
+      f.p(villeDe(ctx) + ", le " + leJourDu(ctx));
+      f.p("Transmis par un moyen conférant date certaine à l'envoi.");
+      f.p("Objet : accident du travail mortel survenu le " + val(ctx, "quand", "date et heure"));
+      f.vide();
+      f.p("Madame, Monsieur l'agent de contrôle,");
+      f.p("Je vous informe du décès d'un travailleur à la suite d'un accident du travail, dans " +
+        "les conditions de l'article R. 4121-5 du code du travail.");
+      f.h1("1. L'entreprise ou l'établissement qui emploie le travailleur");
+      f.p(nomDe(ctx) + ", " + adresseDe(ctx) + ". Adresse électronique : " +
+        cro(((ctx.profil || {}).courriel), "courriel") + ". Téléphone : " +
+        cro(((ctx.profil || {}).telephone), "téléphone") + ".");
+      f.h1("2. L'entreprise ou l'établissement où l'accident s'est produit, s'il est différent");
+      f.p(val(ctx, "accueil", "dénomination, adresses postale et électronique, téléphone, ou « sans objet »"));
+      f.h1("3. La victime");
+      f.p(val(ctx, "victime", "nom et prénom") + ", né(e) le " +
+        dateVal(ctx, "naissance", "date de naissance") + ".");
+      f.h1("4. L'accident");
+      f.p("Date et heure : " + val(ctx, "quand", "date et heure") + ".");
+      f.p("Lieu : " + val(ctx, "ou", "lieu") + ".");
+      f.p("Circonstances : " + val(ctx, "circonstances", "circonstances, décrites sans qualification"));
+      f.h1("5. Les témoins");
+      f.p(val(ctx, "temoins", "identité et coordonnées des témoins, le cas échéant"));
+      f.p("Je me tiens à votre disposition et à celle de vos services.");
+      f.sign("\n" + signataire(ctx) + "\n" + nomDe(ctx));
+      f.note("R. 4121-5 : l'information est due immédiatement et au plus tard dans les douze " +
+        "heures qui suivent le décès, sauf si l'employeur établit qu'il n'a pu en avoir " +
+        "connaissance que postérieurement - le délai court alors du moment où il l'a apprise" +
+        ((v.connaissanceLe || "") !== "" ? " (ici, le " + dateVal(ctx, "connaissanceLe", "date") + ")" : "") +
+        ". Elle se communique par tout moyen permettant de conférer date certaine à l'envoi : " +
+        "gardez l'accusé de réception ou le récépissé.");
+      f.note("Les cinq rubriques ci-dessus sont celles que R. 4121-5 énumère. Décrivez les " +
+        "circonstances sans les qualifier : ce courrier est une information, pas une " +
+        "reconnaissance de responsabilité, et il ne remplace pas la déclaration d'accident du " +
+        "travail à la caisse, qui obéit à d'autres textes que l'application n'a pas lus.");
+      return f.L;
+    },
+    attendus: [
+      { cle: "entreprise", objet: "L'entreprise employeuse et ses coordonnées",
+        mots: ["raison sociale", "adresse", "téléphone"],
+        renvoi: "R. 4121-5, 1°",
+        clause: ["Entreprise ou établissement qui emploie le travailleur au moment de " +
+          "l'accident : [dénomination], [adresse postale], [adresse électronique], [téléphone]."] },
+      { cle: "accueil", objet: "L'entreprise où l'accident s'est produit, si elle est différente",
+        mots: ["lieu de l'accident", "entreprise utilisatrice", "établissement où"],
+        renvoi: "R. 4121-5, 2°",
+        clause: ["Le cas échéant, entreprise ou établissement dans lequel l'accident s'est " +
+          "produit s'il est différent : [dénomination], [adresses], [téléphone]."] },
+      { cle: "victime", objet: "Les nom, prénom et date de naissance de la victime",
+        mots: ["victime", "né le", "date de naissance"],
+        renvoi: "R. 4121-5, 3°",
+        clause: ["Victime : [nom], [prénom], né(e) le [date de naissance]."] },
+      { cle: "accident", objet: "Les date, heure, lieu et circonstances",
+        mots: ["circonstances", "heure", "lieu"],
+        renvoi: "R. 4121-5, 4°",
+        clause: ["Date, heure, lieu et circonstances de l'accident : [description factuelle]."] },
+      { cle: "temoins", objet: "L'identité et les coordonnées des témoins",
+        mots: ["témoin", "témoins"],
+        renvoi: "R. 4121-5, 5°",
+        clause: ["Identité et coordonnées des témoins, le cas échéant : [noms et coordonnées]."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     LA CONVENTION INDIVIDUELLE DE FORFAIT EN JOURS
+
+     Le refus est ici la partie la plus utile du document. L. 3121-63 : les
+     forfaits annuels sont mis en place par un accord collectif d'entreprise ou
+     d'établissement ou, à défaut, par une convention ou un accord de branche.
+     Sans accord, la convention individuelle ne peut pas être valablement
+     conclue - et l'écran ne l'écrit pas.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  PI.ajouter({
+    id: "PIECE-FORFAIT-JOURS",
+    modules: ["social"],
+    titre: "Convention individuelle de forfait en jours",
+    question: "Vos salariés au forfait en jours ont-ils une convention individuelle écrite ?",
+    fichier: "convention-forfait-jours",
+    renvoi: "L. 3121-63 (LEGIARTI000033003340), L. 3121-64 (LEGIARTI000036262805), " +
+            "L. 3121-65 (LEGIARTI000036262800)",
+    champs: [
+      { c: "accord", nom: "Accord collectif qui autorise le forfait en jours",
+        ph: "accord d'entreprise du 14 juin 2024, ou convention de branche [intitulé]" },
+      { c: "salarie", nom: "Salarié", ph: "Madame Claire NGUYEN" },
+      { c: "fonctionS", nom: "Fonction et autonomie", ph: "responsable de projet, autonome dans l'organisation de son emploi du temps" },
+      { c: "jours", nom: "Nombre de jours travaillés dans l'année", t: "number", ph: "218" },
+      { c: "periode", nom: "Période de référence", ph: "année civile" },
+      { c: "remuneration", nom: "Rémunération annuelle brute forfaitaire", ph: "48 000 euros" },
+      { c: "suivi", nom: "Modalités de suivi de la charge de travail", t: "textarea",
+        ph: "document de contrôle mensuel des journées et demi-journées travaillées, visé par le responsable ; point trimestriel sur la charge" },
+      { c: "deconnexion", nom: "Modalités du droit à la déconnexion", t: "textarea",
+        ph: "pas de courriel attendu entre 20 heures et 7 heures ni le week-end, sauf astreinte ; messagerie coupée pendant les congés" },
+      { c: "entretien", nom: "Date du prochain entretien annuel", t: "date" },
+    ],
+    refus: function (ctx) {
+      var a = ((ctx.valeurs || {}).accord || "").trim();
+      if (a !== "") return null;
+      return ["Aucun accord collectif n'est indiqué. Les forfaits annuels en heures ou en jours " +
+        "sur l'année sont mis en place par un accord collectif d'entreprise ou d'établissement " +
+        "ou, à défaut, par une convention ou un accord de branche (L. 3121-63).",
+        "Sans cet accord, une convention individuelle de forfait en jours ne peut pas être " +
+        "valablement conclue : l'application ne l'écrit pas. Portez à gauche l'accord " +
+        "applicable, ou négociez-le avant de proposer un forfait."];
+    },
+    blocs: function (ctx) {
+      var f = feuille();
+      var v = ctx.valeurs || {};
+      var j = Number(v.jours);
+      teteDocument(f, ctx, "CONVENTION INDIVIDUELLE DE FORFAIT ANNUEL EN JOURS", null);
+      f.p("Entre " + nomDe(ctx) + ", " + adresseDe(ctx) + ", représentée par " + signataire(ctx) +
+        ", d'une part,");
+      f.p("Et " + val(ctx, "salarie", "nom et prénom du salarié") + ", " +
+        val(ctx, "fonctionS", "fonction") + ", d'autre part,");
+      f.p("Il est convenu ce qui suit.");
+
+      f.h1("Article 1 - L'accord collectif applicable");
+      f.p("La présente convention est conclue en application de l'accord collectif suivant : " +
+        val(ctx, "accord", "intitulé et date de l'accord collectif") + ". Cet accord autorise la " +
+        "conclusion de conventions individuelles de forfait en jours et en fixe les " +
+        "caractéristiques principales.");
+      f.note("L. 3121-63 : le forfait annuel se met en place par accord collectif d'entreprise " +
+        "ou d'établissement ou, à défaut, par convention ou accord de branche. L. 3121-64, I, 5°, " +
+        "veut que cet accord fixe les caractéristiques principales des conventions individuelles, " +
+        "qui doivent notamment fixer le nombre de jours compris dans le forfait.");
+
+      f.h1("Article 2 - Le nombre de jours et la période de référence");
+      f.p("Le forfait est de " + val(ctx, "jours", "nombre") + " jours travaillés par période de " +
+        "référence. Période de référence : " + val(ctx, "periode", "année civile ou autre période de douze mois consécutifs") + ".");
+      if (isFinite(j) && j > 218) {
+        f.p("Attention : le nombre saisi dépasse deux cent dix-huit jours. L'accord ne peut " +
+          "prévoir un nombre de jours supérieur que dans le cas de la renonciation du salarié à " +
+          "une partie de ses jours de repos ; hors ce cas, le forfait est plafonné.");
+        f.note("L. 3121-64, I, 3° : le nombre de jours compris dans le forfait est déterminé " +
+          "« dans la limite de deux cent dix-huit jours s'agissant du forfait en jours ». " +
+          "L. 3121-64, II, dernier alinéa, permet à l'accord de fixer un nombre maximal de jours " +
+          "travaillés lorsque le salarié renonce à une partie de ses jours de repos en " +
+          "application de l'article L. 3121-59, ce nombre devant rester compatible avec les " +
+          "repos quotidien et hebdomadaire, les jours fériés chômés et les congés payés.");
+      }
+      f.p("Les absences, ainsi que les arrivées et départs en cours de période, sont prises en " +
+        "compte pour la rémunération dans les conditions fixées par l'accord collectif.");
+
+      f.h1("Article 3 - La rémunération");
+      f.p("La rémunération annuelle brute forfaitaire est de " +
+        val(ctx, "remuneration", "montant") + ", versée par douzièmes, indépendamment du nombre " +
+        "d'heures de travail accomplies chaque mois.");
+
+      f.h1("Article 4 - Le décompte et le suivi de la charge de travail");
+      f.p("Un document de contrôle fait apparaître le nombre et la date des journées ou " +
+        "demi-journées travaillées. Sous la responsabilité de l'employeur, ce document peut être " +
+        "renseigné par le salarié.");
+      f.p("Modalités retenues : " + val(ctx, "suivi", "modalités de suivi de la charge"));
+      f.p("L'employeur s'assure que la charge de travail du salarié est compatible avec le " +
+        "respect des temps de repos quotidiens et hebdomadaires.");
+      f.p("Un entretien est organisé une fois par an pour évoquer la charge de travail, qui doit " +
+        "être raisonnable, l'organisation du travail, l'articulation entre l'activité " +
+        "professionnelle et la vie personnelle ainsi que la rémunération. Prochain entretien : " +
+        dateVal(ctx, "entretien", "date") + ".");
+      f.note("L. 3121-65, I : ces trois obligations - document de contrôle, vigilance sur la " +
+        "compatibilité de la charge avec les repos, entretien annuel - s'appliquent à défaut de " +
+        "stipulations conventionnelles prévues aux 1° et 2° du II de l'article L. 3121-64. Si " +
+        "votre accord prévoit ses propres modalités d'évaluation et de suivi, ce sont elles qui " +
+        "s'appliquent : recopiez-les ici à la place.");
+
+      f.h1("Article 5 - Le droit à la déconnexion");
+      f.p(val(ctx, "deconnexion", "modalités d'exercice du droit à la déconnexion"));
+      f.note("L. 3121-65, II : à défaut de stipulations conventionnelles prévues au 3° du II de " +
+        "l'article L. 3121-64, les modalités d'exercice du droit à la déconnexion sont définies " +
+        "par l'employeur et communiquées par tout moyen aux salariés concernés. Dans les " +
+        "entreprises d'au moins cinquante salariés, elles sont conformes à la charte mentionnée " +
+        "au 7° de l'article L. 2242-17.");
+
+      f.trait();
+      f.sign("Fait à " + villeDe(ctx) + ", le " + leJourDu(ctx) + ", en deux exemplaires.\n\n" +
+        "Le salarié                                              Pour l'entreprise\n" +
+        val(ctx, "salarie", "nom") + "                          " + signataire(ctx));
+      f.note("La convention individuelle est écrite et signée : c'est elle qui rend le forfait " +
+        "opposable au salarié. Un forfait appliqué sans convention signée, ou sans accord " +
+        "collectif l'autorisant, se paie en heures supplémentaires.");
+      return f.L;
+    },
+    attendus: [
+      { cle: "accord", objet: "Le renvoi à l'accord collectif qui autorise le forfait",
+        mots: ["accord", "convention de branche", "accord d'entreprise"],
+        renvoi: "L. 3121-63",
+        clause: ["La présente convention est conclue en application de [intitulé et date de " +
+          "l'accord collectif d'entreprise, d'établissement ou de branche], qui autorise la " +
+          "conclusion de conventions individuelles de forfait en jours."] },
+      { cle: "jours", objet: "Le nombre de jours compris dans le forfait",
+        mots: ["jours", "218", "forfait de"],
+        renvoi: "L. 3121-64, I, 5°",
+        clause: ["Le forfait est de [nombre] jours travaillés par période de référence, dans la " +
+          "limite de deux cent dix-huit jours."] },
+      { cle: "periode", objet: "La période de référence",
+        mots: ["période de référence", "année civile", "douze mois"],
+        renvoi: "L. 3121-64, I, 2°",
+        clause: ["Période de référence du forfait : [année civile, ou toute autre période de " +
+          "douze mois consécutifs]."] },
+      { cle: "controle", objet: "Le document de contrôle des journées travaillées",
+        mots: ["document de contrôle", "décompte", "journées travaillées"],
+        renvoi: "L. 3121-65, I, 1°",
+        clause: ["Un document de contrôle fait apparaître le nombre et la date des journées ou " +
+          "demi-journées travaillées. Sous la responsabilité de l'employeur, ce document peut " +
+          "être renseigné par le salarié."] },
+      { cle: "entretien", objet: "L'entretien annuel sur la charge de travail",
+        mots: ["entretien", "charge de travail"],
+        renvoi: "L. 3121-65, I, 3°",
+        clause: ["Un entretien est organisé une fois par an pour évoquer la charge de travail, " +
+          "qui doit être raisonnable, l'organisation du travail, l'articulation entre l'activité " +
+          "professionnelle et la vie personnelle ainsi que la rémunération."] },
+      { cle: "deconnexion", objet: "Le droit à la déconnexion",
+        mots: ["déconnexion"],
+        renvoi: "L. 3121-65, II",
+        clause: ["Modalités d'exercice du droit à la déconnexion : [plages sans sollicitation, " +
+          "règles d'usage de la messagerie, conduite à tenir pendant les congés]."] },
+    ],
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════
+     L'ÉCRAN
+
+     Un seul écran pour les deux modules, parce qu'ils font la même chose : une
+     question fermée, un « non » qui sort le document, un « oui » qui contrôle
+     celui qu'on dépose. Le dupliquer dans deux pages, c'était le corriger une
+     fois sur deux.
+
+     CE QU'IL S'INTERDIT. Pas d'introduction, pas d'explication sous les
+     champs, pas d'étape numérotée. Sur « non », aucune question préalable : le
+     document est déjà écrit à partir de la fiche d'entreprise, et les champs
+     qui restent se saisissent À CÔTÉ de lui - chaque frappe le réécrit sous
+     les yeux de l'utilisateur. Le renvoi aux articles tient dans une ligne
+     dépliable, sous la feuille, jamais devant elle.
+
+     LES CORRECTIONS À LA MAIN SURVIVENT. Un paragraphe corrigé dans la feuille
+     est retenu sur l'empreinte de son texte d'origine, pas sur sa place : il
+     reste quand le reste se réécrit, et il survit à l'ajout d'un article.
+     C'est le mécanisme de docs/gerer.html, repris tel quel.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* Le complément à docs/style.css, et rien de plus : la feuille commune tient
+     déjà les couleurs, les boutons, les champs, les avis et l'impression. Ne
+     descend ici que ce que cet écran est seul à afficher - la ligne de
+     question, la colonne de saisie collée au document, et les genres de blocs
+     de la feuille. */
+  var STYLE = [
+    ".rappel{margin:16px 0 0;font:600 var(--t0)/1 system-ui;letter-spacing:.16em;",
+    "text-transform:uppercase;color:var(--texte-3)}",
+    "h2.q{font:600 var(--t5)/1.3 system-ui;color:var(--encre);margin:var(--e4) 0 var(--e4)}",
+    ".groupe{margin:var(--e5) 0 var(--e2);font:600 var(--t0)/1 system-ui;letter-spacing:.14em;",
+    "text-transform:uppercase;color:var(--accent)}",
+    ".ligne{display:grid;grid-template-columns:1fr auto;gap:var(--e3);align-items:center;",
+    "background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);",
+    "padding:12px 14px;margin:0 0 var(--e2)}",
+    ".ligne.repondue{border-left:4px solid var(--vert)}",
+    ".ligne .t{font:500 15px/1.4 system-ui;color:var(--encre)}",
+    ".ligne .s{display:block;font-size:var(--t1);color:var(--texte-3);margin-top:2px}",
+    ".ligne .b{display:flex;gap:var(--e2);flex-wrap:wrap}",
+    ".plan{display:grid;gap:var(--e5);grid-template-columns:1fr;margin:var(--e4) 0 0;align-items:start}",
+    "@media (min-width:1000px){.plan{grid-template-columns:330px 1fr}",
+    ".cote-champs{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto}}",
+    ".cote-champs{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);",
+    "box-shadow:var(--ombre);padding:var(--e4)}",
+    ".cote-champs h3{margin:0 0 var(--e3);font:600 var(--t1)/1 system-ui;text-transform:uppercase;",
+    "letter-spacing:.09em;color:var(--texte-3)}",
+    ".cote-champs label.ch{margin:0 0 var(--e3)}",
+    ".cote-champs label.ch.plein>span{color:var(--vert)}",
+    ".feuille [contenteditable]{outline:none}",
+    ".feuille [contenteditable]:focus{background:#fffbe9;border-radius:3px}",
+    ".feuille .modifie{border-left:2px solid var(--vert);padding-left:8px;margin-left:-10px}",
+    ".feuille .b-t1{font:700 18px/1.35 system-ui;margin:0 0 6px;text-align:center}",
+    ".feuille .b-st{font:600 13.5px/1.4 system-ui;margin:0 0 22px;text-align:center;color:var(--texte-2)}",
+    ".feuille .b-h1{font:700 15px/1.35 system-ui;margin:20px 0 7px}",
+    ".feuille .b-h2{font:600 14px/1.35 system-ui;margin:15px 0 5px}",
+    ".feuille .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.68;text-align:justify}",
+    ".feuille .b-puce{margin:0 0 5px 18px;font-size:14.5px;line-height:1.6}",
+    ".feuille .b-note{margin:9px 0 12px;padding:0 0 0 10px;border-left:2px dashed var(--filet-2);",
+    "font-size:var(--t1);font-style:italic;line-height:1.55;color:var(--texte-3)}",
+    ".feuille .b-vide{height:9px}",
+    ".feuille .b-trait{border:0;border-top:1px solid var(--filet);margin:20px 0}",
+    ".feuille .b-saut{border:0;border-top:2px dashed var(--filet-2);margin:30px 0}",
+    ".feuille .b-sign{margin:20px 0 0;font-size:14.5px;white-space:pre-wrap;line-height:1.7}",
+    ".refus{background:var(--rouge-clair);border:1px solid var(--filet-2);border-radius:var(--r2);",
+    "padding:var(--e4);margin:0 0 var(--e3);color:var(--rouge);font-size:var(--t3);line-height:1.6}",
+    ".refus b{display:block;margin-bottom:5px;font-size:15.5px}",
+    "textarea.depot{min-height:220px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}",
+    ".manque{border:1px solid var(--filet);border-left:4px solid var(--ambre);",
+    "border-radius:0 var(--r2) var(--r2) 0;background:var(--surface);padding:12px 14px;margin:0 0 var(--e2)}",
+    ".manque.trouve{border-left-color:var(--vert)}",
+    ".manque .o{font:600 15px/1.35 system-ui;color:var(--encre)}",
+    ".manque .clause{margin:var(--e2) 0 0;padding:11px 13px;background:var(--vert-clair);",
+    "border-radius:var(--r1);font-size:var(--t2);line-height:1.55;color:var(--vert)}",
+    ".manque .clause p{margin:0 0 6px}",
+    ".manque label{display:flex;gap:var(--e2);align-items:flex-start;margin:var(--e2) 0 0;font-size:var(--t2)}",
+    ".manque label input{margin-top:3px;width:auto}",
+    ".manque q{color:var(--encre)}",
+    ".manque .fond{margin:var(--e2) 0 0;font-size:var(--t0);color:var(--texte-3)}",
+    "pre.sortie{font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface);",
+    "border:1px solid var(--filet);border-radius:var(--r2);padding:var(--e4);max-height:64vh;overflow:auto}",
+    "@media print{.barre,.cote-champs,.ligne .b,details.txt,.rappel{display:none !important}",
+    ".plan{display:block}}",
+  ].join("\n");
+
+  function ech(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function empreinte(s) {
+    var h = 5381;
+    for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return "b" + (h >>> 0).toString(36);
+  }
+  function texteDe(el) {
+    var t = el.innerText !== undefined && el.innerText !== null ? el.innerText : el.textContent;
+    return String(t).replace(/\u00a0/g, " ");
+  }
+  function sansAccents(s) {
+    return String(s || "").normalize ? String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+                                     : String(s || "").toLowerCase();
+  }
+  function slug(s) {
+    return sansAccents(s).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "document";
+  }
+
+  /* La lecture d'un .docx sans bibliothèque : l'archive est ouverte dans la
+     page, le texte est pris dans word/document.xml, et aucun octet ne sort du
+     poste. Repris de docs/controler-ri.html, où il a été écrit. */
+  function u16(v, i) { return v.getUint16(i, true); }
+  function u32(v, i) { return v.getUint32(i, true); }
+  function entreeZip(buf, nomVoulu) {
+    var v = new DataView(buf), n = buf.byteLength, fin = -1;
+    for (var i = n - 22; i >= 0 && i > n - 65558; i--) if (u32(v, i) === 0x06054b50) { fin = i; break; }
+    if (fin < 0) throw new Error("Ce fichier n'est pas une archive lisible.");
+    var nb = u16(v, fin + 10), pos = u32(v, fin + 16), dec = new TextDecoder("utf-8");
+    for (var k = 0; k < nb; k++) {
+      if (u32(v, pos) !== 0x02014b50) throw new Error("Répertoire de l'archive illisible.");
+      var methode = u16(v, pos + 10), taille = u32(v, pos + 20);
+      var lnom = u16(v, pos + 28), lextra = u16(v, pos + 30), lcom = u16(v, pos + 32);
+      var debut = u32(v, pos + 42);
+      var nom = dec.decode(new Uint8Array(buf, pos + 46, lnom));
+      if (nom === nomVoulu) {
+        var ln = u16(v, debut + 26), lx = u16(v, debut + 28);
+        return { methode: methode, data: new Uint8Array(buf, debut + 30 + ln + lx, taille) };
+      }
+      pos += 46 + lnom + lextra + lcom;
+    }
+    throw new Error("Le fichier ne contient pas de document Word (word/document.xml).");
+  }
+  function inflater(u8) {
+    if (typeof DecompressionStream !== "function")
+      return Promise.reject(new Error("Ce navigateur ne sait pas décomprimer le fichier. Collez le texte à la place."));
+    return new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer();
+  }
+  function texteDeXml(xml) {
+    return xml.replace(/<w:tab[^>]*\/>/g, "\t").replace(/<w:br[^>]*\/>/g, "\n")
+      .replace(/<\/w:p>/g, "\n").replace(/<[^>]+>/g, "")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'").replace(/&amp;/g, "&").replace(/\n{3,}/g, "\n\n").trim();
+  }
+  function lireDocx(fichier) {
+    return fichier.arrayBuffer().then(function (buf) {
+      var e = entreeZip(buf, "word/document.xml");
+      if (e.methode === 0) return new TextDecoder("utf-8").decode(e.data);
+      if (e.methode !== 8) throw new Error("Compression inconnue dans ce .docx.");
+      return inflater(e.data).then(function (b) { return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
+    }).then(texteDeXml);
+  }
+
+  var VERS_EXPORT = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "puce",
+    sign: "p", trait: "trait", saut: "saut", vide: "p" };
+
+  function demarrer(opt) {
+    opt = opt || {};
+    var module = opt.module || "sst";
+    var racine = document.getElementById(opt.racine || "ecran");
+    if (!racine) return;
+
+    var st = document.createElement("style");
+    st.textContent = STYLE;
+    document.head.appendChild(st);
+
+    var Pr = global.Profil;
+    var profil = Pr ? Pr.lire() : {};
+    if (!profil || !profil.denomination) { location.replace("index.html"); return; }
+
+    var CLE = "ecran-pieces-" + module;
+    var ETAT = { reponses: {}, valeurs: {}, corrections: {} };
+    try {
+      var lu = JSON.parse(localStorage.getItem(CLE) || "null");
+      if (lu && typeof lu === "object") {
+        ETAT.reponses = lu.reponses || {};
+        ETAT.valeurs = lu.valeurs || {};
+        ETAT.corrections = lu.corrections || {};
+      }
+    } catch (e) {}
+    function garder() { try { localStorage.setItem(CLE, JSON.stringify(ETAT)); } catch (e) {} }
+
+    /* ------------------------------------------------------ les questions */
+    var LISTE = (opt.questions || []).filter(function (q) {
+      if (typeof q.due !== "function") return true;
+      return q.due(profil) !== false;   /* inconnu : la question se pose */
+    });
+
+    function ligneHtml(q) {
+      var rep = ETAT.reponses[q.id];
+      return '<div class="ligne' + (rep ? " repondue" : "") + '">' +
+        '<div><span class="t">' + ech(q.question) + "</span>" +
+        (rep ? '<span class="s">' + (rep === "oui" ? "vous l'avez" : "vous ne l'avez pas") +
+          (q.piece || q.texteId ? " - " + ech(q.titre) : "") + "</span>" : "") +
+        "</div><div class=\"b\">" +
+        '<button type="button" class="btn second petit" data-oui="' + ech(q.id) + '">Oui</button>' +
+        '<button type="button" class="btn petit" data-non="' + ech(q.id) + '">Non</button>' +
+        "</div></div>";
+    }
+
+    function rendreListe(message) {
+      var h = '<p class="rappel">' + ech(profil.denomination) + "</p>" +
+        '<h2 class="q">' + ech(opt.titre || "Avez-vous ces documents ?") + "</h2>" +
+        (message ? '<div class="avis info">' + message + "</div>" : "");
+      var groupe = null;
+      LISTE.forEach(function (q) {
+        if (q.groupe && q.groupe !== groupe) { groupe = q.groupe; h += '<p class="groupe">' + ech(groupe) + "</p>"; }
+        h += ligneHtml(q);
+      });
+      h += '<footer>' + (opt.pied || "") + "</footer>";
+      racine.innerHTML = h;
+      racine.querySelectorAll("[data-non]").forEach(function (b) {
+        b.addEventListener("click", function () { repondre(b.getAttribute("data-non"), "non"); });
+      });
+      racine.querySelectorAll("[data-oui]").forEach(function (b) {
+        b.addEventListener("click", function () { repondre(b.getAttribute("data-oui"), "oui"); });
+      });
+      window.scrollTo({ top: 0 });
+    }
+
+    function questionDe(id) {
+      for (var i = 0; i < LISTE.length; i++) if (LISTE[i].id === id) return LISTE[i];
+      return null;
+    }
+
+    function repondre(id, rep) {
+      var q = questionDe(id);
+      if (!q) return;
+      ETAT.reponses[id] = rep;
+      garder();
+      if (rep === "non") {
+        if (q.lien) { location.href = q.lien; return; }
+        ouvrirDocument(q);
+        return;
+      }
+      /* Certaines pièces ont leur écran à elles : le « oui » y mène aussi,
+         parce que c'est là que se fait le contrôle du document déposé. */
+      if (q.lienOui) { location.href = q.lienOui; return; }
+      ouvrirControle(q);
+    }
+
+    /* ------------------------------------------------ le document, sur « non » */
+    function contexte(q) {
+      return { profil: Pr ? Pr.lire() : profil,
+        valeurs: ETAT.valeurs[q.id] || {},
+        fiche: { effectif: profil.effectif, entreprise: profil.denomination },
+        aujourdhui: new Date() };
+    }
+
+    /* Un générateur hérité rend du texte : chaque ligne devient un bloc, les
+       titres soulignés par une ligne de tirets restent des titres. Rien n'est
+       réécrit, c'est le même document. */
+    function blocsDeTexte(txt) {
+      var out = [];
+      String(txt).split(/\n/).forEach(function (l) {
+        var t = l.replace(/\s+$/, "");
+        if (/^[═─]{10,}$/.test(t.trim())) { out.push({ k: "trait", t: "" }); return; }
+        if (t.trim() === "") { out.push({ k: "vide", t: "" }); return; }
+        if (/^[A-ZÀ-Ý0-9 ,'’«»\-.()]{12,}$/.test(t.trim()) && t.trim().length < 90)
+          { out.push({ k: "h1", t: t.trim() }); return; }
+        out.push({ k: "p", t: t });
+      });
+      return out;
+    }
+
+    function blocsDe(q, ctx) {
+      if (q.piece) return q.piece.blocs(ctx);
+      var gen = global.DocumentsProduits && global.DocumentsProduits.pour(q.texteId);
+      if (!gen) return [{ k: "p", t: "Aucun document n'est écrit pour ce point." }];
+      return blocsDeTexte(gen.produire(ctx));
+    }
+
+    function feuilleHtml(blocs, id) {
+      var c = ETAT.corrections[id] || {};
+      var h = '<div class="feuille" id="feuille">';
+      blocs.forEach(function (b) {
+        if (b.k === "trait" || b.k === "saut") { h += '<hr class="b-' + b.k + '">'; return; }
+        if (b.k === "vide") { h += '<div class="b-vide"></div>'; return; }
+        var cle = empreinte(b.t);
+        var texte = Object.prototype.hasOwnProperty.call(c, cle) ? c[cle] : b.t;
+        h += '<div class="b-' + b.k + (texte !== b.t ? " modifie" : "") +
+          '" contenteditable="true" data-k="' + b.k + '" data-o="' + cle + '">' + ech(texte) + "</div>";
+      });
+      return h + "</div>";
+    }
+
+    function champsHtml(q) {
+      var v = ETAT.valeurs[q.id] || {};
+      if (!q.piece || !q.piece.champs || !q.piece.champs.length)
+        return '<div class="cote-champs"><h3>Rien à saisir</h3><p style="margin:0;font-size:13.5px;color:#5a6470">' +
+          "Le document est écrit à partir de la fiche d'entreprise. Corrigez-le directement dans la feuille." +
+          "</p></div>";
+      var h = '<div class="cote-champs"><h3>Ce qui reste à remplir</h3>';
+      q.piece.champs.forEach(function (c) {
+        var val = v[c.c] == null ? "" : String(v[c.c]);
+        var plein = val.trim() !== "";
+        h += '<label class="ch' + (plein ? " plein" : "") + '"><span>' + ech(c.nom) + "</span>";
+        if (c.t === "textarea")
+          h += '<textarea data-c="' + ech(c.c) + '" placeholder="' + ech(c.ph || "") + '">' + ech(val) + "</textarea>";
+        else if (c.t === "select")
+          h += '<select data-c="' + ech(c.c) + '">' + (c.options || []).map(function (o) {
+            return '<option' + (val === o ? " selected" : "") + ">" + ech(o) + "</option>"; }).join("") + "</select>";
+        else
+          h += '<input type="' + ech(c.t || "text") + '" data-c="' + ech(c.c) + '" value="' + ech(val) +
+            '" placeholder="' + ech(c.ph || "") + '">';
+        h += "</label>";
+      });
+      return h + "</div>";
+    }
+
+    function ouvrirDocument(q) {
+      var ctx = contexte(q);
+      var refus = q.piece && typeof q.piece.refus === "function" ? q.piece.refus(ctx) : null;
+      var h = '<div class="barre"><button type="button" class="btn second" id="retour">← Les questions</button>' +
+        '<button type="button" class="btn" id="dl-docx">Télécharger en Word</button>' +
+        '<button type="button" class="btn second" id="dl-txt">En texte</button>' +
+        '<button type="button" class="btn second" id="imprimer">Imprimer</button>' +
+        '<button type="button" class="btn second" id="reprendre">Repartir du texte généré</button></div>' +
+        '<div class="plan">' + champsHtml(q) + '<div id="cote-doc">' +
+        (refus ? '<div class="refus"><b>Ce document n\'est pas produit.</b>' +
+          refus.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>"
+               : feuilleHtml(blocsDe(q, ctx), q.id)) +
+        (q.renvoi ? '<details class="txt"><summary>Les articles, avec leur identifiant de version</summary>' +
+          '<div class="c">' + ech(q.renvoi) + "</div></details>" : "") +
+        "</div></div>";
+      /* La vue vit dans son propre conteneur, recréé à chaque ouverture : les
+         écouteurs posés dessus disparaissent avec lui. Posés sur la racine, ils
+         s'empilaient - le deuxième document réécrivait le premier à chaque
+         frappe. */
+      racine.innerHTML = '<div id="vue">' + h + "</div>";
+      brancherDocument(q);
+      window.scrollTo({ top: 0 });
+    }
+
+    function redessinerDocument(q) {
+      var ctx = contexte(q);
+      var refus = q.piece && typeof q.piece.refus === "function" ? q.piece.refus(ctx) : null;
+      var cote = document.getElementById("cote-doc");
+      if (!cote) return;
+      var src = cote.querySelector("details.txt");
+      cote.innerHTML = (refus
+        ? '<div class="refus"><b>Ce document n\'est pas produit.</b>' +
+          refus.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>"
+        : feuilleHtml(blocsDe(q, ctx), q.id)) + (src ? src.outerHTML : "");
+    }
+
+    function brancherDocument(q) {
+      document.getElementById("retour").addEventListener("click", rendreListe);
+      var maj = function (ev) {
+        var el = ev.target;
+        if (!el.getAttribute || !el.getAttribute("data-c")) return;
+        ETAT.valeurs[q.id] = ETAT.valeurs[q.id] || {};
+        ETAT.valeurs[q.id][el.getAttribute("data-c")] = el.value;
+        garder();
+        redessinerDocument(q);
+        el.closest("label").classList.toggle("plein", String(el.value).trim() !== "");
+      };
+      var vue = document.getElementById("vue");
+      vue.addEventListener("input", maj);
+      vue.addEventListener("change", maj);
+
+      /* La correction faite à la main dans la feuille, retenue sur le texte
+         d'origine du bloc : elle survit à la réécriture des autres. */
+      vue.addEventListener("input", function (ev) {
+        var el = ev.target;
+        if (!el || !el.hasAttribute || !el.hasAttribute("contenteditable")) return;
+        ETAT.corrections[q.id] = ETAT.corrections[q.id] || {};
+        ETAT.corrections[q.id][el.getAttribute("data-o")] = texteDe(el);
+        el.classList.add("modifie");
+        garder();
+      });
+
+      document.getElementById("reprendre").addEventListener("click", function () {
+        ETAT.corrections[q.id] = {}; garder(); redessinerDocument(q);
+      });
+      document.getElementById("imprimer").addEventListener("click", function () { window.print(); });
+      document.getElementById("dl-docx").addEventListener("click", function () { exporter(q, "docx"); });
+      document.getElementById("dl-txt").addEventListener("click", function () { exporter(q, "txt"); });
+    }
+
+    /* Ce qui part dans le fichier : le document, et lui seul. Les notes de
+       marge s'adressent à l'employeur, pas au destinataire. */
+    function relire() {
+      var out = [];
+      var f = document.getElementById("feuille");
+      if (!f) return out;
+      Array.prototype.forEach.call(f.children, function (el) {
+        if (el.tagName === "HR") { out.push({ k: el.classList.contains("b-saut") ? "saut" : "trait", t: "" }); return; }
+        if (el.classList.contains("b-vide")) { out.push({ k: "p", t: "" }); return; }
+        if (el.classList.contains("b-note")) return;
+        out.push({ k: el.getAttribute("data-k"), t: texteDe(el) });
+      });
+      return out;
+    }
+
+    function nomFichier(q, ext) {
+      var base = (q.piece && q.piece.fichier) || slug(q.titre || q.id);
+      return base + "-" + slug(profil.denomination) + "-" +
+        new Date().toISOString().slice(0, 10) + "." + ext;
+    }
+
+    function exporter(q, ext) {
+      var blocs = relire();
+      if (!blocs.length) return;
+      var titre = blocs.length && blocs[0].k === "t1" ? blocs.shift().t : (q.titre || "");
+      if (ext === "txt") {
+        var t = (titre ? titre + "\n\n" : "") + blocs.map(function (b) {
+          return b.k === "trait" || b.k === "saut" ? "" : b.t; }).join("\n");
+        global.AuditExport.telecharger(t, nomFichier(q, "txt"), "text/plain;charset=utf-8");
+        return;
+      }
+      var items = blocs.map(function (b) { return { k: VERS_EXPORT[b.k] || "p", t: b.t }; });
+      global.AuditExport.telecharger(global.AuditExport.docx(items, titre),
+        nomFichier(q, "docx"),
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    }
+
+    /* ------------------------------------------------- le contrôle, sur « oui » */
+    /* Le contrôle du document déposé n'est écrit que pour les pièces qui
+       portent leurs attendus. Ailleurs, on le dit plutôt que de renvoyer à la
+       liste sans rien faire : un écran qui ne répond pas se lit comme une
+       panne. */
+    function ouvrirControle(q) {
+      if (!q.piece || !q.piece.attendus || !q.piece.attendus.length) {
+        rendreListe("<b>" + ech(q.titre || q.question) + " : c'est noté.</b>" +
+          "Le contrôle point par point du document que vous avez n'est pas encore écrit pour " +
+          "cette pièce. Répondez « non » pour obtenir le document de référence, rédigé, et " +
+          "comparez-le au vôtre.");
+        return;
+      }
+      racine.innerHTML =
+        '<div class="barre"><button type="button" class="btn second" id="retour">← Les questions</button></div>' +
+        '<h2 class="q">' + ech(q.titre) + " : déposez-le</h2>" +
+        '<div class="barre">' +
+        '<label class="btn second" style="display:inline-flex;align-items:center;gap:9px">Choisir un fichier .docx ou .txt' +
+        '<input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none"></label>' +
+        '<button type="button" class="btn second" id="vider">Vider</button>' +
+        '<button type="button" class="btn" id="controler">Contrôler</button></div>' +
+        '<div id="lecture"></div>' +
+        '<textarea class="depot" id="depot" placeholder="Collez ici le texte de votre document, ou choisissez le fichier ci-dessus."></textarea>' +
+        '<div id="diagnostic"></div>';
+      document.getElementById("retour").addEventListener("click", rendreListe);
+      document.getElementById("vider").addEventListener("click", function () {
+        document.getElementById("depot").value = "";
+        document.getElementById("lecture").innerHTML = "";
+        document.getElementById("diagnostic").innerHTML = "";
+      });
+      document.getElementById("fichier").addEventListener("change", function (ev) {
+        var f = ev.target.files && ev.target.files[0];
+        if (!f) return;
+        var dit = function (m, c) {
+          document.getElementById("lecture").innerHTML = '<div class="avis ' + (c || "info") + '">' + m + "</div>";
+        };
+        dit("Lecture de <b>" + ech(f.name) + "</b>…");
+        (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text()).then(function (t) {
+          document.getElementById("depot").value = t;
+          dit("<b>" + ech(f.name) + "</b> lu, " + t.length.toLocaleString("fr-FR") +
+            " caractères. Le fichier n'est pas sorti de ce poste.");
+        }).catch(function (e) {
+          dit("<b>Ce fichier n'a pas pu être lu.</b>" + ech(e.message) +
+            " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
+        });
+      });
+      document.getElementById("controler").addEventListener("click", function () { controler(q); });
+      window.scrollTo({ top: 0 });
+    }
+
+    var insertions = {};
+
+    function controler(q) {
+      var txt = document.getElementById("depot").value;
+      var cible = document.getElementById("diagnostic");
+      if (txt.trim().length < 80) {
+        cible.innerHTML = '<div class="avis att"><b>Le texte déposé est trop court.</b>' +
+          "Déposez le document entier : sur un extrait, tout ce qui n'y figure pas serait dit absent.</div>";
+        return;
+      }
+      var plat = sansAccents(txt);
+      insertions = {};
+      var manques = 0, h = "";
+      q.piece.attendus.forEach(function (a) {
+        var trouve = null;
+        (a.mots || []).forEach(function (m) {
+          if (trouve) return;
+          var i = plat.indexOf(sansAccents(m));
+          if (i >= 0) trouve = txt.slice(Math.max(0, i - 90), i + 150).replace(/\s+/g, " ").trim();
+        });
+        if (!trouve) { manques++; insertions[a.cle] = true; }
+        h += '<div class="manque' + (trouve ? " trouve" : "") + '">' +
+          '<div class="o">' + ech(a.objet) + "</div>" +
+          (trouve
+            ? '<p class="note" style="margin:6px 0 0">Trouvé dans votre document : <q>…' +
+              ech(trouve) + '…</q> Relisez ce passage : la recherche voit que le sujet est traité, ' +
+              "elle ne dit jamais qu'il l'est bien.</p>"
+            : '<p class="note" style="margin:6px 0 0">Introuvable dans votre document. ' +
+              "Le texte à insérer est écrit :</p>" +
+              '<div class="clause">' + a.clause.map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("") + "</div>" +
+              '<label><input type="checkbox" data-ins="' + ech(a.cle) + '" checked> Insérer ce texte dans la version corrigée</label>') +
+          '<p class="fond">' + ech(a.renvoi || "") + "</p></div>";
+      });
+      cible.innerHTML =
+        '<div class="avis ' + (manques ? "att" : "ok") + '"><b>' +
+        (manques ? manques + " point(s) introuvable(s) dans votre document" : "Tous les points cherchés ont été trouvés") +
+        "</b>La recherche est faite sur les mots : un point rédigé autrement sera dit introuvable, et un " +
+        "point trouvé n'est pas pour autant bien rédigé. C'est votre lecture qui décide.</div>" + h +
+        '<div class="barre" style="margin-top:14px">' +
+        '<button type="button" class="btn" id="assembler">Assembler la version corrigée</button></div>' +
+        '<div id="corrige"></div>';
+      cible.querySelectorAll("[data-ins]").forEach(function (i) {
+        i.addEventListener("change", function () { insertions[i.getAttribute("data-ins")] = i.checked; });
+      });
+      document.getElementById("assembler").addEventListener("click", function () { assembler(q); });
+    }
+
+    function assembler(q) {
+      var txt = document.getElementById("depot").value;
+      var ajouts = q.piece.attendus.filter(function (a) { return insertions[a.cle]; });
+      var L = [txt.replace(/\s+$/, ""), "", "", "AJOUTS AU TITRE DU CONTRÔLE DU " +
+        new Date().toLocaleDateString("fr-FR"), ""];
+      ajouts.forEach(function (a) {
+        L.push(a.objet + " (" + (a.renvoi || "") + ")");
+        a.clause.forEach(function (l) { L.push(l); });
+        L.push("");
+      });
+      if (!ajouts.length) L.push("Aucun ajout retenu.");
+      var sortie = L.join("\n");
+      document.getElementById("corrige").innerHTML =
+        '<div class="barre" style="margin-top:14px">' +
+        '<button type="button" class="btn" id="c-docx">Télécharger en Word</button>' +
+        '<button type="button" class="btn second" id="c-txt">En texte</button>' +
+        '<button type="button" class="btn second" id="c-copier">Copier</button></div>' +
+        '<pre class="sortie">' + ech(sortie) + "</pre>";
+      var nom = ((q.piece && q.piece.fichier) || slug(q.titre)) + "-corrige-" +
+        new Date().toISOString().slice(0, 10);
+      document.getElementById("c-txt").addEventListener("click", function () {
+        global.AuditExport.telecharger(sortie, nom + ".txt", "text/plain;charset=utf-8");
+      });
+      document.getElementById("c-docx").addEventListener("click", function () {
+        var items = sortie.split(/\n/).map(function (l) { return { k: "p", t: l }; });
+        global.AuditExport.telecharger(global.AuditExport.docx(items, q.titre + " - version corrigée"),
+          nom + ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+      });
+      document.getElementById("c-copier").addEventListener("click", function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(sortie);
+      });
+      document.getElementById("corrige").scrollIntoView({ behavior: "smooth" });
+    }
+
+    rendreListe();
+  }
+
+  global.EcranPieces = { demarrer: demarrer };
+
 })(typeof window !== "undefined" ? window : this);
