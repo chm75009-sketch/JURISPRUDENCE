@@ -149,6 +149,17 @@
   pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
     background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
     max-height:64vh;overflow:auto}
+  /* Le panneau « à compléter » : il vit À CÔTÉ du document, jamais avant lui.
+     Il ne montre que ce qui manque encore, et chaque frappe remplit le document
+     visible. Un champ rempli disparaît du panneau : il n'y a plus rien à
+     demander. */
+  .completer{border:1px solid var(--filet);border-left:4px solid var(--ambre);border-radius:11px;
+    padding:14px 16px;margin:14px 0;background:var(--carte)}
+  .completer>b{display:block;font:700 15px/1.35 system-ui;margin-bottom:3px}
+  .completer>p{margin:0 0 11px;font-size:13.5px;line-height:1.5;color:var(--encre-2)}
+  .completer.rien{border-left-color:var(--vert);background:var(--vert-clair)}
+  .completer.rien>b{color:#1b4b2d}
+
   .cache{display:none}
   footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
     font-size:13px;color:var(--encre-3)}
@@ -200,9 +211,10 @@
       </div>
       <div class="porte non">
         <b>Non, je ne l'ai pas</b>
-        <p>Alors il n'y a rien à constater. L'écran suivant contient le document unique entier :
-        une unité de travail par poste, les risques du métier rédigés, la cotation, les mesures de
-        prévention, le responsable et l'échéance. Vous retirez ce qui ne vous concerne pas.</p>
+        <p>Alors il n'y a rien à constater et rien à demander. L'écran suivant est votre document
+        unique, écrit : une unité de travail par poste réel de votre activité, les risques rédigés,
+        la cotation, les mesures de prévention, le responsable et l'échéance datée. Ce qui reste à
+        compléter se remplit à côté du document, sous vos yeux.</p>
         <div class="barre" style="margin:0">
           <button class="btn vert" id="je-nai-pas">Écrire mon document unique</button>
         </div>
@@ -215,9 +227,10 @@
 
   <!-- ══════ 2 · LES BLOCS ══════ -->
   <section id="o-blocs" class="cache">
-    <h2>Les unités de travail, rédigées</h2>
-    <p class="aide">Tout est coché par défaut : ce qui reste coché entre dans le document. Le
-    responsable et l'échéance sont modifiables ligne à ligne, et l'échéance est déjà datée.</p>
+    <h2>Votre document unique</h2>
+    <p class="aide">Il est écrit. Tout est coché : ce qui reste coché part dans le document. Le
+    responsable et l'échéance se modifient ligne à ligne, et l'échéance est déjà datée.</p>
+    <div id="a-completer"></div>
     <div class="compteurs" id="compteurs"></div>
     <div class="barre">
       <button class="btn second" id="tout-cocher">Tout insérer</button>
@@ -242,6 +255,7 @@
       <button class="btn second" id="imprimer">Imprimer</button>
       <button class="btn second" id="retour-blocs">Revenir aux unités</button>
     </div>
+    <div id="a-completer-2"></div>
     <div id="resume"></div>
     <pre id="sortie"></pre>
   </section>

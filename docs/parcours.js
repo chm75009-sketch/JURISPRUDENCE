@@ -1545,6 +1545,16 @@
     nom: "Installer le CSE : la première réunion",
     resume: "La réunion qui suit les élections : convocation par le seul président, bureau élu parmi les titulaires, référent harcèlement, commissions, règlement intérieur du comité, budgets et moyens, transition avec le comité sortant, et la documentation économique et financière due un mois après l'élection.",
     audit: { href: "audit-cse.html", nom: "l'audit du comité social et économique" },
+    /* La question fermée du module comité, et ses deux issues. Ce parcours est
+       la branche « non » : il installe. La branche « oui » ouvre le contrôle
+       du protocole préélectoral et du procès-verbal, où chaque clause sort
+       rédigée, avec le nombre de sièges et de collèges calculés sur
+       l'effectif. Les contrôles d'élection arrivent ici : voir le commentaire
+       de docs/parcours-lien.js sur la rubrique CSE-CTL-ELE. */
+    controle: { href: "controler-cse.html", nom: "Contrôler le protocole existant",
+      question: "Avez-vous déjà un protocole d'accord préélectoral, ou le procès-verbal du scrutin ?",
+      oui: "Déposez-le : les clauses sortent rédigées, collèges et sièges calculés sur votre effectif, avec le calendrier daté à rebours du premier tour.",
+      non: "Restez ici : les étapes ci-dessous installent le comité une fois les élections tenues." },
     jx: "cse-installation",
     donnees: [
       { c: "dateElections", nom: "Date de proclamation des résultats des élections", t: "date",
@@ -2165,6 +2175,14 @@
     nom: "Constituer la base de données (BDESE)",
     resume: "L'accord d'abord, le régime supplétif ensuite : ce que l'accord de l'article L. 2312-21 peut définir, ce que la base doit contenir à défaut d'accord selon l'effectif (R. 2312-8 sous trois cents, R. 2312-9 au-delà), l'accès permanent des élus et des délégués syndicaux, et la mise à disposition qui vaut communication.",
     audit: { href: "audit-bdese.html", nom: "le module d'audit de la base (BDESE)" },
+    /* La question fermée du module base de données, et ses deux issues. Le
+       « non » construit le classeur, rubriques et lignes en place selon
+       l'effectif ; le « oui » ouvre le contrôle de la base déposée, où les
+       rubriques sortent mises en forme, prêtes à recevoir les chiffres. */
+    controle: { href: "controler-bdese.html", nom: "Contrôler la base existante",
+      question: "Avez-vous une base de données économiques, sociales et environnementales ?",
+      oui: "Déposez-la : les rubriques dues sortent déployées ligne à ligne, avec leurs colonnes d'années, et vous repartez avec le classeur.",
+      non: "Restez ici : les étapes ci-dessous la constituent, du régime applicable à la mise à disposition." },
     donnees: [
       { c: "accordBdese", nom: "Un accord définit-il l'organisation, l'architecture, le contenu et le fonctionnement de la base ?", t: "oui-non",
         aide: "Accord d'entreprise de l'article L. 2232-12 ou, en l'absence de délégué syndical, accord entre l'employeur et le comité adopté à la majorité des titulaires (art. L. 2312-21)." },

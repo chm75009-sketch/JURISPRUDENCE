@@ -119,6 +119,9 @@
   .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
   .btn:disabled{opacity:.45;cursor:not-allowed}
   .cache{display:none}
+  /* .champs pose display:grid : sans cette règle, l'attribut hidden ne
+     masquerait rien quand le panneau quitte l'écran. */
+  [hidden]{display:none !important}
   footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
     font-size:13px;color:var(--encre-3)}
 </style>

@@ -151,6 +151,9 @@
     background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
     max-height:60vh;overflow:auto}
   .cache{display:none}
+  /* .champs pose display:grid : sans cette règle, l'attribut hidden ne
+     masquerait rien quand le panneau quitte l'écran. */
+  [hidden]{display:none !important}
   footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
     font-size:13px;color:var(--encre-3)}
   @media print{.onglets,.barre,header.site{display:none}.cache{display:block !important}}
@@ -465,13 +468,18 @@
         } else {
           l.push("Les membres de la délégation du personnel du comité social et économique sont élus sur des listes établies par les organisations syndicales pour chaque catégorie de personnel, dans les collèges suivants :");
           l.push("- premier collège : les ouvriers et employés ;");
-          l.push("- " + (c.nbCol === 3 ? "deuxième" : "second") + " collège : les ingénieurs, chefs de service, techniciens, agents de maîtrise et assimilés.");
-          if (c.nbCol === 3)
+          l.push("- " + (c.nbCol === 3 ? "deuxième collège : les ingénieurs, chefs de service, techniciens, agents de maîtrise et assimilés ;"
+                                       : "second collège : les ingénieurs, chefs de service, techniciens, agents de maîtrise et assimilés."));
+          if (c.nbCol === 3) {
             l.push("- troisième collège : les ingénieurs, chefs de service et cadres administratifs, commerciaux ou techniques assimilés. Leur nombre sur le plan de la classification est de " + (c.cad === null ? "[nombre]" : c.cad) + " au moment du renouvellement de l'instance, soit au moins vingt-cinq : ces catégories constituent un troisième collège.");
-          else
+          } else {
             l.push("Le nombre d'ingénieurs, chefs de service et cadres administratifs, commerciaux ou techniques assimilés sur le plan de la classification est de " + (c.cad === null ? "[nombre]" : c.cad) + " au moment du renouvellement de l'instance. Ce nombre étant inférieur à vingt-cinq, il n'est pas constitué de troisième collège.");
-          if (c.eff !== null && c.eff >= 501)
-            l.push("L'entreprise comptant au moins cinq cent un salariés, les ingénieurs, les chefs de service et cadres administratifs, commerciaux ou techniques assimilés ont au moins un délégué titulaire au sein du second collège, élu dans les mêmes conditions.");
+            /* La règle des cinq cent un salariés loge ces catégories dans le
+               second collège. Elle n'a plus d'objet quand elles constituent
+               elles-mêmes le troisième : on ne la sert donc pas dans ce cas. */
+            if (c.eff !== null && c.eff >= 501)
+              l.push("L'entreprise comptant au moins cinq cent un salariés, les ingénieurs, les chefs de service et cadres administratifs, commerciaux ou techniques assimilés ont au moins un délégué titulaire au sein du second collège, élu dans les mêmes conditions.");
+          }
         }
         l.push("Toute modification du nombre et de la composition des collèges électoraux suppose un accord signé par toutes les organisations syndicales représentatives dans l'entreprise. Un tel accord ne fait pas obstacle à la création du troisième collège. Il est communiqué, à sa demande, à l'agent de contrôle de l'inspection du travail.");
         return l;
