@@ -1379,6 +1379,15 @@
     nom: "Mettre à jour le DUERP",
     resume: "Inventaire par unité de travail, transcription, mise à jour annuelle et événementielle, suites — programme annuel à partir de cinquante salariés, liste d'actions en deçà —, présentation au comité, conservation quarante ans.",
     audit: { href: "audit-sst.html", nom: "l'audit santé-sécurité (SST)" },
+    /* La question fermée, et ses deux issues. Le « non » ne pose plus aucune
+       question : il ouvre directement le document unique écrit, une unité de
+       travail par poste réel de l'activité, ce qui reste à compléter se
+       remplissant à côté du document. */
+    controle: { href: "controler-duerp.html?depart=oui", nom: "Contrôler le document existant",
+      question: "Avez-vous un document unique d'évaluation des risques ?",
+      oui: "Déposez-le : chaque unité de travail et chaque risque du métier y sont cherchés, et ce que la recherche ne retrouve pas vous est rendu rédigé, prêt à insérer.",
+      non: "Alors il n'y a rien à constater : le document unique vous est ouvert entièrement écrit, risques du métier, cotation, mesures, responsable et échéance datée.",
+      hrefNon: "controler-duerp.html?depart=non", nomNon: "Écrire mon document unique" },
     donnees: [
       { c: "dateDerniereMaj", nom: "Date de la dernière mise à jour du document unique", t: "date" },
       { c: "unitesTravail", nom: "Nombre d'unités de travail inventoriées", t: "number",
@@ -1952,6 +1961,14 @@
     nom: "Mettre en place les affichages et informations obligatoires",
     resume: "Ce qui s'affiche et ce qui s'informe « par tout moyen » : égalité et non-discrimination, égalité de rémunération, harcèlements, coordonnées des secours et des services, horaires collectifs, consigne incendie, convention collective, panneaux syndicaux — puis le relevé daté qui prouve que c'est fait.",
     audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
+    /* La question fermée, et ses deux issues. Le « non » ne pose aucune
+       question : il ouvre les affiches elles-mêmes, au format A4, remplies
+       avec la fiche d'entreprise et prêtes à imprimer. */
+    controle: { href: "controler-affichages.html?depart=oui", nom: "Contrôler ce qui est au mur",
+      question: "Vos affichages obligatoires sont-ils en place ?",
+      oui: "Dix cases à cocher, et rien d'autre : ce qui reste décoché sort aussitôt en affiche A4, rédigée et remplie.",
+      non: "Alors les dix affiches vous sont ouvertes directement, prêtes à imprimer et à poser ; ce qui manque se complète à côté de l'affiche.",
+      hrefNon: "controler-affichages.html?depart=non", nomNon: "Imprimer mes affiches" },
     donnees: [
       { c: "dateReleve", nom: "Date du relevé des affichages", t: "date",
         aide: "C'est la date que portera le constat : sans elle, rien ne prouve que l'affichage était en place ce jour-là." },
@@ -3342,7 +3359,12 @@
       ? '<div class="controle-existant"><b>' + e(p.controle.question) + "</b>" +
         '<div class="deux"><span><i>Oui.</i> ' + e(p.controle.oui) +
         ' <a href="' + e(p.controle.href) + '">' + e(p.controle.nom) + " →</a></span>" +
-        '<span><i>Non.</i> ' + e(p.controle.non) + "</span></div></div>"
+        /* Le « non » aussi porte un lien quand la branche existe : il ouvre le
+           document déjà écrit, sans qu'une question de plus soit posée. */
+        '<span><i>Non.</i> ' + e(p.controle.non) +
+        (p.controle.hrefNon
+          ? ' <a href="' + e(p.controle.hrefNon) + '">' + e(p.controle.nomNon) + " →</a>"
+          : "") + "</span></div></div>"
       : "";
     $("zone-prealable").innerHTML = blocControle + '<h2 class="titre-zone">Ce qu\'il faut avoir réuni — ' + e(p.nom) + "</h2>" +
       '<p class="aide">Ce qu\'il faut avoir réuni avant d\'engager la procédure. Cochez ce que vous ' +
