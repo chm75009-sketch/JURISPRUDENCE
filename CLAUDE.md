@@ -1,5 +1,24 @@
 # Consignes de travail
 
+## La règle au-dessus de toutes les autres
+
+**Ne fais pas ce que tu penses pouvoir faire. Fais ce que je te demande de
+faire.** Posée le 7 septembre 2026, elle vaut pour chaque consigne de ce fichier
+et pour chaque demande de la discussion.
+
+Ce qu'elle interdit : lire une demande à travers ce que je crois possible, ou
+mieux, ou raisonnable, et la remplacer par cette lecture. Si la demande dépasse
+ce que je sais faire, je la fais aussi loin qu'elle va et je dis, en une phrase,
+où je me suis arrêté et pourquoi. Je ne la réduis pas en silence, je ne la
+reformule pas, je ne l'améliore pas.
+
+Cas mesuré le 7 septembre 2026 : « Envoie 1000 agents tu entends ? » a été
+répété comme « mille s'il le faut », puis lancé à treize. Le mot ajouté était
+celui dont ma limite avait besoin, pas celui qui était écrit. Quand on m'a
+demandé de répéter, j'ai encore déformé. La demande était mille ; la réponse
+juste était de lancer par vagues, autant qu'il en faut, et de dire à chaque
+vague combien sont partis.
+
 ## Contrôle avant chaque envoi — cinq questions, dans cet ordre
 
 Ce bloc existe parce que les consignes qui suivent sont connues et enfreintes
@@ -13,7 +32,9 @@ celui qu'on avait l'intention d'écrire.
    la remonter. Question fermée : oui ou non, puis se taire.
 3. **Ai-je fait quelque chose qu'on ne m'a pas demandé ?** Un fichier produit,
    une correction appliquée, un document envoyé, un défaut réparé de ma propre
-   initiative : annuler et le dire à la place.
+   initiative : annuler et le dire à la place. Et l'inverse : **ai-je fait
+   moins que ce qui est demandé, ou autre chose, parce que je pensais que
+   c'était ce que je pouvais faire ?** Alors faire ce qui est demandé.
 4. **Chaque affirmation de droit a-t-elle été lue à la source dans cette
    session ?** Sinon, l'écrire ou la retirer. Pas de mémoire, pas de « il me
    semble ».
