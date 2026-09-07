@@ -4,35 +4,38 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gérer - Jurisprudence</title>
-<meta name="description" content="Embaucher, sanctionner, licencier : les champs, les dates, le document.">
+<meta name="description" content="Embaucher, sanctionner, licencier : le document est déjà écrit, les champs le complètent.">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1c2126">
 
 <!--
-  CE QUE FAIT CETTE PAGE.
+  CE QUE FAIT CETTE PAGE, ET COMMENT ELLE LE FAIT.
 
-  Trois formulaires courts, trois documents. On saisit ce que l'on sait déjà,
-  on appuie, le document sort : rédigé, daté, signable, et modifiable à l'écran
-  avant d'être emporté en Word. Il n'y a ici aucun exposé du droit, aucune liste
-  de recommandations, aucun écran intermédiaire. Les dates limites s'affichent
-  parce qu'elles se calculent, pas pour instruire.
+  On clique sur « Embaucher » : le contrat est déjà là, écrit, avec la
+  convention collective, le niveau, l'échelon, le minimum conventionnel et la
+  période d'essai tirés de la fiche d'entreprise. Il n'y a pas de questionnaire
+  avant, pas d'écran intermédiaire, pas d'exposé du droit. Les champs qui
+  restent à remplir - le nom, le poste, la date d'entrée - sont à côté du
+  document, et chaque frappe le réécrit sous les yeux de l'utilisateur.
 
-  Embaucher rend le contrat de travail complet, avec le niveau, l'échelon et le
-  minimum conventionnel tirés de l'IDCC de la fiche d'entreprise, la période
-  d'essai, les mentions obligatoires, et les suites immédiates avec leur date :
-  déclaration préalable, visite d'information et de prévention, registre du
-  personnel. Pour un contrat à durée déterminée, le motif et le terme sont
-  contrôlés, et la page refuse de produire un contrat que la loi n'autorise pas.
+  Même chose pour sanctionner et licencier : la lettre d'abord, les champs
+  ensuite. Les dates limites s'affichent au-dessus du document et se
+  recalculent à chaque frappe, parce qu'elles se calculent, pas pour instruire.
 
-  Sanctionner rend la convocation à l'entretien préalable et la notification,
-  avec le dernier jour pour convoquer et la fenêtre de notification.
+  Le document reste modifiable directement à l'écran. Un paragraphe corrigé à
+  la main est conservé quand le reste se réécrit : la correction est retenue
+  sur son texte d'origine, pas sur sa place dans la page.
 
-  Licencier rend la convocation et la lettre de notification, avec les mêmes
-  dates, la durée du préavis et l'indemnité de licenciement chiffrée.
+  CE QUE LA PAGE REFUSE DE PRODUIRE. Un contrat à durée déterminée dont le
+  motif n'est pas au nombre de ceux que la loi autorise, ou dont la durée
+  dépasse le maximum applicable, ou qui remplace un gréviste. Le licenciement
+  d'un représentant du personnel, qui suppose l'autorisation de l'inspection du
+  travail. Dans ces cas, la place du document porte le refus et l'article qui
+  le fonde.
 
   LES TEXTES. Chaque article cité a été lu au relais Légifrance le 7 septembre
-  2026, deux fois à quelques minutes d'intervalle, et son identifiant de version
-  LEGIARTI figure à côté de lui dans la table TEXTES ci-dessous : c'est cette
+  2026, deux fois à quelques minutes d'intervalle, et son identifiant de
+  version LEGIARTI figure à côté de lui dans la table TEXTES : c'est cette
   version-là qui a été lue, pas le numéro seul. Pour la convention collective
   des hôtels, cafés, restaurants (IDCC 1979), les identifiants KALITEXT et
   KALIARTI sont dans la table CCN, avec la même double lecture.
@@ -59,7 +62,7 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--fond);color:var(--encre);
     font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .wrap{max-width:1360px;margin:0 auto;padding:0 20px}
 
   header.site{background:var(--encre);color:#fff;padding:14px 0}
   header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
@@ -71,79 +74,81 @@
   .outils a:hover{background:rgba(255,255,255,.12)}
   #etat-version{opacity:.55;font-size:11.5px}
 
-  .onglets{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0}
-  .onglets button{font:600 15px/1 system-ui;padding:12px 18px;border-radius:9px;
+  .retour{display:inline-flex;align-items:center;gap:6px;margin:20px 0 0;font:600 13.5px system-ui;
+    color:var(--encre-2);text-decoration:none}
+  .retour:hover{color:var(--encre)}
+  .rappel{margin:14px 0 0;font:600 11.5px/1 system-ui;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--encre-3)}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+  .onglets button{font:600 15px/1 system-ui;padding:12px 20px;border-radius:9px;
     border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
   .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff}
 
-  .bloc{background:var(--carte);border:1px solid var(--filet-2);border-radius:13px;
-    box-shadow:var(--ombre);padding:18px 20px;margin:18px 0}
+  /* Les champs à gauche, le document à droite. Sous 1000 pixels, les champs
+     passent au-dessus : sur un téléphone, on remplit puis on lit. */
+  .plan{display:grid;gap:20px;grid-template-columns:1fr;margin:20px 0 0;align-items:start}
+  @media (min-width:1000px){.plan{grid-template-columns:340px 1fr}
+    .champs{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto}}
 
-  .grille{display:grid;gap:14px;grid-template-columns:1fr}
-  @media (min-width:720px){.grille{grid-template-columns:1fr 1fr}
-    .grille .pleine{grid-column:1/-1}}
-  label.ch{display:block}
-  label.ch>span.nom{display:block;font:600 12.5px/1.3 system-ui;color:var(--encre-2);
-    margin:0 0 5px;letter-spacing:.01em}
+  .champs{background:var(--carte);border:1px solid var(--filet-2);border-radius:13px;
+    box-shadow:var(--ombre);padding:16px 17px}
+  .champs h2{margin:0 0 12px;font:600 13px/1 system-ui;text-transform:uppercase;
+    letter-spacing:.09em;color:var(--encre-3)}
+  label.ch{display:block;margin:0 0 12px}
+  label.ch>span.nom{display:block;font:600 12px/1.35 system-ui;color:var(--encre-2);margin:0 0 4px}
   label.ch input, label.ch select, label.ch textarea{
-    width:100%;font:inherit;font-size:15px;padding:9px 11px;border:1px solid var(--filet-2);
+    width:100%;font:inherit;font-size:14.5px;padding:8px 10px;border:1px solid var(--filet-2);
     border-radius:8px;background:var(--carte);color:var(--encre)}
-  label.ch textarea{min-height:86px;resize:vertical;line-height:1.5}
+  label.ch textarea{min-height:110px;resize:vertical;line-height:1.5;font-size:14px}
   label.ch input:focus, label.ch select:focus, label.ch textarea:focus{
     outline:2px solid var(--bleu-clair);border-color:var(--bleu)}
-  .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
-  .barre{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0 0;align-items:center}
-  .btn{font:600 15px/1 system-ui;padding:12px 18px;border-radius:9px;border:1px solid var(--bleu);
+  .btn{font:600 14px/1 system-ui;padding:11px 16px;border-radius:9px;border:1px solid var(--bleu);
     background:var(--bleu);color:#fff;cursor:pointer}
   .btn:hover{background:#172c4f}
   .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2);
-    font-weight:500;font-size:13.5px;padding:10px 14px}
+    font-weight:500;font-size:13px;padding:9px 13px}
   .btn.second:hover{background:var(--creux);color:var(--encre)}
+  .barre{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
 
-  .dates{display:grid;gap:9px;grid-template-columns:1fr;margin:0 0 16px}
-  @media (min-width:640px){.dates{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}}
+  .dates{display:grid;gap:9px;grid-template-columns:1fr;margin:0 0 14px}
+  @media (min-width:640px){.dates{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
   .d{border:1px solid var(--filet);border-left:3px solid var(--bleu);border-radius:8px;
     padding:10px 13px;background:var(--carte)}
   .d.tard{border-left-color:var(--rouge)}
   .d.tot{border-left-color:var(--vert)}
-  .d .q{display:block;font:600 11.5px/1.3 system-ui;text-transform:uppercase;letter-spacing:.07em;
+  .d .q{display:block;font:600 11px/1.3 system-ui;text-transform:uppercase;letter-spacing:.07em;
     color:var(--encre-3)}
-  .d .v{display:block;font:600 18px/1.3 system-ui;margin:3px 0 1px}
-  .d .f{display:block;font-size:11.5px;color:var(--encre-3)}
+  .d .v{display:block;font:600 17px/1.3 system-ui;margin:3px 0 1px}
+  .d .f{display:block;font-size:11.5px;color:var(--encre-3);line-height:1.45}
 
-  .refus{background:var(--rouge-clair);border:1px solid #e8c4c4;border-radius:10px;
-    padding:14px 16px;margin:16px 0;color:#7d2222;font-size:14.5px;line-height:1.6}
-  .refus b{display:block;margin-bottom:4px;font-size:15px}
+  .refus{background:var(--rouge-clair);border:1px solid #e8c4c4;border-radius:11px;
+    padding:16px 18px;margin:0 0 14px;color:#7d2222;font-size:14.5px;line-height:1.6}
+  .refus b{display:block;margin-bottom:5px;font-size:15.5px}
+  .refus div{margin-top:4px}
   .alerte{background:var(--ambre-clair);border:1px solid #ecd9b4;border-radius:10px;
-    padding:12px 15px;margin:12px 0;color:#6b470c;font-size:14px;line-height:1.6}
-  .chiffre{background:var(--bleu-clair);border-radius:10px;padding:12px 15px;margin:12px 0;
-    color:#22385c;font-size:14.5px;line-height:1.6}
+    padding:11px 14px;margin:0 0 12px;color:#6b470c;font-size:13.5px;line-height:1.6}
+  .chiffre{background:var(--bleu-clair);border-radius:10px;padding:11px 14px;margin:0 0 12px;
+    color:#22385c;font-size:13.5px;line-height:1.6}
 
   .feuille{background:#fff;border:1px solid var(--filet-2);border-radius:10px;
-    padding:34px 38px;margin:16px 0;box-shadow:var(--ombre);max-width:100%}
+    padding:38px 44px;box-shadow:var(--ombre)}
   .feuille [contenteditable]{outline:none}
   .feuille [contenteditable]:focus{background:#fffbe9;border-radius:3px}
-  .feuille .b-t1{font:700 19px/1.3 system-ui;margin:0 0 6px;text-align:center;letter-spacing:.01em}
-  .feuille .b-st{font:600 14px/1.4 system-ui;margin:0 0 20px;text-align:center;color:var(--encre-2)}
-  .feuille .b-h1{font:700 15.5px/1.35 system-ui;margin:22px 0 7px}
-  .feuille .b-h2{font:600 14.5px/1.35 system-ui;margin:16px 0 5px}
-  .feuille .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.65;text-align:justify}
+  .feuille .modifie{border-left:2px solid var(--vert);padding-left:8px;margin-left:-10px}
+  .feuille .b-t1{font:700 18px/1.35 system-ui;margin:0 0 6px;text-align:center;letter-spacing:.01em}
+  .feuille .b-st{font:600 13.5px/1.4 system-ui;margin:0 0 22px;text-align:center;color:var(--encre-2)}
+  .feuille .b-h1{font:700 15px/1.35 system-ui;margin:20px 0 7px}
+  .feuille .b-h2{font:600 14px/1.35 system-ui;margin:15px 0 5px}
+  .feuille .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.68;text-align:justify}
   .feuille .b-puce{margin:0 0 5px 18px;font-size:14.5px;line-height:1.6}
   .feuille .b-note{margin:0 0 9px;font-size:12.5px;line-height:1.55;color:var(--encre-3)}
+  .feuille .b-vide{height:9px}
   .feuille .b-trait{border:0;border-top:1px solid var(--filet);margin:20px 0}
-  .feuille .b-saut{border:0;border-top:2px dashed var(--filet-2);margin:26px 0}
-  .feuille .b-sign{margin:22px 0 0;font-size:14.5px;white-space:pre-wrap;line-height:1.7}
-
-  .apres{margin:18px 0 0}
-  .apres h3{font:600 13px/1 system-ui;text-transform:uppercase;letter-spacing:.09em;
-    color:var(--encre-3);margin:0 0 10px}
-
-  .retour{display:inline-flex;align-items:center;gap:6px;margin:22px 0 0;font:600 13.5px system-ui;
-    color:var(--encre-2);text-decoration:none}
-  .retour:hover{color:var(--encre)}
-  .rappel{margin:16px 0 0;font:600 11.5px/1 system-ui;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--encre-3)}
+  .feuille .b-saut{border:0;border-top:2px dashed var(--filet-2);margin:30px 0}
+  .feuille .b-sign{margin:20px 0 0;font-size:14.5px;white-space:pre-wrap;line-height:1.7}
 
   footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
     font-size:12.5px;color:var(--encre-3);line-height:1.65}
@@ -162,9 +167,9 @@
     border:1px solid var(--bleu);background:var(--bleu);color:#fff;cursor:pointer;white-space:nowrap}
 
   @media print{
-    header.site,.onglets,.barre,.retour,.rappel,footer,.maj-dispo,.dates,.apres{display:none !important}
-    .bloc{border:0;box-shadow:none;padding:0}
-    .feuille{border:0;box-shadow:none;padding:0;margin:0}
+    header.site,.onglets,.barre,.retour,.rappel,footer,.maj-dispo,.dates,.champs,.alerte,.chiffre{display:none !important}
+    .plan{display:block}
+    .feuille{border:0;box-shadow:none;padding:0}
     body{background:#fff}
   }
 </style>
@@ -203,33 +208,35 @@
 
   <!-- ═══════════════════════ EMBAUCHER ═══════════════════════ -->
   <section id="o-embauche">
-    <form class="bloc" id="f-embauche" autocomplete="off">
-      <div class="grille">
-        <label class="ch pleine"><span class="nom">Nom et prénom du salarié</span>
+    <div class="plan">
+      <form class="champs" id="f-embauche" autocomplete="off" onsubmit="return false">
+        <h2>Ce qui reste à remplir</h2>
+
+        <label class="ch"><span class="nom">Nom et prénom du salarié</span>
           <input type="text" id="e-nom" placeholder="Madame Lucie MARTIN"></label>
 
         <label class="ch"><span class="nom">Emploi</span>
           <input type="text" id="e-poste" list="l-postes" placeholder="serveur"></label>
         <datalist id="l-postes"></datalist>
 
-        <label class="ch"><span class="nom">Statut, niveau et échelon</span>
-          <div class="duo">
-            <select id="e-statut">
-              <option value="employe">Employé</option>
-              <option value="maitrise">Agent de maîtrise</option>
-              <option value="cadre">Cadre</option>
-            </select>
-            <select id="e-classe"></select>
-          </div></label>
-
         <label class="ch"><span class="nom">Date d'entrée</span>
           <input type="date" id="e-date"></label>
 
+        <label class="ch"><span class="nom">Statut</span>
+          <select id="e-statut">
+            <option value="employe">Employé</option>
+            <option value="maitrise">Agent de maîtrise</option>
+            <option value="cadre">Cadre</option>
+          </select></label>
+
+        <label class="ch"><span class="nom">Niveau et échelon</span>
+          <select id="e-classe"></select></label>
+
         <label class="ch"><span class="nom">Heures par semaine</span>
-          <input type="number" id="e-heures" min="1" max="48" step="0.5" value="35"></label>
+          <input type="number" id="e-heures" min="1" max="48" step="0.5"></label>
 
         <label class="ch"><span class="nom">Salaire mensuel brut (euros)</span>
-          <input type="number" id="e-salaire" min="0" step="0.01" placeholder="1 900,00"></label>
+          <input type="number" id="e-salaire" min="0" step="0.01"></label>
 
         <label class="ch"><span class="nom">Nature du contrat</span>
           <select id="e-nature">
@@ -237,53 +244,51 @@
             <option value="cdd">Contrat à durée déterminée</option>
           </select></label>
 
-        <label class="ch pleine cache" id="e-bloc-motif"><span class="nom">Motif du contrat à durée déterminée</span>
+        <label class="ch cache" id="e-bloc-motif"><span class="nom">Motif du contrat à durée déterminée</span>
           <select id="e-motif"></select></label>
 
-        <label class="ch cache" id="e-bloc-remplace"><span class="nom">Personne remplacée (nom et qualification)</span>
+        <label class="ch cache" id="e-bloc-remplace"><span class="nom">Personne remplacée</span>
           <input type="text" id="e-remplace" placeholder="Madame Anne DUPONT, chef de rang"></label>
 
         <label class="ch cache" id="e-bloc-terme"><span class="nom">Terme du contrat</span>
           <input type="date" id="e-terme"></label>
 
         <label class="ch cache" id="e-bloc-duree"><span class="nom">Durée minimale (mois)</span>
-          <input type="number" id="e-duree" min="0" step="0.5" placeholder="3"></label>
+          <input type="number" id="e-duree" min="0" step="0.5" value="3"></label>
 
-        <label class="ch pleine cache" id="e-bloc-eco">
-          <span class="nom">Un licenciement pour motif économique a-t-il touché ce poste dans les six derniers mois ?</span>
-          <select id="e-eco">
-            <option value="non">Non</option>
-            <option value="oui">Oui</option>
-          </select></label>
-      </div>
-      <div class="barre">
-        <button type="submit" class="btn">Produire le contrat</button>
-        <button type="button" class="btn second" id="e-vider">Vider</button>
-      </div>
-      <div id="e-refus"></div>
-    </form>
+        <label class="ch cache" id="e-bloc-eco">
+          <span class="nom">Un licenciement économique a-t-il touché ce poste dans les six derniers mois ?</span>
+          <select id="e-eco"><option value="non">Non</option><option value="oui">Oui</option></select></label>
 
-    <div id="e-sortie" class="cache"></div>
+        <div class="barre" style="margin:16px 0 0">
+          <button type="button" class="btn second" data-reprendre="embauche">Repartir du texte généré</button>
+        </div>
+      </form>
+
+      <div id="e-doc"></div>
+    </div>
   </section>
 
   <!-- ═══════════════════════ SANCTIONNER ═══════════════════════ -->
   <section id="o-sanction" class="cache">
-    <form class="bloc" id="f-sanction" autocomplete="off">
-      <div class="grille">
+    <div class="plan">
+      <form class="champs" id="f-sanction" autocomplete="off" onsubmit="return false">
+        <h2>Ce qui reste à remplir</h2>
+
         <label class="ch"><span class="nom">Nom et prénom du salarié</span>
           <input type="text" id="s-nom" placeholder="Monsieur Karim BENALI"></label>
 
         <label class="ch"><span class="nom">Adresse du salarié</span>
           <input type="text" id="s-adresse" placeholder="12 rue des Lilas, 95240 Cormeilles"></label>
 
-        <label class="ch"><span class="nom">Emploi</span>
-          <input type="text" id="s-poste" placeholder="cuisinier"></label>
-
         <label class="ch"><span class="nom">Date des faits</span>
           <input type="date" id="s-faits"></label>
 
         <label class="ch"><span class="nom">Date à laquelle vous en avez eu connaissance</span>
           <input type="date" id="s-connaissance"></label>
+
+        <label class="ch pleine"><span class="nom">Ce que vous reprochez, dans vos mots</span>
+          <textarea id="s-griefs" placeholder="Le 3 septembre 2026, vous avez quitté votre poste à 19 h 30 sans prévenir, alors que le service commençait, laissant la cuisine sans cuisinier pendant deux heures."></textarea></label>
 
         <label class="ch"><span class="nom">Sanction envisagée</span>
           <select id="s-sanction">
@@ -297,7 +302,7 @@
         <label class="ch cache" id="s-bloc-jours"><span class="nom">Durée de la mise à pied (jours ouvrés)</span>
           <input type="number" id="s-jours" min="1" max="15" step="1" value="1"></label>
 
-        <label class="ch" id="s-bloc-entretien"><span class="nom">Date de l'entretien préalable</span>
+        <label class="ch cache" id="s-bloc-entretien"><span class="nom">Date de l'entretien préalable</span>
           <input type="date" id="s-entretien"></label>
 
         <label class="ch cache" id="s-bloc-heure"><span class="nom">Heure et lieu de l'entretien</span>
@@ -306,23 +311,21 @@
             <input type="text" id="s-lieu" placeholder="au siège de la société">
           </div></label>
 
-        <label class="ch pleine"><span class="nom">Ce que vous reprochez, dans vos mots</span>
-          <textarea id="s-griefs" placeholder="Le 3 septembre 2026, vous avez quitté votre poste à 19 h 30 sans prévenir, alors que le service commençait, laissant la cuisine sans cuisinier pendant deux heures."></textarea></label>
-      </div>
-      <div class="barre">
-        <button type="submit" class="btn">Produire les courriers</button>
-        <button type="button" class="btn second" id="s-vider">Vider</button>
-      </div>
-      <div id="s-refus"></div>
-    </form>
+        <div class="barre" style="margin:16px 0 0">
+          <button type="button" class="btn second" data-reprendre="sanction">Repartir du texte généré</button>
+        </div>
+      </form>
 
-    <div id="s-sortie" class="cache"></div>
+      <div id="s-doc"></div>
+    </div>
   </section>
 
   <!-- ═══════════════════════ LICENCIER ═══════════════════════ -->
   <section id="o-licenciement" class="cache">
-    <form class="bloc" id="f-licenciement" autocomplete="off">
-      <div class="grille">
+    <div class="plan">
+      <form class="champs" id="f-licenciement" autocomplete="off" onsubmit="return false">
+        <h2>Ce qui reste à remplir</h2>
+
         <label class="ch"><span class="nom">Nom et prénom du salarié</span>
           <input type="text" id="l-nom" placeholder="Monsieur Karim BENALI"></label>
 
@@ -332,19 +335,6 @@
         <label class="ch"><span class="nom">Emploi</span>
           <input type="text" id="l-poste" placeholder="cuisinier"></label>
 
-        <label class="ch"><span class="nom">Statut</span>
-          <select id="l-statut">
-            <option value="employe">Employé</option>
-            <option value="maitrise">Agent de maîtrise</option>
-            <option value="cadre">Cadre</option>
-          </select></label>
-
-        <label class="ch"><span class="nom">Date d'entrée dans l'entreprise</span>
-          <input type="date" id="l-entree"></label>
-
-        <label class="ch"><span class="nom">Salaire mensuel brut de référence (euros)</span>
-          <input type="number" id="l-salaire" min="0" step="0.01" placeholder="2 100,00"></label>
-
         <label class="ch"><span class="nom">Motif</span>
           <select id="l-motif">
             <option value="faute">Faute (disciplinaire)</option>
@@ -352,7 +342,10 @@
             <option value="personnel">Motif personnel non disciplinaire</option>
           </select></label>
 
-        <label class="ch" id="l-bloc-connaissance"><span class="nom">Date à laquelle vous avez eu connaissance des faits</span>
+        <label class="ch pleine"><span class="nom">Les motifs, dans vos mots</span>
+          <textarea id="l-griefs" placeholder="Le 3 septembre 2026, vous avez quitté votre poste sans prévenir. Le 12 septembre, malgré l'avertissement du 8 septembre, vous avez de nouveau..."></textarea></label>
+
+        <label class="ch" id="l-bloc-connaissance"><span class="nom">Connaissance des faits</span>
           <input type="date" id="l-connaissance"></label>
 
         <label class="ch"><span class="nom">Remise ou présentation de la convocation</span>
@@ -367,28 +360,35 @@
             <input type="text" id="l-lieu" placeholder="au siège de la société">
           </div></label>
 
-        <label class="ch"><span class="nom">Le salarié est-il représentant du personnel ?</span>
-          <select id="l-protege">
-            <option value="non">Non</option>
-            <option value="oui">Oui</option>
+        <label class="ch"><span class="nom">Date d'entrée dans l'entreprise</span>
+          <input type="date" id="l-entree"></label>
+
+        <label class="ch"><span class="nom">Statut</span>
+          <select id="l-statut">
+            <option value="employe">Employé</option>
+            <option value="maitrise">Agent de maîtrise</option>
+            <option value="cadre">Cadre</option>
           </select></label>
 
-        <label class="ch pleine"><span class="nom">Les motifs, dans vos mots</span>
-          <textarea id="l-griefs" placeholder="Le 3 septembre 2026, vous avez quitté votre poste sans prévenir. Le 12 septembre, malgré l'avertissement du 8 septembre, vous avez de nouveau..."></textarea></label>
-      </div>
-      <div class="barre">
-        <button type="submit" class="btn">Produire les courriers</button>
-        <button type="button" class="btn second" id="l-vider">Vider</button>
-      </div>
-      <div id="l-refus"></div>
-    </form>
+        <label class="ch"><span class="nom">Salaire mensuel brut de référence (euros)</span>
+          <input type="number" id="l-salaire" min="0" step="0.01"></label>
 
-    <div id="l-sortie" class="cache"></div>
+        <label class="ch"><span class="nom">Le salarié est-il représentant du personnel ?</span>
+          <select id="l-protege"><option value="non">Non</option><option value="oui">Oui</option></select></label>
+
+        <div class="barre" style="margin:16px 0 0">
+          <button type="button" class="btn second" data-reprendre="licenciement">Repartir du texte généré</button>
+        </div>
+      </form>
+
+      <div id="l-doc"></div>
+    </div>
   </section>
 
   <footer>
     Tout est calculé et rédigé dans ce navigateur : aucune donnée de salarié ne part sur un réseau.
-    Le document produit se modifie directement à l'écran avant d'être emporté.
+    Le document se corrige directement à l'écran, et les paragraphes corrigés à la main sont
+    conservés quand le reste se réécrit.
     <details>
       <summary>Les textes lus, avec leur identifiant de version</summary>
       <div class="src" id="sources"></div>
@@ -427,7 +427,7 @@
     "L1221-13": { id: "LEGIARTI000033971569",
       dit: "registre unique du personnel ; les mentions sont portées au moment de l'embauche et de façon indélébile" },
     "D1221-23": { id: "LEGIARTI000018537878",
-      dit: "indications complémentaires du registre : nationalité, date de naissance, sexe, emploi, qualification, dates d'entrée et de sortie" },
+      dit: "indications du registre : nationalité, date de naissance, sexe, emploi, qualification, dates d'entrée et de sortie" },
     "R4624-10": { id: "LEGIARTI000033769085",
       dit: "visite d'information et de prévention dans un délai qui n'excède pas trois mois à compter de la prise effective du poste" },
     "L1221-19": { id: "LEGIARTI000019071113",
@@ -468,8 +468,6 @@
       dit: "la relation poursuivie après le terme devient un contrat à durée indéterminée, l'ancienneté est conservée" },
     "L1243-13": { id: "LEGIARTI000035643980",
       dit: "renouvellement dans les conditions d'un accord de branche étendu ; conditions stipulées au contrat ou par avenant avant le terme" },
-    "L1244-3": { id: "LEGIARTI000035644007",
-      dit: "délai de carence entre deux contrats sur le même poste, calculé en jours d'ouverture de l'entreprise" },
     "L3121-27": { id: "LEGIARTI000033020376",
       dit: "la durée légale de travail effectif est de trente-cinq heures par semaine" },
     "L3121-36": { id: "LEGIARTI000033020341",
@@ -506,8 +504,6 @@
       dit: "aucune sanction antérieure de plus de trois ans ne peut être invoquée à l'appui d'une nouvelle sanction" },
     "R1332-1": { id: "LEGIARTI000018536889",
       dit: "la convocation indique l'objet, la date, l'heure et le lieu, rappelle l'assistance, et est remise contre récépissé ou par lettre recommandée dans le délai de deux mois" },
-    "L1231-1": { id: "LEGIARTI000019071194",
-      dit: "le contrat à durée indéterminée peut être rompu à l'initiative de l'employeur ou du salarié ; hors période d'essai" },
     "L1232-1": { id: "LEGIARTI000019071126",
       dit: "tout licenciement pour motif personnel est motivé et justifié par une cause réelle et sérieuse" },
     "L1232-2": { id: "LEGIARTI000006901000",
@@ -549,11 +545,6 @@
     "L1226-9": { id: "LEGIARTI000006900975",
       dit: "pendant la suspension pour accident du travail, rupture seulement pour faute grave ou impossibilité de maintenir le contrat" }
   };
-
-  function art(num) {
-    var t = TEXTES[num];
-    return "article " + num.replace(/^([LRD])(\d)/, "$1. $2") + (t ? "" : "");
-  }
   function ref(nums) {
     return nums.map(function (n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }).join(", ");
   }
@@ -575,24 +566,15 @@
       nom: "convention collective nationale des hôtels, cafés, restaurants du 30 avril 1997",
       idcc: "1979",
       base: "KALITEXT000005670044",
-      /* Article 12 : les mentions que le contrat doit porter. */
-      mentions: "KALIARTI000005826268",
-      /* Article 13 : période d'essai, renouvellement, exclusion du niveau I échelon 1. */
-      essai: { id: "KALIARTI000005826269",
+      mentions: "KALIARTI000005826268",        /* article 12 : mentions du contrat */
+      essai: { id: "KALIARTI000005826269",     /* article 13 : période d'essai */
         dit: "cadres 3 mois renouvelables une fois, agents de maîtrise 2 mois, autres salariés 1 mois ; " +
              "le renouvellement n'est pas applicable au niveau I échelon 1 ; il suppose un accord écrit" },
-      /* Article 30 : préavis, par statut et par ancienneté. */
-      preavis: { id: "KALIARTI000005826296",
+      preavis: { id: "KALIARTI000005826296",   /* article 30 : préavis */
         licenciement: { employe: [8, 30, 60], maitrise: [15, 30, 60], cadre: [30, 90, 90] },
-        demission:    { employe: [8, 15, 30], maitrise: [15, 30, 60], cadre: [30, 90, 90] },
-        recherche: "2 heures par jour de travail pendant le préavis pour chercher un emploi, " +
-                   "dans la limite de la durée hebdomadaire de travail" },
-      /* Article 32 : indemnité conventionnelle de licenciement. */
-      indemnite: { id: "KALIARTI000005826298", anciennete: 24, dixieme: 0.10, quinzieme: 1 / 15 },
-      /* Article 35.2 : avantage en nature nourriture. */
-      nourriture: "KALIARTI000005826303",
-      /* Avenant n° 2 du 5 février 2007 : durée du travail, majorations, durées
-         maximales, habillage, temps partiel. */
+        demission:    { employe: [8, 15, 30], maitrise: [15, 30, 60], cadre: [30, 90, 90] } },
+      indemnite: { id: "KALIARTI000005826298", anciennete: 24, quinzieme: 1 / 15 },
+      nourriture: "KALIARTI000005826303",      /* article 35.2 */
       avenant2: "KALITEXT000005670080",
       duree: { id: "KALIARTI000005826385", heures: 39,
         dit: "la durée hebdomadaire de travail est fixée à 39 heures pour toutes les entreprises ; " +
@@ -604,19 +586,17 @@
         dit: "est heure supplémentaire toute heure accomplie au-delà de 35 heures ; " +
              "contingent de 360 heures par an dans les établissements permanents" },
       maxima: { id: "KALIARTI000005826388",
-        jour: { cuisine: "11 heures", reception: "12 heures", administratif: "10 heures", autre: "11 heures 30 minutes" },
-        semaine: "46 heures en moyenne sur douze semaines consécutives, 48 heures sur une même semaine" },
+        jour: { cuisine: "11 heures", reception: "12 heures", administratif: "10 heures",
+                autre: "11 heures 30 minutes" },
+        semaine: "46 heures en moyenne sur douze semaines consécutives et 48 heures sur une même semaine" },
       habillage: { id: "KALIARTI000005826389",
         dit: "à défaut de contrepartie fixée par l'entreprise, un jour de repos par an à partir d'un an " +
              "d'ancienneté, au prorata en deçà, ou une compensation en rémunération équivalente" },
-      tempsPartiel: { id: "KALIARTI000005826396", prevenance: 7, prevenanceCourte: 3, repos: 0.10,
+      tempsPartiel: { id: "KALIARTI000005826396", prevenance: 7, prevenanceCourte: 3,
         dit: "modification notifiée sept jours au moins à l'avance, trois jours ouvrés en cas de " +
              "circonstance exceptionnelle avec un repos compensateur de 10 % des heures effectuées par jour de retard" },
-      /* Avenant n° 30 du 31 mai 2022 : cinq niveaux, trois échelons chacun. */
       classification: { texte: "KALITEXT000046478189", id: "KALIARTI000046478194",
         dit: "cinq niveaux de qualification déclinés chacun en trois échelons, y compris le niveau IV" },
-      /* Avenant n° 33 du 19 juin 2024, article 2 : les minima horaires bruts,
-         applicables depuis le 1er décembre 2024. */
       salaires: { texte: "KALITEXT000050394790", id: "KALIARTI000050394795",
         depuis: "1er décembre 2024",
         grille: {
@@ -626,10 +606,9 @@
           "IV-1": 14.40, "IV-2": 14.77, "IV-3": 15.40,
           "V-1": 18.43, "V-2": 21.78, "V-3": 28.12
         } },
-      /* Les emplois repères de l'annexe 2 de l'avenant n° 30, tels que
-         l'article 2.1 les énumère. Le tableau qui leur donne un niveau n'est
-         pas reproduit sur Légifrance : la page propose donc les intitulés,
-         jamais le classement, qui reste à l'employeur. */
+      /* Les emplois repères que l'article 2.1 de l'avenant n° 30 énumère. Le
+         tableau qui leur donne un niveau, en annexe 2, n'est pas reproduit sur
+         Légifrance : la page propose les intitulés, jamais le classement. */
       emplois: ["groom", "bagagiste", "portier", "voiturier", "chauffeur", "assistant concierge",
         "concierge", "chef concierge", "veilleur de nuit", "réceptionniste", "assistant chef de réception",
         "chef de brigade", "chef de réception", "équipier hôtellerie", "femme de chambre", "valet de chambre",
@@ -652,9 +631,7 @@
   /* ═══════════════════════════════════════════════ le profil de l'entreprise */
   var profil = null;
   try { profil = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
-  if (!profil || !profil.denomination) {
-    if (window.Profil) profil = window.Profil.lire();
-  }
+  if ((!profil || !profil.denomination) && window.Profil) profil = window.Profil.lire();
   if (!profil || !profil.denomination) { location.replace("index.html"); return; }
   $("#rappel-entreprise").textContent = "Gérer - " + profil.denomination;
 
@@ -691,8 +668,8 @@
     var i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7;
     var m = Math.floor((a + 11 * h + 22 * l) / 451);
     var mois = Math.floor((h + l - 7 * m + 114) / 31);
-    var jour = ((h + l - 7 * m + 114) % 31) + 1;
-    return new Date(an, mois - 1, jour);
+    var jourM = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(an, mois - 1, jourM);
   }
   var cacheFeries = {};
   function feries(an) {
@@ -712,8 +689,8 @@
     return !!feries(d.getFullYear())[d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate()];
   }
   /* Jour ouvrable : tous les jours de la semaine sauf le dimanche et les jours
-     fériés. C'est la règle de décompte retenue ici ; elle est dite à l'écran,
-     parce qu'un calcul qui ne dit pas sa règle ne se vérifie pas. */
+     fériés. C'est la règle de décompte retenue ici, et elle est dite à l'écran :
+     un calcul qui ne dit pas sa règle ne se vérifie pas. */
   function estOuvrable(d) { return d.getDay() !== 0 && !estFerie(d); }
   function jour(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
   function prochainOuvrable(d) { var x = new Date(d.getTime()); while (!estOuvrable(x)) x = jour(x, 1); return x; }
@@ -727,15 +704,18 @@
     return prochainOuvrable(jour(d, 1));
   }
   function plusMois(d, n) {
-    var x = new Date(d.getTime()), jourVoulu = x.getDate();
+    var x = new Date(d.getTime()), voulu = x.getDate();
     x.setMonth(x.getMonth() + n);
-    if (x.getDate() < jourVoulu) x.setDate(0);   /* 31 janvier + 1 mois = 28 ou 29 février */
+    if (x.getDate() < voulu) x.setDate(0);   /* 31 janvier plus un mois : le 28 ou le 29 février */
     return x;
   }
+  function iso(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
   function lireDate(id) {
-    var v = $(id).value;
-    if (!v) return null;
-    var p = v.split("-");
+    var el = $(id); if (!el || !el.value) return null;
+    var p = el.value.split("-");
     return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
   }
   var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
@@ -747,6 +727,7 @@
   }
   function dateFrJour(d) { return d ? JOURS[d.getDay()] + " " + dateFr(d) : "[date]"; }
   function moisAnnees(d1, d2) {
+    if (!d1 || !d2) return 0;
     var m = (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
     if (d2.getDate() < d1.getDate()) m--;
     return Math.max(0, m);
@@ -755,25 +736,23 @@
     return Number(n).toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   function nb(n, dec) {
-    return Number(n).toLocaleString("fr-FR", { minimumFractionDigits: dec || 0, maximumFractionDigits: dec === undefined ? 2 : dec });
+    return Number(n).toLocaleString("fr-FR",
+      { minimumFractionDigits: dec || 0, maximumFractionDigits: dec === undefined ? 2 : dec });
   }
+  function heureFr(h) { return h ? h.replace(":", " h ") : "[heure]"; }
 
   /* ═══════════════════════════════════════════════ heures et rémunération */
-  /* Les heures mensuelles d'une durée hebdomadaire : 52 semaines sur 12 mois. */
   function heuresMois(h) { return Math.round(h * 52 / 12 * 100) / 100; }
-
-  /* Le nombre d'heures « équivalentes » payées pour une durée hebdomadaire,
-     majorations comprises. Pour l'IDCC 1979, les paliers de l'article 4 de
-     l'avenant n° 2 ; sinon ceux de l'article L. 3121-36. */
+  /* Les heures « équivalentes » payées pour une durée hebdomadaire,
+     majorations comprises : paliers de l'article 4 de l'avenant n° 2 pour
+     l'IDCC 1979, ceux de l'article L. 3121-36 sinon. */
   function heuresPayees(h) {
-    var normales = Math.min(h, 35), reste = Math.max(0, h - 35), equi = normales;
-    var paliers = ccn && ccn.majorations
-      ? ccn.majorations.paliers
+    var reste = Math.max(0, h - 35), equi = Math.min(h, 35);
+    var paliers = ccn && ccn.majorations ? ccn.majorations.paliers
       : [{ jusqu: 43, taux: 0.25 }, { jusqu: 99, taux: 0.50 }];
     var bas = 35;
     for (var i = 0; i < paliers.length && reste > 0; i++) {
-      var large = Math.max(0, Math.min(h, paliers[i].jusqu) - bas);
-      var prise = Math.min(reste, large);
+      var prise = Math.min(reste, Math.max(0, Math.min(h, paliers[i].jusqu) - bas));
       equi += prise * (1 + paliers[i].taux);
       reste -= prise; bas = paliers[i].jusqu;
     }
@@ -783,46 +762,64 @@
     if (ccn && ccn.salaires && ccn.salaires.grille[cle] !== undefined) return ccn.salaires.grille[cle];
     return null;
   }
+  function preavisMot(jours) {
+    if (jours === 8) return "huit jours";
+    if (jours === 15) return "quinze jours";
+    if (jours === 30) return "un mois";
+    if (jours === 60) return "deux mois";
+    if (jours === 90) return "trois mois";
+    return jours + " jours";
+  }
 
-  /* ═══════════════════════════════════════════════════════════ le rendu */
-  /* Un document est une liste de blocs. Chaque bloc devient une ligne
-     modifiable à l'écran, et repart telle quelle dans le .docx. */
-  function feuille(blocs, cible) {
-    var h = '<div class="feuille" id="' + cible + '-feuille">';
-    blocs.forEach(function (b, i) {
-      var k = b.k;
-      if (k === "trait" || k === "saut") { h += '<hr class="b-' + k + '">'; return; }
-      h += '<div class="b-' + k + '" contenteditable="true" data-k="' + k + '" data-i="' + i + '">' +
-        ech(b.t) + "</div>";
+  /* ═══════════════════════════════════════════════════════════════════════
+     LE RENDU.
+
+     Un document est une liste de blocs. Chaque bloc devient une ligne
+     modifiable à l'écran, et repart telle quelle dans le .docx. Quand les
+     champs changent, tout est réécrit - sauf les blocs corrigés à la main :
+     la correction est retenue sur le texte d'origine du bloc, pas sur sa
+     place, pour survivre à l'ajout ou au retrait d'un article.
+     ══════════════════════════════════════════════════════════════════════ */
+  var corrections = { embauche: {}, sanction: {}, licenciement: {} };
+
+  function feuilleHtml(blocs, module) {
+    var c = corrections[module], h = '<div class="feuille" id="' + module + '-feuille">';
+    blocs.forEach(function (b) {
+      if (b.k === "trait" || b.k === "saut") { h += '<hr class="b-' + b.k + '">'; return; }
+      if (b.k === "vide") { h += '<div class="b-vide"></div>'; return; }
+      var origine = b.t, texte = Object.prototype.hasOwnProperty.call(c, origine) ? c[origine] : b.t;
+      h += '<div class="b-' + b.k + (texte !== origine ? " modifie" : "") +
+        '" contenteditable="true" data-k="' + b.k + '" data-o="' + ech(origine) + '">' +
+        ech(texte) + "</div>";
     });
     return h + "</div>";
   }
-  function relire(id) {
+  function relire(module) {
     var out = [];
-    document.querySelectorAll("#" + id + " > *").forEach(function (el) {
-      if (el.tagName === "HR") { out.push({ k: el.classList.contains("b-saut") ? "saut" : "trait", t: "" }); return; }
+    document.querySelectorAll("#" + module + "-feuille > *").forEach(function (el) {
+      if (el.tagName === "HR") {
+        out.push({ k: el.classList.contains("b-saut") ? "saut" : "trait", t: "" }); return;
+      }
+      if (el.classList.contains("b-vide")) { out.push({ k: "p", t: "" }); return; }
       out.push({ k: el.getAttribute("data-k"), t: el.innerText.replace(/ /g, " ") });
     });
     return out;
   }
   var VERS_EXPORT = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "puce",
     note: "note", sign: "p", trait: "trait", saut: "saut" };
-  function exporterDocx(idFeuille, titre, nomFichier) {
-    var items = relire(idFeuille).map(function (b) {
-      return { k: VERS_EXPORT[b.k] || "p", t: b.t };
-    });
-    window.AuditExport.telecharger(window.AuditExport.docx(items, titre), nomFichier,
+  function exporterDocx(module, titre, fichier) {
+    var items = relire(module).map(function (b) { return { k: VERS_EXPORT[b.k] || "p", t: b.t }; });
+    window.AuditExport.telecharger(window.AuditExport.docx(items, titre), fichier,
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   }
-  function exporterTxt(idFeuille, nomFichier) {
-    var t = relire(idFeuille).map(function (b) {
+  function exporterTxt(module, fichier) {
+    var t = relire(module).map(function (b) {
       return b.k === "trait" || b.k === "saut" ? "" : b.t;
     }).join("\n");
-    window.AuditExport.telecharger(t, nomFichier, "text/plain;charset=utf-8");
+    window.AuditExport.telecharger(t, fichier, "text/plain;charset=utf-8");
   }
-  function nom(base, ext) {
-    var d = new Date();
-    return base + "-" + d.toISOString().slice(0, 10) + "." + ext;
+  function nomFichier(base, ext) {
+    return base + "-" + new Date().toISOString().slice(0, 10) + "." + ext;
   }
   function slug(s) {
     return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "")
@@ -833,13 +830,18 @@
       '<span class="v">' + ech(typeof d === "string" ? d : dateFrJour(d)) + "</span>" +
       '<span class="f">' + ech(f) + "</span></div>";
   }
-  function barreSortie(idFeuille, titre, base) {
+  function barre(module, titre, base) {
     return '<div class="barre">' +
-      '<button type="button" class="btn" data-dl="' + idFeuille + '" data-titre="' + ech(titre) +
+      '<button type="button" class="btn" data-dl="' + module + '" data-titre="' + ech(titre) +
       '" data-base="' + ech(base) + '">Télécharger en Word</button>' +
-      '<button type="button" class="btn second" data-txt="' + idFeuille + '" data-base="' + ech(base) + '">En texte</button>' +
+      '<button type="button" class="btn second" data-txt="' + module + '" data-base="' + ech(base) +
+      '">En texte</button>' +
       '<button type="button" class="btn second" data-print="1">Imprimer</button>' +
       "</div>";
+  }
+  function refusHtml(liste) {
+    return '<div class="refus"><b>Ce document n\'est pas produit.</b>' +
+      liste.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>";
   }
 
   /* ═══════════════════════════════════════════════════════════════════════
@@ -852,88 +854,49 @@
   var MOTIFS = [
     { v: "remp-absence", t: "Remplacement d'un salarié absent", base: "L1242-2", al: "1° a",
       remplace: true, sansTerme: true, max: 18 },
-    { v: "remp-partiel", t: "Remplacement d'un salarié passé provisoirement à temps partiel", base: "L1242-2", al: "1° b",
-      remplace: true, max: 18 },
-    { v: "remp-suspendu", t: "Remplacement d'un salarié dont le contrat est suspendu", base: "L1242-2", al: "1° c",
-      remplace: true, sansTerme: true, max: 18 },
-    { v: "remp-depart", t: "Remplacement d'un salarié parti définitivement avant la suppression de son poste", base: "L1242-2", al: "1° d",
-      remplace: true, max: 24 },
-    { v: "attente-cdi", t: "Attente de l'entrée en service d'un salarié recruté en contrat à durée indéterminée", base: "L1242-2", al: "1° e",
-      sansTerme: true, max: 9 },
-    { v: "accroissement", t: "Accroissement temporaire de l'activité de l'entreprise", base: "L1242-2", al: "2°",
-      eco: true, max: 18 },
+    { v: "remp-partiel", t: "Remplacement d'un salarié passé provisoirement à temps partiel",
+      base: "L1242-2", al: "1° b", remplace: true, max: 18 },
+    { v: "remp-suspendu", t: "Remplacement d'un salarié dont le contrat est suspendu",
+      base: "L1242-2", al: "1° c", remplace: true, sansTerme: true, max: 18 },
+    { v: "remp-depart", t: "Remplacement d'un salarié parti définitivement avant la suppression de son poste",
+      base: "L1242-2", al: "1° d", remplace: true, max: 24 },
+    { v: "attente-cdi", t: "Attente de l'entrée en service d'un salarié recruté en contrat à durée indéterminée",
+      base: "L1242-2", al: "1° e", sansTerme: true, max: 9 },
+    { v: "accroissement", t: "Accroissement temporaire de l'activité de l'entreprise",
+      base: "L1242-2", al: "2°", eco: true, max: 18 },
     { v: "saison", t: "Emploi à caractère saisonnier", base: "L1242-2", al: "3°",
       sansTerme: true, max: 18, sansIndemnite: true },
-    { v: "usage", t: "Emploi pour lequel il est d'usage de ne pas recourir au contrat à durée indéterminée", base: "L1242-2", al: "3°",
-      sansTerme: true, max: 18, sansIndemnite: true },
-    { v: "remp-chef", t: "Remplacement d'un chef d'entreprise ou d'un non-salarié", base: "L1242-2", al: "4°",
-      remplace: true, sansTerme: true, max: 18 },
-    { v: "remp-agricole", t: "Remplacement d'un chef d'exploitation agricole", base: "L1242-2", al: "5°",
-      remplace: true, sansTerme: true, max: 18 },
-    { v: "objet-defini", t: "Ingénieur ou cadre recruté pour la réalisation d'un objet défini", base: "L1242-2", al: "6°",
-      sansTerme: true, accord: true, max: 0 },
-    { v: "emploi", t: "Recrutement au titre d'un dispositif légal en faveur de personnes sans emploi", base: "L1242-3", al: "1°", max: 0 },
-    { v: "formation", t: "Complément de formation professionnelle assuré par l'employeur", base: "L1242-3", al: "2°", max: 0 },
+    { v: "usage", t: "Emploi pour lequel il est d'usage de ne pas recourir au contrat à durée indéterminée",
+      base: "L1242-2", al: "3°", sansTerme: true, max: 18, sansIndemnite: true },
+    { v: "remp-chef", t: "Remplacement d'un chef d'entreprise ou d'un non-salarié",
+      base: "L1242-2", al: "4°", remplace: true, sansTerme: true, max: 18 },
+    { v: "remp-agricole", t: "Remplacement d'un chef d'exploitation agricole",
+      base: "L1242-2", al: "5°", remplace: true, sansTerme: true, max: 18 },
+    { v: "objet-defini", t: "Ingénieur ou cadre recruté pour la réalisation d'un objet défini",
+      base: "L1242-2", al: "6°", sansTerme: true, max: 0 },
+    { v: "emploi", t: "Recrutement au titre d'un dispositif légal en faveur de personnes sans emploi",
+      base: "L1242-3", al: "1°", max: 0 },
+    { v: "formation", t: "Complément de formation professionnelle assuré par l'employeur",
+      base: "L1242-3", al: "2°", max: 0 },
     { v: "recherche", t: "Activités de recherche confiées au salarié", base: "L1242-3", al: "3°", max: 0 },
     { v: "reconversion", t: "Période de reconversion, six mois au moins", base: "L1242-3", al: "5°", max: 0 },
-    { v: "greve", t: "Remplacement d'un salarié en grève", interdit: "L1242-6" },
-    { v: "dangereux", t: "Travaux particulièrement dangereux de la liste réglementaire", interdit: "L1242-6" },
-    { v: "permanent", t: "Pourvoir un poste permanent de l'entreprise", interdit: "L1242-1" },
-    { v: "autre", t: "Autre motif", interdit: "L1242-2" }
+    { v: "greve", t: "Remplacement d'un salarié en grève", interdit: "L1242-6",
+      pourquoi: "Il est interdit de conclure un contrat à durée déterminée pour remplacer un salarié " +
+        "dont le contrat est suspendu à la suite d'un conflit collectif de travail." },
+    { v: "dangereux", t: "Travaux particulièrement dangereux de la liste réglementaire", interdit: "L1242-6",
+      pourquoi: "Il est interdit d'affecter un salarié en contrat à durée déterminée à ces travaux, " +
+        "sauf dérogation exceptionnelle de l'autorité administrative." },
+    { v: "permanent", t: "Pourvoir un poste permanent de l'entreprise", interdit: "L1242-1",
+      pourquoi: "Un contrat à durée déterminée ne peut avoir ni pour objet ni pour effet de pourvoir " +
+        "durablement un emploi lié à l'activité normale et permanente de l'entreprise." },
+    { v: "autre", t: "Autre motif", interdit: "L1242-2",
+      pourquoi: "Un contrat à durée déterminée ne peut être conclu que dans les cas énumérés aux " +
+        "articles L. 1242-2 et L. 1242-3. Hors de ces cas, il n'y a pas de contrat à durée déterminée " +
+        "possible : c'est un contrat à durée indéterminée qu'il faut conclure." }
   ];
-  function motif(v) {
+  function motifDe(v) {
     for (var i = 0; i < MOTIFS.length; i++) if (MOTIFS[i].v === v) return MOTIFS[i];
     return null;
-  }
-
-  /* La grille de classification proposée : celle de la convention lue, sinon
-     rien. On ne fabrique pas une grille. */
-  function remplirClasses() {
-    var sel = $("#e-classe");
-    sel.innerHTML = "";
-    if (ccn && ccn.salaires) {
-      ["I", "II", "III", "IV", "V"].forEach(function (n) {
-        ["1", "2", "3"].forEach(function (e) {
-          var cle = n + "-" + e, taux = ccn.salaires.grille[cle];
-          var o = document.createElement("option");
-          o.value = cle;
-          o.textContent = "Niveau " + n + ", échelon " + e + " - " + eur(taux) + " euros de l'heure";
-          sel.appendChild(o);
-        });
-      });
-    } else {
-      var o = document.createElement("option");
-      o.value = ""; o.textContent = "grille non lue - à compléter sur le contrat";
-      sel.appendChild(o);
-      sel.disabled = true;
-    }
-  }
-  function remplirMotifs() {
-    var sel = $("#e-motif");
-    sel.innerHTML = '<option value="">-</option>';
-    MOTIFS.forEach(function (m) {
-      var o = document.createElement("option");
-      o.value = m.v;
-      o.textContent = m.t + (m.interdit ? "" : "  (" + ref([m.base]) + " " + m.al + ")");
-      sel.appendChild(o);
-    });
-  }
-  function remplirPostes() {
-    if (!ccn || !ccn.emplois) return;
-    var dl = $("#l-postes");
-    ccn.emplois.forEach(function (e) {
-      var o = document.createElement("option"); o.value = e; dl.appendChild(o);
-    });
-  }
-
-  function majEmbauche() {
-    var cdd = $("#e-nature").value === "cdd";
-    $("#e-bloc-motif").classList.toggle("cache", !cdd);
-    var m = cdd ? motif($("#e-motif").value) : null;
-    $("#e-bloc-remplace").classList.toggle("cache", !(m && m.remplace));
-    $("#e-bloc-terme").classList.toggle("cache", !cdd || !m || !!m.interdit);
-    $("#e-bloc-duree").classList.toggle("cache", !(m && m.sansTerme));
-    $("#e-bloc-eco").classList.toggle("cache", !(m && m.eco));
   }
 
   /* La période d'essai. La convention de 1997 fixe des durées plus courtes que
@@ -942,105 +905,65 @@
      peut toujours stipuler moins. Le renouvellement, lui, suppose un accord de
      branche étendu, et l'article 13 de la convention le prévoit. */
   function essaiCdi(statut, classe) {
-    var duree = statut === "cadre" ? 4 : (statut === "maitrise" ? 3 : 2);
-    var mot = duree === 4 ? "quatre" : (duree === 3 ? "trois" : "deux");
-    var renouvelable = !!(ccn && ccn.essai);
-    if (ccn && classe === "I-1") renouvelable = false;
-    return { mois: duree, mot: mot, renouvelable: renouvelable };
+    var mois = statut === "cadre" ? 4 : (statut === "maitrise" ? 3 : 2);
+    var mot = mois === 4 ? "quatre" : (mois === 3 ? "trois" : "deux");
+    var renouvelable = !!(ccn && ccn.essai) && !(ccn && classe === "I-1");
+    return { mois: mois, mot: mot, renouvelable: renouvelable };
   }
-  /* Article L. 1242-10 : un jour par semaine, deux semaines au plus si le
-     contrat est d'au plus six mois, un mois au-delà. */
-  function essaiCdd(semaines, moisContrat) {
-    var jours = Math.floor(semaines);
-    var plafond = moisContrat <= 6 ? 14 : 30;
-    return Math.max(1, Math.min(jours, plafond));
+  function essaiCdd(moisContrat) {
+    var semaines = Math.max(1, Math.round((moisContrat || 1) * 52 / 12));
+    return Math.max(1, Math.min(semaines, moisContrat <= 6 ? 14 : 30));
   }
 
-  function contrat() {
-    var d = {
+  function lireEmbauche() {
+    return {
       nom: $("#e-nom").value.trim(),
       poste: $("#e-poste").value.trim(),
       statut: $("#e-statut").value,
       classe: $("#e-classe").value,
       entree: lireDate("#e-date"),
-      heures: Number($("#e-heures").value),
-      salaire: Number($("#e-salaire").value),
+      heures: Number($("#e-heures").value) || 0,
+      salaire: Number($("#e-salaire").value) || 0,
       cdd: $("#e-nature").value === "cdd",
-      motif: motif($("#e-motif").value),
+      motif: motifDe($("#e-motif").value),
       remplace: $("#e-remplace").value.trim(),
       terme: lireDate("#e-terme"),
-      dureeMin: Number($("#e-duree").value),
+      dureeMin: Number($("#e-duree").value) || 0,
       eco: $("#e-eco").value === "oui"
     };
+  }
 
-    /* Ce qui manque, et ce que la loi refuse. Un refus dit l'article. */
-    var refus = [];
-    if (!d.nom) refus.push("Le nom du salarié n'est pas saisi.");
-    if (!d.poste) refus.push("L'emploi n'est pas saisi.");
-    if (!d.entree) refus.push("La date d'entrée n'est pas saisie.");
-    if (!(d.heures > 0)) refus.push("La durée hebdomadaire n'est pas saisie.");
-    if (!(d.salaire > 0)) refus.push("Le salaire mensuel brut n'est pas saisi.");
-    if (d.heures > 48) refus.push("Une durée hebdomadaire de plus de 48 heures ne peut pas être stipulée.");
-
-    if (d.cdd) {
-      if (!d.motif) {
-        refus.push("Le motif du contrat n'est pas choisi. Un contrat à durée déterminée sans " +
-          "définition précise de son motif est réputé conclu pour une durée indéterminée (" +
-          ref(["L1242-12"]) + ").");
-      } else if (d.motif.interdit) {
-        refus.push("Ce motif n'autorise pas un contrat à durée déterminée (" + ref([d.motif.interdit]) +
-          "). Aucun contrat n'est produit.");
-      } else {
-        if (d.motif.eco && d.eco) {
-          refus.push("Un licenciement pour motif économique a touché ce poste dans les six derniers mois : " +
-            "le contrat pour accroissement temporaire d'activité y est interdit (" + ref(["L1242-5"]) +
-            "), sauf contrat non renouvelable de trois mois au plus ou commande exceptionnelle à l'exportation.");
-        }
-        if (!d.motif.sansTerme && !d.terme) {
-          refus.push("Ce motif impose un terme fixé avec précision dès la conclusion (" + ref(["L1242-7"]) +
-            "). Saisissez la date du terme.");
-        }
-        if (d.motif.sansTerme && !d.terme && !(d.dureeMin > 0)) {
-          refus.push("Sans terme précis, le contrat doit être conclu pour une durée minimale (" +
-            ref(["L1242-12"]) + " 3°). Saisissez-la.");
-        }
-        if (d.terme && d.entree && d.terme <= d.entree) {
-          refus.push("Le terme est antérieur ou égal à la date d'entrée.");
-        }
-        if (d.terme && d.entree && d.motif.max) {
-          var moisContrat = moisAnnees(d.entree, d.terme);
-          if (moisContrat > d.motif.max) {
-            refus.push("La durée du contrat, " + moisContrat + " mois, dépasse le maximum de " +
-              d.motif.max + " mois applicable à ce motif à défaut d'accord de branche (" +
-              ref(["L1242-8-1"]) + ").");
-          }
-        }
-        if (d.motif.remplace && !d.remplace) {
-          refus.push("Le nom et la qualification de la personne remplacée sont une mention obligatoire (" +
-            ref(["L1242-12"]) + " 1°).");
-        }
-      }
+  function contrat(d) {
+    /* Ce que la loi refuse. Un refus dit l'article, et rien ne s'affiche. */
+    if (d.cdd && d.motif && d.motif.interdit) {
+      return { refus: [d.motif.pourquoi + " (" + ref([d.motif.interdit]) + ")."] };
     }
-    if (refus.length) return { refus: refus };
+    if (d.cdd && d.motif && d.motif.eco && d.eco) {
+      return { refus: ["Un licenciement pour motif économique a touché ce poste dans les six derniers " +
+        "mois : le contrat pour accroissement temporaire d'activité y est interdit (" + ref(["L1242-5"]) +
+        "), sauf contrat non renouvelable de trois mois au plus ou commande exceptionnelle à " +
+        "l'exportation soumise au comité social et économique."] };
+    }
+    var moisContrat = d.terme && d.entree ? moisAnnees(d.entree, d.terme) : d.dureeMin;
+    if (d.cdd && d.motif && d.motif.max && d.terme && d.entree && moisContrat > d.motif.max) {
+      return { refus: ["La durée du contrat, " + moisContrat + " mois, dépasse le maximum de " +
+        d.motif.max + " mois applicable à ce motif à défaut d'accord de branche fixant une autre " +
+        "durée (" + ref(["L1242-8-1"]) + ")."] };
+    }
 
-    /* La rémunération : ce que l'on paie, et le plancher conventionnel. */
     var hMois = heuresMois(d.heures);
     var hPayees = heuresPayees(d.heures);
-    var tauxContrat = Math.round(d.salaire / hPayees * 1000) / 1000;
+    var tauxContrat = hPayees > 0 && d.salaire > 0 ? Math.round(d.salaire / hPayees * 1000) / 1000 : 0;
     var tauxMin = tauxMinimum(d.classe);
-    var brutMin = tauxMin ? Math.round(tauxMin * hPayees * 100) / 100 : null;
-    var sousMinimum = brutMin !== null && d.salaire + 0.005 < brutMin;
-    var partiel = d.heures < 35;
+    var brutMin = tauxMin !== null && hPayees > 0 ? Math.round(tauxMin * hPayees * 100) / 100 : null;
+    var partiel = d.heures > 0 && d.heures < 35;
     var supp = Math.max(0, d.heures - 35);
-
-    var moisContrat = d.terme && d.entree ? moisAnnees(d.entree, d.terme) : (d.dureeMin || 0);
-    var essai = d.cdd
-      ? { jours: essaiCdd((moisContrat || 1) * 4.33, moisContrat || 1) }
-      : essaiCdi(d.statut, d.classe);
-
+    var essai = d.cdd ? { jours: essaiCdd(moisContrat) } : essaiCdi(d.statut, d.classe);
     var niveau = d.classe ? d.classe.split("-")[0] : null;
     var echelon = d.classe ? d.classe.split("-")[1] : null;
     var statutMot = d.statut === "cadre" ? "cadre" : (d.statut === "maitrise" ? "agent de maîtrise" : "employé");
+    var nomS = d.nom || "[nom et prénom du salarié]";
+    var poste = d.poste || "[emploi]";
 
     var b = [];
     function p(t) { b.push({ k: "p", t: t }); }
@@ -1048,56 +971,59 @@
     var n = 0;
     function A(t) { n++; b.push({ k: "h1", t: "Article " + n + " - " + t }); }
 
-    b.push({ k: "t1", t: d.cdd ? "CONTRAT DE TRAVAIL À DURÉE DÉTERMINÉE" : "CONTRAT DE TRAVAIL À DURÉE INDÉTERMINÉE" });
-    b.push({ k: "st", t: (partiel ? "À temps partiel" : "À temps plein") + " - " + d.poste });
+    b.push({ k: "t1", t: d.cdd ? "CONTRAT DE TRAVAIL À DURÉE DÉTERMINÉE"
+                               : "CONTRAT DE TRAVAIL À DURÉE INDÉTERMINÉE" });
+    b.push({ k: "st", t: (partiel ? "À temps partiel" : "À temps plein") + " - " + poste });
 
     h1("Entre les soussignés");
     p("La société " + societe() + ",");
     p("ci-après dénommée « la Société », d'une part,");
-    p("Et " + d.nom + ", né(e) le [date de naissance] à [lieu], de nationalité [   ], demeurant " +
+    p("Et " + nomS + ", né(e) le [date de naissance] à [lieu], de nationalité [   ], demeurant " +
       "[adresse], numéro de sécurité sociale [   ],");
     p("ci-après dénommé(e) « le salarié », d'autre part,");
     p("Il a été convenu ce qui suit.");
 
     A("Engagement");
-    p("La Société engage le salarié, qui accepte, en qualité de " + d.poste + ", statut " + statutMot +
+    p("La Société engage le salarié, qui accepte, en qualité de " + poste + ", statut " + statutMot +
       (niveau ? ", niveau " + niveau + ", échelon " + echelon + " de la grille de classification" : "") +
       ", à compter du " + dateFr(d.entree) + ", sous réserve du résultat de la visite d'information " +
       "et de prévention.");
     if (d.cdd) {
-      p("Le présent contrat est conclu pour le motif suivant : " + d.motif.t.toLowerCase() +
-        (d.remplace ? ", en la personne de " + d.remplace : "") + ", cas prévu au " + d.motif.al +
-        " de l'" + ref([d.motif.base]) + " du code du travail.");
+      p("Le présent contrat est conclu pour le motif suivant : " +
+        (d.motif ? d.motif.t.charAt(0).toLowerCase() + d.motif.t.slice(1) : "[motif du recours]") +
+        (d.motif && d.motif.remplace ? ", en la personne de " + (d.remplace || "[nom et qualification de la personne remplacée]") : "") +
+        (d.motif ? ", cas prévu au " + d.motif.al + " de l'" + ref([d.motif.base]) + " du code du travail" : "") + ".");
       p("Il ne peut avoir ni pour objet ni pour effet de pourvoir durablement un emploi lié à " +
         "l'activité normale et permanente de la Société (" + ref(["L1242-1"]) + ").");
     }
-    p("Le contrat est régi par le code du travail et par " + conventionPhrase() +
-      ", dont un exemplaire est tenu à la disposition du salarié dans l'entreprise et qui est " +
-      "consultable sur www.legifrance.gouv.fr.");
-    if (niveau) {
-      b.push({ k: "note", t: "Classification : " + ccn.classification.dit + " (avenant n° 30 du 31 mai 2022, " +
-        ccn.classification.id + ")." });
-    } else {
-      b.push({ k: "note", t: "Le niveau et l'échelon sont à reporter depuis la grille de votre convention " +
-        "collective : l'application ne l'a pas lue et ne les devine pas." });
+    p("Le contrat est régi par le code du travail et par " + conventionPhrase() + ", dont un " +
+      "exemplaire est tenu à la disposition du salarié dans l'entreprise et qui est consultable sur " +
+      "www.legifrance.gouv.fr.");
+    if (!niveau) {
+      b.push({ k: "note", t: "Le niveau et l'échelon sont à reporter depuis la grille de votre " +
+        "convention collective : l'application ne l'a pas lue et ne les devine pas." });
     }
 
     if (d.cdd) {
       A("Durée du contrat");
       if (d.terme) {
-        p("Le contrat est conclu du " + dateFr(d.entree) + " au " + dateFr(d.terme) +
-          ", date à laquelle il prendra fin de plein droit, sans qu'il soit besoin d'aucune formalité.");
-        if (d.motif.max) {
-          p("Il pourra être renouvelé par avenant soumis au salarié avant le terme initialement prévu, " +
-            "sans que la durée totale, renouvellement compris, puisse excéder " + d.motif.max +
+        p("Le contrat est conclu du " + dateFr(d.entree) + " au " + dateFr(d.terme) + ", date à " +
+          "laquelle il prendra fin de plein droit, sans qu'il soit besoin d'aucune formalité.");
+        if (d.motif && d.motif.max) {
+          p("Il pourra être renouvelé par avenant soumis au salarié avant le terme initialement " +
+            "prévu, sans que la durée totale, renouvellement compris, puisse excéder " + d.motif.max +
             " mois (" + ref(["L1243-13", "L1242-8-1"]) + ").");
         }
-      } else {
+      } else if (d.motif && d.motif.sansTerme) {
         p("Le contrat est conclu à compter du " + dateFr(d.entree) + " sans terme précis, pour une " +
           "durée minimale de " + nb(d.dureeMin) + " mois. Il prendra fin " +
           (d.motif.remplace ? "au retour de la personne remplacée"
                             : "à la réalisation de l'objet pour lequel il a été conclu") +
           " (" + ref(["L1242-7"]) + ").");
+      } else {
+        p("Le contrat est conclu du " + dateFr(d.entree) + " au [date du terme].");
+        b.push({ k: "note", t: "Ce motif impose un terme fixé avec précision dès la conclusion (" +
+          ref(["L1242-7"]) + ") : saisissez-le à gauche." });
       }
       p("La relation de travail qui se poursuivrait après le terme rendrait le contrat à durée " +
         "indéterminée, le salarié conservant l'ancienneté acquise (" + ref(["L1243-11"]) + ").");
@@ -1122,10 +1048,11 @@
         p("Cette période n'est pas renouvelable, le salarié étant classé au niveau I, échelon 1 " +
           "(article 13 de la convention collective).");
       }
-      b.push({ k: "note", t: "L'article 13 de la convention (" + (ccn ? ccn.essai.id : "") +
-        ") fixe des durées plus courtes, mais l'" + ref(["L1221-22"]) + " ne rend opposables que " +
-        "celles d'un accord postérieur au 25 juin 2008. Une durée plus courte reste possible : " +
-        "elle se stipule ici." });
+      if (ccn) {
+        b.push({ k: "note", t: "L'article 13 de la convention fixe des durées plus courtes, mais " +
+          "l'" + ref(["L1221-22"]) + " ne rend opposables que celles d'un accord postérieur au " +
+          "25 juin 2008. Une durée plus courte reste possible : elle se stipule ici." });
+      }
     }
     p("Pendant l'essai, chacune des parties peut rompre le contrat sans préavis ni indemnité, sous " +
       "réserve du délai de prévenance de l'" + ref(["L1221-25"]) + " : vingt-quatre heures en deçà " +
@@ -1134,7 +1061,7 @@
     p("Toute absence suspend la période d'essai, dont le terme est reporté d'autant.");
 
     A("Fonctions");
-    p("Le salarié exerce les fonctions de " + d.poste + ". Elles comprennent notamment :");
+    p("Le salarié exerce les fonctions de " + poste + ". Elles comprennent notamment :");
     b.push({ k: "puce", t: "- [première tâche] ;" });
     b.push({ k: "puce", t: "- [deuxième tâche] ;" });
     b.push({ k: "puce", t: "- [troisième tâche]." });
@@ -1158,7 +1085,8 @@
       });
       p("Cette répartition pourra être modifiée en cas de surcroît temporaire d'activité, d'absence " +
         "d'un ou plusieurs salariés, de réorganisation des horaires du site ou de survenance d'un " +
-        "évènement exceptionnel affectant le fonctionnement de l'établissement.");
+        "évènement exceptionnel affectant le fonctionnement de l'établissement (" +
+        ref(["L3123-6"]) + " 2°).");
       if (ccn && ccn.tempsPartiel) {
         p("Toute modification sera notifiée par écrit au moins " + ccn.tempsPartiel.prevenance +
           " jours avant la date à laquelle elle doit intervenir (article 13.2 de l'avenant n° 2 du " +
@@ -1170,77 +1098,73 @@
           "elle doit intervenir.");
       }
       p("Les horaires de chaque journée travaillée sont communiqués au salarié par écrit, par remise " +
-        "en main propre contre décharge ou par courriel, au plus tard le [   ] de chaque mois pour " +
-        "le mois suivant (" + ref(["L3123-6"]) + " 3°).");
+        "en main propre contre décharge ou par courriel, au plus tard le [   ] de chaque mois pour le " +
+        "mois suivant (" + ref(["L3123-6"]) + " 3°).");
       p("Le salarié pourra être amené à effectuer des heures complémentaires dans la limite du " +
         (ccn ? "tiers" : "dixième") + " de la durée mensuelle prévue au contrat, soit " +
         nb(Math.round(hMois * (ccn ? 1 / 3 : 0.1) * 100) / 100) + " heures par mois (" +
-        ref(ccn ? ["L3123-20"] : ["L3123-28"]) + "). Ces heures ne peuvent porter la durée du " +
-        "travail au niveau de la durée légale.");
+        ref(ccn ? ["L3123-20"] : ["L3123-28"]) + "). Ces heures ne peuvent porter la durée du travail " +
+        "au niveau de la durée légale.");
       p("Elles sont majorées de 10 % dans la limite du dixième de la durée contractuelle et de 25 % " +
         "au-delà du dixième et jusqu'au tiers (" + ref(["L3123-29", "L3123-21"]) + ").");
       if (d.heures < 24) {
-        p("Conformément à l'" + ref(["L3123-7"]) + ", cette durée est inférieure à vingt-quatre " +
-          "heures par semaine à la demande écrite et motivée du salarié, en date du [date], annexée " +
-          "au présent contrat.");
-        b.push({ k: "note", t: "Sans cette demande écrite du salarié, ou sans l'un des cas que " +
-          "l'article L. 3123-7 excepte, la durée minimale de vingt-quatre heures s'impose (" +
-          ref(["L3123-27"]) + ")." });
+        p("Conformément à l'" + ref(["L3123-7"]) + ", cette durée est inférieure à vingt-quatre heures " +
+          "par semaine à la demande écrite et motivée du salarié, en date du [date], annexée au " +
+          "présent contrat.");
       }
-      p("Le salarié bénéficie des droits reconnus aux salariés à temps complet et d'une priorité " +
-        "pour l'attribution d'un emploi à temps complet ressortissant à sa catégorie professionnelle.");
+      p("Le salarié bénéficie des droits reconnus aux salariés à temps complet et d'une priorité pour " +
+        "l'attribution d'un emploi à temps complet ressortissant à sa catégorie professionnelle.");
     } else if (ccn && ccn.duree) {
-      p("La durée du travail est fixée à " + nb(d.heures) + " heures par semaine, soit " +
-        nb(hMois) + " heures par mois. L'article 3 de l'avenant n° 2 du 5 février 2007 fixe la durée " +
-        "hebdomadaire à 39 heures, les entreprises pouvant retenir une durée inférieure.");
+      p("La durée du travail est fixée à " + nb(d.heures) + " heures par semaine, soit " + nb(hMois) +
+        " heures par mois. L'article 3 de l'avenant n° 2 du 5 février 2007 fixe la durée hebdomadaire " +
+        "à 39 heures, les entreprises pouvant retenir une durée inférieure.");
       if (supp > 0) {
         p("Cette durée comprend les 35 heures de la durée légale (" + ref(["L3121-27"]) + ") et " +
-          nb(supp) + " heures supplémentaires hebdomadaires. Les heures effectuées entre la 36e et " +
-          "la 39e heure sont majorées de 10 %, celles effectuées entre la 40e et la 43e de 20 %, " +
-          "celles effectuées à partir de la 44e de 50 % (article 4 du même avenant).");
+          nb(supp) + " heures supplémentaires hebdomadaires. Les heures effectuées entre la 36e et la " +
+          "39e heure sont majorées de 10 %, celles effectuées entre la 40e et la 43e de 20 %, celles " +
+          "effectuées à partir de la 44e de 50 % (article 4 du même avenant).");
       }
       p("Le salarié travaille du [jour] au [jour]. La répartition des horaires est portée à sa " +
         "connaissance par voie d'affichage et pourra être modifiée en fonction des nécessités du " +
-        "service, sous réserve d'un délai de prévenance de sept jours, ramené à trois jours ouvrés " +
-        "en cas de circonstance exceptionnelle.");
+        "service, sous réserve d'un délai de prévenance de sept jours, ramené à trois jours ouvrés en " +
+        "cas de circonstance exceptionnelle.");
       p("La durée de présence au travail ne pourra excéder les durées maximales de l'article 6 de " +
         "l'avenant n° 2 : " + ccn.maxima.jour.autre + " par jour pour le personnel de salle, " +
-        ccn.maxima.jour.cuisine + " en cuisine, " + ccn.maxima.jour.reception + " à la réception, " +
-        "et " + ccn.maxima.semaine + ".");
+        ccn.maxima.jour.cuisine + " en cuisine, " + ccn.maxima.jour.reception + " à la réception, et " +
+        ccn.maxima.semaine + ".");
       p("Le temps de travail est décompté quotidiennement au moyen d'une feuille de décompte signée " +
         "par le salarié et par l'employeur (article 5.1 du même avenant).");
     } else {
-      p("La durée du travail est fixée à " + nb(d.heures) + " heures par semaine, soit " +
-        nb(hMois) + " heures par mois. La durée légale est de trente-cinq heures (" +
-        ref(["L3121-27"]) + ").");
+      p("La durée du travail est fixée à " + nb(d.heures) + " heures par semaine, soit " + nb(hMois) +
+        " heures par mois. La durée légale est de trente-cinq heures (" + ref(["L3121-27"]) + ").");
       if (supp > 0) {
-        p("Les " + nb(supp) + " heures accomplies au-delà sont des heures supplémentaires, majorées " +
-          "de 25 % pour les huit premières et de 50 % au-delà, à défaut d'accord d'entreprise ou de " +
+        p("Les " + nb(supp) + " heures accomplies au-delà sont des heures supplémentaires, majorées de " +
+          "25 % pour les huit premières et de 50 % au-delà, à défaut d'accord d'entreprise ou de " +
           "branche fixant un autre taux (" + ref(["L3121-36"]) + ").");
       }
       p("La répartition des horaires est portée à la connaissance du salarié par voie d'affichage.");
     }
 
     A("Rémunération");
-    p("Le salarié percevra une rémunération mensuelle brute de " + eur(d.salaire) + " euros, pour " +
-      nb(hMois) + " heures de travail" +
-      (supp > 0 ? ", majorations des heures supplémentaires comprises" : "") + ".");
+    p("Le salarié percevra une rémunération mensuelle brute de " +
+      (d.salaire > 0 ? eur(d.salaire) : "[montant]") + " euros, pour " + nb(hMois) + " heures de " +
+      "travail" + (supp > 0 ? ", majorations des heures supplémentaires comprises" : "") + ".");
     if (tauxMin !== null) {
-      p("Le taux horaire correspondant est de " + eur(tauxContrat) + " euros. Le minimum " +
-        "conventionnel du niveau " + niveau + ", échelon " + echelon + " est de " + eur(tauxMin) +
-        " euros de l'heure depuis le " + ccn.salaires.depuis + " (avenant n° 33 du 19 juin 2024, " +
-        "article 2).");
+      p("Le taux horaire correspondant est de " + (tauxContrat ? eur(tauxContrat) : "[taux]") +
+        " euros. Le minimum conventionnel du niveau " + niveau + ", échelon " + echelon + " est de " +
+        eur(tauxMin) + " euros de l'heure depuis le " + ccn.salaires.depuis + " (avenant n° 33 du " +
+        "19 juin 2024, article 2).");
     }
     p("Ce taux ne pourra être inférieur au salaire minimum de croissance (" + ref(["L3231-2"]) +
-      ") ni au minimum conventionnel correspondant à la classification du salarié ; il sera ajusté " +
-      "à chaque revalorisation de l'un ou de l'autre.");
+      ") ni au minimum conventionnel correspondant à la classification du salarié ; il sera ajusté à " +
+      "chaque revalorisation de l'un ou de l'autre.");
     p("La rémunération est versée mensuellement, à terme échu, et donne lieu à un bulletin de paie " +
       "mentionnant l'emploi, le niveau et l'échelon du salarié (" + ref(["L3243-2"]) + ").");
-    if (d.cdd && !d.motif.sansIndemnite) {
+    if (d.cdd && d.motif && !d.motif.sansIndemnite) {
       p("À l'issue du contrat, si les relations ne se poursuivent pas par un contrat à durée " +
         "indéterminée, le salarié percevra une indemnité de fin de contrat égale à 10 % de la " +
         "rémunération totale brute versée (" + ref(["L1243-8"]) + ").");
-    } else if (d.cdd) {
+    } else if (d.cdd && d.motif) {
       p("L'indemnité de fin de contrat n'est pas due pour ce motif, sauf disposition conventionnelle " +
         "plus favorable (" + ref(["L1243-10"]) + ").");
     }
@@ -1248,16 +1172,16 @@
     if (ccn) {
       A("Avantage en nature nourriture");
       p("Le salarié bénéficie d'un repas par service travaillé. Cet avantage en nature est évalué " +
-        "selon la réglementation en vigueur et figure sur le bulletin de paie ; à défaut de " +
-        "fourniture du repas, il donne lieu au versement d'une indemnité compensatrice de même " +
-        "montant (article 35.2 de la convention collective).");
+        "selon la réglementation en vigueur et figure sur le bulletin de paie ; à défaut de fourniture " +
+        "du repas, il donne lieu au versement d'une indemnité compensatrice de même montant " +
+        "(article 35.2 de la convention collective).");
 
       A("Temps d'habillage et de déshabillage");
-      p("Le port de la tenue de travail fournie par la Société est obligatoire et l'habillage se " +
-        "fait sur le lieu de travail. En contrepartie, le salarié bénéficie d'un jour de repos par " +
-        "an à partir d'un an d'ancienneté, au prorata en deçà ; lorsque l'activité ne permet pas la " +
-        "prise de ce repos, il perçoit une compensation financière équivalente (article 7 de " +
-        "l'avenant n° 2 du 5 février 2007).");
+      p("Le port de la tenue de travail fournie par la Société est obligatoire et l'habillage se fait " +
+        "sur le lieu de travail. En contrepartie, le salarié bénéficie d'un jour de repos par an à " +
+        "partir d'un an d'ancienneté, au prorata en deçà ; lorsque l'activité ne permet pas la prise " +
+        "de ce repos, il perçoit une compensation financière équivalente (article 7 de l'avenant n° 2 " +
+        "du 5 février 2007).");
     }
 
     A("Congés payés");
@@ -1281,29 +1205,28 @@
       "permettre le contrôle des durées maximales de travail.");
 
     A("Retraite complémentaire, prévoyance et frais de santé");
-    p("Le salarié est affilié à la caisse de retraite complémentaire [nom et adresse de la caisse]. " +
-      "Il bénéficie du régime de prévoyance et de la couverture frais de santé souscrits par la " +
-      "Société, dont la notice d'information lui est remise (" + ref(["L1242-12"]) + " 8°).");
+    p("Le salarié est affilié à la caisse de retraite complémentaire [nom et adresse de la caisse]. Il " +
+      "bénéficie du régime de prévoyance et de la couverture frais de santé souscrits par la Société, " +
+      "dont la notice d'information lui est remise (" + ref(["L1242-12"]) + " 8°).");
 
     A("Données personnelles");
-    p("Les données personnelles du salarié sont traitées par la Société aux seules fins de la " +
-      "gestion de la relation de travail, conformément au règlement (UE) 2016/679. Le salarié " +
-      "dispose d'un droit d'accès, de rectification et d'effacement qu'il exerce auprès de la " +
-      "Société. Il s'engage à signaler tout changement de domicile ou de situation de famille.");
+    p("Les données personnelles du salarié sont traitées par la Société aux seules fins de la gestion " +
+      "de la relation de travail, conformément au règlement (UE) 2016/679. Le salarié dispose d'un " +
+      "droit d'accès, de rectification et d'effacement qu'il exerce auprès de la Société. Il s'engage " +
+      "à signaler tout changement de domicile ou de situation de famille.");
 
     if (!d.cdd) {
       A("Rupture du contrat");
-      p("Après la période d'essai, le contrat pourra être rompu par l'une ou l'autre des parties " +
-        "dans les conditions prévues par la loi et par la convention collective.");
+      p("Après la période d'essai, le contrat pourra être rompu par l'une ou l'autre des parties dans " +
+        "les conditions prévues par la loi et par la convention collective.");
       if (ccn && ccn.preavis) {
-        var pr = ccn.preavis.licenciement[d.statut];
-        var de = ccn.preavis.demission[d.statut];
+        var pr = ccn.preavis.licenciement[d.statut], de = ccn.preavis.demission[d.statut];
         p("Conformément à l'article 30 de la convention collective, le préavis applicable au statut " +
           statutMot + " est, en cas de licenciement, sauf faute grave ou lourde, de " +
           preavisMot(pr[0]) + " pour une ancienneté inférieure à six mois, de " + preavisMot(pr[1]) +
           " de six mois à moins de deux ans et de " + preavisMot(pr[2]) + " au-delà ; en cas de " +
-          "démission, de " + preavisMot(de[0]) + ", " + preavisMot(de[1]) + " et " +
-          preavisMot(de[2]) + " selon les mêmes tranches.");
+          "démission, de " + preavisMot(de[0]) + ", " + preavisMot(de[1]) + " et " + preavisMot(de[2]) +
+          " selon les mêmes tranches.");
       } else {
         p("Le préavis est d'un mois de six mois à moins de deux ans d'ancienneté et de deux mois " +
           "au-delà, sauf faute grave et sauf disposition conventionnelle plus favorable (" +
@@ -1322,92 +1245,107 @@
       "(signature précédée de la mention                             " + signataire() + "\n" +
       "« lu et approuvé, bon pour accord »)" });
 
-    return { blocs: b, d: d, hMois: hMois, hPayees: hPayees, tauxContrat: tauxContrat,
-      tauxMin: tauxMin, brutMin: brutMin, sousMinimum: sousMinimum, partiel: partiel };
-  }
-  function preavisMot(jours) {
-    if (jours === 8) return "huit jours";
-    if (jours === 15) return "quinze jours";
-    if (jours === 30) return "un mois";
-    if (jours === 60) return "deux mois";
-    if (jours === 90) return "trois mois";
-    return jours + " jours";
+    return { blocs: b, hMois: hMois, hPayees: hPayees, tauxContrat: tauxContrat, tauxMin: tauxMin,
+      brutMin: brutMin, partiel: partiel,
+      sousMinimum: brutMin !== null && d.salaire > 0 && d.salaire + 0.005 < brutMin,
+      termeManquant: d.cdd && d.motif && !d.motif.interdit && !d.motif.sansTerme && !d.terme };
   }
 
   /* Les trois suites de l'embauche, avec leur date. */
   function suitesEmbauche(d) {
-    var s = [];
+    var e = d.entree, s = [];
     s.push({ q: "Déclaration préalable à l'embauche",
-      d: "du " + dateFr(jour(d.entree, -8)) + " au " + dateFr(jour(d.entree, -1)),
+      d: e ? "du " + dateFr(jour(e, -8)) + " au " + dateFr(jour(e, -1)) : "[date d'entrée à saisir]",
       f: "au plus tôt huit jours avant, et avant la prise de poste (" + ref(["L1221-10", "R1221-4"]) + ")",
       c: "tot" });
     s.push({ q: "Visite d'information et de prévention",
-      d: "au plus tard le " + dateFr(plusMois(d.entree, 3)),
+      d: e ? "au plus tard le " + dateFr(plusMois(e, 3)) : "[date d'entrée à saisir]",
       f: "trois mois à compter de la prise effective du poste (" + ref(["R4624-10"]) + ")",
       c: "tard" });
     s.push({ q: "Inscription au registre du personnel",
-      d: "le " + dateFr(d.entree),
+      d: e ? "le " + dateFr(e) : "[date d'entrée à saisir]",
       f: "au moment de l'embauche, de façon indélébile (" + ref(["L1221-13", "D1221-23"]) + ")",
       c: "" });
     if (d.cdd) {
       s.push({ q: "Remise du contrat signé",
-        d: "au plus tard le " + dateFr(apresJoursOuvrables(d.entree, 2)),
+        d: e ? "au plus tard le " + dateFr(apresJoursOuvrables(e, 2)) : "[date d'entrée à saisir]",
         f: "deux jours ouvrables suivant l'embauche (" + ref(["L1242-13"]) + ")",
         c: "tard" });
     }
     return s;
   }
 
-  function rendreEmbauche(r) {
-    var d = r.d, h = "";
-
-    h += '<div class="bloc">';
+  function rendreEmbauche() {
+    var d = lireEmbauche(), r = contrat(d), h = "";
+    if (r.refus) {
+      $("#e-doc").innerHTML = refusHtml(r.refus);
+      return;
+    }
+    h += barre("embauche", d.cdd ? "Contrat à durée déterminée" : "Contrat de travail",
+      (d.cdd ? "cdd" : "cdi") + "-" + slug(d.nom));
     h += '<div class="dates">';
     suitesEmbauche(d).forEach(function (s) { h += carteDate(s.q, s.d, s.f, s.c); });
     h += "</div>";
-
+    if (r.termeManquant) {
+      h += '<div class="alerte">Ce motif impose un terme fixé avec précision dès la conclusion (' +
+        ref(["L1242-7"]) + "). Tant qu'il n'est pas saisi, le contrat porte un crochet à sa place.</div>";
+    }
     if (r.sousMinimum) {
-      h += '<div class="alerte"><b>Le salaire saisi est inférieur au minimum conventionnel.</b> ' +
+      h += '<div class="alerte">Le salaire saisi est inférieur au minimum conventionnel : ' +
         eur(r.tauxContrat) + " euros de l'heure contre " + eur(r.tauxMin) + " exigés au niveau " +
         d.classe.replace("-", ", échelon ") + ". Pour " + nb(d.heures) + " heures par semaine, " +
         "majorations comprises, le brut mensuel ne peut être inférieur à " + eur(r.brutMin) +
-        " euros. Le contrat est produit avec le montant que vous avez saisi : corrigez-le avant de " +
-        "le signer.</div>";
-    } else if (r.tauxMin !== null) {
+        " euros.</div>";
+    } else if (r.tauxMin !== null && d.salaire > 0) {
       h += '<div class="chiffre">' + eur(r.tauxContrat) + " euros de l'heure pour " + nb(r.hMois) +
-        " heures par mois, au-dessus du minimum conventionnel de " + eur(r.tauxMin) +
-        " euros. Le salaire minimum de croissance reste à vérifier au jour de la signature : " +
-        "l'application ne le connaît pas.</div>";
+        " heures par mois, au-dessus du minimum conventionnel de " + eur(r.tauxMin) + " euros. Le " +
+        "salaire minimum de croissance reste à vérifier au jour de la signature : l'application ne le " +
+        "connaît pas.</div>";
     }
     if (r.partiel && d.heures < 24) {
       h += '<div class="alerte">Moins de vingt-quatre heures par semaine : la demande écrite et ' +
         "motivée du salarié doit être annexée au contrat, sauf à relever d'un des cas exceptés par " +
-        "l'" + ref(["L3123-7"]) + ".</div>";
+        "l'" + ref(["L3123-7"]) + " (contrat de sept jours au plus, remplacement, étudiant de moins " +
+        "de vingt-six ans, cumul d'activités).</div>";
     }
-    h += barreSortie("e-feuille", d.cdd ? "Contrat à durée déterminée" : "Contrat de travail",
-      (d.cdd ? "cdd" : "cdi") + "-" + slug(d.nom));
-    h += "</div>";
-
-    h += feuille(r.blocs, "e");
-    return h;
+    h += feuilleHtml(r.blocs, "embauche");
+    $("#e-doc").innerHTML = h;
   }
 
   /* ═══════════════════════════════════════════════════════════════════════
      2. SANCTIONNER
      ══════════════════════════════════════════════════════════════════════ */
   var SANCTIONS = {
-    avertissement: { nom: "un avertissement", entretien: false },
-    blame: { nom: "un blâme", entretien: false },
-    miseapied: { nom: "une mise à pied disciplinaire", entretien: true },
-    mutation: { nom: "une mutation disciplinaire", entretien: true },
-    retrogradation: { nom: "une rétrogradation", entretien: true }
+    avertissement: { nom: "un avertissement", entretien: false, objet: "notification d'un avertissement" },
+    blame: { nom: "un blâme", entretien: false, objet: "notification d'un blâme" },
+    miseapied: { nom: "une mise à pied disciplinaire", entretien: true, objet: "notification d'une mise à pied disciplinaire" },
+    mutation: { nom: "une mutation disciplinaire", entretien: true, objet: "notification d'une mutation disciplinaire" },
+    retrogradation: { nom: "une rétrogradation", entretien: true, objet: "notification d'une rétrogradation" }
   };
 
-  function sanction() {
-    var d = {
+  function civiliteDe(nom) {
+    if (/^\s*madame/i.test(nom)) return "Madame";
+    if (/^\s*monsieur/i.test(nom)) return "Monsieur";
+    return "Madame, Monsieur";
+  }
+  function enTete(b, nomS, adresse, objet, envoi) {
+    b.push({ k: "p", t: profil.denomination });
+    if (profil.adresse) b.push({ k: "p", t: profil.adresse });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: nomS });
+    b.push({ k: "p", t: adresse || "[adresse du salarié]" });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: ville() + ", le " + dateFr(new Date()) });
+    b.push({ k: "p", t: envoi });
+    b.push({ k: "p", t: "Objet : " + objet });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: civiliteDe(nomS) + "," });
+  }
+
+  function lireSanction() {
+    return {
       nom: $("#s-nom").value.trim(),
       adresse: $("#s-adresse").value.trim(),
-      poste: $("#s-poste").value.trim(),
       faits: lireDate("#s-faits"),
       connaissance: lireDate("#s-connaissance") || lireDate("#s-faits"),
       type: $("#s-sanction").value,
@@ -1417,124 +1355,104 @@
       lieu: $("#s-lieu").value.trim() || "au siège de la société",
       griefs: $("#s-griefs").value.trim()
     };
+  }
+
+  function courriersSanction(d) {
     var S = SANCTIONS[d.type];
+    var nomS = d.nom || "[nom et prénom du salarié]";
+    var civ = civiliteDe(nomS);
+    var b = [];
 
-    var refus = [];
-    if (!d.nom) refus.push("Le nom du salarié n'est pas saisi.");
-    if (!d.faits) refus.push("La date des faits n'est pas saisie.");
-    if (!d.griefs) refus.push("Les faits reprochés ne sont pas saisis. Une sanction non motivée " +
-      "n'est pas une sanction (" + ref(["L1332-1", "L1332-2"]) + ").");
-    if (S.entretien && !d.entretien) refus.push("La date de l'entretien préalable n'est pas saisie.");
-    if (d.entretien && d.faits && d.entretien < d.faits)
-      refus.push("L'entretien est fixé avant les faits.");
-    if (refus.length) return { refus: refus };
+    if (S.entretien) {
+      b.push({ k: "t1", t: "CONVOCATION À UN ENTRETIEN PRÉALABLE" });
+      enTete(b, nomS, d.adresse, "convocation à un entretien préalable",
+        "Lettre recommandée avec avis de réception ou remise en main propre contre récépissé");
+      b.push({ k: "p", t: "Nous envisageons de prendre à votre égard une sanction disciplinaire " +
+        "pouvant aller jusqu'à " + S.nom + "." });
+      b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se " +
+        "tiendra le " + dateFrJour(d.entretien) + " à " + heureFr(d.heure) + ", " + d.lieu + "." });
+      b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons le motif de la sanction " +
+        "envisagée et recueillerons vos explications (" + ref(["L1332-2"]) + ")." });
+      b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix " +
+        "appartenant au personnel de l'entreprise." });
+      b.push({ k: "p", t: "Nous vous prions d'agréer, " + civ + ", l'expression de nos salutations " +
+        "distinguées." });
+      b.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
+      b.push({ k: "note", t: "Mentions de l'" + ref(["R1332-1"]) + " : objet, date, heure, lieu, " +
+        "assistance ; remise contre récépissé ou lettre recommandée, dans le délai de deux mois de " +
+        "l'" + ref(["L1332-4"]) + "." });
+      b.push({ k: "saut", t: "" });
+    }
 
-    var limiteConvoc = plusMois(d.connaissance, 2);
-    var prescrit = new Date() > limiteConvoc;
+    b.push({ k: "t1", t: "NOTIFICATION DE SANCTION" });
+    enTete(b, nomS, d.adresse, S.objet, "Lettre recommandée avec avis de réception");
+    if (S.entretien) {
+      b.push({ k: "p", t: "Nous vous avons reçu le " + dateFrJour(d.entretien) + " dans le cadre d'un " +
+        "entretien préalable à une sanction disciplinaire. Les explications que vous nous avez " +
+        "données ne nous ont pas permis de modifier notre appréciation des faits." });
+    }
+    b.push({ k: "p", t: "Nous vous notifions par la présente " + S.nom + " pour les faits suivants." });
+    (d.griefs || "[Rappelez ici les faits, datés et circonstanciés : ce sont eux, et eux seuls, qui " +
+      "fondent la sanction.]").split(/\n+/).forEach(function (l) {
+      if (l.trim()) b.push({ k: "p", t: l.trim() });
+    });
+    if (d.type === "miseapied") {
+      b.push({ k: "p", t: "Cette mise à pied disciplinaire prendra effet pour une durée de " + d.jours +
+        " jour" + (d.jours > 1 ? "s" : "") + " ouvré" + (d.jours > 1 ? "s" : "") + ", du [date] au " +
+        "[date] inclus. Votre contrat de travail sera suspendu pendant cette période, sans rémunération." });
+    }
+    b.push({ k: "p", t: "Nous vous demandons de veiller à ce que de tels faits ne se reproduisent " +
+      "pas. Nous restons à votre disposition pour évoquer votre situation." });
+    b.push({ k: "p", t: "Nous vous prions d'agréer, " + civ + ", l'expression de nos salutations " +
+      "distinguées." });
+    b.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
+    return b;
+  }
+
+  function rendreSanction() {
+    var d = lireSanction(), S = SANCTIONS[d.type];
+    var limiteConvoc = d.connaissance ? plusMois(d.connaissance, 2) : null;
+    var prescrit = limiteConvoc && new Date() > limiteConvoc;
     var totNotif = d.entretien ? apresJoursOuvrables(d.entretien, 2) : null;
     var tardNotif = d.entretien ? plusMois(d.entretien, 1) : null;
 
-    var civilite = /^madame/i.test(d.nom) ? "Madame" : (/^monsieur/i.test(d.nom) ? "Monsieur" : "Madame, Monsieur");
-    var enTete = [];
-    function lettre(b, objet) {
-      b.push({ k: "p", t: profil.denomination });
-      if (profil.adresse) b.push({ k: "p", t: profil.adresse });
-      b.push({ k: "p", t: "" });
-      b.push({ k: "p", t: d.nom });
-      if (d.adresse) b.push({ k: "p", t: d.adresse });
-      b.push({ k: "p", t: "" });
-      b.push({ k: "p", t: ville() + ", le " + dateFr(new Date()) });
-      b.push({ k: "p", t: "Lettre recommandée avec avis de réception ou remise en main propre contre récépissé" });
-      b.push({ k: "p", t: "Objet : " + objet });
-      b.push({ k: "p", t: "" });
-      b.push({ k: "p", t: civilite + "," });
-    }
-
-    var blocs = [];
-    if (S.entretien) {
-      blocs.push({ k: "t1", t: "CONVOCATION À UN ENTRETIEN PRÉALABLE" });
-      lettre(blocs, "convocation à un entretien préalable");
-      blocs.push({ k: "p", t: "Nous envisageons de prendre à votre égard une sanction disciplinaire " +
-        "pouvant aller jusqu'à " + S.nom + "." });
-      blocs.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se " +
-        "tiendra le " + dateFrJour(d.entretien) + " à " + (d.heure || "[heure]").replace(":", " h ") +
-        ", " + d.lieu + "." });
-      blocs.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons le motif de la " +
-        "sanction envisagée et recueillerons vos explications." });
-      blocs.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix " +
-        "appartenant au personnel de l'entreprise." });
-      blocs.push({ k: "note", t: "Mentions de l'" + ref(["R1332-1"]) + " : objet, date, heure, lieu, " +
-        "assistance. Remise contre récépissé ou lettre recommandée, dans le délai de deux mois de " +
-        "l'" + ref(["L1332-4"]) + "." });
-      blocs.push({ k: "p", t: "Nous vous prions d'agréer, " + civilite + ", l'expression de nos salutations distinguées." });
-      blocs.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
-      blocs.push({ k: "saut", t: "" });
-    }
-
-    blocs.push({ k: "t1", t: "NOTIFICATION DE SANCTION" });
-    lettre(blocs, "notification " + (d.type === "avertissement" ? "d'un avertissement" :
-      d.type === "blame" ? "d'un blâme" : "d'une sanction disciplinaire"));
-    if (S.entretien) {
-      blocs.push({ k: "p", t: "Nous vous avons reçu le " + dateFrJour(d.entretien) +
-        " dans le cadre d'un entretien préalable à une sanction disciplinaire. Les explications que " +
-        "vous nous avez données ne nous ont pas permis de modifier notre appréciation des faits." });
-    }
-    blocs.push({ k: "p", t: "Nous vous notifions par la présente " + S.nom + " pour les faits suivants." });
-    d.griefs.split(/\n+/).forEach(function (l) {
-      if (l.trim()) blocs.push({ k: "p", t: l.trim() });
-    });
-    if (d.type === "miseapied") {
-      blocs.push({ k: "p", t: "Cette mise à pied disciplinaire prendra effet pour une durée de " +
-        d.jours + " jour" + (d.jours > 1 ? "s" : "") + " ouvré" + (d.jours > 1 ? "s" : "") +
-        ", du [date] au [date] inclus. Votre contrat de travail sera suspendu pendant cette période, " +
-        "sans rémunération." });
-    }
-    blocs.push({ k: "p", t: "Nous vous demandons de veiller à ce que de tels faits ne se " +
-      "reproduisent pas. Nous restons à votre disposition pour évoquer votre situation." });
-    blocs.push({ k: "p", t: "Nous vous prions d'agréer, " + civilite + ", l'expression de nos salutations distinguées." });
-    blocs.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
-
-    return { blocs: blocs, d: d, S: S, limiteConvoc: limiteConvoc, prescrit: prescrit,
-      totNotif: totNotif, tardNotif: tardNotif };
-  }
-
-  function rendreSanction(r) {
-    var h = '<div class="bloc"><div class="dates">';
-    h += carteDate("Dernier jour pour convoquer", r.limiteConvoc,
+    var h = barre("sanction", "Sanction disciplinaire", "sanction-" + slug(d.nom));
+    h += '<div class="dates">';
+    h += carteDate("Dernier jour pour convoquer",
+      limiteConvoc ? dateFrJour(limiteConvoc) : "[date des faits à saisir]",
       "deux mois du jour où vous avez eu connaissance des faits (" + ref(["L1332-4"]) + ")",
-      r.prescrit ? "tard" : "");
-    if (r.d.entretien) {
-      h += carteDate("Notification au plus tôt", r.totNotif,
+      prescrit ? "tard" : "");
+    if (S.entretien) {
+      h += carteDate("Notification au plus tôt",
+        totNotif ? dateFrJour(totNotif) : "[date de l'entretien à saisir]",
         "deux jours ouvrables après l'entretien (" + ref(["L1332-2"]) + ")", "tot");
-      h += carteDate("Notification au plus tard", r.tardNotif,
+      h += carteDate("Notification au plus tard",
+        tardNotif ? dateFrJour(tardNotif) : "[date de l'entretien à saisir]",
         "un mois après le jour fixé pour l'entretien (" + ref(["L1332-2"]) + ")", "tard");
     }
     h += "</div>";
-    if (r.prescrit) {
-      h += '<div class="refus"><b>Le délai de deux mois est écoulé.</b> Les faits datent du ' +
-        dateFr(r.d.connaissance) + " : les poursuites disciplinaires ne peuvent plus être engagées " +
-        "sur ces seuls faits (" + ref(["L1332-4"]) + "), sauf poursuites pénales exercées dans le " +
-        "même délai. Les courriers sont produits pour mémoire.</div>";
+    if (prescrit) {
+      h += '<div class="alerte">Le délai de deux mois est écoulé : les poursuites disciplinaires ne ' +
+        "peuvent plus être engagées sur ces seuls faits (" + ref(["L1332-4"]) + "), sauf poursuites " +
+        "pénales exercées dans le même délai.</div>";
     }
-    if (!r.S.entretien) {
+    if (!S.entretien) {
       h += '<div class="chiffre">Pour cette sanction, l\'entretien préalable n\'est pas imposé par ' +
         "l'" + ref(["L1332-2"]) + ", qui en dispense l'avertissement et les sanctions de même nature " +
         "sans incidence sur la présence, la fonction, la carrière ou la rémunération. Il s'impose si " +
-        "votre règlement intérieur le prévoit : dans ce cas, choisissez une autre sanction pour " +
-        "obtenir la convocation, ou reprenez la trame de la page Documents.</div>";
+        "votre règlement intérieur le prévoit : choisissez alors une autre sanction pour obtenir " +
+        "aussi la convocation.</div>";
     }
     h += '<div class="alerte">Le décompte retient comme jours ouvrables tous les jours de la semaine ' +
       "sauf le dimanche et les jours fériés.</div>";
-    h += barreSortie("s-feuille", "Sanction disciplinaire", "sanction-" + slug(r.d.nom));
-    h += "</div>";
-    h += feuille(r.blocs, "s");
-    return h;
+    h += feuilleHtml(courriersSanction(d), "sanction");
+    $("#s-doc").innerHTML = h;
   }
 
   /* ═══════════════════════════════════════════════════════════════════════
      3. LICENCIER
      ══════════════════════════════════════════════════════════════════════ */
-  function preavisJours(statut, mois, grave) {
+  function preavisDu(statut, mois, grave) {
     if (grave) return { jours: 0, source: "aucun préavis en cas de faute grave (" + ref(["L1234-1"]) + ")" };
     var tranche = mois < 6 ? 0 : (mois < 24 ? 1 : 2);
     var legal = [0, 30, 60][tranche];
@@ -1542,47 +1460,48 @@
       var conv = ccn.preavis.licenciement[statut][tranche];
       var retenu = Math.max(legal, conv);
       return { jours: retenu,
-        source: retenu === conv && conv > legal
-          ? "article 30 de la convention collective, plus favorable que l'" + ref(["L1234-1"])
-          : (tranche === 0 ? "article 30 de la convention collective" :
-             "l'" + ref(["L1234-1"]) + " et l'article 30 de la convention collective") };
+        source: tranche === 0
+          ? "article 30 de la convention collective"
+          : (conv > legal ? "article 30 de la convention collective, plus favorable que l'" + ref(["L1234-1"])
+                          : "l'" + ref(["L1234-1"]) + " et l'article 30 de la convention collective") };
     }
-    if (tranche === 0) return { jours: 0,
-      source: "moins de six mois d'ancienneté : la durée est celle de la convention collective ou " +
-              "des usages (" + ref(["L1234-1"]) + " 1°)" };
+    if (tranche === 0) {
+      return { jours: 0, source: "moins de six mois d'ancienneté : la durée est celle de la " +
+        "convention collective ou des usages (" + ref(["L1234-1"]) + " 1°)" };
+    }
     return { jours: legal, source: "l'" + ref(["L1234-1"]) };
   }
 
-  function indemnite(mois, salaire, grave) {
+  function indemniteDe(mois, salaire, grave) {
     if (grave) return { montant: 0, detail: "aucune indemnité en cas de faute grave (" + ref(["L1234-9"]) + ")" };
-    if (mois < 8) return { montant: 0,
-      detail: "moins de huit mois d'ancienneté : l'indemnité légale n'est pas due (" + ref(["L1234-9"]) + ")" };
+    if (mois < 8) return { montant: 0, detail: "moins de huit mois d'ancienneté : l'indemnité légale " +
+      "n'est pas due (" + ref(["L1234-9"]) + ")" };
     var annees = mois / 12;
-    var jusqu10 = Math.min(annees, 10), audela = Math.max(0, annees - 10);
-    var legale = Math.round((jusqu10 * 0.25 + audela / 3) * salaire * 100) / 100;
+    var legale = Math.round((Math.min(annees, 10) * 0.25 + Math.max(0, annees - 10) / 3) * salaire * 100) / 100;
     var res = { montant: legale, legale: legale,
-      detail: "un quart de mois par année jusqu'à dix ans, un tiers au-delà, mois complets compris " +
-              "(" + ref(["R1234-2", "R1234-1"]) + ")" };
+      detail: "un quart de mois par année jusqu'à dix ans, un tiers au-delà, mois complets compris (" +
+        ref(["R1234-2", "R1234-1"]) + ")" };
     if (ccn && ccn.indemnite && mois >= ccn.indemnite.anciennete) {
       var c = Math.round((Math.min(annees, 10) * 0.10 +
         Math.max(0, annees - 10) * (0.10 + ccn.indemnite.quinzieme)) * salaire * 100) / 100;
       res.conventionnelle = c;
       if (c > legale) {
         res.montant = c;
-        res.detail = "indemnité conventionnelle de l'article 32, plus favorable que l'indemnité légale";
+        res.detail = "indemnité conventionnelle de l'article 32 de la convention collective, plus " +
+          "favorable que l'indemnité légale";
       }
     }
     return res;
   }
 
-  function licenciement() {
-    var d = {
+  function lireLicenciement() {
+    return {
       nom: $("#l-nom").value.trim(),
       adresse: $("#l-adresse").value.trim(),
       poste: $("#l-poste").value.trim(),
       statut: $("#l-statut").value,
       entree: lireDate("#l-entree"),
-      salaire: Number($("#l-salaire").value),
+      salaire: Number($("#l-salaire").value) || 0,
       motif: $("#l-motif").value,
       connaissance: lireDate("#l-connaissance"),
       convocation: lireDate("#l-convocation"),
@@ -1592,111 +1511,76 @@
       protege: $("#l-protege").value === "oui",
       griefs: $("#l-griefs").value.trim()
     };
-    var disciplinaire = d.motif === "faute" || d.motif === "gravel";
-    var grave = d.motif === "gravel";
+  }
 
-    var refus = [];
-    if (!d.nom) refus.push("Le nom du salarié n'est pas saisi.");
-    if (!d.entree) refus.push("La date d'entrée n'est pas saisie : sans elle, ni le préavis ni " +
-      "l'indemnité ne se calculent.");
-    if (!d.convocation) refus.push("La date de remise ou de présentation de la convocation n'est pas saisie.");
-    if (!d.entretien) refus.push("La date de l'entretien préalable n'est pas saisie.");
-    if (!d.griefs) refus.push("Les motifs ne sont pas saisis. La lettre de licenciement doit " +
-      "comporter l'énoncé des motifs (" + ref(["L1232-6"]) + "), et ce sont eux qui fixent les " +
-      "limites du litige (" + ref(["L1235-2"]) + ").");
-    if (!(d.salaire > 0)) refus.push("Le salaire de référence n'est pas saisi.");
-    if (disciplinaire && !d.connaissance) refus.push("La date de connaissance des faits n'est pas " +
-      "saisie : c'est elle qui ouvre le délai de deux mois de l'" + ref(["L1332-4"]) + ".");
-    if (d.protege) refus.push("Le salarié est représentant du personnel : son licenciement suppose " +
-      "l'autorisation de l'inspection du travail, et la procédure n'est pas celle-ci. Aucun courrier " +
-      "n'est produit.");
-    if (refus.length) return { refus: refus };
-
-    var totEntretien = apresJoursOuvrables(d.convocation, 5);
-    var entretienTropTot = d.entretien < totEntretien;
-    var totNotif = apresJoursOuvrables(d.entretien, 2);
-    var tardNotif = disciplinaire ? plusMois(d.entretien, 1) : null;
-    var limiteConvoc = disciplinaire ? plusMois(d.connaissance, 2) : null;
-    var convocTard = limiteConvoc && d.convocation > limiteConvoc;
-
-    var mois = moisAnnees(d.entree, totNotif);
-    var pre = preavisJours(d.statut, mois, grave);
-    var finPreavis = pre.jours ? jour(totNotif, pre.jours) : null;
-    var ind = indemnite(mois, d.salaire, grave);
-
-    var civilite = /^madame/i.test(d.nom) ? "Madame" : (/^monsieur/i.test(d.nom) ? "Monsieur" : "Madame, Monsieur");
-    function lettre(b, objet, recommandee) {
-      b.push({ k: "p", t: profil.denomination });
-      if (profil.adresse) b.push({ k: "p", t: profil.adresse });
-      b.push({ k: "p", t: "" });
-      b.push({ k: "p", t: d.nom });
-      if (d.adresse) b.push({ k: "p", t: d.adresse });
-      b.push({ k: "p", t: "" });
-      b.push({ k: "p", t: ville() + ", le " + dateFr(new Date()) });
-      b.push({ k: "p", t: recommandee });
-      b.push({ k: "p", t: "Objet : " + objet });
-      b.push({ k: "p", t: "" });
-      b.push({ k: "p", t: civilite + "," });
-    }
-
+  function courriersLicenciement(d, calc) {
+    var nomS = d.nom || "[nom et prénom du salarié]";
+    var civ = civiliteDe(nomS);
     var b = [];
+
     b.push({ k: "t1", t: "CONVOCATION À UN ENTRETIEN PRÉALABLE AU LICENCIEMENT" });
-    lettre(b, "convocation à un entretien préalable",
+    enTete(b, nomS, d.adresse, "convocation à un entretien préalable",
       "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
     b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement." });
     b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra " +
-      "le " + dateFrJour(d.entretien) + " à " + (d.heure || "[heure]").replace(":", " h ") + ", " +
-      d.lieu + "." });
+      "le " + dateFrJour(d.entretien) + " à " + heureFr(d.heure) + ", " + d.lieu + "." });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons les motifs de la décision " +
       "envisagée et recueillerons vos explications (" + ref(["L1232-3"]) + ")." });
     b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant " +
       "au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous " +
-      "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste " +
-      "dressée par l'autorité administrative. Cette liste est tenue à votre disposition à la " +
-      "direction départementale de l'emploi, du travail et des solidarités de [département] et à " +
-      "la mairie de " + ville() + " (" + ref(["L1232-4"]) + ")." });
-    if (grave) {
+      "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée " +
+      "par l'autorité administrative. Cette liste est tenue à votre disposition à la direction " +
+      "départementale de l'emploi, du travail et des solidarités de [département] et à la mairie de " +
+      ville() + " (" + ref(["L1232-4"]) + ")." });
+    if (d.motif === "gravel") {
       b.push({ k: "p", t: "Compte tenu de la gravité des faits qui vous sont reprochés, nous vous " +
         "notifions par la présente une mise à pied à titre conservatoire. Vous cesserez votre " +
-        "activité dès réception de ce courrier, et jusqu'à la décision qui sera prise à l'issue de " +
-        "la procédure (" + ref(["L1332-3"]) + ")." });
+        "activité dès réception de ce courrier et jusqu'à la décision qui sera prise à l'issue de la " +
+        "procédure (" + ref(["L1332-3"]) + ")." });
     }
-    b.push({ k: "p", t: "Nous vous prions d'agréer, " + civilite + ", l'expression de nos salutations distinguées." });
+    b.push({ k: "p", t: "Nous vous prions d'agréer, " + civ + ", l'expression de nos salutations " +
+      "distinguées." });
     b.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
+    b.push({ k: "note", t: "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la " +
+      "présentation de cette lettre (" + ref(["L1232-2"]) + ")." });
     b.push({ k: "saut", t: "" });
 
     b.push({ k: "t1", t: "NOTIFICATION DE LICENCIEMENT" });
-    lettre(b, "notification de votre licenciement", "Lettre recommandée avec avis de réception");
+    enTete(b, nomS, d.adresse, "notification de votre licenciement",
+      "Lettre recommandée avec avis de réception");
     b.push({ k: "p", t: "Nous vous avons reçu le " + dateFrJour(d.entretien) + " dans le cadre de " +
-      "l'entretien préalable auquel nous vous avions convoqué par lettre du " + dateFr(d.convocation) +
-      ". Les explications que vous nous avez données ne nous ont pas permis de modifier notre " +
-      "appréciation de la situation." });
+      "l'entretien préalable auquel nous vous avions convoqué par lettre du " +
+      (d.convocation ? dateFr(d.convocation) : "[date]") + ". Les explications que vous nous avez " +
+      "données ne nous ont pas permis de modifier notre appréciation de la situation." });
     b.push({ k: "p", t: "Nous vous notifions par la présente votre licenciement" +
-      (grave ? " pour faute grave" : (disciplinaire ? " pour faute" : "")) + ", pour les motifs suivants." });
-    d.griefs.split(/\n+/).forEach(function (l) { if (l.trim()) b.push({ k: "p", t: l.trim() }); });
-    if (grave) {
+      (d.motif === "gravel" ? " pour faute grave" : (d.motif === "faute" ? " pour faute" : "")) +
+      ", pour les motifs suivants." });
+    (d.griefs || "[Énoncez ici les motifs, datés et circonstanciés. Ce sont eux qui fixent les " +
+      "limites du litige : ce qui n'y figure pas ne pourra pas être invoqué ensuite.]")
+      .split(/\n+/).forEach(function (l) { if (l.trim()) b.push({ k: "p", t: l.trim() }); });
+    if (d.motif === "gravel") {
       b.push({ k: "p", t: "Ces faits rendent impossible votre maintien dans l'entreprise. Votre " +
         "contrat prend fin dès la présentation de cette lettre, sans préavis ni indemnité de " +
         "licenciement. La période de mise à pied conservatoire ne vous sera pas rémunérée." });
     } else {
-      if (pre.jours) {
-        b.push({ k: "p", t: "Votre préavis, d'une durée de " + preavisMot(pre.jours) + ", débutera " +
-          "à la date de présentation de cette lettre (" + ref(["L1234-3"]) + "). Il prendra fin " +
-          "le " + dateFr(finPreavis) + " si la lettre vous est présentée le " + dateFr(totNotif) + "." });
+      if (calc.pre.jours) {
+        b.push({ k: "p", t: "Votre préavis, d'une durée de " + preavisMot(calc.pre.jours) + ", " +
+          "débutera à la date de présentation de cette lettre (" + ref(["L1234-3"]) + "). Présentée " +
+          "le " + dateFr(calc.totNotif) + ", il prendrait fin le " + dateFr(calc.finPreavis) + "." });
         b.push({ k: "p", t: "Si nous vous dispensons de l'exécuter, cette dispense ne réduira ni " +
-          "votre rémunération ni la date à laquelle votre contrat prend fin (" +
-          ref(["L1234-5"]) + ")." });
+          "votre rémunération ni la date à laquelle votre contrat prend fin (" + ref(["L1234-5"]) + ")." });
       } else {
         b.push({ k: "p", t: "Votre ancienneté est inférieure à six mois : la durée du préavis est " +
           "celle que fixent la convention collective ou les usages de la profession (" +
           ref(["L1234-1"]) + ")." });
       }
-      if (ind.montant > 0) {
-        b.push({ k: "p", t: "Vous percevrez une indemnité de licenciement de " + eur(ind.montant) +
+      if (calc.ind.montant > 0) {
+        b.push({ k: "p", t: "Vous percevrez une indemnité de licenciement de " + eur(calc.ind.montant) +
           " euros, calculée sur un salaire de référence de " + eur(d.salaire) + " euros et une " +
-          "ancienneté de " + Math.floor(mois / 12) + " an" + (mois >= 24 ? "s" : "") + " et " +
-          (mois % 12) + " mois. Le salaire de référence retenu sera le plus avantageux entre la " +
-          "moyenne des douze derniers mois et le tiers des trois derniers (" + ref(["R1234-4"]) + ")." });
+          "ancienneté de " + Math.floor(calc.mois / 12) + " an" + (calc.mois >= 24 ? "s" : "") +
+          " et " + (calc.mois % 12) + " mois. Le salaire de référence retenu sera le plus avantageux " +
+          "entre la moyenne des douze derniers mois et le tiers des trois derniers (" +
+          ref(["R1234-4"]) + ")." });
       }
     }
     b.push({ k: "p", t: "Vous pouvez, dans les quinze jours suivant la notification, nous demander " +
@@ -1705,76 +1589,90 @@
       ref(["R1232-13", "L1235-2"]) + ")." });
     b.push({ k: "p", t: "Votre certificat de travail, votre reçu pour solde de tout compte et " +
       "l'attestation destinée à France Travail seront tenus à votre disposition (" +
-      ref(["L1234-19", "L1234-20", "R1234-9"]) + "). Vos droits acquis au titre du compte personnel " +
-      "de formation vous restent ouverts." });
-    b.push({ k: "p", t: "Nous vous prions d'agréer, " + civilite + ", l'expression de nos salutations distinguées." });
+      ref(["L1234-19", "L1234-20", "R1234-9"]) + ")." });
+    b.push({ k: "p", t: "Nous vous prions d'agréer, " + civ + ", l'expression de nos salutations " +
+      "distinguées." });
     b.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
-
-    return { blocs: b, d: d, disciplinaire: disciplinaire, grave: grave, mois: mois,
-      totEntretien: totEntretien, entretienTropTot: entretienTropTot, totNotif: totNotif,
-      tardNotif: tardNotif, limiteConvoc: limiteConvoc, convocTard: convocTard,
-      pre: pre, finPreavis: finPreavis, ind: ind };
+    return b;
   }
 
-  function rendreLicenciement(r) {
-    var h = '<div class="bloc"><div class="dates">';
-    if (r.limiteConvoc) {
-      h += carteDate("Dernier jour pour convoquer", r.limiteConvoc,
-        "deux mois du jour de la connaissance des faits (" + ref(["L1332-4"]) + ")",
-        r.convocTard ? "tard" : "");
+  function rendreLicenciement() {
+    var d = lireLicenciement();
+    if (d.protege) {
+      $("#l-doc").innerHTML = refusHtml(["Le salarié est représentant du personnel : son " +
+        "licenciement suppose l'autorisation de l'inspection du travail, et la procédure n'est pas " +
+        "celle-ci. Les courriers de cette page ne conviennent pas."]);
+      return;
     }
-    h += carteDate("Entretien au plus tôt", r.totEntretien,
+    var disciplinaire = d.motif !== "personnel", grave = d.motif === "gravel";
+    var totEntretien = d.convocation ? apresJoursOuvrables(d.convocation, 5) : null;
+    var entretienTropTot = totEntretien && d.entretien && d.entretien < totEntretien;
+    var totNotif = d.entretien ? apresJoursOuvrables(d.entretien, 2) : null;
+    var tardNotif = disciplinaire && d.entretien ? plusMois(d.entretien, 1) : null;
+    var limiteConvoc = disciplinaire && d.connaissance ? plusMois(d.connaissance, 2) : null;
+    var convocTard = limiteConvoc && d.convocation && d.convocation > limiteConvoc;
+    var mois = d.entree ? moisAnnees(d.entree, totNotif || new Date()) : 0;
+    var pre = preavisDu(d.statut, mois, grave);
+    var finPreavis = pre.jours && totNotif ? jour(totNotif, pre.jours) : null;
+    var ind = indemniteDe(mois, d.salaire, grave);
+    var calc = { mois: mois, pre: pre, finPreavis: finPreavis, ind: ind, totNotif: totNotif };
+
+    var h = barre("licenciement", "Licenciement", "licenciement-" + slug(d.nom));
+    h += '<div class="dates">';
+    if (disciplinaire) {
+      h += carteDate("Dernier jour pour convoquer",
+        limiteConvoc ? dateFrJour(limiteConvoc) : "[date de connaissance à saisir]",
+        "deux mois du jour de la connaissance des faits (" + ref(["L1332-4"]) + ")",
+        convocTard ? "tard" : "");
+    }
+    h += carteDate("Entretien au plus tôt",
+      totEntretien ? dateFrJour(totEntretien) : "[date de convocation à saisir]",
       "cinq jours ouvrables après la présentation de la convocation (" + ref(["L1232-2"]) + ")",
-      r.entretienTropTot ? "tard" : "tot");
-    h += carteDate("Notification au plus tôt", r.totNotif,
+      entretienTropTot ? "tard" : "tot");
+    h += carteDate("Notification au plus tôt",
+      totNotif ? dateFrJour(totNotif) : "[date de l'entretien à saisir]",
       "deux jours ouvrables après l'entretien (" + ref(["L1232-6"]) + ")", "tot");
-    if (r.tardNotif) {
-      h += carteDate("Notification au plus tard", r.tardNotif,
+    if (disciplinaire) {
+      h += carteDate("Notification au plus tard",
+        tardNotif ? dateFrJour(tardNotif) : "[date de l'entretien à saisir]",
         "un mois après le jour fixé pour l'entretien (" + ref(["L1332-2"]) + ")", "tard");
     }
-    if (r.pre.jours) {
-      h += carteDate("Fin du préavis", r.finPreavis,
-        preavisMot(r.pre.jours) + " depuis la présentation de la lettre, " + r.pre.source, "");
+    if (pre.jours && finPreavis) {
+      h += carteDate("Fin du préavis", finPreavis,
+        preavisMot(pre.jours) + " depuis la présentation de la lettre, " + pre.source, "");
     }
     h += "</div>";
 
-    if (r.entretienTropTot) {
-      h += '<div class="refus"><b>L\'entretien est fixé trop tôt.</b> Il ne peut avoir lieu moins de ' +
-        "cinq jours ouvrables après la présentation de la convocation (" + ref(["L1232-2"]) + ") : " +
-        "le premier jour possible est le " + dateFrJour(r.totEntretien) + ". Les courriers sont " +
-        "produits avec la date que vous avez saisie ; corrigez-la.</div>";
+    if (entretienTropTot) {
+      h += '<div class="alerte">L\'entretien est fixé trop tôt : il ne peut avoir lieu moins de cinq ' +
+        "jours ouvrables après la présentation de la convocation (" + ref(["L1232-2"]) + "). Le " +
+        "premier jour possible est le " + dateFrJour(totEntretien) + ".</div>";
     }
-    if (r.convocTard) {
-      h += '<div class="refus"><b>Le délai de deux mois est dépassé.</b> La convocation est datée du ' +
-        dateFr(r.d.convocation) + ", alors que les poursuites devaient être engagées avant le " +
-        dateFr(r.limiteConvoc) + " (" + ref(["L1332-4"]) + ").</div>";
+    if (convocTard) {
+      h += '<div class="alerte">La convocation est datée du ' + dateFr(d.convocation) + ", alors que " +
+        "les poursuites devaient être engagées avant le " + dateFr(limiteConvoc) + " (" +
+        ref(["L1332-4"]) + ").</div>";
     }
-    h += '<div class="chiffre">Ancienneté à la notification : ' + Math.floor(r.mois / 12) + " an" +
-      (r.mois >= 24 ? "s" : "") + " et " + (r.mois % 12) + " mois. " +
-      (r.ind.montant > 0
-        ? "Indemnité de licenciement : " + eur(r.ind.montant) + " euros (" + r.ind.detail + ")" +
-          (r.ind.conventionnelle !== undefined
-            ? ", contre " + eur(r.ind.legale) + " euros au titre de l'indemnité légale et " +
-              eur(r.ind.conventionnelle) + " euros au titre de l'article 32 de la convention"
-            : "") + "."
-        : r.ind.detail + ".") + "</div>";
+    if (d.entree && d.salaire > 0) {
+      h += '<div class="chiffre">Ancienneté à la notification : ' + Math.floor(mois / 12) + " an" +
+        (mois >= 24 ? "s" : "") + " et " + (mois % 12) + " mois. " +
+        (ind.montant > 0
+          ? "Indemnité de licenciement : " + eur(ind.montant) + " euros (" + ind.detail + ")" +
+            (ind.conventionnelle !== undefined
+              ? ", contre " + eur(ind.legale) + " euros au titre de l'indemnité légale et " +
+                eur(ind.conventionnelle) + " euros au titre de l'article 32 de la convention"
+              : "") + "."
+          : ind.detail + ".") + "</div>";
+    }
     h += '<div class="alerte">Le décompte retient comme jours ouvrables tous les jours de la semaine ' +
-      "sauf le dimanche et les jours fériés. Vérifiez avant l'envoi qu'aucune protection " +
-      "particulière ne s'applique : maternité (" + ref(["L1225-4"]) + "), accident du travail ou " +
-      "maladie professionnelle (" + ref(["L1226-9"]) + ").</div>";
-    h += barreSortie("l-feuille", "Licenciement", "licenciement-" + slug(r.d.nom));
-    h += "</div>";
-    h += feuille(r.blocs, "l");
-    return h;
+      "sauf le dimanche et les jours fériés. Vérifiez avant l'envoi qu'aucune protection particulière " +
+      "ne s'applique : maternité (" + ref(["L1225-4"]) + "), accident du travail ou maladie " +
+      "professionnelle (" + ref(["L1226-9"]) + ").</div>";
+    h += feuilleHtml(courriersLicenciement(d, calc), "licenciement");
+    $("#l-doc").innerHTML = h;
   }
 
   /* ═══════════════════════════════════════════════════════════ le câblage */
-  function refusHtml(liste) {
-    return '<div class="refus"><b>' +
-      (liste.length > 1 ? "Le document n'est pas produit :" : "Le document n'est pas produit.") +
-      "</b>" + liste.map(function (l) { return "<div>- " + ech(l) + "</div>"; }).join("") + "</div>";
-  }
-
   function onglet(nom) {
     ["embauche", "sanction", "licenciement"].forEach(function (o) {
       $("#o-" + o).classList.toggle("cache", o !== nom);
@@ -1787,88 +1685,161 @@
     b.addEventListener("click", function () { onglet(b.dataset.o); });
   });
 
-  remplirClasses(); remplirMotifs(); remplirPostes();
-  $("#e-nature").addEventListener("change", majEmbauche);
-  $("#e-motif").addEventListener("change", majEmbauche);
-  $("#s-sanction").addEventListener("change", function () {
+  /* Les listes que la convention fournit. */
+  (function remplirListes() {
+    var sel = $("#e-classe");
+    if (ccn && ccn.salaires) {
+      ["I", "II", "III", "IV", "V"].forEach(function (n) {
+        ["1", "2", "3"].forEach(function (e) {
+          var cle = n + "-" + e, o = document.createElement("option");
+          o.value = cle;
+          o.textContent = "Niveau " + n + ", échelon " + e + " - " + eur(ccn.salaires.grille[cle]) +
+            " euros de l'heure";
+          sel.appendChild(o);
+        });
+      });
+    } else {
+      var o = document.createElement("option");
+      o.value = ""; o.textContent = "grille non lue, à compléter sur le contrat";
+      sel.appendChild(o); sel.disabled = true;
+    }
+    var m = $("#e-motif");
+    m.innerHTML = "";
+    MOTIFS.forEach(function (x) {
+      var op = document.createElement("option");
+      op.value = x.v;
+      op.textContent = x.t + (x.interdit ? "" : "  (" + ref([x.base]) + " " + x.al + ")");
+      m.appendChild(op);
+    });
+    if (ccn && ccn.emplois) {
+      var dl = $("#l-postes");
+      ccn.emplois.forEach(function (e) {
+        var op = document.createElement("option"); op.value = e; dl.appendChild(op);
+      });
+    }
+  })();
+
+  /* Les valeurs de départ : celles que la fiche d'entreprise commande, pour
+     que le document soit déjà écrit avant la première frappe. */
+  (function valeursDeDepart() {
+    var aujourdhui = new Date();
+    $("#e-date").value = iso(aujourdhui);
+    $("#e-heures").value = ccn && ccn.duree ? ccn.duree.heures : 35;
+    $("#e-terme").value = iso(plusMois(aujourdhui, 6));
+    majSalaireConventionnel();
+
+    $("#s-faits").value = iso(aujourdhui);
+    $("#s-connaissance").value = iso(aujourdhui);
+    $("#s-entretien").value = iso(prochainOuvrable(jour(aujourdhui, 7)));
+    $("#s-lieu").value = "au siège de la société";
+
+    $("#l-connaissance").value = iso(aujourdhui);
+    $("#l-convocation").value = iso(aujourdhui);
+    $("#l-entretien").value = iso(apresJoursOuvrables(aujourdhui, 5));
+    $("#l-lieu").value = "au siège de la société";
+  })();
+
+  /* Le salaire suit le minimum conventionnel tant que l'utilisateur n'y a pas
+     touché : le contrat s'ouvre sur un montant licite, pas sur un vide. */
+  var salaireTouche = false;
+  function majSalaireConventionnel() {
+    if (salaireTouche) return;
+    var taux = tauxMinimum($("#e-classe").value);
+    if (taux === null) return;
+    var h = Number($("#e-heures").value) || 0;
+    if (!h) return;
+    $("#e-salaire").value = (Math.round(taux * heuresPayees(h) * 100) / 100).toFixed(2);
+  }
+  $("#e-salaire").addEventListener("input", function () { salaireTouche = true; });
+  ["#e-classe", "#e-heures"].forEach(function (s) {
+    $(s).addEventListener("change", majSalaireConventionnel);
+    $(s).addEventListener("input", majSalaireConventionnel);
+  });
+
+  function majChampsEmbauche() {
+    var cdd = $("#e-nature").value === "cdd";
+    $("#e-bloc-motif").classList.toggle("cache", !cdd);
+    var m = cdd ? motifDe($("#e-motif").value) : null;
+    $("#e-bloc-remplace").classList.toggle("cache", !(m && m.remplace));
+    $("#e-bloc-terme").classList.toggle("cache", !cdd || !m || !!m.interdit || !!m.sansTerme);
+    $("#e-bloc-duree").classList.toggle("cache", !(m && m.sansTerme));
+    $("#e-bloc-eco").classList.toggle("cache", !(m && m.eco));
+  }
+  function majChampsSanction() {
     var S = SANCTIONS[$("#s-sanction").value];
     $("#s-bloc-jours").classList.toggle("cache", $("#s-sanction").value !== "miseapied");
     $("#s-bloc-entretien").classList.toggle("cache", !S.entretien);
     $("#s-bloc-heure").classList.toggle("cache", !S.entretien);
-  });
-  $("#s-sanction").dispatchEvent(new Event("change"));
-  $("#l-motif").addEventListener("change", function () {
-    var disc = $("#l-motif").value !== "personnel";
-    $("#l-bloc-connaissance").classList.toggle("cache", !disc);
-  });
+  }
+  function majChampsLicenciement() {
+    $("#l-bloc-connaissance").classList.toggle("cache", $("#l-motif").value === "personnel");
+  }
 
-  /* La date de l'entretien se propose toute seule dès que la convocation est
-     saisie : le premier jour que la loi permet. Elle reste modifiable. */
+  /* La date de l'entretien suit la convocation tant qu'on ne l'a pas fixée
+     soi-même : c'est le premier jour que la loi permet. */
+  var entretienTouche = false;
+  $("#l-entretien").addEventListener("input", function () { entretienTouche = true; });
   $("#l-convocation").addEventListener("change", function () {
     var c = lireDate("#l-convocation");
-    if (!c || $("#l-entretien").value) return;
-    var t = apresJoursOuvrables(c, 5);
-    $("#l-entretien").value = t.getFullYear() + "-" +
-      String(t.getMonth() + 1).padStart(2, "0") + "-" + String(t.getDate()).padStart(2, "0");
+    if (!c || entretienTouche) return;
+    $("#l-entretien").value = iso(apresJoursOuvrables(c, 5));
   });
 
-  function brancher(idForm, produire, rendre, idRefus, idSortie) {
-    $(idForm).addEventListener("submit", function (ev) {
-      ev.preventDefault();
-      var r = produire();
-      if (r.refus) {
-        $(idRefus).innerHTML = refusHtml(r.refus);
-        $(idSortie).classList.add("cache");
-        $(idSortie).innerHTML = "";
-        return;
-      }
-      $(idRefus).innerHTML = "";
-      $(idSortie).innerHTML = rendre(r);
-      $(idSortie).classList.remove("cache");
-      $(idSortie).scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+  /* Chaque frappe réécrit le document. */
+  function brancher(idForm, maj, rendre) {
+    var f = $(idForm);
+    function tout() { maj(); rendre(); }
+    f.addEventListener("input", tout);
+    f.addEventListener("change", tout);
+    tout();
   }
-  brancher("#f-embauche", contrat, rendreEmbauche, "#e-refus", "#e-sortie");
-  brancher("#f-sanction", sanction, rendreSanction, "#s-refus", "#s-sortie");
-  brancher("#f-licenciement", licenciement, rendreLicenciement, "#l-refus", "#l-sortie");
+  brancher("#f-embauche", majChampsEmbauche, rendreEmbauche);
+  brancher("#f-sanction", majChampsSanction, rendreSanction);
+  brancher("#f-licenciement", majChampsLicenciement, rendreLicenciement);
+
+  /* Une correction faite à la main dans le document est retenue sur le texte
+     d'origine du bloc : elle survit à la réécriture des autres. */
+  document.addEventListener("input", function (ev) {
+    var el = ev.target;
+    if (!el || !el.getAttribute || !el.hasAttribute("contenteditable")) return;
+    var f = el.closest(".feuille");
+    if (!f) return;
+    var module = f.id.replace("-feuille", "");
+    if (!corrections[module]) return;
+    corrections[module][el.getAttribute("data-o")] = el.innerText.replace(/ /g, " ");
+    el.classList.add("modifie");
+  });
 
   document.addEventListener("click", function (ev) {
     var b = ev.target.closest ? ev.target.closest("button") : null;
     if (!b) return;
-    if (b.dataset.dl) exporterDocx(b.dataset.dl, b.dataset.titre, nom(b.dataset.base, "docx"));
-    else if (b.dataset.txt) exporterTxt(b.dataset.txt, nom(b.dataset.base, "txt"));
+    if (b.dataset.dl) exporterDocx(b.dataset.dl, b.dataset.titre, nomFichier(b.dataset.base, "docx"));
+    else if (b.dataset.txt) exporterTxt(b.dataset.txt, nomFichier(b.dataset.base, "txt"));
     else if (b.dataset.print) window.print();
-  });
-
-  ["e", "s", "l"].forEach(function (p) {
-    var btn = $("#" + p + "-vider");
-    if (!btn) return;
-    btn.addEventListener("click", function () {
-      var f = $("#f-" + (p === "e" ? "embauche" : p === "s" ? "sanction" : "licenciement"));
-      f.querySelectorAll("input, textarea").forEach(function (i) {
-        if (i.type !== "time") i.value = "";
-      });
-      $("#" + p + "-refus").innerHTML = "";
-      $("#" + p + "-sortie").innerHTML = "";
-      $("#" + p + "-sortie").classList.add("cache");
-    });
+    else if (b.dataset.reprendre) {
+      corrections[b.dataset.reprendre] = {};
+      if (b.dataset.reprendre === "embauche") rendreEmbauche();
+      else if (b.dataset.reprendre === "sanction") rendreSanction();
+      else rendreLicenciement();
+    }
   });
 
   /* Les sources, en pied de page : le numéro, ce qu'il dit, et l'identifiant de
      version. Sans cet identifiant, un reproche de citation tronquée coûte
      quatre requêtes datées à écarter. */
   (function sources() {
-    var h = "Code du travail, lu au relais Légifrance le 7 septembre 2026, deux lectures concordantes.<br><br>";
+    var h = "Code du travail, lu au relais Légifrance le 7 septembre 2026, deux lectures " +
+      "concordantes par article.<br><br>";
     Object.keys(TEXTES).forEach(function (k) {
       h += ech(k.replace(/^([LRD])(\d)/, "$1. $2")) + " · " + TEXTES[k].id + " · " +
         ech(TEXTES[k].dit) + "<br>";
     });
     if (ccn) {
       h += "<br>" + ech(ccn.nom) + ", lue le 7 septembre 2026, deux lectures identiques.<br>" +
-        "Texte de base " + ccn.base + " : article 12 mentions " + ccn.mentions +
+        "Texte de base " + ccn.base + " : article 12 mentions du contrat " + ccn.mentions +
         " · article 13 période d'essai " + ccn.essai.id + " · article 30 préavis " + ccn.preavis.id +
-        " · article 32 indemnité " + ccn.indemnite.id + " · article 35 salaires et nourriture " +
-        ccn.nourriture + "<br>" +
+        " · article 32 indemnité de licenciement " + ccn.indemnite.id +
+        " · article 35 salaires et nourriture " + ccn.nourriture + "<br>" +
         "Avenant n° 2 du 5 février 2007 " + ccn.avenant2 + " : article 3 durée " + ccn.duree.id +
         " · article 4 majorations " + ccn.majorations.id + " · article 5 heures supplémentaires " +
         ccn.supplementaires.id + " · article 6 durées maximales " + ccn.maxima.id +
