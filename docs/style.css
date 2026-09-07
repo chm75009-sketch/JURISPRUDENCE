@@ -1,0 +1,308 @@
+/* ==========================================================================
+   Jurisprudence - feuille de style unique de l'application
+
+   Avant elle, chaque page portait sa propre feuille : trois familles de
+   couleurs, des titres de six tailles différentes, des boutons ronds ici et
+   carrés là. Tout ce qui se répétait d'une page à l'autre est descendu ici.
+   Une page ne garde en propre que ce qu'elle est seule à afficher.
+
+   L'ordre du fichier :
+     1. les jetons (couleurs, tailles, espacements, rayons)
+     2. la base (corps de page, titres, liens, texte courant)
+     3. la charpente (bandeau, colonne de lecture, pied, barre de retour)
+     4. les composants (boutons, onglets, formulaires, tableaux, encadrés)
+     5. l'impression
+   ========================================================================== */
+
+/* ---------- 1. Les jetons ------------------------------------------------ */
+
+:root{
+  /* La palette tient en six couleurs : un fond, un texte, un gris de trait,
+     un accent, un rouge d'alerte, un vert de conformité. L'ambre sert aux
+     seules mentions d'attente. Chacune a sa version claire pour les fonds. */
+  --fond:#f6f7f9;
+  --surface:#ffffff;
+  --creux:#f2f4f6;
+  --encre:#16181d;
+  --texte:#262b33;
+  --texte-2:#545c66;
+  --texte-3:#7b838d;
+  --filet:#dde1e6;
+  --filet-2:#c8cfd6;
+  --accent:#1F3864;
+  --accent-fonce:#17294a;
+  --accent-clair:#eef1f7;
+  --rouge:#8E1B1B;
+  --rouge-clair:#faf2f2;
+  --vert:#1C5E36;
+  --vert-clair:#eff6f2;
+  --ambre:#8a5b10;
+  --ambre-clair:#f8f2e7;
+  --zebre:#fafbfc;
+
+  /* L'échelle des textes. Sept valeurs, pas une de plus : au-delà, les
+     tailles se mettent à varier d'une page à l'autre sans raison. */
+  --t0:11.5px;   /* sur-titres, identifiants */
+  --t1:12.5px;   /* mentions, aide de champ */
+  --t2:13.5px;   /* texte dense, tableaux */
+  --t3:14.5px;   /* texte secondaire, boutons */
+  --t4:16px;     /* texte courant */
+  --t5:20px;     /* titre de section */
+  --t6:clamp(25px,3.4vw,31px); /* titre de page */
+
+  /* L'échelle des espacements. Tout ce qui sépare deux choses prend une de
+     ces valeurs. */
+  --e1:4px; --e2:8px; --e3:12px; --e4:16px; --e5:24px; --e6:32px; --e7:48px;
+
+  /* Les rayons et l'ombre. L'ombre est presque invisible : elle pose la
+     carte sur le fond, elle ne la fait pas flotter. */
+  --r1:6px;      /* champs, boutons */
+  --r2:10px;     /* cartes, encadrés */
+  --ombre:0 1px 2px rgba(22,24,29,.05);
+
+  --colonne:1080px;  /* la largeur de lecture, la même partout */
+
+  /* Les anciens noms, gardés le temps que les pages et les scripts qui les
+     écrivent encore trouvent la bonne couleur. Ils pointent tous sur la
+     palette ci-dessus : c'est ce qui fait qu'une seule valeur change tout. */
+  --papier:var(--fond); --carte:var(--surface); --card:var(--surface);
+  --bg:var(--fond); --corps:var(--texte); --ink:var(--encre);
+  --encre-2:var(--texte-2); --encre-3:var(--texte-3);
+  --gris:var(--texte-2); --muted:var(--texte-2); --gris-f:var(--creux);
+  --line:var(--filet); --bleu:var(--accent); --link:var(--accent);
+  --bleu-clair:var(--accent-clair); --accent-soft:var(--accent-clair);
+  --prune:var(--accent); --ardoise:var(--texte-2);
+  --rouge-f:var(--rouge-clair); --err:var(--rouge); --err-soft:var(--rouge-clair);
+  --vert-f:var(--vert-clair); --ok:var(--vert); --ok-soft:var(--vert-clair);
+  --orange:var(--ambre); --orange-f:var(--ambre-clair);
+  --warn:var(--ambre); --warn-soft:var(--ambre-clair);
+}
+
+/* ---------- 2. La base --------------------------------------------------- */
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--fond);
+  color:var(--texte);
+  font:var(--t4)/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{color:var(--accent)}
+a:hover{color:var(--accent-fonce)}
+
+h1{font:600 var(--t6)/1.2 system-ui;letter-spacing:-.01em;color:var(--encre);margin:0 0 var(--e3)}
+h2{font:600 var(--t5)/1.3 system-ui;color:var(--encre);margin:var(--e6) 0 var(--e2)}
+h3{font:600 15px/1.4 system-ui;color:var(--accent);margin:var(--e5) 0 var(--e2)}
+h4{font:600 var(--t2)/1.4 system-ui;color:var(--encre);margin:var(--e4) 0 var(--e1)}
+
+p{margin:0 0 var(--e3)}
+
+/* Le sur-titre : la seule capitale de l'application. */
+.fil{font:600 var(--t0)/1 system-ui;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--texte-3);margin:0 0 var(--e3)}
+
+/* Le chapeau, sous le titre de page, et l'aide, sous un titre de section.
+   Les deux se lisent sur une colonne courte : au-delà de 70 signes, l'oeil
+   perd la ligne suivante. */
+.chapo{margin:0;color:var(--texte-2);max-width:68ch}
+.aide{margin:0 0 var(--e3);color:var(--texte-2);font-size:var(--t3);max-width:70ch}
+.note{color:var(--texte-2);font-size:var(--t2)}
+.cache{display:none}
+mark{background:#fbeeb6;color:inherit;border-radius:2px}
+
+hr{border:none;border-top:1px solid var(--filet);margin:var(--e5) 0}
+
+/* Un identifiant de version, une référence : lu à la lettre, donc chasse
+   fixe et jamais coupé. */
+.ident{font:500 var(--t0)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--texte-3);background:var(--creux);border-radius:4px;padding:2px 5px;white-space:nowrap}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- 3. La charpente ---------------------------------------------- */
+
+/* La colonne de lecture. Même largeur sur toutes les pages : c'est elle qui
+   fait qu'on passe d'un écran à l'autre sans que la page bouge. */
+.wrap,.page{max-width:var(--colonne);margin:0 auto;padding:0 var(--e5)}
+.page{padding-bottom:var(--e7)}
+main.wrap,main.page{display:block}
+
+/* Le bandeau de tête, identique partout : le nom de l'application à gauche,
+   le retour à l'accueil et les outils à droite. */
+header.site{background:var(--encre);color:#fff;padding:12px 0}
+header.site .wrap{display:flex;flex-wrap:wrap;gap:var(--e2) var(--e4);
+  align-items:center;justify-content:space-between}
+header.site .marque{font:600 15px/1.3 system-ui;letter-spacing:.01em;color:#fff;
+  text-decoration:none;margin:0}
+header.site .marque span{opacity:.6;font-weight:400}
+header.site h1{margin:0;font:600 15px/1.3 system-ui;color:#fff}
+header.site h1 span{opacity:.6;font-weight:400}
+.outils{display:flex;flex-wrap:wrap;gap:var(--e2);align-items:center;font-size:var(--t1)}
+.outils a,.outils button{font:500 var(--t1)/1 system-ui;padding:7px 12px;border-radius:var(--r1);
+  border:1px solid rgba(255,255,255,.32);background:transparent;color:#fff;
+  text-decoration:none;cursor:pointer}
+.outils a:hover,.outils button:hover{background:rgba(255,255,255,.12);color:#fff}
+.outils #etat-version,#etat-version{opacity:.55;font-size:var(--t0);border:none;padding:0}
+
+/* Le titre de page, sous le bandeau. Un filet le sépare du contenu, rien de
+   plus : le poids vient du texte, pas du trait. */
+main>header:not(.site),.page>header:not(.site){padding:var(--e6) 0 var(--e4);
+  border-bottom:1px solid var(--filet);margin:0 0 var(--e4)}
+
+/* La barre de retour des pages profondes. Collée en haut, parce que sur un
+   téléphone installé il n'y a pas de flèche « précédent ». Elle est dans la
+   colonne, mais son filet la traverse de bord à bord. */
+.retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:var(--e2) var(--e3);
+  align-items:center;background:var(--fond);border-bottom:1px solid var(--filet);
+  padding:var(--e2) var(--e5);margin:0 calc(var(--e5) * -1)}
+/* Le retour est une navigation, pas l'action de l'écran : il se tient en
+   retrait pour laisser le bouton principal seul en avant. */
+button.retour{font:600 var(--t2)/1 system-ui;padding:8px 14px;
+  background:var(--surface);color:var(--accent);border-color:var(--filet-2)}
+button.retour:hover{background:var(--creux);color:var(--accent-fonce);border-color:var(--filet-2)}
+.retour-ou{font-size:var(--t2);color:var(--texte-2)}
+.retour-ou a{color:var(--accent)}
+a.retour{display:inline-flex;align-items:center;gap:6px;margin:var(--e5) 0 0;
+  font:600 var(--t2) system-ui;color:var(--texte-2);text-decoration:none}
+a.retour:hover{color:var(--encre)}
+
+footer{margin:var(--e7) 0 var(--e7);padding-top:var(--e4);border-top:1px solid var(--filet);
+  font-size:var(--t2);color:var(--texte-3);line-height:1.6}
+footer a{color:var(--texte-2)}
+footer a:hover{color:var(--accent)}
+
+/* Le bandeau de mise à jour : il prévient, il n'impose pas le rechargement. */
+.maj-dispo{display:none;background:var(--accent-clair);border-bottom:1px solid var(--filet-2)}
+.maj-dispo.visible{display:block}
+.maj-dispo .wrap{display:flex;gap:var(--e3);align-items:center;flex-wrap:wrap;
+  padding:var(--e2) var(--e5);font-size:var(--t2);color:var(--texte)}
+.maj-dispo button{margin-left:auto;white-space:nowrap}
+
+/* ---------- 4. Les composants -------------------------------------------- */
+
+/* Les boutons. Un seul principal par écran ; tous les autres portent
+   « second » et s'effacent derrière lui. */
+button,.btn{font:600 var(--t3)/1 system-ui;padding:11px 18px;border-radius:var(--r1);
+  border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+button:hover,.btn:hover{background:var(--accent-fonce);border-color:var(--accent-fonce);color:#fff}
+button.second,.btn.second{background:var(--surface);color:var(--accent);border-color:var(--filet-2)}
+button.second:hover,.btn.second:hover{background:var(--creux);color:var(--accent-fonce);border-color:var(--filet-2)}
+button:disabled,.btn:disabled,button[disabled],.btn[disabled]{opacity:.45;cursor:not-allowed}
+button:disabled:hover,.btn:disabled:hover,button[disabled]:hover{background:var(--accent);border-color:var(--accent)}
+button.second:disabled:hover,.btn.second:disabled:hover{background:var(--surface)}
+.btn.petit,button.petit{font-size:var(--t1);padding:8px 12px}
+
+/* La barre d'actions : les boutons au même endroit sur tous les écrans, en
+   bas du bloc qu'ils commandent. */
+.barre{display:flex;flex-wrap:wrap;gap:var(--e2);align-items:center;margin:var(--e4) 0}
+.compteur{color:var(--texte-2);font-size:var(--t3);margin-left:auto}
+
+/* Les onglets. */
+.onglets{display:flex;flex-wrap:wrap;gap:var(--e2);margin:var(--e5) 0 0}
+.onglets button{font:500 var(--t2)/1 system-ui;padding:10px 14px;border-radius:var(--r1);
+  border:1px solid var(--filet-2);background:var(--surface);color:var(--texte-2)}
+.onglets button:hover{background:var(--creux);color:var(--encre);border-color:var(--filet-2)}
+.onglets button.actif{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.onglets button.actif:hover{background:var(--accent-fonce);border-color:var(--accent-fonce)}
+.onglets button:disabled{opacity:.45;cursor:not-allowed}
+
+/* Les formulaires. Le libellé au-dessus du champ, aligné sur lui, de la même
+   taille partout ; l'aide dessous, plus petite et grise. */
+fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:var(--r2);
+  padding:var(--e4) var(--e4) var(--e5);margin:0 0 var(--e4)}
+legend{font:600 var(--t3)/1 system-ui;color:var(--accent);padding:0 var(--e2)}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--e4) var(--e5)}
+.champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:var(--e4)}
+label{display:block;font-size:var(--t3)}
+label .nom,label.ch .nom,label.champ span{display:block;font:600 var(--t2)/1.35 system-ui;
+  color:var(--texte-2);letter-spacing:0;text-transform:none;margin:0 0 var(--e1)}
+label.ch{display:grid;gap:var(--e1)}
+label.ch.large,label.ch.pleine,.pleine{grid-column:1/-1}
+input,select,textarea{width:100%;font:inherit;font-size:15px;line-height:1.4;padding:9px 11px;
+  border:1px solid var(--filet-2);border-radius:var(--r1);
+  background:var(--surface);color:var(--encre)}
+textarea{min-height:74px;resize:vertical}
+input[type=checkbox],input[type=radio]{width:auto;padding:0}
+input[type=file]{padding:7px 9px;font-size:var(--t2)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent-clair);outline-offset:0;
+  border-color:var(--accent)}
+input:disabled,select:disabled,textarea:disabled{background:var(--creux);color:var(--texte-2);cursor:not-allowed}
+.aide-champ,label.ch .sous,.sous{margin:var(--e1) 0 0;font-size:var(--t1);line-height:1.5;color:var(--texte-2)}
+
+/* Les cases à cocher : la case et sa ligne alignées sur le haut du texte. */
+.case,label.case{display:flex;align-items:flex-start;gap:var(--e2);font-size:var(--t2);
+  line-height:1.45;color:var(--texte)}
+.case input,label.case input{width:auto;flex:0 0 auto;margin:3px 0 0}
+
+/* Les tableaux. Les longs surtout : un fond alterné, une tête grise qui ne
+   fatigue pas, et le débordement qui roule dans son cadre plutôt que de
+   pousser la page. */
+.tab,.tbl,.defile{overflow-x:auto;max-width:100%;margin:var(--e3) 0}
+table{border-collapse:collapse;width:100%;font-size:var(--t2);background:var(--surface)}
+th,td{border:1px solid var(--filet);padding:7px 10px;text-align:left;vertical-align:top}
+th{font:600 var(--t1)/1.4 system-ui;color:var(--encre);background:var(--creux)}
+tbody tr:nth-of-type(even){background:var(--zebre)}
+caption{caption-side:top;text-align:left;font-size:var(--t1);color:var(--texte-2);padding:0 0 var(--e1)}
+
+/* Les blocs : la carte, l'encadré, l'avis. Un fond, un filet, rien d'autre. */
+.carte{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
+  padding:var(--e4) var(--e4);margin:var(--e3) 0}
+.presentation{border:1px solid var(--filet);background:var(--surface);border-radius:var(--r2);
+  padding:var(--e4) var(--e5);margin:var(--e5) 0 0}
+.presentation h2{margin:0 0 var(--e2);font:600 17px/1.35 system-ui}
+.presentation p{margin:0 0 var(--e2);max-width:74ch}
+.presentation p:last-child{margin-bottom:0}
+.enc{border:1px solid var(--accent);background:var(--accent-clair);padding:var(--e3) var(--e4);
+  margin:var(--e3) 0;border-radius:var(--r1)}
+.enc .sh{font-weight:600;color:var(--accent);margin:0 0 var(--e1)}
+.vide{border:1px solid var(--filet);background:var(--creux);color:var(--texte);
+  padding:var(--e3) var(--e4);border-radius:var(--r1);margin:var(--e4) 0 0;font-size:var(--t3)}
+
+.avis{border-radius:var(--r1);padding:var(--e3) var(--e4);font-size:var(--t3);
+  line-height:1.55;margin:var(--e3) 0}
+.avis b{display:block;margin-bottom:2px}
+.avis.info{background:var(--accent-clair);color:var(--accent)}
+.avis.att{background:var(--ambre-clair);color:var(--ambre)}
+.avis.ok{background:var(--vert-clair);color:var(--vert)}
+.avis.non{background:var(--rouge-clair);color:var(--rouge)}
+
+/* Les pastilles d'état : même gabarit, seule la couleur dit le sens. */
+.chip,.jauge,.etiq{display:inline-block;font:600 var(--t0)/1 system-ui;padding:5px 9px;
+  border-radius:var(--r1);white-space:nowrap;background:var(--creux);color:var(--texte-2)}
+.compteurs{display:flex;flex-wrap:wrap;gap:var(--e2);margin:var(--e3) 0}
+.compteurs .c{font:600 var(--t1)/1 system-ui;padding:8px 11px;border-radius:var(--r1);
+  background:var(--creux);color:var(--texte-2)}
+
+/* Les replis. Un triangle, un titre, rien qui clignote. */
+details.txt,details.texte{border:1px solid var(--filet);border-radius:var(--r2);
+  background:var(--surface);margin:var(--e2) 0}
+details.txt>summary,details.texte>summary{padding:10px 14px;cursor:pointer;
+  font:600 var(--t2)/1.35 system-ui;color:var(--accent)}
+details.txt .c,details.texte .corps{padding:0 14px 12px;font-size:var(--t2);
+  line-height:1.6;color:var(--texte-2)}
+
+/* La feuille : le document produit, tel qu'il sortira sur le papier. */
+.feuille{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
+  padding:clamp(22px,5vw,48px);margin:0 auto;color:#1a1d22}
+
+pre{white-space:pre-wrap;word-wrap:break-word}
+
+/* ---------- 5. L'impression ---------------------------------------------- */
+
+/* Ce qui sert à naviguer ne s'imprime pas : il ne reste que le document. */
+@media print{
+  body{background:#fff;color:#000}
+  header.site,.retour-barre,.maj-dispo,.onglets,.outils{display:none !important}
+  .wrap,.page{max-width:none;padding:0}
+  .carte,.presentation,.feuille,fieldset{box-shadow:none}
+  .feuille{border:none;border-radius:0;max-width:none;padding:0}
+  table{font-size:10.5pt}
+  th{background:#fff;color:#000;border-bottom:1.5px solid #000}
+  tbody tr:nth-of-type(even){background:#fff}
+  tr,.carte,.avis,.enc{break-inside:avoid}
+  h1,h2,h3{break-after:avoid}
+  a{text-decoration:none;color:#000}
+}
