@@ -1417,6 +1417,9 @@
     Object.keys(concernes).forEach(function (cle) {
       var cont = conteneurDe(cle);
       if (!cont) return;
+      /* Une question à laquelle la fiche d'entreprise a déjà répondu reste
+         masquée : aucune règle de visibilité ne la fait revenir. */
+      if (cont.getAttribute("data-fiche") === "1") return;
       var doitCacher = !!caches[cle];
       var estCache = cont.style.display === "none";
       if (doitCacher && !estCache) { cont.style.display = "none"; viderChamp(cle); }
@@ -2047,6 +2050,9 @@
       env.ligne(null);
     });
     Object.keys(APPELEES).forEach(majAppel);
+    /* L'identité de l'entreprise vient de la fiche, pas de l'audit : effacer
+       l'audit ne l'efface pas. Elle est reposée aussitôt. */
+    poserFiche();
     sortie.innerHTML = ""; compter();
     try { localStorage.removeItem(CLE); } catch (e) {}
     signaler("Tout a été effacé. « Annuler la dernière saisie » rétablit ce que vous aviez écrit.");
@@ -2085,6 +2091,69 @@
       if (nuancesSauvees) ecrire("__nuances", nuancesSauvees);
     }
   } catch (e) {}
+
+  /* ------------------------------------------- ce que la fiche a déjà dit
+
+     La fiche d'entreprise est saisie une fois, sur l'accueil, et elle vit
+     sous la clé « profil-entreprise » (docs/profil.js). Ce formulaire ne la
+     lisait pas : la dénomination, le SIREN, l'IDCC et l'effectif que
+     l'utilisateur venait de saisir lui étaient redemandés dans des cases
+     vides. Ils sont désormais posés depuis la fiche, et la question
+     disparaît de l'écran : on ne demande pas deux fois. Ce que la fiche ne
+     porte pas reste demandé ici, comme avant. */
+  function chiffresDe(v) { return String(v == null ? "" : v).replace(/\D/g, ""); }
+  function depuisFiche() {
+    if (!window.Profil || typeof window.Profil.lire !== "function") return {};
+    var p = window.Profil.lire() || {}, v = {};
+    var nom = String(p.denomination || "").trim();
+    if (nom) v.entreprise = nom;
+    /* Le SIREN est les neuf premiers chiffres du SIRET, qui en compte
+       quatorze : les cinq derniers désignent l'établissement. Un SIRET plus
+       court n'est pas complété au jugé, la question reste posée. */
+    var s = chiffresDe(p.siret);
+    if (s.length >= 9) v.siren = s.slice(0, 9);
+    /* La fiche enregistre la convention sous la forme « 1486 - intitulé » ;
+       le questionnaire attend le seul numéro, sur quatre chiffres. Une
+       convention décrite en toutes lettres ne donne pas de numéro : la
+       question reste posée. */
+    var cc = String(p.conventionCollective || "").trim().match(/^(\d{1,4})\b/);
+    if (cc) v.idcc = ("0000" + cc[1]).slice(-4);
+    var eff = String(p.effectif == null ? "" : p.effectif).trim();
+    if (eff !== "" && isFinite(+eff)) v.effectif = eff;
+    return v;
+  }
+  /* Poser les valeurs de la fiche. Appelé au chargement et après « Tout
+     effacer » : l'identité de l'entreprise n'est pas une saisie de l'audit,
+     elle ne s'efface pas avec lui. */
+  function poserFiche() {
+    var v = depuisFiche(), pris = [];
+    Object.keys(v).forEach(function (cle) {
+      if (!document.getElementById("c-" + cle)) return;
+      ecrire(cle, v[cle]);
+      var cont = conteneurDe(cle);
+      if (cont) { cont.style.display = "none"; cont.setAttribute("data-fiche", "1"); }
+      pris.push(cle);
+    });
+    return { valeurs: v, pris: pris };
+  }
+  (function rappelFiche() {
+    var r = poserFiche();
+    if (!r.pris.length) return;
+    var st = document.createElement("style");
+    st.textContent =
+      ".rappel-fiche{margin:0 0 14px;padding:8px 12px;border:1px solid #dcdfe4;" +
+      "border-radius:3px;background:#fff;font-size:13.5px;color:#5f6874}" +
+      ".rappel-fiche b{color:#16181d}" +
+      ".rappel-fiche a{color:#1F3864;margin-left:10px}";
+    document.head.appendChild(st);
+    var nom = r.valeurs.entreprise, eff = r.valeurs.effectif;
+    var p = document.createElement("p");
+    p.className = "rappel-fiche";
+    p.innerHTML = (nom ? "<b>" + ech(nom) + "</b>" : "") +
+      (nom && eff ? " · " : "") + (eff ? ech(eff) + " salariés" : "") +
+      ' <a href="index.html">modifier</a>';
+    form.insertBefore(p, form.firstChild);
+  })();
 
   /* ------------------------------------------------ la barre d'actions
 

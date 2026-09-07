@@ -162,14 +162,13 @@
   .feuille .pied-textes{margin-top:36px;padding-top:10px;border-top:1px solid #d5d8de;
     font:11.5px/1.55 system-ui;color:#8a9099}
   .feuille .pied-textes .ident{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
-  .doc-outils{max-width:820px;margin:0 auto 12px;display:flex;gap:10px;flex-wrap:wrap}
 
   footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--filet);color:var(--gris);font-size:13.5px}
 
   /* À l'impression, seule la feuille sort — sans cadre ni fond d'écran. */
   @media print{
     body{background:#fff}
-    .retour-barre,header,.presentation,.modeles,#form-bloc,.barre,#message,.doc-outils,footer,h2.titre-zone,.avert{display:none !important}
+    .retour-barre,header,.presentation,.modeles,#form-bloc,.barre,#message,footer,h2.titre-zone,.avert{display:none !important}
     .page{max-width:none;padding:0}
     #docu{margin:0}
     .feuille{border:none;border-radius:0;max-width:none;padding:0;font-size:12.5pt}
@@ -186,7 +185,7 @@
   · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
   · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
   · <a href="audit-sst.html">santé-sécurité (SST)</a> · <a href="audit-discipline.html">discipline et règlement intérieur</a>
-  · <a href="parcours.html">parcours guidés</a> · <a href="agenda.html">agenda</a> · <a href="guides.html">guides</a></span>
+  · <a href="parcours.html">parcours guidés</a> · <a href="agenda.html">agenda</a></span>
 </div>
 
 <header>
@@ -247,11 +246,10 @@
 <p id="message" role="status"></p>
 <div id="alerte"></div>
 
+<!-- Les deux boutons « Imprimer / PDF » et « Copier le texte » figuraient ici
+     une seconde fois, au-dessus du document. Un seul jeu, celui de la barre
+     d'actions ci-dessus, qui s'active dès que le document est composé. -->
 <div id="docu">
-  <div class="doc-outils">
-    <button type="button" class="second" id="imprimer2">Imprimer / PDF</button>
-    <button type="button" class="second" id="copier2">Copier le texte</button>
-  </div>
   <div class="feuille" id="feuille"></div>
 </div>
 
@@ -3082,9 +3080,7 @@
 
   $("generer").addEventListener("click", generer);
   $("imprimer").addEventListener("click", function () { window.print(); });
-  $("imprimer2").addEventListener("click", function () { window.print(); });
   $("copier").addEventListener("click", copierTexte);
-  $("copier2").addEventListener("click", copierTexte);
   $("vider").addEventListener("click", function () {
     var b = lireBrouillons();
     delete b[actif.cle];

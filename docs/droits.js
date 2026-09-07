@@ -98,7 +98,7 @@
   ];
 
   /* Les pages qui restent ouvertes à tous : la documentation ne se ferme pas. */
-  var PAGES_LIBRES = { "guides.html": true };
+  var PAGES_LIBRES = {};
 
   /* Les clés du stockage local que l'application écrit dans son travail
      ordinaire, et le module auquel chacune se rattache. Elles servent à
@@ -859,8 +859,7 @@
         '<div class="dr-avert"><b>Ce que ces droits font, et ne font pas.</b> Ils répartissent le travail ' +
         "dans l'équipe. Tant que l'application fonctionne sans serveur, ils ne protègent pas les données : " +
         "quiconque a accès à ce poste peut les contourner.</div>" +
-        '<p class="dr-liens"><a href="guides.html">Guides d\'utilisation</a> · ' +
-        '<a href="equipe.html">Administration de l\'équipe</a></p>' +
+        '<p class="dr-liens"><a href="equipe.html">Administration de l\'équipe</a></p>' +
       "</div>";
 
     document.body.appendChild(d);

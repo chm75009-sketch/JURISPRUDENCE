@@ -27,7 +27,6 @@ const ESSENTIELS = [
   /* Le vocabulaire de la Cour : 149 Ko lus une fois, qui rendent la
      reconnaissance de la matière instantanée et disponible hors connexion. */
   "./vocabulaire.json",
-  "./guides.html",
   /* L'agenda social lit les brouillons des audits et le moteur NAO, déjà listés. */
   "./agenda.html",
   /* Le générateur de documents des relations collectives : autonome, tout est dans la page. */

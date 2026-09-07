@@ -373,7 +373,7 @@ function brancher(page, nom) {
     }
 
     /* Les pages qui lisent le profil ne doivent pas casser. */
-    for (const a of ["agenda.html", "guides.html", "index.html", "documents.html"]) {
+    for (const a of ["agenda.html", "index.html", "documents.html"]) {
       const pa = await ctx.newPage();
       brancher(pa, vue.nom + "/" + a);
       await pa.goto(BASE + "/" + a, { waitUntil: "domcontentloaded" });
