@@ -1,0 +1,1270 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrôler mon accord d'égalité professionnelle</title>
+<link rel="manifest" href="manifest-audit-nao.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LA BRANCHE « OUI » DU MODULE ÉGALITÉ PROFESSIONNELLE.
+
+  egalite.html pose la question d'entrée : « Un accord d'égalité professionnelle
+  est-il en vigueur ? » Le « non » ouvre la construction du plan d'action. Le
+  « oui » ouvrait, jusqu'ici, un écran fermé : l'outil disait que le plan n'était
+  pas dû et s'arrêtait là. L'accord, lui, n'était jamais regardé.
+
+  Cette page prend le document, accord ou plan d'action, et se conduit selon une
+  règle unique : ELLE NE NOMME AUCUN MANQUE. Pour chaque domaine d'action de
+  l'article R. 2242-2 que le texte déposé ne couvre pas, elle affiche l'article
+  entièrement rédigé qui le comble, éditable, avec son objectif de progression
+  chiffré, ses actions, ses indicateurs et son échéance, et un bouton l'insère.
+  Un domaine déjà couvert ne produit rien : pas de carte, pas de constat, pas
+  de cours sur le droit.
+
+  TROIS SORTIES, ET RIEN À RECOPIER À LA MAIN :
+    1. le texte révisé, votre document mot pour mot plus les articles retenus ;
+    2. le courrier de dépôt sur la plateforme de téléprocédure, rempli des
+       données de la fiche entreprise, avec le bordereau des pièces de
+       D. 2231-7 ;
+    3. la page d'affichage de l'index, prête à imprimer.
+
+  LES TEXTES. Chaque article cité a été relu au relais Légifrance le
+  7 septembre 2026, deux lectures concordantes, et porte son identifiant de
+  version : c'est lui, non le numéro, qui dit laquelle des versions successives
+  a été lue. Les articles D. 1142-2 à D. 1142-6 sont rendus par le relais dans
+  l'état « ABROGE_DIFF » : une abrogation à effet différé est inscrite, la
+  rédaction reproduite ici est celle servie à la date du 7 septembre 2026.
+
+  CE QUE LA PAGE NE FAIT PAS, ET QU'ELLE ÉCRIT. Le repérage est lexical : il
+  voit qu'un domaine est traité, jamais qu'il est bien traité. Aucun chiffre
+  n'est inventé : les valeurs propres à l'entreprise sortent entre crochets,
+  visibles, à compléter. Rien ne quitte ce poste, le fichier déposé est lu dans
+  le navigateur.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
+  header.site a:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+  .onglets button:disabled{opacity:.45;cursor:not-allowed}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  textarea#depot{width:100%;min-height:220px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+  input[type=file]{font:inherit;font-size:14px}
+
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  label.ch{display:grid;gap:4px}
+  label.ch .nom{font:600 12px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  label.ch input,label.ch select{font:inherit;font-size:14.5px;padding:9px 11px;
+    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre)}
+  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
+  label.ch.pleine{grid-column:1/-1}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
+  .avis.non{background:var(--rouge-clair);color:#7d2222}
+
+  .compteurs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .compteurs .c{font:600 12.5px/1 system-ui;padding:8px 11px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
+  .compteurs .c.abs{background:var(--bleu-clair);color:var(--bleu)}
+  .compteurs .c.ok{background:var(--vert-clair);color:var(--vert)}
+
+  .art{border:1px solid var(--filet);border-radius:11px;margin:14px 0;background:var(--carte);overflow:hidden}
+  .art>.tt{padding:12px 15px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--filet);background:var(--creux)}
+  .art>.tt .obj{font:600 15px/1.35 system-ui}
+  .art>.tt .fond{font-size:12px;color:var(--encre-3)}
+  .art>.corps{padding:12px 15px}
+  .art textarea{width:100%;min-height:230px;font:13px/1.62 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:11px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+  .art .actes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+  .etiq{font:600 11px/1 system-ui;padding:6px 9px;border-radius:5px;white-space:nowrap;
+    text-transform:uppercase;letter-spacing:.04em;background:var(--bleu-clair);color:var(--bleu)}
+  .etiq.due{background:var(--ambre-clair);color:var(--ambre)}
+  .etiq.pris{background:var(--vert-clair);color:var(--vert)}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+  .btn.petit{font-size:12.5px;padding:8px 11px}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  details.txt{border:1px solid var(--filet);border-radius:9px;margin:8px 0;background:var(--carte)}
+  details.txt>summary{padding:9px 13px;cursor:pointer;font:600 12.5px/1.3 system-ui;color:var(--bleu)}
+  details.txt .c{padding:0 14px 12px;font-size:13px;line-height:1.6;color:var(--encre-2)}
+  details.txt .id{font:400 11.5px/1.3 ui-monospace,Menlo,monospace;color:var(--encre-3)}
+
+  pre.sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    max-height:62vh;overflow:auto}
+  .cache{display:none}
+
+  /* La page d'affichage de l'index : le seul bloc de cette application qui
+     s'imprime pour être punaisé, donc le seul dessiné pour le papier. */
+  .affiche{background:#fff;border:2px solid var(--encre);border-radius:6px;padding:26px 30px;margin:14px 0}
+  .affiche h4{margin:0 0 3px;font:700 22px/1.2 system-ui}
+  .affiche .qui{font:400 14px/1.4 system-ui;color:var(--encre-2);margin-bottom:18px}
+  .affiche .note{display:flex;align-items:baseline;gap:12px;margin:16px 0;padding:14px 18px;
+    background:var(--creux);border-radius:6px}
+  .affiche .note .n{font:700 40px/1 system-ui;color:var(--bleu)}
+  .affiche .note .l{font:600 14px/1.35 system-ui}
+  .affiche table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+  .affiche th,.affiche td{border:1px solid var(--filet-2);padding:7px 10px;text-align:left}
+  .affiche th{background:var(--creux);font-weight:600}
+  .affiche td.pts{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .affiche .pied{font-size:12.5px;color:var(--encre-2);margin-top:16px;line-height:1.55}
+
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+  @media print{
+    .onglets,.barre,header.site,.aide,.carte,.avis,details.txt,footer,h2{display:none}
+    .affiche{border:none;padding:0}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Contrôler mon accord d'égalité <span>- le document existant, complété article par article</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">&larr; Accueil</a>
+      <a href="egalite.html">Mon plan d'action</a>
+      <a href="audit-nao.html">Auditer mes négociations</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="depot" class="actif">1 &middot; Le document</button>
+    <button data-o="articles" id="ong-articles" disabled>2 &middot; Les articles à insérer</button>
+    <button data-o="sortie" id="ong-sortie" disabled>3 &middot; Ce que vous emportez</button>
+  </div>
+
+  <!-- ══════ 1 · LE DOCUMENT ══════ -->
+  <section id="o-depot">
+    <h2>Déposez votre accord, ou votre plan d'action</h2>
+    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats
+    sont lus directement, <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document, copiez
+    son texte et collez-le ci-dessous.</p>
+
+    <div class="carte">
+      <div class="champs" id="fiche">
+        <label class="ch pleine"><span class="nom">Dénomination</span>
+          <input id="f-nom" placeholder="Raison sociale">
+          <span class="sous">Reprise de votre fiche entreprise, et modifiable ici.</span></label>
+        <label class="ch"><span class="nom">SIRET</span><input id="f-siret" placeholder="14 chiffres"></label>
+        <label class="ch pleine"><span class="nom">Adresse du siège</span><input id="f-adresse"></label>
+        <label class="ch"><span class="nom">Signataire (nom, qualité)</span><input id="f-resp"></label>
+        <label class="ch"><span class="nom">Effectif</span>
+          <input id="f-eff" type="number" min="0">
+          <span class="sous">Trois cents salariés font passer de trois à quatre le nombre minimal de
+          domaines d'action (R. 2242-2).</span></label>
+        <label class="ch"><span class="nom">Année couverte</span>
+          <input id="f-annee" type="number" min="2000" max="2100">
+          <span class="sous">Sert à dater les échéances des articles rédigés.</span></label>
+        <label class="ch"><span class="nom">Nature du document déposé</span>
+          <select id="f-nature">
+            <option value="accord">Accord collectif d'entreprise</option>
+            <option value="plan">Plan d'action unilatéral</option>
+          </select>
+          <span class="sous">Elle commande le courrier de dépôt : les pièces de D. 2231-7
+          accompagnent un accord, pas un plan.</span></label>
+      </div>
+    </div>
+
+    <div class="carte">
+      <div class="barre">
+        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
+          Choisir un fichier .docx ou .txt
+          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+        </label>
+        <button class="btn second" id="vider">Vider</button>
+      </div>
+      <div id="lecture"></div>
+      <textarea id="depot" placeholder="Collez ici le texte de votre accord ou de votre plan d'action, ou choisissez le fichier ci-dessus."></textarea>
+      <div class="barre">
+        <button class="btn" id="controler">Ouvrir les articles à insérer</button>
+      </div>
+      <div id="erreur"></div>
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LES ARTICLES ══════ -->
+  <section id="o-articles" class="cache">
+    <h2>Les articles à insérer</h2>
+    <p class="aide">Chacun est rédigé et prêt à coller. Modifiez ce que vous voulez dans la zone,
+    remplacez les valeurs entre crochets par les vôtres, puis insérez.</p>
+    <div class="compteurs" id="compteurs"></div>
+    <div id="articles"></div>
+    <div class="barre">
+      <button class="btn" id="vers-sortie">Assembler le texte révisé</button>
+      <button class="btn second" id="tout-inserer">Tout insérer</button>
+    </div>
+  </section>
+
+  <!-- ══════ 3 · LA SORTIE ══════ -->
+  <section id="o-sortie" class="cache">
+    <h2>Ce que vous emportez</h2>
+    <div class="barre">
+      <button class="btn second" id="v-texte">Le texte révisé</button>
+      <button class="btn second" id="v-courrier">Le courrier de dépôt</button>
+      <button class="btn second" id="v-index">La page d'affichage de l'index</button>
+    </div>
+
+    <div id="s-texte">
+      <p class="aide">Votre texte mot pour mot, les articles retenus ajoutés à la suite, à déplacer
+      à leur rang.</p>
+      <div class="barre">
+        <button class="btn" id="dl-docx">Télécharger en Word</button>
+        <button class="btn second" id="dl-txt">Télécharger en texte</button>
+        <button class="btn second" id="copier">Copier</button>
+      </div>
+      <pre class="sortie" id="sortie"></pre>
+    </div>
+
+    <div id="s-courrier" class="cache">
+      <p class="aide">Rempli des données de votre fiche, avec le bordereau des pièces que
+      D. 2231-7 énumère.</p>
+      <div class="barre">
+        <button class="btn" id="dl-courrier-docx">Télécharger en Word</button>
+        <button class="btn second" id="copier-courrier">Copier</button>
+      </div>
+      <pre class="sortie" id="courrier"></pre>
+    </div>
+
+    <div id="s-index" class="cache">
+      <p class="aide">Complétez les résultats, puis imprimez : cette page seule sort à
+      l'impression.</p>
+      <div class="carte">
+        <div class="champs">
+          <label class="ch"><span class="nom">Année des résultats</span>
+            <input id="x-annee" type="number" min="2000" max="2100"></label>
+          <label class="ch"><span class="nom">Niveau de résultat, en points</span>
+            <input id="x-note" type="number" min="0" max="100"></label>
+          <label class="ch"><span class="nom">Date de publication</span>
+            <input id="x-date" type="date"></label>
+        </div>
+        <div class="champs" id="x-indics" style="margin-top:14px"></div>
+      </div>
+      <div class="barre">
+        <button class="btn" id="imprimer-index">Imprimer cette page</button>
+      </div>
+      <div id="affiche"></div>
+    </div>
+  </section>
+
+  <details class="txt">
+    <summary>Les textes lus, in extenso, avec l'identifiant de version</summary>
+    <div class="c" id="corps-textes"></div>
+  </details>
+
+  <footer>
+    Rien ne quitte ce poste. Le repérage des domaines déjà traités est lexical : il conduit la
+    lecture de votre document, il ne la remplace pas. Les valeurs propres à votre entreprise
+    sortent entre crochets, jamais devinées.
+  </footer>
+</main>
+
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.getElementById(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES TEXTES
+
+     Relus au relais Légifrance de l'application le 7 septembre 2026, deux
+     lectures concordantes chacun. L'identifiant dit LAQUELLE des versions
+     successives a été lue : le numéro seul ne le dit pas.
+     ══════════════════════════════════════════════════════════════════════════ */
+  var TEXTES = [
+    { n: "R. 2242-2", id: "LEGIARTI000038430967", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "L'accord relatif à l'égalité professionnelle entre les femmes et les hommes conclu à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1 ou, à défaut, le plan d'action prévu à l'article L. 2242-3 fixe les objectifs de progression et les actions permettant de les atteindre portant sur au moins trois des domaines d'action mentionnés au 2° de l'article L. 2312-36 pour les entreprises de moins de 300 salariés et sur au moins quatre de ces domaines pour les entreprises de 300 salariés et plus. Ces domaines d'actions sont les suivants : embauche, formation, promotion professionnelle, qualification, classification, conditions de travail, sécurité et santé au travail, rémunération effective et articulation entre l'activité professionnelle et la vie personnelle et familiale. Les objectifs et les actions sont accompagnés d'indicateurs chiffrés. La rémunération effective est obligatoirement comprise dans les domaines d'action retenus par l'accord collectif ou, à défaut, le plan d'action mentionnés au premier alinéa. Dans les entreprises d'au moins cinquante salariés, les objectifs de progression, les actions et les indicateurs chiffrés fixés dans ce domaine tiennent compte des indicateurs mentionnés à l'article L. 1142-8, ainsi, le cas échéant, que des mesures de correction définies dans les conditions prévues à l'article L. 1142-9." },
+    { n: "L. 2242-1", id: "LEGIARTI000043893962", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Dans les entreprises où sont constituées une ou plusieurs sections syndicales d'organisations représentatives, l'employeur engage au moins une fois tous les quatre ans : 1° Une négociation sur la rémunération, notamment les salaires effectifs, le temps de travail et le partage de la valeur ajoutée dans l'entreprise ; 2° Une négociation sur l'égalité professionnelle entre les femmes et les hommes, portant notamment sur les mesures visant à supprimer les écarts de rémunération, et la qualité de vie et des conditions de travail." },
+    { n: "L. 2242-3", id: "LEGIARTI000037389684", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "En l'absence d'accord relatif à l'égalité professionnelle entre les femmes et les hommes à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1, l'employeur établit un plan d'action annuel destiné à assurer l'égalité professionnelle entre les femmes et les hommes. Après avoir évalué les objectifs fixés et les mesures prises au cours de l'année écoulée, ce plan d'action, fondé sur des critères clairs, précis et opérationnels, détermine les objectifs de progression prévus pour l'année à venir, définit les actions qualitatives et quantitatives permettant de les atteindre et évalue leur coût. Ce plan d'action est déposé auprès de l'autorité administrative. En l'absence d'accord prévoyant les mesures visant à supprimer les écarts de rémunération entre les femmes et les hommes, la négociation sur les salaires effectifs prévue au 1° de l'article L. 2242-1 porte également sur la programmation de mesures permettant de supprimer les écarts de rémunération et les différences de déroulement de carrière entre les femmes et les hommes." },
+    { n: "L. 2242-8", id: "LEGIARTI000051289082", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Les entreprises d'au moins cinquante salariés sont soumises à une pénalité à la charge de l'employeur en l'absence d'accord relatif à l'égalité professionnelle entre les femmes et les hommes à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1 ou, à défaut d'accord, par un plan d'action mentionné à l'article L. 2242-3. Les modalités de suivi de la réalisation des objectifs et des mesures de l'accord et du plan d'action sont fixées par décret. Dans les entreprises d'au moins 300 salariés, ce défaut d'accord est attesté par un procès-verbal de désaccord. La pénalité prévue au premier alinéa du présent article peut également être appliquée, dans des conditions déterminées par décret, en l'absence de publication des informations prévues à l'article L. 1142-8 ou en l'absence de mesures définies dans les conditions prévues à l'article L. 1142-9. Le montant de la pénalité prévue au premier alinéa du présent article est fixé au maximum à 1 % des rémunérations et gains au sens du premier alinéa de l'article L. 242-1 du code de la sécurité sociale et du premier alinéa de l'article L. 741-10 du code rural et de la pêche maritime versés aux travailleurs salariés ou assimilés au cours des périodes au titre desquelles l'entreprise ne respecte pas l'une des obligations mentionnées aux premier et deuxième alinéas du présent article. Le montant est fixé par l'autorité administrative, dans des conditions prévues par décret en Conseil d'Etat, en fonction des efforts constatés dans l'entreprise en matière d'égalité professionnelle et salariale entre les femmes et les hommes ainsi que des motifs de sa défaillance quant au respect des obligations fixées aux mêmes premier et deuxième alinéas. Le produit de cette pénalité est affecté à la branche mentionnée au 3° de l'article L. 200-2 du code de la sécurité sociale." },
+    { n: "L. 2242-17", id: "LEGIARTI000043893940", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "La négociation annuelle sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail porte sur : 1° L'articulation entre la vie personnelle et la vie professionnelle pour les salariés ; 2° Les objectifs et les mesures permettant d'atteindre l'égalité professionnelle entre les femmes et les hommes, notamment en matière de suppression des écarts de rémunération, d'accès à l'emploi, de formation professionnelle, de déroulement de carrière et de promotion professionnelle, de conditions de travail et d'emploi, en particulier pour les salariés à temps partiel, et de mixité des emplois. Cette négociation s'appuie sur les données mentionnées au 2° de l'article L. 2312-36. […] 3° Les mesures permettant de lutter contre toute discrimination en matière de recrutement, d'emploi et d'accès à la formation professionnelle […] ; 4° Les mesures relatives à l'insertion professionnelle et au maintien dans l'emploi des travailleurs handicapés […] ; 5° Les modalités de définition d'un régime de prévoyance […] ; 6° L'exercice du droit d'expression directe et collective des salariés […] ; 7° Les modalités du plein exercice par le salarié de son droit à la déconnexion […] ; 8° Dans les entreprises mentionnées à l'article L. 2143-3 du présent code et dont cinquante salariés au moins sont employés sur un même site, les mesures visant à améliorer la mobilité des salariés entre leur lieu de résidence habituelle et leur lieu de travail […]." },
+    { n: "L. 2312-36, 2°", id: "LEGIARTI000048533625", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "2° Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise : diagnostic et analyse de la situation comparée des femmes et des hommes pour chacune des catégories professionnelles de l'entreprise en matière d'embauche, de formation, de promotion professionnelle, de qualification, de classification, de conditions de travail, de sécurité et de santé au travail, de rémunération effective et d'articulation entre l'activité professionnelle et la vie personnelle et familiale, analyse des écarts de salaires et de déroulement de carrière en fonction de l'âge, de la qualification et de l'ancienneté, évolution des taux de promotion respectifs des femmes et des hommes par métiers dans l'entreprise, part des femmes et des hommes dans le conseil d'administration." },
+    { n: "L. 1142-8", id: "LEGIARTI000044605453", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Dans les entreprises d'au moins cinquante salariés, l'employeur publie chaque année l'ensemble des indicateurs relatifs aux écarts de rémunération entre les femmes et les hommes et aux actions mises en œuvre pour les supprimer, selon des modalités et une méthodologie définies par décret. Par dérogation aux articles L. 311-6 et L. 312-1-2 du code des relations entre le public et l'administration, l'ensemble de ces indicateurs est rendu public sur le site internet du ministère chargé du travail, dans des conditions déterminées par décret." },
+    { n: "L. 1142-9", id: "LEGIARTI000044605442", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Dans les entreprises d'au moins cinquante salariés, lorsque les résultats obtenus par l'entreprise au regard des indicateurs mentionnés à l'article L. 1142-8 se situent en-deçà d'un niveau défini par décret, la négociation sur l'égalité professionnelle prévue au 2° de l'article L. 2242-1 porte également sur les mesures adéquates et pertinentes de correction et, le cas échéant, sur la programmation, annuelle ou pluriannuelle, de mesures financières de rattrapage salarial. En l'absence d'accord prévoyant de telles mesures, celles-ci sont déterminées par décision de l'employeur, après consultation du comité social et économique. La décision est déposée auprès de l'autorité administrative dans les mêmes conditions que le plan d'action mentionné à l'article L. 2242-3. L'autorité administrative peut présenter des observations sur les mesures prévues par l'accord ou la décision de l'employeur. L'employeur soumis à l'obligation prévue au premier alinéa du présent article publie, par une communication externe et au sein de l'entreprise, les mesures de correction, selon des modalités définies par décret." },
+    { n: "L. 1142-10", id: "LEGIARTI000051289090", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Dans les entreprises d'au moins cinquante salariés, lorsque les résultats obtenus par l'entreprise, au regard des indicateurs mentionnés à l'article L. 1142-8, se situent en deçà d'un niveau défini par décret, l'entreprise dispose d'un délai de trois ans pour se mettre en conformité. A l'expiration de ce délai, si les résultats obtenus sont toujours en deçà du niveau défini par décret, l'employeur peut se voir appliquer une pénalité financière. Dès lors qu'une pénalité lui est appliquée sur le fondement du présent alinéa, l'employeur ne peut se voir appliquer la pénalité financière prévue à l'article L. 2242-8. Le montant de la pénalité prévue au premier alinéa du présent article est fixé au maximum à 1 % des rémunérations et gains […] versés aux travailleurs salariés ou assimilés au cours de l'année civile précédant l'expiration du délai mentionné au premier alinéa du présent article. […] En fonction des efforts constatés dans l'entreprise en matière d'égalité salariale entre les femmes et les hommes ainsi que des motifs de sa défaillance, un délai supplémentaire d'un an peut lui être accordé pour se mettre en conformité." },
+    { n: "D. 1142-2", id: "LEGIARTI000038026011", etat: "ABROGE_DIFF", lu: "2026-09-07",
+      t: "Pour les entreprises de plus de deux cent cinquante salariés, les indicateurs mentionnés à l'article L. 1142-8 sont les suivants : 1° L'écart de rémunération entre les femmes et les hommes, calculé à partir de la moyenne de la rémunération des femmes comparée à celle des hommes, par tranche d'âge et par catégorie de postes équivalents ; 2° L'écart de taux d'augmentations individuelles de salaire ne correspondant pas à des promotions entre les femmes et les hommes ; 3° L'écart de taux de promotions entre les femmes et les hommes ; 4° Le pourcentage de salariées ayant bénéficié d'une augmentation dans l'année de leur retour de congé de maternité, si des augmentations sont intervenues au cours de la période pendant laquelle le congé a été pris ; 5° Le nombre de salariés du sexe sous-représenté parmi les dix salariés ayant perçu les plus hautes rémunérations. Ces indicateurs sont calculés selon les modalités définies à l'annexe I figurant à la fin du présent chapitre. En cas de constitution d'un comité social et économique au niveau d'une unité économique et sociale reconnue par accord collectif ou par décision de justice entre plusieurs entreprises juridiquement distinctes, les indicateurs sont calculés au niveau de l'unité économique et sociale." },
+    { n: "D. 1142-2-1", id: "LEGIARTI000038026015", etat: "ABROGE_DIFF", lu: "2026-09-07",
+      t: "Pour les entreprises de cinquante à deux cent cinquante salariés, les indicateurs mentionnés à l'article L. 1142-8 sont les suivants : 1° L'écart de rémunération entre les femmes et les hommes, calculé à partir de la moyenne de la rémunération des femmes comparée à celle des hommes, par tranche d'âge et par catégorie de postes équivalents ; 2° L'écart de taux d'augmentations individuelles de salaire entre les femmes et les hommes ; 3° Le pourcentage de salariées ayant bénéficié d'une augmentation dans l'année suivant leur retour de congé de maternité, si des augmentations sont intervenues au cours de la période pendant laquelle le congé a été pris ; 4° Le nombre de salariés du sexe sous-représenté parmi les dix salariés ayant perçu les plus hautes rémunérations. Ces indicateurs sont calculés selon les modalités définies à l'annexe II figurant à la fin du présent chapitre. En cas de constitution d'un comité social et économique au niveau d'une unité économique et sociale reconnue par accord collectif ou par décision de justice entre plusieurs entreprises juridiquement distinctes, les indicateurs sont calculés au niveau de l'unité économique et sociale." },
+    { n: "D. 1142-3", id: "LEGIARTI000038026019", etat: "ABROGE_DIFF", lu: "2026-09-07",
+      t: "Le niveau de résultat obtenu par l'entreprise au regard des indicateurs définis aux articles D. 1142-2 et D. 1142-2-1 est déterminé selon les modalités fixées aux annexes I et II figurant à la fin du présent chapitre." },
+    { n: "D. 1142-4", id: "LEGIARTI000045250060", etat: "ABROGE_DIFF", lu: "2026-09-07",
+      t: "Le niveau de résultat mentionné à l'article D. 1142-3 et les résultats obtenus pour chaque indicateur mentionné aux articles D. 1142-2 et D. 1142-2-1 sont publiés annuellement, au plus tard le 1er mars de l'année en cours, au titre de l'année précédente, de manière visible et lisible, sur le site internet de l'entreprise lorsqu'il en existe un. Ils sont consultables sur le site internet de l'entreprise au moins jusqu'à la publication, l'année suivante, du niveau de résultat et des résultats obtenus au titre de l'année en cours. A défaut de site internet, ils sont portés à la connaissance des salariés par tout moyen. La publication des informations mentionnées au premier alinéa est actualisée sur le site internet du ministère chargé du travail, chaque année au plus tard le 31 décembre, par les services du ministre chargé du travail." },
+    { n: "D. 1142-6", id: "LEGIARTI000045250040", etat: "ABROGE_DIFF", lu: "2026-09-07",
+      t: "Les mesures de correction et, le cas échéant, la programmation de mesures financières de rattrapage salarial, prévues à l'article L. 1142-9, doivent être mises en œuvre dès lors que le niveau de résultat mentionné à l'article D. 1142-3 est inférieur à soixante-quinze points. Elles sont publiées sur le site internet de l'entreprise lorsqu'il en existe un, sur la même page que le niveau de résultat et les résultats mentionnés à l'article D. 1142-4, dès lors que l'accord ou la décision unilatérale est déposé dans les conditions prévues à l'article D. 2231-4 du même code. Elles sont consultables sur le site internet de l'entreprise jusqu'à ce que celle-ci obtienne un niveau de résultat au moins égal à soixante-quinze points. En outre, l'employeur les porte à la connaissance des salariés par tout moyen." },
+    { n: "D. 2231-2", id: "LEGIARTI000036920600", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "I.-Les conventions et accords de branche et les accords professionnels ou interprofessionnels, ainsi que leurs avenants et annexes, sont déposés par la partie la plus diligente auprès des services du ministre chargé du travail. Le dépôt est opéré en deux exemplaires, dont une version sur support papier signée des parties et une version sur support électronique. II.-Les accords de groupe, d'entreprise, d'établissement et interentreprises ainsi que les pièces accompagnant le dépôt prévues aux articles D. 2231-6 et D. 2231-7 sont déposés par le représentant légal du groupe, de l'entreprise ou de l'établissement ou, pour un accord interentreprises, par les représentants légaux de celles-ci. III.-Le déposant remet également un exemplaire de chaque convention ou accord au greffe du conseil de prud'hommes du lieu de conclusion." },
+    { n: "D. 2231-4", id: "LEGIARTI000036920597", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Les accords de groupe, d'entreprise, d'établissement et interentreprises ainsi que les pièces accompagnant le dépôt prévues aux articles D. 2231-6 et D. 2231-7 sont déposés sur la plateforme de téléprocédure du ministère du travail." },
+    { n: "D. 2231-7", id: "LEGIARTI000036920591", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "Le dépôt des conventions et accords est accompagné des pièces suivantes : 1° Dans tous les cas, a) De la version signée des parties ; b) D'une copie du courrier, du courrier électronique ou du récépissé ou d'un avis de réception daté de notification du texte à l'ensemble des organisations représentatives à l'issue de la procédure de signature ; 2° Pour les accords de branche, de groupe, d'entreprise, d'établissement et interentreprises, a) D'une version publiable mentionnée à l'article L. 2231-5-1, qui tient compte, le cas échéant, des modifications actées conformément au I. de l'article R. 2231-1-1 ; b) De l'acte mentionné au I de l'article R. 2231-1-1, s'il y a lieu ; 3° Dans le cas des accords de groupe, d'entreprise, d'établissement et interentreprises : du procès-verbal mentionné au 2° de l'article D. 2232-2, s'il y a lieu ; 4° Dans le cas des accords d'entreprise, c) De la liste mentionnée à l'article D. 2231-6, s'il y a lieu. Un récépissé est délivré au déposant. Le format de ces documents est précisé par arrêté." },
+    { n: "R. 2242-3", id: "LEGIARTI000038430946", etat: "VIGUEUR", lu: "2026-09-07",
+      t: "L'agent de contrôle de l'inspection du travail, mentionné à l'article L. 8112-1, met en demeure l'employeur de remédier à la situation dans un délai d'exécution fixé en fonction de la nature du manquement et de la situation relevée dans l'entreprise et qui ne peut être inférieur à un mois, lorsqu'il constate : 1° Soit que l'entreprise n'est pas couverte par l'accord relatif à l'égalité professionnelle entre les femmes et les hommes conclu à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1 ou, à défaut, par le plan d'action prévu à l'article L. 2242-3 ; 2° Soit qu'elle n'a pas publié les informations prévues à l'article L. 1142-8 pendant une ou plusieurs années consécutives ; 3° Soit qu'elle n'a pas défini de mesures de correction dans les conditions prévues à l'article L. 1142-9. Cette mise en demeure est transmise à l'employeur par tout moyen permettant de donner date certaine à sa réception." },
+  ];
+
+  $("corps-textes").innerHTML = TEXTES.map(function (a) {
+    return "<h4 style=\"margin:14px 0 3px;font:600 13px/1.3 system-ui;color:#1F3864\">Article " +
+      ech(a.n) + '</h4><div class="id">' + ech(a.id) + " &middot; état " + ech(a.etat) +
+      " &middot; relu au relais Légifrance le " + ech(a.lu) + ", deux lectures concordantes</div><p>" +
+      ech(a.t) + "</p>";
+  }).join("");
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES NEUF DOMAINES D'ACTION
+
+     La liste et son ordre sont ceux de R. 2242-2, mot pour mot : « embauche,
+     formation, promotion professionnelle, qualification, classification,
+     conditions de travail, sécurité et santé au travail, rémunération effective
+     et articulation entre l'activité professionnelle et la vie personnelle et
+     familiale ». Neuf, donc, et non huit : « sécurité et santé au travail » est
+     un domaine à part entière, distinct des conditions de travail.
+
+     Chaque domaine porte :
+       marques  : les mots qui font conclure que le texte déposé le traite déjà.
+                  Le repérage est lexical, il ne juge pas la qualité.
+       article  : l'article entièrement rédigé, avec son objectif de progression
+                  chiffré, ses actions, ses indicateurs chiffrés que R. 2242-2
+                  exige, et son échéance. Les valeurs propres à l'entreprise
+                  sortent entre crochets : elles se voient, elles ne sont pas
+                  inventées.
+     ══════════════════════════════════════════════════════════════════════════ */
+  function A(annee) { return annee || "[ANNÉE]"; }
+
+  var DOMAINES = [
+    {
+      cle: "embauche", nom: "Embauche",
+      marques: ["embauche", "recrutement", "recruter", "candidature", "offre d'emploi", "offres d'emploi"],
+      article: function (an) { return [
+        "ARTICLE - EMBAUCHE",
+        "",
+        "Objectif de progression. Porter la part du sexe sous-représenté parmi les",
+        "recrutements en contrat à durée indéterminée de [__] %, taux constaté en " + (an - 1 || "[N-1]") + ",",
+        "à [__] % au 31 décembre " + A(an) + ", sur les emplois où ce sexe représente moins de",
+        "40 % de l'effectif.",
+        "",
+        "Actions retenues.",
+        "- Rédiger toutes les offres d'emploi en double genre, sans mention d'âge, de",
+        "  situation de famille ni d'exigence sans lien avec le poste, et les faire",
+        "  relire avant diffusion par [service ou personne désignée].",
+        "- Constituer pour chaque poste ouvert une liste courte comportant au moins une",
+        "  candidature de chaque sexe lorsque des candidatures des deux sexes ont été",
+        "  reçues, et consigner par écrit le motif du choix retenu.",
+        "- Former à la non-discrimination à l'embauche toutes les personnes qui",
+        "  conduisent des entretiens de recrutement : [__] sessions dans l'année,",
+        "  [__] personnes formées.",
+        "- Ouvrir [__] places d'alternance ou de stage par an sur les métiers où la",
+        "  mixité est la plus faible, en lien avec [établissements ou organismes].",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Nombre de candidatures reçues, par sexe et par emploi.",
+        "- Nombre d'embauches, par sexe, par catégorie professionnelle et par type de",
+        "  contrat.",
+        "- Part des listes courtes mixtes parmi les postes ayant reçu des candidatures",
+        "  des deux sexes.",
+        "- Nombre de recruteurs formés dans l'année.",
+        "",
+        "Échéance. 31 décembre " + A(an) + ", avec un point d'étape au 30 juin " + A(an) + " présenté",
+        "[au comité social et économique / à la commission de suivi].",
+        "Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+    {
+      cle: "formation", nom: "Formation",
+      marques: ["formation", "plan de développement des compétences", "formations"],
+      article: function (an) { return [
+        "ARTICLE - FORMATION",
+        "",
+        "Objectif de progression. Ramener à [2] points au plus l'écart entre le taux",
+        "d'accès à la formation des femmes et celui des hommes, au 31 décembre " + A(an) + ",",
+        "et porter à 100 % la part des salariés de retour d'un congé de maternité,",
+        "d'adoption ou parental de plus de [4] mois qui se voient proposer une action",
+        "de formation dans les [3] mois de leur reprise.",
+        "",
+        "Actions retenues.",
+        "- Programmer les formations sur le temps de travail, dans un rayon de [__] km",
+        "  du lieu de travail, et prévenir les participants au moins [15] jours avant.",
+        "- Proposer à tout salarié de retour de congé familial un entretien de reprise",
+        "  puis une action de remise à niveau adaptée au poste retrouvé.",
+        "- Réserver [__] % des heures du plan de développement des compétences aux",
+        "  salariés à temps partiel, qui en sont statistiquement les plus éloignés.",
+        "- Financer [__] parcours par an vers les métiers où un sexe est représenté à",
+        "  moins de 30 %.",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Nombre d'heures de formation suivies, par sexe et par catégorie",
+        "  professionnelle.",
+        "- Taux d'accès à la formation, par sexe, et écart entre les deux taux.",
+        "- Part des formations organisées hors temps de travail.",
+        "- Nombre de retours de congé familial ayant donné lieu à une formation.",
+        "",
+        "Échéance. 31 décembre " + A(an) + ". Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+    {
+      cle: "promotion", nom: "Promotion professionnelle",
+      marques: ["promotion", "promotions", "déroulement de carrière", "évolution de carrière", "mobilité interne"],
+      article: function (an) { return [
+        "ARTICLE - PROMOTION PROFESSIONNELLE",
+        "",
+        "Objectif de progression. Porter à [__] % la part des femmes parmi les",
+        "promotions prononcées dans l'année, part au moins égale à celle qu'elles",
+        "représentent dans l'effectif de la catégorie d'origine, au 31 décembre " + A(an) + ".",
+        "",
+        "Actions retenues.",
+        "- Tenir chaque année, avant arbitrage, une revue des promotions envisagées",
+        "  présentant la répartition par sexe et par catégorie, et écrire le motif de",
+        "  tout écart supérieur à [5] points.",
+        "- Neutraliser les périodes de congé de maternité, d'adoption et de congé",
+        "  parental dans le décompte de l'ancienneté servant aux critères de promotion.",
+        "- Tenir un entretien professionnel au retour de chaque congé familial, dans",
+        "  les [2] mois de la reprise, et y examiner les perspectives d'évolution.",
+        "- Ouvrir à [__] salariés par an un parcours d'accès aux fonctions",
+        "  d'encadrement, dont au moins [__] du sexe sous-représenté à ce niveau.",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Taux de promotion par sexe et par catégorie professionnelle.",
+        "- Ancienneté moyenne dans le poste avant promotion, par sexe.",
+        "- Part des femmes et des hommes dans chaque niveau d'encadrement.",
+        "- Nombre d'entretiens de retour de congé tenus, rapporté au nombre de retours.",
+        "",
+        "Échéance. 31 décembre " + A(an) + ". Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+    {
+      cle: "qualification", nom: "Qualification",
+      marques: ["qualification", "qualifiante", "certification", "validation des acquis", "titre professionnel"],
+      article: function (an) { return [
+        "ARTICLE - QUALIFICATION",
+        "",
+        "Objectif de progression. Porter à [__] le nombre de salariés du sexe",
+        "sous-représenté accédant chaque année à une qualification supérieure",
+        "reconnue, certification, titre professionnel ou validation des acquis de",
+        "l'expérience, au 31 décembre " + A(an) + ".",
+        "",
+        "Actions retenues.",
+        "- Recenser les emplois où un sexe est représenté à moins de 30 % et ouvrir",
+        "  [__] parcours qualifiants par an sur ces emplois.",
+        "- Financer [__] démarches de validation des acquis de l'expérience par an et",
+        "  accorder [__] heures d'accompagnement à chacune, sur le temps de travail.",
+        "- Proposer un entretien de positionnement à tout salarié à temps partiel dont",
+        "  la qualification n'a pas évolué depuis [5] ans.",
+        "- Vérifier, à chaque révision de la grille des emplois, que les compétences",
+        "  exercées majoritairement par un sexe sont décrites et valorisées au même",
+        "  titre que les autres.",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Nombre de qualifications obtenues dans l'année, par sexe.",
+        "- Répartition des femmes et des hommes par niveau de qualification.",
+        "- Nombre de démarches de validation des acquis engagées, et nombre abouties.",
+        "- Nombre d'entretiens de positionnement tenus.",
+        "",
+        "Échéance. 31 décembre " + A(an) + ". Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+    {
+      cle: "classification", nom: "Classification",
+      marques: ["classification", "coefficient", "grille de classification", "niveau hiérarchique", "cotation des postes"],
+      article: function (an) { return [
+        "ARTICLE - CLASSIFICATION",
+        "",
+        "Objectif de progression. Ramener à zéro, au 31 décembre " + A(an) + ", le nombre de",
+        "situations où une femme et un homme exerçant des fonctions de valeur égale",
+        "sont positionnés à des coefficients différents sans qu'un critère objectif",
+        "l'explique. Nombre de situations examinées dans l'année : [__].",
+        "",
+        "Actions retenues.",
+        "- Comparer, coefficient par coefficient, les emplois occupés par des femmes et",
+        "  par des hommes, sur des critères écrits et objectifs : contenu du travail,",
+        "  technicité, autonomie, responsabilités, charge physique et charge nerveuse.",
+        "- Écrire, pour chaque écart constaté, soit le critère objectif qui l'explique,",
+        "  soit la correction retenue et sa date d'effet, au plus tard [__] mois après",
+        "  le constat.",
+        "- Réviser les intitulés d'emploi genrés et les remplacer par des intitulés",
+        "  neutres dans la grille, les fiches de poste et les bulletins de paie.",
+        "- Présenter la comparaison [au comité social et économique / aux organisations",
+        "  syndicales] avant toute révision de la grille.",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Répartition des femmes et des hommes par coefficient et par niveau.",
+        "- Nombre de situations examinées, nombre corrigées, nombre expliquées.",
+        "- Coût des corrections de positionnement, en euros.",
+        "- Nombre d'intitulés d'emploi rendus neutres.",
+        "",
+        "Échéance. 31 décembre " + A(an) + ". Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+    {
+      cle: "conditions", nom: "Conditions de travail",
+      marques: ["conditions de travail", "aménagement du poste", "aménagement des postes", "temps partiel", "horaires de travail", "équipement de protection"],
+      article: function (an) { return [
+        "ARTICLE - CONDITIONS DE TRAVAIL",
+        "",
+        "Objectif de progression. Aménager [__] postes par an parmi ceux dont les",
+        "contraintes actuelles font obstacle à la mixité, port de charges, horaires,",
+        "équipements ou locaux, et ramener à [__] le nombre de postes non mixtes pour",
+        "ce motif au 31 décembre " + A(an) + ".",
+        "",
+        "Actions retenues.",
+        "- Recenser, unité de travail par unité de travail, les postes dont",
+        "  l'aménagement conditionne l'accès de l'autre sexe, et arrêter un programme",
+        "  daté d'aménagement.",
+        "- Fournir des équipements de protection individuelle adaptés à la morphologie",
+        "  de chacun, et non d'une taille unique : [__] postes équipés dans l'année.",
+        "- Mettre aux normes vestiaires et sanitaires séparés sur [__] sites, selon le",
+        "  calendrier annexé.",
+        "- Examiner par écrit, dans un délai de [__] jours, toute demande de passage à",
+        "  temps partiel, de retour à temps plein ou d'aménagement d'horaire, et",
+        "  motiver tout refus.",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Nombre de postes aménagés dans l'année, rapporté au programme.",
+        "- Nombre d'équipements de protection adaptés commandés et distribués.",
+        "- Part des salariés à temps partiel, par sexe et par catégorie.",
+        "- Nombre de demandes d'aménagement reçues, acceptées, refusées et motivées.",
+        "",
+        "Échéance. 31 décembre " + A(an) + ". Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+    {
+      cle: "sst", nom: "Sécurité et santé au travail",
+      marques: ["sécurité et santé", "santé au travail", "document unique", "harcèlement", "agissements sexistes", "accident du travail", "prévention des risques"],
+      article: function (an) { return [
+        "ARTICLE - SÉCURITÉ ET SANTÉ AU TRAVAIL",
+        "",
+        "Objectif de progression. Traiter 100 % des signalements de harcèlement ou",
+        "d'agissements sexistes dans un délai de [__] jours ouvrés à compter de leur",
+        "réception, et porter à 100 % la part des unités de travail dont l'évaluation",
+        "des risques distingue l'exposition selon le sexe et l'état de grossesse, au",
+        "31 décembre " + A(an) + ".",
+        "",
+        "Actions retenues.",
+        "- Reprendre le document unique unité de travail par unité de travail pour y",
+        "  faire apparaître les risques liés au sexe, à la grossesse et à l'allaitement,",
+        "  et les mesures de prévention correspondantes.",
+        "- Désigner et faire connaître par affichage les personnes chargées d'orienter",
+        "  et d'accompagner les salariés en matière de harcèlement sexuel et",
+        "  d'agissements sexistes, avec leurs coordonnées directes.",
+        "- Arrêter par écrit la procédure de signalement et de traitement : qui reçoit,",
+        "  sous quel délai, qui enquête, comment le salarié est informé de la suite.",
+        "- Former [__] personnes de l'encadrement à la prévention du harcèlement et des",
+        "  agissements sexistes, [__] sessions dans l'année.",
+        "- Aménager le poste de toute salariée enceinte dans les [__] jours suivant sa",
+        "  déclaration, sur avis du service de prévention et de santé au travail.",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Nombre de signalements reçus, nombre traités, délai moyen de traitement.",
+        "- Nombre d'unités de travail dont l'évaluation a été mise à jour.",
+        "- Nombre d'aménagements de poste liés à la grossesse.",
+        "- Accidents du travail et maladies professionnelles, par sexe et par unité.",
+        "- Taux d'absentéisme par sexe et par catégorie.",
+        "",
+        "Échéance. 31 décembre " + A(an) + ". Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+    {
+      cle: "remuneration", nom: "Rémunération effective", obligatoire: true,
+      marques: ["rémunération effective", "écart de rémunération", "écarts de rémunération", "rattrapage salarial", "salaire de base", "augmentation individuelle"],
+      article: function (an, eff) { return [
+        "ARTICLE - RÉMUNÉRATION EFFECTIVE",
+        "",
+        "Ce domaine est obligatoirement compris dans les domaines retenus",
+        "(article R. 2242-2).",
+        "",
+        "Objectif de progression. Supprimer, au 31 décembre " + A(an) + ", les écarts de",
+        "rémunération entre les femmes et les hommes de même catégorie de postes",
+        "équivalents qu'aucun élément objectif n'explique, et consacrer à ce",
+        "rattrapage une enveloppe de [__] euros, soit [__] % de la masse salariale de",
+        "l'exercice.",
+        "",
+        "Actions retenues.",
+        "- Établir la comparaison des rémunérations par sexe, par tranche d'âge et par",
+        "  catégorie de postes équivalents, et écrire pour chaque écart soit le motif",
+        "  objectif qui l'explique, soit la correction retenue et sa date d'effet.",
+        "- Corriger les situations non expliquées au plus tard le [DATE], et informer",
+        "  individuellement chaque salarié concerné du montant et du motif.",
+        "- Appliquer à toute salariée de retour de congé de maternité ou d'adoption la",
+        "  moyenne des augmentations individuelles accordées, pendant son congé, aux",
+        "  salariés de la même catégorie professionnelle.",
+        "- Vérifier à l'embauche, poste par poste, que le salaire proposé se situe dans",
+        "  la fourchette pratiquée pour l'emploi, sans distinction de sexe, et",
+        "  conserver la trace de cette vérification.",
+        "- Neutraliser, dans les critères d'attribution des augmentations et des primes,",
+        "  les absences liées à la maternité, à l'adoption et au congé parental.",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Écart de rémunération moyenne entre les femmes et les hommes, par tranche",
+        "  d'âge et par catégorie de postes équivalents.",
+        "- Nombre de situations corrigées, montant total et montant moyen.",
+        "- Part de l'enveloppe de rattrapage effectivement consommée.",
+        "- Écart de taux d'augmentations individuelles entre les femmes et les hommes.",
+        "- Nombre de salariées augmentées dans l'année de leur retour de congé de",
+        "  maternité, rapporté au nombre de retours.",
+        (eff !== null && eff >= 50
+          ? "- Niveau de résultat de l'index et résultat de l'indicateur d'écart de"
+          : "- Niveau de résultat de l'index, si l'entreprise y est tenue, et résultat"),
+        (eff !== null && eff >= 50
+          ? "  rémunération, publiés au titre de " + (an - 1 || "[N-1]") + "."
+          : "  de l'indicateur d'écart de rémunération."),
+        "",
+        "Les objectifs, les actions et les indicateurs fixés dans le présent article",
+        "tiennent compte des indicateurs mentionnés à l'article L. 1142-8 et, le cas",
+        "échéant, des mesures de correction définies dans les conditions prévues à",
+        "l'article L. 1142-9 (article R. 2242-2, dernier alinéa).",
+        "",
+        "Échéance. 31 décembre " + A(an) + ". Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+    {
+      cle: "articulation", nom: "Articulation entre l'activité professionnelle et la vie personnelle et familiale",
+      marques: ["articulation", "vie personnelle", "vie familiale", "déconnexion", "télétravail", "parentalité", "conciliation"],
+      article: function (an) { return [
+        "ARTICLE - ARTICULATION ENTRE L'ACTIVITÉ PROFESSIONNELLE ET LA VIE",
+        "PERSONNELLE ET FAMILIALE",
+        "",
+        "Objectif de progression. Tenir 100 % des réunions internes dans la plage",
+        "[9 h - 17 h], ramener à zéro le nombre de réunions engagées après [18 h] et",
+        "répondre sous [__] jours à toute demande d'aménagement d'horaire, au",
+        "31 décembre " + A(an) + ".",
+        "",
+        "Actions retenues.",
+        "- Fixer les réunions dans la plage horaire commune et diffuser convocation et",
+        "  ordre du jour au moins [5] jours à l'avance.",
+        "- Ouvrir le télétravail à [__] jours par semaine pour les emplois qui le",
+        "  permettent, selon les modalités annexées, sans distinction de sexe ni de",
+        "  situation de famille.",
+        "- Rappeler par note de service les modalités d'exercice du droit à la",
+        "  déconnexion, et poser qu'aucune réponse n'est attendue aux messages envoyés",
+        "  entre [20 h] et [7 h], ni les jours de repos.",
+        "- Tenir un entretien avant le départ et au retour de tout congé de maternité,",
+        "  d'adoption ou parental : organisation du remplacement, conditions du retour,",
+        "  perspectives professionnelles.",
+        "- Informer chaque année les salariés des congés et absences liés à la",
+        "  parentalité auxquels ils peuvent prétendre, et de la manière de les demander.",
+        "",
+        "Indicateurs de suivi, chiffrés.",
+        "- Nombre de réunions tenues hors de la plage horaire retenue.",
+        "- Nombre de demandes d'aménagement d'horaire reçues, acceptées, refusées, et",
+        "  délai moyen de réponse.",
+        "- Nombre de jours de télétravail pris, par sexe.",
+        "- Nombre d'entretiens de départ et de retour de congé familial tenus.",
+        "- Volume de messages professionnels envoyés hors plage horaire.",
+        "",
+        "Échéance. 31 décembre " + A(an) + ". Coût estimé de ces actions : [__] euros.",
+      ]; },
+    },
+  ];
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LA FICHE ENTREPRISE
+
+     Lue dans le profil partagé de l'application, modifiable ici, et réécrite
+     dans le profil : ce qu'on corrige sur cet écran sert aux suivants.
+     ══════════════════════════════════════════════════════════════════════════ */
+  var CHAMPS = { "f-nom": "denomination", "f-siret": "siret", "f-adresse": "adresse",
+                 "f-resp": "responsable", "f-eff": "effectif" };
+
+  (function chargerFiche() {
+    var p = (window.Profil && window.Profil.lire()) || {};
+    for (var id in CHAMPS) if (p[CHAMPS[id]] != null && p[CHAMPS[id]] !== "") $(id).value = p[CHAMPS[id]];
+    if (!$("f-annee").value) $("f-annee").value = String(new Date().getFullYear());
+    if (!$("x-annee").value) $("x-annee").value = String(new Date().getFullYear() - 1);
+    Object.keys(CHAMPS).forEach(function (id) {
+      $(id).addEventListener("change", function () {
+        if (!window.Profil) return;
+        var patch = {}; patch[CHAMPS[id]] = $(id).value.trim();
+        window.Profil.ecrire(patch);
+      });
+    });
+  })();
+
+  function fiche() {
+    var eff = parseInt($("f-eff").value, 10);
+    var an = parseInt($("f-annee").value, 10);
+    return {
+      nom: $("f-nom").value.trim() || "[DÉNOMINATION]",
+      siret: $("f-siret").value.trim() || "[SIRET]",
+      adresse: $("f-adresse").value.trim() || "[ADRESSE DU SIÈGE]",
+      resp: $("f-resp").value.trim() || "[NOM ET QUALITÉ DU SIGNATAIRE]",
+      effectif: isFinite(eff) ? eff : null,
+      annee: isFinite(an) ? an : null,
+      nature: $("f-nature").value,
+    };
+  }
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES ONGLETS
+     ══════════════════════════════════════════════════════════════════════════ */
+  function onglet(nom) {
+    ["depot", "articles", "sortie"].forEach(function (o) {
+      $("o-" + o).classList.toggle("cache", o !== nom);
+    });
+    Array.prototype.forEach.call($("onglets").children, function (b) {
+      b.classList.toggle("actif", b.dataset.o === nom);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  Array.prototype.forEach.call($("onglets").children, function (b) {
+    b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LA LECTURE D'UN .DOCX, SANS BIBLIOTHÈQUE
+
+     Un .docx est une archive zip et le texte vit dans word/document.xml : on lit
+     le répertoire central pour trouver l'entrée, puis on la décomprime avec le
+     flux natif du navigateur. Aucun octet ne sort de la page.
+     ══════════════════════════════════════════════════════════════════════════ */
+  function u16(v, i) { return v.getUint16(i, true); }
+  function u32(v, i) { return v.getUint32(i, true); }
+
+  function entreeZip(buf, nomVoulu) {
+    var v = new DataView(buf), n = buf.byteLength;
+    var fin = -1;
+    for (var i = n - 22; i >= 0 && i > n - 65558; i--) if (u32(v, i) === 0x06054b50) { fin = i; break; }
+    if (fin < 0) throw new Error("Ce fichier n'est pas une archive lisible.");
+    var nb = u16(v, fin + 10), pos = u32(v, fin + 16);
+    var dec = new TextDecoder("utf-8");
+    for (var k = 0; k < nb; k++) {
+      if (u32(v, pos) !== 0x02014b50) throw new Error("Répertoire de l'archive illisible.");
+      var methode = u16(v, pos + 10), taille = u32(v, pos + 20);
+      var lnom = u16(v, pos + 28), lextra = u16(v, pos + 30), lcom = u16(v, pos + 32);
+      var debut = u32(v, pos + 42);
+      var nom = dec.decode(new Uint8Array(buf, pos + 46, lnom));
+      if (nom === nomVoulu) {
+        var ln = u16(v, debut + 26), lx = u16(v, debut + 28);
+        return { methode: methode, data: new Uint8Array(buf, debut + 30 + ln + lx, taille) };
+      }
+      pos += 46 + lnom + lextra + lcom;
+    }
+    throw new Error("Le fichier ne contient pas de document Word (word/document.xml).");
+  }
+
+  function inflater(u8) {
+    if (typeof DecompressionStream !== "function")
+      return Promise.reject(new Error("Ce navigateur ne sait pas décomprimer le fichier. Collez le texte à la place."));
+    var flux = new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    return new Response(flux).arrayBuffer();
+  }
+
+  function texteDeDocumentXml(xml) {
+    return xml
+      .replace(/<w:tab[^>]*\/>/g, "\t")
+      .replace(/<w:br[^>]*\/>/g, "\n")
+      .replace(/<\/w:p>/g, "\n")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
+
+  function lireDocx(f) {
+    return f.arrayBuffer().then(function (buf) {
+      var e = entreeZip(buf, "word/document.xml");
+      if (e.methode === 0) return new TextDecoder("utf-8").decode(e.data);
+      if (e.methode !== 8) throw new Error("Compression inconnue dans ce .docx.");
+      return inflater(e.data).then(function (b) { return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
+    }).then(texteDeDocumentXml);
+  }
+
+  function dit(html, classe) {
+    $("lecture").innerHTML = html ? '<div class="avis ' + (classe || "info") + '">' + html + "</div>" : "";
+  }
+
+  $("fichier").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    $("erreur").innerHTML = "";
+    dit("Lecture de <b>" + ech(f.name) + "</b>…");
+    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    suite.then(function (t) {
+      $("depot").value = t;
+      dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +
+          " caractères. Relisez-le ci-dessous, c'est ce texte qui sera repris.");
+    }).catch(function (e) {
+      dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
+          " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
+    });
+  });
+
+  $("vider").addEventListener("click", function () {
+    $("depot").value = ""; dit(""); $("erreur").innerHTML = "";
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LE REPÉRAGE
+
+     Lexical, et il n'en dit pas plus qu'il n'en sait : un domaine dont les mots
+     apparaissent est tenu pour traité, et ne produit pas de carte. Les autres
+     produisent leur article rédigé.
+     ══════════════════════════════════════════════════════════════════════════ */
+  function normaliser(s) {
+    return String(s || "").toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[’']/g, "'").replace(/\s+/g, " ");
+  }
+
+  var etat = { texte: "", absents: [], presents: [], retenus: {}, redige: {} };
+
+  $("controler").addEventListener("click", function () {
+    var t = $("depot").value.trim();
+    $("erreur").innerHTML = "";
+    if (t.length < 200) {
+      $("erreur").innerHTML = '<div class="avis att"><b>Le texte déposé est trop court</b>' +
+        "Il compte " + t.length + " caractères. Déposez le document entier : sur un extrait, tous " +
+        "les domaines que l'extrait ne contient pas seraient rédigés pour rien.</div>";
+      return;
+    }
+    var n = normaliser(t);
+    etat.texte = t; etat.absents = []; etat.presents = []; etat.retenus = {}; etat.redige = {};
+    var f = fiche();
+    DOMAINES.forEach(function (d) {
+      var vu = d.marques.some(function (m) { return n.indexOf(normaliser(m)) >= 0; });
+      if (vu) { etat.presents.push(d); return; }
+      etat.absents.push(d);
+      etat.redige[d.cle] = d.article(f.annee, f.effectif).join("\n");
+      etat.retenus[d.cle] = true;
+    });
+    $("ong-articles").disabled = false;
+    $("ong-sortie").disabled = false;
+    rendreArticles();
+    onglet("articles");
+  });
+
+  function rendreArticles() {
+    var f = fiche();
+    var minimum = f.effectif === null ? null : (f.effectif >= 300 ? 4 : 3);
+    var c = "";
+    c += '<span class="c ok">' + etat.presents.length + " domaine" +
+      (etat.presents.length > 1 ? "s" : "") + " déjà couvert" + (etat.presents.length > 1 ? "s" : "") + "</span>";
+    c += '<span class="c abs">' + etat.absents.length + " article" +
+      (etat.absents.length > 1 ? "s" : "") + " rédigé" + (etat.absents.length > 1 ? "s" : "") + " ci-dessous</span>";
+    if (minimum !== null)
+      c += '<span class="c">' + minimum + " domaines au minimum, effectif de " +
+        f.effectif + " salariés (R. 2242-2)</span>";
+    $("compteurs").innerHTML = c;
+
+    var h = "";
+    if (!etat.absents.length) {
+      h = '<div class="avis ok"><b>Les neuf domaines de R. 2242-2 apparaissent déjà dans votre texte</b>' +
+        "Le repérage est lexical : il voit qu'un domaine est traité, jamais qu'il l'est bien. " +
+        "Relisez chaque article et vérifiez qu'il porte un objectif de progression, des actions, " +
+        "des indicateurs chiffrés et une échéance.</div>";
+    }
+    etat.absents.forEach(function (d) {
+      h += '<div class="art" data-cle="' + ech(d.cle) + '">' +
+        '<div class="tt"><span><span class="obj">' + ech(d.nom) + "</span>" +
+        '<span class="fond">R. 2242-2 &middot; L. 2312-36, 2°</span></span>' +
+        '<span class="etiq' + (d.obligatoire ? " due" : "") + '" data-etiq="' + ech(d.cle) + '">' +
+        (d.obligatoire ? "domaine obligatoire" : "retenu") + "</span></div>" +
+        '<div class="corps"><textarea data-txt="' + ech(d.cle) + '">' + ech(etat.redige[d.cle]) + "</textarea>" +
+        '<div class="actes">' +
+        '<button class="btn petit" data-ins="' + ech(d.cle) + '">Insérer cet article</button>' +
+        '<button class="btn second petit" data-cop="' + ech(d.cle) + '">Copier</button>' +
+        '<button class="btn second petit" data-ret="' + ech(d.cle) + '">Retirer de la version révisée</button>' +
+        "</div></div></div>";
+    });
+    $("articles").innerHTML = h;
+
+    $("articles").querySelectorAll("textarea[data-txt]").forEach(function (z) {
+      z.addEventListener("input", function () { etat.redige[z.dataset.txt] = z.value; });
+    });
+    $("articles").querySelectorAll("button[data-ins]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        etat.retenus[b.dataset.ins] = true; marquer(b.dataset.ins); assembler(); onglet("sortie");
+      });
+    });
+    /* Le bouton « retirer » n'a pas d'écouteur ici : marquer() lui pose son
+       onclick, et le repose à chaque appel. Deux mécanismes sur un même bouton
+       le feraient basculer deux fois par clic. */
+    $("articles").querySelectorAll("button[data-cop]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        copier(etat.redige[b.dataset.cop], b);
+      });
+    });
+    etat.absents.forEach(function (d) { marquer(d.cle); });
+  }
+
+  function marquer(cle) {
+    var e = $("articles").querySelector('[data-etiq="' + cle + '"]');
+    if (!e) return;
+    var d = DOMAINES.filter(function (x) { return x.cle === cle; })[0];
+    var pris = etat.retenus[cle];
+    e.className = "etiq" + (pris ? " pris" : d && d.obligatoire ? " due" : "");
+    e.textContent = pris ? "dans la version révisée" : (d && d.obligatoire ? "domaine obligatoire" : "écarté");
+    var b = $("articles").querySelector('[data-ret="' + cle + '"]');
+    if (b) b.textContent = pris ? "Retirer de la version révisée" : "Remettre dans la version révisée";
+    if (b) b.onclick = function () { etat.retenus[cle] = !etat.retenus[cle]; marquer(cle); };
+  }
+
+  $("tout-inserer").addEventListener("click", function () {
+    etat.absents.forEach(function (d) { etat.retenus[d.cle] = true; marquer(d.cle); });
+    assembler(); onglet("sortie");
+  });
+  $("vers-sortie").addEventListener("click", function () { assembler(); onglet("sortie"); });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES TROIS SORTIES
+     ══════════════════════════════════════════════════════════════════════════ */
+  function retenus() {
+    return etat.absents.filter(function (d) { return etat.retenus[d.cle]; });
+  }
+
+  function texteRevise() {
+    var f = fiche(), L = [];
+    var titre = f.nature === "plan"
+      ? "PLAN D'ACTION POUR L'ÉGALITÉ PROFESSIONNELLE ENTRE LES FEMMES ET LES HOMMES"
+      : "ACCORD RELATIF À L'ÉGALITÉ PROFESSIONNELLE ENTRE LES FEMMES ET LES HOMMES";
+    L.push(titre + " - VERSION RÉVISÉE");
+    L.push(f.nom + (f.siret !== "[SIRET]" ? ", SIRET " + f.siret : ""));
+    L.push("Année couverte : " + (f.annee || "[ANNÉE]") + ". Version établie le " + jourFr(new Date()) + ".");
+    L.push("");
+    L.push("========================================================================");
+    L.push("TEXTE DÉPOSÉ, REPRIS MOT POUR MOT");
+    L.push("========================================================================");
+    L.push("");
+    L.push(etat.texte);
+    var r = retenus();
+    if (r.length) {
+      L.push("");
+      L.push("========================================================================");
+      L.push("ARTICLES AJOUTÉS - DOMAINES D'ACTION DE L'ARTICLE R. 2242-2");
+      L.push("========================================================================");
+      L.push("");
+      L.push("À déplacer à leur rang dans le corps du texte. Les valeurs entre crochets");
+      L.push("sont à compléter : elles sont vôtres, l'application ne les invente pas.");
+      L.push("");
+      r.forEach(function (d) {
+        L.push(etat.redige[d.cle]);
+        L.push("");
+        L.push("------------------------------------------------------------------------");
+        L.push("");
+      });
+    }
+    return L.join("\n");
+  }
+
+  function courrier() {
+    var f = fiche(), L = [];
+    var accord = f.nature === "accord";
+    L.push(f.nom);
+    L.push(f.adresse);
+    L.push("SIRET : " + f.siret);
+    L.push("");
+    L.push("Dépôt sur la plateforme de téléprocédure du ministère du travail");
+    L.push("(TéléAccords), au titre de l'article " + (accord ? "D. 2231-4" : "L. 2242-3") + " du code du travail.");
+    L.push("");
+    L.push("À " + villeDe(f.adresse) + ", le " + jourFr(new Date()) + ".");
+    L.push("");
+    L.push("Objet : dépôt " + (accord
+      ? "de l'accord d'entreprise relatif à l'égalité professionnelle entre les femmes et les hommes"
+      : "du plan d'action pour l'égalité professionnelle entre les femmes et les hommes") +
+      " au titre de l'année " + (f.annee || "[ANNÉE]") + ".");
+    L.push("");
+    L.push("Madame, Monsieur,");
+    L.push("");
+    if (accord) {
+      L.push("Je dépose l'accord relatif à l'égalité professionnelle entre les femmes et");
+      L.push("les hommes conclu le [DATE DE SIGNATURE] au sein de " + f.nom + ",");
+      L.push("à l'issue de la négociation mentionnée au 2° de l'article L. 2242-1 du code");
+      L.push("du travail. L'accord est conclu pour une durée de [__] an(s), du [DATE] au");
+      L.push("[DATE].");
+      L.push("");
+      L.push("Il fixe les objectifs de progression et les actions permettant de les");
+      L.push("atteindre sur " + nbDomaines(f) + " des domaines d'action mentionnés au 2° de l'article");
+      L.push("L. 2312-36, la rémunération effective étant, comme l'exige l'article");
+      L.push("R. 2242-2, comprise parmi eux. Chaque objectif et chaque action sont");
+      L.push("accompagnés d'indicateurs chiffrés.");
+      L.push("");
+      L.push("Signataires :");
+      L.push("  - pour l'entreprise : " + f.resp + " ;");
+      L.push("  - [organisation syndicale représentative n° 1, représentée par ..........] ;");
+      L.push("  - [organisation syndicale représentative n° 2, représentée par ..........].");
+      L.push("");
+      L.push("PIÈCES JOINTES AU DÉPÔT (article D. 2231-7)");
+      L.push("");
+      L.push("  1. La version signée des parties.");
+      L.push("  2. La copie du courrier, du courrier électronique, du récépissé ou de");
+      L.push("     l'avis de réception daté de notification du texte à l'ensemble des");
+      L.push("     organisations représentatives à l'issue de la procédure de signature.");
+      L.push("  3. La version publiable mentionnée à l'article L. 2231-5-1, tenant compte");
+      L.push("     le cas échéant des modifications actées conformément au I de l'article");
+      L.push("     R. 2231-1-1.");
+      L.push("  4. L'acte mentionné au I de l'article R. 2231-1-1, s'il y a lieu.");
+      L.push("  5. Le procès-verbal mentionné au 2° de l'article D. 2232-2, s'il y a lieu.");
+      L.push("  6. La liste mentionnée à l'article D. 2231-6, s'il y a lieu.");
+      L.push("");
+      L.push("Un exemplaire du même accord est remis au greffe du conseil de prud'hommes");
+      L.push("de [VILLE], lieu de conclusion, conformément au III de l'article D. 2231-2.");
+      L.push("");
+      L.push("Un récépissé est délivré au déposant (article D. 2231-7, dernier alinéa) :");
+      L.push("je vous remercie de bien vouloir me le faire parvenir à l'adresse");
+      L.push("ci-dessus. Il sera conservé au dossier.");
+    } else {
+      L.push("Je dépose, en application du deuxième alinéa de l'article L. 2242-3 du code");
+      L.push("du travail, le plan d'action annuel destiné à assurer l'égalité");
+      L.push("professionnelle entre les femmes et les hommes au sein de " + f.nom + ",");
+      L.push("établi au titre de l'année " + (f.annee || "[ANNÉE]") + ".");
+      L.push("");
+      L.push("Ce plan a été établi après évaluation des objectifs fixés et des mesures");
+      L.push("prises au cours de l'année écoulée. Il détermine les objectifs de");
+      L.push("progression prévus pour l'année à venir, définit les actions qualitatives");
+      L.push("et quantitatives permettant de les atteindre et en évalue le coût.");
+      L.push("");
+      L.push("Il porte sur " + nbDomaines(f) + " des domaines d'action mentionnés au 2° de l'article");
+      L.push("L. 2312-36, la rémunération effective étant, comme l'exige l'article");
+      L.push("R. 2242-2, comprise parmi eux. Chaque objectif et chaque action sont");
+      L.push("accompagnés d'indicateurs chiffrés.");
+      L.push("");
+      L.push("PIÈCES JOINTES");
+      L.push("");
+      L.push("  1. Le plan d'action, dans sa version " + (f.annee || "[ANNÉE]") + ".");
+      L.push("  2. [Le procès-verbal de la réunion du comité social et économique du");
+      L.push("     ......... au cours de laquelle le plan lui a été présenté.]");
+      if (f.effectif !== null && f.effectif >= 300) {
+        L.push("  3. Le procès-verbal de désaccord établi le [DATE] à l'issue de la");
+        L.push("     négociation : dans les entreprises d'au moins trois cents salariés,");
+        L.push("     l'article L. 2242-8 en fait la pièce qui atteste le défaut d'accord.");
+      } else {
+        L.push("  3. [Le procès-verbal de désaccord, s'il en a été établi un.]");
+      }
+      L.push("");
+      L.push("Je vous remercie de bien vouloir m'adresser un accusé de réception de ce");
+      L.push("dépôt, qui sera conservé au dossier.");
+    }
+    L.push("");
+    L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
+    L.push("distinguée.");
+    L.push("");
+    L.push("");
+    L.push(f.resp);
+    L.push(f.nom);
+    return L.join("\n");
+  }
+
+  function nbDomaines(f) {
+    var total = etat.presents.length + retenus().length;
+    var mini = f.effectif === null ? null : (f.effectif >= 300 ? 4 : 3);
+    if (!total) return "[nombre]";
+    return String(total) + (mini !== null ? " (le minimum applicable étant de " + mini + ")" : "");
+  }
+
+  function villeDe(adresse) {
+    var m = String(adresse || "").match(/\d{5}\s+([A-Za-zÀ-ÿ' -]+)/);
+    return m ? m[1].trim() : "[VILLE]";
+  }
+  function jourFr(d) {
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+  }
+
+  function assembler() {
+    $("sortie").textContent = texteRevise();
+    $("courrier").textContent = courrier();
+    rendreAffiche();
+  }
+
+  /* Les trois vues de l'onglet de sortie. */
+  function vue(quelle) {
+    ["texte", "courrier", "index"].forEach(function (v) {
+      $("s-" + v).classList.toggle("cache", v !== quelle);
+    });
+  }
+  $("v-texte").addEventListener("click", function () { vue("texte"); });
+  $("v-courrier").addEventListener("click", function () { vue("courrier"); });
+  $("v-index").addEventListener("click", function () { vue("index"); rendreAffiche(); });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LA PAGE D'AFFICHAGE DE L'INDEX
+
+     Les indicateurs affichés sont ceux de D. 1142-2 au-delà de deux cent
+     cinquante salariés, ceux de D. 1142-2-1 de cinquante à deux cent cinquante.
+     Les barèmes sont aux annexes I et II, que cette page n'a pas lues : elle ne
+     dit donc pas sur combien de points chaque indicateur est noté, elle laisse
+     la place pour l'écrire. Le seul seuil qu'elle connaisse est celui que
+     D. 1142-6 énonce en toutes lettres, soixante-quinze points.
+     ══════════════════════════════════════════════════════════════════════════ */
+  var IND_GRANDES = [
+    "Écart de rémunération entre les femmes et les hommes",
+    "Écart de taux d'augmentations individuelles hors promotions",
+    "Écart de taux de promotions",
+    "Pourcentage de salariées augmentées au retour de congé de maternité",
+    "Nombre de salariés du sexe sous-représenté parmi les dix plus hautes rémunérations",
+  ];
+  var IND_PETITES = [
+    "Écart de rémunération entre les femmes et les hommes",
+    "Écart de taux d'augmentations individuelles",
+    "Pourcentage de salariées augmentées au retour de congé de maternité",
+    "Nombre de salariés du sexe sous-représenté parmi les dix plus hautes rémunérations",
+  ];
+
+  function listeIndicateurs() {
+    var eff = fiche().effectif;
+    if (eff !== null && eff > 250) return { liste: IND_GRANDES, base: "D. 1142-2" };
+    if (eff !== null && eff >= 50) return { liste: IND_PETITES, base: "D. 1142-2-1" };
+    return { liste: IND_GRANDES, base: "D. 1142-2" };
+  }
+
+  var valeursInd = {};
+  function rendreChampsIndicateurs() {
+    var L = listeIndicateurs();
+    $("x-indics").innerHTML = L.liste.map(function (nom, i) {
+      return '<label class="ch pleine"><span class="nom">' + ech(nom) + "</span>" +
+        '<input data-ind="' + i + '" value="' + ech(valeursInd[L.base + i] || "") +
+        '" placeholder="Résultat obtenu, en points"></label>';
+    }).join("");
+    $("x-indics").querySelectorAll("input[data-ind]").forEach(function (inp) {
+      inp.addEventListener("input", function () {
+        valeursInd[L.base + inp.dataset.ind] = inp.value; rendreAffiche();
+      });
+    });
+  }
+  rendreChampsIndicateurs();
+
+  ["x-annee", "x-note", "x-date"].forEach(function (id) {
+    $(id).addEventListener("input", rendreAffiche);
+  });
+  $("f-eff").addEventListener("change", function () { rendreChampsIndicateurs(); rendreAffiche(); });
+
+  function rendreAffiche() {
+    var f = fiche(), L = listeIndicateurs();
+    var note = $("x-note").value.trim();
+    var n = note === "" ? null : parseInt(note, 10);
+    var an = $("x-annee").value.trim() || "[ANNÉE]";
+    var dp = $("x-date").value ? jourFr(new Date($("x-date").value + "T12:00:00")) : "[DATE DE PUBLICATION]";
+
+    var h = '<div class="affiche">';
+    h += "<h4>Index de l'égalité professionnelle entre les femmes et les hommes</h4>";
+    h += '<div class="qui">' + ech(f.nom) + " &middot; résultats au titre de l'année " + ech(an) + "</div>";
+    h += '<div class="note"><span class="n">' + (n === null ? "[__]" : ech(String(n))) +
+      '</span><span class="l">points<br>niveau de résultat obtenu au regard des indicateurs mentionnés' +
+      " à l'article L. 1142-8</span></div>";
+    h += "<table><tr><th>Indicateur (" + ech(L.base) + ")</th><th style=\"width:130px\">Résultat</th></tr>";
+    L.liste.forEach(function (nom, i) {
+      var v = valeursInd[L.base + i];
+      h += "<tr><td>" + ech(nom) + '</td><td class="pts">' + (v ? ech(v) : "[__]") + "</td></tr>";
+    });
+    h += "</table>";
+    if (n !== null && n < 75) {
+      h += '<div class="qui" style="margin:14px 0 0"><b>Mesures de correction</b></div>';
+      h += "<p style=\"font-size:13.5px;margin:6px 0 0\">Le niveau de résultat étant inférieur à " +
+        "soixante-quinze points, les mesures adéquates et pertinentes de correction et, le cas " +
+        "échéant, la programmation de mesures financières de rattrapage salarial ont été " +
+        "[définies par l'accord du ......... / arrêtées par décision de l'employeur du ........., " +
+        "après consultation du comité social et économique], et déposées le .......... " +
+        "Elles sont publiées sur la même page que le présent niveau de résultat et y restent " +
+        "consultables jusqu'à l'obtention d'un niveau au moins égal à soixante-quinze points.</p>";
+    }
+    h += '<div class="pied">Publié le ' + ech(dp) + ". Ces résultats sont publiés annuellement, au plus " +
+      "tard le 1<sup>er</sup> mars de l'année en cours au titre de l'année précédente, de manière " +
+      "visible et lisible sur le site internet de l'entreprise lorsqu'il en existe un, et y restent " +
+      "consultables au moins jusqu'à la publication de l'année suivante ; à défaut de site internet, " +
+      "ils sont portés à la connaissance des salariés par tout moyen (article D. 1142-4). " +
+      "Le niveau de résultat est déterminé selon les modalités fixées aux annexes I et II du " +
+      "chapitre (article D. 1142-3).</div>";
+    h += "</div>";
+    $("affiche").innerHTML = h;
+  }
+  rendreAffiche();
+
+  $("imprimer-index").addEventListener("click", function () { window.print(); });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     EMPORTER
+     ══════════════════════════════════════════════════════════════════════════ */
+  function nomFichier(base, ext) {
+    return base + "-" + new Date().toISOString().slice(0, 10) + "." + ext;
+  }
+  function copier(t, bouton) {
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    else { var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a);
+           a.select(); document.execCommand("copy"); a.remove(); }
+    var avant = bouton.textContent;
+    bouton.textContent = "Copié";
+    setTimeout(function () { bouton.textContent = avant; }, 1600);
+  }
+
+  $("copier").addEventListener("click", function () { copier($("sortie").textContent, $("copier")); });
+  $("copier-courrier").addEventListener("click", function () { copier($("courrier").textContent, $("copier-courrier")); });
+
+  $("dl-txt").addEventListener("click", function () {
+    window.AuditExport.telecharger($("sortie").textContent,
+      nomFichier("egalite-version-revisee", "txt"), "text/plain;charset=utf-8");
+  });
+
+  function versWord(texte, titre, nom) {
+    var items = [];
+    texte.split(/\n/).forEach(function (l) { items.push({ k: "p", t: l }); });
+    window.AuditExport.telecharger(window.AuditExport.docx(items, titre), nom,
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  }
+
+  $("dl-docx").addEventListener("click", function () {
+    var f = fiche();
+    versWord($("sortie").textContent,
+      (f.nature === "plan" ? "Plan d'action" : "Accord") + " égalité professionnelle, version révisée",
+      nomFichier("egalite-version-revisee", "docx"));
+  });
+
+  $("dl-courrier-docx").addEventListener("click", function () {
+    versWord($("courrier").textContent, "Courrier de dépôt, égalité professionnelle",
+      nomFichier("egalite-courrier-depot", "docx"));
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mes affichages obligatoires</title>
+<link rel="manifest" href="manifest-audit-social.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  DIX CASES, ET CE QUI SORT DES CASES DÉCOCHÉES.
+
+  L'écran ne dit jamais « affichage manquant ». Il n'a rien à constater : il
+  sort l'affiche, format A4, entièrement rédigée, remplie avec ce que porte la
+  fiche d'entreprise, prête à imprimer et à poser au mur. Une case décochée
+  n'ouvre pas un reproche, elle ouvre une feuille.
+
+  CE QUI EST REPRODUIT MOT POUR MOT. Les articles 225-1 à 225-4, 222-33 et
+  222-33-2 du code pénal, et les articles L. 3221-1 à L. 3221-7 du code du
+  travail, figurent en toutes lettres sur les affiches qui les appellent :
+  L. 1142-6, L. 1152-4, L. 1153-5 et R. 3221-2 imposent le texte, pas un
+  résumé. Ils ont été lus à la source le 7 septembre 2026, trois lectures
+  concordantes chacun, et leur identifiant de version est porté sous chaque
+  encadré. Un texte que l'on n'a pas lu ne s'écrit pas de mémoire.
+
+  CE QUI N'EST PAS CITÉ, ET POURQUOI. L'affiche « interdiction de fumer et de
+  vapoter » ne cite aucun article : le texte qui impose cette signalisation
+  relève du code de la santé publique, que le relais de vérification de cette
+  application ne sert pas. L'affiche existe et se pose ; elle ne se réclame
+  d'aucun texte que cette page aurait lu.
+
+  Rien ne sort de ce poste. Les coordonnées saisies restent dans le navigateur.
+-->
+
+<style>
+  :root{
+    --encre:#1c2126; --encre-2:#5a6470; --encre-3:#8a939c;
+    --fond:#fbfbfc; --carte:#fff; --creux:#f4f5f7;
+    --filet:#e3e6ea; --filet-2:#cdd2d8;
+    --bleu:#1F3864; --bleu-clair:#eef1f7;
+    --vert:#1C5E36; --vert-clair:#e9f2ec;
+    --ambre:#8a5b10; --ambre-clair:#f8efdf;
+    --rouge:#a32c2c; --rouge-clair:#faeaea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);
+    font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+  header.site{background:var(--encre);color:#fff;padding:13px 0}
+  header.site .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  header.site h1{margin:0;font:600 16.5px/1.25 system-ui}
+  header.site h1 span{opacity:.6;font-weight:400}
+  header.site a{font:500 12.5px/1 system-ui;padding:7px 11px;border-radius:20px;
+    border:1px solid rgba(255,255,255,.34);color:#fff;text-decoration:none}
+  header.site a:hover{background:rgba(255,255,255,.12)}
+
+  h2{font:600 21px/1.2 system-ui;margin:24px 0 8px;letter-spacing:-.01em}
+  h3{font:600 15px/1.3 system-ui;margin:18px 0 6px;color:var(--bleu)}
+  .aide{margin:0 0 14px;color:var(--encre-2);font-size:14.5px;max-width:78ch}
+
+  .onglets{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 0}
+  .onglets button{font:500 13.5px/1 system-ui;padding:9px 13px;border-radius:8px;
+    border:1px solid var(--filet-2);background:var(--carte);color:var(--encre-2);cursor:pointer}
+  .onglets button.actif{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+
+  .carte{background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px}
+  label.ch{display:grid;gap:4px}
+  label.ch .nom{font:600 11.5px/1.3 system-ui;letter-spacing:.03em;text-transform:uppercase;color:var(--encre-3)}
+  label.ch input,label.ch select,label.ch textarea{font:inherit;font-size:14.5px;padding:9px 11px;
+    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre);width:100%}
+  label.ch textarea{min-height:72px;resize:vertical}
+  label.ch .sous{font-size:12.5px;color:var(--encre-3);line-height:1.45}
+  label.ch.large{grid-column:1/-1}
+
+  .cases{display:grid;gap:2px}
+  label.case{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border:1px solid var(--filet);
+    border-radius:9px;margin:6px 0;background:var(--carte);cursor:pointer}
+  label.case input{margin-top:4px;width:17px;height:17px;flex:none}
+  label.case b{display:block;font:600 15px/1.35 system-ui}
+  label.case .f{font-size:12.5px;color:var(--encre-3);margin-top:2px}
+  label.case.faite{background:var(--vert-clair);border-color:#cfe3d6}
+  label.case.faite b{color:#1b4b2d}
+
+  .avis{border-radius:9px;padding:12px 14px;font-size:14px;line-height:1.55;margin:12px 0}
+  .avis b{display:block;margin-bottom:2px}
+  .avis.info{background:var(--bleu-clair);color:#22385c}
+  .avis.att{background:var(--ambre-clair);color:#6b470c}
+  .avis.ok{background:var(--vert-clair);color:#1b4b2d}
+
+  .barre{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .btn{font:600 14px/1 system-ui;padding:10px 15px;border-radius:8px;border:1px solid var(--bleu);
+    background:var(--bleu);color:#fff;cursor:pointer}
+  .btn.second{background:var(--carte);color:var(--encre-2);border-color:var(--filet-2)}
+  .btn.petit{font-size:12.5px;padding:7px 11px}
+
+  .bloc-affiche{margin:26px 0 34px}
+  .reglages{background:var(--creux);border:1px solid var(--filet);border-radius:11px;padding:13px 15px;margin:0 0 12px}
+  .reglages>b{display:block;font:600 14px/1.3 system-ui;margin-bottom:9px;color:var(--bleu)}
+
+  .cadre-a4{overflow-x:auto;background:var(--creux);border-radius:12px;padding:14px}
+  .a4{width:210mm;min-height:297mm;margin:0 auto;background:#fff;color:#000;
+    padding:16mm 15mm;border:1px solid var(--filet-2);
+    font:12pt/1.5 Georgia,"Times New Roman",serif}
+  .a4 .ent{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #000;
+    padding-bottom:6px;font:600 10pt/1.3 system-ui;text-transform:uppercase;letter-spacing:.06em}
+  .a4 h1{font:700 26pt/1.1 system-ui;margin:16mm 0 3mm;letter-spacing:-.01em;text-align:center}
+  .a4 .sous{text-align:center;font:600 11pt/1.4 system-ui;color:#333;margin:0 0 9mm}
+  .a4 h2{font:700 13pt/1.3 system-ui;margin:7mm 0 2mm;border-bottom:1px solid #999;padding-bottom:2px}
+  .a4 p{margin:0 0 3mm}
+  .a4 .gros{font:700 17pt/1.35 system-ui;margin:2mm 0}
+  .a4 .cle{display:grid;grid-template-columns:62mm 1fr;gap:4mm;margin:0 0 2mm;font-size:11.5pt}
+  .a4 .cle span:first-child{font:600 10pt/1.5 system-ui;text-transform:uppercase;letter-spacing:.04em;color:#333}
+  .a4 ul{margin:0 0 3mm;padding-left:6mm}
+  .a4 li{margin:0 0 1.5mm}
+  .a4 .vide{color:#666;font-style:italic}
+  .a4 .loi{border-left:3px solid #000;padding:2mm 0 2mm 4mm;margin:0 0 4mm;font-size:10pt;line-height:1.45;text-align:justify}
+  .a4 .loi b{display:block;font:700 10.5pt/1.4 system-ui;margin-bottom:1.5mm}
+  .a4 .loi .ref{display:block;margin-top:1.5mm;font:400 8.5pt/1.3 system-ui;color:#555}
+  .a4 .note{font-size:9.5pt;color:#444;margin:0 0 3mm}
+  .a4 .pied{margin-top:9mm;border-top:1px solid #999;padding-top:3mm;
+    font:400 9.5pt/1.5 system-ui;color:#333;display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+  .a4 .signature{margin-top:8mm;height:22mm;border:1px dashed #aaa;border-radius:2mm;padding:2mm 3mm;
+    font:400 9.5pt/1.4 system-ui;color:#555}
+
+  table.releve{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}
+  table.releve th,table.releve td{border:1px solid var(--filet);padding:7px 9px;text-align:left;vertical-align:top}
+  table.releve thead th{background:var(--creux);font:600 11.5px/1.3 system-ui;color:var(--encre-2)}
+  table.releve td input{width:100%;font:inherit;font-size:13px;padding:5px 6px;border:1px solid transparent;
+    border-radius:5px;background:transparent}
+  table.releve td input:focus{border-color:var(--bleu);background:var(--carte);outline:none}
+  table.releve .fait{color:var(--vert);font-weight:600}
+  table.releve .apposer{color:var(--ambre);font-weight:600}
+
+  .cache{display:none}
+  footer{margin:40px 0 60px;padding-top:18px;border-top:1px solid var(--filet);
+    font-size:13px;color:var(--encre-3)}
+
+  @page{size:A4;margin:0}
+  @media print{
+    header.site,.onglets,.barre,.aide,.reglages,footer,h2,h3,.avis{display:none !important}
+    body{background:#fff}
+    .wrap{max-width:none;padding:0}
+    .cadre-a4{overflow:visible;background:#fff;padding:0}
+    .a4{border:0;margin:0;width:210mm;page-break-after:always}
+    .hors-impression{display:none !important}
+    .cache{display:none !important}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <h1>Mes affichages obligatoires <span>- dix cases, et les affiches qui sortent des cases décochées</span></h1>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <a href="index.html">Accueil</a>
+      <a href="audit-social.html">Auditer l'existant</a>
+      <a href="parcours.html?p=affichages">Le parcours complet</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="onglets" id="onglets">
+    <button data-o="cases" class="actif">1 · Ce qui est déjà au mur</button>
+    <button data-o="affiches">2 · Les affiches à poser</button>
+    <button data-o="releve">3 · Le relevé daté</button>
+  </div>
+
+  <!-- ══════ 1 · LES DIX CASES ══════ -->
+  <section id="o-cases">
+    <h2>Cochez ce qui est déjà affiché</h2>
+    <p class="aide">Ce qui reste décoché sort à l'onglet suivant sous forme d'affiche A4, rédigée et
+    remplie avec les coordonnées ci-dessous. Vous n'aurez qu'à imprimer et poser.</p>
+
+    <div class="carte">
+      <b style="display:block;font:600 14px/1.3 system-ui;color:var(--bleu);margin-bottom:10px">L'entreprise, telle qu'elle figurera en tête de chaque affiche</b>
+      <div class="champs" id="champs-entreprise"></div>
+    </div>
+
+    <div class="cases" id="cases"></div>
+
+    <div class="barre">
+      <button class="btn" id="vers-affiches">Voir les affiches à poser</button>
+      <button class="btn second" id="tout-decocher">Tout décocher</button>
+    </div>
+  </section>
+
+  <!-- ══════ 2 · LES AFFICHES ══════ -->
+  <section id="o-affiches" class="cache">
+    <h2>Les affiches à poser</h2>
+    <p class="aide">Chaque feuille est au format A4. Complétez les quelques cases au-dessus d'une
+    affiche : elle se met à jour aussitôt. Ce qui reste vide sort entre crochets, en clair, pour
+    que rien ne passe inaperçu au moment de poser.</p>
+    <div class="barre hors-impression">
+      <button class="btn" id="imprimer-tout">Imprimer toutes les affiches</button>
+      <button class="btn second" id="word-tout">Télécharger en Word</button>
+      <button class="btn second" id="retour-cases">Revenir aux cases</button>
+    </div>
+    <div id="affiches"></div>
+  </section>
+
+  <!-- ══════ 3 · LE RELEVÉ ══════ -->
+  <section id="o-releve" class="cache">
+    <h2>Le relevé daté</h2>
+    <p class="aide">La feuille qui prouve la pose. Un agent de contrôle ne voit que ce qui est au mur
+    le jour où il passe ; le relevé, daté et signé, dit ce qui a été posé, où, et quand.</p>
+    <div class="carte">
+      <div class="champs" id="champs-releve"></div>
+    </div>
+    <div class="barre hors-impression">
+      <button class="btn" id="imprimer-releve">Imprimer le relevé</button>
+      <button class="btn second" id="word-releve">Télécharger en Word</button>
+    </div>
+    <div id="releve"></div>
+  </section>
+
+  <footer>
+    Les textes reproduits sur les affiches ont été lus à la source le 7 septembre 2026 et portent
+    leur identifiant de version. Tout reste sur ce poste : aucune coordonnée saisie ici n'est envoyée.
+  </footer>
+</main>
+
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s) { return document.querySelector(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+
+  /* ------------------------------------------------------------------ */
+  /* LES TEXTES, LUS À LA SOURCE LE 7 SEPTEMBRE 2026.
+
+     Trois lectures espacées par article, identifiant de version stable aux
+     trois lectures, réponse « elargi » à faux sur la lecture retenue. Le
+     relais rend parfois un homonyme d'un autre code : c'est le contenu qui
+     tranche, et chacun de ces textes parle bien de ce pour quoi il est cité. */
+  var LU = "lu le 7 septembre 2026";
+
+  var CP = {
+    "222-33": { id: "LEGIARTI000054724663", nom: "Article 222-33 du code pénal",
+      t: "I. - Le harcèlement sexuel est le fait d'imposer à une personne, de façon répétée, des propos ou comportements à connotation sexuelle ou sexiste qui soit portent atteinte à sa dignité en raison de leur caractère dégradant ou humiliant, soit créent à son encontre une situation intimidante, hostile ou offensante. L'infraction est également constituée : 1° Lorsque ces propos ou comportements sont imposés à une même victime par plusieurs personnes, de manière concertée ou à l'instigation de l'une d'elles, alors même que chacune de ces personnes n'a pas agi de façon répétée ; 2° Lorsque ces propos ou comportements sont imposés à une même victime, successivement, par plusieurs personnes qui, même en l'absence de concertation, savent que ces propos ou comportements caractérisent une répétition. II. - Est assimilé au harcèlement sexuel le fait, même non répété, d'user de toute forme de pression grave dans le but réel ou apparent d'obtenir un acte de nature sexuelle, que celui-ci soit recherché au profit de l'auteur des faits ou au profit d'un tiers. III. - Les faits mentionnés aux I et II sont punis de deux ans d'emprisonnement et de 30 000 € d'amende. Ces peines sont portées à trois ans d'emprisonnement et 45 000 € d'amende lorsque les faits sont commis : 1° Par une personne qui abuse de l'autorité que lui confèrent ses fonctions ; 2° Sur un mineur de quinze ans ; 3° Sur une personne dont la particulière vulnérabilité, due à son âge, à une maladie, à une infirmité, à une déficience physique ou psychique ou à un état de grossesse, est apparente ou connue de leur auteur ; 4° Sur une personne dont la particulière vulnérabilité ou dépendance résultant de la précarité de sa situation économique ou sociale est apparente ou connue de leur auteur ; 5° Par plusieurs personnes agissant en qualité d'auteur ou de complice ; 6° Par l'utilisation d'un service de communication au public en ligne ou par le biais d'un support numérique ou électronique ; 7° Alors qu'un mineur était présent et y a assisté ; 8° Par un ascendant ou par toute autre personne ayant sur la victime une autorité de droit ou de fait ; 9° Dans un moyen de transport collectif de voyageurs ou dans un lieu destiné à l'accès à un moyen de transport collectif de voyageurs." },
+    "222-33-2": { id: "LEGIARTI000029336939", nom: "Article 222-33-2 du code pénal",
+      t: "Le fait de harceler autrui par des propos ou comportements répétés ayant pour objet ou pour effet une dégradation des conditions de travail susceptible de porter atteinte à ses droits et à sa dignité, d'altérer sa santé physique ou mentale ou de compromettre son avenir professionnel, est puni de deux ans d'emprisonnement et de 30 000 € d'amende." },
+    "225-1": { id: "LEGIARTI000045391831", nom: "Article 225-1 du code pénal",
+      t: "Constitue une discrimination toute distinction opérée entre les personnes physiques sur le fondement de leur origine, de leur sexe, de leur situation de famille, de leur grossesse, de leur apparence physique, de la particulière vulnérabilité résultant de leur situation économique, apparente ou connue de son auteur, de leur patronyme, de leur lieu de résidence, de leur état de santé, de leur perte d'autonomie, de leur handicap, de leurs caractéristiques génétiques, de leurs mœurs, de leur orientation sexuelle, de leur identité de genre, de leur âge, de leurs opinions politiques, de leurs activités syndicales, de leur qualité de lanceur d'alerte, de facilitateur ou de personne en lien avec un lanceur d'alerte au sens, respectivement, du I de l'article 6 et des 1° et 2° de l'article 6-1 de la loi n° 2016-1691 du 9 décembre 2016 relative à la transparence, à la lutte contre la corruption et à la modernisation de la vie économique, de leur capacité à s'exprimer dans une langue autre que le français, de leur appartenance ou de leur non-appartenance, vraie ou supposée, à une ethnie, une Nation, une prétendue race ou une religion déterminée. Constitue également une discrimination toute distinction opérée entre les personnes morales sur le fondement de l'origine, du sexe, de la situation de famille, de la grossesse, de l'apparence physique, de la particulière vulnérabilité résultant de la situation économique, apparente ou connue de son auteur, du patronyme, du lieu de résidence, de l'état de santé, de la perte d'autonomie, du handicap, des caractéristiques génétiques, des mœurs, de l'orientation sexuelle, de l'identité de genre, de l'âge, des opinions politiques, des activités syndicales, de la qualité de lanceur d'alerte, de facilitateur ou de personne en lien avec un lanceur d'alerte, au sens, respectivement, du I de l'article 6 et des 1° et 2° de l'article 6-1 de la loi n° 2016-1691 du 9 décembre 2016 précitée, de la capacité à s'exprimer dans une langue autre que le français, de l'appartenance ou de la non-appartenance, vraie ou supposée, à une ethnie, une Nation, une prétendue race ou une religion déterminée des membres ou de certains membres de ces personnes morales." },
+    "225-2": { id: "LEGIARTI000033975382", nom: "Article 225-2 du code pénal",
+      t: "La discrimination définie aux articles 225-1 à 225-1-2, commise à l'égard d'une personne physique ou morale, est punie de trois ans d'emprisonnement et de 45 000 euros d'amende lorsqu'elle consiste : 1° A refuser la fourniture d'un bien ou d'un service ; 2° A entraver l'exercice normal d'une activité économique quelconque ; 3° A refuser d'embaucher, à sanctionner ou à licencier une personne ; 4° A subordonner la fourniture d'un bien ou d'un service à une condition fondée sur l'un des éléments visés à l'article 225-1 ou prévue aux articles 225-1-1 ou 225-1-2 ; 5° A subordonner une offre d'emploi, une demande de stage ou une période de formation en entreprise à une condition fondée sur l'un des éléments visés à l'article 225-1 ou prévue aux articles 225-1-1 ou 225-1-2 ; 6° A refuser d'accepter une personne à l'un des stages visés par le 2° de l'article L. 412-8 du code de la sécurité sociale. Lorsque le refus discriminatoire prévu au 1° est commis dans un lieu accueillant du public ou aux fins d'en interdire l'accès, les peines sont portées à cinq ans d'emprisonnement et à 75 000 euros d'amende." },
+    "225-3": { id: "LEGIARTI000043895868", nom: "Article 225-3 du code pénal",
+      t: "Les dispositions de l'article précédent ne sont pas applicables : 1° Aux discriminations fondées sur l'état de santé, lorsqu'elles consistent en des opérations ayant pour objet la prévention et la couverture du risque décès, des risques portant atteinte à l'intégrité physique de la personne ou des risques d'incapacité de travail ou d'invalidité. Toutefois, ces discriminations sont punies des peines prévues à l'article précédent lorsqu'elles se fondent sur la prise en compte de tests génétiques prédictifs ayant pour objet une maladie qui n'est pas encore déclarée ou une prédisposition génétique à une maladie ou qu'elles se fondent sur la prise en compte des conséquences sur l'état de santé d'un prélèvement d'organe tel que défini à l'article L. 1231-1 du code de la santé publique ou de données issues de techniques d'imagerie cérébrale ; 2° Aux discriminations fondées sur l'état de santé ou le handicap, lorsqu'elles consistent en un refus d'embauche ou un licenciement fondé sur l'inaptitude médicalement constatée soit dans le cadre du titre IV du livre II du code du travail, soit dans le cadre des lois portant dispositions statutaires relatives à la fonction publique ; 3° Aux discriminations fondées, en matière d'embauche, sur un motif mentionné à l'article 225-1 du présent code, lorsqu'un tel motif constitue une exigence professionnelle essentielle et déterminante et pour autant que l'objectif soit légitime et l'exigence proportionnée ; 4° Aux discriminations fondées, en matière d'accès aux biens et services, sur le sexe lorsque cette discrimination est justifiée par la protection des victimes de violences à caractère sexuel, des considérations liées au respect de la vie privée et de la décence, la promotion de l'égalité des sexes ou des intérêts des hommes ou des femmes, la liberté d'association ou l'organisation d'activités sportives ; 5° Aux refus d'embauche fondés sur la nationalité lorsqu'ils résultent de l'application des dispositions statutaires relatives à la fonction publique ; 6° Aux discriminations liées au lieu de résidence lorsque la personne chargée de la fourniture d'un bien ou service se trouve en situation de danger manifeste. Les mesures prises en faveur des personnes résidant dans certaines zones géographiques et visant à favoriser l'égalité de traitement ne constituent pas une discrimination." },
+    "225-4": { id: "LEGIARTI000020630926", nom: "Article 225-4 du code pénal",
+      t: "Les personnes morales déclarées responsables pénalement, dans les conditions prévues par l'article 121-2, des infractions définies à l'article 225-2 encourent, outre l'amende suivant les modalités prévues par l'article 131-38, les peines prévues par les 2° à 5°, 8° et 9° de l'article 131-39. L'interdiction mentionnée au 2° de l'article 131-39 porte sur l'activité dans l'exercice ou à l'occasion de l'exercice de laquelle l'infraction a été commise." },
+  };
+
+  var CT = {
+    "L3221-1": { id: "LEGIARTI000006902817", t: "Les dispositions des articles L. 3221-2 à L. 3221-7 sont applicables, outre aux employeurs et salariés mentionnés à l'article L. 3211-1, à ceux non régis par le code du travail et, notamment, aux agents de droit public." },
+    "L3221-2": { id: "LEGIARTI000006902818", t: "Tout employeur assure, pour un même travail ou pour un travail de valeur égale, l'égalité de rémunération entre les femmes et les hommes." },
+    "L3221-3": { id: "LEGIARTI000006902819", t: "Constitue une rémunération au sens du présent chapitre, le salaire ou traitement ordinaire de base ou minimum et tous les autres avantages et accessoires payés, directement ou indirectement, en espèces ou en nature, par l'employeur au salarié en raison de l'emploi de ce dernier." },
+    "L3221-4": { id: "LEGIARTI000006902820", t: "Sont considérés comme ayant une valeur égale, les travaux qui exigent des salariés un ensemble comparable de connaissances professionnelles consacrées par un titre, un diplôme ou une pratique professionnelle, de capacités découlant de l'expérience acquise, de responsabilités et de charge physique ou nerveuse." },
+    "L3221-5": { id: "LEGIARTI000006902821", t: "Les disparités de rémunération entre les établissements d'une même entreprise ne peuvent pas, pour un même travail ou pour un travail de valeur égale, être fondées sur l'appartenance des salariés de ces établissements à l'un ou l'autre sexe." },
+    "L3221-6": { id: "LEGIARTI000037389671", t: "Les différents éléments composant la rémunération sont établis selon des normes identiques pour les femmes et pour les hommes. Les catégories et les critères de classification et de promotion professionnelles ainsi que toutes les autres bases de calcul de la rémunération, notamment les modes d'évaluation des emplois, sont établis selon des règles qui assurent l'application du principe fixé à l'article L. 3221-2." },
+    "L3221-7": { id: "LEGIARTI000006902825", t: "Est nulle de plein droit toute disposition figurant notamment dans un contrat de travail, une convention ou accord collectif de travail, un accord de salaires, un règlement ou barème de salaires résultant d'une décision d'un employeur ou d'un groupement d'employeurs et qui, contrairement aux articles L. 3221-2 à L. 3221-6, comporte, pour un ou des salariés de l'un des deux sexes, une rémunération inférieure à celle de salariés de l'autre sexe pour un même travail ou un travail de valeur égale. La rémunération plus élevée dont bénéficient ces derniers salariés est substituée de plein droit à celle que comportait la disposition entachée de nullité." },
+    "L1142-2-1": { id: "LEGIARTI000031072447", t: "Nul ne doit subir d'agissement sexiste, défini comme tout agissement lié au sexe d'une personne, ayant pour objet ou pour effet de porter atteinte à sa dignité ou de créer un environnement intimidant, hostile, dégradant, humiliant ou offensant." },
+  };
+
+  /* Les fondements de chaque affiche, avec leur identifiant de version. Ils
+     s'impriment en pied de feuille : celui qui décroche l'affiche sait de quoi
+     elle se réclame. */
+  var FOND = {
+    "D. 4711-1": "LEGIARTI000018527636",
+    "L. 3171-1": "LEGIARTI000033021067",
+    "D. 3171-2": "LEGIARTI000018533984",
+    "D. 3171-3": "LEGIARTI000018533982",
+    "L. 3141-16": "LEGIARTI000035652687",
+    "D. 3141-5": "LEGIARTI000033515945",
+    "D. 3141-6": "LEGIARTI000033515942",
+    "L. 1142-6": "LEGIARTI000029144893",
+    "R. 3221-2": "LEGIARTI000033292519",
+    "L. 1142-2-1": "LEGIARTI000031072447",
+    "L. 1152-4": "LEGIARTI000029144897",
+    "L. 1153-5": "LEGIARTI000037389712",
+    "L. 1153-5-1": "LEGIARTI000037380160",
+    "L. 2314-1": "LEGIARTI000037389707",
+    "R. 2262-1": "LEGIARTI000048288541",
+    "R. 2262-3": "LEGIARTI000033292505",
+    "R. 2262-5": "LEGIARTI000018535589",
+    "R. 4121-4": "LEGIARTI000045386451",
+  };
+
+  /* ------------------------------------------------------------------ */
+  /* L'état de la page : les dix cases et les coordonnées saisies. */
+  var CLE = "controler-affichages";
+  var E = (function () {
+    try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; } catch (_) { return {}; }
+  })();
+  E.faites = E.faites || {};
+  E.v = E.v || {};
+  function garder() { try { localStorage.setItem(CLE, JSON.stringify(E)); } catch (_) {} }
+
+  var P = (window.Profil && window.Profil.lire) ? window.Profil.lire() : {};
+  function depuisProfil(cle, valeur) { if (!E.v[cle] && valeur) E.v[cle] = String(valeur); }
+  depuisProfil("denomination", P.denomination || P.entreprise);
+  depuisProfil("adresse", P.adresse);
+  depuisProfil("siret", P.siret);
+  depuisProfil("responsable", P.responsable);
+  depuisProfil("ccnIntitule", P.conventionCollective);
+  if (!E.v.dateReleve) E.v.dateReleve = new Date().toISOString().slice(0, 10);
+
+  var effectif = (function () {
+    var n = Number(P.effectif);
+    return isFinite(n) && n > 0 ? n : null;
+  })();
+
+  function v(cle) { return String(E.v[cle] == null ? "" : E.v[cle]).trim(); }
+  function dateFr(iso) {
+    if (!iso) return "";
+    var d = new Date(iso + "T12:00:00");
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* LES DIX AFFICHES.
+
+     Chacune porte ses propres champs, et une fonction qui rend la feuille.
+     Un champ vide sort entre crochets : il se voit, il ne s'invente pas. */
+  function val(cle, quoi) {
+    var x = v(cle);
+    return x ? { k: "ok", t: x } : { k: "vide", t: "[ " + quoi + " ]" };
+  }
+
+  var AFFICHES = [
+    /* ---------------------------------------------------------------- 1 */
+    { id: "inspection",
+      nom: "Inspection du travail : adresse, numéro d'appel, nom de l'agent",
+      fond: ["D. 4711-1"],
+      pourquoi: "L'article D. 4711-1 impose d'afficher l'adresse et le numéro d'appel de l'inspection du travail compétente ainsi que le nom de l'inspecteur compétent.",
+      champs: [
+        { c: "inspUnite", n: "Unité de contrôle compétente", ph: "DDETS, unité de contrôle n° …" },
+        { c: "inspAdresse", n: "Adresse complète", large: true, ph: "n°, rue, code postal, ville" },
+        { c: "inspTel", n: "Numéro d'appel", ph: "01 23 45 67 89" },
+        { c: "inspNom", n: "Nom de l'agent de contrôle compétent", ph: "Madame / Monsieur …" },
+        { c: "inspCourriel", n: "Courriel de l'unité de contrôle", ph: "facultatif" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "INSPECTION DU TRAVAIL" },
+          { k: "sous", t: "Coordonnées de l'agent de contrôle compétent pour cet établissement" },
+          { k: "h", t: "À qui vous adresser" },
+          { k: "cle", l: "Unité de contrôle", x: val("inspUnite", "unité de contrôle à indiquer") },
+          { k: "cle", l: "Adresse", x: val("inspAdresse", "adresse à indiquer") },
+          { k: "cle", l: "Numéro d'appel", x: val("inspTel", "numéro à indiquer") },
+          { k: "cle", l: "Agent de contrôle", x: val("inspNom", "nom de l'agent à indiquer") },
+          { k: "cle", l: "Courriel", x: val("inspCourriel", "courriel, si vous le communiquez") },
+          { k: "h", t: "Ce que vous pouvez en attendre" },
+          { k: "p", t: "Tout salarié de l'établissement peut s'adresser directement à l'agent de contrôle, aux coordonnées ci-dessus, sans passer par sa hiérarchie." },
+          { k: "p", t: "L'employeur ne demande pas à connaître le contenu des échanges et ne conditionne aucune démarche à son accord préalable." },
+          { k: "note", t: "Le nom de l'agent change au gré des affectations : cette affiche est vérifiée une fois par an, et à chaque changement porté à la connaissance de l'entreprise." },
+        ];
+      } },
+
+    /* ---------------------------------------------------------------- 2 */
+    { id: "spst",
+      nom: "Service de prévention et de santé au travail, et médecin du travail",
+      fond: ["D. 4711-1"],
+      pourquoi: "L'article D. 4711-1 impose d'afficher l'adresse et le numéro d'appel du médecin du travail ou du service de santé au travail compétent pour l'établissement.",
+      champs: [
+        { c: "spstNom", n: "Nom du service", ph: "nom du service interentreprises" },
+        { c: "spstAdresse", n: "Adresse complète", large: true, ph: "n°, rue, code postal, ville" },
+        { c: "spstTel", n: "Numéro d'appel", ph: "01 23 45 67 89" },
+        { c: "spstMedecin", n: "Médecin du travail suivant l'établissement", ph: "Docteur …" },
+        { c: "spstRdv", n: "Comment prendre rendez-vous", large: true, ph: "par téléphone au …, du lundi au vendredi de 9 h à 17 h" },
+        { c: "spstAdhesion", n: "Numéro d'adhésion de l'entreprise", ph: "facultatif" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "SANTÉ AU TRAVAIL" },
+          { k: "sous", t: "Médecin du travail et service de prévention et de santé au travail" },
+          { k: "h", t: "Le service qui suit cet établissement" },
+          { k: "cle", l: "Service", x: val("spstNom", "nom du service à indiquer") },
+          { k: "cle", l: "Adresse", x: val("spstAdresse", "adresse à indiquer") },
+          { k: "cle", l: "Numéro d'appel", x: val("spstTel", "numéro à indiquer") },
+          { k: "cle", l: "Médecin du travail", x: val("spstMedecin", "nom du médecin à indiquer") },
+          { k: "cle", l: "Numéro d'adhésion", x: val("spstAdhesion", "numéro d'adhésion, si vous le portez") },
+          { k: "h", t: "Prendre rendez-vous" },
+          { k: "cle", l: "Modalités", x: val("spstRdv", "modalités de prise de rendez-vous à indiquer") },
+          { k: "p", t: "Vous pouvez appeler le service directement, aux coordonnées ci-dessus. L'entreprise ne demande ni le motif de la demande, ni le contenu de l'échange avec le médecin." },
+          { k: "note", t: "Cette affiche est vérifiée une fois par an et à chaque changement de service, de médecin ou de coordonnées." },
+        ];
+      } },
+
+    /* ---------------------------------------------------------------- 3 */
+    { id: "secours",
+      nom: "Numéros des secours d'urgence, secouristes et matériel de premiers secours",
+      fond: ["D. 4711-1"],
+      pourquoi: "L'article D. 4711-1 impose d'afficher l'adresse et le numéro d'appel des services de secours d'urgence.",
+      champs: [
+        { c: "secNums", n: "Numéros affichés", large: true,
+          defaut: "15 SAMU  ·  18 sapeurs-pompiers  ·  112 numéro d'urgence européen  ·  114 urgence par SMS, personnes sourdes ou malentendantes  ·  17 police et gendarmerie",
+          ph: "les numéros à afficher" },
+        { c: "secHopital", n: "Service d'urgence le plus proche", large: true, ph: "nom de l'établissement, adresse, numéro" },
+        { c: "secSauveteurs", n: "Sauveteurs secouristes du travail présents", large: true, ph: "un par ligne : nom, poste, horaires" },
+        { c: "secTrousse", n: "Emplacement de la trousse de secours", ph: "le lieu exact" },
+        { c: "secDae", n: "Emplacement du défibrillateur", ph: "le lieu exact, ou « aucun sur le site »" },
+        { c: "secInterne", n: "Numéro interne à composer en cas d'accident", ph: "poste interne, ou portable d'astreinte" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "EN CAS D'ACCIDENT" },
+          { k: "sous", t: "Numéros d'urgence, secouristes et matériel de premiers secours" },
+          { k: "gros", t: v("secNums") || "[ numéros d'urgence à indiquer ]" },
+          { k: "h", t: "Sur place" },
+          { k: "cle", l: "Numéro interne", x: val("secInterne", "poste interne à indiquer") },
+          { k: "cle", l: "Trousse de secours", x: val("secTrousse", "emplacement à indiquer") },
+          { k: "cle", l: "Défibrillateur", x: val("secDae", "emplacement à indiquer, ou « aucun sur le site »") },
+          { k: "cle", l: "Service d'urgence le plus proche", x: val("secHopital", "établissement et adresse à indiquer") },
+          { k: "h", t: "Les sauveteurs secouristes du travail de l'établissement" },
+          { k: "liste", t: v("secSauveteurs") || "[ noms, postes et horaires à indiquer ]" },
+          { k: "h", t: "Ce que l'on fait, dans cet ordre" },
+          { k: "puces", t: [
+            "Protéger : supprimer le danger si c'est possible sans se mettre en danger, sinon écarter les personnes.",
+            "Alerter : appeler le numéro interne ci-dessus, puis les secours ; donner l'adresse exacte, l'étage, le nombre de blessés et l'état de chacun.",
+            "Secourir : appliquer les gestes appris ; ne pas déplacer une personne qui s'est blessée au dos ou à la nuque, sauf danger immédiat.",
+            "Guider : envoyer quelqu'un attendre les secours à l'entrée et leur ouvrir le chemin.",
+            "Consigner : porter l'accident au registre et prévenir la direction le jour même, même s'il paraît bénin.",
+          ] },
+        ];
+      } },
+
+    /* ---------------------------------------------------------------- 4 */
+    { id: "horaires",
+      nom: "Horaires collectifs de travail et repos",
+      fond: ["L. 3171-1", "D. 3171-2", "D. 3171-3"],
+      pourquoi: "L'employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos (L. 3171-1). L'horaire collectif est daté et signé, affiché en caractères lisibles et apposé de façon apparente dans chacun des lieux de travail auxquels il s'applique (D. 3171-2) ; toute modification donne lieu, avant son application, à une rectification affichée dans les mêmes conditions (D. 3171-3).",
+      champs: [
+        { c: "horChamp", n: "Horaire applicable à", large: true, ph: "l'établissement entier, ou tel service, tel atelier" },
+        { c: "horJours", n: "Jours travaillés", ph: "du lundi au vendredi" },
+        { c: "horMatin", n: "Matin", ph: "de 9 h 00 à 12 h 30" },
+        { c: "horAprem", n: "Après-midi", ph: "de 13 h 30 à 17 h 00" },
+        { c: "horPause", n: "Pause et coupure", large: true, ph: "coupure de 12 h 30 à 13 h 30, pause de 20 minutes à 15 h 00" },
+        { c: "horRepos", n: "Repos hebdomadaire", large: true, ph: "samedi et dimanche" },
+        { c: "horRepartition", n: "Répartition sur la période de référence, s'il y en a une", large: true, ph: "semaines hautes, semaines basses, période retenue" },
+        { c: "horDate", n: "Date de l'horaire", t: "date" },
+        { c: "horSignataire", n: "Signé par", ph: "nom et qualité" },
+      ],
+      feuille: function () {
+        var l = [
+          { k: "titre", t: "HORAIRE COLLECTIF DE TRAVAIL" },
+          { k: "sous", t: "Heures de début et de fin du travail, heures et durée des repos" },
+          { k: "cle", l: "Horaire applicable à", x: val("horChamp", "service ou lieu de travail à indiquer") },
+          { k: "h", t: "Les heures" },
+          { k: "cle", l: "Jours travaillés", x: val("horJours", "jours à indiquer") },
+          { k: "cle", l: "Matin", x: val("horMatin", "heures à indiquer") },
+          { k: "cle", l: "Après-midi", x: val("horAprem", "heures à indiquer") },
+          { k: "cle", l: "Pause et coupure", x: val("horPause", "heures et durée des repos à indiquer") },
+          { k: "cle", l: "Repos hebdomadaire", x: val("horRepos", "jours de repos à indiquer") },
+        ];
+        if (v("horRepartition"))
+          l.push({ k: "cle", l: "Répartition sur la période de référence", x: val("horRepartition", "") });
+        l.push({ k: "h", t: "Daté et signé" });
+        l.push({ k: "cle", l: "Horaire établi le", x: v("horDate") ? { k: "ok", t: dateFr(v("horDate")) } : { k: "vide", t: "[ date à porter ]" } });
+        l.push({ k: "cle", l: "Par", x: val("horSignataire", "nom et qualité du signataire") });
+        l.push({ k: "signature", t: "Signature de l'employeur ou de la personne à laquelle il a délégué ses pouvoirs à cet effet" });
+        l.push({ k: "note", t: "Toute modification de cet horaire donne lieu, avant son application, à une rectification affichée dans les mêmes conditions. Un exemplaire daté de chaque version est conservé." });
+        return l;
+      } },
+
+    /* ---------------------------------------------------------------- 5 */
+    { id: "conges",
+      nom: "Ordre des départs en congés et période de prise",
+      fond: ["L. 3141-16", "D. 3141-5", "D. 3141-6"],
+      pourquoi: "À défaut de stipulation conventionnelle, l'employeur définit la période de prise des congés et l'ordre des départs, après avis, le cas échéant, du comité social et économique (L. 3141-16, 1°). La période de prise est portée à la connaissance des salariés au moins deux mois avant son ouverture (D. 3141-5), et l'ordre des départs est communiqué, par tout moyen, à chaque salarié un mois avant son départ (D. 3141-6).",
+      champs: [
+        { c: "conPeriode", n: "Période de prise des congés", large: true, ph: "du 1er mai 2027 au 31 octobre 2027" },
+        { c: "conDatePortee", n: "Portée à la connaissance des salariés le", t: "date" },
+        { c: "conAvisCse", n: "Avis du comité recueilli le", t: "date" },
+        { c: "conLimite", n: "Date limite de dépôt des demandes", t: "date" },
+        { c: "conListe", n: "Ordre des départs", large: true, aire: true,
+          ph: "une ligne par salarié : nom, service, du … au …" },
+        { c: "conContact", n: "À qui adresser une demande", ph: "nom, qualité" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "CONGÉS PAYÉS" },
+          { k: "sous", t: "Période de prise et ordre des départs" },
+          { k: "h", t: "La période de prise" },
+          { k: "cle", l: "Période retenue", x: val("conPeriode", "période à indiquer") },
+          { k: "cle", l: "Portée à votre connaissance le", x: v("conDatePortee") ? { k: "ok", t: dateFr(v("conDatePortee")) } : { k: "vide", t: "[ date à porter, au moins deux mois avant l'ouverture de la période ]" } },
+          { k: "cle", l: "Avis du comité recueilli le", x: v("conAvisCse") ? { k: "ok", t: dateFr(v("conAvisCse")) } : { k: "vide", t: "[ date, ou « sans objet : pas de comité » ]" } },
+          { k: "cle", l: "Demandes à déposer avant le", x: v("conLimite") ? { k: "ok", t: dateFr(v("conLimite")) } : { k: "vide", t: "[ date limite à porter ]" } },
+          { k: "cle", l: "Demandes à adresser à", x: val("conContact", "nom et qualité à indiquer") },
+          { k: "h", t: "L'ordre des départs" },
+          { k: "liste", t: v("conListe") || "[ ordre des départs à porter : une ligne par salarié, nom, service, dates ]" },
+          { k: "h", t: "Sur quoi l'ordre a été arrêté" },
+          { k: "puces", t: [
+            "La situation de famille de chacun, en particulier les possibilités de congé du conjoint ou du partenaire lié par un pacte civil de solidarité, dans le secteur privé comme dans la fonction publique, et la présence au foyer d'un enfant ou d'un adulte handicapé ou d'une personne âgée en perte d'autonomie.",
+            "La durée des services dans l'entreprise.",
+            "L'activité exercée, le cas échéant, chez un ou plusieurs autres employeurs.",
+          ] },
+          { k: "note", t: "Sauf circonstances exceptionnelles, l'ordre et les dates de départ ne sont pas modifiés moins d'un mois avant la date de départ prévue. L'ordre est communiqué à chaque salarié un mois avant son départ." },
+        ];
+      } },
+
+    /* ---------------------------------------------------------------- 6 */
+    { id: "egalite",
+      nom: "Égalité entre les femmes et les hommes, non-discrimination, agissements sexistes",
+      fond: ["L. 1142-6", "R. 3221-2", "L. 1142-2-1"],
+      pourquoi: "Dans les lieux de travail ainsi que dans les locaux ou à la porte des locaux où se fait l'embauche, les personnes sont informées par tout moyen du texte des articles 225-1 à 225-4 du code pénal (L. 1142-6). Les dispositions des articles L. 3221-1 à L. 3221-7 sont portées, par tout moyen, à la connaissance des personnes ayant accès aux lieux de travail ainsi qu'aux candidats à l'embauche (R. 3221-2).",
+      champs: [
+        { c: "egaContact", n: "À qui signaler une situation", large: true, ph: "nom, qualité, courriel, téléphone" },
+        { c: "egaLocaux", n: "Locaux d'embauche où l'affiche est également posée", large: true, ph: "siège, accueil, agence de recrutement" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "ÉGALITÉ ET NON-DISCRIMINATION" },
+          { k: "sous", t: "Textes portés à la connaissance des salariés et des candidats à l'embauche" },
+          { k: "h", t: "Non-discrimination : le texte du code pénal" },
+          { k: "loi", nom: CP["225-1"].nom, t: CP["225-1"].t, ref: CP["225-1"].id },
+          { k: "loi", nom: CP["225-2"].nom, t: CP["225-2"].t, ref: CP["225-2"].id },
+          { k: "loi", nom: CP["225-3"].nom, t: CP["225-3"].t, ref: CP["225-3"].id },
+          { k: "loi", nom: CP["225-4"].nom, t: CP["225-4"].t, ref: CP["225-4"].id },
+          { k: "h", t: "Égalité de rémunération entre les femmes et les hommes" },
+          { k: "loi", nom: "Articles L. 3221-1 à L. 3221-7 du code du travail",
+            t: "L. 3221-1. " + CT["L3221-1"].t + "\nL. 3221-2. " + CT["L3221-2"].t +
+               "\nL. 3221-3. " + CT["L3221-3"].t + "\nL. 3221-4. " + CT["L3221-4"].t +
+               "\nL. 3221-5. " + CT["L3221-5"].t + "\nL. 3221-6. " + CT["L3221-6"].t +
+               "\nL. 3221-7. " + CT["L3221-7"].t,
+            ref: CT["L3221-1"].id + ", " + CT["L3221-2"].id + ", " + CT["L3221-3"].id + ", " +
+                 CT["L3221-4"].id + ", " + CT["L3221-5"].id + ", " + CT["L3221-6"].id + ", " + CT["L3221-7"].id },
+          { k: "h", t: "Agissements sexistes" },
+          { k: "loi", nom: "Article L. 1142-2-1 du code du travail", t: CT["L1142-2-1"].t, ref: CT["L1142-2-1"].id },
+          { k: "h", t: "Signaler une situation" },
+          { k: "cle", l: "Interlocuteur", x: val("egaContact", "nom, qualité et coordonnées à indiquer") },
+          { k: "cle", l: "Également affiché à", x: val("egaLocaux", "locaux d'embauche à indiquer") },
+        ];
+      } },
+
+    /* ---------------------------------------------------------------- 7 */
+    { id: "harcelement",
+      nom: "Harcèlement sexuel et moral : textes, référents, Défenseur des droits",
+      fond: ["L. 1153-5", "L. 1152-4", "L. 1153-5-1", "L. 2314-1"],
+      pourquoi: "Les personnes sont informées par tout moyen du texte de l'article 222-33 du code pénal ainsi que des actions contentieuses civiles et pénales ouvertes en matière de harcèlement sexuel et des coordonnées des autorités et services compétents (L. 1153-5), et du texte de l'article 222-33-2 du code pénal pour le harcèlement moral (L. 1152-4). Un référent est désigné par le comité social et économique parmi ses membres (L. 2314-1) ; dans toute entreprise employant au moins deux cent cinquante salariés, un référent est désigné par l'employeur (L. 1153-5-1).",
+      champs: [
+        { c: "harRefCse", n: "Référent désigné par le comité", large: true, ph: "nom, qualité, courriel, téléphone" },
+        { c: "harRefEmployeur", n: "Référent désigné par l'employeur", large: true, ph: "nom, qualité, courriel, téléphone" },
+        { c: "harDefenseur", n: "Défenseur des droits : coordonnées", large: true, ph: "adresse, numéro et site, tels que vous les avez vérifiés" },
+        { c: "harProcedure", n: "Où trouver la procédure interne de signalement", large: true, ph: "intranet, classeur d'accueil, auprès de qui" },
+      ],
+      feuille: function () {
+        var l = [
+          { k: "titre", t: "HARCÈLEMENT : CE QUE DIT LA LOI, QUI PRÉVENIR" },
+          { k: "sous", t: "Harcèlement sexuel, harcèlement moral, agissements sexistes" },
+          { k: "h", t: "Harcèlement sexuel" },
+          { k: "loi", nom: CP["222-33"].nom, t: CP["222-33"].t, ref: CP["222-33"].id },
+          { k: "h", t: "Harcèlement moral" },
+          { k: "loi", nom: CP["222-33-2"].nom, t: CP["222-33-2"].t, ref: CP["222-33-2"].id },
+          { k: "h", t: "Agissements sexistes" },
+          { k: "loi", nom: "Article L. 1142-2-1 du code du travail", t: CT["L1142-2-1"].t, ref: CT["L1142-2-1"].id },
+          { k: "h", t: "Les actions ouvertes en matière de harcèlement sexuel" },
+          { k: "puces", t: [
+            "Devant le conseil de prud'hommes : contester la mesure prise à la suite du harcèlement ou du refus de le subir, et demander réparation du préjudice.",
+            "Devant la juridiction pénale : déposer plainte au commissariat, à la gendarmerie ou par courrier au procureur de la République près le tribunal judiciaire du lieu des faits.",
+            "Auprès de l'agent de contrôle de l'inspection du travail, dont les coordonnées sont affichées sur la feuille « Inspection du travail ».",
+            "Auprès du médecin du travail, dont les coordonnées sont affichées sur la feuille « Santé au travail ».",
+            "Auprès du Défenseur des droits, dont les coordonnées figurent ci-dessous.",
+            "Auprès du référent du comité social et économique et, dans les entreprises d'au moins deux cent cinquante salariés, du référent désigné par l'employeur.",
+          ] },
+          { k: "h", t: "Qui prévenir dans l'entreprise" },
+          { k: "cle", l: "Référent du comité", x: val("harRefCse", "nom et coordonnées à indiquer") },
+        ];
+        if (effectif === null || effectif >= 250)
+          l.push({ k: "cle", l: "Référent de l'employeur", x: val("harRefEmployeur",
+            effectif === null ? "nom et coordonnées, si l'effectif atteint deux cent cinquante salariés"
+                              : "nom et coordonnées à indiquer") });
+        l.push({ k: "cle", l: "Défenseur des droits", x: val("harDefenseur", "coordonnées à recopier depuis le site du Défenseur des droits") });
+        l.push({ k: "cle", l: "Procédure interne de signalement", x: val("harProcedure", "où la trouver, à indiquer") });
+        l.push({ k: "note", t: "Un signalement n'a pas à être adressé à la personne mise en cause, ni à passer par elle. Il peut être remis à l'un quelconque des interlocuteurs ci-dessus." });
+        return l;
+      } },
+
+    /* ---------------------------------------------------------------- 8 */
+    { id: "convention",
+      nom: "Convention collective applicable et où la consulter",
+      fond: ["R. 2262-3", "R. 2262-1", "R. 2262-5"],
+      pourquoi: "Un avis est communiqué par tout moyen aux salariés ; il comporte l'intitulé des conventions et des accords applicables dans l'établissement et précise où les textes sont tenus à la disposition des salariés sur le lieu de travail ainsi que les modalités leur permettant de les consulter pendant leur temps de présence (R. 2262-3). À défaut d'autres modalités prévues par un accord, l'employeur tient un exemplaire à jour à la disposition des salariés sur le lieu de travail et le met sur l'intranet lorsqu'il en existe un (R. 2262-1). Les modifications ou compléments sont portés dans un délai d'un mois à compter de leur date d'effet (R. 2262-5).",
+      champs: [
+        { c: "ccnIntitule", n: "Intitulé de la convention collective", large: true, ph: "intitulé exact, tel qu'il figure au texte" },
+        { c: "ccnIdcc", n: "Numéro IDCC", ph: "quatre chiffres" },
+        { c: "ccnAccords", n: "Accords applicables dans l'établissement", large: true, aire: true,
+          ph: "une ligne par accord : intitulé et date de signature" },
+        { c: "ccnOu", n: "Où les textes sont tenus à disposition", large: true, ph: "bureau, classeur, étagère : le lieu exact" },
+        { c: "ccnModalites", n: "Comment les consulter pendant le temps de présence", large: true, ph: "sur demande auprès de …, aux horaires …, sans formalité" },
+        { c: "ccnIntranet", n: "Adresse intranet, s'il en existe un", large: true, ph: "chemin exact vers les textes à jour" },
+        { c: "ccnMaj", n: "Version à jour au", t: "date" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "CONVENTION COLLECTIVE" },
+          { k: "sous", t: "Textes applicables dans l'établissement et modalités de consultation" },
+          { k: "h", t: "Ce qui s'applique ici" },
+          { k: "cle", l: "Convention collective", x: val("ccnIntitule", "intitulé à indiquer") },
+          { k: "cle", l: "Numéro IDCC", x: val("ccnIdcc", "numéro à indiquer") },
+          { k: "h", t: "Les accords applicables" },
+          { k: "liste", t: v("ccnAccords") || "[ intitulé et date de chaque accord applicable dans l'établissement ; à défaut, porter « aucun accord d'entreprise » ]" },
+          { k: "h", t: "Où les consulter, et comment" },
+          { k: "cle", l: "Lieu", x: val("ccnOu", "lieu exact à indiquer") },
+          { k: "cle", l: "Modalités", x: val("ccnModalites", "modalités de consultation pendant le temps de présence") },
+          { k: "cle", l: "Intranet", x: val("ccnIntranet", "adresse, ou « pas d'intranet »") },
+          { k: "cle", l: "Version à jour au", x: v("ccnMaj") ? { k: "ok", t: dateFr(v("ccnMaj")) } : { k: "vide", t: "[ date de la version mise à disposition ]" } },
+          { k: "note", t: "Les modifications et compléments sont portés sur cet avis dans le mois de leur date d'effet. La consultation se fait pendant le temps de présence, sans avoir à en justifier le motif." },
+        ];
+      } },
+
+    /* ---------------------------------------------------------------- 9 */
+    { id: "duerp",
+      nom: "Document unique : modalités d'accès",
+      fond: ["R. 4121-4"],
+      pourquoi: "Un avis indiquant les modalités d'accès des travailleurs au document unique est affiché à une place convenable et aisément accessible dans les lieux de travail. Dans les entreprises ou établissements dotés d'un règlement intérieur, cet avis est affiché au même emplacement que celui réservé au règlement intérieur (R. 4121-4).",
+      champs: [
+        { c: "duOu", n: "Où le document est consultable", large: true, ph: "bureau, classeur, dossier partagé : le lieu exact" },
+        { c: "duAupres", n: "Auprès de qui le demander", ph: "nom, qualité" },
+        { c: "duComment", n: "Comment le demander", large: true, ph: "sur simple demande, sans formalité, aux horaires …" },
+        { c: "duVersion", n: "Version en cours du", t: "date" },
+        { c: "duRi", n: "Emplacement réservé au règlement intérieur", large: true, ph: "le même emplacement, s'il existe un règlement intérieur" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "DOCUMENT UNIQUE D'ÉVALUATION DES RISQUES" },
+          { k: "sous", t: "Avis indiquant les modalités d'accès des travailleurs au document" },
+          { k: "h", t: "Où et comment le consulter" },
+          { k: "cle", l: "Lieu", x: val("duOu", "lieu exact à indiquer") },
+          { k: "cle", l: "À demander à", x: val("duAupres", "nom et qualité à indiquer") },
+          { k: "cle", l: "Modalités", x: val("duComment", "modalités de consultation à indiquer") },
+          { k: "cle", l: "Version en cours du", x: v("duVersion") ? { k: "ok", t: dateFr(v("duVersion")) } : { k: "vide", t: "[ date de la version en cours ]" } },
+          { k: "cle", l: "Emplacement du règlement intérieur", x: val("duRi", "à indiquer, s'il existe un règlement intérieur") },
+          { k: "h", t: "Qui peut y accéder" },
+          { k: "puces", t: [
+            "Les travailleurs, et les anciens travailleurs pour les versions en vigueur durant leur période d'activité dans l'entreprise. Ils peuvent communiquer les éléments mis à leur disposition aux professionnels de santé qui suivent leur santé.",
+            "Les membres de la délégation du personnel du comité social et économique.",
+            "Le service de prévention et de santé au travail.",
+            "Les agents du système d'inspection du travail.",
+            "Les agents des services de prévention des organismes de sécurité sociale.",
+            "Les agents des organismes professionnels de santé, de sécurité et des conditions de travail.",
+            "Les inspecteurs de la radioprotection, pour ce qui concerne l'exposition aux rayonnements ionisants.",
+          ] },
+          { k: "note", t: "Le document unique et ses versions antérieures sont conservés pendant une durée de quarante ans à compter de leur élaboration. La communication d'une version antérieure à celle en vigueur peut être limitée aux seuls éléments qui concernent l'activité du demandeur." },
+        ];
+      } },
+
+    /* --------------------------------------------------------------- 10 */
+    { id: "fumer",
+      nom: "Interdiction de fumer et de vapoter",
+      fond: [],
+      pourquoi: "Le texte qui impose cette signalisation relève du code de la santé publique. Le relais de vérification de cette application ne sert que le code du travail : il n'a pas été lu ici, et l'affiche ne cite donc aucun article.",
+      champs: [
+        { c: "fumLocaux", n: "Locaux couverts par l'interdiction", large: true, ph: "l'ensemble des locaux clos et couverts, véhicules de service compris" },
+        { c: "fumZone", n: "Emplacement extérieur autorisé, s'il en existe un", large: true, ph: "le lieu exact, ou « aucun emplacement prévu »" },
+        { c: "fumResponsable", n: "À qui s'adresser", ph: "nom, qualité" },
+        { c: "fumDate", n: "Affiche apposée le", t: "date" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "INTERDICTION DE FUMER ET DE VAPOTER" },
+          { k: "sous", t: "Dans l'ensemble des locaux de l'établissement" },
+          { k: "gros", t: "Il est interdit de fumer et de vapoter." },
+          { k: "h", t: "Où l'interdiction s'applique" },
+          { k: "cle", l: "Locaux concernés", x: val("fumLocaux", "locaux à indiquer") },
+          { k: "cle", l: "Emplacement extérieur autorisé", x: val("fumZone", "emplacement à indiquer, ou « aucun »") },
+          { k: "cle", l: "À qui s'adresser", x: val("fumResponsable", "nom et qualité à indiquer") },
+          { k: "cle", l: "Affiche apposée le", x: v("fumDate") ? { k: "ok", t: dateFr(v("fumDate")) } : { k: "vide", t: "[ date à porter ]" } },
+          { k: "note", t: "L'interdiction vise la cigarette comme la cigarette électronique. Elle s'impose aux salariés, aux visiteurs, aux clients et aux entreprises extérieures intervenant sur le site." },
+        ];
+      } },
+  ];
+
+  /* ------------------------------------------------------------------ */
+  /* Les onglets. */
+  function onglet(nom) {
+    ["cases", "affiches", "releve"].forEach(function (o) {
+      $("#o-" + o).classList.toggle("cache", o !== nom);
+    });
+    Array.prototype.forEach.call($("#onglets").children, function (b) {
+      b.classList.toggle("actif", b.dataset.o === nom);
+    });
+    if (nom === "affiches") rendreAffiches();
+    if (nom === "releve") rendreReleve();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  Array.prototype.forEach.call($("#onglets").children, function (b) {
+    b.addEventListener("click", function () { onglet(b.dataset.o); });
+  });
+
+  /* ------------------------------------------------------- l'entreprise */
+  var ENTREPRISE = [
+    { c: "denomination", n: "Dénomination", large: true, ph: "raison sociale, telle qu'au Kbis" },
+    { c: "etablissement", n: "Établissement concerné", ph: "le site, s'il y en a plusieurs" },
+    { c: "adresse", n: "Adresse", large: true, ph: "n°, rue, code postal, ville" },
+    { c: "siret", n: "SIRET", ph: "14 chiffres" },
+    { c: "responsable", n: "Signataire des affiches", ph: "nom et qualité" },
+  ];
+
+  function champHtml(ch) {
+    var id = "f-" + ch.c;
+    var dedans;
+    if (ch.aire)
+      dedans = '<textarea id="' + id + '" data-c="' + ech(ch.c) + '" placeholder="' + ech(ch.ph || "") + '">' +
+        ech(v(ch.c)) + "</textarea>";
+    else
+      dedans = '<input id="' + id + '" data-c="' + ech(ch.c) + '" type="' + (ch.t || "text") +
+        '" placeholder="' + ech(ch.ph || "") + '" value="' + ech(v(ch.c)) + '">';
+    return '<label class="ch' + (ch.large ? " large" : "") + '"><span class="nom">' + ech(ch.n) + "</span>" +
+      dedans + (ch.sous ? '<span class="sous">' + ech(ch.sous) + "</span>" : "") + "</label>";
+  }
+
+  function brancherChamps(racine, apres) {
+    racine.querySelectorAll("[data-c]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        E.v[el.dataset.c] = el.value; garder(); if (apres) apres(el);
+      });
+    });
+  }
+
+  (function entreprise() {
+    ENTREPRISE.forEach(function (ch) {
+      if (ch.defaut && !v(ch.c)) E.v[ch.c] = ch.defaut;
+    });
+    $("#champs-entreprise").innerHTML = ENTREPRISE.map(champHtml).join("");
+    brancherChamps($("#champs-entreprise"));
+  })();
+
+  /* ------------------------------------------------------- les dix cases */
+  function rendreCases() {
+    $("#cases").innerHTML = AFFICHES.map(function (a) {
+      var f = !!E.faites[a.id];
+      return '<label class="case' + (f ? " faite" : "") + '"><input type="checkbox" data-case="' + ech(a.id) + '"' +
+        (f ? " checked" : "") + '><span><b>' + ech(a.nom) + "</b>" +
+        '<span class="f">' + (a.fond.length ? ech(a.fond.join(", ")) : "code de la santé publique, non lu ici") +
+        (f ? " · déjà au mur, aucune affiche produite" : " · l'affiche sort à l'onglet suivant") + "</span></span></label>";
+    }).join("");
+    $("#cases").querySelectorAll("input[data-case]").forEach(function (i) {
+      i.addEventListener("change", function () {
+        E.faites[i.dataset.case] = i.checked; garder(); rendreCases();
+      });
+    });
+  }
+  rendreCases();
+
+  $("#tout-decocher").addEventListener("click", function () {
+    E.faites = {}; garder(); rendreCases();
+  });
+  $("#vers-affiches").addEventListener("click", function () { onglet("affiches"); });
+  $("#retour-cases").addEventListener("click", function () { onglet("cases"); });
+
+  /* ---------------------------------------------------------- l'affiche */
+  function enTete() {
+    return '<div class="ent"><span>' + ech(v("denomination") || "[ dénomination ]") + "</span><span>" +
+      ech(v("etablissement") || v("adresse") || "") + "</span></div>";
+  }
+  function pied(a) {
+    var f = a.fond.length
+      ? "Fondement : " + a.fond.map(function (x) { return x + " du code du travail (" + FOND[x] + ", " + LU + ")"; }).join(" ; ") + "."
+      : "Cette affiche ne cite aucun article : le texte qui l'impose relève du code de la santé publique, non lu par cette application.";
+    return '<div class="pied"><span>' + ech(v("denomination") || "[ dénomination ]") +
+      (v("siret") ? " · SIRET " + ech(v("siret")) : "") + "<br>" + ech(v("adresse") || "") +
+      "<br>Affiche établie le " + ech(dateFr(v("dateReleve")) || "[ date ]") +
+      " par " + ech(v("responsable") || "[ signataire ]") + "</span><span>" + ech(f) + "</span></div>";
+  }
+
+  function feuilleHtml(a) {
+    var h = enTete();
+    a.feuille().forEach(function (b) {
+      if (b.k === "titre") h += "<h1>" + ech(b.t) + "</h1>";
+      else if (b.k === "sous") h += '<p class="sous">' + ech(b.t) + "</p>";
+      else if (b.k === "h") h += "<h2>" + ech(b.t) + "</h2>";
+      else if (b.k === "p") h += "<p>" + ech(b.t) + "</p>";
+      else if (b.k === "gros") h += '<p class="gros">' + ech(b.t) + "</p>";
+      else if (b.k === "note") h += '<p class="note">' + ech(b.t) + "</p>";
+      else if (b.k === "cle") h += '<div class="cle"><span>' + ech(b.l) + '</span><span' +
+        (b.x.k === "vide" ? ' class="vide"' : "") + ">" + ech(b.x.t) + "</span></div>";
+      else if (b.k === "liste") h += "<ul>" + String(b.t).split(/\n+/).filter(function (l) { return l.trim(); })
+        .map(function (l) { return "<li>" + ech(l.trim()) + "</li>"; }).join("") + "</ul>";
+      else if (b.k === "puces") h += "<ul>" + b.t.map(function (l) { return "<li>" + ech(l) + "</li>"; }).join("") + "</ul>";
+      else if (b.k === "loi") h += '<div class="loi"><b>' + ech(b.nom) + "</b>" +
+        String(b.t).split("\n").map(function (l) { return ech(l); }).join("<br>") +
+        '<span class="ref">Version ' + ech(b.ref) + ", " + LU + ".</span></div>";
+      else if (b.k === "signature") h += '<div class="signature">' + ech(b.t) + "</div>";
+    });
+    return h + pied(a);
+  }
+
+  function aPoser() {
+    return AFFICHES.filter(function (a) { return !E.faites[a.id]; });
+  }
+
+  function rendreAffiches() {
+    var liste = aPoser();
+    if (!liste.length) {
+      $("#affiches").innerHTML = '<div class="avis ok"><b>Les dix affichages sont cochés</b>' +
+        "Rien à produire. Passez au relevé daté : c'est lui qui prouvera, dans six mois, ce qui était au mur aujourd'hui.</div>";
+      return;
+    }
+    $("#affiches").innerHTML = liste.map(function (a) {
+      return '<div class="bloc-affiche" data-aff="' + ech(a.id) + '">' +
+        '<div class="reglages hors-impression"><b>' + ech(a.nom) + "</b>" +
+        '<p class="sous" style="margin:0 0 10px;font-size:13px;color:var(--encre-2);line-height:1.5">' + ech(a.pourquoi) + "</p>" +
+        '<div class="champs">' + a.champs.map(champHtml).join("") + "</div>" +
+        '<div class="barre" style="margin:12px 0 0"><button class="btn petit" data-imp="' + ech(a.id) + '">Imprimer cette affiche</button>' +
+        '<button class="btn second petit" data-fait="' + ech(a.id) + '">Elle est posée, la cocher</button></div></div>' +
+        '<div class="cadre-a4"><div class="a4" data-feuille="' + ech(a.id) + '">' + feuilleHtml(a) + "</div></div></div>";
+    }).join("");
+
+    liste.forEach(function (a) {
+      a.champs.forEach(function (ch) { if (ch.defaut && !v(ch.c)) E.v[ch.c] = ch.defaut; });
+    });
+    garder();
+
+    brancherChamps($("#affiches"), function () {
+      AFFICHES.forEach(function (a) {
+        var f = $('[data-feuille="' + a.id + '"]');
+        if (f) f.innerHTML = feuilleHtml(a);
+      });
+    });
+
+    $("#affiches").querySelectorAll("[data-imp]").forEach(function (b) {
+      b.addEventListener("click", function () { imprimer(b.dataset.imp); });
+    });
+    $("#affiches").querySelectorAll("[data-fait]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        E.faites[b.dataset.fait] = true; garder(); rendreCases(); rendreAffiches();
+      });
+    });
+  }
+
+  function imprimer(seul) {
+    $("#affiches").querySelectorAll("[data-aff]").forEach(function (d) {
+      d.classList.toggle("hors-impression", !!seul && d.dataset.aff !== seul);
+    });
+    $("#o-releve").classList.add("hors-impression");
+    window.print();
+    setTimeout(function () {
+      $("#affiches").querySelectorAll("[data-aff]").forEach(function (d) {
+        d.classList.remove("hors-impression");
+      });
+      $("#o-releve").classList.remove("hors-impression");
+    }, 800);
+  }
+  $("#imprimer-tout").addEventListener("click", function () { imprimer(null); });
+
+  /* ---------------------------------------------------------- vers Word */
+  function motsFeuille(a) {
+    var items = [];
+    a.feuille().forEach(function (b) {
+      if (b.k === "titre") items.push({ k: "h1", t: b.t });
+      else if (b.k === "sous") items.push({ k: "sur", t: b.t });
+      else if (b.k === "h") items.push({ k: "h2", t: b.t });
+      else if (b.k === "p" || b.k === "gros") items.push({ k: "p", t: b.t });
+      else if (b.k === "note") items.push({ k: "note", t: b.t });
+      else if (b.k === "cle") items.push({ k: "p", t: b.l + " : " + b.x.t });
+      else if (b.k === "liste") String(b.t).split(/\n+/).forEach(function (l) {
+        if (l.trim()) items.push({ k: "puce", t: l.trim() }); });
+      else if (b.k === "puces") b.t.forEach(function (l) { items.push({ k: "puce", t: l }); });
+      else if (b.k === "loi") items.push({ k: "enc", titre: b.nom, t: b.t.replace(/\n/g, "  ") },
+        { k: "note", t: "Version " + b.ref + ", " + LU + "." });
+      else if (b.k === "signature") items.push({ k: "p", t: b.t + " : ............................................" });
+    });
+    items.push({ k: "note", t: (v("denomination") || "[ dénomination ]") +
+      (v("siret") ? " · SIRET " + v("siret") : "") + " · " + (v("adresse") || "") +
+      " · affiche établie le " + (dateFr(v("dateReleve")) || "[ date ]") +
+      " par " + (v("responsable") || "[ signataire ]") });
+    if (a.fond.length) items.push({ k: "note", t: "Fondement : " +
+      a.fond.map(function (x) { return x + " du code du travail (" + FOND[x] + ")"; }).join(" ; ") + ", " + LU + "." });
+    return items;
+  }
+
+  $("#word-tout").addEventListener("click", function () {
+    var items = [{ k: "sur", t: "Affiches à poser · " + (v("denomination") || "") + " · " + dateFr(v("dateReleve")) }];
+    aPoser().forEach(function (a, i) {
+      if (i) items.push({ k: "saut" });
+      items = items.concat(motsFeuille(a));
+    });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Affichages obligatoires"),
+      "affichages-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  /* -------------------------------------------------------- le relevé */
+  var CHAMPS_RELEVE = [
+    { c: "dateReleve", n: "Date du relevé", t: "date" },
+    { c: "relLieux", n: "Lieux parcourus", large: true, ph: "chaque site, chaque atelier, chaque local d'embauche" },
+    { c: "relAuteur", n: "Relevé effectué par", ph: "nom et qualité" },
+    { c: "relSupport", n: "Support de l'information due par tout moyen", large: true,
+      ph: "affichage papier, intranet, livret remis à l'embauche, courriel nominatif" },
+  ];
+
+  function rendreReleve() {
+    $("#champs-releve").innerHTML = CHAMPS_RELEVE.map(champHtml).join("");
+    brancherChamps($("#champs-releve"), tableauReleve);
+    tableauReleve();
+  }
+
+  function tableauReleve() {
+    var lignes = AFFICHES.map(function (a) {
+      var f = !!E.faites[a.id];
+      return "<tr><td>" + ech(a.nom) + "</td>" +
+        "<td>" + (a.fond.length ? ech(a.fond.join(", ")) : "code de la santé publique") + "</td>" +
+        '<td class="' + (f ? "fait" : "apposer") + '">' + (f ? "en place" : "à poser") + "</td>" +
+        '<td><input data-rel="lieu-' + ech(a.id) + '" value="' + ech(v("lieu-" + a.id)) + '" placeholder="emplacement exact"></td>' +
+        '<td><input data-rel="date-' + ech(a.id) + '" type="date" value="' + ech(v("date-" + a.id)) + '"></td></tr>';
+    }).join("");
+
+    $("#releve").innerHTML =
+      '<div class="cadre-a4"><div class="a4">' + enTete() +
+      "<h1>RELEVÉ DES AFFICHAGES</h1>" +
+      '<p class="sous">Constat daté de ce qui est apposé dans l\'établissement</p>' +
+      '<div class="cle"><span>Date du relevé</span><span' + (v("dateReleve") ? "" : ' class="vide"') + ">" +
+      ech(dateFr(v("dateReleve")) || "[ date à porter ]") + "</span></div>" +
+      '<div class="cle"><span>Lieux parcourus</span><span' + (v("relLieux") ? "" : ' class="vide"') + ">" +
+      ech(v("relLieux") || "[ lieux à indiquer ]") + "</span></div>" +
+      '<div class="cle"><span>Relevé effectué par</span><span' + (v("relAuteur") ? "" : ' class="vide"') + ">" +
+      ech(v("relAuteur") || v("responsable") || "[ nom et qualité ]") + "</span></div>" +
+      '<div class="cle"><span>Support de l\'information</span><span' + (v("relSupport") ? "" : ' class="vide"') + ">" +
+      ech(v("relSupport") || "[ support à indiquer ]") + "</span></div>" +
+      "<h2>Ce qui a été constaté, affichage par affichage</h2>" +
+      '<table class="releve"><thead><tr><th>Affichage</th><th>Fondement</th><th>État</th>' +
+      "<th>Emplacement</th><th>Posé le</th></tr></thead><tbody>" + lignes + "</tbody></table>" +
+      '<p class="note">Une photographie datée de chaque emplacement est jointe au présent relevé. ' +
+      "Pour ce qui est dû par tout moyen, la preuve du support en tient lieu : accusé de diffusion, " +
+      "capture de l'intranet, émargement du livret d'accueil.</p>" +
+      '<div class="signature">Date et signature</div>' +
+      "</div></div>";
+
+    $("#releve").querySelectorAll("[data-rel]").forEach(function (i) {
+      i.addEventListener("input", function () { E.v[i.dataset.rel] = i.value; garder(); });
+    });
+  }
+
+  $("#imprimer-releve").addEventListener("click", function () {
+    $("#o-affiches").classList.add("hors-impression");
+    window.print();
+    setTimeout(function () { $("#o-affiches").classList.remove("hors-impression"); }, 800);
+  });
+
+  $("#word-releve").addEventListener("click", function () {
+    var items = [
+      { k: "sur", t: "Relevé daté des affichages · " + (v("denomination") || "") },
+      { k: "p", t: "Date du relevé : " + (dateFr(v("dateReleve")) || "[ date ]") },
+      { k: "p", t: "Lieux parcourus : " + (v("relLieux") || "[ lieux ]") },
+      { k: "p", t: "Relevé effectué par : " + (v("relAuteur") || v("responsable") || "[ nom et qualité ]") },
+      { k: "p", t: "Support de l'information due par tout moyen : " + (v("relSupport") || "[ support ]") },
+      { k: "table", head: ["Affichage", "Fondement", "État", "Emplacement", "Posé le"],
+        rows: AFFICHES.map(function (a) {
+          return [a.nom, a.fond.length ? a.fond.join(", ") : "code de la santé publique",
+            E.faites[a.id] ? "en place" : "à poser",
+            v("lieu-" + a.id) || "", dateFr(v("date-" + a.id)) || ""];
+        }) },
+      { k: "note", t: "Une photographie datée de chaque emplacement est jointe au présent relevé." },
+      { k: "p", t: "Date et signature :" },
+    ];
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Relevé des affichages"),
+      "releve-affichages-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* L'entrée. « non » à la question du parcours ouvre directement les
+     affiches : rien n'est en place, tout est à poser. */
+  var depart = new URLSearchParams(location.search).get("depart");
+  if (depart === "non") { E.faites = {}; garder(); rendreCases(); onglet("affiches"); }
+})();
+</script>
+</body>
+</html>
