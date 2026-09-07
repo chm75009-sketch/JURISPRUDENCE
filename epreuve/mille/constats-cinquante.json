@@ -1,0 +1,842 @@
+[
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 80,
+  "gravite": "illisible",
+  "constat": "Sur téléphone, après « Non », l'écran montre d'abord le formulaire « Ce qui reste à remplir » de 17 champs (1 888 px de haut), puis les boutons, cinq cartes de dates et une alerte, et le document lui-même ne commence qu'à 3 029 px du haut, soit 3,6 écrans de 844 px plus bas.",
+  "correction": "Sous 1000 px, placer #c-doc (barre de téléchargement puis feuille) avant .champs dans l'ordre du grid (order:-1 sur #c-doc ou inverser les deux blocs dans le HTML), et replier le formulaire dans un <details> « Compléter » sous le document."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 844,
+  "gravite": "illisible",
+  "constat": "Le tableau des critères d'ordre est rendu en 26 lignes monospace 13 px « Salarié ; charges ; ancienneté ; situation ; qualités ; total ; rang » puis « [Salarié 1] ; 0 ; 0 ; 0 ; 0 ; 0 ; 1 » qui se coupent chacune en deux lignes sur 390 px, exactement la présentation en caractères que l'utilisatrice a rejetée.",
+  "correction": "Rendre ce bloc en <table> HTML (une colonne par critère, en-tête gras) dans feuilleHtml et l'exporter en table via AuditExport, plutôt qu'en lignes « k: ligne » séparées par des points-virgules."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 785,
+  "gravite": "illisible",
+  "constat": "La liste des postes de reclassement est rendue en lignes monospace 13 px « Intitulé ; descriptif ; employeur ; nature du contrat ; localisation ; rémunération ; classification » puis « [intitulé du poste] ; [descriptif] ; BATI RENOV SAS ; ... » sur 4 à 6 lignes chacune au téléphone.",
+  "correction": "Rendre chaque poste en tableau à sept colonnes (ou en fiche à sept lignes « Intitulé : ... » sur téléphone) au lieu d'une ligne à points-virgules en police à chasse fixe."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 121,
+  "gravite": "mineur",
+  "constat": "Le corps du document (.b-p, 64 paragraphes, et .b-puce, 13) est en 14,5 px (var(--t3)), les lignes .b-ligne en 13 px, les notes .b-note en 12,5 px, les libellés des cartes de dates .d .q en 11 px et .d .f en 11,5 px, les libellés de champs 13,5 px : 160 éléments de texte sous 15 px sur téléphone après « Non ».",
+  "correction": "Passer .b-p, .b-puce et .b-ligne à 16 px (var(--t4)), .b-note et .d .f à 14 px minimum, et les libellés de champs à 15 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 810,
+  "gravite": "mineur",
+  "constat": "Les six notes de renvoi aux articles sont affichées en clair dans le document, de 275 à 912 caractères chacune, la plus longue (liste des offres) citant l'arrêt Cass. soc. 8 janvier 2025 en entier, soit une quinzaine de lignes d'exposé du droit entre deux courriers sur téléphone.",
+  "correction": "Envelopper chaque .b-note dans un <details><summary>Les textes</summary> replié par défaut, et ne garder en clair que les numéros d'articles."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "Le fichier Word téléchargé contient 13 tirets cadratins (U+2014) : la fonction puce ajoute « — » devant un texte qui commence déjà par « - », d'où des puces « — - les charges de famille... » dans le .docx, alors que l'écran n'en a aucun.",
+  "correction": "Dans audit-export.js, écrire par(i.t, {puce:true}) sans préfixe, ou préfixer par le trait d'union « - » seulement si le texte ne commence pas déjà par un tiret."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 840,
+  "gravite": "mineur",
+  "constat": "Avec les valeurs de départ (25 lignes « [Salarié n] » préremplies parce que l'effectif 45 est plafonné à 25), le document affirme « La catégorie professionnelle concernée en compte 25, un licenciement étant envisagé » et dresse 25 lignes de zéros classées de 1 à 25, ce qui est une affirmation fausse écrite d'office dans un document destiné au CSE.",
+  "correction": "Préremplir deux ou trois lignes modèles seulement, et écrire « [nombre] » tant que les lignes portent encore des crochets, en n'imprimant le tableau que pour les lignes renseignées."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 931,
+  "gravite": "mineur",
+  "constat": "L'information de l'administration reprend le champ brut de la fiche : « Nature de l'activité : batiment. » sans accent ni libellé, dans un courrier officiel.",
+  "correction": "Traduire le code secteur en libellé (« bâtiment et travaux publics ») ou laisser « [nature de l'activité] » quand seul le code est connu."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 143,
+  "gravite": "mineur",
+  "constat": "Dans la branche « Oui », le titre du point et sa référence sont collés sans espace ni retour : « Les critères de départage entre candidatures multiplesD. 1233-2-1, III · Cass. soc., 8 janvier 2025 », parce que .fond n'est pas en display:block.",
+  "correction": "Ajouter display:block à .manque .fond (ligne 143)."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 134,
+  "gravite": "mineur",
+  "constat": "La zone de collage du document existant (textarea#depot) est en police à chasse fixe 13,5 px, ce qui rend le texte collé petit et dense sur téléphone.",
+  "correction": "Utiliser la police système en 16 px pour textarea#depot."
+ },
+ {
+  "label": null,
+  "fichier": "docs/style.css",
+  "ligne": 190,
+  "gravite": "mineur",
+  "constat": "Sur téléphone, les boutons d'action font 39 px de haut (Télécharger en Word, En texte, Imprimer, Repartir du texte généré, Choisir un fichier, Vider) et les liens de la barre du site 29 px, sous la cible tactile de 44 px ; seuls Non et Oui atteignent 48 px.",
+  "correction": "Porter le padding de button,.btn à 13px 18px et celui des liens .outils a à 12px 14px pour atteindre 44 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 175,
+  "gravite": "mineur",
+  "constat": "Sur téléphone, avant la question, la barre du site prend 117 px (marque plus trois liens sur deux rangées) et le titre « Licencier pour motif économique - BATI RENOV SAS » s'étale sur trois lignes, si bien que la question commence à 348 px et ses boutons à 476 px ; elle reste dans le premier écran de 844 px.",
+  "correction": "Raccourcir le lien « Plan de sauvegarde de l'emploi » en « PSE » et mettre le nom de l'entreprise sur la ligne .fil pour ramener la question sous 250 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 206,
+  "gravite": "illisible",
+  "constat": "Sur téléphone (390 x 844), après « Non », le premier écran est le formulaire « Ce qui reste à remplir » de 17 champs (haut à 315 px, 1888 px de haut) ; le bouton « Télécharger en Word » n'arrive qu'à 2243 px et le document lui-même à 3029 px, soit plus de trois écrans et demi de défilement avant de voir la première lettre, alors que le commentaire de la page dit « Non n'ouvre pas un questionnaire ».",
+  "correction": "Sous 1000 px, placer #c-doc avant le formulaire dans la grille (.plan .champs{order:2} ou #c-doc{order:-1}) ou replier les champs sous un bouton « Compléter » placé après le document, pour que le document et « Télécharger en Word » soient dans le premier écran."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 844,
+  "gravite": "illisible",
+  "constat": "Le tableau des critères d'ordre (ligne 844-848) et celui des postes (785-787) sont rendus en lignes monospace 13 px « [Salarié 1] ; 0 ; 0 ; 0 ; 0 ; 0 ; 1 » (classe .b-ligne, ui-monospace) qui se coupent en deux lignes sur téléphone (« ; 1 » rejeté à la ligne, hauteur 39 px par rangée), et le .docx téléchargé contient 0 table : ces lignes y sont des paragraphes Normal séparés par des points-virgules.",
+  "correction": "Rendre les deux grilles en <table> HTML à l'écran (colonnes Salarié, charges, ancienneté, situation, qualités, total, rang) et en table Word dans l'export (ajouter un bloc « table » à audit-export.js), au lieu de la ligne monospace k:\"ligne\"."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "L'export Word préfixe chaque puce d'un tiret cadratin (« par(\"— \" + i.t …) ») alors que audit.html préfixe déjà le texte de « - » (lignes 800, 824, 930) : le .docx téléchargé porte 13 occurrences de U+2014 et affiche « — - Charges de famille, … », « — - Nom et adresse de l'employeur : LE PETIT BISTROT SARL. » ; le .txt et l'écran en portent 0.",
+  "correction": "Remplacer « — » par le trait d'union clavier ou par une vraie puce Word (numbering) dans audit-export.js ligne 119 (et lignes 125, 128 « — » idem), et ne pas doubler le tiret déjà présent dans le texte."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1027,
+  "gravite": "mineur",
+  "constat": "Entre la barre « Télécharger en Word » (2243 px) et le document (3029 px) sur téléphone s'intercalent cinq cartes de dates puis un encadré d'explication du décompte des jours ouvrables (ligne 1044-1046, 5 lignes de texte) : environ 790 px à lire avant la première lettre.",
+  "correction": "Garder les cartes de dates mais replier l'explication du décompte dans un <details> ou la mettre en pied de carte, pour que le document suive directement les dates."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 126,
+  "gravite": "mineur",
+  "constat": "Les six notes de droit (.b-note, lignes 703, 767, 810, 852, 907, 944) sont affichées en clair dans le document, en italique 12,5 px, non repliées, et citent les articles dans chaque lettre (« L'entretien ne peut avoir lieu moins de cinq jours ouvrables … (L. 1233-11). L'assistance … : L. 1233-13. ») ; elles sont après chaque lettre, pas avant.",
+  "correction": "Rendre chaque .b-note dans un <details><summary>Les textes</summary> replié, ou en info-bulle, et remonter la taille à 14 px minimum."
+ },
+ {
+  "label": null,
+  "fichier": "docs/style.css",
+  "ligne": 48,
+  "gravite": "mineur",
+  "constat": "Sur téléphone, 152 éléments de texte visibles ont une police sous 15 px : le corps des lettres .b-p et .b-sign 14,5 px (--t3), les libellés de champs .nom et le titre « Ce qui reste à remplir » 13,5 px, les notes .b-note 12,5 px, le pied des cartes de dates .d .f 11,5 px, le fil « Audit et conformité » 11,5 px.",
+  "correction": "Porter --t3 à 16 px et --t2 à 15 px dans style.css (ou surcharger .feuille .b-p{font-size:16px} dans audit.html) et --t1 à 14 px pour les notes."
+ },
+ {
+  "label": null,
+  "fichier": "docs/style.css",
+  "ligne": 190,
+  "gravite": "mineur",
+  "constat": "Toutes les cibles tactiles mesurées sont sous 44 px de haut : boutons .btn 39 px (« Non »/« Oui » de la question 46 px exceptés), liens de l'en-tête 29 px, liens du pied de page 16 px, champs input 41-43 px.",
+  "correction": "Passer button,.btn à padding:13px 18px (hauteur 44 px) et .outils a à padding:14px 12px sous 640 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 143,
+  "gravite": "mineur",
+  "constat": "Dans la branche « Oui », le titre du manque et sa référence sont collés sans espace (« Les critères de départage entre candidatures multiplesD. 1233-2-1, III · Cass. soc., 8 janvier 2025 ») parce que .manque .fond est un span sans display:block.",
+  "correction": "Ajouter display:block à .manque .fond (ligne 143)."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1346,
+  "gravite": "mineur",
+  "constat": "Le fichier téléchargé se nomme « licenciement-economique-salarie-2026-09-07.docx » (slug du nom du salarié, « salarie » quand il est vide) : le nom de l'entreprise n'est pas dans le nom du fichier, même si le contenu du .docx et du .txt le porte 13 fois (en-tête de chaque lettre et signature).",
+  "correction": "Composer le nom du fichier avec slug(profil.denomination) en tête : « le-petit-bistrot-sarl-licenciement-economique-… »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 844,
+  "gravite": "illisible",
+  "constat": "La grille des critères d'ordre (28 blocs .b-ligne, en-tête « Salarié ; charges ; ancienneté ; situation ; qualités ; total ; rang » puis 25 lignes « [Salarié 12] ; 0 ; 0 ; 0 ; 0 ; 0 ; 12 ») et la liste des postes sont rendues en chasse fixe 13 px et se replient sur téléphone, le rang tombant seul à la ligne (« ; 12 »), exactement le tableau en caractères de la capture du 7 septembre.",
+  "correction": "Rendre les blocs k:\"ligne\" en vrai <table> à l'écran (colonnes Salarié, charges, ancienneté, situation, qualités, total, rang) et les exporter par VERS_WORD.table de audit-export.js au lieu de les mapper en « p » (ligne 555)."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 80,
+  "gravite": "illisible",
+  "constat": "Sur téléphone, après « Non », la feuille du document commence à 3 029 px du haut : le premier écran ne montre que le formulaire de 18 champs (« Ce qui reste à remplir », de 315 à 2 203 px), puis les boutons de téléchargement, cinq cartes de dates et une alerte, avant le premier document.",
+  "correction": "Sous 1000 px, placer la feuille et le bouton Télécharger en Word en tête, et mettre le formulaire des 18 champs après la feuille ou dans un <details> replié « Compléter »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "Le .docx téléchargé contient 13 tirets cadratins : la fonction puce préfixe « — » alors que les puces de audit.html commencent déjà par « - » (lignes 800, 824 à 832, 930 à 941), ce qui donne « — - Charges de famille... » dans Word.",
+  "correction": "Remplacer « — » par « - » dans VERS_WORD.puce (et dans acte et acquis, lignes 125 et 128), et ne pas doubler le trait quand le texte commence déjà par « - »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1346,
+  "gravite": "mineur",
+  "constat": "Le fichier téléchargé se nomme licenciement-economique-salarie-2026-09-07.docx : le nom de l'entreprise n'est pas dans le nom de fichier, seul le contenu le porte (13 fois).",
+  "correction": "Construire nomFichier avec slug(profil.denomination) en tête : hotels-du-littoral-sa-licenciement-economique-[salarié]-date.docx."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 143,
+  "gravite": "mineur",
+  "constat": "Dans la branche « Oui », le renvoi .fond est un span en ligne collé à l'objet : on lit « Les critères de départage entre candidatures multiplesD. 1233-2-1, III » et « sa candidatureD. 1233-2-1, III » sur la capture téléphone.",
+  "correction": "Ajouter display:block à .manque .fond (ou un espace avant le span)."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1027,
+  "gravite": "mineur",
+  "constat": "Sur téléphone, les trois boutons Télécharger en Word / En texte / Imprimer occupent deux lignes, précédés des deux boutons Repartir du texte généré / ← La question du formulaire, soit quatre lignes de boutons avant les cartes de dates et le document.",
+  "correction": "Garder un seul bouton Télécharger en Word en tête de feuille et replier En texte / Imprimer / Repartir sous un menu ou en bas de la feuille."
+ },
+ {
+  "label": null,
+  "fichier": "docs/style.css",
+  "ligne": 190,
+  "gravite": "mineur",
+  "constat": "Cibles tactiles sous 44 px sur téléphone : Repartir du texte généré, ← La question, Choisir un fichier .docx ou .txt et Vider font 39 px de haut, les champs 40 à 43 px, les liens du pied de page 16 px ; étiquettes des champs à 13,5 px, notes de marge à 12,5 px, sous-textes des cartes de dates à 11,5 px.",
+  "correction": "Porter button/.btn à min-height:44px et padding 13px 18px, les étiquettes .nom et les .b-note à 15 px, les .d .q et .d .f à 13 px minimum."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 126,
+  "gravite": "mineur",
+  "constat": "Les six notes de marge (.b-note, italique gris 12,5 px) citant les articles sont affichées sous chaque document, non repliées ; l'une, sous la liste des offres, reproduit l'arrêt du 8 janvier 2025 en entier (dix lignes sur téléphone) au milieu du document.",
+  "correction": "Replier chaque .b-note dans un <details><summary>Textes</summary> fermé par défaut."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 80,
+  "gravite": "illisible",
+  "constat": "Téléphone, après « Non » : la page reste en haut (scrollY 0) et montre d'abord le formulaire « Ce qui reste à remplir » (17 champs, 1 888 px de haut, y=345 à 2 233), puis 5 boutons sur 4 rangées (« Repartir du texte généré », « ← La question », « Télécharger en Word », « En texte », « Imprimer »), 5 cartes de dates (529 px) et un encadré ambre (132 px) ; le document n'apparaît qu'à y=3 059 px, soit 3,6 écrans de 844 px plus bas, alors qu'à 1 280 px il est visible dès l'arrivée à droite des champs.",
+  "correction": "Sous 1 000 px, placer le document en premier dans .plan (order:-1 sur #c-doc, ou grid-template-areas) et replier les champs sous un seul bouton « Compléter » collant en bas d'écran, de sorte que « Non » montre la feuille au nom de l'entreprise sans défilement."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 123,
+  "gravite": "illisible",
+  "constat": "La liste des postes (lignes 785-787) et le tableau des critères d'ordre (lignes 844-848) sont rendus en blocs .b-ligne en ui-monospace 13 px avec white-space:pre-wrap et des points-virgules comme séparateurs : sur téléphone (largeur 252 px) l'en-tête « Intitulé ; descriptif ; employeur ; … » se replie sur 4 lignes (78 px), la ligne du poste sur 6 lignes (117 px), et chacune des 25 lignes « [Salarié n] ; 0 ; 0 ; 0 ; 0 ; 0 ; n » se coupe en deux avec le rang rejeté à la ligne (capture crop-c-ordre.png) ; les colonnes ne se lisent pas.",
+  "correction": "Rendre ces deux grilles en balise <table> à l'écran (une cellule par mention, en-tête en gras, défilement horizontal du seul tableau si besoin) et en vrai tableau dans le .docx via l'élément table de l'export, au lieu de lignes à points-virgules en chasse fixe."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 840,
+  "gravite": "mineur",
+  "constat": "Le document « Critères d'ordre » affirme « L'entreprise compte 320 salariés. La catégorie professionnelle concernée en compte 25 » : ce 25 est le plafond Math.min(effectif, 25) des lignes vides posées à la ligne 1290, pas un chiffre du dossier ; le commentaire de la ligne 1289 dit « la page en pose vingt-cinq et le dit », mais aucun texte à l'écran ni dans le document ne le dit (recherche de « vingt-cinq » dans la feuille : absente).",
+  "correction": "Ne compter que les lignes dont le nom n'est pas un crochet « [Salarié n] » et écrire « [   ] » sinon, ou poser une seule ligne vide et laisser l'employeur en ajouter."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "Le .docx téléchargé (licenciement-economique-salarie-2026-09-07.docx, 148 paragraphes, rouvert avec python-docx) contient 13 tirets cadratins U+2014 : audit-export.js préfixe chaque puce par « — », alors que audit.html écrit déjà « - » en tête de ses puces (lignes 800, 824-831, 930-941), d'où des lignes « — - Charges de famille, … » à double marque ; le .txt n'en contient aucun.",
+  "correction": "Remplacer « — » par « - » dans la fonction puce d'audit-export.js (ligne 119, ainsi qu'aux lignes 125 et 128), et retirer le « - » redondant des puces d'audit.html ou le laisser à l'export seul."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 126,
+  "gravite": "mineur",
+  "constat": "Les six notes de droit .b-note sont affichées en entier dans la feuille, en italique 12,5 px, sans repli : celle qui suit la liste des offres reproduit l'arrêt Cass. soc. 8 janvier 2025 en entier et mesure 504 px de haut sur téléphone (y=8 972), soit plus d'un demi-écran de texte de droit entre deux documents.",
+  "correction": "Rendre chaque note dans un <details><summary>Textes</summary> replié par défaut, ou la sortir de la feuille vers le pied de page « Les textes lus » déjà présent."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1032,
+  "gravite": "mineur",
+  "constat": "Avant le premier document, après « Non », s'affichent cinq cartes de dates portant chacune un renvoi d'article (L. 1233-11, D. 1233-2-1 III, L. 1233-15, D. 1233-3, L. 1233-45) puis un encadré sur la règle de décompte des jours ouvrables (lignes 1044-1046) : 661 px de lecture sur téléphone entre les boutons de téléchargement et la feuille.",
+  "correction": "Garder les cinq dates en une seule rangée compacte (libellé et date, sans le renvoi d'article, qui va dans la note repliée) et déplacer l'encadré de décompte sous la feuille ou dans un repli."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 121,
+  "gravite": "mineur",
+  "constat": "Polices sous 15 px sur téléphone, mesurées par getComputedStyle : corps du document .b-p 14,5 px (64 blocs), .b-puce 14,5 px, .b-sign 14,5 px, .b-h2 14 px, .b-st 13,5 px, .b-ligne 13 px, .b-note 12,5 px, libellés des champs .nom 13,5 px, h2 du formulaire 13,5 px, boutons .btn 14,5 px, liens de navigation 12,5 px, fil « Audit et conformité » 11,5 px ; 173 éléments de texte visibles sous 15 px après « Non ».",
+  "correction": "Porter var(--t3) à 16 px et les libellés, boutons et sous-titres à 15 px au minimum dans une media query (max-width:640px), la feuille pouvant garder sa taille d'impression via @media print."
+ },
+ {
+  "label": null,
+  "fichier": "docs/style.css",
+  "ligne": 1,
+  "gravite": "mineur",
+  "constat": "Cibles tactiles sous 44 px sur téléphone : les trois liens de navigation « Accueil », « Plan de sauvegarde de l'emploi », « Gérer » font 29 px de haut ; tous les boutons .btn (« Télécharger en Word » 207x39, « En texte » 106x39, « Imprimer » 113x39, « Choisir un fichier » 285x39, « Vider » 81x39, « ← La question » 151x39) font 39 px ; les champs input et select font 40 à 43 px ; seuls « Non » et « Oui » atteignent 48 px.",
+  "correction": "Donner min-height:44px aux .btn, aux liens de l'en-tête et aux champs de formulaire dans style.css, au moins sous 640 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1195,
+  "gravite": "mineur",
+  "constat": "Branche « Oui » : le dépôt (bouton « Choisir un fichier .docx ou .txt » et zone de collage) apparaît bien en premier et sans autre clic ; mais dans le diagnostic, pour chaque mention absente, le paragraphe « pourquoi » puis la citation intégrale de l'arrêt du 8 janvier 2025 (environ 25 lignes sur téléphone) précèdent le texte prêt à coller, qui n'arrive qu'après (capture crop-e-diag.png).",
+  "correction": "Mettre le bloc .pret (texte à coller, avec un bouton « Copier ») immédiatement sous le titre de la mention, et replier le « pourquoi » et la citation dans un <details>."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1346,
+  "gravite": "mineur",
+  "constat": "Les deux fichiers téléchargés se nomment « licenciement-economique-salarie-2026-09-07.docx » et « .txt » : le nom de fichier porte « salarie » (slug d'un nom vide) et jamais le nom de l'entreprise, alors que le contenu le porte treize fois.",
+  "correction": "Composer le nom de fichier avec slug(profil.denomination) : « ingenierie-atlantique-sa-licenciement-economique-2026-09-07.docx »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 80,
+  "gravite": "illisible",
+  "constat": "Sur téléphone, après « Non », le document commence à 3150 px du haut (3,7 écrans), derrière le formulaire de 18 champs (1888 px de haut), ses deux boutons, la barre de téléchargement à 2243 px, cinq cartes de dates et deux encadrés : ce qu'on voit à l'écran après le clic est un questionnaire, pas le document (règle .plan grid-template-columns:1fr et commentaire « on remplit, puis on lit »).",
+  "correction": "Sous 1000 px, mettre #c-doc (barre Télécharger en Word puis la feuille) avant .champs (order:-1 sur #c-doc ou déplacer le bloc) et replier les champs dans un <details> ouvert à la demande."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 844,
+  "gravite": "illisible",
+  "constat": "La grille des critères d'ordre est rendue en 26 lignes de texte à chasse fixe (.b-ligne, 13 px monospace, lignes 123-124) « Salarié ; charges ; ancienneté ; situation ; qualités ; total ; rang » puis « [Salarié 1] ; 0 ; 0 ; 0 ; 0 ; 0 ; 1 » jusqu'à 25, chaque ligne coupée sur deux lignes dans la colonne de 252 px ; 25 lignes sont posées d'office parce que la ligne 1290 fait min(effectif, 25) avec effectif 1200 ; le .docx les reprend en 26 paragraphes, 0 table.",
+  "correction": "Rendre la grille en <table> HTML à l'écran (une colonne par critère) et en tableau Word via l'élément table déjà géré par audit-export.js, et poser une seule ligne vide par défaut au lieu de vingt-cinq."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 785,
+  "gravite": "illisible",
+  "constat": "La liste des postes disponibles sort en lignes monospace 13 px « Intitulé ; descriptif ; employeur ; nature du contrat ; localisation ; rémunération ; classification » puis « [intitulé du poste] ; [descriptif] ; DISTRIGROS SA ; contrat à durée indéterminée ; ... », coupées sur quatre à six lignes sur téléphone.",
+  "correction": "Rendre chaque poste en tableau (une ligne par poste, sept colonnes) ou en fiche à sept lignes libellées, à l'écran et dans le Word."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "Le .docx téléchargé contient 13 tirets cadratins (U+2014) : la fonction puce écrit « — » devant chaque puce, alors que le texte de la page commence déjà par « - », d'où « — - Charges de famille, en particulier celles des parents isolés » ; la page (0 cadratin dans innerText) et le .txt (0) sont propres.",
+  "correction": "Remplacer \"— \" par \"- \" dans VERS_WORD.puce et ne pas doubler le marqueur quand le texte commence déjà par « - »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1346,
+  "gravite": "mineur",
+  "constat": "Le fichier téléchargé s'appelle « licenciement-economique-salarie-2026-09-07.docx » (et .txt) : le nom est bâti sur slug(d.nom), vide donc « salarie », et ne porte pas DISTRIGROS SA, alors que le contenu porte le nom 13 fois.",
+  "correction": "Bâtir le nom de fichier sur slug(profil.denomination) suivi du nom du salarié s'il est saisi."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 1264,
+  "gravite": "mineur",
+  "constat": "Sous les deux boutons de la question s'affiche un paragraphe de droit non replié : « L'entreprise compte 1200 salariés : au-delà de dix licenciements sur trente jours, c'est un plan de sauvegarde de l'emploi qui est dû (L. 1233-61). Cet écran-là. » ; la branche else if (effectif >= 1000) de la ligne 1268 est inatteignable puisque 1200 >= 50 est testé avant.",
+  "correction": "Remplacer le paragraphe par un troisième lien d'action « Dix licenciements ou plus : ouvrir le plan de sauvegarde » sans article, et supprimer la branche morte."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 126,
+  "gravite": "mineur",
+  "constat": "Six notes de renvoi aux articles (.b-note, 12,5 px italique) sont affichées en clair à l'intérieur du document sur téléphone, par exemple « L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de cette lettre (L. 1233-11). L'assistance et la mention de la liste des conseillers : L. 1233-13. ... », et les cinq cartes de dates et les deux encadrés placés avant la feuille citent aussi L. 1233-11, D. 1233-2-1, L. 1233-15, D. 1233-3, L. 1233-45, L. 1233-71.",
+  "correction": "Replier chaque note dans un <details> « Le texte » fermé par défaut et retirer les numéros d'articles des cartes de dates pour ne garder que la date et la règle en un mot."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 121,
+  "gravite": "mineur",
+  "constat": "Le corps du document est en text-align:justify dans une colonne de 252 px (feuille 342 px moins padding 38px 44px de la ligne 113), ce qui donne sur téléphone des lignes comme « Nous      vous      convoquons      en » avec des blancs de plusieurs centimètres.",
+  "correction": "Sous 640 px, mettre .feuille .b-p en text-align:left et réduire le padding de la feuille à 18px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/style.css",
+  "ligne": 190,
+  "gravite": "mineur",
+  "constat": "Sur téléphone, 82 cibles tactiles font moins de 44 px : tous les boutons .btn (Télécharger en Word, En texte, Imprimer, Repartir du texte généré, Choisir un fichier, Vider, La question) font 39 px de haut, les champs 40 à 43 px, les liens du bandeau 29 px.",
+  "correction": "Passer button,.btn à min-height:44px et padding:13px 18px, et les liens du bandeau à min-height:44px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 98,
+  "gravite": "mineur",
+  "constat": "173 éléments de texte sont sous 15 px sur téléphone : libellés des champs 13,5 px (span.nom), cartes de dates 11 px et 11,5 px, boutons 14,5 px, corps du document 14,5 px (var --t3), notes 12,5 px, encadrés .chiffre et .alerte 13,5 px, zone de dépôt 13,5 px monospace.",
+  "correction": "Porter --t3 à 16px et fixer un plancher de 15 px pour .d .q, .d .f, .b-note, span.nom, .chiffre, .alerte et textarea#depot sous 640 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 1241,
+  "gravite": "bloquant",
+  "constat": "Avec la fiche à 8 salariés, l'écran n'a ni question fermée, ni bouton Non/Oui, ni document, ni téléchargement : lignes 1241 à 1248, le titre devient « Le plan de sauvegarde de l'emploi n'est pas dû ici. », #q-deux reçoit la classe cache, et il reste un paragraphe de six lignes en 14,5 px à lire, avec un seul lien vers audit.html.",
+  "correction": "Sous 50 salariés, ne pas afficher cet écran du tout : location.replace(\"audit.html\") dès la lecture de la fiche, ou le retirer de tous les menus sous ce seuil ; s'il reste affiché, poser quand même la question et laisser Non/Oui actifs."
+ },
+ {
+  "label": null,
+  "fichier": "docs/auditer.html",
+  "ligne": 124,
+  "gravite": "mineur",
+  "constat": "Le menu propose à une entreprise de 8 salariés l'option « Plan de sauvegarde de l'emploi — ne vous concerne pas (dès 50 salariés) », choisissable, qui mène à l'écran vide ci-dessus ; les libellés des lignes 113, 121, 123, 132 et 141 contiennent des tirets cadratins.",
+  "correction": "Ne pas créer l'option quand eff < a.seuil (ou la désactiver avec disabled), et remplacer chaque « — » par une virgule, un deux-points ou le trait d'union du clavier."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 84,
+  "gravite": "illisible",
+  "constat": "Complément à 60 salariés, téléphone : après « Non », la feuille du document commence à 3179 px du haut (3,8 écrans) ; la grille .plan met les 16 champs (1718 px) au-dessus, puis la barre, sept cartes de dates (750 px) et le paragraphe .chiffre (260 px) avant le document ; ce qu'on voit après le clic est « CE QUI RESTE À REMPLIR », pas le document.",
+  "correction": "Sous 1000 px, afficher la feuille en premier avec la barre Word/Texte/Imprimer juste au-dessus, et replier les champs et les dates dans un details ou un volet en dessous."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 122,
+  "gravite": "illisible",
+  "constat": "Les tableaux du plan (Article 3 « Rubrique ; mesure ; bénéficiaires ; budget », catégories, réponse motivée) sont rendus par des blocs .b-ligne en ui-monospace 13 px, pre-wrap, lignes séparées par des points-virgules, dans une colonne de 252 px : c'est un tableau en caractères, et dans le .docx ils sortent en simples paragraphes (0 table sur 145 paragraphes).",
+  "correction": "Rendre ces lignes en vrai tableau HTML (bloc k:\"table\" avec en-têtes Rubrique/Mesure/Bénéficiaires/Budget) et en table Word via AuditExport, ou en paires libellé/valeur empilées sur téléphone."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "Le .docx téléchargé contient 23 tirets cadratins alors que l'écran n'en a aucun : la fonction puce préfixe chaque puce de « — », et audit-pse.html pousse des puces qui commencent déjà par « - » (lignes 618, 619, 624, 665, 667, 669, 726, 845 à 851), ce qui donne « — - Consultation sur l'opération projetée ».",
+  "correction": "Dans audit-export.js ligne 119, écrire par(\"- \" + i.t) et ne pas doubler quand le texte commence déjà par « - » ; dans audit-pse.html retirer le « - » des puces."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 112,
+  "gravite": "illisible",
+  "constat": "Sur téléphone la feuille garde padding 38px 44px, le texte n'a que 252 px de large sur 390 et .b-p est justifié : la capture montre « licenciement      pour      motif » avec de grands blancs entre les mots.",
+  "correction": "Sous 640 px, padding 16px et text-align:left sur .feuille .b-p."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 996,
+  "gravite": "mineur",
+  "constat": "Le droit s'affiche avant le document : le paragraphe .chiffre (L. 1233-57-3, règle des jours ouvrables, 260 px sur téléphone) et sept cartes de dates citant L. 1233-30, 34, 46, 57-4, 39 et D. 1233-2-1 précèdent la feuille ; dans la feuille les notes .b-note (renvois aux articles) sont toujours dépliées ; seul le pied « Les textes lus » est replié.",
+  "correction": "Placer .chiffre sous la feuille dans un details replié, et replier les .b-note derrière un mot « Texte » cliquable."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 77,
+  "gravite": "mineur",
+  "constat": "Cibles tactiles sous 44 px sur téléphone : « Télécharger en Word », « En texte », « Imprimer », « Repartir du texte généré », « ← La question » et « Vider » font 39 px de haut ; le label « Choisir un fichier .docx ou .txt » de la branche Oui fait 24 px ; les liens de pied 16 px ; les liens d'en-tête 29 px.",
+  "correction": "min-height:44px et padding 12px 18px sur .barre button, label.second et les liens de pied et d'en-tête."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 80,
+  "gravite": "mineur",
+  "constat": "Polices sous 15 px dans le corps sur téléphone : 13 éléments à 8 salariés (paragraphe .hors et son lien 14,5 px, pied 13,5 px, .fil 11,5 px) et 170 après « Non » (libellés des champs 13,5 px, boutons 14,5 px, cartes .d .q 11 px et .d .f 11,5 px, notes .b-note en var(--t1)).",
+  "correction": "Fixer 15 px minimum pour .hors, label.ch .nom, .barre button, .d .f, .b-note et le pied ; garder 11 px seulement pour les sur-titres en capitales."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 522,
+  "gravite": "mineur",
+  "constat": "Les fichiers téléchargés se nomment plan-de-sauvegarde-de-l-emploi-2026-09-07.docx et .txt, sans le nom de l'entreprise, alors que la dénomination figure 11 fois dans le contenu.",
+  "correction": "Dans nomFichier, insérer profil.denomination nettoyée : plan-de-sauvegarde-de-l-emploi-le-petit-bistrot-sarl-2026-09-07.docx."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 133,
+  "gravite": "mineur",
+  "constat": "Branche Oui (complément à 60 salariés) : le dépôt apparaît sans autre clic (label fichier, bouton Vider, zone de collage), mais la zone #depot est en ui-monospace 13,5 px et son texte d'aide s'affiche en chasse fixe sur téléphone.",
+  "correction": "Passer textarea#depot en system-ui 16 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 1241,
+  "gravite": "bloquant",
+  "constat": "Avec la fiche à 45 salariés, la page n'a pas de question fermée : le h2 devient « Le plan de sauvegarde de l'emploi n'est pas dû ici. », #q-deux reçoit la classe cache, et l'écran ne comporte qu'un paragraphe de sept lignes (L. 1233-61) et un lien texte, sans aucun bouton ni document, sur téléphone (390 px) comme sur grand écran (1280 px).",
+  "correction": "Sous cinquante salariés, faire location.replace(\"audit.html\") dès la lecture de la fiche, comme la page le fait déjà sans fiche à la ligne 399, au lieu d'afficher un écran à lire."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit.html",
+  "ligne": 180,
+  "gravite": "mineur",
+  "constat": "Le lien vers audit-pse.html figure dans audit.html:180, agenda.html:97, audit-cse.html:232, audit-nao.html:196 et documents.html:135 sans contrôle d'effectif, alors que auditer.html:124 le masque sous cinquante salariés : à 45 salariés on arrive donc quand même sur l'écran « n'est pas dû ici ».",
+  "correction": "Masquer ce lien dans ces cinq pages quand profil.effectif < 50, comme le fait auditer.html avec son champ seuil."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 84,
+  "gravite": "illisible",
+  "constat": "Après « Non » (fiche rejouée à 60 salariés), sur téléphone la feuille du document (#pse-feuille) commence à 3 179 px du haut : avant elle viennent le formulaire de quinze champs (de 287 à 2 005 px), la barre de trois boutons (2 044 px), sept cartes de dates (environ 100 px chacune) et un paragraphe de droit de 260 px ; sur grand écran la feuille est à 883 px, à droite du formulaire.",
+  "correction": "Sous 1000 px, placer #p-doc avant .champs (order:-1 sur .champs dans la grille .plan) et replier le formulaire dans un <details> « Compléter », pour que le document soit la première chose visible après le clic."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 122,
+  "gravite": "illisible",
+  "constat": "Le tableau des mesures du plan (Article 3) et la liste des catégories sont rendus en div.b-ligne à chasse fixe 13 px, une rangée par ligne avec les colonnes séparées par des points-virgules (« Rubrique ; mesure ; bénéficiaires ; budget »), chaque rangée se repliant sur trois à quatre lignes sur téléphone, comme on le voit dans e60-tel-non-part4.png.",
+  "correction": "Rendre ces lignes en <table> HTML à quatre colonnes (et en table dans le docx via un bloc « table » de l'export), en supprimant la police à chasse fixe de .b-ligne."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "Le docx téléchargé contient 23 tirets cadratins (U+2014) alors que l'écran et le txt n'en ont aucun : la fonction puce préfixe « — » à un texte qui commence déjà par « - », d'où des puces « — - Consultation sur l'opération projetée… » (paragraphes 18 à 115 du docx).",
+  "correction": "Remplacer \"— \" par \"- \" à audit-export.js:119 et ne pas l'ajouter quand le texte commence déjà par un trait d'union."
+ },
+ {
+  "label": null,
+  "fichier": "docs/style.css",
+  "ligne": 190,
+  "gravite": "illisible",
+  "constat": "Sur téléphone, cinq boutons ont 39 px de haut (Télécharger en Word, En texte, Imprimer, Repartir du texte généré, ← La question), sous les 44 px d'une cible tactile, à cause de padding:11px 18px et d'une police var(--t3) de 14,5 px.",
+  "correction": "Passer les boutons à min-height:44px et 16 px de police, au moins sous 640 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 274,
+  "gravite": "illisible",
+  "constat": "Dans la branche « Oui », « Choisir un fichier .docx ou .txt » est une étiquette de 218 x 24 px en texte courant, sans aspect de bouton (voir e60-tel-oui-small.png), alors que « Vider » et « ← La question » sont des boutons.",
+  "correction": "Donner à ce label la classe et la hauteur d'un bouton principal (min-height:44px, fond accent) et le placer seul sur sa ligne au-dessus de la zone de collage."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 125,
+  "gravite": "mineur",
+  "constat": "Dix notes .b-note (renvois aux articles et citation intégrale de l'arrêt du 8 janvier 2025) sont affichées dépliées dans le document, en italique 12,5 px ; la note de l'arrêt occupe une trentaine de lignes sur téléphone (e60-tel-non-part5.png).",
+  "correction": "Replier chaque note dans un <details> « Textes » ou la sortir de la feuille vers le pied de page, en laissant le document seul."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 996,
+  "gravite": "mineur",
+  "constat": "Un paragraphe .chiffre de 260 px sur téléphone (« Aucun montant n'est apprécié ici… L. 1233-57-3 ») et sept cartes de dates citant chacune un article sont affichés avant le document, à lire avant d'agir.",
+  "correction": "Replier ce paragraphe et les cartes de dates dans un <details> « Dates et règles » placé après la feuille."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 1250,
+  "gravite": "mineur",
+  "constat": "Sous les boutons Non/Oui, un paragraphe de sept lignes en 14,5 px expose la règle des dix licenciements avec renvoi à L. 1233-61 avant que l'utilisatrice ait cliqué.",
+  "correction": "Réduire ce paragraphe à une ligne sans article, ou le mettre dans un <details>."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 120,
+  "gravite": "mineur",
+  "constat": "Les polices du corps sont sous 15 px sur téléphone : .b-p et .b-puce 14,5 px (82 blocs), .b-st 13,5 px, .b-ligne 13 px, .b-note 12,5 px, étiquettes .nom 13,5 px, cartes .q 11 px et .f 11,5 px, .chiffre 13,5 px.",
+  "correction": "Fixer 16 px pour .b-p, .b-puce, .b-ligne et les étiquettes de champ, 14 px minimum pour les notes et les cartes."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 522,
+  "gravite": "mineur",
+  "constat": "Les fichiers téléchargés se nomment plan-de-sauvegarde-de-l-emploi-2026-09-07.docx et .txt : le nom de l'entreprise figure dans le contenu (11 fois) mais pas dans le nom du fichier.",
+  "correction": "Ajouter profil.denomination en minuscules et sans accents au nom de fichier dans nomFichier()."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 648,
+  "gravite": "mineur",
+  "constat": "Les blancs à remplir « [   ] » des points 6° et 7° sont rendus « [ ] » à l'écran, les espaces étant réduits dans une div ordinaire.",
+  "correction": "Écrire « [à compléter] » plutôt que des espaces entre crochets."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 203,
+  "gravite": "illisible",
+  "constat": "Sur téléphone, après « Non », la feuille du document commence à 3 179 px : l'écran montre d'abord 16 champs de formulaire (1 718 px), puis deux barres de boutons, sept cartes de dates (750 px) et un paragraphe de droit (260 px), soit près de quatre écrans de 844 px à faire défiler avant le document ; sur grand écran la feuille commence à 882 px dans une fenêtre de 900 px.",
+  "correction": "Sous 1000 px, placer la feuille en premier avec la barre Télécharger juste au-dessus, et replier le formulaire « Ce qui reste à remplir » et les cartes de dates dans un details fermé ; sur grand écran, mettre les cartes de dates et le paragraphe sous la feuille ou repliés."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 703,
+  "gravite": "illisible",
+  "constat": "Le tableau des mesures de l'Article 3 (« Rubrique ; mesure ; bénéficiaires ; budget » puis sept lignes) et les catégories professionnelles sont rendus en blocs .b-ligne à chasse fixe 13 px, séparés par des points-virgules, qui se replient sur 4 à 6 lignes chacun sur téléphone : un tableau écrit en caractères, pas un tableau.",
+  "correction": "Rendre les blocs k:'ligne' en vrai élément table (une colonne par point-virgule) dans feuilleHtml, avec police système 15 px, et retirer la règle .b-ligne monospace de la ligne 122."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "illisible",
+  "constat": "Le .docx téléchargé contient 23 tirets cadratins (U+2014) : la fonction puce ajoute « — » devant chaque puce alors que les puces de la page commencent déjà par « - », ce qui donne « — - Consultation sur l'opération projetée » ; le .txt n'en a aucun.",
+  "correction": "Dans audit-export.js, remplacer par('— ' + i.t) par par(i.t) ou par un vrai style de liste Word, et ne jamais écrire de U+2014 ; le trait d'union du clavier est déjà dans le texte."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 120,
+  "gravite": "mineur",
+  "constat": "Les paragraphes du document sont en text-align:justify : sur 390 px, des lignes comme « licenciement      pour      motif » ou « économique      d'au      moins      dix » montrent des trous de plusieurs espaces entre les mots.",
+  "correction": "Retirer text-align:justify de .feuille .b-p (ou le réserver à @media print)."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 101,
+  "gravite": "mineur",
+  "constat": "Polices sous 15 px dans le corps sur téléphone : document .b-p et .b-puce 14,5 px (82 blocs), notes .b-note 12,5 px (10), sous-titres .b-st 13,5 px, lignes .b-ligne 13 px, cartes de dates .q 11 px et .f 11,5 px (7 cartes), intitulés de champs .nom 13,5 px (15), boutons 14,5 px.",
+  "correction": "Passer le corps du document et les puces à 16 px (var(--t4)), les notes et les cartes de dates à 14,5 px au moins, les intitulés de champs à 15 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/style.css",
+  "ligne": 208,
+  "gravite": "mineur",
+  "constat": "Cibles tactiles sous 44 px : les cinq boutons Télécharger en Word, En texte, Imprimer, Repartir du texte généré et ← La question font 39 px de haut ; les champs 40 à 43 px ; les liens de la barre du site 29 px ; les liens du pied de page 16 px ; le libellé « Choisir un fichier » de la branche Oui fait 218 x 24 px et ne ressemble pas à un bouton.",
+  "correction": "Donner min-height:44px aux boutons, champs et au label du fichier (avec la classe second de bouton) et un padding vertical de 12 px aux liens."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 260,
+  "gravite": "mineur",
+  "constat": "Sur téléphone, avant le document, deux barres de boutons s'affichent sur deux rangées chacune : « Repartir du texte généré / ← La question » puis « Télécharger en Word / En texte / Imprimer », soit quatre rangées de boutons.",
+  "correction": "Garder une seule barre au-dessus de la feuille (Télécharger en Word en premier, En texte et Imprimer à côté) et ranger « Repartir du texte généré » et « ← La question » en bas du formulaire replié."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 996,
+  "gravite": "mineur",
+  "constat": "Le droit s'affiche avant le document : sept cartes de dates citant L. 1233-30, L. 1233-34, L. 1233-46, L. 1233-57-4, L. 1233-39, D. 1233-2-1, puis un paragraphe de 260 px sur L. 1233-57-3 et le décompte des jours ouvrables, tous avant la feuille ; les dix notes .b-note dans le document ne sont pas repliées ; le paragraphe sous la question cite L. 1233-61.",
+  "correction": "Replier le paragraphe « Aucun montant n'est apprécié » et les renvois d'articles des cartes dans un details « Les textes », et rendre les notes .b-note dans un details fermé à la fin de chaque document."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 142,
+  "gravite": "mineur",
+  "constat": "Dans le diagnostic de la branche Oui, l'intitulé du point et son renvoi sont collés sur téléphone parce que .fond est un span en ligne : « le reclassement interne sur le territoire nationalL. 1233-62, 1° », « d'ordreL. 1233-5 · L. 1233-24-2, 2° ».",
+  "correction": "Ajouter display:block à .manque .fond (ligne 142)."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 133,
+  "gravite": "mineur",
+  "constat": "La zone de collage du plan déposé (textarea#depot) est en chasse fixe 13,5 px, et le texte lu depuis le .docx s'y affiche ainsi sur téléphone.",
+  "correction": "Passer textarea#depot en police système 15 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 84,
+  "gravite": "illisible",
+  "constat": "Sur téléphone, après « Non », l'écran montre le formulaire « Ce qui reste à remplir » (15 champs, 1718 px) et le document commence à 3179 px, soit près de quatre écrans plus bas, après la barre de boutons, 7 cartes de dates (750 px) et un pavé de droit (260 px).",
+  "correction": "Placer la feuille du document immédiatement sous les boutons de téléchargement et reléguer les champs, les cartes de dates et le pavé de droit après le document ou dans un volet replié « Compléter »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 122,
+  "gravite": "illisible",
+  "constat": "Les 12 lignes de type « Rubrique ; mesure ; bénéficiaires ; budget » (articles 1, 3, réponse motivée) sont rendues en ui-monospace 13 px avec colonnes séparées par des points-virgules, un tableau en caractères qui se replie sur téléphone (capture tel-non-C-article3.png).",
+  "correction": "Rendre ces blocs en vrai tableau HTML (une colonne par point-virgule) à la police du document, et les exporter en table dans le .docx."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "Le .docx téléchargé contient 23 tirets cadratins : chaque puce est exportée avec le préfixe « — », ce qui donne « — - Consultation sur l'opération projetée » (un cadratin suivi du trait d'union déjà présent dans le texte).",
+  "correction": "Retirer le préfixe « — » de la fonction puce d'audit-export.js et laisser le trait d'union du texte, ou utiliser une vraie liste à puces Word."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 974,
+  "gravite": "mineur",
+  "constat": "Avant le document s'affichent 7 cartes de dates portant chacune un renvoi d'article (L. 1233-30, L. 1233-34, L. 1233-46, L. 1233-57-4, L. 1233-39, D. 1233-2-1) puis un pavé de 6 lignes sur L. 1233-57-3 et le décompte des jours ouvrables : c'est un exposé lu avant d'agir.",
+  "correction": "Déplacer les cartes de dates et le pavé après la feuille ou dans un volet details replié « Les dates limites », et ne garder que la date sans le renvoi d'article dans la carte."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 125,
+  "gravite": "mineur",
+  "constat": "Les 10 notes de renvoi aux articles (classe b-note, 12,5 px italique) sont toutes dépliées dans la feuille du document, entre les documents, aucune n'est repliée.",
+  "correction": "Envelopper chaque b-note dans un details replié par défaut avec un summary court (« Les textes »), ou les retirer de la feuille et les laisser au pied de page déjà replié."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 120,
+  "gravite": "mineur",
+  "constat": "Sur téléphone, le corps du document est à 14,5 px (b-p, b-puce, b-sign), les sous-titres à 13,5 px (b-st) et 14 px (b-h2), les notes à 12,5 px, les noms de champs à 13,5 px, les cartes de dates à 11 et 11,5 px, le pavé chiffre à 13,5 px.",
+  "correction": "Fixer var(--t3) et les tailles de la feuille à 16 px minimum sur téléphone, et ne rien afficher sous 15 px dans le corps."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 969,
+  "gravite": "mineur",
+  "constat": "Toutes les cibles tactiles d'action font 39 px de haut (Télécharger en Word 207x39, En texte 106x39, Imprimer 113x39, Repartir du texte généré, La question, Vider), les liens de navigation 29 px, les liens de pied de page 16 px ; seuls Non et Oui font 48 px.",
+  "correction": "Porter la hauteur minimale des boutons et liens à 44 px (min-height:44px ; padding vertical 12 px) dans style.css."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 274,
+  "gravite": "mineur",
+  "constat": "Dans la branche « Oui », le sélecteur de fichier est un label de 218x24 px sans bordure ni aspect de bouton, distinct des deux boutons de 39 px qui le suivent (capture tel-3-oui.png), et la zone de collage est en chasse fixe 13,5 px.",
+  "correction": "Rendre le label comme un bouton principal de 44 px minimum (« Déposer le plan ») et passer textarea#depot en police système 16 px."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 1168,
+  "gravite": "mineur",
+  "constat": "Dans le diagnostic « Oui », l'intitulé et la référence sont collés sans espace ni retour à la ligne : « le territoire nationalL. 1233-62, 1° », « multiplesD. 1233-2-1, III · Cass. soc., 8 janvier 2025 » (capture tel-oui-E-manques.png), parce que le span .fond reste en ligne.",
+  "correction": "Ajouter display:block à .manque .obj et .manque .fond (ligne 141-142) pour que la référence passe à la ligne sous l'intitulé."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 1172,
+  "gravite": "mineur",
+  "constat": "Pour chaque point absent, la branche « Oui » affiche d'abord un paragraphe d'explication puis la citation intégrale de l'arrêt du 8 janvier 2025 (12 lignes sur téléphone) avant le texte prêt à coller.",
+  "correction": "Afficher le texte à coller en premier, avec un bouton « Copier », et replier l'explication et la citation dans un details « Pourquoi »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 522,
+  "gravite": "mineur",
+  "constat": "Les fichiers téléchargés sont nommés plan-de-sauvegarde-de-l-emploi-2026-09-07.docx et .txt, sans le nom de l'entreprise, alors que leur contenu le porte 11 fois.",
+  "correction": "Composer le nom du fichier avec profil.denomination en minuscules sans accents, par exemple pse-ingenierie-atlantique-sa-2026-09-07.docx."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 648,
+  "gravite": "mineur",
+  "constat": "Les renseignements 6° et 7° de la convocation contiennent un blanc « [   ] » à remplir qui ne correspond à aucun champ du formulaire, alors que les 13 autres crochets ont soit un champ, soit un libellé explicite.",
+  "correction": "Ajouter deux champs (mesures de nature économique ; conséquences sur la santé, la sécurité et les conditions de travail) ou remplacer le blanc par un libellé entre crochets."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 84,
+  "gravite": "illisible",
+  "constat": "Sur téléphone, après « Non », la page remonte en haut et ce que l'on voit est le formulaire « Ce qui reste à remplir » (15 champs, 1718 px de haut), puis la barre de boutons, sept cartes de dates (750 px), un paragraphe de droit (260 px) : la feuille du document commence à 3179 px, soit 3,8 écrans de 844 px à faire défiler avant de lire « NOTIFICATION D'UN PROJET DE LICENCIEMENT COLLECTIF » au nom de DISTRIGROS SA (capture tel-2b-non-haut.png).",
+  "correction": "Dans .plan, mettre #p-doc avant le formulaire sous 1000 px (order:-1 sur #p-doc ou déplacer la div dans le HTML) pour que la feuille soit le premier écran après « Non », les champs et les dates venant après ou dans un volet replié."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 122,
+  "gravite": "illisible",
+  "constat": "Les tableaux du plan (Article 3 « Rubrique ; mesure ; bénéficiaires ; budget » et ses sept lignes, Article 1 catégories, réponse motivée « Suggestion ou proposition ; ce qui a été étudié ; suite donnée ; motif ») sont rendus en blocs .b-ligne à chasse fixe (ui-monospace 13 px, largeur 252 px sur téléphone) avec des points-virgules en guise de colonnes, chaque ligne se repliant sur trois à cinq lignes (capture tel-non-E-article3.png).",
+  "correction": "Rendre ces blocs en <table> HTML à quatre colonnes (rubrique, mesure, bénéficiaires, budget) en police du corps, et les exporter avec le type « table » que audit-export.js sait déjà écrire (ligne 129) au lieu de « p »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-export.js",
+  "ligne": 119,
+  "gravite": "mineur",
+  "constat": "Le fichier Word téléchargé (plan-de-sauvegarde-de-l-emploi-2026-09-07.docx, 36 694 octets, 145 paragraphes, s'ouvre avec python-docx, 11 occurrences de DISTRIGROS SA) contient 23 tirets cadratins U+2014, ajoutés par la fonction puce devant chaque item, ce qui donne « — - Consultation sur l'opération projetée… » avec deux tirets à la suite ; la page elle-même et le .txt n'en contiennent aucun.",
+  "correction": "Remplacer par(\"— \" + i.t) par une vraie puce Word (numbering) ou par le trait d'union du clavier, et ne pas doubler le tiret quand le texte commence déjà par « - »."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 513,
+  "gravite": "mineur",
+  "constat": "À l'export, VERS_EXPORT envoie les blocs « ligne » (les tableaux du plan) comme simples paragraphes « p » : dans le .docx, « Rubrique ; mesure ; bénéficiaires ; budget » et les sept mesures sont des paragraphes à points-virgules, alors que audit-export.js sait produire une vraie table Word (VERS_WORD.table, ligne 129).",
+  "correction": "Regrouper les blocs « ligne » consécutifs en un item { k:\"table\", head:[…], rows:[…] } avant l'appel à AuditExport.docx."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 996,
+  "gravite": "mineur",
+  "constat": "Un paragraphe de droit (.chiffre, 260 px sur téléphone, police 13,5 px) citant L. 1233-57-3 et la règle de décompte des jours est affiché avant la feuille du document, et les sept cartes de dates citent chacune un article en 11,5 px sous la date.",
+  "correction": "Déplacer ce paragraphe dans un <details> replié sous le document, ou dans les notes de pied, pour que rien ne soit à lire entre le bouton et la feuille."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 125,
+  "gravite": "mineur",
+  "constat": "Les dix notes de renvoi aux articles (.b-note, italique 12,5 px, bordure pointillée) sont affichées dépliées à l'intérieur de la feuille après chaque document, jusqu'à huit lignes sur téléphone (exemple sous la convocation à la seconde réunion, capture tel-non-D-plan-mesures.png) ; elles ne sont pas repliées.",
+  "correction": "Rendre chaque .b-note dans un <details><summary>Textes</summary> replié par défaut, hors de la zone contenteditable."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 120,
+  "gravite": "mineur",
+  "constat": "Sur téléphone, 170 éléments de texte visibles après « Non » sont sous 15 px : le corps du document (.b-p, .b-puce) est à 14,5 px, les sous-titres .b-st à 13,5 px, les libellés des champs (.nom) à 13,5 px, les intitulés des cartes de dates (.d .q) à 11 px et leur fondement (.d .f) à 11,5 px, le fil « Audit et conformité » à 11,5 px.",
+  "correction": "Passer var(--t3) et var(--t2) à 16 px au moins dans la feuille et les libellés sur les écrans de moins de 640 px, et les .d .q / .d .f à 13 px minimum."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 969,
+  "gravite": "mineur",
+  "constat": "Les cinq boutons d'action (Télécharger en Word, En texte, Imprimer, Repartir du texte généré, ← La question) mesurent 39 px de haut sur téléphone, les trois liens de la barre du site 29 px et les liens du pied de page 16 px, sous les 44 px d'une cible tactile ; les champs de saisie font 40 à 43 px.",
+  "correction": "Donner min-height:44px aux boutons .barre button et aux liens de navigation dans style.css."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 274,
+  "gravite": "mineur",
+  "constat": "Dans la branche « Oui », le dépôt de fichier existe (input#fichier accepte .docx et .txt, la zone de collage #depot est visible), mais le déclencheur « Choisir un fichier .docx ou .txt » est un <label class=\"second\"> rendu en texte nu sans cadre ni fond, contrairement aux boutons « Vider » et « ← La question » qui ont l'apparence de boutons (capture tel-3-oui.png).",
+  "correction": "Appliquer au label le même style que button.second (bordure, fond, hauteur 44 px) ou remplacer le label par un <button> qui déclenche input#fichier.click()."
+ },
+ {
+  "label": null,
+  "fichier": "docs/audit-pse.html",
+  "ligne": 133,
+  "gravite": "mineur",
+  "constat": "La zone de collage du plan existant (textarea#depot) est en police à chasse fixe 13,5 px, y compris son texte d'aide « Collez ici votre plan… », et le diagnostic affiche « Rubrique 1° - le reclassement interne sur le territoire nationalL. 1233-62, 1° » sans espace ni retour entre l'objet et le fondement, les deux spans étant inline (capture tel-oui-diag-haut.png).",
+  "correction": "Retirer la police monospace de textarea#depot (garder system-ui 16 px) et mettre .manque .fond en display:block."
+ }
+]
