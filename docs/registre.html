@@ -7,31 +7,29 @@
 <meta name="theme-color" content="#1c2126">
 
 <!--
-  L'OUTIL, ET POURQUOI IL NE RESSEMBLE PAS À UN AUDIT
+  LE REGISTRE EN PREMIER, UNE LIGNE À AJOUTER, SANS CHAPEAU.
 
-  L'audit dit si le registre est en règle. Il ne le tient pas — et c'est
-  exactement ce qui manque au terrain : dire à une entreprise « votre registre
-  n'est pas à jour » ne l'avance pas. Ce qui l'avance, c'est le cadre : une
-  ligne par salarié, dans l'ordre des embauches, avec les colonnes que le
-  décret énumère, et la mention particulière portée en face de celui qu'elle
-  concerne.
+  La page ouvre sur le registre lui-même : une carte par salarié, dans l'ordre
+  des embauches, avec les colonnes que le décret énumère, et un bouton pour
+  ajouter une ligne. Le reste (la partie spécifique des stagiaires, la reprise
+  d'un export de paie, la tenue, le document en Word) est sous le registre,
+  une ligne chacun, et s'ouvre seul à l'écran. Le bouton Retour du bandeau,
+  posé par droits.js, revient au registre.
 
   Cinq principes gouvernent cette page.
 
   1. AUCUNE COLONNE N'EST INVENTÉE. Chaque colonne, chaque mention porte le
-     texte qui la commande — L. 1221-13 pour les noms et l'ordre des embauches,
+     texte qui la commande : L. 1221-13 pour les noms et l'ordre des embauches,
      les treize indications de D. 1221-23 pour le reste. Les textes sont
-     reproduits en bas de l'écran « Le cadre », tels qu'ils ont été lus, avec
-     leur identifiant de version. Ce que le dépôt n'a pas capté n'est pas
-     affiché : la page le dit au lieu de le combler.
+     reproduits sous le repli « Voir le texte de loi », tels qu'ils ont été
+     lus, avec leur identifiant de version.
 
   2. L'ORDRE N'EST PAS DÉCORATIF. « Les noms et prénoms de tous les salariés
-     sont inscrits dans l'ordre des embauches » (L. 1221-13). Le tableau est
-     donc trié par date d'entrée, et une ligne sans date d'entrée est signalée
-     comme non ordonnable — parce qu'elle l'est.
+     sont inscrits dans l'ordre des embauches » (L. 1221-13). Les cartes sont
+     donc triées par date d'entrée, et une ligne sans date d'entrée est
+     signalée comme non ordonnable, parce qu'elle l'est.
 
-  3. LES SITUATIONS NE SE DEVINENT PAS. Une case non cochée voudrait dire
-     « non » sans que personne ne l'ait dit. Les questions qui commandent une
+  3. LES SITUATIONS NE SE DEVINENT PAS. Les questions qui commandent une
      mention particulière (autorisation requise, travailleur étranger, nature
      du contrat, temps partiel) se répondent : tant qu'elles ne le sont pas, la
      ligne est « à établir », ni conforme ni fautive.
@@ -41,58 +39,77 @@
      avant que la correspondance ait été acceptée.
 
   5. CE QUI MANQUE SE VOIT. Dans le document produit, les mentions absentes
-     sortent entre crochets — visibles, jamais inventées. C'est la convention
-     de la base de données et du module des élections, et elle vaut ici.
+     sortent entre crochets, visibles, jamais inventées.
 
   Tout reste sur ce poste : rien n'est envoyé.
 -->
 
 <link rel="stylesheet" href="style.css">
 <style>
-  .avis ul{margin:6px 0 0;padding-left:20px}
+  main.wrap{max-width:560px;padding-bottom:var(--e7)}
+  main.wrap.large{max-width:760px}
+  .rappel-fiche{margin:14px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .barre{margin:14px 0 0}
+  .suite{margin:var(--e5) 0 0}
+  button.doc-ligne{width:100%;border:0;border-bottom:1px solid var(--filet);border-radius:0;background:none;
+    color:var(--encre);font:400 18px/1.3 system-ui;text-align:left;justify-content:space-between;min-height:52px;padding:14px 0}
+  button.doc-ligne:hover{background:var(--creux);color:var(--accent);border-color:var(--filet)}
+  details.loi{margin:var(--e3) 0 0}
+  details.loi .c{font-size:var(--t2);line-height:1.5;color:var(--texte-2);padding:0 0 var(--e3)}
+  details.texte .corps .ver{display:block;font-size:var(--t1);color:var(--texte-3);margin-bottom:6px}
 
-  table{border-collapse:collapse;width:100%;min-width:900px;font-size:13px;background:var(--carte)}
-  th,td{border:1px solid var(--filet);padding:5px 7px;text-align:left;vertical-align:top}
-  thead th{background:var(--creux);font:600 11.5px/1.3 system-ui;color:var(--encre-2);white-space:nowrap}
-  thead th small{display:block;font-weight:400;color:var(--encre-3);font-size:10.5px;letter-spacing:0}
-  td input,td select{width:100%;font:inherit;font-size:12.5px;padding:5px 6px;border:1px solid transparent;
-    border-radius:5px;background:transparent;color:var(--encre)}
-  td input:focus,td select:focus{border-color:var(--bleu);background:var(--carte);outline:none}
-  td input.rempli{background:var(--vert-clair)}
-  td.rang{text-align:right;color:var(--encre-3);font-variant-numeric:tabular-nums;width:34px}
-  tr.detail>td{background:var(--creux)}
-  .sup{border:none;background:transparent;color:var(--rouge);font:700 14px/1 system-ui;cursor:pointer}
-  .plier{border:1px solid var(--filet-2);background:var(--carte);border-radius:6px;
-    font:600 11.5px/1 system-ui;padding:6px 8px;cursor:pointer;white-space:nowrap}
-
-  .jauge{display:inline-block;font:600 11px/1 system-ui;padding:5px 8px;border-radius:5px;white-space:nowrap;
-    background:var(--creux);color:var(--encre-2)}
+  /* Une carte par salarié : le numéro et le nom en tête, le contrôle à côté,
+     les colonnes du décret dessous, les mentions particulières sous un repli. */
+  .sal{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);padding:14px 16px 16px;margin:12px 0 0}
+  .sal .tete{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .sal .tete b{font:600 17px/1.3 system-ui;color:var(--encre);flex:1;min-width:0}
+  .sal .champs{margin:10px 0 0;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sal .champs input,.sal .champs select{min-width:0;width:100%}
+  .sal .champs label.ch .nom{margin:0 0 2px}
+  .sal .champs .sous{font-size:12px;color:var(--texte-3)}
+  .sal input.rempli,.sal select.rempli{background:var(--vert-clair)}
+  .sal details.loi{margin:12px 0 0}
+  .sal .bloc{display:grid;grid-template-columns:1fr;gap:10px;margin:8px 0 12px}
+  .sal .bloc label{display:grid;gap:3px;font-size:var(--t1);color:var(--texte-2)}
+  .sal .bloc label b{font:600 var(--t2)/1.35 system-ui;color:var(--texte)}
+  .sal .bloc label i{font-style:normal;color:var(--texte-3);font-size:12px}
+  .sal .bloc input,.sal .bloc select{font-size:var(--t3);padding:10px 12px;min-height:var(--h-touche)}
+  .sal h3{margin:8px 0 2px;font-size:15px}
+  .sal .art{color:var(--texte-3);font-size:12.5px;margin:0 0 6px}
+  .sal .barre{margin:10px 0 0}
+  .sal .barre button{min-height:var(--h-touche);font-size:var(--t2);padding:9px 14px;width:auto}
+  .manque{font-size:var(--t1);line-height:1.5;margin:2px 0 0;padding-left:18px}
+  .manque li{margin:1px 0}
+  .jauge{display:inline-block;font:600 12px/1 system-ui;padding:6px 8px;border-radius:6px;white-space:nowrap;
+    background:var(--creux);color:var(--texte-2)}
   .jauge.ok{background:var(--vert-clair);color:var(--vert)}
   .jauge.att{background:var(--ambre-clair);color:var(--ambre)}
   .jauge.non{background:var(--rouge-clair);color:var(--rouge)}
+  @media (min-width:700px){.sal .bloc{grid-template-columns:1fr 1fr}}
 
-  .bloc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:4px 0 10px}
-  .bloc label{display:grid;gap:3px;font-size:12.5px;color:var(--encre-2)}
-  .bloc label b{font:600 var(--t2)/1.35 system-ui;color:var(--texte-2)}
-  .bloc label i{font-style:normal;color:var(--encre-3);font-size:11.5px}
-  .bloc input,.bloc select{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--filet-2);
-    border-radius:6px;background:var(--carte);color:var(--encre)}
-  .manque{font-size:12.5px;line-height:1.5;margin:2px 0 0;padding-left:18px}
-  .manque li{margin:1px 0}
-  .art{color:var(--encre-3);font-size:11.5px}
+  /* L'import : une carte par colonne de l'export, et l'aperçu en cartes. */
+  textarea.depot{min-height:180px;margin:14px 0 0;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+  .col{border-bottom:1px solid var(--filet);padding:10px 0}
+  .col b{display:block;font:600 15px/1.35 system-ui}
+  .col .ex{font-size:var(--t1);color:var(--texte-3);margin:2px 0 6px}
+  .apercu-ligne{border-bottom:1px solid var(--filet);padding:8px 0;font-size:var(--t2);color:var(--texte-2)}
+  .apercu-ligne b{color:var(--encre)}
 
-  textarea{width:100%;min-height:150px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
-    padding:10px;border:1px solid var(--filet-2);border-radius:8px;resize:vertical}
-  pre#doc{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
-    max-height:66vh;overflow:auto}
-  details.texte .corps .ver{display:block;font-size:11.5px;color:var(--encre-3);margin-bottom:6px}
-  /* À l'impression, on imprime l'écran ouvert — et rien d'autre. Faire
-     réapparaître les onglets cachés sortirait six écrans quand l'utilisateur
-     en demande un : le document, ou le registre à l'écran. */
-  @media print{.onglets,.barre,header.site,.sup,.plier{display:none}
-    pre#doc{max-height:none;border:none;padding:0}
-    .tbl{overflow-x:visible}}</style>
+  /* Le document : une feuille, jamais du texte à chasse fixe. */
+  .feuille .b-t1{font:700 18px/1.35 system-ui;margin:0 0 6px;text-align:center}
+  .feuille .b-h1{font:700 15px/1.35 system-ui;margin:20px 0 7px}
+  .feuille .b-h2{font:600 14px/1.35 system-ui;margin:15px 0 5px}
+  .feuille .b-p{margin:0 0 6px;font-size:14.5px;line-height:1.6}
+  .feuille .b-puce{margin:0 0 4px 18px;font-size:14.5px;line-height:1.55}
+  .feuille .b-vide{height:8px}
+  @media print{
+    header.site,.barre,.suite,details,.rappel-fiche,.jauge{display:none !important}
+    body{background:#fff}
+    .wrap{max-width:none;padding:0}
+    .feuille{border:0;padding:0}
+    .sal{break-inside:avoid}
+  }
+</style>
 </head>
 <body>
 
@@ -105,183 +122,110 @@
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" id="main">
 
-  <header>
-    <h1>Mon registre unique <span>— du personnel</span></h1>
-  </header>
-
-  <div class="onglets" id="onglets">
-    <button data-o="cadre" class="actif">1 · Le cadre</button>
-    <button data-o="registre">2 · Le registre</button>
-    <button data-o="accueillis">3 · Stagiaires et volontaires</button>
-    <button data-o="import">4 · Reprendre un export</button>
-    <button data-o="tenue">5 · La tenue</button>
-    <button data-o="doc">6 · Le document</button>
-  </div>
-
-  <!-- ══════ 1 · LE CADRE ══════ -->
-  <section id="o-cadre">
-    <h2>Le cadre : quel établissement, quel registre</h2>
-    <p class="aide">Le registre unique du personnel est tenu <b>dans tout établissement</b> où sont
-    employés des salariés (L. 1221-13). Ce n'est donc pas un registre par entreprise : une
-    entreprise à trois établissements en tient trois. Cette page en tient un — celui que vous
-    nommez ici.</p>
-
-    <div class="carte">
-      <div class="champs">
-        <label class="ch"><span class="nom">Dénomination</span>
-          <input id="c-nom" placeholder="Raison sociale">
-          <span class="sous">Reprise de votre fiche entreprise si elle est remplie.</span></label>
-        <label class="ch"><span class="nom">Établissement concerné</span>
-          <input id="c-etab" placeholder="Siège, agence de Lyon, chantier…">
-          <span class="sous">Le registre est tenu dans tout établissement où sont employés des salariés (L. 1221-13).</span></label>
-        <label class="ch"><span class="nom">Adresse de l'établissement</span>
-          <input id="c-adresse" placeholder="Adresse où le registre est tenu"></label>
-        <label class="ch"><span class="nom">Effectif de l'entreprise</span>
-          <input id="c-eff" type="number" min="0" placeholder="Nombre de salariés">
-          <span class="sous">Repris de votre fiche. Le registre ne dépend d'aucun seuil : il est dû dès le premier salarié.</span></label>
-      </div>
-      <div id="verdict-cadre"></div>
-    </div>
-
-    <h3>Les textes, tels qu'ils ont été lus</h3>
-    <p class="aide">Chaque colonne et chaque mention de cette page vient de l'un de ces six
-    articles. L'identifiant <code>LEGIARTI…</code> désigne la version lue : un article peut être
-    modifié sans changer de numéro, et le numéro seul ne dit pas laquelle.</p>
-    <div id="textes"></div>
-
-    <div class="avis att"><b>Ce que cette page ne porte pas</b>
-    L'article L. 1221-13 renvoie au pouvoir réglementaire le soin de définir les indications
-    complémentaires propres aux stagiaires et aux personnes volontaires en service civique.
-    Ce texte réglementaire n'a pas été capté dans ce dépôt : la partie spécifique de l'écran 3
-    ne demande donc que ce que L. 1221-13 énonce lui-même — les noms, les prénoms et l'ordre
-    d'arrivée. Aucune autre colonne n'y est ajoutée, faute de texte lu pour la fonder.</div>
-  </section>
-
-  <!-- ══════ 2 · LE REGISTRE ══════ -->
-  <section id="o-registre" class="cache">
-    <h2>Le registre</h2>
-    <p class="aide">Une ligne par salarié, <b>dans l'ordre des embauches</b> (L. 1221-13). Le
-    tableau se trie tout seul sur la date d'entrée : c'est le texte qui commande l'ordre, pas
-    l'ordre de saisie. Les mentions particulières — celles que le décret n'attache qu'à certaines
-    situations — se déplient ligne par ligne, en face de l'intéressé.</p>
-    <div id="etat-registre"></div>
-    <div class="barre">
-      <button class="btn" id="r-ajouter">+ Ajouter un salarié</button>
-      <button class="btn second" id="r-import">Reprendre un export</button>
+  <!-- ══════ LE REGISTRE ══════ -->
+  <section id="e-registre">
+    <p class="rappel-fiche" id="rappel-registre"></p>
+    <div class="barre pile">
+      <button type="button" class="btn" id="r-ajouter">+ Ajouter un salarié</button>
     </div>
     <div id="registre"></div>
     <div id="synthese-registre"></div>
+    <div class="suite">
+      <button type="button" class="doc-ligne" data-va="accueillis">Stagiaires et volontaires en service civique</button>
+      <button type="button" class="doc-ligne" data-va="import">Reprendre un export de paie</button>
+      <button type="button" class="doc-ligne" data-va="tenue">L'établissement et la tenue du registre</button>
+      <button type="button" class="doc-ligne" data-va="doc">Le registre en Word ou à imprimer</button>
+    </div>
+    <details class="loi"><summary>Voir le texte de loi</summary><div class="c" id="textes"></div></details>
   </section>
 
-  <!-- ══════ 3 · LA PARTIE SPÉCIFIQUE ══════ -->
-  <section id="o-accueillis" class="cache">
-    <h2>La partie spécifique : stagiaires et volontaires en service civique</h2>
-    <p class="aide">« Les nom et prénoms des stagiaires et des personnes volontaires en service
-    civique […] accueillis dans l'établissement sont inscrits dans l'ordre d'arrivée, dans une
-    partie spécifique du registre unique du personnel » (L. 1221-13). Partie spécifique : elle
-    est distincte de celle des salariés, et c'est pourquoi elle a son propre écran ici.</p>
-    <div id="etat-accueillis"></div>
-    <div class="barre">
-      <button class="btn" id="a-ajouter">+ Ajouter une personne accueillie</button>
+  <!-- ══════ LA PARTIE SPÉCIFIQUE ══════ -->
+  <section id="e-accueillis" hidden>
+    <p class="rappel-fiche">Stagiaires et volontaires en service civique, dans l'ordre d'arrivée (L. 1221-13)</p>
+    <div class="barre pile">
+      <button type="button" class="btn" id="a-ajouter">+ Ajouter une personne accueillie</button>
     </div>
+    <div id="etat-accueillis"></div>
     <div id="accueillis"></div>
   </section>
 
-  <!-- ══════ 4 · L'IMPORT ══════ -->
-  <section id="o-import" class="cache">
-    <h2>Reprendre ce que la paie sait déjà</h2>
-    <p class="aide">L'essentiel du registre existe déjà dans le logiciel de paie. Collez ici le
-    tableau exporté — une ligne d'intitulés, puis une ligne par salarié, les colonnes séparées par
-    une tabulation, un point-virgule ou une barre verticale. L'outil <b>propose</b> un
-    rapprochement colonne par colonne&nbsp;; vous le corrigez, et rien n'entre dans le registre
-    avant que vous l'ayez demandé.</p>
-
-    <div class="carte">
-      <textarea id="i-source" placeholder="Nom&#9;Prénom&#9;Date d'entrée&#9;Emploi&#9;Qualification&#9;Contrat
+  <!-- ══════ L'IMPORT ══════ -->
+  <section id="e-import" hidden>
+    <p class="rappel-fiche">Collez le tableau exporté de la paie : une ligne d'intitulés, puis une ligne par salarié.</p>
+    <textarea class="depot" id="i-source" placeholder="Nom&#9;Prénom&#9;Date d'entrée&#9;Emploi&#9;Qualification&#9;Contrat
 MARTIN&#9;Paul&#9;01/06/2021&#9;Cariste&#9;Niveau 2&#9;CDI
 DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
-      <div class="barre">
-        <button class="btn" id="i-analyser">Proposer les correspondances</button>
-        <button class="btn second" id="i-vider">Vider</button>
-      </div>
-      <div id="i-resultat"></div>
+    <div class="barre pile">
+      <button type="button" class="btn" id="i-analyser">Proposer les correspondances</button>
     </div>
+    <div id="i-resultat"></div>
   </section>
 
-  <!-- ══════ 5 · LA TENUE ══════ -->
-  <section id="o-tenue" class="cache">
-    <h2>La tenue : où, depuis quand, et devant qui</h2>
-    <p class="aide">Un registre parfait que personne ne peut consulter ne remplit pas
-    l'obligation. L'article L. 1221-15 désigne lui-même ceux devant qui il est tenu à
-    disposition : la page les reprend tels quels, sans en ajouter ni en retrancher.</p>
-
-    <div class="carte">
-      <div class="champs">
-        <label class="ch"><span class="nom">Support</span>
-          <select id="t-support">
-            <option value="">— répondre —</option>
-            <option value="papier">Registre tenu sur support papier</option>
-            <option value="substitution">Support de substitution (informatique)</option>
-          </select>
-          <span class="sous">Le support de substitution appelle l'article D. 1221-27 : exigences des articles D. 8113-2 et D. 8113-3, et avis du comité adressé à l'inspection du travail.</span></label>
-        <label class="ch"><span class="nom">Où le registre se consulte</span>
-          <input id="t-lieu" placeholder="Local, bureau, chemin du fichier">
-          <span class="sous">Précisez de façon qu'un élu ou un agent de contrôle puisse s'y rendre seul.</span></label>
-        <label class="ch"><span class="nom">Tenu depuis le</span>
-          <input id="t-depuis" type="date"></label>
-        <label class="ch"><span class="nom">Avis du comité social et économique recueilli le</span>
-          <input id="t-avis" type="date">
-          <span class="sous">D. 1221-27, en cas de support de substitution seulement.</span></label>
-        <label class="ch"><span class="nom">Avis adressé à l'inspection du travail le</span>
-          <input id="t-envoi" type="date">
-          <span class="sous">D. 1221-27 impose de l'adresser ; il ne fixe pas de délai.</span></label>
-        <label class="ch"><span class="nom">Élus informés du lieu de consultation le</span>
-          <input id="t-info" type="date">
-          <span class="sous">Aucun texte lu ici n'impose cette information : L. 1221-15 impose la mise à disposition. La dater reste le seul moyen de la prouver.</span></label>
-      </div>
-      <label class="ch" style="margin-top:14px"><span class="nom">Où la copie des titres des travailleurs étrangers est tenue à disposition</span>
+  <!-- ══════ L'ÉTABLISSEMENT ET LA TENUE ══════ -->
+  <section id="e-tenue" hidden>
+    <div class="champs">
+      <label class="ch"><span class="nom">Dénomination</span>
+        <input id="c-nom" placeholder="Raison sociale"></label>
+      <label class="ch"><span class="nom">Établissement concerné</span>
+        <input id="c-etab" placeholder="Siège, agence de Lyon, chantier"></label>
+      <label class="ch pleine"><span class="nom">Adresse de l'établissement</span>
+        <input id="c-adresse" placeholder="Adresse où le registre est tenu"></label>
+      <label class="ch"><span class="nom">Effectif de l'entreprise</span>
+        <input id="c-eff" type="number" min="0" placeholder="Nombre de salariés"></label>
+      <label class="ch"><span class="nom">Support</span>
+        <select id="t-support">
+          <option value="">répondre</option>
+          <option value="papier">Registre tenu sur support papier</option>
+          <option value="substitution">Support de substitution (informatique)</option>
+        </select></label>
+      <label class="ch pleine"><span class="nom">Où le registre se consulte</span>
+        <input id="t-lieu" placeholder="Local, bureau, chemin du fichier"></label>
+      <label class="ch"><span class="nom">Tenu depuis le</span>
+        <input id="t-depuis" type="date"></label>
+      <label class="ch"><span class="nom">Avis du comité social et économique recueilli le</span>
+        <input id="t-avis" type="date"></label>
+      <label class="ch"><span class="nom">Avis adressé à l'inspection du travail le</span>
+        <input id="t-envoi" type="date"></label>
+      <label class="ch"><span class="nom">Élus informés du lieu de consultation le</span>
+        <input id="t-info" type="date"></label>
+      <label class="ch pleine"><span class="nom">Où la copie des titres des travailleurs étrangers est tenue à disposition</span>
         <textarea id="t-chantiers" style="min-height:70px"
           placeholder="L'établissement, ou chaque chantier ou lieu de travail distinct où ces travailleurs sont employés (D. 1221-24)."></textarea></label>
-      <div id="verdict-tenue"></div>
     </div>
-
-    <div class="avis info"><b>Devant qui le registre est tenu à disposition — L. 1221-15</b>
-      « Le registre unique du personnel est tenu à la disposition du comité social et économique
+    <div id="verdict-cadre"></div>
+    <div id="verdict-tenue"></div>
+    <details class="loi"><summary>Voir le texte de loi</summary><div class="c">
+      L. 1221-13 : le registre est tenu dans tout établissement où sont employés des salariés, un registre par établissement.
+      L. 1221-15 : « Le registre unique du personnel est tenu à la disposition du comité social et économique
       et des fonctionnaires et agents chargés de veiller à l'application du présent code et du
-      code de la sécurité sociale. »</div>
-    <div class="avis info"><b>La copie des titres des travailleurs étrangers — D. 1221-24</b>
-      Elle est annexée au registre et rendue accessible aux membres de la délégation du personnel
+      code de la sécurité sociale. »
+      D. 1221-24 : la copie des titres des travailleurs étrangers est annexée au registre et rendue accessible aux membres de la délégation du personnel
       du comité social et économique et aux fonctionnaires et agents chargés de veiller à
-      l'application du présent code et du code de la sécurité sociale. Elle est tenue à leur
+      l'application du présent code et du code de la sécurité sociale ; elle est tenue à leur
       disposition soit dans l'établissement, soit sur chaque chantier ou lieu de travail distinct
-      de l'établissement pour ceux des travailleurs étrangers qui y sont employés.</div>
+      de l'établissement pour ceux des travailleurs étrangers qui y sont employés.
+      D. 1221-27 : le support de substitution appelle les exigences des articles D. 8113-2 et D. 8113-3, et l'avis du comité adressé à l'inspection du travail.
+      Les versions lues sont sous le repli du registre.
+    </div></details>
   </section>
 
-  <!-- ══════ 6 · LE DOCUMENT ══════ -->
-  <section id="o-doc" class="cache">
-    <h2>Le document</h2>
-    <p class="aide">Le registre tel qu'il est aujourd'hui, prêt à être présenté. Les mentions
-    absentes sortent entre crochets : elles se voient, elles ne sont pas inventées.</p>
-    <div class="barre">
-      <button class="btn" id="d-produire">Produire le document</button>
-      <button class="btn second" id="d-copier">Copier le texte</button>
-      <button class="btn second" id="d-imprimer">Imprimer / PDF</button>
+  <!-- ══════ LE DOCUMENT ══════ -->
+  <section id="e-doc" hidden>
+    <div id="doc"></div>
+    <div class="barre pile">
+      <button type="button" class="btn" id="d-word">Télécharger en Word</button>
+      <button type="button" class="btn second" id="d-imprimer">Imprimer</button>
     </div>
-    <pre id="doc"></pre>
+    <details class="loi"><summary>Voir le texte de loi</summary><div class="c" id="textes-doc"></div></details>
   </section>
 
-  <footer>
-    Tout reste sur ce poste : rien n'est envoyé. Les colonnes et les mentions sont celles des
-    articles L. 1221-13, L. 1221-15, D. 1221-23, D. 1221-24, D. 1221-25 et D. 1221-27, reproduits
-    sur l'écran « Le cadre » avec leur identifiant de version.
-    Cet outil assiste votre démarche&nbsp;; il ne remplace ni votre conseil, ni la décision du juge.
-  </footer>
 </main>
 
 <script src="droits.js"></script>
 <script src="profil.js"></script>
+<script src="audit-export.js"></script>
 <script>
 (function () {
   "use strict";
@@ -330,16 +274,15 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
   var ORDRE_TEXTES = ["L1221-13", "D1221-23", "D1221-25", "L1221-15", "D1221-24", "D1221-27"];
   var TITRES_TEXTES = {
-    "L1221-13": "L. 1221-13 — le registre, les noms, l'ordre des embauches",
-    "D1221-23": "D. 1221-23 — les treize indications complémentaires",
-    "D1221-25": "D. 1221-25 — les événements postérieurs à l'embauche",
-    "L1221-15": "L. 1221-15 — devant qui le registre est tenu à disposition",
-    "D1221-24": "D. 1221-24 — la copie des titres des travailleurs étrangers",
-    "D1221-27": "D. 1221-27 — le support de substitution",
+    "L1221-13": "L. 1221-13 : le registre, les noms, l'ordre des embauches",
+    "D1221-23": "D. 1221-23 : les treize indications complémentaires",
+    "D1221-25": "D. 1221-25 : les événements postérieurs à l'embauche",
+    "L1221-15": "L. 1221-15 : devant qui le registre est tenu à disposition",
+    "D1221-24": "D. 1221-24 : la copie des titres des travailleurs étrangers",
+    "D1221-27": "D. 1221-27 : le support de substitution",
   };
   var art = function (n) { return n.replace(/^([LDR])/, "$1. "); };
 
-  /* ═══════════════════════════════════════════════════════ LE STOCKAGE */
   var CLE = "registre-personnel";
   var E = (function () {
     try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; }
@@ -368,11 +311,6 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     }
   })();
 
-  /* ════════════════════════════════════════ CE QUE LE REGISTRE PORTE
-
-     Les colonnes dues pour TOUT salarié. « fond » cite l'article qui les
-     commande : L. 1221-13 pour les noms, D. 1221-23 pour les indications
-     complémentaires, avec le rang de l'énumération. */
   var COLONNES = [
     { c: "nom",   lib: "Nom",              fond: "L. 1221-13",     t: "text",  du: true },
     { c: "pre",   lib: "Prénoms",          fond: "L. 1221-13",     t: "text",  du: true },
@@ -385,19 +323,19 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     /* La date de sortie est due par le même 6°, mais elle n'existe qu'au
        départ : l'absence de sortie n'est pas un manque, c'est un salarié
        présent. D. 1221-25 commande en revanche de la porter au moment où elle
-       survient — non trois mois plus tard. */
+       survient : non trois mois plus tard. */
     { c: "sor",   lib: "Date de sortie",   fond: "D. 1221-23, 6°", t: "date",  du: false },
   ];
 
   var NATURES = [
-    { v: "",            lib: "— à établir —" },
+    { v: "",            lib: "- à établir -" },
     { v: "cdi",         lib: "Contrat à durée indéterminée" },
     { v: "cdd",         lib: "Contrat à durée déterminée" },
     { v: "temporaire",  lib: "Salarié temporaire" },
     { v: "groupement",  lib: "Mis à disposition par un groupement d'employeurs" },
     { v: "apprenti",    lib: "Contrat d'apprentissage" },
     { v: "pro",         lib: "Contrat de professionnalisation" },
-    { v: "autre",       lib: "Autre situation — à préciser" },
+    { v: "autre",       lib: "Autre situation : à préciser" },
   ];
 
   function neuf() {
@@ -413,7 +351,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
      Deux listes, et elles ne disent pas la même chose. « manques » : une
      mention due par le texte est absente. « aEtablir » : une question dont
-     dépend une mention n'a pas été tranchée — la ligne n'est ni conforme ni
+     dépend une mention n'a pas été tranchée : la ligne n'est ni conforme ni
      fautive, elle est indécise, et l'écrire est plus honnête que de compter
      un silence comme un « non ». */
   function manques(s) {
@@ -459,10 +397,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   function mentions(s) {
     var L = [];
     if (s.nature === "cdd") L.push({ t: "« contrat à durée déterminée »", fond: "D. 1221-23, 9°" });
-    if (s.nature === "temporaire") L.push({ t: "« salarié temporaire » — " +
+    if (s.nature === "temporaire") L.push({ t: "« salarié temporaire » : " +
       (vide(s.ettN) ? "[nom de l'entreprise de travail temporaire]" : s.ettN) + ", " +
       (vide(s.ettA) ? "[adresse de l'entreprise de travail temporaire]" : s.ettA), fond: "D. 1221-23, 10°" });
-    if (s.nature === "groupement") L.push({ t: "« mis à disposition par un groupement d'employeurs » — " +
+    if (s.nature === "groupement") L.push({ t: "« mis à disposition par un groupement d'employeurs » : " +
       (vide(s.gpeN) ? "[dénomination du groupement]" : s.gpeN) + ", " +
       (vide(s.gpeA) ? "[adresse du groupement]" : s.gpeA), fond: "D. 1221-23, 11°" });
     if (s.part === "partiel") L.push({ t: "« salarié à temps partiel »", fond: "D. 1221-23, 12°" });
@@ -486,7 +424,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     return { cls: "ok", txt: "complète" };
   }
 
-  /* L'ordre des embauches — L. 1221-13. Ce n'est pas une commodité
+  /* L'ordre des embauches : L. 1221-13. Ce n'est pas une commodité
      d'affichage : le texte l'impose. Une ligne sans date d'entrée ne peut pas
      être placée ; elle est renvoyée en fin de tableau et signalée. */
   function ordonnes() {
@@ -500,21 +438,38 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     return null;
   }
 
-  /* ═══════════════════════════════════════════════════════ LES ONGLETS */
-  var ONGLETS = ["cadre", "registre", "accueillis", "import", "tenue", "doc"];
+
+  /* ═══════════════════════════════════════════════════════ LES ÉCRANS
+     Un seul visible. Le bouton Retour du bandeau (droits.js) revient au
+     registre depuis les autres, et quitte la page depuis le registre. */
+  var ECRANS = ["registre", "accueillis", "import", "tenue", "doc"];
   function ouvrir(nom) {
-    ONGLETS.forEach(function (o) { $("o-" + o).className = o === nom ? "" : "cache"; });
-    Array.prototype.forEach.call($("onglets").children, function (b) {
-      b.className = b.getAttribute("data-o") === nom ? "actif" : "";
-    });
+    ECRANS.forEach(function (o) { $("e-" + o).hidden = o !== nom; });
+    $("main").classList.toggle("large", nom === "doc" || nom === "import");
     if (nom === "registre") rendreRegistre();
     if (nom === "accueillis") rendreAccueillis();
-    if (nom === "tenue") verdictTenue();
+    if (nom === "tenue") { verdictCadre(); verdictTenue(); }
+    if (nom === "doc") rendreDoc();
     window.scrollTo(0, 0);
   }
-  Array.prototype.forEach.call($("onglets").children, function (b) {
-    b.addEventListener("click", function () { ouvrir(b.getAttribute("data-o")); });
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || !$("e-registre").hidden) return;
+    ev.preventDefault(); ev.stopPropagation();
+    ouvrir("registre");
+  }, true);
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("[data-va]") : null;
+    if (b) ouvrir(b.getAttribute("data-va"));
   });
+
+  function rappelFiche() {
+    var t = E.cadre.nom || "", n = Number(E.cadre.effectif);
+    if (isFinite(n) && String(E.cadre.effectif == null ? "" : E.cadre.effectif).trim() !== "")
+      t += (t ? " · " : "") + n + " salarié" + (n > 1 ? "s" : "");
+    if (!vide(E.cadre.etab)) t += " · " + E.cadre.etab;
+    $("rappel-registre").textContent = t;
+  }
 
   /* ══════════════════════════════════════════════════════════ LE CADRE */
   function lireCadre() {
@@ -522,7 +477,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     E.cadre.etab = $("c-etab").value.trim();
     E.cadre.adresse = $("c-adresse").value.trim();
     E.cadre.effectif = $("c-eff").value.trim();
-    garder(); verdictCadre();
+    garder(); verdictCadre(); rappelFiche();
   }
   ["c-nom", "c-etab", "c-adresse", "c-eff"].forEach(function (id) {
     $(id).addEventListener("change", lireCadre);
@@ -536,53 +491,46 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (p.etablissementsDistincts === "oui" || (isFinite(nb) && nb > 1))
       h += '<div class="avis att"><b>Votre fiche indique plusieurs établissements</b>' +
         (isFinite(nb) && nb > 1 ? "Elle en compte " + nb + ". " : "") +
-        "Le registre est tenu <b>dans tout établissement</b> où sont employés des salariés " +
-        "(L. 1221-13) : un registre par établissement, pas un registre d'entreprise. " +
-        "Cette page en tient un — celui que vous nommez ci-dessus. Reprenez-la pour chacun " +
-        "des autres, ou tenez-les séparément.</div>";
+        "Le registre est tenu dans tout établissement où sont employés des salariés " +
+        "(L. 1221-13) : un registre par établissement. Cette page en tient un, celui que vous nommez ci-dessus.</div>";
     if (vide(E.cadre.etab))
       h += '<div class="avis att"><b>L\'établissement n\'est pas nommé</b>' +
-        "Sans lui, le document produit ne dira pas de quel établissement il est le registre — " +
-        "et L. 1221-13 en fait précisément l'unité de tenue.</div>";
-    var n = E.salaries.length, eff = Number(E.cadre.effectif);
-    if (n && isFinite(eff) && eff > 0)
-      h += '<div class="avis info"><b>' + n + " ligne(s) au registre de cet établissement</b>" +
-        "Votre fiche porte un effectif d'entreprise de " + eff + ". Les deux nombres n'ont pas à " +
-        "coïncider : le registre recense les salariés d'un établissement, entrés et sortis, " +
-        "il ne décompte pas un effectif.</div>";
+        "Sans lui, le document produit ne dira pas de quel établissement il est le registre (L. 1221-13).</div>";
     $("verdict-cadre").innerHTML = h;
   }
 
   function rendreTextes() {
-    $("textes").innerHTML = ORDRE_TEXTES.map(function (n) {
+    var h = ORDRE_TEXTES.map(function (n) {
       var t = TEXTES[n];
       if (!t) return "";
       return '<details class="texte"><summary>' + ech(TITRES_TEXTES[n] || art(n)) + "</summary>" +
         '<div class="corps"><span class="ver">Version lue : ' + ech(t.id) +
-        " — lecture du " + ech(t.date) + "</span>" + ech(t.texte) + "</div></details>";
+        ", lecture du " + ech(t.date) + "</span>" + ech(t.texte) + "</div></details>";
     }).join("");
+    $("textes").innerHTML = h;
+    $("textes-doc").innerHTML = h;
   }
 
   /* ═══════════════════════════════════════════════════════ LE REGISTRE */
-  var ouverts = {};   /* les lignes dépliées, conservées d'un rendu à l'autre */
+  var ouverts = {};   /* les lignes dont les mentions sont dépliées */
 
   function champ(s, col) {
     var v = s[col.c] == null ? "" : s[col.c];
     var plein = String(v).trim() !== "";
+    var dedans;
     if (col.t === "sexe") {
-      /* Un export de paie écrit « F », « H », « 1 ». La valeur importée qui ne
-         figure pas dans la liste est ajoutée à la liste plutôt qu'effacée de
-         l'écran : sinon le contrôle la compte comme renseignée quand la case
-         paraît vide — la pire des deux situations. */
       var opts = ["", "Féminin", "Masculin"];
       if (plein && opts.indexOf(v) < 0) opts.push(v);
-      return '<select data-id="' + ech(s.id) + '" data-c="sexe"' + (plein ? ' class="rempli"' : "") + '>' +
+      dedans = '<select data-id="' + ech(s.id) + '" data-c="sexe"' + (plein ? ' class="rempli"' : "") + '>' +
         opts.map(function (o) {
           return '<option value="' + ech(o) + '"' + (v === o ? " selected" : "") + ">" +
-            (o === "" ? "— ?" : ech(o)) + "</option>"; }).join("") + "</select>";
+            (o === "" ? "?" : ech(o)) + "</option>"; }).join("") + "</select>";
+    } else {
+      dedans = '<input type="' + (col.t === "date" ? "date" : "text") + '" data-id="' + ech(s.id) +
+        '" data-c="' + col.c + '" value="' + ech(v) + '"' + (plein ? ' class="rempli"' : "") + ">";
     }
-    return '<input type="' + (col.t === "date" ? "date" : "text") + '" data-id="' + ech(s.id) +
-      '" data-c="' + col.c + '" value="' + ech(v) + '"' + (plein ? ' class="rempli"' : "") + ">";
+    return '<label class="ch"><span class="nom">' + ech(col.lib) + "</span>" + dedans +
+      '<span class="sous">' + ech(col.fond) + "</span></label>";
   }
 
   function detail(s) {
@@ -598,183 +546,115 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
             ech(o.lib) + "</option>"; }).join("") + "</select>" +
         (sous ? "<i>" + ech(sous) + "</i>" : "") + "</label>";
     };
-    var ouiNon = [{ v: "", lib: "— à établir —" }, { v: "non", lib: "Non" }, { v: "oui", lib: "Oui" }];
+    var ouiNon = [{ v: "", lib: "à établir" }, { v: "non", lib: "Non" }, { v: "oui", lib: "Oui" }];
 
-    var h = '<div style="padding:6px 2px 10px">';
-
-    h += "<h3 style=\"margin:4px 0 2px;font-size:13.5px\">Les mentions particulières</h3>" +
-      '<p class="art" style="margin:0 0 8px">Le décret ne les attache qu\'à certaines situations. ' +
-      'Elles se portent en face de l\'intéressé, et nulle part ailleurs.</p>';
-
-    h += '<div class="bloc">' +
+    var h = '<div class="bloc">' +
       sel("nature", "Nature du contrat", NATURES, "D. 1221-23, 9° à 13°") +
-      sel("part", "Temps de travail", [{ v: "", lib: "— à établir —" },
+      sel("part", "Temps de travail", [{ v: "", lib: "à établir" },
         { v: "complet", lib: "Temps complet" }, { v: "partiel", lib: "Temps partiel" }],
         "D. 1221-23, 12° : la mention « salarié à temps partiel »");
     if (s.nature === "autre") h += e("natAutre", "Préciser la situation", "Hors énumération de D. 1221-23 : rien n'y est présumé.");
     if (s.nature === "temporaire") {
-      h += e("ettN", "Entreprise de travail temporaire — nom", "D. 1221-23, 10°");
-      h += e("ettA", "Entreprise de travail temporaire — adresse", "D. 1221-23, 10°");
+      h += e("ettN", "Entreprise de travail temporaire : nom", "D. 1221-23, 10°");
+      h += e("ettA", "Entreprise de travail temporaire : adresse", "D. 1221-23, 10°");
     }
     if (s.nature === "groupement") {
-      h += e("gpeN", "Groupement d'employeurs — dénomination", "D. 1221-23, 11°");
-      h += e("gpeA", "Groupement d'employeurs — adresse", "D. 1221-23, 11°");
+      h += e("gpeN", "Groupement d'employeurs : dénomination", "D. 1221-23, 11°");
+      h += e("gpeA", "Groupement d'employeurs : adresse", "D. 1221-23, 11°");
     }
-    h += "</div>";
-
-    h += '<div class="bloc">' +
-      sel("aut", "Une autorisation d'embauche ou de licenciement est-elle requise ?", ouiNon, "D. 1221-23, 7°");
+    h += sel("aut", "Une autorisation d'embauche ou de licenciement est-elle requise ?", ouiNon, "D. 1221-23, 7°");
     if (s.aut === "oui") {
       h += e("autD", "Date de l'autorisation", "D. 1221-23, 7°", "date");
       h += e("autDem", "À défaut, date de la demande", "D. 1221-23, 7°", "date");
     }
-    h += "</div>";
-
-    h += '<div class="bloc">' +
-      sel("etr", "Travailleur étranger assujetti à la possession d'un titre autorisant l'exercice d'une activité salariée ?",
+    h += sel("etr", "Travailleur étranger assujetti à la possession d'un titre autorisant l'exercice d'une activité salariée ?",
         ouiNon, "D. 1221-23, 8°");
     if (s.etr === "oui") {
       h += e("titT", "Type du titre", "D. 1221-23, 8°");
       h += e("titN", "Numéro d'ordre du titre", "D. 1221-23, 8°");
       h += sel("titCop", "Copie annexée au registre et rendue accessible ?", ouiNon, "D. 1221-24");
     }
+    h += e("insc", "Mention portée au registre le", "L. 1221-13 : au moment de l'embauche, de façon indélébile. D. 1221-25 pour les événements postérieurs.", "date");
     h += "</div>";
-
-    h += '<div class="bloc">' +
-      e("insc", "Mention portée au registre le", "L. 1221-13 : au moment de l'embauche, de façon indélébile. D. 1221-25 pour les événements postérieurs.", "date") +
-      "</div>";
 
     var m = manques(s), q = aEtablir(s);
     if (m.length)
       h += '<div class="avis non"><b>Ce qui manque à cette ligne</b><ul class="manque">' +
-        m.map(function (x) { return "<li>" + ech(x.quoi) + ' <span class="art">— ' + ech(x.fond) + "</span></li>"; }).join("") +
+        m.map(function (x) { return "<li>" + ech(x.quoi) + ' <span class="art">(' + ech(x.fond) + ")</span></li>"; }).join("") +
         "</ul></div>";
     if (q.length)
       h += '<div class="avis att"><b>Ce qui n\'est pas encore tranché</b>' +
-        "Tant que ces questions restent sans réponse, on ne sait pas si une mention est due. " +
         "Un silence n'est pas un « non ».<ul class=\"manque\">" +
-        q.map(function (x) { return "<li>" + ech(x.quoi) + ' <span class="art">— ' + ech(x.fond) + "</span></li>"; }).join("") +
+        q.map(function (x) { return "<li>" + ech(x.quoi) + ' <span class="art">(' + ech(x.fond) + ")</span></li>"; }).join("") +
         "</ul></div>";
     if (!m.length && !q.length) {
       var men = mentions(s);
       h += '<div class="avis ok"><b>Cette ligne porte tout ce que les textes lus exigent</b>' +
         (men.length ? "Mentions portées : " + ech(men.map(function (x) { return x.t; }).join(" ; ")) + "."
-          : "Aucune mention particulière n'est due dans la situation déclarée.") +
-        " Cela ne vaut pas quitus : le registre se tient au moment de l'embauche et de façon " +
-        "indélébile (L. 1221-13), ce qu'une saisie a posteriori ne rattrape pas.</div>";
+          : "Aucune mention particulière n'est due dans la situation déclarée.") + "</div>";
     }
     if (!vide(s.ent) && !vide(s.insc) && s.insc > s.ent)
       h += '<div class="avis att"><b>Inscription postérieure à l\'entrée</b>' +
-        "Les mentions sont portées sur le registre <b>au moment de l'embauche</b> (L. 1221-13). " +
-        "L'écart est ici de " + Math.round((Date.parse(s.insc) - Date.parse(s.ent)) / 864e5) +
-        " jour(s). Il ne s'efface pas : il se constate.</div>";
+        "Les mentions sont portées sur le registre au moment de l'embauche (L. 1221-13). " +
+        "L'écart est ici de " + Math.round((Date.parse(s.insc) - Date.parse(s.ent)) / 864e5) + " jour(s).</div>";
     if (!vide(s.sor) && !vide(s.ent) && s.sor < s.ent)
-      h += '<div class="avis non"><b>La sortie précède l\'entrée</b>' +
-        "Les deux dates ne peuvent pas être dans cet ordre.</div>";
+      h += '<div class="avis non"><b>La sortie précède l\'entrée</b>Les deux dates ne peuvent pas être dans cet ordre.</div>';
+    return h;
+  }
 
-    return h + "</div>";
+  function nomDe(s) {
+    return vide(s.nom) && vide(s.pre) ? "(sans nom)" : (s.nom + " " + s.pre).trim();
   }
 
   function rendreRegistre() {
+    rappelFiche();
+    /* Une ligne à ajouter, toujours : un registre vide ouvre sur une carte
+       vierge, prête à remplir. */
+    if (!E.salaries.length) { var s0 = neuf(); E.salaries.push(s0); ouverts[s0.id] = true; garder(); }
     var L = ordonnes();
-    var nb = L.length;
-    var c = { ok: 0, att: 0, non: 0 };
-    L.forEach(function (s) { c[etat(s).cls]++; });
-    var sansDate = L.filter(function (s) { return vide(s.ent); }).length;
-
-    $("etat-registre").innerHTML = !nb
-      ? '<div class="avis att"><b>Le registre est vide</b>' +
-        "Un registre unique du personnel est tenu dans tout établissement où sont employés des " +
-        "salariés (L. 1221-13). Ajoutez une ligne, ou reprenez un export de paie sur l'écran 4.</div>"
-      : '<div class="avis info"><b>' + nb + " ligne(s), dans l'ordre des embauches</b>" +
-        c.ok + " complète(s) · " + c.att + " à établir · " + c.non + " avec un manque." +
-        (sansDate ? " " + sansDate + " ligne(s) sans date d'entrée : elles ne peuvent pas être " +
-          "placées dans l'ordre des embauches qu'impose L. 1221-13, et se rangent en fin de tableau." : "") +
-        "</div>";
-
-    if (!nb) { $("registre").innerHTML = ""; $("synthese-registre").innerHTML = ""; return; }
-
-    /* Le contrôle est la DEUXIÈME colonne, avant même le nom. Placé en fin de
-       ligne, il sortait de l'écran sur un tableau de douze colonnes : ce qui
-       manque ne se voyait qu'en faisant défiler, c'est-à-dire ne se voyait
-       pas. */
-    var h = '<div class="tbl"><table><thead><tr><th class="rang">N°</th>' +
-      "<th>Contrôle</th>" +
-      COLONNES.map(function (col) {
-        return "<th>" + ech(col.lib) + "<small>" + ech(col.fond) + "</small></th>"; }).join("") +
-      "<th>Mentions particulières<small>D. 1221-23, 7° à 13°</small></th>" +
-      "<th></th></tr></thead><tbody>";
-
+    var h = "";
     L.forEach(function (s, i) {
       var et = etat(s), ouvert = !!ouverts[s.id];
-      h += '<tr><td class="rang">' + (vide(s.ent) ? "—" : (i + 1)) + "</td>" +
-        '<td><span class="jauge ' + et.cls + '">' + ech(et.txt) + "</span></td>" +
-        COLONNES.map(function (col) { return "<td>" + champ(s, col) + "</td>"; }).join("") +
-        '<td><button class="plier" data-plier="' + ech(s.id) + '">' +
-        (ouvert ? "Replier" : "Déplier") + "</button></td>" +
-        '<td style="text-align:center"><button class="sup" data-sup="' + ech(s.id) + '" title="Retirer la ligne">✕</button></td></tr>';
-    });
-    h += "</tbody></table></div>";
-
-    /* Les mentions particulières se déplient SOUS le tableau, pas dedans.
-
-       Placées dans une ligne du tableau, elles héritaient de sa largeur — plus
-       d'un millier de pixels — et sortaient de l'écran par la droite : la
-       moitié des questions ne se voyaient qu'en faisant défiler. Sous le
-       tableau, chaque ligne dépliée occupe la largeur de la page, et l'on voit
-       d'un coup ce qui est dû et ce qui manque. */
-    L.forEach(function (s, i) {
-      if (!ouverts[s.id]) return;
-      h += '<div class="carte"><h3 style="margin:0">Ligne ' +
-        (vide(s.ent) ? "non ordonnable" : "n° " + (i + 1)) + " — " +
-        ech(vide(s.nom) && vide(s.pre) ? "(sans nom)" : (s.nom + " " + s.pre).trim()) +
-        ' <button class="plier" data-plier="' + ech(s.id) + '" style="margin-left:8px">Replier</button></h3>' +
-        detail(s) + "</div>";
+      h += '<div class="sal" data-sal="' + ech(s.id) + '"><div class="tete"><b>' +
+        (vide(s.ent) ? "Sans date d'entrée" : "N° " + (i + 1)) + " · " + ech(nomDe(s)) + "</b>" +
+        '<span class="jauge ' + et.cls + '">' + ech(et.txt) + "</span></div>" +
+        '<div class="champs">' + COLONNES.map(function (col) { return champ(s, col); }).join("") + "</div>" +
+        '<details class="loi"' + (ouvert ? " open" : "") + ' data-plier="' + ech(s.id) + '"><summary>Mentions particulières (D. 1221-23, 7° à 13°)</summary>' +
+        detail(s) + "</details>" +
+        '<div class="barre"><button type="button" class="second" data-sup="' + ech(s.id) + '">Retirer cette ligne</button></div></div>';
     });
     $("registre").innerHTML = h;
 
-    /* La synthèse : une ligne incomplète doit se voir sans qu'on la déplie. */
     var incompletes = L.filter(function (s) { return manques(s).length; });
     var indecises = L.filter(function (s) { return !manques(s).length && aEtablir(s).length; });
-    var nom = function (s) { return vide(s.nom) && vide(s.pre) ? "(ligne sans nom)"
-      : (s.nom + " " + s.pre).trim(); };
+    var sansDate = L.filter(function (s) { return vide(s.ent); }).length;
     var sh = "";
+    if (sansDate)
+      sh += '<div class="avis att"><b>' + sansDate + " ligne(s) sans date d'entrée</b>" +
+        "Elles ne peuvent pas être placées dans l'ordre des embauches qu'impose L. 1221-13 : elles sont en fin de registre.</div>";
     if (incompletes.length)
-      sh += '<div class="avis non"><b>' + incompletes.length + " ligne(s) incomplète(s)</b><ul class=\"manque\">" +
-        incompletes.map(function (s) {
-          return "<li><b>" + ech(nom(s)) + "</b> — " +
-            manques(s).map(function (x) { return ech(x.quoi) + ' <span class="art">(' + ech(x.fond) + ")</span>"; }).join(" ; ") +
-            "</li>"; }).join("") + "</ul></div>";
+      sh += '<div class="avis non"><b>' + incompletes.length + " ligne(s) incomplète(s)</b>" +
+        ech(incompletes.map(nomDe).join(" · ")) + "</div>";
     if (indecises.length)
       sh += '<div class="avis att"><b>' + indecises.length + " ligne(s) dont la situation n'est pas tranchée</b>" +
-        ech(indecises.map(nom).join(" · ")) +
-        ". Dépliez-les : tant que la nature du contrat, le temps de travail, l'autorisation et le " +
-        "titre de travail ne sont pas renseignés, on ne sait pas quelles mentions de D. 1221-23 sont dues.</div>";
-    if (!incompletes.length && !indecises.length)
-      sh += '<div class="avis ok"><b>Chaque ligne porte les mentions des textes lus</b>' +
-        "Cela ne vaut pas quitus : le registre se tient au moment de l'embauche et de façon indélébile " +
-        "(L. 1221-13), et les événements postérieurs s'y portent au moment où ils surviennent " +
-        "(D. 1221-25). Ce que cet écran vérifie, c'est le contenu — pas la date à laquelle il y a été mis.</div>";
+        ech(indecises.map(nomDe).join(" · ")) + ". Ouvrez leurs mentions particulières.</div>";
     $("synthese-registre").innerHTML = sh;
 
-    /* Les écouteurs. On écrit à la frappe (« input ») pour ne rien perdre, et
-       l'on redessine seulement au « change » : redessiner à chaque touche
-       ferait perdre le curseur. */
     Array.prototype.forEach.call($("registre").querySelectorAll("[data-c]"), function (el) {
       var ecrire = function () {
         var s = parId(el.getAttribute("data-id"));
         if (!s) return;
         s[el.getAttribute("data-c")] = el.value;
+        el.classList.toggle("rempli", String(el.value).trim() !== "");
         garder();
       };
       el.addEventListener("input", ecrire);
       el.addEventListener("change", function () { ecrire(); rendreRegistre(); });
     });
-    Array.prototype.forEach.call($("registre").querySelectorAll("[data-plier]"), function (b) {
-      b.addEventListener("click", function () {
-        var id = b.getAttribute("data-plier");
-        if (ouverts[id]) delete ouverts[id]; else ouverts[id] = true;
-        rendreRegistre();
+    Array.prototype.forEach.call($("registre").querySelectorAll("[data-plier]"), function (d) {
+      d.addEventListener("toggle", function () {
+        var id = d.getAttribute("data-plier");
+        if (d.open) ouverts[id] = true; else delete ouverts[id];
       });
     });
     Array.prototype.forEach.call($("registre").querySelectorAll("[data-sup]"), function (b) {
@@ -786,7 +666,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
           "retirée ici l'est de votre saisie, pas de l'histoire de l'établissement.")) return;
         E.salaries = E.salaries.filter(function (x) { return x.id !== id; });
         delete ouverts[id];
-        garder(); rendreRegistre(); verdictCadre();
+        garder(); rendreRegistre();
       });
     });
   }
@@ -795,9 +675,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var s = neuf();
     E.salaries.push(s);
     ouverts[s.id] = true;
-    garder(); rendreRegistre(); verdictCadre();
+    garder(); rendreRegistre();
+    var c = $("registre").querySelector('[data-sal="' + s.id + '"]');
+    if (c) { c.scrollIntoView({ behavior: "smooth", block: "start" }); var i = c.querySelector("input"); if (i) i.focus(); }
   });
-  $("r-import").addEventListener("click", function () { ouvrir("import"); });
 
   /* ═════════════════════════════════════════ LA PARTIE SPÉCIFIQUE
 
@@ -815,57 +696,37 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       return a.arr < b.arr ? -1 : (a.arr > b.arr ? 1 : 0);
     });
     $("etat-accueillis").innerHTML = !L.length
-      ? '<div class="avis att"><b>Aucune personne accueillie n\'est inscrite</b>' +
-        "Si l'établissement n'accueille ni stagiaire ni volontaire en service civique, cette partie " +
-        "reste vide et c'est régulier. Si elle en accueille, leurs nom et prénoms s'y inscrivent " +
-        "dans l'ordre d'arrivée (L. 1221-13).</div>"
-      : '<div class="avis info"><b>' + L.length + " personne(s) accueillie(s), dans l'ordre d'arrivée</b>" +
-        "Partie spécifique du registre unique, distincte de celle des salariés (L. 1221-13).</div>";
-
+      ? '<div class="avis info"><b>Aucune personne accueillie n\'est inscrite</b>' +
+        "Si l'établissement n'accueille ni stagiaire ni volontaire, cette partie reste vide et c'est régulier.</div>"
+      : "";
     var h = "";
-    if (L.length) {
-      h = '<div class="tbl"><table style="min-width:640px"><thead><tr><th class="rang">N°</th>' +
-        "<th>Nom<small>L. 1221-13</small></th><th>Prénoms<small>L. 1221-13</small></th>" +
-        "<th>Qualité<small>L. 1221-13</small></th>" +
-        "<th>Date d'arrivée<small>établit l'ordre d'arrivée — L. 1221-13</small></th>" +
-        "<th>Contrôle</th><th></th></tr></thead><tbody>";
-      L.forEach(function (a, i) {
-        var m = [];
-        if (vide(a.nom)) m.push("Nom");
-        if (vide(a.pre)) m.push("Prénoms");
-        if (vide(a.qualite)) m.push("Qualité");
-        if (vide(a.arr)) m.push("Date d'arrivée");
-        h += '<tr><td class="rang">' + (vide(a.arr) ? "—" : (i + 1)) + "</td>" +
-          '<td><input data-aid="' + ech(a.id) + '" data-c="nom" value="' + ech(a.nom || "") + '"' +
-            (vide(a.nom) ? "" : ' class="rempli"') + "></td>" +
-          '<td><input data-aid="' + ech(a.id) + '" data-c="pre" value="' + ech(a.pre || "") + '"' +
-            (vide(a.pre) ? "" : ' class="rempli"') + "></td>" +
-          '<td><select data-aid="' + ech(a.id) + '" data-c="qualite">' +
-            [["", "— ?"], ["stagiaire", "Stagiaire"],
-             ["volontaire", "Volontaire en service civique"]].map(function (o) {
-              return '<option value="' + o[0] + '"' + ((a.qualite || "") === o[0] ? " selected" : "") +
-                ">" + o[1] + "</option>"; }).join("") + "</select></td>" +
-          '<td><input type="date" data-aid="' + ech(a.id) + '" data-c="arr" value="' + ech(a.arr || "") + '"' +
-            (vide(a.arr) ? "" : ' class="rempli"') + "></td>" +
-          "<td>" + (m.length
-            ? '<span class="jauge non">' + m.join(", ") + "</span>"
-            : '<span class="jauge ok">complète</span>') + "</td>" +
-          '<td style="text-align:center"><button class="sup" data-asup="' + ech(a.id) + '">✕</button></td></tr>';
-      });
-      h += "</tbody></table></div>" +
-        '<div class="avis att" style="margin-top:12px"><b>Pourquoi il n\'y a pas d\'autre colonne ici</b>' +
-        "L. 1221-13 renvoie à un texte réglementaire le soin de fixer les indications complémentaires " +
-        "propres aux stagiaires et aux volontaires en service civique. Ce texte n'a pas été lu à la " +
-        "source dans ce dépôt : aucune colonne n'est ajoutée sur une simple présomption. " +
-        "Vérifiez-le avant de présenter cette partie comme complète.</div>";
-    }
+    L.forEach(function (a, i) {
+      var m = [];
+      if (vide(a.nom)) m.push("Nom");
+      if (vide(a.pre)) m.push("Prénoms");
+      if (vide(a.qualite)) m.push("Qualité");
+      if (vide(a.arr)) m.push("Date d'arrivée");
+      var champA = function (c, lib, type) {
+        return '<label class="ch"><span class="nom">' + lib + '</span><input type="' + (type || "text") +
+          '" data-aid="' + ech(a.id) + '" data-c="' + c + '" value="' + ech(a[c] || "") + '"' +
+          (vide(a[c]) ? "" : ' class="rempli"') + "></label>";
+      };
+      h += '<div class="sal"><div class="tete"><b>' + (vide(a.arr) ? "Sans date d'arrivée" : "N° " + (i + 1)) + " · " +
+        ech(vide(a.nom) && vide(a.pre) ? "(sans nom)" : (a.nom + " " + a.pre).trim()) + "</b>" +
+        (m.length ? '<span class="jauge non">' + ech(m.join(", ")) + "</span>" : '<span class="jauge ok">complète</span>') + "</div>" +
+        '<div class="champs">' + champA("nom", "Nom") + champA("pre", "Prénoms") +
+        '<label class="ch"><span class="nom">Qualité</span><select data-aid="' + ech(a.id) + '" data-c="qualite">' +
+          [["", "?"], ["stagiaire", "Stagiaire"], ["volontaire", "Volontaire en service civique"]].map(function (o) {
+            return '<option value="' + o[0] + '"' + ((a.qualite || "") === o[0] ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") +
+        "</select></label>" + champA("arr", "Date d'arrivée", "date") + "</div>" +
+        '<div class="barre"><button type="button" class="second" data-asup="' + ech(a.id) + '">Retirer</button></div></div>';
+    });
     $("accueillis").innerHTML = h;
 
     Array.prototype.forEach.call($("accueillis").querySelectorAll("[data-aid]"), function (el) {
       var ecrire = function () {
         var id = el.getAttribute("data-aid");
-        E.accueillis.forEach(function (a) {
-          if (a.id === id) a[el.getAttribute("data-c")] = el.value; });
+        E.accueillis.forEach(function (a) { if (a.id === id) a[el.getAttribute("data-c")] = el.value; });
         garder();
       };
       el.addEventListener("input", ecrire);
@@ -887,14 +748,8 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     garder(); rendreAccueillis();
   });
 
-  /* ══════════════════════════════════════════════════════════ L'IMPORT
-
-     Le rapprochement est PROPOSÉ, jamais appliqué seul. Une colonne mal
-     rapprochée mettrait une qualification dans la case « emploi » d'un
-     registre que l'inspection du travail lira : mieux vaut une case vide
-     qu'une donnée posée au mauvais endroit. */
   var CIBLES = [
-    { c: "",     lib: "— ne pas importer —", mots: [] },
+    { c: "",     lib: "- ne pas importer -", mots: [] },
     { c: "nom",  lib: "Nom", mots: ["nom de famille", "nom", "patronyme"], hors: ["prenom", "etablissement", "entreprise"] },
     { c: "pre",  lib: "Prénoms", mots: ["prenoms", "prenom"] },
     { c: "nat",  lib: "Nationalité", mots: ["nationalite"] },
@@ -975,7 +830,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   }
   function tempsDe(txt) {
     /* Le pourcentage se cherche sur la chaîne BRUTE : sansAccent efface la
-       ponctuation, et « 80 % » y devenait « 80 » — la quotité était perdue et
+       ponctuation, et « 80 % » y devenait « 80 » : la quotité était perdue et
        la mention « salarié à temps partiel » n'était plus proposée. */
     var brut = String(txt == null ? "" : txt);
     var pc = brut.match(/(\d{1,3})(?:[.,]\d+)?\s*%/);
@@ -987,11 +842,8 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     return "";
   }
 
-  var IMPORT = null;   /* l'analyse en cours : rien n'est écrit tant qu'on n'a pas cliqué */
 
-  $("i-vider").addEventListener("click", function () {
-    $("i-source").value = ""; $("i-resultat").innerHTML = ""; IMPORT = null;
-  });
+  var IMPORT = null;   /* l'analyse en cours : rien n'est écrit tant qu'on n'a pas cliqué */
 
   $("i-analyser").addEventListener("click", function () {
     var brut = $("i-source").value;
@@ -1007,9 +859,6 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var decoupe = function (l) { return l.split(sep).map(function (x) {
       return x.trim().replace(/^["']|["']$/g, ""); }); };
 
-    /* L'en-tête n'est pas toujours la première ligne : les exports de paie
-       commencent par un titre. On retient celle qui reconnaît le plus de
-       colonnes. */
     var hdr = 0, meilleur = -1;
     for (var k = 0; k < Math.min(lignes.length, 8); k++) {
       var n = decoupe(lignes[k]).filter(function (t) { return proposeCible(t) !== ""; }).length;
@@ -1024,24 +873,19 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
     var h = '<div class="avis ' + (meilleur > 0 ? "info" : "att") + '"><b>' +
       (meilleur > 0 ? meilleur + " colonne(s) reconnue(s) sur " + titres.length
-        : "Aucune colonne reconnue") + "</b>" +
-      "Ligne d'intitulés retenue : la " + (hdr + 1) + "<sup>e</sup>. " + corps.length +
-      " ligne(s) de données. <b>Rien n'est encore écrit.</b> Corrigez chaque rapprochement " +
-      "ci-dessous, vérifiez l'aperçu, puis demandez l'ajout.</div>";
+        : "Aucune colonne reconnue") + "</b>" + corps.length +
+      " ligne(s) de données. Rien n'est encore écrit : corrigez chaque rapprochement, puis demandez l'ajout.</div>";
 
-    h += '<div class="tbl"><table style="min-width:720px"><thead><tr>' +
-      "<th>Votre colonne</th><th>Trois premières valeurs</th>" +
-      "<th>Colonne du registre</th></tr></thead><tbody>";
     titres.forEach(function (t, j) {
       var ex = corps.slice(0, 3).map(function (r) { return r[j] == null ? "" : r[j]; })
         .filter(function (x) { return String(x).trim(); });
-      h += "<tr><td><b>" + ech(t || "(sans intitulé)") + "</b></td>" +
-        '<td class="art">' + ech(ex.join(" · ") || "—") + "</td>" +
-        '<td><select data-col="' + j + '">' + CIBLES.map(function (cb) {
+      h += '<div class="col"><b>' + ech(t || "(sans intitulé)") + "</b>" +
+        '<div class="ex">' + ech(ex.join(" · ") || "(vide)") + "</div>" +
+        '<select data-col="' + j + '">' + CIBLES.map(function (cb) {
           return '<option value="' + cb.c + '"' + (IMPORT.cibles[j] === cb.c ? " selected" : "") +
-            ">" + ech(cb.lib) + "</option>"; }).join("") + "</select></td></tr>";
+            ">" + ech(cb.lib) + "</option>"; }).join("") + "</select></div>";
     });
-    h += "</tbody></table></div><div id=\"i-apercu\"></div>";
+    h += '<div id="i-apercu"></div>';
     $("i-resultat").innerHTML = h;
 
     Array.prototype.forEach.call($("i-resultat").querySelectorAll("[data-col]"), function (sel) {
@@ -1090,51 +934,41 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       if (o.brutTemps && !o.s.part) tempsKo++;
     });
 
-    var h = "<h3>L'aperçu — ce qui sera écrit</h3>" +
-      "<p class=\"art\">Les cinq premières lignes, telles qu'elles entreraient au registre.</p>" +
-      '<div class="tbl"><table><thead><tr>' +
-      COLONNES.map(function (col) { return "<th>" + ech(col.lib) + "</th>"; }).join("") +
-      "<th>Nature</th><th>Temps</th></tr></thead><tbody>";
+    var h = '<p class="groupe">L\'aperçu, cinq premières lignes</p>';
     apercu.forEach(function (o) {
-      h += "<tr>" + COLONNES.map(function (col) {
-        return '<td class="art">' + ech(o.s[col.c] || "—") + "</td>"; }).join("") +
-        '<td class="art">' + ech(o.s.nature ? (NATURES.filter(function (n) { return n.v === o.s.nature; })[0] || {}).lib : "— à établir —") + "</td>" +
-        '<td class="art">' + ech(o.s.part === "partiel" ? "Temps partiel" : (o.s.part === "complet" ? "Temps complet" : "— à établir —")) + "</td></tr>";
+      var s = o.s;
+      var bits = COLONNES.map(function (col) { return s[col.c] ? col.lib + " : " + s[col.c] : null; }).filter(Boolean);
+      bits.push("Nature : " + (s.nature ? (NATURES.filter(function (n) { return n.v === s.nature; })[0] || {}).lib : "à établir"));
+      bits.push("Temps : " + (s.part === "partiel" ? "partiel" : (s.part === "complet" ? "complet" : "à établir")));
+      h += '<div class="apercu-ligne"><b>' + ech(nomDe(s)) + "</b><br>" + ech(bits.join(" · ")) + "</div>";
     });
-    h += "</tbody></table></div>";
 
     var alertes = [];
-    if (datesKo) alertes.push(datesKo + " date(s) illisible(s) — attendu jj/mm/aaaa ou aaaa-mm-jj. " +
-      "Elles resteront vides : une date n'est pas devinée.");
-    if (natureKo) alertes.push(natureKo + " libellé(s) de contrat non reconnu(s) : la nature restera " +
-      "« à établir », et les mentions de D. 1221-23 (9° à 13°) ne seront pas proposées.");
-    if (tempsKo) alertes.push(tempsKo + " libellé(s) de temps de travail non reconnu(s) : la mention " +
-      "« salarié à temps partiel » (D. 1221-23, 12°) ne sera pas proposée.");
+    if (datesKo) alertes.push(datesKo + " date(s) illisible(s), attendu jj/mm/aaaa ou aaaa-mm-jj. Elles resteront vides.");
+    if (natureKo) alertes.push(natureKo + " libellé(s) de contrat non reconnu(s) : la nature restera « à établir ».");
+    if (tempsKo) alertes.push(tempsKo + " libellé(s) de temps de travail non reconnu(s) : la mention « salarié à temps partiel » (D. 1221-23, 12°) ne sera pas proposée.");
     if (alertes.length)
       h += '<div class="avis att"><b>Ce qui ne sera pas repris</b><ul class="manque"><li>' +
         alertes.map(ech).join("</li><li>") + "</li></ul></div>";
 
-    h += '<div class="avis info"><b>Rien n\'est écrit avant votre clic</b>' +
-      "Les lignes ajoutées viendront s'ajouter à celles déjà présentes, sans en remplacer aucune, " +
-      "et le registre se remettra dans l'ordre des embauches (L. 1221-13). Les mentions " +
-      "particulières restent à vérifier ligne par ligne : aucune n'est réputée acquise.</div>" +
-      '<div class="barre"><button class="btn" id="i-ecrire">Ajouter les ' + IMPORT.corps.length +
+    h += '<div class="barre pile"><button type="button" class="btn" id="i-ecrire">Ajouter les ' + IMPORT.corps.length +
       " ligne(s) au registre</button></div>";
     $("i-apercu").innerHTML = h;
 
     $("i-ecrire").addEventListener("click", function () {
       var n = 0;
+      /* Une carte vierge laissée vide ne compte pas : elle cède la place aux lignes reprises. */
+      E.salaries = E.salaries.filter(function (s) { return !(vide(s.nom) && vide(s.pre) && vide(s.emp) && vide(s.ent)); });
       IMPORT.corps.forEach(function (r) {
         var o = ligneImportee(r);
-        if (vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp)) return;   /* ligne vide : rien à écrire */
+        if (vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp)) return;
         E.salaries.push(o.s); n++;
       });
       garder();
-      $("i-apercu").innerHTML = '<div class="avis ok"><b>' + n + " ligne(s) ajoutée(s)</b>" +
-        "Ouvrez « Le registre » : les lignes y sont classées dans l'ordre des embauches, et le " +
-        "contrôle dit, ligne par ligne, ce qui manque encore.</div>";
       IMPORT = null;
-      verdictCadre();
+      $("i-resultat").innerHTML = '<div class="avis ok"><b>' + n + " ligne(s) ajoutée(s)</b>" +
+        "Le registre les classe dans l'ordre des embauches, et dit, ligne par ligne, ce qui manque encore.</div>";
+      setTimeout(function () { ouvrir("registre"); }, 600);
     });
   }
 
@@ -1186,12 +1020,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         "registre reconstitué la veille d'un contrôle.</div>");
     if (!m.length)
       m.push('<div class="avis ok"><b>Rien ne bloque en l\'état de vos réponses</b>' +
-        "Cela ne vaut pas quitus : la mise à disposition se prouve par des faits — un registre " +
-        "consultable, et des élus qui savent où il est —, pas par une case cochée.</div>");
+        "Cela ne vaut pas quitus : la mise à disposition se prouve par des faits : un registre " +
+        "consultable, et des élus qui savent où il est -, pas par une case cochée.</div>");
     $("verdict-tenue").innerHTML = m.join("");
   }
 
-  /* ══════════════════════════════════════════════════════════ LE DOCUMENT */
   function croch(v, quoi) {
     return vide(v) ? "[" + (quoi || "à renseigner") + "]" : String(v).trim();
   }
@@ -1217,7 +1050,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
     if (!lignes.length) {
       L.push("");
-      L.push("  [aucune ligne saisie — un registre est pourtant dû dès le premier salarié, L. 1221-13]");
+      L.push("  [aucune ligne saisie : un registre est pourtant dû dès le premier salarié, L. 1221-13]");
     }
     lignes.forEach(function (s) {
       n++;
@@ -1233,13 +1066,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       L.push("  Qualification : " + croch(s.qua) + "   (D. 1221-23, 5°)");
       L.push("  Date d'entrée dans l'établissement : " + croch(s.ent) + "   (D. 1221-23, 6°)");
       L.push("  Date de sortie de l'établissement : " +
-        (vide(s.sor) ? "sans objet — salarié présent" : s.sor) + "   (D. 1221-23, 6°)");
+        (vide(s.sor) ? "sans objet : salarié présent" : s.sor) + "   (D. 1221-23, 6°)");
       var men = mentions(s);
       if (men.length) {
         L.push("  Mentions particulières :");
         men.forEach(function (x) { L.push("    · " + x.t + "   (" + x.fond + ")"); });
       } else if (s.nature === "cdi" && s.part === "complet") {
-        L.push("  Mentions particulières : aucune — contrat à durée indéterminée à temps complet.");
+        L.push("  Mentions particulières : aucune : contrat à durée indéterminée à temps complet.");
       }
       if (!vide(s.insc)) L.push("  Mention portée au registre le : " + s.insc + "   (L. 1221-13, D. 1221-25)");
       if (q.length) {
@@ -1249,7 +1082,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     });
 
     L.push("");
-    L.push("═══ II. PARTIE SPÉCIFIQUE — STAGIAIRES ET VOLONTAIRES EN SERVICE CIVIQUE (L. 1221-13) ═══");
+    L.push("═══ II. PARTIE SPÉCIFIQUE : STAGIAIRES ET VOLONTAIRES EN SERVICE CIVIQUE (L. 1221-13) ═══");
     var A = E.accueillis.slice().sort(function (a, b) {
       if (vide(a.arr) && vide(b.arr)) return 0;
       if (vide(a.arr)) return 1;
@@ -1263,10 +1096,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     }
     A.forEach(function (a, i) {
       L.push("");
-      L.push("  N° " + (vide(a.arr) ? "(non ordonnable)" : (i + 1)) + " — " + croch(a.nom) + " " + croch(a.pre) +
-        " — " + croch(a.qualite === "stagiaire" ? "stagiaire"
+      L.push("  N° " + (vide(a.arr) ? "(non ordonnable)" : (i + 1)) + " : " + croch(a.nom) + " " + croch(a.pre) +
+        " : " + croch(a.qualite === "stagiaire" ? "stagiaire"
           : (a.qualite === "volontaire" ? "volontaire en service civique" : ""), "qualité à préciser") +
-        " — arrivée le " + croch(a.arr));
+        " : arrivée le " + croch(a.arr));
     });
     L.push("");
     L.push("  Les indications complémentaires propres aux stagiaires et aux volontaires sont");
@@ -1323,20 +1156,49 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     L.push("Textes lus pour établir ce document :");
     ORDRE_TEXTES.forEach(function (k) {
       var x = TEXTES[k];
-      if (x) L.push("  " + art(k) + " — version " + x.id + " — lecture du " + x.date);
+      if (x) L.push("  " + art(k) + " : version " + x.id + " : lecture du " + x.date);
     });
     return L.join("\n");
   }
 
-  $("d-produire").addEventListener("click", function () { $("doc").textContent = produire(); });
-  $("d-copier").addEventListener("click", function () {
-    if (!$("doc").textContent) $("doc").textContent = produire();
-    if (navigator.clipboard) navigator.clipboard.writeText($("doc").textContent);
+  /* Le texte du registre, ligne par ligne, devient une feuille : les titres
+     soulignés de ═ deviennent des titres, les « ── N° » des sous-titres, les
+     « · » des puces. Rien n'est réécrit, c'est le même document. Le fichier
+     Word reprend les mêmes blocs. */
+  function blocs() {
+    var out = [];
+    produire().split("\n").forEach(function (l, i) {
+      var t = l.replace(/\s+/g, " ").trim();
+      if (i === 0) { out.push({ k: "t1", t: t }); return; }
+      if (t === "") { out.push({ k: "vide", t: "" }); return; }
+      if (/^═/.test(t)) { out.push({ k: "h1", t: t.replace(/═/g, "").trim() }); return; }
+      if (/^──/.test(t)) { out.push({ k: "h2", t: t.replace(/─/g, "").trim() }); return; }
+      if (/^·/.test(t)) { out.push({ k: "puce", t: t.replace(/^·\s*/, "") }); return; }
+      /* Le texte courant est écrit sur plusieurs lignes courtes : une ligne
+         qui commence en minuscule, après une ligne qui ne finit pas une
+         phrase, la continue. Les mentions (« Nom : … ») restent séparées. */
+      var prev = out[out.length - 1];
+      if (prev && prev.k === "p" && !/[.:;»)\]]$/.test(prev.t) && /^[a-zà-ÿ«(]/.test(t)) { prev.t += " " + t; return; }
+      out.push({ k: "p", t: t });
+    });
+    return out;
+  }
+  function rendreDoc() {
+    var h = '<div class="feuille">';
+    blocs().forEach(function (b) {
+      if (b.k === "vide") { h += '<div class="b-vide"></div>'; return; }
+      h += '<div class="b-' + b.k + '">' + ech(b.t) + "</div>";
+    });
+    $("doc").innerHTML = h + "</div>";
+  }
+  $("d-word").addEventListener("click", function () {
+    var items = blocs().filter(function (b) { return b.k !== "vide" && b.k !== "t1"; });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Registre unique du personnel"),
+      "registre-unique-du-personnel-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
-  $("d-imprimer").addEventListener("click", function () {
-    if (!$("doc").textContent) $("doc").textContent = produire();
-    window.print();
-  });
+  $("d-imprimer").addEventListener("click", function () { window.print(); });
 
   /* ══════════════════════════════════════════════════════════ L'AMORÇAGE */
   $("c-nom").value = E.cadre.nom || "";
@@ -1347,8 +1209,8 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (E.tenue[id] != null) $(id).value = E.tenue[id];
   });
   rendreTextes();
-  verdictCadre();
   garder();
+  ouvrir("registre");
 
   if ("serviceWorker" in navigator)
     window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });

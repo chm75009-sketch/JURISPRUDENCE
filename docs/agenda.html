@@ -21,6 +21,8 @@
 
      TEXTES LUS AU RELAIS LÉGIFRANCE LE 18 AOÛT 2026, deux lectures
      concordantes chacun, critère de contenu contre les homonymes :
+       L. 2311-2    LEGIARTI000035609353  (comité mis en place à partir de onze
+                    salariés ; lu deux fois le 9 septembre 2026, filtre par nom du code)
        L. 2315-28   LEGIARTI000035624857  (réunions du CSE : mensuelles à partir
                     de 300 salariés, tous les deux mois en deçà, à défaut d'accord ;
                     relu deux fois le 9 septembre 2026, même version, même texte)
@@ -145,6 +147,7 @@
   <summary>Voir le texte de loi</summary>
   <div class="c" style="font-size:var(--t2);color:var(--texte-2);line-height:1.5;padding:0 0 var(--e3)">
     Code du travail, lu au relais Légifrance le 18 août 2026, deux lectures concordantes par article, identifiant de version entre parenthèses.
+    L. 2311-2 (LEGIARTI000035609353, lu le 9 septembre 2026), comité mis en place à partir de onze salariés ;
     L. 2315-28 (LEGIARTI000035624857), réunions du comité ; L. 2312-17 (LEGIARTI000051559706), consultations récurrentes ;
     L. 2312-22 (LEGIARTI000043975191), annuelles à défaut d'accord ; L. 2312-19 (LEGIARTI000036262394), périodicité par accord, trois ans au plus ;
     L. 2312-18 (LEGIARTI000052437125), la base rassemble les informations ; L. 2242-2 (LEGIARTI000036262221), GEPP, 300 salariés ;
@@ -365,8 +368,24 @@
     var lignes = [], attentes = [], cadences = [], notes = [];
     var effectif = d.effectif ? nombre(d.effectif.valeur) : null;
 
+    /* --- le comité n'est dû qu'à partir de onze salariés --- */
+    /* L. 2311-2 (LEGIARTI000035609353, lu au relais Légifrance le 9 septembre
+       2026, deux lectures espacées concordantes) : « Un comité social et
+       économique est mis en place dans les entreprises d'au moins onze
+       salariés. Sa mise en place n'est obligatoire que si l'effectif d'au
+       moins onze salariés est atteint pendant douze mois consécutifs. » En
+       dessous de onze, rien de ce qui suppose un comité n'est dû : réunions,
+       consultations, élections, documentation économique. La condition des
+       douze mois consécutifs n'est pas vérifiée ici : la fiche ne porte que
+       l'effectif du jour. */
+    var sansComite = effectif !== null && effectif < 11;
+    if (sansComite)
+      attentes.push({ t: "Comité social et économique : pas dû avant onze salariés.",
+        w: "L. 2311-2 : le comité est mis en place dans les entreprises d'au moins onze salariés. " +
+          "Effectif retenu : " + effectif + ". Ni réunions, ni consultations, ni élections à inscrire." });
+
     /* --- réunions du CSE : une cadence, pas une date --- */
-    if (effectif !== null) {
+    if (effectif !== null && !sansComite) {
       var mensuel = effectif >= 300;
       cadences.push({
         titre: "Réunions ordinaires du CSE",
@@ -377,7 +396,7 @@
         prov: d.effectif.source,
         detail: "Effectif retenu : " + effectif + " salariés.",
       });
-    } else {
+    } else if (effectif === null) {
       attentes.push({ t: "Réunions du CSE : effectif non renseigné.",
         w: "La périodicité des réunions dépend du seuil de trois cents salariés (L. 2315-28). Renseignez l'effectif ci-dessus." });
     }
@@ -468,7 +487,7 @@
     }
 
     /* --- consultations récurrentes du CSE --- */
-    if (effectif !== null || d.bdeseDerniereMaj) {
+    if ((effectif !== null || d.bdeseDerniereMaj) && !sansComite) {
       var CONSULTATIONS = ["les orientations stratégiques de l'entreprise",
         "la situation économique et financière de l'entreprise",
         "la politique sociale de l'entreprise, les conditions de travail et l'emploi"];
@@ -508,7 +527,9 @@
     }
 
     /* --- élections du CSE --- */
-    if (d.dateDernieresElections && estDate(d.dateDernieresElections.valeur)) {
+    if (sansComite) {
+      /* rien : pas de comité, pas d'élections à renouveler */
+    } else if (d.dateDernieresElections && estDate(d.dateDernieresElections.valeur)) {
       var elections = d.dateDernieresElections.valeur;
       var fin = plusMois(elections, 48);
       var engager = plusJours(fin, -90);

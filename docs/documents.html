@@ -10,39 +10,35 @@
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
      Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
 <script src="droits.js"></script>
-<!-- Générateur de documents pour la gestion quotidienne des relations du
-     travail : convocation et ordre du jour du CSE, trame de procès-verbal,
-     accord de méthode et procès-verbal de désaccord de la négociation
-     obligatoire, note d'information, réponse à une réclamation, procédure de
-     signalement harcèlement, canevas d'enquête interne — et, côté relations
-     individuelles, les trames de la discipline : convocation à entretien
-     préalable à sanction, notification d'avertissement, notification de mise à
-     pied disciplinaire, échelle des sanctions du règlement intérieur.
+<!-- LA MÊME LISTE QUE GERER.HTML, ET LE MÊME ÉCRAN DE DOCUMENT.
 
-     S'y ajoutent les cinq trames appelées par les parcours guidés
-     (docs/parcours.html) : mise en demeure, courrier d'alerte (danger grave et
-     imminent, atteinte aux droits des personnes, alerte économique), compte
-     rendu de réunion de commission, délibération de désignation des membres
-     d'une commission, résolution de recours à l'expert.
+     Écran 4 : un groupe en capitales, puis un document par ligne. Un mot, un
+     document. Écran 5 : le document seul à l'écran, déjà rempli avec la fiche
+     d'entreprise, ses champs en tête qui se glissent dans le texte à chaque
+     frappe, Télécharger en Word, Imprimer, « Voir le texte de loi » replié.
+     Le bouton Retour du bandeau, posé par droits.js, revient à la liste.
 
-     Et, depuis le 22 août 2026, les six trames du parcours « Installer le CSE :
-     la première réunion » : convocation à la réunion d'installation, ordre du
-     jour de l'installation, procès-verbal d'installation avec les résolutions
-     rédigées, règlement intérieur du comité, demande de la documentation
-     économique et financière de l'article L. 2312-57, et procès-verbal de
-     remise-reprise entre comité sortant et comité entrant. Ce dernier porte un
-     avertissement, parce qu'il le faut : AUCUN article du code du travail lu au
-     relais Légifrance le 22 août 2026 n'organise cette remise. L'article
-     R. 2323-38, qui l'imposait au comité d'entreprise, répond « trouvé : faux ».
-     Le modèle est donc une trame de bonne administration, et le dit.
+     Les vingt-trois modèles : convocation et ordre du jour du comité, trame
+     de procès-verbal, accord de méthode et procès-verbal de désaccord de la
+     négociation obligatoire, note d'information, réponse à une réclamation,
+     procédure de signalement harcèlement, canevas d'enquête interne ; côté
+     discipline, convocation à entretien préalable à sanction, notification
+     d'avertissement, notification de mise à pied disciplinaire, échelle des
+     sanctions du règlement intérieur ; les cinq trames appelées par les
+     parcours guidés (mise en demeure, courrier d'alerte, compte rendu de
+     commission, délibération de désignation, résolution de recours à
+     l'expert) ; et les six trames de l'installation du comité (convocation et
+     ordre du jour d'installation, procès-verbal d'installation, règlement
+     intérieur du comité, demande de la documentation économique et
+     financière de L. 2312-57, procès-verbal de remise-reprise, qui porte un
+     avertissement parce qu'aucun article lu n'organise cette remise).
 
      La page accepte « ?modele=<clé>&pre=<JSON encodé> » : elle ouvre le modèle
      demandé et y verse les valeurs transmises, dans les seuls champs que le
      modèle déclare et seulement là où le brouillon est vide.
 
-     Tout se passe dans le navigateur : un formulaire court, un document
-     généré à l'écran, imprimable en PDF et copiable en texte. Rien n'est
-     envoyé, rien n'est conservé ailleurs que sur ce poste (localStorage).
+     Tout se passe dans le navigateur. Rien n'est envoyé, rien n'est conservé
+     ailleurs que sur ce poste (localStorage).
 
      Chaque mention juridique s'appuie sur un article lu à la source et
      identifié par sa version (LEGIARTI), repris des textes vérifiés du
@@ -51,71 +47,57 @@
      docs/textes-documents.json pour les compléments vérifiés au relais. -->
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Le renvoi de tête, pour les modèles dont Juris Expert imprime la version
-     complète. Le modèle reste ici — il montre la structure et l'article ;
-     le renvoi dit seulement où se fabrique la feuille à signer. */
-  .renvoi-jx{font-size:13.5px;margin:0 0 14px;padding:10px 12px;max-width:70ch;
-    border-radius:0 3px 3px 0;background:var(--gris-f);border-left:3px solid var(--gris);
-    color:var(--gris);line-height:1.55}
-  .renvoi-jx a{color:var(--encre);font-weight:600}
-  .renvoi-jx a::after{content:" ↗";font-size:11px;color:var(--gris)}
+  body{font-size:18px;line-height:1.45}
+  main.wrap{max-width:560px;padding:0 16px var(--e7)}
+  main.wrap.large{max-width:760px}
+  .rappel-fiche{margin:14px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  button.doc-ligne{width:100%;border:0;border-bottom:1px solid var(--filet);border-radius:0;background:none;
+    color:var(--encre);font:400 18px/1.3 system-ui;text-align:left;justify-content:space-between;min-height:52px;padding:14px 0}
+  button.doc-ligne:hover{background:var(--creux);color:var(--accent);border-color:var(--filet)}
 
-  /* Le choix du modèle : huit cartes, une seule active. */
-  .modeles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:22px 0 0}
-  .modele{border:1px solid var(--filet);background:var(--surface);border-radius:4px;
-    padding:12px 14px;cursor:pointer;text-align:left;font:inherit;color:var(--corps)}
-  .modele b{display:block;color:var(--encre);font-size:15px;margin-bottom:3px}
-  .modele span{font-size:13px;color:var(--gris);line-height:1.45;display:block}
-  .modele:hover{border-color:var(--bleu)}
-  .modele.actif{border-color:var(--bleu);outline:2px solid var(--bleu);outline-offset:-1px}
-  .modele.actif b{color:var(--bleu)}
-  textarea{min-height:74px;font:14px/1.5 inherit}
-  .fonde{font-size:12.5px;color:var(--gris);margin:6px 0 0}
-  @media (max-width:560px){
-    .barre{gap:8px;padding:10px 0}
-    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
-    .barre button:first-child{flex:1 1 100%}
-  }
+  /* écran 5 : les champs, la feuille, les boutons */
+  .champs{margin:14px 0 0}
+  .champs label.ch.plein>.nom{color:var(--vert)}
+  .champs .cases{margin:0}
+  .barre{margin:14px 0 0}
+  details.loi{margin:var(--e2) 0 var(--e5)}
+  details.loi .c{font-size:var(--t2);line-height:1.5;color:var(--texte-2);padding:0 0 var(--e3)}
+  details.loi .ident{font-size:11px}
+  #avis{margin:14px 0 0}
 
-  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
-    border:1px solid var(--bleu);background:#eef2f9;color:var(--bleu);font-size:14px}
-  .avert{border:1px solid var(--orange);background:var(--orange-f);color:var(--orange);
-    padding:10px 12px;border-radius:3px;font-size:14px;margin:10px 0 0}
-
-  /* --- le document généré : une feuille --- */
-  #docu{display:none;margin-top:30px}
-  .feuille{background:var(--surface);border:1px solid var(--filet);border-radius:4px;
-    padding:clamp(22px,5vw,52px);max-width:820px;margin:0 auto;
-    font:15px/1.65 Georgia,"Times New Roman",serif;color:#1a1d22}
+  /* le document : une feuille */
+  .feuille{margin:14px 0 0;font:15.5px/1.6 Georgia,"Times New Roman",serif;color:var(--encre)}
   .feuille .entete{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
-    margin:0 0 26px;font-size:13.5px;color:#444}
-  .feuille .entete b{font-size:15px;color:#1a1d22}
-  .feuille h2.titre-doc{font:700 19px/1.3 Georgia,serif;color:#1a1d22;text-align:center;
+    margin:0 0 22px;font-size:14px;color:var(--texte-2)}
+  .feuille .entete b{font-size:15.5px;color:var(--encre)}
+  .feuille h2.titre-doc{font:700 18px/1.3 Georgia,serif;color:var(--encre);text-align:center;
     margin:0 0 4px;text-transform:uppercase;letter-spacing:.04em}
-  .feuille .sous-titre{text-align:center;font-size:14px;color:#444;margin:0 0 24px}
-  .feuille h3{font:700 15px/1.4 Georgia,serif;color:#1a1d22;margin:22px 0 6px}
+  .feuille .sous-titre{text-align:center;font-size:14px;color:var(--texte-2);margin:0 0 22px}
+  .feuille h3{font:700 15.5px/1.4 Georgia,serif;color:var(--encre);margin:20px 0 6px}
   .feuille p{margin:0 0 10px}
-  .feuille ol,.feuille ul{margin:0 0 10px;padding-left:24px}
+  .feuille ol,.feuille ul{margin:0 0 10px;padding-left:22px}
   .feuille li{margin:0 0 5px}
-  .feuille table{border-collapse:collapse;width:100%;font-size:13.5px;margin:0 0 12px}
-  .feuille th,.feuille td{border:1px solid #b9bec7;padding:6px 9px;text-align:left;vertical-align:top}
-  .feuille th{background:#eef0f4;font-weight:700}
-  .feuille .signatures{display:flex;gap:24px;flex-wrap:wrap;margin-top:34px}
-  .feuille .signatures>div{flex:1 1 220px;border-top:1px solid #b9bec7;padding-top:8px;font-size:13.5px}
-  .feuille .champ-vide{color:#777;font-style:italic}
-  .feuille .pied-textes{margin-top:36px;padding-top:10px;border-top:1px solid #d5d8de;
-    font:11.5px/1.55 system-ui;color:#8a9099}
+  .feuille table{border-collapse:collapse;width:100%;font-size:14px;margin:0 0 12px}
+  .feuille th,.feuille td{border:1px solid var(--filet-2);padding:6px 9px;text-align:left;vertical-align:top}
+  .feuille th{background:var(--creux);font-weight:700}
+  .feuille .tab{overflow-x:auto}
+  .feuille .signatures{display:flex;gap:24px;flex-wrap:wrap;margin-top:30px}
+  .feuille .signatures>div{flex:1 1 200px;border-top:1px solid var(--filet-2);padding-top:8px;font-size:14px}
+  .feuille .champ-vide{color:var(--texte-3);font-style:italic}
+  .feuille .pied-textes{margin-top:30px;padding-top:10px;border-top:1px solid var(--filet);
+    font:12px/1.55 system-ui;color:var(--texte-3)}
   .feuille .pied-textes .ident{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
+  .feuille .renvoi-jx{display:none}
 
-  /* À l'impression, seule la feuille sort — sans cadre ni fond d'écran. */
+  [hidden]{display:none !important}
   @media print{
     body{background:#fff}
-    .retour-barre,header,.presentation,.modeles,#form-bloc,.barre,#message,footer,h2.titre-zone,.avert{display:none !important}
-    .page{max-width:none;padding:0}
-    #docu{margin:0}
-    .feuille{border:none;border-radius:0;max-width:none;padding:0;font-size:12.5pt}
+    header.site,.rappel-fiche,.champs,.barre,details,#avis,#e-liste{display:none !important}
+    .wrap{max-width:none;padding:0}
+    .feuille{border:none;border-radius:0;max-width:none;padding:0;font-size:12pt;margin:0}
     .feuille .pied-textes{font-size:8pt}
-  }</style>
+  }
+</style>
 </head>
 <body>
 <header class="site">
@@ -127,104 +109,35 @@
   </div>
 </header>
 
-<div class="page">
+<main class="wrap" id="main">
 
-<div class="retour-barre">
-  <button type="button" id="btn-retour" class="retour">← Retour</button>
-  <span class="retour-ou">ou&nbsp;: <a href="./">recherche</a> · <a href="audit.html">licenciement</a>
-  · <a href="audit-cse.html">comité</a> · <a href="audit-pse.html">plan de sauvegarde</a>
-  · <a href="audit-bdese.html">base de données</a> · <a href="audit-nao.html">négociation (NAO)</a>
-  · <a href="audit-sst.html">santé-sécurité (SST)</a> · <a href="audit-discipline.html">discipline et règlement intérieur</a>
-  · <a href="parcours.html">parcours guidés</a> · <a href="agenda.html">agenda</a></span>
-</div>
+  <!-- écran 4 : la liste -->
+  <section id="e-liste">
+    <p class="rappel-fiche" id="rappel-fiche"></p>
+    <div id="liste"></div>
+  </section>
 
-<header>
-  <p class="fil">Application Jurisprudence</p>
-  <h1>Documents — relations collectives et discipline</h1>
-  <p class="chapo"><b>Cette page prépare les documents de la gestion quotidienne</b> — côté collectif :
-  convocation et ordre du jour du comité, trame de procès-verbal, accord de méthode et procès-verbal
-  de désaccord de la négociation obligatoire, note d'information, réponse écrite à une réclamation,
-  procédure de signalement harcèlement, canevas d'enquête interne ; côté individuel :
-  <b>convocation à entretien préalable à sanction, notification d'avertissement motivée, notification
-  de mise à pied disciplinaire, trame d'échelle des sanctions du règlement intérieur</b> ; et les
-  trames des <a href="parcours.html">parcours guidés</a> : <b>mise en demeure, courrier d'alerte,
-  compte rendu de réunion de commission, délibération de désignation des membres d'une commission,
-  résolution de recours à l'expert</b> ; et celles de l'installation du comité :
-  <b>convocation et ordre du jour de la réunion d'installation, procès-verbal
-  d'installation avec les résolutions rédigées, règlement intérieur du comité, demande de la
-  documentation économique et financière, procès-verbal de remise-reprise entre comités</b>.
-  Un formulaire court, un document à l'écran, imprimable en PDF et copiable en texte.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
-  que sur ce poste.</p>
-</header>
+  <!-- écran 5 : le document, seul -->
+  <section id="e-doc" hidden>
+    <form class="champs" id="formulaire" autocomplete="off" onsubmit="return false"></form>
+    <div id="avis"></div>
+    <div class="feuille" id="feuille"></div>
+    <div class="barre pile">
+      <button type="button" id="word">Télécharger en Word</button>
+      <button type="button" class="second" id="imprimer">Imprimer</button>
+    </div>
+    <details class="loi"><summary>Voir le texte de loi</summary><div class="c" id="loi"></div></details>
+  </section>
 
-<div class="presentation">
-  <h2>À quoi sert cette page</h2>
-  <p>Chaque modèle pose les quelques questions dont le document a besoin, puis le compose : les
-  mentions imposées par le code du travail y sont, chacune fondée sur un article lu à la source et
-  identifié par sa version en pied de document. Ce que vous saisissez reste sur ce poste, et le
-  brouillon de chaque modèle est retrouvé à la prochaine visite.</p>
-  <p>Chaque document porte sa <b>structure intégrale</b>, un <b>exemple fictif marqué
-  « [exemple] »</b> partout où le formulaire est vide — un modèle sans exemple n'est qu'une coquille,
-  un exemple non marqué serait un piège — et la liste des <b>champs à personnaliser</b> en fin de
-  document.</p>
-  <p>Un modèle peut être ouvert <b>déjà rempli</b> depuis une autre page : c'est ce que font les
-  <a href="parcours.html">parcours guidés</a>, dont chaque étape renvoie ici avec ce que le profil de
-  l'entreprise et les dates du dossier donnent déjà. Les valeurs proposées ne sont posées que dans les
-  champs du modèle, et seulement là où votre brouillon est vide : ce que vous avez saisi l'emporte
-  toujours.</p>
-  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne remplace ni la négociation ni le
-  conseil — elle donne une trame conforme aux textes, que vous restez libre d'adapter. Un champ non
-  rempli apparaît comme un exemple marqué ou comme un blanc à compléter, jamais comme une valeur
-  posée pour vraie. Elle ne lit aucune convention collective : ce que la vôtre impose en plus de la
-  loi — conseil de discipline, commission paritaire, avis préalable — doit être recopié à la main,
-  et c'est souvent ce qui décide du sort d'un litige.</p>
-</div>
-
-<h2 class="titre-zone">1. Choisissez un modèle</h2>
-<div class="modeles" id="modeles" role="tablist"></div>
-
-<h2 class="titre-zone">2. Renseignez le formulaire</h2>
-<div id="form-bloc"><form id="formulaire" autocomplete="off"></form></div>
-
-<div class="barre">
-  <button type="button" id="generer">Générer le document</button>
-  <button type="button" class="second" id="imprimer" disabled>Imprimer / PDF</button>
-  <button type="button" class="second" id="copier" disabled>Copier le texte</button>
-  <button type="button" class="second" id="vider">Effacer ce modèle</button>
-</div>
-
-<p id="message" role="status"></p>
-<div id="alerte"></div>
-
-<!-- Les deux boutons « Imprimer / PDF » et « Copier le texte » figuraient ici
-     une seconde fois, au-dessus du document. Un seul jeu, celui de la barre
-     d'actions ci-dessus, qui s'active dès que le document est composé. -->
-<div id="docu">
-  <div class="feuille" id="feuille"></div>
-</div>
-
-<footer>
-  <p>Les mentions juridiques de chaque modèle s'appuient sur des articles du code du travail lus à
-  la source (relais Légifrance de l'application) et identifiés par leur version — l'identifiant
-  figure en pied de chaque document généré. Cette page ne cite aucun article qu'elle n'a pas lu.</p>
-</footer>
-</div>
+</main>
 
 <script src="profil.js"></script>
-<script src="juris-expert.js"></script>
+<script src="audit-export.js"></script>
 <script>
 "use strict";
 (function () {
   var $ = function (id) { return document.getElementById(id); };
 
-  /* ------------------------------------------------------------------ */
-  /* Les textes. Chaque article cité ici a été lu à la source et porte   */
-  /* l'identifiant de la version lue. Provenance : les fichiers de       */
-  /* textes vérifiés du dépôt (moteur/cse/textes_cse.json,               */
-  /* moteur/nao/textes-nao.json, moteur/sst/textes-sst.json), et         */
-  /* docs/textes-documents.json pour D. 2315-26, vérifié au relais en    */
-  /* double lecture concordante.                                         */
-  /* ------------------------------------------------------------------ */
   var TEXTES = {
     "L2315-29": { id: "LEGIARTI000035624861", quoi: "ordre du jour établi conjointement par le président et le secrétaire ; consultations obligatoires inscrites de plein droit" },
     "L2315-30": { id: "LEGIARTI000035624863", quoi: "ordre du jour communiqué aux membres, à l'inspection du travail et à l'agent des services de prévention trois jours au moins avant la réunion" },
@@ -241,7 +154,7 @@
     "L2242-13": { id: "LEGIARTI000052437044", quoi: "à défaut d'accord de méthode : négociation chaque année sur la rémunération et sur l'égalité professionnelle, tous les trois ans sur la gestion des emplois à partir de trois cents salariés" },
     "L2242-5":  { id: "LEGIARTI000035627862", quoi: "si aucun accord n'a été conclu, procès-verbal de désaccord consignant, en leur dernier état, les propositions respectives des parties et les mesures que l'employeur entend appliquer unilatéralement ; dépôt à l'initiative de la partie la plus diligente" },
     "R2242-1":  { id: "LEGIARTI000036222825", quoi: "le procès-verbal de désaccord est déposé dans les conditions prévues à l'article D. 2231-2" },
-    /* Harcèlement — articles repris de moteur/sst/textes-sst.json, capturés au
+    /* Harcèlement, articles repris de moteur/sst/textes-sst.json, capturés au
        relais en lectures doubles concordantes avec critère de contenu. */
     "L1152-1":  { id: "LEGIARTI000006900818", quoi: "définition du harcèlement moral : agissements répétés ayant pour objet ou pour effet une dégradation des conditions de travail" },
     "L1152-2":  { id: "LEGIARTI000045391810", quoi: "protection contre les représailles : aucune mesure de l'article L. 1121-2 contre qui subit, refuse de subir, relate ou témoigne de bonne foi (harcèlement moral)" },
@@ -254,7 +167,7 @@
     "L2314-1":  { id: "LEGIARTI000037389707", quoi: "référent harcèlement sexuel et agissements sexistes désigné par le comité social et économique parmi ses membres" },
     "L4121-1":  { id: "LEGIARTI000035640828", quoi: "obligation de sécurité : l'employeur prend les mesures nécessaires pour protéger la santé physique et mentale des travailleurs" },
     "L4121-2":  { id: "LEGIARTI000033019913", quoi: "principes généraux de prévention ; la planification intègre les risques liés au harcèlement moral, au harcèlement sexuel et aux agissements sexistes (7°)" },
-    /* Discipline et règlement intérieur — articles repris de
+    /* Discipline et règlement intérieur, articles repris de
        moteur/discipline/textes-discipline.json, capturés au relais en lectures
        doubles concordantes avec critère de contenu, et relus à la source
        (29 articles, 29 concordants, aucun écart). */
@@ -278,7 +191,7 @@
     "R1332-3":  { id: "LEGIARTI000018536885", quoi: "le délai d'un mois expire à vingt-quatre heures le jour du mois suivant portant le même quantième ; à défaut, le dernier jour du mois ; prorogation au premier jour ouvrable si le terme est un samedi, un dimanche ou un jour férié ou chômé" },
     "L1333-1":  { id: "LEGIARTI000006901453", quoi: "le conseil de prud'hommes apprécie la régularité de la procédure et si les faits sont de nature à justifier une sanction ; si un doute subsiste, il profite au salarié" },
     "L1333-2":  { id: "LEGIARTI000006901454", quoi: "le conseil de prud'hommes peut annuler une sanction irrégulière en la forme, injustifiée ou disproportionnée à la faute commise" },
-    /* Commissions, expertise et droits d'alerte du comité — articles ajoutés
+    /* Commissions, expertise et droits d'alerte du comité, articles ajoutés
        pour les modèles appelés par les parcours guidés. Provenance :
        moteur/parcours/textes-parcours.json, capture du 21 août 2026, deux
        lectures espacées concordantes chacune, filtre par NOM du code
@@ -307,13 +220,13 @@
     "L2312-64": { id: "LEGIARTI000035611001", quoi: "le comité ou la commission économique peut se faire assister une fois par exercice de l'expert-comptable, convoquer le commissaire aux comptes et s'adjoindre deux salariés avec voix consultative" },
     "L2312-65": { id: "LEGIARTI000035611003", quoi: "le rapport conclut en émettant un avis sur l'opportunité de saisir l'organe d'administration ou de surveillance ; le comité en décide à la majorité des membres présents" },
     /* Installation du comité, règlement intérieur du comité, budgets, comptes
-       et transition entre comités — articles ajoutés pour les six modèles du
+       et transition entre comités, articles ajoutés pour les six modèles du
        parcours « Installer le CSE : la première réunion ». Provenance :
        moteur/parcours/textes-installation.json, capture du 22 août 2026, deux
        lectures espacées concordantes chacune, filtre par NOM du code
        (« Code du travail ») et critère de contenu contre les homonymes. */
     "L2315-23": { id: "LEGIARTI000035624835", quoi: "le comité est doté de la personnalité civile et gère son patrimoine ; il est présidé par l'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative ; le comité désigne, parmi ses membres titulaires, un secrétaire et un trésorier" },
-    "L2315-24": { id: "LEGIARTI000036761946", quoi: "le comité détermine, dans un règlement intérieur, les modalités de son fonctionnement et celles de ses rapports avec les salariés ; sauf accord de l'employeur, ce règlement ne peut comporter de clauses lui imposant des obligations ne résultant pas de dispositions légales — cet accord constitue un engagement unilatéral de l'employeur, dénonçable à l'issue d'un délai raisonnable et après information des membres" },
+    "L2315-24": { id: "LEGIARTI000036761946", quoi: "le comité détermine, dans un règlement intérieur, les modalités de son fonctionnement et celles de ses rapports avec les salariés ; sauf accord de l'employeur, ce règlement ne peut comporter de clauses lui imposant des obligations ne résultant pas de dispositions légales, cet accord constitue un engagement unilatéral de l'employeur, dénonçable à l'issue d'un délai raisonnable et après information des membres" },
     "L2315-3":  { id: "LEGIARTI000035651256", quoi: "secret professionnel pour les questions relatives aux procédés de fabrication ; obligation de discrétion à l'égard des informations revêtant un caractère confidentiel et présentées comme telles par l'employeur" },
     "L2315-4":  { id: "LEGIARTI000035651253", quoi: "le recours à la visioconférence peut être autorisé par accord entre l'employeur et les membres élus ; en l'absence d'accord, il est limité à trois réunions par année civile" },
     "L2315-7":  { id: "LEGIARTI000035651243", quoi: "l'employeur laisse le temps nécessaire à l'exercice de leurs fonctions aux titulaires et, à partir de cinq cent un salariés, aux représentants syndicaux ; le nombre d'heures fixé par décret ne peut être inférieur à dix heures par mois en dessous de cinquante salariés et à seize heures dans les autres entreprises" },
@@ -340,7 +253,7 @@
     "L2315-71": { id: "LEGIARTI000036262527", quoi: "au plus tard trois jours avant la séance plénière d'approbation, les membres chargés d'arrêter les comptes les communiquent aux membres du comité, accompagnés du rapport de gestion" },
     "L2315-72": { id: "LEGIARTI000035627368", quoi: "le comité porte à la connaissance des salariés de l'entreprise, par tout moyen, ses comptes annuels accompagnés du rapport de gestion" },
     "L2315-75": { id: "LEGIARTI000035627374", quoi: "les comptes annuels et les pièces justificatives qui s'y rapportent sont conservés pendant dix ans à compter de la clôture de l'exercice auquel ils se rapportent" },
-    "R2312-52": { id: "LEGIARTI000036413340", quoi: "en cas de cessation définitive de l'activité de l'entreprise, le comité décide de l'affectation des biens dont il dispose ; la dévolution du solde se fait au crédit d'un autre comité ou d'institutions sociales d'intérêt général — les biens ne peuvent être répartis entre les salariés ou entre les membres du comité" }
+    "R2312-52": { id: "LEGIARTI000036413340", quoi: "en cas de cessation définitive de l'activité de l'entreprise, le comité décide de l'affectation des biens dont il dispose ; la dévolution du solde se fait au crédit d'un autre comité ou d'institutions sociales d'intérêt général, les biens ne peuvent être répartis entre les salariés ou entre les membres du comité" }
   };
   function refArt(n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }
 
@@ -368,7 +281,7 @@
     return Math.round((new Date(b + "T12:00:00") - new Date(a + "T12:00:00")) / 86400000);
   }
 
-  /* Les jours ouvrables — tous les jours sauf le dimanche et les jours fériés.
+  /* Les jours ouvrables, tous les jours sauf le dimanche et les jours fériés.
      Cette page ne tient pas le calendrier des jours fériés : elle compte les
      jours non dominicaux et le dit là où le résultat est serré. */
   function joursOuvrablesEntre(a, b) {
@@ -407,7 +320,7 @@
     var morceaux = numeros.map(function (n) {
       return "art. " + refArt(n) + ' <span class="ident">' + TEXTES[n].id + "</span>";
     });
-    return '<div class="pied-textes">Textes cités, lus à la source — code du travail, ' +
+    return '<div class="pied-textes">Textes cités, lus à la source, code du travail, ' +
       morceaux.join(" · ") +
       ". Document préparé avec l'application Jurisprudence ; il reste à relire et à adapter avant usage.</div>";
   }
@@ -422,7 +335,7 @@
   /* ------------------------------------------------------------------ */
   /* La fiche client est tenue par docs/profil.js : une seule définition pour
      toute l'application. Si elle n'est pas chargée, la lecture directe de la
-     clé reste en place — cette page n'a jamais dépendu d'un autre script. */
+     clé reste en place, cette page n'a jamais dépendu d'un autre script. */
   function lireProfil() {
     try {
       var p = window.Profil ? window.Profil.lire()
@@ -465,7 +378,7 @@
           aide: "L'ordre du jour est communiqué trois jours au moins avant la réunion (art. L. 2315-30)." }
       ]},
       { titre: "L'ordre du jour", champs: [
-        { c: "consultations", nom: "Consultations récurrentes à inscrire (inscrites de plein droit — art. L. 2315-29)", t: "cases", pleine: true, options: [
+        { c: "consultations", nom: "Consultations récurrentes à inscrire (inscrites de plein droit, art. L. 2315-29)", t: "cases", pleine: true, options: [
           "Consultation sur les orientations stratégiques de l'entreprise",
           "Consultation sur la situation économique et financière de l'entreprise",
           "Consultation sur la politique sociale, les conditions de travail et l'emploi"
@@ -481,7 +394,7 @@
       var pts = [];
       (v.consultations || []).forEach(function (c) { pts.push(c); });
       if ((v.pointSSCT || []).length)
-        pts.push("Santé, sécurité et conditions de travail (réunion consacrée, en tout ou partie, à ces attributions — art. L. 2315-27 du code du travail)");
+        pts.push("Santé, sécurité et conditions de travail (réunion consacrée, en tout ou partie, à ces attributions, art. L. 2315-27 du code du travail)");
       lignes(v.points).forEach(function (l) { pts.push(l); });
       var liste = pts.length
         ? "<ol>" + pts.map(function (p) { return "<li>" + e(p) + "</li>"; }).join("") + "</ol>"
@@ -540,7 +453,7 @@
         { c: "excuses", nom: "Absents excusés, suppléants remplaçants, invités (un par ligne)", t: "textarea", pleine: true }
       ]},
       { titre: "Les délibérations", champs: [
-        { c: "points", nom: "Points examinés : un point par ligne, sous la forme « Intitulé — résumé des échanges et délibération, résultat du vote le cas échéant »", t: "textarea", pleine: true,
+        { c: "points", nom: "Points examinés : un point par ligne, sous la forme « Intitulé, résumé des échanges et délibération, résultat du vote le cas échéant »", t: "textarea", pleine: true,
           aide: "À défaut d'accord, le procès-verbal contient au moins le résumé des délibérations et la décision motivée de l'employeur sur les propositions de la précédente réunion (art. D. 2315-26)." },
         { c: "reponsesEmployeur", nom: "Décision motivée de l'employeur sur les propositions de la précédente réunion", t: "textarea", pleine: true }
       ]}
@@ -549,14 +462,14 @@
       var pts = lignes(v.points);
       var corps = pts.length
         ? pts.map(function (p, i) {
-            var m = p.split(/\s+—\s+|\s+--\s+/);
+            var m = p.split(/\s+-\s+|\s+--\s+/);
             return "<h3>" + (i + 1) + ". " + e(m[0]) + "</h3><p>" +
-              (m.length > 1 ? e(m.slice(1).join(" — ")) : vide("résumé des échanges, délibération, résultat du vote")) + "</p>";
+              (m.length > 1 ? e(m.slice(1).join(", ")) : vide("résumé des échanges, délibération, résultat du vote")) + "</p>";
           }).join("")
         : "<p>" + vide("points examinés et délibérations") + "</p>";
       return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
         '<h2 class="titre-doc">Procès-verbal de la réunion<br>du comité social et économique</h2>' +
-        '<p class="sous-titre">Réunion du ' + chDate(v.dateReunion, "date") + " — " + ch(v.lieu, "lieu") + "</p>" +
+        '<p class="sous-titre">Réunion du ' + chDate(v.dateReunion, "date") + ", " + ch(v.lieu, "lieu") + "</p>" +
         "<h3>Présences</h3>" +
         "<p>Président : " + ch(v.president, "nom et qualité") + "<br>Secrétaire : " +
         ch(v.secretaire, "nom du secrétaire") + "</p>" +
@@ -564,10 +477,10 @@
         (lignes(v.excuses).length ? "<p>Excusés, remplaçants, invités :</p><ul>" + lignes(v.excuses).map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>" : "") +
         "<h3>Délibérations</h3>" + corps +
         "<h3>Suites données par l'employeur</h3><p>" +
-        ch(v.reponsesEmployeur, "décision motivée de l'employeur sur les propositions faites lors de la précédente réunion — art. L. 2315-34 et D. 2315-26") + "</p>" +
+        ch(v.reponsesEmployeur, "décision motivée de l'employeur sur les propositions faites lors de la précédente réunion, art. L. 2315-34 et D. 2315-26") + "</p>" +
         "<h3>Établissement, transmission et diffusion</h3>" +
         "<p>Le présent procès-verbal est établi par le secrétaire du comité et transmis à l'employeur " +
-        "dans le délai fixé par accord ou, à défaut, dans les quinze jours suivant la réunion — " +
+        "dans le délai fixé par accord ou, à défaut, dans les quinze jours suivant la réunion, " +
         "trois jours dans le cadre de la consultation prévue à l'article L. 1233-30, un jour lorsque " +
         "l'entreprise est en redressement ou en liquidation judiciaire (art. L. 2315-34 et D. 2315-26 " +
         "du code du travail). L'employeur fait connaître, lors de la réunion suivant cette transmission, " +
@@ -589,11 +502,11 @@
         { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
         { c: "representant", nom: "Représentant de l'entreprise (nom, qualité)", t: "text" },
         { c: "syndicats", nom: "Organisations syndicales signataires (une par ligne : organisation, délégué syndical)", t: "textarea", pleine: true },
-        { c: "duree", nom: "Durée de l'accord, en années (au plus quatre — art. L. 2242-11)", t: "number" },
+        { c: "duree", nom: "Durée de l'accord, en années (au plus quatre, art. L. 2242-11)", t: "number" },
         { c: "dateSignature", nom: "Date de signature", t: "date" }
       ]},
       { titre: "Les cinq mentions obligatoires (art. L. 2242-11)", champs: [
-        { c: "themes", nom: "1° Thèmes des négociations et périodicité de chacun — un par ligne, sous la forme « Thème — périodicité »", t: "textarea", pleine: true,
+        { c: "themes", nom: "1° Thèmes des négociations et périodicité de chacun, un par ligne, sous la forme « Thème, périodicité »", t: "textarea", pleine: true,
           aide: "La périodicité choisie ne peut excéder quatre ans pour la rémunération, le temps de travail et le partage de la valeur ajoutée, l'égalité professionnelle et la qualité de vie et des conditions de travail, et la gestion des emplois et des parcours professionnels." },
         { c: "contenu", nom: "2° Contenu de chacun des thèmes", t: "textarea", pleine: true },
         { c: "calendrier", nom: "3° Calendrier et lieux des réunions", t: "textarea", pleine: true },
@@ -608,8 +521,8 @@
       var themes = lignes(v.themes);
       var tableau = themes.length
         ? "<table><tr><th>Thème</th><th>Périodicité</th></tr>" + themes.map(function (t) {
-            var m = t.split(/\s+—\s+|\s+--\s+/);
-            return "<tr><td>" + e(m[0]) + "</td><td>" + (m[1] ? e(m.slice(1).join(" — ")) : vide("périodicité")) + "</td></tr>";
+            var m = t.split(/\s+-\s+|\s+--\s+/);
+            return "<tr><td>" + e(m[0]) + "</td><td>" + (m[1] ? e(m.slice(1).join(", ")) : vide("périodicité")) + "</td></tr>";
           }).join("") + "</table>"
         : "<p>" + vide("thèmes et périodicités") + "</p>";
       return enteteFeuille(v.entreprise, chDate(v.dateSignature, "date de signature")) +
@@ -619,22 +532,22 @@
         ch(v.representant, "nom et qualité") + ", d'une part, et les organisations syndicales " +
         "représentatives signataires, d'autre part :</p>" +
         (lignes(v.syndicats).length ? "<ul>" + lignes(v.syndicats).map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>" : "<p>" + vide("organisations syndicales signataires") + "</p>") +
-        "<h3>Article 1 — Thèmes des négociations et périodicité</h3>" +
+        "<h3>Article 1, Thèmes des négociations et périodicité</h3>" +
         "<p>Les thèmes des négociations et leur périodicité sont fixés comme suit, de telle sorte " +
         "qu'au moins tous les quatre ans soient négociés les thèmes mentionnés aux 1° et 2° de " +
         "l'article L. 2242-1 et aux articles L. 2242-2 et L. 2242-2-1 du code du travail " +
         "(art. L. 2242-11, 1°) :</p>" + tableau +
-        bloc("Article 2 — Contenu de chacun des thèmes (art. L. 2242-11, 2°)", v.contenu, "contenu de chaque thème") +
-        bloc("Article 3 — Calendrier et lieux des réunions (art. L. 2242-11, 3°)", v.calendrier, "calendrier et lieux") +
-        bloc("Article 4 — Informations remises aux négociateurs et date de leur remise (art. L. 2242-11, 4°)", v.informations, "informations et date de remise") +
-        bloc("Article 5 — Modalités de suivi des engagements souscrits (art. L. 2242-11, 5°)", v.suivi, "modalités de suivi") +
-        "<h3>Article 6 — Durée de l'accord</h3>" +
+        bloc("Article 2, Contenu de chacun des thèmes (art. L. 2242-11, 2°)", v.contenu, "contenu de chaque thème") +
+        bloc("Article 3, Calendrier et lieux des réunions (art. L. 2242-11, 3°)", v.calendrier, "calendrier et lieux") +
+        bloc("Article 4, Informations remises aux négociateurs et date de leur remise (art. L. 2242-11, 4°)", v.informations, "informations et date de remise") +
+        bloc("Article 5, Modalités de suivi des engagements souscrits (art. L. 2242-11, 5°)", v.suivi, "modalités de suivi") +
+        "<h3>Article 6, Durée de l'accord</h3>" +
         "<p>Le présent accord est conclu pour une durée de <b>" + ch(v.duree, "durée") +
         " an(s)</b>. Cette durée ne peut excéder quatre ans (art. L. 2242-11, dernier alinéa). " +
         "En cas de non-respect de ses stipulations ou à son échéance sans renouvellement, " +
         "l'employeur engage les négociations selon la périodicité prévue à l'article L. 2242-13 " +
         "du code du travail.</p>" +
-        "<h3>Article 7 — Dépôt</h3>" +
+        "<h3>Article 7, Dépôt</h3>" +
         "<p>Le présent accord sera déposé dans les conditions prévues par voie réglementaire.</p>" +
         '<div class="signatures"><div>Pour l\'entreprise<br>' + ch(v.representant, "nom et qualité") +
         "</div><div>Pour les organisations syndicales<br>" +
@@ -659,7 +572,7 @@
         { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
         { c: "representant", nom: "Représentant de l'entreprise (nom, qualité)", t: "text" },
         { c: "theme", nom: "Thème de la négociation", t: "text",
-          aide: "Par exemple : rémunération, temps de travail et partage de la valeur ajoutée — ou égalité professionnelle et qualité de vie et des conditions de travail." },
+          aide: "Par exemple : rémunération, temps de travail et partage de la valeur ajoutée, ou égalité professionnelle et qualité de vie et des conditions de travail." },
         { c: "reunions", nom: "Dates des réunions de négociation (une par ligne)", t: "textarea", pleine: true },
         { c: "syndicats", nom: "Organisations syndicales parties à la négociation (une par ligne : organisation, délégué syndical)", t: "textarea", pleine: true },
         { c: "dateEtablissement", nom: "Date d'établissement du procès-verbal", t: "date" }
@@ -674,7 +587,7 @@
       var reunions = lignes(v.reunions);
       return enteteFeuille(v.entreprise, chDate(v.dateEtablissement, "date d'établissement")) +
         '<h2 class="titre-doc">Procès-verbal de désaccord</h2>' +
-        '<p class="sous-titre">Négociation obligatoire — ' + ch(v.theme, "thème de la négociation") +
+        '<p class="sous-titre">Négociation obligatoire, ' + ch(v.theme, "thème de la négociation") +
         " (art. L. 2242-5 du code du travail)</p>" +
         "<p>La négociation obligatoire portant sur " + ch(v.theme, "thème") + " a été engagée entre " +
         ch(v.entreprise, "entreprise") + ", représentée par " + ch(v.representant, "nom et qualité") +
@@ -692,10 +605,10 @@
         "<h3>2. Propositions de l'employeur, en leur dernier état</h3><p>" +
         ch(v.propositionsEmployeur, "dernier état des propositions de l'employeur") + "</p>" +
         "<h3>3. Mesures que l'employeur entend appliquer unilatéralement</h3><p>" +
-        ch(v.mesures, "mesures unilatérales envisagées — ou « néant »") + "</p>" +
+        ch(v.mesures, "mesures unilatérales envisagées, ou « néant »") + "</p>" +
         "<h3>4. Dépôt</h3>" +
         "<p>Le présent procès-verbal donne lieu à dépôt, à l'initiative de la partie la plus " +
-        "diligente, dans les conditions prévues par voie réglementaire (art. L. 2242-5) — " +
+        "diligente, dans les conditions prévues par voie réglementaire (art. L. 2242-5), " +
         "c'est-à-dire dans les conditions prévues à l'article D. 2231-2 du code du travail " +
         "(art. R. 2242-1).</p>" +
         '<div class="signatures"><div>Pour l\'entreprise<br>' + ch(v.representant, "nom et qualité") +
@@ -719,7 +632,7 @@
         { c: "dateNote", nom: "Date de la note", t: "date" },
         { c: "objet", nom: "Objet", t: "text" },
         { c: "contexte", nom: "Contexte : pourquoi cette note, maintenant", t: "textarea", pleine: true },
-        { c: "regle", nom: "Règle applicable — citez le texte ou l'accord, avec sa référence exacte", t: "textarea", pleine: true,
+        { c: "regle", nom: "Règle applicable, citez le texte ou l'accord, avec sa référence exacte", t: "textarea", pleine: true,
           aide: "Ne citez un article que vérifié à la source ; la référence saisie ici est reproduite telle quelle, sous votre responsabilité." },
         { c: "application", nom: "Application pratique : ce qui change concrètement, pour qui, comment", t: "textarea", pleine: true },
         { c: "vigueur", nom: "Entrée en vigueur", t: "date" },
@@ -729,7 +642,7 @@
     composer: function (v) {
       return enteteFeuille(v.entreprise, chDate(v.dateNote, "date de la note")) +
         '<h2 class="titre-doc">Note d\'information</h2>' +
-        '<p class="sous-titre">' + ch(v.emetteur, "émetteur") + " — à l'attention de " +
+        '<p class="sous-titre">' + ch(v.emetteur, "émetteur") + ", à l'attention de " +
         ch(v.destinataires, "destinataires") + "</p>" +
         "<h3>Objet</h3><p><b>" + ch(v.objet, "objet de la note") + "</b></p>" +
         "<h3>Contexte</h3><p>" + ch(v.contexte, "contexte") + "</p>" +
@@ -741,7 +654,7 @@
         (v.contact ? "<p>Pour toute question : " + e(v.contact) + ".</p>" : "") +
         '<div class="signatures"><div>' + ch(v.emetteur, "émetteur") + "</div></div>" +
         '<div class="pied-textes">Document préparé avec l\'application Jurisprudence ; la référence ' +
-        "des textes cités dans la note relève de son rédacteur — il reste à relire et à adapter avant usage.</div>";
+        "des textes cités dans la note relève de son rédacteur, il reste à relire et à adapter avant usage.</div>";
     }
   },
 
@@ -817,7 +730,7 @@
         { c: "delaiAccuse", nom: "Délai indicatif d'accusé de réception (en jours ouvrés)", t: "number",
           aide: "Aucun texte ne fixe ce délai : il est indicatif, et la procédure le dit. S'engager sur un délai court et le tenir est une preuve de sérieux." },
         { c: "delaiTraitement", nom: "Délai indicatif d'examen initial du signalement (en jours ouvrés)", t: "number" },
-        { c: "coordonnees", nom: "Coordonnées externes (médecin du travail, inspection du travail et nom de l'inspecteur, Défenseur des droits) — une par ligne", t: "textarea", pleine: true,
+        { c: "coordonnees", nom: "Coordonnées externes (médecin du travail, inspection du travail et nom de l'inspecteur, Défenseur des droits), une par ligne", t: "textarea", pleine: true,
           aide: "Ces coordonnées font partie de l'information obligatoire (art. D. 1151-1) : adresse et numéro d'appel de chacun." }
       ]}
     ],
@@ -827,7 +740,7 @@
       var eff = parseInt(v.effectif, 10);
       return enteteFeuille(v.entreprise, chDate(v.dateNote, "date de la procédure")) +
         '<h2 class="titre-doc">Procédure de signalement<br>des faits de harcèlement</h2>' +
-        '<p class="sous-titre">Harcèlement moral, harcèlement sexuel et agissements sexistes — art. L. 1152-4 et L. 1153-5 du code du travail</p>' +
+        '<p class="sous-titre">Harcèlement moral, harcèlement sexuel et agissements sexistes, art. L. 1152-4 et L. 1153-5 du code du travail</p>' +
         "<h3>1. Objet</h3>" +
         "<p>La présente procédure organise le signalement et le traitement des faits de harcèlement " +
         "moral (art. L. 1152-1 du code du travail), de harcèlement sexuel et des faits assimilés " +
@@ -840,10 +753,10 @@
         "<ul>" +
         (eff >= 250 || v.referentEmployeur
           ? "<li>Référent employeur harcèlement sexuel et agissements sexistes" +
-            (eff >= 250 ? " (obligatoire à partir de 250 salariés — art. L. 1153-5-1)" : "") + " : " +
+            (eff >= 250 ? " (obligatoire à partir de 250 salariés, art. L. 1153-5-1)" : "") + " : " +
             ch(v.referentEmployeur, "nom, fonction, contact") + "</li>" : "") +
         "<li>Référent harcèlement du comité social et économique (art. L. 2314-1) : " +
-        ch(v.referentCSE, "nom, contact — ou « comité non encore doté d'un référent »") + "</li>" +
+        ch(v.referentCSE, "nom, contact, ou « comité non encore doté d'un référent »") + "</li>" +
         "<li>" + ch(v.contactRH, "autre destinataire interne : service RH, supérieur hiérarchique, direction") + "</li>" +
         "</ul>" +
         "<p>Canaux ouverts :</p>" +
@@ -856,22 +769,22 @@
         "l'identité de l'auteur du signalement, celle de la personne visée et celle des témoins ne " +
         "sont communiquées qu'aux personnes ayant besoin d'en connaître pour le traitement. Les " +
         "documents recueillis sont conservés de manière restreinte et séparée.</p>" +
-        "<h3>4. Traitement du signalement — délais indicatifs</h3>" +
+        "<h3>4. Traitement du signalement, délais indicatifs</h3>" +
         "<p>Sauf circonstance particulière, l'entreprise s'engage à :</p><ul>" +
         "<li>accuser réception du signalement sous " + ch(v.delaiAccuse, "délai") + " jour(s) ouvré(s) ;</li>" +
-        "<li>procéder à un premier examen — audition de l'auteur du signalement, appréciation des " +
-        "mesures conservatoires utiles — sous " + ch(v.delaiTraitement, "délai") + " jour(s) ouvré(s) ;</li>" +
+        "<li>procéder à un premier examen, audition de l'auteur du signalement, appréciation des " +
+        "mesures conservatoires utiles, sous " + ch(v.delaiTraitement, "délai") + " jour(s) ouvré(s) ;</li>" +
         "<li>décider des suites : enquête interne, mesures d'éloignement provisoires, classement " +
         "motivé si les faits ne sont manifestement pas constitués.</li></ul>" +
-        "<p>Ces délais sont indicatifs — aucun texte n'en fixe : leur dépassement ne prive pas le " +
+        "<p>Ces délais sont indicatifs, aucun texte n'en fixe : leur dépassement ne prive pas le " +
         "signalement d'effet, et l'obligation de l'employeur de mettre un terme aux faits établis " +
         "(art. L. 1153-5) ne dépend d'aucun délai.</p>" +
         "<h3>5. Protection contre les représailles</h3>" +
         "<p>Aucune personne ayant subi ou refusé de subir des faits de harcèlement, ou ayant, de " +
         "bonne foi, relaté ou témoigné de tels faits, ne peut faire l'objet des mesures mentionnées " +
-        "à l'article L. 1121-2 du code du travail — sanction, licenciement ou mesure discriminatoire, " +
+        "à l'article L. 1121-2 du code du travail, sanction, licenciement ou mesure discriminatoire, " +
         "directe ou indirecte (art. L. 1152-2 et L. 1153-2). Les auteurs d'un signalement de " +
-        "mauvaise foi — c'est-à-dire avec la connaissance de la fausseté des faits — s'exposent en " +
+        "mauvaise foi, c'est-à-dire avec la connaissance de la fausseté des faits, s'exposent en " +
         "revanche à une sanction disciplinaire.</p>" +
         "<h3>6. Coordonnées des autorités et services compétents (art. D. 1151-1)</h3>" +
         (coord.length ? "<ul>" + coord.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
@@ -891,7 +804,7 @@
         { c: "entreprise", nom: "Dénomination de l'entreprise", t: "text", profil: "entreprise" },
         { c: "dateSignalement", nom: "Date du signalement", t: "date" },
         { c: "dateOuverture", nom: "Date d'ouverture de l'enquête", t: "date" },
-        { c: "enqueteurs", nom: "Personnes chargées de l'enquête (noms, fonctions — un par ligne)", t: "textarea", pleine: true,
+        { c: "enqueteurs", nom: "Personnes chargées de l'enquête (noms, fonctions, un par ligne)", t: "textarea", pleine: true,
           aide: "Choisir des personnes sans lien hiérarchique direct avec les intéressés ; une conduite paritaire (direction + représentant du personnel) renforce la crédibilité de l'enquête." },
         { c: "objet", nom: "Faits signalés, tels que signalés (sans qualification)", t: "textarea", pleine: true }
       ]},
@@ -904,7 +817,7 @@
       { titre: "Le rapport et les suites", champs: [
         { c: "dateRapport", nom: "Date (prévue) du rapport", t: "date" },
         { c: "destinataires", nom: "Destinataires du rapport", t: "text",
-          aide: "Par exemple : la direction, et pour information le référent CSE — dans le respect de la confidentialité." }
+          aide: "Par exemple : la direction, et pour information le référent CSE, dans le respect de la confidentialité." }
       ]}
     ],
     composer: function (v) {
@@ -931,8 +844,8 @@
         (aud.length ? "<p>Personnes entendues ou à entendre :</p><ul>" + aud.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
                     : "<p>Personnes entendues ou à entendre : " + vide("auteur du signalement, personne visée, témoins") + "</p>") +
         "<p>Chaque audition donne lieu à un compte rendu écrit, relu et signé par la personne " +
-        "entendue, qui peut y porter ses observations. Les questions sont ouvertes et factuelles — " +
-        "qui, quoi, quand, où, en présence de qui — et les faits rapportés sont représentés " +
+        "entendue, qui peut y porter ses observations. Les questions sont ouvertes et factuelles, " +
+        "qui, quoi, quand, où, en présence de qui, et les faits rapportés sont représentés " +
         "fidèlement, dans les termes de la personne entendue, sans reformulation qui les qualifie.</p>" +
         "<p><b>Confidentialité :</b> chaque personne entendue est informée du caractère confidentiel " +
         "de l'audition, de l'usage qui sera fait du compte rendu, et de la protection contre les " +
@@ -941,13 +854,13 @@
         "la substance des faits qui lui sont prêtés, et mise en mesure de s'expliquer sur chacun " +
         "d'eux ; elle peut proposer des témoins et produire des éléments.</p>" +
         "<h3>4. Mesures conservatoires</h3>" +
-        "<p>" + ch(v.mesuresConservatoires, "mesures prises pendant l'enquête — ou « néant »") + "</p>" +
+        "<p>" + ch(v.mesuresConservatoires, "mesures prises pendant l'enquête, ou « néant »") + "</p>" +
         "<h3>5. Rapport</h3>" +
         "<p>Le rapport, prévu pour le " + chDate(v.dateRapport, "date prévue") + ", est remis à " +
         ch(v.destinataires, "destinataires") + ". Il comprend : la chronologie de l'enquête, la " +
         "liste des auditions et des pièces, les faits que l'enquête permet de tenir pour établis, " +
         "ceux qu'elle ne permet pas d'établir, et les éléments recueillis dans un sens comme dans " +
-        "l'autre — sans omettre ceux qui ne confortent pas la conclusion.</p>" +
+        "l'autre, sans omettre ceux qui ne confortent pas la conclusion.</p>" +
         "<h3>6. Suites</h3>" +
         "<p>Selon les conclusions : mesures d'organisation, sanction disciplinaire si les faits " +
         "sont établis, information de l'auteur du signalement et de la personne visée sur les " +
@@ -956,10 +869,10 @@
         '<div class="signatures"><div>Les chargés de l\'enquête<br>' +
         (enq.length ? e(enq.join(" ; ")) : vide("noms")) + "</div></div>" +
         piedTextes(["L4121-1", "L1152-4", "L1153-5"]) +
-        '<div class="pied-textes">Jurisprudence — Soc., 18 juin 2025, n° 23-19.022, publié : la ' +
+        '<div class="pied-textes">Jurisprudence, Soc., 18 juin 2025, n° 23-19.022, publié : la ' +
         "valeur probante d'une enquête interne relève de l'appréciation souveraine des juges du " +
         "fond, au regard le cas échéant des autres éléments de preuve. D'où ce canevas : une " +
-        "enquête documentée est un élément de preuve que le juge apprécie — pas davantage.</div>";
+        "enquête documentée est un élément de preuve que le juge apprécie, pas davantage.</div>";
     },
     verifier: function (v) {
       var j = joursEntre(v.dateSignalement, v.dateOuverture);
@@ -970,7 +883,7 @@
   },
 
   /* ================================================================== */
-  /* Discipline et règlement intérieur — quatre trames.                 */
+  /* Discipline et règlement intérieur, quatre trames.                 */
   /*                                                                    */
   /* Même standard que les autres modèles du dépôt : la STRUCTURE       */
   /* INTÉGRALE du document, un EXEMPLE FICTIF marqué « [exemple] »      */
@@ -982,7 +895,7 @@
   {
     cle: "convocation-sanction",
     nom: "Convocation à entretien préalable à sanction",
-    resume: "Les quatre mentions de R. 1332-1 — objet, date, heure et lieu, droit d'être assisté par une personne du personnel — et le délai de deux mois de L. 1332-4.",
+    resume: "Les quatre mentions de R. 1332-1, objet, date, heure et lieu, droit d'être assisté par une personne du personnel, et le délai de deux mois de L. 1332-4.",
     articles: ["L1332-2", "R1332-1", "L1332-4", "L1332-3", "L1331-1"],
     sections: [
       { titre: "L'entreprise et le salarié", champs: [
@@ -1001,7 +914,7 @@
         { c: "lieu", nom: "Lieu (adresse précise, bureau)", t: "text" },
         { c: "dateConnaissance", nom: "Date à laquelle l'employeur a eu connaissance des faits", t: "date",
           aide: "Point de départ du délai de deux mois de l'article L. 1332-4." },
-        { c: "objet", nom: "Objet de l'entretien — les faits, en une phrase, sans qualification", t: "textarea", pleine: true,
+        { c: "objet", nom: "Objet de l'entretien, les faits, en une phrase, sans qualification", t: "textarea", pleine: true,
           aide: "R. 1332-1 impose d'indiquer l'objet de l'entretien. Décrire les faits sans les qualifier ni annoncer la sanction : elle n'est pas encore décidée." },
         { c: "misePied", nom: "Mise à pied conservatoire", t: "cases", pleine: true, options: [
           "Une mise à pied conservatoire à effet immédiat est prononcée dans l'attente de la décision"
@@ -1038,7 +951,7 @@
         '<div class="signatures"><div>' + chEx(v.representant, "Jean MOREAU, directeur des ressources humaines") +
         "<br>" + ch(v.entreprise, "dénomination de l'entreprise") + "</div></div>" +
         aPersonnaliser(["le nom et l'emploi du salarié", "la date, l'heure et le lieu exacts de l'entretien",
-          "l'objet — les faits, décrits sans qualification", "le mode de remise effectivement retenu",
+          "l'objet, les faits, décrits sans qualification", "le mode de remise effectivement retenu",
           "le délai que votre convention collective impose éventuellement entre la convocation et l'entretien",
           "la mise à pied conservatoire, à ne cocher que si elle est réellement indispensable"]) +
         piedTextes(["L1332-2", "R1332-1", "L1332-4", "L1332-3", "L1331-1"]);
@@ -1057,8 +970,8 @@
         return "L'entretien serait antérieur à la convocation : l'une des deux dates est erronée.";
       if (j !== null && j < 1)
         return "L'entretien est fixé le jour même de la convocation. Le code du travail ne fixe pas de " +
-          "délai minimum entre la convocation et l'entretien en matière disciplinaire — contrairement au " +
-          "licenciement — mais votre convention collective en prévoit souvent un, et le salarié doit " +
+          "délai minimum entre la convocation et l'entretien en matière disciplinaire, contrairement au " +
+          "licenciement, mais votre convention collective en prévoit souvent un, et le salarié doit " +
           "pouvoir préparer sa défense et trouver la personne qui l'assistera. Vérifiez-la.";
       return "";
     }
@@ -1082,11 +995,11 @@
       { titre: "Les faits et la procédure", champs: [
         { c: "dateConnaissance", nom: "Date à laquelle l'employeur a eu connaissance des faits", t: "date",
           aide: "Point de départ du délai de deux mois de l'article L. 1332-4." },
-        { c: "faits", nom: "Les faits reprochés — un par ligne, datés et circonstanciés", t: "textarea", pleine: true,
+        { c: "faits", nom: "Les faits reprochés, un par ligne, datés et circonstanciés", t: "textarea", pleine: true,
           aide: "« Aucune sanction ne peut être prise à l'encontre du salarié sans que celui-ci soit informé, dans le même temps et par écrit, des griefs retenus contre lui » (art. L. 1332-1). Un avertissement qui se borne à « votre comportement » ne met pas le salarié en mesure de le discuter." },
         { c: "entretien", nom: "Un entretien préalable a-t-il été tenu ?", t: "cases", pleine: true, options: [
           "Un entretien préalable a été tenu avant la présente notification"
-        ], aide: "L'entretien n'est pas dû pour un avertissement sans incidence sur la présence, la fonction, la carrière ou la rémunération (art. L. 1332-2) — SAUF si le règlement intérieur ou la convention collective subordonnent le licenciement à l'existence de sanctions antérieures : la clause institue alors une garantie de fond et l'entretien devient obligatoire (Soc., 3 mai 2011, n° 10-14.104 ; Soc., 22 septembre 2021, n° 18-22.204)." },
+        ], aide: "L'entretien n'est pas dû pour un avertissement sans incidence sur la présence, la fonction, la carrière ou la rémunération (art. L. 1332-2), SAUF si le règlement intérieur ou la convention collective subordonnent le licenciement à l'existence de sanctions antérieures : la clause institue alors une garantie de fond et l'entretien devient obligatoire (Soc., 3 mai 2011, n° 10-14.104 ; Soc., 22 septembre 2021, n° 18-22.204)." },
         { c: "dateEntretien", nom: "Date de l'entretien, le cas échéant", t: "date" },
         { c: "explications", nom: "Explications recueillies et réponse apportée", t: "textarea", pleine: true },
         { c: "attendu", nom: "Ce qui est attendu pour l'avenir", t: "textarea", pleine: true }
@@ -1127,7 +1040,7 @@
         "<p>Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées.</p>" +
         '<div class="signatures"><div>' + chEx(v.representant, "Jean MOREAU, directeur des ressources humaines") +
         "<br>" + ch(v.entreprise, "dénomination de l'entreprise") + "</div></div>" +
-        aPersonnaliser(["les faits, datés et circonstanciés — c'est la seule partie qui fasse la valeur du document",
+        aPersonnaliser(["les faits, datés et circonstanciés, c'est la seule partie qui fasse la valeur du document",
           "les explications réellement recueillies", "ce qui est attendu pour l'avenir",
           "le mode de notification", "la vérification préalable : votre règlement intérieur ou votre convention collective imposent-ils un entretien avant tout avertissement ?"]) +
         piedTextes(["L1332-1", "L1331-1", "L1332-4", "L1332-2", "L1331-2", "L1333-2"]);
@@ -1177,7 +1090,7 @@
         { c: "dateConnaissance", nom: "Date à laquelle l'employeur a eu connaissance des faits", t: "date" },
         { c: "dateEntretien", nom: "Date de l'entretien préalable", t: "date",
           aide: "L'entretien est toujours dû : la mise à pied disciplinaire suspend le contrat et la rémunération, elle a donc une incidence sur la présence et la rémunération (art. L. 1332-2)." },
-        { c: "faits", nom: "Les faits reprochés — un par ligne, datés et circonstanciés", t: "textarea", pleine: true },
+        { c: "faits", nom: "Les faits reprochés, un par ligne, datés et circonstanciés", t: "textarea", pleine: true },
         { c: "explications", nom: "Explications recueillies et réponse apportée", t: "textarea", pleine: true }
       ]},
       { titre: "La sanction", champs: [
@@ -1304,36 +1217,36 @@
           ? "L'effectif déclaré (" + eff + " salariés) atteint le seuil de cinquante : l'établissement d'un règlement intérieur est obligatoire (art. L. 1311-2 du code du travail), au terme d'un délai de douze mois à compter du franchissement du seuil."
           : "L'effectif déclaré (" + eff + " salariés) est inférieur à cinquante : l'établissement d'un règlement intérieur n'est pas obligatoire (art. L. 1311-2). S'il en existe un, il obéit néanmoins à toutes les règles de contenu et à toutes les formalités des articles L. 1321-1 à L. 1321-6, qui ne posent aucun seuil.");
       return enteteFeuille(v.entreprise, chExDate(v.dateNote, "2026-08-20")) +
-        '<h2 class="titre-doc">Règlement intérieur<br>Titre « Discipline » — nature et échelle des sanctions</h2>' +
-        '<p class="sous-titre">Trame à insérer dans le règlement intérieur — art. L. 1321-1, 3° du code du travail</p>' +
+        '<h2 class="titre-doc">Règlement intérieur<br>Titre « Discipline », nature et échelle des sanctions</h2>' +
+        '<p class="sous-titre">Trame à insérer dans le règlement intérieur, art. L. 1321-1, 3° du code du travail</p>' +
         (seuil ? "<p>" + e(seuil) + "</p>" : "") +
-        "<h3>Article — Définition de la sanction</h3>" +
+        "<h3>Article, Définition de la sanction</h3>" +
         "<p>Constitue une sanction toute mesure, autre que les observations verbales, prise par " +
         "l'employeur à la suite d'un agissement du salarié considéré par lui comme fautif, que cette " +
         "mesure soit de nature à affecter immédiatement ou non la présence du salarié dans " +
         "l'entreprise, sa fonction, sa carrière ou sa rémunération (art. L. 1331-1 du code du travail).</p>" +
-        "<h3>Article — Échelle des sanctions</h3>" +
+        "<h3>Article, Échelle des sanctions</h3>" +
         "<p>Selon la gravité des faits, leur caractère répété et les circonstances, l'une des " +
         "sanctions suivantes pourra être prononcée, sans que cet ordre impose une progression " +
         "obligatoire :</p><ol>" +
         liste.map(function (x) {
           var sup = "";
           if (/mise à pied/i.test(x))
-            sup = " — d'une durée maximale de " + chEx(v.dureeMaxMisePied, "5") + " jour(s) ouvré(s), " +
+            sup = ", d'une durée maximale de " + chEx(v.dureeMaxMisePied, "5") + " jour(s) ouvré(s), " +
               "entraînant la suspension du contrat de travail et de la rémunération pendant cette durée";
           if (/rétrogradation|mutation/i.test(x))
-            sup = " — cette sanction emportant modification du contrat de travail, elle ne peut être " +
+            sup = ", cette sanction emportant modification du contrat de travail, elle ne peut être " +
               "imposée au salarié : son refus ne constitue pas une faute, l'employeur pouvant alors " +
               "prononcer une autre sanction";
           return "<li>" + marque(x) + sup + "</li>";
         }).join("") + "</ol>" +
-        "<h3>Article — Sanctions interdites</h3>" +
+        "<h3>Article, Sanctions interdites</h3>" +
         "<p>Les amendes et autres sanctions pécuniaires sont interdites ; toute disposition ou " +
         "stipulation contraire est réputée non écrite (art. L. 1331-2 du code du travail). Aucune " +
         "retenue sur la rémunération ne peut être opérée à titre de sanction ; la perte de " +
         "rémunération résultant d'une mise à pied disciplinaire régulièrement prononcée est la " +
         "conséquence de la suspension du contrat, et non une sanction pécuniaire.</p>" +
-        "<h3>Article — Droits de la défense</h3>" +
+        "<h3>Article, Droits de la défense</h3>" +
         "<p>Aucune sanction ne peut être prise sans que le salarié soit informé, dans le même temps et " +
         "par écrit, des griefs retenus contre lui (art. L. 1332-1 du code du travail).</p>" +
         "<p>Lorsque l'employeur envisage une sanction, il convoque le salarié en lui précisant l'objet " +
@@ -1350,21 +1263,21 @@
         "que ce fait ait donné lieu dans le même délai à l'exercice de poursuites pénales " +
         "(art. L. 1332-4). Aucune sanction antérieure de plus de trois ans à l'engagement des poursuites " +
         "ne peut être invoquée à l'appui d'une nouvelle sanction (art. L. 1332-5).</p>" +
-        "<h3>Article — Procédure conventionnelle</h3>" +
+        "<h3>Article, Procédure conventionnelle</h3>" +
         "<p>" + chEx(v.procedureConventionnelle, "Conformément à l'article 27 de la convention collective applicable, toute sanction autre que l'avertissement est précédée de l'avis d'une commission paritaire de discipline, saisie au moins huit jours avant la décision et composée de deux représentants de la direction et de deux représentants du personnel.") + "</p>" +
         '<p class="note">La consultation d\'un organisme chargé, en vertu d\'une disposition conventionnelle ' +
         "ou d'un règlement intérieur, de donner son avis sur un licenciement envisagé constitue une " +
         "garantie de fond : le licenciement prononcé sans cette consultation ne peut avoir de cause " +
         "réelle et sérieuse (Soc., 8 septembre 2021, n° 19-15.039). Ne recopiez ici que ce que votre " +
         "convention prévoit réellement : cette page ne lit pas les conventions collectives.</p>" +
-        "<h3>Article — Rappels imposés par l'article L. 1321-2</h3>" +
+        "<h3>Article, Rappels imposés par l'article L. 1321-2</h3>" +
         "<p>Le présent règlement rappelle : 1° les dispositions relatives aux droits de la défense des " +
         "salariés définies aux articles L. 1332-1 à L. 1332-3 du code du travail ou par la convention " +
         "collective applicable ; 2° les dispositions relatives aux harcèlements moral et sexuel et aux " +
         "agissements sexistes prévues par le code du travail ; 3° l'existence du dispositif de " +
         "protection des lanceurs d'alerte prévu au chapitre II de la loi n° 2016-1691 du " +
         "9 décembre 2016.</p>" +
-        "<h3>Article — Limites du pouvoir réglementaire de l'employeur</h3>" +
+        "<h3>Article, Limites du pouvoir réglementaire de l'employeur</h3>" +
         "<p>Le présent règlement ne comporte aucune disposition contraire aux lois et règlements ni aux " +
         "stipulations des conventions et accords collectifs applicables, aucune restriction aux droits " +
         "des personnes et aux libertés individuelles et collectives qui ne serait justifiée par la " +
@@ -1384,7 +1297,7 @@
         "s'appliquent également en cas de modification ou de retrait de clauses.</p>" +
         '<div class="signatures"><div>Pour l\'entreprise<br>' + ch(v.entreprise, "dénomination") + "</div></div>" +
         aPersonnaliser(["l'échelle réellement retenue et son ordre",
-          "la durée maximale de la mise à pied — sans elle, la sanction n'est pas licite",
+          "la durée maximale de la mise à pied, sans elle, la sanction n'est pas licite",
           "la clause conventionnelle, recopiée depuis votre convention collective",
           "les dates des formalités et de l'entrée en vigueur",
           "l'articulation avec les autres titres du règlement (santé et sécurité, participation au rétablissement de conditions protectrices)"]) +
@@ -1496,7 +1409,7 @@
       if (v.sens === "de l'employeur à un salarié")
         return "Adressée par l'employeur à un salarié, une mise en demeure qui reproche un agissement " +
           "tenu pour fautif peut, selon son contenu, constituer une sanction au sens de l'article " +
-          "L. 1331-1 — constitue une sanction toute mesure, autre que les observations verbales, prise " +
+          "L. 1331-1, constitue une sanction toute mesure, autre que les observations verbales, prise " +
           "à la suite d'un agissement considéré comme fautif. Si vous entendez sanctionner, suivez la " +
           "procédure de l'article L. 1332-2 ; si vous entendez seulement demander l'exécution d'une " +
           "obligation, tenez-vous-en à la demande, sans qualification de faute.";
@@ -1507,7 +1420,7 @@
   {
     cle: "alerte",
     nom: "Courrier d'alerte",
-    resume: "Les trois alertes du comité : danger grave et imminent, atteinte aux droits des personnes, situation économique préoccupante — chacune avec sa forme et sa suite.",
+    resume: "Les trois alertes du comité : danger grave et imminent, atteinte aux droits des personnes, situation économique préoccupante, chacune avec sa forme et sa suite.",
     articles: ["L4131-2", "L4132-2", "D4132-1", "L2312-59", "L2312-63", "L2312-64", "L2312-65"],
     sections: [
       { titre: "L'auteur et l'objet", champs: [
@@ -1537,7 +1450,7 @@
       var dgi = t.indexOf("danger") === 0, droits = t.indexOf("atteinte") === 0, eco = t.indexOf("situation") === 0;
       var postes = lignes(v.postes), pers = lignes(v.personnes);
       var titre = dgi ? "Avis de danger grave et imminent"
-        : droits ? "Alerte — atteinte aux droits des personnes"
+        : droits ? "Alerte, atteinte aux droits des personnes"
         : eco ? "Alerte économique" : "Courrier d'alerte";
       var arts = dgi ? ["L4131-2", "L4132-2", "D4132-1"]
         : droits ? ["L2312-59"] : eco ? ["L2312-63", "L2312-64", "L2312-65"]
@@ -1553,7 +1466,7 @@
           ? "<h3>Postes de travail concernés</h3>" +
             (postes.length
               ? "<ul>" + postes.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
-              : "<ul><li>" + exemple("Ligne de conditionnement n° 3 — poste d'ensachage") + "</li></ul>")
+              : "<ul><li>" + exemple("Ligne de conditionnement n° 3, poste d'ensachage") + "</li></ul>")
           : "") +
         "<h3>" + (dgi ? "Nature et cause du danger" : droits ? "Atteinte constatée" : "Faits de nature à affecter de manière préoccupante la situation économique") + "</h3>" +
         "<p>" + chEx(v.nature, dgi
@@ -1591,9 +1504,9 @@
               "de l'article L. 2312-59.</p>"
             : "<p>La demande d'explications est inscrite de droit à l'ordre du jour de la prochaine " +
               "séance du comité. Si le comité n'obtient pas de réponse suffisante, ou si celle-ci " +
-              "confirme le caractère préoccupant de la situation, il établit un rapport — établi par la " +
+              "confirme le caractère préoccupant de la situation, il établit un rapport, établi par la " +
               "commission économique dans les entreprises d'au moins mille salariés en l'absence " +
-              "d'accord — transmis à l'employeur et au commissaire aux comptes. Le comité peut se faire " +
+              "d'accord, transmis à l'employeur et au commissaire aux comptes. Le comité peut se faire " +
               "assister, une fois par exercice comptable, de l'expert-comptable, convoquer le " +
               "commissaire aux comptes et s'adjoindre deux salariés avec voix consultative. Le rapport " +
               "conclut en émettant un avis sur l'opportunité de saisir l'organe d'administration ou de " +
@@ -1657,7 +1570,7 @@
         '<h2 class="titre-doc">Compte rendu de réunion<br>de la ' +
         chEx(v.commission, "commission santé, sécurité et conditions de travail") + "</h2>" +
         '<p class="sous-titre">Réunion du ' + chExDate(v.dateReunion, "2026-09-15") +
-        " — " + chEx(v.lieu, "salle du conseil, siège social") + "</p>" +
+        ", " + chEx(v.lieu, "salle du conseil, siège social") + "</p>" +
         "<h3>Présidence et rapporteur</h3>" +
         "<p>Présidence : " + chEx(v.president, "M. Julien Marchand, directeur d'établissement") + "<br>" +
         "Rapporteur : " + chEx(v.rapporteur, "Mme Sonia Delcroix") + "</p>" +
@@ -1679,7 +1592,7 @@
             "<li>" + exemple("Examen du projet de mise à jour du document unique") + "</li>" +
             "<li>" + exemple("Préparation des propositions au comité") + "</li></ol>") +
         "<h3>Travaux</h3>" +
-        "<p>" + chEx(v.travaux, "Point 1 — la commission a constaté que le protecteur de la trémie avait été remplacé le 8 septembre 2026 et que la consigne d'arrêt machine avait été affichée au poste. Point 2 — la commission a relevé que trois unités de travail sur douze n'avaient pas été revues depuis 2024 et propose de les traiter en priorité.") + "</p>" +
+        "<p>" + chEx(v.travaux, "Point 1, la commission a constaté que le protecteur de la trémie avait été remplacé le 8 septembre 2026 et que la consigne d'arrêt machine avait été affichée au poste. Point 2, la commission a relevé que trois unités de travail sur douze n'avaient pas été revues depuis 2024 et propose de les traiter en priorité.") + "</p>" +
         "<h3>Propositions soumises à la délibération du comité</h3>" +
         (props.length
           ? "<ol>" + props.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
@@ -1766,8 +1679,8 @@
             "comité ; le règlement intérieur du comité fixe les modalités de leur désignation et la " +
             "durée de leur mandat (art. L. 2315-44-3).</p>"
           : "<p>Les membres sont désignés par le comité parmi ses membres, par une résolution adoptée " +
-            "selon les modalités définies à l'article L. 2315-32 — soit à la majorité des membres " +
-            "présents —, pour une durée qui prend fin avec celle du mandat des membres élus du comité " +
+            "selon les modalités définies à l'article L. 2315-32, soit à la majorité des membres " +
+            "présents -, pour une durée qui prend fin avec celle du mandat des membres élus du comité " +
             "(art. L. 2315-39).</p>") +
         (troisieme
           ? "<p>Un troisième collège électoral étant institué, un siège au moins est attribué à un élu " +
@@ -1777,10 +1690,10 @@
         "<p>Sièges à pourvoir : <b>" + chEx(v.sieges, "4") + "</b>.</p>" +
         (cand.length
           ? "<ul>" + cand.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
-          : "<ul><li>" + exemple("Mme Sonia Delcroix — second collège — titulaire") + "</li>" +
-            "<li>" + exemple("M. Karim Belaïd — premier collège — titulaire") + "</li>" +
-            "<li>" + exemple("Mme Hélène Roux — troisième collège — suppléante") + "</li>" +
-            "<li>" + exemple("M. Antoine Rivière — premier collège — suppléant") + "</li></ul>") +
+          : "<ul><li>" + exemple("Mme Sonia Delcroix, second collège, titulaire") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd, premier collège, titulaire") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux, troisième collège, suppléante") + "</li>" +
+            "<li>" + exemple("M. Antoine Rivière, premier collège, suppléant") + "</li></ul>") +
         "<h3>Résolution et vote</h3>" +
         "<p>Résolution soumise au vote : <i>« Le comité social et économique désigne les membres de la " +
         chEx(v.commission, "commission santé, sécurité et conditions de travail") +
@@ -1800,10 +1713,10 @@
         "<h3>Membres désignés</h3>" +
         (des.length
           ? "<ol>" + des.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
-          : "<ol><li>" + exemple("Mme Sonia Delcroix — second collège") + "</li>" +
-            "<li>" + exemple("M. Karim Belaïd — premier collège") + "</li>" +
-            "<li>" + exemple("Mme Hélène Roux — troisième collège") + "</li>" +
-            "<li>" + exemple("M. Antoine Rivière — premier collège") + "</li></ol>") +
+          : "<ol><li>" + exemple("Mme Sonia Delcroix, second collège") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd, premier collège") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux, troisième collège") + "</li>" +
+            "<li>" + exemple("M. Antoine Rivière, premier collège") + "</li></ol>") +
         "<h3>Durée du mandat</h3>" +
         "<p>Le mandat des membres désignés prend fin avec celui des membres élus du comité, soit le " +
         chExDate(v.dateFinMandat, "2029-11-30") + ".</p>" +
@@ -1895,7 +1808,7 @@
         "<h3>Cas de recours</h3><p>" +
         chEx(v.cas, "risque grave, identifié et actuel (art. L. 2315-94, 1°)") + "</p>" +
         "<h3>Objet et périmètre de la mission</h3><p>" +
-        chEx(v.objet, "Analyse du risque constaté sur la ligne de conditionnement n° 3 — organisation du travail, état des protecteurs, historique des presque-accidents depuis janvier 2025 — et propositions de mesures de prévention") + "</p>" +
+        chEx(v.objet, "Analyse du risque constaté sur la ligne de conditionnement n° 3, organisation du travail, état des protecteurs, historique des presque-accidents depuis janvier 2025, et propositions de mesures de prévention") + "</p>" +
         "<h3>Expert désigné</h3><p>" +
         chEx(v.expert, "Cabinet Prévention & Travail, expert habilité, agrément n° 2024-118") + "</p>" +
         "<h3>Vote</h3>" +
@@ -1927,9 +1840,9 @@
         "jours (art. R. 2315-45). L'expert notifie à l'employeur le coût prévisionnel, l'étendue et la " +
         "durée de l'expertise dans un délai de dix jours à compter de sa désignation (art. R. 2315-46).</p>" +
         "<table><tr><th>Désignation</th><td>" + chExDate(v.dateDesignation, "2026-09-15") + "</td></tr>" +
-        "<tr><th>Demande d'informations complémentaires — au plus tard</th><td>" +
+        "<tr><th>Demande d'informations complémentaires, au plus tard</th><td>" +
         (d ? e(dateFr(plus(3))) : exemple(dateFr("2026-09-18"))) + "</td></tr>" +
-        "<tr><th>Notification du coût, de l'étendue et de la durée — au plus tard</th><td>" +
+        "<tr><th>Notification du coût, de l'étendue et de la durée, au plus tard</th><td>" +
         (d ? e(dateFr(plus(10))) : exemple(dateFr("2026-09-25"))) + "</td></tr></table>" +
         '<div class="signatures"><div>Le secrétaire du comité<br>' + chEx(v.secretaire, "Mme Sonia Delcroix") + "</div>" +
         "<div>Le président du comité<br>" + chEx(v.president, "M. Julien Marchand") + "</div></div>" +
@@ -1953,12 +1866,12 @@
   /* réunion ». Deux d'entre eux touchent à des questions que le code ne  */
   /* règle pas, et le disent au lieu de les combler :                     */
   /*                                                                      */
-  /* — la CONVOCATION d'installation. L'article L. 2315-29 veut un ordre  */
+  /*, la CONVOCATION d'installation. L'article L. 2315-29 veut un ordre  */
   /*   du jour établi par le président ET le secrétaire ; à l'installation*/
   /*   il n'y a pas encore de secrétaire. Le modèle est donc établi par le*/
   /*   seul président, et l'écrit dans le corps du document.              */
   /*                                                                      */
-  /* — la REMISE-REPRISE entre comité sortant et comité entrant. Aucun    */
+  /*, la REMISE-REPRISE entre comité sortant et comité entrant. Aucun    */
   /*   article du code du travail lu au relais le 22 août 2026 ne         */
   /*   l'organise ; R. 2323-38, qui l'imposait au comité d'entreprise,    */
   /*   répond « trouvé : faux ». Le modèle est une trame prudente : il    */
@@ -2003,7 +1916,7 @@
       return enteteFeuille(v.entreprise, chDate(v.dateEnvoi, "date d'envoi")) +
         '<h2 class="titre-doc">Convocation à la réunion d\'installation<br>du comité social et économique</h2>' +
         '<p class="sous-titre">Réunion du ' + chExDate(v.dateReunion, "2026-09-21") +
-        " à " + chEx(v.heure, "09:00") + " — " + chEx(v.lieu, "salle du conseil, siège social") + "</p>" +
+        " à " + chEx(v.heure, "09:00") + ", " + chEx(v.lieu, "salle du conseil, siège social") + "</p>" +
         "<h3>Objet</h3>" +
         "<p>À la suite des élections dont les résultats ont été proclamés le " +
         chExDate(v.dateElections, "2026-09-08") + ", les membres de la délégation du personnel du " +
@@ -2011,8 +1924,8 @@
         " sont convoqués à la réunion d'installation du comité.</p>" +
         "<h3>Qui établit la présente convocation, et pourquoi</h3>" +
         "<p>L'ordre du jour de chaque réunion du comité est établi conjointement par le président et " +
-        "le secrétaire (art. L. 2315-29). Le comité n'ayant pas encore de secrétaire — sa désignation " +
-        "est précisément l'objet de cette réunion —, la présente convocation et l'ordre du jour qui " +
+        "le secrétaire (art. L. 2315-29). Le comité n'ayant pas encore de secrétaire, sa désignation " +
+        "est précisément l'objet de cette réunion -, la présente convocation et l'ordre du jour qui " +
         "l'accompagne sont établis par le seul président. <b>Aucune disposition du code du travail ne " +
         "règle ce cas :</b> il ne s'agit pas d'une règle légale mais d'une nécessité, et elle cessera " +
         "dès la présente réunion. À compter de la réunion suivante, l'ordre du jour sera établi " +
@@ -2029,15 +1942,15 @@
         "<h3>Membres convoqués</h3>" +
         (dest.length
           ? "<ul>" + dest.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
-          : "<ul><li>" + exemple("Mme Sonia Delcroix — titulaire — second collège") + "</li>" +
-            "<li>" + exemple("M. Karim Belaïd — titulaire — premier collège") + "</li>" +
-            "<li>" + exemple("Mme Hélène Roux — suppléante — premier collège") + "</li>" +
-            "<li>" + exemple("M. Antoine Rivière — suppléant — second collège") + "</li></ul>") +
+          : "<ul><li>" + exemple("Mme Sonia Delcroix, titulaire, second collège") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd, titulaire, premier collège") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux, suppléante, premier collège") + "</li>" +
+            "<li>" + exemple("M. Antoine Rivière, suppléant, second collège") + "</li></ul>") +
         "<p>Le suppléant assiste aux réunions en l'absence du titulaire (art. L. 2314-1).</p>" +
         "<h3>Autres destinataires de l'ordre du jour</h3>" +
         (autres.length
           ? "<ul>" + autres.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
-          : "<ul><li>" + exemple("Agent de contrôle de l'inspection du travail — unité de contrôle des Ardennes") + "</li>" +
+          : "<ul><li>" + exemple("Agent de contrôle de l'inspection du travail, unité de contrôle des Ardennes") + "</li>" +
             "<li>" + exemple("Agent des services de prévention de la caisse d'assurance retraite et de la santé au travail") + "</li></ul>") +
         "<h3>Modalités de tenue</h3>" +
         "<p>" + chEx(v.visio, "réunion en présentiel") + ". En l'absence d'accord entre l'employeur et " +
@@ -2108,7 +2021,7 @@
         ["Adoption du règlement intérieur du comité",
          "Modalités de fonctionnement du comité et de ses rapports avec les salariés ; modalités d'arrêté des comptes et contenu du rapport de gestion (art. L. 2315-24, L. 2315-68 et L. 2315-69). Sauf accord de l'employeur, il ne peut lui imposer d'obligations ne résultant pas de dispositions légales."],
         ["Ouverture des budgets et des comptes bancaires",
-         "Subvention de fonctionnement — 0,20 % ou 0,22 % de la masse salariale brute selon l'effectif (art. L. 2315-61) — et contribution aux activités sociales et culturelles (art. L. 2312-81) ; désignation des mandataires des comptes."],
+         "Subvention de fonctionnement, 0,20 % ou 0,22 % de la masse salariale brute selon l'effectif (art. L. 2315-61), et contribution aux activités sociales et culturelles (art. L. 2312-81) ; désignation des mandataires des comptes."],
         ["Moyens du comité",
          "Heures de délégation et leur répartition, local aménagé et matériel, affichage, déplacements, visioconférence, accès à la base de données économiques, sociales et environnementales (art. L. 2315-7, L. 2315-15, L. 2315-25, L. 2315-4 et L. 2312-18)."],
         ["Formations des élus",
@@ -2125,7 +2038,7 @@
         "Transition avec le comité sortant : reddition de gestion, remise des documents et des archives":
           "Constatation de l'état du patrimoine, de la trésorerie, des engagements et des contrats en cours ; remise des comptes annuels arrêtés et approuvés, du rapport de gestion, du rapport sur les conventions et des pièces justificatives (art. L. 2315-64 à L. 2315-72 et L. 2315-75) ; sort du règlement intérieur du comité précédent. Aucun article du code ne fixe la forme de cette remise : c'est au règlement intérieur du comité de la régler (art. L. 2315-24).",
         "Désignation des représentants au conseil d'administration ou de surveillance":
-          "Deux membres de la délégation du personnel — quatre là où trois collèges sont institués —, ou un seul membre titulaire lorsque le conseil comprend déjà un administrateur élu ou désigné par les salariés (art. L. 2312-72 et L. 2312-75).",
+          "Deux membres de la délégation du personnel, quatre là où trois collèges sont institués -, ou un seul membre titulaire lorsque le conseil comprend déjà un administrateur élu ou désigné par les salariés (art. L. 2312-72 et L. 2312-75).",
         "Désignation des membres de la commission économique (au moins mille salariés)":
           "Au maximum cinq membres représentants du personnel dont au moins un cadre, désignés par le comité parmi ses membres (art. L. 2315-46 et L. 2315-47).",
         "Désignation des membres de la commission des marchés":
@@ -2142,8 +2055,8 @@
       return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
         '<h2 class="titre-doc">Ordre du jour<br>Réunion d\'installation du comité social et économique</h2>' +
         '<p class="sous-titre">' + chExDate(v.dateReunion, "2026-09-21") + " à " +
-        chEx(v.heure, "09:00") + " — " + chEx(v.lieu, "salle du conseil, siège social") +
-        (v.duree ? " — durée prévue : " + e(v.duree) : " — " + exemple("durée prévue : trois heures")) + "</p>" +
+        chEx(v.heure, "09:00") + ", " + chEx(v.lieu, "salle du conseil, siège social") +
+        (v.duree ? ", durée prévue : " + e(v.duree) : ", " + exemple("durée prévue : trois heures")) + "</p>" +
         "<p>Ordre du jour établi par le président du comité, " +
         chEx(v.president, "M. Julien Marchand, directeur général") + ". Le comité n'ayant pas encore " +
         "de secrétaire, l'établissement conjoint prévu par l'article L. 2315-29 n'est pas possible " +
@@ -2186,7 +2099,7 @@
           "Élection du trésorier",
           "Désignation du référent harcèlement",
           "Désignation des membres de la CSSCT",
-          "Désignation des membres de la CSSCT — siège du troisième collège",
+          "Désignation des membres de la CSSCT, siège du troisième collège",
           "Adoption du règlement intérieur du comité",
           "Désignation des représentants au conseil d'administration ou de surveillance",
           "Transition avec le comité sortant"
@@ -2218,7 +2131,7 @@
       /* Les résolutions se numérotent dans l'ordre où elles sont rendues : un
          numéro fixe par nature de résolution laisserait des trous dès qu'une
          séance n'en adopte pas une. */
-      var rn = 0, num = function () { return "Résolution n° " + (++rn) + " — "; };
+      var rn = 0, num = function () { return "Résolution n° " + (++rn) + ", "; };
       var bloc = function (titre, texte, resultat) {
         return "<h3>" + num() + e(titre) + "</h3><p><i>« " + texte + " »</i></p><p>" + resultat + "</p>";
       };
@@ -2226,7 +2139,7 @@
         "Membres présents ayant voix délibérative : <b>" + chEx(v.votants, "11") + "</b>.";
       return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la réunion")) +
         '<h2 class="titre-doc">Procès-verbal de la réunion d\'installation<br>du comité social et économique</h2>' +
-        '<p class="sous-titre">Séance du ' + chExDate(v.dateReunion, "2026-09-21") + " — " +
+        '<p class="sous-titre">Séance du ' + chExDate(v.dateReunion, "2026-09-21") + ", " +
         chEx(v.lieu, "salle du conseil, siège social") + "</p>" +
         "<h3>Constitution du comité</h3>" +
         "<p>À la suite des élections dont les résultats ont été proclamés le " +
@@ -2241,10 +2154,10 @@
         "<h3>Membres présents</h3>" +
         (pres.length
           ? "<ul>" + pres.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
-          : "<ul><li>" + exemple("Mme Sonia Delcroix — titulaire — second collège") + "</li>" +
-            "<li>" + exemple("M. Karim Belaïd — titulaire — premier collège") + "</li>" +
-            "<li>" + exemple("Mme Hélène Roux — titulaire — premier collège") + "</li>" +
-            "<li>" + exemple("M. Antoine Rivière — titulaire — second collège") + "</li></ul>") +
+          : "<ul><li>" + exemple("Mme Sonia Delcroix, titulaire, second collège") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd, titulaire, premier collège") + "</li>" +
+            "<li>" + exemple("Mme Hélène Roux, titulaire, premier collège") + "</li>" +
+            "<li>" + exemple("M. Antoine Rivière, titulaire, second collège") + "</li></ul>") +
         (abs.length
           ? "<h3>Membres absents ou excusés</h3><ul>" +
             abs.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
@@ -2279,20 +2192,20 @@
               "adoptée selon les modalités de l'article L. 2315-32. Le référent bénéficie de la formation " +
               "santé, sécurité et conditions de travail (art. L. 2315-18).")
           : "") +
-        (a("Désignation des membres de la CSSCT") || a("Désignation des membres de la CSSCT — siège du troisième collège")
+        (a("Désignation des membres de la CSSCT") || a("Désignation des membres de la CSSCT, siège du troisième collège")
           ? "<h3>" + num() + "désignation des membres de la commission santé, sécurité et conditions de travail</h3>" +
             "<p><i>« Le comité social et économique désigne les membres de la commission santé, sécurité " +
             "et conditions de travail dont les noms suivent, pour une durée qui prend fin avec celle du " +
             "mandat des membres élus du comité. »</i></p>" +
             (cs.length
               ? "<ol>" + cs.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
-              : "<ol><li>" + exemple("Mme Sonia Delcroix — second collège") + "</li>" +
-                "<li>" + exemple("M. Karim Belaïd — premier collège") + "</li>" +
-                "<li>" + exemple("Mme Hélène Roux — premier collège") + "</li></ol>") +
+              : "<ol><li>" + exemple("Mme Sonia Delcroix, second collège") + "</li>" +
+                "<li>" + exemple("M. Karim Belaïd, premier collège") + "</li>" +
+                "<li>" + exemple("Mme Hélène Roux, premier collège") + "</li></ol>") +
             "<p>" + majorite + " La commission comprend au minimum trois membres représentants du " +
             "personnel, dont au moins un du second collège ou, le cas échéant, du troisième " +
             "(art. L. 2315-39).</p>" +
-            (a("Désignation des membres de la CSSCT — siège du troisième collège")
+            (a("Désignation des membres de la CSSCT, siège du troisième collège")
               ? "<p>Un troisième collège électoral étant institué, un siège au moins est attribué à un " +
                 "élu le représentant (art. L. 2315-39, dont les dispositions sont d'ordre public).</p>"
               : "")
@@ -2304,8 +2217,8 @@
             "noms suivent. »</i></p>" +
             (rc.length
               ? "<ol>" + rc.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ol>"
-              : "<ol><li>" + exemple("M. Antoine Rivière — catégorie des employés et ouvriers") + "</li>" +
-                "<li>" + exemple("Mme Sonia Delcroix — catégorie des cadres, techniciens et agents de maîtrise") + "</li></ol>") +
+              : "<ol><li>" + exemple("M. Antoine Rivière, catégorie des employés et ouvriers") + "</li>" +
+                "<li>" + exemple("Mme Sonia Delcroix, catégorie des cadres, techniciens et agents de maîtrise") + "</li></ol>") +
             "<p>" + majorite + " Articles L. 2312-72 et L. 2312-75. Ces membres ont droit aux mêmes " +
             "documents que ceux adressés aux membres du conseil et peuvent lui soumettre les vœux du " +
             "comité (art. L. 2312-73).</p>"
@@ -2334,7 +2247,7 @@
             exemple("Le président a présenté les moyens mis à la disposition du comité : local situé au bâtiment B, mobilier, ligne téléphonique et poste informatique dédié. Le comité a fixé au 19 octobre 2026 la date de sa prochaine réunion ordinaire.") + "</p>") +
         "<h3>Établissement et diffusion du procès-verbal</h3>" +
         "<p>Les délibérations sont consignées dans un procès-verbal établi par le secrétaire dans un " +
-        "délai fixé par accord ou, à défaut, dans les quinze jours suivant la réunion — ou avant la " +
+        "délai fixé par accord ou, à défaut, dans les quinze jours suivant la réunion, ou avant la " +
         "réunion suivante si elle intervient plus tôt (art. L. 2315-34 et D. 2315-26). Après adoption, " +
         "il peut être affiché ou diffusé dans l'entreprise par le secrétaire (art. L. 2315-35).</p>" +
         '<div class="signatures"><div>Le secrétaire du comité<br>' +
@@ -2369,7 +2282,7 @@
   {
     cle: "ri-comite",
     nom: "Règlement intérieur du comité social et économique",
-    resume: "La trame complète : bureau, réunions et convocations, votes, procès-verbaux, commissions, budgets et comptes, confidentialité, archives — et la limite de l'article L. 2315-24.",
+    resume: "La trame complète : bureau, réunions et convocations, votes, procès-verbaux, commissions, budgets et comptes, confidentialité, archives, et la limite de l'article L. 2315-24.",
     articles: ["L2315-24", "L2315-23", "L2315-32", "L2315-34", "L2315-44", "L2315-68", "L2315-69", "L2315-3", "L2315-4", "L2315-61", "L2312-81"],
     sections: [
       { titre: "Le comité", champs: [
@@ -2410,12 +2323,12 @@
       var com = lignes(v.commissions), cl = lignes(v.clausesEmployeur), aj = lignes(v.ajouts);
       var n = 0, art = function (titre, corps) {
         n++;
-        return "<h3>Article " + n + " — " + e(titre) + "</h3>" + corps;
+        return "<h3>Article " + n + ", " + e(titre) + "</h3>" + corps;
       };
       return enteteFeuille(v.entreprise, chDate(v.dateAdoption, "date d'entrée en vigueur")) +
         '<h2 class="titre-doc">Règlement intérieur<br>du comité social et économique</h2>' +
         '<p class="sous-titre">' + chEx(v.perimetre, "comité social et économique d'entreprise") +
-        " — adopté en réunion du " + chExDate(v.dateReunion, "2026-09-21") +
+        ", adopté en réunion du " + chExDate(v.dateReunion, "2026-09-21") +
         ", en vigueur au " + chExDate(v.dateAdoption, "2026-09-21") + "</p>" +
         "<p>Le comité social et économique de " + chEx(v.entreprise, "la société Ardenne Plasturgie") +
         " détermine, dans le présent règlement intérieur, les modalités de son fonctionnement et celles " +
@@ -2489,7 +2402,7 @@
           "lorsqu'un membre demande le scrutin secret. Les suppléants ne prennent part au vote qu'en " +
           "l'absence du titulaire qu'ils remplacent.</p>" +
           "<p>Le président du comité, membre de celui-ci, participe aux votes relatifs au " +
-          "fonctionnement interne du comité — notamment à la désignation du secrétaire. Il ne participe " +
+          "fonctionnement interne du comité, notamment à la désignation du secrétaire. Il ne participe " +
           "pas aux consultations dans lesquelles le comité est appelé à se prononcer en tant que " +
           "délégation du personnel.</p>") +
 
@@ -2514,8 +2427,8 @@
           "sont soumis à la délibération du comité (art. L. 2315-45).</p>" +
           (com.length
             ? "<ul>" + com.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
-            : "<ul><li>" + exemple("Commission santé, sécurité et conditions de travail — quatre membres, dont un du second collège ; deux réunions par trimestre") + "</li>" +
-              "<li>" + exemple("Commission des activités sociales et culturelles — trois membres ; compte rendu semestriel au comité") + "</li></ul>")) +
+            : "<ul><li>" + exemple("Commission santé, sécurité et conditions de travail, quatre membres, dont un du second collège ; deux réunions par trimestre") + "</li>" +
+              "<li>" + exemple("Commission des activités sociales et culturelles, trois membres ; compte rendu semestriel au comité") + "</li></ul>")) +
 
         art("Budgets",
           "<p>Le comité dispose de deux budgets distincts, qui ne se confondent pas.</p>" +
@@ -2637,7 +2550,7 @@
       ];
       return enteteFeuille(v.entreprise, chDate(v.dateCourrier, "date du courrier")) +
         '<h2 class="titre-doc">Demande de communication<br>de la documentation économique et financière</h2>' +
-        '<p class="sous-titre">Article L. 2312-57 du code du travail — élection du ' +
+        '<p class="sous-titre">Article L. 2312-57 du code du travail, élection du ' +
         chExDate(v.dateElections, "2026-09-08") + "</p>" +
         "<p>À l'attention de " + chEx(v.president, "M. Julien Marchand, directeur général, président du comité social et économique") + ",</p>" +
         "<h3>L'obligation</h3>" +
@@ -2673,7 +2586,7 @@
         ". Le comité rappelle qu'il dispose, pour l'exercice de ses attributions, d'informations " +
         "précises et écrites transmises ou mises à disposition par l'employeur (art. L. 2312-15), et " +
         "que la base de données économiques, sociales et environnementales rassemble les informations " +
-        "nécessaires aux consultations et informations récurrentes (art. L. 2312-18) — sans se " +
+        "nécessaires aux consultations et informations récurrentes (art. L. 2312-18), sans se " +
         "substituer à la documentation propre à l'article L. 2312-57.</p>" +
         '<div class="signatures"><div>Le secrétaire du comité<br>' +
         chEx(v.secretaire, "Mme Sonia Delcroix") + "</div></div>" +
@@ -2697,7 +2610,7 @@
   {
     cle: "remise-reprise",
     nom: "Procès-verbal de remise-reprise entre comité sortant et comité entrant",
-    resume: "Trame prudente : aucun texte lu n'organise cette remise. Le modèle constate ce qui est écrit — comptes, conservation, personnalité civile — et énumère ce qui reste à régler par le règlement intérieur.",
+    resume: "Trame prudente : aucun texte lu n'organise cette remise. Le modèle constate ce qui est écrit, comptes, conservation, personnalité civile, et énumère ce qui reste à régler par le règlement intérieur.",
     articles: ["L2315-23", "L2315-64", "L2315-65", "L2315-68", "L2315-69", "L2315-70", "L2315-71", "L2315-72", "L2315-75", "R2312-52", "L2315-24"],
     sections: [
       { titre: "Les deux comités", champs: [
@@ -2742,12 +2655,12 @@
       return enteteFeuille(v.entreprise, chDate(v.dateReunion, "date de la remise")) +
         '<h2 class="titre-doc">Procès-verbal de remise-reprise<br>entre le comité sortant et le comité entrant</h2>' +
         '<p class="sous-titre">Remise du ' + chExDate(v.dateReunion, "2026-09-21") +
-        " — élections proclamées le " + chExDate(v.dateElections, "2026-09-08") + "</p>" +
+        ", élections proclamées le " + chExDate(v.dateElections, "2026-09-08") + "</p>" +
 
         "<h3>Avertissement sur la portée du présent document</h3>" +
         "<p><b>Aucun article du code du travail ne prescrit ce procès-verbal.</b> Les textes ont été " +
         "recherchés : le comité social et économique est doté de la personnalité civile et gère son " +
-        "patrimoine (art. L. 2315-23) — le renouvellement des mandats change les personnes, non la " +
+        "patrimoine (art. L. 2315-23), le renouvellement des mandats change les personnes, non la " +
         "personne morale ; la dévolution des biens n'est organisée qu'en cas de <i>cessation définitive " +
         "de l'activité de l'entreprise</i>, et les biens ne peuvent alors être répartis ni entre les " +
         "salariés ni entre les membres du comité (art. R. 2312-52). L'article R. 2323-38, qui imposait " +
@@ -2761,14 +2674,14 @@
         chExDate(v.dateFinMandatPrecedent, "2026-09-08") + " :</p>" +
         (so.length
           ? "<ul>" + so.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
-          : "<ul><li>" + exemple("M. Paul Vasseur — secrétaire sortant") + "</li>" +
-            "<li>" + exemple("Mme Nadia Berthier — trésorière sortante") + "</li></ul>") +
+          : "<ul><li>" + exemple("M. Paul Vasseur, secrétaire sortant") + "</li>" +
+            "<li>" + exemple("Mme Nadia Berthier, trésorière sortante") + "</li></ul>") +
         "<p><b>Pour le comité entrant</b>, installé à la suite des élections proclamées le " +
         chExDate(v.dateElections, "2026-09-08") + " :</p>" +
         (en.length
           ? "<ul>" + en.map(function (l) { return "<li>" + e(l) + "</li>"; }).join("") + "</ul>"
-          : "<ul><li>" + exemple("Mme Sonia Delcroix — secrétaire") + "</li>" +
-            "<li>" + exemple("M. Karim Belaïd — trésorier") + "</li></ul>") +
+          : "<ul><li>" + exemple("Mme Sonia Delcroix, secrétaire") + "</li>" +
+            "<li>" + exemple("M. Karim Belaïd, trésorier") + "</li></ul>") +
 
         "<h3>Documents et pièces remis</h3>" +
         (rm.length
@@ -2827,10 +2740,46 @@
   }];
 
   /* ------------------------------------------------------------------ */
-  /* Construction du formulaire, brouillon, génération.                  */
+  /* La liste, groupée comme sur gerer.html. Un mot, un document.        */
+  /* ------------------------------------------------------------------ */
+  var GROUPES = [
+    ["Comité social et économique", ["convocation", "pv-cse", "reclamation"]],
+    ["Installer le comité", ["convocation-installation", "odj-installation", "pv-installation", "ri-comite",
+      "demande-documentation-eco", "remise-reprise"]],
+    ["Commissions, expert, alertes", ["designation-commission", "cr-commission", "resolution-expert", "alerte", "mise-en-demeure"]],
+    ["Négociation obligatoire", ["accord-methode", "pv-desaccord"]],
+    ["Discipline", ["convocation-sanction", "avertissement", "mise-a-pied", "echelle-sanctions"]],
+    ["Harcèlement", ["signalement-harcelement", "enquete-interne"]],
+    ["Information du personnel", ["note-rh"]],
+  ];
+  function modele(cle) { return MODELES.filter(function (m) { return m.cle === cle; })[0] || null; }
+
+  function rendreListe() {
+    var h = "", vus = {};
+    GROUPES.forEach(function (g) {
+      h += '<p class="groupe">' + e(g[0]) + "</p>";
+      g[1].forEach(function (cle) {
+        var m = modele(cle); if (!m) return;
+        vus[cle] = true;
+        h += '<button type="button" class="doc-ligne" data-doc="' + e(cle) + '">' + e(m.nom) + "</button>";
+      });
+    });
+    /* Un modèle qui n'est dans aucun groupe s'affiche quand même : rien ne se perd. */
+    var reste = MODELES.filter(function (m) { return !vus[m.cle]; });
+    if (reste.length) {
+      h += '<p class="groupe">Autres</p>';
+      reste.forEach(function (m) {
+        h += '<button type="button" class="doc-ligne" data-doc="' + e(m.cle) + '">' + e(m.nom) + "</button>";
+      });
+    }
+    $("liste").innerHTML = h;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Le brouillon de chaque modèle, et les champs.                       */
   /* ------------------------------------------------------------------ */
   var CLE_BROUILLON = "documents-brouillon";
-  var actif = MODELES[0];
+  var actif = null;
 
   function lireBrouillons() {
     try { return JSON.parse(localStorage.getItem(CLE_BROUILLON) || "{}") || {}; }
@@ -2842,35 +2791,17 @@
     try { localStorage.setItem(CLE_BROUILLON, JSON.stringify(b)); } catch (_) {}
   }
 
-  function construireCartes() {
-    var conteneur = $("modeles");
-    MODELES.forEach(function (m) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "modele";
-      b.id = "modele-" + m.cle;
-      b.setAttribute("role", "tab");
-      b.innerHTML = "<b>" + e(m.nom) + "</b><span>" + e(m.resume) + "</span>";
-      b.addEventListener("click", function () { choisir(m); });
-      conteneur.appendChild(b);
-    });
-  }
-
   function champHtml(champ) {
-    var pleine = champ.pleine ? ' class="pleine"' : "";
-    var aide = champ.aide ? '<p class="aide-champ">' + e(champ.aide) + "</p>" : "";
+    var pleine = champ.pleine || champ.t === "textarea" || champ.t === "cases";
     if (champ.t === "cases") {
-      return "<div" + pleine + '><span class="nom" style="display:block;color:var(--encre);font-size:14px;margin-bottom:4px">' + e(champ.nom) + "</span>" +
+      return '<div class="ch' + (pleine ? " pleine" : "") + '"><span class="nom">' + e(champ.nom) + "</span>" +
         '<div class="cases">' + champ.options.map(function (o, i) {
           return '<label class="case"><input type="checkbox" name="' + champ.c + '" value="' + e(o) + '" id="' + champ.c + "-" + i + '"> <span>' + e(o) + "</span></label>";
-        }).join("") + "</div>" + aide + "</div>";
+        }).join("") + "</div></div>";
     }
     var interieur;
     if (champ.t === "textarea")
       interieur = '<textarea id="ch-' + champ.c + '" name="' + champ.c + '"></textarea>';
-    /* Un menu déroulant partout où les réponses sont connues : c'est la règle
-       du dépôt, appliquée ici comme dans les formulaires d'audit. La première
-       option est vide — un choix par défaut serait une réponse inventée. */
     else if (champ.t === "select")
       interieur = '<select id="ch-' + champ.c + '" name="' + champ.c + '"><option value=""></option>' +
         champ.options.map(function (o) { return '<option value="' + e(o) + '">' + e(o) + "</option>"; }).join("") +
@@ -2878,227 +2809,214 @@
     else
       interieur = '<input id="ch-' + champ.c + '" name="' + champ.c + '" type="' + champ.t + '"' +
         (champ.t === "number" ? ' min="0" step="1"' : "") + ">";
-    return "<label" + pleine + '><span class="nom">' + e(champ.nom) + "</span>" + interieur + aide + "</label>";
+    return '<label class="ch' + (pleine ? " pleine" : "") + '"><span class="nom">' + e(champ.nom) + "</span>" + interieur + "</label>";
   }
 
-  /* ------------------------------------------------------------------ */
-  /* Les modèles dont Juris Expert imprime la version complète.          */
-  /* ------------------------------------------------------------------ */
-  /* Le partage arrêté entre les deux applications : celle-ci diagnostique et
-     fonde, Juris Expert produit. Les modèles ci-dessous ont un équivalent
-     complet et imprimable là-bas — vérifié dans son code, pas supposé
-     d'après un titre. Ils RESTENT ici : ils montrent la structure, l'article
-     qui la commande et l'exemple pré-rempli, et une trame ouverte sur le
-     poste vaut mieux qu'un renvoi obligatoire. On signale seulement, en tête,
-     où se trouve la feuille à signer.
-
-     Ce qui n'est pas dans cette table n'a pas d'équivalent vérifié chez Juris
-     Expert : la note d'information, la mise en demeure, le courrier d'alerte,
-     le compte rendu de commission, la délibération de désignation, la
-     résolution d'expertise et le procès-verbal de remise-reprise n'y
-     renvoient donc pas. */
-  var DOUBLONS_JX = {
-    "convocation":             "cse-reunion",
-    "pv-cse":                  "cse-reunion",
-    "reclamation":             "cse-reclamations",
-    "accord-methode":          "nego",
-    "pv-desaccord":            "nego",
-    "signalement-harcelement": "harcelement",
-    "enquete-interne":         "harcelement",
-    "convocation-sanction":    "discipline",
-    "avertissement":           "discipline",
-    "mise-a-pied":             "discipline",
-    "echelle-sanctions":       "ri",
-    "convocation-installation": "cse-installation",
-    "odj-installation":        "cse-installation",
-    "pv-installation":         "cse-installation",
-    "ri-comite":               "cse-installation",
-    "demande-documentation-eco": "cse-installation",
-  };
-
-  function bandeauJX(m) {
-    var cle = DOUBLONS_JX[m.cle];
-    if (!cle || !window.JurisExpert || !JurisExpert.existe(cle)) return "";
-    return JurisExpert.bandeau(cle);
+  function champsDe(m) {
+    var out = [];
+    m.sections.forEach(function (s) { s.champs.forEach(function (c) { out.push(c); }); });
+    return out;
   }
 
   function construireFormulaire(m) {
-    var f = $("formulaire");
-    f.innerHTML = bandeauJX(m) + m.sections.map(function (s) {
-      return "<fieldset><legend>" + e(s.titre) + '</legend><div class="grille">' +
-        s.champs.map(champHtml).join("") + "</div></fieldset>";
-    }).join("") +
-    (m.articles.length
-      ? '<p class="fonde">Ce modèle se fonde sur : ' + m.articles.map(function (n) {
-          return "art. " + refArt(n) + " (" + e(TEXTES[n].quoi) + ")";
-        }).join(" ; ") + ".</p>"
-      : '<p class="fonde">Ce modèle ne cite aucun article de lui-même : la référence de la règle rappelée dans la note relève de son rédacteur.</p>');
-    f.addEventListener("input", function () { ecrireBrouillon(m.cle, lireValeurs(m)); });
+    $("formulaire").innerHTML = champsDe(m).map(champHtml).join("");
   }
 
   function lireValeurs(m) {
     var v = {};
-    m.sections.forEach(function (s) {
-      s.champs.forEach(function (c) {
-        if (c.t === "cases") {
-          v[c.c] = [].slice.call(document.querySelectorAll('input[name="' + c.c + '"]:checked'))
-            .map(function (x) { return x.value; });
-        } else {
-          var el = $("ch-" + c.c);
-          v[c.c] = el ? el.value.trim() : "";
-        }
-      });
+    champsDe(m).forEach(function (c) {
+      if (c.t === "cases") {
+        v[c.c] = [].slice.call(document.querySelectorAll('input[name="' + c.c + '"]:checked'))
+          .map(function (x) { return x.value; });
+      } else {
+        var el = $("ch-" + c.c);
+        v[c.c] = el ? el.value.trim() : "";
+      }
     });
     return v;
   }
 
   function remplir(m, valeurs) {
-    m.sections.forEach(function (s) {
-      s.champs.forEach(function (c) {
-        if (c.t === "cases") {
-          var cochees = valeurs[c.c] || [];
-          [].slice.call(document.querySelectorAll('input[name="' + c.c + '"]')).forEach(function (x) {
-            x.checked = cochees.indexOf(x.value) !== -1;
-          });
-        } else {
-          var el = $("ch-" + c.c);
-          if (el) el.value = valeurs[c.c] || "";
-        }
-      });
+    champsDe(m).forEach(function (c) {
+      if (c.t === "cases") {
+        var cochees = valeurs[c.c] || [];
+        [].slice.call(document.querySelectorAll('input[name="' + c.c + '"]')).forEach(function (x) {
+          x.checked = cochees.indexOf(x.value) !== -1;
+        });
+      } else {
+        var el = $("ch-" + c.c);
+        if (el) el.value = valeurs[c.c] || "";
+      }
     });
   }
 
-  function choisir(m) {
-    actif = m;
-    [].slice.call(document.querySelectorAll(".modele")).forEach(function (b) {
-      b.classList.toggle("actif", b.id === "modele-" + m.cle);
+  /* Le repli « Voir le texte de loi » : les articles du modèle, avec leur
+     identifiant de version. */
+  function loiHtml(m) {
+    if (!m.articles.length)
+      return "Ce modèle ne cite aucun article de lui-même : la référence de la règle rappelée relève de son rédacteur.";
+    return m.articles.map(function (n) {
+      return "<p><b>" + e(refArt(n)) + "</b> : " + e(TEXTES[n].quoi) + '. <span class="ident">' + e(TEXTES[n].id) + "</span></p>";
+    }).join("");
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Le document, seul à l'écran ; chaque frappe le réécrit.             */
+  /* ------------------------------------------------------------------ */
+  function rendreDoc() {
+    if (!actif) return;
+    var v = lireValeurs(actif);
+    ecrireBrouillon(actif.cle, v);
+    var alerte = actif.verifier ? actif.verifier(v) : "";
+    $("avis").innerHTML = alerte ? '<div class="avis att">' + e(alerte) + "</div>" : "";
+    $("feuille").innerHTML = actif.composer(v);
+    champsDe(actif).forEach(function (c) {
+      var el = $("ch-" + c.c);
+      if (el && el.closest) el.closest("label").classList.toggle("plein", String(el.value).trim() !== "");
     });
+  }
+
+  function ouvrir(m) {
+    actif = m;
     construireFormulaire(m);
-    /* Brouillon d'abord ; à défaut, le profil d'entreprise s'il existe. */
     var brouillon = lireBrouillons()[m.cle];
     if (brouillon) remplir(m, brouillon);
     else {
       var profil = lireProfil(), v = {};
-      m.sections.forEach(function (s) {
-        s.champs.forEach(function (c) {
-          if (c.profil && profil[c.profil]) v[c.c] = profil[c.profil];
-        });
-      });
+      champsDe(m).forEach(function (c) { if (c.profil && profil[c.profil]) v[c.c] = profil[c.profil]; });
       if (Object.keys(v).length) remplir(m, v);
     }
-    $("docu").style.display = "none";
-    $("imprimer").disabled = true;
-    $("copier").disabled = true;
-    $("alerte").innerHTML = "";
-    message("");
+    $("loi").innerHTML = loiHtml(m);
+    rendreDoc();
+    $("e-liste").hidden = true;
+    $("e-doc").hidden = false;
+    $("main").classList.add("large");
+    window.scrollTo(0, 0);
+    try { history.replaceState(null, "", "#" + m.cle); } catch (_) {}
+  }
+  function revenir() {
+    actif = null;
+    $("e-doc").hidden = true;
+    $("e-liste").hidden = false;
+    $("main").classList.remove("large");
+    window.scrollTo(0, 0);
+    try { history.replaceState(null, "", location.pathname); } catch (_) {}
   }
 
-  function message(txt) {
-    var m = $("message");
-    if (!txt) { m.style.display = "none"; m.textContent = ""; return; }
-    m.textContent = txt;
-    m.style.display = "block";
-  }
+  $("liste").addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("button[data-doc]") : null;
+    var m = b && modele(b.getAttribute("data-doc"));
+    if (m) ouvrir(m);
+  });
+  $("formulaire").addEventListener("input", rendreDoc);
+  $("formulaire").addEventListener("change", rendreDoc);
+  /* Le bouton Retour du bandeau, posé par droits.js : depuis le document, il
+     revient à la liste ; depuis la liste, il quitte la page. */
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || !actif) return;
+    ev.preventDefault(); ev.stopPropagation();
+    revenir();
+  }, true);
 
-  function generer() {
-    var v = lireValeurs(actif);
-    ecrireBrouillon(actif.cle, v);
-    var alerte = actif.verifier ? actif.verifier(v) : "";
-    $("alerte").innerHTML = alerte ? '<p class="avert">' + e(alerte) + "</p>" : "";
-    $("feuille").innerHTML = actif.composer(v);
-    $("docu").style.display = "block";
-    $("imprimer").disabled = false;
-    $("copier").disabled = false;
-    message("Document généré ci-dessous — relisez-le, complétez les blancs entre crochets, puis imprimez-le ou copiez-le.");
-    $("docu").scrollIntoView({ behavior: "smooth", block: "start" });
+  /* ------------------------------------------------------------------ */
+  /* Word et impression. La feuille est lue telle qu'elle est à l'écran. */
+  /* ------------------------------------------------------------------ */
+  function texteDe(el) { return String(el.innerText || el.textContent || "").replace(/\s+/g, " ").trim(); }
+  function itemsDeFeuille() {
+    var items = [];
+    Array.prototype.forEach.call($("feuille").children, function (el) {
+      var tag = el.tagName;
+      if (el.classList.contains("renvoi-jx")) return;
+      if (tag === "H2") items.push({ k: "t1", t: texteDe(el) });
+      else if (tag === "H3") items.push({ k: "h2", t: texteDe(el) });
+      else if (el.classList.contains("sous-titre")) items.push({ k: "sur", t: texteDe(el) });
+      else if (el.classList.contains("pied-textes")) items.push({ k: "note", t: texteDe(el) });
+      else if (el.classList.contains("entete") || el.classList.contains("signatures"))
+        Array.prototype.forEach.call(el.children, function (c) { items.push({ k: "p", t: texteDe(c) }); });
+      else if (tag === "UL" || tag === "OL")
+        Array.prototype.forEach.call(el.querySelectorAll("li"), function (li) { items.push({ k: "puce", t: texteDe(li) }); });
+      else if (tag === "TABLE" || el.querySelector("table")) {
+        var t = tag === "TABLE" ? el : el.querySelector("table");
+        var head = Array.prototype.map.call(t.querySelectorAll("thead th, tr:first-child th"), texteDe);
+        var rows = Array.prototype.filter.call(t.querySelectorAll("tr"), function (tr) { return tr.querySelector("td"); })
+          .map(function (tr) { return Array.prototype.map.call(tr.querySelectorAll("td"), texteDe); });
+        if (!head.length && rows.length) head = rows.shift();
+        items.push({ k: "table", head: head, rows: rows });
+      }
+      else { var t2 = texteDe(el); if (t2) items.push({ k: "p", t: t2 }); }
+    });
+    return items;
   }
-
-  function copierTexte() {
-    var texte = $("feuille").innerText.replace(/\n{3,}/g, "\n\n").trim();
-    function fini(ok) { message(ok ? "Texte copié dans le presse-papiers." : "La copie a échoué — sélectionnez le document et copiez-le à la main."); }
-    if (navigator.clipboard && navigator.clipboard.writeText)
-      navigator.clipboard.writeText(texte).then(function () { fini(true); }, function () { fini(false); });
-    else {
-      var z = document.createElement("textarea");
-      z.value = texte; document.body.appendChild(z); z.select();
-      var ok = false;
-      try { ok = document.execCommand("copy"); } catch (_) {}
-      document.body.removeChild(z);
-      fini(ok);
-    }
+  function slug(s) {
+    return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "document";
   }
-
-  $("generer").addEventListener("click", generer);
+  $("word").addEventListener("click", function () {
+    if (!actif) return;
+    var items = itemsDeFeuille();
+    var titre = items.length && items[0].k === "t1" ? items.shift().t : actif.nom;
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, titre),
+      slug(actif.nom) + "-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
   $("imprimer").addEventListener("click", function () { window.print(); });
-  $("copier").addEventListener("click", copierTexte);
-  $("vider").addEventListener("click", function () {
-    var b = lireBrouillons();
-    delete b[actif.cle];
-    try { localStorage.setItem(CLE_BROUILLON, JSON.stringify(b)); } catch (_) {}
-    choisir(actif);
-    message("Formulaire de ce modèle effacé. Les autres modèles sont intacts.");
-  });
-  $("btn-retour").addEventListener("click", function () {
-    if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
-    else location.href = "./";
-  });
 
   /* ------------------------------------------------------------------ */
   /* Ouverture d'un modèle pré-rempli depuis une autre page.             */
   /*                                                                     */
   /* « documents.html?modele=<clé>&pre=<JSON encodé> » ouvre le modèle   */
   /* demandé et y verse les valeurs transmises. Ce sont les parcours     */
-  /* guidés qui s'en servent : chaque étape renvoie ici avec ce que le   */
-  /* profil de l'entreprise et les dates du dossier donnent déjà.        */
-  /*                                                                     */
-  /* Deux précautions. Les valeurs transmises ne sont versées que dans   */
-  /* les champs QUE LE MODÈLE DÉCLARE : une clé inconnue est ignorée,    */
-  /* jamais écrite. Et elles ne sont posées que là où le brouillon est   */
-  /* vide — ce que l'utilisateur a saisi ici l'emporte toujours sur ce   */
-  /* qu'une autre page propose.                                          */
+  /* guidés qui s'en servent. Les valeurs transmises ne sont versées que */
+  /* dans les champs que le modèle déclare, et seulement là où le        */
+  /* brouillon est vide : ce que l'utilisateur a saisi l'emporte.        */
+  /* ------------------------------------------------------------------ */
   function appliquerPre(m, pre) {
     var v = lireValeurs(m), touche = false;
-    m.sections.forEach(function (s) {
-      s.champs.forEach(function (c) {
-        if (!(c.c in pre)) return;
-        var val = pre[c.c];
-        if (c.t === "cases") {
-          if (!Array.isArray(val) || !val.length) return;
-          if ((v[c.c] || []).length) return;
-          /* Une option qui n'existe pas dans le modèle n'est pas cochée. */
-          val = val.filter(function (x) { return c.options.indexOf(x) >= 0; });
-          if (!val.length) return;
-        } else {
-          if (val === null || val === undefined || String(val) === "") return;
-          if (v[c.c]) return;
-          val = String(val);
-        }
-        v[c.c] = val;
-        touche = true;
-      });
+    champsDe(m).forEach(function (c) {
+      if (!(c.c in pre)) return;
+      var val = pre[c.c];
+      if (c.t === "cases") {
+        if (!Array.isArray(val) || !val.length) return;
+        if ((v[c.c] || []).length) return;
+        val = val.filter(function (x) { return c.options.indexOf(x) >= 0; });
+        if (!val.length) return;
+      } else {
+        if (val === null || val === undefined || String(val) === "") return;
+        if (v[c.c]) return;
+        val = String(val);
+      }
+      v[c.c] = val;
+      touche = true;
     });
     if (!touche) return false;
     remplir(m, v);
-    ecrireBrouillon(m.cle, lireValeurs(m));
+    rendreDoc();
     return true;
   }
 
-  construireCartes();
+  (function rappel() {
+    var p = lireProfil(), n = Number(p.effectif), t = p.entreprise || "";
+    if (isFinite(n) && String(p.effectif || "").trim() !== "") t += (t ? " · " : "") + n + " salarié" + (n > 1 ? "s" : "");
+    $("rappel-fiche").textContent = t;
+  })();
+  rendreListe();
 
   var params = new URLSearchParams(location.search);
-  var demande = params.get("modele");
-  var vise = MODELES.filter(function (m) { return m.cle === demande; })[0];
-  choisir(vise || MODELES[0]);
+  var demande = params.get("modele") || (location.hash || "").replace(/^#/, "");
+  var vise = modele(demande);
   if (vise) {
+    ouvrir(vise);
     var pre = null;
     try { pre = JSON.parse(params.get("pre") || "null"); } catch (_) { pre = null; }
-    var pose = pre && typeof pre === "object" && !Array.isArray(pre) ? appliquerPre(vise, pre) : false;
-    message(pose
-      ? "Modèle ouvert et pré-rempli avec les données de votre profil et de votre parcours. Relisez, complétez, puis générez le document."
-      : "Modèle ouvert. Complétez le formulaire, puis générez le document.");
-    var carte = $("modele-" + vise.cle);
-    if (carte) carte.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (pre && typeof pre === "object" && !Array.isArray(pre)) appliquerPre(vise, pre);
   }
+  window.addEventListener("hashchange", function () {
+    var m = modele((location.hash || "").replace(/^#/, ""));
+    if (m) { if (m !== actif) ouvrir(m); }
+    else if (actif) revenir();
+  });
 
   if ("serviceWorker" in navigator)
     window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
