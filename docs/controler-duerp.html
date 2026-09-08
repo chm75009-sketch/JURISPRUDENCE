@@ -3,211 +3,98 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mon document unique, par métier</title>
+<title>Contrôle du document unique</title>
 <link rel="manifest" href="manifest-audit-sst.json">
-<meta name="theme-color" content="#1c2126">
+<meta name="theme-color" content="#16181d">
+<script src="droits.js"></script>
 
 <!--
-  L'ÉCRAN NE NOMME PAS UN MANQUE, IL SORT LE BLOC QUI LE COMBLE.
+  L'ÉCRAN DU « OUI » : le dépôt d'abord, le diagnostic, la version corrigée.
 
-  Dire « unité de travail Plonge absente » ne fait avancer personne : celui qui
-  l'entend a toujours son document unique à écrire. Cette page affiche donc, à
-  la place du constat, l'unité entièrement rédigée - les risques du métier, la
-  situation de travail décrite en une phrase, la gravité, la fréquence, la
-  priorité qui en découle, les mesures de prévention, un responsable et une
-  échéance datée - avec un bouton qui l'insère dans le document. On coche, on
-  emporte, on affiche l'avis d'accès.
+  On dépose son document unique (Word .docx ou texte), il est lu dans le
+  navigateur. Chaque risque du métier y est cherché : trouvé, il est cité ;
+  introuvable, il est écrit et coché pour la version corrigée. La version
+  corrigée, c'est le texte déposé suivi des compléments, prête en Word.
 
-  D'OÙ VIENNENT LES UNITÉS. Du métier réel, pas d'une nomenclature abstraite :
-  la restauration donne salle, cuisine, plonge, bar et livraison, le commerce
-  donne caisse, rayon, réception et vente, et ainsi de suite. Le code NAF sert
-  à proposer le bon jeu ; il ne le décide pas, l'utilisateur en change d'un
-  menu.
-
-  CE QUE LA PAGE N'AFFIRME PAS. Les mesures de prévention listées sont des
-  mesures proposées, à retenir ou à écarter, pas l'énoncé de ce qu'un texte
-  imposerait : seuls les articles cités en fin de document sont affirmés, et
-  chacun d'eux a été lu à la source le 7 septembre 2026, trois lectures
-  concordantes, identifiant de version porté à côté.
-
-  LA COTATION N'EST PAS UNE OBLIGATION. Ni L. 4121-3 ni R. 4121-1 n'imposent
-  de coter un risque par une gravité multipliée par une fréquence. C'est une
-  aide au classement, et le document produit le dit en toutes lettres.
-
-  Rien ne sort de ce poste : le fichier déposé est lu dans le navigateur.
+  « ?depart=non » renvoie à duerp.html, l'écran du document écrit : c'est le
+  lien que pose le parcours. La logique est dans controler-duerp.js.
+  Tout reste sur ce poste : rien n'est envoyé.
 -->
 
 <link rel="stylesheet" href="style.css">
 <style>
-  textarea#depot{width:100%;min-height:200px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
-    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
-
-  .deux-portes{display:grid;gap:12px;margin:16px 0}
-  @media (min-width:780px){.deux-portes{grid-template-columns:1fr 1fr}}
-  .porte{border:1px solid var(--filet);border-left:4px solid var(--bleu);border-radius:11px;
-    padding:15px 17px;background:var(--carte)}
-  .porte b{display:block;font:700 17px/1.3 system-ui;margin-bottom:5px}
-  .porte p{margin:0 0 12px;font-size:14px;line-height:1.55;color:var(--encre-2)}
-  .porte.non{border-left-color:var(--vert)}
-  .compteurs .c.ins{background:var(--vert-clair);color:var(--vert)}
-  .compteurs .c.dej{background:var(--bleu-clair);color:var(--bleu)}
-  .compteurs .c.urg{background:var(--rouge-clair);color:var(--rouge)}
-
-  .unite{border:1px solid var(--filet);border-radius:12px;margin:16px 0;background:var(--carte);overflow:hidden}
-  .unite>.tt{padding:13px 16px;border-bottom:1px solid var(--filet);background:var(--creux);
-    display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
-  .unite>.tt b{font:700 17px/1.3 system-ui}
-  .unite>.tt .qui{display:block;font:400 13px/1.45 system-ui;color:var(--encre-2);margin-top:2px}
-  .unite>.corps{padding:6px 16px 14px}
-
-  .risque{border:1px solid var(--filet);border-radius:10px;margin:12px 0;padding:13px 15px}
-  .risque.insere{border-color:#bcd7c6;background:var(--vert-clair)}
-  .risque>.h{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;margin-bottom:6px}
-  .risque>.h b{font:600 15.5px/1.35 system-ui}
-  .risque .sit{margin:0 0 9px;font-size:14px;line-height:1.55;color:var(--encre)}
-  .risque .sit i{font-style:normal;color:var(--encre-3);font-size:12px;text-transform:uppercase;
-    letter-spacing:.04em;display:block;font-weight:600}
-  .cot{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}
-  .cot span{font:600 11.5px/1 system-ui;padding:6px 9px;border-radius:5px;background:var(--creux);color:var(--encre-2)}
-  .cot span.p1{background:var(--creux);color:var(--encre-2)}
-  .cot span.p2{background:var(--bleu-clair);color:var(--bleu)}
-  .cot span.p3{background:var(--ambre-clair);color:var(--ambre)}
-  .cot span.p4{background:var(--rouge-clair);color:var(--rouge)}
-  .risque ul{margin:0 0 9px;padding-left:20px;font-size:14px;line-height:1.55;color:var(--encre-2)}
-  .risque ul li{margin:0 0 4px}
-  .risque .pied{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0 0}
-  .risque .pied label{display:grid;gap:3px}
-  .risque .pied .nom{font:600 var(--t2)/1.35 system-ui;color:var(--texte-2)}
-  .risque .pied input{font-size:14px;padding:7px 9px}
-  .risque .trouve{font-size:13px;line-height:1.5;color:var(--encre-2);background:var(--bleu-clair);
-    border-radius:7px;padding:8px 11px;margin:0 0 9px}
-  .risque .trouve q{color:var(--encre)}
-  .btn.vert{background:var(--vert);border-color:var(--vert)}
-  details.txt .c b{color:var(--encre)}
-
-  pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
-    max-height:64vh;overflow:auto}
-  /* Le panneau « à compléter » : il vit À CÔTÉ du document, jamais avant lui.
-     Il ne montre que ce qui manque encore, et chaque frappe remplit le document
-     visible. Un champ rempli disparaît du panneau : il n'y a plus rien à
-     demander. */
-  .completer{border:1px solid var(--filet);border-left:4px solid var(--ambre);border-radius:11px;
-    padding:14px 16px;margin:14px 0;background:var(--carte)}
-  .completer>b{display:block;font:700 15px/1.35 system-ui;margin-bottom:3px}
-  .completer>p{margin:0 0 11px;font-size:13.5px;line-height:1.5;color:var(--encre-2)}
-  .completer.rien{border-left-color:var(--vert);background:var(--vert-clair)}
-  .completer.rien>b{color:#1b4b2d}
-  @media print{.onglets,.barre,header.site,.aide{display:none}.cache{display:block !important}}</style>
+  textarea#depot{min-height:200px;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;margin:8px 0}
+  #diagnostic .groupe{margin:18px 0 0}
+  #diagnostic .ligne{gap:10px}
+  #diagnostic .ligne.deja .nom{color:var(--texte-2)}
+  #diagnostic .ligne .du{white-space:normal;font-size:14px;margin-top:2px}
+  #diagnostic .ajout{display:inline-flex;align-items:center;gap:8px;flex:none;font:600 15px/1 system-ui;
+    color:var(--texte-2);min-height:44px;cursor:pointer}
+  #diagnostic .ajout.manque{color:var(--accent)}
+  #diagnostic .ajout input{width:22px;height:22px;margin:0}
+  .feuille h3{font:700 16px/1.3 Georgia,"Times New Roman",serif;color:#1a1d22;margin:22px 0 6px}
+  .feuille ul,.feuille ol{margin:0 0 10px;padding-left:22px}
+  .feuille li{margin:0 0 4px}
+  .feuille .qui{color:var(--texte-2);font-size:14px;margin:0 0 12px}
+  .feuille .cot{color:var(--texte-2)}
+  .feuille p.ent{font-size:18px;margin:0 0 6px}
+  .feuille .depose{border-left:3px solid var(--filet);padding-left:12px;margin:0 0 14px}
+  @media print{.champs,.barre,details,#diagnostic,#lecture,#depot-zone{display:none !important}
+    .feuille .qui,.feuille .cot{color:#000}}
+</style>
 </head>
 <body>
 
 <header class="site">
   <div class="wrap">
-    <p class="marque">Jurisprudence <span>relations collectives</span></p>
+    <p class="marque">Contrôle du document unique</p>
     <div class="outils">
       <a href="index.html">Accueil</a>
-      <a href="audit-sst.html">Auditer ma santé-sécurité</a>
-      <a href="duerp.html">Le construire poste par poste</a>
     </div>
   </div>
 </header>
 
 <main class="wrap">
 
-  <header>
-    <h1>Mon document unique <span>- une unité de travail par poste réel, déjà rédigée</span></h1>
-  </header>
-
-  <div class="onglets" id="onglets">
-    <button data-o="depart" class="actif">1 · La question</button>
-    <button data-o="blocs" id="ong-blocs">2 · Le document unique rédigé</button>
-    <button data-o="sortie" id="ong-sortie">3 · Le document à emporter</button>
+  <div id="depot-zone">
+    <div class="champs" style="margin:16px 0 8px">
+      <label class="ch large"><span class="nom">Déposez votre document unique (Word .docx ou texte)</span>
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain"></label>
+    </div>
+    <div id="lecture"></div>
+    <details id="coller"><summary>Ou coller le texte</summary>
+      <textarea id="depot" placeholder="Collez ici le texte de votre document unique."></textarea>
+      <button type="button" class="second" id="controler">Contrôler le texte collé</button>
+    </details>
   </div>
 
-  <!-- ══════ 1 · LE DÉPART ══════ -->
-  <section id="o-depart">
-    <h2>Avez-vous un document unique ?</h2>
-    <div class="deux-portes">
-      <div class="porte">
-        <b>Oui, je l'ai</b>
-        <p>Déposez-le. Chaque unité de travail du métier et chaque risque sont cherchés dans votre
-        texte ; ceux que la recherche ne retrouve pas vous sont présentés rédigés, prêts à insérer.
-        Le fichier est lu dans votre navigateur et n'est envoyé nulle part.</p>
-        <div class="barre" style="margin:0">
-          <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
-            Choisir un fichier .docx ou .txt
-            <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
-          </label>
-          <button class="btn second" id="coller">Coller le texte</button>
-        </div>
-        <div id="lecture"></div>
-        <textarea id="depot" class="cache" placeholder="Collez ici le texte de votre document unique."></textarea>
-        <div class="barre" id="barre-controle" style="margin:10px 0 0">
-          <button class="btn" id="controler">Comparer au métier</button>
-        </div>
-      </div>
-      <div class="porte non">
-        <b>Non, je ne l'ai pas</b>
-        <p>Alors il n'y a rien à constater et rien à demander. L'écran suivant est votre document
-        unique, écrit : une unité de travail par poste réel de votre activité, les risques rédigés,
-        la cotation, les mesures de prévention, le responsable et l'échéance datée. Ce qui reste à
-        compléter se remplit à côté du document, sous vos yeux.</p>
-        <div class="barre" style="margin:0">
-          <button class="btn vert" id="je-nai-pas">Écrire mon document unique</button>
-        </div>
-      </div>
-    </div>
+  <div id="diagnostic"></div>
 
-    <details class="txt"><summary>Les textes, tels qu'ils ont été lus</summary>
-      <div class="c" id="textes"></div></details>
-  </section>
-
-  <!-- ══════ 2 · LES BLOCS ══════ -->
-  <section id="o-blocs" class="cache">
-    <h2>Votre document unique</h2>
-    <p class="aide">Il est écrit. Tout est coché : ce qui reste coché part dans le document. Le
-    responsable et l'échéance se modifient ligne à ligne, et l'échéance est déjà datée.</p>
-    <div id="a-completer"></div>
-    <div class="compteurs" id="compteurs"></div>
-    <div class="barre">
-      <button class="btn second" id="tout-cocher">Tout insérer</button>
-      <button class="btn second" id="tout-decocher">Tout retirer</button>
-      <button class="btn" id="vers-sortie">Assembler le document</button>
+  <div id="corrige" hidden>
+    <div class="champs" style="margin:16px 0">
+      <label class="ch"><span class="nom">Responsable</span>
+        <input id="d-responsable" placeholder="nom et qualité"></label>
+      <label class="ch"><span class="nom">Établissement</span>
+        <input id="d-etablissement" placeholder="adresse du site"></label>
     </div>
-    <div id="blocs"></div>
-    <div class="barre">
-      <button class="btn" id="vers-sortie-2">Assembler le document</button>
+    <div class="feuille" id="feuille"></div>
+    <div class="barre pile">
+      <button type="button" id="dl-docx">Télécharger en Word</button>
+      <button type="button" class="second" id="imprimer">Imprimer</button>
     </div>
-  </section>
+  </div>
 
-  <!-- ══════ 3 · LE DOCUMENT ══════ -->
-  <section id="o-sortie" class="cache">
-    <h2>Le document à emporter</h2>
-    <p class="aide">Le document unique tel qu'il sort de vos choix. Les cases laissées vides sortent
-    entre crochets : elles se voient, elles ne sont pas inventées.</p>
-    <div class="barre">
-      <button class="btn" id="dl-docx">Télécharger en Word</button>
-      <button class="btn second" id="dl-txt">Télécharger en texte</button>
-      <button class="btn second" id="copier">Copier</button>
-      <button class="btn second" id="imprimer">Imprimer</button>
-      <button class="btn second" id="retour-blocs">Revenir aux unités</button>
-    </div>
-    <div id="a-completer-2"></div>
-    <div id="resume"></div>
-    <pre id="sortie"></pre>
-  </section>
+  <details><summary>Voir le texte de loi</summary><div class="corps" id="textes"></div></details>
 
-  <footer>
-    Les articles cités ont été lus à la source le 7 septembre 2026 et portent leur identifiant de
-    version. Les mesures de prévention proposées ne sont pas l'énoncé d'une obligation : ce sont des
-    mesures à retenir ou à écarter, sous la responsabilité de l'employeur.
-  </footer>
 </main>
 
 <script src="profil.js"></script>
 <script src="audit-export.js"></script>
 <script src="duerp-metiers.js"></script>
 <script src="controler-duerp.js"></script>
+<script>
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+</script>
 </body>
 </html>

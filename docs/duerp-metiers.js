@@ -53,6 +53,7 @@
     naf: "56.10A restauration traditionnelle, 56.10C restauration de type rapide, 56.30Z débits de boissons",
     mots: "restaur|brasserie|pizz|traiteur|snack|café|cafe|bar|hôtel|hotel|cuisine|56.10|56.30|5610|5630",
     secteurs: ["services"],
+    codes: ["1979", "1501", "1266"],
     unites: [
       { cle: "salle", nom: "Salle et service", m: "salle|service en salle|serveur|runner|chef de rang",
         qui: "Serveurs, runners, chefs de rang, maître d'hôtel. Toute personne qui travaille entre le passe et les tables.",
@@ -338,6 +339,7 @@
     naf: "47.11 à 47.99 commerce de détail, en magasin ou hors magasin",
     mots: "commerce|détail|detail|magasin|boutique|supérette|superette|épicerie|epicerie|vente|47.|4711|4719",
     secteurs: ["commerce"],
+    codes: ["2216", "1517", "573", "1606"],
     unites: [
       { cle: "caisse", nom: "Caisse et encaissement", m: "caisse|encaissement|hôtesse|hotesse|scanner",
         qui: "Hôtes et hôtesses de caisse, personnel affecté à l'encaissement, y compris en caisse automatique.",
@@ -524,6 +526,7 @@
     naf: "62, 64, 66, 69, 70, 71, 73, 78, 82 activités de bureau, de conseil et de siège",
     mots: "bureau|siège|siege|conseil|comptab|assurance|informatique|cabinet|agence|administratif|62.|69.|70.|82.",
     secteurs: ["services"],
+    codes: ["1486", "2098"],
     unites: [
       { cle: "ecran", nom: "Poste administratif sur écran", m: "écran|ecran|bureau|ordinateur|administratif|informatique",
         qui: "Assistants, gestionnaires, comptables, chargés d'affaires : toute personne dont le travail se fait principalement devant un écran.",
@@ -645,6 +648,7 @@
     naf: "52.10B entreposage et stockage non frigorifique, 52.29A messagerie, 46 commerce de gros",
     mots: "entrepôt|entrepot|logistique|stockage|messagerie|plateforme|préparation de commandes|52.|4941|gros",
     secteurs: ["transport et logistique"],
+    codes: ["16"],
     unites: [
       { cle: "quai", nom: "Réception et quai", m: "quai|réception|reception|déchargement|camion|dépotage",
         qui: "Réceptionnaires, agents de quai, personnel affecté au dépotage.",
@@ -831,6 +835,7 @@
     naf: "41.20A et 41.20B construction de bâtiments, 43 travaux de construction spécialisés",
     mots: "bâtiment|batiment|btp|construction|maçon|macon|travaux|chantier|électricien|plomb|peintre|41.2|43.",
     secteurs: ["bâtiment et travaux publics"],
+    codes: ["1596", "1597", "2609", "2420", "1702", "2614", "3212"],
     unites: [
       { cle: "gros-oeuvre", nom: "Gros œuvre et maçonnerie", m: "gros œuvre|gros oeuvre|maçonnerie|maconnerie|maçon|banche|fouille",
         qui: "Maçons, coffreurs, ferrailleurs, manœuvres affectés au gros œuvre.",
@@ -1024,8 +1029,202 @@
     ],
   };
 
+  /* =================================================================== */
+  /* INDUSTRIE                                                           */
+  /* =================================================================== */
+  var INDUSTRIE = {
+    cle: "industrie",
+    nom: "Industrie et atelier de production",
+    naf: "10 à 33 industrie manufacturière, 25 fabrication de produits métalliques, 22 plasturgie",
+    mots: "industr|usine|fabrication|métallurg|metallurg|plasturgie|chimie|chimique|textile|production|mécanique|mecanique|usinage|2[0-9]\\.|3[0-3]\\.",
+    secteurs: ["industrie"],
+    codes: ["3248", "44", "176", "18", "292", "1090"],
+    unites: [
+      { cle: "production", nom: "Atelier de production", m: "atelier|production|machine|presse|opérateur|operateur|ligne",
+        qui: "Opérateurs, conducteurs de ligne, régleurs. Toute personne qui travaille sur ou près d'une machine en marche.",
+        risques: [
+          { n: "Happement, écrasement et coupure par les machines", m: "happement|écrasement|ecrasement|machine|presse|organe en mouvement|carter|protecteur",
+            s: "L'opérateur dégage une pièce coincée dans la presse sans arrêter la machine, la main dans la zone d'outillage.",
+            g: 4, f: 2, r: "Le responsable de production", mois: 1,
+            mes: [
+              "Protecteurs et carters en place sur chaque machine, vérifiés à la prise de poste ; une machine dont le protecteur manque ne démarre pas.",
+              "Arrêt et consignation avant toute intervention dans la zone d'outillage : la consigne est affichée sur la machine, pas dans un classeur.",
+              "Arrêt d'urgence repéré, accessible et essayé une fois par mois, avec la date notée.",
+              "Vêtements ajustés, pas de gants près des organes en rotation, cheveux longs attachés.",
+              "Formation au poste consignée pour chaque nouvel opérateur avant la première conduite seul.",
+            ] },
+          { n: "Bruit", m: "bruit|sonore|décibel|decibel|acoustique|bouchon|casque anti-bruit",
+            s: "Le poste de découpe dépasse le niveau où l'on doit hausser la voix pour se parler à un mètre, huit heures par jour.",
+            g: 3, f: 4, r: "Le responsable de production", mois: 3,
+            mes: [
+              "Mesure du niveau sonore aux postes exposés, refaite à chaque changement de machine, résultat affiché.",
+              "Capotage ou éloignement des sources les plus bruyantes avant toute protection individuelle.",
+              "Bouchons moulés ou casques fournis, au choix de la personne, et portés dans les zones marquées au sol.",
+              "Suivi audiométrique organisé avec le service de prévention et de santé au travail.",
+            ] },
+          { n: "Manutention et gestes répétitifs", m: "manutention|port de charge|répétitif|repetitif|tms|posture|dos",
+            s: "Le conducteur de ligne alimente la machine à la main, quarante fois par heure, avec des bacs de quinze kilos posés au sol.",
+            g: 2, f: 4, r: "Le responsable de production", mois: 3,
+            mes: [
+              "Bacs posés à hauteur de hanche sur un support, jamais au sol.",
+              "Aide à la manutention (table élévatrice, palan, convoyeur) pour toute charge répétée.",
+              "Rotation entre postes toutes les deux heures, inscrite au planning.",
+              "Formation aux gestes et postures dans le mois de l'arrivée, reprise tous les trois ans.",
+            ] },
+          { n: "Risque chimique des produits de process", m: "chimique|solvant|huile de coupe|fumée|fumee|poussière|poussiere|fds|aspiration",
+            s: "Le régleur nettoie les outillages au solvant, sur un chiffon, sans aspiration, à côté d'un poste de soudure.",
+            g: 3, f: 3, r: "Le responsable de production", mois: 2,
+            mes: [
+              "Fiches de données de sécurité à jour et accessibles à l'atelier, pas au bureau.",
+              "Aspiration à la source sur les postes de soudure, de meulage et de nettoyage au solvant.",
+              "Produit le moins dangereux retenu à chaque renouvellement de commande, en le disant au fournisseur.",
+              "Gants adaptés au produit (le gant de manutention ne protège pas d'un solvant), lunettes, et lavage des mains avant les pauses.",
+              "Suivi individuel renforcé demandé au service de prévention et de santé au travail pour les personnes exposées.",
+            ] },
+          { n: "Ambiances thermiques", m: "chaleur|froid|ambiance thermique|thermique|canicule|four|température|temperature",
+            s: "Le poste devant le four dépasse largement la température du reste de l'atelier ; l'hiver, le quai d'expédition est ouvert sur l'extérieur.",
+            g: 2, f: 3, r: "Le responsable de production", mois: 4,
+            mes: [
+              "Écrans et isolation des sources de chaleur, ventilation contrôlée avant chaque été.",
+              "Eau fraîche au poste, pauses supplémentaires au-delà d'un seuil de température écrit et affiché.",
+              "Rideau d'air ou sas au quai ouvert, vêtements chauds fournis pour les postes froids.",
+              "Rotation des postes chauds et froids en période extrême, écrite au planning.",
+            ] },
+        ] },
+
+      { cle: "maintenance", nom: "Maintenance", m: "maintenance|technicien|dépannage|depannage|réparation|reparation|électrique|electrique|consignation",
+        qui: "Techniciens de maintenance, électriciens, mécaniciens. Ceux qui interviennent sur une machine arrêtée ou qu'on croit arrêtée.",
+        risques: [
+          { n: "Électrisation et remise en marche intempestive", m: "électrisation|electrisation|électrique|electrique|consignation|cadenas|habilitation",
+            s: "Le technicien intervient dans l'armoire électrique d'une ligne qu'un collègue remet en route depuis le pupitre, sans le savoir.",
+            g: 4, f: 2, r: "Le responsable maintenance", mois: 1,
+            mes: [
+              "Consignation par cadenas personnel avant toute intervention : chaque intervenant pose le sien, la machine ne repart que quand tous sont retirés.",
+              "Habilitation électrique à jour pour toute personne qui ouvre une armoire, copie au dossier.",
+              "Vérification d'absence de tension à chaque intervention, avec l'appareil, pas au jugé.",
+              "Procédure de consignation écrite par machine, affichée à côté de l'armoire.",
+            ] },
+          { n: "Chute de hauteur", m: "hauteur|échelle|echelle|nacelle|toiture|escabeau|garde-corps",
+            s: "Le technicien change un néon à quatre mètres depuis une échelle posée sur un sol huileux.",
+            g: 4, f: 2, r: "Le responsable maintenance", mois: 1,
+            mes: [
+              "Plateforme roulante ou nacelle pour tout travail au-dessus de deux mètres, l'échelle reste un moyen d'accès.",
+              "Autorisation de conduite de nacelle pour ceux qui l'utilisent.",
+              "Harnais et point d'ancrage définis pour les interventions en toiture, jamais seul.",
+              "Contrôle périodique des équipements en hauteur, rapport conservé.",
+            ] },
+          { n: "Travail isolé en dehors des heures de production", m: "isolé|isole|seul|nuit|astreinte|dati|week-end",
+            s: "Le technicien d'astreinte intervient seul dans l'usine un dimanche, sans que personne ne sache où il est.",
+            g: 3, f: 2, r: "Le responsable maintenance", mois: 2,
+            mes: [
+              "Dispositif d'alarme pour travailleur isolé porté pendant toute intervention hors production.",
+              "Appel de prise de poste et de fin d'intervention à une personne désignée, avec le lieu précis.",
+              "Interventions dangereuses (hauteur, électricité, espace confiné) interdites seul : elles attendent un second.",
+              "Numéros d'urgence et plan d'accès affichés à l'entrée et dans l'atelier.",
+            ] },
+        ] },
+
+      { cle: "magasin", nom: "Magasin et expéditions", m: "magasin|expédition|expedition|réception|reception|chariot|cariste|palette|quai",
+        qui: "Magasiniers, caristes, agents de réception et d'expédition.",
+        risques: [
+          { n: "Circulation de chariots et piétons", m: "chariot|cariste|circulation|piéton|pieton|collision|allée|allee|marquage",
+            s: "Le cariste recule avec une palette haute qui masque sa vue, dans une allée que traverse un opérateur venu chercher un bac.",
+            g: 4, f: 3, r: "Le responsable logistique", mois: 1,
+            mes: [
+              "Plan de circulation affiché, allées piétonnes marquées au sol, zones interdites aux piétons.",
+              "Autorisation de conduite délivrée par écrit à chaque cariste après formation et visite médicale.",
+              "Vitesse limitée et affichée, avertisseur de recul et gyrophare en état, vérifiés à la prise de poste.",
+              "Gilet haute visibilité pour toute personne dans la zone de circulation.",
+            ] },
+          { n: "Chute d'objets et effondrement de rayonnages", m: "rayonnage|rack|étagère|etagere|chute d'objet|gerbage|stockage",
+            s: "Des palettes gerbées sur trois niveaux dépassent des rayonnages dont un montant a été heurté par un chariot.",
+            g: 3, f: 2, r: "Le responsable logistique", mois: 2,
+            mes: [
+              "Charge maximale affichée par niveau et respectée.",
+              "Contrôle visuel mensuel des rayonnages, fiche signée ; montant déformé signalé et vidé le jour même.",
+              "Sabots de protection sur les montants d'angle.",
+              "Casques et chaussures de sécurité dans la zone de stockage en hauteur.",
+            ] },
+          { n: "Manutention au quai", m: "quai|hayon|transpalette|déchargement|dechargement|chargement|camion",
+            s: "L'agent décharge un camion au transpalette manuel sur un quai dont le niveleur est en panne depuis des semaines.",
+            g: 3, f: 3, r: "Le responsable logistique", mois: 2,
+            mes: [
+              "Niveleur de quai réparé sous quinze jours et vérifié chaque année ; quai fermé tant qu'il est en panne.",
+              "Camion calé et immobilisé avant tout accès à la remorque.",
+              "Transpalette électrique pour les charges lourdes, manuel réservé aux charges légères.",
+              "Zone de quai éclairée et dégagée, pas de stockage tampon devant les portes.",
+            ] },
+        ] },
+
+      { cle: "bureaux", nom: "Bureaux et encadrement", m: "bureau|administratif|écran|ecran|encadrement|chef d'équipe|planning",
+        qui: "Personnel administratif, encadrement d'atelier, méthodes et qualité.",
+        risques: [
+          { n: "Travail sur écran et posture", m: "écran|ecran|posture|siège|siege|clavier|ordinateur",
+            s: "La gestionnaire de production saisit les ordres de fabrication huit heures par jour sur un écran posé de côté.",
+            g: 1, f: 4, r: "Le responsable administratif", mois: 6,
+            mes: [
+              "Écran en face, haut du moniteur à hauteur des yeux, à une longueur de bras.",
+              "Siège réglable en hauteur et en dossier, réglé avec la personne à son arrivée.",
+              "Pause visuelle de cinq minutes par heure, dite et acceptée.",
+              "Second écran ou support pour le poste qui compare deux documents.",
+            ] },
+          { n: "Charge mentale de l'encadrement et horaires", m: "charge mentale|stress|horaire|astreinte|planning|équipe|epuisement|épuisement",
+            s: "Le chef d'équipe enchaîne les postes du matin et de l'après-midi quand un opérateur manque, et répond au téléphone le soir.",
+            g: 2, f: 3, r: "La direction", mois: 3,
+            mes: [
+              "Remplaçants identifiés par poste, pour que l'absence ne retombe pas sur l'encadrant.",
+              "Plage sans sollicitation en dehors des heures, écrite et respectée par la direction.",
+              "Point mensuel sur la charge de chaque équipe, décisions notées.",
+              "Possibilité de rencontrer le service de prévention et de santé au travail à la demande de la personne.",
+            ] },
+          { n: "Circulation dans l'atelier pour le personnel de bureau", m: "circulation|atelier|visiteur|chaussure|allée|allee|protection",
+            s: "Le responsable qualité traverse l'atelier en chaussures de ville pour vérifier une pièce, en coupant par l'allée des chariots.",
+            g: 3, f: 2, r: "Le responsable de production", mois: 2,
+            mes: [
+              "Chaussures de sécurité et gilet fournis à tout le personnel de bureau qui entre dans l'atelier.",
+              "Allées piétonnes seules empruntées, même pour un détour.",
+              "Protections auditives à l'entrée de l'atelier, à disposition.",
+              "Visiteurs accompagnés et équipés, enregistrés à l'accueil.",
+            ] },
+        ] },
+    ],
+  };
+
+  /* Le métier déduit de la fiche d'entreprise, sans rien demander : le
+     numéro de la convention collective d'abord (c'est le plus sûr), les mots
+     de son intitulé et du secteur ensuite, le secteur seul enfin. Le dernier
+     recours est le bureau. */
+  var METIERS = [RESTAURATION, COMMERCE, BUREAU, ENTREPOT, BATIMENT, INDUSTRIE];
+  function deduire(profil) {
+    profil = profil || {};
+    var conv = String(profil.conventionCollective || profil.idcc || profil.convention || "");
+    var num = (conv.match(/\d{1,4}/) || [""])[0].replace(/^0+/, "");
+    var trouve = null;
+    if (num) METIERS.forEach(function (m) {
+      if (!trouve && (m.codes || []).indexOf(num) >= 0) trouve = m.cle;
+    });
+    if (trouve) return trouve;
+    var texte = [profil.secteur, conv, profil.activite, profil.naf].join(" ").toLowerCase();
+    METIERS.forEach(function (m) {
+      if (!trouve && new RegExp(m.mots, "i").test(texte)) trouve = m.cle;
+    });
+    if (trouve) return trouve;
+    /* Le secteur seul. « services » sans autre mot va au bureau, pas à la
+       restauration : c'est le cas le plus courant. */
+    var s = String(profil.secteur || "").toLowerCase();
+    [BUREAU].concat(METIERS).forEach(function (m) {
+      if (!trouve && (m.secteurs || []).indexOf(s) >= 0) trouve = m.cle;
+    });
+    return trouve || "bureau";
+  }
+  function pour(cle) {
+    var m = null;
+    METIERS.forEach(function (x) { if (x.cle === cle) m = x; });
+    return m || BUREAU;
+  }
+
   window.DuerpMetiers = {
     GRAVITE: GRAVITE, FREQUENCE: FREQUENCE, priorite: priorite,
-    METIERS: [RESTAURATION, COMMERCE, BUREAU, ENTREPOT, BATIMENT],
+    METIERS: METIERS, deduire: deduire, pour: pour,
   };
 })();

@@ -6,12 +6,21 @@
    carrés là. Tout ce qui se répétait d'une page à l'autre est descendu ici.
    Une page ne garde en propre que ce qu'elle est seule à afficher.
 
+   Le 8 septembre 2026, la feuille a été alignée sur la maquette validée le
+   même jour (epreuve/maquette.html), après le verdict « trop compliquée, je
+   ne comprends rien » : corps de 18 px, titres de 26 px, boutons pleins de
+   56 px, cibles tactiles de 44 px, lignes de liste de 64 px avec un filet,
+   une colonne sur téléphone, bandeau réduit au retour et au titre, plus de
+   chapeau, un repli discret pour le texte de loi.
+
    L'ordre du fichier :
      1. les jetons (couleurs, tailles, espacements, rayons)
      2. la base (corps de page, titres, liens, texte courant)
      3. la charpente (bandeau, colonne de lecture, pied, barre de retour)
      4. les composants (boutons, onglets, formulaires, tableaux, encadrés)
-     5. l'impression
+     5. les écrans de la maquette (fiche, portes, lignes, document)
+     6. le téléphone
+     7. l'impression
    ========================================================================== */
 
 /* ---------- 1. Les jetons ------------------------------------------------ */
@@ -20,35 +29,37 @@
   /* La palette tient en six couleurs : un fond, un texte, un gris de trait,
      un accent, un rouge d'alerte, un vert de conformité. L'ambre sert aux
      seules mentions d'attente. Chacune a sa version claire pour les fonds. */
-  --fond:#f6f7f9;
+  --fond:#f3f4f6;
   --surface:#ffffff;
   --creux:#f2f4f6;
   --encre:#16181d;
-  --texte:#262b33;
-  --texte-2:#545c66;
+  --texte:#16181d;
+  --texte-2:#5f6874;
   --texte-3:#7b838d;
-  --filet:#dde1e6;
+  --filet:#dcdfe4;
   --filet-2:#c8cfd6;
   --accent:#1F3864;
   --accent-fonce:#17294a;
-  --accent-clair:#eef1f7;
+  --accent-clair:#e9edf5;
   --rouge:#8E1B1B;
   --rouge-clair:#faf2f2;
   --vert:#1C5E36;
-  --vert-clair:#eff6f2;
+  --vert-clair:#e8f2ec;
   --ambre:#8a5b10;
   --ambre-clair:#f8f2e7;
   --zebre:#fafbfc;
 
-  /* L'échelle des textes. Sept valeurs, pas une de plus : au-delà, les
-     tailles se mettent à varier d'une page à l'autre sans raison. */
-  --t0:11.5px;   /* sur-titres, identifiants */
-  --t1:12.5px;   /* mentions, aide de champ */
-  --t2:13.5px;   /* texte dense, tableaux */
-  --t3:14.5px;   /* texte secondaire, boutons */
-  --t4:16px;     /* texte courant */
+  /* L'échelle des textes, celle de la maquette : 18 px pour lire, 26 px pour
+     le titre, 16 px pour ce qui accompagne, 15 px pour la mention, 13 px pour
+     le sur-titre. */
+  --t0:13px;     /* sur-titres, identifiants */
+  --t1:14px;     /* mentions, aide de champ */
+  --t2:15px;     /* texte dense, tableaux */
+  --t3:16px;     /* texte secondaire, libellés */
+  --t4:18px;     /* texte courant */
   --t5:20px;     /* titre de section */
-  --t6:clamp(25px,3.4vw,31px); /* titre de page */
+  --t6:26px;     /* titre de page */
+  --t-bouton:19px; /* le bouton plein */
 
   /* L'échelle des espacements. Tout ce qui sépare deux choses prend une de
      ces valeurs. */
@@ -56,9 +67,18 @@
 
   /* Les rayons et l'ombre. L'ombre est presque invisible : elle pose la
      carte sur le fond, elle ne la fait pas flotter. */
-  --r1:6px;      /* champs, boutons */
-  --r2:10px;     /* cartes, encadrés */
+  --r1:10px;     /* champs, petits boutons */
+  --r2:12px;     /* cartes, encadrés, boutons pleins */
+  --r3:16px;     /* les deux grandes portes */
   --ombre:0 1px 2px rgba(22,24,29,.05);
+
+  /* Les hauteurs que le doigt attend : 44 px pour toucher, 48 px pour un
+     champ, 56 px pour le bouton qui commande l'écran, 64 px pour une ligne
+     de liste. */
+  --h-touche:44px;
+  --h-champ:48px;
+  --h-bouton:56px;
+  --h-ligne:64px;
 
   --colonne:1080px;  /* la largeur de lecture, la même partout */
 
@@ -66,6 +86,7 @@
      écrivent encore trouvent la bonne couleur. Ils pointent tous sur la
      palette ci-dessus : c'est ce qui fait qu'une seule valeur change tout. */
   --papier:var(--fond); --carte:var(--surface); --card:var(--surface);
+  --ecran:var(--surface);
   --bg:var(--fond); --corps:var(--texte); --ink:var(--encre);
   --encre-2:var(--texte-2); --encre-3:var(--texte-3);
   --gris:var(--texte-2); --muted:var(--texte-2); --gris-f:var(--creux);
@@ -86,32 +107,36 @@ body{
   margin:0;
   background:var(--fond);
   color:var(--texte);
-  font:var(--t4)/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font:var(--t4)/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   -webkit-font-smoothing:antialiased;
+  overflow-wrap:break-word;
 }
 
 a{color:var(--accent)}
 a:hover{color:var(--accent-fonce)}
 
-h1{font:600 var(--t6)/1.2 system-ui;letter-spacing:-.01em;color:var(--encre);margin:0 0 var(--e3)}
-h2{font:600 var(--t5)/1.3 system-ui;color:var(--encre);margin:var(--e6) 0 var(--e2)}
-h3{font:600 15px/1.4 system-ui;color:var(--accent);margin:var(--e5) 0 var(--e2)}
-h4{font:600 var(--t2)/1.4 system-ui;color:var(--encre);margin:var(--e4) 0 var(--e1)}
+h1{font:600 var(--t6)/1.2 system-ui;letter-spacing:-.01em;color:var(--encre);margin:var(--e1) 0 var(--e2);text-wrap:balance}
+h2{font:600 var(--t5)/1.3 system-ui;color:var(--encre);margin:var(--e5) 0 var(--e2)}
+h3{font:600 17px/1.35 system-ui;color:var(--accent);margin:var(--e4) 0 var(--e2)}
+h4{font:600 var(--t3)/1.4 system-ui;color:var(--encre);margin:var(--e4) 0 var(--e1)}
 
 p{margin:0 0 var(--e3)}
+img,svg,video,iframe,canvas{max-width:100%}
 
 /* Le sur-titre : la seule capitale de l'application. */
-.fil{font:600 var(--t0)/1 system-ui;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--texte-3);margin:0 0 var(--e3)}
+.fil{font:600 var(--t0)/1 system-ui;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--texte-2);margin:0 0 var(--e2)}
 
-/* Le chapeau, sous le titre de page, et l'aide, sous un titre de section.
-   Les deux se lisent sur une colonne courte : au-delà de 70 signes, l'oeil
-   perd la ligne suivante. */
-.chapo{margin:0;color:var(--texte-2);max-width:68ch}
-.aide{margin:0 0 var(--e3);color:var(--texte-2);font-size:var(--t3);max-width:70ch}
-.note{color:var(--texte-2);font-size:var(--t2)}
+/* Il n'y a plus de chapeau ni de présentation : l'utilisateur agit, il ne
+   lit pas. Ce qui en reste, c'est l'aide d'une ligne sous le titre, en gris,
+   comme dans la maquette (« Quatre réponses, une seule fois. »). */
+.chapo,.presentation,.chapeau-long{display:none}
+main>header:not(.site) .note,.page>header:not(.site) .note,.wrap>header:not(.site) .note{display:none}
+.aide{margin:0 0 var(--e2);color:var(--texte-2);font-size:var(--t3);line-height:1.4;max-width:none}
+.note{color:var(--texte-2);font-size:var(--t2);line-height:1.45}
 .cache{display:none}
-mark{background:#fbeeb6;color:inherit;border-radius:2px}
+[hidden]{display:none !important}
+mark{background:var(--accent-clair);color:inherit;border-radius:3px;padding:0 3px}
 
 hr{border:none;border-top:1px solid var(--filet);margin:var(--e5) 0}
 
@@ -130,57 +155,50 @@ hr{border:none;border-top:1px solid var(--filet);margin:var(--e5) 0}
 .page{padding-bottom:var(--e7)}
 main.wrap,main.page{display:block}
 
-/* Le bandeau de tête, identique partout : le nom de l'application à gauche,
-   le retour à l'accueil et les outils à droite. */
-/* Le bandeau reste collé en haut de l'écran, même au bas d'une longue page :
-   demande du 7 septembre 2026, « mets-la visible, je ne la vois pas », sur le
-   lien de retour du document unique, six onglets plus bas. */
-header.site{background:var(--encre);color:#fff;padding:12px 0;position:sticky;top:0;z-index:40}
-/* Le bouton de retour : blanc sur le bandeau sombre, 44 px de haut, toujours
-   le premier de la rangée. droits.js l'insère sur chaque page. */
-.outils a.retour{background:#fff;color:var(--encre);border-color:#fff;font-weight:600;
-  min-height:44px;display:inline-flex;align-items:center;padding:0 16px}
-.outils a.retour:hover{background:#e8ebf0;color:var(--encre)}
-header.site .wrap{display:flex;flex-wrap:wrap;gap:var(--e2) var(--e4);
-  align-items:center;justify-content:space-between}
-header.site .marque{font:600 15px/1.3 system-ui;letter-spacing:.01em;color:#fff;
-  text-decoration:none;margin:0}
-header.site .marque span{opacity:.6;font-weight:400}
-header.site h1{margin:0;font:600 15px/1.3 system-ui;color:#fff}
-header.site h1 span{opacity:.6;font-weight:400}
-.outils{display:flex;flex-wrap:wrap;gap:var(--e2);align-items:center;font-size:var(--t1)}
-.outils a,.outils button{font:500 var(--t1)/1 system-ui;padding:7px 12px;border-radius:var(--r1);
-  border:1px solid rgba(255,255,255,.32);background:transparent;color:#fff;
-  text-decoration:none;cursor:pointer}
-.outils a:hover,.outils button:hover{background:rgba(255,255,255,.12);color:#fff}
-.outils #etat-version,#etat-version{opacity:.55;font-size:var(--t0);border:none;padding:0}
+/* Le bandeau de tête, réduit à deux choses : le bouton Retour, puis le titre.
+   Blanc, un filet dessous, collé en haut de l'écran (demande du 7 septembre
+   2026, « mets-la visible, je ne la vois pas »). Les liens d'outils et les
+   boutons qui l'encombraient sont masqués sur toutes les pages : le retour,
+   posé par droits.js en premier dans .outils, est le seul qui reste. */
+header.site{background:var(--surface);color:var(--encre);padding:10px 0;position:sticky;top:0;z-index:40;
+  border-bottom:1px solid var(--filet)}
+header.site .wrap{display:flex;flex-wrap:nowrap;gap:var(--e3);align-items:center;justify-content:flex-start;
+  min-height:var(--h-touche)}
+header.site .marque{font:600 17px/1.3 system-ui;letter-spacing:0;color:var(--encre);
+  text-decoration:none;margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+header.site .marque span{color:var(--texte-2);font-weight:400;font-size:var(--t2)}
+header.site h1{margin:0;font:600 17px/1.3 system-ui;color:var(--encre);min-width:0;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+header.site h1 span{color:var(--texte-2);font-weight:400;font-size:var(--t2)}
+.outils{display:flex;flex:none;order:-1;gap:var(--e2);align-items:center;font-size:var(--t2)}
+.outils a:not(.retour),.outils button,.outils #etat-version,#etat-version{display:none}
+.outils a.retour{margin:0}
+/* Les pages qui ne chargent pas droits.js n'ont pas de retour posé : leur
+   premier lien (« Accueil ») prend sa place et son habit. */
+.outils:not(:has(a.retour))>a:first-child{display:inline-flex}
+
+/* Le bouton de retour, le même partout : blanc, un filet, 44 px de haut,
+   toujours le premier de la rangée. */
+a.retour,button.retour,.outils a.retour,.outils:not(:has(a.retour))>a:first-child{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  margin:0;font:600 17px/1 system-ui;padding:10px 14px;min-height:var(--h-touche);
+  border:1px solid var(--filet);border-radius:var(--r1);background:var(--surface);color:var(--encre);
+  text-decoration:none;white-space:nowrap;cursor:pointer}
+a.retour:hover,button.retour:hover,.outils a.retour:hover{background:var(--creux);color:var(--encre);border-color:var(--filet-2)}
 
 /* Le titre de page, sous le bandeau. Un filet le sépare du contenu, rien de
    plus : le poids vient du texte, pas du trait. */
-main>header:not(.site),.page>header:not(.site),.wrap>header:not(.site){padding:var(--e6) 0 var(--e4);
+main>header:not(.site),.page>header:not(.site),.wrap>header:not(.site){padding:var(--e4) 0 var(--e3);
   border-bottom:1px solid var(--filet);margin:0 0 var(--e4)}
 main>header h1 span,.page>header h1 span,.wrap>header h1 span{font-weight:400;color:var(--texte-2)}
 main>header a,.page>header a{color:var(--accent)}
 
-/* La barre de retour des pages profondes. Collée en haut, parce que sur un
-   téléphone installé il n'y a pas de flèche « précédent ». Elle est dans la
-   colonne, mais son filet la traverse de bord à bord. */
-.retour-barre{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:var(--e2) var(--e3);
-  align-items:center;background:var(--fond);border-bottom:1px solid var(--filet);
-  padding:var(--e2) var(--e5);margin:0 calc(var(--e5) * -1)}
-/* Le retour est une navigation, pas l'action de l'écran : il se tient en
-   retrait pour laisser le bouton principal seul en avant. */
-button.retour{font:600 var(--t2)/1 system-ui;padding:8px 14px;
-  background:var(--surface);color:var(--accent);border-color:var(--filet-2)}
-button.retour:hover{background:var(--creux);color:var(--accent-fonce);border-color:var(--filet-2)}
-.retour-ou{font-size:var(--t2);color:var(--texte-2)}
-.retour-ou a{color:var(--accent)}
-a.retour{display:inline-flex;align-items:center;gap:6px;margin:var(--e5) 0 0;
-  font:600 var(--t2) system-ui;color:var(--texte-2);text-decoration:none}
-a.retour:hover{color:var(--encre)}
+/* L'ancienne barre de retour des pages profondes, et sa rangée de liens
+   « ou : recherche · comité · ... » : le bandeau porte déjà le retour, le
+   reste se lit, donc s'en va. */
+.retour-barre,.retour-ou{display:none}
 
-footer{margin:var(--e7) 0 var(--e7);padding-top:var(--e4);border-top:1px solid var(--filet);
-  font-size:var(--t2);color:var(--texte-3);line-height:1.6}
+footer{margin:var(--e7) 0 var(--e6);padding-top:var(--e4);border-top:1px solid var(--filet);
+  font-size:var(--t2);color:var(--texte-2);line-height:1.5}
 footer a{color:var(--texte-2)}
 footer a:hover{color:var(--accent)}
 
@@ -189,84 +207,90 @@ footer a:hover{color:var(--accent)}
 .maj-dispo.visible{display:block}
 .maj-dispo .wrap{display:flex;gap:var(--e3);align-items:center;flex-wrap:wrap;
   padding:var(--e2) var(--e5);font-size:var(--t2);color:var(--texte)}
-.maj-dispo button{margin-left:auto;white-space:nowrap}
+.maj-dispo button{margin-left:auto;white-space:nowrap;min-height:var(--h-touche);font-size:var(--t3);padding:10px 14px}
 
 /* ---------- 4. Les composants -------------------------------------------- */
 
-/* Les boutons. Un seul principal par écran ; tous les autres portent
-   « second » et s'effacent derrière lui. */
-button,.btn{font:600 var(--t3)/1 system-ui;padding:11px 18px;border-radius:var(--r1);
-  border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+/* Les boutons. Pleins, 56 px de haut, 19 px de texte : celui de la maquette.
+   Un seul principal par écran ; tous les autres portent « second » et
+   s'effacent derrière lui, blancs avec un trait bleu. */
+button,.btn{font:600 var(--t-bouton)/1.2 system-ui;padding:14px 18px;border-radius:var(--r2);
+  min-height:var(--h-bouton);border:2px solid var(--accent);background:var(--accent);color:#fff;
+  cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;
+  max-width:100%}
 button:hover,.btn:hover{background:var(--accent-fonce);border-color:var(--accent-fonce);color:#fff}
-button.second,.btn.second{background:var(--surface);color:var(--accent);border-color:var(--filet-2)}
-button.second:hover,.btn.second:hover{background:var(--creux);color:var(--accent-fonce);border-color:var(--filet-2)}
+button.second,.btn.second{background:var(--surface);color:var(--accent);border-color:var(--accent)}
+button.second:hover,.btn.second:hover{background:var(--accent-clair);color:var(--accent-fonce);border-color:var(--accent)}
 button:disabled,.btn:disabled,button[disabled],.btn[disabled]{opacity:.45;cursor:not-allowed}
 button:disabled:hover,.btn:disabled:hover,button[disabled]:hover{background:var(--accent);border-color:var(--accent)}
 button.second:disabled:hover,.btn.second:disabled:hover{background:var(--surface)}
-.btn.petit,button.petit{font-size:var(--t1);padding:8px 12px}
+/* Le petit bouton reste une cible de 44 px : c'est le minimum du doigt. */
+.btn.petit,button.petit,td button,th button,.compteurs button{font-size:var(--t3);padding:9px 14px;
+  min-height:var(--h-touche);border-radius:var(--r1);border-width:1px}
 
 /* Un bouton qui n'agit pas sur le dossier mais ouvre une explication se lit
    comme un lien, pas comme une commande. */
-.lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;
-  color:var(--accent);text-decoration:underline;cursor:pointer}
+.lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;min-height:0;
+  display:inline;color:var(--accent);text-decoration:underline;cursor:pointer}
 .lien-avert:hover{background:none;color:var(--accent-fonce)}
 
 /* La barre d'actions : les boutons au même endroit sur tous les écrans, en
    bas du bloc qu'ils commandent. */
-.barre{display:flex;flex-wrap:wrap;gap:var(--e2);align-items:center;margin:var(--e4) 0}
+.barre{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:var(--e4) 0}
 .compteur{color:var(--texte-2);font-size:var(--t3);margin-left:auto}
 
-/* Les onglets. */
-.onglets{display:flex;flex-wrap:wrap;gap:var(--e2);margin:var(--e5) 0 0}
-.onglets button{font:500 var(--t2)/1 system-ui;padding:10px 14px;border-radius:var(--r1);
+/* Les onglets : 44 px de haut, jamais moins. */
+.onglets{display:flex;flex-wrap:wrap;gap:var(--e2);margin:var(--e4) 0 0}
+.onglets button{font:600 var(--t3)/1 system-ui;padding:10px 14px;min-height:var(--h-touche);border-radius:var(--r1);
   border:1px solid var(--filet-2);background:var(--surface);color:var(--texte-2)}
 .onglets button:hover{background:var(--creux);color:var(--encre);border-color:var(--filet-2)}
-.onglets button.actif{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.onglets button.actif{background:var(--accent);border-color:var(--accent);color:#fff}
 .onglets button.actif:hover{background:var(--accent-fonce);border-color:var(--accent-fonce)}
 .onglets button:disabled{opacity:.45;cursor:not-allowed}
 
-/* Les formulaires. Le libellé au-dessus du champ, aligné sur lui, de la même
-   taille partout ; l'aide dessous, plus petite et grise. */
+/* Les formulaires. Le libellé au-dessus du champ, en gris, 16 px ; le champ
+   à 18 px, 48 px de haut, comme dans la fiche de la maquette. */
 fieldset{border:1px solid var(--filet);background:var(--surface);border-radius:var(--r2);
   padding:var(--e4) var(--e4) var(--e5);margin:0 0 var(--e4)}
 legend{font:600 var(--t3)/1 system-ui;color:var(--accent);padding:0 var(--e2)}
 .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:var(--e4) var(--e5);align-items:start}
 .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:var(--e4);align-items:start}
-label{display:block;font-size:var(--t3)}
-label .nom,label.ch .nom,label.champ span{display:block;font:600 var(--t2)/1.35 system-ui;
-  color:var(--texte-2);letter-spacing:0;text-transform:none;margin:0 0 var(--e1)}
+  gap:var(--e3) var(--e4);align-items:start}
+label{display:block;font-size:var(--t3);color:var(--texte-2)}
+label .nom,label.ch .nom,label.champ span{display:block;font:400 var(--t3)/1.35 system-ui;
+  color:var(--texte-2);letter-spacing:0;text-transform:none;margin:0 0 6px}
 /* Sans « align-content:start », un champ sans phrase d'aide voit sa case
    s'étirer sur la hauteur du plus grand voisin : deux champs côte à côte ne
    commencent alors plus à la même ligne. */
 label.ch{display:grid;gap:var(--e1);align-content:start}
 label.ch.large,label.ch.pleine,.pleine{grid-column:1/-1}
-input,select,textarea{width:100%;font:inherit;font-size:15px;line-height:1.4;padding:9px 11px;
-  border:1px solid var(--filet-2);border-radius:var(--r1);
+input,select,textarea{width:100%;font:inherit;font-size:var(--t4);line-height:1.3;padding:12px 14px;
+  min-height:var(--h-champ);border:1px solid var(--filet);border-radius:var(--r1);
   background:var(--surface);color:var(--encre)}
-textarea{min-height:74px;resize:vertical}
-input[type=checkbox],input[type=radio]{width:auto;padding:0}
-input[type=file]{padding:7px 9px;font-size:var(--t2)}
+textarea{min-height:96px;resize:vertical}
+input[type=checkbox],input[type=radio]{width:auto;min-height:0;padding:0;width:20px;height:20px}
+input[type=file]{padding:10px 12px;font-size:var(--t2)}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--accent-clair);outline-offset:0;
   border-color:var(--accent)}
 input:disabled,select:disabled,textarea:disabled{background:var(--creux);color:var(--texte-2);cursor:not-allowed}
-.aide-champ,label.ch .sous,.sous{margin:var(--e1) 0 0;font-size:var(--t1);line-height:1.5;color:var(--texte-2)}
+.aide-champ,label.ch .sous,.sous{margin:var(--e1) 0 0;font-size:var(--t1);line-height:1.45;color:var(--texte-2)}
 
 /* Les cases à cocher : la case et sa ligne alignées sur le haut du texte, et
-   la liste tenue dans un cadre pour qu'on voie où elle commence et finit. */
-.cases{display:flex;flex-direction:column;gap:var(--e2);margin:var(--e1) 0 var(--e2);
-  border:1px solid var(--filet);background:var(--surface);border-radius:var(--r1);padding:10px 12px}
-.case,label.case{display:flex;align-items:flex-start;gap:var(--e2);font-size:var(--t2);
-  line-height:1.45;color:var(--texte)}
-.case input,label.case input{width:auto;flex:0 0 auto;margin:3px 0 0}
+   la liste tenue dans un cadre pour qu'on voie où elle commence et finit.
+   Chaque ligne fait 44 px : on la touche sans viser. */
+.cases{display:flex;flex-direction:column;gap:var(--e1);margin:var(--e1) 0 var(--e2);
+  border:1px solid var(--filet);background:var(--surface);border-radius:var(--r1);padding:6px 12px}
+.case,label.case{display:flex;align-items:flex-start;gap:10px;font-size:var(--t3);min-height:var(--h-touche);
+  padding:8px 0;line-height:1.4;color:var(--texte)}
+.case input,label.case input{width:20px;height:20px;flex:0 0 auto;margin:1px 0 0}
 
 /* Les tableaux. Les longs surtout : un fond alterné, une tête grise qui ne
    fatigue pas, et le débordement qui roule dans son cadre plutôt que de
    pousser la page. */
 .tab,.tbl,.defile{overflow-x:auto;max-width:100%;margin:var(--e3) 0}
 table{border-collapse:collapse;width:100%;font-size:var(--t2);background:var(--surface)}
-th,td{border:1px solid var(--filet);padding:7px 10px;text-align:left;vertical-align:top}
+th,td{border:1px solid var(--filet);padding:9px 10px;text-align:left;vertical-align:top}
 th{font:600 var(--t1)/1.4 system-ui;color:var(--encre);background:var(--creux)}
 tbody tr:nth-of-type(even){background:var(--zebre)}
 caption{caption-side:top;text-align:left;font-size:var(--t1);color:var(--texte-2);padding:0 0 var(--e1)}
@@ -278,11 +302,8 @@ caption{caption-side:top;text-align:left;font-size:var(--t1);color:var(--texte-2
    trou entre le filet et le texte. */
 .carte>:first-child,.presentation>:first-child,fieldset>:first-child{margin-top:0}
 .carte>:last-child,.presentation>:last-child{margin-bottom:0}
-.presentation{border:1px solid var(--filet);background:var(--surface);border-radius:var(--r2);
-  padding:var(--e4) var(--e5);margin:var(--e5) 0 0}
 .presentation h2{margin:0 0 var(--e2);font:600 17px/1.35 system-ui}
 .presentation p{margin:0 0 var(--e2);max-width:74ch}
-.presentation p:last-child{margin-bottom:0}
 .enc{border:1px solid var(--accent);background:var(--accent-clair);padding:var(--e3) var(--e4);
   margin:var(--e3) 0;border-radius:var(--r1)}
 .enc .sh{font-weight:600;color:var(--accent);margin:0 0 var(--e1)}
@@ -290,7 +311,7 @@ caption{caption-side:top;text-align:left;font-size:var(--t1);color:var(--texte-2
   padding:var(--e3) var(--e4);border-radius:var(--r1);margin:var(--e4) 0 0;font-size:var(--t3)}
 
 .avis{border-radius:var(--r1);padding:var(--e3) var(--e4);font-size:var(--t3);
-  line-height:1.55;margin:var(--e3) 0}
+  line-height:1.45;margin:var(--e3) 0}
 .avis b{display:block;margin-bottom:2px}
 .avis.info{background:var(--accent-clair);color:var(--accent)}
 .avis.att{background:var(--ambre-clair);color:var(--ambre)}
@@ -298,37 +319,172 @@ caption{caption-side:top;text-align:left;font-size:var(--t1);color:var(--texte-2
 .avis.non{background:var(--rouge-clair);color:var(--rouge)}
 
 /* Les pastilles d'état : même gabarit, seule la couleur dit le sens. */
-.chip,.jauge,.etiq{display:inline-block;font:600 var(--t0)/1 system-ui;padding:5px 9px;
-  border-radius:var(--r1);white-space:nowrap;background:var(--creux);color:var(--texte-2)}
+.chip,.jauge,.etiq{display:inline-block;font:600 var(--t0)/1 system-ui;padding:6px 10px;
+  border-radius:8px;white-space:nowrap;background:var(--creux);color:var(--texte-2)}
 .compteurs{display:flex;flex-wrap:wrap;gap:var(--e2);margin:var(--e3) 0}
-.compteurs .c{font:600 var(--t1)/1 system-ui;padding:8px 11px;border-radius:var(--r1);
+.compteurs .c{font:600 var(--t1)/1 system-ui;padding:8px 11px;border-radius:8px;
   background:var(--creux);color:var(--texte-2)}
 
-/* Les replis. Un triangle, un titre, rien qui clignote. */
-details.txt,details.texte{border:1px solid var(--filet);border-radius:var(--r2);
-  background:var(--surface);margin:var(--e2) 0}
-details.txt>summary,details.texte>summary{padding:10px 14px;cursor:pointer;
-  font:600 var(--t2)/1.35 system-ui;color:var(--accent)}
-details.txt .c,details.texte .corps{padding:0 14px 12px;font-size:var(--t2);
-  line-height:1.6;color:var(--texte-2)}
+/* Les replis : « Voir le texte de loi ». Discrets, comme dans la maquette :
+   un filet au-dessus, un titre gris de 44 px qu'on touche, et le texte en
+   gris dessous. Pas de cadre, pas de couleur : le document reste seul en
+   avant. */
+details{border-top:1px solid var(--filet);padding-top:6px;margin:var(--e3) 0 0;
+  color:var(--texte-2);font-size:var(--t2);line-height:1.5}
+details.txt,details.texte{border:0;border-top:1px solid var(--filet);border-radius:0;background:none;margin:var(--e3) 0 0}
+summary{cursor:pointer;font:600 var(--t2)/1.3 system-ui;color:var(--texte-2);min-height:var(--h-touche);
+  display:flex;align-items:center;gap:8px;padding:0;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"";flex:none;width:8px;height:8px;border-right:2px solid var(--texte-2);
+  border-bottom:2px solid var(--texte-2);transform:rotate(-45deg);margin:0 4px 0 2px;transition:transform .15s}
+details[open]>summary::before{transform:rotate(45deg)}
+details.txt>summary,details.texte>summary{padding:0;color:var(--texte-2)}
+details.txt .c,details.texte .corps,details .corps{padding:0 0 var(--e3);font-size:var(--t2);
+  line-height:1.5;color:var(--texte-2)}
+details p{margin:0 0 var(--e2)}
 
 /* Les boîtes de dialogue. */
 dialog{border:1px solid var(--filet-2);border-radius:var(--r2);background:var(--surface);
-  color:var(--texte);padding:var(--e5)}
+  color:var(--texte);padding:var(--e5);max-width:calc(100vw - 32px)}
 dialog::backdrop{background:rgba(11,17,26,.55)}
 
-/* La feuille : le document produit, tel qu'il sortira sur le papier. */
+/* La feuille : le document produit, tel qu'il sortira sur le papier. Seul à
+   l'écran, dans un cadre, en caractères de lettre. */
 .feuille{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
-  padding:clamp(22px,5vw,48px);margin:0 auto;color:#1a1d22}
+  padding:clamp(20px,4vw,44px);margin:0 auto;color:#1a1d22;
+  font:16px/1.55 Georgia,"Times New Roman",serif}
+.feuille h2{font:700 16px/1.3 Georgia,"Times New Roman",serif;margin:0 0 12px;text-transform:uppercase;
+  letter-spacing:.04em;color:#1a1d22}
+.feuille p{margin:0 0 10px}
+.feuille .ent{font-weight:700}
+.feuille mark{background:var(--accent-clair);color:var(--encre);padding:0 3px;border-radius:3px}
 
-pre{white-space:pre-wrap;word-wrap:break-word}
+pre{white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere}
 
-/* ---------- 5. L'impression ---------------------------------------------- */
+/* ---------- 5. Les écrans de la maquette --------------------------------- */
+
+/* Écran 1, la fiche : un champ par ligne, le bouton Continuer plein dessous. */
+section.fiche{padding:var(--e4) 0 var(--e6)}
+section.fiche fieldset{border:0;background:none;border-radius:0;padding:0;margin:0}
+section.fiche legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+section.fiche .grille,section.fiche .champs{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+section.fiche label{display:flex;flex-direction:column;gap:6px;position:relative}
+.btn-suite{display:flex;width:100%;margin:22px 0 0}
+
+/* Écran 2, les deux portes : le rappel de la fiche sur une ligne avec son
+   bouton Modifier, puis Audit et Gérer, larges, bleus, 110 px sur téléphone. */
+.rappel{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--filet)}
+.rappel .texte{flex:1;min-width:0;font-size:var(--t3);line-height:1.35;color:var(--texte-2)}
+.rappel .texte b{color:var(--texte);font-size:17px}
+.rappel button{flex:none;font:600 17px/1 system-ui;padding:10px 14px;min-height:var(--h-touche);
+  border-radius:var(--r1);background:var(--surface);color:var(--texte);border:1px solid var(--filet)}
+.rappel button:hover{background:var(--creux);color:var(--texte);border-color:var(--filet-2)}
+.chapeau{margin:var(--e4) 0 0;font-size:17px;line-height:1.5;color:var(--texte-2)}
+.chapeau b{color:var(--texte)}
+.portes{display:flex;flex-direction:column;gap:14px;margin:var(--e4) 0 0}
+.grand{display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:110px;padding:26px 20px;
+  border-radius:var(--r3);border:2px solid var(--accent);background:var(--accent-clair);color:var(--accent);
+  font:600 24px/1.2 system-ui;text-align:left;text-decoration:none;cursor:pointer;width:100%}
+.grand b{font-size:24px;color:var(--accent)}
+.grand span{color:var(--texte-2);font:400 var(--t3)/1.4 system-ui}
+.grand:hover{background:var(--accent);color:#fff}
+.grand:hover b,.grand:hover span{color:#fff}
+
+/* La tête d'écran des pages profondes : Retour, le titre en gras, la fiche
+   en gris à côté. */
+.haut{display:flex;align-items:center;gap:12px;padding:12px 0 10px;border-bottom:1px solid var(--filet);
+  min-height:var(--h-touche)}
+.haut b{font-size:17px;color:var(--encre);white-space:nowrap}
+.haut span{color:var(--texte-2);font-size:var(--t2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.haut a.retour,.haut button.retour{margin:0}
+
+/* Écran 3, l'audit : une ligne par obligation, 64 px, un filet dessous, le
+   nom à gauche, Oui et Non à droite. Ce qui n'est pas dû à l'effectif reste
+   en gris avec « pas dû avant N » à la place des boutons. */
+.ligne{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--filet);
+  min-height:var(--h-ligne)}
+.ligne .nom{flex:1;min-width:0;font-size:var(--t4);line-height:1.3;color:var(--encre)}
+.ligne .du{display:block;color:var(--texte-2);font-size:var(--t2)}
+.ligne.pasdu{opacity:.55}
+.ligne.pasdu .nom{color:var(--texte-2)}
+.ligne.pasdu .du{display:inline;white-space:nowrap}
+.ligne .oui,.ligne .non,.ligne .vu{font:600 17px/1 system-ui;min-width:74px;min-height:46px;padding:0 12px;
+  border-radius:var(--r1);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  text-decoration:none;white-space:nowrap;flex:none}
+.ligne .oui{border:2px solid var(--vert);background:var(--vert-clair);color:var(--vert)}
+.ligne .oui:hover{background:var(--vert);color:#fff;border-color:var(--vert)}
+.ligne .non{border:2px solid var(--accent);background:var(--accent);color:#fff}
+.ligne .non:hover{background:var(--accent-fonce);border-color:var(--accent-fonce);color:#fff}
+.ligne .vu{border:2px solid var(--vert);background:var(--vert);color:#fff}
+.ligne .vu:hover{background:var(--vert-clair);color:var(--vert);border-color:var(--vert)}
+.ligne.fait{background:var(--vert-clair);margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:var(--r1)}
+.ligne.fait .nom{color:var(--vert)}
+
+/* Écran 4, gérer : un groupe en capitales grises, puis un document par
+   ligne, un chevron à droite. Un mot, un document rempli. */
+.groupe{font:600 var(--t0)/1.3 system-ui;letter-spacing:.1em;text-transform:uppercase;color:var(--texte-2);
+  margin:14px 0 0}
+.doc-ligne{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0;
+  border-bottom:1px solid var(--filet);font-size:var(--t4);color:var(--encre);cursor:pointer;
+  min-height:52px;text-decoration:none}
+.doc-ligne::after{content:"\203A";color:var(--texte-2);font-size:24px;flex:none}
+.doc-ligne:hover{color:var(--accent)}
+
+/* Écran 5, le document : les champs en tête sur deux colonnes, la feuille
+   dessous, Télécharger en Word plein, Imprimer en second, le repli du texte
+   de loi tout en bas. Sur un grand écran, .plan met les champs à gauche et
+   la feuille à droite. */
+.plan{display:grid;gap:var(--e5);grid-template-columns:1fr;margin:var(--e4) 0 0;align-items:start}
+.barre.pile{flex-direction:column;align-items:stretch}
+.barre.pile button,.barre.pile .btn{width:100%}
+
+/* ---------- 6. Le téléphone ---------------------------------------------- */
+
+@media (max-width:640px){
+  .wrap,.page{padding:0 var(--e4)}
+  header.site{padding:8px 0}
+  /* Sur téléphone, le bandeau garde le nom seul : le sous-titre prendrait la
+     place du retour. */
+  header.site .marque span,header.site h1 span{display:none}
+  .maj-dispo .wrap{padding:var(--e2) var(--e4)}
+  main>header:not(.site),.page>header:not(.site),.wrap>header:not(.site){padding:var(--e3) 0 10px}
+  /* Une seule colonne : les champs d'abord, sur deux colonnes, puis le
+     document ; les boutons se suivent, pleins et de toute la largeur. */
+  .grille,.plan{grid-template-columns:1fr}
+  .champs{grid-template-columns:1fr 1fr;gap:10px}
+  .champs label{font-size:var(--t1)}
+  .champs label .nom,.champs label.ch .nom{font-size:var(--t1);margin:0 0 4px}
+  .champs input,.champs select{font-size:var(--t3);padding:10px 12px;min-height:var(--h-touche)}
+  .champs textarea,.champs label:has(textarea),.champs label:has(input[type=file]),.champs .cases,
+  .champs fieldset,.champs .barre,.champs h2,.champs h3,.champs p{grid-column:1/-1}
+  .barre{flex-direction:column;align-items:stretch}
+  .barre button,.barre .btn{width:100%}
+  .barre .compteur{margin-left:0}
+  .onglets{gap:6px}
+  .onglets button{flex:1 1 auto}
+  .feuille{padding:20px 16px}
+  .carte,fieldset{padding:14px 14px 16px}
+  dialog{padding:var(--e4)}
+  .rappel .texte{font-size:var(--t2)}
+  .ligne .nom{font-size:17px}
+  .ligne .oui,.ligne .non,.ligne .vu{min-width:64px;padding:0 10px;font-size:16px}
+  .retour-barre{margin:0 calc(var(--e4) * -1);padding:var(--e2) var(--e4)}
+}
+
+@media (min-width:700px){
+  .portes{flex-direction:row}
+  .grand{flex:1}
+}
+@media (min-width:1000px){
+  .plan{grid-template-columns:340px 1fr}
+}
+
+/* ---------- 7. L'impression ---------------------------------------------- */
 
 /* Ce qui sert à naviguer ne s'imprime pas : il ne reste que le document. */
 @media print{
-  body{background:#fff;color:#000}
-  header.site,.retour-barre,.maj-dispo,.onglets,.outils{display:none !important}
+  body{background:#fff;color:#000;font-size:11pt}
+  header.site,.retour-barre,.maj-dispo,.onglets,.outils,.haut,.rappel,.portes,details{display:none !important}
   /* Le titre de l'écran ne s'imprime pas au-dessus d'un document produit :
      la feuille sort seule, comme elle sera signée. Les pages qui impriment
      leur propre rapport (les audits, l'agenda) gardent le leur. */

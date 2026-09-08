@@ -31,7 +31,8 @@
   .fiche h1{font:600 26px/1.2 system-ui;margin:4px 0 16px}
   .fiche fieldset{border:0;background:none;border-radius:0;padding:0;margin:0}
   .fiche legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .fiche .grille{display:flex;flex-direction:column;gap:14px}
+  .fiche .grille{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+  .fiche input,.fiche select{width:100%}
   .fiche label{display:flex;flex-direction:column;gap:6px;position:relative}
   .fiche label .nom{font:400 16px/1.35 system-ui;color:var(--texte-2);margin:0}
   .fiche input,.fiche select{font:18px system-ui;padding:12px 14px;min-height:48px;
@@ -147,6 +148,7 @@
     var num = m ? String(Number(m[1])) : "";
     var t = m ? m[2] : s;
     t = t.replace(/^convention collective( nationale| régionale| départementale| interrégionale)?( de travail)?( des | de la | de l'| du | de | d')?/i, "");
+    t = t.replace(/\s+du \d{1,2}(er)? \S+ \d{4}$/i, "").trim();
     if (t) t = t.charAt(0).toUpperCase() + t.slice(1);
     return (num ? "IDCC " + num + (t ? ", " : "") : "") + t;
   }

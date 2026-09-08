@@ -9,7 +9,7 @@
 <link rel="icon" href="icons/icon-sst-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Santé et sécurité - Jurisprudence</title>
+<title>Santé et sécurité</title>
 <meta name="description" content="Une question par pièce. Sur « non », le document est déjà écrit.">
 <!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
@@ -17,58 +17,51 @@
 <script src="droits.js"></script>
 
 <!--
-  CE QUE FAIT CET ÉCRAN, ET CE QU'IL A CESSÉ DE FAIRE.
+  UNE LIGNE PAR QUESTION, OUI OU NON. Rien d'autre.
 
-  Il posait vingt-deux questions, rendait un rapport, un guide, une fiche de
-  régularisation et une grille de vérification, en six étapes numérotées. Au
-  bout de tout cela, l'employeur n'avait toujours pas sa consigne incendie.
+  Sur « non », le document s'affiche déjà écrit à partir de la fiche
+  d'entreprise ; ce que l'application ne peut pas connaître se saisit à côté
+  du document et chaque frappe le réécrit. Sur « oui », on dépose le document
+  existant et ce qui manque en sort rédigé.
 
-  Il pose maintenant une question par pièce, et rien d'autre.
+  Ce qui n'est pas dû à l'effectif n'est pas demandé : commission
+  santé-sécurité en dessous de trois cents salariés, registre des dangers
+  graves et imminents, consultation et référent du comité en dessous de onze,
+  référent harcèlement de l'employeur en dessous de deux cent cinquante.
 
-  SUR « NON », le document s'affiche déjà écrit à partir de la fiche
-  d'entreprise. Les quelques renseignements que l'application ne peut pas
-  connaître - le matériel d'extinction, le nom du salarié désigné, les heures
-  de l'opération - se saisissent à côté du document visible, et chaque frappe
-  le réécrit. Le document se corrige directement à l'écran ; un paragraphe
-  corrigé à la main est conservé quand le reste se réécrit.
+  Le document unique a ses deux écrans : duerp.html sur « non », le document
+  écrit ; controler-duerp.html sur « oui », le dépôt et le contrôle.
 
-  SUR « OUI », on dépose le document existant. Chaque point que la loi impose
-  y est cherché ; celui qu'on n'y trouve pas sort rédigé, prêt à insérer, et la
-  version corrigée s'emporte en Word.
-
-  CE QUI NE S'AFFICHE PAS. Une pièce que l'effectif ne rend pas due : la
-  commission santé-sécurité en dessous de trois cents salariés, le registre des
-  dangers graves et imminents et la consultation du comité en dessous de onze,
-  le référent harcèlement de l'employeur en dessous de deux cent cinquante. Une
-  question dont le « non » ne mènerait nulle part n'est pas posée. Défaut
-  mesuré le 7 septembre 2026 : la commission était demandée à tous les
-  effectifs, et le « non » ne menait à rien en dessous de trois cents.
-
-  LE DOCUMENT UNIQUE A SON PROPRE ÉCRAN, docs/controler-duerp.html. La question
-  est posée ici, les deux réponses y mènent.
-
-  LES TEXTES. Les articles des pièces écrites pour cet écran ont été lus au
-  relais Légifrance le 7 septembre 2026, deux fois à quelques minutes
-  d'intervalle, avec le même identifiant de version et le même texte aux deux
-  lectures. Les identifiants LEGIARTI sont portés sous chaque document, dans un
-  repli, et repris dans docs/documents-sst.js. Les documents plus anciens
-  gardent leurs propres sources, celles du moteur du module.
-
-  Rien ne sort du poste : tout est écrit dans le navigateur, et le fichier
-  déposé y est lu.
+  Les articles des pièces écrites pour cet écran ont été lus au relais
+  Légifrance le 7 septembre 2026, deux lectures concordantes, identifiant de
+  version porté sous chaque document et repris dans docs/documents-sst.js.
+  Rien ne sort du poste.
 -->
 <link rel="stylesheet" href="style.css">
+<style>
+  /* La liste, au plus près de la maquette : pas de rappel, pas de titre, pas
+     de pied ; une ligne par question avec un filet dessous, Oui vert, Non
+     bleu. Les documents ouverts sur « non » gardent l'habillage du moteur. */
+  #ecran>.rappel,#ecran>h2.q,#ecran>footer{display:none}
+  #ecran>.ligne{border:0;border-bottom:1px solid var(--filet);border-radius:0;background:none;
+    padding:14px 0;margin:0;min-height:var(--h-ligne)}
+  #ecran>.ligne.repondue{border-left:0;background:var(--vert-clair);margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:var(--r1)}
+  #ecran>.ligne .t{font:400 17px/1.3 system-ui}
+  #ecran>.ligne .b button{font:600 17px/1 system-ui;min-width:74px;min-height:46px;padding:0 12px;border-radius:var(--r1)}
+  #ecran>.ligne .b [data-oui]{border:2px solid var(--vert);background:var(--vert-clair);color:var(--vert)}
+  #ecran>.ligne .b [data-oui]:hover{background:var(--vert);color:#fff}
+  #ecran>.ligne .b [data-non]{border:2px solid var(--accent);background:var(--accent);color:#fff}
+  #ecran>.groupe{margin:14px 0 0;color:var(--texte-2)}
+  @media (max-width:640px){#ecran>.ligne .b button{min-width:64px;padding:0 10px;font-size:16px}}
+</style>
 </head>
 <body>
 
 <header class="site">
   <div class="wrap">
-    <p class="marque">Jurisprudence <span>santé et sécurité</span></p>
+    <p class="marque">Santé et sécurité</p>
     <div class="outils">
       <a href="index.html">Accueil</a>
-      <a href="controler-duerp.html">Document unique</a>
-      <a href="audit-social.html">Audit social</a>
-      <a href="gerer.html">Gérer</a>
     </div>
   </div>
 </header>
@@ -145,12 +138,12 @@
   }
 
   var QUESTIONS = [
-    /* Le document unique a son écran : les deux réponses y mènent, et cet
-       écran-ci ne redemande rien. */
+    /* Le document unique a ses deux écrans : le « non » ouvre le document
+       écrit, le « oui » le contrôle. */
     { id: "duerp", groupe: "Le document unique",
       question: "Avez-vous un document unique d'évaluation des risques ?",
       titre: "Document unique",
-      lien: "controler-duerp.html", lienOui: "controler-duerp.html" },
+      lien: "duerp.html", lienOui: "controler-duerp.html" },
 
     deTexte("SST-CTL-DUE-05",
       "Avez-vous le programme annuel de prévention, ou la liste des actions consignée dans le document unique ?",
@@ -199,10 +192,7 @@
     module: "sst",
     titre: "Avez-vous ces pièces ?",
     questions: QUESTIONS,
-    pied: "Les articles cités sous chaque document ont été lus à la source, avec leur " +
-      "identifiant de version. Tout est écrit dans ce navigateur : aucune donnée ne part " +
-      "sur un réseau. Le document unique se construit sur son écran, " +
-      "<a href=\"controler-duerp.html\">par métier</a>.",
+    pied: "",
   });
 })();
 </script>
