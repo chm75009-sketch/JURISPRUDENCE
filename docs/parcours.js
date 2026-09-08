@@ -3980,18 +3980,24 @@
       return '<col min="' + (j + 1) + '" max="' + (j + 1) + '" width="' + Math.max(10, w) + '" customWidth="1"/>';
     }).join("");
 
+    var nbCol = largeurs.length;
     var rows = lignes.map(function (l, i) {
-      var gras = (i === 0 || i === large) ? ' s="1"' : "";
-      var cells = (l || []).map(function (c, j) {
+      l = l || [];
+      var dansTableau = large >= 0 && i >= large && l.length >= 4;
+      var style = (i === 0 || i === large) ? ' s="1"' : (dansTableau ? ' s="2"' : "");
+      var n = dansTableau ? nbCol : l.length;
+      var cells = [];
+      for (var j = 0; j < n; j++) {
+        var c = l[j];
         var v = c == null ? "" : String(c);
-        if (v === "") return "";
         var ref = colonne(j) + (i + 1);
+        if (v === "") { if (dansTableau) cells.push('<c r="' + ref + '"' + style + "/>"); continue; }
         if (/^-?\d+([.,]\d+)?$/.test(v.replace(/\s/g, "")))
-          return '<c r="' + ref + '"' + gras + '><v>' + v.replace(/\s/g, "").replace(",", ".") + "</v></c>";
-        return '<c r="' + ref + '" t="inlineStr"' + gras + "><is><t xml:space=\"preserve\">" +
-          xmlEch(v) + "</t></is></c>";
-      }).join("");
-      return '<row r="' + (i + 1) + '">' + cells + "</row>";
+          cells.push('<c r="' + ref + '"' + style + '><v>' + v.replace(/\s/g, "").replace(",", ".") + "</v></c>");
+        else
+          cells.push('<c r="' + ref + '" t="inlineStr"' + style + "><is><t xml:space=\"preserve\">" + xmlEch(v) + "</t></is></c>");
+      }
+      return '<row r="' + (i + 1) + '">' + cells.join("") + "</row>";
     }).join("");
 
     var feuille = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
@@ -4000,15 +4006,23 @@
         '" topLeftCell="A' + (large + 2) + '" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>' : "") +
       "<cols>" + cols + "</cols><sheetData>" + rows + "</sheetData></worksheet>";
 
+    /* Des cadres sur chaque cellule, l'en-tête en gras sur fond gris, le
+       texte qui revient à la ligne : sans cela le classeur s'ouvrait comme du
+       texte brut (« il faut mettre les cadres, séparer colonnes et lignes »,
+       8 septembre 2026). Style 1 = en-tête, style 2 = cellule cadrée. */
     var styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
       '<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font>' +
       '<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>' +
-      '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>' +
-      '<borders count="1"><border/></borders>' +
-      '<cellStyleXfs count="1"><xf/></cellStyleXfs>' +
-      '<cellXfs count="2"><xf xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
-      '<xf xfId="0" fontId="1" applyFont="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+      '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>' +
+      '<fill><patternFill patternType="solid"><fgColor rgb="FFE7EAF0"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+      '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>' +
+      '<border><left style="thin"><color rgb="FF9AA3AF"/></left><right style="thin"><color rgb="FF9AA3AF"/></right>' +
+      '<top style="thin"><color rgb="FF9AA3AF"/></top><bottom style="thin"><color rgb="FF9AA3AF"/></bottom><diagonal/></border></borders>' +
+      '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+      '<cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>' +
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
       "</cellXfs></styleSheet>";
 
     return zip([

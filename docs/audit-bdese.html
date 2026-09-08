@@ -341,9 +341,23 @@
     pris[s.toLowerCase()] = true;
     return s;
   }
+  /* La feuille : des cadres sur chaque cellule, l'en-tête en gras sur fond
+     gris, le titre de l'onglet en plus grand, le texte qui revient à la
+     ligne, et la ligne d'en-tête figée. Sans cela le classeur s'ouvrait
+     comme du texte brut dans des colonnes étroites : « c'est de la merde,
+     il faut mettre les cadres, séparer colonnes et lignes », 8 septembre 2026.
+     Styles (xl/styles.xml) : 1 = titre, 2 = en-tête, 3 = cellule cadrée. */
   function feuilleXml(lignes, largeurs) {
     var x = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
+    function pleines(l) { return (l || []).filter(function (c) { return c !== null && c !== undefined && c !== ""; }).length; }
+    var tete = -1;
+    lignes.forEach(function (l, i) { if (tete < 0 && pleines(l) >= 4) tete = i; });
+    if (tete >= 0) {
+      x += '<sheetViews><sheetView workbookViewId="0"><pane ySplit="' + (tete + 1) +
+        '" topLeftCell="A' + (tete + 2) + '" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>';
+    }
+    x += '<sheetFormatPr defaultRowHeight="15"/>';
     if (largeurs && largeurs.length) {
       x += "<cols>";
       largeurs.forEach(function (l, i) {
@@ -352,17 +366,43 @@
       x += "</cols>";
     }
     x += "<sheetData>";
+    var nbCol = Math.max.apply(null, lignes.map(function (l) { return (l || []).length; }).concat([1]));
     lignes.forEach(function (ligne, i) {
-      x += '<row r="' + (i + 1) + '">';
-      ligne.forEach(function (cel, j) {
-        if (cel === null || cel === undefined || cel === "") return;
-        x += '<c r="' + colonne(j + 1) + (i + 1) + '" t="inlineStr"><is><t xml:space="preserve">' +
+      var vide = !(ligne || []).some(function (c) { return c !== null && c !== undefined && c !== ""; });
+      if (vide) { x += '<row r="' + (i + 1) + '"/>'; return; }
+      var titre = (i === 0 && pleines(ligne) === 1);
+      var style = titre ? 1 : (i === tete ? 2 : 3);
+      var largeur = titre ? 1 : (i < tete || tete < 0 ? ligne.length : nbCol);
+      x += '<row r="' + (i + 1) + '"' + (titre ? ' ht="22" customHeight="1"' : "") + '>';
+      for (var j = 0; j < largeur; j++) {
+        var cel = ligne[j];
+        var ref = colonne(j + 1) + (i + 1);
+        if (cel === null || cel === undefined || cel === "") { x += '<c r="' + ref + '" s="' + style + '"/>'; continue; }
+        x += '<c r="' + ref + '" s="' + style + '" t="inlineStr"><is><t xml:space="preserve">' +
           echX(cel) + "</t></is></c>";
-      });
+      }
       x += "</row>";
     });
     return x + "</sheetData></worksheet>";
   }
+  var STYLES_XLSX = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    '<fonts count="3"><font><sz val="11"/><name val="Calibri"/></font>' +
+    '<font><b/><sz val="13"/><color rgb="FF1F3864"/><name val="Calibri"/></font>' +
+    '<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>' +
+    '<fills count="3"><fill><patternFill patternType="none"/></fill>' +
+    '<fill><patternFill patternType="gray125"/></fill>' +
+    '<fill><patternFill patternType="solid"><fgColor rgb="FFE7EAF0"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+    '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>' +
+    '<border><left style="thin"><color rgb="FF9AA3AF"/></left><right style="thin"><color rgb="FF9AA3AF"/></right>' +
+    '<top style="thin"><color rgb="FF9AA3AF"/></top><bottom style="thin"><color rgb="FF9AA3AF"/></bottom><diagonal/></border></borders>' +
+    '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+    '<cellXfs count="4">' +
+    '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+    '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>' +
+    '<xf numFmtId="0" fontId="2" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>' +
+    '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+    '</cellXfs></styleSheet>';
   function xlsx(feuilles) {
     var pris = {};
     var noms = feuilles.map(function (f) { return nomOnglet(f.titre, pris); });
@@ -374,7 +414,7 @@
         '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
         feuilles.map(function (f, i) {
           return '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
-        }).join("") + "</Types>" },
+        }).join("") + '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' + "</Types>" },
       { nom: "_rels/.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
         '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
@@ -389,7 +429,8 @@
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
         feuilles.map(function (f, i) {
           return '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>';
-        }).join("") + "</Relationships>" },
+        }).join("") + '<Relationship Id="rId' + (feuilles.length + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' + "</Relationships>" },
+      { nom: "xl/styles.xml", contenu: STYLES_XLSX },
     ];
     feuilles.forEach(function (f, i) {
       entrees.push({ nom: "xl/worksheets/sheet" + (i + 1) + ".xml", contenu: feuilleXml(f.lignes, f.largeurs) });
@@ -409,8 +450,8 @@
   function feuilles() {
     var head = entetes(CTX);
     var vides = head.length - 3;
-    var largeurs = [26, 34, 46].concat(CTX.mil.map(function () { return 14; })).concat([38]);
-    var couverture = { titre: "La base", largeurs: [34, 62], lignes: [
+    var largeurs = [30, 44, 60].concat(CTX.mil.map(function () { return 16; })).concat([44]);
+    var couverture = { titre: "La base", largeurs: [36, 90], lignes: [
       ["Base de données économiques, sociales et environnementales"],
       ["Entreprise", CTX.ent || "[à renseigner]"],
       ["Effectif", CTX.eff === null ? "[à renseigner]" : String(CTX.eff)],
