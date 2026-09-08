@@ -73,7 +73,7 @@
   #ecran-doc .champs label.ch .nom{font-size:14px;margin:0 0 4px}
   #ecran-doc .champs input,#ecran-doc .champs select,#ecran-doc .champs textarea{font-size:16px;padding:10px 12px;min-height:44px}
   #ecran-doc .champs textarea{min-height:88px}
-  #ecran-doc .champs .duo{display:grid;grid-template-columns:96px 1fr;gap:8px}
+  #ecran-doc .champs .duo{display:grid;grid-template-columns:120px 1fr;gap:8px}
   #ecran-doc .barre{margin:var(--e4) 0}
   #ecran-doc details{margin:var(--e2) 0 var(--e6)}
   #sources{margin-top:8px;font-size:var(--t1);line-height:1.6;color:var(--texte-2)}
@@ -442,7 +442,7 @@
   var CHAMPS = {
     nom: { nom: "Nom et prénom du salarié", t: "text", ph: "Madame Lucie MARTIN" },
     entretien: { nom: "Date de l'entretien préalable", t: "date" },
-    lieu: { nom: "Heure et lieu de l'entretien", t: "duo" },
+    lieu: { nom: "Heure et lieu de l'entretien", t: "duo", pleine: true },
     entree: { nom: "Date d'entrée dans l'entreprise", t: "date" },
     publication: { nom: "Date de diffusion de la liste", t: "date" },
     postes: { nom: "Postes disponibles, un par ligne", t: "textarea", pleine: true,
@@ -1159,15 +1159,14 @@
   }, true);
   $("#onglets").addEventListener("click", function () { $("#marque").textContent = courant.nom; });
 
-  /* Sous la question : l'entreprise, son effectif, et ce que l'effectif
-     commande. */
+  /* Sous la question : l'entreprise et son effectif. À partir de cinquante
+     salariés, le lien vers le plan de sauvegarde, dû dès dix licenciements
+     sur trente jours (L. 1233-61). */
   (function fiche() {
     var t = ech(profil.denomination) + " · " + effectif + " salarié" + (effectif > 1 ? "s" : "");
     if (effectif >= 50) {
-      t += " · dix licenciements ou plus sur trente jours : " +
-        '<a href="audit-pse.html">plan de sauvegarde de l\'emploi</a> (' + ref(["L1233-61"]) + ")";
+      t += ' · dix licenciements ou plus : <a href="audit-pse.html">plan de sauvegarde</a>';
     }
-    if (effectif >= 1000) t += " · congé de reclassement (" + ref(["L1233-71"]) + ")";
     $("#fiche-rappel").innerHTML = t;
   })();
 
