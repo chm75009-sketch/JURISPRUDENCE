@@ -10,20 +10,27 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Base de données</title>
-<meta name="description" content="La base de données économiques, sociales et environnementales : oui ou non. Non : le classeur se construit, rempli au nom de l'entreprise. Oui : vous déposez le vôtre, il est contrôlé.">
+<meta name="description" content="La base de données économiques, sociales et environnementales : oui ou non. Non : le classeur, rempli au nom de l'entreprise. Oui : vous déposez le vôtre, il est contrôlé.">
+<!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
+     tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
+     Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Il pose aussi le
+     bouton Retour du bandeau. Voir docs/DROITS.md. -->
 <script src="droits.js"></script>
 
 <!--
-  LA BASE DE DONNÉES, AUX ÉCRANS 3 ET 5 DE LA MAQUETTE VALIDÉE LE
-  8 SEPTEMBRE 2026 (epreuve/maquette.html).
+  UNE QUESTION, DEUX RÉPONSES, ET DANS LES DEUX CAS UN CLASSEUR.
 
-  Une question, oui ou non. « Non » ouvre le classeur, seul à l'écran : les
-  deux téléchargements en premier, les champs en tête, puis les rubriques du
-  décret en vrais tableaux qui défilent dans leur cadre. « Oui » ouvre
-  controler-bdese.html, le dépôt en premier. auditer.html arrive ici avec
-  ?rep=non dans l'adresse : la question est alors sautée et le classeur
-  s'affiche tout de suite. Au-dessous de cinquante salariés, la page dit
-  « pas dû » et renvoie à auditer.html.
+  « Avez-vous une base de données économiques, sociales et environnementales ? »
+  Non : le classeur est seul à l'écran, les deux téléchargements en premier,
+  quatre champs en tête qui le redessinent à chaque frappe, puis les rubriques
+  du décret en vrais tableaux, qui défilent dans leur cadre et jamais avec la
+  page. Oui : la page passe la main à controler-bdese.html, le dépôt en premier.
+  auditer.html arrive ici avec ?rep=non dans l'adresse : la question est alors
+  sautée et le classeur s'affiche tout de suite.
+
+  C'est l'écran 5 de la maquette validée le 8 septembre 2026
+  (epreuve/maquette.html). Rien d'autre : ni chapeau, ni étape, ni exposé du
+  droit avant d'agir. Le droit est dans le repli « Voir le texte de loi ».
 
   LA GRILLE N'EST PAS ÉCRITE ICI. Elle est découpée du texte du décret par
   moteur/bdese/contenu-bdese.js, dont la couverture est mesurée à cent pour
@@ -33,7 +40,8 @@
 
   LES ARTICLES, LUS AU RELAIS LÉGIFRANCE DE L'APPLICATION (filtre par le nom
   du code, lectures espacées et concordantes, contenu vérifié et non le seul
-  numéro). Le 8 septembre 2026, deux lectures chacun :
+  numéro). Le 8 septembre 2026, deux lectures chacun, puis deux lectures espacées
+  de plus dans la journée, mêmes identifiants :
 
     L. 2312-2   LEGIARTI000035650754   attributions récurrentes à cinquante salariés, douze mois
     L. 2312-18  LEGIARTI000052437125   la base rassemble les informations nécessaires aux consultations
@@ -42,7 +50,7 @@
     R. 2312-10  LEGIARTI000036411580   année en cours, deux précédentes, trois suivantes, tendances
     R. 2312-12  LEGIARTI000036411586   support informatique ou papier selon l'effectif
 
-  Le 7 septembre 2026, trois lectures chacun :
+  Le 7 septembre 2026, trois lectures chacun, relus deux fois le 8 septembre 2026 :
 
     R. 2312-8   LEGIARTI000049905537   contenu supplétif, moins de trois cents salariés
     R. 2312-9   LEGIARTI000049905524   contenu supplétif, au moins trois cents salariés
@@ -50,49 +58,28 @@
 
 <link rel="stylesheet" href="style.css">
 <style>
-  body{font-size:18px;line-height:1.45}
-  main.wrap{max-width:560px;padding:0 16px var(--e7)}
+  /* Ce qui est propre à cette page. Tout le reste vient de style.css. */
+  main.wrap{padding-bottom:var(--e7)}
   @media (min-width:900px){main.wrap.large{max-width:1080px}}
 
-  .haut{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:12px 0 10px;
-    border-bottom:1px solid var(--filet);background:var(--fond)}
-  .haut .retour{margin:0;font:600 15px system-ui;padding:10px 14px;border:1px solid var(--filet-2);
-    border-radius:10px;background:var(--surface);color:var(--encre);text-decoration:none;min-height:44px;
-    display:inline-flex;align-items:center;white-space:nowrap;flex:none;cursor:pointer}
-  .haut .retour:hover{background:var(--creux);color:var(--encre);border-color:var(--filet-2)}
-  .haut b{font-size:17px;color:var(--encre);white-space:nowrap;flex:none}
-  .haut span{color:var(--texte-2);font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* La question d'entrée : elle occupe l'écran, et deux boutons y répondent. */
+  .question{max-width:720px;margin:11vh auto 0;text-align:center}
+  .question h1{font:600 clamp(24px,3.6vw,32px)/1.3 system-ui;margin:0 0 var(--e6);text-wrap:balance}
+  .question .deux{display:flex;gap:var(--e3);justify-content:center;flex-wrap:wrap}
+  .question .deux button{min-width:170px;font-size:17px;padding:16px 26px}
+  .question .fiche{margin:var(--e6) 0 0;font-size:var(--t3);color:var(--texte-2)}
 
-  /* la question, seule à l'écran */
-  .question{margin:52px 0 0}
-  .question p{margin:0 0 22px;font:600 clamp(21px,3vw,28px)/1.3 system-ui;color:var(--encre);max-width:24ch}
-  .deux{display:flex;gap:12px;flex-wrap:wrap}
-  .deux button{font:600 19px system-ui;min-width:140px;min-height:56px;padding:14px 34px;border-radius:12px;margin:0}
-  .deux .oui{border:2px solid var(--vert);background:var(--vert-clair);color:var(--vert)}
-  .deux .oui:hover{background:var(--vert);color:#fff;border-color:var(--vert)}
-  .deux .non{border:2px solid var(--accent);background:var(--accent);color:#fff}
-  .deux .non:hover{background:var(--accent-fonce);border-color:var(--accent-fonce);color:#fff}
-
-  /* pas dû avant cinquante salariés */
-  .pasdu-txt{margin:24px 0 18px;font-size:20px;line-height:1.4;color:var(--encre)}
-  .pasdu-txt b{color:var(--texte-2);font-weight:600}
-  a.btn.plein{display:flex;justify-content:center;width:100%;box-sizing:border-box;text-decoration:none;
-    font:600 19px system-ui;padding:16px;min-height:56px;border-radius:12px;align-items:center}
-
-  /* écran 5 : les téléchargements, les champs, le classeur */
-  .barre{display:flex;flex-direction:column;gap:10px;margin:16px 0 8px}
-  .barre button{font:600 19px system-ui;padding:16px;min-height:56px;border-radius:12px;width:100%;margin:0}
-  @media (min-width:700px){.barre{flex-direction:row}.barre button{width:auto;flex:1}}
-
-  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 6px}
+  /* Le classeur seul à l'écran : les téléchargements, les champs, les tableaux. */
+  #ecran-doc{margin:var(--e4) 0 0}
+  #ecran-doc .barre{margin:0 0 var(--e4)}
+  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 var(--e4)}
   .champs label{display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--texte-2)}
   .champs input,.champs select{font-size:16px;padding:10px 12px;min-height:44px;width:100%;box-sizing:border-box;
     border-radius:10px;border:1px solid var(--filet-2);background:var(--surface);color:var(--encre);font-family:inherit}
   .champs label.attend input{border-color:var(--accent);background:var(--accent-clair)}
   @media (min-width:700px){.champs{grid-template-columns:2fr 1fr 1fr 1fr}}
 
-  .etat{margin:6px 0 12px;font-size:14px;color:var(--texte-2);line-height:1.5}
-
+  /* Une rubrique : un cadre, son titre, et le tableau qui défile dedans. */
   .rb{border:1px solid var(--filet);border-radius:12px;margin:0 0 12px;background:var(--surface);overflow:hidden}
   .rb>.tt{padding:11px 14px;border-bottom:1px solid var(--filet);display:flex;
     justify-content:space-between;gap:12px;align-items:baseline}
@@ -119,7 +106,7 @@
     table.g td.vide{min-width:96px}
   }
 
-  details.loi{border-top:1px solid var(--filet);padding-top:10px;color:var(--texte-2);font-size:15px;margin-top:8px}
+  details.loi{border-top:1px solid var(--filet);padding-top:10px;color:var(--texte-2);font-size:15px;margin:var(--e2) 0 var(--e6)}
   details.loi summary{cursor:pointer;font-weight:600;color:var(--texte-2);min-height:40px;display:flex;align-items:center}
   details.loi p{margin:0 0 10px;line-height:1.5}
   details.loi .ident{font-size:11px}
@@ -127,7 +114,7 @@
   [hidden]{display:none !important}
 
   @media print{
-    .haut,.barre,.champs,details.loi{display:none !important}
+    header.site,.barre,.champs,details.loi,.question{display:none !important}
     main.wrap,main.wrap.large{max-width:none;padding:0}
     .grille-tab{max-height:none;overflow:visible}
     .rb{break-inside:avoid;border:0}
@@ -136,44 +123,30 @@
 </head>
 <body>
 
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Base de données</p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
 <main class="wrap" id="main">
 
-  <!-- la question, seule -->
-  <section id="e-question" hidden>
-    <div class="haut">
-      <a class="retour" href="auditer.html">&larr; Retour</a>
-      <b>Base de données</b>
-      <span id="ent-q"></span>
+  <!-- ═══════════════════ LA QUESTION D'ENTRÉE ═══════════════════ -->
+  <section class="question" id="ecran-question" hidden>
+    <h1>Avez-vous une base de données économiques, sociales et environnementales ?</h1>
+    <div class="deux">
+      <button type="button" class="second" id="rep-oui">Oui</button>
+      <button type="button" id="rep-non">Non</button>
     </div>
-    <div class="question">
-      <p>Avez-vous une base de données économiques, sociales et environnementales ?</p>
-      <div class="deux">
-        <button type="button" class="oui" id="rep-oui">Oui</button>
-        <button type="button" class="non" id="rep-non">Non</button>
-      </div>
-    </div>
+    <p class="fiche" id="fiche-rappel"></p>
   </section>
 
-  <!-- au-dessous de cinquante salariés : pas dû -->
-  <section id="e-pasdu" hidden>
-    <div class="haut">
-      <a class="retour" href="auditer.html">&larr; Retour</a>
-      <b>Base de données</b>
-      <span id="ent-p"></span>
-    </div>
-    <p class="pasdu-txt">Base de données économiques, sociales et environnementales : <b>pas dû avant 50 salariés</b>.</p>
-    <a class="btn plein" href="auditer.html">Retour à l'audit</a>
-  </section>
-
-  <!-- le classeur, seul -->
-  <section id="e-classeur" hidden>
-    <div class="haut">
-      <button type="button" class="retour" id="btn-retour">&larr; Retour</button>
-      <b>Base de données</b>
-      <span id="ent-c"></span>
-    </div>
-
-    <div class="barre">
+  <!-- ═══════════════ LE « NON » : LE CLASSEUR, SEUL À L'ÉCRAN ═══════════════ -->
+  <section id="ecran-doc" hidden>
+    <div class="barre pile">
       <button type="button" id="dl-xlsx">Télécharger le classeur</button>
       <button type="button" class="second" id="dl-csv">Télécharger en CSV</button>
     </div>
@@ -185,7 +158,6 @@
       <label>Un accord définit la base
         <select id="acc"><option value="non">non</option><option value="oui">oui</option></select></label>
     </form>
-    <p class="etat" id="etat"></p>
 
     <div id="rubriques"></div>
 
@@ -208,34 +180,56 @@
   var CTX = null;
   var VIA_URL = /(?:\?|&)rep=non(?:&|$)/.test(location.search);
 
-  var profil = P ? (P.lire() || {}) : {};
+  /* ═════════════════════════════════════════════ le profil de l'entreprise */
+  var profil = null;
+  try { profil = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
+  if ((!profil || !profil.denomination) && P) profil = P.lire();
+  if (!profil) profil = {};
   var effProfil = (profil.effectif !== undefined && profil.effectif !== null && String(profil.effectif).trim() !== "")
     ? parseInt(profil.effectif, 10) : null;
   if (effProfil !== null && isNaN(effProfil)) effProfil = null;
-  var titreEnt = (profil.denomination || "") +
-    (effProfil !== null ? (profil.denomination ? " · " : "") + effProfil + " salarié" + (effProfil > 1 ? "s" : "") : "");
-  ["#ent-q", "#ent-p", "#ent-c"].forEach(function (s) { $(s).textContent = titreEnt; });
 
-  /* ---------------------------------------------------------------- */
+  /* ═══════════════════════════════════ la question, et ce qu'elle commande */
   function montrer(id) {
-    ["e-question", "e-pasdu", "e-classeur"].forEach(function (e) {
+    ["ecran-question", "ecran-doc"].forEach(function (e) {
       document.getElementById(e).hidden = (e !== id);
     });
-    document.getElementById("main").classList.toggle("large", id === "e-classeur");
+    document.getElementById("main").classList.toggle("large", id === "ecran-doc");
     window.scrollTo(0, 0);
   }
-
   function ouvrirClasseur() {
     CTX = contexte();
     rendre();
-    montrer("e-classeur");
+    montrer("ecran-doc");
   }
-
-  $("#rep-oui").addEventListener("click", function () { location.href = "controler-bdese.html"; });
   $("#rep-non").addEventListener("click", ouvrirClasseur);
-  $("#btn-retour").addEventListener("click", function () {
-    if (VIA_URL) location.href = "auditer.html"; else montrer("e-question");
-  });
+  /* Le « oui » n'ouvre pas un questionnaire : il ouvre le dépôt de la base
+     existante et son contrôle, en un clic. */
+  $("#rep-oui").addEventListener("click", function () { location.href = "controler-bdese.html"; });
+
+  /* Le bouton Retour du bandeau, posé par droits.js : depuis le classeur, il
+     revient à la question ; depuis la question, ou quand on est arrivé avec
+     ?rep=non depuis l'audit, il quitte la page. */
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || $("#ecran-doc").hidden || VIA_URL) return;
+    ev.preventDefault(); ev.stopPropagation();
+    montrer("ecran-question");
+  }, true);
+
+  /* Sous la question : l'entreprise, son effectif, et si la base est due
+     (cinquante salariés, L. 2312-2 ; la base est à L. 2312-18, dans la
+     section que cet article ouvre). */
+  (function fiche() {
+    var t = "";
+    if (profil.denomination) t = profil.denomination;
+    if (effProfil !== null) {
+      t += (t ? " · " : "") + effProfil + " salarié" + (effProfil > 1 ? "s" : "");
+      t += effProfil >= 50 ? " · due à partir de 50 salariés" : " · pas due avant 50 salariés";
+      t += " (L. 2312-2)";
+    }
+    $("#fiche-rappel").textContent = t;
+  })();
 
   /* ---------------------------------------------------------------- */
   function nombre(v) {
@@ -252,9 +246,9 @@
     };
     c.mil = AUD ? AUD.millesimes(c.an) : [];
     /* L'effectif commande la grille : R. 2312-8 en deçà de trois cents
-       salariés, R. 2312-9 au-delà. La grille du décret n'est due qu'à défaut
-       d'accord. Sous accord, ou tant que l'effectif n'est pas connu, restent
-       les dix thèmes de L. 2312-21, alinéa 3. */
+       salariés, R. 2312-9 à partir de trois cents. La grille du décret n'est
+       due qu'à défaut d'accord. Sous accord, ou tant que l'effectif n'est pas
+       connu, restent les dix thèmes de L. 2312-21, alinéa 3. */
     c.grille = AUD ? AUD.grilleDue(c.eff, c.accord) : null;
     c.plancher = (AUD && AUD.plancher) || [];
     return c;
@@ -305,13 +299,7 @@
      six années défilent. Chaque réponse portée en tête le redessine. */
   function rendre() {
     var liste = rubriques(CTX);
-    var n = liste.reduce(function (a, r) { return a + r.lignes.length; }, 0);
     var nbCol = 1 + CTX.mil.length + 1;
-
-    $("#etat").textContent = texteApplicable(CTX) + " · " +
-      (CTX.mil.length ? CTX.mil[0].annee + " à " + CTX.mil[CTX.mil.length - 1].annee + " · " : "") +
-      liste.length + " rubriques, " + n + " lignes" +
-      (CTX.eff !== null && CTX.eff >= 300 ? " · support informatique (R. 2312-12)" : "");
 
     var head = '<tr><th class="info">Information</th>' +
       CTX.mil.map(function (m) {
@@ -595,24 +583,24 @@
   /* Le texte de loi, replié sous le classeur. Les passages cités sont ceux
      lus au relais Légifrance de l'application, avec la version lue. */
   $("#loi").innerHTML =
-    "<p><b>L. 2312-36 du code du travail</b> <span class=\"ident\">(LEGIARTI000048533625, lu le 8 septembre 2026)</span> : " +
+    "<p><b>L. 2312-36 du code du travail</b> <span class=\"ident\">(LEGIARTI000048533625, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, une base de données économiques, sociales et environnementales, " +
     "mise régulièrement à jour, rassemble un ensemble d'informations que l'employeur met à disposition du comité social et économique. " +
     "La base de données est accessible en permanence aux membres de la délégation du personnel du comité social et économique " +
     "ainsi qu'aux membres de la délégation du personnel du comité social et économique central d'entreprise, et aux délégués syndicaux. » " +
     "Et plus loin : « Ces informations portent sur les deux années précédentes et l'année en cours et intègrent des perspectives " +
     "sur les trois années suivantes. »</p>" +
-    "<p><b>R. 2312-10</b> <span class=\"ident\">(LEGIARTI000036411580, lu le 8 septembre 2026)</span> : " +
+    "<p><b>R. 2312-10</b> <span class=\"ident\">(LEGIARTI000036411580, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, les informations figurant dans la base de données portent sur l'année en cours, " +
     "sur les deux années précédentes et, telles qu'elles peuvent être envisagées, sur les trois années suivantes. Ces informations sont " +
     "présentées sous forme de données chiffrées ou, à défaut, pour les années suivantes, sous forme de grandes tendances. L'employeur indique, " +
     "pour ces années, les informations qui, eu égard à leur nature ou aux circonstances, ne peuvent pas faire l'objet de données chiffrées " +
     "ou de grandes tendances, pour les raisons qu'il précise. »</p>" +
-    "<p><b>R. 2312-12</b> <span class=\"ident\">(LEGIARTI000036411586, lu le 8 septembre 2026)</span> : " +
+    "<p><b>R. 2312-12</b> <span class=\"ident\">(LEGIARTI000036411586, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, la base de données est tenue à la disposition des personnes mentionnées au " +
     "dernier alinéa de l'article L. 2312-36 sur un support informatique pour les entreprises d'au moins trois cents salariés, et sur un " +
     "support informatique ou papier pour les entreprises de moins de trois cents salariés. »</p>" +
-    "<p><b>L. 2312-21</b> <span class=\"ident\">(LEGIARTI000043975329, lu le 8 septembre 2026)</span> : un accord d'entreprise, ou à défaut " +
+    "<p><b>L. 2312-21</b> <span class=\"ident\">(LEGIARTI000043975329, lu le 8 septembre 2026, deux lectures espacées)</span> : un accord d'entreprise, ou à défaut " +
     "de délégué syndical un accord entre l'employeur et le comité, « définit : 1° L'organisation, l'architecture et le contenu de la base " +
     "de données économiques, sociales et environnementales ». Et : « La base de données comporte au moins les thèmes suivants : " +
     "l'investissement social, l'investissement matériel et immatériel, l'égalité professionnelle entre les femmes et les hommes au sein " +
@@ -620,9 +608,9 @@
     "activités sociales et culturelles, la rémunération des financeurs, les flux financiers à destination de l'entreprise et les " +
     "conséquences environnementales de l'activité de l'entreprise. »</p>" +
     "<p><b>R. 2312-8</b> <span class=\"ident\">(LEGIARTI000049905537)</span> et <b>R. 2312-9</b> " +
-    "<span class=\"ident\">(LEGIARTI000049905524)</span>, lus le 7 septembre 2026 : le contenu de la base à défaut d'accord, " +
+    "<span class=\"ident\">(LEGIARTI000049905524)</span>, lus le 7 septembre 2026, relus le 8 : le contenu de la base à défaut d'accord, " +
     "au-dessous et à partir de trois cents salariés. Les rubriques, sections, sujets et lignes du classeur en sont le découpage, mot pour mot.</p>" +
-    "<p><b>L. 2312-2</b> <span class=\"ident\">(LEGIARTI000035650754, lu le 8 septembre 2026)</span> : " +
+    "<p><b>L. 2312-2</b> <span class=\"ident\">(LEGIARTI000035650754, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« Lorsque, postérieurement à la mise en place du comité social et économique, l'effectif de l'entreprise atteint au moins cinquante " +
     "salariés pendant douze mois consécutifs, le comité exerce l'ensemble des attributions récurrentes d'information et de consultation " +
     "définies par la section 3 à l'expiration d'un délai de douze mois à compter de la date à laquelle le seuil de 50 salariés a été atteint " +
@@ -652,9 +640,8 @@
     $("#champs").addEventListener("input", majour);
     $("#champs").addEventListener("change", majour);
 
-    if (effProfil !== null && effProfil < 50) montrer("e-pasdu");
-    else if (VIA_URL) ouvrirClasseur();
-    else montrer("e-question");
+    if (VIA_URL) ouvrirClasseur();
+    else montrer("ecran-question");
   })();
 })();
 </script>

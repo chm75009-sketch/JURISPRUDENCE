@@ -3225,31 +3225,41 @@
 
   /* Le complément à docs/style.css, et rien de plus : la feuille commune tient
      déjà les couleurs, les boutons, les champs, les avis et l'impression. Ne
-     descend ici que ce que cet écran est seul à afficher - la ligne de
-     question, la colonne de saisie collée au document, et les genres de blocs
-     de la feuille. */
+     descend ici que ce que cet écran est seul à afficher : la ligne de
+     question telle que la maquette du 8 septembre 2026 la dessine (le nom à
+     gauche, Oui vert et Non bleu à droite, un filet dessous), les champs en
+     tête du document, et les genres de blocs de la feuille. */
   var STYLE = [
-    ".rappel{margin:16px 0 0;font:600 var(--t0)/1 system-ui;letter-spacing:.16em;",
-    "text-transform:uppercase;color:var(--texte-3)}",
-    "h2.q{font:600 var(--t5)/1.3 system-ui;color:var(--encre);margin:var(--e4) 0 var(--e4)}",
-    ".groupe{margin:var(--e5) 0 var(--e2);font:600 var(--t0)/1 system-ui;letter-spacing:.14em;",
-    "text-transform:uppercase;color:var(--accent)}",
-    ".ligne{display:grid;grid-template-columns:1fr auto;gap:var(--e3);align-items:center;",
-    "background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);",
-    "padding:12px 14px;margin:0 0 var(--e2)}",
-    ".ligne.repondue{border-left:4px solid var(--vert)}",
-    ".ligne .t{font:500 15px/1.4 system-ui;color:var(--encre)}",
-    ".ligne .s{display:block;font-size:var(--t1);color:var(--texte-3);margin-top:2px}",
-    ".ligne .b{display:flex;gap:var(--e2);flex-wrap:wrap}",
-    ".plan{display:grid;gap:var(--e5);grid-template-columns:1fr;margin:var(--e4) 0 0;align-items:start}",
-    "@media (min-width:1000px){.plan{grid-template-columns:330px 1fr}",
-    ".cote-champs{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto}}",
-    ".cote-champs{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);",
-    "box-shadow:var(--ombre);padding:var(--e4)}",
-    ".cote-champs h3{margin:0 0 var(--e3);font:600 var(--t1)/1 system-ui;text-transform:uppercase;",
-    "letter-spacing:.09em;color:var(--texte-3)}",
-    ".cote-champs label.ch{margin:0 0 var(--e3)}",
-    ".cote-champs label.ch.plein>span{color:var(--vert)}",
+    ".rappel{margin:14px 0 0;font:400 var(--t2)/1.3 system-ui;color:var(--texte-2)}",
+    "h2.q{font:600 var(--t5)/1.3 system-ui;color:var(--encre);margin:var(--e4) 0 var(--e3)}",
+    ".groupe{margin:14px 0 0;font:600 var(--t0)/1.3 system-ui;letter-spacing:.1em;",
+    "text-transform:uppercase;color:var(--texte-2)}",
+    ".ligne{display:flex;align-items:center;gap:10px;padding:14px 0;margin:0;",
+    "border:0;border-bottom:1px solid var(--filet);border-radius:0;background:none;min-height:var(--h-ligne)}",
+    ".ligne>div:first-child{flex:1;min-width:0}",
+    ".ligne.repondue{background:var(--vert-clair);margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:var(--r1)}",
+    ".ligne.repondue .t{color:var(--vert)}",
+    ".ligne .t{font:400 var(--t4)/1.3 system-ui;color:var(--encre)}",
+    ".ligne .s{display:block;font-size:var(--t2);color:var(--texte-2);margin-top:2px}",
+    ".ligne .b{display:flex;gap:8px;flex:none;flex-wrap:nowrap}",
+    ".ligne .b button{font:600 17px/1 system-ui;min-width:74px;min-height:46px;padding:0 12px;",
+    "border-radius:var(--r1);cursor:pointer;white-space:nowrap}",
+    ".ligne .b [data-oui]{border:2px solid var(--vert);background:var(--vert-clair);color:var(--vert)}",
+    ".ligne .b [data-oui]:hover{background:var(--vert);color:#fff;border-color:var(--vert)}",
+    ".ligne .b [data-non]{border:2px solid var(--accent);background:var(--accent);color:#fff}",
+    ".ligne .b [data-non]:hover{background:var(--accent-fonce);border-color:var(--accent-fonce);color:#fff}",
+    "@media (max-width:640px){.ligne .t{font-size:17px}",
+    ".ligne .b button{min-width:64px;padding:0 10px;font-size:16px}}",
+    "#vue .champs{margin:14px 0 0}",
+    "#vue .champs label.ch.plein>.nom{color:var(--vert)}",
+    "#vue #cote-doc{margin:14px 0 0}",
+    "#vue .barre{margin:14px 0 0}",
+    "#vue details.loi{margin:var(--e2) 0 var(--e5)}",
+    "#vue details.loi .c{font-size:var(--t2);line-height:1.5;color:var(--texte-2);padding:0 0 var(--e3)}",
+    ".reprendre{margin:0 0 var(--e5);font-size:var(--t2);color:var(--texte-2)}",
+    ".reprendre button{font:inherit;border:0;background:none;padding:0;min-height:0;color:var(--accent);",
+    "text-decoration:underline;cursor:pointer}",
+    ".reprendre button:hover{background:none;color:var(--accent-fonce)}",
     ".feuille [contenteditable]{outline:none}",
     ".feuille [contenteditable]:focus{background:#fffbe9;border-radius:3px}",
     ".feuille .modifie{border-left:2px solid var(--vert);padding-left:8px;margin-left:-10px}",
@@ -3257,7 +3267,7 @@
     ".feuille .b-st{font:600 13.5px/1.4 system-ui;margin:0 0 22px;text-align:center;color:var(--texte-2)}",
     ".feuille .b-h1{font:700 15px/1.35 system-ui;margin:20px 0 7px}",
     ".feuille .b-h2{font:600 14px/1.35 system-ui;margin:15px 0 5px}",
-    ".feuille .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.68;text-align:justify}",
+    ".feuille .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.68}",
     ".feuille .b-puce{margin:0 0 5px 18px;font-size:14.5px;line-height:1.6}",
     ".feuille .b-note{margin:9px 0 12px;padding:0 0 0 10px;border-left:2px dashed var(--filet-2);",
     "font-size:var(--t1);font-style:italic;line-height:1.55;color:var(--texte-3)}",
@@ -3268,7 +3278,8 @@
     ".refus{background:var(--rouge-clair);border:1px solid var(--filet-2);border-radius:var(--r2);",
     "padding:var(--e4);margin:0 0 var(--e3);color:var(--rouge);font-size:var(--t3);line-height:1.6}",
     ".refus b{display:block;margin-bottom:5px;font-size:15.5px}",
-    "textarea.depot{min-height:220px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}",
+    "textarea.depot{min-height:200px;margin:14px 0 0;font:15px/1.5 system-ui}",
+    "#lecture{margin:14px 0 0}",
     ".manque{border:1px solid var(--filet);border-left:4px solid var(--ambre);",
     "border-radius:0 var(--r2) var(--r2) 0;background:var(--surface);padding:12px 14px;margin:0 0 var(--e2)}",
     ".manque.trouve{border-left-color:var(--vert)}",
@@ -3280,10 +3291,9 @@
     ".manque label input{margin-top:3px;width:auto}",
     ".manque q{color:var(--encre)}",
     ".manque .fond{margin:var(--e2) 0 0;font-size:var(--t0);color:var(--texte-3)}",
-    "pre.sortie{font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface);",
+    "pre.sortie{font:14px/1.6 system-ui;background:var(--surface);",
     "border:1px solid var(--filet);border-radius:var(--r2);padding:var(--e4);max-height:64vh;overflow:auto}",
-    "@media print{.barre,.cote-champs,.ligne .b,details.txt,.rappel{display:none !important}",
-    ".plan{display:block}}",
+    "@media print{.barre,.champs,.ligne .b,details.loi,.rappel,h2.q,.reprendre{display:none !important}}",
   ].join("\n");
 
   function ech(s) {
@@ -3380,34 +3390,46 @@
     } catch (e) {}
     function garder() { try { localStorage.setItem(CLE, JSON.stringify(ETAT)); } catch (e) {} }
 
+    /* Ce qui est ouvert : la liste, un document ou un contrôle. Le bouton
+       Retour du bandeau, posé par droits.js, ramène à la liste tant qu'un
+       document est ouvert ; depuis la liste, il quitte la page. */
+    var OUVERT = null;
+
     /* ------------------------------------------------------ les questions */
     var LISTE = (opt.questions || []).filter(function (q) {
       if (typeof q.due !== "function") return true;
       return q.due(profil) !== false;   /* inconnu : la question se pose */
     });
 
+    function rappel() {
+      var e = Number(profil.effectif);
+      return ech(profil.denomination) +
+        (isFinite(e) && String(profil.effectif).trim() !== "" ? " · " + e + " salarié" + (e > 1 ? "s" : "") : "");
+    }
+
     function ligneHtml(q) {
       var rep = ETAT.reponses[q.id];
       return '<div class="ligne' + (rep ? " repondue" : "") + '">' +
         '<div><span class="t">' + ech(q.question) + "</span>" +
         (rep ? '<span class="s">' + (rep === "oui" ? "vous l'avez" : "vous ne l'avez pas") +
-          (q.piece || q.texteId ? " - " + ech(q.titre) : "") + "</span>" : "") +
+          (q.piece || q.texteId ? " : " + ech(q.titre) : "") + "</span>" : "") +
         "</div><div class=\"b\">" +
-        '<button type="button" class="btn second petit" data-oui="' + ech(q.id) + '">Oui</button>' +
-        '<button type="button" class="btn petit" data-non="' + ech(q.id) + '">Non</button>' +
+        '<button type="button" data-oui="' + ech(q.id) + '">Oui</button>' +
+        '<button type="button" data-non="' + ech(q.id) + '">Non</button>' +
         "</div></div>";
     }
 
     function rendreListe(message) {
-      var h = '<p class="rappel">' + ech(profil.denomination) + "</p>" +
-        '<h2 class="q">' + ech(opt.titre || "Avez-vous ces documents ?") + "</h2>" +
+      OUVERT = null;
+      var h = '<p class="rappel">' + rappel() + "</p>" +
+        (opt.titre ? '<h2 class="q">' + ech(opt.titre) + "</h2>" : "") +
         (message ? '<div class="avis info">' + message + "</div>" : "");
       var groupe = null;
       LISTE.forEach(function (q) {
         if (q.groupe && q.groupe !== groupe) { groupe = q.groupe; h += '<p class="groupe">' + ech(groupe) + "</p>"; }
         h += ligneHtml(q);
       });
-      h += '<footer>' + (opt.pied || "") + "</footer>";
+      if (opt.pied) h += "<footer>" + opt.pied + "</footer>";
       racine.innerHTML = h;
       racine.querySelectorAll("[data-non]").forEach(function (b) {
         b.addEventListener("click", function () { repondre(b.getAttribute("data-non"), "non"); });
@@ -3438,6 +3460,15 @@
       if (q.lienOui) { location.href = q.lienOui; return; }
       ouvrirControle(q);
     }
+
+    /* Le bouton Retour du bandeau : depuis un document ou un contrôle, il
+       revient à la liste ; depuis la liste, il quitte la page. */
+    document.addEventListener("click", function (ev) {
+      var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+      if (!a || !OUVERT) return;
+      ev.preventDefault(); ev.stopPropagation();
+      rendreListe();
+    }, true);
 
     /* ------------------------------------------------ le document, sur « non » */
     function contexte(q) {
@@ -3484,17 +3515,18 @@
       return h + "</div>";
     }
 
+    /* Les champs en tête du document : seulement ce que l'application ne
+       peut pas connaître. Chaque frappe réécrit la feuille dessous. Sans
+       champ, rien ne s'affiche au-dessus du document. */
     function champsHtml(q) {
       var v = ETAT.valeurs[q.id] || {};
-      if (!q.piece || !q.piece.champs || !q.piece.champs.length)
-        return '<div class="cote-champs"><h3>Rien à saisir</h3><p style="margin:0;font-size:13.5px;color:#5a6470">' +
-          "Le document est écrit à partir de la fiche d'entreprise. Corrigez-le directement dans la feuille." +
-          "</p></div>";
-      var h = '<div class="cote-champs"><h3>Ce qui reste à remplir</h3>';
+      if (!q.piece || !q.piece.champs || !q.piece.champs.length) return "";
+      var h = '<form class="champs" id="champs-piece" autocomplete="off" onsubmit="return false">';
       q.piece.champs.forEach(function (c) {
         var val = v[c.c] == null ? "" : String(v[c.c]);
         var plein = val.trim() !== "";
-        h += '<label class="ch' + (plein ? " plein" : "") + '"><span>' + ech(c.nom) + "</span>";
+        h += '<label class="ch' + (plein ? " plein" : "") + (c.t === "textarea" ? " pleine" : "") +
+          '"><span class="nom">' + ech(c.nom) + "</span>";
         if (c.t === "textarea")
           h += '<textarea data-c="' + ech(c.c) + '" placeholder="' + ech(c.ph || "") + '">' + ech(val) + "</textarea>";
         else if (c.t === "select")
@@ -3505,47 +3537,50 @@
             '" placeholder="' + ech(c.ph || "") + '">';
         h += "</label>";
       });
-      return h + "</div>";
+      return h + "</form>";
+    }
+
+    function corpsHtml(q, ctx) {
+      var refus = q.piece && typeof q.piece.refus === "function" ? q.piece.refus(ctx) : null;
+      return refus
+        ? '<div class="refus"><b>Ce document n\'est pas produit.</b>' +
+          refus.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>"
+        : feuilleHtml(blocsDe(q, ctx), q.id);
+    }
+
+    function reprendreHtml(q) {
+      var c = ETAT.corrections[q.id] || {};
+      return Object.keys(c).length
+        ? '<p class="reprendre">Le document a été corrigé à la main. ' +
+          '<button type="button" id="reprendre">Repartir du texte généré</button></p>'
+        : "";
     }
 
     function ouvrirDocument(q) {
+      OUVERT = q;
       var ctx = contexte(q);
-      var refus = q.piece && typeof q.piece.refus === "function" ? q.piece.refus(ctx) : null;
-      var h = '<div class="barre"><button type="button" class="btn second" id="retour">← Les questions</button>' +
+      racine.innerHTML = '<div id="vue">' + champsHtml(q) +
+        '<div id="cote-doc">' + corpsHtml(q, ctx) + "</div>" +
+        '<div class="barre pile">' +
         '<button type="button" class="btn" id="dl-docx">Télécharger en Word</button>' +
-        '<button type="button" class="btn second" id="dl-txt">En texte</button>' +
-        '<button type="button" class="btn second" id="imprimer">Imprimer</button>' +
-        '<button type="button" class="btn second" id="reprendre">Repartir du texte généré</button></div>' +
-        '<div class="plan">' + champsHtml(q) + '<div id="cote-doc">' +
-        (refus ? '<div class="refus"><b>Ce document n\'est pas produit.</b>' +
-          refus.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>"
-               : feuilleHtml(blocsDe(q, ctx), q.id)) +
-        (q.renvoi ? '<details class="txt"><summary>Les articles, avec leur identifiant de version</summary>' +
+        '<button type="button" class="btn second" id="imprimer">Imprimer</button></div>' +
+        (q.renvoi ? '<details class="loi"><summary>Voir le texte de loi</summary>' +
           '<div class="c">' + ech(q.renvoi) + "</div></details>" : "") +
-        "</div></div>";
-      /* La vue vit dans son propre conteneur, recréé à chaque ouverture : les
-         écouteurs posés dessus disparaissent avec lui. Posés sur la racine, ils
-         s'empilaient - le deuxième document réécrivait le premier à chaque
-         frappe. */
-      racine.innerHTML = '<div id="vue">' + h + "</div>";
+        '<div id="reprise">' + reprendreHtml(q) + "</div></div>";
       brancherDocument(q);
       window.scrollTo({ top: 0 });
     }
 
     function redessinerDocument(q) {
-      var ctx = contexte(q);
-      var refus = q.piece && typeof q.piece.refus === "function" ? q.piece.refus(ctx) : null;
       var cote = document.getElementById("cote-doc");
       if (!cote) return;
-      var src = cote.querySelector("details.txt");
-      cote.innerHTML = (refus
-        ? '<div class="refus"><b>Ce document n\'est pas produit.</b>' +
-          refus.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>"
-        : feuilleHtml(blocsDe(q, ctx), q.id)) + (src ? src.outerHTML : "");
+      cote.innerHTML = corpsHtml(q, contexte(q));
+      var r = document.getElementById("reprise");
+      if (r) r.innerHTML = reprendreHtml(q);
     }
 
     function brancherDocument(q) {
-      document.getElementById("retour").addEventListener("click", rendreListe);
+      var vue = document.getElementById("vue");
       var maj = function (ev) {
         var el = ev.target;
         if (!el.getAttribute || !el.getAttribute("data-c")) return;
@@ -3555,7 +3590,6 @@
         redessinerDocument(q);
         el.closest("label").classList.toggle("plein", String(el.value).trim() !== "");
       };
-      var vue = document.getElementById("vue");
       vue.addEventListener("input", maj);
       vue.addEventListener("change", maj);
 
@@ -3568,14 +3602,17 @@
         ETAT.corrections[q.id][el.getAttribute("data-o")] = texteDe(el);
         el.classList.add("modifie");
         garder();
+        var r = document.getElementById("reprise");
+        if (r && !r.firstChild) r.innerHTML = reprendreHtml(q);
+      });
+      vue.addEventListener("click", function (ev) {
+        if (ev.target && ev.target.id === "reprendre") {
+          ETAT.corrections[q.id] = {}; garder(); redessinerDocument(q);
+        }
       });
 
-      document.getElementById("reprendre").addEventListener("click", function () {
-        ETAT.corrections[q.id] = {}; garder(); redessinerDocument(q);
-      });
       document.getElementById("imprimer").addEventListener("click", function () { window.print(); });
       document.getElementById("dl-docx").addEventListener("click", function () { exporter(q, "docx"); });
-      document.getElementById("dl-txt").addEventListener("click", function () { exporter(q, "txt"); });
     }
 
     /* Ce qui part dans le fichier : le document, et lui seul. Les notes de
@@ -3617,34 +3654,20 @@
 
     /* ------------------------------------------------- le contrôle, sur « oui » */
     /* Le contrôle du document déposé n'est écrit que pour les pièces qui
-       portent leurs attendus. Ailleurs, on le dit plutôt que de renvoyer à la
-       liste sans rien faire : un écran qui ne répond pas se lit comme une
-       panne. */
+       portent leurs attendus. Ailleurs, la réponse est enregistrée et la
+       ligne passe en vert : rien d'autre à faire. */
     function ouvrirControle(q) {
-      if (!q.piece || !q.piece.attendus || !q.piece.attendus.length) {
-        rendreListe("<b>" + ech(q.titre || q.question) + " : c'est noté.</b>" +
-          "Le contrôle point par point du document que vous avez n'est pas encore écrit pour " +
-          "cette pièce. Répondez « non » pour obtenir le document de référence, rédigé, et " +
-          "comparez-le au vôtre.");
-        return;
-      }
-      racine.innerHTML =
-        '<div class="barre"><button type="button" class="btn second" id="retour">← Les questions</button></div>' +
-        '<h2 class="q">' + ech(q.titre) + " : déposez-le</h2>" +
-        '<div class="barre">' +
-        '<label class="btn second" style="display:inline-flex;align-items:center;gap:9px">Choisir un fichier .docx ou .txt' +
-        '<input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none"></label>' +
-        '<button type="button" class="btn second" id="vider">Vider</button>' +
-        '<button type="button" class="btn" id="controler">Contrôler</button></div>' +
+      if (!q.piece || !q.piece.attendus || !q.piece.attendus.length) { rendreListe(); return; }
+      OUVERT = q;
+      racine.innerHTML = '<div id="vue">' +
+        '<h2 class="q">' + ech(q.titre) + " : déposez le vôtre</h2>" +
+        '<div class="barre pile">' +
+        '<label class="btn second" style="display:inline-flex;align-items:center;justify-content:center;gap:9px">Choisir le fichier (.docx ou .txt)' +
+        '<input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none"></label></div>' +
         '<div id="lecture"></div>' +
-        '<textarea class="depot" id="depot" placeholder="Collez ici le texte de votre document, ou choisissez le fichier ci-dessus."></textarea>' +
-        '<div id="diagnostic"></div>';
-      document.getElementById("retour").addEventListener("click", rendreListe);
-      document.getElementById("vider").addEventListener("click", function () {
-        document.getElementById("depot").value = "";
-        document.getElementById("lecture").innerHTML = "";
-        document.getElementById("diagnostic").innerHTML = "";
-      });
+        '<textarea class="depot" id="depot" placeholder="Ou collez ici le texte de votre document."></textarea>' +
+        '<div class="barre pile"><button type="button" class="btn" id="controler">Contrôler</button></div>' +
+        '<div id="diagnostic"></div></div>';
       document.getElementById("fichier").addEventListener("change", function (ev) {
         var f = ev.target.files && ev.target.files[0];
         if (!f) return;
@@ -3703,7 +3726,7 @@
         (manques ? manques + " point(s) introuvable(s) dans votre document" : "Tous les points cherchés ont été trouvés") +
         "</b>La recherche est faite sur les mots : un point rédigé autrement sera dit introuvable, et un " +
         "point trouvé n'est pas pour autant bien rédigé. C'est votre lecture qui décide.</div>" + h +
-        '<div class="barre" style="margin-top:14px">' +
+        '<div class="barre pile" style="margin-top:14px">' +
         '<button type="button" class="btn" id="assembler">Assembler la version corrigée</button></div>' +
         '<div id="corrige"></div>';
       cible.querySelectorAll("[data-ins]").forEach(function (i) {
@@ -3725,16 +3748,12 @@
       if (!ajouts.length) L.push("Aucun ajout retenu.");
       var sortie = L.join("\n");
       document.getElementById("corrige").innerHTML =
-        '<div class="barre" style="margin-top:14px">' +
+        '<div class="barre pile" style="margin-top:14px">' +
         '<button type="button" class="btn" id="c-docx">Télécharger en Word</button>' +
-        '<button type="button" class="btn second" id="c-txt">En texte</button>' +
         '<button type="button" class="btn second" id="c-copier">Copier</button></div>' +
         '<pre class="sortie">' + ech(sortie) + "</pre>";
       var nom = ((q.piece && q.piece.fichier) || slug(q.titre)) + "-corrige-" +
         new Date().toISOString().slice(0, 10);
-      document.getElementById("c-txt").addEventListener("click", function () {
-        global.AuditExport.telecharger(sortie, nom + ".txt", "text/plain;charset=utf-8");
-      });
       document.getElementById("c-docx").addEventListener("click", function () {
         var items = sortie.split(/\n/).map(function (l) { return { k: "p", t: l }; });
         global.AuditExport.telecharger(global.AuditExport.docx(items, q.titre + " - version corrigée"),
@@ -3748,7 +3767,6 @@
 
     rendreListe();
   }
-
   global.EcranPieces = { demarrer: demarrer };
 
 })(typeof window !== "undefined" ? window : this);
