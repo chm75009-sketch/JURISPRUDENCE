@@ -13,7 +13,8 @@
   VALIDÉE LE 8 SEPTEMBRE 2026 (epreuve/maquette.html).
 
   Le dépôt en premier : on choisit le fichier, il est lu, et l'écran passe
-  aux rubriques sans autre clic. Les deux téléchargements en premier, les
+  aux rubriques sans autre clic. Le bouton Retour du bandeau est posé par
+  droits.js ; la page ne le refait pas. Les deux téléchargements en premier, les
   champs en tête, puis chaque rubrique absente de la base déposée, mise en
   forme ligne à ligne avec ses colonnes d'années et son bouton « Insérer ».
   Les rubriques déjà présentes suivent, au cas où la vôtre serait plus courte.
@@ -31,7 +32,8 @@
 
   LES ARTICLES, LUS AU RELAIS LÉGIFRANCE DE L'APPLICATION (filtre par le nom
   du code, lectures espacées et concordantes, contenu vérifié et non le seul
-  numéro). Le 8 septembre 2026, deux lectures chacun :
+  numéro). Le 8 septembre 2026, deux lectures chacun, puis deux lectures
+  espacées de plus dans la journée, mêmes identifiants :
 
     L. 2312-2   LEGIARTI000035650754   attributions récurrentes à cinquante salariés, douze mois
     L. 2312-18  LEGIARTI000052437125   la base rassemble les informations, égalité, formations
@@ -40,7 +42,8 @@
     R. 2312-10  LEGIARTI000036411580   année en cours, deux précédentes, trois suivantes, tendances
     R. 2312-12  LEGIARTI000036411586   support informatique ou papier selon l'effectif
 
-  Le 7 septembre 2026, trois lectures chacun :
+  Le 7 septembre 2026, trois lectures chacun (R. 2312-8 et R. 2312-9 relus
+  deux fois le 8 septembre 2026) :
 
     L. 2312-34  LEGIARTI000035609830   seuil de trois cents réputé franchi, un an pour s'y conformer
     R. 2312-8   LEGIARTI000049905537   contenu supplétif, moins de trois cents salariés
@@ -49,18 +52,9 @@
 
 <link rel="stylesheet" href="style.css">
 <style>
-  body{font-size:18px;line-height:1.45}
-  main.wrap{max-width:560px;padding:0 16px var(--e7)}
+  /* Ce qui est propre à cette page. Tout le reste vient de style.css. */
+  main.wrap{padding-bottom:var(--e7)}
   @media (min-width:900px){main.wrap.large{max-width:1080px}}
-
-  .haut{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:12px 0 10px;
-    border-bottom:1px solid var(--filet);background:var(--fond)}
-  .haut .retour{margin:0;font:600 15px system-ui;padding:10px 14px;border:1px solid var(--filet-2);
-    border-radius:10px;background:var(--surface);color:var(--encre);text-decoration:none;min-height:44px;
-    display:inline-flex;align-items:center;white-space:nowrap;flex:none;cursor:pointer}
-  .haut .retour:hover{background:var(--creux);color:var(--encre);border-color:var(--filet-2)}
-  .haut b{font-size:17px;color:var(--encre);white-space:nowrap;flex:none}
-  .haut span{color:var(--texte-2);font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
   /* le dépôt, en premier */
   .depot{margin:24px 0 0;display:flex;flex-direction:column;gap:12px}
@@ -75,18 +69,17 @@
   .depot .avis{margin:0}
 
   /* les rubriques : les téléchargements, les champs, les tableaux */
-  .barre{display:flex;flex-direction:column;gap:10px;margin:16px 0 8px}
-  .barre button{font:600 19px system-ui;padding:16px;min-height:56px;border-radius:12px;width:100%;margin:0}
-  @media (min-width:700px){.barre{flex-direction:row}.barre button{width:auto;flex:1}}
+  #e-rubriques{margin:var(--e4) 0 0}
+  #e-rubriques .barre{margin:0 0 var(--e4)}
 
-  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 6px}
+  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 var(--e4)}
   .champs label{display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--texte-2)}
   .champs input,.champs select{font-size:16px;padding:10px 12px;min-height:44px;width:100%;box-sizing:border-box;
     border-radius:10px;border:1px solid var(--filet-2);background:var(--surface);color:var(--encre);font-family:inherit}
   .champs label.attend input{border-color:var(--accent);background:var(--accent-clair)}
   @media (min-width:700px){.champs{grid-template-columns:2fr 1fr 1fr 1fr}}
 
-  .etat{margin:6px 0 12px;font-size:14px;color:var(--texte-2);line-height:1.5}
+  .etat{margin:0 0 12px;font-size:14px;color:var(--texte-2);line-height:1.5}
   h3.deja{margin:22px 0 10px;font:600 13px system-ui;letter-spacing:.1em;text-transform:uppercase;color:var(--texte-2)}
 
   .rb{border:1px solid var(--filet);border-radius:12px;margin:0 0 12px;background:var(--surface);overflow:hidden}
@@ -121,7 +114,7 @@
     table.g td.vide{min-width:96px}
   }
 
-  details.loi{border-top:1px solid var(--filet);padding-top:10px;color:var(--texte-2);font-size:15px;margin-top:8px}
+  details.loi{border-top:1px solid var(--filet);padding-top:10px;color:var(--texte-2);font-size:15px;margin:var(--e2) 0 var(--e6)}
   details.loi summary{cursor:pointer;font-weight:600;color:var(--texte-2);min-height:40px;display:flex;align-items:center}
   details.loi p{margin:0 0 10px;line-height:1.5}
   details.loi .ident{font-size:11px}
@@ -129,7 +122,7 @@
   [hidden]{display:none !important}
 
   @media print{
-    .haut,.barre,.champs,details.loi,.btn-ins{display:none !important}
+    header.site,.barre,.champs,details.loi,.btn-ins,#e-depot{display:none !important}
     main.wrap,main.wrap.large{max-width:none;padding:0}
     .grille-tab{max-height:none;overflow:visible}
     .rb{break-inside:avoid;border:0}
@@ -138,15 +131,19 @@
 </head>
 <body>
 
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Contrôle : base de données</p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
 <main class="wrap" id="main">
 
   <!-- le dépôt, en premier -->
   <section id="e-depot" hidden>
-    <div class="haut">
-      <a class="retour" href="auditer.html">&larr; Retour</a>
-      <b>Contrôle : base de données</b>
-      <span id="ent-d"></span>
-    </div>
     <div class="depot">
       <label class="btn depose">
         Déposer votre base (Excel, Word, CSV ou texte)
@@ -162,13 +159,7 @@
 
   <!-- les rubriques, mises en forme, prêtes à insérer -->
   <section id="e-rubriques" hidden>
-    <div class="haut">
-      <button type="button" class="retour" id="btn-retour">&larr; Retour</button>
-      <b>Contrôle : base de données</b>
-      <span id="ent-r"></span>
-    </div>
-
-    <div class="barre">
+    <div class="barre pile">
       <button type="button" id="dl-xlsx">Télécharger le classeur</button>
       <button type="button" class="second" id="dl-csv">Télécharger en CSV</button>
     </div>
@@ -207,16 +198,20 @@
   var effProfil = (profil.effectif !== undefined && profil.effectif !== null && String(profil.effectif).trim() !== "")
     ? parseInt(profil.effectif, 10) : null;
   if (effProfil !== null && isNaN(effProfil)) effProfil = null;
-  var titreEnt = (profil.denomination || "") +
-    (effProfil !== null ? (profil.denomination ? " · " : "") + effProfil + " salarié" + (effProfil > 1 ? "s" : "") : "");
-  ["#ent-d", "#ent-r"].forEach(function (s) { $(s).textContent = titreEnt; });
 
   function montrer(id) {
     ["e-depot", "e-rubriques"].forEach(function (e) { document.getElementById(e).hidden = (e !== id); });
     document.getElementById("main").classList.toggle("large", id === "e-rubriques");
     window.scrollTo(0, 0);
   }
-  $("#btn-retour").addEventListener("click", function () { montrer("e-depot"); });
+  /* Le bouton Retour du bandeau, posé par droits.js : depuis les rubriques,
+     il revient au dépôt ; depuis le dépôt, il quitte la page. */
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || $("#e-rubriques").hidden) return;
+    ev.preventDefault(); ev.stopPropagation();
+    montrer("e-depot");
+  }, true);
 
   /* ---------------------------------------------------------------- */
   /* LE ZIP, EN LECTURE. Un .docx comme un .xlsx sont des archives zip. On lit
@@ -434,8 +429,7 @@
     var lignes = liste.reduce(function (n, rb) { return n + (CHOIX[rb.id] ? rb.lignes.length : 0); }, 0);
 
     $("#etat").textContent = mis + " rubrique" + (mis > 1 ? "s" : "") + " à insérer, " +
-      lignes + " ligne" + (lignes > 1 ? "s" : "") + " · " + texteApplicable(CTX) +
-      (CTX.mil.length ? " · " + CTX.mil[0].annee + " à " + CTX.mil[CTX.mil.length - 1].annee : "");
+      lignes + " ligne" + (lignes > 1 ? "s" : "");
 
     var aPoser = liste.filter(function (rb) { return !PRESENTES[rb.id]; });
     var deja = liste.filter(function (rb) { return PRESENTES[rb.id]; });
@@ -724,24 +718,24 @@
 
   /* ---------------------------------------------------------------- */
   $("#loi").innerHTML =
-    "<p><b>L. 2312-36 du code du travail</b> <span class=\"ident\">(LEGIARTI000048533625, lu le 8 septembre 2026)</span> : " +
+    "<p><b>L. 2312-36 du code du travail</b> <span class=\"ident\">(LEGIARTI000048533625, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, une base de données économiques, sociales et environnementales, " +
     "mise régulièrement à jour, rassemble un ensemble d'informations que l'employeur met à disposition du comité social et économique. " +
     "La base de données est accessible en permanence aux membres de la délégation du personnel du comité social et économique " +
     "ainsi qu'aux membres de la délégation du personnel du comité social et économique central d'entreprise, et aux délégués syndicaux. » " +
     "Et plus loin : « Ces informations portent sur les deux années précédentes et l'année en cours et intègrent des perspectives " +
     "sur les trois années suivantes. »</p>" +
-    "<p><b>R. 2312-10</b> <span class=\"ident\">(LEGIARTI000036411580, lu le 8 septembre 2026)</span> : " +
+    "<p><b>R. 2312-10</b> <span class=\"ident\">(LEGIARTI000036411580, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, les informations figurant dans la base de données portent sur l'année en cours, " +
     "sur les deux années précédentes et, telles qu'elles peuvent être envisagées, sur les trois années suivantes. Ces informations sont " +
     "présentées sous forme de données chiffrées ou, à défaut, pour les années suivantes, sous forme de grandes tendances. L'employeur indique, " +
     "pour ces années, les informations qui, eu égard à leur nature ou aux circonstances, ne peuvent pas faire l'objet de données chiffrées " +
     "ou de grandes tendances, pour les raisons qu'il précise. »</p>" +
-    "<p><b>R. 2312-12</b> <span class=\"ident\">(LEGIARTI000036411586, lu le 8 septembre 2026)</span> : " +
+    "<p><b>R. 2312-12</b> <span class=\"ident\">(LEGIARTI000036411586, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, la base de données est tenue à la disposition des personnes mentionnées au " +
     "dernier alinéa de l'article L. 2312-36 sur un support informatique pour les entreprises d'au moins trois cents salariés, et sur un " +
     "support informatique ou papier pour les entreprises de moins de trois cents salariés. »</p>" +
-    "<p><b>L. 2312-21</b> <span class=\"ident\">(LEGIARTI000043975329, lu le 8 septembre 2026)</span> : un accord d'entreprise, ou à défaut " +
+    "<p><b>L. 2312-21</b> <span class=\"ident\">(LEGIARTI000043975329, lu le 8 septembre 2026, deux lectures espacées)</span> : un accord d'entreprise, ou à défaut " +
     "de délégué syndical un accord entre l'employeur et le comité, « définit : 1° L'organisation, l'architecture et le contenu de la base " +
     "de données économiques, sociales et environnementales ». Et : « La base de données comporte au moins les thèmes suivants : " +
     "l'investissement social, l'investissement matériel et immatériel, l'égalité professionnelle entre les femmes et les hommes au sein " +
@@ -749,7 +743,7 @@
     "activités sociales et culturelles, la rémunération des financeurs, les flux financiers à destination de l'entreprise et les " +
     "conséquences environnementales de l'activité de l'entreprise. »</p>" +
     "<p><b>R. 2312-8</b> <span class=\"ident\">(LEGIARTI000049905537)</span> et <b>R. 2312-9</b> " +
-    "<span class=\"ident\">(LEGIARTI000049905524)</span>, lus le 7 septembre 2026 : le contenu de la base à défaut d'accord, " +
+    "<span class=\"ident\">(LEGIARTI000049905524)</span>, lus le 7 septembre 2026, relus le 8 : le contenu de la base à défaut d'accord, " +
     "au-dessous et à partir de trois cents salariés. Les rubriques, sections, sujets et lignes de cet écran en sont le découpage, mot pour mot.</p>";
 
   /* ---------------------------------------------------------------- */

@@ -10,56 +10,46 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Audit social</title>
-<meta name="description" content="Une question par obligation. Sur « non », le document ou la procédure s'ouvre.">
+<meta name="description" content="Une ligne par pièce, oui ou non. Non : le document rempli s'ouvre. Oui : vous déposez le vôtre.">
 <!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
      Voir docs/DROITS.md. -->
 <script src="droits.js"></script>
 
 <!--
-  CE QUE FAIT CET ÉCRAN, ET CE QU'IL A CESSÉ DE FAIRE.
+  L'ÉCRAN 3 DE LA MAQUETTE VALIDÉE LE 8 SEPTEMBRE 2026 : une ligne par pièce,
+  Oui et Non sur la ligne. Rien avant la liste, rien après.
 
-  Il ouvrait sur « Ce niveau d'effectif est-il atteint depuis au moins douze
-  mois consécutifs ? », puis seize à dix-huit questions d'orientation, avant
-  tout questionnaire et tout document. Et le « non » à cette première question
-  ne menait nulle part.
+  « Non » ouvre le document, déjà écrit à partir de la fiche d'entreprise, seul
+  à l'écran : les champs que l'application ne connaît pas en tête, la feuille,
+  Télécharger en Word, Imprimer, le texte de loi replié dessous. Le bouton
+  Retour du bandeau, posé par droits.js, ramène à la liste.
 
-  Il ouvre maintenant sur la seule question qui vaille : avez-vous cette pièce,
-  ce dispositif, ce process ? Une ligne par obligation que le module recense,
-  deux boutons, et le « non » qui construit.
+  « Oui » ouvre le dépôt du document existant : chaque mention exigée y est
+  cherchée, celle qu'on n'y trouve pas sort rédigée, prête à insérer. Pour les
+  obligations qui n'ont pas de contrôle écrit, « Oui » enregistre la réponse
+  et la ligne passe en vert.
 
-  OÙ MÈNE LE « NON », ET IL MÈNE TOUJOURS QUELQUE PART :
-
-  - pour les obligations que le module rattachait à une procédure guidée, au
-    parcours qui la fait naître, ouvert sur son document (parcours.html?p=…&faire=1) ;
-
-  - pour celles qui n'avaient aucun parcours - elles étaient trente-cinq, et le
-    « non » y tombait dans le vide -, au document lui-même, écrit ici à partir
-    de la fiche d'entreprise : registre unique de sécurité, registre des
-    dangers graves et imminents, fiche d'entreprise du service de santé au
-    travail, plan de prévention, consigne de sécurité incendie, désignation du
-    salarié compétent et du référent handicap, livret d'épargne salariale,
-    information de l'inspection après un accident mortel, convention
-    individuelle de forfait en jours. Celles qui ne sont pas un écrit - une
-    durée maximale de travail, un repos quotidien, l'interdiction de
-    discriminer - ne sont pas transformées en formulaire pour le plaisir
-    d'avoir une pièce à sortir : elles restent au moteur.
-
-  SUR « OUI », pour les documents écrits ici, on dépose l'existant : chaque
-  mention exigée y est cherchée, celle qu'on n'y trouve pas sort rédigée, prête
-  à insérer.
+  Les obligations du moteur social qui ont une procédure guidée sont sur la
+  même liste, avec un libellé court : leur « non » ouvre le parcours sur son
+  document (parcours.html?p=…&faire=1).
 
   CE QUI NE S'AFFICHE PAS : une obligation que la fiche d'entreprise rend non
   due. C'est l'effectif qui commande, comme partout dans l'application.
 
   LES TEXTES. Les documents écrits pour cet écran citent des articles lus au
   relais Légifrance le 7 septembre 2026, deux lectures concordantes, identifiant
-  LEGIARTI porté sous chaque document. Le reste vient du moteur du module, où
-  cent soixante-douze articles ont été lus à la source.
+  LEGIARTI porté sous chaque document, dans le repli « Voir le texte de loi ».
+  Le reste vient du moteur du module, où cent soixante-douze articles ont été
+  lus à la source.
 
   Rien ne sort du poste.
 -->
 <link rel="stylesheet" href="style.css">
+<style>
+  main.wrap{max-width:560px;padding-bottom:var(--e7)}
+  main.wrap.large{max-width:760px}
+</style>
 </head>
 <body>
 
@@ -72,7 +62,7 @@
   </div>
 </header>
 
-<main class="wrap"><div id="ecran"></div></main>
+<main class="wrap" id="main"><div id="ecran"></div></main>
 
 <script src="profil.js"></script>
 <script src="audit-export.js"></script>
@@ -87,40 +77,57 @@
   var A = window.MoteurSocial && window.MoteurSocial.audit;
   var profil = window.Profil ? window.Profil.lire() : {};
 
-  function dePiece(id, groupe) {
+  /* Le libellé court de chaque ligne : la pièce, pas la question entière. */
+  var COURT = {
+    "PIECE-REGISTRE-SECURITE": "Registre unique de sécurité",
+    "PIECE-DGI": "Registre des dangers graves et imminents",
+    "PIECE-INCENDIE": "Consigne de sécurité incendie",
+    "PIECE-FICHE-ENTREPRISE": "Fiche d'entreprise du service de santé",
+    "PIECE-SALARIE-COMPETENT": "Salarié compétent en prévention",
+    "PIECE-PLAN-PREVENTION": "Plan de prévention (entreprises extérieures)",
+    "PIECE-ACCIDENT-MORTEL": "Accident mortel : information de l'inspection",
+    "PIECE-REFERENT-HANDICAP": "Référent handicap",
+    "PIECE-LIVRET-EPARGNE": "Livret d'épargne salariale",
+    "PIECE-FORFAIT-JOURS": "Convention de forfait en jours",
+  };
+
+  function dePiece(id) {
     var p = P.pour(id);
     if (!p) return null;
-    return { id: p.id, groupe: groupe, question: p.question, titre: p.titre,
+    return { id: p.id, groupe: "Les pièces à tenir", question: COURT[id] || p.titre, titre: p.titre,
       piece: p, renvoi: p.renvoi, due: p.due };
   }
 
   var QUESTIONS = [
-    dePiece("PIECE-REGISTRE-SECURITE", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-DGI", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-INCENDIE", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-FICHE-ENTREPRISE", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-SALARIE-COMPETENT", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-PLAN-PREVENTION", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-ACCIDENT-MORTEL", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-REFERENT-HANDICAP", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-LIVRET-EPARGNE", "Les pièces que vous devez tenir"),
-    dePiece("PIECE-FORFAIT-JOURS", "Les pièces que vous devez tenir"),
+    dePiece("PIECE-REGISTRE-SECURITE"),
+    dePiece("PIECE-DGI"),
+    dePiece("PIECE-INCENDIE"),
+    dePiece("PIECE-FICHE-ENTREPRISE"),
+    dePiece("PIECE-SALARIE-COMPETENT"),
+    dePiece("PIECE-PLAN-PREVENTION"),
+    dePiece("PIECE-ACCIDENT-MORTEL"),
+    dePiece("PIECE-REFERENT-HANDICAP"),
+    dePiece("PIECE-LIVRET-EPARGNE"),
+    dePiece("PIECE-FORFAIT-JOURS"),
   ].filter(Boolean);
+
+  /* Le libellé court d'une obligation du moteur : ce qui précède le
+     deux-points ou la parenthèse. */
+  function court(t) {
+    var m = String(t || "").split(/\s[:(]/)[0].trim();
+    return m || t;
+  }
 
   /* Les obligations du moteur qui ont une procédure guidée : le « non » y
      mène, ouverte sur son document. Celles que la fiche d'entreprise rend non
-     dues ne sont pas posées ; celles dont l'assujettissement dépend d'une
-     réponse que l'écran ne demande plus le sont, parce qu'un « peut-être » se
-     tranche en ouvrant la pièce, pas en posant une question de plus. */
+     dues ne sont pas posées. */
   if (A) {
     var ORDRE = ["instances", "documents obligatoires", "affichages et informations",
       "registres", "négociations", "santé-sécurité", "formation et entretiens",
       "congés et jours", "embauche et contrat", "fin du contrat",
       "égalité et non-discrimination", "épargne et protection sociale",
       "durée du travail et repos"];
-    /* Une obligation déjà servie par une pièce écrite ici n'est pas reposée :
-       la question serait la même, et la réponse mènerait à un parcours moins
-       direct que le document. */
+    /* Une obligation déjà servie par une pièce écrite ici n'est pas reposée. */
     var DEJA = { "SOC-AFF-CONSIGNE-INCENDIE": true, "SOC-SST-SALARIE-COMPETENT": true };
     var avecParcours = A.applicables(profil).filter(function (o) {
       return o.du !== false && !DEJA[o.id] && o.regularisation && o.regularisation.parcours;
@@ -130,15 +137,14 @@
       return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
     });
     avecParcours.forEach(function (o) {
-      /* Le document unique a son écran, où il s'écrit par métier : c'est là
-         qu'il faut aller, pas dans un parcours qui le décrit. */
+      /* Le document unique a son écran, où il s'écrit par métier. */
       var duerp = o.id === "SOC-DOC-DUERP";
       QUESTIONS.push({
         id: o.id,
         groupe: o.categorie.charAt(0).toUpperCase() + o.categorie.slice(1),
-        question: o.intitule,
+        question: court(o.intitule),
         titre: duerp ? "Document unique" : o.regularisation.parcoursNom,
-        lien: duerp ? "controler-duerp.html"
+        lien: duerp ? "duerp.html"
                     : "parcours.html?p=" + o.regularisation.parcours + "&faire=1",
         lienOui: duerp ? "controler-duerp.html" : null,
         renvoi: o.fondement || "",
@@ -149,13 +155,17 @@
   window.EcranPieces.demarrer({
     racine: "ecran",
     module: "social",
-    titre: "Avez-vous ces documents et ces dispositifs ?",
+    titre: "",
     questions: QUESTIONS,
-    pied: "Les documents écrits ici portent leurs articles, avec l'identifiant de version, " +
-      "sous la feuille. Tout est écrit dans ce navigateur : aucune donnée ne part sur un " +
-      "réseau. La santé-sécurité a son écran, <a href=\"audit-sst.html\">ici</a>, et le " +
-      "document unique le sien, <a href=\"controler-duerp.html\">là</a>.",
+    pied: "",
   });
+
+  /* Le document ouvert prend une colonne plus large que la liste. */
+  var main = document.getElementById("main"), ecran = document.getElementById("ecran");
+  if (main && ecran && window.MutationObserver)
+    new MutationObserver(function () {
+      main.classList.toggle("large", !!ecran.querySelector("#vue"));
+    }).observe(ecran, { childList: true });
 })();
 </script>
 <script>
