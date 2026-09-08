@@ -1,4 +1,4 @@
-/* Les documents que l'application PRODUIT — licenciement pour motif économique :
+/* Les documents que l'application PRODUIT - licenciement pour motif économique :
    reclassement, suppression d'emploi, cause économique.
 
    POURQUOI CE FICHIER EXISTE
@@ -25,7 +25,7 @@
    régularisent rien : ils ajoutent une pièce postérieure à un acte antérieur,
    et la pièce elle-même prouve alors que la recherche n'était pas faite. Les
    documents qui touchent à ces points portent donc un encadré « CE QUI NE SE
-   RATTRAPE PAS » : il dit ce qui est acquis, et ce qui reste à faire — arrêter
+   RATTRAPE PAS » : il dit ce qui est acquis, et ce qui reste à faire - arrêter
    ce qui peut encore l'être, documenter ce qui avait réellement été fait avant
    la lettre, et ne rien antidater. Antidater une pièce n'est pas une
    régularisation ; c'est un risque d'une autre nature, et l'application ne le
@@ -35,14 +35,14 @@
 
    1. RIEN QUI N'AIT ÉTÉ LU À LA SOURCE. Les seuls articles cités ici sont ceux
       que porte moteur/economique/textes_eco.json, avec leur identifiant de
-      version — L. 1233-2 (LEGIARTI000019071124), L. 1233-3
+      version - L. 1233-2 (LEGIARTI000019071124), L. 1233-3
       (LEGIARTI000036762081), L. 1233-4 (LEGIARTI000036261863), D. 1233-2-1
       (LEGIARTI000036248612), L. 1233-16 (LEGIARTI000036762077), L. 1235-1
       (LEGIARTI000035643446), L. 1235-2 (LEGIARTI000036261950), L. 1235-3
-      (LEGIARTI000036762052) — ou ceux que le contrôle porte en fondement.
-      Les articles seulement RENVOYÉS par ces textes — L. 233-1, L. 233-3 et
+      (LEGIARTI000036762052) - ou ceux que le contrôle porte en fondement.
+      Les articles seulement RENVOYÉS par ces textes - L. 233-1, L. 233-3 et
       L. 233-16 du code de commerce pour la notion de groupe, L. 1237-11 et
-      L. 1237-17 pour les ruptures exclues — sont NOMMÉS, jamais reproduits ni
+      L. 1237-17 pour les ruptures exclues - sont NOMMÉS, jamais reproduits ni
       paraphrasés : l'application ne les a pas lus, et elle le dit à l'endroit
       où le lecteur pourrait croire qu'elle les connaît.
 
@@ -75,8 +75,8 @@
        de L. 1233-3, 4° lu à la source ne les mentionne pas ; la réserve est
        d'origine prétorienne et le document l'écrit comme telle ;
      · le délai de réponse à une offre PERSONNALISÉE (CTL-REC-09) : D. 1233-2-1
-       ne fixe de plancher — quinze jours francs, quatre en redressement ou
-       liquidation judiciaire — que pour la LISTE diffusée du III. Aucun
+       ne fixe de plancher - quinze jours francs, quatre en redressement ou
+       liquidation judiciaire - que pour la LISTE diffusée du III. Aucun
        plancher n'est donc affirmé pour l'offre personnalisée : le document dit
        que le délai doit être écrit et raisonnable, et il laisse le nombre à
        l'employeur.                                                            */
@@ -93,7 +93,7 @@
   /* ════════════════════════════════════════════════════════════════════════
      LES OUTILS DE DATE
 
-     Les dates du dossier économique sont des chaînes « AAAA-MM-JJ » —
+     Les dates du dossier économique sont des chaînes « AAAA-MM-JJ » -
      dateNotification, dateEntretien, dateInfoCSE, et la date portée par chaque
      pièce. Elles sont lues en heure locale : un midi UTC suffirait à décaler
      d'un jour l'affichage chez un lecteur situé assez à l'ouest, et un document
@@ -114,7 +114,7 @@
     var m = d.getMonth() + 1, j = d.getDate();
     return d.getFullYear() + "-" + (m < 10 ? "0" + m : m) + "-" + (j < 10 ? "0" + j : j);
   }
-  /* Une date du dossier, écrite en toutes lettres — ou son crochet. */
+  /* Une date du dossier, écrite en toutes lettres - ou son crochet. */
   function jour(iso, quoi) {
     var d = dateDe(iso);
     return d ? leJour(d) : "[" + (quoi || "date") + "]";
@@ -133,7 +133,7 @@
     if (!x || !y) return null;
     return Math.round((y.getTime() - x.getTime()) / 86400000);
   }
-  /* Le jour où l'on sera, n jours après aujourd'hui — pour les calendriers. */
+  /* Le jour où l'on sera, n jours après aujourd'hui - pour les calendriers. */
   function dansJours(ctx, n) { return leJour(dans(aujourd(ctx), n)); }
 
   /* ════════════════════════════════════════════════════════════════════════
@@ -157,7 +157,7 @@
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
 
-  /* Une pièce du dossier, si elle y est — avec sa date et son auteur. */
+  /* Une pièce du dossier, si elle y est - avec sa date et son auteur. */
   function pieceDe(f, code) {
     var l = f && Array.isArray(f.pieces) ? f.pieces : [];
     for (var i = 0; i < l.length; i++) if (l[i] && l[i].code === code) return l[i];
@@ -179,7 +179,7 @@
   }
 
   /* Le nombre de salariés dont le licenciement est envisagé, tel que le dossier
-     le déclare — jamais recalculé, jamais supposé. */
+     le déclare - jamais recalculé, jamais supposé. */
   function nbLic(f) {
     return typeof f.nbLicenciements === "number" ? f.nbLicenciements : null;
   }
@@ -223,7 +223,7 @@
       "le juge peut proposer la réintégration du salarié avec maintien de ses",
       "avantages acquis ; si l'une ou l'autre des parties la refuse, il octroie au",
       "salarié une indemnité à la charge de l'employeur, comprise entre les montants",
-      "minimaux et maximaux du tableau de L. 1235-3 — de un à vingt mois de salaire",
+      "minimaux et maximaux du tableau de L. 1235-3 - de un à vingt mois de salaire",
       "brut selon l'ancienneté, avec un plancher abaissé dans les entreprises",
       "employant habituellement moins de onze salariés.",
       "",
@@ -251,7 +251,7 @@
   }
 
   /* Le pied commun : d'où vient ce qui est écrit, et ce que le document ne dit
-     pas. Même forme que dans les autres modules — deux façons d'écrire un pied
+     pas. Même forme que dans les autres modules - deux façons d'écrire un pied
      dans deux documents de la même entreprise se remarquent tout de suite. */
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
@@ -296,7 +296,7 @@
   }
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-01 — L'ÉTAT DATÉ DES POSTES DISPONIBLES
+     CTL-REC-01 - L'ÉTAT DATÉ DES POSTES DISPONIBLES
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-01", {
@@ -353,33 +353,33 @@
         ? "repris tels quels dans le tableau, sans être complétés ni interprétés."
         : "est à remplir ligne à ligne. S'il n'y a réellement aucun poste, c'est le");
       if (!postes.length) {
-        L.push("document du point CTL-REC-04 — l'attestation d'absence de poste — qu'il");
+        L.push("document du point CTL-REC-04 - l'attestation d'absence de poste - qu'il");
         L.push("vous faut, et non celui-ci : l'absence de poste se justifie, elle ne se");
         L.push("déclare pas.");
       }
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — ÉTAT DES POSTES DISPONIBLES");
+      L.push("PIÈCE 1 - ÉTAT DES POSTES DISPONIBLES");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
       L.push("ÉTAT DES EMPLOIS DISPONIBLES SUR LE TERRITOIRE NATIONAL");
-      L.push("Établi au [DATE D'ARRÊTÉ DE L'ÉTAT — c'est cette date qui devra être");
+      L.push("Établi au [DATE D'ARRÊTÉ DE L'ÉTAT - c'est cette date qui devra être");
       L.push("antérieure à toute offre et à toute notification]");
       L.push("");
       L.push("Périmètre de permutation retenu (L. 1233-4) :");
       var fr = societesFR(f);
       if (fr.length) {
         fr.forEach(function (s) {
-          L.push("  · " + cro(s.nom, "société") + " — " + cro(s.activite, "activité") +
-            (s.effectif != null ? " — " + s.effectif + " salariés" : ""));
+          L.push("  · " + cro(s.nom, "société") + " - " + cro(s.activite, "activité") +
+            (s.effectif != null ? " - " + s.effectif + " salariés" : ""));
         });
       } else {
         L.push("  · " + nom + " [et, s'il y a lieu, les autres sociétés du groupe");
         L.push("    établies sur le territoire national dont l'organisation, les");
         L.push("    activités ou le lieu d'exploitation assurent la permutation de tout");
-        L.push("    ou partie du personnel — à énumérer nommément]");
+        L.push("    ou partie du personnel - à énumérer nommément]");
       }
       var etr = societesEtrangeres(f);
       if (etr.length) {
@@ -412,7 +412,7 @@
       L.push("Postes recensés puis ÉCARTÉS, avec le motif d'exclusion :");
       L.push(col("Poste", 30) + col("Société", 24) + "Motif d'exclusion");
       L.push(TRAIT);
-      L.push(col("[intitulé]", 30) + col("[société]", 24) + "[motif — poste pourvu à la date");
+      L.push(col("[intitulé]", 30) + col("[société]", 24) + "[motif - poste pourvu à la date");
       L.push(col("", 30) + col("", 24) + " d'arrêté, qualification hors de portée");
       L.push(col("", 30) + col("", 24) + " d'une adaptation, etc.]");
       L.push(TRAIT);
@@ -421,11 +421,11 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — SIGNATURE ET CERTIFICATION DE L'ÉTAT");
+      L.push("PIÈCE 2 - SIGNATURE ET CERTIFICATION DE L'ÉTAT");
       L.push(GROS);
       L.push("");
       L.push("Je soussigné(e) " + cro(p.responsable, "nom, prénom") + ",");
-      L.push("[qualité — la personne qui a réellement établi l'état, et qui pourra en");
+      L.push("[qualité - la personne qui a réellement établi l'état, et qui pourra en");
       L.push("répondre], certifie que l'état ci-dessus recense les emplois disponibles");
       L.push("dans les sociétés énumérées, tels qu'ils ressortent des réponses écrites");
       L.push("reçues de chacune et des pièces annexées, à la date du [DATE D'ARRÊTÉ].");
@@ -437,7 +437,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — BORDEREAU DES PIÈCES ANNEXÉES");
+      L.push("PIÈCE 3 - BORDEREAU DES PIÈCES ANNEXÉES");
       L.push(GROS);
       L.push("");
       L.push("  1. Réponse écrite de chaque société interrogée, y compris les réponses");
@@ -456,11 +456,11 @@
         "licenciement ne peut intervenir que si le reclassement ne peut être opéré."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  1. Aujourd'hui — vous arrêtez l'état et vous le faites signer.");
-      L.push("  2. Ensuite seulement — vous adressez les offres, poste par poste, par un");
+      L.push("  1. Aujourd'hui - vous arrêtez l'état et vous le faites signer.");
+      L.push("  2. Ensuite seulement - vous adressez les offres, poste par poste, par un");
       L.push("     moyen conférant date certaine (D. 1233-2-1, I).");
-      L.push("  3. Puis — vous laissez courir le délai de réponse écrit dans l'offre.");
-      L.push("  4. Enfin — la notification, jamais avant.");
+      L.push("  3. Puis - vous laissez courir le délai de réponse écrit dans l'offre.");
+      L.push("  4. Enfin - la notification, jamais avant.");
       L.push("");
       L.push("Si l'état était arrêté aujourd'hui et les offres adressées demain avec un");
       L.push("délai de réponse de quinze jours, ce délai expirerait le " +
@@ -488,13 +488,13 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-02 — L'INTERROGATION DES SOCIÉTÉS DU PÉRIMÈTRE
+     CTL-REC-02 - L'INTERROGATION DES SOCIÉTÉS DU PÉRIMÈTRE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-02", {
     nom: "Les lettres d'interrogation des sociétés du périmètre, et le suivi des réponses",
     detail: "La lettre à adresser à chaque société, le formulaire de réponse qui " +
-            "l'accompagne — réponse négative comprise — et le tableau de suivi.",
+            "l'accompagne - réponse négative comprise - et le tableau de suivi.",
     produire: function (ctx) {
       var p = ctx.profil || {}, f = ctx.fiche || {};
       var nom = nomDe(ctx);
@@ -514,7 +514,7 @@
       L.push("");
       L.push("Une société du périmètre qui n'a pas été interrogée n'est pas une société");
       L.push("sans poste : c'est une société dont on ignore si elle en avait. C'est la");
-      L.push("réponse écrite — y compris « aucun poste disponible » — qui atteste que la");
+      L.push("réponse écrite - y compris « aucun poste disponible » - qui atteste que la");
       L.push("recherche l'a couverte. Sans elle, il manque au dossier autant de trous");
       L.push("qu'il y a de sociétés muettes.");
       L.push("");
@@ -531,13 +531,13 @@
         L.push("Un groupe est déclaré, mais aucune société n'est renseignée. Énumérez-les");
         L.push("nommément avant d'écrire : un périmètre non nommé n'est pas vérifiable.");
       } else {
-        L.push("À interroger — sociétés établies sur le territoire national :");
+        L.push("À interroger - sociétés établies sur le territoire national :");
         L.push("");
         L.push(col("Société", 30) + col("Activité", 26) + "Réponse au dossier ?");
         L.push(TRAIT);
         fr.forEach(function (s) {
           L.push(col(s.nom, 30) + col(s.activite, 26) +
-            (vues[s.nom] ? "des postes y sont recensés" : "AUCUNE — à interroger"));
+            (vues[s.nom] ? "des postes y sont recensés" : "AUCUNE - à interroger"));
         });
         L.push(TRAIT);
         L.push("La colonne de droite ne dit pas qu'une réponse écrite existe : elle dit");
@@ -545,7 +545,7 @@
         L.push("La preuve reste la lettre de réponse elle-même.");
         if (etr.length) {
           L.push("");
-          L.push("Hors périmètre — sociétés non établies sur le territoire national :");
+          L.push("Hors périmètre - sociétés non établies sur le territoire national :");
           etr.forEach(function (s) {
             L.push("  · " + cro(s.nom, "société") + " (" + cro(s.pays, "pays") + ")");
           });
@@ -557,7 +557,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — LETTRE D'INTERROGATION (une par société)");
+      L.push("PIÈCE 1 - LETTRE D'INTERROGATION (une par société)");
       L.push(GROS);
       L.push("");
       L.push(nom);
@@ -571,7 +571,7 @@
       L.push("Lettre recommandée avec demande d'avis de réception [ou tout autre moyen");
       L.push("conservant la date et la preuve de l'envoi]");
       L.push("");
-      L.push("Objet : recherche de reclassement — demande d'état des emplois disponibles");
+      L.push("Objet : recherche de reclassement - demande d'état des emplois disponibles");
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
@@ -588,7 +588,7 @@
       L.push("");
       L.push("Je vous demande en conséquence de me communiquer, à la date du");
       L.push("[DATE D'ARRÊTÉ DEMANDÉE], la liste des emplois disponibles au sein de votre");
-      L.push("société — emplois vacants, créés ou libérés par un départ — en précisant");
+      L.push("société - emplois vacants, créés ou libérés par un départ - en précisant");
       L.push("pour chacun les éléments que l'article D. 1233-2-1 impose de faire figurer");
       L.push("dans l'offre : intitulé du poste et son descriptif, nom de l'employeur,");
       L.push("nature du contrat de travail, localisation du poste, niveau de rémunération");
@@ -611,7 +611,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — FORMULAIRE DE RÉPONSE (à joindre à chaque lettre)");
+      L.push("PIÈCE 2 - FORMULAIRE DE RÉPONSE (à joindre à chaque lettre)");
       L.push(GROS);
       L.push("");
       L.push("SOCIÉTÉ : [dénomination]        SIRET : [siret]");
@@ -631,7 +631,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — TABLEAU DE SUIVI DES ENVOIS ET DES RÉPONSES");
+      L.push("PIÈCE 3 - TABLEAU DE SUIVI DES ENVOIS ET DES RÉPONSES");
       L.push(GROS);
       L.push("");
       L.push(col("Société", 28) + col("Envoi le", 14) + col("Preuve", 14) + "Réponse reçue le");
@@ -654,13 +654,13 @@
         "périmètre non interrogée laisse la condition de L. 1233-4 non établie."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui, " + leJour(aujourd(ctx)) + " — envoi des lettres ;");
-      L.push("  · " + dansJours(ctx, 10) + " — date limite de réponse si vous accordez");
+      L.push("  · aujourd'hui, " + leJour(aujourd(ctx)) + " - envoi des lettres ;");
+      L.push("  · " + dansJours(ctx, 10) + " - date limite de réponse si vous accordez");
       L.push("    dix jours aux sociétés interrogées ;");
-      L.push("  · " + dansJours(ctx, 12) + " — arrêté de l'état des postes, réponses en");
+      L.push("  · " + dansJours(ctx, 12) + " - arrêté de l'état des postes, réponses en");
       L.push("    main (point CTL-REC-01) ;");
-      L.push("  · " + dansJours(ctx, 13) + " — envoi des offres ;");
-      L.push("  · au plus tôt le " + dansJours(ctx, 29) + " — notification, si le délai");
+      L.push("  · " + dansJours(ctx, 13) + " - envoi des offres ;");
+      L.push("  · au plus tôt le " + dansJours(ctx, 29) + " - notification, si le délai");
       L.push("    de réponse écrit dans l'offre est de quinze jours.");
       L.push("");
       L.push("Ces dates sont un exemple bâti sur les délais que vous choisirez : seul");
@@ -672,11 +672,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-03 — L'OFFRE DE RECLASSEMENT ET SES SIX MENTIONS
+     CTL-REC-03 - L'OFFRE DE RECLASSEMENT ET SES SIX MENTIONS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-03", {
-    nom: "L'offre de reclassement écrite — les six mentions de D. 1233-2-1",
+    nom: "L'offre de reclassement écrite - les six mentions de D. 1233-2-1",
     detail: "L'offre rédigée mention par mention, la grille de contrôle des offres " +
             "déjà adressées et le rappel du moyen conférant date certaine.",
     produire: function (ctx) {
@@ -727,7 +727,7 @@
           }).map(function (m) { return m[1]; });
           L.push(col(cro(o.intitule, "intitulé") + " · " + cro(o.employeur, "employeur"), 34) +
             col(cro(o.salarie, "non désigné"), 12) +
-            (manq.length ? manq.join(", ") : "aucune — offre complète"));
+            (manq.length ? manq.join(", ") : "aucune - offre complète"));
         });
         L.push(TRAIT);
         var sansDC = offres.filter(function (o) { return o.dateCertaine !== true; });
@@ -740,7 +740,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — OFFRE DE RECLASSEMENT (un exemplaire par salarié et par poste)");
+      L.push("PIÈCE 1 - OFFRE DE RECLASSEMENT (un exemplaire par salarié et par poste)");
       L.push(GROS);
       L.push("");
       L.push(nom);
@@ -753,7 +753,7 @@
       L.push(cro(p.ville, "lieu") + ", le " + leJour(aujourd(ctx)));
       L.push("");
       L.push("Lettre recommandée avec demande d'avis de réception [ou remise en main");
-      L.push("propre contre décharge datée et signée — D. 1233-2-1, I exige un moyen");
+      L.push("propre contre décharge datée et signée - D. 1233-2-1, I exige un moyen");
       L.push("permettant de conférer date certaine]");
       L.push("");
       L.push("Objet : proposition de reclassement");
@@ -765,18 +765,18 @@
       L.push("L. 1233-4 du code du travail, je vous propose le poste suivant :");
       L.push("");
       L.push("  a) Intitulé du poste : [INTITULÉ]");
-      L.push("     Descriptif : [DESCRIPTIF DU POSTE — les missions, le rattachement");
+      L.push("     Descriptif : [DESCRIPTIF DU POSTE - les missions, le rattachement");
       L.push("     hiérarchique, les horaires ou l'organisation du temps de travail s'ils");
       L.push("     diffèrent des vôtres. « Précise » veut dire que le salarié peut");
       L.push("     décider sans avoir à demander autre chose.]");
       L.push("  b) Nom de l'employeur : [DÉNOMINATION DE LA SOCIÉTÉ QUI EMBAUCHE]");
-      L.push("  c) Nature du contrat de travail : [CDI / CDD — durée / autre]");
+      L.push("  c) Nature du contrat de travail : [CDI / CDD - durée / autre]");
       L.push("  d) Localisation du poste : [ADRESSE PRÉCISE DU LIEU DE TRAVAIL]");
       L.push("  e) Niveau de rémunération : [MONTANT ANNUEL BRUT ET, S'IL Y A LIEU,");
       L.push("     variable, primes et avantages]");
       L.push("  f) Classification du poste : [NIVEAU, COEFFICIENT, POSITION selon la");
       L.push("     convention collective applicable" +
-        (p.conventionCollective ? " — " + p.conventionCollective : "") + "]");
+        (p.conventionCollective ? " - " + p.conventionCollective : "") + "]");
       L.push("");
       L.push("[SI LE POSTE RELÈVE D'UNE CATÉGORIE INFÉRIEURE À CELLE QUE VOUS OCCUPEZ :");
       L.push(" cette offre ne peut vous être adressée qu'après votre accord exprès sur le");
@@ -784,7 +784,7 @@
       L.push(" point CTL-REC-10 : l'accord se recueille AVANT la proposition.]");
       L.push("");
       L.push("Vous disposez d'un délai de [DÉLAI] à compter de la réception de la présente");
-      L.push("pour me faire connaître votre réponse, par [MOYEN — courrier remis contre");
+      L.push("pour me faire connaître votre réponse, par [MOYEN - courrier remis contre");
       L.push("décharge, lettre recommandée, courriel à telle adresse].");
       L.push("");
       L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
@@ -795,10 +795,10 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — GRILLE DE CONTRÔLE AVANT ENVOI");
+      L.push("PIÈCE 2 - GRILLE DE CONTRÔLE AVANT ENVOI");
       L.push(GROS);
       L.push("");
-      L.push("  ☐ a) intitulé du poste ET son descriptif — les deux, le texte les lie");
+      L.push("  ☐ a) intitulé du poste ET son descriptif - les deux, le texte les lie");
       L.push("  ☐ b) nom de l'employeur");
       L.push("  ☐ c) nature du contrat de travail");
       L.push("  ☐ d) localisation du poste");
@@ -829,16 +829,16 @@
         "L. 1233-4 l'exige, D. 1233-2-1 en dresse le contenu."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — envoi des offres complètes, avec preuve de date certaine ;");
-      L.push("  · " + dansJours(ctx, 15) + " — expiration d'un délai de réponse de quinze");
+      L.push("  · aujourd'hui - envoi des offres complètes, avec preuve de date certaine ;");
+      L.push("  · " + dansJours(ctx, 15) + " - expiration d'un délai de réponse de quinze");
       L.push("    jours ouvert aujourd'hui ;");
-      L.push("  · à compter du " + dansJours(ctx, 16) + " — la notification redevient");
+      L.push("  · à compter du " + dansJours(ctx, 16) + " - la notification redevient");
       L.push("    possible, les autres conditions étant remplies.");
       L.push("");
 
       return L.concat(pied("L. 1233-4, D. 1233-2-1, L. 1233-2, L. 1235-1, L. 1235-3",
-        ["Le plancher de quinze jours francs — quatre en redressement ou liquidation",
-         "judiciaire — que porte le III de D. 1233-2-1 vise la LISTE diffusée, non",
+        ["Le plancher de quinze jours francs - quatre en redressement ou liquidation",
+         "judiciaire - que porte le III de D. 1233-2-1 vise la LISTE diffusée, non",
          "l'offre personnalisée. Aucun texte capté ne fixe de plancher pour celle-ci :",
          "le délai que vous écrirez doit être réel, et vous devrez pouvoir le",
          "défendre."])).join("\n");
@@ -846,7 +846,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-04 — L'ATTESTATION D'ABSENCE DE POSTE DISPONIBLE
+     CTL-REC-04 - L'ATTESTATION D'ABSENCE DE POSTE DISPONIBLE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-04", {
@@ -865,14 +865,14 @@
       L.push("");
       L.push("L. 1233-4 ne permet le licenciement que si « le reclassement de l'intéressé");
       L.push("ne peut être opéré sur les emplois disponibles ». L'employeur qui n'a aucun");
-      L.push("poste à proposer ne manque à rien — à condition de le JUSTIFIER. C'est la");
+      L.push("poste à proposer ne manque à rien - à condition de le JUSTIFIER. C'est la");
       L.push("justification qui le protège, non l'affirmation : une attestation qui dit");
       L.push("« il n'y a pas de poste » sans dire d'où elle le tient est une déclaration");
       L.push("de l'employeur sur lui-même.");
       L.push("");
       L.push("Le contrôle CTL-REC-04 de ce module l'énonce ainsi : « Il n'y a pas de");
       L.push("manquement à l'obligation de reclassement si l'employeur justifie de");
-      L.push("l'absence de poste disponible » — encore faut-il le justifier (Cass. soc.");
+      L.push("l'absence de poste disponible » - encore faut-il le justifier (Cass. soc.");
       L.push("2 juillet 2014, n° 13-12.048, décision figurant au corpus du module).");
       L.push("");
 
@@ -899,7 +899,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — ATTESTATION D'ABSENCE DE POSTE DISPONIBLE");
+      L.push("PIÈCE 1 - ATTESTATION D'ABSENCE DE POSTE DISPONIBLE");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
@@ -918,13 +918,13 @@
       var fr = societesFR(f);
       if (fr.length) {
         fr.forEach(function (s) {
-          L.push("  · " + cro(s.nom, "société") + " — " + cro(s.activite, "activité"));
+          L.push("  · " + cro(s.nom, "société") + " - " + cro(s.activite, "activité"));
         });
       } else {
         L.push("  · " + nom);
         L.push("  · [et chaque autre société du groupe établie en France dont");
         L.push("    l'organisation, les activités ou le lieu d'exploitation assurent la");
-        L.push("    permutation de tout ou partie du personnel — à nommer]");
+        L.push("    permutation de tout ou partie du personnel - à nommer]");
       }
       L.push("");
       L.push("Elle a porté sur les emplois vacants, les emplois créés et les emplois");
@@ -937,7 +937,7 @@
       L.push("  2. les réponses écrites de chaque société interrogée, y compris les");
       L.push("     réponses négatives ;");
       L.push("  3. [le registre du personnel, l'organigramme daté, l'état des postes");
-      L.push("     ouverts au recrutement — toute pièce extérieure à la présente");
+      L.push("     ouverts au recrutement - toute pièce extérieure à la présente");
       L.push("     attestation].");
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE]");
@@ -947,7 +947,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — ÉTAT DES EFFECTIFS ET DES MOUVEMENTS, PAR SOCIÉTÉ");
+      L.push("PIÈCE 2 - ÉTAT DES EFFECTIFS ET DES MOUVEMENTS, PAR SOCIÉTÉ");
       L.push(GROS);
       L.push("");
       L.push("Période couverte : du [DATE DE DÉBUT DE LA RECHERCHE] au [DATE D'ARRÊTÉ]");
@@ -970,7 +970,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — NOTE DE MISE À JOUR");
+      L.push("PIÈCE 3 - NOTE DE MISE À JOUR");
       L.push(GROS);
       L.push("");
       L.push("Un poste peut se libérer entre l'attestation et la lettre. Si la procédure");
@@ -988,10 +988,10 @@
         "l'affirmer, la condition n'est pas établie."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — arrêté de l'état des effectifs et des mouvements ;");
-      L.push("  · " + dansJours(ctx, 1) + " — signature de l'attestation, pièces");
+      L.push("  · aujourd'hui - arrêté de l'état des effectifs et des mouvements ;");
+      L.push("  · " + dansJours(ctx, 1) + " - signature de l'attestation, pièces");
       L.push("    annexées ;");
-      L.push("  · " + dansJours(ctx, 30) + " — si la lettre n'est toujours pas partie à");
+      L.push("  · " + dansJours(ctx, 30) + " - si la lettre n'est toujours pas partie à");
       L.push("    cette date, refaites l'attestation : celle d'aujourd'hui aura un mois.");
       L.push("");
       L.push("L'attestation doit être ANTÉRIEURE à la notification, et aussi proche que");
@@ -1007,7 +1007,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-05 — LES EFFORTS DE FORMATION ET D'ADAPTATION
+     CTL-REC-05 - LES EFFORTS DE FORMATION ET D'ADAPTATION
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-05", {
@@ -1072,10 +1072,10 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — TABLEAU DES ACTIONS, SALARIÉ PAR SALARIÉ");
+      L.push("PIÈCE 1 - TABLEAU DES ACTIONS, SALARIÉ PAR SALARIÉ");
       L.push(GROS);
       L.push("");
-      L.push(nom.toUpperCase() + " — arrêté au [DATE]");
+      L.push(nom.toUpperCase() + " - arrêté au [DATE]");
       L.push("");
       L.push(col("Salarié", 16) + col("Action proposée", 26) + col("Date", 12) +
         col("Durée", 8) + "Réponse et date");
@@ -1100,7 +1100,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — LETTRE DE PROPOSITION D'UNE ACTION D'ADAPTATION");
+      L.push("PIÈCE 2 - LETTRE DE PROPOSITION D'UNE ACTION D'ADAPTATION");
       L.push(GROS);
       L.push("");
       L.push(nom);
@@ -1142,7 +1142,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — FORMULAIRE DE RÉPONSE DU SALARIÉ");
+      L.push("PIÈCE 3 - FORMULAIRE DE RÉPONSE DU SALARIÉ");
       L.push(GROS);
       L.push("");
       L.push("Je soussigné(e) [NOM, PRÉNOM], déclare :");
@@ -1158,17 +1158,17 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — NOTE MOTIVÉE POUR LES SALARIÉS SANS ACTION PROPOSÉE");
+      L.push("PIÈCE 4 - NOTE MOTIVÉE POUR LES SALARIÉS SANS ACTION PROPOSÉE");
       L.push(GROS);
       L.push("");
       L.push("Pour chaque salarié auquel aucune action n'a été proposée, écrivez ici");
       L.push("pourquoi. Une ligne vide dans le tableau 1 se lit comme une absence");
       L.push("d'effort ; une ligne motivée se discute.");
       L.push("");
-      L.push("  · [NOM] — aucune action proposée. Motif : [le poste visé n'existe dans");
+      L.push("  · [NOM] - aucune action proposée. Motif : [le poste visé n'existe dans");
       L.push("    aucune société du périmètre ; l'écart de qualification excède ce qu'une");
       L.push("    adaptation au poste permet de combler ; le salarié a refusé le principe");
-      L.push("    même d'une adaptation par écrit du … ; autre — à écrire précisément.]");
+      L.push("    même d'une adaptation par écrit du … ; autre - à écrire précisément.]");
       L.push("");
       L.push("N'écrivez ici que ce que vous pouvez établir. Cette note est une pièce du");
       L.push("dossier au même titre que les autres, et elle sera lue comme telle.");
@@ -1179,11 +1179,11 @@
         "tous les efforts de formation et d'adaptation doivent avoir été réalisés."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — envoi des propositions d'action ;");
-      L.push("  · " + dansJours(ctx, 10) + " — date de réponse si vous accordez dix jours ;");
-      L.push("  · " + dansJours(ctx, 11) + " — constat daté du silence pour ceux qui n'ont");
+      L.push("  · aujourd'hui - envoi des propositions d'action ;");
+      L.push("  · " + dansJours(ctx, 10) + " - date de réponse si vous accordez dix jours ;");
+      L.push("  · " + dansJours(ctx, 11) + " - constat daté du silence pour ceux qui n'ont");
       L.push("    pas répondu, et clôture du tableau ;");
-      L.push("  · après seulement — les offres de reclassement, puis la notification.");
+      L.push("  · après seulement - les offres de reclassement, puis la notification.");
       L.push("");
       L.push("Les actions elles-mêmes prennent le temps qu'elles prennent : une action");
       L.push("d'adaptation annoncée mais jamais engagée ne vaut pas effort réalisé.");
@@ -1194,11 +1194,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-06 — LA DATE DE L'ÉTAT DES POSTES ET CELLE DE LA LETTRE
+     CTL-REC-06 - LA DATE DE L'ÉTAT DES POSTES ET CELLE DE LA LETTRE
 
      La fiche de régularisation ne prévoit aucun document pour ce point : il
      s'agit d'une date à contrôler, non d'une pièce à produire. Le document
-     écrit ici n'invente donc pas une régularisation — il constate les deux
+     écrit ici n'invente donc pas une régularisation - il constate les deux
      dates, il dit ce qui reste possible, et il interdit expressément la seule
      chose qu'un employeur pressé serait tenté de faire.
      ══════════════════════════════════════════════════════════════════════ */
@@ -1215,7 +1215,7 @@
       var dLettre = estISO(f.dateNotification) ? f.dateNotification : null;
       var ec = dEtat && dLettre ? ecartJours(dEtat, dLettre) : null;
       var partie = dLettre ? dLettre <= isoDe(aujourd(ctx)) : null;
-      var L = entete(ctx, "Constat des dates — état des postes et notification",
+      var L = entete(ctx, "Constat des dates - état des postes et notification",
         "article L. 1233-4 du code du travail");
 
       L.push("POURQUOI CETTE DATE DÉCIDE DE TOUT");
@@ -1231,13 +1231,13 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — RELEVÉ DES DEUX DATES");
+      L.push("PIÈCE 1 - RELEVÉ DES DEUX DATES");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
       L.push("Relevé établi le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("  · État des postes disponibles — date portée sur la pièce : " +
+      L.push("  · État des postes disponibles - date portée sur la pièce : " +
         (dEtat ? jour(dEtat) : "[NON RENSEIGNÉE]"));
       if (pe) {
         L.push("    pièce : " + cro(pe.fichier, "fichier") + " · auteur : " +
@@ -1246,7 +1246,7 @@
         L.push("    Aucune pièce « état des postes » n'est versée au dossier : la date ne");
         L.push("    peut pas être relevée, et le point ne peut pas être contrôlé.");
       }
-      L.push("  · Notification des licenciements — date portée au dossier : " +
+      L.push("  · Notification des licenciements - date portée au dossier : " +
         (dLettre ? jour(dLettre) : "[NON RENSEIGNÉE]"));
       L.push("");
       if (ec !== null) {
@@ -1259,7 +1259,7 @@
         } else if (ec === 0) {
           L.push("L'état des postes porte LE JOUR MÊME de la notification. Rien n'établit");
           L.push("que la recherche précédait la décision. Documentez ce qui avait été fait");
-          L.push("avant — réponses des sociétés, échanges datés — et faites examiner le");
+          L.push("avant - réponses des sociétés, échanges datés - et faites examiner le");
           L.push("point par votre conseil.");
         } else {
           L.push("L'état des postes est antérieur à la notification. Vérifiez toutefois");
@@ -1268,13 +1268,13 @@
         }
       } else {
         L.push("Les deux dates ne sont pas toutes deux au dossier : relevez-les sur les");
-        L.push("pièces elles-mêmes — la date portée sur l'état, et la date d'envoi de la");
-        L.push("lettre attestée par le récépissé — avant toute conclusion.");
+        L.push("pièces elles-mêmes - la date portée sur l'état, et la date d'envoi de la");
+        L.push("lettre attestée par le récépissé - avant toute conclusion.");
       }
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — CE QUI RESTE POSSIBLE");
+      L.push("PIÈCE 2 - CE QUI RESTE POSSIBLE");
       L.push(GROS);
       L.push("");
       if (partie === false) {
@@ -1287,7 +1287,7 @@
         L.push("  2. adresser ou réadresser les offres correspondantes, complètes des six");
         L.push("     mentions de D. 1233-2-1 ;");
         L.push("  3. laisser courir le délai de réponse écrit dans l'offre ;");
-        L.push("  4. n'expédier la lettre qu'ensuite — au besoin en repoussant la date");
+        L.push("  4. n'expédier la lettre qu'ensuite - au besoin en repoussant la date");
         L.push("     prévue. Repousser une notification ne coûte rien ; l'expédier trop tôt");
         L.push("     coûte le licenciement.");
       } else if (partie === true) {
@@ -1296,16 +1296,16 @@
         L.push("Ce qui pouvait être fait avant elle ne peut plus l'être. Ce qui reste :");
         L.push("  1. verser l'état des postes TEL QU'IL EST, avec sa date réelle ;");
         L.push("  2. rassembler séparément ce qui, avant la lettre, établissait la");
-        L.push("     recherche — courriers aux sociétés, réponses reçues, échanges datés,");
+        L.push("     recherche - courriers aux sociétés, réponses reçues, échanges datés,");
         L.push("     offres adressées : ces pièces-là sont antérieures, et elles comptent ;");
         L.push("  3. porter le point à la connaissance du conseil de l'entreprise, à qui");
         L.push("     il appartient d'apprécier la conduite à tenir.");
       } else {
         L.push("La date de notification n'est pas au dossier. Deux situations, et la");
         L.push("réponse n'est pas la même :");
-        L.push("  · la lettre n'est pas partie — refaites l'état à une date antérieure,");
+        L.push("  · la lettre n'est pas partie - refaites l'état à une date antérieure,");
         L.push("    adressez les offres, laissez courir le délai, puis notifiez ;");
-        L.push("  · la lettre est partie — ne redatez rien, versez l'état tel qu'il est,");
+        L.push("  · la lettre est partie - ne redatez rien, versez l'état tel qu'il est,");
         L.push("    et documentez séparément ce que la recherche couvrait avant elle.");
       }
       L.push("");
@@ -1328,21 +1328,21 @@
 
       L = L.concat(ouvrirCalendrier(ctx));
       if (partie === false || partie === null) {
-        L.push("  · aujourd'hui — nouvel état des postes, réponses en main ;");
-        L.push("  · " + dansJours(ctx, 1) + " — envoi ou réenvoi des offres complètes ;");
-        L.push("  · " + dansJours(ctx, 16) + " — expiration d'un délai de réponse de");
+        L.push("  · aujourd'hui - nouvel état des postes, réponses en main ;");
+        L.push("  · " + dansJours(ctx, 1) + " - envoi ou réenvoi des offres complètes ;");
+        L.push("  · " + dansJours(ctx, 16) + " - expiration d'un délai de réponse de");
         L.push("    quinze jours ouvert demain ;");
-        L.push("  · à compter du " + dansJours(ctx, 17) + " — notification possible.");
+        L.push("  · à compter du " + dansJours(ctx, 17) + " - notification possible.");
         if (dLettre) {
           L.push("");
           L.push("La date de notification prévue au dossier est le " + jour(dLettre) + " :");
           L.push(ecartJours(isoDe(aujourd(ctx)), dLettre) >= 17
             ? "elle laisse la place à ce calendrier."
-            : "elle NE LAISSE PAS la place à ce calendrier — repoussez-la.");
+            : "elle NE LAISSE PAS la place à ce calendrier - repoussez-la.");
         }
       } else {
-        L.push("  · aujourd'hui — relevé des dates, sans aucune modification des pièces ;");
-        L.push("  · " + dansJours(ctx, 1) + " — remise du dossier au conseil de");
+        L.push("  · aujourd'hui - relevé des dates, sans aucune modification des pièces ;");
+        L.push("  · " + dansJours(ctx, 1) + " - remise du dossier au conseil de");
         L.push("    l'entreprise, avec la présente note.");
         L.push("");
         L.push("Il n'y a pas d'autre échéance : le calendrier de régularisation est");
@@ -1355,7 +1355,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-07 — LES POSTES DISPONIBLES OMIS DANS LES OFFRES
+     CTL-REC-07 - LES POSTES DISPONIBLES OMIS DANS LES OFFRES
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-07", {
@@ -1377,7 +1377,7 @@
       var omis = postes.filter(function (x) {
         return !x.motifExclusion && !servis[(x.intitule || "") + "|" + (x.societe || "")];
       });
-      var L = entete(ctx, "Postes disponibles et offres adressées — rapprochement",
+      var L = entete(ctx, "Postes disponibles et offres adressées - rapprochement",
         "article L. 1233-4 du code du travail");
 
       L.push("LA RÈGLE, ET CE QU'ELLE INTERDIT");
@@ -1394,10 +1394,10 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — TABLEAU DE RAPPROCHEMENT, POSTE PAR POSTE");
+      L.push("PIÈCE 1 - TABLEAU DE RAPPROCHEMENT, POSTE PAR POSTE");
       L.push(GROS);
       L.push("");
-      L.push(nom.toUpperCase() + " — arrêté au " + leJour(aujourd(ctx)));
+      L.push(nom.toUpperCase() + " - arrêté au " + leJour(aujourd(ctx)));
       L.push("");
       if (!postes.length) {
         L.push("Aucun poste disponible n'est renseigné dans votre fiche : le rapprochement");
@@ -1414,7 +1414,7 @@
         postes.forEach(function (x) {
           var n = servis[(x.intitule || "") + "|" + (x.societe || "")] || 0;
           L.push(col(x.intitule, 26) + col(x.societe, 22) + col(n, 8) +
-            (n ? "offert" : (x.motifExclusion ? "exclu — motif au dossier" : "OMIS — rien au dossier")));
+            (n ? "offert" : (x.motifExclusion ? "exclu - motif au dossier" : "OMIS - rien au dossier")));
         });
         L.push(TRAIT);
         L.push(postes.length + " poste(s) recensé(s) · " + offres.length + " offre(s) déclarée(s) · " +
@@ -1428,8 +1428,8 @@
           L.push("");
           L.push("POSTES À TRAITER AVANT TOUTE NOTIFICATION :");
           omis.forEach(function (x) {
-            L.push("  · " + cro(x.intitule, "intitulé") + " — " + cro(x.societe, "société") +
-              " — " + cro(x.lieu, "lieu"));
+            L.push("  · " + cro(x.intitule, "intitulé") + " - " + cro(x.societe, "société") +
+              " - " + cro(x.lieu, "lieu"));
           });
           L.push("  Pour chacun : l'offrir, ou écrire son motif d'exclusion ci-dessous.");
         }
@@ -1437,7 +1437,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — LETTRE D'OFFRE COMPLÉMENTAIRE");
+      L.push("PIÈCE 2 - LETTRE D'OFFRE COMPLÉMENTAIRE");
       L.push(GROS);
       L.push("");
       L.push(nom);
@@ -1449,7 +1449,7 @@
       L.push(cro(p.ville, "lieu") + ", le " + leJour(aujourd(ctx)));
       L.push("");
       L.push("Lettre recommandée avec demande d'avis de réception [ou remise contre");
-      L.push("décharge — D. 1233-2-1, I : un moyen conférant date certaine]");
+      L.push("décharge - D. 1233-2-1, I : un moyen conférant date certaine]");
       L.push("");
       L.push("Objet : proposition de reclassement complémentaire");
       L.push("");
@@ -1477,7 +1477,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — NOTE DES MOTIFS D'EXCLUSION, POSTE PAR POSTE");
+      L.push("PIÈCE 3 - NOTE DES MOTIFS D'EXCLUSION, POSTE PAR POSTE");
       L.push(GROS);
       L.push("");
       L.push("Un poste peut légitimement n'être proposé à personne. Encore faut-il que le");
@@ -1489,14 +1489,14 @@
       if (omis.length) {
         omis.forEach(function (x) {
           L.push(col(cro(x.intitule, "intitulé") + " · " + cro(x.societe, "société"), 34) +
-            "[motif — à écrire]");
+            "[motif - à écrire]");
         });
       } else {
-        L.push(col("[poste] · [société]", 34) + "[motif — à écrire]");
+        L.push(col("[poste] · [société]", 34) + "[motif - à écrire]");
       }
       L.push(TRAIT);
       L.push("");
-      L.push("Motifs qui s'écrivent et se prouvent — la liste n'est pas limitative, et");
+      L.push("Motifs qui s'écrivent et se prouvent - la liste n'est pas limitative, et");
       L.push("aucun ne se présume :");
       L.push("  · le poste n'était plus disponible à la date utile : dire à quelle date il");
       L.push("    a été pourvu, et par qui ;");
@@ -1522,14 +1522,14 @@
         "L. 1233-4 non satisfaite."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — rapprochement, décision poste par poste ;");
-      L.push("  · " + dansJours(ctx, 1) + " — envoi des offres complémentaires ;");
-      L.push("  · " + dansJours(ctx, 16) + " — expiration d'un délai de réponse de quinze");
+      L.push("  · aujourd'hui - rapprochement, décision poste par poste ;");
+      L.push("  · " + dansJours(ctx, 1) + " - envoi des offres complémentaires ;");
+      L.push("  · " + dansJours(ctx, 16) + " - expiration d'un délai de réponse de quinze");
       L.push("    jours ouvert demain ;");
-      L.push("  · à compter du " + dansJours(ctx, 17) + " — notification possible.");
+      L.push("  · à compter du " + dansJours(ctx, 17) + " - notification possible.");
       L.push("");
       L.push("Une offre complémentaire ouvre un délai NOUVEAU : la notification recule");
-      L.push("d'autant, et c'est le prix — modeste — de la régularisation.");
+      L.push("d'autant, et c'est le prix - modeste - de la régularisation.");
       L.push("");
 
       return L.concat(pied("L. 1233-4, D. 1233-2-1, L. 1233-2, L. 1235-1, L. 1235-3")).join("\n");
@@ -1537,7 +1537,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-08 — OFFRES PERSONNALISÉES OU LISTE DIFFUSÉE
+     CTL-REC-08 - OFFRES PERSONNALISÉES OU LISTE DIFFUSÉE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-08", {
@@ -1591,7 +1591,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — RELEVÉ DES DESTINATAIRES");
+      L.push("PIÈCE 1 - RELEVÉ DES DESTINATAIRES");
       L.push(GROS);
       L.push("");
       L.push("Salariés dont le licenciement est envisagé : " +
@@ -1626,7 +1626,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — VOIE A : LES OFFRES PERSONNALISÉES");
+      L.push("PIÈCE 2 - VOIE A : LES OFFRES PERSONNALISÉES");
       L.push(GROS);
       L.push("");
       L.push("Le modèle d'offre est celui du document du point CTL-REC-03 : six mentions,");
@@ -1641,13 +1641,13 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — VOIE B : LA LISTE DIFFUSÉE (III de D. 1233-2-1)");
+      L.push("PIÈCE 3 - VOIE B : LA LISTE DIFFUSÉE (III de D. 1233-2-1)");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
-      L.push("LISTE DES POSTES DISPONIBLES — RECLASSEMENT INTERNE");
+      L.push("LISTE DES POSTES DISPONIBLES - RECLASSEMENT INTERNE");
       L.push("Publiée le [DATE DE PUBLICATION] · diffusée par [MOYEN CONFÉRANT DATE");
-      L.push("CERTAINE — préciser lequel, et conserver la preuve]");
+      L.push("CERTAINE - préciser lequel, et conserver la preuve]");
       L.push("");
       L.push("1. LES POSTES");
       L.push("");
@@ -1671,7 +1671,7 @@
       L.push("");
       L.push("2. LES CRITÈRES DE DÉPARTAGE EN CAS DE CANDIDATURES MULTIPLES");
       L.push("");
-      L.push("[À ÉCRIRE — le III les exige, et une liste qui n'en porte pas est");
+      L.push("[À ÉCRIRE - le III les exige, et une liste qui n'en porte pas est");
       L.push(" incomplète. Les critères sont les vôtres : dites-les, dans l'ordre où ils");
       L.push(" s'appliquent, et de façon qu'un salarié puisse vérifier le résultat.");
       L.push(" L'application ne les invente pas : aucun texte capté ne les fixe.]");
@@ -1683,7 +1683,7 @@
       L.push("");
       L.push("Ce délai « ne peut être inférieur à " + plancher + " jours francs à compter de la");
       L.push("publication de la liste » (D. 1233-2-1, III)" +
-        (enPC ? " — votre dossier déclare une procédure de " +
+        (enPC ? " - votre dossier déclare une procédure de " +
           cro(f.typeProcedure, "procédure collective") + "." : "."));
       if (!enPC) {
         L.push("Le plancher de quatre jours francs ne vaut que pour les entreprises en");
@@ -1695,7 +1695,7 @@
       L.push("vaut refus par la volonté du texte : encore faut-il que la liste ait été");
       L.push("diffusée par un moyen conférant date certaine et qu'elle porte le délai.");
       L.push("");
-      L.push("4. DIFFUSION — registre à conserver");
+      L.push("4. DIFFUSION - registre à conserver");
       L.push("");
       L.push(col("Destinataire", 20) + col("Moyen", 20) + col("Date", 12) + "Preuve");
       L.push(TRAIT);
@@ -1708,14 +1708,14 @@
         "personnalisée ou la liste, l'une des deux, pour chacun."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui, " + leJour(aujourd(ctx)) + " — envoi des offres ou");
+      L.push("  · aujourd'hui, " + leJour(aujourd(ctx)) + " - envoi des offres ou");
       L.push("    publication de la liste, avec preuve de date certaine ;");
-      L.push("  · " + dansJours(ctx, plancher) + " — plus tôt que ce jour, le délai de " +
+      L.push("  · " + dansJours(ctx, plancher) + " - plus tôt que ce jour, le délai de " +
         plancher + " jours");
       L.push("    francs de la liste ne peut pas expirer ; les jours francs se comptent");
       L.push("    entiers, de sorte que la date limite se place au lendemain de ce jour au");
       L.push("    plus tôt : retenez le " + dansJours(ctx, plancher + 1) + " ;");
-      L.push("  · à compter du " + dansJours(ctx, plancher + 2) + " — la notification");
+      L.push("  · à compter du " + dansJours(ctx, plancher + 2) + " - la notification");
       L.push("    redevient possible, les autres conditions étant remplies.");
       L.push("");
       L.push("N'EXPÉDIEZ AUCUNE LETTRE avant l'expiration de ce délai : une notification");
@@ -1730,7 +1730,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-09 — LE DÉLAI ET LE MOYEN DE RÉPONSE
+     CTL-REC-09 - LE DÉLAI ET LE MOYEN DE RÉPONSE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-09", {
@@ -1760,7 +1760,7 @@
       L.push("Le texte ne l'écrit expressément que pour la LISTE diffusée : « L'absence de");
       L.push("candidature écrite du salarié à l'issue du délai mentionné au deuxième");
       L.push("alinéa vaut refus des offres » (D. 1233-2-1, III), le délai ne pouvant y");
-      L.push("être inférieur à quinze jours francs à compter de la publication — quatre");
+      L.push("être inférieur à quinze jours francs à compter de la publication - quatre");
       L.push("jours francs dans les entreprises en redressement ou liquidation judiciaire.");
       L.push("");
       L.push("AUCUN TEXTE CAPTÉ NE FIXE DE PLANCHER POUR L'OFFRE PERSONNALISÉE. Ce n'est");
@@ -1790,7 +1790,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — LA CLAUSE À INSÉRER DANS CHAQUE OFFRE");
+      L.push("PIÈCE 1 - LA CLAUSE À INSÉRER DANS CHAQUE OFFRE");
       L.push(GROS);
       L.push("");
       L.push("« Vous disposez d'un délai de [NOMBRE] jours à compter de la réception de la");
@@ -1810,7 +1810,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — LETTRE DE RÉOUVERTURE POUR UNE OFFRE MUETTE SUR LE DÉLAI");
+      L.push("PIÈCE 2 - LETTRE DE RÉOUVERTURE POUR UNE OFFRE MUETTE SUR LE DÉLAI");
       L.push(GROS);
       L.push("");
       L.push(nom);
@@ -1821,9 +1821,9 @@
       L.push(cro(p.ville, "lieu") + ", le " + leJour(aujourd(ctx)));
       L.push("");
       L.push("Lettre recommandée avec demande d'avis de réception [ou remise contre");
-      L.push("décharge — D. 1233-2-1, I]");
+      L.push("décharge - D. 1233-2-1, I]");
       L.push("");
-      L.push("Objet : proposition de reclassement — délai de réponse");
+      L.push("Objet : proposition de reclassement - délai de réponse");
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
@@ -1849,7 +1849,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — REGISTRE DES ÉCHÉANCES");
+      L.push("PIÈCE 3 - REGISTRE DES ÉCHÉANCES");
       L.push(GROS);
       L.push("");
       L.push(col("Salarié", 16) + col("Offre", 22) + col("Reçue le", 12) + col("Délai", 10) + "Expire le");
@@ -1870,7 +1870,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — CONSTAT DE SILENCE À L'EXPIRATION DU DÉLAI");
+      L.push("PIÈCE 4 - CONSTAT DE SILENCE À L'EXPIRATION DU DÉLAI");
       L.push(GROS);
       L.push("");
       L.push("Je soussigné(e) " + cro(p.responsable, "nom, qualité") + " constate que");
@@ -1889,12 +1889,12 @@
         "écrit, il ne vaut pas refus, et le poste reste réputé non refusé."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — envoi ou réenvoi des offres portant délai et moyen ;");
-      L.push("  · " + dansJours(ctx, 2) + " — réception présumée, à vérifier sur l'avis ;");
-      L.push("  · " + dansJours(ctx, 2 + plancher) + " — expiration d'un délai de " +
+      L.push("  · aujourd'hui - envoi ou réenvoi des offres portant délai et moyen ;");
+      L.push("  · " + dansJours(ctx, 2) + " - réception présumée, à vérifier sur l'avis ;");
+      L.push("  · " + dansJours(ctx, 2 + plancher) + " - expiration d'un délai de " +
         plancher + " jours");
       L.push("    compté de cette réception ;");
-      L.push("  · " + dansJours(ctx, 3 + plancher) + " — constats de silence, puis");
+      L.push("  · " + dansJours(ctx, 3 + plancher) + " - constats de silence, puis");
       L.push("    notification possible.");
       L.push("");
       L.push("Le nombre de " + plancher + " jours retenu ici est celui que D. 1233-2-1 impose à la");
@@ -1911,7 +1911,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-10 — LE POSTE DE CATÉGORIE INFÉRIEURE ET L'ACCORD EXPRÈS
+     CTL-REC-10 - LE POSTE DE CATÉGORIE INFÉRIEURE ET L'ACCORD EXPRÈS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-10", {
@@ -1940,7 +1940,7 @@
       L.push("     proposent D'ABORD ;");
       L.push("  2. le poste de catégorie inférieure ne vient qu'« à défaut » ;");
       L.push("  3. l'accord exprès du salarié se recueille AVANT que le poste inférieur");
-      L.push("     lui soit proposé — c'est une réserve posée à la proposition, non une");
+      L.push("     lui soit proposé - c'est une réserve posée à la proposition, non une");
       L.push("     formalité qui la suit.");
       L.push("");
       L.push("Une proposition de catégorie inférieure faite sans cet accord ne vaut pas");
@@ -1962,7 +1962,7 @@
         inf.forEach(function (o) {
           L.push(col(cro(o.intitule, "intitulé"), 28) + col(cro(o.salarie, "non désigné"), 14) +
             col(cro(o.classification, "n. r."), 12) +
-            (o.accordExpres === true ? "oui, au dossier" : "NON — à recueillir"));
+            (o.accordExpres === true ? "oui, au dossier" : "NON - à recueillir"));
         });
         L.push(TRAIT);
         if (sansAccord.length) {
@@ -1974,7 +1974,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — LETTRE DE DEMANDE D'ACCORD EXPRÈS");
+      L.push("PIÈCE 1 - LETTRE DE DEMANDE D'ACCORD EXPRÈS");
       L.push(GROS);
       L.push("");
       L.push("Cette lettre se place AVANT toute proposition de poste inférieur.");
@@ -1990,7 +1990,7 @@
       L.push("Remise en main propre contre décharge [ou lettre recommandée avec avis de");
       L.push("réception]");
       L.push("");
-      L.push("Objet : recherche de reclassement — postes de catégorie inférieure");
+      L.push("Objet : recherche de reclassement - postes de catégorie inférieure");
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
@@ -2009,7 +2009,7 @@
       L.push("offres vous soient adressées, chacune restant soumise à votre acceptation.");
       L.push("");
       L.push("[Si vous êtes en mesure de le faire dès à présent, indiquez ici la nature des");
-      L.push(" postes concernés — sans les proposer : « des postes de niveau …, dans les");
+      L.push(" postes concernés - sans les proposer : « des postes de niveau …, dans les");
       L.push(" sociétés …, aux conditions de rémunération de … ». Un salarié qui ne sait");
       L.push(" pas de quoi il s'agit ne donne pas un accord éclairé.]");
       L.push("");
@@ -2026,7 +2026,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — FORMULAIRE D'ACCORD OU DE REFUS");
+      L.push("PIÈCE 2 - FORMULAIRE D'ACCORD OU DE REFUS");
       L.push(GROS);
       L.push("");
       L.push("Je soussigné(e) [NOM, PRÉNOM], occupant l'emploi de [EMPLOI], classification");
@@ -2048,7 +2048,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — SUIVI");
+      L.push("PIÈCE 3 - SUIVI");
       L.push(GROS);
       L.push("");
       L.push(col("Salarié", 16) + col("Demande envoyée", 16) + col("Réponse", 12) + "Offres inférieures adressées");
@@ -2082,14 +2082,14 @@
         "sur un emploi de catégorie inférieure : l'accord exprès du salarié."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — envoi des demandes d'accord ;");
-      L.push("  · " + dansJours(ctx, 7) + " — date de réponse si vous accordez une");
+      L.push("  · aujourd'hui - envoi des demandes d'accord ;");
+      L.push("  · " + dansJours(ctx, 7) + " - date de réponse si vous accordez une");
       L.push("    semaine ;");
-      L.push("  · " + dansJours(ctx, 8) + " — envoi des offres de catégorie inférieure");
+      L.push("  · " + dansJours(ctx, 8) + " - envoi des offres de catégorie inférieure");
       L.push("    aux seuls salariés ayant donné leur accord ;");
-      L.push("  · " + dansJours(ctx, 23) + " — expiration d'un délai de réponse de quinze");
+      L.push("  · " + dansJours(ctx, 23) + " - expiration d'un délai de réponse de quinze");
       L.push("    jours ouvert sur ces offres ;");
-      L.push("  · à compter du " + dansJours(ctx, 24) + " — notification possible.");
+      L.push("  · à compter du " + dansJours(ctx, 24) + " - notification possible.");
       L.push("");
 
       return L.concat(pied("L. 1233-4, D. 1233-2-1, L. 1233-2, L. 1235-1, L. 1235-3")).join("\n");
@@ -2097,7 +2097,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-11 — LES PIÈCES EXTÉRIEURES À LA DIRECTION
+     CTL-REC-11 - LES PIÈCES EXTÉRIEURES À LA DIRECTION
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-11", {
@@ -2115,8 +2115,8 @@
       L.push("CE QUE CE DOCUMENT CORRIGE");
       L.push("");
       L.push("L. 1233-4 exige que le reclassement « ne puisse être opéré ». C'est à");
-      L.push("l'employeur de l'établir. Une attestation qu'il se délivre à lui-même — sur");
-      L.push("son papier, signée de sa direction, sans pièce derrière — n'est pas une");
+      L.push("l'employeur de l'établir. Une attestation qu'il se délivre à lui-même - sur");
+      L.push("son papier, signée de sa direction, sans pièce derrière - n'est pas une");
       L.push("preuve : c'est la répétition de ce qu'il faut prouver.");
       L.push("");
       L.push("Le remède n'est pas d'écrire l'attestation plus fermement. Il est de");
@@ -2149,7 +2149,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — BORDEREAU DES PIÈCES À RÉUNIR");
+      L.push("PIÈCE 1 - BORDEREAU DES PIÈCES À RÉUNIR");
       L.push(GROS);
       L.push("");
       L.push(col("Pièce", 38) + col("Date", 12) + "Origine");
@@ -2170,7 +2170,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — DEMANDE D'EXTRACTION ADRESSÉE À CHAQUE SOCIÉTÉ");
+      L.push("PIÈCE 2 - DEMANDE D'EXTRACTION ADRESSÉE À CHAQUE SOCIÉTÉ");
       L.push(GROS);
       L.push("");
       L.push(nom);
@@ -2211,10 +2211,10 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — ATTESTATION ÉTABLIE PAR UNE PERSONNE DISTINCTE DU DÉCIDEUR");
+      L.push("PIÈCE 3 - ATTESTATION ÉTABLIE PAR UNE PERSONNE DISTINCTE DU DÉCIDEUR");
       L.push(GROS);
       L.push("");
-      L.push("Je soussigné(e) [NOM, PRÉNOM], [QUALITÉ — la personne qui tient les données");
+      L.push("Je soussigné(e) [NOM, PRÉNOM], [QUALITÉ - la personne qui tient les données");
       L.push("de gestion ou qui en répond : responsable du personnel, expert-comptable,");
       L.push("commissaire aux comptes, direction d'une autre société du périmètre],");
       L.push("");
@@ -2235,7 +2235,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — GRILLE D'AUTO-CONTRÔLE");
+      L.push("PIÈCE 4 - GRILLE D'AUTO-CONTRÔLE");
       L.push(GROS);
       L.push("");
       L.push("  ☐ chaque société du périmètre a répondu par écrit, y compris « néant »");
@@ -2252,12 +2252,12 @@
         "l'établit pas."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — envoi des demandes d'extraction ;");
-      L.push("  · " + dansJours(ctx, 7) + " — réception des pièces, si vous accordez une");
+      L.push("  · aujourd'hui - envoi des demandes d'extraction ;");
+      L.push("  · " + dansJours(ctx, 7) + " - réception des pièces, si vous accordez une");
       L.push("    semaine ;");
-      L.push("  · " + dansJours(ctx, 8) + " — établissement de l'attestation par le tiers,");
+      L.push("  · " + dansJours(ctx, 8) + " - établissement de l'attestation par le tiers,");
       L.push("    pièces en main ;");
-      L.push("  · ensuite seulement — la notification, jamais avant.");
+      L.push("  · ensuite seulement - la notification, jamais avant.");
       L.push("");
 
       return L.concat(pied("L. 1233-4, L. 1233-2, L. 1235-1, L. 1235-3",
@@ -2268,7 +2268,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-REC-12 — LE TERRITOIRE NATIONAL
+     CTL-REC-12 - LE TERRITOIRE NATIONAL
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-REC-12", {
@@ -2298,7 +2298,7 @@
       L.push("antérieures au 24 septembre 2017, la limitation ne leur étant pas opposable.");
       L.push("");
       L.push("Conséquence immédiate : une offre émanant d'une société non établie en");
-      L.push("France ne satisfait pas l'obligation. Elle n'est pas interdite — elle ne");
+      L.push("France ne satisfait pas l'obligation. Elle n'est pas interdite - elle ne");
       L.push("compte pas. Un salarié qui n'a reçu que celles-là est, au regard du texte,");
       L.push("un salarié qui n'a reçu aucune offre.");
       L.push("");
@@ -2323,7 +2323,7 @@
       } else {
         L.push("Sociétés du groupe non établies sur le territoire national :");
         etr.forEach(function (s) {
-          L.push("  · " + cro(s.nom, "société") + " — " + cro(s.pays, "pays") + " — " +
+          L.push("  · " + cro(s.nom, "société") + " - " + cro(s.pays, "pays") + " - " +
             cro(s.activite, "activité"));
         });
         L.push("");
@@ -2345,7 +2345,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — ÉTAT DES POSTES DISPONIBLES, PÉRIMÈTRE NATIONAL");
+      L.push("PIÈCE 1 - ÉTAT DES POSTES DISPONIBLES, PÉRIMÈTRE NATIONAL");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
@@ -2355,11 +2355,11 @@
       L.push("Sociétés comprises dans le périmètre :");
       if (fr.length) {
         fr.forEach(function (s) {
-          L.push("  · " + cro(s.nom, "société") + " (" + cro(s.pays, "France") + ") — " +
+          L.push("  · " + cro(s.nom, "société") + " (" + cro(s.pays, "France") + ") - " +
             cro(s.activite, "activité"));
         });
       } else {
-        L.push("  · [à énumérer nommément — les sociétés du groupe établies en France");
+        L.push("  · [à énumérer nommément - les sociétés du groupe établies en France");
         L.push("    dont l'organisation, les activités ou le lieu d'exploitation assurent");
         L.push("    la permutation de tout ou partie du personnel]");
       }
@@ -2367,7 +2367,7 @@
       L.push("Sociétés écartées, et pourquoi :");
       if (etr.length) {
         etr.forEach(function (s) {
-          L.push("  · " + cro(s.nom, "société") + " — établie en " + cro(s.pays, "pays") +
+          L.push("  · " + cro(s.nom, "société") + " - établie en " + cro(s.pays, "pays") +
             ", hors territoire national (L. 1233-4)");
         });
       } else {
@@ -2386,10 +2386,10 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — NOTE DE RETRAITEMENT");
+      L.push("PIÈCE 2 - NOTE DE RETRAITEMENT");
       L.push(GROS);
       L.push("");
-      L.push("Note interne — recherche de reclassement, périmètre géographique");
+      L.push("Note interne - recherche de reclassement, périmètre géographique");
       L.push("Établie le " + leJour(aujourd(ctx)));
       L.push("");
       L.push("  1. L'obligation de reclassement de l'article L. 1233-4 du code du travail");
@@ -2420,13 +2420,13 @@
         "situés sur le territoire national, et eux seuls."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — retraitement et nouvel état, périmètre national ;");
-      L.push("  · " + dansJours(ctx, 10) + " — réponses des sociétés françaises");
+      L.push("  · aujourd'hui - retraitement et nouvel état, périmètre national ;");
+      L.push("  · " + dansJours(ctx, 10) + " - réponses des sociétés françaises");
       L.push("    interrogées, si vous leur accordez dix jours ;");
-      L.push("  · " + dansJours(ctx, 11) + " — envoi des offres correspondantes ;");
-      L.push("  · " + dansJours(ctx, 27) + " — expiration d'un délai de réponse de quinze");
+      L.push("  · " + dansJours(ctx, 11) + " - envoi des offres correspondantes ;");
+      L.push("  · " + dansJours(ctx, 27) + " - expiration d'un délai de réponse de quinze");
       L.push("    jours ;");
-      L.push("  · à compter du " + dansJours(ctx, 28) + " — notification possible.");
+      L.push("  · à compter du " + dansJours(ctx, 28) + " - notification possible.");
       L.push("");
 
       return L.concat(pied("L. 1233-4, D. 1233-2-1, L. 1233-2, L. 1235-1, L. 1235-3",
@@ -2438,7 +2438,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-EMP-01 — LE DOSSIER DE SUPPRESSION D'EMPLOI
+     CTL-EMP-01 - LE DOSSIER DE SUPPRESSION D'EMPLOI
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-EMP-01", {
@@ -2467,7 +2467,7 @@
       L.push("travail, consécutives notamment… » (L. 1233-3).");
       L.push("");
       L.push("Deux termes, et deux démonstrations distinctes : la CAUSE (les difficultés,");
-      L.push("la mutation technologique, la réorganisation, la cessation — c'est le");
+      L.push("la mutation technologique, la réorganisation, la cessation - c'est le");
       L.push("« consécutives à ») et l'EFFET SUR L'EMPLOI (la suppression, la");
       L.push("transformation, la modification refusée). Un dossier peut établir");
       L.push("parfaitement les difficultés et échouer sur l'emploi, parce que rien n'y dit");
@@ -2475,7 +2475,7 @@
       L.push("");
       L.push("Le même article ajoute que « la matérialité de la suppression, de la");
       L.push("transformation d'emploi ou de la modification d'un élément essentiel du");
-      L.push("contrat de travail s'apprécie AU NIVEAU DE L'ENTREPRISE » — et non au niveau");
+      L.push("contrat de travail s'apprécie AU NIVEAU DE L'ENTREPRISE » - et non au niveau");
       L.push("du groupe ni du secteur d'activité, à la différence de la cause. C'est votre");
       L.push("entreprise, " + nom + ", qui doit montrer ses postes.");
       L.push("");
@@ -2505,7 +2505,7 @@
           L.push("");
           L.push("ÉCART DE " + Math.abs(ecart) + " : " + total + " suppression(s) déclarée(s) pour " +
             nb + " licenciement(s).");
-          L.push("Un écart n'est pas une faute — il s'explique presque toujours. Mais un");
+          L.push("Un écart n'est pas une faute - il s'explique presque toujours. Mais un");
           L.push("écart NON EXPLIQUÉ affaiblit la démonstration au point qu'elle peut être");
           L.push("écartée. Écrivez l'explication à la pièce 3 : reclassements internes,");
           L.push("départs volontaires, postes vacants supprimés, refus de modification déjà");
@@ -2520,7 +2520,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — NOTE DE PRÉSENTATION DE LA RÉORGANISATION");
+      L.push("PIÈCE 1 - NOTE DE PRÉSENTATION DE LA RÉORGANISATION");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
@@ -2533,7 +2533,7 @@
       L.push("");
       L.push("2. Organisation cible");
       L.push("[Décrire l'organisation projetée, emploi par emploi. Ce qui disparaît, ce");
-      L.push(" qui se transforme, ce qui se crée — car une réorganisation qui crée des");
+      L.push(" qui se transforme, ce qui se crée - car une réorganisation qui crée des");
       L.push(" postes doit le dire : ces postes sont des postes disponibles au sens de");
       L.push(" L. 1233-4, et ils entrent dans la recherche de reclassement.]");
       L.push("");
@@ -2550,7 +2550,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — TABLEAU DE REDISTRIBUTION DES TÂCHES");
+      L.push("PIÈCE 2 - TABLEAU DE REDISTRIBUTION DES TÂCHES");
       L.push(GROS);
       L.push("");
       L.push("C'est la pièce qu'on oublie, et c'est celle qui décide. Un emploi supprimé");
@@ -2576,7 +2576,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — EXPLICATION DE L'ÉCART SUPPRESSIONS / LICENCIEMENTS");
+      L.push("PIÈCE 3 - EXPLICATION DE L'ÉCART SUPPRESSIONS / LICENCIEMENTS");
       L.push(GROS);
       L.push("");
       L.push("Suppressions déclarées : " + (sup.length ? total : "[nb]"));
@@ -2584,18 +2584,18 @@
       L.push("Écart : " + (ecart !== null ? ecart : "[à calculer]"));
       L.push("");
       L.push("Explication, ligne par ligne :");
-      L.push("  · reclassements internes acceptés ................. [nb] — [noms/postes]");
-      L.push("  · départs volontaires ou ruptures d'un autre type .. [nb] — [préciser]");
-      L.push("  · postes vacants supprimés (aucun salarié dessus) .. [nb] — [intitulés]");
-      L.push("  · départs à la retraite, fins de contrat ........... [nb] — [préciser]");
-      L.push("  · autres ........................................... [nb] — [préciser]");
+      L.push("  · reclassements internes acceptés ................. [nb] - [noms/postes]");
+      L.push("  · départs volontaires ou ruptures d'un autre type .. [nb] - [préciser]");
+      L.push("  · postes vacants supprimés (aucun salarié dessus) .. [nb] - [intitulés]");
+      L.push("  · départs à la retraite, fins de contrat ........... [nb] - [préciser]");
+      L.push("  · autres ........................................... [nb] - [préciser]");
       L.push("");
       L.push("Le total des lignes ci-dessus doit égaler l'écart. S'il ne l'égale pas,");
       L.push("c'est qu'une partie du projet n'est pas décrite : cherchez-la maintenant.");
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — BORDEREAU DES ANNEXES");
+      L.push("PIÈCE 4 - BORDEREAU DES ANNEXES");
       L.push(GROS);
       L.push("");
       L.push("  1. Organigramme avant projet, daté du [DATE].");
@@ -2612,14 +2612,14 @@
       L = L.concat(blocEnjeu(
         "Ici, ce qui est en cause est l'effet sur l'emploi que L. 1233-3 exige :\n" +
         "suppression, transformation, ou modification refusée d'un élément essentiel\n" +
-        "du contrat — appréciée au niveau de l'entreprise."));
+        "du contrat - appréciée au niveau de l'entreprise."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — établissement des organigrammes et du tableau de");
+      L.push("  · aujourd'hui - établissement des organigrammes et du tableau de");
       L.push("    redistribution ;");
-      L.push("  · " + dansJours(ctx, 3) + " — explication écrite de l'écart, s'il en");
+      L.push("  · " + dansJours(ctx, 3) + " - explication écrite de l'écart, s'il en");
       L.push("    subsiste un ;");
-      L.push("  · " + dansJours(ctx, 5) + " — versement du dossier AVANT la convocation du");
+      L.push("  · " + dansJours(ctx, 5) + " - versement du dossier AVANT la convocation du");
       L.push("    comité social et économique : c'est de ces pièces que part la");
       L.push("    démonstration remise aux élus.");
       if (estISO(f.dateInfoCSE)) {
@@ -2636,7 +2636,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-EMP-02 — LES CONTRATS PRÉCAIRES ET LES RECRUTEMENTS
+     CTL-EMP-02 - LES CONTRATS PRÉCAIRES ET LES RECRUTEMENTS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-EMP-02", {
@@ -2669,7 +2669,7 @@
       L.push("");
       L.push("Toutes ces situations ne sont pas des contradictions. Un remplacement de");
       L.push("salarié absent, un accroissement ponctuel étranger au poste supprimé, un");
-      L.push("contrat conclu avant le projet et arrivant à son terme s'expliquent — à");
+      L.push("contrat conclu avant le projet et arrivant à son terme s'expliquent - à");
       L.push("condition que l'explication soit ÉCRITE, DATÉE, et versée au dossier avant");
       L.push("la notification. Écrite après, elle ressemble à une justification");
       L.push("reconstituée.");
@@ -2696,7 +2696,7 @@
         prec.forEach(function (c) {
           L.push(col(cro(c.emploi, "emploi"), 30) + col(cro(c.type, "type"), 14) +
             col(cro(c.periode || c.date, "période"), 20) +
-            (titres[c.emploi] ? "OUI — à traiter" : "non, d'après les intitulés"));
+            (titres[c.emploi] ? "OUI - à traiter" : "non, d'après les intitulés"));
         });
         L.push(TRAIT);
         L.push("Le rapprochement ci-dessus se fait sur les INTITULÉS, tels que votre");
@@ -2713,14 +2713,14 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — DEMANDE D'EXTRACTION");
+      L.push("PIÈCE 1 - DEMANDE D'EXTRACTION");
       L.push(GROS);
       L.push("");
       L.push("À [SERVICE DU PERSONNEL / PRESTATAIRE DE PAIE]");
       L.push("Objet : extraction des contrats précaires et des embauches");
       L.push("");
       L.push("Merci d'extraire, pour " + nom + " et pour la période du [DATE] au");
-      L.push("[DATE] — au minimum les douze derniers mois :");
+      L.push("[DATE] - au minimum les douze derniers mois :");
       L.push("");
       L.push("  1. tous les contrats à durée déterminée, en cours ou achevés, avec");
       L.push("     l'emploi occupé, le motif de recours, les dates de début et de fin ;");
@@ -2736,7 +2736,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — TABLEAU DE RAPPROCHEMENT");
+      L.push("PIÈCE 2 - TABLEAU DE RAPPROCHEMENT");
       L.push(GROS);
       L.push("");
       L.push("Emplois déclarés supprimés :");
@@ -2745,7 +2745,7 @@
           L.push("  · " + cro(x.intitule, "intitulé") + " (" + cro(x.service, "service") + ")");
         });
       } else {
-        L.push("  · [à énumérer — voir le document du point CTL-EMP-01]");
+        L.push("  · [à énumérer - voir le document du point CTL-EMP-01]");
       }
       L.push("");
       L.push(col("Contrat / embauche", 26) + col("Emploi occupé", 22) + col("Dates", 16) + "Recoupe ?");
@@ -2762,7 +2762,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — DÉCISION ET JUSTIFICATION, CONTRAT PAR CONTRAT");
+      L.push("PIÈCE 3 - DÉCISION ET JUSTIFICATION, CONTRAT PAR CONTRAT");
       L.push(GROS);
       L.push("");
       L.push("Pour chaque recoupement, une seule ligne, et une décision réelle :");
@@ -2772,7 +2772,7 @@
       L.push("  ☐ IL SE POURSUIT, et voici pourquoi il n'est pas incompatible avec la");
       L.push("    suppression : [remplacement de [NOM], absent depuis le [DATE] pour");
       L.push("    [MOTIF] ; accroissement ponctuel d'activité sur [PÉRIODE] portant sur");
-      L.push("    [TÂCHES], distinctes de celles du poste supprimé ; autre — à écrire].");
+      L.push("    [TÂCHES], distinctes de celles du poste supprimé ; autre - à écrire].");
       L.push("");
       L.push("  Pièce jointe : [contrat, avenant, attestation d'absence, bon de commande");
       L.push("  du client dont l'activité est invoquée…]");
@@ -2783,16 +2783,16 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — NOTE DE SYNTHÈSE À VERSER AU DOSSIER");
+      L.push("PIÈCE 4 - NOTE DE SYNTHÈSE À VERSER AU DOSSIER");
       L.push(GROS);
       L.push("");
-      L.push(nom.toUpperCase() + " — note établie le " + leJour(aujourd(ctx)));
+      L.push(nom.toUpperCase() + " - note établie le " + leJour(aujourd(ctx)));
       L.push("");
       L.push("L'inventaire des contrats à durée déterminée, des missions d'intérim et des");
       L.push("embauches de la période du [DATE] au [DATE] a été rapproché de la liste des");
       L.push("emplois dont la suppression est envisagée.");
       L.push("");
-      L.push("[Conclusion — à écrire d'après le tableau : « aucun contrat ne porte sur un");
+      L.push("[Conclusion - à écrire d'après le tableau : « aucun contrat ne porte sur un");
       L.push(" emploi supprimé », ou « les contrats suivants y portent, et il en est");
       L.push(" disposé comme suit : … ». Ne concluez pas avant d'avoir rempli les");
       L.push(" tableaux : c'est le rapprochement qui écrit la conclusion, non l'inverse.]");
@@ -2805,12 +2805,12 @@
         "L. 1233-3 : un poste tenu par un autre contrat n'est pas un poste supprimé."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — demande d'extraction ;");
-      L.push("  · " + dansJours(ctx, 3) + " — rapprochement intitulé par intitulé, puis");
+      L.push("  · aujourd'hui - demande d'extraction ;");
+      L.push("  · " + dansJours(ctx, 3) + " - rapprochement intitulé par intitulé, puis");
       L.push("    tâche par tâche ;");
-      L.push("  · " + dansJours(ctx, 5) + " — décision et justification écrites, contrat");
+      L.push("  · " + dansJours(ctx, 5) + " - décision et justification écrites, contrat");
       L.push("    par contrat ;");
-      L.push("  · " + dansJours(ctx, 6) + " — versement de la note au dossier, AVANT la");
+      L.push("  · " + dansJours(ctx, 6) + " - versement de la note au dossier, AVANT la");
       L.push("    notification.");
       L.push("");
       L.push("Pour les contrats qui doivent prendre fin, le calendrier est celui de leur");
@@ -2826,7 +2826,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-ECO-01 — LA DÉMONSTRATION COMPTABLE
+     CTL-ECO-01 - LA DÉMONSTRATION COMPTABLE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-ECO-01", {
@@ -2844,10 +2844,10 @@
       var liasse = pieceDe(f, "liasse");
       var seuil = null, seuilTexte = "[selon votre effectif]";
       if (eff != null) {
-        if (eff < 11) { seuil = 1; seuilTexte = "un trimestre (entreprise de moins de onze salariés — a)"; }
-        else if (eff < 50) { seuil = 2; seuilTexte = "deux trimestres consécutifs (au moins onze et moins de cinquante salariés — b)"; }
-        else if (eff < 300) { seuil = 3; seuilTexte = "trois trimestres consécutifs (au moins cinquante et moins de trois cents salariés — c)"; }
-        else { seuil = 4; seuilTexte = "quatre trimestres consécutifs (trois cents salariés et plus — d)"; }
+        if (eff < 11) { seuil = 1; seuilTexte = "un trimestre (entreprise de moins de onze salariés - a)"; }
+        else if (eff < 50) { seuil = 2; seuilTexte = "deux trimestres consécutifs (au moins onze et moins de cinquante salariés - b)"; }
+        else if (eff < 300) { seuil = 3; seuilTexte = "trois trimestres consécutifs (au moins cinquante et moins de trois cents salariés - c)"; }
+        else { seuil = 4; seuilTexte = "quatre trimestres consécutifs (trois cents salariés et plus - d)"; }
       }
       var L = entete(ctx, "Dossier de démonstration économique",
         "article L. 1233-3, 1°, du code du travail");
@@ -2873,9 +2873,9 @@
       L.push("     salariés et plus. »");
       L.push("");
       L.push("DEUX CHOSES À NE PAS CONFONDRE. Le seuil trimestriel ne concerne QUE la");
-      L.push("baisse des commandes ou du chiffre d'affaires. Les autres indicateurs —");
+      L.push("baisse des commandes ou du chiffre d'affaires. Les autres indicateurs -");
       L.push("pertes d'exploitation, dégradation de la trésorerie ou de l'excédent brut");
-      L.push("d'exploitation — n'ont pas de durée légale, et le texte laisse en outre");
+      L.push("d'exploitation - n'ont pas de durée légale, et le texte laisse en outre");
       L.push("ouverte la voie de « tout autre élément de nature à justifier » les");
       L.push("difficultés. Si votre baisse n'atteint pas la durée exigée, ce n'est pas");
       L.push("perdu : c'est un autre indicateur qu'il faut documenter, et le dire.");
@@ -2891,13 +2891,13 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — TABLEAU TRIMESTRIEL COMPARÉ");
+      L.push("PIÈCE 1 - TABLEAU TRIMESTRIEL COMPARÉ");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
-      L.push("CHIFFRE D'AFFAIRES [OU COMMANDES — préciser lequel] PAR TRIMESTRE");
+      L.push("CHIFFRE D'AFFAIRES [OU COMMANDES - préciser lequel] PAR TRIMESTRE");
       L.push("Comparaison avec le même trimestre de l'année précédente");
-      L.push("Périmètre : [ENTREPRISE / SECTEUR D'ACTIVITÉ DU GROUPE — voir le point");
+      L.push("Périmètre : [ENTREPRISE / SECTEUR D'ACTIVITÉ DU GROUPE - voir le point");
       L.push("CTL-ECO-02, qui commande ce choix]");
       L.push("");
       L.push(col("Trimestre", 14) + col("Année N", 14) + col("Année N-1", 14) +
@@ -2931,8 +2931,8 @@
             ? "La durée exigée pour votre effectif (" + seuil + ") est atteinte, sur les chiffres déclarés."
             : "La durée exigée pour votre effectif (" + seuil + ") N'EST PAS atteinte sur les chiffres déclarés.");
           if (meilleure < seuil) {
-            L.push("Documentez alors un autre indicateur — pertes d'exploitation,");
-            L.push("dégradation de la trésorerie ou de l'excédent brut d'exploitation — ou");
+            L.push("Documentez alors un autre indicateur - pertes d'exploitation,");
+            L.push("dégradation de la trésorerie ou de l'excédent brut d'exploitation - ou");
             L.push("« tout autre élément de nature à justifier » les difficultés, et");
             L.push("dites-le expressément dans la note de la pièce 4.");
           }
@@ -2946,7 +2946,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — RÉSULTAT D'EXPLOITATION, TROIS EXERCICES");
+      L.push("PIÈCE 2 - RÉSULTAT D'EXPLOITATION, TROIS EXERCICES");
       L.push(GROS);
       L.push("");
       L.push(col("Exercice", 14) + col("Résultat d'exploitation", 26) + "Source");
@@ -2964,7 +2964,7 @@
       L.push(TRAIT);
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 3 — TRÉSORERIE ET EXCÉDENT BRUT D'EXPLOITATION");
+      L.push("PIÈCE 3 - TRÉSORERIE ET EXCÉDENT BRUT D'EXPLOITATION");
       L.push(GROS);
       L.push("");
       L.push(col("Exercice", 14) + col("Trésorerie", 20) + col("EBE", 20) + "Source");
@@ -2982,14 +2982,14 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — NOTE DE PRÉSENTATION DE LA DÉMONSTRATION");
+      L.push("PIÈCE 4 - NOTE DE PRÉSENTATION DE LA DÉMONSTRATION");
       L.push(GROS);
       L.push("");
       L.push("1. L'indicateur invoqué");
       L.push("[Dire lequel des indicateurs de L. 1233-3, 1° est invoqué, et pourquoi :");
       L.push(" baisse des commandes, baisse du chiffre d'affaires, pertes d'exploitation,");
       L.push(" dégradation de la trésorerie, dégradation de l'excédent brut");
-      L.push(" d'exploitation, ou tout autre élément — à décrire.]");
+      L.push(" d'exploitation, ou tout autre élément - à décrire.]");
       L.push("");
       L.push("2. Le périmètre");
       L.push("[Entreprise seule si elle n'appartient à aucun groupe ; sinon, secteur");
@@ -3007,12 +3007,12 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 5 — BORDEREAU DES PIÈCES COMPTABLES");
+      L.push("PIÈCE 5 - BORDEREAU DES PIÈCES COMPTABLES");
       L.push(GROS);
       L.push("");
       L.push("  ☐ Liasse fiscale de chaque exercice invoqué" +
-        (liasse ? " — au dossier : " + cro(liasse.fichier, "fichier") +
-          ", " + cro(liasse.periode, "période") : " — ABSENTE DU DOSSIER"));
+        (liasse ? " - au dossier : " + cro(liasse.fichier, "fichier") +
+          ", " + cro(liasse.periode, "période") : " - ABSENTE DU DOSSIER"));
       L.push("  ☐ Comptes annuels et annexe");
       L.push("  ☐ Situation intermédiaire, si la période invoquée n'est pas close");
       L.push("  ☐ Balances ou grands livres à l'appui du tableau trimestriel");
@@ -3030,13 +3030,13 @@
         "de L. 1233-3."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — construction des trois tableaux ;");
-      L.push("  · " + dansJours(ctx, 7) + " — obtention de la liasse et, s'il y a lieu, du");
+      L.push("  · aujourd'hui - construction des trois tableaux ;");
+      L.push("  · " + dansJours(ctx, 7) + " - obtention de la liasse et, s'il y a lieu, du");
       L.push("    visa du professionnel des comptes ;");
-      L.push("  · " + dansJours(ctx, 10) + " — remise du dossier au comité social et");
+      L.push("  · " + dansJours(ctx, 10) + " - remise du dossier au comité social et");
       L.push("    économique AVEC la convocation : les renseignements se joignent à");
       L.push("    l'ordre du jour, ils ne se distribuent pas en séance ;");
-      L.push("  · ensuite — la consultation, puis la notification.");
+      L.push("  · ensuite - la consultation, puis la notification.");
       if (estISO(f.dateInfoCSE)) {
         L.push("");
         L.push("Votre dossier porte une convocation du comité datée du " +
@@ -3052,7 +3052,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-ECO-02 — LE PÉRIMÈTRE D'APPRÉCIATION DE LA CAUSE
+     CTL-ECO-02 - LE PÉRIMÈTRE D'APPRÉCIATION DE LA CAUSE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-ECO-02", {
@@ -3106,11 +3106,11 @@
       if (!f.groupe) {
         L.push("Votre dossier ne déclare aucun groupe : la cause s'apprécie alors au niveau");
         L.push("de " + nom + " seule, et ce document se réduit à la note de la pièce 1,");
-        L.push("qui doit le dire et l'établir. Si un groupe existe — même étranger, même");
-        L.push("réduit à une holding — revenez à l'audit : cette réponse commande tout.");
+        L.push("qui doit le dire et l'établir. Si un groupe existe - même étranger, même");
+        L.push("réduit à une holding - revenez à l'audit : cette réponse commande tout.");
       } else {
         L.push("Groupe déclaré" +
-          (typeof f.effectifGroupe === "number" ? " — effectif total : " + f.effectifGroupe : "") + ".");
+          (typeof f.effectifGroupe === "number" ? " - effectif total : " + f.effectifGroupe : "") + ".");
         L.push("Activité de l'entreprise auditée : " + cro(f.activite, "NON RENSEIGNÉE") + ".");
         L.push("");
         if (soc.length) {
@@ -3151,7 +3151,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — NOTE DE DÉLIMITATION DU SECTEUR D'ACTIVITÉ");
+      L.push("PIÈCE 1 - NOTE DE DÉLIMITATION DU SECTEUR D'ACTIVITÉ");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
@@ -3167,8 +3167,8 @@
       L.push("2. Les sociétés établies sur le territoire national");
       if (fr.length) {
         fr.forEach(function (s) {
-          L.push("   · " + cro(s.nom, "société") + " — " + cro(s.activite, "activité") +
-            (s.effectif != null ? " — " + s.effectif + " salariés" : ""));
+          L.push("   · " + cro(s.nom, "société") + " - " + cro(s.activite, "activité") +
+            (s.effectif != null ? " - " + s.effectif + " salariés" : ""));
         });
       } else {
         L.push("   · [à énumérer]");
@@ -3197,14 +3197,14 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — TABLEAU CONSOLIDÉ, SOCIÉTÉ PAR SOCIÉTÉ");
+      L.push("PIÈCE 2 - TABLEAU CONSOLIDÉ, SOCIÉTÉ PAR SOCIÉTÉ");
       L.push(GROS);
       L.push("");
       L.push("La pièce doit NOMMER ce qu'elle agrège. Un total sans détail ne se vérifie");
       L.push("pas, et une étiquette « secteur » sur un total n'est qu'une affirmation.");
       L.push("");
       L.push("Indicateur : [chiffre d'affaires / commandes / résultat d'exploitation /");
-      L.push("trésorerie / excédent brut d'exploitation — un tableau par indicateur]");
+      L.push("trésorerie / excédent brut d'exploitation - un tableau par indicateur]");
       L.push("");
       var entetes = col("Société", 28);
       if (tri.length) tri.forEach(function (t) { entetes += col(cro(t.libelle, "T…"), 12); });
@@ -3246,7 +3246,7 @@
       }
 
       L.push(GROS);
-      L.push("PIÈCE 3 — DEMANDE DE COMPTES AUX SOCIÉTÉS DU SECTEUR");
+      L.push("PIÈCE 3 - DEMANDE DE COMPTES AUX SOCIÉTÉS DU SECTEUR");
       L.push(GROS);
       L.push("");
       L.push(nom);
@@ -3256,7 +3256,7 @@
       L.push("");
       L.push(cro(p.ville, "lieu") + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Objet : appréciation de la cause économique — communication de données");
+      L.push("Objet : appréciation de la cause économique - communication de données");
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
@@ -3286,12 +3286,12 @@
         "d'activité du groupe, ne caractérise pas la cause de L. 1233-3."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — note de délimitation et demandes de données ;");
-      L.push("  · " + dansJours(ctx, 21) + " — réception et agrégation des comptes, si");
+      L.push("  · aujourd'hui - note de délimitation et demandes de données ;");
+      L.push("  · " + dansJours(ctx, 21) + " - réception et agrégation des comptes, si");
       L.push("    vous accordez trois semaines aux sociétés interrogées ;");
-      L.push("  · " + dansJours(ctx, 25) + " — démonstration consolidée prête pour le");
+      L.push("  · " + dansJours(ctx, 25) + " - démonstration consolidée prête pour le");
       L.push("    comité social et économique ;");
-      L.push("  · ensuite — la consultation, puis la notification.");
+      L.push("  · ensuite - la consultation, puis la notification.");
       L.push("");
       L.push("Agréger des comptes prend du temps : c'est le point de ce module qui");
       L.push("repousse le plus souvent un calendrier, et le découvrir tard est la");
@@ -3307,7 +3307,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-ECO-03 — LA MENACE SUR LA COMPÉTITIVITÉ
+     CTL-ECO-03 - LA MENACE SUR LA COMPÉTITIVITÉ
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-ECO-03", {
@@ -3325,8 +3325,8 @@
       L.push(GROS);
       L.push("");
       L.push("Le contrôle CTL-ECO-03 de ce module ne conclut JAMAIS à la conformité, quel");
-      L.push("que soit le soin apporté au dossier. La question — cette réorganisation");
-      L.push("était-elle nécessaire à la sauvegarde de la compétitivité ? — excède ce");
+      L.push("que soit le soin apporté au dossier. La question - cette réorganisation");
+      L.push("était-elle nécessaire à la sauvegarde de la compétitivité ? - excède ce");
       L.push("qu'une base de textes peut apprécier : elle suppose de lire un marché, des");
       L.push("comptes et une stratégie.");
       L.push("");
@@ -3346,7 +3346,7 @@
       L.push("quelque chose à préserver, donc une menace ; nécessaire suppose que la");
       L.push("réorganisation soit la réponse à cette menace, et non un choix parmi");
       L.push("d'autres également ouverts. C'est là que se sépare la réorganisation");
-      L.push("nécessaire de la recherche d'une rentabilité meilleure — et une menace");
+      L.push("nécessaire de la recherche d'une rentabilité meilleure - et une menace");
       L.push("seulement affirmée ne fait pas cette séparation.");
       L.push("");
       L.push("Le périmètre d'appréciation est le même que pour les difficultés : celui du");
@@ -3359,7 +3359,7 @@
       if (f.cause && f.cause !== "3") {
         L.push("La cause invoquée dans votre dossier n'est pas la sauvegarde de la");
         L.push("compétitivité (cause déclarée : " + cro(f.cause, "non renseignée") + ").");
-        L.push("Ce document ne vous concerne que si vous changez de fondement — et changer");
+        L.push("Ce document ne vous concerne que si vous changez de fondement - et changer");
         L.push("de fondement en cours de procédure n'est pas neutre : la lettre de");
         L.push("licenciement comporte l'énoncé des motifs économiques invoqués (L. 1233-16)");
         L.push("et fixe les limites du litige (L. 1235-2).");
@@ -3380,13 +3380,13 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — LETTRE DE MISSION AU PROFESSIONNEL");
+      L.push("PIÈCE 1 - LETTRE DE MISSION AU PROFESSIONNEL");
       L.push(GROS);
       L.push("");
       L.push(nom);
       L.push(cro(p.adresse, "adresse du siège"));
       L.push("");
-      L.push("À [CABINET / EXPERT — économiste, cabinet de conseil en stratégie,");
+      L.push("À [CABINET / EXPERT - économiste, cabinet de conseil en stratégie,");
       L.push("expert-comptable, selon la nature de la menace]");
       L.push("");
       L.push(cro(p.ville, "lieu") + ", le " + leJour(aujourd(ctx)));
@@ -3400,8 +3400,8 @@
       L.push("");
       L.push("L'article L. 1233-3, 3° du code du travail ne permet de fonder un");
       L.push("licenciement économique sur une réorganisation que si celle-ci est");
-      L.push("nécessaire à la sauvegarde de la compétitivité, appréciée — l'entreprise");
-      L.push("appartenant à un groupe — au niveau du secteur d'activité commun aux");
+      L.push("nécessaire à la sauvegarde de la compétitivité, appréciée - l'entreprise");
+      L.push("appartenant à un groupe - au niveau du secteur d'activité commun aux");
       L.push("entreprises du groupe établies sur le territoire national.");
       L.push("");
       L.push("Je vous confie en conséquence une mission d'analyse portant sur :");
@@ -3418,7 +3418,7 @@
       L.push("Votre analyse doit pouvoir être remise au comité social et économique et,");
       L.push("le cas échéant, produite en justice. Les sources y sont datées et citées.");
       L.push("");
-      L.push("[Délai de remise souhaité : le … — préciser.]");
+      L.push("[Délai de remise souhaité : le … - préciser.]");
       L.push("");
       L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
       L.push("distinguée.");
@@ -3428,16 +3428,16 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — TRAME DE LA NOTE D'ANALYSE");
+      L.push("PIÈCE 2 - TRAME DE LA NOTE D'ANALYSE");
       L.push(GROS);
       L.push("");
       L.push("1. LA MENACE");
-      L.push("   1.1 Origine : [d'où elle vient — nouvel entrant, évolution technologique,");
+      L.push("   1.1 Origine : [d'où elle vient - nouvel entrant, évolution technologique,");
       L.push("       réglementation, perte d'un donneur d'ordre, mutation de la demande]");
       L.push("   1.2 Date : [quand elle s'est manifestée, et à quoi on l'a vue]");
       L.push("   1.3 Marché concerné : [le même marché que celui qui caractérise le");
       L.push("       secteur d'activité, au sens de L. 1233-3]");
-      L.push("   1.4 Sources : [études, statistiques de branche, données de marché —");
+      L.push("   1.4 Sources : [études, statistiques de branche, données de marché -");
       L.push("       datées et citées. Une menace établie par les seules notes internes");
       L.push("       de l'entreprise reste une affirmation de l'entreprise.]");
       L.push("");
@@ -3452,7 +3452,7 @@
       L.push(col("[autre indicateur]", 30) + col("[…]", 12) + col("[…]", 12) + col("[…]", 12) + "[source]");
       L.push(TRAIT);
       L.push("");
-      L.push("3. LE SCÉNARIO DE RÉFÉRENCE — SANS RÉORGANISATION");
+      L.push("3. LE SCÉNARIO DE RÉFÉRENCE - SANS RÉORGANISATION");
       L.push("   [Que devient l'entreprise si rien n'est fait : à quelle échéance, sur");
       L.push("    quelles hypothèses, avec quel effet sur l'emploi. C'est la partie que");
       L.push("    l'on oublie, et c'est celle qui montre la NÉCESSITÉ : sans elle, la");
@@ -3467,7 +3467,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — CE QUI DOIT PRÉCÉDER LA DÉCISION");
+      L.push("PIÈCE 3 - CE QUI DOIT PRÉCÉDER LA DÉCISION");
       L.push(GROS);
       L.push("");
       L.push("La note s'établit AVANT la décision de réorganiser, non pour la justifier");
@@ -3476,9 +3476,9 @@
       L.push("");
       L.push("  ☐ mission confiée le ................. [DATE]");
       L.push("  ☐ note remise le ..................... [DATE]");
-      L.push("  ☐ décision de réorganisation prise le  [DATE] — postérieure à la note");
+      L.push("  ☐ décision de réorganisation prise le  [DATE] - postérieure à la note");
       L.push("  ☐ information du comité le ........... [DATE]" +
-        (estISO(f.dateInfoCSE) ? " — votre dossier porte le " + jour(f.dateInfoCSE) : ""));
+        (estISO(f.dateInfoCSE) ? " - votre dossier porte le " + jour(f.dateInfoCSE) : ""));
       L.push("");
 
       L = L.concat(blocEnjeu(
@@ -3487,13 +3487,13 @@
         "compétitivité d'une recherche de rentabilité."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — envoi de la lettre de mission ;");
-      L.push("  · " + dansJours(ctx, 28) + " — remise de la note, si vous accordez quatre");
+      L.push("  · aujourd'hui - envoi de la lettre de mission ;");
+      L.push("  · " + dansJours(ctx, 28) + " - remise de la note, si vous accordez quatre");
       L.push("    semaines ; l'analyse suppose des données de marché, et huit semaines ne");
       L.push("    sont pas rares ;");
-      L.push("  · " + dansJours(ctx, 30) + " — décision de réorganisation, au vu de la");
+      L.push("  · " + dansJours(ctx, 30) + " - décision de réorganisation, au vu de la");
       L.push("    note et non l'inverse ;");
-      L.push("  · ensuite — l'information du comité, puis la procédure.");
+      L.push("  · ensuite - l'information du comité, puis la procédure.");
       L.push("");
 
       return L.concat(pied("L. 1233-3, L. 1233-2, L. 1233-16, L. 1235-1, L. 1235-2, L. 1235-3",
@@ -3505,7 +3505,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-ECO-04 — LA MUTATION TECHNOLOGIQUE
+     CTL-ECO-04 - LA MUTATION TECHNOLOGIQUE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-ECO-04", {
@@ -3523,7 +3523,7 @@
       L.push("");
       L.push("Le licenciement peut être consécutif « 2° A des mutations technologiques »");
       L.push("(L. 1233-3). Le texte n'en dit pas plus : il ne définit pas la mutation, il");
-      L.push("ne fixe ni seuil ni montant. Tout se joue donc sur la PREUVE — et une");
+      L.push("ne fixe ni seuil ni montant. Tout se joue donc sur la PREUVE - et une");
       L.push("mutation non datée, non documentée, ne se distingue pas d'un changement");
       L.push("d'organisation ordinaire, qui n'est pas une cause économique.");
       L.push("");
@@ -3533,8 +3533,8 @@
       L.push("poste, tâche par tâche).");
       L.push("");
       L.push("ET UN QUATRIÈME POINT, QUI EST LE VRAI TERRAIN DU LITIGE : lorsque la cause");
-      L.push("invoquée est une mutation technologique, la question posée par L. 1233-4 —");
-      L.push("tous les efforts de FORMATION ET D'ADAPTATION ont-ils été réalisés ? —");
+      L.push("invoquée est une mutation technologique, la question posée par L. 1233-4 -");
+      L.push("tous les efforts de FORMATION ET D'ADAPTATION ont-ils été réalisés ? -");
       L.push("devient centrale. L'outil change ; qu'a-t-on fait pour que le salarié");
       L.push("puisse le tenir ? Le document du point CTL-REC-05 traite ce point, et les");
       L.push("deux dossiers se lisent ensemble.");
@@ -3545,7 +3545,7 @@
       if (f.cause && f.cause !== "2") {
         L.push("La cause déclarée dans votre dossier n'est pas la mutation technologique");
         L.push("(cause : " + cro(f.cause, "non renseignée") + "). Ce document ne vous");
-        L.push("concerne que si la mutation est invoquée — seule ou avec une autre cause,");
+        L.push("concerne que si la mutation est invoquée - seule ou avec une autre cause,");
         L.push("étant rappelé que la lettre de licenciement comporte l'énoncé des motifs");
         L.push("économiques invoqués (L. 1233-16).");
         L.push("");
@@ -3563,28 +3563,28 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — FICHE DESCRIPTIVE DE LA MUTATION");
+      L.push("PIÈCE 1 - FICHE DESCRIPTIVE DE LA MUTATION");
       L.push(GROS);
       L.push("");
       L.push(nom.toUpperCase());
-      L.push("FICHE DE MUTATION TECHNOLOGIQUE — établie le " + leJour(aujourd(ctx)));
+      L.push("FICHE DE MUTATION TECHNOLOGIQUE - établie le " + leJour(aujourd(ctx)));
       L.push("");
       L.push("1. L'OUTIL ABANDONNÉ");
-      L.push("   · désignation : [machine, logiciel, procédé — désignation précise]");
+      L.push("   · désignation : [machine, logiciel, procédé - désignation précise]");
       L.push("   · mis en service le : [DATE]");
-      L.push("   · arrêté le : [DATE] — pièce : [procès-verbal d'arrêt, contrat de");
+      L.push("   · arrêté le : [DATE] - pièce : [procès-verbal d'arrêt, contrat de");
       L.push("     cession, bon d'enlèvement, désinstallation]");
       L.push("   · ce qu'il permettait de faire : [tâches]");
       L.push("");
       L.push("2. L'OUTIL NOUVEAU");
       L.push("   · désignation : [désignation précise]");
-      L.push("   · commandé le : [DATE] — bon de commande n° [RÉFÉRENCE]");
-      L.push("   · facturé le : [DATE] — facture n° [RÉFÉRENCE] — montant : [MONTANT]");
-      L.push("   · mis en service le : [DATE] — procès-verbal de mise en service du [DATE]");
+      L.push("   · commandé le : [DATE] - bon de commande n° [RÉFÉRENCE]");
+      L.push("   · facturé le : [DATE] - facture n° [RÉFÉRENCE] - montant : [MONTANT]");
+      L.push("   · mis en service le : [DATE] - procès-verbal de mise en service du [DATE]");
       L.push("   · ce qu'il permet de faire, et ce qu'il fait autrement : [description]");
       L.push("");
       L.push("3. CE QUE LA MUTATION CHANGE DANS LE TRAVAIL");
-      L.push("   [Non pas « l'outil est plus performant » — cela ne dit rien d'un emploi —");
+      L.push("   [Non pas « l'outil est plus performant » - cela ne dit rien d'un emploi -");
       L.push("    mais : quelles opérations disparaissent, lesquelles sont automatisées,");
       L.push("    quelles compétences nouvelles sont exigées, à quel niveau.]");
       L.push("");
@@ -3593,7 +3593,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — BORDEREAU DES PIÈCES");
+      L.push("PIÈCE 2 - BORDEREAU DES PIÈCES");
       L.push(GROS);
       L.push("");
       L.push(col("Pièce", 44) + col("Date", 14) + "Référence");
@@ -3611,7 +3611,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — EFFETS SUR LES POSTES");
+      L.push("PIÈCE 3 - EFFETS SUR LES POSTES");
       L.push(GROS);
       L.push("");
       L.push(col("Poste", 24) + col("Tâches disparues", 24) + "Compétences nouvelles exigées");
@@ -3634,7 +3634,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — CHRONOLOGIE DE LA MUTATION");
+      L.push("PIÈCE 4 - CHRONOLOGIE DE LA MUTATION");
       L.push(GROS);
       L.push("");
       L.push("  · décision d'investissement ........... [DATE]");
@@ -3658,11 +3658,11 @@
         "distingue pas d'un changement d'organisation."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — établissement de la fiche et réunion des quatre pièces ;");
-      L.push("  · " + dansJours(ctx, 5) + " — tableau des effets, poste par poste ;");
-      L.push("  · " + dansJours(ctx, 7) + " — rapprochement avec le tableau des actions de");
+      L.push("  · aujourd'hui - établissement de la fiche et réunion des quatre pièces ;");
+      L.push("  · " + dansJours(ctx, 5) + " - tableau des effets, poste par poste ;");
+      L.push("  · " + dansJours(ctx, 7) + " - rapprochement avec le tableau des actions de");
       L.push("    formation et d'adaptation (point CTL-REC-05) ;");
-      L.push("  · ensuite — le dossier au comité, puis la procédure.");
+      L.push("  · ensuite - le dossier au comité, puis la procédure.");
       L.push("");
       L.push("Les pièces existent déjà : ce dossier ne demande pas de créer quoi que ce");
       L.push("soit, il demande de rassembler et de dater.");
@@ -3673,7 +3673,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-ECO-05 — LA CESSATION COMPLÈTE ET DÉFINITIVE
+     CTL-ECO-05 - LA CESSATION COMPLÈTE ET DÉFINITIVE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-ECO-05", {
@@ -3701,13 +3701,13 @@
       L.push("CTL-ECO-05 de ce module applique, ne sont donc pas cités ici comme des mots");
       L.push("du texte. Ils commandent pourtant le dossier, et la raison en est simple :");
       L.push("une activité qui s'arrête en partie, ou qui s'arrête pour un temps, n'est");
-      L.push("pas une activité qui cesse — et ce qui n'a pas cessé continue de fournir des");
+      L.push("pas une activité qui cesse - et ce qui n'a pas cessé continue de fournir des");
       L.push("emplois, donc des postes de reclassement.");
       L.push("");
       L.push("Une précision du même article, celle-là écrite : la matérialité s'apprécie");
       L.push("au niveau de l'entreprise. La cessation est celle de VOTRE entreprise, non");
       L.push("celle du groupe. Mais la poursuite de la même activité par une société du");
-      L.push("groupe nourrit deux débats à la fois — la réalité de la cessation, et");
+      L.push("groupe nourrit deux débats à la fois - la réalité de la cessation, et");
       L.push("l'obligation de reclassement de L. 1233-4, qui s'étend aux autres");
       L.push("entreprises du groupe assurant la permutation du personnel.");
       L.push("");
@@ -3724,7 +3724,7 @@
       } else if (f.cessationComplete === false) {
         L.push("Votre dossier déclare la cessation INCOMPLÈTE OU NON DÉFINITIVE. Le 4° de");
         L.push("L. 1233-3 vise la cessation d'activité de l'entreprise : une cessation");
-        L.push("partielle relève, le cas échéant, d'un autre cas du même article — et c'est");
+        L.push("partielle relève, le cas échéant, d'un autre cas du même article - et c'est");
         L.push("alors ce cas qu'il faut démontrer, avec ses pièces propres.");
       } else {
         L.push("Le caractère de la cessation n'est pas renseigné. C'est la première chose");
@@ -3740,7 +3740,7 @@
           var m = s.activite && act && String(s.activite).toLowerCase() === act;
           L.push(col(s.nom, 30) + col(s.activite, 26) +
             col(s.pays || (s.etranger ? "étranger" : "France"), 12) +
-            (m ? "OUI — à expliquer" : "[à vérifier]"));
+            (m ? "OUI - à expliquer" : "[à vérifier]"));
         });
         L.push(TRAIT);
         if (memes.length) {
@@ -3757,12 +3757,12 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — PROCÈS-VERBAL DE LA DÉCISION DE L'ORGANE COMPÉTENT");
+      L.push("PIÈCE 1 - PROCÈS-VERBAL DE LA DÉCISION DE L'ORGANE COMPÉTENT");
       L.push(GROS);
       L.push("");
       L.push("Trame à adapter à la forme sociale et aux statuts de l'entreprise :");
       L.push("l'application ne connaît ni vos statuts ni votre organe compétent, et le");
-      L.push("droit des sociétés n'est pas le code du travail — elle n'en dit donc rien.");
+      L.push("droit des sociétés n'est pas le code du travail - elle n'en dit donc rien.");
       L.push("");
       L.push(nom.toUpperCase());
       L.push(cro(p.adresse, "adresse du siège"));
@@ -3774,14 +3774,14 @@
       L.push("");
       L.push("Ordre du jour : cessation de l'activité de la société");
       L.push("");
-      L.push("[EXPOSÉ — écrire ici, en propre, la situation qui conduit à la décision.");
+      L.push("[EXPOSÉ - écrire ici, en propre, la situation qui conduit à la décision.");
       L.push(" L'application n'écrit pas cet exposé : il porte sur des faits qu'elle ne");
       L.push(" connaît pas, et un exposé inventé serait la pièce la plus dangereuse du");
       L.push(" dossier.]");
       L.push("");
-      L.push("RÉSOLUTION [n°] — [L'organe] décide la cessation de l'activité de la société");
+      L.push("RÉSOLUTION [n°] - [L'organe] décide la cessation de l'activité de la société");
       L.push("[à compter du DATE / selon le calendrier annexé], portant sur [L'ÉTENDUE :");
-      L.push("toutes les activités, tous les sites — préciser].");
+      L.push("toutes les activités, tous les sites - préciser].");
       L.push("");
       L.push("[Le cas échéant : résolutions relatives à la dévolution des actifs, à la");
       L.push(" résiliation des baux, au sort des contrats en cours.]");
@@ -3791,7 +3791,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — CALENDRIER D'ARRÊT, SITE PAR SITE");
+      L.push("PIÈCE 2 - CALENDRIER D'ARRÊT, SITE PAR SITE");
       L.push(GROS);
       L.push("");
       L.push(col("Site / établissement", 26) + col("Effectif", 10) + col("Arrêt prévu", 14) + "Devenir des actifs");
@@ -3811,7 +3811,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — BORDEREAU DES PIÈCES DE LA CESSATION");
+      L.push("PIÈCE 3 - BORDEREAU DES PIÈCES DE LA CESSATION");
       L.push(GROS);
       L.push("");
       L.push("  ☐ décision de l'organe compétent, datée");
@@ -3820,17 +3820,17 @@
       L.push("  ☐ [radiation ou modification au registre du commerce, si elle est");
       L.push("     intervenue]");
       L.push("  ☐ état des sociétés du groupe et de leurs activités (pièce 4)");
-      L.push("  ☐ [le cas échéant : pièces de la procédure collective — jugement");
+      L.push("  ☐ [le cas échéant : pièces de la procédure collective - jugement");
       L.push("     d'ouverture, ordonnance du juge-commissaire" +
         (f.procedureCollective === true ? " ; votre dossier déclare une procédure de " +
           cro(f.typeProcedure, "nature non renseignée") : "") + "]");
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — ÉTAT DES SOCIÉTÉS DU GROUPE ET DE LEURS ACTIVITÉS");
+      L.push("PIÈCE 4 - ÉTAT DES SOCIÉTÉS DU GROUPE ET DE LEURS ACTIVITÉS");
       L.push(GROS);
       L.push("");
-      L.push("Établi le " + leJour(aujourd(ctx)) + " — pour que la contradiction puisse");
+      L.push("Établi le " + leJour(aujourd(ctx)) + " - pour que la contradiction puisse");
       L.push("être recherchée par vous avant de l'être par d'autres.");
       L.push("");
       L.push(col("Société", 28) + col("Activité", 24) + col("Pays", 12) + "Clientèle et marché");
@@ -3846,7 +3846,7 @@
       L.push(TRAIT);
       L.push("");
       L.push("Pour chaque société exerçant une activité proche, écrivez ce qui la");
-      L.push("distingue de la vôtre — clientèle, marché, moyens, implantation — ou");
+      L.push("distingue de la vôtre - clientèle, marché, moyens, implantation - ou");
       L.push("renoncez à invoquer la cessation et cherchez un autre fondement. La");
       L.push("distinction s'écrit dans les termes que L. 1233-3 emploie pour caractériser");
       L.push("un secteur d'activité : nature des produits, biens ou services délivrés,");
@@ -3863,11 +3863,11 @@
         "L. 1233-3, et, par ricochet, l'étendue de la recherche de reclassement."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — état des sociétés du groupe et de leurs activités ;");
-      L.push("  · " + dansJours(ctx, 7) + " — calendrier d'arrêt, site par site ;");
-      L.push("  · " + dansJours(ctx, 10) + " — décision de l'organe compétent, dans les");
+      L.push("  · aujourd'hui - état des sociétés du groupe et de leurs activités ;");
+      L.push("  · " + dansJours(ctx, 7) + " - calendrier d'arrêt, site par site ;");
+      L.push("  · " + dansJours(ctx, 10) + " - décision de l'organe compétent, dans les");
       L.push("    formes prévues par vos statuts ;");
-      L.push("  · ensuite — l'information du comité, la recherche de reclassement dans le");
+      L.push("  · ensuite - l'information du comité, la recherche de reclassement dans le");
       L.push("    groupe, puis la notification.");
       L.push("");
 
@@ -3884,7 +3884,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     CTL-ECO-06 — L'IMPUTABILITÉ DE LA CESSATION
+     CTL-ECO-06 - L'IMPUTABILITÉ DE LA CESSATION
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("CTL-ECO-06", {
@@ -3896,7 +3896,7 @@
       var nom = nomDe(ctx);
       var flux = liste(f, "fluxIntragroupe");
       var rg = liste(f, "resultatGroupe");
-      var L = entete(ctx, "Imputabilité de la cessation d'activité — examen extérieur",
+      var L = entete(ctx, "Imputabilité de la cessation d'activité - examen extérieur",
         "article L. 1233-3, 4°, du code du travail");
 
       L.push(GROS);
@@ -3906,16 +3906,16 @@
       L.push("Le contrôle CTL-ECO-06 de ce module ne conclut JAMAIS à la conformité.");
       L.push("");
       L.push("La raison tient à la nature de la question. L. 1233-3, 4° vise « la cessation");
-      L.push("d'activité de l'entreprise » — et le texte lu à la source s'arrête là. La");
-      L.push("réserve qui s'y attache — la cessation ne vaut pas cause économique");
-      L.push("lorsqu'elle procède d'une faute de l'employeur ou de sa légèreté blâmable —");
+      L.push("d'activité de l'entreprise » - et le texte lu à la source s'arrête là. La");
+      L.push("réserve qui s'y attache - la cessation ne vaut pas cause économique");
+      L.push("lorsqu'elle procède d'une faute de l'employeur ou de sa légèreté blâmable -");
       L.push("N'EST PORTÉE PAR AUCUN TEXTE DU CORPUS DE CE MODULE. Elle est d'origine");
       L.push("prétorienne. L'application l'écrit comme telle, elle ne l'attribue pas à");
       L.push("l'article, et elle ne peut ni l'appliquer ni l'écarter : apprécier une");
       L.push("gestion suppose de lire des comptes, des décisions et des intentions.");
       L.push("");
       L.push("Ce document ne rédige donc aucune conclusion. Il commande l'examen, il");
-      L.push("rassemble les pièces, et il dit quand décider — c'est-à-dire après.");
+      L.push("rassemble les pièces, et il dit quand décider - c'est-à-dire après.");
       L.push("");
 
       L.push("POURQUOI CE POINT MÉRITE UN EXAMEN SÉPARÉ");
@@ -3927,7 +3927,7 @@
       L.push("propre gestion.");
       L.push("");
       L.push("Un examen conduit tôt a une vertu que rien ne remplace : il montre ce qui");
-      L.push("sera contesté, pendant qu'il est encore temps d'y répondre autrement — par");
+      L.push("sera contesté, pendant qu'il est encore temps d'y répondre autrement - par");
       L.push("un autre fondement, un autre calendrier, ou des mesures d'accompagnement.");
       L.push("");
 
@@ -3971,18 +3971,18 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — LETTRE DE MISSION");
+      L.push("PIÈCE 1 - LETTRE DE MISSION");
       L.push(GROS);
       L.push("");
       L.push(nom);
       L.push(cro(p.adresse, "adresse du siège"));
       L.push("");
-      L.push("À [AVOCAT EN DROIT SOCIAL / JURISTE — le cas échéant avec le concours d'un");
+      L.push("À [AVOCAT EN DROIT SOCIAL / JURISTE - le cas échéant avec le concours d'un");
       L.push("expert-comptable]");
       L.push("");
       L.push(cro(p.ville, "lieu") + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Objet : cessation d'activité — examen de l'imputabilité");
+      L.push("Objet : cessation d'activité - examen de l'imputabilité");
       L.push("");
       L.push("Maître, [ou : Madame, Monsieur,]");
       L.push("");
@@ -3992,7 +3992,7 @@
       L.push("");
       L.push("La cessation d'activité constitue en elle-même une cause économique. Il est");
       L.push("toutefois admis qu'elle ne la constitue pas lorsqu'elle procède d'une faute");
-      L.push("de l'employeur ou de sa légèreté blâmable — réserve qui ne figure pas dans");
+      L.push("de l'employeur ou de sa légèreté blâmable - réserve qui ne figure pas dans");
       L.push("le texte de l'article, et dont l'appréciation excède ce que nos outils");
       L.push("internes permettent.");
       L.push("");
@@ -4015,7 +4015,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — BORDEREAU DES PIÈCES DE GESTION REMISES");
+      L.push("PIÈCE 2 - BORDEREAU DES PIÈCES DE GESTION REMISES");
       L.push(GROS);
       L.push("");
       L.push(col("Pièce", 44) + col("Exercices", 16) + "Remise le");
@@ -4029,7 +4029,7 @@
       L.push(col("Décisions d'investissement et de cession", 44) + col("[N-3 à N]", 16) + "[date]");
       L.push(col("Distributions de dividendes", 44) + col("[N-3 à N]", 16) + "[date]");
       L.push(col("Comptes consolidés du groupe", 44) + col("[N-3 à N]", 16) + "[date]");
-      L.push(col("[Autres — à compléter]", 44) + col("", 16) + "[date]");
+      L.push(col("[Autres - à compléter]", 44) + col("", 16) + "[date]");
       L.push(TRAIT);
       L.push("");
       L.push("Remettez tout, y compris ce qui vous paraît défavorable. Un conseil qui");
@@ -4038,7 +4038,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — TRAME DE LA NOTE ATTENDUE");
+      L.push("PIÈCE 3 - TRAME DE LA NOTE ATTENDUE");
       L.push(GROS);
       L.push("");
       L.push("1. Les faits de gestion examinés, exercice par exercice.");
@@ -4056,13 +4056,13 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — ORDRE DES DÉCISIONS");
+      L.push("PIÈCE 4 - ORDRE DES DÉCISIONS");
       L.push(GROS);
       L.push("");
       L.push("  1. mission confiée .................... [DATE]");
       L.push("  2. pièces remises ..................... [DATE]");
       L.push("  3. note reçue ......................... [DATE]");
-      L.push("  4. DÉCISION PRISE AU VU DE LA NOTE .... [DATE] — et non l'inverse");
+      L.push("  4. DÉCISION PRISE AU VU DE LA NOTE .... [DATE] - et non l'inverse");
       L.push("  5. information du comité .............. " +
         (estISO(f.dateInfoCSE) ? jour(f.dateInfoCSE) : "[DATE]"));
       L.push("  6. notification ....................... " +
@@ -4075,14 +4075,14 @@
       L = L.concat(blocEnjeu(
         "Ici, ce qui est en cause est la valeur même de la cause invoquée : la\n" +
         "cessation d'activité fonde le licenciement, sauf à ce qu'elle soit imputable\n" +
-        "à l'employeur — question que l'application ne tranche pas."));
+        "à l'employeur - question que l'application ne tranche pas."));
 
       L = L.concat(ouvrirCalendrier(ctx));
-      L.push("  · aujourd'hui — lettre de mission et remise des pièces ;");
-      L.push("  · " + dansJours(ctx, 14) + " — remise de la note, si vous accordez deux");
+      L.push("  · aujourd'hui - lettre de mission et remise des pièces ;");
+      L.push("  · " + dansJours(ctx, 14) + " - remise de la note, si vous accordez deux");
       L.push("    semaines ; quatre ne sont pas excessives ;");
-      L.push("  · " + dansJours(ctx, 16) + " — décision prise au vu de la note ;");
-      L.push("  · ensuite — l'information du comité, puis la procédure.");
+      L.push("  · " + dansJours(ctx, 16) + " - décision prise au vu de la note ;");
+      L.push("  · ensuite - l'information du comité, puis la procédure.");
       if (estISO(f.dateNotification)) {
         var e2 = ecartJours(isoDe(aujourd(ctx)), f.dateNotification);
         L.push("");

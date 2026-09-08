@@ -1,4 +1,4 @@
-/* Les documents que l'application PRODUIT — module « licenciement économique »,
+/* Les documents que l'application PRODUIT - module « licenciement économique »,
    quatrième et dernier volet : le plan de sauvegarde de l'emploi au-delà de son
    contenu (proportionnalité, voie, chiffrage, transmission, calendrier de
    notification, représentativité des signataires), les salariés protégés et les
@@ -13,7 +13,7 @@
    documents-eco-fond.js (fondement, groupe, conventions, ordre, cohérence).
    Seize contrôles restaient sans document. Ce fichier les couvre. Il ne
    réenregistre aucun identifiant des trois autres : le registre lève une
-   exception sur un doublon, et c'est voulu — deux documents pour un même
+   exception sur un doublon, et c'est voulu - deux documents pour un même
    contrôle, ce sont deux réponses possibles à la même question.
 
    CE QUE CES SEIZE POINTS ONT DE PARTICULIER
@@ -24,7 +24,7 @@
    jours, et de la note qui en déduit le régime. Un employeur qui saisit
    l'administration n'a pas besoin d'une exhortation : il a besoin du bordereau
    qui dit, pièce par pièce, ce que chacune doit établir. Ces documents sont donc
-   des notes, des tableaux, des relevés et des bordereaux — avec leurs colonnes,
+   des notes, des tableaux, des relevés et des bordereaux - avec leurs colonnes,
    leurs rubriques et leurs cases. Ce qu'ils demandent à l'employeur, c'est de
    renseigner, pas de rédiger.
 
@@ -34,7 +34,7 @@
       est moteur/economique/textes_eco.json, qui porte pour chaque article son
       identifiant LEGIARTI. Deux articles font exception et le document le dit
       là où il les cite : L. 2411-1 et L. 2411-5, fondement du contrôle des
-      salariés protégés, ne sont pas au corpus du module — ils sont lus dans
+      salariés protégés, ne sont pas au corpus du module - ils sont lus dans
       celui du module « comité social et économique »
       (moteur/cse/textes_cse.json, LEGIARTI000035652370 et LEGIARTI000035652360).
       Les articles L. 1233-57-9 à L. 1233-57-16, auxquels L. 1233-57-2 et
@@ -53,7 +53,7 @@
       ses résultats, ses budgets, l'identité des salariés : tout sort ENTRE
       CROCHETS, avec la consigne de l'écrire daté, chiffré et sourcé. Un
       document qui devinerait ces éléments ferait signer à l'employeur des faits
-      qu'il n'a pas déclarés — et c'est sur ces faits que l'administration
+      qu'il n'a pas déclarés - et c'est sur ces faits que l'administration
       décide, puis que le juge statue.  */
 (function (global) {
   "use strict";
@@ -170,7 +170,7 @@
      pas l'avertissement qui le suit. */
   function irrattrapable(L, quoi, pourquoi) {
     L.push(DOUBLE);
-    L.push("CE QUI NE SE RATTRAPE PAS — À LIRE AVANT TOUT LE RESTE");
+    L.push("CE QUI NE SE RATTRAPE PAS - À LIRE AVANT TOUT LE RESTE");
     L.push(DOUBLE);
     L.push("");
     quoi.forEach(function (x) { L.push(x); });
@@ -191,8 +191,8 @@
     lignes.forEach(function (x) { L.push(x); });
     L.push("");
     L.push("Ce qui est entre crochets vous appartient : ce sont vos choix, vos faits,");
-    L.push("ou les données que l'audit n'a pas reçues. Remplacez chaque crochet — daté,");
-    L.push("chiffré, sourcé — et ne laissez aucun crochet dans la pièce que vous versez");
+    L.push("ou les données que l'audit n'a pas reçues. Remplacez chaque crochet - daté,");
+    L.push("chiffré, sourcé - et ne laissez aucun crochet dans la pièce que vous versez");
     L.push("au dossier. Un crochet resté dans un bordereau adressé à l'administration se");
     L.push("lit comme un aveu d'improvisation.");
     L.push("");
@@ -204,7 +204,7 @@
     L.push("");
     L.push(TRAIT);
     L.push("");
-    L.push("Fondement — " + articles.join(" · ") + " du code du travail,");
+    L.push("Fondement - " + articles.join(" · ") + " du code du travail,");
     L.push("lus à la source. Les versions lues sont celles du dépôt de textes du module");
     L.push("(moteur/economique/textes_eco.json), qui porte pour chacune son identifiant");
     L.push("LEGIARTI : un article peut être modifié sans changer de numéro, et seul cet");
@@ -216,9 +216,9 @@
     L.push("qu'elle n'a pas lue. Ce qui est dit du risque l'est sur le fondement des");
     L.push("articles cités.");
     L.push("");
-    L.push("Réserve — ce document ne vaut pas consultation. L'application ne lit ni votre");
+    L.push("Réserve - ce document ne vaut pas consultation. L'application ne lit ni votre");
     L.push("convention collective ni vos accords, qui peuvent fixer d'autres délais ou");
-    L.push("ajouter des exigences — l'article L. 1233-30 réserve expressément la");
+    L.push("ajouter des exigences - l'article L. 1233-30 réserve expressément la");
     L.push("convention ou l'accord collectif qui « peut prévoir des délais différents ».");
   }
 
@@ -310,7 +310,7 @@
       L.push("");
       L.push("  Le moteur du module n'est pas chargé sur cette page : le régime n'est pas");
       L.push("  rappelé ici. Le document énonce les branches du texte au lieu d'en choisir");
-      L.push("  une — reportez-vous au rapport d'audit, qui l'a tranché.");
+      L.push("  une - reportez-vous au rapport d'audit, qui l'a tranché.");
     }
     L.push("");
     L.push(TRAIT);
@@ -329,10 +329,10 @@
     A.ajouter(id, { nom: nomDoc, detail: detail, produire: produire });
   }
 
-  /* ═════════════════════════════════════ LES GÉNÉRATEURS — un par contrôle */
+  /* ═════════════════════════════════════ LES GÉNÉRATEURS - un par contrôle */
 
   /* ══════════════════════════════════════════════════════════════════════
-     LE PLAN DE SAUVEGARDE DE L'EMPLOI — CE QUI L'ENTOURE
+     LE PLAN DE SAUVEGARDE DE L'EMPLOI - CE QUI L'ENTOURE
      ══════════════════════════════════════════════════════════════════════ */
 
   doc("CTL-PSE-02",
@@ -422,8 +422,8 @@
         L.push("l'emploi après s'être assurée du respect par celui-ci des articles");
         L.push("L. 1233-61 à L. 1233-63 AU REGARD DES MOYENS DONT DISPOSE L'ENTREPRISE ».");
         L.push("");
-        L.push("La recherche des moyens du groupe reste due — le texte l'écrit « sans");
-        L.push("préjudice » —, mais le contrôle d'homologation se fait au regard des moyens");
+        L.push("La recherche des moyens du groupe reste due - le texte l'écrit « sans");
+        L.push("préjudice » -, mais le contrôle d'homologation se fait au regard des moyens");
         L.push("de l'entreprise. Renseignez donc les deux périmètres ci-dessous : celui de");
         L.push("l'entreprise, sur lequel l'administration se prononcera, et celui du groupe,");
         L.push("dont la recherche doit apparaître au dossier.");
@@ -473,12 +473,12 @@
               t1 && t1.valeur != null ? String(t1.valeur) : "[  ]"];
           }));
         L.push("");
-        L.push("  [Préciser l'unité — euros, milliers d'euros — et la source de chaque");
+        L.push("  [Préciser l'unité - euros, milliers d'euros - et la source de chaque");
         L.push("  ligne. La fiche d'audit ne la porte pas.]");
         L.push("");
       }
       if (rg.length || flux.length) {
-        L.push("La fiche porte également des éléments de niveau groupe — résultat consolidé");
+        L.push("La fiche porte également des éléments de niveau groupe - résultat consolidé");
         L.push("et flux intragroupe. Ils sont traités par le document du contrôle");
         L.push("CTL-FRA-01, qui les rapproche du résultat reconstitué. Reprenez-les ici en");
         L.push("tant que MOYENS, et non en tant que cause : ce sont deux démonstrations");
@@ -519,20 +519,20 @@
       L.push("« Le plan de sauvegarde de l'emploi de " + nom(ctx) + " a été");
       L.push("établi au regard des moyens suivants.");
       L.push("");
-      L.push("Moyens de l'entreprise — [rappeler les chiffres du tableau II, exercice par");
+      L.push("Moyens de l'entreprise - [rappeler les chiffres du tableau II, exercice par");
       L.push("exercice, avec la pièce qui les porte].");
       L.push("");
-      L.push("Moyens de l'unité économique et sociale — [si une unité économique et");
+      L.push("Moyens de l'unité économique et sociale - [si une unité économique et");
       L.push("sociale existe : la nommer, indiquer l'acte qui la reconnaît, et donner ses");
       L.push("moyens. À défaut, écrire qu'il n'en existe pas : le silence se lit comme un");
       L.push("oubli.]");
       L.push("");
-      L.push("Moyens du groupe — [rappeler les chiffres consolidés et l'exercice retenu.");
+      L.push("Moyens du groupe - [rappeler les chiffres consolidés et l'exercice retenu.");
       L.push("Préciser le périmètre de consolidation et l'entité consolidante.]");
       L.push("");
       L.push("Au regard de ces moyens, les mesures du plan représentent [montant], soit");
       L.push("[ratio] des [référence retenue]. Elles ont été calibrées ainsi pour les");
-      L.push("raisons suivantes : [écrire les raisons — engagements financiers déjà pris,");
+      L.push("raisons suivantes : [écrire les raisons - engagements financiers déjà pris,");
       L.push("besoins de trésorerie du groupe, autres plans en cours, capacité");
       L.push("d'absorption du bassin d'emploi. Chaque raison se rattache à une pièce.]");
       L.push("");
@@ -555,7 +555,7 @@
             cro(pc.perimetre, "périmètre"), pc.lue === true ? "oui" : pc.lue === false ? "non" : "[  ]"]]);
         L.push("");
         if (pc.lue !== true) {
-          L.push("  ATTENTION — cette pièce est enregistrée comme NON LUE. Une pièce versée");
+          L.push("  ATTENTION - cette pièce est enregistrée comme NON LUE. Une pièce versée");
           L.push("  sans avoir été rapprochée des réponses de l'audit n'établit rien : elle");
           L.push("  peut porter un périmètre ou un exercice différents de ceux sur lesquels");
           L.push("  le plan a été calibré.");
@@ -573,13 +573,13 @@
       }
       L.push("Ce que chaque pièce doit établir :");
       L.push("");
-      L.push("  Comptes consolidés du groupe — les moyens du groupe au sens du 1° de");
+      L.push("  Comptes consolidés du groupe - les moyens du groupe au sens du 1° de");
       L.push("  L. 1233-57-3, sur un exercice clos et certifié. Le périmètre de");
       L.push("  consolidation doit apparaître : c'est lui qui dit de quel groupe on parle.");
-      L.push("  Comptes de l'entreprise — les moyens de l'employeur, seul périmètre sur");
+      L.push("  Comptes de l'entreprise - les moyens de l'employeur, seul périmètre sur");
       L.push("  lequel l'administration se prononce en cas de redressement ou de");
       L.push("  liquidation judiciaire (L. 1233-58, II).");
-      L.push("  Acte reconnaissant l'unité économique et sociale, s'il en existe une —");
+      L.push("  Acte reconnaissant l'unité économique et sociale, s'il en existe une -");
       L.push("  le texte cite l'unité économique et sociale à part du groupe.");
       L.push("");
 
@@ -597,11 +597,11 @@
       L.push(adresse(ctx));
       L.push("");
       L.push("À l'autorité administrative compétente");
-      L.push("[Direction régionale — service en charge des plans de sauvegarde de l'emploi]");
+      L.push("[Direction régionale - service en charge des plans de sauvegarde de l'emploi]");
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Objet : note de proportionnalité et comptes du groupe — demande de " +
+      L.push("Objet : note de proportionnalité et comptes du groupe - demande de " +
         (voie(f) === "accord" ? "validation" : voie(f) === "unilateral" ? "homologation"
           : "validation ou d'homologation"));
       L.push("");
@@ -631,7 +631,7 @@
       L.push("comptes de l'entreprise · [le cas échéant] acte reconnaissant l'unité");
       L.push("économique et sociale · tableau budgétaire du plan");
       L.push("");
-      L.push("Copie : comité social et économique — les observations de l'administration");
+      L.push("Copie : comité social et économique - les observations de l'administration");
       L.push("lui sont adressées simultanément (L. 1233-57-6), et il est utile qu'il");
       L.push("dispose des mêmes pièces que celui qui les commentera.");
       L.push("");
@@ -639,11 +639,11 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = aujourd(ctx);
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous réunissez les comptes. Comptez deux à");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous réunissez les comptes. Comptez deux à");
       L.push("quatre semaines : des comptes consolidés ne s'obtiennent pas en un jour,");
       L.push("surtout auprès d'une société mère étrangère.");
       L.push("");
-      L.push("Au plus tard le " + leJour(dans(d0, 28)) + " — la note de proportionnalité est");
+      L.push("Au plus tard le " + leJour(dans(d0, 28)) + " - la note de proportionnalité est");
       L.push("écrite et les comptes sont versés.");
       L.push("");
       var dr = derniereReunion(f);
@@ -652,12 +652,12 @@
         L.push("de " + (voie(f) === "accord" ? "validation" : voie(f) === "unilateral"
           ? "homologation" : "validation ou d'homologation") + " se dépose après elle : ces pièces");
         L.push("doivent être prêtes avant le dépôt, non ajoutées ensuite. Une pièce ajoutée");
-        L.push("en cours d'instruction rend le dossier « complet » plus tard — et le délai");
+        L.push("en cours d'instruction rend le dossier « complet » plus tard - et le délai");
         L.push("de L. 1233-57-4 court à compter de la réception du document COMPLET.");
         L.push("");
       }
       var dd = delaiDecision(f);
-      L.push("Après le dépôt — l'administration notifie sa décision « dans un délai de");
+      L.push("Après le dépôt - l'administration notifie sa décision « dans un délai de");
       L.push("quinze jours à compter de la réception de l'accord collectif » ou « dans un");
       L.push("délai de vingt et un jours à compter de la réception du document complet »");
       L.push("(L. 1233-57-4)" + (dd ? ", soit " + dd + " jours dans la voie que vous avez retenue." : "."));
@@ -690,8 +690,8 @@
 
   doc("CTL-PSE-03",
     "La note arrêtant la voie du plan, et le calendrier qui en découle",
-    "Le rapprochement des deux voies — accord collectif majoritaire ou document " +
-    "unilatéral —, la décision datée et signée, le calendrier calculé jusqu'à la " +
+    "Le rapprochement des deux voies - accord collectif majoritaire ou document " +
+    "unilatéral -, la décision datée et signée, le calendrier calculé jusqu'à la " +
     "décision administrative, l'information de l'administration sur l'ouverture " +
     "d'une négociation et l'information du comité.",
     function (ctx) {
@@ -704,7 +704,7 @@
 
       modeEmploi(L, [
         "C'est une décision à formaliser, non une pièce à construire : elle tient en",
-        "une page et se prend en une réunion. Mais elle commande TOUT LE RESTE — la",
+        "une page et se prend en une réunion. Mais elle commande TOUT LE RESTE - la",
         "nature du contrôle administratif, son délai, la date à laquelle vous pourrez",
         "notifier, et jusqu'à la personne qui signera le plan.",
         "",
@@ -717,7 +717,7 @@
 
       titre(L, "I. Les deux voies, telles que le code les écrit");
 
-      L.push("VOIE 1 — L'ACCORD COLLECTIF MAJORITAIRE");
+      L.push("VOIE 1 - L'ACCORD COLLECTIF MAJORITAIRE");
       L.push("");
       L.push("L. 1233-24-1 : « Dans les entreprises de cinquante salariés et plus, un");
       L.push("accord collectif peut déterminer le contenu du plan de sauvegarde de l'emploi");
@@ -732,16 +732,16 @@
       L.push("délai de l'ouverture d'une négociation en vue de l'accord précité. »");
       L.push("");
       L.push("Trois conséquences, et elles sont souvent oubliées :");
-      L.push("  — le seuil de 50 % se calcule sur les SUFFRAGES EXPRIMÉS EN FAVEUR");
+      L.push("  - le seuil de 50 % se calcule sur les SUFFRAGES EXPRIMÉS EN FAVEUR");
       L.push("    D'ORGANISATIONS RECONNUES REPRÉSENTATIVES, non sur les inscrits ni sur");
       L.push("    tous les suffrages ; le document du contrôle CTL-PSE-07 fait ce calcul ;");
-      L.push("  — l'administration doit être informée SANS DÉLAI de l'ouverture de la");
+      L.push("  - l'administration doit être informée SANS DÉLAI de l'ouverture de la");
       L.push("    négociation : c'est une obligation autonome, et le courrier en III y");
       L.push("    pourvoit ;");
-      L.push("  — l'article L. 2321-9, qui règle le conseil d'entreprise, n'est pas au");
+      L.push("  - l'article L. 2321-9, qui règle le conseil d'entreprise, n'est pas au");
       L.push("    corpus du module : il est nommé ici, non reproduit.");
       L.push("");
-      L.push("Ce que l'accord peut porter, au-delà du contenu du plan — L. 1233-24-2 :");
+      L.push("Ce que l'accord peut porter, au-delà du contenu du plan - L. 1233-24-2 :");
       L.push("« 1° Les modalités d'information et de consultation du comité social et");
       L.push("économique, en particulier les conditions dans lesquelles ces modalités");
       L.push("peuvent être aménagées en cas de projet de transfert d'une ou de plusieurs");
@@ -753,7 +753,7 @@
       L.push("œuvre des mesures de formation, d'adaptation et de reclassement prévues à");
       L.push("l'article L. 1233-4. »");
       L.push("");
-      L.push("VOIE 2 — LE DOCUMENT UNILATÉRAL");
+      L.push("VOIE 2 - LE DOCUMENT UNILATÉRAL");
       L.push("");
       L.push("L. 1233-24-4 : « A défaut d'accord mentionné à l'article L. 1233-24-1, un");
       L.push("document élaboré par l'employeur APRÈS LA DERNIÈRE RÉUNION du comité social");
@@ -818,13 +818,13 @@
       L.push("");
       L.push("« NOTE ARRÊTANT LA VOIE DU PLAN DE SAUVEGARDE DE L'EMPLOI");
       L.push("");
-      L.push(nom(ctx) + " — projet de licenciement collectif pour motif économique");
+      L.push(nom(ctx) + " - projet de licenciement collectif pour motif économique");
       L.push("");
       L.push("État des organisations syndicales représentatives dans l'entreprise :");
-      L.push("  [Organisation] — [suffrages recueillis au premier tour des dernières");
+      L.push("  [Organisation] - [suffrages recueillis au premier tour des dernières");
       L.push("  élections des titulaires au comité, en pourcentage des suffrages exprimés");
       L.push("  en faveur d'organisations reconnues représentatives]");
-      L.push("  [Organisation] — [  ]");
+      L.push("  [Organisation] - [  ]");
       L.push("  [S'il n'existe aucune organisation représentative, l'écrire : c'est ce qui");
       L.push("  justifie à lui seul la voie unilatérale.]");
       L.push("");
@@ -845,7 +845,7 @@
         L.push("  contrôle a relevé : la voie n'est pas arrêtée.");
       }
       L.push("");
-      L.push("Motif de ce choix : [écrire le motif — état de la représentativité, absence");
+      L.push("Motif de ce choix : [écrire le motif - état de la représentativité, absence");
       L.push("d'organisation représentative, échec constaté d'une négociation, délai");
       L.push("disponible. Un choix motivé se défend ; un choix subi se constate.]");
       L.push("");
@@ -869,7 +869,7 @@
       L.push(adresse(ctx));
       L.push("");
       L.push("À l'autorité administrative compétente");
-      L.push("[Direction régionale — service en charge des plans de sauvegarde de l'emploi]");
+      L.push("[Direction régionale - service en charge des plans de sauvegarde de l'emploi]");
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(d0));
       L.push("");
@@ -918,7 +918,7 @@
       L.push("(L. 1233-30, I, 2°) et que, dans la voie de l'accord, « les éléments");
       L.push("mentionnés au 2° du présent I qui font l'objet de l'accord mentionné à");
       L.push("l'article L. 1233-24-1 ne sont pas soumis à la consultation du comité social");
-      L.push("et économique prévue au présent article » — ce que le même article dispose.");
+      L.push("et économique prévue au présent article » - ce que le même article dispose.");
       L.push("");
       L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération");
       L.push("distinguée.");
@@ -930,7 +930,7 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous arrêtez la voie et vous datez la note.");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous arrêtez la voie et vous datez la note.");
       L.push("Une réunion suffit : c'est une décision, non une pièce à construire.");
       L.push("");
       if (rs.length) {
@@ -938,7 +938,7 @@
           rs.map(function (x) { return jour(x); }).join(" · ") + ".");
         L.push("La note doit porter une date antérieure à la première, le " + jour(rs[0]) + " :");
         L.push("c'est la voie qui dit ce que le comité doit recevoir et sur quoi il est");
-        L.push("consulté. Si elle est postérieure, ne l'antidatez pas — datez-la du jour où");
+        L.push("consulté. Si elle est postérieure, ne l'antidatez pas - datez-la du jour où");
         L.push("elle est prise, et consignez le calendrier réel.");
         L.push("");
       } else {
@@ -947,12 +947,12 @@
         L.push("");
       }
       if (dr) {
-        L.push("Voie unilatérale — le document se date après la dernière réunion, soit après");
+        L.push("Voie unilatérale - le document se date après la dernière réunion, soit après");
         L.push("le " + jour(dr) + ", donc au plus tôt le " + jourPlus(dr, 1) + ".");
         L.push("");
       }
       var dd2 = delaiDecision(f);
-      L.push("Après la dernière réunion — vous déposez la demande par la voie");
+      L.push("Après la dernière réunion - vous déposez la demande par la voie");
       L.push("dématérialisée (D. 1233-14). L'administration dispose alors de " +
         (dd2 ? dd2 + " jours" : "quinze jours dans la voie de l'accord, vingt et un dans la voie unilatérale"));
       L.push("pour notifier sa décision (L. 1233-57-4).");
@@ -960,7 +960,7 @@
         L.push("");
         L.push("Si vous déposiez le lendemain de la dernière réunion, soit le " +
           jourPlus(dr, 1) + ",");
-        L.push("la décision serait attendue au plus tard le " + jourPlus(dr, 1 + dd2) + " —");
+        L.push("la décision serait attendue au plus tard le " + jourPlus(dr, 1 + dd2) + " -");
         L.push("à condition que le dossier soit COMPLET dès le dépôt.");
       }
       L.push("");
@@ -987,7 +987,7 @@
     "Le calendrier de notification calé sur la décision administrative",
     "Le relevé de la décision de validation ou d'homologation, la liste de " +
     "vérification à passer avant tout envoi de lettre, la portée à connaissance " +
-    "des salariés, et — si des lettres sont déjà parties — la note de constat à " +
+    "des salariés, et - si des lettres sont déjà parties - la note de constat à " +
     "remettre au conseil de l'entreprise.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
@@ -1026,7 +1026,7 @@
         "et le module de la procédure s'en charge. Il fait une chose, et il la fait",
         "complètement : il DATE l'envoi.",
         "",
-        "Trois pièces le composent — le relevé de la décision administrative, la liste",
+        "Trois pièces le composent - le relevé de la décision administrative, la liste",
         "de vérification à passer avant de mettre une enveloppe à la poste, et le",
         "constat à établir si des lettres sont déjà parties trop tôt.",
       ]);
@@ -1053,10 +1053,10 @@
       L.push("« lettre recommandée avec avis de réception ».");
       L.push("");
       L.push("Deux points de départ possibles, donc, et un seul est sûr : la NOTIFICATION");
-      L.push("de la décision. L'expiration des délais de L. 1233-57-4 en est un autre —");
+      L.push("de la décision. L'expiration des délais de L. 1233-57-4 en est un autre -");
       L.push("« le silence gardé par l'autorité administrative pendant les délais prévus au");
       L.push("premier alinéa vaut décision d'acceptation de validation ou d'homologation »");
-      L.push("—, mais il suppose de savoir exactement quand le dossier a été reçu COMPLET.");
+      L.push("-, mais il suppose de savoir exactement quand le dossier a été reçu COMPLET.");
       L.push("Se fonder sur le silence sans en tenir la preuve, c'est parier.");
       L.push("");
 
@@ -1070,7 +1070,7 @@
         ["Écart entre les deux", (function () {
           var e = ecart(dDec, dNot);
           return e === null ? "[non calculable]" : (e > 0 ? e + " jours après la décision"
-            : e === 0 ? "le jour même — insuffisant" : Math.abs(e) + " jours AVANT la décision");
+            : e === 0 ? "le jour même - insuffisant" : Math.abs(e) + " jours AVANT la décision");
         })()],
       ]);
       L.push("");
@@ -1081,7 +1081,7 @@
         L.push("  relancez l'audit.");
         L.push("");
       } else if (ecart(dDec, dNot) === 0) {
-        L.push("  ATTENTION — la notification est prévue LE JOUR MÊME de la décision. Le");
+        L.push("  ATTENTION - la notification est prévue LE JOUR MÊME de la décision. Le");
         L.push("  texte exige qu'elle intervienne APRÈS la notification de la décision. Le");
         L.push("  jour même n'est pas après : décalez d'au moins un jour, et conservez la");
         L.push("  preuve de l'heure de réception de la décision si vous n'aviez pas le");
@@ -1110,7 +1110,7 @@
       L.push("délais, au comité social et économique et, si elle porte sur un accord");
       L.push("collectif, aux organisations syndicales représentatives signataires ».");
       L.push("");
-      L.push("EN CAS DE REFUS — ne notifiez rien. L'article L. 1235-10 vise expressément");
+      L.push("EN CAS DE REFUS - ne notifiez rien. L'article L. 1235-10 vise expressément");
       L.push("le licenciement « intervenu […] alors qu'une décision négative a été rendue »");
       L.push("et le déclare nul. La suite se traite avec votre conseil, et non par un");
       L.push("nouvel envoi.");
@@ -1153,14 +1153,14 @@
       L.push("liste : elle n'est pas un pense-bête, elle est un verrou.");
       L.push("");
       L.push("  ☐ La décision administrative est NOTIFIÉE à l'entreprise, et j'en tiens la");
-      L.push("    preuve datée — ou le délai de L. 1233-57-4 est expiré et je tiens la");
+      L.push("    preuve datée - ou le délai de L. 1233-57-4 est expiré et je tiens la");
       L.push("    preuve de la date de réception du dossier complet.");
       L.push("  ☐ Elle est FAVORABLE.");
       L.push("  ☐ La date d'expédition des lettres est POSTÉRIEURE à cette date, et non le");
       L.push("    jour même.");
       L.push("  ☐ La décision est portée à la connaissance des salariés (L. 1233-57-4).");
       L.push("  ☐ Chaque salarié protégé concerné dispose d'une autorisation de");
-      L.push("    l'inspecteur du travail antérieure à l'envoi — voyez le document du");
+      L.push("    l'inspecteur du travail antérieure à l'envoi - voyez le document du");
       L.push("    contrôle CTL-PRT-01.");
       L.push("  ☐ Les salariés en arrêt, en congé maternité ou déclarés inaptes ont fait");
       L.push("    l'objet de l'examen individuel du contrôle CTL-IND-01.");
@@ -1199,7 +1199,7 @@
       L.push("salarié une indemnité à la charge de l'employeur qui ne peut être inférieure");
       L.push("aux salaires des six derniers mois. »");
       L.push("");
-      L.push("CONSTAT — à établir, dater et signer :");
+      L.push("CONSTAT - à établir, dater et signer :");
       L.push("");
       tableau(L, ["Salarié", "Date d'expédition", "Preuve d'envoi", "Reçue le", "Décision admin. du"],
         [["[nom ou matricule]", "[  ]", "[avis de réception n°]", "[  ]",
@@ -1217,7 +1217,7 @@
       L.push("  décision. Aucune appréciation juridique : elle appartient à votre conseil,");
       L.push("  et une appréciation écrite par l'employeur se retourne contre lui.]");
       L.push("");
-      L.push("Rappel de délai — l'article L. 1235-7 dispose que « toute contestation portant");
+      L.push("Rappel de délai - l'article L. 1235-7 dispose que « toute contestation portant");
       L.push("sur le licenciement pour motif économique se prescrit par douze mois à compter");
       L.push("de la dernière réunion du comité social et économique ou, dans le cadre de");
       L.push("l'exercice par le salarié de son droit individuel à contester le licenciement");
@@ -1237,7 +1237,7 @@
         L.push("Décision administrative portée par la fiche : " + jour(dDec) + ".");
         L.push("Première date d'expédition possible : " + jourPlus(dDec, 1) + ", sous réserve");
         L.push("que ce soit la date de NOTIFICATION de la décision à l'entreprise, et non sa");
-        L.push("date de signature — le texte compte à partir de la notification.");
+        L.push("date de signature - le texte compte à partir de la notification.");
         L.push("");
       } else {
         L.push("Aucune décision administrative n'est portée par la fiche : la première date");
@@ -1253,10 +1253,10 @@
           L.push("");
         }
       }
-      L.push("Le jour de la notification de la décision — vous affichez ou portez à");
+      L.push("Le jour de la notification de la décision - vous affichez ou portez à");
       L.push("connaissance (L. 1233-57-4), et vous passez la liste de vérification du V.");
       L.push("");
-      L.push("Le lendemain au plus tôt — vous expédiez, par lettre recommandée avec avis de");
+      L.push("Le lendemain au plus tôt - vous expédiez, par lettre recommandée avec avis de");
       L.push("réception (L. 1233-39, premier alinéa).");
       L.push("");
       L.push("Ce jour-là, gardez à l'esprit ce que le texte protège : il n'exige pas un");
@@ -1281,7 +1281,7 @@
      pour que le rapport et la pièce disent la même chose. */
   var MESURES = [
     { cle: "evitement", nom: "Mesures d'évitement des licenciements",
-      rub: "L. 1233-61 — « éviter les licenciements ou en limiter le nombre »" },
+      rub: "L. 1233-61 - « éviter les licenciements ou en limiter le nombre »" },
     { cle: "reclassementInterne", nom: "Reclassement interne sur le territoire national",
       rub: "L. 1233-62, 1°" },
     { cle: "formation", nom: "Formation, validation des acquis, reconversion",
@@ -1313,7 +1313,7 @@
       modeEmploi(L, [
         "Une mesure non chiffrée n'est pas une mesure incomplète : c'est une mesure",
         "que personne ne peut apprécier. « Des actions de formation » ne dit ni",
-        "combien de salariés, ni combien d'heures, ni combien d'euros — et",
+        "combien de salariés, ni combien d'heures, ni combien d'euros - et",
         "l'administration ne peut donc pas dire si elle est proportionnée aux moyens",
         "de l'entreprise et du groupe, ce que le 1° de l'article L. 1233-57-3 lui",
         "demande précisément de faire.",
@@ -1356,7 +1356,7 @@
       L.push("");
       L.push("Un rapport se fait entre deux nombres. Une mesure sans nombre n'entre dans");
       L.push("aucun des deux critères : elle n'est ni proportionnée ni disproportionnée,");
-      L.push("elle est inappréciable — et c'est le motif de refus le plus économique à");
+      L.push("elle est inappréciable - et c'est le motif de refus le plus économique à");
       L.push("rédiger pour l'administration.");
       L.push("");
 
@@ -1382,20 +1382,20 @@
         });
       } else {
         L.push("La fiche ne porte AUCUNE mesure saisie. Le tableau du III est donc à");
-        L.push("remplir intégralement — à partir du plan tel que vous l'avez rédigé, et non");
+        L.push("remplir intégralement - à partir du plan tel que vous l'avez rédigé, et non");
         L.push("de mémoire.");
         L.push("");
       }
       if (absentes.length) {
         L.push("Rubriques du questionnaire restées vides : " +
           absentes.map(function (m) { return m.nom.toLowerCase(); }).join(" · ") + ".");
-        L.push("Une rubrique vide n'est pas en elle-même une non-conformité — le texte écrit");
-        L.push("« des mesures telles que » —, mais elle appelle un motif écrit. Le document");
+        L.push("Une rubrique vide n'est pas en elle-même une non-conformité - le texte écrit");
+        L.push("« des mesures telles que » -, mais elle appelle un motif écrit. Le document");
         L.push("du contrôle CTL-PSE-01 porte la note motivée des rubriques écartées.");
         L.push("");
       }
       if (sansChiffre.length) {
-        L.push("EN RÉSUMÉ — mesures énoncées sans aucun chiffre : " +
+        L.push("EN RÉSUMÉ - mesures énoncées sans aucun chiffre : " +
           sansChiffre.map(function (m) { return m.cle; }).join(", ") + ".");
         L.push("");
       }
@@ -1407,7 +1407,7 @@
       L.push("");
       var lignesB = MESURES.map(function (m) {
         var s = txt(p[m.cle]);
-        return [m.rub.split(" —")[0], m.nom, s ? "[préciser : « " + s + " »]" : "[intitulé]",
+        return [m.rub.split(" -")[0], m.nom, s ? "[préciser : « " + s + " »]" : "[intitulé]",
           "[  ]", "[  ]", "[  ]", "[  ]"];
       });
       lignesB.push(["L. 1233-62, 1° bis", "Reprise d'activités", "[intitulé]", "[  ]", "[  ]", "[  ]", "[  ]"]);
@@ -1521,13 +1521,13 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous remplissez le tableau. Comptez une à");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous remplissez le tableau. Comptez une à");
       L.push("deux semaines : les montants se justifient par des devis et des engagements,");
       L.push("qui se demandent.");
       L.push("");
-      L.push("Au plus tard le " + leJour(dans(d0, 14)) + " — le tableau est intégré au plan.");
+      L.push("Au plus tard le " + leJour(dans(d0, 14)) + " - le tableau est intégré au plan.");
       L.push("");
-      L.push("Avant la convocation du comité — le plan chiffré doit être PRÊT : L. 1233-32");
+      L.push("Avant la convocation du comité - le plan chiffré doit être PRÊT : L. 1233-32");
       L.push("impose de l'adresser avec elle, et non de le remettre en séance. Voyez le");
       L.push("document du contrôle CTL-PSE-06.");
       L.push("");
@@ -1585,7 +1585,7 @@
           "L'article L. 1233-32 impose que, dans les entreprises d'au moins cinquante",
           "salariés, l'employeur « adresse le plan de sauvegarde de l'emploi » aux",
           "représentants du personnel, outre les renseignements de l'article L. 1233-31",
-          "— lesquels sont adressés, selon ce dernier, « avec la convocation à la",
+          "- lesquels sont adressés, selon ce dernier, « avec la convocation à la",
           "première réunion ».",
         ], "Une réunion tenue sans le plan ne se répare pas en versant le plan ensuite : " +
            "elle se REPREND, sur une nouvelle convocation à laquelle le plan est joint. " +
@@ -1631,15 +1631,15 @@
       L.push("à la première réunion » : c'est le seul moment que le texte fixe.");
       L.push("");
       L.push("  Effectif de l'entreprise : " +
-        (eff === null ? "[non renseigné — les deux branches de L. 1233-32 valent, et"
+        (eff === null ? "[non renseigné - les deux branches de L. 1233-32 valent, et"
           : eff + " salariés."));
       if (eff === null) {
         L.push("  elles sont énoncées ci-dessus]");
       } else if (eff >= 50) {
-        L.push("  Branche applicable : « au moins cinquante salariés » — c'est LE PLAN qui");
+        L.push("  Branche applicable : « au moins cinquante salariés » - c'est LE PLAN qui");
         L.push("  est adressé avec la convocation.");
       } else {
-        L.push("  Branche applicable : « moins de cinquante salariés » — ce sont LES MESURES");
+        L.push("  Branche applicable : « moins de cinquante salariés » - ce sont LES MESURES");
         L.push("  envisagées qui sont adressées avec la convocation, et non un plan.");
       }
       L.push("");
@@ -1668,7 +1668,7 @@
         L.push("");
       } else if (!estDate(datePlan)) {
         L.push("  La pièce existe mais n'est pas datée. Une pièce non datée ne prouve pas");
-        L.push("  son antériorité — et c'est exactement ce qu'il s'agit de prouver ici.");
+        L.push("  son antériorité - et c'est exactement ce qu'il s'agit de prouver ici.");
         L.push("");
       } else if (!apres) {
         L.push("  Le projet de plan est daté du " + jour(datePlan) + ", soit à la date de la");
@@ -1688,7 +1688,7 @@
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(d0));
       L.push("");
-      L.push("Objet : convocation à la réunion du [DATE] — projet de licenciement collectif");
+      L.push("Objet : convocation à la réunion du [DATE] - projet de licenciement collectif");
       L.push("pour motif économique et plan de sauvegarde de l'emploi");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -1764,7 +1764,7 @@
 
       titre(L, "V. La décharge, et la mention au procès-verbal");
 
-      L.push("DÉCHARGE — un exemplaire par destinataire, conservé au dossier.");
+      L.push("DÉCHARGE - un exemplaire par destinataire, conservé au dossier.");
       L.push("");
       tableau(L, ["Destinataire", "Qualité", "Moyen d'envoi", "Date", "Signature"], [
         ["[nom]", "titulaire", "[remise en main propre / LRAR / courriel AR]", "[  ]", ""],
@@ -1774,7 +1774,7 @@
       L.push("");
       L.push("  Convoquez les suppléants : ils n'assistent qu'en l'absence du titulaire,");
       L.push("  mais la seule façon de prouver qu'ils ont été convoqués est de les avoir");
-      L.push("  convoqués. Le moyen doit conférer date certaine — c'est cette date qui se");
+      L.push("  convoqués. Le moyen doit conférer date certaine - c'est cette date qui se");
       L.push("  discute.");
       L.push("");
       L.push("MENTION À PORTER AU PROCÈS-VERBAL DE LA RÉUNION :");
@@ -1821,10 +1821,10 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous vérifiez que le plan est daté, complet");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous vérifiez que le plan est daté, complet");
       L.push("et chiffré. Un plan qui n'est pas prêt ne se convoque pas : il se termine.");
       L.push("");
-      L.push("Le jour de la convocation — le plan part AVEC elle, et le même jour à");
+      L.push("Le jour de la convocation - le plan part AVEC elle, et le même jour à");
       L.push("l'autorité administrative (L. 1233-48 ; D. 1233-5).");
       L.push("");
       if (r && r.reunions === 2) {
@@ -1834,10 +1834,10 @@
       }
       L.push("Si vous convoquiez aujourd'hui, la seconde réunion ne pourrait pas se tenir");
       L.push("avant le " + leJour(dans(d0, 15)) + " dans une entreprise d'au moins cinquante");
-      L.push("salariés — « au moins deux réunions espacées d'au moins quinze jours »");
-      L.push("(L. 1233-30, I) —, et devrait se tenir au plus tard le " +
+      L.push("salariés - « au moins deux réunions espacées d'au moins quinze jours »");
+      L.push("(L. 1233-30, I) -, et devrait se tenir au plus tard le " +
         leJour(dans(d0, 14)) + " dans");
-      L.push("une entreprise de moins de cinquante — « deux réunions, séparées par un délai");
+      L.push("une entreprise de moins de cinquante - « deux réunions, séparées par un délai");
       L.push("qui ne peut être supérieur à quatorze jours » (L. 1233-29). Les deux règles");
       L.push("ne disent pas la même chose : l'une fixe un minimum, l'autre un maximum.");
       L.push("");
@@ -1859,7 +1859,7 @@
     "Le décompte des suffrages et la note de bascule vers le document unilatéral",
     "Le tableau de décompte organisation par organisation, le calcul du seuil de " +
     "50 % tel que L. 1233-24-1 le définit, le bordereau du procès-verbal des " +
-    "dernières élections, et — si le seuil n'est pas atteint — la note qui arrête " +
+    "dernières élections, et - si le seuil n'est pas atteint - la note qui arrête " +
     "le passage au document unilatéral et le calendrier qui en découle.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
@@ -1901,10 +1901,10 @@
       L.push("");
       L.push("Quatre conditions dans une seule phrase, et chacune se vérifie :");
       L.push("");
-      L.push("  — les signataires sont des organisations REPRÉSENTATIVES ;");
-      L.push("  — le score cumulé atteint 50 % ;");
-      L.push("  — le score se mesure au PREMIER TOUR des DERNIÈRES élections ;");
-      L.push("  — et sur le collège des TITULAIRES au comité social et économique.");
+      L.push("  - les signataires sont des organisations REPRÉSENTATIVES ;");
+      L.push("  - le score cumulé atteint 50 % ;");
+      L.push("  - le score se mesure au PREMIER TOUR des DERNIÈRES élections ;");
+      L.push("  - et sur le collège des TITULAIRES au comité social et économique.");
       L.push("");
       L.push("L'article L. 2321-9, qui règle la signature par le conseil d'entreprise,");
       L.push("n'est pas au corpus du module : il est nommé ici, non reproduit.");
@@ -1920,7 +1920,7 @@
         ["[organisation]", "☐ oui ☐ non", "[  ]", "☐"],
         ["[organisation]", "☐ oui ☐ non", "[  ]", "☐"],
         ["[organisation]", "☐ oui ☐ non", "[  ]", "☐"],
-        ["[liste non représentative]", "non", "[  ]", "—"],
+        ["[liste non représentative]", "non", "[  ]", "-"],
       ]);
       L.push("");
       L.push("LE CALCUL :");
@@ -1937,7 +1937,7 @@
       L.push("  faible qu'il n'est, ou masque un seuil atteint.");
       L.push("");
       L.push("  Nombre de votants ................................................ [  ]");
-      L.push("  Quorum atteint au premier tour ? ☐ oui ☐ non — sans effet sur le calcul,");
+      L.push("  Quorum atteint au premier tour ? ☐ oui ☐ non - sans effet sur le calcul,");
       L.push("  le texte disant « quel que soit le nombre de votants ».");
       L.push("");
       L.push("  Calcul établi le [DATE] par [nom et qualité], à partir du procès-verbal");
@@ -1949,7 +1949,7 @@
       if (s === null) {
         L.push("La fiche ne porte AUCUN pourcentage de suffrages. C'est ce que le contrôle a");
         L.push("relevé : tant que ce chiffre manque, personne ne peut dire si l'accord est");
-        L.push("validable — ni vous, ni l'administration, ni le rapport d'audit.");
+        L.push("validable - ni vous, ni l'administration, ni le rapport d'audit.");
         L.push("");
         L.push("Faites le calcul du II, reportez le résultat dans la fiche, et relancez");
         L.push("l'audit.");
@@ -1977,7 +1977,7 @@
       }
       L.push("");
       if (v && v !== "accord") {
-        L.push("Remarque — la fiche porte par ailleurs la voie du document unilatéral. Ce");
+        L.push("Remarque - la fiche porte par ailleurs la voie du document unilatéral. Ce");
         L.push("décompte reste utile : il documente pourquoi l'accord n'a pas été retenu, et");
         L.push("c'est le premier élément de la note de bascule du IV.");
         L.push("");
@@ -2010,7 +2010,7 @@
       L.push("Il sera élaboré après la dernière réunion du comité social et économique, et");
       L.push("soumis à l'homologation de l'autorité administrative.");
       L.push("");
-      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] - " + signataire(ctx) + " »");
       L.push("");
       L.push("Le document unilatéral doit préciser les cinq éléments de L. 1233-24-2 :");
       L.push("« 1° Les modalités d'information et de consultation du comité social et");
@@ -2051,18 +2051,18 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous faites le décompte. Quelques jours");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous faites le décompte. Quelques jours");
       L.push("suffisent : le procès-verbal des élections porte les chiffres, il n'y a rien");
       L.push("à reconstituer.");
       L.push("");
-      L.push("Au plus tard le " + leJour(dans(d0, 7)) + " — le résultat est connu, et la voie");
+      L.push("Au plus tard le " + leJour(dans(d0, 7)) + " - le résultat est connu, et la voie");
       L.push("est arrêtée en conséquence (document du contrôle CTL-PSE-03).");
       L.push("");
       if (dr) {
         L.push("Votre dernière réunion du comité s'est tenue le " + jour(dr) + ".");
         L.push("Un document unilatéral se daterait donc au plus tôt du " + jourPlus(dr, 1) + ",");
         L.push("et son homologation ouvrirait un délai de vingt et un jours à compter de la");
-        L.push("réception du dossier complet (L. 1233-57-4) — soit, pour un dépôt le");
+        L.push("réception du dossier complet (L. 1233-57-4) - soit, pour un dépôt le");
         L.push(jourPlus(dr, 1) + ", une décision attendue au plus tard le " +
           jourPlus(dr, 22) + ".");
         L.push("");
@@ -2132,7 +2132,7 @@
         return x.a.sens === "absent" || x.a.sens === "en attente";
       });
 
-      L = L.concat(entete(ctx, "Salariés protégés — demandes d'autorisation et registre des décisions",
+      L = L.concat(entete(ctx, "Salariés protégés - demandes d'autorisation et registre des décisions",
         "articles L. 2411-1 et L. 2411-5 du code du travail"));
 
       if (refus.length || tardives.length) {
@@ -2149,7 +2149,7 @@
           quoi.push("La fiche porte " + tardives.length + " autorisation(s) datée(s) APRÈS la");
           quoi.push("notification du " + jour(dNot) + " : " +
             tardives.map(function (x) {
-              return cro(x.nom, "nom") + " — " + jour(x.a.date);
+              return cro(x.nom, "nom") + " - " + jour(x.a.date);
             }).join(", ") + ".");
           quoi.push("");
         }
@@ -2169,13 +2169,13 @@
       modeEmploi(L, [
         "Ce document ne dit pas comment se conduit l'instruction d'une demande",
         "d'autorisation : l'application n'a pas lu à la source les articles qui la",
-        "règlent — forme et contenu de la demande, consultation préalable du comité",
+        "règlent - forme et contenu de la demande, consultation préalable du comité",
         "pour certains mandats, enquête contradictoire, délais d'instruction, recours",
         "hiérarchique. Ils ne sont pas au corpus de ce module, et l'application",
         "n'énonce pas ce qu'elle n'a pas lu. Faites vérifier ce point.",
         "",
         "Ce qu'il fait, en revanche, il le fait entièrement : il recense, il rédige la",
-        "demande, il tient le registre, et il DATE — parce que c'est la date qui se",
+        "demande, il tient le registre, et il DATE - parce que c'est la date qui se",
         "discute. L'autorisation doit précéder la notification ; un registre qui",
         "rapproche les deux dates, salarié par salarié, est la pièce la plus utile du",
         "dossier.",
@@ -2211,12 +2211,12 @@
       L.push("des conditions de travail en agriculture […] ; 10° Salarié mandaté […]. »");
       L.push("");
       L.push("Trois choses à retenir de ce seul article :");
-      L.push("  — la liste est plus longue que « les élus du comité » : le délégué syndical,");
+      L.push("  - la liste est plus longue que « les élus du comité » : le délégué syndical,");
       L.push("    le représentant de proximité et le salarié mandaté y sont ;");
-      L.push("  — la protection joue « Y COMPRIS lors d'une procédure de sauvegarde, de");
-      L.push("    redressement ou de liquidation judiciaire » — le texte l'écrit, et");
+      L.push("  - la protection joue « Y COMPRIS lors d'une procédure de sauvegarde, de");
+      L.push("    redressement ou de liquidation judiciaire » - le texte l'écrit, et");
       L.push("    l'urgence d'une procédure collective n'en dispense pas ;");
-      L.push("  — les mentions abrégées ci-dessus par des points de suspension renvoient à");
+      L.push("  - les mentions abrégées ci-dessus par des points de suspension renvoient à");
       L.push("    des articles d'autres codes que l'application n'a pas lus : vérifiez le");
       L.push("    texte intégral si l'un de vos salariés relève des 8°, 9° ou 10°.");
       L.push("");
@@ -2264,7 +2264,7 @@
         if (illisibles.length) {
           L.push("  Mention non interprétable pour " +
             illisibles.map(function (x) { return cro(x.nom, "nom"); }).join(", ") + ".");
-          L.push("  Attendu : le SENS de la décision — accord, refus ou en attente — ET sa");
+          L.push("  Attendu : le SENS de la décision - accord, refus ou en attente - ET sa");
           L.push("  date. « Vu », « OK » ou « dossier envoyé » ne disent ni l'un ni l'autre.");
           L.push("");
         }
@@ -2282,36 +2282,36 @@
         L.push("la même chose, et la seconde se découvre toujours au mauvais moment.");
         L.push("");
       }
-      L.push("À COMPLÉTER — un salarié par ligne, pour tous les mandats de L. 2411-1 :");
+      L.push("À COMPLÉTER - un salarié par ligne, pour tous les mandats de L. 2411-1 :");
       L.push("");
       tableau(L, ["Salarié", "Mandat", "Depuis le", "Mandat en cours ?",
         "Fin de mandat", "Protection courant jusqu'au"], [
         ["[nom ou matricule]", "[mandat exact]", "[  ]", "☐ oui ☐ non", "[  ]", "[  ]"],
         ["[nom ou matricule]", "[mandat exact]", "[  ]", "☐ oui ☐ non", "[  ]", "[  ]"],
         ["[ancien élu non reconduit]", "[mandat exact]", "[  ]", "non", "[  ]",
-          "[six mois après — L. 2411-5]"],
+          "[six mois après - L. 2411-5]"],
       ]);
       L.push("");
       L.push("  [Reprenez le procès-verbal des élections, les lettres de désignation");
       L.push("  syndicale et le procès-verbal du dernier renouvellement. Le mandat s'écrit");
       L.push("  exactement : « membre du CSE » ne dit pas s'il est titulaire ou suppléant,");
-      L.push("  ni de quel comité — d'établissement, central.]");
+      L.push("  ni de quel comité - d'établissement, central.]");
       L.push("");
 
-      titre(L, "III. La demande d'autorisation — une par salarié");
+      titre(L, "III. La demande d'autorisation - une par salarié");
 
       L.push(nom(ctx));
       L.push(adresse(ctx));
       L.push("");
       L.push("Monsieur l'Inspecteur du travail");
-      L.push("[Unité de contrôle compétente — adresse]");
+      L.push("[Unité de contrôle compétente - adresse]");
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(d0));
       L.push("");
       L.push("Lettre recommandée avec demande d'avis de réception");
       L.push("");
       L.push("Objet : demande d'autorisation de licenciement pour motif économique d'un");
-      L.push("salarié protégé — [NOM DU SALARIÉ], [MANDAT]");
+      L.push("salarié protégé - [NOM DU SALARIÉ], [MANDAT]");
       L.push("");
       L.push("Monsieur l'Inspecteur,");
       L.push("");
@@ -2332,22 +2332,22 @@
         (nbLic(f) === null ? "[nombre] salariés" : nbLic(f) + " salariés") +
         " sur une même période de trente jours.");
       L.push("");
-      L.push("MOTIF ÉCONOMIQUE INVOQUÉ — [exposer ici, daté et chiffré, le motif au sens de");
+      L.push("MOTIF ÉCONOMIQUE INVOQUÉ - [exposer ici, daté et chiffré, le motif au sens de");
       L.push("l'article L. 1233-3 : difficultés économiques, mutations technologiques,");
       L.push("réorganisation nécessaire à la sauvegarde de la compétitivité, cessation");
       L.push("d'activité. Joindre les pièces qui l'établissent. L'application n'écrit pas");
       L.push("ce motif : il est propre à votre entreprise, et c'est sur lui que la décision");
       L.push("se prendra.]");
       L.push("");
-      L.push("SUPPRESSION DE POSTE — [préciser le poste supprimé, l'effectif de la catégorie");
+      L.push("SUPPRESSION DE POSTE - [préciser le poste supprimé, l'effectif de la catégorie");
       L.push("avant et après, et la place du salarié dans l'application des critères d'ordre");
       L.push("des licenciements].");
       L.push("");
-      L.push("RECHERCHE DE RECLASSEMENT — [exposer les recherches menées, les offres");
+      L.push("RECHERCHE DE RECLASSEMENT - [exposer les recherches menées, les offres");
       L.push("adressées au salarié, écrites et précises, et leurs réponses. Joindre l'état");
       L.push("daté des postes disponibles et les offres.]");
       L.push("");
-      L.push("ABSENCE DE LIEN AVEC LE MANDAT — [exposer les éléments qui établissent que la");
+      L.push("ABSENCE DE LIEN AVEC LE MANDAT - [exposer les éléments qui établissent que la");
       L.push("mesure envisagée est sans rapport avec le mandat détenu.]");
       L.push("");
       L.push("Je me tiens à votre disposition pour toute pièce complémentaire et pour");
@@ -2363,7 +2363,7 @@
       L.push("élections ou lettre de désignation · éléments du motif économique · le cas");
       L.push("échéant, plan de sauvegarde de l'emploi et décision administrative]");
       L.push("");
-      L.push("  [AVANT D'ENVOYER — l'application n'a pas lu les articles qui règlent la");
+      L.push("  [AVANT D'ENVOYER - l'application n'a pas lu les articles qui règlent la");
       L.push("  procédure de cette demande. Certaines catégories de mandats supposent une");
       L.push("  consultation préalable du comité, et la demande obéit à des formes et à des");
       L.push("  délais que ce document n'énonce pas. Faites vérifier ces points avant");
@@ -2407,7 +2407,7 @@
       L.push("  5. Si une lettre est déjà partie malgré un refus, ne tentez aucune");
       L.push("     régularisation et saisissez immédiatement votre conseil.");
       L.push("");
-      L.push("  CONSTAT — salarié [nom], mandat [  ], décision de refus du [DATE],");
+      L.push("  CONSTAT - salarié [nom], mandat [  ], décision de refus du [DATE],");
       L.push("  notifiée à l'entreprise le [DATE]. Retiré du projet le [DATE].");
       L.push("  Aucune lettre de licenciement n'a été expédiée : ☐ vérifié le [DATE]");
       L.push("  par [nom et qualité].");
@@ -2415,7 +2415,7 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous recensez et vous déposez les demandes.");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous recensez et vous déposez les demandes.");
       L.push("");
       L.push("La durée de l'instruction n'est pas fixée par un texte que l'application ait");
       L.push("lu : elle ne l'annonce donc pas. Ce qui est certain, c'est que la");
@@ -2435,7 +2435,7 @@
         L.push("des deux dates qui commande.");
         L.push("");
       }
-      L.push("Le jour de l'envoi — relisez le registre du IV. Une seule ligne sans");
+      L.push("Le jour de l'envoi - relisez le registre du IV. Une seule ligne sans");
       L.push("autorisation datée et antérieure suffit à arrêter l'envoi pour ce salarié,");
       L.push("et pour lui seul : les autres lettres ne sont pas retenues par la sienne.");
 
@@ -2464,7 +2464,7 @@
       var dNot = f.dateNotification, d0 = aujourd(ctx);
 
       L = L.concat(entete(ctx, "Note d'examen individuel des salariés en situation particulière",
-        "contrôle sans fondement textuel propre — voyez la partie I"));
+        "contrôle sans fondement textuel propre - voyez la partie I"));
 
       modeEmploi(L, [
         "Ce document est le seul du module qui ne conclut jamais. Ce n'est pas une",
@@ -2475,12 +2475,12 @@
         "retarder la notification. Ces régimes ne sont pas au corpus du module :",
         "l'application ne les a pas lus à la source, et elle n'écrira donc ni leurs",
         "articles, ni leurs conditions, ni leurs exceptions. Un document qui les",
-        "résumerait de mémoire serait pire qu'absent — il ferait croire à un examen",
+        "résumerait de mémoire serait pire qu'absent - il ferait croire à un examen",
         "qui n'a pas eu lieu.",
         "",
         "Ce qu'il fait : il recense, il rassemble les pièces, il pose les questions à",
         "poser, il commande l'examen à qui peut le conduire, et il consigne la",
-        "décision. C'est-à-dire tout ce qui prépare l'examen — et rien de l'examen",
+        "décision. C'est-à-dire tout ce qui prépare l'examen - et rien de l'examen",
         "lui-même.",
       ]);
 
@@ -2493,9 +2493,9 @@
       L.push("qui appelle un examen extérieur à la base.");
       L.push("");
       L.push("Il ne conclut donc jamais à la conformité. Trois issues seulement :");
-      L.push("  — aucun salarié dans une telle situation n'est déclaré : sans objet ;");
-      L.push("  — la question n'est pas renseignée : donnée manquante ;");
-      L.push("  — des salariés le sont : chacun doit faire l'objet d'un examen distinct.");
+      L.push("  - aucun salarié dans une telle situation n'est déclaré : sans objet ;");
+      L.push("  - la question n'est pas renseignée : donnée manquante ;");
+      L.push("  - des salariés le sont : chacun doit faire l'objet d'un examen distinct.");
       L.push("");
       L.push("Ce que l'application sait avec certitude, et qui suffit à justifier la");
       L.push("prudence : la date de notification n'est pas libre. L'article L. 1233-39");
@@ -2528,7 +2528,7 @@
         L.push("notifier.");
         L.push("");
       }
-      L.push("À COMPLÉTER — pour chaque salarié concerné par le projet :");
+      L.push("À COMPLÉTER - pour chaque salarié concerné par le projet :");
       L.push("");
       tableau(L, ["Salarié", "Emploi", "Nature de la situation", "Début", "Fin prévue",
         "Pièce au dossier"], [
@@ -2536,7 +2536,7 @@
           "[avis d'arrêt du ...]"],
         ["[nom ou matricule]", "[  ]", "congé de maternité", "[  ]", "[  ]",
           "[attestation, dates]"],
-        ["[nom ou matricule]", "[  ]", "inaptitude constatée", "[  ]", "—",
+        ["[nom ou matricule]", "[  ]", "inaptitude constatée", "[  ]", "-",
           "[avis du médecin du travail du ...]"],
         ["[nom ou matricule]", "[  ]", "[autre situation à signaler]", "[  ]", "[  ]", "[  ]"],
       ]);
@@ -2546,7 +2546,7 @@
       L.push("  situation à la date de l'envoi qui compte.]");
       L.push("");
 
-      titre(L, "III. La fiche d'examen — une par salarié");
+      titre(L, "III. La fiche d'examen - une par salarié");
 
       L.push("À remplir par l'entreprise, puis à remettre au professionnel avec les pièces.");
       L.push("Elle ne comporte aucune appréciation juridique : ce n'est pas son rôle, et");
@@ -2555,13 +2555,13 @@
       L.push("  Salarié ......................... [nom ou matricule]");
       L.push("  Emploi et catégorie ............. [  ]");
       L.push("  Ancienneté ...................... [  ]");
-      L.push("  Salarié protégé ? ............... ☐ oui — mandat : [  ]  ☐ non");
+      L.push("  Salarié protégé ? ............... ☐ oui - mandat : [  ]  ☐ non");
       L.push("");
       L.push("  NATURE DE LA SITUATION");
-      L.push("  ☐ Arrêt de travail — origine déclarée : [maladie / accident du travail /");
+      L.push("  ☐ Arrêt de travail - origine déclarée : [maladie / accident du travail /");
       L.push("    maladie professionnelle / non renseignée]");
       L.push("    Date du premier arrêt : [  ]   Prolongations : [  ]   Fin prévue : [  ]");
-      L.push("  ☐ Congé de maternité ou congé qui le suit — dates : [du ... au ...]");
+      L.push("  ☐ Congé de maternité ou congé qui le suit - dates : [du ... au ...]");
       L.push("    Déclaration de grossesse reçue le : [  ]");
       L.push("  ☐ Inaptitude constatée par le médecin du travail");
       L.push("    Date de l'avis : [  ]   Mentions portées sur l'avis : [  ]");
@@ -2581,7 +2581,7 @@
       L.push("  Date de notification envisagée pour ce salarié : " +
         (estDate(dNot) ? jour(dNot) : "[  ]"));
       L.push("  Position dans l'application des critères d'ordre : [  ]");
-      L.push("  Reclassement recherché : ☐ oui ☐ non — postes proposés : [  ]");
+      L.push("  Reclassement recherché : ☐ oui ☐ non - postes proposés : [  ]");
       L.push("");
       L.push("  QUESTIONS POSÉES AU PROFESSIONNEL");
       L.push("  1. La notification peut-elle intervenir dans cette situation ?");
@@ -2590,7 +2590,7 @@
       L.push("  4. La situation modifie-t-elle l'application des critères d'ordre ?");
       L.push("  5. La recherche de reclassement doit-elle être conduite différemment ?");
       L.push("  6. Des formalités propres s'ajoutent-elles à celles du licenciement");
-      L.push("     économique — avis, délais, mentions dans la lettre ?");
+      L.push("     économique - avis, délais, mentions dans la lettre ?");
       L.push("");
 
       titre(L, "IV. La lettre de mission");
@@ -2658,25 +2658,25 @@
       L.push("  [Différer une notification peut faire sortir un salarié de la fenêtre de");
       L.push("  trente jours, ou l'y faire entrer. Relancez l'audit après toute décision de");
       L.push("  report : le décompte du seuil de dix en dépend, et avec lui le régime tout");
-      L.push("  entier — voyez le document du contrôle CTL-SEU-01.]");
+      L.push("  entier - voyez le document du contrôle CTL-SEU-01.]");
       L.push("");
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous recensez et vous réunissez les pièces.");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous recensez et vous réunissez les pièces.");
       L.push("");
       L.push("Comptez une à deux semaines d'examen extérieur PAR SALARIÉ. Ce n'est pas une");
       L.push("formalité groupée : chaque situation est distincte, et une analyse commune à");
       L.push("trois salariés dans trois situations différentes n'analyse rien.");
       L.push("");
-      L.push("Au plus tard le " + leJour(dans(d0, 21)) + " — les analyses sont revenues et");
+      L.push("Au plus tard le " + leJour(dans(d0, 21)) + " - les analyses sont revenues et");
       L.push("les décisions sont consignées.");
       L.push("");
       if (estDate(dNot)) {
         var e = ecart(iso0(d0), dNot);
         L.push("Votre fiche porte une notification envisagée au " + jour(dNot) + ".");
         if (e !== null && e < 21) {
-          L.push("Il reste " + (e < 0 ? "moins de zéro jour — cette date est passée"
+          L.push("Il reste " + (e < 0 ? "moins de zéro jour - cette date est passée"
             : e + " jours") + " : c'est court pour un examen individuel.");
           L.push("Mieux vaut décaler la notification que de la faire sans l'avoir examinée.");
         } else {
@@ -2684,7 +2684,7 @@
         }
         L.push("");
       }
-      L.push("Le jour de l'envoi — reprenez le tableau du V. Un salarié dont la ligne");
+      L.push("Le jour de l'envoi - reprenez le tableau du V. Un salarié dont la ligne");
       L.push("porte « différée » ne reçoit pas de lettre ce jour-là, et le reste du");
       L.push("projet n'est pas retenu par lui.");
 
@@ -2742,7 +2742,7 @@
 
       modeEmploi(L, [
         "Ce document ne dit pas le droit : il COMPTE. Et c'est le compte qui décide",
-        "de tout le reste — une réunion ou deux, un mois d'avis ou quatre, une",
+        "de tout le reste - une réunion ou deux, un mois d'avis ou quatre, une",
         "information de l'administration ou une notification préalable, un plan de",
         "sauvegarde de l'emploi ou rien.",
         "",
@@ -2802,7 +2802,7 @@
       L.push("un licenciement déjà prononcé, et celle de l'envoi envisagé pour un");
       L.push("licenciement projeté.");
       L.push("");
-      L.push("A — LICENCIEMENTS ENVISAGÉS DANS LE PROJET EN COURS");
+      L.push("A - LICENCIEMENTS ENVISAGÉS DANS LE PROJET EN COURS");
       L.push("");
       tableau(L, ["N°", "Salarié", "Emploi", "Catégorie", "Date d'envoi envisagée", "Pièce"],
         [["1", "[nom ou matricule]", "[  ]", "[  ]", "[  ]", "[  ]"],
@@ -2812,24 +2812,24 @@
       L.push("  Sous-total A ...... " + (projet === null ? "[  ]" : String(projet)) +
         (projet === null ? "  (la fiche ne le renseigne pas)" : "  (selon la fiche)"));
       L.push("");
-      L.push("B — LICENCIEMENTS ÉCONOMIQUES DÉJÀ PRONONCÉS DANS LA MÊME PÉRIODE");
+      L.push("B - LICENCIEMENTS ÉCONOMIQUES DÉJÀ PRONONCÉS DANS LA MÊME PÉRIODE");
       L.push("");
       tableau(L, ["N°", "Salarié", "Emploi", "Date d'envoi de la lettre", "Motif", "Pièce"],
         [["1", "[nom ou matricule]", "[  ]", "[  ]", "[économique]", "[lettre du ...]"],
          ["2", "[nom ou matricule]", "[  ]", "[  ]", "[économique]", "[lettre du ...]"]]);
       L.push("");
       L.push("  Sous-total B ...... " + (recents === null ? "[  ]" : String(recents)) +
-        (recents === null ? "  (NON RENSEIGNÉ — sans lui, le seuil ne peut pas être vérifié)"
+        (recents === null ? "  (NON RENSEIGNÉ - sans lui, le seuil ne peut pas être vérifié)"
           : "  (selon la fiche)"));
       L.push("");
-      L.push("C — LICENCIEMENTS ENVISAGÉS APRÈS REFUS D'UNE MODIFICATION DU CONTRAT");
+      L.push("C - LICENCIEMENTS ENVISAGÉS APRÈS REFUS D'UNE MODIFICATION DU CONTRAT");
       L.push("");
       tableau(L, ["N°", "Salarié", "Élément essentiel modifié", "Date du refus", "Pièce"],
         [["1", "[nom ou matricule]", "[  ]", "[  ]", "[lettre de refus du ...]"],
          ["2", "[nom ou matricule]", "[  ]", "[  ]", "[lettre de refus du ...]"]]);
       L.push("");
       L.push("  Sous-total C ...... " + (refus === null ? "[  ]" : String(refus)) +
-        "  — non compris dans A. Le détail se tient dans le document du");
+        "  - non compris dans A. Le détail se tient dans le document du");
       L.push("  contrôle CTL-SEU-02.");
       L.push("");
       L.push("LA FENÊTRE RETENUE");
@@ -2845,9 +2845,9 @@
       titre(L, "III. Le total, et le régime qu'il commande");
 
       tableau(L, ["Terme", "Nombre", "Source"], [
-        ["A — licenciements envisagés", projet === null ? "[  ]" : String(projet), "nbLicenciements"],
-        ["B — déjà prononcés dans les trente jours", recents === null ? "[  ]" : String(recents), "licenciementsRecents30j"],
-        ["C — après refus de modification", refus === null ? "[  ]" : String(refus), "refusModification"],
+        ["A - licenciements envisagés", projet === null ? "[  ]" : String(projet), "nbLicenciements"],
+        ["B - déjà prononcés dans les trente jours", recents === null ? "[  ]" : String(recents), "licenciementsRecents30j"],
+        ["C - après refus de modification", refus === null ? "[  ]" : String(refus), "refusModification"],
         ["TOTAL SUR LA FENÊTRE", total === null ? "[  ]" : String(total), "A + B + C"],
       ]);
       L.push("");
@@ -2898,7 +2898,7 @@
 
       L.push("« NOTE FIXANT LE RÉGIME APPLICABLE AU PROJET DE LICENCIEMENT");
       L.push("");
-      L.push(nom(ctx) + " — projet de licenciement pour motif économique");
+      L.push(nom(ctx) + " - projet de licenciement pour motif économique");
       L.push("");
       L.push("Le décompte des licenciements envisagés sur une même période de trente jours,");
       L.push("établi le [DATE] à partir des pièces énumérées au tableau annexé, s'établit");
@@ -2917,7 +2917,7 @@
       L.push("salariés (L. 1233-28)], et [qu'un plan de sauvegarde de l'emploi est dû");
       L.push("(L. 1233-61) / qu'aucun plan n'est dû].");
       L.push("");
-      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] - " + signataire(ctx) + " »");
       L.push("");
       L.push("  [Cette note se date AVANT la convocation du comité. C'est elle qui justifie");
       L.push("  le régime retenu, et une justification écrite après coup ne justifie rien.]");
@@ -2954,10 +2954,10 @@
       L.push("Reprendre la procédure ne veut pas dire ajouter des pièces : cela veut dire");
       L.push("recommencer les actes dans l'ordre où le texte les place.");
       L.push("");
-      L.push("  ☐ Aucune lettre de licenciement n'est partie — reprenez au commencement :");
+      L.push("  ☐ Aucune lettre de licenciement n'est partie - reprenez au commencement :");
       L.push("    note de régime, convocation du comité avec les renseignements de");
       L.push("    L. 1233-31, notification du projet à l'administration, et le reste.");
-      L.push("  ☐ Des lettres sont déjà parties — ne les rappelez pas, ne les réexpédiez");
+      L.push("  ☐ Des lettres sont déjà parties - ne les rappelez pas, ne les réexpédiez");
       L.push("    pas, n'antidatez rien. Établissez le relevé ci-dessous et remettez-le à");
       L.push("    votre conseil.");
       L.push("");
@@ -2970,7 +2970,7 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous établissez le décompte. Une journée");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous établissez le décompte. Une journée");
       L.push("suffit si les lettres déjà envoyées sont classées ; plusieurs si elles ne le");
       L.push("sont pas.");
       L.push("");
@@ -2982,10 +2982,10 @@
         L.push("  Première réunion, au plus tôt ................... [selon vos usages]");
         L.push("  Notification du projet à l'administration ....... au plus tôt le lendemain");
         L.push("    de la date prévue pour la première réunion (L. 1233-46)");
-        L.push("  Seconde réunion — au moins quinze jours après la première dans une");
+        L.push("  Seconde réunion - au moins quinze jours après la première dans une");
         L.push("    entreprise d'au moins cinquante salariés (L. 1233-30, I), quatorze jours");
         L.push("    au plus dans une entreprise de moins de cinquante (L. 1233-29)");
-        L.push("  Avis du comité — dans le délai que le régime fixe" +
+        L.push("  Avis du comité - dans le délai que le régime fixe" +
           (r && r.delaiAvis ? " : " + r.delaiAvis : ""));
         L.push("  Demande de validation ou d'homologation, puis quinze ou vingt et un jours");
         L.push("    de décision (L. 1233-57-4)");
@@ -2998,14 +2998,14 @@
         L.push("retire du projet. Le seuil se franchit d'un salarié, et il se franchit");
         L.push("sans avertissement : un salarié protégé dont l'autorisation est refusée, un");
         L.push("salarié dont la notification est différée, un licenciement décidé dans un");
-        L.push("autre service — chacun de ces mouvements déplace le total.");
+        L.push("autre service - chacun de ces mouvements déplace le total.");
         L.push("");
         L.push("Prochaine vérification conseillée : le " + leJour(dans(d0, 30)) + ", ou le");
         L.push("jour où un licenciement s'ajoute, selon ce qui vient en premier.");
         L.push("");
       }
       L.push("Le décompte se conserve. C'est lui qui justifiera, plus tard, le régime que");
-      L.push("vous avez retenu — et si vous ne le conservez pas, c'est l'autre partie qui");
+      L.push("vous avez retenu - et si vous ne le conservez pas, c'est l'autre partie qui");
       L.push("fera le compte.");
 
       pied(L, ["L. 1233-8", "L. 1233-15", "L. 1233-25", "L. 1233-28", "L. 1233-29",
@@ -3061,7 +3061,7 @@
 
       modeEmploi(L, [
         "Ce document sert deux fois. D'abord à établir si le seuil de dix refus est",
-        "atteint — auquel cas le régime collectif s'applique à lui seul. Ensuite, et",
+        "atteint - auquel cas le régime collectif s'applique à lui seul. Ensuite, et",
         "même en deçà de dix, à documenter chaque refus : ces salariés entrent dans le",
         "décompte général de la fenêtre de trente jours, et leur nombre s'ajoute à",
         "celui des autres licenciements envisagés.",
@@ -3188,7 +3188,7 @@
       L.push("envisagés sur une même période de trente jours, dont le total s'élève à");
       L.push("[nombre]].");
       L.push("");
-      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] - " + signataire(ctx) + " »");
       L.push("");
       L.push("Pièces annexées : propositions de modification adressées · réponses des");
       L.push("salariés · tableau du II · décompte de la fenêtre de trente jours");
@@ -3196,10 +3196,10 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous établissez le relevé. Les pièces");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous établissez le relevé. Les pièces");
       L.push("existent déjà : ce sont vos propositions et les réponses reçues.");
       L.push("");
-      L.push("Au plus tard le " + leJour(dans(d0, 7)) + " — le décompte est arrêté, et la");
+      L.push("Au plus tard le " + leJour(dans(d0, 7)) + " - le décompte est arrêté, et la");
       L.push("note de régime est datée. Elle doit précéder la convocation du comité :");
       L.push("c'est elle qui dit sous quel régime celle-ci est faite.");
       L.push("");
@@ -3208,13 +3208,13 @@
         L.push("licenciement collectif : convocation et consultation du comité, notification");
         L.push("du projet à l'autorité administrative (L. 1233-46), et plan de sauvegarde de");
         L.push("l'emploi si l'entreprise atteint cinquante salariés (L. 1233-61). Comptez");
-        L.push("plusieurs semaines — une notification avant le " + leJour(dans(d0, 60)));
+        L.push("plusieurs semaines - une notification avant le " + leJour(dans(d0, 60)));
         L.push("serait, en pratique, difficile à tenir régulièrement.");
         L.push("");
       } else {
         L.push("Refaites ce relevé si une proposition de modification est encore en cours de");
         L.push("réponse : un refus supplémentaire déplace le total, et peut faire franchir");
-        L.push("le seuil de dix — celui de L. 1233-25 comme celui de la fenêtre de trente");
+        L.push("le seuil de dix - celui de L. 1233-25 comme celui de la fenêtre de trente");
         L.push("jours. Notez la date à laquelle la dernière réponse est attendue : [  ].");
         L.push("");
       }
@@ -3225,7 +3225,7 @@
       pied(L, ["L. 1233-3", "L. 1233-25", "L. 1233-28", "L. 1233-46", "L. 1233-61"],
         "Ce qui se joue : la procédure conduite au régime allégé alors que le seuil de\n" +
         "dix refus est atteint est irrégulière, et l'absence de plan de sauvegarde de\n" +
-        "l'emploi expose à la nullité — « en cas d'annulation d'une décision de\n" +
+        "l'emploi expose à la nullité - « en cas d'annulation d'une décision de\n" +
         "validation […] ou d'homologation […] en raison d'une absence ou d'une\n" +
         "insuffisance de plan de sauvegarde de l'emploi mentionné à l'article\n" +
         "L. 1233-61, la procédure de licenciement est nulle » (L. 1235-10).");
@@ -3265,15 +3265,15 @@
           "collectif, quel que soit le nombre de salariés qu'il concerne.",
         ], "Conduire la nouvelle procédure au régime allégé la rend irrégulière dès son " +
            "premier acte. Ce document sert à l'établir, à le dater, et à en tirer le " +
-           "calendrier — non à le corriger après coup.");
+           "calendrier - non à le corriger après coup.");
       }
 
       modeEmploi(L, [
         "C'est une règle qui se retourne contre l'employeur prudent. Un employeur qui",
         "étale ses licenciements pour rester sous le seuil de dix sur trente jours",
         "franchit un autre seuil : celui de dix sur trois mois consécutifs. Et à",
-        "partir de là, TOUT nouveau licenciement économique des trois mois suivants —",
-        "fût-il unique — relève du régime collectif.",
+        "partir de là, TOUT nouveau licenciement économique des trois mois suivants -",
+        "fût-il unique - relève du régime collectif.",
         "",
         "Le relevé se fait donc à l'envers du réflexe habituel : on ne compte pas ce",
         "que le projet contient, on compte ce que les trois mois passés ont contenu.",
@@ -3299,12 +3299,12 @@
       L.push("     cinquante salariés ;");
       L.push("  2. des licenciements économiques ont été prononcés pendant TROIS MOIS");
       L.push("     CONSÉCUTIFS ;");
-      L.push("  3. leur total dépasse dix — « PLUS de dix salariés au total », donc onze au");
+      L.push("  3. leur total dépasse dix - « PLUS de dix salariés au total », donc onze au");
       L.push("     moins ;");
       L.push("  4. sans qu'aucune période de trente jours en ait compté dix.");
       L.push("");
       L.push("Si les quatre sont réunies, la conséquence porte sur les TROIS MOIS SUIVANTS,");
-      L.push("et sur « tout nouveau licenciement économique envisagé » — le singulier est");
+      L.push("et sur « tout nouveau licenciement économique envisagé » - le singulier est");
       L.push("dans le texte.");
       L.push("");
 
@@ -3326,7 +3326,7 @@
         L.push("  Remplissez néanmoins le relevé du III. L'effectif peut changer, et le");
         L.push("  texte vise aussi l'ÉTABLISSEMENT : un établissement d'au moins cinquante");
         L.push("  salariés dans une entreprise plus petite n'existe pas, mais l'inverse");
-        L.push("  arrive — et c'est alors l'établissement qu'il faut regarder.");
+        L.push("  arrive - et c'est alors l'établissement qu'il faut regarder.");
       } else {
         L.push("  L'effectif atteint cinquante salariés : la première condition est remplie.");
         L.push("  Le mot « habituellement » se vérifie sur la durée, non au jour du projet :");
@@ -3361,7 +3361,7 @@
       L.push("  pas ici. Indiquez le motif de chaque rupture : c'est ce qui permettra de");
       L.push("  justifier une exclusion.]");
       L.push("");
-      L.push("VÉRIFICATION DE LA QUATRIÈME CONDITION — aucune période de trente jours ne");
+      L.push("VÉRIFICATION DE LA QUATRIÈME CONDITION - aucune période de trente jours ne");
       L.push("doit avoir compté dix licenciements :");
       L.push("");
       tableau(L, ["Fenêtre de trente jours examinée", "Licenciements", "Atteint dix ?"],
@@ -3371,7 +3371,7 @@
       L.push("");
       L.push("  [Faites glisser la fenêtre sur toutes les dates du relevé. Si l'une des");
       L.push("  fenêtres atteint dix, ce n'est plus L. 1233-26 qui s'applique mais");
-      L.push("  L. 1233-28 — et la procédure aurait dû être collective dès ce moment-là.");
+      L.push("  L. 1233-28 - et la procédure aurait dû être collective dès ce moment-là.");
       L.push("  Voyez alors le document du contrôle CTL-SEU-01.]");
       L.push("");
 
@@ -3395,7 +3395,7 @@
       } else if (declenche) {
         L.push("LES QUATRE CONDITIONS SONT RÉUNIES, selon les données de la fiche. Tout");
         L.push("nouveau licenciement économique envisagé au cours des trois mois suivants");
-        L.push("est soumis aux dispositions du chapitre — c'est-à-dire au régime du");
+        L.push("est soumis aux dispositions du chapitre - c'est-à-dire au régime du");
         L.push("licenciement collectif pour motif économique.");
       } else if (eff !== null && eff >= 50) {
         L.push("Les conditions ne sont pas toutes réunies selon les données de la fiche : " +
@@ -3429,7 +3429,7 @@
       L.push("s'appliquer. Le régime du présent projet est celui qui résulte du décompte de");
       L.push("la fenêtre de trente jours, arrêté par note distincte.]");
       L.push("");
-      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] - " + signataire(ctx) + " »");
       L.push("");
       L.push("Ce que le régime collectif ajoute est énuméré au document du contrôle");
       L.push("CTL-SEU-01, partie V : notification du projet à l'autorité administrative");
@@ -3450,7 +3450,7 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous établissez le relevé des trois mois");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous établissez le relevé des trois mois");
       L.push("précédents. Les pièces existent : ce sont les lettres déjà expédiées.");
       L.push("");
       L.push("Les trois mois précédents à examiner courent, en repère de date, du " +
@@ -3477,7 +3477,7 @@
         L.push("jour où un nouveau licenciement économique est envisagé.");
         L.push("");
       }
-      L.push("Conservez le relevé signé et daté. C'est lui qui justifie le régime retenu —");
+      L.push("Conservez le relevé signé et daté. C'est lui qui justifie le régime retenu -");
       L.push("et, s'il fait apparaître que la règle n'est pas déclenchée, il justifie aussi");
       L.push("de ne pas l'avoir appliquée.");
 
@@ -3495,7 +3495,7 @@
      LA QUALITÉ DES DONNÉES
      ══════════════════════════════════════════════════════════════════════ */
 
-  /* Ce que chaque champ doit être — repris à l'identique de
+  /* Ce que chaque champ doit être - repris à l'identique de
      moteur/economique/valider.js, qui est le seul juge de la lisibilité d'une
      donnée. Le fichier n'est pas exposé au navigateur : le document en reprend
      la table plutôt que d'en inventer une seconde. */
@@ -3545,7 +3545,7 @@
     ["dateAudit", "dateEntretien", "dateNotification", "dateInfoCSE", "dateNotifAdmin"]
       .forEach(function (ch) {
         if (a(ch) && !estDateISO(f[ch]))
-          dit(ch, f[ch], "date inexistante ou format non reconnu — attendu AAAA-MM-JJ");
+          dit(ch, f[ch], "date inexistante ou format non reconnu - attendu AAAA-MM-JJ");
       });
     if (a("dateAvisCSE") && !estDateISO(f.dateAvisCSE) && !/non rendu/i.test(String(f.dateAvisCSE)))
       dit("dateAvisCSE", f.dateAvisCSE, "ni date valide, ni mention « avis non rendu »");
@@ -3600,7 +3600,7 @@
       var d0 = aujourd(ctx);
 
       L = L.concat(entete(ctx, "Fiche de correction des données de l'audit",
-        "contrôle sans fondement textuel propre — voyez la partie I"));
+        "contrôle sans fondement textuel propre - voyez la partie I"));
 
       modeEmploi(L, [
         "Ce document est le premier à remplir et le seul à remplir en premier. Tant",
@@ -3627,11 +3627,11 @@
       L.push("");
       L.push("La distinction commande ce qui en découle :");
       L.push("");
-      L.push("  LISIBILITÉ — la valeur ne peut pas exister : le 30 février, un effectif");
+      L.push("  LISIBILITÉ - la valeur ne peut pas exister : le 30 février, un effectif");
       L.push("  négatif, neuf licenciements et demi. Aucun contrôle ne peut rien conclure");
       L.push("  de ce qu'il a lu là, et le moteur le lui interdit.");
       L.push("");
-      L.push("  COHÉRENCE — deux valeurs parfaitement lisibles se contredisent : un");
+      L.push("  COHÉRENCE - deux valeurs parfaitement lisibles se contredisent : un");
       L.push("  effectif d'établissement supérieur à celui de l'entreprise, une");
       L.push("  notification antérieure à l'entretien préalable. Ce n'est pas un obstacle à");
       L.push("  l'examen, c'est son objet : les contrôles doivent au contraire pouvoir le");
@@ -3658,7 +3658,7 @@
         L.push("");
       } else {
         if (lisib.length) {
-          L.push("DONNÉES ILLISIBLES — " + lisib.length + " :");
+          L.push("DONNÉES ILLISIBLES - " + lisib.length + " :");
           L.push("");
           tableau(L, ["Champ", "Valeur saisie", "Pourquoi elle est impossible"],
             lisib.map(function (x) {
@@ -3669,7 +3669,7 @@
           L.push("");
         }
         if (coher.length) {
-          L.push("DONNÉES INCOHÉRENTES ENTRE ELLES — " + coher.length + " :");
+          L.push("DONNÉES INCOHÉRENTES ENTRE ELLES - " + coher.length + " :");
           L.push("");
           tableau(L, ["Champ", "Valeur saisie", "Contradiction relevée"],
             coher.map(function (x) {
@@ -3678,7 +3678,7 @@
           L.push("");
           L.push("  Celles-ci sont lisibles. Deux issues seulement : l'une des deux valeurs");
           L.push("  est fausse et se corrige, ou les deux sont exactes et c'est le dossier");
-          L.push("  lui-même qui porte la contradiction — auquel cas elle ne se corrige pas");
+          L.push("  lui-même qui porte la contradiction - auquel cas elle ne se corrige pas");
           L.push("  dans la fiche, elle se traite dans le dossier.");
           L.push("");
         }
@@ -3694,11 +3694,11 @@
       L.push("");
       L.push("Et les quatre cohérences vérifiées entre champs :");
       L.push("");
-      L.push("  — la notification ne peut pas être antérieure à l'entretien préalable ;");
-      L.push("  — l'effectif de l'établissement ne peut pas dépasser celui de l'entreprise ;");
-      L.push("  — l'effectif du groupe ne peut pas être inférieur à celui de l'entreprise,");
+      L.push("  - la notification ne peut pas être antérieure à l'entretien préalable ;");
+      L.push("  - l'effectif de l'établissement ne peut pas dépasser celui de l'entreprise ;");
+      L.push("  - l'effectif du groupe ne peut pas être inférieur à celui de l'entreprise,");
       L.push("    puisque celle-ci en fait partie ;");
-      L.push("  — le nombre de licenciements ne peut pas dépasser l'effectif.");
+      L.push("  - le nombre de licenciements ne peut pas dépasser l'effectif.");
       L.push("");
       L.push("  [Les dates des réunions du comité sont vérifiées une à une : une seule date");
       L.push("  mal formée dans la liste suffit à la signaler.]");
@@ -3733,7 +3733,7 @@
         ["Date de notification à l'administration", "accusé de réception de la voie dématérialisée"],
         ["IDCC", "bulletin de paie, ou intitulé exact de la convention appliquée"],
         ["SIREN", "extrait Kbis"],
-        ["Cause invoquée", "note de projet — l'un des quatre cas de L. 1233-3"],
+        ["Cause invoquée", "note de projet - l'un des quatre cas de L. 1233-3"],
       ]);
       L.push("");
 
@@ -3754,19 +3754,19 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous corrigez. Quelques heures suffisent :");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous corrigez. Quelques heures suffisent :");
       L.push("ce sont des saisies à reprendre, non des pièces à construire.");
       L.push("");
-      L.push("Aujourd'hui encore — vous relancez l'audit. Il n'y a aucune raison");
+      L.push("Aujourd'hui encore - vous relancez l'audit. Il n'y a aucune raison");
       L.push("d'attendre, et une seule de ne pas attendre : tout le reste du travail");
       L.push("dépend de ce que le rapport dira.");
       L.push("");
-      L.push("Au plus tard le " + leJour(dans(d0, 2)) + " — les verdicts sont relus sur les");
+      L.push("Au plus tard le " + leJour(dans(d0, 2)) + " - les verdicts sont relus sur les");
       L.push("données corrigées, et les documents des autres contrôles sont régénérés à");
       L.push("partir de la fiche corrigée. Un document produit avant la correction porte");
       L.push("les anciennes valeurs : il est à refaire, pas à modifier à la main.");
       L.push("");
-      L.push("Refaites cette vérification chaque fois qu'une donnée change — un");
+      L.push("Refaites cette vérification chaque fois qu'une donnée change - un");
       L.push("licenciement ajouté, une notification différée, une réunion déplacée. Les");
       L.push("données de ce dossier bougent jusqu'au dernier jour.");
 
@@ -3774,7 +3774,7 @@
         "Ce contrôle n'a aucun article au champ « fondement ». La table du III et les\n" +
         "quatre cohérences du même titre sont reprises de\n" +
         "moteur/economique/valider.js, qui est le seul juge de la lisibilité d'une\n" +
-        "donnée dans ce module — le document n'en invente pas une seconde.\n" +
+        "donnée dans ce module - le document n'en invente pas une seconde.\n" +
         "\n" +
         "Ce qui se joue : rien de juridique, et c'est bien le problème. Une donnée\n" +
         "impossible ne se sanctionne pas ; elle fausse tout ce qui en dépend, sans que\n" +
@@ -3793,8 +3793,8 @@
 
   doc("CTL-PCO-01",
     "La fiche d'identification du régime de la procédure collective",
-    "Les trois données que l'article L. 1233-58 rend indispensables — nature de " +
-    "la procédure, date du jugement, qualité de l'auteur du plan —, le tableau " +
+    "Les trois données que l'article L. 1233-58 rend indispensables - nature de " +
+    "la procédure, date du jugement, qualité de l'auteur du plan -, le tableau " +
     "des renvois que ce texte opère selon le seuil et l'effectif, et le bordereau " +
     "des pièces qui les établissent.",
     function (ctx) {
@@ -3803,7 +3803,7 @@
       var enPC = f.procedureCollective === true;
       var type = txt(f.typeProcedure), dJug = f.dateJugement, qual = txt(f.qualiteAuteur);
       var manque = [];
-      if (!type) manque.push("la nature de la procédure — sauvegarde, redressement ou liquidation");
+      if (!type) manque.push("la nature de la procédure - sauvegarde, redressement ou liquidation");
       if (!estDate(dJug)) manque.push("la date du jugement d'ouverture ou de liquidation");
       if (!qual) manque.push("la qualité de celui qui met en œuvre le plan de licenciement");
 
@@ -3812,7 +3812,7 @@
 
       modeEmploi(L, [
         "Trois données, et rien d'autre. Mais tant qu'elles manquent, le régime de",
-        "l'article L. 1233-58 ne peut pas être appliqué — et ce régime n'est pas un",
+        "l'article L. 1233-58 ne peut pas être appliqué - et ce régime n'est pas un",
         "aménagement de détail : il désigne qui met en œuvre le plan, il renvoie à des",
         "articles de consultation différents selon le nombre de licenciements et",
         "l'effectif, il raccourcit les délais de décision de l'administration, et il",
@@ -3841,7 +3841,7 @@
       L.push("");
       if (!enPC) {
         L.push("La fiche ne déclare AUCUNE procédure collective. Ce document n'a alors pas");
-        L.push("d'objet — sauf si la situation a changé depuis l'audit, auquel cas");
+        L.push("d'objet - sauf si la situation a changé depuis l'audit, auquel cas");
         L.push("renseignez les trois données ci-dessus et relancez l'audit avant tout acte");
         L.push("suivant : l'ouverture d'une procédure collective déplace le régime entier.");
         L.push("");
@@ -3849,7 +3849,7 @@
         L.push("PROCÉDURE COLLECTIVE DÉCLARÉE, MAIS " + manque.length + " DONNÉE(S)");
         L.push("MANQUANTE(S) :");
         L.push("");
-        manque.forEach(function (m) { L.push("  — " + m); });
+        manque.forEach(function (m) { L.push("  - " + m); });
         L.push("");
         L.push("Le régime de l'article L. 1233-58 ne peut pas être appliqué en l'état.");
         L.push("");
@@ -3892,9 +3892,9 @@
         (n === null ? "[non renseigné]" : String(n)));
       L.push("  Renvoi applicable ............... " +
         (eff === null || n === null ? "[à déterminer une fois ces deux données renseignées]"
-          : n < 10 ? "1° — L. 1233-8"
-          : eff < 50 ? "2° — L. 1233-29, premier alinéa"
-          : "3° — L. 1233-30, I et dernier alinéa du II, et 7°"));
+          : n < 10 ? "1° - L. 1233-8"
+          : eff < 50 ? "2° - L. 1233-29, premier alinéa"
+          : "3° - L. 1233-30, I et dernier alinéa du II, et 7°"));
       L.push("");
       L.push("Le texte cite aussi les articles L. 2325-35, L. 4614-12-1 et L. 2323-31, qui");
       L.push("ne sont pas au corpus du module : ils sont nommés, non reproduits.");
@@ -4021,7 +4021,7 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous renseignez les trois données et vous");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous renseignez les trois données et vous");
       L.push("relancez l'audit. C'est immédiat : elles se lisent sur le jugement.");
       L.push("");
       if (estDate(dJug)) {
@@ -4125,7 +4125,7 @@
         "quand l'ordonnance a été obtenue, et l'ordonnance ne la dispense pas.",
         "",
         "L'application n'a pas lu à la source les articles du code de commerce",
-        "auxquels L. 1233-60 renvoie — L. 631-17, L. 631-19 (II), L. 641-4 dernier",
+        "auxquels L. 1233-60 renvoie - L. 631-17, L. 631-19 (II), L. 641-4 dernier",
         "alinéa, L. 641-10 troisième alinéa, L. 642-5. Ils sont NOMMÉS ici tels que le",
         "texte lu les nomme, jamais reproduits ni résumés : c'est là que se trouvent",
         "les conditions et la forme de la requête, et elles doivent être vérifiées à",
@@ -4149,7 +4149,7 @@
       L.push("");
       if (f.procedureCollective !== true) {
         L.push("  La fiche ne déclare aucune procédure collective : ce document n'a pas");
-        L.push("  d'objet en l'état. Il le retrouve si une procédure est ouverte — auquel");
+        L.push("  d'objet en l'état. Il le retrouve si une procédure est ouverte - auquel");
         L.push("  cas renseignez la fiche et relancez l'audit avant tout acte suivant.");
         L.push("");
       }
@@ -4169,16 +4169,16 @@
 
       L.push("Trois caractères à établir, et ils sont cumulatifs : URGENT, INÉVITABLE,");
       L.push("INDISPENSABLE. Une requête qui les affirme sans les caractériser n'établit");
-      L.push("rien — et ce sont des faits, pas des qualifications : chacun se démontre par");
+      L.push("rien - et ce sont des faits, pas des qualifications : chacun se démontre par");
       L.push("des dates et des chiffres.");
       L.push("");
       L.push(cro((ctx.profil || {}).denomination || f.entreprise, "DÉNOMINATION SOCIALE"));
       L.push("[ou : cabinet de l'administrateur / du liquidateur, selon la qualité de");
-      L.push("l'auteur du plan — voyez le document du contrôle CTL-PCO-01]");
+      L.push("l'auteur du plan - voyez le document du contrôle CTL-PCO-01]");
       L.push("");
       L.push("À Monsieur le Juge-commissaire");
       L.push("Tribunal [de commerce / judiciaire] de [VILLE]");
-      L.push("Procédure n° [  ] — " + (type ? (PROC[type] || type) : "[nature de la procédure]") +
+      L.push("Procédure n° [  ] - " + (type ? (PROC[type] || type) : "[nature de la procédure]") +
         " ouverte le " + (estDate(dJug) ? jour(dJug) : "[DATE]"));
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(d0));
@@ -4229,9 +4229,9 @@
       L.push("convocation et procès-verbaux du comité · projet de plan, le cas échéant ·");
       L.push("tableau des catégories et des suppressions]");
       L.push("");
-      L.push("[Signature — qualité de l'auteur du plan]");
+      L.push("[Signature - qualité de l'auteur du plan]");
       L.push("");
-      L.push("  [AVANT DE DÉPOSER — la forme, le contenu et le circuit de cette requête");
+      L.push("  [AVANT DE DÉPOSER - la forme, le contenu et le circuit de cette requête");
       L.push("  sont réglés par les articles du code de commerce que L. 1233-60 nomme, et");
       L.push("  que l'application n'a pas lus. Faites-les vérifier. Ce modèle organise le");
       L.push("  fond de la démonstration ; il ne garantit pas la forme.]");
@@ -4281,11 +4281,11 @@
       L.push("[ou en-tête de l'administrateur ou du liquidateur, selon le cas]");
       L.push("");
       L.push("À l'autorité administrative compétente");
-      L.push("[Direction régionale — adresse]");
+      L.push("[Direction régionale - adresse]");
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(d0));
       L.push("");
-      L.push("Objet : information préalable à des licenciements pour motif économique —");
+      L.push("Objet : information préalable à des licenciements pour motif économique -");
       L.push("article L. 1233-60 du code du travail");
       L.push("");
       L.push("Madame, Monsieur,");
@@ -4313,12 +4313,12 @@
       L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
       L.push("distinguée.");
       L.push("");
-      L.push("[Signature — qualité de l'auteur du plan]");
+      L.push("[Signature - qualité de l'auteur du plan]");
       L.push("");
       L.push("Pièces jointes : jugement · acte de désignation · ordonnance du");
       L.push("juge-commissaire · tableau des catégories et des suppressions");
       L.push("");
-      L.push("  Envoyée le [DATE] — moyen : [voie dématérialisée / LRAR] — accusé de");
+      L.push("  Envoyée le [DATE] - moyen : [voie dématérialisée / LRAR] - accusé de");
       L.push("  réception du [DATE], conservé au dossier : ☐");
       L.push("");
       L.push("  [Cette information ne se confond pas avec la demande de validation ou");
@@ -4336,7 +4336,7 @@
         ["4", "Consultation du comité selon le renvoi applicable", "L. 1233-58, I", "[  ]"],
         ["5", "Demande de validation ou d'homologation, le cas échéant",
           "L. 1233-58, II ; D. 1233-14", "[  ]"],
-        ["6", "Décision de l'administration — 8 jours en redressement, 4 en liquidation",
+        ["6", "Décision de l'administration - 8 jours en redressement, 4 en liquidation",
           "L. 1233-58, II", "[  ]"],
         ["7", "Notification des licenciements", "L. 1233-58, II", "[  ]"],
       ]);
@@ -4348,7 +4348,7 @@
       if (estDate(dAdm) && estDate(dNot)) {
         var e2 = ecart(dAdm, dNot);
         L.push("  Dans votre fiche : information de l'administration le " + jour(dAdm) + ",");
-        L.push("  notification envisagée le " + jour(dNot) + " — soit " +
+        L.push("  notification envisagée le " + jour(dNot) + " - soit " +
           (e2 === null ? "[  ]" : e2 + " jours") + ".");
         if (e2 !== null && e2 < 0) {
           L.push("  L'ordre est INVERSÉ : l'information doit précéder les licenciements.");
@@ -4358,7 +4358,7 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous déposez la requête et vous préparez");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous déposez la requête et vous préparez");
       L.push("l'information de l'administration.");
       L.push("");
       L.push("L'application n'annonce aucun délai d'obtention de l'ordonnance : elle n'a");
@@ -4402,8 +4402,8 @@
   doc("CTL-PCO-03",
     "Le calendrier de notification calé sur la fenêtre de garantie des créances",
     "Le calcul de la fenêtre de quinze ou vingt et un jours ouverte par le " +
-    "jugement de liquidation, le tableau de contrôle date par date, et — si la " +
-    "fenêtre est expirée — l'état des créances qui ne seraient pas garanties, à " +
+    "jugement de liquidation, le tableau de contrôle date par date, et - si la " +
+    "fenêtre est expirée - l'état des créances qui ne seraient pas garanties, à " +
     "établir avec le liquidateur avant toute notification.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
@@ -4452,14 +4452,14 @@
         "et de qui le paie.",
         "",
         "La garantie couvre les créances de rupture intervenant dans une fenêtre qui",
-        "s'ouvre au jugement de liquidation et dure quinze jours — vingt et un lorsqu'un",
+        "s'ouvre au jugement de liquidation et dure quinze jours - vingt et un lorsqu'un",
         "plan de sauvegarde de l'emploi est élaboré. Hors de cette fenêtre, indemnités",
         "et préavis restent à la charge de la procédure, et les salariés ne sont pas",
         "payés par la garantie.",
         "",
         "Deux conséquences pratiques, et elles tirent en sens contraire : il ne faut",
         "pas notifier trop tard, et il ne faut pas notifier sans avoir accompli ce qui",
-        "doit précéder — ordonnance du juge-commissaire, information de",
+        "doit précéder - ordonnance du juge-commissaire, information de",
         "l'administration, consultation. Le calendrier est étroit ; il n'est pas",
         "facultatif.",
       ]);
@@ -4523,7 +4523,7 @@
         ["Notification envisagée", estDate(dNot) ? jour(dNot) : "[non renseignée]"],
         ["Écart jugement → notification", e === null ? "[non calculable]" : e + " jours"],
         ["Dans la fenêtre ?", (e === null || jours === null) ? "[  ]"
-          : (e < 0 ? "NON — antérieure au jugement" : e <= jours ? "oui" : "NON — hors fenêtre")],
+          : (e < 0 ? "NON - antérieure au jugement" : e <= jours ? "oui" : "NON - hors fenêtre")],
       ]);
       L.push("");
       if (!estDate(dJug) || !estDate(dNot)) {
@@ -4550,7 +4550,7 @@
       L.push("C'est ce qui rend le calendrier de la liquidation si serré.");
       L.push("");
       tableau(L, ["Acte", "Fondement", "Prévu le", "Dans la fenêtre ?"], [
-        ["Jugement de liquidation", "—", estDate(dJug) ? jour(dJug) : "[  ]", "point de départ"],
+        ["Jugement de liquidation", "-", estDate(dJug) ? jour(dJug) : "[  ]", "point de départ"],
         ["Requête et ordonnance du juge-commissaire", "code de commerce (non lu ici)",
           "[  ]", "☐"],
         ["Information de l'autorité administrative", "L. 1233-60", "[  ]", "☐"],
@@ -4560,7 +4560,7 @@
         ["NOTIFICATION DES LICENCIEMENTS", "L. 1233-58, II",
           estDate(dNot) ? jour(dNot) : "[  ]", "☐"],
         ["Dernier jour de la fenêtre", "L. 3253-8, 2° c",
-          (estDate(dJug) && jours !== null) ? jourPlus(dJug, jours) : "[  ]", "—"],
+          (estDate(dJug) && jours !== null) ? jourPlus(dJug, jours) : "[  ]", "-"],
       ]);
       L.push("");
       L.push("  Rappel utile : L. 1233-59 dispose que « les délais prévus à l'article");
@@ -4572,7 +4572,7 @@
       L.push("  Mais l'article L. 1233-58, II, le retient : la rupture ne peut intervenir");
       L.push("  « avant la notification de la décision favorable de validation ou");
       L.push("  d'homologation, ou l'expiration des délais mentionnés au quatrième alinéa »");
-      L.push("  — quatre jours à compter de la dernière réunion du comité en liquidation.");
+      L.push("  - quatre jours à compter de la dernière réunion du comité en liquidation.");
       L.push("  Les deux contraintes se cumulent : il faut être après la décision ET dans");
       L.push("  la fenêtre.");
       L.push("");
@@ -4595,7 +4595,7 @@
       L.push("  ☐ Comité consulté selon le renvoi applicable (L. 1233-58, I)");
       L.push("  ☐ Décision de validation ou d'homologation notifiée, ou délai expiré");
       L.push("  ☐ Autorisations de l'inspecteur du travail obtenues pour les salariés");
-      L.push("    protégés — la protection joue « y compris lors d'une procédure de");
+      L.push("    protégés - la protection joue « y compris lors d'une procédure de");
       L.push("    sauvegarde, de redressement ou de liquidation judiciaire » (L. 2411-1,");
       L.push("    lu au corpus du module « comité social et économique »)");
       L.push("  ☐ Date d'expédition retenue : [  ], dans la fenêtre");
@@ -4608,7 +4608,7 @@
       titre(L, "V. Si la fenêtre est expirée");
 
       L.push("N'antidatez rien. Chiffrez, avec le liquidateur, ce qui ne serait pas");
-      L.push("garanti — c'est la seule décision utile à ce stade, et elle se prend sur des");
+      L.push("garanti - c'est la seule décision utile à ce stade, et elle se prend sur des");
       L.push("montants, non sur une impression.");
       L.push("");
       tableau(L, ["Salarié", "Ancienneté", "Indemnité de licenciement",
@@ -4710,8 +4710,8 @@
       modeEmploi(L, [
         "Une précision qui commande la lecture de tout ce document : les articles",
         "L. 1233-57-9 à L. 1233-57-16, qui portent l'obligation elle-même, NE SONT",
-        "DANS AUCUN CORPUS LU PAR L'APPLICATION. Ils sont nommés — les textes lus les",
-        "nomment —, mais ni reproduits, ni résumés, ni paraphrasés. Le contenu exact",
+        "DANS AUCUN CORPUS LU PAR L'APPLICATION. Ils sont nommés - les textes lus les",
+        "nomment -, mais ni reproduits, ni résumés, ni paraphrasés. Le contenu exact",
         "de l'obligation, ses conditions et ses exceptions se vérifient à la source.",
         "",
         "Ce que l'application a lu, en revanche, ce sont les deux articles qui",
@@ -4721,7 +4721,7 @@
         "deux-là sont reproduits mot pour mot ci-dessous, et ce sont eux que ce",
         "document sert à exécuter.",
         "",
-        "Le reste — mandat, journal, motifs d'écartement — n'est pas commandé article",
+        "Le reste - mandat, journal, motifs d'écartement - n'est pas commandé article",
         "par article : c'est ce sans quoi le rapport du L. 1233-57-20 ne pourra pas",
         "être écrit. On ne rend pas compte, à la fin, d'une recherche dont on n'a rien",
         "consigné au fil de l'eau.",
@@ -4733,7 +4733,7 @@
 
       tableau(L, ["Condition", "Ce que la fiche porte"], [
         ["Effectif d'au moins mille salariés",
-          eff === null ? "[non renseigné]" : eff + " salariés — " + (vise ? "condition remplie" : "en deçà du seuil")],
+          eff === null ? "[non renseigné]" : eff + " salariés - " + (vise ? "condition remplie" : "en deçà du seuil")],
         ["Fermeture d'un établissement envisagée",
           ferme === true ? "oui" : ferme === false ? "non" : "[non renseignée]"],
         ["Recherche engagée, telle que déclarée", rech ? "« " + rech + " »" : "[rien de déclaré]"],
@@ -4749,21 +4749,21 @@
         L.push("");
         L.push("  Ce document reste utile à deux titres. D'abord parce que l'effectif du");
         L.push("  groupe peut compter : vérifiez le périmètre exact que les articles");
-        L.push("  L. 1233-57-9 et suivants retiennent — l'application ne les a pas lus et ne");
+        L.push("  L. 1233-57-9 et suivants retiennent - l'application ne les a pas lus et ne");
         L.push("  le dit donc pas. Ensuite parce qu'une recherche de repreneur conduite");
         L.push("  volontairement se documente de la même manière, et sert alors la");
         L.push("  démonstration des mesures d'évitement du plan.");
         L.push("");
       } else if (ferme !== true) {
         L.push("  L'effectif atteint mille salariés, mais la fermeture d'un établissement");
-        L.push("  n'est pas déclarée" + (ferme === false ? "." : " — la donnée manque.") + " L'obligation est");
+        L.push("  n'est pas déclarée" + (ferme === false ? "." : " - la donnée manque.") + " L'obligation est");
         L.push("  attachée au projet de fermeture : renseignez cette donnée avant de");
         L.push("  conclure, et relancez l'audit.");
         L.push("");
       } else {
         L.push("  Effectif d'au moins mille salariés et fermeture d'établissement envisagée :");
         L.push("  l'obligation est en jeu. Le respect des articles L. 1233-57-9 à");
-        L.push("  L. 1233-57-16 est vérifié par l'autorité administrative — voyez le II.");
+        L.push("  L. 1233-57-16 est vérifié par l'autorité administrative - voyez le II.");
         L.push("");
       }
 
@@ -4771,19 +4771,19 @@
 
       L.push("Les deux textes du contrôle administratif citent expressément ces articles.");
       L.push("");
-      L.push("L. 1233-57-2, 4° — pour la validation d'un accord : l'autorité administrative");
+      L.push("L. 1233-57-2, 4° - pour la validation d'un accord : l'autorité administrative");
       L.push("s'assure de « la mise en œuvre effective, le cas échéant, des obligations");
       L.push("prévues aux articles L. 1233-57-9 à L. 1233-57-16, L. 1233-57-19 et");
       L.push("L. 1233-57-20 ».");
       L.push("");
-      L.push("L. 1233-57-3 — pour l'homologation d'un document unilatéral : elle vérifie");
+      L.push("L. 1233-57-3 - pour l'homologation d'un document unilatéral : elle vérifie");
       L.push("« le respect, le cas échéant, des obligations prévues aux articles");
       L.push("L. 1233-57-9 à L. 1233-57-16, L. 1233-57-19 et L. 1233-57-20 ».");
       L.push("");
       L.push("Deux mots à retenir de ces deux phrases. « MISE EN ŒUVRE EFFECTIVE » : ce");
       L.push("n'est pas l'existence d'un mandat qui est vérifiée, c'est ce qui a été fait.");
       L.push("Et « LE CAS ÉCHÉANT » : l'administration vérifie d'abord si l'obligation");
-      L.push("s'appliquait — d'où l'intérêt de documenter aussi le cas où elle ne");
+      L.push("s'appliquait - d'où l'intérêt de documenter aussi le cas où elle ne");
       L.push("s'appliquait pas.");
       L.push("");
       L.push("  [Ce que ces obligations contiennent exactement, l'application ne le dit");
@@ -4901,7 +4901,7 @@
       L.push("Les raisons qui conduisent l'entreprise à accepter cette offre sont les");
       L.push("suivantes, notamment au regard de la capacité de son auteur à garantir la");
       L.push("pérennité de l'activité et de l'emploi de l'établissement : [exposer les");
-      L.push("raisons — nombre d'emplois repris, périmètre d'activité maintenu, moyens");
+      L.push("raisons - nombre d'emplois repris, périmètre d'activité maintenu, moyens");
       L.push("financiers de l'auteur, projet industriel, engagements pris].");
       L.push("");
       L.push("La consultation est ouverte à compter de ce jour ; vous êtes invités à émettre");
@@ -4938,7 +4938,7 @@
       L.push("« RAPPORT SUR LA RECHERCHE D'UN REPRENEUR");
       L.push("Article L. 1233-57-20 du code du travail");
       L.push("");
-      L.push(nom(ctx) + " — établissement de [  ]");
+      L.push(nom(ctx) + " - établissement de [  ]");
       L.push("Présenté au comité social et économique réuni le [DATE]");
       L.push("");
       L.push("1° LES ACTIONS ENGAGÉES POUR RECHERCHER UN REPRENEUR");
@@ -4960,10 +4960,10 @@
       L.push("insuffisant, conditions financières, conditions suspensives non levées,");
       L.push("absence de projet industriel. Un motif par offre, et rattaché à des éléments.]");
       L.push("");
-      L.push("Fait à " + ville(ctx) + ", le [DATE] — " + signataire(ctx) + " »");
+      L.push("Fait à " + ville(ctx) + ", le [DATE] - " + signataire(ctx) + " »");
       L.push("");
-      L.push("  Présenté au comité le [DATE] — porté au procès-verbal : ☐");
-      L.push("  Communiqué à l'autorité administrative le [DATE] — accusé conservé : ☐");
+      L.push("  Présenté au comité le [DATE] - porté au procès-verbal : ☐");
+      L.push("  Communiqué à l'autorité administrative le [DATE] - accusé conservé : ☐");
       L.push("");
 
       titre(L, "VII. Le suivi de l'information du comité au fil des réunions");
@@ -4986,7 +4986,7 @@
 
       titre(L, "VOTRE CALENDRIER");
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous datez le mandat et vous ouvrez le");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous datez le mandat et vous ouvrez le");
       L.push("journal. La recherche s'engage DÈS l'information du comité sur le projet de");
       L.push("fermeture, et non après : c'est la date du mandat qui le prouvera.");
       L.push("");
@@ -5007,7 +5007,7 @@
         L.push("tard à cette réunion, et non après.");
         L.push("");
         L.push("Prévoyez de le communiquer à l'autorité administrative dans la foulée, le " +
-          jourPlus(dr, 1) + " au plus tard — avant, en tout cas, le dépôt de la demande");
+          jourPlus(dr, 1) + " au plus tard - avant, en tout cas, le dépôt de la demande");
         L.push("de validation ou d'homologation, puisque c'est elle qui vérifie le respect");
         L.push("de cette obligation (L. 1233-57-2, 4° ; L. 1233-57-3).");
         L.push("");
@@ -5018,7 +5018,7 @@
         L.push("");
       }
       L.push("Une recherche engagée tard ne se rattrape pas en la prolongeant : elle se");
-      L.push("constate telle qu'elle a eu lieu. Ce qui se rattrape, c'est le compte rendu —");
+      L.push("constate telle qu'elle a eu lieu. Ce qui se rattrape, c'est le compte rendu -");
       L.push("à condition d'avoir consigné quelque chose à rendre.");
 
       pied(L, ["L. 1233-30", "L. 1233-57-2", "L. 1233-57-3", "L. 1233-57-19",

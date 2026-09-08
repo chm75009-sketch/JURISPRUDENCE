@@ -2,8 +2,8 @@
 
    Le .docx est écrit ici, à la main, en OOXML minimal. C'est délibéré et c'est
    la consigne du dépôt : les fichiers produits par la bibliothèque JavaScript
-   « docx » sont refusés par Word — « des problèmes ont été décelés dans son
-   contenu » — et le format conservateur, celui qu'écrit python-docx, passe
+   « docx » sont refusés par Word, « des problèmes ont été décelés dans son
+   contenu », et le format conservateur, celui qu'écrit python-docx, passe
    toujours. On s'en tient donc au strict nécessaire : des paragraphes, une mise
    en forme directe sans feuille de styles, des tableaux bordés, et une archive
    dont les entrées sont stockées telles quelles, sans compression.
@@ -116,16 +116,16 @@
     sur: function (i) { return par(i.t, { taille: 18, couleur: "5F6874" }); },
     p: function (i) { return par(i.t); },
     note: function (i) { return par(i.t, { taille: 18, couleur: "5F6874" }); },
-    puce: function (i) { return par("— " + i.t, { puce: true }); },
+    puce: function (i) { var t = String(i.t || ""); return par(/^[-•]/.test(t) ? t : "- " + t, { puce: true }); },
     trait: function () { return par("________________________________________", { couleur: "DCDFE4" }); },
     saut: function () { return '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'; },
     enc: function (i) { return par(i.titre, { gras: true, cadre: true }) + par(i.t, { cadre: true }); },
     etape: function (i) { return par(i.t + (i.compte ? "  ·  " + i.compte : ""), { gras: true, couleur: "1F3864", espaceAvant: 200 }); },
     acte: function (i) { return par(i.n + ". " + i.t + "  [" + i.priorite + "]", { gras: true, cadre: true }) +
-      par((i.etat ? i.etat + " — " : "") + i.pourquoi + "  ·  " + i.id, { taille: 18, couleur: "5F6874", cadre: true }); },
+      par((i.etat ? i.etat + ", " : "") + i.pourquoi + "  ·  " + i.id, { taille: 18, couleur: "5F6874", cadre: true }); },
     interdit: function (i) { return par(i.t, { gras: true, couleur: "8E1B1B", cadre: true }) +
       par(i.pourquoi + "  ·  " + i.id, { taille: 18, couleur: "5F6874", cadre: true }); },
-    acquis: function (i) { return par("✓ " + i.t + " — " + i.base, { puce: true }); },
+    acquis: function (i) { return par("✓ " + i.t + ", " + i.base, { puce: true }); },
     table: function (i) { return tableau(i.head, i.rows); },
   };
 

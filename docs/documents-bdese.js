@@ -1,4 +1,4 @@
-/* Les documents que l'application PRODUIT — module « base de données
+/* Les documents que l'application PRODUIT, module « base de données
    économiques, sociales et environnementales ».
 
    POURQUOI CE FICHIER EXISTE
@@ -20,7 +20,7 @@
    qui se bornerait à écrire « reportez-vous à l'article R. 2312-9 » rendrait à
    l'employeur exactement le problème qu'il a. La grille est donc déployée :
    R. 2312-8 en dessous de trois cents salariés, R. 2312-9 à partir de trois
-   cents, et les DEUX lorsque l'effectif n'est pas connu — plutôt que d'en
+   cents, et les DEUX lorsque l'effectif n'est pas connu, plutôt que d'en
    deviner un.
 
    QUATRE RÈGLES, TENUES PARTOUT
@@ -28,28 +28,28 @@
    1. Rien qui n'ait été lu à la source. Les articles cités ici figurent dans
       moteur/bdese/textes-bdese.json avec leur identifiant de version, ou dans
       le fondement du contrôle auquel le document répond. Les articles seulement
-      RENVOYÉS par un texte lu — L. 2232-12, L. 1142-8, L. 2315-27, L. 6315-1,
-      L. 23-12-1 du code de commerce — sont NOMMÉS, jamais reproduits ni
+      RENVOYÉS par un texte lu, L. 2232-12, L. 1142-8, L. 2315-27, L. 6315-1,
+      L. 23-12-1 du code de commerce, sont NOMMÉS, jamais reproduits ni
       paraphrasés : le module ne les a pas lus, et il le dit à l'endroit même où
       le lecteur pourrait croire qu'il les connaît.
 
    2. Le contenu du décret n'est pas récrit : il est REPRIS du découpage que
       moteur/bdese/contenu-bdese.js opère sur le texte capté, et dont la
       couverture est mesurée à cent pour cent. La table ARBRE ci-dessous est la
-      sortie de ce découpage — mêmes libellés, mot pour mot, avec la version de
+      sortie de ce découpage, mêmes libellés, mot pour mot, avec la version de
       l'article. Réécrire ces tableaux à la main aurait garanti des écarts
       silencieux à la prochaine modification du décret.
 
    3. Les faits et les chiffres ne s'inventent jamais. Aucun document n'écrit la
       masse salariale, les effectifs par catégorie, les rémunérations ni les
       résultats. Tout cela sort entre crochets, avec l'indication de la source où
-      l'employeur ira le chercher — déclaration sociale nominative, comptes
+      l'employeur ira le chercher, déclaration sociale nominative, comptes
       annuels, registre unique du personnel. L'indication de source est une aide
       à la recherche, pas une affirmation sur l'entreprise.
 
    4. Aucune peine annoncée qui ne soit portée par un texte capté. Le corpus de
       ce module ne contient AUCUN texte pénal ni aucune pénalité financière
-      propres à la base de données — c'est déjà le constat de
+      propres à la base de données, c'est déjà le constat de
       regularisation-bdese.js, qui n'emploie ni gravité 1 ni gravité 2. Aucun
       document ne menace donc d'une amende. Ce qui se joue, et qui a été lu,
       c'est l'irrégularité opposable : une consultation dont le délai n'a pas
@@ -74,11 +74,11 @@
      Sortie de moteur/bdese/contenu-bdese.js, publiée dans _bdese.json : les
      rubriques, sections, sujets et informations des articles R. 2312-8 et
      R. 2312-9, avec leur identifiant de version. Chaque libellé se retrouve mot
-     pour mot dans le texte capté — c'est la garantie « fidelite() » du
+     pour mot dans le texte capté, c'est la garantie « fidelite() » du
      découpage, et elle bloque la publication du module quand elle échoue.
 
-     Le renvoi de R. 2312-9 vers le 1° A e) et f) de R. 2312-8 — formation
-     professionnelle et conditions de travail — est déjà EXÉCUTÉ dans cette
+     Le renvoi de R. 2312-9 vers le 1° A e) et f) de R. 2312-8, formation
+     professionnelle et conditions de travail, est déjà EXÉCUTÉ dans cette
      table : les deux sujets y figurent avec la marque de leur origine.
      ══════════════════════════════════════════════════════════════════════ */
 
@@ -629,7 +629,7 @@
                   informations: [] },
                 { lettre: "i", intitule: "Montant des rémunérations (17) : Choix de deux indicateurs dans l'un des groupes suivants : -rapport entre la masse salariale annuelle (18) (II) et l'effectif mensuel moyen",
                   informations: [
-                    "rémunération moyenne du mois de décembre (effectif permanent) hors primes à périodicité non mensuelle ― base 35 heures (II)",
+                    "rémunération moyenne du mois de décembre (effectif permanent) hors primes à périodicité non mensuelle - base 35 heures (II)",
                     "OU -rémunération mensuelle moyenne (19) (II)",
                     "part des primes à périodicité non mensuelle dans la déclaration de salaire (II)",
                     "grille des rémunérations (20)"
@@ -855,11 +855,11 @@
       ] },
   };
   /* Le plancher de l'article L. 2312-21, alinéa 3, relevé dans le texte capté
-     par contenu-bdese.js — dix thèmes, dans l'ordre de la phrase. Ce sont LES
+     par contenu-bdese.js, dix thèmes, dans l'ordre de la phrase. Ce sont LES
      DIX THÈMES DU PLANCHER DE L'ACCORD, à ne pas confondre avec les dix thèmes
      de l'article L. 2312-36 : le plancher scinde les investissements et les
-     fonds propres/endettement, et il laisse tomber la sous-traitance — que le
-     décret nomme « partenariats » — et les transferts intragroupe. */
+     fonds propres/endettement, et il laisse tomber la sous-traitance, que le
+     décret nomme « partenariats », et les transferts intragroupe. */
   var PLANCHER = [
     "l'investissement social",
     "l'investissement matériel et immatériel",
@@ -876,8 +876,8 @@
   /* La correspondance entre le thème de la loi et l'intitulé du décret, telle
      que plancher-bdese.js la déclare et la vérifie au chargement du module. */
   var CORRESPONDANCE = [
-    ["l'investissement social", "1° Investissements — section A « Investissement social »"],
-    ["l'investissement matériel et immatériel", "1° Investissements — section B « Investissement matériel et immatériel »"],
+    ["l'investissement social", "1° Investissements, section A « Investissement social »"],
+    ["l'investissement matériel et immatériel", "1° Investissements, section B « Investissement matériel et immatériel »"],
     ["l'égalité professionnelle entre les femmes et les hommes au sein de l'entreprise", "2° « Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise »"],
     ["les fonds propres", "3° « Fonds propres, endettement et impôts »"],
     ["l'endettement", "3° « Fonds propres, endettement et impôts »"],
@@ -891,7 +891,7 @@
   /* ══════════════════════════════════════════════════════════════════════
      OÙ LA DONNÉE SE TROUVE DANS L'ENTREPRISE
 
-     Une aide à la recherche, rubrique par rubrique — jamais une affirmation sur
+     Une aide à la recherche, rubrique par rubrique, jamais une affirmation sur
      l'entreprise. Le document dit où aller chercher ; il n'écrit ni le chiffre
      ni le fait, qui sortent entre crochets.
      ══════════════════════════════════════════════════════════════════════ */
@@ -904,7 +904,7 @@
        "professionnelle · système d'information des ressources humaines " +
        "(embauches, promotions, formation) · déclarations relatives aux " +
        "indicateurs d'écarts de rémunération",
-    3: "comptes annuels — bilan, compte de résultat, annexe · liasse fiscale · " +
+    3: "comptes annuels, bilan, compte de résultat, annexe · liasse fiscale · " +
        "tableau des emprunts et des échéances · avis d'imposition et crédits d'impôt",
     4: "DSN · journal et livre de paie · procès-verbaux d'assemblée et rapports " +
        "sur les rémunérations des mandataires sociaux · contrats de travail des " +
@@ -988,7 +988,7 @@
   function etat(v, oui, non) {
     if (v === true || v === "oui") return oui;
     if (v === false || v === "non") return non;
-    return "non renseigné — à vérifier sur la base elle-même";
+    return "non renseigné, à vérifier sur la base elle-même";
   }
   function estOui(v) { return v === true || v === "oui"; }
   function estNon(v) { return v === false || v === "non"; }
@@ -996,7 +996,7 @@
     return v === undefined || v === null || v === "" ||
       (Array.isArray(v) && !v.length) || (typeof v === "string" && !v.trim());
   }
-  /* Une liste du dossier, quelle que soit sa forme — tableau, chaîne à retours
+  /* Une liste du dossier, quelle que soit sa forme, tableau, chaîne à retours
      à la ligne, valeur unique. */
   function liste(v) {
     if (Array.isArray(v)) return v.map(function (x) { return String(x); }).filter(Boolean);
@@ -1025,7 +1025,7 @@
     for (var i = 1; i < lignes.length; i++) L.push((retrait || "") + lignes[i]);
   }
 
-  /* Une date du dossier, écrite en toutes lettres — ou son crochet. */
+  /* Une date du dossier, écrite en toutes lettres, ou son crochet. */
   function estISO(v) {
     return typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) &&
       !isNaN(new Date(v + "T12:00:00Z").getTime());
@@ -1039,7 +1039,7 @@
     var d = dateDe(iso);
     return d ? leJour(d) : "[" + (quoi || "date") + "]";
   }
-  /* Le même quantième, n mois plus tard — la manière dont regime-bdese.js
+  /* Le même quantième, n mois plus tard, la manière dont regime-bdese.js
      compte les douze mois de L. 2312-2, l'an de L. 2312-34 et le mois de
      R. 2312-6. */
   function moisApres(iso, n) {
@@ -1064,7 +1064,7 @@
     L.push("Ce que vous lisez est " + quoi + ", rédigé au nom de votre entreprise.");
     L.push("Ce qui est entre crochets vous appartient : ce sont vos chiffres, vos");
     L.push("dates, vos choix. L'application ne les connaît pas et ne les inventera");
-    L.push("pas — un document qui devinerait la masse salariale ou les effectifs par");
+    L.push("pas, un document qui devinerait la masse salariale ou les effectifs par");
     L.push("catégorie serait pire qu'absent. Remplacez chaque crochet, ou supprimez");
     L.push("la ligne si elle ne vous concerne pas.");
     L.push("");
@@ -1076,7 +1076,7 @@
     L.push("");
   }
 
-  /* Quel texte commande le contenu de la base — l'ordre des trois étages, écrit
+  /* Quel texte commande le contenu de la base, l'ordre des trois étages, écrit
      avant toute grille. Aucun document de ce fichier ne déploie une grille sans
      avoir posé cette question : monter la grille du décret dans une entreprise
      couverte par un accord, c'est réclamer ce qui n'est pas dû. */
@@ -1085,7 +1085,7 @@
     var L = ["════ QUEL TEXTE COMMANDE VOTRE BASE ════", ""];
     L.push("L'ordre ne se contourne pas, et il commande tout le reste :");
     L.push("");
-    L.push("  1. UN ACCORD D'ENTREPRISE — « un accord d'entreprise conclu dans les");
+    L.push("  1. UN ACCORD D'ENTREPRISE : « un accord d'entreprise conclu dans les");
     L.push("     conditions prévues au premier alinéa de l'article L. 2232-12 ou, en");
     L.push("     l'absence de délégué syndical, un accord entre l'employeur et le");
     L.push("     comité social et économique, adopté à la majorité des membres");
@@ -1101,7 +1101,7 @@
     L.push("     entreprises de moins de trois cents salariés » (L. 2312-21,");
     L.push("     dernier alinéa).");
     L.push("");
-    L.push("  3. À DÉFAUT DES DEUX, LE DÉCRET — R. 2312-8 en dessous de trois cents");
+    L.push("  3. À DÉFAUT DES DEUX, LE DÉCRET : R. 2312-8 en dessous de trois cents");
     L.push("     salariés, R. 2312-9 à partir de trois cents.");
     L.push("");
     L.push("Dans tous les cas, le PLANCHER de l'alinéa 3 de L. 2312-21 reste dû :");
@@ -1111,18 +1111,18 @@
     L.push("CE QUE VOTRE DOSSIER DÉCLARE");
     L.push("");
     L.push("  · accord d'entreprise définissant la base : " +
-      etat(f.accordEntreprise, "OUI" + (estOui(f.accordEntrepriseVerse) ? " — et il est versé" :
-        " — mais il n'est PAS versé : sans son texte, la grille due ne peut pas être établie"), "non"));
+      etat(f.accordEntreprise, "OUI" + (estOui(f.accordEntrepriseVerse) ? ", et il est versé" :
+        ", mais il n'est PAS versé : sans son texte, la grille due ne peut pas être établie"), "non"));
     L.push("  · accord de branche définissant la base : " +
-      etat(f.accordBranche, "OUI" + (estOui(f.accordBrancheVerse) ? " — et il est versé" :
-        " — mais il n'est PAS versé"), "non"));
-    L.push("  · effectif : " + (r.connu ? r.effectif + " salariés" : "[EFFECTIF — non renseigné]"));
+      etat(f.accordBranche, "OUI" + (estOui(f.accordBrancheVerse) ? ", et il est versé" :
+        ", mais il n'est PAS versé"), "non"));
+    L.push("  · effectif : " + (r.connu ? r.effectif + " salariés" : "[EFFECTIF : non renseigné]"));
     L.push("");
     if (estOui(f.accordEntreprise) || estOui(f.accordBranche)) {
       L.push("UN ACCORD EST DÉCLARÉ. La grille déployée plus bas est celle du décret :");
       L.push("elle ne vaut alors que comme point de comparaison, et comme rappel du");
       L.push("plancher que votre accord ne pouvait pas descendre. C'est le texte de");
-      L.push("votre accord qui fixe ce qui est dû — reportez-vous-y, rubrique par");
+      L.push("votre accord qui fixe ce qui est dû, reportez-vous-y, rubrique par");
       L.push("rubrique, avant de considérer une case comme manquante.");
     } else {
       L.push("Aucun accord n'est déclaré : c'est le décret qui fixe le contenu, et la");
@@ -1138,7 +1138,7 @@
       L.push("");
     } else {
       L.push("Votre effectif étant de " + r.effectif + " salariés, l'article applicable à");
-      L.push("défaut d'accord est l'article " + r.article + " — " + r.seuil + ".");
+      L.push("défaut d'accord est l'article " + r.article + ", " + r.seuil + ".");
       L.push("");
     }
     return L;
@@ -1163,10 +1163,10 @@
     L.push("");
     L.push("  " + enteteAnnees(a));
     L.push("");
-    L.push("  · " + a.passees[0] + " et " + a.passees[1] + " — les deux années précédentes. Elles ne se");
+    L.push("  · " + a.passees[0] + " et " + a.passees[1] + ", les deux années précédentes. Elles ne se");
     L.push("    recalculent pas : reprenez-les dans les documents déjà produits.");
-    L.push("  · " + a.courante + " — l'année en cours.");
-    L.push("  · " + a.suivantes.join(", ") + " — les trois années suivantes, en données chiffrées");
+    L.push("  · " + a.courante + ", l'année en cours.");
+    L.push("  · " + a.suivantes.join(", ") + ", les trois années suivantes, en données chiffrées");
     L.push("    ou, à défaut, en GRANDES TENDANCES. Les grandes tendances suffisent :");
     L.push("    c'est le texte, et exiger le chiffre partout retarderait la base sans");
     L.push("    l'améliorer.");
@@ -1201,7 +1201,7 @@
       var rang = (i + 1 < 10 ? " " : "") + (i + 1);
       pousserPlie(L, CORRESPONDANCE[i][0], 62, "  " + rang + ". ", "      ");
       pousserPlie(L, CORRESPONDANCE[i][1], 62, "      → ", "        ");
-      L.push("      présent dans votre base : [OUI / NON — onglet ou page : ...........]");
+      L.push("      présent dans votre base : [OUI / NON : onglet ou page : ...........]");
       L.push("");
     }
     if (t.length) {
@@ -1210,7 +1210,7 @@
       L.push("");
     }
     L.push("DEUX RUBRIQUES DU DÉCRET NE SONT PAS AU PLANCHER, et il faut le savoir :");
-    L.push("le 8° « Partenariats » — ce que L. 2312-36 nomme la sous-traitance — et le");
+    L.push("le 8° « Partenariats », ce que L. 2312-36 nomme la sous-traitance, et le");
     L.push("9° « Pour les entreprises appartenant à un groupe, transferts commerciaux");
     L.push("et financiers entre les entités du groupe ». Un accord peut donc les");
     L.push("supprimer ; le décret, lui, les impose à défaut d'accord.");
@@ -1229,15 +1229,15 @@
     var arbre = ARBRE[cle];
     var a = anneesDe(ctx);
     var L = [];
-    if (!arbre) { L.push("[Article " + cle + " — non découpé par le module.]"); return L; }
+    if (!arbre) { L.push("[Article " + cle + ", non découpé par le module.]"); return L; }
     L.push(GROS);
     L.push("LA GRILLE DE L'ARTICLE " + arbre.article.toUpperCase() +
-      " — " + arbre.seuil.toUpperCase());
+      ", " + arbre.seuil.toUpperCase());
     L.push(GROS);
     L.push("");
     L.push("Version du texte lue à la source : " + arbre.version + ".");
     L.push("Rubriques : " + arbre.rubriques.length + ". Les libellés ci-dessous sont ceux du");
-    L.push("décret, mot pour mot — ils ne sont ni résumés ni reformulés.");
+    L.push("décret, mot pour mot, ils ne sont ni résumés ni reformulés.");
     L.push("");
     L.push("Chaque case se remplit sur les six colonnes : " + enteteAnnees(a) + ".");
     L.push("");
@@ -1256,7 +1256,7 @@
 
     for (var i = 0; i < arbre.rubriques.length; i++) {
       var r = arbre.rubriques[i];
-      L.push("════ " + r.n + "° — " + r.titre.toUpperCase() + " ════");
+      L.push("════ " + r.n + "° " + r.titre.toUpperCase() + " ════");
       L.push("");
       L.push(r.plancher
         ? "Au plancher de L. 2312-21, alinéa 3 : cette rubrique est due quoi que"
@@ -1265,13 +1265,13 @@
         ? "stipule un accord."
         : "mais à défaut d'accord le décret l'impose.");
       L.push("");
-      pousserPlie(L, "OÙ CHERCHER LA DONNÉE — " + (SOURCES[r.n] || "[à déterminer]"),
+      pousserPlie(L, "OÙ CHERCHER LA DONNÉE : " + (SOURCES[r.n] || "[à déterminer]"),
         66, "", "  ");
       L.push("");
       for (var j = 0; j < r.sections.length; j++) {
         var s = r.sections[j];
         if (s.lettre || s.titre) {
-          pousserPlie(L, (s.lettre ? s.lettre + " — " : "") + s.titre, 66, "  ", "      ");
+          pousserPlie(L, (s.lettre ? s.lettre + ", " : "") + s.titre, 66, "  ", "      ");
           L.push("");
         }
         for (var k = 0; k < s.sujets.length; k++) {
@@ -1279,7 +1279,7 @@
           pousserPlie(L, (u.lettre ? u.lettre + ") " : "· ") + u.intitule, 62, "    ", "       ");
           if (u.renvoi) L.push("       (importé par renvoi : " + u.renvoi + ")");
           for (var m = 0; m < u.informations.length; m++)
-            pousserPlie(L, u.informations[m], 60, "       – ", "         ");
+            pousserPlie(L, u.informations[m], 60, "       - ", "         ");
           if (!opt.sansCases) {
             L.push("       " + a.passees[0] + " : [...]  " + a.passees[1] + " : [...]  " +
               a.courante + " : [...]");
@@ -1296,7 +1296,7 @@
     return L;
   }
 
-  /* La grille du régime applicable — une seule, ou les deux quand l'effectif
+  /* La grille du régime applicable, une seule, ou les deux quand l'effectif
      n'est pas connu. C'est ici que « le contenu du régime descend dans le
      document ». */
   function blocGrilleDuRegime(ctx, r, options) {
@@ -1304,7 +1304,7 @@
     for (var i = 0; i < r.articles.length; i++) {
       if (!r.connu) {
         L.push(GROS);
-        L.push("GRILLE " + (i + 1) + " SUR 2 — À CONSERVER SI VOTRE EFFECTIF EST " +
+        L.push("GRILLE " + (i + 1) + " SUR 2 : À CONSERVER SI VOTRE EFFECTIF EST " +
           (r.articles[i] === "R. 2312-8" ? "INFÉRIEUR" : "AU MOINS ÉGAL") + " À 300");
         L.push(GROS);
         L.push("");
@@ -1318,14 +1318,14 @@
      base à laquelle personne n'a été invité n'est pas mise à disposition, et le
      délai de consultation ne court pas (R. 2312-5). */
   function courrierMAD(ctx, objet, corps) {
-    var L = [GROS, "COURRIER — MISE À DISPOSITION DE LA BASE", GROS, ""];
+    var L = [GROS, "COURRIER : MISE À DISPOSITION DE LA BASE", GROS, ""];
     L.push(nomDe(ctx));
     L.push(adresseDe(ctx));
     L.push("");
     L.push("Aux membres de la délégation du personnel du comité social et économique,");
     L.push("aux membres de la délégation du personnel du comité social et économique");
     L.push("central d'entreprise s'il en existe un, et aux délégués syndicaux");
-    L.push("— ce sont les personnes que le dernier alinéa de L. 2312-36 désigne.");
+    L.push("- ce sont les personnes que le dernier alinéa de L. 2312-36 désigne.");
     L.push("");
     L.push(villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
     L.push("");
@@ -1369,7 +1369,7 @@
   }
   /* Une échéance, en jours depuis aujourd'hui. */
   function ech(ctx, jours, quoi) {
-    return "  · " + leJour(dans(aujourd(ctx), jours)) + " — " + quoi;
+    return "  · " + leJour(dans(aujourd(ctx), jours)) + ", " + quoi;
   }
 
   /* Le pied : d'où vient ce qui est écrit, et ce que le document ne dit pas. */
@@ -1388,7 +1388,7 @@
     L.push("Aucune sanction pénale ni pénalité financière n'est annoncée dans ce");
     L.push("document : le corpus lu par ce module n'en porte aucune qui soit propre à");
     L.push("la base de données. Ce qui est encouru, et qui a été lu, est");
-    L.push("l'irrégularité opposable — la consultation dont le délai n'a pas couru, et");
+    L.push("l'irrégularité opposable, la consultation dont le délai n'a pas couru, et");
     L.push("l'avis négatif acquis au terme.");
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
@@ -1399,17 +1399,17 @@
   }
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-REG-01 — LA NOTE DE RÉGIME
+     BDESE-CTL-REG-01 : LA NOTE DE RÉGIME
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-REG-01", {
-    nom: "La note de régime — quel texte commande votre base, et la pièce qui l'établit",
+    nom: "La note de régime, quel texte commande votre base, et la pièce qui l'établit",
     detail: "La recherche des accords dans l'ordre que la loi impose, la note " +
             "signée qui arrête le régime retenu, le bordereau des pièces et la " +
             "grille qui en découle.",
     produire: function (ctx) {
       var f = F(ctx), r = regimeDe(ctx);
-      var L = entete(ctx, "Note de régime — le texte applicable à la base de données",
+      var L = entete(ctx, "Note de régime, le texte applicable à la base de données",
         "article L. 2312-21 du code du travail");
 
       modeDEmploi(L, "la note qui arrête le texte applicable à votre base");
@@ -1432,7 +1432,7 @@
       L.push("");
       L.push(nomDe(ctx).toUpperCase());
       L.push("");
-      L.push("ARTICLE 1 — LA RECHERCHE ACCOMPLIE");
+      L.push("ARTICLE 1 : LA RECHERCHE ACCOMPLIE");
       L.push("");
       L.push("1.1. Recherche d'un accord d'entreprise définissant la base.");
       L.push("L'article L. 2312-21 n'en connaît que deux formes, et il n'en admet pas");
@@ -1464,35 +1464,35 @@
       L.push("R. 2312-8 en dessous de trois cents salariés, R. 2312-9 à partir de trois");
       L.push("cents. L'effectif se justifie par le relevé mensuel qui l'établit.");
       L.push("");
-      L.push("ARTICLE 2 — LE RÉGIME RETENU");
+      L.push("ARTICLE 2 : LE RÉGIME RETENU");
       L.push("");
       L.push("Le texte qui commande le contenu de la base de " + nomDe(ctx) + " est :");
       L.push("");
       L.push("  [ ] l'accord d'entreprise du .............., versé au dossier ;");
       L.push("  [ ] l'accord de branche du .............., versé au dossier ;");
       if (r.connu) {
-        L.push("  [ ] l'article " + r.article + " du code du travail — l'entreprise comptant");
+        L.push("  [ ] l'article " + r.article + " du code du travail, l'entreprise comptant");
         L.push("      " + r.effectif + " salariés, soit " + r.seuil + ", et aucun accord ne");
         L.push("      définissant la base.");
       } else {
-        L.push("  [ ] l'article R. 2312-8 — effectif inférieur à trois cents salariés ;");
-        L.push("  [ ] l'article R. 2312-9 — effectif d'au moins trois cents salariés.");
+        L.push("  [ ] l'article R. 2312-8, effectif inférieur à trois cents salariés ;");
+        L.push("  [ ] l'article R. 2312-9, effectif d'au moins trois cents salariés.");
       }
       L.push("");
       L.push("Date à laquelle ce régime est retenu : " + leJour(aujourd(ctx)) + ".");
       L.push("");
-      L.push("ARTICLE 3 — LE PLANCHER, QUEL QUE SOIT LE RÉGIME");
+      L.push("ARTICLE 3 : LE PLANCHER, QUEL QUE SOIT LE RÉGIME");
       L.push("");
       L.push("Quel que soit le texte retenu, les dix thèmes de l'alinéa 3 de");
       L.push("L. 2312-21 sont dus : « la base de données comporte au moins les thèmes");
       L.push("suivants ». Ils sont repris à l'article 4 ci-dessous.");
       L.push("");
-      L.push("ARTICLE 4 — LE BORDEREAU DES PIÈCES");
+      L.push("ARTICLE 4 : LE BORDEREAU DES PIÈCES");
       L.push("");
-      L.push("  1. [Accord d'entreprise définissant la base — texte complet et daté]");
+      L.push("  1. [Accord d'entreprise définissant la base, texte complet et daté]");
       L.push("  2. [Le cas échéant, procès-verbal d'adoption par le comité à la");
       L.push("     majorité des membres titulaires, ou signatures syndicales]");
-      L.push("  3. [Accord de branche, s'il est invoqué — texte complet]");
+      L.push("  3. [Accord de branche, s'il est invoqué, texte complet]");
       L.push("  4. [Relevé d'effectif mensuel établissant le seuil retenu]");
       L.push("  5. [Le cas échéant, constat écrit qu'aucun accord ne définit la base]");
       L.push("");
@@ -1529,17 +1529,17 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-REG-02 — L'ACCORD DE BRANCHE ÉCARTÉ
+     BDESE-CTL-REG-02 : L'ACCORD DE BRANCHE ÉCARTÉ
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-REG-02", {
-    nom: "La note de régime rectificative — l'accord de branche écarté",
+    nom: "La note de régime rectificative, l'accord de branche écarté",
     detail: "Le constat qui écarte l'accord de branche, le texte réellement " +
             "applicable, le tableau des écarts à combler, le courrier aux élus " +
             "et le calendrier de complètement.",
     produire: function (ctx) {
       var f = F(ctx), r = regimeDe(ctx);
-      var L = entete(ctx, "Note de régime rectificative — le texte réellement applicable à la base",
+      var L = entete(ctx, "Note de régime rectificative, le texte réellement applicable à la base",
         "article L. 2312-21, dernier alinéa, du code du travail");
 
       modeDEmploi(L, "la note qui écarte l'accord de branche et rétablit le texte applicable");
@@ -1570,8 +1570,8 @@
       L.push("");
       L.push("  · accord de branche invoqué : " + etat(f.accordBranche, "OUI", "non"));
       L.push("  · accord d'entreprise définissant la base : " +
-        etat(f.accordEntreprise, "OUI — la branche est alors écartée par le texte lui-même", "non"));
-      L.push("  · effectif : " + (r.connu ? r.effectif + " salariés" : "[EFFECTIF — non renseigné]"));
+        etat(f.accordEntreprise, "OUI : la branche est alors écartée par le texte lui-même", "non"));
+      L.push("  · effectif : " + (r.connu ? r.effectif + " salariés" : "[EFFECTIF : non renseigné]"));
       if (r.connu && r.effectif >= 300) {
         L.push("");
         L.push("  → L'EFFECTIF FERME À LUI SEUL LA VOIE DE LA BRANCHE : " + r.effectif +
@@ -1581,7 +1581,7 @@
       } else if (r.connu) {
         L.push("");
         L.push("  → L'effectif de " + r.effectif + " salariés est inférieur à trois cents : la");
-        L.push("    première condition est remplie. Reste la seconde — l'absence");
+        L.push("    première condition est remplie. Reste la seconde, l'absence");
         L.push("    d'accord d'entreprise.");
       }
       L.push("");
@@ -1592,13 +1592,13 @@
       L.push("");
       L.push(nomDe(ctx).toUpperCase());
       L.push("");
-      L.push("ARTICLE 1 — LE CONSTAT");
+      L.push("ARTICLE 1 : LE CONSTAT");
       L.push("");
       L.push("1.1. Effectif de l'entreprise : " +
         (r.connu ? r.effectif + " salariés" : "[EFFECTIF]") + ", établi par [relevé");
       L.push("d'effectif mensuel / déclarations sociales nominatives de la période].");
       L.push("Date à laquelle le seuil de trois cents salariés a été franchi, s'il l'a");
-      L.push("été : [DATE — douze mois consécutifs de dépassement, L. 2312-34].");
+      L.push("été : [DATE : douze mois consécutifs de dépassement, L. 2312-34].");
       L.push("");
       L.push("1.2. Existence d'un accord d'entreprise au sens du premier alinéa de");
       L.push("L. 2312-21 : [OUI, du .............. / NON, constat du ..............].");
@@ -1606,20 +1606,20 @@
       L.push("1.3. En conséquence, l'accord de branche [invoqué : ..................]");
       L.push("[ne peut pas / peut] définir la base de l'entreprise.");
       L.push("");
-      L.push("ARTICLE 2 — LE TEXTE RÉELLEMENT APPLICABLE");
+      L.push("ARTICLE 2 : LE TEXTE RÉELLEMENT APPLICABLE");
       L.push("");
       L.push("Le texte qui commande le contenu de la base est :");
       L.push("");
       L.push("  [ ] l'accord d'entreprise du .............. ;");
       if (r.connu) {
-        L.push("  [ ] l'article " + r.article + " — " + r.seuil + ", et aucun accord");
+        L.push("  [ ] l'article " + r.article + ", " + r.seuil + ", et aucun accord");
         L.push("      d'entreprise ne définissant la base.");
       } else {
-        L.push("  [ ] l'article R. 2312-8 — moins de trois cents salariés ;");
-        L.push("  [ ] l'article R. 2312-9 — au moins trois cents salariés.");
+        L.push("  [ ] l'article R. 2312-8, moins de trois cents salariés ;");
+        L.push("  [ ] l'article R. 2312-9, au moins trois cents salariés.");
       }
       L.push("");
-      L.push("ARTICLE 3 — LES ÉCARTS À COMBLER");
+      L.push("ARTICLE 3 : LES ÉCARTS À COMBLER");
       L.push("");
       L.push("La grille déjà montée est comparée à celle que ce texte commande,");
       L.push("rubrique par rubrique. La grille due est déployée en entier plus bas :");
@@ -1677,11 +1677,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-DAT-01 — LA NOTE D'EXIGIBILITÉ
+     BDESE-CTL-DAT-01 : LA NOTE D'EXIGIBILITÉ
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-DAT-01", {
-    nom: "La note d'exigibilité — le seuil de cinquante salariés et les douze mois de L. 2312-2",
+    nom: "La note d'exigibilité, le seuil de cinquante salariés et les douze mois de L. 2312-2",
     detail: "Le relevé d'effectif mois par mois, la date d'atteinte du seuil, le " +
             "terme du délai de douze mois, la réserve du mandat inférieur à un an " +
             "et le calendrier qui en découle.",
@@ -1689,7 +1689,7 @@
       var f = F(ctx), r = regimeDe(ctx);
       var d50 = f.dateSeuil50Atteint, fin = f.dateFinMandat, ren = f.dateRenouvellementCSE;
       var terme = estISO(d50) ? moisApres(d50, 12) : null;
-      var L = entete(ctx, "Note d'exigibilité — atteinte du seuil de cinquante salariés",
+      var L = entete(ctx, "Note d'exigibilité, atteinte du seuil de cinquante salariés",
         "article L. 2312-2 du code du travail");
 
       modeDEmploi(L, "la note qui établit depuis quand la base vous est due");
@@ -1734,7 +1734,7 @@
       L.push("");
       L.push(nomDe(ctx).toUpperCase());
       L.push("");
-      L.push("ARTICLE 1 — LE RELEVÉ D'EFFECTIF, MOIS PAR MOIS");
+      L.push("ARTICLE 1 : LE RELEVÉ D'EFFECTIF, MOIS PAR MOIS");
       L.push("");
       L.push("Ce n'est pas l'effectif d'un jour qui compte, mais douze mois consécutifs");
       L.push("d'effectif au moins égal à cinquante. Le relevé se lit dans les");
@@ -1750,7 +1750,7 @@
       L.push("Effectif de l'entreprise à la date de la présente note : " +
         (r.connu ? r.effectif + " salariés." : "[EFFECTIF]."));
       L.push("");
-      L.push("ARTICLE 2 — LA DATE D'ATTEINTE DU SEUIL");
+      L.push("ARTICLE 2 : LA DATE D'ATTEINTE DU SEUIL");
       L.push("");
       if (estISO(d50)) {
         L.push("Votre dossier porte cette date : le seuil de cinquante salariés a été");
@@ -1761,19 +1761,19 @@
         L.push("dernier mois de la série de douze, et non le premier.");
       }
       L.push("");
-      L.push("ARTICLE 3 — LE TERME DU DÉLAI DE DOUZE MOIS");
+      L.push("ARTICLE 3 : LE TERME DU DÉLAI DE DOUZE MOIS");
       L.push("");
       if (terme) {
         L.push("Douze mois plus tard : le " + jour(terme) + ". À compter de ce jour, le");
         L.push("comité exerce l'ensemble des attributions récurrentes d'information et");
-        L.push("de consultation — la base de données en fait partie.");
+        L.push("de consultation, la base de données en fait partie.");
       } else {
         L.push("Douze mois après la date de l'article 2 : [DATE D'EXIGIBILITÉ]. À");
         L.push("compter de ce jour, le comité exerce l'ensemble des attributions");
-        L.push("récurrentes — la base en fait partie.");
+        L.push("récurrentes, la base en fait partie.");
       }
       L.push("");
-      L.push("ARTICLE 4 — LA RÉSERVE DU MANDAT INFÉRIEUR À UN AN");
+      L.push("ARTICLE 4 : LA RÉSERVE DU MANDAT INFÉRIEUR À UN AN");
       L.push("");
       L.push("Si, à l'expiration de ce délai de douze mois, le mandat du comité restant");
       L.push("à courir est inférieur à un an, le délai court à compter de son");
@@ -1796,7 +1796,7 @@
         L.push("Terme reporté correspondant : " + jour(moisApres(ren, 12)) + ".");
       }
       L.push("");
-      L.push("ARTICLE 5 — L'HYPOTHÈSE DE L'ENTREPRISE SANS COMITÉ");
+      L.push("ARTICLE 5 : L'HYPOTHÈSE DE L'ENTREPRISE SANS COMITÉ");
       L.push("");
       L.push("Si l'entreprise n'est pas pourvue d'un comité social et économique, le");
       L.push("délai n'est pas le même : le comité exerce l'ensemble des attributions à");
@@ -1804,7 +1804,7 @@
       L.push("Date de mise en place du comité, le cas échéant : [DATE].");
       L.push("Terme correspondant : [DATE + un an].");
       L.push("");
-      L.push("ARTICLE 6 — LA DATE RETENUE");
+      L.push("ARTICLE 6 : LA DATE RETENUE");
       L.push("");
       L.push("La date à compter de laquelle la base de données est due dans");
       L.push(nomDe(ctx) + " est le [DATE RETENUE], établie par [pièce].");
@@ -1838,8 +1838,8 @@
         ech(ctx, 10, "le terme des douze mois est calculé, et la réserve du mandat"),
         "    inférieur à un an est vérifiée sur la date de fin des mandats.",
         ech(ctx, 14, "la note est signée et versée au dossier."),
-        terme ? "  · " + leJour(dateDe(terme)) + " — terme calculé sur la date de votre dossier."
-              : "  · [DATE + 12 mois] — terme, dès que la date de l'article 2 est établie.",
+        terme ? "  · " + leJour(dateDe(terme)) + ", terme calculé sur la date de votre dossier."
+              : "  · [DATE + 12 mois], terme, dès que la date de l'article 2 est établie.",
       ]));
 
       return L.concat(pied("L. 2312-2, L. 2312-18, L. 2312-21, L. 2312-36")).join("\n");
@@ -1847,7 +1847,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-DAT-02 — LE FRANCHISSEMENT DU SEUIL DE TROIS CENTS
+     BDESE-CTL-DAT-02 : LE FRANCHISSEMENT DU SEUIL DE TROIS CENTS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-DAT-02", {
@@ -1895,26 +1895,26 @@
       L.push("");
       L.push(nomDe(ctx).toUpperCase());
       L.push("");
-      L.push("ARTICLE 1 — LES DOUZE MOIS CONSÉCUTIFS DE DÉPASSEMENT");
+      L.push("ARTICLE 1 : LES DOUZE MOIS CONSÉCUTIFS DE DÉPASSEMENT");
       L.push("");
       L.push("  mois        │ effectif │ > 300 ?   source : déclaration sociale");
       L.push("  ────────────┼──────────┼────────   nominative, registre du personnel");
       for (var m = 0; m < 12; m++)
         L.push("  [.........] │ [......] │ [ ]");
       L.push("");
-      L.push("Date à laquelle le seuil est réputé franchi — dernier mois de la série :");
+      L.push("Date à laquelle le seuil est réputé franchi, dernier mois de la série :");
       L.push(estISO(d300) ? "  " + jour(d300) + " (portée par votre dossier)." : "  [DATE DE FRANCHISSEMENT].");
       L.push("");
-      L.push("ARTICLE 2 — LA DATE LIMITE DE MISE EN CONFORMITÉ COMPLÈTE");
+      L.push("ARTICLE 2 : LA DATE LIMITE DE MISE EN CONFORMITÉ COMPLÈTE");
       L.push("");
       L.push(limite
         ? "  Un an plus tard : le " + jour(limite) + "."
         : "  Un an après la date de l'article 1 : [DATE LIMITE].");
       L.push("");
       L.push("À cette date, la base doit porter le contenu de l'article R. 2312-9 en");
-      L.push("entier — à défaut d'accord de L. 2312-21 qui en disposerait autrement.");
+      L.push("entier, à défaut d'accord de L. 2312-21 qui en disposerait autrement.");
       L.push("");
-      L.push("ARTICLE 3 — CE QUE R. 2312-9 AJOUTE À R. 2312-8");
+      L.push("ARTICLE 3 : CE QUE R. 2312-9 AJOUTE À R. 2312-8");
       L.push("");
       L.push("Les deux articles ne se recouvrent pas. Le tableau ci-dessous relève, sur");
       L.push("le découpage des deux textes, les sections que l'article R. 2312-9 porte");
@@ -1947,7 +1947,7 @@
         nAjouts += nouvelles.length;
         L.push("  " + rg.n + "° " + rg.titre);
         for (var s3 = 0; s3 < nouvelles.length; s3++) {
-          pousserPlie(L, (nouvelles[s3].lettre ? nouvelles[s3].lettre + " — " : "") +
+          pousserPlie(L, (nouvelles[s3].lettre ? nouvelles[s3].lettre + ", " : "") +
             nouvelles[s3].titre, 60, "      + ", "        ");
           L.push("        service : [..............]   échéance : [..............]");
         }
@@ -1964,7 +1964,7 @@
       L.push("sujets sont portés dans la grille ci-dessous, à leur place, avec la");
       L.push("marque de leur origine.");
       L.push("");
-      L.push("ARTICLE 4 — L'ÉTALEMENT SUR L'ANNÉE");
+      L.push("ARTICLE 4 : L'ÉTALEMENT SUR L'ANNÉE");
       L.push("");
       L.push("Le complètement s'étale sur l'année que L. 2312-34 laisse, de sorte que");
       L.push("la base soit complète à la date limite de l'article 2. Reportez ci-dessus");
@@ -2000,8 +2000,8 @@
         ech(ctx, 30, "chaque section ajoutée par R. 2312-9 a son service et son échéance."),
         ech(ctx, 90, "les sections nouvelles sont montées ; le renseignement sur les six"),
         "    années commence.",
-        limite ? "  · " + leJour(dateDe(limite)) + " — DATE LIMITE de mise en conformité complète (L. 2312-34)."
-               : "  · [DATE DE FRANCHISSEMENT + un an] — date limite de mise en conformité.",
+        limite ? "  · " + leJour(dateDe(limite)) + ", DATE LIMITE de mise en conformité complète (L. 2312-34)."
+               : "  · [DATE DE FRANCHISSEMENT + un an], date limite de mise en conformité.",
       ]));
 
       return L.concat(pied("L. 2312-18, L. 2312-21, L. 2312-34, L. 2312-36, R. 2312-5, " +
@@ -2010,17 +2010,17 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-CNT-01 — LES THÈMES DU PLANCHER
+     BDESE-CTL-CNT-01 : LES THÈMES DU PLANCHER
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-CNT-01", {
-    nom: "La grille du plancher légal — les dix thèmes que l'accord ne peut pas descendre",
+    nom: "La grille du plancher légal, les dix thèmes que l'accord ne peut pas descendre",
     detail: "Les dix thèmes de L. 2312-21, alinéa 3, un par un, avec l'intitulé " +
             "du décret qui les porte, la pièce qui les alimente, le service " +
             "responsable et les six années.",
     produire: function (ctx) {
       var f = F(ctx), r = regimeDe(ctx), a = anneesDe(ctx);
-      var L = entete(ctx, "Grille de la base — thèmes du plancher légal",
+      var L = entete(ctx, "Grille de la base, thèmes du plancher légal",
         "article L. 2312-21, alinéa 3, du code du travail");
 
       modeDEmploi(L, "la grille des dix thèmes que votre base doit comporter en toute hypothèse");
@@ -2036,7 +2036,7 @@
       L.push("consultation qui s'en réclame peut être jugée irrégulière, et le délai de");
       L.push("R. 2312-5 ne court pas sur ce qui n'a pas été mis à disposition.");
       L.push("");
-      L.push("LE THÈME LE PLUS SOUVENT ABSENT est le dixième — les conséquences");
+      L.push("LE THÈME LE PLUS SOUVENT ABSENT est le dixième, les conséquences");
       L.push("environnementales de l'activité de l'entreprise. Regardez-le en premier.");
       L.push("");
 
@@ -2053,7 +2053,7 @@
       for (var i = 0; i < CORRESPONDANCE.length; i++) {
         var n = RUB[i];
         L.push(TRAIT);
-        pousserPlie(L, "THÈME " + (i + 1) + " — " + CORRESPONDANCE[i][0].toUpperCase(),
+        pousserPlie(L, "THÈME " + (i + 1) + ", " + CORRESPONDANCE[i][0].toUpperCase(),
           64, "", "  ");
         L.push("");
         pousserPlie(L, "Où il se trouve dans le décret : " + CORRESPONDANCE[i][1],
@@ -2083,11 +2083,11 @@
       L.push("transferts commerciaux et financiers entre les entités du groupe ». Un");
       L.push("accord peut donc les supprimer ; à défaut d'accord, le décret les impose.");
       L.push("");
-      L.push("  8° Partenariats — présent : [OUI / NON]   " +
+      L.push("  8° Partenariats, présent : [OUI / NON]   " +
         (estOui(f.accordEntreprise) || estOui(f.accordBranche)
           ? "un accord est déclaré : vérifiez ce qu'il en dit."
           : "aucun accord : la rubrique est due."));
-      L.push("  9° Transferts intragroupe — présent : [OUI / NON]   " +
+      L.push("  9° Transferts intragroupe, présent : [OUI / NON]   " +
         cro(P(ctx).groupe, "appartenance à un groupe non renseignée"));
       L.push("");
 
@@ -2095,7 +2095,7 @@
       L = L.concat(blocGrilleDuRegime(ctx, r));
 
       L = L.concat(courrierMAD(ctx,
-        "complètement de la base de données — thèmes du plancher légal",
+        "complètement de la base de données, thèmes du plancher légal",
         ["Je vous informe que la base de données économiques, sociales et",
          "environnementales de l'entreprise a été complétée des thèmes que le",
          "troisième alinéa de l'article L. 2312-21 du code du travail impose en toute",
@@ -2115,7 +2115,7 @@
         "    fourniture.",
         ech(ctx, 45, "les thèmes manquants sont montés et renseignés sur les six"),
         "    années dues.",
-        ech(ctx, 46, "vous informez les bénéficiaires — sans cette information, le"),
+        ech(ctx, 46, "vous informez les bénéficiaires, sans cette information, le"),
         "    délai de consultation ne court pas (R. 2312-5).",
         ech(ctx, 60, "vous relancez l'audit."),
       ]));
@@ -2126,7 +2126,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-CNT-02 — LA GRILLE DU CONTENU SUPPLÉTIF
+     BDESE-CTL-CNT-02 : LA GRILLE DU CONTENU SUPPLÉTIF
 
      C'est ici que tout se joue : la grille du décret déployée en entier, et non
      un renvoi à l'article. Une note qui écrirait « reportez-vous à R. 2312-9 »
@@ -2134,9 +2134,9 @@
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-CNT-02", {
-    nom: "La grille du contenu supplétif — le décret déployé, rubrique par rubrique",
-    detail: "L'article R. 2312-8 ou R. 2312-9 selon l'effectif — les deux si " +
-            "l'effectif n'est pas connu — déployé rubrique par rubrique, sujet " +
+    nom: "La grille du contenu supplétif, le décret déployé, rubrique par rubrique",
+    detail: "L'article R. 2312-8 ou R. 2312-9 selon l'effectif, les deux si " +
+            "l'effectif n'est pas connu, déployé rubrique par rubrique, sujet " +
             "par sujet, avec les six années, la source de la donnée et le " +
             "service responsable.",
     produire: function (ctx) {
@@ -2156,7 +2156,7 @@
       L.push("laisser l'employeur devant la page blanche qu'il avait déjà.");
       L.push("");
       L.push("La grille ci-dessous est donc DÉPLOYÉE. Chaque libellé est celui du");
-      L.push("décret, mot pour mot — il est repris du découpage que le module opère sur");
+      L.push("décret, mot pour mot, il est repris du découpage que le module opère sur");
       L.push("le texte capté, dont la couverture est mesurée à cent pour cent et dont");
       L.push("chaque libellé est vérifié comme se retrouvant dans le texte.");
       L.push("");
@@ -2167,7 +2167,7 @@
       L.push("jugée irrégulière, et l'avis n'être pas valablement rendu. Et");
       L.push("l'article R. 2312-7 ajoute que « l'ensemble des informations de la base de");
       L.push("données contribue à donner une vision claire et globale de la formation et");
-      L.push("de la répartition de la valeur créée par l'activité de l'entreprise » —");
+      L.push("de la répartition de la valeur créée par l'activité de l'entreprise »,");
       L.push("une grille trouée ne la donne pas.");
       L.push("");
       L.push("R. 2312-7 ajoute encore que la base « comporte également les indicateurs");
@@ -2192,7 +2192,7 @@
         for (var i = 0; i < themes.length; i++) {
           var t = themes[i];
           pousserPlie(L, String(t && t.theme ? t.theme : t) +
-            (t && t.renseigne ? " — renseignée : " + t.renseigne : ""), 66, "  · ", "    ");
+            (t && t.renseigne ? ", renseignée : " + t.renseigne : ""), 66, "  · ", "    ");
         }
       } else {
         L.push("Aucune rubrique n'est déclarée dans le dossier : la comparaison se fait");
@@ -2217,7 +2217,7 @@
       L.push("  1. LE SERVICE QUI DÉTIENT LA DONNÉE. Sans lui, la grille se vide au");
       L.push("     premier exercice : personne n'est chargé de la remplir.");
       L.push("  2. LA DATE À LAQUELLE IL LA FOURNIT. Une échéance, pas une intention.");
-      L.push("  3. LES SIX ANNÉES — " + enteteAnnees(a) + ".");
+      L.push("  3. LES SIX ANNÉES : " + enteteAnnees(a) + ".");
       L.push("     Les trois dernières en chiffres ou en grandes tendances.");
       L.push("  4. LE CAS ÉCHÉANT, LA MENTION « ne peut faire l'objet ni de données");
       L.push("     chiffrées ni de grandes tendances », AVEC SA RAISON. C'est ce que");
@@ -2284,19 +2284,19 @@
         ["Les articles L. 1142-8, L. 1142-11, L. 3111-2 et L. 23-12-1 du code de",
          "commerce, que R. 2312-7 et L. 2312-18 nomment, n'ont pas été lus à la source",
          "par ce module : leur contenu n'est pas reproduit.",
-         "Les articles cités À L'INTÉRIEUR des tableaux du décret — L. 5212-5,",
-         "D. 5212-4, L. 2241-6, L. 6361-1 et les autres — le sont par le texte du",
+         "Les articles cités À L'INTÉRIEUR des tableaux du décret, L. 5212-5,",
+         "D. 5212-4, L. 2241-6, L. 6361-1 et les autres, le sont par le texte du",
          "décret lui-même, reproduit ici mot pour mot ; ils ne sont pas davantage",
          "développés."])).join("\n");
     },
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-CNT-03 — LES SIX ANNÉES
+     BDESE-CTL-CNT-03 : LES SIX ANNÉES
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-CNT-03", {
-    nom: "Le tableau des six années — deux exercices passés, l'année en cours, trois à venir",
+    nom: "Le tableau des six années, deux exercices passés, l'année en cours, trois à venir",
     detail: "Les six millésimes calculés, la matrice rubrique par rubrique et " +
             "année par année, la source de chaque exercice passé et la forme " +
             "admise pour les exercices à venir.",
@@ -2324,7 +2324,7 @@
       L.push("de la base.");
       L.push("");
       L.push("ET LA RÉSERVE : R. 2312-10 ne vaut qu'en l'absence d'accord. Un accord de");
-      L.push("L. 2312-21 peut retenir une autre profondeur — vérifiez-le avant d'ouvrir");
+      L.push("L. 2312-21 peut retenir une autre profondeur, vérifiez-le avant d'ouvrir");
       L.push("six colonnes.");
       L.push("  · accord d'entreprise déclaré : " + etat(f.accordEntreprise, "OUI", "non"));
       L.push("  · accord de branche déclaré : " + etat(f.accordBranche, "OUI", "non"));
@@ -2333,10 +2333,10 @@
       L.push("");
       L.push("  · années passées couvertes : " +
         (b.anneesPassees != null && b.anneesPassees !== "" ? b.anneesPassees : "[non renseigné]") +
-        " — le décret en impose deux.");
+        ", le décret en impose deux.");
       L.push("  · années suivantes couvertes : " +
         (b.anneesSuivantes != null && b.anneesSuivantes !== "" ? b.anneesSuivantes : "[non renseigné]") +
-        " — le décret en impose trois.");
+        ", le décret en impose trois.");
       L.push("  · forme des perspectives : " +
         (vide(b.formePerspectives) ? "[non renseignée]" : String(b.formePerspectives)));
       L.push("");
@@ -2348,27 +2348,27 @@
       L.push(GROS);
       L.push("");
       L.push("Les deux années passées NE SE RECALCULENT PAS. Elles se retrouvent dans");
-      L.push("les documents déjà produits — c'est plus rapide et c'est plus sûr :");
+      L.push("les documents déjà produits, c'est plus rapide et c'est plus sûr :");
       L.push("");
-      L.push("  · " + a.passees[0] + " et " + a.passees[1] + " — comptes annuels et annexe, liasse fiscale,");
+      L.push("  · " + a.passees[0] + " et " + a.passees[1] + ", comptes annuels et annexe, liasse fiscale,");
       L.push("    déclarations sociales nominatives, bilans et rapports antérieurs,");
       L.push("    versions précédentes de la base elle-même si elles ont été");
       L.push("    conservées.");
-      L.push("  · " + a.courante + " — les mêmes sources, arrêtées à la dernière période close, et");
+      L.push("  · " + a.courante + ", les mêmes sources, arrêtées à la dernière période close, et");
       L.push("    la mention de la date d'arrêté.");
-      L.push("  · " + a.suivantes.join(", ") + " — budget, plan d'affaires, plan de charge, plan de");
+      L.push("  · " + a.suivantes.join(", ") + ", budget, plan d'affaires, plan de charge, plan de");
       L.push("    développement des compétences, trajectoire d'investissement. À défaut");
       L.push("    de chiffres, DES GRANDES TENDANCES SUFFISENT : le décret les admet");
       L.push("    expressément pour ces années.");
       L.push("");
 
       L.push(GROS);
-      L.push("LA MATRICE — RUBRIQUE PAR RUBRIQUE, ANNÉE PAR ANNÉE");
+      L.push("LA MATRICE : RUBRIQUE PAR RUBRIQUE, ANNÉE PAR ANNÉE");
       L.push(GROS);
       L.push("");
       for (var w = 0; w < r.articles.length; w++) {
         var arbre = ARBRE[r.articles[w]];
-        L.push("Article " + arbre.article + " — " + arbre.seuil + " (version " + arbre.version + ")");
+        L.push("Article " + arbre.article + ", " + arbre.seuil + " (version " + arbre.version + ")");
         L.push("");
         for (var i = 0; i < arbre.rubriques.length; i++) {
           var rub = arbre.rubriques[i];
@@ -2404,7 +2404,7 @@
         ech(ctx, 0, "vous vérifiez qu'aucun accord ne fixe lui-même les années couvertes."),
         ech(ctx, 7, "les six colonnes sont ouvertes pour chaque rubrique."),
         ech(ctx, 30, "les deux années passées sont reprises dans les documents déjà"),
-        "    produits — elles ne se reconstituent pas.",
+        "    produits, elles ne se reconstituent pas.",
         ech(ctx, 45, "l'année en cours est arrêtée à la dernière période close."),
         ech(ctx, 60, "les trois années suivantes sont renseignées, en chiffres ou en"),
         "    grandes tendances.",
@@ -2417,25 +2417,25 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-CNT-04 — LES PERSPECTIVES ET LEURS MANQUES MOTIVÉS
+     BDESE-CTL-CNT-04 : LES PERSPECTIVES ET LEURS MANQUES MOTIVÉS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-CNT-04", {
-    nom: "La note sur les perspectives — forme retenue et informations non renseignables",
+    nom: "La note sur les perspectives, forme retenue et informations non renseignables",
     detail: "La forme des trois années à venir rubrique par rubrique, et la liste " +
-            "motivée — à porter DANS la base — des informations qui ne peuvent " +
+            "motivée, à porter DANS la base, des informations qui ne peuvent " +
             "recevoir ni chiffres ni tendances.",
     produire: function (ctx) {
       var f = F(ctx), r = regimeDe(ctx), a = anneesDe(ctx), b = B(ctx);
       var non = liste(b.informationsNonRenseignables);
-      var L = entete(ctx, "Note sur les perspectives — les trois années suivantes",
+      var L = entete(ctx, "Note sur les perspectives, les trois années suivantes",
         "article R. 2312-10 du code du travail");
 
       modeDEmploi(L, "la note qui arrête la forme des trois années à venir et motive ce qui ne peut pas être renseigné");
 
       L.push("L'OBLIGATION QU'ON OUBLIE");
       L.push("");
-      L.push("R. 2312-10 admet les grandes tendances — c'est une facilité, et il faut");
+      L.push("R. 2312-10 admet les grandes tendances, c'est une facilité, et il faut");
       L.push("s'en servir. Mais il ajoute une obligation dans la même phrase :");
       L.push("");
       L.push("« L'employeur indique, pour ces années, les informations qui, eu égard à");
@@ -2459,21 +2459,21 @@
       L.push("  · forme des perspectives : " +
         (vide(b.formePerspectives) ? "[NON RENSEIGNÉE]" : String(b.formePerspectives)));
       L.push("  · informations non renseignables déclarées : " +
-        (non.length ? non.length : "AUCUNE — soit tout est renseignable et il faut pouvoir le dire, soit la liste manque"));
+        (non.length ? non.length : "AUCUNE : soit tout est renseignable et il faut pouvoir le dire, soit la liste manque"));
       if (non.length) {
         L.push("");
-        for (var i = 0; i < non.length; i++) pousserPlie(L, non[i], 66, "    – ", "      ");
+        for (var i = 0; i < non.length; i++) pousserPlie(L, non[i], 66, "    - ", "      ");
       }
       L.push("");
 
       L.push(GROS);
-      L.push("NOTE SUR LES PERSPECTIVES — À INSÉRER DANS LA BASE");
+      L.push("NOTE SUR LES PERSPECTIVES : À INSÉRER DANS LA BASE");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx).toUpperCase());
       L.push("Années concernées : " + a.suivantes.join(", ") + ".");
       L.push("");
-      L.push("ARTICLE 1 — LA FORME RETENUE, RUBRIQUE PAR RUBRIQUE");
+      L.push("ARTICLE 1 : LA FORME RETENUE, RUBRIQUE PAR RUBRIQUE");
       L.push("");
       L.push("Données chiffrées lorsque le chiffre a un sens ; grandes tendances");
       L.push("lorsqu'il n'en a pas. Les deux formes sont admises, et la seconde n'est");
@@ -2489,11 +2489,11 @@
         L.push("     charge / plan de développement des compétences / ...............]");
         L.push("");
       }
-      L.push("ARTICLE 2 — LES INFORMATIONS QUI NE PEUVENT RECEVOIR NI CHIFFRES NI");
+      L.push("ARTICLE 2 : LES INFORMATIONS QUI NE PEUVENT RECEVOIR NI CHIFFRES NI");
       L.push("TENDANCES, ET LES RAISONS QUE L'EMPLOYEUR EN DONNE");
       L.push("");
       L.push("Une ligne par information. La raison tient à la nature de l'information");
-      L.push("ou aux circonstances — ce sont les deux motifs que le texte retient. Le");
+      L.push("ou aux circonstances, ce sont les deux motifs que le texte retient. Le");
       L.push("décret exige LES RAISONS, non le seul constat : « ne peut pas être");
       L.push("renseigné » n'est pas une raison.");
       L.push("");
@@ -2510,7 +2510,7 @@
       for (var z = 0; z < 8; z++)
         L.push("  [....................................] │ [......] │ [................]");
       L.push("");
-      L.push("ARTICLE 3 — OÙ CETTE LISTE FIGURE");
+      L.push("ARTICLE 3 : OÙ CETTE LISTE FIGURE");
       L.push("");
       L.push("Emplacement dans la base : [onglet / page ........................].");
       L.push("Date d'insertion : " + leJour(aujourd(ctx)) + ".");
@@ -2526,7 +2526,7 @@
       L = L.concat(blocAnnees(ctx));
 
       L = L.concat(courrierMAD(ctx,
-        "perspectives des trois années suivantes — forme retenue et informations non renseignables",
+        "perspectives des trois années suivantes, forme retenue et informations non renseignables",
         ["Je vous informe que la base de données a été complétée des perspectives sur",
          "les trois années suivantes (" + a.suivantes.join(", ") + "), présentées [en données",
          "chiffrées / sous forme de grandes tendances selon les rubriques].",
@@ -2553,18 +2553,18 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-MAD-01 — LES ACCÈS, LE SUPPORT, LES MODALITÉS
+     BDESE-CTL-MAD-01 : LES ACCÈS, LE SUPPORT, LES MODALITÉS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-MAD-01", {
-    nom: "La décision d'organisation de la base — support, accès, modalités, et le courrier de mise à disposition",
+    nom: "La décision d'organisation de la base, support, accès, modalités, et le courrier de mise à disposition",
     detail: "La décision unilatérale qui fixe le support, les droits d'accès et " +
             "les modalités de consultation et d'utilisation ; la liste nominative " +
             "des bénéficiaires ; le courrier aux élus et aux délégués syndicaux.",
     produire: function (ctx) {
       var f = F(ctx), b = B(ctx), r = regimeDe(ctx);
       var benef = liste(b.beneficiaires);
-      var L = entete(ctx, "Organisation de la base — support, droits d'accès et modalités",
+      var L = entete(ctx, "Organisation de la base, support, droits d'accès et modalités",
         "articles L. 2312-18, L. 2312-36 et R. 2312-12 du code du travail");
 
       modeDEmploi(L, "la décision qui organise l'accès à votre base, et le courrier qui l'ouvre");
@@ -2578,7 +2578,7 @@
       L.push("qu'aux membres de la délégation du personnel du comité social et");
       L.push("économique central d'entreprise, et aux délégués syndicaux. »");
       L.push("");
-      L.push("Un accord peut ORGANISER les droits d'accès — L. 2312-21, 2°, range");
+      L.push("Un accord peut ORGANISER les droits d'accès, L. 2312-21, 2°, range");
       L.push("expressément parmi ce qu'il définit « les droits d'accès et le niveau de");
       L.push("mise en place de la base dans les entreprises comportant des");
       L.push("établissements distincts, son support, ses modalités de consultation et");
@@ -2594,7 +2594,7 @@
       L.push("");
       L.push("  · support : " + (vide(b.support) ? "[NON RENSEIGNÉ]" : String(b.support)));
       L.push("  · bénéficiaires déclarés : " + (benef.length ? "" : "[NON RENSEIGNÉS]"));
-      for (var i = 0; i < benef.length; i++) pousserPlie(L, benef[i], 66, "      – ", "        ");
+      for (var i = 0; i < benef.length; i++) pousserPlie(L, benef[i], 66, "      - ", "        ");
       L.push("  · trace d'accès : " + (vide(b.preuveAcces) ? "[NON RENSEIGNÉE]" : String(b.preuveAcces)));
       L.push("  · effectif : " + (r.connu ? r.effectif + " salariés" : "[EFFECTIF non renseigné]"));
       L.push("");
@@ -2608,10 +2608,10 @@
       L.push("À adapter si un accord de L. 2312-21 organise déjà ces points : c'est");
       L.push("alors l'accord qui commande, et cette décision ne fait que rappeler ce");
       L.push("qu'il stipule. En l'absence d'accord, l'article R. 2312-12 laisse ces");
-      L.push("modalités à l'employeur — mais il les lui fait FIXER : elles ne peuvent");
+      L.push("modalités à l'employeur, mais il les lui fait FIXER : elles ne peuvent");
       L.push("pas rester implicites.");
       L.push("");
-      L.push("ARTICLE 1 — LE SUPPORT");
+      L.push("ARTICLE 1 : LE SUPPORT");
       L.push("");
       L.push("« En l'absence d'accord prévu à l'article L. 2312-21, la base de données");
       L.push("est tenue à la disposition des personnes mentionnées au dernier alinéa de");
@@ -2637,7 +2637,7 @@
       L.push("Adresse ou lieu de consultation : [.................................].");
       L.push("Date de mise en service : [..............].");
       L.push("");
-      L.push("ARTICLE 2 — LA LISTE NOMINATIVE DES PERSONNES AYANT ACCÈS");
+      L.push("ARTICLE 2 : LA LISTE NOMINATIVE DES PERSONNES AYANT ACCÈS");
       L.push("");
       L.push("  nom et prénom          │ qualité                    │ accès ouvert le");
       L.push("  ───────────────────────┼────────────────────────────┼────────────────");
@@ -2653,7 +2653,7 @@
       L.push("délégation du personnel du comité central s'il en existe un, délégués");
       L.push("syndicaux. Aucune ne peut être omise.");
       L.push("");
-      L.push("ARTICLE 3 — LES MODALITÉS D'ACCÈS, DE CONSULTATION ET D'UTILISATION");
+      L.push("ARTICLE 3 : LES MODALITÉS D'ACCÈS, DE CONSULTATION ET D'UTILISATION");
       L.push("");
       L.push("R. 2312-12 : « L'employeur informe ces personnes de l'actualisation de la");
       L.push("base de données selon des modalités qu'il détermine et fixe les modalités");
@@ -2672,14 +2672,14 @@
       L.push("respectives des bénéficiaires. [Préciser ce qui est admis : reproduction");
       L.push("pour les besoins d'une réunion, remise à un expert désigné, etc.]");
       L.push("3.5. Information de l'actualisation : [par courriel à la liste ci-dessus /");
-      L.push("par affichage / par mention datée en page d'accueil de la base] — et la");
+      L.push("par affichage / par mention datée en page d'accueil de la base], et la");
       L.push("preuve d'envoi est conservée.");
       L.push("3.6. Ces modalités doivent permettre à chacun d'exercer UTILEMENT ses");
-      L.push("compétences. Une modalité qui rendrait la consultation impraticable —");
-      L.push("créneau unique, poste partagé, interdiction de prendre copie — manque");
+      L.push("compétences. Une modalité qui rendrait la consultation impraticable,");
+      L.push("créneau unique, poste partagé, interdiction de prendre copie, manque");
       L.push("cette exigence.");
       L.push("");
-      L.push("ARTICLE 4 — LA CONFIDENTIALITÉ, ET SA CONTREPARTIE");
+      L.push("ARTICLE 4 : LA CONFIDENTIALITÉ, ET SA CONTREPARTIE");
       L.push("");
       L.push("« Les informations figurant dans la base de données qui revêtent un");
       L.push("caractère confidentiel doivent être présentées comme telles par");
@@ -2697,7 +2697,7 @@
       for (var z = 0; z < 5; z++)
         L.push("  [.........................................] │ [.....................]");
       L.push("");
-      L.push("ARTICLE 5 — DATE D'EFFET");
+      L.push("ARTICLE 5 : DATE D'EFFET");
       L.push("");
       L.push("La présente décision prend effet le [DATE]. Elle est portée à la");
       L.push("connaissance des bénéficiaires par le courrier ci-après, et la preuve de");
@@ -2747,11 +2747,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-MAD-02 — L'ACTUALISATION ET SON CALENDRIER
+     BDESE-CTL-MAD-02 : L'ACTUALISATION ET SON CALENDRIER
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-MAD-02", {
-    nom: "Le calendrier d'actualisation — rubrique, responsable, périodicité, dernière mise à jour",
+    nom: "Le calendrier d'actualisation, rubrique, responsable, périodicité, dernière mise à jour",
     detail: "La note d'actualisation périodique, le tableau rubrique par rubrique " +
             "construit sur le décret, et le courrier qui signale chaque mise à jour.",
     produire: function (ctx) {
@@ -2798,7 +2798,7 @@
       L.push("respect des périodicités prévues par le présent code. »");
       L.push("");
       L.push("LA RÉSERVE : l'accord de L. 2312-21 porte, à son 2°, les modalités de");
-      L.push("fonctionnement de la base — l'actualisation en fait partie. Vérifiez ce");
+      L.push("fonctionnement de la base, l'actualisation en fait partie. Vérifiez ce");
       L.push("qu'il prévoit avant d'appliquer le supplétif.");
       L.push("  · accord d'entreprise déclaré : " + etat(f.accordEntreprise, "OUI", "non"));
       L.push("");
@@ -2821,22 +2821,22 @@
       L.push("");
       L.push(nomDe(ctx).toUpperCase());
       L.push("");
-      L.push("ARTICLE 1 — LE PRINCIPE");
+      L.push("ARTICLE 1 : LE PRINCIPE");
       L.push("");
       L.push("Les éléments d'information de la base sont régulièrement mis à jour, au");
       L.push("moins dans le respect des périodicités prévues par le code du travail");
       L.push("(R. 2312-11). Chaque actualisation est datée, et les bénéficiaires en sont");
       L.push("informés (R. 2312-12).");
       L.push("");
-      L.push("ARTICLE 2 — LE CALENDRIER, RUBRIQUE PAR RUBRIQUE");
+      L.push("ARTICLE 2 : LE CALENDRIER, RUBRIQUE PAR RUBRIQUE");
       L.push("");
       L.push("Périodicité proposée : annuelle pour ce qui suit l'exercice comptable ou");
-      L.push("l'année civile ; plus rapprochée pour ce qui bouge en cours d'année —");
+      L.push("l'année civile ; plus rapprochée pour ce qui bouge en cours d'année,");
       L.push("effectifs, contrats, accidents. Arrêtez la vôtre : le tableau ci-dessous");
       L.push("est à remplir, pas à subir.");
       L.push("");
       var arbre = ARBRE[r.articles[r.articles.length - 1]];
-      L.push("Grille de référence : article " + arbre.article + " — " + arbre.seuil + ".");
+      L.push("Grille de référence : article " + arbre.article + ", " + arbre.seuil + ".");
       L.push("");
       for (var i = 0; i < arbre.rubriques.length; i++) {
         var rub = arbre.rubriques[i];
@@ -2849,7 +2849,7 @@
           "     ", "       ");
         L.push("");
       }
-      L.push("ARTICLE 3 — LES ÉLÉMENTS D'ANALYSE OU D'EXPLICATION");
+      L.push("ARTICLE 3 : LES ÉLÉMENTS D'ANALYSE OU D'EXPLICATION");
       L.push("");
       L.push("Lorsque le code en prévoit, ils sont mis à disposition en même temps que");
       L.push("les informations : c'est la seconde condition cumulative de R. 2312-14, et");
@@ -2860,7 +2860,7 @@
       for (var z = 0; z < 5; z++)
         L.push("  [.................] │ [.................................................]");
       L.push("");
-      L.push("ARTICLE 4 — LA PRIORITÉ DE RATTRAPAGE");
+      L.push("ARTICLE 4 : LA PRIORITÉ DE RATTRAPAGE");
       L.push("");
       L.push("Ce qui est en retard se met à jour en commençant par les rubriques qui");
       L.push("alimentent la PROCHAINE consultation récurrente : c'est elle qui est");
@@ -2911,7 +2911,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-MAD-03 — L'INFORMATION QUI FAIT COURIR LE DÉLAI
+     BDESE-CTL-MAD-03 : L'INFORMATION QUI FAIT COURIR LE DÉLAI
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-MAD-03", {
@@ -2925,7 +2925,7 @@
 
       modeDEmploi(L, "l'envoi qui fait courir le délai de consultation, et son registre");
 
-      L.push("CE QUE CET ENVOI DÉCLENCHE — ET CE QUE SON ABSENCE EMPÊCHE");
+      L.push("CE QUE CET ENVOI DÉCLENCHE : ET CE QUE SON ABSENCE EMPÊCHE");
       L.push("");
       L.push("« Pour l'ensemble des consultations mentionnées au présent code pour");
       L.push("lesquelles la loi n'a pas fixé de délai spécifique, le délai de");
@@ -2960,7 +2960,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("MODÈLE D'INFORMATION — À ENVOYER À CHAQUE ACTUALISATION");
+      L.push("MODÈLE D'INFORMATION : À ENVOYER À CHAQUE ACTUALISATION");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
@@ -3052,8 +3052,8 @@
         ech(ctx, 1, "le registre est ouvert."),
         ech(ctx, 2, "à chaque actualisation, l'information part le jour même : elle"),
         "    désigne ce qui a été mis à jour et à quelle date.",
-        "  · et à chaque fois — la preuve d'envoi est classée au registre.",
-        "  · un mois après chaque envoi lié à une consultation — le comité est",
+        "  · et à chaque fois, la preuve d'envoi est classée au registre.",
+        "  · un mois après chaque envoi lié à une consultation, le comité est",
         "    réputé avoir rendu un avis, négatif à défaut d'avis exprès",
         "    (R. 2312-6, I). Deux mois en cas d'expertise, trois en cas",
         "    d'expertises au niveau central et d'établissement.",
@@ -3065,18 +3065,18 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-CSL-01 — LA PÉRIODICITÉ DES CONSULTATIONS
+     BDESE-CTL-CSL-01 : LA PÉRIODICITÉ DES CONSULTATIONS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-CSL-01", {
     nom: "L'avenant qui ramène la périodicité des consultations dans la limite de trois ans",
-    detail: "La distinction des deux accords — L. 2312-19 et L. 2312-21 —, " +
+    detail: "La distinction des deux accords, L. 2312-19 et L. 2312-21, " +
             "l'avenant rédigé, le courrier aux organisations syndicales et au " +
             "comité, et le calendrier de dépôt.",
     produire: function (ctx) {
       var f = F(ctx);
       var p = f.periodiciteConsultations;
-      var L = entete(ctx, "Avenant à l'accord sur les consultations récurrentes — périodicité",
+      var L = entete(ctx, "Avenant à l'accord sur les consultations récurrentes, périodicité",
         "article L. 2312-19 du code du travail");
 
       modeDEmploi(L, "l'avenant qui ramène la périodicité de vos consultations dans la limite légale");
@@ -3114,10 +3114,10 @@
       L.push("CE QUE VOTRE DOSSIER DÉCLARE");
       L.push("");
       L.push("  · accord fixant la périodicité des consultations : " +
-        etat(f.accordPeriodiciteConsultations, "OUI", "non — le rythme annuel de L. 2312-22 s'applique"));
+        etat(f.accordPeriodiciteConsultations, "OUI", "non, le rythme annuel de L. 2312-22 s'applique"));
       L.push("  · périodicité qu'il fixe : " +
         (p == null || p === "" ? "[NON RENSEIGNÉE]" : p + " an(s)" +
-          (Number(p) > 3 ? " — AU-DELÀ DU PLAFOND DE TROIS ANS" : ", dans la limite de trois ans")));
+          (Number(p) > 3 ? ", AU-DELÀ DU PLAFOND DE TROIS ANS" : ", dans la limite de trois ans")));
       L.push("  · nombre de réunions annuelles prévu : " +
         (f.reunionsAnnuellesAccord == null || f.reunionsAnnuellesAccord === ""
           ? "[non renseigné]" : f.reunionsAnnuellesAccord));
@@ -3134,7 +3134,7 @@
       L.push("...................................................................]");
       L.push("[ou, en l'absence de délégué syndical : le comité social et économique,");
       L.push("l'accord étant adopté à la majorité des membres titulaires de la");
-      L.push("délégation du personnel — c'est la seconde voie que L. 2312-19 ouvre].");
+      L.push("délégation du personnel, c'est la seconde voie que L. 2312-19 ouvre].");
       L.push("");
       L.push("PRÉAMBULE");
       L.push("");
@@ -3144,7 +3144,7 @@
       L.push("L. 2312-19 plafonne cette périodicité à trois ans. Le présent avenant");
       L.push("ramène dans cette limite les stipulations qui l'excédaient.");
       L.push("");
-      L.push("ARTICLE 1 — LA PÉRIODICITÉ, CONSULTATION PAR CONSULTATION");
+      L.push("ARTICLE 1 : LA PÉRIODICITÉ, CONSULTATION PAR CONSULTATION");
       L.push("");
       L.push("Les trois consultations récurrentes sont celles de L. 2312-17 :");
       L.push("");
@@ -3162,14 +3162,14 @@
       L.push("");
       L.push("Aucune périodicité ne peut excéder trois ans.");
       L.push("");
-      L.push("ARTICLE 2 — LES CONSÉQUENCES ENVIRONNEMENTALES");
+      L.push("ARTICLE 2 : LES CONSÉQUENCES ENVIRONNEMENTALES");
       L.push("");
       L.push("Au cours de chacune de ces consultations, le comité est informé des");
       L.push("conséquences environnementales de l'activité de l'entreprise (L. 2312-17,");
       L.push("deuxième alinéa ; L. 2312-22). L'aménagement de la périodicité ne");
       L.push("supprime pas cette information.");
       L.push("");
-      L.push("ARTICLE 3 — CE QUE L'ACCORD PEUT AUSSI RÉGLER");
+      L.push("ARTICLE 3 : CE QUE L'ACCORD PEUT AUSSI RÉGLER");
       L.push("");
       L.push("L'article L. 2312-19 permet au même accord de définir :");
       L.push("  2° le nombre de réunions annuelles du comité prévues à l'article");
@@ -3184,10 +3184,10 @@
       L.push("");
       L.push("[Le cas échéant, reprendre ici ces stipulations. L'article L. 2315-27,");
       L.push("auquel le 2° renvoie pour le nombre de réunions, n'a pas été lu à la");
-      L.push("source par ce module : il est nommé, non reproduit — mais le PLANCHER DE");
+      L.push("source par ce module : il est nommé, non reproduit, mais le PLANCHER DE");
       L.push("SIX, lui, figure bien dans L. 2312-19, 2°, qui a été lu.]");
       L.push("");
-      L.push("ARTICLE 4 — DURÉE, ENTRÉE EN VIGUEUR, DÉPÔT");
+      L.push("ARTICLE 4 : DURÉE, ENTRÉE EN VIGUEUR, DÉPÔT");
       L.push("");
       L.push("Le présent avenant est conclu pour [durée] et entre en vigueur le [DATE].");
       L.push("Il est déposé dans les conditions prévues par le code du travail, et le");
@@ -3205,7 +3205,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("COURRIER — OUVERTURE DE LA NÉGOCIATION DE L'AVENANT");
+      L.push("COURRIER : OUVERTURE DE LA NÉGOCIATION DE L'AVENANT");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
@@ -3217,7 +3217,7 @@
       L.push("");
       L.push(villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Objet : périodicité des consultations récurrentes — projet d'avenant");
+      L.push("Objet : périodicité des consultations récurrentes, projet d'avenant");
       L.push("");
       L.push("Mesdames, Messieurs,");
       L.push("");
@@ -3258,7 +3258,7 @@
         ech(ctx, 30, "première réunion de négociation."),
         ech(ctx, 90, "l'avenant est signé."),
         ech(ctx, 105, "l'avenant est déposé et le récépissé conservé."),
-        "  · et pendant tout ce temps — les consultations restent tenues à",
+        "  · et pendant tout ce temps, les consultations restent tenues à",
         "    l'échéance légale : annuelle à défaut d'accord valable (L. 2312-22).",
       ]));
 
@@ -3271,7 +3271,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-CSL-02 — LES SIX RÉUNIONS ANNUELLES
+     BDESE-CTL-CSL-02 : LES SIX RÉUNIONS ANNUELLES
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-CSL-02", {
@@ -3307,14 +3307,14 @@
       L.push("CE QUE VOTRE DOSSIER DÉCLARE");
       L.push("");
       L.push("  · accord fixant le nombre de réunions : " +
-        etat(f.accordPeriodiciteConsultations, "OUI", "non — c'est le régime supplétif qui s'applique"));
+        etat(f.accordPeriodiciteConsultations, "OUI", "non, c'est le régime supplétif qui s'applique"));
       L.push("  · nombre de réunions annuelles prévu par l'accord : " +
         (n == null || n === "" ? "[NON RENSEIGNÉ]"
-          : n + (Number(n) < 6 ? " — EN DESSOUS DU PLANCHER DE SIX" : ", au moins six")));
+          : n + (Number(n) < 6 ? ", EN DESSOUS DU PLANCHER DE SIX" : ", au moins six")));
       L.push("");
 
       L.push(GROS);
-      L.push("PREMIER TEMPS — LE CALENDRIER DES RÉUNIONS DE L'ANNÉE EN COURS");
+      L.push("PREMIER TEMPS : LE CALENDRIER DES RÉUNIONS DE L'ANNÉE EN COURS");
       L.push(GROS);
       L.push("");
       L.push("Programmez les réunions manquantes pour atteindre six sur l'année. Cela");
@@ -3330,8 +3330,8 @@
       L.push("donc [nombre] à programmer d'ici la fin de l'année.");
       L.push("");
       L.push("Deux dates repères, comptées depuis aujourd'hui :");
-      L.push("  · " + leJour(dans(d0, 30)) + " — première réunion de rattrapage ;");
-      L.push("  · " + leJour(dans(d0, 60)) + " — deuxième, si deux réunions manquent.");
+      L.push("  · " + leJour(dans(d0, 30)) + ", première réunion de rattrapage ;");
+      L.push("  · " + leJour(dans(d0, 60)) + ", deuxième, si deux réunions manquent.");
       L.push("");
       L.push("C'EST LE PROCÈS-VERBAL QUI PROUVERA LE NOMBRE. Une réunion tenue sans");
       L.push("procès-verbal ne se démontre pas. Feuilles d'émargement et convocations");
@@ -3339,7 +3339,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("SECOND TEMPS — AVENANT N° [numéro] SUR LE NOMBRE DE RÉUNIONS ANNUELLES");
+      L.push("SECOND TEMPS : AVENANT N° [numéro] SUR LE NOMBRE DE RÉUNIONS ANNUELLES");
       L.push(GROS);
       L.push("");
       L.push("Entre " + nomDe(ctx) + ", " + adresseDe(ctx) + ",");
@@ -3357,14 +3357,14 @@
       L.push("dispose que ce nombre « ne peut être inférieur à six ». Les parties");
       L.push("conviennent de le porter à ce plancher.");
       L.push("");
-      L.push("ARTICLE 1 — Le nombre de réunions annuelles du comité social et économique");
+      L.push("ARTICLE 1 : Le nombre de réunions annuelles du comité social et économique");
       L.push("est porté à [nombre, au moins six] à compter du [DATE].");
       L.push("");
-      L.push("ARTICLE 2 — [Le cas échéant : répartition indicative des réunions dans");
+      L.push("ARTICLE 2 : [Le cas échéant : répartition indicative des réunions dans");
       L.push("l'année, et articulation avec les trois consultations récurrentes de");
       L.push("l'article L. 2312-17.]");
       L.push("");
-      L.push("ARTICLE 3 — Le présent avenant entre en vigueur le [DATE]. Il est déposé");
+      L.push("ARTICLE 3 : Le présent avenant entre en vigueur le [DATE]. Il est déposé");
       L.push("dans les conditions prévues par le code du travail, et le récépissé est");
       L.push("conservé au dossier.");
       L.push("");
@@ -3376,7 +3376,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("COURRIER — CONVOCATION À LA NÉGOCIATION DE L'AVENANT");
+      L.push("COURRIER : CONVOCATION À LA NÉGOCIATION DE L'AVENANT");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
@@ -3387,7 +3387,7 @@
       L.push("");
       L.push(villeDe(ctx) + ", le " + leJour(d0));
       L.push("");
-      L.push("Objet : nombre de réunions annuelles du comité — projet d'avenant");
+      L.push("Objet : nombre de réunions annuelles du comité, projet d'avenant");
       L.push("");
       L.push("Mesdames, Messieurs,");
       L.push("");
@@ -3429,11 +3429,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-CSL-03 — LE DÉLAI DE CONSULTATION
+     BDESE-CTL-CSL-03 : LE DÉLAI DE CONSULTATION
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-CSL-03", {
-    nom: "La fiche de délai de consultation — point de départ, terme applicable, date de l'avis",
+    nom: "La fiche de délai de consultation, point de départ, terme applicable, date de l'avis",
     detail: "Le calcul du terme selon l'expertise, la lettre qui fait courir le " +
             "délai, la règle des sept jours entre établissements et comité " +
             "central, et le procès-verbal.",
@@ -3451,9 +3451,9 @@
 
       modeDEmploi(L, "la fiche qui calcule le terme au-delà duquel l'avis est réputé rendu");
 
-      L.push("CE QUE LE TERME PRODUIT — ET CE N'EST PAS UN SILENCE");
+      L.push("CE QUE LE TERME PRODUIT : ET CE N'EST PAS UN SILENCE");
       L.push("");
-      L.push("« I. — Pour les consultations mentionnées à l'article R. 2312-5, à défaut");
+      L.push("« I. - Pour les consultations mentionnées à l'article R. 2312-5, à défaut");
       L.push("d'accord, le comité social et économique est réputé avoir été consulté et");
       L.push("AVOIR RENDU UN AVIS NÉGATIF à l'expiration d'un délai d'un mois à compter");
       L.push("de la date prévue à cet article. En cas d'intervention d'un expert, le");
@@ -3473,7 +3473,7 @@
       L.push("du travail pour la consultation ou de l'information par l'employeur de");
       L.push("leur mise à disposition dans la base de données […] » (R. 2312-5).");
       L.push("");
-      L.push("C'est de l'un de ces deux actes que court le délai — pas de la réunion, ni");
+      L.push("C'est de l'un de ces deux actes que court le délai, pas de la réunion, ni");
       L.push("de la date de l'ordre du jour.");
       L.push("");
       L.push("ET LE DÉLAI D'EXAMEN SUFFISANT RESTE DÛ : le comité « dispose à cette fin");
@@ -3491,8 +3491,8 @@
       L.push("");
       L.push("  · accord fixant les délais de consultation : " +
         etat(f.accordDelaisConsultation,
-          "OUI — c'est lui qui commande, non le mois supplétif de R. 2312-6 ; joignez-le",
-          "non — le régime de R. 2312-6 s'applique"));
+          "OUI : c'est lui qui commande, non le mois supplétif de R. 2312-6 ; joignez-le",
+          "non, le régime de R. 2312-6 s'applique"));
       L.push("  · date de mise à disposition ou de communication : " +
         (estISO(depart) ? jour(depart) : "[NON RENSEIGNÉE]"));
       L.push("  · nombre d'expertises : " + (nbExp == null || nbExp === "" ? "[non renseigné]" : nbExp));
@@ -3515,9 +3515,9 @@
       L.push("   Preuve : [accusé de réception / décharge datée / journal horodaté].");
       L.push("");
       L.push("2. TERME APPLICABLE");
-      L.push("   · un mois — aucune expertise ;");
-      L.push("   · deux mois — intervention d'un expert ;");
-      L.push("   · trois mois — expertises au niveau du comité central ET d'un ou");
+      L.push("   · un mois, aucune expertise ;");
+      L.push("   · deux mois, intervention d'un expert ;");
+      L.push("   · trois mois, expertises au niveau du comité central ET d'un ou");
       L.push("     plusieurs comités d'établissement.");
       L.push("");
       L.push("   Terme retenu ici : " + moisDus + " mois (" + cas + ")" +
@@ -3575,7 +3575,7 @@
       L.push("");
 
       L = L.concat(courrierMAD(ctx,
-        "mise à disposition des informations en vue d'une consultation — point de départ du délai",
+        "mise à disposition des informations en vue d'une consultation, point de départ du délai",
         ["Je vous informe que les informations nécessaires à la consultation sur",
          "[objet de la consultation] sont mises à votre disposition dans la base de",
          "données économiques, sociales et environnementales depuis le [DATE].",
@@ -3596,10 +3596,10 @@
       L = L.concat(calendrier(ctx, [
         ech(ctx, 0, "vous datez la communication ou l'information de mise à"),
         "    disposition, et conservez la preuve d'envoi.",
-        terme ? "  · " + leJour(dateDe(terme)) + " — terme du délai de " + moisDus + " mois calculé sur votre dossier."
-              : "  · [DATE DE MISE À DISPOSITION + " + moisDus + " mois] — terme du délai.",
+        terme ? "  · " + leJour(dateDe(terme)) + ", terme du délai de " + moisDus + " mois calculé sur votre dossier."
+              : "  · [DATE DE MISE À DISPOSITION + " + moisDus + " mois], terme du délai.",
         ech(ctx, 30 * moisDus - 7, "si la consultation se déroule aux deux niveaux : date"),
-        "    limite indicative des avis d'établissement — sept jours avant le terme.",
+        "    limite indicative des avis d'établissement, sept jours avant le terme.",
         ech(ctx, 30 * moisDus - 1, "l'avis est rendu et porté au procès-verbal, daté. Après"),
         "    le terme, l'avis négatif était déjà acquis.",
       ]));
@@ -3610,7 +3610,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-ETB-01 — LE NIVEAU DE MISE EN PLACE
+     BDESE-CTL-ETB-01 : LE NIVEAU DE MISE EN PLACE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-ETB-01", {
@@ -3672,7 +3672,7 @@
       L.push("CE QUE VOTRE DOSSIER DÉCLARE");
       L.push("");
       L.push("  · établissements distincts : " +
-        etat(ed, "OUI", "non — la base est mise en place au niveau de l'entreprise"));
+        etat(ed, "OUI", "non, la base est mise en place au niveau de l'entreprise"));
       L.push("  · niveau de mise en place déclaré : " +
         (vide(b.niveau) ? "[NON RENSEIGNÉ]" : String(b.niveau)));
       L.push("  · accord d'entreprise déclaré : " + etat(f.accordEntreprise, "OUI", "non"));
@@ -3684,7 +3684,7 @@
       L.push("");
       L.push(nomDe(ctx).toUpperCase());
       L.push("");
-      L.push("ARTICLE 1 — LE RECENSEMENT");
+      L.push("ARTICLE 1 : LE RECENSEMENT");
       L.push("");
       L.push("  établissement distinct   │ comité installé │ président │ nb d'élus");
       L.push("  ─────────────────────────┼─────────────────┼───────────┼──────────");
@@ -3694,7 +3694,7 @@
       L.push("Comité social et économique central : [OUI, installé le ......... / NON].");
       L.push("Nombre de délégués syndicaux, et leur périmètre : [..................].");
       L.push("");
-      L.push("ARTICLE 2 — LE NIVEAU RETENU");
+      L.push("ARTICLE 2 : LE NIVEAU RETENU");
       L.push("");
       L.push("  [ ] Un accord de L. 2312-21 fixe le niveau : accord du ..............,");
       L.push("      stipulation ..............., niveau retenu : ...................");
@@ -3703,7 +3703,7 @@
       L.push("      l'employeur met à disposition du comité central et des comités");
       L.push("      d'établissement.");
       L.push("");
-      L.push("ARTICLE 3 — LES DROITS D'ACCÈS, COMITÉ PAR COMITÉ");
+      L.push("ARTICLE 3 : LES DROITS D'ACCÈS, COMITÉ PAR COMITÉ");
       L.push("");
       L.push("  comité                 │ rubriques accessibles │ notifié le");
       L.push("  ───────────────────────┼───────────────────────┼────────────");
@@ -3716,7 +3716,7 @@
       L.push("est accessible en permanence aux membres de la délégation du personnel du");
       L.push("comité, à ceux du comité central et aux délégués syndicaux (L. 2312-36).");
       L.push("");
-      L.push("ARTICLE 4 — LA CONSULTATION AUX DEUX NIVEAUX ET LA RÈGLE DES SEPT JOURS");
+      L.push("ARTICLE 4 : LA CONSULTATION AUX DEUX NIVEAUX ET LA RÈGLE DES SEPT JOURS");
       L.push("");
       L.push("Lorsque la consultation se déroule à la fois au niveau du comité central");
       L.push("et de comités d'établissement, l'avis de chaque comité d'établissement est");
@@ -3732,7 +3732,7 @@
       L.push("lesquels le comité central et les comités d'établissement rendent et");
       L.push("transmettent leurs avis (L. 2316-22). Si vous en avez un, reportez-le ici.]");
       L.push("");
-      L.push("ARTICLE 5 — LA BASE DE GROUPE, LE CAS ÉCHÉANT");
+      L.push("ARTICLE 5 : LA BASE DE GROUPE, LE CAS ÉCHÉANT");
       L.push("");
       L.push("« Sans préjudice de l'obligation de mise en place d'une base de données au");
       L.push("niveau de l'entreprise, une convention ou un accord de groupe peut prévoir");
@@ -3753,7 +3753,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("COURRIER — NOTIFICATION AUX COMITÉS D'ÉTABLISSEMENT ET AU COMITÉ CENTRAL");
+      L.push("COURRIER : NOTIFICATION AUX COMITÉS D'ÉTABLISSEMENT ET AU COMITÉ CENTRAL");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
@@ -3811,11 +3811,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-COH-01 — LE BORDEREAU DES PIÈCES
+     BDESE-CTL-COH-01 : LE BORDEREAU DES PIÈCES
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-COH-01", {
-    nom: "Le bordereau des pièces — accords versés, leur objet, et régime retenu",
+    nom: "Le bordereau des pièces, accords versés, leur objet, et régime retenu",
     detail: "La grille qui qualifie chaque accord versé, le constat écrit lorsque " +
             "aucun accord ne définit la base, et la rectification de la " +
             "déclaration de régime.",
@@ -3846,16 +3846,16 @@
       L.push("CE QUE VOTRE DOSSIER DÉCLARE");
       L.push("");
       L.push("  · accord d'entreprise : " + etat(f.accordEntreprise, "OUI", "non") +
-        " — versé : " + etat(f.accordEntrepriseVerse, "oui", "NON"));
+        ", versé : " + etat(f.accordEntrepriseVerse, "oui", "NON"));
       L.push("  · accord de branche : " + etat(f.accordBranche, "OUI", "non") +
-        " — versé : " + etat(f.accordBrancheVerse, "oui", "NON"));
+        ", versé : " + etat(f.accordBrancheVerse, "oui", "NON"));
       L.push("  · accord sur la périodicité des consultations (L. 2312-19) : " +
         etat(f.accordPeriodiciteConsultations, "OUI", "non"));
       L.push("  · pièces versées : " + (pieces.length ? pieces.length : "AUCUNE"));
       for (var i = 0; i < pieces.length; i++) {
         var pc = pieces[i];
         pousserPlie(L, typeof pc === "string" ? pc :
-          String((pc && (pc.nom || pc.type)) || "pièce"), 66, "      – ", "        ");
+          String((pc && (pc.nom || pc.type)) || "pièce"), 66, "      - ", "        ");
       }
       L.push("");
 
@@ -3866,18 +3866,18 @@
       L.push(nomDe(ctx).toUpperCase());
       L.push("Arrêté le " + leJour(aujourd(ctx)) + ".");
       L.push("");
-      L.push("ARTICLE 1 — LA GRILLE DE QUALIFICATION DE CHAQUE ACCORD VERSÉ");
+      L.push("ARTICLE 1 : LA GRILLE DE QUALIFICATION DE CHAQUE ACCORD VERSÉ");
       L.push("");
       L.push("Pour chaque accord au dossier, quatre questions. Elles se posent sur le");
       L.push("TEXTE, pas sur l'intitulé.");
       L.push("");
       L.push("  Q1. Définit-il l'organisation, l'architecture et le contenu de la base");
       L.push("      (L. 2312-21, 1°) ?");
-      L.push("  Q2. Définit-il les modalités de fonctionnement de la base — droits");
+      L.push("  Q2. Définit-il les modalités de fonctionnement de la base, droits");
       L.push("      d'accès, niveau de mise en place, support, modalités de");
       L.push("      consultation et d'utilisation (L. 2312-21, 2°) ?");
       L.push("  Q3. Définit-il le contenu, la périodicité ou les modalités des");
-      L.push("      consultations récurrentes (L. 2312-19) ? — alors il ne règle pas la");
+      L.push("      consultations récurrentes (L. 2312-19) ?, alors il ne règle pas la");
       L.push("      base.");
       L.push("  Q4. Dans quelles conditions a-t-il été conclu ? L. 2312-21 n'ouvre que");
       L.push("      deux voies : les signatures des organisations syndicales dans les");
@@ -3894,7 +3894,7 @@
       L.push("SOURCE par ce module : il est nommé, non reproduit. Vérifiez-y les");
       L.push("conditions de conclusion avant de répondre à Q4.");
       L.push("");
-      L.push("ARTICLE 2 — LE CONSTAT, LORSQU'AUCUN ACCORD NE DÉFINIT LA BASE");
+      L.push("ARTICLE 2 : LE CONSTAT, LORSQU'AUCUN ACCORD NE DÉFINIT LA BASE");
       L.push("");
       L.push("« Je soussigné " + signataire(ctx) + ",");
       L.push("agissant en qualité de représentant légal de " + nomDe(ctx) + ",");
@@ -3917,16 +3917,16 @@
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("ARTICLE 3 — CE QU'IL FAUT RETIRER DU BORDEREAU");
+      L.push("ARTICLE 3 : CE QU'IL FAUT RETIRER DU BORDEREAU");
       L.push("");
       L.push("Les accords qui ne traitent pas de la base n'ont pas leur place dans ce");
       L.push("bordereau : ils y font croire à un régime conventionnel qui n'existe pas.");
-      L.push("Retirez-les, et versez-les au dossier qui les concerne — celui de");
+      L.push("Retirez-les, et versez-les au dossier qui les concerne, celui de");
       L.push("l'article L. 2312-19 pour les consultations récurrentes.");
       L.push("");
       L.push("Pièces retirées : [.............................................].");
       L.push("");
-      L.push("ARTICLE 4 — LA RECTIFICATION DE LA DÉCLARATION");
+      L.push("ARTICLE 4 : LA RECTIFICATION DE LA DÉCLARATION");
       L.push("");
       L.push("Régime déclaré avant rectification : [...........................].");
       L.push("Régime retenu après examen des pièces : [........................].");
@@ -3957,11 +3957,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     BDESE-CTL-PRV-01 — LE DOSSIER DE PREUVE
+     BDESE-CTL-PRV-01 : LE DOSSIER DE PREUVE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("BDESE-CTL-PRV-01", {
-    nom: "Le dossier de preuve de la mise à disposition — support, accès, notifications",
+    nom: "Le dossier de preuve de la mise à disposition, support, accès, notifications",
     detail: "L'inventaire des pièces qui prouvent la mise à disposition, le " +
             "registre des accès et des envois, et ce que l'application ne peut " +
             "pas attester à votre place.",
@@ -3976,7 +3976,7 @@
       L.push("");
       L.push("L'article L. 2312-18 met la base à disposition, et c'est un ACTE DE");
       L.push("L'EMPLOYEUR : c'est à lui de l'établir. Ce module prépare, structure, date");
-      L.push("et audite le contenu — il n'est pas la base, et il n'atteste pas la mise à");
+      L.push("et audite le contenu, il n'est pas la base, et il n'atteste pas la mise à");
       L.push("disposition. Il ne le fera pas, et un rapport d'audit ne vaut pas preuve");
       L.push("de mise à disposition.");
       L.push("");
@@ -4016,13 +4016,13 @@
       L.push("");
 
       L.push(GROS);
-      L.push("DOSSIER DE PREUVE — INVENTAIRE");
+      L.push("DOSSIER DE PREUVE : INVENTAIRE");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx).toUpperCase());
       L.push("Constitué le " + leJour(aujourd(ctx)) + ", tenu au fil des mises à jour.");
       L.push("");
-      L.push("PIÈCE 1 — LE SUPPORT");
+      L.push("PIÈCE 1 : LE SUPPORT");
       L.push("");
       L.push("Description : [espace informatique dédié / intranet / classeur papier");
       L.push("tenu à ..............................].");
@@ -4039,12 +4039,12 @@
       else
         L.push("Votre effectif n'est pas renseigné : tranchez sur votre effectif réel.");
       L.push("");
-      L.push("PIÈCE 2 — LES TRACES D'ACCÈS QUE CE SUPPORT PRODUIT");
+      L.push("PIÈCE 2 : LES TRACES D'ACCÈS QUE CE SUPPORT PRODUIT");
       L.push("");
       L.push("  · support informatique : journal de connexions horodaté, avec");
-      L.push("    l'identifiant de chaque bénéficiaire — [conservé à : ............] ;");
+      L.push("    l'identifiant de chaque bénéficiaire, [conservé à : ............] ;");
       L.push("  · support papier : registre de consultation signé et daté, ou décharges");
-      L.push("    de remise — [conservé à : ............] ;");
+      L.push("    de remise, [conservé à : ............] ;");
       L.push("  · dans les deux cas : la liste nominative des accès ouverts, avec la");
       L.push("    date d'ouverture de chacun.");
       L.push("");
@@ -4052,7 +4052,7 @@
       L.push("consultation. L'accès est permanent (L. 2312-36) ; une trace qui ne montre");
       L.push("que les semaines de réunion prouve l'inverse de ce qu'on veut prouver.");
       L.push("");
-      L.push("PIÈCE 3 — LES INFORMATIONS ENVOYÉES AUX BÉNÉFICIAIRES");
+      L.push("PIÈCE 3 : LES INFORMATIONS ENVOYÉES AUX BÉNÉFICIAIRES");
       L.push("");
       L.push("  date d'envoi │ objet de la mise à jour │ destinataires │ preuve");
       L.push("  ─────────────┼─────────────────────────┼───────────────┼──────────────");
@@ -4062,7 +4062,7 @@
       L.push("C'est cette pièce qui datera le point de départ des délais de");
       L.push("consultation (R. 2312-5).");
       L.push("");
-      L.push("PIÈCE 4 — LA DÉCISION D'ORGANISATION ET LES MODALITÉS");
+      L.push("PIÈCE 4 : LA DÉCISION D'ORGANISATION ET LES MODALITÉS");
       L.push("");
       L.push("  · la décision ou l'accord qui fixe le support, les droits d'accès et");
       L.push("    les modalités de consultation et d'utilisation (L. 2312-21, 2° ;");
@@ -4072,7 +4072,7 @@
       L.push("    alinéa) et la liste des informations présentées comme");
       L.push("    confidentielles, avec la durée de leur confidentialité (R. 2312-13).");
       L.push("");
-      L.push("PIÈCE 5 — LES ÉLÉMENTS D'ANALYSE OU D'EXPLICATION");
+      L.push("PIÈCE 5 : LES ÉLÉMENTS D'ANALYSE OU D'EXPLICATION");
       L.push("");
       L.push("R. 2312-14 pose deux conditions cumulatives pour que la mise à disposition");
       L.push("actualisée vaille communication : la condition du second alinéa de");
@@ -4080,9 +4080,9 @@
       L.push("d'explication « lorsqu'ils sont prévus par le présent code ». Conservez la");
       L.push("trace de ces éléments : sans eux, le bénéfice ne joue pas.");
       L.push("");
-      L.push("PIÈCE 6 — LE CLASSEMENT");
+      L.push("PIÈCE 6 : LE CLASSEMENT");
       L.push("");
-      L.push("Ces pièces sont classées PAR DATE et conservées AVEC la base — non dans un");
+      L.push("Ces pièces sont classées PAR DATE et conservées AVEC la base, non dans un");
       L.push("dossier d'audit. C'est ce dossier, et non le rapport d'audit, qui prouvera");
       L.push("la mise à disposition.");
       L.push("");
@@ -4101,7 +4101,7 @@
         ech(ctx, 7, "vous réunissez les informations envoyées sur les douze derniers"),
         "    mois, avec leur date et leurs destinataires.",
         ech(ctx, 10, "les pièces sont classées par date et conservées avec la base."),
-        "  · et ensuite, en continu — chaque mise à jour verse sa preuve au dossier.",
+        "  · et ensuite, en continu, chaque mise à jour verse sa preuve au dossier.",
         "    Une preuve réunie après coup n'en est pas une.",
       ]));
 

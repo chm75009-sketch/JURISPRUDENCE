@@ -1,4 +1,4 @@
-/* Les documents que l'application PRODUIT — module « licenciement économique »,
+/* Les documents que l'application PRODUIT - module « licenciement économique »,
    volet consultation du comité, entretien préalable, plan de sauvegarde de
    l'emploi, salariés protégés et situations individuelles.
 
@@ -21,8 +21,8 @@
    documents ne recalculent jamais ce régime : ils le demandent au moteur du
    module (MoteurEco.moteur.regimeEco), qui l'a déjà dit dans le rapport. Deux
    réponses différentes à la même question, dans le rapport et dans le document,
-   se remarqueraient tout de suite. Quand le moteur n'est pas chargé — la page
-   des documents peut l'être seule —, le document énonce les deux branches au
+   se remarqueraient tout de suite. Quand le moteur n'est pas chargé - la page
+   des documents peut l'être seule -, le document énonce les deux branches au
    lieu d'en choisir une au hasard.
 
    CE QUI NE SE RATTRAPE PAS
@@ -46,7 +46,7 @@
 
    Aucune peine n'est annoncée. Le corpus du module ne porte aucun article de
    sanction pénale : ce qui se joue est donc dit tel que les textes lus le
-   disent — nullité de la procédure (L. 1235-10), poursuite du contrat ou
+   disent - nullité de la procédure (L. 1235-10), poursuite du contrat ou
    réintégration (L. 1235-11), indemnité calculée en fonction du préjudice subi
    (L. 1235-12), indemnité non inférieure aux salaires des six derniers mois
    (L. 1235-16).
@@ -55,7 +55,7 @@
    l'identité des salariés concernés, le contenu de ses mesures : tout cela sort
    ENTRE CROCHETS, avec la consigne de l'écrire daté, chiffré et circonstancié.
    Un document qui devinerait ces éléments ferait signer à l'employeur des faits
-   qu'il n'a pas déclarés — et c'est sur ces faits que le juge statue.
+   qu'il n'a pas déclarés - et c'est sur ces faits que le juge statue.
 
    LES DÉLAIS SE DISENT AVEC LEUR POINT DE DÉPART, et se calculent quand une date
    du dossier le permet. « Un mois » ne veut rien dire ; « un mois à compter de
@@ -148,7 +148,7 @@
     return x && y ? Math.round((y - x) / 86400000) : null;
   }
   /* Cinq jours ouvrables, sept, quinze : le samedi compte, le dimanche non. Les
-     jours fériés ne sont pas retirés ici — le moteur, lui, les retire (il porte
+     jours fériés ne sont pas retirés ici - le moteur, lui, les retire (il porte
      le calendrier des onze fériés, Pâques comprise). Le document le dit au lieu
      de laisser croire à un calcul complet. */
   function plusOuvrables(s, n) {
@@ -213,7 +213,7 @@
      pas l'avertissement qui le suit. */
   function irrattrapable(L, quoi, pourquoi) {
     L.push(DOUBLE);
-    L.push("CE QUI NE SE RATTRAPE PAS — À LIRE AVANT TOUT LE RESTE");
+    L.push("CE QUI NE SE RATTRAPE PAS - À LIRE AVANT TOUT LE RESTE");
     L.push(DOUBLE);
     L.push("");
     quoi.forEach(function (x) { L.push(x); });
@@ -234,8 +234,8 @@
     lignes.forEach(function (x) { L.push(x); });
     L.push("");
     L.push("Ce qui est entre crochets vous appartient : ce sont vos choix, vos faits,");
-    L.push("ou les données que l'audit n'a pas reçues. Remplacez chaque crochet — daté,");
-    L.push("chiffré, circonstancié — et ne laissez aucun crochet dans la pièce que vous");
+    L.push("ou les données que l'audit n'a pas reçues. Remplacez chaque crochet - daté,");
+    L.push("chiffré, circonstancié - et ne laissez aucun crochet dans la pièce que vous");
     L.push("versez au dossier. Un crochet resté dans une convocation se lit comme un");
     L.push("aveu d'improvisation.");
     L.push("");
@@ -247,7 +247,7 @@
     L.push("");
     L.push(TRAIT);
     L.push("");
-    L.push("Fondement — " + articles.join(" · ") + " du code du travail,");
+    L.push("Fondement - " + articles.join(" · ") + " du code du travail,");
     L.push("lus à la source. Les versions lues sont celles du dépôt de textes du module");
     L.push("(moteur/economique/textes_eco.json), qui porte pour chacune son identifiant");
     L.push("LEGIARTI : un article peut être modifié sans changer de numéro, et seul cet");
@@ -259,9 +259,9 @@
     L.push("qu'elle n'a pas lue. Ce qui est dit du risque l'est sur le fondement des");
     L.push("articles cités.");
     L.push("");
-    L.push("Réserve — ce document ne vaut pas consultation. L'application ne lit ni votre");
+    L.push("Réserve - ce document ne vaut pas consultation. L'application ne lit ni votre");
     L.push("convention collective ni vos accords, qui peuvent fixer d'autres délais ou");
-    L.push("ajouter des exigences — l'article L. 1233-30 réserve expressément la");
+    L.push("ajouter des exigences - l'article L. 1233-30 réserve expressément la");
     L.push("convention ou l'accord collectif qui « peut prévoir des délais différents ».");
   }
 
@@ -300,7 +300,7 @@
       : v === "unilateral" ? "document unilatéral de l'employeur (L. 1233-24-4), soumis à homologation"
       : "[voie non arrêtée : accord collectif majoritaire ou document unilatéral]";
   }
-  /* Le délai d'avis, en mois, tel que le régime le fixe — et rien d'autre. Le
+  /* Le délai d'avis, en mois, tel que le régime le fixe - et rien d'autre. Le
      régime de l'entreprise de moins de cinquante salariés n'exprime pas son
      délai en mois : le document ne lui en invente pas un. */
   function delaiAvisMois(r) {
@@ -344,7 +344,7 @@
       L.push("");
       L.push("  Le moteur du module n'est pas chargé sur cette page : le régime n'est pas");
       L.push("  rappelé ici. Le document énonce les branches du texte au lieu d'en choisir");
-      L.push("  une — reportez-vous au rapport d'audit, qui l'a tranché.");
+      L.push("  une - reportez-vous au rapport d'audit, qui l'a tranché.");
     }
     L.push("");
     L.push(TRAIT);
@@ -355,10 +355,10 @@
      dont un membre n'a pas été convoqué est une réunion attaquable, et c'est la
      pièce la plus souvent absente du dossier. */
   function destinataires(L, ctx, central) {
-    L.push("LISTE DES DESTINATAIRES — à compléter et à conserver au dossier");
+    L.push("LISTE DES DESTINATAIRES - à compléter et à conserver au dossier");
     L.push("");
     L.push("  Membres titulaires de la délégation du personnel : [noms, un par ligne]");
-    L.push("  Membres suppléants : [noms — les convoquer, même s'ils n'assistent qu'en");
+    L.push("  Membres suppléants : [noms - les convoquer, même s'ils n'assistent qu'en");
     L.push("  l'absence du titulaire, est la seule façon de prouver qu'ils l'ont été]");
     L.push("  Représentant syndical au comité, le cas échéant : [nom]");
     if (central) {
@@ -368,11 +368,11 @@
     }
     L.push("  Le médecin du travail et l'agent de contrôle de l'inspection du travail,");
     L.push("  pour les points portant sur la santé, la sécurité et les conditions de");
-    L.push("  travail : [à compléter — l'application n'a pas lu au code du travail la");
+    L.push("  travail : [à compléter - l'application n'a pas lu au code du travail la");
     L.push("  disposition qui règle cette convocation et ne l'affirme donc pas]");
     L.push("");
     L.push("  Moyen d'envoi : [remise en main propre contre décharge · lettre");
-    L.push("  recommandée · courriel avec accusé de réception] — le moyen doit conférer");
+    L.push("  recommandée · courriel avec accusé de réception] - le moyen doit conférer");
     L.push("  date certaine, c'est cette date qui se discute.");
     L.push("");
     L.push("  Date d'envoi : ....................  Décharges signées : ☐");
@@ -383,7 +383,7 @@
     A.ajouter(id, { nom: nomDoc, detail: detail, produire: produire });
   }
 
-  /* ═════════════════════════════════════ LES GÉNÉRATEURS — un par contrôle */
+  /* ═════════════════════════════════════ LES GÉNÉRATEURS - un par contrôle */
 
   /* ══════════════════════════════════════════════════════════════════════
      LA CONSULTATION DU COMITÉ
@@ -416,7 +416,7 @@
         "opérations : la consultation précède la décision, elle ne la commente pas.",
         "",
         "Une consultation tenue après la notification ne régularise donc rien. Ce",
-        "document sert à convoquer AVANT — et si une lettre est déjà partie, il ne",
+        "document sert à convoquer AVANT - et si une lettre est déjà partie, il ne",
         "faut pas antidater : il faut consigner le calendrier réel et porter le point",
         "à votre conseil.",
       ]);
@@ -435,7 +435,7 @@
         if (r.note) { L.push(""); L.push("  " + r.note); }
         L.push("");
         if (!r.consultationCSE) {
-          L.push("ATTENTION — l'audit conclut que la consultation n'est pas due ici. Ne vous");
+          L.push("ATTENTION - l'audit conclut que la consultation n'est pas due ici. Ne vous");
           L.push("servez de ce document que si votre situation a changé depuis l'audit :");
           L.push("un licenciement supplémentaire dans la même période de trente jours");
           L.push("déplace le régime, et la consultation devient due sans autre avertissement.");
@@ -443,16 +443,16 @@
         }
       } else {
         L.push("Le moteur du module n'est pas chargé : les deux branches du texte sont");
-        L.push("énoncées ci-dessous, et c'est à vous — ou au rapport d'audit — de dire");
+        L.push("énoncées ci-dessous, et c'est à vous - ou au rapport d'audit - de dire");
         L.push("laquelle s'applique.");
         L.push("");
         L.push("  Moins de dix licenciements sur trente jours, entreprise d'au moins onze");
-        L.push("  salariés — L. 1233-8 : une réunion, et le comité « rend son avis dans un");
+        L.push("  salariés - L. 1233-8 : une réunion, et le comité « rend son avis dans un");
         L.push("  délai qui ne peut être supérieur, à compter de la date de la première");
         L.push("  réunion au cours de laquelle il est consulté, à un mois ». Les");
         L.push("  renseignements sont ceux de L. 1233-10.");
         L.push("");
-        L.push("  Au moins dix licenciements sur trente jours — L. 1233-28. Dans une");
+        L.push("  Au moins dix licenciements sur trente jours - L. 1233-28. Dans une");
         L.push("  entreprise de moins de cinquante salariés, L. 1233-29 : « deux réunions,");
         L.push("  séparées par un délai qui ne peut être supérieur à quatorze jours ».");
         L.push("  Dans une entreprise d'au moins cinquante salariés, L. 1233-30 : « au");
@@ -490,7 +490,7 @@
       L.push("Remise en main propre contre décharge / lettre recommandée avec avis de");
       L.push("réception [rayer la mention inutile]");
       L.push("");
-      L.push("Objet : convocation à la réunion du comité social et économique — projet de");
+      L.push("Objet : convocation à la réunion du comité social et économique - projet de");
       L.push("licenciement collectif pour motif économique");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -507,7 +507,7 @@
       L.push("");
       L.push("Vous trouverez joints à la présente convocation l'ordre du jour et");
       L.push("l'ensemble des renseignements que le code du travail impose d'adresser");
-      L.push("« avec la convocation » — la liste en est reprise dans le document");
+      L.push("« avec la convocation » - la liste en est reprise dans le document");
       L.push("d'information joint. Ils vous sont adressés avec la convocation, et non");
       L.push("remis en séance, afin que le comité dispose d'un temps réel d'examen.");
       L.push("");
@@ -572,7 +572,7 @@
       L.push("L'application n'a pas lu, dans le corpus de ce module, la disposition du");
       L.push("code du travail qui règle l'établissement de l'ordre du jour du comité :");
       L.push("elle ne la cite donc pas et n'en énonce pas le contenu. Vérifiez-la, ainsi");
-      L.push("que le règlement intérieur de votre comité, avant d'envoyer — les deux");
+      L.push("que le règlement intérieur de votre comité, avant d'envoyer - les deux");
       L.push("emplacements de signature ci-dessus sont prévus pour cela.");
       L.push("");
 
@@ -599,14 +599,14 @@
       L.push("  Renseignements remis ou rappelés, point par point : [reprendre la liste");
       L.push("  du document d'information et pointer chacun des sept points]");
       L.push("");
-      L.push("  Questions posées par les membres, et réponses apportées : [transcrire —");
+      L.push("  Questions posées par les membres, et réponses apportées : [transcrire -");
       L.push("  une question restée sans réponse au procès-verbal est une question");
       L.push("  restée sans réponse]");
       L.push("");
       L.push("  Suggestions relatives aux mesures sociales et propositions alternatives");
       L.push("  formulées par le comité (L. 1233-33) : [transcrire chacune]");
       L.push("  Réponse motivée de l'employeur, ou date à laquelle elle sera apportée :");
-      L.push("  [à écrire — le texte exige une réponse motivée, non un accusé de");
+      L.push("  [à écrire - le texte exige une réponse motivée, non un accusé de");
       L.push("  réception]");
       L.push("");
       L.push("  [Le cas échéant] Décision de recourir à une expertise : ...............");
@@ -621,12 +621,12 @@
       var depart = rs.length ? rs[0] : null;
       var mois = delaiAvisMois(r);
 
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous adressez la convocation, l'ordre du");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous adressez la convocation, l'ordre du");
       L.push("jour et les renseignements. Ils partent ENSEMBLE : le code impose de les");
       L.push("adresser « avec la convocation », et c'est le seul point de ce calendrier");
       L.push("qui ne souffre aucun aménagement.");
       L.push("");
-      L.push("Ensuite — la première réunion. Le code ne fixe ici aucun délai chiffré");
+      L.push("Ensuite - la première réunion. Le code ne fixe ici aucun délai chiffré");
       L.push("entre la convocation et la séance ; mais les renseignements devant parvenir");
       L.push("avec la convocation, une réunion tenue à deux ou trois jours prive le");
       L.push("comité de tout examen, et c'est sur ce terrain que la consultation est");
@@ -646,7 +646,7 @@
         L.push("");
       } else {
         L.push("Aucune réunion n'est encore tenue. Dès que la première le sera, c'est de sa");
-        L.push("date — et d'aucune autre — que courra le délai d'avis.");
+        L.push("date - et d'aucune autre - que courra le délai d'avis.");
         L.push("");
       }
       if (rs.length >= 2) {
@@ -655,7 +655,7 @@
         L.push("CTL-CSE-02 et son document le confrontent au régime.");
         L.push("");
       }
-      L.push("Enfin — la notification. Aucune lettre ne part avant que le comité ait rendu");
+      L.push("Enfin - la notification. Aucune lettre ne part avant que le comité ait rendu");
       L.push("son avis ou soit réputé consulté : c'est l'objet du contrôle CTL-CSE-04 et");
       L.push("de son document.");
 
@@ -703,7 +703,7 @@
       modeEmploi(L, [
         "L'intervalle entre les réunions n'est pas une commodité d'agenda : c'est le",
         "temps que la loi donne au comité pour examiner ce qu'on lui a remis. Deux",
-        "régimes, deux règles inverses — un MAXIMUM de quatorze jours dans",
+        "régimes, deux règles inverses - un MAXIMUM de quatorze jours dans",
         "l'entreprise de moins de cinquante salariés (L. 1233-29), un MINIMUM de",
         "quinze jours dans celle d'au moins cinquante (L. 1233-30, I). Se tromper de",
         "règle, c'est se tromper dans les deux sens à la fois.",
@@ -717,13 +717,13 @@
 
       titre(L, "I. La règle applicable, dans les termes du texte");
 
-      L.push("Entreprise ou établissement de MOINS de cinquante salariés — L. 1233-29 :");
+      L.push("Entreprise ou établissement de MOINS de cinquante salariés - L. 1233-29 :");
       L.push("« Dans les entreprises ou établissements employant habituellement moins de");
       L.push("cinquante salariés, l'employeur réunit et consulte le comité social et");
       L.push("économique. Ce dernier tient deux réunions, séparées par un délai qui ne");
       L.push("peut être supérieur à quatorze jours. »");
       L.push("");
-      L.push("Entreprise ou établissement d'AU MOINS cinquante salariés — L. 1233-30, I,");
+      L.push("Entreprise ou établissement d'AU MOINS cinquante salariés - L. 1233-30, I,");
       L.push("dernier alinéa : « Le comité social et économique tient au moins deux");
       L.push("réunions espacées d'au moins quinze jours. »");
       L.push("");
@@ -778,8 +778,8 @@
           L.push("Intervalle : " + e + " jours, pour un minimum de quinze (L. 1233-30, I).");
           L.push(e < 15 ? "=> Il manque " + (15 - e) + " jour(s)." : "=> Le minimum est respecté.");
         } else {
-          L.push("Intervalle : " + e + " jours. Le régime n'étant pas rappelé ici — le moteur");
-          L.push("du module n'est pas chargé —, confrontez ce chiffre au maximum de quatorze");
+          L.push("Intervalle : " + e + " jours. Le régime n'étant pas rappelé ici - le moteur");
+          L.push("du module n'est pas chargé -, confrontez ce chiffre au maximum de quatorze");
           L.push("jours de L. 1233-29 ou au minimum de quinze jours de L. 1233-30, I selon");
           L.push("que l'entreprise emploie habituellement moins de cinquante salariés ou non.");
         }
@@ -806,7 +806,7 @@
       L.push(ville(ctx) + ", le " + leJour(ctx.aujourdhui));
       L.push("");
       if (trop || pasAssez) {
-        L.push("Objet : calendrier des réunions du comité — constat");
+        L.push("Objet : calendrier des réunions du comité - constat");
         L.push("");
         L.push("Mesdames, Messieurs,");
         L.push("");
@@ -823,8 +823,8 @@
         L.push("nouvelle n'est convoquée dans le seul but d'effacer ce constat : les dates");
         L.push("réelles restent celles qui figurent aux procès-verbaux.");
         L.push("");
-        L.push("[Le cas échéant : la suite de la procédure — et notamment la date de");
-        L.push("notification — est arrêtée comme suit : décrire.]");
+        L.push("[Le cas échéant : la suite de la procédure - et notamment la date de");
+        L.push("notification - est arrêtée comme suit : décrire.]");
       } else {
         L.push("Objet : convocation à la " + (manquante === 2 ? "seconde" : "prochaine") + " réunion du comité social et économique");
         L.push("");
@@ -863,16 +863,16 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous relevez les dates réelles sur les");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous relevez les dates réelles sur les");
       L.push("convocations et les procès-verbaux, et vous les inscrivez au tableau du II.");
       L.push("");
       if (rs.length && code === "GRAND_PETITE_ENTREPRISE") {
-        L.push("Butoir de la seconde réunion : " + jour(plusJours(rs[0], 14)) + " — quatorze jours après la");
+        L.push("Butoir de la seconde réunion : " + jour(plusJours(rs[0], 14)) + " - quatorze jours après la");
         L.push("première réunion du " + jour(rs[0]) + " (L. 1233-29).");
         L.push("");
       }
       if (rs.length && code === "GRAND_COLLECTIF") {
-        L.push("Date la plus proche pour la seconde réunion : " + jour(plusJours(rs[0], 15)) + " — quinze jours");
+        L.push("Date la plus proche pour la seconde réunion : " + jour(plusJours(rs[0], 15)) + " - quinze jours");
         L.push("après la première réunion du " + jour(rs[0]) + " (L. 1233-30, I).");
         L.push("");
       }
@@ -880,7 +880,7 @@
         L.push("Expiration du délai d'avis : " + jour(plusMois(rs[0], delaiAvisMois(r))) + ". Aucune notification avant.");
         L.push("");
       }
-      L.push("Après l'avis, ou après l'expiration du délai — et pas avant — la");
+      L.push("Après l'avis, ou après l'expiration du délai - et pas avant - la");
       L.push("notification devient possible, sous réserve, lorsqu'un plan de sauvegarde");
       L.push("de l'emploi est dû, de la décision de validation ou d'homologation de");
       L.push("l'autorité administrative (L. 1233-39).");
@@ -906,7 +906,7 @@
   }
 
   /* Les sept renseignements, verbatim. Les deux articles disent la même chose à
-     un mot près — L. 1233-10, 7° vise « les conséquences des licenciements
+     un mot près - L. 1233-10, 7° vise « les conséquences des licenciements
      projetés », L. 1233-31, 7° « les conséquences de la réorganisation ». Le
      document reproduit celui qui s'applique, et signale l'écart : ce n'est pas
      une coquette, c'est ce que l'exposé du 7° doit couvrir. */
@@ -936,7 +936,7 @@
   }
 
   doc("CTL-CSE-03",
-    "La note d'information et de consultation — les sept renseignements",
+    "La note d'information et de consultation - les sept renseignements",
     "Le document que le code impose d'adresser « avec la convocation » : les " +
     "sept renseignements rédigés point par point, le tableau des catégories et " +
     "des critères d'ordre pondérés, le bordereau de décharge et le courrier de " +
@@ -956,14 +956,14 @@
       modeEmploi(L, [
         "Les deux articles emploient le même mot : l'employeur adresse ces",
         "renseignements « avec la convocation ». Remis en séance, ils ne sont pas",
-        "adressés avec la convocation — ils sont découverts en réunion, et le comité",
+        "adressés avec la convocation - ils sont découverts en réunion, et le comité",
         "n'a rien pu examiner. C'est le reproche le plus simple à établir de toute",
         "cette procédure : il se lit sur une date.",
         "",
         "Les sept points sont numérotés ci-dessous dans l'ordre du texte. Écrivez",
         "chacun. Un point laissé vide n'est pas un point discret : c'est un",
-        "renseignement manquant, et le septième — les conséquences en matière de",
-        "santé, de sécurité et de conditions de travail — est dû comme les six",
+        "renseignement manquant, et le septième - les conséquences en matière de",
+        "santé, de sécurité et de conditions de travail - est dû comme les six",
         "autres.",
         "",
         "N'écrivez ici aucun fait que vous ne puissiez produire. Les raisons",
@@ -977,12 +977,12 @@
       titre(L, "I. Le texte applicable");
 
       if (art === "L. 1233-10") {
-        L.push("Régime de moins de dix licenciements sur trente jours — L. 1233-10 :");
+        L.push("Régime de moins de dix licenciements sur trente jours - L. 1233-10 :");
         L.push("« L'employeur adresse aux représentants du personnel, avec la convocation à");
         L.push("la réunion prévue à l'article L. 1233-8, tous renseignements utiles sur le");
         L.push("projet de licenciement collectif. »");
       } else if (art === "L. 1233-31") {
-        L.push("Régime d'au moins dix licenciements sur trente jours — L. 1233-31 :");
+        L.push("Régime d'au moins dix licenciements sur trente jours - L. 1233-31 :");
         L.push("« L'employeur adresse aux représentants du personnel, avec la convocation à");
         L.push("la première réunion, tous renseignements utiles sur le projet de");
         L.push("licenciement collectif. »");
@@ -990,12 +990,12 @@
         L.push("Le moteur du module n'est pas chargé : les deux textes sont rappelés, et");
         L.push("c'est le nombre de licenciements sur trente jours qui décide.");
         L.push("");
-        L.push("L. 1233-10 — moins de dix licenciements : « L'employeur adresse aux");
+        L.push("L. 1233-10 - moins de dix licenciements : « L'employeur adresse aux");
         L.push("représentants du personnel, avec la convocation à la réunion prévue à");
         L.push("l'article L. 1233-8, tous renseignements utiles sur le projet de");
         L.push("licenciement collectif. »");
         L.push("");
-        L.push("L. 1233-31 — au moins dix licenciements : « L'employeur adresse aux");
+        L.push("L. 1233-31 - au moins dix licenciements : « L'employeur adresse aux");
         L.push("représentants du personnel, avec la convocation à la première réunion,");
         L.push("tous renseignements utiles sur le projet de licenciement collectif. »");
       }
@@ -1003,7 +1003,7 @@
       L.push("Les deux articles énumèrent ensuite les mêmes sept points, à un mot près");
       L.push("au septième : L. 1233-10 vise « les conséquences des licenciements");
       L.push("projetés », L. 1233-31 « les conséquences de la réorganisation ». Écrivez");
-      L.push("ce que votre régime commande — et, dans le doute, couvrez les deux.");
+      L.push("ce que votre régime commande - et, dans le doute, couvrez les deux.");
       L.push("");
       if (dISO(f.dateInfoCSE) && rs.length) {
         L.push("Dans votre dossier, la convocation a été adressée le " + jour(f.dateInfoCSE) + " et la");
@@ -1015,7 +1015,7 @@
       titre(L, "II. Les sept renseignements");
 
       SEPT.forEach(function (p) {
-        L.push("── " + p.m + " — " + p.court + " ──");
+        L.push("── " + p.m + " - " + p.court + " ──");
         L.push("");
         L.push("Texte : « " + (art === "L. 1233-31" && p.t31 ? p.t31 : p.t) + ". »");
         if (p.m === "7°" && art !== "L. 1233-10") {
@@ -1033,7 +1033,7 @@
           L.push("  trimestriel comparé, comptes consolidés du groupe le cas échéant.]");
         } else if (p.m === "2°") {
           L.push("  Nombre de licenciements envisagé : " +
-            (n === null ? "[nombre — à écrire en chiffres]" : n) + ".");
+            (n === null ? "[nombre - à écrire en chiffres]" : n) + ".");
           if (nbf(f.licenciementsRecents30j)) {
             L.push("  Dont " + nbf(f.licenciementsRecents30j) + " licenciement(s) déjà prononcé(s) dans la même");
             L.push("  période de trente jours.");
@@ -1051,7 +1051,7 @@
           L.push("  Nombre de salariés employés dans l'établissement : " +
             (nbf(f.effectifEtablissement) === null
               ? "[effectif de l'établissement]" : nbf(f.effectifEtablissement)) + ".");
-          L.push("  Dont permanents : [nombre] · non permanents : [nombre — contrats à durée");
+          L.push("  Dont permanents : [nombre] · non permanents : [nombre - contrats à durée");
           L.push("  déterminée, intérimaires, saisonniers].");
           if (eff !== null) L.push("  Effectif de l'entreprise, pour mémoire : " + eff + " salariés.");
           L.push("  [Le texte demande l'effectif de l'ÉTABLISSEMENT, permanents ou non :");
@@ -1089,7 +1089,7 @@
           }
         } else if (p.m === "7°") {
           L.push("  [Exposer les conséquences du projet en matière de santé, de sécurité ou");
-          L.push("  de conditions de travail — pour les salariés dont le licenciement est");
+          L.push("  de conditions de travail - pour les salariés dont le licenciement est");
           L.push("  envisagé ET pour ceux qui restent, dont la charge se redistribue. Le");
           L.push("  document du contrôle CTL-CSE-10 développe ce point ; joignez-le.]");
           if (String(f.consequencesSSCT || "").trim()) {
@@ -1109,7 +1109,7 @@
 
       L.push("Le 3° ne demande pas seulement la liste des catégories : il demande « les");
       L.push("critères proposés pour l'ordre des licenciements ». Le mot « proposés »");
-      L.push("dit l'ordre des opérations — l'article L. 1233-5 précise que l'employeur");
+      L.push("dit l'ordre des opérations - l'article L. 1233-5 précise que l'employeur");
       L.push("définit les critères « après consultation du comité social et");
       L.push("économique ». Ce tableau est donc une proposition soumise au comité, non");
       L.push("une décision déjà prise.");
@@ -1131,7 +1131,7 @@
       L.push("");
       L.push("Le texte réserve enfin la convention ou l'accord collectif : les critères");
       L.push("légaux ne s'appliquent qu'« en l'absence de convention ou accord collectif");
-      L.push("de travail applicable ». Vérifiez le vôtre — l'application ne le lit pas.");
+      L.push("de travail applicable ». Vérifiez le vôtre - l'application ne le lit pas.");
       if (f.convention && f.convention.criteresOrdre === true) {
         L.push("La fiche déclare que votre convention porte des critères d'ordre : ce sont");
         L.push("eux qui s'appliquent, et le tableau ci-dessous doit être refait sur leur");
@@ -1145,7 +1145,7 @@
       L.push("d'emplois dans laquelle sont situés un ou plusieurs établissements de");
       L.push("l'entreprise concernés par les suppressions d'emplois. »");
       L.push("");
-      L.push("PONDÉRATION PROPOSÉE — à compléter et à soumettre au comité");
+      L.push("PONDÉRATION PROPOSÉE - à compléter et à soumettre au comité");
       L.push("");
       tableau(L, ["Critère (L. 1233-5)", "Points proposés", "Comment il est apprécié"], [
         ["1° Charges de famille", "[  ]", "[barème : nombre de personnes à charge, parent isolé]"],
@@ -1162,7 +1162,7 @@
         L.push("suppressions envisagées, puis salarié par salarié la note de chacun des");
         L.push("quatre critères et le total.");
         L.push("");
-        L.push("  Catégorie : [intitulé] — effectif [  ] — suppressions envisagées [  ]");
+        L.push("  Catégorie : [intitulé] - effectif [  ] - suppressions envisagées [  ]");
         L.push("");
         tableau(L, ["Salarié", "1° Charges", "2° Ancienneté", "3° Social", "4° Qualités", "Total"],
           [["[nom ou matricule]", "[ ]", "[ ]", "[ ]", "[ ]", "[ ]"],
@@ -1194,7 +1194,7 @@
               L.push("");
               L.push("  Ce classement est celui que l'audit applique : total le plus faible en");
               L.push("  premier, l'ancienneté départageant les ex æquo. Il vaut ce que vaut la");
-              L.push("  pondération — c'est elle, et non le classement, qui se discute.");
+              L.push("  pondération - c'est elle, et non le classement, qui se discute.");
             } else {
               lignes = sal.map(function (s) {
                 var t = (nbf(s.charges) || 0) + (nbf(s.anciennetePoints) || 0) +
@@ -1221,7 +1221,7 @@
         tableau(L, ["Poste", "Service", "Effectif avant", "Effectif après", "Écart"],
           postes.map(function (p) {
             var av = nbf(p.avant), ap = nbf(p.apres);
-            return [cro(p.intitule, "intitulé"), cro(p.service, "—"),
+            return [cro(p.intitule, "intitulé"), cro(p.service, "-"),
               av === null ? "[ ]" : av, ap === null ? "[ ]" : ap,
               (av !== null && ap !== null) ? (ap - av) : "[ ]"];
           }));
@@ -1272,9 +1272,9 @@
       L.push("BORDEREAU DES PIÈCES ADRESSÉES AVEC LA CONVOCATION");
       L.push("");
       tableau(L, ["#", "Pièce", "Point du texte", "Remise"], [
-        ["1", "Convocation à la réunion", "—", "☐"],
-        ["2", "Ordre du jour", "—", "☐"],
-        ["3", "Note d'information — raisons du projet", "1°", "☐"],
+        ["1", "Convocation à la réunion", "-", "☐"],
+        ["2", "Ordre du jour", "-", "☐"],
+        ["3", "Note d'information - raisons du projet", "1°", "☐"],
         ["4", "Nombre de licenciements envisagé", "2°", "☐"],
         ["5", "Catégories et critères d'ordre proposés", "3°", "☐"],
         ["6", "Effectif de l'établissement", "4°", "☐"],
@@ -1294,15 +1294,15 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous complétez les sept points et le tableau");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous complétez les sept points et le tableau");
       L.push("des critères.");
       L.push("");
-      L.push("Le même jour que la convocation — et non après : la note et ses pièces");
+      L.push("Le même jour que la convocation - et non après : la note et ses pièces");
       L.push("partent AVEC la convocation. Si la convocation est déjà partie sans elles,");
       L.push("il faut convoquer à nouveau ; le document du contrôle CTL-CSE-06 porte la");
       L.push("lettre de report.");
       L.push("");
-      L.push("Ensuite — la réunion, puis l'avis. Et l'article L. 1233-48 impose que");
+      L.push("Ensuite - la réunion, puis l'avis. Et l'article L. 1233-48 impose que");
       L.push("« l'ensemble des informations communiquées aux représentants du personnel");
       L.push("lors de leur convocation aux réunions prévues par les articles L. 1233-29");
       L.push("et L. 1233-30 » soit communiqué SIMULTANÉMENT à l'autorité administrative.");
@@ -1323,7 +1323,7 @@
   doc("CTL-CSE-04",
     "Le procès-verbal d'avis, ou le constat écrit d'expiration du délai",
     "L'avis du comité consigné, ou le constat daté qui établit qu'à défaut " +
-    "d'avis le comité est réputé consulté — et la date de notification la plus " +
+    "d'avis le comité est réputé consulté - et la date de notification la plus " +
     "proche que ce constat autorise.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
@@ -1355,9 +1355,9 @@
       modeEmploi(L, [
         "Deux issues, et deux seulement : le comité rend un avis, ou le délai expire",
         "et il est réputé consulté. L'article L. 1233-8 le dit pour le régime de",
-        "moins de dix licenciements — « En l'absence d'avis rendu dans ce délai, le",
-        "comité social et économique est réputé avoir été consulté » — et l'article",
-        "L. 1233-30, II le répète pour l'autre — « En l'absence d'avis du comité",
+        "moins de dix licenciements - « En l'absence d'avis rendu dans ce délai, le",
+        "comité social et économique est réputé avoir été consulté » - et l'article",
+        "L. 1233-30, II le répète pour l'autre - « En l'absence d'avis du comité",
         "social et économique dans ces délais, celui-ci est réputé avoir été",
         "consulté ».",
         "",
@@ -1415,13 +1415,13 @@
         L.push("Votre régime n'exprime pas le délai d'avis en mois : l'article L. 1233-29");
         L.push("impose deux réunions séparées d'un délai qui ne peut être supérieur à");
         L.push("quatorze jours, sans fixer de délai d'avis chiffré. La date à laquelle le");
-        L.push("comité est réputé consulté doit donc être établie autrement — par votre");
+        L.push("comité est réputé consulté doit donc être établie autrement - par votre");
         L.push("accord collectif s'il en fixe une, à défaut par l'avis effectivement");
         L.push("rendu. Ne notifiez pas sur une date que rien n'établit.");
         L.push("");
       }
 
-      titre(L, "II. Le procès-verbal d'avis — si le comité a rendu un avis");
+      titre(L, "II. Le procès-verbal d'avis - si le comité a rendu un avis");
 
       if (avisRendu) {
         L.push("La fiche porte un avis rendu le " + jour(f.dateAvisCSE) + ".");
@@ -1439,7 +1439,7 @@
         L.push("complétez le procès-verbal ci-dessous ; sinon, passez au III.");
       }
       L.push("");
-      L.push("PROCÈS-VERBAL — AVIS DU COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("PROCÈS-VERBAL - AVIS DU COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
       L.push(nom(ctx));
       L.push("Réunion du " + (avisRendu ? jour(f.dateAvisCSE) : "[DATE]") + ", à [HEURE], à [LIEU]");
@@ -1462,10 +1462,10 @@
       L.push("  Suggestions et propositions alternatives formulées par le comité");
       L.push("  (L. 1233-33) : [transcrire chacune]");
       L.push("  Réponse motivée de l'employeur : [transcrire, ou indiquer la date à");
-      L.push("  laquelle elle est apportée — le texte exige une réponse motivée]");
+      L.push("  laquelle elle est apportée - le texte exige une réponse motivée]");
       L.push("");
       L.push("  AVIS : le comité social et économique émet un avis [favorable /");
-      L.push("  défavorable / réservé — reprendre les termes exacts du vote].");
+      L.push("  défavorable / réservé - reprendre les termes exacts du vote].");
       L.push("  Résultat du vote : [pour] · [contre] · [abstentions]");
       L.push("  [Le cas échéant : le comité décide de ne pas rendre d'avis.]");
       L.push("");
@@ -1478,7 +1478,7 @@
       L.push("avis, suggestions et propositions des représentants du personnel ».");
       L.push("");
 
-      titre(L, "III. Le constat d'expiration — si aucun avis n'est rendu");
+      titre(L, "III. Le constat d'expiration - si aucun avis n'est rendu");
 
       L.push("Ce constat n'est pas une formalité de confort : c'est la pièce qui");
       L.push("établit la date à laquelle le comité est réputé consulté, et donc celle à");
@@ -1577,7 +1577,7 @@
         L.push("Et ce n'est pas tout : un plan de sauvegarde de l'emploi étant dû, la");
         L.push("notification est en outre subordonnée à la décision de validation ou");
         L.push("d'homologation de l'autorité administrative (L. 1233-39). L'avis du comité");
-        L.push("ne suffit pas — voyez le document du contrôle CTL-PSE-04.");
+        L.push("ne suffit pas - voyez le document du contrôle CTL-PSE-04.");
       } else {
         L.push("Si un plan de sauvegarde de l'emploi est dû, la notification est en outre");
         L.push("subordonnée à la décision de validation ou d'homologation de l'autorité");
@@ -1597,8 +1597,8 @@
 
   doc("CTL-CSE-05",
     "L'information ou la notification à l'autorité administrative",
-    "Les deux actes que le code distingue — information des licenciements " +
-    "prononcés (L. 1233-19) et notification du projet (L. 1233-46) —, la lettre " +
+    "Les deux actes que le code distingue - information des licenciements " +
+    "prononcés (L. 1233-19) et notification du projet (L. 1233-46) -, la lettre " +
     "correspondante avec les mentions exigées par le décret, et la date d'envoi " +
     "que le calendrier des réunions contraint.",
     function (ctx) {
@@ -1623,13 +1623,13 @@
           "L. 1233-29 et L. 1233-30 ». Une notification envoyée le jour de cette",
           "réunion, ou avant, a été envoyée trop tôt : l'envoi a eu lieu, sa date est",
           "établie par l'accusé de réception, et elle ne se réécrit pas.",
-        ], "Il vous dit ce qu'il reste à faire — notamment adresser à l'administration " +
-           "les renseignements et les procès-verbaux que L. 1233-48 lui destine — sans " +
+        ], "Il vous dit ce qu'il reste à faire - notamment adresser à l'administration " +
+           "les renseignements et les procès-verbaux que L. 1233-48 lui destine - sans " +
            "prétendre effacer une date d'envoi.");
       }
 
       modeEmploi(L, [
-        "Deux actes, deux régimes, deux textes — et ils ne se ressemblent pas.",
+        "Deux actes, deux régimes, deux textes - et ils ne se ressemblent pas.",
         "",
         "L. 1233-19 : « L'employeur qui procède à un licenciement collectif pour motif",
         "économique de moins de dix salariés dans une même période de trente jours",
@@ -1682,7 +1682,7 @@
         L.push("");
       }
 
-      titre(L, "II. La notification du projet — au moins dix licenciements (L. 1233-46)");
+      titre(L, "II. La notification du projet - au moins dix licenciements (L. 1233-46)");
 
       L.push("Le texte, dans ses termes : « L'employeur notifie à l'autorité");
       L.push("administrative tout projet de licenciement pour motif économique d'au");
@@ -1711,7 +1711,7 @@
       L.push(cro((ctx.profil || {}).adresse, "adresse du siège"));
       L.push("");
       L.push("À l'autorité administrative compétente");
-      L.push("[Direction régionale — service en charge des licenciements collectifs]");
+      L.push("[Direction régionale - service en charge des licenciements collectifs]");
       L.push("[Adresse, ou plateforme dématérialisée utilisée]");
       L.push("");
       L.push(ville(ctx) + ", le " + (envoi ? jour(envoi) : "[DATE D'ENVOI]"));
@@ -1719,7 +1719,7 @@
       L.push("Envoi par la voie dématérialisée (D. 1233-4)");
       L.push("");
       L.push("Objet : notification d'un projet de licenciement collectif pour motif");
-      L.push("économique — article L. 1233-46 du code du travail");
+      L.push("économique - article L. 1233-46 du code du travail");
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
@@ -1744,7 +1744,7 @@
           : f.expertise === false ? "non" : "[oui / non]") + ".");
       L.push("  6° Signature d'un accord collectif en application des articles L. 1233-21");
       L.push("     et L. 1233-24-1 : " +
-        (voie(f) === "accord" ? "un accord est conclu ou en cours de négociation — copie jointe"
+        (voie(f) === "accord" ? "un accord est conclu ou en cours de négociation - copie jointe"
           : "[aucun / préciser, et joindre copie]") + ".");
       L.push("");
       L.push("Renseignements sur la réunion du comité social et économique :");
@@ -1787,7 +1787,7 @@
       L.push("salariés par tout moyen sur les lieux de travail ».]");
       L.push("");
 
-      titre(L, "III. L'information des licenciements prononcés — moins de dix (L. 1233-19)");
+      titre(L, "III. L'information des licenciements prononcés - moins de dix (L. 1233-19)");
 
       L.push("Le texte : « L'employeur qui procède à un licenciement collectif pour motif");
       L.push("économique de moins de dix salariés dans une même période de trente jours");
@@ -1807,11 +1807,11 @@
       L.push(cro((ctx.profil || {}).adresse, "adresse du siège"));
       L.push("");
       L.push("À l'autorité administrative compétente");
-      L.push("[Direction régionale — service compétent]");
+      L.push("[Direction régionale - service compétent]");
       L.push("");
       L.push(ville(ctx) + ", le [DATE D'ENVOI]");
       L.push("");
-      L.push("Objet : information sur les licenciements prononcés — article L. 1233-19 du");
+      L.push("Objet : information sur les licenciements prononcés - article L. 1233-19 du");
       L.push("code du travail");
       L.push("");
       L.push("Madame, Monsieur,");
@@ -1822,7 +1822,7 @@
       L.push("");
       L.push("  1° " + nom(ctx) + ", " + cro((ctx.profil || {}).adresse, "adresse") + ".");
       L.push("  2° Nature de l'activité : " +
-        cro((ctx.profil || {}).secteur || f.activite, "activité") + " — effectif : " +
+        cro((ctx.profil || {}).secteur || f.activite, "activité") + " - effectif : " +
         (effectifDe(ctx) === null ? "[effectif]" : effectifDe(ctx)) + " salariés.");
       L.push("  3° Salariés licenciés :");
       L.push("");
@@ -1850,7 +1850,7 @@
       if (grand) {
         if (premiere) {
           L.push("Première réunion prévue le " + jour(premiere) + ".");
-          L.push("PREMIÈRE DATE D'ENVOI POSSIBLE : " + jour(plusJours(premiere, 1)) + " — « au plus tôt le");
+          L.push("PREMIÈRE DATE D'ENVOI POSSIBLE : " + jour(plusJours(premiere, 1)) + " - « au plus tôt le");
           L.push("lendemain de la date prévue pour la première réunion » (L. 1233-46).");
         } else {
           L.push("La date prévue pour la première réunion n'est pas renseignée : l'envoi ne");
@@ -1868,7 +1868,7 @@
         if (estDate(f.dateNotification)) {
           L.push("Notification des licenciements aux salariés : " + jour(f.dateNotification) + ".");
           L.push("DATE LIMITE D'INFORMATION DE L'ADMINISTRATION : " +
-            jour(plusJours(f.dateNotification, 8)) + " — huit jours");
+            jour(plusJours(f.dateNotification, 8)) + " - huit jours");
           L.push("à compter de l'envoi des lettres (D. 1233-3).");
         } else {
           L.push("La date de notification n'est pas renseignée : le délai de huit jours de");
@@ -1876,21 +1876,21 @@
         }
       } else {
         L.push("Le régime n'étant pas rappelé ici, les deux échéances sont données :");
-        L.push("  — notification du projet : au plus tôt le lendemain de la date prévue");
+        L.push("  - notification du projet : au plus tôt le lendemain de la date prévue");
         L.push("    pour la première réunion (L. 1233-46) ;");
-        L.push("  — information des licenciements prononcés : dans les huit jours de");
+        L.push("  - information des licenciements prononcés : dans les huit jours de");
         L.push("    l'envoi des lettres (D. 1233-3).");
       }
       L.push("");
-      L.push("Dans tous les cas — conservez l'accusé de réception. C'est lui qui prouve");
+      L.push("Dans tous les cas - conservez l'accusé de réception. C'est lui qui prouve");
       L.push("la date, et c'est la date qui se discute.");
 
       pied(L, ["L. 1233-19", "L. 1233-46", "L. 1233-48", "L. 1233-49",
         "D. 1233-3", "D. 1233-4", "D. 1233-5", "D. 1233-10"],
         "Ce qui se joue : l'article L. 1235-12 vise le non-respect par l'employeur\n" +
         "« des procédures de consultation des représentants du personnel OU\n" +
-        "d'information de l'autorité administrative » — l'information de\n" +
-        "l'administration y est expressément nommée — et ouvre au salarié compris dans\n" +
+        "d'information de l'autorité administrative » - l'information de\n" +
+        "l'administration y est expressément nommée - et ouvre au salarié compris dans\n" +
         "le licenciement collectif une indemnité calculée en fonction du préjudice\n" +
         "subi.");
       return L.join("\n");
@@ -1917,7 +1917,7 @@
         "réunion. Il fixe autre chose, et de plus contraignant : les renseignements",
         "sont adressés « avec la convocation ». Si le comité les reçoit avec la",
         "convocation mais siège trois jours plus tard, il les a reçus sans avoir pu",
-        "les examiner — et le texte n'aurait aucun objet s'il suffisait de les faire",
+        "les examiner - et le texte n'aurait aucun objet s'il suffisait de les faire",
         "partir à temps pour qu'ils soient réputés étudiés.",
         "",
         "Ce document n'invente donc pas un délai que la loi ne donne pas. Il relève",
@@ -1952,7 +1952,7 @@
         if (d < 0) {
           L.push("=> La convocation est POSTÉRIEURE à la première réunion. Ce n'est pas un");
           L.push("   délai court : c'est une réunion tenue avant d'avoir été convoquée. Il");
-          L.push("   n'y a rien à reporter — il y a une réunion à tenir, sur une convocation");
+          L.push("   n'y a rien à reporter - il y a une réunion à tenir, sur une convocation");
           L.push("   régulière, et le calendrier réel à consigner.");
         } else if (d < 3) {
           L.push("=> " + d + " jour(s) : le comité n'a disposé d'aucun temps d'examen réel. Les");
@@ -1967,7 +1967,7 @@
         }
         L.push("");
       }
-      L.push("Le texte, dans ses termes — " +
+      L.push("Le texte, dans ses termes - " +
         (art === "L. 1233-10"
           ? "L. 1233-10 : « L'employeur adresse aux représentants du personnel, avec la"
           : art === "L. 1233-31"
@@ -2032,10 +2032,10 @@
       SEPT.forEach(function (p) {
         L.push("  " + p.m + " " + p.court + "  ☐ joint");
       });
-      L.push("  L. 1233-32 — le cas échéant, le plan de sauvegarde de l'emploi  ☐ joint");
+      L.push("  L. 1233-32 - le cas échéant, le plan de sauvegarde de l'emploi  ☐ joint");
       L.push("");
       L.push("Objet : convocation à la réunion du comité social et économique du");
-      L.push("[NOUVELLE DATE] — projet de licenciement collectif pour motif économique");
+      L.push("[NOUVELLE DATE] - projet de licenciement collectif pour motif économique");
       L.push("");
       L.push("Mesdames, Messieurs,");
       L.push("");
@@ -2060,7 +2060,7 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous adressez la lettre de report, la");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous adressez la lettre de report, la");
       L.push("nouvelle convocation et l'intégralité des pièces, ensemble.");
       L.push("");
       L.push("Nouvelle réunion : à fixer de manière à laisser un temps d'examen réel. Si");
@@ -2135,7 +2135,7 @@
         "concernés par les mesures, non tous les comités de l'entreprise.",
         "",
         "Ce document vous fait établir le critère, produit les convocations des deux",
-        "niveaux, et rappelle l'ordre des réunions — que l'article L. 1233-36 fixe, et",
+        "niveaux, et rappelle l'ordre des réunions - que l'article L. 1233-36 fixe, et",
         "qui n'est pas celui qu'on suppose.",
       ]);
 
@@ -2156,7 +2156,7 @@
         L.push("distincts ou sur la décision qui en tient lieu.");
       } else if (nbEt <= 1) {
         L.push("Établissement unique : le comité de l'entreprise est seul compétent, et ce");
-        L.push("document est sans objet — sauf si le périmètre a changé depuis l'audit.");
+        L.push("document est sans objet - sauf si le périmètre a changé depuis l'audit.");
       } else if (central) {
         L.push(nbEt + " établissements distincts, et le comité central a été réuni ainsi que les");
         L.push("comités d'établissement intéressés. Les convocations ci-dessous servent");
@@ -2166,7 +2166,7 @@
         L.push(nbEt + " établissements distincts, et le comité central n'a pas été réuni.");
       }
       L.push("");
-      L.push("LE CRITÈRE, À ÉTABLIR PAR ÉCRIT — c'est lui qui se discute, non le nombre");
+      L.push("LE CRITÈRE, À ÉTABLIR PAR ÉCRIT - c'est lui qui se discute, non le nombre");
       L.push("d'établissements :");
       L.push("");
       L.push("  Les mesures envisagées excèdent-elles le pouvoir du ou des chefs");
@@ -2181,7 +2181,7 @@
       L.push("  suppressions envisagées.]");
       L.push("");
       L.push("  Établissements INTÉRESSÉS, dont le comité doit être réuni :");
-      L.push("  [liste — un établissement dont aucune mesure ne touche les salariés n'est");
+      L.push("  [liste - un établissement dont aucune mesure ne touche les salariés n'est");
       L.push("  pas intéressé au sens du texte]");
       L.push("");
       L.push("Une seule réponse « oui » suffit : le texte pose les deux branches comme");
@@ -2230,7 +2230,7 @@
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(ctx.aujourdhui));
       L.push("");
-      L.push("Objet : convocation du comité social et économique central — projet de");
+      L.push("Objet : convocation du comité social et économique central - projet de");
       L.push("licenciement collectif pour motif économique");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -2240,7 +2240,7 @@
       L.push("salarié(s) dans une même période de trente jours est envisagé.");
       L.push("");
       L.push("Les mesures envisagées [excèdent le pouvoir des chefs d'établissement");
-      L.push("concernés / portent sur plusieurs établissements simultanément — reprendre");
+      L.push("concernés / portent sur plusieurs établissements simultanément - reprendre");
       L.push("la branche établie au I et la motiver]. En application de l'article");
       L.push("L. 1233-9 du code du travail, le comité social et économique central est en");
       L.push("conséquence réuni, ainsi que les comités d'établissement intéressés.");
@@ -2249,8 +2249,8 @@
       L.push("jour et l'ensemble des renseignements prévus par le code du travail sont");
       L.push("joints à la présente.");
       L.push("");
-      L.push("Les comités d'établissement intéressés — " +
-        (nbEt !== null && nbEt > 1 ? "[énumérer les " + nbEt + " établissements et désigner les intéressés]" : "[énumérer]") + " —");
+      L.push("Les comités d'établissement intéressés - " +
+        (nbEt !== null && nbEt > 1 ? "[énumérer les " + nbEt + " établissements et désigner les intéressés]" : "[énumérer]") + " -");
       L.push("tiendront leurs réunions après celles du comité central, conformément à");
       L.push("l'article L. 1233-36.");
       L.push("");
@@ -2271,14 +2271,14 @@
       L.push("comités […] intéressés » : convoquer l'un et pas l'autre, c'est ne pas");
       L.push("consulter le second.");
       L.push("");
-      L.push(nom(ctx) + " — Établissement de [NOM DE L'ÉTABLISSEMENT]");
+      L.push(nom(ctx) + " - Établissement de [NOM DE L'ÉTABLISSEMENT]");
       L.push("");
       L.push("Aux membres du comité social et économique");
       L.push("de l'établissement de [NOM]");
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(ctx.aujourdhui));
       L.push("");
-      L.push("Objet : convocation du comité d'établissement — projet de licenciement");
+      L.push("Objet : convocation du comité d'établissement - projet de licenciement");
       L.push("collectif pour motif économique");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -2287,9 +2287,9 @@
       L.push("de licenciement collectif pour motif économique, en application de");
       L.push("l'article L. 1233-9 du code du travail.");
       L.push("");
-      L.push("Votre établissement étant intéressé par les mesures envisagées — [préciser :");
+      L.push("Votre établissement étant intéressé par les mesures envisagées - [préciser :");
       L.push("nombre de suppressions d'emploi projetées dans l'établissement, catégories");
-      L.push("professionnelles concernées] —, je vous convoque à la réunion du [DATE], à");
+      L.push("professionnelles concernées] -, je vous convoque à la réunion du [DATE], à");
       L.push("[HEURE], à [LIEU].");
       L.push("");
       L.push("Cette réunion se tient après celle du comité central, comme l'article");
@@ -2325,7 +2325,7 @@
       L.push("");
       L.push("Conformément à l'article L. 1233-51, je vous en informe. Le comité central");
       L.push("a été convoqué le [DATE] pour une réunion le [DATE] ; les comités des");
-      L.push("établissements intéressés — [liste] — seront réunis à sa suite.");
+      L.push("établissements intéressés - [liste] - seront réunis à sa suite.");
       L.push("");
       L.push("[Le cas échéant] Le comité social et économique central a désigné un expert");
       L.push("le [DATE] : [identité de l'expert et objet de la mission].");
@@ -2339,21 +2339,21 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous établissez par écrit le critère de");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous établissez par écrit le critère de");
       L.push("l'article L. 1233-9 et la liste des établissements intéressés.");
       L.push("");
       L.push("Puis, dans l'ordre, et dans cet ordre seulement :");
       L.push("");
       L.push("  1. Convocation du comité central, avec l'ensemble des renseignements.");
       L.push("  2. Information de l'autorité administrative du siège (L. 1233-51).");
-      L.push("  3. Réunions du comité central — deux au moins lorsque l'article");
+      L.push("  3. Réunions du comité central - deux au moins lorsque l'article");
       L.push("     L. 1233-30 s'applique, espacées d'au moins quinze jours.");
       L.push("  4. Réunions des comités d'établissement intéressés, APRÈS celles du");
       L.push("     central, et dans les délais de l'article L. 1233-30.");
       L.push("  5. Avis, ou expiration du délai.");
       L.push("");
       if (rs.length && manque) {
-        L.push("Vos réunions déjà tenues — " + rs.map(function (x) { return jour(x); }).join(", ") + " — ne");
+        L.push("Vos réunions déjà tenues - " + rs.map(function (x) { return jour(x); }).join(", ") + " - ne");
         L.push("comptent pas comme réunions du comité central si elles se sont tenues");
         L.push("devant une autre instance. La consultation reprend à l'étape 1, et le");
         L.push("délai d'avis courra de la première réunion du comité central, non de");
@@ -2382,13 +2382,13 @@
 
   /* Les articles qui règlent l'organisation des élections et l'établissement du
      procès-verbal de carence (L. 2314-8 et suivants, L. 2314-9) ne sont pas dans
-     le corpus du module et ne fondent pas ce contrôle : le document les NOMME —
-     D. 1233-10 renvoie expressément à L. 2314-9 — sans en reproduire ni en
+     le corpus du module et ne fondent pas ce contrôle : le document les NOMME -
+     D. 1233-10 renvoie expressément à L. 2314-9 - sans en reproduire ni en
      paraphraser le contenu, et il le dit. */
   doc("CTL-CSE-08",
     "Le procès-verbal de carence, ou le constat de la situation du comité",
-    "La situation retenue écrite noir sur blanc — comité en place, carence " +
-    "établie, ou processus électoral à engager —, la pièce qui l'établit, et ce " +
+    "La situation retenue écrite noir sur blanc - comité en place, carence " +
+    "établie, ou processus électoral à engager -, la pièce qui l'établit, et ce " +
     "que l'absence de comité change dans le dossier adressé à l'administration.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
@@ -2397,13 +2397,13 @@
       var pv = f.pvCarence;
       var eff = effectifDe(ctx);
 
-      L = L.concat(entete(ctx, "Situation du comité social et économique — carence ou mise en place",
+      L = L.concat(entete(ctx, "Situation du comité social et économique - carence ou mise en place",
         "articles D. 1233-10, R. 1233-9 et L. 1233-49 du code du travail"));
 
       modeEmploi(L, [
         "L'absence de comité ne dispense pas de consulter : elle doit être ÉTABLIE.",
         "Tant qu'aucune pièce ne l'établit, l'employeur qui n'a pas consulté n'a pas",
-        "de moyen de dire qu'il en était dispensé — il a seulement omis de",
+        "de moyen de dire qu'il en était dispensé - il a seulement omis de",
         "consulter, ce qui n'est pas la même chose devant un juge.",
         "",
         "La pièce qui l'établit est le procès-verbal de carence. Le code du travail",
@@ -2413,7 +2413,7 @@
         "",
         "Ce document fait trois choses : il vous fait écrire la situation réelle, il",
         "produit le constat correspondant, et il dit ce que l'absence de comité",
-        "change dans le dossier — ce n'est pas rien, et c'est souvent découvert trop",
+        "change dans le dossier - ce n'est pas rien, et c'est souvent découvert trop",
         "tard.",
       ]);
 
@@ -2432,13 +2432,13 @@
       L.push("");
       if (existe === true) {
         L.push("Un comité est en place : ce document sert alors à vérifier une seule chose,");
-        L.push("mais la vérifier vraiment — que le mandat des membres court toujours, et");
+        L.push("mais la vérifier vraiment - que le mandat des membres court toujours, et");
         L.push("que le comité convoqué est bien celui qui existe. Un comité dont le mandat");
         L.push("est expiré ne consulte plus.");
       } else if (existe === false && pv) {
         L.push("Aucun comité, mais un procès-verbal de carence est produit. Vérifiez trois");
         L.push("choses : sa date, le scrutin auquel il se rapporte, et qu'il est bien versé");
-        L.push("AU DOSSIER ADRESSÉ À L'ADMINISTRATION — l'article D. 1233-10 l'impose.");
+        L.push("AU DOSSIER ADRESSÉ À L'ADMINISTRATION - l'article D. 1233-10 l'impose.");
       } else if (existe === false) {
         L.push("Aucun comité, et aucun procès-verbal de carence. C'est la situation la plus");
         L.push("exposée : la procédure est conduite comme si la consultation n'était pas");
@@ -2449,7 +2449,7 @@
       }
       L.push("");
 
-      titre(L, "II. Le constat de situation — à établir et à verser");
+      titre(L, "II. Le constat de situation - à établir et à verser");
 
       L.push("CONSTAT DE LA SITUATION DE LA REPRÉSENTATION DU PERSONNEL");
       L.push("");
@@ -2487,14 +2487,14 @@
 
       L.push("Trois textes lus à la source, et ils ne disent pas la même chose :");
       L.push("");
-      L.push("D. 1233-10 — le procès-verbal de carence est joint à la notification :");
+      L.push("D. 1233-10 - le procès-verbal de carence est joint à la notification :");
       L.push("« En cas d'absence de comité social et économique, par suite d'une carence");
       L.push("constatée dans les conditions prévues à l'article L. 2314-9, l'employeur");
       L.push("joint à la notification du projet de licenciement le procès-verbal de");
       L.push("carence établi conformément à ces articles et l'adresse par la voie");
       L.push("dématérialisée. »");
       L.push("");
-      L.push("R. 1233-9 — les informations et le plan partent avec la notification :");
+      L.push("R. 1233-9 - les informations et le plan partent avec la notification :");
       L.push("« Lorsqu'il n'existe pas de comité social et économique dans l'entreprise,");
       L.push("les informations mentionnées à l'article L. 1233-31, le plan de sauvegarde");
       L.push("de l'emploi et les renseignements prévus au 1° de l'article R. 1233-6 sont");
@@ -2502,7 +2502,7 @@
       L.push("que la notification du projet de licenciement prévue à l'article");
       L.push("L. 1233-46. »");
       L.push("");
-      L.push("L. 1233-49 — et le plan est porté à la connaissance des salariés :");
+      L.push("L. 1233-49 - et le plan est porté à la connaissance des salariés :");
       L.push("« Lorsque l'entreprise est dépourvue de comité social et économique et est");
       L.push("soumise à l'obligation d'établir un plan de sauvegarde de l'emploi, ce plan");
       L.push("ainsi que les informations destinées aux représentants du personnel");
@@ -2513,7 +2513,7 @@
       L.push("");
       L.push("Autrement dit : sans comité, ce qui lui aurait été adressé va à");
       L.push("l'administration, et le plan va directement aux salariés. Ce n'est pas une");
-      L.push("dispense — c'est un autre circuit, et il a ses propres pièces.");
+      L.push("dispense - c'est un autre circuit, et il a ses propres pièces.");
       L.push("");
       L.push("BORDEREAU DU DOSSIER, EN L'ABSENCE DE COMITÉ");
       L.push("");
@@ -2533,8 +2533,8 @@
       L.push("Il faut engager le processus électoral. L'application NE PRODUIT PAS ici");
       L.push("les pièces de ce processus : les articles du code du travail qui règlent");
       L.push("l'organisation des élections et l'établissement du procès-verbal de");
-      L.push("carence — l'article L. 2314-9, auquel D. 1233-10 renvoie, et ceux qui");
-      L.push("l'entourent — ne figurent pas dans le corpus de textes de ce module.");
+      L.push("carence - l'article L. 2314-9, auquel D. 1233-10 renvoie, et ceux qui");
+      L.push("l'entourent - ne figurent pas dans le corpus de textes de ce module.");
       L.push("L'application les nomme ; elle ne les a pas lus, et elle n'en écrira donc");
       L.push("ni le contenu ni les délais.");
       L.push("");
@@ -2544,10 +2544,10 @@
       L.push("");
       L.push("Ce que ce document peut dire, en revanche, et qui suffit à décider :");
       L.push("");
-      L.push("  — l'organisation d'élections se compte en mois, pas en jours ;");
-      L.push("  — la procédure de licenciement ne s'interrompt pas d'elle-même pendant");
+      L.push("  - l'organisation d'élections se compte en mois, pas en jours ;");
+      L.push("  - la procédure de licenciement ne s'interrompt pas d'elle-même pendant");
       L.push("    ce temps : c'est à vous d'arrêter le calendrier, par écrit ;");
-      L.push("  — engager le processus après avoir notifié les licenciements ne");
+      L.push("  - engager le processus après avoir notifié les licenciements ne");
       L.push("    rétablit rien : la consultation était due avant.");
       L.push("");
       L.push("  Décision retenue, à écrire et à dater : ..............................");
@@ -2557,25 +2557,25 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous cochez UNE case du constat du II, et");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous cochez UNE case du constat du II, et");
       L.push("vous joignez la pièce qui l'établit.");
       L.push("");
       if (existe === false && !pv) {
         L.push("Vous n'avez ni comité ni carence : rien ne peut être joint aujourd'hui.");
-        L.push("Deux chemins, et ils ne se cumulent pas — retrouver le procès-verbal de");
+        L.push("Deux chemins, et ils ne se cumulent pas - retrouver le procès-verbal de");
         L.push("carence du dernier scrutin s'il existe, ou engager le processus électoral.");
         L.push("Dans le second cas, le calendrier de la procédure de licenciement est à");
         L.push("reprendre entièrement.");
         L.push("");
       }
-      L.push("Ensuite — si la carence est établie, le dossier adressé à l'administration");
+      L.push("Ensuite - si la carence est établie, le dossier adressé à l'administration");
       L.push("change de composition : reportez-vous au bordereau du III et complétez-le");
       L.push("avant l'envoi, non après.");
       L.push("");
       L.push("Et si un plan de sauvegarde de l'emploi est dû, n'oubliez pas la dernière");
       L.push("phrase de l'article L. 1233-49 : le plan est « porté à la connaissance des");
       L.push("salariés par tout moyen sur les lieux de travail ». Conservez la preuve de");
-      L.push("cet affichage — date et lieu.");
+      L.push("cet affichage - date et lieu.");
 
       pied(L, ["D. 1233-10", "R. 1233-9", "L. 1233-49", "L. 1233-46", "L. 1233-31"],
         "L'article L. 2314-9, auquel D. 1233-10 renvoie pour les conditions du constat\n" +
@@ -2613,12 +2613,12 @@
         "est remis au comité social et économique et, le cas échéant, aux",
         "organisations syndicales, au plus tard quinze jours avant l'expiration du",
         "délai mentionné à l'article L. 1233-30. » Le rapport doit donc entrer DANS",
-        "le délai, avec quinze jours de marge — ce n'est pas le délai qui s'étire",
+        "le délai, avec quinze jours de marge - ce n'est pas le délai qui s'étire",
         "pour attendre le rapport.",
         "",
         "D'où deux échecs symétriques, également fréquents. Attendre le rapport",
         "au-delà du délai, et notifier alors que le comité n'a pas pu se prononcer.",
-        "Ou notifier avant l'expiration parce que l'expertise n'est pas finie — et",
+        "Ou notifier avant l'expiration parce que l'expertise n'est pas finie - et",
         "notifier sans que le comité soit réputé consulté.",
         "",
         "Ce document arrête le calendrier par écrit, avec les dates calculées, et",
@@ -2640,7 +2640,7 @@
       L.push("conditions de travail. »");
       L.push("");
       L.push("Trois conditions, donc, et elles se cumulent : l'effectif, le nombre de");
-      L.push("licenciements, et le moment de la décision — LORS DE LA PREMIÈRE RÉUNION.");
+      L.push("licenciements, et le moment de la décision - LORS DE LA PREMIÈRE RÉUNION.");
       L.push("Une décision prise à la seconde réunion n'est pas celle que ce texte");
       L.push("prévoit, et cela ne se rattrape pas plus qu'une date.");
       L.push("");
@@ -2679,19 +2679,19 @@
       L.push("");
       if (expiration) {
         L.push("  REMISE DU RAPPORT AU PLUS TARD ........ " + jour(remiseButoir));
-        L.push("  (quinze jours avant l'expiration du délai — L. 1233-34, dernier alinéa)");
+        L.push("  (quinze jours avant l'expiration du délai - L. 1233-34, dernier alinéa)");
         L.push("");
       }
       L.push("Les dates de l'expertise elle-même, à compléter et à faire confirmer par");
       L.push("l'expert :");
       L.push("");
       L.push("  Décision du comité de recourir à l'expertise ..... [AAAA-MM-JJ]");
-      L.push("  (doit être celle de la première réunion — L. 1233-34)");
+      L.push("  (doit être celle de la première réunion - L. 1233-34)");
       L.push("  Désignation de l'expert ......................... [AAAA-MM-JJ]");
       L.push("  Demande d'informations de l'expert .............. [AAAA-MM-JJ]");
-      L.push("  (au plus tard dix jours après la désignation — L. 1233-35)");
+      L.push("  (au plus tard dix jours après la désignation - L. 1233-35)");
       L.push("  Réponse de l'employeur ......................... [AAAA-MM-JJ]");
-      L.push("  (au plus tard huit jours après la demande — L. 1233-35)");
+      L.push("  (au plus tard huit jours après la demande - L. 1233-35)");
       L.push("  Demande complémentaire, le cas échéant ......... [AAAA-MM-JJ]");
       L.push("  Réponse de l'employeur ......................... [AAAA-MM-JJ]");
       L.push("  Remise du rapport .............................. [AAAA-MM-JJ]");
@@ -2704,7 +2704,7 @@
         L.push("");
       }
       if (r && !r.pse) {
-        L.push("Note — l'audit ne retient pas ici le régime dans lequel l'article");
+        L.push("Note - l'audit ne retient pas ici le régime dans lequel l'article");
         L.push("L. 1233-34 ouvre cette expertise (entreprise d'au moins cinquante salariés,");
         L.push("projet d'au moins dix licenciements sur trente jours). Vérifiez que");
         L.push("l'expertise envisagée repose bien sur un autre fondement, que l'application");
@@ -2712,7 +2712,7 @@
         L.push("");
       }
 
-      titre(L, "III. La lettre au comité — le calendrier arrêté");
+      titre(L, "III. La lettre au comité - le calendrier arrêté");
 
       L.push(nom(ctx));
       L.push(cro((ctx.profil || {}).adresse, "adresse du siège"));
@@ -2734,10 +2734,10 @@
       L.push("");
       L.push("Je vous confirme le calendrier arrêté :");
       L.push("");
-      L.push("  — demande d'informations de l'expert : [DATE] ;");
-      L.push("  — réponse de l'entreprise : [DATE], dans les huit jours que l'article");
+      L.push("  - demande d'informations de l'expert : [DATE] ;");
+      L.push("  - réponse de l'entreprise : [DATE], dans les huit jours que l'article");
       L.push("    L. 1233-35 impose ;");
-      L.push("  — remise du rapport : [DATE].");
+      L.push("  - remise du rapport : [DATE].");
       L.push("");
       if (expiration) {
         L.push("Je rappelle que l'article L. 1233-34 prévoit que le rapport est remis « au");
@@ -2772,7 +2772,7 @@
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(ctx.aujourdhui));
       L.push("");
-      L.push("Objet : expertise décidée par le comité social et économique — calendrier");
+      L.push("Objet : expertise décidée par le comité social et économique - calendrier");
       L.push("et modalités d'échange");
       L.push("");
       L.push("Madame, Monsieur,");
@@ -2812,7 +2812,7 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous écrivez le calendrier, vous l'adressez");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous écrivez le calendrier, vous l'adressez");
       L.push("au comité et à l'expert, et vous le versez au dossier.");
       L.push("");
       if (expiration) {
@@ -2828,7 +2828,7 @@
         L.push("Renseignez-les, et ce calendrier se remplira tout seul.");
       }
       L.push("");
-      L.push("Si le rapport n'est pas remis à temps — le délai d'avis court quand même.");
+      L.push("Si le rapport n'est pas remis à temps - le délai d'avis court quand même.");
       L.push("Le comité rendra son avis sans le rapport, ou sera réputé consulté à");
       L.push("l'expiration. Ne fixez aucune notification avant cette date, expertise");
       L.push("remise ou non.");
@@ -2836,7 +2836,7 @@
         L.push("");
         L.push("Et un plan de sauvegarde de l'emploi étant dû, la décision de recourir à");
         L.push("une expertise doit en outre être mentionnée dans la notification du projet");
-        L.push("adressée à l'administration : l'article D. 1233-4, 5° l'exige — « en cas de");
+        L.push("adressée à l'administration : l'article D. 1233-4, 5° l'exige - « en cas de");
         L.push("recours à un expert-comptable par le comité social et économique, mention");
         L.push("de cette décision ».");
       }
@@ -2874,7 +2874,7 @@
       modeEmploi(L, [
         "C'est le septième renseignement, et il est dû comme les six autres. Le texte",
         "dit « le cas échéant » : ces mots visent l'hypothèse où le projet n'a aucune",
-        "conséquence sur la santé, la sécurité ou les conditions de travail — ce qui",
+        "conséquence sur la santé, la sécurité ou les conditions de travail - ce qui",
         "se démontre, et se rencontre rarement. Un projet qui supprime des postes",
         "redistribue la charge de ceux qui restent : c'est déjà une conséquence sur",
         "les conditions de travail.",
@@ -2883,8 +2883,8 @@
         "l'erreur ordinaire : les salariés dont le licenciement est envisagé, et ceux",
         "qui demeurent dans l'entreprise.",
         "",
-        "Écrivez-le poste par poste et service par service. Un exposé général — « le",
-        "projet n'aura pas d'incidence significative » — ne renseigne rien et se",
+        "Écrivez-le poste par poste et service par service. Un exposé général - « le",
+        "projet n'aura pas d'incidence significative » - ne renseigne rien et se",
         "retourne : il établit que la question a été posée et qu'on n'y a pas",
         "répondu.",
       ]);
@@ -2910,7 +2910,7 @@
       }
       L.push("");
       L.push("La nuance n'est pas verbale. L. 1233-10 vise les conséquences DES");
-      L.push("LICENCIEMENTS ; L. 1233-31, celles DE LA RÉORGANISATION — c'est-à-dire de");
+      L.push("LICENCIEMENTS ; L. 1233-31, celles DE LA RÉORGANISATION - c'est-à-dire de");
       L.push("l'opération dans son ensemble, et non des seules ruptures. L'exposé du");
       L.push("second est donc plus large que celui du premier. Dans le doute, couvrez");
       L.push("les deux : l'exposé le plus large satisfait le plus étroit, l'inverse est");
@@ -2932,17 +2932,17 @@
         L.push("");
       } else {
         L.push("Votre fiche ne porte rien à ce titre. L'exposé est donc entièrement à");
-        L.push("écrire — et il ne peut pas l'être par l'application, qui ne connaît ni vos");
+        L.push("écrire - et il ne peut pas l'être par l'application, qui ne connaît ni vos");
         L.push("postes, ni vos cadences, ni votre document unique d'évaluation des risques.");
         L.push("");
       }
 
-      titre(L, "II. L'exposé — trame à compléter");
+      titre(L, "II. L'exposé - trame à compléter");
 
       L.push("EXPOSÉ DES CONSÉQUENCES DU PROJET EN MATIÈRE DE SANTÉ, DE SÉCURITÉ ET DE");
       L.push("CONDITIONS DE TRAVAIL");
       L.push("");
-      L.push(nom(ctx) + " — " + leJour(ctx.aujourdhui));
+      L.push(nom(ctx) + " - " + leJour(ctx.aujourdhui));
       L.push("");
       L.push("1. LE PROJET, DANS SES EFFETS SUR L'ORGANISATION");
       L.push("");
@@ -2952,13 +2952,13 @@
         tableau(L, ["Poste", "Service", "Avant", "Après", "Écart"],
           postes.map(function (p) {
             var av = nbf(p.avant), ap = nbf(p.apres);
-            return [cro(p.intitule, "intitulé"), cro(p.service, "—"),
+            return [cro(p.intitule, "intitulé"), cro(p.service, "-"),
               av === null ? "[ ]" : av, ap === null ? "[ ]" : ap,
               (av !== null && ap !== null) ? (ap - av) : "[ ]"];
           }));
         L.push("");
         L.push("Pour chaque ligne : [ce que ces suppressions changent dans l'organisation");
-        L.push("du service — tâches redistribuées, à qui, dans quel volume].");
+        L.push("du service - tâches redistribuées, à qui, dans quel volume].");
       } else {
         L.push("  [Décrire l'organisation avant et après : services concernés, effectifs");
         L.push("  avant et après, tâches supprimées, tâches redistribuées et à qui.]");
@@ -2970,7 +2970,7 @@
       L.push("  préavis, aménagement des postes, accompagnement, accès aux mesures de");
       L.push("  reclassement pendant le temps de travail.]");
       L.push("");
-      L.push("3. CONSÉQUENCES POUR LES SALARIÉS QUI DEMEURENT — le point que l'on oublie");
+      L.push("3. CONSÉQUENCES POUR LES SALARIÉS QUI DEMEURENT - le point que l'on oublie");
       L.push("");
       L.push("  Service par service :");
       L.push("");
@@ -3050,7 +3050,7 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous rédigez l'exposé. Comptez une semaine");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous rédigez l'exposé. Comptez une semaine");
       L.push("si vous devez reprendre le document unique service par service.");
       L.push("");
       L.push("Il part AVEC la convocation, joint à la note des sept renseignements. Il ne");
@@ -3069,7 +3069,7 @@
         L.push("convocation.");
         L.push("");
       }
-      L.push("En réunion — faites consigner au procès-verbal les observations du comité");
+      L.push("En réunion - faites consigner au procès-verbal les observations du comité");
       L.push("sur ce point, nommément. Un procès-verbal qui ne dit rien du 7° laisse");
       L.push("penser qu'il n'a pas été abordé.");
       if (r && r.pse) {
@@ -3095,13 +3095,13 @@
     });
 
   /* ══════════════════════════════════════════════════════════════════════
-     L'ENTRETIEN PRÉALABLE — ou sa dispense
+     L'ENTRETIEN PRÉALABLE - ou sa dispense
      ══════════════════════════════════════════════════════════════════════ */
 
   doc("CTL-ENT-01",
     "La convocation à l'entretien préalable, ou la note fixant le calendrier collectif",
-    "Le régime établi noir sur blanc — entretien dû (L. 1233-11) ou dispensé " +
-    "(L. 1233-38) —, la convocation avec ses mentions obligatoires, le compte " +
+    "Le régime établi noir sur blanc - entretien dû (L. 1233-11) ou dispensé " +
+    "(L. 1233-38) -, la convocation avec ses mentions obligatoires, le compte " +
     "rendu d'entretien, et les dates que les délais en jours ouvrables commandent.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
@@ -3143,7 +3143,7 @@
         "",
         "Le calendrier INDIVIDUEL : convocation, entretien au plus tôt cinq jours",
         "ouvrables après la présentation de la lettre, puis notification au plus tôt",
-        "sept jours ouvrables — quinze pour un membre du personnel d'encadrement —",
+        "sept jours ouvrables - quinze pour un membre du personnel d'encadrement -",
         "après la date prévue de l'entretien.",
         "",
         "Le calendrier COLLECTIF : réunions du comité, avis ou expiration du délai,",
@@ -3153,7 +3153,7 @@
         "L'article L. 1233-38 écarte l'entretien préalable lorsque le licenciement",
         "porte sur au moins dix salariés dans une même période de trente jours ET",
         "qu'il existe un comité social et économique dans l'entreprise. Dans ce cas,",
-        "un entretien tenu par précaution n'est pas irrégulier — mais il n'ouvre",
+        "un entretien tenu par précaution n'est pas irrégulier - mais il n'ouvre",
         "aucun délai opposable : se régler sur lui conduirait à notifier trop tôt au",
         "regard du calendrier collectif.",
         "",
@@ -3200,7 +3200,7 @@
         (cadre ? "oui" : f.cadreAuSensL1441_13 === false ? "non" : "[non renseigné]"));
       L.push("");
       if (du === false && dateEnt) {
-        L.push("ATTENTION — l'entretien n'est pas dû, et pourtant un entretien est déclaré");
+        L.push("ATTENTION - l'entretien n'est pas dû, et pourtant un entretien est déclaré");
         L.push("le " + jour(dateEnt) + ". Le tenir n'est pas irrégulier ; mais NE FIXEZ PAS la");
         L.push("notification à partir de sa date. Le calendrier qui vous lie est le");
         L.push("calendrier collectif : partie III de ce document.");
@@ -3209,20 +3209,20 @@
       if (du === null) {
         L.push("Le régime ne peut pas être établi en l'état : renseignez l'existence d'un");
         L.push("comité et le nombre de licenciements sur trente jours. Tant que ce point");
-        L.push("n'est pas tranché, aucune date de notification n'est fiable — et se");
+        L.push("n'est pas tranché, aucune date de notification n'est fiable - et se");
         L.push("tromper de calendrier, c'est notifier trop tôt.");
         L.push("");
       }
 
-      titre(L, "II. Si l'entretien est dû — la convocation");
+      titre(L, "II. Si l'entretien est dû - la convocation");
 
       L.push("Trois mentions que le texte impose, et une quatrième qu'il ajoute :");
       L.push("");
       L.push("  1. L'objet de la convocation (L. 1233-11).");
       L.push("  2. Le moyen : lettre recommandée, ou remise en main propre contre");
       L.push("     décharge (L. 1233-11). Le courriel n'est pas dans le texte.");
-      L.push("  3. La possibilité de se faire assister, et — s'il n'y a pas");
-      L.push("     d'institutions représentatives du personnel dans l'entreprise — la");
+      L.push("  3. La possibilité de se faire assister, et - s'il n'y a pas");
+      L.push("     d'institutions représentatives du personnel dans l'entreprise - la");
       L.push("     mention de la possibilité de recourir à un conseiller du salarié et");
       L.push("     « l'adresse des services où la liste des conseillers est tenue à la");
       L.push("     disposition des salariés » (L. 1233-13).");
@@ -3264,10 +3264,10 @@
       L.push("votre choix appartenant au personnel de l'entreprise.");
       L.push("");
       L.push("[À CONSERVER UNIQUEMENT S'IL N'EXISTE PAS D'INSTITUTIONS REPRÉSENTATIVES DU");
-      L.push("PERSONNEL DANS L'ENTREPRISE — L. 1233-13 : Vous pouvez également vous faire");
+      L.push("PERSONNEL DANS L'ENTREPRISE - L. 1233-13 : Vous pouvez également vous faire");
       L.push("assister par un conseiller du salarié choisi sur une liste dressée par");
       L.push("l'autorité administrative. Cette liste est tenue à votre disposition auprès");
-      L.push("de [ADRESSE DES SERVICES OÙ LA LISTE EST TENUE À DISPOSITION — mairie de la");
+      L.push("de [ADRESSE DES SERVICES OÙ LA LISTE EST TENUE À DISPOSITION - mairie de la");
       L.push("commune du lieu de travail et services de l'inspection du travail : indiquer");
       L.push("les adresses exactes]. Cette mention est obligatoire dans ce cas ; elle est");
       L.push("à supprimer si l'entreprise est dotée d'institutions représentatives.]");
@@ -3282,11 +3282,11 @@
       L.push("est individuel.");
       L.push("");
 
-      titre(L, "III. Si l'entretien n'est pas dû — la note de calendrier");
+      titre(L, "III. Si l'entretien n'est pas dû - la note de calendrier");
 
-      L.push("NOTE — CALENDRIER RETENU POUR LA NOTIFICATION DES LICENCIEMENTS");
+      L.push("NOTE - CALENDRIER RETENU POUR LA NOTIFICATION DES LICENCIEMENTS");
       L.push("");
-      L.push(nom(ctx) + " — " + leJour(ctx.aujourdhui));
+      L.push(nom(ctx) + " - " + leJour(ctx.aujourdhui));
       L.push("");
       L.push("1. Le projet porte sur " + (nbLic(f) === null ? "[nombre]" : nbLic(f)) +
         " licenciements dans une même période de");
@@ -3296,9 +3296,9 @@
       L.push("");
       L.push("2. La notification est commandée par le calendrier collectif :");
       L.push("");
-      L.push("   — l'avis du comité, ou l'expiration du délai d'avis à compter de la");
+      L.push("   - l'avis du comité, ou l'expiration du délai d'avis à compter de la");
       L.push("     première réunion (L. 1233-8 ; L. 1233-30, II) ;");
-      L.push("   — et, lorsqu'un plan de sauvegarde de l'emploi est dû, la décision de");
+      L.push("   - et, lorsqu'un plan de sauvegarde de l'emploi est dû, la décision de");
       L.push("     validation ou d'homologation de l'autorité administrative");
       L.push("     (L. 1233-39).");
       L.push("");
@@ -3306,7 +3306,7 @@
       L.push("   n'est pas un point de départ, et la notification n'en est pas");
       L.push("   rapprochée.");
       L.push("");
-      L.push("4. Information due malgré la dispense — l'article R. 1233-19 : « Lorsque");
+      L.push("4. Information due malgré la dispense - l'article R. 1233-19 : « Lorsque");
       L.push("   l'employeur n'est pas tenu de convoquer les salariés à cet entretien, en");
       L.push("   cas de licenciement de dix salariés ou plus dans une même période de");
       L.push("   trente jours, il les informe, à l'issue de la dernière réunion du comité");
@@ -3337,7 +3337,7 @@
       L.push("  économiques, la suppression ou la transformation de l'emploi, et le");
       L.push("  résultat de l'application des critères d'ordre pour ce salarié]");
       L.push("");
-      L.push("  Explications recueillies du salarié : [transcrire — c'est la moitié de");
+      L.push("  Explications recueillies du salarié : [transcrire - c'est la moitié de");
       L.push("  l'obligation, et celle qu'on omet]");
       L.push("");
       L.push("  Reclassement évoqué : [postes proposés, réponses données]");
@@ -3351,12 +3351,12 @@
       L.push("");
       L.push("Ce que le texte impose de dire à l'entretien, selon le dispositif :");
       L.push("");
-      L.push("  — congé de reclassement : R. 1233-19 — « Lors de l'entretien préalable");
+      L.push("  - congé de reclassement : R. 1233-19 - « Lors de l'entretien préalable");
       L.push("    prévu à l'article L. 1233-11, en cas de licenciement de moins de dix");
       L.push("    salariés dans une même période de trente jours, l'employeur informe le");
       L.push("    salarié des conditions de mise en œuvre du congé de reclassement. »");
       L.push("");
-      L.push("  — contrat de sécurisation professionnelle : L. 1233-66 — l'employeur");
+      L.push("  - contrat de sécurisation professionnelle : L. 1233-66 - l'employeur");
       L.push("    « est tenu de proposer, lors de l'entretien préalable ou à l'issue de la");
       L.push("    dernière réunion des représentants du personnel, le bénéfice du contrat");
       L.push("    de sécurisation professionnelle à chaque salarié dont il envisage de");
@@ -3385,14 +3385,14 @@
         } else {
           L.push("  Convocation envoyée aujourd'hui ........... " + leJour(d0));
           L.push("  Présentation de la lettre ................. [date de première");
-          L.push("  présentation — c'est d'elle que courent les cinq jours ouvrables]");
+          L.push("  présentation - c'est d'elle que courent les cinq jours ouvrables]");
           L.push("  Entretien, au plus tôt ................... cinq jours ouvrables après");
           L.push("  la présentation (L. 1233-11)");
         }
         if (notifMin) {
           L.push("  Expédition de la lettre, au plus tôt ..... " + jour(notifMin));
           L.push("  (" + joursAvant + " jours ouvrables à compter de la date prévue de l'entretien" +
-            (cadre ? ", le salarié relevant du personnel d'encadrement" : "") + " — L. 1233-15)");
+            (cadre ? ", le salarié relevant du personnel d'encadrement" : "") + " - L. 1233-15)");
           if (notif) {
             L.push("  Notification prévue ...................... " + jour(notif) +
               (notif < notifMin ? "  ← TROP TÔT" : "  ← compatible"));
@@ -3405,7 +3405,7 @@
         L.push("Jours ouvrables : le samedi compte, le dimanche non. " +
           (ouvrablesExacts()
             ? "Le calcul ci-dessus retire les jours fériés."
-            : "Le calcul ci-dessus ne retire PAS les jours fériés — le moteur du module,"));
+            : "Le calcul ci-dessus ne retire PAS les jours fériés - le moteur du module,"));
         if (!ouvrablesExacts()) {
           L.push("qui les porte, n'est pas chargé sur cette page. Vérifiez les échéances qui");
           L.push("traversent un jour férié : elles se décalent d'autant.");
@@ -3426,7 +3426,7 @@
           L.push("  décision (L. 1233-39)");
         }
         L.push("");
-        L.push("À l'issue de la dernière réunion — information des salariés sur les");
+        L.push("À l'issue de la dernière réunion - information des salariés sur les");
         L.push("conditions de mise en œuvre du congé de reclassement, lorsqu'il est dû");
         L.push("(R. 1233-19). Datez-la et conservez-en la preuve.");
         L.push("");
@@ -3436,7 +3436,7 @@
         L.push("ce document.");
         L.push("");
       }
-      L.push("Dans tous les cas — la lettre de licenciement comporte l'énoncé des motifs");
+      L.push("Dans tous les cas - la lettre de licenciement comporte l'énoncé des motifs");
       L.push("économiques et mentionne la priorité de réembauche prévue par l'article");
       L.push("L. 1233-45 et ses conditions de mise en œuvre (L. 1233-16 ; L. 1233-42).");
       L.push("Cette mention n'est pas facultative, et elle s'écrit dans la lettre, pas");
@@ -3463,8 +3463,8 @@
      ══════════════════════════════════════════════════════════════════════ */
 
   /* Les sept rubriques de L. 1233-62, verbatim, depuis la version lue au dépôt
-     (LEGIARTI000036261725). La liste n'est pas limitative — le texte écrit
-     « des mesures telles que » —, et le document le dit au lieu de laisser
+     (LEGIARTI000036261725). La liste n'est pas limitative - le texte écrit
+     « des mesures telles que » -, et le document le dit au lieu de laisser
      croire à un catalogue fermé. */
   var RUBRIQUES = [
     { m: "1°", court: "Reclassement interne sur le territoire national",
@@ -3508,7 +3508,7 @@
         "",
         "Deux avertissements, et ils commandent tout le reste.",
         "",
-        "PREMIER — la liste de l'article L. 1233-62 n'est pas limitative : le texte",
+        "PREMIER - la liste de l'article L. 1233-62 n'est pas limitative : le texte",
         "écrit « des mesures telles que ». Une rubrique vide n'est donc pas, en",
         "elle-même, une non-conformité. Mais l'autorité administrative apprécie le",
         "plan au regard de ces rubriques et vérifie « le respect par le plan de",
@@ -3516,7 +3516,7 @@
         "(L. 1233-57-3) : une rubrique laissée vide SANS EXPLICATION est un motif de",
         "refus ordinaire, et le refus renvoie tout le dossier au point de départ.",
         "",
-        "SECOND — aucun montant n'est avancé ici, et ce n'est pas une prudence",
+        "SECOND - aucun montant n'est avancé ici, et ce n'est pas une prudence",
         "excessive : AUCUN TEXTE NE FIXE LE MONTANT D'UN PLAN. L'article L. 1233-57-3",
         "confie à l'autorité administrative l'appréciation du plan « en fonction des",
         "critères suivants : 1° Les moyens dont disposent l'entreprise, l'unité",
@@ -3548,7 +3548,7 @@
       L.push("basculer le régime, plan compris.");
       L.push("");
 
-      titre(L, "II. Le plan de reclassement interne — le cœur du plan");
+      titre(L, "II. Le plan de reclassement interne - le cœur du plan");
 
       L.push("L. 1233-61, deuxième alinéa : « Ce plan intègre un plan de reclassement");
       L.push("visant à faciliter le reclassement sur le territoire national des salariés");
@@ -3595,13 +3595,13 @@
       L.push("");
       L.push("3. SALARIÉS DONT LA RÉINSERTION EST PARTICULIÈREMENT DIFFICILE");
       L.push("");
-      L.push("  [Recenser nominativement, avec pour chacun la caractéristique retenue —");
-      L.push("  âge, caractéristique sociale, qualification — et les mesures");
+      L.push("  [Recenser nominativement, avec pour chacun la caractéristique retenue -");
+      L.push("  âge, caractéristique sociale, qualification - et les mesures");
       L.push("  spécifiques prévues pour lui. Le texte les nomme expressément : les");
       L.push("  ignorer se voit.]");
       L.push("");
-      L.push("  [Nom ou matricule] — [caractéristique] — [mesures spécifiques]");
-      L.push("  [Nom ou matricule] — [caractéristique] — [mesures spécifiques]");
+      L.push("  [Nom ou matricule] - [caractéristique] - [mesures spécifiques]");
+      L.push("  [Nom ou matricule] - [caractéristique] - [mesures spécifiques]");
       L.push("");
       L.push("4. MODALITÉS DES OFFRES");
       L.push("");
@@ -3622,12 +3622,12 @@
       titre(L, "III. Les mesures, rubrique par rubrique de l'article L. 1233-62");
 
       L.push("Chapeau du texte : « Le plan de sauvegarde de l'emploi prévoit des mesures");
-      L.push("TELLES QUE : […] ». La liste est indicative, pas limitative — mais chaque");
+      L.push("TELLES QUE : […] ». La liste est indicative, pas limitative - mais chaque");
       L.push("rubrique vide appelle un motif, et le motif s'écrit en IV.");
       L.push("");
       RUBRIQUES.forEach(function (rub) {
         var saisi = rub.cle ? String(p[rub.cle] || "").trim() : "";
-        L.push("── " + rub.m + " — " + rub.court + " ──");
+        L.push("── " + rub.m + " - " + rub.court + " ──");
         L.push("");
         L.push("Texte : « " + rub.t + ". »");
         L.push("");
@@ -3642,7 +3642,7 @@
           L.push("    Modalités d'accès ............ [qui, comment, dans quel délai]");
           if (!/\d/.test(saisi)) {
             L.push("");
-            L.push("  ATTENTION — la mesure telle qu'elle est saisie ne porte AUCUN chiffre.");
+            L.push("  ATTENTION - la mesure telle qu'elle est saisie ne porte AUCUN chiffre.");
             L.push("  Une mesure non chiffrée n'est pas appréciable au regard des critères de");
             L.push("  l'article L. 1233-57-3. Voyez le document du contrôle CTL-PSE-05.");
           }
@@ -3651,9 +3651,9 @@
           L.push("  AUCUNE MESURE RATTACHÉE.");
           L.push("");
           L.push("  Deux issues, et deux seulement :");
-          L.push("  — une mesure y est rattachée : [intitulé], [bénéficiaires], [budget],");
+          L.push("  - une mesure y est rattachée : [intitulé], [bénéficiaires], [budget],");
           L.push("    [durée], [modalités d'accès] ;");
-          L.push("  — ou la rubrique est écartée, et le motif est écrit en IV.");
+          L.push("  - ou la rubrique est écartée, et le motif est écrit en IV.");
         }
         L.push("");
       });
@@ -3675,7 +3675,7 @@
 
       if (!absentes.length) {
         L.push("Toutes les rubriques que la fiche renseigne portent une mesure. Vérifiez");
-        L.push("néanmoins les rubriques que la fiche ne couvre pas — 1° bis, 2°, 3° et 6°");
+        L.push("néanmoins les rubriques que la fiche ne couvre pas - 1° bis, 2°, 3° et 6°");
         L.push("ne correspondent à aucun champ du questionnaire : si votre plan ne les");
         L.push("renseigne pas, écrivez ci-dessous pourquoi.");
         L.push("");
@@ -3687,9 +3687,9 @@
       }
       var aMotiver = absentes.length ? absentes : RUBRIQUES.filter(function (x) { return !x.cle; });
       aMotiver.forEach(function (rub) {
-        L.push("Rubrique " + rub.m + " — " + rub.court);
+        L.push("Rubrique " + rub.m + " - " + rub.court);
         L.push("  Motif de l'écartement : [écrire ici pourquoi cette rubrique ne reçoit");
-        L.push("  aucune mesure — absence de poste disponible, absence d'activité");
+        L.push("  aucune mesure - absence de poste disponible, absence d'activité");
         L.push("  transférable, absence d'heures supplémentaires régulières, etc.]");
         L.push("  Éléments qui l'établissent : [pièce, date, auteur]");
         L.push("");
@@ -3706,14 +3706,14 @@
         }
         if (acc.incertain) {
           L.push("");
-          L.push("Réserve — l'effectif total du groupe n'est pas renseigné, et le seuil");
+          L.push("Réserve - l'effectif total du groupe n'est pas renseigné, et le seuil");
           L.push("s'apprécie aussi à ce niveau. Vérifiez-le avant de retenir ce dispositif.");
         }
       } else {
         L.push("Le moteur du module n'est pas chargé : le dispositif n'est pas déterminé");
         L.push("ici. Deux branches, et l'effectif décide.");
         L.push("");
-        L.push("Congé de reclassement — L. 1233-71 : « Dans les entreprises ou les");
+        L.push("Congé de reclassement - L. 1233-71 : « Dans les entreprises ou les");
         L.push("établissements d'au moins mille salariés, ainsi que dans les entreprises");
         L.push("mentionnées à l'article L. 2331-1 et celles répondant aux conditions");
         L.push("mentionnées aux articles L. 2341-1 et L. 2341-2, dès lors qu'elles");
@@ -3721,7 +3721,7 @@
         L.push("salarié dont il envisage de prononcer le licenciement pour motif");
         L.push("économique un congé de reclassement […]. »");
         L.push("");
-        L.push("Contrat de sécurisation professionnelle — L. 1233-66 : « Dans les");
+        L.push("Contrat de sécurisation professionnelle - L. 1233-66 : « Dans les");
         L.push("entreprises non soumises à l'article L. 1233-71, l'employeur est tenu de");
         L.push("proposer, lors de l'entretien préalable ou à l'issue de la dernière");
         L.push("réunion des représentants du personnel, le bénéfice du contrat de");
@@ -3737,13 +3737,13 @@
       L.push("");
       L.push("  Dispositif prévu par le présent plan : [le nommer]");
       L.push("  Modalités de la proposition : [à l'entretien préalable / à l'issue de la");
-      L.push("  dernière réunion / après la décision administrative — attention : en");
+      L.push("  dernière réunion / après la décision administrative - attention : en");
       L.push("  régime de plan de sauvegarde de l'emploi, L. 1233-66 place la proposition");
       L.push("  de contrat de sécurisation professionnelle APRÈS la notification de la");
       L.push("  décision de validation ou d'homologation]");
       L.push("");
 
-      titre(L, "VI. Les modalités de suivi — article L. 1233-63");
+      titre(L, "VI. Les modalités de suivi - article L. 1233-63");
 
       L.push("Le texte : « Le plan de sauvegarde de l'emploi détermine les modalités de");
       L.push("suivi de la mise en oeuvre effective des mesures contenues dans le plan de");
@@ -3826,14 +3826,14 @@
 
       L.push("Voie retenue : " + voieEnClair(f) + ".");
       L.push("");
-      L.push("  ☐ Accord collectif majoritaire (L. 1233-24-1) — signé par une ou plusieurs");
+      L.push("  ☐ Accord collectif majoritaire (L. 1233-24-1) - signé par une ou plusieurs");
       L.push("    organisations syndicales représentatives ayant recueilli au moins 50 %");
       L.push("    des suffrages exprimés en faveur d'organisations reconnues");
       L.push("    représentatives au premier tour des dernières élections des titulaires");
       L.push("    au comité, quel que soit le nombre de votants, ou par le conseil");
       L.push("    d'entreprise. Voyez le document du contrôle CTL-PSE-07.");
       L.push("");
-      L.push("  ☐ Document unilatéral (L. 1233-24-4) — « A défaut d'accord mentionné à");
+      L.push("  ☐ Document unilatéral (L. 1233-24-4) - « A défaut d'accord mentionné à");
       L.push("    l'article L. 1233-24-1, un document élaboré par l'employeur APRÈS LA");
       L.push("    DERNIÈRE RÉUNION du comité social et économique fixe le contenu du plan");
       L.push("    de sauvegarde de l'emploi et précise les éléments prévus aux 1° à 5° de");
@@ -3851,23 +3851,23 @@
       titre(L, "VOTRE CALENDRIER");
 
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous complétez le plan et la note motivée");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous complétez le plan et la note motivée");
       L.push("des rubriques écartées. Comptez quatre à huit semaines : un plan se négocie");
       L.push("ou s'élabore, il ne se remplit pas.");
       L.push("");
-      L.push("Avant la convocation — le plan doit être PRÊT : l'article L. 1233-32 impose");
+      L.push("Avant la convocation - le plan doit être PRÊT : l'article L. 1233-32 impose");
       L.push("de l'adresser avec elle. Un plan daté d'après la convocation établit à lui");
       L.push("seul qu'il n'a pas été joint (contrôle CTL-PSE-06).");
       L.push("");
       if (rs.length) {
         L.push("Vos réunions : " + rs.map(function (x) { return jour(x); }).join(" · ") + ".");
-        L.push("Toute mesure ajoutée au plan APRÈS la dernière — le " +
-          jour(rs[rs.length - 1]) + " — n'a pas été");
+        L.push("Toute mesure ajoutée au plan APRÈS la dernière - le " +
+          jour(rs[rs.length - 1]) + " - n'a pas été");
         L.push("soumise au comité. Reconvoquez sur la version définitive avant de saisir");
         L.push("l'administration.");
         L.push("");
       }
-      L.push("Après l'avis — vous déposez la demande de " +
+      L.push("Après l'avis - vous déposez la demande de " +
         (voie(f) === "accord" ? "validation" : voie(f) === "unilateral" ? "homologation"
           : "validation ou d'homologation") + ", par la voie");
       L.push("dématérialisée (D. 1233-14).");
