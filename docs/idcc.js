@@ -1,20 +1,20 @@
 /* Le sélecteur de convention collective.
 
-   Un champ texte reste un champ texte — les brouillons existants s'affichent
-   tels quels — mais il gagne une liste filtrante : on tape un numéro IDCC ou
+   Un champ texte reste un champ texte, les brouillons existants s'affichent
+   tels quels, mais il gagne une liste filtrante : on tape un numéro IDCC ou
    quelques lettres de l'intitulé, la liste se resserre, on touche une ligne et
    le champ se remplit. En fin de liste, toujours : « Autre / pas dans la
-   liste », qui rend la saisie libre — un dossier réel comporte toujours le cas
+   liste », qui rend la saisie libre, un dossier réel comporte toujours le cas
    qu'on n'avait pas prévu.
 
-   La liste vient de docs/idcc.json — extraite de la ressource « Liste des
+   La liste vient de docs/idcc.json, extraite de la ressource « Liste des
    conventions collectives » du jeu de données KALI de la DILA sur data.gouv.fr,
    conventions en vigueur seulement (la source et la date sont consignées dans
    le fichier). Hors connexion ou si le fichier manque, le champ fonctionne en
    saisie libre : rien ne casse.
 
    Usage : window.IDCC.attacher(input, { stocker: "libelle" | "code", zeros: bool })
-     - "libelle" (défaut) : le champ reçoit « 1486 — Convention collective … »
+     - "libelle" (défaut) : le champ reçoit « 1486, Convention collective ... »
      - "code"             : le champ ne reçoit que le numéro (« 0016 », ou
                             « 16 » si zeros vaut false).                       */
 (function () {
@@ -78,13 +78,13 @@
 
     function valeurDe(c) {
       if (stocker === "code") return zeros ? c.idcc : String(Number(c.idcc));
-      return c.idcc + " — " + c.intitule;
+      return c.idcc + " - " + c.intitule;
     }
     function choisir(c) {
       input.value = valeurDe(c);
       fermer();
       /* Un choix referme la liste, il ne verrouille pas le champ : reprendre
-         la saisie ensuite — sans repasser par un focus — doit la rouvrir.
+         la saisie ensuite, sans repasser par un focus, doit la rouvrir.
          Seul l'évènement synthétique ci-dessous, écho immédiat du choix, ne
          doit pas la rouvrir tout seul ; ignorerProchaineSaisie ne vaut que
          pour lui, une fois. */
@@ -94,14 +94,38 @@
     }
     function fermer() { boite.hidden = true; }
 
+    /* SUR TÉLÉPHONE, LA LISTE PASSAIT SOUS LE CLAVIER. Le champ est en bas de
+       l'écran, la liste s'ouvre dessous, le clavier monte par-dessus : on ne
+       voit rien, on croit qu'on ne peut pas changer de convention (capture du
+       8 septembre 2026, 22 h 29). Sous 700 px, la liste est donc posée en
+       position fixe juste sous le champ, avec la hauteur que laisse le clavier
+       (visualViewport), et le champ est remonté en haut de l'écran. */
+    function etroit() { return window.innerWidth < 700; }
+    function placer() {
+      if (!etroit()) { boite.style.position = ""; boite.style.top = ""; boite.style.left = "";
+        boite.style.right = ""; boite.style.maxHeight = ""; return; }
+      var r = input.getBoundingClientRect();
+      var vv = window.visualViewport;
+      var haut = vv ? vv.height + vv.offsetTop : window.innerHeight;
+      boite.style.position = "fixed";
+      boite.style.left = Math.max(6, r.left) + "px";
+      boite.style.right = Math.max(6, window.innerWidth - r.right) + "px";
+      boite.style.top = (r.bottom + 4) + "px";
+      boite.style.maxHeight = Math.max(140, haut - r.bottom - 14) + "px";
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", function () { if (!boite.hidden) placer(); });
+      window.visualViewport.addEventListener("scroll", function () { if (!boite.hidden) placer(); });
+    }
+
     function montrer(liste, q) {
       var qs = plat(q).split(/\s+/).filter(Boolean);
       var mots = (input._idccMots || []).map(plat).filter(Boolean);
       var priorite = !qs.length && mots.length > 0;
       var retenues = [];
       if (priorite) {
-        /* Champ vide, secteur renseigné : on ne filtre rien — 328 conventions
-           restent atteignables — mais celles dont l'intitulé porte un mot du
+        /* Champ vide, secteur renseigné : on ne filtre rien, 328 conventions
+           restent atteignables, mais celles dont l'intitulé porte un mot du
            secteur remontent en tête. Une suggestion à vérifier depuis
            l'activité réelle, jamais une affirmation : le champ reste, comme
            toujours, une saisie libre assistée. */
@@ -132,18 +156,19 @@
       }
       var h = "";
       if (priorite && retenues.length && score(retenues[0]) > 0)
-        h += '<div class="idcc-vide">Conventions dont l\'intitulé évoque votre secteur, en tête — ' +
+        h += '<div class="idcc-vide">Conventions dont l\'intitulé évoque votre secteur, en tête : ' +
           'à vérifier depuis votre activité réelle, pas une affirmation.</div>';
       if (!retenues.length && liste.length)
-        h += '<div class="idcc-vide">Aucune convention ne correspond — « Autre » ouvre la saisie libre.</div>';
+        h += '<div class="idcc-vide">Aucune convention ne correspond ; « Autre » ouvre la saisie libre.</div>';
       retenues.forEach(function (c, i) {
         h += '<button type="button" class="idcc-o" role="option" data-i="' + i + '">' +
           '<span class="idcc-num">' + c.idcc + '</span>' +
           c.intitule.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</button>";
       });
-      h += '<button type="button" class="idcc-o idcc-autre" role="option" data-autre="1">Autre / pas dans la liste — saisie libre</button>';
+      h += '<button type="button" class="idcc-o idcc-autre" role="option" data-autre="1">Autre / pas dans la liste, saisie libre</button>';
       boite.innerHTML = h;
       boite.hidden = false;
+      placer();
       Array.prototype.forEach.call(boite.querySelectorAll(".idcc-o"), function (b) {
         /* pointerdown : avant le blur du champ, pour que le toucher aboutisse */
         b.addEventListener("pointerdown", function (ev) {
@@ -160,7 +185,7 @@
       });
     }
 
-    /* Le champ contient-il déjà l'intitulé exact d'une convention choisie —
+    /* Le champ contient-il déjà l'intitulé exact d'une convention choisie -
        à l'instant, ou lors d'une visite précédente, relue depuis la fiche ?
        Si oui, rouvrir la liste en filtrant sur ce texte entier ne retient
        plus qu'elle-même : toutes les autres lignes disparaissent, et rien ne
@@ -169,7 +194,10 @@
     function dejaChoisie(liste, val) {
       var v = String(val || "").trim();
       if (!v) return false;
-      for (var i = 0; i < liste.length; i++) if (valeurDe(liste[i]) === v) return true;
+      /* L'ancien séparateur, le tiret long, peut encore être dans une fiche
+         enregistrée avant le 8 septembre 2026 : on l'accepte à la lecture. */
+      var v2 = v.replace(/\s[\u2014\u2013]\s/, " - ");
+      for (var i = 0; i < liste.length; i++) if (valeurDe(liste[i]) === v2) return true;
       return false;
     }
     function ouvrir() {
@@ -181,7 +209,16 @@
       });
     }
 
-    input.addEventListener("focus", function () { libre = false; ouvrir(); });
+    input.addEventListener("focus", function () {
+      libre = false;
+      /* Le texte est sélectionné en entier : taper remplace la convention
+         enregistrée au lieu de s'ajouter à la fin de son intitulé. */
+      try { input.select(); } catch (_) {}
+      if (etroit()) {
+        try { input.scrollIntoView({ block: "start", behavior: "instant" }); } catch (_) { input.scrollIntoView(true); }
+      }
+      ouvrir();
+    });
     input.addEventListener("input", function () {
       if (ignorerProchaineSaisie) { ignorerProchaineSaisie = false; return; }
       ouvrir();
@@ -195,7 +232,7 @@
   }
 
   /* Fait remonter, dans la liste ouverte à champ vide, les conventions dont
-     l'intitulé porte un des mots donnés — un secteur choisi ailleurs sur la
+     l'intitulé porte un des mots donnés, un secteur choisi ailleurs sur la
      fiche, par exemple. N'écarte rien, ne filtre rien : une suggestion. */
   function definirMots(input, mots) {
     if (input) input._idccMots = mots || [];
