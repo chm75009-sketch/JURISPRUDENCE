@@ -196,7 +196,11 @@
   });
   $("modifier-fiche").addEventListener("click", montrerFiche);
 
-  if (complet(profil())) montrerPortes(); else montrerFiche();
+  /* La fiche s'affiche à chaque ouverture, pré-remplie de ce qui est déjà
+     enregistré : demande du 8 septembre 2026, « à chaque fois je choisis le
+     secteur, la convention et l'effectif que je veux ». Continuer mène aux
+     deux boutons. */
+  montrerFiche();
 
   /* Mise à jour de l'application : un bandeau, jamais un rechargement imposé. */
   if ("serviceWorker" in navigator) {
