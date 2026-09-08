@@ -1,0 +1,224 @@
+<title>Maquette Jurisprudence</title>
+<style>
+  :root{
+    --fond:#f3f4f6; --ecran:#ffffff; --encre:#16181d; --gris:#5f6874; --filet:#dcdfe4;
+    --bleu:#1f3864; --bleu-clair:#e9edf5; --vert:#1c5e36; --vert-clair:#e8f2ec; --rouge:#8e1b1b;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --fond:#111318; --ecran:#1b1e25; --encre:#f2f3f5; --gris:#a3aab5; --filet:#333844;
+    --bleu:#8fa8d8; --bleu-clair:#232a3a; --vert:#7cc59a; --vert-clair:#1f2d25; --rouge:#e08484; } }
+  :root[data-theme="dark"]{
+    --fond:#111318; --ecran:#1b1e25; --encre:#f2f3f5; --gris:#a3aab5; --filet:#333844;
+    --bleu:#8fa8d8; --bleu-clair:#232a3a; --vert:#7cc59a; --vert-clair:#1f2d25; --rouge:#e08484; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fond);color:var(--encre);font:18px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .tel{max-width:430px;margin:0 auto;min-height:100vh;background:var(--ecran);display:flex;flex-direction:column}
+  .haut{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--filet)}
+  .haut b{font-size:17px}
+  .haut span{color:var(--gris);font-size:15px}
+  .retour{font:600 17px system-ui;padding:10px 14px;border:1px solid var(--filet);border-radius:10px;background:var(--ecran);color:var(--encre);cursor:pointer;min-height:44px}
+  .corps{padding:20px 16px 40px;display:flex;flex-direction:column;gap:14px;flex:1}
+  h1{font:600 26px/1.2 system-ui;margin:4px 0 6px;text-wrap:balance}
+  .aide{color:var(--gris);font-size:16px;margin:0}
+  label{display:flex;flex-direction:column;gap:6px;font-size:16px;color:var(--gris)}
+  input,select{font:18px system-ui;padding:12px 14px;border:1px solid var(--filet);border-radius:10px;background:var(--ecran);color:var(--encre);min-height:48px}
+  .btn{font:600 19px system-ui;padding:16px;border-radius:12px;border:0;background:var(--bleu);color:#fff;cursor:pointer;min-height:56px;text-align:center}
+  :root[data-theme="dark"] .btn, .btn{color:#fff}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .btn{color:#111318} }
+  :root[data-theme="dark"] .btn{color:#111318}
+  .grand{display:flex;flex-direction:column;gap:6px;padding:26px 20px;border-radius:16px;border:2px solid var(--bleu);background:var(--bleu-clair);cursor:pointer;text-align:left;min-height:110px}
+  .grand b{font-size:24px;color:var(--bleu)}
+  .grand span{color:var(--gris);font-size:16px}
+  .ligne{display:flex;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--filet);min-height:64px}
+  .ligne .nom{flex:1;font-size:18px}
+  .ligne .du{color:var(--gris);font-size:15px}
+  .oui,.non{font:600 17px system-ui;min-width:74px;min-height:46px;border-radius:10px;cursor:pointer}
+  .oui{border:2px solid var(--vert);background:var(--vert-clair);color:var(--vert)}
+  .non{border:2px solid var(--bleu);background:var(--bleu);color:#fff}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .non{color:#111318} }
+  :root[data-theme="dark"] .non{color:#111318}
+  .pasdu{opacity:.5}
+  .pasdu .nom{color:var(--gris)}
+  .groupe{font:600 13px system-ui;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);margin:14px 0 0}
+  .doc-ligne{padding:14px 0;border-bottom:1px solid var(--filet);font-size:18px;cursor:pointer;min-height:52px;display:flex;align-items:center;justify-content:space-between}
+  .doc-ligne::after{content:"›";color:var(--gris);font-size:24px}
+  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .champs label{font-size:14px}
+  .champs input{font-size:16px;padding:10px 12px;min-height:44px}
+  .feuille{border:1px solid var(--filet);border-radius:12px;padding:20px 18px;font:16px/1.55 Georgia,"Times New Roman",serif;background:var(--ecran)}
+  .feuille h2{font:700 16px/1.3 Georgia,serif;margin:0 0 12px;text-transform:uppercase;letter-spacing:.04em}
+  .feuille p{margin:0 0 10px}
+  .feuille .ent{font-weight:700}
+  .feuille mark{background:var(--bleu-clair);color:var(--encre);padding:0 3px;border-radius:3px}
+  .barre{display:flex;flex-direction:column;gap:10px}
+  .second{background:var(--ecran);color:var(--bleu);border:2px solid var(--bleu)}
+  :root[data-theme="dark"] .second{color:var(--bleu)}
+  details{border-top:1px solid var(--filet);padding-top:10px;color:var(--gris);font-size:15px}
+  summary{cursor:pointer;font-weight:600;color:var(--gris);min-height:40px;display:flex;align-items:center}
+  [hidden]{display:none !important}
+  .fil{display:flex;gap:6px;justify-content:center;padding:10px;font-size:13px;color:var(--gris);border-top:1px solid var(--filet)}
+  .fil b{color:var(--bleu)}
+</style>
+
+<div class="tel">
+
+  <!-- ÉCRAN 1 : la fiche, une seule fois -->
+  <section id="e1">
+    <div class="haut"><b>Jurisprudence</b></div>
+    <div class="corps">
+      <h1>Votre entreprise</h1>
+      <p class="aide">Quatre réponses, une seule fois. Elles règlent tout le reste.</p>
+      <label>Dénomination <input id="f-nom" value="TEC"></label>
+      <label>Effectif (salariés) <input id="f-eff" type="number" value="10"></label>
+      <label>Secteur <select id="f-sec"><option>restauration</option><option>bâtiment</option><option>commerce</option><option>transport</option><option>services</option></select></label>
+      <label>Convention collective <select><option>HCR (1979)</option><option>Bâtiment (1596)</option><option>Commerce de détail (2216)</option><option>Transports routiers (0016)</option><option>Syntec (1486)</option></select></label>
+      <button class="btn" onclick="aller('e2')">Continuer</button>
+    </div>
+  </section>
+
+  <!-- ÉCRAN 2 : deux boutons -->
+  <section id="e2" hidden>
+    <div class="haut"><b id="t-nom">TEC</b><span id="t-eff">10 salariés · HCR</span><button class="retour" style="margin-left:auto" onclick="aller('e1')">Modifier</button></div>
+    <div class="corps">
+      <button class="grand" onclick="aller('e3')"><b>Audit</b><span>Suis-je en règle ? Une ligne par obligation, oui ou non.</span></button>
+      <button class="grand" onclick="aller('e4')"><b>Gérer</b><span>Les documents types, déjà remplis : contrat, sanction, rupture, comité.</span></button>
+    </div>
+  </section>
+
+  <!-- ÉCRAN 3 : l'audit, une ligne par obligation -->
+  <section id="e3" hidden>
+    <div class="haut"><button class="retour" onclick="aller('e2')">← Retour</button><b>Audit</b><span id="t-eff2">TEC · 10 salariés</span></div>
+    <div class="corps" style="gap:0">
+      <p class="aide" style="margin:0 0 8px">Non = le document rempli s'ouvre. Oui = vous déposez le vôtre, il est contrôlé.</p>
+      <div id="liste-audit"></div>
+    </div>
+  </section>
+
+  <!-- ÉCRAN 4 : gérer, les documents types -->
+  <section id="e4" hidden>
+    <div class="haut"><button class="retour" onclick="aller('e2')">← Retour</button><b>Gérer</b><span>TEC</span></div>
+    <div class="corps" style="gap:0">
+      <p class="aide" style="margin:0 0 4px">Un mot, un document rempli.</p>
+      <div id="liste-gerer"></div>
+    </div>
+  </section>
+
+  <!-- ÉCRAN 5 : le document choisi, seul -->
+  <section id="e5" hidden>
+    <div class="haut"><button class="retour" onclick="revenir()">← Retour</button><b id="d-titre">Avertissement</b></div>
+    <div class="corps">
+      <div class="champs" id="d-champs"></div>
+      <div class="feuille" id="d-feuille"></div>
+      <div class="barre">
+        <button class="btn">Télécharger en Word</button>
+        <button class="btn second">Imprimer / PDF</button>
+      </div>
+      <details><summary>Voir le texte de loi</summary><p id="d-loi"></p></details>
+    </div>
+  </section>
+
+  <div class="fil">Maquette · <b>5 écrans</b> · cliquez pour passer de l'un à l'autre</div>
+</div>
+
+<script>
+(function () {
+  var precedent = 'e2';
+  var ENT = { nom: 'TEC', eff: 10, sec: 'restauration', ccn: 'HCR' };
+
+  var AUDIT = [
+    { nom: 'Document unique (risques)', seuil: 1, doc: 'duerp' },
+    { nom: 'Affichages obligatoires', seuil: 1, doc: 'affichages' },
+    { nom: 'Registre du personnel', seuil: 1, doc: 'registre' },
+    { nom: 'Mutuelle d\'entreprise', seuil: 1, doc: 'mutuelle' },
+    { nom: 'Visites médicales', seuil: 1, doc: 'visite' },
+    { nom: 'Comité social (CSE)', seuil: 11, doc: 'cse' },
+    { nom: 'Règlement intérieur', seuil: 50, doc: 'ri' },
+    { nom: 'Base de données (BDESE)', seuil: 50, doc: 'bdese' },
+    { nom: 'Égalité femmes-hommes', seuil: 50, doc: 'egalite' },
+    { nom: 'Négociation annuelle (NAO)', seuil: 50, doc: 'nao', cond: 'si délégué syndical' },
+    { nom: 'Commission santé-sécurité', seuil: 300, doc: 'cssct' }
+  ];
+
+  var GERER = [
+    ['Embaucher', ['Contrat CDI', 'Contrat CDD', 'Temps partiel', 'Déclaration d\'embauche (DPAE)', 'Visite d\'information et prévention']],
+    ['Pendant le contrat', ['Avenant', 'Congés payés', 'Arrêt maladie', 'Accident du travail', 'Entretien professionnel']],
+    ['Sanctionner', ['Avertissement', 'Mise à pied', 'Licenciement pour faute']],
+    ['Rompre', ['Rupture conventionnelle', 'Démission', 'Licenciement économique', 'Fin de CDD', 'Départ en retraite', 'Certificat, solde, attestation']],
+    ['Collectif', ['Convocation du CSE', 'Ordre du jour', 'Procès-verbal', 'Accord NAO', 'PV de désaccord']]
+  ];
+
+  var DOCS = {
+    duerp: { titre: 'Document unique', champs: [['Date de la version', '08/09/2026'], ['Responsable', 'Didier']],
+      loi: 'L. 4121-3 et R. 4121-1 du code du travail, versions LEGIARTI000043893923 et LEGIARTI000023795562, lues le 7 septembre 2026.',
+      corps: function () { return '<h2>Document unique d\'évaluation des risques</h2><p class="ent">' + ENT.nom + ' · ' + ENT.eff + ' salariés · ' + ENT.sec + '</p>' +
+        '<p><b>Cuisine.</b> Brûlures (fours, friteuses) ; coupures (couteaux, trancheuse) ; chutes de plain-pied (sols gras) ; port de charges. Mesures : gants anti-chaleur, protège-lames, sols antidérapants, chariot.</p>' +
+        '<p><b>Salle.</b> Chutes (escaliers, plateaux) ; station debout prolongée ; agressions verbales. Mesures : chaussures antidérapantes, rotation, consigne d\'appel.</p>' +
+        '<p><b>Plonge.</b> Produits détergents ; humidité ; bruit. Mesures : gants, fiches de données de sécurité, aération.</p>' +
+        '<p><b>Réserve.</b> Chambre froide ; rayonnages ; manutention. Mesures : veste, arrimage, transpalette.</p>' +
+        '<p>Version du <mark>08/09/2026</mark>, responsable <mark>Didier</mark>.</p>'; } },
+    avert: { titre: 'Avertissement', champs: [['Salarié', 'Karim BENALI'], ['Date des faits', '03/09/2026'], ['Ce que vous reprochez', 'a quitté son poste à 19 h 30 sans prévenir']],
+      loi: 'L. 1332-1, L. 1332-2 et L. 1332-4 du code du travail (versions LEGIARTI000006901447, 025560074, 006901450, lues le 7 septembre 2026).',
+      corps: function () { return '<h2>Notification d\'un avertissement</h2><p class="ent">' + ENT.nom + '</p><p>Monsieur <mark>Karim BENALI</mark></p><p>Paris, le 8 septembre 2026. Lettre recommandée avec avis de réception.</p>' +
+        '<p>Nous vous notifions un avertissement pour les faits suivants : le <mark>3 septembre 2026</mark>, vous <mark>avez quitté votre poste à 19 h 30 sans prévenir</mark>, alors que le service commençait.</p>' +
+        '<p>Nous vous demandons de veiller à ce que de tels faits ne se reproduisent pas.</p><p>Didier, pour ' + ENT.nom + '.</p>'; } },
+    generique: { titre: '', champs: [['Salarié', 'Karim BENALI'], ['Date', '08/09/2026']],
+      loi: 'Les articles qui fondent ce document, avec leur identifiant de version, lus à la source.',
+      corps: function (t) { return '<h2>' + t + '</h2><p class="ent">' + ENT.nom + ' · ' + ENT.eff + ' salariés · ' + ENT.ccn + '</p>' +
+        '<p>Le document complet, rédigé au nom de <b>' + ENT.nom + '</b>, avec les mentions que la loi impose et les délais calculés à la date du jour. Seuls les champs ci-dessus restent à remplir : ils se glissent dans le texte à mesure.</p>' +
+        '<p>Didier, pour ' + ENT.nom + '.</p>'; } }
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function lireFiche() {
+    ENT.nom = $('f-nom').value.trim() || 'TEC';
+    ENT.eff = parseInt($('f-eff').value, 10) || 0;
+    ENT.sec = $('f-sec').value;
+    $('t-nom').textContent = ENT.nom;
+    $('t-eff').textContent = ENT.eff + ' salariés · ' + ENT.ccn;
+    $('t-eff2').textContent = ENT.nom + ' · ' + ENT.eff + ' salariés';
+  }
+  function rendreAudit() {
+    var h = '';
+    AUDIT.forEach(function (a) {
+      var du = ENT.eff >= a.seuil;
+      h += '<div class="ligne' + (du ? '' : ' pasdu') + '"><span class="nom">' + a.nom + (a.cond && du ? ' <span class="du">' + a.cond + '</span>' : '') + '</span>';
+      if (du) h += '<button class="oui" onclick="ouvrir(\'' + a.doc + '\',\'' + a.nom.replace(/'/g, "\\'") + '\',true)">Oui</button><button class="non" onclick="ouvrir(\'' + a.doc + '\',\'' + a.nom.replace(/'/g, "\\'") + '\')">Non</button>';
+      else h += '<span class="du">pas dû avant ' + a.seuil + '</span>';
+      h += '</div>';
+    });
+    $('liste-audit').innerHTML = h;
+  }
+  function rendreGerer() {
+    var h = '';
+    GERER.forEach(function (g) {
+      h += '<p class="groupe">' + g[0] + '</p>';
+      g[1].forEach(function (d) {
+        var cle = d === 'Avertissement' ? 'avert' : 'generique';
+        h += '<div class="doc-ligne" onclick="ouvrir(\'' + cle + '\',\'' + d.replace(/'/g, "\\'") + '\')">' + d + '</div>';
+      });
+    });
+    $('liste-gerer').innerHTML = h;
+  }
+  window.aller = function (id) {
+    if (id === 'e2') lireFiche();
+    if (id === 'e3') { rendreAudit(); precedent = 'e3'; }
+    if (id === 'e4') { rendreGerer(); precedent = 'e4'; }
+    ['e1', 'e2', 'e3', 'e4', 'e5'].forEach(function (e) { $(e).hidden = (e !== id); });
+    window.scrollTo(0, 0);
+  };
+  window.revenir = function () { aller(precedent); };
+  window.ouvrir = function (cle, titre, oui) {
+    var d = DOCS[cle] || DOCS.generique;
+    $('d-titre').textContent = oui ? 'Contrôle : ' + titre : titre;
+    $('d-champs').innerHTML = oui
+      ? '<label style="grid-column:1/-1">Déposez votre document (Word ou PDF) <input type="file"></label>'
+      : d.champs.map(function (c) { return '<label>' + c[0] + '<input value="' + c[1] + '"></label>'; }).join('');
+    $('d-feuille').innerHTML = oui
+      ? '<h2>' + titre + ' : contrôle du vôtre</h2><p class="ent">' + ENT.nom + '</p><p>Une fois déposé, chaque mention obligatoire est cherchée dans votre document. Ce qui manque est signalé, et la clause à insérer est écrite, prête à coller. Vous repartez avec la version corrigée.</p>'
+      : d.corps(titre);
+    $('d-loi').textContent = d.loi;
+    ['e1', 'e2', 'e3', 'e4', 'e5'].forEach(function (e) { $(e).hidden = (e !== 'e5'); });
+    window.scrollTo(0, 0);
+  };
+})();
+</script>
