@@ -11,5 +11,24 @@
         ]
       }
     ]
+  },
+  "permissions": {
+    "allow": [
+      "Agent",
+      "Artifact",
+      "Bash",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Read",
+      "SendMessage",
+      "TaskStop",
+      "WebFetch",
+      "Workflow",
+      "Write",
+      "mcp__Claude_Code_Remote__create_trigger",
+      "mcp__Claude_Code_Remote__send_later",
+      "mcp__Claude_Code_Remote__update_trigger"
+    ]
   }
 }
