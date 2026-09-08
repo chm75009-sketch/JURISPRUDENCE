@@ -6,14 +6,26 @@
 <title>Affichages obligatoires</title>
 <link rel="manifest" href="manifest-audit-social.json">
 <meta name="theme-color" content="#1c2126">
+<!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
+     tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
+     Voir docs/DROITS.md. -->
+<script src="droits.js"></script>
 
 <!--
-  DIX CASES, ET CE QUI SORT DES CASES DÉCOCHÉES.
+  LE DÉPÔT OU L'AFFICHE EN PREMIER. Rien avant.
 
-  L'écran ne dit jamais « affichage manquant ». Il n'a rien à constater : il
-  sort l'affiche, format A4, entièrement rédigée, remplie avec ce que porte la
-  fiche d'entreprise, prête à imprimer et à poser au mur. Une case décochée
-  n'ouvre pas un reproche, elle ouvre une feuille.
+  Depuis « Oui » à l'audit (j'ai mes affichages), la page ouvre sur le dépôt :
+  le texte des affiches en place (Word ou texte), un bouton Contrôler. Chaque
+  mention que la loi impose y est cherchée ; ce qui manque ouvre l'affiche,
+  entièrement rédigée, remplie avec la fiche d'entreprise, prête à imprimer.
+
+  Depuis « Non » (controler-affichages.html?depart=non), la page ouvre sur les
+  dix affiches, les unes sous les autres : les quelques cases à compléter en
+  tête de chacune, la feuille dessous, Imprimer et Télécharger en Word.
+
+  Une affiche seule à l'écran : ses champs en tête, la feuille, Imprimer,
+  Télécharger en Word, et le texte qui l'appelle sous un repli. Le bouton
+  Retour du bandeau, posé par droits.js, revient à l'écran précédent.
 
   CE QUI EST REPRODUIT MOT POUR MOT. Les articles 225-1 à 225-4, 222-33 et
   222-33-2 du code pénal, et les articles L. 3221-1 à L. 3221-7 du code du
@@ -34,67 +46,77 @@
 
 <link rel="stylesheet" href="style.css">
 <style>
-  label.ch input,label.ch select,label.ch textarea{font:inherit;font-size:14.5px;padding:9px 11px;
-    border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre);width:100%}
-  label.ch textarea{min-height:72px;resize:vertical}
+  main.wrap{max-width:560px;padding-bottom:var(--e7)}
+  main.wrap.large{max-width:760px}
+  .rappel-fiche{margin:14px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .champs{margin:14px 0 0}
+  .champs label.ch.plein>.nom{color:var(--vert)}
+  textarea.depot{min-height:200px;margin:14px 0 0;font:15px/1.5 system-ui}
+  #lecture{margin:14px 0 0}
+  .barre{margin:14px 0 0}
+  details.loi{margin:var(--e2) 0 var(--e5)}
+  details.loi .c{font-size:var(--t2);line-height:1.5;color:var(--texte-2);padding:0 0 var(--e3)}
+  .suite{margin:var(--e5) 0 0}
 
-  .cases{display:grid;gap:2px}
-  label.case{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border:1px solid var(--filet);
-    border-radius:9px;margin:6px 0;background:var(--carte);cursor:pointer}
-  label.case input{margin-top:4px;width:17px;height:17px;flex:none}
-  label.case b{display:block;font:600 15px/1.35 system-ui}
-  label.case .f{font-size:12.5px;color:var(--encre-3);margin-top:2px}
-  label.case.faite{background:var(--vert-clair);border-color:#cfe3d6}
-  label.case.faite b{color:#1b4b2d}
+  /* Le résultat du contrôle : une carte par affiche, trouvée ou non. */
+  .manque{border:1px solid var(--filet);border-left:4px solid var(--ambre);
+    border-radius:0 var(--r2) var(--r2) 0;background:var(--surface);padding:12px 14px;margin:0 0 var(--e2)}
+  .manque.trouve{border-left-color:var(--vert)}
+  .manque .o{font:600 15px/1.35 system-ui;color:var(--encre)}
+  .manque q{color:var(--encre)}
+  .manque .barre{margin:10px 0 0}
 
-  .bloc-affiche{margin:26px 0 34px}
-  .reglages{background:var(--creux);border:1px solid var(--filet);border-radius:11px;padding:13px 15px;margin:0 0 12px}
-  .reglages>b{display:block;font:600 14px/1.3 system-ui;margin-bottom:9px;color:var(--bleu)}
-
-  .cadre-a4{overflow-x:auto;background:var(--creux);border-radius:12px;padding:14px}
-  .a4{width:210mm;min-height:297mm;margin:0 auto;background:#fff;color:#000;
-    padding:16mm 15mm;border:1px solid var(--filet-2);
-    font:12pt/1.5 Georgia,"Times New Roman",serif}
-  .a4 .ent{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #000;
-    padding-bottom:6px;font:600 10pt/1.3 system-ui;text-transform:uppercase;letter-spacing:.06em}
-  .a4 h1{font:700 26pt/1.1 system-ui;margin:16mm 0 3mm;letter-spacing:-.01em;text-align:center}
-  .a4 .sous{text-align:center;font:600 11pt/1.4 system-ui;color:#333;margin:0 0 9mm}
-  .a4 h2{font:700 13pt/1.3 system-ui;margin:7mm 0 2mm;border-bottom:1px solid #999;padding-bottom:2px}
-  .a4 p{margin:0 0 3mm}
-  .a4 .gros{font:700 17pt/1.35 system-ui;margin:2mm 0}
-  .a4 .cle{display:grid;grid-template-columns:62mm 1fr;gap:4mm;margin:0 0 2mm;font-size:11.5pt}
-  .a4 .cle span:first-child{font:600 10pt/1.5 system-ui;text-transform:uppercase;letter-spacing:.04em;color:#333}
-  .a4 ul{margin:0 0 3mm;padding-left:6mm}
-  .a4 li{margin:0 0 1.5mm}
+  /* L'affiche, à l'écran : une feuille pleine largeur, lisible sur un
+     téléphone. Le format A4 n'est pris qu'à l'impression. */
+  .titre-affiche{font:600 var(--t5)/1.3 system-ui;margin:var(--e5) 0 0}
+  .a4{background:#fff;color:#000;padding:20px 16px;margin:14px 0 0;border:1px solid var(--filet);
+    border-radius:var(--r2);font:16px/1.5 Georgia,"Times New Roman",serif}
+  .a4 .ent{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid #000;
+    padding-bottom:6px;font:600 13px/1.3 system-ui;text-transform:uppercase;letter-spacing:.06em}
+  .a4 h1{font:700 24px/1.15 system-ui;margin:22px 0 4px;letter-spacing:-.01em;text-align:center}
+  .a4 .sous{text-align:center;font:600 14px/1.4 system-ui;color:#333;margin:0 0 18px}
+  .a4 h2{font:700 16px/1.3 system-ui;margin:18px 0 6px;border-bottom:1px solid #999;padding-bottom:2px}
+  .a4 p{margin:0 0 8px}
+  .a4 .gros{font:700 20px/1.35 system-ui;margin:6px 0}
+  .a4 .cle{display:grid;grid-template-columns:1fr;gap:2px;margin:0 0 8px;font-size:16px}
+  .a4 .cle span:first-child{font:600 12.5px/1.5 system-ui;text-transform:uppercase;letter-spacing:.04em;color:#333}
+  .a4 ul{margin:0 0 8px;padding-left:20px}
+  .a4 li{margin:0 0 4px}
   .a4 .vide{color:#666;font-style:italic}
-  .a4 .loi{border-left:3px solid #000;padding:2mm 0 2mm 4mm;margin:0 0 4mm;font-size:10pt;line-height:1.45;text-align:justify}
-  .a4 .loi b{display:block;font:700 10.5pt/1.4 system-ui;margin-bottom:1.5mm}
-  .a4 .loi .ref{display:block;margin-top:1.5mm;font:400 8.5pt/1.3 system-ui;color:#555}
-  .a4 .note{font-size:9.5pt;color:#444;margin:0 0 3mm}
-  .a4 .pied{margin-top:9mm;border-top:1px solid #999;padding-top:3mm;
-    font:400 9.5pt/1.5 system-ui;color:#333;display:grid;grid-template-columns:1fr 1fr;gap:6mm}
-  .a4 .signature{margin-top:8mm;height:22mm;border:1px dashed #aaa;border-radius:2mm;padding:2mm 3mm;
-    font:400 9.5pt/1.4 system-ui;color:#555}
+  .a4 .loi{border-left:3px solid #000;padding:6px 0 6px 12px;margin:0 0 12px;font-size:14px;line-height:1.45}
+  .a4 .loi b{display:block;font:700 14px/1.4 system-ui;margin-bottom:4px}
+  .a4 .loi .ref{display:block;margin-top:4px;font:400 12px/1.3 system-ui;color:#555}
+  .a4 .note{font-size:13.5px;color:#444;margin:0 0 8px}
+  .a4 .pied{margin-top:20px;border-top:1px solid #999;padding-top:8px;
+    font:400 13px/1.5 system-ui;color:#333;display:grid;grid-template-columns:1fr;gap:8px}
+  .a4 .signature{margin-top:18px;min-height:60px;border:1px dashed #aaa;border-radius:6px;padding:6px 8px;
+    font:400 13px/1.4 system-ui;color:#555}
+  @media (min-width:700px){
+    .a4{padding:32px 30px}
+    .a4 .cle{grid-template-columns:220px 1fr;gap:12px}
+    .a4 .pied{grid-template-columns:1fr 1fr;gap:20px}
+  }
 
-  table.releve{border-collapse:collapse;width:100%;font-size:13px;margin:10px 0}
-  table.releve th,table.releve td{border:1px solid var(--filet);padding:7px 9px;text-align:left;vertical-align:top}
-  table.releve thead th{background:var(--creux);font:600 11.5px/1.3 system-ui;color:var(--encre-2)}
-  table.releve td input{width:100%;font:inherit;font-size:13px;padding:5px 6px;border:1px solid transparent;
-    border-radius:5px;background:transparent}
-  table.releve td input:focus{border-color:var(--bleu);background:var(--carte);outline:none}
-  table.releve .fait{color:var(--vert);font-weight:600}
-  table.releve .apposer{color:var(--ambre);font-weight:600}
+  /* Le relevé : une ligne par affichage, sur une carte. */
+  .releve-ligne{border-bottom:1px solid var(--filet);padding:10px 0}
+  .releve-ligne .n{font:600 15px/1.35 system-ui}
+  .releve-ligne .e{font-size:var(--t1);color:var(--texte-2);margin:2px 0 6px}
+  .releve-ligne .e.fait{color:var(--vert)}
+  .releve-ligne .deux{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .releve-ligne input{font-size:15px;padding:8px 10px;min-height:40px}
 
-  @page{size:A4;margin:0}
+  @page{size:A4;margin:14mm}
   @media print{
-    header.site,.onglets,.barre,.aide,.reglages,footer,h2,h3,.avis{display:none !important}
+    header.site,.barre,.champs,details,.rappel-fiche,.suite,.titre-affiche,.manque,textarea,#lecture,h2{display:none !important}
     body{background:#fff}
     .wrap{max-width:none;padding:0}
-    .cadre-a4{overflow:visible;background:#fff;padding:0}
-    .a4{border:0;margin:0;width:210mm;page-break-after:always}
+    .a4{border:0;border-radius:0;margin:0;padding:0;page-break-after:always;font-size:12pt}
+    .a4 .cle{grid-template-columns:62mm 1fr;gap:4mm}
+    .a4 .pied{grid-template-columns:1fr 1fr}
     .hors-impression{display:none !important}
-    .cache{display:none !important}
-  }</style>
+    [hidden]{display:none !important}
+  }
+</style>
 </head>
 <body>
 
@@ -107,70 +129,55 @@
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" id="main">
 
-  <header>
-    <h1>Mes affichages obligatoires <span>- dix cases, et les affiches qui sortent des cases décochées</span></h1>
-  </header>
-
-  <div class="onglets" id="onglets">
-    <button data-o="cases" class="actif">1 · Ce qui est déjà au mur</button>
-    <button data-o="affiches">2 · Les affiches à poser</button>
-    <button data-o="releve">3 · Le relevé daté</button>
-  </div>
-
-  <!-- ══════ 1 · LES DIX CASES ══════ -->
-  <section id="o-cases">
-    <h2>Cochez ce qui est déjà affiché</h2>
-    <p class="aide">Ce qui reste décoché sort à l'onglet suivant sous forme d'affiche A4, rédigée et
-    remplie avec les coordonnées ci-dessous. Vous n'aurez qu'à imprimer et poser.</p>
-
-    <div class="carte">
-      <b style="display:block;font:600 14px/1.3 system-ui;color:var(--bleu);margin-bottom:10px">L'entreprise, telle qu'elle figurera en tête de chaque affiche</b>
-      <div class="champs" id="champs-entreprise"></div>
+  <!-- ══════ LE DÉPÔT ══════ -->
+  <section id="e-depot" hidden>
+    <p class="rappel-fiche" id="rappel-depot"></p>
+    <div class="barre pile">
+      <label class="btn second" style="display:inline-flex;align-items:center;justify-content:center;gap:9px">Choisir le fichier (.docx ou .txt)
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none"></label>
     </div>
-
-    <div class="cases" id="cases"></div>
-
-    <div class="barre">
-      <button class="btn" id="vers-affiches">Voir les affiches à poser</button>
-      <button class="btn second" id="tout-decocher">Tout décocher</button>
+    <div id="lecture"></div>
+    <textarea class="depot" id="depot" placeholder="Ou collez ici le texte de vos affichages."></textarea>
+    <div class="barre pile"><button type="button" class="btn" id="controler">Contrôler</button></div>
+    <div id="diagnostic"></div>
+    <div class="suite">
+      <button type="button" class="doc-ligne" data-va="toutes">Les dix affiches, prêtes à poser</button>
+      <button type="button" class="doc-ligne" data-va="releve">Le relevé daté</button>
     </div>
   </section>
 
-  <!-- ══════ 2 · LES AFFICHES ══════ -->
-  <section id="o-affiches" class="cache">
-    <h2>Les affiches à poser</h2>
-    <p class="aide">Chaque feuille est au format A4. Complétez les quelques cases au-dessus d'une
-    affiche : elle se met à jour aussitôt. Ce qui reste vide sort entre crochets, en clair, pour
-    que rien ne passe inaperçu au moment de poser.</p>
-    <div class="barre hors-impression">
-      <button class="btn" id="imprimer-tout">Imprimer toutes les affiches</button>
-      <button class="btn second" id="word-tout">Télécharger en Word</button>
-      <button class="btn second" id="retour-cases">Revenir aux cases</button>
+  <!-- ══════ UNE AFFICHE, SEULE ══════ -->
+  <section id="e-affiche" hidden>
+    <div id="affiche-seule"></div>
+  </section>
+
+  <!-- ══════ LES DIX AFFICHES ══════ -->
+  <section id="e-toutes" hidden>
+    <p class="rappel-fiche" id="rappel-toutes"></p>
+    <div class="barre pile">
+      <button type="button" class="btn" id="imprimer-tout">Imprimer toutes les affiches</button>
+      <button type="button" class="btn second" id="word-tout">Télécharger en Word</button>
     </div>
+    <details class="loi"><summary>L'entreprise, en tête de chaque affiche</summary>
+      <div class="champs" id="champs-entreprise"></div></details>
     <div id="affiches"></div>
+    <div class="suite">
+      <button type="button" class="doc-ligne" data-va="releve">Le relevé daté</button>
+    </div>
   </section>
 
-  <!-- ══════ 3 · LE RELEVÉ ══════ -->
-  <section id="o-releve" class="cache">
-    <h2>Le relevé daté</h2>
-    <p class="aide">La feuille qui prouve la pose. Un agent de contrôle ne voit que ce qui est au mur
-    le jour où il passe ; le relevé, daté et signé, dit ce qui a été posé, où, et quand.</p>
-    <div class="carte">
-      <div class="champs" id="champs-releve"></div>
-    </div>
-    <div class="barre hors-impression">
-      <button class="btn" id="imprimer-releve">Imprimer le relevé</button>
-      <button class="btn second" id="word-releve">Télécharger en Word</button>
-    </div>
+  <!-- ══════ LE RELEVÉ ══════ -->
+  <section id="e-releve" hidden>
+    <div class="champs" id="champs-releve"></div>
     <div id="releve"></div>
+    <div class="barre pile">
+      <button type="button" class="btn" id="imprimer-releve">Imprimer le relevé</button>
+      <button type="button" class="btn second" id="word-releve">Télécharger en Word</button>
+    </div>
   </section>
 
-  <footer>
-    Les textes reproduits sur les affiches ont été lus à la source le 7 septembre 2026 et portent
-    leur identifiant de version. Tout reste sur ce poste : aucune coordonnée saisie ici n'est envoyée.
-  </footer>
 </main>
 
 <script src="profil.js"></script>
@@ -628,21 +635,82 @@
   ];
 
   /* ------------------------------------------------------------------ */
-  /* Les onglets. */
-  function onglet(nom) {
-    ["cases", "affiches", "releve"].forEach(function (o) {
-      $("#o-" + o).classList.toggle("cache", o !== nom);
-    });
-    Array.prototype.forEach.call($("#onglets").children, function (b) {
-      b.classList.toggle("actif", b.dataset.o === nom);
-    });
-    if (nom === "affiches") rendreAffiches();
+  /* CE QUE LE CONTRÔLE CHERCHE DANS LE TEXTE DÉPOSÉ.
+
+     Une entrée par affiche, avec les mots qui disent que le sujet est
+     traité. Ils viennent des textes cités sous chaque affiche (« pourquoi »),
+     pas d'ailleurs : D. 4711-1 pour les coordonnées, L. 3171-1 pour
+     l'horaire, L. 3141-16 et D. 3141-5 pour les congés, L. 1142-6 et
+     R. 3221-2 pour les textes d'égalité et de non-discrimination, L. 1153-5
+     et L. 1152-4 pour les textes du harcèlement, R. 2262-3 pour la
+     convention, R. 4121-4 pour l'accès au document unique. Un mot trouvé dit
+     que le sujet est là, jamais qu'il est bien traité. */
+  var ATTENDUS = {
+    inspection: [{ objet: "Adresse, numéro d'appel de l'inspection du travail et nom de l'agent",
+      mots: ["inspection du travail", "inspecteur du travail"] }],
+    spst: [{ objet: "Adresse et numéro d'appel du médecin du travail ou du service de santé au travail",
+      mots: ["médecin du travail", "santé au travail"] }],
+    secours: [{ objet: "Adresse et numéro d'appel des services de secours d'urgence",
+      mots: ["secours", "pompiers", "samu", "112"] }],
+    horaires: [{ objet: "Heures de début et de fin du travail, heures et durée des repos",
+      mots: ["horaire collectif", "horaires de travail", "horaire de travail", "heures de travail", "début et de fin", "commence et finit"] }],
+    conges: [{ objet: "Période de prise des congés et ordre des départs",
+      mots: ["ordre des départs", "période de prise", "congés payés"] }],
+    egalite: [
+      { objet: "Le texte des articles 225-1 à 225-4 du code pénal", mots: ["225-1"] },
+      { objet: "Le texte des articles L. 3221-1 à L. 3221-7 du code du travail", mots: ["3221-2", "égalité de rémunération"] },
+      { objet: "L'interdiction des agissements sexistes (L. 1142-2-1)", mots: ["agissement sexiste", "agissements sexistes"] },
+    ],
+    harcelement: [
+      { objet: "Le texte de l'article 222-33 du code pénal (harcèlement sexuel)", mots: ["222-33", "harcèlement sexuel"] },
+      { objet: "Le texte de l'article 222-33-2 du code pénal (harcèlement moral)", mots: ["222-33-2", "harcèlement moral"] },
+      { objet: "Les actions ouvertes et les coordonnées des autorités et services compétents",
+        mots: ["défenseur des droits", "prud'hommes", "prud’hommes"] },
+      { objet: "Le référent harcèlement", mots: ["référent"] },
+    ],
+    convention: [
+      { objet: "L'intitulé de la convention collective applicable", mots: ["convention collective"] },
+      { objet: "Où les textes sont tenus à disposition, et comment les consulter", mots: ["disposition", "consult"] },
+    ],
+    duerp: [{ objet: "Les modalités d'accès au document unique", mots: ["document unique", "évaluation des risques"] }],
+    fumer: [
+      { objet: "L'interdiction de fumer", mots: ["interdit de fumer", "interdiction de fumer"] },
+      { objet: "L'interdiction de vapoter", mots: ["vapot"] },
+    ],
+  };
+
+  /* ------------------------------------------------------------------ */
+  /* Les écrans. Un seul visible ; le bouton Retour du bandeau (droits.js)
+     revient à l'écran précédent, et quitte la page depuis le premier. */
+  var PILE = [];
+  var ECRANS = ["depot", "affiche", "toutes", "releve"];
+  function montrer(nom, sansPile) {
+    var courant = ECRANS.filter(function (e) { return !$("#e-" + e).hidden; })[0];
+    if (courant && !sansPile && courant !== nom) PILE.push(courant);
+    ECRANS.forEach(function (e) { $("#e-" + e).hidden = e !== nom; });
+    $("#main").classList.toggle("large", nom !== "depot");
+    if (nom === "toutes") rendreAffiches();
     if (nom === "releve") rendreReleve();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0);
   }
-  Array.prototype.forEach.call($("#onglets").children, function (b) {
-    b.addEventListener("click", function () { onglet(b.dataset.o); });
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || !PILE.length) return;
+    ev.preventDefault(); ev.stopPropagation();
+    montrer(PILE.pop(), true);
+  }, true);
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("[data-va]") : null;
+    if (b) montrer(b.getAttribute("data-va"));
   });
+
+  function rappelFiche() {
+    var n = Number(P.effectif), t = v("denomination") || "";
+    if (isFinite(n) && String(P.effectif || "").trim() !== "") t += (t ? " · " : "") + n + " salarié" + (n > 1 ? "s" : "");
+    return t;
+  }
+  $("#rappel-depot").textContent = rappelFiche();
+  $("#rappel-toutes").textContent = rappelFiche();
 
   /* ------------------------------------------------------- l'entreprise */
   var ENTREPRISE = [
@@ -654,58 +722,34 @@
   ];
 
   function champHtml(ch) {
-    var id = "f-" + ch.c;
-    var dedans;
+    var dedans, plein = !!v(ch.c);
     if (ch.aire)
-      dedans = '<textarea id="' + id + '" data-c="' + ech(ch.c) + '" placeholder="' + ech(ch.ph || "") + '">' +
-        ech(v(ch.c)) + "</textarea>";
+      dedans = '<textarea data-c="' + ech(ch.c) + '" placeholder="' + ech(ch.ph || "") + '">' + ech(v(ch.c)) + "</textarea>";
     else
-      dedans = '<input id="' + id + '" data-c="' + ech(ch.c) + '" type="' + (ch.t || "text") +
+      dedans = '<input data-c="' + ech(ch.c) + '" type="' + (ch.t || "text") +
         '" placeholder="' + ech(ch.ph || "") + '" value="' + ech(v(ch.c)) + '">';
-    return '<label class="ch' + (ch.large ? " large" : "") + '"><span class="nom">' + ech(ch.n) + "</span>" +
-      dedans + (ch.sous ? '<span class="sous">' + ech(ch.sous) + "</span>" : "") + "</label>";
+    return '<label class="ch' + (ch.large || ch.aire ? " pleine" : "") + (plein ? " plein" : "") +
+      '"><span class="nom">' + ech(ch.n) + "</span>" + dedans + "</label>";
   }
 
   function brancherChamps(racine, apres) {
     racine.querySelectorAll("[data-c]").forEach(function (el) {
       el.addEventListener("input", function () {
-        E.v[el.dataset.c] = el.value; garder(); if (apres) apres(el);
+        E.v[el.getAttribute("data-c")] = el.value; garder();
+        el.closest("label").classList.toggle("plein", String(el.value).trim() !== "");
+        if (apres) apres(el);
       });
     });
   }
 
-  (function entreprise() {
-    ENTREPRISE.forEach(function (ch) {
-      if (ch.defaut && !v(ch.c)) E.v[ch.c] = ch.defaut;
-    });
-    $("#champs-entreprise").innerHTML = ENTREPRISE.map(champHtml).join("");
-    brancherChamps($("#champs-entreprise"));
-  })();
-
-  /* ------------------------------------------------------- les dix cases */
-  function rendreCases() {
-    $("#cases").innerHTML = AFFICHES.map(function (a) {
-      var f = !!E.faites[a.id];
-      return '<label class="case' + (f ? " faite" : "") + '"><input type="checkbox" data-case="' + ech(a.id) + '"' +
-        (f ? " checked" : "") + '><span><b>' + ech(a.nom) + "</b>" +
-        '<span class="f">' + (a.fond.length ? ech(a.fond.join(", ")) : "code de la santé publique, non lu ici") +
-        (f ? " · déjà au mur, aucune affiche produite" : " · l'affiche sort à l'onglet suivant") + "</span></span></label>";
-    }).join("");
-    $("#cases").querySelectorAll("input[data-case]").forEach(function (i) {
-      i.addEventListener("change", function () {
-        E.faites[i.dataset.case] = i.checked; garder(); rendreCases();
-      });
-    });
-  }
-  rendreCases();
-
-  $("#tout-decocher").addEventListener("click", function () {
-    E.faites = {}; garder(); rendreCases();
-  });
-  $("#vers-affiches").addEventListener("click", function () { onglet("affiches"); });
-  $("#retour-cases").addEventListener("click", function () { onglet("cases"); });
+  $("#champs-entreprise").innerHTML = ENTREPRISE.map(champHtml).join("");
+  brancherChamps($("#champs-entreprise"), function () { redessiner(); });
 
   /* ---------------------------------------------------------- l'affiche */
+  function parId(id) {
+    for (var i = 0; i < AFFICHES.length; i++) if (AFFICHES[i].id === id) return AFFICHES[i];
+    return null;
+  }
   function enTete() {
     return '<div class="ent"><span>' + ech(v("denomination") || "[ dénomination ]") + "</span><span>" +
       ech(v("etablissement") || v("adresse") || "") + "</span></div>";
@@ -742,76 +786,90 @@
     return h + pied(a);
   }
 
-  function aPoser() {
-    return AFFICHES.filter(function (a) { return !E.faites[a.id]; });
+  /* Le texte de loi, sous le repli : ce qui appelle l'affiche, et les
+     articles avec leur identifiant de version. */
+  function loiHtml(a) {
+    return ech(a.pourquoi) + (a.fond.length
+      ? "<br><br>" + a.fond.map(function (x) { return ech(x) + " du code du travail, version " + ech(FOND[x]) + ", " + LU; }).join(" ; ") + "."
+      : "");
   }
 
+  /* Les champs en tête : d'abord ce qui manque encore, puis ce qui est déjà
+     rempli sous un repli, pour ne pas redemander ce qu'on a déjà. */
+  function champsAfficheHtml(a) {
+    a.champs.forEach(function (ch) { if (ch.defaut && !v(ch.c)) E.v[ch.c] = ch.defaut; });
+    var vides = a.champs.filter(function (ch) { return !v(ch.c); });
+    var remplis = a.champs.filter(function (ch) { return !!v(ch.c); });
+    return (vides.length ? '<div class="champs">' + vides.map(champHtml).join("") + "</div>" : "") +
+      (remplis.length
+        ? '<details class="loi"><summary>Corriger ce qui est déjà rempli (' + remplis.length + ")</summary>" +
+          '<div class="champs">' + remplis.map(champHtml).join("") + "</div></details>"
+        : "");
+  }
+
+  /* Une affiche, seule à l'écran. */
+  var SEULE = null;
+  function ouvrirAffiche(id) {
+    var a = parId(id); if (!a) return;
+    SEULE = a;
+    $("#affiche-seule").innerHTML =
+      '<p class="titre-affiche">' + ech(a.nom) + "</p>" +
+      '<div data-aff="' + ech(a.id) + '">' + champsAfficheHtml(a) +
+      '<div class="a4" data-feuille="' + ech(a.id) + '">' + feuilleHtml(a) + "</div></div>" +
+      '<div class="barre pile"><button type="button" class="btn" data-imp="' + ech(a.id) + '">Imprimer cette affiche</button>' +
+      '<button type="button" class="btn second" data-word="' + ech(a.id) + '">Télécharger en Word</button>' +
+      '<button type="button" class="btn second" data-fait="' + ech(a.id) + '">Elle est posée</button></div>' +
+      '<details class="loi"><summary>Voir le texte de loi</summary><div class="c">' + loiHtml(a) + "</div></details>";
+    brancherChamps($("#affiche-seule"), function () { redessiner(); });
+    montrer("affiche");
+  }
+
+  /* Les dix affiches, les unes sous les autres. */
+  function aPoser() { return AFFICHES.filter(function (a) { return !E.faites[a.id]; }); }
   function rendreAffiches() {
-    var liste = aPoser();
-    if (!liste.length) {
-      $("#affiches").innerHTML = '<div class="avis ok"><b>Les dix affichages sont cochés</b>' +
-        "Rien à produire. Passez au relevé daté : c'est lui qui prouvera, dans six mois, ce qui était au mur aujourd'hui.</div>";
-      return;
-    }
-    /* Les champs ne sont pas un questionnaire préalable : l'affiche est déjà
-       là, entière. On ne demande que ce qui manque encore, à côté d'elle, et
-       chaque frappe la remplit. Ce qui est déjà renseigné se corrige sous le
-       repli, pour ne pas redemander ce qu'on a déjà. */
+    var liste = AFFICHES;
     $("#affiches").innerHTML = liste.map(function (a) {
-      a.champs.forEach(function (ch) { if (ch.defaut && !v(ch.c)) E.v[ch.c] = ch.defaut; });
-      var vides = a.champs.filter(function (ch) { return !v(ch.c); });
-      var remplis = a.champs.filter(function (ch) { return !!v(ch.c); });
-      return '<div class="bloc-affiche" data-aff="' + ech(a.id) + '">' +
-        '<div class="reglages hors-impression"><b>' + ech(a.nom) + "</b>" +
-        '<p class="sous" style="margin:0 0 10px;font-size:13px;color:var(--encre-2);line-height:1.5">' +
-        (vides.length
-          ? "Il reste " + vides.length + " chose" + (vides.length > 1 ? "s" : "") +
-            " à porter sur cette affiche. Chaque réponse la remplit sous vos yeux."
-          : "Rien ne manque sur cette affiche : elle est prête à imprimer.") + "</p>" +
-        '<div class="champs">' + vides.map(champHtml).join("") + "</div>" +
-        (remplis.length
-          ? '<details class="txt" style="margin:10px 0 0"><summary>Corriger ce qui est déjà rempli (' +
-            remplis.length + ")</summary><div class=\"c\"><div class=\"champs\">" +
-            remplis.map(champHtml).join("") + "</div></div></details>"
-          : "") +
-        '<details class="txt" style="margin:8px 0 0"><summary>Le texte qui appelle cette affiche</summary>' +
-        '<div class="c">' + ech(a.pourquoi) + "</div></details>" +
-        '<div class="barre" style="margin:12px 0 0"><button class="btn petit" data-imp="' + ech(a.id) + '">Imprimer cette affiche</button>' +
-        '<button class="btn second petit" data-fait="' + ech(a.id) + '">Elle est posée, la cocher</button></div></div>' +
-        '<div class="cadre-a4"><div class="a4" data-feuille="' + ech(a.id) + '">' + feuilleHtml(a) + "</div></div></div>";
+      return '<div data-aff="' + ech(a.id) + '"' + (E.faites[a.id] ? ' class="hors-impression"' : "") + ">" +
+        '<p class="titre-affiche">' + ech(a.nom) + (E.faites[a.id] ? ' <span style="color:var(--vert);font-size:var(--t2)">posée</span>' : "") + "</p>" +
+        champsAfficheHtml(a) +
+        '<div class="a4" data-feuille="' + ech(a.id) + '">' + feuilleHtml(a) + "</div>" +
+        '<div class="barre pile"><button type="button" class="btn second" data-imp="' + ech(a.id) + '">Imprimer cette affiche</button>' +
+        (E.faites[a.id]
+          ? '<button type="button" class="btn second" data-refaire="' + ech(a.id) + '">À reposer</button>'
+          : '<button type="button" class="btn second" data-fait="' + ech(a.id) + '">Elle est posée</button>') + "</div>" +
+        '<details class="loi"><summary>Voir le texte de loi</summary><div class="c">' + loiHtml(a) + "</div></details></div>";
     }).join("");
-
     garder();
+    brancherChamps($("#affiches"), function () { redessiner(); });
+  }
 
-    brancherChamps($("#affiches"), function () {
-      AFFICHES.forEach(function (a) {
-        var f = $('[data-feuille="' + a.id + '"]');
-        if (f) f.innerHTML = feuilleHtml(a);
-      });
-    });
-
-    $("#affiches").querySelectorAll("[data-imp]").forEach(function (b) {
-      b.addEventListener("click", function () { imprimer(b.dataset.imp); });
-    });
-    $("#affiches").querySelectorAll("[data-fait]").forEach(function (b) {
-      b.addEventListener("click", function () {
-        E.faites[b.dataset.fait] = true; garder(); rendreCases(); rendreAffiches();
-      });
+  /* Chaque frappe réécrit toutes les feuilles à l'écran. */
+  function redessiner() {
+    document.querySelectorAll("[data-feuille]").forEach(function (f) {
+      var a = parId(f.getAttribute("data-feuille"));
+      if (a) f.innerHTML = feuilleHtml(a);
     });
   }
+
+  document.addEventListener("click", function (ev) {
+    var t = ev.target.closest ? ev.target.closest("[data-imp],[data-word],[data-fait],[data-refaire],[data-ouvre]") : null;
+    if (!t) return;
+    if (t.hasAttribute("data-imp")) imprimer(t.getAttribute("data-imp"));
+    else if (t.hasAttribute("data-word")) word([parId(t.getAttribute("data-word"))], "affiche-" + t.getAttribute("data-word"));
+    else if (t.hasAttribute("data-fait")) { E.faites[t.getAttribute("data-fait")] = true; garder(); if (!$("#e-toutes").hidden) rendreAffiches(); else montrer(PILE.pop() || "depot", true); }
+    else if (t.hasAttribute("data-refaire")) { delete E.faites[t.getAttribute("data-refaire")]; garder(); rendreAffiches(); }
+    else if (t.hasAttribute("data-ouvre")) ouvrirAffiche(t.getAttribute("data-ouvre"));
+  });
 
   function imprimer(seul) {
-    $("#affiches").querySelectorAll("[data-aff]").forEach(function (d) {
-      d.classList.toggle("hors-impression", !!seul && d.dataset.aff !== seul);
+    var caches = [];
+    document.querySelectorAll("[data-aff]").forEach(function (d) {
+      if (seul && d.getAttribute("data-aff") !== seul && !d.classList.contains("hors-impression")) {
+        d.classList.add("hors-impression"); caches.push(d);
+      }
     });
-    $("#o-releve").classList.add("hors-impression");
     window.print();
-    setTimeout(function () {
-      $("#affiches").querySelectorAll("[data-aff]").forEach(function (d) {
-        d.classList.remove("hors-impression");
-      });
-      $("#o-releve").classList.remove("hors-impression");
-    }, 800);
+    setTimeout(function () { caches.forEach(function (d) { d.classList.remove("hors-impression"); }); }, 800);
   }
   $("#imprimer-tout").addEventListener("click", function () { imprimer(null); });
 
@@ -841,16 +899,106 @@
     return items;
   }
 
-  $("#word-tout").addEventListener("click", function () {
+  function word(liste, nom) {
     var items = [{ k: "sur", t: "Affiches à poser · " + (v("denomination") || "") + " · " + dateFr(v("dateReleve")) }];
-    aPoser().forEach(function (a, i) {
+    liste.forEach(function (a, i) {
       if (i) items.push({ k: "saut" });
       items = items.concat(motsFeuille(a));
     });
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, "Affichages obligatoires"),
-      "affichages-" + new Date().toISOString().slice(0, 10) + ".docx",
+      nom + "-" + new Date().toISOString().slice(0, 10) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  }
+  $("#word-tout").addEventListener("click", function () { word(aPoser().length ? aPoser() : AFFICHES, "affichages"); });
+
+  /* ----------------------------------------------------------- le dépôt */
+  function sansAccents(s) {
+    return String(s || "").normalize ? String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+                                     : String(s || "").toLowerCase();
+  }
+  function u16(vw, i) { return vw.getUint16(i, true); }
+  function u32(vw, i) { return vw.getUint32(i, true); }
+  function entreeZip(buf, nomVoulu) {
+    var vw = new DataView(buf), n = buf.byteLength, fin = -1;
+    for (var i = n - 22; i >= 0 && i > n - 65558; i--) if (u32(vw, i) === 0x06054b50) { fin = i; break; }
+    if (fin < 0) throw new Error("Ce fichier n'est pas une archive lisible.");
+    var nb = u16(vw, fin + 10), pos = u32(vw, fin + 16), dec = new TextDecoder("utf-8");
+    for (var k = 0; k < nb; k++) {
+      if (u32(vw, pos) !== 0x02014b50) throw new Error("Répertoire de l'archive illisible.");
+      var methode = u16(vw, pos + 10), taille = u32(vw, pos + 20);
+      var lnom = u16(vw, pos + 28), lextra = u16(vw, pos + 30), lcom = u16(vw, pos + 32);
+      var debut = u32(vw, pos + 42);
+      var nom = dec.decode(new Uint8Array(buf, pos + 46, lnom));
+      if (nom === nomVoulu) {
+        var ln = u16(vw, debut + 26), lx = u16(vw, debut + 28);
+        return { methode: methode, data: new Uint8Array(buf, debut + 30 + ln + lx, taille) };
+      }
+      pos += 46 + lnom + lextra + lcom;
+    }
+    throw new Error("Le fichier ne contient pas de document Word (word/document.xml).");
+  }
+  function inflater(u8) {
+    if (typeof DecompressionStream !== "function")
+      return Promise.reject(new Error("Ce navigateur ne sait pas décomprimer le fichier. Collez le texte à la place."));
+    return new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer();
+  }
+  function texteDeXml(xml) {
+    return xml.replace(/<w:tab[^>]*\/>/g, "\t").replace(/<w:br[^>]*\/>/g, "\n")
+      .replace(/<\/w:p>/g, "\n").replace(/<[^>]+>/g, "")
+      .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'").replace(/&amp;/g, "&").replace(/\n{3,}/g, "\n\n").trim();
+  }
+  function lireDocx(fichier) {
+    return fichier.arrayBuffer().then(function (buf) {
+      var e = entreeZip(buf, "word/document.xml");
+      if (e.methode === 0) return new TextDecoder("utf-8").decode(e.data);
+      if (e.methode !== 8) throw new Error("Compression inconnue dans ce .docx.");
+      return inflater(e.data).then(function (b) { return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
+    }).then(texteDeXml);
+  }
+
+  $("#fichier").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    var dit = function (m, c) { $("#lecture").innerHTML = '<div class="avis ' + (c || "info") + '">' + m + "</div>"; };
+    dit("Lecture de <b>" + ech(f.name) + "</b>…");
+    (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text()).then(function (t) {
+      $("#depot").value = t;
+      dit("<b>" + ech(f.name) + "</b> lu, " + t.length.toLocaleString("fr-FR") + " caractères. Le fichier n'est pas sorti de ce poste.");
+    }).catch(function (e) {
+      dit("<b>Ce fichier n'a pas pu être lu.</b>" + ech(e.message) + " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
+    });
+  });
+
+  $("#controler").addEventListener("click", function () {
+    var txt = $("#depot").value, cible = $("#diagnostic");
+    if (txt.trim().length < 40) {
+      cible.innerHTML = '<div class="avis att"><b>Le texte déposé est trop court.</b>' +
+        "Déposez le texte de toutes vos affiches : sur un extrait, tout ce qui n'y figure pas serait dit absent.</div>";
+      return;
+    }
+    var plat = sansAccents(txt), manques = 0, h = "";
+    AFFICHES.forEach(function (a) {
+      var att = ATTENDUS[a.id] || [], absents = [];
+      att.forEach(function (x) {
+        var ok = (x.mots || []).some(function (m) { return plat.indexOf(sansAccents(m)) >= 0; });
+        if (!ok) absents.push(x.objet);
+      });
+      var trouve = !absents.length;
+      if (trouve) E.faites[a.id] = true; else { manques++; delete E.faites[a.id]; }
+      h += '<div class="manque' + (trouve ? " trouve" : "") + '"><div class="o">' + ech(a.nom) + "</div>" +
+        (trouve
+          ? '<p class="note" style="margin:6px 0 0">Trouvé dans votre texte. La recherche voit que le sujet est traité, elle ne dit jamais qu\'il l\'est bien.</p>'
+          : '<p class="note" style="margin:6px 0 0">Introuvable : ' + ech(absents.join(" ; ")) + ".</p>" +
+            '<div class="barre pile"><button type="button" class="btn" data-ouvre="' + ech(a.id) + '">L\'affiche, prête à poser</button></div>') +
+        "</div>";
+    });
+    garder();
+    cible.innerHTML = '<div class="avis ' + (manques ? "att" : "ok") + '"><b>' +
+      (manques ? manques + " affichage(s) introuvable(s) dans votre texte" : "Les dix affichages sont trouvés") +
+      "</b>La recherche est faite sur les mots : c'est votre lecture qui décide.</div>" + h;
+    cible.scrollIntoView({ behavior: "smooth" });
   });
 
   /* -------------------------------------------------------- le relevé */
@@ -871,15 +1019,15 @@
   function tableauReleve() {
     var lignes = AFFICHES.map(function (a) {
       var f = !!E.faites[a.id];
-      return "<tr><td>" + ech(a.nom) + "</td>" +
-        "<td>" + (a.fond.length ? ech(a.fond.join(", ")) : "code de la santé publique") + "</td>" +
-        '<td class="' + (f ? "fait" : "apposer") + '">' + (f ? "en place" : "à poser") + "</td>" +
-        '<td><input data-rel="lieu-' + ech(a.id) + '" value="' + ech(v("lieu-" + a.id)) + '" placeholder="emplacement exact"></td>' +
-        '<td><input data-rel="date-' + ech(a.id) + '" type="date" value="' + ech(v("date-" + a.id)) + '"></td></tr>';
+      return '<div class="releve-ligne"><div class="n">' + ech(a.nom) + "</div>" +
+        '<div class="e' + (f ? " fait" : "") + '">' + (f ? "en place" : "à poser") + " · " +
+        (a.fond.length ? ech(a.fond.join(", ")) : "code de la santé publique") + "</div>" +
+        '<div class="deux"><input data-rel="lieu-' + ech(a.id) + '" value="' + ech(v("lieu-" + a.id)) + '" placeholder="emplacement exact">' +
+        '<input data-rel="date-' + ech(a.id) + '" type="date" value="' + ech(v("date-" + a.id)) + '"></div></div>';
     }).join("");
 
     $("#releve").innerHTML =
-      '<div class="cadre-a4"><div class="a4">' + enTete() +
+      '<div class="a4">' + enTete() +
       "<h1>RELEVÉ DES AFFICHAGES</h1>" +
       '<p class="sous">Constat daté de ce qui est apposé dans l\'établissement</p>' +
       '<div class="cle"><span>Date du relevé</span><span' + (v("dateReleve") ? "" : ' class="vide"') + ">" +
@@ -890,25 +1038,19 @@
       ech(v("relAuteur") || v("responsable") || "[ nom et qualité ]") + "</span></div>" +
       '<div class="cle"><span>Support de l\'information</span><span' + (v("relSupport") ? "" : ' class="vide"') + ">" +
       ech(v("relSupport") || "[ support à indiquer ]") + "</span></div>" +
-      "<h2>Ce qui a été constaté, affichage par affichage</h2>" +
-      '<table class="releve"><thead><tr><th>Affichage</th><th>Fondement</th><th>État</th>' +
-      "<th>Emplacement</th><th>Posé le</th></tr></thead><tbody>" + lignes + "</tbody></table>" +
-      '<p class="note">Une photographie datée de chaque emplacement est jointe au présent relevé. ' +
+      "<h2>Ce qui a été constaté, affichage par affichage</h2>" + lignes +
+      '<p class="note" style="margin-top:12px">Une photographie datée de chaque emplacement est jointe au présent relevé. ' +
       "Pour ce qui est dû par tout moyen, la preuve du support en tient lieu : accusé de diffusion, " +
       "capture de l'intranet, émargement du livret d'accueil.</p>" +
       '<div class="signature">Date et signature</div>' +
-      "</div></div>";
+      "</div>";
 
     $("#releve").querySelectorAll("[data-rel]").forEach(function (i) {
-      i.addEventListener("input", function () { E.v[i.dataset.rel] = i.value; garder(); });
+      i.addEventListener("input", function () { E.v[i.getAttribute("data-rel")] = i.value; garder(); });
     });
   }
 
-  $("#imprimer-releve").addEventListener("click", function () {
-    $("#o-affiches").classList.add("hors-impression");
-    window.print();
-    setTimeout(function () { $("#o-affiches").classList.remove("hors-impression"); }, 800);
-  });
+  $("#imprimer-releve").addEventListener("click", function () { window.print(); });
 
   $("#word-releve").addEventListener("click", function () {
     var items = [
@@ -933,11 +1075,16 @@
   });
 
   /* ------------------------------------------------------------------ */
-  /* L'entrée. « non » à la question du parcours ouvre directement les
-     affiches : rien n'est en place, tout est à poser. */
+  /* L'entrée. « non » (rien n'est en place) ouvre les dix affiches ;
+     tout le reste ouvre le dépôt. */
   var depart = new URLSearchParams(location.search).get("depart");
-  if (depart === "non") { E.faites = {}; garder(); rendreCases(); onglet("affiches"); }
+  if (depart === "non") { E.faites = {}; garder(); montrer("toutes", true); }
+  else montrer("depot", true);
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
 })();
 </script>
+<script src="assistant.js" defer></script>
 </body>
 </html>
