@@ -20,12 +20,14 @@
   déjà traité ne produit rien : ni carte, ni constat, ni exposé du droit.
 
   AUCUNE QUESTION AVANT LE DOCUMENT. Le premier écran ne demande rien : il prend
-  le fichier. Laquelle des quatre négociations ? Elle est reconnue dans le texte
-  déposé, et la réponse s'affiche À CÔTÉ des paragraphes, corrigeable d'un
-  geste. Les autres questions se posent de même, dans le panneau posé contre le
-  document visible, et seulement celles qui servent à le compléter : le
-  signataire, l'effectif, la date de la réunion suivante. Chaque réponse remplit
-  le document sous les yeux de l'utilisateur.
+  le fichier, et c'est le premier geste de la page, sans chapeau ni titre
+  au-dessus (écran 5 de la maquette validée le 8 septembre 2026). Laquelle des
+  quatre négociations ? Elle est reconnue dans le texte déposé, et la réponse
+  s'affiche À CÔTÉ des paragraphes, corrigeable d'un geste. Les autres
+  questions se posent de même, dans le panneau posé contre le document
+  visible, et seulement celles qui servent à le compléter : le signataire,
+  l'effectif, la date de la réunion suivante. Chaque réponse remplit le
+  document sous les yeux de l'utilisateur. Retour remonte d'un écran.
 
   L'utilisateur choisit sa sortie :
     - le procès-verbal de désaccord complet, portant les deux mentions que
@@ -53,9 +55,15 @@
 -->
 
 <link rel="stylesheet" href="style.css">
+<script src="droits.js"></script>
 <style>
-  textarea#depot{width:100%;min-height:220px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
-    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+  #o-depot{margin:var(--e4) 0 0}
+  textarea#depot{min-height:200px;font-size:var(--t3);line-height:1.5;margin:var(--e3) 0 0}
+  #o-depot .barre{margin:var(--e3) 0}
+  #lecture .avis,#erreur .avis{margin:var(--e3) 0 0}
+  /* Avant le dépôt, ni onglets ni texte de loi : la règle .onglets de style.css
+     passerait sinon devant .cache. */
+  .onglets.cache,details.cache{display:none}
 
   /* Le document à gauche, ce qui reste à compléter à droite, à côté de lui.
      Aucune question ne précède le document : elles se posent devant lui, et
@@ -112,45 +120,30 @@
 
 <main class="wrap">
 
-  <header>
-    <h1>Contrôler mon procès-verbal <span>- négociation obligatoire, le document existant complété</span></h1>
-  </header>
-
-  <div class="onglets" id="onglets">
-    <button data-o="depot" class="actif">1 &middot; Le procès-verbal</button>
-    <button data-o="paragraphes" id="ong-par" disabled>2 &middot; Les paragraphes à insérer</button>
-    <button data-o="sortie" id="ong-sortie" disabled>3 &middot; Ce que vous emportez</button>
-  </div>
-
-  <!-- ══════ 1 · LE PROCÈS-VERBAL ══════ -->
+  <!-- ══════ LE DÉPÔT, PREMIER GESTE DE LA PAGE ══════ -->
   <section id="o-depot">
-    <h2>Déposez le procès-verbal de votre négociation</h2>
-    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats
-    sont lus directement, <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document, copiez
-    son texte et collez-le ci-dessous.</p>
-
-    <div class="carte">
-      <div class="barre">
-        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
-          Choisir un fichier .docx ou .txt
-          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
-        </label>
-        <button class="btn second" id="vider">Vider</button>
-      </div>
-      <div id="lecture"></div>
-      <textarea id="depot" placeholder="Collez ici le texte du procès-verbal, ou choisissez le fichier ci-dessus."></textarea>
-      <div class="barre">
-        <button class="btn" id="controler">Ouvrir les paragraphes à insérer</button>
-      </div>
-      <div id="erreur"></div>
+    <div class="barre pile">
+      <label class="btn">
+        Déposer le procès-verbal (Word ou texte)
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+      </label>
     </div>
+    <div id="lecture"></div>
+    <textarea id="depot" placeholder="Ou collez ici le texte du procès-verbal."></textarea>
+    <div class="barre pile">
+      <button class="btn" id="controler">Contrôler</button>
+    </div>
+    <div id="erreur"></div>
   </section>
 
-  <!-- ══════ 2 · LES PARAGRAPHES ══════ -->
+  <div class="onglets cache" id="onglets">
+    <button data-o="depot" class="actif">Le procès-verbal</button>
+    <button data-o="paragraphes" id="ong-par" disabled>Les paragraphes à insérer</button>
+    <button data-o="sortie" id="ong-sortie" disabled>Ce que vous emportez</button>
+  </div>
+
+  <!-- ══════ LES PARAGRAPHES ══════ -->
   <section id="o-paragraphes" class="cache">
-    <h2>Les paragraphes à insérer</h2>
-    <p class="aide">Chacun est rédigé et prêt à coller. Modifiez ce que vous voulez dans la zone,
-    remplacez les valeurs entre crochets par les vôtres, puis insérez.</p>
     <div class="compteurs" id="compteurs"></div>
     <div class="deux">
       <div>
@@ -182,10 +175,8 @@
     </div>
   </section>
 
-  <!-- ══════ 3 · LA SORTIE ══════ -->
+  <!-- ══════ LA SORTIE ══════ -->
   <section id="o-sortie" class="cache">
-    <h2>Ce que vous emportez</h2>
-
     <div class="choix" id="choix-issue">
       <label data-issue="desaccord" class="actif">
         <input type="radio" name="issue" value="desaccord" checked>
@@ -252,16 +243,10 @@
     </div>
   </section>
 
-  <details class="txt">
-    <summary>Les textes lus, in extenso, avec l'identifiant de version</summary>
+  <details class="txt cache" id="textes">
+    <summary>Voir le texte de loi</summary>
     <div class="c" id="corps-textes"></div>
   </details>
-
-  <footer>
-    Rien ne quitte ce poste. Le repérage des thèmes déjà traités est lexical : il conduit la lecture
-    du procès-verbal, il ne la remplace pas. Aucune proposition, aucun chiffre n'est écrit à votre
-    place : ce qui vous appartient sort entre crochets.
-  </footer>
 </main>
 
 <script src="profil.js"></script>
@@ -862,18 +847,32 @@
   /* ══════════════════════════════════════════════════════════════════════════
      LES ONGLETS
      ══════════════════════════════════════════════════════════════════════════ */
+  var ECRAN = "depot";
   function onglet(nom) {
+    ECRAN = nom;
     ["depot", "paragraphes", "sortie"].forEach(function (o) {
       $("o-" + o).classList.toggle("cache", o !== nom);
     });
     Array.prototype.forEach.call($("onglets").children, function (b) {
       b.classList.toggle("actif", b.dataset.o === nom);
     });
+    /* Les onglets et le texte de loi n'apparaissent qu'une fois le document
+       déposé : avant, le dépôt est seul à l'écran. */
+    $("onglets").classList.toggle("cache", nom === "depot");
+    $("textes").classList.toggle("cache", nom === "depot");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   Array.prototype.forEach.call($("onglets").children, function (b) {
     b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
   });
+  /* Le bouton Retour du bandeau, posé par droits.js : il remonte d'un écran,
+     et ne quitte la page que depuis le dépôt. */
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || ECRAN === "depot") return;
+    ev.preventDefault(); ev.stopPropagation();
+    onglet(ECRAN === "sortie" ? "paragraphes" : "depot");
+  }, true);
 
   /* ══════════════════════════════════════════════════════════════════════════
      LA LECTURE D'UN .DOCX, SANS BIBLIOTHÈQUE
@@ -953,10 +952,6 @@
       dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
           " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
     });
-  });
-
-  $("vider").addEventListener("click", function () {
-    $("depot").value = ""; dit(""); $("erreur").innerHTML = "";
   });
 
   /* ══════════════════════════════════════════════════════════════════════════

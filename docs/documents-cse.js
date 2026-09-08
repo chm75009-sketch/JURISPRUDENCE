@@ -1,19 +1,19 @@
-/* Les documents que l'application PRODUIT — module « comité social et économique ».
+/* Les documents que l'application PRODUIT - module « comité social et économique ».
 
    POURQUOI CE FICHIER EXISTE
 
    Le module d'audit dit ce qui manque ; les fiches de régularisation disent
    quoi faire. Aucun des deux ne fait le travail : un employeur à qui l'on
    explique en six étapes comment convoquer son comité n'a toujours pas de
-   convocation. Ce fichier écrit la pièce elle-même — au nom de l'entreprise,
+   convocation. Ce fichier écrit la pièce elle-même - au nom de l'entreprise,
    avec ses courriers d'accompagnement et son calendrier calculé.
 
    TROIS RÈGLES ONT COMMANDÉ L'ÉCRITURE
 
    1. Rien qui n'ait été lu à la source. Aucun article n'est cité ici qui ne
       figure dans « moteur/cse/textes_cse.json ». Aucun montant, aucun délai,
-      aucune mention n'est inventé. Un texte que le dépôt n'a pas capté — la
-      loi du 9 décembre 2016, un article d'un autre code — est signalé comme
+      aucune mention n'est inventé. Un texte que le dépôt n'a pas capté - la
+      loi du 9 décembre 2016, un article d'un autre code - est signalé comme
       tel plutôt que résumé de mémoire.
 
    2. L'ordre des trois étages. Beaucoup d'obligations du comité ne sont
@@ -26,8 +26,8 @@
       pourquoi l'étage supérieur ne s'applique pas.
 
    3. Ce qui manque sort entre crochets. Un document qui devinerait les choix
-      de l'employeur — le nombre de membres d'une commission, l'échelle des
-      délégations, la date d'une réunion — lui ferait adopter des règles qu'il
+      de l'employeur - le nombre de membres d'une commission, l'échelle des
+      délégations, la date d'une réunion - lui ferait adopter des règles qu'il
       n'a pas voulues. Le crochet est visible : il se remplit, il ne se subit
       pas.
 
@@ -122,7 +122,7 @@
     L.push("Ce qui est écrit sans crochets est imposé par la loi et fondé sur l'article");
     L.push("cité en regard. Ce qui est ENTRE CROCHETS vous appartient : soit la loi vous");
     L.push("en laisse le choix, soit l'application ne dispose pas de la donnée. Remplacez");
-    L.push("chaque crochet, ou supprimez la ligne si elle ne vous concerne pas — n'en");
+    L.push("chaque crochet, ou supprimez la ligne si elle ne vous concerne pas - n'en");
     L.push("laissez aucun dans le document que vous signez, adressez ou déposez.");
     L.push("");
     L.push("Gardez les mentions d'articles : elles vous serviront le jour où la pièce se");
@@ -136,7 +136,7 @@
     L.push("");
     L.push(TRAIT);
     L.push("");
-    L.push("FONDEMENT — les articles du code du travail lus à la source :");
+    L.push("FONDEMENT - les articles du code du travail lus à la source :");
     L.push(arts.join(" · ") + ".");
     L.push("");
     if (!sansReserve) {
@@ -159,7 +159,7 @@
   function courrier(L, rang, objetTxt, avertissement) {
     L.push("");
     L.push(DOUBLE);
-    L.push("COURRIER " + rang + " — " + objetTxt.toUpperCase());
+    L.push("COURRIER " + rang + " - " + objetTxt.toUpperCase());
     L.push(DOUBLE);
     L.push("");
     if (avertissement) { avertissement.forEach(function (a) { L.push(a); }); L.push(""); }
@@ -214,35 +214,35 @@
 
       L.push("OBJET");
       L.push("");
-      L.push("Tout le régime du comité — nombre de sièges, crédit d'heures, périodicité");
-      L.push("des réunions, commissions, budgets — se calcule sur l'effectif. L'article");
+      L.push("Tout le régime du comité - nombre de sièges, crédit d'heures, périodicité");
+      L.push("des réunions, commissions, budgets - se calcule sur l'effectif. L'article");
       L.push("L. 2311-2 renvoie ce calcul aux articles L. 1111-2 et L. 1251-54. Le présent");
       L.push("état établit l'effectif mois par mois : c'est lui, et non une déclaration,");
       L.push("qui fait foi.");
       L.push("");
 
-      L.push("I — L'ÉTAT MOIS PAR MOIS");
+      L.push("I - L'ÉTAT MOIS PAR MOIS");
       L.push("");
       L.push("Effectif de " + nom(ctx) + ", calculé selon l'article L. 1111-2 :");
       L.push("");
       if (mois.length) {
         mois.forEach(function (v, i) {
-          L.push("   Mois " + (i + 1) + " — [mois et année] : " + v + " salariés");
+          L.push("   Mois " + (i + 1) + " - [mois et année] : " + v + " salariés");
         });
         L.push("");
         L.push("Les " + mois.length + " valeurs ci-dessus sont celles que porte votre dossier.");
         L.push("Datez chaque ligne du mois qu'elle recouvre et joignez, pour chacune, l'état");
         L.push("d'effectif ou la déclaration sociale nominative qui l'établit.");
       } else {
-        L.push("   [Mois 1 — mois et année] : [effectif] salariés");
+        L.push("   [Mois 1 - mois et année] : [effectif] salariés");
         L.push("   [Mois 2 …] : […]");
         L.push("   [… jusqu'au douzième mois au moins : le seuil de onze salariés ne rend");
         L.push("    la mise en place du comité obligatoire que s'il est atteint pendant");
-        L.push("    douze mois consécutifs — L. 2311-2.]");
+        L.push("    douze mois consécutifs - L. 2311-2.]");
       }
       L.push("");
 
-      L.push("II — LA MÉTHODE, CATÉGORIE PAR CATÉGORIE (L. 1111-2)");
+      L.push("II - LA MÉTHODE, CATÉGORIE PAR CATÉGORIE (L. 1111-2)");
       L.push("");
       L.push("1° Comptent intégralement dans l'effectif : les salariés titulaires d'un");
       L.push("contrat de travail à durée indéterminée à temps plein et les travailleurs à");
@@ -264,7 +264,7 @@
       L.push("   Somme des horaires contractuels : [ ] h  ·  durée retenue : [ ] h");
       L.push("   Nombre retenu : [ ]");
       L.push("");
-      L.push("EXCLUSIONS À MOTIVER — le 2° de l'article L. 1111-2 exclut du décompte les");
+      L.push("EXCLUSIONS À MOTIVER - le 2° de l'article L. 1111-2 exclut du décompte les");
       L.push("salariés titulaires d'un contrat à durée déterminée et les salariés mis à");
       L.push("disposition par une entreprise extérieure, y compris les salariés");
       L.push("temporaires, lorsqu'ils remplacent un salarié absent ou dont le contrat de");
@@ -276,7 +276,7 @@
       L.push("    l'a pratiquée.]");
       L.push("");
 
-      L.push("III — CE QUE L'ÉTAT ÉTABLIT");
+      L.push("III - CE QUE L'ÉTAT ÉTABLIT");
       L.push("");
       L.push("Le comité social et économique est mis en place dans les entreprises d'au");
       L.push("moins onze salariés ; sa mise en place n'est obligatoire que si l'effectif");
@@ -284,7 +284,7 @@
       L.push("(L. 2311-2).");
       L.push("");
       L.push("   Le seuil de onze salariés est-il atteint sur douze mois consécutifs ?");
-      L.push("   [oui / non] — mois de départ : [ ]  ·  mois d'arrivée : [ ]");
+      L.push("   [oui / non] - mois de départ : [ ]  ·  mois d'arrivée : [ ]");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le " + leJour(ctx.aujourdhui) + ".");
       L.push("");
@@ -299,8 +299,8 @@
 
   DP.ajouter("CSE-CTL-COH-02", {
     nom: "La note de franchissement de seuil et son calendrier de mise en conformité",
-    detail: "La date du franchissement, le délai que la loi laisse pour s'y conformer — " +
-            "calculé —, et la liste datée des obligations qui s'ouvrent.",
+    detail: "La date du franchissement, le délai que la loi laisse pour s'y conformer - " +
+            "calculé -, et la liste datée des obligations qui s'ouvrent.",
     produire: function (ctx) {
       var f = ctx.fiche || {};
       var eff = effectifDe(ctx);
@@ -310,19 +310,19 @@
         "articles L. 2311-2, L. 2312-2 et L. 2312-34 du code du travail"));
       usage(L);
 
-      L.push("I — LE FRANCHISSEMENT, DATÉ");
+      L.push("I - LE FRANCHISSEMENT, DATÉ");
       L.push("");
       L.push("Effectif porté au dossier : " + (eff == null ? "[effectif]" : eff + " salariés") + ".");
       L.push("");
       L.push("Un seuil ne se franchit pas le jour où on le constate : il se franchit sur");
       L.push("une durée, et c'est de cette durée que courent les délais.");
       L.push("");
-      L.push("  · Onze salariés — la mise en place du comité n'est obligatoire que si");
+      L.push("  · Onze salariés - la mise en place du comité n'est obligatoire que si");
       L.push("    l'effectif d'au moins onze salariés est atteint pendant douze mois");
       L.push("    consécutifs (L. 2311-2).");
       L.push("    Douze mois consécutifs du [mois] au [mois] · seuil atteint le [date].");
       L.push("");
-      L.push("  · Cinquante salariés — lorsque, postérieurement à la mise en place du");
+      L.push("  · Cinquante salariés - lorsque, postérieurement à la mise en place du");
       L.push("    comité, l'effectif atteint au moins cinquante salariés pendant douze mois");
       L.push("    consécutifs, le comité exerce l'ensemble des attributions récurrentes");
       L.push("    d'information et de consultation à l'expiration d'un délai de douze mois");
@@ -335,7 +335,7 @@
       L.push("    Lorsque l'entreprise n'était pas pourvue d'un comité, le délai est d'un an");
       L.push("    à compter de sa mise en place (L. 2312-2, dernier alinéa).");
       L.push("");
-      L.push("  · Trois cents salariés — le seuil est réputé franchi lorsque l'effectif de");
+      L.push("  · Trois cents salariés - le seuil est réputé franchi lorsque l'effectif de");
       L.push("    l'entreprise dépasse ce seuil pendant douze mois consécutifs, et");
       L.push("    l'employeur dispose d'un délai d'un an à compter du franchissement pour");
       L.push("    se conformer complètement aux obligations d'information et de");
@@ -343,9 +343,9 @@
       L.push("    Seuil franchi le [date] · conformité complète due le [date + 1 an].");
       L.push("");
 
-      L.push("II — CE QUE LE SEUIL OUVRE");
+      L.push("II - CE QUE LE SEUIL OUVRE");
       L.push("");
-      L.push("À cinquante salariés — l'ensemble des attributions récurrentes d'information");
+      L.push("À cinquante salariés - l'ensemble des attributions récurrentes d'information");
       L.push("et de consultation définies par la section 3 (L. 2312-2) : orientations");
       L.push("stratégiques, situation économique et financière, politique sociale,");
       L.push("conditions de travail et emploi (L. 2312-17).");
@@ -359,17 +359,17 @@
       L.push("    (L. 2315-50) et la commission de l'égalité professionnelle (L. 2315-56).");
       L.push("   État, commission par commission : [ ]");
       L.push("");
-      L.push("À mille salariés — à défaut d'accord prévu à l'article L. 2315-45, la");
+      L.push("À mille salariés - à défaut d'accord prévu à l'article L. 2315-45, la");
       L.push("commission économique, créée au sein du comité ou du comité central");
       L.push("(L. 2315-46).");
       L.push("   État : [ ]");
       L.push("");
-      L.push("À deux mille salariés — le taux de la subvention de fonctionnement passe de");
+      L.push("À deux mille salariés - le taux de la subvention de fonctionnement passe de");
       L.push("0,20 % à 0,22 % de la masse salariale brute (L. 2315-61).");
       L.push("   État : [ ]");
       L.push("");
 
-      L.push("III — LE CALENDRIER DE MISE EN CONFORMITÉ");
+      L.push("III - LE CALENDRIER DE MISE EN CONFORMITÉ");
       L.push("");
       L.push("Ces obligations sont dues depuis le franchissement, non depuis sa");
       L.push("découverte. Le tableau ci-dessous se remplit dans l'ordre des échéances, la");
@@ -413,7 +413,7 @@
       L.push("");
       L.push("  1. La note d'information du personnel sur l'organisation des élections.");
       L.push("  2. L'invitation des organisations syndicales à négocier le protocole");
-      L.push("     d'accord préélectoral — deux canaux, que le texte distingue.");
+      L.push("     d'accord préélectoral - deux canaux, que le texte distingue.");
       L.push("  3. Le procès-verbal de carence, à n'établir que si le processus n'a");
       L.push("     produit aucun élu.");
       L.push("  4. Le courrier de transmission du procès-verbal de carence à l'inspection");
@@ -427,7 +427,7 @@
       L.push("d'une amende de 7 500 € (L. 2317-1).");
       L.push("");
 
-      titre(L, "1 — Note d'information du personnel");
+      titre(L, "1 - Note d'information du personnel");
       L.push("À diffuser PAR TOUT MOYEN PERMETTANT DE CONFÉRER DATE CERTAINE à cette");
       L.push("information (L. 2314-4). Sans date certaine, le point de départ des");
       L.push("quatre-vingt-dix jours est indémontrable, et le respect du délai avec lui.");
@@ -450,7 +450,7 @@
       L.push("Conformément à l'article L. 2314-4 du code du travail, la présente note vous");
       L.push("informe de l'organisation de ces élections.");
       L.push("");
-      L.push("DATE ENVISAGÉE POUR LE PREMIER TOUR : " + jourOu(f.datePremierTour, "DATE — mention obligatoire"));
+      L.push("DATE ENVISAGÉE POUR LE PREMIER TOUR : " + jourOu(f.datePremierTour, "DATE - mention obligatoire"));
       L.push("");
       L.push("Cette mention est exigée par l'article L. 2314-4 : le document diffusé");
       L.push("précise la date envisagée pour le premier tour. Ce premier tour doit se tenir");
@@ -463,7 +463,7 @@
       L.push("imposées par L. 2314-4 : elles sont utiles, et elles vous engagent.]");
       L.push("");
       if (eff != null && eff >= 11 && eff <= 20) {
-        L.push("MENTION PROPRE À VOTRE EFFECTIF — l'entreprise comptant entre onze et vingt");
+        L.push("MENTION PROPRE À VOTRE EFFECTIF - l'entreprise comptant entre onze et vingt");
         L.push("salariés, les organisations syndicales ne seront invitées à négocier le");
         L.push("protocole qu'à la condition qu'au moins un salarié se soit porté candidat");
         L.push("aux élections dans un délai de trente jours à compter de la présente");
@@ -481,7 +481,7 @@
         L.push("information (L. 2314-5, dernier alinéa).]");
         L.push("");
       }
-      L.push("Diffusion : [préciser le moyen retenu et ce qui lui confère date certaine —");
+      L.push("Diffusion : [préciser le moyen retenu et ce qui lui confère date certaine -");
       L.push("affichage avec constat daté, remise contre émargement, courrier recommandé,");
       L.push("courriel avec accusé de réception]. Conservez cette preuve.");
       L.push("");
@@ -495,11 +495,11 @@
         "parvenir au plus tard QUINZE JOURS avant la date de la première réunion de",
         "négociation.",
       ]);
-      papier(L, ctx, ["[Organisation syndicale — dénomination]", "[Adresse]"],
+      papier(L, ctx, ["[Organisation syndicale - dénomination]", "[Adresse]"],
         leJour(d0));
       L.push("Lettre recommandée avec demande d'avis de réception");
       L.push("");
-      L.push("Objet : organisation des élections au comité social et économique —");
+      L.push("Objet : organisation des élections au comité social et économique -");
       L.push("invitation à négocier le protocole d'accord préélectoral");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -520,16 +520,16 @@
       L.push(jourOu(f.dateInformationPersonnel, "date de diffusion") + ".");
       L.push("");
       salutation(L, ctx);
-      L.push("À QUI L'ADRESSER — établissez la liste avant d'envoyer, et conservez-la :");
+      L.push("À QUI L'ADRESSER - établissez la liste avant d'envoyer, et conservez-la :");
       L.push("");
-      L.push("  Premier alinéa de L. 2314-5, informées PAR TOUT MOYEN — les organisations");
+      L.push("  Premier alinéa de L. 2314-5, informées PAR TOUT MOYEN - les organisations");
       L.push("  syndicales qui satisfont aux critères de respect des valeurs républicaines");
       L.push("  et d'indépendance, légalement constituées depuis au moins deux ans, et dont");
       L.push("  le champ professionnel et géographique couvre l'entreprise ou");
       L.push("  l'établissement concernés.");
       L.push("     [Lister]");
       L.push("");
-      L.push("  Deuxième alinéa de L. 2314-5, invitées PAR COURRIER — les organisations");
+      L.push("  Deuxième alinéa de L. 2314-5, invitées PAR COURRIER - les organisations");
       L.push("  syndicales reconnues représentatives dans l'entreprise ou l'établissement,");
       L.push("  celles ayant constitué une section syndicale dans l'entreprise ou");
       L.push("  l'établissement, ainsi que les syndicats affiliés à une organisation");
@@ -557,7 +557,7 @@
       L.push("Élections des membres de la délégation du personnel");
       L.push("du comité social et économique");
       L.push("");
-      L.push("Établi le [DATE D'ÉTABLISSEMENT] — c'est de cette date que courent les quinze");
+      L.push("Établi le [DATE D'ÉTABLISSEMENT] - c'est de cette date que courent les quinze");
       L.push("jours de transmission à l'inspection du travail, et les six mois de");
       L.push("l'article L. 2314-8.");
       L.push("");
@@ -590,7 +590,7 @@
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("PUBLICITÉ — l'employeur porte le procès-verbal à la connaissance des salariés");
+      L.push("PUBLICITÉ - l'employeur porte le procès-verbal à la connaissance des salariés");
       L.push("dans l'entreprise par tout moyen permettant de donner date certaine à cette");
       L.push("information (L. 2314-9).");
       L.push("   Moyen retenu : [ ]  ·  date : [ ]");
@@ -631,11 +631,11 @@
       if (dinfo) {
         L.push("Information du personnel diffusée le " + leJour(dinfo) + ".");
         L.push("Le premier tour doit se tenir au plus tard le " + leJour(dans(dinfo, 90)) +
-               " — quatre-vingt-dixième jour suivant la diffusion (L. 2314-4).");
+               " - quatre-vingt-dixième jour suivant la diffusion (L. 2314-4).");
         if (dtour) {
           var ecart = Math.round((dtour - dinfo) / 86400000);
           L.push("Premier tour porté au dossier : " + leJour(dtour) + ", soit " + ecart +
-                 " jours après la diffusion — " +
+                 " jours après la diffusion - " +
                  (ecart <= 90 ? "le délai est tenu." : "LE DÉLAI EST DÉPASSÉ."));
           if (ecart > 90) {
             L.push("Il faut alors reprendre le processus : diffuser une NOUVELLE information");
@@ -690,7 +690,7 @@
         "articles L. 2314-4, L. 2314-5, L. 2314-33 et L. 2314-34 du code du travail"));
       usage(L);
 
-      L.push("I — LE TERME DES MANDATS EN COURS");
+      L.push("I - LE TERME DES MANDATS EN COURS");
       L.push("");
       L.push("Les membres de la délégation du personnel du comité social et économique");
       L.push("sont élus pour quatre ans (L. 2314-33). Par dérogation, un accord de branche,");
@@ -698,18 +698,18 @@
       L.push("durée comprise entre deux et quatre ans (L. 2314-34).");
       L.push("");
       L.push("  Premier tour des dernières élections : " + jourOu(f.dateDernieresElections, "date"));
-      L.push("  Durée applicable : " + (duree ? duree + " ans, fixée par accord — [référence de l'accord]"
+      L.push("  Durée applicable : " + (duree ? duree + " ans, fixée par accord - [référence de l'accord]"
                                              : "quatre ans (L. 2314-33), à défaut d'accord dérogatoire"));
       L.push("  Terme des mandats : " + (terme ? leJour(terme) : "[date]"));
       L.push("");
       if (duree && (duree < 2 || duree > 4)) {
-        L.push("  ATTENTION — la durée portée au dossier (" + duree + " ans) est hors des bornes");
+        L.push("  ATTENTION - la durée portée au dossier (" + duree + " ans) est hors des bornes");
         L.push("  de deux à quatre ans que fixe L. 2314-34. Elle ne peut pas être appliquée :");
         L.push("  reprenez l'accord par avenant, ou revenez à la durée légale de quatre ans.");
         L.push("");
       }
 
-      L.push("II — LE CALENDRIER, COMPTÉ À REBOURS");
+      L.push("II - LE CALENDRIER, COMPTÉ À REBOURS");
       L.push("");
       L.push("Deux exigences se croisent, et c'est la plus contraignante qui commande :");
       L.push("");
@@ -746,7 +746,7 @@
       }
       L.push("");
 
-      titre(L, "Note d'information du personnel — renouvellement");
+      titre(L, "Note d'information du personnel - renouvellement");
       L.push("À diffuser par tout moyen permettant de conférer date certaine (L. 2314-4).");
       L.push("");
       L.push(nom(ctx));
@@ -767,7 +767,7 @@
       L.push("élections, la présente note vous informe de l'organisation des élections");
       L.push("destinées à renouveler cette délégation.");
       L.push("");
-      L.push("DATE ENVISAGÉE POUR LE PREMIER TOUR : " + jourOu(f.datePremierTour, "DATE — mention obligatoire"));
+      L.push("DATE ENVISAGÉE POUR LE PREMIER TOUR : " + jourOu(f.datePremierTour, "DATE - mention obligatoire"));
       L.push("");
       L.push("Ce premier tour se tiendra au plus tard le quatre-vingt-dixième jour suivant");
       L.push("la diffusion de la présente note, et dans la quinzaine précédant l'expiration");
@@ -782,17 +782,17 @@
       L.push(signataire(ctx));
       L.push("");
 
-      courrier(L, 1, "invitation des organisations syndicales — renouvellement", [
+      courrier(L, 1, "invitation des organisations syndicales - renouvellement", [
         "À adresser DEUX MOIS AVANT l'expiration du mandat des délégués en exercice",
         "(L. 2314-5). Les organisations du deuxième alinéa de L. 2314-5 sont invitées PAR",
         "COURRIER ; celles du premier alinéa sont informées par tout moyen.",
       ]);
-      papier(L, ctx, ["[Organisation syndicale — dénomination]", "[Adresse]"],
+      papier(L, ctx, ["[Organisation syndicale - dénomination]", "[Adresse]"],
         terme ? leJour((function () { var x = new Date(terme.getTime()); x.setMonth(x.getMonth() - 2); return x; })())
-              : "[DATE — deux mois avant le terme]");
+              : "[DATE - deux mois avant le terme]");
       L.push("Lettre recommandée avec demande d'avis de réception");
       L.push("");
-      L.push("Objet : renouvellement du comité social et économique — invitation à négocier");
+      L.push("Objet : renouvellement du comité social et économique - invitation à négocier");
       L.push("le protocole d'accord préélectoral");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -842,16 +842,16 @@
       L.push("durée du mandat comprise entre deux et quatre ans (L. 2314-34).");
       L.push("");
       L.push("Deux conséquences, et elles sont strictes :");
-      L.push("  · l'instrument — seul un accord de branche, de groupe ou d'entreprise le");
+      L.push("  · l'instrument - seul un accord de branche, de groupe ou d'entreprise le");
       L.push("    peut. Ni une décision unilatérale, ni le règlement intérieur du comité,");
       L.push("    ni le protocole d'accord préélectoral ne sont cet instrument ;");
-      L.push("  · la borne — deux ans au moins, quatre ans au plus. Une durée hors de ces");
+      L.push("  · la borne - deux ans au moins, quatre ans au plus. Une durée hors de ces");
       L.push("    bornes ne s'applique pas, et c'est la durée légale de quatre ans qui");
       L.push("    reprend son empire.");
       L.push("");
       L.push("Situation portée au dossier : " +
         (duree == null ? "aucune durée conventionnelle."
-                       : "durée conventionnelle de " + duree + " an(s) — " +
+                       : "durée conventionnelle de " + duree + " an(s) - " +
                          (duree >= 2 && duree <= 4 ? "dans les bornes." : "HORS DES BORNES de L. 2314-34.")));
       L.push("");
 
@@ -866,8 +866,8 @@
       L.push("d'une part,");
       L.push("");
       L.push("et les organisations syndicales représentatives suivantes :");
-      L.push("   [Organisation — représentée par …]");
-      L.push("   [Organisation — représentée par …]");
+      L.push("   [Organisation - représentée par …]");
+      L.push("   [Organisation - représentée par …]");
       L.push("d'autre part,");
       L.push("");
       L.push("[Le cas échéant, adapter : s'il s'agit d'un accord de branche ou de groupe,");
@@ -882,23 +882,23 @@
       L.push("L. 2314-34 du code du travail assigne à toute dérogation à la durée légale.");
       L.push("Les parties conviennent de la ramener dans cette fourchette.");
       L.push("");
-      L.push("ARTICLE 1 — DURÉE DU MANDAT");
+      L.push("ARTICLE 1 - DURÉE DU MANDAT");
       L.push("");
       L.push("La durée du mandat des membres de la délégation du personnel du comité social");
-      L.push("et économique est fixée à [DURÉE RETENUE — entre deux et quatre ans] ans.");
+      L.push("et économique est fixée à [DURÉE RETENUE - entre deux et quatre ans] ans.");
       L.push("");
       L.push("[Ou, si les parties renoncent à toute dérogation : les stipulations de");
       L.push("l'article [ ] de l'accord visé sont supprimées. La durée du mandat est celle");
       L.push("de quatre ans fixée par l'article L. 2314-33 du code du travail.]");
       L.push("");
-      L.push("ARTICLE 2 — MANDATS EN COURS");
+      L.push("ARTICLE 2 - MANDATS EN COURS");
       L.push("");
       L.push("[Préciser : la nouvelle durée s'applique-t-elle aux mandats en cours, ou");
       L.push("seulement à ceux issus du prochain scrutin ? Ce choix vous appartient, et il");
       L.push("commande la date de terme ci-dessous. Écrivez-le : un avenant muet sur ce");
       L.push("point se plaide dans les deux sens.]");
       L.push("");
-      L.push("ARTICLE 3 — ENTRÉE EN VIGUEUR, DÉPÔT ET PUBLICITÉ");
+      L.push("ARTICLE 3 - ENTRÉE EN VIGUEUR, DÉPÔT ET PUBLICITÉ");
       L.push("");
       L.push("Le présent avenant entre en vigueur le [DATE].");
       L.push("[Il est déposé et publié dans les conditions applicables à l'accord qu'il");
@@ -911,13 +911,13 @@
       L.push(signataire(ctx));
       L.push("");
 
-      titre(L, "Variante — constat de retour à la durée légale");
+      titre(L, "Variante - constat de retour à la durée légale");
       L.push("À établir si aucun avenant n'est négocié : il faut alors écrire quelle durée");
       L.push("s'applique, et en tirer les dates.");
       L.push("");
       L.push(nom(ctx));
       L.push("");
-      L.push("NOTE — DURÉE DES MANDATS AU COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("NOTE - DURÉE DES MANDATS AU COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
       L.push(lieu(ctx) + ", le " + leJour(ctx.aujourdhui));
       L.push("");
@@ -955,8 +955,8 @@
 
   DP.ajouter("CSE-CTL-PER-01", {
     nom: "L'accord déterminant les établissements distincts, et la décision unilatérale de repli",
-    detail: "L'accord d'entreprise d'abord, l'accord avec le comité ensuite, et — à " +
-            "défaut seulement — la décision de l'employeur motivée sur l'autonomie de gestion.",
+    detail: "L'accord d'entreprise d'abord, l'accord avec le comité ensuite, et - à " +
+            "défaut seulement - la décision de l'employeur motivée sur l'autonomie de gestion.",
     produire: function (ctx) {
       var f = ctx.fiche || {};
       var L = [];
@@ -967,16 +967,16 @@
 
       L.push("L'ORDRE DES SOURCES, ET POURQUOI IL COMMANDE");
       L.push("");
-      L.push("  1er étage — un accord d'entreprise, conclu dans les conditions prévues au");
+      L.push("  1er étage - un accord d'entreprise, conclu dans les conditions prévues au");
       L.push("     premier alinéa de l'article L. 2232-12, détermine le nombre et le");
       L.push("     périmètre des établissements distincts (L. 2313-2).");
       L.push("");
-      L.push("  2e étage — EN L'ABSENCE d'un tel accord ET EN L'ABSENCE DE DÉLÉGUÉ SYNDICAL,");
+      L.push("  2e étage - EN L'ABSENCE d'un tel accord ET EN L'ABSENCE DE DÉLÉGUÉ SYNDICAL,");
       L.push("     un accord entre l'employeur et le comité social et économique, adopté à");
       L.push("     la majorité des membres titulaires élus de la délégation du personnel,");
       L.push("     peut les déterminer (L. 2313-3).");
       L.push("");
-      L.push("  3e étage — EN L'ABSENCE des accords ci-dessus, l'employeur fixe le nombre et");
+      L.push("  3e étage - EN L'ABSENCE des accords ci-dessus, l'employeur fixe le nombre et");
       L.push("     le périmètre des établissements distincts, COMPTE TENU DE L'AUTONOMIE DE");
       L.push("     GESTION du responsable de l'établissement, notamment en matière de");
       L.push("     gestion du personnel (L. 2313-4).");
@@ -989,7 +989,7 @@
       L.push("Source portée au dossier : " + cro(f.sourceDecoupage, "à renseigner") + ".");
       L.push("");
 
-      titre(L, "1 — Accord d'entreprise déterminant les établissements distincts");
+      titre(L, "1 - Accord d'entreprise déterminant les établissements distincts");
       L.push("ACCORD D'ENTREPRISE RELATIF AU NOMBRE ET AU PÉRIMÈTRE DES ÉTABLISSEMENTS");
       L.push("DISTINCTS");
       L.push("");
@@ -997,8 +997,8 @@
       L.push("représentée par " + signataire(ctx) + ", d'une part,");
       L.push("");
       L.push("et les organisations syndicales représentatives dans l'entreprise :");
-      L.push("   [Organisation — représentée par …]");
-      L.push("   [Organisation — représentée par …]");
+      L.push("   [Organisation - représentée par …]");
+      L.push("   [Organisation - représentée par …]");
       L.push("d'autre part,");
       L.push("");
       L.push("PRÉAMBULE");
@@ -1008,38 +1008,38 @@
       L.push("prévues au premier alinéa de l'article L. 2232-12, détermine le nombre et le");
       L.push("périmètre des établissements distincts.");
       L.push("");
-      L.push("ARTICLE 1 — NOMBRE D'ÉTABLISSEMENTS DISTINCTS");
+      L.push("ARTICLE 1 - NOMBRE D'ÉTABLISSEMENTS DISTINCTS");
       L.push("");
       L.push("Le nombre d'établissements distincts au sein de " + nom(ctx));
       L.push("est fixé à [NOMBRE].");
       L.push("");
-      L.push("ARTICLE 2 — PÉRIMÈTRE DE CHAQUE ÉTABLISSEMENT");
+      L.push("ARTICLE 2 - PÉRIMÈTRE DE CHAQUE ÉTABLISSEMENT");
       L.push("");
-      L.push("   Établissement n° 1 — [dénomination] · [adresse] · [sites, services et");
+      L.push("   Établissement n° 1 - [dénomination] · [adresse] · [sites, services et");
       L.push("   effectifs rattachés] · [responsable]");
-      L.push("   Établissement n° 2 — [ … ]");
+      L.push("   Établissement n° 2 - [ … ]");
       L.push("   [Autant de lignes que d'établissements. Le périmètre se décrit par ce qu'il");
       L.push("   contient, non par ce qu'il exclut : un salarié qui ne se reconnaît dans");
       L.push("   aucun périmètre n'a pas d'électeurs.]");
       L.push("");
-      L.push("ARTICLE 3 — CONSÉQUENCES SUR LA REPRÉSENTATION");
+      L.push("ARTICLE 3 - CONSÉQUENCES SUR LA REPRÉSENTATION");
       L.push("");
       L.push("[Préciser ce que les parties en tirent : mise en place d'un comité social et");
       L.push("économique dans chaque établissement distinct et d'un comité central, date");
       L.push("d'effet au regard du processus électoral en cours, sort des mandats en cours.");
       L.push("Ces choix vous appartiennent.]");
       L.push("");
-      L.push("ARTICLE 4 — DURÉE, RÉVISION, DÉPÔT");
+      L.push("ARTICLE 4 - DURÉE, RÉVISION, DÉPÔT");
       L.push("");
       L.push("Le présent accord est conclu pour [durée]. Il entre en vigueur le [date].");
       L.push("[Modalités de révision et de dénonciation. Dépôt et publicité : l'application");
-      L.push("ne lit pas les articles relatifs au dépôt des accords collectifs — reportez-");
+      L.push("ne lit pas les articles relatifs au dépôt des accords collectifs - reportez-");
       L.push("vous à eux.]");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le [DATE], en [nombre] exemplaires.");
       L.push("");
 
-      titre(L, "2 — Variante : accord avec le comité, en l'absence de délégué syndical");
+      titre(L, "2 - Variante : accord avec le comité, en l'absence de délégué syndical");
       L.push("À n'employer QUE s'il n'existe pas de délégué syndical dans l'entreprise :");
       L.push("c'est la condition que pose L. 2313-3.");
       L.push("");
@@ -1056,10 +1056,10 @@
       L.push("[Reprendre ensuite les articles 1 à 4 ci-dessus.]");
       L.push("");
 
-      titre(L, "3 — Variante de dernier recours : décision de l'employeur");
+      titre(L, "3 - Variante de dernier recours : décision de l'employeur");
       L.push("À n'employer QU'À DÉFAUT des accords ci-dessus. Elle doit être motivée sur");
       L.push("l'autonomie de gestion du responsable de l'établissement, notamment en");
-      L.push("matière de gestion du personnel (L. 2313-4) — c'est le seul critère que le");
+      L.push("matière de gestion du personnel (L. 2313-4) - c'est le seul critère que le");
       L.push("texte donne, et c'est sur lui que la décision se discutera.");
       L.push("");
       L.push(nom(ctx));
@@ -1076,12 +1076,12 @@
       L.push("");
       L.push("DÉCIDE");
       L.push("");
-      L.push("Article 1 — Le nombre d'établissements distincts est fixé à [NOMBRE].");
+      L.push("Article 1 - Le nombre d'établissements distincts est fixé à [NOMBRE].");
       L.push("");
-      L.push("Article 2 — Le périmètre de chacun est le suivant :");
+      L.push("Article 2 - Le périmètre de chacun est le suivant :");
       L.push("   [Établissement · périmètre · responsable]");
       L.push("");
-      L.push("Article 3 — MOTIVATION : l'autonomie de gestion des responsables");
+      L.push("Article 3 - MOTIVATION : l'autonomie de gestion des responsables");
       L.push("d'établissement, notamment en matière de gestion du personnel, est établie");
       L.push("par les éléments suivants :");
       L.push("   [Délégation de pouvoir consentie : date, objet, étendue.]");
@@ -1089,13 +1089,13 @@
       L.push("    embauche, discipline, organisation du temps de travail, congés.]");
       L.push("   [Budget propre et pouvoir d'engagement.]");
       L.push("");
-      L.push("Article 4 — La présente décision est portée à la connaissance des");
+      L.push("Article 4 - La présente décision est portée à la connaissance des");
       L.push("organisations syndicales et [du comité social et économique / des salariés] le");
       L.push("[date], par [moyen].");
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("EN CAS DE LITIGE — le nombre et le périmètre des établissements distincts sont");
+      L.push("EN CAS DE LITIGE - le nombre et le périmètre des établissements distincts sont");
       L.push("fixés par l'autorité administrative du siège de l'entreprise (L. 2313-5).");
       L.push("Lorsqu'elle intervient dans le cadre d'un processus électoral global, la");
       L.push("saisine de l'autorité administrative SUSPEND ce processus jusqu'à la décision");
@@ -1141,7 +1141,7 @@
       L.push("Entre " + nom(ctx) + ", représentée par " + signataire(ctx) + ",");
       L.push("d'une part,");
       L.push("et les organisations syndicales représentatives dans l'entreprise :");
-      L.push("   [Organisation — représentée par …]");
+      L.push("   [Organisation - représentée par …]");
       L.push("d'autre part,");
       L.push("");
       L.push("PRÉAMBULE");
@@ -1154,19 +1154,19 @@
       L.push("nombre et le périmètre des établissements distincts. Précisez-le : c'est le");
       L.push("même accord que le texte vise.]");
       L.push("");
-      L.push("ARTICLE 1 — NOMBRE DE REPRÉSENTANTS DE PROXIMITÉ (L. 2313-7, 1°)");
+      L.push("ARTICLE 1 - NOMBRE DE REPRÉSENTANTS DE PROXIMITÉ (L. 2313-7, 1°)");
       L.push("");
       L.push("Le nombre de représentants de proximité est fixé à [NOMBRE].");
-      L.push("[Le cas échéant, par périmètre : [périmètre] — [nombre].]");
+      L.push("[Le cas échéant, par périmètre : [périmètre] - [nombre].]");
       L.push("");
-      L.push("ARTICLE 2 — ATTRIBUTIONS (L. 2313-7, 2°)");
+      L.push("ARTICLE 2 - ATTRIBUTIONS (L. 2313-7, 2°)");
       L.push("");
       L.push("Les représentants de proximité exercent les attributions suivantes,");
       L.push("notamment en matière de santé, de sécurité et de conditions de travail :");
       L.push("   [Énumérer. Le texte impose que l'accord les définisse ; il ne dit pas");
       L.push("    lesquelles : c'est votre choix, et il doit être écrit.]");
       L.push("");
-      L.push("ARTICLE 3 — MODALITÉS DE DÉSIGNATION (L. 2313-7, 3°)");
+      L.push("ARTICLE 3 - MODALITÉS DE DÉSIGNATION (L. 2313-7, 3°)");
       L.push("");
       L.push("Les représentants de proximité sont membres du comité social et économique ou");
       L.push("désignés par lui (L. 2313-7, dernier alinéa).");
@@ -1175,7 +1175,7 @@
       L.push("");
       L.push("Leur mandat prend fin avec celui des membres élus du comité (L. 2313-7).");
       L.push("");
-      L.push("ARTICLE 4 — MODALITÉS DE FONCTIONNEMENT ET HEURES DE DÉLÉGATION");
+      L.push("ARTICLE 4 - MODALITÉS DE FONCTIONNEMENT ET HEURES DE DÉLÉGATION");
       L.push("(L. 2313-7, 4°)");
       L.push("");
       L.push("Chaque représentant de proximité bénéficie de [NOMBRE] heures de délégation");
@@ -1184,7 +1184,7 @@
       L.push("    l'entreprise, moyens matériels, articulation avec la commission santé,");
       L.push("    sécurité et conditions de travail lorsqu'elle existe.]");
       L.push("");
-      L.push("ARTICULATION DES HEURES — lorsque les membres du comité social et économique");
+      L.push("ARTICULATION DES HEURES - lorsque les membres du comité social et économique");
       L.push("sont également représentants de proximité, le temps nécessaire à l'exercice");
       L.push("de leurs fonctions défini par le présent accord peut rester inchangé par");
       L.push("rapport au temps dont ils disposent en vertu de l'accord prévu à l'article");
@@ -1199,14 +1199,14 @@
         L.push("    effectif : nombre de titulaires, heures mensuelles, total.]");
       }
       L.push("");
-      L.push("ARTICLE 5 — DURÉE, RÉVISION, DÉPÔT");
+      L.push("ARTICLE 5 - DURÉE, RÉVISION, DÉPÔT");
       L.push("");
       L.push("[Durée, entrée en vigueur, révision, dénonciation, dépôt et publicité.]");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le [DATE], en [nombre] exemplaires.");
       L.push("");
 
-      titre(L, "Variante — constat d'absence d'accord");
+      titre(L, "Variante - constat d'absence d'accord");
       L.push("À établir si aucun accord n'institue les représentants de proximité et");
       L.push("qu'aucune négociation n'aboutit. Un dispositif de fait ne se laisse pas");
       L.push("mourir en silence : il se clôt par écrit, et les personnes concernées en sont");
@@ -1214,7 +1214,7 @@
       L.push("");
       L.push(nom(ctx));
       L.push("");
-      L.push("NOTE — REPRÉSENTANTS DE PROXIMITÉ");
+      L.push("NOTE - REPRÉSENTANTS DE PROXIMITÉ");
       L.push("");
       L.push(lieu(ctx) + ", le " + leJour(ctx.aujourdhui));
       L.push("");
@@ -1265,29 +1265,29 @@
       L.push("organisation entache le processus électoral.");
       L.push("");
       L.push("  A. Informées PAR TOUT MOYEN de l'organisation des élections et invitées à");
-      L.push("     négocier le protocole et à établir les listes de leurs candidats — les");
+      L.push("     négocier le protocole et à établir les listes de leurs candidats - les");
       L.push("     organisations syndicales qui satisfont aux critères de respect des");
       L.push("     valeurs républicaines et d'indépendance, légalement constituées depuis");
       L.push("     au moins deux ans et dont le champ professionnel et géographique couvre");
       L.push("     l'entreprise ou l'établissement concernés.");
       L.push("");
-      L.push("  B. Invitées ÉGALEMENT PAR COURRIER — les organisations syndicales reconnues");
+      L.push("  B. Invitées ÉGALEMENT PAR COURRIER - les organisations syndicales reconnues");
       L.push("     représentatives dans l'entreprise ou l'établissement, celles ayant");
       L.push("     constitué une section syndicale dans l'entreprise ou l'établissement,");
       L.push("     ainsi que les syndicats affiliés à une organisation syndicale");
       L.push("     représentative au niveau national et interprofessionnel.");
       L.push("");
-      L.push("LE DÉLAI — l'invitation doit PARVENIR au plus tard quinze jours avant la date");
+      L.push("LE DÉLAI - l'invitation doit PARVENIR au plus tard quinze jours avant la date");
       L.push("de la première réunion de négociation. Le délai se compte à la réception :");
       L.push("c'est pourquoi le recommandé avec avis de réception, pour l'ensemble B, vaut");
       L.push("mieux qu'un envoi simple.");
       L.push("");
-      L.push("EN CAS DE RENOUVELLEMENT — l'invitation est effectuée DEUX MOIS avant");
+      L.push("EN CAS DE RENOUVELLEMENT - l'invitation est effectuée DEUX MOIS avant");
       L.push("l'expiration du mandat des délégués en exercice, et le premier tour a lieu");
       L.push("dans la quinzaine précédant cette expiration (L. 2314-5).");
       L.push("");
       if (eff != null && eff >= 11 && eff <= 20) {
-        L.push("VOTRE CAS — l'effectif de l'entreprise (" + eff + " salariés) étant compris entre");
+        L.push("VOTRE CAS - l'effectif de l'entreprise (" + eff + " salariés) étant compris entre");
         L.push("onze et vingt salariés, l'employeur n'invite les organisations mentionnées");
         L.push("aux premier et deuxième alinéas qu'À LA CONDITION qu'au moins un salarié se");
         L.push("soit porté candidat aux élections dans un délai de trente jours à compter de");
@@ -1301,13 +1301,13 @@
         L.push("");
       }
 
-      titre(L, "1 — Courrier aux organisations de l'ensemble B (par courrier)");
-      papier(L, ctx, ["[Organisation syndicale — dénomination]",
+      titre(L, "1 - Courrier aux organisations de l'ensemble B (par courrier)");
+      papier(L, ctx, ["[Organisation syndicale - dénomination]",
                       "[Union départementale / fédération, le cas échéant]", "[Adresse]"],
         leJour(d0));
       L.push("Lettre recommandée avec demande d'avis de réception");
       L.push("");
-      L.push("Objet : élections au comité social et économique — invitation à négocier le");
+      L.push("Objet : élections au comité social et économique - invitation à négocier le");
       L.push("protocole d'accord préélectoral");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -1330,7 +1330,7 @@
       L.push(jourOu(f.dateInformationPersonnel, "date") + " ; la date envisagée pour le premier tour est le");
       L.push(jourOu(f.datePremierTour, "date") + ".");
       L.push("");
-      L.push("[Le cas échéant : ordre du jour de la réunion — répartition du personnel dans");
+      L.push("[Le cas échéant : ordre du jour de la réunion - répartition du personnel dans");
       L.push("les collèges électoraux et des sièges entre les catégories, proportion de");
       L.push("femmes et d'hommes par collège, nombre de sièges et volume des heures de");
       L.push("délégation, modalités d'organisation et de déroulement des opérations");
@@ -1341,7 +1341,7 @@
         jourOu(f.dateInformationPersonnel, "date"));
       L.push("");
 
-      titre(L, "2 — Note aux organisations de l'ensemble A (par tout moyen)");
+      titre(L, "2 - Note aux organisations de l'ensemble A (par tout moyen)");
       L.push("Même contenu, autre canal. « Par tout moyen » n'est pas « sans trace » :");
       L.push("gardez de quoi établir l'envoi et sa date.");
       L.push("");
@@ -1363,9 +1363,9 @@
       L.push(signataire(ctx));
       L.push("");
 
-      titre(L, "3 — Registre des envois et des réceptions");
+      titre(L, "3 - Registre des envois et des réceptions");
       L.push("C'est cette pièce qui prouvera le respect du délai de quinze jours. Sans");
-      L.push("elle, la date de réception se discute — et le processus avec elle.");
+      L.push("elle, la date de réception se discute - et le processus avec elle.");
       L.push("");
       L.push("  Première réunion de négociation : le [DATE].");
       L.push("  Réception au plus tard le : [DATE moins quinze jours].");
@@ -1392,7 +1392,7 @@
       L.push("affiliés à une organisation représentative au niveau national et");
       L.push("interprofessionnel, auprès des unions départementales correspondantes.");
       L.push("");
-      L.push("CE QUE L'INVITATION EXPOSE — le fait d'apporter une entrave à la constitution");
+      L.push("CE QUE L'INVITATION EXPOSE - le fait d'apporter une entrave à la constitution");
       L.push("du comité ou à la libre désignation de ses membres, notamment par la");
       L.push("méconnaissance des dispositions des articles L. 2314-1 à L. 2314-9, est puni");
       L.push("d'un emprisonnement d'un an et d'une amende de 7 500 € (L. 2317-1).");
@@ -1427,7 +1427,7 @@
       L.push("");
       L.push("Trois obligations, et non une : la DATE CERTAINE de la diffusion, la MENTION");
       L.push("de la date envisagée dans le document, et le DÉLAI de quatre-vingt-dix jours");
-      L.push("qui court de la diffusion — non de la décision d'organiser le scrutin, non de");
+      L.push("qui court de la diffusion - non de la décision d'organiser le scrutin, non de");
       L.push("l'invitation syndicale, non du protocole.");
       L.push("");
       L.push("VOTRE DÉCOMPTE");
@@ -1449,7 +1449,7 @@
             L.push("  ci-dessous, et le décompte repart de sa diffusion.");
           } else if (e < 0) {
             L.push("  LA CHRONOLOGIE EST INVERSÉE : le premier tour précède la diffusion de");
-            L.push("  l'information. L'une des deux dates est fausse — reprenez-les sur les");
+            L.push("  l'information. L'une des deux dates est fausse - reprenez-les sur les");
             L.push("  pièces d'origine avant toute autre chose.");
           } else {
             L.push("  Le délai est tenu. Conservez la preuve de diffusion : c'est elle, et");
@@ -1535,7 +1535,7 @@
         "articles L. 2314-6, L. 2314-7, L. 2314-11, L. 2314-13 et L. 2314-28 du code du travail"));
       usage(L);
 
-      L.push("LA DOUBLE MAJORITÉ — CE QUI REND LE PROTOCOLE VALABLE");
+      L.push("LA DOUBLE MAJORITÉ - CE QUI REND LE PROTOCOLE VALABLE");
       L.push("");
       L.push("« Sauf dispositions législatives contraires, la validité du protocole");
       L.push("d'accord préélectoral conclu entre l'employeur et les organisations");
@@ -1548,7 +1548,7 @@
       L.push("");
       L.push("Deux conditions CUMULATIVES :");
       L.push("  1. la majorité en NOMBRE des organisations AYANT PARTICIPÉ À LA NÉGOCIATION");
-      L.push("     — et non de l'ensemble des organisations invitées ;");
+      L.push("     - et non de l'ensemble des organisations invitées ;");
       L.push("  2. parmi les signataires, les organisations représentatives ayant recueilli");
       L.push("     la MAJORITÉ DES SUFFRAGES exprimés aux dernières élections");
       L.push("     professionnelles ; à défaut de résultats disponibles, la majorité des");
@@ -1571,16 +1571,16 @@
              (suf == null ? "[pourcentage]" : suf + " %"));
       if (suf != null)
         L.push("  Seconde condition ............................... " +
-               (suf > 50 ? "remplie." : "NON REMPLIE — il faut la majorité des suffrages exprimés."));
+               (suf > 50 ? "remplie." : "NON REMPLIE - il faut la majorité des suffrages exprimés."));
       L.push("");
       L.push("  [Joignez le procès-verbal des dernières élections : c'est lui qui établit");
       L.push("   les suffrages, et lui seul.]");
       L.push("");
-      L.push("SI LA DOUBLE MAJORITÉ N'EST PAS RÉUNIE — le protocole ne purge rien. Les");
+      L.push("SI LA DOUBLE MAJORITÉ N'EST PAS RÉUNIE - le protocole ne purge rien. Les");
       L.push("stipulations qu'il porte sont sans effet, et ce sont les règles légales qui");
       L.push("s'appliquent : la composition des collèges de l'article L. 2314-11 et le");
       L.push("tableau de l'article R. 2314-1. Rouvrez la négociation, ou écrivez quelles");
-      L.push("règles légales vous appliquez à la place — le constat figure en fin de");
+      L.push("règles légales vous appliquez à la place - le constat figure en fin de");
       L.push("document.");
       L.push("");
 
@@ -1593,10 +1593,10 @@
       L.push("représentée par " + signataire(ctx) + ",");
       L.push("");
       L.push("et les organisations syndicales ayant participé à la négociation :");
-      L.push("   [Organisation — représentée par …]");
-      L.push("   [Organisation — représentée par …]");
+      L.push("   [Organisation - représentée par …]");
+      L.push("   [Organisation - représentée par …]");
       L.push("");
-      L.push("ARTICLE 1 — CHAMP ET EFFECTIF");
+      L.push("ARTICLE 1 - CHAMP ET EFFECTIF");
       L.push("");
       L.push("Le présent protocole s'applique à l'élection des membres de la délégation du");
       L.push("personnel du comité social et économique de " + nom(ctx));
@@ -1604,7 +1604,7 @@
       L.push("Effectif retenu, calculé selon l'article L. 1111-2 : " +
         (eff == null ? "[effectif]" : eff) + " salariés.");
       L.push("");
-      L.push("ARTICLE 2 — COLLÈGES ÉLECTORAUX");
+      L.push("ARTICLE 2 - COLLÈGES ÉLECTORAUX");
       L.push("");
       L.push("À défaut d'accord modifiant leur nombre et leur composition (L. 2314-12), les");
       L.push("collèges sont ceux de l'article L. 2314-11 :");
@@ -1635,21 +1635,21 @@
       L.push("Composition retenue : [décrire chaque collège et les catégories qu'il");
       L.push("regroupe].");
       L.push("");
-      L.push("ARTICLE 3 — RÉPARTITION DU PERSONNEL ET DES SIÈGES,");
+      L.push("ARTICLE 3 - RÉPARTITION DU PERSONNEL ET DES SIÈGES,");
       L.push("PROPORTION DE FEMMES ET D'HOMMES (L. 2314-13)");
       L.push("");
       L.push("La répartition des sièges entre les différentes catégories de personnel et la");
       L.push("répartition du personnel dans les collèges électoraux sont arrêtées comme");
       L.push("suit :");
-      L.push("   Collège 1 — inscrits : [ ] · sièges titulaires : [ ] · suppléants : [ ]");
-      L.push("   Collège 2 — inscrits : [ ] · sièges titulaires : [ ] · suppléants : [ ]");
-      L.push("   [Collège 3 — … ]");
+      L.push("   Collège 1 - inscrits : [ ] · sièges titulaires : [ ] · suppléants : [ ]");
+      L.push("   Collège 2 - inscrits : [ ] · sièges titulaires : [ ] · suppléants : [ ]");
+      L.push("   [Collège 3 - … ]");
       L.push("");
-      L.push("PROPORTION DE FEMMES ET D'HOMMES COMPOSANT CHAQUE COLLÈGE ÉLECTORAL —");
+      L.push("PROPORTION DE FEMMES ET D'HOMMES COMPOSANT CHAQUE COLLÈGE ÉLECTORAL -");
       L.push("mention IMPOSÉE par l'article L. 2314-13, deuxième alinéa :");
-      L.push("   Collège 1 — femmes : [ ] soit [ ] % · hommes : [ ] soit [ ] %");
-      L.push("   Collège 2 — femmes : [ ] soit [ ] % · hommes : [ ] soit [ ] %");
-      L.push("   [Collège 3 — … ]");
+      L.push("   Collège 1 - femmes : [ ] soit [ ] % · hommes : [ ] soit [ ] %");
+      L.push("   Collège 2 - femmes : [ ] soit [ ] % · hommes : [ ] soit [ ] %");
+      L.push("   [Collège 3 - … ]");
       if (pr.proportionFH === false) {
         L.push("   [Votre dossier indique que cette mention NE FIGURE PAS au protocole : sans");
         L.push("    elle, les listes se composent à l'aveugle et s'exposent à l'annulation.]");
@@ -1659,7 +1659,7 @@
       L.push("permettant de donner une date certaine, dès l'accord ou la décision");
       L.push("intervenus (L. 2314-31).");
       L.push("");
-      L.push("ARTICLE 4 — NOMBRE DE SIÈGES ET HEURES DE DÉLÉGATION (L. 2314-7)");
+      L.push("ARTICLE 4 - NOMBRE DE SIÈGES ET HEURES DE DÉLÉGATION (L. 2314-7)");
       L.push("");
       if (del && del.du) {
         L.push("À défaut de stipulations du présent protocole, le tableau de l'article");
@@ -1681,7 +1681,7 @@
       L.push("   Stipulation retenue : [nombre de sièges par collège] · [heures");
       L.push("   individuelles] · [volume global par collège, à comparer au volume légal].");
       L.push("");
-      L.push("ARTICLE 5 — MODALITÉS D'ORGANISATION ET DE DÉROULEMENT DU SCRUTIN");
+      L.push("ARTICLE 5 - MODALITÉS D'ORGANISATION ET DE DÉROULEMENT DU SCRUTIN");
       L.push("(L. 2314-28)");
       L.push("");
       L.push("Les modalités d'organisation et de déroulement des opérations électorales");
@@ -1706,7 +1706,7 @@
       L.push("tribunal judiciaire statue en dernier ressort selon la procédure accélérée au");
       L.push("fond (R. 2314-2).");
       L.push("");
-      L.push("ARTICLE 6 — MODE DE SCRUTIN");
+      L.push("ARTICLE 6 - MODE DE SCRUTIN");
       L.push("");
       L.push("Le scrutin est de liste à deux tours avec représentation proportionnelle à la");
       L.push("plus forte moyenne. Au premier tour, chaque liste est établie par les");
@@ -1722,7 +1722,7 @@
       L.push("les titulaires et pour les suppléants, dans chacune des catégories");
       L.push("professionnelles formant des collèges distincts (L. 2314-26).");
       L.push("");
-      L.push("ARTICLE 7 — COMPOSITION DES LISTES");
+      L.push("ARTICLE 7 - COMPOSITION DES LISTES");
       L.push("");
       L.push("Pour chaque collège, les listes comportant plusieurs candidats sont composées");
       L.push("d'un nombre de femmes et d'hommes correspondant à la part de femmes et");
@@ -1731,7 +1731,7 @@
       L.push("(L. 2314-30). Cette règle s'applique séparément à la liste des titulaires et");
       L.push("à celle des suppléants.");
       L.push("");
-      L.push("ARTICLE 8 — TRANSMISSION DES PROCÈS-VERBAUX");
+      L.push("ARTICLE 8 - TRANSMISSION DES PROCÈS-VERBAUX");
       L.push("");
       L.push("Après la proclamation des résultats, l'employeur transmet, dans les meilleurs");
       L.push("délais, par tout moyen, une copie des procès-verbaux aux organisations");
@@ -1758,7 +1758,7 @@
       L.push("");
       L.push("  Pour l'employeur : " + signataire(ctx) + " · date : [ ] · ______________");
       L.push("");
-      L.push("  TOTAUX — participants : [ ] · signataires : [ ] · majorité en nombre");
+      L.push("  TOTAUX - participants : [ ] · signataires : [ ] · majorité en nombre");
       L.push("  atteinte : [oui/non] · suffrages des représentatives signataires : [ ] % ·");
       L.push("  majorité des suffrages atteinte : [oui/non]");
       L.push("");
@@ -1771,7 +1771,7 @@
       titre(L, "Constat, si la double majorité n'est pas réunie");
       L.push(nom(ctx));
       L.push("");
-      L.push("NOTE — INVALIDITÉ DU PROTOCOLE ET RÈGLES APPLIQUÉES");
+      L.push("NOTE - INVALIDITÉ DU PROTOCOLE ET RÈGLES APPLIQUÉES");
       L.push("");
       L.push(lieu(ctx) + ", le " + leJour(ctx.aujourdhui));
       L.push("");
@@ -1785,7 +1785,7 @@
       L.push("  · composition des collèges électoraux : article L. 2314-11 ;");
       L.push("  · nombre de titulaires et heures de délégation : tableau de l'article");
       L.push("    R. 2314-1" +
-        (del && del.du ? " — " + del.titulaires + " titulaires, " + del.heures +
+        (del && del.du ? " - " + del.titulaires + " titulaires, " + del.heures +
                           " heures mensuelles, " + del.total + " heures au total" : "") + " ;");
       L.push("  · répartition du personnel et des sièges : [à défaut d'accord, et lorsque au");
       L.push("    moins une organisation syndicale a répondu à l'invitation à négocier,");
@@ -1825,8 +1825,8 @@
       L.push("certaine à cette information, la proportion de femmes et d'hommes composant");
       L.push("chaque collège électoral » (L. 2314-31).");
       L.push("");
-      L.push("C'est cette proportion — celle des INSCRITS SUR LA LISTE ÉLECTORALE, non");
-      L.push("l'effectif global de l'entreprise — qui commande la composition des listes de");
+      L.push("C'est cette proportion - celle des INSCRITS SUR LA LISTE ÉLECTORALE, non");
+      L.push("l'effectif global de l'entreprise - qui commande la composition des listes de");
       L.push("candidats (L. 2314-30). Sans elle, les organisations composent à l'aveugle,");
       L.push("et l'élection des candidats du sexe surreprésenté en surnombre est annulée");
       L.push("par le juge (L. 2314-32).");
@@ -1835,18 +1835,18 @@
       L.push("plus à rien.");
       L.push("");
 
-      titre(L, "1 — Avenant au protocole d'accord préélectoral");
+      titre(L, "1 - Avenant au protocole d'accord préélectoral");
       L.push("AVENANT N° [ ] AU PROTOCOLE D'ACCORD PRÉÉLECTORAL DU [DATE]");
       L.push("");
       L.push("Entre " + nom(ctx) + ", représentée par " + signataire(ctx) + ",");
       L.push("et les organisations syndicales ayant participé à la négociation :");
       L.push("   [Organisation] · [Organisation]");
       L.push("");
-      L.push("PRÉAMBULE — le protocole du [date] ne mentionne pas la proportion de femmes");
+      L.push("PRÉAMBULE - le protocole du [date] ne mentionne pas la proportion de femmes");
       L.push("et d'hommes composant chaque collège électoral, que l'article L. 2314-13 du");
       L.push("code du travail impose. Le présent avenant y remédie.");
       L.push("");
-      L.push("ARTICLE UNIQUE — PROPORTION DE FEMMES ET D'HOMMES PAR COLLÈGE");
+      L.push("ARTICLE UNIQUE - PROPORTION DE FEMMES ET D'HOMMES PAR COLLÈGE");
       L.push("");
       L.push("Sur la base de la liste électorale arrêtée le [DATE] :");
       L.push("");
@@ -1875,9 +1875,9 @@
         L.push("   [Ces valeurs sont celles que porte votre dossier. Vérifiez-les sur la");
         L.push("    liste électorale elle-même avant de signer.]");
       } else {
-        L.push("   Collège 1 — inscrits : [ ] · femmes : [ ] soit [ ] % · hommes : [ ] soit [ ] %");
-        L.push("   Collège 2 — inscrits : [ ] · femmes : [ ] soit [ ] % · hommes : [ ] soit [ ] %");
-        L.push("   [Collège 3 — … ]");
+        L.push("   Collège 1 - inscrits : [ ] · femmes : [ ] soit [ ] % · hommes : [ ] soit [ ] %");
+        L.push("   Collège 2 - inscrits : [ ] · femmes : [ ] soit [ ] % · hommes : [ ] soit [ ] %");
+        L.push("   [Collège 3 - … ]");
       }
       L.push("");
       L.push("Les autres stipulations du protocole demeurent inchangées.");
@@ -1885,11 +1885,11 @@
       L.push("Fait à " + lieu(ctx) + ", le [DATE], en [nombre] exemplaires.");
       L.push("");
       L.push("[Feuille de signatures : le présent avenant obéit à la condition de validité");
-      L.push("de l'article L. 2314-6, comme le protocole qu'il modifie — L. 2314-13 renvoie");
+      L.push("de l'article L. 2314-6, comme le protocole qu'il modifie - L. 2314-13 renvoie");
       L.push("aux conditions de cet article.]");
       L.push("");
 
-      titre(L, "2 — Note d'information des salariés (L. 2314-31)");
+      titre(L, "2 - Note d'information des salariés (L. 2314-31)");
       L.push("À diffuser par tout moyen permettant de donner une DATE CERTAINE, dès");
       L.push("l'accord ou la décision intervenus, et avant l'ouverture du dépôt des listes.");
       L.push("");
@@ -1911,7 +1911,7 @@
       L.push("");
       L.push("   [Reprendre le tableau de l'avenant, collège par collège.]");
       L.push("");
-      L.push("CE QU'ELLE COMMANDE — pour chaque collège, les listes de candidats comportant");
+      L.push("CE QU'ELLE COMMANDE - pour chaque collège, les listes de candidats comportant");
       L.push("plusieurs candidats sont composées d'un nombre de femmes et d'hommes");
       L.push("correspondant à cette part, et alternativement d'un candidat de chaque sexe");
       L.push("jusqu'à épuisement des candidats de l'un des sexes (L. 2314-30). La règle");
@@ -1941,7 +1941,7 @@
       var listes = liste(f.listesDeposees);
       var L = [];
 
-      L = L.concat(entete(ctx, "Composition des listes de candidats — notification d'irrégularité",
+      L = L.concat(entete(ctx, "Composition des listes de candidats - notification d'irrégularité",
         "articles L. 2314-30 et L. 2314-32 du code du travail"));
       usage(L);
 
@@ -1970,7 +1970,7 @@
       L.push("La règle s'applique SÉPARÉMENT à la liste des titulaires et à celle des");
       L.push("suppléants (L. 2314-30, dernier alinéa).");
       L.push("");
-      L.push("CE QUE COÛTE L'IRRÉGULARITÉ — constatée par le juge APRÈS l'élection, la");
+      L.push("CE QUE COÛTE L'IRRÉGULARITÉ - constatée par le juge APRÈS l'élection, la");
       L.push("méconnaissance de la première phrase du premier alinéa entraîne l'annulation");
       L.push("de l'élection d'un nombre d'élus du sexe surreprésenté égal au nombre de");
       L.push("candidats en surnombre, le juge annulant l'élection des derniers élus de ce");
@@ -2003,7 +2003,7 @@
             if (cand.length) {
               var nF = cand.filter(function (c) { return String(c && c.sexe).toUpperCase() === "F"; }).length;
               var nH = cand.length - nF;
-              L.push("     liste déposée : " + cand.length + " candidats — femmes " + nF + ", hommes " + nH);
+              L.push("     liste déposée : " + cand.length + " candidats - femmes " + nF + ", hommes " + nH);
               var ordre = cand.map(function (c) { return String(c && c.sexe).toUpperCase(); }).join(" ");
               L.push("     ordre de dépôt : " + ordre);
               var alt = true;
@@ -2013,7 +2013,7 @@
                 if (a === b) { alt = false; break; }
               }
               L.push("     alternance stricte respectée jusqu'à épuisement : " +
-                     (alt ? "oui" : "NON — voir L. 2314-30, première phrase du premier alinéa"));
+                     (alt ? "oui" : "NON - voir L. 2314-30, première phrase du premier alinéa"));
               if (nF !== arr(attF) || nH !== arr(attH))
                 L.push("     ÉCART DE PROPORTION : attendu femmes " + arr(attF) + " / hommes " +
                        arr(attH) + ", déposé femmes " + nF + " / hommes " + nH + ".");
@@ -2027,13 +2027,13 @@
           L.push("");
         });
         L.push("  [Le décompte ci-dessus est fait sur les valeurs de votre dossier. Il");
-        L.push("   n'apprécie ni les deux cas particuliers du texte — nombre impair de sièges");
-        L.push("   avec stricte égalité des inscrits, et sexe qui serait totalement exclu —");
+        L.push("   n'apprécie ni les deux cas particuliers du texte - nombre impair de sièges");
+        L.push("   avec stricte égalité des inscrits, et sexe qui serait totalement exclu -");
         L.push("   ni ce que le juge tirerait des circonstances. Reprenez-le sur la liste");
         L.push("   électorale et sur la liste déposée avant de notifier quoi que ce soit.]");
       } else {
         L.push("  [Aucune liste n'est portée au dossier. Pour chaque collège et pour chacune");
-        L.push("   des deux listes — titulaires et suppléants —, reportez : inscrits femmes,");
+        L.push("   des deux listes - titulaires et suppléants -, reportez : inscrits femmes,");
         L.push("   inscrits hommes, sièges à pourvoir, et le sexe de chaque candidat dans");
         L.push("   l'ordre de dépôt. Le calcul se fait ensuite comme ci-dessus.]");
       }
@@ -2049,7 +2049,7 @@
       L.push("Lettre remise en main propre contre décharge [ou recommandée avec avis de");
       L.push("réception]");
       L.push("");
-      L.push("Objet : composition de la liste de candidats déposée le [DATE] — collège [ ],");
+      L.push("Objet : composition de la liste de candidats déposée le [DATE] - collège [ ],");
       L.push("[titulaires / suppléants]");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -2120,7 +2120,7 @@
          String(f.voteElectronique) === "non" ? "non utilisé." : "[à renseigner]."));
       L.push("");
 
-      titre(L, "1 — Accord ouvrant le recours au vote électronique");
+      titre(L, "1 - Accord ouvrant le recours au vote électronique");
       L.push("ACCORD [D'ENTREPRISE / DE GROUPE] RELATIF AU RECOURS AU VOTE ÉLECTRONIQUE");
       L.push("POUR L'ÉLECTION DES MEMBRES DE LA DÉLÉGATION DU PERSONNEL DU COMITÉ SOCIAL");
       L.push("ET ÉCONOMIQUE");
@@ -2128,7 +2128,7 @@
       L.push("Entre " + nom(ctx) + ", représentée par " + signataire(ctx) + ",");
       L.push("et les organisations syndicales représentatives : [ ]");
       L.push("");
-      L.push("ARTICLE 1 — OUVERTURE DU RECOURS");
+      L.push("ARTICLE 1 - OUVERTURE DU RECOURS");
       L.push("");
       L.push("Le recours au vote électronique est ouvert pour l'élection des membres de la");
       L.push("délégation du personnel du comité social et économique, en application de");
@@ -2137,34 +2137,34 @@
       L.push("Le vote électronique est organisé [sur le lieu de travail / à distance / sur");
       L.push("le lieu de travail et à distance] (R. 2314-5).");
       L.push("");
-      L.push("ARTICLE 2 — MAINTIEN OU EXCLUSION DU VOTE SOUS ENVELOPPE");
+      L.push("ARTICLE 2 - MAINTIEN OU EXCLUSION DU VOTE SOUS ENVELOPPE");
       L.push("");
       L.push("[CHOISIR, et l'écrire : la mise en place du vote électronique n'interdit pas");
       L.push("le vote à bulletin secret sous enveloppe si l'accord ou l'employeur n'exclut");
       L.push("pas cette modalité (R. 2314-5, dernier alinéa). Un accord muet laisse donc la");
-      L.push("double modalité ouverte — ce qui peut être voulu, ou pas.]");
+      L.push("double modalité ouverte - ce qui peut être voulu, ou pas.]");
       L.push("");
       L.push("   Le vote à bulletin secret sous enveloppe est [maintenu / exclu].");
       L.push("");
-      L.push("ARTICLE 3 — CAHIER DES CHARGES");
+      L.push("ARTICLE 3 - CAHIER DES CHARGES");
       L.push("");
       L.push("Un cahier des charges respectant les dispositions des articles R. 2314-6 et");
       L.push("suivants est établi dans le cadre du présent accord (R. 2314-5). Il est annexé");
       L.push("au présent accord.");
       L.push("");
-      L.push("ARTICLE 4 — ÉLECTIONS PARTIELLES");
+      L.push("ARTICLE 4 - ÉLECTIONS PARTIELLES");
       L.push("");
       L.push("[Le cas échéant : le présent accord vaut également pour les élections");
       L.push("partielles se déroulant en cours de mandat (R. 2314-5).]");
       L.push("");
-      L.push("ARTICLE 5 — DURÉE, RÉVISION, DÉPÔT");
+      L.push("ARTICLE 5 - DURÉE, RÉVISION, DÉPÔT");
       L.push("");
       L.push("[Durée, entrée en vigueur, révision, dépôt et publicité.]");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le [DATE].");
       L.push("");
 
-      titre(L, "2 — Variante de repli : décision de l'employeur");
+      titre(L, "2 - Variante de repli : décision de l'employeur");
       L.push("À N'EMPLOYER QU'À DÉFAUT D'ACCORD. Écrivez la négociation qui a précédé :");
       L.push("c'est elle qui fonde le repli.");
       L.push("");
@@ -2182,28 +2182,28 @@
       L.push("");
       L.push("DÉCIDE");
       L.push("");
-      L.push("Article 1 — L'élection des membres de la délégation du personnel du comité");
+      L.push("Article 1 - L'élection des membres de la délégation du personnel du comité");
       L.push("social et économique aura lieu par vote électronique, [sur le lieu de travail");
       L.push("/ à distance / les deux].");
       L.push("");
-      L.push("Article 2 — Le vote à bulletin secret sous enveloppe est [maintenu / exclu].");
+      L.push("Article 2 - Le vote à bulletin secret sous enveloppe est [maintenu / exclu].");
       L.push("");
-      L.push("Article 3 — Le cahier des charges prévu à l'article R. 2314-5 est établi par");
+      L.push("Article 3 - Le cahier des charges prévu à l'article R. 2314-5 est établi par");
       L.push("l'employeur et annexé à la présente décision.");
       L.push("");
-      L.push("Article 4 — [Le cas échéant : la présente décision vaut également pour les");
+      L.push("Article 4 - [Le cas échéant : la présente décision vaut également pour les");
       L.push("élections partielles se déroulant en cours de mandat.]");
       L.push("");
       L.push(signataire(ctx));
       L.push("");
 
-      titre(L, "3 — Cahier des charges");
+      titre(L, "3 - Cahier des charges");
       L.push("Établi dans le cadre de l'accord ou, à défaut, par l'employeur (R. 2314-5).");
       L.push("Il est TENU À LA DISPOSITION DES SALARIÉS SUR LE LIEU DE TRAVAIL et MIS SUR");
       L.push("L'INTRANET de l'entreprise lorsqu'il en existe un (R. 2314-5).");
       L.push("");
       L.push("CAHIER DES CHARGES DU SYSTÈME DE VOTE ÉLECTRONIQUE");
-      L.push(nom(ctx) + " — élections du [DATE]");
+      L.push(nom(ctx) + " - élections du [DATE]");
       L.push("");
       L.push("1. OBJET ET PÉRIMÈTRE");
       L.push("   Élection des membres [titulaires et suppléants] de la délégation du");
@@ -2241,7 +2241,7 @@
       L.push("   lieu de travail à compter du [DATE], à [lieu], et mis sur l'intranet de");
       L.push("   l'entreprise [le cas échéant] à compter du [DATE].");
       L.push("");
-      L.push("RÉSERVE — les articles R. 2314-7 et suivants, qui complètent les exigences du");
+      L.push("RÉSERVE - les articles R. 2314-7 et suivants, qui complètent les exigences du");
       L.push("cahier des charges, ne sont pas repris ici : le dépôt n'en a capté que les");
       L.push("articles R. 2314-5 et R. 2314-6. Faites vérifier le cahier des charges au");
       L.push("regard de l'ensemble du paragraphe avant de le publier, ainsi qu'au regard des");
@@ -2295,7 +2295,7 @@
         L.push("      reporter sur le procès-verbal des élections et le registre des départs.]");
       }
       L.push("");
-      L.push("  3. L'exception des six mois — l'événement est-il intervenu moins de six mois");
+      L.push("  3. L'exception des six mois - l'événement est-il intervenu moins de six mois");
       L.push("     avant le terme du mandat ?");
       if (moisAvant != null) {
         L.push("     Mois restant à courir jusqu'au terme des mandats : " + moisAvant + ".");
@@ -2308,7 +2308,7 @@
         L.push("     [Date de l'événement : … · terme des mandats : … · écart : … ]");
       }
       L.push("");
-      L.push("SI LES ÉLECTIONS SONT DUES — elles se déroulent dans les conditions fixées à");
+      L.push("SI LES ÉLECTIONS SONT DUES - elles se déroulent dans les conditions fixées à");
       L.push("l'article L. 2314-29, POUR POURVOIR TOUS LES SIÈGES VACANTS DANS LES COLLÈGES");
       L.push("INTÉRESSÉS, sur la base des dispositions en vigueur lors de l'élection");
       L.push("précédente. Les candidats sont élus pour la durée du mandat restant à courir");
@@ -2346,8 +2346,8 @@
       L.push("les sièges vacants dans les collèges intéressés.");
       L.push("");
       L.push("Collèges intéressés et sièges à pourvoir :");
-      L.push("   Collège [ ] — titulaires : [ ] · suppléants : [ ]");
-      L.push("   Collège [ ] — titulaires : [ ] · suppléants : [ ]");
+      L.push("   Collège [ ] - titulaires : [ ] · suppléants : [ ]");
+      L.push("   Collège [ ] - titulaires : [ ] · suppléants : [ ]");
       L.push("");
       L.push("DATE ENVISAGÉE POUR LE PREMIER TOUR : [DATE]");
       L.push("Ce premier tour se tiendra au plus tard le " + leJour(dans(d0, 90)) + ",");
@@ -2362,12 +2362,12 @@
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("À FAIRE EN MÊME TEMPS — inviter les organisations syndicales dans les");
+      L.push("À FAIRE EN MÊME TEMPS - inviter les organisations syndicales dans les");
       L.push("conditions de l'article L. 2314-5 : information par tout moyen pour les");
       L.push("organisations du premier alinéa, courrier pour celles du deuxième, et");
       L.push("réception au plus tard quinze jours avant la première réunion de négociation.");
       L.push("");
-      L.push("VARIANTE — CONSTAT QUE LES ÉLECTIONS PARTIELLES NE SONT PAS DUES");
+      L.push("VARIANTE - CONSTAT QUE LES ÉLECTIONS PARTIELLES NE SONT PAS DUES");
       L.push("");
       L.push("Si l'exception des six mois joue, écrivez-le plutôt que de laisser la");
       L.push("question ouverte :");
@@ -2379,7 +2379,7 @@
       L.push("   l'article L. 2314-10 du code du travail, il n'y a pas lieu d'organiser des");
       L.push("   élections partielles. »");
       L.push("");
-      L.push("   Fait à " + lieu(ctx) + ", le " + leJour(d0) + " — " + signataire(ctx));
+      L.push("   Fait à " + lieu(ctx) + ", le " + leJour(d0) + " - " + signataire(ctx));
 
       return pied(L, ["L. 2314-4", "L. 2314-5", "L. 2314-10", "L. 2314-29", "L. 2314-33"]);
     },
@@ -2407,7 +2407,7 @@
         "articles L. 2312-17, L. 2312-19 et L. 2312-22 du code du travail"));
       usage(L);
 
-      L.push("I — L'ORDRE DES SOURCES, À DIRE AVANT TOUT");
+      L.push("I - L'ORDRE DES SOURCES, À DIRE AVANT TOUT");
       L.push("");
       L.push("Un accord d'entreprise, conclu dans les conditions prévues au premier alinéa");
       L.push("de l'article L. 2232-12 ou, en l'absence de délégué syndical, un accord entre");
@@ -2424,7 +2424,7 @@
       L.push("Il peut aussi prévoir un AVIS UNIQUE portant sur tout ou partie des thèmes.");
       L.push("La périodicité qu'il prévoit NE PEUT ÊTRE SUPÉRIEURE À TROIS ANS (L. 2312-19).");
       L.push("");
-      L.push("EN L'ABSENCE de cet accord — et alors seulement —, le comité est consulté");
+      L.push("EN L'ABSENCE de cet accord - et alors seulement -, le comité est consulté");
       L.push("CHAQUE ANNÉE sur les trois thèmes (L. 2312-22).");
       L.push("");
       L.push("Situation portée au dossier : " +
@@ -2432,13 +2432,13 @@
           ? "un accord fixe la périodicité des consultations. Reportez ci-dessous sa référence, la périodicité qu'il retient et les niveaux qu'il fixe : c'est lui qui commande, non le régime supplétif."
           : String(f.accordPeriodicite) === "non"
             ? "aucun accord ne fixe la périodicité. Le régime supplétif annuel de L. 2312-22 s'applique."
-            : "[l'existence d'un accord n'est pas renseignée — cherchez-le avant d'appliquer le supplétif]."));
+            : "[l'existence d'un accord n'est pas renseignée - cherchez-le avant d'appliquer le supplétif]."));
       L.push("");
       L.push("   Accord applicable : [référence et date] · périodicité retenue : [ ] ·");
       L.push("   niveaux : [ ] · délais d'avis : [ ]");
       L.push("");
 
-      L.push("II — CE QUI RESTE À CONDUIRE");
+      L.push("II - CE QUI RESTE À CONDUIRE");
       L.push("");
       TROIS.forEach(function (t) {
         var fait = faites.some(function (x) { return String(x).toLowerCase().indexOf(t.split(",")[0].toLowerCase()) >= 0; });
@@ -2459,7 +2459,7 @@
       L.push("    L'application ne lit pas le code de commerce : faites vérifier.]");
       L.push("   Consultation retenue pour ce point : [ ]");
       L.push("");
-      L.push("NIVEAUX, à défaut d'accord (L. 2312-22) — les consultations sur les");
+      L.push("NIVEAUX, à défaut d'accord (L. 2312-22) - les consultations sur les");
       L.push("orientations stratégiques et sur la situation économique et financière sont");
       L.push("conduites AU NIVEAU DE L'ENTREPRISE, sauf si l'employeur en décide autrement");
       L.push("et sous réserve de l'accord de groupe prévu à l'article L. 2312-20. La");
@@ -2467,15 +2467,15 @@
       L.push("et au niveau des établissements lorsque sont prévues des mesures d'adaptation");
       L.push("spécifiques à ces établissements.");
       L.push("   Mesures d'adaptation spécifiques prévues : " +
-        (String(f.mesuresAdaptation) === "oui" ? "OUI — la double consultation s'impose." :
+        (String(f.mesuresAdaptation) === "oui" ? "OUI - la double consultation s'impose." :
          String(f.mesuresAdaptation) === "non" ? "non." : "[à renseigner]."));
       L.push("");
 
-      titre(L, "1 — Ordre du jour et convocation");
+      titre(L, "1 - Ordre du jour et convocation");
       L.push("L'ordre du jour de chaque réunion est ÉTABLI PAR LE PRÉSIDENT ET LE");
       L.push("SECRÉTAIRE (L. 2315-29). Les consultations rendues obligatoires par une");
       L.push("disposition législative ou réglementaire ou par un accord collectif y sont");
-      L.push("inscrites DE PLEIN DROIT par le président ou le secrétaire — ce qui signifie");
+      L.push("inscrites DE PLEIN DROIT par le président ou le secrétaire - ce qui signifie");
       L.push("que le désaccord du secrétaire ne peut pas les tenir hors de l'ordre du jour.");
       L.push("");
       L.push("Il est communiqué par le président aux membres du comité, à l'agent de");
@@ -2506,7 +2506,7 @@
       L.push("");
       L.push("  1. Approbation du procès-verbal de la réunion du [date].");
       L.push("");
-      L.push("  2. CONSULTATION RÉCURRENTE — [thème retenu parmi les trois de L. 2312-17].");
+      L.push("  2. CONSULTATION RÉCURRENTE - [thème retenu parmi les trois de L. 2312-17].");
       L.push("     Inscrite de plein droit (L. 2315-29).");
       L.push("     Informations remises ou mises à disposition le [DATE DE REMISE] : voir le");
       L.push("     bordereau annexé. Le délai de consultation court de cette date");
@@ -2525,8 +2525,8 @@
       L.push(signataire(ctx) + "        [Nom]");
       L.push("");
 
-      titre(L, "2 — Bordereau de remise des informations");
-      L.push("Il fait courir le délai. Sans lui, la date de départ se discute — et l'avis");
+      titre(L, "2 - Bordereau de remise des informations");
+      L.push("Il fait courir le délai. Sans lui, la date de départ se discute - et l'avis");
       L.push("rendu hors délai avec elle.");
       L.push("");
       L.push(nom(ctx));
@@ -2554,7 +2554,7 @@
       L.push("Reçu par : [nom et qualité] · le [date] · signature : ______________");
       L.push("");
 
-      titre(L, "3 — Réponse motivée aux observations du comité");
+      titre(L, "3 - Réponse motivée aux observations du comité");
       L.push("Le comité « dispose à cette fin d'un délai d'examen suffisant et");
       L.push("d'informations précises et écrites transmises ou mises à disposition par");
       L.push("l'employeur, ET DE LA RÉPONSE MOTIVÉE DE L'EMPLOYEUR À SES PROPRES");
@@ -2568,21 +2568,21 @@
       L.push("");
       L.push(lieu(ctx) + ", le " + leJour(d0));
       L.push("");
-      L.push("Observation n° 1 — [reprendre l'observation telle qu'elle a été formulée]");
-      L.push("Réponse — [motivée : ce qui est retenu, ce qui ne l'est pas, et pourquoi]");
+      L.push("Observation n° 1 - [reprendre l'observation telle qu'elle a été formulée]");
+      L.push("Réponse - [motivée : ce qui est retenu, ce qui ne l'est pas, et pourquoi]");
       L.push("");
-      L.push("Observation n° 2 — [ ]");
-      L.push("Réponse — [ ]");
+      L.push("Observation n° 2 - [ ]");
+      L.push("Réponse - [ ]");
       L.push("");
       L.push("Cette réponse est adressée au comité avant qu'il ne rende son avis.");
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("APRÈS L'AVIS — l'employeur rend compte, EN LA MOTIVANT, de la suite donnée aux");
+      L.push("APRÈS L'AVIS - l'employeur rend compte, EN LA MOTIVANT, de la suite donnée aux");
       L.push("avis et vœux du comité (L. 2312-15, dernier alinéa). C'est un second écrit,");
       L.push("distinct du premier, et il vient après.");
       L.push("");
-      L.push("POUR LA CONSULTATION SUR LES ORIENTATIONS STRATÉGIQUES — l'avis du comité est");
+      L.push("POUR LA CONSULTATION SUR LES ORIENTATIONS STRATÉGIQUES - l'avis du comité est");
       L.push("transmis à l'organe chargé de l'administration ou de la surveillance de");
       L.push("l'entreprise, qui formule une RÉPONSE ARGUMENTÉE ; le comité en reçoit");
       L.push("communication et peut y répondre (L. 2312-24). Prévoyez ce circuit : il");
@@ -2596,8 +2596,8 @@
 
   DP.ajouter("CSE-CTL-CON-02", {
     nom: "Le bordereau de remise daté, et le calcul du délai de consultation",
-    detail: "La date de remise qui fait courir le délai, le délai applicable — un, deux " +
-            "ou trois mois — calculé, et la règle des sept jours entre établissements et central.",
+    detail: "La date de remise qui fait courir le délai, le délai applicable - un, deux " +
+            "ou trois mois - calculé, et la règle des sept jours entre établissements et central.",
     produire: function (ctx) {
       var f = ctx.fiche || {};
       var c = objet(f.consultation);
@@ -2624,14 +2624,14 @@
       L.push("Ni la convocation, ni l'ordre du jour, ni la réunion ne font courir le délai :");
       L.push("la remise des informations, et elle seule.");
       L.push("");
-      L.push("QUEL DÉLAI — L'ORDRE DES SOURCES");
+      L.push("QUEL DÉLAI - L'ORDRE DES SOURCES");
       L.push("");
-      L.push("  1er étage — l'accord de l'article L. 2312-19, 4°, peut fixer les délais dans");
+      L.push("  1er étage - l'accord de l'article L. 2312-19, 4°, peut fixer les délais dans");
       L.push("     lesquels les avis du comité sont rendus. L'article L. 2312-16 vise");
       L.push("     également, en l'absence de délégué syndical, un accord entre l'employeur");
       L.push("     et le comité adopté à la majorité des membres titulaires.");
       L.push("");
-      L.push("  2e étage — À DÉFAUT D'ACCORD, R. 2312-6 : le comité est réputé avoir été");
+      L.push("  2e étage - À DÉFAUT D'ACCORD, R. 2312-6 : le comité est réputé avoir été");
       L.push("     consulté et avoir rendu un AVIS NÉGATIF à l'expiration d'un délai");
       L.push("       · d'UN MOIS à compter de la date prévue à R. 2312-5 ;");
       L.push("       · de DEUX MOIS en cas d'intervention d'un expert ;");
@@ -2690,7 +2690,7 @@
         L.push("   par le bordereau ci-dessous.]");
       }
       L.push("");
-      L.push("CENTRAL ET ÉTABLISSEMENTS — lorsqu'il y a lieu de consulter à la fois le");
+      L.push("CENTRAL ET ÉTABLISSEMENTS - lorsqu'il y a lieu de consulter à la fois le");
       L.push("comité central et un ou plusieurs comités d'établissement en application du");
       L.push("second alinéa de l'article L. 2316-22, les délais ci-dessus s'appliquent AU");
       L.push("COMITÉ CENTRAL. L'avis de chaque comité d'établissement est rendu et transmis");
@@ -2722,10 +2722,10 @@
       L.push("   [ ] remise en main propre contre émargement");
       L.push("   [ ] envoi avec accusé de réception");
       L.push("   [ ] information de la mise à disposition dans la base de données");
-      L.push("       économiques, sociales et environnementales — préciser la date de");
+      L.push("       économiques, sociales et environnementales - préciser la date de");
       L.push("       l'information et son support");
       L.push("");
-      L.push("Pièces remises ou mises à disposition — les énumérer, il ne suffit pas de dire");
+      L.push("Pièces remises ou mises à disposition - les énumérer, il ne suffit pas de dire");
       L.push("qu'elles l'ont été :");
       L.push("   1. [ ]");
       L.push("   2. [ ]");
@@ -2739,7 +2739,7 @@
       L.push("");
       L.push("Pour l'employeur : " + signataire(ctx));
       L.push("");
-      L.push("SI LE COMITÉ ESTIME NE PAS DISPOSER D'ÉLÉMENTS SUFFISANTS — il peut saisir le");
+      L.push("SI LE COMITÉ ESTIME NE PAS DISPOSER D'ÉLÉMENTS SUFFISANTS - il peut saisir le");
       L.push("président du tribunal judiciaire statuant selon la procédure accélérée au");
       L.push("fond pour qu'il ordonne la communication des éléments manquants. Cette saisine");
       L.push("N'A PAS pour effet de prolonger le délai ; toutefois, en cas de difficultés");
@@ -2782,7 +2782,7 @@
       L.push("par décret en Conseil d'État (L. 2312-18).");
       L.push("");
 
-      titre(L, "1 — Note d'information au comité");
+      titre(L, "1 - Note d'information au comité");
       L.push(nom(ctx));
       L.push("");
       L.push("NOTE D'INFORMATION AU COMITÉ SOCIAL ET ÉCONOMIQUE");
@@ -2790,7 +2790,7 @@
       L.push("");
       L.push(lieu(ctx) + ", le " + leJour(d0));
       L.push("");
-      L.push("Remise ou mise à disposition le [DATE] — c'est de cette date que court le");
+      L.push("Remise ou mise à disposition le [DATE] - c'est de cette date que court le");
       L.push("délai de consultation (R. 2312-5).");
       L.push("");
       L.push("1. OBJET DE LA CONSULTATION");
@@ -2816,7 +2816,7 @@
       L.push("6. PIÈCES JOINTES OU MISES À DISPOSITION");
       L.push("   [Énumérer. Si elles sont dans la base de données économiques, sociales et");
       L.push("    environnementales, dire lesquelles, où, et à quelle date l'information de");
-      L.push("    leur mise à disposition a été donnée — L. 2312-18, R. 2312-5.]");
+      L.push("    leur mise à disposition a été donnée - L. 2312-18, R. 2312-5.]");
       L.push("");
       L.push("7. DÉLAI ET DATE D'AVIS");
       L.push("   Le comité est invité à rendre son avis au plus tard le [DATE].");
@@ -2824,10 +2824,10 @@
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("Reçu pour le comité par [nom et qualité], le [date] — signature : __________");
+      L.push("Reçu pour le comité par [nom et qualité], le [date] - signature : __________");
       L.push("");
 
-      titre(L, "2 — Réponse motivée aux observations (avant l'avis)");
+      titre(L, "2 - Réponse motivée aux observations (avant l'avis)");
       L.push(nom(ctx));
       L.push("");
       L.push("RÉPONSE MOTIVÉE AUX OBSERVATIONS DU COMITÉ SOCIAL ET ÉCONOMIQUE");
@@ -2841,19 +2841,19 @@
       L.push("avant que vous ne rendiez votre avis, comme l'article L. 2312-15 du code du");
       L.push("travail le prévoit.");
       L.push("");
-      L.push("   Observation 1 — [texte de l'observation]");
-      L.push("   Réponse — [ce qui est retenu, ce qui ne l'est pas, et le motif de chaque");
+      L.push("   Observation 1 - [texte de l'observation]");
+      L.push("   Réponse - [ce qui est retenu, ce qui ne l'est pas, et le motif de chaque");
       L.push("   position. « Nous en prenons note » n'est pas une réponse motivée.]");
       L.push("");
-      L.push("   Observation 2 — [ ]");
-      L.push("   Réponse — [ ]");
+      L.push("   Observation 2 - [ ]");
+      L.push("   Réponse - [ ]");
       L.push("");
-      L.push("   Observation 3 — [ ]");
-      L.push("   Réponse — [ ]");
+      L.push("   Observation 3 - [ ]");
+      L.push("   Réponse - [ ]");
       L.push("");
       salutation(L, ctx);
 
-      titre(L, "3 — Compte rendu motivé de la suite donnée (après l'avis)");
+      titre(L, "3 - Compte rendu motivé de la suite donnée (après l'avis)");
       L.push("« L'employeur rend compte, en la motivant, de la suite donnée aux avis et");
       L.push("vœux du comité » (L. 2312-15, dernier alinéa). C'est un écrit distinct de la");
       L.push("réponse aux observations, et il vient après l'avis.");
@@ -2865,7 +2865,7 @@
       L.push(lieu(ctx) + ", le " + leJour(d0));
       L.push("");
       L.push("Avis rendu : [favorable / défavorable / réputé négatif à l'expiration du");
-      L.push("délai — préciser la date et le fondement].");
+      L.push("délai - préciser la date et le fondement].");
       L.push("");
       L.push("Vœux formulés : [ ]");
       L.push("");
@@ -2877,7 +2877,7 @@
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("À SAVOIR — le comité a également accès à l'information utile détenue par les");
+      L.push("À SAVOIR - le comité a également accès à l'information utile détenue par les");
       L.push("administrations publiques et les organismes agissant pour leur compte,");
       L.push("conformément aux dispositions légales relatives à l'accès aux documents");
       L.push("administratifs (L. 2312-15).");
@@ -2905,17 +2905,17 @@
 
       L.push("COMBIEN DE RÉUNIONS, ET SUR QUEL FONDEMENT");
       L.push("");
-      L.push("  1er étage — l'accord de l'article L. 2312-19 peut fixer le nombre de");
+      L.push("  1er étage - l'accord de l'article L. 2312-19 peut fixer le nombre de");
       L.push("     réunions annuelles du comité prévues à l'article L. 2315-27. Ce nombre");
       L.push("     NE PEUT ÊTRE INFÉRIEUR À SIX (L. 2312-19, 2°).");
       L.push("");
-      L.push("  2e étage — À DÉFAUT de cet accord (L. 2315-28) : dans les entreprises d'au");
+      L.push("  2e étage - À DÉFAUT de cet accord (L. 2315-28) : dans les entreprises d'au");
       L.push("     moins TROIS CENTS salariés, le comité se réunit au moins UNE FOIS PAR");
       L.push("     MOIS ; dans les entreprises de moins de trois cents salariés, au moins");
       L.push("     UNE FOIS TOUS LES DEUX MOIS. Le comité peut tenir une seconde réunion à");
       L.push("     la demande de la majorité de ses membres.");
       L.push("");
-      L.push("  Dans tous les cas — au moins QUATRE réunions annuelles portent, en tout ou");
+      L.push("  Dans tous les cas - au moins QUATRE réunions annuelles portent, en tout ou");
       L.push("     partie, sur les attributions du comité en matière de santé, sécurité et");
       L.push("     conditions de travail (L. 2315-27).");
       L.push("");
@@ -2923,7 +2923,7 @@
       if (accord && parAccord != null) { du = parAccord; base = "l'accord du [référence], qui fixe " + parAccord + " réunions annuelles (L. 2312-19, 2°)"; }
       else if (!accord && eff != null) {
         du = eff >= 300 ? 12 : 6;
-        base = "l'article L. 2315-28, à défaut d'accord — " +
+        base = "l'article L. 2315-28, à défaut d'accord - " +
           (eff >= 300 ? "au moins une réunion par mois" : "au moins une réunion tous les deux mois") +
           " pour un effectif de " + eff + " salariés";
       }
@@ -2931,10 +2931,10 @@
       L.push("");
       L.push("  Effectif ....................................... " + (eff == null ? "[à renseigner]" : eff + " salariés"));
       L.push("  Accord fixant le nombre de réunions ............ " +
-        (accord ? "oui — " + (parAccord != null ? parAccord + " réunions annuelles" : "[nombre à reporter]")
+        (accord ? "oui - " + (parAccord != null ? parAccord + " réunions annuelles" : "[nombre à reporter]")
                 : String(f.accordPeriodicite) === "non" ? "non" : "[à vérifier]"));
       if (accord && parAccord != null && parAccord < 6) {
-        L.push("  ATTENTION — un accord ne peut pas fixer un nombre de réunions inférieur à");
+        L.push("  ATTENTION - un accord ne peut pas fixer un nombre de réunions inférieur à");
         L.push("  six (L. 2312-19, 2°). La stipulation qui le ferait ne peut pas s'appliquer.");
       }
       L.push("  Nombre dû ...................................... " +
@@ -2956,10 +2956,10 @@
       L.push("");
       L.push("  Réunions ayant porté sur la santé et la sécurité : " +
         (nb(f.reunionsSante) == null ? "[à renseigner]" : nb(f.reunionsSante)) +
-        " — quatre au moins sont dues (L. 2315-27).");
+        " - quatre au moins sont dues (L. 2315-27).");
       L.push("");
 
-      titre(L, "1 — Calendrier annuel des réunions");
+      titre(L, "1 - Calendrier annuel des réunions");
       L.push(nom(ctx));
       L.push("");
       L.push("CALENDRIER ANNUEL DES RÉUNIONS DU COMITÉ SOCIAL ET ÉCONOMIQUE");
@@ -2977,10 +2977,10 @@
       L.push("");
       L.push("Quatre au moins des réunions ci-dessus doivent porter, en tout ou partie, sur");
       L.push("les attributions du comité en matière de santé, sécurité et conditions de");
-      L.push("travail — plus fréquemment en cas de besoin, notamment dans les branches");
+      L.push("travail - plus fréquemment en cas de besoin, notamment dans les branches");
       L.push("d'activité présentant des risques particuliers (L. 2315-27).");
       L.push("");
-      L.push("RÉUNIONS SUPPLÉMENTAIRES, de droit (L. 2315-27) — le comité est en outre réuni");
+      L.push("RÉUNIONS SUPPLÉMENTAIRES, de droit (L. 2315-27) - le comité est en outre réuni");
       L.push("à la suite de tout accident ayant entraîné ou ayant pu entraîner des");
       L.push("conséquences graves, en cas d'événement grave lié à l'activité de l'entreprise");
       L.push("ayant porté atteinte ou ayant pu porter atteinte à la santé publique ou à");
@@ -2988,7 +2988,7 @@
       L.push("du personnel sur les sujets relevant de la santé, de la sécurité ou des");
       L.push("conditions de travail.");
       L.push("");
-      L.push("SECONDE RÉUNION — le comité peut tenir une seconde réunion à la demande de la");
+      L.push("SECONDE RÉUNION - le comité peut tenir une seconde réunion à la demande de la");
       L.push("majorité de ses membres (L. 2315-28) ; les questions jointes à la demande de");
       L.push("convocation sont inscrites à l'ordre du jour (L. 2315-31).");
       L.push("");
@@ -2997,7 +2997,7 @@
       L.push(signataire(ctx));
       L.push("");
 
-      titre(L, "2 — Convocation et ordre du jour");
+      titre(L, "2 - Convocation et ordre du jour");
       L.push("L'ordre du jour est ÉTABLI PAR LE PRÉSIDENT ET LE SECRÉTAIRE (L. 2315-29),");
       L.push("puis communiqué par le président aux membres du comité, à l'agent de contrôle");
       L.push("de l'inspection du travail et à l'agent des services de prévention des");
@@ -3024,24 +3024,24 @@
       L.push("ORDRE DU JOUR");
       L.push("   1. Approbation du procès-verbal de la réunion du [date].");
       L.push("   2. [Point.]");
-      L.push("   3. [Consultation obligatoire — inscrite de plein droit, L. 2315-29.]");
+      L.push("   3. [Consultation obligatoire - inscrite de plein droit, L. 2315-29.]");
       L.push("   4. [Le cas échéant : questions jointes à la demande de réunion de la");
       L.push("      majorité des membres, L. 2315-31.]");
       L.push("   5. [Le cas échéant : points relevant de la santé, de la sécurité et des");
-      L.push("      conditions de travail — cette réunion est alors l'une des quatre de");
+      L.push("      conditions de travail - cette réunion est alors l'une des quatre de");
       L.push("      L. 2315-27.]");
       L.push("");
       L.push("Le président                              Le secrétaire du comité");
       L.push(signataire(ctx) + "        [Nom]");
       L.push("");
 
-      titre(L, "3 — Après la réunion : le procès-verbal");
+      titre(L, "3 - Après la réunion : le procès-verbal");
       L.push("Les délibérations du comité sont consignées dans un procès-verbal établi par");
       L.push("LE SECRÉTAIRE du comité, dans un délai et selon des modalités définis par un");
       L.push("accord conclu dans les conditions de l'article L. 2312-16 ou, à défaut, par");
       L.push("décret (L. 2315-34).");
       L.push("");
-      L.push("À DÉFAUT D'ACCORD — le secrétaire établit le procès-verbal dans un délai de");
+      L.push("À DÉFAUT D'ACCORD - le secrétaire établit le procès-verbal dans un délai de");
       L.push("QUINZE JOURS et le communique à l'employeur et aux membres du comité");
       L.push("(R. 2315-25).");
       L.push("");
@@ -3057,7 +3057,7 @@
       L.push("   Réunion du [date] · procès-verbal dû le [date + 15 jours] · transmis le [ ] ·");
       L.push("   décision motivée de l'employeur à la réunion du [ ].");
       L.push("");
-      L.push("RÉSOLUTIONS — les résolutions du comité sont prises à la majorité des membres");
+      L.push("RÉSOLUTIONS - les résolutions du comité sont prises à la majorité des membres");
       L.push("présents. Le président ne participe pas au vote lorsqu'il consulte les membres");
       L.push("élus du comité en tant que délégation du personnel (L. 2315-32).");
 
@@ -3092,7 +3092,7 @@
       L.push("« En tout ou partie » : le texte n'exige pas quatre réunions exclusivement");
       L.push("consacrées à ces sujets, mais quatre réunions qui les traitent. Une réunion");
       L.push("ordinaire dont l'ordre du jour comporte un point de santé et de sécurité");
-      L.push("compte — encore faut-il que l'ordre du jour et le procès-verbal l'établissent.");
+      L.push("compte - encore faut-il que l'ordre du jour et le procès-verbal l'établissent.");
       L.push("");
       L.push("DEUX OBLIGATIONS D'INFORMATION, souvent oubliées, et qui sont dans le même");
       L.push("article :");
@@ -3122,7 +3122,7 @@
       }
       L.push("");
 
-      titre(L, "1 — Calendrier annuel des réunions santé, sécurité et conditions de travail");
+      titre(L, "1 - Calendrier annuel des réunions santé, sécurité et conditions de travail");
       L.push(nom(ctx));
       L.push("");
       L.push("CALENDRIER ANNUEL DES RÉUNIONS DU COMITÉ SOCIAL ET ÉCONOMIQUE");
@@ -3130,14 +3130,14 @@
       L.push("ET AUX CONDITIONS DE TRAVAIL");
       L.push("Année [ANNÉE]");
       L.push("");
-      L.push("   Réunion 1 — [date] · [heure] · [lieu] · sujets : [ ]");
-      L.push("   Réunion 2 — [date] · [heure] · [lieu] · sujets : [ ]");
-      L.push("   Réunion 3 — [date] · [heure] · [lieu] · sujets : [ ]");
-      L.push("   Réunion 4 — [date] · [heure] · [lieu] · sujets : [ ]");
+      L.push("   Réunion 1 - [date] · [heure] · [lieu] · sujets : [ ]");
+      L.push("   Réunion 2 - [date] · [heure] · [lieu] · sujets : [ ]");
+      L.push("   Réunion 3 - [date] · [heure] · [lieu] · sujets : [ ]");
+      L.push("   Réunion 4 - [date] · [heure] · [lieu] · sujets : [ ]");
       L.push("   [Réunions supplémentaires, en cas de besoin : … ]");
       L.push("");
       L.push("[Le cas échéant, préciser : ces réunions sont celles des n° [ ] du calendrier");
-      L.push("général des réunions du comité — une même réunion peut porter en partie sur");
+      L.push("général des réunions du comité - une même réunion peut porter en partie sur");
       L.push("ces sujets et en partie sur d'autres.]");
       L.push("");
       L.push("Établi le " + leJour(d0) + " par " + signataire(ctx) + ".");
@@ -3148,10 +3148,10 @@
         "Envoyez-le dès que le calendrier est arrêté : c'est une information annuelle, pas",
         "une confirmation de réunion.",
       ]);
-      papier(L, ctx, ["Monsieur l'Inspecteur du travail — [unité de contrôle]",
-                      "Monsieur / Madame le Médecin du travail — [service de prévention et de",
+      papier(L, ctx, ["Monsieur l'Inspecteur du travail - [unité de contrôle]",
+                      "Monsieur / Madame le Médecin du travail - [service de prévention et de",
                       "santé au travail]",
-                      "Monsieur / Madame l'Agent des services de prévention — [organisme de",
+                      "Monsieur / Madame l'Agent des services de prévention - [organisme de",
                       "sécurité sociale]"], leJour(d0));
       L.push("Objet : calendrier annuel des réunions du comité social et économique");
       L.push("consacrées à la santé, à la sécurité et aux conditions de travail");
@@ -3178,7 +3178,7 @@
         "UN courrier PAR RÉUNION, aux mêmes trois destinataires, au moins quinze jours",
         "avant sa tenue. Le délai se compte à rebours depuis la date de la réunion.",
       ]);
-      papier(L, ctx, ["Monsieur l'Inspecteur du travail — [unité de contrôle]",
+      papier(L, ctx, ["Monsieur l'Inspecteur du travail - [unité de contrôle]",
                       "Monsieur / Madame le Médecin du travail",
                       "Monsieur / Madame l'Agent des services de prévention"], "[DATE D'ENVOI]");
       L.push("Objet : confirmation de la tenue de la réunion du [DATE DE LA RÉUNION] du");
@@ -3210,7 +3210,7 @@
       ]);
       L.push(nom(ctx));
       L.push("");
-      L.push("CONVOCATION — RÉUNION EXCEPTIONNELLE DU COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("CONVOCATION - RÉUNION EXCEPTIONNELLE DU COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
       L.push(lieu(ctx) + ", le " + leJour(d0));
       L.push("");
@@ -3230,12 +3230,393 @@
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("SI L'EMPLOYEUR EST DÉFAILLANT — à la demande d'au moins la moitié des membres");
+      L.push("SI L'EMPLOYEUR EST DÉFAILLANT - à la demande d'au moins la moitié des membres");
       L.push("du comité, celui-ci peut être convoqué par l'agent de contrôle de l'inspection");
       L.push("du travail et siéger sous sa présidence (L. 2315-27). C'est ce que la carence");
       L.push("expose : la réunion se tient quand même, mais sans vous.");
 
       return pied(L, ["L. 2315-27", "L. 2315-30", "L. 2315-31"]);
+    },
+  });
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     LES CINQ PIÈCES DE L'ÉCRAN « COMITÉ » (docs/audit-cse.html, 8 septembre
+     2026). Le document seul, rempli avec la fiche, sans mode d'emploi : la
+     page qui l'affiche porte le texte de loi dans un repli.
+
+     Les articles ont été lus au relais Légifrance de l'application le
+     8 septembre 2026, deux lectures espacées et concordantes chacun, filtre
+     par le nom du code. Identifiants de version : L. 2311-2
+     LEGIARTI000035609353 ; L. 2314-1 LEGIARTI000037389707 ; L. 2314-4
+     LEGIARTI000035651165 ; L. 2314-5 LEGIARTI000035651159 ; L. 2312-19
+     LEGIARTI000036262394 ; L. 2315-21 LEGIARTI000035624428 ; L. 2315-22
+     LEGIARTI000035624430 ; L. 2315-23 LEGIARTI000035624835 ; L. 2315-24
+     LEGIARTI000036761946 ; L. 2315-27 LEGIARTI000036761943 ; L. 2315-28
+     LEGIARTI000035624857 ; L. 2315-29 LEGIARTI000035624861 ; L. 2315-30
+     LEGIARTI000035624863 ; L. 2315-31 LEGIARTI000035624865 ; L. 2315-32
+     LEGIARTI000035624869 ; L. 2315-34 LEGIARTI000036262447 ; L. 2315-35
+     LEGIARTI000035624877 ; R. 2315-25 LEGIARTI000036433679 ; D. 2315-26
+     LEGIARTI000036433681.
+
+     Les dates arrivent en ISO (AAAA-MM-JJ) dans ctx.fiche ; elles sont lues
+     en heure locale pour qu'un fuseau ne décale pas un délai d'un jour.
+     ══════════════════════════════════════════════════════════════════════════ */
+
+  function dateLocale(v) {
+    if (v instanceof Date) return isNaN(v) ? null : v;
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v || "").trim());
+    if (!m) return null;
+    var d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    return isNaN(d) ? null : d;
+  }
+  function jourLocal(v, quoi) {
+    var d = dateLocale(v);
+    return d ? leJour(d) : "[" + (quoi || "date") + "]";
+  }
+  function plus(v, n, quoi) {
+    var d = dateLocale(v);
+    return d ? leJour(dans(d, n)) : "[" + (quoi || "date") + "]";
+  }
+  /* Jours ouvrables : tous les jours sauf le dimanche. Les jours fériés ne
+     sont pas décomptés ici, et le document le dit. */
+  function plusOuvrables(v, n, quoi) {
+    var d = dateLocale(v);
+    if (!d) return "[" + (quoi || "date") + "]";
+    var x = new Date(d.getTime()), pas = n < 0 ? -1 : 1, reste = Math.abs(n);
+    while (reste > 0) { x.setDate(x.getDate() + pas); if (x.getDay() !== 0) reste--; }
+    return leJour(x);
+  }
+  function lignes(v) {
+    return String(v == null ? "" : v).split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function tete(ctx, titreDoc, fondement) {
+    var p = ctx.profil || {};
+    return [
+      cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE").toUpperCase(),
+      cro(p.adresse, "adresse du siège"),
+      p.siret ? "SIRET " + p.siret : "[SIRET]",
+      "",
+      titreDoc.toUpperCase(),
+      "(" + fondement + ")",
+      "",
+    ];
+  }
+  function fondement(L, arts) {
+    L.push("");
+    L.push(TRAIT);
+    L.push("Fondement : " + arts.join(", ") + " du code du travail.");
+    return L.join("\n");
+  }
+
+  /* 1. Les élections : la note d'information du personnel et l'invitation
+        des organisations syndicales. */
+  DP.ajouter("CSE-DOC-ELECTIONS", {
+    nom: "Note d'information du personnel et invitation à négocier le protocole",
+    detail: "La note à date certaine, l'invitation des organisations syndicales et le calendrier des quatre-vingt-dix jours.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var eff = effectifDe(ctx);
+      var dInfo = f.dateInformationPersonnel, dTour = f.datePremierTour, dNeg = f.dateReunionNegociation;
+      var L = tete(ctx, "Élections du comité social et économique",
+        "articles L. 2311-2, L. 2314-4 et L. 2314-5 du code du travail");
+
+      L.push("NOTE D'INFORMATION AU PERSONNEL");
+      L.push("Organisation des élections des membres de la délégation du personnel du comité social et économique");
+      L.push("");
+      L.push(lieu(ctx) + ", le " + jourLocal(dInfo, "date de diffusion"));
+      L.push("");
+      L.push("Mesdames, Messieurs,");
+      L.push("");
+      L.push("L'effectif de " + nom(ctx) + (eff != null ? ", qui s'établit à " + eff + " salariés," : "") +
+        " ayant atteint au moins onze salariés pendant douze mois consécutifs, il est procédé à l'élection des membres de la délégation du personnel du comité social et économique (article L. 2311-2 du code du travail).");
+      L.push("");
+      L.push("La date envisagée pour le premier tour est le " + jourLocal(dTour, "date du premier tour") +
+        ". Le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant la diffusion de la présente note, soit le " +
+        plus(dInfo, 90, "date de diffusion plus quatre-vingt-dix jours") + " (article L. 2314-4).");
+      var a = dateLocale(dInfo), b = dateLocale(dTour);
+      if (a && b && (b - a) / 86400000 > 90)
+        L.push("[La date envisagée dépasse ce délai : fixez le premier tour au plus tard le " + leJour(dans(a, 90)) + ", ou diffusez une nouvelle information.]");
+      L.push("");
+      L.push("Les organisations syndicales mentionnées à l'article L. 2314-5 sont invitées à négocier le protocole d'accord préélectoral et à établir les listes de leurs candidats. La première réunion de négociation se tient le " +
+        jourLocal(dNeg, "date de la première réunion") + " à [heure], à [lieu].");
+      L.push("");
+      if (eff != null && eff >= 11 && eff <= 20) {
+        L.push("L'entreprise employant entre onze et vingt salariés, ces organisations ne sont invitées à la négociation qu'à la condition qu'au moins un salarié se soit porté candidat dans les trente jours de la présente information, soit jusqu'au " +
+          plus(dInfo, 30, "date de diffusion plus trente jours") + " (article L. 2314-5, dernier alinéa). Le salarié candidat bénéficie de la protection des articles L. 2411-7, L. 2412-3 et L. 2413-1 dès que l'employeur a connaissance de l'imminence de sa candidature.");
+        L.push("");
+      }
+      L.push("Les candidatures sont déposées auprès de [service ou personne] au plus tard le [date].");
+      L.push("");
+      L.push("La présente note est diffusée le " + jourLocal(dInfo, "date de diffusion") +
+        " par [moyen conférant date certaine : affichage daté, remise contre émargement, courriel avec accusé de réception].");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push(DOUBLE);
+      L.push("INVITATION DES ORGANISATIONS SYNDICALES");
+      L.push(DOUBLE);
+      L.push("");
+      L.push("[Organisation syndicale]");
+      L.push("[Adresse]");
+      L.push("");
+      L.push(lieu(ctx) + ", le " + jourLocal(dInfo, "date"));
+      L.push("Lettre recommandée avec avis de réception");
+      L.push("");
+      L.push("Objet : élections du comité social et économique, invitation à négocier le protocole d'accord préélectoral");
+      L.push("");
+      L.push("Mesdames, Messieurs,");
+      L.push("");
+      L.push("En application de l'article L. 2314-5 du code du travail, je vous informe de l'organisation des élections des membres de la délégation du personnel du comité social et économique de " +
+        nom(ctx) + " et vous invite à négocier le protocole d'accord préélectoral et à établir les listes de vos candidats.");
+      L.push("");
+      L.push("La première réunion de négociation se tient le " + jourLocal(dNeg, "date de la première réunion") +
+        " à [heure], à [lieu]. La présente invitation vous parvient au plus tard quinze jours avant cette date, soit le " +
+        plus(dNeg, -15, "date de la première réunion moins quinze jours") + " (article L. 2314-5).");
+      L.push("");
+      L.push("Le personnel a été informé de l'organisation des élections le " + jourLocal(dInfo, "date de diffusion") +
+        ". La date envisagée pour le premier tour est le " + jourLocal(dTour, "date du premier tour") + ".");
+      L.push("");
+      L.push("[En cas de renouvellement du comité : la présente invitation est adressée deux mois avant l'expiration des mandats en cours, et le premier tour a lieu dans la quinzaine qui précède cette expiration (article L. 2314-5).]");
+      L.push("");
+      L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération distinguée.");
+      L.push("");
+      L.push(signataire(ctx));
+      L.push("");
+      L.push("DESTINATAIRES (article L. 2314-5)");
+      L.push("");
+      L.push("  Informées par tout moyen : les organisations syndicales qui satisfont aux critères de respect des valeurs républicaines et d'indépendance, légalement constituées depuis au moins deux ans et dont le champ professionnel et géographique couvre l'entreprise : [liste].");
+      L.push("  Invitées par courrier : les organisations syndicales représentatives dans l'entreprise, celles ayant constitué une section syndicale dans l'entreprise, et les syndicats affiliés à une organisation représentative au niveau national et interprofessionnel : [liste].");
+      L.push("");
+      L.push("CALENDRIER");
+      L.push("");
+      L.push("  " + jourLocal(dInfo, "date") + " : information du personnel, à date certaine (L. 2314-4).");
+      L.push("  " + plus(dNeg, -15, "date") + " : réception de l'invitation par les organisations syndicales, au plus tard (L. 2314-5).");
+      L.push("  " + jourLocal(dNeg, "date") + " : première réunion de négociation du protocole.");
+      L.push("  " + jourLocal(dTour, "date") + " : premier tour, au plus tard le " + plus(dInfo, 90, "date") + " (L. 2314-4).");
+      return fondement(L, ["L. 2311-2", "L. 2314-4", "L. 2314-5"]);
+    },
+  });
+
+  /* 2. La convocation. Moins de cinquante salariés : la réunion mensuelle des
+        articles L. 2315-21 et L. 2315-22. Cinquante et plus : la réunion du
+        comité, convoquée avec son ordre du jour. */
+  DP.ajouter("CSE-DOC-CONVOCATION", {
+    nom: "Convocation à la réunion du comité",
+    detail: "La convocation datée, avec les délais calculés à partir de la date de réunion.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var eff = effectifDe(ctx);
+      var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
+      var dR = f.dateReunion;
+      var heure = cro(f.heure, "heure"), salle = cro(f.lieuReunion, "lieu");
+      var L;
+      if (eff != null && eff < 50) {
+        L = tete(ctx, "Convocation à la réunion mensuelle de la délégation du personnel",
+          "articles L. 2315-21 et L. 2315-22 du code du travail");
+        L.push(lieu(ctx) + ", le " + leJour(d0));
+        L.push("");
+        L.push("Aux membres de la délégation du personnel du comité social et économique, titulaires et suppléants");
+        L.push("");
+        L.push("Madame, Monsieur,");
+        L.push("");
+        L.push("Vous êtes reçus collectivement par l'employeur le " + jourLocal(dR, "date de la réunion") + " à " + heure + ", à " + salle +
+          ". Cette réunion est celle que l'article L. 2315-21 du code du travail prévoit au moins une fois par mois. En cas d'urgence, vous êtes reçus sur votre demande.");
+        L.push("");
+        L.push("Vos demandes font l'objet d'une note écrite remise à l'employeur deux jours ouvrables avant la réunion, soit au plus tard le " +
+          plusOuvrables(dR, -2, "date de la réunion moins deux jours ouvrables") + " (article L. 2315-22). L'employeur y répond par écrit au plus tard dans les six jours ouvrables suivant la réunion, soit le " +
+          plusOuvrables(dR, 6, "date de la réunion plus six jours ouvrables") + ". Les dimanches sont exclus de ce décompte ; les jours fériés ne le sont pas ici, vérifiez-les.");
+        L.push("");
+        L.push("Les demandes et les réponses motivées sont transcrites sur le registre spécial, ou annexées à ce registre (article L. 2315-22).");
+        L.push("");
+        L.push("Le suppléant assiste aux réunions en l'absence du titulaire (article L. 2314-1).");
+        L.push("");
+        L.push(signataire(ctx));
+        L.push("");
+        L.push(DOUBLE);
+        L.push("REGISTRE SPÉCIAL (article L. 2315-22)");
+        L.push(DOUBLE);
+        L.push("");
+        L.push("Réunion du " + jourLocal(dR, "date de la réunion") + ".");
+        L.push("");
+        L.push("  Demande n° 1 : [objet de la demande]. Réponse motivée de l'employeur : [réponse], le [date].");
+        L.push("  Demande n° 2 : [objet de la demande]. Réponse motivée de l'employeur : [réponse], le [date].");
+        L.push("");
+        L.push("Le registre et les documents annexés sont tenus à la disposition des salariés de l'entreprise pendant un jour ouvrable par quinzaine, en dehors de leur temps de travail, ainsi qu'à celle de l'agent de contrôle de l'inspection du travail et des membres de la délégation du personnel.");
+        return fondement(L, ["L. 2314-1", "L. 2315-21", "L. 2315-22"]);
+      }
+      L = tete(ctx, "Convocation à la réunion du comité social et économique",
+        "articles L. 2312-19, L. 2314-1, L. 2315-27 à L. 2315-31 du code du travail");
+      L.push(lieu(ctx) + ", le " + leJour(d0));
+      L.push("");
+      L.push("Destinataires : les membres du comité, titulaires et suppléants ; l'agent de contrôle de l'inspection du travail ; l'agent des services de prévention des organismes de sécurité sociale (article L. 2315-30).");
+      L.push("");
+      L.push("Madame, Monsieur,");
+      L.push("");
+      L.push("Le comité social et économique de " + nom(ctx) + " est convoqué le " + jourLocal(dR, "date de la réunion") + " à " + heure + ", à " + salle + ".");
+      L.push("");
+      L.push((eff != null && eff >= 300
+        ? "L'entreprise employant au moins trois cents salariés, le comité se réunit au moins une fois par mois"
+        : "Le comité se réunit au moins une fois tous les deux mois") +
+        ", à défaut d'accord fixant le nombre annuel de réunions, qui ne peut être inférieur à six (articles L. 2312-19 et L. 2315-28). [Le cas échéant : la présente réunion est la seconde réunion demandée par la majorité des membres ; les questions jointes à la demande sont inscrites à l'ordre du jour (articles L. 2315-28 et L. 2315-31).]");
+      L.push("");
+      L.push("L'ordre du jour, établi par le président et le secrétaire, est joint. Il vous est communiqué trois jours au moins avant la réunion, soit au plus tard le " +
+        plus(dR, -3, "date de la réunion moins trois jours") + " (articles L. 2315-29 et L. 2315-30).");
+      L.push("");
+      L.push("[Si la réunion porte, en tout ou partie, sur la santé, la sécurité et les conditions de travail : elle compte parmi les quatre réunions annuelles de l'article L. 2315-27. Le médecin du travail, l'agent de contrôle de l'inspection du travail et l'agent des services de prévention en ont été informés par écrit au moins quinze jours à l'avance, soit le " +
+        plus(dR, -15, "date de la réunion moins quinze jours") + ".]");
+      L.push("");
+      L.push("Le suppléant assiste aux réunions en l'absence du titulaire (article L. 2314-1).");
+      L.push("");
+      L.push(signataire(ctx) + ", président du comité");
+      L.push("");
+      L.push("Pièce jointe : l'ordre du jour.");
+      return fondement(L, ["L. 2312-19", "L. 2314-1", "L. 2315-27", "L. 2315-28", "L. 2315-29", "L. 2315-30", "L. 2315-31"]);
+    },
+  });
+
+  /* 3. L'ordre du jour, établi par le président et le secrétaire. */
+  DP.ajouter("CSE-DOC-ORDRE-DU-JOUR", {
+    nom: "Ordre du jour de la réunion du comité",
+    detail: "L'ordre du jour conjoint, daté, avec la date limite de communication.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
+      var dR = f.dateReunion;
+      var L = tete(ctx, "Ordre du jour de la réunion du comité social et économique",
+        "articles L. 2315-29 et L. 2315-30 du code du travail");
+      L.push("Réunion du " + jourLocal(dR, "date de la réunion") + " à " + cro(f.heure, "heure") + ", à " + cro(f.lieuReunion, "lieu") + ".");
+      L.push("");
+      L.push("Ordre du jour établi conjointement par le président et le secrétaire du comité (article L. 2315-29).");
+      L.push("");
+      var n = 1;
+      L.push("  " + n++ + ". Approbation du procès-verbal de la réunion du [date].");
+      lignes(f.points).forEach(function (pt) { L.push("  " + n++ + ". " + pt.replace(/\.?$/, ".")); });
+      L.push("  " + n++ + ". [Consultations rendues obligatoires par une disposition législative ou réglementaire ou par un accord collectif : inscrites de plein droit par le président ou le secrétaire (article L. 2315-29).]");
+      L.push("  " + n++ + ". Questions diverses.");
+      L.push("");
+      L.push("Communiqué le " + leJour(d0) + " par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale, trois jours au moins avant la réunion, soit au plus tard le " +
+        plus(dR, -3, "date de la réunion moins trois jours") + " (article L. 2315-30).");
+      L.push("");
+      L.push("Le président : " + signataire(ctx));
+      L.push("Le secrétaire du comité : " + cro(f.secretaire, "nom du secrétaire"));
+      return fondement(L, ["L. 2315-29", "L. 2315-30"]);
+    },
+  });
+
+  /* 4. Le procès-verbal de réunion, établi par le secrétaire. */
+  DP.ajouter("CSE-DOC-PROCES-VERBAL", {
+    nom: "Procès-verbal de la réunion du comité",
+    detail: "Le procès-verbal établi par le secrétaire, avec le délai de quinze jours calculé.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var dR = f.dateReunion;
+      var sec = cro(f.secretaire, "nom du secrétaire");
+      var L = tete(ctx, "Procès-verbal de la réunion du comité social et économique",
+        "articles L. 2315-32, L. 2315-34, L. 2315-35, R. 2315-25 et D. 2315-26 du code du travail");
+      L.push("Réunion du " + jourLocal(dR, "date de la réunion") + ".");
+      L.push("Procès-verbal établi par le secrétaire du comité, " + sec + " (article L. 2315-34).");
+      L.push("");
+      L.push("PRÉSENTS");
+      L.push("");
+      L.push("  Président : " + signataire(ctx) + ", assisté de [collaborateurs, trois au plus, avec voix consultative].");
+      L.push("  Membres titulaires : [noms].");
+      L.push("  Suppléants remplaçant un titulaire absent : [noms].");
+      L.push("  [Représentant syndical au comité : nom.]");
+      L.push("  Absents excusés : [noms].");
+      L.push("");
+      L.push("La séance est ouverte à [heure]. L'ordre du jour communiqué le [date] est rappelé.");
+      L.push("");
+      L.push("DÉLIBÉRATIONS");
+      L.push("");
+      var n = 1;
+      L.push("  " + n++ + ". Approbation du procès-verbal de la réunion du [date] : adopté par [nombre] voix pour, [nombre] voix contre, [nombre] abstentions.");
+      L.push("  " + n++ + ". Décision motivée de l'employeur sur les propositions faites lors de la précédente réunion : [décision et motifs] (article D. 2315-26).");
+      lignes(f.deliberations).forEach(function (pt) {
+        L.push("  " + n++ + ". " + pt.replace(/\.?$/, ".") + " Résumé des débats : [résumé]. Résolution : [texte], adoptée par [nombre] voix pour, [nombre] voix contre, [nombre] abstentions.");
+      });
+      L.push("  " + n++ + ". Questions diverses : [résumé].");
+      L.push("");
+      L.push("Les résolutions ont été prises à la majorité des membres présents. Le président n'a pas pris part au vote lorsqu'il consultait les membres élus du comité en tant que délégation du personnel (article L. 2315-32).");
+      L.push("");
+      L.push("La séance est levée à [heure].");
+      L.push("");
+      L.push("TRANSMISSION ET ADOPTION");
+      L.push("");
+      L.push("À défaut d'accord sur le délai, le présent procès-verbal est établi et transmis à l'employeur et communiqué aux membres du comité dans les quinze jours suivant la réunion, soit au plus tard le " +
+        plus(dR, 15, "date de la réunion plus quinze jours") + ", ou avant la réunion suivante si elle est prévue dans ce délai (articles R. 2315-25 et D. 2315-26). L'employeur fait connaître, lors de la réunion qui suit cette transmission, sa décision motivée sur les propositions qui lui ont été soumises (article L. 2315-34).");
+      L.push("");
+      L.push("Adopté à la réunion du [date]. Après adoption, il est affiché ou diffusé dans l'entreprise par le secrétaire, selon les modalités du règlement intérieur du comité (article L. 2315-35).");
+      L.push("");
+      L.push("Le secrétaire du comité : " + sec);
+      return fondement(L, ["L. 2315-32", "L. 2315-34", "L. 2315-35", "R. 2315-25", "D. 2315-26"]);
+    },
+  });
+
+  /* 5. Le règlement intérieur du comité. */
+  DP.ajouter("CSE-DOC-REGLEMENT", {
+    nom: "Règlement intérieur du comité social et économique",
+    detail: "Le règlement adopté par le comité : bureau, réunions, ordre du jour, votes, procès-verbal, rapports avec les salariés.",
+    produire: function (ctx) {
+      var f = ctx.fiche || {};
+      var eff = effectifDe(ctx);
+      var L = tete(ctx, "Règlement intérieur du comité social et économique",
+        "article L. 2315-24 du code du travail");
+      L.push("Adopté par le comité social et économique de " + nom(ctx) + " le " + jourLocal(f.dateAdoption, "date d'adoption") + ", par résolution prise à la majorité des membres présents (article L. 2315-32).");
+      L.push("");
+      L.push("ARTICLE 1. OBJET");
+      L.push("");
+      L.push("Le présent règlement détermine les modalités de fonctionnement du comité et celles de ses rapports avec les salariés de l'entreprise, pour l'exercice des missions que lui confère le chapitre II du titre Ier du livre III de la deuxième partie du code du travail (article L. 2315-24).");
+      L.push("");
+      L.push("ARTICLE 2. PRÉSIDENCE ET BUREAU");
+      L.push("");
+      L.push("Le comité est présidé par l'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative. Le comité désigne parmi ses membres titulaires un secrétaire et un trésorier (article L. 2315-23). [Le comité désigne de même un secrétaire adjoint et un trésorier adjoint parmi ses membres titulaires.]");
+      L.push("");
+      L.push("Le secrétaire établit l'ordre du jour avec le président, rédige les procès-verbaux et assure leur diffusion. Le trésorier tient les comptes du comité et en rend compte au comité [chaque année].");
+      L.push("");
+      L.push("Le comité désigne parmi ses membres, par résolution, un référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes, pour une durée qui prend fin avec celle du mandat des élus (article L. 2314-1).");
+      L.push("");
+      L.push("ARTICLE 3. RÉUNIONS");
+      L.push("");
+      L.push((eff != null && eff >= 300
+        ? "L'entreprise employant au moins trois cents salariés, le comité se réunit au moins une fois par mois sur convocation du président"
+        : "Le comité se réunit au moins une fois tous les deux mois sur convocation du président") +
+        ", à défaut d'accord fixant un nombre annuel de réunions, qui ne peut être inférieur à six (articles L. 2312-19 et L. 2315-28). Le comité peut tenir une seconde réunion à la demande de la majorité de ses membres ; les questions jointes à la demande sont inscrites à l'ordre du jour (articles L. 2315-28 et L. 2315-31).");
+      L.push("");
+      L.push("Au moins quatre réunions par an portent, en tout ou partie, sur la santé, la sécurité et les conditions de travail. Le comité est en outre réuni à la suite de tout accident ayant entraîné ou ayant pu entraîner des conséquences graves, en cas d'événement grave lié à l'activité de l'entreprise ayant porté atteinte ou ayant pu porter atteinte à la santé publique ou à l'environnement, ou à la demande motivée de deux de ses membres représentants du personnel sur ces sujets (article L. 2315-27).");
+      L.push("");
+      L.push("Le suppléant assiste aux réunions en l'absence du titulaire (article L. 2314-1). [Le titulaire empêché en informe son suppléant et le secrétaire dès qu'il a connaissance de son absence.]");
+      L.push("");
+      L.push("ARTICLE 4. ORDRE DU JOUR");
+      L.push("");
+      L.push("L'ordre du jour de chaque réunion est établi par le président et le secrétaire. Les consultations rendues obligatoires par une disposition législative ou réglementaire ou par un accord collectif y sont inscrites de plein droit par le président ou le secrétaire (article L. 2315-29). Il est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale trois jours au moins avant la réunion (article L. 2315-30).");
+      L.push("");
+      L.push("ARTICLE 5. VOTES ET RÉSOLUTIONS");
+      L.push("");
+      L.push("Les résolutions du comité sont prises à la majorité des membres présents. Le président ne participe pas au vote lorsqu'il consulte les membres élus du comité en tant que délégation du personnel (article L. 2315-32). [Le vote a lieu à main levée, sauf demande de vote à bulletin secret par un membre.]");
+      L.push("");
+      L.push("ARTICLE 6. PROCÈS-VERBAL");
+      L.push("");
+      L.push("Les délibérations sont consignées dans un procès-verbal établi par le secrétaire (article L. 2315-34). À défaut d'accord sur le délai, il est établi et transmis à l'employeur et communiqué aux membres dans les quinze jours suivant la réunion, ou avant la réunion suivante si elle est prévue dans ce délai ; il contient au moins le résumé des délibérations et la décision motivée de l'employeur sur les propositions faites lors de la précédente réunion (articles R. 2315-25 et D. 2315-26).");
+      L.push("");
+      L.push("Après adoption, le procès-verbal est affiché par le secrétaire sur les panneaux réservés au comité et diffusé aux salariés par [intranet, courriel, remise en main propre] (article L. 2315-35). [Les passages relatifs à des personnes nommément désignées ou couverts par l'obligation de discrétion en sont retirés avant diffusion.]");
+      L.push("");
+      L.push("ARTICLE 7. RAPPORTS AVEC LES SALARIÉS");
+      L.push("");
+      L.push("Les salariés peuvent saisir le comité de toute question relevant de ses attributions par [boîte aux lettres du comité, adresse électronique, permanence du secrétaire]. Le comité informe les salariés de son activité par [affichage, intranet, réunion d'information annuelle].");
+      L.push("");
+      L.push("ARTICLE 8. OBLIGATIONS DE L'EMPLOYEUR");
+      L.push("");
+      L.push("Le présent règlement ne comporte aucune clause imposant à l'employeur des obligations qui ne résultent pas de dispositions légales. [Le cas échéant : l'employeur accepte les clauses suivantes : (clauses). Cet accord constitue un engagement unilatéral qu'il peut dénoncer à l'issue d'un délai raisonnable, après en avoir informé les membres de la délégation du personnel] (article L. 2315-24).");
+      L.push("");
+      L.push("ARTICLE 9. DURÉE ET RÉVISION");
+      L.push("");
+      L.push("Le présent règlement s'applique à compter de son adoption, pour la durée des mandats en cours, et reste applicable jusqu'à l'adoption d'un nouveau règlement. Il peut être modifié par résolution du comité prise dans les conditions de l'article 5.");
+      L.push("");
+      L.push("Fait à " + lieu(ctx) + ", le " + jourLocal(f.dateAdoption, "date d'adoption") + ".");
+      L.push("");
+      L.push("Le président : " + signataire(ctx));
+      L.push("Le secrétaire du comité : " + cro(f.secretaire, "nom du secrétaire"));
+      return fondement(L, ["L. 2312-19", "L. 2314-1", "L. 2315-23", "L. 2315-24", "L. 2315-27", "L. 2315-28", "L. 2315-29", "L. 2315-30", "L. 2315-31", "L. 2315-32", "L. 2315-34", "L. 2315-35", "R. 2315-25", "D. 2315-26"]);
     },
   });
 

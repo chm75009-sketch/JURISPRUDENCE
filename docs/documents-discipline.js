@@ -1,11 +1,11 @@
-/* Les documents que l'application PRODUIT — discipline et règlement intérieur.
+/* Les documents que l'application PRODUIT - discipline et règlement intérieur.
 
    POURQUOI CE FICHIER EXISTE
 
    documents-produits.js porte le règlement intérieur lui-même (DIS-CTL-RI-01).
    Il manquait tout le reste : les avenants qui complètent un règlement
    incomplet, les courriers qui lui font suivre ses formalités, et surtout les
-   écrits de la procédure disciplinaire — convocation, compte rendu,
+   écrits de la procédure disciplinaire - convocation, compte rendu,
    notification motivée, mise à pied conservatoire, retraits.
 
    Un employeur à qui l'on explique qu'il aurait dû convoquer n'a toujours pas
@@ -17,14 +17,14 @@
    1. Rien qui n'ait été lu à la source. Chaque article cité ici figure dans
       moteur/discipline/textes-discipline.json, avec son identifiant de version,
       ou dans le fondement du contrôle auquel le document répond. Les articles
-      simplement RENVOYÉS par un texte lu — L. 4122-1, les dispositions sur les
-      harcèlements, la loi du 9 décembre 2016 — sont nommés, jamais reproduits :
+      simplement RENVOYÉS par un texte lu - L. 4122-1, les dispositions sur les
+      harcèlements, la loi du 9 décembre 2016 - sont nommés, jamais reproduits :
       l'application ne les a pas lus, et elle le dit à l'endroit où le lecteur
       pourrait croire qu'elle les connaît.
 
    2. Les griefs ne s'inventent jamais. Aucune de ces lettres n'écrit ce que le
       salarié aurait fait. Les faits sortent entre crochets, avec la consigne de
-      les écrire datés et circonstanciés — c'est l'employeur qui sait, et c'est
+      les écrire datés et circonstanciés - c'est l'employeur qui sait, et c'est
       lui qui répondra de ce qu'il a écrit.
 
    3. Aucune peine annoncée qui ne soit portée par un texte capté. R. 1323-1
@@ -48,7 +48,7 @@
      LES OUTILS DE DATE
 
      Les dates du dossier sont des chaînes « AAAA-MM-JJ ». Elles sont lues en
-     heure locale — un midi UTC suffirait à décaler d'un jour l'affichage chez
+     heure locale - un midi UTC suffirait à décaler d'un jour l'affichage chez
      un lecteur situé assez à l'ouest, et un document daté du mauvais jour est
      pire qu'un document non daté.
      ════════════════════════════════════════════════════════════════════════ */
@@ -67,13 +67,13 @@
     var m = d.getMonth() + 1, j = d.getDate();
     return d.getFullYear() + "-" + (m < 10 ? "0" + m : m) + "-" + (j < 10 ? "0" + j : j);
   }
-  /* Une date du dossier, écrite en toutes lettres — ou son crochet. */
+  /* Une date du dossier, écrite en toutes lettres - ou son crochet. */
   function jour(iso, quoi) {
     var d = dateDe(iso);
     return d ? leJour(d) : "[" + (quoi || "date") + "]";
   }
 
-  /* Le même quantième, n mois plus tard — la règle que R. 1332-3 énonce pour
+  /* Le même quantième, n mois plus tard - la règle que R. 1332-3 énonce pour
      le délai d'un mois de L. 1332-2, et selon laquelle se compte aussi le
      délai de deux mois de L. 1332-4 : « le jour du mois suivant qui porte le
      même quantième […] à défaut d'un quantième identique, le dernier jour du
@@ -144,7 +144,7 @@
   function etat(v, oui, non) {
     if (v === true || v === "oui") return oui;
     if (v === false || v === "non") return non;
-    return "non renseigné — à vérifier sur le document lui-même";
+    return "non renseigné - à vérifier sur le document lui-même";
   }
   function estOui(v) { return v === true || v === "oui"; }
   function estNon(v) { return v === false || v === "non"; }
@@ -152,7 +152,7 @@
   var TRAIT = "────────────────────────────────────────────────────────────────────────";
   var GROS  = "════════════════════════════════════════════════════════════════════════";
 
-  /* L'identification du salarié : le dossier de l'audit ne la porte pas — il
+  /* L'identification du salarié : le dossier de l'audit ne la porte pas - il
      décrit une procédure, pas une personne. Elle sort donc entre crochets, et
      le document le dit une fois pour toutes. */
   function blocSalarie() {
@@ -169,11 +169,11 @@
     return [
       (intro || "Les faits qui vous sont reprochés sont les suivants :"),
       "",
-      "[ÉCRIRE ICI LES GRIEFS — c'est à vous, et à personne d'autre, de le faire.",
+      "[ÉCRIRE ICI LES GRIEFS - c'est à vous, et à personne d'autre, de le faire.",
       " Un grief s'écrit daté, situé et circonstancié : ce qui s'est passé, quel",
       " jour, à quelle heure, où, avec qui, et en quoi cela contrevient à une",
-      " obligation. Une formule générale — « votre comportement », « vos",
-      " manquements répétés » — ne met pas le salarié en mesure de discuter, et",
+      " obligation. Une formule générale - « votre comportement », « vos",
+      " manquements répétés » - ne met pas le salarié en mesure de discuter, et",
       " ne permet pas au conseil de prud'hommes d'apprécier. L'application ne",
       " connaît pas vos faits et ne les inventera pas.]",
       "",
@@ -210,7 +210,7 @@
       "retrait des clauses du règlement intérieur ». " + quoi + " suit donc les",
       "quatre formalités du règlement lui-même, dans cet ordre :",
       "",
-      "  1. AVIS DU COMITÉ SOCIAL ET ÉCONOMIQUE, avant toute introduction — « le",
+      "  1. AVIS DU COMITÉ SOCIAL ET ÉCONOMIQUE, avant toute introduction - « le",
       "     règlement intérieur ne peut être introduit qu'après avoir été soumis à",
       "     l'avis du comité social et économique » (L. 1321-4, premier alinéa) ;",
       "  2. PUBLICITÉ par tout moyen, à la connaissance des personnes ayant accès",
@@ -226,11 +226,11 @@
       "la date d'entrée en vigueur doit lui être POSTÉRIEURE (L. 1321-4).",
       "",
       "Calendrier, compté depuis aujourd'hui " + leJour(d0) + " :",
-      "  · aujourd'hui — saisine du comité social et économique (courrier",
+      "  · aujourd'hui - saisine du comité social et économique (courrier",
       "    ci-dessous) ; l'avis se rend en réunion, sur un texte transmis avant ;",
-      "  · le jour de l'avis — publicité, dépôt au greffe et communication à",
+      "  · le jour de l'avis - publicité, dépôt au greffe et communication à",
       "    l'inspection : ces trois actes peuvent se faire le même jour ;",
-      "  · un mois plus tard — si la dernière des formalités de publicité et de",
+      "  · un mois plus tard - si la dernière des formalités de publicité et de",
       "    dépôt était accomplie aujourd'hui, le mois échoirait le " +
         jour(plancher, "date") + ",",
       "    et l'entrée en vigueur ne pourrait pas être antérieure au " +
@@ -250,12 +250,12 @@
     var nom = cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE");
     var L = [
       GROS,
-      "COURRIER — SAISINE DU COMITÉ SOCIAL ET ÉCONOMIQUE",
+      "COURRIER - SAISINE DU COMITÉ SOCIAL ET ÉCONOMIQUE",
       GROS,
       "",
     ];
     if (f.cse && f.cse.existe === false) {
-      L.push("ATTENTION — le dossier indique qu'il n'existe pas de comité social et");
+      L.push("ATTENTION - le dossier indique qu'il n'existe pas de comité social et");
       L.push("économique. L. 1321-4 subordonne l'introduction du règlement, et donc de");
       L.push("toute modification, à ce qu'il ait été soumis à l'avis du comité : cette");
       L.push("formalité ne peut pas être accomplie tant qu'il n'y a pas de comité. Le");
@@ -312,7 +312,7 @@
     L.push("");
     if (recommande) {
       L.push("Lettre recommandée avec demande d'avis de réception");
-      L.push("— ou remise en main propre contre récépissé daté et signé —");
+      L.push("- ou remise en main propre contre récépissé daté et signé -");
       L.push("");
     }
     return L;
@@ -357,13 +357,13 @@
         var e = ecartJours(s.dateConnaissance, s.dateConvocation);
         L.push("La convocation a été envoyée le " + jour(s.dateConvocation) +
           ", soit " + e + " jours après");
-        L.push("cette connaissance — " + (s.dateConvocation > lim
+        L.push("cette connaissance - " + (s.dateConvocation > lim
           ? "AU-DELÀ du terme : les poursuites ont été engagées hors délai."
           : "dans le délai."));
       }
     } else {
       L.push("Votre dossier ne porte pas la date à laquelle l'employeur a eu");
-      L.push("connaissance des faits : [DATE DE CONNAISSANCE DES FAITS — à établir par");
+      L.push("connaissance des faits : [DATE DE CONNAISSANCE DES FAITS - à établir par");
       L.push("la pièce qui la fixe : signalement, constat, rapport reçu]. C'est de");
       L.push("cette date, et non de celle des faits ni de la fin d'une enquête, que");
       L.push("courent les deux mois.");
@@ -402,7 +402,7 @@
       L.push("Dans votre dossier, le jour fixé pour l'entretien est le " +
         jour(b.entretien) + ".");
       L.push("");
-      L.push("  · au plus tôt   : " + jour(b.basse) + " — deux jours ouvrables au moins");
+      L.push("  · au plus tôt   : " + jour(b.basse) + " - deux jours ouvrables au moins");
       L.push("    doivent s'être écoulés. L'application compte les jours non");
       L.push("    dominicaux : elle ne tient pas le calendrier des jours fériés ou");
       L.push("    chômés, qui repousseraient cette date. Vérifiez-le à la main.");
@@ -421,9 +421,9 @@
         L.push("La notification portée au dossier est datée du " +
           jour(s.dateNotification) + " :");
         if (s.dateNotification < b.basse)
-          L.push("elle est INTERVENUE TROP TÔT — moins de deux jours ouvrables après l'entretien.");
+          L.push("elle est INTERVENUE TROP TÔT - moins de deux jours ouvrables après l'entretien.");
         else if (s.dateNotification > b.hauteProrogee)
-          L.push("elle est INTERVENUE TROP TARD — après le terme du mois de L. 1332-2.");
+          L.push("elle est INTERVENUE TROP TARD - après le terme du mois de L. 1332-2.");
         else {
           L.push("elle tombe dans la fenêtre, sous réserve des jours fériés que");
           L.push("l'application ne tient pas.");
@@ -450,7 +450,7 @@
     var s = (ctx.fiche || {}).sanction || {};
     if (!estOui(s.salarieProtege)) return [];
     return [
-      "════ AVERTISSEMENT — SALARIÉ TITULAIRE D'UN MANDAT ════",
+      "════ AVERTISSEMENT - SALARIÉ TITULAIRE D'UN MANDAT ════",
       "",
       "Le dossier déclare que le salarié est titulaire d'un mandat représentatif",
       "ou syndical. Le statut protecteur ajoute à la procédure disciplinaire des",
@@ -462,7 +462,7 @@
   }
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-02 — L'AVENANT DES TROIS MATIÈRES DE L. 1321-1
+     DIS-CTL-RI-02 - L'AVENANT DES TROIS MATIÈRES DE L. 1321-1
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-02", {
@@ -471,7 +471,7 @@
             "comité et le calendrier des quatre formalités.",
     produire: function (ctx) {
       var f = ctx.fiche || {}, ri = f.ri || {};
-      var L = entete(ctx, "Avenant au règlement intérieur — les trois matières de L. 1321-1",
+      var L = entete(ctx, "Avenant au règlement intérieur - les trois matières de L. 1321-1",
         "articles L. 1321-1 et L. 1321-4 du code du travail");
 
       L.push("CE QUE LE DOSSIER DÉCLARE");
@@ -512,13 +512,13 @@
       L.push("");
 
       if (estOui(ri.contenuSanteSecurite)) {
-        L.push("MATIÈRE 1° — SANTÉ ET SÉCURITÉ");
+        L.push("MATIÈRE 1° - SANTÉ ET SÉCURITÉ");
         L.push("Le dossier déclare cette matière déjà portée par le règlement");
         L.push("intérieur. Rien n'est ajouté ici. Pointez l'article [numéro] qui la");
         L.push("porte, pour pouvoir le montrer.");
         L.push("");
       } else {
-        L.push("ARTICLE 1 — MESURES D'APPLICATION DE LA RÉGLEMENTATION EN MATIÈRE DE");
+        L.push("ARTICLE 1 - MESURES D'APPLICATION DE LA RÉGLEMENTATION EN MATIÈRE DE");
         L.push("SANTÉ ET DE SÉCURITÉ (L. 1321-1, 1°)");
         L.push("");
         L.push("1.1. Chaque membre du personnel se conforme aux instructions données");
@@ -543,13 +543,13 @@
       }
 
       if (estOui(ri.contenuParticipation)) {
-        L.push("MATIÈRE 2° — PARTICIPATION AU RÉTABLISSEMENT DE CONDITIONS DE TRAVAIL");
+        L.push("MATIÈRE 2° - PARTICIPATION AU RÉTABLISSEMENT DE CONDITIONS DE TRAVAIL");
         L.push("PROTECTRICES");
         L.push("Le dossier déclare cette matière déjà portée par le règlement");
         L.push("intérieur. Rien n'est ajouté ici. Pointez l'article [numéro].");
         L.push("");
       } else {
-        L.push("ARTICLE 2 — PARTICIPATION AU RÉTABLISSEMENT DE CONDITIONS DE TRAVAIL");
+        L.push("ARTICLE 2 - PARTICIPATION AU RÉTABLISSEMENT DE CONDITIONS DE TRAVAIL");
         L.push("PROTECTRICES (L. 1321-1, 2°)");
         L.push("");
         L.push("2.1. Lorsque les conditions de travail protectrices de la santé et de");
@@ -557,7 +557,7 @@
         L.push("être appelés, à la demande de l'employeur, à participer à leur");
         L.push("rétablissement.");
         L.push("");
-        L.push("2.2. [PRÉCISER LES CONDITIONS — c'est ce que le texte demande, et c'est");
+        L.push("2.2. [PRÉCISER LES CONDITIONS - c'est ce que le texte demande, et c'est");
         L.push(" la partie que l'on oublie : qui peut être appelé (quels postes, quelles");
         L.push(" qualifications), à quelles tâches, par qui la demande est formulée,");
         L.push(" dans quelles limites de durée, et ce qui reste exclu. Une clause qui se");
@@ -566,12 +566,12 @@
       }
 
       if (estOui(ri.contenuDiscipline)) {
-        L.push("MATIÈRE 3° — RÈGLES GÉNÉRALES ET PERMANENTES RELATIVES À LA DISCIPLINE");
+        L.push("MATIÈRE 3° - RÈGLES GÉNÉRALES ET PERMANENTES RELATIVES À LA DISCIPLINE");
         L.push("Le dossier déclare cette matière déjà portée par le règlement");
         L.push("intérieur. Rien n'est ajouté ici. Pointez l'article [numéro].");
         L.push("");
       } else {
-        L.push("ARTICLE 3 — RÈGLES GÉNÉRALES ET PERMANENTES RELATIVES À LA DISCIPLINE");
+        L.push("ARTICLE 3 - RÈGLES GÉNÉRALES ET PERMANENTES RELATIVES À LA DISCIPLINE");
         L.push("(L. 1321-1, 3°)");
         L.push("");
         L.push("3.1. [RÉDIGER VOS RÈGLES : horaires et leur respect, accès aux locaux,");
@@ -591,7 +591,7 @@
         L.push("  1. l'avertissement ;");
         L.push("  2. le blâme ;");
         L.push("  3. la mise à pied disciplinaire, d'une durée maximale de");
-        L.push("     [PRÉCISER LE NOMBRE DE JOURS] — cette mention est ce qui rend la");
+        L.push("     [PRÉCISER LE NOMBRE DE JOURS] - cette mention est ce qui rend la");
         L.push("     mise à pied licite ; sans elle, elle ne peut pas être prononcée ;");
         L.push("  4. [le cas échéant : la mutation disciplinaire, la rétrogradation] ;");
         L.push("  5. le licenciement pour motif disciplinaire.");
@@ -603,7 +603,7 @@
         L.push("");
       }
 
-      L.push("ARTICLE FINAL — ENTRÉE EN VIGUEUR");
+      L.push("ARTICLE FINAL - ENTRÉE EN VIGUEUR");
       L.push("Le présent avenant entre en vigueur le [DATE], postérieure d'un mois à la");
       L.push("dernière en date des formalités de publicité et de dépôt (L. 1321-4 ;");
       L.push("R. 1321-3).");
@@ -628,13 +628,13 @@
          "Sur le terrain pénal : « le fait de méconnaître les dispositions des",
          "articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au",
          "règlement intérieur, est puni de l'amende prévue pour les contraventions",
-         "de la quatrième classe » (R. 1323-1) — L. 1321-1 est dans cette",
+         "de la quatrième classe » (R. 1323-1) - L. 1321-1 est dans cette",
          "énumération."])).join("\n");
     },
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-03 — L'ÉCHELLE DES SANCTIONS ET LA DURÉE MAXIMALE
+     DIS-CTL-RI-03 - L'ÉCHELLE DES SANCTIONS ET LA DURÉE MAXIMALE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-03", {
@@ -644,7 +644,7 @@
     produire: function (ctx) {
       var f = ctx.fiche || {}, ri = f.ri || {}, s = f.sanction || {};
       var jours = ri.misePiedDureeMaxJours;
-      var L = entete(ctx, "Avenant au règlement intérieur — échelle des sanctions et mise à pied",
+      var L = entete(ctx, "Avenant au règlement intérieur - échelle des sanctions et mise à pied",
         "article L. 1321-1, 3°, du code du travail");
 
       L.push("POURQUOI CET AVENANT EST LE PLUS URGENT DES AVENANTS");
@@ -674,7 +674,7 @@
 
       L.push("AVENANT N° [numéro] AU RÈGLEMENT INTÉRIEUR DE " + nomDe(ctx).toUpperCase());
       L.push("");
-      L.push("ARTICLE 1 — CE QU'EST UNE SANCTION");
+      L.push("ARTICLE 1 - CE QU'EST UNE SANCTION");
       L.push("");
       L.push("Constitue une sanction toute mesure, autre que les observations");
       L.push("verbales, prise par l'employeur à la suite d'un agissement du salarié");
@@ -682,23 +682,23 @@
       L.push("affecter immédiatement ou non la présence du salarié dans l'entreprise,");
       L.push("sa fonction, sa carrière ou sa rémunération (L. 1331-1).");
       L.push("");
-      L.push("ARTICLE 2 — NATURE ET ÉCHELLE DES SANCTIONS");
+      L.push("ARTICLE 2 - NATURE ET ÉCHELLE DES SANCTIONS");
       L.push("");
       L.push("Les sanctions susceptibles d'être prononcées dans l'entreprise sont,");
       L.push("dans l'ordre croissant de gravité :");
       L.push("");
-      L.push("  1. L'AVERTISSEMENT — observation écrite notifiée au salarié.");
+      L.push("  1. L'AVERTISSEMENT - observation écrite notifiée au salarié.");
       L.push("");
-      L.push("  2. LE BLÂME — reproche écrit notifié au salarié et versé à son");
+      L.push("  2. LE BLÂME - reproche écrit notifié au salarié et versé à son");
       L.push("     dossier.");
       L.push("");
-      L.push("  3. LA MISE À PIED DISCIPLINAIRE — suspension du contrat de travail et");
+      L.push("  3. LA MISE À PIED DISCIPLINAIRE - suspension du contrat de travail et");
       L.push("     de la rémunération pendant sa durée, d'une durée maximale de " +
         (jours != null && jours !== ""
           ? jours + " JOUR(S)."
           : "[PRÉCISER"));
       if (jours == null || jours === "") {
-        L.push("     LE NOMBRE DE JOURS — c'est la mention qui rend cette sanction");
+        L.push("     LE NOMBRE DE JOURS - c'est la mention qui rend cette sanction");
         L.push("     licite. Sans elle, la mise à pied ne peut pas être prononcée, et");
         L.push("     l'avenant ne sert à rien. Chiffrez-la.].");
       } else {
@@ -706,7 +706,7 @@
         L.push("     bien celui du texte que vous déposez.");
       }
       L.push("");
-      L.push("  4. [LE CAS ÉCHÉANT : LA MUTATION DISCIPLINAIRE, LA RÉTROGRADATION —");
+      L.push("  4. [LE CAS ÉCHÉANT : LA MUTATION DISCIPLINAIRE, LA RÉTROGRADATION -");
       L.push("     ces sanctions modifient le contrat de travail et ne peuvent pas être");
       L.push("     imposées : le refus du salarié oblige l'employeur à y renoncer ou à");
       L.push("     engager une autre procédure. Ne les inscrivez que si vous entendez");
@@ -718,7 +718,7 @@
       L.push("proportionnée à la faute. Il ne peut en revanche prononcer aucune");
       L.push("sanction qui ne figure pas dans cette liste.");
       L.push("");
-      L.push("ARTICLE 3 — INTERDICTION DES SANCTIONS PÉCUNIAIRES");
+      L.push("ARTICLE 3 - INTERDICTION DES SANCTIONS PÉCUNIAIRES");
       L.push("");
       L.push("Les amendes ou autres sanctions pécuniaires sont interdites. Toute");
       L.push("disposition ou stipulation contraire est réputée non écrite (L. 1331-2).");
@@ -727,7 +727,7 @@
       L.push("doit consister en une amende, une pénalité, une retenue ou une");
       L.push("suppression de prime prononcée à titre de sanction.");
       L.push("");
-      L.push("ARTICLE 4 — ENTRÉE EN VIGUEUR");
+      L.push("ARTICLE 4 - ENTRÉE EN VIGUEUR");
       L.push("Le présent avenant entre en vigueur le [DATE], postérieure d'un mois à la");
       L.push("dernière en date des formalités de publicité et de dépôt (L. 1321-4 ;");
       L.push("R. 1321-3).");
@@ -742,7 +742,7 @@
       L.push("");
 
       L = L.concat(blocFormalites(ctx, "l'avenant"));
-      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant — échelle des sanctions",
+      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant - échelle des sanctions",
         ["L'article L. 1321-1, 3°, du code du travail réserve au règlement intérieur",
          "la nature et l'échelle des sanctions que peut prendre l'employeur. Le",
          "projet d'avenant ci-joint fixe cette échelle et précise la durée maximale",
@@ -761,7 +761,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-04 — LES TROIS RAPPELS DE L. 1321-2
+     DIS-CTL-RI-04 - LES TROIS RAPPELS DE L. 1321-2
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-04", {
@@ -770,7 +770,7 @@
             "rappels cadrés, le courrier de saisine et le calendrier.",
     produire: function (ctx) {
       var f = ctx.fiche || {}, ri = f.ri || {};
-      var L = entete(ctx, "Avenant au règlement intérieur — les rappels de L. 1321-2",
+      var L = entete(ctx, "Avenant au règlement intérieur - les rappels de L. 1321-2",
         "article L. 1321-2 du code du travail");
 
       L.push("CE QUE LE DOSSIER DÉCLARE");
@@ -803,7 +803,7 @@
       L.push("AVENANT N° [numéro] AU RÈGLEMENT INTÉRIEUR DE " + nomDe(ctx).toUpperCase());
       L.push("");
 
-      L.push("ARTICLE 1 — DROITS DE LA DÉFENSE (L. 1321-2, 1°)");
+      L.push("ARTICLE 1 - DROITS DE LA DÉFENSE (L. 1321-2, 1°)");
       L.push("");
       L.push("Le règlement intérieur rappelle les dispositions suivantes, reproduites");
       L.push("dans leur texte.");
@@ -834,13 +834,13 @@
       L.push("1.4. [LE CAS ÉCHÉANT : L. 1321-2, 1°, permet de rappeler les droits de la");
       L.push(" défense « définis aux articles L. 1332-1 à L. 1332-3 OU par la convention");
       L.push(" collective applicable ». Si votre convention collective en prévoit");
-      L.push(" d'autres — conseil de discipline, commission paritaire, délai de");
-      L.push(" réflexion, forme particulière de notification —, rappelez-les ici, en");
+      L.push(" d'autres - conseil de discipline, commission paritaire, délai de");
+      L.push(" réflexion, forme particulière de notification -, rappelez-les ici, en");
       L.push(" citant la stipulation. L'application ne lit aucune convention");
       L.push(" collective : elle ne peut ni les écrire ni affirmer qu'il n'y en a pas.]");
       L.push("");
 
-      L.push("ARTICLE 2 — HARCÈLEMENTS ET AGISSEMENTS SEXISTES (L. 1321-2, 2°)");
+      L.push("ARTICLE 2 - HARCÈLEMENTS ET AGISSEMENTS SEXISTES (L. 1321-2, 2°)");
       L.push("");
       L.push("[REPRODUIRE ICI LES DISPOSITIONS DU CODE DU TRAVAIL RELATIVES AUX");
       L.push(" HARCÈLEMENTS MORAL ET SEXUEL ET AUX AGISSEMENTS SEXISTES. L. 1321-2, 2°,");
@@ -856,7 +856,7 @@
       L.push(" suit un signalement.]");
       L.push("");
 
-      L.push("ARTICLE 3 — DISPOSITIF DE PROTECTION DES LANCEURS D'ALERTE");
+      L.push("ARTICLE 3 - DISPOSITIF DE PROTECTION DES LANCEURS D'ALERTE");
       L.push("(L. 1321-2, 3°)");
       L.push("");
       L.push("Il existe un dispositif de protection des lanceurs d'alerte, prévu au");
@@ -874,7 +874,7 @@
       L.push(" et n'en détaille donc pas le contenu.]");
       L.push("");
 
-      L.push("ARTICLE 4 — ENTRÉE EN VIGUEUR");
+      L.push("ARTICLE 4 - ENTRÉE EN VIGUEUR");
       L.push("Le présent avenant entre en vigueur le [DATE], postérieure d'un mois à la");
       L.push("dernière en date des formalités de publicité et de dépôt (L. 1321-4 ;");
       L.push("R. 1321-3).");
@@ -886,7 +886,7 @@
       L.push("");
 
       L = L.concat(blocFormalites(ctx, "l'avenant"));
-      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant — les rappels de L. 1321-2",
+      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant - les rappels de L. 1321-2",
         ["L'article L. 1321-2 du code du travail impose au règlement intérieur de",
          "rappeler les droits de la défense, les dispositions relatives aux",
          "harcèlements et aux agissements sexistes, et l'existence du dispositif de",
@@ -902,13 +902,13 @@
          "Sur le terrain pénal : « le fait de méconnaître les dispositions des",
          "articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au",
          "règlement intérieur, est puni de l'amende prévue pour les contraventions",
-         "de la quatrième classe » (R. 1323-1) — L. 1321-2 est dans cette",
+         "de la quatrième classe » (R. 1323-1) - L. 1321-2 est dans cette",
          "énumération."])).join("\n");
     },
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-05 — LA REVUE DES CLAUSES (L. 1321-3 ; L. 1321-2-1)
+     DIS-CTL-RI-05 - LA REVUE DES CLAUSES (L. 1321-3 ; L. 1321-2-1)
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-05", {
@@ -924,15 +924,15 @@
       L.push("À QUOI SERT CETTE NOTE");
       L.push("");
       L.push("Elle n'est pas un avenant : elle est le travail qui précède l'avenant.");
-      L.push("Elle se remplit clause par clause, et ce qu'elle établit — ou n'établit");
-      L.push("pas — décide de ce qui est retiré. Datée et signée, elle est aussi la");
+      L.push("Elle se remplit clause par clause, et ce qu'elle établit - ou n'établit");
+      L.push("pas - décide de ce qui est retiré. Datée et signée, elle est aussi la");
       L.push("pièce que l'on montre lorsque l'inspecteur du travail exige le retrait ou");
       L.push("la modification d'une disposition (L. 1322-1).");
       L.push("");
       L.push("CE QUE LE DOSSIER DÉCLARE");
       L.push("");
       L.push("Clauses à retirer relevées à la relecture : " +
-        etat(ri.clausesInterdites, "OUI — elles sont à traiter ci-dessous", "aucune"));
+        etat(ri.clausesInterdites, "OUI - elles sont à traiter ci-dessous", "aucune"));
       L.push("Clause de neutralité au règlement : " +
         etat(ri.clauseNeutralite, "OUI", "non"));
       if (estOui(ri.clauseNeutralite))
@@ -942,7 +942,7 @@
       L.push(TRAIT);
       L.push("");
 
-      L.push("I. CE QUE LE RÈGLEMENT NE PEUT PAS CONTENIR — L. 1321-3, EN ENTIER");
+      L.push("I. CE QUE LE RÈGLEMENT NE PEUT PAS CONTENIR - L. 1321-3, EN ENTIER");
       L.push("");
       L.push("« Le règlement intérieur ne peut contenir : 1° Des dispositions");
       L.push("contraires aux lois et règlements ainsi qu'aux stipulations des");
@@ -982,10 +982,10 @@
       L.push("     [.....................................................]");
       L.push("  b) Quel droit ou quelle liberté elle restreint :");
       L.push("     [.....................................................]");
-      L.push("  c) La NATURE DE LA TÂCHE qui la justifie — quels postes, quelles");
+      L.push("  c) La NATURE DE LA TÂCHE qui la justifie - quels postes, quelles");
       L.push("     opérations, quel risque, établi par quelle pièce :");
       L.push("     [.....................................................]");
-      L.push("  d) En quoi elle est PROPORTIONNÉE au but recherché — pourquoi une");
+      L.push("  d) En quoi elle est PROPORTIONNÉE au but recherché - pourquoi une");
       L.push("     mesure moins restrictive ne suffirait pas, et à quoi la clause est");
       L.push("     limitée (postes, moments, modalités, présence d'un tiers, refus");
       L.push("     possible) :");
@@ -1019,7 +1019,7 @@
       L.push("");
       if (estNon(ri.clauseNeutralite)) {
         L.push("Le dossier déclare qu'il n'y a pas de clause de neutralité : ce III est");
-        L.push("sans objet. Ne l'inscrivez pas pour faire nombre — le texte n'en fait");
+        L.push("sans objet. Ne l'inscrivez pas pour faire nombre - le texte n'en fait");
         L.push("qu'une faculté, et une clause inscrite sans justification écrite est une");
         L.push("clause exposée.");
       } else {
@@ -1027,7 +1027,7 @@
         L.push("  ────────────────────────────────────────────────────────────────────");
         L.push("  a) Ce que la clause restreint, dans ses termes :");
         L.push("     [.....................................................]");
-        L.push("  b) Ce qui la justifie — cochez et développez :");
+        L.push("  b) Ce qui la justifie - cochez et développez :");
         L.push("     [ ] l'exercice d'autres libertés et droits fondamentaux, à savoir");
         L.push("         [.................................................]");
         L.push("     [ ] les nécessités du bon fonctionnement de l'entreprise, à savoir");
@@ -1058,7 +1058,7 @@
       L.push("");
 
       L = L.concat(blocFormalites(ctx, "l'avenant issu de cette revue"));
-      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant — retrait de clauses",
+      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant - retrait de clauses",
         ["La relecture du règlement intérieur au regard de l'article L. 1321-3 du",
          "code du travail a conduit à retirer ou à réécrire les clauses dont la",
          "note de revue jointe rend compte. Le projet d'avenant en tire les",
@@ -1070,19 +1070,19 @@
         ["Sur le terrain pénal : « le fait de méconnaître les dispositions des",
          "articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au",
          "règlement intérieur, est puni de l'amende prévue pour les contraventions",
-         "de la quatrième classe » (R. 1323-1) — L. 1321-3 est dans cette",
+         "de la quatrième classe » (R. 1323-1) - L. 1321-3 est dans cette",
          "énumération."])).join("\n");
     },
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-06 — LA CONSULTATION DU COMITÉ : ORDRE DU JOUR ET PROCÈS-VERBAL
+     DIS-CTL-RI-06 - LA CONSULTATION DU COMITÉ : ORDRE DU JOUR ET PROCÈS-VERBAL
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-06", {
     nom: "La consultation du comité : convocation, ordre du jour, procès-verbal",
     detail: "Le courrier de transmission du projet, l'ordre du jour et le " +
-            "procès-verbal qui recueille l'avis — la pièce qui accompagnera le " +
+            "procès-verbal qui recueille l'avis - la pièce qui accompagnera le " +
             "règlement chez l'inspecteur du travail.",
     produire: function (ctx) {
       var p = ctx.profil || {}, f = ctx.fiche || {}, ri = f.ri || {};
@@ -1103,7 +1103,7 @@
       L.push("l'inspecteur du travail (L. 1321-4, troisième alinéa) : il se consigne");
       L.push("donc par écrit, daté.");
       L.push("");
-      L.push("Dans votre dossier : avis du comité recueilli avant l'introduction — " +
+      L.push("Dans votre dossier : avis du comité recueilli avant l'introduction - " +
         etat(ri.avisCSE, "oui", "NON"));
       if (f.cse && f.cse.existe === false) {
         L.push("Et le dossier n'indique aucun comité social et économique : la");
@@ -1113,7 +1113,7 @@
       }
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — COURRIER DE TRANSMISSION DU PROJET AUX MEMBRES DU COMITÉ");
+      L.push("PIÈCE 1 - COURRIER DE TRANSMISSION DU PROJET AUX MEMBRES DU COMITÉ");
       L.push(GROS);
       L.push("");
       L.push("Un avis se rend sur un texte, pas sur une annonce : le projet part avant");
@@ -1127,7 +1127,7 @@
       L.push("");
       L.push(cro(p.ville, "lieu") + ", le " + leJour(d0));
       L.push("");
-      L.push("Objet : consultation sur le règlement intérieur — transmission du projet");
+      L.push("Objet : consultation sur le règlement intérieur - transmission du projet");
       L.push("");
       L.push("Mesdames, Messieurs,");
       L.push("");
@@ -1154,11 +1154,11 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — ORDRE DU JOUR DE LA RÉUNION");
+      L.push("PIÈCE 2 - ORDRE DU JOUR DE LA RÉUNION");
       L.push(GROS);
       L.push("");
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE DE " + nomDe(ctx).toUpperCase());
-      L.push("Réunion du [DATE] à [HEURE] — [LIEU]");
+      L.push("Réunion du [DATE] à [HEURE] - [LIEU]");
       L.push("");
       L.push("Ordre du jour");
       L.push("");
@@ -1176,7 +1176,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — PROCÈS-VERBAL DE LA CONSULTATION");
+      L.push("PIÈCE 3 - PROCÈS-VERBAL DE LA CONSULTATION");
       L.push(GROS);
       L.push("");
       L.push("C'est cette pièce qui prouve la consultation, et c'est elle qui part");
@@ -1198,14 +1198,14 @@
       L.push("Le président a exposé l'objet du projet et les matières qu'il fixe.");
       L.push("");
       L.push("Observations des membres de la délégation du personnel :");
-      L.push("[CONSIGNER LES OBSERVATIONS — elles font la valeur du procès-verbal. Un");
+      L.push("[CONSIGNER LES OBSERVATIONS - elles font la valeur du procès-verbal. Un");
       L.push(" procès-verbal qui n'en porte aucune se lit comme une consultation");
       L.push(" formelle.]");
       L.push("");
       L.push("Avis rendu : [FAVORABLE / DÉFAVORABLE / le comité n'a pas souhaité rendre");
       L.push("d'avis], par [nombre] voix pour, [nombre] contre, [nombre] abstentions.");
       L.push("");
-      L.push("Date de l'avis : [DATE] — c'est cette date qui doit être ANTÉRIEURE à");
+      L.push("Date de l'avis : [DATE] - c'est cette date qui doit être ANTÉRIEURE à");
       L.push("l'introduction du règlement intérieur (L. 1321-4).");
       L.push("");
       L.push("Le procès-verbal a été établi le [DATE] et signé par :");
@@ -1217,7 +1217,7 @@
 
       L.push("════ CE QUI SUIT L'AVIS ════");
       L.push("");
-      L.push("Le jour de l'avis, ou après lui — jamais avant — vous accomplissez la");
+      L.push("Le jour de l'avis, ou après lui - jamais avant - vous accomplissez la");
       L.push("publicité (R. 1321-1), le dépôt au greffe (R. 1321-2) et la communication");
       L.push("à l'inspecteur du travail en deux exemplaires avec l'avis (L. 1321-4 ;");
       L.push("R. 1321-4). Le délai d'un mois qui précède l'entrée en vigueur court de la");
@@ -1243,7 +1243,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-07 — PUBLICITÉ ET DATE D'ENTRÉE EN VIGUEUR
+     DIS-CTL-RI-07 - PUBLICITÉ ET DATE D'ENTRÉE EN VIGUEUR
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-07", {
@@ -1273,7 +1273,7 @@
       L.push("formalités de publicité et de dépôt définies aux articles R. 1321-1 et");
       L.push("R. 1321-2 » (R. 1321-3).");
       L.push("");
-      L.push("Le moyen est libre — « par tout moyen ». La preuve, elle, incombe à celui");
+      L.push("Le moyen est libre - « par tout moyen ». La preuve, elle, incombe à celui");
       L.push("qui l'invoque : c'est pourquoi l'attestation ci-dessous est datée et");
       L.push("accompagnée de ses pièces.");
       L.push("");
@@ -1307,7 +1307,7 @@
       }
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — ATTESTATION DE PUBLICITÉ");
+      L.push("PIÈCE 1 - ATTESTATION DE PUBLICITÉ");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
@@ -1324,7 +1324,7 @@
       L.push("");
       L.push("  · moyen employé : [affichage sur les lieux de travail · affichage dans");
       L.push("    les locaux où se fait l'embauche · mise à disposition sur l'intranet ·");
-      L.push("    remise à chaque salarié contre émargement · autre — préciser] ;");
+      L.push("    remise à chaque salarié contre émargement · autre - préciser] ;");
       L.push("  · emplacements ou adresse exacte : [.....................] ;");
       L.push("  · date d'accomplissement : [DATE] ;");
       L.push("  · pièces jointes établissant cet accomplissement : [photographie datée");
@@ -1341,12 +1341,12 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — NOTE FIXANT LA DATE D'ENTRÉE EN VIGUEUR");
+      L.push("PIÈCE 2 - NOTE FIXANT LA DATE D'ENTRÉE EN VIGUEUR");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
       L.push("");
-      L.push("NOTE — DATE D'ENTRÉE EN VIGUEUR DU RÈGLEMENT INTÉRIEUR");
+      L.push("NOTE - DATE D'ENTRÉE EN VIGUEUR DU RÈGLEMENT INTÉRIEUR");
       L.push("");
       L.push("Les formalités de publicité et de dépôt ont été accomplies aux dates");
       L.push("suivantes :");
@@ -1358,14 +1358,14 @@
       L.push("    en deux exemplaires, avec l'avis du comité");
       L.push("    (L. 1321-4 ; R. 1321-4)                   : [DATE]");
       L.push("");
-      L.push("La dernière en date des formalités de PUBLICITÉ ET DE DÉPÔT — et d'elles");
-      L.push("seules, R. 1321-3 ne visant que celles-là — est intervenue le " +
+      L.push("La dernière en date des formalités de PUBLICITÉ ET DE DÉPÔT - et d'elles");
+      L.push("seules, R. 1321-3 ne visant que celles-là - est intervenue le " +
         jour(ri.dateDerniereFormalite, "DATE"));
       L.push(".");
       L.push("");
       L.push("Le délai d'un mois court de cette date. En conséquence, la date d'entrée");
       L.push("en vigueur du règlement intérieur est fixée au " +
-        (derniere ? jour(minimum) : "[DATE — au plus tôt le lendemain du terme du mois]") + ".");
+        (derniere ? jour(minimum) : "[DATE - au plus tôt le lendemain du terme du mois]") + ".");
       L.push("");
       L.push("Cette date est inscrite dans le règlement lui-même : L. 1321-4 veut que");
       L.push("« le règlement intérieur indique la date de son entrée en vigueur ».");
@@ -1382,13 +1382,13 @@
         ["Sur le terrain pénal : « le fait de méconnaître les dispositions des",
          "articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au",
          "règlement intérieur, est puni de l'amende prévue pour les contraventions",
-         "de la quatrième classe » (R. 1323-1) — R. 1321-1, R. 1321-3 et L. 1321-4",
+         "de la quatrième classe » (R. 1323-1) - R. 1321-1, R. 1321-3 et L. 1321-4",
          "sont dans cette énumération."])).join("\n");
     },
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-08 — LE DÉPÔT AU GREFFE
+     DIS-CTL-RI-08 - LE DÉPÔT AU GREFFE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-08", {
@@ -1418,9 +1418,9 @@
       L.push("l'entrée en vigueur n'a pas commencé de courir, et la date inscrite au");
       L.push("règlement ne vaut pas.");
       L.push("");
-      L.push("Dans votre dossier : dépôt au greffe — " +
+      L.push("Dans votre dossier : dépôt au greffe - " +
         etat(ri.depotGreffe, "déclaré accompli", "NON ACCOMPLI") + ".");
-      L.push("Publicité — " + etat(ri.publicite, "déclarée accomplie", "non accomplie") + ".");
+      L.push("Publicité - " + etat(ri.publicite, "déclarée accomplie", "non accomplie") + ".");
       L.push("");
       L.push(GROS);
       L.push("LETTRE DE DÉPÔT");
@@ -1438,7 +1438,7 @@
       L.push(cro(p.ville, "lieu") + ", le " + leJour(d0));
       L.push("");
       L.push("Lettre recommandée avec demande d'avis de réception");
-      L.push("— ou dépôt sur place contre récépissé —");
+      L.push("- ou dépôt sur place contre récépissé -");
       L.push("");
       L.push("Objet : dépôt du règlement intérieur de " + nomDe(ctx));
       L.push("");
@@ -1470,7 +1470,7 @@
       L.push("   des deux : c'est elle, et elle seule, qui fait courir le mois");
       L.push("   (R. 1321-3).");
       L.push("3. Rectifiez, s'il y a lieu, la date d'entrée en vigueur inscrite au");
-      L.push("   règlement — et refaites pour cette rectification les formalités de");
+      L.push("   règlement - et refaites pour cette rectification les formalités de");
       L.push("   L. 1321-4, qui s'appliquent également en cas de modification.");
       L.push("");
       if (estISO(ri.dateDerniereFormalite)) {
@@ -1492,19 +1492,19 @@
         ["Sur le terrain pénal : « le fait de méconnaître les dispositions des",
          "articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au",
          "règlement intérieur, est puni de l'amende prévue pour les contraventions",
-         "de la quatrième classe » (R. 1323-1) — R. 1321-2 et R. 1321-3 sont dans",
+         "de la quatrième classe » (R. 1323-1) - R. 1321-2 et R. 1321-3 sont dans",
          "cette énumération."])).join("\n");
     },
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-09 — LA COMMUNICATION À L'INSPECTEUR DU TRAVAIL
+     DIS-CTL-RI-09 - LA COMMUNICATION À L'INSPECTEUR DU TRAVAIL
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-09", {
     nom: "La lettre de transmission à l'inspecteur du travail, en deux exemplaires",
-    detail: "La lettre, le bordereau des pièces — deux exemplaires du texte et " +
-            "l'avis du comité — et ce qu'il faut faire d'une réponse.",
+    detail: "La lettre, le bordereau des pièces - deux exemplaires du texte et " +
+            "l'avis du comité - et ce qu'il faut faire d'une réponse.",
     produire: function (ctx) {
       var p = ctx.profil || {}, f = ctx.fiche || {}, ri = f.ri || {};
       var d0 = aujourd(ctx);
@@ -1533,7 +1533,7 @@
       if (estNon(ri.avisCSE)) {
         L.push("");
         L.push("L'avis manque : il est la pièce que L. 1321-4 veut voir accompagner le");
-        L.push("règlement. Recueillez-le avant d'envoyer — un envoi sans avis n'accomplit");
+        L.push("règlement. Recueillez-le avant d'envoyer - un envoi sans avis n'accomplit");
         L.push("pas la formalité.");
       }
       L.push("");
@@ -1578,7 +1578,7 @@
       L.push(cro(p.responsable, "Nom et qualité du signataire"));
       L.push("");
       L.push("Pièces jointes :");
-      L.push("  · règlement intérieur [ou avenant] — DEUX exemplaires (R. 1321-4) ;");
+      L.push("  · règlement intérieur [ou avenant] - DEUX exemplaires (R. 1321-4) ;");
       L.push("  · avis du comité social et économique du [DATE] (L. 1321-4) ;");
       L.push("  · [le cas échéant : justificatif de publicité et récépissé de dépôt].");
       L.push("");
@@ -1597,7 +1597,7 @@
       L.push("   social et économique (L. 1322-2). La seule voie ouverte contre elle est");
       L.push("   le recours hiérarchique (L. 1322-3) : l'inaction n'en est pas une.");
       L.push("");
-      L.push("3. Une communication tardive se répare par un envoi — mais elle laisse,");
+      L.push("3. Une communication tardive se répare par un envoi - mais elle laisse,");
       L.push("   jusque-là, un texte que l'inspection n'a jamais vu.");
       L.push("");
 
@@ -1606,13 +1606,13 @@
         ["Sur le terrain pénal : « le fait de méconnaître les dispositions des",
          "articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au",
          "règlement intérieur, est puni de l'amende prévue pour les contraventions",
-         "de la quatrième classe » (R. 1323-1) — L. 1321-4 et R. 1321-4 sont dans",
+         "de la quatrième classe » (R. 1323-1) - L. 1321-4 et R. 1321-4 sont dans",
          "cette énumération."])).join("\n");
     },
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-10 — LA VERSION FRANÇAISE (L. 1321-6)
+     DIS-CTL-RI-10 - LA VERSION FRANÇAISE (L. 1321-6)
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-10", {
@@ -1624,7 +1624,7 @@
       var L = entete(ctx, "Version française du règlement intérieur et des documents obligeant le salarié",
         "article L. 1321-6 du code du travail");
 
-      L.push("LE TEXTE, EN ENTIER — ET IL EN DIT PLUS QU'ON NE CROIT");
+      L.push("LE TEXTE, EN ENTIER - ET IL EN DIT PLUS QU'ON NE CROIT");
       L.push("");
       L.push("« Le règlement intérieur est rédigé en français. Il peut être accompagné");
       L.push("de traductions en une ou plusieurs langues étrangères. Il en va de même");
@@ -1639,14 +1639,14 @@
       L.push("  · l'exigence déborde le règlement intérieur : elle atteint TOUT document");
       L.push("    comportant des obligations pour le salarié, ou dont la connaissance");
       L.push("    est nécessaire à l'exécution de son travail ;");
-      L.push("  · l'exception est étroite — les documents REÇUS DE L'ÉTRANGER ou");
-      L.push("    DESTINÉS À DES ÉTRANGERS —, et elle ne s'étend pas au-delà.");
+      L.push("  · l'exception est étroite - les documents REÇUS DE L'ÉTRANGER ou");
+      L.push("    DESTINÉS À DES ÉTRANGERS -, et elle ne s'étend pas au-delà.");
       L.push("");
-      L.push("Dans votre dossier : règlement rédigé en français — " +
+      L.push("Dans votre dossier : règlement rédigé en français - " +
         etat(ri.redigeFrancais, "oui", "NON") + ".");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — RECENSEMENT DES DOCUMENTS ATTEINTS PAR L. 1321-6");
+      L.push("PIÈCE 1 - RECENSEMENT DES DOCUMENTS ATTEINTS PAR L. 1321-6");
       L.push(GROS);
       L.push("");
       L.push("Une ligne par document. La colonne qui décide est la dernière.");
@@ -1671,21 +1671,21 @@
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 2 — AVENANT ÉTABLISSANT LA VERSION FRANÇAISE");
+      L.push("PIÈCE 2 - AVENANT ÉTABLISSANT LA VERSION FRANÇAISE");
       L.push(GROS);
       L.push("");
       L.push("AVENANT N° [numéro] AU RÈGLEMENT INTÉRIEUR DE " + nomDe(ctx).toUpperCase());
       L.push("");
-      L.push("Article 1 — Le règlement intérieur de " + nomDe(ctx) + " est établi en");
+      L.push("Article 1 - Le règlement intérieur de " + nomDe(ctx) + " est établi en");
       L.push("langue française. La version française est seule opposable ; les");
       L.push("traductions éventuelles ne sont remises qu'à titre d'accompagnement");
       L.push("(L. 1321-6).");
       L.push("");
-      L.push("Article 2 — Il en va de même de tout document comportant des obligations");
+      L.push("Article 2 - Il en va de même de tout document comportant des obligations");
       L.push("pour le salarié ou des dispositions dont la connaissance est nécessaire à");
       L.push("l'exécution de son travail.");
       L.push("");
-      L.push("Article 3 — Entrée en vigueur : le [DATE], postérieure d'un mois à la");
+      L.push("Article 3 - Entrée en vigueur : le [DATE], postérieure d'un mois à la");
       L.push("dernière en date des formalités de publicité et de dépôt (L. 1321-4 ;");
       L.push("R. 1321-3).");
       L.push("");
@@ -1696,7 +1696,7 @@
       L.push("");
 
       L = L.concat(blocFormalites(ctx, "la version française"));
-      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant — version française",
+      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant - version française",
         ["L'article L. 1321-6 du code du travail impose que le règlement intérieur,",
          "et tout document comportant des obligations pour le salarié, soient",
          "rédigés en français. Le projet ci-joint établit cette version.",
@@ -1707,7 +1707,7 @@
         ["Sur le terrain pénal : « le fait de méconnaître les dispositions des",
          "articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au",
          "règlement intérieur, est puni de l'amende prévue pour les contraventions",
-         "de la quatrième classe » (R. 1323-1) — L. 1321-6 est dans cette",
+         "de la quatrième classe » (R. 1323-1) - L. 1321-6 est dans cette",
          "énumération. L'inspecteur du travail peut en outre exiger à tout moment le",
          "retrait ou la modification des dispositions contraires à L. 1321-6",
          "(L. 1322-1)."])).join("\n");
@@ -1715,7 +1715,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-11 — MODIFICATIONS ET NOTES DE SERVICE
+     DIS-CTL-RI-11 - MODIFICATIONS ET NOTES DE SERVICE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-11", {
@@ -1746,7 +1746,7 @@
       L.push("");
       L.push("Autrement dit : changer de nom ne change pas de régime. Ce qui compte est");
       L.push("que le document porte des obligations GÉNÉRALES ET PERMANENTES dans les");
-      L.push("matières de L. 1321-1 et L. 1321-2 — santé et sécurité, participation au");
+      L.push("matières de L. 1321-1 et L. 1321-2 - santé et sécurité, participation au");
       L.push("rétablissement de conditions protectrices, discipline, et les rappels de");
       L.push("L. 1321-2. Une note qui les porte est une adjonction au règlement.");
       L.push("");
@@ -1764,7 +1764,7 @@
           etat(ri.notesServiceFormalites, "oui", "NON"));
       L.push("");
       L.push(GROS);
-      L.push("TABLEAU — UNE LIGNE PAR MODIFICATION ET PAR NOTE DE SERVICE");
+      L.push("TABLEAU - UNE LIGNE PAR MODIFICATION ET PAR NOTE DE SERVICE");
       L.push(GROS);
       L.push("");
       L.push("Remplissez les quatre dates. Une case vide est une formalité manquante,");
@@ -1784,10 +1784,10 @@
         jour(ri.dateEntreeVigueur, "date d'entrée en vigueur") + ".]");
       L.push("");
       L.push("Colonnes, et leur fondement :");
-      L.push("  · Avis CSE     — L. 1321-4, premier alinéa ;");
-      L.push("  · Publicité    — R. 1321-1 ;");
-      L.push("  · Dépôt greffe — R. 1321-2 ;");
-      L.push("  · Inspection   — L. 1321-4, troisième alinéa, et R. 1321-4 (deux");
+      L.push("  · Avis CSE     - L. 1321-4, premier alinéa ;");
+      L.push("  · Publicité    - R. 1321-1 ;");
+      L.push("  · Dépôt greffe - R. 1321-2 ;");
+      L.push("  · Inspection   - L. 1321-4, troisième alinéa, et R. 1321-4 (deux");
       L.push("    exemplaires, avec l'avis du comité).");
       L.push("");
       L.push("Une entrée en vigueur ne peut être fixée qu'un mois après la dernière en");
@@ -1808,7 +1808,7 @@
       L.push("");
       L.push("  « La présente note reçoit application immédiate en application de");
       L.push("  l'article L. 1321-5 du code du travail, l'urgence le justifiant pour le");
-      L.push("  motif suivant : [ÉCRIRE L'URGENCE — quel risque, constaté quand, par");
+      L.push("  motif suivant : [ÉCRIRE L'URGENCE - quel risque, constaté quand, par");
       L.push("  qui]. Elle est communiquée ce jour, simultanément, au secrétaire du");
       L.push("  comité social et économique et à l'inspection du travail. »");
       L.push("");
@@ -1835,7 +1835,7 @@
         ["Sur le terrain pénal : « le fait de méconnaître les dispositions des",
          "articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au",
          "règlement intérieur, est puni de l'amende prévue pour les contraventions",
-         "de la quatrième classe » (R. 1323-1) — L. 1321-4 et L. 1321-5 sont dans",
+         "de la quatrième classe » (R. 1323-1) - L. 1321-4 et L. 1321-5 sont dans",
          "cette énumération. Et la modification soustraite à l'avis du comité expose",
          "à l'amende de 7 500 € que L. 2317-1 attache à l'entrave au fonctionnement",
          "régulier du comité, qualification qu'il appartient au juge de retenir ou",
@@ -1844,13 +1844,13 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-RI-12 — LA DEMANDE DE L'INSPECTEUR DU TRAVAIL
+     DIS-CTL-RI-12 - LA DEMANDE DE L'INSPECTEUR DU TRAVAIL
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-RI-12", {
     nom: "La suite à donner à la demande de l'inspecteur du travail",
     detail: "Le relevé de ce que la décision vise, l'avenant de retrait ou de " +
-            "modification, la lettre à l'inspecteur — et, si c'est la voie " +
+            "modification, la lettre à l'inspecteur - et, si c'est la voie " +
             "choisie, le recours hiérarchique de L. 1322-3.",
     produire: function (ctx) {
       var p = ctx.profil || {}, f = ctx.fiche || {}, ri = f.ri || {};
@@ -1875,19 +1875,19 @@
       L.push("(L. 1322-3).");
       L.push("");
       L.push("Deux voies, et deux seulement : exécuter, ou former le recours");
-      L.push("hiérarchique. Ne rien faire n'en est pas une — la décision reste, et la");
+      L.push("hiérarchique. Ne rien faire n'en est pas une - la décision reste, et la");
       L.push("clause aussi.");
       L.push("");
-      L.push("Dans votre dossier : demande de l'inspecteur — " +
-        etat(ri.demandeInspection, "OUI", "non") + " ; suivie d'effet — " +
+      L.push("Dans votre dossier : demande de l'inspecteur - " +
+        etat(ri.demandeInspection, "OUI", "non") + " ; suivie d'effet - " +
         etat(ri.suiteDemandeInspection, "oui", "NON") + ".");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — RELEVÉ DE CE QUE LA DÉCISION VISE");
+      L.push("PIÈCE 1 - RELEVÉ DE CE QUE LA DÉCISION VISE");
       L.push(GROS);
       L.push("");
       L.push("La décision est motivée : c'est sa motivation qui délimite exactement ce");
-      L.push("qu'il faut retirer ou modifier — ni moins, ni plus.");
+      L.push("qu'il faut retirer ou modifier - ni moins, ni plus.");
       L.push("");
       L.push("  Décision de l'inspecteur du travail du [DATE], reçue le [DATE]");
       L.push("  Référence : [numéro ou objet]");
@@ -1895,7 +1895,7 @@
       L.push("  Disposition visée n° 1 : article [numéro] du règlement intérieur");
       L.push("    · ce que la décision reproche : [.............................]");
       L.push("    · article du code qu'elle invoque : [L. 1321-1 / L. 1321-2 /");
-      L.push("      L. 1321-3 / L. 1321-6 — L. 1322-1 ne permet d'exiger le retrait ou");
+      L.push("      L. 1321-3 / L. 1321-6 - L. 1322-1 ne permet d'exiger le retrait ou");
       L.push("      la modification que des dispositions contraires à ces articles]");
       L.push("    · retrait exigé  [ ]     modification exigée  [ ]");
       L.push("");
@@ -1908,13 +1908,13 @@
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 2 — LA VOIE CHOISIE, DATÉE ET ÉCRITE");
+      L.push("PIÈCE 2 - LA VOIE CHOISIE, DATÉE ET ÉCRITE");
       L.push(GROS);
       L.push("");
-      L.push("  [ ] EXÉCUTION — le retrait ou la modification est opéré par l'avenant");
+      L.push("  [ ] EXÉCUTION - le retrait ou la modification est opéré par l'avenant");
       L.push("      qui suit (pièce 3), et l'inspecteur en est informé (pièce 4).");
       L.push("");
-      L.push("  [ ] RECOURS HIÉRARCHIQUE (L. 1322-3) — formé le [DATE], auprès de");
+      L.push("  [ ] RECOURS HIÉRARCHIQUE (L. 1322-3) - formé le [DATE], auprès de");
       L.push("      [autorité hiérarchique]. Le texte ouvre ce recours « dans des");
       L.push("      conditions déterminées par voie réglementaire » : l'application n'a");
       L.push("      pas lu ces conditions à la source et ne les écrit donc pas ici.");
@@ -1925,7 +1925,7 @@
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 3 — AVENANT DE RETRAIT OU DE MODIFICATION");
+      L.push("PIÈCE 3 - AVENANT DE RETRAIT OU DE MODIFICATION");
       L.push(GROS);
       L.push("");
       L.push("AVENANT N° [numéro] AU RÈGLEMENT INTÉRIEUR DE " + nomDe(ctx).toUpperCase());
@@ -1934,17 +1934,17 @@
       L.push("exigeant, sur le fondement de l'article L. 1322-1 du code du travail, le");
       L.push("retrait ou la modification des dispositions ci-après ;");
       L.push("");
-      L.push("Article 1 — L'article [numéro] du règlement intérieur est RETIRÉ.");
+      L.push("Article 1 - L'article [numéro] du règlement intérieur est RETIRÉ.");
       L.push("");
-      L.push("Article 2 — L'article [numéro] du règlement intérieur est MODIFIÉ et");
+      L.push("Article 2 - L'article [numéro] du règlement intérieur est MODIFIÉ et");
       L.push("rédigé comme suit :");
-      L.push("  « [NOUVELLE RÉDACTION — elle doit répondre exactement à ce que la");
+      L.push("  « [NOUVELLE RÉDACTION - elle doit répondre exactement à ce que la");
       L.push("  décision reproche. Si le reproche portait sur une restriction non");
       L.push("  justifiée ou disproportionnée (L. 1321-3, 2°), écrivez dans la clause");
       L.push("  elle-même la nature de la tâche qui la justifie et ce qui la limite au");
       L.push("  but recherché.] »");
       L.push("");
-      L.push("Article 3 — Entrée en vigueur : le [DATE], postérieure d'un mois à la");
+      L.push("Article 3 - Entrée en vigueur : le [DATE], postérieure d'un mois à la");
       L.push("dernière en date des formalités de publicité et de dépôt (L. 1321-4 ;");
       L.push("R. 1321-3).");
       L.push("");
@@ -1954,7 +1954,7 @@
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 4 — LETTRE INFORMANT L'INSPECTEUR DE LA SUITE DONNÉE");
+      L.push("PIÈCE 4 - LETTRE INFORMANT L'INSPECTEUR DE LA SUITE DONNÉE");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
@@ -1967,7 +1967,7 @@
       L.push("");
       L.push("Lettre recommandée avec demande d'avis de réception");
       L.push("");
-      L.push("Objet : suite donnée à votre décision du [DATE] — règlement intérieur de " +
+      L.push("Objet : suite donnée à votre décision du [DATE] - règlement intérieur de " +
         nomDe(ctx));
       L.push("");
       L.push("Monsieur l'Inspecteur,");
@@ -1995,7 +1995,7 @@
       L.push("");
 
       L = L.concat(blocFormalites(ctx, "l'avenant"));
-      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant — décision de l'inspecteur du travail",
+      L = L.concat(courrierCSE(ctx, "consultation sur un projet d'avenant - décision de l'inspecteur du travail",
         ["Par décision motivée du [DATE], l'inspecteur du travail a exigé, sur le",
          "fondement de l'article L. 1322-1 du code du travail, le retrait ou la",
          "modification de dispositions du règlement intérieur. Cette décision vous",
@@ -2017,11 +2017,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-01 — L'ÉCRIT D'ÉNONCIATION DES GRIEFS
+     DIS-CTL-SAN-01 - L'ÉCRIT D'ÉNONCIATION DES GRIEFS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-01", {
-    nom: "L'écrit qui énonce les griefs — et, s'il a manqué, le retrait de la sanction",
+    nom: "L'écrit qui énonce les griefs - et, s'il a manqué, le retrait de la sanction",
     detail: "L. 1332-1 exige l'information écrite « dans le même temps » : un écrit " +
             "postérieur ne répare pas. Le document porte donc le retrait, puis " +
             "l'écrit d'une procédure reprise.",
@@ -2043,25 +2043,25 @@
       L.push("fonction, sa carrière ou sa rémunération » (L. 1331-1).");
       L.push("");
       L.push("Trois conséquences, et la troisième est celle que l'on manque :");
-      L.push("  · l'exigence vaut pour TOUTE sanction au sens de L. 1331-1 — toute mesure");
+      L.push("  · l'exigence vaut pour TOUTE sanction au sens de L. 1331-1 - toute mesure");
       L.push("    autre que les observations verbales. L'avertissement et le blâme en");
       L.push("    sont, et ils ne bénéficient pas ici de l'exception que L. 1332-2");
       L.push("    réserve à la convocation : celle-ci dispense de l'entretien, jamais de");
       L.push("    l'écrit ;");
-      L.push("  · l'information porte sur les GRIEFS — les faits reprochés —, non sur");
+      L.push("  · l'information porte sur les GRIEFS - les faits reprochés -, non sur");
       L.push("    l'existence d'une procédure ;");
       L.push("  · elle est donnée « DANS LE MÊME TEMPS » que la sanction. Un écrit");
       L.push("    postérieur ne rétablit pas ce simultané : une sanction prise sans");
       L.push("    écrit ne se complète pas, elle se retire.");
       L.push("");
-      L.push("Dans votre dossier : sanction déclarée — " +
+      L.push("Dans votre dossier : sanction déclarée - " +
         (s.nature ? s.nature : "[nature non renseignée]") +
-        " ; information écrite des griefs — " + etat(s.griefsEcrits, "oui", "NON") + ".");
+        " ; information écrite des griefs - " + etat(s.griefsEcrits, "oui", "NON") + ".");
       L.push("");
 
       if (estNon(s.griefsEcrits)) {
         L.push(GROS);
-        L.push("PIÈCE 1 — RETRAIT DE LA SANCTION PRISE SANS ÉCRIT");
+        L.push("PIÈCE 1 - RETRAIT DE LA SANCTION PRISE SANS ÉCRIT");
         L.push(GROS);
         L.push("");
         L.push("À remettre avant toute reprise : c'est le retrait, et non un écrit");
@@ -2094,7 +2094,7 @@
 
       L.push(GROS);
       L.push((estNon(s.griefsEcrits) ? "PIÈCE 2" : "PIÈCE 1") +
-        " — ÉCRIT D'ÉNONCIATION DES GRIEFS");
+        " - ÉCRIT D'ÉNONCIATION DES GRIEFS");
       L.push(GROS);
       L.push("");
       L.push("Cet écrit se remet AVANT ou EN MÊME TEMPS que la sanction, jamais après.");
@@ -2102,8 +2102,8 @@
       L.push("  · si un entretien préalable est dû, les griefs sont énoncés dans la");
       L.push("    lettre de notification, motivée, qui suit l'entretien (L. 1332-2 ;");
       L.push("    R. 1332-2) ;");
-      L.push("  · si aucun entretien n'est dû — avertissement, ou sanction de même");
-      L.push("    nature sans incidence —, la lettre ci-dessous est à la fois");
+      L.push("  · si aucun entretien n'est dû - avertissement, ou sanction de même");
+      L.push("    nature sans incidence -, la lettre ci-dessous est à la fois");
       L.push("    l'énonciation des griefs et la sanction elle-même.");
       L.push("");
       L = L.concat(teteLettre(ctx, true));
@@ -2113,13 +2113,13 @@
       L.push("");
       L = L.concat(blocGriefs("Je vous informe des griefs retenus contre vous."));
       L.push("[Le cas échéant, préciser : les pièces sur lesquelles ces griefs se");
-      L.push(" fondent, et les règles auxquelles les faits contreviennent — article du");
+      L.push(" fondent, et les règles auxquelles les faits contreviennent - article du");
       L.push(" règlement intérieur, consigne, instruction.]");
       L.push("");
       L.push("[Choisir l'une des deux suites :");
-      L.push(" — soit : Ces faits me conduisent à vous notifier [SANCTION, telle qu'elle");
+      L.push(" - soit : Ces faits me conduisent à vous notifier [SANCTION, telle qu'elle");
       L.push("   est nommée dans l'échelle du règlement intérieur].");
-      L.push(" — soit : Ces faits me conduisent à envisager une sanction. Vous êtes");
+      L.push(" - soit : Ces faits me conduisent à envisager une sanction. Vous êtes");
       L.push("   convoqué à un entretien préalable dont l'objet, la date, l'heure et le");
       L.push("   lieu vous sont précisés par la lettre jointe, qui rappelle également");
       L.push("   votre faculté d'être assisté.]");
@@ -2145,7 +2145,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-02 — LA SANCTION PÉCUNIAIRE
+     DIS-CTL-SAN-02 - LA SANCTION PÉCUNIAIRE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-02", {
@@ -2158,13 +2158,13 @@
       var L = entete(ctx, "Retrait de la sanction pécuniaire et régularisation de la paie",
         "article L. 1331-2 du code du travail");
 
-      L.push("LE TEXTE, EN ENTIER — IL TIENT EN DEUX PHRASES");
+      L.push("LE TEXTE, EN ENTIER - IL TIENT EN DEUX PHRASES");
       L.push("");
       L.push("« Les amendes ou autres sanctions pécuniaires sont interdites. Toute");
       L.push("disposition ou stipulation contraire est réputée non écrite » (L. 1331-2).");
       L.push("");
       L.push("L'interdiction est absolue : ni le contrat, ni le règlement intérieur, ni");
-      L.push("un accord ne peuvent y déroger — ce qui les prévoirait est réputé non");
+      L.push("un accord ne peuvent y déroger - ce qui les prévoirait est réputé non");
       L.push("écrit. C'est en outre la seule interdiction de ce chapitre que le code");
       L.push("assortit d'une peine : « le fait d'infliger une amende ou une sanction");
       L.push("pécuniaire en méconnaissance des dispositions de l'article L. 1331-2 est");
@@ -2184,20 +2184,20 @@
       L.push("la mise à pied elle-même était-elle régulière ?");
       L.push("");
       L.push("Dans votre dossier : retenue sur la rémunération étrangère à une");
-      L.push("suspension du contrat — " + etat(s.retenueSalaire, "OUI", "non") +
+      L.push("suspension du contrat - " + etat(s.retenueSalaire, "OUI", "non") +
         " ; nature déclarée de la");
-      L.push("sanction — " + (s.nature ? s.nature : "[non renseignée]") + ".");
+      L.push("sanction - " + (s.nature ? s.nature : "[non renseignée]") + ".");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — NOTE DE RETRAIT (interne)");
+      L.push("PIÈCE 1 - NOTE DE RETRAIT (interne)");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
-      L.push("NOTE — RETRAIT D'UNE SANCTION PÉCUNIAIRE");
+      L.push("NOTE - RETRAIT D'UNE SANCTION PÉCUNIAIRE");
       L.push("Établie le " + leJour(d0));
       L.push("");
       L.push("1. Mesure identifiée : [amende / pénalité / retenue / suppression de");
-      L.push("   prime — écrire la dénomination employée], notifiée le " +
+      L.push("   prime - écrire la dénomination employée], notifiée le " +
         jour(s.dateNotification, "date") + ",");
       L.push("   d'un montant de [MONTANT] euros.");
       L.push("");
@@ -2208,10 +2208,10 @@
       L.push("");
       L.push("3. Décision : la mesure est RETIRÉE. La somme retenue est restituée sur la");
       L.push("   paie de [MOIS], sous une ligne de régularisation identifiable");
-      L.push("   [intitulé retenu : « régularisation — retenue indue »].");
+      L.push("   [intitulé retenu : « régularisation - retenue indue »].");
       L.push("");
       L.push("4. Purge : sont retirées, dans les textes suivants, les stipulations qui");
-      L.push("   prévoyaient une telle mesure — L. 1331-2 les répute non écrites, mais");
+      L.push("   prévoyaient une telle mesure - L. 1331-2 les répute non écrites, mais");
       L.push("   les laisser figurer entretient la pratique :");
       L.push("     · règlement intérieur, article(s) [numéro(s)] ;");
       L.push("     · contrats de travail, clause [référence] ;");
@@ -2226,7 +2226,7 @@
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 2 — LETTRE AU SALARIÉ");
+      L.push("PIÈCE 2 - LETTRE AU SALARIÉ");
       L.push(GROS);
       L.push("");
       L = L.concat(teteLettre(ctx, true));
@@ -2252,7 +2252,7 @@
       L.push("");
       L.push("· Sur le bulletin qui portait la retenue : la période visée, le libellé, le");
       L.push("  montant. Confrontez-les aux jours de mise à pied effectivement prononcés");
-      L.push("  s'il y en a eu — au-delà de ces jours, la retenue n'a plus de support");
+      L.push("  s'il y en a eu - au-delà de ces jours, la retenue n'a plus de support");
       L.push("  disciplinaire.");
       L.push("· Le retrait de la mesure pécuniaire ne préjuge pas des faits : si les");
       L.push("  faits justifient une sanction, elle se prend dans l'échelle du règlement");
@@ -2274,13 +2274,13 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-03 — LA SANCTION NON PRÉVUE PAR LE RÈGLEMENT INTÉRIEUR
+     DIS-CTL-SAN-03 - LA SANCTION NON PRÉVUE PAR LE RÈGLEMENT INTÉRIEUR
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-03", {
     nom: "Le retrait de la sanction que le règlement intérieur ne prévoit pas",
     detail: "La note de retrait, la lettre au salarié, et ce qui peut être " +
-            "repris — une échelle complétée ne rétroagit pas.",
+            "repris - une échelle complétée ne rétroagit pas.",
     produire: function (ctx) {
       var p = ctx.profil || {}, f = ctx.fiche || {}, s = f.sanction || {}, ri = f.ri || {};
       var d0 = aujourd(ctx);
@@ -2314,7 +2314,7 @@
       L.push("PREMIER RÉFLEXE : LA BONNE VERSION DU RÈGLEMENT");
       L.push("");
       L.push("Prenez le règlement intérieur DANS LA VERSION EN VIGUEUR À LA DATE DE LA");
-      L.push("SANCTION — et non dans celle d'aujourd'hui. C'est elle qui s'applique.");
+      L.push("SANCTION - et non dans celle d'aujourd'hui. C'est elle qui s'applique.");
       L.push("");
       L.push("  · date de la sanction               : " + jour(s.dateNotification, "date"));
       L.push("  · version applicable, entrée en");
@@ -2324,11 +2324,11 @@
       L.push("    figure, s'il existe               : [numéro, ou : elle n'y figure pas]");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — NOTE DE RETRAIT (interne)");
+      L.push("PIÈCE 1 - NOTE DE RETRAIT (interne)");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
-      L.push("NOTE — RETRAIT D'UNE SANCTION NON PRÉVUE PAR LE RÈGLEMENT INTÉRIEUR");
+      L.push("NOTE - RETRAIT D'UNE SANCTION NON PRÉVUE PAR LE RÈGLEMENT INTÉRIEUR");
       L.push("Établie le " + leJour(d0));
       L.push("");
       L.push("1. Sanction concernée : " + (s.nature ? s.nature : "[nature]") +
@@ -2344,7 +2344,7 @@
       L.push("   salarié, et ses effets sur la rémunération sont régularisés.");
       L.push("");
       L.push("4. Examen d'une reprise : l'échelle telle qu'elle est écrite comporte-t-elle");
-      L.push("   une sanction adaptée aux faits ? [oui — laquelle : ......... / non].");
+      L.push("   une sanction adaptée aux faits ? [oui - laquelle : ......... / non].");
       L.push("   Si oui, une procédure régulière peut être reprise, sous réserve du délai");
       L.push("   de deux mois de L. 1332-4 rappelé plus bas.");
       L.push("");
@@ -2357,7 +2357,7 @@
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 2 — LETTRE AU SALARIÉ");
+      L.push("PIÈCE 2 - LETTRE AU SALARIÉ");
       L.push(GROS);
       L.push("");
       L = L.concat(teteLettre(ctx, true));
@@ -2392,7 +2392,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-04 — LA DURÉE DE LA MISE À PIED DISCIPLINAIRE
+     DIS-CTL-SAN-04 - LA DURÉE DE LA MISE À PIED DISCIPLINAIRE
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-04", {
@@ -2408,7 +2408,7 @@
         ? null : Number(ri.misePiedDureeMaxJours);
       var exces = (prononcee != null && plafond != null && !isNaN(prononcee) && !isNaN(plafond))
         ? prononcee - plafond : null;
-      var L = entete(ctx, "Durée de la mise à pied disciplinaire — décision rectificative",
+      var L = entete(ctx, "Durée de la mise à pied disciplinaire - décision rectificative",
         "article L. 1321-1, 3°, du code du travail");
 
       L.push("LA RÈGLE");
@@ -2435,7 +2435,7 @@
         L.push("");
         L.push("Il n'y a alors rien à ramener dans une limite qui n'existe pas : la mise");
         L.push("à pied se RETIRE, et le point se traite au niveau du règlement intérieur");
-        L.push("— c'est l'objet du document « échelle des sanctions et durée maximale de");
+        L.push("- c'est l'objet du document « échelle des sanctions et durée maximale de");
         L.push("la mise à pied » de cet audit. Une durée maximale inscrite après coup ne");
         L.push("rétroagit pas.");
         L.push("");
@@ -2450,8 +2450,8 @@
         L.push("l'interdiction des sanctions pécuniaires de L. 1331-2.");
       } else if (exces != null) {
         L.push("La durée prononcée n'excède pas le plafond déclaré. Vérifiez néanmoins");
-        L.push("les deux nombres sur les documents eux-mêmes — la notification et le");
-        L.push("règlement dans sa version applicable — avant de conclure.");
+        L.push("les deux nombres sur les documents eux-mêmes - la notification et le");
+        L.push("règlement dans sa version applicable - avant de conclure.");
       } else {
         L.push("Le dossier ne porte pas les deux nombres. Relevez-les avant toute");
         L.push("décision : la durée maximale sur le règlement en vigueur à la date de la");
@@ -2459,12 +2459,12 @@
       }
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — DÉCISION RECTIFICATIVE NOTIFIÉE AU SALARIÉ");
+      L.push("PIÈCE 1 - DÉCISION RECTIFICATIVE NOTIFIÉE AU SALARIÉ");
       L.push(GROS);
       L.push("");
       L = L.concat(teteLettre(ctx, true));
       L.push("Objet : mise à pied disciplinaire notifiée le " +
-        jour(s.dateNotification, "date de la notification") + " — rectification");
+        jour(s.dateNotification, "date de la notification") + " - rectification");
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
@@ -2474,7 +2474,7 @@
         (prononcee != null && !isNaN(prononcee) ? prononcee + " jour(s)" : "[durée]") +
         ", du [DATE DE DÉBUT] au [DATE DE FIN].");
       L.push("");
-      L.push("[VARIANTE 1 — le règlement fixe une durée maximale, et elle est dépassée :");
+      L.push("[VARIANTE 1 - le règlement fixe une durée maximale, et elle est dépassée :");
       L.push(" Le règlement intérieur applicable fixe à " +
         (plafond != null && !isNaN(plafond) ? plafond + " jour(s)" : "[nombre] jour(s)") +
         " la durée maximale de la");
@@ -2483,7 +2483,7 @@
       L.push(" rémunération correspondante vous sera restituée sur votre paie de [MOIS],");
       L.push(" sous une ligne de régularisation distincte.]");
       L.push("");
-      L.push("[VARIANTE 2 — le règlement ne fixe aucune durée maximale :");
+      L.push("[VARIANTE 2 - le règlement ne fixe aucune durée maximale :");
       L.push(" Le règlement intérieur applicable ne précise pas la durée maximale de la");
       L.push(" mise à pied disciplinaire. Je retire en conséquence cette mesure. Elle est");
       L.push(" réputée n'avoir jamais été prononcée ; les jours de suspension vous sont");
@@ -2496,12 +2496,12 @@
       L = L.concat(signature(ctx));
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 2 — CONSIGNE DE PAIE");
+      L.push("PIÈCE 2 - CONSIGNE DE PAIE");
       L.push(GROS);
       L.push("");
-      L.push(nomDe(ctx) + " — note à [service paie / prestataire], le " + leJour(d0));
+      L.push(nomDe(ctx) + " - note à [service paie / prestataire], le " + leJour(d0));
       L.push("");
-      L.push("Salarié : [NOM PRÉNOM] — matricule [.....]");
+      L.push("Salarié : [NOM PRÉNOM] - matricule [.....]");
       L.push("Objet : régularisation d'une retenue de mise à pied disciplinaire");
       L.push("");
       L.push("  · jours de mise à pied initialement retenus : " +
@@ -2510,7 +2510,7 @@
         (plafond != null && !isNaN(plafond) ? plafond : "0 (mesure retirée)"));
       L.push("  · jours à restituer : " +
         (exces != null && exces > 0 ? exces : "[nombre]") +
-        " — soit [MONTANT] euros bruts");
+        " - soit [MONTANT] euros bruts");
       L.push("  · paie concernée : [MOIS], ligne « régularisation »");
       L.push("");
       L.push("La retenue maintenue au-delà de la durée régulière ne serait plus la");
@@ -2531,7 +2531,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-05 — LES FAITS PRESCRITS (L. 1332-4)
+     DIS-CTL-SAN-05 - LES FAITS PRESCRITS (L. 1332-4)
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-05", {
@@ -2568,7 +2568,7 @@
       L.push("");
       L.push("LES DEUX DATES, ET CE QU'ELLES DONNENT");
       L.push("");
-      L.push("  · point de départ — le jour où l'EMPLOYEUR A EU CONNAISSANCE des faits,");
+      L.push("  · point de départ - le jour où l'EMPLOYEUR A EU CONNAISSANCE des faits,");
       L.push("    et non celui où ils se sont produits, ni celui où une enquête interne");
       L.push("    s'est achevée : " + jour(s.dateConnaissance, "DATE NON RENSEIGNÉE"));
       L.push("  · terme des deux mois : " + (limite ? jour(limite) : "[à calculer]"));
@@ -2592,8 +2592,8 @@
         }
       } else {
         L.push("Le dossier ne porte pas les deux dates : établissez-les avant toute");
-        L.push("décision. La date de connaissance se prouve par une pièce — signalement,");
-        L.push("constat, rapport reçu — et non par une affirmation.");
+        L.push("décision. La date de connaissance se prouve par une pièce - signalement,");
+        L.push("constat, rapport reçu - et non par une affirmation.");
       }
       L.push("");
       L.push("LA SEULE RÉSERVE QUE LE TEXTE PRÉVOIT");
@@ -2604,15 +2604,15 @@
       L.push("");
       L.push("  · des poursuites pénales ont-elles été exercées ? " +
         etat(s.poursuitesPenales, "OUI", "non"));
-      L.push("  · date de l'acte de poursuite : [DATE] — à comparer au terme du délai" +
+      L.push("  · date de l'acte de poursuite : [DATE] - à comparer au terme du délai" +
         (limite ? " (" + jour(limite) + ")" : "") + ".");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — NOTE DE RETRAIT (interne)");
+      L.push("PIÈCE 1 - NOTE DE RETRAIT (interne)");
       L.push(GROS);
       L.push("");
       L.push(nomDe(ctx));
-      L.push("NOTE — RETRAIT D'UNE SANCTION FONDÉE SUR DES FAITS PRESCRITS");
+      L.push("NOTE - RETRAIT D'UNE SANCTION FONDÉE SUR DES FAITS PRESCRITS");
       L.push("Établie le " + leJour(d0));
       L.push("");
       L.push("1. Faits : [rappel sommaire, sans les requalifier].");
@@ -2623,7 +2623,7 @@
       L.push("4. Engagement des poursuites : le " +
         (engagement ? jour(engagement) : "[DATE]") +
         (quoiEngagement ? ", par " + quoiEngagement : "") + ".");
-      L.push("5. Poursuites pénales exercées dans le même délai : [oui — date : ..... /");
+      L.push("5. Poursuites pénales exercées dans le même délai : [oui - date : ..... /");
       L.push("   non].");
       L.push("6. Décision : hors la réserve du 5, la sanction est RETIRÉE. Le fait");
       L.push("   prescrit ne peut plus la fonder.");
@@ -2636,7 +2636,7 @@
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 2 — LETTRE AU SALARIÉ");
+      L.push("PIÈCE 2 - LETTRE AU SALARIÉ");
       L.push(GROS);
       L.push("");
       L = L.concat(teteLettre(ctx, true));
@@ -2671,7 +2671,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-06 — LES SANCTIONS ANTÉRIEURES DE PLUS DE TROIS ANS
+     DIS-CTL-SAN-06 - LES SANCTIONS ANTÉRIEURES DE PLUS DE TROIS ANS
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-06", {
@@ -2686,7 +2686,7 @@
       var pivot = engagement ? moisApres(engagement, -36) : null;
       var plusAncienne = estISO(s.dateSanctionAnterieurePlusAncienne)
         ? s.dateSanctionAnterieurePlusAncienne : null;
-      var L = entete(ctx, "Motifs de la sanction — retrait des sanctions antérieures prescrites",
+      var L = entete(ctx, "Motifs de la sanction - retrait des sanctions antérieures prescrites",
         "article L. 1332-5 du code du travail");
 
       L.push("LE TEXTE, EN ENTIER");
@@ -2706,7 +2706,7 @@
       L.push("  · engagement des poursuites en cours : " +
         (engagement ? jour(engagement) : "[DATE NON RENSEIGNÉE]"));
       L.push("    (l'envoi de la convocation ; à défaut de convocation, la notification");
-      L.push("    de la sanction — R. 1332-1 rattache la convocation au délai de");
+      L.push("    de la sanction - R. 1332-1 rattache la convocation au délai de");
       L.push("    L. 1332-4, ce qui en fait l'acte d'engagement)");
       L.push("  · trois ans avant cet engagement : " +
         (pivot ? jour(pivot) : "[à calculer]"));
@@ -2715,7 +2715,7 @@
         (pivot ? jour(pivot).toUpperCase() : "[DATE PIVOT]") + " EST ÉCARTÉE.");
       L.push("Celles notifiées à cette date ou après elle peuvent être invoquées.");
       L.push("");
-      L.push("Dans votre dossier : sanctions antérieures invoquées — " +
+      L.push("Dans votre dossier : sanctions antérieures invoquées - " +
         etat(s.sanctionsAnterieuresInvoquees, "OUI", "non") + ".");
       if (plusAncienne) {
         L.push("Plus ancienne d'entre elles : " + jour(plusAncienne) + ".");
@@ -2726,7 +2726,7 @@
       }
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 1 — TRI DES SANCTIONS ANTÉRIEURES");
+      L.push("PIÈCE 1 - TRI DES SANCTIONS ANTÉRIEURES");
       L.push(GROS);
       L.push("");
       L.push("Une ligne par sanction invoquée. La date qui compte est celle de sa");
@@ -2741,33 +2741,33 @@
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 2 — RÉEXAMEN DE LA MESURE SANS CE QUI EST ÉCARTÉ");
+      L.push("PIÈCE 2 - RÉEXAMEN DE LA MESURE SANS CE QUI EST ÉCARTÉ");
       L.push(GROS);
       L.push("");
       L.push("C'est l'étape que l'on saute, et c'est elle qui décide.");
       L.push("");
-      L.push("  a) Éléments qui subsistent après le tri — faits, pièces, sanctions");
+      L.push("  a) Éléments qui subsistent après le tri - faits, pièces, sanctions");
       L.push("     antérieures encore invocables :");
       L.push("     [.....................................................]");
       L.push("");
       L.push("  b) La mesure envisagée tient-elle par ces seuls éléments ?");
-      L.push("     [ ] OUI — elle est maintenue, et sa motivation est réécrite sans");
+      L.push("     [ ] OUI - elle est maintenue, et sa motivation est réécrite sans");
       L.push("         aucune mention des sanctions écartées (pièce 3).");
-      L.push("     [ ] NON — elle ne tenait que par le passé écarté : elle est RETIRÉE.");
+      L.push("     [ ] NON - elle ne tenait que par le passé écarté : elle est RETIRÉE.");
       L.push("");
       L.push("  c) Purge des dossiers : les mentions devenues inutilisables sont");
-      L.push("     retirées des pièces qui servent à motiver — trames, historiques,");
+      L.push("     retirées des pièces qui servent à motiver - trames, historiques,");
       L.push("     notes internes. Une mention laissée en place ressort à la première");
       L.push("     lecture contradictoire.");
       L.push("");
       L.push("");
       L.push(GROS);
-      L.push("PIÈCE 3 — LETTRE RECTIFICATIVE AU SALARIÉ");
+      L.push("PIÈCE 3 - LETTRE RECTIFICATIVE AU SALARIÉ");
       L.push(GROS);
       L.push("");
       L = L.concat(teteLettre(ctx, true));
       L.push("Objet : sanction notifiée le " +
-        jour(s.dateNotification, "date de la notification") + " — rectification des motifs");
+        jour(s.dateNotification, "date de la notification") + " - rectification des motifs");
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
@@ -2781,12 +2781,12 @@
       L.push("sanction à l'appui d'une nouvelle sanction. Ces mentions sont en");
       L.push("conséquence retirées de la motivation.");
       L.push("");
-      L.push("[VARIANTE 1 — la mesure est maintenue :");
+      L.push("[VARIANTE 1 - la mesure est maintenue :");
       L.push(" La mesure est maintenue, motivée par les seuls éléments suivants :");
       L.push(" " + "[REPRENDRE ICI LES SEULS GRIEFS QUI SUBSISTENT, datés et");
       L.push(" circonstanciés. N'y faites figurer aucune sanction écartée.]]");
       L.push("");
-      L.push("[VARIANTE 2 — la mesure ne tenait que par ce passé :");
+      L.push("[VARIANTE 2 - la mesure ne tenait que par ce passé :");
       L.push(" La mesure ne se justifiant pas par les seuls éléments qui subsistent, je");
       L.push(" la retire. Elle est réputée n'avoir jamais été prononcée, et toute mention");
       L.push(" en sera supprimée de votre dossier individuel.]");

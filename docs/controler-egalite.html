@@ -24,7 +24,9 @@
   de cours sur le droit.
 
   AUCUNE QUESTION AVANT LE DOCUMENT. Le premier écran ne demande rien : il prend
-  le fichier, et le second montre aussitôt les articles écrits. Les questions
+  le fichier, sans chapeau ni titre au-dessus (écran 5 de la maquette validée
+  le 8 septembre 2026), et le second montre aussitôt les articles écrits.
+  Retour remonte d'un écran. Les questions
   viennent après, dans le panneau posé À CÔTÉ du document visible, et seulement
   celles qui servent à le compléter : l'année qui date les échéances, l'effectif
   qui commande le minimum de domaines, le signataire, les résultats de l'index.
@@ -53,9 +55,15 @@
 -->
 
 <link rel="stylesheet" href="style.css">
+<script src="droits.js"></script>
 <style>
-  textarea#depot{width:100%;min-height:220px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
-    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
+  #o-depot{margin:var(--e4) 0 0}
+  textarea#depot{min-height:200px;font-size:var(--t3);line-height:1.5;margin:var(--e3) 0 0}
+  #o-depot .barre{margin:var(--e3) 0}
+  #lecture .avis,#erreur .avis{margin:var(--e3) 0 0}
+  /* Avant le dépôt, ni onglets ni texte de loi : la règle .onglets de style.css
+     passerait sinon devant .cache. */
+  .onglets.cache,details.cache{display:none}
 
   /* Le document à gauche, ce qui reste à compléter à droite, à côté de lui.
      Aucune question ne précède le document : elles se posent devant lui, et
@@ -126,45 +134,30 @@
 
 <main class="wrap">
 
-  <header>
-    <h1>Contrôler mon accord d'égalité <span>- le document existant, complété article par article</span></h1>
-  </header>
-
-  <div class="onglets" id="onglets">
-    <button data-o="depot" class="actif">1 &middot; Le document</button>
-    <button data-o="articles" id="ong-articles" disabled>2 &middot; Les articles à insérer</button>
-    <button data-o="sortie" id="ong-sortie" disabled>3 &middot; Ce que vous emportez</button>
-  </div>
-
-  <!-- ══════ 1 · LE DOCUMENT ══════ -->
+  <!-- ══════ LE DÉPÔT, PREMIER GESTE DE LA PAGE ══════ -->
   <section id="o-depot">
-    <h2>Déposez votre accord, ou votre plan d'action</h2>
-    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats
-    sont lus directement, <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document, copiez
-    son texte et collez-le ci-dessous.</p>
-
-    <div class="carte">
-      <div class="barre">
-        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
-          Choisir un fichier .docx ou .txt
-          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
-        </label>
-        <button class="btn second" id="vider">Vider</button>
-      </div>
-      <div id="lecture"></div>
-      <textarea id="depot" placeholder="Collez ici le texte de votre accord ou de votre plan d'action, ou choisissez le fichier ci-dessus."></textarea>
-      <div class="barre">
-        <button class="btn" id="controler">Ouvrir les articles à insérer</button>
-      </div>
-      <div id="erreur"></div>
+    <div class="barre pile">
+      <label class="btn">
+        Déposer l'accord ou le plan d'action (Word ou texte)
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+      </label>
     </div>
+    <div id="lecture"></div>
+    <textarea id="depot" placeholder="Ou collez ici le texte de votre accord ou de votre plan d'action."></textarea>
+    <div class="barre pile">
+      <button class="btn" id="controler">Contrôler</button>
+    </div>
+    <div id="erreur"></div>
   </section>
 
-  <!-- ══════ 2 · LES ARTICLES ══════ -->
+  <div class="onglets cache" id="onglets">
+    <button data-o="depot" class="actif">Le document</button>
+    <button data-o="articles" id="ong-articles" disabled>Les articles à insérer</button>
+    <button data-o="sortie" id="ong-sortie" disabled>Ce que vous emportez</button>
+  </div>
+
+  <!-- ══════ LES ARTICLES ══════ -->
   <section id="o-articles" class="cache">
-    <h2>Les articles à insérer</h2>
-    <p class="aide">Chacun est rédigé et prêt à coller. Modifiez ce que vous voulez dans la zone,
-    remplacez les valeurs entre crochets par les vôtres, puis insérez.</p>
     <div class="compteurs" id="compteurs"></div>
     <div class="deux">
       <div>
@@ -191,9 +184,8 @@
     </div>
   </section>
 
-  <!-- ══════ 3 · LA SORTIE ══════ -->
+  <!-- ══════ LA SORTIE ══════ -->
   <section id="o-sortie" class="cache">
-    <h2>Ce que vous emportez</h2>
     <div class="barre">
       <button class="btn second" id="v-texte">Le texte révisé</button>
       <button class="btn second" id="v-courrier">Le courrier de dépôt</button>
@@ -258,16 +250,10 @@
     </div>
   </section>
 
-  <details class="txt">
-    <summary>Les textes lus, in extenso, avec l'identifiant de version</summary>
+  <details class="txt cache" id="textes">
+    <summary>Voir le texte de loi</summary>
     <div class="c" id="corps-textes"></div>
   </details>
-
-  <footer>
-    Rien ne quitte ce poste. Le repérage des domaines déjà traités est lexical : il conduit la
-    lecture de votre document, il ne la remplace pas. Les valeurs propres à votre entreprise
-    sortent entre crochets, jamais devinées.
-  </footer>
 </main>
 
 <script src="profil.js"></script>
@@ -717,18 +703,32 @@
   /* ══════════════════════════════════════════════════════════════════════════
      LES ONGLETS
      ══════════════════════════════════════════════════════════════════════════ */
+  var ECRAN = "depot";
   function onglet(nom) {
+    ECRAN = nom;
     ["depot", "articles", "sortie"].forEach(function (o) {
       $("o-" + o).classList.toggle("cache", o !== nom);
     });
     Array.prototype.forEach.call($("onglets").children, function (b) {
       b.classList.toggle("actif", b.dataset.o === nom);
     });
+    /* Les onglets et le texte de loi n'apparaissent qu'une fois le document
+       déposé : avant, le dépôt est seul à l'écran. */
+    $("onglets").classList.toggle("cache", nom === "depot");
+    $("textes").classList.toggle("cache", nom === "depot");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   Array.prototype.forEach.call($("onglets").children, function (b) {
     b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
   });
+  /* Le bouton Retour du bandeau, posé par droits.js : il remonte d'un écran,
+     et ne quitte la page que depuis le dépôt. */
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || ECRAN === "depot") return;
+    ev.preventDefault(); ev.stopPropagation();
+    onglet(ECRAN === "sortie" ? "articles" : "depot");
+  }, true);
 
   /* ══════════════════════════════════════════════════════════════════════════
      LA LECTURE D'UN .DOCX, SANS BIBLIOTHÈQUE
@@ -808,10 +808,6 @@
       dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
           " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
     });
-  });
-
-  $("vider").addEventListener("click", function () {
-    $("depot").value = ""; dit(""); $("erreur").innerHTML = "";
   });
 
   /* ══════════════════════════════════════════════════════════════════════════

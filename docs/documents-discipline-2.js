@@ -1,11 +1,11 @@
-/* Les documents que l'application PRODUIT — les six écrits de la procédure
+/* Les documents que l'application PRODUIT - les six écrits de la procédure
    disciplinaire.
 
    POURQUOI CE FICHIER EXISTE, ET POURQUOI IL EST SÉPARÉ
 
    documents-produits.js porte le règlement intérieur ; documents-discipline.js
    porte ses avenants, ses formalités, et les six premiers contrôles de
-   sanction — DIS-CTL-SAN-01 à SAN-06 : l'écrit des griefs, la sanction
+   sanction - DIS-CTL-SAN-01 à SAN-06 : l'écrit des griefs, la sanction
    pécuniaire, la sanction absente de l'échelle, la durée de la mise à pied, la
    prescription des faits, la prescription des sanctions antérieures.
 
@@ -40,20 +40,20 @@
       périmètre a été revérifié pour ce fichier, et il ne bouge pas :
         · R. 1323-1 s'arrête à L. 1322-4 et à R. 1321-5 : il atteint le
           règlement intérieur, jamais la procédure disciplinaire ;
-        · L. 1334-1 ne vise que L. 1331-2 — l'amende et la sanction
-          pécuniaire —, que le module traite en DIS-CTL-SAN-02.
+        · L. 1334-1 ne vise que L. 1331-2 - l'amende et la sanction
+          pécuniaire -, que le module traite en DIS-CTL-SAN-02.
       Aucun des six documents de ce fichier ne menace donc d'une amende pour
       un entretien qui n'a pas eu lieu, une convocation incomplète, un délai
       dépassé, une notification défaillante, une mise à pied conservatoire
       laissée sans suite ou une procédure conventionnelle non suivie. CE QUI
       S'Y JOUE EST L'ANNULATION : « le conseil de prud'hommes peut annuler une
       sanction irrégulière en la forme ou injustifiée ou disproportionnée à la
-      faute commise » (L. 1333-2) — et, lorsque la mesure est un licenciement,
+      faute commise » (L. 1333-2) - et, lorsque la mesure est un licenciement,
       l'absence de cause réelle et sérieuse, selon la jurisprudence citée.
 
    3. LES GRIEFS NE S'INVENTENT JAMAIS. Aucune de ces lettres n'écrit ce que
       le salarié aurait fait. Les faits sortent entre crochets, avec la
-      consigne de les écrire datés et circonstanciés — c'est l'employeur qui
+      consigne de les écrire datés et circonstanciés - c'est l'employeur qui
       sait, et c'est lui qui répondra de ce qu'il a écrit.
 
    UNE QUATRIÈME RÈGLE, PROPRE AU LICENCIEMENT. Lorsque la mesure auditée est
@@ -100,13 +100,13 @@
     var m = d.getMonth() + 1, j = d.getDate();
     return d.getFullYear() + "-" + (m < 10 ? "0" + m : m) + "-" + (j < 10 ? "0" + j : j);
   }
-  /* Une date du dossier, écrite en toutes lettres — ou son crochet. */
+  /* Une date du dossier, écrite en toutes lettres - ou son crochet. */
   function jour(iso, quoi) {
     var d = dateDe(iso);
     return d ? leJour(d) : "[" + (quoi || "date") + "]";
   }
 
-  /* Le même quantième, n mois plus tard — la règle que R. 1332-3 énonce pour
+  /* Le même quantième, n mois plus tard - la règle que R. 1332-3 énonce pour
      le délai d'un mois de L. 1332-2, et selon laquelle se compte aussi le
      délai de deux mois de L. 1332-4 : « le jour du mois suivant qui porte le
      même quantième […] à défaut d'un quantième identique, le dernier jour du
@@ -176,7 +176,7 @@
   function etat(v, oui, non) {
     if (v === true || v === "oui") return oui;
     if (v === false || v === "non") return non;
-    return "non renseigné — à vérifier sur le document lui-même";
+    return "non renseigné - à vérifier sur le document lui-même";
   }
   function estOui(v) { return v === true || v === "oui"; }
   function estNon(v) { return v === false || v === "non"; }
@@ -189,7 +189,7 @@
   }
   function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
 
-  /* L'identification du salarié : le dossier de l'audit ne la porte pas — il
+  /* L'identification du salarié : le dossier de l'audit ne la porte pas - il
      décrit une procédure, pas une personne. Elle sort donc entre crochets, et
      le document le dit une fois pour toutes. */
   function blocSalarie() {
@@ -206,11 +206,11 @@
     return [
       (intro || "Les faits qui vous sont reprochés sont les suivants :"),
       "",
-      "[ÉCRIRE ICI LES GRIEFS — c'est à vous, et à personne d'autre, de le faire.",
+      "[ÉCRIRE ICI LES GRIEFS - c'est à vous, et à personne d'autre, de le faire.",
       " Un grief s'écrit daté, situé et circonstancié : ce qui s'est passé, quel",
       " jour, à quelle heure, où, avec qui, et en quoi cela contrevient à une",
-      " obligation. Une formule générale — « votre comportement », « vos",
-      " manquements répétés » — ne met pas le salarié en mesure de discuter, et",
+      " obligation. Une formule générale - « votre comportement », « vos",
+      " manquements répétés » - ne met pas le salarié en mesure de discuter, et",
       " ne permet pas au conseil de prud'hommes d'apprécier. L'application ne",
       " connaît pas vos faits et ne les inventera pas.]",
       "",
@@ -226,7 +226,7 @@
     L.push("");
     if (recommande) {
       L.push("Lettre recommandée avec demande d'avis de réception");
-      L.push("— ou remise en main propre contre récépissé daté et signé —");
+      L.push("- ou remise en main propre contre récépissé daté et signé -");
       L.push("");
     }
     return L;
@@ -288,7 +288,7 @@
     ],
     avertissementCCN: [
       "Soc., 22 septembre 2021, n° 18-22.204, publié : même solution au regard d'une",
-      "convention collective — si l'employeur n'est en principe pas tenu de",
+      "convention collective - si l'employeur n'est en principe pas tenu de",
       "convoquer un salarié à un entretien préalable avant de lui notifier un",
       "avertissement ou une sanction de même nature, il en va autrement lorsque, au",
       "regard des dispositions d'une convention collective, la sanction peut avoir",
@@ -351,19 +351,19 @@
         var e = ecartJours(s.dateConnaissance, s.dateConvocation);
         L.push("La convocation a été envoyée le " + jour(s.dateConvocation) +
           ", soit " + e + " jours après");
-        L.push("cette connaissance — " + (s.dateConvocation > lim
+        L.push("cette connaissance - " + (s.dateConvocation > lim
           ? "AU-DELÀ du terme : les poursuites ont été engagées hors délai."
           : "dans le délai."));
       }
       if (estOui(s.poursuitesPenales)) {
         L.push("Le dossier déclare que ces faits ont donné lieu à des poursuites");
-        L.push("pénales : L. 1332-4 réserve ce cas — « à moins que ce fait ait donné");
+        L.push("pénales : L. 1332-4 réserve ce cas - « à moins que ce fait ait donné");
         L.push("lieu dans le même délai à l'exercice de poursuites pénales ». Vérifiez");
         L.push("la date de l'acte de poursuite et conservez-en la pièce.");
       }
     } else {
       L.push("Votre dossier ne porte pas la date à laquelle l'employeur a eu");
-      L.push("connaissance des faits : [DATE DE CONNAISSANCE DES FAITS — à établir par");
+      L.push("connaissance des faits : [DATE DE CONNAISSANCE DES FAITS - à établir par");
       L.push("la pièce qui la fixe : signalement, constat, rapport reçu]. C'est de");
       L.push("cette date, et non de celle des faits ni de la fin d'une enquête, que");
       L.push("courent les deux mois.");
@@ -402,7 +402,7 @@
       L.push("Dans votre dossier, le jour fixé pour l'entretien est le " +
         jour(b.entretien) + ".");
       L.push("");
-      L.push("  · au plus tôt   : " + jour(b.basse) + " — deux jours ouvrables au moins");
+      L.push("  · au plus tôt   : " + jour(b.basse) + " - deux jours ouvrables au moins");
       L.push("    doivent s'être écoulés. L'application compte les jours non");
       L.push("    dominicaux : elle ne tient pas le calendrier des jours fériés ou");
       L.push("    chômés, qui repousseraient cette date. Vérifiez-le à la main.");
@@ -421,9 +421,9 @@
         L.push("La notification portée au dossier est datée du " +
           jour(s.dateNotification) + " :");
         if (s.dateNotification < b.basse)
-          L.push("elle est INTERVENUE TROP TÔT — moins de deux jours ouvrables après l'entretien.");
+          L.push("elle est INTERVENUE TROP TÔT - moins de deux jours ouvrables après l'entretien.");
         else if (s.dateNotification > b.hauteProrogee)
-          L.push("elle est INTERVENUE TROP TARD — après le terme du mois de L. 1332-2.");
+          L.push("elle est INTERVENUE TROP TARD - après le terme du mois de L. 1332-2.");
         else {
           L.push("elle tombe dans la fenêtre, sous réserve des jours fériés que");
           L.push("l'application ne tient pas.");
@@ -450,7 +450,7 @@
     var s = ((ctx && ctx.fiche) || {}).sanction || {};
     if (!estOui(s.salarieProtege)) return [];
     return [
-      "════ AVERTISSEMENT — SALARIÉ TITULAIRE D'UN MANDAT ════",
+      "════ AVERTISSEMENT - SALARIÉ TITULAIRE D'UN MANDAT ════",
       "",
       "Le dossier déclare que le salarié est titulaire d'un mandat représentatif",
       "ou syndical. Le statut protecteur ajoute à la procédure disciplinaire des",
@@ -464,7 +464,7 @@
   /* ════════════════════════════════════════════════════════════════════════
      LA MESURE, TELLE QUE LE DOSSIER LA DÉCLARE
 
-     Trois natures portent l'incidence par construction — la mise à pied
+     Trois natures portent l'incidence par construction - la mise à pied
      disciplinaire suspend le contrat et la rémunération, la mutation change la
      fonction, la rétrogradation change la qualification. Le licenciement, lui,
      sort du chapitre (L. 1333-3). Pour les autres, l'incidence est DÉCLARÉE :
@@ -519,7 +519,7 @@
       L.push("dispositions relatives à la contestation des irrégularités de licenciement");
       L.push("prévues par le chapitre V du titre III du livre II » (L. 1333-3).");
       L.push("");
-      L.push("[CHAPITRE NON LU PAR L'APPLICATION — le chapitre V du titre III du");
+      L.push("[CHAPITRE NON LU PAR L'APPLICATION - le chapitre V du titre III du");
       L.push(" livre II, auquel L. 1333-3 renvoie, n'a pas été capté : l'application");
       L.push(" n'écrit ni la procédure du licenciement, ni ses délais, ni ses");
       L.push(" mentions. NE VOUS SERVEZ PAS DES LETTRES CI-DESSOUS POUR UN");
@@ -528,12 +528,12 @@
       L.push("Ce qui demeure applicable au licenciement disciplinaire, et que ce module");
       L.push("contrôle : la prescription des faits (L. 1332-4), l'interdiction des");
       L.push("sanctions pécuniaires (L. 1331-2), et les garanties de fond que la");
-      L.push("convention collective ou le règlement intérieur ajoutent — DIS-CTL-SAN-12.");
+      L.push("convention collective ou le règlement intérieur ajoutent - DIS-CTL-SAN-12.");
       L.push("");
       return L;
     }
     if (m.du === true && m.incidence === true) {
-      L.push("OUI — L'ENTRETIEN EST DÛ. La mesure a une incidence, immédiate ou non,");
+      L.push("OUI - L'ENTRETIEN EST DÛ. La mesure a une incidence, immédiate ou non,");
       L.push("sur la présence dans l'entreprise, la fonction, la carrière ou la");
       L.push("rémunération : l'exception de L. 1332-2 ne joue pas.");
       if (m.nature === "mise à pied disciplinaire") {
@@ -547,7 +547,7 @@
         L.push("rémunération : l'incidence porte sur la fonction et la carrière.");
       }
     } else if (m.du === true) {
-      L.push("OUI — L'ENTRETIEN EST DÛ, mais pas par l'effet de L. 1332-2 : PAR UNE");
+      L.push("OUI - L'ENTRETIEN EST DÛ, mais pas par l'effet de L. 1332-2 : PAR UNE");
       L.push("GARANTIE DE FOND. Le dossier déclare que le règlement intérieur ou la");
       L.push("convention collective subordonne le licenciement à l'existence de");
       L.push("sanctions antérieures. La sanction, fût-elle un avertissement, peut donc");
@@ -557,7 +557,7 @@
       L.push("");
       ARRETS.avertissementCCN.forEach(function (x) { L.push(x); });
     } else if (m.du === false) {
-      L.push("NON — l'entretien n'est pas dû. La mesure est déclarée sans incidence,");
+      L.push("NON - l'entretien n'est pas dû. La mesure est déclarée sans incidence,");
       L.push("immédiate ou non, sur la présence dans l'entreprise, la fonction, la");
       L.push("carrière ou la rémunération, et ni le règlement intérieur ni la");
       L.push("convention collective ne subordonnent le licenciement à l'existence de");
@@ -568,7 +568,7 @@
       L.push("La première : l'exception de L. 1332-2 dispense de l'ENTRETIEN, jamais de");
       L.push("l'ÉCRIT. « Aucune sanction ne peut être prise à l'encontre du salarié sans");
       L.push("que celui-ci soit informé, dans le même temps et par écrit, des griefs");
-      L.push("retenus contre lui » (L. 1332-1) — et cela vaut pour toute sanction au");
+      L.push("retenus contre lui » (L. 1332-1) - et cela vaut pour toute sanction au");
       L.push("sens de L. 1331-1, avertissement compris. Le générateur DIS-CTL-SAN-01 de");
       L.push("cette application écrit cet écrit.");
       L.push("");
@@ -588,13 +588,13 @@
       if (m.subordination === null) {
         L.push("  · il n'est pas dit si le règlement intérieur ou la convention");
         L.push("    collective subordonne le licenciement à l'existence de sanctions");
-        L.push("    antérieures — auquel cas l'entretien serait dû même pour un");
+        L.push("    antérieures - auquel cas l'entretien serait dû même pour un");
         L.push("    avertissement.");
       }
       L.push("");
       L.push("Répondez à ces questions avant de choisir. En cas de doute, CONVOQUEZ :");
       L.push("une convocation superflue ne vicie rien, une convocation manquante vicie");
-      L.push("tout. Mais sachez qu'en convoquant vous vous liez à toute la procédure —");
+      L.push("tout. Mais sachez qu'en convoquant vous vous liez à toute la procédure -");
       L.push("");
       ARRETS.tousLesTermes.forEach(function (x) { L.push(x); });
     }
@@ -606,8 +606,8 @@
      pas une peine, c'est l'annulation. */
   var NOTE_ANNULATION = [
     "Aucune peine n'est annoncée dans ce document, et le périmètre a été vérifié :",
-    "R. 1323-1 s'arrête à L. 1322-4 et à R. 1321-5 — il atteint le règlement",
-    "intérieur, non la procédure disciplinaire —, et L. 1334-1 ne vise que",
+    "R. 1323-1 s'arrête à L. 1322-4 et à R. 1321-5 - il atteint le règlement",
+    "intérieur, non la procédure disciplinaire -, et L. 1334-1 ne vise que",
     "L. 1331-2, l'amende et la sanction pécuniaire. Ce qui se joue ici est",
     "l'annulation : « Le conseil de prud'hommes peut annuler une sanction",
     "irrégulière en la forme ou injustifiée ou disproportionnée à la faute",
@@ -624,18 +624,18 @@
      ══════════════════════════════════════════════════════════════════════ */
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-07 — L'ENTRETIEN PRÉALABLE
+     DIS-CTL-SAN-07 - L'ENTRETIEN PRÉALABLE
 
      Deux questions, et la seconde ne se pose que si la première est tranchée :
      l'entretien était-il dû, et a-t-il été tenu ? Le document répond à la
      première avec les seules données déclarées, puis produit la convocation et
-     le compte rendu — et, si la sanction a déjà été prise sans l'entretien dû,
+     le compte rendu - et, si la sanction a déjà été prise sans l'entretien dû,
      le retrait : un entretien tenu après coup ne répare pas une sanction déjà
      notifiée.
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-07", {
-    nom: "L'entretien préalable : convocation, compte rendu — et, s'il a manqué, le retrait",
+    nom: "L'entretien préalable : convocation, compte rendu - et, s'il a manqué, le retrait",
     detail: "La question de savoir si l'entretien est dû, tranchée sur les données " +
             "déclarées ; la lettre de convocation, la trame de compte rendu, et le " +
             "retrait de la sanction prise sans l'entretien dû.",
@@ -665,7 +665,7 @@
       L.push("  · CONVOQUER, en précisant l'objet de la convocation ;");
       L.push("  · LAISSER JOUER L'ASSISTANCE, par une personne du choix du salarié");
       L.push("    appartenant au personnel de l'entreprise ;");
-      L.push("  · TENIR L'ENTRETIEN et y faire deux choses — indiquer le motif de la");
+      L.push("  · TENIR L'ENTRETIEN et y faire deux choses - indiquer le motif de la");
       L.push("    sanction ENVISAGÉE, et RECUEILLIR les explications du salarié. Un");
       L.push("    entretien où l'employeur annonce une décision déjà prise n'est pas");
       L.push("    un entretien préalable : il ne recueille rien.");
@@ -679,9 +679,9 @@
       L.push("règlement intérieur ou la convention collective : " +
         (m.subordination === true ? "OUI" : m.subordination === false ? "non" : "non renseigné"));
       L.push("Convocation envoyée : " + etat(s.convocationEnvoyee, "oui", "NON") +
-        (estISO(s.dateConvocation) ? " — le " + jour(s.dateConvocation) : ""));
+        (estISO(s.dateConvocation) ? " - le " + jour(s.dateConvocation) : ""));
       L.push("Entretien tenu : " + etat(s.entretienTenu, "oui", "NON") +
-        (estISO(s.dateEntretien) ? " — le " + jour(s.dateEntretien) : ""));
+        (estISO(s.dateEntretien) ? " - le " + jour(s.dateEntretien) : ""));
       L.push("Sanction notifiée : " +
         (estISO(s.dateNotification) ? "le " + jour(s.dateNotification) : "[date non renseignée]"));
       L.push("");
@@ -698,7 +698,7 @@
         L.push("Ce qui, en revanche, s'applique et se vérifie tout de suite :");
         L.push("");
         L = L.concat(blocPrescription(ctx));
-        L.push("Et la garantie de fond — consultation d'un conseil de discipline ou");
+        L.push("Et la garantie de fond - consultation d'un conseil de discipline ou");
         L.push("d'une commission paritaire prévue par la convention collective ou le");
         L.push("règlement intérieur : le générateur DIS-CTL-SAN-12 de cette application");
         L.push("la traite, et c'est le manquement le plus coûteux du module, parce que");
@@ -715,14 +715,14 @@
 
       if (estNon(s.entretienTenu) && m.du === true && estISO(s.dateNotification)) {
         L.push(GROS);
-        L.push("PIÈCE 1 — RETRAIT DE LA SANCTION PRISE SANS L'ENTRETIEN DÛ");
+        L.push("PIÈCE 1 - RETRAIT DE LA SANCTION PRISE SANS L'ENTRETIEN DÛ");
         L.push(GROS);
         L.push("");
         L.push("À REMETTRE AVANT TOUTE REPRISE. Un entretien tenu après coup ne répare");
         L.push("pas une sanction déjà notifiée : la sanction a été prise sans que");
         L.push("l'employeur ait indiqué le motif envisagé ni recueilli les explications");
         L.push("du salarié, et ce moment-là ne revient pas. Ce qui se répare, c'est la");
-        L.push("situation — en retirant, puis en reprenant régulièrement si le délai de");
+        L.push("situation - en retirant, puis en reprenant régulièrement si le délai de");
         L.push("deux mois le permet encore.");
         L.push("");
         L = L.concat(teteLettre(ctx, true));
@@ -758,7 +758,7 @@
 
       L.push(GROS);
       L.push("PIÈCE " + ((estNon(s.entretienTenu) && m.du === true && estISO(s.dateNotification)) ? "2" : "1") +
-        " — LETTRE DE CONVOCATION À L'ENTRETIEN PRÉALABLE");
+        " - LETTRE DE CONVOCATION À L'ENTRETIEN PRÉALABLE");
       L.push(GROS);
       L.push("");
       L.push("Cette lettre porte les quatre exigences de R. 1332-1. Le générateur");
@@ -774,7 +774,7 @@
       L.push("disciplinaire.");
       L.push("");
       L.push("Cet entretien se tiendra le [DATE] à [HEURE], à l'adresse suivante :");
-      L.push("[LIEU PRÉCIS — bâtiment, étage, bureau].");
+      L.push("[LIEU PRÉCIS - bâtiment, étage, bureau].");
       L.push("");
       L.push("Au cours de cet entretien, je vous indiquerai le motif de la sanction");
       L.push("envisagée et je recueillerai vos explications.");
@@ -800,7 +800,7 @@
 
       L.push(GROS);
       L.push("PIÈCE " + ((estNon(s.entretienTenu) && m.du === true && estISO(s.dateNotification)) ? "3" : "2") +
-        " — COMPTE RENDU D'ENTRETIEN PRÉALABLE");
+        " - COMPTE RENDU D'ENTRETIEN PRÉALABLE");
       L.push(GROS);
       L.push("");
       L.push("Aucun texte lu n'impose ce compte rendu. Mais L. 1332-2 impose à");
@@ -813,11 +813,11 @@
       L.push("COMPTE RENDU D'ENTRETIEN PRÉALABLE À UNE ÉVENTUELLE SANCTION");
       L.push("");
       L.push("Date de l'entretien : " + jour(s.dateEntretien, "DATE") +
-        " — début [..h..] / fin [..h..]");
+        " - début [..h..] / fin [..h..]");
       L.push("Lieu : [.....]");
-      L.push("Salarié : [NOM, PRÉNOM] — [fonction, service, ancienneté]");
+      L.push("Salarié : [NOM, PRÉNOM] - [fonction, service, ancienneté]");
       L.push("Représentant de l'employeur : [NOM, qualité]");
-      L.push("Personne assistant le salarié : [NOM, qualité — appartenant au personnel");
+      L.push("Personne assistant le salarié : [NOM, qualité - appartenant au personnel");
       L.push("de l'entreprise] / [le salarié n'était pas assisté] / [le salarié ne");
       L.push("s'est pas présenté]");
       L.push("");
@@ -830,7 +830,7 @@
       L = L.concat(blocGriefs("Ont été indiqués au salarié les faits suivants :"));
       L.push("   [Préciser également : les pièces sur lesquelles ces faits se fondent,");
       L.push("    si elles ont été montrées ou évoquées, et la règle à laquelle ils");
-      L.push("    contreviennent — article du règlement intérieur, consigne,");
+      L.push("    contreviennent - article du règlement intérieur, consigne,");
       L.push("    instruction.]");
       L.push("");
       L.push("3. EXPLICATIONS DU SALARIÉ, RECUEILLIES");
@@ -851,7 +851,7 @@
       L.push("   Aucune décision n'a été annoncée au cours de l'entretien.");
       L.push("   [CETTE LIGNE N'EST PAS UNE FORMULE. Annoncer la sanction pendant");
       L.push("    l'entretien revient à dire qu'elle était arrêtée avant d'avoir entendu");
-      L.push("    le salarié — et à contredire l'obligation de recueillir ses");
+      L.push("    le salarié - et à contredire l'obligation de recueillir ses");
       L.push("    explications. Si la décision a été annoncée, ne l'écrivez pas comme");
       L.push("    ci-dessus : écrivez ce qui s'est réellement passé, et tirez-en les");
       L.push("    conséquences.]");
@@ -864,7 +864,7 @@
       L.push("");
       L.push("Pour l'employeur : ................");
       L.push("Le salarié : ................");
-      L.push("[ou : le salarié a refusé de signer — mention portée le [DATE] devant");
+      L.push("[ou : le salarié a refusé de signer - mention portée le [DATE] devant");
       L.push(" [témoin]. Le refus de signer ne vicie rien ; le taire, si.]");
       L.push("La personne assistant le salarié : ................");
       L.push("");
@@ -876,14 +876,14 @@
       L.push("");
       L.push("L'entretien préalable est une garantie offerte au salarié, non une");
       L.push("obligation qui pèserait sur lui : son absence n'empêche pas la suite. Mais");
-      L.push("elle s'établit — portez au compte rendu la date, l'heure, la durée");
+      L.push("elle s'établit - portez au compte rendu la date, l'heure, la durée");
       L.push("d'attente, et les personnes présentes. Le jour fixé pour l'entretien reste");
       L.push("le point de départ des deux bornes de L. 1332-2, qu'il se soit tenu ou");
       L.push("non.");
       L.push("");
       L.push("[Si le salarié demande un report, écrivez la demande, votre réponse et la");
       L.push(" nouvelle date. Un report déplace le jour fixé pour l'entretien, donc les");
-      L.push(" deux bornes — mais il ne suspend pas le délai de deux mois de L. 1332-4,");
+      L.push(" deux bornes - mais il ne suspend pas le délai de deux mois de L. 1332-4,");
       L.push(" qui court depuis la connaissance des faits.]");
       L.push("");
       L.push("");
@@ -896,17 +896,17 @@
       L.push("VOTRE CALENDRIER");
       L.push(GROS);
       L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous arrêtez la date de l'entretien et");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous arrêtez la date de l'entretien et");
       L.push("vous remettez ou adressez la convocation. La date de cette remise doit");
       L.push("tomber dans le délai de deux mois de L. 1332-4 : c'est elle qui engage les");
       L.push("poursuites (R. 1332-1).");
       L.push("");
-      L.push("Au " + leJour(dans(d0, 8)) + " environ — l'entretien se tient. Aucun");
+      L.push("Au " + leJour(dans(d0, 8)) + " environ - l'entretien se tient. Aucun");
       L.push("texte lu ne fixe de délai entre la convocation et l'entretien : laissez au");
       L.push("salarié le temps de trouver la personne qui l'assistera, faute de quoi");
       L.push("l'assistance qu'ouvre L. 1332-2 restera théorique.");
       L.push("");
-      L.push("Le jour même — le compte rendu s'écrit. Pas la semaine suivante : ce qui");
+      L.push("Le jour même - le compte rendu s'écrit. Pas la semaine suivante : ce qui");
       L.push("a été dit s'oublie, et un compte rendu tardif se conteste.");
       L.push("");
       L.push("Ensuite, la fenêtre de notification s'ouvre : au plus tôt deux jours");
@@ -925,7 +925,7 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-08 — LES QUATRE EXIGENCES DE LA CONVOCATION
+     DIS-CTL-SAN-08 - LES QUATRE EXIGENCES DE LA CONVOCATION
 
      R. 1332-1 tient en quatre phrases, et chacune est une exigence. Celle qu'on
      manque est la troisième : le rappel du droit d'assistance. Une convocation
@@ -944,7 +944,7 @@
       var L = entete(ctx, "Lettre de convocation à l'entretien préalable",
         "articles R. 1332-1 et L. 1332-2 du code du travail");
 
-      L.push("LE TEXTE, EN ENTIER — QUATRE PHRASES, QUATRE EXIGENCES");
+      L.push("LE TEXTE, EN ENTIER - QUATRE PHRASES, QUATRE EXIGENCES");
       L.push("");
       L.push("« La lettre de convocation prévue à l'article L. 1332-2 indique l'objet de");
       L.push("l'entretien entre le salarié et l'employeur. Elle précise la date, l'heure");
@@ -966,7 +966,7 @@
       L.push("     bâtiment, un étage, un bureau. « Au siège » n'est pas un lieu dans");
       L.push("     une entreprise qui en occupe trois.");
       L.push("");
-      L.push("  3. LE RAPPEL DU DROIT D'ASSISTANCE — c'est l'exigence la plus souvent");
+      L.push("  3. LE RAPPEL DU DROIT D'ASSISTANCE - c'est l'exigence la plus souvent");
       L.push("     manquée. Elle se rappelle DANS LA LETTRE, pas à l'entretien : le");
       L.push("     salarié qui l'apprend en arrivant n'a plus le temps de trouver");
       L.push("     quelqu'un. Et la personne est « de son choix, appartenant au");
@@ -976,7 +976,7 @@
       L.push("  4. LA REMISE. Deux voies, et deux seulement : contre récépissé, ou par");
       L.push("     lettre recommandée. Un courriel, une remise sans récépissé, un dépôt");
       L.push("     dans un casier n'en sont pas. Et cette remise doit intervenir dans");
-      L.push("     le délai de deux mois de L. 1332-4 — c'est elle qui engage les");
+      L.push("     le délai de deux mois de L. 1332-4 - c'est elle qui engage les");
       L.push("     poursuites disciplinaires.");
       L.push("");
       L.push("CE QUE LE DOSSIER DÉCLARE, EXIGENCE PAR EXIGENCE");
@@ -984,16 +984,16 @@
       L.push("  Convocation envoyée .................. " +
         etat(s.convocationEnvoyee, "oui", "NON"));
       L.push("  1. objet de l'entretien indiqué ...... " +
-        etat(s.convocationObjet, "oui", "NON — à reprendre"));
+        etat(s.convocationObjet, "oui", "NON - à reprendre"));
       L.push("  2. date, heure et lieu précisés ...... " +
-        etat(s.convocationDateHeureLieu, "oui", "NON — à reprendre"));
+        etat(s.convocationDateHeureLieu, "oui", "NON - à reprendre"));
       L.push("  3. droit d'assistance rappelé ........ " +
-        etat(s.convocationAssistance, "oui", "NON — à reprendre"));
+        etat(s.convocationAssistance, "oui", "NON - à reprendre"));
       L.push("  4. mode de remise .................... " +
         (rempli(s.convocationRemise)
           ? (s.convocationRemise === "récépissé" || s.convocationRemise === "lettre recommandée"
-             ? s.convocationRemise + " — l'une des deux voies de R. 1332-1"
-             : String(s.convocationRemise) + " — HORS DES DEUX VOIES DE R. 1332-1")
+             ? s.convocationRemise + " - l'une des deux voies de R. 1332-1"
+             : String(s.convocationRemise) + " - HORS DES DEUX VOIES DE R. 1332-1")
           : "[non renseigné]"));
       L.push("  date de la remise .................... " +
         jour(s.dateConvocation, "non renseignée"));
@@ -1018,7 +1018,7 @@
         L.push("UN AVERTISSEMENT AVANT DE VOUS SERVIR DE CETTE LETTRE");
         L.push("");
         L.push("Le dossier conduit à dire que la convocation n'était pas due. Vous êtes");
-        L.push("libre de convoquer quand même — mais alors vous devez tout tenir.");
+        L.push("libre de convoquer quand même - mais alors vous devez tout tenir.");
         L.push("");
         ARRETS.tousLesTermes.forEach(function (x) { L.push(x); });
         L.push("");
@@ -1027,7 +1027,7 @@
       }
 
       L.push(GROS);
-      L.push("PIÈCE 1 — LETTRE DE CONVOCATION (les quatre exigences portées)");
+      L.push("PIÈCE 1 - LETTRE DE CONVOCATION (les quatre exigences portées)");
       L.push(GROS);
       L.push("");
       L = L.concat(teteLettre(ctx, true));
@@ -1066,7 +1066,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — RÉCÉPISSÉ DE REMISE EN MAIN PROPRE");
+      L.push("PIÈCE 2 - RÉCÉPISSÉ DE REMISE EN MAIN PROPRE");
       L.push(GROS);
       L.push("");
       L.push("La première des deux voies de R. 1332-1. Le récépissé est la preuve de la");
@@ -1085,14 +1085,14 @@
       L.push("     Signature du salarié : ................");
       L.push("");
       L.push("     [SI LE SALARIÉ REFUSE DE SIGNER : ne le forcez pas et ne datez pas à");
-      L.push("      sa place. Adressez la lettre par recommandé le jour même — c'est");
+      L.push("      sa place. Adressez la lettre par recommandé le jour même - c'est");
       L.push("      l'autre voie du texte, et elle est ouverte sans condition. Portez");
       L.push("      par écrit, daté et signé de deux personnes, la mention du refus.]");
       L.push("");
       L.push("Établir le récépissé en deux exemplaires : un pour le salarié, un pour le");
       L.push("dossier. Celui du dossier est le seul qui comptera.");
       L.push("");
-      L.push("SECONDE VOIE — LETTRE RECOMMANDÉE : conservez la preuve de dépôt et l'avis");
+      L.push("SECONDE VOIE - LETTRE RECOMMANDÉE : conservez la preuve de dépôt et l'avis");
       L.push("de réception. Le texte n'exige pas que le salarié ait retiré le pli ; il");
       L.push("exige que la lettre ait été ADRESSÉE dans le délai. Gardez néanmoins");
       L.push("l'avis : il dira quand elle a été présentée.");
@@ -1105,7 +1105,7 @@
          s.convocationRemise !== "lettre recommandée");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — SI L'ENTRETIEN S'EST DÉJÀ TENU SUR UNE CONVOCATION IRRÉGULIÈRE");
+      L.push("PIÈCE 3 - SI L'ENTRETIEN S'EST DÉJÀ TENU SUR UNE CONVOCATION IRRÉGULIÈRE");
       L.push(GROS);
       L.push("");
       if (irreguliere) {
@@ -1155,7 +1155,7 @@
       L.push("[LE NOUVEAU JOUR D'ENTRETIEN DEVIENT LE POINT DE DÉPART DES DEUX BORNES");
       L.push(" DE L. 1332-2 : deux jours ouvrables au moins, un mois au plus. Mais il ne");
       L.push(" rouvre pas le délai de deux mois de L. 1332-4, qui court depuis la");
-      L.push(" connaissance des faits — vérifiez-le ci-dessous AVANT d'envoyer.]");
+      L.push(" connaissance des faits - vérifiez-le ci-dessous AVANT d'envoyer.]");
       L.push("");
       L.push("");
 
@@ -1167,20 +1167,20 @@
       L.push("VOTRE CALENDRIER");
       L.push(GROS);
       L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous reprenez la lettre et vous cochez");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous reprenez la lettre et vous cochez");
       L.push("les quatre exigences une à une. Cinq minutes, et c'est le contrôle le plus");
       L.push("rentable de toute la procédure.");
       L.push("");
-      L.push("Le jour de la remise — récépissé signé et daté, ou dépôt du recommandé.");
+      L.push("Le jour de la remise - récépissé signé et daté, ou dépôt du recommandé.");
       L.push("Cette date doit tomber dans le délai de deux mois de L. 1332-4 : elle");
       L.push("engage les poursuites (R. 1332-1).");
       L.push("");
-      L.push("Au " + leJour(dans(d0, 8)) + " environ — l'entretien. Laissez au salarié");
+      L.push("Au " + leJour(dans(d0, 8)) + " environ - l'entretien. Laissez au salarié");
       L.push("le temps de trouver la personne qui l'assistera : aucun texte lu ne fixe");
       L.push("ce délai, mais une convocation remise la veille rend l'assistance");
       L.push("illusoire, et cela se plaide.");
       L.push("");
-      L.push("Après l'entretien — la fenêtre de notification s'ouvre. Le générateur");
+      L.push("Après l'entretien - la fenêtre de notification s'ouvre. Le générateur");
       L.push("DIS-CTL-SAN-09 la calcule.");
 
       return L.concat(pied("R. 1332-1, L. 1332-2, L. 1332-4, R. 1332-2, R. 1332-3, " +
@@ -1192,16 +1192,16 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-09 — LES DEUX BORNES
+     DIS-CTL-SAN-09 - LES DEUX BORNES
 
      Le seul document du fichier qui soit d'abord un calcul. Il calcule ce
-     qu'il peut — les quantièmes, la prorogation du samedi et du dimanche — et
+     qu'il peut - les quantièmes, la prorogation du samedi et du dimanche - et
      dit tout aussi clairement ce qu'il ne peut pas : le calendrier des jours
      fériés ou chômés, que l'application ne tient pas.
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-09", {
-    nom: "Le calendrier de notification — les deux bornes de L. 1332-2, calculées",
+    nom: "Le calendrier de notification - les deux bornes de L. 1332-2, calculées",
     detail: "Les bornes calculées selon R. 1332-3, la fiche de suivi, la lettre à " +
             "envoyer dans la fenêtre, et le retrait si le mois est passé.",
     produire: function (ctx) {
@@ -1232,7 +1232,7 @@
       L.push("");
       L.push("QUATRE POINTS QUE CES TROIS TEXTES DÉCIDENT");
       L.push("");
-      L.push("  1. LE POINT DE DÉPART est le JOUR FIXÉ POUR L'ENTRETIEN — pas le jour");
+      L.push("  1. LE POINT DE DÉPART est le JOUR FIXÉ POUR L'ENTRETIEN - pas le jour");
       L.push("     où la décision est arrêtée, pas le jour où le dossier est complet,");
       L.push("     pas le jour du retour de congé du signataire. Et c'est le jour FIXÉ :");
       L.push("     si le salarié ne s'est pas présenté, le délai court quand même.");
@@ -1243,7 +1243,7 @@
       L.push("     décidée avant.");
       L.push("");
       L.push("  3. LA BORNE HAUTE se compte par QUANTIÈME, non en trente jours. Le");
-      L.push("     30 janvier donne le 28 février — « à défaut d'un quantième identique,");
+      L.push("     30 janvier donne le 28 février - « à défaut d'un quantième identique,");
       L.push("     le dernier jour du mois suivant ».");
       L.push("");
       L.push("  4. LA PROROGATION joue pour le samedi, le dimanche, ET tout jour férié");
@@ -1271,13 +1271,13 @@
       L = L.concat(blocBornes(ctx));
 
       L.push(GROS);
-      L.push("PIÈCE 1 — FICHE DE SUIVI DES DÉLAIS");
+      L.push("PIÈCE 1 - FICHE DE SUIVI DES DÉLAIS");
       L.push(GROS);
       L.push("");
       L.push("À agrafer en tête du dossier disciplinaire. Une seule feuille, et elle");
       L.push("porte les quatre dates qui décident de la régularité.");
       L.push("");
-      L.push("  " + nomDe(ctx) + " — dossier [RÉFÉRENCE]");
+      L.push("  " + nomDe(ctx) + " - dossier [RÉFÉRENCE]");
       L.push("  Salarié : [NOM, PRÉNOM]");
       L.push("");
       L.push("  1. Connaissance des faits par l'employeur ..... " +
@@ -1290,7 +1290,7 @@
       L.push("");
       L.push("  2. Remise ou envoi de la convocation .......... " +
         jour(s.dateConvocation, "À PORTER"));
-      L.push("     Voie : [récépissé / lettre recommandée] — pièce : [.....]");
+      L.push("     Voie : [récépissé / lettre recommandée] - pièce : [.....]");
       L.push("     Doit tomber avant le terme du 1 (R. 1332-1).");
       L.push("");
       L.push("  3. JOUR FIXÉ POUR L'ENTRETIEN ................. " +
@@ -1309,11 +1309,11 @@
         L.push("                                                  suivant, R. 1332-3]");
       }
       L.push("     Jour férié ou chômé dans l'intervalle ou au terme ? [OUI / NON]");
-      L.push("     — à vérifier À LA MAIN : l'application ne tient pas ce calendrier.");
+      L.push("     - à vérifier À LA MAIN : l'application ne tient pas ce calendrier.");
       L.push("");
       L.push("  5. Notification effectivement faite le ........ " +
         jour(s.dateNotification, "À PORTER"));
-      L.push("     Voie : [récépissé / lettre recommandée] — pièce : [.....]");
+      L.push("     Voie : [récépissé / lettre recommandée] - pièce : [.....]");
       L.push("");
       L.push("  Vérifié le [DATE] par [NOM, FONCTION].");
       L.push("");
@@ -1324,7 +1324,7 @@
 
       if (horsFenetre) {
         L.push(GROS);
-        L.push("PIÈCE 2 — VOTRE NOTIFICATION EST HORS DE LA FENÊTRE");
+        L.push("PIÈCE 2 - VOTRE NOTIFICATION EST HORS DE LA FENÊTRE");
         L.push(GROS);
         L.push("");
         if (s.dateNotification < b.basse) {
@@ -1333,8 +1333,8 @@
           L.push("");
           L.push("La borne basse ne se rattrape pas en renotifiant plus tard la même");
           L.push("décision : la sanction a été prise à une date qui la vicie. Ce qui se");
-          L.push("fait, c'est le retrait, puis — si le délai de deux mois de L. 1332-4 le");
-          L.push("permet encore — une procédure reprise depuis la convocation.");
+          L.push("fait, c'est le retrait, puis - si le délai de deux mois de L. 1332-4 le");
+          L.push("permet encore - une procédure reprise depuis la convocation.");
         } else {
           L.push("Elle est intervenue TROP TARD : après le terme du mois compté selon");
           L.push("R. 1332-3 depuis le jour fixé pour l'entretien. La sanction est");
@@ -1374,7 +1374,7 @@
         L.push("");
       } else {
         L.push(GROS);
-        L.push("PIÈCE 2 — CE QUI SE FAIT SI LE MOIS EST PASSÉ");
+        L.push("PIÈCE 2 - CE QUI SE FAIT SI LE MOIS EST PASSÉ");
         L.push(GROS);
         L.push("");
         L.push("NE NOTIFIEZ PAS. Une sanction notifiée après le terme est irrégulière en");
@@ -1389,8 +1389,8 @@
         L.push("     L'application proroge les deux premiers ; vérifiez les fériés.");
         L.push("");
         L.push("  2. Le délai de deux mois de L. 1332-4 est-il encore ouvert ? S'il");
-        L.push("     l'est, une procédure entièrement reprise — nouvelle convocation,");
-        L.push("     nouvel entretien, nouvelle notification dans les bornes — reste");
+        L.push("     l'est, une procédure entièrement reprise - nouvelle convocation,");
+        L.push("     nouvel entretien, nouvelle notification dans les bornes - reste");
         L.push("     possible. Le jour fixé pour le NOUVEL entretien devient le nouveau");
         L.push("     point de départ.");
         L.push("");
@@ -1402,11 +1402,11 @@
       }
 
       L.push(GROS);
-      L.push("PIÈCE 3 — LA LETTRE DE NOTIFICATION, DANS LA FENÊTRE");
+      L.push("PIÈCE 3 - LA LETTRE DE NOTIFICATION, DANS LA FENÊTRE");
       L.push(GROS);
       L.push("");
       L.push("Elle est écrite en entier par le générateur DIS-CTL-SAN-10 de cette");
-      L.push("application, avec ses exigences propres — décision ÉCRITE et MOTIVÉE,");
+      L.push("application, avec ses exigences propres - décision ÉCRITE et MOTIVÉE,");
       L.push("remise contre récépissé ou par lettre recommandée (R. 1332-2). Ce");
       L.push("document-ci ne s'occupe que de la DATE à laquelle elle part.");
       L.push("");
@@ -1429,27 +1429,27 @@
       L.push("VOTRE CALENDRIER");
       L.push(GROS);
       L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous remplissez la fiche de suivi");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous remplissez la fiche de suivi");
       L.push("(pièce 1) avec les dates réelles du dossier, et vous vérifiez à la main");
       L.push("les jours fériés que l'application ne tient pas.");
       if (b) {
         L.push("");
-        L.push("Du " + jour(b.basse) + " au " + jour(b.hauteProrogee) + " — la fenêtre");
+        L.push("Du " + jour(b.basse) + " au " + jour(b.hauteProrogee) + " - la fenêtre");
         L.push("de notification est ouverte. Choisissez une date, et tenez-la.");
         L.push("");
-        L.push("Le " + jour(b.hauteProrogee) + " à vingt-quatre heures — le délai");
+        L.push("Le " + jour(b.hauteProrogee) + " à vingt-quatre heures - le délai");
         L.push("expire, sauf férié ou jour chômé qui le reporterait au premier jour");
         L.push("ouvrable suivant.");
       } else {
         L.push("");
-        L.push("Dès que la date de l'entretien sera portée — la fenêtre se calculera");
+        L.push("Dès que la date de l'entretien sera portée - la fenêtre se calculera");
         L.push("d'elle-même : deux jours ouvrables au moins, un mois au plus, compté par");
         L.push("quantième.");
       }
       L.push("");
       L.push("Ces deux bornes ne se négocient pas et ne se suspendent pas : ni un congé,");
       L.push("ni une enquête complémentaire, ni l'attente d'un avis ne les arrêtent. Si");
-      L.push("une formalité conventionnelle doit s'intercaler — DIS-CTL-SAN-12 —, elle");
+      L.push("une formalité conventionnelle doit s'intercaler - DIS-CTL-SAN-12 -, elle");
       L.push("doit tenir DANS le mois.");
 
       return L.concat(pied("L. 1332-2, R. 1332-2, R. 1332-3, L. 1332-4, R. 1332-1, " +
@@ -1458,16 +1458,16 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-10 — LA DÉCISION ÉCRITE ET MOTIVÉE
+     DIS-CTL-SAN-10 - LA DÉCISION ÉCRITE ET MOTIVÉE
 
      Trois exigences dans une seule phrase de R. 1332-2 : écrite, motivée,
-     notifiée par l'une des deux voies. La deuxième est celle qui se perd —
+     notifiée par l'une des deux voies. La deuxième est celle qui se perd -
      « votre comportement inadapté » n'est pas une motivation, et une sanction
      qui n'énonce pas ses griefs ne met le salarié en mesure de rien.
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-10", {
-    nom: "La lettre de notification de la sanction — décision écrite et motivée",
+    nom: "La lettre de notification de la sanction - décision écrite et motivée",
     detail: "Les trois exigences confrontées au dossier, la lettre de notification " +
             "avec ses variantes par nature de sanction, le récépissé, et le retrait " +
             "de la sanction notifiée sans écrit ou sans motifs.",
@@ -1503,12 +1503,12 @@
       L.push("     au salarié sont de nature à justifier une sanction » (L. 1333-1).");
       L.push("     Une motivation vague se retourne d'ailleurs contre l'employeur au");
       L.push("     stade de la preuve : « L'employeur fournit au conseil de prud'hommes");
-      L.push("     les éléments retenus pour prendre la sanction » (L. 1333-1) — encore");
+      L.push("     les éléments retenus pour prendre la sanction » (L. 1333-1) - encore");
       L.push("     faut-il savoir lesquels.");
       L.push("");
       L.push("  3. NOTIFIÉE PAR L'UNE DES DEUX VOIES : lettre remise contre récépissé,");
       L.push("     ou lettre recommandée. Le texte n'en ouvre pas d'autre. Et dans le");
-      L.push("     délai d'un mois de L. 1332-2 — ce que le générateur DIS-CTL-SAN-09");
+      L.push("     délai d'un mois de L. 1332-2 - ce que le générateur DIS-CTL-SAN-09");
       L.push("     calcule.");
       L.push("");
       L.push("CE QUE LE DOSSIER DÉCLARE");
@@ -1517,14 +1517,14 @@
         (m.nature ? m.nature : "[non renseignée]"));
       L.push("  Sanction prévue par le règlement ..... " + etat(s.prevueRI, "oui", "NON"));
       L.push("  1. décision écrite ................... " +
-        etat(s.notificationEcrite, "oui", "NON — à reprendre"));
+        etat(s.notificationEcrite, "oui", "NON - à reprendre"));
       L.push("  2. décision motivée .................. " +
-        etat(s.notificationMotivee, "oui", "NON — à reprendre"));
+        etat(s.notificationMotivee, "oui", "NON - à reprendre"));
       L.push("  3. mode de notification .............. " +
         (rempli(s.notificationRemise)
           ? (s.notificationRemise === "récépissé" || s.notificationRemise === "lettre recommandée"
-             ? s.notificationRemise + " — l'une des deux voies de R. 1332-2"
-             : String(s.notificationRemise) + " — HORS DES DEUX VOIES DE R. 1332-2")
+             ? s.notificationRemise + " - l'une des deux voies de R. 1332-2"
+             : String(s.notificationRemise) + " - HORS DES DEUX VOIES DE R. 1332-2")
           : "[non renseigné]"));
       L.push("  Date de la notification .............. " +
         jour(s.dateNotification, "non renseignée"));
@@ -1547,7 +1547,7 @@
 
       if (estNon(s.notificationEcrite) || estNon(s.notificationMotivee)) {
         L.push(GROS);
-        L.push("PIÈCE 1 — RETRAIT DE LA SANCTION NOTIFIÉE SANS ÉCRIT OU SANS MOTIFS");
+        L.push("PIÈCE 1 - RETRAIT DE LA SANCTION NOTIFIÉE SANS ÉCRIT OU SANS MOTIFS");
         L.push(GROS);
         L.push("");
         L.push("Le dossier déclare que la décision " +
@@ -1556,7 +1556,7 @@
         L.push("");
         L.push("Une lettre motivée envoyée après coup ne répare pas : elle notifierait");
         L.push("une seconde fois une sanction déjà prise, et hors du mois de L. 1332-2");
-        L.push("si celui-ci est écoulé. Ce qui se fait, c'est le retrait — puis, si le");
+        L.push("si celui-ci est écoulé. Ce qui se fait, c'est le retrait - puis, si le");
         L.push("délai de deux mois de L. 1332-4 le permet, une procédure reprise.");
         L.push("");
         L = L.concat(teteLettre(ctx, true));
@@ -1586,7 +1586,7 @@
       var n = (estNon(s.notificationEcrite) || estNon(s.notificationMotivee)) ? 2 : 1;
 
       L.push(GROS);
-      L.push("PIÈCE " + n + " — LETTRE DE NOTIFICATION DE LA SANCTION");
+      L.push("PIÈCE " + n + " - LETTRE DE NOTIFICATION DE LA SANCTION");
       L.push(GROS);
       L.push("");
       L = L.concat(teteLettre(ctx, true));
@@ -1605,13 +1605,13 @@
       L.push(" elle explique que vos explications ne figurent pas ci-dessous.]");
       L.push("");
       L = L.concat(blocGriefs("Les faits qui vous sont reprochés sont les suivants :"));
-      L.push("[Ajouter, pour chaque fait : la règle à laquelle il contrevient — article");
-      L.push(" du règlement intérieur, consigne écrite, instruction — et la pièce qui");
+      L.push("[Ajouter, pour chaque fait : la règle à laquelle il contrevient - article");
+      L.push(" du règlement intérieur, consigne écrite, instruction - et la pièce qui");
       L.push(" l'établit.]");
       L.push("");
       L.push("[Reprendre ici les explications que vous avez données lors de l'entretien,");
       L.push(" et dire pourquoi elles ne conduisent pas à renoncer. Cette partie n'est");
-      L.push(" imposée par aucun texte lu — mais une lettre qui ignore ce que le salarié");
+      L.push(" imposée par aucun texte lu - mais une lettre qui ignore ce que le salarié");
       L.push(" a répondu laisse penser qu'on ne l'a pas écouté, alors que L. 1332-2");
       L.push(" impose de recueillir ses explications.]");
       L.push("");
@@ -1646,12 +1646,12 @@
         L.push(" rétrogradation modifient le contrat de travail. Elles ne peuvent pas");
         L.push(" être imposées : le salarié peut les refuser, et son refus n'est pas en");
         L.push(" lui-même une faute nouvelle. L'employeur doit alors renoncer, ou");
-        L.push(" engager une autre procédure sur les faits initiaux — sous réserve du");
+        L.push(" engager une autre procédure sur les faits initiaux - sous réserve du");
         L.push(" délai de deux mois de L. 1332-4. Prévoyez la lettre par laquelle vous");
         L.push(" lui demandez de se prononcer, et le délai que vous lui laissez.]");
       } else {
         L.push("     [NOMMER LA SANCTION telle que l'échelle du règlement intérieur la");
-        L.push("      nomme — avertissement, blâme, ou autre], à effet du [DATE].");
+        L.push("      nomme - avertissement, blâme, ou autre], à effet du [DATE].");
         L.push("");
         L.push("[Ne prononcez aucune sanction qui ne figure pas dans cette échelle :");
         L.push(" c'est l'objet du générateur DIS-CTL-SAN-03 de cette application.]");
@@ -1674,7 +1674,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE " + (n + 1) + " — RÉCÉPISSÉ DE REMISE");
+      L.push("PIÈCE " + (n + 1) + " - RÉCÉPISSÉ DE REMISE");
       L.push(GROS);
       L.push("");
       L.push("     RÉCÉPISSÉ DE REMISE EN MAIN PROPRE");
@@ -1702,7 +1702,7 @@
         L.push("");
         L.push("Entre le " + jour(b.basse) + " et le " + jour(b.hauteProrogee) +
           (b.prorogee ? " (terme prorogé depuis le " + jour(b.haute) + ")" : "") + ".");
-        L.push("Le générateur DIS-CTL-SAN-09 détaille ce calcul et ses réserves — les");
+        L.push("Le générateur DIS-CTL-SAN-09 détaille ce calcul et ses réserves - les");
         L.push("jours fériés ou chômés, que l'application ne tient pas.");
         L.push("");
         L.push("");
@@ -1716,19 +1716,19 @@
       L.push("VOTRE CALENDRIER");
       L.push(GROS);
       L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous écrivez les griefs, datés et");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous écrivez les griefs, datés et");
       L.push("circonstanciés, et vous rassemblez les pièces qui les établissent. C'est");
       L.push("le travail réel ; le reste de la lettre est de la forme.");
       L.push("");
-      L.push("Avant de signer — vous relisez trois choses : la sanction figure-t-elle");
+      L.push("Avant de signer - vous relisez trois choses : la sanction figure-t-elle");
       L.push("dans l'échelle du règlement intérieur ? les griefs sont-ils écrits de");
       L.push("façon qu'un tiers puisse les comprendre ? la date d'envoi tombe-t-elle");
       L.push("dans la fenêtre ?");
       L.push("");
-      L.push("Le jour de l'envoi — récépissé ou dépôt du recommandé, et la preuve au");
+      L.push("Le jour de l'envoi - récépissé ou dépôt du recommandé, et la preuve au");
       L.push("dossier.");
       L.push("");
-      L.push("Ensuite — versement au dossier individuel, et si la sanction emporte des");
+      L.push("Ensuite - versement au dossier individuel, et si la sanction emporte des");
       L.push("effets de paie, consigne écrite au service ou au prestataire, portant les");
       L.push("dates exactes.");
 
@@ -1739,11 +1739,11 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-11 — LA MISE À PIED CONSERVATOIRE
+     DIS-CTL-SAN-11 - LA MISE À PIED CONSERVATOIRE
 
      Une mesure d'attente, et tout le danger tient dans ce mot : une mise à pied
      conservatoire qui n'est suivie de rien n'est plus une mesure d'attente,
-     c'est une sanction — non notifiée, non motivée, et assortie d'une retenue
+     c'est une sanction - non notifiée, non motivée, et assortie d'une retenue
      de salaire. L. 1332-3 ferme la porte dans l'autre sens : aucune sanction
      définitive sur ces faits sans que la procédure de L. 1332-2 ait été suivie.
      ══════════════════════════════════════════════════════════════════════ */
@@ -1760,7 +1760,7 @@
       var L = entete(ctx, "Mise à pied conservatoire et procédure disciplinaire",
         "article L. 1332-3 du code du travail");
 
-      L.push("LE TEXTE, EN ENTIER — IL TIENT EN UNE PHRASE");
+      L.push("LE TEXTE, EN ENTIER - IL TIENT EN UNE PHRASE");
       L.push("");
       L.push("« Lorsque les faits reprochés au salarié ont rendu indispensable une");
       L.push("mesure conservatoire de mise à pied à effet immédiat, aucune sanction");
@@ -1781,7 +1781,7 @@
       L.push("");
       L.push("  · LA MISE À PIED CONSERVATOIRE N'EST PAS UNE SANCTION. Elle attend la");
       L.push("    décision, elle ne la remplace pas. C'est pourquoi elle ne s'annonce");
-      L.push("    jamais dans les termes d'une sanction — ni « je vous sanctionne d'une");
+      L.push("    jamais dans les termes d'une sanction - ni « je vous sanctionne d'une");
       L.push("    mise à pied », ni la mention d'une durée fixée à l'avance comme une");
       L.push("    peine ;");
       L.push("");
@@ -1795,13 +1795,13 @@
       L.push("     de prud'hommes peut l'annuler (L. 1333-2).");
       L.push("");
       L.push("  2. LA MISE À PIED CONSERVATOIRE LAISSÉE SANS SUITE risque d'être");
-      L.push("     regardée comme une sanction — c'est-à-dire, au sens de L. 1331-1,");
+      L.push("     regardée comme une sanction - c'est-à-dire, au sens de L. 1331-1,");
       L.push("     comme « toute mesure, autre que les observations verbales, prise par");
       L.push("     l'employeur à la suite d'un agissement du salarié considéré par");
       L.push("     l'employeur comme fautif, [affectant] immédiatement ou non la");
       L.push("     présence du salarié dans l'entreprise […] ou sa rémunération ». Une");
       L.push("     sanction, donc, prononcée sans écrit, sans motivation et sans");
-      L.push("     entretien — avec la retenue de salaire qui l'accompagne.");
+      L.push("     entretien - avec la retenue de salaire qui l'accompagne.");
       L.push("");
       L.push("CE QUE LE DOSSIER DÉCLARE");
       L.push("");
@@ -1809,10 +1809,10 @@
         etat(s.misePiedConservatoire, "OUI", "non"));
       L.push("  Convocation envoyée ................... " +
         etat(s.convocationEnvoyee, "oui", "NON") +
-        (estISO(s.dateConvocation) ? " — le " + jour(s.dateConvocation) : ""));
+        (estISO(s.dateConvocation) ? " - le " + jour(s.dateConvocation) : ""));
       L.push("  Entretien tenu ........................ " +
         etat(s.entretienTenu, "oui", "NON") +
-        (estISO(s.dateEntretien) ? " — le " + jour(s.dateEntretien) : ""));
+        (estISO(s.dateEntretien) ? " - le " + jour(s.dateEntretien) : ""));
       L.push("  Sanction définitive notifiée .......... " +
         jour(s.dateNotification, "non renseignée"));
       L.push("  Nature de la sanction ................. " +
@@ -1849,7 +1849,7 @@
       }
 
       L.push(GROS);
-      L.push("PIÈCE 1 — NOTIFICATION DE LA MISE À PIED CONSERVATOIRE");
+      L.push("PIÈCE 1 - NOTIFICATION DE LA MISE À PIED CONSERVATOIRE");
       L.push(GROS);
       L.push("");
       L.push("À remettre le jour même. La qualification est tout : écrivez");
@@ -1864,11 +1864,11 @@
       L.push("[EXPOSER SANS QUALIFIER les faits qui ont conduit à cette mesure : ce qui");
       L.push(" est survenu, quel jour, à quelle heure, où. L'application ne les connaît");
       L.push(" pas et ne les inventera pas. À ce stade, écrivez « les faits qui vous");
-      L.push(" sont reprochés » ou « les faits portés à ma connaissance » — la");
+      L.push(" sont reprochés » ou « les faits portés à ma connaissance » - la");
       L.push(" qualification viendra, ou ne viendra pas, à l'issue de la procédure.]");
       L.push("");
       L.push("Ces faits rendent indispensable votre éloignement immédiat de");
-      L.push("l'entreprise, pour la raison suivante : [ÉCRIRE POURQUOI — risque pour la");
+      L.push("l'entreprise, pour la raison suivante : [ÉCRIRE POURQUOI - risque pour la");
       L.push("sécurité des personnes, risque pour les biens ou les données, nécessité");
       L.push("de préserver le déroulement de vérifications, impossibilité de maintenir");
       L.push("les personnes concernées en présence. C'est cette phrase qui sera lue en");
@@ -1902,7 +1902,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — CONVOCATION À L'ENTRETIEN PRÉALABLE, REMISE EN MÊME TEMPS");
+      L.push("PIÈCE 2 - CONVOCATION À L'ENTRETIEN PRÉALABLE, REMISE EN MÊME TEMPS");
       L.push(GROS);
       L.push("");
       L.push("Les deux lettres partent ensemble. C'est la seule manière d'établir que");
@@ -1941,7 +1941,7 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — FICHE D'ENCHAÎNEMENT DES DATES");
+      L.push("PIÈCE 3 - FICHE D'ENCHAÎNEMENT DES DATES");
       L.push(GROS);
       L.push("");
       L.push("C'est cette suite de dates qui dira si la mise à pied était");
@@ -1974,17 +1974,17 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 4 — CONSIGNE DE PAIE, À ÉCRIRE APRÈS LA DÉCISION");
+      L.push("PIÈCE 4 - CONSIGNE DE PAIE, À ÉCRIRE APRÈS LA DÉCISION");
       L.push(GROS);
       L.push("");
-      L.push(nomDe(ctx) + " — note interne du " + leJour(d0));
+      L.push(nomDe(ctx) + " - note interne du " + leJour(d0));
       L.push("Objet : traitement en paie de la période de mise à pied conservatoire");
       L.push("");
       L.push("  Période concernée : du [DATE] au [DATE].");
       L.push("");
       L.push("  Décision prise à l'issue de la procédure : [préciser].");
       L.push("");
-      L.push("  Traitement retenu — cocher UNE case, et une seule :");
+      L.push("  Traitement retenu - cocher UNE case, et une seule :");
       L.push("");
       L.push("  [ ] Une mise à pied DISCIPLINAIRE a été prononcée et couvre ces jours.");
       L.push("      La retenue porte exactement sur les jours prononcés, et sur aucun");
@@ -2014,20 +2014,20 @@
       L.push("VOTRE CALENDRIER");
       L.push(GROS);
       L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + " — les deux lettres partent ensemble");
+      L.push("Aujourd'hui, " + leJour(d0) + " - les deux lettres partent ensemble");
       L.push("(pièces 1 et 2). Si la mise à pied a déjà été prononcée sans convocation,");
       L.push("la convocation part aujourd'hui, et la fiche d'enchaînement portera");
       L.push("l'écart réel : ne le maquillez pas.");
       L.push("");
-      L.push("Au " + leJour(dans(d0, 5)) + " environ — l'entretien. Tenez-le vite :");
+      L.push("Au " + leJour(dans(d0, 5)) + " environ - l'entretien. Tenez-le vite :");
       L.push("chaque jour de mise à pied conservatoire est un jour sans salaire pour une");
       L.push("mesure qui n'est pas une sanction.");
       L.push("");
       L.push("Au plus tôt deux jours ouvrables après l'entretien, au plus tard un mois");
-      L.push("après — la notification de la décision (L. 1332-2). La mise à pied");
+      L.push("après - la notification de la décision (L. 1332-2). La mise à pied");
       L.push("conservatoire prend fin à cette date au plus tard.");
       L.push("");
-      L.push("Le jour de la décision — la consigne de paie est écrite (pièce 4). C'est");
+      L.push("Le jour de la décision - la consigne de paie est écrite (pièce 4). C'est");
       L.push("l'étape qu'on oublie, et celle qui coûte : la seule peine du chapitre de");
       L.push("la discipline est attachée à la sanction pécuniaire (L. 1334-1).");
 
@@ -2043,18 +2043,18 @@
   });
 
   /* ══════════════════════════════════════════════════════════════════════
-     DIS-CTL-SAN-12 — LA GARANTIE DE FOND
+     DIS-CTL-SAN-12 - LA GARANTIE DE FOND
 
      Le manquement le plus coûteux du module, parce qu'il ne se répare pas. Et
      le seul dont la source ne soit pas dans le code : elle est dans la
      convention collective ou dans le règlement intérieur, que l'application ne
-     lit pas. Ce document ne peut donc pas dire ce que votre clause exige — il
+     lit pas. Ce document ne peut donc pas dire ce que votre clause exige - il
      dit comment la trouver, ce qu'elle entraîne, et ce qui se passe si elle a
      été manquée.
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("DIS-CTL-SAN-12", {
-    nom: "La procédure conventionnelle ou de règlement intérieur — la garantie de fond",
+    nom: "La procédure conventionnelle ou de règlement intérieur - la garantie de fond",
     detail: "Le relevé de la clause, la saisine de l'organisme, la fiche de suivi des " +
             "délais conventionnels, et le retrait lorsque la procédure n'a pas été " +
             "suivie ou l'a été tardivement.",
@@ -2064,7 +2064,7 @@
       var p = ctx.profil || {};
       var d0 = aujourd(ctx);
       var L = entete(ctx, "Procédure conventionnelle ou de règlement intérieur préalable à la sanction",
-        "garantie de fond — jurisprudence de la chambre sociale, et article L. 1333-2 du code du travail");
+        "garantie de fond - jurisprudence de la chambre sociale, et article L. 1333-2 du code du travail");
 
       L.push("POURQUOI CE DOCUMENT EST LE PREMIER À LIRE, ET NON LE DERNIER");
       L.push("");
@@ -2088,7 +2088,7 @@
       L.push("    annulation de sanction, c'est la perte du procès sur le fond.");
       L.push("  · POUR TOUTE AUTRE SANCTION : la même logique conduit le conseil de");
       L.push("    prud'hommes à apprécier si la sanction, irrégulière en la forme, doit");
-      L.push("    être annulée — « Le conseil de prud'hommes peut annuler une sanction");
+      L.push("    être annulée - « Le conseil de prud'hommes peut annuler une sanction");
       L.push("    irrégulière en la forme ou injustifiée ou disproportionnée à la faute");
       L.push("    commise » (L. 1333-2).");
       L.push("");
@@ -2138,12 +2138,12 @@
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 1 — RELEVÉ DE LA CLAUSE");
+      L.push("PIÈCE 1 - RELEVÉ DE LA CLAUSE");
       L.push(GROS);
       L.push("");
       L.push("Une page, remplie AVANT la convocation. Elle vaut mieux qu'un souvenir.");
       L.push("");
-      L.push("  " + nomDe(ctx) + " — dossier [RÉFÉRENCE]");
+      L.push("  " + nomDe(ctx) + " - dossier [RÉFÉRENCE]");
       L.push("  Relevé établi le " + leJour(d0) + " par [NOM, FONCTION].");
       L.push("");
       L.push("  1. TEXTES CONSULTÉS");
@@ -2158,16 +2158,16 @@
       L.push("");
       L.push("  2. CE QU'ILS PRÉVOIENT AVANT LE PRONONCÉ D'UNE SANCTION");
       L.push("     [ ] consultation d'un conseil de discipline ou d'une commission");
-      L.push("         paritaire — article [.....]");
+      L.push("         paritaire - article [.....]");
       L.push("     [ ] entretien supplémentaire, ou entretien devant une autre personne");
-      L.push("         que le supérieur — article [.....]");
-      L.push("     [ ] avis préalable d'une instance ou d'un tiers — article [.....]");
-      L.push("     [ ] délai de réflexion imposé — article [.....]");
-      L.push("     [ ] forme particulière de la convocation ou de la notification —");
+      L.push("         que le supérieur - article [.....]");
+      L.push("     [ ] avis préalable d'une instance ou d'un tiers - article [.....]");
+      L.push("     [ ] délai de réflexion imposé - article [.....]");
+      L.push("     [ ] forme particulière de la convocation ou de la notification -");
       L.push("         article [.....]");
-      L.push("     [ ] échelle de sanctions propre, ou plafond de sanction —");
+      L.push("     [ ] échelle de sanctions propre, ou plafond de sanction -");
       L.push("         article [.....]");
-      L.push("     [ ] subordination du licenciement à des sanctions antérieures —");
+      L.push("     [ ] subordination du licenciement à des sanctions antérieures -");
       L.push("         article [.....]  ← CE POINT CHANGE LA PROCÉDURE DE TOUTE");
       L.push("         SANCTION, AVERTISSEMENT COMPRIS : voir plus bas.");
       L.push("     [ ] aucune de ces formalités");
@@ -2198,13 +2198,13 @@
                                  : "[à calculer : date d'entretien non portée]"));
       L.push("     · la formalité tient-elle dans ces bornes ? [OUI / NON]");
       L.push("     [SI NON : la difficulté est réelle et elle n'a pas de solution");
-      L.push("      élégante. Anticipez — saisissez l'organisme dès la convocation");
+      L.push("      élégante. Anticipez - saisissez l'organisme dès la convocation");
       L.push("      lorsque la clause le permet, plutôt qu'après l'entretien.]");
       L.push("");
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 2 — LETTRE DE SAISINE DE L'ORGANISME");
+      L.push("PIÈCE 2 - LETTRE DE SAISINE DE L'ORGANISME");
       L.push(GROS);
       L.push("");
       L.push("Modèle générique : l'application ne connaît ni le nom de votre organisme,");
@@ -2221,7 +2221,7 @@
       L.push(lieu(ctx) + ", le " + leJour(d0));
       L.push("");
       L.push("Lettre recommandée avec demande d'avis de réception");
-      L.push("[ou la forme que la clause impose — la respecter à la lettre]");
+      L.push("[ou la forme que la clause impose - la respecter à la lettre]");
       L.push("");
       L.push("Objet : saisine préalable au prononcé d'une sanction disciplinaire");
       L.push("");
@@ -2254,7 +2254,7 @@
       L.push("le délai d'un mois de l'article L. 1332-2 du code du travail expirant le");
       L.push((estISO(s.dateEntretien)
         ? jour(bornesNotification(s.dateEntretien).hauteProrogee)
-        : "[DATE — à calculer depuis le jour fixé pour l'entretien]") + ".");
+        : "[DATE - à calculer depuis le jour fixé pour l'entretien]") + ".");
       L.push("");
       L.push("Je vous prie d'agréer, Madame, Monsieur, l'expression de ma considération");
       L.push("distinguée.");
@@ -2262,13 +2262,13 @@
       L.push(cro(p.responsable, "Nom et qualité du signataire"));
       L.push("");
       L.push("Conservez : la preuve de l'envoi, sa date, et l'accusé de réception. LA");
-      L.push("DATE DE SAISINE EST UNE PIÈCE À PART ENTIÈRE — c'est elle qui dira si la");
+      L.push("DATE DE SAISINE EST UNE PIÈCE À PART ENTIÈRE - c'est elle qui dira si la");
       L.push("demande d'avis était tardive.");
       L.push("");
       L.push("");
 
       L.push(GROS);
-      L.push("PIÈCE 3 — TRACE DE L'AVIS RENDU");
+      L.push("PIÈCE 3 - TRACE DE L'AVIS RENDU");
       L.push(GROS);
       L.push("");
       L.push("À joindre au dossier, avec la composition de l'organisme : un avis rendu");
@@ -2288,7 +2288,7 @@
       L.push("  Pièce qui le porte .................... [procès-verbal, lettre, extrait]");
       L.push("");
       L.push("  [SI L'ORGANISME NE REND PAS D'AVIS DANS LE DÉLAI DE LA CLAUSE : lisez ce");
-      L.push("   que la clause prévoit dans ce cas — avis réputé rendu, faculté de");
+      L.push("   que la clause prévoit dans ce cas - avis réputé rendu, faculté de");
       L.push("   passer outre, relance. Ne décidez rien qu'elle n'autorise pas, et");
       L.push("   conservez la trace de la relance.]");
       L.push("");
@@ -2298,7 +2298,7 @@
         g.suivie === "tardivement ou imparfaitement";
 
       L.push(GROS);
-      L.push("PIÈCE 4 — SI LA PROCÉDURE N'A PAS ÉTÉ SUIVIE, OU L'A ÉTÉ TARDIVEMENT");
+      L.push("PIÈCE 4 - SI LA PROCÉDURE N'A PAS ÉTÉ SUIVIE, OU L'A ÉTÉ TARDIVEMENT");
       L.push(GROS);
       L.push("");
       if (manquee) {
@@ -2312,7 +2312,7 @@
       L.push("décision déjà prise, et c'est précisément ce que la garantie protégeait.");
       L.push("");
       L.push("La seule voie est le RETRAIT, puis, si le délai de deux mois de L. 1332-4");
-      L.push("le permet encore, une procédure reprise DEPUIS L'ORIGINE — clause");
+      L.push("le permet encore, une procédure reprise DEPUIS L'ORIGINE - clause");
       L.push("relevée, organisme saisi en temps utile, avis rendu, puis sanction.");
       L.push("");
       L.push("[SI LA SANCTION N'EST PAS ENCORE NOTIFIÉE : ne la notifiez pas.");
@@ -2350,7 +2350,7 @@
       L.push("");
       L.push("Une clause mérite d'être cherchée pour elle-même : celle qui subordonne le");
       L.push("licenciement à l'existence de sanctions antérieures. Elle ne crée pas une");
-      L.push("formalité de plus — elle transforme l'avertissement lui-même en mesure");
+      L.push("formalité de plus - elle transforme l'avertissement lui-même en mesure");
       L.push("susceptible d'influer sur le maintien du salarié dans l'entreprise, et");
       L.push("impose donc l'entretien préalable là où L. 1332-2 en dispensait.");
       L.push("");
@@ -2359,9 +2359,9 @@
       ARRETS.avertissementCCN.forEach(function (x) { L.push(x); });
       L.push("");
       L.push("Dans votre dossier, cette subordination est déclarée : " +
-        (m.subordination === true ? "OUI — l'entretien est dû, quelle que soit la sanction."
+        (m.subordination === true ? "OUI - l'entretien est dû, quelle que soit la sanction."
          : m.subordination === false ? "non."
-         : "[non renseignée] — à vérifier sur le texte, c'est décisif."));
+         : "[non renseignée] - à vérifier sur le texte, c'est décisif."));
       L.push("");
       L.push("");
 
@@ -2373,22 +2373,22 @@
       L.push("VOTRE CALENDRIER");
       L.push(GROS);
       L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous ouvrez la convention collective et");
+      L.push("Aujourd'hui, " + leJour(d0) + " - vous ouvrez la convention collective et");
       L.push("le règlement intérieur, et vous remplissez la pièce 1. Avant de convoquer,");
       L.push("avant tout le reste. Une demi-heure, et c'est la demi-heure qui décide du");
       L.push("procès.");
       L.push("");
-      L.push("Le même jour, si une formalité existe — vous établissez le calendrier");
+      L.push("Le même jour, si une formalité existe - vous établissez le calendrier");
       L.push("conventionnel et vous le confrontez aux deux délais de la loi. S'ils ne");
       L.push("tiennent pas ensemble, c'est maintenant qu'il faut le savoir.");
       L.push("");
-      L.push("À la date que la clause impose — la saisine part (pièce 2), sous la forme");
+      L.push("À la date que la clause impose - la saisine part (pièce 2), sous la forme");
       L.push("qu'elle prévoit, avec la preuve d'envoi conservée.");
       L.push("");
-      L.push("À réception de l'avis — la trace est constituée (pièce 3), avec la");
+      L.push("À réception de l'avis - la trace est constituée (pièce 3), avec la");
       L.push("composition de l'organisme.");
       L.push("");
-      L.push("Après l'avis, et pas avant — la sanction se notifie, dans les bornes de");
+      L.push("Après l'avis, et pas avant - la sanction se notifie, dans les bornes de");
       L.push("L. 1332-2 rappelées ci-dessus.");
       L.push("");
       L.push("Ces échéances sont celles de VOTRE clause : l'application ne les connaît");

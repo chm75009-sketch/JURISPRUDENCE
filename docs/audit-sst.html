@@ -24,10 +24,11 @@
   du document et chaque frappe le réécrit. Sur « oui », on dépose le document
   existant et ce qui manque en sort rédigé.
 
-  Ce qui n'est pas dû à l'effectif n'est pas demandé : commission
-  santé-sécurité en dessous de trois cents salariés, registre des dangers
-  graves et imminents, consultation et référent du comité en dessous de onze,
-  référent harcèlement de l'employeur en dessous de deux cent cinquante.
+  Ce qui n'est pas dû à l'effectif reste sur sa ligne, en gris, avec le
+  seuil à la place des boutons : commission santé-sécurité en dessous de
+  trois cents salariés, registre des dangers graves et imminents,
+  consultation et référent du comité en dessous de onze, référent
+  harcèlement de l'employeur en dessous de deux cent cinquante.
 
   Le document unique a ses deux écrans : duerp.html sur « non », le document
   écrit ; controler-duerp.html sur « oui », le dépôt et le contrôle.
@@ -47,12 +48,19 @@
     padding:14px 0;margin:0;min-height:var(--h-ligne)}
   #ecran>.ligne.repondue{border-left:0;background:var(--vert-clair);margin:0 -10px;padding-left:10px;padding-right:10px;border-radius:var(--r1)}
   #ecran>.ligne .t{font:400 17px/1.3 system-ui}
+  #ecran>.ligne .b{flex-wrap:nowrap}
   #ecran>.ligne .b button{font:600 17px/1 system-ui;min-width:74px;min-height:46px;padding:0 12px;border-radius:var(--r1)}
   #ecran>.ligne .b [data-oui]{border:2px solid var(--vert);background:var(--vert-clair);color:var(--vert)}
   #ecran>.ligne .b [data-oui]:hover{background:var(--vert);color:#fff}
   #ecran>.ligne .b [data-non]{border:2px solid var(--accent);background:var(--accent);color:#fff}
   #ecran>.groupe{margin:14px 0 0;color:var(--texte-2)}
-  @media (max-width:640px){#ecran>.ligne .b button{min-width:64px;padding:0 10px;font-size:16px}}
+  /* Ce qui n'est pas dû à l'effectif reste sur sa ligne, en gris, avec le
+     seuil : on sait d'un coup ce qui viendra, sans avoir à y répondre. */
+  #ecran>.ligne.pasdu{opacity:.5}
+  #ecran>.ligne.pasdu .t{color:var(--texte-2)}
+  #ecran>.ligne.pasdu .du{font:400 15px/1.2 system-ui;color:var(--texte-2);white-space:nowrap}
+  @media (max-width:640px){#ecran>.ligne .b button{min-width:64px;padding:0 10px;font-size:16px}
+    #ecran>.ligne .t{font-size:16px}}
 </style>
 </head>
 <body>
@@ -115,24 +123,22 @@
     var n = Number(v);
     return isFinite(n) ? n : null;
   }
-  function auMoins(n) {
-    return function (profil) {
-      var e = effectif(profil);
-      return e === null ? null : e >= n;
-    };
-  }
+
+  /* Une ligne par obligation : le libellé court, et le seuil d'effectif
+     quand il y en a un. Une ligne non due à l'effectif reste affichée, en
+     gris, avec « pas dû avant N » à la place des deux boutons. */
 
   /* Une question portée par une pièce écrite pour cet écran. */
-  function dePiece(id, groupe) {
+  function dePiece(id, libelle, groupe, seuil) {
     var p = P.pour(id);
-    return { id: p.id, groupe: groupe, question: p.question, titre: p.titre,
-      piece: p, renvoi: p.renvoi, due: p.due };
+    return { id: p.id, groupe: groupe, question: libelle, titre: p.titre,
+      piece: p, renvoi: p.renvoi, seuil: seuil };
   }
   /* Une question portée par un document que le module écrivait déjà : le
      générateur rend du texte, l'écran le rend en feuille corrigeable. */
-  function deTexte(id, question, titre, groupe, due) {
-    return { id: id, groupe: groupe, question: question, titre: titre,
-      texteId: id, due: due,
+  function deTexte(id, libelle, titre, groupe, seuil) {
+    return { id: id, groupe: groupe, question: libelle, titre: titre,
+      texteId: id, seuil: seuil,
       renvoi: "Sources du module santé-sécurité : moteur/sst/textes-sst.json, " +
         "trente-cinq articles lus à la source avec leur identifiant de version." };
   }
@@ -141,51 +147,60 @@
     /* Le document unique a ses deux écrans : le « non » ouvre le document
        écrit, le « oui » le contrôle. */
     { id: "duerp", groupe: "Le document unique",
-      question: "Avez-vous un document unique d'évaluation des risques ?",
+      question: "Document unique (risques)",
       titre: "Document unique",
       lien: "duerp.html", lienOui: "controler-duerp.html" },
 
-    deTexte("SST-CTL-DUE-05",
-      "Avez-vous le programme annuel de prévention, ou la liste des actions consignée dans le document unique ?",
+    deTexte("SST-CTL-DUE-05", "Programme ou actions de prévention",
       "Programme annuel de prévention", "Le document unique"),
-    deTexte("SST-CTL-DUE-06",
-      "L'avis indiquant les modalités d'accès au document unique est-il affiché ?",
+    deTexte("SST-CTL-DUE-06", "Avis d'accès affiché",
       "Avis d'accès et conservation des versions", "Le document unique"),
-    deTexte("SST-CTL-DUE-07",
-      "Le comité social et économique est-il consulté sur le document unique ?",
-      "Consultation du comité sur le document unique", "Le document unique", auMoins(11)),
-    deTexte("SST-CTL-DUE-08",
-      "Le document unique est-il transmis au service de prévention et de santé au travail ?",
+    deTexte("SST-CTL-DUE-07", "Comité consulté sur le document",
+      "Consultation du comité sur le document unique", "Le document unique", 11),
+    deTexte("SST-CTL-DUE-08", "Transmis au service de santé au travail",
       "Transmission au service de santé au travail", "Le document unique"),
 
-    dePiece("PIECE-INCENDIE", "Les pièces de la prévention"),
-    dePiece("PIECE-DGI", "Les pièces de la prévention"),
-    dePiece("PIECE-REGISTRE-SECURITE", "Les pièces de la prévention"),
-    dePiece("PIECE-FICHE-ENTREPRISE", "Les pièces de la prévention"),
-    dePiece("PIECE-SALARIE-COMPETENT", "Les pièces de la prévention"),
-    dePiece("PIECE-PLAN-PREVENTION", "Les pièces de la prévention"),
-    dePiece("PIECE-ACCIDENT-MORTEL", "Les pièces de la prévention"),
+    dePiece("PIECE-INCENDIE", "Consigne incendie affichée", "Les pièces de la prévention"),
+    dePiece("PIECE-DGI", "Registre des dangers graves et imminents", "Les pièces de la prévention", 11),
+    dePiece("PIECE-REGISTRE-SECURITE", "Registre unique de sécurité", "Les pièces de la prévention"),
+    dePiece("PIECE-FICHE-ENTREPRISE", "Fiche d'entreprise du service de santé", "Les pièces de la prévention"),
+    dePiece("PIECE-SALARIE-COMPETENT", "Salarié compétent en prévention", "Les pièces de la prévention"),
+    dePiece("PIECE-PLAN-PREVENTION", "Plan de prévention (entreprises extérieures)", "Les pièces de la prévention"),
+    dePiece("PIECE-ACCIDENT-MORTEL", "Accident mortel : inspection prévenue sous douze heures", "Les pièces de la prévention"),
 
-    deTexte("SST-CTL-CSS-01",
-      "La commission santé, sécurité et conditions de travail est-elle créée ?",
-      "Commission santé, sécurité et conditions de travail", "La commission", auMoins(300)),
-    deTexte("SST-CTL-CSS-05",
-      "Les élus et le référent ont-ils suivi la formation santé, sécurité et conditions de travail ?",
-      "Formation santé, sécurité et conditions de travail", "La commission", auMoins(11)),
+    deTexte("SST-CTL-CSS-01", "Commission santé, sécurité (CSSCT)",
+      "Commission santé, sécurité et conditions de travail", "La commission", 300),
+    deTexte("SST-CTL-CSS-05", "Formation santé-sécurité des élus",
+      "Formation santé, sécurité et conditions de travail", "La commission", 11),
 
-    deTexte("SST-CTL-HAR-01",
-      "Avez-vous désigné le référent harcèlement sexuel de l'employeur ?",
-      "Référent harcèlement de l'employeur", "Le harcèlement", auMoins(250)),
-    deTexte("SST-CTL-HAR-02",
-      "Le comité a-t-il désigné son référent en matière de harcèlement sexuel ?",
-      "Référent harcèlement du comité", "Le harcèlement", auMoins(11)),
-    deTexte("SST-CTL-HAR-03",
-      "L'information sur les harcèlements est-elle affichée dans vos locaux ?",
+    deTexte("SST-CTL-HAR-01", "Référent harcèlement de l'employeur",
+      "Référent harcèlement de l'employeur", "Le harcèlement", 250),
+    deTexte("SST-CTL-HAR-02", "Référent harcèlement du comité",
+      "Référent harcèlement du comité", "Le harcèlement", 11),
+    deTexte("SST-CTL-HAR-03", "Information sur le harcèlement affichée",
       "Affichage et information sur les harcèlements", "Le harcèlement"),
-    deTexte("SST-CTL-HAR-04",
-      "Avez-vous une procédure interne de signalement du harcèlement ?",
+    deTexte("SST-CTL-HAR-04", "Procédure de signalement du harcèlement",
       "Prévention du harcèlement et procédure de signalement", "Le harcèlement"),
   ];
+
+  /* Le moteur pose deux boutons sur chaque ligne. Sur celles que l'effectif
+     ne rend pas dues, les boutons cèdent la place au seuil. Le moteur
+     réécrit la liste après chaque document : on repasse à chaque fois. */
+  var eff = effectif(window.Profil && window.Profil.lire ? window.Profil.lire() : {});
+  function griser() {
+    if (eff === null) return;
+    QUESTIONS.forEach(function (q) {
+      if (!q.seuil || eff >= q.seuil) return;
+      var b = document.querySelector('#ecran [data-non="' + q.id + '"]');
+      if (!b) return;
+      var boutons = b.parentNode, ligne = boutons.parentNode;
+      var du = document.createElement("span");
+      du.className = "du";
+      du.textContent = "pas dû avant " + q.seuil;
+      boutons.parentNode.replaceChild(du, boutons);
+      ligne.className += " pasdu";
+    });
+  }
 
   window.EcranPieces.demarrer({
     racine: "ecran",
@@ -194,6 +209,10 @@
     questions: QUESTIONS,
     pied: "",
   });
+  griser();
+  var racine = document.getElementById("ecran");
+  if (racine && window.MutationObserver)
+    new MutationObserver(griser).observe(racine, { childList: true });
 })();
 </script>
 <script>

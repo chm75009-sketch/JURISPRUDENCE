@@ -15,12 +15,16 @@
   LA BRANCHE « OUI ».
 
   La question posée est : « Avez-vous un règlement des sanctions et une
-  procédure disciplinaire écrite ? » Le « non » écrit les six documents
+  procédure disciplinaire écrite ? » Le « non » écrit le règlement
   (audit-discipline.html). Le « oui » arrive ici, et ici on ne pose aucune
   question : on prend le document, et pour chaque manque on rend la clause
   rédigée, prête à être collée à sa place.
 
-  Trois écrans, trois actes : déposer, choisir, emporter.
+  Le dépôt est le premier écran, et le seul geste qu'on y fait : un fichier
+  ou un texte collé, puis Contrôler. Le deuxième écran est ce qui manque, avec
+  la clause à insérer sous chaque manque. Le troisième est la version
+  complétée, en Word ou imprimée. Ni chapeau, ni étape numérotée : Retour
+  remonte d'un écran.
 
   CE QUE LE REPÉRAGE FAIT, ET CE QU'IL NE FAIT PAS. Il est lexical. Il voit
   qu'un sujet est traité ; il ne dit jamais qu'il est bien traité. Aucun point
@@ -32,7 +36,7 @@
   LES TEXTES. Chaque article cité a été demandé deux fois au relais Légifrance
   le 7 septembre 2026, à plusieurs minutes d'intervalle ; les deux lectures ont
   rendu le même identifiant de version et le même texte. L'identifiant LEGIARTI
-  est dans la table TEXTES, et le pied de page l'affiche.
+  est dans la table TEXTES, et « Voir le texte de loi » l'affiche.
 
   Rien ne quitte ce poste : le fichier déposé est lu dans le navigateur, et
   n'est envoyé nulle part.
@@ -41,42 +45,50 @@
 <style>
   /* Ce qui est propre à cette page. Le reste vient de style.css. */
 
-  textarea#depot{min-height:240px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}
+  #o-depot{margin:var(--e4) 0 0}
+  textarea#depot{min-height:200px;font-size:var(--t3);line-height:1.5;margin:var(--e3) 0 0}
+  #o-depot .barre{margin:var(--e3) 0}
+  #lecture .avis,#erreur .avis{margin:var(--e3) 0 0}
 
   .pt{border:1px solid var(--filet);border-radius:var(--r2);margin:var(--e3) 0;
     background:var(--surface);overflow:hidden}
-  .pt>.tt{padding:11px 15px;display:grid;grid-template-columns:auto 1fr;gap:11px;
-    align-items:start;border-bottom:1px solid var(--filet)}
-  .pt>.tt .obj{font:600 15px/1.35 system-ui;color:var(--encre)}
-  .pt>.tt .fond{display:block;font-size:var(--t1);color:var(--texte-3);margin-top:2px}
+  .pt>.tt{padding:11px 15px;display:flex;gap:11px;align-items:center;flex-wrap:wrap;
+    border-bottom:1px solid var(--filet)}
+  .pt>.tt .obj{font:600 16px/1.35 system-ui;color:var(--encre);flex:1;min-width:0}
   .etat{font:600 11px/1 system-ui;padding:6px 9px;border-radius:var(--r1);white-space:nowrap;
     text-transform:uppercase;letter-spacing:.04em}
   .etat.absent{background:var(--rouge-clair);color:var(--rouge)}
   .etat.averifier{background:var(--accent-clair);color:var(--accent)}
   .etat.acontroler{background:var(--ambre-clair);color:var(--ambre)}
   .etat.sansobjet{background:var(--creux);color:var(--texte-3)}
-  .pt .c{padding:12px 15px;font-size:14px;line-height:1.6;color:var(--texte-2)}
+  .pt .c{padding:12px 15px;font-size:15px;line-height:1.55;color:var(--texte-2)}
   .pt .c p{margin:0 0 9px}
-  .pt .c .exige{color:var(--encre)}
+  .pt .c details{margin:var(--e2) 0 0;border:0;padding:0}
+  .pt .c details p{margin:6px 0 0;font-size:var(--t1)}
   blockquote{margin:8px 0;padding:9px 13px;border-left:3px solid var(--filet-2);
-    background:var(--creux);border-radius:0 var(--r1) var(--r1) 0;font-size:13.5px;color:var(--encre)}
+    background:var(--creux);border-radius:0 var(--r1) var(--r1) 0;font-size:14px;color:var(--encre)}
   blockquote .m{display:block;margin-top:5px;font-size:11.5px;color:var(--texte-3)}
 
   /* La clause prête à insérer : c'est elle qu'on vient chercher, elle est donc
      lisible d'un coup d'oeil et copiable d'un bouton. */
   .clause{margin:8px 0 0;padding:12px 14px;background:var(--vert-clair);
-    border-radius:var(--r1);font-size:13.5px;line-height:1.55;color:#1b4b2d}
+    border-radius:var(--r1);font-size:14px;line-height:1.55;color:#1b4b2d}
   .clause p{margin:0 0 6px}
   .clause p:last-child{margin-bottom:0}
   .sous-clause{display:flex;flex-wrap:wrap;gap:var(--e2);align-items:center;margin:var(--e2) 0 0}
-  label.opt{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--encre)}
+  label.opt{display:flex;gap:9px;align-items:flex-start;font-size:14px;color:var(--encre)}
   label.opt input{width:auto;margin-top:3px}
 
-  pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
-    padding:16px;max-height:64vh;overflow:auto}
+  /* La version complétée, en feuille : le texte tel qu'il partira. */
+  #sortie{white-space:pre-wrap}
+  #sortie .b-h{font:700 15px/1.4 system-ui;margin:16px 0 6px}
+  #sortie p{margin:0 0 8px;font-size:14.5px;line-height:1.65}
+  #sources{margin-top:8px;font-size:var(--t1);line-height:1.6;color:var(--texte-2)}
+  #sources div{margin:0 0 6px}
+  #sources b{color:var(--encre)}
+  main details{margin:var(--e2) 0 var(--e6)}
 
-  @media print{.barre,.onglets,#o-depot{display:none !important}}
+  @media print{.barre,#o-depot,#o-diag,details,header.site{display:none !important}}
 </style>
 </head>
 <body>
@@ -92,86 +104,45 @@
 
 <main class="wrap">
 
-  <div class="onglets" id="onglets">
-    <button type="button" data-o="depot" class="actif">1 · Le document</button>
-    <button type="button" data-o="diag" id="ong-diag" disabled>2 · Ce qui manque</button>
-    <button type="button" data-o="sortie" id="ong-sortie" disabled>3 · La version complétée</button>
-  </div>
-
-  <!-- ══════ 1 · LE DOCUMENT ══════ -->
+  <!-- ══════ LE DÉPÔT ══════ -->
   <section id="o-depot">
-    <h2>Déposez votre règlement des sanctions ou votre procédure disciplinaire</h2>
-    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats
-    sont lus directement, <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document, copiez
-    son texte et collez-le ci-dessous. Le règlement intérieur entier convient aussi : la page ne
-    regarde que ce qui touche à la discipline.</p>
-
-    <div class="carte">
-      <div class="barre">
-        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
-          Choisir un fichier .docx ou .txt
-          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
-        </label>
-        <button type="button" class="btn second" id="exemple">Coller un exemple</button>
-        <button type="button" class="btn second" id="vider">Vider</button>
-      </div>
-      <div id="lecture"></div>
-      <textarea id="depot" placeholder="Collez ici le texte de votre règlement des sanctions, de votre procédure disciplinaire ou de votre règlement intérieur."></textarea>
-      <div class="barre">
-        <button type="button" class="btn" id="controler">Contrôler ce document</button>
-      </div>
-      <div id="erreur"></div>
+    <div class="barre pile">
+      <label class="btn">
+        Déposer le fichier (Word ou texte)
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+      </label>
     </div>
-
-    <div class="avis info">
-      <b>Ce que ce contrôle établit, et ce qu'il n'établit pas</b>
-      Il cherche dans votre texte les exigences que la loi pose à la discipline et les clauses
-      qu'elle interdit. Trouver un sujet ne prouve pas que la clause est complète ni bien rédigée :
-      c'est pourquoi rien ici n'est jamais dit « conforme ». Ne pas le trouver ne prouve pas
-      davantage qu'il manque au droit de votre entreprise : il peut figurer dans un accord, dans la
-      convention collective, ou être rédigé en d'autres termes que ceux que ce contrôle connaît.
+    <div id="lecture"></div>
+    <textarea id="depot" placeholder="Ou collez ici le texte de votre règlement."></textarea>
+    <div class="barre pile">
+      <button type="button" id="controler">Contrôler</button>
     </div>
+    <div id="erreur"></div>
   </section>
 
-  <!-- ══════ 2 · CE QUI MANQUE ══════ -->
+  <!-- ══════ CE QUI MANQUE ══════ -->
   <section id="o-diag" class="cache">
-    <h2>Ce qui manque, et la clause qui le comble</h2>
-    <p class="aide">Chaque point cite l'article dont il sort. Les passages de votre document sont
-    rendus tels qu'ils sont écrits : ce sont eux qui décident.</p>
     <div class="compteurs" id="compteurs"></div>
     <div id="points"></div>
-    <div class="barre">
-      <button type="button" class="btn" id="vers-sortie">Assembler la version complétée</button>
+    <div class="barre pile">
+      <button type="button" id="vers-sortie">Voir la version complétée</button>
     </div>
-  </section>
-
-  <!-- ══════ 3 · LA VERSION COMPLÉTÉE ══════ -->
-  <section id="o-sortie" class="cache">
-    <h2>La version complétée</h2>
-    <p class="aide">Votre texte est conservé mot pour mot. Les passages retenus au diagnostic y sont
-    signalés à leur place, et les clauses manquantes sont ajoutées à la suite, à déplacer à leur
-    rang. Rien n'est réécrit à votre place.</p>
-    <div class="barre">
-      <button type="button" class="btn" id="dl-docx">Télécharger en Word</button>
-      <button type="button" class="btn second" id="dl-txt">En texte</button>
-      <button type="button" class="btn second" id="copier">Copier</button>
-      <button type="button" class="btn second" id="retour-diag">&larr; Revenir au diagnostic</button>
-    </div>
-    <div id="resume"></div>
-    <pre id="sortie"></pre>
-  </section>
-
-  <footer>
-    Le repérage est lexical : il ne remplace pas la lecture du document, il la conduit.
-    <p style="margin:10px 0 0">Si le document n'existe pas encore, il s'écrit sur
-      <a href="audit-discipline.html">l'écran de la discipline</a> ; le règlement intérieur entier
-      se contrôle sur <a href="controler-ri.html">controler-ri.html</a> et se rédige dans le
-      <a href="parcours.html?p=ri&amp;faire=1">parcours du règlement intérieur</a>.</p>
     <details>
-      <summary>Les textes lus, avec leur identifiant de version</summary>
-      <div id="sources" style="margin-top:8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.7"></div>
+      <summary>Voir le texte de loi</summary>
+      <div id="sources"></div>
     </details>
-  </footer>
+  </section>
+
+  <!-- ══════ LA VERSION COMPLÉTÉE ══════ -->
+  <section id="o-sortie" class="cache">
+    <div id="resume"></div>
+    <div class="feuille" id="sortie"></div>
+    <div class="barre pile">
+      <button type="button" id="dl-docx">Télécharger en Word</button>
+      <button type="button" class="second" id="imprimer">Imprimer</button>
+    </div>
+  </section>
+
 </main>
 
 <script src="audit-export.js"></script>
@@ -655,19 +626,23 @@
 
   /* ═══════════════════════════════════════════════════════════ les écrans */
   var analyse = null, choixInserer = {}, choixSignaler = {};
+  var ECRAN = "depot";
 
-  function onglet(nom) {
+  function ecran(nom) {
+    ECRAN = nom;
     ["depot", "diag", "sortie"].forEach(function (o) {
       $("#o-" + o).classList.toggle("cache", o !== nom);
     });
-    Array.prototype.forEach.call($("#onglets").children, function (b) {
-      b.classList.toggle("actif", b.dataset.o === nom);
-    });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0);
   }
-  Array.prototype.forEach.call($("#onglets").children, function (b) {
-    b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
-  });
+  /* Le bouton Retour du bandeau, posé par droits.js : il remonte d'un écran,
+     et ne quitte la page que depuis le dépôt. */
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || ECRAN === "depot") return;
+    ev.preventDefault(); ev.stopPropagation();
+    ecran(ECRAN === "sortie" ? "diag" : "depot");
+  }, true);
 
   /* ═══════════════════════════════════════════════════════════════════════
      LA LECTURE D'UN .DOCX, SANS BIBLIOTHÈQUE.
@@ -746,26 +721,6 @@
     });
   });
 
-  $("#vider").addEventListener("click", function () {
-    $("#depot").value = ""; dit(""); $("#erreur").innerHTML = "";
-  });
-
-  $("#exemple").addEventListener("click", function () {
-    $("#depot").value = [
-      "RÈGLEMENT DISCIPLINAIRE DE LA SOCIÉTÉ EXEMPLE",
-      "",
-      "Article 1 - Le présent règlement s'applique à l'ensemble du personnel.",
-      "Article 2 - Les sanctions applicables sont l'avertissement, le blâme et la mise à pied disciplinaire.",
-      "Article 3 - Tout retard non justifié donnera lieu à une retenue sur salaire de vingt euros.",
-      "Article 4 - Trois avertissements entraîneront automatiquement le licenciement du salarié.",
-      "Article 5 - L'abandon de poste vaut démission et emporte rupture de plein droit du contrat de travail.",
-      "Article 6 - La période d'essai est de quatre mois, renouvelable une fois.",
-      "Article 7 - Le salarié convoqué à un entretien préalable est reçu par son supérieur hiérarchique."
-    ].join("\n");
-    dit("Exemple collé : un règlement disciplinaire de sept articles, volontairement fautif. " +
-        "Contrôlez-le pour voir ce que la page en dit.");
-  });
-
   $("#controler").addEventListener("click", function () {
     var t = $("#depot").value.trim();
     $("#erreur").innerHTML = "";
@@ -781,10 +736,8 @@
       if (p.etat === ABSENT && p.clause && !p.sansObjet) choixInserer[p.id] = true;
       if (p.etat === ACONTROLER) choixSignaler[p.id] = true;
     });
-    $("#ong-diag").disabled = false;
-    $("#ong-sortie").disabled = false;
     rendreDiagnostic();
-    onglet("diag");
+    ecran("diag");
   });
 
   function classeEtat(p) {
@@ -797,12 +750,7 @@
   function carte(p) {
     var h = '<div class="pt"><div class="tt"><span class="etat ' + classeEtat(p) + '">' +
       ech(p.sansObjet ? "sans objet" : p.etat) + "</span>" +
-      '<span><span class="obj">' + ech(p.objet) + "</span>" +
-      '<span class="fond">' + ech(p.id) + " · " + ech(refs(p.fondement)) +
-      "</span></span></div><div class=\"c\">";
-
-    h += '<p class="exige">' + ech(p.exige) + "</p>";
-    h += "<p>" + ech(p.motif) + "</p>";
+      '<span class="obj">' + ech(p.objet) + "</span></div><div class=\"c\">";
 
     if (p.passages && p.passages.length) {
       p.passages.slice(0, 6).forEach(function (q) {
@@ -834,6 +782,8 @@
       h += '<label class="opt"><input type="checkbox" data-sig="' + ech(p.id) + '" checked> ' +
         "Signaler ce passage dans la version complétée</label>";
     }
+    h += '<details><summary>Voir le texte de loi</summary><p>' + ech(p.exige) + "</p><p>" +
+      ech(p.motif) + "</p><p>" + ech(p.id) + " · " + ech(refs(p.fondement)) + "</p></details>";
     return h + "</div></div>";
   }
 
@@ -842,8 +792,7 @@
     $("#compteurs").innerHTML =
       '<span class="c">' + c.absents + " clause" + (c.absents > 1 ? "s" : "") + " à insérer</span>" +
       '<span class="c">' + c.aControler + " passage" + (c.aControler > 1 ? "s" : "") + " à contrôler</span>" +
-      '<span class="c">' + c.aRelire + " point" + (c.aRelire > 1 ? "s" : "") + " à relire</span>" +
-      '<span class="c">' + analyse.phrases.toLocaleString("fr-FR") + " phrases lues</span>";
+      '<span class="c">' + c.aRelire + " point" + (c.aRelire > 1 ? "s" : "") + " à relire</span>";
 
     var familles = ["le règlement des sanctions", "la procédure disciplinaire", "les formalités",
       "ce qui ne peut pas y figurer"];
@@ -881,25 +830,25 @@
     };
   }
 
+  function feuilleDe(texte) {
+    return String(texte).split(/\n/).map(function (l) {
+      var t = l.trim();
+      if (!t) return '<div style="height:8px"></div>';
+      if (/^[A-ZÀ-Ý0-9'’ ,:-]{6,}$/.test(t) && t === t.toUpperCase()) return '<div class="b-h">' + ech(t) + "</div>";
+      return "<p>" + ech(t) + "</p>";
+    }).join("");
+  }
   $("#vers-sortie").addEventListener("click", function () {
     var c = corriger(analyse, choix());
-    $("#resume").innerHTML = '<div class="avis info"><b>' + ech(c.resume) + "</b>" +
-      "Les clauses ajoutées portent des mentions entre crochets à compléter. Un document " +
-      "disciplinaire modifié se soumet de nouveau à l'avis du comité, au dépôt au greffe, à la " +
-      "communication à l'inspection et à la publicité, avant une entrée en vigueur différée d'un " +
-      "mois (" + refs(["L1321-4", "L1321-5", "R1321-3"]) + ").</div>";
-    $("#sortie").textContent = texteComplete(analyse, choix());
-    onglet("sortie");
+    $("#resume").innerHTML = '<div class="compteurs"><span class="c">' + ech(c.resume) + "</span></div>";
+    $("#sortie").innerHTML = feuilleDe(texteComplete(analyse, choix()));
+    ecran("sortie");
   });
-  $("#retour-diag").addEventListener("click", function () { onglet("diag"); });
+  $("#imprimer").addEventListener("click", function () { window.print(); });
 
   function nomFichier(ext) {
     return "procedure-disciplinaire-completee-" + new Date().toISOString().slice(0, 10) + "." + ext;
   }
-  $("#dl-txt").addEventListener("click", function () {
-    window.AuditExport.telecharger($("#sortie").textContent, nomFichier("txt"),
-      "text/plain;charset=utf-8");
-  });
   $("#dl-docx").addEventListener("click", function () {
     var c = corriger(analyse, choix());
     var items = [{ k: "sur", t: "Version complétée au terme du contrôle de la discipline · " + c.resume }];
@@ -927,20 +876,13 @@
       nomFichier("docx"),
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
-  $("#copier").addEventListener("click", function () {
-    var t = $("#sortie").textContent;
-    if (navigator.clipboard) navigator.clipboard.writeText(t);
-    $("#copier").textContent = "Copié";
-    setTimeout(function () { $("#copier").textContent = "Copier"; }, 1600);
-  });
-
-  /* Les sources, en pied de page : le numéro, ce qu'il dit, et l'identifiant
-     de version. */
+  /* Les textes, repliés sous « Voir le texte de loi » : le numéro, ce qu'il
+     dit, et l'identifiant de version. */
   (function sources() {
-    var h = "Code du travail, lu au relais Légifrance le 7 septembre 2026, deux lectures " +
-      "concordantes par article.<br><br>";
+    var h = "<div>Code du travail, lu au relais Légifrance le 7 septembre 2026, deux lectures " +
+      "concordantes par article.</div>";
     Object.keys(TEXTES).forEach(function (k) {
-      h += ech(article(k)) + " · " + TEXTES[k].id + " · " + ech(TEXTES[k].dit) + "<br>";
+      h += "<div><b>" + ech(article(k)) + "</b> · " + ech(TEXTES[k].dit) + " · " + TEXTES[k].id + "</div>";
     });
     $("#sources").innerHTML = h;
   })();

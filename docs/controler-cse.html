@@ -3,17 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Protocole électoral</title>
+<title>Contrôle du comité</title>
 <link rel="manifest" href="manifest-audit-cse.json">
 <meta name="theme-color" content="#1c2126">
 
 <!--
-  LA BRANCHE « OUI » DU MODULE COMITÉ.
+  LA BRANCHE « OUI » DU MODULE COMITÉ, le dépôt en premier (maquette validée
+  le 8 septembre 2026, epreuve/maquette.html, écran 3 puis écran 5).
 
-  Le « non » ouvre la construction. Le « oui » ouvre ceci : on dépose le
-  protocole d'accord préélectoral, ou le procès-verbal du scrutin, et l'écran
-  rend les clauses entièrement rédigées, avec les chiffres de la fiche
-  entreprise dedans. Un bouton les insère. L'utilisateur n'a rien à écrire.
+  On dépose le document que l'on a : protocole d'accord préélectoral,
+  procès-verbal du scrutin, convocation, ordre du jour, procès-verbal de
+  réunion ou règlement intérieur du comité. L'écran rend les clauses
+  entièrement rédigées, avec les chiffres de la fiche entreprise dedans, et
+  un bouton les insère. Le paramètre d= de l'adresse (protocole, pv,
+  convocation, odj, pvreunion, reglement) choisit la nature du document
+  déposé ; il vient de la ligne de audit-cse.html.
 
   LA RÈGLE DE CET ÉCRAN : il ne nomme jamais un manque. Il n'y a pas ici de
   « clause absente », pas de constat, pas de note. Il y a le texte fini, prêt
@@ -58,14 +62,58 @@
     R. 2314-20  LEGIARTI000036481925   plus forte moyenne
     R. 2314-22  LEGIARTI000040341167   transmission du procès-verbal, quinze jours, affichage
     R. 2314-24  LEGIARTI000039624934   requête, trois jours sur l'électorat, quinze jours sur la régularité
+
+  LES ARTICLES DES QUATRE AUTRES DOCUMENTS, LUS AU MÊME RELAIS LE 8 SEPTEMBRE
+  2026, deux lectures espacées et concordantes chacun, filtre par le nom du
+  code :
+
+    L. 2312-19  LEGIARTI000036262394   accord fixant le nombre de réunions, six au moins
+    L. 2315-21  LEGIARTI000035624428   réception collective au moins une fois par mois
+    L. 2315-22  LEGIARTI000035624430   note écrite deux jours ouvrables avant, réponse six jours ouvrables après, registre spécial
+    L. 2315-23  LEGIARTI000035624835   personnalité civile, présidence, secrétaire et trésorier
+    L. 2315-24  LEGIARTI000036761946   règlement intérieur du comité
+    L. 2315-27  LEGIARTI000036761943   quatre réunions santé-sécurité par an, réunions supplémentaires
+    L. 2315-28  LEGIARTI000035624857   périodicité à défaut d'accord, seconde réunion
+    L. 2315-29  LEGIARTI000035624861   ordre du jour établi par le président et le secrétaire
+    L. 2315-30  LEGIARTI000035624863   communication trois jours au moins avant la réunion
+    L. 2315-31  LEGIARTI000035624865   questions jointes à la demande de convocation
+    L. 2315-32  LEGIARTI000035624869   résolutions à la majorité des présents
+    L. 2315-34  LEGIARTI000036262447   procès-verbal établi par le secrétaire, décision motivée
+    L. 2315-35  LEGIARTI000035624877   affichage ou diffusion après adoption
+    R. 2315-25  LEGIARTI000036433679   quinze jours à défaut d'accord
+    D. 2315-26  LEGIARTI000036433681   quinze jours, contenu minimal du procès-verbal
 -->
 
 <link rel="stylesheet" href="style.css">
 <style>
-  textarea#depot{width:100%;min-height:210px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
-    padding:12px;border:1px solid var(--filet-2);border-radius:8px;background:var(--carte);color:var(--encre);resize:vertical}
-  .champs input,.champs select{width:100%;padding:8px 10px;border:1px solid var(--filet-2);
-    border-radius:7px;font:15px/1.35 inherit;background:var(--carte);color:var(--encre)}
+  body{font-size:18px;line-height:1.45}
+  main.wrap{max-width:760px;padding:0 16px var(--e7)}
+
+  .haut{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:12px 0 10px;
+    border-bottom:1px solid var(--filet);background:var(--fond)}
+  .haut .retour{margin:0;font:600 15px system-ui;padding:10px 14px;border:1px solid var(--filet-2);
+    border-radius:10px;background:var(--surface);color:var(--encre);text-decoration:none;min-height:44px;
+    display:inline-flex;align-items:center;white-space:nowrap;flex:none;cursor:pointer}
+  .haut .retour:hover{background:var(--creux);color:var(--encre);border-color:var(--filet-2)}
+  .haut b{font-size:17px;color:var(--encre);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .haut span{color:var(--texte-2);font-size:15px;flex:none;max-width:38%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .onglets{margin:12px 0 0}
+  textarea#depot{width:100%;min-height:200px;font:15px/1.55 system-ui,sans-serif;box-sizing:border-box;
+    padding:12px;border:1px solid var(--filet-2);border-radius:10px;background:var(--surface);color:var(--encre);resize:vertical;margin:12px 0 0}
+  .barre{display:flex;flex-direction:column;gap:10px;margin:12px 0 8px}
+  .barre .btn,.barre button{font:600 19px system-ui;padding:16px;min-height:56px;border-radius:12px;width:100%;margin:0;
+    box-sizing:border-box;justify-content:center;text-align:center;cursor:pointer}
+  @media (min-width:700px){.barre{flex-direction:row;flex-wrap:wrap}.barre .btn,.barre button{width:auto;flex:1}}
+
+  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  .champs label{display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--texte-2)}
+  .champs label b{font-weight:500}
+  .champs input,.champs select{width:100%;box-sizing:border-box;padding:10px 12px;min-height:44px;border:1px solid var(--filet-2);
+    border-radius:10px;font:16px/1.35 inherit;background:var(--surface);color:var(--encre)}
+  .champs label.nature{grid-column:1/-1}
+  .compteurs{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+  .compteurs .c{font:500 12.5px/1 system-ui;padding:7px 10px;border-radius:7px;background:var(--creux);color:var(--encre-2)}
   .compteurs .c.pose{background:var(--vert-clair);color:var(--vert)}
   .compteurs .c.ver{background:var(--bleu-clair);color:var(--bleu)}
 
@@ -73,141 +121,119 @@
   .cl>.tt{padding:12px 15px;display:grid;grid-template-columns:1fr auto;gap:11px;align-items:center;
     border-bottom:1px solid var(--filet)}
   .cl>.tt .obj{font:600 15px/1.35 system-ui}
+  .cl>.tt .obj,.cl>.tt .fond{display:block}
   .cl>.tt .fond{font-size:12.5px;color:var(--encre-3);margin-top:2px}
   .cl .corps{padding:12px 15px}
   .texte{padding:12px 14px;background:var(--creux);border-radius:8px;
-    font:14px/1.62 Georgia,"Times New Roman",serif;color:var(--encre)}
+    font:15px/1.6 Georgia,"Times New Roman",serif;color:var(--encre);overflow-wrap:anywhere}
   .texte p{margin:0 0 9px}
   .texte p:last-child{margin-bottom:0}
+  .texte .tab{overflow-x:auto}
   .texte table{border-collapse:collapse;width:100%;font:13px/1.4 system-ui;margin:4px 0 9px;background:var(--carte)}
   .texte th,.texte td{border:1px solid var(--filet-2);padding:5px 8px;text-align:left}
   .texte th{background:var(--bleu-clair);font-weight:600}
-  .btn-ins{font:600 13px/1 system-ui;padding:9px 13px;border-radius:8px;border:1px solid var(--vert);
-    background:var(--vert);color:#fff;cursor:pointer;white-space:nowrap}
+  .btn-ins{font:600 14px/1 system-ui;padding:11px 14px;min-height:44px;border-radius:10px;border:2px solid var(--vert);
+    background:var(--vert);color:#fff;cursor:pointer;white-space:nowrap;margin:0}
   .btn-ins.mis{background:var(--carte);color:var(--vert)}
 
-  .deja{display:flex;flex-wrap:wrap;gap:7px;margin:6px 0 0}
-  .deja span{font:500 12.5px/1 system-ui;padding:7px 10px;border-radius:7px;
-    background:var(--creux);color:var(--encre-2)}
+  .cal-liste{display:flex;flex-direction:column;gap:8px;margin:6px 0 14px}
+  .cal-liste .d{border:1px solid var(--filet);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px;background:var(--surface)}
+  .cal-liste .d .q{display:block;font:600 11.5px/1.3 system-ui;text-transform:uppercase;letter-spacing:.07em;color:var(--texte-3)}
+  .cal-liste .d .v{display:block;font:600 17px/1.3 system-ui;margin:3px 0 1px;color:var(--encre)}
+  .cal-liste .d .f{display:block;font-size:12.5px;color:var(--texte-3);line-height:1.45}
 
-  table.cal{border-collapse:collapse;width:100%;font-size:14px;background:var(--carte);margin:6px 0 14px}
-  table.cal th,table.cal td{border:1px solid var(--filet);padding:8px 10px;text-align:left;vertical-align:top}
-  table.cal th{background:var(--bleu);color:#fff;font-weight:600}
-  table.cal td.j{white-space:nowrap;font-weight:600;width:1%}
-  table.cal td.f{color:var(--encre-3);font-size:12.5px;white-space:nowrap}
-
-  pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
-    max-height:60vh;overflow:auto}
-  @media print{.onglets,.barre,header.site{display:none}.cache{display:block !important}}</style>
+  #sortie{white-space:pre-wrap;font:15px/1.6 Georgia,"Times New Roman",serif;color:var(--encre);overflow-wrap:anywhere;
+    background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:18px 16px}
+  .cache{display:none}
+  [hidden]{display:none !important}
+  @media print{.onglets,.barre,.haut,#champs,#lecture{display:none !important}.cache{display:block !important}#sortie{border:0;padding:0}}
+</style>
 </head>
 <body>
 
-<header class="site">
-  <div class="wrap">
-    <p class="marque">Protocole électoral</p>
-    <div class="outils">
-      <a href="index.html">Accueil</a>
-    </div>
+<main class="wrap" id="main">
+
+  <div class="haut">
+    <a class="retour" href="audit-cse.html">&larr; Retour</a>
+    <b id="titre">Contrôle</b>
+    <span id="ent-haut"></span>
   </div>
-</header>
-
-<main class="wrap">
-
-  <header>
-    <h1>Contrôler mon protocole préélectoral <span>et le procès-verbal du scrutin</span></h1>
-  </header>
 
   <div class="onglets" id="onglets">
-    <button data-o="depot" class="actif">1 · Le document</button>
-    <button data-o="clauses" id="ong-clauses" disabled>2 · Les clauses à insérer</button>
-    <button data-o="sortie" id="ong-sortie" disabled>3 · Le protocole et le calendrier</button>
+    <button type="button" data-o="depot" class="actif">1 · Déposer</button>
+    <button type="button" data-o="clauses" id="ong-clauses" disabled>2 · Les clauses</button>
+    <button type="button" data-o="sortie" id="ong-sortie" disabled>3 · Le document</button>
   </div>
 
-  <!-- ══════ 1 · LE DOCUMENT ══════ -->
+  <!-- 1 · LE DÉPÔT, EN PREMIER -->
   <section id="o-depot">
-    <h2>Déposez votre protocole ou votre procès-verbal</h2>
-    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats sont
-    lus directement, <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document, copiez son texte
-    et collez-le ci-dessous.</p>
-
-    <div class="carte">
-      <!-- Le panneau des champs est unique. Il suit l'onglet actif : sur
-           l'onglet des clauses, il se tient à côté du texte rédigé, et chaque
-           réponse remplit ce texte sous les yeux de l'utilisateur. Aucun de
-           ces champs ne conditionne l'ouverture : ce qui manque sort entre
-           crochets, jamais en question posée d'avance. -->
-      <div id="hote-depot"></div>
-      <div class="barre">
-        <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
-          Choisir un fichier .docx ou .txt
-          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
-        </label>
-        <button class="btn second" id="exemple">Coller un exemple</button>
-        <button class="btn second" id="vider">Vider</button>
-      </div>
-      <div id="lecture"></div>
-      <textarea id="depot" placeholder="Collez ici le texte de votre protocole préélectoral ou de votre procès-verbal, ou choisissez le fichier ci-dessus."></textarea>
-      <div class="barre">
-        <button class="btn" id="ouvrir">Ouvrir les clauses</button>
-      </div>
-      <div id="erreur"></div>
+    <div class="barre">
+      <label class="btn">Choisir le fichier (.docx ou .txt)
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none"></label>
     </div>
+    <div id="lecture"></div>
+    <textarea id="depot" placeholder="Ou collez ici le texte de votre document."></textarea>
+    <div class="barre">
+      <button type="button" class="btn" id="ouvrir">Contrôler</button>
+      <button type="button" class="btn second" id="exemple">Exemple</button>
+      <button type="button" class="btn second" id="vider">Vider</button>
+    </div>
+    <div id="erreur"></div>
+    <div id="hote-depot"></div>
   </section>
 
-  <!-- ══════ 2 · LES CLAUSES ══════ -->
+  <!-- 2 · LES CLAUSES -->
   <section id="o-clauses" class="cache">
-    <h2>Les clauses, rédigées</h2>
-    <p class="aide">Chaque clause est écrite en entier, avec les chiffres de votre entreprise dedans.
-    Le bouton l'insère dans le document de l'onglet 3. Ce qui reste entre crochets vous appartient.</p>
-    <div class="carte" id="hote-clauses"></div>
+    <div id="hote-clauses"></div>
     <div class="compteurs" id="compteurs"></div>
     <div id="clauses"></div>
     <div id="presentes"></div>
     <div class="barre">
-      <button class="btn" id="vers-sortie">Voir le protocole et le calendrier</button>
-      <button class="btn second" id="tout">Tout insérer</button>
+      <button type="button" class="btn" id="vers-sortie">Voir le document</button>
+      <button type="button" class="btn second" id="tout">Tout insérer</button>
     </div>
   </section>
 
-  <!-- ══════ 3 · LE DOCUMENT CORRIGÉ ══════ -->
+  <!-- 3 · LE DOCUMENT -->
   <section id="o-sortie" class="cache">
-    <h2>Le document et le calendrier</h2>
-    <p class="aide">Votre texte est conservé mot pour mot. Les clauses insérées le suivent, dans l'ordre
-    où elles se lisent. Le calendrier est calculé à rebours de la date du premier tour.</p>
     <div class="barre">
-      <button class="btn" id="dl-docx">Télécharger en Word</button>
-      <button class="btn second" id="dl-txt">Télécharger en texte</button>
-      <button class="btn second" id="copier">Copier</button>
-      <button class="btn second" id="retour-clauses">← Revenir aux clauses</button>
+      <button type="button" class="btn" id="dl-docx">Télécharger en Word</button>
+      <button type="button" class="btn second" id="imprimer">Imprimer</button>
+      <button type="button" class="btn second" id="dl-txt">Texte</button>
+      <button type="button" class="btn second" id="copier">Copier</button>
+      <button type="button" class="btn second" id="retour-clauses">&larr; Les clauses</button>
     </div>
     <div id="calendrier"></div>
-    <pre id="sortie"></pre>
+    <div id="sortie"></div>
   </section>
 
-  <!-- Le panneau unique des champs, déplacé d'un onglet à l'autre. -->
+  <!-- Le panneau unique des champs, déplacé d'un onglet à l'autre. Chaque
+       champ ne s'affiche que pour les natures de document qu'il sert. -->
   <div id="champs" class="champs" hidden>
-    <label><b>Ce document est</b>
+    <label class="nature"><b>Ce document est</b>
       <select id="nature">
         <option value="protocole">un protocole d'accord préélectoral</option>
         <option value="pv">un procès-verbal du scrutin</option>
+        <option value="convocation">une convocation à une réunion du comité</option>
+        <option value="odj">un ordre du jour de réunion</option>
+        <option value="pvreunion">un procès-verbal de réunion du comité</option>
+        <option value="reglement">le règlement intérieur du comité</option>
       </select></label>
     <label><b>Entreprise</b><input type="text" id="ent" placeholder="dénomination sociale"></label>
     <label><b>Effectif</b><input type="number" id="eff" min="0" step="1" placeholder="salariés"></label>
-    <label><b>Ingénieurs et cadres</b><input type="number" id="cad" min="0" step="1" placeholder="nombre"></label>
-    <label><b>Premier tour</b><input type="date" id="d1"></label>
-    <label><b>Fin des mandats en cours</b><input type="date" id="dfin"></label>
-    <label><b>Publication de la liste électorale</b><input type="date" id="dliste"></label>
-    <label><b>Vote électronique</b>
+    <label data-pour="protocole pv"><b>Ingénieurs et cadres</b><input type="number" id="cad" min="0" step="1" placeholder="nombre"></label>
+    <label data-pour="protocole pv"><b>Premier tour</b><input type="date" id="d1"></label>
+    <label data-pour="protocole pv"><b>Fin des mandats en cours</b><input type="date" id="dfin"></label>
+    <label data-pour="protocole pv"><b>Publication de la liste électorale</b><input type="date" id="dliste"></label>
+    <label data-pour="protocole pv"><b>Vote électronique</b>
       <select id="vel"><option value="non">non</option><option value="oui">oui</option></select></label>
+    <label data-pour="convocation odj pvreunion"><b>Date de la réunion</b><input type="date" id="dr"></label>
+    <label data-pour="convocation odj"><b>Heure</b><input type="text" id="heure" placeholder="10 h"></label>
+    <label data-pour="convocation odj"><b>Lieu</b><input type="text" id="lieur" placeholder="salle de réunion du siège"></label>
+    <label data-pour="odj pvreunion reglement"><b>Secrétaire du comité</b><input type="text" id="sec" placeholder="Madame Nadia ROUX"></label>
+    <label data-pour="reglement"><b>Date d'adoption</b><input type="date" id="dadopt"></label>
   </div>
 
-  <footer>
-    Les articles cités ont été relus à la source par le relais Légifrance de l'application, deux lectures
-    espacées et concordantes chacun, le 7 septembre 2026 ; leurs identifiants de version figurent en
-    commentaire dans le fichier de cette page. Le nombre de sièges et le nombre de collèges viennent du
-    moteur du module comité, sur l'effectif que vous avez saisi.
-  </footer>
 </main>
 
 <script src="moteur-cse.js"></script>
@@ -319,6 +345,16 @@
     d.setUTCDate(d.getUTCDate() + n);
     return d.toISOString().slice(0, 10);
   }
+  /* Jours ouvrables : tous les jours sauf le dimanche. Les jours fériés ne
+     sont pas décomptés ici, et le texte le dit. */
+  function ouvr(iso, n) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return null;
+    var d = new Date(iso + "T00:00:00Z");
+    if (isNaN(d.getTime())) return null;
+    var pas = n < 0 ? -1 : 1, reste = Math.abs(n);
+    while (reste > 0) { d.setUTCDate(d.getUTCDate() + pas); if (d.getUTCDay() !== 0) reste--; }
+    return d.toISOString().slice(0, 10);
+  }
   function mois(iso, n) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return null;
     var d = new Date(iso + "T00:00:00Z");
@@ -352,6 +388,8 @@
       eff: eff, cad: cad,
       d1: $("#d1").value, dfin: $("#dfin").value, dliste: $("#dliste").value,
       vel: $("#vel").value === "oui",
+      dr: $("#dr").value, heure: $("#heure").value.trim() || "[heure]", lieur: $("#lieur").value.trim() || "[lieu]",
+      sec: $("#sec").value.trim() || "[nom du secrétaire]", dadopt: $("#dadopt").value,
     };
     /* Le nombre de sièges et le nombre de collèges ne sont pas saisis : le
        moteur du module comité les tire du tableau de R. 2314-1 et de
@@ -667,7 +705,302 @@
         ];
       },
     },
+
+    /* ---------------- la convocation, moins de cinquante salariés ---------------- */
+    {
+      id: "conv-petit-objet", pour: "convocation", si: function (c) { return c.eff !== null && c.eff < 50; },
+      titre: "Objet, date et lieu de la réunion mensuelle",
+      fond: ["L2315-21", "L2314-1"],
+      marques: ["recus collectivement", "une fois par mois", "convoqu"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Objet : réunion mensuelle de la délégation du personnel du comité social et économique de " + c.ent + ".",
+          "Les membres de la délégation du personnel, titulaires et suppléants, sont reçus collectivement par l'employeur le " + fr(c.dr) + " à " + c.heure + ", à " + c.lieur + ". Cette réunion est celle que l'article L. 2315-21 du code du travail prévoit au moins une fois par mois ; en cas d'urgence, les membres sont reçus sur leur demande.",
+          "L'employeur peut se faire assister de collaborateurs ; ensemble, ils ne sont pas en nombre supérieur à celui des représentants du personnel titulaires.",
+          "Le suppléant assiste aux réunions en l'absence du titulaire (article L. 2314-1).",
+        ];
+      },
+    },
+    {
+      id: "conv-petit-note", pour: "convocation", si: function (c) { return c.eff !== null && c.eff < 50; },
+      titre: "Note écrite des demandes, réponse et registre spécial",
+      fond: ["L2315-22"],
+      marques: ["note ecrite", "deux jours ouvrables", "registre special"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Sauf circonstances exceptionnelles, les demandes sont remises à l'employeur par une note écrite exposant leur objet, deux jours ouvrables avant la réunion, soit au plus tard le " + fr(ouvr(c.dr, -2)) + " (article L. 2315-22). Les dimanches sont exclus de ce décompte ; les jours fériés ne le sont pas ici.",
+          "L'employeur répond par écrit à ces demandes au plus tard dans les six jours ouvrables suivant la réunion, soit le " + fr(ouvr(c.dr, 6)) + ".",
+          "Les demandes et les réponses motivées de l'employeur sont transcrites sur le registre spécial, ou annexées à ce registre. Le registre et ses annexes sont tenus à la disposition des salariés un jour ouvrable par quinzaine, en dehors de leur temps de travail, ainsi qu'à celle de l'agent de contrôle de l'inspection du travail et des membres de la délégation du personnel.",
+        ];
+      },
+    },
+
+    /* ---------------- la convocation, cinquante salariés et plus ---------------- */
+    {
+      id: "conv-objet", pour: "convocation", si: function (c) { return c.eff === null || c.eff >= 50; },
+      titre: "Objet, date et lieu de la réunion",
+      fond: ["L2315-28", "L2312-19", "L2315-31"],
+      marques: ["convoqu", "reunion du comite", "tous les deux mois"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Objet : réunion du comité social et économique de " + c.ent + " du " + fr(c.dr) + ".",
+          "Le comité social et économique est convoqué le " + fr(c.dr) + " à " + c.heure + ", à " + c.lieur + ".",
+          (c.eff !== null && c.eff >= 300
+            ? "L'entreprise employant au moins trois cents salariés, le comité se réunit au moins une fois par mois sur convocation de l'employeur ou de son représentant"
+            : "Le comité se réunit au moins une fois tous les deux mois") +
+          ", à défaut d'accord fixant le nombre annuel de réunions, qui ne peut être inférieur à six (articles L. 2312-19 et L. 2315-28).",
+          "[Le cas échéant : la présente réunion est la seconde réunion demandée par la majorité des membres ; les questions jointes à la demande de convocation sont inscrites à l'ordre du jour (articles L. 2315-28 et L. 2315-31).]",
+        ];
+      },
+    },
+    {
+      id: "conv-destinataires", pour: "convocation", si: function (c) { return c.eff === null || c.eff >= 50; },
+      titre: "Destinataires de la convocation",
+      fond: ["L2315-30", "L2314-1"],
+      marques: ["inspection du travail", "services de prevention", "suppleant"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Destinataires : les membres du comité, titulaires et suppléants ; l'agent de contrôle de l'inspection du travail ; l'agent des services de prévention des organismes de sécurité sociale (article L. 2315-30).",
+          "Le suppléant assiste aux réunions en l'absence du titulaire (article L. 2314-1). La convocation lui est adressée pour qu'il puisse le remplacer.",
+        ];
+      },
+    },
+    {
+      id: "conv-odj", pour: "convocation", si: function (c) { return c.eff === null || c.eff >= 50; },
+      titre: "Ordre du jour joint et délai de communication",
+      fond: ["L2315-29", "L2315-30"],
+      marques: ["ordre du jour", "trois jours"], seuil: 2,
+      texte: function (c) {
+        return [
+          "L'ordre du jour, établi par le président et le secrétaire, est joint à la présente convocation (article L. 2315-29). Les consultations rendues obligatoires par une disposition législative ou réglementaire ou par un accord collectif y sont inscrites de plein droit.",
+          "Il est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention trois jours au moins avant la réunion, soit au plus tard le " + fr(jours(c.dr, -3)) + " (article L. 2315-30).",
+        ];
+      },
+    },
+    {
+      id: "conv-sst", pour: "convocation", si: function (c) { return c.eff === null || c.eff >= 50; },
+      titre: "Réunion portant sur la santé, la sécurité et les conditions de travail",
+      fond: ["L2315-27"],
+      marques: ["sante", "securite", "conditions de travail"], seuil: 2,
+      texte: function (c) {
+        return [
+          "[Si la réunion porte, en tout ou partie, sur la santé, la sécurité et les conditions de travail : elle compte parmi les quatre réunions annuelles de l'article L. 2315-27. Le médecin du travail, l'agent de contrôle de l'inspection du travail et l'agent des services de prévention des organismes de sécurité sociale en ont été informés par écrit au moins quinze jours à l'avance, soit le " + fr(jours(c.dr, -15)) + ".]",
+          "Le comité est en outre réuni à la suite de tout accident ayant entraîné ou ayant pu entraîner des conséquences graves, en cas d'événement grave lié à l'activité de l'entreprise ayant porté atteinte ou ayant pu porter atteinte à la santé publique ou à l'environnement, ou à la demande motivée de deux de ses membres représentants du personnel sur ces sujets (article L. 2315-27).",
+        ];
+      },
+    },
+
+    /* ---------------- l'ordre du jour ---------------- */
+    {
+      id: "odj-tete", pour: "odj", titre: "En-tête et auteurs de l'ordre du jour",
+      fond: ["L2315-29"],
+      marques: ["ordre du jour", "president et le secretaire"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Ordre du jour de la réunion du comité social et économique de " + c.ent + " du " + fr(c.dr) + " à " + c.heure + ", à " + c.lieur + ".",
+          "Établi conjointement par le président et le secrétaire du comité, " + c.sec + " (article L. 2315-29).",
+        ];
+      },
+    },
+    {
+      id: "odj-points", pour: "odj", titre: "Les points inscrits",
+      fond: ["L2315-29", "L2315-31"],
+      marques: ["approbation du proces-verbal", "questions diverses"], seuil: 1,
+      texte: function (c) {
+        return [
+          "1. Approbation du procès-verbal de la réunion du [date].",
+          "2. [Point inscrit.]",
+          "3. [Consultations rendues obligatoires par une disposition législative ou réglementaire ou par un accord collectif : inscrites de plein droit par le président ou le secrétaire (article L. 2315-29).]",
+          "4. [Le cas échéant : questions jointes à la demande de réunion de la majorité des membres (article L. 2315-31).]",
+          "5. Questions diverses.",
+        ];
+      },
+    },
+    {
+      id: "odj-communication", pour: "odj", titre: "Communication trois jours au moins avant la réunion",
+      fond: ["L2315-30"],
+      marques: ["trois jours", "inspection du travail"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Le présent ordre du jour est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale trois jours au moins avant la réunion, soit au plus tard le " + fr(jours(c.dr, -3)) + " (article L. 2315-30).",
+        ];
+      },
+    },
+    {
+      id: "odj-signatures", pour: "odj", titre: "Signatures",
+      fond: ["L2315-29"],
+      marques: ["le president", "le secretaire"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Le président : [nom, qualité], pour " + c.ent + ".",
+          "Le secrétaire du comité : " + c.sec + ".",
+        ];
+      },
+    },
+
+    /* ---------------- le procès-verbal de réunion ---------------- */
+    {
+      id: "pvr-tete", pour: "pvreunion", titre: "En-tête, auteur et présents",
+      fond: ["L2315-34", "L2315-23"],
+      marques: ["proces-verbal", "presents", "secretaire"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Procès-verbal de la réunion du comité social et économique de " + c.ent + " du " + fr(c.dr) + ".",
+          "Établi par le secrétaire du comité, " + c.sec + " (article L. 2315-34).",
+          "Présents : le président, [nom, qualité], assisté de [collaborateurs, trois au plus, avec voix consultative] (article L. 2315-23) ; membres titulaires : [noms] ; suppléants remplaçant un titulaire absent : [noms] ; [représentant syndical au comité : nom]. Absents excusés : [noms].",
+          "La séance est ouverte à [heure]. L'ordre du jour communiqué le [date] est rappelé.",
+        ];
+      },
+    },
+    {
+      id: "pvr-deliberations", pour: "pvreunion", titre: "Délibérations et résolutions",
+      fond: ["L2315-32", "D2315-26"],
+      marques: ["resolution", "majorite des membres presents", "decision motivee"], seuil: 1,
+      texte: function (c) {
+        return [
+          "1. Approbation du procès-verbal de la réunion du [date] : adopté par [nombre] voix pour, [nombre] voix contre, [nombre] abstentions.",
+          "2. Décision motivée de l'employeur sur les propositions faites lors de la précédente réunion : [décision et motifs] (article D. 2315-26).",
+          "3. [Point délibéré.] Résumé des débats : [résumé]. Résolution : [texte], adoptée par [nombre] voix pour, [nombre] voix contre, [nombre] abstentions.",
+          "Les résolutions ont été prises à la majorité des membres présents. Le président n'a pas pris part au vote lorsqu'il consultait les membres élus du comité en tant que délégation du personnel (article L. 2315-32).",
+          "La séance est levée à [heure].",
+        ];
+      },
+    },
+    {
+      id: "pvr-transmission", pour: "pvreunion", titre: "Transmission, adoption et diffusion",
+      fond: ["L2315-34", "R2315-25", "D2315-26", "L2315-35"],
+      marques: ["quinze jours", "transmis", "affich"], seuil: 1,
+      texte: function (c) {
+        return [
+          "À défaut d'accord sur le délai, le présent procès-verbal est établi et transmis à l'employeur, et communiqué aux membres du comité, dans les quinze jours suivant la réunion, soit au plus tard le " + fr(jours(c.dr, 15)) + ", ou avant la réunion suivante si elle est prévue dans ce délai (articles R. 2315-25 et D. 2315-26).",
+          "L'employeur fait connaître, lors de la réunion du comité qui suit cette transmission, sa décision motivée sur les propositions qui lui ont été soumises ; ses déclarations sont consignées au procès-verbal (article L. 2315-34).",
+          "Adopté à la réunion du [date]. Après adoption, il est affiché ou diffusé dans l'entreprise par le secrétaire, selon les modalités du règlement intérieur du comité (article L. 2315-35).",
+          "Le secrétaire du comité : " + c.sec + ".",
+        ];
+      },
+    },
+
+    /* ---------------- le règlement intérieur du comité ---------------- */
+    {
+      id: "ri-objet", pour: "reglement", titre: "Objet du règlement et adoption",
+      fond: ["L2315-24", "L2315-32"],
+      marques: ["reglement interieur", "modalites de son fonctionnement"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Article 1. Objet.",
+          "Le présent règlement, adopté par le comité social et économique de " + c.ent + " le " + fr(c.dadopt) + " par résolution prise à la majorité des membres présents (article L. 2315-32), détermine les modalités de fonctionnement du comité et celles de ses rapports avec les salariés de l'entreprise, pour l'exercice des missions que lui confère le chapitre II du titre Ier du livre III de la deuxième partie du code du travail (article L. 2315-24).",
+        ];
+      },
+    },
+    {
+      id: "ri-bureau", pour: "reglement", titre: "Présidence, bureau et référent",
+      fond: ["L2315-23", "L2314-1"],
+      marques: ["secretaire", "tresorier", "referent"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 2. Présidence et bureau.",
+          "Le comité est présidé par l'employeur ou son représentant, assisté éventuellement de trois collaborateurs qui ont voix consultative. Le comité désigne parmi ses membres titulaires un secrétaire et un trésorier (article L. 2315-23). [Il désigne de même un secrétaire adjoint et un trésorier adjoint parmi ses membres titulaires.]",
+          "Le secrétaire établit l'ordre du jour avec le président, rédige les procès-verbaux et assure leur diffusion. Le trésorier tient les comptes du comité et en rend compte au comité [chaque année].",
+          "Le comité désigne parmi ses membres, par résolution, un référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes, pour une durée qui prend fin avec celle du mandat des membres élus (article L. 2314-1).",
+        ];
+      },
+    },
+    {
+      id: "ri-reunions", pour: "reglement", titre: "Réunions",
+      fond: ["L2315-28", "L2312-19", "L2315-27", "L2315-31", "L2314-1"],
+      marques: ["se reunit", "tous les deux mois", "une fois par mois", "sante"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 3. Réunions.",
+          (c.eff !== null && c.eff >= 300
+            ? "L'entreprise employant au moins trois cents salariés, le comité se réunit au moins une fois par mois sur convocation du président"
+            : "Le comité se réunit au moins une fois tous les deux mois sur convocation du président") +
+          ", à défaut d'accord fixant un nombre annuel de réunions, qui ne peut être inférieur à six (articles L. 2312-19 et L. 2315-28). Le comité peut tenir une seconde réunion à la demande de la majorité de ses membres ; les questions jointes à la demande sont inscrites à l'ordre du jour (articles L. 2315-28 et L. 2315-31).",
+          "Au moins quatre réunions par an portent, en tout ou partie, sur la santé, la sécurité et les conditions de travail. Le comité est en outre réuni à la suite de tout accident ayant entraîné ou ayant pu entraîner des conséquences graves, en cas d'événement grave lié à l'activité de l'entreprise ayant porté atteinte ou ayant pu porter atteinte à la santé publique ou à l'environnement, ou à la demande motivée de deux de ses membres représentants du personnel sur ces sujets (article L. 2315-27).",
+          "Le suppléant assiste aux réunions en l'absence du titulaire (article L. 2314-1). [Le titulaire empêché en informe son suppléant et le secrétaire dès qu'il a connaissance de son absence.]",
+        ];
+      },
+    },
+    {
+      id: "ri-odj", pour: "reglement", titre: "Ordre du jour",
+      fond: ["L2315-29", "L2315-30"],
+      marques: ["ordre du jour", "trois jours"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 4. Ordre du jour.",
+          "L'ordre du jour de chaque réunion est établi par le président et le secrétaire. Les consultations rendues obligatoires par une disposition législative ou réglementaire ou par un accord collectif y sont inscrites de plein droit par le président ou le secrétaire (article L. 2315-29). Il est communiqué par le président aux membres du comité, à l'agent de contrôle de l'inspection du travail et à l'agent des services de prévention des organismes de sécurité sociale trois jours au moins avant la réunion (article L. 2315-30).",
+        ];
+      },
+    },
+    {
+      id: "ri-votes", pour: "reglement", titre: "Votes et résolutions",
+      fond: ["L2315-32"],
+      marques: ["majorite des membres presents", "ne participe pas au vote"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Article 5. Votes et résolutions.",
+          "Les résolutions du comité sont prises à la majorité des membres présents. Le président ne participe pas au vote lorsqu'il consulte les membres élus du comité en tant que délégation du personnel (article L. 2315-32). [Le vote a lieu à main levée, sauf demande de vote à bulletin secret par un membre.]",
+        ];
+      },
+    },
+    {
+      id: "ri-pv", pour: "reglement", titre: "Procès-verbal",
+      fond: ["L2315-34", "R2315-25", "D2315-26", "L2315-35"],
+      marques: ["proces-verbal", "quinze jours", "affich"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 6. Procès-verbal.",
+          "Les délibérations sont consignées dans un procès-verbal établi par le secrétaire (article L. 2315-34). À défaut d'accord sur le délai, il est établi et transmis à l'employeur, et communiqué aux membres, dans les quinze jours suivant la réunion, ou avant la réunion suivante si elle est prévue dans ce délai ; il contient au moins le résumé des délibérations et la décision motivée de l'employeur sur les propositions faites lors de la précédente réunion (articles R. 2315-25 et D. 2315-26).",
+          "Après adoption, le procès-verbal est affiché par le secrétaire sur les panneaux réservés au comité et diffusé aux salariés par [intranet, courriel, remise en main propre] (article L. 2315-35). [Les passages relatifs à des personnes nommément désignées ou couverts par l'obligation de discrétion en sont retirés avant diffusion.]",
+        ];
+      },
+    },
+    {
+      id: "ri-salaries", pour: "reglement", titre: "Rapports avec les salariés",
+      fond: ["L2315-24"],
+      marques: ["rapports avec les salaries", "saisir le comite"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Article 7. Rapports avec les salariés.",
+          "Les salariés peuvent saisir le comité de toute question relevant de ses attributions par [boîte aux lettres du comité, adresse électronique, permanence du secrétaire]. Le comité informe les salariés de son activité par [affichage, intranet, réunion d'information annuelle] (article L. 2315-24).",
+        ];
+      },
+    },
+    {
+      id: "ri-employeur", pour: "reglement", titre: "Obligations de l'employeur",
+      fond: ["L2315-24"],
+      marques: ["obligations", "engagement unilateral"], seuil: 1,
+      texte: function (c) {
+        return [
+          "Article 8. Obligations de l'employeur.",
+          "Le présent règlement ne comporte aucune clause imposant à l'employeur des obligations qui ne résultent pas de dispositions légales. [Le cas échéant : l'employeur accepte les clauses suivantes : (clauses). Cet accord constitue un engagement unilatéral qu'il peut dénoncer à l'issue d'un délai raisonnable, après en avoir informé les membres de la délégation du personnel] (article L. 2315-24).",
+        ];
+      },
+    },
+    {
+      id: "ri-duree", pour: "reglement", titre: "Durée et révision",
+      fond: ["L2315-24", "L2315-32"],
+      marques: ["duree", "revision", "modifie"], seuil: 2,
+      texte: function (c) {
+        return [
+          "Article 9. Durée et révision.",
+          "Le présent règlement s'applique à compter de son adoption, pour la durée des mandats en cours, et reste applicable jusqu'à l'adoption d'un nouveau règlement. Il peut être modifié par résolution du comité prise dans les conditions de l'article 5.",
+          "Fait à [lieu], le " + fr(c.dadopt) + ". Le président : [nom, qualité]. Le secrétaire du comité : " + c.sec + ".",
+        ];
+      },
+    },
   ];
+
+  var TITRES = {
+    protocole: "Protocole d'accord préélectoral", pv: "Procès-verbal des élections",
+    convocation: "Convocation à la réunion du comité", odj: "Ordre du jour de la réunion du comité",
+    pvreunion: "Procès-verbal de réunion du comité", reglement: "Règlement intérieur du comité",
+  };
+  var COURTS = {
+    protocole: "protocole", pv: "PV du scrutin", convocation: "convocation",
+    odj: "ordre du jour", pvreunion: "procès-verbal", reglement: "règlement intérieur",
+  };
+  function electoral(nature) { return nature === "protocole" || nature === "pv"; }
 
   var LIB = {
     L2314_1: "L. 2314-1", L2314_4: "L. 2314-4", L2314_5: "L. 2314-5", L2314_6: "L. 2314-6",
@@ -678,6 +1011,10 @@
     R2314_5: "R. 2314-5", R2314_13: "R. 2314-13", R2314_15: "R. 2314-15", R2314_16: "R. 2314-16",
     R2314_19: "R. 2314-19", R2314_20: "R. 2314-20", R2314_21: "R. 2314-21", R2314_22: "R. 2314-22",
     R2314_24: "R. 2314-24", R2314_25: "R. 2314-25",
+    L2312_19: "L. 2312-19", L2315_21: "L. 2315-21", L2315_22: "L. 2315-22", L2315_23: "L. 2315-23",
+    L2315_24: "L. 2315-24", L2315_27: "L. 2315-27", L2315_28: "L. 2315-28", L2315_29: "L. 2315-29",
+    L2315_30: "L. 2315-30", L2315_31: "L. 2315-31", L2315_32: "L. 2315-32", L2315_34: "L. 2315-34",
+    L2315_35: "L. 2315-35", R2315_25: "R. 2315-25", D2315_26: "D. 2315-26",
   };
   function article(code) { return LIB[String(code).replace("-", "_")] || String(code); }
 
@@ -686,7 +1023,7 @@
      dans le document passe en bas, les autres viennent en tête, rédigées. */
   function normaliser(s) {
     return String(s || "").toLowerCase()
-      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/[’']/g, "'")
       .replace(/\s+/g, " ");
   }
@@ -718,8 +1055,8 @@
     $("#depot").value = ""; dit(""); $("#erreur").innerHTML = "";
   });
 
-  $("#exemple").addEventListener("click", function () {
-    $("#depot").value = [
+  var EXEMPLES = {
+    protocole: [
       "PROTOCOLE D'ACCORD PRÉÉLECTORAL",
       "",
       "Entre la société EXEMPLE, et les organisations syndicales soussignées.",
@@ -729,8 +1066,43 @@
       "Article 3 - Le scrutin est secret. Il aura lieu pendant le temps de travail.",
       "Article 4 - Les listes de candidats devront être déposées huit jours avant le scrutin.",
       "Article 5 - Le présent protocole prend effet à sa signature.",
-    ].join("\n");
-    dit("Exemple collé : un protocole de cinq articles, volontairement sommaire. Ouvrez les clauses.");
+    ],
+    pv: [
+      "PROCÈS-VERBAL DES ÉLECTIONS",
+      "",
+      "Premier tour du 15 juin 2027, collège unique, titulaires.",
+      "Inscrits : 38. Votants : 27. Bulletins nuls : 2.",
+      "Liste A : 15 voix. Liste B : 10 voix.",
+      "Sont élus : Madame X (liste A), Monsieur Y (liste B).",
+    ],
+    convocation: [
+      "CONVOCATION",
+      "",
+      "Les membres du comité social et économique sont convoqués à la réunion du 22 septembre 2026 à 10 h, salle de réunion du siège.",
+      "Le président.",
+    ],
+    odj: [
+      "ORDRE DU JOUR DE LA RÉUNION DU 22 SEPTEMBRE 2026",
+      "",
+      "1. Point sur l'activité du trimestre.",
+      "2. Questions diverses.",
+    ],
+    pvreunion: [
+      "PROCÈS-VERBAL DE LA RÉUNION DU 22 SEPTEMBRE 2026",
+      "",
+      "Présents : le président, trois membres titulaires.",
+      "Le point sur l'activité du trimestre a été présenté. Aucune question diverse.",
+    ],
+    reglement: [
+      "RÈGLEMENT INTÉRIEUR DU COMITÉ SOCIAL ET ÉCONOMIQUE",
+      "",
+      "Article 1. Le comité se réunit tous les deux mois.",
+      "Article 2. Le secrétaire rédige le procès-verbal.",
+    ],
+  };
+  $("#exemple").addEventListener("click", function () {
+    $("#depot").value = (EXEMPLES[$("#nature").value] || EXEMPLES.protocole).join("\n");
+    dit("Exemple collé, volontairement sommaire. Appuyez sur Contrôler.");
   });
 
   $("#ouvrir").addEventListener("click", function () {
@@ -741,13 +1113,7 @@
       return;
     }
     CTX = contexte();
-    var t = normaliser($("#depot").value);
-    CHOIX = {}; PRESENTES = {};
-    CLAUSES.forEach(function (cl) {
-      if (cl.pour !== CTX.nature) return;
-      PRESENTES[cl.id] = reperee(cl, t);
-      CHOIX[cl.id] = !PRESENTES[cl.id];
-    });
+    reperer();
     $("#ong-clauses").disabled = false;
     $("#ong-sortie").disabled = false;
     rendreClauses();
@@ -768,7 +1134,16 @@
   }
 
   function pourLaNature() {
-    return CLAUSES.filter(function (cl) { return cl.pour === CTX.nature; });
+    return CLAUSES.filter(function (cl) { return cl.pour === CTX.nature && (!cl.si || cl.si(CTX)); });
+  }
+  /* Le repérage lexical des clauses de la nature choisie, sur le texte déposé. */
+  function reperer() {
+    var t = normaliser($("#depot").value);
+    CHOIX = {}; PRESENTES = {};
+    pourLaNature().forEach(function (cl) {
+      PRESENTES[cl.id] = reperee(cl, t);
+      CHOIX[cl.id] = !PRESENTES[cl.id];
+    });
   }
 
   function rendreClauses() {
@@ -779,11 +1154,15 @@
     var mis = Object.keys(CHOIX).filter(function (k) { return CHOIX[k]; }).length;
     $("#compteurs").innerHTML =
       '<span class="c pose">' + mis + " clause" + (mis > 1 ? "s" : "") + " retenue" + (mis > 1 ? "s" : "") + "</span>" +
-      '<span class="c ver">' + (CTX.tit === null ? "sièges à calculer" :
-        CTX.tit + " titulaire" + (CTX.tit > 1 ? "s" : "") + " et autant de suppléants") + "</span>" +
-      '<span class="c ver">' + (CTX.nbCol === null ? "collèges à calculer" :
-        (CTX.unique ? "collège unique" : CTX.nbCol + " collèges")) + "</span>" +
-      '<span class="c">premier tour le ' + ech(fr(CTX.d1)) + "</span>";
+      (electoral(CTX.nature)
+        ? '<span class="c ver">' + (CTX.tit === null ? "sièges à calculer" :
+            CTX.tit + " titulaire" + (CTX.tit > 1 ? "s" : "") + " et autant de suppléants") + "</span>" +
+          '<span class="c ver">' + (CTX.nbCol === null ? "collèges à calculer" :
+            (CTX.unique ? "collège unique" : CTX.nbCol + " collèges")) + "</span>" +
+          '<span class="c">premier tour le ' + ech(fr(CTX.d1)) + "</span>"
+        : (CTX.nature === "reglement"
+            ? '<span class="c">adopté le ' + ech(fr(CTX.dadopt)) + "</span>"
+            : '<span class="c">réunion du ' + ech(fr(CTX.dr)) + "</span>"));
 
     $("#clauses").innerHTML = aPoser.map(carte).join("") ||
       '<p class="aide">Chaque clause de cette liste se retrouve déjà dans votre texte. Elles sont reprises ci-dessous : vous pouvez tout de même en insérer une, si la vôtre est plus courte que celle-ci.</p>';
@@ -865,14 +1244,32 @@
     return out;
   }
 
+  /* Les délais des quatre autres documents, à partir de la date de réunion. */
+  function delais(c) {
+    var out = [];
+    if (c.nature === "convocation" && c.eff !== null && c.eff < 50) {
+      out.push({ d: ouvr(c.dr, -2), t: "Note écrite des demandes remise à l'employeur, au plus tard.", f: "L. 2315-22", n: "Deux jours ouvrables avant la réunion, dimanches exclus ; les jours fériés ne sont pas décomptés ici." });
+      out.push({ d: c.dr, t: "Réunion mensuelle de la délégation du personnel.", f: "L. 2315-21", n: "Au moins une fois par mois ; en cas d'urgence, sur demande." });
+      out.push({ d: ouvr(c.dr, 6), t: "Réponse écrite de l'employeur, au plus tard.", f: "L. 2315-22", n: "Dans les six jours ouvrables suivant la réunion ; demandes et réponses au registre spécial." });
+    } else if (c.nature === "convocation" || c.nature === "odj") {
+      out.push({ d: jours(c.dr, -15), t: "Confirmation écrite de la réunion à l'inspection du travail, au médecin du travail et à l'agent de prévention, si elle porte sur la santé et la sécurité.", f: "L. 2315-27", n: "Au moins quinze jours à l'avance." });
+      out.push({ d: jours(c.dr, -3), t: "Communication de l'ordre du jour aux membres, à l'inspection du travail et à l'agent de prévention, au plus tard.", f: "L. 2315-30", n: "Trois jours au moins avant la réunion." });
+      out.push({ d: c.dr, t: "Réunion du comité.", f: "L. 2315-28", n: c.eff !== null && c.eff >= 300 ? "Au moins une fois par mois à défaut d'accord." : "Au moins une fois tous les deux mois à défaut d'accord." });
+    } else if (c.nature === "pvreunion") {
+      out.push({ d: c.dr, t: "Réunion du comité.", f: "L. 2315-34", n: "Les délibérations sont consignées dans un procès-verbal établi par le secrétaire." });
+      out.push({ d: jours(c.dr, 15), t: "Procès-verbal établi et transmis à l'employeur, communiqué aux membres, au plus tard.", f: "R. 2315-25, D. 2315-26", n: "Quinze jours suivant la réunion, à défaut d'accord, ou avant la réunion suivante si elle est prévue dans ce délai." });
+    }
+    return out;
+  }
+  function lignesCalendrier(c) { return electoral(c.nature) ? calendrier(c) : delais(c); }
+
   function calendrierHtml(c) {
-    var l = calendrier(c);
-    return '<h3>Le calendrier</h3><table class="cal"><tr><th>Date</th><th>Étape</th><th>Texte</th></tr>' +
-      l.map(function (x) {
-        return '<tr><td class="j">' + ech(x.d ? fr(x.d) : "à fixer") + "</td><td>" + ech(x.t) +
-          '<div style="color:#8a939c;font-size:12.5px;margin-top:3px">' + ech(x.n) + "</div></td>" +
-          '<td class="f">' + ech(x.f) + "</td></tr>";
-      }).join("") + "</table>";
+    var l = lignesCalendrier(c);
+    if (!l.length) return "";
+    return '<div class="cal-liste">' + l.map(function (x) {
+      return '<div class="d"><span class="q">' + ech(x.f) + "</span><span class=\"v\">" + ech(x.d ? fr(x.d) : "date à fixer") + "</span>" +
+        '<span class="f">' + ech(x.t) + " " + ech(x.n) + "</span></div>";
+    }).join("") + "</div>";
   }
 
   /* ---------------------------------------------------------------- */
@@ -900,9 +1297,9 @@
     var r = retenues();
     if (r.length) {
       out.push("");
-      out.push("========================================");
-      out.push(CTX.nature === "pv" ? "MENTIONS INSÉRÉES AU PROCÈS-VERBAL" : "CLAUSES INSÉRÉES AU PROTOCOLE");
-      out.push("========================================");
+      out.push("======================");
+      out.push(CTX.nature === "protocole" ? "CLAUSES INSÉRÉES AU PROTOCOLE" : "MENTIONS INSÉRÉES AU DOCUMENT");
+      out.push("======================");
       r.forEach(function (cl) {
         out.push("");
         out.push(cl.titre.toUpperCase() + "  (" + cl.fond.map(article).join(", ") + ")");
@@ -910,15 +1307,18 @@
         lignesTexte(cl.texte(CTX)).forEach(function (x) { out.push(x); });
       });
     }
-    out.push("");
-    out.push("========================================");
-    out.push("CALENDRIER");
-    out.push("========================================");
-    calendrier(CTX).forEach(function (x) {
+    var cal = lignesCalendrier(CTX);
+    if (cal.length) {
       out.push("");
-      out.push((x.d ? fr(x.d) : "date à fixer") + "  -  " + x.t);
-      out.push("   " + x.f + ". " + x.n);
-    });
+      out.push("======================");
+      out.push(electoral(CTX.nature) ? "CALENDRIER" : "DÉLAIS");
+      out.push("======================");
+      cal.forEach(function (x) {
+        out.push("");
+        out.push((x.d ? fr(x.d) : "date à fixer") + "  -  " + x.t);
+        out.push("   " + x.f + ". " + x.n);
+      });
+    }
     return out.join("\n");
   }
 
@@ -931,37 +1331,41 @@
   $("#retour-clauses").addEventListener("click", function () { onglet("clauses"); });
 
   function nomFichier(ext) {
-    return (CTX && CTX.nature === "pv" ? "proces-verbal-elections-" : "protocole-preelectoral-") +
-      new Date().toISOString().slice(0, 10) + "." + ext;
+    var t = String(TITRES[CTX && CTX.nature] || "document").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
+    return t + "-" + new Date().toISOString().slice(0, 10) + "." + ext;
   }
+  $("#imprimer").addEventListener("click", function () { window.print(); });
 
   $("#dl-txt").addEventListener("click", function () {
     window.AuditExport.telecharger($("#sortie").textContent, nomFichier("txt"), "text/plain;charset=utf-8");
   });
 
   $("#dl-docx").addEventListener("click", function () {
-    var items = [{ k: "sur", t: (CTX.nature === "pv" ? "Procès-verbal" : "Protocole d'accord préélectoral") +
-      " - " + CTX.ent + (CTX.eff === null ? "" : ", " + CTX.eff + " salariés") + " - premier tour le " + fr(CTX.d1) }];
+    var items = [{ k: "sur", t: TITRES[CTX.nature] + " - " + CTX.ent + (CTX.eff === null ? "" : ", " + CTX.eff + " salariés") +
+      (electoral(CTX.nature) ? " - premier tour le " + fr(CTX.d1) : (CTX.dr ? " - réunion du " + fr(CTX.dr) : "")) }];
     var t = $("#depot").value.replace(/\s+$/, "");
     if (t) t.split(/\n/).forEach(function (l) { items.push({ k: "p", t: l }); });
     var r = retenues();
     if (r.length) {
-      items.push({ k: "trait" }, { k: "h1", t: CTX.nature === "pv" ? "Mentions insérées au procès-verbal" : "Clauses insérées au protocole" });
+      items.push({ k: "trait" }, { k: "h1", t: CTX.nature === "protocole" ? "Clauses insérées au protocole" : "Mentions insérées au document" });
       r.forEach(function (cl) {
         items.push({ k: "h2", t: cl.titre });
         items.push({ k: "note", t: cl.fond.map(article).join(", ") });
         cl.texte(CTX).forEach(function (l) {
           if (l && l.tab) items.push({ k: "table", head: l.tab.head, rows: l.tab.rows });
-          else if (/^- /.test(l)) items.push({ k: "puce", t: l.replace(/^- /, "") });
           else items.push({ k: "p", t: l });
         });
       });
     }
-    items.push({ k: "trait" }, { k: "h1", t: "Calendrier" });
-    items.push({ k: "table", head: ["Date", "Étape", "Texte"],
-      rows: calendrier(CTX).map(function (x) { return [x.d ? fr(x.d) : "à fixer", x.t + " " + x.n, x.f]; }) });
+    var cal = lignesCalendrier(CTX);
+    if (cal.length) {
+      items.push({ k: "trait" }, { k: "h1", t: electoral(CTX.nature) ? "Calendrier" : "Délais" });
+      items.push({ k: "table", head: ["Date", "Étape", "Texte"],
+        rows: cal.map(function (x) { return [x.d ? fr(x.d) : "à fixer", x.t + " " + x.n, x.f]; }) });
+    }
     window.AuditExport.telecharger(
-      window.AuditExport.docx(items, CTX.nature === "pv" ? "Procès-verbal des élections" : "Protocole d'accord préélectoral"),
+      window.AuditExport.docx(items, TITRES[CTX.nature] || "Document"),
       nomFichier("docx"), "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
 
@@ -989,24 +1393,41 @@
        conservés. */
     $("#champs").addEventListener("input", function () {
       if (!CTX) return;
-      var nature = CTX.nature;
+      var nature = CTX.nature, eff = CTX.eff;
       CTX = contexte();
-      if (CTX.nature !== nature) {
-        var t = normaliser($("#depot").value);
-        CHOIX = {}; PRESENTES = {};
-        CLAUSES.forEach(function (cl) {
-          if (cl.pour !== CTX.nature) return;
-          PRESENTES[cl.id] = reperee(cl, t);
-          CHOIX[cl.id] = !PRESENTES[cl.id];
-        });
-      }
+      if (CTX.nature !== nature || CTX.eff !== eff) reperer();
       rendreClauses();
     });
     $("#champs").addEventListener("change", function () {
-      if (CTX) { CTX = contexte(); rendreClauses(); }
+      majChamps();
+      if (CTX) { var nature = CTX.nature, eff = CTX.eff; CTX = contexte(); if (CTX.nature !== nature || CTX.eff !== eff) reperer(); rendreClauses(); }
     });
+    /* La ligne de audit-cse.html dit quelle nature de document arrive :
+       controler-cse.html?d=convocation, par exemple. */
+    var d = new URLSearchParams(location.search).get("d");
+    if (d && TITRES[d]) $("#nature").value = d;
+    /* Les dates de réunion et d'adoption partent d'aujourd'hui : elles se
+       corrigent dans le champ, elles ne restent pas vides. */
+    var auj = new Date(); auj.setMinutes(auj.getMinutes() - auj.getTimezoneOffset());
+    var dans7 = new Date(auj.getTime() + 7 * 86400000);
+    $("#dr").value = dans7.toISOString().slice(0, 10);
+    $("#dadopt").value = auj.toISOString().slice(0, 10);
+    majChamps();
     onglet("depot");
   })();
+
+  /* Chaque champ ne s'affiche que pour les natures qu'il sert ; le titre de
+     la barre suit la nature choisie. */
+  function majChamps() {
+    var nature = $("#nature").value;
+    Array.prototype.forEach.call(document.querySelectorAll("#champs label[data-pour]"), function (l) {
+      l.hidden = l.getAttribute("data-pour").split(" ").indexOf(nature) < 0;
+    });
+    $("#titre").textContent = "Contrôle : " + (COURTS[nature] || "document");
+    var p = P ? (P.lire() || {}) : {};
+    var eff = nombre($("#eff").value);
+    $("#ent-haut").textContent = (p.denomination || "") + (eff !== null ? " · " + eff + " salarié" + (eff > 1 ? "s" : "") : "");
+  }
 })();
 </script>
 <script>

@@ -1,12 +1,12 @@
-/* Les documents que l'application PRODUIT — module « comité social et économique »,
+/* Les documents que l'application PRODUIT - module « comité social et économique »,
    troisième série : les commissions, les budgets, les expertises, et les deux
    points à faire examiner.
 
    POURQUOI UN TROISIÈME FICHIER
 
-   « documents-cse.js » a pris dix-neuf points — effectifs, mise en place,
+   « documents-cse.js » a pris dix-neuf points - effectifs, mise en place,
    périmètre, élections, consultations. « documents-cse-2.js » en a pris quinze
-   — recevabilité, moyens du comité, commission santé, sécurité et conditions de
+   - recevabilité, moyens du comité, commission santé, sécurité et conditions de
    travail. Douze restaient sans document, et ce sont ceux où l'argent circule :
    les commissions obligatoires, les deux budgets, le financement et la
    contestation des expertises, les accords à faire relire et les faits
@@ -14,7 +14,7 @@
 
    Trois fichiers plutôt qu'un seul de dix mille lignes : on travaille sur le
    calcul de la subvention de fonctionnement sans risquer d'abîmer le protocole
-   préélectoral, et le registre refuse de lui-même tout identifiant déjà pris —
+   préélectoral, et le registre refuse de lui-même tout identifiant déjà pris -
    c'est lui, et non la vigilance, qui garantit qu'aucun point n'est servi deux
    fois.
 
@@ -66,7 +66,7 @@
    3. Les faits et les chiffres ne s'inventent jamais. Aucun document n'écrit la
       masse salariale de l'entreprise, le montant de la subvention versée, le
       coût de l'expertise, le nom des élus ni la date d'une délibération. Tout
-      cela sort ENTRE CROCHETS, avec la source où l'employeur ira le chercher —
+      cela sort ENTRE CROCHETS, avec la source où l'employeur ira le chercher -
       déclarations sociales nominatives, comptes annuels du comité, justificatifs
       de versement, délibération, cahier des charges. Ce que le dossier porte
       lui-même est repris tel quel, et rien de plus.
@@ -88,7 +88,7 @@
    commissions de la formation, du logement et de l'égalité professionnelle ;
    mille pour la commission économique ; deux mille pour le taux de 0,22 %. Quand
    l'effectif manque au dossier, le document expose la règle, laisse l'effectif
-   entre crochets et dit ce qui se passe de part et d'autre du seuil — il ne
+   entre crochets et dit ce qui se passe de part et d'autre du seuil - il ne
    conclut pas. Quand l'effectif est là, il conclut, et écrit sur quoi.  */
 (function (global) {
   "use strict";
@@ -213,7 +213,7 @@
     L.push("Ce qui est écrit sans crochets est imposé par la loi et fondé sur l'article");
     L.push("cité en regard. Ce qui est ENTRE CROCHETS vous appartient : soit la loi vous");
     L.push("en laisse le choix, soit l'application ne dispose pas de la donnée. Remplacez");
-    L.push("chaque crochet, ou supprimez la ligne si elle ne vous concerne pas — n'en");
+    L.push("chaque crochet, ou supprimez la ligne si elle ne vous concerne pas - n'en");
     L.push("laissez aucun dans le document que vous signez, adoptez ou adressez.");
     L.push("");
     L.push("Gardez les mentions d'articles : elles vous serviront le jour où la pièce se");
@@ -229,12 +229,12 @@
     L.push(TRAIT);
     L.push("");
     if (arts && arts.length) {
-      L.push("FONDEMENT — les articles du code du travail lus à la source :");
+      L.push("FONDEMENT - les articles du code du travail lus à la source :");
       L.push(arts.join(" · ") + ".");
     }
     if (nonLus && nonLus.length) {
       L.push("");
-      L.push("NOMMÉS MAIS NON LUS — l'application ne dispose pas de leur texte et ne les");
+      L.push("NOMMÉS MAIS NON LUS - l'application ne dispose pas de leur texte et ne les");
       L.push("reproduit donc pas ; reportez-vous-y avant de conclure :");
       L.push(nonLus.join(" · ") + ".");
     }
@@ -257,7 +257,7 @@
   function courrier(L, rang, objetTxt, avertissement) {
     L.push("");
     L.push(DOUBLE);
-    L.push("COURRIER " + rang + " — " + objetTxt.toUpperCase());
+    L.push("COURRIER " + rang + " - " + objetTxt.toUpperCase());
     L.push(DOUBLE);
     L.push("");
     if (avertissement) { avertissement.forEach(function (a) { L.push(a); }); L.push(""); }
@@ -293,7 +293,7 @@
   /* Le rappel de l'ordre des sources pour les commissions du comité. Trois
      documents s'en servent : il est écrit une fois. */
   function ordreCommissions(L) {
-    L.push("  1er étage — L'ACCORD D'ENTREPRISE conclu dans les conditions prévues au");
+    L.push("  1er étage - L'ACCORD D'ENTREPRISE conclu dans les conditions prévues au");
     L.push("     premier alinéa de l'article L. 2232-12 peut prévoir la création de");
     L.push("     commissions supplémentaires pour l'examen de problèmes particuliers.");
     L.push("     L'employeur peut alors leur adjoindre, avec voix consultative, des experts");
@@ -302,7 +302,7 @@
     L.push("     l'article L. 2315-3. Les rapports des commissions sont soumis à la");
     L.push("     délibération du comité (L. 2315-45).");
     L.push("");
-    L.push("  2e étage — EN L'ABSENCE DE CET ACCORD, et à ce moment seulement, jouent les");
+    L.push("  2e étage - EN L'ABSENCE DE CET ACCORD, et à ce moment seulement, jouent les");
     L.push("     commissions supplétives : la commission de la formation (L. 2315-49), la");
     L.push("     commission d'information et d'aide au logement (L. 2315-50), la commission");
     L.push("     de l'égalité professionnelle (L. 2315-56) à trois cents salariés, et la");
@@ -310,7 +310,7 @@
     L.push("     articles s'ouvre par les mots « En l'absence d'accord prévu à l'article");
     L.push("     L. 2315-45 » : l'ordre n'est pas une commodité de rédaction.");
     L.push("");
-    L.push("  À PART — la commission des marchés ne dépend d'aucun accord ni d'aucun");
+    L.push("  À PART - la commission des marchés ne dépend d'aucun accord ni d'aucun");
     L.push("     effectif d'entreprise : elle se déclenche sur les COMPTES DU COMITÉ");
     L.push("     (L. 2315-44-1, D. 2315-29).");
     L.push("");
@@ -376,7 +376,7 @@
       L.push("");
       L.push("Trois actes et deux courriers, dans l'ordre où ils se signent :");
       L.push("");
-      L.push("  1. le constat préalable — y a-t-il un accord de L. 2315-45 ? ;");
+      L.push("  1. le constat préalable - y a-t-il un accord de L. 2315-45 ? ;");
       L.push("  2. les TROIS RÉSOLUTIONS constitutives, prêtes à être mises aux voix ;");
       L.push("  3. le PROCÈS-VERBAL de la délibération qui les institue ;");
       L.push("  4. la NOTE D'ORGANISATION des réunions des trois commissions ;");
@@ -385,16 +385,16 @@
       L.push("");
       L.push("Ces commissions ne sont pas des comités d'étude facultatifs : la commission");
       L.push("de la formation et celle de l'égalité professionnelle PRÉPARENT DES");
-      L.push("DÉLIBÉRATIONS DU COMITÉ prévues à l'article L. 2312-17 — les orientations");
+      L.push("DÉLIBÉRATIONS DU COMITÉ prévues à l'article L. 2312-17 - les orientations");
       L.push("stratégiques, la situation économique et financière, la politique sociale,");
       L.push("les conditions de travail et l'emploi. Leur absence prive ces délibérations");
       L.push("de la préparation que la loi leur assigne.");
       L.push("");
 
-      titre(L, "1 — Le constat préalable : quel étage s'applique");
+      titre(L, "1 - Le constat préalable : quel étage s'applique");
       ordreCommissions(L);
       L.push("  Un accord de L. 2315-45 organise-t-il les commissions du comité ? ...... " +
-        ouiNon(f.accordCommissions, "oui / non — à établir sur l'accord lui-même"));
+        ouiNon(f.accordCommissions, "oui / non - à établir sur l'accord lui-même"));
       if (accord === true) {
         L.push("");
         L.push("  UN ACCORD EST DÉCLARÉ. Alors les articles L. 2315-49, L. 2315-50 et");
@@ -416,7 +416,7 @@
         L.push("  LA RÉPONSE MANQUE. Cherchez l'accord avant de délibérer : s'il existe, les");
         L.push("  résolutions du paragraphe 3 sont sans objet ; s'il n'existe pas, elles sont");
         L.push("  dues. Une résolution adoptée par-dessus un accord existant n'annule pas");
-        L.push("  l'accord — elle crée deux régimes concurrents dans la même entreprise.");
+        L.push("  l'accord - elle crée deux régimes concurrents dans la même entreprise.");
       }
       L.push("");
       if (faites.length) {
@@ -426,7 +426,7 @@
         L.push("");
       }
 
-      titre(L, "2 — Le seuil de trois cents salariés");
+      titre(L, "2 - Le seuil de trois cents salariés");
       ligneSeuil(L, eff, 300, "les trois commissions sont dues, à défaut d'accord.");
       L.push("");
       L.push("« Le seuil de trois cents salariés mentionné au présent chapitre est réputé");
@@ -443,7 +443,7 @@
       L.push("    commissions : il porte sur les obligations D'INFORMATION ET DE");
       L.push("    CONSULTATION qui découlent du franchissement.");
       L.push("");
-      L.push("  Mois consécutifs au-dessus de trois cents à ce jour : [ ] — relevé sur");
+      L.push("  Mois consécutifs au-dessus de trois cents à ce jour : [ ] - relevé sur");
       L.push("  [états d'effectif ou déclarations sociales nominatives, mois par mois].");
       L.push("");
       if (a === false) {
@@ -459,7 +459,7 @@
         L.push("");
       }
 
-      titre(L, "3 — Les trois résolutions, prêtes à être mises aux voix");
+      titre(L, "3 - Les trois résolutions, prêtes à être mises aux voix");
       L.push(nom(ctx));
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
@@ -471,14 +471,14 @@
       L.push("");
       L.push(TRAIT);
       L.push("");
-      L.push("RÉSOLUTION N° 1 — COMMISSION DE LA FORMATION");
+      L.push("RÉSOLUTION N° 1 - COMMISSION DE LA FORMATION");
       L.push("");
       L.push("Le comité social et économique de " + nom(ctx) + ", constatant qu'aucun accord");
       L.push("prévu à l'article L. 2315-45 du code du travail n'organise ses commissions et");
       L.push("que l'entreprise emploie au moins trois cents salariés, CONSTITUE une");
       L.push("commission de la formation, en application de l'article L. 2315-49.");
       L.push("");
-      L.push("ATTRIBUTIONS — la commission est chargée, aux termes mêmes de L. 2315-49 :");
+      L.push("ATTRIBUTIONS - la commission est chargée, aux termes mêmes de L. 2315-49 :");
       L.push("");
       L.push("  1° de préparer les délibérations du comité prévues aux 1° et 3° de");
       L.push("     l'article L. 2312-17 dans les domaines qui relèvent de sa compétence,");
@@ -491,7 +491,7 @@
       L.push("  3° d'étudier les problèmes spécifiques concernant l'emploi et le travail des");
       L.push("     jeunes et des travailleurs handicapés.");
       L.push("");
-      L.push("CE QUI LUI EST SOUMIS — en l'absence d'accord prévu à l'article L. 2315-45, le");
+      L.push("CE QUI LUI EST SOUMIS - en l'absence d'accord prévu à l'article L. 2315-45, le");
       L.push("comité et, dans les entreprises d'au moins trois cents salariés, la commission");
       L.push("de la formation SONT CONSULTÉS sur les problèmes généraux relatifs à la mise en");
       L.push("œuvre des dispositifs de formation professionnelle continue et de la validation");
@@ -499,24 +499,24 @@
       L.push("congé accordées aux salariés, des conditions dans lesquelles ces congés ont été");
       L.push("accordés et des résultats obtenus (R. 2315-31).");
       L.push("");
-      L.push("COMPOSITION — [nombre] membres : [noms ou matricules des membres désignés].");
+      L.push("COMPOSITION - [nombre] membres : [noms ou matricules des membres désignés].");
       L.push("La loi ne fixe pas la composition de cette commission : c'est au comité de la");
       L.push("déterminer, et la résolution doit donc la porter expressément.");
       L.push("");
-      L.push("PRÉSIDENCE ET RAPPORTEUR — [désigner le rapporteur chargé de présenter les");
+      L.push("PRÉSIDENCE ET RAPPORTEUR - [désigner le rapporteur chargé de présenter les");
       L.push("travaux de la commission au comité].");
       L.push("");
-      L.push("Vote : [ ] pour · [ ] contre · [ ] abstention — le président ne prenant pas");
+      L.push("Vote : [ ] pour · [ ] contre · [ ] abstention - le président ne prenant pas");
       L.push("part au vote (L. 2315-32).");
       L.push("");
       L.push(TRAIT);
       L.push("");
-      L.push("RÉSOLUTION N° 2 — COMMISSION D'INFORMATION ET D'AIDE AU LOGEMENT");
+      L.push("RÉSOLUTION N° 2 - COMMISSION D'INFORMATION ET D'AIDE AU LOGEMENT");
       L.push("");
       L.push("Le comité, aux mêmes constatations, CRÉE en son sein une commission");
       L.push("d'information et d'aide au logement des salariés (L. 2315-50).");
       L.push("");
-      L.push("MISSIONS — « La commission d'information et d'aide au logement facilite le");
+      L.push("MISSIONS - « La commission d'information et d'aide au logement facilite le");
       L.push("logement et l'accession des salariés à la propriété et à la location des locaux");
       L.push("d'habitation. À cet effet, la commission : 1° Recherche les possibilités");
       L.push("d'offre de logements correspondant aux besoins du personnel, EN LIAISON AVEC");
@@ -535,18 +535,18 @@
       L.push("compte notamment des charges de famille des candidats (L. 2315-52).");
       L.push("");
       L.push("  Critères de classement proposés par la commission : [à établir par la");
-      L.push("  commission elle-même — ils ne peuvent pas figurer d'avance dans la");
+      L.push("  commission elle-même - ils ne peuvent pas figurer d'avance dans la");
       L.push("  résolution, et L. 2315-52 réserve des priorités que ce texte énonce et");
       L.push("  que la commission devra reprendre.]");
       L.push("");
-      L.push("MOYENS — la commission peut s'adjoindre, AVEC L'ACCORD DE L'EMPLOYEUR et à");
+      L.push("MOYENS - la commission peut s'adjoindre, AVEC L'ACCORD DE L'EMPLOYEUR et à");
       L.push("titre consultatif, un ou plusieurs conseillers délégués par des organisations");
       L.push("professionnelles, juridiques ou techniques (L. 2315-53).");
       L.push("");
-      L.push("  Conseillers dont l'adjonction est demandée : [ ] — accord de l'employeur");
+      L.push("  Conseillers dont l'adjonction est demandée : [ ] - accord de l'employeur");
       L.push("  demandé le [DATE], obtenu le [DATE].");
       L.push("");
-      L.push("COMPOSITION — [nombre] membres : [noms ou matricules]. Le nombre maximum de");
+      L.push("COMPOSITION - [nombre] membres : [noms ou matricules]. Le nombre maximum de");
       L.push("membres de cette commission et les conditions de rémunération éventuelle des");
       L.push("conseillers sont fixés par décret (L. 2315-55) ; les conditions dans lesquelles");
       L.push("la commission est constituée le sont par décret en Conseil d'État (L. 2315-54).");
@@ -556,17 +556,17 @@
       L.push("");
       L.push(TRAIT);
       L.push("");
-      L.push("RÉSOLUTION N° 3 — COMMISSION DE L'ÉGALITÉ PROFESSIONNELLE");
+      L.push("RÉSOLUTION N° 3 - COMMISSION DE L'ÉGALITÉ PROFESSIONNELLE");
       L.push("");
       L.push("Le comité, aux mêmes constatations, CRÉE en son sein une commission de");
       L.push("l'égalité professionnelle (L. 2315-56).");
       L.push("");
-      L.push("ATTRIBUTIONS — elle est notamment chargée de préparer les délibérations du");
-      L.push("comité prévues au 3° de l'article L. 2312-17 — LA POLITIQUE SOCIALE DE");
-      L.push("L'ENTREPRISE, LES CONDITIONS DE TRAVAIL ET L'EMPLOI — dans les domaines qui");
+      L.push("ATTRIBUTIONS - elle est notamment chargée de préparer les délibérations du");
+      L.push("comité prévues au 3° de l'article L. 2312-17 - LA POLITIQUE SOCIALE DE");
+      L.push("L'ENTREPRISE, LES CONDITIONS DE TRAVAIL ET L'EMPLOI - dans les domaines qui");
       L.push("relèvent de sa compétence (L. 2315-56).");
       L.push("");
-      L.push("COMPOSITION — [nombre] membres : [noms ou matricules].");
+      L.push("COMPOSITION - [nombre] membres : [noms ou matricules].");
       L.push("");
       L.push("Vote : [ ] pour · [ ] contre · [ ] abstention.");
       L.push("");
@@ -586,18 +586,18 @@
       L.push("    par le secrétaire du comité (L. 2315-34).");
       L.push("");
 
-      titre(L, "4 — Le procès-verbal de la délibération");
-      L.push("PROCÈS-VERBAL — extrait");
+      titre(L, "4 - Le procès-verbal de la délibération");
+      L.push("PROCÈS-VERBAL - extrait");
       L.push("");
       L.push("Comité social et économique de " + nom(ctx));
       L.push("Réunion du [DATE] · lieu : [ ]");
       L.push("Président : " + cro(((ctx.profil) || {}).responsable, "l'employeur ou son représentant"));
       L.push("Secrétaire : [nom du secrétaire du comité]");
-      L.push("Membres présents : [liste nominative — c'est elle qui établit la majorité des");
+      L.push("Membres présents : [liste nominative - c'est elle qui établit la majorité des");
       L.push("membres présents exigée par L. 2315-32]");
       L.push("Membres absents : [liste]");
       L.push("");
-      L.push("Point [n°] — Constitution des commissions prévues aux articles L. 2315-49,");
+      L.push("Point [n°] - Constitution des commissions prévues aux articles L. 2315-49,");
       L.push("L. 2315-50 et L. 2315-56.");
       L.push("");
       L.push("Le président rappelle qu'aucun accord prévu à l'article L. 2315-45 n'organise");
@@ -609,11 +609,11 @@
       L.push("Les trois résolutions sont successivement mises aux voix. Le président ne");
       L.push("prend pas part au vote (L. 2315-32).");
       L.push("");
-      L.push("  Résolution n° 1 — commission de la formation ......... adoptée / rejetée");
+      L.push("  Résolution n° 1 - commission de la formation ......... adoptée / rejetée");
       L.push("    [ ] pour · [ ] contre · [ ] abstention");
-      L.push("  Résolution n° 2 — commission logement ................ adoptée / rejetée");
+      L.push("  Résolution n° 2 - commission logement ................ adoptée / rejetée");
       L.push("    [ ] pour · [ ] contre · [ ] abstention");
-      L.push("  Résolution n° 3 — commission égalité professionnelle . adoptée / rejetée");
+      L.push("  Résolution n° 3 - commission égalité professionnelle . adoptée / rejetée");
       L.push("    [ ] pour · [ ] contre · [ ] abstention");
       L.push("");
       L.push("Le secrétaire,                             Le président,");
@@ -624,7 +624,7 @@
       L.push("règlement intérieur du comité (L. 2315-35).");
       L.push("");
 
-      titre(L, "5 — La note d'organisation des réunions des commissions");
+      titre(L, "5 - La note d'organisation des réunions des commissions");
       L.push("Cette note n'est imposée par aucun texte lu : elle sert à ce que les trois");
       L.push("commissions produisent effectivement les rapports que L. 2315-45 fait remonter");
       L.push("au comité. Tout y est donc entre crochets, sauf ce qui vient de la loi.");
@@ -649,7 +649,7 @@
       L.push("     · compte rendu : établi par [qui], dans [délai], transmis au secrétaire du");
       L.push("       comité pour inscription du rapport à l'ordre du jour ;");
       L.push("     · temps consacré aux réunions des commissions : [préciser le régime");
-      L.push("       retenu dans l'entreprise et sa source — accord, usage, règlement");
+      L.push("       retenu dans l'entreprise et sa source - accord, usage, règlement");
       L.push("       intérieur du comité. L'application ne tranche pas ce point ici : il");
       L.push("       relève des moyens du comité, traités par les documents CSE-CTL-MOY de");
       L.push("       ce module.]");
@@ -714,29 +714,29 @@
       L.push("Pièces jointes : extrait du procès-verbal · note d'organisation.");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous cherchez l'accord de L. 2315-45. C'est le seul",
+        "Aujourd'hui, " + leJour(d0) + " - vous cherchez l'accord de L. 2315-45. C'est le seul",
         "acte qui ne peut pas attendre : tout le reste en dépend. S'il existe, ce document",
         "n'a plus d'objet que pour les commissions qu'il ne couvre pas.",
         "",
-        "Dans la foulée — vous adressez au secrétaire le courrier 1 pour que le point soit",
+        "Dans la foulée - vous adressez au secrétaire le courrier 1 pour que le point soit",
         "inscrit à l'ordre du jour, l'ordre du jour étant établi conjointement par le",
         "président et le secrétaire (L. 2315-29). Envoyé aujourd'hui, il permet une",
         "inscription à la réunion suivante.",
         "",
-        "À la réunion — les trois résolutions sont mises aux voix, à la majorité des",
+        "À la réunion - les trois résolutions sont mises aux voix, à la majorité des",
         "membres présents, le président ne votant pas (L. 2315-32). Une seule réunion",
         "suffit pour les trois : ne les étalez pas.",
         "",
-        "Dans les jours qui suivent — le secrétaire établit le procès-verbal (L. 2315-34)",
+        "Dans les jours qui suivent - le secrétaire établit le procès-verbal (L. 2315-34)",
         "et vous adressez le courrier 2 à chaque membre désigné.",
         "",
-        "Au plus tard le " + leJour(dans(d0, 90)) + ", soit trois mois — la première réunion de chaque",
+        "Au plus tard le " + leJour(dans(d0, 90)) + ", soit trois mois - la première réunion de chaque",
         "commission devrait s'être tenue. Ce délai n'est imposé par aucun texte lu : il",
         "est celui qui laisse aux rapports le temps de remonter au comité avant la",
         "prochaine consultation récurrente. Si votre calendrier de consultation est plus",
         "serré, avancez-le d'autant.",
         "",
-        "À chaque clôture d'exercice — reprenez le paragraphe 2. Le seuil de trois cents",
+        "À chaque clôture d'exercice - reprenez le paragraphe 2. Le seuil de trois cents",
         "salariés se franchit sur douze mois consécutifs, et se reperd de la même façon.",
       ]);
 
@@ -774,7 +774,7 @@
 
       L.push("CE QUE CE DOCUMENT PRODUIT");
       L.push("");
-      L.push("  1. le constat préalable — accord de L. 2315-45, seuil de mille salariés,");
+      L.push("  1. le constat préalable - accord de L. 2315-45, seuil de mille salariés,");
       L.push("     niveau de création ;");
       L.push("  2. la RÉSOLUTION créant la commission et désignant ses membres ;");
       L.push("  3. le PROCÈS-VERBAL de la délibération ;");
@@ -791,7 +791,7 @@
       L.push("d'écrire ce rapport.");
       L.push("");
 
-      titre(L, "1 — Le constat préalable");
+      titre(L, "1 - Le constat préalable");
       ordreCommissions(L);
       L.push("  Un accord de L. 2315-45 organise-t-il les commissions ? .... " +
         ouiNon(f.accordCommissions, "oui / non"));
@@ -807,7 +807,7 @@
         L.push("");
       }
       if (existe === true && membres.length) {
-        L.push("  Membres déclarés : " + membres.length + " — dont " + cadres +
+        L.push("  Membres déclarés : " + membres.length + " - dont " + cadres +
           " identifié(s) comme représentant la catégorie des cadres.");
         if (membres.length > 5) {
           L.push("  ATTENTION : L. 2315-47 fixe un MAXIMUM DE CINQ membres représentants du");
@@ -821,25 +821,25 @@
         }
         L.push("");
       }
-      L.push("  NIVEAU DE CRÉATION — la commission est créée « au sein du comité social et");
+      L.push("  NIVEAU DE CRÉATION - la commission est créée « au sein du comité social et");
       L.push("  économique OU du comité social et économique central » (L. 2315-46). Le");
       L.push("  texte laisse ce choix ouvert et ne le tranche pas.");
       L.push("");
       L.push("     Niveau retenu : [comité social et économique / comité social et");
-      L.push("     économique central] — motif : [ ].");
+      L.push("     économique central] - motif : [ ].");
       L.push("");
       L.push("     Si l'entreprise comporte plusieurs comités d'établissement, c'est le");
       L.push("     comité central qui examine les questions excédant les pouvoirs des chefs");
       L.push("     d'établissement : le niveau de la commission suit ce choix.");
       L.push("");
 
-      titre(L, "2 — La résolution de création et de désignation");
+      titre(L, "2 - La résolution de création et de désignation");
       L.push(nom(ctx));
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE [CENTRAL]");
       L.push("");
       L.push("Réunion du [DATE] · point [n°] de l'ordre du jour");
       L.push("");
-      L.push("RÉSOLUTION — CRÉATION DE LA COMMISSION ÉCONOMIQUE");
+      L.push("RÉSOLUTION - CRÉATION DE LA COMMISSION ÉCONOMIQUE");
       L.push("");
       L.push("Le comité social et économique [central] de " + nom(ctx) + ", constatant");
       L.push("qu'aucun accord prévu à l'article L. 2315-45 du code du travail n'organise ses");
@@ -862,12 +862,12 @@
       L.push("");
       L.push("LES TROIS RÈGLES DE COMPOSITION, telles que L. 2315-47 les pose :");
       L.push("");
-      L.push("  · CINQ MEMBRES AU MAXIMUM représentants du personnel — c'est un plafond, pas");
+      L.push("  · CINQ MEMBRES AU MAXIMUM représentants du personnel - c'est un plafond, pas");
       L.push("    un nombre imposé : le comité peut en désigner moins ;");
-      L.push("  · AU MOINS UN REPRÉSENTANT DE LA CATÉGORIE DES CADRES — cette mention doit");
+      L.push("  · AU MOINS UN REPRÉSENTANT DE LA CATÉGORIE DES CADRES - cette mention doit");
       L.push("    figurer dans la résolution elle-même, faute de quoi rien n'établit qu'elle");
       L.push("    a été respectée ;");
-      L.push("  · DÉSIGNÉS PAR LE COMITÉ PARMI SES MEMBRES — la commission économique ne");
+      L.push("  · DÉSIGNÉS PAR LE COMITÉ PARMI SES MEMBRES - la commission économique ne");
       L.push("    s'ouvre pas à des salariés extérieurs au comité.");
       L.push("");
       L.push("La résolution est adoptée à la majorité des membres présents, le président ne");
@@ -877,8 +877,8 @@
       L.push("Vote : [ ] pour · [ ] contre · [ ] abstention.");
       L.push("");
 
-      titre(L, "3 — Le procès-verbal de la délibération");
-      L.push("PROCÈS-VERBAL — extrait");
+      titre(L, "3 - Le procès-verbal de la délibération");
+      L.push("PROCÈS-VERBAL - extrait");
       L.push("");
       L.push("Comité social et économique [central] de " + nom(ctx));
       L.push("Réunion du [DATE]");
@@ -886,7 +886,7 @@
       L.push("Secrétaire : [nom]");
       L.push("Membres présents : [liste nominative]");
       L.push("");
-      L.push("Point [n°] — Création de la commission économique (L. 2315-46) et désignation");
+      L.push("Point [n°] - Création de la commission économique (L. 2315-46) et désignation");
       L.push("de ses membres (L. 2315-47).");
       L.push("");
       L.push("Le président rappelle qu'aucun accord de L. 2315-45 n'organise les commissions");
@@ -904,7 +904,7 @@
       L.push("[nom]                                      " + signataire(ctx));
       L.push("");
 
-      titre(L, "4 — La note d'organisation des réunions et des moyens d'instruction");
+      titre(L, "4 - La note d'organisation des réunions et des moyens d'instruction");
       L.push("  a) CE QUE LA LOI IMPOSE (L. 2315-46 et L. 2315-48)");
       L.push("");
       L.push("     · LA COMMISSION SE RÉUNIT AU MOINS DEUX FOIS PAR AN. C'est un plancher :");
@@ -931,7 +931,7 @@
       L.push("     l'employeur de lui fournir des explications ; la demande est inscrite DE");
       L.push("     DROIT à l'ordre du jour de la prochaine séance. Si le comité n'a pu");
       L.push("     obtenir de réponse suffisante, ou si celle-ci confirme le caractère");
-      L.push("     préoccupant de la situation, IL ÉTABLIT UN RAPPORT — et « dans les");
+      L.push("     préoccupant de la situation, IL ÉTABLIT UN RAPPORT - et « dans les");
       L.push("     entreprises employant au moins mille salariés et en l'absence d'accord");
       L.push("     prévu à l'article L. 2315-45, CE RAPPORT EST ÉTABLI PAR LA COMMISSION");
       L.push("     ÉCONOMIQUE prévue par l'article L. 2315-46 ». Ce rapport est transmis à");
@@ -949,7 +949,7 @@
       L.push("");
       L.push("  d) CE QUE VOUS FIXEZ");
       L.push("");
-      L.push("     · dates des deux réunions au moins : [ ] et [ ] — de préférence l'une");
+      L.push("     · dates des deux réunions au moins : [ ] et [ ] - de préférence l'une");
       L.push("       avant la consultation sur la situation économique et financière, l'autre");
       L.push("       après la clôture ;");
       L.push("     · convocation par [qui], [délai] à l'avance, avec les documents");
@@ -975,7 +975,7 @@
       L.push("");
       L.push("Je vous propose d'inscrire ce point à l'ordre du jour de la réunion du [DATE]");
       L.push("et vous adresse le projet de résolution. Il appartient au comité de désigner");
-      L.push("les membres de la commission parmi les siens — cinq au maximum, dont au moins");
+      L.push("les membres de la commission parmi les siens - cinq au maximum, dont au moins");
       L.push("un représentant de la catégorie des cadres (L. 2315-47).");
       L.push("");
       salutation(L, ctx, "Je vous prie d'agréer, Monsieur le Secrétaire, l'expression de ma considération distinguée.");
@@ -1012,13 +1012,13 @@
       L.push("");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous cherchez l'accord de L. 2315-45 et vous établissez",
+        "Aujourd'hui, " + leJour(d0) + " - vous cherchez l'accord de L. 2315-45 et vous établissez",
         "l'effectif. Sans ces deux constats, la résolution est prématurée.",
         "",
-        "Dans la foulée — courrier 1 au secrétaire, pour l'inscription à l'ordre du jour",
+        "Dans la foulée - courrier 1 au secrétaire, pour l'inscription à l'ordre du jour",
         "(L. 2315-29).",
         "",
-        "À la réunion suivante — la résolution est mise aux voix : création, puis",
+        "À la réunion suivante - la résolution est mise aux voix : création, puis",
         "désignation de cinq membres au plus dont au moins un cadre (L. 2315-47),",
         "à la majorité des membres présents (L. 2315-32).",
         "",
@@ -1027,7 +1027,7 @@
         "l'année civile en porte deux. Inscrivez les deux dates dès la réunion de",
         "constitution : c'est la seule façon de ne pas les perdre.",
         "",
-        "Le jour où la situation économique devient préoccupante — la commission devient",
+        "Le jour où la situation économique devient préoccupante - la commission devient",
         "l'auteur du rapport d'alerte (L. 2312-63). Ce n'est pas le moment de la créer.",
       ]);
 
@@ -1065,12 +1065,12 @@
       L.push("celui DU COMITÉ à la clôture d'un exercice, et non celui de l'entreprise.");
       L.push("");
       if (eff != null) {
-        L.push("L'effectif de l'entreprise — " + eff + " salariés — est donc SANS INCIDENCE ici. Il");
+        L.push("L'effectif de l'entreprise - " + eff + " salariés - est donc SANS INCIDENCE ici. Il");
         L.push("n'est rappelé que pour qu'on ne le confonde pas avec le premier critère.");
         L.push("");
       }
 
-      titre(L, "1 — Le texte, et ce que l'application n'a pas lu");
+      titre(L, "1 - Le texte, et ce que l'application n'a pas lu");
       L.push("« Une commission des marchés est créée au sein du comité social et économique");
       L.push("qui dépasse, POUR AU MOINS DEUX DES TROIS CRITÈRES mentionnés au II de");
       L.push("l'article L. 2315-64, des seuils fixés par décret » (L. 2315-44-1).");
@@ -1103,7 +1103,7 @@
       L.push("présent test : c'est elle qui datera la vérification.");
       L.push("");
 
-      titre(L, "2 — Le test, critère par critère");
+      titre(L, "2 - Le test, critère par critère");
       L.push("À remplir sur LES COMPTES ANNUELS DU COMITÉ arrêtés à la clôture du dernier");
       L.push("exercice, et non sur une estimation.");
       L.push("");
@@ -1119,18 +1119,18 @@
       L.push("  ├────┼──────────────────────────────┼───────────────┼───────────────┼───────┤");
       L.push("  │ 2° │ Ressources annuelles         │ [        ] €  │ [montant du   │ [O/N] │");
       L.push("  │    │ (définies à D. 2315-34,      │               │ 2° de R.612-1 │       │");
-      L.push("  │    │ NON LU par l'application)    │               │ c. com. — À   │       │");
+      L.push("  │    │ NON LU par l'application)    │               │ c. com. - À   │       │");
       L.push("  │    │                              │               │ RELEVER]      │       │");
       L.push("  ├────┼──────────────────────────────┼───────────────┼───────────────┼───────┤");
       L.push("  │ 3° │ Total du bilan du comité     │ [        ] €  │ [montant du   │ [O/N] │");
       L.push("  │    │                              │               │ 3° de R.612-1 │       │");
-      L.push("  │    │                              │               │ c. com. — À   │       │");
+      L.push("  │    │                              │               │ c. com. - À   │       │");
       L.push("  │    │                              │               │ RELEVER]      │       │");
       L.push("  └────┴──────────────────────────────┴───────────────┴───────────────┴───────┘");
       L.push("");
       L.push("  NOMBRE DE CRITÈRES DÉPASSÉS : [ ] sur 3.");
       L.push("");
-      L.push("  RÈGLE DE DÉCISION — deux critères dépassés sur trois suffisent, et il en faut");
+      L.push("  RÈGLE DE DÉCISION - deux critères dépassés sur trois suffisent, et il en faut");
       L.push("  deux : un seul critère dépassé, même très largement, ne déclenche rien.");
       L.push("");
       L.push("  CONCLUSION : la commission des marchés est [DUE / NON DUE] au titre de");
@@ -1139,7 +1139,7 @@
       if (franchis === true) {
         L.push("  LE DOSSIER DÉCLARE QUE DEUX SEUILS AU MOINS SONT DÉPASSÉS. La résolution du");
         L.push("  paragraphe 3 est donc à adopter" +
-          (creee === true ? ", si ce n'est déjà fait — le dossier déclare par ailleurs la commission créée : vérifiez alors la date de la résolution."
+          (creee === true ? ", si ce n'est déjà fait - le dossier déclare par ailleurs la commission créée : vérifiez alors la date de la résolution."
                           : ", et le dossier ne déclare aucune commission créée."));
         L.push("");
       } else if (franchis === false) {
@@ -1153,19 +1153,19 @@
         L.push("  de création ne peuvent être justifiées.");
         L.push("");
       }
-      L.push("  UNE PRÉCISION QUE PORTE LE MÊME DÉCRET — D. 2315-29 fixe à 30 000 euros le");
+      L.push("  UNE PRÉCISION QUE PORTE LE MÊME DÉCRET - D. 2315-29 fixe à 30 000 euros le");
       L.push("  seuil mentionné à l'article L. 2315-44-2. L'application n'a pas lu");
       L.push("  L. 2315-44-2 et ne dit donc pas à quoi ce seuil s'applique : reportez-vous-y");
       L.push("  avant de conclure sur les obligations qui s'y attachent.");
       L.push("");
 
-      titre(L, "3 — La résolution créant la commission des marchés");
+      titre(L, "3 - La résolution créant la commission des marchés");
       L.push(nom(ctx));
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
       L.push("Réunion du [DATE] · point [n°] de l'ordre du jour");
       L.push("");
-      L.push("RÉSOLUTION — CRÉATION DE LA COMMISSION DES MARCHÉS");
+      L.push("RÉSOLUTION - CRÉATION DE LA COMMISSION DES MARCHÉS");
       L.push("");
       L.push("Le comité social et économique de " + nom(ctx) + ",");
       L.push("");
@@ -1185,7 +1185,7 @@
       L.push("  l'application a lus : c'est au comité de l'arrêter, et la résolution doit");
       L.push("  donc la porter.]");
       L.push("");
-      L.push("  Modalités de fonctionnement : [à définir — les modalités de fonctionnement du");
+      L.push("  Modalités de fonctionnement : [à définir - les modalités de fonctionnement du");
       L.push("  comité et de ses rapports avec les salariés relèvent du règlement intérieur");
       L.push("  du comité (L. 2315-24). C'est là que la commission des marchés trouve");
       L.push("  naturellement sa place.]");
@@ -1199,7 +1199,7 @@
       L.push("[nom]                                      " + signataire(ctx));
       L.push("");
 
-      titre(L, "4 — Ce à quoi ce test se rattache");
+      titre(L, "4 - Ce à quoi ce test se rattache");
       L.push("Le test des trois critères n'est pas un exercice isolé : il vient des");
       L.push("obligations comptables du comité, et il y retourne.");
       L.push("");
@@ -1223,7 +1223,7 @@
       L.push("    gestion financière ; il est présenté aux membres élus lors de la réunion en");
       L.push("    séance plénière (L. 2315-69).");
       L.push("");
-      L.push("C'est donc au moment de l'arrêté des comptes que le test se fait — pas à un");
+      L.push("C'est donc au moment de l'arrêté des comptes que le test se fait - pas à un");
       L.push("autre moment de l'année, et pas une fois pour toutes.");
       L.push("");
 
@@ -1259,19 +1259,19 @@
       salutation(L, ctx);
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous adressez le courrier 1 et vous ouvrez le tableau du",
+        "Aujourd'hui, " + leJour(d0) + " - vous adressez le courrier 1 et vous ouvrez le tableau du",
         "paragraphe 2 sur les comptes du dernier exercice clos.",
         "",
-        "Dès la réponse reçue — vous achevez le test. Trois lignes à remplir, et la",
+        "Dès la réponse reçue - vous achevez le test. Trois lignes à remplir, et la",
         "conclusion s'impose d'elle-même : deux critères dépassés sur trois, la commission",
         "est due.",
         "",
-        "Si elle est due — la résolution du paragraphe 3 se prend à la réunion suivante du",
+        "Si elle est due - la résolution du paragraphe 3 se prend à la réunion suivante du",
         "comité, à la majorité des membres présents (L. 2315-32). Comptez le délai",
         "d'inscription à l'ordre du jour, établi conjointement par le président et le",
         "secrétaire (L. 2315-29).",
         "",
-        "À CHAQUE CLÔTURE — le test se refait. Les comptes annuels sont approuvés dans les",
+        "À CHAQUE CLÔTURE - le test se refait. Les comptes annuels sont approuvés dans les",
         "six mois de la clôture (R. 2315-37) : c'est la fenêtre naturelle. Si votre",
         "exercice se clôturait aujourd'hui, l'approbation devrait intervenir au plus tard",
         "le " + leJour(dans(d0, 182)) + ", et le test avec elle.",
@@ -1302,7 +1302,7 @@
      entreprise applique deux assiettes différentes à deux calculs qui n'en ont
      qu'une. */
   function assiette(L) {
-    L.push("L'ASSIETTE — CE QUE LE TEXTE DIT, ET RIEN DE PLUS");
+    L.push("L'ASSIETTE - CE QUE LE TEXTE DIT, ET RIEN DE PLUS");
     L.push("");
     L.push("« La masse salariale brute est constituée par L'ENSEMBLE DES GAINS ET");
     L.push("RÉMUNÉRATIONS SOUMIS À COTISATIONS DE SÉCURITÉ SOCIALE en application des");
@@ -1316,23 +1316,23 @@
     L.push("contribution aux activités sociales et culturelles. Une seule assiette, donc,");
     L.push("pour les deux budgets.");
     L.push("");
-    L.push("  CE QUI ENTRE — tout ce qui est soumis à cotisations de sécurité sociale au");
+    L.push("  CE QUI ENTRE - tout ce qui est soumis à cotisations de sécurité sociale au");
     L.push("  sens de L. 242-1 du code de la sécurité sociale (ou de L. 741-10 du code");
     L.push("  rural et de la pêche maritime pour les employeurs qui en relèvent).");
     L.push("");
-    L.push("  CE QUI SORT — les indemnités versées à l'occasion de la rupture du contrat de");
+    L.push("  CE QUI SORT - les indemnités versées à l'occasion de la rupture du contrat de");
     L.push("  travail À DURÉE INDÉTERMINÉE. C'est la seule exclusion que le texte énonce,");
     L.push("  et elle vise la rupture du CDI : ce que le texte ne nomme pas, il ne");
     L.push("  l'exclut pas.");
     L.push("");
-    L.push("  CE QUE L'APPLICATION N'A PAS LU — l'article L. 242-1 du code de la sécurité");
+    L.push("  CE QUE L'APPLICATION N'A PAS LU - l'article L. 242-1 du code de la sécurité");
     L.push("  sociale et l'article L. 741-10 du code rural. Ils n'appartiennent pas au code");
     L.push("  du travail et le relais de l'application ne les sert pas. Ils sont donc");
     L.push("  NOMMÉS ici, jamais paraphrasés. Le périmètre exact de ce qui est « soumis à");
     L.push("  cotisations » se lit dans ces textes et dans vos déclarations sociales");
-    L.push("  nominatives — pas dans ce document.");
+    L.push("  nominatives - pas dans ce document.");
     L.push("");
-    L.push("  LA PIÈCE QUI PORTE L'ASSIETTE — vos déclarations sociales nominatives de");
+    L.push("  LA PIÈCE QUI PORTE L'ASSIETTE - vos déclarations sociales nominatives de");
     L.push("  l'exercice, dont le cumul annuel des rémunérations brutes soumises à");
     L.push("  cotisations constitue le point de départ, DIMINUÉ des indemnités de rupture");
     L.push("  de CDI qui y figurent. Conservez le détail du retraitement : c'est lui qui");
@@ -1351,7 +1351,7 @@
       var eff = effectifDe(ctx);
       var ms = nb(f.masseSalariale);
       var verse = nb(f.subventionVersee);
-      var tauxNum = null, tauxTxt = "[0,20 % ou 0,22 % — selon l'effectif]", tranche = "[tranche à déterminer]";
+      var tauxNum = null, tauxTxt = "[0,20 % ou 0,22 % - selon l'effectif]", tranche = "[tranche à déterminer]";
       if (eff != null) {
         if (eff >= 2000) { tauxNum = 0.0022; tauxTxt = "0,22 %"; tranche = "entreprises d'au moins deux mille salariés (L. 2315-61, 2°)"; }
         else if (eff >= 50) { tauxNum = 0.0020; tauxTxt = "0,20 %"; tranche = "entreprises de cinquante à moins de deux mille salariés (L. 2315-61, 1°)"; }
@@ -1369,24 +1369,24 @@
       L.push("Le complément de subvention non versé RESTE DÛ. Ce n'est pas une irrégularité");
       L.push("formelle qui se corrige en écrivant une note : c'est une dette du budget de");
       L.push("l'entreprise envers le budget du comité, que le comité peut réclamer, et dont");
-      L.push("le montant se calcule exactement — c'est tout l'objet du paragraphe 3.");
+      L.push("le montant se calcule exactement - c'est tout l'objet du paragraphe 3.");
       L.push("");
       L.push("Ce document produit, dans l'ordre :");
       L.push("");
       L.push("  1. la NOTE DE MÉTHODE sur l'assiette, avec ce qui entre et ce qui sort ;");
       L.push("  2. le TAUX de la tranche, et la vérification de la tranche ;");
       L.push("  3. le TABLEAU DE CALCUL de l'exercice, chiffré ;");
-      L.push("  4. la question de L'IMPUTATION — cette subvention s'ajoute-t-elle à celle");
+      L.push("  4. la question de L'IMPUTATION - cette subvention s'ajoute-t-elle à celle");
       L.push("     des activités sociales, ou l'employeur en est-il déjà quitte ? ;");
       L.push("  5. l'ORDRE DE VERSEMENT et le procès-verbal ;");
       L.push("  6. le COURRIER AU TRÉSORIER du comité ;");
       L.push("  7. le PROTOCOLE DE RÉGULARISATION de l'arriéré, avec son échéancier.");
       L.push("");
 
-      titre(L, "1 — Note de méthode : l'assiette");
+      titre(L, "1 - Note de méthode : l'assiette");
       assiette(L);
 
-      titre(L, "2 — Le taux, et la tranche");
+      titre(L, "2 - Le taux, et la tranche");
       L.push("« L'employeur verse au comité social et économique une subvention de");
       L.push("fonctionnement d'un montant annuel équivalent à : 1° 0,20 % DE LA MASSE");
       L.push("SALARIALE BRUTE dans les entreprises de CINQUANTE À MOINS DE DEUX MILLE");
@@ -1406,7 +1406,7 @@
         L.push("  L. 2315-61 vise les entreprises « de cinquante à moins de deux mille »");
         L.push("  salariés : en deçà, ce texte ne fixe aucune subvention. Vérifiez d'abord");
         L.push("  l'effectif et la façon dont le seuil de cinquante salariés a été apprécié");
-        L.push("  — c'est le point CSE-CTL-MEP de ce module qui le traite —, puis reprenez");
+        L.push("  - c'est le point CSE-CTL-MEP de ce module qui le traite -, puis reprenez");
         L.push("  ce document si le seuil est en réalité franchi.");
       } else {
         L.push("  Effectif de l'entreprise ...... " + eff + " salariés");
@@ -1414,7 +1414,7 @@
         L.push("  TAUX RETENU ................... " + tauxTxt);
         L.push("");
         if (eff >= 1900 && eff < 2000) {
-          L.push("  ATTENTION — l'effectif est proche du seuil de deux mille salariés. Le taux");
+          L.push("  ATTENTION - l'effectif est proche du seuil de deux mille salariés. Le taux");
           L.push("  passe de 0,20 % à 0,22 % au franchissement : reprenez ce calcul dès que");
           L.push("  l'effectif atteint deux mille.");
           L.push("");
@@ -1422,17 +1422,17 @@
       }
       L.push("");
 
-      titre(L, "3 — Le tableau de calcul de l'exercice");
+      titre(L, "3 - Le tableau de calcul de l'exercice");
       L.push("Exercice considéré : [DU ..... AU .....]");
       L.push("");
-      L.push("  A — MASSE SALARIALE BRUTE de l'exercice, au sens du dernier alinéa de");
+      L.push("  A - MASSE SALARIALE BRUTE de l'exercice, au sens du dernier alinéa de");
       L.push("      L. 2315-61 (gains et rémunérations soumis à cotisations, moins les");
       L.push("      indemnités de rupture de CDI) ......... " +
-        (ms == null ? "[MASSE SALARIALE BRUTE — à relever sur les déclarations sociales nominatives]"
+        (ms == null ? "[MASSE SALARIALE BRUTE - à relever sur les déclarations sociales nominatives]"
                     : eur(ms)));
       L.push("");
       if (eff == null || eff < 50) {
-        L.push("  B — TAUX. Les deux hypothèses, puisque l'effectif n'est pas établi :");
+        L.push("  B - TAUX. Les deux hypothèses, puisque l'effectif n'est pas établi :");
         L.push("");
         L.push("      · de cinquante à moins de deux mille salariés .......... 0,20 %");
         L.push("        C = A × 0,0020 = " +
@@ -1443,22 +1443,22 @@
         L.push("");
         L.push("      Rayez la ligne qui ne s'applique pas.");
       } else {
-        L.push("  B — TAUX de la tranche ....................... " + tauxTxt +
+        L.push("  B - TAUX de la tranche ....................... " + tauxTxt +
           " (soit " + (tauxNum === 0.0022 ? "0,0022" : "0,0020") + ")");
         L.push("");
-        L.push("  C — MONTANT ANNUEL DÛ = A × B");
+        L.push("  C - MONTANT ANNUEL DÛ = A × B");
         L.push("      " + (ms == null
           ? "[MASSE SALARIALE BRUTE] × " + (tauxNum === 0.0022 ? "0,0022" : "0,0020") + " = [MONTANT DÛ]"
           : eur(ms) + " × " + (tauxNum === 0.0022 ? "0,0022" : "0,0020") + " = " + eur(du)));
       }
       L.push("");
-      L.push("  D — DÉJÀ VERSÉ sur l'exercice, tous versements confondus ...... " +
-        (verse == null ? "[MONTANT VERSÉ — à relever sur les justificatifs de versement]" : eur(verse)));
+      L.push("  D - DÉJÀ VERSÉ sur l'exercice, tous versements confondus ...... " +
+        (verse == null ? "[MONTANT VERSÉ - à relever sur les justificatifs de versement]" : eur(verse)));
       L.push("");
       L.push("      Détail des versements : [date · montant · pièce], ligne par ligne. Un");
       L.push("      total sans détail ne prouve rien le jour où il est contesté.");
       L.push("");
-      L.push("  E — COMPLÉMENT RESTANT DÛ = C − D");
+      L.push("  E - COMPLÉMENT RESTANT DÛ = C − D");
       if (solde == null) {
         L.push("      [MONTANT DÛ] − [MONTANT VERSÉ] = [COMPLÉMENT]");
       } else if (solde > 0) {
@@ -1472,7 +1472,7 @@
         L.push("");
         L.push("      LE VERSEMENT EXCÈDE LE MONTANT LÉGAL DE " + eur(Math.abs(solde)) + ". Le taux de");
         L.push("      L. 2315-61 est un MINIMUM légal : rien n'interdit de verser davantage.");
-        L.push("      Vérifiez seulement d'où vient l'excédent — un accord plus favorable, un");
+        L.push("      Vérifiez seulement d'où vient l'excédent - un accord plus favorable, un");
         L.push("      usage, ou une erreur d'imputation entre les deux budgets, qui ne se");
         L.push("      confondent pas.");
       } else {
@@ -1481,12 +1481,12 @@
         L.push("      LE COMPTE EST EXACT au titre de cet exercice.");
       }
       L.push("");
-      L.push("  CE QUE CE TABLEAU NE FAIT PAS — il ne remonte pas les exercices antérieurs.");
+      L.push("  CE QUE CE TABLEAU NE FAIT PAS - il ne remonte pas les exercices antérieurs.");
       L.push("  Refaites-le, à l'identique, pour chaque exercice où le doute existe ; le");
       L.push("  paragraphe 7 échelonne ensuite le total.");
       L.push("");
 
-      titre(L, "4 — L'imputation : cette subvention s'ajoute-t-elle ?");
+      titre(L, "4 - L'imputation : cette subvention s'ajoute-t-elle ?");
       L.push("« Ce montant S'AJOUTE à la subvention destinée aux activités sociales et");
       L.push("culturelles, SAUF SI l'employeur fait déjà bénéficier le comité d'une somme ou");
       L.push("de moyens en personnel équivalents à 0,22 % de la masse salariale brute »");
@@ -1497,7 +1497,7 @@
       L.push("");
       L.push("  Si oui, détaillez ce qui est fourni et sa valorisation :");
       L.push("     · sommes versées à un autre titre .......... [ ] €");
-      L.push("     · moyens en personnel mis à disposition .... [ ] € — [nature, temps,");
+      L.push("     · moyens en personnel mis à disposition .... [ ] € - [nature, temps,");
       L.push("       méthode de valorisation]");
       L.push("     · TOTAL ................................... [ ] €");
       L.push("     · à comparer à 0,22 % de A ................ " +
@@ -1515,7 +1515,7 @@
       L.push("  · il peut également décider, par une délibération, de TRANSFÉRER UNE PARTIE");
       L.push("    DE L'EXCÉDENT ANNUEL du budget de fonctionnement au financement des");
       L.push("    activités sociales et culturelles, dans des conditions et limites fixées");
-      L.push("    par décret en Conseil d'État (L. 2315-61) — le décret n'est pas cité ici :");
+      L.push("    par décret en Conseil d'État (L. 2315-61) - le décret n'est pas cité ici :");
       L.push("    l'application ne l'a pas lu, et la limite ne s'invente pas ;");
       L.push("  · MAIS lorsque le financement des frais d'expertise est pris en charge par");
       L.push("    l'employeur en application du 3° de l'article L. 2315-80, LE COMITÉ NE PEUT");
@@ -1524,7 +1524,7 @@
       L.push("    SUIVANTES (L. 2315-61, dernier alinéa). Vérifiez ce point avant toute");
       L.push("    délibération de transfert : il se rattache au document CSE-CTL-EXP-01.");
       L.push("");
-      L.push("  INSCRIPTION AUX COMPTES — « Cette somme et ses modalités d'utilisation sont");
+      L.push("  INSCRIPTION AUX COMPTES - « Cette somme et ses modalités d'utilisation sont");
       L.push("  inscrites, d'une part, dans les comptes annuels du comité social et");
       L.push("  économique ou, le cas échéant, dans les documents mentionnés à l'article");
       L.push("  L. 2315-65 et, d'autre part, dans le rapport mentionné à l'article");
@@ -1532,13 +1532,13 @@
       L.push("  dans les comptes et dans le rapport de gestion du comité.");
       L.push("");
 
-      titre(L, "5 — L'ordre de versement, et le procès-verbal");
+      titre(L, "5 - L'ordre de versement, et le procès-verbal");
       L.push("ORDRE DE VERSEMENT");
       L.push("");
       L.push(nom(ctx));
       L.push("");
       L.push("Objet : versement du complément de subvention de fonctionnement du comité");
-      L.push("social et économique — exercice [ ]");
+      L.push("social et économique - exercice [ ]");
       L.push("");
       L.push("Vu l'article L. 2315-61 du code du travail ;");
       L.push("Vu le tableau de calcul annexé ;");
@@ -1548,11 +1548,11 @@
         " au titre du complément de subvention de");
       L.push("fonctionnement de l'exercice [ ].");
       L.push("");
-      L.push("  Compte à créditer : [coordonnées bancaires du comité — à demander au");
+      L.push("  Compte à créditer : [coordonnées bancaires du comité - à demander au");
       L.push("  trésorier, jamais reconstituées]");
       L.push("  Date d'exécution : [DATE]");
-      L.push("  Référence à porter au libellé : « Subvention de fonctionnement L. 2315-61 —");
-      L.push("  complément exercice [ ] » — le libellé compte : c'est lui qui empêchera");
+      L.push("  Référence à porter au libellé : « Subvention de fonctionnement L. 2315-61 -");
+      L.push("  complément exercice [ ] » - le libellé compte : c'est lui qui empêchera");
       L.push("  qu'on impute plus tard ce versement au budget des activités sociales.");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ".");
@@ -1561,12 +1561,12 @@
       L.push("");
       L.push(TRAIT);
       L.push("");
-      L.push("PROCÈS-VERBAL DE VERSEMENT — extrait à porter au procès-verbal du comité");
+      L.push("PROCÈS-VERBAL DE VERSEMENT - extrait à porter au procès-verbal du comité");
       L.push("");
       L.push("Comité social et économique de " + nom(ctx));
       L.push("Réunion du [DATE]");
       L.push("");
-      L.push("Point [n°] — Subvention de fonctionnement de l'exercice [ ].");
+      L.push("Point [n°] - Subvention de fonctionnement de l'exercice [ ].");
       L.push("");
       L.push("Le président présente le calcul de la subvention de fonctionnement : masse");
       L.push("salariale brute de l'exercice " +
@@ -1592,7 +1592,7 @@
       ]);
       papier(L, ctx, ["À l'attention du trésorier",
                       "du comité social et économique"]);
-      L.push("Objet : subvention de fonctionnement de l'exercice [ ] — calcul et versement");
+      L.push("Objet : subvention de fonctionnement de l'exercice [ ] - calcul et versement");
       L.push("du complément");
       L.push("");
       L.push("Madame, Monsieur le Trésorier,");
@@ -1627,7 +1627,7 @@
       L.push("ordre de versement.");
       L.push("");
 
-      titre(L, "7 — Le protocole de régularisation de l'arriéré, et son échéancier");
+      titre(L, "7 - Le protocole de régularisation de l'arriéré, et son échéancier");
       L.push("À n'utiliser que si le complément porte sur PLUSIEURS EXERCICES ou si son");
       L.push("montant ne peut pas être versé en une fois. Un arriéré se règle d'abord en un");
       L.push("seul versement : l'échéancier est une facilité, et il se négocie.");
@@ -1638,7 +1638,7 @@
       L.push("et le comité social et économique de " + nom(ctx) + ", représenté par");
       L.push("[secrétaire et trésorier, autorisés par la délibération du [DATE]],");
       L.push("");
-      L.push("Article 1 — Reconnaissance de la dette");
+      L.push("Article 1 - Reconnaissance de la dette");
       L.push("Les parties constatent qu'au titre de l'article L. 2315-61 du code du travail,");
       L.push("il reste dû au comité, au jour de la signature :");
       L.push("");
@@ -1650,14 +1650,14 @@
       L.push("");
       L.push("Le calcul de chaque exercice est annexé, avec l'assiette retenue et sa pièce.");
       L.push("");
-      L.push("Article 2 — Échéancier");
+      L.push("Article 2 - Échéancier");
       L.push("Le total est versé selon l'échéancier suivant :");
       L.push("");
       var q = (solde != null && solde > 0) ? solde / 4 : null;
-      L.push("     1re échéance — le " + leJour(dans(d0, 30)) + " ......... " + (q == null ? "[ ] €" : eur(q)));
-      L.push("     2e échéance — le " + leJour(dans(d0, 120)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
-      L.push("     3e échéance — le " + leJour(dans(d0, 210)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
-      L.push("     4e échéance — le " + leJour(dans(d0, 300)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
+      L.push("     1re échéance - le " + leJour(dans(d0, 30)) + " ......... " + (q == null ? "[ ] €" : eur(q)));
+      L.push("     2e échéance - le " + leJour(dans(d0, 120)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
+      L.push("     3e échéance - le " + leJour(dans(d0, 210)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
+      L.push("     4e échéance - le " + leJour(dans(d0, 300)) + " .......... " + (q == null ? "[ ] €" : eur(q)));
       L.push("");
       L.push("     [Ces quatre dates et ce quart sont une PROPOSITION calculée à partir");
       L.push("     d'aujourd'hui : quatre versements trimestriels sur moins d'un an. Aucun");
@@ -1665,19 +1665,19 @@
       L.push("     et le comité peut refuser l'étalement. Adaptez les dates et les");
       L.push("     montants, ou supprimez cet article et versez en une fois.]");
       L.push("");
-      L.push("Article 3 — Imputation");
+      L.push("Article 3 - Imputation");
       L.push("Chaque versement est porté au crédit du budget DE FONCTIONNEMENT du comité,");
-      L.push("avec le libellé « Subvention de fonctionnement L. 2315-61 — arriéré exercice");
+      L.push("avec le libellé « Subvention de fonctionnement L. 2315-61 - arriéré exercice");
       L.push("[ ] ». Aucun de ces versements ne s'impute sur la contribution aux activités");
       L.push("sociales et culturelles, qui obéit à l'article L. 2312-81 et fait l'objet d'un");
       L.push("calcul distinct.");
       L.push("");
-      L.push("Article 4 — Inscription aux comptes");
+      L.push("Article 4 - Inscription aux comptes");
       L.push("Le comité inscrit chaque versement à ses comptes annuels ou aux documents de");
       L.push("l'article L. 2315-65, et en mentionne les modalités d'utilisation dans le");
       L.push("rapport de l'article L. 2315-69 (L. 2315-61).");
       L.push("");
-      L.push("Article 5 — Défaut");
+      L.push("Article 5 - Défaut");
       L.push("À défaut de versement à l'une des échéances, le solde devient immédiatement");
       L.push("exigible en totalité.");
       L.push("");
@@ -1688,25 +1688,25 @@
       L.push("");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous demandez au service paie le cumul annuel des",
+        "Aujourd'hui, " + leJour(d0) + " - vous demandez au service paie le cumul annuel des",
         "rémunérations brutes soumises à cotisations, et le détail des indemnités de",
         "rupture de CDI à en retrancher. C'est le seul travail réel de ce document : le",
         "reste est une multiplication.",
         "",
-        "Dès l'assiette obtenue — le tableau du paragraphe 3 se remplit en dix minutes et",
+        "Dès l'assiette obtenue - le tableau du paragraphe 3 se remplit en dix minutes et",
         "donne le complément. Comptez une semaine, soit le " + leJour(dans(d0, 7)) + ".",
         "",
-        "Le versement — il n'est enfermé dans aucun délai par le texte lu, ce qui ne",
+        "Le versement - il n'est enfermé dans aucun délai par le texte lu, ce qui ne",
         "signifie pas qu'il puisse attendre : la somme est due, et elle porte sur un",
         "exercice qui se clôture. Fixez-vous le " + leJour(dans(d0, 30)) + " au plus tard.",
         "",
-        "Le même jour — courrier 1 au trésorier, avec le calcul. Sans le calcul, le",
+        "Le même jour - courrier 1 au trésorier, avec le calcul. Sans le calcul, le",
         "versement ne clôt rien : il reste discutable.",
         "",
-        "À la réunion suivante du comité — le point est porté au procès-verbal",
+        "À la réunion suivante du comité - le point est porté au procès-verbal",
         "(paragraphe 5), et le trésorier confirme l'inscription aux comptes.",
         "",
-        "À CHAQUE EXERCICE — le calcul se refait. Deux choses le changent : la masse",
+        "À CHAQUE EXERCICE - le calcul se refait. Deux choses le changent : la masse",
         "salariale, qui bouge chaque année, et le franchissement du seuil de deux mille",
         "salariés, qui fait passer le taux de 0,20 % à 0,22 %.",
       ]);
@@ -1753,7 +1753,7 @@
       L.push("D'où l'erreur qui se répète chaque année : verser le même montant que l'an");
       L.push("passé, et croire l'obligation satisfaite. Elle ne l'est pas. Si la masse");
       L.push("salariale a progressé et que la contribution est restée stable, LE RAPPORT A");
-      L.push("BAISSÉ, et l'insuffisance est caractérisée — sans qu'aucun montant ait");
+      L.push("BAISSÉ, et l'insuffisance est caractérisée - sans qu'aucun montant ait");
       L.push("diminué.");
       L.push("");
       L.push("Ce document produit, dans l'ordre :");
@@ -1767,7 +1767,7 @@
       L.push("  7. le PROTOCOLE DE RÉGULARISATION et son échéancier.");
       L.push("");
 
-      titre(L, "1 — L'accord d'abord : c'est lui qui fixe la contribution");
+      titre(L, "1 - L'accord d'abord : c'est lui qui fixe la contribution");
       L.push("Le plancher du rapport ne joue qu'« À DÉFAUT D'ACCORD ». Cherchez donc");
       L.push("l'accord avant tout calcul :");
       L.push("");
@@ -1776,7 +1776,7 @@
       L.push("");
       L.push("     Si OUI : accord du [DATE], déposé le [DATE], article [ ]. C'est lui qui");
       L.push("     fixe la contribution, et le calcul du paragraphe 3 devient une simple");
-      L.push("     vérification de son exécution — comparez ce qui a été versé à ce que");
+      L.push("     vérification de son exécution - comparez ce qui a été versé à ce que");
       L.push("     l'accord prévoit, et arrêtez-vous là.");
       L.push("");
       L.push("     Si NON : le plancher de L. 2312-81 s'applique, et le calcul du");
@@ -1787,16 +1787,16 @@
       L.push("  d'établissement (L. 2312-82). Le second n'écarte pas le plancher du premier.");
       L.push("");
 
-      titre(L, "2 — Note de méthode : l'assiette");
+      titre(L, "2 - Note de méthode : l'assiette");
       assiette(L);
-      L.push("UNE PRÉCISION PROPRE À CE CALCUL — l'assiette doit être LA MÊME POUR LES DEUX");
+      L.push("UNE PRÉCISION PROPRE À CE CALCUL - l'assiette doit être LA MÊME POUR LES DEUX");
       L.push("EXERCICES comparés. Un rapport calculé sur une assiette retraitée cette année");
       L.push("et sur une assiette brute l'an dernier ne compare rien du tout : c'est la");
       L.push("première chose qu'on vous opposera. Si votre méthode de retraitement a changé,");
       L.push("recalculez l'exercice précédent avec la nouvelle méthode et dites-le.");
       L.push("");
 
-      titre(L, "3 — Le tableau des deux exercices");
+      titre(L, "3 - Le tableau des deux exercices");
       L.push("  ┌──────────────────────────────────────┬──────────────┬──────────────┐");
       L.push("  │                                      │ Exercice N-1 │ Exercice N   │");
       L.push("  ├──────────────────────────────────────┼──────────────┼──────────────┤");
@@ -1818,14 +1818,14 @@
       L.push("  Pièces : justificatifs de versement pour A · déclarations sociales");
       L.push("  nominatives retraitées pour B, sur chacun des deux exercices.");
       L.push("");
-      L.push("  LE TEST — le rapport de l'exercice N est-il au moins égal à celui de");
+      L.push("  LE TEST - le rapport de l'exercice N est-il au moins égal à celui de");
       L.push("  l'exercice N-1 ?");
       L.push("");
       if (rN != null && rN1 != null) {
-        L.push("     " + pourcent(rN) + " (N) contre " + pourcent(rN1) + " (N-1) — " +
+        L.push("     " + pourcent(rN) + " (N) contre " + pourcent(rN1) + " (N-1) - " +
           (rN >= rN1 ? "LE PLANCHER EST RESPECTÉ." : "LE PLANCHER N'EST PAS RESPECTÉ."));
       } else {
-        L.push("     [rapport N] contre [rapport N-1] — [respecté / non respecté].");
+        L.push("     [rapport N] contre [rapport N-1] - [respecté / non respecté].");
       }
       L.push("");
       L.push("  LE CALCUL DU DÛ ET DU COMPLÉMENT");
@@ -1843,7 +1843,7 @@
         L.push("");
         L.push("      IL FAUT VERSER " + eur(comp) + " POUR RÉTABLIR LE RAPPORT.");
         L.push("      Après ce versement, la contribution de l'exercice N s'établira à");
-        L.push("      " + eur(duN) + ", soit " + pourcent(rN1) + " de la masse salariale — exactement le");
+        L.push("      " + eur(duN) + ", soit " + pourcent(rN1) + " de la masse salariale - exactement le");
         L.push("      rapport de l'exercice précédent, qui est le plancher légal.");
       } else if (comp != null && comp <= 0) {
         L.push("      " + eur(duN) + " − " + eur(ascN) + " = " + eur(comp));
@@ -1864,9 +1864,9 @@
       L.push("  l'exercice N devient le plancher de l'exercice N+1. Un versement");
       L.push("  exceptionnel élève le plancher de l'année suivante. Si le versement est");
       L.push("  destiné à ne pas se reproduire, dites-le expressément dans l'acte qui le");
-      L.push("  décide — et vérifiez ce que votre accord, s'il en existe un, en dit.");
+      L.push("  décide - et vérifiez ce que votre accord, s'il en existe un, en dit.");
       L.push("");
-      L.push("  CE QUE CE CALCUL NE COUVRE PAS — le reliquat budgétaire. « En cas de");
+      L.push("  CE QUE CE CALCUL NE COUVRE PAS - le reliquat budgétaire. « En cas de");
       L.push("  reliquat budgétaire les membres de la délégation du personnel du comité");
       L.push("  peuvent décider, par une délibération, de transférer tout ou partie du");
       L.push("  montant de l'excédent annuel du budget destiné aux activités sociales et");
@@ -1876,7 +1876,7 @@
       L.push("  contribution due.");
       L.push("");
 
-      titre(L, "4 — La répartition entre comités d'établissement");
+      titre(L, "4 - La répartition entre comités d'établissement");
       L.push("  L'entreprise comporte-t-elle plusieurs établissements distincts ? ...... " +
         ouiNon(f.etablissementsMultiples, "oui / non"));
       L.push("");
@@ -1897,7 +1897,7 @@
         L.push("");
         L.push("  Deux étages, donc, et dans cet ordre :");
         L.push("");
-        L.push("     1. le MONTANT GLOBAL se calcule au niveau de l'entreprise — c'est le");
+        L.push("     1. le MONTANT GLOBAL se calcule au niveau de l'entreprise - c'est le");
         L.push("        tableau du paragraphe 3, et lui seul ;");
         L.push("     2. la RÉPARTITION suit l'accord ; à défaut, elle suit la masse salariale");
         L.push("        de chaque établissement, et rien d'autre.");
@@ -1911,19 +1911,19 @@
         L.push("     TOTAL .... " + (ms == null ? "[ ] €" : eur(ms)) + " ...... 100 % ...... " +
           (duN == null ? "[ ] €" : eur(duN)));
         L.push("");
-        L.push("     Un accord de répartition existe-t-il ? [oui / non] — s'il existe :");
+        L.push("     Un accord de répartition existe-t-il ? [oui / non] - s'il existe :");
         L.push("     accord du [DATE], critère retenu : [effectifs / masse salariale / les");
         L.push("     deux combinés].");
         L.push("");
       }
 
-      titre(L, "5 — L'ordre de versement et le procès-verbal");
+      titre(L, "5 - L'ordre de versement et le procès-verbal");
       L.push("ORDRE DE VERSEMENT");
       L.push("");
       L.push(nom(ctx));
       L.push("");
       L.push("Objet : versement du complément de contribution aux activités sociales et");
-      L.push("culturelles — exercice [ ]");
+      L.push("culturelles - exercice [ ]");
       L.push("");
       L.push("Vu l'article L. 2312-81 du code du travail ;");
       L.push("Vu l'absence d'accord d'entreprise fixant la contribution ;");
@@ -1937,7 +1937,7 @@
       L.push("égal à celui de l'exercice précédent.");
       L.push("");
       L.push("  Référence à porter au libellé : « Contribution activités sociales et");
-      L.push("  culturelles L. 2312-81 — complément exercice [ ] ». Ce libellé n'est pas");
+      L.push("  culturelles L. 2312-81 - complément exercice [ ] ». Ce libellé n'est pas");
       L.push("  une formalité : c'est lui qui empêchera qu'on impute plus tard ce versement");
       L.push("  à la subvention de fonctionnement, qui a son propre calcul et son propre");
       L.push("  article.");
@@ -1948,11 +1948,11 @@
       L.push("");
       L.push(TRAIT);
       L.push("");
-      L.push("PROCÈS-VERBAL — extrait");
+      L.push("PROCÈS-VERBAL - extrait");
       L.push("");
       L.push("Comité social et économique de " + nom(ctx) + " · réunion du [DATE]");
       L.push("");
-      L.push("Point [n°] — Contribution aux activités sociales et culturelles de");
+      L.push("Point [n°] - Contribution aux activités sociales et culturelles de");
       L.push("l'exercice [ ].");
       L.push("");
       L.push("Le président expose que, en l'absence d'accord d'entreprise fixant la");
@@ -1978,7 +1978,7 @@
       ]);
       papier(L, ctx, ["À l'attention du trésorier",
                       "du comité social et économique"]);
-      L.push("Objet : contribution aux activités sociales et culturelles de l'exercice [ ] —");
+      L.push("Objet : contribution aux activités sociales et culturelles de l'exercice [ ] -");
       L.push("calcul du rapport et versement du complément");
       L.push("");
       L.push("Madame, Monsieur le Trésorier,");
@@ -1990,10 +1990,10 @@
       L.push("");
       L.push("Le calcul s'établit ainsi, sur l'assiette définie à l'article L. 2312-83 :");
       L.push("");
-      L.push("  Exercice précédent — contribution " + (ascN1 == null ? "[ ] €" : eur(ascN1)) +
+      L.push("  Exercice précédent - contribution " + (ascN1 == null ? "[ ] €" : eur(ascN1)) +
         " · masse salariale " + (msN1 == null ? "[ ] €" : eur(msN1)));
       L.push("     rapport ....................... " + (rN1 == null ? "[ ] %" : pourcent(rN1)));
-      L.push("  Exercice en cours — contribution " + (ascN == null ? "[ ] €" : eur(ascN)) +
+      L.push("  Exercice en cours - contribution " + (ascN == null ? "[ ] €" : eur(ascN)) +
         " · masse salariale " + (ms == null ? "[ ] €" : eur(ms)));
       L.push("     rapport avant complément ...... " + (rN == null ? "[ ] %" : pourcent(rN)));
       L.push("");
@@ -2015,40 +2015,40 @@
       L.push("l'assiette · ordre de versement.");
       L.push("");
 
-      titre(L, "7 — Le protocole de régularisation de l'arriéré");
+      titre(L, "7 - Le protocole de régularisation de l'arriéré");
       L.push("PROTOCOLE DE RÉGULARISATION");
       L.push("");
       L.push("Entre " + nom(ctx) + ", représentée par " + signataire(ctx) + ",");
       L.push("et le comité social et économique, représenté par [secrétaire et trésorier,");
       L.push("autorisés par la délibération du [DATE]],");
       L.push("");
-      L.push("Article 1 — Reconnaissance");
+      L.push("Article 1 - Reconnaissance");
       L.push("Les parties constatent que, faute d'accord fixant la contribution, le rapport");
       L.push("de la contribution à la masse salariale brute est demeuré inférieur au rapport");
       L.push("de l'année précédente sur le ou les exercices suivants, et qu'il reste dû :");
       L.push("");
-      L.push("     Exercice [ ] — rapport constaté [ ] % contre [ ] % ... [ ] €");
-      L.push("     Exercice [ ] — rapport constaté [ ] % contre [ ] % ... [ ] €");
+      L.push("     Exercice [ ] - rapport constaté [ ] % contre [ ] % ... [ ] €");
+      L.push("     Exercice [ ] - rapport constaté [ ] % contre [ ] % ... [ ] €");
       L.push("     TOTAL ................................................ " +
         (comp != null && comp > 0 ? eur(comp) + " (pour le seul exercice calculé)" : "[TOTAL]"));
       L.push("");
-      L.push("Article 2 — Échéancier");
+      L.push("Article 2 - Échéancier");
       var q2 = (comp != null && comp > 0) ? comp / 3 : null;
-      L.push("     1re échéance — le " + leJour(dans(d0, 30)) + " ......... " + (q2 == null ? "[ ] €" : eur(q2)));
-      L.push("     2e échéance — le " + leJour(dans(d0, 120)) + " .......... " + (q2 == null ? "[ ] €" : eur(q2)));
-      L.push("     3e échéance — le " + leJour(dans(d0, 210)) + " .......... " + (q2 == null ? "[ ] €" : eur(q2)));
+      L.push("     1re échéance - le " + leJour(dans(d0, 30)) + " ......... " + (q2 == null ? "[ ] €" : eur(q2)));
+      L.push("     2e échéance - le " + leJour(dans(d0, 120)) + " .......... " + (q2 == null ? "[ ] €" : eur(q2)));
+      L.push("     3e échéance - le " + leJour(dans(d0, 210)) + " .......... " + (q2 == null ? "[ ] €" : eur(q2)));
       L.push("");
       L.push("     [Trois échéances calculées à partir d'aujourd'hui, à titre de");
       L.push("     proposition. Aucun texte lu n'impose de délai : c'est une négociation,");
       L.push("     et le comité peut exiger le versement en une fois.]");
       L.push("");
-      L.push("Article 3 — Effet sur les exercices suivants");
+      L.push("Article 3 - Effet sur les exercices suivants");
       L.push("Les parties conviennent que le rapport rétabli au titre de chaque exercice");
       L.push("régularisé constitue le rapport de référence pour l'exercice suivant, au sens");
       L.push("de l'article L. 2312-81. [Vérifiez cette clause : elle est la conséquence");
       L.push("logique du texte, mais elle engage l'entreprise pour l'avenir.]");
       L.push("");
-      L.push("Article 4 — Imputation et défaut");
+      L.push("Article 4 - Imputation et défaut");
       L.push("Chaque versement est porté au budget des activités sociales et culturelles,");
       L.push("distinct du budget de fonctionnement. À défaut de versement à l'une des");
       L.push("échéances, le solde devient immédiatement exigible.");
@@ -2060,25 +2060,25 @@
       L.push("");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous cherchez l'accord de L. 2312-81. S'il existe, le",
+        "Aujourd'hui, " + leJour(d0) + " - vous cherchez l'accord de L. 2312-81. S'il existe, le",
         "plancher ne joue pas et le travail s'arrête presque là.",
         "",
-        "Le même jour — vous demandez au service paie les DEUX masses salariales, celle",
+        "Le même jour - vous demandez au service paie les DEUX masses salariales, celle",
         "de l'exercice et celle de l'exercice précédent, retraitées de la même façon. Ce",
         "sont deux chiffres, pas un : c'est là que les dossiers s'enlisent.",
         "",
-        "Dès les quatre montants réunis — le tableau du paragraphe 3 donne les deux",
+        "Dès les quatre montants réunis - le tableau du paragraphe 3 donne les deux",
         "rapports et le complément. Comptez le " + leJour(dans(d0, 10)) + ".",
         "",
-        "Le versement — avant la clôture de l'exercice en cours. C'est le seul repère",
+        "Le versement - avant la clôture de l'exercice en cours. C'est le seul repère",
         "utile : le plancher se mesure exercice par exercice, et un complément versé",
         "après la clôture régularise l'exercice clos sans rien changer au suivant.",
         "",
-        "Le même jour — courrier 1 au trésorier, avec les deux rapports.",
+        "Le même jour - courrier 1 au trésorier, avec les deux rapports.",
         "",
-        "À la réunion suivante du comité — le point est porté au procès-verbal.",
+        "À la réunion suivante du comité - le point est porté au procès-verbal.",
         "",
-        "L'AN PROCHAIN, à la même date — le rapport rétabli cette année devient le",
+        "L'AN PROCHAIN, à la même date - le rapport rétabli cette année devient le",
         "plancher. Refaites le calcul : c'est une obligation annuelle, et elle se perd",
         "toujours de la même façon, en reconduisant un montant au lieu d'un rapport.",
       ]);
@@ -2129,7 +2129,7 @@
         L.push("");
       }
       L.push("  Ce que le texte lu commande, et ce qu'il ne commande pas : L. 2312-78 dit au");
-      L.push("  bénéfice de qui ces activités sont établies — les salariés, leur famille,");
+      L.push("  bénéfice de qui ces activités sont établies - les salariés, leur famille,");
       L.push("  les stagiaires. Il ne dit rien d'une condition d'ancienneté, ni pour, ni");
       L.push("  contre. Ce qui se joue est donc ceci : une condition d'ancienneté FERME");
       L.push("  L'ACCÈS À DES BÉNÉFICIAIRES QUE LE TEXTE VISE, et la décision qui l'institue");
@@ -2137,7 +2137,7 @@
       L.push("  décision, et les refus qu'elle a fondés, qui sont fragiles.");
       L.push("");
 
-      titre(L, "1 — Le recensement, prestation par prestation");
+      titre(L, "1 - Le recensement, prestation par prestation");
       L.push("La nomenclature de R. 2312-35 sert de grille : elle énumère ce que sont les");
       L.push("activités sociales et culturelles, et elle a l'avantage de ne rien laisser de");
       L.push("côté. « Les activités sociales et culturelles établies dans l'entreprise au");
@@ -2149,12 +2149,12 @@
       L.push("  │                                        │ exigée ?  │ concernées       │");
       L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
       L.push("  │ 1° Institutions sociales de prévoyance │ [oui/non] │ [ ]              │");
-      L.push("  │    et d'entraide — institutions de     │ [durée]   │                  │");
+      L.push("  │    et d'entraide - institutions de     │ [durée]   │                  │");
       L.push("  │    retraites, sociétés de secours      │           │                  │");
       L.push("  │    mutuels                             │           │                  │");
       L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
       L.push("  │ 2° Activités tendant à l'amélioration  │ [oui/non] │ [ ]              │");
-      L.push("  │    des conditions de bien-être —       │ [durée]   │                  │");
+      L.push("  │    des conditions de bien-être -       │ [durée]   │                  │");
       L.push("  │    cantines, coopératives de           │           │                  │");
       L.push("  │    consommation, logements, jardins    │           │                  │");
       L.push("  │    familiaux, crèches, colonies de     │           │                  │");
@@ -2166,7 +2166,7 @@
       L.push("  ├────────────────────────────────────────┼───────────┼──────────────────┤");
       L.push("  │ 4° Institutions d'ordre professionnel  │ [oui/non] │ [ ]              │");
       L.push("  │    ou éducatif attachées à l'entreprise│ [durée]   │                  │");
-      L.push("  │    ou dépendant d'elle — centres       │           │                  │");
+      L.push("  │    ou dépendant d'elle - centres       │           │                  │");
       L.push("  │    d'apprentissage et de formation     │           │                  │");
       L.push("  │    professionnelle, bibliothèques,     │           │                  │");
       L.push("  │    cercles d'études, cours de culture  │           │                  │");
@@ -2204,13 +2204,13 @@
       L.push("       Les ayants droit familiaux sont-ils admis ? ............. [oui / non]");
       L.push("");
 
-      titre(L, "2 — La délibération du comité");
+      titre(L, "2 - La délibération du comité");
       L.push(nom(ctx));
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
       L.push("Réunion du [DATE] · point [n°] de l'ordre du jour");
       L.push("");
-      L.push("DÉLIBÉRATION — SUPPRESSION DE LA CONDITION D'ANCIENNETÉ D'ACCÈS AUX ACTIVITÉS");
+      L.push("DÉLIBÉRATION - SUPPRESSION DE LA CONDITION D'ANCIENNETÉ D'ACCÈS AUX ACTIVITÉS");
       L.push("SOCIALES ET CULTURELLES");
       L.push("");
       L.push("Le comité social et économique de " + nom(ctx) + ",");
@@ -2225,27 +2225,27 @@
       L.push("");
       L.push("DÉCIDE :");
       L.push("");
-      L.push("Article 1 — La condition d'ancienneté de [durée] qui subordonnait l'accès aux");
+      L.push("Article 1 - La condition d'ancienneté de [durée] qui subordonnait l'accès aux");
       L.push("prestations suivantes est SUPPRIMÉE, à compter du [DATE D'EFFET] :");
       L.push("     · [prestation] ;");
       L.push("     · [prestation] ;");
       L.push("     · [prestation].");
       L.push("");
-      L.push("Article 2 — Ont accès aux activités sociales et culturelles du comité, sans");
+      L.push("Article 2 - Ont accès aux activités sociales et culturelles du comité, sans");
       L.push("condition d'ancienneté : les salariés de l'entreprise, LES STAGIAIRES, et");
       L.push("[préciser les autres bénéficiaires retenus : la famille des salariés, les");
-      L.push("anciens salariés — R. 2312-35 vise les uns et les autres].");
+      L.push("anciens salariés - R. 2312-35 vise les uns et les autres].");
       L.push("");
-      L.push("Article 3 — [Le cas échéant : les modalités d'attribution, notamment les");
+      L.push("Article 3 - [Le cas échéant : les modalités d'attribution, notamment les");
       L.push("critères de modulation retenus par le comité, sont maintenues. Attention :");
       L.push("l'application ne se prononce pas ici sur la licéité d'un critère de");
       L.push("modulation, qui est une question distincte de celle de l'ancienneté et que le");
       L.push("texte lu ne tranche pas. Faites-la examiner.]");
       L.push("");
-      L.push("Article 4 — Les demandes refusées sur le fondement de la condition supprimée,");
+      L.push("Article 4 - Les demandes refusées sur le fondement de la condition supprimée,");
       L.push("depuis le [DATE], sont reprises d'office selon les modalités du paragraphe 3.");
       L.push("");
-      L.push("Article 5 — La présente délibération est portée à la connaissance des salariés");
+      L.push("Article 5 - La présente délibération est portée à la connaissance des salariés");
       L.push("par la note figurant au paragraphe 4, et le règlement des activités sociales");
       L.push("est modifié en conséquence.");
       L.push("");
@@ -2263,7 +2263,7 @@
       L.push("diffusé dans l'entreprise par le secrétaire (L. 2315-35).");
       L.push("");
 
-      titre(L, "3 — La reprise des demandes refusées");
+      titre(L, "3 - La reprise des demandes refusées");
       L.push("Supprimer la condition pour l'avenir laisse debout les refus qu'elle a");
       L.push("fondés. Ce sont eux qui feront le contentieux, pas la clause.");
       L.push("");
@@ -2278,17 +2278,17 @@
       L.push("  elle se motive.]");
       L.push("");
       L.push("  Pour chaque refus repris : la prestation est-elle encore attribuable");
-      L.push("  aujourd'hui — un séjour passé ne se rattrape pas —, et sinon, que propose le");
+      L.push("  aujourd'hui - un séjour passé ne se rattrape pas -, et sinon, que propose le");
       L.push("  comité à la place ? [à décider par le comité, qui gère.]");
       L.push("");
 
-      titre(L, "4 — La note d'information au personnel");
+      titre(L, "4 - La note d'information au personnel");
       L.push(nom(ctx));
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
-      L.push("NOTE AU PERSONNEL — " + leJour(d0));
+      L.push("NOTE AU PERSONNEL - " + leJour(d0));
       L.push("");
-      L.push("Objet : accès aux activités sociales et culturelles — suppression de la");
+      L.push("Objet : accès aux activités sociales et culturelles - suppression de la");
       L.push("condition d'ancienneté");
       L.push("");
       L.push("Le comité social et économique a décidé, par une délibération du [DATE], de");
@@ -2305,7 +2305,7 @@
       L.push("");
       L.push("Les demandes qui ont été refusées depuis le [DATE] au seul motif de");
       L.push("l'ancienneté sont reprises. Si vous êtes dans ce cas, vous n'avez aucune");
-      L.push("démarche à faire : [préciser — le comité vous recontacte / adressez-vous à");
+      L.push("démarche à faire : [préciser - le comité vous recontacte / adressez-vous à");
       L.push("[qui] avant le [DATE]].");
       L.push("");
       L.push("Le règlement des activités sociales et culturelles, modifié en conséquence,");
@@ -2321,7 +2321,7 @@
       ]);
       papier(L, ctx, ["À l'attention du secrétaire",
                       "du comité social et économique"]);
-      L.push("Objet : inscription à l'ordre du jour — conditions d'accès aux activités");
+      L.push("Objet : inscription à l'ordre du jour - conditions d'accès aux activités");
       L.push("sociales et culturelles");
       L.push("");
       L.push("Monsieur le Secrétaire, [ou Madame la Secrétaire]");
@@ -2343,26 +2343,26 @@
       L.push("de note au personnel.");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous ouvrez le recensement du paragraphe 1 sur le",
+        "Aujourd'hui, " + leJour(d0) + " - vous ouvrez le recensement du paragraphe 1 sur le",
         "règlement des activités sociales. Six lignes à remplir : c'est la grille de",
         "R. 2312-35, et elle est faite pour qu'aucune prestation ne passe au travers.",
         "",
-        "Dans la semaine, soit le " + leJour(dans(d0, 7)) + " — courrier 1 au secrétaire, pour",
+        "Dans la semaine, soit le " + leJour(dans(d0, 7)) + " - courrier 1 au secrétaire, pour",
         "l'inscription à l'ordre du jour (L. 2315-29).",
         "",
-        "À la réunion suivante — le comité délibère, à la majorité des membres présents,",
+        "À la réunion suivante - le comité délibère, à la majorité des membres présents,",
         "le président ne votant pas (L. 2315-32). C'est LE COMITÉ qui décide : une note de",
         "la direction ne remplacerait pas cette délibération.",
         "",
-        "Le lendemain de la délibération — la note au personnel est diffusée et le",
+        "Le lendemain de la délibération - la note au personnel est diffusée et le",
         "règlement des activités sociales est modifié. Une délibération non publiée ne",
         "change rien pour celui qui s'est vu opposer la condition.",
         "",
-        "Dans le mois qui suit, soit avant le " + leJour(dans(d0, 60)) + " — la reprise des demandes",
+        "Dans le mois qui suit, soit avant le " + leJour(dans(d0, 60)) + " - la reprise des demandes",
         "refusées est achevée. C'est la partie la plus longue, et la seule qui",
         "intéresse vraiment ceux qui ont été écartés.",
         "",
-        "À chaque nouvelle prestation créée par le comité — reprenez la grille du",
+        "À chaque nouvelle prestation créée par le comité - reprenez la grille du",
         "paragraphe 1. Les conditions d'ancienneté reviennent par le règlement d'une",
         "prestation nouvelle, jamais par la porte principale.",
       ]);
@@ -2384,14 +2384,14 @@
   function casDeRecours(L) {
     L.push("  LES CAS DE RECOURS, tels que les textes lus les énoncent :");
     L.push("");
-    L.push("  · L. 2315-87 — recours à un EXPERT-COMPTABLE en vue de la consultation sur");
+    L.push("  · L. 2315-87 - recours à un EXPERT-COMPTABLE en vue de la consultation sur");
     L.push("    les ORIENTATIONS STRATÉGIQUES de l'entreprise (1° de L. 2312-17) ;");
-    L.push("  · L. 2315-88 — expert-comptable en vue de la consultation sur la SITUATION");
+    L.push("  · L. 2315-88 - expert-comptable en vue de la consultation sur la SITUATION");
     L.push("    ÉCONOMIQUE ET FINANCIÈRE (2° de L. 2312-17) ;");
-    L.push("  · L. 2315-91 — expert-comptable dans le cadre de la consultation sur la");
+    L.push("  · L. 2315-91 - expert-comptable dans le cadre de la consultation sur la");
     L.push("    POLITIQUE SOCIALE, LES CONDITIONS DE TRAVAIL ET L'EMPLOI (3° de");
     L.push("    L. 2312-17) ;");
-    L.push("  · L. 2315-92, I — expert-comptable : 1° opérations de CONCENTRATION");
+    L.push("  · L. 2315-92, I - expert-comptable : 1° opérations de CONCENTRATION");
     L.push("    (L. 2312-41) ; 2° exercice du DROIT D'ALERTE ÉCONOMIQUE (L. 2312-63 et");
     L.push("    suivants) ; 3° LICENCIEMENTS COLLECTIFS pour motif économique (L. 1233-34");
     L.push("    et suivants) ; 4° OFFRES PUBLIQUES D'ACQUISITION (L. 2312-42 à L. 2312-52).");
@@ -2399,7 +2399,7 @@
     L.push("    analyse utile aux organisations syndicales en vue des négociations prévues");
     L.push("    aux articles L. 2254-2 et L. 1233-24-1 ; dans ce dernier cas, l'expert est");
     L.push("    le même que celui désigné au titre du 3° du I ;");
-    L.push("  · L. 2315-94 — EXPERT HABILITÉ : 1° lorsqu'un RISQUE GRAVE, IDENTIFIÉ ET");
+    L.push("  · L. 2315-94 - EXPERT HABILITÉ : 1° lorsqu'un RISQUE GRAVE, IDENTIFIÉ ET");
     L.push("    ACTUEL, révélé ou non par un accident du travail, une maladie");
     L.push("    professionnelle ou à caractère professionnel, est constaté dans");
     L.push("    l'établissement ; 2° en cas d'INTRODUCTION DE NOUVELLES TECHNOLOGIES ou de");
@@ -2407,7 +2407,7 @@
     L.push("    conditions de travail, prévus au 4° du II de L. 2312-8 ; 3° dans les");
     L.push("    entreprises D'AU MOINS TROIS CENTS SALARIÉS, en vue de préparer la");
     L.push("    NÉGOCIATION SUR L'ÉGALITÉ PROFESSIONNELLE ;");
-    L.push("  · L. 2315-81 — par DÉROGATION aux articles L. 2315-78 et L. 2315-80, le");
+    L.push("  · L. 2315-81 - par DÉROGATION aux articles L. 2315-78 et L. 2315-80, le");
     L.push("    comité peut faire appel à TOUT TYPE D'EXPERTISE RÉMUNÉRÉE PAR SES SOINS");
     L.push("    pour la préparation de ses travaux. C'est l'expertise dite libre : elle est");
     L.push("    intégralement à sa charge, et c'est le prix de sa liberté.");
@@ -2436,22 +2436,22 @@
       L.push("");
       L.push("« LORSQUE LE COMITÉ SOCIAL ET ÉCONOMIQUE DÉCIDE DU RECOURS À L'EXPERTISE, les");
       L.push("frais d'expertise sont pris en charge : … » (L. 2315-80). La répartition suit");
-      L.push("donc LE CAS DE RECOURS sur lequel la délibération du comité est fondée — et");
+      L.push("donc LE CAS DE RECOURS sur lequel la délibération du comité est fondée - et");
       L.push("non la nature du rapport rendu, ni le sujet que l'expert a finalement traité,");
       L.push("ni ce qui a été discuté en séance.");
       L.push("");
       L.push("D'où l'ordre de ce document : on qualifie d'abord, on répartit ensuite.");
       L.push("");
       L.push("Ce qui se joue : une répartition erronée n'expose à aucune peine. Elle expose");
-      L.push("à ceci — une facture payée par celui qui ne la devait pas, qui se réclame ; et");
+      L.push("à ceci - une facture payée par celui qui ne la devait pas, qui se réclame ; et");
       L.push("surtout, dans le cas du 3°, TROIS ANNÉES PENDANT LESQUELLES LE COMITÉ NE PEUT");
       L.push("PLUS TRANSFÉRER D'EXCÉDENT de son budget de fonctionnement vers les activités");
       L.push("sociales et culturelles (L. 2315-61). Cette conséquence-là se paie longtemps.");
       L.push("");
 
-      titre(L, "1 — La qualification du cas de recours");
+      titre(L, "1 - La qualification du cas de recours");
       L.push("  Cas de recours déclaré au dossier ......... " +
-        (cas ? cas : "[À QUALIFIER — reportez-vous à la délibération du comité]"));
+        (cas ? cas : "[À QUALIFIER - reportez-vous à la délibération du comité]"));
       L.push("  Délibération du comité du ................. [DATE]");
       L.push("  Fondement visé par la délibération ........ [article visé]");
       L.push("");
@@ -2462,7 +2462,7 @@
       L.push("");
       casDeRecours(L);
 
-      titre(L, "2 — La règle de répartition, article en main");
+      titre(L, "2 - La règle de répartition, article en main");
       L.push("L'article L. 2315-80 pose trois règles, et une seule s'applique :");
       L.push("");
       L.push("  1° À LA CHARGE DE L'EMPLOYEUR, pour les consultations prévues par les");
@@ -2473,13 +2473,13 @@
       L.push("");
       L.push("     Soit, en clair : la situation économique et financière, la politique");
       L.push("     sociale, le licenciement collectif pour motif économique, le risque grave");
-      L.push("     — et la préparation de la négociation sur l'égalité professionnelle, mais");
+      L.push("     - et la préparation de la négociation sur l'égalité professionnelle, mais");
       L.push("     seulement s'il n'existe AUCUN indicateur d'égalité professionnelle dans la");
       L.push("     base de données économiques, sociales et environnementales.");
       L.push("");
       L.push("  2° PAR LE COMITÉ, SUR SON BUDGET DE FONCTIONNEMENT, À HAUTEUR DE 20 %, ET");
       L.push("     PAR L'EMPLOYEUR À HAUTEUR DE 80 %, concernant la consultation prévue à");
-      L.push("     l'article L. 2315-87 — les orientations stratégiques — ET LES");
+      L.push("     l'article L. 2315-87 - les orientations stratégiques - ET LES");
       L.push("     CONSULTATIONS PONCTUELLES hors celles visées au deuxième alinéa.");
       L.push("");
       L.push("  3° PAR L'EMPLOYEUR, concernant les consultations mentionnées au 2°, LORSQUE");
@@ -2493,38 +2493,38 @@
       L.push("     précédentes suffit à faire tomber le 3°, et la part de 20 % reste alors");
       L.push("     à la charge du comité.");
       L.push("");
-      L.push("  ET, HORS DE CES TROIS RÈGLES — l'expertise libre de L. 2315-81, rémunérée");
+      L.push("  ET, HORS DE CES TROIS RÈGLES - l'expertise libre de L. 2315-81, rémunérée");
       L.push("  par le comité seul, « par dérogation aux articles L. 2315-78 et L. 2315-80 ».");
       L.push("");
 
-      titre(L, "3 — Le calcul, chiffré");
-      L.push("  A — COÛT DE L'EXPERTISE ................ [COÛT — hors taxes ou toutes taxes");
+      titre(L, "3 - Le calcul, chiffré");
+      L.push("  A - COÛT DE L'EXPERTISE ................ [COÛT - hors taxes ou toutes taxes");
       L.push("      comprises : dites-le, et gardez la même base d'un bout à l'autre.");
       L.push("      Source : cahier des charges de l'expert, puis facture]");
       L.push("");
-      L.push("  B — RÈGLE APPLICABLE (cochez UNE case) :");
+      L.push("  B - RÈGLE APPLICABLE (cochez UNE case) :");
       L.push("");
-      L.push("     [ ] 1° de L. 2315-80 — intégralement à la charge de l'employeur");
+      L.push("     [ ] 1° de L. 2315-80 - intégralement à la charge de l'employeur");
       L.push("            Employeur : [A] · Comité : 0 €");
       L.push("");
-      L.push("     [ ] 2° de L. 2315-80 — 80 % employeur, 20 % comité");
+      L.push("     [ ] 2° de L. 2315-80 - 80 % employeur, 20 % comité");
       L.push("            Employeur = [A] × 0,80 = [ ] €");
-      L.push("            Comité ... = [A] × 0,20 = [ ] € — sur le BUDGET DE FONCTIONNEMENT,");
+      L.push("            Comité ... = [A] × 0,20 = [ ] € - sur le BUDGET DE FONCTIONNEMENT,");
       L.push("            et sur lui seul : le budget des activités sociales et culturelles");
       L.push("            n'a pas à financer une expertise.");
       L.push("");
       L.push("            Exemple de lecture, pour vérifier la mécanique : pour un coût de");
       L.push("            10 000 €, l'employeur doit 8 000 € et le comité 2 000 €.");
       L.push("");
-      L.push("     [ ] 3° de L. 2315-80 — intégralement à la charge de l'employeur, par");
+      L.push("     [ ] 3° de L. 2315-80 - intégralement à la charge de l'employeur, par");
       L.push("            exception au 2°, les deux conditions étant réunies");
       L.push("            Employeur : [A] · Comité : 0 €");
       L.push("");
-      L.push("     [ ] L. 2315-81 — expertise libre : intégralement à la charge du comité");
+      L.push("     [ ] L. 2315-81 - expertise libre : intégralement à la charge du comité");
       L.push("            Comité : [A] · Employeur : 0 €");
       L.push("");
       if (cas) {
-        L.push("  CE QUE LE DOSSIER DÉCLARE — cas de recours : « " + cas + " ».");
+        L.push("  CE QUE LE DOSSIER DÉCLARE - cas de recours : « " + cas + " ».");
         if (part != null) {
           L.push("  Part employeur déclarée : " + part + " %.");
           L.push("  Confrontez cette part à la règle cochée en B. Si elles diffèrent, c'est");
@@ -2535,12 +2535,12 @@
         }
         L.push("");
       }
-      L.push("  C — LA VÉRIFICATION DU 3°, si la case 3° est cochée");
+      L.push("  C - LA VÉRIFICATION DU 3°, si la case 3° est cochée");
       L.push("");
       L.push("     · Le budget de fonctionnement du comité est-il insuffisant pour couvrir");
       L.push("       le coût de l'expertise ? ......................... [oui / non]");
       L.push("       Solde du budget de fonctionnement à la date de la délibération :");
-      L.push("       [ ] € — pièce : comptes du comité ou situation intermédiaire.");
+      L.push("       [ ] € - pièce : comptes du comité ou situation intermédiaire.");
       L.push("");
       L.push("     · Le comité a-t-il transféré un excédent annuel du budget de");
       L.push("       fonctionnement vers les activités sociales et culturelles au cours des");
@@ -2557,7 +2557,7 @@
       L.push("     s'applique. Sinon, on retombe sur le 2°.");
       L.push("");
 
-      titre(L, "4 — La conséquence du 3°, qui court sur trois ans");
+      titre(L, "4 - La conséquence du 3°, qui court sur trois ans");
       L.push("« Lorsque le financement des frais d'expertise est pris en charge par");
       L.push("l'employeur en application du 3° de l'article L. 2315-80 du présent code, LE");
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE NE PEUT PAS DÉCIDER DE TRANSFÉRER D'EXCÉDENTS DU");
@@ -2574,13 +2574,13 @@
       L.push("  d'années civiles ou d'exercices : c'est une question d'interprétation que");
       L.push("  l'application ne tranche pas. Retenez la lecture la plus prudente.]");
       L.push("");
-      L.push("  À PORTER AU DOSSIER DU COMITÉ — cette interdiction pèse sur le comité, pas");
+      L.push("  À PORTER AU DOSSIER DU COMITÉ - cette interdiction pèse sur le comité, pas");
       L.push("  sur l'employeur. Elle doit donc être écrite au procès-verbal de la réunion");
       L.push("  où la prise en charge est constatée, faute de quoi un trésorier suivant");
       L.push("  délibérera un transfert que la loi lui interdit.");
       L.push("");
 
-      titre(L, "5 — La régularisation des paiements déjà effectués");
+      titre(L, "5 - La régularisation des paiements déjà effectués");
       L.push("  RELEVÉ");
       L.push("");
       L.push("     Date · payeur · montant · pièce");
@@ -2592,12 +2592,12 @@
       L.push("  ÉCART À RÉGULARISER ....................... [ ] € au profit de [ ]");
       L.push("");
       L.push("  Si le comité a payé ce que l'employeur devait, l'entreprise lui rembourse");
-      L.push("  la différence, sur le BUDGET DE FONCTIONNEMENT — c'est de là qu'elle est");
+      L.push("  la différence, sur le BUDGET DE FONCTIONNEMENT - c'est de là qu'elle est");
       L.push("  sortie. Si l'employeur a payé ce que le comité devait, la somme reste due");
       L.push("  par le comité, sauf renonciation expresse de l'entreprise, qui doit alors");
       L.push("  être écrite.");
       L.push("");
-      L.push("  UN CAS QUE LE TEXTE PRÉVOIT SÉPARÉMENT — « en cas d'annulation définitive");
+      L.push("  UN CAS QUE LE TEXTE PRÉVOIT SÉPARÉMENT - « en cas d'annulation définitive");
       L.push("  par le juge de la délibération du comité social et économique, LES SOMMES");
       L.push("  PERÇUES PAR L'EXPERT SONT REMBOURSÉES PAR CE DERNIER À L'EMPLOYEUR. Le");
       L.push("  comité social et économique peut, à tout moment, décider de les prendre en");
@@ -2606,13 +2606,13 @@
       L.push("");
 
       courrier(L, 1, "lettre encadrant le recours à l'expert", [
-        "À adresser à l'expert désigné, dès sa désignation. Elle ne décide rien — le",
-        "comité a décidé — mais elle fixe par écrit ce dont la suite dépendra : le cas de",
+        "À adresser à l'expert désigné, dès sa désignation. Elle ne décide rien - le",
+        "comité a décidé - mais elle fixe par écrit ce dont la suite dépendra : le cas de",
         "recours, la répartition, et les délais que les textes imposent à l'expert.",
       ]);
       papier(L, ctx, ["À l'attention de [cabinet / expert désigné]",
                       "[adresse]"]);
-      L.push("Objet : expertise décidée par le comité social et économique le [DATE] —");
+      L.push("Objet : expertise décidée par le comité social et économique le [DATE] -");
       L.push("cadre du recours et financement");
       L.push("");
       L.push("Madame, Monsieur,");
@@ -2657,12 +2657,12 @@
       salutation(L, ctx);
       L.push("");
 
-      courrier(L, 2, "au trésorier du comité — rectification de la répartition", [
+      courrier(L, 2, "au trésorier du comité - rectification de la répartition", [
         "À adresser quand la répartition appliquée n'était pas la bonne.",
       ]);
       papier(L, ctx, ["À l'attention du trésorier",
                       "du comité social et économique"]);
-      L.push("Objet : expertise du [DATE] — rectification de la répartition des frais");
+      L.push("Objet : expertise du [DATE] - rectification de la répartition des frais");
       L.push("");
       L.push("Madame, Monsieur le Trésorier,");
       L.push("");
@@ -2687,24 +2687,24 @@
       salutation(L, ctx, "Je vous prie d'agréer, Madame, Monsieur le Trésorier, l'expression de ma considération distinguée.");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous reprenez la DÉLIBÉRATION du comité et vous notez le",
+        "Aujourd'hui, " + leJour(d0) + " - vous reprenez la DÉLIBÉRATION du comité et vous notez le",
         "cas de recours qu'elle vise. Tout part de là : sans elle, aucune case du",
         "paragraphe 3 ne peut être cochée honnêtement.",
         "",
-        "Dans les trois jours de la désignation — l'expert demande ses informations",
+        "Dans les trois jours de la désignation - l'expert demande ses informations",
         "complémentaires (R. 2315-45) ; l'employeur répond dans les cinq jours. Partie",
         "aujourd'hui, une désignation appellerait la demande avant le " + leJour(dans(d0, 3)) + " et la",
         "réponse avant le " + leJour(dans(d0, 8)) + ".",
         "",
-        "Dans les dix jours de la désignation — l'expert notifie le coût prévisionnel,",
+        "Dans les dix jours de la désignation - l'expert notifie le coût prévisionnel,",
         "l'étendue et la durée (R. 2315-46), soit avant le " + leJour(dans(d0, 10)) + " pour une",
         "désignation de ce jour. C'est à cette notification que se raccroche le délai de",
         "contestation du 3° de L. 2315-86 : le document CSE-CTL-EXP-02 le calcule.",
         "",
-        "AVANT TOUT PAIEMENT — la répartition se fixe. Une facture payée s'annule mal ;",
+        "AVANT TOUT PAIEMENT - la répartition se fixe. Une facture payée s'annule mal ;",
         "une répartition écrite avant paiement ne se discute plus.",
         "",
-        "Si le 3° s'applique — inscrivez au procès-verbal du comité, le jour même,",
+        "Si le 3° s'applique - inscrivez au procès-verbal du comité, le jour même,",
         "l'interdiction de transfert pour les trois années suivantes (L. 2315-61). C'est",
         "la seule chose de ce document qui produira encore ses effets dans trois ans.",
       ]);
@@ -2753,7 +2753,7 @@
       L.push("de discuter l'expertise, qui s'éteint.");
       L.push("");
 
-      titre(L, "1 — Que conteste-t-on ? Le tableau des quatre cas");
+      titre(L, "1 - Que conteste-t-on ? Le tableau des quatre cas");
       L.push("L'article L. 2315-86 énumère quatre objets, et rattache à chacun son point de");
       L.push("départ. « Sauf dans le cas prévu à l'article L. 1233-35-1, l'employeur saisit");
       L.push("le juge judiciaire dans un délai fixé par décret en Conseil d'État de : »");
@@ -2778,7 +2778,7 @@
       L.push("  L'article L. 2315-81-1, auquel le 3° renvoie pour le contenu des");
       L.push("  informations notifiées, N'A PAS ÉTÉ LU par l'application : il est nommé ici,");
       L.push("  et son contenu n'est ni reproduit ni paraphrasé. Reportez-vous-y pour savoir");
-      L.push("  ce que la notification doit comporter — c'est de sa complétude que dépend le");
+      L.push("  ce que la notification doit comporter - c'est de sa complétude que dépend le");
       L.push("  point de départ.");
       L.push("");
       L.push("  De même, l'article L. 1233-35-1, que L. 2315-86 réserve dès sa première");
@@ -2786,7 +2786,7 @@
       L.push("  compter dix jours.");
       L.push("");
       L.push("  Objet de la contestation, au dossier ....... " +
-        (objetC ? objetC : "[À DÉTERMINER — cochez l'une des quatre lignes ci-dessus]"));
+        (objetC ? objetC : "[À DÉTERMINER - cochez l'une des quatre lignes ci-dessus]"));
       L.push("");
       L.push("  UNE CONTESTATION, UN OBJET, UN POINT DE DÉPART. Si vous contestez à la fois");
       L.push("  la nécessité et le coût prévisionnel, ce sont DEUX délais distincts qui");
@@ -2794,7 +2794,7 @@
       L.push("  calcul.");
       L.push("");
 
-      titre(L, "2 — Le calcul du délai");
+      titre(L, "2 - Le calcul du délai");
       L.push("  Acte qui fait courir le délai ....... [délibération / désignation /");
       L.push("                                        notification], en date du " +
         (dep ? leJour(dep) : "[DATE]"));
@@ -2802,24 +2802,24 @@
       L.push("                                        notification, accusé de réception]");
       L.push("");
       if (dep) {
-        L.push("  DÉLAI DE DIX JOURS (R. 2315-49) — dernier jour utile : " + leJour(limite) + ".");
+        L.push("  DÉLAI DE DIX JOURS (R. 2315-49) - dernier jour utile : " + leJour(limite) + ".");
       } else {
-        L.push("  DÉLAI DE DIX JOURS (R. 2315-49) — dernier jour utile : [date de l'acte");
+        L.push("  DÉLAI DE DIX JOURS (R. 2315-49) - dernier jour utile : [date de l'acte");
         L.push("  + 10 jours].");
       }
       L.push("");
-      L.push("  COMPUTATION — le module retient que le délai exprimé en jours ne commence à");
+      L.push("  COMPUTATION - le module retient que le délai exprimé en jours ne commence à");
       L.push("  courir QUE LE LENDEMAIN de l'acte qui le fait courir, par application des");
       L.push("  ARTICLES 641 ET 642 DU CODE DE PROCÉDURE CIVILE. Ces deux articles sont");
       L.push("  NOMMÉS : ils n'appartiennent pas au code du travail et l'application ne les");
-      L.push("  a pas lus. Vérifiez-les avant de compter au jour près — un jour d'écart");
+      L.push("  a pas lus. Vérifiez-les avant de compter au jour près - un jour d'écart");
       L.push("  suffit ici.");
       L.push("");
       L.push("  LA DATE DE SAISINE s'entend de celle de l'ASSIGNATION devant le président du");
       L.push("  tribunal judiciaire statuant selon la procédure accélérée au fond.");
       L.push("");
       if (dep && sais) {
-        L.push("  AU DOSSIER — acte du " + leJour(dep) + ", saisine du " + leJour(sais) +
+        L.push("  AU DOSSIER - acte du " + leJour(dep) + ", saisine du " + leJour(sais) +
           " : " + ecart + " jour(s) d'écart.");
         L.push("  " + (ecart <= 10
           ? "L'écart n'excède pas dix jours : la saisine paraît faite dans le délai, sous"
@@ -2828,12 +2828,12 @@
         L.push("  l'assignation.");
         L.push("");
       } else if (dep && !sais) {
-        L.push("  AU DOSSIER — l'acte de départ est daté du " + leJour(dep) + " ; aucune saisine");
+        L.push("  AU DOSSIER - l'acte de départ est daté du " + leJour(dep) + " ; aucune saisine");
         L.push("  n'est déclarée. Le dernier jour utile est le " + leJour(limite) + ".");
         L.push("");
       }
 
-      titre(L, "3 — Si le délai est expiré");
+      titre(L, "3 - Si le délai est expiré");
       L.push("N'ENGAGEZ PAS UNE CONTESTATION IRRECEVABLE. Elle coûte, elle retarde, et elle");
       L.push("ne rétablit rien. Ce qu'il faut faire à la place :");
       L.push("");
@@ -2856,8 +2856,8 @@
       L.push("  Signée le " + leJour(d0) + " par " + signataire(ctx) + ".");
       L.push("");
 
-      titre(L, "4 — L'écrit de saisine, et ses mentions");
-      L.push("LE JUGE COMPÉTENT — « Les contestations de l'employeur prévues à l'article");
+      titre(L, "4 - L'écrit de saisine, et ses mentions");
+      L.push("LE JUGE COMPÉTENT - « Les contestations de l'employeur prévues à l'article");
       L.push("L. 2315-86 relèvent de la compétence DU PRÉSIDENT DU TRIBUNAL JUDICIAIRE »");
       L.push("(R. 2315-50). Il statue, dans les cas 1° à 3°, SUIVANT LA PROCÉDURE ACCÉLÉRÉE");
       L.push("AU FOND DANS LES DIX JOURS SUIVANT SA SAISINE, et sa décision N'EST PAS");
@@ -2873,46 +2873,46 @@
       L.push("");
       L.push("  MENTIONS INDISPENSABLES");
       L.push("");
-      L.push("  1. LES PARTIES — l'entreprise demanderesse : " + nom(ctx) + ", " +
+      L.push("  1. LES PARTIES - l'entreprise demanderesse : " + nom(ctx) + ", " +
         cro(((ctx.profil) || {}).adresse, "adresse du siège") + " ;");
       L.push("     le défendeur : LE COMITÉ SOCIAL ET ÉCONOMIQUE de " + nom(ctx) + ", pris");
       L.push("     en la personne de son secrétaire. [L'expert désigné est-il appelé à la");
       L.push("     cause ? À décider avec votre conseil : l'application ne tranche pas.]");
       L.push("");
-      L.push("  2. LA JURIDICTION — Monsieur le Président du tribunal judiciaire de [ville],");
+      L.push("  2. LA JURIDICTION - Monsieur le Président du tribunal judiciaire de [ville],");
       L.push("     statuant selon la procédure accélérée au fond (R. 2315-50, L. 2315-86).");
       L.push("");
-      L.push("  3. L'OBJET PRÉCIS DE LA CONTESTATION — l'un des quatre cas, et un seul par");
+      L.push("  3. L'OBJET PRÉCIS DE LA CONTESTATION - l'un des quatre cas, et un seul par");
       L.push("     chef de demande : [la nécessité de l'expertise / le choix de l'expert /");
       L.push("     le coût prévisionnel, l'étendue ou la durée / le coût final].");
       L.push("");
-      L.push("  4. L'ACTE DE DÉPART ET SA DATE — [délibération du comité du " +
+      L.push("  4. L'ACTE DE DÉPART ET SA DATE - [délibération du comité du " +
         (dep ? leJour(dep) : "[date]") + " /");
       L.push("     désignation de l'expert du [date] / notification du cahier des charges et");
       L.push("     des informations de L. 2315-81-1 reçue le [date] / notification du coût");
       L.push("     final reçue le [date]], établi par [pièce]. C'EST LA MENTION QUI ÉTABLIT");
       L.push("     LA RECEVABILITÉ : sans elle, le juge ne peut pas vérifier le délai.");
       L.push("");
-      L.push("  5. LE RESPECT DU DÉLAI — assignation délivrée le [date], soit dans les dix");
+      L.push("  5. LE RESPECT DU DÉLAI - assignation délivrée le [date], soit dans les dix");
       L.push("     jours de l'acte de départ (R. 2315-49).");
       L.push("");
-      L.push("  6. LES MOYENS — [ce que vous soutenez : selon le cas, que le fondement");
+      L.push("  6. LES MOYENS - [ce que vous soutenez : selon le cas, que le fondement");
       L.push("     invoqué n'est pas réuni, que le coût prévisionnel est disproportionné à");
       L.push("     l'objet, que l'étendue excède le cas de recours, que la durée n'est pas");
       L.push("     justifiée. L'application ne rédige pas vos moyens : ils dépendent des");
       L.push("     faits, qu'elle ne connaît pas.]");
       L.push("");
-      L.push("  7. LES PIÈCES — procès-verbal de la délibération · lettre de désignation ·");
+      L.push("  7. LES PIÈCES - procès-verbal de la délibération · lettre de désignation ·");
       L.push("     cahier des charges et informations notifiés, avec la preuve de leur date");
       L.push("     de réception · facture ou notification du coût final · le présent");
       L.push("     calendrier.");
       L.push("");
-      L.push("  8. LA DEMANDE — [annulation de la délibération / réduction du coût");
+      L.push("  8. LA DEMANDE - [annulation de la délibération / réduction du coût");
       L.push("     prévisionnel / limitation de l'étendue ou de la durée / réduction du coût");
       L.push("     final].");
       L.push("");
 
-      titre(L, "5 — L'effet suspensif, qu'il faut mesurer avant de saisir");
+      titre(L, "5 - L'effet suspensif, qu'il faut mesurer avant de saisir");
       L.push("« Cette saisine SUSPEND L'EXÉCUTION DE LA DÉCISION DU COMITÉ, ainsi que LES");
       L.push("DÉLAIS DANS LESQUELS IL EST CONSULTÉ en application de l'article L. 2312-15,");
       L.push("JUSQU'À LA NOTIFICATION DU JUGEMENT » (L. 2315-86).");
@@ -2929,9 +2929,9 @@
       L.push("  Délai de consultation suspendu à compter de cette date, jusqu'à la");
       L.push("  notification du jugement.");
       L.push("  Solde du délai de consultation restant à courir au jour de la saisine :");
-      L.push("  [ ] jours — à calculer sur le délai applicable à votre consultation.");
+      L.push("  [ ] jours - à calculer sur le délai applicable à votre consultation.");
       L.push("");
-      L.push("  ET APRÈS — « en cas d'annulation définitive par le juge de la délibération");
+      L.push("  ET APRÈS - « en cas d'annulation définitive par le juge de la délibération");
       L.push("  du comité social et économique, les sommes perçues par l'expert sont");
       L.push("  remboursées par ce dernier à l'employeur. Le comité social et économique");
       L.push("  peut, à tout moment, décider de les prendre en charge » (L. 2315-86).");
@@ -2945,7 +2945,7 @@
       papier(L, ctx, ["Aux membres de la délégation du personnel",
                       "du comité social et économique",
                       "Copie : [expert désigné]"]);
-      L.push("Objet : saisine du président du tribunal judiciaire — contestation de");
+      L.push("Objet : saisine du président du tribunal judiciaire - contestation de");
       L.push("l'expertise décidée le [DATE]");
       L.push("");
       L.push("Mesdames, Messieurs,");
@@ -2970,29 +2970,29 @@
       calendrier(L, (function () {
         var base = dep || d0;
         var l = [];
-        l.push("Le point de départ — " + (dep ? "l'acte est daté du " + leJour(dep) + "."
+        l.push("Le point de départ - " + (dep ? "l'acte est daté du " + leJour(dep) + "."
           : "à dater précisément, sur la pièce elle-même. Tout le calendrier"));
         if (!dep) l.push("en dépend, et une date approximative ne sert à rien ici.");
         l.push("");
-        l.push("Jour 1 — le lendemain de l'acte, soit le " + leJour(dans(base, 1)) + " : le délai");
+        l.push("Jour 1 - le lendemain de l'acte, soit le " + leJour(dans(base, 1)) + " : le délai");
         l.push("commence à courir (computation rappelée au paragraphe 2).");
         l.push("");
-        l.push("Au plus tard le " + leJour(dans(base, 10)) + " — L'ASSIGNATION EST DÉLIVRÉE.");
+        l.push("Au plus tard le " + leJour(dans(base, 10)) + " - L'ASSIGNATION EST DÉLIVRÉE.");
         l.push("Dix jours, c'est court : il faut le conseil, l'acte et le commissaire de");
         l.push("justice. Décidez de contester ou non dans les TROIS PREMIERS JOURS, soit");
         l.push("avant le " + leJour(dans(base, 3)) + ", sans quoi le délai se consommera en");
         l.push("délibérations internes.");
         l.push("");
-        l.push("Dans les dix jours de la saisine — le juge statue selon la procédure");
+        l.push("Dans les dix jours de la saisine - le juge statue selon la procédure");
         l.push("accélérée au fond (L. 2315-86). Une saisine du " + leJour(dans(base, 10)) + " appellerait");
         l.push("une décision aux environs du " + leJour(dans(base, 20)) + ".");
         l.push("");
-        l.push("Pas d'appel — la décision n'est pas susceptible d'appel ; le pourvoi en");
+        l.push("Pas d'appel - la décision n'est pas susceptible d'appel ; le pourvoi en");
         l.push("cassation se forme dans les DIX JOURS DE LA NOTIFICATION du jugement");
         l.push("(R. 2315-50). Notifié le [date], le pourvoi devrait être formé dans les dix");
         l.push("jours qui suivent.");
         l.push("");
-        l.push("Pendant tout ce temps — l'expertise ET le délai de consultation sont");
+        l.push("Pendant tout ce temps - l'expertise ET le délai de consultation sont");
         l.push("suspendus. Reprenez le calcul du délai de consultation à la notification du");
         l.push("jugement, en repartant du solde, et non de zéro.");
         return l;
@@ -3042,7 +3042,7 @@
         (cas ? cas : "[À RELEVER SUR LA DÉLIBÉRATION]"));
       L.push("");
 
-      titre(L, "1 — Le test des deux conditions de L. 1233-34");
+      titre(L, "1 - Le test des deux conditions de L. 1233-34");
       L.push("« DANS LES ENTREPRISES D'AU MOINS CINQUANTE SALARIÉS, lorsque LE PROJET DE");
       L.push("LICENCIEMENT CONCERNE AU MOINS DIX SALARIÉS DANS UNE MÊME PÉRIODE DE TRENTE");
       L.push("JOURS, le comité social et économique peut, LE CAS ÉCHÉANT SUR PROPOSITION DES");
@@ -3056,10 +3056,10 @@
       L.push("");
       L.push("  b) NOMBRE DE LICENCIEMENTS ENVISAGÉS DANS UNE MÊME PÉRIODE DE TRENTE JOURS");
       if (nbL != null) {
-        L.push("     " + nbL + " licenciement(s) envisagé(s) — seuil de dix salariés " +
+        L.push("     " + nbL + " licenciement(s) envisagé(s) - seuil de dix salariés " +
           (nbL >= 10 ? "ATTEINT." : "NON ATTEINT."));
       } else {
-        L.push("     [NOMBRE] licenciement(s) envisagé(s) — seuil de dix salariés");
+        L.push("     [NOMBRE] licenciement(s) envisagé(s) - seuil de dix salariés");
         L.push("     [atteint / non atteint].");
       }
       L.push("     Période de trente jours considérée : du [DATE] au [DATE].");
@@ -3070,13 +3070,13 @@
       L.push("     texte. Datez chaque licenciement envisagé.");
       L.push("");
       if (nbL != null && nbL < 10) {
-        L.push("  CONCLUSION AU DOSSIER — le seuil de dix salariés sur trente jours n'est pas");
+        L.push("  CONCLUSION AU DOSSIER - le seuil de dix salariés sur trente jours n'est pas");
         L.push("  atteint. L'expertise NE PEUT PAS être fondée sur L. 1233-34. Deux voies :");
         L.push("  chercher un autre cas de recours au paragraphe 2, ou renoncer et employer");
         L.push("  le courrier 2.");
         L.push("");
       }
-      L.push("  c) LE MOMENT DE LA DÉCISION — la décision se prend LORS DE LA PREMIÈRE");
+      L.push("  c) LE MOMENT DE LA DÉCISION - la décision se prend LORS DE LA PREMIÈRE");
       L.push("     RÉUNION PRÉVUE À L'ARTICLE L. 1233-30. L'article L. 1233-30 n'a pas été");
       L.push("     lu par l'application : il est NOMMÉ, et vous devez y vérifier de quelle");
       L.push("     réunion il s'agit et à quelle date elle se tient.");
@@ -3089,21 +3089,21 @@
       L.push("     · l'expert peut être assisté dans les conditions prévues à L. 2315-81 ;");
       L.push("     · le comité peut ÉGALEMENT mandater un expert afin qu'il apporte toute");
       L.push("       analyse utile aux organisations syndicales pour mener la négociation");
-      L.push("       prévue à l'article L. 1233-24-1 — article NOMMÉ, non lu ;");
+      L.push("       prévue à l'article L. 1233-24-1 - article NOMMÉ, non lu ;");
       L.push("     · LE RAPPORT DE L'EXPERT est remis au comité et, le cas échéant, aux");
       L.push("       organisations syndicales, AU PLUS TARD QUINZE JOURS AVANT L'EXPIRATION");
       L.push("       DU DÉLAI mentionné à l'article L. 1233-30 (L. 1233-34).");
       L.push("");
 
-      titre(L, "2 — La grille des fondements : lequel existe réellement ?");
+      titre(L, "2 - La grille des fondements : lequel existe réellement ?");
       L.push("Parcourez-la dans l'ordre et cochez celui qui correspond aux faits. Si aucun");
       L.push("ne correspond, il n'y a pas d'expertise financée : il reste l'expertise libre.");
       L.push("");
       casDeRecours(L);
-      L.push("  [ ] Aucun de ces cas ne correspond — voir le courrier 2 : renonciation, ou");
+      L.push("  [ ] Aucun de ces cas ne correspond - voir le courrier 2 : renonciation, ou");
       L.push("      recours à l'expertise libre de L. 2315-81, aux frais du comité.");
       L.push("");
-      L.push("  POUR LE CAS DU 2° DE L. 2315-94 en particulier — introduction de nouvelles");
+      L.push("  POUR LE CAS DU 2° DE L. 2315-94 en particulier - introduction de nouvelles");
       L.push("  technologies ou projet important modifiant les conditions de santé et de");
       L.push("  sécurité ou les conditions de travail, prévus au 4° du II de L. 2312-8 :");
       L.push("");
@@ -3116,24 +3116,24 @@
       L.push("     est alors nulle (Soc., 18 mars 2026, n° 23-22.270, publié).");
       L.push("");
       L.push("     Autrement dit : dans cette configuration, on ne prend pas DEUX");
-      L.push("     délibérations — une « santé et sécurité » et une « économique ». On en");
+      L.push("     délibérations - une « santé et sécurité » et une « économique ». On en");
       L.push("     prend UNE, lors de la première réunion de L. 1233-30, et elle peut porter");
       L.push("     sur les domaines économique et comptable AINSI QUE sur la santé, la");
       L.push("     sécurité ou les effets potentiels du projet sur les conditions de travail");
-      L.push("     — L. 1233-34 le dit expressément.");
+      L.push("     - L. 1233-34 le dit expressément.");
       L.push("");
       L.push("     Le projet donne-t-il lieu à un plan de sauvegarde de l'emploi ? [oui/non]");
       L.push("     Une délibération distincte a-t-elle été prise sur le 2° de L. 2315-94 ?");
-      L.push("     [oui / non] — si oui, elle est à reprendre.");
+      L.push("     [oui / non] - si oui, elle est à reprendre.");
       L.push("");
 
-      titre(L, "3 — La délibération rectificative");
+      titre(L, "3 - La délibération rectificative");
       L.push(nom(ctx));
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
       L.push("Réunion du [DATE] · point [n°] de l'ordre du jour");
       L.push("");
-      L.push("DÉLIBÉRATION RECTIFICATIVE — FONDEMENT DU RECOURS À L'EXPERTISE");
+      L.push("DÉLIBÉRATION RECTIFICATIVE - FONDEMENT DU RECOURS À L'EXPERTISE");
       L.push("");
       L.push("Le comité social et économique de " + nom(ctx) + ",");
       L.push("");
@@ -3151,24 +3151,24 @@
       L.push("");
       L.push("DÉCIDE :");
       L.push("");
-      L.push("Article 1 — La délibération du [DATE] est RAPPORTÉE en tant qu'elle vise");
+      L.push("Article 1 - La délibération du [DATE] est RAPPORTÉE en tant qu'elle vise");
       L.push("[l'article erroné].");
       L.push("");
-      L.push("Article 2 — Le comité décide de recourir à une expertise sur le fondement de");
+      L.push("Article 2 - Le comité décide de recourir à une expertise sur le fondement de");
       L.push("[ARTICLE EXACT], portant sur [objet de l'expertise, décrit en termes qui");
       L.push("correspondent au cas de recours retenu].");
       L.push("");
-      L.push("Article 3 — [Le cas échéant : cette expertise, décidée dans le cadre de");
+      L.push("Article 3 - [Le cas échéant : cette expertise, décidée dans le cadre de");
       L.push("l'article L. 1233-34, porte sur les domaines économique et comptable ainsi que");
       L.push("sur la santé, la sécurité et les effets potentiels du projet sur les");
       L.push("conditions de travail, en une seule expertise et par une seule délibération.]");
       L.push("");
-      L.push("Article 4 — [Le cas échéant : la présente décision est prise sur proposition de");
+      L.push("Article 4 - [Le cas échéant : la présente décision est prise sur proposition de");
       L.push("la commission [nom], formulée le [DATE], conformément à l'article L. 2315-78");
       L.push("et à l'article L. 1233-34 qui réservent cette faculté de proposition aux");
       L.push("commissions constituées au sein du comité.]");
       L.push("");
-      L.push("Article 5 — L'expert désigné est [nom]. Le financement de l'expertise sera");
+      L.push("Article 5 - L'expert désigné est [nom]. Le financement de l'expertise sera");
       L.push("réparti conformément à l'article L. 2315-80, selon le cas de recours retenu à");
       L.push("l'article 2.");
       L.push("");
@@ -3181,7 +3181,7 @@
       L.push("Le secrétaire,                             Le président,");
       L.push("[nom]                                      " + signataire(ctx));
       L.push("");
-      L.push("  ATTENTION AU DÉLAI QUE CETTE DÉLIBÉRATION ROUVRE — une délibération");
+      L.push("  ATTENTION AU DÉLAI QUE CETTE DÉLIBÉRATION ROUVRE - une délibération");
       L.push("  rectificative décidant le recours à l'expertise fait courir à nouveau, pour");
       L.push("  l'employeur, le délai de dix jours de contestation de la nécessité de");
       L.push("  l'expertise (L. 2315-86, 1° ; R. 2315-49). Le document CSE-CTL-EXP-02 le");
@@ -3215,30 +3215,30 @@
       L.push("Pièces jointes : grille des cas de recours · projet de délibération.");
       L.push("");
 
-      courrier(L, 2, "à l'expert — renonciation ou changement de fondement", [
+      courrier(L, 2, "à l'expert - renonciation ou changement de fondement", [
         "À adresser dès que le constat est fait, et non après la remise du rapport : ce",
         "qui a été engagé se paie.",
       ]);
       papier(L, ctx, ["À l'attention de [cabinet / expert désigné]", "[adresse]"]);
-      L.push("Objet : expertise décidée le [DATE] — fondement du recours");
+      L.push("Objet : expertise décidée le [DATE] - fondement du recours");
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
       L.push("Vous avez été désigné par une délibération du comité social et économique du");
       L.push("[DATE], prise sur le fondement de [article].");
       L.push("");
-      L.push("[VARIANTE 1 — RECTIFICATION] Le comité a repris cette délibération le [DATE]");
+      L.push("[VARIANTE 1 - RECTIFICATION] Le comité a repris cette délibération le [DATE]");
       L.push("pour viser [article exact]. L'objet de votre mission en est [inchangé /");
       L.push("modifié comme suit : ...]. Le financement en sera réparti selon l'article");
       L.push("L. 2315-80 dans les conditions attachées à ce cas de recours.");
       L.push("");
-      L.push("[VARIANTE 2 — RENONCIATION] Les conditions du texte fondant votre désignation");
+      L.push("[VARIANTE 2 - RENONCIATION] Les conditions du texte fondant votre désignation");
       L.push("ne sont pas réunies : [exposer]. Le comité a en conséquence rapporté sa");
       L.push("délibération le [DATE], et il n'est pas donné suite à cette expertise. Je vous");
       L.push("prie de bien vouloir nous adresser le décompte des diligences accomplies à ce");
       L.push("jour.");
       L.push("");
-      L.push("[VARIANTE 3 — EXPERTISE LIBRE] Le comité a décidé, le [DATE], de poursuivre");
+      L.push("[VARIANTE 3 - EXPERTISE LIBRE] Le comité a décidé, le [DATE], de poursuivre");
       L.push("cette expertise sur le fondement de l'article L. 2315-81 du code du travail,");
       L.push("qui lui permet de faire appel à tout type d'expertise RÉMUNÉRÉE PAR SES SOINS");
       L.push("pour la préparation de ses travaux. Vos honoraires seront donc réglés par le");
@@ -3247,23 +3247,23 @@
       salutation(L, ctx);
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous remplissez le test du paragraphe 1 et la grille du",
+        "Aujourd'hui, " + leJour(d0) + " - vous remplissez le test du paragraphe 1 et la grille du",
         "paragraphe 2. Deux chiffres et une date suffisent : le nombre de licenciements,",
         "la période de trente jours, la date de la première réunion de L. 1233-30.",
         "",
-        "Le même jour, si le fondement est erroné — courrier 2 à l'expert. Chaque jour de",
+        "Le même jour, si le fondement est erroné - courrier 2 à l'expert. Chaque jour de",
         "retard est un jour de diligences engagées sur une délibération qui ne tient pas.",
         "",
-        "Dans les jours qui suivent — courrier 1 au secrétaire pour l'inscription à",
+        "Dans les jours qui suivent - courrier 1 au secrétaire pour l'inscription à",
         "l'ordre du jour (L. 2315-29), puis délibération rectificative à la réunion",
         "suivante.",
         "",
-        "À COMPTER DE LA DÉLIBÉRATION RECTIFICATIVE — un nouveau délai de dix jours court",
+        "À COMPTER DE LA DÉLIBÉRATION RECTIFICATIVE - un nouveau délai de dix jours court",
         "pour l'employeur qui voudrait contester la nécessité de l'expertise (L. 2315-86,",
         "1° ; R. 2315-49). Prise aujourd'hui, elle ouvrirait un délai expirant le",
         leJour(dans(d0, 10)) + ".",
         "",
-        "Si l'expertise se rattache à L. 1233-34 — le rapport de l'expert est remis au",
+        "Si l'expertise se rattache à L. 1233-34 - le rapport de l'expert est remis au",
         "plus tard QUINZE JOURS AVANT l'expiration du délai de L. 1233-30. Remontez ce",
         "délai depuis la date d'expiration, et non depuis la désignation.",
       ]);
@@ -3302,7 +3302,7 @@
       L.push("");
       L.push("Trois rôles, trois textes, et ils ne se substituent pas :");
       L.push("");
-      L.push("  · LE COMITÉ DÉCIDE — « Le comité social et économique peut, le cas échéant");
+      L.push("  · LE COMITÉ DÉCIDE - « Le comité social et économique peut, le cas échéant");
       L.push("    sur proposition des commissions constituées en son sein, DÉCIDER de");
       L.push("    recourir à un expert-comptable ou à un expert habilité dans les cas prévus");
       L.push("    à la présente sous-section » (L. 2315-78) ; « le comité social et");
@@ -3310,7 +3310,7 @@
       L.push("    constituées en son sein, DÉCIDER, lors de la première réunion prévue à");
       L.push("    l'article L. 1233-30, de recourir à une expertise » (L. 1233-34).");
       L.push("");
-      L.push("  · LA COMMISSION SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL NE DÉCIDE PAS —");
+      L.push("  · LA COMMISSION SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL NE DÉCIDE PAS -");
       L.push("    « La commission santé, sécurité et conditions de travail se voit confier,");
       L.push("    par délégation du comité social et économique, tout ou partie des");
       L.push("    attributions du comité relatives à la santé, à la sécurité et aux");
@@ -3323,7 +3323,7 @@
       L.push("    commission ne produit pas d'effet, et la décision prise sur son fondement");
       L.push("    est irrégulière.");
       L.push("");
-      L.push("  · L'EMPLOYEUR CONTESTE, il ne décide pas — sa voie est la saisine du");
+      L.push("  · L'EMPLOYEUR CONTESTE, il ne décide pas - sa voie est la saisine du");
       L.push("    président du tribunal judiciaire dans les dix jours (L. 2315-86,");
       L.push("    R. 2315-49 ; document CSE-CTL-EXP-02 de ce module).");
       L.push("");
@@ -3332,7 +3332,7 @@
       L.push("la décision qui ne tient pas, et l'expertise engagée sur elle avec.");
       L.push("");
 
-      titre(L, "1 — Qui a décidé, et sur quelle pièce");
+      titre(L, "1 - Qui a décidé, et sur quelle pièce");
       L.push("  Auteur de la décision, au dossier ......... " +
         (par ? par : "[À ÉTABLIR SUR LA PIÈCE]"));
       L.push("");
@@ -3341,14 +3341,14 @@
       L.push("     [ ] compte rendu de la commission santé, sécurité et conditions de");
       L.push("         travail du [DATE] ;");
       L.push("     [ ] décision ou courrier de l'employeur du [DATE] ;");
-      L.push("     [ ] aucune pièce — c'est alors le premier problème.");
+      L.push("     [ ] aucune pièce - c'est alors le premier problème.");
       L.push("");
       if (parCommission) {
         L.push("  AU DOSSIER, LA DÉCISION ÉMANE DE LA COMMISSION. Elle est à reprendre : le");
         L.push("  recours à l'expert de la sous-section 10 est EXPRESSÉMENT EXCLU des");
         L.push("  attributions délégables (L. 2315-38), et ce texte est d'ordre public. La");
-        L.push("  commission a pu PROPOSER l'expertise — L. 2315-78 et L. 1233-34 le");
-        L.push("  prévoient — mais seul le comité peut la DÉCIDER. Le paragraphe 2 produit");
+        L.push("  commission a pu PROPOSER l'expertise - L. 2315-78 et L. 1233-34 le");
+        L.push("  prévoient - mais seul le comité peut la DÉCIDER. Le paragraphe 2 produit");
         L.push("  la délibération, et le paragraphe 3 montre comment la proposition de la");
         L.push("  commission se consigne sans se confondre avec la décision.");
         L.push("");
@@ -3372,7 +3372,7 @@
         L.push("");
       }
 
-      titre(L, "2 — La délibération du comité");
+      titre(L, "2 - La délibération du comité");
       L.push(nom(ctx));
       L.push("COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
@@ -3384,7 +3384,7 @@
       L.push("collectif sont inscrites de plein droit à l'ordre du jour par le président ou");
       L.push("le secrétaire.]");
       L.push("");
-      L.push("DÉLIBÉRATION — RECOURS À UNE EXPERTISE");
+      L.push("DÉLIBÉRATION - RECOURS À UNE EXPERTISE");
       L.push("");
       L.push("Le comité social et économique de " + nom(ctx) + ",");
       L.push("");
@@ -3395,22 +3395,22 @@
       L.push("");
       L.push("DÉCIDE :");
       L.push("");
-      L.push("Article 1 — Le comité décide de RECOURIR À UNE EXPERTISE sur le fondement de");
+      L.push("Article 1 - Le comité décide de RECOURIR À UNE EXPERTISE sur le fondement de");
       L.push("[ARTICLE], portant sur [objet précis].");
       L.push("");
-      L.push("Article 2 — Est désigné en qualité d'expert : [nom, qualité, adresse].");
+      L.push("Article 2 - Est désigné en qualité d'expert : [nom, qualité, adresse].");
       L.push("[Pour une expertise de L. 2315-94 : l'expert est habilité, son habilitation");
       L.push("étant une certification délivrée par un organisme certificateur accrédité");
       L.push("(R. 2315-51). Copie de la certification est demandée.]");
       L.push("");
-      L.push("Article 3 — Le financement de l'expertise est réparti conformément à l'article");
+      L.push("Article 3 - Le financement de l'expertise est réparti conformément à l'article");
       L.push("L. 2315-80 : [à la charge de l'employeur / 80 % employeur, 20 % comité sur son");
       L.push("budget de fonctionnement].");
       L.push("");
-      L.push("Article 4 — Le secrétaire est chargé de notifier la présente délibération à");
+      L.push("Article 4 - Le secrétaire est chargé de notifier la présente délibération à");
       L.push("l'employeur et à l'expert désigné.");
       L.push("");
-      L.push("LE VOTE — les résolutions du comité sont prises À LA MAJORITÉ DES MEMBRES");
+      L.push("LE VOTE - les résolutions du comité sont prises À LA MAJORITÉ DES MEMBRES");
       L.push("PRÉSENTS ; le président ne participe pas au vote lorsqu'il consulte les membres");
       L.push("élus du comité en tant que délégation du personnel (L. 2315-32).");
       L.push("");
@@ -3432,7 +3432,7 @@
       L.push("[nom]                                      " + signataire(ctx));
       L.push("");
 
-      titre(L, "3 — La proposition de la commission, consignée sans être confondue");
+      titre(L, "3 - La proposition de la commission, consignée sans être confondue");
       L.push("C'est là ce que les commissions apportent à l'expertise, et la seule chose");
       L.push("qu'elles y apportent. Écrivez-la donc SÉPARÉMENT, et à sa place.");
       L.push("");
@@ -3453,7 +3453,7 @@
       L.push("");
       L.push("     Le rapporteur, [nom]");
       L.push("");
-      L.push("  EXTRAIT DU PROCÈS-VERBAL DU COMITÉ — la proposition et la décision, dans");
+      L.push("  EXTRAIT DU PROCÈS-VERBAL DU COMITÉ - la proposition et la décision, dans");
       L.push("  deux paragraphes distincts");
       L.push("");
       L.push("     « Le rapporteur de la commission [nom] présente la proposition formulée");
@@ -3465,7 +3465,7 @@
       L.push("     contre, [ ] abstention, sur [ ] membres présents, le président n'ayant");
       L.push("     pas pris part au vote. »");
       L.push("");
-      L.push("  SI L'ACCORD OU LE RÈGLEMENT INTÉRIEUR DU COMITÉ DIT LE CONTRAIRE — la clause");
+      L.push("  SI L'ACCORD OU LE RÈGLEMENT INTÉRIEUR DU COMITÉ DIT LE CONTRAIRE - la clause");
       L.push("  qui délègue le recours à l'expert à la commission ne produit pas d'effet,");
       L.push("  L. 2315-38 étant d'ordre public. Signalez-la, et faites-la examiner : c'est");
       L.push("  l'objet du document CSE-CTL-DET-01 de ce module. En attendant, ne vous");
@@ -3545,24 +3545,24 @@
       L.push("Pièce jointe : extrait du procès-verbal portant la délibération.");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous établissez QUI a décidé, sur la pièce. Une seule",
+        "Aujourd'hui, " + leJour(d0) + " - vous établissez QUI a décidé, sur la pièce. Une seule",
         "question, et elle commande tout le reste.",
         "",
-        "Si la décision émane de la commission ou de l'employeur — le point est inscrit à",
+        "Si la décision émane de la commission ou de l'employeur - le point est inscrit à",
         "l'ordre du jour de la réunion suivante (L. 2315-29) et le comité délibère. Ne",
         "laissez pas l'expertise se poursuivre entre-temps sur une décision irrégulière.",
         "",
-        "Le jour de la délibération — le décompte des voix est porté au procès-verbal, et",
+        "Le jour de la délibération - le décompte des voix est porté au procès-verbal, et",
         "la proposition de la commission y est consignée SÉPARÉMENT de la décision.",
         "",
-        "Le lendemain — notification à l'employeur (courrier 1) et lettre de désignation à",
+        "Le lendemain - notification à l'employeur (courrier 1) et lettre de désignation à",
         "l'expert (courrier 2). Notifiée le " + leJour(dans(d0, 1)) + ", la délibération ouvrirait à",
         "l'employeur un délai de contestation expirant vers le " + leJour(dans(d0, 11)) + ".",
         "",
-        "Dans les trois jours de la désignation — l'expert demande ses informations",
+        "Dans les trois jours de la désignation - l'expert demande ses informations",
         "(R. 2315-45) ; dans les dix jours, il notifie le coût prévisionnel (R. 2315-46).",
         "",
-        "Et une fois pour toutes — relisez la clause de votre accord ou du règlement",
+        "Et une fois pour toutes - relisez la clause de votre accord ou du règlement",
         "intérieur du comité qui organise la délégation à la commission. Si elle inclut le",
         "recours à l'expert, elle est inopérante : L. 2315-38 est d'ordre public.",
       ]);
@@ -3614,14 +3614,14 @@
       L.push("La relecture elle-même appartient à un professionnel. Ce document la prépare");
       L.push("et la date ; il ne la remplace pas.");
       L.push("");
-      L.push("CE QUI SE JOUE — un accord peut légalement aménager beaucoup de choses. Il ne");
+      L.push("CE QUI SE JOUE - un accord peut légalement aménager beaucoup de choses. Il ne");
       L.push("peut pas priver le comité d'une prérogative que la loi lui reconnaît. La");
       L.push("clause qui le ferait n'est pas une faute pénale : elle est inopérante, et");
-      L.push("l'acte pris sur son fondement — un avis rendu par la seule commission, une");
-      L.push("expertise décidée par elle — est irrégulier.");
+      L.push("l'acte pris sur son fondement - un avis rendu par la seule commission, une");
+      L.push("expertise décidée par elle - est irrégulier.");
       L.push("");
 
-      titre(L, "1 — Le relevé des accords et de leurs deux dates");
+      titre(L, "1 - Le relevé des accords et de leurs deux dates");
       L.push("« Toute action en nullité de tout ou partie d'une convention ou d'un accord");
       L.push("collectif doit, À PEINE D'IRRECEVABILITÉ, être engagée dans un délai de DEUX");
       L.push("MOIS à compter : 1° DE LA NOTIFICATION de l'accord d'entreprise prévue à");
@@ -3662,18 +3662,18 @@
       } else {
         L.push("  Aucun accord n'est déclaré au dossier. Vérifiez tout de même : les accords");
         L.push("  applicables au comité ne portent pas tous le mot « comité » dans leur");
-        L.push("  intitulé — un accord de dialogue social, un accord de groupe, un accord de");
+        L.push("  intitulé - un accord de dialogue social, un accord de groupe, un accord de");
         L.push("  branche étendu peuvent l'être.");
         L.push("");
       }
-      L.push("  À TITRE DE REPÈRE — un accord notifié ou publié aujourd'hui, " + leJour(d0) + ",");
+      L.push("  À TITRE DE REPÈRE - un accord notifié ou publié aujourd'hui, " + leJour(d0) + ",");
       L.push("  ouvrirait un délai expirant aux environs du " + leJour(dans(d0, 61)) + ". Deux mois se");
       L.push("  consomment en une relecture et une décision : ce n'est pas beaucoup.");
       L.push("");
       L.push("  LES ACCORDS À CHERCHER EN PRIORITÉ, parce que le module en dépend :");
       L.push("");
       L.push("     [ ] l'accord de L. 2313-2 déterminant LE NOMBRE ET LE PÉRIMÈTRE DES");
-      L.push("         ÉTABLISSEMENTS DISTINCTS — ou, en l'absence de délégué syndical,");
+      L.push("         ÉTABLISSEMENTS DISTINCTS - ou, en l'absence de délégué syndical,");
       L.push("         l'accord entre l'employeur et le comité adopté à la majorité des");
       L.push("         membres titulaires élus (L. 2313-3) ; à défaut des deux, la décision");
       L.push("         de l'employeur prise compte tenu de L'AUTONOMIE DE GESTION du");
@@ -3707,11 +3707,11 @@
       L.push("         mais qui produit les mêmes effets pratiques (L. 2315-24).");
       L.push("");
 
-      titre(L, "2 — La grille : ce qu'un accord peut faire");
+      titre(L, "2 - La grille : ce qu'un accord peut faire");
       L.push("Ce qui suit vient des textes lus. Une clause qui entre dans l'une de ces cases");
       L.push("n'a rien d'irrégulier par elle-même.");
       L.push("");
-      L.push("  · LES CONSULTATIONS RÉCURRENTES — un accord d'entreprise conclu dans les");
+      L.push("  · LES CONSULTATIONS RÉCURRENTES - un accord d'entreprise conclu dans les");
       L.push("    conditions du premier alinéa de L. 2232-12 ou, EN L'ABSENCE DE DÉLÉGUÉ");
       L.push("    SYNDICAL, un accord entre l'employeur et le comité adopté à la majorité des");
       L.push("    membres titulaires, peut définir : 1° le contenu, la périodicité et les");
@@ -3728,13 +3728,13 @@
       L.push("       ans au maximum. Ce sont les deux seuls chiffres que L. 2312-19 impose,");
       L.push("       et ce sont les deux qu'un accord franchit sans le vouloir.");
       L.push("");
-      L.push("  · LES COMMISSIONS — un accord d'entreprise peut prévoir la création de");
+      L.push("  · LES COMMISSIONS - un accord d'entreprise peut prévoir la création de");
       L.push("    commissions supplémentaires pour l'examen de problèmes particuliers, et");
       L.push("    l'employeur peut leur adjoindre des experts et techniciens de l'entreprise");
       L.push("    avec voix consultative. « LES RAPPORTS DES COMMISSIONS SONT SOUMIS À LA");
       L.push("    DÉLIBÉRATION DU COMITÉ » (L. 2315-45).");
       L.push("");
-      L.push("  · LA COMMISSION SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL — l'accord de");
+      L.push("  · LA COMMISSION SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL - l'accord de");
       L.push("    L. 2313-2 fixe les modalités de mise en place de la ou des commissions en");
       L.push("    définissant les six points des 1° à 6° de L. 2315-41 : nombre de membres,");
       L.push("    missions déléguées et leurs modalités d'exercice, modalités de");
@@ -3744,7 +3744,7 @@
       L.push("    et L. 2315-37, l'accord peut aussi fixer LE NOMBRE ET LE PÉRIMÈTRE de ces");
       L.push("    commissions (L. 2315-43).");
       L.push("");
-      L.push("  · LE NOMBRE D'EXPERTISES — « Un accord d'entreprise, ou à défaut un accord");
+      L.push("  · LE NOMBRE D'EXPERTISES - « Un accord d'entreprise, ou à défaut un accord");
       L.push("    conclu entre l'employeur et le comité social et économique, adopté à la");
       L.push("    majorité des membres titulaires élus de la délégation du personnel,");
       L.push("    détermine LE NOMBRE D'EXPERTISES dans le cadre des consultations");
@@ -3752,27 +3752,27 @@
       L.push("    (L. 2315-79). L'accord borne donc le nombre ; il ne supprime pas le");
       L.push("    recours.");
       L.push("");
-      L.push("  · LES BUDGETS — la contribution aux activités sociales et culturelles EST");
+      L.push("  · LES BUDGETS - la contribution aux activités sociales et culturelles EST");
       L.push("    FIXÉE PAR ACCORD D'ENTREPRISE (L. 2312-81) ; sa répartition entre comités");
       L.push("    d'établissement est fixée par accord au prorata des effectifs, de la masse");
       L.push("    salariale, ou des deux combinés (L. 2312-82). En revanche, la subvention de");
       L.push("    fonctionnement de L. 2315-61 est fixée par la loi : voir la case suivante.");
       L.push("");
-      L.push("  · LES ÉTABLISSEMENTS DISTINCTS ET LES REPRÉSENTANTS DE PROXIMITÉ — l'accord");
+      L.push("  · LES ÉTABLISSEMENTS DISTINCTS ET LES REPRÉSENTANTS DE PROXIMITÉ - l'accord");
       L.push("    de L. 2313-2 détermine le nombre et le périmètre des établissements");
       L.push("    distincts, et peut mettre en place des représentants de proximité en");
       L.push("    définissant leur nombre, leurs attributions, les modalités de leur");
       L.push("    désignation et de leur fonctionnement, dont leurs heures de délégation");
       L.push("    (L. 2313-7).");
       L.push("");
-      L.push("  · LE PROTOCOLE PRÉÉLECTORAL — il peut modifier le nombre de sièges ou le");
+      L.push("  · LE PROTOCOLE PRÉÉLECTORAL - il peut modifier le nombre de sièges ou le");
       L.push("    volume des heures individuelles de délégation « DÈS LORS QUE LE VOLUME");
       L.push("    GLOBAL DE CES HEURES, AU SEIN DE CHAQUE COLLÈGE, EST AU MOINS ÉGAL À CELUI");
       L.push("    RÉSULTANT DES DISPOSITIONS LÉGALES au regard de l'effectif » (L. 2314-7).");
       L.push("    C'est une condition, pas une faculté : vérifiez-la collège par collège.");
       L.push("");
 
-      titre(L, "3 — La grille : ce qu'un accord ne peut pas faire");
+      titre(L, "3 - La grille : ce qu'un accord ne peut pas faire");
       L.push("Ce sont les clauses à relever en priorité pour la relecture. Chacune renvoie");
       L.push("à un texte lu, et à un document de ce module qui la traite.");
       L.push("");
@@ -3804,7 +3804,7 @@
       L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
       L.push("  │ Composer la commission santé et sécurité  │ L. 2315-39   │ [oui / non]  │");
       L.push("  │ sans le MINIMUM DE TROIS MEMBRES dont au  │              │              │");
-      L.push("  │ moins un du second — ou du troisième —    │              │              │");
+      L.push("  │ moins un du second - ou du troisième -    │              │              │");
       L.push("  │ collège, ou hors des membres du comité    │              │              │");
       L.push("  ├───────────────────────────────────────────┼──────────────┼──────────────┤");
       L.push("  │ Modifier le nombre de sièges ou d'heures  │ L. 2314-7    │ [oui / non]  │");
@@ -3828,16 +3828,16 @@
         L.push("  CSE-CTL-EXP-04 de ce module en tirent les conséquences pratiques.");
         L.push("");
       }
-      L.push("  UNE PRÉCISION QUI ÉVITE UN CONTRESENS — « les projets d'accord collectif,");
+      L.push("  UNE PRÉCISION QUI ÉVITE UN CONTRESENS - « les projets d'accord collectif,");
       L.push("  leur révision ou leur dénonciation NE SONT PAS SOUMIS À LA CONSULTATION DU");
       L.push("  COMITÉ » (L. 2312-14). L'absence de consultation sur le projet d'accord");
       L.push("  lui-même n'est donc pas un grief.");
       L.push("");
 
-      titre(L, "4 — La conclusion : action en nullité ou exception d'illégalité");
+      titre(L, "4 - La conclusion : action en nullité ou exception d'illégalité");
       L.push("Deux voies, et le choix dépend d'une seule chose : la date.");
       L.push("");
-      L.push("  A — L'ACTION EN NULLITÉ, dans les DEUX MOIS de la notification ou de la");
+      L.push("  A - L'ACTION EN NULLITÉ, dans les DEUX MOIS de la notification ou de la");
       L.push("      publication (L. 2262-14), À PEINE D'IRRECEVABILITÉ. Elle attaque la");
       L.push("      clause de front et la fait disparaître pour tous.");
       L.push("");
@@ -3846,7 +3846,7 @@
       L.push("        Délai expirant le ........... [ ]");
       L.push("        Jours restants .............. [ ]");
       L.push("");
-      L.push("  B — L'EXCEPTION D'ILLÉGALITÉ, quand le délai est passé. L'article L. 2262-14");
+      L.push("  B - L'EXCEPTION D'ILLÉGALITÉ, quand le délai est passé. L'article L. 2262-14");
       L.push("      enferme dans deux mois L'ACTION EN NULLITÉ ; il ne dit rien de");
       L.push("      l'invocation de l'illégalité par voie d'exception, à l'occasion d'un");
       L.push("      litige où la clause est opposée. C'est la voie qui reste, et elle n'est");
@@ -3857,15 +3857,15 @@
       L.push("        contrôle la retient, et laisse au professionnel le soin d'en apprécier");
       L.push("        les conditions et la portée.]");
       L.push("");
-      L.push("  C — CE QU'IL FAUT FAIRE DANS TOUS LES CAS, et tout de suite : NE PLUS SE");
+      L.push("  C - CE QU'IL FAUT FAIRE DANS TOUS LES CAS, et tout de suite : NE PLUS SE");
       L.push("      FONDER SUR LA CLAUSE. Une clause qui prive le comité d'une prérogative");
       L.push("      légale ne devient pas valable parce que le délai de nullité est passé.");
-      L.push("      L'acte pris sur son fondement reste irrégulier — l'avis rendu par la");
+      L.push("      L'acte pris sur son fondement reste irrégulier - l'avis rendu par la");
       L.push("      seule commission, l'expertise décidée par elle. Cessez de vous en");
       L.push("      prévaloir, et reprenez les actes concernés.");
       L.push("");
 
-      titre(L, "5 — La note d'analyse, à dater et à signer");
+      titre(L, "5 - La note d'analyse, à dater et à signer");
       L.push("NOTE D'ANALYSE DES CLAUSES DES ACCORDS APPLICABLES AU COMITÉ SOCIAL ET");
       L.push("ÉCONOMIQUE");
       L.push("");
@@ -3906,7 +3906,7 @@
       L.push("Je souhaiterais votre avis sur trois questions :");
       L.push("");
       L.push("  1. l'une des clauses de ces accords prive-t-elle le comité d'une prérogative");
-      L.push("     que la loi lui reconnaît — notamment au regard de l'article L. 2315-38,");
+      L.push("     que la loi lui reconnaît - notamment au regard de l'article L. 2315-38,");
       L.push("     qui exclut le recours à l'expert et les attributions consultatives des");
       L.push("     attributions délégables à la commission santé, sécurité et conditions de");
       L.push("     travail, et des planchers de l'article L. 2312-19 : six réunions");
@@ -3928,25 +3928,25 @@
       L.push("grille des clauses relevées.");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — vous remplissez le tableau du paragraphe 1. Deux dates",
+        "Aujourd'hui, " + leJour(d0) + " - vous remplissez le tableau du paragraphe 1. Deux dates",
         "par accord, et rien d'autre : la notification aux organisations disposant d'une",
         "section syndicale, et la publication. Ce sont elles qui décident de tout le",
         "reste.",
         "",
-        "Dans les jours qui suivent — vous cochez la grille du paragraphe 3 sur chaque",
+        "Dans les jours qui suivent - vous cochez la grille du paragraphe 3 sur chaque",
         "accord, puis vous adressez le courrier 1 avec les accords en intégralité. Un",
         "extrait ne suffit pas : une clause se lit dans son accord.",
         "",
-        "Si un accord a été notifié ou publié récemment — comptez DEUX MOIS depuis cette",
+        "Si un accord a été notifié ou publié récemment - comptez DEUX MOIS depuis cette",
         "date, et remontez de quinze jours pour laisser à votre conseil le temps de",
         "conclure. Un accord notifié aujourd'hui appellerait une décision avant le",
         leJour(dans(d0, 45)) + " et une action avant le " + leJour(dans(d0, 61)) + ".",
         "",
-        "Si le délai est passé — ne renoncez pas pour autant : l'exception d'illégalité",
+        "Si le délai est passé - ne renoncez pas pour autant : l'exception d'illégalité",
         "n'est pas enfermée dans ce délai, et la cessation de l'application de la clause",
         "ne dépend d'aucun délai du tout.",
         "",
-        "À CHAQUE NOUVEL ACCORD SIGNÉ — inscrivez immédiatement ses deux dates au tableau.",
+        "À CHAQUE NOUVEL ACCORD SIGNÉ - inscrivez immédiatement ses deux dates au tableau.",
         "C'est la seule discipline qui évite de découvrir un délai le jour où il est",
         "expiré.",
       ]);
@@ -3963,7 +3963,7 @@
   });
 
   /* Le seul des douze points dont le fondement porte une peine. Elle est donc
-     écrite ici — telle que L. 2317-1 la formule, sans l'arrondir — et nulle
+     écrite ici - telle que L. 2317-1 la formule, sans l'arrondir - et nulle
      part ailleurs dans ce fichier. */
   DP.ajouter("CSE-CTL-DET-03", {
     nom: "La note de constat des faits signalés et des mesures prises, avec le relevé daté et la saisine du conseil",
@@ -3986,7 +3986,7 @@
       L.push("L'entrave est une INFRACTION PÉNALE. La qualifier suppose d'apprécier des");
       L.push("faits, une intention et un contexte : c'est l'office du juge répressif, et");
       L.push("l'affaire d'un professionnel avant lui. L'application détecte, elle ne");
-      L.push("qualifie pas — et un document qui écrirait « il y a entrave » ou « il n'y a");
+      L.push("qualifie pas - et un document qui écrirait « il y a entrave » ou « il n'y a");
       L.push("pas entrave » serait faux dans les deux sens.");
       L.push("");
       L.push("Ce que ce document fait, en revanche, est ce qui compte le jour où la");
@@ -3996,7 +3996,7 @@
       L.push("silence.");
       L.push("");
 
-      titre(L, "1 — Le texte, tel qu'il est");
+      titre(L, "1 - Le texte, tel qu'il est");
       L.push("« Le fait d'apporter une entrave SOIT À LA CONSTITUTION d'un comité social et");
       L.push("économique, d'un comité social et économique d'établissement ou d'un comité");
       L.push("social et économique central, SOIT À LA LIBRE DÉSIGNATION DE LEURS MEMBRES,");
@@ -4016,7 +4016,7 @@
       L.push("  et rien de plus pour la seconde. L'appréciation reste entière.");
       L.push("");
 
-      titre(L, "2 — Le relevé daté des faits signalés");
+      titre(L, "2 - Le relevé daté des faits signalés");
       if (faits) {
         L.push("  CE QUE LE DOSSIER SIGNALE, repris tel quel et sans commentaire :");
         L.push("");
@@ -4052,45 +4052,45 @@
       L.push("    fait cesser d'abord.");
       L.push("");
 
-      titre(L, "3 — Le classement, selon la distinction du texte");
-      L.push("  A — FAITS TOUCHANT À LA CONSTITUTION DU COMITÉ OU À LA LIBRE DÉSIGNATION DE");
-      L.push("      SES MEMBRES (première branche de L. 2317-1 — un an d'emprisonnement et");
+      titre(L, "3 - Le classement, selon la distinction du texte");
+      L.push("  A - FAITS TOUCHANT À LA CONSTITUTION DU COMITÉ OU À LA LIBRE DÉSIGNATION DE");
+      L.push("      SES MEMBRES (première branche de L. 2317-1 - un an d'emprisonnement et");
       L.push("      7 500 € d'amende)");
       L.push("");
       L.push("      Le texte vise « notamment la méconnaissance des dispositions des");
       L.push("      articles L. 2314-1 à L. 2314-9 ». Ces neuf articles ont été lus ; voici");
       L.push("      ce que chacun impose, pour que le classement se fasse sur le texte :");
       L.push("");
-      L.push("        [ ] L. 2314-1 — composition du comité : l'employeur et une délégation");
+      L.push("        [ ] L. 2314-1 - composition du comité : l'employeur et une délégation");
       L.push("            du personnel comportant UN NOMBRE ÉGAL DE TITULAIRES ET DE");
       L.push("            SUPPLÉANTS ; le suppléant assiste aux réunions en l'absence du");
       L.push("            titulaire ; un référent en matière de lutte contre le harcèlement");
       L.push("            sexuel et les agissements sexistes est désigné par le comité ;");
-      L.push("        [ ] L. 2314-2 — désignation par chaque organisation syndicale");
+      L.push("        [ ] L. 2314-2 - désignation par chaque organisation syndicale");
       L.push("            représentative d'un REPRÉSENTANT SYNDICAL au comité, qui assiste");
       L.push("            aux séances avec voix consultative ;");
-      L.push("        [ ] L. 2314-3 — présence, AVEC VOIX CONSULTATIVE, du médecin du");
+      L.push("        [ ] L. 2314-3 - présence, AVEC VOIX CONSULTATIVE, du médecin du");
       L.push("            travail, du responsable interne du service de sécurité et des");
       L.push("            autres personnes que ce texte désigne, aux réunions portant sur la");
       L.push("            santé, la sécurité et les conditions de travail ;");
-      L.push("        [ ] L. 2314-4 — INFORMATION DU PERSONNEL tous les quatre ans de");
+      L.push("        [ ] L. 2314-4 - INFORMATION DU PERSONNEL tous les quatre ans de");
       L.push("            l'organisation des élections, par tout moyen conférant date");
       L.push("            certaine, avec la date envisagée du premier tour, qui doit se");
       L.push("            tenir AU PLUS TARD LE QUATRE-VINGT-DIXIÈME JOUR suivant la");
       L.push("            diffusion ;");
-      L.push("        [ ] L. 2314-5 — INVITATION DES ORGANISATIONS SYNDICALES à négocier le");
+      L.push("        [ ] L. 2314-5 - INVITATION DES ORGANISATIONS SYNDICALES à négocier le");
       L.push("            protocole préélectoral et à établir leurs listes ;");
-      L.push("        [ ] L. 2314-6 — condition de VALIDITÉ DU PROTOCOLE : signature par la");
+      L.push("        [ ] L. 2314-6 - condition de VALIDITÉ DU PROTOCOLE : signature par la");
       L.push("            majorité des organisations ayant participé à sa négociation, dont");
       L.push("            les organisations représentatives ayant recueilli la majorité des");
       L.push("            suffrages exprimés aux dernières élections ;");
-      L.push("        [ ] L. 2314-7 — modification du nombre de sièges ou du volume des");
+      L.push("        [ ] L. 2314-7 - modification du nombre de sièges ou du volume des");
       L.push("            heures par le protocole, à la condition du volume global par");
       L.push("            collège ;");
-      L.push("        [ ] L. 2314-8 — engagement de la procédure de L. 2314-5 À LA DEMANDE");
+      L.push("        [ ] L. 2314-8 - engagement de la procédure de L. 2314-5 À LA DEMANDE");
       L.push("            d'un salarié ou d'une organisation syndicale, DANS LE MOIS suivant");
       L.push("            la réception de cette demande ;");
-      L.push("        [ ] L. 2314-9 — établissement du PROCÈS-VERBAL DE CARENCE, sa");
+      L.push("        [ ] L. 2314-9 - établissement du PROCÈS-VERBAL DE CARENCE, sa");
       L.push("            publicité auprès des salariés par tout moyen conférant date");
       L.push("            certaine, et sa TRANSMISSION DANS LES QUINZE JOURS à l'agent de");
       L.push("            contrôle de l'inspection du travail.");
@@ -4099,15 +4099,15 @@
       L.push("      fait touchant à la constitution ou à la libre désignation peut relever");
       L.push("      de cette branche sans se rattacher à l'un de ces neuf articles.");
       L.push("");
-      L.push("  B — FAITS TOUCHANT AU FONCTIONNEMENT RÉGULIER (seconde branche — 7 500 €");
+      L.push("  B - FAITS TOUCHANT AU FONCTIONNEMENT RÉGULIER (seconde branche - 7 500 €");
       L.push("      d'amende)");
       L.push("");
       L.push("      Le texte ne les énumère pas. Décrivez-les, sans les qualifier :");
       L.push("");
-      L.push("        [ ] réunion non tenue ou non convoquée — le [date] ;");
-      L.push("        [ ] information ou document non remis — [lequel], le [date] ;");
-      L.push("        [ ] consultation non menée avant la décision — [laquelle], le [date] ;");
-      L.push("        [ ] moyens retirés ou non fournis — [lesquels], depuis le [date] ;");
+      L.push("        [ ] réunion non tenue ou non convoquée - le [date] ;");
+      L.push("        [ ] information ou document non remis - [lequel], le [date] ;");
+      L.push("        [ ] consultation non menée avant la décision - [laquelle], le [date] ;");
+      L.push("        [ ] moyens retirés ou non fournis - [lesquels], depuis le [date] ;");
       L.push("        [ ] autre : [                                                    ].");
       L.push("");
       L.push("      [Ce classement est une PRÉPARATION à l'examen professionnel, non une");
@@ -4115,8 +4115,8 @@
       L.push("      le soin de dire ce qu'ils sont.]");
       L.push("");
 
-      titre(L, "4 — Les mesures : faire cesser, puis accomplir");
-      L.push("  A — CE QUI SE FAIT CESSER IMMÉDIATEMENT — sans attendre l'avis du conseil,");
+      titre(L, "4 - Les mesures : faire cesser, puis accomplir");
+      L.push("  A - CE QUI SE FAIT CESSER IMMÉDIATEMENT - sans attendre l'avis du conseil,");
       L.push("      parce que chaque jour de plus est un jour de plus.");
       L.push("");
       L.push("        Fait n° [ ] · mesure : [rétablir les moyens retirés / convoquer la");
@@ -4125,7 +4125,7 @@
       L.push("");
       L.push("        Fait n° [ ] · mesure : [ ] · prise le [DATE] · pièce : [ ].");
       L.push("");
-      L.push("  B — L'ACTE OMIS, ACCOMPLI DANS LES FORMES QUI LUI SONT PROPRES");
+      L.push("  B - L'ACTE OMIS, ACCOMPLI DANS LES FORMES QUI LUI SONT PROPRES");
       L.push("");
       L.push("      C'est le point où l'on se trompe le plus souvent : on annonce qu'on va");
       L.push("      régulariser, et l'on omet la forme. Une réunion se convoque avec un");
@@ -4135,7 +4135,7 @@
       L.push("      résolution adoptée à la majorité des membres présents (L. 2315-32).");
       L.push("");
       L.push("        Acte omis ................ [ ]");
-      L.push("        Forme requise ............ [ ] — texte : [ ]");
+      L.push("        Forme requise ............ [ ] - texte : [ ]");
       L.push("        Accompli le .............. [DATE]");
       L.push("        Pièce ..................... [ ]");
       L.push("        Consigné au procès-verbal du comité du [DATE] ? ...... [oui / non]");
@@ -4145,7 +4145,7 @@
       L.push("      le secrétaire (L. 2315-34) : c'est la seule trace contradictoire de ce");
       L.push("      qui a été fait, et la seule qu'un tiers lira.");
       L.push("");
-      L.push("  C — CE QUI NE PEUT PAS ÊTRE RÉPARÉ");
+      L.push("  C - CE QUI NE PEUT PAS ÊTRE RÉPARÉ");
       L.push("");
       L.push("      Certains faits sont épuisés : une consultation qui n'a pas eu lieu avant");
       L.push("      une décision déjà exécutée ne se rattrape pas à l'identique. Écrivez-le,");
@@ -4155,28 +4155,28 @@
       L.push("        prise à la place : [ ].");
       L.push("");
 
-      titre(L, "5 — La note de constat, datée et signée");
+      titre(L, "5 - La note de constat, datée et signée");
       L.push("NOTE DE CONSTAT DES FAITS SIGNALÉS ET DES MESURES PRISES");
       L.push("");
       L.push(nom(ctx));
       L.push("Établie le " + leJour(d0) + " par " + signataire(ctx) + ".");
       L.push("");
-      L.push("1. FAITS SIGNALÉS — [reprendre le tableau du paragraphe 2, daté].");
+      L.push("1. FAITS SIGNALÉS - [reprendre le tableau du paragraphe 2, daté].");
       L.push("");
-      L.push("2. CLASSEMENT — [reprendre le paragraphe 3, sans qualification pénale].");
+      L.push("2. CLASSEMENT - [reprendre le paragraphe 3, sans qualification pénale].");
       L.push("");
-      L.push("3. MESURES DE CESSATION — [reprendre le A du paragraphe 4, avec les dates].");
+      L.push("3. MESURES DE CESSATION - [reprendre le A du paragraphe 4, avec les dates].");
       L.push("");
-      L.push("4. ACTES ACCOMPLIS — [reprendre le B, avec les formes suivies et les dates de");
+      L.push("4. ACTES ACCOMPLIS - [reprendre le B, avec les formes suivies et les dates de");
       L.push("   consignation au procès-verbal].");
       L.push("");
-      L.push("5. EXAMEN PROFESSIONNEL — les faits ont été soumis à [conseil] le [DATE].");
+      L.push("5. EXAMEN PROFESSIONNEL - les faits ont été soumis à [conseil] le [DATE].");
       L.push("   La présente note ne comporte aucune qualification : elle constate et elle");
       L.push("   date.");
       L.push("");
       L.push("Signature : " + signataire(ctx));
       L.push("");
-      L.push("  POURQUOI CETTE NOTE EST SIGNÉE ET DATÉE — parce que la date à laquelle");
+      L.push("  POURQUOI CETTE NOTE EST SIGNÉE ET DATÉE - parce que la date à laquelle");
       L.push("  l'employeur a su, et celle à laquelle il a agi, sont les deux seules choses");
       L.push("  qui distinguent celui qui a laissé faire de celui qui a corrigé.");
       L.push("");
@@ -4213,7 +4213,7 @@
         "datés plutôt qu'une inquiétude.",
       ]);
       papier(L, ctx, ["À l'attention de [conseil / avocat]", "[adresse]"]);
-      L.push("Objet : faits signalés concernant le comité social et économique — demande");
+      L.push("Objet : faits signalés concernant le comité social et économique - demande");
       L.push("d'examen");
       L.push("");
       L.push("Maître, [ou Madame, Monsieur,]");
@@ -4241,22 +4241,22 @@
       L.push("courriers cités.");
 
       calendrier(L, [
-        "Aujourd'hui, " + leJour(d0) + " — deux choses, et dans cet ordre : vous FAITES CESSER ce",
+        "Aujourd'hui, " + leJour(d0) + " - deux choses, et dans cet ordre : vous FAITES CESSER ce",
         "qui se poursuit, et vous DATEZ les faits. La cessation ne se planifie pas ; le",
         "relevé, si.",
         "",
-        "Le même jour — courrier 2 au conseil. L'entrave est pénale : plus tôt les faits",
+        "Le même jour - courrier 2 au conseil. L'entrave est pénale : plus tôt les faits",
         "lui parviennent datés, mieux ils seront appréciés.",
         "",
-        "Dans la semaine, soit avant le " + leJour(dans(d0, 7)) + " — l'acte omis est accompli dans",
+        "Dans la semaine, soit avant le " + leJour(dans(d0, 7)) + " - l'acte omis est accompli dans",
         "les formes qui lui sont propres. Une convocation, une communication, une",
         "consultation : chacune a sa forme, et c'est la forme qui régularise.",
         "",
-        "À la prochaine réunion du comité — les mesures sont consignées au procès-verbal",
+        "À la prochaine réunion du comité - les mesures sont consignées au procès-verbal",
         "(L. 2315-34) et le courrier 1 a été adressé. Sans cette consignation, la",
         "régularisation existe pour vous seul.",
         "",
-        "Dans les deux mois, soit avant le " + leJour(dans(d0, 61)) + " — vous reprenez le relevé et",
+        "Dans les deux mois, soit avant le " + leJour(dans(d0, 61)) + " - vous reprenez le relevé et",
         "vous vérifiez, fait par fait, que rien ne s'est reconstitué. Un fait qui",
         "réapparaît après régularisation ne se lit pas du tout comme un fait isolé.",
       ]);

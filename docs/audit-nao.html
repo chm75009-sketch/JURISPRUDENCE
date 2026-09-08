@@ -3,181 +3,104 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#1F3864">
+<meta name="theme-color" content="#16181d">
 <link rel="manifest" href="manifest-audit-nao.json">
 <link rel="apple-touch-icon" href="icons/icon-nao-180.png">
 <link rel="icon" href="icons/icon-nao-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Négociation annuelle</title>
+<link rel="stylesheet" href="style.css">
 <!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
      Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Voir docs/DROITS.md. -->
 <script src="droits.js"></script>
-<!-- LA NÉGOCIATION OBLIGATOIRE, EN SIX ÉTAPES — même parcours que l'audit
-     social, la BDESE, le comité et la discipline (voir docs/audit-bdese.html,
-     docs/audit-cse.html, docs/audit-discipline.html), avec le contenu propre
-     à ce module :
 
-       1. LA FICHE CLIENT — partagée avec toutes les pages (clé « profil-entreprise »).
+<!--
+  UNE QUESTION, DEUX RÉPONSES, ET DANS LES DEUX CAS UN DOCUMENT.
 
-       2. LE QUESTIONNAIRE DE L'EXISTANT — le déclencheur (section syndicale),
-          le régime (accord de méthode ou supplétif), les quatre négociations,
-          la conduite, la demande syndicale, l'égalité. Quatre valeurs sur
-          toute question fermée — oui, non, en cours, autre — et seules « oui »
-          et « non » concluent.
+  « Avez-vous engagé la négociation annuelle obligatoire ? » Non : la
+  convocation des organisations syndicales et le calendrier des négociations
+  sont déjà écrits au nom de l'entreprise, seuls à l'écran, et trois champs en
+  tête (la date, l'heure et le lieu de la première réunion) les complètent
+  frappe par frappe. Oui : la page passe la main à controler-nao.html, qui
+  prend le procès-verbal existant et rend, pour chaque manque, le paragraphe
+  à insérer.
 
-       3. LE RAPPORT GÉNÉRAL — celui que rend moteur/nao/audit-nao-client.js.
+  C'est l'écran 5 de la maquette validée le 8 septembre 2026 : les champs en
+  tête, la feuille, Télécharger en Word, Imprimer, « Voir le texte de loi »
+  replié, et Retour. Rien d'autre : ni chapeau, ni étape, ni exposé du droit
+  avant d'agir. Le questionnaire en six étapes et le rapport général qui
+  occupaient cette page ont été retirés le 8 septembre 2026.
 
-       4. LE GUIDE DE RÉGULARISATION — les contrôles non conformes ou à
-          vérifier, du plus grave au moins grave (moteur/nao/regularisation-nao.js).
+  CE QUE L'EFFECTIF COMMANDE. Deux négociations sont dues chaque année à
+  défaut d'accord de méthode : la rémunération et l'égalité professionnelle
+  (L. 2242-13, 1° et 2°). À partir de trois cents salariés s'y ajoutent, tous
+  les trois ans, la gestion des emplois et des parcours professionnels et les
+  salariés expérimentés (L. 2242-13, 3° et 4°) : la convocation et le
+  calendrier les portent seulement à cet effectif.
 
-       5. LA RÉGULARISATION, ÉLÉMENT PAR ÉLÉMENT — pour le contrôle choisi :
-          la note chiffrée sur le dossier (moteur/nao/modeles-nao.js), la
-          procédure, le document que l'application sait rédiger
-          (docs/documents-produits.js, docs/documents-nao.js), et la
-          déclaration « c'est fait ».
+  LES TEXTES. Chaque article cité a été demandé deux fois au relais Légifrance
+  le 8 septembre 2026, à plusieurs minutes d'intervalle, filtre par nom du
+  code ; les deux lectures ont rendu le même identifiant de version et le même
+  texte. L'identifiant LEGIARTI est dans la table TEXTES, à côté du numéro : un
+  article change sans changer de numéro, et seul l'identifiant dit lequel a
+  été lu.
 
-       6. LA VÉRIFICATION — les contrôles que l'audit tient pour conformes sur
-          votre seule déclaration (moteur/commun/parcours-deux-temps.js), plus
-          ceux que vous venez de déclarer régularisés à l'étape 5.
+  CE QUI RESTE ENTRE CROCHETS. Les organisations syndicales représentatives et
+  leurs délégués, que l'application ne connaît pas ; ce qui manque à la fiche.
+  Un crochet est un champ à remplir, jamais une affirmation.
 
-     CE QUI NE SE GÉNÉRALISE PAS TEL QUEL, ET C'EST ASSUMÉ :
+  Rien ne sort du poste : tout est calculé et rédigé dans le navigateur.
+-->
 
-     — LE VERROU DE LA SECTION SYNDICALE. Dans les autres modules, un seuil
-       d'effectif écarte UNE partie des contrôles (la BDESE d'une entreprise
-       de vingt salariés, par exemple) et laisse le reste à vérifier. Ici,
-       l'absence de section syndicale d'organisation représentative (L. 2242-1)
-       écarte TOUT le module d'un coup : aucune négociation n'est due, et le
-       guide de l'étape 4 n'a structurellement rien à montrer. La page le dit
-       explicitement dès l'étape 2 — le reste du questionnaire se masque — et
-       le répète à l'étape 4, plutôt que de laisser deviner un guide vide.
-
-     — LES CHAMPS COMPOSÉS. Chaque négociation (rémunération, égalité, gestion
-       des emplois, salariés expérimentés) porte plusieurs informations à la
-       fois — date d'engagement, issue, dépôt, thèmes traités — sur le modèle
-       déjà posé par le comité pour ses champs composés (protocole, expertise).
-
-     — LA LOI N'OBLIGE PAS À CONCLURE. Aucun contrôle ne devient « non
-       conforme » au seul motif qu'aucun accord n'a été signé — l'obligation
-       est de négocier loyalement, pas d'aboutir. Le rapport le rappelle, et
-       le contrôle d'exposition aux sanctions ne rend jamais « conforme » : le
-       montant des pénalités est fixé par l'administration, pas par ce module. -->
-<link rel="stylesheet" href="style.css">
 <style>
-  .presentation .etapes{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0;padding:0;list-style:none}
-  .presentation .etapes li{flex:1 1 200px;border-left:3px solid var(--bleu);padding:2px 0 2px 10px;
-    font-size:14px;color:var(--corps)}
-  .presentation .etapes b{display:block;color:var(--encre)}
+  /* Ce qui est propre à cette page. Tout le reste vient de style.css. */
 
-  .temps{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 6px}
-  .temps span{font:600 13px/1 system-ui;padding:8px 12px;border-radius:99px;
-    border:1px solid var(--filet);background:var(--surface);color:var(--gris)}
-  .temps span.actif{border-color:var(--bleu);background:var(--bleu);color:#fff}
-  .temps span.fait{border-color:var(--vert);color:var(--vert)}
-  textarea{min-height:72px;font:14px/1.5 inherit}
-  .aide-champ.nuance{color:var(--orange)}
-  @media (max-width:560px){
-    .barre{gap:8px;padding:10px 0}
-    .barre button{flex:1 1 46%;padding:11px 10px;font-size:14px}
-    .barre button:first-child{flex:1 1 100%}
-    .compteur{flex:1 1 100%;margin:2px 0 0;text-align:right}
-  }
+  /* La question d'entrée : elle occupe l'écran, et deux boutons y répondent. */
+  .question{max-width:720px;margin:11vh auto 0;text-align:center}
+  .question h1{font:600 clamp(24px,3.6vw,32px)/1.3 system-ui;margin:0 0 var(--e6)}
+  .question .deux{display:flex;gap:var(--e3);justify-content:center;flex-wrap:wrap}
+  .question .deux button{min-width:170px;font-size:17px;padding:16px 26px}
+  .question .fiche{margin:var(--e6) 0 0;font-size:var(--t3);color:var(--texte-2)}
 
-  .rubrique{margin:26px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
-    color:var(--bleu);font:600 15px/1.3 system-ui}
+  /* Le document seul à l'écran : trois champs en tête, la feuille, la barre. */
+  #ecran-doc{margin:var(--e4) 0 0}
+  #ecran-doc .champs{margin:0 0 var(--e4)}
+  #ecran-doc .barre{margin:var(--e4) 0}
+  #ecran-doc details{margin:var(--e2) 0 var(--e6)}
+  #sources{margin-top:8px;font-size:var(--t1);line-height:1.6;color:var(--texte-2)}
+  #sources div{margin:0 0 6px}
+  #sources b{color:var(--encre)}
 
-  .bandeau{padding:18px 20px;color:#fff;margin:14px 0 18px;border-radius:3px}
-  .bandeau .r{font:700 22px/1.15 system-ui;letter-spacing:.4px;margin:0 0 6px}
-  .bandeau .s{margin:0;font-size:15px}
-  .b-rouge{background:var(--rouge)} .b-orange{background:var(--orange)}
-  .b-vert{background:var(--vert)} .b-gris{background:var(--ardoise)}
-  .etape-r{margin:22px 0 8px;padding-bottom:4px;border-bottom:1.5px solid var(--bleu);
-    color:var(--bleu);font:600 15px/1.3 system-ui;display:flex;justify-content:space-between;gap:12px}
-  .etape-r span{font-weight:400;font-size:13px;color:var(--gris)}
-  .acte{border-left:4px solid var(--bleu);background:var(--surface);padding:10px 14px;margin:0 0 7px}
-  .acte .t{font-weight:600;color:var(--encre)}
-  .acte .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
-  .chip{font:600 11px/1 system-ui;color:#fff;padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
-  .c-bloquant{background:var(--rouge)}.c-critique{background:var(--orange)}
-  .c-important{background:var(--bleu)}.c-information{background:#767676}
-  .a-bloquant{border-left-color:var(--rouge);background:var(--rouge-f)}
-  .a-critique{border-left-color:var(--orange);background:var(--orange-f)}
-  .a-information{border-left-color:#767676;background:var(--gris-f)}
-  .interdit{border:1px solid var(--rouge);background:var(--rouge-f);padding:12px 14px;margin:0 0 8px;border-radius:3px}
-  .interdit .t{font-weight:700;color:var(--rouge)}
-  .interdit .w{font-size:13.5px;color:var(--gris);margin:4px 0 0}
-  .acquis{margin:0 0 4px;padding-left:20px;text-indent:-20px;font-size:15px}
-  .acquis b{color:var(--vert)}
-  .puce{margin:0 0 4px 18px;text-indent:-18px}
-
-  .action{border:1px solid var(--filet);border-left:4px solid var(--rouge);background:var(--surface);
-    padding:14px 16px;margin:0 0 12px;border-radius:0 3px 3px 0}
-  .action.verifier{border-left-color:var(--orange)}
-  .action .t{font-weight:700;color:var(--encre)}
-  .action .quoi{margin:6px 0 0;font-size:14.5px}
-  .action .meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:13px;color:var(--gris)}
-  .action .meta b{color:var(--corps)}
-  .action ol{margin:8px 0 0;padding-left:22px;font-size:14px}
-  .action ol li{margin:0 0 4px}
-  .action .risque{font-size:13.5px;color:var(--rouge);margin:8px 0 0}
-  .action.verifier .risque{color:var(--orange)}
-  .prio{font:600 11px/1 system-ui;color:#fff;background:var(--ardoise);padding:3px 7px;border-radius:2px;margin-left:8px;white-space:nowrap}
-  .p-1{background:var(--rouge)} .p-2{background:var(--orange)} .p-3{background:var(--ardoise)} .p-4{background:#767676}
-  details.modele{margin:10px 0 0;border:1px dashed var(--bleu);border-radius:3px;background:#eef1f7}
-  details.modele summary{cursor:pointer;font:600 13.5px/1.3 system-ui;color:var(--bleu);padding:9px 12px}
-  details.modele .corps{padding:0 14px 14px}
-
-  .produit{margin:12px 0;padding:13px 15px;border:1px solid var(--bleu);border-radius:3px;background:#eef1f7}
-  .produit .sh{font-weight:600;color:var(--bleu);margin:0 0 4px}
-  .produit .w{margin:0 0 10px;font-size:13.5px;color:var(--corps)}
-
-  .coches{display:flex;gap:14px;margin:10px 0 0;flex-wrap:wrap;font-size:14px}
-  .coches label{display:flex;align-items:center;gap:6px;width:auto;cursor:pointer;
-    border:1px solid var(--filet);border-radius:99px;padding:6px 14px;background:var(--gris-f)}
-  .coches input{width:auto;margin:0}
-  .coches label:has(input:checked){border-color:var(--bleu);background:#eef1f7;color:var(--encre);font-weight:600}
-
-  .sous-objet{grid-column:1/-1;border:1px solid var(--filet);background:var(--gris-f);
-    border-radius:3px;padding:12px 14px}
-  .sous-objet>.nom{margin:0 0 8px;font-size:14px;color:var(--encre)}
-  .sous-objet .grille{gap:10px 16px}
-
-  .verif-bloc{border:1px solid var(--filet);background:var(--surface);border-radius:3px;padding:12px 14px;margin:0 0 10px}
-  .verif-bloc .t{font-weight:600;color:var(--encre);margin:0 0 8px}
-  .verif-q{margin:0 0 10px}
-  .verif-q p{margin:0 0 4px;font-size:13.5px}
-  .verif-q .attendu{color:var(--gris);font-size:12px}
-  .verif-q select{margin-top:4px}
-  .verif-q input.detail{margin-top:5px}
-  .verdict{border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.5;margin:8px 0 0}
-  .verdict b{display:block;margin-bottom:2px}
-  .v-val{background:var(--vert-f);color:#1c5e36}
-  .v-ref{background:var(--rouge-f);color:#8E1B1B}
-  .v-att{background:var(--orange-f);color:#9C5A05}
-
-  #message{display:none;margin:10px 0 0;padding:10px 12px;border-radius:3px;
-    border:1px solid var(--bleu);background:#eef1f7;color:var(--bleu);font-size:14px}
+  /* La feuille : le document tel qu'il sortira sur le papier. */
+  .feuille [contenteditable]{outline:none}
+  .feuille [contenteditable]:focus{background:#fffbe9;border-radius:3px}
+  .feuille .modifie{border-left:2px solid var(--vert);padding-left:8px;margin-left:-10px}
+  .feuille .b-t1{font:700 18px/1.35 system-ui;margin:0 0 6px;text-align:center}
+  .feuille .b-st{font:600 13.5px/1.4 system-ui;margin:0 0 22px;text-align:center;color:var(--texte-2)}
+  .feuille .b-h1{font:700 15px/1.35 system-ui;margin:20px 0 7px}
+  .feuille .b-h2{font:600 14px/1.35 system-ui;margin:15px 0 5px}
+  .feuille .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.68}
+  .feuille .b-puce{margin:0 0 5px 18px;font-size:14.5px;line-height:1.6}
+  /* Une note de marge s'adresse à l'employeur : elle ne part pas dans le
+     fichier emporté, elle doit donc se voir comme telle. */
+  .feuille .b-note{margin:9px 0 12px;padding:0 0 0 10px;border-left:2px dashed var(--filet-2);
+    font-size:12.5px;font-style:italic;line-height:1.55;color:var(--texte-3)}
+  .feuille .b-vide{height:9px}
+  .feuille .b-trait{border:0;border-top:1px solid var(--filet);margin:20px 0}
+  /* Le second document commence sur une nouvelle page à l'impression. */
+  .feuille .b-saut{border:0;border-top:2px dashed var(--filet-2);margin:34px 0}
+  .feuille .b-sign{margin:20px 0 0;font-size:14.5px;white-space:pre-wrap;line-height:1.7}
 
   @media print{
-    .retour-barre,.presentation,.temps,.barre,#message,form,header a,footer,
-    .coches,details.modele summary,.produit button,.no-print{display:none !important}
-    details.modele{border:none} details.modele .corps{border-top:none;padding:8px 0}
-    details.modele[open] .corps{display:block}
-    .page{padding:0}
-    body.print-liste #bloc-general,body.print-liste #bloc-guide,body.print-liste #bloc-item{display:none !important}
-    body.print-general #bloc-liste,body.print-general #bloc-guide,body.print-general #bloc-item{display:none !important}
-    body.print-guide #bloc-liste,body.print-guide #bloc-general,body.print-guide #bloc-item{display:none !important}
-    body.print-item #bloc-liste,body.print-item #bloc-general,body.print-item #bloc-guide{display:none !important}
-    body.print-existant #bloc-liste,body.print-existant #bloc-general,body.print-existant #bloc-guide,body.print-existant #bloc-item{display:none !important}
+    .champs,.barre,details,.b-note,.question{display:none !important}
+    .feuille .b-saut{border:0;margin:0;break-before:page}
   }
-
-  #dlg-texte{max-width:80ch;width:92vw;border:1px solid var(--filet);border-radius:6px;padding:16px 18px}
-  #dlg-texte .dt-barre{display:flex;gap:8px;margin:0 0 12px}
-  #dlg-texte pre{white-space:pre-wrap;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
-    margin:0;max-height:70vh;overflow:auto}</style>
+</style>
 </head>
 <body>
+
 <header class="site">
   <div class="wrap">
     <p class="marque">Négociation annuelle</p>
@@ -187,1135 +110,477 @@
   </div>
 </header>
 
-<div class="page">
+<main class="wrap">
 
-<div class="retour-barre">
-  <button type="button" id="btn-retour" class="retour">← Retour</button>
-  <span class="retour-ou"><a href="./">accueil</a> · <a href="audit.html">licenciement</a>
-  · <a href="audit-social.html">audit social</a> · <a href="audit-cse.html">comité</a>
-  · <a href="audit-bdese.html">base de données</a> · <a href="audit-pse.html">plan de sauvegarde</a>
-  · <a href="audit-discipline.html">discipline et règlement intérieur</a>
-  · <a href="audit-sst.html">santé-sécurité (SST)</a>
-  · <a href="agenda.html">agenda</a> · <a href="documents.html">documents</a> · <a href="guides.html">guides</a></span>
-</div>
+  <!-- ═══════════════════ LA QUESTION D'ENTRÉE ═══════════════════ -->
+  <section class="question" id="ecran-question">
+    <h1>Avez-vous engagé la négociation annuelle obligatoire ?</h1>
+    <div class="deux">
+      <button type="button" class="second" id="rep-oui">Oui</button>
+      <button type="button" id="rep-non">Non</button>
+    </div>
+    <p class="fiche" id="fiche-rappel"></p>
+  </section>
 
-<header>
-  <p class="fil">Application Jurisprudence</p>
-  <h1>Audit — négociation obligatoire (NAO)</h1>
-  <p class="chapo"><b>Cette application vérifie vos négociations obligatoires point par point</b> —
-  ce qui est dû et tous les combien (rémunération, égalité professionnelle, gestion des emplois,
-  salariés expérimentés), la loyauté de la conduite, l'issue et son dépôt, et ce à quoi l'entreprise
-  s'expose quand une négociation manque. Vous répondez au questionnaire : <b>le manquant reçoit un
-  guide de régularisation</b> priorisé, avec pour chaque point une note chiffrée sur votre dossier,
-  la procédure, et le document que l'application rédige elle-même.<br>
-  L'audit se calcule dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs que sur ce
-  poste. <button type="button" class="lien-avert" id="btn-avert">Avertissement d'usage</button></p>
-</header>
+  <!-- ═══════ LE « NON » : LA CONVOCATION ET LE CALENDRIER, SEULS À L'ÉCRAN ═══════ -->
+  <section id="ecran-doc" hidden>
+    <form class="champs" id="champs" autocomplete="off" onsubmit="return false">
+      <label class="ch"><span class="nom">Première réunion le</span>
+        <input type="date" id="c-date"></label>
+      <label class="ch"><span class="nom">Heure</span>
+        <input type="text" id="c-heure" value="9 h 30"></label>
+      <label class="ch"><span class="nom">Lieu</span>
+        <input type="text" id="c-lieu" placeholder="Salle, adresse"></label>
+    </form>
 
-<div class="presentation">
-  <h2>Le parcours, en six étapes</h2>
-  <p>La question qui commande tout n'est pas « quand ai-je négocié ? » mais « ai-je une section
-  syndicale, et un accord de méthode tenu ? ». Votre avancement est enregistré sur ce poste : vous
-  reprenez où vous vous êtes arrêté.</p>
-  <ul class="etapes">
-    <li><b>1. La fiche client</b> — dénomination, effectif, secteur. Partagée avec les autres pages
-    de l'application.</li>
-    <li><b>2. Le questionnaire de l'existant</b> — le déclencheur, le régime, les quatre négociations,
-    la conduite, la demande syndicale, l'égalité.</li>
-    <li><b>3. Le rapport général</b> — chaque exigence confrontée aux textes, et ce à quoi
-    l'employeur s'expose.</li>
-    <li><b>4. Le guide de régularisation</b> — les contrôles non conformes ou à vérifier, du plus
-    grave au moins grave.</li>
-    <li><b>5. La régularisation, élément par élément</b> — la note chiffrée sur votre dossier, la
-    procédure, le document produit, et la case « c'est fait ».</li>
-    <li><b>6. La vérification de ce qui est déclaré</b> — les contrôles tenus pour conformes sur
-    votre seule déclaration, contrôlés pièce par pièce.</li>
-  </ul>
-  <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne conduit pas la négociation, ne
-  rédige pas le contenu des accords et ne dépose rien à votre place. <b>Elle ne juge pas ce qui a
-  été signé</b> : la loi oblige à négocier, pas à conclure — l'échec loyal se constate par un
-  procès-verbal de désaccord, déposé. Le contrôle de l'exposition aux sanctions ne rend jamais
-  « conforme » : le montant en est fixé par l'administration selon les efforts constatés.
-  <b>Une réponse « en cours » ou « autre » ne conclut rien</b> : l'audit la traite comme une donnée
-  manquante.</p>
-</div>
+    <div id="doc"></div>
 
-<div class="temps" id="fil-temps" role="navigation" aria-label="Les six étapes de l'audit">
-  <span data-t="1" class="actif">1 · Fiche client</span>
-  <span data-t="2">2 · Questionnaire de l'existant</span>
-  <span data-t="3">3 · Rapport général</span>
-  <span data-t="4">4 · Guide de régularisation</span>
-  <span data-t="5">5 · Régulariser, élément par élément</span>
-  <span data-t="6">6 · Vérification de ce qui est déclaré</span>
-</div>
+    <div class="barre pile">
+      <button type="button" id="btn-word">Télécharger en Word</button>
+      <button type="button" class="second" id="btn-imprimer">Imprimer</button>
+    </div>
 
-<h2 id="t1">1. La fiche client</h2>
-<p class="aide">L'entreprise auditée. Cette fiche est partagée avec les parcours guidés, le générateur de
-documents et les huit audits détaillés — renseignée ici, elle est reprise partout. Elle ne quitte pas ce
-poste.</p>
-<div id="fiche-client"></div>
+    <details>
+      <summary>Voir le texte de loi</summary>
+      <div id="sources"></div>
+    </details>
+  </section>
 
-<h3 id="t1b">Ce qui complète la fiche</h3>
-<p class="aide">La date à laquelle votre situation est décrite. Le reste des questions — section
-syndicale, accord de méthode, négociations menées — se pose à l'étape 2.</p>
-<form id="formulaire-fiche" autocomplete="off"></form>
+</main>
 
-<div class="barre">
-  <button type="button" id="generer">Étape 2 : ouvrir le questionnaire de l'existant</button>
-  <button type="button" class="second" id="exemple">Charger un dossier d'exemple</button>
-  <button type="button" class="second" id="vider">Tout effacer</button>
-  <span class="compteur" id="compteur"></span>
-</div>
-<p id="message" role="status"></p>
-
-<div id="bloc-liste" style="display:none">
-  <h2 id="t2">2. Le questionnaire de l'existant <span class="note" id="liste-date"></span></h2>
-  <p class="aide">La section syndicale d'abord — son absence dispense de tout le reste — puis le
-  régime, les quatre négociations, la conduite, la demande syndicale et l'égalité. Quatre réponses
-  possibles aux questions fermées : <b>oui</b> et <b>non</b> concluent ; <b>en cours</b> et
-  <b>autre</b> décrivent votre situation sans rien conclure.</p>
-  <p id="verrou-nao" class="enc" style="display:none">
-    <span class="sh">Sans section syndicale, rien n'est dû</span>
-    Vous avez répondu « non » à la première question. L. 2242-1 réserve les négociations
-    obligatoires aux entreprises où une ou plusieurs sections syndicales d'organisations
-    représentatives sont constituées : le reste du questionnaire est donc sans objet, et se masque.
-    Répondez « oui » si votre situation change.
-  </p>
-  <form id="formulaire" autocomplete="off"></form>
-  <div class="barre no-print">
-    <button type="button" id="vers-general">Étape 3 : voir le rapport général</button>
-    <button type="button" class="second" id="imprimer-liste">Imprimer le questionnaire</button>
-    <span class="compteur" id="compteur-questionnaire"></span>
-  </div>
-</div>
-
-<div id="bloc-general" style="display:none">
-  <h2 id="t3">3. Le rapport général de l'audit</h2>
-  <p class="aide">Chaque exigence confrontée aux textes lus à la source, et ce à quoi l'employeur
-  s'expose. Ce rapport se recalcule à chaque étape : il tiendra compte de ce que vous régulariserez
-  à l'étape 5 et de ce que vous vérifierez à l'étape 6.</p>
-  <div id="rapport-general"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-guide">Étape 4 : ouvrir le guide de régularisation</button>
-    <button type="button" class="second" id="imprimer-general">Imprimer le rapport général</button>
-  </div>
-</div>
-
-<div id="bloc-guide" style="display:none">
-  <h2 id="t4">4. Le guide de régularisation</h2>
-  <p class="aide">Les contrôles non conformes ou à vérifier, du plus grave au moins grave. Chaque
-  point dit l'acte à accomplir, ce qu'on risque à ne pas le faire, et ouvre sa note chiffrée et sa
-  procédure à l'étape 5.</p>
-  <div id="guide"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-item">Étape 5 : régulariser élément par élément</button>
-    <button type="button" class="second" id="imprimer-guide">Imprimer le guide</button>
-  </div>
-</div>
-
-<div id="bloc-item" style="display:none">
-  <h2 id="t5">5. Régulariser, élément par élément</h2>
-  <p class="aide">Choisissez un contrôle du guide. Vous obtenez la <b>note chiffrée sur votre
-  dossier</b> — établie sur les valeurs saisies à l'étape 2, jamais sur un exemple figé —, la
-  <b>procédure</b> jusqu'à la validation, le <b>document</b> que l'application sait rédiger, et la
-  grille de vérification. Quand c'est fait, dites-le : l'étape 6 le reprendra.</p>
-  <div class="grille" style="margin:0 0 16px">
-    <label><span class="nom">Le contrôle à régulariser</span>
-      <select id="choix-item"></select>
-      <span class="aide-champ">La liste reprend le guide de l'étape 4.</span></label>
-  </div>
-  <div id="fiche-item"></div>
-  <div class="barre no-print">
-    <button type="button" id="vers-existant">Étape 6 : vérifier ce qui est déclaré</button>
-    <button type="button" class="second" id="imprimer-item">Imprimer cette fiche de régularisation</button>
-  </div>
-</div>
-
-<div id="bloc-existant" style="display:none">
-  <h2 id="t6">6. La vérification de ce qui est déclaré</h2>
-  <p class="aide">Les contrôles que l'audit tient pour conformes sur votre seule déclaration à
-  l'étape 2, et ceux que vous venez de déclarer régularisés à l'étape 5. <b>Cocher n'est pas
-  prouver</b> : une case cochée sans détail vérifiable rend « ne conclut pas », jamais « en règle »
-  — et un point refusé retourne au guide de l'étape 4.</p>
-  <div id="verifs"></div>
-  <div class="barre no-print">
-    <button type="button" id="controler">Produire le rapport de régularisation</button>
-    <button type="button" class="second" id="imprimer-existant">Imprimer le rapport de régularisation</button>
-  </div>
-  <div id="rapport-existant"></div>
-</div>
-
-<footer id="pied"></footer>
-</div>
-
-<dialog id="dlg-avertissement" style="max-width:64ch;border:1px solid #d8dbe0;border-radius:12px;padding:22px 24px;font:15px/1.55 system-ui;color:#1c2126">
-  <h2 style="margin:0 0 12px;font:600 19px/1.3 system-ui">Avertissement d'usage</h2>
-  <p style="margin:0 0 10px">Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un
-  avocat, ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
-  <p style="margin:0 0 10px">Ce module ne conduit pas la négociation et ne juge pas ce qui a été signé : la
-  loi oblige à négocier, pas à conclure. Le contrôle de l'exposition aux sanctions ne rend jamais « conforme » :
-  le montant des pénalités est fixé par l'administration selon les efforts constatés.</p>
-  <form method="dialog" style="margin:14px 0 0;text-align:right">
-    <button style="font:600 14px/1 system-ui;padding:9px 16px;border:1px solid #1F3864;background:#1F3864;color:#fff;border-radius:6px;cursor:pointer">Fermer</button>
-  </form>
-</dialog>
-
-<dialog id="dlg-texte">
-  <div class="dt-barre">
-    <button type="button" id="dt-copier">Copier le texte</button>
-    <button type="button" id="dt-imprimer" class="second">Imprimer</button>
-    <button type="button" id="dt-fermer" class="second">Fermer</button>
-  </div>
-  <pre id="dt-corps"></pre>
-</dialog>
-
-<script src="moteur-nao.js"></script>
-<script src="idcc.js"></script>
+<script src="audit-export.js"></script>
 <script src="profil.js"></script>
-<script src="parcours-lien.js"></script>
-<script src="documents-produits.js"></script>
-<script src="documents-nao.js"></script>
 <script>
 (function () {
   "use strict";
-  var MOTEUR = window.MoteurNAO;
-  var AUD = MOTEUR.audit;
-  var CTRL = MOTEUR.controles;
-  var CHAMPS = MOTEUR.champs || [];
-  var PROPOS = MOTEUR.propositions || {};
-  var MOT = MOTEUR.moteur || {};
-  var P = window.Profil;
-  var CLE = "audit-nao-brouillon";
-  var $ = function (id) { return document.getElementById(id); };
-  document.getElementById("fil-temps").addEventListener("click", function (e) {
-    var el = e.target.closest("span[data-t]");
-    if (!el || el.style.cursor !== "pointer") return;
-    var n = Number(el.getAttribute("data-t"));
-    var cible = document.getElementById("t" + n);
-    if (cible) cible.scrollIntoView({ behavior: "smooth" });
-  });
-  var AUJOURDHUI = new Date().toISOString().slice(0, 10);
 
-  var e = function (s) { return String(s == null ? "" : s)
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  var $ = function (s) { return document.querySelector(s); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
 
-  /* ------------------------------------------------------------ l'état ---
-     Même convention que la BDESE, le comité et la discipline : `dossier` et
-     `nuances` séparent ce qui conclut de ce qui ne conclut pas ; `faits`
-     garde ce qui est déclaré régularisé à l'étape 5 ; `controles` garde les
-     réponses aux grilles de vérification (étapes 5 et 6). À la différence de
-     la discipline, `dossier` porte des valeurs typées (booléens, nombres,
-     objets imbriqués) plutôt que des chaînes « oui »/« non » : c'est la
-     forme qu'attendent les champs composés de ce module (négociations,
-     accord de méthode), sur le modèle déjà posé par le comité. */
-  var etatVide = function () {
-    return { dossier: {}, nuances: {}, faits: {}, controles: {}, etape: 1 };
+  /* ═══════════════════════════════════════════════════════════════════════
+     LES TEXTES.
+
+     Chacun a été demandé deux fois au relais Légifrance le 8 septembre 2026,
+     à plusieurs minutes d'intervalle, filtre par nom du code ; les deux
+     lectures ont rendu le même identifiant et le même texte. La colonne
+     « dit » ne reprend que ce qui sert à la rédaction, dans les mots de
+     l'article.
+     ══════════════════════════════════════════════════════════════════════ */
+  var TEXTES = {
+    "L2242-1": { id: "LEGIARTI000043893962",
+      dit: "dans les entreprises où sont constituées une ou plusieurs sections syndicales d'organisations représentatives, l'employeur engage au moins une fois tous les quatre ans une négociation sur la rémunération, notamment les salaires effectifs, le temps de travail et le partage de la valeur ajoutée, et une négociation sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail" },
+    "L2242-2": { id: "LEGIARTI000036262221",
+      dit: "dans les entreprises et les groupes d'au moins trois cents salariés, l'employeur engage en plus, au moins une fois tous les quatre ans, une négociation sur la gestion des emplois et des parcours professionnels" },
+    "L2242-2-1": { id: "LEGIARTI000052432470",
+      dit: "dans les entreprises et les groupes d'au moins trois cents salariés où une section syndicale représentative est constituée, l'employeur engage en plus, au moins une fois tous les quatre ans, une négociation sur l'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés, en considération de leur âge" },
+    "L2242-5": { id: "LEGIARTI000035627862",
+      dit: "si, au terme de la négociation, aucun accord n'a été conclu, il est établi un procès-verbal de désaccord consignant, en leur dernier état, les propositions respectives des parties et les mesures que l'employeur entend appliquer unilatéralement ; ce procès-verbal donne lieu à dépôt, à l'initiative de la partie la plus diligente" },
+    "L2242-6": { id: "LEGIARTI000035627858",
+      dit: "l'engagement sérieux et loyal des négociations implique que l'employeur ait convoqué à la négociation les organisations syndicales représentatives dans l'entreprise et fixé le lieu et le calendrier des réunions ; il doit également leur avoir communiqué les informations nécessaires pour négocier en toute connaissance de cause et avoir répondu de manière motivée aux éventuelles propositions des organisations syndicales" },
+    "L2242-11": { id: "LEGIARTI000052437060",
+      dit: "l'accord de méthode précise les thèmes des négociations et leur périodicité, de telle sorte qu'au moins tous les quatre ans soient négociés les thèmes des 1° et 2° de l'article L. 2242-1 et des articles L. 2242-2 et L. 2242-2-1, le contenu de chacun des thèmes, le calendrier et les lieux des réunions, les informations remises aux négociateurs et la date de cette remise, et les modalités de suivi des engagements ; sa durée ne peut excéder quatre ans" },
+    "L2242-13": { id: "LEGIARTI000052437044",
+      dit: "à défaut d'accord de méthode, l'employeur engage chaque année la négociation sur la rémunération, le temps de travail et le partage de la valeur ajoutée (1°) et la négociation sur l'égalité professionnelle et la qualité de vie et des conditions de travail (2°), et, tous les trois ans dans les entreprises d'au moins trois cents salariés, la négociation sur la gestion des emplois et des parcours professionnels (3°) et celle sur les salariés expérimentés (4°) ; à défaut d'initiative de l'employeur depuis plus de douze mois (trente-six pour la négociation triennale), la négociation s'engage obligatoirement à la demande d'une organisation syndicale représentative ; la demande est transmise dans les huit jours aux autres organisations représentatives, et l'employeur convoque les parties dans les quinze jours qui suivent la demande" },
+    "L2242-14": { id: "LEGIARTI000035627802",
+      dit: "lors de la première réunion sont précisés le lieu et le calendrier de la ou des réunions, et les informations que l'employeur remettra aux délégués syndicaux et aux salariés composant la délégation sur les thèmes prévus par la négociation qui s'engage, et la date de cette remise" },
+    "L2242-15": { id: "LEGIARTI000038837123",
+      dit: "la négociation annuelle sur la rémunération porte sur les salaires effectifs ; la durée effective et l'organisation du temps de travail, notamment la mise en place du travail à temps partiel ; l'intéressement, la participation et l'épargne salariale, à défaut d'accord ou de plan en vigueur ; le suivi de la mise en œuvre des mesures visant à supprimer les écarts de rémunération et les différences de déroulement de carrière entre les femmes et les hommes" },
+    "L2242-17": { id: "LEGIARTI000043893940",
+      dit: "la négociation annuelle sur l'égalité professionnelle et la qualité de vie et des conditions de travail porte sur l'articulation entre la vie personnelle et la vie professionnelle ; les objectifs et les mesures permettant d'atteindre l'égalité professionnelle, en s'appuyant sur les données du 2° de l'article L. 2312-36 ; la lutte contre les discriminations ; l'insertion et le maintien dans l'emploi des travailleurs handicapés ; la prévoyance et les remboursements complémentaires de frais de santé, à défaut de couverture ; le droit d'expression directe et collective ; le droit à la déconnexion ; et, dans les entreprises de l'article L. 2143-3 dont cinquante salariés au moins sont employés sur un même site, la mobilité entre le domicile et le lieu de travail" },
+    "L2242-20": { id: "LEGIARTI000043975202",
+      dit: "dans les entreprises d'au moins trois cents salariés, la négociation triennale sur la gestion des emplois et des parcours professionnels et sur la mixité des métiers porte sur un dispositif de gestion prévisionnelle des emplois et des compétences et ses mesures d'accompagnement ; le cas échéant, les conditions de la mobilité interne ; les grandes orientations à trois ans de la formation et les objectifs du plan de développement des compétences ; les perspectives de recours aux différents contrats de travail, au temps partiel et aux stages ; l'information des entreprises sous-traitantes ; le déroulement de carrière des salariés exerçant des responsabilités syndicales" },
+    "L2243-1": { id: "LEGIARTI000031086617",
+      dit: "le fait de se soustraire aux obligations prévues à l'article L. 2242-1, relatives à la convocation des parties à la négociation et à l'obligation périodique de négocier, est puni d'un emprisonnement d'un an et d'une amende de 3 750 euros" }
   };
-  /* La bascule : quel « non » emmène vers quelle procédure. Le nom du champ
-     est celui du questionnaire du moteur (moteur/nao/questionnaire-nao.js). */
-  var BASCULES = { negosEngagees: { p: "nao" } };
-
-  var ETAT = etatVide();
-  try {
-    var lu = JSON.parse(localStorage.getItem(CLE) || "null");
-    if (lu && lu.dossier && lu.etape) ETAT = lu;
-  } catch (err) {}
-  if (!ETAT.dossier) ETAT.dossier = {};
-  if (!ETAT.nuances) ETAT.nuances = {};
-  if (!ETAT.faits) ETAT.faits = {};
-  if (!ETAT.controles) ETAT.controles = {};
-  if (!ETAT.etape) ETAT.etape = 1;
-  function enregistrer() { try { localStorage.setItem(CLE, JSON.stringify(ETAT)); } catch (err) {} }
-
-  var VALEURS = (P && P.VALEURS) || ["oui", "non", "en cours", "autre"];
-  var conclut = (P && P.conclut) || function (v) { return v === "oui" || v === "non"; };
-  var REPONSES_GRILLE = ["oui", "non", "en cours", "je ne sais pas", "autre"];
-  function grilleConclut(v) { return v === "oui" || v === "non"; }
-  function dit(x) { return x === true || x === "oui"; }
-  function nie(x) { return x === false || x === "non"; }
-
-  /* ------------------------------------------------------ chemins pointés --- */
-  function getPath(obj, chemin) {
-    var parts = String(chemin).split("."), o = obj;
-    for (var i = 0; i < parts.length; i++) { if (o == null) return undefined; o = o[parts[i]]; }
-    return o;
-  }
-  function assignPath(obj, chemin, val) {
-    var parts = String(chemin).split("."), o = obj;
-    for (var i = 0; i < parts.length - 1; i++) { o[parts[i]] = o[parts[i]] || {}; o = o[parts[i]]; }
-    o[parts[parts.length - 1]] = val;
-  }
-  function valeurAvecNuance(chemin) {
-    var v = getPath(ETAT.dossier, chemin);
-    return v !== undefined ? v : ETAT.nuances[chemin];
+  /* « L2242-1 » s'écrit « L. 2242-1 » dans un document. */
+  function ref(nums) {
+    return nums.map(function (n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }).join(", ");
   }
 
-  /* Les deux champs que la fiche partagée porte déjà : ils ne sont pas
-     redemandés à l'étape 2. `dateAudit` reste une question propre au module,
-     répétée en tête (étape 1) et dans la rubrique « Identité » (étape 2) —
-     même convention que la discipline. */
-  var DEPUIS_FICHE = { entreprise: true, effectif: true };
+  /* ═════════════════════════════════════════════ le profil de l'entreprise */
+  var profil = null;
+  try { profil = JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) {}
+  if ((!profil || !profil.denomination) && window.Profil) profil = window.Profil.lire();
+  if (!profil) profil = {};
 
-  function construireF() {
-    var p = P ? P.lire() : {};
-    var f = JSON.parse(JSON.stringify(ETAT.dossier));
-    f.entreprise = p.denomination || "";
-    if (p.effectif !== undefined && p.effectif !== null && String(p.effectif).trim() !== "" && isFinite(+p.effectif))
-      f.effectif = Number(p.effectif);
-    return f;
+  function nomSociete() { return profil.denomination || "[dénomination de l'entreprise]"; }
+  function adresse() { return profil.adresse || "[adresse du siège]"; }
+  function signataire() { return profil.responsable || "[nom et qualité du signataire]"; }
+  function ville() {
+    var m = String(profil.adresse || "").match(/\d{5}\s+(.+)$/);
+    return m ? m[1].trim() : "[ville]";
+  }
+  function effectif() {
+    var n = Number(profil.effectif);
+    return isFinite(n) && n > 0 ? n : null;
+  }
+  /* Les deux négociations triennales ne sont dues qu'à partir de trois cents
+     salariés (L. 2242-2, L. 2242-2-1, L. 2242-13, 3° et 4°). */
+  function troisCents() { var n = effectif(); return n !== null && n >= 300; }
+
+  /* ═══════════════════════════════════════════════════════ dates et calculs */
+  function jour(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+  /* Le même quantième, n mois plus tard ; à défaut, le dernier jour du mois. */
+  function plusMois(d, n) {
+    var x = new Date(d.getTime()), voulu = x.getDate();
+    x.setMonth(x.getMonth() + n);
+    if (x.getDate() < voulu) x.setDate(0);
+    return x;
+  }
+  /* Un samedi ou un dimanche recule au lundi : on ne convoque pas un dimanche. */
+  function ouvre(d) {
+    var x = new Date(d.getTime());
+    while (x.getDay() === 0 || x.getDay() === 6) x = jour(x, 1);
+    return x;
+  }
+  function iso(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+  function lireDate(id) {
+    var el = $(id); if (!el || !el.value) return null;
+    var p = el.value.split("-");
+    return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  }
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
+    "septembre", "octobre", "novembre", "décembre"];
+  var JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+  function dateFr(d) {
+    if (!d) return "[date]";
+    return (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
+  }
+  function dateLongue(d) {
+    if (!d) return "[date]";
+    return JOURS[d.getDay()] + " " + dateFr(d);
   }
 
-  /* ----------------------------------------------------- 1. fiche client --- */
-  function construireFiche() {
-    if (!P) { $("fiche-client").innerHTML =
-      '<p class="aide">La fiche client n\'a pas pu être chargée (profil.js).</p>'; return; }
-    P.rendre($("fiche-client"), {
-      prefixe: "fc",
-      legende: "Fiche client — l'entreprise auditée",
-      aide: "Ces données restent dans ce navigateur. Elles orientent l'audit et pré-remplissent les rapports et les documents produits.",
-      onChange: function () {
-        enregistrer(); majCompteur();
-        if (ETAT.etape >= 2) majVisibiliteQuestionnaire();
-      },
+  /* ═══════════════════════════════════════════════════════════════════════
+     LE RENDU.
+
+     Un document est une liste de blocs. Chaque bloc devient une ligne
+     modifiable à l'écran et repart telle quelle dans le .docx. Quand les
+     champs changent, tout est réécrit, sauf les blocs corrigés à la main : la
+     correction est retenue sur une empreinte du texte d'origine, pas sur la
+     place du bloc.
+     ══════════════════════════════════════════════════════════════════════ */
+  var corrections = {};
+  function empreinte(s) {
+    var h = 5381;
+    for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return "b" + (h >>> 0).toString(36);
+  }
+  function feuilleHtml(blocs) {
+    var h = '<div class="feuille" id="feuille">';
+    blocs.forEach(function (b) {
+      if (b.k === "trait") { h += '<hr class="b-trait">'; return; }
+      if (b.k === "saut") { h += '<hr class="b-saut">'; return; }
+      if (b.k === "vide") { h += '<div class="b-vide"></div>'; return; }
+      var cle = empreinte(b.t);
+      var texte = Object.prototype.hasOwnProperty.call(corrections, cle) ? corrections[cle] : b.t;
+      h += '<div class="b-' + b.k + (texte !== b.t ? " modifie" : "") +
+        '" contenteditable="true" data-k="' + b.k + '" data-o="' + cle + '">' +
+        ech(texte) + "</div>";
     });
+    return h + "</div>";
   }
-
-  function construireFormulaireFiche() {
-    var html = '<fieldset><legend>La date de votre situation</legend><div class="grille">' +
-      '<label><span class="nom">Date à laquelle la situation est décrite</span>' +
-      '<input name="dateAudit" type="date" value="' + e(ETAT.dossier.dateAudit || "") + '">' +
-      '<span class="aide-champ">Sert de référence aux délais calculés par le rapport (étape 3).</span></label>' +
-      "</div></fieldset>";
-    $("formulaire-fiche").innerHTML = html;
-    $("formulaire-fiche").addEventListener("change", function (ev) {
-      ETAT.dossier[ev.target.name] = ev.target.value;
-      enregistrer(); majCompteur();
-      if (ETAT.etape >= 2) majVisibiliteQuestionnaire();
-    });
+  function texteDe(el) {
+    var t = el.innerText !== undefined && el.innerText !== null ? el.innerText : el.textContent;
+    return String(t).replace(/ /g, " ");
   }
-
-  /* ------------------------------------------------ 2. le questionnaire --- */
-  function boolVersOuiNon(v) {
-    if (v === true) return "oui"; if (v === false) return "non";
-    if (typeof v === "string") return v;
-    return "";
-  }
-  function menuFerme(chemin, val) {
-    var libre = val && VALEURS.indexOf(String(val)) < 0;
-    var choisi = libre ? "autre" : String(val == null ? "" : val);
-    return '<select data-nom="' + e(chemin) + '" data-ferme="1"><option value=""></option>' +
-      VALEURS.map(function (o) {
-        return '<option value="' + o + '"' + (choisi === o ? " selected" : "") + ">" + o + "</option>";
-      }).join("") + "</select>" +
-      '<input type="text" data-libre="' + e(chemin) + '" placeholder="précisez" ' +
-      'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' +
-      (libre ? e(val) : "") + '">';
-  }
-  function menuProposition(chemin, val, prop) {
-    prop = prop || { valeurs: [] };
-    var opts = (prop.valeurs || []).concat(prop.autres || []);
-    var libre = prop.libre && val && opts.indexOf(String(val)) < 0;
-    var choisi = libre ? "autre" : String(val == null ? "" : val);
-    return '<select data-nom="' + e(chemin) + '"' + (prop.libre ? ' data-ferme-libre="1"' : "") + '><option value=""></option>' +
-      opts.map(function (o) { return '<option value="' + e(o) + '"' + (choisi === o ? " selected" : "") + ">" + e(o) + "</option>"; }).join("") +
-      (prop.libre ? '<option value="autre"' + (libre ? " selected" : "") + '>autre (préciser)</option>' : "") +
-      "</select>" +
-      (prop.libre ? '<input type="text" data-libre="' + e(chemin) + '" placeholder="précisez" ' +
-        'style="margin-top:6px' + (libre ? "" : ";display:none") + '" value="' + (libre ? e(val) : "") + '">' : "") +
-      (prop.aide ? '<span class="aide-champ">' + e(prop.aide) + "</span>" : "");
-  }
-  function multiHtml(chemin, prop) {
-    prop = prop || { valeurs: [] };
-    var vals = getPath(ETAT.dossier, chemin);
-    var cochees = Array.isArray(vals) ? vals : [];
-    var h = '<div class="coches" data-multi="' + e(chemin) + '">' +
-      (prop.valeurs || []).map(function (v) {
-        return '<label><input type="checkbox" value="' + e(v) + '"' + (cochees.indexOf(v) >= 0 ? " checked" : "") + '> ' + e(v) + "</label>";
-      }).join("") + "</div>";
-    if (prop.libre) h += '<input type="text" data-libre-multi="' + e(chemin) + '" placeholder="autres, séparés par des virgules" ' +
-      'value="' + e(cochees.filter(function (v) { return (prop.valeurs || []).indexOf(v) < 0; }).join(", ")) + '" style="margin-top:6px">';
-    if (prop.aide) h += '<span class="aide-champ">' + e(prop.aide) + "</span>";
-    return h;
-  }
-  function estMultiple(chemin) { return PROPOS[chemin] && PROPOS[chemin].multiple; }
-  function champSimpleHtml(chemin, format) {
-    var val = getPath(ETAT.dossier, chemin);
-    if (format === "nombre") return '<input data-nom="' + e(chemin) + '" type="number" value="' + e(val == null ? "" : val) + '">';
-    if (format === "AAAA-MM-JJ") return '<input data-nom="' + e(chemin) + '" type="date" value="' + e(val == null ? "" : val) + '">';
-    return '<input data-nom="' + e(chemin) + '" type="text" value="' + e(val == null ? "" : val) + '">';
-  }
-
-  /* Un champ interne à un bloc composé (négociation, périodicité de l'accord
-     de méthode) : même rendu qu'un champ ordinaire, mais son chemin porte le
-     préfixe du bloc (« negos.remuneration.depot »). */
-  function champInterneHtml(chemin, libelle, format) {
-    var interne;
-    if (format === "oui / non") interne = menuFerme(chemin, boolVersOuiNon(valeurAvecNuance(chemin)));
-    else if (format && format.indexOf("proposition:") === 0) interne = menuProposition(chemin, getPath(ETAT.dossier, chemin), PROPOS[format.slice("proposition:".length)]);
-    else interne = champSimpleHtml(chemin, format);
-    return '<label><span class="nom">' + e(libelle) + "</span>" + interne +
-      (format === "oui / non" ? '<span class="aide-champ nuance" data-nuance="' + e(chemin) + '"></span>' +
-        (PROPOS[chemin] && PROPOS[chemin].aide ? '<span class="aide-champ">' + e(PROPOS[chemin].aide) + "</span>" : "") : "") +
-      "</label>";
-  }
-
-  /* Le bloc composé d'une négociation — rémunération, égalité, gestion des
-     emplois, salariés expérimentés. Les quatre partagent la date d'engagement,
-     l'issue et le dépôt ; l'égalité et la rémunération portent chacune une
-     donnée propre (l'appui sur la BDESE et le plan d'action pour l'une, le
-     procès-verbal d'ouverture pour l'autre) et les thèmes légaux à cocher. */
-  function negoBlocHtml(nom, libelle) {
-    var cle = nom.split(".")[1];
-    var h = '<div class="sous-objet" data-objet="' + e(nom) + '"><p class="nom">' + e(libelle) + '</p><div class="grille">';
-    h += champInterneHtml(nom + ".dateEngagement", "Date d'engagement de cette négociation", "AAAA-MM-JJ");
-    h += champInterneHtml(nom + ".issue", "Comment la négociation s'est-elle terminée ?", "proposition:" + nom + ".issue");
-    h += champInterneHtml(nom + ".depot", "L'accord ou le procès-verbal a-t-il été déposé ?", "oui / non");
-    if (cle === "remuneration")
-      h += champInterneHtml(nom + ".pvOuvertureEcarts", "Procès-verbal d'ouverture des négociations sur les écarts femmes-hommes établi ?", "oui / non");
-    if (cle === "egalite") {
-      h += champInterneHtml(nom + ".appuiBDESE", "La négociation s'est-elle appuyée sur les données de la base (BDESE) ?", "oui / non");
-      h += champInterneHtml(nom + ".planAction.existe", "À défaut d'accord, un plan d'action annuel existe-t-il ?", "oui / non");
-      h += champInterneHtml(nom + ".planAction.depot", "Ce plan d'action a-t-il été déposé ?", "oui / non");
-    }
-    h += "</div>";
-    if (PROPOS[nom + ".themesTraites"]) h += '<div style="margin-top:10px">' + multiHtml(nom + ".themesTraites", PROPOS[nom + ".themesTraites"]) + "</div>";
-    h += "</div>";
-    return h;
-  }
-
-  /* Les périodicités que l'accord de méthode fixe, une par thème : un champ
-     composé de format « objet » dont les clés sont celles de MOT.THEMES. */
-  function periodicitesHtml(libelle) {
-    var h = '<div class="sous-objet" data-objet="accordMethode.periodicites"><p class="nom">' + e(libelle) + '</p><div class="grille">';
-    Object.values(MOT.THEMES || {}).forEach(function (t) {
-      h += champInterneHtml("accordMethode.periodicites." + t.cle, "« " + t.titre + " » (années)", "nombre");
-    });
-    h += "</div></div>";
-    return h;
-  }
-
-  function champHtml(nom, libelle, format) {
-    if (nom === "accordMethode.periodicites") return periodicitesHtml(libelle);
-    if (["negos.remuneration", "negos.egalite", "negos.gepp", "negos.experimentes"].indexOf(nom) >= 0)
-      return negoBlocHtml(nom, libelle);
-    var interne;
-    if (format === "oui / non") interne = menuFerme(nom, boolVersOuiNon(valeurAvecNuance(nom)));
-    else if (estMultiple(nom)) interne = multiHtml(nom, PROPOS[nom]);
-    else interne = champSimpleHtml(nom, format);
-    return '<label><span class="nom">' + e(libelle) + "</span>" + interne +
-      (format === "oui / non" ? '<span class="aide-champ nuance" data-nuance="' + e(nom) + '"></span>' +
-        (PROPOS[nom] && PROPOS[nom].aide ? '<span class="aide-champ">' + e(PROPOS[nom].aide) + "</span>" : "") : "") +
-      "</label>";
-  }
-
-  function construireQuestionnaire() {
-    var html = "";
-    CHAMPS.forEach(function (grp) {
-      var champs = grp[1].filter(function (c) { return !DEPUIS_FICHE[c[0]]; });
-      if (!champs.length) return;
-      html += '<fieldset><legend>' + e(grp[0]) + '</legend><div class="grille">';
-      champs.forEach(function (c) { html += champHtml(c[0], c[1], c[2]); });
-      html += "</div></fieldset>";
-    });
-    $("formulaire").innerHTML = html;
-    brancherFormulaire();
-    majVisibiliteQuestionnaire(); majNuances(); majCompteurQuestionnaire();
-  }
-
-  function brancherFormulaire() {
-    var f = $("formulaire");
-    Array.prototype.forEach.call(f.querySelectorAll('[data-ferme="1"],[data-ferme-libre="1"]'), function (sel) {
-      var libre = f.querySelector('[data-libre="' + sel.getAttribute("data-nom") + '"]');
-      if (!libre) return;
-      sel.addEventListener("change", function () {
-        var ouvert = sel.value === "autre";
-        libre.style.display = ouvert ? "" : "none";
-        if (!ouvert) libre.value = "";
-        lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
-      });
-      libre.addEventListener("input", function () { lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire(); majNuances(); });
-    });
-    f.addEventListener("change", function (ev) {
-      lireQuestionnaire(); enregistrer(); majVisibiliteQuestionnaire(); majCompteurQuestionnaire(); majNuances();
-      /* « Non » n'appelle pas un constat, il appelle la procédure qui engage
-         les négociations. Voir docs/parcours-lien.js. Défaut mesuré le
-         2 septembre 2026 : ce module n'avait aucune bascule. */
-      if (window.ParcoursLien) ParcoursLien.bascule(ev, BASCULES);
-    });
-    f.addEventListener("input", function (ev) {
-      if (ev.target.tagName === "TEXTAREA" || ev.target.type === "text" || ev.target.type === "number") {
-        lireQuestionnaire(); enregistrer(); majCompteurQuestionnaire();
-      }
-    });
-  }
-
-  function majNuances() {
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("[data-nuance]"), function (n) {
-      var chemin = n.getAttribute("data-nuance");
-      var sel = $("formulaire").querySelector('[data-nom="' + chemin + '"]');
-      if (!sel) { n.style.display = "none"; return; }
-      if (sel.value === "" || conclut(sel.value)) { n.textContent = ""; n.style.display = "none"; return; }
-      n.textContent = "Réponse « " + sel.value + " » : elle ne conclut pas. Le contrôle restera « donnée manquante ».";
-      n.style.display = "";
-    });
-  }
-
-  /* Le format de chaque chemin, pour la lecture générique du formulaire :
-     les champs de premier niveau viennent de MOTEUR.champs ; les sous-champs
-     des blocs composés sont déclarés ici, puisqu'ils ne sont pas des lignes
-     du questionnaire à eux seuls — comme le comité le fait pour ses propres
-     champs composés (protocole, expertise…). */
-  var FORMATS = {};
-  CHAMPS.forEach(function (grp) { grp[1].forEach(function (c) { FORMATS[c[0]] = c[2]; }); });
-  ["remuneration", "egalite", "gepp", "experimentes"].forEach(function (cle) {
-    var base = "negos." + cle;
-    FORMATS[base + ".dateEngagement"] = "AAAA-MM-JJ";
-    FORMATS[base + ".issue"] = "texte";
-    FORMATS[base + ".depot"] = "oui / non";
-  });
-  FORMATS["negos.remuneration.pvOuvertureEcarts"] = "oui / non";
-  FORMATS["negos.egalite.appuiBDESE"] = "oui / non";
-  FORMATS["negos.egalite.planAction.existe"] = "oui / non";
-  FORMATS["negos.egalite.planAction.depot"] = "oui / non";
-  Object.values(MOT.THEMES || {}).forEach(function (t) { FORMATS["accordMethode.periodicites." + t.cle] = "nombre"; });
-  function formatDe(chemin) { return FORMATS[chemin] || "texte"; }
-
-  function lireQuestionnaire() {
-    var f = $("formulaire");
-    var neufDossier = {};
-    Array.prototype.forEach.call(f.querySelectorAll("[data-nom]"), function (el) {
-      var chemin = el.getAttribute("data-nom");
-      var format = formatDe(chemin);
-      var brut = String(el.value == null ? "" : el.value);
-      if ((el.hasAttribute("data-ferme") || el.hasAttribute("data-ferme-libre")) && brut === "autre") {
-        var l = f.querySelector('[data-libre="' + chemin + '"]');
-        var texte = l ? l.value.trim() : "";
-        if (texte === "") return;
-        if (format === "oui / non") { ETAT.nuances[chemin] = "autre : " + texte; return; }
-        assignPath(neufDossier, chemin, texte); return;
-      }
-      if (el.tagName !== "TEXTAREA") brut = brut.trim();
-      if (brut === "") return;
-      if (format === "oui / non") {
-        if (!conclut(brut)) { ETAT.nuances[chemin] = brut; return; }
-        assignPath(neufDossier, chemin, brut === "oui");
-      } else if (format === "nombre") {
-        if (isFinite(+brut)) assignPath(neufDossier, chemin, +brut);
-      } else assignPath(neufDossier, chemin, brut);
-      delete ETAT.nuances[chemin];
-    });
-    Array.prototype.forEach.call(f.querySelectorAll("[data-multi]"), function (bloc) {
-      var chemin = bloc.getAttribute("data-multi");
-      var vals = Array.prototype.map.call(bloc.querySelectorAll("input:checked"), function (c) { return c.value; });
-      var libreEl = f.querySelector('[data-libre-multi="' + chemin + '"]');
-      if (libreEl && libreEl.value.trim() !== "")
-        vals = vals.concat(libreEl.value.split(",").map(function (s) { return s.trim(); }).filter(Boolean));
-      if (vals.length) assignPath(neufDossier, chemin, vals);
-    });
-    ETAT.dossier = neufDossier;
-  }
-
-  /* Le masquage conditionnel. Huit familles :
-       — LE VERROU : sans section syndicale, tout le reste du questionnaire
-         (hors identité et pièces) se masque, puisque rien n'est dû ;
-       — les sous-champs de l'accord de méthode, qui ne se demandent que s'il
-         est déclaré exister — et son détail (durée, mentions, périodicités)
-         que s'il est joint : tant qu'il ne l'est pas, le régime reste
-         indéterminé et le moteur ne lit rien de ce détail ;
-       — l'effectif du groupe et l'effectif en France, qui ne se demandent
-         que si les questions qui les commandent répondent « oui » ;
-       — la matière et l'urgence d'une décision unilatérale, et les dates de
-         traitement d'une demande syndicale, sur le même principe ;
-       — les champs internes aux négociations qui ne valent que dans un cas
-         précis : le procès-verbal d'ouverture sur les écarts et les réponses
-         motivées, seulement si un accord sur les salaires est déclaré
-         (NAO-CTL-LOY-02 est sans objet sinon) ; le plan d'action égalité,
-         seulement si aucun accord n'est déclaré ; le dépôt de chaque
-         négociation, seulement quand une issue à déposer — accord ou
-         procès-verbal de désaccord — est déclarée (NAO-CTL-ISS-01 ignore ce
-         champ avant) ; les thèmes traités et l'appui sur la BDESE, seulement
-         quand la négociation est déclarée engagée (NAO-CTL-CON-01 à 03 sont
-         sans objet sinon) ;
-       — le déroulé de la première réunion, qui ne se demande qu'une fois la
-         réunion datée : NAO-CTL-LOY-01 reste en attente de cette date et ne
-         lit rien d'autre avant ;
-       — l'index de l'égalité professionnelle, qui ne se demande qu'à partir
-         de cinquante salariés (NAO-CTL-EGA-02 est sans objet en dessous) ;
-       — la date d'engagement des négociations triennales (gestion des
-         emplois, salariés expérimentés), qui ne se demande que si le seuil
-         de trois cents salariés est atteint : en dessous, NAO-CTL-PER-03 et
-         04 sont sans objet — l'issue et le dépôt restent demandés, car une
-         négociation terminée se dépose même quand elle n'était pas due. */
-  var RUBRIQUES_CONDITIONNELLES = ["L'accord de méthode", "Les négociations menées", "La conduite",
-    "La demande syndicale", "L'égalité professionnelle"];
-  var PORTES = [
-    { si: function (f) { return !dit((f.accordMethode || {}).existe); },
-      champs: ["accordMethode.verse", "accordMethode.dureeAns", "accordMethode.mentions", "accordMethode.periodicites"] },
-    { si: function (f) { return !dit((f.accordMethode || {}).verse); },
-      champs: ["accordMethode.dureeAns", "accordMethode.mentions", "accordMethode.periodicites"] },
-    { si: function (f) { return !dit(f.groupe); }, champs: ["effectifGroupe"] },
-    { si: function (f) { return !dit(f.dimensionCommunautaire); }, champs: ["effectifFrance"] },
-    { si: function (f) { return !dit((f.decisionUnilaterale || {}).prise); },
-      champs: ["decisionUnilaterale.matiere", "decisionUnilaterale.urgence"] },
-    { si: function (f) { return !dit((f.demandeSyndicale || {}).recue); },
-      champs: ["demandeSyndicale.date", "demandeSyndicale.dateTransmissionAutresOS", "demandeSyndicale.dateConvocation"] },
-    { si: function (f) { return ((f.negos || {}).remuneration || {}).issue !== "accord"; },
-      champs: ["negos.remuneration.pvOuvertureEcarts", "reponsesMotivees"] },
-    { si: function (f) { return ((f.negos || {}).egalite || {}).issue === "accord"; },
-      champs: ["negos.egalite.planAction.existe", "negos.egalite.planAction.depot"] },
-    { si: function (f) { return !String(((f.negos || {}).remuneration || {}).dateEngagement || "").trim(); },
-      champs: ["negos.remuneration.themesTraites"] },
-    { si: function (f) { return !String(((f.negos || {}).egalite || {}).dateEngagement || "").trim(); },
-      champs: ["negos.egalite.themesTraites", "negos.egalite.appuiBDESE"] },
-    { si: function (f) { return !String((f.premiereReunion || {}).date || "").trim(); },
-      champs: ["premiereReunion.lieuCalendrierFixes", "premiereReunion.informationsRemises", "premiereReunion.dateRemiseInformations"] },
-    { si: function (f) { return typeof f.effectif === "number" && f.effectif < 50; },
-      champs: ["indexEgalitePublie"] },
-    { si: function (f) { var s = (MOT.seuil300 || function () { return {}; })(f); return s.connu === true && s.atteint === false; },
-      champs: ["negos.gepp.dateEngagement", "negos.experimentes.dateEngagement"] },
-  ];
-  /* Le dépôt d'une négociation ne se demande que lorsqu'une issue à déposer
-     est déclarée : une porte par négociation. */
-  ["remuneration", "egalite", "gepp", "experimentes"].forEach(function (cle) {
-    PORTES.push({ si: function (f) {
-      var issue = ((f.negos || {})[cle] || {}).issue;
-      return issue !== "accord" && issue !== "PV de désaccord";
-    }, champs: ["negos." + cle + ".depot"] });
-  });
-  function majVisibiliteQuestionnaire() {
-    if (!$("formulaire").children.length) return;
-    var f = construireF();
-    var masques = {};
-    PORTES.forEach(function (porte) { if (porte.si(f)) porte.champs.forEach(function (c) { masques[c] = true; }); });
-    var concernes = {};
-    PORTES.forEach(function (porte) { porte.champs.forEach(function (c) { concernes[c] = true; }); });
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("[data-nom],[data-multi],[data-objet]"), function (el) {
-      var nom = el.getAttribute("data-nom") || el.getAttribute("data-multi") || el.getAttribute("data-objet");
-      if (!nom || !concernes[nom]) return;
-      /* Un bloc à cocher logé dans un bloc composé (les thèmes traités d'une
-         négociation) se masque avec son enveloppe propre, jamais avec tout
-         le bloc composé qui le contient. */
-      var conteneur = el.closest("label") ||
-        (el.hasAttribute("data-multi") ? el.parentElement : el.closest(".sous-objet") || el.closest("[data-multi]"));
-      if (conteneur) conteneur.style.display = masques[nom] ? "none" : "";
-    });
-
-    /* Le verrou de la section syndicale : voir la note en tête de ce fichier.
-       Une rubrique conditionnelle dont toutes les questions sont masquées se
-       masque aussi (l'index de l'égalité en dessous de cinquante salariés
-       laisserait sinon un cadre vide). */
-    var verrou = nie(f.sectionsSyndicales);
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("fieldset"), function (fs) {
-      var leg = fs.querySelector("legend");
-      if (!leg || RUBRIQUES_CONDITIONNELLES.indexOf(leg.textContent) < 0) return;
-      var toutMasque = true;
-      Array.prototype.forEach.call(fs.querySelectorAll(".grille > label, .grille > .sous-objet"), function (el) {
-        if (el.style.display !== "none") toutMasque = false;
-      });
-      fs.style.display = (verrou || toutMasque) ? "none" : "";
-    });
-    $("verrou-nao").style.display = verrou ? "" : "none";
-  }
-
-  function majCompteur() {
-    var f = P ? P.lire() : {};
-    var fTotal = P ? P.IDENTITE.length : 0;
-    var fPris = P ? P.IDENTITE.filter(function (ch) {
-      var v = f[ch.c]; return v !== undefined && v !== null && String(v).trim() !== "";
-    }).length : 0;
-    $("compteur").textContent = "Fiche client : " + fPris + " / " + fTotal;
-  }
-  function majCompteurQuestionnaire() {
-    var total = 0, pris = 0;
-    Array.prototype.forEach.call($("formulaire").querySelectorAll("label,[data-multi]"), function (el) {
-      if (el.style.display === "none") return;
-      if (el.closest("fieldset") && el.closest("fieldset").style.display === "none") return;
-      if (el.tagName === "LABEL" && el.closest(".sous-objet") && el.closest(".sous-objet").style.display === "none") return;
-      if (el.hasAttribute("data-multi") && el.parentElement && el.parentElement.style.display === "none") return;
-      if (el.hasAttribute("data-multi") && el.closest("label")) return;
-      total++;
-      var vide = true;
-      Array.prototype.forEach.call(el.querySelectorAll("[data-nom]"), function (c) { if (String(c.value).trim() !== "") vide = false; });
-      Array.prototype.forEach.call(el.querySelectorAll("input[type=checkbox]:checked"), function () { vide = false; });
-      if (el.hasAttribute("data-nom") && String(el.value).trim() !== "") vide = false;
-      if (!vide) pris++;
-    });
-    $("compteur-questionnaire").textContent = pris + " / " + total + " questions répondues";
-  }
-
-  /* ------------------------------------------------------- le renvoi D --- */
-  function rendreD(items, hote) {
-    var h = "";
-    (items || []).forEach(function (i) {
-      if (i.k === "sur") h += '<p class="note">' + e(i.t) + "</p>";
-      else if (i.k === "t1") h += "<h2>" + e(i.t) + "</h2>";
-      else if (i.k === "trait") h += "<hr>";
-      else if (i.k === "h1") h += "<h2>" + e(i.t) + "</h2>";
-      else if (i.k === "h2") h += "<h3>" + e(i.t) + "</h3>";
-      else if (i.k === "h3") h += "<h3>" + e(i.t) + "</h3>";
-      else if (i.k === "p") h += "<p>" + e(i.t) + "</p>";
-      else if (i.k === "note") h += '<p class="note">' + e(i.t) + "</p>";
-      else if (i.k === "puce") h += '<p class="puce">— ' + e(i.t) + "</p>";
-      else if (i.k === "enc") h += '<div class="enc"><p class="sh">' + e(i.titre) + '</p><p style="margin:0">' + e(i.t) + "</p></div>";
-      else if (i.k === "bandeau") h += '<div class="bandeau b-' + e(i.couleur) + '"><p class="r">' + e(i.t) + '</p><p class="s">' + e(i.sous) + "</p></div>";
-      else if (i.k === "acte") h += '<div class="acte a-' + e(i.priorite) + '"><p class="t">' + e(i.n) + ". " + e(i.t) +
-        '<span class="chip c-' + e(i.priorite) + '">' + e(i.priorite) + '</span></p><p class="w">' +
-        (i.etat ? "<b>" + e(i.etat) + "</b> — " : "") + e(i.pourquoi) + ' <span class="ident">' + e(i.id) + "</span></p></div>";
-      else if (i.k === "interdit") h += '<div class="interdit"><p class="t">' + e(i.t) +
-        '</p><p class="w">' + e(i.pourquoi) + ' <span class="ident">' + e(i.id) + "</span></p></div>";
-      else if (i.k === "acquis") h += '<p class="acquis"><b>&#10003;</b> ' + e(i.t) + ' <span class="note">— ' + e(i.base) + "</span></p>";
-      else if (i.k === "table")
-        h += '<div class="tab"><table><tr>' + i.head.map(function (x) { return "<th>" + e(x) + "</th>"; }).join("") + "</tr>" +
-          i.rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + e(c) + "</td>"; }).join("") + "</tr>"; }).join("") +
-          "</table></div>";
-    });
-    if (hote) hote.innerHTML = h;
-    return h;
-  }
-
-  /* --------------------------------------------------- 3. rapport général --- */
-  function construireRapportGeneral() {
-    var f = construireF();
-    var items = AUD(f);
-    rendreD(items, $("rapport-general"));
-  }
-
-  /* ---------------------------------------------- 4/5/6. le parcours ------ */
-  function calculerParcours() {
-    var f = construireF();
-    return { f: f, p: AUD.parcours(f, { faits: ETAT.faits, controles: ETAT.controles }) };
-  }
-
-  var GRAVITES_TXT = { 1: "Sanction pénale encourue", 2: "Pénalité financière encourue",
-    3: "Irrégularité opposable", 4: "Régularisation rapide" };
-
-  function carteAction(pt) {
-    return '<div class="action' + (pt.etat === "risque à vérifier" ? " verifier" : "") + '" id="guide-' + e(pt.id) + '">' +
-      '<div class="t">' + e(pt.objet) + '<span class="prio p-' + pt.gravite + '">' + e(GRAVITES_TXT[pt.gravite] || "") + "</span>" +
-      (pt.fait ? '<span class="chip c-important">déclaré régularisé</span>' : "") + "</div>" +
-      '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
-      '<p class="note">' + e(pt.constat) + "</p>" +
-      '<div class="meta"><span><b>Rubrique :</b> ' + e(pt.rubrique) + "</span><span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
-      '<p class="risque">Risque : ' + e(pt.risque) + "</p>" +
-      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
-      '<p class="note"><a href="#t5" data-regulariser="' + e(pt.id) + '">Régulariser cet élément (étape 5) →</a>' +
-      /* Quand la pièce n'existe pas, un constat de plus ne sert à rien : le
-         renvoi mène à la procédure qui la fait naître, pas à une seconde
-         description du manque (docs/parcours-lien.js). */
-      (window.ParcoursLien ? (function (l) { return l ? " · " + l : ""; })(ParcoursLien.lien(pt.id)) : "") +
-      '</p>' +
-      "</div>";
-  }
-
-  function construireGuide() {
-    var r = calculerParcours(), p = r.p;
-    var fc = P ? P.lire() : {};
-    var html = "";
-    var assuj = (MOT.assujettissement || function () { return {}; })(r.f);
-    if (assuj.du === false)
-      html += '<div class="enc"><p class="sh">Aucune négociation n\'est due</p><p style="margin:0">' + e(assuj.motif) + "</p></div>";
-
-    html += '<div class="bandeau ' + (p.tempsA.points.length ? "b-rouge" : "b-vert") + '">' +
-      '<p class="r">' + (p.tempsA.points.length ? p.tempsA.points.length + " contrôle(s) à régulariser" : "Rien à régulariser en l'état des réponses") + "</p>" +
-      '<p class="s">' + e(fc.denomination || r.f.entreprise || "") +
-      (r.f.dateAudit ? " — situation au " + e(r.f.dateAudit) : "") + " — guide établi le " + AUJOURDHUI + ".</p></div>";
-
-    if (p.tempsA.points.length) p.tempsA.points.forEach(function (pt) { html += carteAction(pt); });
-    else html += '<p class="aide">Aucun contrôle n\'est non conforme ou à vérifier en l\'état des réponses : passez à l\'étape 6 pour vérifier ce qui est tenu pour conforme.</p>';
-
-    var v = AUD.verdicts(r.f);
-    var manquantes = CTRL.C.filter(function (c) { return (v[c.id] || {}).etat === "donnée manquante"; });
-    if (manquantes.length) {
-      html += '<h3>Ce qui n\'a pas encore de réponse (' + manquantes.length + ')</h3>' +
-        '<p class="aide">Sans réponse, ces contrôles ne se contrôlent pas — ils ne figurent pas comme manquements ci-dessus, ' +
-        'ils retournent au questionnaire de l\'étape 2.</p>';
-      manquantes.forEach(function (c) {
-        html += '<div class="acte"><p class="t">' + e(c.objet) + '<span class="chip c-information">donnée manquante</span></p>' +
-          '<p class="w">' + e((v[c.id] || {}).motif || "") + ' <span class="ident">' + e(c.id) + "</span></p></div>";
-      });
-    }
-    $("guide").innerHTML = html;
-
-    Array.prototype.forEach.call($("guide").querySelectorAll("[data-regulariser]"), function (a) {
-      a.addEventListener("click", function (ev) { ev.preventDefault(); ouvrirItem(a.getAttribute("data-regulariser")); });
-    });
-  }
-
-  /* ------------------------------------------------------- 5. l'élément --- */
-  function majChoixItem() {
-    var r = calculerParcours();
-    var sel = $("choix-item");
-    var courant = sel.value;
-    sel.innerHTML = '<option value="">— choisissez un contrôle —</option>' +
-      r.p.tempsA.points.map(function (pt) {
-        return '<option value="' + e(pt.id) + '">' + e(pt.objet) + (pt.fait ? " (déclaré régularisé)" : "") + "</option>";
-      }).join("");
-    if (courant && r.p.tempsA.points.some(function (pt) { return pt.id === courant; })) sel.value = courant;
-    return r;
-  }
-
-  function ouvrirItem(id) {
-    montrer(Math.max(ETAT.etape, 5));
-    majChoixItem();
-    $("choix-item").value = id;
-    rendreItem(id);
-    $("t5").scrollIntoView({ behavior: "smooth" });
-  }
-
-  function grilleHtml(verifs, reponses, prefixe) {
-    var h = "";
-    (verifs || []).forEach(function (v) {
-      var val = (reponses[v.cle] == null) ? "" : String(reponses[v.cle]);
-      h += '<div class="verif-q"><p><b>' + e(v.question) + "</b></p>" +
-        '<p class="attendu">Attendu : ' + e(v.attendu) + "</p>" +
-        '<select data-cle="' + e(v.cle) + '" data-prefixe="' + e(prefixe) + '"><option value="">— répondre —</option>' +
-        REPONSES_GRILLE.map(function (o) { return '<option value="' + o + '"' + (val === o ? " selected" : "") + ">" + o + "</option>"; }).join("") +
-        "</select>" +
-        '<input class="detail" type="text" data-cle="' + e(v.cle) + '__detail" data-prefixe="' + e(prefixe) +
-        '" placeholder="date, référence, pièce" value="' + e(reponses[v.cle + "__detail"] || "") + '"></div>';
-    });
-    return h;
-  }
-
-  function verdictGrille(verifs, reponses) {
-    var manquantes = [], refusees = [];
-    (verifs || []).forEach(function (v) {
-      var val = reponses[v.cle];
-      if (val === undefined || val === null || String(val).trim() === "" || !grilleConclut(val)) { manquantes.push(v); return; }
-      if (val === "non") refusees.push(v);
-    });
-    if (refusees.length) return { issue: "refusé", classe: "v-ref",
-      motif: "Ce qui était déclaré n'est pas établi : " +
-        refusees.map(function (v) { return "« " + v.question + " » — attendu : " + v.attendu; }).join(" ; ") + "." };
-    if (manquantes.length) return { issue: "ne conclut pas", classe: "v-att",
-      motif: "Il reste à répondre : " + manquantes.map(function (v) { return "« " + v.question + " »"; }).join(" ; ") + "." };
-    return { issue: "validé", classe: "v-val", motif: "Vérifié point par point : ce point passe à « en règle ».." };
-  }
-
-  /* Le document que l'application sait rédiger — docs/documents-produits.js
-     et docs/documents-nao.js portent un générateur pour quinze des dix-sept
-     contrôles (tous ceux qui se régularisent : ni l'assujettissement, ni
-     l'exposition aux sanctions ne se régularisent pour eux-mêmes). */
-  function produireDocument(id) {
-    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(id);
-    if (!gen) return;
-    var profil = P ? P.lire() : {};
-    var f = construireF();
-    var txt = gen.produire({ profil: profil, fiche: f, aujourdhui: new Date() });
-    montrerTexte(txt);
-  }
-  function montrerTexte(txt) {
-    $("dt-corps").textContent = txt;
-    var d = $("dlg-texte");
-    if (d.showModal) d.showModal(); else d.setAttribute("open", "open");
-  }
-
-  function rendreItem(id) {
-    if (!id) { $("fiche-item").innerHTML = '<p class="aide">Choisissez un contrôle dans la liste ci-dessus, ou revenez au guide.</p>'; return; }
-    var r = calculerParcours();
-    var pt = r.p.tempsA.points.filter(function (x) { return x.id === id; })[0];
-    if (!pt) { $("fiche-item").innerHTML = '<p class="aide">Ce contrôle n\'appelle plus de régularisation en l\'état des réponses.</p>'; return; }
-    var modele = AUD.modele(r.f, id);
-    var html = '<div class="action" id="item-' + e(pt.id) + '">' +
-      '<div class="t">' + e(pt.objet) + '<span class="prio p-' + pt.gravite + '">' + e(GRAVITES_TXT[pt.gravite] || "") + "</span>" +
-      (pt.fait ? '<span class="chip c-important">déclaré régularisé' + (ETAT.faits[id] && ETAT.faits[id].le ? " le " + e(ETAT.faits[id].le) : "") + "</span>" : "") + "</div>" +
-      '<p class="quoi"><b>' + e(pt.quoiFaire) + "</b></p>" +
-      '<p class="note">Constat de l\'audit — ' + e(pt.constat) + "</p>" +
-      '<p class="note">Fondement : ' + e(pt.fondement.join(" · ")) + ' <span class="ident">' + e(pt.id) + "</span></p>" +
-      /* L'accompagnement pas à pas, quand la régularisation est une procédure
-         et pas une simple pièce à écrire : consultation, affichage, dépôt,
-         inspection du travail, entrée en vigueur (docs/parcours-lien.js). */
-      (window.ParcoursLien ? (function (l) {
-        return l ? '<p class="note">' + l + "</p>" : "";
-      })(ParcoursLien.lien(pt.id)) : "");
-
-    html += "<h3>a. La note chiffrée sur votre dossier</h3>" +
-      '<p class="aide">Établie sur les réponses de l\'étape 2 — dates de négociation, régime applicable, effectif déclaré — jamais sur un exemple figé.</p>';
-    if (modele && modele.length) html += '<details class="modele" open><summary>Ouvrir la note</summary><div class="corps">' + rendreD(modele) + "</div></details>";
-    else html += '<p class="aide">Aucune note chiffrée n\'est encore écrite pour ce contrôle.</p>';
-
-    var gen = window.DocumentsProduits && window.DocumentsProduits.pour(pt.id);
-    if (gen) {
-      html += '<div class="produit"><p class="sh">' + e(gen.nom) + '</p><p class="w">' + e(gen.detail || "") + '</p>' +
-        '<button type="button" class="second" data-produire="' + e(pt.id) + '">Produire le document</button></div>';
-    } else if (pt.document) {
-      html += '<p class="note">Document à produire : ' + e(pt.document) + "</p>";
-    }
-
-    html += "<h3>b. La procédure, étape par étape</h3><ol>" + pt.etapes.map(function (x) { return "<li>" + e(x) + "</li>"; }).join("") + "</ol>" +
-      '<div class="meta" style="display:flex;flex-wrap:wrap;gap:6px 18px;margin:8px 0 0;font-size:13px;color:#5f6874">' +
-      "<span><b>Délai indicatif :</b> " + e(pt.delai) + "</span></div>" +
-      '<p class="risque">Risque : ' + e(pt.risque) + "</p>";
-
-    html += "<h3>c. Quand c'est fait, dites-le</h3>" +
-      '<p class="aide">Déclarer un point régularisé ne le rend pas « en règle » : la grille ci-dessous documente comment, et l\'étape 6 le reprend.</p>' +
-      '<div class="coches"><label><input type="checkbox" id="fait-' + e(pt.id) + '"' + (pt.fait ? " checked" : "") + '> j\'ai régularisé ce point</label>' +
-      '<input type="date" id="fait-date-' + e(pt.id) + '" value="' + e((ETAT.faits[id] && ETAT.faits[id].le) || "") + '" aria-label="Date de la régularisation" style="width:auto"></div>';
-
-    html += '<div id="verif-item-' + e(pt.id) + '">' + '<h3>La grille de vérification</h3>' +
-      grilleHtml(pt.verifs, ETAT.controles[id] || {}, id) + '<div id="verdict-item-' + e(pt.id) + '"></div></div>';
-
-    html += "</div>";
-    $("fiche-item").innerHTML = html;
-    afficherVerdictItem(pt);
-
-    var btnProduire = $("fiche-item").querySelector('[data-produire]');
-    if (btnProduire) btnProduire.addEventListener("click", function () { produireDocument(pt.id); });
-
-    var cb = $("fait-" + pt.id), dt = $("fait-date-" + pt.id);
-    cb.addEventListener("change", function () {
-      if (cb.checked) {
-        ETAT.faits[pt.id] = { le: dt.value || AUJOURDHUI };
-        dt.value = ETAT.faits[pt.id].le;
-        message("« " + pt.objet + " » est déclaré régularisé. L'étape 6 le reprendra : une déclaration sans détail vérifiable rendra « ne conclut pas », jamais « en règle ».");
-      } else delete ETAT.faits[pt.id];
-      enregistrer(); construireGuide(); majChoixItem(); rendreItem(pt.id);
-    });
-    dt.addEventListener("change", function () { if (ETAT.faits[pt.id]) { ETAT.faits[pt.id].le = dt.value || AUJOURDHUI; enregistrer(); } });
-
-    Array.prototype.forEach.call($("fiche-item").querySelectorAll("[data-prefixe='" + pt.id + "']"), function (el) {
-      var ev = el.tagName === "SELECT" ? "change" : "input";
-      el.addEventListener(ev, function () {
-        ETAT.controles[pt.id] = ETAT.controles[pt.id] || {};
-        var cle = el.getAttribute("data-cle");
-        if (el.value === "") delete ETAT.controles[pt.id][cle]; else ETAT.controles[pt.id][cle] = el.value;
-        enregistrer();
-        afficherVerdictItem(pt);
-      });
-    });
-  }
-  function afficherVerdictItem(pt) {
-    var d = $("verdict-item-" + pt.id);
-    if (!d) return;
-    var v = verdictGrille(pt.verifs, ETAT.controles[pt.id] || {});
-    d.innerHTML = '<div class="verdict ' + v.classe + '"><b>' + e(v.issue.charAt(0).toUpperCase() + v.issue.slice(1)) + "</b>" + e(v.motif) + "</div>";
-  }
-
-  /* --------------------------------------------------- 6. la vérification --- */
-  function pointsAVerifier() {
-    var r = calculerParcours();
-    var out = r.p.tempsB.points.slice();
-    var dejaB = {}; out.forEach(function (pt) { dejaB[pt.id] = true; });
-    Object.keys(ETAT.faits).forEach(function (id) {
-      if (dejaB[id]) return;
-      var pt = r.p.tempsA.points.filter(function (x) { return x.id === id; })[0];
-      var ctrl = CTRL.C.filter(function (c) { return c.id === id; })[0];
-      if (!pt && !ctrl) return;
-      var objet = (pt && pt.objet) || (ctrl && ctrl.objet) || id;
-      var rubrique = (pt && pt.rubrique) || (ctrl && ctrl.rubrique) || "";
-      var fondement = (pt && pt.fondement) || (ctrl && ctrl.fondement) || [];
-      var verifs = (pt && pt.verifs) || [];
-      var reponses = ETAT.controles[id] || {};
-      var verdict = verifs.length ? verdictGrille(verifs, reponses)
-        : { issue: "non vérifiable", motif: "Aucune grille de vérification n'est écrite pour ce contrôle : il reste déclaré." };
-      out.push({ id: id, rubrique: rubrique, objet: objet, fondement: fondement,
-        declare: "Déclaré régularisé le " + (ETAT.faits[id].le || AUJOURDHUI) + " (étape 5).",
-        verifiable: verifs.length > 0, verifs: verifs, reponses: reponses,
-        verdict: { issue: verdict.issue, motif: verdict.motif }, depuisEtape5: true });
+  function relire() {
+    var out = [];
+    document.querySelectorAll("#feuille > *").forEach(function (el) {
+      if (el.tagName === "HR") { out.push({ k: el.classList.contains("b-saut") ? "saut" : "trait", t: "" }); return; }
+      if (el.classList.contains("b-vide")) { out.push({ k: "p", t: "" }); return; }
+      out.push({ k: el.getAttribute("data-k"), t: texteDe(el) });
     });
     return out;
   }
-
-  function construireVerifs() {
-    var pts = pointsAVerifier();
-    if (!pts.length) {
-      $("verifs").innerHTML = '<p class="aide">Aucun contrôle n\'est tenu pour conforme et aucun n\'est déclaré régularisé : rien à vérifier ici.</p>';
-      return;
-    }
-    var html = "";
-    pts.forEach(function (pt) {
-      html += '<div class="verif-bloc" data-item="' + e(pt.id) + '"><p class="t">' + e(pt.objet) +
-        (pt.depuisEtape5 ? ' <span class="chip c-important">étape 5</span>' : "") + "</p>" +
-        '<p class="note">' + e(pt.declare) + ' <span class="ident">' + e(pt.id) + "</span></p>";
-      if (!pt.verifiable) html += '<div class="verdict v-att"><b>Non vérifiable</b>' + e(pt.verdict.motif) + "</div>";
-      else html += grilleHtml(pt.verifs, pt.reponses, pt.id) + '<div id="verdict-verif-' + e(pt.id) + '"></div>';
-      html += "</div>";
-    });
-    $("verifs").innerHTML = html;
-    pts.forEach(function (pt) { if (pt.verifiable) majVerdictVerif(pt.id); });
-
-    Array.prototype.forEach.call($("verifs").querySelectorAll("[data-prefixe]"), function (el) {
-      var ev = el.tagName === "SELECT" ? "change" : "input";
-      el.addEventListener(ev, function () {
-        var id = el.getAttribute("data-prefixe");
-        ETAT.controles[id] = ETAT.controles[id] || {};
-        var cle = el.getAttribute("data-cle");
-        if (el.value === "") delete ETAT.controles[id][cle]; else ETAT.controles[id][cle] = el.value;
-        enregistrer(); majVerdictVerif(id);
-      });
-    });
-  }
-  function majVerdictVerif(id) {
-    var d = $("verdict-verif-" + id);
-    if (!d) return;
-    var pt = pointsAVerifier().filter(function (x) { return x.id === id; })[0];
-    if (!pt) return;
-    var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
-    var classe = v.issue === "validé" ? "v-val" : v.issue === "refusé" ? "v-ref" : "v-att";
-    d.innerHTML = '<div class="verdict ' + classe + '"><b>' + e(v.issue.charAt(0).toUpperCase() + v.issue.slice(1)) + "</b>" + e(v.motif) + "</div>";
+  var VERS_EXPORT = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "puce",
+    note: "note", sign: "p", trait: "trait", saut: "saut" };
+  /* Ce qui part dans le fichier : les deux documents, et eux seuls. Les notes
+     de marge s'adressent à l'employeur, elles restent à l'écran. */
+  function pourFichier() {
+    var blocs = relire().filter(function (b) { return b.k !== "note"; });
+    var titre = blocs.length && blocs[0].k === "t1" ? blocs.shift().t : "";
+    return { titre: titre, blocs: blocs };
   }
 
-  function construireRapportExistant() {
-    var pts = pointsAVerifier();
-    var val = 0, ref = 0, att = 0;
-    pts.forEach(function (pt) {
-      var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
-      if (v.issue === "validé") val++;
-      else if (v.issue === "refusé") { ref++; if (pt.depuisEtape5 && ETAT.faits[pt.id]) delete ETAT.faits[pt.id]; }
-      else att++;
-    });
-    enregistrer();
-    var teinte = ref ? "b-rouge" : (att ? "b-orange" : "b-vert");
-    var fc = P ? P.lire() : {};
-    var corps = "";
-    pts.forEach(function (pt) {
-      var v = pt.verdict.issue ? pt.verdict : verdictGrille(pt.verifs, pt.reponses);
-      corps += '<div class="acte a-' + (v.issue === "refusé" ? "bloquant" : v.issue === "validé" ? "information" : "critique") + '">' +
-        '<p class="t">' + e(pt.objet) + '<span class="chip ' + (v.issue === "validé" ? "c-information" : v.issue === "refusé" ? "c-bloquant" : "c-critique") + '">' + e(v.issue) + "</span></p>" +
-        '<p class="w">' + e(pt.declare) + " " + e(v.motif) + ' <span class="ident">' + e(pt.id) + "</span></p></div>";
-    });
-    $("rapport-existant").innerHTML =
-      '<div class="bandeau ' + teinte + '"><p class="r">Rapport de régularisation : ' + val + " en règle · " + ref + " refusé(s) · " + att + " ne conclu(en)t pas</p>" +
-      '<p class="s">' + e(fc.denomination || "") + " — contrôle du " + AUJOURDHUI + ".</p></div>" +
-      (corps || '<p class="aide">Rien à vérifier.</p>') +
-      (ref ? '<p class="note">Les points refusés sont retirés de la liste des régularisations déclarées : ils réapparaissent au guide de l\'étape 4.</p>' : "");
-    construireGuide(); majChoixItem();
-  }
-
-  /* ------------------------------------------------------- la navigation --- */
-  function montrer(t) {
-    ETAT.etape = Math.max(ETAT.etape || 1, t);
-    enregistrer();
-    $("bloc-liste").style.display = t >= 2 ? "" : "none";
-    $("bloc-general").style.display = t >= 3 ? "" : "none";
-    $("bloc-guide").style.display = t >= 4 ? "" : "none";
-    $("bloc-item").style.display = t >= 5 ? "" : "none";
-    $("bloc-existant").style.display = t >= 6 ? "" : "none";
-    Array.prototype.forEach.call(document.querySelectorAll("#fil-temps span"), function (el) {
-      var n = Number(el.getAttribute("data-t"));
-      el.className = n === t ? "actif" : (n < t ? "fait" : "");
-      el.style.cursor = n <= t ? "pointer" : "default";
-    });
-  }
-  function imprimer(cible) { document.body.className = "print-" + cible; window.print(); document.body.className = ""; }
-
-  $("generer").addEventListener("click", function () {
-    construireQuestionnaire(); montrer(2);
-    $("t2").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-general").addEventListener("click", function () {
-    construireRapportGeneral(); montrer(3);
-    $("t3").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-guide").addEventListener("click", function () {
-    construireGuide(); montrer(4);
-    $("t4").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-item").addEventListener("click", function () {
-    montrer(5); majChoixItem(); rendreItem($("choix-item").value);
-    $("t5").scrollIntoView({ behavior: "smooth" });
-  });
-  $("vers-existant").addEventListener("click", function () {
-    construireVerifs(); montrer(6);
-    $("t6").scrollIntoView({ behavior: "smooth" });
-  });
-  $("choix-item").addEventListener("change", function () { rendreItem($("choix-item").value); });
-  $("controler").addEventListener("click", function () {
-    construireRapportExistant(); construireRapportGeneral(); construireVerifs();
-    $("rapport-existant").scrollIntoView({ behavior: "smooth" });
-  });
-  $("imprimer-liste").addEventListener("click", function () { imprimer("liste"); });
-  $("imprimer-general").addEventListener("click", function () { imprimer("general"); });
-  $("imprimer-guide").addEventListener("click", function () { imprimer("guide"); });
-  $("imprimer-item").addEventListener("click", function () { imprimer("item"); });
-  $("imprimer-existant").addEventListener("click", function () { imprimer("existant"); });
-
-  $("exemple").addEventListener("click", function () {
-    ETAT = etatVide();
-    if (P) P.ecrire({
-      denomination: "SOCIÉTÉ D'EXEMPLE SAS", siret: "12345678900012",
-      adresse: "12 rue de l'Exemple, 59000 Lille", responsable: "Camille Martin, DRH",
-      courriel: "drh@societe-exemple.fr", telephone: "03 20 00 00 00",
-      effectif: 420, secteur: "services", etablissementsDistincts: "non",
-    });
-    ETAT.dossier = {
-      dateAudit: "2026-08-18",
-      groupe: false, dimensionCommunautaire: false,
-      sectionsSyndicales: true,
-      accordMethode: { existe: false },
-      negos: {
-        remuneration: { dateEngagement: "2026-02-10", issue: "accord", depot: true, pvOuvertureEcarts: true,
-          themesTraites: ["salaires", "temps de travail", "épargne salariale", "écarts femmes-hommes"] },
-        egalite: { dateEngagement: "2026-03-05", issue: "PV de désaccord", depot: true, appuiBDESE: false,
-          themesTraites: ["articulation", "écarts femmes-hommes", "discriminations", "handicap", "prévoyance", "déconnexion"] },
-        gepp: { dateEngagement: "2024-06-01", issue: "accord", depot: true },
-        experimentes: { dateEngagement: "2026-01-15", issue: "en cours" },
-      },
-      premiereReunion: { date: "2026-02-10", lieuCalendrierFixes: true, informationsRemises: true, dateRemiseInformations: "2026-02-03" },
-      reponsesMotivees: true,
-      decisionUnilaterale: { prise: true, matiere: "organisation du temps de travail", urgence: false },
-      demandeSyndicale: { recue: true, date: "2026-01-05", dateTransmissionAutresOS: "2026-01-08", dateConvocation: "2026-01-14" },
-      indexEgalitePublie: false,
-      pieces: [],
+  /* ═══════════════════════════════════════════════════ la lecture des champs */
+  function lire() {
+    return {
+      date: lireDate("#c-date"),
+      heure: $("#c-heure").value.trim() || "[heure]",
+      lieu: $("#c-lieu").value.trim() || "[salle, adresse]"
     };
-    enregistrer();
-    construireFiche(); construireFormulaireFiche(); majCompteur();
-    message("Exemple chargé : SOCIÉTÉ D'EXEMPLE SAS, 420 salariés. Ouvrez le questionnaire.");
-  });
-  $("vider").addEventListener("click", function () {
-    ETAT = etatVide();
-    if (P) P.effacer();
-    enregistrer();
-    construireFiche(); construireFormulaireFiche(); majCompteur(); montrer(1);
-    message("Tout est effacé — fiche client comprise.");
-  });
-  function message(txt) {
-    var m = $("message"); m.textContent = txt; m.style.display = "block";
-    clearTimeout(message.t); message.t = setTimeout(function () { m.style.display = "none"; }, 8000);
   }
 
-  $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
-  $("btn-retour").addEventListener("click", function () {
-    if (history.length > 1 && document.referrer && new URL(document.referrer, location.href).origin === location.origin) history.back();
-    else location.href = "./";
+  /* Les thèmes que la convocation engage : deux chaque année, quatre à partir
+     de trois cents salariés (L. 2242-13). */
+  function themes() {
+    var t = [
+      "la rémunération, le temps de travail et le partage de la valeur ajoutée dans l'entreprise (" + ref(["L2242-1"]) + ", 1° ; " + ref(["L2242-13"]) + ", 1°)",
+      "l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail (" + ref(["L2242-1"]) + ", 2° ; " + ref(["L2242-13"]) + ", 2°)"
+    ];
+    if (troisCents()) {
+      t.push("la gestion des emplois et des parcours professionnels et la mixité des métiers (" + ref(["L2242-2", "L2242-20"]) + " ; " + ref(["L2242-13"]) + ", 3°)");
+      t.push("l'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés, en considération de leur âge (" + ref(["L2242-2-1"]) + " ; " + ref(["L2242-13"]) + ", 4°)");
+    }
+    return t;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LA CONVOCATION DES ORGANISATIONS SYNDICALES, AVEC SON ORDRE DU JOUR
+     ══════════════════════════════════════════════════════════════════════ */
+  function convocation(d) {
+    var b = [];
+    function p(t) { b.push({ k: "p", t: t }); }
+    function puce(t) { b.push({ k: "puce", t: t }); }
+    var remise = d.date ? ouvre(jour(d.date, -7)) : null;
+
+    b.push({ k: "t1", t: "CONVOCATION À LA NÉGOCIATION ANNUELLE OBLIGATOIRE" });
+    b.push({ k: "st", t: nomSociete() + " - " + adresse() });
+
+    p("Aux organisations syndicales représentatives dans l'entreprise, à l'attention de chaque " +
+      "délégué syndical : [organisation 1, délégué syndical], [organisation 2, délégué syndical].");
+    p(ville() + ", le " + dateFr(new Date()) + ". Lettre remise en main propre contre décharge, " +
+      "ou recommandée avec avis de réception.");
+    p("Objet : convocation à la première réunion de la négociation obligatoire.");
+    p("Mesdames, Messieurs,");
+    p("En application des articles " + ref(["L2242-1", "L2242-13"]) + " du code du travail, " +
+      nomSociete() + " engage la négociation obligatoire sur :");
+    themes().forEach(function (t) { puce(t + " ;"); });
+    p("Je vous convoque à la première réunion de cette négociation le " + dateLongue(d.date) +
+      ", à " + d.heure + ", " + d.lieu + ".");
+    p("Lors de cette première réunion seront précisés le lieu et le calendrier des réunions, " +
+      "ainsi que les informations que l'employeur remettra aux délégués syndicaux et aux " +
+      "salariés composant la délégation sur les thèmes de la négociation, et la date de cette " +
+      "remise (" + ref(["L2242-14"]) + "). Le calendrier proposé est joint.");
+    p("Les informations nécessaires pour négocier en toute connaissance de cause vous seront " +
+      "remises le " + dateLongue(remise) + ", contre décharge. Chacune de vos propositions " +
+      "recevra une réponse motivée (" + ref(["L2242-6"]) + ").");
+    p("Vous voudrez bien me faire connaître la composition de votre délégation avant la " +
+      "première réunion.");
+    p("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération distinguée.");
+    b.push({ k: "sign", t: signataire() + "\n" + nomSociete() });
+    p("Pièces jointes : l'ordre du jour ci-après ; le calendrier des réunions.");
+
+    b.push({ k: "h1", t: "Ordre du jour de la négociation sur la rémunération, le temps de travail et le partage de la valeur ajoutée (" + ref(["L2242-15"]) + ")" });
+    puce("1° Les salaires effectifs.");
+    puce("2° La durée effective et l'organisation du temps de travail, notamment la mise en place du travail à temps partiel.");
+    puce("3° L'intéressement, la participation et l'épargne salariale, à défaut d'accord d'intéressement, d'accord de participation, de plan d'épargne d'entreprise, de plan d'épargne pour la mise à la retraite collectif ou d'accord de branche comportant un ou plusieurs de ces dispositifs.");
+    puce("4° Le suivi de la mise en œuvre des mesures visant à supprimer les écarts de rémunération et les différences de déroulement de carrière entre les femmes et les hommes.");
+
+    b.push({ k: "h1", t: "Ordre du jour de la négociation sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail (" + ref(["L2242-17"]) + ")" });
+    puce("1° L'articulation entre la vie personnelle et la vie professionnelle pour les salariés.");
+    puce("2° Les objectifs et les mesures permettant d'atteindre l'égalité professionnelle entre les femmes et les hommes : suppression des écarts de rémunération, accès à l'emploi, formation professionnelle, déroulement de carrière et promotion professionnelle, conditions de travail et d'emploi, en particulier pour les salariés à temps partiel, mixité des emplois ; sur la base des données du 2° de l'article L. 2312-36.");
+    puce("3° Les mesures permettant de lutter contre toute discrimination en matière de recrutement, d'emploi et d'accès à la formation professionnelle.");
+    puce("4° Les mesures relatives à l'insertion professionnelle et au maintien dans l'emploi des travailleurs handicapés.");
+    puce("5° Les modalités de définition d'un régime de prévoyance et d'un régime de remboursements complémentaires de frais de santé, à défaut de couverture par un accord de branche ou un accord d'entreprise.");
+    puce("6° L'exercice du droit d'expression directe et collective des salariés, notamment au moyen des outils numériques.");
+    puce("7° Les modalités du plein exercice par le salarié de son droit à la déconnexion et les dispositifs de régulation de l'utilisation des outils numériques.");
+    puce("8° Dans les entreprises dont cinquante salariés au moins sont employés sur un même site, les mesures visant à améliorer la mobilité des salariés entre leur lieu de résidence habituelle et leur lieu de travail.");
+
+    if (troisCents()) {
+      b.push({ k: "h1", t: "Ordre du jour de la négociation sur la gestion des emplois et des parcours professionnels (" + ref(["L2242-20"]) + ")" });
+      puce("1° La mise en place d'un dispositif de gestion prévisionnelle des emplois et des compétences et les mesures d'accompagnement susceptibles de lui être associées.");
+      puce("2° Le cas échéant, les conditions de la mobilité professionnelle ou géographique interne à l'entreprise.");
+      puce("3° Les grandes orientations à trois ans de la formation professionnelle et les objectifs du plan de développement des compétences.");
+      puce("4° Les perspectives de recours aux différents contrats de travail, au travail à temps partiel et aux stages, et les moyens mis en œuvre pour diminuer le recours aux emplois précaires.");
+      puce("5° Les conditions dans lesquelles les entreprises sous-traitantes sont informées des orientations stratégiques de l'entreprise.");
+      puce("6° Le déroulement de carrière des salariés exerçant des responsabilités syndicales et l'exercice de leurs fonctions.");
+      b.push({ k: "h1", t: "Ordre du jour de la négociation sur les salariés expérimentés (" + ref(["L2242-2-1"]) + ")" });
+      puce("L'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés, en considération de leur âge : [maintien dans l'emploi, aménagement des postes et des horaires, formation, transmission des savoirs, transition entre activité et retraite].");
+    }
+
+    b.push({ k: "note", t: "Toutes les organisations syndicales représentatives sont convoquées : " +
+      "une seule oubliée fait tomber l'engagement sérieux et loyal que " + ref(["L2242-6"]) +
+      " définit. Se soustraire à la convocation des parties ou à l'obligation périodique de " +
+      "négocier est puni d'un an d'emprisonnement et de 3 750 euros d'amende (" +
+      ref(["L2243-1"]) + ")." });
+    return b;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LE CALENDRIER DES NÉGOCIATIONS
+     ══════════════════════════════════════════════════════════════════════ */
+  function calendrier(d) {
+    var b = [], D = d.date, n = effectif();
+    function p(t) { b.push({ k: "p", t: t }); }
+    function puce(t) { b.push({ k: "puce", t: t }); }
+    function le(j) { return D ? dateLongue(ouvre(jour(D, j))) : "[date]"; }
+
+    b.push({ k: "saut", t: "" });
+    b.push({ k: "t1", t: "CALENDRIER DES NÉGOCIATIONS OBLIGATOIRES" });
+    b.push({ k: "st", t: nomSociete() + (n !== null ? " - " + n + " salariés" : "") +
+      " - établi le " + dateFr(new Date()) });
+
+    b.push({ k: "h1", t: "Les réunions de la négociation qui s'engage" });
+    p("Le lieu et le calendrier des réunions sont fixés lors de la première réunion (" +
+      ref(["L2242-14"]) + ", 1°) ; ceux qui suivent sont la proposition de l'employeur.");
+    puce(le(-7) + " : remise aux négociateurs des informations nécessaires pour négocier en " +
+      "toute connaissance de cause, contre décharge (" + ref(["L2242-6"]) + " ; " +
+      ref(["L2242-14"]) + ", 2°).");
+    puce(dateLongue(D) + ", " + d.heure + ", " + d.lieu + " : première réunion. Lieu et " +
+      "calendrier des réunions fixés, liste des informations remises et date de leur remise " +
+      "précisées (" + ref(["L2242-14"]) + ") ; recueil des propositions des organisations syndicales.");
+    puce(le(21) + " : deuxième réunion. Examen des propositions ; réponse motivée de " +
+      "l'employeur à chacune (" + ref(["L2242-6"]) + ").");
+    puce(le(42) + " : troisième réunion. Dernières propositions des parties.");
+    puce(le(56) + " : réunion de clôture. Signature de l'accord, ou procès-verbal de désaccord " +
+      "consignant, en leur dernier état, les propositions respectives des parties et les mesures " +
+      "que l'employeur entend appliquer unilatéralement (" + ref(["L2242-5"]) + ").");
+    puce(le(70) + " : dépôt de l'accord ou du procès-verbal de désaccord, à l'initiative de la " +
+      "partie la plus diligente (" + ref(["L2242-5"]) + ") ; récépissé conservé au dossier.");
+
+    b.push({ k: "h1", t: "Le rythme des négociations, à défaut d'accord de méthode (" + ref(["L2242-13"]) + ")" });
+    puce("Chaque année : la négociation sur la rémunération, le temps de travail et le partage " +
+      "de la valeur ajoutée (1°). Prochaine ouverture au plus tard le " +
+      (D ? dateFr(ouvre(plusMois(D, 12))) : "[date]") + ".");
+    puce("Chaque année : la négociation sur l'égalité professionnelle entre les femmes et les " +
+      "hommes et la qualité de vie et des conditions de travail (2°). Prochaine ouverture au " +
+      "plus tard le " + (D ? dateFr(ouvre(plusMois(D, 12))) : "[date]") + ".");
+    if (troisCents()) {
+      puce("Tous les trois ans : la négociation sur la gestion des emplois et des parcours " +
+        "professionnels (3°). Prochaine ouverture au plus tard le " +
+        (D ? dateFr(ouvre(plusMois(D, 36))) : "[date]") + ".");
+      puce("Tous les trois ans : la négociation sur l'emploi, le travail et l'amélioration des " +
+        "conditions de travail des salariés expérimentés (4°). Prochaine ouverture au plus tard " +
+        "le " + (D ? dateFr(ouvre(plusMois(D, 36))) : "[date]") + ".");
+    } else if (n !== null) {
+      p("Les deux négociations triennales des 3° et 4° de l'article " + ref(["L2242-13"]) +
+        " ne sont pas dues à " + n + " salariés : elles visent les entreprises d'au moins " +
+        "trois cents salariés (" + ref(["L2242-2", "L2242-2-1"]) + ").");
+    }
+    p("À défaut d'initiative de l'employeur depuis plus de douze mois pour chacune des deux " +
+      "négociations annuelles, et depuis plus de trente-six mois pour la négociation " +
+      "triennale, la négociation s'engage obligatoirement à la demande d'une organisation " +
+      "syndicale représentative. La demande est alors transmise dans les huit jours aux autres " +
+      "organisations représentatives, et l'employeur convoque les parties dans les quinze jours " +
+      "qui suivent la demande (" + ref(["L2242-13"]) + ").");
+
+    b.push({ k: "trait", t: "" });
+    b.push({ k: "sign", t: "Fait à " + ville() + ", le " + dateFr(new Date()) + "\n\n" +
+      signataire() + "\n" + nomSociete() });
+
+    b.push({ k: "note", t: "Ces négociations ne sont dues que dans les entreprises où une ou " +
+      "plusieurs sections syndicales d'organisations représentatives sont constituées (" +
+      ref(["L2242-1"]) + "). Un accord de méthode conclu au titre des articles L. 2242-10 et " +
+      "L. 2242-11 peut fixer un autre calendrier, dans la limite de quatre ans : s'il en existe " +
+      "un, c'est lui qui s'applique." });
+    return b;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════ le rendu */
+  var BLOCS = [];
+  function rendre() {
+    var d = lire();
+    BLOCS = convocation(d).concat(calendrier(d));
+    $("#doc").innerHTML = feuilleHtml(BLOCS);
+    sources();
+  }
+
+  /* Les textes que les documents citent, avec leur identifiant de version. */
+  function sources() {
+    var cites = {};
+    BLOCS.forEach(function (b) {
+      var m = String(b.t).match(/\b[LRD]\. \d{4}-\d{1,2}(?:-\d)?\b/g) || [];
+      m.forEach(function (x) { cites[x.replace(". ", "")] = true; });
+    });
+    var h = "";
+    Object.keys(TEXTES).forEach(function (k) {
+      if (!cites[k]) return;
+      h += "<div><b>" + ech(ref([k])) + "</b> · " + ech(TEXTES[k].dit) + " · " + TEXTES[k].id + "</div>";
+    });
+    $("#sources").innerHTML = "<div>Code du travail, lu au relais Légifrance le 8 septembre 2026, " +
+      "deux lectures concordantes par article.</div>" + h;
+  }
+
+  /* Chaque frappe réécrit les documents. */
+  $("#champs").addEventListener("input", rendre);
+  $("#champs").addEventListener("change", rendre);
+
+  /* Une correction faite à la main dans le document est retenue sur le texte
+     d'origine du bloc : elle survit à la réécriture des autres. */
+  document.addEventListener("input", function (ev) {
+    var el = ev.target;
+    if (!el || !el.getAttribute || !el.hasAttribute("contenteditable")) return;
+    if (!el.closest("#feuille")) return;
+    corrections[el.getAttribute("data-o")] = texteDe(el);
+    el.classList.add("modifie");
   });
-  $("dt-fermer").addEventListener("click", function () { $("dlg-texte").close(); });
-  $("dt-imprimer").addEventListener("click", function () { window.print(); });
-  $("dt-copier").addEventListener("click", function () {
-    var t = $("dt-corps").textContent;
-    if (navigator.clipboard) navigator.clipboard.writeText(t);
+
+  $("#btn-word").addEventListener("click", function () {
+    var f = pourFichier();
+    /* Les puces partent en paragraphes précédés du trait d'union : le rendu
+       « puce » d'audit-export.js les ferait précéder d'un tiret long. */
+    var items = f.blocs.map(function (b) {
+      if (b.k === "puce") return { k: "p", t: "- " + b.t };
+      return { k: VERS_EXPORT[b.k] || "p", t: b.t };
+    });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, f.titre || "Convocation et calendrier de la négociation annuelle obligatoire"),
+      "negociation-annuelle-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
+  $("#btn-imprimer").addEventListener("click", function () { window.print(); });
 
-  var man = MOTEUR.manifeste || {};
-  var cpt = man.compteurs || {};
-  $("pied").innerHTML = "Moteur : " + e(man.domaine || "négociation obligatoire en entreprise") +
-    (man.empreinte ? " — empreinte " + '<span class="ident">' + e(man.empreinte) + "</span>" : "") +
-    (cpt.controles ? " — " + cpt.controles + " contrôles, " + (cpt.articlesLus || 0) + " articles lus à la source" : "") +
-    ". Les données saisies restent dans ce navigateur.";
+  /* ═══════════════════════════════════ la question, et ce qu'elle commande */
+  var CLE = "nao-reponse";
+  function ouvrirDocument() {
+    $("#ecran-question").hidden = true;
+    $("#ecran-doc").hidden = false;
+    rendre();
+    window.scrollTo(0, 0);
+  }
+  function ouvrirQuestion() {
+    $("#ecran-question").hidden = false;
+    $("#ecran-doc").hidden = true;
+    window.scrollTo(0, 0);
+  }
+  $("#rep-non").addEventListener("click", function () {
+    try { localStorage.setItem(CLE, "non"); } catch (e) {}
+    ouvrirDocument();
+  });
+  /* Le « oui » n'ouvre pas un questionnaire : il ouvre le dépôt du
+     procès-verbal existant et son contrôle, en un clic. */
+  $("#rep-oui").addEventListener("click", function () {
+    try { localStorage.setItem(CLE, "oui"); } catch (e) {}
+    location.href = "controler-nao.html";
+  });
+  /* Le bouton Retour du bandeau, posé par droits.js : depuis le document, il
+     revient à la question ; depuis la question, il quitte la page. */
+  document.addEventListener("click", function (ev) {
+    var a = ev.target.closest ? ev.target.closest("header.site a.retour") : null;
+    if (!a || $("#ecran-doc").hidden) return;
+    ev.preventDefault(); ev.stopPropagation();
+    try { localStorage.removeItem(CLE); } catch (e) {}
+    ouvrirQuestion();
+  }, true);
 
-  construireFiche(); construireFormulaireFiche(); majCompteur();
-
-  (function reprendre() {
-    var t = Number(ETAT.etape) || 1;
-    /* La fiche a pu être remplie sur l'écran d'accueil avant même la
-       première visite de ce module : ne pas la remontrer, passer
-       directement à l'étape 2, comme si elle venait d'être validée ici. */
-    if (t < 2 && P) { var pp = P.lire(); if (pp && pp.denomination) t = 2; }
-    if (t < 2) return;
-    construireQuestionnaire();
-    if (t >= 3) construireRapportGeneral();
-    if (t >= 4) construireGuide();
-    if (t >= 5) { majChoixItem(); rendreItem($("choix-item").value); }
-    if (t >= 6) construireVerifs();
-    montrer(t);
-    /* Choisir un audit doit mener au questionnaire, pas à une page de
-       présentation : la présentation s'efface et l'écran s'ouvre sur
-       l'étape 2 — on remonte si on veut revoir la fiche. */
-    var pres = document.querySelector(".presentation");
-    if (pres) pres.style.display = "none";
-    var q = document.getElementById("t2");
-    if (q) q.scrollIntoView();
+  /* Les valeurs de départ, pour que les documents soient écrits avant la
+     première frappe : la première réunion à trois semaines, un jour ouvré. */
+  (function depart() {
+    $("#c-date").value = iso(ouvre(jour(new Date(), 21)));
   })();
+
+  /* Sous la question : l'entreprise, son effectif, et ce que L. 2242-1
+     commande. */
+  (function fiche() {
+    var eff = effectif(), t = "";
+    if (profil.denomination) t = profil.denomination;
+    if (eff !== null) t += (t ? " · " : "") + eff + " salarié" + (eff > 1 ? "s" : "");
+    t += (t ? " · " : "") + "due si une section syndicale d'organisation représentative est constituée (" +
+      ref(["L2242-1"]) + ")";
+    if (eff !== null && eff >= 300) t += " · quatre négociations à partir de 300 salariés (" + ref(["L2242-13"]) + ")";
+    $("#fiche-rappel").textContent = t;
+  })();
+
+  /* La réponse déjà donnée n'est pas redemandée : on retombe où l'on était. */
+  var dejaRepondu = null;
+  try { dejaRepondu = localStorage.getItem(CLE); } catch (e) {}
+  if (dejaRepondu === "non") ouvrirDocument();
 })();
 </script>
 <script>
