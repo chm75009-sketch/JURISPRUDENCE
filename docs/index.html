@@ -3,181 +3,110 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jurisprudence — l'outil des relations collectives</title>
-<meta name="description" content="Auditer, régulariser, mener une procédure, produire un document, trouver une réponse. L'outil pratique des relations collectives.">
+<title>Jurisprudence</title>
+<meta name="description" content="Votre fiche d'entreprise, puis deux boutons : Audit et Gérer.">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1c2126">
 
 <!--
-  L'ACCUEIL, ET POURQUOI IL EST FAIT AINSI
+  L'accueil, en deux écrans.
 
-  Il ouvrait sur la recherche de jurisprudence, et proposait onze liens de même
-  poids : huit audits, l'agenda, les documents, les parcours. C'était l'outil du
-  juriste, pas celui du responsable des ressources humaines — et il fallait
-  savoir ce qu'est une base de données économiques et sociales pour cliquer au
-  bon endroit.
+  Écran 1 : la fiche d'entreprise, une seule fois. Dénomination, effectif,
+  secteur, convention collective. Un bouton Continuer.
 
-  Il pose désormais la question que le visiteur se pose déjà — qu'est-ce que
-  vous avez à faire ? Une fiche entreprise à remplir une fois, puis deux
-  portes seulement : auditer (faire le point, module par module) et gérer
-  (les outils du quotidien, de l'embauche à la rupture — procédures,
-  documents, recherche). Quatre portes au départ, deux au bout du compte :
-  la distinction qui comptait pour l'utilisateur n'était pas entre
-  « procédure », « document » et « recherche », mais entre vérifier sa
-  conformité et agir au jour le jour.
+  Écran 2 : la fiche rappelée sur une ligne avec un bouton Modifier, deux
+  phrases, deux grands boutons, Audit et Gérer. Rien d'autre.
 
-  Rien n'est supprimé : tout ce qui existait reste accessible, rangé.
+  Si la fiche est déjà remplie, on arrive directement à l'écran 2.
+  Maquette validée le 8 septembre 2026 (epreuve/maquette.html).
 -->
 
 <link rel="stylesheet" href="style.css">
 <style>
-  /* La page d'accueil : la question, la fiche, les deux portes. Tout le
-     reste (bandeau, pied, boutons, champs) vient de style.css. */
+  body{font-size:18px;line-height:1.45}
+  main.wrap{max-width:560px;padding:0 16px}
 
-  .question{padding:var(--e7) 0 var(--e1)}
-  .question p.sur{margin:0 0 var(--e2)}
-  .question h1{margin:0 0 var(--e3)}
-  .question p.sous{margin:0;max-width:62ch;color:var(--texte-2)}
+  /* ecran 1 : la fiche */
+  .fiche{padding:20px 0 40px}
+  .fiche h1{font:600 26px/1.2 system-ui;margin:4px 0 16px}
+  .fiche fieldset{border:0;background:none;border-radius:0;padding:0;margin:0}
+  .fiche legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .fiche .grille{display:flex;flex-direction:column;gap:14px}
+  .fiche label{display:flex;flex-direction:column;gap:6px;position:relative}
+  .fiche label .nom{font:400 16px/1.35 system-ui;color:var(--texte-2);margin:0}
+  .fiche input,.fiche select{font:18px system-ui;padding:12px 14px;min-height:48px;
+    border:1px solid var(--filet-2);border-radius:10px;background:var(--surface);color:var(--texte)}
+  .fiche .idcc-liste{font-size:16px}
+  .fiche .idcc-liste .idcc-o{min-height:44px}
+  .btn-suite{display:block;width:100%;margin:22px 0 0;font:600 19px system-ui;padding:16px;
+    min-height:56px;border-radius:12px}
 
-  /* ---------- la fiche, avant tout ---------- */
-  .ficheban{display:flex;flex-wrap:wrap;gap:var(--e2) var(--e4);align-items:center;
-    justify-content:space-between;margin:var(--e5) 0 0;padding:var(--e4) var(--e5);
-    background:var(--accent-clair);border:1px solid var(--accent);
-    border-radius:var(--r2);text-decoration:none;color:inherit}
-  .ficheban:hover{background:#e7ebf3}
-  .ficheban b{display:block;font:600 15px/1.35 system-ui;color:var(--accent)}
-  .ficheban span{font-size:var(--t2);color:var(--texte-2)}
-  .ficheban-fleche{font:600 var(--t2)/1 system-ui;color:var(--accent);white-space:nowrap}
-  .ficheban[hidden]{display:none}
-  .ficheban-continuer{display:block;margin:var(--e3) 0 0}
-  .ficheban-continuer[hidden]{display:none}
+  /* ecran 2 : la ligne, le chapeau, les deux boutons */
+  .rappel{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--filet)}
+  .rappel .texte{flex:1;min-width:0;font-size:16px;line-height:1.35;color:var(--texte-2)}
+  .rappel .texte b{color:var(--texte);font-size:17px}
+  .rappel button{flex:none;font:600 17px system-ui;padding:10px 14px;min-height:44px;
+    border-radius:10px;background:var(--surface);color:var(--texte);border:1px solid var(--filet-2)}
+  .rappel button:hover{background:var(--creux);color:var(--texte);border-color:var(--filet-2)}
+  .chapeau{margin:20px 0 0;font-size:17px;line-height:1.5;color:var(--texte-2)}
+  .chapeau b{color:var(--texte)}
+  .portes{display:flex;flex-direction:column;gap:14px;margin:20px 0 0}
+  .grand{display:flex;align-items:center;min-height:92px;padding:26px 20px;border-radius:16px;
+    border:2px solid var(--accent);background:var(--accent-clair);color:var(--accent);
+    font:600 26px/1.2 system-ui;text-decoration:none}
+  .grand:hover{background:var(--accent);color:#fff}
+  @media (min-width:700px){
+    main.wrap{max-width:720px}
+    .portes{flex-direction:row}
+    .grand{flex:1;min-height:110px;justify-content:center}
+  }
 
-  /* ---------- les deux portes : deux boutons, rien d'autre ---------- */
-  .portes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:var(--e4);margin:var(--e4) 0 0}
-  .portes[hidden]{display:none}
-  .porte-bouton{display:block;background:var(--surface);border:1px solid var(--filet-2);
-    border-radius:var(--r2);box-shadow:var(--ombre);padding:var(--e5);
-    text-decoration:none;color:inherit}
-  .porte-bouton:hover{border-color:var(--accent)}
-  .porte-bouton .n{display:inline-flex;width:28px;height:28px;border-radius:var(--r1);
-    background:var(--accent);color:#fff;font:600 var(--t2)/28px system-ui;
-    justify-content:center;margin-bottom:var(--e3)}
-  .porte-bouton h2{margin:0 0 var(--e1);font:600 22px/1.25 system-ui}
-  .porte-bouton p{margin:0;font-size:var(--t3);color:var(--texte-2)}
-
-  /* ---------- les règles ---------- */
-  .regles{margin:var(--e7) 0 0;padding:var(--e5) 0 0;border-top:1px solid var(--filet)}
-  .regles h2{margin:0 0 var(--e1)}
-  .regles>p{margin:0 0 var(--e4);color:var(--texte-2);font-size:var(--t3);max-width:64ch}
-  .regles ul{list-style:none;margin:0;padding:0;
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:var(--e3)}
-  .regles li{background:var(--surface);border:1px solid var(--filet);
-    border-radius:var(--r2);padding:var(--e3) var(--e4)}
-  .regles li b{display:block;margin-bottom:var(--e1);font-size:var(--t3)}
-  .regles li span{font-size:var(--t2);color:var(--texte-2);line-height:1.55}
-
-  dialog{max-width:64ch;border:1px solid var(--filet-2);border-radius:var(--r2);
-    padding:var(--e5);font:15px/1.6 system-ui;color:var(--texte);background:var(--surface)}
-  dialog h2{margin:0 0 var(--e3);font:600 18px/1.3 system-ui}
-  dialog p{margin:0 0 var(--e2)}
+  footer{margin:40px 0 32px;padding-top:14px;border-top:1px solid var(--filet);
+    font-size:15px;color:var(--texte-2);text-align:center}
+  [hidden]{display:none !important}
 </style>
 </head>
 <body>
 
 <div class="maj-dispo" id="maj-dispo">
   <div class="wrap">
-    <span><b>Une nouvelle version est disponible.</b> Celle affichée date de votre dernière ouverture.</span>
-    <button type="button" id="btn-maj">Recharger maintenant</button>
+    <span><b>Une nouvelle version est disponible.</b></span>
+    <button type="button" id="btn-maj">Recharger</button>
   </div>
 </div>
 
 <header class="site">
   <div class="wrap">
     <p class="marque">Jurisprudence <span>relations collectives</span></p>
-    <div class="outils">
-      <button id="btn-avert" type="button">Avertissement d'usage</button>
-      <span id="etat-version"></span>
-    </div>
   </div>
 </header>
 
 <main class="wrap">
 
-  <section class="question">
-    <p class="sur">Bienvenue</p>
-    <h1>Qu'est-ce que vous avez à faire&nbsp;?</h1>
-    <p class="sous" id="sous">Une fiche à remplir une fois, deux portes ensuite. Rien qu'on
-    vous demande deux fois.</p>
-  </section>
-
-  <!-- ══ écran 1 : la fiche — rien d'autre tant qu'elle n'est pas complète ══ -->
-  <section id="ecran-fiche">
+  <section class="fiche" id="ecran-fiche" hidden>
+    <h1>Votre entreprise</h1>
     <div id="fiche-accueil"></div>
-    <button type="button" class="ficheban-continuer" id="continuer-fiche" hidden>Continuer →</button>
+    <button type="button" class="btn-suite" id="continuer-fiche">Continuer</button>
   </section>
 
-  <!-- ══ écran 2 : deux portes, une fois la fiche complète ══ -->
-  <a class="ficheban" id="ficheban" href="#" hidden>
-    <div>
-      <b id="rail-ent">Mon entreprise</b>
-      <span id="rail-ent-txt"></span>
+  <section id="ecran-portes" hidden>
+    <div class="rappel">
+      <div class="texte"><b id="rail-ent"></b> <span id="rail-ent-txt"></span></div>
+      <button type="button" id="modifier-fiche">Modifier</button>
     </div>
-    <span class="ficheban-fleche">Modifier →</span>
-  </a>
-
-  <div class="portes" id="ecran-portes" hidden>
-    <a class="porte-bouton p1" href="auditer.html">
-      <span class="n">A</span>
-      <h2>Auditer</h2>
-      <p>Faire le point, module par module — ce qui manque, et comment le corriger,
-      jusqu'à la vérification.</p>
-    </a>
-    <a class="porte-bouton p2" href="gerer.html">
-      <span class="n">B</span>
-      <h2>Gérer</h2>
-      <p>Les outils du quotidien, de l'embauche à la rupture — tenir vos documents,
-      mener une procédure, produire un acte.</p>
-    </a>
-  </div>
-
-  <!-- ══ les règles ══ -->
-  <section class="regles">
-    <h2>Les cinq règles de l'écran</h2>
-    <p>Elles valent pour toutes les pages. C'est ce qui fait qu'on s'y retrouve sans mode d'emploi.</p>
-    <ul>
-      <li><b>Une chose par écran</b><span>Un point à corriger, un document à produire,
-        une question. Jamais un tableau de bord à douze cases.</span></li>
-      <li><b>On ne demande jamais deux fois</b><span>L'effectif saisi une fois ne se
-        resaisit nulle part. Il ouvre et ferme les questions.</span></li>
-      <li><b>Un « oui » n'est pas une preuve</b><span>Rien n'est écrit « en règle »
-        avant d'avoir été vérifié sur pièces. Le mot est réservé.</span></li>
-      <li><b>Chaque phrase a son article</b><span>Et son identifiant de version.
-        Rien n'est affirmé qui n'ait été lu à la source.</span></li>
-      <li><b>Tout sort en Word et en PDF</b><span>Un rapport qu'on ne peut pas remettre
-        à sa direction n'a pas servi.</span></li>
-    </ul>
+    <p class="chapeau"><b>Audit</b> : une question par obligation, oui ou non ; à non, le document
+    manquant est écrit pour vous ; à oui, vous déposez le vôtre et il est contrôlé.
+    <b>Gérer</b> : les documents du quotidien, de l'embauche à la rupture, contrat, sanction,
+    licenciement, comité, remplis au nom de votre entreprise et prêts en Word.</p>
+    <div class="portes">
+      <a class="grand" href="auditer.html">Audit</a>
+      <a class="grand" href="gerer.html">Gérer</a>
+    </div>
   </section>
 
-  <footer>
-    Les calculs se font dans votre navigateur : rien n'est envoyé, rien n'est conservé ailleurs
-    que sur ce poste. Cet outil assiste votre démarche&nbsp;; il ne remplace ni votre conseil, ni la
-    décision de l'administration ou du juge. <a href="#" id="lien-avert">Avertissement d'usage</a>.
-  </footer>
+  <footer>Tout se calcule dans votre navigateur, rien n'est envoyé</footer>
 
 </main>
-
-<dialog id="dlg-avertissement">
-  <h2>Avertissement d'usage</h2>
-  <p>Cet outil vous assiste dans votre démarche. Il ne se substitue pas au conseil d'un avocat,
-  ni à celui de votre conseil habituel, ni à la décision de l'autorité administrative ou du juge.</p>
-  <p>Les listes d'obligations sont les plus complètes que les textes lus à la source permettent :
-  elles ne sont pas exhaustives pour autant — votre convention collective, vos accords et votre
-  activité peuvent ajouter des obligations que l'application signale sans les détailler.</p>
-  <p>Un rapport sans point bloquant dit « rien ne bloque en l'état de vos réponses », jamais
-  « rien ne bloquera ». La décision, et la responsabilité qui l'accompagne, restent les vôtres.</p>
-  <form method="dialog" style="margin-top:14px"><button>Fermer</button></form>
-</dialog>
 
 <script src="droits.js"></script>
 <script src="idcc.js"></script>
@@ -187,130 +116,87 @@
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
 
-  /* Le premier écran est la fiche, et rien d'autre : nom de la société,
-     effectif, activité, convention collective. Tant que ces quatre champs ne
-     sont pas remplis, les deux portes restent masquées — pas devinées, pas
-     entr'aperçues. Dès qu'ils le sont, l'écran bascule : la fiche se replie
-     en un simple rappel, et les deux portes apparaissent. */
-  var CHAMPS_ACCUEIL = (window.Profil ? window.Profil.IDENTITE : []).filter(function (ch) {
-    return ["denomination", "effectif", "secteur", "conventionCollective"].indexOf(ch.c) >= 0;
+  /* Les quatre champs de la fiche, sans texte d'aide, avec des intitulés courts. */
+  var NOMS = {
+    denomination: "Dénomination",
+    effectif: "Effectif (salariés)",
+    secteur: "Secteur",
+    conventionCollective: "Convention collective (IDCC)"
+  };
+  var CHAMPS = (window.Profil ? window.Profil.IDENTITE : []).filter(function (ch) {
+    return NOMS[ch.c] !== undefined;
+  }).map(function (ch) {
+    var c = {};
+    for (var k in ch) if (Object.prototype.hasOwnProperty.call(ch, k)) c[k] = ch[k];
+    c.nom = NOMS[ch.c];
+    c.aide = "";
+    return c;
   });
 
-  function profilActuel() {
-    try { return JSON.parse(localStorage.getItem("profil-entreprise") || "null"); } catch (e) { return null; }
-  }
+  function profil() { return window.Profil ? window.Profil.lire() : {}; }
   function complet(p) {
-    return !!(p && p.denomination && p.effectif != null && String(p.effectif) !== "" &&
-      p.secteur && p.conventionCollective);
+    return !!(p && String(p.denomination || "").trim() && String(p.effectif == null ? "" : p.effectif).trim() !== "" &&
+      String(p.secteur || "").trim() && String(p.conventionCollective || "").trim());
   }
 
-  /* En ouvrant l'application, on tombe toujours sur la fiche — jamais
-     directement sur les deux boutons, même quand elle est déjà remplie
-     d'une visite précédente. Le passage aux deux boutons se fait par le
-     bouton « Continuer », et par lui seul.
-
-     L'écran basculait autrefois de lui-même dès que les quatre champs
-     étaient remplis. Le défaut, mesuré le 31 août 2026 : la fiche déjà
-     complète, on efface la dénomination pour la corriger, on tape la
-     première lettre — les quatre champs sont de nouveau remplis, l'écran
-     bascule, et le champ disparaît sous les doigts avant la deuxième
-     lettre. La correction devenait impossible.
-
-     Le remède n'est pas de deviner mieux : c'est de ne plus deviner.
-     La saisie ne fait plus que deux choses — enregistrer, et faire
-     apparaître « Continuer » dès que les quatre champs y sont. Rien ne
-     bouge tant que l'utilisateur n'a pas décidé d'avancer. */
-  function basculer() {
-    var p = profilActuel();
-    $("ecran-fiche").hidden = true;
-    $("ecran-portes").hidden = false;
-    $("ficheban").hidden = false;
-    majResume(p);
-    majSeuils(p);
+  /* La convention, en court : le numéro et l'intitulé sans son préambule. */
+  function conventionCourte(s) {
+    s = String(s || "").trim();
+    if (!s) return "";
+    var m = s.match(/^(\d{3,4})\s*[^\w\s]?\s*(.*)$/);
+    var num = m ? String(Number(m[1])) : "";
+    var t = m ? m[2] : s;
+    t = t.replace(/^convention collective( nationale| régionale| départementale| interrégionale)?( de travail)?( des | de la | de l'| du | de | d')?/i, "");
+    if (t) t = t.charAt(0).toUpperCase() + t.slice(1);
+    return (num ? "IDCC " + num + (t ? ", " : "") : "") + t;
   }
 
-  /* Ce que fait une frappe dans la fiche : enregistrer, tenir le rappel à
-     jour, et rien de plus. */
-  function surSaisie() {
-    var p = profilActuel();
-    $("continuer-fiche").hidden = !complet(p);
-    majResume(p);
-    majSeuils(p);
-  }
-
-  function afficherFiche() {
-    var p = profilActuel();
-    $("ecran-fiche").hidden = false;
-    $("ecran-portes").hidden = true;
-    $("ficheban").hidden = true;
-    $("continuer-fiche").hidden = !complet(p);
-    majResume(p);
-    majSeuils(p);
-  }
-
-  if (window.Profil && CHAMPS_ACCUEIL.length === 4) {
-    window.Profil.rendre($("fiche-accueil"), {
-      champs: CHAMPS_ACCUEIL,
-      legende: "Votre entreprise",
-      aide: "Quatre informations, une seule fois : elles ouvrent et referment les obligations de tous les modules ci-dessous, sans jamais être redemandées.",
-      echange: false,
-      onChange: surSaisie,
-    });
-  }
-  $("continuer-fiche").addEventListener("click", basculer);
-  $("ficheban").addEventListener("click", function (e) {
-    e.preventDefault();
-    afficherFiche();
-  });
-
-  /* La fiche entreprise sert, module par module, à dire ce qui concerne
-     l'entreprise et ce qui ne la concerne pas. La condition est citée telle
-     qu'elle est — un seuil d'effectif quand c'en est un. */
-  function majResume(p) {
-    if (!p) return;
+  function majRappel(p) {
     var bits = [];
     var e = p.effectif != null ? parseInt(p.effectif, 10) : null;
     if (e != null && !isNaN(e)) bits.push(e + " salarié" + (e > 1 ? "s" : ""));
-    if (p.secteur) bits.push(p.secteur);
-    if (p.conventionCollective) bits.push(p.conventionCollective);
-    $("rail-ent").textContent = p.denomination || "Mon entreprise";
-    $("rail-ent-txt").textContent = bits.length ? bits.join(" · ") : "Fiche à compléter";
+    var cc = conventionCourte(p.conventionCollective);
+    if (cc) bits.push(cc);
+    $("rail-ent").textContent = p.denomination || "";
+    $("rail-ent-txt").textContent = bits.length ? "· " + bits.join(" · ") : "";
   }
 
-  /* Les seuils eux-mêmes (data-seuil, data-interne) sont affichés et
-     expliqués sur auditer.html, une fois qu'on y arrive — cette page-ci ne
-     montre plus que les deux boutons, rien à y filtrer. */
-  function majSeuils(p) {
-    var eff = p && p.effectif != null ? parseInt(p.effectif, 10) : null;
-    if (isNaN(eff)) eff = null;
-    if (eff === null) return;
-    $("sous").textContent = "Ce qui s'affiche tient compte de votre effectif — "
-      + eff + " salarié" + (eff > 1 ? "s" : "") + " — et la condition est dite à chaque fois.";
+  function montrerFiche() {
+    $("ecran-portes").hidden = true;
+    $("ecran-fiche").hidden = false;
+    $("continuer-fiche").disabled = !complet(profil());
+    window.scrollTo(0, 0);
+  }
+  function montrerPortes() {
+    var p = profil();
+    majRappel(p);
+    $("ecran-fiche").hidden = true;
+    $("ecran-portes").hidden = false;
+    window.scrollTo(0, 0);
   }
 
-  afficherFiche();
+  if (window.Profil && CHAMPS.length === 4) {
+    window.Profil.rendre($("fiche-accueil"), {
+      champs: CHAMPS,
+      legende: "Votre entreprise",
+      echange: false,
+      onChange: function (p) { $("continuer-fiche").disabled = !complet(p); }
+    });
+    var autre = $("fiche-accueil").querySelector('option[value="__autre"]');
+    if (autre) autre.textContent = "Autre";
+    var cc = $("fc-conventionCollective");
+    if (cc) { cc.placeholder = "numéro ou intitulé"; cc.setAttribute("data-garde-placeholder", "1"); }
+  }
 
-  $("btn-avert").addEventListener("click", function () { $("dlg-avertissement").showModal(); });
-  $("lien-avert").addEventListener("click", function (e) { e.preventDefault(); $("dlg-avertissement").showModal(); });
+  $("continuer-fiche").addEventListener("click", function () {
+    if (!complet(profil())) return;
+    montrerPortes();
+  });
+  $("modifier-fiche").addEventListener("click", montrerFiche);
 
-  /* La version, lue du manifeste du service worker s'il y en a un. */
-  try {
-    fetch("manifest.json", { cache: "no-store" }).then(function (r) { return r.json(); })
-      .then(function (m) { if (m && m.version) $("etat-version").textContent = m.version; })
-      .catch(function () {});
-  } catch (e) {}
+  if (complet(profil())) montrerPortes(); else montrerFiche();
 
-  /* Une mise à jour du service worker prend la main en arrière-plan, sans
-     rien dire : la page déjà ouverte continue de faire tourner son ancien
-     code tant qu'elle n'est pas rechargée. Un rechargement forcé dès la prise
-     de main a été essayé (version 7.9) et s'est révélé pire que le mal : le
-     changement de contrôleur peut survenir à tout moment, y compris pendant
-     qu'on vient de toucher un lien — le rechargement gagnait alors la course
-     contre la navigation et le clic ne menait plus nulle part. On revient au
-     même principe que recherche.html : un bandeau, jamais un rechargement
-     imposé. Le tout premier enregistrement ne compte pas comme une mise à
-     jour — d'où le drapeau qui ne bascule qu'après cette première prise de
-     contrôle. */
+  /* Mise à jour de l'application : un bandeau, jamais un rechargement imposé. */
   if ("serviceWorker" in navigator) {
     var dejaControlee = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.addEventListener("controllerchange", function () {
