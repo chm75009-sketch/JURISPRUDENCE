@@ -109,7 +109,7 @@
   details.repli summary{cursor:pointer;font-weight:600;color:var(--texte-2);min-height:40px;display:flex;align-items:center}
   details.repli .corps{padding:6px 0 var(--e4);color:var(--encre)}
   details.repli p{margin:0 0 10px;line-height:1.5}
-  details.repli .ident{font-size:11px}
+  details.repli .vers{font-size:12px;color:var(--texte-2)}
   details.repli.loi{margin-bottom:var(--e6)}
   .paie textarea{width:100%;min-height:120px;box-sizing:border-box;font:15px/1.5 system-ui;padding:12px;
     border:1px solid var(--filet-2);border-radius:10px;background:var(--surface);color:var(--encre);resize:vertical;margin:0 0 10px}
@@ -286,6 +286,10 @@
   }
   function raison(cle) { return E.raisons[cle] != null ? String(E.raisons[cle]) : ""; }
 
+  /* Un titre de section ou de sujet qui est lui-même la ligne à renseigner
+     ne s'écrit qu'une fois : « A. Environnement » puis « Environnement »
+     serait la même chose deux fois. */
+  function sansLettre(t) { return String(t || "").replace(/^([A-Z]+\.|[a-z]+\))\s*/, ""); }
   function entetes(c) {
     return ["Section", "Sujet", "Information"]
       .concat(c.mil.map(function (m) { return m.annee + " (" + m.nature + ")"; }))
@@ -321,11 +325,13 @@
       r.lignes.forEach(function (l) {
         if (l.section && l.section !== sec) {
           sec = l.section; suj = null;
-          corps += '<tr class="sec"><td class="info">' + ech(l.section) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
+          if (sansLettre(l.section) !== l.info)
+            corps += '<tr class="sec"><td class="info">' + ech(l.section) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
         }
         if (l.sujet && l.sujet !== suj) {
           suj = l.sujet;
-          corps += '<tr class="suj"><td class="info">' + ech(l.sujet) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
+          if (sansLettre(l.sujet) !== l.info)
+            corps += '<tr class="suj"><td class="info">' + ech(l.sujet) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
         }
         var une = false;
         corps += '<tr><td class="info">' + ech(l.info) + "</td>" +
@@ -746,38 +752,38 @@
   /* Le texte de loi, replié sous le classeur. Les passages cités sont ceux
      lus au relais Légifrance de l'application, avec la version lue. */
   $("#loi").innerHTML =
-    "<p><b>L. 2312-36 du code du travail</b> <span class=\"ident\">(LEGIARTI000048533625, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
+    "<p><b>L. 2312-36 du code du travail</b> <span class=\"vers\">(LEGIARTI000048533625, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, une base de données économiques, sociales et environnementales, " +
     "mise régulièrement à jour, rassemble un ensemble d'informations que l'employeur met à disposition du comité social et économique. " +
     "La base de données est accessible en permanence aux membres de la délégation du personnel du comité social et économique " +
     "ainsi qu'aux membres de la délégation du personnel du comité social et économique central d'entreprise, et aux délégués syndicaux. » " +
     "Et plus loin : « Ces informations portent sur les deux années précédentes et l'année en cours et intègrent des perspectives " +
     "sur les trois années suivantes. »</p>" +
-    "<p><b>R. 2312-10</b> <span class=\"ident\">(LEGIARTI000036411580, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
+    "<p><b>R. 2312-10</b> <span class=\"vers\">(LEGIARTI000036411580, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, les informations figurant dans la base de données portent sur l'année en cours, " +
     "sur les deux années précédentes et, telles qu'elles peuvent être envisagées, sur les trois années suivantes. Ces informations sont " +
     "présentées sous forme de données chiffrées ou, à défaut, pour les années suivantes, sous forme de grandes tendances. L'employeur indique, " +
     "pour ces années, les informations qui, eu égard à leur nature ou aux circonstances, ne peuvent pas faire l'objet de données chiffrées " +
     "ou de grandes tendances, pour les raisons qu'il précise. »</p>" +
-    "<p><b>R. 2312-12</b> <span class=\"ident\">(LEGIARTI000036411586, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
+    "<p><b>R. 2312-12</b> <span class=\"vers\">(LEGIARTI000036411586, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« En l'absence d'accord prévu à l'article L. 2312-21, la base de données est tenue à la disposition des personnes mentionnées au " +
     "dernier alinéa de l'article L. 2312-36 sur un support informatique pour les entreprises d'au moins trois cents salariés, et sur un " +
     "support informatique ou papier pour les entreprises de moins de trois cents salariés. »</p>" +
-    "<p><b>L. 2312-21</b> <span class=\"ident\">(LEGIARTI000043975329, lu le 8 septembre 2026, deux lectures espacées)</span> : un accord d'entreprise, ou à défaut " +
+    "<p><b>L. 2312-21</b> <span class=\"vers\">(LEGIARTI000043975329, lu le 8 septembre 2026, deux lectures espacées)</span> : un accord d'entreprise, ou à défaut " +
     "de délégué syndical un accord entre l'employeur et le comité, « définit : 1° L'organisation, l'architecture et le contenu de la base " +
     "de données économiques, sociales et environnementales ». Et : « La base de données comporte au moins les thèmes suivants : " +
     "l'investissement social, l'investissement matériel et immatériel, l'égalité professionnelle entre les femmes et les hommes au sein " +
     "de l'entreprise, les fonds propres, l'endettement, l'ensemble des éléments de la rémunération des salariés et dirigeants, les " +
     "activités sociales et culturelles, la rémunération des financeurs, les flux financiers à destination de l'entreprise et les " +
     "conséquences environnementales de l'activité de l'entreprise. »</p>" +
-    "<p><b>R. 2312-8</b> <span class=\"ident\">(LEGIARTI000049905537)</span> et <b>R. 2312-9</b> " +
-    "<span class=\"ident\">(LEGIARTI000049905524)</span>, lus le 7 septembre 2026, relus le 8 : le contenu de la base à défaut d'accord, " +
+    "<p><b>R. 2312-8</b> <span class=\"vers\">(LEGIARTI000049905537)</span> et <b>R. 2312-9</b> " +
+    "<span class=\"vers\">(LEGIARTI000049905524)</span>, lus le 7 septembre 2026, relus le 8 : le contenu de la base à défaut d'accord, " +
     "au-dessous et à partir de trois cents salariés. Les rubriques, sections, sujets et lignes du classeur en sont le découpage, mot pour mot.</p>" +
-    "<p><b>L. 2312-2</b> <span class=\"ident\">(LEGIARTI000035650754, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
+    "<p><b>L. 2312-2</b> <span class=\"vers\">(LEGIARTI000035650754, lu le 8 septembre 2026, deux lectures espacées)</span> : " +
     "« Lorsque, postérieurement à la mise en place du comité social et économique, l'effectif de l'entreprise atteint au moins cinquante " +
     "salariés pendant douze mois consécutifs, le comité exerce l'ensemble des attributions récurrentes d'information et de consultation " +
     "définies par la section 3 à l'expiration d'un délai de douze mois à compter de la date à laquelle le seuil de 50 salariés a été atteint " +
-    "pendant douze mois consécutifs. » La base de données, à l'article L. 2312-18 <span class=\"ident\">(LEGIARTI000052437125)</span>, " +
+    "pendant douze mois consécutifs. » La base de données, à l'article L. 2312-18 <span class=\"vers\">(LEGIARTI000052437125)</span>, " +
     "est dans cette section.</p>";
 
   /* ---------------------------------------------------------------- */

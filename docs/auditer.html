@@ -212,7 +212,7 @@
       dejaControlee = true;
     });
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("sw.js").then(function (reg) { reg.update().catch(function () {}); });
+      navigator.serviceWorker.register("sw.js").then(function (reg) { if (reg && reg.update) reg.update().catch(function () {}); }).catch(function () {});
     });
   }
   $("btn-maj").addEventListener("click", function () { location.reload(); });
