@@ -15,6 +15,18 @@
    identifiant : ce fichier n'enregistre que SST-CTL-HAR-01 à SST-CTL-HAR-05,
    qu'aucun autre fichier ne porte.
 
+   LA FORME, DEPUIS LE 9 SEPTEMBRE 2026 (epreuve/CONSIGNE-EXEMPLE-TABLEAUX.md)
+
+   Chaque générateur rend, dans cet ordre : l'en-tête ; l'exemple, ouvert par
+   le bandeau DP.EXEMPLE et entièrement rempli pour une entreprise fictive du
+   secteur de la fiche (cinq secteurs, services par défaut) ; le document à
+   compléter, même structure, données de la fiche et crochets ; le calendrier ;
+   les liens du thème et du secteur ; puis LES RÈGLES, le droit tel qu'il a
+   été lu. Les tableaux s'écrivent une rangée par ligne, cellules séparées par
+   une barre verticale : feuille-doc.js les rend en vrai tableau. Le corps de
+   chaque document est écrit une seule fois, dans une fonction corps(E) qui
+   sert à l'exemple (E rempli) et au document à compléter (E nul).
+
    TROIS RÈGLES ONT COMMANDÉ L'ÉCRITURE, ET LA TROISIÈME EST VITALE ICI
 
    1. RIEN QUI N'AIT ÉTÉ LU À LA SOURCE. Chaque article cité figure dans
@@ -23,43 +35,43 @@
       RENVOYÉS par un texte lu sont NOMMÉS, jamais reproduits ni paraphrasés,
       et le document le dit à l'endroit exact où le lecteur pourrait croire
       que l'application les connaît. La liste, pour ce fichier :
-        · les articles 222-33 et 222-33-2 du CODE PÉNAL, dont L. 1153-5 et
+        - les articles 222-33 et 222-33-2 du CODE PÉNAL, dont L. 1153-5 et
           L. 1152-4 imposent pourtant d'afficher le TEXTE. C'est le manque le
           plus gênant du fichier, et le plus visible : le relais Légifrance du
           dépôt ne sert que le code du travail. L'affichage produit ici porte
           donc, à la place de ces deux textes, un emplacement réservé et la
           consigne d'aller les chercher, un affichage sans eux ne satisfait
           ni L. 1152-4 ni L. 1153-5 ;
-        · L. 1121-2, auquel L. 1152-2 et L. 1153-2 renvoient pour désigner les
+        - L. 1121-2, auquel L. 1152-2 et L. 1153-2 renvoient pour désigner les
           mesures interdites contre la personne qui a subi, refusé de subir,
           relaté ou témoigné ;
-        · L. 1142-2-1, qui définit l'agissement sexiste et auquel renvoie
+        - L. 1142-2-1, qui définit l'agissement sexiste et auquel renvoie
           L. 4121-2, 7° ;
-        · L. 1153-3, l'un des trois articles que vise la peine de L. 1155-2 ;
-        · les articles 10-1, 12 à 13-1 de la loi n° 2016-1691 du 9 décembre
+        - L. 1153-3, l'un des trois articles que vise la peine de L. 1155-2 ;
+        - les articles 10-1, 12 à 13-1 de la loi n° 2016-1691 du 9 décembre
           2016, dont L. 1152-2 et L. 1153-2 étendent les protections ;
-        · L. 4644-1 et L. 2312-9, nommés par L. 4121-3 ;
-        · L. 2315-22-1 et L. 2315-32, nommés par L. 2315-18 et L. 2314-1 -
+        - L. 4644-1 et L. 2312-9, nommés par L. 4121-3 ;
+        - L. 2315-22-1 et L. 2315-32, nommés par L. 2315-18 et L. 2314-1 ;
           L. 2315-32, lui, est capté et se cite.
 
    2. AUCUNE PEINE ANNONCÉE QUI NE SOIT PORTÉE PAR UN TEXTE CAPTÉ, ET QUI NE
       VISE L'OBLIGATION EN CAUSE. Le périmètre a été revérifié pour ce fichier,
       et il est étroit :
-        · L. 1155-2 punit « les faits de discriminations commis à la suite d'un
+        - L. 1155-2 punit « les faits de discriminations commis à la suite d'un
           harcèlement moral ou sexuel définis aux articles L. 1152-2, L. 1153-2
           et L. 1153-3 » : ce sont les REPRÉSAILLES, non l'organisation de la
           prévention. Il n'est invoqué qu'en HAR-05, et seulement au titre de
           la protection de la personne qui signale ou témoigne ;
-        · L. 4741-1 ne rattrape rien ici : son énumération vise, pour le livre
+        - L. 4741-1 ne rattrape rien ici : son énumération vise, pour le livre
           Ier de la quatrième partie, les « Titres Ier, III et IV », le titre
           II, où vivent L. 4121-1 et L. 4121-2, en est absent ; et les articles
-          L. 1152-… et L. 1153-… relèvent de la PREMIÈRE partie du code, que
-          cette énumération n'atteint pas davantage ;
-        · R. 4741-3, quoique son objet, « les documents et affichages
+          L. 1152 et L. 1153 relèvent de la PREMIÈRE partie du code, que cette
+          énumération n'atteint pas davantage ;
+        - R. 4741-3, quoique son objet, « les documents et affichages
           obligatoires », le laisse croire, a une énumération close
           (L. 4711-1 à L. 4711-5, D. 4711-1 à D. 4711-3) où l'affichage de
           L. 1153-5 ne figure pas. Il n'est invoqué nulle part ;
-        · L. 2317-1 punit deux faits, et deux seulement : l'entrave à la
+        - L. 2317-1 punit deux faits, et deux seulement : l'entrave à la
           constitution du comité ou à la libre désignation de ses MEMBRES, et
           l'entrave à son fonctionnement régulier. La désignation du référent
           de L. 2314-1 est le fait du COMITÉ, non de l'employeur : HAR-02
@@ -70,20 +82,23 @@
       d'agiter une amende qui n'existe pas.
 
    3. LES FAITS NE S'INVENTENT JAMAIS, ET LES QUALIFICATIONS ENCORE MOINS.
-      Aucun document de ce fichier n'écrit ce qu'un salarié aurait fait ou
-      subi. Aucun ne qualifie les faits à la place de l'enquête, ni ne préjuge
-      de son issue. Tout sort ENTRE CROCHETS, avec la consigne de l'écrire
-      daté et circonstancié. La trame d'audition ne pose aucune question qui
-      suppose les faits établis ; le rapport d'enquête porte trois conclusions
-      possibles, établis, non établis, éléments insuffisants, et jamais une
-      seule pré-remplie. Un document qui écrirait « les faits de harcèlement
-      établis » avant l'audition de la personne mise en cause serait une pièce
-      à charge contre son propre auteur.
+      Le document à compléter n'écrit jamais ce qu'un salarié aurait fait ou
+      subi : tout sort ENTRE CROCHETS, avec la consigne de l'écrire daté et
+      circonstancié. L'exemple, lui, met en scène des personnes fictives, dans
+      une entreprise fictive, et le bandeau qui l'ouvre le dit ; il n'emploie
+      que les mots « faits signalés » et « faits allégués » tant que l'enquête
+      n'est pas close, et son rapport ne conclut qu'après avoir entendu la
+      personne mise en cause. La trame d'audition ne pose aucune question qui
+      suppose les faits établis ; le rapport porte trois conclusions
+      possibles, établis, non établis, éléments insuffisants, et le document à
+      compléter n'en coche aucune.
 
    LES SEUILS NE SE SUPPOSENT PAS. Deux cent cinquante salariés pour le
    référent de l'employeur (L. 1153-5-1) : quand l'effectif n'est pas
    renseigné, aucun document ne tranche. Il expose les deux branches et laisse
-   le lecteur porter son chiffre.                                            */
+   le lecteur porter son chiffre. L'exemple, lui, prend l'effectif de la
+   fiche s'il est connu, celui de l'entreprise fictive sinon, et dit de quel
+   côté du seuil il se trouve.                                             */
 (function (global) {
   "use strict";
 
@@ -94,8 +109,9 @@
   var O = DP.outils;
   var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
 
+  var GROS = "════════";
+  function blocCoordonnees(ctx) { return tableauCoordonnees(ctx, null); }
   var TRAIT = "────────────────────────────────────────────────────────────────────────";
-  var GROS  = "════════════════════════════════════════════════════════════════════════";
 
   /* ════════════════════════════════════════════════════════════════════════
      LES OUTILS DE DATE
@@ -125,6 +141,12 @@
     return ctx && ctx.aujourdhui instanceof Date && !isNaN(ctx.aujourdhui.getTime())
       ? ctx.aujourdhui : new Date();
   }
+  /* La date courte des tableaux, JJ/MM/AAAA. */
+  function jj(d) {
+    if (!(d instanceof Date) || isNaN(d.getTime())) return "[date]";
+    var m = d.getMonth() + 1, j = d.getDate();
+    return (j < 10 ? "0" + j : j) + "/" + (m < 10 ? "0" + m : m) + "/" + d.getFullYear();
+  }
 
   /* ════════════════════════════════════════════════════════════════════════
      LES OUTILS DE TEXTE, D'EFFECTIF ET DE PROFIL
@@ -147,6 +169,17 @@
   function signataire(ctx) {
     return cro(((ctx && ctx.profil) || {}).responsable, "Nom et qualité du représentant légal");
   }
+  function villeDe(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    if (p.ville && String(p.ville).trim() !== "") return String(p.ville).trim();
+    var m = String(p.adresse || "").match(/\d{5}\s+([^,;]+)$/);
+    return m ? m[1].trim() : "[ville]";
+  }
+
+  /* Une valeur d'exemple, ou son crochet quand on écrit le document à
+     compléter : la même fonction sert aux deux, pour que les deux aient
+     exactement la même structure. */
+  function X(ex, valeur, crochet) { return ex ? valeur : "[" + crochet + "]"; }
 
   /* L'effectif, lu au profil puis au dossier, et jamais deviné. Un effectif
      absent ne devient pas zéro : il reste inconnu, et tout ce qui dépend d'un
@@ -174,6 +207,32 @@
                    : "Effectif : [EFFECTIF DE L'ENTREPRISE, non renseigné]. Le seuil de " +
                      "deux cent cinquante salariés de L. 1153-5-1 en dépend : portez-le " +
                      "avant de choisir une branche.";
+  }
+
+  /* LES TABLEAUX. Une ligne par rangée, cellules séparées par une barre
+     verticale, la première ligne étant l'en-tête : feuille-doc.js rend ces
+     lignes en vrai tableau à l'écran, en tableau Word bordé et en feuille
+     Excel. Plus de texte à chasse fixe, plus de crochets pointillés pour
+     figurer une colonne. Demande du 9 septembre 2026. */
+  function rangee(cellules) { return cellules.join(" | "); }
+  /* Une rangée vide garde une barre à chaque bout pour que la feuille la
+     reconnaisse comme une ligne de tableau même à deux colonnes. */
+  function rangeeVide(nb) {
+    var c = [];
+    for (var i = 0; i < nb; i++) c.push(" ");
+    return "|" + c.join("|") + "|";
+  }
+  function tableau(entete, lignes) {
+    var L = [rangee(entete)];
+    (lignes || []).forEach(function (l) { L.push(rangee(l)); });
+    L.push("");
+    return L;
+  }
+  function tableauVide(entete, nbLignes) {
+    var L = [rangee(entete)];
+    for (var i = 0; i < (nbLignes || 3); i++) L.push(rangeeVide(entete.length));
+    L.push("");
+    return L;
   }
 
   /* Le pied commun : d'où vient ce qui est écrit, et ce que le document ne
@@ -208,8 +267,16 @@
 
   /* Les deux articles du code pénal que l'affichage doit porter. Le relais
      Légifrance du dépôt ne sert que le code du travail : le bloc est écrit une
-     fois, et repris partout où l'un des deux textes est en cause. */
-  function blocCodePenal(lesquels) {
+     fois, et repris partout où l'un des deux textes est en cause. Dans
+     l'exemple, la même place est tenue par une phrase sans crochet qui dit
+     ce qui y est recopié. */
+  function blocCodePenal(E, lesquels) {
+    if (E) return [
+      "Texte de " + lesquels + ", recopié ici en entier dans sa version en vigueur",
+      "au " + jj(E.d0) + ", date notée sur le support. L'application ne lit que le code",
+      "du travail : elle ne le reproduit pas, et l'exemple ne l'invente pas.",
+      "",
+    ];
     return [
       "[TEXTE À REPORTER, " + lesquels + ".",
       " L'application ne lit que le CODE DU TRAVAIL : elle n'a pas capté ces",
@@ -222,30 +289,288 @@
     ];
   }
 
-  /* L'en-tête d'un courrier : qui écrit, à qui, d'où, quand. */
-  function teteLettre(ctx, destinataire, recommande) {
+  /* L'en-tête d'un courrier : qui écrit, à qui, d'où, quand. E est
+     l'entreprise de l'exemple, ou nul pour le document à compléter. */
+  function teteLettre(ctx, E, destinataire, recommande, dateLettre) {
     var p = (ctx && ctx.profil) || {};
-    var L = [nomDe(ctx), cro(p.adresse, "adresse du siège"), ""];
+    var L = [E ? E.nom : nomDe(ctx), E ? E.adresse : cro(p.adresse, "adresse du siège"), ""];
     (destinataire || []).forEach(function (x) { L.push(x); });
     L.push("");
-    L.push(lieu(ctx) + ", le " + leJour(aujourd(ctx)));
+    L.push((E ? E.ville : lieu(ctx)) + ", le " + leJour(dateLettre || aujourd(ctx)));
     L.push("");
     if (recommande) {
-      L.push("Lettre recommandée avec demande d'avis de réception");
-      L.push("- ou remise en main propre contre récépissé daté et signé -");
+      L.push("Lettre recommandée avec demande d'avis de réception, ou remise en main");
+      L.push("propre contre récépissé daté et signé");
       L.push("");
     }
     return L;
   }
 
-  function formulePolitesse(ctx, appel) {
+  function formulePolitesse(ctx, E, appel) {
     return [
       "Je vous prie d'agréer, " + (appel || "Madame, Monsieur") + ", l'expression de ma",
       "considération distinguée.",
       "",
-      signataire(ctx),
+      E ? E.signataire : signataire(ctx),
       "",
     ];
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════
+     LES ENTREPRISES DE L'EXEMPLE, UNE PAR SECTEUR
+
+     Les mêmes entreprises fictives que celles de documents-sst.js, pour que
+     le document unique et son volet harcèlement parlent de la même maison.
+     Les personnes, les adresses et les numéros sont inventés ; les numéros
+     d'appel sont pris dans les tranches que l'autorité des télécommunications
+     réserve aux œuvres de fiction. Le Défenseur des droits a été relevé sur
+     son site le 9 septembre 2026, c'est la seule coordonnée réelle.
+
+     Ce que chaque secteur porte : l'entreprise, ses signataires, les
+     interlocuteurs de D. 1151-1, les lieux d'affichage, les unités de travail
+     exposées au harcèlement (grille à six colonnes du volet du document
+     unique) et un signalement fictif, pour l'exemple de HAR-05, écrit en
+     « faits signalés » et jamais qualifié avant la clôture.
+     ════════════════════════════════════════════════════════════════════════ */
+  var DDD = { nom: "Défenseur des droits", adresse: "Libre réponse 71120, 75342 Paris Cedex 07", tel: "09 69 39 00 00" };
+  var CSE_EX = {
+    secretaire: "Monsieur Marc TISSIER, secrétaire du comité",
+    referent: "Madame Julie ROUX", qualite: "membre titulaire", college: "1er collège",
+    membres: 4, presents: 4,
+  };
+
+  var EXEMPLES = {
+    "transport et logistique": {
+      nom: "TRANSPORTS EXEMPLE SARL", adresse: "ZA des Chênes, 14 rue du Fret, 77400 Lagny-sur-Marne",
+      siret: "812 345 678 00019", ville: "Lagny-sur-Marne", effectif: 34, femmes: 6,
+      activite: "messagerie, transport routier de marchandises et garage mécanique",
+      signataire: "Monsieur Éric DUVAL, gérant",
+      recoit: "Madame Nadia FERRAND, responsable d'exploitation",
+      remplacant: "Monsieur Éric DUVAL, gérant",
+      referent: { nom: "Madame Claire BONNET", fonction: "assistante de direction", service: "bureau d'exploitation, dépôt de Lagny-sur-Marne",
+        adresse: "bureau de l'étage du dépôt, 14 rue du Fret, 77400 Lagny-sur-Marne, et referent@transports-exemple.example", tel: "01 99 00 12 34",
+        temps: "quatre heures par mois", formation: "deux jours, « prévenir et traiter le harcèlement sexuel et les agissements sexistes », organisme de formation interprofessionnel de Seine-et-Marne",
+        lieuReception: "salle de réunion de l'étage, porte fermée, hors de la vue du quai" },
+      cseAdresse: "local du comité, rez-de-chaussée du dépôt", cseTel: "01 99 00 12 35",
+      spst: { nom: "SPSTI de Seine-et-Marne, antenne de Lagny", adresse: "6 rue de l'Industrie, 77400 Lagny-sur-Marne", tel: "01 99 00 45 67", medecin: "Docteur Sylvie MARTEAU, médecin du travail" },
+      inspection: { nom: "Inspection du travail, unité de contrôle de Seine-et-Marne nord", adresse: "cité administrative, 77000 Melun", tel: "01 99 00 78 90", inspecteur: "Madame Isabelle PONS, inspectrice du travail" },
+      lieux: ["quai de chargement, panneau à côté de la pointeuse", "atelier mécanique, porte du bureau du chef d'atelier", "porte du bureau d'exploitation, où se font les entretiens d'embauche"],
+      encadrement: "chef de quai, chef d'atelier, responsable d'exploitation",
+      unites: [
+        ["Tournées VL et PL", "11 conducteurs dont 4 femmes, seuls toute la journée, contacts avec les clients et avec les chauffeurs d'autres entreprises sur les aires", "téléphone professionnel", "consigne écrite en cas de propos ou de gestes déplacés d'un client, débriefing sous 48 heures, signalement consigné", 2, "responsable d'exploitation, Mme Nadia FERRAND"],
+        ["Quai de chargement", "10 salariés sous un seul chef de quai qui fait les plannings et les évaluations, 2 femmes, intérimaires fréquents", "aucune", "second regard du responsable d'exploitation sur les plannings et les évaluations, accueil des intérimaires avec remise de la procédure", 3, "gérant, M. Éric DUVAL"],
+        ["Atelier mécanique", "3 salariés, travail en soirée jusqu'à 20 heures sans témoin, apprenti de 17 ans", "aucune", "point mensuel avec l'apprenti hors de la présence du chef d'atelier, procédure remise au maître d'apprentissage", 2, "gérant, M. Éric DUVAL"],
+        ["Bureau d'exploitation", "4 salariés, appels tendus avec les chauffeurs et les clients, surcharge de novembre à décembre", "aucune", "droit de transférer un appel devenu insultant, main courante relue chaque mois, formation de l'encadrement", 3, "gérant, M. Éric DUVAL"],
+      ],
+      signalement: {
+        auteur: "Madame Sonia PETIT", auteurQualite: "conductrice VL, tournée est", auteurF: true,
+        cause: "Monsieur Alain ROCHER", causeQualite: "chef d'équipe au quai de chargement",
+        temoins: ["Madame Léa COSTA, agente de quai", "Monsieur Yanis BRUN, conducteur VL"],
+        unite: "quai de chargement, au chargement des tournées, entre 6 h 15 et 6 h 45",
+        faits: [
+          "remarques répétées sur sa tenue au chargement de sa tournée, les D28, D21 et D14 vers 6 h 30, devant l'équipe du quai",
+          "message envoyé sur son téléphone personnel le D13 à 22 h 14, sans aucun motif de service",
+          "tournée est réattribuée à un collègue le D9, au lendemain du jour où elle a demandé que cela cesse",
+        ],
+        mesure: "chargement de la tournée de Mme PETIT confié au chef de quai, M. Karim BELAÏD, jusqu'à la clôture ; M. ROCHER affecté au quai de l'après-midi, ses horaires ne croisant plus ceux de Mme PETIT ; Mme PETIT garde sa tournée est, à sa demande",
+        enqueteurs: ["Madame Nadia FERRAND, responsable d'exploitation", "Monsieur Pascal MOREL, chef d'atelier, extérieur au quai"],
+        pieces: "relevé des tournées du D28 au D9, copie du message du D13, planning du quai",
+      },
+    },
+
+    "industrie": {
+      nom: "MÉCA EXEMPLE SAS", adresse: "ZI de la Plaine, 8 avenue des Forges, 42000 Saint-Étienne",
+      siret: "823 456 789 00027", ville: "Saint-Étienne", effectif: 58, femmes: 9,
+      activite: "découpe, emboutissage et assemblage de pièces métalliques",
+      signataire: "Madame Hélène ROCHE, présidente",
+      recoit: "Madame Claire VIDAL, responsable administratif",
+      remplacant: "Madame Hélène ROCHE, présidente",
+      referent: { nom: "Madame Sonia DIALLO", fonction: "responsable logistique", service: "bâtiment B, magasin",
+        adresse: "bureau du magasin, bâtiment B, 8 avenue des Forges, 42000 Saint-Étienne, et referent@meca-exemple.example", tel: "04 65 71 20 21",
+        temps: "une demi-journée par mois", formation: "deux jours, « référent harcèlement sexuel et agissements sexistes », organisme de formation de la métallurgie de la Loire",
+        lieuReception: "bureau du magasin, porte fermée, ou salle de réunion du bâtiment A sur rendez-vous" },
+      cseAdresse: "local du comité, bâtiment A, rez-de-chaussée", cseTel: "04 65 71 20 22",
+      spst: { nom: "SPSTI Loire, antenne de Saint-Étienne", adresse: "12 rue des Aciéries, 42000 Saint-Étienne", tel: "04 65 71 20 30", medecin: "Docteur Paul GERMAIN, médecin du travail" },
+      inspection: { nom: "Inspection du travail, unité de contrôle de la Loire sud", adresse: "cité administrative, 42000 Saint-Étienne", tel: "04 65 71 40 50", inspecteur: "Monsieur Denis FAVRE, inspecteur du travail" },
+      lieux: ["vestiaires de l'atelier A", "panneau du réfectoire", "hall d'accueil du bâtiment A, où se font les entretiens d'embauche"],
+      encadrement: "chefs d'équipe des trois postes, responsable de production, responsable maintenance",
+      unites: [
+        ["Ligne de production", "17 opérateurs en 3 x 8 dont 2 femmes, équipe de nuit de 6 sans encadrement de direction présent", "référent du comité désigné", "chef d'équipe de nuit formé, procédure affichée au poste, tout signalement traité sous 48 heures", 2, "présidente, Mme Hélène ROCHE"],
+        ["Maintenance", "3 techniciens, astreinte du week-end seul, interventions de nuit sur la ligne", "aucune", "rappel du règlement intérieur, point trimestriel avec le responsable maintenance", 3, "responsable maintenance, M. Yann LE GALL"],
+        ["Magasin et manutention", "6 salariés, intérimaires et jeunes embauchés, un seul responsable pour les plannings", "aucune", "second regard sur les plannings, accueil des intérimaires avec remise de la procédure", 3, "responsable logistique, Mme Sonia DIALLO"],
+        ["Laboratoire et bureaux", "11 salariés, 2 salariées seules au laboratoire en fin de poste, réorganisation des méthodes en cours", "aucune", "porte ouverte sur l'atelier en fin de poste, entretien avec chaque salarié pendant la réorganisation", 3, "présidente, Mme Hélène ROCHE"],
+      ],
+      signalement: {
+        auteur: "Madame Laura MENDES", auteurQualite: "opératrice sur la ligne de production, équipe de nuit", auteurF: true,
+        cause: "Monsieur Bruno CASTEL", causeQualite: "chef d'équipe de nuit",
+        temoins: ["Monsieur Ahmed SAHRAOUI, opérateur", "Madame Nadège BRUN, opératrice"],
+        unite: "atelier A, ligne de production, équipe de nuit",
+        faits: [
+          "propos sur son physique à chaque prise de poste, du D40 au D12, devant l'équipe",
+          "main posée sur l'épaule et le bas du dos à trois reprises, les D25, D18 et D12, au poste de découpe",
+          "affectation au poste le plus bruyant pendant deux semaines à partir du D11, au lendemain du jour où elle a demandé que cela cesse",
+        ],
+        mesure: "M. CASTEL affecté à l'équipe du matin jusqu'à la clôture, sans autorité sur l'équipe de nuit ; Mme MENDES maintenue à son poste et à ses horaires, à sa demande, sous la responsabilité directe du responsable de production",
+        enqueteurs: ["Madame Claire VIDAL, responsable administratif", "Madame Inès BARBIER, responsable qualité, extérieure à l'atelier"],
+        pieces: "plannings de l'équipe de nuit du D40 au D9, fiche d'affectation du D11, relevé de pointage",
+      },
+    },
+
+    "bâtiment et travaux publics": {
+      nom: "BÂTI EXEMPLE SARL", adresse: "3 chemin des Carrières, 33700 Mérignac",
+      siret: "834 567 890 00035", ville: "Mérignac", effectif: 27, femmes: 2,
+      activite: "gros œuvre, second œuvre et terrassement",
+      signataire: "Monsieur Paul LAMBERT, gérant",
+      recoit: "Monsieur Rachid AMRANI, conducteur de travaux",
+      remplacant: "Monsieur Paul LAMBERT, gérant",
+      referent: { nom: "Madame Nathalie SORIN", fonction: "assistante de gestion", service: "bureaux du dépôt de Mérignac",
+        adresse: "bureau du dépôt, 3 chemin des Carrières, 33700 Mérignac, et referent@bati-exemple.example", tel: "05 36 49 10 11",
+        temps: "trois heures par mois, et le temps des rendez-vous", formation: "deux jours, « prévenir le harcèlement sexuel et les agissements sexistes sur les chantiers », organisme de prévention du bâtiment",
+        lieuReception: "bureau du dépôt, porte fermée, ou sur le chantier dans le bungalow de réunion, à la demande de la personne" },
+      cseAdresse: "vestiaires du dépôt, casier du comité", cseTel: "05 36 49 10 12",
+      spst: { nom: "Service de santé au travail du BTP de la Gironde", adresse: "18 avenue de la Pelouse, 33700 Mérignac", tel: "05 36 49 10 20", medecin: "Docteur Anne RIVAL, médecin du travail" },
+      inspection: { nom: "Inspection du travail, unité de contrôle de la Gironde ouest", adresse: "immeuble administratif, 33000 Bordeaux", tel: "05 36 49 30 40", inspecteur: "Madame Hélène CARRÉ, inspectrice du travail" },
+      lieux: ["base vie de chaque chantier, bungalow réfectoire", "dépôt de Mérignac, vestiaires", "bureau du dépôt, où se font les entretiens d'embauche"],
+      encadrement: "chefs de chantier, conducteur de travaux, chef d'atelier",
+      unites: [
+        ["Gros œuvre", "12 compagnons sur des chantiers éloignés du dépôt, 1 salariée, apprentis de 16 et 17 ans, coactivité avec d'autres entreprises", "aucune", "procédure affichée à la base vie, quart d'heure sécurité mensuel consacré au sujet, maître d'apprentissage formé", 2, "conducteur de travaux, M. Rachid AMRANI"],
+        ["Second œuvre", "7 compagnons en binômes chez des clients particuliers, sans témoin", "téléphone", "consigne écrite en cas de propos ou de gestes déplacés d'un client, retrait autorisé, débriefing", 2, "conducteur de travaux, M. Rachid AMRANI"],
+        ["Conduite d'engins et base vie", "5 salariés, un seul chef de chantier qui décide des affectations et des primes", "aucune", "second regard du gérant sur les affectations et les primes, entretien annuel par le conducteur de travaux", 3, "gérant, M. Paul LAMBERT"],
+        ["Bureaux", "3 salariés dont 1 salariée, gérant seul décideur, tension aux réponses aux appels d'offres", "aucune", "référent désigné hors de la ligne hiérarchique, procédure remise", 3, "gérant, M. Paul LAMBERT"],
+      ],
+      signalement: {
+        auteur: "Monsieur Kevin DORÉ", auteurQualite: "maçon, embauché depuis quatre mois", auteurF: false,
+        cause: "Monsieur Serge VALLET", causeQualite: "chef d'équipe gros œuvre",
+        temoins: ["Monsieur Ali MEZIANE, coffreur", "Madame Émilie NOËL, conductrice de minipelle"],
+        unite: "chantier de la rue des Vignes, gros œuvre",
+        faits: [
+          "surnoms humiliants et moqueries devant l'équipe à chaque prise de poste, du D45 au D9",
+          "affectation systématique aux tâches les plus pénibles et refus de pause le D20 et le D13, alors que le reste de l'équipe en prenait une",
+          "menace, le D9, devant deux compagnons, de ne pas le garder à la fin du chantier s'il « continuait à se plaindre »",
+        ],
+        mesure: "M. DORÉ affecté au chantier du dépôt sous l'autorité directe du conducteur de travaux, à sa demande ; M. VALLET reste sur son chantier et ne participe plus à l'appréciation du travail de M. DORÉ",
+        enqueteurs: ["Monsieur Rachid AMRANI, conducteur de travaux", "Monsieur Lucas PERRIN, chef d'atelier, extérieur au chantier"],
+        pieces: "feuilles de pointage du chantier du D45 au D9, fiches d'affectation journalières, compte rendu du quart d'heure sécurité du D20",
+      },
+    },
+
+    "commerce": {
+      nom: "COMMERCE EXEMPLE SARL", adresse: "25 rue de la République, 69002 Lyon",
+      siret: "845 678 901 00043", ville: "Lyon", effectif: 22, femmes: 14,
+      activite: "commerce de détail, magasin de centre-ville avec réserve et livraison",
+      signataire: "Madame Sophie LENOIR, gérante",
+      recoit: "Madame Sophie LENOIR, gérante",
+      remplacant: "Monsieur Antoine ROY, responsable réception",
+      referent: { nom: "Madame Farida HADDAD", fonction: "comptable", service: "bureaux de l'entresol",
+        adresse: "bureau de l'entresol, 25 rue de la République, 69002 Lyon, et referent@commerce-exemple.example", tel: "04 65 71 50 51",
+        temps: "deux heures par mois, et le temps des rendez-vous", formation: "une journée, « harcèlement sexuel et agissements sexistes dans le commerce », organisme de formation de la branche",
+        lieuReception: "bureau de l'entresol, porte fermée, hors des heures d'ouverture à la demande de la personne" },
+      cseAdresse: "salle de pause, casier du comité", cseTel: "04 65 71 50 52",
+      spst: { nom: "SPSTI du Rhône, centre de Lyon Bellecour", adresse: "20 rue de la Charité, 69002 Lyon", tel: "04 65 71 50 60", medecin: "Docteur Marc DUBOIS, médecin du travail" },
+      inspection: { nom: "Inspection du travail, unité de contrôle de Lyon centre", adresse: "immeuble administratif, 69003 Lyon", tel: "04 65 71 70 80", inspecteur: "Monsieur Julien BLANC, inspecteur du travail" },
+      lieux: ["réserve, panneau à côté de la pointeuse", "salle de pause", "bureau de l'entresol, où se font les entretiens d'embauche"],
+      encadrement: "chef de rayon, responsable réception, gérante",
+      unites: [
+        ["Surface de vente", "9 vendeurs dont 6 femmes, contacts permanents avec la clientèle, fermeture à deux", "procédure d'appel du responsable", "consigne écrite face aux propos sexistes de clients, interruption de la vente autorisée, signalement consigné et relu chaque mois", 2, "gérante, Mme Sophie LENOIR"],
+        ["Caisse", "5 salariées, seules le dimanche matin, un seul chef de rayon pour les plannings", "aucune", "second regard de la gérante sur les plannings, affichage à l'entrée du magasin, procédure remise", 2, "gérante, Mme Sophie LENOIR"],
+        ["Réserve et livraison", "5 salariés, contacts avec les chauffeurs, livreurs seuls chez les clients, étudiants en contrat court", "téléphone", "consigne en cas de propos ou de gestes déplacés d'un client ou d'un chauffeur, retrait autorisé, débriefing", 2, "responsable réception, M. Antoine ROY"],
+        ["Bureaux", "3 salariés, gérante seule décideuse, période des soldes et des inventaires", "aucune", "référent désigné hors de la ligne hiérarchique, formation de l'encadrement", 3, "gérante, Mme Sophie LENOIR"],
+      ],
+      signalement: {
+        auteur: "Madame Inès CARON", auteurQualite: "hôtesse de caisse", auteurF: true,
+        cause: "Monsieur Cédric LAMY", causeQualite: "chef de rayon, chargé des plannings de la caisse",
+        temoins: ["Madame Clara MOREAU, vendeuse", "Monsieur Hugo FABRE, vendeur"],
+        unite: "ligne de caisses et réserve, à la fermeture du magasin",
+        faits: [
+          "plaisanteries à connotation sexuelle à la fermeture de caisse, les D30, D23 et D16, devant les vendeurs",
+          "insistance répétée pour un rendez-vous hors du magasin, par messages les D21 et D14, après un premier refus",
+          "planning modifié le D10 pour la mettre en fermeture seule avec lui, au lendemain de son second refus",
+        ],
+        mesure: "fermetures de Mme CARON planifiées avec la gérante ou le responsable réception jusqu'à la clôture ; M. LAMY retiré de l'établissement des plannings de la caisse ; Mme CARON garde ses horaires, à sa demande",
+        enqueteurs: ["Madame Sophie LENOIR, gérante", "Monsieur Antoine ROY, responsable réception, extérieur à la surface de vente"],
+        pieces: "plannings de la caisse du D30 au D9, copies des messages des D21 et D14, main courante du magasin",
+      },
+    },
+
+    "services": {
+      nom: "SERVICES EXEMPLE SAS", adresse: "10 boulevard Haussmann, 75009 Paris",
+      siret: "856 789 012 00051", ville: "Paris", effectif: 31, femmes: 19,
+      activite: "conseil et prestations administratives, accueil du public, télétravail deux jours par semaine",
+      signataire: "Madame Anne MERCIER, présidente",
+      recoit: "Madame Camille VIDAL, responsable administrative",
+      remplacant: "Madame Anne MERCIER, présidente",
+      referent: { nom: "Madame Élise RENARD", fonction: "chargée des ressources humaines", service: "siège, 3e étage",
+        adresse: "bureau 3.12, 10 boulevard Haussmann, 75009 Paris, et referent@services-exemple.example", tel: "01 99 00 60 61",
+        temps: "une demi-journée par mois", formation: "deux jours, « référent harcèlement sexuel et agissements sexistes », organisme de formation interprofessionnel",
+        lieuReception: "salle de réunion du 3e étage, réservée sous un intitulé neutre, ou en visioconférence pour les salariés en télétravail" },
+      cseAdresse: "local du comité, 3e étage, bureau 3.02", cseTel: "01 99 00 60 62",
+      spst: { nom: "SPSTI de Paris, centre Haussmann", adresse: "5 rue de Provence, 75009 Paris", tel: "01 99 00 60 70", medecin: "Docteur Claire NOUAILLES, médecin du travail" },
+      inspection: { nom: "Inspection du travail, unité de contrôle de Paris 9e", adresse: "cité administrative, 75019 Paris", tel: "01 99 00 80 90", inspecteur: "Madame Sarah LEVY, inspectrice du travail" },
+      lieux: ["3e étage, panneau à côté de la machine à café", "hall d'accueil du rez-de-chaussée, où se font les entretiens d'embauche", "intranet, page « prévention », consultée depuis le domicile en télétravail"],
+      encadrement: "responsables d'équipe, responsable d'agence, responsable administrative",
+      unites: [
+        ["Bureaux et écrans", "18 salariés en open space dont 12 femmes, responsables d'équipe qui évaluent et répartissent les missions, pics de clôture", "référent du comité désigné", "formation des responsables d'équipe, procédure affichée, enquête écrite sous huit jours", 2, "présidente, Mme Anne MERCIER"],
+        ["Accueil du public", "2 salariées seules au comptoir en début et en fin de journée, public parfois agressif", "aucune", "consigne écrite face aux propos sexistes ou insultants du public, bouton d'appel, main courante relue chaque mois", 2, "responsable administrative, Mme Camille VIDAL"],
+        ["Déplacements et clients", "6 consultants seuls chez les clients, 3 nuits par mois en déplacement, rendez-vous sensibles", "aucune", "consigne de retrait chez un client, rendez-vous sensibles à deux, débriefing sous 48 heures", 2, "responsable d'agence, M. Nicolas FAURE"],
+        ["Télétravail", "12 salariés deux jours par semaine, échanges par messagerie sans témoin, sur-connexion", "charte", "règles d'usage de la messagerie écrites, signalement possible par courriel dédié, point d'équipe hebdomadaire en présence", 3, "présidente, Mme Anne MERCIER"],
+        ["Entretien des locaux", "2 salariées en soirée, seules dans les étages", "téléphone", "procédure remise en main propre, coordonnées du référent enregistrées sur le téléphone professionnel", 2, "responsable administrative, Mme Camille VIDAL"],
+      ],
+      signalement: {
+        auteur: "Madame Chloé BERNARD", auteurQualite: "consultante", auteurF: true,
+        cause: "Monsieur Olivier MARTIN", causeQualite: "responsable d'équipe",
+        temoins: ["Monsieur Théo LAMBERT, consultant", "Madame Aurélie GIRAUD, assistante"],
+        unite: "3e étage, open space, et messagerie interne",
+        faits: [
+          "messages sur la messagerie interne le soir et le week-end, à contenu personnel et insistant, du D50 au D12",
+          "commentaires sur sa tenue en réunion d'équipe les D27 et D13, devant l'équipe",
+          "retrait de la mission Durand le D9, au lendemain de son refus d'un dîner",
+        ],
+        mesure: "Mme BERNARD rattachée à M. Nicolas FAURE, responsable d'agence, pour ses missions jusqu'à la clôture, à sa demande ; M. MARTIN n'évalue plus ses travaux et ne lui adresse plus de message hors de la présence d'un tiers",
+        enqueteurs: ["Madame Camille VIDAL, responsable administrative", "Monsieur Nicolas FAURE, responsable d'agence, extérieur à l'équipe"],
+        pieces: "export de la messagerie interne du D50 au D12, comptes rendus des réunions d'équipe des D27 et D13, courriel de retrait de mission du D9",
+      },
+    },
+  };
+
+  function secteurDe(ctx) {
+    var s = String(((ctx && ctx.profil) || {}).secteur || "").trim().toLowerCase();
+    return EXEMPLES[s] ? s : "services";
+  }
+  /* L'entreprise de l'exemple : celle du profil quand il en donne une, la
+     fictive du secteur sinon. Les dates se comptent depuis aujourd'hui, et
+     les « D28 » des faits signalés deviennent des dates réelles, vingt-huit
+     jours avant aujourd'hui. */
+  function exempleDe(ctx) {
+    var s = secteurDe(ctx), p = (ctx && ctx.profil) || {}, M = EXEMPLES[s];
+    var e = effectifDe(ctx), d0 = aujourd(ctx);
+    var ville = villeDe(ctx);
+    var ex = {
+      secteur: s, activite: M.activite,
+      nom: String(p.denomination || p.entreprise || "").trim() || M.nom,
+      adresse: String(p.adresse || "").trim() || M.adresse,
+      siret: String(p.siret || "").trim() || M.siret,
+      ville: ville === "[ville]" ? M.ville : ville,
+      effectif: e.connu ? e.n : M.effectif, femmes: M.femmes,
+      signataire: String(p.responsable || "").trim() || M.signataire,
+      recoit: M.recoit, remplacant: M.remplacant, referent: M.referent,
+      cse: CSE_EX, cseAdresse: M.cseAdresse, cseTel: M.cseTel,
+      spst: M.spst, inspection: M.inspection, lieux: M.lieux, encadrement: M.encadrement,
+      unites: M.unites, signalement: M.signalement, d0: d0,
+    };
+    ex.au250 = ex.effectif >= 250;
+    ex.date = function (n) { return jj(dans(d0, n)); };
+    ex.lettres = function (n) { return leJour(dans(d0, n)); };
+    /* « D28 » dans un fait signalé : vingt-huit jours avant aujourd'hui. */
+    ex.dater = function (texte) {
+      return String(texte).replace(/\bD(\d+)\b/g, function (m, n) { return jj(dans(d0, -Number(n))); });
+    };
+    /* La grille du volet harcèlement du document unique, six colonnes. */
+    ex.grille = function () {
+      return M.unites.map(function (u) {
+        return [u[0], u[1], u[2], u[3], ex.date(u[4] * 30), u[5]];
+      });
+    };
+    return ex;
   }
 
   /* ════════════════════════════════════════════════════════════════════════
@@ -253,12 +578,11 @@
      ════════════════════════════════════════════════════════════════════════ */
 
   /* Les définitions, telles que les textes lus les écrivent. Elles reviennent
-     dans l'affichage, dans la procédure et dans la trame d'audition, et il
-     n'y en a qu'une version, pour qu'un salarié qui lit l'affichage et un
-     enquêteur qui lit la trame ne travaillent pas sur deux définitions
-     différentes. */
-  function blocDefinitions() {
-    return [
+     dans l'affichage, dans la procédure et dans les règles, et il n'y en a
+     qu'une version, pour qu'un salarié qui lit l'affichage et un enquêteur
+     qui lit la trame ne travaillent pas sur deux définitions différentes. */
+  function blocDefinitions(E) {
+    var L = [
       "LE HARCÈLEMENT MORAL (L. 1152-1)",
       "",
       "« Aucun salarié ne doit subir les agissements répétés de harcèlement moral",
@@ -286,24 +610,25 @@
       "acte de nature sexuelle, que celui-ci soit recherché au profit de l'auteur des",
       "faits ou au profit d'un tiers. »",
       "",
-      "Trois points de ce texte se manquent souvent, et ils décident de tout :",
-      "  · les propos ou comportements peuvent être à connotation SEXUELLE OU",
-      "    SEXISTE, le texte dit les deux ;",
-      "  · la répétition peut résulter de plusieurs auteurs (a et b), y compris sans",
-      "    concertation lorsqu'ils savent qu'ils répètent ;",
-      "  · la pression grave du 2° n'a pas besoin d'être répétée.",
-      "",
       "L'AGISSEMENT SEXISTE",
       "",
-    ].concat(blocRenvoi("L. 1142-2-1",
+    ];
+    if (E) {
+      L.push("Texte de l'article L. 1142-2-1 du code du travail, qui définit l'agissement");
+      L.push("sexiste, recopié ici en entier (l'application ne l'a pas lu et ne le");
+      L.push("reproduit pas).");
+      L.push("");
+      return L;
+    }
+    return L.concat(blocRenvoi("L. 1142-2-1",
       "définit l'agissement sexiste, et L. 4121-2, 7°, y renvoie expressément"));
   }
 
-  /* La protection de celui qui parle. Elle est rappelée dans l'affichage, dans
-     la procédure, dans chaque convocation d'audition et dans le rapport : un
-     salarié qui ne la connaît pas ne signale pas. */
-  function blocProtection() {
-    return [
+  /* La protection de celui qui parle, dans les mots des deux articles. Elle
+     est rappelée dans l'affichage, dans la procédure et dans chaque courrier :
+     un salarié qui ne la connaît pas ne signale pas. */
+  function blocProtection(E) {
+    var L = [
       "LA PROTECTION DE CELUI QUI SUBIT, REFUSE, RELATE OU TÉMOIGNE",
       "",
       "« Aucune personne ayant subi ou refusé de subir des agissements répétés de",
@@ -323,7 +648,9 @@
       "n° 2016-1691 du 9 décembre 2016 relative à la transparence, à la lutte contre",
       "la corruption et à la modernisation de la vie économique ».",
       "",
-    ].concat(blocRenvoi("L. 1121-2",
+    ];
+    if (E) return L;
+    return L.concat(blocRenvoi("L. 1121-2",
       "porte la liste des mesures interdites, à laquelle L. 1152-2 et L. 1153-2 " +
       "renvoient l'une et l'autre ; c'est lui qui dit ce qui ne peut pas être fait " +
       "à la personne protégée"))
@@ -332,8 +659,19 @@
       "le relais de l'application ne sert que ce code"));
   }
 
+  /* Le rappel court de la protection, tel qu'il se met dans un courrier. */
+  function rappelProtection() {
+    return [
+      "Il est rappelé qu'aucune personne ayant subi ou refusé de subir des faits",
+      "de harcèlement, ni celle qui, de bonne foi, les a relatés ou en a témoigné,",
+      "ne peut faire l'objet des mesures mentionnées à l'article L. 1121-2 du code",
+      "du travail (L. 1152-2 ; L. 1153-2).",
+    ];
+  }
+
   /* Les trois obligations de l'employeur, dans les mots des textes lus. C'est
-     le socle de HAR-04 et de HAR-05 : prévenir, mettre un terme, sanctionner. */
+     le socle des règles de HAR-04 et de HAR-05 : prévenir, mettre un terme,
+     sanctionner. */
   function blocTroisTemps() {
     return [
       "LES TROIS TEMPS QUE LA LOI IMPOSE, ET QU'ON NE PEUT PAS INTERVERTIR",
@@ -371,14 +709,45 @@
     ];
   }
 
-  /* Les cinq coordonnées de D. 1151-1, avec leurs lignes à remplir. Elles
-     servent à l'affichage (HAR-03), mais aussi aux deux documents de
-     désignation, qui doivent dire où porter le nom du référent. */
-  function blocCoordonnees(ctx) {
-    var au250 = seuil(ctx, 250);
-    var f = (ctx && ctx.fiche) || {};
-    var cse = f.cse || {};
-    var L = [
+  /* Les cinq coordonnées de D. 1151-1, en tableau : l'interlocuteur, son
+     adresse, son numéro d'appel, et le nom quand le texte le demande. Dans
+     l'exemple, tout est rempli ; dans le document à compléter, les lignes
+     dues dépendent de l'effectif et du comité, et le reste est à crochets. */
+  function tableauCoordonnees(ctx, E) {
+    var T = ["Interlocuteur (D. 1151-1)", "Adresse", "Numéro d'appel", "Nom, quand le texte l'exige"];
+    var f = (ctx && ctx.fiche) || {}, cse = f.cse || {};
+    var au250 = E ? E.au250 : seuil(ctx, 250);
+    var R = [];
+    if (E) {
+      R.push(["1° Médecin du travail ou service de santé au travail : " + E.spst.nom, E.spst.adresse, E.spst.tel, E.spst.medecin]);
+      R.push(["2° Inspection du travail : " + E.inspection.nom, E.inspection.adresse, E.inspection.tel, E.inspection.inspecteur + " (nom exigé par le 2°)"]);
+      R.push(["3° " + DDD.nom, DDD.adresse, DDD.tel, "sans objet"]);
+      R.push(["4° Référent de l'employeur (L. 1153-5-1)" + (au250 ? ", dû, effectif d'au moins deux cent cinquante salariés" : ", désigné volontairement, effectif de " + E.effectif + " salariés"),
+        E.referent.adresse, E.referent.tel, E.referent.nom + ", " + E.referent.fonction]);
+      R.push(["5° Référent du comité social et économique (L. 2314-1)", E.cseAdresse, E.cseTel, E.cse.referent + ", " + E.cse.qualite]);
+      return tableau(T, R);
+    }
+    R.push(["1° Médecin du travail ou service de santé au travail compétent pour l'établissement", "[ADRESSE]", "[NUMÉRO]", "[nom du médecin, utile]"]);
+    R.push(["2° Inspection du travail compétente", "[ADRESSE DE L'UNITÉ DE CONTRÔLE]", "[NUMÉRO]", "[NOM DE L'INSPECTEUR, exigé par le 2°]"]);
+    R.push(["3° Défenseur des droits", "[ADRESSE]", "[NUMÉRO]", "sans objet"]);
+    if (au250 === true) {
+      R.push(["4° Référent de l'employeur (L. 1153-5-1), DÛ : votre effectif atteint deux cent cinquante salariés", "[ADRESSE]", "[NUMÉRO]", "[NOM, PRÉNOM, FONCTION]"]);
+    } else if (au250 === false) {
+      R.push(["4° Référent de l'employeur (L. 1153-5-1) : votre effectif n'atteint pas deux cent cinquante salariés, ligne à supprimer si vous n'avez pas désigné de référent", "[ADRESSE, si désigné]", "[NUMÉRO, si désigné]", "[NOM, si désigné]"]);
+    } else {
+      R.push(["4° Référent de l'employeur (L. 1153-5-1) : dû à partir de deux cent cinquante salariés, effectif non renseigné, gardez ou supprimez la ligne", "[ADRESSE]", "[NUMÉRO]", "[NOM, PRÉNOM, FONCTION]"]);
+    }
+    if (estNon(cse.existe)) {
+      R.push(["5° Référent du comité social et économique (L. 2314-1) : aucun comité déclaré, ligne sans objet", "sans objet", "sans objet", "sans objet"]);
+    } else {
+      R.push(["5° Référent du comité social et économique (L. 2314-1)" + (estNon(f.referentCSE) ? ", non encore désigné par le comité selon le dossier" : ""), "[ADRESSE]", "[NUMÉRO]", "[NOM, PRÉNOM]"]);
+    }
+    return tableau(T, R);
+  }
+
+  /* Ce que D. 1151-1 demande, dans ses mots, pour les règles. */
+  function blocD1151() {
+    return [
       "LES CINQ COORDONNÉES DE D. 1151-1, DANS L'ORDRE DU TEXTE",
       "",
       "« L'information prévue au second alinéa de l'article L. 1153-5 précise",
@@ -393,65 +762,11 @@
       "D'APPEL. Un nom seul ne suffit pas ; un numéro seul non plus. Et pour",
       "l'inspection du travail, il en demande une troisième : LE NOM de l'inspecteur",
       "compétent, c'est la mention la plus souvent absente, et elle se périme.",
-      "",
-      "  1° MÉDECIN DU TRAVAIL OU SERVICE DE SANTÉ AU TRAVAIL compétent pour",
-      "     l'établissement",
-      "       adresse ......... [ADRESSE]",
-      "       numéro d'appel .. [NUMÉRO]",
-      "",
-      "  2° INSPECTION DU TRAVAIL compétente",
-      "       adresse ......... [ADRESSE DE L'UNITÉ DE CONTRÔLE]",
-      "       numéro d'appel .. [NUMÉRO]",
-      "       nom de l'inspecteur compétent ... [NOM] (exigé par le texte)",
-      "",
-      "  3° DÉFENSEUR DES DROITS",
-      "       adresse ......... [ADRESSE]",
-      "       numéro d'appel .. [NUMÉRO]",
+      "Ces cinq coordonnées se périment : un service qui déménage, un inspecteur",
+      "qui change d'affectation, un référent dont le mandat s'achève. Datez le",
+      "support et fixez qui le relit.",
       "",
     ];
-    L.push("  4° RÉFÉRENT DE L'EMPLOYEUR (L. 1153-5-1)");
-    if (au250 === true) {
-      L.push("       Votre effectif atteint deux cent cinquante salariés : cette");
-      L.push("       ligne est DUE.");
-      L.push("       nom ............. [NOM, PRÉNOM, FONCTION]");
-      L.push("       adresse ......... [ADRESSE]");
-      L.push("       numéro d'appel .. [NUMÉRO]");
-    } else if (au250 === false) {
-      L.push("       Votre effectif n'atteint pas deux cent cinquante salariés :");
-      L.push("       le 4° ne vous concerne pas, et cette ligne se SUPPRIME du");
-      L.push("       support. Rien n'interdit de désigner un référent malgré tout ;");
-      L.push("       si vous le faites, portez ses coordonnées ici.");
-    } else {
-      L.push("       [EFFECTIF NON RENSEIGNÉ : cette ligne n'est due qu'à partir de");
-      L.push("        deux cent cinquante salariés. Portez votre effectif, puis");
-      L.push("        gardez ou supprimez la ligne.]");
-      L.push("       nom ............. [NOM, PRÉNOM, FONCTION]");
-      L.push("       adresse ......... [ADRESSE]");
-      L.push("       numéro d'appel .. [NUMÉRO]");
-    }
-    L.push("");
-    L.push("  5° RÉFÉRENT DU COMITÉ SOCIAL ET ÉCONOMIQUE (L. 2314-1)");
-    if (estNon(cse.existe)) {
-      L.push("       Le dossier ne déclare aucun comité social et économique : le 5°");
-      L.push("       n'a pas d'objet et cette ligne se supprime. La régularité de");
-      L.push("       cette absence relève du module « comité social et économique ».");
-    } else {
-      L.push("       nom ............. [NOM, PRÉNOM]");
-      L.push("       adresse ......... [ADRESSE]");
-      L.push("       numéro d'appel .. [NUMÉRO]");
-      if (estNon(f.referentCSE)) {
-        L.push("       Le dossier indique qu'aucun référent n'a été désigné par le");
-        L.push("       comité : cette ligne ne peut pas être remplie tant que la");
-        L.push("       désignation n'a pas eu lieu, et l'information reste donc");
-        L.push("       incomplète. Le document SST-CTL-HAR-02 porte la démarche.");
-      }
-    }
-    L.push("");
-    L.push("Ces cinq coordonnées se périment : un service qui déménage, un inspecteur");
-    L.push("qui change d'affectation, un référent dont le mandat s'achève. Datez le");
-    L.push("support et fixez qui le relit.");
-    L.push("");
-    return L;
   }
 
   /* ══════════════════════════════════════════════════════════════════════
@@ -463,7 +778,7 @@
 
      Un article de deux lignes, et pourtant le document le plus facile à rater :
      désigner quelqu'un ne suffit pas, encore faut-il que la décision énonce la
-     mission telle que le texte la définit, orienter, informer, accompagner -
+     mission telle que le texte la définit, orienter, informer, accompagner,
      et que les coordonnées du référent rejoignent l'affichage, où D. 1151-1,
      4°, va les chercher. Un référent désigné et introuvable ne remplit ni l'une
      ni l'autre obligation.
@@ -477,9 +792,252 @@
       var f = ctx.fiche || {};
       var d0 = aujourd(ctx);
       var au250 = seuil(ctx, 250);
+      var ex = exempleDe(ctx);
       var L = entete(ctx, "Désignation du référent harcèlement sexuel et agissements sexistes",
         "article L. 1153-5-1 du code du travail");
 
+      /* Le corps du document, écrit une fois : rempli pour l'exemple, à
+         crochets pour le document à compléter. */
+      function corps(E) {
+        var C = [];
+        var nom = E ? E.nom : nomDe(ctx);
+        var sig = E ? E.signataire : signataire(ctx);
+        var ville = E ? E.ville : lieu(ctx);
+        var adresse = E ? E.adresse : cro((ctx.profil || {}).adresse, "adresse du siège");
+        var R = E ? E.referent : null;
+        var refNom = X(E, R && R.nom, "NOM, PRÉNOM");
+        var refFonction = X(E, R && R.fonction, "fonction exercée dans l'entreprise");
+        var refService = X(E, R && R.service, "service, site, établissement");
+        var refAdresse = X(E, R && R.adresse, "ADRESSE");
+        var refTel = X(E, R && R.tel, "NUMÉRO");
+        var due = E ? E.au250 : au250;
+        var eff = E ? E.effectif : (effectifDe(ctx).connu ? effectifDe(ctx).n : null);
+        var dateDecision = X(E, leJour(dans(d0, 3)), "DATE");
+        var dateEffet = X(E, leJour(dans(d0, 3)), "DATE D'EFFET");
+
+        C.push("PIÈCE 1, DÉCISION DE DÉSIGNATION");
+        C.push("");
+        C.push(nom.toUpperCase());
+        C.push(adresse);
+        C.push("");
+        C.push("DÉCISION DU " + dateDecision.toUpperCase());
+        C.push("Désignation du référent chargé d'orienter, d'informer et d'accompagner");
+        C.push("les salariés en matière de lutte contre le harcèlement sexuel et les");
+        C.push("agissements sexistes");
+        C.push("");
+        C.push("Vu l'article L. 1153-5-1 du code du travail ;");
+        C.push("Vu l'article D. 1151-1 du même code, 4° ;");
+        C.push("Vu les articles L. 1153-1, L. 1153-2 et L. 1153-5 du même code ;");
+        if (due === true) {
+          C.push("Considérant que l'entreprise emploie " + eff + " salariés, soit au moins deux");
+          C.push("cent cinquante, et que la désignation d'un référent est due ;");
+        } else if (due === false) {
+          C.push("Considérant que l'entreprise emploie " + eff + " salariés, moins de deux cent");
+          C.push("cinquante, et que la désignation, volontaire, s'inscrit dans les dispositions");
+          C.push("de prévention que l'article L. 1153-5 impose à tout employeur ;");
+        } else {
+          C.push("Considérant que l'entreprise emploie [EFFECTIF] salariés, [au moins deux cent");
+          C.push("cinquante : la désignation est due / moins de deux cent cinquante : la");
+          C.push("désignation est volontaire et s'inscrit dans les dispositions de prévention");
+          C.push("de L. 1153-5] ;");
+        }
+        C.push("");
+        C.push("ARTICLE 1, DÉSIGNATION");
+        C.push("Est désigné(e) référent(e) chargé(e) d'orienter, d'informer et");
+        C.push("d'accompagner les salariés en matière de lutte contre le harcèlement");
+        C.push("sexuel et les agissements sexistes : " + refNom + ", " + refFonction + ",");
+        C.push(refService + ".");
+        C.push("");
+        C.push("ARTICLE 2, MISSION");
+        C.push("La mission du référent est celle que L. 1153-5-1 définit :");
+        C.push("  - ORIENTER les salariés, vers le médecin du travail ou le service de");
+        C.push("    santé au travail, vers l'inspection du travail, vers le Défenseur des");
+        C.push("    droits, vers le référent du comité social et économique, vers la");
+        C.push("    procédure interne de signalement ;");
+        C.push("  - INFORMER les salariés sur ce que sont le harcèlement sexuel et les");
+        C.push("    agissements sexistes, sur les protections dont bénéficie celui qui");
+        C.push("    relate ou témoigne, et sur les voies ouvertes ;");
+        C.push("  - ACCOMPAGNER les salariés qui le saisissent, pendant le temps");
+        C.push("    nécessaire.");
+        C.push("Ce que le référent ne fait pas : " + X(E,
+          "il ne conduit pas les enquêtes internes, qui relèvent de la procédure de signalement ; il peut y être entendu, et il n'y qualifie rien",
+          "PRÉCISER, par exemple s'il conduit ou non les enquêtes internes ; le texte ne le dit pas, et le flou se reprochera plus tard au référent") + ".");
+        C.push("");
+        C.push("ARTICLE 3, MOYENS");
+        C.push("Sont mis à sa disposition :");
+        C.push("");
+        C = C.concat(tableau(["Moyen", "Ce qui est mis à disposition", "Date ou échéance"], [
+          ["Temps identifié, distinct de la charge habituelle", X(E, R && R.temps, "NOMBRE d'heures par mois ou par trimestre"), X(E, "à compter du " + leJour(dans(d0, 3)), "date d'effet")],
+          ["Formation", X(E, R && R.formation, "INTITULÉ, ORGANISME, DURÉE"), X(E, "engagée avant le " + jj(dans(d0, 90)), "suivie le DATE, ou à suivre avant le DATE")],
+          ["Lieu où recevoir sans être vu ni entendu", X(E, R && R.lieuReception, "LIEU"), X(E, "disponible dès la désignation", "date")],
+          ["Adresse et numéro d'appel dédiés, portés à l'affichage", refAdresse + " ; " + refTel, X(E, "portés à l'affichage le " + jj(dans(d0, 7)), "date de mise à jour de l'affichage")],
+        ]));
+        C.push("ARTICLE 4, SAISINE");
+        C.push("Tout salarié peut le saisir directement, " + X(E,
+          "par écrit à l'adresse ci-dessus, par téléphone ou sur rendez-vous",
+          "par écrit à l'adresse ci-dessus / par téléphone / sur rendez-vous") + ".");
+        C.push("La saisine du référent ne prive le salarié d'aucune autre voie : il peut");
+        C.push("s'adresser directement à l'employeur, au comité social et économique, au");
+        C.push("médecin du travail, à l'inspection du travail ou au Défenseur des droits.");
+        C.push("");
+        C.push("ARTICLE 5, DURÉE ET PUBLICITÉ");
+        C.push("La présente désignation prend effet le " + dateEffet + " et court");
+        C.push("jusqu'à " + X(E, "décision contraire", "décision contraire / terme, s'il en est fixé un") + ". Elle est portée à la");
+        C.push("connaissance du personnel par " + X(E, "note de service remise contre émargement et affichage", "note de service / intranet / affichage") + ",");
+        C.push("et les coordonnées du référent sont ajoutées à l'information de D. 1151-1.");
+        C.push("");
+        C.push("Fait à " + ville + ", le " + dateDecision + ".");
+        C.push(sig);
+        C.push("");
+        C.push("Pour acceptation de la mission : " + X(E, R && R.nom + ", le " + leJour(dans(d0, 3)), "NOM du référent, le DATE") + ", signature.");
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 2, LETTRE DE MISSION AU RÉFÉRENT");
+        C.push("");
+        C = C.concat(teteLettre(ctx, E, [refNom, refFonction + ", " + refService], false, E ? dans(d0, 3) : d0));
+        C.push("Objet : votre désignation comme référent harcèlement sexuel et");
+        C.push("agissements sexistes");
+        C.push("");
+        C.push("Madame, Monsieur,");
+        C.push("");
+        C.push("Par décision du " + dateDecision + ", je vous ai désigné(e) référent(e) au");
+        C.push("titre de l'article L. 1153-5-1 du code du travail, qui charge ce référent");
+        C.push("« d'orienter, d'informer et d'accompagner les salariés en matière de lutte");
+        C.push("contre le harcèlement sexuel et les agissements sexistes ».");
+        C.push("");
+        C.push("Cette lettre précise ce que cette mission suppose de votre part, et ce");
+        C.push("que l'entreprise met à votre disposition pour l'exercer.");
+        C.push("");
+        C.push("CE QUE VOUS AUREZ À CONNAÎTRE");
+        C.push("");
+        C.push("Les définitions, d'abord, elles sont dans le code du travail et non dans");
+        C.push("l'usage : L. 1153-1 pour le harcèlement sexuel, L. 1152-1 pour le");
+        C.push("harcèlement moral. Vous les trouverez reproduites dans l'affichage de");
+        C.push("l'entreprise et dans la procédure interne de signalement.");
+        C.push("");
+        C.push("La protection de celui qui parle, ensuite : L. 1153-2 et L. 1152-2");
+        C.push("interdisent que la personne qui a subi, refusé de subir, relaté de bonne");
+        C.push("foi ou témoigné fasse l'objet des mesures mentionnées à l'article");
+        C.push("L. 1121-2. C'est la première chose à dire à un salarié qui hésite.");
+        C.push("");
+        C.push("Les interlocuteurs, enfin : médecin du travail ou service de santé au");
+        C.push("travail, inspection du travail, Défenseur des droits, référent du comité");
+        C.push("social et économique. Leurs coordonnées figurent à l'affichage");
+        C.push("(D. 1151-1) ; vérifiez qu'elles sont à jour avant d'y renvoyer quelqu'un.");
+        C.push("");
+        C.push("CE QUE L'ENTREPRISE MET À VOTRE DISPOSITION");
+        C.push("");
+        C.push("  - du temps : " + X(E, R && R.temps, "NOMBRE d'heures par mois ou par trimestre") + " ;");
+        C.push("  - une formation : " + X(E, R && R.formation + ", à engager avant le " + leJour(dans(d0, 90)), "INTITULÉ, ORGANISME, DURÉE, suivie le DATE ou à suivre avant le DATE") + " ;");
+        C.push("  - un lieu de réception préservé : " + X(E, R && R.lieuReception, "LIEU") + " ;");
+        C.push("  - une adresse et un numéro d'appel dédiés : " + refAdresse + " ; " + refTel + ".");
+        C.push("");
+        C.push("CE QUI VOUS EST DEMANDÉ EN RETOUR");
+        C.push("");
+        C.push("  - tenir le registre des saisines ci-dessous, sans y porter le récit des");
+        C.push("    faits : date, nature de la demande, orientation donnée, suite. Il sert");
+        C.push("    à mesurer l'activité, pas à constituer un dossier ;");
+        C.push("  - ne pas qualifier les faits : ce n'est ni votre rôle ni celui de");
+        C.push("    l'entreprise avant l'enquête ;");
+        C.push("  - alerter sans délai " + X(E, E && E.recoit, "le signataire de la présente / la personne désignée par la procédure interne") + " lorsqu'une");
+        C.push("    situation vous paraît appeler des mesures immédiates ;");
+        C.push("  - vous abstenir de tout traitement d'une situation où vous seriez");
+        C.push("    personnellement en cause ou trop proche des personnes concernées, et");
+        C.push("    le signaler aussitôt.");
+        C.push("");
+        C.push("Registre des saisines du référent, modèle :");
+        C.push("");
+        var enteteRegistre = ["Date", "Qui saisit (fonction, sans nom)", "Nature de la demande", "Orientation donnée", "Suite"];
+        C = C.concat(E ? tableau(enteteRegistre, [
+          [E.date(20), "salariée, " + E.unites[0][0].toLowerCase(), "question sur ce qui relève de l'agissement sexiste", "définitions remises, affichage montré", "aucune saisine formelle, la salariée sait où s'adresser"],
+          [E.date(34), "salarié, " + E.unites[1][0].toLowerCase(), "récit de propos entendus au poste", "orientation vers la procédure interne, rappel de la protection de L. 1153-2", "signalement écrit remis à " + E.recoit + " le " + E.date(35)],
+          [E.date(51), "salariée, " + E.unites[2][0].toLowerCase(), "demande de rendez-vous avec le médecin du travail", "coordonnées du service de santé au travail remises, appel passé avec elle", "rendez-vous obtenu le " + E.date(58)],
+          [E.date(66), "intérimaire, " + E.unites[1][0].toLowerCase(), "message reçu d'un collègue, hors service", "conservation du message conseillée, orientation vers la procédure interne", "signalement écrit le " + E.date(67)],
+        ]) : tableauVide(enteteRegistre, 3));
+        C = C.concat(formulePolitesse(ctx, E, "Madame, Monsieur"));
+        C.push("Pièce jointe : décision de désignation du " + dateDecision);
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 3, NOTE D'INFORMATION AU PERSONNEL");
+        C.push("");
+        C.push(nom + ", note du " + X(E, leJour(dans(d0, 7)), "DATE"));
+        C.push("Objet : désignation d'un référent harcèlement sexuel et agissements");
+        C.push("sexistes");
+        C.push("");
+        C.push("Mesdames, Messieurs,");
+        C.push("");
+        C.push("En application de l'article L. 1153-5-1 du code du travail, " + refNom + ",");
+        C.push(refFonction + ", est désigné(e) référent(e) chargé(e) d'orienter, d'informer");
+        C.push("et d'accompagner les salariés en matière de lutte contre le harcèlement");
+        C.push("sexuel et les agissements sexistes.");
+        C.push("");
+        C.push("Vous pouvez le ou la saisir directement : " + refAdresse + " ; " + refTel + " ;");
+        C.push(X(E, "sur rendez-vous, par écrit ou par téléphone, aux heures d'ouverture des bureaux", "modalités : sur rendez-vous, par écrit, aux heures suivantes") + ".");
+        C.push("");
+        C.push("Cette saisine ne vous prive d'aucune autre voie. Vous pouvez également");
+        C.push("vous adresser à l'employeur, au comité social et économique et à son");
+        C.push("référent, au médecin du travail ou au service de santé au travail, à");
+        C.push("l'inspection du travail ou au Défenseur des droits. Leurs coordonnées");
+        C.push("figurent sur l'affichage prévu par l'article D. 1151-1 du code du");
+        C.push("travail.");
+        C.push("");
+        C.push("Il est rappelé qu'aucune personne ayant subi ou refusé de subir des faits");
+        C.push("de harcèlement sexuel définis à l'article L. 1153-1, ou ayant de bonne foi");
+        C.push("témoigné de tels faits ou les ayant relatés, ne peut faire l'objet des");
+        C.push("mesures mentionnées à l'article L. 1121-2 (L. 1153-2). La même protection");
+        C.push("est prévue en matière de harcèlement moral par l'article L. 1152-2.");
+        C.push("");
+        C.push(sig);
+        C.push("Diffusion : " + X(E, "remise contre émargement à chaque salarié, affichage aux trois emplacements de l'entreprise, le " + leJour(dans(d0, 7)), "support, date, preuve conservée") + ".");
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 4, CE QUI DOIT CHANGER SUR L'AFFICHAGE");
+        C.push("");
+        C.push("La ligne à porter, ou à corriger, sur le support d'information de");
+        C.push("D. 1151-1, 4° :");
+        C.push("");
+        C = C.concat(tableau(["Rubrique de l'affichage", "Nom et fonction", "Adresse", "Numéro d'appel", "Porté le"], [
+          ["Référent harcèlement sexuel et agissements sexistes de l'entreprise (L. 1153-5-1)", refNom + ", " + refFonction, refAdresse, refTel, X(E, E && E.date(7), "date")],
+        ]));
+        C.push("Le document SST-CTL-HAR-03 de cette application produit l'affichage");
+        C.push("complet, avec les cinq coordonnées de D. 1151-1.");
+        C.push("");
+        return C;
+      }
+
+      /* ---- l'exemple ---- */
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L = L.concat(corps(ex));
+      L.push("");
+
+      /* ---- le document à compléter ---- */
+      L.push("VOS PIÈCES, À COMPLÉTER");
+      L.push("");
+      L.push("Même structure que l'exemple. Les données de votre fiche sont déjà");
+      L.push("portées ; chaque crochet est un choix à faire, pas une case à cocher.");
+      L.push("Ne laissez aucun crochet dans les pièces que vous signez et diffusez.");
+      L.push("");
+      L = L.concat(corps(null));
+
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L = L.concat(tableau(["Étape", "Date", "Pièce", "Preuve conservée"], [
+        ["Choix de la personne, et accord de l'intéressé : un référent désigné sans son accord ne recevra personne", jj(d0), "aucune", "aucune"],
+        ["Signature de la décision et remise de la lettre de mission ; aucune consultation, aucun délai, aucune formalité extérieure", jj(dans(d0, 3)), "pièces 1 et 2", "décision signée, lettre contresignée pour acceptation"],
+        ["Diffusion de la note au personnel et correction de l'affichage", jj(dans(d0, 7)), "pièces 3 et 4", "émargement ou accusé, photographie du panneau, capture datée de l'intranet"],
+        ["Formation du référent engagée ; aucun texte lu ne fixe ce délai, c'est une échéance que vous vous donnez", jj(dans(d0, 90)), "pièce 2, article 3", "convention de formation, attestation"],
+        ["À chaque changement : départ du référent, changement de fonction, de site ou de numéro", "le jour même", "pièces 1 et 4", "nouvelle décision, affichage corrigé et photographié"],
+      ]));
+
+      L = L.concat(DP.liens(ctx, ["sst", "cse"]));
+
+      /* ---- les règles ---- */
+      L.push("LES RÈGLES");
+      L.push("");
       L.push("LE TEXTE, EN ENTIER, IL TIENT EN UNE PHRASE");
       L.push("");
       L.push("« Dans toute entreprise employant au moins deux cent cinquante salariés est");
@@ -488,23 +1046,29 @@
       L.push("agissements sexistes » (L. 1153-5-1).");
       L.push("");
       L.push("Quatre choses s'y lisent, et chacune commande une ligne du document :");
-      L.push("  · le SEUIL, au moins deux cent cinquante salariés ;");
-      L.push("  · l'obligation de DÉSIGNER : le texte n'ouvre pas une faculté ;");
-      L.push("  · la MISSION, en trois verbes, orienter, informer, accompagner. Ce ne");
+      L.push("  - le SEUIL, au moins deux cent cinquante salariés ;");
+      L.push("  - l'obligation de DÉSIGNER : le texte n'ouvre pas une faculté ;");
+      L.push("  - la MISSION, en trois verbes, orienter, informer, accompagner. Ce ne");
       L.push("    sont pas les mêmes : orienter suppose de connaître les interlocuteurs,");
       L.push("    informer suppose de connaître les textes, accompagner suppose du");
       L.push("    temps et un lieu où recevoir ;");
-      L.push("  · l'OBJET, la lutte contre le harcèlement sexuel ET les agissements");
+      L.push("  - l'OBJET, la lutte contre le harcèlement sexuel ET les agissements");
       L.push("    sexistes. Le second est plus large que le premier.");
       L.push("");
       L.push("CE QUE LE TEXTE NE DIT PAS, et qu'aucun document ne peut inventer : ni la");
       L.push("qualité que doit avoir le référent, ni sa formation, ni le temps qui lui");
       L.push("est alloué, ni les modalités de sa saisine. Ces choix vous appartiennent ;");
-      L.push("ils sortent ici entre crochets. Mais un référent sans temps, sans");
-      L.push("formation et sans procédure de saisine n'est un référent que sur le");
-      L.push("papier, et c'est le papier qui sera discuté.");
+      L.push("ils sortent entre crochets, et l'exemple en montre une façon. Mais un");
+      L.push("référent sans temps, sans formation et sans procédure de saisine n'est un");
+      L.push("référent que sur le papier, et c'est le papier qui sera discuté.");
       L.push("");
-      L.push("OÙ VOUS EN ÊTES");
+      L.push("Une désignation qui ne rejoint pas l'affichage laisse l'information");
+      L.push("incomplète : D. 1151-1, 4°, veut l'adresse et le numéro d'appel « du");
+      L.push("référent prévu à l'article L. 1153-5-1 dans toute entreprise employant au");
+      L.push("moins deux cent cinquante salariés ». Le manquement se constate alors à");
+      L.push("deux titres, la désignation et l'information.");
+      L.push("");
+      L.push("CE QUE LE DOSSIER DÉCLARE");
       L.push("");
       L.push(ligneEffectif(ctx));
       if (au250 === true) {
@@ -514,7 +1078,7 @@
         L.push("Le seuil de deux cent cinquante salariés n'est pas atteint : L. 1153-5-1");
         L.push("ne vous oblige pas à désigner un référent, et le 4° de D. 1151-1 ne");
         L.push("s'applique pas à votre affichage. RIEN NE VOUS L'INTERDIT POUR AUTANT.");
-        L.push("Si vous désignez malgré tout, le présent document sert tel quel : la");
+        L.push("Si vous désignez malgré tout, les pièces servent telles quelles : la");
         L.push("désignation volontaire produit les mêmes effets pratiques, et elle est");
         L.push("un élément des dispositions de prévention que L. 1152-4 et L. 1153-5");
         L.push("imposent par ailleurs, sans seuil, à tout employeur.");
@@ -525,237 +1089,7 @@
         L.push("deçà, elle reste possible et utile, mais elle n'est pas imposée par");
         L.push("L. 1153-5-1.");
       }
-      L.push("Référent désigné selon le dossier : " +
-        etat(f.referentEmployeur, "oui", "NON"));
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 1, DÉCISION DE DÉSIGNATION");
-      L.push(GROS);
-      L.push("");
-      L.push(nomDe(ctx));
-      L.push(cro((ctx.profil || {}).adresse, "adresse du siège"));
-      L.push("");
-      L.push("DÉCISION DU " + leJour(d0).toUpperCase());
-      L.push("Désignation du référent chargé d'orienter, d'informer et d'accompagner");
-      L.push("les salariés en matière de lutte contre le harcèlement sexuel et les");
-      L.push("agissements sexistes");
-      L.push("");
-      L.push("Vu l'article L. 1153-5-1 du code du travail ;");
-      L.push("Vu l'article D. 1151-1 du même code, 4° ;");
-      L.push("Vu les articles L. 1153-1, L. 1153-2 et L. 1153-5 du même code ;");
-      L.push("");
-      L.push("ARTICLE 1er, DÉSIGNATION");
-      L.push("Est désigné(e) référent(e) chargé(e) d'orienter, d'informer et");
-      L.push("d'accompagner les salariés en matière de lutte contre le harcèlement");
-      L.push("sexuel et les agissements sexistes :");
-      L.push("");
-      L.push("    [NOM, PRÉNOM]");
-      L.push("    [fonction exercée dans l'entreprise]");
-      L.push("    [service, site, établissement]");
-      L.push("");
-      L.push("ARTICLE 2, MISSION");
-      L.push("La mission du référent est celle que L. 1153-5-1 définit :");
-      L.push("  · ORIENTER les salariés, vers le médecin du travail ou le service de");
-      L.push("    santé au travail, vers l'inspection du travail, vers le Défenseur des");
-      L.push("    droits, vers le référent du comité social et économique, vers la");
-      L.push("    procédure interne de signalement ;");
-      L.push("  · INFORMER les salariés sur ce que sont le harcèlement sexuel et les");
-      L.push("    agissements sexistes, sur les protections dont bénéficie celui qui");
-      L.push("    relate ou témoigne, et sur les voies ouvertes ;");
-      L.push("  · ACCOMPAGNER les salariés qui le saisissent, pendant le temps");
-      L.push("    nécessaire.");
-      L.push("");
-      L.push("[Le cas échéant, préciser ce que le référent ne fait PAS : par exemple,");
-      L.push(" s'il conduit ou non les enquêtes internes. Le texte ne le dit pas ; le");
-      L.push(" laisser dans le flou expose le référent à se voir reprocher, plus tard,");
-      L.push(" ce qu'il n'avait pas mission de faire.]");
-      L.push("");
-      L.push("ARTICLE 3, MOYENS");
-      L.push("Sont mis à sa disposition :");
-      L.push("  · un temps identifié de [NOMBRE] heures par [mois / trimestre],");
-      L.push("    distinct de sa charge de travail habituelle ;");
-      L.push("  · une formation de [DURÉE], portant sur [CONTENU], suivie le [DATE] ou");
-      L.push("    à suivre avant le [DATE] ;");
-      L.push("  · un lieu où recevoir un salarié sans que l'entretien soit vu ou");
-      L.push("    entendu : [LIEU] ;");
-      L.push("  · une adresse et un numéro d'appel dédiés, portés à l'affichage :");
-      L.push("    [ADRESSE] · [NUMÉRO].");
-      L.push("");
-      L.push("ARTICLE 4, SAISINE");
-      L.push("Tout salarié peut le saisir directement, [par écrit à l'adresse");
-      L.push("ci-dessus / par téléphone / sur rendez-vous]. La saisine du référent ne");
-      L.push("prive le salarié d'aucune autre voie : il peut s'adresser directement à");
-      L.push("l'employeur, au comité social et économique, au médecin du travail, à");
-      L.push("l'inspection du travail ou au Défenseur des droits.");
-      L.push("");
-      L.push("ARTICLE 5, DURÉE ET PUBLICITÉ");
-      L.push("La présente désignation prend effet le [DATE D'EFFET] et court jusqu'à");
-      L.push("[décision contraire / terme, s'il en est fixé un]. Elle est portée à la");
-      L.push("connaissance du personnel par [note de service / intranet / affichage],");
-      L.push("et les coordonnées du référent sont ajoutées à l'information de");
-      L.push("D. 1151-1.");
-      L.push("");
-      L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ".");
-      L.push("");
-      L.push(signataire(ctx));
-      L.push("");
-      L.push("Pour acceptation de la mission,");
-      L.push("[NOM du référent], le [DATE], signature :");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 2, LETTRE DE MISSION AU RÉFÉRENT");
-      L.push(GROS);
-      L.push("");
-      L = L.concat(teteLettre(ctx,
-        ["[NOM, PRÉNOM du référent]", "[fonction et service]"], false));
-      L.push("Objet : votre désignation comme référent harcèlement sexuel et");
-      L.push("agissements sexistes");
-      L.push("");
-      L.push("Madame, Monsieur,");
-      L.push("");
-      L.push("Par décision du " + leJour(d0) + ", je vous ai désigné(e) référent(e) au");
-      L.push("titre de l'article L. 1153-5-1 du code du travail, qui charge ce référent");
-      L.push("« d'orienter, d'informer et d'accompagner les salariés en matière de lutte");
-      L.push("contre le harcèlement sexuel et les agissements sexistes ».");
-      L.push("");
-      L.push("Cette lettre précise ce que cette mission suppose de votre part, et ce");
-      L.push("que l'entreprise met à votre disposition pour l'exercer.");
-      L.push("");
-      L.push("CE QUE VOUS AUREZ À CONNAÎTRE");
-      L.push("");
-      L.push("Les définitions, d'abord, elles sont dans le code du travail et non dans");
-      L.push("l'usage : L. 1153-1 pour le harcèlement sexuel, L. 1152-1 pour le");
-      L.push("harcèlement moral. Vous les trouverez reproduites dans l'affichage de");
-      L.push("l'entreprise et dans la procédure interne de signalement.");
-      L.push("");
-      L.push("La protection de celui qui parle, ensuite : L. 1153-2 et L. 1152-2");
-      L.push("interdisent que la personne qui a subi, refusé de subir, relaté de bonne");
-      L.push("foi ou témoigné fasse l'objet des mesures mentionnées à l'article");
-      L.push("L. 1121-2. C'est la première chose à dire à un salarié qui hésite.");
-      L.push("");
-      L.push("Les interlocuteurs, enfin : médecin du travail ou service de santé au");
-      L.push("travail, inspection du travail, Défenseur des droits, référent du comité");
-      L.push("social et économique. Leurs coordonnées figurent à l'affichage");
-      L.push("(D. 1151-1) ; vérifiez qu'elles sont à jour avant d'y renvoyer quelqu'un.");
-      L.push("");
-      L.push("CE QUE L'ENTREPRISE MET À VOTRE DISPOSITION");
-      L.push("");
-      L.push("  · du temps : [NOMBRE] heures par [mois / trimestre] ;");
-      L.push("  · une formation : [INTITULÉ, ORGANISME, DURÉE], [suivie le DATE / à");
-      L.push("    suivre avant le DATE] ;");
-      L.push("  · un lieu de réception préservé : [LIEU] ;");
-      L.push("  · une adresse et un numéro d'appel dédiés : [ADRESSE] · [NUMÉRO].");
-      L.push("");
-      L.push("CE QUI VOUS EST DEMANDÉ EN RETOUR");
-      L.push("");
-      L.push("  · tenir un registre des saisines, sans y porter le récit des faits :");
-      L.push("    date, nature de la demande, orientation donnée. Il sert à mesurer");
-      L.push("    l'activité, pas à constituer un dossier ;");
-      L.push("  · ne pas qualifier les faits : ce n'est ni votre rôle ni celui de");
-      L.push("    l'entreprise avant l'enquête ;");
-      L.push("  · alerter sans délai [le signataire de la présente / la personne");
-      L.push("    désignée par la procédure interne] lorsqu'une situation vous paraît");
-      L.push("    appeler des mesures immédiates ;");
-      L.push("  · vous abstenir de tout traitement d'une situation où vous seriez");
-      L.push("    personnellement en cause ou trop proche des personnes concernées, et");
-      L.push("    le signaler aussitôt.");
-      L.push("");
-      L = L.concat(formulePolitesse(ctx, "Madame, Monsieur"));
-      L.push("Pièce jointe : décision de désignation du " + leJour(d0));
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 3, NOTE D'INFORMATION AU PERSONNEL");
-      L.push(GROS);
-      L.push("");
-      L.push(nomDe(ctx) + ", note du " + leJour(d0));
-      L.push("Objet : désignation d'un référent harcèlement sexuel et agissements");
-      L.push("sexistes");
-      L.push("");
-      L.push("Mesdames, Messieurs,");
-      L.push("");
-      L.push("En application de l'article L. 1153-5-1 du code du travail, [NOM, PRÉNOM],");
-      L.push("[fonction], est désigné(e) référent(e) chargé(e) d'orienter, d'informer et");
-      L.push("d'accompagner les salariés en matière de lutte contre le harcèlement");
-      L.push("sexuel et les agissements sexistes.");
-      L.push("");
-      L.push("Vous pouvez le ou la saisir directement :");
-      L.push("    adresse ......... [ADRESSE]");
-      L.push("    numéro d'appel .. [NUMÉRO]");
-      L.push("    [modalités : sur rendez-vous, par écrit, aux heures suivantes]");
-      L.push("");
-      L.push("Cette saisine ne vous prive d'aucune autre voie. Vous pouvez également");
-      L.push("vous adresser à l'employeur, au comité social et économique et à son");
-      L.push("référent, au médecin du travail ou au service de santé au travail, à");
-      L.push("l'inspection du travail ou au Défenseur des droits. Leurs coordonnées");
-      L.push("figurent sur l'affichage prévu par l'article D. 1151-1 du code du");
-      L.push("travail.");
-      L.push("");
-      L.push("Il est rappelé qu'aucune personne ayant subi ou refusé de subir des faits");
-      L.push("de harcèlement sexuel définis à l'article L. 1153-1, ou ayant de bonne foi");
-      L.push("témoigné de tels faits ou les ayant relatés, ne peut faire l'objet des");
-      L.push("mesures mentionnées à l'article L. 1121-2 (L. 1153-2). La même protection");
-      L.push("est prévue en matière de harcèlement moral par l'article L. 1152-2.");
-      L.push("");
-      L.push(signataire(ctx));
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 4, CE QUI DOIT CHANGER SUR L'AFFICHAGE");
-      L.push(GROS);
-      L.push("");
-      L.push("Une désignation qui ne rejoint pas l'affichage laisse l'information");
-      L.push("incomplète : D. 1151-1, 4°, veut l'adresse et le numéro d'appel « du");
-      L.push("référent prévu à l'article L. 1153-5-1 dans toute entreprise employant au");
-      L.push("moins deux cent cinquante salariés ». Le manquement se constate alors à");
-      L.push("deux titres, la désignation et l'information.");
-      L.push("");
-      L.push("À porter, ou à corriger, sur le support d'information :");
-      L.push("");
-      L.push("    Référent harcèlement sexuel et agissements sexistes de l'entreprise");
-      L.push("    (article L. 1153-5-1 du code du travail)");
-      L.push("      [NOM, PRÉNOM], [fonction]");
-      L.push("      adresse ......... [ADRESSE]");
-      L.push("      numéro d'appel .. [NUMÉRO]");
-      L.push("");
-      L.push("Le document SST-CTL-HAR-03 de cette application produit l'affichage");
-      L.push("complet, avec les cinq coordonnées de D. 1151-1 et les deux textes du");
-      L.push("code pénal à y reporter.");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("VOTRE CALENDRIER");
-      L.push(GROS);
-      L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + ", vous choisissez la personne, et vous");
-      L.push("lui en parlez avant de signer : un référent désigné sans son accord ne");
-      L.push("recevra personne.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 3)) + ", vous signez la décision (pièce 1) et");
-      L.push("vous remettez la lettre de mission (pièce 2). Ces deux actes ne dépendent");
-      L.push("que de vous : aucune consultation, aucun délai, aucune formalité");
-      L.push("extérieure. C'est pourquoi ce manquement ne se laisse pas expliquer.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 7)) + ", la note au personnel est diffusée");
-      L.push("(pièce 3) et l'affichage est corrigé (pièce 4). Datez la diffusion et");
-      L.push("gardez-en la trace : photographie du panneau, accusé de réception de la");
-      L.push("note, capture de la page intranet.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 90)) + " au plus tard, la formation du référent");
-      L.push("est engagée. Aucun texte lu ne fixe ce délai : c'est une échéance que");
-      L.push("vous vous donnez, et elle vaut mieux qu'une intention.");
-      L.push("");
-      L.push("Ensuite, à chaque changement, départ du référent, changement de");
-      L.push("fonction, de site ou de numéro : la décision se refait et l'affichage se");
-      L.push("corrige le même jour.");
+      L.push("Référent désigné selon le dossier : " + etat(f.referentEmployeur, "oui", "NON") + ".");
 
       return L.concat(pied("L. 1153-5-1, D. 1151-1, L. 1153-1, L. 1153-2, L. 1153-5, " +
         "L. 1152-2, L. 4121-1",
