@@ -52,7 +52,17 @@
       ".idcc-liste .idcc-o:hover,.idcc-liste .idcc-o:focus{background:#f1f3f6}" +
       ".idcc-liste .idcc-num{font-weight:600;white-space:nowrap;margin-right:6px}" +
       ".idcc-liste .idcc-autre{color:#5f6874;font-style:italic}" +
-      ".idcc-liste .idcc-vide{padding:10px 12px;color:#5f6874}";
+      ".idcc-liste .idcc-vide{padding:10px 12px;color:#5f6874}" +
+      ".idcc-voile{position:fixed;inset:0;z-index:1000;background:#fff;display:flex;flex-direction:column}" +
+      ".idcc-voile[hidden]{display:none}" +
+      ".idcc-voile-tete{display:flex;gap:8px;padding:10px 12px;border-bottom:1px solid #dcdfe4;background:#fff}" +
+      ".idcc-voile-champ{flex:1;min-width:0;font:17px system-ui;padding:12px 14px;min-height:48px;" +
+      "border:1px solid #b9bfc8;border-radius:10px;color:#16181d;background:#fff}" +
+      ".idcc-voile-fermer{font:600 16px system-ui;padding:0 14px;min-height:48px;border:1px solid #dcdfe4;" +
+      "border-radius:10px;background:#f4f5f7;color:#16181d}" +
+      ".idcc-liste-voile{position:static;flex:1;max-height:none;overflow-y:auto;border:0;box-shadow:none;" +
+      "border-radius:0;font-size:16px;-webkit-overflow-scrolling:touch}" +
+      ".idcc-liste-voile .idcc-o{min-height:48px;padding:12px 14px}";
     document.head.appendChild(st);
   }
 
@@ -82,7 +92,7 @@
     }
     function choisir(c) {
       input.value = valeurDe(c);
-      fermer();
+      fermer(); fermerVoile();
       /* Un choix referme la liste, il ne verrouille pas le champ : reprendre
          la saisie ensuite, sans repasser par un focus, doit la rouvrir.
          Seul l'évènement synthétique ci-dessous, écho immédiat du choix, ne
@@ -101,6 +111,45 @@
        position fixe juste sous le champ, avec la hauteur que laisse le clavier
        (visualViewport), et le champ est remonté en haut de l'écran. */
     function etroit() { return window.innerWidth < 700; }
+
+    /* SUR TÉLÉPHONE, UN VOILE PLEIN ÉCRAN. Poser la liste sous le champ ne
+       suffisait pas : sur iPhone le champ reste en bas de l'écran et le clavier
+       recouvre tout (capture du 9 septembre 2026, 9 h 18). Le voile prend
+       l'écran entier, son champ de recherche est en haut, la liste défile
+       dessous : le clavier ne cache plus que le bas de la liste. */
+    var voile = null, champVoile = null, listeVoile = null;
+    function ouvrirVoile() {
+      if (!voile) {
+        voile = document.createElement("div");
+        voile.className = "idcc-voile";
+        voile.innerHTML = '<div class="idcc-voile-tete"><input type="text" class="idcc-voile-champ" ' +
+          'placeholder="numéro ou intitulé de la convention" autocomplete="off" autocorrect="off" autocapitalize="off">' +
+          '<button type="button" class="idcc-voile-fermer">Fermer</button></div>' +
+          '<div class="idcc-liste idcc-liste-voile" role="listbox"></div>';
+        document.body.appendChild(voile);
+        champVoile = voile.querySelector(".idcc-voile-champ");
+        listeVoile = voile.querySelector(".idcc-liste-voile");
+        voile.querySelector(".idcc-voile-fermer").addEventListener("click", fermerVoile);
+        champVoile.addEventListener("input", function () {
+          charger().then(function (liste) { if (voile && !voile.hidden) montrer(liste, champVoile.value); });
+        });
+      }
+      voile.hidden = false;
+      document.body.style.overflow = "hidden";
+      cadre = listeVoile;
+      champVoile.value = "";
+      charger().then(function (liste) {
+        if (!liste.length) { fermerVoile(); return; }
+        montrer(liste, "");
+        setTimeout(function () { try { champVoile.focus(); } catch (_) {} }, 50);
+      });
+    }
+    function fermerVoile() {
+      if (!voile || voile.hidden) return;
+      voile.hidden = true;
+      document.body.style.overflow = "";
+      cadre = boite;
+    }
     function placer() {
       if (!etroit()) { boite.style.position = ""; boite.style.top = ""; boite.style.left = "";
         boite.style.right = ""; boite.style.maxHeight = ""; return; }
@@ -118,6 +167,7 @@
       window.visualViewport.addEventListener("scroll", function () { if (!boite.hidden) placer(); });
     }
 
+    var cadre = boite;   /* où la liste se dessine : sous le champ, ou dans le voile */
     function montrer(liste, q) {
       var qs = plat(q).split(/\s+/).filter(Boolean);
       var mots = (input._idccMots || []).map(plat).filter(Boolean);
@@ -166,15 +216,15 @@
           c.intitule.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</button>";
       });
       h += '<button type="button" class="idcc-o idcc-autre" role="option" data-autre="1">Autre / pas dans la liste, saisie libre</button>';
-      boite.innerHTML = h;
-      boite.hidden = false;
-      placer();
-      Array.prototype.forEach.call(boite.querySelectorAll(".idcc-o"), function (b) {
+      cadre.innerHTML = h;
+      cadre.hidden = false;
+      if (cadre === boite) placer();
+      Array.prototype.forEach.call(cadre.querySelectorAll(".idcc-o"), function (b) {
         /* pointerdown : avant le blur du champ, pour que le toucher aboutisse */
         b.addEventListener("pointerdown", function (ev) {
           ev.preventDefault();
           if (b.getAttribute("data-autre")) {
-            libre = true; fermer();
+            libre = true; fermer(); fermerVoile();
             input.focus();
             if (!input.getAttribute("data-garde-placeholder"))
               input.placeholder = "numéro ou intitulé, en saisie libre";
@@ -211,12 +261,16 @@
 
     input.addEventListener("focus", function () {
       libre = false;
+      if (etroit()) {
+        /* Le champ rend la main tout de suite : c'est le voile qui prend la
+           saisie, avec son propre champ en haut de l'écran. */
+        input.blur();
+        ouvrirVoile();
+        return;
+      }
       /* Le texte est sélectionné en entier : taper remplace la convention
          enregistrée au lieu de s'ajouter à la fin de son intitulé. */
       try { input.select(); } catch (_) {}
-      if (etroit()) {
-        try { input.scrollIntoView({ block: "start", behavior: "instant" }); } catch (_) { input.scrollIntoView(true); }
-      }
       ouvrir();
     });
     input.addEventListener("input", function () {
