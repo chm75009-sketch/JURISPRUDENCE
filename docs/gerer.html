@@ -74,7 +74,9 @@
   .champs label{display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--texte-2)}
   .champs label.pleine{grid-column:1/-1}
   .champs input,.champs select,.champs textarea{font-size:16px;padding:10px 12px;min-height:44px;
-    border-radius:10px;border:1px solid var(--filet-2);background:var(--surface);color:var(--encre)}
+    border-radius:10px;border:1px solid var(--filet-2);background:var(--surface);color:var(--encre);
+    width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+  .champs label{min-width:0}
   .champs textarea{min-height:88px}
 
   .dates{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
@@ -782,7 +784,9 @@
     h1("Entre les soussignés");
     p("La société " + societe() + ",");
     p("ci-après dénommée « la Société », d'une part,");
-    p("Et " + nomS + ", né(e) le [date de naissance] à [lieu], de nationalité [   ], demeurant [adresse], numéro de sécurité sociale [   ],");
+    p("Et " + nomS + ", né(e) le " + (d.naissance ? dateFr(d.naissance) : "[date de naissance]") +
+      " à " + (d.lieuNaissance || "[lieu]") + ", de nationalité " + (d.nationalite || "[   ]") +
+      ", demeurant " + (d.adresse || "[adresse]") + ", numéro de sécurité sociale " + (d.secu || "[   ]") + ",");
     p("ci-après dénommé(e) « le salarié », d'autre part,");
     p("Il a été convenu ce qui suit.");
 
@@ -977,8 +981,18 @@
   var LOI_PARTIEL = ["L3123-6", "L3123-7", "L3123-20", "L3123-21", "L3123-27", "L3123-28", "L3123-29"];
 
   function champsContrat() {
+    /* L'identité entière en tête, en petits champs, pour qu'elle se glisse
+       dans le contrat sans crochets : demande du 9 septembre 2026, « son
+       adresse, date et lieu de naissance, insérés directement dans le
+       contrat sans que ça prenne trop de place ». */
     var c = [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: "Madame Lucie MARTIN" },
-             { id: "poste", nom: "Emploi", t: "text", ph: "serveur" }];
+             { id: "poste", nom: "Emploi", t: "text", ph: "serveur" },
+             { id: "naissance", nom: "Né(e) le", t: "date" },
+             { id: "lieuNaissance", nom: "À", t: "text", ph: "Argenteuil" },
+             { id: "nationalite", nom: "Nationalité", t: "text", ph: "française" },
+             { id: "secu", nom: "N° de sécurité sociale", t: "text", ph: "2 88 02 75 114 002 61" },
+             { id: "adresse", nom: "Adresse", t: "text", pleine: true, ph: "12 rue des Lilas, 95240 Cormeilles-en-Parisis" },
+             { id: "salaire", nom: "Salaire brut mensuel (euros)", t: "number", ph: "laissez vide : minimum de la grille" }];
     if (ccn && ccn.salaires) {
       var opts = [];
       ["I", "II", "III", "IV", "V"].forEach(function (n) {
@@ -995,8 +1009,10 @@
   function baseContrat(v) {
     var classe = ccn && ccn.salaires ? (v.classe || "I-1") : "";
     return { nom: v.nom || "", poste: v.poste || "", classe: classe,
+      naissance: dateDe(v.naissance), lieuNaissance: v.lieuNaissance || "", nationalite: v.nationalite || "",
+      secu: v.secu || "", adresse: v.adresse || "",
       statut: ccn && ccn.salaires ? statutDeClasse(classe) : (v.statut || "employe"),
-      heures: ccn && ccn.duree ? ccn.duree.heures : 35, salaire: 0, dureeMin: 0 };
+      heures: ccn && ccn.duree ? ccn.duree.heures : 35, salaire: Number(v.salaire) > 0 ? Number(v.salaire) : 0, dureeMin: 0 };
   }
   function resultatContrat(d, loi) {
     var r = contrat(d);
