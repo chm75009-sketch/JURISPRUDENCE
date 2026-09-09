@@ -194,12 +194,14 @@
 
 <script src="audit-export.js"></script>
 <script src="tableur-export.js"></script>
+<script src="feuille-doc.js"></script>
 <script src="profil.js"></script>
 <script>
 (function () {
   "use strict";
 
   var $ = function (id) { return document.getElementById(id); };
+  if (window.FeuilleDoc) window.FeuilleDoc.style();
   var ech = function (s) { return String(s == null ? "" : s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
 
@@ -639,9 +641,11 @@
     return "b" + (h >>> 0).toString(36);
   }
   function feuilleHtml(blocs) {
-    var h = '<div class="feuille" id="feuille">';
+    var h = '<div class="feuille fd" id="feuille">';
     blocs.forEach(function (b) {
       if (b.k === "trait" || b.k === "saut") { h += '<hr class="b-' + b.k + '">'; return; }
+      if (b.k === "table") { h += window.FeuilleDoc.tableHtml(b, true); return; }
+      if (b.k === "lien") { h += '<div class="b-lien" data-k="lien">' + window.FeuilleDoc.avecLiens(b.t) + "</div>"; return; }
       if (b.k === "vide") { h += '<div class="b-vide"></div>'; return; }
       var cle = empreinte(b.t);
       var texte = Object.prototype.hasOwnProperty.call(corrections, cle) ? corrections[cle] : b.t;
@@ -659,6 +663,12 @@
     document.querySelectorAll("#feuille > *").forEach(function (el) {
       if (el.tagName === "HR") { out.push({ k: el.classList.contains("b-saut") ? "saut" : "trait", t: "" }); return; }
       if (el.classList.contains("b-vide")) { out.push({ k: "p", t: "" }); return; }
+      if (el.classList.contains("fd-cadre")) {
+        var lignes = [];
+        el.querySelectorAll("tr").forEach(function (tr) { lignes.push(Array.prototype.map.call(tr.children, function (c) { return texteDe(c).replace(/\s+/g, " ").trim(); })); });
+        if (lignes.length) out.push({ k: "table", head: lignes[0], rows: lignes.slice(1) });
+        return;
+      }
       out.push({ k: el.getAttribute("data-k"), t: texteDe(el) });
     });
     return out;
@@ -666,11 +676,15 @@
   /* Les puces partent en paragraphes : l'export commun les ferait précéder
      d'un tiret long, proscrit partout. */
   var VERS_EXPORT = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "p",
-    note: "note", sign: "p", trait: "trait", saut: "saut" };
+    note: "note", sign: "p", trait: "trait", saut: "saut", lien: "p" };
   function exporterDocx(titre, fichier) {
     var blocs = relire().filter(function (b) { return b.k !== "note"; });
     var t = blocs.length && blocs[0].k === "t1" ? blocs.shift().t : titre;
-    var items = blocs.map(function (b) { return { k: VERS_EXPORT[b.k] || "p", t: b.t }; });
+    var items = blocs.map(function (b) {
+      if (b.k === "table") return { k: "table", head: b.head, rows: b.rows };
+      if (b.k === "exemple") return { k: "enc", titre: "Exemple", t: b.t };
+      return { k: VERS_EXPORT[b.k] || "p", t: b.t };
+    });
     window.AuditExport.telecharger(window.AuditExport.docx(items, t), fichier,
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   }
@@ -688,41 +702,8 @@
   /* Les documents des générateurs de l'application sortent en texte, lignes
      de 78 signes, titres en capitales, filets de tirets. Ils reviennent ici en
      blocs, et les tirets longs qu'ils portent deviennent le trait d'union. */
-  function blocsDeTexte(t) {
-    t = String(t || "").replace(/[\u2014\u2013]/g, "-").replace(/\u00a0/g, " ");
-    var lignes = t.split("\n"), b = [], para = [], premier = true;
-    function vider() {
-      if (!para.length) return;
-      var texte = para.map(function (s) { return s.trim(); }).join(" ");
-      var capitales = !/[a-zà-ÿ]/.test(para[0]);
-      if (premier) {
-        para.forEach(function (l) { b.push({ k: "p", t: l.trim() }); });
-      } else if (capitales && para.length >= 2 && /^\s*\(/.test(para[1])) {
-        b.push({ k: "t1", t: para[0].trim() });
-        b.push({ k: "st", t: para.slice(1).map(function (s) { return s.trim(); }).join(" ") });
-      } else if (capitales && texte.length < 120) {
-        b.push({ k: "h1", t: texte });
-      } else if (/^NOTE\b/.test(texte)) {
-        b.push({ k: "note", t: texte });
-      } else if (para.every(function (l) { return /^\s{2,}/.test(l); })) {
-        para.forEach(function (l) { b.push({ k: "puce", t: l.trim() }); });
-      } else if (para.length >= 2 && para.every(function (l) { return /^[^:]{2,70} ?:/.test(l.trim()); })) {
-        para.forEach(function (l) { b.push({ k: "p", t: l.trim() }); });
-      } else {
-        b.push({ k: "p", t: texte });
-      }
-      premier = false;
-      para = [];
-    }
-    lignes.forEach(function (l) {
-      if (!l.trim()) { vider(); return; }
-      if (/^[─═_\-\s]{6,}$/.test(l.trim())) { vider(); b.push({ k: "trait", t: "" }); return; }
-      if (/^[═─]{2,}\s.*\s[═─]{2,}$/.test(l.trim())) { vider(); b.push({ k: "h1", t: l.trim().replace(/^[═─]+\s*|\s*[═─]+$/g, "") }); return; }
-      para.push(l);
-    });
-    vider();
-    return b;
-  }
+  function blocsDeTexte(t) { return window.FeuilleDoc.blocs(t); }
+
 
   /* ═══════════════════════════════════════════════════════════════════════
      1. LES CONTRATS
@@ -1786,8 +1767,15 @@
      rempli, feuille 3 les règles (le mode d'emploi, les rappels, et le texte
      du document). */
   $("btn-excel").addEventListener("click", function () {
-    if (!TABLEAU || !window.TableurExport) return;
+    if (!window.TableurExport) return;
     var doc = DOCS[ACTIF];
+    if (!TABLEAU) {
+      var feuilles = window.FeuilleDoc.tableaux(relire());
+      if (!feuilles.length) return;
+      var nomF = (doc.titre + "-" + (profil.denomination || "")).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
+      TableurExport.telecharger(TableurExport.xlsx(feuilles), nomF + ".xlsx");
+      return;
+    }
     var regles = [];
     var tableau = TABLEAU.filter(function (l) {
       if (pleines(l) === 1 && /^(MODE D'EMPLOI|RAPPEL|NOTE)/i.test(String(l[0]))) { regles.push([String(l[0])]); return false; }
@@ -1828,8 +1816,8 @@
       $("d-feuille").innerHTML = '<details class="loi"><summary>Voir les règles de tenue</summary>' + feuilleHtml(r.blocs) + "</details>";
     } else {
       $("d-tableau").hidden = true;
-      $("d-barre-tableau").hidden = true;
       $("d-feuille").innerHTML = r.refus ? "" : feuilleHtml(r.blocs);
+      $("d-barre-tableau").hidden = r.refus || !window.FeuilleDoc.tableaux(r.blocs || []).length;
     }
     $("btn-word").disabled = !!r.refus;
     $("btn-imprimer").disabled = !!r.refus;

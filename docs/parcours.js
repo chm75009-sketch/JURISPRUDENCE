@@ -3781,6 +3781,7 @@
       var ctx = { profil: PROFIL, fiche: st.donnees || {}, donnees: st.donnees || {},
                   aujourdhui: new Date() };
       COURRIER = { id: id, nom: gen.nom, modele: gen.produire(ctx) };
+      COURRIER.modeleTexte = lireTexte(COURRIER.modele);
       /* CERTAINS DOCUMENTS SONT DES TABLEAUX, PAS DES LETTRES. Une base de
          données, une grille de contenu, un registre : le client en a besoin
          dans son tableur, avec ses colonnes et ses lignes, non dans un
@@ -3791,12 +3792,17 @@
          client de mettre ses données ». */
       TABLEUR = (typeof gen.tableur === "function")
         ? { nom: gen.nom, lignes: gen.tableur(ctx) } : null;
+      /* Sans fonction tableur, les tableaux de la feuille elle-même partent
+         en Excel, une feuille par tableau. */
+      if (!TABLEUR && window.FeuilleDoc && window.TableurExport &&
+          window.FeuilleDoc.tableaux(window.FeuilleDoc.blocs(COURRIER.modele)).length)
+        TABLEUR = { nom: gen.nom, feuille: true };
       $("dt-tableur").hidden = !TABLEUR;
       $("dt-titre").textContent = gen.nom;
       /* La version de l'utilisateur prime sur le modèle : un courrier qu'on a
          complété la semaine dernière se rouvre tel qu'on l'a laissé. */
       var mien = lireCourrier(id);
-      $("dt-corps").value = mien != null ? mien : COURRIER.modele;
+      poserCorps(mien != null ? mien : COURRIER.modele);
       etatCourrier(mien != null ? "Votre version, modifiée le " + (dateFr(dateCourrier(id)) || "—") + "." : "");
       var d = $("dlg-courrier");
       if (d.showModal) d.showModal(); else d.setAttribute("open", "open");
@@ -3891,10 +3897,25 @@
   });
   /* La saisie est enregistrée au fil de la frappe — pas de bouton
      « enregistrer » à oublier. */
+  /* La feuille : le texte du générateur rendu en page, tableaux compris,
+     corrigeable en place. Ce qui s'enregistre est le texte relu de la page. */
+  function lireTexte(t) { return window.FeuilleDoc ? window.FeuilleDoc.texte(window.FeuilleDoc.blocs(t)) : String(t || ""); }
+  function poserCorps(t) {
+    var el = $("dt-corps");
+    if (!window.FeuilleDoc) { el.textContent = t; return; }
+    window.FeuilleDoc.style();
+    el.innerHTML = window.FeuilleDoc.html(window.FeuilleDoc.blocs(t), { classe: "feuille" });
+  }
+  function relireCorps() {
+    var el = $("dt-corps");
+    if (!window.FeuilleDoc || !el.firstElementChild) return [{ k: "p", t: el.textContent }];
+    return window.FeuilleDoc.relire(el.firstElementChild);
+  }
+  function lireCorps() { return window.FeuilleDoc ? window.FeuilleDoc.texte(relireCorps()) : $("dt-corps").textContent; }
   $("dt-corps").addEventListener("input", function () {
     if (!COURRIER) return;
-    var t = $("dt-corps").value;
-    if (t === COURRIER.modele) { ecrireCourrier(COURRIER.id, null); etatCourrier(""); return; }
+    var t = lireCorps();
+    if (t === COURRIER.modeleTexte) { ecrireCourrier(COURRIER.id, null); etatCourrier(""); return; }
     ecrireCourrier(COURRIER.id, t);
     etatCourrier("Vos modifications sont enregistrées sur ce poste.");
   });
@@ -4056,6 +4077,11 @@
 
   $("dt-tableur").addEventListener("click", function () {
     if (!TABLEUR) return;
+    if (TABLEUR.feuille) {
+      var feuilles = window.FeuilleDoc.tableaux(relireCorps());
+      if (feuilles.length) window.TableurExport.telecharger(window.TableurExport.xlsx(feuilles), nomFichier(TABLEUR.nom) + ".xlsx");
+      return;
+    }
     var a = document.createElement("a");
     a.href = URL.createObjectURL(xlsx(TABLEUR.lignes));
     a.download = nomFichier(TABLEUR.nom) + ".xlsx";
@@ -4077,9 +4103,9 @@
       return;
     }
     var titre = COURRIER ? COURRIER.nom : ($("dt-titre").textContent || "Document");
-    var items = String($("dt-corps").value).split(/\r?\n/).map(function (ligne) {
-      return { k: "p", t: ligne };
-    });
+    var items = window.FeuilleDoc ? window.FeuilleDoc.items(relireCorps())
+      : String($("dt-corps").textContent).split(/\r?\n/).map(function (ligne) { return { k: "p", t: ligne }; });
+    if (items.length && items[0].k === "t1") titre = items.shift().t;
     AuditExport.telecharger(AuditExport.docx(items, titre), nomFichier(titre) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
     etatCourrier("Téléchargé en Word.");
@@ -4087,9 +4113,9 @@
 
   $("dt-modele").addEventListener("click", function () {
     if (!COURRIER) return;
-    if ($("dt-corps").value !== COURRIER.modele &&
+    if (lireCorps() !== COURRIER.modeleTexte &&
         !confirm("Revenir au modèle effacera ce que vous avez écrit dans ce courrier. Continuer ?")) return;
-    $("dt-corps").value = COURRIER.modele;
+    poserCorps(COURRIER.modele);
     ecrireCourrier(COURRIER.id, null);
     etatCourrier("Texte d'origine rétabli.");
   });
@@ -4105,7 +4131,7 @@
     document.body.classList.remove("print-courrier");
   });
   $("dt-copier").addEventListener("click", function () {
-    if (navigator.clipboard) navigator.clipboard.writeText($("dt-corps").value);
+    if (navigator.clipboard) navigator.clipboard.writeText(lireCorps());
     etatCourrier("Copié.");
   });
   $("bp-changer").addEventListener("click", function () { deplier("cartes"); });

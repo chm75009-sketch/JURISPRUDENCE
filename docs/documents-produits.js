@@ -763,8 +763,70 @@
     D[id] = def;
   }
 
+  /* LES LIENS UTILES, par thème et par secteur. Chaque adresse a répondu
+     200 le 9 septembre 2026, lue depuis cette machine. Aucune n'est devinée.
+     Demande du même jour : « s'il y a un lien pour le secteur concerné,
+     fédération, service public, tu mets le lien avec la formule d'usage ». */
+  var LIENS = {
+    duerp: [
+      ["Le document unique, ce qu'il faut retenir (INRS)", "https://www.inrs.fr/demarche/evaluation-risques-professionnels/ce-qu-il-faut-retenir.html"],
+      ["Le document unique (ministère du travail)", "https://travail-emploi.gouv.fr/document-unique-devaluation-des-risques-professionnels-duerp"],
+    ],
+    sst: [
+      ["Institut national de recherche et de sécurité (INRS)", "https://www.inrs.fr/"],
+      ["Les services de prévention et de santé au travail (Présanse)", "https://www.presanse.fr/"],
+    ],
+    cse: [["Le comité social et économique (ministère du travail)", "https://travail-emploi.gouv.fr/le-comite-social-et-economique-cse"]],
+    bdese: [["La base de données économiques, sociales et environnementales (ministère du travail)", "https://travail-emploi.gouv.fr/la-base-de-donnees-economiques-sociales-et-environnementales-bdese"]],
+    nao: [["La négociation collective en entreprise (ministère du travail)", "https://travail-emploi.gouv.fr/la-negociation-collective-en-entreprise"]],
+    pse: [["Le plan de sauvegarde de l'emploi (ministère du travail)", "https://travail-emploi.gouv.fr/le-plan-de-sauvegarde-de-lemploi-pse"]],
+    egalite: [["Index de l'égalité professionnelle, Egapro (ministère du travail)", "https://egapro.travail.gouv.fr/"]],
+    ri: [
+      ["Le règlement intérieur (ministère du travail)", "https://travail-emploi.gouv.fr/le-reglement-interieur"],
+      ["Le règlement intérieur de l'entreprise (service-public.fr)", "https://entreprendre.service-public.fr/vosdroits/F1905"],
+    ],
+    discipline: [["Sanctions disciplinaires (service-public.fr)", "https://www.service-public.fr/particuliers/vosdroits/F2234"]],
+    registre: [["Le registre unique du personnel (service-public.fr)", "https://entreprendre.service-public.fr/vosdroits/F1784"]],
+    rh: [["Le code du travail numérique (ministère du travail)", "https://code.travail.gouv.fr/"]],
+    convention: [["Trouver et lire sa convention collective (code du travail numérique)", "https://code.travail.gouv.fr/outils/convention-collective"]],
+  };
+  var LIENS_SECTEUR = {
+    "transport et logistique": [
+      ["Transport routier, les risques du métier (INRS)", "https://www.inrs.fr/metiers/transport.html"],
+      ["Logistique, les risques du métier (INRS)", "https://www.inrs.fr/metiers/logistique.html"],
+      ["Organisation des transporteurs routiers européens (OTRE), fédération professionnelle", "https://www.otre.org/"],
+    ],
+    "industrie": [["Industrie, les risques du métier (INRS)", "https://www.inrs.fr/metiers/industrie.html"]],
+    "bâtiment et travaux publics": [
+      ["Bâtiment et travaux publics, les risques du métier (INRS)", "https://www.inrs.fr/metiers/btp.html"],
+      ["Organisme professionnel de prévention du BTP (OPPBTP)", "https://www.preventionbtp.fr/"],
+      ["Fédération française du bâtiment (FFB)", "https://www.ffbatiment.fr/"],
+      ["Confédération de l'artisanat et des petites entreprises du bâtiment (CAPEB)", "https://www.capeb.fr/"],
+    ],
+    "commerce": [["Union des entreprises de proximité (U2P), organisation professionnelle", "https://www.u2p-france.fr/"]],
+    "services": [["Union des entreprises de proximité (U2P), organisation professionnelle", "https://www.u2p-france.fr/"]],
+  };
+  /* Les lignes « pour aller plus loin » d'un document : le thème, puis le
+     secteur de la fiche, puis la convention collective. Rien si rien. */
+  function liens(ctx, themes) {
+    var p = (ctx && ctx.profil) || {};
+    var out = [], vus = {};
+    function met(l) { if (!vus[l[1]]) { vus[l[1]] = true; out.push("  " + l[0] + " : " + l[1]); } }
+    (Array.isArray(themes) ? themes : [themes]).forEach(function (t) { (LIENS[t] || []).forEach(met); });
+    (LIENS_SECTEUR[String(p.secteur || "").trim().toLowerCase()] || []).forEach(met);
+    if (String(p.conventionCollective || p.idcc || "").trim()) LIENS.convention.forEach(met);
+    if (!out.length) return [];
+    return ["POUR ALLER PLUS LOIN", "", "Pour aller plus loin, vous pouvez consulter :", ""].concat(out).concat([""]);
+  }
+  /* Le bandeau qui ouvre tout exemple : demande du 9 septembre 2026,
+     « commencer par un exemple en disant que c'est juste un exemple et que le
+     document doit tenir compte des spécificités de l'entreprise ». */
+  var EXEMPLE = "EXEMPLE, À ADAPTER : ce qui suit est un exemple, donné pour montrer la forme attendue. " +
+    "Votre document doit tenir compte des spécificités de votre entreprise, de ses postes, de ses effectifs et de sa convention collective.";
+
   global.DocumentsProduits = {
     pour: pour, tous: D, ajouter: ajouter,
-    outils: { cro: cro, leJour: leJour, dans: dans, entete: entete },
+    outils: { cro: cro, leJour: leJour, dans: dans, entete: entete, liens: liens, EXEMPLE: EXEMPLE },
+    liens: liens, EXEMPLE: EXEMPLE,
   };
 })(typeof window !== "undefined" ? window : this);

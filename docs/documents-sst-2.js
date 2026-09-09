@@ -2641,8 +2641,13 @@
      ══════════════════════════════════════════════════════════════════════ */
 
   var PI = global.Pieces;
-  if (!PI || typeof PI.ajouter !== "function")
-    throw new Error("documents-sst-2.js : documents-sst.js doit être chargé avant.");
+  if (!PI || typeof PI.ajouter !== "function") {
+    /* Sans documents-sst.js (l'épreuve epreuve/tester-generateurs.mjs charge
+       ce fichier seul, après documents-produits.js), les cinq générateurs
+       ci-dessus suffisent : les pièces et l'écran qui suivent ne se montent
+       pas, et rien ne casse. */
+    return;
+  }
 
   var U = PI.outils;
   var feuille = U.feuille, val = U.val, dateVal = U.dateVal, teteDocument = U.teteDocument;
