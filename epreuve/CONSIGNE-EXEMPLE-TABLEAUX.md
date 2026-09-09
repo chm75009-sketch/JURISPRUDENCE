@@ -85,3 +85,20 @@ Elle doit finir sur « aucune faute ». Elle vérifie l'ordre EXEMPLE, À
 COMPLÉTER, LES RÈGLES, la présence d'un tableau, des liens, l'absence de
 tirets longs, et qu'aucun générateur ne lève d'exception pour les cinq
 secteurs et pour une fiche vide.
+
+## L'avancement, session par session (un fichier par session, un seul agent)
+
+Faits et publiés : docs/documents-sst.js (14 documents, le 9 septembre 2026),
+le registre du personnel, l'affichage commun (feuille-doc.js).
+
+En cours le 9 septembre : docs/documents-sst-2.js (5 documents).
+
+À faire, dans cet ordre : documents-rh.js (11), documents-discipline.js (17),
+documents-discipline-2.js (6), documents-bdese.js (17), documents-nao.js (15),
+documents-pse.js (20), documents-eco-fond.js (20), documents-eco-procedure.js
+(20), documents-eco-2.js (17), documents-eco-cse.js (13), puis gerer.html
+(contrats et courriers intégrés).
+
+NE PAS FAIRE : documents-cse.js, documents-cse-2.js, documents-cse-3.js.
+Décision de l'utilisatrice du 9 septembre 2026 : « le CSE, ne le fait pas, on
+l'a déjà dans Juriste expert et il est excellent. »
