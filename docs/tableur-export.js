@@ -108,8 +108,10 @@
       ligne = ligne || [];
       if (!pleines(ligne)) { x += '<row r="' + (i + 1) + '"/>'; return; }
       var titre = i < tete || tete < 0 ? (pleines(ligne) === 1 && i === 0 ? 1 : 4) : 0;
-      var note = tete >= 0 && i > tete && pleines(ligne) === 1;
-      var style = titre ? titre : (i === tete ? 2 : (note ? 4 : 3));
+      var numero = /^\d+$/.test(String(ligne[0] == null ? "" : ligne[0]));
+      var note = tete >= 0 && i > tete && pleines(ligne) === 1 && !numero;
+      var enTete = i === tete || (tete >= 0 && i > tete && pleines(ligne) >= 4 && !numero);
+      var style = titre ? titre : (enTete ? 2 : (note ? 4 : 3));
       var largeur = (style === 3 || style === 2) ? nbCol : ligne.length;
       x += '<row r="' + (i + 1) + '"' + (style === 1 ? ' ht="22" customHeight="1"' : "") + '>';
       for (var j = 0; j < largeur; j++) {
