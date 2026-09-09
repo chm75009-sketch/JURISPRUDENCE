@@ -3792,11 +3792,12 @@
          client de mettre ses données ». */
       TABLEUR = (typeof gen.tableur === "function")
         ? { nom: gen.nom, lignes: gen.tableur(ctx) } : null;
-      /* Sans fonction tableur, les tableaux de la feuille elle-même partent
-         en Excel, une feuille par tableau. */
-      if (!TABLEUR && window.FeuilleDoc && window.TableurExport &&
+      /* Les tableaux de la feuille elle-même partent en Excel, une feuille
+         par tableau, l'exemple rempli puis le modèle à compléter ; le
+         tableur du générateur, s'il existe, vient en dernier onglet. */
+      if (window.FeuilleDoc && window.TableurExport &&
           window.FeuilleDoc.tableaux(window.FeuilleDoc.blocs(COURRIER.modele)).length)
-        TABLEUR = { nom: gen.nom, feuille: true };
+        TABLEUR = { nom: gen.nom, feuille: true, lignes: TABLEUR ? TABLEUR.lignes : null };
       $("dt-tableur").hidden = !TABLEUR;
       $("dt-titre").textContent = gen.nom;
       /* La version de l'utilisateur prime sur le modèle : un courrier qu'on a
@@ -4079,6 +4080,7 @@
     if (!TABLEUR) return;
     if (TABLEUR.feuille) {
       var feuilles = window.FeuilleDoc.tableaux(relireCorps());
+      if (TABLEUR.lignes) feuilles.push({ titre: "Modèle vierge", lignes: TABLEUR.lignes });
       if (feuilles.length) window.TableurExport.telecharger(window.TableurExport.xlsx(feuilles), nomFichier(TABLEUR.nom) + ".xlsx");
       return;
     }

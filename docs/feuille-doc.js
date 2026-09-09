@@ -211,12 +211,19 @@
   /* Les tableaux de la page, une feuille chacun, pour TableurExport. Le
      titre de la feuille est le dernier titre lu avant le tableau. */
   function tableaux(bs) {
-    var f = [], titre = "", n = 0;
+    var f = [], titre = "", n = 0, vus = {};
     bs.forEach(function (b) {
-      if (b.k === "h1" || b.k === "t1") titre = b.t;
+      /* Le titre de l'onglet : le dernier titre, ou la courte ligne qui
+         précède le tableau (« UNITÉ DE TRAVAIL : Quai de chargement »). */
+      if (b.k === "h1" || b.k === "t1" || b.k === "h2" || ((b.k === "p" || b.k === "puce") && b.t && (b.t.length < 60 || /^unité de travail/i.test(b.t)))) titre = b.t;
       if (b.k !== "table") return;
       n++;
-      f.push({ titre: (titre || "Tableau " + n).slice(0, 31), lignes: [b.head].concat(b.rows) });
+      /* Un nom d'onglet : 31 signes au plus, sans : \ / ? * [ ], unique. */
+      var nom = String(titre || "Tableau " + n).replace(/^UNITÉ DE TRAVAIL\s*:\s*/i, "").replace(/\s*\(.*$/, "").replace(/[:\\\/?*\[\]]/g, " ").replace(/\s+/g, " ").trim().slice(0, 28) || "Tableau";
+      var base = nom, k = 2;
+      while (vus[nom.toLowerCase()]) { nom = base.slice(0, 25) + " " + k; k++; }
+      vus[nom.toLowerCase()] = true;
+      f.push({ titre: nom, lignes: [b.head].concat(b.rows) });
     });
     return f;
   }
