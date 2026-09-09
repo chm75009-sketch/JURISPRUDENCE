@@ -375,6 +375,11 @@
         mesure: "chargement de la tournée de Mme PETIT confié au chef de quai, M. Karim BELAÏD, jusqu'à la clôture ; M. ROCHER affecté au quai de l'après-midi, ses horaires ne croisant plus ceux de Mme PETIT ; Mme PETIT garde sa tournée est, à sa demande",
         enqueteurs: ["Madame Nadia FERRAND, responsable d'exploitation", "Monsieur Pascal MOREL, chef d'atelier, extérieur au quai"],
         pieces: "relevé des tournées du D28 au D9, copie du message du D13, planning du quai",
+        reponsesCause: ["reconnaît des remarques sur la tenue, qu'il dit « pour rire » et sans intention de blesser", "reconnaît l'envoi du message, dit avoir voulu prévenir d'un changement d'horaire, ne peut pas expliquer le contenu ni l'heure", "conteste : la tournée est aurait été réattribuée pour équilibrer les kilomètres, sur sa seule décision"],
+        temoin1: "a entendu les remarques sur la tenue les D21 et D14, devant l'équipe ; les trouve déplacées ; n'a rien vu d'autre",
+        temoin2: "a vu Mme PETIT bouleversée le D13 au soir et a lu le message sur son téléphone ; a entendu M. ROCHER dire le D9 qu'elle « n'avait qu'à être moins compliquée »",
+        conclusions: ["établi : propos reconnus, deux témoins concordants sur les dates", "établi : message produit, envoi reconnu, contenu sans rapport avec le service", "non établi : la réattribution est établie, sa cause ne l'est pas ; le motif d'organisation invoqué n'est pas exclu par les pièces"],
+        organisation: "affectation des tournées décidée par la responsable d'exploitation sur un tableau partagé ; consigne écrite sur l'usage des téléphones personnels ; formation de l'encadrement du quai",
       },
     },
 
@@ -413,6 +418,11 @@
         mesure: "M. CASTEL affecté à l'équipe du matin jusqu'à la clôture, sans autorité sur l'équipe de nuit ; Mme MENDES maintenue à son poste et à ses horaires, à sa demande, sous la responsabilité directe du responsable de production",
         enqueteurs: ["Madame Claire VIDAL, responsable administratif", "Madame Inès BARBIER, responsable qualité, extérieure à l'atelier"],
         pieces: "plannings de l'équipe de nuit du D40 au D9, fiche d'affectation du D11, relevé de pointage",
+        reponsesCause: ["reconnaît des « compliments », conteste qu'ils aient été quotidiens", "conteste tout geste, dit avoir pu la toucher « en passant » dans l'allée étroite de la découpe", "reconnaît l'affectation, l'explique par l'absence d'un opérateur, produit le planning"],
+        temoin1: "a entendu les propos à la prise de poste « presque chaque nuit » depuis l'été ; a vu la main sur le bas du dos le D18, au poste de découpe",
+        temoin2: "a entendu Mme MENDES demander le D12 que cela cesse ; a constaté l'affectation au poste bruyant dès la nuit suivante, alors qu'un autre opérateur y était prévu",
+        conclusions: ["établi : propos reconnus en partie, deux témoins concordants sur la répétition", "établi pour le D18, vu par un témoin ; les D25 et D12 reposent sur le seul récit de la personne qui a signalé", "non établi : l'affectation est établie, le planning produit rend le motif d'organisation possible ; un témoin la lie à la demande du D12, sans autre élément"],
+        organisation: "affectations de nuit validées chaque semaine par le responsable de production ; allée de la découpe élargie ; formation des chefs d'équipe des trois postes",
       },
     },
 
@@ -451,6 +461,11 @@
         mesure: "M. DORÉ affecté au chantier du dépôt sous l'autorité directe du conducteur de travaux, à sa demande ; M. VALLET reste sur son chantier et ne participe plus à l'appréciation du travail de M. DORÉ",
         enqueteurs: ["Monsieur Rachid AMRANI, conducteur de travaux", "Monsieur Lucas PERRIN, chef d'atelier, extérieur au chantier"],
         pieces: "feuilles de pointage du chantier du D45 au D9, fiches d'affectation journalières, compte rendu du quart d'heure sécurité du D20",
+        reponsesCause: ["reconnaît les surnoms, dit que « tout le monde en a un sur le chantier »", "conteste : les tâches sont réparties « selon les besoins », les pauses auraient été décalées pour tout le monde le D20 à cause d'une livraison", "conteste avoir menacé, dit avoir « rappelé les règles » devant l'équipe"],
+        temoin1: "a entendu les surnoms tous les jours, dit qu'ils ne visaient que M. DORÉ ; a pris sa pause le D20 pendant que M. DORÉ continuait seul",
+        temoin2: "a entendu le D9 la phrase sur la fin du chantier, la rapporte mot pour mot ; n'a pas vu les affectations",
+        conclusions: ["établi : surnoms reconnus, un témoin dit qu'ils ne visaient que lui", "établi pour le D20, contredit par un témoin sur la pause « décalée pour tous » ; non établi pour le D13, aucun élément hors le récit", "établi : phrase rapportée mot pour mot par un témoin, « rappel des règles » non retenu au vu des termes"],
+        organisation: "affectations journalières visées par le conducteur de travaux ; quart d'heure sécurité mensuel consacré au respect entre compagnons ; accueil des nouveaux embauchés par le conducteur de travaux",
       },
     },
 
@@ -489,6 +504,11 @@
         mesure: "fermetures de Mme CARON planifiées avec la gérante ou le responsable réception jusqu'à la clôture ; M. LAMY retiré de l'établissement des plannings de la caisse ; Mme CARON garde ses horaires, à sa demande",
         enqueteurs: ["Madame Sophie LENOIR, gérante", "Monsieur Antoine ROY, responsable réception, extérieur à la surface de vente"],
         pieces: "plannings de la caisse du D30 au D9, copies des messages des D21 et D14, main courante du magasin",
+        reponsesCause: ["reconnaît des plaisanteries « de fin de journée », conteste leur connotation", "reconnaît les deux messages, dit avoir compris le premier refus comme une hésitation", "conteste : le planning du D10 aurait été fait « au hasard des disponibilités »"],
+        temoin1: "a entendu les plaisanteries les D30 et D16, les a trouvées gênantes, a vu Mme CARON quitter la caisse le D16 sans répondre",
+        temoin2: "a vu le planning du D10 affiché, a remarqué que Mme CARON était seule en fermeture avec M. LAMY pour la première fois",
+        conclusions: ["établi : propos reconnus, un témoin concordant sur deux dates et sur leur nature", "établi : messages produits, envoi reconnu, second message postérieur à un refus écrit", "non établi : le planning est établi, sa cause ne l'est pas ; le motif de disponibilité n'est pas exclu"],
+        organisation: "plannings de la caisse établis par la gérante ; fermetures toujours à deux personnes, jamais un responsable seul avec un salarié qu'il évalue ; formation de l'encadrement",
       },
     },
 
@@ -528,6 +548,11 @@
         mesure: "Mme BERNARD rattachée à M. Nicolas FAURE, responsable d'agence, pour ses missions jusqu'à la clôture, à sa demande ; M. MARTIN n'évalue plus ses travaux et ne lui adresse plus de message hors de la présence d'un tiers",
         enqueteurs: ["Madame Camille VIDAL, responsable administrative", "Monsieur Nicolas FAURE, responsable d'agence, extérieur à l'équipe"],
         pieces: "export de la messagerie interne du D50 au D12, comptes rendus des réunions d'équipe des D27 et D13, courriel de retrait de mission du D9",
+        reponsesCause: ["reconnaît les messages, les dit « amicaux », conteste qu'ils aient été insistants", "conteste des commentaires sur la tenue, dit avoir parlé « du code vestimentaire client »", "conteste tout lien : la mission Durand aurait été retirée pour une raison de planning, sur demande du client"],
+        temoin1: "a entendu les commentaires le D27, en réunion, les a trouvés déplacés ; a reçu de Mme BERNARD, le D26, une capture des messages du week-end",
+        temoin2: "a préparé le courriel de retrait de mission le D9 à la demande de M. MARTIN ; n'a pas connaissance d'une demande du client",
+        conclusions: ["établi : messages produits, envoi reconnu, fréquence et horaires sans rapport avec le service", "établi pour le D27, un témoin concordant ; non établi pour le D13, aucun élément hors le récit", "non établi : le retrait est établi, la demande du client n'a pas été retrouvée, mais le lien avec le refus n'est pas établi par un élément extérieur au récit"],
+        organisation: "règles d'usage de la messagerie interne écrites, aucun message hors plage sans motif de service ; attribution et retrait des missions validés par la responsable d'agence ; formation des responsables d'équipe",
       },
     },
   };
@@ -950,10 +975,10 @@
         C.push("");
         var enteteRegistre = ["Date", "Qui saisit (fonction, sans nom)", "Nature de la demande", "Orientation donnée", "Suite"];
         C = C.concat(E ? tableau(enteteRegistre, [
-          [E.date(20), "salariée, " + E.unites[0][0].toLowerCase(), "question sur ce qui relève de l'agissement sexiste", "définitions remises, affichage montré", "aucune saisine formelle, la salariée sait où s'adresser"],
-          [E.date(34), "salarié, " + E.unites[1][0].toLowerCase(), "récit de propos entendus au poste", "orientation vers la procédure interne, rappel de la protection de L. 1153-2", "signalement écrit remis à " + E.recoit + " le " + E.date(35)],
-          [E.date(51), "salariée, " + E.unites[2][0].toLowerCase(), "demande de rendez-vous avec le médecin du travail", "coordonnées du service de santé au travail remises, appel passé avec elle", "rendez-vous obtenu le " + E.date(58)],
-          [E.date(66), "intérimaire, " + E.unites[1][0].toLowerCase(), "message reçu d'un collègue, hors service", "conservation du message conseillée, orientation vers la procédure interne", "signalement écrit le " + E.date(67)],
+          [E.date(20), "salariée, " + E.unites[0][0], "question sur ce qui relève de l'agissement sexiste", "définitions remises, affichage montré", "aucune saisine formelle, la salariée sait où s'adresser"],
+          [E.date(34), "salarié, " + E.unites[1][0], "récit de propos entendus au poste", "orientation vers la procédure interne, rappel de la protection de L. 1153-2", "signalement écrit remis à " + E.recoit + " le " + E.date(35)],
+          [E.date(51), "salariée, " + E.unites[2][0], "demande de rendez-vous avec le médecin du travail", "coordonnées du service de santé au travail remises, appel passé avec elle", "rendez-vous obtenu le " + E.date(58)],
+          [E.date(66), "intérimaire, " + E.unites[1][0], "message reçu d'un collègue, hors service", "conservation du message conseillée, orientation vers la procédure interne", "signalement écrit le " + E.date(67)],
         ]) : tableauVide(enteteRegistre, 3));
         C = C.concat(formulePolitesse(ctx, E, "Madame, Monsieur"));
         C.push("Pièce jointe : décision de désignation du " + dateDecision);
@@ -1124,9 +1149,178 @@
       var f = ctx.fiche || {};
       var cse = f.cse || {};
       var d0 = aujourd(ctx);
+      var ex = exempleDe(ctx);
       var L = entete(ctx, "Désignation du référent harcèlement par le comité social et économique",
         "article L. 2314-1, dernier alinéa, du code du travail");
 
+      function corps(E) {
+        var C = [];
+        var nom = E ? E.nom : nomDe(ctx);
+        var sig = E ? E.signataire : signataire(ctx);
+        var K = E ? E.cse : null;
+        var reunion = X(E, leJour(dans(d0, 15)), "DATE DE LA RÉUNION");
+        var refNom = X(E, K && K.referent, "NOM, PRÉNOM");
+        var refQualite = X(E, K && K.qualite + ", " + K.college, "membre titulaire / suppléant, collège");
+        var refAdresse = X(E, E && E.cseAdresse, "ADRESSE");
+        var refTel = X(E, E && E.cseTel, "NUMÉRO");
+        var datesFormation = X(E, "du " + leJour(dans(d0, 60)) + " au " + leJour(dans(d0, 64)), "DATES");
+
+        C.push("PIÈCE 1, INSCRIPTION À L'ORDRE DU JOUR");
+        C.push("");
+        C.push(nom);
+        C.push("");
+        C.push("ORDRE DU JOUR, RÉUNION DU COMITÉ SOCIAL ET ÉCONOMIQUE DU " + reunion.toUpperCase());
+        C.push("Extrait");
+        C.push("");
+        C.push("Point " + X(E, "3", "N°") + ", désignation du référent en matière de lutte contre le");
+        C.push("harcèlement sexuel et les agissements sexistes (L. 2314-1, dernier alinéa).");
+        C.push("");
+        C.push("Objet : le comité est appelé à désigner, parmi ses membres, par une");
+        C.push("résolution adoptée selon les modalités de L. 2315-32, le référent en");
+        C.push("matière de lutte contre le harcèlement sexuel et les agissements sexistes,");
+        C.push("pour une durée qui prend fin avec celle du mandat des membres élus du");
+        C.push("comité. Document joint : modèle de résolution.");
+        C.push("");
+        C.push("Transmission du point au secrétaire : " + X(E,
+          "courriel adressé à " + (K ? K.secretaire : "") + " le " + leJour(d0) + ", copie conservée au dossier du comité",
+          "DATE et moyen ; si l'ordre du jour est établi conjointement avec le secrétaire, transmettez-lui ce point par écrit et gardez la trace de l'envoi, c'est elle qui établira votre démarche") + ".");
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 2, COURRIER AUX MEMBRES DE LA DÉLÉGATION DU PERSONNEL");
+        C.push("");
+        C = C.concat(teteLettre(ctx, E, ["Aux membres de la délégation du personnel", "du comité social et économique"], false));
+        C.push("Objet : désignation du référent en matière de lutte contre le harcèlement");
+        C.push("sexuel et les agissements sexistes");
+        C.push("");
+        C.push("Mesdames, Messieurs,");
+        C.push("");
+        C.push("Le dernier alinéa de l'article L. 2314-1 du code du travail prévoit qu'un");
+        C.push("référent en matière de lutte contre le harcèlement sexuel et les");
+        C.push("agissements sexistes « est désigné par le comité social et économique");
+        C.push("parmi ses membres, sous la forme d'une résolution adoptée selon les");
+        C.push("modalités définies à l'article L. 2315-32, pour une durée qui prend fin");
+        C.push("avec celle du mandat des membres élus du comité ».");
+        C.push("");
+        C.push("Cette désignation appartient au comité, et à lui seul : je ne peux ni y");
+        C.push("procéder, ni proposer un nom. Je vous invite en conséquence à y procéder");
+        C.push("lors de la réunion du " + reunion + ", à l'ordre du jour de laquelle");
+        C.push("cette question est inscrite. Un modèle de résolution est joint, que vous");
+        C.push("pourrez reprendre ou écarter.");
+        C.push("");
+        C.push("Deux points pratiques, qui ne sont pas de simples formalités :");
+        C.push("");
+        C.push("  - les coordonnées du référent que vous désignerez, adresse et numéro");
+        C.push("    d'appel, devront figurer sur l'information délivrée aux salariés et");
+        C.push("    aux candidats à l'embauche, l'article D. 1151-1, 5°, l'exigeant");
+        C.push("    « lorsqu'un comité social et économique existe ». Merci de me les");
+        C.push("    communiquer dès la désignation, afin que le support soit corrigé sans");
+        C.push("    délai ;");
+        C.push("  - le référent bénéficie de la formation en matière de santé, de");
+        C.push("    sécurité et de conditions de travail : l'article L. 2315-18 vise");
+        C.push("    expressément, à côté des membres de la délégation du personnel, « le");
+        C.push("    référent prévu au dernier alinéa de l'article L. 2314-1 ». Le");
+        C.push("    financement de cette formation est pris en charge par l'employeur");
+        C.push("    dans les conditions prévues par décret en Conseil d'État. Indiquez-moi");
+        C.push("    les dates que vous souhaitez retenir" + (E ? " ; l'organisme sollicité propose la session " + datesFormation : "") + ".");
+        C.push("");
+        C.push("Je vous rappelle enfin que la désignation prend fin avec le mandat des");
+        C.push("membres élus du comité : elle devra être reprise au prochain");
+        C.push("renouvellement.");
+        C.push("");
+        C = C.concat(formulePolitesse(ctx, E, "Mesdames, Messieurs"));
+        C.push("Pièce jointe : modèle de résolution");
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 3, MODÈLE DE RÉSOLUTION, À L'USAGE DU COMITÉ");
+        C.push("");
+        C.push("Ce modèle est mis à la disposition du comité. Il ne l'engage pas : le");
+        C.push("comité l'adopte, le modifie ou l'écarte.");
+        C.push("");
+        C.push("RÉSOLUTION N° " + X(E, "5", ".") + ", DÉSIGNATION DU RÉFÉRENT EN MATIÈRE DE LUTTE CONTRE");
+        C.push("LE HARCÈLEMENT SEXUEL ET LES AGISSEMENTS SEXISTES");
+        C.push("");
+        C.push("Réunion du comité social et économique de " + nom + " du " + reunion + ".");
+        C.push("");
+        C.push("Vu le dernier alinéa de l'article L. 2314-1 du code du travail ;");
+        C.push("Vu l'article L. 2315-32 du même code ;");
+        C.push("");
+        C.push("Le comité social et économique, après en avoir délibéré, désigne parmi");
+        C.push("ses membres, en qualité de référent en matière de lutte contre le");
+        C.push("harcèlement sexuel et les agissements sexistes, pour une durée qui prend");
+        C.push("fin avec celle du mandat des membres élus du comité : " + refNom + ", " + refQualite + ".");
+        C.push("");
+        C.push("Coordonnées à porter sur l'information délivrée aux salariés (D. 1151-1,");
+        C.push("5°) : " + refAdresse + " ; " + refTel + ".");
+        C.push("");
+        C.push("Le comité demande que le référent ainsi désigné bénéficie de la");
+        C.push("formation prévue à l'article L. 2315-18, aux dates suivantes : " + datesFormation + ".");
+        C.push("");
+        C = C.concat(tableau(["Votants", "Pour", "Contre", "Abstentions", "Le président"], [
+          [X(E, K && String(K.presents), ".."), X(E, K && String(K.presents), ".."), X(E, "0", ".."), X(E, "0", ".."), "n'a pas pris part au vote (L. 2315-32)"],
+        ]));
+        C.push("Résolution adoptée à la majorité des membres présents.");
+        C.push("");
+        C.push("Le secrétaire du comité, " + X(E, K && K.secretaire.replace(/, secrétaire du comité$/, ""), "NOM") + ". Le président, " + sig + ".");
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 4, LA FORMATION DU RÉFÉRENT");
+        C.push("");
+        C.push("Le référent est nommément visé par la première phrase de L. 2315-18 : il");
+        C.push("bénéficie de la formation, et l'employeur en supporte le financement.");
+        C.push("");
+        C = C.concat(tableau(["Ce qui est arrêté", "Valeur retenue", "Trace conservée"], [
+          ["Organisme", X(E, "organisme de formation agréé retenu par le comité, session « santé, sécurité et conditions de travail » avec un module sur le harcèlement sexuel et les agissements sexistes", "NOM DE L'ORGANISME"), X(E, "convention de formation signée le " + jj(dans(d0, 20)), "convention")],
+          ["Dates", datesFormation, X(E, "convocation remise le " + jj(dans(d0, 45)), "convocation")],
+          ["Durée", X(E, "cinq jours, la référente exerçant son premier mandat de membre de la délégation du personnel", "DURÉE"), X(E, "attestation de présence", "attestation")],
+          ["Prise en charge", "employeur (L. 2315-18, dernier alinéa)", X(E, "facture réglée le " + jj(dans(d0, 75)), "facture")],
+        ]));
+        C.push("");
+
+        C.push("PIÈCE 5, CE QUI DOIT CHANGER SUR L'AFFICHAGE, DÈS LA DÉSIGNATION");
+        C.push("");
+        C = C.concat(tableau(["Rubrique de l'affichage", "Nom", "Adresse", "Numéro d'appel", "Porté le"], [
+          ["Référent harcèlement du comité social et économique (L. 2314-1)", refNom + ", " + refQualite, refAdresse, refTel, X(E, E && E.date(18), "date, dans les trois jours de la désignation")],
+        ]));
+        C.push("Cette ligne se met à jour à chaque renouvellement du comité : le mandat du");
+        C.push("référent prend fin avec celui des élus, et un affichage qui porte le nom");
+        C.push("d'un ancien élu vaut, sur ce point, une absence d'information.");
+        C.push("");
+        return C;
+      }
+
+      /* ---- l'exemple ---- */
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L = L.concat(corps(ex));
+      L.push("");
+
+      /* ---- le document à compléter ---- */
+      L.push("VOS PIÈCES, À COMPLÉTER");
+      L.push("");
+      L.push("Même structure que l'exemple. Vous ne pouvez pas désigner à la place du");
+      L.push("comité, mais vous pouvez établir que vous l'avez mis en mesure de le");
+      L.push("faire : chaque pièce ci-dessous se date et se conserve.");
+      L.push("");
+      L = L.concat(corps(null));
+
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L = L.concat(tableau(["Étape", "Date", "Pièce", "Preuve conservée"], [
+        ["Transmission du point d'ordre du jour et du courrier aux élus ; c'est la seule chose qui établira votre démarche si le comité ne désigne pas", jj(d0), "pièces 1 et 2", "courriel ou récépissé daté"],
+        ["Réunion du comité, selon le calendrier propre à l'instance ; résolution adoptée à la majorité des membres présents, le président ne prenant pas part au vote", jj(dans(d0, 15)) + " environ", "pièce 3", "extrait de procès-verbal demandé au secrétaire le jour même, avec le décompte des voix"],
+        ["Affichage corrigé ; cette ligne dépend de vous seul, ne la laissez pas attendre le procès-verbal définitif", jj(dans(d0, 18)), "pièce 5", "photographie du panneau, capture datée"],
+        ["Formation de L. 2315-18 engagée ; aucun texte lu ne fixe ce délai, c'est une échéance que vous vous donnez", jj(dans(d0, 90)) + " au plus tard", "pièce 4", "convention, convocation, attestation"],
+        ["Prochain renouvellement du comité : la désignation se refait, sans que personne ne vous le rappelle", "à porter dès aujourd'hui à l'agenda", "pièces 1 à 5", "nouvelle résolution, affichage corrigé"],
+      ]));
+
+      L = L.concat(DP.liens(ctx, ["cse", "sst"]));
+
+      /* ---- les règles ---- */
+      L.push("LES RÈGLES");
+      L.push("");
       L.push("LE TEXTE, EN ENTIER, DERNIER ALINÉA DE L. 2314-1");
       L.push("");
       L.push("« Un référent en matière de lutte contre le harcèlement sexuel et les");
@@ -1150,7 +1344,7 @@
       L.push("     croire à une conformité qui n'existe pas.");
       L.push("  2. LE RÉFÉRENT SE PREND PARMI LES MEMBRES DU COMITÉ. Un salarié");
       L.push("     extérieur au comité, si compétent soit-il, ne peut pas l'être à ce");
-      L.push("     titre, l'employeur peut, lui, désigner son propre référent au titre");
+      L.push("     titre ; l'employeur peut, lui, désigner son propre référent au titre");
       L.push("     de L. 1153-5-1, mais c'est un autre référent et un autre article.");
       L.push("  3. LA FORME EST UNE RÉSOLUTION, adoptée à la majorité des membres");
       L.push("     présents, le président ne prenant pas part au vote. Un tour de table");
@@ -1170,158 +1364,7 @@
       L.push("lorsqu'un comité social et économique existe » : tant que le comité n'a");
       L.push("pas désigné, VOTRE information reste incomplète.");
       L.push("");
-      L.push("OÙ VOUS EN ÊTES");
-      L.push("");
-      if (estNon(cse.existe)) {
-        L.push("Le dossier ne déclare AUCUN comité social et économique. L. 2314-1 n'a");
-        L.push("donc pas d'objet en l'état, et le 5° de D. 1151-1 non plus : cette ligne");
-        L.push("se supprime de l'affichage. La régularité de cette absence de comité");
-        L.push("relève du module « comité social et économique » de l'application, qui");
-        L.push("traite de sa mise en place. Les pièces ci-dessous sont écrites pour le");
-        L.push("jour où le comité existera.");
-      } else if (estOui(cse.existe)) {
-        L.push("Un comité social et économique existe.");
-        L.push("Référent harcèlement du comité désigné selon le dossier : " +
-          etat(f.referentCSE, "oui", "NON"));
-        if (estNon(f.referentCSE)) {
-          L.push("La désignation n'a pas eu lieu : engagez la démarche ci-dessous et");
-          L.push("conservez-en la date. Vous ne pouvez pas désigner à la place du comité,");
-          L.push("mais vous pouvez établir que vous l'avez mis en mesure de le faire.");
-        }
-      } else {
-        L.push("Le dossier ne dit pas s'il existe un comité social et économique. La");
-        L.push("question commande tout : le référent de L. 2314-1 est désigné PAR le");
-        L.push("comité, PARMI ses membres. Renseignez-la avant de vous servir des pièces");
-        L.push("ci-dessous.");
-      }
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 1, INSCRIPTION À L'ORDRE DU JOUR");
-      L.push(GROS);
-      L.push("");
-      L.push(nomDe(ctx));
-      L.push("");
-      L.push("ORDRE DU JOUR, RÉUNION DU COMITÉ SOCIAL ET ÉCONOMIQUE DU [DATE]");
-      L.push("Extrait");
-      L.push("");
-      L.push("Point [N°], Désignation du référent en matière de lutte contre le");
-      L.push("harcèlement sexuel et les agissements sexistes (L. 2314-1, dernier");
-      L.push("alinéa).");
-      L.push("");
-      L.push("  Objet : le comité est appelé à désigner, parmi ses membres, par une");
-      L.push("  résolution adoptée selon les modalités de L. 2315-32, le référent en");
-      L.push("  matière de lutte contre le harcèlement sexuel et les agissements");
-      L.push("  sexistes, pour une durée qui prend fin avec celle du mandat des membres");
-      L.push("  élus du comité.");
-      L.push("");
-      L.push("  Document joint : modèle de résolution.");
-      L.push("");
-      L.push("[L'ordre du jour est arrêté selon les règles propres au fonctionnement du");
-      L.push(" comité, le module « comité social et économique » de cette application");
-      L.push(" les traite. Si l'ordre du jour est établi conjointement avec le");
-      L.push(" secrétaire, transmettez-lui ce point par écrit et gardez la trace de");
-      L.push(" l'envoi : c'est cette trace qui établira votre démarche.]");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 2, COURRIER AUX MEMBRES DE LA DÉLÉGATION DU PERSONNEL");
-      L.push(GROS);
-      L.push("");
-      L = L.concat(teteLettre(ctx,
-        ["Aux membres de la délégation du personnel",
-         "du comité social et économique"], false));
-      L.push("Objet : désignation du référent en matière de lutte contre le harcèlement");
-      L.push("sexuel et les agissements sexistes");
-      L.push("");
-      L.push("Mesdames, Messieurs,");
-      L.push("");
-      L.push("Le dernier alinéa de l'article L. 2314-1 du code du travail prévoit qu'un");
-      L.push("référent en matière de lutte contre le harcèlement sexuel et les");
-      L.push("agissements sexistes « est désigné par le comité social et économique");
-      L.push("parmi ses membres, sous la forme d'une résolution adoptée selon les");
-      L.push("modalités définies à l'article L. 2315-32, pour une durée qui prend fin");
-      L.push("avec celle du mandat des membres élus du comité ».");
-      L.push("");
-      L.push("Cette désignation appartient au comité, et à lui seul : je ne peux ni y");
-      L.push("procéder, ni proposer un nom. Je vous invite en conséquence à y procéder");
-      L.push("lors de la réunion du [DATE DE LA RÉUNION], à l'ordre du jour de laquelle");
-      L.push("cette question est inscrite. Un modèle de résolution est joint, que vous");
-      L.push("pourrez reprendre ou écarter.");
-      L.push("");
-      L.push("Deux points pratiques, qui ne sont pas de simples formalités :");
-      L.push("");
-      L.push("  · les coordonnées du référent que vous désignerez, adresse et numéro");
-      L.push("    d'appel, devront figurer sur l'information délivrée aux salariés et");
-      L.push("    aux candidats à l'embauche, l'article D. 1151-1, 5°, l'exigeant");
-      L.push("    « lorsqu'un comité social et économique existe ». Merci de me les");
-      L.push("    communiquer dès la désignation, afin que le support soit corrigé sans");
-      L.push("    délai ;");
-      L.push("");
-      L.push("  · le référent bénéficie de la formation en matière de santé, de");
-      L.push("    sécurité et de conditions de travail : l'article L. 2315-18 vise");
-      L.push("    expressément, à côté des membres de la délégation du personnel, « le");
-      L.push("    référent prévu au dernier alinéa de l'article L. 2314-1 ». Le");
-      L.push("    financement de cette formation est pris en charge par l'employeur");
-      L.push("    dans les conditions prévues par décret en Conseil d'État. Indiquez-moi");
-      L.push("    les dates que vous souhaitez retenir.");
-      L.push("");
-      L.push("Je vous rappelle enfin que la désignation prend fin avec le mandat des");
-      L.push("membres élus du comité : elle devra être reprise au prochain");
-      L.push("renouvellement.");
-      L.push("");
-      L = L.concat(formulePolitesse(ctx, "Mesdames, Messieurs"));
-      L.push("Pièce jointe : modèle de résolution");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 3, MODÈLE DE RÉSOLUTION (à l'usage du comité)");
-      L.push(GROS);
-      L.push("");
-      L.push("Ce modèle est mis à la disposition du comité. Il ne l'engage pas : le");
-      L.push("comité l'adopte, le modifie ou l'écarte.");
-      L.push("");
-      L.push("  RÉSOLUTION N° [.], DÉSIGNATION DU RÉFÉRENT EN MATIÈRE DE LUTTE CONTRE");
-      L.push("  LE HARCÈLEMENT SEXUEL ET LES AGISSEMENTS SEXISTES");
-      L.push("");
-      L.push("  Réunion du comité social et économique de " + nomDe(ctx));
-      L.push("  du [DATE].");
-      L.push("");
-      L.push("  Vu le dernier alinéa de l'article L. 2314-1 du code du travail ;");
-      L.push("  Vu l'article L. 2315-32 du même code ;");
-      L.push("");
-      L.push("  Le comité social et économique, après en avoir délibéré, désigne parmi");
-      L.push("  ses membres, en qualité de référent en matière de lutte contre le");
-      L.push("  harcèlement sexuel et les agissements sexistes, pour une durée qui prend");
-      L.push("  fin avec celle du mandat des membres élus du comité :");
-      L.push("");
-      L.push("      [NOM, PRÉNOM], [membre titulaire / suppléant], [collège]");
-      L.push("");
-      L.push("  Coordonnées à porter sur l'information délivrée aux salariés");
-      L.push("  (D. 1151-1, 5°) :");
-      L.push("      adresse ......... [ADRESSE]");
-      L.push("      numéro d'appel .. [NUMÉRO]");
-      L.push("");
-      L.push("  Le comité demande que le référent ainsi désigné bénéficie de la");
-      L.push("  formation prévue à l'article L. 2315-18, aux dates suivantes : [DATES].");
-      L.push("");
-      L.push("  Votants : [..] · Pour : [..] · Contre : [..] · Abstentions : [..]");
-      L.push("  Le président n'a pas pris part au vote (L. 2315-32).");
-      L.push("");
-      L.push("  Résolution adoptée à la majorité des membres présents.");
-      L.push("");
-      L.push("  Le secrétaire du comité,            Le président,");
-      L.push("  [NOM]                               [NOM]");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 4, LA FORMATION DU RÉFÉRENT");
-      L.push(GROS);
+      L.push("LA FORMATION DU RÉFÉRENT");
       L.push("");
       L.push("« Les membres de la délégation du personnel du comité social et économique");
       L.push("et le référent prévu au dernier alinéa de l'article L. 2314-1 bénéficient");
@@ -1338,63 +1381,32 @@
       L.push("au premier alinéa du présent article est pris en charge par l'employeur");
       L.push("dans des conditions prévues par décret en Conseil d'Etat » (L. 2315-18).");
       L.push("");
-      L.push("Le référent est NOMMÉMENT visé par la première phrase : il bénéficie de");
-      L.push("la formation, et l'employeur en supporte le financement.");
-      L.push("");
-      L.push("  À arrêter :");
-      L.push("      organisme ....... [NOM DE L'ORGANISME]");
-      L.push("      dates ........... [DATES]");
-      L.push("      durée ........... [DURÉE]");
-      L.push("      prise en charge . employeur (L. 2315-18, dernier alinéa)");
-      L.push("");
       L = L.concat(blocRenvoi("L. 2315-22-1",
         "est réservé par L. 2315-18 (« sans préjudice des dispositions de l'article " +
         "L. 2315-22-1 ») pour le financement de la formation"));
+      L.push("CE QUE LE DOSSIER DÉCLARE");
       L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 5, CE QUI DOIT CHANGER SUR L'AFFICHAGE, DÈS LA DÉSIGNATION");
-      L.push(GROS);
-      L.push("");
-      L.push("    Référent harcèlement du comité social et économique");
-      L.push("    (article L. 2314-1 du code du travail)");
-      L.push("      [NOM, PRÉNOM]");
-      L.push("      adresse ......... [ADRESSE]");
-      L.push("      numéro d'appel .. [NUMÉRO]");
-      L.push("");
-      L.push("Cette ligne se met à jour à chaque renouvellement du comité : le mandat du");
-      L.push("référent prend fin avec celui des élus, et un affichage qui porte le nom");
-      L.push("d'un ancien élu vaut, sur ce point, une absence d'information.");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("VOTRE CALENDRIER");
-      L.push(GROS);
-      L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + ", vous transmettez le point d'ordre du");
-      L.push("jour (pièce 1) et le courrier aux élus (pièce 2). Datez l'envoi et");
-      L.push("conservez-en la preuve : c'est la seule chose qui établira votre");
-      L.push("démarche si le comité ne désigne pas.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 15)) + " environ, la réunion du comité se tient,");
-      L.push("selon le calendrier propre à l'instance. La résolution est adoptée à la");
-      L.push("majorité des membres présents, le président ne prenant pas part au vote.");
-      L.push("");
-      L.push("Le jour même de la désignation, vous demandez au secrétaire l'extrait de");
-      L.push("procès-verbal portant la résolution et le décompte des voix.");
-      L.push("");
-      L.push("Dans les trois jours qui suivent, l'affichage est corrigé (pièce 5).");
-      L.push("Cette ligne, elle, dépend de vous seul : ne la laissez pas attendre le");
-      L.push("procès-verbal définitif.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 90)) + " au plus tard, la formation de");
-      L.push("L. 2315-18 est engagée (pièce 4). Aucun texte lu ne fixe ce délai : c'est");
-      L.push("une échéance que vous vous donnez.");
-      L.push("");
-      L.push("Au prochain renouvellement du comité, la désignation se refait. Portez");
-      L.push("dès aujourd'hui ce rendez-vous dans votre agenda : le mandat du référent");
-      L.push("prend fin avec celui des élus, sans que personne ne vous le rappelle.");
+      if (estNon(cse.existe)) {
+        L.push("Le dossier ne déclare AUCUN comité social et économique. L. 2314-1 n'a");
+        L.push("donc pas d'objet en l'état, et le 5° de D. 1151-1 non plus : cette ligne");
+        L.push("se supprime de l'affichage. La régularité de cette absence de comité");
+        L.push("relève du module « comité social et économique » de l'application, qui");
+        L.push("traite de sa mise en place. Les pièces ci-dessus sont écrites pour le");
+        L.push("jour où le comité existera.");
+      } else if (estOui(cse.existe)) {
+        L.push("Un comité social et économique existe.");
+        L.push("Référent harcèlement du comité désigné selon le dossier : " +
+          etat(f.referentCSE, "oui", "NON") + ".");
+        if (estNon(f.referentCSE)) {
+          L.push("La désignation n'a pas eu lieu : engagez la démarche et conservez-en la");
+          L.push("date. Vous ne pouvez pas désigner à la place du comité, mais vous pouvez");
+          L.push("établir que vous l'avez mis en mesure de le faire.");
+        }
+      } else {
+        L.push("Le dossier ne dit pas s'il existe un comité social et économique. La");
+        L.push("question commande tout : le référent de L. 2314-1 est désigné PAR le");
+        L.push("comité, PARMI ses membres. Renseignez-la avant de vous servir des pièces.");
+      }
 
       return L.concat(pied("L. 2314-1, L. 2315-32, L. 2315-18, D. 1151-1, 5°, " +
         "L. 1153-5, L. 1153-5-1",
@@ -1418,7 +1430,7 @@
      qu'elle doit dire haut : le texte à afficher est celui de DEUX ARTICLES DU
      CODE PÉNAL, et le relais Légifrance du dépôt ne sert que le code du
      travail. L'affichage sort donc avec deux emplacements réservés et la
-     consigne d'aller chercher les textes. Le contraire, un résumé de mémoire -
+     consigne d'aller chercher les textes. Le contraire, un résumé de mémoire,
      serait un affichage faux, affiché sous la signature de l'employeur.
      ══════════════════════════════════════════════════════════════════════ */
 
@@ -1430,9 +1442,175 @@
     produire: function (ctx) {
       var f = ctx.fiche || {};
       var d0 = aujourd(ctx);
+      var ex = exempleDe(ctx);
       var L = entete(ctx, "Affichage et information, harcèlements et agissements sexistes",
         "articles L. 1152-4, L. 1153-5 et D. 1151-1 du code du travail");
 
+      function corps(E) {
+        var C = [];
+        var nom = E ? E.nom : nomDe(ctx);
+        var sig = E ? E.signataire : signataire(ctx);
+        var datePose = X(E, leJour(dans(d0, 7)), "DATE");
+        var responsable = X(E, E && E.referent.nom + ", " + E.referent.fonction, "NOM, FONCTION");
+
+        C.push("PIÈCE 1, LE SUPPORT D'AFFICHAGE");
+        C.push("");
+        C.push("À afficher dans les lieux de travail et dans les locaux ou à la porte des");
+        C.push("locaux où se fait l'embauche (L. 1153-5). Deux emplacements, deux");
+        C.push("supports : ne vous contentez pas du panneau du réfectoire.");
+        C.push("");
+        C.push("HARCÈLEMENT MORAL, HARCÈLEMENT SEXUEL ET AGISSEMENTS SEXISTES");
+        C.push(nom.toUpperCase());
+        C.push("Affichage établi le " + datePose);
+        C.push("");
+        C = C.concat(blocDefinitions(E));
+        C.push("CE QUE LA LOI PUNIT, TEXTES DU CODE PÉNAL");
+        C.push("");
+        C.push("Harcèlement sexuel, article 222-33 du code pénal (dont L. 1153-5 impose");
+        C.push("l'affichage) :");
+        C.push("");
+        C = C.concat(blocCodePenal(E, "l'article 222-33 du code pénal, en entier"));
+        C.push("Harcèlement moral, article 222-33-2 du code pénal (dont L. 1152-4 impose");
+        C.push("la communication par tout moyen) :");
+        C.push("");
+        C = C.concat(blocCodePenal(E, "l'article 222-33-2 du code pénal, en entier"));
+        C.push("LES ACTIONS CONTENTIEUSES OUVERTES EN MATIÈRE DE HARCÈLEMENT SEXUEL");
+        C.push("(exigées par L. 1153-5 : les actions civiles et les actions pénales)");
+        C.push("");
+        if (E) {
+          C.push("Rubrique rédigée par le conseil de l'entreprise le " + leJour(dans(d0, 3)) + " et relue");
+          C.push("avec lui : devant quelle juridiction la personne peut agir, au civil et au");
+          C.push("pénal, dans quels délais, avec quels concours. L'application ne rédige pas");
+          C.push("cette rubrique, elle n'a pas lu les textes de procédure, et l'exemple ne");
+          C.push("l'invente pas.");
+        } else {
+          C.push("[À COMPLÉTER, l'application ne rédige pas cette rubrique, et il faut");
+          C.push(" dire pourquoi : L. 1153-5 impose d'informer « des actions contentieuses");
+          C.push(" civiles et pénales ouvertes en matière de harcèlement sexuel », mais ni");
+          C.push(" lui ni D. 1151-1 n'en dressent la liste. Les décrire suppose de citer");
+          C.push(" des textes de procédure civile et pénale que l'application n'a pas lus :");
+          C.push(" elle ne les reproduira donc pas de mémoire. Portez ici, en termes simples");
+          C.push(" et exacts, les voies ouvertes à la personne : devant quelle juridiction,");
+          C.push(" dans quels délais, avec quels concours. Faites relire cette rubrique par");
+          C.push(" un conseil : c'est la seule du support dont le contenu ne soit pas dicté");
+          C.push(" par un texte que vous pouvez recopier.]");
+        }
+        C.push("");
+        C = C.concat(blocProtection(E));
+        C.push("LES AUTORITÉS ET SERVICES COMPÉTENTS, ADRESSE ET NUMÉRO D'APPEL (D. 1151-1)");
+        C.push("");
+        C = C.concat(tableauCoordonnees(ctx, E));
+        C.push("À QUI S'ADRESSER DANS L'ENTREPRISE");
+        C.push("");
+        C.push(X(E,
+          "Procédure interne de signalement et de traitement du " + (E && E.lettres(45)) + " : signalement par écrit ou oralement, sans forme imposée, à " + (E && E.recoit) + ", ou au référent, " + (E && E.referent.nom) + ", " + (E && E.referent.tel) + ". Un accusé de réception est remis sous deux jours ouvrés ; la procédure complète est affichée à côté du présent support",
+          "Renvoyer ici à la procédure interne de signalement, si elle existe : à qui s'adresser, sous quelle forme, et ce qui se passe ensuite. Le document SST-CTL-HAR-04 de cette application la rédige. Un affichage qui dit ce qui est interdit sans dire à qui en parler laisse le salarié devant une porte fermée") + ".");
+        C.push("");
+        C.push("Affichage établi le " + datePose + ", à vérifier avant le " + X(E, leJour(dans(d0, 372)), "DATE, un an plus tard") + ".");
+        C.push("Responsable de la mise à jour : " + responsable + ".");
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 2, NOTE DE DIFFUSION SUR LE HARCÈLEMENT MORAL (L. 1152-4)");
+        C.push("");
+        C.push(nom + ", note du " + datePose);
+        C.push("Objet : information sur le harcèlement moral (article L. 1152-4 du code");
+        C.push("du travail)");
+        C.push("");
+        C.push("Mesdames, Messieurs,");
+        C.push("");
+        C.push("L'article L. 1152-4 du code du travail prévoit que l'employeur prend");
+        C.push("toutes dispositions nécessaires en vue de prévenir les agissements de");
+        C.push("harcèlement moral, et que les personnes mentionnées à l'article L. 1152-2");
+        C.push("sont informées par tout moyen du texte de l'article 222-33-2 du code");
+        C.push("pénal.");
+        C.push("");
+        C.push("Le harcèlement moral est défini par l'article L. 1152-1 du code du");
+        C.push("travail : « Aucun salarié ne doit subir les agissements répétés de");
+        C.push("harcèlement moral qui ont pour objet ou pour effet une dégradation de ses");
+        C.push("conditions de travail susceptible de porter atteinte à ses droits et à sa");
+        C.push("dignité, d'altérer sa santé physique ou mentale ou de compromettre son");
+        C.push("avenir professionnel. »");
+        C.push("");
+        C.push("Le texte de l'article 222-33-2 du code pénal figure ci-après :");
+        C.push("");
+        C = C.concat(blocCodePenal(E, "l'article 222-33-2 du code pénal, en entier"));
+        C.push("Aucune personne ayant subi ou refusé de subir de tels agissements, ou");
+        C.push("ayant de bonne foi relaté ou témoigné de tels agissements, ne peut faire");
+        C.push("l'objet des mesures mentionnées à l'article L. 1121-2 du code du travail");
+        C.push("(L. 1152-2).");
+        C.push("");
+        C.push("Vous pouvez vous adresser à " + X(E, E && E.recoit + " ou au référent, " + E.referent.nom + ", ainsi qu'aux personnes et services dont les coordonnées figurent à l'affichage",
+          "voir la procédure interne de signalement / aux personnes et services dont les coordonnées figurent à l'affichage") + ".");
+        C.push("");
+        C.push(sig);
+        C.push("Diffusion : " + X(E, "remise contre émargement à chaque salarié le " + leJour(dans(d0, 7)) + ", et à chaque nouvel embauché avec le livret d'accueil", "support, date, preuve conservée") + ".");
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 3, RELEVÉ DE DIFFUSION ET D'AFFICHAGE");
+        C.push("");
+        C.push("Ce que l'on vous demandera n'est pas « avez-vous affiché ? » mais");
+        C.push("« montrez-le ». Ce relevé est la pièce qui répond.");
+        C.push("");
+        var enteteReleve = ["Emplacement", "Date", "Support", "Preuve conservée"];
+        if (E) {
+          C = C.concat(tableau(enteteReleve, [
+            ["Lieu de travail : " + E.lieux[0], E.date(7), "panneau sous vitre, format A3", "photographie datée du " + E.date(7)],
+            ["Lieu de travail : " + E.lieux[1], E.date(7), "panneau sous vitre, format A3", "photographie datée du " + E.date(7)],
+            ["Locaux ou porte des locaux où se fait l'embauche : " + E.lieux[2], E.date(7), "cadre à la porte, format A4, et exemplaire remis à chaque candidat reçu", "photographie datée, récépissés des candidats"],
+            ["Note nominative sur le harcèlement moral (L. 1152-4)", E.date(7), "note remise en main propre", "feuille d'émargement, " + E.effectif + " signatures sur " + E.effectif],
+            ["Livret d'accueil, remise à l'embauche", "à chaque embauche", "livret, page « prévention »", "récépissé signé au dossier du salarié"],
+          ]));
+        } else {
+          C = C.concat(tableau(enteteReleve, [
+            ["Lieu de travail : [SITE / ATELIER]", "[date]", "[support]", "[photographie datée]"],
+            ["Lieu de travail : [SITE / ATELIER]", "[date]", "[support]", "[photographie datée]"],
+            ["Locaux ou porte des locaux où se fait l'embauche : [LIEU]", "[date]", "[support]", "[photographie datée]"],
+            ["Note nominative sur le harcèlement moral (L. 1152-4)", "[date]", "[support]", "[émargement, accusé électronique]"],
+            ["Livret d'accueil, remise à l'embauche", "à chaque embauche", "[support]", "[récépissé]"],
+          ]));
+        }
+        C.push("Le lieu d'embauche est visé pour lui-même par L. 1153-5 : s'il ne figure");
+        C.push("pas dans ce relevé, l'obligation n'est pas tenue, quel que soit le nombre");
+        C.push("de panneaux dans les ateliers.");
+        C.push("");
+        C.push("Relevé arrêté le " + datePose + " par " + responsable + ".");
+        C.push("");
+        return C;
+      }
+
+      /* ---- l'exemple ---- */
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L = L.concat(corps(ex));
+      L.push("");
+
+      /* ---- le document à compléter ---- */
+      L.push("VOS PIÈCES, À COMPLÉTER");
+      L.push("");
+      L.push("Même structure que l'exemple. Les crochets sont des coordonnées à relever,");
+      L.push("des textes à recopier et une rubrique à rédiger : rien de tout cela ne se");
+      L.push("devine, et l'application ne l'invente pas.");
+      L.push("");
+      L = L.concat(corps(null));
+
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L = L.concat(tableau(["Étape", "Date", "Pièce", "Preuve conservée"], [
+        ["Relevé des cinq coordonnées de D. 1151-1 ; le nom de l'inspecteur du travail compétent se demande à l'unité de contrôle, il ne se devine pas", jj(d0), "pièce 1, tableau", "réponse écrite de l'unité de contrôle, fiche du service de santé au travail"],
+        ["Recopie des deux articles du code pénal dans leur version en vigueur, rédaction de la rubrique des actions contentieuses, relecture par un conseil", jj(dans(d0, 3)), "pièce 1", "version datée des textes, relecture"],
+        ["Pose aux deux emplacements, lieux de travail et lieu d'embauche ; note sur le harcèlement moral diffusée le même jour ; relevé daté", jj(dans(d0, 7)), "pièces 1 à 3", "photographies datées, émargement"],
+        ["Vérification que rien n'a été décroché, recouvert ou déplacé", jj(dans(d0, 30)), "pièce 3", "photographie"],
+        ["Relecture annuelle des cinq coordonnées ; aucun texte lu ne fixe cette périodicité, c'est une échéance que vous vous donnez", jj(dans(d0, 365)) + " au plus tard", "pièce 1, tableau", "relevé daté et signé"],
+        ["Sans attendre l'échéance, à chaque changement : nouveau référent, nouvel inspecteur, déménagement du service de santé au travail, franchissement du seuil de deux cent cinquante salariés", "le jour même", "pièce 1", "support corrigé et photographié"],
+      ]));
+
+      L = L.concat(DP.liens(ctx, ["sst", "cse"]));
+
+      /* ---- les règles ---- */
+      L.push("LES RÈGLES");
+      L.push("");
       L.push("DEUX OBLIGATIONS DISTINCTES, QU'ON CONFOND SANS CESSE");
       L.push("");
       L.push("LA PREMIÈRE, sur le HARCÈLEMENT MORAL : « L'employeur prend toutes");
@@ -1440,13 +1618,15 @@
       L.push("moral. Les personnes mentionnées à l'article L. 1152-2 sont informées PAR");
       L.push("TOUT MOYEN du texte de l'article 222-33-2 du code pénal » (L. 1152-4).");
       L.push("");
-      L.push("  · le moyen est libre, affichage, note, intranet, livret d'accueil ;");
-      L.push("  · l'objet ne l'est pas : c'est LE TEXTE de l'article 222-33-2 du code");
+      L.push("  - le moyen est libre, affichage, note, intranet, livret d'accueil ;");
+      L.push("  - l'objet ne l'est pas : c'est LE TEXTE de l'article 222-33-2 du code");
       L.push("    pénal, non son numéro et non un résumé ;");
-      L.push("  · les destinataires sont « les personnes mentionnées à l'article");
+      L.push("  - les destinataires sont « les personnes mentionnées à l'article");
       L.push("    L. 1152-2 », celles qui ont subi, refusé de subir, relaté de bonne");
       L.push("    foi ou témoigné. En pratique, cela se traduit par une information");
-      L.push("    accessible à tous : on ne sait pas d'avance qui sera concerné.");
+      L.push("    accessible à tous : on ne sait pas d'avance qui sera concerné. Une");
+      L.push("    note nominativement diffusée se prouve mieux qu'un affichage, et la");
+      L.push("    preuve, ici, est tout ce qui restera.");
       L.push("");
       L.push("LA SECONDE, sur le HARCÈLEMENT SEXUEL : « Dans les lieux de travail ainsi");
       L.push("que dans les locaux ou à la porte des locaux où se fait l'embauche, les");
@@ -1456,189 +1636,30 @@
       L.push("et des coordonnées des autorités et services compétents. La liste de ces");
       L.push("services est définie par décret » (L. 1153-5, second alinéa).");
       L.push("");
-      L.push("  · DEUX LIEUX, et le second est celui qu'on oublie : les lieux de");
+      L.push("  - DEUX LIEUX, et le second est celui qu'on oublie : les lieux de");
       L.push("    travail, ET les locaux ou la porte des locaux OÙ SE FAIT L'EMBAUCHE.");
       L.push("    Le texte vise ce lieu pour lui-même : un candidat qui n'est pas encore");
       L.push("    salarié doit lire cette information avant d'entrer ;");
-      L.push("  · TROIS OBJETS : le texte de l'article 222-33 du code pénal ; les");
+      L.push("  - TROIS OBJETS : le texte de l'article 222-33 du code pénal ; les");
       L.push("    actions contentieuses civiles et pénales ouvertes en matière de");
       L.push("    harcèlement sexuel ; les coordonnées des autorités et services");
       L.push("    compétents ;");
-      L.push("  · la liste de ces services est celle du décret, D. 1151-1, reproduit");
-      L.push("    plus bas, et qui exige pour chacun UNE ADRESSE ET UN NUMÉRO D'APPEL.");
+      L.push("  - la liste de ces services est celle du décret, D. 1151-1, reproduit");
+      L.push("    ci-dessous, et qui exige pour chacun UNE ADRESSE ET UN NUMÉRO D'APPEL.");
       L.push("");
-      L.push("OÙ VOUS EN ÊTES");
-      L.push("");
-      L.push("Information sur le harcèlement moral (L. 1152-4) : " +
-        etat(f.infoHarcelementMoral, "délivrée", "NON DÉLIVRÉE"));
-      L.push("Information sur le harcèlement sexuel (L. 1153-5) : " +
-        etat(f.infoHarcelementSexuel, "délivrée", "NON DÉLIVRÉE"));
-      L.push("Coordonnées des autorités et services (D. 1151-1) : " +
-        etat(f.infoCoordonnees, "délivrées", "NON DÉLIVRÉES"));
-      L.push("");
-      L.push(ligneEffectif(ctx));
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 1, LE SUPPORT D'AFFICHAGE");
-      L.push(GROS);
-      L.push("");
-      L.push("À afficher DANS LES LIEUX DE TRAVAIL et DANS LES LOCAUX OU À LA PORTE DES");
-      L.push("LOCAUX OÙ SE FAIT L'EMBAUCHE (L. 1153-5). Deux emplacements, deux");
-      L.push("supports : ne vous contentez pas du panneau du réfectoire.");
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-      L.push("            HARCÈLEMENT MORAL, HARCÈLEMENT SEXUEL");
-      L.push("                ET AGISSEMENTS SEXISTES");
-      L.push("");
-      L.push("                    " + nomDe(ctx));
-      L.push("              Affichage établi le " + leJour(d0));
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-      L = L.concat(blocDefinitions());
-      L.push(TRAIT);
-      L.push("");
-      L.push("CE QUE LA LOI PUNIT, TEXTES DU CODE PÉNAL");
-      L.push("");
-      L.push("Harcèlement sexuel, article 222-33 du code pénal");
-      L.push("(dont L. 1153-5 impose l'affichage) :");
-      L.push("");
-      L = L.concat(blocCodePenal("l'article 222-33 du code pénal, en entier"));
-      L.push("Harcèlement moral, article 222-33-2 du code pénal");
-      L.push("(dont L. 1152-4 impose la communication par tout moyen) :");
-      L.push("");
-      L = L.concat(blocCodePenal("l'article 222-33-2 du code pénal, en entier"));
-      L.push(TRAIT);
-      L.push("");
-      L.push("LES ACTIONS CONTENTIEUSES OUVERTES EN MATIÈRE DE HARCÈLEMENT SEXUEL");
-      L.push("(exigées par L. 1153-5 : les actions CIVILES et les actions PÉNALES)");
-      L.push("");
-      L.push("[À COMPLÉTER, l'application ne rédige pas cette rubrique, et il faut");
-      L.push(" dire pourquoi : L. 1153-5 impose d'informer « des actions contentieuses");
-      L.push(" civiles et pénales ouvertes en matière de harcèlement sexuel », mais ni");
-      L.push(" lui ni D. 1151-1 n'en dressent la liste. Les décrire suppose de citer");
-      L.push(" des textes de procédure civile et pénale que l'application n'a pas lus :");
-      L.push(" elle ne les reproduira donc pas de mémoire.");
-      L.push("");
-      L.push(" Portez ici, en termes simples et exacts, les voies ouvertes à la");
-      L.push(" personne : devant quelle juridiction, dans quels délais, avec quels");
-      L.push(" concours. Faites relire cette rubrique par un conseil : c'est la seule");
-      L.push(" du support dont le contenu ne soit pas dicté par un texte que vous");
-      L.push(" pouvez recopier.]");
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-      L = L.concat(blocProtection());
-      L.push(TRAIT);
-      L.push("");
-      L = L.concat(blocCoordonnees(ctx));
-      L.push(TRAIT);
-      L.push("");
-      L.push("À QUI S'ADRESSER DANS L'ENTREPRISE");
-      L.push("");
-      L.push("[Renvoyer ici à la procédure interne de signalement, si elle existe :");
-      L.push(" à qui s'adresser, sous quelle forme, et ce qui se passe ensuite. Le");
-      L.push(" document SST-CTL-HAR-04 de cette application la rédige. Un affichage qui");
-      L.push(" dit ce qui est interdit sans dire à qui en parler laisse le salarié");
-      L.push(" devant une porte fermée.]");
-      L.push("");
-      L.push("Affichage établi le " + leJour(d0) + ", à vérifier avant le " +
-        leJour(dans(d0, 365)) + ".");
-      L.push("Responsable de la mise à jour : [NOM, FONCTION].");
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 2, NOTE DE DIFFUSION (harcèlement moral, L. 1152-4)");
-      L.push(GROS);
-      L.push("");
-      L.push("L. 1152-4 n'impose pas un affichage : il impose une information PAR TOUT");
-      L.push("MOYEN. L'affichage y suffit, mais une note nominativement diffusée se");
-      L.push("prouve mieux, et la preuve, ici, est tout ce qui restera.");
-      L.push("");
-      L.push(nomDe(ctx) + ", note du " + leJour(d0));
-      L.push("Objet : information sur le harcèlement moral (article L. 1152-4 du code");
-      L.push("du travail)");
-      L.push("");
-      L.push("Mesdames, Messieurs,");
-      L.push("");
-      L.push("L'article L. 1152-4 du code du travail prévoit que l'employeur prend");
-      L.push("toutes dispositions nécessaires en vue de prévenir les agissements de");
-      L.push("harcèlement moral, et que les personnes mentionnées à l'article L. 1152-2");
-      L.push("sont informées par tout moyen du texte de l'article 222-33-2 du code");
-      L.push("pénal.");
-      L.push("");
-      L.push("Le harcèlement moral est défini par l'article L. 1152-1 du code du");
-      L.push("travail : « Aucun salarié ne doit subir les agissements répétés de");
-      L.push("harcèlement moral qui ont pour objet ou pour effet une dégradation de ses");
-      L.push("conditions de travail susceptible de porter atteinte à ses droits et à sa");
-      L.push("dignité, d'altérer sa santé physique ou mentale ou de compromettre son");
-      L.push("avenir professionnel. »");
-      L.push("");
-      L.push("Le texte de l'article 222-33-2 du code pénal figure ci-après :");
-      L.push("");
-      L = L.concat(blocCodePenal("l'article 222-33-2 du code pénal, en entier"));
-      L.push("Aucune personne ayant subi ou refusé de subir de tels agissements, ou");
-      L.push("ayant de bonne foi relaté ou témoigné de tels agissements, ne peut faire");
-      L.push("l'objet des mesures mentionnées à l'article L. 1121-2 du code du travail");
-      L.push("(L. 1152-2).");
-      L.push("");
-      L.push("Vous pouvez vous adresser à [voir la procédure interne de signalement /");
-      L.push("aux personnes et services dont les coordonnées figurent à l'affichage].");
-      L.push("");
-      L.push(signataire(ctx));
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 3, RELEVÉ DE DIFFUSION ET D'AFFICHAGE");
-      L.push(GROS);
-      L.push("");
-      L.push("Ce que l'on vous demandera n'est pas « avez-vous affiché ? » mais");
-      L.push("« montrez-le ». Ce relevé est la pièce qui répond.");
-      L.push("");
-      L.push("  Emplacement                       | Date | Support | Preuve conservée");
-      L.push("  ----------------------------------|------|---------|-----------------");
-      L.push("  Lieu de travail : [SITE / ATELIER]| [..] | [......] | [photographie]");
-      L.push("  Lieu de travail : [SITE / ATELIER]| [..] | [......] | [photographie]");
-      L.push("  Locaux ou porte des locaux où se  |      |         |");
-      L.push("  fait l'embauche : [LIEU]          | [..] | [......] | [photographie]");
-      L.push("  Intranet / espace salarié         | [..] | [......] | [capture datée]");
-      L.push("  Note nominative (L. 1152-4)       | [..] | [......] | [émargement]");
-      L.push("  Livret d'accueil / remise à");
-      L.push("  l'embauche                        | [..] | [......] | [récépissé]");
-      L.push("");
-      L.push("Le lieu d'embauche est visé pour lui-même par L. 1153-5 : s'il ne figure");
-      L.push("pas dans ce relevé, l'obligation n'est pas tenue, quel que soit le nombre");
-      L.push("de panneaux dans les ateliers.");
-      L.push("");
-      L.push("Relevé arrêté le " + leJour(d0) + " par [NOM, FONCTION].");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 4, CE QU'IL FAUT ALLER CHERCHER, ET OÙ");
-      L.push(GROS);
+      L = L.concat(blocD1151());
+      L.push("CE QU'IL FAUT ALLER CHERCHER, ET OÙ");
       L.push("");
       L.push("L'application ne lit que le CODE DU TRAVAIL. Trois éléments de cet");
       L.push("affichage ne s'y trouvent pas, et elle ne les inventera pas :");
-      L.push("");
       L.push("  1. le TEXTE de l'article 222-33 du code pénal (harcèlement sexuel) ;");
       L.push("  2. le TEXTE de l'article 222-33-2 du code pénal (harcèlement moral) ;");
       L.push("  3. la description des actions contentieuses civiles et pénales");
       L.push("     ouvertes en matière de harcèlement sexuel.");
-      L.push("");
       L.push("Les deux premiers se recopient depuis le code pénal, dans leur version en");
       L.push("vigueur au jour de l'affichage. Notez cette date sur le support : ces");
-      L.push("articles ont été modifiés, et un affichage périmé se voit.");
-      L.push("");
-      L.push("Le troisième demande une rédaction : faites-la relire.");
+      L.push("articles ont été modifiés, et un affichage périmé se voit. Le troisième");
+      L.push("demande une rédaction : faites-la relire.");
       L.push("");
       L.push("Deux autres articles du code du travail sont NOMMÉS par l'affichage sans");
       L.push("que l'application les ait lus :");
@@ -1648,43 +1669,22 @@
         "renvoient L. 1152-2 et L. 1153-2"));
       L = L.concat(blocRenvoi("L. 1142-2-1",
         "définit l'agissement sexiste, auquel renvoie L. 4121-2, 7°"));
-
-      L.push(GROS);
-      L.push("VOTRE CALENDRIER");
-      L.push(GROS);
+      L.push("CE QUE LE DOSSIER DÉCLARE");
       L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + ", vous relevez les cinq coordonnées de");
-      L.push("D. 1151-1. C'est le travail le plus long : le nom de l'inspecteur du");
-      L.push("travail compétent se demande à l'unité de contrôle, il ne se devine pas.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 3)) + ", vous recopiez les deux articles du code");
-      L.push("pénal et vous rédigez la rubrique des actions contentieuses.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 7)) + ", l'affichage est posé, aux DEUX");
-      L.push("emplacements : lieux de travail, et locaux ou porte des locaux où se fait");
-      L.push("l'embauche. La note de diffusion sur le harcèlement moral part le même");
-      L.push("jour. Vous datez le relevé (pièce 3) et vous photographiez chaque");
-      L.push("emplacement.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 30)) + ", vous vérifiez que rien n'a été");
-      L.push("décroché, recouvert ou déplacé. Un affichage arraché la semaine suivante");
-      L.push("n'est plus un affichage.");
-      L.push("");
-      L.push("Avant le " + leJour(dans(d0, 365)) + ", relecture annuelle des cinq");
-      L.push("coordonnées. Aucun texte lu ne fixe cette périodicité : c'est une");
-      L.push("échéance que vous vous donnez, parce que ces coordonnées se périment.");
-      L.push("");
-      L.push("Sans attendre l'échéance, à chaque changement : nouveau référent, nouvel");
-      L.push("inspecteur, déménagement du service de santé au travail, franchissement");
-      L.push("du seuil de deux cent cinquante salariés. Le support se corrige le jour");
-      L.push("même.");
+      L.push("Information sur le harcèlement moral (L. 1152-4) : " +
+        etat(f.infoHarcelementMoral, "délivrée", "NON DÉLIVRÉE") + ".");
+      L.push("Information sur le harcèlement sexuel (L. 1153-5) : " +
+        etat(f.infoHarcelementSexuel, "délivrée", "NON DÉLIVRÉE") + ".");
+      L.push("Coordonnées des autorités et services (D. 1151-1) : " +
+        etat(f.infoCoordonnees, "délivrées", "NON DÉLIVRÉES") + ".");
+      L.push(ligneEffectif(ctx));
 
       return L.concat(pied("L. 1152-4, L. 1153-5, D. 1151-1, L. 1152-1, L. 1152-2, " +
         "L. 1153-1, L. 1153-2, L. 4121-1",
         ["Aucune peine n'est annoncée pour ce manquement, et le périmètre a été",
          "vérifié. R. 4741-3 punit la méconnaissance des « documents et affichages",
          "obligatoires », mais son énumération est CLOSE, L. 4711-1 à L. 4711-5 et",
-         "D. 4711-1 à D. 4711-3 -, et l'affichage de L. 1153-5 n'y figure pas.",
+         "D. 4711-1 à D. 4711-3, et l'affichage de L. 1153-5 n'y figure pas.",
          "L. 4741-1 ne l'atteint pas davantage : son énumération porte sur la",
          "quatrième partie du code, quand L. 1152-4 et L. 1153-5 sont à la première.",
          "L. 1155-2 ne punit que les discriminations commises À LA SUITE d'un",
@@ -1694,7 +1694,9 @@
          "",
          "Les articles 222-33 et 222-33-2 du CODE PÉNAL, ainsi que L. 1121-2 et",
          "L. 1142-2-1 du code du travail, sont NOMMÉS ici sans avoir été lus par",
-         "l'application : elle n'en reproduit pas le contenu."])).join("\n");
+         "l'application : elle n'en reproduit pas le contenu. Les coordonnées du",
+         "Défenseur des droits portées dans l'exemple ont été relevées sur son site",
+         "le 9 septembre 2026 ; vérifiez-les avant de les afficher."])).join("\n");
     },
   });
 
