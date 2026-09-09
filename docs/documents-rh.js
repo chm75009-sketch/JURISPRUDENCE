@@ -42,7 +42,7 @@
     nom: "Le registre unique du personnel, à ouvrir et à tenir",
     detail: "Le registre lui-même, ses deux parties, ses treize indications " +
             "complémentaires et la règle de mise à jour.",
-    /* LE TABLEUR — un registre est un tableau. Le client le tient dans Excel,
+    /* LE TABLEUR :un registre est un tableau. Le client le tient dans Excel,
        une ligne par salarié, dans l'ordre des embauches. Deux lignes d'exemple
        montrent ce qu'on attend de chaque colonne. */
     tableur: function (ctx) {
@@ -51,7 +51,7 @@
       L.push(["REGISTRE UNIQUE DU PERSONNEL"]);
       L.push([cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE")]);
       L.push(["Établissement : " + cro(p.adresse, "adresse de l'établissement")]);
-      L.push(["Ouvert le " + leJour(ctx.aujourdhui) + " — articles L. 1221-13 et D. 1221-23 du code du travail"]);
+      L.push(["Ouvert le " + leJour(ctx.aujourdhui) + ", articles L. 1221-13 et D. 1221-23 du code du travail"]);
       L.push([]);
       L.push(["MODE D'EMPLOI : un registre PAR ÉTABLISSEMENT. Les salariés dans l'ordre des embauches, " +
               "les mentions portées au moment de l'embauche et de façon indélébile. Les deux lignes " +
@@ -67,18 +67,18 @@
               "Mention « salarié à temps partiel »",
               "Mention « apprenti » ou « contrat de professionnalisation »"]);
       L.push(["1", "DUPONT Jean", "française", "12/04/1988", "M", "Conducteur poids lourd",
-              "Ouvrier — coefficient 138 M", "15/09/2026", "", "", "", "", "", "", "", ""]);
+              "Ouvrier, coefficient 138 M", "15/09/2026", "", "", "", "", "", "", "", ""]);
       L.push(["2", "MARTIN Sofia", "portugaise", "03/11/1995", "F", "Agent d'exploitation",
-              "Employé — coefficient 120", "01/10/2026", "", "",
+              "Employé, coefficient 120", "01/10/2026", "", "",
               "Carte de séjour pluriannuelle n° [NUMÉRO]", "contrat à durée déterminée", "", "",
               "salarié à temps partiel", ""]);
       L.push(["3", "[NOM ET PRÉNOMS]", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]);
       L.push([]);
-      L.push(["SECONDE PARTIE — STAGIAIRES ET VOLONTAIRES EN SERVICE CIVIQUE (partie spécifique, ordre d'arrivée)"]);
+      L.push(["SECONDE PARTIE : STAGIAIRES ET VOLONTAIRES EN SERVICE CIVIQUE (partie spécifique, ordre d'arrivée)"]);
       L.push(["N° d'ordre", "Nom et prénoms", "Qualité", "Date d'arrivée", "Date de départ"]);
       L.push(["1", "[NOM ET PRÉNOMS]", "stagiaire", "", ""]);
       L.push([]);
-      L.push(["RAPPEL — Les mentions relatives à des événements postérieurs à l'embauche sont portées " +
+      L.push(["RAPPEL : Les mentions relatives à des événements postérieurs à l'embauche sont portées " +
               "AU MOMENT OÙ CEUX-CI SURVIENNENT (D. 1221-25). Une copie des titres de travail des " +
               "travailleurs étrangers est annexée au registre (D. 1221-24)."]);
       return L;
@@ -94,7 +94,7 @@
       L.push("");
       L.push("Ce document est le registre lui-même : imprimez-le, ou reportez ses");
       L.push("colonnes dans votre tableur ou votre logiciel de paie. Un registre par");
-      L.push("établissement — l'article L. 1221-13 le veut « dans tout établissement où");
+      L.push("établissement, l'article L. 1221-13 le veut « dans tout établissement où");
       L.push("sont employés des salariés », et non un seul pour l'entreprise.");
       L.push("");
       L.push("Les lignes qui commencent par NOTE ne font pas partie du registre.");
@@ -108,7 +108,7 @@
       L.push("Adresse de l'établissement : " + cro(p.adresse, "adresse de l'établissement"));
       L.push("Registre ouvert le : [DATE D'OUVERTURE]");
       L.push("");
-      L.push("PREMIÈRE PARTIE — LES SALARIÉS");
+      L.push("PREMIÈRE PARTIE : LES SALARIÉS");
       L.push("");
       L.push("Les noms et prénoms de tous les salariés sont inscrits DANS L'ORDRE DES");
       L.push("EMBAUCHES, au moment de l'embauche, et de façon indélébile (L. 1221-13).");
@@ -143,7 +143,7 @@
       L.push("des embauches. Aucune ligne ne se réécrit ni ne s'efface : les mentions");
       L.push("sont portées de façon indélébile.)");
       L.push("");
-      L.push("SECONDE PARTIE — STAGIAIRES ET VOLONTAIRES EN SERVICE CIVIQUE");
+      L.push("SECONDE PARTIE : STAGIAIRES ET VOLONTAIRES EN SERVICE CIVIQUE");
       L.push("");
       L.push("Partie spécifique et distincte de la précédente (L. 1221-13, troisième");
       L.push("alinéa). Les noms et prénoms des stagiaires et des personnes volontaires");
@@ -156,7 +156,7 @@
       L.push("   Date d'arrivée :");
       L.push("   Date de départ :");
       L.push("");
-      L.push("ANNEXE — TITRES DE TRAVAIL DES TRAVAILLEURS ÉTRANGERS");
+      L.push("ANNEXE, TITRES DE TRAVAIL DES TRAVAILLEURS ÉTRANGERS");
       L.push("");
       L.push("Une copie des titres autorisant l'exercice d'une activité salariée des");
       L.push("travailleurs étrangers est annexée au registre et rendue accessible aux");
@@ -174,7 +174,7 @@
       L.push("MOMENT OÙ CEUX-CI SURVIENNENT (D. 1221-25). Une mise à jour mensuelle ou");
       L.push("trimestrielle ne satisfait pas le texte.");
       L.push("");
-      L.push("NOTE — Le registre se tient à la disposition des membres de la délégation");
+      L.push("NOTE, Le registre se tient à la disposition des membres de la délégation");
       L.push("du personnel du comité social et économique et des agents de contrôle. Un");
       L.push("support informatique est admis, mais il doit offrir les mêmes garanties");
       L.push("que le support papier, à commencer par l'inaltérabilité des inscriptions :");
@@ -192,8 +192,8 @@
      LE CERTIFICAT DE TRAVAIL
 
      D. 1234-6 : le certificat contient « EXCLUSIVEMENT » deux mentions. Les
-     3° et 4° de l'article sont abrogés. Tout ce que l'usage y ajoute — motif
-     de la rupture, appréciation sur le travail, mention de la portabilité —
+     3° et 4° de l'article sont abrogés. Tout ce que l'usage y ajoute, motif
+     de la rupture, appréciation sur le travail, mention de la portabilité -
      déborde le texte ; la portabilité de la prévoyance se notifie, elle ne
      s'inscrit pas ici.
      ════════════════════════════════════════════════════════════════════════ */

@@ -79,6 +79,20 @@
   .champs label{min-width:0}
   .champs textarea{min-height:88px}
 
+  .tableau-doc{margin:0 0 14px}
+  .tableau-doc .titre-tab{font:600 17px/1.3 system-ui;color:var(--encre);margin:0 0 4px}
+  .tableau-doc .sous-tab{font-size:14px;color:var(--texte-2);margin:0 0 10px}
+  .tableau-doc .cadre-tab{overflow:auto;max-height:62vh;border:1px solid var(--filet);border-radius:10px;-webkit-overflow-scrolling:touch;background:var(--surface)}
+  table.reg{border-collapse:separate;border-spacing:0;font-size:14px;min-width:100%}
+  table.reg th,table.reg td{border-bottom:1px solid var(--filet);border-right:1px solid var(--filet);padding:8px 10px;text-align:left;vertical-align:top;white-space:nowrap}
+  table.reg th{position:sticky;top:0;z-index:1;background:var(--creux);font:600 12.5px/1.3 system-ui;color:var(--texte-2);white-space:normal;min-width:120px}
+  table.reg td:first-child,table.reg th:first-child{position:sticky;left:0;background:var(--surface);z-index:2;box-shadow:1px 0 0 var(--filet)}
+  table.reg th:first-child{background:var(--creux);z-index:3}
+  table.reg td.vide{color:var(--texte-2)}
+  table.reg tr.section td{position:static;font:600 14px system-ui;color:var(--encre);background:var(--accent-clair);white-space:normal;padding:10px}
+  table.reg th{min-width:140px;max-width:210px;font-size:12px;line-height:1.25;padding:6px 8px}
+  table.reg th:first-child{min-width:70px}
+  .tableau-doc .note-tab{font-size:14px;color:var(--texte-2);margin:10px 0 0}
   .dates{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
   .d{border:1px solid var(--filet);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px;background:var(--surface)}
   .d.tard{border-left-color:var(--rouge)}
@@ -161,6 +175,13 @@
     <form class="champs" id="d-champs" autocomplete="off" onsubmit="return false"></form>
     <div class="dates" id="d-dates"></div>
     <div id="d-avis"></div>
+    <!-- Un document qui est un tableau (le registre du personnel) s'affiche en
+         tableau, jamais en texte, et se télécharge en classeur : demande du
+         9 septembre 2026, « on doit tomber sur le registre pratique ». -->
+    <div class="barre" id="d-barre-tableau" hidden>
+      <button type="button" id="btn-excel">Télécharger le classeur Excel</button>
+    </div>
+    <div id="d-tableau" class="tableau-doc" hidden></div>
     <div id="d-feuille"></div>
     <div class="barre">
       <button type="button" id="btn-word">Télécharger en Word</button>
@@ -172,6 +193,7 @@
 </main>
 
 <script src="audit-export.js"></script>
+<script src="tableur-export.js"></script>
 <script src="profil.js"></script>
 <script>
 (function () {
@@ -1565,15 +1587,21 @@
       if (c.crochet && val) crochets.push([c.crochet, val]);
     });
     var ctx = { profil: profil, fiche: donnees, donnees: donnees, aujourdhui: AUJOURDHUI };
-    var blocs = [];
+    var blocs = [], tableau = null, texteRegles = "";
     gens.forEach(function (g, i) {
       var t = g.produire(ctx);
       crochets.forEach(function (c) { t = t.split(c[0]).join(c[1]); });
       if (i) blocs.push({ k: "saut", t: "" });
       blocs = blocs.concat(blocsDeTexte(t));
+      if (!tableau && typeof g.tableur === "function") {
+        tableau = g.tableur(ctx).map(function (l) {
+          return (l || []).map(function (c) { var s = c == null ? "" : String(c); crochets.forEach(function (k) { s = s.split(k[0]).join(k[1]); }); return s; });
+        });
+        texteRegles = t;
+      }
     });
     if (apres) blocs = blocs.concat(apres(v));
-    return { blocs: blocs, dates: [] };
+    return { blocs: blocs, dates: [], tableau: tableau, regles: texteRegles };
   }
 
   /* ═══════════════════════════════════════════════════════════════════════
@@ -1693,6 +1721,63 @@
     return h || "<p>Aucun article du code du travail n'est cité dans ce document.</p>";
   }
 
+  var TABLEAU = null, REGLES = "";
+  function pleines(l) { return (l || []).filter(function (c) { return c !== null && c !== undefined && c !== ""; }).length; }
+  /* Le tableau à l'écran : les lignes de titre en petit, l'en-tête figé, une
+     ligne par salarié, les notes dessous. La ligne « mode d'emploi » ne
+     s'affiche pas ici : elle est dans les règles. */
+  function tableauHtml(lignes) {
+    var tete = -1;
+    lignes.forEach(function (l, i) { if (tete < 0 && pleines(l) >= 4) tete = i; });
+    var h = "", titres = [], notes = [], corps = [], tetes = [];
+    lignes.forEach(function (l, i) {
+      var n = pleines(l);
+      if (!n) return;
+      if (tete < 0 || i < tete) { if (!/^MODE D'EMPLOI/i.test(l[0])) titres.push(l[0]); return; }
+      if (i === tete) { tetes = l; return; }
+      if (n === 1) { if (/^(RAPPEL|NOTE|MODE D'EMPLOI)/i.test(String(l[0]))) notes.push(l[0]); else corps.push({ section: String(l[0]) }); return; }
+      corps.push(l);
+    });
+    if (titres.length) h += '<p class="titre-tab">' + ech(titres[0]) + "</p>";
+    if (titres.length > 1) h += '<p class="sous-tab">' + titres.slice(1).map(ech).join(" · ") + "</p>";
+    corps = corps.filter(function (l, i) { return !l.section || corps.slice(i + 1).some(function (m) { return !m.section && pleines(m) >= 1; }); });
+    var nb = Math.max(tetes.length, corps.reduce(function (m, l) { return Math.max(m, l.section ? 0 : l.length); }, 0));
+    h += '<div class="cadre-tab"><table class="reg"><thead><tr>';
+    for (var j = 0; j < nb; j++) h += "<th>" + ech(tetes[j] || "") + "</th>";
+    h += "</tr></thead><tbody>";
+    corps.forEach(function (l) {
+      if (l.section) { h += '<tr class="section"><td colspan="' + nb + '">' + ech(l.section) + "</td></tr>"; return; }
+      if (pleines(l) >= 4 && l.join("|") !== tetes.join("|") && corps.indexOf(l) > 0 && !/^\d+$/.test(String(l[0]))) {
+        /* une seconde partie du tableau (stagiaires) : son en-tête sur une ligne grise */
+        h += '<tr>' ; for (var k = 0; k < nb; k++) h += '<th>' + ech(l[k] || "") + "</th>"; h += "</tr>"; return;
+      }
+      h += "<tr>";
+      for (var j = 0; j < nb; j++) { var v = l[j] == null ? "" : String(l[j]); h += '<td class="' + (v ? "" : "vide") + '">' + ech(v) + "</td>"; }
+      h += "</tr>";
+    });
+    h += "</tbody></table></div>";
+    notes.forEach(function (t) { h += '<p class="note-tab">' + ech(t) + "</p>"; });
+    return h;
+  }
+  /* Le classeur : feuille 1 le tableau seul, feuille 2 les règles (le mode
+     d'emploi, les rappels, et le texte du document). */
+  $("btn-excel").addEventListener("click", function () {
+    if (!TABLEAU || !window.TableurExport) return;
+    var doc = DOCS[ACTIF];
+    var regles = [];
+    var tableau = TABLEAU.filter(function (l) {
+      if (pleines(l) === 1 && /^(MODE D'EMPLOI|RAPPEL|NOTE)/i.test(String(l[0]))) { regles.push([String(l[0])]); return false; }
+      return true;
+    });
+    var texte = String(REGLES || "").split(/\n+/).map(function (t) { return t.replace(/^#+\s*/, "").trim(); }).filter(Boolean);
+    var feuilleRegles = [[doc.titre + " : les règles"], []].concat(regles).concat([[]]).concat(texte.map(function (t) { return [t]; }));
+    var nom = (doc.titre + "-" + (profil.denomination || "")).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
+    TableurExport.telecharger(TableurExport.xlsx([
+      { titre: doc.titre, lignes: tableau },
+      { titre: "Règles", lignes: feuilleRegles, largeurs: [110] }
+    ]), nom + ".xlsx");
+  });
+
   function rendreDoc() {
     var doc = DOCS[ACTIF], r;
     if (doc.ext) {
@@ -1709,7 +1794,18 @@
     if (r.refus) a += '<div class="refus"><b>Ce document n\'est pas produit.</b>' + r.refus.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>";
     (r.alertes || []).forEach(function (t) { a += '<div class="alerte">' + ech(t) + "</div>"; });
     $("d-avis").innerHTML = a;
-    $("d-feuille").innerHTML = r.refus ? "" : feuilleHtml(r.blocs);
+    TABLEAU = r.refus ? null : (r.tableau || null);
+    REGLES = r.refus ? "" : (r.regles || "");
+    if (TABLEAU) {
+      $("d-tableau").innerHTML = tableauHtml(TABLEAU);
+      $("d-tableau").hidden = false;
+      $("d-barre-tableau").hidden = false;
+      $("d-feuille").innerHTML = '<details class="loi"><summary>Voir les règles de tenue</summary>' + feuilleHtml(r.blocs) + "</details>";
+    } else {
+      $("d-tableau").hidden = true;
+      $("d-barre-tableau").hidden = true;
+      $("d-feuille").innerHTML = r.refus ? "" : feuilleHtml(r.blocs);
+    }
     $("btn-word").disabled = !!r.refus;
     $("btn-imprimer").disabled = !!r.refus;
     $("d-loi").innerHTML = loiHtml(r.loi || []);

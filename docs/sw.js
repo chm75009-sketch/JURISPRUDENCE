@@ -91,7 +91,7 @@ const ESSENTIELS = [
      document qu'un agent de contrôle demande sur place. */
   "./registre.html",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
-  "./audit-form.js", "./audit-export.js", "./parcours-deux-temps.js",
+  "./audit-form.js", "./audit-export.js", "./tableur-export.js", "./parcours-deux-temps.js",
   /* Les documents que l'application rédige elle-même. */
   "./documents-produits.js",
   "./documents-cse.js", "./documents-pse.js", "./documents-discipline.js",
