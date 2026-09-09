@@ -1759,8 +1759,32 @@
     notes.forEach(function (t) { h += '<p class="note-tab">' + ech(t) + "</p>"; });
     return h;
   }
-  /* Le classeur : feuille 1 le tableau seul, feuille 2 les règles (le mode
-     d'emploi, les rappels, et le texte du document). */
+  /* Le modèle vide : mêmes titres, mêmes en-têtes, mais les lignes d'exemple
+     sont remplacées par des lignes numérotées vides, trente pour la première
+     partie, dix pour chaque partie suivante. */
+  function modeleVide(lignes) {
+    var out = [], enTetes = 0, dansCorps = false;
+    lignes.forEach(function (l) {
+      var n = pleines(l);
+      var tete = n >= 4 && !/^\d+$/.test(String(l[0] || ""));
+      if (tete) {
+        enTetes++; dansCorps = true;
+        out.push(l.slice());
+        var nb = enTetes === 1 ? 30 : 10;
+        for (var i = 1; i <= nb; i++) { var v = l.map(function () { return ""; }); v[0] = String(i); out.push(v); }
+        return;
+      }
+      if (dansCorps && n >= 2) return;
+      if (dansCorps && n === 1 && /^\d+$/.test(String(l[0]))) return;
+      if (n === 0) { dansCorps = false; out.push([]); return; }
+      dansCorps = false;
+      out.push(l.slice());
+    });
+    return out;
+  }
+  /* Le classeur : feuille 1 le registre vide à compléter, feuille 2 l'exemple
+     rempli, feuille 3 les règles (le mode d'emploi, les rappels, et le texte
+     du document). */
   $("btn-excel").addEventListener("click", function () {
     if (!TABLEAU || !window.TableurExport) return;
     var doc = DOCS[ACTIF];
@@ -1773,7 +1797,8 @@
     var feuilleRegles = [[doc.titre + " : les règles"], []].concat(regles).concat([[]]).concat(texte.map(function (t) { return [t]; }));
     var nom = (doc.titre + "-" + (profil.denomination || "")).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
     TableurExport.telecharger(TableurExport.xlsx([
-      { titre: doc.titre, lignes: tableau },
+      { titre: "À compléter", lignes: modeleVide(tableau) },
+      { titre: "Exemple rempli", lignes: tableau },
       { titre: "Règles", lignes: feuilleRegles, largeurs: [110] }
     ]), nom + ".xlsx");
   });
