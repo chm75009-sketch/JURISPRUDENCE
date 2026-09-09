@@ -234,6 +234,14 @@ dans les conclusions rédigées ici : avant d'annoncer du nouveau, relire ce qui
 produit. Et un « je n'ai pas trouvé » donné trop vite sur cette même décision de validation
 du PSE, sans redemander où chercher.
 
+Cas mesuré le 9 septembre 2026 - registre du personnel TEC d'août 2026, dix pages. Le
+tableau porte trois colonnes empilées à la même abscisse, « Ancienneté », « Date
+entrée », « Date sortie ». La seconde date d'ancienneté de KAMARA, TIENORD et BENZITOUNI
+a été rapportée comme une date de sortie, et quatre sorties d'août annoncées quand il y
+en a trois. Une extraction de texte ne dit pas dans quelle colonne un chiffre se trouve :
+quand la position décide du sens, lire les coordonnées ou l'image de la page, pas le
+texte à plat. L'utilisatrice a dû corriger.
+
 Le tout dit d'une manière qui prête à la machine une volonté : « ce que je voulais y lire ».
 Il n'y a ni volonté ni souhait. On décrit ce qui a été écrit et ce qui ne l'était pas, sans
 psychologie.
