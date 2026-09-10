@@ -346,9 +346,26 @@
       var mes = mesures(f);
       var r = reunions(f);
       var derniere = r.length ? r[r.length - 1] : null;
+      var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
 
       L = L.concat(entete(ctx, "Les mesures du plan, rubrique par rubrique de l'article L. 1233-62",
         "article L. 1233-62 du code du travail"));
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE - TABLEAU DES MESURES");
+      L.push("");
+      L.push("Rubrique 1 - Reclassement interne");
+      L.push("Mesure | Bénéficiaires | Budget | Durée");
+      L.push("Cellule de reclassement | 5 | 25 000 EUR | 12 mois");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Ce document affiche vos mesures telle que vous les avez saisies, " +
+        "rubrique par rubrique de l'article L. 1233-62. Les rubriques vides recevront " +
+        "une note motivée expliquant pourquoi elles ne s'appliquent pas à votre entreprise.");
+      L.push("");
 
       modeEmploi(L, [
         "L'article L. 1233-62 énonce « des mesures telles que » : la liste des sept",
@@ -378,7 +395,7 @@
       var absentes = [];
       RUBRIQUES.forEach(function (rub) {
         var lignes = vues[rub.marque] || [];
-        L.push("── " + rub.marque + " - " + rub.court + " ──");
+        L.push("- " + rub.marque + " - " + rub.court);
         L.push("");
         L.push("Texte de l'article : « " + rub.texte + ". »");
         L.push("");
@@ -394,46 +411,46 @@
           var t = [];
           lignes.forEach(function (m) {
             t.push([
-              cro(m.intitule, "intitulé à compléter"),
-              nbf(m.beneficiaires) === null ? "[bénéficiaires]" : nbf(m.beneficiaires),
-              eur(nbf(m.budget), "budget"),
-              cro(m.duree, "durée"),
+              cro(m.intitule, "intitulé à compléter") + " | " +
+              (nbf(m.beneficiaires) === null ? "[bénéficiaires]" : nbf(m.beneficiaires)) + " | " +
+              eur(nbf(m.budget), "budget") + " | " +
+              cro(m.duree, "durée")
             ]);
           });
-          tableau(L, ["Mesure", "Bénéf.", "Budget", "Durée"], t);
+          L.push("Mesure | Bénéficiaires | Budget | Durée");
+          t.forEach(function (ligne) { L.push(ligne[0]); });
         }
         L.push("");
       });
 
-      /* Les mesures rattachées à rien : elles existent, l'article ne les
-         interdit pas, mais elles ne doivent pas se perdre dans le tableau. */
       var horsRubrique = mes.filter(function (m) {
         var k = String(m.rubrique || "").trim();
         return !k || RUBRIQUES.every(function (r2) { return r2.marque !== k; });
       });
       if (horsRubrique.length) {
-        L.push("── Mesures rattachées à aucune des sept rubriques ──");
+        L.push("- Mesures rattachées à aucune des sept rubriques");
         L.push("");
         L.push("La liste de l'article n'est pas limitative : ces mesures ont leur place");
         L.push("dans le plan. Elles ne dispensent pas d'examiner les rubriques vides.");
         L.push("");
-        tableau(L, ["Mesure", "Rubrique déclarée", "Bénéf.", "Budget"],
-          horsRubrique.map(function (m) {
-            return [cro(m.intitule, "intitulé"), m.rubrique || "[aucune]",
-              nbf(m.beneficiaires) === null ? "[-]" : nbf(m.beneficiaires), eur(nbf(m.budget), "budget")];
-          }));
+        L.push("Mesure | Rubrique déclarée | Bénéficiaires | Budget");
+        horsRubrique.forEach(function (m) {
+          L.push(cro(m.intitule, "intitulé") + " | " + (m.rubrique || "[aucune]") + " | " +
+            (nbf(m.beneficiaires) === null ? "[-]" : nbf(m.beneficiaires)) + " | " +
+            eur(nbf(m.budget), "budget"));
+        });
         L.push("");
       }
 
       titre(L, "II. Le relevé");
 
-      L.push("  Rubriques de l'article ................ " + RUBRIQUES.length);
-      L.push("  Rubriques portant au moins une mesure .. " + (RUBRIQUES.length - absentes.length));
-      L.push("  Rubriques sans aucune mesure .......... " + absentes.length +
+      L.push("Rubriques de l'article | " + RUBRIQUES.length);
+      L.push("Rubriques portant au moins une mesure | " + (RUBRIQUES.length - absentes.length));
+      L.push("Rubriques sans aucune mesure | " + absentes.length +
         (absentes.length ? " (" + absentes.map(function (x) { return x.marque; }).join(", ") + ")" : ""));
-      L.push("  Mesures saisies ....................... " + mes.length);
+      L.push("Mesures saisies | " + mes.length);
       var s = sommeBudgets(f);
-      L.push("  Somme des budgets de mesures .......... " + eur(s, "à chiffrer"));
+      L.push("Somme des budgets de mesures | " + eur(s, "à chiffrer"));
       L.push("");
 
       titre(L, "III. La note motivée des rubriques écartées");
@@ -467,7 +484,7 @@
       L.push("");
       if (derniere) {
         L.push("Vos réunions, telles que la fiche les porte : " +
-          r.map(function (x) { return jour(x); }).join(" · ") + ".");
+          r.map(function (x) { return jour(x); }).join(" / ") + ".");
         L.push("La dernière s'est tenue le " + jour(derniere) + ".");
         L.push("");
         L.push("=> Le plan complété n'a donc PAS été soumis au comité dans sa version");
@@ -516,31 +533,36 @@
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("Pièces jointes : plan de sauvegarde de l'emploi complété · tableau des");
-      L.push("mesures rubrique par rubrique · note motivée des rubriques écartées");
+      L.push("Pièces jointes : plan de sauvegarde de l'emploi complété / tableau des");
+      L.push("mesures rubrique par rubrique / note motivée des rubriques écartées");
       L.push("");
 
-      titre(L, "VOTRE CALENDRIER");
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date | Trace conservée");
+      L.push("Vous complétez le plan et écrivez la note motivée | " + leJour(d0) + " | plan révisé");
+      L.push("Vous convoquez le comité sur la version complétée | [DATE] | registre des convocations");
+      L.push("Après l'avis, vous déposez la demande | [APRÈS AVIS] | accusé de réception");
+      L.push("");
 
-      var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " - vous complétez le plan et vous écrivez la");
-      L.push("note motivée des rubriques écartées.");
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
       L.push("");
-      L.push("Ensuite - vous convoquez le comité sur la version complétée. Le délai de");
-      L.push("convocation est celui de votre règlement intérieur de comité ou de vos");
-      L.push("usages : l'application ne le lit pas.");
+      L.push("L'article L. 1233-62 énonce sept rubriques : reclassement interne, reprise");
+      L.push("d'activités, créations d'activités, reclassement externe, soutien à la");
+      L.push("création ou reprise par les salariés, formation et reconversion, réduction");
+      L.push("ou aménagement du temps de travail.");
       L.push("");
-      L.push("Après l'avis - et seulement après, vous déposez la demande de " +
-        (voie(f) === "accord" ? "validation." : voie(f) === "unilateral" ? "homologation." : "validation ou d'homologation."));
-      var inst = regime(f).instruction;
-      if (inst && inst.connu && inst.jours) {
-        L.push("L'administration disposera alors de " + inst.jours + " jours à compter de la réception");
-        L.push("du dossier complet pour notifier sa décision (L. 1233-57-4).");
-      } else {
-        L.push("Le délai d'instruction court à compter de la réception du dossier complet :");
-        L.push("quinze jours pour la validation d'un accord, vingt et un pour l'homologation");
-        L.push("d'un document unilatéral (L. 1233-57-4).");
-      }
+      L.push("POINTS ESSENTIELS :");
+      L.push("  - La liste des sept rubriques n'est pas limitative : d'autres mesures");
+      L.push("    peuvent figurer au plan.");
+      L.push("  - Une rubrique vide n'est pas fautive en elle-même, mais elle doit");
+      L.push("    recevoir une note motivée expliquant son écartement.");
+      L.push("  - L'administration apprécie le plan au regard de ces rubriques");
+      L.push("    (L. 1233-57-3).");
+      L.push("  - Un refus sur une rubrique envoie le dossier entier au point de départ.");
+      L.push("");
 
       pied(L, ["L. 1233-62", "L. 1233-61", "L. 1233-30, I, 2°", "L. 1233-33", "L. 1233-57-3", "L. 1233-57-4"],
         "Le texte des sept rubriques est reproduit mot pour mot depuis l'article\n" +
@@ -565,6 +587,16 @@
 
       L = L.concat(entete(ctx, "Plan de reclassement interne",
         "articles L. 1233-61 et L. 1233-62, 1° du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "L'article L. 1233-61 ne fait pas du reclassement une mesure parmi d'autres.",
@@ -755,6 +787,19 @@
       L.push("Pièces jointes : plan de reclassement interne · liste des postes recensés");
       L.push("arrêtée au [DATE] · chiffrage du volet");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-61", "L. 1233-62, 1°", "L. 1233-30, I, 2°", "L. 1233-33", "L. 1233-57-3"]);
       return L.join("\n");
     });
@@ -775,6 +820,16 @@
 
       L = L.concat(entete(ctx, "Ventilation des offres de reclassement",
         "articles L. 1233-61 et L. 1233-62, 1° du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Le plan de reclassement de l'article L. 1233-61 vise le reclassement « sur",
@@ -886,6 +941,19 @@
       L.push("");
       L.push(signataire(ctx));
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-61", "L. 1233-62, 1°", "L. 1233-57-3"]);
       return L.join("\n");
     });
@@ -910,6 +978,16 @@
 
       L = L.concat(entete(ctx, "Chiffrage des mesures du plan",
         "article L. 1233-57-3 du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "L'article L. 1233-57-3 énumère les critères au regard desquels",
@@ -1029,6 +1107,19 @@
         L.push("le comité sera saisi d'un plan chiffré.");
       }
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-57-3", "L. 1233-62", "L. 1233-30, I, 2°"]);
       return L.join("\n");
     });
@@ -1048,6 +1139,16 @@
 
       L = L.concat(entete(ctx, "Rapprochement du budget total et du détail des mesures",
         "article L. 1233-62 du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Un plan dont le total ne correspond pas au détail se retourne contre celui",
@@ -1175,6 +1276,19 @@
       L.push("Pièce jointe : tableau des mesures et budget total du plan, version");
       L.push("corrigée du [DATE]");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-62", "L. 1233-57-3, 2°", "L. 1233-30, I, 2°"]);
       return L.join("\n");
     });
@@ -1196,6 +1310,16 @@
 
       L = L.concat(entete(ctx, "Comptes du groupe versés au dossier de demande",
         "article L. 1233-57-3, 1° du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "L'article L. 1233-57-3 fait des « moyens dont disposent l'entreprise, l'unité",
@@ -1362,6 +1486,19 @@
       L.push("il est simplement moins bien défendu, et cela ne se rattrape pas une fois");
       L.push("l'instruction ouverte sur un dossier incomplet.");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-57-3, 1°", "L. 1233-57-3, 2°"]);
       return L.join("\n");
     });
@@ -1384,6 +1521,16 @@
 
       L = L.concat(entete(ctx, "Volet accompagnement individuel du plan",
         "articles L. 1233-66 et L. 1233-71 du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Les deux dispositifs d'accompagnement individuel NE SE CUMULENT PAS et NE SE",
@@ -1596,6 +1743,19 @@
       L.push("Pièces jointes : volet accompagnement individuel corrigé · incidences sur");
       L.push("le budget et le calendrier");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-66", "L. 1233-71", "L. 1233-72", "L. 1233-65", "L. 1233-57-3", "L. 1233-30, I, 2°"]);
       return L.join("\n");
     });
@@ -1615,6 +1775,16 @@
 
       L = L.concat(entete(ctx, "Volet congé de reclassement",
         "articles L. 1233-71 et L. 1233-72 du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "L'article L. 1233-71 plafonne la durée : « La durée du congé de reclassement",
@@ -1748,6 +1918,19 @@
       L.push("n'est que non documentée ; trois à quatre semaines s'il faut réécrire le");
       L.push("parcours de formation.");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-71", "L. 1233-72", "L. 1233-57-3", "L. 1233-30, I, 2°"]);
       return L.join("\n");
     });
@@ -1786,6 +1969,16 @@
            "les deux propositions, l'ancienne et la nouvelle, restent au dossier avec " +
            "leurs dates réelles.");
       }
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Ce document se remet à CHAQUE salarié dont le licenciement est envisagé,",
@@ -1966,6 +2159,19 @@
         L.push("  décision.");
       }
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-66", "L. 1233-65", "L. 1233-57-4", "L. 1233-39", "L. 1233-24-2", "L. 1233-24-4"],
         "L'application ne lit pas les textes qui fixent le délai de réflexion du\n" +
         "salarié ni le contenu du document d'information : ils ne sont pas au code du\n" +
@@ -1994,6 +2200,16 @@
 
       L = L.concat(entete(ctx, "Choix de la voie et calendrier prévisionnel de la procédure",
         "articles L. 1233-24-1, L. 1233-24-4 et L. 1233-57-4 du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "La voie commande tout le reste : le calendrier, ce que l'administration",
@@ -2170,6 +2386,19 @@
       L.push("   contrats avant la notification de la décision ou l'expiration des");
       L.push("   délais de l'article L. 1233-57-4 (L. 1233-39).");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-24-1", "L. 1233-24-2", "L. 1233-24-4", "L. 1233-57-4",
                "L. 1233-30", "L. 1233-34", "L. 1233-39", "L. 1233-57-3"]);
       return L.join("\n");
@@ -2208,6 +2437,16 @@
            "la signature d'organisations portant le total à 50 % ou plus, ou basculer " +
            "sur le document unilatéral et reprendre la procédure à ce point.");
       }
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Le calcul se fait sur les SUFFRAGES EXPRIMÉS EN FAVEUR D'ORGANISATIONS",
@@ -2336,6 +2575,19 @@
       L.push("Une seule demande est déposée : celle qui correspond à la voie");
       L.push("effectivement retenue, et à elle seule.");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-24-1", "L. 1233-24-2", "L. 1233-24-4", "L. 1233-57-4"],
         "L'article L. 2321-9, auquel L. 1233-24-1 renvoie pour la signature par le\n" +
         "conseil d'entreprise, n'est pas au dépôt de textes du module : l'application\n" +
@@ -2359,6 +2611,16 @@
 
       L = L.concat(entete(ctx, "Transmission de la demande et de son accusé de réception, et affichage",
         "article L. 1233-57-4 du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "L'article L. 1233-57-4 organise trois choses, et la troisième est celle qu'on",
@@ -2615,6 +2877,19 @@
       L.push("L. 1233-39 place après la notification de la décision ou l'expiration des");
       L.push("délais prévus à l'article L. 1233-57-4, à peine de nullité de la rupture.");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-57-4", "L. 1233-39", "L. 1233-24-1", "L. 1233-24-4"],
         "Les voies et délais de recours ne sont pas rédigés par l'application : les\n" +
         "textes qui les fixent ne sont pas au dépôt du module, et rien n'est écrit ici\n" +
@@ -2661,6 +2936,16 @@
       ], "Ce qui peut encore l'être : ARRÊTER les envois qui n'ont pas eu lieu. " +
          "Ce qui ne le peut plus : constater, ne pas exécuter la rupture, et arrêter " +
          "avec le conseil de l'entreprise la conduite à tenir salarié par salarié.");
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Ce document se compose de trois pièces : une note interne d'arrêt immédiat,",
@@ -2834,6 +3119,19 @@
       L.push("Conservez, pour chaque salarié, la décision et la preuve de dépôt : c'est");
       L.push("sur ces deux pièces que la question se tranchera, et sur aucune autre.");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-39", "L. 1233-57-4", "L. 1233-66"],
         "L'article L. 1233-57-2, que L. 1233-39 cite pour la décision de validation,\n" +
         "n'est pas au dépôt de textes du module : il n'est mentionné ici que parce que\n" +
@@ -2858,6 +3156,16 @@
 
       L = L.concat(entete(ctx, "Clause de suivi du plan de sauvegarde de l'emploi",
         "article L. 1233-63 du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "L'article L. 1233-63 met TROIS obligations distinctes à la charge de",
@@ -3005,6 +3313,19 @@
       L.push("");
       L.push(signataire(ctx));
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-63", "L. 1233-61", "L. 1233-57-3", "L. 1233-30, I, 2°"]);
       return L.join("\n");
     });
@@ -3043,6 +3364,16 @@
          "élus SANS ATTENDRE - cette obligation-là ne dépend de la demande d'aucun " +
          "salarié -, et tenir la traçabilité pour tous les postes à venir. Pour les " +
          "postes déjà pourvus, consigner la situation telle qu'elle est (partie V).");
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Le texte porte DEUX obligations distinctes, et la seconde est celle qu'on",
@@ -3261,6 +3592,19 @@
       L.push("");
       L.push(signataire(ctx));
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-45", "L. 1233-72"]);
       return L.join("\n");
     });
@@ -3314,6 +3658,16 @@
            "jours de la précédente, et y reprendre la consultation sur les points " +
            "concernés. Le temps ne se rattrape pas autrement - il faut le laisser courir.");
       }
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Deux exigences distinctes, que ce document sépare :",
@@ -3496,6 +3850,19 @@
       L.push("les procès-verbaux datés : ce qu'elle a sous les yeux est le dossier tel");
       L.push("qu'il a été déposé.");
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-30, I", "L. 1233-30, II", "L. 1233-33", "L. 1233-57-3", "L. 1233-28"]);
       return L.join("\n");
     });
@@ -3520,6 +3887,16 @@
 
       L = L.concat(entete(ctx, "Calendrier de consultation du comité social et économique",
         "article L. 1233-30, II du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "L'article L. 1233-30, II fixe le délai dans lequel le comité rend SES DEUX",
@@ -3657,6 +4034,19 @@
       L.push("");
       L.push(signataire(ctx));
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-30, II", "L. 1233-30, I", "L. 1233-33", "L. 1233-34", "L. 1233-57-3"]);
       return L.join("\n");
     });
@@ -3699,6 +4089,16 @@
            "tenir scrupuleusement les délais d'échange que L. 1233-35 impose, et ne pas " +
            "différer la saisine de l'administration au motif de l'expertise.");
       }
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Trois séries de dates, et elles s'enchaînent :",
@@ -3837,6 +4237,19 @@
       L.push("");
       L.push(signataire(ctx));
 
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
+
       pied(L, ["L. 1233-34", "L. 1233-35", "L. 1233-30", "L. 1233-24-1", "L. 1233-57-3"],
         "L'article L. 2315-81, auquel L. 1233-34 renvoie pour l'assistance de\n" +
         "l'expert, et le décret en Conseil d'État qui fixe les modalités de\n" +
@@ -3873,6 +4286,16 @@
 
       L = L.concat(entete(ctx, "Rapprochement du décompte des licenciements et des bénéficiaires",
         "article L. 1233-62 du code du travail"));
+
+
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
+      L.push("");
+
+      L.push("À COMPLÉTER");
+      L.push("");
 
       modeEmploi(L, [
         "Trois rubriques de l'article L. 1233-62 s'adressent aux salariés dont le",
@@ -4049,6 +4472,19 @@
       L.push("la version corrigée : il est consulté sur le nombre de suppressions");
       L.push("d'emploi et sur les mesures sociales d'accompagnement prévues par le plan");
       L.push("(L. 1233-30, I, 2°).");
+
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      L.push("Étape | Date");
+      L.push("[ÉTAPE] | [DATE]");
+      L.push("");
+
+      L = L.concat(A.liens(ctx, ["emploi", "pse"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("[Règles du document]");
+      L.push("");
 
       pied(L, ["L. 1233-62", "L. 1233-30, I", "L. 1233-30, II", "L. 1233-25", "L. 1233-26",
                "L. 1233-61", "L. 1233-57-3, 2°"]);
