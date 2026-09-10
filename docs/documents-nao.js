@@ -674,7 +674,7 @@
       L.push("ARTICLE 2 - LES THÈMES ET LEUR PÉRIODICITÉ (L. 2242-11, 1°)");
       L.push("");
       L.push("  thème                                    | périodicité | prochaine");
-      L.push("  ─────────────────────────────────────────┼─────────────┼───────────");
+      L.push("  ───────────────────────────────────────── |  ──────────── |  ──────────");
       L.push("  Rémunération, temps de travail et        | 1 an        | " + leJour(dans(d0, 365)));
       L.push("  partage de la valeur ajoutée (L. 2242-1, |             |");
       L.push("  1°)                                      |             |");
@@ -813,19 +813,19 @@
       L.push("");
       L.push("ARTICLE 2 - LES THÈMES ET LEUR PÉRIODICITÉ (L. 2242-11, 1°)");
       L.push("");
-      L.push("  thème                                    │ périodicité │ prochaine");
-      L.push("  ─────────────────────────────────────────┼─────────────┼───────────");
-      L.push("  Rémunération, temps de travail et        │ [.... ans]  │ [........]");
-      L.push("  partage de la valeur ajoutée (L. 2242-1, │             │");
-      L.push("  1°)                                      │             │");
-      L.push("  Égalité professionnelle femmes-hommes et │ [.... ans]  │ [........]");
-      L.push("  qualité de vie et des conditions de      │             │");
-      L.push("  travail (L. 2242-1, 2°)                  │             │");
+      L.push("  thème                                    | périodicité | prochaine");
+      L.push("  ───────────────────────────────────────── |  ──────────── |  ──────────");
+      L.push("  Rémunération, temps de travail et        | [.... ans]  | [........]");
+      L.push("  partage de la valeur ajoutée (L. 2242-1, |             │");
+      L.push("  1°)                                      |             │");
+      L.push("  Égalité professionnelle femmes-hommes et | [.... ans]  | [........]");
+      L.push("  qualité de vie et des conditions de      |             │");
+      L.push("  travail (L. 2242-1, 2°)                  |             │");
       if (!s.connu || s.atteint) {
-        L.push("  Gestion des emplois et des parcours      │ [.... ans]  │ [........]");
-        L.push("  professionnels (L. 2242-2)               │             │");
-        L.push("  Emploi et conditions de travail des      │ [.... ans]  │ [........]");
-        L.push("  salariés expérimentés (L. 2242-2-1)      │             │");
+        L.push("  Gestion des emplois et des parcours      | [.... ans]  | [........]");
+        L.push("  professionnels (L. 2242-2)               |             │");
+        L.push("  Emploi et conditions de travail des      | [.... ans]  | [........]");
+        L.push("  salariés expérimentés (L. 2242-2-1)      |             │");
       }
       L.push("");
       L.push("Aucune de ces périodicités ne peut excéder quatre ans : L. 2242-11, 1°,");
@@ -992,8 +992,8 @@
       L.push("");
       L.push("Complétez ce document avec les éléments propres à votre entreprise.");
       L.push("");
-      L.push("  thème          │ date       │ lieu");
-      L.push("  ─────────────┼────────────┼──────────");
+      L.push("  thème          | date       | lieu");
+      L.push("  ───────────── |  ─────────── |  ─────────");
 
 
       modeDEmploi(L, "la convocation à la négociation sur la rémunération, avec son ordre du jour");
@@ -1261,8 +1261,8 @@
       L.push("");
       L.push("Complétez ce document avec les éléments propres à votre entreprise.");
       L.push("");
-      L.push("  thème          │ indicateur │ résultat");
-      L.push("  ─────────────┼────────────┼──────────");
+      L.push("  thème          | indicateur | résultat");
+      L.push("  ───────────── |  ─────────── |  ─────────");
 
 
       modeDEmploi(L, "la convocation à la négociation sur l'égalité professionnelle, avec son ordre du jour");
@@ -1540,8 +1540,8 @@
       L.push("");
       L.push("Complétez ce document avec les éléments propres à votre entreprise.");
       L.push("");
-      L.push("  compétence     │ objectif   │ formation");
-      L.push("  ─────────────┼────────────┼──────────");
+      L.push("  compétence     | objectif   | formation");
+      L.push("  ───────────── |  ─────────── |  ─────────");
 
 
       modeDEmploi(L, "la convocation à la négociation triennale sur la gestion des emplois");
@@ -1796,8 +1796,8 @@
       L.push("");
       L.push("Complétez ce document avec les éléments propres à votre entreprise.");
       L.push("");
-      L.push("  domaine        │ action     │ période");
-      L.push("  ─────────────┼────────────┼──────────");
+      L.push("  domaine        | action     | période");
+      L.push("  ───────────── |  ─────────── |  ─────────");
 
 
       modeDEmploi(L, "la convocation à la négociation triennale sur les salariés expérimentés");
@@ -2033,6 +2033,8 @@
       L.push("");
       L.push("Remplissez ce modèle avec les informations de votre entreprise.");
       L.push("");
+      L.push("  type           | délai      | date");
+      L.push("  ────────────── | ────────── | ──────────");
 
 
       modeDEmploi(L, "le traitement d'une demande syndicale d'ouverture de négociation");
@@ -2323,15 +2325,15 @@
       L.push("");
       L.push("ARTICLE 2 - LE CALENDRIER DES RÉUNIONS (L. 2242-14, 1°)");
       L.push("");
-      L.push("  n° │ date            │ heure  │ objet de la réunion");
-      L.push("  ───┼─────────────────┼────────┼──────────────────────────────────────");
-      L.push("   1 │ " + (vide(r.date) ? "[..............]" : jour(r.date, "date")) +
+      L.push("  n° | date            | heure  | objet de la réunion");
+      L.push("  ─── |  ──────────────── |  ─────── |  ─────────────────────────────────────");
+      L.push("   1 | " + (vide(r.date) ? "[..............]" : jour(r.date, "date")) +
         (vide(r.date) ? "" : new Array(Math.max(1, 17 - jour(r.date, "date").length)).join(" ")) +
-        "│ [....] │ ouverture, cadrage");
-      L.push("   2 │ [..............] │ [....] │ [..............................]");
-      L.push("   3 │ [..............] │ [....] │ [..............................]");
-      L.push("   4 │ [..............] │ [....] │ [..............................]");
-      L.push("   5 │ [..............] │ [....] │ clôture : accord ou désaccord");
+        "│ [....] | ouverture, cadrage");
+      L.push("   2 | [..............] | [....] | [..............................]");
+      L.push("   3 | [..............] | [....] | [..............................]");
+      L.push("   4 | [..............] | [....] | [..............................]");
+      L.push("   5 | [..............] | [....] | clôture : accord ou désaccord");
       L.push("");
       L.push("Un calendrier qui se borne à annoncer « des réunions se tiendront au");
       L.push("premier semestre » ne précise rien : le texte veut des dates.");
@@ -2397,10 +2399,10 @@
         ", en application de l'article L. 2242-14, 2°,");
       L.push("du code du travail, dans le cadre de la négociation sur [THÈME].");
       L.push("");
-      L.push("  document remis                          │ nb pages │ signature");
-      L.push("  ────────────────────────────────────────┼──────────┼────────────");
+      L.push("  document remis                          | nb pages | signature");
+      L.push("  ──────────────────────────────────────── |  ───────── |  ───────────");
       for (var i = 0; i < 6; i++)
-        L.push("  [....................................] │ [......] │ [.........]");
+        L.push("  [....................................] | [......] | [.........]");
       L.push("");
       L.push("  Destinataire : [organisation syndicale, nom et qualité du signataire]");
       L.push("  Date et signature : [.................................]");
@@ -2592,10 +2594,10 @@
       L.push("acceptation, ACCOMPAGNÉ DE SES RAISONS. Un « non » sans motif ne remplit");
       L.push("pas la quatrième composante de L. 2242-6.");
       L.push("");
-      L.push("  proposition syndicale        │ réponse │ motifs de la réponse");
-      L.push("  ─────────────────────────────┼─────────┼───────────────────────────");
+      L.push("  proposition syndicale        | réponse | motifs de la réponse");
+      L.push("  ───────────────────────────── |  ──────── |  ──────────────────────────");
       for (var k = 0; k < 5; k++)
-        L.push("  [.........................] │ [.....] │ [.......................]");
+        L.push("  [.........................] | [.....] | [.......................]");
       L.push("");
       L.push("  Date de chaque réponse écrite : [..........................]");
       L.push("");
@@ -2834,11 +2836,11 @@
       L.push("cours, sans trier d'avance : c'est le rapprochement avec les matières");
       L.push("négociées qui trie, pas l'intuition.");
       L.push("");
-      L.push("  date  │ décision              │ matière   │ dans le champ │ urgence");
-      L.push("        │                       │           │ négocié ?     │ établie ?");
-      L.push("  ──────┼───────────────────────┼───────────┼───────────────┼──────────");
+      L.push("  date  | décision              | matière   | dans le champ | urgence");
+      L.push("        |                       |           | négocié ?     | établie ?");
+      L.push("  ────── |  ────────────────────── |  ────────── |  ────────────── |  ─────────");
       for (var i = 0; i < 6; i++)
-        L.push("  [...] │ [...................] │ [.......] │ [OUI / non]   │ [OUI/non]");
+        L.push("  [...] | [...................] | [.......] | [OUI / non]   | [OUI/non]");
       L.push("");
       L.push("  Négociations en cours à ce jour, et matières qu'elles traitent :");
       L.push("  · [Négociation ................ - ouverte le ......... - matières :");
@@ -3066,8 +3068,8 @@
 
       L.push("════ L'ISSUE DE CHACUNE DE VOS NÉGOCIATIONS ════");
       L.push("");
-      L.push("  négociation                              │ issue        │ dépôt");
-      L.push("  ─────────────────────────────────────────┼──────────────┼────────────");
+      L.push("  négociation                              | issue        | dépôt");
+      L.push("  ───────────────────────────────────────── |  ───────────── |  ───────────");
       for (var i = 0; i < negos.length; i++) {
         var n = negoDe(ctx, negos[i][0]);
         var titre = negos[i][1];
@@ -3075,7 +3077,7 @@
         while (court.length < 38) court += " ";
         var iss = vide(n.issue) ? "[non rens.]" : String(n.issue);
         while (iss.length < 12) iss += " ";
-        L.push("  " + court + " │ " + iss.slice(0, 12) + " │ " +
+        L.push("  " + court + " | " + iss.slice(0, 12) + " | " +
           (estOui(n.depot) ? "OUI" : estNon(n.depot) ? "NON" : "[non rens.]"));
       }
       L.push("");
@@ -3154,10 +3156,10 @@
       L.push("C'est la mention que L. 2242-5 exige et qu'on oublie. Elle n'est pas une");
       L.push("menace : elle est ce qui rendra ces mesures opposables.");
       L.push("");
-      L.push("  mesure                          │ champ      │ date d'application");
-      L.push("  ────────────────────────────────┼────────────┼────────────────────");
+      L.push("  mesure                          | champ      | date d'application");
+      L.push("  ──────────────────────────────── |  ─────────── |  ───────────────────");
       for (var k = 0; k < 5; k++)
-        L.push("  [............................] │ [........] │ [................]");
+        L.push("  [............................] | [........] | [................]");
       L.push("");
       L.push("  [Si l'employeur n'entend appliquer aucune mesure unilatérale, l'écrire :");
       L.push("  « L'employeur n'entend appliquer aucune mesure unilatérale à l'issue de");
@@ -3322,8 +3324,8 @@
       L.push("");
       L.push("Complétez avec les propositions de votre entreprise sur chaque thème.");
       L.push("");
-      L.push("  type           │ délai      │ date");
-      L.push("  ─────────────┼────────────┼──────────");
+      L.push("  type           | délai      | date");
+      L.push("  ───────────── |  ─────────── |  ─────────");
 
 
       modeDEmploi(L, "le plan d'action annuel que la loi impose à défaut d'accord sur l'égalité professionnelle");
@@ -3390,10 +3392,10 @@
       L.push("");
       L.push("I.1. Les objectifs qui avaient été fixés pour " + an);
       L.push("");
-      L.push("  objectif fixé                    │ indicateur │ cible │ atteint ?");
-      L.push("  ─────────────────────────────────┼────────────┼───────┼───────────");
+      L.push("  objectif fixé                    | indicateur | cible | atteint ?");
+      L.push("  ───────────────────────────────── |  ─────────── |  ────── |  ──────────");
       for (var i = 0; i < 5; i++)
-        L.push("  [.............................] │ [........] │ [...] │ [........]");
+        L.push("  [.............................] | [........] | [...] | [........]");
       L.push("");
       L.push("I.2. Les mesures qui avaient été prises");
       L.push("");
@@ -3417,22 +3419,22 @@
       L.push("registre unique du personnel. L'application ne les connaît pas et ne les");
       L.push("invente pas : elle vous dit où les prendre.]");
       L.push("");
-      L.push("  domaine                    │ femmes  │ hommes  │ écart │ source");
-      L.push("  ───────────────────────────┼─────────┼─────────┼───────┼──────────");
-      L.push("  Effectifs par catégorie    │ [.....] │ [.....] │ [...] │ [......]");
-      L.push("  Embauches de l'exercice    │ [.....] │ [.....] │ [...] │ [......]");
-      L.push("  Rémunération effective     │ [.....] │ [.....] │ [...] │ [......]");
-      L.push("  Promotions                 │ [.....] │ [.....] │ [...] │ [......]");
-      L.push("  Formation                  │ [.....] │ [.....] │ [...] │ [......]");
-      L.push("  Temps partiel              │ [.....] │ [.....] │ [...] │ [......]");
-      L.push("  Départs                    │ [.....] │ [.....] │ [...] │ [......]");
+      L.push("  domaine                    | femmes  | hommes  | écart | source");
+      L.push("  ─────────────────────────── |  ──────── |  ──────── |  ────── |  ─────────");
+      L.push("  Effectifs par catégorie    | [.....] | [.....] | [...] | [......]");
+      L.push("  Embauches de l'exercice    | [.....] | [.....] | [...] | [......]");
+      L.push("  Rémunération effective     | [.....] | [.....] | [...] | [......]");
+      L.push("  Promotions                 | [.....] | [.....] | [...] | [......]");
+      L.push("  Formation                  | [.....] | [.....] | [...] | [......]");
+      L.push("  Temps partiel              | [.....] | [.....] | [...] | [......]");
+      L.push("  Départs                    | [.....] | [.....] | [...] | [......]");
       L.push("");
       L.push("PARTIE III - LES OBJECTIFS DE PROGRESSION POUR L'ANNÉE À VENIR");
       L.push("");
-      L.push("  objectif                         │ indicateur │ cible │ échéance");
-      L.push("  ─────────────────────────────────┼────────────┼───────┼──────────");
+      L.push("  objectif                         | indicateur | cible | échéance");
+      L.push("  ───────────────────────────────── |  ─────────── |  ────── |  ─────────");
       for (var j = 0; j < 5; j++)
-        L.push("  [.............................] │ [........] │ [...] │ [......]");
+        L.push("  [.............................] | [........] | [...] | [......]");
       L.push("");
       L.push("  [Un objectif sans indicateur n'est pas opérationnel au sens du texte :");
       L.push("  personne, l'an prochain, ne pourra dire s'il a été atteint.]");
@@ -3442,10 +3444,10 @@
       L.push("Le texte exige les trois : les actions, leur nature qualitative ou");
       L.push("quantitative, et l'évaluation de leur coût.");
       L.push("");
-      L.push("  action                     │ objectif  │ pilote  │ échéance │ coût");
-      L.push("  ───────────────────────────┼───────────┼─────────┼──────────┼───────");
+      L.push("  action                     | objectif  | pilote  | échéance | coût");
+      L.push("  ─────────────────────────── |  ────────── |  ──────── |  ───────── |  ──────");
       for (var m = 0; m < 7; m++)
-        L.push("  [.......................] │ [.......] │ [.....] │ [......] │ [....]");
+        L.push("  [.......................] | [.......] | [.....] | [......] | [....]");
       L.push("");
       L.push("  COÛT TOTAL ESTIMÉ DU PLAN : [........] euros.");
       L.push("");
@@ -3866,8 +3868,8 @@
      ce que l'audit ne mesure pas. Trois états, jamais deux. */
   function pointage(L, items, traites, article) {
     var connus = traites.length > 0;
-    L.push("  état    │ n° │ thème");
-    L.push("  ────────┼────┼──────────────────────────────────────────────────────");
+    L.push("  état    | n° | thème");
+    L.push("  ────────| ───| ─────────────────────────────────────────────────────");
     var absents = [];
     for (var i = 0; i < items.length; i++) {
       var marque = items[i][0], num = items[i][1], titre = items[i][2];
@@ -3876,7 +3878,7 @@
       else if (!connus) st = "[   ]   ";
       else if (traites.indexOf(marque) >= 0) st = "TRAITÉ  ";
       else { st = "ABSENT  "; absents.push(num + " - " + titre); }
-      pousserPlie(L, titre, 52, "  " + st + "│ " + num + " │ ", "          │    │ ");
+      pousserPlie(L, titre, 52, "  " + st + "│ " + num + " | ", "          |    | ");
     }
     L.push("");
     if (!connus) {
@@ -3933,8 +3935,8 @@
       L.push("");
       L.push("Déployez chaque point avec les détails propres à votre secteur et votre entreprise.");
       L.push("");
-      L.push("  item          │ description   │ status");
-      L.push("  ──────────────┼───────────────┼─────────");
+      L.push("  item          | description   | status");
+      L.push("  ────────────── |  ────────────── |  ────────");
 
 
       modeDEmploi(L, "le pointage des thèmes légaux et l'ordre du jour de la réunion complémentaire");
@@ -4125,8 +4127,8 @@
       L.push("");
       L.push("Déployez chaque point avec les détails propres à votre entreprise.");
       L.push("");
-      L.push("  item          │ description   │ status");
-      L.push("  ──────────────┼───────────────┼─────────");
+      L.push("  item          | description   | status");
+      L.push("  ────────────── |  ────────────── |  ────────");
 
 
       modeDEmploi(L, "le pointage des huit points de L. 2242-17 et l'ordre du jour complémentaire");
@@ -4364,8 +4366,8 @@
       L.push("elles sont les données qu'une négociation sur l'égalité utilise en");
       L.push("pratique, non la liste légale. Complétez-les depuis votre base réelle.");
       L.push("");
-      L.push("  indicateur     │ femmes %   │ hommes %");
-      L.push("  ─────────────┼────────────┼──────────");
+      L.push("  indicateur     | femmes %   | hommes %");
+      L.push("  ───────────── |  ─────────── |  ─────────");
 
       L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
       L.push("");
@@ -4434,23 +4436,23 @@
       L.push("Remise le " + leJour(dans(aujourd(ctx), 14)) + " [date à confirmer], en application du 2° de");
       L.push("l'article L. 2242-17 du code du travail.");
       L.push("");
-      L.push("  donnée remise                        │ période  │ à jour au │ visa");
-      L.push("  ─────────────────────────────────────┼──────────┼───────────┼──────");
+      L.push("  donnée remise                        | période  | à jour au | visa");
+      L.push("  ───────────────────────────────────── |  ───────── |  ────────── |  ─────");
       L.push("  [Effectifs par sexe et par catégorie");
-      L.push("   professionnelle]                    │ [......] │ [.......] │ [..]");
-      L.push("  [Embauches par sexe et par catégorie]│ [......] │ [.......] │ [..]");
-      L.push("  [Départs par sexe et par motif]      │ [......] │ [.......] │ [..]");
+      L.push("   professionnelle]                    | [......] | [.......] | [..]");
+      L.push("  [Embauches par sexe et par catégorie]│ [......] | [.......] | [..]");
+      L.push("  [Départs par sexe et par motif]      | [......] | [.......] | [..]");
       L.push("  [Rémunération effective comparée par");
-      L.push("   sexe et par catégorie]              │ [......] │ [.......] │ [..]");
-      L.push("  [Promotions par sexe]                │ [......] │ [.......] │ [..]");
+      L.push("   sexe et par catégorie]              | [......] | [.......] | [..]");
+      L.push("  [Promotions par sexe]                | [......] | [.......] | [..]");
       L.push("  [Formation : bénéficiaires et heures");
-      L.push("   par sexe]                           │ [......] │ [.......] │ [..]");
+      L.push("   par sexe]                           | [......] | [.......] | [..]");
       L.push("  [Qualifications et classifications");
-      L.push("   par sexe]                           │ [......] │ [.......] │ [..]");
+      L.push("   par sexe]                           | [......] | [.......] | [..]");
       L.push("  [Conditions de travail, santé et");
-      L.push("   sécurité par sexe]                  │ [......] │ [.......] │ [..]");
-      L.push("  [Temps partiel par sexe]             │ [......] │ [.......] │ [..]");
-      L.push("  [.................................] │ [......] │ [.......] │ [..]");
+      L.push("   sécurité par sexe]                  | [......] | [.......] | [..]");
+      L.push("  [Temps partiel par sexe]             | [......] | [.......] | [..]");
+      L.push("  [.................................] | [......] | [.......] | [..]");
       L.push("");
       L.push("  CES RUBRIQUES SONT ENTRE CROCHETS ET CE N'EST PAS UN OUBLI : ce module");
       L.push("  n'a pas lu l'article L. 2312-36, et il ne prétend donc pas énumérer les");
