@@ -1727,6 +1727,8 @@
       var L = entete(ctx, "Prévention du harcèlement et des agissements sexistes",
         "articles L. 1152-4, L. 1153-5, L. 4121-1, L. 4121-2, 7°, et R. 4121-1 du code du travail");
 
+      L.push(DP.EXEMPLE);
+      L.push("");
       L = L.concat(blocTroisTemps());
       L.push("LA MAILLE DE L'ÉVALUATION");
       L.push("");
@@ -1764,6 +1766,10 @@
         L.push("application produit. Le volet « harcèlement » viendra s'y insérer.");
         L.push("");
       }
+      L.push(TRAIT);
+      L.push("");
+      L.push("VOTRE PROCÉDURE, À COMPLÉTER");
+      L.push("");
       L.push(TRAIT);
       L.push("");
 
@@ -2128,6 +2134,24 @@
       L.push("suffisent. La suffisance des dispositions de prévention s'apprécie AU");
       L.push("FOND, au vu de ce qui s'est réellement passé dans l'entreprise. Ce");
       L.push("document dit ce qui doit exister ; il ne délivre aucun quitus.");
+      L.push("");
+
+      L = L.concat(DP.liens(ctx, ["harcelement", "sst"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("La prévention du harcèlement s'appuie sur quatre obligations :");
+      L.push("");
+      L.push("  1. L'évaluation des risques de harcèlement dans le document unique");
+      L.push("     (L. 4121-1, L. 4121-2, 7°, L. 4121-3 ; R. 4121-1) ;");
+      L.push("  2. L'organisation d'une procédure de signalement (L. 1152-4, L. 1153-5) ;");
+      L.push("  3. La mise en place d'une information et formation adéquates (L. 4121-1) ;");
+      L.push("  4. La prévention des représailles contre celui qui signale (L. 1152-2,");
+      L.push("     L. 1153-2).");
+      L.push("");
+      L.push("Tous ces éléments doivent être ÉCRITS, DATÉS et CONSERVÉS. Un acte");
+      L.push("accompli et non consigné ne sera jamais prouvé.");
+      L.push("");
 
       return L.concat(pied("L. 1152-4, L. 1153-5, L. 1152-1, L. 1153-1, L. 1152-2, " +
         "L. 1153-2, L. 4121-1, L. 4121-2, 7°, L. 4121-3, R. 4121-1, R. 4121-2, " +
@@ -2184,6 +2208,8 @@
       var L = entete(ctx, "Signalement de harcèlement, enquête interne et suites",
         "articles L. 1153-5, L. 1152-4, L. 4121-1, L. 1152-2 et L. 1153-2 du code du travail");
 
+      L.push(DP.EXEMPLE);
+      L.push("");
       L.push("À LIRE AVANT TOUT LE RESTE");
       L.push("");
       L.push("Ce document ne dit pas ce qui s'est passé. Il ne le dira à aucun moment.");
@@ -2227,6 +2253,10 @@
       }
       L.push(TRAIT);
       L.push("");
+      L.push("VOS DOCUMENTS, À COMPLÉTER");
+      L.push("");
+      L.push(TRAIT);
+      L.push("");
 
       L.push(GROS);
       L.push("PIÈCE 1, ACCUSÉ DE RÉCEPTION DU SIGNALEMENT");
@@ -2235,7 +2265,7 @@
       L.push("Le premier écrit du dossier, et celui qui fixe la date à partir de");
       L.push("laquelle tout se comptera.");
       L.push("");
-      L = L.concat(teteLettre(ctx,
+      L = L.concat(teteLettre(ctx, undefined,
         ["[NOM, PRÉNOM de la personne qui a signalé]", "[fonction et service]"], true));
       L.push("Objet : réception de votre signalement");
       L.push("");
@@ -2384,7 +2414,7 @@
       L.push("");
       L.push("Un même modèle pour les trois qualités, avec la variante indiquée.");
       L.push("");
-      L = L.concat(teteLettre(ctx,
+      L = L.concat(teteLettre(ctx, undefined,
         ["[NOM, PRÉNOM]", "[fonction et service]"], false));
       L.push("Objet : audition dans le cadre d'une enquête interne");
       L.push("");
@@ -2824,7 +2854,7 @@
       L.push("");
       L.push("A, À LA PERSONNE QUI A SIGNALÉ");
       L.push("");
-      L = L.concat(teteLettre(ctx,
+      L = L.concat(teteLettre(ctx, undefined,
         ["[NOM, PRÉNOM]", "[fonction et service]"], true));
       L.push("Objet : clôture de l'instruction de votre signalement du [DATE]");
       L.push("");
@@ -2853,7 +2883,7 @@
       L.push("");
       L.push("B, À LA PERSONNE MISE EN CAUSE");
       L.push("");
-      L = L.concat(teteLettre(ctx,
+      L = L.concat(teteLettre(ctx, undefined,
         ["[NOM, PRÉNOM]", "[fonction et service]"], true));
       L.push("Objet : clôture de l'enquête interne ouverte le [DATE]");
       L.push("");
@@ -2923,6 +2953,24 @@
       L.push("Au " + leJour(dans(d0, 84)) + " puis au " + leJour(dans(d0, 175)) + " -");
       L.push("les points de suivi avec la personne qui a signalé. C'est l'étape que");
       L.push("l'on saute, et c'est elle qui prouve qu'on a mis un terme.");
+      L.push("");
+
+      L = L.concat(DP.liens(ctx, ["harcelement", "sst"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Une enquête interne efficace repose sur quelques principes simples :");
+      L.push("");
+      L.push("  1. CONFIDENTIALITÉ : l'information circule entre les seules personnes");
+      L.push("     qui doivent en connaître ;");
+      L.push("  2. IMPARTIALITÉ : l'enquête est menée par une personne ou un binôme sans");
+      L.push("     intérêt personnel dans l'affaire ;");
+      L.push("  3. ABSENCE DE PRÉJUGÉ : les faits ne sont jamais qualifiés avant la clôture");
+      L.push("     de l'enquête ;");
+      L.push("  4. PROTECTION : aucune mesure défavorable ne peut frapper celui qui a");
+      L.push("     signalé ou témoigné ;");
+      L.push("  5. DOCUMENTATION : tout s'écrit, se date, se conserve.");
+      L.push("");
 
       return L.concat(pied("L. 1153-5, L. 1152-4, L. 1152-1, L. 1153-1, L. 1152-2, " +
         "L. 1153-2, L. 4121-1, L. 1155-2, R. 4121-2, D. 1151-1",
