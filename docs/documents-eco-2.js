@@ -138,24 +138,16 @@
   /* Un tableau en texte simple : le document se colle dans un courriel, se copie
      dans Word et s'imprime sans rien perdre. */
   function tableau(L, entetes, lignes) {
-    var larg = entetes.map(function (e, i) {
-      var m = String(e).length;
-      lignes.forEach(function (l) { m = Math.max(m, String(l[i] == null ? "" : l[i]).length); });
-      return Math.min(m, 44);
-    });
-    var ligne = function (cells) {
-      return "  " + cells.map(function (c, i) {
-        var s = String(c == null ? "" : c);
-        if (s.length > larg[i]) s = s.slice(0, larg[i] - 1) + "…";
-        return pad(s, larg[i]);
-      }).join("  ").replace(/\s+$/, "");
-    };
-    L.push(ligne(entetes));
-    L.push("  " + larg.map(function (n) {
-      var s = ""; while (s.length < n) s += "─"; return s;
-    }).join("  "));
-    if (!lignes.length) L.push(ligne(entetes.map(function () { return "[  ]"; })));
-    else lignes.forEach(function (l) { L.push(ligne(l)); });
+    if (entetes && entetes.length > 0) {
+      L.push(entetes.join(" | "));
+    }
+    if (lignes && lignes.length > 0) {
+      lignes.forEach(function (l) {
+        L.push(l.join(" | "));
+      });
+    } else if (entetes) {
+      L.push(entetes.map(function () { return "[  ]"; }).join(" | "));
+    }
   }
 
   function titre(L, t) {
@@ -343,6 +335,10 @@
     "courrier de transmission.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var eff = effectifDe(ctx), effG = effectifGroupeDe(ctx);
       var socs = liste(f.societes), re = liste(f.resultatExploitation);
       var tres = liste(f.tresorerie), rg = liste(f.resultatGroupe);
@@ -685,6 +681,26 @@
         "indemnité « qui ne peut être inférieure aux salaires des six derniers mois »\n" +
         "(L. 1235-11). L'annulation pour un autre motif ouvre l'indemnité de\n" +
         "L. 1235-16, elle aussi non inférieure aux salaires des six derniers mois.");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -696,6 +712,10 @@
     "d'une négociation et l'information du comité.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var v = voie(f), rs = reunions(f), dr = derniereReunion(f);
       var d0 = aujourd(ctx);
 
@@ -980,6 +1000,26 @@
         "Ce qui se joue : tant que la voie n'est pas arrêtée, le calendrier ne l'est\n" +
         "pas non plus, et une notification mal datée frappe la rupture de nullité\n" +
         "(L. 1233-39 ; L. 1235-10).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -991,6 +1031,10 @@
     "remettre au conseil de l'entreprise.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var p = f.pse || {};
       var dDec = p.dateDecisionAdmin, dNot = f.dateNotification;
       var partiTrop = estDate(dDec) && estDate(dNot) && dNot <= dDec;
@@ -1272,6 +1316,26 @@
         "s'appliquent pas : L. 1233-58, II, écrit alors une irrégularité et une\n" +
         "indemnité « qui ne peut être inférieure aux salaires des six derniers mois »,\n" +
         "L. 1235-16 ne s'appliquant pas.");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -1298,6 +1362,10 @@
     "tableau au comité et à l'administration.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var p = f.pse || {};
       var d0 = aujourd(ctx), dr = derniereReunion(f);
       var sansChiffre = MESURES.filter(function (m) {
@@ -1555,6 +1623,26 @@
         "licenciement est nulle » (L. 1235-10) ; le juge peut ordonner la poursuite du\n" +
         "contrat ou la réintégration, et à défaut octroie une indemnité « qui ne peut\n" +
         "être inférieure aux salaires des six derniers mois » (L. 1235-11).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -1565,6 +1653,10 @@
     "procès-verbal, et le constat à établir si une réunion s'est tenue sans le plan.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var pp = pieceDe(f, "pse");
       var datePlan = pp && pp.date ? pp.date : null;
       var dConv = f.dateInfoCSE;
@@ -1852,6 +1944,26 @@
         "expressément (L. 1233-57-2, 2° ; L. 1233-57-3). Elle expose au refus de\n" +
         "validation ou d'homologation, et le licenciement prononcé en l'absence de\n" +
         "décision est nul (L. 1235-10).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -1863,6 +1975,10 @@
     "le passage au document unilatéral et le calendrier qui en découle.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var p = f.pse || {};
       var s = nbf(p.suffrages);
       var v = voie(f), dr = derniereReunion(f), d0 = aujourd(ctx);
@@ -2087,6 +2203,26 @@
         "« le licenciement intervenu en l'absence de toute décision relative à la\n" +
         "validation ou à l'homologation ou alors qu'une décision négative a été rendue\n" +
         "est nul » (L. 1235-10).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -2119,6 +2255,10 @@
     "conduite à tenir en cas de refus.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var prot = liste(f.salariesProteges).map(function (x) {
         var o = x || {};
         return { nom: txt(o.nom), mandat: txt(o.mandat), a: sensAutorisation(o.autorisation) };
@@ -2450,6 +2590,26 @@
         "demande d'autorisation et la conséquence d'un licenciement notifié sans elle\n" +
         "ne sont lus dans aucun corpus de l'application. Ils ne sont ni reproduits ni\n" +
         "paraphrasés, et aucune sanction n'est annoncée de ce chef.");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -2460,6 +2620,10 @@
     "mission au conseil, et la décision écrite de différer ou non la notification.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var sus = liste(f.salariesSuspendus);
       var dNot = f.dateNotification, d0 = aujourd(ctx);
 
@@ -2697,6 +2861,26 @@
         "Ce qui se joue : l'application ne le dit pas, parce qu'elle ne l'a pas lu.\n" +
         "C'est précisément pourquoi ce document commande un examen extérieur au lieu\n" +
         "de conclure.");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -2711,6 +2895,10 @@
     "article ; et la note de régime à verser au dossier.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var c = comptes(f), r = regime(f);
       var projet = nbf(f.nbLicenciements), recents = nbf(f.licenciementsRecents30j);
       var refus = nbf(f.refusModification);
@@ -3022,6 +3210,26 @@
         "l'homologation […] est nul » (L. 1235-10), et le juge peut ordonner la\n" +
         "poursuite du contrat ou la réintégration, à défaut une indemnité non\n" +
         "inférieure aux salaires des six derniers mois (L. 1235-11).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -3033,6 +3241,10 @@
     "et la note de régime qui en découle.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var c = comptes(f);
       var refus = nbf(f.refusModification);
       var eff = effectifDe(ctx), d0 = aujourd(ctx);
@@ -3229,6 +3441,26 @@
         "validation […] ou d'homologation […] en raison d'une absence ou d'une\n" +
         "insuffisance de plan de sauvegarde de l'emploi mentionné à l'article\n" +
         "L. 1233-61, la procédure de licenciement est nulle » (L. 1235-10).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -3240,6 +3472,10 @@
     "le régime du nouveau projet.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var trois = nbf(f.licenciements3moisGlissants);
       var c = comptes(f);
       var eff = effectifDe(ctx), d0 = aujourd(ctx);
@@ -3488,6 +3724,26 @@
         "sauvegarde de l'emploi était par ailleurs dû et n'a pas été établi, « le\n" +
         "licenciement intervenu en l'absence de toute décision relative à la\n" +
         "validation ou à l'homologation […] est nul » (L. 1235-10).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -3594,6 +3850,10 @@
     "l'audit.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var an = anomalies(f);
       var lisib = an.filter(function (x) { return x.nature === "lisibilité"; });
       var coher = an.filter(function (x) { return x.nature === "cohérence"; });
@@ -3779,6 +4039,26 @@
         "Ce qui se joue : rien de juridique, et c'est bien le problème. Une donnée\n" +
         "impossible ne se sanctionne pas ; elle fausse tout ce qui en dépend, sans que\n" +
         "rien ne le signale ailleurs que dans ce contrôle.");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -3799,6 +4079,10 @@
     "des pièces qui les établissent.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var d0 = aujourd(ctx), eff = effectifDe(ctx), n = nbLic(f);
       var enPC = f.procedureCollective === true;
       var type = txt(f.typeProcedure), dJug = f.dateJugement, qual = txt(f.qualiteAuteur);
@@ -4062,6 +4346,26 @@
         "l'employeur qui ne peut être inférieure aux salaires des six derniers mois »\n" +
         "(même texte) ; les deux premiers alinéas de L. 1235-10 ne sont, eux, pas\n" +
         "applicables aux entreprises en redressement ou liquidation judiciaires.");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -4073,6 +4377,10 @@
     "par l'article L. 1233-60, et l'ordre dans lequel ces actes se placent.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var d0 = aujourd(ctx);
       var type = txt(f.typeProcedure), qual = txt(f.qualiteAuteur);
       var ord = txt(f.ordonnanceJugeCommissaire);
@@ -4396,6 +4704,26 @@
         "peine d'irrégularité, à la rupture des contrats de travail avant la\n" +
         "notification de la décision favorable de validation ou d'homologation »\n" +
         "(L. 1233-58, II).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -4407,6 +4735,10 @@
     "établir avec le liquidateur avant toute notification.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var d0 = aujourd(ctx);
       var type = txt(f.typeProcedure), dJug = f.dateJugement, dNot = f.dateNotification;
       var r = regime(f);
@@ -4683,6 +5015,26 @@
         "préavis restent à la charge de la procédure, et les salariés ne sont pas\n" +
         "payés par la garantie. Ce n'est pas une irrégularité de procédure : c'est une\n" +
         "charge.");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
@@ -4698,6 +5050,10 @@
     "à présenter avant la fin de la procédure d'information et de consultation.",
     function (ctx) {
       var f = (ctx && ctx.fiche) || {}, L = [];
+        L.push(A.EXEMPLE);
+        L.push("");
+        L.push("EXEMPLE");
+        L.push("");
       var d0 = aujourd(ctx), eff = effectifDe(ctx);
       var ferme = f.fermetureEtablissement;
       var rech = txt(f.rechercheRepreneur);
@@ -5034,6 +5390,26 @@
         "L. 1233-57-3). Le refus de validation ou d'homologation est donc le premier\n" +
         "risque, et le licenciement prononcé en l'absence de décision est nul\n" +
         "(L. 1235-10).");
+        L.push("À COMPLÉTER");
+
+        L.push("");
+
+        L.push("LES RÈGLES");
+
+        L.push("");
+
+        L.push("Voir le fondement du contrôle.");
+
+        L.push("");
+
+        L = L.concat(A.liens(ctx, ["economique"]));
+
+        
+
+        pied(L, ["L. 1233-57-3"]);
+
+        
+
       return L.join("\n");
     });
 
