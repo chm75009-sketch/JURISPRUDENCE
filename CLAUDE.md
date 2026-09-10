@@ -29,6 +29,13 @@ demandé de répéter, j'ai encore déformé. Puis, une troisième fois, j'ai é
 « autant de vagues qu'il en faut pour approcher le nombre » : encore une
 réduction. Mille, c'est mille.
 
+Cas mesuré le 9 septembre 2026 - contrats BLU BLU. La note manuscrite du 31 août
+donnait six jours de travail, du mardi au dimanche. Les six contrats ont été écrits
+sur cinq jours, pour tenir dans les 35 heures demandées : une décision prise à la
+place de l'utilisatrice, sans que rien dans le dossier ne l'indique. Quand la demande
+et une pièce ne se concilient pas, on écrit ce que la pièce dit et on signale l'écart
+en une phrase ; on ne tranche pas.
+
 ## Contrôle avant chaque envoi — cinq questions, dans cet ordre
 
 Ce bloc existe parce que les consignes qui suivent sont connues et enfreintes
