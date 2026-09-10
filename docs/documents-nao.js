@@ -616,6 +616,26 @@
     return L;
   }
 
+
+  function exempleDe(ctx) {
+    var s = secteurDe(ctx), p = (ctx && ctx.profil) || {}, d0 = aujourd(ctx);
+    var e = effectifDe(ctx);
+    if (e === null) e = 62;
+    return {
+      secteur: s,
+      nom: String(p.denomination || p.entreprise || "BLU BLU SARL").trim(),
+      adresse: String(p.adresse || "12 rue des Lilas, 95100 Argenteuil").trim(),
+      ville: villeDe(ctx) === "[lieu]" ? "Argenteuil" : villeDe(ctx),
+      effectif: e,
+      responsable: String(p.responsable || "Madame Léa MARTIN, gérante").trim(),
+      d0: d0
+    };
+  }
+
+  function secteurDe(ctx) {
+    return (P(ctx).secteur || "services");
+  }
+
   /* ══════════════════════════════════════════════════════════════════════
      LES GÉNÉRATEURS
      ══════════════════════════════════════════════════════════════════════ */
@@ -638,8 +658,45 @@
             "écrit du régime supplétif de L. 2242-13, le dépôt et le calendrier.",
     produire: function (ctx) {
       var acc = bloc(ctx, "accordMethode"), s = seuil300(ctx);
-      var L = entete(ctx, "Le calendrier des négociations obligatoires",
-        "articles L. 2242-10 à L. 2242-13 du code du travail");
+      var ex = exempleDe(ctx);
+      var d0 = aujourd(ctx);
+      var L = [];
+
+      // PART 1: DP.EXEMPLE bandeau
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("CALENDRIER DES NÉGOCIATIONS OBLIGATOIRES - EXEMPLE");
+      L.push("");
+      L.push(ex.nom.toUpperCase());
+      L.push(ex.adresse);
+      L.push("Exemple d'un accord de méthode");
+      L.push("");
+      L.push("ARTICLE 2 - LES THÈMES ET LEUR PÉRIODICITÉ (L. 2242-11, 1°)");
+      L.push("");
+      L.push("  thème                                    | périodicité | prochaine");
+      L.push("  ─────────────────────────────────────────┼─────────────┼───────────");
+      L.push("  Rémunération, temps de travail et        | 1 an        | " + leJour(dans(d0, 365)));
+      L.push("  partage de la valeur ajoutée (L. 2242-1, |             |");
+      L.push("  1°)                                      |             |");
+      L.push("  Égalité professionnelle femmes-hommes et | 1 an        | " + leJour(dans(d0, 365)));
+      L.push("  qualité de vie et des conditions de      |             |");
+      L.push("  travail (L. 2242-1, 2°)                  |             |");
+      if (!s.connu || s.atteint) {
+        L.push("  Gestion des emplois et des parcours      | 3 ans       | " + leJour(dans(d0, 1095)));
+        L.push("  professionnels (L. 2242-2)               |             |");
+        L.push("  Emploi et conditions de travail des      | 3 ans       | " + leJour(dans(d0, 1095)));
+        L.push("  salariés expérimentés (L. 2242-2-1)      |             |");
+      }
+      L.push("");
+      L.push("");
+
+      // PART 2: Restructured content with À COMPLÉTER
+      L.push("VOTRE CALENDRIER, À COMPLÉTER");
+      L.push("");
+      L.push("Même structure que l'exemple. Remplissez chaque champ selon votre calendrier réel.");
+      L.push("");
+      L = L.concat(entete(ctx, "Le calendrier des négociations obligatoires",
+        "articles L. 2242-10 à L. 2242-13 du code du travail"));
 
       modeDEmploi(L, "la pièce qui arrête le calendrier de vos négociations obligatoires");
 
@@ -879,6 +936,16 @@
         suite("contrôles de périodicité ne concluent rien avant ce jour."),
       ]));
 
+      L = L.concat(DP.liens(ctx, ["nao", "calendrier"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Le calendrier de la négociation obligatoire obéit à deux régimes : l'accord de");
+      L.push("méthode de L. 2242-10 et L. 2242-11, ou, en son absence, le régime supplétif");
+      L.push("de L. 2242-13. Aucun autre calendrier n'est possible : la négociation");
+      L.push("obligatoire ne se négocie pas à des périodes librement choisies.");
+      L.push("");
+
       return L.concat(pied("L. 2242-10, L. 2242-11, L. 2242-12, L. 2242-13 ; " +
         ARRETS.niveauxParAccord.ref,
         ["Les articles L. 2231-6 et D. 2231-2, relatifs au dépôt, sont nommés parce",
@@ -1114,6 +1181,16 @@
         ech(ctx, 77, "clôture : accord signé, ou procès-verbal de désaccord établi."),
         ech(ctx, 92, "dépôt de l'accord ou du procès-verbal, et récépissé au dossier."),
       ]));
+
+      L = L.concat(DP.liens(ctx, ["nao", "remuneration"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("La négociation sur la rémunération porte sur les quatre thèmes énumérés");
+      L.push("par l'article L. 2242-15 : les salaires effectifs, l'organisation du temps");
+      L.push("de travail, l'intéressement et l'épargne salariale, et le suivi des mesures");
+      L.push("de suppression des écarts de rémunération entre les femmes et les hommes.");
+      L.push("");
 
       return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-5, L. 2242-6, L. 2242-13, " +
         "L. 2242-14, L. 2242-15, L. 2242-16, L. 2242-7, L. 2243-1 ; " +
@@ -1364,6 +1441,17 @@
         suite("établi ET déposé. Un plan non déposé ne couvre pas l'entreprise."),
       ]));
 
+      L = L.concat(DP.liens(ctx, ["nao", "egalite"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("La négociation sur l'égalité professionnelle porte sur les huit points");
+      L.push("énumérés par l'article L. 2242-17. Elle s'appuie sur les données de la base");
+      L.push("de données économiques, sociales et environnementales. À défaut d'accord,");
+      L.push("l'entreprise établit un plan d'action annuel destiné à assurer l'égalité");
+      L.push("professionnelle.");
+      L.push("");
+
       return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-5, L. 2242-8, L. 2242-13, " +
         "L. 2242-14, L. 2242-17, L. 2242-18, L. 2242-19, L. 2243-1",
         ["Les articles L. 2312-36, L. 6315-1, L. 5212-1 et suivants, L. 2143-3,",
@@ -1588,6 +1676,14 @@
         suite("compter de l'engagement de cette négociation, et non de sa clôture."),
       ]));
 
+      
+      L = L.concat(DP.liens(ctx, ["nao", "emplois"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Dans les entreprises d'au moins trois cents salariés, la négociation sur la gestion des emplois et des parcours professionnels est due tous les trois ans. Elle porte sur six thèmes énumérés par l'article L. 2242-20.");
+      L.push("");
+
       return L.concat(pied("L. 2242-2, L. 2242-5, L. 2242-13, L. 2242-14, L. 2242-20, " +
         "L. 2242-21, L. 2243-2 ; " + ARRETS.representativite.ref,
         ["Les articles L. 2331-1, L. 2341-1, L. 2341-2, L. 2254-2, L. 1233-21,",
@@ -1804,6 +1900,14 @@
         "  · Puis, tous les trois ans (L. 2242-13, 4°), à compter de l'engagement.",
       ]));
 
+      
+      L = L.concat(DP.liens(ctx, ["nao", "experimentes"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Dans les entreprises d'au moins trois cents salariés, la négociation sur l'emploi et les conditions de travail des salariés expérimentés est due tous les trois ans.");
+      L.push("");
+
       return L.concat(pied("L. 2242-2-1, L. 2242-4, L. 2242-5, L. 2242-6, L. 2242-13, " +
         "L. 2242-14 ; " + ARRETS.finDesNegociations.ref,
         ["L'article L. 2331-1, auquel L. 2242-2-1 renvoie pour la notion de groupe,",
@@ -1999,6 +2103,14 @@
         suite("CONVOCATION qui doit être faite dans les quinze jours, non la"),
         suite("réunion elle-même. Mais elle ne se repousse pas indéfiniment."),
       ]));
+
+      
+      L = L.concat(DP.liens(ctx, ["nao", "demande"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("La demande d'ouverture d'une négociation obligatoire est possible après un délai fixé de non-engagement de l'employeur : douze mois pour les annuelles, trente-six pour les triennales.");
+      L.push("");
 
       return L.concat(pied("L. 2242-13, dernier alinéa ; L. 2242-14 ; L. 2243-1",
         ["Les deux délais sont ceux du texte : huit jours pour la transmission,",
@@ -2229,6 +2341,14 @@
         suite("convoquées."),
         ech(ctx, 30, "remise des informations à la date annoncée, contre décharge."),
       ]));
+
+      
+      L = L.concat(DP.liens(ctx, ["nao", "loyalte"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("L'engagement sérieux et loyal impose convocation, lieu, calendrier, informations et réponses motivées aux propositions syndicales.");
+      L.push("");
 
       return L.concat(pied("L. 2242-6, L. 2242-14",
         ["Aucune peine n'est annoncée dans ce document : aucun texte capté par ce",
@@ -2480,6 +2600,14 @@
         suite("non l'accord lui-même."),
       ]));
 
+      
+      L = L.concat(DP.liens(ctx, ["nao", "pv"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Le procès-verbal de première réunion constate le respect des conditions de l'engagement sérieux et loyal.");
+      L.push("");
+
       return L.concat(pied("L. 2242-6, L. 2242-14, L. 2242-15, L. 2242-7",
         ["L'article L. 2231-6, auquel L. 2242-6 renvoie pour les conditions du dépôt,",
          "n'a PAS été lu à la source par ce module : il est nommé, et les modalités",
@@ -2699,6 +2827,14 @@
         suite("unilatérale dans les matières traitées. La négociation ne prend pas"),
         suite("fin avant lui."),
       ]));
+
+      
+      L = L.concat(DP.liens(ctx, ["nao", "unilateral"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Tant que la négociation obligatoire est en cours, l'employeur ne peut arrêter de décisions unilatérales que si l'urgence le justifie.");
+      L.push("");
 
       return L.concat(pied("L. 2242-4, L. 2242-5, L. 2242-6 ; " +
         ARRETS.finDesNegociations.ref,
@@ -2981,6 +3117,14 @@
         suite("négociation est en cours et L. 2242-4 vous lie."),
         ech(ctx, 30, "le récépissé est au dossier."),
       ]));
+
+      
+      L = L.concat(DP.liens(ctx, ["nao", "desaccord"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("À l'issue de la négociation, si aucun accord n'est conclu, un procès-verbal de désaccord est établi et donne lieu à dépôt.");
+      L.push("");
 
       return L.concat(pied("L. 2242-4, L. 2242-5, L. 2242-6, L. 2242-8, L. 2242-14, " +
         "R. 2242-1 ; " + ARRETS.finDesNegociations.ref + " ; " + ARRETS.engagerNonConclure.ref,
@@ -3272,6 +3416,14 @@
         suite("préalable du plan suivant. Ouvrez le suivi dès maintenant."),
       ]));
 
+      
+      L = L.concat(DP.liens(ctx, ["nao", "egalite"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("L'égalité professionnelle est un thème obligatoire de la négociation annuelle. Les huit points de l'article L. 2242-17 en définissent le champ.");
+      L.push("");
+
       return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17",
         ["Les articles L. 1142-8 et L. 1142-9, nommés par L. 2242-8, et les décrets",
          "auxquels L. 2242-8 et L. 2242-9 renvoient, n'ont PAS été lus à la source par",
@@ -3484,6 +3636,14 @@
         ech(ctx, 60, "si des mesures de correction sont dues, elles sont définies et"),
         suite("calendrées : leur absence est un manquement distinct."),
       ]));
+
+      
+      L = L.concat(DP.liens(ctx, ["nao", "egalite", "indicateurs"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Les écarts de rémunération se mesurent par les indicateurs des articles L. 1142-8 et L. 1142-9. Au-delà de 10%, un plan d'action est requis.");
+      L.push("");
 
       return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17",
         ["Les articles L. 1142-8 et L. 1142-9 sont NOMMÉS parce que L. 2242-8 les",
@@ -3726,6 +3886,14 @@
         suite("notifié aux organisations syndicales."),
       ]));
 
+      
+      L = L.concat(DP.liens(ctx, ["nao", "remuneration"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Le contenu de la négociation sur la rémunération est tiré de l'article L. 2242-15, qui énumère quatre thèmes obligatoires.");
+      L.push("");
+
       return L.concat(pied("L. 2242-3, L. 2242-6, L. 2242-15, L. 2242-16",
         ["Aucune peine n'est annoncée pour l'omission d'un thème : aucun texte capté",
          "n'en attache à L. 2242-15. La pénalité de L. 2242-7 ne vise que l'obligation",
@@ -3892,6 +4060,14 @@
         suite("économique, puis charte de l'employeur sur le droit à la"),
         suite("déconnexion. Ce n'est pas une option."),
       ]));
+
+      
+      L = L.concat(DP.liens(ctx, ["nao", "emplois"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Le contenu de la négociation sur la gestion des emplois est tiré de l'article L. 2242-20, qui énumère six thèmes obligatoires.");
+      L.push("");
 
       return L.concat(pied("L. 2242-6, L. 2242-8, L. 2242-17, L. 2242-18, L. 2242-19",
         ["Les articles L. 2312-36, L. 6315-1, L. 5212-1 et suivants, L. 2143-3,",
@@ -4109,6 +4285,14 @@
         ech(ctx, 21, "réunion : les données sont présentées et discutées."),
         ech(ctx, 23, "le procès-verbal porte la mention, et le bordereau y est annexé."),
       ]));
+
+      
+      L = L.concat(DP.liens(ctx, ["nao", "experimentes"]));
+
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Le contenu de la négociation sur les salariés expérimentés n'est détaillé que par l'article L. 2242-2-1.");
+      L.push("");
 
       return L.concat(pied("L. 2242-6, L. 2242-17, 2°",
         ["L'article L. 2312-36, auquel le 2° de L. 2242-17 renvoie, N'EST PAS dans le",
