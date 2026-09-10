@@ -1724,10 +1724,270 @@
       var cse = f.cse || {};
       var d0 = aujourd(ctx);
       var au250 = seuil(ctx, 250);
+      var ex = exempleDe(ctx);
       var L = entete(ctx, "Prévention du harcèlement et des agissements sexistes",
         "articles L. 1152-4, L. 1153-5, L. 4121-1, L. 4121-2, 7°, et R. 4121-1 du code du travail");
 
+      /* Le corps des quatre pièces, écrit une fois : rempli pour l'exemple,
+         à crochets pour le document à compléter. */
+      function corps(E) {
+        var C = [];
+        var nom = E ? E.nom : nomDe(ctx);
+        var sig = E ? E.signataire : signataire(ctx);
+        var ville = E ? E.ville : lieu(ctx);
+        var R = E ? E.referent : null;
+        var due = E ? E.au250 : au250;
+        var avecCSE = E ? true : !estNon(cse.existe);
+        var dateVolet = X(E, leJour(dans(d0, 21)), "DATE");
+        var dateProc = X(E, leJour(dans(d0, 30)), "DATE");
+        var recoit = X(E, E && E.recoit, "FONCTION, destinataire principal");
+        var remplacant = X(E, E && E.remplacant, "FONCTION, destinataire de remplacement");
+        var adresseSignalement = X(E, R && R.adresse, "ADRESSE POSTALE / ADRESSE ÉLECTRONIQUE DÉDIÉE");
+        var refCSE = X(E, E && E.cse.referent + ", " + E.cse.qualite, "NOM, PRÉNOM du référent du comité");
+
+        C.push("PIÈCE 1, VOLET « HARCÈLEMENT ET AGISSEMENTS SEXISTES » DU DOCUMENT UNIQUE");
+        C.push("");
+        C.push(nom.toUpperCase());
+        C.push("Document unique d'évaluation des risques professionnels, volet inséré le");
+        C.push(dateVolet + ", version " + X(E, "n° 4", "N°") + ". Les unités de travail sont celles");
+        C.push("du reste du document unique, sous la même découpe.");
+        C.push("");
+        var enteteVolet = ["Unité de travail", "Situations exposantes", "Mesures existantes", "Mesures à prendre", "Échéance", "Responsable"];
+        C = C.concat(E ? tableau(enteteVolet, E.grille()) : tableauVide(enteteVolet, 3));
+        C.push("Relevé fait " + X(E,
+          E && "le " + E.lettres(0) + ", sur les postes, avec l'encadrement (" + E.encadrement + ") et le référent, " + R.nom,
+          "le DATE, avec QUI : ceux qui connaissent le travail réel, pas depuis un bureau") + ".");
+        C.push("Prochaine relecture : " + X(E, E && E.lettres(365), "DATE") + ", et après tout signalement,");
+        C.push("qu'une enquête ait ou non conclu à des faits établis.");
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 2, PROCÉDURE INTERNE DE SIGNALEMENT ET DE TRAITEMENT");
+        C.push("");
+        C.push("PROCÉDURE DE SIGNALEMENT ET DE TRAITEMENT DES SITUATIONS DE HARCÈLEMENT");
+        C.push("MORAL, DE HARCÈLEMENT SEXUEL ET D'AGISSEMENTS SEXISTES");
+        C.push(nom);
+        C.push("Version " + X(E, "1", "N°") + ", applicable à compter du " + dateProc);
+        C.push("");
+        C.push("ARTICLE 1, OBJET ET CHAMP");
+        C.push("");
+        C.push("La présente procédure s'applique à toute personne travaillant dans");
+        C.push("l'entreprise ou y intervenant : salariés, apprentis, stagiaires,");
+        C.push("intérimaires, salariés d'entreprises extérieures, candidats à l'embauche.");
+        C.push(X(E, E && "Elle vaut pour l'ensemble de l'activité, " + E.activite,
+          "ADAPTER À VOTRE ORGANISATION : sites, chantiers, télétravail, déplacements") + ".");
+        C.push("Elle porte sur les faits définis aux articles L. 1152-1 (harcèlement");
+        C.push("moral) et L. 1153-1 (harcèlement sexuel) du code du travail, ainsi que sur");
+        C.push("les agissements sexistes.");
+        C.push("");
+        C.push("ARTICLE 2, CE QUE LA LOI DÉFINIT");
+        C.push("");
+        C = C.concat(blocDefinitions(E));
+        C.push("ARTICLE 3, QUI PEUT SIGNALER, ET COMMENT");
+        C.push("");
+        C.push("Peut signaler : la personne qui s'estime concernée, toute personne qui a");
+        C.push("été témoin de faits, un membre de la délégation du personnel du comité");
+        C.push("social et économique, le référent du comité, le médecin du travail.");
+        C.push("");
+        C = C.concat(tableau(["Voie", "À qui", "Ce qui en est fait"], [
+          ["Par écrit", adresseSignalement, "daté à réception, consigné au registre des signalements"],
+          ["Oralement", recoit, "écrit aussitôt, relu et signé par celui qui l'a fait"],
+          ["En main propre au référent", X(E, R && R.nom + ", " + R.tel, "NOM du référent, NUMÉRO, ou autre voie que vous ouvrez : ligne d'écoute, formulaire"), "transmis le jour même au destinataire principal"],
+        ]));
+        C.push("Aucune forme n'est imposée à celui qui signale. Un signalement n'a pas à");
+        C.push("être motivé, daté par heure, ni accompagné de preuves : c'est l'enquête");
+        C.push("qui établira, pas le signalement.");
+        C.push("");
+        C.push("ARTICLE 4, QUI REÇOIT");
+        C.push("");
+        var lignesRecoit = [
+          ["Destinataire principal", recoit, "tout signalement"],
+          ["Destinataire de remplacement", remplacant, "lorsque le précédent est personnellement concerné, proche des personnes en cause, ou empêché"],
+        ];
+        if (E || due === true || due === null) {
+          lignesRecoit.push(["Référent harcèlement sexuel et agissements sexistes de l'employeur (L. 1153-5-1)",
+            X(E, R && R.nom + ", " + R.fonction, "NOM, PRÉNOM, FONCTION" + (due === null ? ", s'il a été désigné" : "")),
+            "oriente, informe et accompagne ; peut être saisi directement"]);
+        }
+        if (avecCSE) {
+          lignesRecoit.push(["Référent harcèlement du comité social et économique (L. 2314-1)", refCSE, "peut être saisi directement"]);
+        }
+        C = C.concat(tableau(["Destinataire", "Nom et fonction", "Quand"], lignesRecoit));
+        C.push("Règle de déport : celui qui est en cause, ou proche des personnes en");
+        C.push("cause, ne reçoit pas, n'enquête pas et ne décide pas.");
+        C.push("");
+        C.push("ARTICLE 5, LE CIRCUIT, ÉTAPE PAR ÉTAPE");
+        C.push("");
+        C = C.concat(tableau(["Étape", "Ce qui est fait", "Qui", "Délai", "Écrit conservé"], [
+          ["1. Réception et accusé", "signalement daté à réception, consigné au registre ; accusé de réception écrit remis à son auteur, rappelant la protection dont il bénéficie et indiquant qui suit le dossier", recoit, X(E, "2 jours ouvrés", "X jours ouvrés, proposé : 2"), "registre, accusé de réception"],
+          ["2. Mesures immédiates", "sans attendre l'enquête, mesures propres à faire cesser les faits allégués et à protéger la personne : horaires, affectations, suspension des contacts, orientation vers le médecin du travail", X(E, E && E.signataire, "FONCTION"), X(E, "3 jours ouvrés", "X jours ouvrés, proposé : 3"), "décision écrite"],
+          ["3. Décision d'enquêter", "décision écrite fixant l'auteur de l'enquête, son périmètre et son calendrier ; ne pas enquêter est une décision, qui s'écrit et se motive", X(E, E && E.signataire, "FONCTION"), X(E, "5 jours ouvrés", "X jours ouvrés, proposé : 5"), "décision d'enquête"],
+          ["4. Enquête", "auditions de la personne qui signale, de la personne mise en cause et des témoins utiles ; recueil des pièces (trames : SST-CTL-HAR-05)", X(E, "binôme désigné par la décision d'enquête", "enquêteurs désignés"), X(E, "4 à 6 semaines", "X semaines, proposé : 4 à 6"), "comptes rendus signés, pièces cotées"],
+          ["5. Rapport", "rapport écrit et daté : ce qui a été recherché, constaté, et ce qui ne l'a pas été", "les enquêteurs", "à la fin de l'enquête", "rapport"],
+          ["6. Suites", "mesures pour mettre un terme aux faits ; sanction disciplinaire s'ils sont établis, selon la procédure disciplinaire ; mesures d'organisation", X(E, E && E.signataire, "FONCTION"), X(E, "10 jours ouvrés après le rapport", "X jours ouvrés après le rapport, proposé : 10"), "décision, courriers"],
+          ["7. Retour aux personnes", "la personne qui a signalé et la personne mise en cause sont informées par écrit de la clôture et du sens de la décision", X(E, E && E.signataire, "FONCTION"), "avec les suites", "courriers de clôture"],
+          ["8. Suivi", "point avec la personne qui a signalé, pour vérifier que les faits ont cessé et qu'aucune mesure défavorable n'a suivi", recoit, X(E, "à 4 semaines puis à 3 mois", "à X semaines, proposé : 4, puis à X mois, proposé : 3"), "compte rendu de chaque point"],
+        ]));
+        C.push("Les mesures de l'étape 2 ne sont pas des sanctions et ne se prennent pas");
+        C.push("au détriment de celui qui signale : le déplacer, changer ses horaires ou");
+        C.push("l'écarter d'un projet contre son gré peut constituer, à son égard, une");
+        C.push("mesure que L. 1152-2 et L. 1153-2 interdisent. Quand l'éloignement");
+        C.push("s'impose, il se discute d'abord avec la personne protégée, et la solution");
+        C.push("retenue est écrite avec son accord ou, à défaut, avec la raison qui l'a");
+        C.push("imposée.");
+        C.push("");
+        C.push("ARTICLE 6, LES GARANTIES");
+        C.push("");
+        C.push("1. Confidentialité. L'information circule entre les seules personnes qui");
+        C.push("doivent en connaître pour instruire et décider. Les documents sont");
+        C.push("conservés séparément des dossiers du personnel, " + X(E,
+          "dans une armoire fermée du bureau de " + (E && E.recoit), "sous MODALITÉ DE CONSERVATION") + ".");
+        C.push("Aucune communication n'est faite aux collègues, à l'encadrement non");
+        C.push("concerné, ni à des tiers.");
+        C.push("");
+        C.push("2. Impartialité. Règle de déport de l'article 4. L'enquête est conduite");
+        C.push("par " + X(E, "un binôme dont une personne est extérieure au service concerné, désigné dans la décision d'enquête",
+          "DÉSIGNATION : binôme, dont une personne extérieure au service concerné") + ",");
+        C.push("et non par le supérieur direct des personnes en cause.");
+        C.push("");
+        C.push("3. Absence de préjugé. Aucun écrit de la procédure ne qualifie les faits");
+        C.push("avant la clôture de l'enquête. Les termes employés sont « les faits");
+        C.push("signalés », « les faits allégués », jamais « les faits de harcèlement »,");
+        C.push("tant que rien n'est établi.");
+        C.push("");
+        C.push("4. Non-représailles.");
+        C.push("");
+        C = C.concat(blocProtection(E));
+        C.push("5. Droit de la personne mise en cause. Elle est informée de ce qui lui est");
+        C.push("reproché avant d'être entendue, dans des termes qui lui permettent de");
+        C.push("répondre, et elle est entendue avant toute conclusion.");
+        C.push("");
+        C.push("6. Assistance. " + X(E,
+          "La personne entendue peut être accompagnée d'un salarié de l'entreprise ou d'un membre du comité social et économique",
+          "PRÉCISER si la personne entendue peut être accompagnée, et par qui : un salarié de l'entreprise, un membre du comité") + ".");
+        C.push("");
+        C.push("ARTICLE 7, CONSERVATION");
+        C.push("");
+        C.push("Le dossier complet, signalement, accusé, mesures immédiates, décision");
+        C.push("d'enquête, comptes rendus d'audition, pièces, rapport, suites, courriers");
+        C.push("de retour, points de suivi, est conservé " + X(E, "cinq ans après la clôture", "DURÉE que vous fixez") + ",");
+        C.push(X(E, "dans l'armoire fermée du bureau de " + (E && E.recoit), "sous MODALITÉ") + ". C'est ce dossier, et non le souvenir des");
+        C.push("personnes, qui établira ce que l'entreprise a fait.");
+        C.push("");
+        C.push("ARTICLE 8, RÉVISION");
+        C.push("");
+        C.push("La présente procédure est réexaminée à chaque mise à jour du document");
+        C.push("unique, et après chaque signalement traité.");
+        C.push("");
+        C.push("Fait à " + ville + ", le " + dateProc + ".");
+        C.push(sig);
+        C.push("");
+        C.push("");
+
+        C.push("PIÈCE 3, PLAN D'INFORMATION ET DE FORMATION");
+        C.push("");
+        C.push(nom + ", plan arrêté le " + dateProc + ".");
+        C.push("");
+        var entetePlan = ["Action", "Public", "Date", "Contenu", "Preuve"];
+        var lignesPlan;
+        if (E) {
+          lignesPlan = [
+            ["Diffusion de la procédure", "tout le personnel, " + E.effectif + " salariés", E.date(45), "procédure remise avec la note de diffusion (pièce 4)", "feuille d'émargement, " + E.effectif + " signatures"],
+            ["Affichage L. 1152-4 et L. 1153-5", "tous, et lieu d'embauche : " + E.lieux[2], E.date(7), "support produit par SST-CTL-HAR-03", "photographies datées"],
+            ["Formation de l'encadrement : repérer, recevoir, ne pas qualifier, transmettre", E.encadrement, E.date(120), "une journée, cas pratiques tirés de l'activité, " + E.activite, "feuille de présence, attestations"],
+            ["Information des nouveaux entrants", "embauches, intérimaires, apprentis, stagiaires", "à chaque arrivée", "livret d'accueil, page « prévention », procédure remise", "récépissé au dossier"],
+            ["Formation du référent de l'employeur", R.nom, E.date(90), R.formation, "convention, attestation"],
+            ["Formation du référent du comité (L. 2315-18, financée par l'employeur)", E.cse.referent, E.date(150), "formation en santé, sécurité et conditions de travail", "convention, attestation"],
+            ["Point annuel devant le comité", "élus du comité", E.date(365), "nombre de signalements, délais tenus, suites, relecture du volet", "procès-verbal de la réunion"],
+          ];
+        } else {
+          lignesPlan = [
+            ["Diffusion de la procédure", "tout le personnel", "[date]", "[support]", "[émargement, accusé électronique]"],
+            ["Affichage L. 1152-4 et L. 1153-5", "tous, et lieu d'embauche", "[date]", "[support]", "[photographies datées]"],
+            ["Formation de l'encadrement : repérer, recevoir, ne pas qualifier, transmettre", "[encadrement]", "[date]", "[durée, organisme]", "[feuille de présence]"],
+            ["Information des nouveaux entrants", "embauches", "à chaque arrivée", "[livret d'accueil]", "[récépissé]"],
+          ];
+          if (due === true || due === null) lignesPlan.push(["Formation du référent de l'employeur", "[référent]", "[date]", "[intitulé, organisme]", "[attestation]"]);
+          if (avecCSE) lignesPlan.push(["Formation du référent du comité (L. 2315-18, financée par l'employeur)", "[référent du comité]", "[date]", "[intitulé, organisme]", "[attestation]"]);
+          lignesPlan.push(["Point annuel devant le comité", "élus", "[date]", "[bilan des signalements et des suites]", "[procès-verbal]"]);
+        }
+        C = C.concat(tableau(entetePlan, lignesPlan));
+        C.push("");
+
+        C.push("PIÈCE 4, NOTE DE DIFFUSION DE LA PROCÉDURE");
+        C.push("");
+        C.push(nom + ", note du " + X(E, leJour(dans(d0, 45)), "DATE"));
+        C.push("Objet : procédure de signalement et de traitement des situations de");
+        C.push("harcèlement et d'agissements sexistes");
+        C.push("");
+        C.push("Mesdames, Messieurs,");
+        C.push("");
+        C.push("Une procédure de signalement et de traitement des situations de");
+        C.push("harcèlement moral, de harcèlement sexuel et d'agissements sexistes est");
+        C.push("mise en place dans l'entreprise à compter du " + dateProc + ". Elle est");
+        C.push("jointe à la présente note et consultable " + X(E, "sur les trois panneaux d'affichage et sur la page « prévention » de l'intranet", "LIEU / LIEN") + ".");
+        C.push("");
+        C.push("Ce qu'il faut en retenir :");
+        C.push("  - à qui parler : " + X(E, E && E.recoit + ", ou le référent, " + R.nom + ", " + R.tel, "FONCTION / NOM, à ADRESSE / NUMÉRO") + ". Vous");
+        C.push("    pouvez aussi vous adresser aux personnes et services dont les coordonnées");
+        C.push("    figurent à l'affichage prévu par l'article D. 1151-1 ;");
+        C.push("  - comment : par écrit ou oralement, sans forme imposée ;");
+        C.push("  - ce qui se passe ensuite : un accusé de réception, l'examen de mesures");
+        C.push("    immédiates, une décision d'enquête, une enquête, un rapport, des");
+        C.push("    suites, et un retour ;");
+        C.push("  - ce que vous risquez en parlant : rien. Aucune personne ayant subi ou");
+        C.push("    refusé de subir de tels faits, ni celle qui, de bonne foi, les a");
+        C.push("    relatés ou en a témoigné, ne peut faire l'objet des mesures");
+        C.push("    mentionnées à l'article L. 1121-2 du code du travail (L. 1152-2 ;");
+        C.push("    L. 1153-2).");
+        C.push("");
+        C.push("Les personnes exerçant une responsabilité d'encadrement sont tenues de");
+        C.push("transmettre sans délai tout signalement qui leur parvient, sans le");
+        C.push("qualifier ni l'apprécier.");
+        C.push("");
+        C.push(sig);
+        C.push("");
+        C.push("Pièce jointe : la procédure");
+        C.push("Diffusion : " + X(E, E && "remise contre émargement à chaque salarié le " + E.lettres(45) + ", affichage aux emplacements de l'entreprise, mise en ligne sur l'intranet", "tout le personnel, préciser le support et conserver la preuve : émargement, accusé électronique, capture datée") + ".");
+        C.push("");
+        return C;
+      }
+
+      /* ---- l'exemple ---- */
       L.push(DP.EXEMPLE);
+      L.push("");
+      L = L.concat(corps(ex));
+      L.push("");
+
+      /* ---- le document à compléter ---- */
+      L.push("VOS PIÈCES, À COMPLÉTER");
+      L.push("");
+      L.push("Même structure que l'exemple. Les risques réels de votre entreprise, ses");
+      L.push("unités de travail, les noms de ceux qui reçoivent et les délais que vous");
+      L.push("vous donnez : l'application ne les connaît pas et ne les invente pas.");
+      L.push("Ne laissez aucun crochet dans les pièces que vous signez et diffusez.");
+      L.push("");
+      L = L.concat(corps(null));
+
+      L.push("VOTRE CALENDRIER");
+      L.push("");
+      var calendrier = [
+        ["Relevé des unités de travail et des situations exposantes, avec ceux qui connaissent le travail réel", jj(d0), "pièce 1", "relevé daté, noms des personnes consultées"],
+        ["Volet du document unique rédigé et intégré ; le risque d'abord, la procédure ensuite", jj(dans(d0, 21)), "pièce 1", "document unique daté, version numérotée"],
+        ["Procédure arrêtée : noms portés, délais choisis, règle de déport écrite", jj(dans(d0, 30)), "pièce 2", "procédure signée"],
+      ];
+      if (!estNon(cse.existe)) {
+        calendrier.push(["Présentation au comité social et économique avant l'adoption, dans le délai de convocation propre à l'instance", "avant le " + jj(dans(d0, 45)), "pièces 1 et 2", "ordre du jour, procès-verbal"]);
+      }
+      calendrier.push(["Procédure diffusée, affichage en place, preuves conservées", jj(dans(d0, 45)), "pièce 4", "émargement, photographies datées"]);
+      calendrier.push(["Formation de l'encadrement faite", jj(dans(d0, 120)), "pièce 3", "feuille de présence"]);
+      calendrier.push(["Réexamen du volet et de la procédure, à l'occasion de la mise à jour du document unique", "avant le " + jj(dans(d0, 365)), "pièces 1 et 2", "version datée"]);
+      L = L.concat(tableau(["Étape", "Date", "Pièce", "Preuve conservée"], calendrier));
+
+      L = L.concat(DP.liens(ctx, ["sst", "duerp", "cse"]));
+
+      /* ---- les règles ---- */
+      L.push("LES RÈGLES");
       L.push("");
       L = L.concat(blocTroisTemps());
       L.push("LA MAILLE DE L'ÉVALUATION");
@@ -1744,74 +2004,24 @@
       L.push("unique, « l'entreprise est attentive aux risques psychosociaux », ne");
       L.push("vaut pas inventaire : elle ne dit à quoi personne est exposé.");
       L.push("");
-      L.push("OÙ VOUS EN ÊTES");
-      L.push("");
-      L.push("Risques de harcèlement intégrés à l'évaluation : " +
-        etat(f.risquesHarcelementEvalues, "oui", "NON"));
-      L.push("Dispositions de prévention prises : " +
-        etat(f.mesuresPreventionHarcelement, "oui", "NON"));
-      L.push("Document unique existant : " + etat((f.duerp || {}).existe, "oui", "NON"));
-      L.push("Dernière mise à jour du document unique : " +
-        jour((f.duerp || {}).dateDerniereMaj, "date non renseignée"));
-      if (estISO((f.duerp || {}).dateDerniereMaj)) {
-        L.push("C'est la version qui reçoit le volet ci-dessous, et l'insertion de ce");
-        L.push("volet est elle-même une mise à jour, à dater du jour où vous la faites.");
-      }
-      L.push(ligneEffectif(ctx));
-      L.push("");
-      if (estNon((f.duerp || {}).existe)) {
-        L.push("ATTENTION, le dossier indique qu'il n'existe pas de document unique. Le");
-        L.push("volet ci-dessous n'a alors nulle part où s'inscrire : commencez par le");
-        L.push("document unique lui-même, que le générateur SST-CTL-DUE-01 de cette");
-        L.push("application produit. Le volet « harcèlement » viendra s'y insérer.");
-        L.push("");
-      }
-      L.push(TRAIT);
-      L.push("");
-      L.push("VOTRE PROCÉDURE, À COMPLÉTER");
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 1, VOLET « HARCÈLEMENT ET AGISSEMENTS SEXISTES » DU DOCUMENT UNIQUE");
-      L.push(GROS);
-      L.push("");
-      L.push("À insérer dans le document unique, unité de travail par unité de travail,");
-      L.push("avec les mêmes colonnes que le reste du document. Ce qui suit est une");
-      L.push("grille : les risques réels de votre entreprise, l'application ne les");
-      L.push("connaît pas et ne les inventera pas.");
-      L.push("");
       L.push("CE QUI SE REGARDE, ET QUI N'EST PAS UNE MACHINE");
       L.push("");
       L.push("Le risque de harcèlement ne se lit pas sur un équipement : il se lit dans");
       L.push("l'organisation. Les situations qui l'exposent sont connues et se relèvent");
       L.push("sans enquête, c'est un inventaire, pas une accusation :");
-      L.push("");
-      L.push("  · le travail isolé ou en très petite équipe, où il n'y a pas de témoin ;");
-      L.push("  · le travail de nuit, en horaires décalés, sur site du client ;");
-      L.push("  · les relations hiérarchiques resserrées, où une seule personne décide");
+      L.push("  - le travail isolé ou en très petite équipe, où il n'y a pas de témoin ;");
+      L.push("  - le travail de nuit, en horaires décalés, sur site du client ;");
+      L.push("  - les relations hiérarchiques resserrées, où une seule personne décide");
       L.push("    des plannings, des affectations et de l'évaluation ;");
-      L.push("  · les contacts avec des tiers, clients, usagers, sous-traitants, sur");
+      L.push("  - les contacts avec des tiers, clients, usagers, sous-traitants, sur");
       L.push("    lesquels l'employeur n'a pas d'autorité disciplinaire, mais dont il");
       L.push("    doit protéger ses salariés ;");
-      L.push("  · les fortes disparités d'âge, d'ancienneté ou de statut dans une même");
+      L.push("  - les fortes disparités d'âge, d'ancienneté ou de statut dans une même");
       L.push("    équipe ; les contrats précaires, l'apprentissage, les stages ;");
-      L.push("  · les métiers très déséquilibrés du point de vue du sexe, dans un sens");
+      L.push("  - les métiers très déséquilibrés du point de vue du sexe, dans un sens");
       L.push("    ou dans l'autre ;");
-      L.push("  · les périodes de tension : réorganisation, changement de responsable,");
+      L.push("  - les périodes de tension : réorganisation, changement de responsable,");
       L.push("    surcharge saisonnière.");
-      L.push("");
-      L.push("  Unité de travail   | Situations exposantes | Mesures existantes | Mesures à prendre   | Échéance   | Responsable");
-      L.push("  -------------------|-----------------------|--------------------|---------------------|------------|-------------");
-      L.push("  [.................] | [...................] | [................] | [.................] | [........] | [...........]");
-      L.push("  [.................] | [...................] | [................] | [.................] | [........] | [...........]");
-      L.push("  [.................] | [...................] | [................] | [.................] | [........] | [...........]");
-      L.push("  [.................] | [...................] | [................] | [.................] | [........] | [...........]");
-      L.push("");
-      L.push("[REPRENDRE LA LISTE DE VOS UNITÉS DE TRAVAIL, celle du document unique.");
-      L.push(" Si le harcèlement y apparaît sous une découpe différente du reste du");
-      L.push(" document, personne ne saura les rapprocher.]");
       L.push("");
       L.push("Ce volet se met à jour comme le reste du document unique, et notamment");
       L.push("« lorsqu'une information supplémentaire intéressant l'évaluation d'un");
@@ -1819,339 +2029,78 @@
       L.push("SIGNALEMENT EST UNE TELLE INFORMATION : après tout signalement, ce volet");
       L.push("se relit, qu'une enquête ait ou non conclu à des faits établis.");
       L.push("");
+      L.push("LA PROCÉDURE EST UN MOYEN, PAS UNE OBLIGATION DE FORME");
       L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 2, PROCÉDURE INTERNE DE SIGNALEMENT ET DE TRAITEMENT");
-      L.push(GROS);
+      L.push("Aucun texte lu n'impose une procédure écrite, ni n'en fixe le contenu, les");
+      L.push("circuits ou les délais. Ce que les textes imposent, c'est le résultat :");
+      L.push("prévenir, mettre un terme, sanctionner (L. 1152-4 ; L. 1153-5), et prendre");
+      L.push("les mesures nécessaires pour protéger la santé physique et mentale des");
+      L.push("travailleurs (L. 4121-1). La procédure de la pièce 2 est proposée parce");
+      L.push("qu'un employeur qui n'a pas décidé à l'avance qui reçoit, qui décide et en");
+      L.push("combien de temps improvise le jour où il reçoit un signalement, et");
+      L.push("improvise mal. Les délais qu'elle porte sont les vôtres : ils ne sont pas");
+      L.push("dans la loi. Il en va de même des dates du calendrier : aucun texte lu ne");
+      L.push("fixe de délai pour organiser la prévention. Ce que les textes fixent,");
+      L.push("c'est l'obligation de l'organiser, et elle court déjà.");
       L.push("");
-      L.push("AVERTISSEMENT SUR CE QUI SUIT, aucun texte lu n'impose une procédure");
-      L.push("écrite, ni n'en fixe le contenu, les circuits ou les délais. Ce que les");
-      L.push("textes imposent, c'est le résultat : prévenir, mettre un terme,");
-      L.push("sanctionner (L. 1152-4 ; L. 1153-5), et prendre les mesures nécessaires");
-      L.push("pour protéger la santé physique et mentale des travailleurs (L. 4121-1).");
-      L.push("La procédure ci-dessous est un MOYEN, proposé parce qu'un employeur qui");
-      L.push("n'a pas décidé à l'avance qui reçoit, qui décide et en combien de temps");
-      L.push("improvise le jour où il reçoit un signalement, et improvise mal. Les");
-      L.push("délais qu'elle porte sont les vôtres : ils ne sont pas dans la loi.");
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-      L.push("     PROCÉDURE DE SIGNALEMENT ET DE TRAITEMENT DES SITUATIONS DE");
-      L.push("     HARCÈLEMENT MORAL, DE HARCÈLEMENT SEXUEL ET D'AGISSEMENTS SEXISTES");
-      L.push("");
-      L.push("     " + nomDe(ctx));
-      L.push("     Version [N°], applicable à compter du [DATE]");
-      L.push("");
-      L.push(TRAIT);
-      L.push("");
-      L.push("ARTICLE 1, OBJET ET CHAMP");
-      L.push("");
-      L.push("La présente procédure s'applique à toute personne travaillant dans");
-      L.push("l'entreprise ou y intervenant : salariés, apprentis, stagiaires,");
-      L.push("intérimaires, salariés d'entreprises extérieures, candidats à l'embauche.");
-      L.push("[Adapter selon votre organisation.]");
-      L.push("");
-      L.push("Elle porte sur les faits définis aux articles L. 1152-1 (harcèlement");
-      L.push("moral) et L. 1153-1 (harcèlement sexuel) du code du travail, ainsi que sur");
-      L.push("les agissements sexistes.");
-      L.push("");
-      L.push("ARTICLE 2, CE QUE LA LOI DÉFINIT");
-      L.push("");
-      L = L.concat(blocDefinitions());
-      L.push("ARTICLE 3, QUI PEUT SIGNALER, ET COMMENT");
-      L.push("");
-      L.push("Peut signaler : la personne qui s'estime concernée, toute personne qui a");
-      L.push("été témoin de faits, un membre de la délégation du personnel du comité");
-      L.push("social et économique, le référent du comité, le médecin du travail.");
-      L.push("");
-      L.push("Le signalement peut être fait :");
-      L.push("  · par écrit à [ADRESSE POSTALE / ADRESSE ÉLECTRONIQUE DÉDIÉE] ;");
-      L.push("  · oralement à [FONCTION DE LA PERSONNE DÉSIGNÉE], qui l'écrit aussitôt");
-      L.push("    et le fait relire et signer par celui qui l'a fait ;");
-      L.push("  · [autre voie que vous ouvrez : ligne d'écoute, formulaire].");
-      L.push("");
-      L.push("AUCUNE FORME N'EST IMPOSÉE À CELUI QUI SIGNALE. Un signalement n'a pas à");
-      L.push("être motivé, daté par heure, ni accompagné de preuves : c'est l'enquête");
-      L.push("qui établira, pas le signalement. Un signalement rejeté pour vice de forme");
-      L.push("est un signalement reçu, et il obligera l'entreprise comme les autres.");
-      L.push("");
-      L.push("ARTICLE 4, QUI REÇOIT");
-      L.push("");
-      L.push("  · [FONCTION], destinataire principal ;");
-      L.push("  · [FONCTION], destinataire de remplacement, notamment lorsque le");
-      L.push("    précédent est personnellement concerné, proche des personnes en cause,");
-      L.push("    ou empêché ;");
-      if (au250 === true || au250 === null) {
-        L.push("  · le référent harcèlement sexuel et agissements sexistes de l'employeur");
-        L.push("    (L. 1153-5-1), qui oriente, informe et accompagne" +
-          (au250 === null ? " s'il a été désigné" : "") + " ;");
-      }
-      if (!estNon(cse.existe)) {
-        L.push("  · le référent harcèlement du comité social et économique (L. 2314-1),");
-        L.push("    que la personne peut saisir directement.");
-      }
-      L.push("");
-      L.push("LA RÈGLE DE DÉPORT EST LA PLUS IMPORTANTE DE TOUT L'ARTICLE : celui qui");
-      L.push("est en cause, ou proche des personnes en cause, ne reçoit pas, n'enquête");
-      L.push("pas et ne décide pas. Le prévoir à l'avance évite d'avoir à le décider");
-      L.push("dans l'urgence, sous le regard de l'intéressé.");
-      L.push("");
-      L.push("ARTICLE 5, LE CIRCUIT, ÉTAPE PAR ÉTAPE");
-      L.push("");
-      L.push("  ÉTAPE 1, RÉCEPTION ET ACCUSÉ. Le signalement est daté à sa réception et");
-      L.push("  consigné dans un registre tenu par [FONCTION]. Un accusé de réception");
-      L.push("  écrit est remis à son auteur sous [X jours ouvrés, proposé : 2],");
-      L.push("  rappelant la protection dont il bénéficie et indiquant qui suivra le");
-      L.push("  dossier.");
-      L.push("");
-      L.push("  ÉTAPE 2, MESURES IMMÉDIATES. Sans attendre l'enquête, sont examinées");
-      L.push("  les mesures propres à faire cesser les faits ALLÉGUÉS et à protéger la");
-      L.push("  personne : aménagement des horaires ou des affectations, suspension des");
-      L.push("  contacts entre les personnes concernées, orientation vers le médecin du");
-      L.push("  travail. Délai proposé : [X jours ouvrés, proposé : 3].");
-      L.push("");
-      L.push("  CES MESURES NE SONT PAS DES SANCTIONS et ne se prennent pas au détriment");
-      L.push("  de celui qui signale : le déplacer, changer ses horaires ou l'écarter");
-      L.push("  d'un projet contre son gré peut constituer, à son égard, une mesure que");
-      L.push("  L. 1152-2 et L. 1153-2 interdisent. Quand l'éloignement s'impose, il se");
-      L.push("  discute d'abord avec la personne protégée, et la solution retenue est");
-      L.push("  écrite avec son accord ou, à défaut, avec la raison qui l'a imposée.");
-      L.push("");
-      L.push("  ÉTAPE 3, DÉCISION D'ENQUÊTER. Une décision écrite fixe l'auteur de");
-      L.push("  l'enquête, son périmètre et son calendrier. Délai proposé : [X jours");
-      L.push("  ouvrés, proposé : 5]. Ne pas enquêter est une décision : si elle est");
-      L.push("  prise, elle s'écrit et se motive.");
-      L.push("");
-      L.push("  ÉTAPE 4, ENQUÊTE. Auditions de la personne qui signale, de la personne");
-      L.push("  mise en cause et des témoins utiles, recueil des pièces. Durée proposée :");
-      L.push("  [X semaines, proposé : 4 à 6]. Le document SST-CTL-HAR-05 de cette");
-      L.push("  application porte la trame d'audition et la structure du rapport.");
-      L.push("");
-      L.push("  ÉTAPE 5, RAPPORT. Un rapport écrit et daté expose ce qui a été");
-      L.push("  recherché, ce qui a été constaté et ce qui ne l'a pas été.");
-      L.push("");
-      L.push("  ÉTAPE 6, SUITES. Mesures pour mettre un terme aux faits ; sanction");
-      L.push("  disciplinaire s'ils sont établis, prise selon la procédure disciplinaire");
-      L.push(" , que le module « discipline » de cette application traite ; mesures");
-      L.push("  d'organisation pour l'avenir. Délai proposé : [X jours ouvrés après le");
-      L.push("  rapport, proposé : 10].");
-      L.push("");
-      L.push("  ÉTAPE 7, RETOUR AUX PERSONNES. La personne qui a signalé et la personne");
-      L.push("  mise en cause sont informées par écrit de la clôture et du sens de la");
-      L.push("  décision. Le rapport lui-même n'est pas nécessairement communiqué ; ce");
-      L.push("  qui doit l'être, c'est que l'entreprise a instruit et a décidé.");
-      L.push("");
-      L.push("  ÉTAPE 8, SUIVI. Un point est fait avec la personne qui a signalé à");
-      L.push("  [X semaines, proposé : 4] puis à [X mois, proposé : 3], pour vérifier");
-      L.push("  que les faits ont cessé et qu'aucune mesure défavorable n'a suivi.");
-      L.push("  C'est cette étape qui manque presque toujours, et c'est elle qui donne");
-      L.push("  sa portée à l'obligation d'Y METTRE UN TERME.");
-      L.push("");
-      L.push("ARTICLE 6, LES GARANTIES");
-      L.push("");
-      L.push("  1. CONFIDENTIALITÉ. L'information circule entre les seules personnes");
-      L.push("     qui doivent en connaître pour instruire et décider. Les documents");
-      L.push("     sont conservés séparément des dossiers du personnel, sous [modalité");
-      L.push("     de conservation]. Aucune communication n'est faite aux collègues, à");
-      L.push("     l'encadrement non concerné, ni à des tiers.");
-      L.push("");
-      L.push("  2. IMPARTIALITÉ. Règle de déport de l'article 4. L'enquête est conduite");
-      L.push("     par [désignation : binôme, dont une personne extérieure au service");
-      L.push("     concerné], et non par le supérieur direct des personnes en cause.");
-      L.push("");
-      L.push("  3. ABSENCE DE PRÉJUGÉ. Aucun écrit de la procédure ne qualifie les faits");
-      L.push("     avant la clôture de l'enquête. Les termes employés sont « les faits");
-      L.push("     signalés », « les faits allégués », jamais « les faits de");
-      L.push("     harcèlement », tant que rien n'est établi. Cette règle protège aussi");
-      L.push("     l'entreprise : un écrit qui préjuge est une pièce contre elle.");
-      L.push("");
-      L.push("  4. NON-REPRÉSAILLES.");
-      L.push("");
-      L = L.concat(blocProtection());
-      L.push("  5. DROIT DE LA PERSONNE MISE EN CAUSE. Elle est informée de ce qui lui");
-      L.push("     est reproché avant d'être entendue, dans des termes qui lui");
-      L.push("     permettent de répondre, et elle est entendue avant toute conclusion.");
-      L.push("     Une enquête qui conclut sans l'avoir entendue ne vaut rien, ni pour");
-      L.push("     elle ni pour l'entreprise.");
-      L.push("");
-      L.push("  6. ASSISTANCE. [Préciser si la personne entendue peut être accompagnée,");
-      L.push("     et par qui, un salarié de l'entreprise, un membre du comité. Aucun");
-      L.push("     texte lu ne l'impose au stade de l'enquête ; le prévoir apaise les");
-      L.push("     auditions. En revanche, l'assistance lors de l'entretien préalable à");
-      L.push("     une SANCTION est, elle, prévue par L. 1332-2, et le module");
-      L.push("     « discipline » de cette application la traite.]");
-      L.push("");
-      L.push("ARTICLE 7, CONSERVATION");
-      L.push("");
-      L.push("Le dossier complet, signalement, accusé, mesures immédiates, décision");
-      L.push("d'enquête, comptes rendus d'audition, pièces, rapport, suites, courriers");
-      L.push("de retour, points de suivi, est conservé [durée que vous fixez], sous");
-      L.push("[modalité]. C'est ce dossier, et non le souvenir des personnes, qui");
-      L.push("établira ce que l'entreprise a fait.");
-      L.push("");
-      L.push("ARTICLE 8, RÉVISION");
-      L.push("");
-      L.push("La présente procédure est réexaminée à chaque mise à jour du document");
-      L.push("unique, et après chaque signalement traité.");
-      L.push("");
-      L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ".");
-      L.push("");
-      L.push(signataire(ctx));
-      L.push("");
-      L.push(TRAIT);
+      L.push("L'assistance de la personne entendue au stade de l'enquête n'est imposée");
+      L.push("par aucun texte lu ; le prévoir apaise les auditions. En revanche,");
+      L.push("l'assistance lors de l'entretien préalable à une SANCTION est, elle, prévue");
+      L.push("par L. 1332-2, et le module « discipline » de cette application la traite.");
       L.push("");
       if (!estNon(cse.existe)) {
-        L.push("[AVANT D'ADOPTER : votre règlement intérieur porte-t-il déjà un article");
-        L.push(" sur le signalement des harcèlements ? Si la présente procédure y ajoute");
-        L.push(" des obligations générales et permanentes, elle relève du règlement");
-        L.push(" intérieur et de ses formalités, avis du comité social et économique,");
-        L.push(" publicité, dépôt, communication à l'inspection. Le module « discipline");
-        L.push(" et règlement intérieur » de cette application les traite. Présenter la");
-        L.push(" procédure au comité est en tout état de cause de bonne méthode : une");
-        L.push(" procédure que les élus découvrent le jour d'un signalement ne sera pas");
-        L.push(" utilisée.]");
+        L.push("LE COMITÉ, AVANT D'ADOPTER");
+        L.push("");
+        L.push("Le comité « est consulté sur le document unique d'évaluation des risques");
+        L.push("professionnels et sur ses mises à jour » (L. 4121-3, 1°) : la mise à jour");
+        L.push("qui porte le volet harcèlement entre dans cette consultation.");
+        L.push("");
+        L.push("Votre règlement intérieur porte-t-il déjà un article sur le signalement");
+        L.push("des harcèlements ? Si la présente procédure y ajoute des obligations");
+        L.push("générales et permanentes, elle relève du règlement intérieur et de ses");
+        L.push("formalités, avis du comité social et économique, publicité, dépôt,");
+        L.push("communication à l'inspection. Le module « discipline et règlement");
+        L.push("intérieur » de cette application les traite. Présenter la procédure au");
+        L.push("comité est en tout état de cause de bonne méthode : une procédure que les");
+        L.push("élus découvrent le jour d'un signalement ne sera pas utilisée.");
         L.push("");
       }
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 3, PLAN D'INFORMATION ET DE FORMATION");
-      L.push(GROS);
+      L.push("L'INFORMATION ET LA FORMATION");
       L.push("");
       L.push("L'obligation de sécurité comprend expressément « des actions d'information");
       L.push("et de formation » (L. 4121-1, 2°). Ce qui sera discuté n'est pas");
       L.push("l'existence du plan, mais sa MISE EN ŒUVRE : dates, destinataires,");
-      L.push("contenus, présences.");
+      L.push("contenus, présences. L'encadrement est le public le plus important du");
+      L.push("tableau de la pièce 3 : c'est à lui que la parole arrive d'abord, et c'est");
+      L.push("lui qui, faute de savoir quoi en faire, l'arrête. Une formation qui apprend");
+      L.push("à NE PAS qualifier et à transmettre vaut mieux qu'une formation juridique.");
       L.push("");
-      L.push("  Action                          | Public       | Date | Contenu | Preuve");
-      L.push("  --------------------------------|--------------|------|---------|--------");
-      L.push("  Diffusion de la procédure       | tout le      | [..] | [.....] | [.....]");
-      L.push("                                  | personnel    |      |         |");
-      L.push("  Affichage L. 1152-4 / L. 1153-5 | tous + lieu  | [..] | [.....] | [.....]");
-      L.push("                                  | d'embauche   |      |         |");
-      L.push("  Formation de l'encadrement :    | encadrement  | [..] | [.....] | [.....]");
-      L.push("  repérer, recevoir, ne pas       |              |      |         |");
-      L.push("  qualifier, transmettre          |              |      |         |");
-      L.push("  Information des nouveaux        | embauches    | [..] | [.....] | [.....]");
-      L.push("  entrants (livret d'accueil)     |              |      |         |");
-      if (au250 === true || au250 === null) {
-        L.push("  Formation du référent employeur | référent     | [..] | [.....] | [.....]");
+      L.push("CE QUE LE DOSSIER DÉCLARE");
+      L.push("");
+      L.push("Risques de harcèlement intégrés à l'évaluation : " +
+        etat(f.risquesHarcelementEvalues, "oui", "NON") + ".");
+      L.push("Dispositions de prévention prises : " +
+        etat(f.mesuresPreventionHarcelement, "oui", "NON") + ".");
+      L.push("Document unique existant : " + etat((f.duerp || {}).existe, "oui", "NON") + ".");
+      L.push("Dernière mise à jour du document unique : " +
+        jour((f.duerp || {}).dateDerniereMaj, "date non renseignée") + ".");
+      if (estISO((f.duerp || {}).dateDerniereMaj)) {
+        L.push("C'est la version qui reçoit le volet de la pièce 1, et l'insertion de ce");
+        L.push("volet est elle-même une mise à jour, à dater du jour où vous la faites.");
       }
-      if (!estNon(cse.existe)) {
-        L.push("  Formation du référent du comité | référent CSE | [..] | [.....] | [.....]");
-        L.push("  (L. 2315-18, financée par       |              |      |         |");
-        L.push("  l'employeur)                    |              |      |         |");
-      }
-      L.push("  Point annuel devant le comité   | élus         | [..] | [.....] | [.....]");
-      L.push("");
-      L.push("L'encadrement est le public le plus important de ce tableau : c'est à lui");
-      L.push("que la parole arrive d'abord, et c'est lui qui, faute de savoir quoi en");
-      L.push("faire, l'arrête. Une formation qui apprend à NE PAS qualifier et à");
-      L.push("transmettre vaut mieux qu'une formation juridique.");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("PIÈCE 4, NOTE DE DIFFUSION DE LA PROCÉDURE");
-      L.push(GROS);
-      L.push("");
-      L.push(nomDe(ctx) + ", note du " + leJour(d0));
-      L.push("Objet : procédure de signalement et de traitement des situations de");
-      L.push("harcèlement et d'agissements sexistes");
-      L.push("");
-      L.push("Mesdames, Messieurs,");
-      L.push("");
-      L.push("Une procédure de signalement et de traitement des situations de");
-      L.push("harcèlement moral, de harcèlement sexuel et d'agissements sexistes est");
-      L.push("mise en place dans l'entreprise à compter du [DATE]. Elle est jointe à la");
-      L.push("présente note et consultable [LIEU / LIEN].");
-      L.push("");
-      L.push("Ce qu'il faut en retenir :");
-      L.push("");
-      L.push("  · à qui parler : [FONCTION / NOM], à [ADRESSE / NUMÉRO]. Vous pouvez");
-      L.push("    aussi vous adresser aux personnes et services dont les coordonnées");
-      L.push("    figurent à l'affichage prévu par l'article D. 1151-1 ;");
-      L.push("  · comment : par écrit ou oralement, sans forme imposée ;");
-      L.push("  · ce qui se passe ensuite : un accusé de réception, l'examen de mesures");
-      L.push("    immédiates, une décision d'enquête, une enquête, un rapport, des");
-      L.push("    suites, et un retour ;");
-      L.push("  · ce que vous risquez en parlant : rien. Aucune personne ayant subi ou");
-      L.push("    refusé de subir de tels faits, ni celle qui, de bonne foi, les a");
-      L.push("    relatés ou en a témoigné, ne peut faire l'objet des mesures");
-      L.push("    mentionnées à l'article L. 1121-2 du code du travail (L. 1152-2 ;");
-      L.push("    L. 1153-2).");
-      L.push("");
-      L.push("Les personnes exerçant une responsabilité d'encadrement sont tenues de");
-      L.push("transmettre sans délai tout signalement qui leur parvient, sans le");
-      L.push("qualifier ni l'apprécier.");
-      L.push("");
-      L.push(signataire(ctx));
-      L.push("");
-      L.push("Pièce jointe : la procédure");
-      L.push("Diffusion : [tout le personnel, préciser le support et conserver la");
-      L.push("preuve : émargement, accusé électronique, capture datée]");
-      L.push("");
-      L.push("");
-
-      L.push(GROS);
-      L.push("VOTRE CALENDRIER");
-      L.push(GROS);
-      L.push("");
-      L.push("Aujourd'hui, " + leJour(d0) + ", vous relevez vos unités de travail et");
-      L.push("les situations exposantes (pièce 1). Ce relevé se fait avec ceux qui");
-      L.push("connaissent le travail réel, pas depuis un bureau.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 21)) + ", le volet du document unique est");
-      L.push("rédigé et intégré. C'est l'ordre qui compte : le risque d'abord, la");
-      L.push("procédure ensuite.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 30)) + ", la procédure est arrêtée (pièce 2) :");
-      L.push("les noms sont portés, les délais choisis, la règle de déport écrite.");
-      L.push("");
-      if (!estNon(cse.existe)) {
-        L.push("Avant l'adoption, présentation au comité social et économique. Le comité");
-        L.push("« est consulté sur le document unique d'évaluation des risques");
-        L.push("professionnels et sur ses mises à jour » (L. 4121-3, 1°) : la mise à jour");
-        L.push("qui porte le volet harcèlement entre dans cette consultation. Prévoyez le");
-        L.push("délai de convocation propre à l'instance.");
+      L.push(ligneEffectif(ctx));
+      if (estNon((f.duerp || {}).existe)) {
         L.push("");
+        L.push("ATTENTION, le dossier indique qu'il n'existe pas de document unique. Le");
+        L.push("volet de la pièce 1 n'a alors nulle part où s'inscrire : commencez par le");
+        L.push("document unique lui-même, que le générateur SST-CTL-DUE-01 de cette");
+        L.push("application produit. Le volet « harcèlement » viendra s'y insérer.");
       }
-      L.push("Au " + leJour(dans(d0, 45)) + ", la procédure est diffusée (pièce 4),");
-      L.push("l'affichage est en place, et les preuves de diffusion sont conservées.");
-      L.push("");
-      L.push("Au " + leJour(dans(d0, 120)) + ", la formation de l'encadrement est");
-      L.push("faite (pièce 3), avec sa feuille de présence.");
-      L.push("");
-      L.push("Avant le " + leJour(dans(d0, 365)) + ", réexamen du volet et de la");
-      L.push("procédure, à l'occasion de la mise à jour du document unique.");
-      L.push("");
-      L.push("Ces durées sont les VÔTRES : aucun texte lu ne fixe de délai pour");
-      L.push("organiser la prévention. Ce que les textes fixent, c'est l'obligation de");
-      L.push("l'organiser, et elle court déjà.");
       L.push("");
       L.push("CE QUE CE DOCUMENT NE DIT PAS, ET NE DIRA JAMAIS : que ces mesures");
       L.push("suffisent. La suffisance des dispositions de prévention s'apprécie AU");
       L.push("FOND, au vu de ce qui s'est réellement passé dans l'entreprise. Ce");
       L.push("document dit ce qui doit exister ; il ne délivre aucun quitus.");
-      L.push("");
-
-      L = L.concat(DP.liens(ctx, ["harcelement", "sst"]));
-
-      L.push("LES RÈGLES");
-      L.push("");
-      L.push("La prévention du harcèlement s'appuie sur quatre obligations :");
-      L.push("");
-      L.push("  1. L'évaluation des risques de harcèlement dans le document unique");
-      L.push("     (L. 4121-1, L. 4121-2, 7°, L. 4121-3 ; R. 4121-1) ;");
-      L.push("  2. L'organisation d'une procédure de signalement (L. 1152-4, L. 1153-5) ;");
-      L.push("  3. La mise en place d'une information et formation adéquates (L. 4121-1) ;");
-      L.push("  4. La prévention des représailles contre celui qui signale (L. 1152-2,");
-      L.push("     L. 1153-2).");
-      L.push("");
-      L.push("Tous ces éléments doivent être ÉCRITS, DATÉS et CONSERVÉS. Un acte");
-      L.push("accompli et non consigné ne sera jamais prouvé.");
-      L.push("");
 
       return L.concat(pied("L. 1152-4, L. 1153-5, L. 1152-1, L. 1153-1, L. 1152-2, " +
         "L. 1153-2, L. 4121-1, L. 4121-2, 7°, L. 4121-3, R. 4121-1, R. 4121-2, " +
