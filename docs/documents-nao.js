@@ -971,6 +971,30 @@
       var n = negoDe(ctx, "remuneration");
       var L = entete(ctx, "Négociation sur la rémunération, le temps de travail et le partage de la valeur ajoutée",
         "articles L. 2242-1, 1°, L. 2242-13, 1° et L. 2242-15 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("NÉGOCIATION SUR LA RÉMUNÉRATION - EXEMPLE");
+      L.push("");
+      L.push("CALENDRIER PROPOSÉ");
+      L.push("  première réunion : 21 jours");
+      L.push("  remise des informations : 14 jours avant");
+      L.push("  deuxième réunion : 42 jours");
+      L.push("  clôture : 77 jours");
+      L.push("");
+      L.push("THÈMES DE NÉGOCIATION");
+      L.push("  1. Salaires effectifs");
+      L.push("  2. Durée et organisation du temps de travail");
+      L.push("  3. Intéressement, participation, épargne");
+      L.push("  4. Suivi des mesures égalité femmes-hommes");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Complétez ce document avec les éléments propres à votre entreprise.");
+      L.push("");
+      L.push("  thème          │ date       │ lieu");
+      L.push("  ─────────────┼────────────┼──────────");
+
 
       modeDEmploi(L, "la convocation à la négociation sur la rémunération, avec son ordre du jour");
 
@@ -1222,6 +1246,24 @@
       var n = negoDe(ctx, "egalite");
       var L = entete(ctx, "Négociation sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail",
         "articles L. 2242-1, 2°, L. 2242-13, 2° et L. 2242-17 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("NÉGOCIATION SUR L'ÉGALITÉ PROFESSIONNELLE - EXEMPLE");
+      L.push("");
+      L.push("CALENDRIER PROPOSÉ");
+      L.push("  première réunion : 21 jours");
+      L.push("  remise des données : 14 jours avant");
+      L.push("  deuxième réunion : 42 jours");
+      L.push("  clôture : 77 jours");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Complétez ce document avec les éléments propres à votre entreprise.");
+      L.push("");
+      L.push("  thème          │ indicateur │ résultat");
+      L.push("  ─────────────┼────────────┼──────────");
+
 
       modeDEmploi(L, "la convocation à la négociation sur l'égalité professionnelle, avec son ordre du jour");
 
@@ -1485,6 +1527,22 @@
       var n = negoDe(ctx, "gepp"), s = seuil300(ctx);
       var L = entete(ctx, "Négociation sur la gestion des emplois et des parcours professionnels",
         "articles L. 2242-2, L. 2242-13, 3° et L. 2242-20 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("GESTION DES EMPLOIS ET PARCOURS PROFESSIONNELS - EXEMPLE");
+      L.push("");
+      L.push("CALENDRIER PROPOSÉ");
+      L.push("  première réunion : 21 jours");
+      L.push("  clôture : 90 jours");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Complétez ce document avec les éléments propres à votre entreprise.");
+      L.push("");
+      L.push("  compétence     │ objectif   │ formation");
+      L.push("  ─────────────┼────────────┼──────────");
+
 
       modeDEmploi(L, "la convocation à la négociation triennale sur la gestion des emplois");
 
@@ -1725,6 +1783,22 @@
       var n = negoDe(ctx, "experimentes"), s = seuil300(ctx);
       var L = entete(ctx, "Négociation sur l'emploi, le travail et l'amélioration des conditions de travail des salariés expérimentés",
         "articles L. 2242-2-1 et L. 2242-13, 4° du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("SALARIÉS EXPÉRIMENTÉS - EXEMPLE");
+      L.push("");
+      L.push("CALENDRIER PROPOSÉ");
+      L.push("  première réunion : 21 jours");
+      L.push("  clôture : 90 jours");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Complétez ce document avec les éléments propres à votre entreprise.");
+      L.push("");
+      L.push("  domaine        │ action     │ période");
+      L.push("  ─────────────┼────────────┼──────────");
+
 
       modeDEmploi(L, "la convocation à la négociation triennale sur les salariés expérimentés");
 
@@ -1947,6 +2021,19 @@
       var quinze = ref ? joursApres(d.date, 15) : dans(aujourd(ctx), 15);
       var L = entete(ctx, "Demande syndicale d'ouverture d'une négociation - les deux actes et leurs délais",
         "article L. 2242-13, dernier alinéa, du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("DEMANDE D'OUVERTURE DE NÉGOCIATION - EXEMPLE");
+      L.push("");
+      L.push("Courrier envoyé à l'employeur demandant l'ouverture d'une négociation");
+      L.push("obligatoire dans le délai imparti.");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Remplissez ce modèle avec les informations de votre entreprise.");
+      L.push("");
+
 
       modeDEmploi(L, "le traitement d'une demande syndicale d'ouverture de négociation");
 
@@ -2143,6 +2230,18 @@
       var r = bloc(ctx, "premiereReunion");
       var L = entete(ctx, "Procès-verbal de première réunion de négociation",
         "article L. 2242-14 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("PROCÈS-VERBAL DE PREMIÈRE RÉUNION - EXEMPLE");
+      L.push("");
+      L.push("Le procès-verbal constate le respect des obligations de L. 2242-6 et L. 2242-14.");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Remplissez le procès-verbal avec les détails de votre première réunion.");
+      L.push("");
+
 
       modeDEmploi(L, "le procès-verbal de la première réunion, et le bordereau de remise des informations");
 
@@ -2379,6 +2478,19 @@
       var n = negoDe(ctx, "remuneration");
       var L = entete(ctx, "Procès-verbal d'ouverture des négociations sur les écarts de rémunération entre les femmes et les hommes",
         "article L. 2242-6 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("PROCÈS-VERBAL D'OUVERTURE - EXEMPLE");
+      L.push("");
+      L.push("Ce procès-verbal atteste que la première réunion a été tenue dans les");
+      L.push("conditions prévues par les articles L. 2242-6 et L. 2242-14.");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Remplissez ce procès-verbal avec les détails de votre réunion.");
+      L.push("");
+
 
       modeDEmploi(L, "le procès-verbal sans lequel un accord sur les salaires effectifs ne peut pas être déposé");
 
@@ -2637,6 +2749,19 @@
       var d = bloc(ctx, "decisionUnilaterale");
       var L = entete(ctx, "Retrait d'une décision unilatérale prise dans une matière en cours de négociation",
         "article L. 2242-4 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("MESURES UNILATÉRALES - EXEMPLE");
+      L.push("");
+      L.push("Les mesures prises pendant la négociation obligatoire, en l'absence");
+      L.push("d'urgence justifiée, sont nulles et peuvent être retirées.");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Documentez les mesures retirées et justifiez l'urgence si applicable.");
+      L.push("");
+
 
       modeDEmploi(L, "la note de retrait d'une décision unilatérale et l'information des organisations syndicales");
 
@@ -2873,6 +2998,19 @@
       var s = seuil300(ctx);
       var L = entete(ctx, "Procès-verbal de désaccord, et son dépôt",
         "articles L. 2242-5 et R. 2242-1 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("PROCÈS-VERBAL DE DÉSACCORD - EXEMPLE");
+      L.push("");
+      L.push("À défaut d'accord, ce procès-verbal consigne les propositions respectives");
+      L.push("et les mesures que l'employeur entend appliquer unilatéralement.");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Remplissez ce procès-verbal avec les propositions et mesures en désaccord.");
+      L.push("");
+
 
       modeDEmploi(L, "le procès-verbal de désaccord et le courrier qui le dépose");
 
@@ -3165,6 +3303,28 @@
       var an = aujourd(ctx).getFullYear();
       var L = entete(ctx, "Plan d'action annuel pour l'égalité professionnelle entre les femmes et les hommes",
         "article L. 2242-3 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("THÈMES DE LA NÉGOCIATION SUR L'ÉGALITÉ - EXEMPLE");
+      L.push("");
+      L.push("Les huit points de l'article L. 2242-17 :");
+      L.push("  1. Articulation vie personnelle-professionnelle");
+      L.push("  2. Suppression des écarts de rémunération");
+      L.push("  3. Lutte contre les discriminations");
+      L.push("  4. Travailleurs handicapés");
+      L.push("  5. Prévoyance et remboursement de frais");
+      L.push("  6. Exercice du droit d'expression");
+      L.push("  7. Droit à la déconnexion");
+      L.push("  8. Mobilité des salariés");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Complétez avec les propositions de votre entreprise sur chaque thème.");
+      L.push("");
+      L.push("  type           │ délai      │ date");
+      L.push("  ─────────────┼────────────┼──────────");
+
 
       modeDEmploi(L, "le plan d'action annuel que la loi impose à défaut d'accord sur l'égalité professionnelle");
 
@@ -3458,6 +3618,20 @@
       var couvert = n.issue === "accord" || estOui(p.existe);
       var L = entete(ctx, "Couverture égalité professionnelle et publication des écarts de rémunération",
         "article L. 2242-8 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("INDICATEURS DES ÉCARTS DE RÉMUNÉRATION - EXEMPLE");
+      L.push("");
+      L.push("Tableau des indicateurs de l'article L. 1142-8 :");
+      L.push("  Écart de rémunération globale | Écart de répartition | Écart d'augmentation");
+      L.push("  [% écart femmes/hommes]      | [% présence femmes]  | [% augmentation femmes]");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Extrayez les données de votre base de données économiques et sociales.");
+      L.push("");
+
 
       modeDEmploi(L, "le constat de couverture et la note de publication des écarts de rémunération");
 
@@ -3744,6 +3918,24 @@
       var traites = liste(n.themesTraites);
       var L = entete(ctx, "Ordre du jour complémentaire - les thèmes de la négociation sur la rémunération",
         "article L. 2242-15 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("CONTENU DE LA NÉGOCIATION SUR LA RÉMUNÉRATION - EXEMPLE");
+      L.push("");
+      L.push("Détail de chacun des quatre points de L. 2242-15 :");
+      L.push("  Point 1 : Salaires effectifs et masses salariales");
+      L.push("  Point 2 : Durée et organisation du temps de travail");
+      L.push("  Point 3 : Intéressement, participation, épargne salariale");
+      L.push("  Point 4 : Suivi des mesures d'égalité femmes-hommes");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Déployez chaque point avec les détails propres à votre secteur et votre entreprise.");
+      L.push("");
+      L.push("  item          │ description   │ status");
+      L.push("  ──────────────┼───────────────┼─────────");
+
 
       modeDEmploi(L, "le pointage des thèmes légaux et l'ordre du jour de la réunion complémentaire");
 
@@ -3916,6 +4108,26 @@
       var traites = liste(n.themesTraites);
       var L = entete(ctx, "Ordre du jour complémentaire - les thèmes de la négociation sur l'égalité professionnelle",
         "article L. 2242-17 du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("CONTENU DE LA NÉGOCIATION SUR LES EMPLOIS - EXEMPLE");
+      L.push("");
+      L.push("Détail de chacun des six points de L. 2242-20 :");
+      L.push("  Point 1 : Gestion prévisionnelle des emplois et des compétences");
+      L.push("  Point 2 : Mobilité professionnelle et géographique");
+      L.push("  Point 3 : Formation professionnelle et développement des compétences");
+      L.push("  Point 4 : Recours aux différents contrats de travail");
+      L.push("  Point 5 : Orientations stratégiques et entreprises sous-traitantes");
+      L.push("  Point 6 : Déroulement de carrière des représentants syndicaux");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Déployez chaque point avec les détails propres à votre entreprise.");
+      L.push("");
+      L.push("  item          │ description   │ status");
+      L.push("  ──────────────┼───────────────┼─────────");
+
 
       modeDEmploi(L, "le pointage des huit points de L. 2242-17 et l'ordre du jour complémentaire");
 
@@ -4103,6 +4315,21 @@
       var n = negoDe(ctx, "egalite");
       var L = entete(ctx, "Appui de la négociation sur l'égalité professionnelle sur les données de la base",
         "article L. 2242-17, 2°, du code du travail");
+      L.push(DP.EXEMPLE);
+      L.push("");
+      L.push("CONTENU DE LA NÉGOCIATION SUR LES SALARIÉS EXPÉRIMENTÉS - EXEMPLE");
+      L.push("");
+      L.push("L'article L. 2242-2-1 énumère les sujets, sans les détailler :");
+      L.push("  - Emploi, travail et conditions de travail");
+      L.push("  - Amélioration des conditions de travail");
+      L.push("  - Considération de l'âge et de l'expérience");
+      L.push("");
+      L.push("");
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("Déployez ces sujets avec les propositions de votre entreprise.");
+      L.push("");
+
 
       modeDEmploi(L, "la demande d'extraction, le bordereau de remise et la mention au procès-verbal");
 
@@ -4137,6 +4364,8 @@
       L.push("elles sont les données qu'une négociation sur l'égalité utilise en");
       L.push("pratique, non la liste légale. Complétez-les depuis votre base réelle.");
       L.push("");
+      L.push("  indicateur     │ femmes %   │ hommes %");
+      L.push("  ─────────────┼────────────┼──────────");
 
       L.push("════ CE QUE VOTRE DOSSIER DÉCLARE ════");
       L.push("");
