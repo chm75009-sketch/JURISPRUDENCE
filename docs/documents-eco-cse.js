@@ -194,10 +194,10 @@
         var s = String(c == null ? "" : c);
         if (s.length > larg[i]) s = s.slice(0, larg[i] - 1) + "…";
         return pad(s, larg[i]);
-      }).join("  ").replace(/\s+$/, "");
+      }).join(" | ").replace(/\s+$/, "");
     };
     L.push(ligne(entetes));
-    L.push(larg.map(function (n) { var s = ""; while (s.length < n) s += "─"; return s; }).join("  "));
+    L.push(larg.map(function (n) { var s = ""; while (s.length < n) s += "─"; return s; }).join(" | "));
     lignes.forEach(function (l) { L.push(ligne(l)); });
   }
 
@@ -401,6 +401,10 @@
     "le calendrier calculé sur les dates de votre dossier.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f), rs = reunions(f), n = nbLic(f), eff = effectifDe(ctx);
       var attendues = r ? r.reunions : null;
 
@@ -659,6 +663,18 @@
       L.push("son avis ou soit réputé consulté : c'est l'objet du contrôle CTL-CSE-04 et");
       L.push("de son document.");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Élément", "Valeur"], [
+        ["[élément]", "[valeur]"],
+        ["[élément]", "[valeur]"],
+      ]);
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["L. 1233-8", "L. 1233-28", "L. 1233-29", "L. 1233-30", "L. 1233-31",
         "L. 1233-32", "L. 1233-33", "L. 1233-48"],
         "Ce qui se joue si la consultation manque : l'article L. 1235-12 permet au juge\n" +
@@ -678,6 +694,10 @@
     "est déjà dépassé.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f), rs = reunions(f);
       var e = rs.length >= 2 ? ecart(rs[0], rs[1]) : null;
       var code = r ? r.code : null;
@@ -885,6 +905,18 @@
       L.push("de l'emploi est dû, de la décision de validation ou d'homologation de");
       L.push("l'autorité administrative (L. 1233-39).");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Élément", "Valeur"], [
+        ["[élément]", "[valeur]"],
+        ["[élément]", "[valeur]"],
+      ]);
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["L. 1233-29", "L. 1233-30", "L. 1233-39"],
         "Ce qui se joue : l'irrégularité du calendrier de consultation relève des\n" +
         "« procédures de consultation des représentants du personnel » dont l'article\n" +
@@ -943,6 +975,10 @@
     "transmission.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f), rs = reunions(f);
       var art = articleRenseignements(r);
       var n = nbLic(f), eff = effectifDe(ctx);
@@ -1309,6 +1345,18 @@
       L.push("Prévoyez donc le même envoi, le même jour, à l'administration : l'article");
       L.push("D. 1233-5 précise qu'il se fait « par la voie dématérialisée ».");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Élément", "Valeur"], [
+        ["[élément]", "[valeur]"],
+        ["[élément]", "[valeur]"],
+      ]);
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["L. 1233-10", "L. 1233-31", "L. 1233-5", "L. 1233-17", "L. 1233-43",
         "R. 1233-1", "L. 1233-48", "D. 1233-5"],
         "Ce qui se joue : le défaut de renseignements adressés avec la convocation\n" +
@@ -1327,6 +1375,10 @@
     "proche que ce constat autorise.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f), rs = reunions(f);
       var mois = delaiAvisMois(r);
       var depart = rs.length ? rs[0] : null;
@@ -1584,6 +1636,18 @@
         L.push("administrative (L. 1233-39) : l'avis du comité ne suffit alors pas.");
       }
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Élément", "Valeur"], [
+        ["[élément]", "[valeur]"],
+        ["[élément]", "[valeur]"],
+      ]);
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["L. 1233-8", "L. 1233-30, II", "L. 1233-33", "L. 1233-48", "L. 1233-39"],
         "Ce qui se joue : notifier avant que le comité ait rendu son avis ou soit\n" +
         "réputé consulté, c'est notifier sans consultation. L'article L. 1235-12 ouvre\n" +
@@ -1603,6 +1667,10 @@
     "que le calendrier des réunions contraint.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f), rs = reunions(f);
       var grand = r && (r.code === "GRAND_COLLECTIF" || r.code === "GRAND_PETITE_ENTREPRISE");
       var petit = r && r.code === "PETIT_COLLECTIF";
@@ -1885,6 +1953,13 @@
       L.push("Dans tous les cas - conservez l'accusé de réception. C'est lui qui prouve");
       L.push("la date, et c'est la date qui se discute.");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["L. 1233-19", "L. 1233-46", "L. 1233-48", "L. 1233-49",
         "D. 1233-3", "D. 1233-4", "D. 1233-5", "D. 1233-10"],
         "Ce qui se joue : l'article L. 1235-12 vise le non-respect par l'employeur\n" +
@@ -1903,6 +1978,10 @@
     "renseignements, et les deux pièces conservées côte à côte.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f), rs = reunions(f);
       var art = articleRenseignements(r);
       var premiere = rs.length ? rs[0] : null;
@@ -2083,6 +2162,18 @@
         L.push("notification ne pourrait pas partir avant le " + leJour(dans(d0, 16)) + ".");
       }
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Élément", "Valeur"], [
+        ["[élément]", "[valeur]"],
+        ["[élément]", "[valeur]"],
+      ]);
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["L. 1233-10", "L. 1233-31", "L. 1233-32", "L. 1233-8", "L. 1233-30", "L. 1233-46"],
         "Ce qui se joue : une consultation privée de tout examen préalable relève des\n" +
         "« procédures de consultation des représentants du personnel » que l'article\n" +
@@ -2098,6 +2189,10 @@
     "quand la consultation a été conduite devant la seule instance locale.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f), rs = reunions(f);
       var nbEt = nbf(f.etablissementsDistincts);
       if (nbEt === null) nbEt = nbf((ctx.profil || {}).etablissementsDistincts);
@@ -2364,6 +2459,18 @@
       L.push("compétente n'est pas une formalité de rattrapage, c'est la procédure");
       L.push("entière.");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Élément", "Valeur"], [
+        ["[élément]", "[valeur]"],
+        ["[élément]", "[valeur]"],
+      ]);
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["L. 1233-9", "L. 1233-36", "L. 1233-30", "L. 1233-51"],
         "Le fondement du contrôle cite également l'article L. 2316-1, relatif aux\n" +
         "attributions du comité social et économique central. Le corpus de textes du\n" +
@@ -2392,6 +2499,10 @@
     "que l'absence de comité change dans le dossier adressé à l'administration.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f);
       var existe = f.cseExistant;
       var pv = f.pvCarence;
@@ -2577,6 +2688,13 @@
       L.push("salariés par tout moyen sur les lieux de travail ». Conservez la preuve de");
       L.push("cet affichage - date et lieu.");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["D. 1233-10", "R. 1233-9", "L. 1233-49", "L. 1233-46", "L. 1233-31"],
         "L'article L. 2314-9, auquel D. 1233-10 renvoie pour les conditions du constat\n" +
         "de carence, N'A PAS ÉTÉ LU : il ne figure pas dans le corpus de textes du\n" +
@@ -2598,6 +2716,10 @@
     "l'article fixe, et l'articulation avec l'expiration du délai d'avis.",
     function (ctx) {
       var f = ctx.fiche || {}, L = [];
+      L.push(A.EXEMPLE);
+      L.push("");
+      L.push("EXEMPLE");
+      L.push("");
       var r = regime(f), rs = reunions(f);
       var mois = delaiAvisMois(r);
       var depart = rs.length ? rs[0] : null;
@@ -2841,6 +2963,19 @@
         L.push("de cette décision ».");
       }
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Élément", "Valeur"], [
+        ["[élément]", "[valeur]"],
+        ["[élément]", "[valeur]"],
+      ]);
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
+
       pied(L, ["L. 1233-34", "L. 1233-35", "L. 1233-30", "D. 1233-4"],
         "L'article L. 2315-81, auquel L. 1233-34 renvoie pour l'assistance de l'expert,\n" +
         "N'A PAS ÉTÉ LU : il ne figure pas dans le corpus de textes du module. Il est\n" +
@@ -2870,6 +3005,9 @@
         "Conséquences du projet en matière de santé, de sécurité et de conditions de travail",
         art ? "article " + art + ", 7° du code du travail"
             : "articles L. 1233-10, 7° et L. 1233-31, 7° du code du travail"));
+
+      L.push("EXEMPLE");
+      L.push("");
 
       modeEmploi(L, [
         "C'est le septième renseignement, et il est dû comme les six autres. Le texte",
@@ -3081,6 +3219,14 @@
         L.push("expressément ces conséquences parmi les objets de la consultation.");
       }
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
+
       pied(L, ["L. 1233-10, 7°", "L. 1233-31, 7°", "L. 1233-30, I, 2°", "L. 1233-33"],
         "Les articles du code du travail relatifs à l'évaluation des risques et au\n" +
         "document unique ne figurent pas dans le corpus de textes de ce module :\n" +
@@ -3116,6 +3262,9 @@
 
       L = L.concat(entete(ctx, "Entretien préalable au licenciement pour motif économique",
         "articles L. 1233-11 à L. 1233-13, L. 1233-15 et L. 1233-38 du code du travail"));
+
+      L.push("EXEMPLE");
+      L.push("");
 
       if (du === true && notif && notifMin && notif < notifMin) {
         irrattrapable(L, [
@@ -3442,6 +3591,19 @@
       L.push("Cette mention n'est pas facultative, et elle s'écrit dans la lettre, pas");
       L.push("dans un document joint.");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Élément", "Valeur"], [
+        ["[élément]", "[valeur]"],
+        ["[élément]", "[valeur]"],
+      ]);
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
+
       pied(L, ["L. 1233-11", "L. 1233-12", "L. 1233-13", "L. 1233-15", "L. 1233-16",
         "L. 1233-38", "L. 1233-42", "L. 1233-45", "L. 1233-66", "R. 1233-19"],
         "L'article L. 1441-13, dont le 2° définit le membre du personnel d'encadrement\n" +
@@ -3501,6 +3663,9 @@
 
       L = L.concat(entete(ctx, "Plan de sauvegarde de l'emploi",
         "articles L. 1233-61, L. 1233-62 et L. 1233-63 du code du travail"));
+
+      L.push("EXEMPLE");
+      L.push("");
 
       modeEmploi(L, [
         "Ce document est le plan, non sa description. Ce qui suit se complète, se",
@@ -3883,6 +4048,14 @@
         L.push("Aucune lettre de licenciement ne peut être expédiée avant cette date");
         L.push("(L. 1233-39) : voyez le document du contrôle CTL-PSE-04.");
       }
+
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L.push("Voir le fondement du contrôle.");
+      L.push("");
+      L = L.concat(A.liens(ctx, ["economique"]));
 
       pied(L, ["L. 1233-61", "L. 1233-62", "L. 1233-63", "L. 1233-4", "L. 1233-32",
         "L. 1233-30, I, 2°", "L. 1233-33", "L. 1233-24-1", "L. 1233-24-4",
