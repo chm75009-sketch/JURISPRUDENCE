@@ -211,7 +211,7 @@
         var s = String(c == null ? "" : c);
         if (s.length > larg[i]) s = s.slice(0, larg[i] - 1) + "…";
         return pad(s, larg[i]);
-      }).join(" │ ").replace(/\s+$/, "");
+      }).join(" | ").replace(/\s+$/, "");
     }
     L.push(ligne(entetes));
     L.push("  " + larg.map(function (w) {
@@ -342,6 +342,7 @@
       var L = entete(ctx, "Note de relecture - version applicable de l'article L. 1233-3",
         "article L. 1233-3 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("À QUOI SERT CETTE NOTE");
       L.push("");
       L.push("La version applicable de l'article L. 1233-3 est celle en vigueur au jour");
@@ -505,6 +506,13 @@
       L.push(signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      tableau(L, ["Point", "Valeur"], [[" | ", " | "]]);
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-3, L. 1235-7, L. 1471-1",
         [RESERVE_GROUPE,
          "L'ordonnance du 22 septembre 2017 est nommée pour dater le changement de",
@@ -536,6 +544,7 @@
       var L = entete(ctx, "Reconstitution du résultat d'exploitation hors flux intragroupe",
         "article L. 1233-3 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("POURQUOI CE TABLEAU EXISTE");
       L.push("");
       L.push("L'article L. 1233-3 fait apprécier les difficultés économiques au niveau du");
@@ -669,6 +678,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-3",
         [RESERVE_GROUPE,
          "Aucun texte capté par ce module ne définit la fraude ni n'en tire de",
@@ -690,6 +705,7 @@
       var societes = liste(f.societes);
       var L = entete(ctx, "Dossier de saisine - risque de co-emploi", null);
 
+      L.push(DP.EXEMPLE);
       L.push("CE QUE CE DOCUMENT EST, ET CE QU'IL N'EST PAS");
       L.push("");
       L.push("Ce n'est pas une note de qualification : l'application ne dit pas s'il y a");
@@ -805,6 +821,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("aucun article ne fonde ce document",
         ["CE DOCUMENT NE CITE AUCUN ARTICLE, ET C'EST VOLONTAIRE. Le contrôle",
          "CTL-COE-01 ne repose sur aucun texte : son champ « fondement » est vide.",
@@ -832,6 +854,7 @@
       var L = entete(ctx, "Note de répartition - transfert d'entité et projet de licenciement",
         "article L. 1224-1 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("LA RÈGLE, LUE À LA SOURCE");
       L.push("");
       L.push("« Lorsque survient une modification dans la situation juridique de");
@@ -948,6 +971,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1224-1",
         ["L'article L. 1233-61, lu à la source, prévoit un cas particulier : lorsque",
          "le plan de sauvegarde de l'emploi comporte, en vue d'éviter la fermeture",
@@ -974,6 +1003,7 @@
       var L = entete(ctx, "Note de qualification - refus d'un accord de performance collective",
         "article L. 2254-2 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("CE QUE CETTE NOTE CORRIGE");
       L.push("");
       L.push("Le licenciement du salarié qui refuse l'application d'un accord de");
@@ -1109,6 +1139,12 @@
       L.push(signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 2254-2, L. 1233-3, L. 1233-5, L. 1233-25, L. 1233-28, " +
         "L. 1233-46, L. 1233-61",
         ["Les articles L. 1232-2 à L. 1232-14, L. 1234-1 à L. 1234-11, L. 1234-14,",
@@ -1141,6 +1177,7 @@
       var L = entete(ctx, "Bordereau de versement - convention collective et accords d'entreprise",
         "articles L. 1233-5 et L. 1233-39 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("POURQUOI CE BORDEREAU, ET CE QUE L'APPLICATION NE SAIT PAS");
       L.push("");
       L.push("L'APPLICATION NE CONNAÎT PAS LE TEXTE DE VOTRE CONVENTION COLLECTIVE. Elle");
@@ -1259,6 +1296,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-5, L. 1233-39",
         ["AUCUNE STIPULATION CONVENTIONNELLE N'EST REPRODUITE NI RÉSUMÉE DANS CE",
          "DOCUMENT. L'application ne lit pas la convention collective du client :",
@@ -1286,6 +1329,7 @@
       var veille = (f.veille && f.veille.convention) || {};
       var L = entete(ctx, "Relevé d'identification de la convention collective versée", null);
 
+      L.push(DP.EXEMPLE);
       L.push("CE QUE CE RELEVÉ ÉTABLIT");
       L.push("");
       L.push("Qu'une convention soit versée ne dit pas que c'est LA BONNE, ni que c'est la");
@@ -1388,6 +1432,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("aucun article ne fonde ce relevé",
         ["CE DOCUMENT NE CITE AUCUN ARTICLE, ET C'EST EXACT : le contrôle CTL-CCN-02",
          "n'a pas de fondement textuel - il vérifie que la pièce versée est bien",
@@ -1418,6 +1468,7 @@
       var L = entete(ctx, "Tableau de confrontation - accords d'entreprise et règles légales",
         "articles L. 1233-21, L. 1233-24-1 et L. 2254-2 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("CE QUE CE TABLEAU FAIT");
       L.push("");
       L.push("Un accord déposé au dossier mais non lu n'a été articulé avec rien. Il ne");
@@ -1571,6 +1622,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-21, L. 1233-24-1, L. 1233-24-2, L. 1233-57-3, L. 2254-2",
         ["AUCUNE STIPULATION DE VOS ACCORDS N'EST REPRODUITE ICI. Seules les",
          "colonnes « ce que la loi dit » sont écrites par l'application, à partir des",
@@ -1594,6 +1651,7 @@
       var f = fic(ctx);
       var L = entete(ctx, "Constat d'usage d'entreprise et engagements unilatéraux", null);
 
+      L.push(DP.EXEMPLE);
       L.push("POURQUOI CE RECENSEMENT, ET POURQUOI L'APPLICATION NE PEUT PAS LE FAIRE");
       L.push("");
       L.push("Les usages d'entreprise, les engagements unilatéraux et les décisions");
@@ -1718,6 +1776,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("aucun article ne fonde ce constat",
         ["CE DOCUMENT NE CITE AUCUN ARTICLE, ET C'EST VOLONTAIRE. Le contrôle",
          "CTL-USA-01 n'a pas de fondement textuel : les usages et engagements",
@@ -1744,6 +1808,7 @@
       var f = fic(ctx);
       var L = entete(ctx, "Note de signalement - contentieux et contrôles en cours", null);
 
+      L.push(DP.EXEMPLE);
       L.push("POURQUOI CETTE NOTE EST URGENTE");
       L.push("");
       L.push("Un contentieux ou un contrôle en cours peut modifier la stratégie et les");
@@ -1862,6 +1927,12 @@
       L.push("Accusé de réception : [date et signature du destinataire]");
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1235-7, L. 1471-1",
         ["Le contrôle CTL-CTX-01 n'a pas de fondement textuel : il signale une",
          "situation, il n'applique aucune règle. Les deux articles cités ci-dessus le",
@@ -1887,6 +1958,7 @@
       var binaires = l.filter(function (p) { return p._binaire; });
       var incomplets = l.filter(function (p) { return !p._binaire && manquantsDe(p).length; });
 
+      L.push(DP.EXEMPLE);
       L.push("CE QU'EST UN BORDEREAU, ET CE QUE N'EST PAS UNE CASE COCHÉE");
       L.push("");
       L.push("Une case cochée n'établit ni la date, ni le périmètre, ni la complétude");
@@ -2013,6 +2085,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-3, L. 1233-4",
         ["Le contrôle CTL-PCE-01 n'a pas de fondement textuel propre : aucun article",
          "n'impose de tenir un bordereau. Les deux articles cités le sont pour la",
@@ -2037,6 +2115,7 @@
       var tard = ref ? l.filter(function (p) { return String(p.date) > String(ref); }) : [];
       var L = entete(ctx, "Relevé d'antériorité des pièces", null);
 
+      L.push(DP.EXEMPLE);
       L.push("LA RÈGLE, EN UNE PHRASE");
       L.push("");
       L.push("Une pièce postérieure à l'acte qu'elle justifie ne le justifie pas : elle");
@@ -2158,6 +2237,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-4, L. 1235-3",
         ["Le contrôle CTL-PCE-02 n'a pas de fondement textuel propre : aucun article",
          "ne dit qu'une pièce doit être antérieure. C'est L. 1233-4 qui le dit",
@@ -2189,6 +2274,7 @@
       var L = entete(ctx, "Note de périmètre - les sociétés que les pièces comptables agrègent",
         "article L. 1233-3 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("LE PROBLÈME, ET IL EST TOUJOURS LE MÊME");
       L.push("");
       L.push("Une pièce comptable porte une étiquette : « groupe », « secteur »,");
@@ -2345,6 +2431,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-3",
         [RESERVE_GROUPE,
          "Les données sur les sociétés du groupe qui figurent au point 1 viennent du",
@@ -2367,6 +2459,7 @@
       var nonLues = l.filter(function (p) { return p.lue !== true; });
       var L = entete(ctx, "Fiche de lecture et de visa des pièces", null);
 
+      L.push(DP.EXEMPLE);
       L.push("TROIS ÉTATS, ET ON LES CONFOND TOUJOURS");
       L.push("");
       L.push("Le DÉPÔT n'est pas la LECTURE, et la lecture n'est pas la CONFORMITÉ.");
@@ -2474,6 +2567,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("aucun article ne fonde cette fiche",
         ["Le contrôle CTL-PCE-04 n'a pas de fondement textuel : aucun article",
          "n'impose de viser ses pièces. Ce qui l'impose est plus simple - la charge",
@@ -2501,6 +2600,7 @@
       var impossible = (nb(eEnt) !== null && eEta !== null && eEta > eEnt);
       var L = entete(ctx, "Tableau de réconciliation des effectifs", null);
 
+      L.push(DP.EXEMPLE);
       L.push("POURQUOI UN CHIFFRE FAUX ICI FAIT TOUT BASCULER");
       L.push("");
       L.push("L'effectif n'est pas une donnée de contexte : c'est une donnée de régime.");
@@ -2618,6 +2718,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-3, L. 1233-5, L. 1233-26, L. 1233-61, L. 1235-3",
         ["Le contrôle CTL-EFF-01 n'a pas de fondement textuel propre : c'est un",
          "contrôle arithmétique. Les articles cités le sont pour dire ce que",
@@ -2647,6 +2753,7 @@
       var L = entete(ctx, "Note de délimitation - périmètre d'application des critères d'ordre",
         "article L. 1233-5 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("LA RÈGLE, LUE À LA SOURCE, ET ELLE TIENT EN DEUX PHRASES");
       L.push("");
       L.push("« Le périmètre d'application des critères d'ordre des licenciements peut");
@@ -2794,6 +2901,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-5, L. 1233-43, L. 1235-3, D. 1233-2",
         ["L'atlas des zones d'emploi, auquel D. 1233-2 renvoie, n'est pas lu par",
          "l'application : elle le nomme parce que le texte le nomme, elle n'en",
@@ -2833,6 +2946,7 @@
       var L = entete(ctx, "Note de construction des catégories professionnelles",
         "article L. 1233-5 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("À QUOI SERT UNE CATÉGORIE PROFESSIONNELLE");
       L.push("");
       L.push("Une catégorie professionnelle regroupe les salariés exerçant des fonctions");
@@ -2988,6 +3102,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-5, L. 1233-43",
         ["La définition de la catégorie professionnelle - fonctions de même nature",
          "supposant une formation professionnelle commune - ne figure dans aucun",
@@ -3033,6 +3153,7 @@
       var L = entete(ctx, "Tableau d'application des critères d'ordre des licenciements",
         "article L. 1233-5 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("LE TEXTE, LU À LA SOURCE, ET CE QU'IL EXIGE VRAIMENT");
       L.push("");
       L.push("Les critères « prennent notamment en compte : 1° Les charges de famille, en");
@@ -3183,6 +3304,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-5, L. 1233-17, L. 1233-43, R. 1233-1",
         ["Les valeurs reprises au point 1 sont celles saisies au questionnaire : ce",
          "sont des DÉCLARATIONS, non des faits établis. Chacune appelle la pièce du",
@@ -3221,6 +3348,7 @@
       var L = entete(ctx, "Note de résolution - postes supprimés et postes disponibles",
         "articles L. 1233-3 et L. 1233-4 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("LA CONTRADICTION, ET CE QU'ELLE COÛTE");
       L.push("");
       L.push("Un poste ne peut pas être à la fois supprimé et disponible dans la même");
@@ -3355,6 +3483,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-3, L. 1233-4, L. 1233-28, L. 1233-61",
         ["Les intitulés des postes sont rapprochés à l'identique, après mise en",
          "minuscules et suppression des espaces de bord. Deux libellés différents",
@@ -3390,6 +3524,7 @@
       var L = entete(ctx, "Liste des offres de reclassement et critères de départage",
         "article L. 1233-4 et article D. 1233-2-1 du code du travail");
 
+      L.push(DP.EXEMPLE);
       L.push("LE NOMBRE D'OFFRES NE VAUT PAS NOMBRE DE POSTES");
       L.push("");
       L.push("Proposer le même poste à cinq salariés, c'est adresser cinq offres et");
@@ -3569,6 +3704,12 @@
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
+      L.push("À COMPLÉTER");
+      L.push("");
+      L.push("LES RÈGLES");
+      L.push("");
+      L = L.concat(DP.liens(ctx, ["economique"]));
+      L.push("");
       return L.concat(pied("L. 1233-4, D. 1233-2-1",
         ["Les offres sont regroupées sur le triplet intitulé / employeur / lieu, qui",
          "est le regroupement du contrôle CTL-COH-02. Deux offres portant le même",
