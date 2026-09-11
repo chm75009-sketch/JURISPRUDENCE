@@ -1,0 +1,102 @@
+ÉVALUATIONS DE RETRAITE - M. CHIKHAOUI MOUNIR
+Dossier SSN: 1 60 11 99 351 596
+========================================
+
+AVANT INTERVENTION CRA
+28 juin 2023 - Évaluation de retraite personnelle
+
+1. RETRAITE AU 01/12/2027 (ÂGE DU TAUX PLEIN)
+   Montant mensuel brut: 295,33 euros
+   Taux: 50%
+   Trimestres: 56
+   Revenu de base: 21 137,57 euros
+   Revenu 1995: 27 548,77 euros
+
+2. RETRAITE AU 01/05/2023
+   Montant mensuel brut: 225,19 euros
+   Taux: 38,125% (réduit)
+   Trimestres: 56
+   Revenu de base: 21 137,57 euros
+   Revenu 1995: 27 548,77 euros
+
+APRÈS INTERVENTION CRA
+15 septembre 2025 - Évaluations/Propositions
+
+3. RETRAITE AU 01/05/2023
+   Montant mensuel brut: 635,58 euros
+   Taux: 38,125% (réduit)
+   Trimestres: 110
+   Revenu de base: 30 371,48 euros
+   Revenu 1995: 129 127,00 euros
+
+4. RETRAITE AU 01/12/2027 (ÂGE DU TAUX PLEIN)
+   Montant mensuel brut: 913,37 euros
+   Taux: 50%
+   Trimestres: 114
+   Revenu de base: 32 112,29 euros
+   Revenu 1995: 136 464,90 euros
+
+IMPACT DE L'INTERVENTION CRA
+========================================
+
+Scénario retraite au 01/05/2023:
+- Montant avant CRA: 225,19 euros/mois
+- Montant après CRA: 635,58 euros/mois
+- Augmentation: 410,39 euros/mois (+182%)
+- Trimestres ajoutés: 54 (de 56 à 110) = RTH NETGOCE 2004-2017
+- Revenu de base augmenté: +9 234,91 euros (+43,7%)
+- Revenu 1995 augmenté: +101 578,23 euros (1995 ruling amounts integrated)
+
+Scénario retraite au taux plein 01/12/2027:
+- Montant avant CRA: 295,33 euros/mois
+- Montant après CRA: 913,37 euros/mois
+- Augmentation: 618,04 euros/mois (+209%)
+- Trimestres ajoutés: 58 (de 56 à 114) all regimes combined
+- Revenu de base augmenté: +10 974,72 euros (+51,9%)
+- Revenu 1995 augmenté: +108 916,90 euros
+
+ANALYSE CHRONOLOGIQUE
+========================================
+
+Juin 28, 2023 (AVANT CRA):
+- CNAV n'a comptabilisé que 56 trimestres
+- Base de calcul: 21 137,57 euros
+- Aucune intégration de la période RTH NETGOCE 2004-2017 (54 trimestres)
+- Revenu 1995 limité à 27 548,77 euros (ruling 1995 non pris en compte)
+
+Août 18, 2023:
+- CNAV rejection letter (piece 8)
+- Rejet invoquant "Activité Gérant Associé" (document non identifié/inexpliqué)
+
+Septembre 15, 2025 (APRÈS CRA):
+- CNAV ajoute 54 trimestres RTH NETGOCE
+- CNAV élève revenu 1995 de 27 548,77€ à 129 127,00€ (101 578,23€ added = ruling 1995 amount)
+- Base de calcul passe de 21 137,57€ à 30 371,48€
+- Montant pour retraite 01/05/2023: +182% (225,19€ → 635,58€)
+- Montant pour taux plein: +209% (295,33€ → 913,37€)
+
+DOCUMENTS DE RÉFÉRENCE
+========================================
+
+piece_9_eval_juin2023_taux_plein.pdf
+- Evaluation du 28 juin 2023 pour retraite au taux plein (01/12/2027)
+- Montant: 295,33€/mois
+
+piece_10_eval_juin2023_01mai2023.pdf
+- Evaluation du 28 juin 2023 pour retraite au 01/05/2023
+- Montant: 225,19€/mois
+- 14 pages incluant détail complet de carrière
+
+piece_11_prop_sept2025_01mai2023.pdf
+- Proposition du 15 septembre 2025 pour retraite au 01/05/2023
+- Montant: 635,58€/mois
+- APRÈS intervention CRA
+
+piece_12_est_sept2025_taux_plein.pdf
+- Estimation du 15 septembre 2025 pour retraite au taux plein (01/12/2027)
+- Montant: 913,37€/mois
+- APRÈS intervention CRA
+
+piece_8_courrier_CNAV_18aout2023.pdf
+- Lettre de rejet CNAV du 18 août 2023
+- Invoque "Activité Gérant Associé" comme motif de rejet
