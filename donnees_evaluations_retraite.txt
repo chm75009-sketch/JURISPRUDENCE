@@ -60,13 +60,15 @@ ANALYSE CHRONOLOGIQUE
 
 Juin 28, 2023 (AVANT CRA):
 ÉLÉMENTS REFUSÉS PAR CNAV:
-- ❌ 56 trimestres RTH NETGOCE 2004-2017
-- ❌ Arrêt de 1995 (ruling amount = 101 578€)
+- ❌ 54 trimestres RTH NETGOCE 2004-2017
+- ❌ Arrêt Cour d'appel Paris 26 juin 1997: 448 344,41 francs (1990-1995)
+- ❌ Arrêt 13 novembre 1996: 120 690,60 francs (1995-1996)
+- ❌ Total arriérés GERME: 86 749€
 
 Résultat du calcul:
-- Comptabilisé: 56 trimestres seulement
+- Comptabilisé: 56 trimestres seulement (aucun trimestre RTH)
 - Base de calcul: 21 137,57 euros
-- Revenu 1995 limité à 27 548,77 euros
+- Revenu 1995 limité à 27 548,77 euros (sans intégration des arrêts de 1996/1997)
 - Montants: 225,19€ (retraite 01/05/2023) et 295,33€ (taux plein)
 
 Août 18, 2023:
@@ -76,17 +78,19 @@ Août 18, 2023:
 Septembre 15, 2025 (APRÈS INTERVENTION CRA):
 ÉLÉMENTS ACCEPTÉS PAR CNAV:
 - ✓ 54 trimestres RTH NETGOCE 2004-2017 (INTÉGRÉS)
-- ✓ Arrêt de 1995 (INTÉGRÉ = +101 578€ sur revenu 1995)
+- ✓ Arrêt Cour d'appel Paris 26 juin 1997: 448 344,41 francs (INTÉGRÉ)
+- ✓ Arrêt 13 novembre 1996: 120 690,60 francs (INTÉGRÉ)
+- ✓ Total arriérés GERME 1990-1996: 86 749€ (INTÉGRÉS)
 
 Résultat du calcul:
 - CNAV ajoute 54 trimestres RTH NETGOCE: 56 → 110 trimestres
-- CNAV élève revenu 1995 de 27 548,77€ à 129 127,00€
-- Base de calcul passe de 21 137,57€ à 30 371,48€
+- CNAV intègre les deux arrêts dans le revenu 1995: 27 548,77€ → 129 127,00€ (+101 578€)
+- Base de calcul passe de 21 137,57€ à 30 371,48€ (+9 234€)
 - Montant pour retraite 01/05/2023: +182% (225,19€ → 635,58€)
 - Montant pour taux plein: +209% (295,33€ → 913,37€)
 
 DIFFÉRENCE CLÉ:
-Ce que CNAV a refusé en juin 2023 (56 trimestres RTH + arrêt 1995) = exactement ce qui a créé l'augmentation en septembre 2025
+Ce que CNAV a refusé en juin 2023 (54 trimestres RTH + 2 arrêts GERME 1996/1997) = exactement ce qui a créé l'augmentation en septembre 2025. Le +101 578€ sur le revenu 1995 provient de l'intégration des deux arrêts.
 
 DOCUMENTS DE RÉFÉRENCE
 ========================================
