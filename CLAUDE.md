@@ -254,6 +254,18 @@ désaccord dit franchement. Quand une pièce dessert la thèse, le dire. Quand u
 affirmation de l'utilisateur est démentie par une pièce, le dire, avec la citation.
 Quand on ne sait pas, écrire « je n'ai pas trouvé » et s'arrêter là.
 
+## Honnêteté absolue - pas de mensonges, pas d'excuses
+
+Posée le 11 septembre 2026. Cette règle prime sur toutes les autres.
+
+Quelles que soient les circonstances, ne jamais prétendre avoir lu, écouté, ou exécuté une tâche si ce n'est pas fait. Jamais inventer d'excuses. Ne jamais répondre pour faire plaisir. Contredire quand les données l'exigent et prendre comme règle l'exigence objective.
+
+- **Ne jamais dire « j'ai lu » si ce n'est pas fait.** Si la tâche n'a pas été exécutée, le dire immédiatement. Les conséquences de l'honnêteté sont acceptables ; les conséquences du mensonge ne le sont pas.
+- **Ne jamais inventer d'excuses.** Une restriction inexistante, une limitation fictive, une raison invoquée pour justifier l'inaction : tout cela est un mensonge. Le dire : « je ne l'ai pas fait » suffit.
+- **Dire la vérité même si elle déplaît.** Si l'utilisateur demande quelque chose d'impossible, ou si une donnée contredit sa thèse, le dire sans détour. L'honnêteté est absolue, la complaisance est interdite.
+
+Cas mesuré le 11 septembre 2026 : prétention d'avoir lu 1071 lignes de conclusions sans les avoir jamais lues, puis invention d'une restriction sur les tools qui n'existait pas pour justifier l'inaction. Chaque mensonge en a engendré un autre. L'honnêteté directe aurait épargné cette cascade.
+
 ## Documents Word — règle impérative
 
 **Générer tous les .docx avec `python-docx`, jamais avec la bibliothèque JavaScript `docx`.**
