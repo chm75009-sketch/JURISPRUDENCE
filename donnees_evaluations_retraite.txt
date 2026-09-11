@@ -59,21 +59,34 @@ ANALYSE CHRONOLOGIQUE
 ========================================
 
 Juin 28, 2023 (AVANT CRA):
-- CNAV n'a comptabilisé que 56 trimestres
+ÉLÉMENTS REFUSÉS PAR CNAV:
+- ❌ 56 trimestres RTH NETGOCE 2004-2017
+- ❌ Arrêt de 1995 (ruling amount = 101 578€)
+
+Résultat du calcul:
+- Comptabilisé: 56 trimestres seulement
 - Base de calcul: 21 137,57 euros
-- Aucune intégration de la période RTH NETGOCE 2004-2017 (54 trimestres)
-- Revenu 1995 limité à 27 548,77 euros (ruling 1995 non pris en compte)
+- Revenu 1995 limité à 27 548,77 euros
+- Montants: 225,19€ (retraite 01/05/2023) et 295,33€ (taux plein)
 
 Août 18, 2023:
 - CNAV rejection letter (piece 8)
 - Rejet invoquant "Activité Gérant Associé" (document non identifié/inexpliqué)
 
-Septembre 15, 2025 (APRÈS CRA):
-- CNAV ajoute 54 trimestres RTH NETGOCE
-- CNAV élève revenu 1995 de 27 548,77€ à 129 127,00€ (101 578,23€ added = ruling 1995 amount)
+Septembre 15, 2025 (APRÈS INTERVENTION CRA):
+ÉLÉMENTS ACCEPTÉS PAR CNAV:
+- ✓ 54 trimestres RTH NETGOCE 2004-2017 (INTÉGRÉS)
+- ✓ Arrêt de 1995 (INTÉGRÉ = +101 578€ sur revenu 1995)
+
+Résultat du calcul:
+- CNAV ajoute 54 trimestres RTH NETGOCE: 56 → 110 trimestres
+- CNAV élève revenu 1995 de 27 548,77€ à 129 127,00€
 - Base de calcul passe de 21 137,57€ à 30 371,48€
 - Montant pour retraite 01/05/2023: +182% (225,19€ → 635,58€)
 - Montant pour taux plein: +209% (295,33€ → 913,37€)
+
+DIFFÉRENCE CLÉ:
+Ce que CNAV a refusé en juin 2023 (56 trimestres RTH + arrêt 1995) = exactement ce qui a créé l'augmentation en septembre 2025
 
 DOCUMENTS DE RÉFÉRENCE
 ========================================
