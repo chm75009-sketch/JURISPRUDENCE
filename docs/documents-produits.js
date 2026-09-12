@@ -67,6 +67,12 @@
       cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE").toUpperCase(),
       cro(p.adresse, "adresse du siège"),
       p.siret ? "SIRET " + p.siret : "[SIRET]",
+      /* Le représentant légal appartient à l'en-tête au même titre que le
+         SIRET : c'est lui qui engage l'entreprise, et un courrier remis sans
+         son nom laissait un crochet à remplir à la main sur soixante-huit
+         documents. Demande du 12 septembre 2026 : ces renseignements doivent
+         figurer sur tous les documents. */
+      "Représentée par " + cro(p.responsable, "nom et qualité du représentant légal"),
       "",
       titre.toUpperCase(),
       fondement ? "(" + fondement + ")" : "",

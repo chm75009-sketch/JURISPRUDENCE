@@ -3333,6 +3333,9 @@
       cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE").toUpperCase(),
       cro(p.adresse, "adresse du siège"),
       p.siret ? "SIRET " + p.siret : "[SIRET]",
+      /* Même en-tête que celui de documents-produits.js : le représentant
+         légal y figure depuis le 12 septembre 2026. */
+      "Représentée par " + cro(p.responsable, "nom et qualité du représentant légal"),
       "",
       titreDoc.toUpperCase(),
       "(" + fondement + ")",

@@ -119,9 +119,17 @@
   var $ = function (id) { return document.getElementById(id); };
   if (window.VERSION_APP) $("version-app").textContent = "Version " + window.VERSION_APP + ", " + window.VERSION_DATE;
 
-  /* Les quatre champs de la fiche, sans texte d'aide, avec des intitulés courts. */
+  /* Les sept champs de la fiche, sans texte d'aide, avec des intitulés courts.
+     Le SIRET, l'adresse et le représentant légal en font partie depuis le
+     12 septembre 2026 : ils sont l'en-tête et la signature de tout document
+     produit, et sans eux chaque courrier sortait avec trois crochets à
+     remplir à la main. L'ordre suit celui de la fiche complète (Profil.IDENTITE),
+     que le filtre ci-dessous conserve. */
   var NOMS = {
     denomination: "Dénomination",
+    siret: "SIRET",
+    adresse: "Adresse du siège",
+    responsable: "Représentant légal (nom, qualité)",
     effectif: "Effectif (salariés)",
     secteur: "Secteur",
     conventionCollective: "Convention collective (IDCC)"
@@ -138,8 +146,13 @@
 
   function profil() { return window.Profil ? window.Profil.lire() : {}; }
   function complet(p) {
-    return !!(p && String(p.denomination || "").trim() && String(p.effectif == null ? "" : p.effectif).trim() !== "" &&
-      String(p.secteur || "").trim() && String(p.conventionCollective || "").trim());
+    if (!p) return false;
+    if (String(p.effectif == null ? "" : p.effectif).trim() === "") return false;
+    for (var c in NOMS) {
+      if (c === "effectif") continue;
+      if (!String(p[c] || "").trim()) return false;
+    }
+    return true;
   }
 
   /* La convention, en court : le numéro et l'intitulé sans son préambule. */
@@ -179,7 +192,7 @@
     window.scrollTo(0, 0);
   }
 
-  if (window.Profil && CHAMPS.length === 4) {
+  if (window.Profil && CHAMPS.length === Object.keys(NOMS).length) {
     window.Profil.rendre($("fiche-accueil"), {
       champs: CHAMPS,
       legende: "Votre entreprise",
