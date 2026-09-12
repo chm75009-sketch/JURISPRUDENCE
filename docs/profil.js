@@ -40,7 +40,7 @@
      au greffe est pire qu'un champ vide. */
   var DEFAUT = {
     denomination: "TEC",
-    effectif: 150000,
+    effectif: 81,
     secteur: "transport et logistique",
     conventionCollective: "0016 - Convention collective nationale des transports routiers " +
       "et activités auxiliaires du transport du 21 décembre 1950",
