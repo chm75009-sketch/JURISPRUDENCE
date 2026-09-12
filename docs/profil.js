@@ -29,6 +29,23 @@
   var SECTEURS = ["transport et logistique", "industrie",
     "bâtiment et travaux publics", "commerce", "services"];
 
+  /* LA FICHE S'OUVRE SUR TEC. Demande du 12 septembre 2026 : « par défaut on
+     met TEC », quitte à modifier ensuite. Ces valeurs ne servent qu'au
+     PREMIER affichage, tant que rien n'a jamais été saisi sur ce poste : dès
+     que la fiche est enregistrée, même vidée, c'est elle qui vaut et ces
+     valeurs ne reviennent plus. Le bouton « tout effacer » de la page d'audit
+     les rétablit, puisqu'il ramène le poste à son état initial.
+     Le SIRET, l'adresse et le représentant légal ne sont pas ici : ils ne
+     m'ont pas été donnés, et un SIRET inventé sur un document qui se dépose
+     au greffe est pire qu'un champ vide. */
+  var DEFAUT = {
+    denomination: "TEC",
+    effectif: 150000,
+    secteur: "transport et logistique",
+    conventionCollective: "0016 - Convention collective nationale des transports routiers " +
+      "et activités auxiliaires du transport du 21 décembre 1950",
+  };
+
   /* Mots probables de l'intitulé d'une convention collective pour chaque
      secteur — pas une correspondance officielle : une convention s'identifie
      par l'activité réelle de l'entreprise (le champ le rappelle), jamais par
@@ -99,9 +116,16 @@
   /* Les alias historiques sont lus, jamais réécrits à la place des nouveaux :
      un profil enregistré par une version antérieure s'ouvre tel quel. */
   function lire() {
-    var p;
-    try { p = JSON.parse(localStorage.getItem(CLE) || "null"); } catch (_) { p = null; }
-    if (!p || typeof p !== "object") p = {};
+    var p, brut = null;
+    try { brut = localStorage.getItem(CLE); } catch (_) {}
+    try { p = JSON.parse(brut || "null"); } catch (_) { p = null; }
+    if (!p || typeof p !== "object") {
+      /* Rien n'a jamais été enregistré ici : on ouvre sur les valeurs par
+         défaut. Une fiche enregistrée, fût-elle vide, passe par la branche
+         ci-dessus et garde ce que l'utilisateur y a mis. */
+      p = {};
+      for (var d in DEFAUT) if (Object.prototype.hasOwnProperty.call(DEFAUT, d)) p[d] = DEFAUT[d];
+    }
     if (!p.denomination) p.denomination = p.denominationSociale || p.entreprise || p.nom || "";
     if (!p.conventionCollective) p.conventionCollective = p.convention || p.idcc || "";
     if (!p.secteur) p.secteur = p.activite || "";
@@ -122,6 +146,23 @@
   }
 
   function effacer() { try { localStorage.removeItem(CLE); } catch (_) {} }
+
+  /* La fiche par défaut est ÉCRITE, pas seulement rendue à la lecture : une
+     douzaine de pages du dépôt relisent la clé « profil-entreprise »
+     directement, sans passer par lire(), et n'auraient rien vu. Écrire une
+     fois, au chargement de ce fichier, les sert toutes. Ensuite la clé
+     existe et cette fonction ne fait plus rien : ce que l'utilisateur a
+     enregistré n'est jamais recouvert. */
+  function semer() {
+    try {
+      if (localStorage.getItem(CLE) !== null) return;
+      var p = {};
+      for (var d in DEFAUT) if (Object.prototype.hasOwnProperty.call(DEFAUT, d)) p[d] = DEFAUT[d];
+      if (p.denomination) p.entreprise = p.denomination;
+      localStorage.setItem(CLE, JSON.stringify(p));
+    } catch (_) {}
+  }
+  semer();
 
   /* ------------------------------------------------------- échange --- */
   /* LE FORMAT COMMUN AUX DEUX APPLICATIONS DE LA JURISTE.
