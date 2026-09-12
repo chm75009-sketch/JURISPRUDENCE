@@ -3800,11 +3800,15 @@
         TABLEUR = { nom: gen.nom, feuille: true, lignes: TABLEUR ? TABLEUR.lignes : null };
       $("dt-tableur").hidden = !TABLEUR;
       $("dt-titre").textContent = gen.nom;
-      /* La version de l'utilisateur prime sur le modèle : un courrier qu'on a
-         complété la semaine dernière se rouvre tel qu'on l'a laissé. */
-      var mien = lireCourrier(id);
-      poserCorps(mien != null ? mien : COURRIER.modele);
-      etatCourrier(mien != null ? "Votre version, modifiée le " + (dateFr(dateCourrier(id)) || "—") + "." : "");
+      /* UN DOCUMENT PEUT VENIR EN TROIS PARTIES. Le règlement intérieur se
+         remplit, ses courriers s'envoient dans un ordre, et le droit qui le
+         fonde se consulte quand on le conteste : trois usages qu'un seul
+         rouleau mélangeait. Le générateur qui porte « parties » ouvre des
+         onglets ; les autres gardent leur texte d'un bloc. */
+      COURRIER.parties = (typeof gen.parties === "function") ? gen.parties(ctx) : null;
+      COURRIER.partie = 0;
+      poserOnglets();
+      afficherPartie(0);
       var d = $("dlg-courrier");
       if (d.showModal) d.showModal(); else d.setAttribute("open", "open");
     });
@@ -3901,6 +3905,51 @@
   /* La feuille : le texte du générateur rendu en page, tableaux compris,
      corrigeable en place. Ce qui s'enregistre est le texte relu de la page. */
   function lireTexte(t) { return window.FeuilleDoc ? window.FeuilleDoc.texte(window.FeuilleDoc.blocs(t)) : String(t || ""); }
+  /* La clé sous laquelle la version de l'utilisateur est gardée : le document
+     entier quand il n'a qu'une partie, la partie sinon. Une correction portée
+     au règlement ne doit pas se perdre parce qu'on a ouvert l'onglet du
+     droit, ni écraser le courrier voisin. */
+  function clePartie(id, i) {
+    return (COURRIER && COURRIER.parties) ? id + ":" + COURRIER.parties[i].cle : id;
+  }
+  function poserOnglets() {
+    var b = $("dt-onglets");
+    if (!b) return;
+    if (!COURRIER || !COURRIER.parties) { b.hidden = true; b.innerHTML = ""; return; }
+    b.hidden = false;
+    b.innerHTML = COURRIER.parties.map(function (p, i) {
+      return '<button type="button" role="tab" data-i="' + i + '" aria-selected="' +
+        (i === 0 ? "true" : "false") + '">' + e(p.nom) + "</button>";
+    }).join("");
+  }
+  function afficherPartie(i) {
+    if (!COURRIER) return;
+    COURRIER.partie = i;
+    var modele = COURRIER.parties ? COURRIER.parties[i].texte : COURRIER.modele;
+    COURRIER.modeleTexte = lireTexte(modele);
+    var cle = clePartie(COURRIER.id, i);
+    var mien = lireCourrier(cle);
+    poserCorps(mien != null ? mien : modele);
+    etatCourrier(mien != null
+      ? "Votre version, modifiée le " + (dateFr(dateCourrier(cle)) || "—") + "."
+      : "");
+    var b = $("dt-onglets");
+    if (b && !b.hidden) Array.prototype.forEach.call(b.children, function (x, j) {
+      x.setAttribute("aria-selected", j === i ? "true" : "false");
+    });
+    /* On change d'onglet, on recommence en haut : sans cela on arrive au
+       milieu du courrier 3 parce qu'on était au milieu de l'article 22. */
+    var c = $("dt-corps");
+    if (c) c.scrollTop = 0;
+  }
+  (function () {
+    var b = document.getElementById("dt-onglets");
+    if (b) b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button[data-i]");
+      if (t) afficherPartie(+t.getAttribute("data-i"));
+    });
+  })();
+
   function poserCorps(t) {
     var el = $("dt-corps");
     if (!window.FeuilleDoc) { el.textContent = t; return; }
@@ -3915,9 +3964,9 @@
   function lireCorps() { return window.FeuilleDoc ? window.FeuilleDoc.texte(relireCorps()) : $("dt-corps").textContent; }
   $("dt-corps").addEventListener("input", function () {
     if (!COURRIER) return;
-    var t = lireCorps();
-    if (t === COURRIER.modeleTexte) { ecrireCourrier(COURRIER.id, null); etatCourrier(""); return; }
-    ecrireCourrier(COURRIER.id, t);
+    var t = lireCorps(), cle = clePartie(COURRIER.id, COURRIER.partie || 0);
+    if (t === COURRIER.modeleTexte) { ecrireCourrier(cle, null); etatCourrier(""); return; }
+    ecrireCourrier(cle, t);
     etatCourrier("Vos modifications sont enregistrées sur ce poste.");
   });
   /* LE TABLEUR — un vrai fichier Excel, écrit à la main.
@@ -4105,6 +4154,10 @@
       return;
     }
     var titre = COURRIER ? COURRIER.nom : ($("dt-titre").textContent || "Document");
+    /* Trois onglets font trois fichiers : sans le nom de la partie, le second
+       téléchargement écraserait le premier. */
+    if (COURRIER && COURRIER.parties)
+      titre += " - " + COURRIER.parties[COURRIER.partie || 0].nom;
     var items = window.FeuilleDoc ? window.FeuilleDoc.items(relireCorps())
       : String($("dt-corps").textContent).split(/\r?\n/).map(function (ligne) { return { k: "p", t: ligne }; });
     if (items.length && items[0].k === "t1") titre = items.shift().t;
@@ -4117,8 +4170,11 @@
     if (!COURRIER) return;
     if (lireCorps() !== COURRIER.modeleTexte &&
         !confirm("Revenir au modèle effacera ce que vous avez écrit dans ce courrier. Continuer ?")) return;
-    poserCorps(COURRIER.modele);
-    ecrireCourrier(COURRIER.id, null);
+    /* Sur un document à onglets, on ne rétablit que la partie ouverte : les
+       deux autres gardent ce que l'utilisateur y a corrigé. */
+    var i = COURRIER.partie || 0;
+    ecrireCourrier(clePartie(COURRIER.id, i), null);
+    poserCorps(COURRIER.parties ? COURRIER.parties[i].texte : COURRIER.modele);
     etatCourrier("Texte d'origine rétabli.");
   });
   $("dt-fermer").addEventListener("click", function () { $("dlg-courrier").close(); });

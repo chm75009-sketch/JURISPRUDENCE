@@ -71,6 +71,22 @@
     }
     function vider() {
       if (!para.length) return;
+      /* UN ARTICLE NUMÉROTÉ SEUL SUR SON PARAGRAPHE EST UN TITRE. « Article 12
+         - Usage des biens » se rendait en texte courant, faute d'être en
+         capitales : les trente et un articles du règlement intérieur
+         disparaissaient dans le corps, à l'écran comme dans le Word.
+         La règle est volontairement étroite. Ailleurs dans le dépôt, les
+         délibérations du comité écrivent « Article 1 - Le comité décide de
+         recourir à une expertise sur le fondement de… » : l'article y EST la
+         phrase, sur plusieurs lignes, et rien n'y est un titre. Exiger que la
+         ligne soit seule entre deux blancs, et qu'elle ne finisse pas par un
+         point, sépare les deux cas sans avoir à deviner. */
+      if (!premier && para.length === 1 && /^(Article|ARTICLE)\s+\d+\b/.test(para[0]) &&
+          para[0].trim().length <= 90 && !/\.$/.test(para[0].trim())) {
+        b.push({ k: "h2", t: para[0].trim() });
+        para = [];
+        return;
+      }
       var texte = para.map(function (s) { return s.trim(); }).join(" ");
       var capitales = !/[a-zà-ÿ]/.test(para[0]);
       if (premier) {

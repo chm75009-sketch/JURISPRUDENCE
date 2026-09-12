@@ -170,6 +170,14 @@
   @media (max-width:700px){#dlg-courrier .dt-barre button{flex:1 1 44%;padding:10px 8px;font-size:14px}
     #dlg-courrier .dt-aide{display:none}}
   #dlg-courrier h3{margin:0 0 10px;font:600 16px/1.3 system-ui;color:var(--encre)}
+  /* Les onglets d'un document en trois parties : le texte, les formalités,
+     le droit. Ils ne s'affichent que si le générateur les porte. */
+  #dlg-courrier .dt-onglets{display:flex;gap:0;margin:0 0 12px;border-bottom:1px solid var(--filet)}
+  #dlg-courrier .dt-onglets button{flex:1;min-height:44px;border:0;background:none;
+    font:600 13px/1.3 system-ui;color:var(--gris);cursor:pointer;white-space:nowrap;
+    border-bottom:2px solid transparent;padding:0 4px}
+  #dlg-courrier .dt-onglets button[aria-selected="true"]{color:var(--accent,#1f3864);
+    border-bottom-color:var(--accent,#1f3864)}
   #dlg-courrier .dt-aide{margin:0 0 10px;font-size:12.5px;line-height:1.5;color:var(--gris)}
   #dlg-courrier .dt-aide b{color:var(--corps)}
   #dlg-courrier #dt-corps{max-height:62vh;overflow:auto;padding:14px 16px;
@@ -427,6 +435,7 @@ réponse nuancée.</p>
     <button type="button" class="second" id="dt-fermer">Fermer</button>
   </div>
   <h3 id="dt-titre"></h3>
+  <div id="dt-onglets" class="dt-onglets" role="tablist" hidden></div>
   <p class="dt-aide">Ce texte est à vous : <b>complétez-le, coupez, ajoutez vos clauses</b>. Ce qui
   manque à votre dossier sort entre crochets, remplacez-les. Vos modifications sont conservées sur ce
   poste et vous les retrouverez ici ; « Revenir au modèle » rétablit le texte d'origine.</p>

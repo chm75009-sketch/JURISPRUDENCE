@@ -7,7 +7,7 @@
    lui manque un règlement intérieur, et à qui l'on explique en cinq étapes
    comment en établir un, n'a toujours pas de règlement intérieur.
 
-   Ce fichier produit le document lui-même — rédigé, au nom de l'entreprise,
+   Ce fichier produit le document lui-même : rédigé, au nom de l'entreprise,
    prêt à suivre ses formalités. C'est la différence entre un outil de constat
    et un outil de travail.
 
@@ -17,10 +17,10 @@
    Là où la loi laisse un choix, le document en PROPOSE un, rédigé : demande du
    31 août 2026, « suggérer toujours une version quel que soit l'article ». Un
    employeur qui n'a pas de règlement intérieur n'a pas non plus la clause à
-   écrire dans le crochet — lui laisser la page blanche, c'est ne rien faire.
+   écrire dans le crochet : lui laisser la page blanche, c'est ne rien faire.
 
    Le choix reste néanmoins visible, et il reste le sien : sous chaque clause
-   proposée, une ligne « NOTE — » dit à quelle condition elle tient, ce qu'il
+   proposée, une ligne « NOTE - » dit à quelle condition elle tient, ce qu'il
    faut y adapter, et quand la supprimer. Ces lignes ne font pas partie du
    règlement et se retirent avant le dépôt. Ne demeurent entre crochets que les
    renseignements que l'application ne peut pas connaître : un SIRET, des
@@ -29,7 +29,7 @@
    Chaque partie porte l'article qui la commande. Ce n'est pas de l'ornement :
    un règlement intérieur se discute devant l'inspecteur du travail, qui peut
    en exiger le retrait ou la modification (L. 1322-1). Savoir d'où vient
-   chaque clause, c'est pouvoir la défendre — ou l'abandonner sans tout casser.
+   chaque clause, c'est pouvoir la défendre, ou l'abandonner sans tout casser.
 
    LES COURRIERS VONT AVEC. Un règlement intérieur non consulté, non publié,
    non déposé et non communiqué n'entre pas en vigueur. Les trois courriers
@@ -185,12 +185,12 @@
       L.push("COMMENT SE SERVIR DE CE DOCUMENT");
       L.push("");
       L.push("Ce texte est complet : il porte tout ce que la loi impose à un règlement");
-      L.push("intérieur, et rien d'autre — l'article L. 1321-1 dit que l'employeur y fixe");
+      L.push("intérieur, et rien d'autre : l'article L. 1321-1 dit que l'employeur y fixe");
       L.push("« exclusivement » trois matières, et une clause étrangère à ces matières");
       L.push("n'a pas sa place ici.");
       L.push("");
       L.push("Toutes les clauses sont rédigées : vous n'avez rien à écrire vous-même.");
-      L.push("Il ne reste entre crochets que des renseignements — votre SIRET, vos");
+      L.push("Il ne reste entre crochets que des renseignements : votre SIRET, vos");
       L.push("horaires, la liste de vos postes à risque, une date, un nom. Remplacez-les,");
       L.push("ou supprimez la ligne si elle ne vous concerne pas. Ne laissez aucun");
       L.push("crochet dans le texte que vous déposez.");
@@ -210,19 +210,19 @@
       L.push("");
       L.push(nom.toUpperCase());
       L.push("");
-      L.push("PRÉAMBULE — CHAMP D'APPLICATION");
+      L.push("PRÉAMBULE - CHAMP D'APPLICATION");
       L.push("");
       L.push("Le présent règlement intérieur s'applique à l'ensemble du personnel de");
       L.push(nom + ", en quelque lieu qu'il exerce son activité, ainsi qu'aux");
       L.push("personnes qui, sans être salariées, exécutent un travail dans l'entreprise");
-      L.push("— notamment les salariés d'entreprises extérieures, les intérimaires, les");
-      L.push("stagiaires et les apprentis — pour celles de ses dispositions relatives à");
+      L.push("(notamment les salariés d'entreprises extérieures, les intérimaires, les");
+      L.push("stagiaires et les apprentis) pour celles de ses dispositions relatives à");
       L.push("la santé, à la sécurité et à la discipline.");
       L.push("");
       L.push("Il est établi en application de l'article L. 1311-2 du code du travail, qui");
       L.push("le rend obligatoire dans les entreprises et établissements employant au");
       L.push("moins cinquante salariés" +
-        (eff ? " — l'effectif de l'entreprise est de " + eff + " salariés" : "") + ".");
+        (eff ? " (l'effectif de l'entreprise est de " + eff + " salariés)" : "") + ".");
       L.push("");
       L.push("Il s'applique uniformément à l'ensemble du personnel : aucune disposition");
       L.push("spéciale n'est établie pour une catégorie de personnel ou une division de");
@@ -246,23 +246,25 @@
       L.push("justifiées par la nature de la tâche à accomplir ni proportionnées au but");
       L.push("recherché (L. 1121-1 ; L. 1321-3, 2°).");
       L.push("");
-      L.push("NOTE — Si vous en établissez, l'article L. 1311-2, dernier alinéa, le");
+      L.push("NOTE - Si vous en établissez, l'article L. 1311-2, dernier alinéa, le");
       L.push("permet : remplacez alors la phrase ci-dessus par « Des dispositions");
       L.push("spéciales sont établies pour [CATÉGORIE OU DIVISION] ; elles figurent en");
       L.push("annexe du présent règlement et suivent les mêmes formalités que lui. »");
       L.push("");
 
-      L.push("════ TITRE I — SANTÉ ET SÉCURITÉ ════");
+      L.push("════ TITRE I - SANTÉ ET SÉCURITÉ ════");
       L.push("(L. 1321-1, 1° : les mesures d'application de la réglementation en matière");
       L.push("de santé et de sécurité, notamment les instructions prévues à L. 4122-1)");
       L.push("");
-      L.push("Article 1 — Obligation générale");
+      L.push("Article 1 - Obligation générale");
+      L.push("");
       L.push("Chaque salarié prend soin, en fonction de sa formation et selon ses");
       L.push("possibilités, de sa santé et de sa sécurité ainsi que de celles des autres");
       L.push("personnes concernées par ses actes ou ses omissions au travail. Il se");
       L.push("conforme aux instructions données par l'employeur.");
       L.push("");
-      L.push("Article 2 — Instructions particulières");
+      L.push("Article 2 - Instructions particulières");
+      L.push("");
       L.push("Chaque salarié respecte les consignes de sécurité affichées ou portées à sa");
       L.push("connaissance pour l'unité de travail à laquelle il appartient, ainsi que les");
       L.push("modes opératoires qui lui ont été enseignés lors de sa formation à la");
@@ -288,7 +290,7 @@
       L.push("avise immédiatement son responsable hiérarchique.");
       L.push("");
       if (sect) {
-        L.push("NOTE — Les interdictions du bloc « compte tenu de l'activité » sont les");
+        L.push("NOTE - Les interdictions du bloc « compte tenu de l'activité » sont les");
         L.push("consignes usuelles du " + sect.titre + ". Elles ne sont pas la loi :");
         L.push("confrontez-les à votre document unique et à vos postes réels, gardez");
         L.push("celles qui correspondent à un risque évalué chez vous, supprimez les");
@@ -296,7 +298,7 @@
         L.push("affaiblit tout l'article.");
         L.push("");
       }
-      L.push("NOTE — Ajoutez ici les consignes propres à vos unités de travail, telles");
+      L.push("NOTE - Ajoutez ici les consignes propres à vos unités de travail, telles");
       L.push("qu'elles ressortent de votre document unique. Une instruction qui ne");
       L.push("correspond à aucun risque évalué se défend mal ; une instruction absente là");
       L.push("où le risque est évalué se défend encore plus mal (L. 4122-1, qui impose");
@@ -304,7 +306,8 @@
       L.push("de travail, des moyens de protection et des substances dangereuses, et");
       L.push("qu'elles soient adaptées à la nature des tâches).");
       L.push("");
-      L.push("Article 3 — Équipements de protection individuelle");
+      L.push("Article 3 - Équipements de protection individuelle");
+      L.push("");
       L.push("L'entreprise fournit gratuitement à chaque salarié les équipements de");
       L.push("protection individuelle nécessaires à son poste, ainsi que les vêtements de");
       L.push("travail lorsque la nature du travail l'exige.");
@@ -325,19 +328,21 @@
       L.push("sans frais pour le salarié. Ces équipements restent la propriété de");
       L.push("l'entreprise et sont restitués à la fin du contrat.");
       L.push("");
-      L.push("NOTE — Annexez la liste des équipements fournis, poste par poste : c'est");
+      L.push("NOTE - Annexez la liste des équipements fournis, poste par poste : c'est");
       L.push("elle qui rend l'obligation de port opposable à un salarié déterminé.");
       L.push("");
-      L.push("Article 4 — Accidents et incidents");
+      L.push("Article 4 - Accidents et incidents");
+      L.push("");
       L.push("Tout accident, même bénin, et tout incident ayant pu entraîner un accident");
       L.push("sont signalés sans délai au responsable hiérarchique et, en son absence, à");
       L.push("la direction, qui procède à leur inscription et met en œuvre les mesures");
       L.push("nécessaires.");
       L.push("");
-      L.push("NOTE — Si un service ou une personne est spécialement chargé de la sécurité");
+      L.push("NOTE - Si un service ou une personne est spécialement chargé de la sécurité");
       L.push("dans l'entreprise, nommez-le ici en plus du responsable hiérarchique.");
       L.push("");
-      L.push("Article 5 — Repos, repas et locaux");
+      L.push("Article 5 - Repos, repas et locaux");
+      L.push("");
       L.push("Le salarié veille au respect de son repos quotidien de onze heures");
       L.push("consécutives au moins (L. 3131-1) et de son repos hebdomadaire de");
       L.push("vingt-quatre heures consécutives au moins, auxquelles s'ajoute le repos");
@@ -348,45 +353,47 @@
       L.push("Les repas ne sont pas pris dans les locaux affectés au travail (R. 4228-19),");
       L.push("mais dans l'emplacement prévu à cet effet, situé [PRÉCISEZ L'EMPLACEMENT].");
       L.push("");
-      L.push("NOTE — Si vos règles de déconnexion figurent dans un accord ou une charte,");
+      L.push("NOTE - Si vos règles de déconnexion figurent dans un accord ou une charte,");
       L.push("nommez-la ici avec sa date. Si vous n'en avez pas, supprimez la dernière");
       L.push("phrase du premier paragraphe plutôt que de renvoyer à un texte inexistant.");
       L.push("");
-      L.push("Article 6 — Visites médicales");
+      L.push("Article 6 - Visites médicales");
+      L.push("");
       L.push("Le personnel se soumet aux visites médicales et aux examens prévus par la");
       L.push("réglementation relative au suivi individuel de l'état de santé.");
       L.push("");
-      L.push("Article 7 — Boissons alcoolisées et substances");
-      L.push("6.1 — Aucune boisson alcoolisée autre que le vin, la bière, le cidre et le");
+      L.push("Article 7 - Boissons alcoolisées et substances");
+      L.push("");
+      L.push("7.1 - Aucune boisson alcoolisée autre que le vin, la bière, le cidre et le");
       L.push("poiré n'est autorisée sur le lieu de travail (R. 4228-20, alinéa 1er).");
       L.push("Toute autre boisson alcoolisée ne peut y être ni introduite, ni distribuée,");
       L.push("ni consommée.");
       L.push("");
-      L.push("6.2 — Il est interdit de laisser entrer ou séjourner dans les lieux de");
+      L.push("7.2 - Il est interdit de laisser entrer ou séjourner dans les lieux de");
       L.push("travail des personnes en état d'ivresse (R. 4228-21).");
       L.push("");
-      L.push("6.3 — La consommation des boissons mentionnées au 6.1 est interdite aux");
+      L.push("7.3 - La consommation des boissons mentionnées au 7.1 est interdite aux");
       L.push("postes suivants, dont le document unique d'évaluation des risques établit");
       L.push("qu'une atteinte à la vigilance y exposerait le salarié ou autrui à un");
       if (sect) {
         L.push("danger : " + sect.postes + " [COMPLÉTEZ OU RETIREZ SELON VOS POSTES RÉELS].");
       } else {
-        L.push("danger : [LISTER VOS POSTES — par exemple : conduite d'un véhicule ou d'un");
+        L.push("danger : [LISTER VOS POSTES, par exemple : conduite d'un véhicule ou d'un");
         L.push("engin, travail en hauteur, conduite de machine dangereuse, manipulation de");
         L.push("produits dangereux, travail isolé, port d'arme, encadrement d'une");
         L.push("intervention de secours].");
       }
       L.push("");
-      L.push("6.4 — L'introduction, la détention et l'usage de substances stupéfiantes");
+      L.push("7.4 - L'introduction, la détention et l'usage de substances stupéfiantes");
       L.push("sont interdits dans l'entreprise et pendant le temps de travail. Aux postes");
-      L.push("énumérés au 6.3, et à eux seuls, un test salivaire de dépistage peut être");
-      L.push("pratiqué dans les mêmes conditions qu'au 6.5. Le salarié peut demander une");
+      L.push("énumérés au 7.3, et à eux seuls, un test salivaire de dépistage peut être");
+      L.push("pratiqué dans les mêmes conditions qu'au 7.5. Le salarié peut demander une");
       L.push("contre-expertise médicale, à la charge de l'entreprise. La personne qui");
       L.push("pratique le test comme l'employeur sont tenus au secret sur son résultat, qui");
       L.push("ne révèle qu'une aptitude ou une inaptitude à tenir le poste, et non un");
       L.push("diagnostic.");
       L.push("");
-      L.push("6.5 — Lorsque l'état d'une personne occupant l'un des postes énumérés au 6.3");
+      L.push("7.5 - Lorsque l'état d'une personne occupant l'un des postes énumérés au 7.3");
       L.push("fait présumer une atteinte à sa vigilance et que cet état l'expose ou expose");
       L.push("autrui à un danger immédiat, un contrôle par éthylotest peut être pratiqué.");
       L.push("Ce contrôle ne peut avoir lieu que dans ce cas et selon les garanties");
@@ -395,26 +402,27 @@
       L.push("peut demander une seconde mesure immédiate ; le résultat n'est porté qu'à la");
       L.push("connaissance des personnes qui doivent en connaître.");
       L.push("");
-      L.push("6.6 — Le retrait immédiat du poste de la personne dont l'état constitue un");
+      L.push("7.6 - Le retrait immédiat du poste de la personne dont l'état constitue un");
       L.push("danger est une mesure de sécurité, et non une sanction : il ne dispense pas");
       L.push("de la procédure disciplinaire si une sanction est ensuite envisagée.");
       L.push("");
-      L.push("NOTE — La liste des postes du 6.3 est la condition de validité de tout ce");
+      L.push("NOTE - La liste des postes du 7.3 est la condition de validité de tout ce");
       L.push("qui précède : R. 4228-20 exige que la mesure soit proportionnée au but");
       L.push("recherché, et L. 1321-3, 2° interdit les restrictions qui ne sont ni");
       L.push("justifiées par la nature de la tâche à accomplir ni proportionnées au but");
       L.push("recherché. Une interdiction générale et absolue, sans lien avec des postes");
       L.push("identifiés comme à risque dans votre document unique, est exposée au retrait");
       L.push("par l'inspecteur du travail. Si aucun poste n'est concerné, supprimez les");
-      L.push("6.3 et 6.5 et gardez les autres : ils sont, eux, la loi elle-même.");
+      L.push("7.3 et 7.5 et gardez les autres : ils sont, eux, la loi elle-même.");
       L.push("");
-      L.push("Article 8 — Rétablissement de conditions de travail protectrices");
+      L.push("Article 8 - Rétablissement de conditions de travail protectrices");
+      L.push("");
       L.push("(L. 1321-1, 2°)");
       L.push("Lorsque les conditions de travail protectrices de la santé et de la sécurité");
-      L.push("apparaissent compromises — notamment à la suite d'un accident, d'un");
+      L.push("apparaissent compromises (notamment à la suite d'un accident, d'un");
       L.push("sinistre, de la défaillance d'un dispositif de protection, d'un défaut");
       L.push("d'hygiène ou d'une observation de l'inspecteur du travail ou du médecin du");
-      L.push("travail —, les salariés peuvent être appelés, à la demande de l'employeur, à");
+      L.push("travail), les salariés peuvent être appelés, à la demande de l'employeur, à");
       L.push("participer à leur rétablissement.");
       L.push("");
       L.push("Les tâches confiées à ce titre se limitent à la mise en sécurité de la zone,");
@@ -442,45 +450,47 @@
       L.push("(L. 4133-1).");
       L.push("");
 
-      L.push("════ TITRE II — DISCIPLINE ════");
+      L.push("════ TITRE II - DISCIPLINE ════");
       L.push("(L. 1321-1, 3° : les règles générales et permanentes relatives à la");
       L.push("discipline, notamment la nature et l'échelle des sanctions)");
       L.push("");
-      L.push("Article 9 — Règles générales");
-      L.push("8.1 Horaires — Le personnel respecte les horaires de travail affichés dans");
+      L.push("Article 9 - Règles générales");
+      L.push("");
+      L.push("9.1 Horaires - Le personnel respecte les horaires de travail affichés dans");
       L.push("l'entreprise. Tout retard est justifié auprès du responsable hiérarchique");
       L.push("dès la prise de poste. Le salarié ne quitte son poste avant l'heure qu'avec");
       L.push("l'accord de son responsable.");
       L.push("");
-      L.push("8.2 Absences — Toute absence est portée à la connaissance de l'entreprise");
+      L.push("9.2 Absences - Toute absence est portée à la connaissance de l'entreprise");
       L.push("dès que possible et, sauf impossibilité, le jour même. Elle est justifiée");
       L.push("dans les quarante-huit heures, sauf force majeure. En cas de maladie ou");
       L.push("d'accident, le salarié adresse l'arrêt de travail dans ce même délai, ainsi");
       L.push("que toute prolongation. Toute absence prévisible est autorisée");
       L.push("préalablement.");
       L.push("");
-      L.push("8.3 Contrôle des horaires — Lorsque l'entreprise use d'un dispositif de");
+      L.push("9.3 Contrôle des horaires - Lorsque l'entreprise use d'un dispositif de");
       L.push("contrôle des horaires, chacun l'emploie pour lui-même et pour lui seul :");
       L.push("enregistrer l'arrivée ou le départ d'un autre salarié est une faute. Toute");
       L.push("erreur ou omission est signalée sans délai, et régularisée.");
       L.push("");
-      L.push("NOTE — Ce 8.3 ne vaut que si vous avez un tel dispositif : badgeuse, pointeuse,");
+      L.push("NOTE - Ce 9.3 ne vaut que si vous avez un tel dispositif : badgeuse, pointeuse,");
       L.push("application. Supprimez-le sinon. Et gardez-vous d'écrire qu'un temps non");
       L.push("enregistré n'est pas payé : le temps de travail effectif se prouve par tout");
       L.push("moyen, une clause qui le nierait serait tenue pour non écrite.");
       L.push("");
-      L.push("8.4 Tenue et comportement — Le salarié adopte une tenue compatible avec ses");
+      L.push("9.4 Tenue et comportement - Le salarié adopte une tenue compatible avec ses");
       L.push("fonctions et avec les règles de sécurité et d'hygiène de son poste. Il");
       L.push("s'abstient de tout comportement portant atteinte à la dignité ou à la");
       L.push("sécurité d'autrui, ainsi que de toute violence, physique ou verbale.");
       L.push("");
-      L.push("NOTE — Adaptez les horaires et les délais aux vôtres et à votre convention");
+      L.push("NOTE - Adaptez les horaires et les délais aux vôtres et à votre convention");
       L.push("collective : une clause moins favorable que la convention est illicite");
       L.push("(L. 1321-3, 1°). Ces règles doivent rester GÉNÉRALES et PERMANENTES : une");
       L.push("règle qui ne vise qu'un salarié, ou qui n'a qu'un temps, relève de la note");
       L.push("de service ou du contrat, non du règlement intérieur.");
       L.push("");
-      L.push("Article 10 — Accès aux lieux de travail");
+      L.push("Article 10 - Accès aux lieux de travail");
+      L.push("");
       L.push("L'entrée et la sortie du personnel s'effectuent par les accès prévus à cet");
       L.push("effet. Le salarié n'a accès aux locaux et aux lieux de travail que pour");
       L.push("l'exécution de son contrat ; il ne s'y maintient pas en dehors de son");
@@ -505,12 +515,13 @@
       L.push("garde, ne les confie à personne, signale sans délai toute perte même");
       L.push("temporaire, et les restitue à la fin de son contrat.");
       L.push("");
-      L.push("NOTE — Si l'entreprise pratique un contrôle d'accès enregistrant les entrées");
+      L.push("NOTE - Si l'entreprise pratique un contrôle d'accès enregistrant les entrées");
       L.push("et les sorties, dites-le ici : aucune information concernant personnellement");
       L.push("un salarié ne peut être collectée par un dispositif qui n'a pas été porté");
       L.push("préalablement à sa connaissance (L. 1222-4).");
       L.push("");
-      L.push("Article 11 — Sorties pendant le temps de travail");
+      L.push("Article 11 - Sorties pendant le temps de travail");
+      L.push("");
       L.push("Le salarié ne quitte pas son poste ni l'établissement pendant son temps de");
       L.push("travail sans l'accord de son responsable, sauf pendant les temps de pause et");
       L.push("de repas, et sauf exercice du droit de retrait prévu à l'article 8.");
@@ -528,7 +539,8 @@
       L.push("commandée par l'urgence, dont il est rendu compte dès que possible. Elle ne");
       L.push("s'applique pas aux salariés dont le travail s'exécute hors de l'établissement.");
       L.push("");
-      L.push("Article 12 — Usage des biens et du matériel de l'entreprise");
+      L.push("Article 12 - Usage des biens et du matériel de l'entreprise");
+      L.push("");
       L.push("Les locaux, le matériel, les véhicules, les outils et les documents mis à la");
       L.push("disposition du salarié servent à l'exécution de son travail. Il en prend soin,");
       L.push("les utilise conformément à leur destination et aux notices reçues, et signale");
@@ -549,11 +561,12 @@
       L.push("communiquer aux autorités l'identité du conducteur lorsqu'une infraction est");
       L.push("constatée par un appareil de contrôle automatique.");
       L.push("");
-      L.push("NOTE — Cette dernière obligation ne se justifie que pour les salariés dont la");
+      L.push("NOTE - Cette dernière obligation ne se justifie que pour les salariés dont la");
       L.push("conduite fait partie du travail : réservez-la-leur expressément, sinon elle");
       L.push("excède ce que la nature de la tâche justifie (L. 1121-1).");
       L.push("");
-      L.push("Article 13 — Outils informatiques et communications");
+      L.push("Article 13 - Outils informatiques et communications");
+      L.push("");
       L.push("Les équipements informatiques, les accès au réseau, la messagerie");
       L.push("professionnelle et les connexions fournis par l'entreprise sont destinés à un");
       L.push("usage professionnel. Un usage personnel raisonnable en est toléré, à condition");
@@ -578,14 +591,15 @@
       L.push("ouverts par l'employeur hors de sa présence ou sans qu'il ait été appelé, sauf");
       L.push("risque ou événement particulier.");
       L.push("");
-      L.push("NOTE — C'est l'article de ce règlement qui appelle le plus d'adaptation. Il");
+      L.push("NOTE - C'est l'article de ce règlement qui appelle le plus d'adaptation. Il");
       L.push("suppose que vous ayez une charte informatique, ou à défaut que vous décriviez");
       L.push("ici vos outils réels. Si vous ne journalisez rien, supprimez le paragraphe");
       L.push("correspondant : annoncer un contrôle qui n'existe pas ne protège de rien.");
       L.push("Si vous en pratiquez un, l'information préalable et la consultation du comité");
       L.push("ne sont pas des formalités, ce sont les conditions de son opposabilité.");
       L.push("");
-      L.push("Article 14 — Effets personnels et vestiaires");
+      L.push("Article 14 - Effets personnels et vestiaires");
+      L.push("");
       L.push("L'entreprise met à disposition les vestiaires et armoires individuelles que la");
       L.push("réglementation impose (R. 4228-6 et suivants). Chacun tient la sienne en état");
       L.push("de propreté.");
@@ -603,12 +617,13 @@
       L.push("au salarié, qui est informé de son droit de la refuser et de demander la");
       L.push("présence d'un témoin ; son refus n'est pas fautif.");
       L.push("");
-      L.push("NOTE — Ce dernier paragraphe est écrit au plus près de L. 1121-1. Une clause");
+      L.push("NOTE - Ce dernier paragraphe est écrit au plus près de L. 1121-1. Une clause");
       L.push("qui autoriserait une fouille systématique, ou qui ferait du refus une faute,");
       L.push("serait retirée. Si votre activité justifie un contrôle des sacs à la sortie,");
       L.push("écrivez-le en le motivant et en gardant le caractère facultatif.");
       L.push("");
-      L.push("Article 15 — Exécution du travail, discrétion et courtoisie");
+      L.push("Article 15 - Exécution du travail, discrétion et courtoisie");
+      L.push("");
       L.push("Le contrat de travail s'exécute de bonne foi (L. 1222-1). Le salarié applique");
       L.push("les instructions reçues et les procédures en vigueur, rend compte des");
       L.push("difficultés rencontrées et transmet aux autres services les informations");
@@ -621,7 +636,8 @@
       L.push("Il se comporte avec correction envers ses collègues, sa hiérarchie et les");
       L.push("personnes extérieures qu'il rencontre dans l'exercice de ses fonctions.");
       L.push("");
-      L.push("Article 16 — Nature et échelle des sanctions");
+      L.push("Article 16 - Nature et échelle des sanctions");
+      L.push("");
       L.push("Constitue une sanction toute mesure, autre que les observations verbales,");
       L.push("prise par l'employeur à la suite d'un agissement du salarié considéré par");
       L.push("lui comme fautif, que cette mesure soit de nature à affecter immédiatement");
@@ -641,30 +657,33 @@
       L.push("proportionnée à la faute. Il ne peut en revanche prononcer aucune sanction");
       L.push("qui ne figure pas dans cette liste.");
       L.push("");
-      L.push("NOTE — La durée de la mise à pied est ici proposée à trois jours ouvrables :");
+      L.push("NOTE - La durée de la mise à pied est ici proposée à trois jours ouvrables :");
       L.push("vous la fixez librement, mais elle doit figurer dans le règlement, à défaut");
       L.push("de quoi cette sanction ne peut pas être prononcée. La mutation et la");
       L.push("rétrogradation modifient le contrat et ne peuvent être imposées : le refus");
       L.push("du salarié oblige l'employeur à y renoncer ou à engager une autre");
       L.push("procédure ; supprimez le 4 si vous ne voulez pas de ces sanctions.");
       L.push("");
-      L.push("Article 17 — Interdiction des sanctions pécuniaires");
+      L.push("Article 17 - Interdiction des sanctions pécuniaires");
+      L.push("");
       L.push("Les amendes et autres sanctions pécuniaires sont interdites. Toute");
       L.push("disposition ou stipulation contraire est réputée non écrite (L. 1331-2).");
       L.push("");
 
-      L.push("════ TITRE III — DROITS DE LA DÉFENSE ════");
+      L.push("════ TITRE III - DROITS DE LA DÉFENSE ════");
       L.push("(L. 1321-2, 1° : le règlement rappelle les dispositions relatives aux droits");
       L.push("de la défense définies aux articles L. 1332-1 à L. 1332-3)");
       L.push("");
-      L.push("Article 18 — Information écrite des griefs");
+      L.push("Article 18 - Information écrite des griefs");
+      L.push("");
       L.push("Aucune sanction ne peut être prise à l'encontre d'un salarié sans que");
       L.push("celui-ci soit informé, dans le même temps et par écrit, des griefs retenus");
       L.push("contre lui (L. 1332-1).");
       L.push("");
-      L.push("Article 19 — Entretien préalable et assistance");
+      L.push("Article 19 - Entretien préalable et assistance");
+      L.push("");
       L.push("Lorsque l'employeur envisage de prendre une sanction, il convoque le salarié");
-      L.push("en lui précisant l'objet de la convocation — sauf si la sanction envisagée");
+      L.push("en lui précisant l'objet de la convocation, sauf si la sanction envisagée");
       L.push("est un avertissement ou une sanction de même nature n'ayant pas");
       L.push("d'incidence, immédiate ou non, sur la présence dans l'entreprise, la");
       L.push("fonction, la carrière ou la rémunération.");
@@ -674,13 +693,15 @@
       L.push("l'employeur indique le motif de la sanction envisagée et recueille les");
       L.push("explications du salarié (L. 1332-2).");
       L.push("");
-      L.push("Article 20 — Mise à pied conservatoire");
+      L.push("Article 20 - Mise à pied conservatoire");
+      L.push("");
       L.push("Lorsque les faits reprochés ont rendu indispensable une mesure conservatoire");
       L.push("de mise à pied à effet immédiat, aucune sanction définitive relative à ces");
       L.push("faits ne peut être prise sans que la procédure de l'article L. 1332-2 ait été");
       L.push("respectée (L. 1332-3). La mise à pied conservatoire n'est pas une sanction.");
       L.push("");
-      L.push("Article 21 — Prescription");
+      L.push("Article 21 - Prescription");
+      L.push("");
       L.push("Aucun fait fautif ne peut donner lieu à lui seul à l'engagement de");
       L.push("poursuites disciplinaires au-delà d'un délai de deux mois à compter du jour");
       L.push("où l'employeur en a eu connaissance, à moins que ce fait ait donné lieu dans");
@@ -690,24 +711,25 @@
       L.push("poursuites ne peut être invoquée à l'appui d'une nouvelle sanction");
       L.push("(L. 1332-5).");
       L.push("");
-      L.push("Lorsque la convention collective applicable — " +
-        cro(p.conventionCollective, "INTITULÉ DE LA CONVENTION COLLECTIVE, IDCC") + " —");
+      L.push("Lorsque la convention collective applicable (" +
+        cro(p.conventionCollective, "INTITULÉ DE LA CONVENTION COLLECTIVE, IDCC") + ")");
       L.push("prévoit en matière disciplinaire des garanties supérieures à celles qui");
       L.push("précèdent, notamment la saisine préalable d'une commission de discipline,");
       L.push("un avis préalable ou des délais particuliers, ces garanties s'appliquent en");
       L.push("sus des dispositions du présent titre, qui ne s'y substituent pas.");
       L.push("");
-      L.push("NOTE — Écrivez ici, en toutes lettres, la procédure que votre convention");
+      L.push("NOTE - Écrivez ici, en toutes lettres, la procédure que votre convention");
       L.push("impose. Sa méconnaissance est assimilée à la violation d'une garantie de");
       L.push("fond lorsqu'elle a privé le salarié de ses droits de la défense ou a pu");
       L.push("influer sur la décision : la sanction tombe alors sans examen des faits.");
       L.push("");
 
-      L.push("════ TITRE IV — HARCÈLEMENTS ET AGISSEMENTS SEXISTES ════");
+      L.push("════ TITRE IV - HARCÈLEMENTS ET AGISSEMENTS SEXISTES ════");
       L.push("(L. 1321-2, 2° : le règlement rappelle les dispositions relatives aux");
       L.push("harcèlements moral et sexuel et aux agissements sexistes prévues par le code)");
       L.push("");
-      L.push("Article 22 — Harcèlement moral");
+      L.push("Article 22 - Harcèlement moral");
+      L.push("");
       L.push("Aucun salarié ne doit subir les agissements répétés de harcèlement moral qui");
       L.push("ont pour objet ou pour effet une dégradation de ses conditions de travail");
       L.push("susceptible de porter atteinte à ses droits et à sa dignité, d'altérer sa");
@@ -724,7 +746,8 @@
       L.push("Tout salarié ayant procédé à des agissements de harcèlement moral est");
       L.push("passible d'une sanction disciplinaire (L. 1152-5).");
       L.push("");
-      L.push("Article 23 — Harcèlement sexuel");
+      L.push("Article 23 - Harcèlement sexuel");
+      L.push("");
       L.push("Aucun salarié ne doit subir des faits (L. 1153-1) :");
       L.push("  1° Soit de harcèlement sexuel, constitué par des propos ou comportements à");
       L.push("     connotation sexuelle ou sexiste répétés qui soit portent atteinte à sa");
@@ -741,8 +764,8 @@
       L.push("     d'obtenir un acte de nature sexuelle, que celui-ci soit recherché au");
       L.push("     profit de l'auteur des faits ou au profit d'un tiers.");
       L.push("");
-      L.push("Aucune personne ayant subi ou refusé de subir de tels faits — y compris,");
-      L.push("dans le cas du 1°, si les propos ou comportements n'ont pas été répétés —");
+      L.push("Aucune personne ayant subi ou refusé de subir de tels faits (y compris,");
+      L.push("dans le cas du 1°, si les propos ou comportements n'ont pas été répétés)");
       L.push("ni ayant de bonne foi témoigné ou relaté de tels faits, ne peut être écartée");
       L.push("d'un recrutement, sanctionnée, licenciée ni faire l'objet d'une mesure");
       L.push("discriminatoire (L. 1153-2, renvoyant à L. 1121-2). Toute disposition ou");
@@ -751,14 +774,16 @@
       L.push("Tout salarié ayant procédé à des faits de harcèlement sexuel est passible");
       L.push("d'une sanction disciplinaire (L. 1153-6).");
       L.push("");
-      L.push("Article 24 — Agissements sexistes");
+      L.push("Article 24 - Agissements sexistes");
+      L.push("");
       L.push("Nul ne doit subir d'agissement sexiste, défini comme tout agissement lié au");
       L.push("sexe d'une personne, ayant pour objet ou pour effet de porter atteinte à sa");
       L.push("dignité ou de créer un environnement intimidant, hostile, dégradant,");
       L.push("humiliant ou offensant (L. 1142-2-1). Un tel agissement expose son auteur");
       L.push("aux sanctions prévues à l'article 16 du présent règlement.");
       L.push("");
-      L.push("Article 25 — Prévention, information et signalement");
+      L.push("Article 25 - Prévention, information et signalement");
+      L.push("");
       L.push("L'employeur prend toutes dispositions nécessaires en vue de prévenir les");
       L.push("agissements de harcèlement moral (L. 1152-4), de prévenir les faits de");
       L.push("harcèlement sexuel, d'y mettre un terme et de les sanctionner (L. 1153-5).");
@@ -788,12 +813,13 @@
       L.push("suites qui lui sont données.");
       L.push("");
 
-      L.push("════ TITRE V — PROTECTION DES LANCEURS D'ALERTE ════");
+      L.push("════ TITRE V - PROTECTION DES LANCEURS D'ALERTE ════");
       L.push("(L. 1321-2, 3° : le règlement rappelle l'existence du dispositif de");
       L.push("protection des lanceurs d'alerte prévu au chapitre II de la loi n° 2016-1691");
       L.push("du 9 décembre 2016)");
       L.push("");
-      L.push("Article 26 — Existence du dispositif et protection");
+      L.push("Article 26 - Existence du dispositif et protection");
+      L.push("");
       L.push("Il existe un dispositif de protection des lanceurs d'alerte, institué par le");
       L.push("chapitre II de la loi n° 2016-1691 du 9 décembre 2016 relative à la");
       L.push("transparence, à la lutte contre la corruption et à la modernisation de la");
@@ -802,34 +828,35 @@
       L.push("Aucune personne ne peut être écartée d'une procédure de recrutement ou de");
       L.push("l'accès à un stage ou à une période de formation, aucun salarié ne peut être");
       L.push("sanctionné, licencié ni faire l'objet d'une mesure discriminatoire, directe");
-      L.push("ou indirecte — notamment en matière de rémunération, de formation, de");
+      L.push("ou indirecte (notamment en matière de rémunération, de formation, de");
       L.push("reclassement, d'affectation, de qualification, de classification, de");
       L.push("promotion, d'horaires, d'évaluation de la performance, de mutation ou de");
-      L.push("renouvellement de contrat — pour avoir signalé ou divulgué des informations");
+      L.push("renouvellement de contrat) pour avoir signalé ou divulgué des informations");
       L.push("dans les conditions prévues par cette loi (L. 1121-2).");
       L.push("");
       L.push("Les signalements sont recueillis et traités selon la procédure interne en");
-      L.push("vigueur dans l'entreprise, consultable [OÙ LA CONSULTER — par exemple : sur");
+      L.push("vigueur dans l'entreprise, consultable [OÙ LA CONSULTER, par exemple : sur");
       L.push("l'intranet, auprès du service des ressources humaines], et peuvent être");
       L.push("adressés à [PERSONNE OU SERVICE DÉSIGNÉ POUR LES RECEVOIR]. Le salarié");
       L.push("conserve la faculté de s'adresser directement à l'autorité externe");
       L.push("compétente dans les conditions prévues par la même loi.");
       L.push("");
-      L.push("NOTE — Cette loi n'est pas au code du travail : l'application ne l'a pas lue");
+      L.push("NOTE - Cette loi n'est pas au code du travail : l'application ne l'a pas lue");
       L.push("à la source et n'en détaille donc pas le contenu ici. Si vous n'avez pas");
       L.push("encore de procédure interne de recueil des signalements, supprimez la");
-      L.push("dernière phrase du troisième alinéa jusqu'à sa mise en place — l'existence");
+      L.push("dernière phrase du troisième alinéa jusqu'à sa mise en place : l'existence");
       L.push("du dispositif, elle, doit être rappelée dans tous les cas (L. 1321-2, 3°).");
       L.push("");
 
       /* Le principe de neutralité n'est pas obligatoire : il est une faculté que
          L. 1321-2-1 encadre. Le proposer comme un modèle tout fait pousserait à
          l'inscrire sans en mesurer la condition. */
-      L.push("════ TITRE VI — [FACULTATIF] PRINCIPE DE NEUTRALITÉ ════");
-      L.push("(L. 1321-2-1 — ce titre est FACULTATIF : supprimez-le si vous n'inscrivez");
+      L.push("════ TITRE VI - [FACULTATIF] PRINCIPE DE NEUTRALITÉ ════");
+      L.push("(L. 1321-2-1, ce titre est FACULTATIF : supprimez-le si vous n'inscrivez");
       L.push("pas de principe de neutralité)");
       L.push("");
-      L.push("Article 27 — Principe de neutralité");
+      L.push("Article 27 - Principe de neutralité");
+      L.push("");
       L.push("Les salariés occupant un poste comportant un contact direct avec la");
       L.push("clientèle ou le public observent, dans l'exercice de leurs fonctions et");
       L.push("pendant ce seul temps, une stricte neutralité : ils s'abstiennent de");
@@ -837,7 +864,7 @@
       L.push("leurs propos, leur comportement ou leur tenue.");
       L.push("");
       L.push("Cette restriction est justifiée par [ÉCRIRE ICI CE QUI LA JUSTIFIE DANS");
-      L.push("VOTRE ENTREPRISE — par exemple : la nécessité de préserver, auprès d'une");
+      L.push("VOTRE ENTREPRISE, par exemple : la nécessité de préserver, auprès d'une");
       L.push("clientèle diverse, l'image d'impartialité de l'entreprise dans l'exécution");
       L.push("de prestations réalisées chez le client]. Elle est proportionnée au but");
       L.push("recherché en ce qu'elle est limitée aux seuls salariés en contact avec la");
@@ -845,32 +872,35 @@
       L.push("qu'un salarié qui s'y refuserait se verrait proposer, dans la mesure du");
       L.push("possible, un poste sans contact avec la clientèle plutôt qu'un licenciement.");
       L.push("");
-      L.push("NOTE — La clause n'est licite qu'à ces deux conditions cumulatives");
+      L.push("NOTE - La clause n'est licite qu'à ces deux conditions cumulatives");
       L.push("(L. 1321-2-1) : une clause qui viserait l'ensemble du personnel sans");
       L.push("distinction de poste ne l'est pas. Le motif entre crochets doit être écrit");
       L.push("dans le règlement lui-même : c'est cette motivation qui défendra la clause.");
       L.push("Supprimez tout ce titre si vous n'inscrivez pas de principe de neutralité.");
       L.push("");
 
-      L.push("════ TITRE VII — ENTRÉE EN VIGUEUR, PUBLICITÉ, MODIFICATIONS ════");
+      L.push("════ TITRE VII - ENTRÉE EN VIGUEUR, PUBLICITÉ, MODIFICATIONS ════");
       L.push("");
-      L.push("Article 28 — Entrée en vigueur");
+      L.push("Article 28 - Entrée en vigueur");
+      L.push("");
       L.push("Le présent règlement entre en vigueur le [DATE D'ENTRÉE EN VIGUEUR].");
       L.push("Cette date doit être postérieure d'un mois à l'accomplissement des");
       L.push("formalités de publicité, le délai courant à compter de la dernière en date");
       L.push("des formalités de publicité et de dépôt (L. 1321-4 ; R. 1321-3).");
       L.push("");
-      L.push("Article 29 — Publicité");
+      L.push("Article 29 - Publicité");
+      L.push("");
       L.push("Le règlement est porté, par tout moyen, à la connaissance des personnes ayant");
       L.push("accès aux lieux de travail ou aux locaux où se fait l'embauche (R. 1321-1).");
       L.push("");
       L.push("À compter de son entrée en vigueur, le présent règlement remplace, dans");
       L.push("toutes ses dispositions, le règlement intérieur antérieur.");
       L.push("");
-      L.push("NOTE — Supprimez cette phrase s'il s'agit de votre premier règlement");
+      L.push("NOTE - Supprimez cette phrase s'il s'agit de votre premier règlement");
       L.push("intérieur.");
       L.push("");
-      L.push("Article 30 — Modifications");
+      L.push("Article 30 - Modifications");
+      L.push("");
       L.push("Toute modification ou tout retrait de clause suit les mêmes formalités que");
       L.push("l'établissement du règlement : avis du comité social et économique,");
       L.push("publicité, dépôt et communication à l'inspecteur du travail (L. 1321-4,");
@@ -896,7 +926,8 @@
       L.push("disposition légale, réglementaire ou conventionnelle nouvelle cesserait de");
       L.push("s'appliquer de plein droit, sans que cela affecte les autres.");
       L.push("");
-      L.push("Article 31 — Langue");
+      L.push("Article 31 - Langue");
+      L.push("");
       L.push("Le présent règlement est rédigé en français (L. 1321-6).");
       L.push("");
       L.push("");
@@ -909,7 +940,7 @@
       L.push("Communication à l'inspecteur du travail, deux exemplaires (R. 1321-4) | [DATE] | [accusé de réception]");
       L.push("Entrée en vigueur, un mois après la dernière formalité (R. 1321-3) | [DATE] | ");
       L.push("");
-      L.push("NOTE — Remplissez ce relevé au fur et à mesure et gardez-le avec le règlement.");
+      L.push("NOTE - Remplissez ce relevé au fur et à mesure et gardez-le avec le règlement.");
       L.push("C'est la dernière en date des formalités de publicité et de dépôt qui fait");
       L.push("courir le délai d'un mois : sans ces dates, vous ne pouvez pas prouver que le");
       L.push("règlement était en vigueur le jour où vous avez prononcé une sanction.");
@@ -922,7 +953,7 @@
 
       /* ---- les trois courriers, produits avec le règlement ---- */
       L.push("════════════════════════════════════════════════════════════════════════");
-      L.push("COURRIER 1 — CONSULTATION DU COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("COURRIER 1 - CONSULTATION DU COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("════════════════════════════════════════════════════════════════════════");
       L.push("");
       L.push("À adresser AVANT toute introduction du règlement : L. 1321-4 interdit son");
@@ -962,7 +993,7 @@
       L.push("");
 
       L.push("════════════════════════════════════════════════════════════════════════");
-      L.push("COURRIER 2 — TRANSMISSION À L'INSPECTEUR DU TRAVAIL");
+      L.push("COURRIER 2 - TRANSMISSION À L'INSPECTEUR DU TRAVAIL");
       L.push("════════════════════════════════════════════════════════════════════════");
       L.push("");
       L.push("À adresser EN MÊME TEMPS que les mesures de publicité, en DEUX exemplaires,");
@@ -1003,7 +1034,7 @@
       L.push("");
 
       L.push("════════════════════════════════════════════════════════════════════════");
-      L.push("COURRIER 3 — DÉPÔT AU GREFFE DU CONSEIL DE PRUD'HOMMES");
+      L.push("COURRIER 3 - DÉPÔT AU GREFFE DU CONSEIL DE PRUD'HOMMES");
       L.push("════════════════════════════════════════════════════════════════════════");
       L.push("");
       L.push("Le dépôt se fait au greffe du conseil de prud'hommes DU RESSORT de");
@@ -1044,15 +1075,15 @@
       L.push("════════════════════════════════════════════════════════════════════════");
       L.push("");
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " — vous adressez le projet au comité (courrier 1).");
+      L.push("Aujourd'hui, " + leJour(d0) + " : vous adressez le projet au comité (courrier 1).");
       L.push("Le comité rend son avis en réunion : prévoyez le délai de convocation que");
       L.push("votre règlement intérieur de comité ou vos usages imposent.");
       L.push("");
-      L.push("Le jour de l'avis — vous accomplissez la publicité (R. 1321-1), vous déposez");
+      L.push("Le jour de l'avis : vous accomplissez la publicité (R. 1321-1), vous déposez");
       L.push("au greffe (R. 1321-2) et vous transmettez à l'inspecteur en deux exemplaires");
       L.push("avec l'avis (R. 1321-4). Ces trois actes peuvent se faire le même jour.");
       L.push("");
-      L.push("Un mois plus tard, au plus tôt — le règlement entre en vigueur. Si la");
+      L.push("Un mois plus tard, au plus tôt : le règlement entre en vigueur. Si la");
       L.push("dernière formalité était accomplie aujourd'hui, l'entrée en vigueur ne");
       L.push("pourrait pas être antérieure au " + leJour(dans(d0, 31)) + ".");
       L.push("");
@@ -1107,10 +1138,47 @@
     },
   };
 
+  /* TROIS ONGLETS PLUTÔT QU'UN ROULEAU
+     ==================================
+     Un générateur peut porter une fonction « parties » : la page affiche
+     alors des onglets au lieu d'un seul texte. Demande du 12 septembre 2026,
+     « il ne faut pas mettre le modèle du règlement intérieur et les modèles
+     de procédure ensemble ».
+
+     Le règlement se remplit ; les courriers s'envoient dans un ordre ; le
+     droit se consulte quand on le conteste. Trois usages, trois écrans. Le
+     découpage se fait sur les intertitres que le générateur écrit lui-même,
+     et « produire » continue de rendre le tout d'un bloc : un appelant qui
+     ignore les parties n'en perd aucune. */
+  function coupe(L, debut, fin) {
+    var a = -1, b = L.length;
+    for (var i = 0; i < L.length; i++) if (L[i].indexOf(debut) === 0) { a = i; break; }
+    if (a < 0) return [];
+    if (fin) for (var j = a + 1; j < L.length; j++) if (L[j].indexOf(fin) === 0) { b = j; break; }
+    return L.slice(a, b);
+  }
+  function partiesRi(ctx) {
+    var L = D["DIS-CTL-RI-01"].produire(ctx).split("\n");
+    var jusquRelve = coupe(L, L[0], "RELEVÉ DES FORMALITÉS");
+    var signature  = coupe(L, "Fait à ", "COURRIER 1");
+    var verifs     = coupe(L, "AVANT DE DÉPOSER", "LE DROIT QUI FONDE");
+    var relve      = coupe(L, "RELEVÉ DES FORMALITÉS", "Fait à ");
+    var courriers  = coupe(L, "COURRIER 1", "AVANT DE DÉPOSER");
+    var droit      = coupe(L, "LE DROIT QUI FONDE", null);
+    return [
+      { cle: "document", nom: "Le règlement",
+        texte: jusquRelve.concat(signature, [""], verifs).join("\n") },
+      { cle: "formalites", nom: "Formalités",
+        texte: relve.concat([""], courriers).join("\n") },
+      { cle: "droit", nom: "Le droit", texte: droit.join("\n") },
+    ];
+  }
+  D["DIS-CTL-RI-01"].parties = partiesRi;
+
   /* Ce que la page demande : y a-t-il un document pour ce point ? */
   function pour(id) { return Object.prototype.hasOwnProperty.call(D, id) ? D[id] : null; }
 
-  /* Les modules déposent leurs générateurs ici, chacun dans son fichier —
+  /* Les modules déposent leurs générateurs ici, chacun dans son fichier :
      documents-cse.js, documents-pse.js… Un seul registre, huit sources : c'est
      ce qui permet de travailler sur un module sans toucher aux sept autres.
 
