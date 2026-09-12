@@ -1427,13 +1427,6 @@
     var exemple = coupure > 0 ? L.slice(0, coupure) : [];
     var reste = coupure > 0 ? L.slice(coupure) : L;
 
-    var sous = [
-      { cle: "vous", nom: "Votre document",
-        texte: coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "5. INVENTAIRE").join("\n") },
-      { cle: "socle", nom: "Le socle commun",
-        texte: coupeSst(reste, "5. INVENTAIRE", "6. SUITES").join("\n") },
-      { cle: "ex", nom: "L'exemple", texte: exemple.join("\n") },
-    ];
     var form = [
       { cle: "s6", nom: "6 Les suites", texte: coupeSst(reste, "6. SUITES", "7. MISE À JOUR").join("\n") },
       { cle: "s7", nom: "7 Mise à jour", texte: coupeSst(reste, "7. MISE À JOUR", "8. CONSERVATION").join("\n") },
@@ -1443,9 +1436,16 @@
     ].filter(function (x) { return x.texte.trim() !== ""; });
     var droit = coupeSst(reste, "LES RÈGLES", null).join("\n");
 
+    /* PAS DE SOUS-BOUTONS SUR LE DOCUMENT. Ils y avaient été posés, et le
+       Word n'emportait plus que le morceau ouvert : l'en-tête sans
+       l'inventaire, c'est-à-dire tout sauf un document unique. Défaut relevé
+       le 12 septembre 2026 sur le fichier téléchargé. L'onglet rend donc le
+       document entier, sections 1 à 5, socle compris, et l'exemple vient
+       après lui, comme dans le règlement intérieur. */
+    var doc = coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "6. SUITES")
+      .concat([""], exemple);
     return [
-      { cle: "document", nom: "Le document",
-        texte: coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "6. SUITES").join("\n"), sous: sous },
+      { cle: "document", nom: "Le document", texte: doc.join("\n") },
       { cle: "formalites", nom: "Formalités",
         texte: coupeSst(reste, "6. SUITES", "LES RÈGLES").join("\n"), sous: form },
       { cle: "droit", nom: "Le droit", texte: droit },
