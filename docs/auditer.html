@@ -108,15 +108,22 @@
      due. non : la page où le document se produit. oui : la page qui contrôle
      le document existant ; sans page de contrôle, « Oui » enregistre la
      réponse sur ce poste et la ligne passe en vert. */
+  /* L'ORDRE : LES MODULES REPRIS D'ABORD.
+
+     Le règlement intérieur, puis la base de données : les deux qui ouvrent
+     le document, ses formalités une par une avec leur pièce, et le droit.
+     Demande du 12 septembre 2026, la même que pour les vignettes des
+     parcours. Les autres suivent dans leur ordre d'origine, et chacun
+     remontera ici le jour où il sera repris. */
   var LIGNES = [
+    { cle: "ri",         nom: "Règlement intérieur",  seuil: 50,  non: "parcours.html?p=ri&faire=1",           oui: "controler-ri.html" },
+    { cle: "bdese",      nom: "Base de données (BDESE)",   seuil: 50,  non: "audit-bdese.html?rep=non",             oui: "controler-bdese.html" },
     { cle: "duerp",      nom: "Document unique (risques)",      seuil: 1,   non: "parcours.html?p=duerp&faire=1",        oui: "controler-duerp.html" },
     { cle: "affichages", nom: "Affichages obligatoires",        seuil: 1,   non: "parcours.html?p=affichages&faire=1",   oui: "controler-affichages.html" },
     { cle: "registre",   nom: "Registre du personnel",          seuil: 1,   non: "parcours.html?p=registre&faire=1" },
     { cle: "mutuelle",   nom: "Mutuelle d'entreprise",          seuil: 1,   non: "gerer.html" },
     { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "gerer.html" },
     { cle: "cse",        nom: "Comité social et économique", seuil: 11, non: "parcours.html?p=installation&faire=1", oui: "controler-cse.html" },
-    { cle: "ri",         nom: "Règlement intérieur",  seuil: 50,  non: "parcours.html?p=ri&faire=1",           oui: "controler-ri.html" },
-    { cle: "bdese",      nom: "Base de données (BDESE)",   seuil: 50,  non: "audit-bdese.html?rep=non",             oui: "controler-bdese.html" },
     { cle: "egalite",    nom: "Égalité femmes-hommes", seuil: 50, non: "parcours.html?p=index&faire=1",        oui: "controler-egalite.html" },
     { cle: "nao",        nom: "Négociation annuelle (NAO)", seuil: 50, cond: "si délégué syndical", non: "parcours.html?p=nao&faire=1", oui: "controler-nao.html" },
     { cle: "pse",        nom: "Licenciement économique et PSE", seuil: 50, cond: "si projet de licenciement", non: "audit.html" },
