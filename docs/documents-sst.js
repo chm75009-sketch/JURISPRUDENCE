@@ -250,6 +250,233 @@
                 "Mesures à prendre", "Échéance", "Responsable"];
 
   /* ══════════════════════════════════════════════════════════════════════
+     LE SOCLE COMMUN
+
+     Seize familles de dangers qui valent pour n'importe quelle entreprise,
+     quel que soit son secteur : c'est le plus large qu'on puisse écrire sans
+     connaître les postes. Chacune porte ses situations types, ses dommages,
+     les mesures de prévention courantes et une cotation proposée.
+
+     LA GRILLE NE REMPLACE PAS L'ÉVALUATION. Demande du 12 septembre 2026 :
+     « un modèle le plus large possible avec le socle commun, et dire qu'il
+     faut impérativement l'adapter ». Le client retranche ce qui ne le
+     concerne pas, remplace les crochets par ses chiffres, ajoute ce qui
+     manque. Recopiée telle quelle, elle n'évalue rien.
+
+     Les familles et leurs dommages viennent de la fiche ressources du guide
+     Carsat Prév. 317 de juillet 2024, page 10, lue en entier le 12 septembre
+     2026. Les mesures sont des mesures de prévention courantes, non des
+     obligations : celles qui en sont portent leur article.
+     ══════════════════════════════════════════════════════════════════════ */
+  var SOCLE = [
+    { n: "Incendie, explosion",
+      sit: ["Stockage de produits inflammables : [nature, quantité, lieu]",
+            "Installations électriques, chargeurs de batteries, locaux de charge",
+            "Travaux par points chauds : soudage, meulage, [fréquence]",
+            "Locaux recevant du personnel : [nombre] personnes, [nombre] issues de secours"],
+      dom: "Intoxication, brûlures, asphyxie, contusions, décès",
+      mes: ["Extincteurs vérifiés le [date], nombre et emplacement [préciser]",
+            "Consignes de sécurité affichées, plan d'évacuation à jour",
+            "Exercice d'évacuation du [date]",
+            "Permis de feu pour les travaux par points chauds",
+            "Dégagements et issues de secours dégagés en permanence"],
+      cote: ["faible", "mortels"] },
+    { n: "Électricité",
+      sit: ["Installation fixe : dernière vérification le [date]",
+            "Appareils portatifs, rallonges, multiprises en cascade",
+            "Interventions sur ou à proximité d'installations sous tension",
+            "Travail en zone humide ou à l'extérieur"],
+      dom: "Électrocution, électrisation, brûlures, décès",
+      mes: ["Vérification périodique par organisme agréé, rapport du [date]",
+            "Levée des observations du rapport : [faites / en cours]",
+            "Habilitations électriques à jour le [date]",
+            "Armoires fermées à clé, consignation avant intervention",
+            "Matériel portatif contrôlé, rallonges remplacées si endommagées"],
+      cote: ["faible", "mortels"] },
+    { n: "Manutention manuelle",
+      sit: ["Port de charges : [poids] kg, [nombre] fois par jour, [nombre] salariés",
+            "Gestes répétitifs : [nombre] mouvements par heure, [durée] par jour",
+            "Postures contraignantes : [décrire], [durée] par jour",
+            "Déplacement de charges roulantes, transpalettes manuels"],
+      dom: "Lombalgie, hernie discale, écrasement, coupures, troubles musculo-squelettiques",
+      mes: ["Aides à la manutention : [diable, transpalette, table élévatrice, hayon]",
+            "Formation gestes et postures du [date], [nombre] salariés formés",
+            "Poids unitaire plafonné à [kg], conditionnement revu avec le fournisseur",
+            "Rotation des postes, pauses organisées",
+            "Suivi par le service de prévention et de santé au travail"],
+      cote: ["forte", "réversibles"] },
+    { n: "Déplacement des personnes, chute de plain-pied",
+      sit: ["Circulation dans les locaux : sols [état], éclairage [niveau]",
+            "Zones encombrées, câbles au sol, dénivelés non signalés",
+            "Sols glissants : nettoyage, intempéries, produits répandus",
+            "Escaliers, quais, passerelles : [nombre], état des mains courantes"],
+      dom: "Décès, traumatismes divers, fractures, entorses, écrasement",
+      mes: ["Rangement des circulations, goulottes et passe-câbles posés",
+            "Nettoyage par moitié avec panneaux de signalisation",
+            "Éclairage vérifié, sources défaillantes remplacées",
+            "Marquage au sol des allées piétonnes",
+            "Mains courantes et nez de marche antidérapants"],
+      cote: ["forte", "réversibles"] },
+    { n: "Chute d'objets, effondrement",
+      sit: ["Stockage en hauteur : rayonnages [hauteur], charge admissible [kg]",
+            "Empilement de palettes, gerbage : [hauteur] maximale",
+            "Charges suspendues au-dessus de zones de passage",
+            "Ouverture de portes de véhicules chargés"],
+      dom: "Décès, traumatismes divers, fractures, écrasement",
+      mes: ["Rayonnages vérifiés le [date], charges admissibles affichées",
+            "Filmage ou houssage des charges palettisées",
+            "Interdiction de circuler sous une charge, zone balisée",
+            "Casque fourni, port contrôlé",
+            "Arrimage vérifié avant tout déplacement"],
+      cote: ["moyenne", "irréversibles"] },
+    { n: "Travaux en hauteur",
+      sit: ["Accès en hauteur : [échelle, escabeau, échafaudage, nacelle, toiture]",
+            "Hauteur de travail : [mètres], [nombre] salariés, [fréquence]",
+            "Travail sur véhicule, plateau, remorque, hayon",
+            "Interventions en toiture ou sur verrière"],
+      dom: "Décès, traumatismes divers, fractures, entorses",
+      mes: ["Protection collective d'abord : garde-corps, plateforme, filet",
+            "Échafaudage monté par du personnel formé, vérifié le [date]",
+            "Harnais et point d'ancrage en dernier recours, vérifiés le [date]",
+            "Échelles réservées à l'accès, non au travail",
+            "Interdiction écrite de monter sur la charge ou sur le plateau"],
+      cote: ["moyenne", "mortels"] },
+    { n: "Produits chimiques",
+      sit: ["Produits utilisés : [liste], quantités, [nombre] salariés exposés",
+            "Agents cancérogènes, mutagènes ou toxiques pour la reproduction : [oui / non]",
+            "Poussières, fumées, vapeurs : [nature], [durée] d'exposition",
+            "Stockage, transvasement, élimination des déchets"],
+      dom: "Brûlures, intoxication aiguë ou chronique, cancers, allergie, irritation",
+      mes: ["Fiches de données de sécurité disponibles et à jour, classeur [lieu]",
+            "Substitution recherchée pour les produits les plus dangereux",
+            "Ventilation et captage à la source, vérifiés le [date]",
+            "Équipements de protection adaptés, fournis et remplacés",
+            "Étiquetage conservé, aucun transvasement en contenant alimentaire",
+            "Information et formation des salariés exposés"],
+      cote: ["moyenne", "mortels"] },
+    { n: "Agents biologiques",
+      sit: ["Contact avec des personnes, des animaux, des déchets, des eaux usées",
+            "Nettoyage de sanitaires, collecte de déchets, soins",
+            "Risque de piqûre ou de coupure avec un objet souillé",
+            "Travail en milieu humide, légionelles, moisissures"],
+      dom: "Affection chronique, allergies, maladies professionnelles",
+      mes: ["Gants et protections adaptés, fournis et remplacés",
+            "Points d'eau et savon accessibles, vestiaires séparés",
+            "Conduite à tenir en cas d'exposition, affichée",
+            "Vaccinations proposées par le service de santé au travail",
+            "Entretien des installations d'eau, contrôle du [date]"],
+      cote: ["faible", "irréversibles"] },
+    { n: "Bruit, vibrations, ambiances thermiques, éclairage",
+      sit: ["Bruit : [niveau] dB(A) mesuré le [date], [durée] par jour, [nombre] salariés",
+            "Vibrations : engins, outils portatifs, conduite, [durée] par jour",
+            "Chaleur ou froid : [température], [période], [nombre] salariés",
+            "Éclairage insuffisant ou éblouissant : [lieux]"],
+      dom: "Surdité, malaise, déshydratation, fatigue, traumatismes articulaires",
+      mes: ["Mesure du bruit du [date], plan d'action au-delà des seuils",
+            "Capotage des sources, traitement acoustique, protections auditives",
+            "Sièges suspendus, outils à vibrations réduites, rotation des postes",
+            "Eau fraîche à disposition, local de pause tempéré, horaires adaptés",
+            "Éclairage renforcé, écrans perpendiculaires aux fenêtres"],
+      cote: ["forte", "irréversibles"] },
+    { n: "Équipements de travail, machines",
+      sit: ["Machines et outils : [liste], [nombre] salariés, [durée]",
+            "Engins mobiles : [chariot élévateur, nacelle, engin de chantier]",
+            "Maintenance, réglage, nettoyage en marche",
+            "Outillage portatif : meuleuse, scie, perceuse"],
+      dom: "Décès, fractures, écrasement, coupures, amputation",
+      mes: ["Protecteurs et arrêts d'urgence en place et contrôlés",
+            "Vérifications périodiques réglementaires, rapport du [date]",
+            "Consignation avant toute intervention de maintenance",
+            "Autorisations de conduite délivrées, formation du [date]",
+            "Notices d'utilisation disponibles au poste",
+            "Équipements de protection individuelle fournis : [liste]"],
+      cote: ["forte", "irréversibles"] },
+    { n: "Organisation du travail et risques psychosociaux",
+      sit: ["Charge de travail, délais, interruptions : [décrire], [nombre] salariés",
+            "Travail isolé : [qui], [durée], moyen d'alerte [préciser]",
+            "Horaires atypiques, travail de nuit, astreintes : [nombre] salariés",
+            "Relation avec le public, agressivité : [nombre] incidents",
+            "Autonomie, soutien de l'encadrement, reconnaissance"],
+      dom: "Surcharge mentale, stress, fatigue, troubles du sommeil et musculo-squelettiques",
+      mes: ["Remplaçant identifié aux postes sensibles, plages sans sollicitation",
+            "Procédure d'alerte pour le travail isolé, appel de fin de journée",
+            "Consigne écrite en cas d'agression, débriefing systématique",
+            "Entretiens réguliers sur la charge de travail",
+            "Référent désigné, dispositif d'écoute : [préciser]"],
+      cote: ["forte", "réversibles"] },
+    { n: "Travail sur écran",
+      sit: ["[nombre] salariés, [durée] par jour devant un écran",
+            "Postes fixes, portables sans rehausseur, doubles écrans",
+            "Sièges et plans de travail : [réglables / non]",
+            "Implantation par rapport aux fenêtres et à l'éclairage"],
+      dom: "Fatigue visuelle, troubles musculo-squelettiques, douleurs cervicales et lombaires",
+      mes: ["Sièges réglables, repose-pieds et supports d'écran fournis",
+            "Rehausseur et clavier séparé pour tout portable en poste fixe",
+            "Écran perpendiculaire aux fenêtres, stores posés",
+            "Réglage du poste expliqué à l'arrivée de chaque salarié",
+            "Suivi de la vue par le service de prévention et de santé au travail"],
+      cote: ["forte", "réversibles"] },
+    { n: "Risque routier et déplacements",
+      sit: ["Déplacements professionnels : [nombre] salariés, [km] par an",
+            "Trajets domicile-travail, véhicules personnels ou de service",
+            "Conduite et téléphone, délais, durée de conduite",
+            "État et entretien du parc : [nombre] véhicules"],
+      dom: "Décès, traumatismes divers",
+      mes: ["Entretien du parc au carnet, contrôles techniques à jour",
+            "Interdiction écrite du téléphone au volant, mains libres compris",
+            "Organisation des tournées tenant compte des temps réels",
+            "Formation à la conduite en sécurité du [date]",
+            "Protocole de sécurité établi avec les sites clients"],
+      cote: ["forte", "mortels"] },
+    { n: "Circulation interne, coactivité, entreprises extérieures",
+      sit: ["Croisement piétons et engins : [zones], [nombre] de chacun",
+            "Manœuvres, mise à quai, marche arrière",
+            "Intervention d'entreprises extérieures : [nature], [fréquence]",
+            "Livraisons, accès des visiteurs"],
+      dom: "Décès, traumatismes divers, écrasement",
+      mes: ["Plan de circulation affiché, allées piétonnes séparées et marquées",
+            "Miroirs aux angles, avertisseurs de recul, gilets haute visibilité",
+            "Plan de prévention écrit avec chaque entreprise extérieure",
+            "Protocole de sécurité pour les opérations de chargement",
+            "Accueil sécurité des intervenants extérieurs"],
+      cote: ["forte", "mortels"] },
+    { n: "Harcèlements, agissements sexistes, violences",
+      sit: ["Ensemble du personnel : [nombre] salariés dont [nombre] femmes",
+            "Signalements reçus l'an dernier : [nombre]",
+            "Organisation permettant l'isolement d'un salarié",
+            "Accueil du public, tiers, clients"],
+      dom: "Atteintes psychiques, dépression, arrêts de travail, ruptures",
+      mes: ["Référent harcèlement désigné le [date] : [nom]",
+            "Procédure de signalement écrite et portée à la connaissance de tous",
+            "Affichage des textes et des coordonnées des services compétents",
+            "Formation de l'encadrement du [date]",
+            "Enquête écrite à tout signalement, sans délai"],
+      cote: ["moyenne", "irréversibles"] },
+    { n: "Espaces confinés, fouilles, milieux particuliers",
+      sit: ["Interventions en cuve, fosse, silo, regard, vide sanitaire",
+            "Travaux en tranchée ou en fouille : [profondeur]",
+            "Atmosphère appauvrie en oxygène ou explosive",
+            "À supprimer si l'entreprise n'en a aucun"],
+      dom: "Décès, asphyxie, traumatismes divers, ensevelissement",
+      mes: ["Interdiction d'intervenir seul, surveillant à l'extérieur",
+            "Contrôle d'atmosphère avant et pendant l'intervention",
+            "Ventilation forcée, harnais et moyen de récupération",
+            "Blindage des fouilles, talutage",
+            "Autorisation de pénétrer écrite pour chaque intervention"],
+      cote: ["faible", "mortels"] },
+  ];
+
+  /* Le rang du risque : probabilité croisée avec gravité, méthode Carsat.
+     1 important, 2 moyen, 3 faible. */
+  var RANG = {
+    faible:  { "réversibles": 3, "irréversibles": 3, "mortels": 2 },
+    moyenne: { "réversibles": 3, "irréversibles": 2, "mortels": 1 },
+    forte:   { "réversibles": 2, "irréversibles": 1, "mortels": 1 },
+  };
+  var NOM_RANG = { 1: "1 - important", 2: "2 - moyen", 3: "3 - faible" };
+  function rangDe(c) { return RANG[c[0]][c[1]]; }
+
+  /* ══════════════════════════════════════════════════════════════════════
      LES EXEMPLES, PAR SECTEUR
 
      Cinq entreprises fictives, une par secteur de la fiche, avec leurs
@@ -652,8 +879,33 @@
 
   DP.ajouter("SST-CTL-DUE-01", {
     nom: "Le document unique d'évaluation des risques professionnels",
-    detail: "Le document rédigé, avec sa maille par unité de travail, ses six " +
-            "colonnes, ses suites, ses formalités et son calendrier.",
+    detail: "Le document rédigé, le socle commun des seize familles de dangers " +
+            "unité par unité, les suites, les formalités et le calendrier.",
+    /* LE CLASSEUR. Le document unique se remplit dans un tableur, pas dans un
+       traitement de texte : une ligne par situation, les colonnes de cotation
+       et celles du plan d'action. Le socle commun sort déjà rempli de ses
+       seize familles, il n'y a qu'à retrancher et chiffrer. */
+    tableur: function (ctx) {
+      var p = ctx.profil || {};
+      var L = [];
+      L.push(["DOCUMENT UNIQUE D'ÉVALUATION DES RISQUES PROFESSIONNELS"]);
+      L.push([cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE")]);
+      L.push(["Établi le " + leJour(aujourd(ctx)) +
+              " - articles L. 4121-1 à L. 4121-3-1 et R. 4121-1 à R. 4121-4 du code du travail"]);
+      L.push(["SOCLE COMMUN, À ADAPTER IMPÉRATIVEMENT. Seize familles valables pour toute " +
+              "entreprise. Écartez ce qui ne vous concerne pas, remplacez les crochets par vos " +
+              "chiffres, ajoutez ce qui manque. Recopiez le bloc pour chaque unité de travail."]);
+      L.push([]);
+      L.push(["Unité de travail", "N°", "Famille de dangers", "Situation : qui, combien, où, quand",
+              "Dommages possibles", "Mesures déjà en place", "Probabilité", "Gravité", "Rang",
+              "Mesures à prendre", "Conditions d'exécution", "Indicateur de résultat",
+              "Coût estimé", "Responsable", "Échéance", "Réalisé le"]);
+      SOCLE.forEach(function (f, i) {
+        L.push(["[NOM DE L'UNITÉ]", i + 1, f.n, f.sit.join(" · "), f.dom, f.mes.join(" · "),
+                f.cote[0], f.cote[1], NOM_RANG[rangDe(f.cote)], "", "", "", "", "", "", ""]);
+      });
+      return L;
+    },
     produire: function (ctx) {
       var f = ctx.fiche || {}, du = f.duerp || {};
       var d0 = aujourd(ctx);
@@ -757,15 +1009,49 @@
             C = C.concat(tableau(GRILLE, E.grille(u)));
           });
         } else {
-          C.push("Une grille par unité de travail, les mêmes sept colonnes partout. Le risque");
-          C.push("se nomme (« chute de hauteur au bâchage », pas « risque physique ») ;");
-          C.push("l'exposition dit qui, combien, à quelle fréquence ; l'échéance est une date ;");
-          C.push("le responsable est une personne nommée.");
+          /* LE SOCLE COMMUN, PRÉ-ÉCRIT. La grille était vide : trois lignes à
+             remplir devant un tableau de sept colonnes. On donne désormais
+             les seize familles rédigées, avec leurs situations types, les
+             mesures courantes et une cotation proposée, pour que le client
+             ait à retrancher plutôt qu'à inventer. */
+          C.push("SOCLE COMMUN, À ADAPTER IMPÉRATIVEMENT");
+          C.push("");
+          C.push("Les seize familles ci-dessous valent pour n'importe quelle entreprise,");
+          C.push("quel que soit son secteur : c'est le plus large qu'on puisse écrire sans");
+          C.push("connaître vos postes. Tout y est rédigé, situations types et mesures");
+          C.push("courantes, pour que vous ayez à retrancher plutôt qu'à inventer.");
+          C.push("Écartez ce qui ne vous concerne pas, remplacez les crochets par vos");
+          C.push("chiffres, ajoutez ce qui manque. Un document unique recopié tel quel");
+          C.push("n'évalue rien et ne vous protégera pas.");
+          C.push("");
+          C.push("Recopiez ces seize familles pour CHAQUE unité de travail : l'inventaire");
+          C.push("est dû unité par unité (R. 4121-1), et la même famille n'a pas la même");
+          C.push("cotation à l'atelier et au bureau.");
           C.push("");
           C.push("Unité de travail : [NOM DE L'UNITÉ, effectif, site]");
           C.push("");
-          C = C.concat(tableauVide(GRILLE, 3));
-          C.push("[Recopier la grille pour chaque unité de travail. N'oubliez ni les");
+          SOCLE.forEach(function (f, i) {
+            C.push("Situation " + (i + 1) + " - " + f.n);
+            C.push("");
+            C.push("Les situations, à confirmer et à chiffrer :");
+            C.push("");
+            f.sit.forEach(function (x) { C.push("  - " + x); });
+            C.push("");
+            C.push("Dommages possibles : " + f.dom);
+            C.push("");
+            C.push("Mesures déjà en place, à cocher et à dater :");
+            C.push("");
+            f.mes.forEach(function (x) { C.push("  - [ ] " + x); });
+            C.push("  - [ ] Autres mesures : [préciser]");
+            C.push("");
+            C.push("Cotation proposée, à revoir sur vos chiffres : probabilité " + f.cote[0] +
+              ", gravité " + f.cote[1] + ", soit un risque de rang " + NOM_RANG[rangDe(f.cote)] + ".");
+            C.push("");
+            C.push("Mesures à prendre : [décrire]   -   Échéance : [DATE]   -   Responsable : [NOM]");
+            C.push("");
+            C.push("");
+          });
+          C.push("[Recopier ce bloc pour chaque unité de travail. N'oubliez ni les");
           C.push(" ambiances thermiques (R. 4121-1), ni le harcèlement moral, le harcèlement");
           C.push(" sexuel et les agissements sexistes (L. 4121-2, 7°).]");
           C.push("");
@@ -1120,6 +1406,52 @@
          "L. 4121-1 à L. 4121-3-1, n'y figure pas."])).join("\n");
     },
   });
+
+  /* LES TROIS ONGLETS, SUR LE MODÈLE DU RÈGLEMENT INTÉRIEUR ET DE LA BASE.
+     Le document à remplir, les formalités une par une, le droit. Le texte
+     produit contient deux fois les mêmes titres de section, une fois pour
+     l'exemple et une fois pour le document réel : on coupe donc d'abord
+     l'exemple, et l'on découpe ce qui reste. */
+  function coupeSst(L, debut, fin) {
+    var a = -1, b = L.length;
+    for (var i = 0; i < L.length; i++) if (L[i].indexOf(debut) === 0) { a = i; break; }
+    if (a < 0) return [];
+    if (fin) for (var j = a + 1; j < L.length; j++) if (L[j].indexOf(fin) === 0) { b = j; break; }
+    return L.slice(a, b);
+  }
+  DP.pour("SST-CTL-DUE-01").parties = function (ctx) {
+    var L = DP.pour("SST-CTL-DUE-01").produire(ctx).split("\n");
+    var coupure = -1;
+    for (var i = 0; i < L.length; i++)
+      if (L[i].indexOf("VOTRE DOCUMENT UNIQUE, À COMPLÉTER") === 0) { coupure = i; break; }
+    var exemple = coupure > 0 ? L.slice(0, coupure) : [];
+    var reste = coupure > 0 ? L.slice(coupure) : L;
+
+    var sous = [
+      { cle: "vous", nom: "Votre document",
+        texte: coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "5. INVENTAIRE").join("\n") },
+      { cle: "socle", nom: "Le socle commun",
+        texte: coupeSst(reste, "5. INVENTAIRE", "6. SUITES").join("\n") },
+      { cle: "ex", nom: "L'exemple", texte: exemple.join("\n") },
+    ];
+    var form = [
+      { cle: "s6", nom: "6 Les suites", texte: coupeSst(reste, "6. SUITES", "7. MISE À JOUR").join("\n") },
+      { cle: "s7", nom: "7 Mise à jour", texte: coupeSst(reste, "7. MISE À JOUR", "8. CONSERVATION").join("\n") },
+      { cle: "s8", nom: "8 Conservation", texte: coupeSst(reste, "8. CONSERVATION", "9. TRANSMISSION").join("\n") },
+      { cle: "s9", nom: "9 Transmission", texte: coupeSst(reste, "9. TRANSMISSION", "VOTRE CALENDRIER").join("\n") },
+      { cle: "cal", nom: "Le calendrier", texte: coupeSst(reste, "VOTRE CALENDRIER", "LES RÈGLES").join("\n") },
+    ].filter(function (x) { return x.texte.trim() !== ""; });
+    var droit = coupeSst(reste, "LES RÈGLES", null).join("\n");
+
+    return [
+      { cle: "document", nom: "Le document",
+        texte: coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "6. SUITES").join("\n"), sous: sous },
+      { cle: "formalites", nom: "Formalités",
+        texte: coupeSst(reste, "6. SUITES", "LES RÈGLES").join("\n"), sous: form },
+      { cle: "droit", nom: "Le droit", texte: droit },
+    ];
+  };
+
 
   /* ══════════════════════════════════════════════════════════════════════
      SST-CTL-DUE-02, L'INVENTAIRE PAR UNITÉ DE TRAVAIL

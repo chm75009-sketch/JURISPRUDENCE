@@ -3265,7 +3265,7 @@
      elle qui décide de l'ordre des vignettes, les refaits en tête.
 
      Ajouter une clé ici suffit — ne rien changer d'autre. */
-  var REFAITS = ["ri", "bdese"];
+  var REFAITS = ["ri", "bdese", "duerp"];
   function rang(p) {
     var i = REFAITS.indexOf(p.cle);
     return i < 0 ? REFAITS.length : i;
