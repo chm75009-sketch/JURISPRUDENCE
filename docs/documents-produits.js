@@ -191,9 +191,11 @@
   }
 
   D["DIS-CTL-RI-01"] = {
-    nom: "Le règlement intérieur, et ses trois courriers",
-    detail: "Le règlement rédigé, la consultation du comité, la transmission à " +
-            "l'inspecteur du travail et le dépôt au greffe.",
+    nom: "Le règlement intérieur, et ses formalités",
+    detail: "Le règlement rédigé, puis les cinq formalités dans l'ordre, chacune " +
+            "avec le document qui l'accomplit : consultation du comité ou " +
+            "procès-verbal de carence, note d'information du personnel, dépôt au " +
+            "greffe, communication à l'inspecteur, entrée en vigueur.",
     produire: function (ctx) {
       var p = ctx.profil || {};
       var nom = cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE");
@@ -953,115 +955,248 @@
       L.push("");
       L.push("Le présent règlement est rédigé en français (L. 1321-6).");
       L.push("");
-      L.push("");
-      L.push("RELEVÉ DES FORMALITÉS ACCOMPLIES");
-      L.push("");
-      L.push("Formalité | Date | Référence");
-      L.push("Avis du comité social et économique (L. 1321-4) | [DATE] | [n° de PV ou mention de carence]");
-      L.push("Publicité auprès du personnel (R. 1321-1) | [DATE] | [affichage, intranet, remise]");
-      L.push("Dépôt au greffe du conseil de prud'hommes (R. 1321-2) | [DATE] | [récépissé n°]");
-      L.push("Communication à l'inspecteur du travail, deux exemplaires (R. 1321-4) | [DATE] | [accusé de réception]");
-      L.push("Entrée en vigueur, un mois après la dernière formalité (R. 1321-3) | [DATE] | ");
-      L.push("");
-      L.push("NOTE - Remplissez ce relevé au fur et à mesure et gardez-le avec le règlement.");
-      L.push("C'est la dernière en date des formalités de publicité et de dépôt qui fait");
-      L.push("courir le délai d'un mois : sans ces dates, vous ne pouvez pas prouver que le");
-      L.push("règlement était en vigueur le jour où vous avez prononcé une sanction.");
-      L.push("");
+      /* Le règlement se termine par sa signature : c'est la dernière ligne de
+         l'onglet du document, et ce qui suit appartient aux formalités. */
       L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
       L.push("");
       L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
       L.push("");
       L.push("");
+      /* ═══════════════════════════════════════════════════════════════════
+         LES FORMALITÉS, UNE PAR UNE, AVEC SES DOCUMENTS
 
-      /* ---- les trois courriers, produits avec le règlement ---- */
-      L.push("════════════════════════════════════════════════════════════════════════");
-      L.push("COURRIER 1 - CONSULTATION DU COMITÉ SOCIAL ET ÉCONOMIQUE");
-      L.push("════════════════════════════════════════════════════════════════════════");
+         Elles sortaient à la suite : le relevé, puis les trois courriers,
+         puis le calendrier, un seul rouleau où il fallait retrouver seul
+         quelle lettre allait avec quelle formalité. Demande du 12 septembre
+         2026 : « dans formalités il faut séparer les formalités avec les
+         documents qui vont avec ». Chaque étape porte donc son article, sa
+         date, ce qu'elle exige, et la lettre qui l'accomplit, juste dessous.
+
+         L'ORDRE N'EST PAS LIBRE. L. 1321-4, lu à la source le 12 septembre
+         2026 (LEGIARTI000054140230) : le règlement « ne peut être introduit
+         qu'après avoir été soumis à l'avis du comité social et économique »,
+         et « en même temps qu'il fait l'objet des mesures de publicité », il
+         est communiqué à l'inspecteur, accompagné de cet avis. L'affichage,
+         le dépôt et la transmission se font donc le même jour, après l'avis
+         et pas avant.
+
+         SANS COMITÉ, la première étape change de nature. L. 2314-9, lu le
+         même jour (LEGIARTI000035651143) : « Lorsque le comité social et
+         économique n'a pas été mis en place ou renouvelé, un procès-verbal
+         de carence est établi par l'employeur », porté à la connaissance des
+         salariés par un moyen donnant date certaine et transmis sous quinze
+         jours à l'inspection. C'est lui qui accompagne alors le règlement.  */
+      var sansCse = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
+        (ctx.donnees || {}).cseExiste || "").trim() === "non";
+      var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
+      var pieceAvis = sansCse ? "procès-verbal de carence" : "avis du comité social et économique";
+
+      L.push("DANS CET ORDRE");
       L.push("");
-      L.push("À adresser AVANT toute introduction du règlement : L. 1321-4 interdit son");
-      L.push("introduction avant que le comité ait été mis à même de donner son avis.");
+      L.push("Cinq formalités, chacune avec le document qui l'accomplit. Rien ne");
+      L.push("s'affiche, ne se dépose ni n'entre en vigueur avant la première : le");
+      L.push("règlement ne peut être introduit qu'après " +
+        (sansCse ? "l'établissement du procès-verbal de carence"
+                 : "avoir été soumis à l'avis du comité") + " (L. 1321-4).");
+      L.push("");
+      L.push("");
+
+      /* ---- étape 1 ---------------------------------------------------- */
+      L.push(sansCse ? "ÉTAPE 1 - SANS COMITÉ : LE PROCÈS-VERBAL DE CARENCE"
+                     : "ÉTAPE 1 - CONSULTER LE COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("");
+      L.push(sansCse ? "(L. 2314-9) - à faire en premier, avant toute autre formalité"
+                     : "(L. 1321-4) - à faire en premier, avant toute autre formalité");
+      L.push("");
+      if (sansCse) {
+        /* La question fermée, avant tout exposé : avez-vous ce document ?
+           C'est le principe de l'application, et il vaut ici parce que la
+           réponse change la suite du tout au tout. Sans comité et sans
+           procès-verbal de carence, ce n'est pas le règlement qui est en
+           retard, ce sont les élections. */
+        L.push("Avez-vous un procès-verbal de carence ?");
+        L.push("");
+        L.push("  [ ] OUI - cochez, datez ci-dessous, et passez à l'étape 2. Le");
+        L.push("      procès-verbal tient lieu d'avis : c'est lui qui accompagnera le");
+        L.push("      règlement à l'inspection, à l'étape 4.");
+        L.push("");
+        L.push("  [ ] NON - arrêtez-vous ici. Le comité est obligatoire dans les");
+        L.push("      entreprises d'au moins onze salariés, dès lors que ce seuil est");
+        L.push("      atteint pendant douze mois consécutifs (L. 2311-2). Ne pas en");
+        L.push("      avoir n'est régulier que si les élections ont été organisées et");
+        L.push("      n'ont pas abouti, et c'est le procès-verbal de carence qui le");
+        L.push("      prouve. Organisez donc les élections d'abord : vous informez le");
+        L.push("      personnel par un moyen donnant date certaine, en précisant la");
+        L.push("      date envisagée du premier tour, qui se tient au plus tard le");
+        L.push("      quatre-vingt-dixième jour suivant cette diffusion (L. 2314-4).");
+        L.push("");
+        L.push("      Le modèle qui écrit ces documents, note d'information du");
+        L.push("      personnel, invitation des organisations syndicales et calendrier");
+        L.push("      des quatre-vingt-dix jours :");
+        L.push("      " + SITE + "audit-cse.html#elections");
+        L.push("");
+        L.push("Le procès-verbal de carence est établi par l'employeur, porté à la");
+        L.push("connaissance des salariés par un moyen donnant date certaine, et");
+        L.push("transmis dans les quinze jours à l'inspection du travail (L. 2314-9).");
+      } else {
+        L.push("Le comité rend son avis en réunion. Transmettez-lui le projet assez tôt");
+        L.push("pour qu'il l'ait lu, et respectez le délai de convocation que votre");
+        L.push("règlement intérieur de comité ou vos usages imposent. C'est le");
+        L.push("procès-verbal, non le règlement, qui prouvera la formalité.");
+      }
+      L.push("");
+      L.push("Fait le [DATE]   -   Référence : " +
+        (sansCse ? "[procès-verbal de carence du DATE]" : "[n° du procès-verbal]"));
+      L.push("");
+      L.push("  Le document de cette étape :");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push(sansCse ? "LETTRE 1 - TRANSMISSION DU PROCÈS-VERBAL DE CARENCE"
+                     : "LETTRE 1 - CONSULTATION DU COMITÉ SOCIAL ET ÉCONOMIQUE");
+      L.push("────────────────────────────────────────────────────────────────────────");
       L.push("");
       L.push(nom);
       L.push(cro(p.adresse, "adresse"));
       L.push("");
-      L.push("Aux membres de la délégation du personnel");
-      L.push("du comité social et économique");
+      if (sansCse) {
+        L.push("Monsieur l'Inspecteur du travail");
+        L.push("[ADRESSE DE L'UNITÉ DE CONTRÔLE COMPÉTENTE]");
+        L.push("");
+        L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
+        L.push("");
+        L.push("Lettre recommandée avec demande d'avis de réception");
+        L.push("");
+        L.push("Objet : procès-verbal de carence");
+        L.push("");
+        L.push("Monsieur l'Inspecteur,");
+        L.push("");
+        L.push("En application de l'article L. 2314-9 du code du travail, je vous transmets");
+        L.push("le procès-verbal de carence établi le [DATE], le comité social et");
+        L.push("économique n'ayant pu être mis en place à l'issue des élections organisées");
+        L.push("le [DATE DU SCRUTIN].");
+        L.push("");
+        L.push("Ce procès-verbal a été porté à la connaissance des salariés le [DATE], par");
+        L.push("[MOYEN DONNANT DATE CERTAINE].");
+        L.push("");
+        L.push("Je vous prie d'agréer, Monsieur l'Inspecteur, l'expression de ma");
+        L.push("considération distinguée.");
+        L.push("");
+        L.push(cro(p.responsable, "Nom et qualité"));
+        L.push("");
+        L.push("Pièce jointe : procès-verbal de carence");
+      } else {
+        L.push("Aux membres de la délégation du personnel");
+        L.push("du comité social et économique");
+        L.push("");
+        L.push(cro(p.ville, "lieu") + ", le " + leJour(d0));
+        L.push("");
+        L.push("Objet : consultation sur le projet de règlement intérieur");
+        L.push("");
+        L.push("Mesdames, Messieurs,");
+        L.push("");
+        L.push("L'entreprise employant au moins cinquante salariés, l'établissement d'un");
+        L.push("règlement intérieur lui est imposé par l'article L. 1311-2 du code du");
+        L.push("travail.");
+        L.push("");
+        L.push("Conformément à l'article L. 1321-4 du même code, aux termes duquel le");
+        L.push("règlement intérieur ne peut être introduit qu'après avoir été soumis à");
+        L.push("l'avis du comité social et économique, je vous adresse ci-joint le projet");
+        L.push("et vous invite à en délibérer lors de la réunion du [DATE DE LA RÉUNION].");
+        L.push("");
+        L.push("L'avis que vous rendrez sera communiqué à l'inspecteur du travail en même");
+        L.push("temps que le règlement, comme le même article l'exige.");
+        L.push("");
+        L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma");
+        L.push("considération distinguée.");
+        L.push("");
+        L.push(cro(p.responsable, "Nom et qualité"));
+        L.push("");
+        L.push("Pièce jointe : projet de règlement intérieur");
+      }
       L.push("");
-      L.push(cro(p.ville, "lieu") + ", le " + leJour(ctx.aujourdhui));
       L.push("");
-      L.push("Objet : consultation sur le projet de règlement intérieur");
+
+      /* ---- étape 2 ---------------------------------------------------- */
+      L.push("ÉTAPE 2 - PORTER LE RÈGLEMENT À LA CONNAISSANCE DU PERSONNEL");
+      L.push("");
+      L.push("(R. 1321-1) - le jour de l'avis, ou après, jamais avant");
+      L.push("");
+      L.push("Le règlement est porté, par tout moyen, à la connaissance des personnes");
+      L.push("ayant accès aux lieux de travail ou aux locaux où se fait l'embauche");
+      L.push("(R. 1321-1). L'affichage n'est donc pas imposé : l'intranet ou la remise");
+      L.push("contre émargement valent aussi, pourvu que vous puissiez en établir la");
+      L.push("date. C'est cette date, avec celle du dépôt, qui fait courir le mois.");
+      L.push("");
+      L.push("Fait le [DATE]   -   Moyen : [AFFICHAGE, INTRANET, REMISE CONTRE ÉMARGEMENT]");
+      L.push("");
+      L.push("  Le document de cette étape :");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("DOCUMENT 2 - NOTE D'INFORMATION AU PERSONNEL");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push("À afficher aux emplacements réservés aux communications de l'employeur et");
+      L.push("dans les locaux où se fait l'embauche. Gardez-en une copie datée, et");
+      L.push("faites-la émarger si vous la remettez en main propre.");
+      L.push("");
+      L.push(nom);
+      L.push(cro(p.adresse, "adresse"));
+      L.push("");
+      L.push("NOTE D'INFORMATION AU PERSONNEL");
+      L.push("");
+      L.push(cro(p.ville, "lieu") + ", le [DATE D'AFFICHAGE]");
+      L.push("");
+      L.push("Objet : règlement intérieur de l'entreprise");
       L.push("");
       L.push("Mesdames, Messieurs,");
       L.push("");
-      L.push("L'entreprise employant au moins cinquante salariés, l'établissement d'un");
-      L.push("règlement intérieur lui est imposé par l'article L. 1311-2 du code du");
-      L.push("travail.");
+      L.push("Un règlement intérieur a été établi pour " + nom + ". Il a été soumis");
+      L.push((sansCse
+        ? "au procès-verbal de carence établi le [DATE], le comité social et économique"
+        : "à l'avis du comité social et économique, qui l'a rendu le [DATE DE L'AVIS],"));
+      L.push((sansCse
+        ? "n'ayant pu être mis en place, et il est déposé au greffe du conseil de"
+        : "et il est déposé au greffe du conseil de"));
+      L.push("prud'hommes de [VILLE DU RESSORT] et communiqué à l'inspection du travail.");
       L.push("");
-      L.push("Conformément à l'article L. 1321-4 du même code, aux termes duquel le");
-      L.push("règlement intérieur ne peut être introduit qu'après avoir été soumis à");
-      L.push("l'avis du comité social et économique, je vous adresse ci-joint le projet");
-      L.push("et vous invite à en délibérer lors de la réunion du [DATE DE LA RÉUNION].");
+      L.push("Il fixe les règles de santé et de sécurité, les conditions de");
+      L.push("participation des salariés au rétablissement de conditions de travail");
+      L.push("protectrices, et les règles générales et permanentes de discipline, dont");
+      L.push("la nature et l'échelle des sanctions. Il rappelle les droits de la");
+      L.push("défense, les dispositions sur les harcèlements et les agissements");
+      L.push("sexistes, et l'existence du dispositif de protection des lanceurs");
+      L.push("d'alerte.");
       L.push("");
-      L.push("L'avis que vous rendrez sera communiqué à l'inspecteur du travail en même");
-      L.push("temps que le règlement, comme le même article l'exige.");
+      L.push("Il est consultable [OÙ ET COMMENT LE CONSULTER : affiché au panneau du");
+      L.push("réfectoire, remis à chaque salarié, disponible sur l'intranet à telle");
+      L.push("adresse]. Un exemplaire est remis à toute personne qui en fait la");
+      L.push("demande.");
       L.push("");
-      L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma");
-      L.push("considération distinguée.");
-      L.push("");
-      L.push(cro(p.responsable, "Nom et qualité"));
-      L.push("");
-      L.push("Pièce jointe : projet de règlement intérieur");
-      L.push("");
-      L.push("");
-
-      L.push("════════════════════════════════════════════════════════════════════════");
-      L.push("COURRIER 2 - TRANSMISSION À L'INSPECTEUR DU TRAVAIL");
-      L.push("════════════════════════════════════════════════════════════════════════");
-      L.push("");
-      L.push("À adresser EN MÊME TEMPS que les mesures de publicité, en DEUX exemplaires,");
-      L.push("accompagné de l'avis du comité (L. 1321-4 ; R. 1321-4).");
-      L.push("");
-      L.push(nom);
-      L.push(cro(p.adresse, "adresse"));
-      L.push("");
-      L.push("Monsieur l'Inspecteur du travail");
-      L.push("[Adresse de l'unité de contrôle compétente]");
-      L.push("");
-      L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
-      L.push("");
-      L.push("Lettre recommandée avec demande d'avis de réception");
-      L.push("");
-      L.push("Objet : communication du règlement intérieur");
-      L.push("");
-      L.push("Monsieur l'Inspecteur,");
-      L.push("");
-      L.push("En application des articles L. 1321-4 et R. 1321-4 du code du travail, je");
-      L.push("vous communique en deux exemplaires le règlement intérieur de " + nom + ",");
-      L.push("accompagné de l'avis rendu par le comité social et économique le");
-      L.push("[DATE DE L'AVIS].");
-      L.push("");
-      L.push("Les formalités de publicité ont été accomplies le [DATE DE PUBLICITÉ] et le");
-      L.push("dépôt au greffe du conseil de prud'hommes de [VILLE] le [DATE DE DÉPÔT].");
-      L.push("L'entrée en vigueur est fixée au [DATE], postérieure d'un mois à la");
-      L.push("dernière en date de ces formalités.");
-      L.push("");
-      L.push("Je vous prie d'agréer, Monsieur l'Inspecteur, l'expression de ma");
-      L.push("considération distinguée.");
+      L.push("Il entrera en vigueur le [DATE D'ENTRÉE EN VIGUEUR], soit un mois après");
+      L.push("l'accomplissement de la dernière des formalités de publicité et de dépôt");
+      L.push("(L. 1321-4 ; R. 1321-3). Aucune sanction ne peut être fondée sur lui");
+      L.push("avant cette date.");
       L.push("");
       L.push(cro(p.responsable, "Nom et qualité"));
       L.push("");
-      L.push("Pièces jointes : règlement intérieur (2 exemplaires) · avis du comité social");
-      L.push("et économique");
-      L.push("");
       L.push("");
 
-      L.push("════════════════════════════════════════════════════════════════════════");
-      L.push("COURRIER 3 - DÉPÔT AU GREFFE DU CONSEIL DE PRUD'HOMMES");
-      L.push("════════════════════════════════════════════════════════════════════════");
+      /* ---- étape 3 ---------------------------------------------------- */
+      L.push("ÉTAPE 3 - DÉPOSER AU GREFFE DU CONSEIL DE PRUD'HOMMES");
+      L.push("");
+      L.push("(R. 1321-2) - le même jour que l'étape 2");
       L.push("");
       L.push("Le dépôt se fait au greffe du conseil de prud'hommes DU RESSORT de");
-      L.push("l'entreprise ou de l'établissement (R. 1321-2).");
+      L.push("l'entreprise ou de l'établissement. Demandez le récépissé : c'est lui qui");
+      L.push("date la formalité.");
+      L.push("");
+      L.push("Fait le [DATE]   -   Récépissé : [N° DU RÉCÉPISSÉ]");
+      L.push("");
+      L.push("  Le document de cette étape :");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("LETTRE 3 - DÉPÔT AU GREFFE DU CONSEIL DE PRUD'HOMMES");
+      L.push("────────────────────────────────────────────────────────────────────────");
       L.push("");
       L.push(nom);
       L.push(cro(p.adresse, "adresse"));
@@ -1092,25 +1227,107 @@
       L.push("");
       L.push("");
 
-      /* ---- le calendrier, calculé ---- */
-      L.push("════════════════════════════════════════════════════════════════════════");
-      L.push("VOTRE CALENDRIER");
-      L.push("════════════════════════════════════════════════════════════════════════");
+      /* ---- étape 4 ---------------------------------------------------- */
+      L.push("ÉTAPE 4 - COMMUNIQUER À L'INSPECTEUR DU TRAVAIL");
       L.push("");
-      var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      L.push("Aujourd'hui, " + leJour(d0) + " : vous adressez le projet au comité (courrier 1).");
-      L.push("Le comité rend son avis en réunion : prévoyez le délai de convocation que");
-      L.push("votre règlement intérieur de comité ou vos usages imposent.");
+      L.push("(L. 1321-4 et R. 1321-4) - EN MÊME TEMPS que l'étape 2");
       L.push("");
-      L.push("Le jour de l'avis : vous accomplissez la publicité (R. 1321-1), vous déposez");
-      L.push("au greffe (R. 1321-2) et vous transmettez à l'inspecteur en deux exemplaires");
-      L.push("avec l'avis (R. 1321-4). Ces trois actes peuvent se faire le même jour.");
+      L.push("Quand ? Le texte le dit lui-même : « En même temps qu'il fait l'objet des");
+      L.push("mesures de publicité, le règlement intérieur, accompagné de l'avis du");
+      L.push("comité social et économique, est communiqué à l'inspecteur du travail »");
+      L.push("(L. 1321-4). Donc le jour de l'étape 2, ni avant ni après. En DEUX");
+      L.push("exemplaires (R. 1321-4), accompagné " +
+        (sansCse ? "du procès-verbal de carence." : "de l'avis du comité."));
       L.push("");
-      L.push("Un mois plus tard, au plus tôt : le règlement entre en vigueur. Si la");
-      L.push("dernière formalité était accomplie aujourd'hui, l'entrée en vigueur ne");
-      L.push("pourrait pas être antérieure au " + leJour(dans(d0, 31)) + ".");
+      L.push("Fait le [DATE]   -   Accusé de réception : [N° OU DATE]");
+      L.push("");
+      L.push("  Le document de cette étape :");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("LETTRE 4 - COMMUNICATION À L'INSPECTEUR DU TRAVAIL");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push(nom);
+      L.push(cro(p.adresse, "adresse"));
+      L.push("");
+      L.push("Monsieur l'Inspecteur du travail");
+      L.push("[ADRESSE DE L'UNITÉ DE CONTRÔLE COMPÉTENTE]");
+      L.push("");
+      L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
+      L.push("");
+      L.push("Lettre recommandée avec demande d'avis de réception");
+      L.push("");
+      L.push("Objet : communication du règlement intérieur");
+      L.push("");
+      L.push("Monsieur l'Inspecteur,");
+      L.push("");
+      L.push("En application des articles L. 1321-4 et R. 1321-4 du code du travail, je");
+      L.push("vous communique en deux exemplaires le règlement intérieur de " + nom + ",");
+      L.push("accompagné " + (sansCse
+        ? "du procès-verbal de carence établi le [DATE]."
+        : "de l'avis rendu par le comité social et économique le [DATE DE L'AVIS]."));
+      L.push("");
+      L.push("Les formalités de publicité ont été accomplies le [DATE DE PUBLICITÉ] et le");
+      L.push("dépôt au greffe du conseil de prud'hommes de [VILLE] le [DATE DE DÉPÔT].");
+      L.push("L'entrée en vigueur est fixée au [DATE], postérieure d'un mois à la");
+      L.push("dernière en date de ces formalités.");
+      L.push("");
+      L.push("Je vous prie d'agréer, Monsieur l'Inspecteur, l'expression de ma");
+      L.push("considération distinguée.");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push("");
+      L.push("Pièces jointes : règlement intérieur (2 exemplaires) · " +
+        (sansCse ? "procès-verbal de carence" : "avis du comité social et économique"));
+      L.push("");
+      L.push("");
+
+      /* ---- étape 5 ---------------------------------------------------- */
+      L.push("ÉTAPE 5 - ENTRÉE EN VIGUEUR");
+      L.push("");
+      L.push("(L. 1321-4 et R. 1321-3) - un mois après la dernière formalité");
+      L.push("");
+      L.push("Le règlement indique lui-même sa date d'entrée en vigueur, et cette date");
+      L.push("est postérieure d'un mois à l'accomplissement des formalités de publicité");
+      L.push("(L. 1321-4). Si la dernière de ces formalités était accomplie");
+      L.push("aujourd'hui, " + leJour(d0) + ", l'entrée en vigueur ne pourrait pas être");
+      L.push("antérieure au " + leJour(dans(d0, 31)) + ".");
       L.push("");
       L.push("Avant cette date, aucune sanction ne peut être fondée sur ce règlement.");
+      L.push("Reportez la date retenue à l'article 28 du règlement, et dans la note");
+      L.push("d'information de l'étape 2.");
+      L.push("");
+      L.push("Fait le [DATE D'ENTRÉE EN VIGUEUR]");
+      L.push("");
+      L.push("Aucun document à envoyer : cette étape se constate, elle ne s'accomplit");
+      L.push("pas.");
+      L.push("");
+      L.push("");
+
+      /* ---- le relevé, à la fin, une fois les cinq étapes passées ------- */
+      L.push("LE RELEVÉ DES DATES, À GARDER AVEC LE RÈGLEMENT");
+      L.push("");
+      L.push("Formalité | Date | Référence");
+      L.push((sansCse ? "1. Procès-verbal de carence (L. 2314-9)"
+                      : "1. Avis du comité social et économique (L. 1321-4)") +
+             " | [DATE] | " + (sansCse ? "[PV du DATE]" : "[n° de PV]"));
+      L.push("2. Information du personnel (R. 1321-1) | [DATE] | [affichage, intranet, remise]");
+      L.push("3. Dépôt au greffe du conseil de prud'hommes (R. 1321-2) | [DATE] | [récépissé n°]");
+      L.push("4. Communication à l'inspecteur, deux exemplaires (R. 1321-4) | [DATE] | [accusé de réception]");
+      L.push("5. Entrée en vigueur, un mois après (R. 1321-3) | [DATE] | ");
+      L.push("");
+      L.push("NOTE - Sans ces dates, vous ne pouvez pas prouver que le règlement était");
+      L.push("en vigueur le jour où vous avez prononcé une sanction. C'est la dernière");
+      L.push("en date des formalités de publicité et de dépôt qui fait courir le mois,");
+      L.push("non la première.");
+      L.push("");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push("");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
       L.push("");
       L.push("────────────────────────────────────────────────────────────────────────");
       L.push("");
@@ -1182,17 +1399,18 @@
   }
   function partiesRi(ctx) {
     var L = D["DIS-CTL-RI-01"].produire(ctx).split("\n");
-    var jusquRelve = coupe(L, L[0], "RELEVÉ DES FORMALITÉS");
-    var signature  = coupe(L, "Fait à ", "COURRIER 1");
-    var verifs     = coupe(L, "AVANT DE DÉPOSER", "LE DROIT QUI FONDE");
-    var relve      = coupe(L, "RELEVÉ DES FORMALITÉS", "Fait à ");
-    var courriers  = coupe(L, "COURRIER 1", "AVANT DE DÉPOSER");
-    var droit      = coupe(L, "LE DROIT QUI FONDE", null);
+    /* Trois coupes franches. Le règlement va de son en-tête à sa signature,
+       les cinq formalités et leurs documents tiennent entre « DANS CET ORDRE »
+       et les vérifications, qui reviennent au règlement parce qu'elles portent
+       sur son contenu, non sur la procédure. */
+    var reglement = coupe(L, L[0], "DANS CET ORDRE");
+    var verifs    = coupe(L, "AVANT DE DÉPOSER", "LE DROIT QUI FONDE");
+    var etapes    = coupe(L, "DANS CET ORDRE", "AVANT DE DÉPOSER");
+    var droit     = coupe(L, "LE DROIT QUI FONDE", null);
     return [
       { cle: "document", nom: "Le règlement",
-        texte: jusquRelve.concat(signature, [""], verifs).join("\n") },
-      { cle: "formalites", nom: "Formalités",
-        texte: relve.concat([""], courriers).join("\n") },
+        texte: reglement.concat([""], verifs).join("\n") },
+      { cle: "formalites", nom: "Formalités", texte: etapes.join("\n") },
       { cle: "droit", nom: "Le droit", texte: droit.join("\n") },
     ];
   }
