@@ -33,6 +33,9 @@
 
   var O = DP.outils;
   var cro = O.cro, leJour = O.leJour, entete = O.entete;
+  /* L'adresse publique : un document emporté en Word ou imprimé quitte le
+     navigateur, un lien relatif n'y mène plus nulle part. */
+  var SITE_APP = "https://chm75009-sketch.github.io/JURISPRUDENCE/docs/";
 
   function X(ex, valeur, crochet) { return ex ? valeur : "[" + crochet + "]"; }
   function jj(d) {
@@ -1121,123 +1124,518 @@
      LA BASE DE DONNÉES ÉCONOMIQUES, SOCIALES ET ENVIRONNEMENTALES
      ════════════════════════════════════════════════════════════════════════ */
 
+  /* ══════════════════════════════════════════════════════════════════════
+     LA BASE DE DONNÉES ÉCONOMIQUES, SOCIALES ET ENVIRONNEMENTALES
+
+     Trois onglets, comme le règlement intérieur : la base elle-même, les
+     formalités une par une, le droit qui les fonde. Demande du 12 septembre
+     2026, « dans le même principe que le règlement intérieur ».
+
+     LA GRILLE N'EST PAS ÉCRITE ICI. Elle est découpée du texte du décret par
+     moteur/bdese, mise à plat par engendrer-grille.js, et servie au navigateur
+     dans bdese-grille.js sous window.GRILLE_BDESE. Deux arbres : R. 2312-8 en
+     deçà de trois cents salariés, R. 2312-9 au-delà. L'effectif de la fiche
+     choisit, l'utilisateur ne choisit pas.
+
+     Articles lus au relais Légifrance le 12 septembre 2026 :
+     L. 2312-18 (LEGIARTI000052437125), L. 2312-36 (LEGIARTI000048533625),
+     R. 2312-10 (LEGIARTI000036411580), R. 2312-12 (LEGIARTI000036411586),
+     R. 2312-13 (LEGIARTI000036411588), R. 2312-15 (LEGIARTI000036411594),
+     L. 2317-1 (LEGIARTI000035634273).
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* Les intitulés courts des rubriques : ce qui tient sur un sous-bouton de
+     téléphone. La clé est le début du titre que porte la grille. */
+  var COURT_BDESE = [
+    ["Investissements", "1 Investissements"],
+    ["Egalité professionnelle", "2 Égalité"],
+    ["Fonds propres", "3 Fonds propres"],
+    ["Rémunération des salariés", "4 Rémunérations"],
+    ["Activités sociales", "5 ASC"],
+    ["Représentation du personnel", "5 Représentation et ASC"],
+    ["Rémunération des financeurs", "6 Financeurs"],
+    ["Flux financiers", "7 Flux"],
+    ["Partenariats", "8 Partenariats"],
+    ["Pour les entreprises appartenant", "9 Groupe"],
+    ["Environnement", "10 Environnement"],
+  ];
+  function courtBdese(titre) {
+    for (var i = 0; i < COURT_BDESE.length; i++)
+      if (String(titre).indexOf(COURT_BDESE[i][0]) === 0) return COURT_BDESE[i][1];
+    return String(titre).slice(0, 22);
+  }
+  /* Le titre de la rubrique, tel que le décret le donne, traîne son appel de
+     note et parfois le début de sa première section : « Environnement (1)
+     A-Politique générale en matière environnementale ». On garde le titre,
+     on coupe à l'appel de note. */
+  function titreRubrique(t) {
+    return String(t).replace(/\s*\(\d+\).*$/, "").trim();
+  }
+
+  function grandEffectif(p) {
+    var n = parseInt(String(p.effectif == null ? "" : p.effectif).replace(/\s/g, ""), 10);
+    return isFinite(n) && n >= 300;
+  }
+  function grilleBdese(p) {
+    var g = (typeof window !== "undefined" && window.GRILLE_BDESE) || null;
+    if (!g) return [];
+    return (grandEffectif(p) ? g.plus300 : g.moins300) || [];
+  }
+  /* Les six années de R. 2312-10 : l'année en cours, les deux précédentes,
+     les trois suivantes. Le décret ne dit pas autre chose, et le générateur
+     disait « trois années précédentes » jusqu'au 12 septembre 2026. */
+  function anneesBdese(d0) {
+    var an = d0.getFullYear(), out = [];
+    for (var i = -2; i <= 3; i++) out.push(String(an + i) + (i === 0 ? " (en cours)" : ""));
+    return out;
+  }
+
   DP.ajouter("BDESE-CTL-CNT-00", {
     nom: "La base de données économiques, sociales et environnementales",
-    detail: "La base elle-même : ses dix thèmes, ses six années, ses modalités " +
-            "de mise à disposition.",
+    detail: "La grille du décret, rubrique par rubrique, avec les six années ; " +
+            "puis les six formalités, chacune avec son document ; puis le droit.",
     tableur: function (ctx) {
       var p = ctx.profil || {};
+      var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
+      var g = grilleBdese(p), an = anneesBdese(d0);
       var L = [];
       L.push(["BASE DE DONNÉES ÉCONOMIQUES, SOCIALES ET ENVIRONNEMENTALES"]);
       L.push([cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE")]);
-      L.push(["Effectif : " + (p.effectif ? p.effectif + " salariés" : "à renseigner")]);
-      L.push(["Établie le " + leJour(ctx.aujourdhui)]);
+      L.push(["Effectif : " + (p.effectif ? p.effectif + " salariés" : "[EFFECTIF]") +
+              " - contenu applicable : " + (grandEffectif(p) ? "R. 2312-9 (au moins 300 salariés)"
+                                                            : "R. 2312-8 (moins de 300 salariés)")]);
+      L.push(["Établie le " + leJour(d0) + " - articles L. 2312-18, L. 2312-21 et " +
+              (grandEffectif(p) ? "R. 2312-9" : "R. 2312-8") + " du code du travail"]);
       L.push([]);
-      L.push(["Les dix thèmes du contenu : Investissements, Égalité professionnelle, Fonds propres, " +
-              "Rémunération, Activités sociales, Rémunération des financeurs, Flux financiers, " +
-              "Partenariats, Transferts commerciaux intra-groupe, Environnement"]);
+      L.push(["Rubrique", "Section", "Sujet", "Ce que le décret demande"].concat(an));
+      g.forEach(function (l) { L.push([l[0], l[1], l[2], l[3], "", "", "", "", "", ""]); });
       return L;
     },
     produire: function (ctx) {
       var p = ctx.profil || {};
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      var an = d0.getFullYear();
+      var g = grilleBdese(p), an = anneesBdese(d0);
+      var gros = grandEffectif(p);
+      var art = gros ? "R. 2312-9" : "R. 2312-8";
+      var eff = String(p.effectif == null ? "" : p.effectif).trim();
       var L = [];
 
       L = L.concat(entete(ctx, "Base de données économiques, sociales et environnementales",
-        "articles L. 2312-18, L. 2312-21, R. 2312-8 et R. 2312-9 du code du travail"));
-
+        "articles L. 2312-18, L. 2312-21 et " + art + " du code du travail"));
       L.push(DP.EXEMPLE);
       L.push("");
-      L.push("EXEMPLE - BASE DE DONNÉES ÉCONOMIQUES, SOCIALES ET ENVIRONNEMENTALES");
+
+      /* ---------- le régime, avant tout : il commande le contenu ---------- */
+      L.push("VOTRE CONTENU EST CELUI DE " + art.toUpperCase());
       L.push("");
-      L.push("Établissement : DUPONT TRANSPORTS");
-      L.push("Effectif : 45 salariés");
-      L.push("Base ouverte le : 1er janvier " + an);
+      L.push((eff ? eff + " salariés" : "Effectif non renseigné") +
+        ", et aucun accord au sens de L. 2312-21 : le contenu supplétif du décret");
+      L.push("s'applique. " + (gros
+        ? "Au-dessus de trois cents salariés, c'est la grille longue de R. 2312-9."
+        : "En deçà de trois cents salariés, c'est la grille de R. 2312-8 ; les rubriques plus lourdes de R. 2312-9 ne vous sont pas dues.") +
+        " La bascule se fait sur l'effectif de votre fiche, vous n'avez rien à choisir.");
       L.push("");
-      L.push("LES DIX THÈMES");
+      L.push("Les informations portent sur l'année en cours, les deux années précédentes");
+      L.push("et, telles qu'elles peuvent être envisagées, les trois années suivantes");
+      L.push("(R. 2312-10). Soit " + an.join(", ") + ".");
       L.push("");
-      L = L.concat(tableau(["Thème", "Année N-2", "Année N-1", "Année N", "N+1", "N+2", "N+3"], [
-        ["1. Investissements", "520000 €", "550000 €", "580000 €", "600000 €", "620000 €", "640000 €"],
-        ["2. Égalité professionnelle F/H", "45% F / 55% H", "46% F / 54% H", "47% F / 53% H", "", "", ""],
-        ["3. Fonds propres", "750000 €", "800000 €", "850000 €", "880000 €", "900000 €", "920000 €"],
-        ["4. Masse salariale brute", "1200000 €", "1260000 €", "1320000 €", "1380000 €", "1440000 €", "1500000 €"],
-        ["5. Activités sociales", "8000 €", "8500 €", "9000 €", "9500 €", "10000 €", "10500 €"],
-      ]));
+      L.push("NOTE - Un accord d'entreprise, ou à défaut de branche, peut redéfinir");
+      L.push("l'organisation, l'architecture, le contenu et le fonctionnement de la base");
+      L.push("(L. 2312-21). Si vous en avez un, c'est lui qui commande, et cette grille");
+      L.push("n'est plus qu'un plancher de comparaison.");
       L.push("");
-      L.push("MISE À DISPOSITION");
-      L.push("Support : papier");
-      L.push("Lieu : bureau du directeur");
-      L.push("Accès permanent : membres de la délégation du personnel du CSE");
       L.push("");
 
-      L.push("VOS PIÈCES, À COMPLÉTER");
+      /* ---------- la grille, rubrique par rubrique ---------- */
+      var vues = [], courante = null;
+      g.forEach(function (l) {
+        if (l[0] !== courante) { courante = l[0]; vues.push({ titre: l[0], lignes: [] }); }
+        vues[vues.length - 1].lignes.push(l);
+      });
+      vues.forEach(function (v, i) {
+        L.push("RUBRIQUE " + (i + 1) + " - " + titreRubrique(v.titre).toUpperCase());
+        L.push("");
+        L.push("(" + art + ") - " + v.lignes.length + " information" +
+          (v.lignes.length > 1 ? "s" : "") + " à porter");
+        L.push("");
+        var section = null;
+        v.lignes.forEach(function (l) {
+          /* La ligne vide avant le titre de section : sans elle, FeuilleDoc
+             recolle le titre à la puce qui précède et la section disparaît. */
+          if (l[1] && l[1] !== section) { section = l[1]; L.push(""); L.push(section); L.push(""); }
+          L.push("  - " + l[3]);
+          L.push("    " + an.join(" [    ]  ") + " [    ]");
+          L.push("");
+        });
+        L.push("");
+        L.push("");
+      });
+
+      /* ---------- les formalités ---------- */
+      L.push("DANS CET ORDRE");
       L.push("");
-      L.push("« La base de données comporte les informations relatives aux trois années précédentes, " +
-             "l'année en cours et les trois années suivantes, sous forme de perspectives » " +
-             "(L. 2312-18).");
+      L.push("Six formalités, chacune avec le document qui l'accomplit. La première");
+      L.push("n'en est pas une : elle demande à qui la base serait due, et la réponse");
+      L.push("décide de tout le reste.");
       L.push("");
-      L.push("Établissement : " + cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE"));
-      L.push("Effectif : " + (p.effectif ? p.effectif + " salariés" : "[EFFECTIF]"));
-      L.push("Base ouverte le : [DATE]");
-      L.push("");
-      L.push("LES DIX THÈMES");
-      L.push("");
-      L = L.concat(tableau(["Thème", "Année N-2", "Année N-1", "Année N", "N+1", "N+2", "N+3"], [
-        ["1. Investissements", "[montant]", "[montant]", "[montant]", "[montant]", "[montant]", "[montant]"],
-        ["2. Égalité professionnelle", "[%F/%H]", "[%F/%H]", "[%F/%H]", "[%F/%H]", "[%F/%H]", "[%F/%H]"],
-        ["3. Fonds propres", "[montant]", "[montant]", "[montant]", "[montant]", "[montant]", "[montant]"],
-        ["4. Masse salariale brute", "[montant]", "[montant]", "[montant]", "[montant]", "[montant]", "[montant]"],
-        ["5. Rémunération dirigeants", "[montant]", "[montant]", "[montant]", "[montant]", "[montant]", "[montant]"],
-      ]));
-      L.push("");
-      L.push("MISE À DISPOSITION");
-      L.push("Support : [papier / informatique]");
-      L.push("Lieu : [lieu d'accès]");
-      L.push("Accès permanent : [membres du CSE et délégués syndicaux - liste nominative]");
-      L.push("Dernière mise à jour : [date]");
       L.push("");
 
-      L.push("VOTRE CALENDRIER");
-      L.push("");
-      L = L.concat(tableau(["Étape", "Date", "Trace conservée"], [
-        ["Ouverture de la base : avant la première présentation au comité", jj(d0), "base signée et datée"],
-        ["Mise à jour des données : au moins annuellement", jj(dans(d0, 365)), "trace de chaque mise à jour"],
-        ["Communication au comité : à chaque mise à jour", "au fil de l'année", "ordre du jour et PV CSE"],
-        ["Accès permanent : pour le comité et les délégués syndicaux", "en permanence", "registre d'accès"],
-      ]));
+      var cse = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
+        (ctx.donnees || {}).cseExiste || "").trim().toLowerCase();
 
-      L = L.concat(DP.liens(ctx, ["emploi", "rh"]));
+      L.push("ÉTAPE 0 - À QUI LA BASE EST-ELLE DUE ?");
+      L.push("");
+      L.push("(L. 2312-18 et L. 2312-36) - avant tout");
+      L.push("");
+      L.push("La base est ce que l'employeur « met à disposition du comité social et");
+      L.push("économique » (L. 2312-18), et elle est « accessible en permanence aux");
+      L.push("membres de la délégation du personnel du comité social et économique ainsi");
+      L.push("qu'aux membres de la délégation du personnel du comité social et économique");
+      L.push("central d'entreprise, et aux délégués syndicaux » (L. 2312-36). Deux");
+      L.push("destinataires, pas un de plus.");
+      L.push("");
+      L.push("Un comité social et économique est-il en place ?");
+      L.push("");
+      L.push("  [" + (cse === "oui" ? "x" : " ") + "] OUI" +
+        (cse === "oui" ? " - c'est ce que dit votre fiche." : " - cochez si c'est votre cas."));
+      L.push("      La base est due, et l'accès leur est ouvert en permanence.");
+      L.push("");
+      L.push("  [ ] NON, MAIS DES DÉLÉGUÉS SYNDICAUX SONT DÉSIGNÉS.");
+      L.push("      La base leur est accessible de plein droit (L. 2312-36) : elle est");
+      L.push("      due, et tout ce qui suit vaut.");
+      L.push("");
+      L.push("  [" + (cse === "non" ? "x" : " ") + "] NON, NI L'UN NI L'AUTRE, AVEC UN PROCÈS-VERBAL DE CARENCE.");
+      L.push("      Aucun destinataire n'est désigné par les textes. Ils ne disent pas");
+      L.push("      pour autant que la base n'est pas due : ils se taisent. Les vingt");
+      L.push("      décisions publiées qui citent la base ne tranchent pas ce cas, la");
+      L.push("      dernière en date, Cass. soc. 3 décembre 2025, n° 24-10.326, se");
+      L.push("      bornant à nommer les bénéficiaires. Voyez un avocat avant de vous");
+      L.push("      en dispenser, et sachez que la base redeviendra due le jour où un");
+      L.push("      comité sera élu ou un délégué désigné.");
+      L.push("");
+      L.push("  [ ] NON, ET PAS DE PROCÈS-VERBAL DE CARENCE.");
+      L.push("      Ce n'est pas la base qui est en retard, ce sont les élections. Le");
+      L.push("      comité est obligatoire dans les entreprises d'au moins onze salariés,");
+      L.push("      dès lors que ce seuil est atteint pendant douze mois consécutifs");
+      L.push("      (L. 2311-2), et l'employeur informe le personnel de l'organisation");
+      L.push("      des élections par un moyen donnant date certaine, le premier tour se");
+      L.push("      tenant au plus tard le quatre-vingt-dixième jour suivant cette");
+      L.push("      diffusion (L. 2314-4).");
+      L.push("");
+      L.push("      Le modèle qui écrit ces documents :");
+      L.push("      " + SITE_APP + "audit-cse.html#elections");
+      L.push("");
+      L.push("Rien n'interdit de constituer la base sans y être tenu : elle sera prête.");
+      L.push("");
+      L.push("");
 
-      L.push("LES RÈGLES");
+      L.push("ÉTAPE 1 - DÉTERMINER LE RÉGIME");
       L.push("");
-      L.push("CONTENUS OBLIGATOIRES (L. 2312-21) :");
-      L.push("- Investissement social, matériel et immatériel");
-      L.push("- Égalité professionnelle femmes-hommes");
-      L.push("- Fonds propres, endettement, impôts");
-      L.push("- Rémunération des salariés et dirigeants");
-      L.push("- Activités sociales et culturelles");
-      L.push("- Rémunération des financeurs");
-      L.push("- Flux financiers à destination de l'entreprise");
-      L.push("- Partenariats");
-      L.push("- Transferts commerciaux et financiers intra-groupe");
-      L.push("- Environnement et changement climatique");
+      L.push("(L. 2312-21) - avant de constituer quoi que ce soit");
       L.push("");
-      L.push("PÉRIODES COUVERTES :");
-      L.push("- Trois années écoulées");
-      L.push("- L'année en cours");
-      L.push("- Trois années à venir (sous forme de perspectives et tendances)");
+      L.push("Un accord d'entreprise, ou à défaut de branche, peut définir l'organisation,");
+      L.push("l'architecture, le contenu et le fonctionnement de la base. En son absence,");
+      L.push("c'est le contenu supplétif du décret qui s'impose, et il dépend de votre");
+      L.push("effectif : " + art + " pour vous.");
       L.push("");
-      L.push("ACCESSIBILITÉ :");
-      L.push("« La base de données est mise à la disposition des membres de la délégation du personnel " +
-             "du comité et, le cas échéant, des délégués syndicaux » (L. 2312-18).");
+      L.push("Fait le [DATE]   -   Référence : [ACCORD DU DATE, OU « AUCUN ACCORD »]");
+      L.push("");
+      L.push("  Le document de cette étape :");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("DOCUMENT 1 - NOTE DE RÉGIME");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push(cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE"));
+      L.push(cro(p.adresse, "adresse du siège"));
+      L.push("");
+      L.push("NOTE DE RÉGIME DE LA BASE DE DONNÉES");
+      L.push("");
+      L.push(cro(p.ville, "lieu") + ", le [DATE]");
+      L.push("");
+      L.push("Régime applicable : [ACCORD DU DATE / ACCORD DE BRANCHE DU DATE / AUCUN");
+      L.push("ACCORD, CONTENU SUPPLÉTIF].");
+      L.push("");
+      L.push("Effectif retenu : " + (eff ? eff + " salariés" : "[EFFECTIF]") + ". Contenu applicable : " + art + ".");
+      L.push("");
+      L.push("Années couvertes : " + an.join(", ") + " (R. 2312-10).");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push("");
       L.push("");
 
-      return L.concat(pied("L. 2312-18, L. 2312-21, R. 2312-8, R. 2312-9",
-        ["La mise à disposition actualisée des éléments transmis régulièrement au comité vaut " +
-         "communication des rapports et informations au comité. Une base figée ne satisfait pas cette " +
-         "obligation."])).join("\n");
+      L.push("ÉTAPE 2 - CONSTITUER LA BASE");
+      L.push("");
+      L.push("(L. 2312-18 et " + art + ") - une fois le régime arrêté");
+      L.push("");
+      L.push("Les " + vues.length + " rubriques de l'onglet précédent, et dans chacune les");
+      L.push("informations que le décret nomme : " + g.length + " lignes à porter en tout,");
+      L.push("sur six colonnes d'années.");
+      L.push("");
+      L.push("Le classeur se télécharge rempli de ce que vous avez saisi, une feuille par");
+      L.push("rubrique.");
+      L.push("");
+      L.push("Fait le [DATE]");
+      L.push("");
+      L.push("");
+
+      L.push("ÉTAPE 3 - LE SUPPORT");
+      L.push("");
+      L.push("(R. 2312-12) - dès la base constituée");
+      L.push("");
+      L.push("À défaut d'accord, la base est tenue « sur un support informatique pour les");
+      L.push("entreprises d'au moins trois cents salariés, et sur un support informatique");
+      L.push("ou papier pour les entreprises de moins de trois cents salariés ».");
+      L.push("");
+      L.push(gros
+        ? "Vous êtes à " + eff + " : le support informatique est obligatoire, le papier n'est pas admis."
+        : "Vous êtes à " + (eff || "[EFFECTIF]") + " : les deux sont admis.");
+      L.push("");
+      L.push("Fait le [DATE]   -   Support : [PAPIER / INFORMATIQUE]   -   Accès : [LIEU OU ADRESSE]");
+      L.push("");
+      L.push("");
+
+      L.push("ÉTAPE 4 - OUVRIR L'ACCÈS PERMANENT");
+      L.push("");
+      L.push("(L. 2312-36) - le jour de la mise à disposition");
+      L.push("");
+      L.push("Accès permanent aux membres de la délégation du personnel du comité, à ceux");
+      L.push("du comité central s'il en existe un, et aux délégués syndicaux. Permanent :");
+      L.push("pas sur demande, pas à l'occasion d'une consultation. Tenez la liste");
+      L.push("nominative de ceux à qui l'accès est ouvert, avec sa date.");
+      L.push("");
+      L.push("Fait le [DATE]   -   Liste nominative : [NOMS]");
+      L.push("");
+      L.push("  Le document de cette étape :");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("DOCUMENT 4 - NOTE D'ACCÈS À LA BASE");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push(cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE"));
+      L.push(cro(p.adresse, "adresse du siège"));
+      L.push("");
+      L.push("Aux membres de la délégation du personnel du comité social et économique");
+      L.push("et aux délégués syndicaux");
+      L.push("");
+      L.push(cro(p.ville, "lieu") + ", le [DATE]");
+      L.push("");
+      L.push("Objet : accès à la base de données économiques, sociales et environnementales");
+      L.push("");
+      L.push("Mesdames, Messieurs,");
+      L.push("");
+      L.push("La base de données économiques, sociales et environnementales de");
+      L.push(cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE") + " est à votre disposition depuis le [DATE], sur");
+      L.push("[SUPPORT], à [LIEU OU ADRESSE D'ACCÈS]. Elle vous est accessible en");
+      L.push("permanence, conformément à l'article L. 2312-36 du code du travail.");
+      L.push("");
+      L.push("Elle porte sur " + an.join(", ") + ".");
+      L.push("");
+      L.push("Les informations qui y sont présentées comme confidentielles le sont pour la");
+      L.push("durée qui y est indiquée, et vous êtes tenus de la respecter (R. 2312-13).");
+      L.push("");
+      L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération");
+      L.push("distinguée.");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push("");
+      L.push("");
+
+      L.push("ÉTAPE 5 - INFORMER DE CHAQUE ACTUALISATION");
+      L.push("");
+      L.push("(R. 2312-12 et L. 2312-18) - à chaque mise à jour");
+      L.push("");
+      L.push("« L'employeur informe ces personnes de l'actualisation de la base de données");
+      L.push("selon des modalités qu'il détermine » (R. 2312-12). Les modalités sont");
+      L.push("libres, l'information ne l'est pas.");
+      L.push("");
+      L.push("Ce qui se joue ici dépasse la formalité : « cette mise à disposition");
+      L.push("actualisée vaut communication des rapports et informations au comité »");
+      L.push("(L. 2312-18). Une base à jour remplace la transmission ; une base en retard");
+      L.push("ne remplace rien, et la consultation se tient alors sans les éléments dus.");
+      L.push("");
+      L.push("Fait le [DATE]   -   Moyen : [COURRIEL, REMISE, AFFICHAGE]");
+      L.push("");
+      L.push("  Le document de cette étape :");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("DOCUMENT 5 - NOTE D'ACTUALISATION");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push(cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE"));
+      L.push("");
+      L.push("Objet : actualisation de la base de données");
+      L.push("");
+      L.push("La base a été actualisée le [DATE]. Les rubriques modifiées sont :");
+      L.push("[LISTE DES RUBRIQUES].");
+      L.push("");
+      L.push("Cette mise à disposition actualisée vaut communication des rapports et");
+      L.push("informations au comité (L. 2312-18).");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push("");
+      L.push("");
+
+      L.push("ÉTAPE 6 - CE QUI EST CONFIDENTIEL");
+      L.push("");
+      L.push("(R. 2312-13) - au fil de l'eau");
+      L.push("");
+      L.push("Les informations confidentielles « doivent être présentées comme telles par");
+      L.push("l'employeur qui indique la durée du caractère confidentiel de ces");
+      L.push("informations ». Deux choses, donc : le dire, et dire combien de temps.");
+      L.push("");
+      L.push("Une mention générale de confidentialité portée sur toute la base ne vaut");
+      L.push("rien : elle se porte information par information, avec sa durée.");
+      L.push("");
+      L.push("Rubriques concernées : [LISTE]   -   Durée : [DURÉE]");
+      L.push("");
+      L.push("");
+
+      L.push("LE RELEVÉ DES DATES, À GARDER AVEC LA BASE");
+      L.push("");
+      L.push("Formalité | Date | Référence");
+      L.push("1. Régime arrêté (L. 2312-21) | [DATE] | [accord, ou « aucun »]");
+      L.push("2. Base constituée (" + art + ") | [DATE] | [" + g.length + " lignes portées]");
+      L.push("3. Support retenu (R. 2312-12) | [DATE] | [papier / informatique]");
+      L.push("4. Accès ouvert (L. 2312-36) | [DATE] | [liste nominative]");
+      L.push("5. Information de l'actualisation (R. 2312-12) | [DATE] | [moyen]");
+      L.push("6. Mentions de confidentialité (R. 2312-13) | [DATE] | [rubriques, durées]");
+      L.push("");
+      L.push("NOTE - Sans ces dates, vous ne pouvez pas établir que la base était à jour");
+      L.push("le jour d'une consultation, et la mise à disposition ne vaudra pas");
+      L.push("communication.");
+      L.push("");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
+      L.push("");
+      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push("");
+      L.push("");
+
+      /* ---------- le droit ---------- */
+      L.push("LE DROIT QUI FONDE CE DOCUMENT");
+      L.push("");
+      L.push("Articles lus au relais Légifrance le 12 septembre 2026, chacun avec");
+      L.push("l'identifiant de la version lue.");
+      L.push("");
+      L.push("L. 2312-18 - ce qu'est la base, et ce qu'elle vaut (LEGIARTI000052437125)");
+      L.push("");
+      L.push("« Une base de données économiques, sociales et environnementales rassemble");
+      L.push("l'ensemble des informations nécessaires aux consultations et informations");
+      L.push("récurrentes que l'employeur met à disposition du comité social et");
+      L.push("économique. […] Les éléments d'information transmis de manière récurrente au");
+      L.push("comité sont mis à la disposition de leurs membres dans la base de données et");
+      L.push("cette mise à disposition actualisée vaut communication des rapports et");
+      L.push("informations au comité. »");
+      L.push("");
+      L.push("L. 2312-36 - à qui elle est due (LEGIARTI000048533625)");
+      L.push("");
+      L.push("« La base de données est accessible en permanence aux membres de la");
+      L.push("délégation du personnel du comité social et économique ainsi qu'aux membres");
+      L.push("de la délégation du personnel du comité social et économique central");
+      L.push("d'entreprise, et aux délégués syndicaux. »");
+      L.push("");
+      L.push("L. 2312-21 - l'accord qui peut tout redéfinir");
+      L.push("");
+      L.push("Il fixe l'organisation, l'architecture, le contenu et les modalités de");
+      L.push("fonctionnement de la base. R. 2312-8 et R. 2312-9 ne s'appliquent qu'à son");
+      L.push("défaut.");
+      L.push("");
+      L.push("R. 2312-10 - les six années (LEGIARTI000036411580)");
+      L.push("");
+      L.push("« Les informations figurant dans la base de données portent sur l'année en");
+      L.push("cours, sur les deux années précédentes et, telles qu'elles peuvent être");
+      L.push("envisagées, sur les trois années suivantes. »");
+      L.push("");
+      L.push("R. 2312-12 - le support, et l'information de l'actualisation (LEGIARTI000036411586)");
+      L.push("");
+      L.push("« La base de données est tenue à la disposition des personnes mentionnées au");
+      L.push("dernier alinéa de l'article L. 2312-36 sur un support informatique pour les");
+      L.push("entreprises d'au moins trois cents salariés, et sur un support informatique");
+      L.push("ou papier pour les entreprises de moins de trois cents salariés. L'employeur");
+      L.push("informe ces personnes de l'actualisation de la base de données selon des");
+      L.push("modalités qu'il détermine. »");
+      L.push("");
+      L.push("R. 2312-13 - la confidentialité (LEGIARTI000036411588)");
+      L.push("");
+      L.push("« Les informations figurant dans la base de données qui revêtent un caractère");
+      L.push("confidentiel doivent être présentées comme telles par l'employeur qui indique");
+      L.push("la durée du caractère confidentiel de ces informations que les personnes");
+      L.push("mentionnées au dernier alinéa de l'article L. 2312-36 sont tenues de");
+      L.push("respecter. »");
+      L.push("");
+      L.push("R. 2312-15 - la base de groupe (LEGIARTI000036411594)");
+      L.push("");
+      L.push("« Sans préjudice de l'obligation de mise en place d'une base de données au");
+      L.push("niveau de l'entreprise, une convention ou un accord de groupe peut prévoir la");
+      L.push("constitution d'une base de données au niveau du groupe. » Elle s'ajoute, elle");
+      L.push("ne remplace pas.");
+      L.push("");
+      L.push("L. 2317-1 - ce qui est encouru (LEGIARTI000035634273)");
+      L.push("");
+      L.push("L'entrave au fonctionnement du comité est punie d'une amende de 7 500 euros.");
+      L.push("Méfiez-vous des sources qui visent L. 2312-8 : cet article définit la mission");
+      L.push("du comité, il ne porte aucune peine.");
+      L.push("");
+      L.push("La jurisprudence");
+      L.push("");
+      L.push("Vingt décisions publiées citent la base, relevées à Judilibre le 12 septembre");
+      L.push("2026. La plus récente sur les destinataires est Cass. soc. 3 décembre 2025,");
+      L.push("n° 24-10.326 : les demandes d'accès à la base « dont sont bénéficiaires les");
+      L.push("membres de la délégation du personnel au comité social et économique et les");
+      L.push("délégués syndicaux ». Aucune ne tranche le cas où il n'existe ni comité ni");
+      L.push("délégué syndical.");
+      L.push("");
+
+      return L.join("\n");
     },
   });
+
+  /* Les trois onglets, et leurs sous-boutons. La base ouvre une rubrique par
+     bouton, les formalités une étape par bouton. */
+  function coupeBdese(L, debut, fin) {
+    var a = -1, b = L.length;
+    for (var i = 0; i < L.length; i++) if (L[i].indexOf(debut) === 0) { a = i; break; }
+    if (a < 0) return [];
+    if (fin) for (var j = a + 1; j < L.length; j++) if (L[j].indexOf(fin) === 0) { b = j; break; }
+    return L.slice(a, b);
+  }
+  DP.pour("BDESE-CTL-CNT-00").parties = function (ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var L = DP.pour("BDESE-CTL-CNT-00").produire(ctx).split("\n");
+    var g = grilleBdese(p);
+
+    /* Les rubriques, dans l'ordre où la grille les donne. */
+    var titres = [], vu = {};
+    g.forEach(function (l) { if (!vu[l[0]]) { vu[l[0]] = true; titres.push(l[0]); } });
+    var sousBase = [{ cle: "tete", nom: "Le régime",
+      texte: coupeBdese(L, L[0], "RUBRIQUE 1 - ").join("\n") }];
+    titres.forEach(function (t, i) {
+      var debut = "RUBRIQUE " + (i + 1) + " - ";
+      var fin = (i + 1 < titres.length) ? "RUBRIQUE " + (i + 2) + " - " : "DANS CET ORDRE";
+      var texte = coupeBdese(L, debut, fin).join("\n");
+      if (texte.trim()) sousBase.push({ cle: "r" + (i + 1), nom: courtBdese(t), texte: texte });
+    });
+
+    var bornes = [
+      { cle: "f0", nom: "0 À qui ?", debut: "DANS CET ORDRE", fin: "ÉTAPE 1 - " },
+      { cle: "f1", nom: "1 Le régime", debut: "ÉTAPE 1 - ", fin: "ÉTAPE 2 - " },
+      { cle: "f2", nom: "2 Constituer", debut: "ÉTAPE 2 - ", fin: "ÉTAPE 3 - " },
+      { cle: "f3", nom: "3 Le support", debut: "ÉTAPE 3 - ", fin: "ÉTAPE 4 - " },
+      { cle: "f4", nom: "4 L'accès", debut: "ÉTAPE 4 - ", fin: "ÉTAPE 5 - " },
+      { cle: "f5", nom: "5 Informer", debut: "ÉTAPE 5 - ", fin: "ÉTAPE 6 - " },
+      { cle: "f6", nom: "6 Confidentiel", debut: "ÉTAPE 6 - ", fin: "LE RELEVÉ" },
+      { cle: "rel", nom: "Le relevé", debut: "LE RELEVÉ", fin: "LE DROIT QUI FONDE" },
+    ];
+    var sousForm = bornes.map(function (b) {
+      return { cle: b.cle, nom: b.nom, texte: coupeBdese(L, b.debut, b.fin).join("\n") };
+    }).filter(function (x) { return x.texte.trim() !== ""; });
+
+    return [
+      { cle: "base", nom: "La base", texte: coupeBdese(L, L[0], "DANS CET ORDRE").join("\n"), sous: sousBase },
+      { cle: "formalites", nom: "Formalités",
+        texte: coupeBdese(L, "DANS CET ORDRE", "LE DROIT QUI FONDE").join("\n"), sous: sousForm },
+      { cle: "droit", nom: "Le droit", texte: coupeBdese(L, "LE DROIT QUI FONDE", null).join("\n") },
+    ];
+  };
 
 })(typeof window !== "undefined" ? window : this);

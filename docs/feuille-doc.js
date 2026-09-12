@@ -89,7 +89,13 @@
       }
       var texte = para.map(function (s) { return s.trim(); }).join(" ");
       var capitales = !/[a-zà-ÿ]/.test(para[0]);
-      if (premier) {
+      /* Le premier paragraphe est l'en-tête de l'entreprise : ses lignes se
+         rendent une par une, et non collées en un bloc. Sauf quand ce premier
+         paragraphe est une ligne unique en capitales : là, c'est un titre, et
+         c'est le cas des onglets qui n'ouvrent qu'un morceau de document, une
+         formalité ou une rubrique de la base. Sans cette réserve, « RUBRIQUE 10
+         - ENVIRONNEMENT » sortait en texte courant. */
+      if (premier && !(capitales && para.length === 1 && texte.length < 120)) {
         para.forEach(function (l) { b.push({ k: "p", t: l.trim() }); });
       } else if (/^EXEMPLE\b/.test(texte)) {
         b.push({ k: "exemple", t: texte });
