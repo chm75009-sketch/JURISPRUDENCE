@@ -3329,20 +3329,16 @@
   }
   function tete(ctx, titreDoc, fondement) {
     var p = ctx.profil || {};
-    return [
-      cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE").toUpperCase(),
-      cro(p.adresse, "adresse du siège"),
-      p.siret ? "SIRET " + p.siret : "[SIRET]",
-      /* Même en-tête que celui de documents-produits.js : le représentant
-         légal y figure depuis le 12 septembre 2026. */
-      "Représentée par " + cro(p.responsable, "nom et qualité du représentant légal"),
+    /* Les sept lignes de la fiche d'accueil, construites par le même outil que
+       l'en-tête de documents-produits.js : un seul endroit à corriger. */
+    return DP.outils.identite(p).concat([
       "",
       titreDoc.toUpperCase(),
       "(" + fondement + ")",
       "",
       DP.EXEMPLE,
       "",
-    ];
+    ]);
   }
   function fondement(L, arts) {
     L.push("");

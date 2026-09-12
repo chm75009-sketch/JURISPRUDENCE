@@ -61,25 +61,42 @@
   }
 
   /* L'en-tête commun : qui écrit, à quelle date, sur quel fondement. */
-  function entete(ctx, titre, fondement) {
-    var p = ctx.profil || {};
+  /* L'EN-TÊTE DE L'ENTREPRISE, LES SEPT LIGNES DE LA FICHE D'ACCUEIL.
+
+     Demande du 12 septembre 2026 : « tous les documents générés doivent
+     comporter les infos figurant sur cette fiche d'accueil, et ça doit être
+     automatique, et à chaque changement mise à jour ». Rien n'est donc
+     recopié nulle part : chaque document se fabrique à l'ouverture, et lit la
+     fiche à ce moment-là. Corriger la fiche suffit, les documents suivent.
+
+     Ce qui manque sort entre crochets, comme partout ailleurs dans le dépôt :
+     une case vide se remplirait sans qu'on la voie, un crochet non. */
+  function identite(p) {
+    p = p || {};
+    var eff = String(p.effectif == null ? "" : p.effectif).trim();
+    var cc = String(p.conventionCollective || "").trim();
     return [
       cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE").toUpperCase(),
       cro(p.adresse, "adresse du siège"),
       p.siret ? "SIRET " + p.siret : "[SIRET]",
-      /* Le représentant légal appartient à l'en-tête au même titre que le
-         SIRET : c'est lui qui engage l'entreprise, et un courrier remis sans
-         son nom laissait un crochet à remplir à la main sur soixante-huit
-         documents. Demande du 12 septembre 2026 : ces renseignements doivent
-         figurer sur tous les documents. */
       "Représentée par " + cro(p.responsable, "nom et qualité du représentant légal"),
+      cro(p.courriel, "adresse e-mail"),
+      "Effectif : " + (eff === "" ? "[effectif]" : eff + " salarié" + (+eff > 1 ? "s" : "")),
+      "Convention collective : " + (cc === "" ? "[convention collective applicable, IDCC]"
+        : (/^\d/.test(cc) ? "IDCC " + cc : cc)),
+    ];
+  }
+
+  function entete(ctx, titre, fondement) {
+    var p = ctx.profil || {};
+    return identite(p).concat([
       "",
       titre.toUpperCase(),
       fondement ? "(" + fondement + ")" : "",
       "",
       "Établi le " + leJour(ctx.aujourdhui) + ".",
       "",
-    ].filter(function (l) { return l !== null; });
+    ]).filter(function (l) { return l !== null; });
   }
 
   /* L'adresse publique de l'application. Un document emporté en Word ou
@@ -1263,7 +1280,8 @@
 
   global.DocumentsProduits = {
     pour: pour, tous: D, ajouter: ajouter,
-    outils: { cro: cro, leJour: leJour, dans: dans, entete: entete, liens: liens, EXEMPLE: EXEMPLE },
+    outils: { cro: cro, leJour: leJour, dans: dans, entete: entete, identite: identite,
+      liens: liens, EXEMPLE: EXEMPLE },
     liens: liens, EXEMPLE: EXEMPLE,
   };
 })(typeof window !== "undefined" ? window : this);
