@@ -3257,11 +3257,32 @@
     return seuil(PROFIL, s.min) !== false;
   }
 
+  /* LES PARCOURS REPRIS EN TROIS ONGLETS, DANS L'ORDRE OÙ ILS L'ONT ÉTÉ.
+
+     Le document, les formalités une par une avec leur pièce, puis le droit.
+     Le règlement intérieur le 12 septembre 2026, la base de données le même
+     jour. Les autres viendront, et cette liste s'allongera d'autant : c'est
+     elle qui décide de l'ordre des vignettes, les refaits en tête.
+
+     Ajouter une clé ici suffit — ne rien changer d'autre. */
+  var REFAITS = ["ri", "bdese"];
+  function rang(p) {
+    var i = REFAITS.indexOf(p.cle);
+    return i < 0 ? REFAITS.length : i;
+  }
+
   function construireCartes() {
     var dus = PARCOURS.filter(duParcours);
+    /* Tri stable : les refaits dans leur ordre, puis les autres dans le leur. */
+    dus = dus.map(function (p, i) { return { p: p, i: i }; })
+      .sort(function (a, b) { return (rang(a.p) - rang(b.p)) || (a.i - b.i); })
+      .map(function (x) { return x.p; });
     var hors = PARCOURS.filter(function (p) { return !duParcours(p); });
     $("cartes").innerHTML = dus.map(function (p) {
-      return '<button type="button" class="carte" id="carte-' + p.cle + '" role="tab">' +
+      var neuf = REFAITS.indexOf(p.cle) >= 0;
+      return '<button type="button" class="carte' + (neuf ? " refait" : "") +
+        '" id="carte-' + p.cle + '" role="tab">' +
+        (neuf ? '<span class="pastille">Le document, les formalités, le droit</span>' : "") +
         "<b>" + e(p.nom) + '</b><span class="res">' + e(p.resume) + "</span>" +
         '<span class="avance" id="avance-' + p.cle + '"></span></button>';
     }).join("") +
