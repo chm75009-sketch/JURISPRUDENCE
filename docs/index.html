@@ -43,12 +43,24 @@
     min-height:56px;border-radius:12px}
 
   /* ecran 2 : la ligne, le chapeau, les deux boutons */
+  /* LE RETOUR À LA FICHE. Il était un bouton « Modifier » posé au bout de la
+     ligne du rappel, à droite d'un nom d'entreprise et d'une convention qui
+     l'écrasaient : demandé le 12 septembre 2026, « un bouton retour en arrière
+     que je ne vois pas ». Il passe au-dessus, seul sur sa ligne, avec la
+     flèche et le mot retour. */
+  /* Le dépôt a déjà un bouton de retour, blanc et discret (style.css, « le
+     même partout »). Sur cet écran il se perdait ; ici, et ici seulement, il
+     prend le bleu des deux portes pour qu'on le voie du premier coup d'œil.
+     L'identifiant dans le sélecteur est ce qui lui permet de passer devant la
+     règle commune. */
+  #modifier-fiche.retour{display:flex;width:100%;margin:16px 0 0;
+    justify-content:flex-start;font:600 17px/1.2 system-ui;padding:14px 16px;
+    min-height:52px;border-radius:12px;
+    background:var(--accent-clair);color:var(--accent);border:2px solid var(--accent)}
+  #modifier-fiche.retour:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
   .rappel{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--filet)}
   .rappel .texte{flex:1;min-width:0;font-size:16px;line-height:1.35;color:var(--texte-2)}
   .rappel .texte b{color:var(--texte);font-size:17px}
-  .rappel button{flex:none;font:600 17px system-ui;padding:10px 14px;min-height:44px;
-    border-radius:10px;background:var(--surface);color:var(--texte);border:1px solid var(--filet-2)}
-  .rappel button:hover{background:var(--creux);color:var(--texte);border-color:var(--filet-2)}
   .chapeau{margin:20px 0 0;font-size:17px;line-height:1.5;color:var(--texte-2)}
   .chapeau b{color:var(--texte)}
   .portes{display:flex;flex-direction:column;gap:14px;margin:20px 0 0}
@@ -91,9 +103,9 @@
   </section>
 
   <section id="ecran-portes" hidden>
+    <button type="button" id="modifier-fiche" class="retour">&#8592; Retour à la fiche</button>
     <div class="rappel">
       <div class="texte"><b id="rail-ent"></b> <span id="rail-ent-txt"></span></div>
-      <button type="button" id="modifier-fiche">Modifier</button>
     </div>
     <p class="chapeau"><b>Audit</b> : une question par obligation, oui ou non ; à non, le document
     manquant est écrit pour vous ; à oui, vous déposez le vôtre et il est contrôlé.
