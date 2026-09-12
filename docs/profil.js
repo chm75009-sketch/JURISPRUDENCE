@@ -35,11 +35,14 @@
      que la fiche est enregistrée, même vidée, c'est elle qui vaut et ces
      valeurs ne reviennent plus. Le bouton « tout effacer » de la page d'audit
      les rétablit, puisqu'il ramène le poste à son état initial.
-     Le SIRET, l'adresse et le représentant légal ne sont pas ici : ils ne
-     m'ont pas été donnés, et un SIRET inventé sur un document qui se dépose
-     au greffe est pire qu'un champ vide. */
+     Le courriel et le téléphone ne sont pas ici : le dépôt est public, et une
+     adresse personnelle comme un numéro de portable y resteraient dans
+     l'historique. Ils se saisissent sur le poste, où ils ne bougent plus. */
   var DEFAUT = {
-    denomination: "TEC",
+    denomination: "SARL TEC",
+    siret: "53845047900034",
+    adresse: "23 avenue du Château, 95100 Argenteuil",
+    responsable: "Chadi EL SAFADI, gérant",
     effectif: 81,
     secteur: "transport et logistique",
     conventionCollective: "0016 - Convention collective nationale des transports routiers " +
