@@ -82,6 +82,86 @@
      LE RÈGLEMENT INTÉRIEUR
      ══════════════════════════════════════════════════════════════════════ */
 
+  /* Ce que le secteur change dans le règlement. Trois endroits seulement, et
+     jamais un article de plus : les consignes de l'article 2, les équipements
+     de l'article 3, les postes à vigilance du 6.3. Un article ajouté
+     décalerait toute la numérotation, et un règlement dont les articles se
+     décalent d'un secteur à l'autre ne se compare plus à lui-même.
+
+     Ces clauses ne sont pas la loi : ce sont des consignes usuelles du métier,
+     à confronter au document unique de l'entreprise. La NOTE qui les suit le
+     dit, et elles se suppriment comme les autres. */
+  var SECTEUR = {
+    "transport et logistique": {
+      titre: "transport et logistique",
+      consignes: [
+        "de prendre le volant sans que les temps de conduite et de repos réglementaires aient été respectés, ou de manipuler, fausser ou neutraliser le chronotachygraphe et la carte conducteur ;",
+        "d'user d'un téléphone tenu en main ou de tout appareil à écran pendant la conduite ;",
+        "de prendre la route sans avoir vérifié l'arrimage et la répartition du chargement, ni contrôlé que la charge utile et les hauteurs autorisées sont respectées ;",
+        "de conduire un chariot automoteur, un engin de manutention ou un hayon élévateur sans l'autorisation de conduite délivrée par l'employeur ;",
+        "de circuler à pied sur les zones de quai, de manœuvre ou de circulation des engins sans gilet de haute visibilité, ni de stationner dans l'angle mort d'un véhicule en manœuvre ;",
+        "de gerber ou de désolidariser une charge palettisée hors des zones prévues, ou au-delà des hauteurs de gerbage affichées."
+      ],
+      epi: "chaussures de sécurité, gilet de haute visibilité et gants adaptés à la manutention, ainsi que, selon le poste, casque et vêtements de protection contre le froid",
+      postes: "conduite d'un véhicule ou d'un engin de manutention, travail sur quai, opérations de chargement et de déchargement, manœuvre de hayon"
+    },
+    "industrie": {
+      titre: "industrie",
+      consignes: [
+        "d'intervenir sur une machine, une installation ou un circuit sans que la consignation ait été faite et vérifiée, et sans en être la personne habilitée ;",
+        "de retirer, caler ou contourner un protecteur, un carter ou un dispositif d'arrêt d'urgence ;",
+        "de porter, à proximité d'un organe en mouvement, des vêtements flottants, une écharpe, des bijoux ou des cheveux longs non attachés ;",
+        "d'utiliser un produit chimique sans avoir pris connaissance de sa fiche de données de sécurité, ni de le transvaser dans un contenant non étiqueté ;",
+        "de séjourner sans protection auditive dans les zones où le port en est prescrit par la signalisation ;",
+        "d'élinguer, de lever ou de déplacer une charge au pont roulant ou à l'aide d'un appareil de levage sans l'autorisation de conduite requise."
+      ],
+      epi: "chaussures de sécurité, protections auditives, lunettes ou écran facial, gants adaptés au risque du poste et vêtements de travail ajustés",
+      postes: "conduite de machine dangereuse, conduite d'appareil de levage ou de pont roulant, manipulation de produits chimiques, intervention sur installation consignée, travail isolé"
+    },
+    "bâtiment et travaux publics": {
+      titre: "bâtiment et travaux publics",
+      consignes: [
+        "de travailler en hauteur sans que les protections collectives aient été mises en place, ou, lorsqu'elles sont impossibles, sans harnais relié à un point d'ancrage vérifié ;",
+        "de monter, modifier ou démonter un échafaudage sans y avoir été formé et désigné ;",
+        "de descendre dans une fouille ou une tranchée de plus d'un mètre trente sans blindage ni talutage conformes ;",
+        "de conduire un engin de chantier, une nacelle ou une grue sans l'autorisation de conduite délivrée par l'employeur ;",
+        "de circuler sur le chantier sans casque ni chaussures de sécurité, ni de stationner sous une charge levée ou dans le rayon d'évolution d'un engin ;",
+        "d'intervenir sur un ouvrage susceptible de contenir de l'amiante ou du plomb hors du mode opératoire et du plan de retrait établis."
+      ],
+      epi: "casque, chaussures de sécurité, gants, lunettes, vêtements de haute visibilité et, pour les travaux en hauteur, harnais et longe vérifiés",
+      postes: "travail en hauteur, conduite d'engin de chantier ou de nacelle, manœuvre de levage, travaux en tranchée, travaux exposant à l'amiante ou au plomb"
+    },
+    "commerce": {
+      titre: "commerce",
+      consignes: [
+        "de porter ou de déplacer une charge au-delà de ce que la formation aux gestes et postures et les aides à la manutention permettent ;",
+        "de garnir un rayonnage au-delà des hauteurs et des charges affichées, ou d'y grimper au lieu d'user de l'escabeau ou de la plateforme prévus ;",
+        "de conduire un transpalette électrique ou un chariot automoteur sans l'autorisation de conduite délivrée par l'employeur ;",
+        "d'utiliser une trancheuse, une scie, un four ou tout matériel coupant ou chaud sans la formation au poste et les protections prévues ;",
+        "de laisser un sol mouillé ou souillé sans signalisation, ni de différer le nettoyage d'un produit renversé ;",
+        "de s'opposer physiquement à un vol ou à une agression : la consigne est de se mettre en sécurité et d'alerter."
+      ],
+      epi: "chaussures antidérapantes, gants adaptés à la manutention et au risque de coupure, et, en réserve ou en laboratoire, les protections propres au poste",
+      postes: "conduite de transpalette ou de chariot automoteur, travail en hauteur sur escabeau ou plateforme, utilisation de matériel coupant ou chauffant, travail isolé en fermeture"
+    },
+    "services": {
+      titre: "services",
+      consignes: [
+        "de laisser un câble, un carton ou un matériel encombrer une circulation, une issue de secours ou l'accès à un extincteur ;",
+        "de conduire dans le cadre professionnel sans avoir respecté les temps de repos, ni d'user d'un téléphone tenu en main au volant ;",
+        "d'intervenir seul chez un client ou sur un site extérieur sans que le moyen d'alerte prévu pour le travail isolé soit disponible et en état ;",
+        "de brancher sur le réseau électrique un appareil personnel ou un multiprise en cascade ;",
+        "de s'opposer physiquement à une personne agressive : la consigne est de se mettre en sécurité, d'alerter et de rendre compte."
+      ],
+      epi: "les équipements que le poste rend nécessaires, notamment pour les interventions sur site extérieur, ainsi que le matériel de travail sur écran adapté",
+      postes: "conduite dans le cadre professionnel, travail isolé, intervention chez un client ou sur un site extérieur, accueil du public en horaire décalé"
+    }
+  };
+  function secteurDe(p) {
+    var s = String((p && p.secteur) || "").trim().toLowerCase();
+    return Object.prototype.hasOwnProperty.call(SECTEUR, s) ? SECTEUR[s] : null;
+  }
+
   D["DIS-CTL-RI-01"] = {
     nom: "Le règlement intérieur, et ses trois courriers",
     detail: "Le règlement rédigé, la consultation du comité, la transmission à " +
@@ -90,6 +170,7 @@
       var p = ctx.profil || {};
       var nom = cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE");
       var eff = p.effectif;
+      var sect = secteurDe(p);
       var L = [];
 
       L = L.concat(entete(ctx, "Règlement intérieur", "articles L. 1311-2 et L. 1321-1 à L. 1321-6 du code du travail"));
@@ -163,20 +244,31 @@
       L.push("sécurité.");
       L.push("");
       L.push("Il est notamment interdit :");
-      L.push("  — de neutraliser, modifier ou déposer un dispositif de sécurité d'une");
-      L.push("    machine, d'un équipement, d'un véhicule ou d'un local ;");
-      L.push("  — d'utiliser un équipement de travail pour un usage auquel il n'est pas");
-      L.push("    destiné, ou sans avoir reçu la formation ou l'habilitation requises ;");
-      L.push("  — d'introduire dans l'entreprise un produit, un matériel ou un véhicule");
-      L.push("    non autorisé par la direction ;");
-      L.push("  — d'accéder sans autorisation à une zone dont l'accès est réservé ou");
-      L.push("    signalé comme dangereux ;");
-      L.push("  — de fumer et de vapoter dans les locaux fermés et couverts affectés à un");
-      L.push("    usage collectif.");
       L.push("");
+      L.push("  - de neutraliser, modifier ou déposer un dispositif de sécurité d'une machine, d'un équipement, d'un véhicule ou d'un local ;");
+      L.push("  - d'utiliser un équipement de travail pour un usage auquel il n'est pas destiné, ou sans avoir reçu la formation ou l'habilitation requises ;");
+      L.push("  - d'introduire dans l'entreprise un produit, un matériel ou un véhicule non autorisé par la direction ;");
+      L.push("  - d'accéder sans autorisation à une zone dont l'accès est réservé ou signalé comme dangereux ;");
+      L.push("  - de fumer et de vapoter dans les locaux fermés et couverts affectés à un usage collectif.");
+      L.push("");
+      if (sect) {
+        L.push("Compte tenu de l'activité de l'entreprise, il est en outre interdit :");
+        L.push("");
+        sect.consignes.forEach(function (c) { L.push("  - " + c); });
+        L.push("");
+      }
       L.push("Tout salarié qui constate la défaillance d'un dispositif de protection en");
       L.push("avise immédiatement son responsable hiérarchique.");
       L.push("");
+      if (sect) {
+        L.push("NOTE — Les interdictions du bloc « compte tenu de l'activité » sont les");
+        L.push("consignes usuelles du " + sect.titre + ". Elles ne sont pas la loi :");
+        L.push("confrontez-les à votre document unique et à vos postes réels, gardez");
+        L.push("celles qui correspondent à un risque évalué chez vous, supprimez les");
+        L.push("autres. Une consigne recopiée d'un modèle et étrangère à votre activité");
+        L.push("affaiblit tout l'article.");
+        L.push("");
+      }
       L.push("NOTE — Ajoutez ici les consignes propres à vos unités de travail, telles");
       L.push("qu'elles ressortent de votre document unique. Une instruction qui ne");
       L.push("correspond à aucun risque évalué se défend mal ; une instruction absente là");
@@ -190,6 +282,11 @@
       L.push("protection individuelle nécessaires à son poste, ainsi que les vêtements de");
       L.push("travail lorsque la nature du travail l'exige.");
       L.push("");
+      if (sect) {
+        L.push("Compte tenu de l'activité de l'entreprise, ces équipements comprennent");
+        L.push("notamment : " + sect.epi + ".");
+        L.push("");
+      }
       L.push("Le port de ces équipements est obligatoire pendant toute la durée de");
       L.push("l'exposition au risque, aux postes et dans les zones où il est prescrit par");
       L.push("la signalisation ou par la consigne de poste. Il n'y est dérogé en aucun");
@@ -229,10 +326,14 @@
       L.push("6.3 — La consommation des boissons mentionnées au 6.1 est interdite aux");
       L.push("postes suivants, dont le document unique d'évaluation des risques établit");
       L.push("qu'une atteinte à la vigilance y exposerait le salarié ou autrui à un");
-      L.push("danger : [LISTER VOS POSTES — par exemple : conduite d'un véhicule ou d'un");
-      L.push("engin, travail en hauteur, conduite de machine dangereuse, manipulation de");
-      L.push("produits dangereux, travail isolé, port d'arme, encadrement d'une");
-      L.push("intervention de secours].");
+      if (sect) {
+        L.push("danger : " + sect.postes + " [COMPLÉTEZ OU RETIREZ SELON VOS POSTES RÉELS].");
+      } else {
+        L.push("danger : [LISTER VOS POSTES — par exemple : conduite d'un véhicule ou d'un");
+        L.push("engin, travail en hauteur, conduite de machine dangereuse, manipulation de");
+        L.push("produits dangereux, travail isolé, port d'arme, encadrement d'une");
+        L.push("intervention de secours].");
+      }
       L.push("");
       L.push("6.4 — L'introduction, la détention et l'usage de substances stupéfiantes");
       L.push("sont interdits dans l'entreprise et pendant le temps de travail.");
@@ -335,9 +436,7 @@
       L.push("");
       L.push("  1. L'avertissement ;");
       L.push("  2. Le blâme ;");
-      L.push("  3. La mise à pied disciplinaire, d'une durée maximale de trois jours");
-      L.push("     ouvrables, entraînant la suspension du contrat et de la rémunération");
-      L.push("     pendant cette durée ;");
+      L.push("  3. La mise à pied disciplinaire, d'une durée maximale de trois jours ouvrables, entraînant la suspension du contrat et de la rémunération pendant cette durée ;");
       L.push("  4. La mutation disciplinaire et la rétrogradation ;");
       L.push("  5. Le licenciement pour motif disciplinaire.");
       L.push("");
@@ -477,15 +576,12 @@
       L.push("Tout salarié qui s'estime victime de tels faits, ou qui en est témoin, peut");
       L.push("les signaler par tout moyen écrit, sans passer par sa hiérarchie s'il ne le");
       L.push("souhaite pas, à l'un des interlocuteurs suivants :");
-      L.push("  — son responsable hiérarchique ou la direction ;");
-      L.push("  — le référent en matière de lutte contre le harcèlement sexuel et les");
-      L.push("    agissements sexistes désigné par le comité social et économique parmi");
-      L.push("    ses membres : [NOM ET COORDONNÉES] ;");
-      L.push("  — [SI L'ENTREPRISE ATTEINT 250 SALARIÉS : le référent désigné par");
-      L.push("    l'employeur : NOM ET COORDONNÉES] ;");
-      L.push("  — le médecin du travail ou le service de prévention et de santé au");
-      L.push("    travail : [COORDONNÉES] ;");
-      L.push("  — l'inspection du travail : [COORDONNÉES DE LA SECTION COMPÉTENTE].");
+      L.push("");
+      L.push("  - son responsable hiérarchique ou la direction ;");
+      L.push("  - le référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes désigné par le comité social et économique parmi ses membres : [NOM ET COORDONNÉES] ;");
+      L.push("  - [SI L'ENTREPRISE ATTEINT 250 SALARIÉS : le référent désigné par l'employeur : NOM ET COORDONNÉES] ;");
+      L.push("  - le médecin du travail ou le service de prévention et de santé au travail : [COORDONNÉES] ;");
+      L.push("  - l'inspection du travail : [COORDONNÉES DE LA SECTION COMPÉTENTE].");
       L.push("");
       L.push("Tout signalement donne lieu à un accusé de réception écrit et à une enquête");
       L.push("conduite avec impartialité et discrétion, à laquelle la personne mise en");
@@ -735,11 +831,37 @@
       L.push("");
       L.push("────────────────────────────────────────────────────────────────────────");
       L.push("");
+      L.push("AVANT DE DÉPOSER, TROIS VÉRIFICATIONS");
+      L.push("");
+      L.push("Votre convention collective d'abord" +
+        (String(p.conventionCollective || "").trim()
+          ? ", soit celle que votre fiche désigne : " + String(p.conventionCollective).trim() + ". "
+          : ". ") +
+        "Elle peut imposer des mentions que ce texte ne porte pas, encadrer la");
+      L.push("procédure disciplinaire plus strictement que la loi, ou prévoir une");
+      L.push("commission de discipline. L'application ne lit pas les conventions");
+      L.push("collectives : cette lecture vous revient, et elle est indispensable.");
+      L.push("");
+      L.push("Vos accords d'entreprise et vos usages ensuite. Un accord sur le temps de");
+      L.push("travail, le télétravail ou le droit à la déconnexion peut contredire une");
+      L.push("clause écrite ici. C'est l'accord qui l'emporte.");
+      L.push("");
+      L.push("Un avocat enfin, si le règlement doit fonder des sanctions. Ce document est");
+      L.push("un projet rédigé à partir des textes, non une consultation juridique : il");
+      L.push("ne tient compte ni de votre organisation, ni de vos contentieux en cours,");
+      L.push("ni des particularités de vos postes. Avant de déposer, faites-le relire par");
+      L.push("un avocat en droit du travail, et n'hésitez pas à le soumettre en amont à");
+      L.push("l'inspecteur du travail, qui peut à tout moment en exiger le retrait ou la");
+      L.push("modification (L. 1322-1).");
+      L.push("");
+      L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      var pourAllerPlusLoin = liens(ctx, "ri");
+      if (pourAllerPlusLoin.length) L = L.concat(pourAllerPlusLoin);
       L.push("Ce document reprend les textes lus à la source : L. 1311-2, L. 1321-1,");
       L.push("L. 1321-2, L. 1321-2-1, L. 1321-3, L. 1321-4, L. 1321-5, L. 1321-6,");
-      L.push("L. 1331-1, L. 1331-2, L. 1332-1 à L. 1332-5, R. 1321-1 à R. 1321-5.");
-      L.push("Il ne vaut pas consultation : votre convention collective et vos accords");
-      L.push("peuvent ajouter des exigences que l'application ne lit pas.");
+      L.push("L. 1322-1, L. 1331-1, L. 1331-2, L. 1332-1 à L. 1332-5, R. 1321-1 à");
+      L.push("R. 1321-5.");
       return L.join("\n");
     },
   };
