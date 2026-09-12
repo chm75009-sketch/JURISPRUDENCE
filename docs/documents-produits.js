@@ -76,6 +76,11 @@
     ].filter(function (l) { return l !== null; });
   }
 
+  /* L'adresse publique de l'application. Un document emporté en Word ou
+     imprimé quitte le navigateur : un lien relatif n'y mène plus nulle part.
+     C'est la même base que juris-expert.js emploie pour ses renvois. */
+  var SITE = "https://chm75009-sketch.github.io/JURISPRUDENCE/docs/";
+
   var D = {};
 
   /* ══════════════════════════════════════════════════════════════════════
@@ -1079,6 +1084,18 @@
       L.push("modification (L. 1322-1).");
       L.push("");
       L.push("────────────────────────────────────────────────────────────────────────");
+      L.push("");
+      L.push("LE DROIT QUI FONDE CE DOCUMENT");
+      L.push("");
+      L.push("Ce document est le règlement lui-même, prêt à remplir. Ce qui le fonde se");
+      L.push("trouve ailleurs, pour ne pas l'alourdir : le parcours guidé donne, étape par");
+      L.push("étape, l'article qui commande chaque formalité avec son identifiant de");
+      L.push("version, la jurisprudence qui l'éclaire, le risque encouru et le délai");
+      L.push("calculé sur vos dates.");
+      L.push("");
+      L.push("  La procédure pas à pas : " + SITE + "parcours.html?p=ri");
+      L.push("  Contrôler un règlement déjà en vigueur : " + SITE + "controler-ri.html");
+      L.push("  L'audit discipline et règlement intérieur : " + SITE + "audit-discipline.html");
       L.push("");
       var pourAllerPlusLoin = liens(ctx, "ri");
       if (pourAllerPlusLoin.length) L = L.concat(pourAllerPlusLoin);
