@@ -119,21 +119,26 @@
   var $ = function (id) { return document.getElementById(id); };
   if (window.VERSION_APP) $("version-app").textContent = "Version " + window.VERSION_APP + ", " + window.VERSION_DATE;
 
-  /* Les sept champs de la fiche, sans texte d'aide, avec des intitulés courts.
+  /* Les huit champs de la fiche, sans texte d'aide, avec des intitulés courts.
      Le SIRET, l'adresse et le représentant légal en font partie depuis le
      12 septembre 2026 : ils sont l'en-tête et la signature de tout document
      produit, et sans eux chaque courrier sortait avec trois crochets à
-     remplir à la main. L'ordre suit celui de la fiche complète (Profil.IDENTITE),
-     que le filtre ci-dessous conserve. */
+     remplir à la main. L'adresse électronique a suivi le même jour. L'ordre
+     suit celui de la fiche complète (Profil.IDENTITE), que le filtre
+     ci-dessous conserve. */
   var NOMS = {
     denomination: "Dénomination",
     siret: "SIRET",
     adresse: "Adresse du siège",
     responsable: "Représentant légal (nom, qualité)",
+    courriel: "Adresse e-mail",
     effectif: "Effectif (salariés)",
     secteur: "Secteur",
     conventionCollective: "Convention collective (IDCC)"
   };
+  /* Ce qui n'empêche pas de continuer. Le courriel est une coordonnée, non un
+     élément d'identité : un document se dépose au greffe sans lui. */
+  var FACULTATIFS = { courriel: true };
   var CHAMPS = (window.Profil ? window.Profil.IDENTITE : []).filter(function (ch) {
     return NOMS[ch.c] !== undefined;
   }).map(function (ch) {
@@ -149,7 +154,7 @@
     if (!p) return false;
     if (String(p.effectif == null ? "" : p.effectif).trim() === "") return false;
     for (var c in NOMS) {
-      if (c === "effectif") continue;
+      if (c === "effectif" || FACULTATIFS[c]) continue;
       if (!String(p[c] || "").trim()) return false;
     }
     return true;
