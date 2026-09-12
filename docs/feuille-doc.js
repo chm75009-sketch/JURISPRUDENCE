@@ -27,6 +27,21 @@
     return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
       .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
+
+  /* Les blancs à remplir se voient. Partout dans l'application, ce que
+     l'application ne peut pas connaître sort entre crochets plutôt que d'être
+     inventé ; encore faut-il que l'employeur les repère avant de déposer son
+     document. Demande du 12 septembre 2026 : en rouge.
+
+     Le style est écrit dans la balise, et non dans une feuille : il y a une
+     copie du style des feuilles dans chaque page qui en affiche, et un
+     document imprimé ou collé ailleurs perdrait la couleur. */
+  var STYLE_BLANC = "color:#b3261e;font-weight:600";
+  function blancs(h) {
+    return h.replace(/\[[^\[\]\n]{1,200}\]/g, function (m) {
+      return '<span class="fd-blanc" style="' + STYLE_BLANC + '">' + m + "</span>";
+    });
+  }
   function propre(t) {
     return String(t == null ? "" : t).replace(/[—–]/g, "-").replace(/ /g, " ");
   }
@@ -117,11 +132,11 @@
   function tableHtml(b, editable) {
     var e = editable ? ' contenteditable="true"' : "";
     var h = '<div class="fd-cadre"><table class="fd-table"><thead><tr>';
-    b.head.forEach(function (c) { h += "<th" + e + ">" + ech(c) + "</th>"; });
+    b.head.forEach(function (c) { h += "<th" + e + ">" + blancs(ech(c)) + "</th>"; });
     h += "</tr></thead><tbody>";
     b.rows.forEach(function (r) {
       h += "<tr>";
-      r.forEach(function (c) { h += "<td" + e + (c ? "" : ' class="vide"') + ">" + ech(c) + "</td>"; });
+      r.forEach(function (c) { h += "<td" + e + (c ? "" : ' class="vide"') + ">" + blancs(ech(c)) + "</td>"; });
       h += "</tr>";
     });
     return h + "</tbody></table></div>";
@@ -138,8 +153,8 @@
       if (b.k === "trait" || b.k === "saut") { h += '<hr class="b-' + b.k + '" data-k="' + b.k + '">'; return; }
       if (b.k === "table") { h += tableHtml(b, editable); return; }
       if (b.k === "lien") { h += '<div class="b-lien" data-k="lien">' + avecLiens(b.t) + "</div>"; return; }
-      if (b.k === "exemple") { h += '<div class="b-exemple" data-k="exemple"' + e + ">" + ech(b.t) + "</div>"; return; }
-      h += '<div class="b-' + b.k + '" data-k="' + b.k + '"' + e + ">" + ech(b.t) + "</div>";
+      if (b.k === "exemple") { h += '<div class="b-exemple" data-k="exemple"' + e + ">" + blancs(ech(b.t)) + "</div>"; return; }
+      h += '<div class="b-' + b.k + '" data-k="' + b.k + '"' + e + ">" + blancs(ech(b.t)) + "</div>";
     });
     return h + "</div>";
   }

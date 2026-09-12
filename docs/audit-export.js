@@ -80,8 +80,31 @@
       (o.taille ? '<w:sz w:val="' + o.taille + '"/><w:szCs w:val="' + o.taille + '"/>' : "") +
       (o.couleur ? '<w:color w:val="' + o.couleur + '"/>' : "") +
       "</w:rPr>";
-    return "<w:p>" + ppr + "<w:r>" + rpr +
-      '<w:t xml:space="preserve">' + ech(texte) + "</w:t></w:r></w:p>";
+    return "<w:p>" + ppr + runs(texte, rpr, o) + "</w:p>";
+  }
+
+  /* Un paragraphe fait normalement un seul segment. Il en fait plusieurs dès
+     qu'il porte un blanc à remplir : ce qui est entre crochets sort en rouge,
+     comme à l'écran, pour que l'employeur le voie avant de déposer son
+     document. Demande du 12 septembre 2026.
+
+     Rien n'est coloré là où une couleur est déjà imposée : un en-tête de
+     tableau est en blanc sur fond bleu, et du rouge y serait illisible. */
+  var ROUGE_BLANC = "B3261E";
+  function runs(texte, rpr, o) {
+    var s = String(texte == null ? "" : texte);
+    if (o.couleur || s.indexOf("[") < 0)
+      return "<w:r>" + rpr + '<w:t xml:space="preserve">' + ech(s) + "</w:t></w:r>";
+    var re = /\[[^\[\]\n]{1,200}\]/g, out = "", i = 0, m;
+    var rprRouge = rpr.replace("</w:rPr>", '<w:color w:val="' + ROUGE_BLANC + '"/><w:b/></w:rPr>');
+    function seg(t, r) {
+      return t ? "<w:r>" + r + '<w:t xml:space="preserve">' + ech(t) + "</w:t></w:r>" : "";
+    }
+    while ((m = re.exec(s))) {
+      out += seg(s.slice(i, m.index), rpr) + seg(m[0], rprRouge);
+      i = m.index + m[0].length;
+    }
+    return out + seg(s.slice(i), rpr);
   }
   function cellule(texte, entete) {
     return "<w:tc><w:tcPr><w:tcW w:w=\"0\" w:type=\"auto\"/>" +
