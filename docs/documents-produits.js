@@ -1250,12 +1250,29 @@
       L.push("");
       L.push("(L. 1321-4 et R. 1321-4) - EN MÊME TEMPS que l'étape 2");
       L.push("");
+      /* La citation disait « accompagné de l'avis du comité », et la phrase
+         suivante, sans comité, « accompagné du procès-verbal de carence » :
+         le texte semblait démenti dans la ligne d'après. Défaut relevé le
+         12 septembre 2026. La citation reste ce qu'elle est, et c'est dit
+         ensuite, en propre, que la carence tient lieu d'avis. */
       L.push("Quand ? Le texte le dit lui-même : « En même temps qu'il fait l'objet des");
       L.push("mesures de publicité, le règlement intérieur, accompagné de l'avis du");
       L.push("comité social et économique, est communiqué à l'inspecteur du travail »");
-      L.push("(L. 1321-4). Donc le jour de l'étape 2, ni avant ni après. En DEUX");
-      L.push("exemplaires (R. 1321-4), accompagné " +
-        (sansCse ? "du procès-verbal de carence." : "de l'avis du comité."));
+      L.push("(L. 1321-4). Donc le jour de l'étape 2, ni avant ni après.");
+      L.push("");
+      L.push("Quoi ? Le règlement en DEUX exemplaires (R. 1321-4), avec la pièce de");
+      L.push("l'étape 1.");
+      if (sansCse) {
+        L.push("");
+        L.push("Cette pièce, chez vous, n'est pas l'avis : l'article vise l'avis du");
+        L.push("comité parce qu'il écrit le cas ordinaire, celui où le comité existe.");
+        L.push("Faute de comité, c'est le procès-verbal de carence que vous joignez, et");
+        L.push("c'est lui que L. 2314-9 vous fait de toute façon transmettre à");
+        L.push("l'inspection dans les quinze jours. La lettre ci-dessous le joint et");
+        L.push("dit elle-même pourquoi l'avis n'y est pas.");
+      } else {
+        L.push("Chez vous, c'est l'avis du comité, rendu à l'étape 1.");
+      }
       L.push("");
       L.push("Fait le [DATE]   -   Accusé de réception : [N° OU DATE]");
       L.push("");
@@ -1281,9 +1298,20 @@
       L.push("");
       L.push("En application des articles L. 1321-4 et R. 1321-4 du code du travail, je");
       L.push("vous communique en deux exemplaires le règlement intérieur de " + nom + ",");
-      L.push("accompagné " + (sansCse
-        ? "du procès-verbal de carence établi le [DATE]."
-        : "de l'avis rendu par le comité social et économique le [DATE DE L'AVIS]."));
+      if (sansCse) {
+        /* La lettre dit elle-même pourquoi l'avis n'y est pas : l'inspecteur
+           qui reçoit un règlement sans l'avis que L. 1321-4 mentionne doit
+           lire dans la lettre ce qui en tient lieu, sans avoir à le demander. */
+        L.push("accompagné du procès-verbal de carence établi le [DATE].");
+        L.push("");
+        L.push("L'avis mentionné à l'article L. 1321-4 ne peut être joint : aucun comité");
+        L.push("social et économique n'est en place, les élections organisées le [DATE DU");
+        L.push("SCRUTIN] n'ayant pas permis de pourvoir les sièges. Le procès-verbal de");
+        L.push("carence, établi en application de l'article L. 2314-9, en tient lieu.");
+      } else {
+        L.push("accompagné de l'avis rendu par le comité social et économique le");
+        L.push("[DATE DE L'AVIS].");
+      }
       L.push("");
       L.push("Les formalités de publicité ont été accomplies le [DATE DE PUBLICITÉ] et le");
       L.push("dépôt au greffe du conseil de prud'hommes de [VILLE] le [DATE DE DÉPÔT].");
