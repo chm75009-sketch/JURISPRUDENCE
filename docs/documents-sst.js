@@ -1424,7 +1424,18 @@
     var coupure = -1;
     for (var i = 0; i < L.length; i++)
       if (L[i].indexOf("VOTRE DOCUMENT UNIQUE, À COMPLÉTER") === 0) { coupure = i; break; }
-    var exemple = coupure > 0 ? L.slice(0, coupure) : [];
+    /* L'EN-TÊTE DE L'ENTREPRISE OUVRE LE DOCUMENT, PAS L'EXEMPLE. Les sept
+       lignes de la fiche (dénomination, adresse, SIRET, représentant,
+       courriel, effectif, convention) précèdent l'exemple dans le texte
+       produit : sans cette coupure, elles partaient à la fin de l'onglet,
+       derrière l'exemple, et le Word téléchargé s'ouvrait sur « VOTRE
+       DOCUMENT UNIQUE, À COMPLÉTER » au lieu du nom de l'entreprise. */
+    var iEx = -1;
+    for (var k = 0; k < L.length; k++)
+      if (L[k].indexOf("EXEMPLE, À ADAPTER") === 0) { iEx = k; break; }
+    var entete = (iEx > 0 && (coupure < 0 || iEx < coupure)) ? L.slice(0, iEx) : [];
+    var debutExemple = entete.length ? iEx : 0;
+    var exemple = coupure > 0 ? L.slice(debutExemple, coupure) : [];
     var reste = coupure > 0 ? L.slice(coupure) : L;
 
     var form = [
@@ -1442,11 +1453,11 @@
        le 12 septembre 2026 sur le fichier téléchargé. L'onglet rend donc le
        document entier, sections 1 à 5, socle compris, et l'exemple vient
        après lui, comme dans le règlement intérieur. */
-    var doc = coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "6. SUITES")
+    var doc = entete.concat(coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "6. SUITES"))
       .concat([""], exemple);
     return [
       { cle: "document", nom: "Le document", texte: doc.join("\n") },
-      { cle: "formalites", nom: "Formalités",
+      { cle: "formalites", nom: "Formalités", pieces: true,
         texte: coupeSst(reste, "6. SUITES", "LES RÈGLES").join("\n"), sous: form },
       { cle: "droit", nom: "Le droit", texte: droit },
     ];

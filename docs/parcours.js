@@ -4030,6 +4030,36 @@
     return window.FeuilleDoc.relire(el.firstElementChild);
   }
   function lireCorps() { return window.FeuilleDoc ? window.FeuilleDoc.texte(relireCorps()) : $("dt-corps").textContent; }
+  /* LE GARDE-FOU DU TÉLÉCHARGEMENT.
+
+     Un onglet à sous-boutons n'affiche qu'un morceau à la fois, et le bouton
+     Word emportait ce seul morceau : le document unique téléchargé le
+     12 septembre 2026 s'arrêtait à sa section 4, sans l'inventaire des
+     risques. Le générateur dit désormais ce que ses sous-boutons sont :
+     « entier », des morceaux d'un même document, et le fichier emporte le
+     tout ; « pieces », des lettres autonomes, et chacune s'emporte seule.
+     moteur/verifier-onglets.js refuse un onglet qui ne le dit pas.
+
+     Ce qui a été corrigé par l'utilisateur prime, morceau par morceau : le
+     morceau ouvert est relu dans la page, les autres dans ce qui a été
+     enregistré, et à défaut le modèle. */
+  function texteEntier(i) {
+    if (!COURRIER || !COURRIER.parties) return null;
+    var p = COURRIER.parties[i], s = sousDe(p);
+    if (!s || !p.entier) return null;
+    var ouvert = (COURRIER.partie || 0) === i ? (COURRIER.sous || 0) : -1;
+    return s.map(function (x, j) {
+      if (j === ouvert) return lireCorps();
+      var mien = lireCourrier(clePartie(COURRIER.id, i, j));
+      return mien != null ? mien : x.texte;
+    }).join("\n\n");
+  }
+  /* Les blocs à emporter : ceux de l'onglet entier s'il est d'un seul tenant,
+     ceux de la page sinon. */
+  function blocsAEmporter() {
+    var t = COURRIER ? texteEntier(COURRIER.partie || 0) : null;
+    return (t != null && window.FeuilleDoc) ? window.FeuilleDoc.blocs(t) : relireCorps();
+  }
   $("dt-corps").addEventListener("input", function () {
     if (!COURRIER) return;
     var t = lireCorps(), cle = clePartie(COURRIER.id, COURRIER.partie || 0, COURRIER.sous || 0);
@@ -4196,7 +4226,7 @@
   $("dt-tableur").addEventListener("click", function () {
     if (!TABLEUR) return;
     if (TABLEUR.feuille) {
-      var feuilles = window.FeuilleDoc.tableaux(relireCorps());
+      var feuilles = window.FeuilleDoc.tableaux(blocsAEmporter());
       if (TABLEUR.lignes) feuilles.push({ titre: "Modèle vierge", lignes: TABLEUR.lignes });
       if (feuilles.length) window.TableurExport.telecharger(window.TableurExport.xlsx(feuilles), nomFichier(TABLEUR.nom) + ".xlsx");
       return;
@@ -4225,16 +4255,18 @@
     /* Chaque onglet fait son fichier, et chaque formalité le sien : sans le
        nom de ce qui est ouvert, le second téléchargement écraserait le
        premier. */
+    var entier = false;
     if (COURRIER && COURRIER.parties) {
       var pw = COURRIER.parties[COURRIER.partie || 0], sw = sousDe(pw);
-      titre += " - " + (sw ? sw[COURRIER.sous || 0].nom : pw.nom);
+      entier = !!(sw && pw.entier);
+      titre += " - " + ((sw && !entier) ? sw[COURRIER.sous || 0].nom : pw.nom);
     }
-    var items = window.FeuilleDoc ? window.FeuilleDoc.items(relireCorps())
+    var items = window.FeuilleDoc ? window.FeuilleDoc.items(blocsAEmporter())
       : String($("dt-corps").textContent).split(/\r?\n/).map(function (ligne) { return { k: "p", t: ligne }; });
     if (items.length && items[0].k === "t1") titre = items.shift().t;
     AuditExport.telecharger(AuditExport.docx(items, titre), nomFichier(titre) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-    etatCourrier("Téléchargé en Word.");
+    etatCourrier(entier ? "Téléchargé en Word, l'onglet entier." : "Téléchargé en Word.");
   });
 
   $("dt-modele").addEventListener("click", function () {

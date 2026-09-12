@@ -1473,7 +1473,12 @@
     return [
       { cle: "document", nom: "Le règlement",
         texte: reglement.concat([""], verifs).join("\n") },
-      { cle: "formalites", nom: "Formalités", texte: etapes.join("\n"), sous: sous },
+      /* « pieces » : chaque sous-bouton porte ici une lettre autonome, qui
+         s'emporte seule en Word. L'autre valeur possible est « entier », pour
+         un onglet dont les sous-boutons sont les morceaux d'un même document
+         (la base de données) : le Word y emporte alors le tout. L'un des deux
+         est exigé par moteur/verifier-onglets.js. */
+      { cle: "formalites", nom: "Formalités", pieces: true, texte: etapes.join("\n"), sous: sous },
       { cle: "droit", nom: "Le droit", texte: droit.join("\n") },
     ];
   }

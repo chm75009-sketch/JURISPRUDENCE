@@ -1631,8 +1631,15 @@
     }).filter(function (x) { return x.texte.trim() !== ""; });
 
     return [
-      { cle: "base", nom: "La base", texte: coupeBdese(L, L[0], "DANS CET ORDRE").join("\n"), sous: sousBase },
-      { cle: "formalites", nom: "Formalités",
+      /* « entier » : les onze rubriques sont les morceaux d'UNE base, pas onze
+         documents. Le bouton Word de cet onglet emporte donc la base entière,
+         rubrique par rubrique, avec les corrections portées à chacune. Sans ce
+         drapeau, le fichier téléchargé ne contenait que la rubrique ouverte.
+         « pieces » dit l'inverse pour les formalités : chaque sous-bouton y
+         porte une lettre autonome, qui s'emporte seule. */
+      { cle: "base", nom: "La base", entier: true,
+        texte: coupeBdese(L, L[0], "DANS CET ORDRE").join("\n"), sous: sousBase },
+      { cle: "formalites", nom: "Formalités", pieces: true,
         texte: coupeBdese(L, "DANS CET ORDRE", "LE DROIT QUI FONDE").join("\n"), sous: sousForm },
       { cle: "droit", nom: "Le droit", texte: coupeBdese(L, "LE DROIT QUI FONDE", null).join("\n") },
     ];
