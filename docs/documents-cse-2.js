@@ -284,6 +284,8 @@
       var L = [];
 
       L = L.concat(entete(ctx, "Fiche de reprise des données de l'audit du comité", ""));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("OBJET, ET CE QUE CE DOCUMENT N'EST PAS");
@@ -423,6 +425,8 @@
 
       L = L.concat(entete(ctx, "États d'effectif mensuels et constat de franchissement du seuil de onze salariés",
         "articles L. 2311-2, L. 1111-2 et L. 2314-4 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE LE TEXTE EXIGE, ET POURQUOI L'ÉTAT EST LA SEULE PREUVE");
@@ -598,6 +602,8 @@
 
       L = L.concat(entete(ctx, "Recueil des délégations de pouvoir des responsables d'établissement",
         "articles L. 2313-2 et L. 2313-4 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("POURQUOI CE RECUEIL, ET POURQUOI LUI SEUL NE SUFFIT PAS");
@@ -794,6 +800,8 @@
 
       L = L.concat(entete(ctx, "Note de saisine - niveau de consultation retenu",
         "articles L. 2316-1, L. 2316-20, L. 2316-22 et R. 2312-6 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LA QUESTION, ET POURQUOI ELLE N'EST PAS SECONDAIRE");
@@ -1023,6 +1031,8 @@
 
       L = L.concat(entete(ctx, "Crédit d'heures de délégation et moyens matériels du comité",
         "articles L. 2314-7, L. 2315-7 à L. 2315-16, L. 2315-20, L. 2315-25 et R. 2314-1 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("L'ORDRE DES SOURCES - ET LA CONTREPARTIE QUE LE PROTOCOLE DOIT RESPECTER");
@@ -1277,6 +1287,8 @@
 
       L = L.concat(entete(ctx, "Note explicative de la composition de la délégation du personnel",
         "articles L. 2314-7, L. 2314-10 et R. 2314-1 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE CETTE NOTE ÉTABLIT");
@@ -1435,6 +1447,8 @@
 
       L = L.concat(entete(ctx, "Remboursement des heures de délégation retenues et suivi des heures",
         "articles L. 2315-10, L. 2315-11 et L. 2315-16 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LA RÈGLE, ET L'ORDRE QU'ELLE IMPOSE");
@@ -1628,6 +1642,8 @@
 
       L = L.concat(entete(ctx, "Formation des membres du comité en santé, sécurité et conditions de travail",
         "articles L. 2315-16 à L. 2315-18 et L. 2315-63 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("DEUX FORMATIONS DISTINCTES, QUE L'ON CONFOND TOUJOURS");
@@ -1886,6 +1902,8 @@
 
       L = L.concat(entete(ctx, "Constitution de la commission santé, sécurité et conditions de travail",
         "articles L. 2315-36 à L. 2315-44, L. 2315-32 et L. 2312-34 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("QUAND LA COMMISSION EST DUE");
@@ -2134,6 +2152,8 @@
 
       L = L.concat(entete(ctx, "Résolution rectificative - composition de la commission santé, sécurité et conditions de travail",
         "articles L. 2315-39, L. 2314-11 et L. 2315-32 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LA RÈGLE, ET CE QU'UN ARRÊT PUBLIÉ EN A DIT");
@@ -2326,6 +2346,8 @@
 
       L = L.concat(entete(ctx, "Procès-verbal de désignation des membres de la commission santé, sécurité et conditions de travail",
         "articles L. 2315-39, L. 2315-32, L. 2315-29, L. 2315-30 et L. 2315-34 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE LA DÉSIGNATION EXIGE, ET CE QU'ELLE N'EXIGE PAS");
@@ -2520,6 +2542,8 @@
 
       L = L.concat(entete(ctx, "Rétablissement de la composition de la commission santé, sécurité et conditions de travail",
         "articles L. 2315-39, L. 2314-33 et L. 2315-32 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LE PRINCIPE : UN TERME COMMUN, ET LUI SEUL");
@@ -2695,6 +2719,8 @@
 
       L = L.concat(entete(ctx, "Délimitation de la délégation consentie à la commission santé, sécurité et conditions de travail",
         "article L. 2315-38 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LA LIMITE, ET ELLE EST D'ORDRE PUBLIC");
@@ -2959,6 +2985,8 @@
 
       L = L.concat(entete(ctx, "Modalités de mise en place et de fonctionnement de la commission santé, sécurité et conditions de travail",
         "articles L. 2315-41 à L. 2315-44 et L. 2315-24 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("POURQUOI CET ACTE EST LE PREMIER DE TOUS");
@@ -3240,6 +3268,8 @@
 
       L = L.concat(entete(ctx, "Formation des membres de la commission santé, sécurité et conditions de travail",
         "articles L. 2315-18, L. 2315-16 et L. 2315-41, 4°, du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LA DURÉE, ET CE QUI LA COMMANDE");

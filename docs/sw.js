@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.4";
+const CACHE = "jurisprudence-12.5";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,

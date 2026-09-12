@@ -210,6 +210,8 @@
 
       L = L.concat(entete(ctx, "État récapitulatif des effectifs mensuels",
         "articles L. 1111-2 et L. 2311-2 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("OBJET");
@@ -308,6 +310,8 @@
 
       L = L.concat(entete(ctx, "Note de franchissement de seuil",
         "articles L. 2311-2, L. 2312-2 et L. 2312-34 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("I - LE FRANCHISSEMENT, DATÉ");
@@ -407,6 +411,8 @@
 
       L = L.concat(entete(ctx, "Mise en place du comité social et économique",
         "articles L. 2314-4, L. 2314-5, L. 2314-8 et L. 2314-9 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE CE DOSSIER CONTIENT");
@@ -688,6 +694,8 @@
 
       L = L.concat(entete(ctx, "Renouvellement du comité social et économique",
         "articles L. 2314-4, L. 2314-5, L. 2314-33 et L. 2314-34 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("I - LE TERME DES MANDATS EN COURS");
@@ -832,6 +840,8 @@
 
       L = L.concat(entete(ctx, "Durée du mandat des représentants du personnel au comité",
         "articles L. 2314-33 et L. 2314-34 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LE POINT DE DROIT");
@@ -963,6 +973,8 @@
 
       L = L.concat(entete(ctx, "Nombre et périmètre des établissements distincts",
         "articles L. 2313-2, L. 2313-3, L. 2313-4 et L. 2313-5 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("L'ORDRE DES SOURCES, ET POURQUOI IL COMMANDE");
@@ -1120,6 +1132,8 @@
 
       L = L.concat(entete(ctx, "Représentants de proximité",
         "articles L. 2313-2 et L. 2313-7 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LE POINT DE DROIT");
@@ -1255,6 +1269,8 @@
 
       L = L.concat(entete(ctx, "Invitation à négocier le protocole d'accord préélectoral",
         "article L. 2314-5 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE LE TEXTE EXIGE, ET CE QU'ON OUBLIE");
@@ -1414,6 +1430,8 @@
 
       L = L.concat(entete(ctx, "Information du personnel et délai du premier tour",
         "article L. 2314-4 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LE TEXTE, ET LE DÉCOMPTE");
@@ -1533,6 +1551,8 @@
 
       L = L.concat(entete(ctx, "Protocole d'accord préélectoral",
         "articles L. 2314-6, L. 2314-7, L. 2314-11, L. 2314-13 et L. 2314-28 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LA DOUBLE MAJORITÉ - CE QUI REND LE PROTOCOLE VALABLE");
@@ -1813,6 +1833,8 @@
 
       L = L.concat(entete(ctx, "Proportion de femmes et d'hommes par collège électoral",
         "articles L. 2314-13, L. 2314-30 et L. 2314-31 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("POURQUOI CETTE MENTION N'EST PAS UNE FORMALITÉ");
@@ -1943,6 +1965,8 @@
 
       L = L.concat(entete(ctx, "Composition des listes de candidats - notification d'irrégularité",
         "articles L. 2314-30 et L. 2314-32 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LA RÈGLE, ET SON ARITHMÉTIQUE");
@@ -2095,6 +2119,8 @@
 
       L = L.concat(entete(ctx, "Vote électronique aux élections du comité",
         "article L. 2314-26 du code du travail et articles R. 2314-5 et R. 2314-6"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("L'ORDRE DES SOURCES");
@@ -2269,6 +2295,8 @@
 
       L = L.concat(entete(ctx, "Élections partielles",
         "article L. 2314-10 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LE TEST, EN TROIS TEMPS");
@@ -2405,6 +2433,8 @@
 
       L = L.concat(entete(ctx, "Consultations récurrentes du comité social et économique",
         "articles L. 2312-17, L. 2312-19 et L. 2312-22 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("I - L'ORDRE DES SOURCES, À DIRE AVANT TOUT");
@@ -2609,6 +2639,8 @@
 
       L = L.concat(entete(ctx, "Remise des informations et délai de consultation",
         "articles L. 2312-15 et L. 2312-16 du code du travail, articles R. 2312-5 et R. 2312-6"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("D'OÙ PART LE DÉLAI");
@@ -2762,6 +2794,8 @@
 
       L = L.concat(entete(ctx, "Information du comité et réponse motivée",
         "articles L. 2312-15 et L. 2312-18 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE LE COMITÉ DOIT AVOIR, ET QUAND");
@@ -2901,6 +2935,8 @@
 
       L = L.concat(entete(ctx, "Calendrier annuel des réunions du comité",
         "articles L. 2312-19, L. 2315-27 à L. 2315-31 et L. 2315-34 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("COMBIEN DE RÉUNIONS, ET SUR QUEL FONDEMENT");
@@ -3080,6 +3116,8 @@
 
       L = L.concat(entete(ctx, "Réunions consacrées à la santé, à la sécurité et aux conditions de travail",
         "article L. 2315-27 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE LE TEXTE EXIGE");
@@ -3298,6 +3336,8 @@
       "",
       titreDoc.toUpperCase(),
       "(" + fondement + ")",
+      "",
+      DP.EXEMPLE,
       "",
     ];
   }

@@ -370,6 +370,8 @@
 
       L = L.concat(entete(ctx, "Constitution des commissions de la formation, du logement et de l'égalité professionnelle",
         "articles L. 2315-45, L. 2315-49, L. 2315-50, L. 2315-51 et L. 2315-56 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE CE DOCUMENT PRODUIT");
@@ -770,6 +772,8 @@
 
       L = L.concat(entete(ctx, "Création de la commission économique et désignation de ses membres",
         "articles L. 2315-45, L. 2315-46, L. 2315-47 et L. 2315-48 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE CE DOCUMENT PRODUIT");
@@ -1053,6 +1057,8 @@
 
       L = L.concat(entete(ctx, "Commission des marchés du comité : test des seuils et résolution de création",
         "articles L. 2315-44-1 et D. 2315-29 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LE PIÈGE DE CE POINT, ET IL EST CONSTANT");
@@ -1362,6 +1368,8 @@
 
       L = L.concat(entete(ctx, "Subvention de fonctionnement du comité : note de méthode, calcul et régularisation",
         "article L. 2315-61 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUI SE JOUE, ET CE QUI NE SE JOUE PAS");
@@ -1740,6 +1748,8 @@
 
       L = L.concat(entete(ctx, "Contribution aux activités sociales et culturelles : note de méthode, calcul du rapport et régularisation",
         "articles L. 2312-81, L. 2312-82, L. 2312-83 et L. 2312-84 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUI SE MESURE ICI N'EST PAS UN MONTANT, C'EST UN RAPPORT");
@@ -2103,6 +2113,8 @@
 
       L = L.concat(entete(ctx, "Suppression de la condition d'ancienneté d'accès aux activités sociales et culturelles",
         "articles L. 2312-78 et R. 2312-35 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("QUI DÉCIDE, ET DONC QUI SIGNE");
@@ -2430,6 +2442,8 @@
 
       L = L.concat(entete(ctx, "Répartition du financement de l'expertise",
         "article L. 2315-80 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LE PRINCIPE, ET L'ERREUR QU'IL CORRIGE");
@@ -2737,6 +2751,8 @@
 
       L = L.concat(entete(ctx, "Contestation de l'expertise devant le président du tribunal judiciaire",
         "articles L. 2315-86, R. 2315-49 et R. 2315-50 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("DIX JOURS, ET QUATRE POINTS DE DÉPART DIFFÉRENTS");
@@ -3022,6 +3038,8 @@
 
       L = L.concat(entete(ctx, "Rectification du fondement du recours à l'expertise",
         "articles L. 1233-34, L. 2315-92 et L. 2315-94 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("UNE EXPERTISE SANS FONDEMENT N'EST PAS UNE EXPERTISE FRAGILE : ELLE EST SANS");
@@ -3296,6 +3314,8 @@
 
       L = L.concat(entete(ctx, "Décision de recourir à l'expertise : la délibération du comité",
         "articles L. 2315-38, L. 2315-78 et L. 1233-34 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("LE COMITÉ DÉCIDE. LA COMMISSION PROPOSE. L'EMPLOYEUR CONTESTE.");
@@ -3597,6 +3617,8 @@
 
       L = L.concat(entete(ctx, "Analyse des accords collectifs applicables au comité au regard de ses prérogatives légales",
         "article L. 2262-14 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE QUE CETTE NOTE FAIT, ET CE QU'ELLE NE FAIT PAS");
@@ -3979,6 +4001,8 @@
 
       L = L.concat(entete(ctx, "Constat des faits signalés et des mesures prises",
         "article L. 2317-1 du code du travail"));
+      L.push(DP.EXEMPLE);
+      L.push("");
       usage(L);
 
       L.push("CE DOCUMENT NE QUALIFIE RIEN, ET C'EST VOULU");

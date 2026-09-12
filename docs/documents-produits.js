@@ -175,6 +175,8 @@
 
       L = L.concat(entete(ctx, "Règlement intérieur", "articles L. 1311-2 et L. 1321-1 à L. 1321-6 du code du travail"));
 
+      L.push(EXEMPLE);
+      L.push("");
       L.push("COMMENT SE SERVIR DE CE DOCUMENT");
       L.push("");
       L.push("Ce texte est complet : il porte tout ce que la loi impose à un règlement");
@@ -1165,8 +1167,8 @@
   /* Le bandeau qui ouvre tout exemple : demande du 9 septembre 2026,
      « commencer par un exemple en disant que c'est juste un exemple et que le
      document doit tenir compte des spécificités de l'entreprise ». */
-  var EXEMPLE = "EXEMPLE, À ADAPTER : ce qui suit est un exemple, donné pour montrer la forme attendue. " +
-    "Votre document doit tenir compte des spécificités de votre entreprise, de ses postes, de ses effectifs et de sa convention collective.";
+  var EXEMPLE = "EXEMPLE, À ADAPTER : ce document est un simple schéma, qui doit être adapté et " +
+    "complété en fonction des particularités de l'entreprise, de ses postes, de ses effectifs et de sa convention collective.";
 
   global.DocumentsProduits = {
     pour: pour, tous: D, ajouter: ajouter,
