@@ -267,7 +267,9 @@
       L.push("  - d'utiliser un équipement de travail pour un usage auquel il n'est pas destiné, ou sans avoir reçu la formation ou l'habilitation requises ;");
       L.push("  - d'introduire dans l'entreprise un produit, un matériel ou un véhicule non autorisé par la direction ;");
       L.push("  - d'accéder sans autorisation à une zone dont l'accès est réservé ou signalé comme dangereux ;");
-      L.push("  - de fumer et de vapoter dans les locaux fermés et couverts affectés à un usage collectif.");
+      L.push("  - de fumer et de vapoter dans les locaux fermés et couverts affectés à un usage collectif ;");
+      L.push("  - d'encombrer, même temporairement, une porte, un couloir, une circulation ou un escalier : les dégagements sont toujours libres, et aucun objet, marchandise ou matériel ne doit faire obstacle à la circulation (R. 4227-4) ;");
+      L.push("  - de déplacer, de rendre l'accès difficile ou d'employer hors d'une urgence le matériel de secours, notamment les extincteurs, les trousses de premiers soins et les défibrillateurs ; tout emploi, même partiel, en est signalé aussitôt afin que le matériel soit remis en état.");
       L.push("");
       if (sect) {
         L.push("Compte tenu de l'activité de l'entreprise, il est en outre interdit :");
@@ -398,7 +400,18 @@
       L.push("");
       L.push("Le présent article laisse entier le droit de tout travailleur de se retirer");
       L.push("d'une situation dont il a un motif raisonnable de penser qu'elle présente un");
-      L.push("danger grave et imminent pour sa vie ou sa santé (L. 4131-1).");
+      L.push("danger grave et imminent pour sa vie ou sa santé (L. 4131-1). Le salarié en");
+      L.push("alerte immédiatement l'employeur, ainsi que de toute défectuosité qu'il");
+      L.push("constate dans les systèmes de protection. Aucune sanction ne peut être prise à");
+      L.push("raison de l'exercice de ce droit.");
+      L.push("");
+      L.push("Ce droit s'exerce de telle manière qu'il ne puisse créer pour autrui une");
+      L.push("nouvelle situation de danger grave et imminent (L. 4132-1).");
+      L.push("");
+      L.push("Le salarié qui estime de bonne foi que les produits ou procédés de fabrication");
+      L.push("utilisés ou mis en œuvre par l'entreprise font peser un risque grave sur la");
+      L.push("santé publique ou l'environnement en alerte immédiatement l'employeur");
+      L.push("(L. 4133-1).");
       L.push("");
 
       L.push("════ TITRE II — DISCIPLINE ════");
@@ -842,6 +855,20 @@
       L.push("Article 30 — Langue");
       L.push("Le présent règlement est rédigé en français (L. 1321-6).");
       L.push("");
+      L.push("");
+      L.push("RELEVÉ DES FORMALITÉS ACCOMPLIES");
+      L.push("");
+      L.push("Formalité | Date | Référence");
+      L.push("Avis du comité social et économique (L. 1321-4) | [DATE] | [n° de PV ou mention de carence]");
+      L.push("Publicité auprès du personnel (R. 1321-1) | [DATE] | [affichage, intranet, remise]");
+      L.push("Dépôt au greffe du conseil de prud'hommes (R. 1321-2) | [DATE] | [récépissé n°]");
+      L.push("Communication à l'inspecteur du travail, deux exemplaires (R. 1321-4) | [DATE] | [accusé de réception]");
+      L.push("Entrée en vigueur, un mois après la dernière formalité (R. 1321-3) | [DATE] | ");
+      L.push("");
+      L.push("NOTE — Remplissez ce relevé au fur et à mesure et gardez-le avec le règlement.");
+      L.push("C'est la dernière en date des formalités de publicité et de dépôt qui fait");
+      L.push("courir le délai d'un mois : sans ces dates, vous ne pouvez pas prouver que le");
+      L.push("règlement était en vigueur le jour où vous avez prononcé une sanction.");
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
       L.push("");
