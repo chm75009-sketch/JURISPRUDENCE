@@ -1422,7 +1422,13 @@
     ],
     etapes: [
       { id: "d1", nom: "Évaluer les risques, unité de travail par unité de travail",
-        docProduit: "SST-CTL-DUE-02",
+        /* LA PREMIÈRE ÉTAPE OUVRE LE DOCUMENT LUI-MÊME, comme celle du
+           règlement intérieur. Elle ouvrait l'inventaire annexe
+           (SST-CTL-DUE-02), sans onglets : le « non » de l'audit tombait sur
+           une pièce jointe au lieu du document unique et de ses trois
+           onglets. Défaut relevé le 12 septembre 2026. L'inventaire annexe
+           reste produit par l'étape de contrôle qui le demande. */
+        docProduit: "SST-CTL-DUE-01",
         conseil: "Découpez d'abord, évaluez ensuite : une liste de risques sans unité de travail se réécrira entièrement. Faites participer ceux qui tiennent les postes — l'évaluation faite au bureau se voit, et se conteste.",
         quoi: "L'employeur, compte tenu de la nature des activités, évalue les risques pour la santé et la sécurité des travailleurs, y compris dans le choix des procédés, des équipements et de l'aménagement des lieux de travail. L'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail, y compris ceux liés aux ambiances thermiques.",
         fond: ["L4121-3", "R4121-1"],
