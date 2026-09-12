@@ -986,8 +986,10 @@
          de carence est établi par l'employeur », porté à la connaissance des
          salariés par un moyen donnant date certaine et transmis sous quinze
          jours à l'inspection. C'est lui qui accompagne alors le règlement.  */
-      var sansCse = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
-        (ctx.donnees || {}).cseExiste || "").trim() === "non";
+      var repCse = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
+        (ctx.donnees || {}).cseExiste || "").trim().toLowerCase();
+      var sansCse = repCse === "non";
+      var avecCse = repCse === "oui";
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
       var pieceAvis = sansCse ? "procès-verbal de carence" : "avis du comité social et économique";
 
@@ -1003,48 +1005,64 @@
 
       /* ---- étape 1 ---------------------------------------------------- */
       L.push(sansCse ? "ÉTAPE 1 - SANS COMITÉ : LE PROCÈS-VERBAL DE CARENCE"
-                     : "ÉTAPE 1 - CONSULTER LE COMITÉ SOCIAL ET ÉCONOMIQUE");
+                     : "ÉTAPE 1 - L'AVIS DU COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
-      L.push(sansCse ? "(L. 2314-9) - à faire en premier, avant toute autre formalité"
-                     : "(L. 1321-4) - à faire en premier, avant toute autre formalité");
+      L.push("(L. 1321-4 ; L. 2314-9 à défaut de comité) - à faire en premier,");
+      L.push("avant toute autre formalité");
       L.push("");
-      if (sansCse) {
-        /* La question fermée, avant tout exposé : avez-vous ce document ?
-           C'est le principe de l'application, et il vaut ici parce que la
-           réponse change la suite du tout au tout. Sans comité et sans
-           procès-verbal de carence, ce n'est pas le règlement qui est en
-           retard, ce sont les élections. */
-        L.push("Avez-vous un procès-verbal de carence ?");
+      /* LA QUESTION D'ABORD, TOUJOURS, ET LES TROIS RÉPONSES ÉCRITES.
+
+         La branche « sans comité » posait la question, la branche « avec »
+         entrait directement dans la consultation : l'entreprise qui A un
+         comité ne lisait nulle part pourquoi cette étape la concerne, et
+         celle qui n'a pas répondu à la fiche se voyait servir la version
+         « avec comité » sans que rien ne le dise. Défaut relevé le
+         12 septembre 2026 : « s'il a un comité tu n'en parles pas ». La
+         question se pose donc dans tous les cas, les trois issues sont
+         écrites, et celle qui correspond à la fiche est marquée d'une croix.
+         Rien n'est supposé : une fiche muette laisse les trois cases vides. */
+      L.push("Un comité social et économique est-il en place ?");
+      L.push("");
+      L.push("  [" + (avecCse ? "x" : " ") + "] OUI" +
+        (avecCse ? " - c'est ce que dit votre fiche." : " - cochez si c'est votre cas."));
+      L.push("      Le règlement ne peut être introduit qu'après avoir été soumis à son");
+      L.push("      avis (L. 1321-4). Le comité le rend en réunion : transmettez-lui le");
+      L.push("      projet assez tôt pour qu'il l'ait lu, et respectez le délai de");
+      L.push("      convocation que son règlement intérieur ou vos usages imposent.");
+      L.push("      C'est le procès-verbal, non le règlement, qui prouvera la");
+      L.push("      formalité, et c'est l'avis qui accompagnera le règlement à");
+      L.push("      l'inspection, à l'étape 4. La lettre est ci-dessous.");
+      L.push("");
+      L.push("  [" + (sansCse ? "x" : " ") + "] NON, MAIS J'AI UN PROCÈS-VERBAL DE CARENCE" +
+        (sansCse ? " - c'est ce que dit votre fiche." : "."));
+      L.push("      Il tient lieu d'avis. Il est établi par l'employeur, porté à la");
+      L.push("      connaissance des salariés par un moyen donnant date certaine, et");
+      L.push("      transmis dans les quinze jours à l'inspection du travail");
+      L.push("      (L. 2314-9). C'est lui qui accompagnera le règlement à l'étape 4.");
+      L.push("");
+      L.push("  [ ] NON, ET JE N'EN AI PAS - arrêtez-vous ici.");
+      L.push("      Le comité est obligatoire dans les entreprises d'au moins onze");
+      L.push("      salariés, dès lors que ce seuil est atteint pendant douze mois");
+      L.push("      consécutifs (L. 2311-2). Ne pas en avoir n'est régulier que si les");
+      L.push("      élections ont été organisées et n'ont pas abouti, et c'est le");
+      L.push("      procès-verbal de carence qui le prouve. Organisez donc les");
+      L.push("      élections d'abord : vous informez le personnel par un moyen donnant");
+      L.push("      date certaine, en précisant la date envisagée du premier tour, qui");
+      L.push("      se tient au plus tard le quatre-vingt-dixième jour suivant cette");
+      L.push("      diffusion (L. 2314-4).");
+      L.push("");
+      L.push("      Le modèle qui écrit ces documents, note d'information du");
+      L.push("      personnel, invitation des organisations syndicales et calendrier");
+      L.push("      des quatre-vingt-dix jours :");
+      L.push("      " + SITE + "audit-cse.html#elections");
+      L.push("");
+      if (!avecCse && !sansCse) {
+        L.push("NOTE - Votre fiche ne dit pas si un comité est en place. La lettre");
+        L.push("ci-dessous est celle de la consultation ; répondez à la question dans");
+        L.push("votre fiche et elle deviendra, s'il y a lieu, celle de la transmission");
+        L.push("du procès-verbal de carence.");
         L.push("");
-        L.push("  [ ] OUI - cochez, datez ci-dessous, et passez à l'étape 2. Le");
-        L.push("      procès-verbal tient lieu d'avis : c'est lui qui accompagnera le");
-        L.push("      règlement à l'inspection, à l'étape 4.");
-        L.push("");
-        L.push("  [ ] NON - arrêtez-vous ici. Le comité est obligatoire dans les");
-        L.push("      entreprises d'au moins onze salariés, dès lors que ce seuil est");
-        L.push("      atteint pendant douze mois consécutifs (L. 2311-2). Ne pas en");
-        L.push("      avoir n'est régulier que si les élections ont été organisées et");
-        L.push("      n'ont pas abouti, et c'est le procès-verbal de carence qui le");
-        L.push("      prouve. Organisez donc les élections d'abord : vous informez le");
-        L.push("      personnel par un moyen donnant date certaine, en précisant la");
-        L.push("      date envisagée du premier tour, qui se tient au plus tard le");
-        L.push("      quatre-vingt-dixième jour suivant cette diffusion (L. 2314-4).");
-        L.push("");
-        L.push("      Le modèle qui écrit ces documents, note d'information du");
-        L.push("      personnel, invitation des organisations syndicales et calendrier");
-        L.push("      des quatre-vingt-dix jours :");
-        L.push("      " + SITE + "audit-cse.html#elections");
-        L.push("");
-        L.push("Le procès-verbal de carence est établi par l'employeur, porté à la");
-        L.push("connaissance des salariés par un moyen donnant date certaine, et");
-        L.push("transmis dans les quinze jours à l'inspection du travail (L. 2314-9).");
-      } else {
-        L.push("Le comité rend son avis en réunion. Transmettez-lui le projet assez tôt");
-        L.push("pour qu'il l'ait lu, et respectez le délai de convocation que votre");
-        L.push("règlement intérieur de comité ou vos usages imposent. C'est le");
-        L.push("procès-verbal, non le règlement, qui prouvera la formalité.");
       }
-      L.push("");
       L.push("Fait le [DATE]   -   Référence : " +
         (sansCse ? "[procès-verbal de carence du DATE]" : "[n° du procès-verbal]"));
       L.push("");
