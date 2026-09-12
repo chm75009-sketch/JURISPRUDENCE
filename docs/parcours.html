@@ -178,6 +178,17 @@
     border-bottom:2px solid transparent;padding:0 4px}
   #dlg-courrier .dt-onglets button[aria-selected="true"]{color:var(--accent,#1f3864);
     border-bottom-color:var(--accent,#1f3864)}
+  /* Le second rang : les formalités, une par bouton. Il défile du doigt
+     plutôt que de se comprimer, six intitulés ne tenant pas de front sur un
+     téléphone. */
+  #dlg-courrier .dt-sous{display:flex;gap:6px;margin:0 0 12px;padding:2px 0 6px;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  #dlg-courrier .dt-sous::-webkit-scrollbar{display:none}
+  #dlg-courrier .dt-sous button{flex:none;min-height:40px;padding:0 12px;cursor:pointer;
+    font:600 13px/1.2 system-ui;white-space:nowrap;border-radius:999px;
+    border:1px solid var(--filet-2);background:var(--surface);color:var(--gris)}
+  #dlg-courrier .dt-sous button[aria-selected="true"]{background:var(--accent,#1f3864);
+    border-color:var(--accent,#1f3864);color:#fff}
   #dlg-courrier .dt-aide{margin:0 0 10px;font-size:12.5px;line-height:1.5;color:var(--gris)}
   #dlg-courrier .dt-aide b{color:var(--corps)}
   #dlg-courrier #dt-corps{max-height:62vh;overflow:auto;padding:14px 16px;
@@ -436,6 +447,7 @@ réponse nuancée.</p>
   </div>
   <h3 id="dt-titre"></h3>
   <div id="dt-onglets" class="dt-onglets" role="tablist" hidden></div>
+  <div id="dt-sous" class="dt-sous" role="tablist" hidden></div>
   <p class="dt-aide">Ce texte est à vous : <b>complétez-le, coupez, ajoutez vos clauses</b>. Ce qui
   manque à votre dossier sort entre crochets, remplacez-les. Vos modifications sont conservées sur ce
   poste et vous les retrouverez ici ; « Revenir au modèle » rétablit le texte d'origine.</p>

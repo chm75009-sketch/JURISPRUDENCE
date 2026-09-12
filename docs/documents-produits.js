@@ -1407,10 +1407,27 @@
     var verifs    = coupe(L, "AVANT DE DÉPOSER", "LE DROIT QUI FONDE");
     var etapes    = coupe(L, "DANS CET ORDRE", "AVANT DE DÉPOSER");
     var droit     = coupe(L, "LE DROIT QUI FONDE", null);
+    /* LES FORMALITÉS SE PRENNENT UNE PAR UNE, PAS EN ROULEAU. Demande du
+       12 septembre 2026 : « dans formalités des sous-boutons, et pour chacun
+       la formalité en question et le document qui va avec ». L'onglet ouvre
+       donc six sous-boutons, les cinq étapes et le relevé, et l'on ne voit
+       que celui sur lequel on est. L'intitulé court est ce qui tient sur un
+       téléphone ; le titre complet reste en tête du texte. */
+    var bornes = [
+      { cle: "e1", nom: "1 · Comité",     debut: "DANS CET ORDRE",  fin: "ÉTAPE 2" },
+      { cle: "e2", nom: "2 · Personnel",  debut: "ÉTAPE 2",         fin: "ÉTAPE 3" },
+      { cle: "e3", nom: "3 · Greffe",     debut: "ÉTAPE 3",         fin: "ÉTAPE 4" },
+      { cle: "e4", nom: "4 · Inspection", debut: "ÉTAPE 4",         fin: "ÉTAPE 5" },
+      { cle: "e5", nom: "5 · Vigueur",    debut: "ÉTAPE 5",         fin: "LE RELEVÉ" },
+      { cle: "rel", nom: "Le relevé",     debut: "LE RELEVÉ",       fin: null },
+    ];
+    var sous = bornes.map(function (b) {
+      return { cle: b.cle, nom: b.nom, texte: coupe(etapes, b.debut, b.fin).join("\n").replace(/\n+$/, "\n") };
+    }).filter(function (x) { return x.texte.trim() !== ""; });
     return [
       { cle: "document", nom: "Le règlement",
         texte: reglement.concat([""], verifs).join("\n") },
-      { cle: "formalites", nom: "Formalités", texte: etapes.join("\n") },
+      { cle: "formalites", nom: "Formalités", texte: etapes.join("\n"), sous: sous },
       { cle: "droit", nom: "Le droit", texte: droit.join("\n") },
     ];
   }

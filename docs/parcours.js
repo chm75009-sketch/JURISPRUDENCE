@@ -3808,7 +3808,7 @@
       COURRIER.parties = (typeof gen.parties === "function") ? gen.parties(ctx) : null;
       COURRIER.partie = 0;
       poserOnglets();
-      afficherPartie(0);
+      afficherPartie(0, 0);
       var d = $("dlg-courrier");
       if (d.showModal) d.showModal(); else d.setAttribute("open", "open");
     });
@@ -3909,8 +3909,15 @@
      entier quand il n'a qu'une partie, la partie sinon. Une correction portée
      au règlement ne doit pas se perdre parce qu'on a ouvert l'onglet du
      droit, ni écraser le courrier voisin. */
-  function clePartie(id, i) {
-    return (COURRIER && COURRIER.parties) ? id + ":" + COURRIER.parties[i].cle : id;
+  function partieCourante() {
+    return (COURRIER && COURRIER.parties) ? COURRIER.parties[COURRIER.partie || 0] : null;
+  }
+  function sousDe(p) { return (p && p.sous && p.sous.length) ? p.sous : null; }
+  function clePartie(id, i, j) {
+    if (!COURRIER || !COURRIER.parties) return id;
+    var p = COURRIER.parties[i], cle = id + ":" + p.cle;
+    var s = sousDe(p);
+    return s ? cle + "/" + s[Math.min(j || 0, s.length - 1)].cle : cle;
   }
   function poserOnglets() {
     var b = $("dt-onglets");
@@ -3922,20 +3929,49 @@
         (i === 0 ? "true" : "false") + '">' + e(p.nom) + "</button>";
     }).join("");
   }
-  function afficherPartie(i) {
+  /* LES SOUS-BOUTONS. Un onglet peut ouvrir des pièces qui ne se lisent pas à
+     la suite : les formalités du règlement intérieur sont cinq démarches dans
+     un ordre imposé, chacune avec la lettre qui l'accomplit. Bout à bout, il
+     fallait chercher quelle lettre allait avec quoi. Demande du 12 septembre
+     2026 : une formalité à la fois, son document dessous. */
+  function poserSousOnglets() {
+    var b = $("dt-sous");
+    if (!b) return;
+    var s = sousDe(partieCourante());
+    if (!s) { b.hidden = true; b.innerHTML = ""; return; }
+    b.hidden = false;
+    b.innerHTML = s.map(function (x, j) {
+      return '<button type="button" role="tab" data-j="' + j + '" aria-selected="' +
+        (j === (COURRIER.sous || 0) ? "true" : "false") + '">' + e(x.nom) + "</button>";
+    }).join("");
+    /* La rangée défile : on ramène sous les yeux la formalité ouverte, sinon
+       on revient sur l'onglet et le bouton actif est hors de l'écran. */
+    var actif = b.children[COURRIER.sous || 0];
+    if (actif) b.scrollLeft = Math.max(0, actif.offsetLeft - 12);
+  }
+  function afficherPartie(i, j) {
     if (!COURRIER) return;
+    var change = i !== COURRIER.partie;
     COURRIER.partie = i;
-    var modele = COURRIER.parties ? COURRIER.parties[i].texte : COURRIER.modele;
+    var p = COURRIER.parties ? COURRIER.parties[i] : null;
+    var s = sousDe(p);
+    /* On revient sur un onglet : il se rouvre là où on l'avait laissé, sauf si
+       l'appelant désigne une sous-partie. */
+    if (j == null) j = change ? (p && p.vue) || 0 : (COURRIER.sous || 0);
+    if (s) { j = Math.min(j, s.length - 1); if (p) p.vue = j; } else j = 0;
+    COURRIER.sous = j;
+    var modele = s ? s[j].texte : (p ? p.texte : COURRIER.modele);
     COURRIER.modeleTexte = lireTexte(modele);
-    var cle = clePartie(COURRIER.id, i);
+    var cle = clePartie(COURRIER.id, i, j);
     var mien = lireCourrier(cle);
+    poserSousOnglets();
     poserCorps(mien != null ? mien : modele);
     etatCourrier(mien != null
       ? "Votre version, modifiée le " + (dateFr(dateCourrier(cle)) || "—") + "."
       : "");
     var b = $("dt-onglets");
-    if (b && !b.hidden) Array.prototype.forEach.call(b.children, function (x, j) {
-      x.setAttribute("aria-selected", j === i ? "true" : "false");
+    if (b && !b.hidden) Array.prototype.forEach.call(b.children, function (x, k) {
+      x.setAttribute("aria-selected", k === i ? "true" : "false");
     });
     /* On change d'onglet, on recommence en haut : sans cela on arrive au
        milieu du courrier 3 parce qu'on était au milieu de l'article 22. */
@@ -3946,7 +3982,12 @@
     var b = document.getElementById("dt-onglets");
     if (b) b.addEventListener("click", function (ev) {
       var t = ev.target.closest("button[data-i]");
-      if (t) afficherPartie(+t.getAttribute("data-i"));
+      if (t) afficherPartie(+t.getAttribute("data-i"), null);
+    });
+    var s = document.getElementById("dt-sous");
+    if (s) s.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button[data-j]");
+      if (t) afficherPartie(COURRIER ? (COURRIER.partie || 0) : 0, +t.getAttribute("data-j"));
     });
   })();
 
@@ -3964,7 +4005,7 @@
   function lireCorps() { return window.FeuilleDoc ? window.FeuilleDoc.texte(relireCorps()) : $("dt-corps").textContent; }
   $("dt-corps").addEventListener("input", function () {
     if (!COURRIER) return;
-    var t = lireCorps(), cle = clePartie(COURRIER.id, COURRIER.partie || 0);
+    var t = lireCorps(), cle = clePartie(COURRIER.id, COURRIER.partie || 0, COURRIER.sous || 0);
     if (t === COURRIER.modeleTexte) { ecrireCourrier(cle, null); etatCourrier(""); return; }
     ecrireCourrier(cle, t);
     etatCourrier("Vos modifications sont enregistrées sur ce poste.");
@@ -4154,10 +4195,13 @@
       return;
     }
     var titre = COURRIER ? COURRIER.nom : ($("dt-titre").textContent || "Document");
-    /* Trois onglets font trois fichiers : sans le nom de la partie, le second
-       téléchargement écraserait le premier. */
-    if (COURRIER && COURRIER.parties)
-      titre += " - " + COURRIER.parties[COURRIER.partie || 0].nom;
+    /* Chaque onglet fait son fichier, et chaque formalité le sien : sans le
+       nom de ce qui est ouvert, le second téléchargement écraserait le
+       premier. */
+    if (COURRIER && COURRIER.parties) {
+      var pw = COURRIER.parties[COURRIER.partie || 0], sw = sousDe(pw);
+      titre += " - " + (sw ? sw[COURRIER.sous || 0].nom : pw.nom);
+    }
     var items = window.FeuilleDoc ? window.FeuilleDoc.items(relireCorps())
       : String($("dt-corps").textContent).split(/\r?\n/).map(function (ligne) { return { k: "p", t: ligne }; });
     if (items.length && items[0].k === "t1") titre = items.shift().t;
@@ -4170,11 +4214,13 @@
     if (!COURRIER) return;
     if (lireCorps() !== COURRIER.modeleTexte &&
         !confirm("Revenir au modèle effacera ce que vous avez écrit dans ce courrier. Continuer ?")) return;
-    /* Sur un document à onglets, on ne rétablit que la partie ouverte : les
-       deux autres gardent ce que l'utilisateur y a corrigé. */
-    var i = COURRIER.partie || 0;
-    ecrireCourrier(clePartie(COURRIER.id, i), null);
-    poserCorps(COURRIER.parties ? COURRIER.parties[i].texte : COURRIER.modele);
+    /* Sur un document à onglets, on ne rétablit que ce qui est ouvert : les
+       autres onglets, et les autres formalités, gardent ce qui y a été
+       corrigé. */
+    var i = COURRIER.partie || 0, j = COURRIER.sous || 0;
+    var p = COURRIER.parties ? COURRIER.parties[i] : null, s = sousDe(p);
+    ecrireCourrier(clePartie(COURRIER.id, i, j), null);
+    poserCorps(s ? s[j].texte : (p ? p.texte : COURRIER.modele));
     etatCourrier("Texte d'origine rétabli.");
   });
   $("dt-fermer").addEventListener("click", function () { $("dlg-courrier").close(); });
