@@ -9,6 +9,7 @@
 <link rel="icon" href="icons/icon-discipline-180.png">
 <title>Contrôle discipline</title>
 <link rel="stylesheet" href="style.css">
+<script src="lire-pdf.js"></script>
 <script src="apercu.js"></script>
 <script src="droits.js"></script>
 
@@ -110,7 +111,7 @@
     <div class="barre pile">
       <label class="btn">
         Déposer le fichier (Word ou texte)
-        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain,.pdf,application/pdf" style="display:none">
       </label>
     </div>
     <div id="lecture"></div>
@@ -711,7 +712,8 @@
     if (!f) return;
     $("#erreur").innerHTML = "";
     dit("Lecture de <b>" + ech(f.name) + "</b>…");
-    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    var suite = (window.LirePdf && window.LirePdf.estPdf(f)) ? window.LirePdf.texte(f)
+      : (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text());
     suite.then(function (t) {
       $("#depot").value = t;
       dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +

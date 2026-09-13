@@ -9,6 +9,7 @@
 <!-- Équipe, droits et journal : le point unique d'autorisation. Chargé avant
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
      Voir docs/DROITS.md. -->
+<script src="lire-pdf.js"></script>
 <script src="apercu.js"></script>
 <script src="droits.js"></script>
 
@@ -139,8 +140,8 @@
   <section id="e-depot" hidden>
     <p class="rappel-fiche" id="rappel-depot"></p>
     <div class="barre pile">
-      <label class="btn second" style="display:inline-flex;align-items:center;justify-content:center;gap:9px">Choisir le fichier (.docx ou .txt)
-        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none"></label>
+      <label class="btn second" style="display:inline-flex;align-items:center;justify-content:center;gap:9px">Choisir le fichier (.docx, .pdf ou .txt)
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain,.pdf,application/pdf" style="display:none"></label>
     </div>
     <div id="lecture"></div>
     <textarea class="depot" id="depot" placeholder="Ou collez ici le texte de vos affichages."></textarea>
@@ -967,7 +968,8 @@
     if (!f) return;
     var dit = function (m, c) { $("#lecture").innerHTML = '<div class="avis ' + (c || "info") + '">' + m + "</div>"; };
     dit("Lecture de <b>" + ech(f.name) + "</b>…");
-    (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text()).then(function (t) {
+    ((window.LirePdf && window.LirePdf.estPdf(f)) ? window.LirePdf.texte(f)
+      : (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text())).then(function (t) {
       $("#depot").value = t;
       dit("<b>" + ech(f.name) + "</b> lu, " + t.length.toLocaleString("fr-FR") + " caractères. Le fichier n'est pas sorti de ce poste.");
     }).catch(function (e) {

@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.26";
+const CACHE = "jurisprudence-12.27";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -91,7 +91,13 @@ const ESSENTIELS = [
      document qu'un agent de contrôle demande sur place. */
   "./registre.html",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
-  "./audit-form.js", "./apercu.js", "./audit-export.js", "./tableur-export.js", "./feuille-doc.js", "./parcours-deux-temps.js",
+  /* lire-pdf.js est ici ; pdfjs.js et pdfjs.worker.js ne le sont pas. La
+     bibliothèque de lecture des PDF pèse 1,3 Mo : la mettre dans cette liste
+     ferait payer ce poids à toute installation, pour un format que beaucoup
+     d'utilisateurs ne déposeront jamais. Elle se charge au premier PDF déposé
+     et le gestionnaire « fetch » ci-dessous la met alors en cache, comme tout
+     le reste : à partir de là, elle fonctionne hors connexion. */
+  "./audit-form.js", "./apercu.js", "./lire-pdf.js", "./audit-export.js", "./tableur-export.js", "./feuille-doc.js", "./parcours-deux-temps.js",
   /* Les documents que l'application rédige elle-même. */
   "./documents-produits.js",
   "./documents-cse.js", "./documents-pse.js", "./documents-discipline.js",

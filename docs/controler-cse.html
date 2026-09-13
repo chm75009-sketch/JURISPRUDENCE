@@ -168,8 +168,8 @@
   <!-- 1 · LE DÉPÔT, EN PREMIER -->
   <section id="o-depot">
     <div class="barre">
-      <label class="btn">Choisir le fichier (.docx ou .txt)
-        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none"></label>
+      <label class="btn">Choisir le fichier (.docx, .pdf ou .txt)
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain,.pdf,application/pdf" style="display:none"></label>
     </div>
     <div id="lecture"></div>
     <textarea id="depot" placeholder="Ou collez ici le texte de votre document."></textarea>
@@ -236,6 +236,7 @@
 
 </main>
 
+<script src="lire-pdf.js"></script>
 <script src="moteur-cse.js"></script>
 <script src="profil.js"></script>
 <script src="apercu.js"></script>
@@ -1041,7 +1042,8 @@
     if (!f) return;
     $("#erreur").innerHTML = "";
     dit("Lecture de <b>" + ech(f.name) + "</b>…");
-    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    var suite = (window.LirePdf && window.LirePdf.estPdf(f)) ? window.LirePdf.texte(f)
+      : (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text());
     suite.then(function (t) {
       $("#depot").value = t;
       dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +

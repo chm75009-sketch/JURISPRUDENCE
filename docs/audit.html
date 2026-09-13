@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Motif économique</title>
 <meta name="description" content="Une question, et les documents du licenciement économique déjà écrits : convocation, contrat de sécurisation, liste des postes, critères d'ordre, lettre.">
+<script src="lire-pdf.js"></script>
 <script src="apercu.js"></script>
 <script src="droits.js"></script>
 
@@ -180,7 +181,7 @@
     <div class="barre pile">
       <label class="btn second" style="display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer">
         Déposer votre document (Word ou texte)
-        <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+        <input type="file" id="fichier" accept=".docx,.txt,text/plain,.pdf,application/pdf" style="display:none">
       </label>
     </div>
     <div id="lecture"></div>
@@ -1127,7 +1128,8 @@
     var f = ev.target.files && ev.target.files[0];
     if (!f) return;
     $("#lecture").innerHTML = '<div class="chiffre">Lecture de ' + ech(f.name) + "...</div>";
-    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    var suite = (window.LirePdf && window.LirePdf.estPdf(f)) ? window.LirePdf.texte(f)
+      : (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text());
     suite.then(function (t) {
       $("#depot").value = t;
       $("#lecture").innerHTML = '<div class="chiffre">' + ech(f.name) + " lu : " +

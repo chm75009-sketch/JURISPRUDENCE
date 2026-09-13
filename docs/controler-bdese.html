@@ -11,6 +11,7 @@
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
      Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Il pose aussi le
      bouton Retour du bandeau. Voir docs/DROITS.md. -->
+<script src="lire-pdf.js"></script>
 <script src="apercu.js"></script>
 <script src="droits.js"></script>
 
@@ -152,8 +153,8 @@
   <section id="e-depot" hidden>
     <div class="depot">
       <label class="btn depose">
-        Déposer votre base (Excel, Word, CSV ou texte)
-        <input type="file" id="fichier" accept=".xlsx,.csv,.docx,.txt,text/plain" hidden>
+        Déposer votre base (Excel, Word, PDF, CSV ou texte)
+        <input type="file" id="fichier" accept=".xlsx,.csv,.docx,.txt,text/plain,.pdf,application/pdf" hidden>
       </label>
       <p class="lu" id="lecture"></p>
       <div id="erreur"></div>
@@ -304,7 +305,8 @@
     $("#erreur").innerHTML = "";
     dit("Lecture de <b>" + ech(f.name) + "</b>...");
     var suite;
-    if (/\.xlsx$/i.test(f.name)) suite = lireXlsx(f);
+    if (window.LirePdf && window.LirePdf.estPdf(f)) suite = window.LirePdf.texte(f);
+    else if (/\.xlsx$/i.test(f.name)) suite = lireXlsx(f);
     else if (/\.docx$/i.test(f.name)) suite = lireDocx(f);
     else suite = f.text();
     suite.then(function (t) {

@@ -95,15 +95,16 @@
   <!-- ══════ 1 · LE DOCUMENT ══════ -->
   <section id="o-depot">
     <h2>Déposez votre règlement intérieur</h2>
-    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Deux formats
-    sont lus directement — <b>.docx</b> et <b>.txt</b> ; pour tout autre, ouvrez le document,
+    <p class="aide">Le fichier est lu dans votre navigateur et n'est envoyé nulle part. Trois formats
+    sont lus directement : <b>.docx</b>, <b>.pdf</b> et <b>.txt</b>. Un PDF scanné, lui, n'a pas de
+    texte à lire ; dans ce cas, comme pour tout autre format, ouvrez le document,
     copiez son texte et collez-le ci-dessous.</p>
 
     <div class="carte">
       <div class="barre">
         <label class="btn second" style="display:inline-flex;align-items:center;gap:9px">
-          Choisir un fichier .docx ou .txt
-          <input type="file" id="fichier" accept=".docx,.txt,text/plain" style="display:none">
+          Choisir un fichier .docx, .pdf ou .txt
+          <input type="file" id="fichier" accept=".docx,.txt,text/plain,.pdf,application/pdf" style="display:none">
         </label>
         <button class="btn second" id="exemple">Coller un exemple</button>
         <button class="btn second" id="vider">Vider</button>
@@ -161,6 +162,7 @@
   </footer>
 </main>
 
+<script src="lire-pdf.js"></script>
 <script src="moteur-discipline.js"></script>
 <script src="apercu.js"></script>
 <script src="audit-export.js"></script>
@@ -262,7 +264,8 @@
     if (!f) return;
     $("#erreur").innerHTML = "";
     dit("Lecture de <b>" + ech(f.name) + "</b>…");
-    var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+    var suite = (window.LirePdf && window.LirePdf.estPdf(f)) ? window.LirePdf.texte(f)
+      : (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text());
     suite.then(function (t) {
       $("#depot").value = t;
       dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +

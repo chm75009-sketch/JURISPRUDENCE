@@ -452,7 +452,8 @@
       var f = ev.target.files && ev.target.files[0];
       if (!f) return;
       dit("Lecture de <b>" + ech(f.name) + "</b>.");
-      var suite = /\.docx$/i.test(f.name) ? lireDocx(f) : f.text();
+      var suite = (window.LirePdf && window.LirePdf.estPdf(f)) ? window.LirePdf.texte(f)
+      : (/\.docx$/i.test(f.name) ? lireDocx(f) : f.text());
       suite.then(function (t) {
         if (t.trim().length < 200) {
           dit("<b>" + ech(f.name) + " est trop court pour être un document unique</b> (" + t.length + " caractères). Déposez le document entier.", "att");
