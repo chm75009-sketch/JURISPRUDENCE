@@ -237,7 +237,11 @@
     h += m.corps.map(function (l) {
       return l === "" ? "" : "<p>" + rouge(l) + "</p>";
     }).join("");
-    h += "<p>" + signature().map(ech).join("<br>") + "</p>";
+    /* La signature sur deux paragraphes, non sur deux lignes d'un seul : le
+       saut de ligne ne survivait pas au texte relu, et le Word sortait
+       « Chadi EL SAFADI, gérantSARL TEC ». Mesuré le 13 septembre 2026 sur le
+       fichier téléchargé. */
+    h += signature().map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("");
     return h;
   }
 
