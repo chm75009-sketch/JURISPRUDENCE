@@ -2830,7 +2830,7 @@ function corriger(analyse, choix) {
   let corps = analyse.texte;
   for (const m of marques) {
     corps = corps.slice(0, m.fin) +
-      `  [À CONTRÔLER — ${m.id} : ${m.objet}]` +
+      `  [À CONTRÔLER - ${m.id} : ${m.objet}]` +
       corps.slice(m.fin);
   }
 
@@ -2851,23 +2851,23 @@ function corriger(analyse, choix) {
     resume: `${ajouts.length} clause${ajouts.length > 1 ? "s ajoutées" : " ajoutée"}, ${notes.length} famille${notes.length > 1 ? "s signalées" : " signalée"} à contrôler.` };
 }
 
-/* Le texte plat de la version corrigée — celui que la page propose au
+/* Le texte plat de la version corrigée, celui que la page propose au
    téléchargement lorsque l'utilisateur ne veut pas le composer lui-même. */
 function texteCorrige(analyse, choix) {
   const r = corriger(analyse, choix);
   const L = [r.corps.trim(), ""];
   if (r.ajouts.length) {
-    L.push("", "— — —", "CLAUSES AJOUTÉES AU TITRE DU CONTRÔLE", "");
+    L.push("", "- - -", "CLAUSES AJOUTÉES AU TITRE DU CONTRÔLE", "");
     for (const a of r.ajouts) {
-      L.push(`[${a.id} — ${a.fondement.map(article).join(", ")}]`);
+      L.push(`[${a.id} - ${a.fondement.map(article).join(", ")}]`);
       for (const l of a.lignes) L.push(l);
       L.push("");
     }
   }
   if (r.notes.length) {
-    L.push("", "— — —", "PASSAGES À CONTRÔLER AVANT DIFFUSION", "");
+    L.push("", "- - -", "PASSAGES À CONTRÔLER AVANT DIFFUSION", "");
     for (const n of r.notes) {
-      L.push(`[${n.id} — ${n.objet} — ${n.fondement.map(article).join(", ")}]`);
+      L.push(`[${n.id} - ${n.objet} - ${n.fondement.map(article).join(", ")}]`);
       L.push("Critère : " + n.critere);
       L.push("Ce qu'il faut faire : " + n.remplacement);
       for (const p of n.passages) L.push("  « " + p + " »");

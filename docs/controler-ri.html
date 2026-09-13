@@ -11,7 +11,7 @@
   LA BRANCHE « OUI ».
 
   L'application pose une question fermée : « Avez-vous un règlement intérieur ? »
-  Le « non » ouvre la construction — c'est le parcours. Le « oui » ouvrait, jusqu'ici,
+  Le « non » ouvre la construction, c'est le parcours. Le « oui » ouvrait, jusqu'ici,
   un questionnaire : quinze cases à cocher sur ce que le règlement contient. Or
   cocher n'est pas prouver, et l'employeur qui coche « oui, il rappelle les droits
   de la défense » ne sait pas toujours ce que son règlement dit.
@@ -25,7 +25,7 @@
 
   Le repérage est lexical. Il voit qu'un sujet est traité ; il ne dit jamais
   qu'il est bien traité. Il n'existe donc, dans toute cette page, aucun état
-  « conforme » — c'est le module qui le refuse, pas l'écran qui l'oublie. Une
+  « conforme » : c'est le module qui le refuse, pas l'écran qui l'oublie. Une
   matière écrite en d'autres termes que ceux que le module connaît sera dite
   absente : c'est le prix du procédé, et il vaut mieux relire une clause qui
   existe que croire complète celle qui manque.
@@ -67,6 +67,57 @@
   pre#sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
     background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
     max-height:64vh;overflow:auto}
+
+  /* ══════ LE VERDICT, EN PREMIER ══════
+     Demande du 13 septembre 2026 : « il faut tout de suite dire ce qui va en
+     vert, ce qui ne va pas en rouge ». Avant cette refonte, l'écran ouvrait sur
+     quatre compteurs de couleurs différentes et vingt fiches à lire dans
+     l'ordre du code : rien ne disait, à l'ouverture, si le règlement tenait ou
+     non. Deux cartes le disent maintenant en deux lignes, et la suite les
+     détaille, le rouge d'abord. */
+  .verdict{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 6px}
+  .verdict .v{border-radius:12px;padding:14px;border:2px solid transparent}
+  .verdict .v .n{font:700 30px/1 system-ui;display:block}
+  .verdict .v .q{font:600 15px/1.3 system-ui;display:block;margin-top:6px}
+  .verdict .v .d{font-size:13px;line-height:1.45;margin-top:6px;display:block}
+  .verdict .ko{background:var(--rouge-clair);border-color:var(--rouge);color:var(--rouge)}
+  .verdict .ok{background:var(--vert-clair);border-color:var(--vert);color:var(--vert)}
+  .verdict .v.vide{opacity:.55}
+  @media (max-width:430px){.verdict{grid-template-columns:1fr}}
+
+  .bloc-t{display:flex;align-items:center;gap:9px;margin:22px 0 4px;font:600 17px/1.3 system-ui}
+  .bloc-t .pastille{width:12px;height:12px;border-radius:50%;flex:none}
+  .bloc-t.r .pastille{background:var(--rouge)}
+  .bloc-t.v .pastille{background:var(--vert)}
+  .bloc-t.g .pastille{background:var(--encre-3)}
+  .bloc-s{font-size:14px;color:var(--encre-3);margin:0 0 8px}
+  .pt.rouge{border-left:4px solid var(--rouge)}
+  .pt.vert{border-left:4px solid var(--vert)}
+  .etat.ok{background:var(--vert-clair);color:var(--vert)}
+  .etat.ko{background:var(--rouge-clair);color:var(--rouge)}
+  .clause .ct{font:600 13px/1.3 system-ui;text-transform:uppercase;letter-spacing:.04em;
+    color:var(--vert);margin:0 0 6px;display:block}
+
+  /* ══════ LA VERSION CORRIGÉE, AVEC LES MODIFICATIONS EN ROUGE ══════
+     « une proposition de modification, avec en rouge les modifications
+     effectuées ». Le texte d'origine reste noir, mot pour mot ; ce qui a été
+     ajouté ou signalé est en rouge, à sa place. */
+  .corrige{background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
+    font:15px/1.7 system-ui;max-height:64vh;overflow:auto;color:var(--encre)}
+  .corrige p{margin:0 0 10px;white-space:pre-wrap}
+  .corrige .ajout{color:var(--rouge);background:var(--rouge-clair);border-left:3px solid var(--rouge);
+    padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0}
+  .corrige .ajout .t{font-weight:600;display:block;margin-bottom:4px}
+  .corrige .marque{color:var(--rouge);font-weight:600}
+  .corrige h3{font:600 15px/1.3 system-ui;margin:20px 0 8px;color:var(--rouge)}
+  .legende{font-size:13.5px;color:var(--encre-3);margin:10px 0 0}
+  .legende b{color:var(--rouge)}
+  .cr{margin:16px 0 0;border:1px solid var(--filet);border-radius:11px;overflow:hidden;background:var(--carte)}
+  .cr h3{margin:0;padding:12px 15px;font:600 16px/1.3 system-ui;background:var(--creux);
+    border-bottom:1px solid var(--filet)}
+  .cr ul{margin:0;padding:12px 15px 12px 32px;font-size:14.5px;line-height:1.6}
+  .cr li{margin:0 0 6px}
+  .cr .suite{padding:0 15px 14px;font-size:14px;color:var(--encre-2);line-height:1.6}
   @media print{.onglets,.barre,header.site{display:none}.cache{display:block !important}}</style>
 </head>
 <body>
@@ -83,12 +134,12 @@
 <main class="wrap">
 
   <header>
-    <h1>Contrôler mon règlement intérieur <span>— le document existant, confronté au texte</span></h1>
+    <h1>Contrôler mon règlement intérieur <span>: votre document, confronté au texte</span></h1>
   </header>
 
   <div class="onglets" id="onglets">
     <button data-o="depot" class="actif">1 · Le document</button>
-    <button data-o="diag" id="ong-diag" disabled>2 · Ce qu'il faut corriger</button>
+    <button data-o="diag" id="ong-diag" disabled>2 · Ce qui va, ce qui ne va pas</button>
     <button data-o="sortie" id="ong-sortie" disabled>3 · La version corrigée</button>
   </div>
 
@@ -123,36 +174,39 @@
       un sujet ne prouve pas que la clause est complète ni bien rédigée : c'est pourquoi rien ici
       n'est jamais dit « conforme ». Ne pas trouver un sujet ne prouve pas davantage qu'il est
       absent du droit de votre entreprise : il peut figurer dans un accord, une note de service ou
-      la convention collective — ou être rédigé en d'autres termes que ceux que ce contrôle connaît.
+      la convention collective, ou être rédigé en d'autres termes que ceux que ce contrôle connaît.
     </div>
   </section>
 
   <!-- ══════ 2 · LE DIAGNOSTIC ══════ -->
   <section id="o-diag" class="cache">
-    <h2>Ce qu'il faut corriger</h2>
-    <p class="aide">Chaque point cite l'article dont il est tiré. Les passages de votre document
-    sont rendus tels qu'ils sont écrits : lisez-les, ce sont eux qui décident.</p>
-    <div class="compteurs" id="compteurs"></div>
+    <h2>Ce qui va, ce qui ne va pas</h2>
+    <div class="verdict" id="verdict"></div>
+    <p class="aide">Le rouge d'abord : ce qui manque, et la clause proposée pour le combler ;
+    puis les passages repérés comme interdits. Le vert ensuite : les matières que votre règlement
+    traite. Chaque point cite l'article dont il est tiré et rend vos phrases telles qu'elles sont
+    écrites.</p>
     <div id="points"></div>
     <div class="barre">
-      <button class="btn" id="vers-sortie">Assembler la version corrigée</button>
+      <button class="btn" id="vers-sortie">Voir la proposition de modification</button>
     </div>
   </section>
 
   <!-- ══════ 3 · LA VERSION CORRIGÉE ══════ -->
   <section id="o-sortie" class="cache">
     <h2>La version corrigée</h2>
-    <p class="aide">Votre texte est conservé mot pour mot. Les passages retenus au diagnostic y sont
-    signalés à leur place, et les clauses des matières absentes sont ajoutées à la suite, à déplacer
-    à leur rang. Rien n'est réécrit à votre place : ce que vous emportez, vous l'avez choisi.</p>
+    <p class="legende">Votre texte est conservé mot pour mot, en noir. <b>En rouge, ce qui a été
+    modifié</b> : les clauses ajoutées et les passages signalés à contrôler. Rien n'est réécrit à
+    votre place ; ce que vous emportez, vous l'avez choisi au tableau précédent.</p>
     <div class="barre">
       <button class="btn" id="dl-docx">Télécharger en Word</button>
       <button class="btn second" id="dl-txt">Télécharger en texte</button>
       <button class="btn second" id="copier">Copier</button>
-      <button class="btn second" id="retour-diag">← Revenir au diagnostic</button>
+      <button class="btn second" id="retour-diag">&larr; Revenir au tableau</button>
     </div>
-    <div id="resume"></div>
-    <pre id="sortie"></pre>
+    <div class="corrige" id="corrige"></div>
+    <div id="compte-rendu"></div>
+    <pre id="sortie" hidden></pre>
   </section>
 
   <footer>
@@ -269,7 +323,7 @@
     suite.then(function (t) {
       $("#depot").value = t;
       dit("<b>" + ech(f.name) + "</b> lu : " + t.length.toLocaleString("fr-FR") +
-          " caractères. Relisez-le ci-dessous — c'est ce texte qui sera contrôlé.");
+          " caractères. Relisez-le ci-dessous : c'est ce texte qui sera contrôlé.");
     }).catch(function (e) {
       dit("<b>Ce fichier n'a pas pu être lu</b>" + ech(e.message) +
           " Ouvrez le document, copiez son texte et collez-le ci-dessous.", "att");
@@ -284,13 +338,13 @@
     $("#depot").value = [
       "RÈGLEMENT INTÉRIEUR DE LA SOCIÉTÉ EXEMPLE",
       "",
-      "Article 1 — Le présent règlement s'applique à l'ensemble du personnel.",
-      "Article 2 — Chaque salarié respecte les consignes de sécurité affichées dans les ateliers et porte les équipements de protection individuelle qui lui sont remis.",
-      "Article 3 — Tout retard non justifié donnera lieu à une amende de vingt euros retenue sur le salaire du mois suivant.",
-      "Article 4 — La direction procède à la fouille des sacs et des vestiaires à tout moment et pour l'ensemble des salariés.",
-      "Article 5 — Les sanctions applicables sont l'avertissement, le blâme et la mise à pied disciplinaire.",
-      "Article 6 — L'abandon de poste vaut démission et emporte rupture de plein droit du contrat de travail.",
-      "Article 7 — La période d'essai est de quatre mois, renouvelable une fois.",
+      "Article 1 - Le présent règlement s'applique à l'ensemble du personnel.",
+      "Article 2 - Chaque salarié respecte les consignes de sécurité affichées dans les ateliers et porte les équipements de protection individuelle qui lui sont remis.",
+      "Article 3 - Tout retard non justifié donnera lieu à une amende de vingt euros retenue sur le salaire du mois suivant.",
+      "Article 4 - La direction procède à la fouille des sacs et des vestiaires à tout moment et pour l'ensemble des salariés.",
+      "Article 5 - Les sanctions applicables sont l'avertissement, le blâme et la mise à pied disciplinaire.",
+      "Article 6 - L'abandon de poste vaut démission et emporte rupture de plein droit du contrat de travail.",
+      "Article 7 - La période d'essai est de quatre mois, renouvelable une fois.",
     ].join("\n");
     dit("Exemple collé : un règlement de sept articles, volontairement fautif. Contrôlez-le pour voir ce que la page en dit.");
   });
@@ -323,29 +377,76 @@
     onglet("diag");
   });
 
+  /* CE QUI VA, CE QUI NE VA PAS.
+
+     Le module ne dit jamais qu'une clause est « conforme » : son repérage est
+     lexical, il voit qu'un sujet est traité, jamais qu'il l'est bien. Le vert
+     dit donc ce qui est mesuré, « c'est dans votre règlement », et la carte
+     verte le rappelle en toutes lettres. Le rouge, lui, réunit les deux
+     défauts que le contrôle établit vraiment : une matière obligatoire dont
+     rien ne parle, et un passage qui tombe dans une famille interdite. */
+  function estRouge(p) {
+    if (p.sansObjet) return false;
+    if (p.etat === CR.ETATS.ACONTROLER) return true;
+    return p.etat === CR.ETATS.ABSENT && !p.prohibe;
+  }
+  function estVert(p) {
+    if (p.sansObjet) return false;
+    if (p.prohibe) return p.etat === CR.ETATS.ABSENT;
+    return p.etat === CR.ETATS.AVERIFIER;
+  }
   function classeEtat(p) {
     if (p.sansObjet) return "sansobjet";
-    if (p.etat === CR.ETATS.ABSENT) return "absent";
-    if (p.etat === CR.ETATS.ACONTROLER) return "acontroler";
-    return "averifier";
+    return estRouge(p) ? "ko" : "ok";
+  }
+  function motEtat(p) {
+    if (p.sansObjet) return "sans objet";
+    if (p.etat === CR.ETATS.ACONTROLER) return "à retirer ou à borner";
+    if (p.etat === CR.ETATS.ABSENT && !p.prohibe) return "manquant";
+    if (p.prohibe) return "rien de repéré";
+    return "présent";
   }
 
   function rendreDiagnostic() {
-    var c = analyse.compteurs;
-    $("#compteurs").innerHTML =
-      '<span class="c abs">' + c.absents + " matière" + (c.absents > 1 ? "s" : "") + " absente" + (c.absents > 1 ? "s" : "") + "</span>" +
-      '<span class="c ctl">' + c.aControler + " famille" + (c.aControler > 1 ? "s" : "") + " à contrôler</span>" +
-      '<span class="c ver">' + c.aVerifier + " point" + (c.aVerifier > 1 ? "s" : "") + " à relire</span>" +
-      '<span class="c">' + analyse.phrases.toLocaleString("fr-FR") + " phrases lues</span>";
+    var rouges = analyse.points.filter(estRouge);
+    var verts = analyse.points.filter(estVert);
+    var gris = analyse.points.filter(function (p) { return p.sansObjet; });
+    var manque = rouges.filter(function (p) { return p.etat === CR.ETATS.ABSENT; }).length;
+    var interdits = rouges.length - manque;
 
-    var familles = ["contenu obligatoire", "formalités", "contenu prohibé"];
+    $("#verdict").innerHTML =
+      '<div class="v ko' + (rouges.length ? "" : " vide") + '">' +
+        '<span class="n">' + rouges.length + "</span>" +
+        '<span class="q">' + (rouges.length ? "ce qui ne va pas" : "rien à corriger") + "</span>" +
+        '<span class="d">' + (rouges.length
+          ? (manque ? manque + " matière" + (manque > 1 ? "s" : "") + " obligatoire" + (manque > 1 ? "s" : "") + " absente" + (manque > 1 ? "s" : "") : "") +
+            (manque && interdits ? ", " : "") +
+            (interdits ? interdits + " passage" + (interdits > 1 ? "s" : "") + " d'une famille interdite" : "") + "."
+          : "Aucune matière obligatoire absente, aucun passage d'une famille interdite.") + "</span></div>" +
+      '<div class="v ok' + (verts.length ? "" : " vide") + '">' +
+        '<span class="n">' + verts.length + "</span>" +
+        '<span class="q">ce qui va</span>' +
+        '<span class="d">Traité dans votre règlement. Le contrôle établit que le sujet y est, ' +
+        "jamais que la clause est complète ni bien rédigée.</span></div>";
+
     var h = "";
-    familles.forEach(function (fam) {
-      var liste = analyse.points.filter(function (p) { return p.famille === fam; });
-      if (!liste.length) return;
-      h += "<h3>" + ech(fam.charAt(0).toUpperCase() + fam.slice(1)) + "</h3>";
-      liste.forEach(function (p) { h += carte(p); });
-    });
+    if (rouges.length) {
+      h += '<p class="bloc-t r"><span class="pastille"></span>Ce qui ne va pas</p>';
+      h += '<p class="bloc-s">Sous chaque manque, la clause proposée : cochez-la pour qu\'elle entre ' +
+        "dans la version corrigée.</p>";
+      rouges.forEach(function (p) { h += carte(p); });
+    }
+    if (verts.length) {
+      h += '<p class="bloc-t v"><span class="pastille"></span>Ce qui va</p>';
+      h += '<p class="bloc-s">Relisez tout de même ces passages : c\'est leur rédaction qui décide.</p>';
+      verts.forEach(function (p) { h += carte(p); });
+    }
+    if (gris.length) {
+      h += '<p class="bloc-t g"><span class="pastille"></span>Sans objet pour votre document</p>';
+      gris.forEach(function (p) { h += carte(p); });
+    }
+    h += '<p class="bloc-s">' + analyse.phrases.toLocaleString("fr-FR") + " phrases lues, " +
+      analyse.caracteres.toLocaleString("fr-FR") + " caractères.</p>";
     $("#points").innerHTML = h;
 
     $("#points").querySelectorAll("input[data-ins]").forEach(function (i) {
@@ -357,8 +458,8 @@
   }
 
   function carte(p) {
-    var h = '<div class="pt"><div class="tt"><span class="etat ' + classeEtat(p) + '">' +
-      ech(p.sansObjet ? "sans objet" : p.etat) + "</span>" +
+    var h = '<div class="pt ' + (estRouge(p) ? "rouge" : (estVert(p) ? "vert" : "")) +
+      '"><div class="tt"><span class="etat ' + classeEtat(p) + '">' + ech(motEtat(p)) + "</span>" +
       '<span><span class="obj">' + ech(p.objet) + "</span>" +
       '<span class="fond">' + ech(p.id) + " · " +
       p.fondement.map(function (a) { return ech(CR.article(a)); }).join(", ") + "</span></span>" +
@@ -385,7 +486,8 @@
     });
 
     if (p.clause && p.etat === CR.ETATS.ABSENT && !p.sansObjet) {
-      h += '<div class="clause">' + p.clause.map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("") + "</div>";
+      h += '<div class="clause"><span class="ct">La clause proposée</span>' +
+        p.clause.map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("") + "</div>";
       h += '<label class="opt"><input type="checkbox" data-ins="' + ech(p.id) + '" checked> ' +
         "Insérer cette clause dans la version corrigée</label>";
     }
@@ -405,14 +507,78 @@
     };
   }
 
+  /* LA PROPOSITION DE MODIFICATION, LES CHANGEMENTS EN ROUGE.
+
+     Le corps rendu par le module porte, à leur place, les marques des passages
+     signalés ; les clauses retenues viennent ensuite. Ici, tout ce qui a été
+     ajouté au document d'origine s'affiche en rouge : on voit d'un coup d'oeil
+     ce qui a bougé, sans comparer deux fichiers. */
+  function corpsEnHtml(corps) {
+    var lignes = String(corps).split(/\n{2,}/);
+    return lignes.map(function (bloc) {
+      var t = ech(bloc);
+      t = t.replace(/\[À CONTRÔLER[^\]]*\]/g, function (m) { return '<span class="marque">' + m + "</span>"; });
+      return "<p>" + t + "</p>";
+    }).join("");
+  }
+
   function assembler() {
     var c = CR.corriger(analyse, choix());
-    $("#resume").innerHTML = '<div class="avis info"><b>' + ech(c.resume) + "</b>" +
-      "Relisez avant diffusion : les clauses ajoutées portent des mentions entre crochets à compléter, " +
-      "et un règlement modifié se soumet de nouveau à l'avis du comité, au dépôt au greffe, à la " +
-      "communication à l'inspection et à la publicité, avant une entrée en vigueur différée d'un mois.</div>";
+    var h = corpsEnHtml(c.corps.trim());
+
+    if (c.ajouts.length) {
+      h += "<h3>Clauses ajoutées au titre du contrôle</h3>";
+      c.ajouts.forEach(function (a) {
+        h += '<div class="ajout"><span class="t">' + ech(a.objet) + " · " +
+          ech(a.id + ", " + a.fondement.map(CR.article).join(", ")) + "</span>" +
+          a.lignes.map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("") + "</div>";
+      });
+    }
+    if (c.notes.length) {
+      h += "<h3>Passages à contrôler avant diffusion</h3>";
+      c.notes.forEach(function (n) {
+        h += '<div class="ajout"><span class="t">' + ech(n.objet) + " · " +
+          ech(n.id + ", " + n.fondement.map(CR.article).join(", ")) + "</span>" +
+          "<p>Ce que le juge vérifie : " + ech(n.critere) + "</p>" +
+          "<p>Ce qu'il faut faire : " + ech(n.remplacement) + "</p>" +
+          n.passages.map(function (p) { return "<p>« " + ech(p) + " »</p>"; }).join("") + "</div>";
+      });
+    }
+    if (!c.ajouts.length && !c.notes.length)
+      h += '<p class="legende">Aucune modification : votre texte est rendu tel que vous l\'avez déposé.</p>';
+    $("#corrige").innerHTML = h;
+    $("#compte-rendu").innerHTML = compteRendu(c);
     $("#sortie").textContent = CR.texteCorrige(analyse, choix());
     onglet("sortie");
+    $("#o-sortie").scrollIntoView({ block: "start" });
+  }
+
+  /* LE COMPTE RENDU, À LA FIN. Ce qui a été fait, ce qui reste à faire. Un
+     règlement modifié ne vaut rien tant que ses formalités ne sont pas
+     accomplies : elles ferment le compte rendu, dans leur ordre. */
+  function compteRendu(c) {
+    var rouges = analyse.points.filter(estRouge);
+    var restants = rouges.filter(function (p) {
+      if (p.etat === CR.ETATS.ABSENT) return choix().inserer.indexOf(p.id) === -1;
+      return choix().signaler.indexOf(p.id) === -1;
+    });
+    var l = [];
+    l.push("<li><b>" + c.ajouts.length + "</b> clause" + (c.ajouts.length > 1 ? "s ajoutées" : " ajoutée") +
+      " au texte, en rouge ci-dessus.</li>");
+    l.push("<li><b>" + c.notes.length + "</b> passage" + (c.notes.length > 1 ? "s signalés" : " signalé") +
+      " à contrôler avant diffusion.</li>");
+    if (restants.length)
+      l.push("<li><b>" + restants.length + "</b> point" + (restants.length > 1 ? "s" : "") +
+        " du rouge que vous n'avez pas retenu" + (restants.length > 1 ? "s" : "") +
+        " : il" + (restants.length > 1 ? "s restent" : " reste") + " à traiter dans votre document.</li>");
+    l.push("<li>Les mentions entre crochets des clauses ajoutées sont à compléter : elles ne peuvent " +
+      "pas être devinées.</li>");
+    return '<div class="cr"><h3>Le compte rendu</h3><ul>' + l.join("") + "</ul>" +
+      '<p class="suite"><b>Ce qui reste à faire, et dans cet ordre.</b> Un règlement modifié se soumet ' +
+      "de nouveau à l'avis du comité social et économique, puis au dépôt au greffe du conseil de " +
+      "prud'hommes, à la communication en deux exemplaires à l'inspection du travail et à la " +
+      "publicité auprès du personnel. Il entre en vigueur un mois après l'accomplissement de ces " +
+      "formalités (L. 1321-4).</p></div>";
   }
   $("#vers-sortie").addEventListener("click", assembler);
   $("#retour-diag").addEventListener("click", function () { onglet("diag"); });
@@ -447,7 +613,19 @@
         n.passages.forEach(function (p) { items.push({ k: "puce", t: "« " + p + " »" }); });
       });
     }
-    window.AuditExport.telecharger(window.AuditExport.docx(items, "Règlement intérieur — version corrigée"),
+    /* Le compte rendu ferme le fichier comme il ferme l'écran : celui qui
+       ouvre le Word trois jours plus tard doit retrouver ce qui a été fait et
+       ce qui reste à faire, sans revenir à l'application. */
+    items.push({ k: "trait" }, { k: "h1", t: "Le compte rendu" });
+    items.push({ k: "puce", t: c.ajouts.length + " clause" + (c.ajouts.length > 1 ? "s ajoutées" : " ajoutée") + " au texte." });
+    items.push({ k: "puce", t: c.notes.length + " passage" + (c.notes.length > 1 ? "s signalés" : " signalé") + " à contrôler avant diffusion." });
+    items.push({ k: "puce", t: "Les mentions entre crochets des clauses ajoutées sont à compléter." });
+    items.push({ k: "p", t: "Ce qui reste à faire, et dans cet ordre. Un règlement modifié se soumet de " +
+      "nouveau à l'avis du comité social et économique, puis au dépôt au greffe du conseil de " +
+      "prud'hommes, à la communication en deux exemplaires à l'inspection du travail et à la publicité " +
+      "auprès du personnel. Il entre en vigueur un mois après l'accomplissement de ces formalités " +
+      "(L. 1321-4)." });
+    window.AuditExport.telecharger(window.AuditExport.docx(items, "Règlement intérieur, version corrigée"),
       nomFichier("docx"), "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
 
