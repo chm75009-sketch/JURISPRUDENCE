@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Courriers et e-mails</title>
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LE GÉNÉRATEUR DE COURRIERS ET D'E-MAILS.
+
+  Demande du 13 septembre 2026 : « un générateur d'e-mail ou de courrier type
+  ou personnalisé : client, fournisseur, fisc, salarié, assurance ».
+
+  Trois écrans, trois gestes, pas un de plus : à qui j'écris, pourquoi,
+  j'emporte. Le courrier s'affiche rédigé, à l'en-tête de l'entreprise, avec
+  la date du jour ; ce que l'application ne peut pas savoir y figure entre
+  crochets, en rouge, et se corrige en place. Deux boutons pour finir : copier
+  pour le coller dans un message, ou emporter en Word.
+
+  CE QUE CETTE PAGE NE FAIT PAS.
+
+  Elle n'affirme aucun droit hors du code du travail, le relais Légifrance de
+  l'application ne servant que celui-ci : une lettre demande, elle n'invoque
+  pas un article que le dépôt n'aurait pas lu. Là où un fondement décide de
+  l'issue, une note le dit et renvoie à la vérification.
+
+  Elle ne contient pas non plus les lettres disciplinaires : elles vivent dans
+  les modules qui les fondent article par article et calculent leurs délais.
+
+  Rien ne sort de ce poste.
+-->
+
+<link rel="stylesheet" href="style.css">
+<style>
+  main.wrap{max-width:620px;padding-bottom:var(--e7)}
+  .haut{display:flex;align-items:center;gap:12px;padding:14px 0 10px;border-bottom:1px solid var(--filet);
+    min-width:0}
+  .haut a.retour,.haut button.retour{margin:0;font:600 15px system-ui;padding:10px 14px;border:1px solid var(--filet);
+    border-radius:10px;background:var(--surface);color:var(--encre);text-decoration:none;min-height:44px;
+    display:inline-flex;align-items:center;white-space:nowrap;cursor:pointer}
+  /* Le titre du modèle peut être long : il se tronque, il ne pousse pas la
+     page hors de l'écran. Débordement mesuré à 390 pixels le 13 septembre
+     2026 sur « Relance d'un impayé (deuxième relance) ». */
+  .haut b{font-size:17px;color:var(--encre);min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .haut span.ent{color:var(--texte-2);font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .fam{display:grid;gap:10px;margin:16px 0 0}
+  .fam button{width:100%;display:block;text-align:left;border:1px solid var(--filet);border-radius:12px;
+    background:var(--carte);color:var(--encre);padding:16px;cursor:pointer;min-height:64px}
+  .fam button:hover{border-color:var(--accent);background:var(--creux)}
+  .fam .n{font:600 18px/1.3 system-ui;display:block}
+  .fam .s{font-size:14px;color:var(--texte-2);display:block;margin-top:4px}
+  .fam .c{font-size:13px;color:var(--texte-3);display:block;margin-top:6px}
+
+  .liste{margin:14px 0 0}
+  .liste button{width:100%;display:block;text-align:left;border:0;border-bottom:1px solid var(--filet);
+    border-radius:0;background:none;color:var(--encre);font:400 17px/1.35 system-ui;padding:15px 0;
+    min-height:56px;cursor:pointer}
+  .liste button:hover{background:var(--creux);color:var(--accent)}
+
+  .objet{margin:14px 0 0;border:1px solid var(--filet);border-radius:10px;background:var(--carte);padding:12px 14px}
+  .objet .et{font:600 12px/1 system-ui;text-transform:uppercase;letter-spacing:.05em;color:var(--texte-3)}
+  .objet .v{font:600 16.5px/1.4 system-ui;margin-top:6px;outline:none}
+  .lettre{margin:12px 0 0;border:1px solid var(--filet);border-radius:10px;background:var(--carte);
+    padding:18px 16px;font:16px/1.65 system-ui;color:var(--encre);outline:none;min-height:200px}
+  .lettre p{margin:0 0 12px;white-space:pre-wrap}
+  .lettre p.tete{margin:0;font-size:15px;line-height:1.5}
+  .lettre p.date{margin:14px 0 16px;text-align:right;font-size:15px}
+  .lettre .a-remplir{color:var(--rouge);font-weight:600}
+  .note{margin:12px 0 0;font-size:14.5px;line-height:1.6;color:var(--encre-2);
+    background:var(--ambre-clair);border-left:3px solid var(--ambre);border-radius:0 8px 8px 0;padding:11px 13px}
+  .note b{color:var(--ambre)}
+  .barre{display:grid;gap:8px;margin:14px 0 0}
+  .barre button{min-height:48px;border-radius:10px;font:600 16.5px system-ui;cursor:pointer;width:100%}
+  .barre button.p{background:var(--accent);color:#fff;border:2px solid var(--accent)}
+  .barre button.s{background:var(--surface);color:var(--accent);border:2px solid var(--accent)}
+  @media (min-width:520px){.barre{grid-template-columns:1fr 1fr}}
+  .etat{margin:10px 0 0;font-size:14.5px;color:var(--vert);min-height:20px}
+  .cache{display:none}
+  @media print{.haut,.barre,.fam,.liste,.etat,.note{display:none}.lettre{border:0;padding:0}}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <div class="haut">
+    <button type="button" class="retour" id="retour">&larr; Retour</button>
+    <b id="titre-haut">Courriers</b>
+    <span class="ent" id="ent"></span>
+  </div>
+
+  <!-- ══════ 1 · À QUI ══════ -->
+  <section id="e-familles">
+    <p class="aide">À qui écrivez-vous ?</p>
+    <div class="fam" id="familles"></div>
+  </section>
+
+  <!-- ══════ 2 · POURQUOI ══════ -->
+  <section id="e-modeles" class="cache">
+    <p class="aide" id="aide-modeles"></p>
+    <div class="liste" id="modeles"></div>
+  </section>
+
+  <!-- ══════ 3 · LA LETTRE ══════ -->
+  <section id="e-lettre" class="cache">
+    <div class="objet">
+      <span class="et">Objet du message</span>
+      <div class="v" id="objet" contenteditable="true" spellcheck="true"></div>
+    </div>
+    <div class="lettre" id="lettre" contenteditable="true" spellcheck="true"></div>
+    <div class="note cache" id="note"></div>
+    <div class="barre">
+      <button type="button" class="p" id="copier">Copier pour l'e-mail</button>
+      <button type="button" class="s" id="word">Télécharger en Word</button>
+      <button type="button" class="s" id="imprimer">Imprimer</button>
+      <button type="button" class="s" id="modele">Revenir au modèle</button>
+    </div>
+    <p class="etat" id="etat"></p>
+  </section>
+
+  <footer>
+    Les mentions en rouge sont à compléter : l'application ne les invente pas. Ce qui vient de votre
+    fiche d'entreprise s'écrit tout seul et suit chaque changement de la fiche.
+  </footer>
+</main>
+
+<script src="apercu.js"></script>
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script src="courriers-modeles.js"></script>
+<script src="courriers-modeles-2.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  var CM = window.CourriersModeles;
+  var P = window.Profil;
+
+  var profil = {};
+  try { profil = JSON.parse(localStorage.getItem("profil-entreprise") || "null") || {}; } catch (e) {}
+  if ((!profil.denomination) && P && P.lire) profil = P.lire() || {};
+
+  $("ent").textContent = profil.denomination || "";
+
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
+              "septembre", "octobre", "novembre", "décembre"];
+  function leJour(d) {
+    d = d || new Date();
+    return d.getDate() + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
+  }
+  /* La ville de l'en-tête se lit dans l'adresse de la fiche : « 23 avenue du
+     Château, 95100 Argenteuil » donne Argenteuil. Sans adresse, le crochet
+     reste, comme partout ailleurs. */
+  function ville() {
+    var a = String(profil.adresse || "");
+    var m = /(\d{5})\s+([^,;]+)$/.exec(a.trim());
+    if (m) return m[2].trim();
+    var bouts = a.split(",");
+    return bouts.length > 1 ? bouts[bouts.length - 1].trim() : "[VILLE]";
+  }
+
+  /* L'en-tête : l'entreprise telle que la fiche la décrit, jamais retapée. */
+  function entete() {
+    var L = [];
+    if (profil.denomination) L.push(profil.denomination);
+    if (profil.adresse) L.push(profil.adresse);
+    if (profil.siret) L.push("SIRET " + profil.siret);
+    if (profil.telephone) L.push("Téléphone : " + profil.telephone);
+    if (profil.courriel) L.push(profil.courriel);
+    if (!L.length) L.push("[VOTRE ENTREPRISE]");
+    return L;
+  }
+  function signature() {
+    var L = [];
+    if (profil.responsable) L.push(profil.responsable);
+    else L.push("[NOM ET QUALITÉ DU SIGNATAIRE]");
+    if (profil.denomination) L.push(profil.denomination);
+    return L;
+  }
+
+  var FAM = null, MOD = null;
+
+  function ecran(id) {
+    ["e-familles", "e-modeles", "e-lettre"].forEach(function (x) {
+      $(x).classList.toggle("cache", x !== id);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  /* ─────────────────────────── 1 · les familles ─────────────────────── */
+  function rendreFamilles() {
+    $("familles").innerHTML = CM.FAMILLES.map(function (f) {
+      var n = CM.MODELES.filter(function (m) { return m.famille === f.cle; }).length;
+      return '<button type="button" data-f="' + ech(f.cle) + '">' +
+        '<span class="n">' + ech(f.nom) + "</span>" +
+        '<span class="s">' + ech(f.sous) + "</span>" +
+        '<span class="c">' + n + " modèle" + (n > 1 ? "s" : "") + "</span></button>";
+    }).join("");
+  }
+  $("familles").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-f]");
+    if (b) ouvrirFamille(b.getAttribute("data-f"));
+  });
+
+  function ouvrirFamille(cle) {
+    FAM = null;
+    CM.FAMILLES.forEach(function (f) { if (f.cle === cle) FAM = f; });
+    if (!FAM) return;
+    $("titre-haut").textContent = FAM.nom;
+    $("aide-modeles").textContent = "Que voulez-vous écrire ?";
+    var liste = CM.MODELES.filter(function (m) { return m.famille === cle; });
+    $("modeles").innerHTML = liste.map(function (m) {
+      return '<button type="button" data-m="' + ech(m.id) + '">' + ech(m.nom) + "</button>";
+    }).join("");
+    ecran("e-modeles");
+  }
+  $("modeles").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-m]");
+    if (b) ouvrirModele(b.getAttribute("data-m"));
+  });
+
+  /* ─────────────────────────── 3 · la lettre ────────────────────────── */
+  /* Les crochets en rouge : ce que l'application ne peut pas savoir se voit,
+     et ne part pas dans un message sans qu'on l'ait vu. */
+  function rouge(t) {
+    return ech(t).replace(/\[[^\]]+\]/g, function (m) { return '<span class="a-remplir">' + m + "</span>"; });
+  }
+
+  function corpsHtml(m) {
+    var h = entete().map(function (l) { return '<p class="tete">' + ech(l) + "</p>"; }).join("");
+    h += '<p class="date">' + ech(ville() + ", le " + leJour()) + "</p>";
+    h += m.corps.map(function (l) {
+      return l === "" ? "" : "<p>" + rouge(l) + "</p>";
+    }).join("");
+    h += "<p>" + signature().map(ech).join("<br>") + "</p>";
+    return h;
+  }
+
+  function ouvrirModele(id) {
+    MOD = null;
+    CM.MODELES.forEach(function (m) { if (m.id === id) MOD = m; });
+    if (!MOD) return;
+    $("titre-haut").textContent = MOD.nom;
+    $("objet").innerHTML = rouge(MOD.objet);
+    $("lettre").innerHTML = corpsHtml(MOD);
+    $("note").classList.toggle("cache", !MOD.note);
+    if (MOD.note) $("note").innerHTML = "<b>À vérifier avant d'envoyer.</b> " + ech(MOD.note);
+    $("etat").textContent = "";
+    ecran("e-lettre");
+  }
+
+  $("modele").addEventListener("click", function () {
+    if (!MOD) return;
+    $("objet").innerHTML = rouge(MOD.objet);
+    $("lettre").innerHTML = corpsHtml(MOD);
+    $("etat").textContent = "Modèle rétabli.";
+  });
+
+  /* Le texte tel qu'il partira : les lignes de la lettre, dans l'ordre. */
+  function texteLettre() {
+    var out = [];
+    Array.prototype.forEach.call($("lettre").children, function (p) {
+      out.push(p.textContent);
+    });
+    return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  }
+
+  $("copier").addEventListener("click", function () {
+    var t = "Objet : " + $("objet").textContent.trim() + "\n\n" + texteLettre();
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    else {
+      var a = document.createElement("textarea");
+      a.value = t; document.body.appendChild(a); a.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      a.remove();
+    }
+    $("etat").textContent = "Copié : collez-le dans votre message.";
+  });
+
+  $("word").addEventListener("click", function () {
+    if (!window.AuditExport) { $("etat").textContent = "Le module d'export ne s'est pas chargé."; return; }
+    var items = [];
+    var lignes = texteLettre().split("\n");
+    var tete = entete().length;
+    lignes.forEach(function (l, i) {
+      if (!l.trim()) { items.push({ k: "p", t: "" }); return; }
+      items.push({ k: i < tete ? "sur" : "p", t: l });
+    });
+    var titre = $("objet").textContent.trim() || (MOD ? MOD.nom : "Courrier");
+    var nom = titre.normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 60);
+    window.AuditExport.telecharger(window.AuditExport.docx(items, titre),
+      (nom || "courrier") + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    $("etat").textContent = "Téléchargé en Word.";
+  });
+
+  $("imprimer").addEventListener("click", function () { window.print(); });
+
+  /* Le retour suit le chemin inverse : la lettre revient aux motifs, les
+     motifs aux familles, les familles à l'accueil. */
+  $("retour").addEventListener("click", function () {
+    if (!$("e-lettre").classList.contains("cache")) {
+      $("titre-haut").textContent = FAM ? FAM.nom : "Courriers";
+      ecran("e-modeles");
+      return;
+    }
+    if (!$("e-modeles").classList.contains("cache")) {
+      $("titre-haut").textContent = "Courriers";
+      ecran("e-familles");
+      return;
+    }
+    location.href = "index.html";
+  });
+
+  rendreFamilles();
+})();
+</script>
+</body>
+</html>

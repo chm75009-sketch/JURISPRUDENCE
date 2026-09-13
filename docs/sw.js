@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.29";
+const CACHE = "jurisprudence-12.30";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -97,6 +97,7 @@ const ESSENTIELS = [
      d'utilisateurs ne déposeront jamais. Elle se charge au premier PDF déposé
      et le gestionnaire « fetch » ci-dessous la met alors en cache, comme tout
      le reste : à partir de là, elle fonctionne hors connexion. */
+  "./courriers.html", "./courriers-modeles.js", "./courriers-modeles-2.js",
   "./audit-form.js", "./apercu.js", "./lire-pdf.js", "./audit-export.js", "./tableur-export.js", "./feuille-doc.js", "./parcours-deux-temps.js",
   /* Les documents que l'application rédige elle-même. */
   "./documents-produits.js",

@@ -1668,7 +1668,14 @@
   var ACTIF = null, V = {};
 
   function rendreListe() {
-    var h = "";
+    /* LES COURRIERS DE TOUS LES JOURS, EN TÊTE. Ils ne sont pas des documents
+       que la loi impose : ce sont les lettres qu'on écrit à un client, à un
+       fournisseur, au service des impôts, à l'assureur. Ils ont leur page, et
+       l'entrée est ici parce que c'est ici qu'on vient quand on a quelque
+       chose à écrire. Demande du 13 septembre 2026. */
+    var h = '<p class="groupe">Écrire</p>' +
+      '<button type="button" class="doc-ligne" data-vers="courriers.html">' +
+      "Courriers et e-mails (client, fournisseur, impôts, URSSAF, assurance, banque)</button>";
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
       g[1].forEach(function (cle) {
@@ -1857,7 +1864,10 @@
   }
 
   $("liste").addEventListener("click", function (ev) {
-    var b = ev.target.closest ? ev.target.closest("button[data-doc]") : null;
+    if (!ev.target.closest) return;
+    var v = ev.target.closest("button[data-vers]");
+    if (v) { location.href = v.getAttribute("data-vers"); return; }
+    var b = ev.target.closest("button[data-doc]");
     if (b) ouvrir(b.getAttribute("data-doc"));
   });
   $("btn-retour").addEventListener("click", revenir);
