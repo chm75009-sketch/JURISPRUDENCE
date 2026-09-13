@@ -56,12 +56,24 @@ celui qu'on avait l'intention d'écrire.
    semble ».
 5. **Ce que j'avance sur une pièce : est-ce cité, page et phrase ?** Et
    ai-je cherché ce qui, dans la pièce, dit le contraire ?
+6. **Ai-je ouvert et lu ce que j'envoie ?** Un lien, une page, un fichier, un
+   écran : on l'ouvre, on le parcourt, on vérifie qu'il marche et qu'il dit ce
+   qu'on prétend, avant de l'envoyer. Pas « ça devrait marcher », pas « je
+   viens de le corriger ». Et la même vérification vaut pour ce qu'on a promis :
+   avant de dire qu'une chose est faite, on regarde si elle existe. Règle posée
+   le 13 septembre 2026.
 
-Quand une de ces cinq questions a été manquée, la faute s'inscrit datée dans ce
+Quand une de ces six questions a été manquée, la faute s'inscrit datée dans ce
 fichier, à la section qu'elle concerne — comme les cas du 26 août, du 28 août
 et du 31 août 2026. C'est ce qui la rend présente à la session suivante, ce
 fichier étant relu à chaque démarrage. Une faute non écrite est une faute qui
 recommencera.
+
+Cas mesuré le 13 septembre 2026 : un module de conformité au règlement général
+sur la protection des données a été proposé sur la boutique MaxiPower, jamais
+validé, jamais écrit, et l'utilisatrice a dû demander où il était. Une chose
+proposée n'est pas une chose faite. Tant qu'elle n'est pas écrite et ouverte
+pour être relue, elle n'existe pas, et on le dit ainsi.
 
 Cas mesuré du 30 août au 2 septembre 2026 : sur une semaine, la règle des deux
 ou trois phrases a été enfreinte à presque chaque réponse, avec titres, listes
