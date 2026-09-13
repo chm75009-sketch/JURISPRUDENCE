@@ -148,10 +148,22 @@
       { nom: "xl/styles.xml", contenu: STYLES },
     ];
     feuilles.forEach(function (f, i) { entrees.push({ nom: "xl/worksheets/sheet" + (i + 1) + ".xml", contenu: feuilleXml(f.lignes, f.largeurs) }); });
-    return zip(entrees);
+    var octets = zip(entrees);
+    /* Le classeur garde avec lui son rendu lisible : l'aperçu le montre,
+       feuille par feuille, avant que le fichier ne parte sur le téléphone.
+       Demande du 13 septembre 2026 : « je dois pouvoir l'ouvrir d'abord ». */
+    if (global.Apercu)
+      global.Apercu.poser(octets, { titre: (feuilles[0] && feuilles[0].titre) || "Classeur",
+        html: global.Apercu.htmlFeuilles(feuilles) });
+    return octets;
   }
 
   function telecharger(bytes, nom) {
+    var vu = global.Apercu ? global.Apercu.pour(bytes) : null;
+    if (vu) { global.Apercu.montrer(vu, nom, function () { enregistrer(bytes, nom); }); return; }
+    enregistrer(bytes, nom);
+  }
+  function enregistrer(bytes, nom) {
     var b = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     var u = URL.createObjectURL(b), a = document.createElement("a");
     a.href = u; a.download = nom; a.rel = "noopener";

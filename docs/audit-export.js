@@ -162,7 +162,7 @@
       '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>' +
       '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="709" w:footer="709" w:gutter="0"/>' +
       "</w:sectPr></w:body></w:document>";
-    return zip([
+    var octets = zip([
       { nom: "[Content_Types].xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
         '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
@@ -177,9 +177,56 @@
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>' },
       { nom: "word/document.xml", contenu: doc },
     ]);
+    /* Les octets écrits gardent avec eux le rendu qui leur correspond : c'est
+       lui que l'aperçu montrera au moment d'enregistrer. */
+    if (window.Apercu) window.Apercu.poser(octets, { titre: titre, html: htmlApercu(items, titre) });
+    return octets;
+  }
+
+  /* L'APERÇU AVANT L'ENREGISTREMENT. Le même document, rendu en page : sur
+     un téléphone, Safari dépose le fichier dans iCloud Drive sans rien
+     montrer, et il faut sortir de l'application pour savoir ce qu'on vient
+     de télécharger. Demande du 13 septembre 2026. Le rendu suit VERS_WORD
+     item par item, pour que ce qui s'affiche soit ce qui s'enregistre. */
+  var VERS_HTML = {
+    bandeau: function (i) { return "<h1>" + ech(i.t) + "</h1>" + (i.sous ? '<p class="ap-sur">' + ech(i.sous) + "</p>" : ""); },
+    t1: function (i) { return "<h1>" + ech(i.t) + "</h1>"; },
+    h1: function (i) { return "<h1>" + ech(i.t) + "</h1>"; },
+    h2: function (i) { return "<h2>" + ech(i.t) + "</h2>"; },
+    h3: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
+    sur: function (i) { return '<p class="ap-sur">' + ech(i.t) + "</p>"; },
+    p: function (i) { return "<p>" + ech(i.t) + "</p>"; },
+    note: function (i) { return '<p class="ap-note">' + ech(i.t) + "</p>"; },
+    puce: function (i) { return "<ul><li>" + ech(String(i.t || "").replace(/^[-•]\s*/, "")) + "</li></ul>"; },
+    trait: function () { return "<hr>"; },
+    saut: function () { return "<hr>"; },
+    enc: function (i) { return "<p><b>" + ech(i.titre) + "</b></p><p>" + ech(i.t) + "</p>"; },
+    etape: function (i) { return "<h2>" + ech(i.t) + (i.compte ? " · " + ech(i.compte) : "") + "</h2>"; },
+    acte: function (i) { return "<p><b>" + ech(i.n + ". " + i.t + "  [" + i.priorite + "]") + "</b></p>" +
+      '<p class="ap-note">' + ech((i.etat ? i.etat + ", " : "") + i.pourquoi + "  ·  " + i.id) + "</p>"; },
+    interdit: function (i) { return "<p><b>" + ech(i.t) + "</b></p>" +
+      '<p class="ap-note">' + ech(i.pourquoi + "  ·  " + i.id) + "</p>"; },
+    acquis: function (i) { return "<ul><li>" + ech("✓ " + i.t + ", " + i.base) + "</li></ul>"; },
+    table: function (i) {
+      var lignes = [].concat(i.head ? [i.head] : [], i.rows || []);
+      return window.Apercu ? window.Apercu.tableHtml(lignes, !!i.head) : "";
+    },
+  };
+  function htmlApercu(items, titre) {
+    return "<h1>" + ech(titre) + "</h1>" + (items || []).map(function (i) {
+      return VERS_HTML[i.k] ? VERS_HTML[i.k](i) : "";
+    }).join("");
   }
 
   function telecharger(octetsFichier, nom, type) {
+    var vu = window.Apercu ? window.Apercu.pour(octetsFichier) : null;
+    if (vu) {
+      window.Apercu.montrer(vu, nom, function () { enregistrer(octetsFichier, nom, type); });
+      return;
+    }
+    enregistrer(octetsFichier, nom, type);
+  }
+  function enregistrer(octetsFichier, nom, type) {
     var b = new Blob([octetsFichier], { type: type });
     var u = URL.createObjectURL(b);
     var a = document.createElement("a");

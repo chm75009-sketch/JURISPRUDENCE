@@ -13,6 +13,7 @@
      tout le reste, il masque la page tant que l'utilisateur n'est pas identifié.
      Tant qu'aucun utilisateur n'a été créé, il ne fait rien. Il pose aussi le
      bouton Retour du bandeau. Voir docs/DROITS.md. -->
+<script src="apercu.js"></script>
 <script src="droits.js"></script>
 
 <!--
@@ -553,10 +554,29 @@
     feuilles.forEach(function (f, i) {
       entrees.push({ nom: "xl/worksheets/sheet" + (i + 1) + ".xml", contenu: feuilleXml(f.lignes, f.largeurs) });
     });
-    return zip(entrees);
+    var octets = zip(entrees);
+    /* Le classeur garde son rendu lisible : c'est ce que l'apercu montrera. */
+    if (window.Apercu)
+      window.Apercu.poser(octets, { titre: "Le classeur",
+        html: window.Apercu.htmlFeuilles(feuilles) });
+    return octets;
   }
 
-  function telecharger(contenu, nom, type) {
+  /* Rien ne s'enregistre avant d'avoir ete vu. Sur un telephone, Safari
+     depose le fichier dans iCloud Drive sans rien montrer : il faut sortir de
+     l'application pour savoir ce qu'on vient de telecharger. Demande du
+     13 septembre 2026, « je dois pouvoir l'ouvrir d'abord ». L'apercu rend le
+     classeur feuille par feuille, ou les lignes du CSV, et le bouton
+     « Enregistrer » fait seul partir le fichier. */
+  function telecharger(contenu, nom, type, rendu) {
+    var vu = rendu || (window.Apercu ? window.Apercu.pour(contenu) : null);
+    if (vu && window.Apercu) {
+      window.Apercu.montrer(vu, nom, function () { enregistrer(contenu, nom, type); });
+      return;
+    }
+    enregistrer(contenu, nom, type);
+  }
+  function enregistrer(contenu, nom, type) {
     var b = new Blob([contenu], { type: type });
     var u = URL.createObjectURL(b);
     var a = document.createElement("a");
@@ -632,7 +652,8 @@
     var csv = "﻿" + l.map(function (r) {
       return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(";");
     }).join("\r\n");
-    telecharger(csv, nomFichier("csv"), "text/csv;charset=utf-8");
+    telecharger(csv, nomFichier("csv"), "text/csv;charset=utf-8",
+      window.Apercu ? { titre: "Le CSV", html: window.Apercu.tableHtml(l) } : null);
   });
 
   /* ---------------------------------------------------------------- */

@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.25";
+const CACHE = "jurisprudence-12.26";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -91,7 +91,7 @@ const ESSENTIELS = [
      document qu'un agent de contrôle demande sur place. */
   "./registre.html",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
-  "./audit-form.js", "./audit-export.js", "./tableur-export.js", "./feuille-doc.js", "./parcours-deux-temps.js",
+  "./audit-form.js", "./apercu.js", "./audit-export.js", "./tableur-export.js", "./feuille-doc.js", "./parcours-deux-temps.js",
   /* Les documents que l'application rédige elle-même. */
   "./documents-produits.js",
   "./documents-cse.js", "./documents-pse.js", "./documents-discipline.js",
