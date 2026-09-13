@@ -497,6 +497,65 @@
     return t;
   }
   function signataire() { return profil.responsable || "[nom et qualité du signataire]"; }
+
+  /* L'EN-TÊTE DE L'ENTREPRISE, EN HAUT DE CHAQUE DOCUMENT.
+
+     Demande du 12 septembre 2026 : « tous les documents générés doivent
+     comporter les infos figurant sur cette fiche d'accueil, et ça doit être
+     automatique et à chaque changement mise à jour. » Mesuré le 13 septembre
+     sur les vingt-cinq documents de cet écran : tous portaient la
+     dénomination et l'adresse quelque part, onze ne portaient pas le SIRET,
+     et la place de ces mentions changeait d'un document à l'autre, parfois
+     sous le titre, parfois au milieu. L'en-tête est désormais le même
+     partout, en premier, et il suit la fiche.
+
+     Les documents qui portaient déjà ces lignes en tête ne les portent pas
+     deux fois : elles sont retirées avant que l'en-tête ne soit posé. */
+  function lignesIdentite() {
+    var L = [];
+    L.push(profil.denomination || "[dénomination sociale]");
+    if (profil.adresse) L.push(profil.adresse);
+    if (profil.siret) L.push("SIRET " + profil.siret);
+    L.push("Représentée par " + (profil.responsable || "[nom et qualité du représentant légal]"));
+    if (profil.courriel) L.push(profil.courriel);
+    if (effectif) L.push("Effectif : " + effectif + " salarié" + (effectif > 1 ? "s" : ""));
+    L.push("Convention collective : " + (ccn ? ccn.nom + " (IDCC " + ccn.idcc + ")"
+      : (String(profil.conventionCollective || "").trim() || "[convention collective applicable]")));
+    return L;
+  }
+  /* Une ligne de tête est de l'identité si elle répète, à la ponctuation
+     près, ce que la fiche porte déjà. On ne regarde que les premiers blocs :
+     plus bas, « SARL TEC » dans une phrase est du texte, pas un en-tête. */
+  function estIdentite(t) {
+    var s = String(t || "").trim();
+    if (!s) return false;
+    var d = String(profil.denomination || "").trim();
+    if (d && (s === d || s === d + "," || s.indexOf(d + " · ") === 0)) return true;
+    if (profil.adresse && s === String(profil.adresse).trim()) return true;
+    if (profil.siret && (s === "SIRET " + profil.siret || s === profil.siret)) return true;
+    if (/^SIRET\b/.test(s)) return true;
+    if (/^Représentée par /.test(s)) return true;
+    if (profil.courriel && s === String(profil.courriel).trim()) return true;
+    /* Les documents produits par les modules communs posent la même identité
+       avec leurs propres intitulés : sans ces trois lignes, l'en-tête se
+       répétait sous lui-même. Doublon vu à l'écran le 13 septembre 2026 sur
+       l'entretien professionnel. */
+    if (/^Effectif\s*:/.test(s)) return true;
+    if (/^Convention collective\s*:/.test(s)) return true;
+    if (/^\[(adresse|SIRET|dénomination|convention)/i.test(s)) return true;
+    if (/^[\w.+-]+@[\w.-]+\.\w+$/.test(s)) return true;
+    return false;
+  }
+  function avecEnTete(blocs) {
+    var b = (blocs || []).slice();
+    var i = 0;
+    while (i < b.length && i < 10) {
+      if (b[i] && b[i].t !== undefined && estIdentite(b[i].t)) { b.splice(i, 1); continue; }
+      break;
+    }
+    var tete = lignesIdentite().map(function (t) { return { k: "sur", t: t }; });
+    return tete.concat([{ k: "trait" }]).concat(b);
+  }
   function ville() {
     var m = String(profil.adresse || "").match(/\d{5}\s+(.+)$/);
     return m ? m[1].trim() : "[ville]";
@@ -1818,13 +1877,19 @@
     TABLEAU = r.refus ? null : (r.tableau || null);
     REGLES = r.refus ? "" : (r.regles || "");
     if (TABLEAU) {
-      $("d-tableau").innerHTML = tableauHtml(TABLEAU);
+      /* Le registre est un tableau : son en-tête se pose au-dessus de lui,
+         non dans le repli des règles de tenue, sinon le document imprimé
+         commence par une grille sans dire de quelle entreprise elle est. */
+      $("d-tableau").innerHTML =
+        '<div class="feuille fd tete-fiche">' +
+        lignesIdentite().map(function (t) { return '<div class="b-sur">' + ech(t) + "</div>"; }).join("") +
+        '<hr class="b-trait"></div>' + tableauHtml(TABLEAU);
       $("d-tableau").hidden = false;
       $("d-barre-tableau").hidden = false;
       $("d-feuille").innerHTML = '<details class="loi"><summary>Voir les règles de tenue</summary>' + feuilleHtml(r.blocs) + "</details>";
     } else {
       $("d-tableau").hidden = true;
-      $("d-feuille").innerHTML = r.refus ? "" : feuilleHtml(r.blocs);
+      $("d-feuille").innerHTML = r.refus ? "" : feuilleHtml(avecEnTete(r.blocs));
       $("d-barre-tableau").hidden = r.refus || !window.FeuilleDoc.tableaux(r.blocs || []).length;
     }
     $("btn-word").disabled = !!r.refus;
