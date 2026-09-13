@@ -97,6 +97,13 @@
   .etat.ko{background:var(--rouge-clair);color:var(--rouge)}
   .clause .ct{font:600 13px/1.3 system-ui;text-transform:uppercase;letter-spacing:.04em;
     color:var(--vert);margin:0 0 6px;display:block}
+  /* L'article du règlement en cause, nommé avant tout commentaire. */
+  .pt .c p.art{font:600 14.5px/1.4 system-ui;margin:0 0 8px}
+  .pt.rouge .c p.art{color:var(--rouge)}
+  .pt.vert .c p.art{color:var(--vert)}
+  .pt .c p.art.nul{color:var(--encre-3);font-weight:600}
+  blockquote .aq{display:block;font:600 12px/1.3 system-ui;text-transform:uppercase;
+    letter-spacing:.04em;color:var(--encre-3);margin-bottom:4px}
 
   /* ══════ LA VERSION CORRIGÉE, AVEC LES MODIFICATIONS EN ROUGE ══════
      « une proposition de modification, avec en rouge les modifications
@@ -366,6 +373,7 @@
       return;
     }
     analyse = CR.analyser(t);
+    repererArticles(analyse.texte);
     choixInserer = {}; choixSignaler = {};
     analyse.points.forEach(function (p) {
       if (p.etat === CR.ETATS.ABSENT && p.clause && !p.sansObjet) choixInserer[p.id] = true;
@@ -431,8 +439,20 @@
 
     var h = "";
     if (rouges.length) {
+      var articlesEnCause = [];
+      rouges.forEach(function (p) {
+        articlesDe(p).forEach(function (a) { if (articlesEnCause.indexOf(a) === -1) articlesEnCause.push(a); });
+      });
+      /* Dans l'ordre du document, pas dans celui des contrôles : on relit un
+         règlement du premier article au dernier. */
+      articlesEnCause.sort(function (a, b) { return rangArticle(a) - rangArticle(b); });
       h += '<p class="bloc-t r"><span class="pastille"></span>Ce qui ne va pas</p>';
-      h += '<p class="bloc-s">Sous chaque manque, la clause proposée : cochez-la pour qu\'elle entre ' +
+      h += '<p class="bloc-s">' +
+        (articlesEnCause.length
+          ? "Vos articles en cause : " +
+            ech(articlesEnCause.map(function (x) { return x.replace(/^article /, ""); }).join(", ")) + ". "
+          : "") +
+        "Sous chaque manque, la clause proposée : cochez-la pour qu'elle entre " +
         "dans la version corrigée.</p>";
       rouges.forEach(function (p) { h += carte(p); });
     }
@@ -457,6 +477,62 @@
     });
   }
 
+  /* LE NUMÉRO D'ARTICLE, SUR CHAQUE POINT.
+
+     Demande du 13 septembre 2026 : « il faut dire le numéro d'article du
+     règlement intérieur qui ne va pas, ou va bien ». Le module rend la phrase
+     et sa position dans le texte, jamais l'article : celui-ci se retrouve en
+     remontant de la position jusqu'au dernier en-tête d'article rencontré.
+
+     Deux façons de numéroter sont reconnues, « Article 7 » (ou ARTICLE, Art.)
+     et le numéro seul en tête de ligne, « 7.2 ». Un document qui ne numérote
+     rien ne peut rien rendre : la page le dit alors une fois, au lieu de
+     laisser croire à un défaut du contrôle. */
+  var ARTICLES = [];
+  function repererArticles(texte) {
+    ARTICLES = [];
+    var re = /(?:^|\n)[ \t]*(?:(ARTICLE|Article|ARTICLE|Art\.?|ART\.?)[ \t]*(\d+(?:[.\-]\d+)*)|(\d+(?:\.\d+)+)[ \t]*[-–.)]?)[ \t]*/g;
+    var m;
+    while ((m = re.exec(texte)) !== null) {
+      var num = m[2] || m[3];
+      if (!num) continue;
+      ARTICLES.push({ debut: m.index, nom: "article " + num });
+    }
+  }
+  function articleDe(debut) {
+    var trouve = null;
+    for (var i = 0; i < ARTICLES.length; i++) {
+      if (ARTICLES[i].debut <= debut) trouve = ARTICLES[i]; else break;
+    }
+    return trouve ? trouve.nom : null;
+  }
+  /* La place d'un article dans le document, pour les remettre dans l'ordre. */
+  function rangArticle(nom) {
+    for (var i = 0; i < ARTICLES.length; i++) if (ARTICLES[i].nom === nom) return ARTICLES[i].debut;
+    return Number.MAX_VALUE;
+  }
+  /* Les articles d'un point, sans doublon et dans l'ordre du document. */
+  function articlesDe(p) {
+    var vus = {}, out = [];
+    (p.passages || []).forEach(function (q) {
+      if (typeof q.debut !== "number") return;
+      var a = articleDe(q.debut);
+      if (a && !vus[a]) { vus[a] = true; out.push(a); }
+    });
+    out.sort(function (a, b) { return rangArticle(a) - rangArticle(b); });
+    return out;
+  }
+  /* « articles 7.4, 13 et 26 », non « article 7.4, article 13, article 26 » :
+     c'est une phrase, pas une concaténation. */
+  function phraseArticles(p) {
+    var a = articlesDe(p).map(function (x) { return x.replace(/^article /, ""); });
+    if (!a.length) return null;
+    var liste = a.length === 1 ? a[0] : a.slice(0, -1).join(", ") + " et " + a[a.length - 1];
+    var mot = (a.length === 1 ? "article " : "articles ") + liste;
+    if (estRouge(p)) return "En cause dans votre règlement : " + mot + ".";
+    return "Traité par " + (a.length === 1 ? "votre " : "vos ") + mot + ".";
+  }
+
   function carte(p) {
     var h = '<div class="pt ' + (estRouge(p) ? "rouge" : (estVert(p) ? "vert" : "")) +
       '"><div class="tt"><span class="etat ' + classeEtat(p) + '">' + ech(motEtat(p)) + "</span>" +
@@ -465,12 +541,23 @@
       p.fondement.map(function (a) { return ech(CR.article(a)); }).join(", ") + "</span></span>" +
       "<span></span></div><div class=\"c\">";
 
+    /* L'article en cause, tout de suite après l'objet : c'est lui qu'on va
+       ouvrir dans le document, pas le motif du contrôle. */
+    var art = phraseArticles(p);
+    if (art) h += '<p class="art">' + ech(art) + "</p>";
+    else if (p.etat === CR.ETATS.ABSENT && !p.prohibe && !p.sansObjet)
+      h += '<p class="art nul">' + (ARTICLES.length
+        ? "Aucun article de votre règlement ne traite cette matière."
+        : "Votre document ne porte pas de numéros d'article : le contrôle ne peut pas en citer.") + "</p>";
+
     h += '<p class="exige">' + ech(p.exige) + "</p>";
     h += "<p>" + ech(p.motif) + "</p>";
 
     if (p.passages && p.passages.length) {
       p.passages.slice(0, 6).forEach(function (q) {
-        h += "<blockquote>" + ech(q.texte) +
+        var a = typeof q.debut === "number" ? articleDe(q.debut) : null;
+        h += "<blockquote>" + (a ? '<span class="aq">' + ech(a.charAt(0).toUpperCase() + a.slice(1)) + "</span>" : "") +
+          ech(q.texte) +
           (q.marques && q.marques.length ? '<span class="m">repéré sur : ' + ech(q.marques.join(", ")) + "</span>" : "") +
           "</blockquote>";
       });
@@ -607,7 +694,13 @@
       items.push({ k: "trait" }, { k: "h1", t: "Passages à contrôler avant diffusion" });
       c.notes.forEach(function (n) {
         items.push({ k: "h2", t: n.objet });
-        items.push({ k: "note", t: n.id + " · " + n.fondement.map(CR.article).join(", ") });
+        /* L'article du règlement en cause, dans le fichier comme à l'écran :
+           celui qui le relit doit savoir quoi ouvrir. */
+        var pn = null;
+        analyse.points.forEach(function (x) { if (x.id === n.id) pn = x; });
+        var an = pn ? articlesDe(pn) : [];
+        items.push({ k: "note", t: (an.length ? "Votre " + an.join(", ") + " · " : "") +
+          n.id + " · " + n.fondement.map(CR.article).join(", ") });
         items.push({ k: "p", t: "Ce que le juge vérifie : " + n.critere });
         items.push({ k: "p", t: "Ce qu'il faut faire : " + n.remplacement });
         n.passages.forEach(function (p) { items.push({ k: "puce", t: "« " + p + " »" }); });
