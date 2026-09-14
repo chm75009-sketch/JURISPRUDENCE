@@ -1223,8 +1223,19 @@
     return m || BUREAU;
   }
 
+  /* Un métier peut être ajouté depuis un fichier séparé : le transport
+     routier de marchandises vit dans duerp-transport.js, parce qu'il porte à
+     lui seul sept unités de travail et qu'il grossira. Il passe DEVANT les
+     autres dans la reconnaissance : une entreprise de transport avec un
+     entrepôt est d'abord un transporteur, et l'IDCC 16 leur est commun. */
+  function ajouter(metier) {
+    if (!metier || !metier.cle) return;
+    for (var i = 0; i < METIERS.length; i++) if (METIERS[i].cle === metier.cle) { METIERS[i] = metier; return; }
+    METIERS.unshift(metier);
+  }
+
   window.DuerpMetiers = {
     GRAVITE: GRAVITE, FREQUENCE: FREQUENCE, priorite: priorite,
-    METIERS: METIERS, deduire: deduire, pour: pour,
+    METIERS: METIERS, deduire: deduire, pour: pour, ajouter: ajouter,
   };
 })();

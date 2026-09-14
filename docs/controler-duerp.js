@@ -365,6 +365,161 @@
     if (l) l.innerHTML = html ? '<div class="avis ' + (classe || "info") + '">' + html + "</div>" : "";
   }
 
+  /* ══════════════════════════════════════════════════════════════════════
+     CE QUE LE DOCUMENT DÉPOSÉ CONTIENT, ET CE QU'IL N'A PAS
+
+     Demande du 14 septembre 2026 : « l'application fera l'analyse détaillée
+     avec un compte rendu ». Jusqu'ici, déposer un document unique de
+     quarante-quatre pages ne produisait qu'une liste de risques manquants :
+     rien sur ce que le document dit, rien sur sa date, rien sur les mentions
+     que le code du travail impose de porter. On lui répondait par un
+     catalogue, pas par une lecture.
+
+     Les huit points ci-dessous sont ceux que les articles lus à la source
+     imposent au document lui-même. Le repérage reste lexical : trouver un
+     mot ne prouve pas que la mention est bien rédigée, et ne pas le trouver
+     ne prouve pas qu'elle manque. C'est écrit à l'écran, comme partout
+     ailleurs dans cette application.                                      */
+  var MENTIONS = [
+    { cle: "unites", nom: "Inventaire par unité de travail",
+      fond: "R. 4121-1", m: "unite de travail|unites de travail|par unite|poste de travail",
+      quoi: "L'évaluation comporte un inventaire des risques par unité de travail." },
+    { cle: "cotation", nom: "Cotation ou hiérarchisation des risques",
+      fond: "aucune obligation de forme", m: "gravite|frequence|probabilite|criticite|cotation|priorite|niveau de risque",
+      quoi: "Classer les risques n'est imposé par aucun texte, mais sans classement le programme d'actions n'a pas d'ordre." },
+    { cle: "mesures", nom: "Mesures de prévention existantes et à prendre",
+      fond: "L. 4121-2", m: "mesure de prevention|mesures de prevention|action de prevention|moyens de prevention|equipement de protection",
+      quoi: "Les mesures répondent aux neuf principes généraux de prévention." },
+    { cle: "plan", nom: "Programme annuel ou liste d'actions",
+      fond: "L. 4121-3-1, III", m: "programme annuel|plan d action|plan d actions|programme de prevention|actions a mener|echeancier",
+      quoi: "À partir de cinquante salariés, les résultats débouchent sur un programme annuel de prévention ; en dessous, sur une liste d'actions consignée dans le document." },
+    { cle: "responsables", nom: "Responsable et échéance par action",
+      fond: "L. 4121-3-1, III", m: "responsable|pilote|echeance|delai de realisation|date de realisation|cout estime",
+      quoi: "Le programme précise pour chaque mesure ses conditions d'exécution, l'indicateur de résultat, le coût estimé et la personne qui en répond." },
+    { cle: "maj", nom: "Mise à jour du document",
+      fond: "R. 4121-2", m: "mise a jour|mis a jour|actualisation|revision annuelle|version du",
+      quoi: "Mise à jour au moins chaque année à partir de onze salariés, et à chaque aménagement important ou information nouvelle." },
+    { cle: "acces", nom: "Mise à disposition et avis d'affichage",
+      fond: "R. 4121-4", m: "tenu a la disposition|mise a disposition|avis indiquant les modalites|affiche|consultation du document",
+      quoi: "Le document est tenu à la disposition des travailleurs et des personnes désignées ; un avis affiché dit comment y accéder." },
+    { cle: "spst", nom: "Transmission au service de prévention et de santé au travail",
+      fond: "L. 4121-3-1, VI", m: "service de prevention et de sante au travail|medecine du travail|spst|sist|transmis au service",
+      quoi: "Le document est transmis au service de prévention et de santé au travail à chaque mise à jour." },
+  ];
+
+  /* LA DATE DU DOCUMENT. Un millésime trouvé n'importe où ne prouve rien : le
+     document unique de TEC, rédigé en 2016, cite 2026 dans un renvoi de texte
+     et paraissait ainsi à jour. On cherche donc les dates complètes, jour,
+     mois, année, et la plus récente fait foi ; les millésimes isolés ne
+     servent qu'à défaut, et sont donnés comme tels. Mesuré le 14 septembre
+     2026. */
+  function datesDocument(t) {
+    var jours = [], m;
+    var re = /\b(0?[1-9]|[12]\d|3[01])[\/.\-](0?[1-9]|1[0-2])[\/.\-](19[89]\d|20[0-4]\d)\b/g;
+    while ((m = re.exec(t)) !== null) {
+      var iso = m[3] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2);
+      if (jours.indexOf(iso) < 0) jours.push(iso);
+    }
+    jours.sort();
+    var annees = [], a;
+    var ra = /\b(19[89]\d|20[0-4]\d)\b/g;
+    while ((a = ra.exec(t)) !== null) if (annees.indexOf(a[1]) < 0) annees.push(a[1]);
+    annees.sort();
+    return { jours: jours, annees: annees,
+      derniere: jours.length ? Number(jours[jours.length - 1].slice(0, 4))
+                             : (annees.length ? Number(annees[annees.length - 1]) : null),
+      precise: jours.length > 0 };
+  }
+  function analyseMentions(t) {
+    var n = normaliser(t);
+    return MENTIONS.map(function (x) {
+      var vu = null;
+      (x.m || "").split("|").forEach(function (mot) {
+        if (vu) return;
+        mot = normaliser(mot);
+        if (mot.length < 4) return;
+        var k = n.indexOf(mot);
+        if (k >= 0) vu = t.substr(Math.max(0, k - 70), 200).replace(/\s+/g, " ").trim();
+      });
+      return { x: x, vu: vu };
+    });
+  }
+
+  function analyseHtml(t) {
+    var mentions = analyseMentions(t);
+    var absentes = mentions.filter(function (m) { return !m.vu; });
+    var dates = datesDocument(t);
+    var derniere = dates.derniere;
+    var anneeCourante = new Date().getFullYear();
+    var vieux = derniere !== null && (anneeCourante - derniere) >= 1;
+    var eff = effectif();
+
+    var manques = 0, total = 0;
+    M.unites.forEach(function (u) {
+      u.risques.forEach(function (r, i) { total++; if (!E.trouve[idRisque(u, i)]) manques++; });
+    });
+    var unitesVues = M.unites.filter(function (u) {
+      return u.risques.some(function (r, i) { return E.trouve[idRisque(u, i)]; });
+    });
+
+    var rouge = manques + absentes.length + (vieux ? 1 : 0);
+    var h = '<div class="verdict">' +
+      '<div class="v ko' + (rouge ? "" : " vide") + '"><span class="n">' + rouge + "</span>" +
+      '<span class="q">' + (rouge ? "ce qui ne va pas" : "rien à corriger") + "</span>" +
+      '<span class="d">' +
+        (absentes.length ? absentes.length + " mention" + (absentes.length > 1 ? "s" : "") + " du code du travail introuvable" + (absentes.length > 1 ? "s" : "") + ". " : "") +
+        (manques ? manques + " risque" + (manques > 1 ? "s" : "") + " du métier non traité" + (manques > 1 ? "s" : "") + ". " : "") +
+        (vieux ? "Document daté de " + derniere + "." : "") +
+      "</span></div>" +
+      '<div class="v ok"><span class="n">' + (total - manques + (MENTIONS.length - absentes.length)) + "</span>" +
+      '<span class="q">ce qui va</span>' +
+      '<span class="d">' + (MENTIONS.length - absentes.length) + " mention" +
+        ((MENTIONS.length - absentes.length) > 1 ? "s" : "") + " sur " + MENTIONS.length + " et " +
+        (total - manques) + " risque" + ((total - manques) > 1 ? "s" : "") + " sur " + total +
+        " se retrouvent dans votre document.</span></div></div>";
+
+    h += '<p class="bloc-t r"><span class="pastille"></span>La tenue du document</p>';
+    if (derniere !== null) {
+      var quoi = dates.precise
+        ? "Dates portées par le document : " + ech(dates.jours.map(function (j) { return dateFr(j); }).join(", ")) + "."
+        : "Aucune date complète. Millésimes cités : " + ech(dates.annees.join(", ")) + ".";
+      h += '<div class="avis ' + (vieux ? "non" : "info") + '"><b>' + quoi + "</b>" +
+        (vieux
+          ? "La plus récente remonte à " + derniere + ", soit " + (anneeCourante - derniere) +
+            " an" + ((anneeCourante - derniere) > 1 ? "s" : "") +
+            ". La mise à jour est due au moins chaque année à partir de onze salariés" +
+            (eff !== null ? ", et votre effectif est de " + eff + " salariés" : "") +
+            " (R. 4121-2). Un document unique qui n'a pas été mis à jour ne protège personne, et son absence de mise à jour est punie de l'amende prévue pour les contraventions de cinquième classe (R. 4741-1)."
+          : "La plus récente est de " + derniere + ".") + "</div>";
+    } else {
+      h += '<div class="avis att"><b>Aucune date n\'a été trouvée dans le document.</b>' +
+        "Un document unique sans date d'élaboration ni de mise à jour ne permet pas de vérifier la mise à jour annuelle (R. 4121-2).</div>";
+    }
+
+    h += '<p class="bloc-t ' + (absentes.length ? "r" : "v") + '"><span class="pastille"></span>' +
+      "Les mentions que le code du travail impose</p>";
+    mentions.forEach(function (m) {
+      h += '<div class="ligne' + (m.vu ? " deja" : "") + '"><span class="nom">' +
+        '<b class="etat ' + (m.vu ? "ok" : "ko") + '">' + (m.vu ? "présent" : "introuvable") + "</b> " +
+        ech(m.x.nom) + '<span class="du">' + ech(m.x.quoi) + " (" + ech(m.x.fond) + ")" +
+        (m.vu ? '</span><span class="du">Dans votre document : « ' + ech(m.vu) + ' »' : "") +
+        "</span></span></div>";
+    });
+
+    h += '<p class="bloc-t ' + (unitesVues.length === M.unites.length ? "v" : "r") + '"><span class="pastille"></span>' +
+      "Les unités de travail de votre métier</p>" +
+      '<p class="bloc-s">Métier retenu d\'après votre fiche : ' + ech(M.nom) + ". " +
+      unitesVues.length + " unité" + (unitesVues.length > 1 ? "s" : "") + " sur " + M.unites.length +
+      " trouve" + (unitesVues.length > 1 ? "nt" : "") + " un écho dans votre document.</p>";
+    M.unites.forEach(function (u) {
+      var vues = u.risques.filter(function (r, i) { return E.trouve[idRisque(u, i)]; }).length;
+      h += '<div class="ligne' + (vues ? " deja" : "") + '"><span class="nom">' +
+        '<b class="etat ' + (vues ? "ok" : "ko") + '">' + vues + "/" + u.risques.length + "</b> " +
+        ech(u.nom) + '<span class="du">' + ech(u.qui) + "</span></span></div>";
+    });
+    return h;
+  }
+
   function diagnosticHtml() {
     var manques = 0, total = 0, h = "";
     M.unites.forEach(function (u) {
@@ -422,8 +577,56 @@
     } else {
       h += "<h3>Compléments</h3><p>Aucun complément retenu.</p>";
     }
-    h += tenueHtml(groupes.length + 2) + signatureHtml();
+    h += tenueHtml(groupes.length + 2) + signatureHtml() + compteRenduHtml();
     return h;
+  }
+
+  /* LE COMPTE RENDU, À LA FIN. Ce qui a été trouvé, ce qui a été ajouté, ce
+     qui reste à faire. Demande du 14 septembre 2026 : l'analyse détaillée
+     « avec un compte rendu ». Il ferme l'écran et le fichier Word : celui qui
+     rouvre le document trois mois plus tard doit retrouver l'essentiel sans
+     revenir à l'application. */
+  function compteRendu() {
+    var dates = datesDocument(E.depot || "");
+    var mentions = analyseMentions(E.depot || "");
+    var absentes = mentions.filter(function (m) { return !m.vu; });
+    var groupes = inventaire(function (id) { return E.ins[id] !== false && (E.ins[id] || !E.trouve[id]); });
+    var ajoutes = 0;
+    groupes.forEach(function (g) { ajoutes += g.liste.length; });
+    var total = 0, trouves = 0;
+    M.unites.forEach(function (u) {
+      u.risques.forEach(function (r, i) { total++; if (E.trouve[idRisque(u, i)]) trouves++; });
+    });
+    var an = new Date().getFullYear();
+    var L = [];
+    L.push("Document déposé : " + (dates.derniere ? "daté de " + dates.derniere : "sans date trouvée") +
+      (dates.derniere && (an - dates.derniere) >= 1
+        ? ", soit " + (an - dates.derniere) + " an" + ((an - dates.derniere) > 1 ? "s" : "") + " sans mise à jour visible" : "") + ".");
+    L.push(trouves + " risque" + (trouves > 1 ? "s" : "") + " sur " + total + " du métier « " + M.nom +
+      " » trouvent un écho dans votre document.");
+    L.push(absentes.length
+      ? absentes.length + " mention" + (absentes.length > 1 ? "s" : "") + " imposée" + (absentes.length > 1 ? "s" : "") +
+        " par le code du travail n'" + (absentes.length > 1 ? "ont" : "a") + " pas été trouvée" + (absentes.length > 1 ? "s" : "") +
+        " : " + absentes.map(function (m) { return m.x.nom.toLowerCase(); }).join(", ") + "."
+      : "Les huit mentions imposées par le code du travail se retrouvent dans votre document.");
+    L.push(ajoutes + " risque" + (ajoutes > 1 ? "s" : "") + " ajouté" + (ajoutes > 1 ? "s" : "") +
+      " ci-dessus, avec leurs mesures, un responsable et une échéance.");
+    return L;
+  }
+  function compteRenduHtml() {
+    var eff = effectif();
+    return '<div class="cr"><h3>Le compte rendu</h3><ul>' +
+      compteRendu().map(function (l) { return "<li>" + ech(l) + "</li>"; }).join("") +
+      "</ul>" +
+      '<p class="suite"><b>Ce qui reste à faire, et dans cet ordre.</b> Reprendre poste par poste les ' +
+      "risques ajoutés, corriger les cotations qui ne correspondent pas à votre réalité, dater et " +
+      "signer le document" +
+      (eff !== null && eff >= 50
+        ? ", en tirer le programme annuel de prévention que votre effectif de " + eff + " salariés impose (L. 4121-3-1, III)"
+        : ", y consigner la liste des actions de prévention (L. 4121-3-1, III)") +
+      ", consulter le comité social et économique s'il existe (L. 4121-3), transmettre la nouvelle " +
+      "version au service de prévention et de santé au travail (L. 4121-3-1, VI), et afficher l'avis " +
+      "d'accès au même emplacement que le règlement intérieur (R. 4121-4).</p></div>";
   }
 
   function corrigeItems() {
@@ -449,6 +652,19 @@
     tenueItems(groupes.length + 2, items);
     items.push({ k: "p", t: "Fait à " + ou("etablissement", "lieu") + ", le " + dateFr(aujourdhui) + "." });
     items.push({ k: "p", t: ou("responsable", "responsable") + ", signature :" });
+    /* Le compte rendu ferme le fichier comme il ferme l'écran. */
+    items.push({ k: "trait" }, { k: "h1", t: "Le compte rendu" });
+    compteRendu().forEach(function (l) { items.push({ k: "puce", t: l }); });
+    var eff2 = effectif();
+    items.push({ k: "p", t: "Ce qui reste à faire, et dans cet ordre. Reprendre poste par poste les " +
+      "risques ajoutés, corriger les cotations qui ne correspondent pas à votre réalité, dater et signer " +
+      "le document" +
+      (eff2 !== null && eff2 >= 50
+        ? ", en tirer le programme annuel de prévention que votre effectif de " + eff2 + " salariés impose (L. 4121-3-1, III)"
+        : ", y consigner la liste des actions de prévention (L. 4121-3-1, III)") +
+      ", consulter le comité social et économique s'il existe (L. 4121-3), transmettre la nouvelle version " +
+      "au service de prévention et de santé au travail (L. 4121-3-1, VI), et afficher l'avis d'accès au " +
+      "même emplacement que le règlement intérieur (R. 4121-4)." });
     items.push({ k: "note", t: "Textes : " + TEXTES.map(function (t) { return t.n + " (" + t.id + ")"; }).join(", ") + " du code du travail, " + LU + "." });
     return items;
   }
@@ -456,7 +672,12 @@
   function rendreControle() {
     var diag = $("#diagnostic"), corr = $("#corrige");
     if (!E.depot) { diag.innerHTML = ""; corr.hidden = true; return; }
-    diag.innerHTML = diagnosticHtml();
+    /* L'analyse du document déposé passe DEVANT la liste des risques à
+       ajouter : on dit d'abord ce que le document contient et ce qui lui
+       manque, on propose ensuite. Demande du 14 septembre 2026. */
+    diag.innerHTML = analyseHtml(E.depot) +
+      '<p class="bloc-t r"><span class="pastille"></span>Les risques à ajouter</p>' +
+      diagnosticHtml();
     diag.querySelectorAll("[data-ins]").forEach(function (i) {
       i.addEventListener("change", function () {
         E.ins[i.getAttribute("data-ins")] = i.checked; garder();
