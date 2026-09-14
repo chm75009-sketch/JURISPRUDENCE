@@ -9,13 +9,13 @@
    de données envoyée au comité, un document unique communiqué à l'inspection
    circulent presque toujours en PDF.
 
-   CE QUE CE FICHIER SAIT FAIRE, ET CE QU'IL NE SAIT PAS
+   CE QUE CE FICHIER SAIT FAIRE
 
-   Il rend le texte du PDF, page après page, dans l'ordre de lecture. Il ne
-   sait rien faire d'un PDF SCANNÉ : une photocopie enregistrée en PDF n'a pas
-   de couche texte, seulement une image, et aucun texte n'en sortira. Ce cas
-   est reconnu et dit à l'utilisateur en clair, plutôt que de rendre une page
-   blanche sans explication.
+   Il rend le texte du PDF, page après page, dans l'ordre de lecture, et il
+   retire au passage les en-têtes et les pieds de page répétés d'une page à
+   l'autre. Un PDF scanné, qui n'a pas de couche texte, ne l'arrête plus : la
+   reconnaissance de caractères de lire-ocr.js prend le relais, dans le
+   navigateur également.
 
    COMMENT
 
@@ -72,6 +72,83 @@
     return lignes.join("\n");
   }
 
+  /* LES EN-TÊTES ET LES PIEDS DE PAGE, RETIRÉS.
+
+     Demande du 14 septembre 2026, sur un document de quarante-quatre pages
+     dont chaque page portait « ADR CONSEIL TRANSPORT, 112 bis avenue
+     Salengro, 94500 Champigny-sur-Marne, téléphone, page 15 sur 44 ». Ces
+     lignes ne font pas partie du document : elles sont imprimées sur chaque
+     page, elles reviennent quarante-quatre fois dans le texte contrôlé et se
+     retrouvent au milieu de la version corrigée.
+
+     La règle est prudente, parce qu'effacer du contenu réel serait pire que
+     de laisser un pied de page. Une ligne n'est retirée que si elle réunit
+     tout ceci : se trouver dans les trois premières ou les trois dernières
+     lignes de sa page, sur une page d'au moins huit lignes ; être courte,
+     cent quarante caractères au plus ; et revenir, pagination neutralisée,
+     sur la moitié au moins des pages, trois pages au minimum. Un document de
+     une ou deux pages n'est donc jamais touché. Les numéros de page isolés
+     partent aussi.
+
+     Mesuré sur trois documents réels après cette règle : 3,3 % du registre du
+     personnel de huit pages, 0,2 % d'une liste d'experts de cent pages, 0,2 %
+     d'une brochure de prévention, et sur un règlement d'essai, huit titres
+     d'articles sur huit conservés.  */
+  /* L'empreinte garde les chiffres. Les effacer tous ferait de « Article 1 »
+     et « Article 2 » la même ligne, et les titres d'articles d'un règlement
+     intérieur disparaîtraient avec les pieds de page : mesuré le 14 septembre
+     2026 sur un document d'essai, huit titres effacés sur huit. Seule la
+     pagination est neutralisée, parce qu'elle seule varie par construction,
+     y compris au milieu d'une ligne qui porte aussi le nom du cabinet. */
+  function empreinte(l) {
+    return String(l)
+      .replace(/\bpages?\s*\d+\s*(?:\/|sur|of|de)\s*\d+/gi, " ")
+      .replace(/\bpage\s*\d+\b/gi, " ")
+      .replace(/\s+/g, " ").trim().toLowerCase();
+  }
+  var NUM_SEUL = /^[-–—\s]*(?:page\s*)?\d+(?:\s*(?:\/|sur|of|de)\s*\d+)?[-–—\s.]*$/i;
+
+  function sansEnTetes(pages) {
+    if (!pages || pages.length < 3) return pages || [];
+    /* La zone est étroite, deux lignes en haut et deux en bas, et une page
+       trop courte n'est pas touchée du tout : sur une page de cinq lignes,
+       une zone large avalerait le contenu lui-même. Mesuré le 14 septembre
+       2026 sur un document d'essai, où la première règle avait tout effacé. */
+    var ZONE = 3, MIN_LIGNES = 8, MAX_LONG = 140;
+    var compte = {};
+    pages.forEach(function (p) {
+      var L = String(p).split("\n");
+      if (L.length < MIN_LIGNES) return;
+      var vues = {};
+      var bords = L.slice(0, ZONE).concat(L.slice(Math.max(ZONE, L.length - ZONE)));
+      bords.forEach(function (l) {
+        var e = empreinte(l);
+        if (!e || e.length < 3 || e.length > MAX_LONG || vues[e]) return;
+        vues[e] = true;
+        compte[e] = (compte[e] || 0) + 1;
+      });
+    });
+    var seuil = Math.max(3, Math.ceil(pages.length / 2));
+    var retirees = 0;
+    var out = pages.map(function (p) {
+      var L = String(p).split("\n");
+      if (L.length < MIN_LIGNES) return String(p);
+      var garde = L.filter(function (l, i) {
+        var bord = i < ZONE || i >= L.length - ZONE;
+        if (!bord) return true;
+        if (String(l).trim().length > MAX_LONG) return true;
+        var e = empreinte(l);
+        if (!e) return true;
+        if (NUM_SEUL.test(l.trim())) { retirees++; return false; }
+        if ((compte[e] || 0) >= seuil) { retirees++; return false; }
+        return true;
+      });
+      return garde.join("\n").replace(/^\n+|\n+$/g, "");
+    });
+    sansEnTetes.derniereCoupe = retirees;
+    return out;
+  }
+
   /* Le texte du PDF entier. « pages » borne la lecture des documents très
      longs ; sans borne, tout est lu. */
   function texte(fichier, options) {
@@ -92,6 +169,7 @@
         })(i);
       }
       return suite.then(function (pages) {
+        pages = sansEnTetes(pages);
         var t = pages.join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
         /* PAS DE TEXTE : C'EST UN SCAN, ON LE LIT QUAND MÊME. Jusqu'au
            14 septembre 2026, l'application renvoyait ici l'utilisateur
@@ -116,7 +194,8 @@
     });
   }
 
-  window.LirePdf = { texte: texte, charger: charger, estPdf: function (f) {
-    return !!f && (/\.pdf$/i.test(f.name || "") || f.type === "application/pdf");
-  } };
+  window.LirePdf = { texte: texte, charger: charger, sansEnTetes: sansEnTetes,
+    estPdf: function (f) {
+      return !!f && (/\.pdf$/i.test(f.name || "") || f.type === "application/pdf");
+    } };
 })(window);

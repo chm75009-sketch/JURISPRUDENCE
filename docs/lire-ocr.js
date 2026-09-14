@@ -143,6 +143,9 @@
       return suite;
     }).then(function (pages) {
       if (ouvrier) ouvrier.terminate();
+      /* Les en-têtes et pieds de page se retirent ici aussi : un scan porte
+         les mêmes mentions répétées que l'original. */
+      if (window.LirePdf && window.LirePdf.sansEnTetes) pages = window.LirePdf.sansEnTetes(pages);
       var t = pages.join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
       dire(pages.length, pages.length, "Terminé");
       if (!t) throw new Error("La reconnaissance n'a rien pu lire sur ce document : " +
