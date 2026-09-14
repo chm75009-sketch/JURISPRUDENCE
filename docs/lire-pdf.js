@@ -93,9 +93,24 @@
       }
       return suite.then(function (pages) {
         var t = pages.join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
-        if (!t) throw new Error(
-          "Ce PDF ne contient pas de texte : c'est un document scanné, une image. " +
-          "Déposez la version d'origine (Word, Excel) ou collez le texte.");
+        /* PAS DE TEXTE : C'EST UN SCAN, ON LE LIT QUAND MÊME. Jusqu'au
+           14 septembre 2026, l'application renvoyait ici l'utilisateur
+           chercher ailleurs « la version d'origine ». C'était lui rendre son
+           problème : la moitié des pièces d'un dossier social sont des scans.
+           La reconnaissance de caractères prend le relais, dans le navigateur,
+           sans que rien ne sorte du poste. */
+        if (!t) {
+          if (!window.LireOCR) throw new Error(
+            "Ce PDF ne contient pas de texte : c'est un document scanné, une image, " +
+            "et le module de reconnaissance n'est pas chargé sur cet écran.");
+          return window.LireOCR.texte(fichier, {
+            surProgres: options && options.surProgres,
+            pages: (options && options.pages) || 20,
+          }).then(function (t2) {
+            if (options && options.surOCR) options.surOCR(t2);
+            return t2;
+          });
+        }
         return t;
       });
     });
