@@ -36,13 +36,22 @@ place de l'utilisatrice, sans que rien dans le dossier ne l'indique. Quand la de
 et une pièce ne se concilient pas, on écrit ce que la pièce dit et on signale l'écart
 en une phrase ; on ne tranche pas.
 
-## Contrôle avant chaque envoi — cinq questions, dans cet ordre
+## Contrôle avant chaque envoi - six questions, dans cet ordre
 
 Ce bloc existe parce que les consignes qui suivent sont connues et enfreintes
 quand même. Une intention ne tient pas ; une question à laquelle on répond par
 oui ou non, si. Elles se posent AVANT d'envoyer, sur le message écrit, pas sur
 celui qu'on avait l'intention d'écrire.
 
+0. **Est-ce présentable ?** Posée le 14 septembre 2026 : « je t'ai toujours dit
+   de ne pas faire un travail bâclé, la présentation est capitale, éliminatoire ».
+   Elle passe avant toutes les autres parce qu'elle décide seule du sort de ce
+   qui est livré : un contenu juste dans une présentation sale est refusé, et
+   il a raison de l'être. Un écran, un document, un tableau, une réponse se
+   regardent avant de partir, sur un téléphone, comme les lira l'utilisatrice.
+   Du texte illisible, des colonnes mêlées, des caractères à l'envers, un
+   en-tête au milieu d'une phrase : rien de tout cela ne s'envoie, et
+   l'expliquer ensuite ne répare rien.
 1. **Combien de phrases ?** Plus de trois, et aucune note n'a été demandée :
    couper. Un titre, une puce, un tableau non demandés : supprimer.
 2. **La question posée a-t-elle sa réponse dans la première phrase ?** Sinon,
@@ -64,7 +73,7 @@ celui qu'on avait l'intention d'écrire.
 5. **Ce que j'avance sur une pièce : est-ce cité, page et phrase ?** Et
    ai-je cherché ce qui, dans la pièce, dit le contraire ?
 
-Quand une de ces cinq questions a été manquée, la faute s'inscrit datée dans ce
+Quand une de ces six questions a été manquée, la faute s'inscrit datée dans ce
 fichier, à la section qu'elle concerne — comme les cas du 26 août, du 28 août
 et du 31 août 2026. C'est ce qui la rend présente à la session suivante, ce
 fichier étant relu à chaque démarrage. Une faute non écrite est une faute qui
@@ -119,6 +128,25 @@ Le contrôle sur tout écran, tout document produit, toute page livrée : **est-
 lisible sur un téléphone ?** Pas lisible en principe, lisible à l'écran, essayé.
 Un tableau ne s'affiche pas en texte à chasse fixe : il se rend en tableau, ou
 il se télécharge en classeur et ne s'affiche pas du tout.
+
+**La présentation est éliminatoire.** Posé le 14 septembre 2026, dans ces
+termes : « je t'ai toujours dit de ne pas faire un travail bâclé, la
+présentation est capitale, éliminatoire ». Ce n'est pas un critère parmi
+d'autres qu'on pondère : c'est celui qui écarte le travail avant qu'on en lise
+le contenu. Un document sale ne se rattrape pas par la justesse de ce qu'il
+dit, et un écran illisible ne se rattrape pas par la richesse de ce qu'il
+contient. Ce qui n'est pas regardable ne s'envoie pas, ne se publie pas, ne se
+livre pas : on le refait.
+
+Cas mesuré le 14 septembre 2026 : le document unique de TEC, déposé en PDF
+scanné, est ressorti en « version corrigée » avec des pages lues à l'envers
+(« pans 72 ofeq LE6P' LE TT 90 »), les colonnes du tableau mêlées, l'en-tête
+du cabinet rédacteur au milieu des phrases, et tout cela recopié sous le nom
+de l'entreprise. Trois causes, toutes évitables : les pages retournées
+n'étaient pas redressées, les pieds de page n'étaient retirés que s'ils
+étaient identiques au caractère près, et surtout un texte issu d'une
+reconnaissance de caractères n'aurait jamais dû être reproduit tel quel dans
+un document produit au nom du client. Personne n'avait regardé le résultat.
 
 Cas mesuré le 7 septembre 2026 : la base de données économiques et sociales,
 ouverte par le « non » du parcours, sortait dans une zone de texte à chasse

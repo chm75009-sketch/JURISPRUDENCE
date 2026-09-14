@@ -54,6 +54,53 @@
      lettres se confondent ; trop haute, le téléphone peine. Deux fois la
      taille naturelle est le compromis retenu, avec un plafond en pixels pour
      ne pas dépasser ce qu'un canvas de téléphone accepte. */
+  /* UNE PAGE À L'ENVERS SE LIT À L'ENVERS. Relevé le 14 septembre 2026 sur un
+     document unique de quarante-quatre pages : plusieurs pages avaient été
+     numérisées retournées, et la reconnaissance en a tiré « pans 72 ofeq
+     LE6P' LE TT 90 », c'est-à-dire le pied de page lu à l'envers, recopié tel
+     quel dans la version corrigée.
+
+     Le moteur ne redresse pas tout seul. On mesure donc sa confiance : en
+     dessous du seuil, la page est retournée de cent quatre-vingts degrés et
+     relue, et le meilleur des deux l'emporte. Une page en largeur, souvent un
+     tableau scanné de travers, est en outre essayée à quatre-vingt-dix et à
+     deux cent soixante-dix degrés. */
+  function tourner(toile, angle) {
+    if (!angle) return toile;
+    var t2 = document.createElement("canvas");
+    var droit = angle === 90 || angle === 270;
+    t2.width = droit ? toile.height : toile.width;
+    t2.height = droit ? toile.width : toile.height;
+    var c = t2.getContext("2d");
+    c.fillStyle = "#fff"; c.fillRect(0, 0, t2.width, t2.height);
+    c.translate(t2.width / 2, t2.height / 2);
+    c.rotate(angle * Math.PI / 180);
+    c.drawImage(toile, -toile.width / 2, -toile.height / 2);
+    return t2;
+  }
+
+  var SEUIL_CONFIANCE = 70;
+  function lirePage(ouvrier, toile) {
+    return ouvrier.recognize(toile).then(function (r) {
+      var best = { texte: (r && r.data && r.data.text) || "", conf: (r && r.data && r.data.confidence) || 0 };
+      if (best.conf >= SEUIL_CONFIANCE) return best;
+      var angles = [180];
+      if (toile.width > toile.height) angles = [180, 90, 270];
+      var suite = Promise.resolve(best);
+      angles.forEach(function (a) {
+        suite = suite.then(function (courant) {
+          if (courant.conf >= SEUIL_CONFIANCE) return courant;
+          return ouvrier.recognize(tourner(toile, a)).then(function (r2) {
+            var c2 = (r2 && r2.data && r2.data.confidence) || 0;
+            if (c2 > courant.conf) return { texte: (r2 && r2.data && r2.data.text) || "", conf: c2 };
+            return courant;
+          });
+        });
+      });
+      return suite;
+    });
+  }
+
   function pageEnImage(page, echelle) {
     var vue = page.getViewport({ scale: echelle || 2 });
     var max = 2400;
@@ -132,9 +179,9 @@
             dire(p, n, "Lecture de la page " + p + " sur " + n);
             return doc.getPage(p)
               .then(function (page) { return pageEnImage(page, 2); })
-              .then(function (toile) { return ouvrier.recognize(toile); })
+              .then(function (toile) { return lirePage(ouvrier, toile); })
               .then(function (r) {
-                acc.push(((r && r.data && r.data.text) || "").replace(/[ \t]+\n/g, "\n").trim());
+                acc.push(String(r.texte || "").replace(/[ \t]+\n/g, "\n").trim());
                 return acc;
               });
           });

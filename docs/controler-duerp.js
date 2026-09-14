@@ -387,12 +387,35 @@
       "La recherche est faite sur les mots : un risque rédigé autrement sera dit introuvable, et un risque trouvé n'est pas pour autant bien traité. Ce qui est coché part dans la version corrigée, ci-dessous.</div>" + h;
   }
 
+  /* UN DOCUMENT SCANNÉ NE SE RECOPIE PAS. Relevé le 14 septembre 2026 : le
+     document unique de TEC, scanné, était reproduit ici tel que la
+     reconnaissance l'avait lu, colonnes mêlées, pages retournées, en-têtes du
+     cabinet au milieu des phrases. Ce charabia n'est pas un document unique,
+     et l'imprimer sous le nom de l'entreprise serait pire que de ne rien
+     produire. Quand le texte vient d'une reconnaissance de caractères, la
+     version corrigée ne le reproduit donc pas : elle renvoie au document
+     d'origine, qui reste la référence, et ne porte que ce que l'application
+     ajoute, les compléments, le programme d'actions et les règles de tenue.
+     Un texte saisi ou lu dans un fichier bureautique continue, lui, d'être
+     repris mot pour mot. */
+  var MENTION_SCAN = "Votre document a été lu par reconnaissance de caractères, à partir d'un " +
+    "PDF scanné. Son texte n'est pas reproduit ici : la reconnaissance d'un scan mêle les " +
+    "colonnes et les en-têtes, et ce qui en sort n'a pas la valeur de votre document. Le " +
+    "document d'origine reste la référence ; les pages qui suivent le complètent et se " +
+    "joignent à lui.";
+  function corpsDepose() {
+    if (E.scan) return '<div class="avis att">' + ech(MENTION_SCAN) + "</div>";
+    return '<div class="depose">' +
+      E.depot.split(/\n/).map(function (l) { return l.trim() ? "<p>" + ech(l) + "</p>" : ""; }).join("") +
+      "</div>";
+  }
+
   function corrigeHtml() {
     var groupes = inventaire(function (id) { return E.ins[id] !== false && (E.ins[id] || !E.trouve[id]); });
     var h = "<h2>" + ech(TITRE) + ", version corrigée</h2>" +
       '<p class="ent">' + ech(P.denomination) + "</p>" +
       "<p>Votre document, complété le " + ech(dateFr(aujourdhui)) + ".</p>" +
-      '<div class="depose">' + E.depot.split(/\n/).map(function (l) { return l.trim() ? "<p>" + ech(l) + "</p>" : ""; }).join("") + "</div>";
+      corpsDepose();
     if (groupes.length) {
       h += "<h3>Compléments</h3><p>Les unités de travail et les risques qui suivent ne figuraient pas dans le document déposé. Chacun porte sa situation de travail, sa cotation, ses mesures, un responsable et une échéance.</p>" +
         unitesHtml(groupes, 1) + planHtml(groupes, groupes.length + 1);
@@ -407,7 +430,11 @@
     var groupes = inventaire(function (id) { return E.ins[id] !== false && (E.ins[id] || !E.trouve[id]); });
     var items = [];
     items.push({ k: "sur", t: P.denomination + " · votre document, complété le " + dateFr(aujourdhui) });
-    E.depot.split(/\n/).forEach(function (l) { if (l.trim()) items.push({ k: "p", t: l.trim() }); });
+    if (E.scan) {
+      items.push({ k: "note", t: MENTION_SCAN });
+    } else {
+      E.depot.split(/\n/).forEach(function (l) { if (l.trim()) items.push({ k: "p", t: l.trim() }); });
+    }
     items.push({ k: "saut" });
     items.push({ k: "h1", t: "Compléments" });
     if (!groupes.length) items.push({ k: "p", t: "Aucun complément retenu." });
@@ -459,6 +486,9 @@
           dit("<b>" + ech(f.name) + " est trop court pour être un document unique</b> (" + t.length + " caractères). Déposez le document entier.", "att");
           return;
         }
+        /* D'où vient ce texte : un scan lu par reconnaissance, ou un fichier
+           qui porte son texte. La version corrigée n'en fait pas le même usage. */
+        E.scan = !!(window.LirePdf && window.LirePdf.venaitDuScan);
         E.depot = t; E.ins = {}; comparer(t);
         dit("<b>" + ech(f.name) + "</b> lu, " + t.length.toLocaleString("fr-FR") + " caractères. Le fichier n'est pas sorti de ce poste.");
         rendreControle();
@@ -473,6 +503,7 @@
         dit("<b>Le texte collé est trop court pour être un document unique</b> (" + t.length + " caractères). Collez le document entier.", "att");
         return;
       }
+      E.scan = false;
       E.depot = t; E.ins = {}; comparer(t);
       dit("Texte collé lu, " + t.length.toLocaleString("fr-FR") + " caractères.");
       rendreControle();

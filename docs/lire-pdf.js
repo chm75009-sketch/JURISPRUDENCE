@@ -106,6 +106,49 @@
       .replace(/\bpage\s*\d+\b/gi, " ")
       .replace(/\s+/g, " ").trim().toLowerCase();
   }
+  /* LA RECONNAISSANCE NE REND JAMAIS DEUX FOIS LA MÊME LIGNE. Sur un document
+     scanné, le même pied de page ressort « Champigny Sur Marne », « Champigny
+     Sur Mare », « Tel : 06.22.97.49.97 » puis « Tel : 06,22,97,49,97 » : la
+     comparaison à l'identique n'en retire aucun. On compare donc les lettres
+     seules, et on accepte un écart : deux lignes dont les squelettes se
+     ressemblent à neuf dixièmes sont la même ligne. Mesuré le 14 septembre
+     2026 sur le document unique de TEC. */
+  function squelette(l) {
+    var e = empreinte(l).normalize("NFD").replace(/[̀-ͯ]/g, "");
+    /* Les lettres d'un côté, les chiffres de l'autre. Deux lignes qui ne
+       diffèrent que par un chiffre ne sont PAS la même ligne : « Article 1 »
+       et « Article 2 » se ressemblent à un caractère près, et la tolérance
+       les confondait, effaçant les huit titres d'un règlement. Mesuré le
+       14 septembre 2026. La pagination, elle, a déjà été neutralisée par
+       l'empreinte : elle ne compte pas dans les chiffres comparés. */
+    return { l: e.replace(/[^a-z]/g, ""), c: (e.match(/\d+/g) || []).join(".") };
+  }
+  function proches(A, B) {
+    if (!A || !B) return false;
+    if (A.c !== B.c) return false;
+    var a = A.l, b = B.l;
+    if (!a || !b) return false;
+    if (a === b) return true;
+    var court = a.length < b.length ? a : b, long = a.length < b.length ? b : a;
+    if (court.length < 12 || court.length / long.length < 0.8) return false;
+    /* Distance d'édition bornée : on s'arrête dès qu'elle dépasse le dixième
+       de la longueur, ce qui évite de comparer mot à mot des pages entières. */
+    var max = Math.ceil(long.length * 0.12);
+    var prec = [], cour = [], i, j;
+    for (j = 0; j <= long.length; j++) prec[j] = j;
+    for (i = 1; i <= court.length; i++) {
+      cour[0] = i;
+      var mini = i;
+      for (j = 1; j <= long.length; j++) {
+        cour[j] = Math.min(prec[j] + 1, cour[j - 1] + 1,
+          prec[j - 1] + (court.charAt(i - 1) === long.charAt(j - 1) ? 0 : 1));
+        if (cour[j] < mini) mini = cour[j];
+      }
+      if (mini > max) return false;
+      prec = cour.slice();
+    }
+    return prec[long.length] <= max;
+  }
   var NUM_SEUL = /^[-–—\s]*(?:page\s*)?\d+(?:\s*(?:\/|sur|of|de)\s*\d+)?[-–—\s.]*$/i;
 
   function sansEnTetes(pages) {
@@ -115,17 +158,35 @@
        une zone large avalerait le contenu lui-même. Mesuré le 14 septembre
        2026 sur un document d'essai, où la première règle avait tout effacé. */
     var ZONE = 3, MIN_LIGNES = 8, MAX_LONG = 140;
-    var compte = {};
+    /* Les familles : chaque squelette rencontré est rattaché à une famille
+       existante s'il lui ressemble, sinon il en ouvre une. Le compte se fait
+       par famille, non par ligne exacte. */
+    var familles = [];
+    function famille(sq) {
+      for (var k = 0; k < familles.length; k++) if (proches(familles[k].sq, sq)) return familles[k];
+      var f = { sq: sq, n: 0 };
+      familles.push(f);
+      return f;
+    }
+    /* Une ligne sans lettres ou presque, « Tel : 06.22.97.49.97 », se compte
+       sur ses chiffres : son squelette de lettres est trop court pour être
+       comparé. */
+    function cle(l) {
+      var sq = squelette(l);
+      return (sq.l.length >= 4 || sq.c) ? sq : null;
+    }
     pages.forEach(function (p) {
       var L = String(p).split("\n");
       if (L.length < MIN_LIGNES) return;
-      var vues = {};
+      var vues = [];
       var bords = L.slice(0, ZONE).concat(L.slice(Math.max(ZONE, L.length - ZONE)));
       bords.forEach(function (l) {
-        var e = empreinte(l);
-        if (!e || e.length < 3 || e.length > MAX_LONG || vues[e]) return;
-        vues[e] = true;
-        compte[e] = (compte[e] || 0) + 1;
+        var e = empreinte(l), k = cle(l);
+        if (!e || e.length < 3 || e.length > MAX_LONG || !k) return;
+        var f = famille(k);
+        if (vues.indexOf(f) >= 0) return;
+        vues.push(f);
+        f.n++;
       });
     });
     var seuil = Math.max(3, Math.ceil(pages.length / 2));
@@ -137,10 +198,10 @@
         var bord = i < ZONE || i >= L.length - ZONE;
         if (!bord) return true;
         if (String(l).trim().length > MAX_LONG) return true;
-        var e = empreinte(l);
+        var e = empreinte(l), k = cle(l);
         if (!e) return true;
         if (NUM_SEUL.test(l.trim())) { retirees++; return false; }
-        if ((compte[e] || 0) >= seuil) { retirees++; return false; }
+        if (k && famille(k).n >= seuil) { retirees++; return false; }
         return true;
       });
       return garde.join("\n").replace(/^\n+|\n+$/g, "");
@@ -153,6 +214,7 @@
      longs ; sans borne, tout est lu. */
   function texte(fichier, options) {
     var max = (options && options.pages) || 0;
+    window.LirePdf.venaitDuScan = false;
     return charger().then(function (pdfjsLib) {
       return fichier.arrayBuffer().then(function (buf) {
         return pdfjsLib.getDocument({ data: new Uint8Array(buf), isEvalSupported: false }).promise;
@@ -185,6 +247,10 @@
             surProgres: options && options.surProgres,
             pages: (options && options.pages) || 20,
           }).then(function (t2) {
+            /* L'écran doit savoir d'où vient ce texte : ce qui sort d'une
+               reconnaissance ne se recopie pas dans un document produit au
+               nom de l'entreprise. */
+            window.LirePdf.venaitDuScan = true;
             if (options && options.surOCR) options.surOCR(t2);
             return t2;
           });
