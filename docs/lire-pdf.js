@@ -110,7 +110,7 @@
 
   function sansEnTetes(pages) {
     if (!pages || pages.length < 3) return pages || [];
-    /* La zone est étroite, deux lignes en haut et deux en bas, et une page
+    /* La zone est étroite, trois lignes en haut et trois en bas, et une page
        trop courte n'est pas touchée du tout : sur une page de cinq lignes,
        une zone large avalerait le contenu lui-même. Mesuré le 14 septembre
        2026 sur un document d'essai, où la première règle avait tout effacé. */
