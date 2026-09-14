@@ -192,6 +192,7 @@
 
 </main>
 
+<script src="documents-transport.js"></script>
 <script src="liste-choix.js"></script>
 <script src="listes-valeurs.js"></script>
 <script src="listes-auto.js"></script>
@@ -1013,6 +1014,20 @@
     A("Élection de domicile");
     p("Pour l'exécution du présent contrat, les parties font élection de domicile en leurs adresses respectives mentionnées en tête des présentes.");
 
+    /* LE TRANSPORT ROUTIER DE MARCHANDISES. Demande du 14 septembre 2026 :
+       « lorsque le client choisit transport, les documents les plus complets
+       et surtout les plus adaptés ». Un contrat de conducteur écrit sur le
+       seul code du travail est faux sur l'essentiel : la durée du travail s'y
+       appelle temps de service et vaut quarante-trois heures pour un grand
+       routier, les heures supplémentaires ne se comptent pas au même seuil,
+       et le décompte se fait au chronotachygraphe. Les clauses viennent de
+       documents-transport.js, fondées sur le code des transports lu à la
+       source. */
+    if (window.Transport && window.Transport.estTransport(profil)) {
+      b.push({ k: "trait", t: "" });
+      window.Transport.clausesContrat(d, profil).forEach(function (x) { b.push(x); });
+    }
+
     b.push({ k: "trait", t: "" });
     b.push({ k: "sign", t: "Fait à " + ville() + ", le " + dateFr(AUJOURDHUI) + ", en deux exemplaires originaux, dont un remis au salarié." });
     b.push({ k: "sign", t: "\nLe salarié                                                    Pour la Société\n(signature précédée de la mention                             " + signataire() + "\n« lu et approuvé, bon pour accord »)" });
@@ -1046,19 +1061,26 @@
     "L1221-10", "R1221-4", "R4624-10", "L1221-13", "D1221-23"];
   var LOI_PARTIEL = ["L3123-6", "L3123-7", "L3123-20", "L3123-21", "L3123-27", "L3123-28", "L3123-29"];
 
+  /* La catégorie de personnel roulant commande les durées : elle n'apparaît
+     que pour une entreprise de transport, et le contrat ne la pose pas
+     autrement. Demande du 14 septembre 2026. */
+  function champsTransport() {
+    return (window.Transport && window.Transport.estTransport(profil))
+      ? [window.Transport.CHAMP_ROULANT] : [];
+  }
   function champsContrat() {
     /* L'identité entière en tête, en petits champs, pour qu'elle se glisse
        dans le contrat sans crochets : demande du 9 septembre 2026, « son
        adresse, date et lieu de naissance, insérés directement dans le
        contrat sans que ça prenne trop de place ». */
-    var c = [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: "Madame Lucie MARTIN" },
+    var c = champsTransport().concat([{ id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: "Madame Lucie MARTIN" },
              { id: "poste", nom: "Emploi", t: "text", ph: "serveur" },
              { id: "naissance", nom: "Né(e) le", t: "date" },
              { id: "lieuNaissance", nom: "À", t: "text", ph: "Argenteuil" },
              { id: "nationalite", nom: "Nationalité", t: "text", ph: "française" },
              { id: "secu", nom: "N° de sécurité sociale", t: "text", ph: "2 88 02 75 114 002 61" },
              { id: "adresse", nom: "Adresse", t: "text", pleine: true, ph: "12 rue des Lilas, 95240 Cormeilles-en-Parisis" },
-             { id: "salaire", nom: "Salaire brut mensuel (euros)", t: "number", ph: "laissez vide : minimum de la grille" }];
+             { id: "salaire", nom: "Salaire brut mensuel (euros)", t: "number", ph: "laissez vide : minimum de la grille" }]);
     if (ccn && ccn.salaires) {
       var opts = [];
       ["I", "II", "III", "IV", "V"].forEach(function (n) {
@@ -1078,7 +1100,8 @@
       naissance: dateDe(v.naissance), lieuNaissance: v.lieuNaissance || "", nationalite: v.nationalite || "",
       secu: v.secu || "", adresse: v.adresse || "",
       statut: ccn && ccn.salaires ? statutDeClasse(classe) : (v.statut || "employe"),
-      heures: ccn && ccn.duree ? ccn.duree.heures : 35, salaire: Number(v.salaire) > 0 ? Number(v.salaire) : 0, dureeMin: 0 };
+      heures: ccn && ccn.duree ? ccn.duree.heures : 35, salaire: Number(v.salaire) > 0 ? Number(v.salaire) : 0, dureeMin: 0,
+      roulant: v.roulant || "grand" };
   }
   function resultatContrat(d, loi) {
     var r = contrat(d);
