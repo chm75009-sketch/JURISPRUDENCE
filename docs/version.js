@@ -1,4 +1,4 @@
 /* Le numéro de version, affiché à l'accueil. À changer en même temps que
    CACHE dans sw.js et "version" dans manifest.json. */
-window.VERSION_APP = "12.32";
-window.VERSION_DATE = "13 septembre 2026";
+window.VERSION_APP = "12.33";
+window.VERSION_DATE = "14 septembre 2026";
