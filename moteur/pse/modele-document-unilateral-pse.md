@@ -42,6 +42,8 @@ Il convient de se reporter au document d'information relatif au projet, remis au
 
 Elles sont rappelées ci-après de façon synthétique : [exposé du motif économique : évolution du chiffre d'affaires, des résultats, de la trésorerie, du marché et de la concurrence, sur les [nombre] derniers exercices].
 
+> **À ne pas oublier. Les difficultés économiques et la nécessité de sauvegarder la compétitivité s'apprécient au niveau du secteur d'activité du groupe, non de la seule entreprise, et la spécialisation d'une filiale ne suffit pas à l'exclure d'un secteur plus large, apprécié d'après la nature des produits, la clientèle et les réseaux de distribution (Cass. soc. 26 juin 2024, n° 23-15.503, publié au Bulletin). Joindre les comptes du secteur, et pas seulement ceux de l'entreprise.**
+
 | Exercice | Chiffre d'affaires | Résultat d'exploitation | Résultat net | Effectif moyen |
 | --- | --- | --- | --- | --- |
 |   |   |   |   |   |
@@ -120,6 +122,8 @@ Sont visées les suppressions d'emplois constituant le nombre de licenciements e
 
 Soit [nombre] licenciements économiques envisagés. La liste des postes supprimés et des contrats modifiés, par intitulé de fonction et par zone géographique, figure en annexe 1.
 
+> **À ne pas oublier. Une catégorie professionnelle regroupe l'ensemble des salariés qui exercent, dans l'entreprise, des fonctions de même nature supposant une formation professionnelle commune ; l'administration le vérifie avant de valider ou d'homologuer, en tenant compte des acquis de l'expérience qui excèdent l'obligation d'adaptation (Cass. soc. 20 avril 2022, n° 20-20.567, publié). Une catégorie taillée pour désigner un salarié se conteste devant le tribunal administratif, dans les deux mois de la décision, et non devant le conseil de prud'hommes (Cass. soc. 12 juin 2024, n° 23-12.969, publié).**
+
 Les catégories professionnelles concernées, entendues comme l'ensemble des salariés qui exercent des fonctions de même nature supposant une formation professionnelle commune, sont définies en annexe, avec l'effectif de chacune et le rattachement de chaque intitulé de poste.
 
 | Catégorie professionnelle | Effectif de la catégorie | Nombre de suppressions envisagées |
@@ -195,7 +199,11 @@ b) Chaque critère est pris en compte selon la cotation suivante, pour un total 
 |   |   |
 |   |   |
 
+> **À ne pas oublier. Les quatre critères légaux doivent tous être pris en compte : l'un peut être privilégié, aucun ne peut être écarté, et la situation sociale rendant la réinsertion difficile ne se limite pas au handicap reconnu (Cass. soc. 12 juillet 2022, n° 20-23.651, publié, pour un salarié engagé en contrat d'insertion). La pondération retenue est contrôlée par l'administration (Cass. soc. 20 avril 2022, n° 20-20.567, publié).**
+
 Les éléments retenus au titre des qualités professionnelles reposent sur des données objectives et vérifiables, identiques pour tous les salariés d'une même catégorie professionnelle. La grille d'évaluation utilisée est jointe en annexe.
+
+> **À ne pas oublier. Dès lors que tous les postes d'une catégorie ne sont pas supprimés, les critères doivent être appliqués pour désigner les salariés licenciés. Leur inobservation ne prive pas le licenciement de cause réelle et sérieuse, mais ouvre droit à des dommages-intérêts pouvant aller jusqu'à la perte injustifiée de l'emploi (Cass. soc. 20 avril 2022, n° 20-20.567, publié).**
 
 c) Catégories professionnelles : les catégories retenues, l'effectif de chacune et le rattachement de chaque intitulé de poste figurent en annexe 2. La méthode suivie pour les définir est décrite en annexe 5.
 
@@ -212,6 +220,8 @@ d) Périmètre d'application. En l'absence d'accord collectif fixant ce périmè
 |   |   |   |
 |   |   |   |
 |   |   |   |
+
+> **À ne pas oublier. Faute d'accord fixant le périmètre, un périmètre plus étroit que la zone d'emploi est irrégulier : l'administration refuse l'homologation sur ce seul point. Vérifier la zone d'emploi de chaque établissement concerné auprès du zonage en vigueur, et non la commune ou le département.**
 
 ## 5. Conséquences en matière de santé, de sécurité et de conditions de travail
 
@@ -277,6 +287,8 @@ A. Identification des postes. Les postes disponibles proposés au reclassement a
 |   |   |   |
 |   |   |   |
 
+> **À ne pas oublier. Le plan de reclassement doit préciser le nombre, la nature, la localisation, le statut et la rémunération des emplois disponibles dans le groupe ; en revanche, les recherches auprès des sociétés du groupe n'ont pas à être assorties du profil personnalisé de chaque salarié (Cass. soc. 28 octobre 2015, n° 14-17.712, publié).**
+
 B. Proposition de reclassement. Chaque salarié dont le licenciement est envisagé et auquel un ou plusieurs postes peuvent être proposés reçoit une proposition écrite et individualisée, par lettre remise en main propre contre décharge ou adressée à son domicile.
 
 Conformément au II de l'article D. 1233-2-1 du code du travail, chaque offre écrite précise :
@@ -287,6 +299,8 @@ Conformément au II de l'article D. 1233-2-1 du code du travail, chaque offre é
 - la localisation du poste ;
 - le niveau de rémunération ;
 - la classification du poste.
+
+> **À ne pas oublier. Les six mentions sont exigées à peine d'imprécision : si l'une manque, l'offre est imprécise, l'obligation de reclassement est méconnue et le licenciement est privé de cause réelle et sérieuse (Cass. soc. 23 octobre 2024, n° 23-19.629, publié).**
 
 Le salarié dispose d'un délai de réflexion de [nombre] jours à compter de la première présentation de la proposition. Ce délai est porté à [nombre] pour le salarié auquel est simultanément proposée une modification de son contrat de travail. L'absence de réponse dans le délai vaut refus.
 
@@ -363,6 +377,8 @@ Le salarié qui crée ou reprend une entreprise bénéficie de l'assistance du c
 Le contrat de sécurisation professionnelle est proposé à chaque salarié dont le licenciement est envisagé, dans les conditions légales. La remise du document d'information ouvre un délai de réflexion de vingt et un jours. En cas d'acceptation, le contrat de travail est rompu à l'expiration de ce délai, sans préavis, et le salarié perçoit l'indemnité de licenciement ainsi que, le cas échéant, l'indemnité correspondant au solde du préavis.
 
 Pendant la durée du contrat de sécurisation professionnelle, le salarié bénéficie d'un accompagnement renforcé et de l'allocation de sécurisation professionnelle, ainsi que, s'il reprend un emploi moins rémunéré, de l'indemnité différentielle de reclassement.
+
+> **À ne pas oublier. La priorité de réembauche doit figurer dans le document écrit énonçant le motif économique, porté à la connaissance du salarié au plus tard au moment où il accepte le contrat de sécurisation professionnelle. Son omission ne prive pas la rupture de cause réelle et sérieuse, mais ouvre droit à réparation si le salarié justifie d'un préjudice (Cass. soc. 26 février 2025, n° 23-15.427, publié).**
 
 ### 7.2.6. Préavis et indemnités de rupture
 
@@ -458,6 +474,8 @@ La décision d'homologation, expresse ou implicite, est portée à la connaissan
 
 Les licenciements ne peuvent être notifiés avant la notification de la décision d'homologation ou l'expiration du délai valant homologation implicite.
 
+> **À ne pas oublier. Le contenu du plan, le document unilatéral et la régularité de la procédure ne peuvent être discutés que devant le tribunal administratif, saisi dans les deux mois (article L. 1235-7-1 du code du travail) ; le juge prud'homal ne peut en apprécier la légalité par voie d'exception (Cass. soc. 12 juin 2024, n° 23-12.969, publié). Le conseil de prud'hommes reste compétent pour la réalité de la suppression du poste et pour l'application des critères d'ordre (Cass. soc. 20 avril 2022, n° 20-20.567, publié).**
+
 ## Signature
 
 Fait à [ville], le [date].
@@ -540,3 +558,19 @@ Fait à [ville], le [date].
 |   |   |   |   |
 |   |   |   |   |
 |   |   |   |   |
+
+## Jurisprudence citée
+
+> Les décisions ci-dessous sont jointes en copie intégrale, au format PDF, dans le dossier « arrets » du module.
+
+| Décision | Ce qu'elle juge | Fichier |
+| --- | --- | --- |
+| Cass. soc. 26 juin 2024, n° 23-15.503, publié | Le motif économique s'apprécie au niveau du secteur d'activité du groupe ; la spécialisation d'une filiale ne l'en exclut pas. | Cass-soc-26-juin-2024-23-15503.pdf |
+| Cass. soc. 20 avril 2022, n° 20-20.567, publié | Contrôle administratif des catégories professionnelles et de la pondération des critères ; sanction de l'ordre des licenciements. | Cass-soc-20-avril-2022-20-20567.pdf |
+| Cass. soc. 12 juin 2024, n° 23-12.969, publié | Le juge judiciaire ne peut apprécier par voie d'exception la légalité du plan validé ; recours devant le tribunal administratif. | Cass-soc-12-juin-2024-23-12969.pdf |
+| Cass. soc. 12 juillet 2022, n° 20-23.651, publié | Tous les critères légaux doivent être pris en compte, dont la situation sociale rendant la réinsertion difficile. | Cass-soc-12-juillet-2022-20-23651.pdf |
+| Cass. soc. 28 octobre 2015, n° 14-17.712, publié | Le plan précise le nombre, la nature, la localisation, le statut et la rémunération des emplois disponibles dans le groupe. | Cass-soc-28-octobre-2015-14-17712.pdf |
+| Cass. soc. 23 octobre 2024, n° 23-19.629, publié | À défaut de l'une des six mentions, l'offre est imprécise : licenciement sans cause réelle et sérieuse. | Cass-soc-23-octobre-2024-23-19629.pdf |
+| Cass. soc. 8 janvier 2025, n° 22-24.724, publié | La liste de postes diffusée doit porter les critères de départage ; à défaut, licenciement sans cause réelle et sérieuse. | Cass-soc-08-janvier-2025-22-24724.pdf |
+| Cass. soc. 26 février 2025, n° 23-15.427, publié | La priorité de réembauche doit être portée à la connaissance du salarié au plus tard lors de son acceptation du CSP. | Cass-soc-26-février-2025-23-15427.pdf |
+| Cass. soc. 15 mai 2013, n° 11-27.458, publié | Sauf accord collectif, les critères d'ordre sont mis en oeuvre à l'égard de l'ensemble du personnel de l'entreprise (avant la loi du 6 août 2015 sur la zone d'emploi). | Cass-soc-15-mai-2013-11-27458.pdf |
