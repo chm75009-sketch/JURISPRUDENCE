@@ -115,6 +115,32 @@
     return transaction("readonly").then(function (m) { return promesse(m.get(Number(id))); });
   }
 
+  /* TOUTES LES RUBRIQUES QUI PORTENT QUELQUE CHOSE.
+
+     La vitrine listait des rubriques inscrites en dur dans son code : un
+     écran ajouté plus tard, comme les notes de service, y déposait ses
+     documents sans que personne ne puisse les retrouver. Elle demande
+     maintenant à la base ce qu'elle contient. Mesuré le 15 septembre 2026. */
+  function rubriques() {
+    /* getAllKeys() sur un index rend les clés PRIMAIRES des enregistrements,
+       non les valeurs de l'index : la première version rendait « 1 », « 2 »,
+       « 3 », et la vitrine restait vide. Un curseur de clés en « nextunique »
+       donne chaque rubrique une fois, sans charger aucun contenu. */
+    return transaction("readonly").then(function (m) {
+      return new Promise(function (ok, non) {
+        var out = [];
+        var req = m.index("rubrique").openKeyCursor(null, "nextunique");
+        req.onsuccess = function () {
+          var c = req.result;
+          if (!c) { ok(out); return; }
+          out.push(String(c.key));
+          c.continue();
+        };
+        req.onerror = function () { non(req.error); };
+      });
+    }).catch(function () { return []; });
+  }
+
   function dernier(rubrique, sorte) {
     return transaction("readonly").then(function (m) {
       return promesse(m.index("rubrique").getAll(String(rubrique)));
@@ -213,7 +239,8 @@
 
   window.Documents = {
     enregistrer: enregistrer, liste: liste, lire: lire, dernier: dernier,
-    supprimer: supprimer, vider: vider, enFrancais: enFrancais, poids: poids,
+    supprimer: supprimer, vider: vider, rubriques: rubriques,
+    enFrancais: enFrancais, poids: poids,
     disponible: function () { return !!window.indexedDB; },
     rubriqueDeLaPage: rubriqueDeLaPage,
   };

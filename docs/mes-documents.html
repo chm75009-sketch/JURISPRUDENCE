@@ -78,6 +78,8 @@
     "controler-affichages": "Affichages obligatoires",
     "controler-discipline": "Discipline",
     "bdese": "Base de données, la mienne",
+    "notes-service": "Notes de service",
+    "audit-bdese": "Base de données, le modèle",
     "audit-pse": "Plan de sauvegarde de l'emploi",
     "audit": "Licenciement économique",
     "audit-cse": "Audit du comité",
@@ -117,17 +119,30 @@
     });
   }
 
-  /* Toutes les rubriques, sans en connaître la liste à l'avance : on lit ce
-     qui est dans la base. */
+  /* Le nom d'une rubrique qui n'est pas dans la table : mieux vaut un
+     intitulé approximatif qu'un document introuvable. */
+  function nomDe(r) {
+    if (NOMS[r]) return NOMS[r];
+    var t = String(r).replace(/[-_]+/g, " ").trim();
+    return t ? t.charAt(0).toUpperCase() + t.slice(1) : "Sans rubrique";
+  }
+
+  /* TOUTES LES RUBRIQUES, DEMANDÉES À LA BASE.
+
+     Elles étaient lues dans la table des noms ci-dessus, écrite à la main :
+     un écran ajouté plus tard y déposait ses documents sans que personne ne
+     puisse les retrouver, et c'est arrivé aux notes de service le jour même
+     où elles ont été écrites. La base dit maintenant ce qu'elle contient, et
+     la table ne sert plus qu'à mettre un nom lisible dessus. */
   function toutes() {
-    return window.Documents.liste("").then(function () { return null; }).catch(function () { return null; })
-      .then(function () {
-        var cles = Object.keys(NOMS);
-        return Promise.all(cles.map(function (r) {
-          return window.Documents.liste(r).then(function (L) { return { r: r, L: L }; })
-            .catch(function () { return { r: r, L: [] }; });
-        }));
-      });
+    return window.Documents.rubriques().then(function (cles) {
+      var L = (cles && cles.length) ? cles.slice() : Object.keys(NOMS);
+      L.sort(function (a, b) { return nomDe(a).localeCompare(nomDe(b), "fr"); });
+      return Promise.all(L.map(function (r) {
+        return window.Documents.liste(r).then(function (D) { return { r: r, L: D }; })
+          .catch(function () { return { r: r, L: [] }; });
+      }));
+    });
   }
 
   function rendre() {
@@ -145,7 +160,7 @@
         return;
       }
       $("liste").innerHTML = pleines.map(function (x) {
-        return '<section class="rub"><h2>' + ech(NOMS[x.r] || x.r) + "</h2>" +
+        return '<section class="rub"><h2>' + ech(nomDe(x.r)) + "</h2>" +
           '<p class="compte">' + x.L.length + " document(s)</p>" +
           x.L.map(ligne).join("") + "</section>";
       }).join("");
