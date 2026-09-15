@@ -892,6 +892,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   var CIBLES = [
     { c: "",     lib: "- ne pas importer -", mots: [] },
     { c: "nom",  lib: "Nom", mots: ["nom de famille", "nom", "patronyme"], hors: ["prenom", "etablissement", "entreprise"] },
+    { c: "_np",  lib: "Nom et prénom dans la même colonne", mots: ["nom et prenom", "nom et prenoms", "nom prenom", "identite", "salarie"] },
     { c: "pre",  lib: "Prénoms", mots: ["prenoms", "prenom"] },
     { c: "nat",  lib: "Nationalité", mots: ["nationalite"] },
     { c: "nais", lib: "Date de naissance", mots: ["date de naissance", "naissance", "ne le", "nee le"] },
@@ -1076,11 +1077,36 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     rendreApercu();
   });
 
+  /* « COULIBALY Siramana » dans une seule colonne : le nom est ce qui est en
+     capitales, le prénom ce qui suit. Quand rien n'est en capitales, le
+     premier mot fait le nom : c'est l'usage des registres, et l'écran laisse
+     corriger. */
+  function couper(v) {
+    var mots = String(v || "").trim().split(/\s+/).filter(Boolean);
+    if (!mots.length) return { nom: "", pre: "" };
+    var maj = [];
+    while (mots.length && mots[0] === mots[0].toUpperCase() && /[A-ZÀ-Ý]/.test(mots[0])) maj.push(mots.shift());
+    if (!maj.length) maj.push(mots.shift());
+    return { nom: maj.join(" "), pre: mots.join(" ") };
+  }
+  /* UN TIRET N'EST PAS UNE VALEUR, « EN POSTE » N'EST PAS UNE DATE.
+
+     Les registres écrivent « — » pour une case sans contenu et « en poste »
+     pour un salarié qui n'est pas sorti. Repris tels quels, le premier faisait
+     passer une nationalité pour renseignée, le second comptait quatre-vingt-
+     douze dates illisibles. Les deux sont maintenant lus pour ce qu'ils sont :
+     rien, et une absence de sortie. Mesuré le 15 septembre 2026 sur un
+     registre de cinq pages. */
+  var RIEN = /^(—|–|-{1,3}|n\s*\/\s*a|na|néant|neant|sans objet|non renseigné|non renseigne|\.)$/i;
+  var PRESENT = /^(en poste|en cours|présent|present|toujours en poste|toujours présent|toujours present|n\s*\/\s*a|—|–|-{1,3})$/i;
   function ligneImportee(r) {
     var s = neuf(), brutNature = "", brutTemps = "", dateKo = 0;
     IMPORT.cibles.forEach(function (c, j) {
       var v = r[j] == null ? "" : String(r[j]).trim();
       if (!c || !v) return;
+      if (RIEN.test(v)) return;
+      if (c === "sor" && PRESENT.test(v)) return;
+      if (c === "_np") { var d = couper(v); s.nom = d.nom; s.pre = d.pre; return; }
       if (c === "_nat") { brutNature = v; return; }
       if (c === "_tps") { brutTemps = v; return; }
       if (c === "nais" || c === "ent" || c === "sor") {
@@ -1091,7 +1117,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       s[c] = v;
     });
     s.nature = natureDe(brutNature);
-    s.part = tempsDe(brutTemps);
+    /* Un libellé comme « CDI temps plein » porte les deux : la nature et le
+       temps de travail. Le second ne se perd plus faute de colonne dédiée. */
+    s.part = tempsDe(brutTemps) || tempsDe(brutNature);
     if (s.sexe) s.sexe = sexeDe(s.sexe) || s.sexe;
     return { s: s, brutNature: brutNature, brutTemps: brutTemps, dateKo: dateKo };
   }
@@ -1140,7 +1168,15 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       { c: "_nat", lib: "Nature du contrat", fond: "D. 1221-23, 9° à 13°" },
       { c: "_tps", lib: "Temps complet ou partiel", fond: "D. 1221-23, 12°" },
     ];
-    var absentes = DUES.filter(function (d) { return retenues.indexOf(d.c) < 0; });
+    var porteLeTemps = IMPORT.corps.some(function (r) {
+      return IMPORT.cibles.some(function (c, j) {
+        return c === "_nat" && tempsDe(r[j] || ""); });
+    });
+    var absentes = DUES.filter(function (d) {
+      if (d.c === "_tps" && porteLeTemps) return false;
+      if ((d.c === "nom" || d.c === "pre") && retenues.indexOf("_np") >= 0) return false;
+      return retenues.indexOf(d.c) < 0;
+    });
     var h0 = "";
     if (absentes.length)
       h0 = '<div class="avis non"><b>' + absentes.length +
