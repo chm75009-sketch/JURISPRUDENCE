@@ -29,25 +29,17 @@
   var SECTEURS = ["transport et logistique", "industrie",
     "bâtiment et travaux publics", "commerce", "services"];
 
-  /* LA FICHE S'OUVRE SUR TEC. Demande du 12 septembre 2026 : « par défaut on
-     met TEC », quitte à modifier ensuite. Ces valeurs ne servent qu'au
-     PREMIER affichage, tant que rien n'a jamais été saisi sur ce poste : dès
-     que la fiche est enregistrée, même vidée, c'est elle qui vaut et ces
-     valeurs ne reviennent plus. Le bouton « tout effacer » de la page d'audit
-     les rétablit, puisqu'il ramène le poste à son état initial.
-     Le courriel et le téléphone ne sont pas ici : le dépôt est public, et une
-     adresse personnelle comme un numéro de portable y resteraient dans
-     l'historique. Ils se saisissent sur le poste, où ils ne bougent plus. */
-  var DEFAUT = {
-    denomination: "SARL TEC",
-    siret: "53845047900034",
-    adresse: "23 avenue du Château, 95100 Argenteuil",
-    responsable: "Chadi EL SAFADI, gérant",
-    effectif: 81,
-    secteur: "transport et logistique",
-    conventionCollective: "0016 - Convention collective nationale des transports routiers " +
-      "et activités auxiliaires du transport du 21 décembre 1950",
-  };
+  /* LA FICHE S'OUVRE VIDE. Demande du 15 septembre 2026 : « on ne met pas TEC
+     par défaut ; dans les documents, sur tout le site, partout, seules les
+     coordonnées saisies dans la page d'accueil apparaîtront ». Jusqu'ici la
+     fiche s'ouvrait sur les valeurs d'un client, écrites ici : sur le poste
+     d'un autre, elles se seraient retrouvées en tête de ses documents tant
+     qu'il n'avait rien saisi.
+     Le courriel et le téléphone ne sont pas demandés ici non plus : le dépôt
+     est public, et une adresse personnelle comme un numéro de portable y
+     resteraient dans l'historique. Ils se saisissent sur le poste, où ils ne
+     bougent plus. */
+  var DEFAUT = {};
 
   /* Mots probables de l'intitulé d'une convention collective pour chaque
      secteur — pas une correspondance officielle : une convention s'identifie

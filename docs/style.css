@@ -499,3 +499,13 @@ section.fiche label{display:flex;flex-direction:column;gap:6px;position:relative
   h1,h2,h3{break-after:avoid}
   a{text-decoration:none;color:#000}
 }
+
+/* LA RÉSERVE DES ÉCRANS DE CONTRÔLE.
+
+   Un écran de contrôle repère des mots et des dates ; il ne juge pas un
+   document. La phrase le dit une fois, au bas de l'écran, de la même façon
+   partout, sans occuper la place de ce qui s'y fait. Demande du 15 septembre
+   2026, après l'audit extérieur qui l'a réclamée « de manière visible » sur
+   tous les modules. */
+.reserve{margin:var(--e5) 0 var(--e4);padding:10px 0 0;border-top:1px solid var(--filet);
+  font-size:var(--t1);line-height:1.5;color:var(--texte-3)}

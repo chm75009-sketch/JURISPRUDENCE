@@ -438,7 +438,7 @@
       L.push("ET");
       L.push("");
       L.push("MARTIN Sofia, née le 03/11/1995 à Lisbonne, demeurant 12 rue de la Paix, 76000 Rouen, " +
-             "de nationalité portugaise, numéro de sécurité sociale 195 95 75 123 456,");
+             "de nationalité portugaise, numéro de sécurité sociale [NUMÉRO DE SÉCURITÉ SOCIALE],");
       L.push("");
       L.push("Ci-après « le salarié »,");
       L.push("");

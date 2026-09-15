@@ -623,11 +623,14 @@
     if (e === null) e = 62;
     return {
       secteur: s,
-      nom: String(p.denomination || p.entreprise || "BLU BLU SARL").trim(),
-      adresse: String(p.adresse || "12 rue des Lilas, 95100 Argenteuil").trim(),
-      ville: villeDe(ctx) === "[lieu]" ? "Argenteuil" : villeDe(ctx),
+      /* Rien qui vienne d'ailleurs que la fiche : un document produit ne porte
+         que les coordonnées saisies sur la page d'accueil, et un crochet là où
+         elles manquent. Demande du 15 septembre 2026. */
+      nom: String(p.denomination || p.entreprise || "[NOM DE L'ENTREPRISE]").trim(),
+      adresse: String(p.adresse || "[ADRESSE DU SIÈGE]").trim(),
+      ville: villeDe(ctx),
       effectif: e,
-      responsable: String(p.responsable || "Madame Léa MARTIN, gérante").trim(),
+      responsable: String(p.responsable || "[REPRÉSENTANT LÉGAL]").trim(),
       d0: d0
     };
   }

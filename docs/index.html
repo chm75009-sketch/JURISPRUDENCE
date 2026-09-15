@@ -78,8 +78,10 @@
     font-size:15px;color:var(--texte-2);text-align:center}
   [hidden]{display:none !important}
   footer #adresse-app{color:var(--accent);word-break:break-all}
-  footer .lien-copie{display:block;margin:10px auto 64px;border:1px solid var(--filet);background:var(--surface);
+  footer .boutons{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:10px 0 64px}
+  footer .lien-copie{border:1px solid var(--filet);background:var(--surface);
     color:var(--encre);border-radius:var(--r2);font:600 13px/1 system-ui;padding:9px 14px;min-height:38px;width:auto}
+  footer .lien-copie.efface{color:var(--texte-3)}
 </style>
 </head>
 <body>
@@ -121,10 +123,15 @@
     </div>
   </section>
 
-  <footer>Tout se calcule dans votre navigateur, rien n'est envoyé<br>
+  <footer>Les contrôles, les documents déposés et ce que vous saisissez restent
+    dans votre navigateur. Seul l'assistant, si vous l'ouvrez avec votre clé,
+    envoie votre question à son fournisseur.<br>
     <span id="version-app"></span><br>
     <a id="adresse-app" href="#"></a><br>
-    <button type="button" id="copier-adresse" class="lien-copie">Copier le lien</button>
+    <span class="boutons">
+      <button type="button" id="copier-adresse" class="lien-copie">Copier le lien</button>
+      <button type="button" id="effacer-poste" class="lien-copie efface">Effacer mes données de ce poste</button>
+    </span>
   </footer>
 
 </main>
@@ -162,6 +169,30 @@
       if (navigator.clipboard && navigator.clipboard.writeText)
         navigator.clipboard.writeText(u).then(function () { fini(true); }, function () { fini(false); });
       else fini(false);
+    });
+  })();
+
+  /* EFFACER CE POSTE.
+
+     Tout ce que l'application garde vit ici : la fiche d'entreprise, les
+     réponses des écrans de contrôle, les documents déposés et produits. Il
+     n'existait aucun moyen de tout reprendre à zéro, alors qu'un navigateur
+     partagé rend la fiche du client précédent à celui qui vient après.
+     Demande du 15 septembre 2026, après l'audit extérieur. */
+  (function () {
+    var b = $("effacer-poste");
+    if (!b) return;
+    b.addEventListener("click", function () {
+      if (!window.confirm("Effacer la fiche de l'entreprise, toutes les réponses " +
+        "et tous les documents gardés sur ce poste ? C'est sans retour.")) return;
+      try { localStorage.clear(); } catch (e) {}
+      try { sessionStorage.clear(); } catch (e) {}
+      var fini = function () { location.reload(); };
+      if (window.indexedDB && window.indexedDB.deleteDatabase) {
+        var d = window.indexedDB.deleteDatabase("jurisprudence-documents");
+        d.onsuccess = fini; d.onerror = fini; d.onblocked = fini;
+        setTimeout(fini, 1500);
+      } else fini();
     });
   })();
 

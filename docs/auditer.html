@@ -83,6 +83,7 @@
 
   <div id="liste"></div>
 
+  <p class="reserve">Contrôle documentaire automatisé : le résultat est indicatif et ne vaut ni avis juridique ni attestation de conformité.</p>
 </main>
 
 <script>
@@ -127,7 +128,18 @@
     { cle: "egalite",    nom: "Égalité femmes-hommes", seuil: 50, non: "parcours.html?p=index&faire=1",        oui: "controler-egalite.html" },
     { cle: "nao",        nom: "Négociation annuelle (NAO)", seuil: 50, cond: "si délégué syndical", non: "parcours.html?p=nao&faire=1", oui: "controler-nao.html" },
     { cle: "pse",        nom: "Licenciement économique et PSE", seuil: 50, cond: "si projet de licenciement", non: "audit.html" },
-    { cle: "cssct",      nom: "Commission santé-sécurité", seuil: 300, non: "parcours.html?p=commissions&faire=1" }
+    /* La commission santé-sécurité n'obéit pas au seul effectif : L. 2315-36
+       (LEGIARTI000035626455, deux lectures concordantes le 15 septembre 2026)
+       la crée dans les entreprises d'au moins trois cents salariés, dans les
+       établissements distincts d'au moins trois cents salariés ET dans les
+       établissements mentionnés aux articles L. 4521-1 et suivants, sans
+       condition d'effectif ; L. 2315-37 (LEGIARTI000036262445) permet à
+       l'inspecteur du travail de l'imposer en dessous de trois cents. Écrire
+       « pas dû avant 300 » était donc faux, et la ligne restait fermée.
+       Elle s'ouvre, avec ce que l'effectif ne dit pas. */
+    { cle: "cssct",      nom: "Commission santé-sécurité", seuil: 300,
+      sousSeuil: "à vérifier : établissement distinct, site classé, ou décision de l'inspection du travail",
+      non: "parcours.html?p=commissions&faire=1" }
   ];
 
   var CLE_STOCK = "audit-vu";
@@ -143,7 +155,9 @@
     var liste = $("liste");
     liste.textContent = "";
     LIGNES.forEach(function (l) {
-      var du = eff >= l.seuil;
+      /* Une ligne que l'effectif ne rend pas due, mais que d'autres causes
+         peuvent rendre due, n'est pas barrée : elle s'ouvre avec sa réserve. */
+      var du = eff >= l.seuil || !!l.sousSeuil;
       var vu = du && !l.oui && !!vus[l.cle];
       var ligne = document.createElement("div");
       ligne.className = "ligne" + (du ? "" : " pasdu") + (vu ? " fait" : "");
@@ -152,10 +166,11 @@
       var nom = document.createElement("span");
       nom.className = "nom";
       nom.textContent = l.nom;
-      if (du && l.cond) {
+      var reserve = l.cond || (eff < l.seuil ? l.sousSeuil : "");
+      if (du && reserve) {
         var cond = document.createElement("span");
         cond.className = "du";
-        cond.textContent = l.cond;
+        cond.textContent = reserve;
         nom.appendChild(cond);
       }
       ligne.appendChild(nom);
