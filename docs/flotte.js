@@ -83,15 +83,24 @@
 
   var GENRES = [
     ["vl", "Voiture particulière"],
-    ["vul", "Véhicule utilitaire léger"],
-    ["pl", "Poids lourd"],
+    ["vul", "Véhicule utilitaire léger, jusqu'à 3,5 t"],
+    ["pl", "Poids lourd, plus de 3,5 t"],
     ["tracteur", "Tracteur routier"],
     ["remorque", "Remorque ou semi-remorque"],
+    ["public10", "Transport public de personnes, moins de 10 places"],
+    ["commun", "Transport en commun de personnes"],
     ["autre", "Autre"],
   ];
-  /* Pré-remplissage, jamais une affirmation : le champ reste modifiable, et
-     c'est la date obtenue qui commande l'alerte. */
-  var CT_DEFAUT = { vl: 24, vul: 24, pl: 12, tracteur: 12, remorque: 12, autre: 12 };
+  /* La périodicité du contrôle technique, en mois, telle que le code de la
+     route la fixe, lu à la source le 15 septembre 2026 (deux lectures
+     concordantes chacun) : deux ans pour un véhicule léger, R. 323-22
+     (LEGIARTI000034075672) ; un an au-dessus de 3,5 tonnes, R. 323-25
+     (LEGIARTI000034075679) ; un an pour le transport public de personnes de
+     moins de dix places, R. 323-24 (LEGIARTI000006841864) ; six mois pour le
+     transport en commun, R. 323-23 (LEGIARTI000037676165). Le champ reste
+     modifiable : c'est la date obtenue qui commande l'alerte. */
+  var CT_DEFAUT = { vl: 24, vul: 24, pl: 12, tracteur: 12, remorque: 12,
+    public10: 12, commun: 6, autre: 12 };
 
   var CHAMPS_V = [
     { c: "immat", lib: "Immatriculation", t: "text", maj: true, large: false },
@@ -137,6 +146,7 @@
     { c: "suivi", lib: "Suivi médical du travail", t: "select", opts: SUIVIS, large: true },
     { c: "visiteTravail", lib: "Dernière visite avec le médecin du travail", t: "date" },
     { c: "visiteInter", lib: "Dernière visite intermédiaire", t: "date" },
+    { c: "attestConduite", lib: "Attestation médicale de conduite, délivrée le", t: "date" },
     { c: "vehicule", lib: "Véhicule habituel", t: "vehicule" },
     { c: "note", lib: "Observations", t: "textarea", large: true },
   ];
@@ -219,6 +229,11 @@
       pose("Visite intermédiaire", f.visiteTravail
         ? plusMois(f.visiteInter || f.visiteTravail, f.visiteInter ? 48 : 24) : "");
     }
+    /* L'attestation d'absence de contre-indication à la conduite d'un
+       équipement à risques particuliers vaut cinq ans, et sans elle
+       l'autorisation de conduite ne vaut plus : R. 4323-56
+       (LEGIARTI000051500371), lu à la source le 15 septembre 2026. */
+    pose("Attestation de conduite", f.attestConduite ? plusMois(f.attestConduite, 60) : "");
     var pts = parseInt(f.points, 10);
     if (!isNaN(pts)) {
       L.push({
@@ -436,7 +451,7 @@
 
     var C = [["Conducteur", "Emploi", "Permis", "Catégories", "Validité du permis", "Points",
       "Suspension jusqu'au", "Dernière FCO", "Prochaine FCO", "Carte conducteur",
-      "Carte de qualification", "Visite du permis", "Suivi médical",
+      "Carte de qualification", "Visite du permis", "Attestation de conduite", "Suivi médical",
       "Dernière visite", "Prochaine visite", "Véhicule", "Observations"]];
     var parId = {};
     vehicules().forEach(function (v) { parId[v.id] = v.immat || ""; });
@@ -451,6 +466,7 @@
         f.points == null ? "" : f.points, enFrancais(f.retraitFin), enFrancais(f.fco),
         enFrancais(f.fco ? plusMois(f.fco, f.fcoMois || 60) : ""),
         enFrancais(f.carteCond), enFrancais(f.carteQualif), enFrancais(f.visitePermisFin),
+        enFrancais(f.attestConduite ? plusMois(f.attestConduite, 60) : ""),
         suivi, enFrancais(f.visiteTravail), enFrancais(prochaine),
         parId[f.vehicule] || "", f.note || "",
       ]);
