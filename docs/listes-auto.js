@@ -88,8 +88,95 @@
       ville: "ville", civilite: "civilité" }[cle] || cle;
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     CHOISIR UN SALARIÉ REMPLIT LE RESTE.
+
+     Demande du 15 septembre 2026 : « sélectionner le salarié, objet du
+     courrier quel qu'il soit, et ensuite enchaîner ». La liste des salariés
+     existait déjà sur les champs de nom, mais choisir un nom ne faisait que
+     poser le nom : l'emploi, la qualification, la nationalité, la date de
+     naissance et la date d'entrée restaient à retaper, alors que le registre
+     du personnel les porte.
+
+     Ce qui est déjà écrit n'est jamais remplacé : on ne remplit que les cases
+     vides. Une lettre en cours de rédaction ne se fait pas réécrire sous les
+     doigts de celui qui la rédige.                                          */
+  var CHAMPS_SALARIE = [
+    [/qualification|cat[ée]gorie professionnelle/i, "qua"],
+    [/nationalit/i, "nat"],
+    [/date de naissance|n[ée]\(e\) le/i, "nais"],
+    [/date d'entr[ée]e|date d'embauche|entr[ée]e dans l'entreprise/i, "ent"],
+    [/date de sortie|date de d[ée]part/i, "sor"],
+    /* L'emploi en dernier : « Emploi supprimé » ou « Emploi » se reconnaît
+       largement, et ne doit pas rafler un champ de qualification. */
+    [/emploi|poste|fonction|m[ée]tier/i, "emp"],
+  ];
+
+  function salarieDuRegistre(nom) {
+    var E = null;
+    try { E = JSON.parse(window.localStorage.getItem("registre-personnel") || "null"); }
+    catch (e) { return null; }
+    var L = (E && E.salaries) || [];
+    var cherche = String(nom || "").trim().toLowerCase();
+    if (!cherche) return null;
+    var trouve = null;
+    L.forEach(function (s) {
+      var a = [String(s.pre || "").trim(), String(s.nom || "").trim()].filter(Boolean).join(" ");
+      var b = [String(s.nom || "").trim(), String(s.pre || "").trim()].filter(Boolean).join(" ");
+      if (!trouve && (a.toLowerCase() === cherche || b.toLowerCase() === cherche)) trouve = s;
+    });
+    return trouve;
+  }
+
+  /* Pour remplir, on ne regarde QUE l'étiquette et l'identifiant du champ,
+     jamais son texte d'invite. Mesuré le 15 septembre 2026 : l'invite de la
+     zone « Ce que vous reprochez » de la lettre d'avertissement parle de
+     poste, et l'emploi du salarié s'y était écrit. */
+  function etiquette(el) {
+    var parts = [];
+    var lab = el.closest ? el.closest("label") : null;
+    if (lab) {
+      var n = lab.querySelector(".nom");
+      parts.push(n ? n.textContent : lab.textContent);
+    }
+    if (el.id) parts.push(el.id);
+    return parts.join(" | ");
+  }
+
+  function enchainer(el) {
+    if (listeDe(description(el)) !== "salarie") return;
+    var s = salarieDuRegistre(el.value);
+    if (!s) return;
+    var cadre = (el.closest && (el.closest("form") || el.closest(".champs") ||
+      el.closest("section"))) || doc;
+    var champs = cadre.querySelectorAll("input, select, textarea");
+    Array.prototype.forEach.call(champs, function (x) {
+      if (x === el || x.value) return;          /* jamais par-dessus une saisie */
+      if (x.tagName === "TEXTAREA") return;     /* une zone de texte n'est pas une case */
+      var d = etiquette(x);
+      if (listeDe(d) === "salarie") return;
+      for (var i = 0; i < CHAMPS_SALARIE.length; i++) {
+        if (!CHAMPS_SALARIE[i][0].test(d)) continue;
+        var v = s[CHAMPS_SALARIE[i][1]];
+        if (v == null || String(v).trim() === "") return;
+        /* Une date du registre est en AAAA-MM-JJ, ce qu'attend un champ date ;
+           ailleurs, elle s'écrit telle quelle. */
+        x.value = String(v);
+        x.dispatchEvent(new Event("input", { bubbles: true }));
+        x.dispatchEvent(new Event("change", { bubbles: true }));
+        return;
+      }
+    });
+  }
+
   function demarrer() {
     equiper(doc);
+    doc.addEventListener("change", function (ev) {
+      var el = ev.target;
+      if (!el || el.tagName !== "INPUT" || el.type !== "text") return;
+      if (!el.value) return;
+      try { enchainer(el); } catch (e) { /* remplir ne doit jamais casser l'écran */ }
+    });
     /* Les écrans reconstruisent leurs champs à chaque saisie : sans cette
        surveillance, la liste ne tiendrait qu'une frappe. */
     if (typeof MutationObserver !== "function") return;

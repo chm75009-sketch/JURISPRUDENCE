@@ -72,6 +72,10 @@
     o = o || {};
     var ppr = "<w:pPr>" +
       (o.espaceAvant ? '<w:spacing w:before="' + o.espaceAvant + '" w:after="60"/>' : '<w:spacing w:after="60"/>') +
+      /* Le bloc destinataire et la date d'une lettre se posent à droite : sur
+         le papier, c'est là qu'ils sont, et un courrier dont l'adresse du
+         destinataire est à gauche ne ressemble pas à un courrier. */
+      (o.droite ? '<w:jc w:val="right"/>' : "") +
       (o.puce ? '<w:ind w:left="360" w:hanging="180"/>' : "") +
       (o.cadre ? '<w:pBdr><w:left w:val="single" w:sz="18" w:space="6" w:color="1F3864"/></w:pBdr><w:ind w:left="180"/>' : "") +
       "</w:pPr>";
@@ -137,6 +141,7 @@
     h2: function (i) { return par(i.t, { gras: true, taille: 24, couleur: "1F3864", espaceAvant: 200 }); },
     h3: function (i) { return par(i.t, { gras: true, taille: 22, couleur: "1F3864", espaceAvant: 160 }); },
     sur: function (i) { return par(i.t, { taille: 18, couleur: "5F6874" }); },
+    dest: function (i) { return par(i.t, { droite: true }); },
     p: function (i) { return par(i.t); },
     note: function (i) { return par(i.t, { taille: 18, couleur: "5F6874" }); },
     puce: function (i) { var t = String(i.t || ""); return par(/^[-•]/.test(t) ? t : "- " + t, { puce: true }); },
@@ -203,6 +208,7 @@
     h2: function (i) { return "<h2>" + ech(i.t) + "</h2>"; },
     h3: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
     sur: function (i) { return '<p class="ap-sur">' + ech(i.t) + "</p>"; },
+    dest: function (i) { return '<p style="text-align:right">' + ech(i.t) + "</p>"; },
     p: function (i) { return "<p>" + ech(i.t) + "</p>"; },
     note: function (i) { return '<p class="ap-note">' + ech(i.t) + "</p>"; },
     puce: function (i) { return "<ul><li>" + ech(String(i.t || "").replace(/^[-•]\s*/, "")) + "</li></ul>"; },
