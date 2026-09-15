@@ -98,6 +98,18 @@
     padding:var(--e4);color:var(--rouge);font-size:var(--t3);line-height:1.55;margin:0 0 var(--e4)}
   .renvoi a{color:var(--rouge);font-weight:600}
 
+  /* Les arrêts sur lesquels repose le document, et leur copie intégrale. */
+  #arrets{margin:var(--e4) 0 0}
+  #arrets h3{font:600 15px/1.35 system-ui;margin:0 0 8px;color:var(--encre)}
+  .arret{border:1px solid var(--trait);border-radius:var(--r2);padding:12px 14px;margin:0 0 10px;
+    background:var(--fond-2,#fafafa)}
+  .arret .ref{font-weight:600;font-size:var(--t2);color:var(--encre);margin:0 0 4px}
+  .arret .dit{font-size:var(--t1);line-height:1.55;color:var(--texte-2);margin:0 0 10px}
+  .arret a.pdf{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:8px 14px;
+    border:1px solid var(--trait);border-radius:var(--r2);background:#fff;color:var(--encre);
+    font:600 14px/1 system-ui;text-decoration:none}
+  .arret a.pdf:hover{background:var(--rouge-clair);border-color:#e6cccc;color:var(--rouge)}
+
   /* La feuille : le document tel qu'il sortira sur le papier. */
   .feuille [contenteditable]{outline:none}
   .feuille [contenteditable]:focus{background:#fffbe9;border-radius:3px}
@@ -137,7 +149,7 @@
     padding:11px 14px;margin:var(--e3) 0;color:var(--ambre);font-size:var(--t2);line-height:1.6}
 
   @media print{
-    header.site,.maj-dispo,.onglets,.champs,.barre,details,.question,#ecran-oui,.renvoi{display:none !important}
+    header.site,.maj-dispo,.onglets,.champs,.barre,details,.question,#ecran-oui,.renvoi,#arrets{display:none !important}
     main.wrap{max-width:none;padding:0}
     .feuille{border:0;padding:0}
   }
@@ -186,6 +198,7 @@
       <button type="button" id="btn-word">Télécharger en Word</button>
       <button type="button" class="second" id="btn-imprimer">Imprimer</button>
     </div>
+    <div id="arrets"></div>
     <details id="loi">
       <summary>Voir le texte de loi</summary>
       <div id="sources"></div>
@@ -281,16 +294,78 @@
       dit: "dans les entreprises ou établissements d'au moins mille salariés, congé de reclassement d'une durée qui ne peut excéder douze mois, portés à vingt-quatre en cas de formation de reconversion" }
   };
 
-  var ARRET = {
-    ref: "Cass. soc., 8 janvier 2025, pourvoi n° 22-24.724, publié au Bulletin",
-    dit: "l'employeur doit indiquer, dans la liste des postes disponibles mise à disposition " +
-      "des salariés concernés, les critères de départage arrêtés afin de pouvoir identifier le " +
-      "salarié retenu, sur des bases objectives, en cas de candidatures multiples pour un même " +
-      "poste. A défaut de cette mention, l'offre est imprécise en ce qu'elle ne donne pas les " +
-      "éléments d'information de nature à donner aux salariés les outils de réflexion déterminant " +
-      "leur décision, ce qui caractérise un manquement de l'employeur à son obligation de " +
-      "reclassement et prive le licenciement de cause réelle et sérieuse"
+  /* Les arrêts sur lesquels reposent les documents. Chacun a été lu texte
+     intégral à la source (Judilibre) et sa copie est servie en PDF depuis
+     arrets/. La référence part dans le document, en note ; le bouton, lui,
+     reste à l'écran. */
+  var ARRETS = {
+    departage: {
+      ref: "Cass. soc., 8 janvier 2025, pourvoi n° 22-24.724, publié au Bulletin",
+      dit: "l'employeur doit indiquer, dans la liste des postes disponibles mise à disposition " +
+        "des salariés concernés, les critères de départage arrêtés afin de pouvoir identifier le " +
+        "salarié retenu, sur des bases objectives, en cas de candidatures multiples pour un même " +
+        "poste. A défaut de cette mention, l'offre est imprécise en ce qu'elle ne donne pas les " +
+        "éléments d'information de nature à donner aux salariés les outils de réflexion déterminant " +
+        "leur décision, ce qui caractérise un manquement de l'employeur à son obligation de " +
+        "reclassement et prive le licenciement de cause réelle et sérieuse",
+      pdf: "arrets/Cass-soc-08-janvier-2025-22-24724.pdf" },
+    mentions: {
+      ref: "Cass. soc., 23 octobre 2024, pourvoi n° 23-19.629, publié au Bulletin",
+      dit: "à défaut de l'une des six mentions que l'offre doit porter, l'offre est imprécise, ce " +
+        "qui caractérise un manquement de l'employeur à son obligation de reclassement et prive le " +
+        "licenciement de cause réelle et sérieuse",
+      pdf: "arrets/Cass-soc-23-octobre-2024-23-19629.pdf" },
+    postes: {
+      ref: "Cass. soc., 28 octobre 2015, pourvoi n° 14-17.712, publié au Bulletin",
+      dit: "le plan de reclassement doit préciser le nombre, la nature, la localisation, le statut " +
+        "et la rémunération des emplois disponibles au sein du groupe ; les recherches auprès des " +
+        "sociétés du groupe n'ont pas à être assorties du profil personnalisé de chaque salarié",
+      pdf: "arrets/Cass-soc-28-octobre-2015-14-17712.pdf" },
+    secteur: {
+      ref: "Cass. soc., 26 juin 2024, pourvoi n° 23-15.503, publié au Bulletin",
+      dit: "la spécialisation d'une entreprise dans le groupe ne suffit pas à exclure son " +
+        "rattachement à un secteur d'activité plus étendu, au sein duquel doivent être appréciées " +
+        "les difficultés économiques, les mutations technologiques ou la nécessité de sauvegarder " +
+        "la compétitivité de l'entreprise",
+      pdf: "arrets/Cass-soc-26-juin-2024-23-15503.pdf" },
+    categories: {
+      ref: "Cass. soc., 20 avril 2022, pourvoi n° 20-20.567, publié au Bulletin",
+      dit: "il appartient à l'autorité administrative de s'assurer que les catégories " +
+        "professionnelles regroupent l'ensemble des salariés qui exercent des fonctions de même " +
+        "nature supposant une formation professionnelle commune, et de vérifier la conformité des " +
+        "critères d'ordre et de leurs règles de pondération ; l'inobservation des règles relatives " +
+        "à l'ordre des licenciements ne prive pas le licenciement de cause réelle et sérieuse mais " +
+        "donne lieu à des dommages-intérêts pouvant aller jusqu'à la perte injustifiée de l'emploi",
+      pdf: "arrets/Cass-soc-20-avril-2022-20-20567.pdf" },
+    criteres: {
+      ref: "Cass. soc., 12 juillet 2022, pourvoi n° 20-23.651, publié au Bulletin",
+      dit: "l'employeur prend notamment en compte, dans le choix du salarié concerné, le critère " +
+        "tenant à la situation des salariés qui présentent des caractéristiques sociales rendant " +
+        "leur réinsertion professionnelle particulièrement difficile",
+      pdf: "arrets/Cass-soc-12-juillet-2022-20-23651.pdf" },
+    reembauche: {
+      ref: "Cass. soc., 26 février 2025, pourvoi n° 23-15.427, publié au Bulletin",
+      dit: "lorsque la rupture résulte de l'acceptation d'un contrat de sécurisation " +
+        "professionnelle, la priorité de réembauche doit être mentionnée dans le document écrit " +
+        "énonçant le motif économique, et donc portée à la connaissance du salarié au plus tard au " +
+        "moment de son acceptation ; son défaut ne prive pas la rupture de cause réelle et sérieuse " +
+        "mais permet au salarié qui justifie d'un préjudice d'obtenir des dommages-intérêts",
+      pdf: "arrets/Cass-soc-26-fevrier-2025-23-15427.pdf" },
+    competence: {
+      ref: "Cass. soc., 12 juin 2024, pourvoi n° 23-12.969, publié au Bulletin",
+      dit: "le juge judiciaire ne peut, sans violer le principe de séparation des pouvoirs, en " +
+        "l'état d'une décision de validation devenue définitive, apprécier par voie d'exception la " +
+        "légalité des mesures figurant dans le plan, en particulier celles déterminant les " +
+        "catégories professionnelles concernées par le licenciement",
+      pdf: "arrets/Cass-soc-12-juin-2024-23-12969.pdf" },
+    ensemble: {
+      ref: "Cass. soc., 15 mai 2013, pourvoi n° 11-27.458, publié au Bulletin",
+      dit: "sauf accord collectif conclu au niveau de l'entreprise ou à un niveau plus élevé, les " +
+        "critères déterminant l'ordre des licenciements doivent être mis en oeuvre à l'égard de " +
+        "l'ensemble du personnel de l'entreprise",
+      pdf: "arrets/Cass-soc-15-mai-2013-11-27458.pdf" }
   };
+  var ARRET = ARRETS.departage;
 
   function ref(nums) {
     return nums.map(function (n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }).join(", ");
@@ -417,7 +492,7 @@
     });
     return out;
   }
-  var VERS_EXPORT = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "puce",
+  var VERS_EXPORT = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "puce", note: "note",
     ligne: "p", sign: "p", trait: "trait" };
   function pourFichier() {
     var blocs = relire();
@@ -665,6 +740,8 @@
     b.push({ k: "p", t: "L'entreprise connaît " + d.cause.t + "." });
     (d.faits ? d.faits.split(/\n+/) : ["[Éléments chiffrés et datés qui l'établissent.]"])
       .forEach(function (l) { if (l.trim()) b.push({ k: "p", t: l.trim() }); });
+    b.push({ k: "note", t: "Les difficultés économiques s'apprécient au niveau du secteur " +
+      "d'activité du groupe : " + ARRETS.secteur.ref + "." });
 
     b.push({ k: "h1", t: "Article 3 - Les mesures du plan" });
     b.push({ k: "p", t: "Les mesures ci-dessous sont classées par rubrique. Le budget indiqué est " +
@@ -684,6 +761,9 @@
     b.push({ k: "p", t: "Chaque offre est écrite et précise. Elle indique l'intitulé du poste et son " +
       "descriptif, le nom de l'employeur, la nature du contrat de travail, la localisation du poste, " +
       "le niveau de rémunération et la classification du poste." });
+    b.push({ k: "note", t: "Les six mentions sont exigées à peine d'imprécision : " +
+      ARRETS.mentions.ref + ". Les postes du groupe sont décrits par leur nombre, leur nature, leur " +
+      "localisation, leur statut et leur rémunération : " + ARRETS.postes.ref + "." });
     b.push({ k: "h2", t: "Le délai de candidature" });
     b.push({ k: "p", t: "Les candidatures sont présentées par écrit et reçues jusqu'au " +
       (cloture ? dateFr(cloture) + " inclus" : "[date]") + ", soit un délai de quinze jours francs à " +
@@ -696,6 +776,8 @@
     b.push({ k: "p", t: "Ces critères sont repris dans la liste diffusée aux salariés, et non " +
       "seulement dans le présent plan. Le salarié dont la candidature n'est pas retenue en est " +
       "informé par écrit, avec l'indication du critère qui a départagé les candidatures." });
+    b.push({ k: "note", t: "Leur absence de la liste diffusée rend l'offre imprécise et prive le " +
+      "licenciement de cause réelle et sérieuse : " + ARRETS.departage.ref + "." });
 
     b.push({ k: "h1", t: "Article 5 - Les critères d'ordre des licenciements" });
     b.push({ k: "p", t: "Les critères retenus pour fixer l'ordre des licenciements sont les charges " +
@@ -714,6 +796,11 @@
         "d'emplois dans laquelle est situé l'établissement concerné."
       : "la zone d'emplois dans laquelle est situé l'établissement concerné par les suppressions " +
         "d'emplois, soit la zone d'emplois de " + ville() + ".") });
+    b.push({ k: "note", t: "Aucun critère ne peut être écarté, et la situation sociale rendant la " +
+      "réinsertion difficile ne se limite pas au handicap reconnu : " + ARRETS.criteres.ref + ". " +
+      "Les catégories professionnelles et la pondération retenue sont contrôlées par " +
+      "l'administration, et l'ordre mal appliqué se paie en dommages-intérêts : " +
+      ARRETS.categories.ref + "." });
 
     b.push({ k: "h1", t: "Article 6 - L'accompagnement individuel" });
     b.push({ k: "p", t: mille
@@ -733,6 +820,8 @@
       "compatible avec sa qualification, et informe les représentants du personnel des postes " +
       "disponibles. Le salarié ayant acquis une nouvelle qualification en bénéficie également au " +
       "titre de celle-ci, s'il en informe l'entreprise." });
+    b.push({ k: "note", t: "Elle est portée à la connaissance du salarié au plus tard au moment " +
+      "où il accepte le contrat de sécurisation professionnelle : " + ARRETS.reembauche.ref + "." });
 
     b.push({ k: "h1", t: "Article 8 - Le suivi de la mise en oeuvre" });
     b.push({ k: "p", t: "Une commission de suivi est constituée. Elle comprend [nombre] " +
@@ -875,6 +964,7 @@
      articles avec leur identifiant de version. */
   var ONGLETS = [
     { cle: "notification", nom: "Notification", champs: ["nombre", "reunion1", "voie"],
+      arrets: function () { return ["secteur"]; },
       doc: docNotification, fichier: "notification-du-projet",
       dates: function (d) {
         return ["Notification au plus tôt le " + dateFrJour(d.notifadmin) + " : le lendemain de " +
@@ -887,6 +977,7 @@
       },
       textes: function () { return ["L1233-46", "L1233-28", "L1233-61"]; } },
     { cle: "convocation1", nom: "Première réunion", champs: ["cause", "faits", "categories"],
+      arrets: function () { return ["secteur", "categories", "criteres"]; },
       doc: docConvocation1, fichier: "convocation-premiere-reunion",
       dates: function (d) {
         var avis = d.reunion1 ? plusMois(d.reunion1, moisAvis(d.nombre)) : null;
@@ -896,6 +987,7 @@
       },
       textes: function () { return ["L1233-31", "L1233-32", "L1233-30", "L1233-34", "L1233-35", "L1233-3"]; } },
     { cle: "convocation2", nom: "Seconde réunion", champs: ["reunion1", "reunion2"],
+      arrets: function () { return ["categories"]; },
       doc: docConvocation2, fichier: "convocation-seconde-reunion",
       dates: function (d) {
         return ["Seconde réunion au plus tôt le " +
@@ -909,6 +1001,7 @@
       },
       textes: function () { return ["L1233-30", "L1233-33"]; } },
     { cle: "plan", nom: "Plan", champs: ["mesures", "publication", "departage"],
+      arrets: function () { return ["departage", "mentions", "postes", "criteres", "categories", "reembauche"]; },
       doc: docPlan, fichier: "plan-de-sauvegarde-de-l-emploi",
       dates: function (d) {
         var c = clotureCandidatures(d.publication);
@@ -927,6 +1020,7 @@
       dates: function () { return []; },
       textes: function () { return ["L1233-33"]; } },
     { cle: "demande", nom: "Validation", champs: ["voie", "depot"],
+      arrets: function () { return ["competence", "categories"]; },
       doc: docDemande, fichier: "demande-de-validation-ou-d-homologation",
       dates: function (d) {
         return ["Décision de l'administration au plus tard le " + dateFrJour(d.decision) + " : " +
@@ -937,6 +1031,7 @@
       textes: function (d) { return ["L1233-24-1", "L1233-24-2", "L1233-24-4",
         d.accord ? "L1233-57-2" : "L1233-57-3", "L1233-57-4"]; } },
     { cle: "lettre", nom: "Lettre", champs: ["nom", "adresse", "poste"],
+      arrets: function () { return ["reembauche", "mentions", "ensemble"]; },
       doc: docLettre, fichier: "lettre-de-licenciement",
       dates: function (d) {
         return ["Lettre au plus tôt le " + dateFrJour(d.decision) + " : après la notification de " +
@@ -1001,6 +1096,20 @@
     }
     return l.map(function (t) { return '<div class="renvoi">' + t + "</div>"; }).join("");
   }
+  /* Les arrêts de l'onglet courant, chacun avec sa copie intégrale à
+     télécharger. Le bouton ne part ni au Word ni à l'impression. */
+  function arretsHtml(cles) {
+    if (!cles || !cles.length) return "";
+    var h = "<h3>Ce que la Cour de cassation a jugé</h3>";
+    cles.forEach(function (c) {
+      var a = ARRETS[c];
+      if (!a) return;
+      h += '<div class="arret"><div class="ref">' + ech(a.ref) + "</div>" +
+        '<div class="dit">&laquo; ' + ech(a.dit) + ' &raquo;</div>' +
+        '<a class="pdf" href="' + a.pdf + '" download>T\u00e9l\u00e9charger l\'arr\u00eat en PDF</a></div>';
+    });
+    return h;
+  }
   function rendreDoc() {
     var d = lire();
     $("#doc").innerHTML = renvois(d) + feuilleHtml(courant.doc(d));
@@ -1008,6 +1117,7 @@
     courant.textes(d).forEach(function (k) {
       h += "<div><b>" + ech(ref([k])) + "</b> · " + TEXTES[k].id + " · " + ech(TEXTES[k].dit) + "</div>";
     });
+    $("#arrets").innerHTML = arretsHtml(courant.arrets ? courant.arrets(d) : []);
     h += "<div>Code du travail, lu au relais Légifrance le 7 septembre 2026, deux lectures " +
       "concordantes par article, même identifiant et même texte aux deux lectures. Jours " +
       "ouvrables : tous les jours de la semaine sauf le dimanche et les jours fériés.</div>";
