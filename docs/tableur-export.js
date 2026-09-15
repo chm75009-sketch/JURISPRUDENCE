@@ -66,24 +66,38 @@
   }
   function pleines(l) { return (l || []).filter(function (c) { return c !== null && c !== undefined && c !== ""; }).length; }
 
-  /* Styles : 1 = titre, 2 = en-tête, 3 = cellule cadrée, 4 = note. */
+  /* Styles : 1 = titre, 2 = en-tête, 3 = cellule cadrée, 4 = note,
+     5 = cellule cadrée d'une ligne paire.
+
+     LES CADRES SONT EN GRAS. Demande du 15 septembre 2026, « tous les
+     documents Excel de l'application doivent avoir la bordure » : ce sont les
+     mêmes cadres que ceux validés sur le classeur de la base de données, un
+     trait moyen gris ardoise autour de chaque cellule du tableau, et une
+     ligne sur deux très légèrement teintée pour suivre une ligne longue de
+     l'œil sans la perdre. Les titres et les notes, qui ne sont pas des
+     cellules de tableau, restent sans cadre : les encadrer ferait un
+     quadrillage et non un tableau. */
   var STYLES = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
     '<fonts count="3"><font><sz val="11"/><name val="Calibri"/></font>' +
     '<font><b/><sz val="13"/><color rgb="FF1F3864"/><name val="Calibri"/></font>' +
     '<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>' +
-    '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>' +
-    '<fill><patternFill patternType="solid"><fgColor rgb="FFE7EAF0"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+    '<fills count="4"><fill><patternFill patternType="none"/></fill>' +
+    '<fill><patternFill patternType="gray125"/></fill>' +
+    '<fill><patternFill patternType="solid"><fgColor rgb="FFE7EAF0"/><bgColor indexed="64"/></patternFill></fill>' +
+    '<fill><patternFill patternType="solid"><fgColor rgb="FFF7F8FB"/><bgColor indexed="64"/></patternFill></fill></fills>' +
     '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>' +
-    '<border><left style="thin"><color rgb="FF9AA3AF"/></left><right style="thin"><color rgb="FF9AA3AF"/></right>' +
-    '<top style="thin"><color rgb="FF9AA3AF"/></top><bottom style="thin"><color rgb="FF9AA3AF"/></bottom><diagonal/></border></borders>' +
+    '<border><left style="medium"><color rgb="FF4A5568"/></left><right style="medium"><color rgb="FF4A5568"/></right>' +
+    '<top style="medium"><color rgb="FF4A5568"/></top><bottom style="medium"><color rgb="FF4A5568"/></bottom>' +
+    '<diagonal/></border></borders>' +
     '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
-    '<cellXfs count="5">' +
+    '<cellXfs count="6">' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
     '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>' +
     '<xf numFmtId="0" fontId="2" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+    '<xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
     '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
 
   function feuilleXml(lignes, largeurs) {
@@ -112,6 +126,8 @@
       var note = tete >= 0 && i > tete && pleines(ligne) === 1 && !numero;
       var enTete = i === tete || (tete >= 0 && i > tete && pleines(ligne) >= 4 && !numero);
       var style = titre ? titre : (enTete ? 2 : (note ? 4 : 3));
+      /* Une ligne de données sur deux, très légèrement teintée. */
+      if (style === 3 && tete >= 0 && (i - tete) % 2 === 0) style = 5;
       var largeur = (style === 3 || style === 2) ? nbCol : ligne.length;
       x += '<row r="' + (i + 1) + '"' + (style === 1 ? ' ht="22" customHeight="1"' : "") + '>';
       for (var j = 0; j < largeur; j++) {
