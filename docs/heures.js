@@ -127,6 +127,7 @@
   var qui = null;                       /* le salarié affiché               */
   var an, mo;                           /* le mois affiché, mo de 0 à 11    */
   var lignes = [];                      /* les jours du mois, à l'écran     */
+  var VERROU = false;                   /* le mois affiché est-il clos      */
   var semaines = [];
 
   function refDe(id) {
@@ -222,6 +223,7 @@
 
   function dessinerJours() {
     var m = moisDe(), verrou = !!(m.clos && m.clos.le);
+    VERROU = verrou;
     var hote = $("jours");
     hote.textContent = "";
     semaines = [];
@@ -323,7 +325,38 @@
     });
   }
 
+  /* Recopier un jour sur tous les jours que le contrat fait travailler. La
+     nature de chaque jour ne bouge pas : un congé posé reste un congé. */
+  function recopier(modele) {
+    if (!window.confirm("Reporter " + modele.d + " - " + modele.f + ", pause " + modele.p +
+      " minutes, sur tous les jours travaillés de " + MOIS[mo] + " " + an + " ?")) return;
+    var m = moisDe();
+    lignes.forEach(function (l) {
+      if (l.base.n !== "travail" || l.n !== "travail") return;
+      l.d = modele.d; l.f = modele.f; l.p = modele.p;
+      if (modifiee(l)) m.jours[String(l.j)] = { n: l.n, d: l.d, f: l.f, p: l.p };
+      else delete m.jours[String(l.j)];
+    });
+    garderMois(m);
+    dessinerJours(); calculer();
+  }
+
   function majLigne(noeud, l) {
+    /* Le bouton de recopie se pose et se retire au fil de la frappe : il n'a
+       de sens que sur un jour qui s'écarte du contrat. */
+    var z = noeud.querySelector(".saisie");
+    var rep = z ? z.querySelector(".repeter") : null;
+    var doitEtre = l.n === "travail" && modifiee(l) && !VERROU;
+    if (doitEtre && !rep) {
+      rep = document.createElement("button");
+      rep.type = "button";
+      rep.className = "repeter";
+      rep.textContent = "Ces horaires pour tout le mois";
+      rep.addEventListener("click", function () { recopier(l); });
+      z.appendChild(rep);
+    } else if (!doitEtre && rep) {
+      rep.parentNode.removeChild(rep);
+    }
     var h = noeud.querySelector(".h");
     var v = duree(l);
     h.innerHTML = l.n === "travail"
@@ -636,6 +669,18 @@
       r.p = $("r-pause").value;
       garderRef(qui.id, r);
       construire(); rendreIdentite(); dessinerJours(); calculer();
+    });
+
+    /* Remettre le mois à l'horaire du contrat : on efface les écarts, pas le
+       mois. Les rectificatifs et les réclamations restent. */
+    $("r-appliquer").addEventListener("click", function () {
+      var m = moisDe();
+      if (m.clos && m.clos.le) { window.alert("Le mois est clos : il ne se réécrit plus."); return; }
+      if (!window.confirm("Remettre tous les jours de " + MOIS[mo] + " " + an +
+        " à l'horaire de référence ? Les horaires corrigés à la main seront perdus.")) return;
+      m.jours = {};
+      garderMois(m);
+      construire(); dessinerJours(); calculer();
     });
 
     $("t-retenu").addEventListener("input", function () {

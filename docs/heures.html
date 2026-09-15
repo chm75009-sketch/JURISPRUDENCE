@@ -92,6 +92,12 @@
   .jour .cap{font:600 10px/1.2 system-ui;letter-spacing:.05em;text-transform:uppercase;
     color:var(--texte-3);text-align:center;align-self:end;padding-bottom:1px}
   .jour .cap.g{text-align:left;padding-left:2px}
+  /* Recopier plutôt que retaper. Le bouton n'apparaît que sur un jour qui
+     s'écarte du contrat : c'est le seul cas où il y a quelque chose à
+     recopier. Demande du 15 septembre 2026. */
+  .jour .repeter{grid-column:1/-1;justify-self:start;margin:4px 0 0;width:auto;
+    min-height:38px;padding:0 12px;border-radius:999px;border:1px solid var(--filet-2);
+    background:var(--surface);color:var(--accent);font:600 var(--t1) system-ui;cursor:pointer}
   /* 16 px au moins sur tout champ : en dessous, l'iPhone zoome de lui-même
      dès qu'on entre dans la case et la page part de travers. */
   .jour .saisie select,.jour .saisie input{width:100%;min-width:0;box-sizing:border-box;
@@ -206,12 +212,14 @@
         <label><span>Pause min</span><input type="text" id="r-pause" inputmode="numeric" maxlength="3" placeholder="60"></label>
       </div>
       <div class="sem" id="r-jours"></div>
+      <div class="barre"><button type="button" class="second" id="r-appliquer">Remettre tout le mois à cet horaire</button></div>
     </div>
 
     <div class="bloc">
       <h2>Jours du mois</h2>
-      <p class="doux">Sur chaque ligne : la nature du jour, l'heure de début, l'heure de fin,
-        la pause en minutes. On ne touche qu'aux jours qui ont changé, ils se marquent d'un trait orange.</p>
+      <p class="doux">Les jours travaillés arrivent déjà remplis par l'horaire de référence : il n'y a
+        rien à saisir tant que rien ne change. On ne touche qu'aux jours qui s'en écartent, ils se
+        marquent d'un trait orange et proposent alors de recopier leurs horaires sur tout le mois.</p>
       <div class="jours" id="jours"></div>
     </div>
 
