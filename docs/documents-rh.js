@@ -102,9 +102,9 @@
               "Mention « mis à disposition par un groupement d'employeurs » + groupement",
               "Mention « salarié à temps partiel »",
               "Mention « apprenti » ou « contrat de professionnalisation »"]);
-      L.push(["1", "DUPONT Jean", "française", "12/04/1988", "M", "Conducteur poids lourd",
+      L.push(["1", "YYYYY Jean", "française", "12/04/1988", "M", "Conducteur poids lourd",
               "Ouvrier, coefficient 138 M", "15/09/2026", "", "", "", "", "", "", "", ""]);
-      L.push(["2", "MARTIN Sofia", "portugaise", "03/11/1995", "F", "Agent d'exploitation",
+      L.push(["2", "ZZZZZ Sofia", "portugaise", "03/11/1995", "F", "Agent d'exploitation",
               "Employé, coefficient 120", "01/10/2026", "", "",
               "Carte de séjour pluriannuelle n° [NUMÉRO]", "contrat à durée déterminée", "", "",
               "salarié à temps partiel", ""]);
@@ -131,7 +131,7 @@
       L.push("");
       L.push("EXEMPLE - REGISTRE UNIQUE DU PERSONNEL");
       L.push("");
-      L.push("Établissement : DUPONT TRANSPORTS SARL");
+      L.push("Établissement : AAAAA SARL");
       L.push("Adresse de l'établissement : 45 rue du Port, 76600 Le Havre");
       L.push("Registre ouvert le : 1er septembre 2026");
       L.push("");
@@ -139,9 +139,9 @@
       L.push("");
       L = L.concat(tableau(["N° d'ordre", "Nom et prénoms", "Nationalité", "Date de naissance", "Sexe",
                            "Emploi", "Qualification", "Date d'entrée", "Date de sortie"],
-                         [["1", "DUPONT Jean", "française", "12/04/1988", "M",
+                         [["1", "YYYYY Jean", "française", "12/04/1988", "M",
                            "Conducteur poids lourd", "Ouvrier, coefficient 138 M", "15/09/2019", ""],
-                          ["2", "MARTIN Sofia", "portugaise", "03/11/1995", "F",
+                          ["2", "ZZZZZ Sofia", "portugaise", "03/11/1995", "F",
                            "Agent d'exploitation", "Employé, coefficient 120", "01/10/2022", ""]]));
       L.push("");
 
@@ -224,11 +224,11 @@
       L.push("");
       L.push("EXEMPLE - CERTIFICAT DE TRAVAIL");
       L.push("");
-      L.push("Je soussigné, Jean DUPONT, gérant de la SARL DUPONT TRANSPORTS,");
-      L.push("agissant pour la société DUPONT TRANSPORTS,");
+      L.push("Je soussigné, Jean XXXXX, gérant de la SARL AAAAA,");
+      L.push("agissant pour la société AAAAA,");
       L.push("dont le siège est 45 rue du Port, 76600 Le Havre,");
       L.push("");
-      L.push("certifie que MARTIN Sofia");
+      L.push("certifie que ZZZZZ Sofia");
       L.push("");
       L.push("- est entrée à mon service le 01/10/2022 ;");
       L.push("- en est sortie le 30/06/2026 ;");
@@ -239,7 +239,7 @@
       L.push("En foi de quoi ce certificat est délivré au salarié pour servir et valoir ce que de droit.");
       L.push("");
       L.push("Fait à Le Havre, le 30 juin 2026");
-      L.push("Jean DUPONT, Gérant");
+      L.push("Jean XXXXX, Gérant");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
@@ -317,9 +317,9 @@
       L.push("");
       L.push("EXEMPLE - REÇU POUR SOLDE DE TOUT COMPTE");
       L.push("");
-      L.push("Entre la société DUPONT TRANSPORTS,");
+      L.push("Entre la société AAAAA,");
       L.push("45 rue du Port, 76600 Le Havre,");
-      L.push("et MARTIN Sofia,");
+      L.push("et ZZZZZ Sofia,");
       L.push("dont le contrat de travail a pris fin le 30/06/2026.");
       L.push("");
       L.push("INVENTAIRE DES SOMMES VERSÉES LORS DE LA RUPTURE");
@@ -337,7 +337,7 @@
       L.push("Le présent reçu est établi en DEUX EXEMPLAIRES.");
       L.push("Fait à Le Havre, le 30 juin 2026, en deux exemplaires.");
       L.push("Pour la société                          La salariée");
-      L.push("Jean DUPONT, Gérant                      MARTIN Sofia");
+      L.push("Jean XXXXX, Gérant                      ZZZZZ Sofia");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
@@ -429,15 +429,15 @@
       L.push("");
       L.push("ENTRE LES SOUSSIGNÉS :");
       L.push("");
-      L.push("DUPONT TRANSPORTS SARL, dont le siège social est situé 45 rue du Port, 76600 Le Havre, " +
+      L.push("AAAAA SARL, dont le siège social est situé 45 rue du Port, 76600 Le Havre, " +
              "immatriculée sous le numéro SIRET 12345678901234,");
-      L.push("représentée par Jean DUPONT, gérant,");
+      L.push("représentée par Jean XXXXX, gérant,");
       L.push("");
       L.push("Ci-après « l'employeur »,");
       L.push("");
       L.push("ET");
       L.push("");
-      L.push("MARTIN Sofia, née le 03/11/1995 à Lisbonne, demeurant 12 rue de la Paix, 76000 Rouen, " +
+      L.push("ZZZZZ Sofia, née le 03/11/1995 à Lisbonne, demeurant 12 rue de la Paix, 76000 Rouen, " +
              "de nationalité portugaise, numéro de sécurité sociale [NUMÉRO DE SÉCURITÉ SOCIALE],");
       L.push("");
       L.push("Ci-après « le salarié »,");
@@ -455,7 +455,7 @@
       L.push("");
       L.push("Fait à Le Havre, le " + leJour(d0) + ", en deux exemplaires.");
       L.push("L'employeur                              Le salarié");
-      L.push("Jean DUPONT, Gérant                      MARTIN Sofia");
+      L.push("Jean XXXXX, Gérant                      ZZZZZ Sofia");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
@@ -549,9 +549,9 @@
       L.push("EXEMPLE - CONTRAT DE TRAVAIL À DURÉE DÉTERMINÉE");
       L.push("");
       L.push("ENTRE LES SOUSSIGNÉS :");
-      L.push("DUPONT TRANSPORTS SARL, [...], représentée par Jean DUPONT, gérant,");
+      L.push("AAAAA SARL, [...], représentée par Jean XXXXX, gérant,");
       L.push("ET");
-      L.push("MARTIN Sofia, [...]");
+      L.push("ZZZZZ Sofia, [...]");
       L.push("");
       L.push("Article 1 - Motif du recours");
       L.push("Le présent contrat est conclu pour remplacement d'un salarié absent : remplacement de " +
@@ -565,7 +565,7 @@
       L.push("");
       L.push("Fait à Le Havre, le " + leJour(d0) + ", en deux exemplaires.");
       L.push("L'employeur                              Le salarié");
-      L.push("Jean DUPONT, Gérant                      MARTIN Sofia");
+      L.push("Jean XXXXX, Gérant                      ZZZZZ Sofia");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
@@ -662,13 +662,13 @@
       L.push("RÉUNION DES MENTIONS À DÉCLARER À L'URSSAF");
       L.push("");
       L.push("1. L'EMPLOYEUR");
-      L.push("Dénomination : DUPONT TRANSPORTS SARL");
+      L.push("Dénomination : AAAAA SARL");
       L.push("Code APE : 4941B");
       L.push("SIRET : 12345678901234");
       L.push("Adresse : 45 rue du Port, 76600 Le Havre");
       L.push("");
       L.push("2. LE SALARIÉ");
-      L.push("Nom et prénoms : MARTIN Sofia");
+      L.push("Nom et prénoms : ZZZZZ Sofia");
       L.push("Date et lieu de naissance : 03/11/1995 à Lisbonne");
       L.push("Nationalité : portugaise");
       L.push("");
@@ -754,11 +754,11 @@
       L.push("");
       L.push("EXEMPLE - ENTRETIEN DE PARCOURS PROFESSIONNEL");
       L.push("");
-      L.push("Entreprise : DUPONT TRANSPORTS");
-      L.push("Salarié : MARTIN Sofia - emploi occupé : Agent d'exploitation");
+      L.push("Entreprise : AAAAA");
+      L.push("Salarié : ZZZZZ Sofia - emploi occupé : Agent d'exploitation");
       L.push("Date d'entrée : 01/10/2022");
       L.push("Entretien tenu le : 15/06/2026, à 14h00, pendant le temps de travail");
-      L.push("Conduit par : Jean DUPONT, gérant");
+      L.push("Conduit par : Jean XXXXX, gérant");
       L.push("");
       L.push("1. COMPÉTENCES ET QUALIFICATIONS MOBILISÉES");
       L.push("Maîtrise des outils informatiques, gestion de la logistique, communication avec les clients.");
@@ -776,7 +776,7 @@
       L.push("Le salarié a été informé de son CPF et des possibilités d'abondement par l'entreprise.");
       L.push("");
       L.push("Fait à Le Havre, le " + leJour(d0) + ", en deux exemplaires.");
-      L.push("L'employeur : Jean DUPONT                Le salarié : MARTIN Sofia");
+      L.push("L'employeur : Jean XXXXX                Le salarié : ZZZZZ Sofia");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
@@ -862,8 +862,8 @@
       L.push("");
       L.push("EXEMPLE - ÉTAT DES LIEUX RÉCAPITULATIF - HUIT ANS");
       L.push("");
-      L.push("Entreprise : DUPONT TRANSPORTS");
-      L.push("Salarié : DUPONT Jean - ancienneté depuis le 15/09/2019");
+      L.push("Entreprise : AAAAA");
+      L.push("Salarié : YYYYY Jean - ancienneté depuis le 15/09/2019");
       L.push("État des lieux établi le : " + leJour(d0));
       L.push("");
       L.push("LES ENTRETIENS DES HUIT DERNIÈRES ANNÉES");
@@ -880,7 +880,7 @@
       L.push("Progressions : coefficient 138 M (2019) puis 150 (2024)");
       L.push("");
       L.push("Fait à Le Havre, le " + leJour(d0) + ", en deux exemplaires.");
-      L.push("L'employeur : Jean DUPONT                Le salarié : DUPONT Jean");
+      L.push("L'employeur : Jean XXXXX                Le salarié : YYYYY Jean");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
@@ -972,7 +972,7 @@
       L.push("L'ordre des départs sera communiqué à chaque salarié un mois au moins avant son départ.");
       L.push("");
       L.push("Affiché le " + leJour(dans(d0, 60)) + " aux emplacements habituels.");
-      L.push("Jean DUPONT, gérant");
+      L.push("Jean XXXXX, gérant");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
@@ -1054,8 +1054,8 @@
       L.push("Période de prise : 1er mai " + an + " - 31 octobre " + an);
       L.push("");
       L = L.concat(tableau(["Salarié", "Dates demandées", "Dates accordées", "Décision", "Critère appliqué", "Notifié le"],
-        [["DUPONT Jean", "01/07 au 26/07", "01/07 au 26/07", "accordé", "situation de famille (2 enfants)", "15/05"],
-         ["MARTIN Sofia", "01/08 au 23/08", "08/08 au 30/08", "décalé", "durée des services", "20/05"]]));
+        [["YYYYY Jean", "01/07 au 26/07", "01/07 au 26/07", "accordé", "situation de famille (2 enfants)", "15/05"],
+         ["ZZZZZ Sofia", "01/08 au 23/08", "08/08 au 30/08", "décalé", "durée des services", "20/05"]]));
       L.push("");
       L.push("LES CRITÈRES APPLIQUÉS :");
       L.push("  - Situation de famille (enfants, conjoint enseignant, personne en perte d'autonomie)");
@@ -1063,7 +1063,7 @@
       L.push("  - Activité éventuelle chez d'autres employeurs");
       L.push("");
       L.push("Communiqué le " + leJour(d0));
-      L.push("Jean DUPONT, gérant");
+      L.push("Jean XXXXX, gérant");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");

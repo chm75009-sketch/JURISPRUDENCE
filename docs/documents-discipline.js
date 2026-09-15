@@ -503,14 +503,14 @@
       L.push("");
       L.push("EXEMPLE - DÉCISION DE RETRAIT");
       L.push("");
-      L.push("DUPONT TRANSPORTS SARL");
+      L.push("AAAAA SARL");
       L.push("");
       L.push("DÉCISION DE RETRAIT D'UNE CLAUSE");
       L.push("");
       L.push("La clause prévoyant une fouille sans consentement du salarié est retirée du");
       L.push("règlement intérieur, car elle n'est pas proportionnée au but recherché.");
       L.push("Date d'effet : 1er octobre 2026");
-      L.push("Signée par : M. DUPONT, gérant");
+      L.push("Signée par : M. XXXXX, gérant");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
@@ -900,7 +900,7 @@
       L.push("");
       L.push("ENTRETIEN DU 15 SEPTEMBRE 2026 À 10 H");
       L.push("Avec : M. Jean MARTIN, conducteur");
-      L.push("Présent : M. DUPONT, gérant");
+      L.push("Présent : M. XXXXX, gérant");
       L.push("Assistant du salarié : [si l'une demande]");
       L.push("");
       L.push("FAITS REPROCHÉS");
