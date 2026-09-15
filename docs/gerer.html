@@ -1856,7 +1856,17 @@
       '<button type="button" class="doc-ligne" data-vers="courriers.html">' +
       "Courriers et e-mails (client, fournisseur, impôts, URSSAF, assurance, banque)</button>" +
       '<button type="button" class="doc-ligne" data-vers="notes-service.html">' +
-      "Notes de service (organisation, horaires, sécurité, discipline, matériel)</button>";
+      "Notes de service (organisation, horaires, sécurité, discipline, matériel)</button>" +
+      /* LE DÉCOMPTE DES HEURES, AU MÊME ENDROIT. Il se tient tous les mois,
+         salarié par salarié, et c'est lui qu'on produit quand des heures
+         supplémentaires sont réclamées : L. 3171-4 met à la charge de
+         l'employeur les éléments qui justifient les horaires réalisés.
+         Demande du 15 septembre 2026. */
+      '<p class="groupe">Suivre</p>' +
+      '<button type="button" class="doc-ligne" data-vers="heures.html">' +
+      "Décompte des heures (relevé mensuel par salarié, à clore et à faire signer)</button>" +
+      '<button type="button" class="doc-ligne" data-vers="registre.html">' +
+      "Registre unique du personnel (entrées, sorties, mentions obligatoires)</button>";
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
       g[1].forEach(function (cle) {

@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Décompte des heures</title>
+<meta name="description" content="Le relevé mensuel des heures de chaque salarié, clos, scellé, prêt à signer.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LE DÉCOMPTE DES HEURES, MOIS PAR MOIS.
+
+  Pourquoi cet écran existe. Un salarié réclame des heures supplémentaires et
+  produit son propre relevé. L'article L. 3171-4 (LEGIARTI000006902808) met
+  alors à la charge de l'employeur les éléments de nature à justifier les
+  horaires effectivement réalisés : sans ces éléments, c'est le relevé du
+  salarié qui reste seul devant le juge. L'article L. 3171-2
+  (LEGIARTI000035653247) impose d'établir ces documents dès que tous les
+  salariés ne suivent pas le même horaire collectif, et D. 3171-8
+  (LEGIARTI000018533970) en donne la forme : un décompte quotidien, une
+  récapitulation chaque semaine. D. 3171-16 (LEGIARTI000033515983) veut qu'ils
+  restent un an à disposition de l'inspection du travail ; ici rien ne
+  s'efface, les demandes arrivent bien plus tard.
+
+  Ce que l'écran fait. Le salarié vient du registre du personnel, on ne le
+  ressaisit pas. Le mois s'ouvre déjà rempli par l'horaire de référence, la
+  secrétaire ne touche qu'aux jours qui ont changé. Le total du mois reste
+  vide : c'est elle qui l'inscrit, et l'écart avec le calcul des jours est
+  annoncé. La clôture date le mois, le verrouille et en calcule l'empreinte :
+  une valeur retouchée ensuite ne rend plus la même. Après clôture, on
+  n'efface pas, on ouvre un rectificatif daté et motivé. La réclamation du
+  salarié s'enregistre avec sa réponse et reste attachée au mois.
+
+  Tout vit sur le poste, comme le reste de l'application.
+-->
+
+<link rel="stylesheet" href="style.css">
+<style>
+  .haut b{font-size:var(--t4)}
+  .bloc{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
+    padding:var(--e4);margin:var(--e4) 0 0}
+  .bloc h2{font:600 var(--t0)/1 system-ui;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--texte-3);margin:0 0 var(--e3)}
+  .doux{font-size:var(--t2);color:var(--texte-2);margin:0 0 var(--e2)}
+
+  .mois{display:flex;align-items:center;gap:10px;margin:var(--e4) 0 0}
+  .mois button{width:48px;height:48px;flex:0 0 auto;border-radius:var(--r1);
+    border:1px solid var(--filet-2);background:var(--surface);color:var(--texte);
+    font-size:20px;line-height:1;padding:0}
+  .mois .quel{flex:1 1 auto;text-align:center;font:600 var(--t5)/1.2 system-ui}
+  .mois .quel small{display:block;font:400 var(--t1)/1.4 system-ui;color:var(--texte-3)}
+
+  .etat{display:inline-flex;align-items:center;gap:7px;margin:var(--e3) 0 0;
+    font:600 var(--t0)/1 system-ui;letter-spacing:.04em;text-transform:uppercase;
+    padding:7px 11px;border-radius:999px;background:var(--ambre-clair);color:var(--ambre)}
+  .etat.clos{background:var(--vert-clair);color:var(--vert)}
+  .etat .pastille{width:7px;height:7px;border-radius:50%;background:currentColor}
+
+  .identite{display:grid;gap:2px;margin:var(--e3) 0 0}
+  .identite .l{display:flex;justify-content:space-between;gap:12px;padding:7px 0;
+    border-bottom:1px solid var(--filet);font-size:var(--t2)}
+  .identite .l:last-child{border-bottom:0}
+  .identite .q{color:var(--texte-3)}
+  .identite .v{font-weight:600;text-align:right}
+
+  .ref{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:var(--e3) 0 0}
+  .ref label{display:flex;flex-direction:column;gap:5px}
+  .ref span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .ref input{font-size:16px;min-height:46px;padding:8px 6px;text-align:center;
+    border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);color:var(--texte);width:100%;box-sizing:border-box}
+  .sem{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:var(--e3) 0 0}
+  .sem button{min-height:44px;padding:0;border-radius:var(--r1);
+    border:1px solid var(--filet-2);background:var(--surface);color:var(--texte-2);
+    font:600 14px system-ui;width:auto}
+  .sem button[aria-pressed="true"]{background:var(--accent-clair);border-color:var(--accent);color:var(--accent)}
+
+  .jours{display:grid;gap:6px;margin:var(--e2) 0 0}
+  .entetes{display:grid;grid-template-columns:1fr 70px 70px 58px;gap:6px;padding:6px 10px 0;
+    font:600 10px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .entetes span{text-align:center}
+  .entetes span:first-child{text-align:left}
+  .jour{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;
+    grid-template-areas:"q h" "s s";padding:9px 10px;border-radius:var(--r1);background:var(--creux)}
+  @media (min-width:640px){.jour{grid-template-columns:70px 1fr 66px;grid-template-areas:"q s h"}}
+  .jour.hors{background:transparent;border:1px dashed var(--filet)}
+  .jour .quand{grid-area:q;font:600 var(--t2)/1.25 system-ui}
+  .jour .saisie{grid-area:s;display:grid;grid-template-columns:1fr 70px 70px 58px;gap:6px}
+  .jour .saisie.seule{grid-template-columns:1fr}
+  /* 16 px au moins sur tout champ : en dessous, l'iPhone zoome de lui-même
+     dès qu'on entre dans la case et la page part de travers. */
+  .jour .saisie select,.jour .saisie input{width:100%;min-width:0;box-sizing:border-box;
+    font-size:16px;min-height:44px;padding:6px 4px;border:1px solid var(--filet-2);
+    border-radius:var(--r1);background:var(--surface);color:var(--texte)}
+  .jour .saisie input{text-align:center}
+  .jour .saisie select{padding-left:8px}
+  .jour .h{grid-area:h;justify-self:end;text-align:right;font:600 var(--t3)/1 system-ui;
+    font-variant-numeric:tabular-nums}
+  .jour .h small{display:block;font:400 10px/1.5 system-ui;color:var(--texte-3)}
+  .jour.change{box-shadow:inset 3px 0 0 var(--ambre)}
+  .jour.verrou select,.jour.verrou input{background:var(--creux);color:var(--texte-2)}
+  .semaine{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    padding:9px 10px 13px;border-bottom:1px solid var(--filet);
+    font:600 var(--t1)/1.3 system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--texte-3)}
+  .semaine b{font:700 var(--t3) system-ui;color:var(--accent);letter-spacing:0;text-transform:none;
+    font-variant-numeric:tabular-nums}
+  .semaine.sup b{color:var(--ambre)}
+
+  .bilan{display:grid;gap:10px}
+  @media (min-width:560px){.bilan{grid-template-columns:1fr 1fr 1fr}}
+  .tuile{border:1px solid var(--filet);border-radius:var(--r1);padding:12px 13px;background:var(--surface)}
+  .tuile .et{font:600 11px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-3)}
+  .tuile .n{font:700 25px/1.1 system-ui;margin-top:7px;font-variant-numeric:tabular-nums}
+  .tuile.aremplir{border-color:var(--ambre);background:var(--ambre-clair)}
+  .tuile.aremplir .et{color:var(--ambre)}
+  .tuile.aremplir input{margin-top:6px;font:700 22px/1.1 system-ui;width:100%;box-sizing:border-box;
+    min-height:48px;padding:6px 10px;border:1px solid var(--filet-2);border-radius:var(--r1);
+    background:var(--surface);color:var(--texte)}
+  .ecart{margin:10px 0 0;font-size:var(--t2);font-weight:600;color:var(--ambre)}
+  .ecart.ok{color:var(--vert)}
+
+  .sceau{margin:var(--e3) 0 0;border:1px solid var(--vert);background:var(--vert-clair);
+    border-radius:var(--r1);padding:12px 14px}
+  .sceau .t{font:600 var(--t2) system-ui;color:var(--vert)}
+  .sceau .d{margin-top:6px;font-size:var(--t2);color:var(--texte-2)}
+  .sceau code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em}
+
+  .liste{display:grid;gap:10px;margin:var(--e3) 0 0}
+  .item{border:1px solid var(--filet);border-left:3px solid var(--accent);
+    border-radius:var(--r1);padding:12px 13px;background:var(--surface)}
+  .item.recl{border-left-color:var(--rouge)}
+  .item .t{font:600 var(--t3) system-ui}
+  .item .meta{font-size:var(--t1);color:var(--texte-3);margin-top:3px}
+  .item .corps{margin-top:8px;font-size:var(--t2);color:var(--texte-2);white-space:pre-wrap}
+  .item .rep{margin-top:10px;padding-top:10px;border-top:1px dashed var(--filet)}
+
+  .deux{display:grid;gap:10px;margin:var(--e3) 0 0}
+  @media (min-width:560px){.deux{grid-template-columns:1fr 1fr}}
+  .champ{display:flex;flex-direction:column;gap:6px}
+  .champ > span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .champ input,.champ textarea,.bloc select{font-size:16px;min-height:48px;padding:10px 12px;
+    border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);
+    color:var(--texte);width:100%;box-sizing:border-box}
+  .champ textarea{min-height:84px;line-height:1.45;resize:vertical}
+
+  .barre{display:flex;flex-direction:column;gap:10px;margin:var(--e4) 0 0}
+  @media (min-width:640px){.barre{flex-direction:row}.barre button{flex:1}}
+  .barre button{font:600 var(--t-bouton) system-ui;padding:14px;min-height:var(--h-bouton);
+    border-radius:var(--r2);width:100%}
+  .rien{padding:var(--e5) 0;color:var(--texte-2);font-size:var(--t3)}
+  .rien a{color:var(--accent)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="maj-dispo" id="maj-dispo">
+  <div class="wrap">
+    <span><b>Une nouvelle version est disponible.</b></span>
+    <button type="button" id="btn-maj">Recharger</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <div class="haut">
+    <a class="retour" href="gerer.html">&larr; Retour</a>
+    <b>Décompte des heures</b>
+    <span id="ent"></span>
+  </div>
+
+  <section id="e-vide" hidden>
+    <p class="rien">Le registre du personnel ne porte encore aucun salarié.
+      C'est lui qui donne les noms de cet écran :
+      <a href="registre.html">ouvrir le registre du personnel</a>.</p>
+  </section>
+
+  <section id="e-tout" hidden>
+
+    <div class="bloc">
+      <h2>Salarié</h2>
+      <p class="doux">Repris du registre du personnel, rien à ressaisir.</p>
+      <select id="qui" aria-label="Salarié"></select>
+      <div class="identite" id="identite"></div>
+    </div>
+
+    <div class="mois">
+      <button type="button" id="mois-avant" aria-label="Mois précédent">&lsaquo;</button>
+      <span class="quel"><span id="mois-nom"></span><small id="mois-sous"></small></span>
+      <button type="button" id="mois-apres" aria-label="Mois suivant">&rsaquo;</button>
+    </div>
+    <span class="etat" id="etat"><span class="pastille"></span><span id="etat-txt"></span></span>
+
+    <div class="bloc">
+      <h2>Horaire de référence</h2>
+      <p class="doux">Celui du contrat. Il remplit d'avance tous les jours travaillés du mois,
+        et ne sert qu'à cela : chaque jour reste modifiable.</p>
+      <div class="ref">
+        <label><span>Début</span><input type="text" id="r-deb" inputmode="numeric" maxlength="5" placeholder="08:00"></label>
+        <label><span>Fin</span><input type="text" id="r-fin" inputmode="numeric" maxlength="5" placeholder="16:00"></label>
+        <label><span>Pause min</span><input type="text" id="r-pause" inputmode="numeric" maxlength="3" placeholder="60"></label>
+      </div>
+      <div class="sem" id="r-jours"></div>
+    </div>
+
+    <div class="bloc">
+      <h2>Jours du mois</h2>
+      <p class="doux">Sur chaque ligne : la nature du jour, l'heure de début, l'heure de fin,
+        la pause en minutes. On ne touche qu'aux jours qui ont changé, ils se marquent d'un trait orange.</p>
+      <div class="jours" id="jours"></div>
+    </div>
+
+    <div class="bloc">
+      <h2>Total du mois</h2>
+      <div class="bilan">
+        <div class="tuile"><span class="et">Jours travaillés</span><div class="n" id="t-jours">0</div></div>
+        <div class="tuile"><span class="et">Calculé par les jours</span><div class="n" id="t-calcule">0,00 h</div></div>
+        <div class="tuile aremplir"><span class="et">Total retenu</span>
+          <input type="text" id="t-retenu" inputmode="decimal" placeholder="à remplir" autocomplete="off"
+            aria-label="Total retenu par l'entreprise, en heures"></div>
+      </div>
+      <p class="ecart" id="ecart"></p>
+      <label class="champ" id="l-motif" hidden style="margin-top:12px"><span>Motif de l'écart</span>
+        <input type="text" id="t-motif" placeholder="pourquoi le total retenu diffère du calcul des jours"></label>
+    </div>
+
+    <div class="bloc">
+      <h2>Clôture du mois</h2>
+      <p class="doux">Une fois clos, le mois passe en lecture seule et son empreinte est calculée :
+        si une valeur est retouchée après coup, l'empreinte ne correspond plus.</p>
+      <div class="barre">
+        <button type="button" id="clore">Clore le mois</button>
+        <button type="button" class="second" id="rectifier" hidden>Ouvrir un rectificatif</button>
+      </div>
+      <div class="sceau" id="sceau" hidden><div class="t">Mois clos</div><div class="d" id="sceau-d"></div></div>
+      <div id="f-rectif" hidden>
+        <div class="deux">
+          <label class="champ"><span>Jour concerné</span><input type="date" id="x-jour"></label>
+          <label class="champ"><span>Heures rectifiées</span><input type="text" id="x-h" inputmode="decimal" placeholder="7,50"></label>
+        </div>
+        <label class="champ" style="margin-top:10px"><span>Motif de la rectification</span>
+          <textarea id="x-motif" placeholder="ce qui a été constaté, et par qui"></textarea></label>
+        <div class="barre"><button type="button" id="x-ok">Enregistrer le rectificatif</button></div>
+      </div>
+      <div class="liste" id="rectifs"></div>
+    </div>
+
+    <div class="bloc">
+      <h2>Réclamation du salarié</h2>
+      <p class="doux">Le mois réclamé ne se rouvre pas, il se complète. La demande est datée à sa
+        réception, la réponse de l'entreprise reste attachée au mois.</p>
+      <div class="deux">
+        <label class="champ"><span>Reçue le</span><input type="date" id="c-date"></label>
+        <label class="champ"><span>Heures réclamées</span><input type="text" id="c-h" inputmode="decimal" placeholder="12,00"></label>
+      </div>
+      <label class="champ" style="margin-top:10px"><span>Jours et motif invoqués</span>
+        <textarea id="c-motif" placeholder="les jours visés et ce que le salarié soutient"></textarea></label>
+      <div class="barre"><button type="button" id="c-ok">Enregistrer la réclamation</button></div>
+      <div class="liste" id="recls"></div>
+    </div>
+
+    <div class="barre">
+      <button type="button" id="b-excel">Télécharger le classeur Excel</button>
+      <button type="button" class="second" id="b-word">Récapitulatif à signer, en Word</button>
+    </div>
+
+    <details class="loi" style="margin-top:24px">
+      <summary>Voir le texte de loi</summary>
+      <div>
+        <p><b>Article L. 3171-2</b> : « Lorsque tous les salariés occupés dans un service ou un atelier
+          ne travaillent pas selon le même horaire collectif, l'employeur établit les documents
+          nécessaires au décompte de la durée de travail, des repos compensateurs acquis et de leur
+          prise effective, pour chacun des salariés concernés. »
+          <span class="ident">LEGIARTI000035653247</span></p>
+        <p><b>Article D. 3171-8</b> : le décompte se fait « quotidiennement, par enregistrement, selon
+          tous moyens, des heures de début et de fin de chaque période de travail ou par le relevé du
+          nombre d'heures de travail accomplies », puis « chaque semaine, par récapitulation selon tous
+          moyens du nombre d'heures de travail accomplies par chaque salarié ».
+          <span class="ident">LEGIARTI000018533970</span></p>
+        <p><b>Article L. 3171-4</b> : « En cas de litige relatif à l'existence ou au nombre d'heures de
+          travail accomplies, l'employeur fournit au juge les éléments de nature à justifier les horaires
+          effectivement réalisés par le salarié. » Et si le décompte est assuré par un système
+          d'enregistrement automatique, « celui-ci doit être fiable et infalsifiable ».
+          <span class="ident">LEGIARTI000006902808</span></p>
+        <p><b>Article D. 3171-16</b> : ces documents restent à la disposition de l'inspection du travail
+          pendant un an. <span class="ident">LEGIARTI000033515983</span></p>
+      </div>
+    </details>
+
+  </section>
+
+</main>
+
+<script src="apercu.js"></script>
+<script src="audit-export.js"></script>
+<script src="tableur-export.js"></script>
+<script src="profil.js"></script>
+<script src="version.js"></script>
+<script src="heures.js"></script>
+<script>
+(function () {
+  "use strict";
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+  var b = document.getElementById("btn-maj");
+  if (b) b.addEventListener("click", function () { location.reload(); });
+})();
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

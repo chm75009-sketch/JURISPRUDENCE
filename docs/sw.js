@@ -90,6 +90,9 @@ const ESSENTIELS = [
      tient son registre sans réseau doit pouvoir l'ouvrir : c'est justement le
      document qu'un agent de contrôle demande sur place. */
   "./registre.html",
+  /* Le décompte des heures se tient sur place, souvent sans réseau, et c'est
+     la pièce qu'on produit quand des heures supplémentaires sont réclamées. */
+  "./heures.html", "./heures.js",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
   /* lire-pdf.js est ici ; pdfjs.js et pdfjs.worker.js ne le sont pas. La
      bibliothèque de lecture des PDF pèse 1,3 Mo : la mettre dans cette liste
