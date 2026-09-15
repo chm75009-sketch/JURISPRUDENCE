@@ -292,6 +292,8 @@ Le salarié dispose d'un délai de réflexion de [nombre] jours à compter de la
 
 Lorsque l'employeur choisit de diffuser une liste de postes disponibles plutôt que d'adresser des offres individuelles, cette liste précise, conformément au III de l'article D. 1233-2-1, les critères de départage entre salariés candidats à un même poste ainsi que le délai dont ils disposent pour se porter candidats, lequel ne peut être inférieur à quinze jours francs à compter de la publication, sauf redressement ou liquidation judiciaire où il est de quatre jours.
 
+> **À ne pas oublier. La liste diffusée doit indiquer les critères de départage arrêtés pour identifier, sur des bases objectives, le salarié retenu en cas de candidatures multiples sur un même poste, ainsi que le délai de candidature, qui ne peut être inférieur à quinze jours francs. À défaut de cette mention, l'offre est imprécise, faute de donner aux salariés les éléments d'information de nature à déterminer leur décision : la Cour de cassation y voit un manquement de l'employeur à son obligation de reclassement, qui prive le licenciement de cause réelle et sérieuse (Cass. soc. 8 janvier 2025, n° 22-24.724, publié au Bulletin, rejet).**
+
 C. Critères de départage. En cas de candidatures surnuméraires sur un même poste, il est fait application des critères d'ordre définis au 4. À égalité de points, le poste est attribué [au salarié ayant la plus grande ancienneté, puis au plus âgé, à préciser].
 
 D. Adaptation. À la prise de fonction, un bilan des besoins de formation est établi ; la formation d'adaptation nécessaire est mise en œuvre sur une période qui ne peut excéder [durée], à la charge de l'entreprise.
