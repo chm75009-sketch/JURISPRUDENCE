@@ -179,8 +179,11 @@
 MARTIN&#9;Paul&#9;01/06/2021&#9;Cariste&#9;Niveau 2&#9;CDI
 DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     <div class="barre pile">
-      <button type="button" class="btn" id="i-analyser">Proposer les correspondances</button>
+      <button type="button" class="btn" id="i-deposer">Déposer le fichier de votre registre</button>
+      <button type="button" class="btn second" id="i-analyser">Proposer les correspondances</button>
     </div>
+    <input type="file" id="i-fichier" accept=".xlsx,.csv,.tsv,.docx,.txt,text/plain,.pdf,application/pdf" style="display:none">
+    <div id="i-lecture"></div>
     <div id="i-resultat"></div>
   </section>
 
@@ -247,6 +250,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 <script src="liste-choix.js"></script>
 <script src="listes-valeurs.js"></script>
 <script src="listes-auto.js"></script>
+<script src="lire-pdf.js"></script>
+<script src="lire-ocr.js"></script>
+<script src="lire-tableau.js"></script>
 <script src="apercu.js"></script>
 <script src="droits.js"></script>
 <script src="profil.js"></script>
@@ -977,6 +983,44 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     return "";
   }
 
+
+  /* LE DÉPÔT DU FICHIER.
+
+     Les huit autres écrans de contrôle reçoivent un document déposé ; celui-ci
+     ne savait que recevoir du texte collé. Un registre du personnel arrive en
+     classeur, en Word ou en PDF : il se dépose ici, il est lu dans le
+     navigateur, et son contenu remplit la zone ci-dessus, où il reste
+     modifiable avant tout rapprochement. */
+  function ditLecture(html, classe) {
+    $("i-lecture").innerHTML = html
+      ? '<div class="avis ' + (classe || "info") + '">' + html + "</div>" : "";
+  }
+  $("i-deposer").addEventListener("click", function () { $("i-fichier").click(); });
+  $("i-fichier").addEventListener("change", function () {
+    var f = $("i-fichier").files && $("i-fichier").files[0];
+    if (!f) return;
+    ditLecture("<b>Lecture de " + ech(f.name) + "</b>Rien ne sort de votre navigateur.");
+    if (!window.LireTableau) {
+      ditLecture("<b>Le lecteur de fichiers n'est pas chargé</b>Collez le tableau à la place.", "att");
+      return;
+    }
+    window.LireTableau.depuisFichier(f).then(function (txt) {
+      var lignes = String(txt || "").split(/\r?\n/).filter(function (l) { return l.trim(); });
+      if (!lignes.length) {
+        ditLecture("<b>Ce fichier ne porte aucune ligne lisible</b>" +
+          "S'il s'agit d'un PDF scanné, la reconnaissance de caractères peut rendre un texte " +
+          "sans colonnes : collez alors le tableau à la main.", "att");
+        return;
+      }
+      $("i-source").value = lignes.join("\n");
+      ditLecture("<b>" + lignes.length + " ligne(s) lue(s) dans " + ech(f.name) + "</b>" +
+        "Vérifiez la zone ci-dessus, puis demandez les correspondances.", "ok");
+      $("i-analyser").click();
+    }).catch(function (e) {
+      ditLecture("<b>Ce fichier n'a pas pu être lu</b>" + ech(e && e.message ? e.message : String(e)), "att");
+    });
+    $("i-fichier").value = "";
+  });
 
   var IMPORT = null;   /* l'analyse en cours : rien n'est écrit tant qu'on n'a pas cliqué */
 
