@@ -62,7 +62,8 @@
       "border-radius:10px;background:#f4f5f7;color:#16181d}" +
       ".idcc-liste-voile{position:static;flex:1;max-height:none;overflow-y:auto;border:0;box-shadow:none;" +
       "border-radius:0;font-size:16px;-webkit-overflow-scrolling:touch}" +
-      ".idcc-liste-voile .idcc-o{min-height:48px;padding:12px 14px}";
+      ".idcc-liste-voile .idcc-o{min-height:48px;padding:12px 14px;touch-action:manipulation}" +
+      ".idcc-liste-voile{overscroll-behavior:contain}";
     document.head.appendChild(st);
   }
 
@@ -219,10 +220,22 @@
       cadre.innerHTML = h;
       cadre.hidden = false;
       if (cadre === boite) placer();
+      /* CHOISIR SANS EMPÊCHER DE FAIRE DÉFILER.
+
+         La petite liste posée sous le champ écoute « pointerdown » et annule
+         l'événement : sans cela le champ perd le focus avant le clic et le
+         toucher n'aboutit pas. La liste en plein écran, elle, compte trois
+         cent vingt-huit conventions : annuler « pointerdown » y annule aussi
+         le geste de défilement, et le doigt qui voulait faire défiler
+         choisissait la convention qu'il effleurait. Signalé le 16 septembre
+         2026, après le même défaut sur la liste des salariés.
+
+         Dans le plein écran, où le champ est déjà sans focus, on écoute
+         « click », qui ne se déclenche pas après un défilement. */
+      var plein = (cadre === listeVoile);
       Array.prototype.forEach.call(cadre.querySelectorAll(".idcc-o"), function (b) {
-        /* pointerdown : avant le blur du champ, pour que le toucher aboutisse */
-        b.addEventListener("pointerdown", function (ev) {
-          ev.preventDefault();
+        var prendre = function (ev) {
+          if (!plein) ev.preventDefault();
           if (b.getAttribute("data-autre")) {
             libre = true; fermer(); fermerVoile();
             input.focus();
@@ -231,7 +244,8 @@
             return;
           }
           choisir(retenues[Number(b.getAttribute("data-i"))]);
-        });
+        };
+        b.addEventListener(plein ? "click" : "pointerdown", prendre);
       });
     }
 
