@@ -152,14 +152,19 @@
     table: function (i) { return tableau(i.head, i.rows); },
   };
 
-  function docx(items, titre) {
+  /* Un troisième argument, facultatif : { paysage: true } pour un tableau
+     large, comme le modèle de registre et ses onze colonnes. Les appels qui ne
+     le passent pas gardent le portrait. */
+  function docx(items, titre, opts) {
     var corps = items.map(function (i) {
       return VERS_WORD[i.k] ? VERS_WORD[i.k](i) : "";
     }).join("");
     var doc = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
       "<w:body>" + par(titre, { gras: true, taille: 40 }) + corps +
-      '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>' +
+      '<w:sectPr>' + ((opts && opts.paysage)
+        ? '<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>'
+        : '<w:pgSz w:w="11906" w:h="16838"/>') +
       '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="709" w:footer="709" w:gutter="0"/>' +
       "</w:sectPr></w:body></w:document>";
     var octets = zip([
