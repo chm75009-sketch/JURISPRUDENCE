@@ -158,6 +158,7 @@
       <button type="button" class="doc-ligne" data-va="tenue">L'établissement et la tenue du registre</button>
       <button type="button" class="doc-ligne" data-va="doc">Le registre en Word ou à imprimer</button>
       <button type="button" class="doc-ligne" id="r-modele">Le modèle vierge en Word, avec trois exemples</button>
+      <button type="button" class="doc-ligne" data-va="archives">Les documents gardés pour cette rubrique</button>
     </div>
     <details class="loi"><summary>Voir le texte de loi</summary><div class="c" id="textes"></div></details>
   </section>
@@ -235,6 +236,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     </div></details>
   </section>
 
+  <!-- ══════ LES DOCUMENTS GARDÉS ══════ -->
+  <section id="e-archives" hidden>
+    <p class="rappel-fiche">Ce que vous avez déposé et ce que l'application a produit pour le
+      registre du personnel, gardés sur ce poste, du plus récent au plus ancien.</p>
+    <div id="archives"></div>
+  </section>
+
   <!-- ══════ LE DOCUMENT ══════ -->
   <section id="e-doc" hidden>
     <div id="doc"></div>
@@ -253,6 +261,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 <script src="lire-pdf.js"></script>
 <script src="lire-ocr.js"></script>
 <script src="lire-tableau.js"></script>
+<script src="base-documents.js"></script>
 <script src="apercu.js"></script>
 <script src="droits.js"></script>
 <script src="profil.js"></script>
@@ -532,7 +541,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   /* ═══════════════════════════════════════════════════════ LES ÉCRANS
      Un seul visible. Le bouton Retour du bandeau (droits.js) revient au
      registre depuis les autres, et quitte la page depuis le registre. */
-  var ECRANS = ["question", "registre", "accueillis", "import", "tenue", "doc"];
+  var ECRANS = ["question", "registre", "accueillis", "import", "tenue", "doc", "archives"];
   function ouvrir(nom) {
     ECRANS.forEach(function (o) { $("e-" + o).hidden = o !== nom; });
     $("main").classList.toggle("large", nom === "doc" || nom === "import");
@@ -541,6 +550,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (nom === "accueillis") rendreAccueillis();
     if (nom === "tenue") { verdictCadre(); verdictTenue(); }
     if (nom === "doc") rendreDoc();
+    if (nom === "archives") rendreArchives();
     window.scrollTo(0, 0);
   }
   document.addEventListener("click", function (ev) {
@@ -1501,10 +1511,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   }
   $("d-word").addEventListener("click", function () {
     var items = blocs().filter(function (b) { return b.k !== "vide" && b.k !== "t1"; });
-    window.AuditExport.telecharger(
-      window.AuditExport.docx(items, "Registre unique du personnel"),
-      "registre-unique-du-personnel-" + new Date().toISOString().slice(0, 10) + ".docx",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    var octets = window.AuditExport.docx(items, "Registre unique du personnel");
+    var nom = "registre-unique-du-personnel-" + new Date().toISOString().slice(0, 10) + ".docx";
+    var type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    /* La version téléchargée est gardée par base-documents.js, qui enrobe
+       AuditExport.telecharger : le registre se met à jour au fur et à mesure,
+       et chaque état reste consultable. */
+    window.AuditExport.telecharger(octets, nom, type);
   });
   $("d-imprimer").addEventListener("click", function () { window.print(); });
 
@@ -1561,11 +1574,63 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     ];
   }
   $("r-modele").addEventListener("click", function () {
-    window.AuditExport.telecharger(
-      window.AuditExport.docx(itemsModele(), "Registre unique du personnel, modèle", { paysage: true }),
-      "registre-unique-du-personnel-modele-" + new Date().toISOString().slice(0, 10) + ".docx",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    var octets = window.AuditExport.docx(itemsModele(), "Registre unique du personnel, modèle", { paysage: true });
+    var nom = "registre-unique-du-personnel-modele-" + new Date().toISOString().slice(0, 10) + ".docx";
+    var type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    window.AuditExport.telecharger(octets, nom, type);
   });
+
+  /* LA BASE DES DOCUMENTS DE CETTE RUBRIQUE.
+
+     Ce que le client dépose et ce que l'application produit ne se perdent
+     plus : les deux sont gardés sur le poste, datés, et la liste se relit
+     quand on veut. Demande du 15 septembre 2026. */
+  var RUBRIQUE = "registre";
+  function rendreArchives() {
+    var z = $("archives");
+    if (!window.Documents || !window.Documents.disponible()) {
+      z.innerHTML = '<div class="avis att"><b>Ce navigateur ne garde pas les documents</b>' +
+        "Les fichiers déposés restent lus à l'écran, mais ils ne sont pas conservés ici.</div>";
+      return;
+    }
+    window.Documents.liste(RUBRIQUE).then(function (L) {
+      if (!L.length) {
+        z.innerHTML = '<div class="avis info"><b>Aucun document gardé pour l\'instant</b>' +
+          "Le fichier que vous déposez et le registre que vous téléchargez viendront ici.</div>";
+        return;
+      }
+      z.innerHTML = L.map(function (d) {
+        return '<div class="sal"><div class="tete"><b>' + ech(d.nom) + "</b>" +
+          '<span class="jauge ' + (d.sorte === "produit" ? "ok" : "") + '">' +
+          (d.sorte === "produit" ? "produit ici" : "déposé") + "</span></div>" +
+          '<p class="art">' + ech(window.Documents.enFrancais(d.date)) +
+          (d.taille ? " · " + ech(window.Documents.poids(d.taille)) : "") + "</p>" +
+          '<div class="barre"><button type="button" data-tel="' + d.id + '">Télécharger</button>' +
+          '<button type="button" class="second" data-del="' + d.id + '">Retirer</button></div></div>';
+      }).join("");
+      Array.prototype.forEach.call(z.querySelectorAll("[data-tel]"), function (b) {
+        b.addEventListener("click", function () {
+          window.Documents.lire(b.getAttribute("data-tel")).then(function (d) {
+            if (!d) return;
+            var blob = (d.contenu && typeof d.contenu.size === "number")
+              ? d.contenu : new Blob([d.contenu], { type: d.type || "text/plain" });
+            var u = URL.createObjectURL(blob), a = document.createElement("a");
+            a.href = u; a.setAttribute("download", d.nom); document.body.appendChild(a);
+            a.click();
+            setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 2000);
+          });
+        });
+      });
+      Array.prototype.forEach.call(z.querySelectorAll("[data-del]"), function (b) {
+        b.addEventListener("click", function () {
+          if (!window.confirm("Retirer ce document de la base de cette rubrique ?")) return;
+          window.Documents.supprimer(b.getAttribute("data-del")).then(rendreArchives);
+        });
+      });
+    }).catch(function () {
+      z.innerHTML = '<div class="avis att"><b>La base des documents n\'a pas répondu</b></div>';
+    });
+  }
 
   /* ══════════════════════════════════════════════════════════ L'AMORÇAGE */
   $("c-nom").value = E.cadre.nom || "";

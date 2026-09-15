@@ -17,6 +17,7 @@
 <script src="listes-valeurs.js"></script>
 <script src="listes-auto.js"></script>
 <script src="apercu.js"></script>
+<script src="base-documents.js"></script>
 <script src="droits.js"></script>
 
 <!--
@@ -622,6 +623,11 @@
   }
   function enregistrer(contenu, nom, type) {
     var b = new Blob([contenu], { type: type });
+    /* Le classeur produit est gardé dans la base de la rubrique : on retrouve
+       ce qu'on a envoyé au comité, daté. */
+    if (window.Documents && window.Documents.disponible())
+      window.Documents.enregistrer("bdese", { nom: nom, sorte: "produit", type: type, contenu: b })
+        .catch(function () {});
     var u = URL.createObjectURL(b);
     var a = document.createElement("a");
     a.href = u; a.setAttribute("download", nom); a.rel = "noopener";

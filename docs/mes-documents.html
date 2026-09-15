@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1F3864">
+<link rel="icon" href="icons/icon-180.png">
+<title>Mes documents</title>
+<meta name="description" content="Les documents déposés et produits, rubrique par rubrique, gardés sur ce poste.">
+
+<!--
+  CE QUE FAIT CETTE PAGE.
+
+  Elle montre ce que la base des documents a gardé : par rubrique, ce que vous
+  avez déposé et ce que l'application a produit, du plus récent au plus ancien.
+  Chaque ligne se télécharge ou se retire.
+
+  Demande du 15 septembre 2026 : « tu dois créer une base de données dans
+  chaque rubrique où tu stockes les documents pour au fur et à mesure les
+  mettre à jour ». La base est base-documents.js, partagée par tous les
+  écrans ; cette page en est la vitrine.
+
+  Tout est sur le poste, dans le navigateur : rien n'a été envoyé.
+-->
+
+<link rel="stylesheet" href="style.css">
+<style>
+  main.wrap{max-width:640px;padding-bottom:var(--e7)}
+  .rub{margin:var(--e5) 0 0}
+  .rub h2{font:600 17px/1.3 system-ui;margin:0 0 4px;color:var(--encre)}
+  .rub .compte{font-size:var(--t1);color:var(--texte-3);margin:0 0 8px}
+  .doc{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);
+    padding:12px 14px;margin:0 0 8px}
+  .doc .tete{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .doc .tete b{font:600 15px/1.35 system-ui;flex:1;min-width:0;word-break:break-word}
+  .doc .quand{font-size:var(--t1);color:var(--texte-2);margin:4px 0 10px}
+  .doc .barre{margin:0}
+  .doc .barre button{min-height:38px;font-size:var(--t1);padding:8px 12px;width:auto}
+  .etiq{font:600 11px/1 system-ui;padding:6px 8px;border-radius:6px;white-space:nowrap;
+    background:var(--creux);color:var(--texte-2)}
+  .etiq.produit{background:var(--vert-clair);color:var(--vert)}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Mes documents</p>
+    <div class="outils"><a href="index.html">Accueil</a></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="rappel-fiche" id="chapeau">Ce que vous avez déposé et ce que l'application a produit,
+    gardés sur ce poste, rubrique par rubrique.</p>
+  <div id="liste"></div>
+</main>
+
+<script src="droits.js"></script>
+<script src="base-documents.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+
+  /* Le nom lisible de chaque rubrique. Une rubrique inconnue garde son nom de
+     page : mieux vaut un intitulé technique qu'un document introuvable. */
+  var NOMS = {
+    "registre": "Registre du personnel",
+    "controler-ri": "Règlement intérieur",
+    "controler-duerp": "Document unique d'évaluation des risques",
+    "controler-bdese": "Base de données économiques, sociales et environnementales",
+    "controler-cse": "Comité social et économique",
+    "controler-egalite": "Égalité femmes-hommes",
+    "controler-nao": "Négociation annuelle obligatoire",
+    "controler-affichages": "Affichages obligatoires",
+    "controler-discipline": "Discipline",
+    "bdese": "Base de données, la mienne",
+    "audit-pse": "Plan de sauvegarde de l'emploi",
+    "audit": "Licenciement économique",
+    "audit-cse": "Audit du comité",
+    "audit-sst": "Santé et sécurité",
+    "audit-social": "Audit social",
+    "audit-nao": "Audit de la négociation",
+    "audit-discipline": "Audit de la discipline",
+    "duerp": "Document unique, le mien",
+    "parcours": "Parcours guidés",
+    "documents": "Modèles de documents",
+    "courriers": "Courriers",
+    "gerer": "Gestion du quotidien",
+    "agenda": "Agenda social",
+    "equipe": "Équipe",
+    "egalite": "Index de l'égalité",
+  };
+
+  function ligne(d) {
+    return '<div class="doc"><div class="tete"><b>' + ech(d.nom) + "</b>" +
+      '<span class="etiq' + (d.sorte === "produit" ? " produit" : "") + '">' +
+      (d.sorte === "produit" ? "produit ici" : "déposé") + "</span></div>" +
+      '<p class="quand">' + ech(window.Documents.enFrancais(d.date)) +
+      (d.taille ? " · " + ech(window.Documents.poids(d.taille)) : "") +
+      (d.note ? " · " + ech(d.note) : "") + "</p>" +
+      '<div class="barre"><button type="button" data-tel="' + d.id + '">Télécharger</button>' +
+      '<button type="button" class="second" data-del="' + d.id + '">Retirer</button></div></div>';
+  }
+
+  function telecharger(id) {
+    window.Documents.lire(id).then(function (d) {
+      if (!d) return;
+      var blob = (d.contenu && typeof d.contenu.size === "number")
+        ? d.contenu : new Blob([d.contenu], { type: d.type || "text/plain" });
+      var u = URL.createObjectURL(blob), a = document.createElement("a");
+      a.href = u; a.setAttribute("download", d.nom); document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 2000);
+    });
+  }
+
+  /* Toutes les rubriques, sans en connaître la liste à l'avance : on lit ce
+     qui est dans la base. */
+  function toutes() {
+    return window.Documents.liste("").then(function () { return null; }).catch(function () { return null; })
+      .then(function () {
+        var cles = Object.keys(NOMS);
+        return Promise.all(cles.map(function (r) {
+          return window.Documents.liste(r).then(function (L) { return { r: r, L: L }; })
+            .catch(function () { return { r: r, L: [] }; });
+        }));
+      });
+  }
+
+  function rendre() {
+    if (!window.Documents || !window.Documents.disponible()) {
+      $("liste").innerHTML = '<div class="avis att"><b>Ce navigateur ne garde pas les documents</b>' +
+        "Les fichiers déposés restent lus à l'écran, mais rien n'est conservé ici.</div>";
+      return;
+    }
+    toutes().then(function (rubs) {
+      var pleines = rubs.filter(function (x) { return x.L.length; });
+      if (!pleines.length) {
+        $("liste").innerHTML = '<div class="avis info"><b>Aucun document gardé pour l\'instant</b>' +
+          "Déposez un document dans un écran de contrôle, ou téléchargez-en un que l'application " +
+          "écrit : il viendra ici, daté.</div>";
+        return;
+      }
+      $("liste").innerHTML = pleines.map(function (x) {
+        return '<section class="rub"><h2>' + ech(NOMS[x.r] || x.r) + "</h2>" +
+          '<p class="compte">' + x.L.length + " document(s)</p>" +
+          x.L.map(ligne).join("") + "</section>";
+      }).join("");
+      Array.prototype.forEach.call(document.querySelectorAll("[data-tel]"), function (b) {
+        b.addEventListener("click", function () { telecharger(b.getAttribute("data-tel")); });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-del]"), function (b) {
+        b.addEventListener("click", function () {
+          if (!window.confirm("Retirer ce document ? Il ne sera plus gardé sur ce poste.")) return;
+          window.Documents.supprimer(b.getAttribute("data-del")).then(rendre);
+        });
+      });
+    });
+  }
+
+  rendre();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+</body>
+</html>
