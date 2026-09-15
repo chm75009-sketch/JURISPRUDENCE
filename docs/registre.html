@@ -158,6 +158,7 @@
       <button type="button" class="doc-ligne" data-va="tenue">L'établissement et la tenue du registre</button>
       <button type="button" class="doc-ligne" data-va="doc">Le registre en Word ou à imprimer</button>
       <button type="button" class="doc-ligne" id="r-modele">Le modèle vierge en Word, avec trois exemples</button>
+      <button type="button" class="doc-ligne" id="r-excel">Le registre en Excel, à compléter et à redéposer</button>
       <button type="button" class="doc-ligne" data-va="archives">Les documents gardés pour cette rubrique</button>
     </div>
     <details class="loi"><summary>Voir le texte de loi</summary><div class="c" id="textes"></div></details>
@@ -182,6 +183,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     <div class="barre pile">
       <button type="button" class="btn" id="i-deposer">Déposer le fichier de votre registre</button>
       <button type="button" class="btn second" id="i-analyser">Proposer les correspondances</button>
+      <!-- Le classeur est ici aussi, et pas seulement sous le registre : c'est
+           sur cet écran qu'on se trouve quand un dépôt ne passe pas, et un PDF
+           imprimé depuis un téléphone ne repasse jamais. Demande du
+           15 septembre 2026. -->
+      <button type="button" class="btn second" id="i-excel">Prendre le registre en Excel, à compléter et à redéposer</button>
     </div>
     <input type="file" id="i-fichier" accept=".xlsx,.csv,.tsv,.docx,.txt,text/plain,.pdf,application/pdf" style="display:none">
     <div id="i-lecture"></div>
@@ -266,6 +272,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 <script src="droits.js"></script>
 <script src="profil.js"></script>
 <script src="audit-export.js"></script>
+<script src="tableur-export.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1518,6 +1525,76 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     });
     $("doc").innerHTML = h + "</div>";
   }
+  /* LE REGISTRE EN EXCEL, POUR QU'IL PUISSE REVENIR.
+
+     Mesuré le 15 septembre 2026 : le registre imprimé en PDF depuis un
+     téléphone ne se relit pas, ses polices n'ayant pas de table de
+     caractères, et le Word produit ici est fait de paragraphes, non d'un
+     tableau. Rien de ce que l'application écrivait ne pouvait donc y revenir.
+
+     Le classeur, lui, sort en tableau et rentre en tableau : les intitulés de
+     la première ligne sont exactement ceux que le rapprochement reconnaît,
+     et la feuille des salariés vient en premier, parce que c'est elle que le
+     lecteur ouvre. Aucun titre ne la précède : une ligne de titre serait
+     prise pour les en-têtes au retour. */
+  var COLONNES_XLSX = [
+    ["Nom", function (s) { return s.nom; }],
+    ["Prénoms", function (s) { return s.pre; }],
+    ["Nationalité", function (s) { return s.nat; }],
+    ["Date de naissance", function (s) { return s.nais; }],
+    ["Sexe", function (s) { return s.sexe; }],
+    ["Emploi", function (s) { return s.emp; }],
+    ["Qualification", function (s) { return s.qua; }],
+    ["Date d'entrée", function (s) { return s.ent; }],
+    ["Date de sortie", function (s) { return s.sor; }],
+    ["Nature du contrat", function (s) { return libelleNature(s.nature); }],
+    ["Temps de travail", function (s) {
+      return s.part === "partiel" ? "Temps partiel" : (s.part === "complet" ? "Temps complet" : ""); }],
+    ["Type du titre de travail", function (s) { return s.titT; }],
+    ["Numéro d'ordre du titre", function (s) { return s.titN; }],
+  ];
+  function libelleNature(v) {
+    var l = "";
+    NATURES.forEach(function (n) { if (n.v === v && n.v) l = n.lib; });
+    return l;
+  }
+  function classeurRegistre() {
+    if (!window.TableurExport) return;
+    var salaries = E.salaries.filter(function (s) {
+      return !vide(s.nom) || !vide(s.pre) || !vide(s.emp);
+    });
+    var lignes = [COLONNES_XLSX.map(function (c) { return c[0]; })];
+    salaries.forEach(function (s) {
+      lignes.push(COLONNES_XLSX.map(function (c) {
+        var v = c[1](s);
+        return v == null ? "" : String(v);
+      }));
+    });
+    /* Une feuille vide n'aide personne : sans salarié, on sort les en-têtes
+       et trois lignes à remplir. */
+    if (salaries.length === 0)
+      for (var i = 0; i < 3; i++) lignes.push(COLONNES_XLSX.map(function () { return ""; }));
+
+    var ent = [
+      ["Registre unique du personnel"],
+      ["Entreprise", E.cadre.nom || ""],
+      ["Établissement", E.cadre.adresse || ""],
+      ["Édité le", new Date().toLocaleDateString("fr-FR")],
+      [],
+      ["Les colonnes de la première feuille sont celles des articles L. 1221-13 et D. 1221-23. " +
+       "Complétez-la dans Excel, puis redéposez ce fichier dans l'écran du registre : " +
+       "les colonnes seront reconnues d'elles-mêmes."],
+      ["Les dates s'écrivent en jour/mois/année ou en année-mois-jour, les deux sont lues."],
+    ];
+    var nom = "registre-unique-du-personnel-" + new Date().toISOString().slice(0, 10) + ".xlsx";
+    window.TableurExport.telecharger(window.TableurExport.xlsx([
+      { titre: "Salariés", lignes: lignes },
+      { titre: "Mode d'emploi", lignes: ent, largeurs: [24, 80] },
+    ]), nom);
+  }
+  $("r-excel").addEventListener("click", classeurRegistre);
+  $("i-excel").addEventListener("click", classeurRegistre);
+
   $("d-word").addEventListener("click", function () {
     var items = blocs().filter(function (b) { return b.k !== "vide" && b.k !== "t1"; });
     var octets = window.AuditExport.docx(items, "Registre unique du personnel");

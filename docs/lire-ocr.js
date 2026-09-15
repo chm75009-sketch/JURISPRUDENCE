@@ -110,9 +110,9 @@
     });
   }
 
-  function pageEnImage(page, echelle) {
+  function pageEnImage(page, echelle, maxi) {
     var vue = page.getViewport({ scale: echelle || 2 });
-    var max = 2400;
+    var max = maxi || 2400;
     if (vue.width > max || vue.height > max) {
       var k = max / Math.max(vue.width, vue.height);
       vue = page.getViewport({ scale: (echelle || 2) * k });
@@ -259,8 +259,29 @@
           suite = suite.then(function (acc) {
             dire(p, n, "Lecture de la page " + p + " sur " + n);
             return doc.getPage(p)
-              .then(function (page) { return pageEnImage(page, 2); })
+              .then(function (page) { return pageEnImage(page, 3, 3600); })
               .then(function (toile) { return lirePage(ouvrier, toile); })
+              .then(function (r) {
+                /* UNE SECONDE PASSE, PLUS FINE. Mesuré le 15 septembre 2026
+                   sur un registre de quatre-vingt-cinq salariés imprimé en
+                   PDF : le tableau, en largeur sur une page en hauteur, y est
+                   écrit petit. À la définition ordinaire, le moteur rendait
+                   « Line cannot be recognized » sur la plupart des lignes et
+                   ne ramenait qu'une poignée de mots. On recommence la page
+                   en plus grand quand la moisson est maigre, et seulement
+                   dans ce cas : c'est long, et inutile ailleurs. */
+                var assez = ((r.data && r.data.words) || []).length >= 60;
+                if (assez) return r;
+                dire(p, n, "Lecture fine de la page " + p + " sur " + n);
+                return doc.getPage(p)
+                  .then(function (page) { return pageEnImage(page, 5, 5200); })
+                  .then(function (grande) { return lirePage(ouvrier, grande); })
+                  .then(function (r2) {
+                    var a = ((r.data && r.data.words) || []).length;
+                    var b2 = ((r2.data && r2.data.words) || []).length;
+                    return b2 > a ? r2 : r;
+                  });
+              })
               .then(function (r) {
                 var W = (r.data && r.data.words) || [];
                 acc.push(W.filter(function (m) {
