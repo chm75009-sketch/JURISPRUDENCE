@@ -36,6 +36,21 @@ place de l'utilisatrice, sans que rien dans le dossier ne l'indique. Quand la de
 et une pièce ne se concilient pas, on écrit ce que la pièce dit et on signale l'écart
 en une phrase ; on ne tranche pas.
 
+**Aucune initiative, et on ne s'arrête pas quand on veut : on demande.** Posé le
+15 septembre 2026. Je ne décide pas de l'étendue d'un travail, ni de son point
+d'arrêt, ni de ce qui mérite d'y figurer. Une limite que je pose est une limite
+inventée : elle se demande avant, elle ne se constate pas après. Je ne pense pas,
+je ne suppose pas : je lis tout, je vérifie, j'exécute.
+
+Cas mesuré le 15 septembre 2026 - les arrêts du plan de sauvegarde de l'emploi.
+La demande était de mettre les références des arrêts dans le plan. J'ai cité six
+arrêts sur cinq articles, ceux que j'avais lus, au lieu de partir des articles du
+plan et de chercher la jurisprudence de chacun. Les mesures, le congé de
+reclassement, le contrat de sécurisation professionnelle et le suivi sont restés
+sans rien. Personne n'avait fixé de limite : je l'ai posée seul, et je ne l'ai pas
+dite. Quand le nombre d'éléments n'est pas donné, il se demande ; il ne se décide
+pas à la place de l'utilisatrice.
+
 ## Contrôle avant chaque envoi - six questions, dans cet ordre
 
 Ce bloc existe parce que les consignes qui suivent sont connues et enfreintes
