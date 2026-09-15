@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes de service</title>
+<meta name="theme-color" content="#1c2126">
+<meta name="description" content="Les notes de service de l'entreprise, par thème, rédigées, numérotées et référencées automatiquement.">
+
+<!--
+  LES NOTES DE SERVICE.
+
+  Demande du 15 septembre 2026 : « une série de modèles de notes de service
+  qui concerne toute la vie de l'entreprise, le maximum possible ; une fois
+  générée et validée tu lui donnes un numéro et une référence automatique »,
+  puis « tu les classes par thème, et pour le secteur transport tu les adaptes
+  à ce secteur ».
+
+  Trois écrans, trois gestes : le thème, la note, le texte. La note s'affiche
+  rédigée, à l'en-tête de l'entreprise, avec la date du jour ; ce que
+  l'application ne peut pas savoir y figure entre crochets, en rouge, et se
+  corrige en place. « Valider et numéroter » lui donne son numéro d'ordre de
+  l'année et sa référence, tous deux définitifs, et l'inscrit au registre des
+  notes tenu sur ce poste.
+
+  LES FORMALITÉS. Une note qui porte des obligations générales et permanentes
+  de santé, de sécurité ou de discipline est une adjonction au règlement
+  intérieur (L. 1321-5, LEGIARTI000035653093) et suit les mêmes formalités
+  (L. 1321-4, LEGIARTI000054140230) : avis du comité, publicité, communication
+  à l'inspection du travail, entrée en vigueur un mois après. L'écran le dit
+  sur les notes concernées, et seulement sur celles-là.
+
+  Les modèles vivent dans notes-service.js, et ceux du transport routier dans
+  notes-service-transport.js. Rien ne sort de ce poste.
+-->
+
+<link rel="stylesheet" href="style.css">
+<style>
+  main.wrap{max-width:660px;padding-bottom:var(--e7)}
+  .haut{display:flex;align-items:center;gap:12px;padding:14px 0 10px;
+    border-bottom:1px solid var(--filet);min-width:0}
+  .haut button.retour,.haut a.retour{margin:0;font:600 15px system-ui;padding:10px 14px;
+    border:1px solid var(--filet);border-radius:10px;background:var(--surface);color:var(--encre);
+    text-decoration:none;min-height:44px;display:inline-flex;align-items:center;white-space:nowrap;cursor:pointer}
+  .haut b{font-size:17px;color:var(--encre);min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .haut span.ent{color:var(--texte-2);font-size:15px;min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+
+  .fam{display:grid;gap:10px;margin:16px 0 0}
+  .fam button{width:100%;display:block;text-align:left;border:1px solid var(--filet);
+    border-radius:12px;background:var(--carte);color:var(--encre);padding:16px;cursor:pointer;min-height:64px}
+  .fam button:hover{border-color:var(--accent);background:var(--creux)}
+  .fam .n{font:600 18px/1.3 system-ui;display:block}
+  .fam .s{font:400 14px/1.4 system-ui;color:var(--texte-2);display:block;margin-top:4px}
+  .fam .c{font:400 13px/1 system-ui;color:var(--texte-3);display:block;margin-top:7px}
+  .fam button.metier{border-color:var(--accent);background:var(--accent-clair)}
+  .fam button.metier .n{color:var(--accent)}
+
+  .liste{margin:14px 0 0}
+  .liste button{width:100%;display:block;text-align:left;border:0;
+    border-bottom:1px solid var(--filet);border-radius:0;background:none;color:var(--encre);
+    font:400 17px/1.35 system-ui;padding:15px 0;min-height:56px;cursor:pointer}
+  .liste button:hover{background:var(--creux);color:var(--accent)}
+  .liste .f{display:block;font:400 13px/1.3 system-ui;color:var(--ambre);margin-top:4px}
+
+  .objet{margin:14px 0 0;border:1px solid var(--filet);border-radius:10px;
+    background:var(--carte);padding:12px 14px}
+  .objet .et{font:600 12px/1 system-ui;text-transform:uppercase;letter-spacing:.05em;color:var(--texte-3)}
+  .objet .v{font:600 16.5px/1.4 system-ui;margin-top:6px;outline:none}
+
+  .note-doc{margin:12px 0 0;border:1px solid var(--filet);border-radius:10px;background:var(--carte);
+    padding:18px 16px;font:16px/1.65 system-ui;color:var(--encre);outline:none;min-height:200px}
+  .note-doc p{margin:0 0 12px;white-space:pre-wrap}
+  .note-doc p.tete{margin:0;font-size:15px;line-height:1.5}
+  .note-doc p.ref{margin:14px 0 4px;font:600 15px/1.45 system-ui;color:var(--accent)}
+  .note-doc p.date{margin:0 0 16px;text-align:right;font-size:15px}
+  .note-doc p.titre{font:700 18px/1.35 system-ui;margin:0 0 14px}
+  .note-doc .a-remplir{color:var(--rouge);font-weight:600}
+
+  .form{margin:12px 0 0;font-size:14.5px;line-height:1.6;color:var(--encre-2);
+    background:var(--ambre-clair);border-left:3px solid var(--ambre);border-radius:0 8px 8px 0;padding:12px 14px}
+  .form b{color:var(--ambre);display:block;margin-bottom:4px}
+  .form ul{margin:6px 0 0;padding-left:20px}
+  .form li{margin:0 0 3px}
+
+  .barre{display:grid;gap:8px;margin:14px 0 0}
+  .barre button{min-height:48px;border-radius:10px;font:600 16.5px system-ui;cursor:pointer;width:100%}
+  .barre button.p{background:var(--accent);color:#fff;border:2px solid var(--accent)}
+  .barre button.s{background:var(--surface);color:var(--accent);border:2px solid var(--accent)}
+  .barre button[disabled]{opacity:.5;cursor:default}
+  @media (min-width:520px){.barre{grid-template-columns:1fr 1fr}}
+  .etat{margin:10px 0 0;font-size:14.5px;color:var(--vert);min-height:20px}
+
+  .registre{margin:var(--e5) 0 0;border-top:1px solid var(--filet);padding-top:12px}
+  .registre h2{font:600 16px/1.3 system-ui;margin:0 0 8px;color:var(--encre)}
+  /* Le registre en lignes, non en tableau : à 400 pixels, trois colonnes
+     tronquaient la date, « 15 septembr… ». Une ligne par note, la référence
+     et la date au-dessus de l'objet, rien ne déborde. */
+  .registre ol{list-style:none;margin:0;padding:0}
+  .registre li{border-bottom:1px solid var(--filet);padding:11px 0}
+  .registre li .t{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .registre li .num{font:600 14px/1.3 system-ui;color:var(--accent);
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .registre li .q{font:400 13px/1.3 system-ui;color:var(--texte-2);white-space:nowrap}
+  .registre li .o{display:block;font:400 15.5px/1.45 system-ui;color:var(--encre);margin-top:3px}
+  .registre .rien{color:var(--texte-2);font-size:15px;line-height:1.55;margin:0}
+  .cache{display:none}
+  @media print{.haut,.barre,.fam,.liste,.etat,.form,.registre{display:none}
+    .note-doc{border:0;padding:0}}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <div class="haut">
+    <button type="button" class="retour" id="retour">&larr; Retour</button>
+    <b id="titre-haut">Notes de service</b>
+    <span class="ent" id="ent"></span>
+  </div>
+
+  <!-- ══════ 1 · LE THÈME ══════ -->
+  <section id="e-themes">
+    <p class="aide">Sur quoi porte votre note ?</p>
+    <div class="fam" id="themes"></div>
+
+    <section class="registre" id="registre"></section>
+  </section>
+
+  <!-- ══════ 2 · LA NOTE ══════ -->
+  <section id="e-notes" class="cache">
+    <p class="aide" id="aide-notes"></p>
+    <div class="liste" id="notes"></div>
+  </section>
+
+  <!-- ══════ 3 · LE TEXTE ══════ -->
+  <section id="e-texte" class="cache">
+    <div class="objet">
+      <span class="et">Objet de la note</span>
+      <div class="v" id="objet" contenteditable="true" spellcheck="true"></div>
+    </div>
+    <div class="note-doc" id="doc" contenteditable="true" spellcheck="true"></div>
+    <div class="form cache" id="formalites"></div>
+    <div class="barre">
+      <button type="button" class="p" id="valider">Valider et numéroter</button>
+      <button type="button" class="s" id="word">Télécharger en Word</button>
+      <button type="button" class="s" id="imprimer">Imprimer</button>
+      <button type="button" class="s" id="modele">Revenir au modèle</button>
+    </div>
+    <p class="etat" id="etat"></p>
+  </section>
+
+  <footer>
+    Les mentions en rouge sont à compléter : l'application ne les invente pas. Ce qui vient de
+    votre fiche d'entreprise s'écrit tout seul. Le numéro et la référence ne sont attribués
+    qu'à la validation, et ne se réutilisent jamais.
+  </footer>
+</main>
+
+<script src="liste-choix.js"></script>
+<script src="listes-valeurs.js"></script>
+<script src="listes-auto.js"></script>
+<script src="apercu.js"></script>
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script src="base-documents.js"></script>
+<script src="droits.js"></script>
+<script src="notes-service.js"></script>
+<script src="notes-service-transport.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  var NS = window.NotesService;
+  var P = window.Profil;
+
+  var profil = {};
+  try { profil = JSON.parse(localStorage.getItem("profil-entreprise") || "null") || {}; } catch (e) {}
+  if (!profil.denomination && P && P.lire) profil = P.lire() || {};
+  $("ent").textContent = profil.denomination || "";
+
+  var SECTEUR = String(profil.secteur || "").toLowerCase();
+
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
+              "septembre", "octobre", "novembre", "décembre"];
+  function leJour(d) {
+    d = d || new Date();
+    return (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
+  }
+  function ville() {
+    var a = String(profil.adresse || "");
+    var m = /(\d{5})\s+([^,;]+)$/.exec(a.trim());
+    if (m) return m[2].trim();
+    var bouts = a.split(",");
+    return bouts.length > 1 ? bouts[bouts.length - 1].trim() : "[VILLE]";
+  }
+  function entete() {
+    var L = [];
+    if (profil.denomination) L.push(profil.denomination);
+    if (profil.adresse) L.push(profil.adresse);
+    if (profil.siret) L.push("SIRET " + profil.siret);
+    if (!L.length) L.push("[VOTRE ENTREPRISE]");
+    return L;
+  }
+  function signature() {
+    var L = [];
+    L.push(profil.responsable || "[NOM ET QUALITÉ DU SIGNATAIRE]");
+    if (profil.denomination) L.push(profil.denomination);
+    return L;
+  }
+
+  /* ─────────────── LE REGISTRE DES NOTES ÉMISES, SUR CE POSTE ─────────── */
+  /* Un numéro attribué ne se reprend jamais : le registre est la mémoire de
+     ce qui est parti, et c'est lui qui donne le suivant. */
+  var CLE = "notes-service-registre";
+  function lireRegistre() {
+    try { return JSON.parse(localStorage.getItem(CLE) || "[]") || []; } catch (e) { return []; }
+  }
+  function garderRegistre(L) {
+    try { localStorage.setItem(CLE, JSON.stringify(L)); } catch (e) {}
+  }
+  function prochainNumero(annee) {
+    var n = 0;
+    lireRegistre().forEach(function (x) { if (x.annee === annee && x.numero > n) n = x.numero; });
+    return n + 1;
+  }
+  function codeTheme(cle) {
+    var c = "";
+    NS.THEMES.forEach(function (t) { if (t.cle === cle) c = t.code; });
+    return c || "NS";
+  }
+  function reference(annee, numero, theme) {
+    return "NS-" + annee + "-" + ("00" + numero).slice(-3) + "-" + codeTheme(theme);
+  }
+
+  /* ─────────────────────── les modèles, filtrés ──────────────────────── */
+  /* Un thème réservé à un secteur ne s'affiche que dans ce secteur, et une
+     note générale cède la place à sa version métier quand il en existe une :
+     un conducteur n'a que faire d'une consigne écrite pour un atelier. */
+  function remplacements() {
+    var v = (NS.VARIANTES || {})[SECTEUR] || {};
+    return v;
+  }
+  function themesDus() {
+    return NS.THEMES.filter(function (t) {
+      return !t.secteurs || t.secteurs.indexOf(SECTEUR) >= 0;
+    });
+  }
+  function notesDe(cle) {
+    var remplace = remplacements();
+    var remplacees = {};
+    Object.keys(remplace).forEach(function (k) { remplacees[k] = true; });
+    return NS.MODELES.filter(function (m) {
+      if (m.theme !== cle) return false;
+      if (m.secteurs && m.secteurs.indexOf(SECTEUR) < 0) return false;
+      if (remplacees[m.id]) return false;
+      return true;
+    });
+  }
+  function modele(id) {
+    var m = null;
+    NS.MODELES.forEach(function (x) { if (x.id === id) m = x; });
+    return m;
+  }
+
+  var THEME = null, MOD = null, EMISE = null;
+
+  function ecran(x) {
+    ["e-themes", "e-notes", "e-texte"].forEach(function (i) {
+      $(i).classList.toggle("cache", i !== x);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  /* ───────────────────────── 1 · les thèmes ──────────────────────────── */
+  function rendreThemes() {
+    $("themes").innerHTML = themesDus().map(function (t) {
+      var n = notesDe(t.cle).length;
+      return '<button type="button" class="' + (t.secteurs ? "metier" : "") +
+        '" data-t="' + ech(t.cle) + '"><span class="n">' + ech(t.nom) + "</span>" +
+        '<span class="s">' + ech(t.sous) + "</span>" +
+        '<span class="c">' + n + " modèle" + (n > 1 ? "s" : "") + "</span></button>";
+    }).join("");
+  }
+  $("themes").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-t]");
+    if (b) ouvrirTheme(b.getAttribute("data-t"));
+  });
+
+  function rendreRegistre() {
+    var L = lireRegistre().slice().sort(function (a, b) {
+      return a.annee === b.annee ? b.numero - a.numero : b.annee - a.annee;
+    });
+    if (!L.length) {
+      $("registre").innerHTML = "<h2>Registre des notes de service</h2>" +
+        '<p class="rien">Aucune note validée pour l\'instant. Le numéro d\'ordre part de 1 ' +
+        "au premier janvier de chaque année, et la référence porte le code du thème.</p>";
+      return;
+    }
+    $("registre").innerHTML = "<h2>Registre des notes de service</h2><ol>" +
+      L.map(function (x) {
+        return '<li><span class="t"><span class="num">' + ech(x.reference) + "</span>" +
+          '<span class="q">' + ech(x.jour) + '</span></span><span class="o">' +
+          ech(x.titre) + "</span></li>";
+      }).join("") + "</ol>";
+  }
+
+  /* ───────────────────────── 2 · les notes ───────────────────────────── */
+  function ouvrirTheme(cle) {
+    THEME = null;
+    NS.THEMES.forEach(function (t) { if (t.cle === cle) THEME = t; });
+    if (!THEME) return;
+    $("titre-haut").textContent = THEME.nom;
+    $("aide-notes").textContent = "Quelle note voulez-vous écrire ?";
+    $("notes").innerHTML = notesDe(cle).map(function (m) {
+      return '<button type="button" data-n="' + ech(m.id) + '">' + ech(m.titre) +
+        (m.adjonction ? '<span class="f">Adjonction au règlement intérieur : formalités à suivre</span>' : "") +
+        "</button>";
+    }).join("");
+    ecran("e-notes");
+  }
+  $("notes").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-n]");
+    if (b) ouvrirNote(b.getAttribute("data-n"));
+  });
+
+  /* ───────────────────────── 3 · le texte ────────────────────────────── */
+  function rouge(t) {
+    return ech(t).replace(/\[[^\]]+\]/g, function (m) {
+      return '<span class="a-remplir">' + m + "</span>";
+    });
+  }
+
+  function corpsHtml(m) {
+    var h = entete().map(function (l) { return '<p class="tete">' + ech(l) + "</p>"; }).join("");
+    h += '<p class="ref">' + ech(EMISE
+      ? "Note de service n° " + EMISE.numero + " · " + EMISE.reference
+      : "Note de service (numéro attribué à la validation)") + "</p>";
+    h += '<p class="date">' + ech(ville() + ", le " + leJour()) + "</p>";
+    h += '<p class="titre">' + rouge(m.titre) + "</p>";
+    h += m.corps.map(function (l) { return l === "" ? "" : "<p>" + rouge(l) + "</p>"; }).join("");
+    h += signature().map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("");
+    return h;
+  }
+
+  function formalitesHtml(m) {
+    if (!m.adjonction) {
+      return '<b>Une note d\'information ou d\'organisation</b>Elle ne porte pas ' +
+        "d'obligation générale et permanente de santé, de sécurité ou de discipline : elle " +
+        "s'affiche et s'applique, sans autre formalité. Datez-la, signez-la, affichez-la et " +
+        "gardez la preuve de sa diffusion.";
+    }
+    var L = '<b>Cette note s\'ajoute à votre règlement intérieur</b>' +
+      "Elle porte des obligations générales et permanentes en matière de santé, de sécurité " +
+      "ou de discipline. L'article L. 1321-5 du code du travail en fait une adjonction au " +
+      "règlement intérieur, soumise aux mêmes formalités que lui (L. 1321-4) :<ul>" +
+      "<li>avis du comité social et économique avant l'introduction de la note ;</li>" +
+      "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
+      "<li>communication à l'inspection du travail, avec l'avis du comité, en même temps ;</li>" +
+      "<li>entrée en vigueur à une date postérieure d'un mois à ces formalités ;</li>" +
+      "<li>la note indique elle-même sa date d'entrée en vigueur.</li></ul>";
+    if (m.urgence) {
+      L += "<b>Sauf urgence</b>Lorsque l'urgence le justifie, les obligations relatives à la " +
+        "santé et à la sécurité peuvent recevoir application immédiate. Dans ce cas, la note " +
+        "est immédiatement et simultanément communiquée au secrétaire du comité social et " +
+        "économique et à l'inspection du travail. L'urgence se justifie par écrit dans la note.";
+    }
+    return L;
+  }
+
+  function ouvrirNote(id) {
+    MOD = modele(id);
+    if (!MOD) return;
+    EMISE = null;
+    $("titre-haut").textContent = MOD.titre;
+    $("objet").innerHTML = rouge(MOD.objet);
+    $("doc").innerHTML = corpsHtml(MOD);
+    $("formalites").classList.remove("cache");
+    $("formalites").innerHTML = formalitesHtml(MOD);
+    $("valider").disabled = false;
+    $("valider").textContent = "Valider et numéroter";
+    $("etat").textContent = "";
+    ecran("e-texte");
+  }
+
+  $("modele").addEventListener("click", function () {
+    if (!MOD) return;
+    $("objet").innerHTML = rouge(MOD.objet);
+    $("doc").innerHTML = corpsHtml(MOD);
+    $("etat").textContent = "Modèle rétabli." + (EMISE ? " Le numéro attribué est conservé." : "");
+  });
+
+  /* LE NUMÉRO ET LA RÉFÉRENCE, À LA VALIDATION ET PAS AVANT.
+
+     Demande du 15 septembre 2026. Numéroter à l'ouverture d'un modèle
+     consommerait un numéro à chaque fois qu'on regarde une note sans
+     l'émettre, et le registre porterait des trous. */
+  $("valider").addEventListener("click", function () {
+    if (!MOD || EMISE) return;
+    var d = new Date(), annee = d.getFullYear();
+    var numero = prochainNumero(annee);
+    EMISE = {
+      annee: annee, numero: numero, reference: reference(annee, numero, MOD.theme),
+      theme: MOD.theme, modele: MOD.id,
+      titre: $("objet").textContent.trim() || MOD.titre,
+      jour: leJour(d), date: d.toISOString(),
+    };
+    var L = lireRegistre();
+    L.push(EMISE);
+    garderRegistre(L);
+    /* Le document affiché reprend son numéro sans perdre ce qui a été saisi :
+       seule la ligne de référence change. */
+    var ligne = $("doc").querySelector("p.ref");
+    if (ligne) ligne.textContent = "Note de service n° " + EMISE.numero + " · " + EMISE.reference;
+    $("valider").disabled = true;
+    $("valider").textContent = "Numérotée : " + EMISE.reference;
+    $("etat").textContent = "Note inscrite au registre sous la référence " + EMISE.reference + ".";
+    rendreRegistre();
+  });
+
+  function texteNote() {
+    var out = [];
+    Array.prototype.forEach.call($("doc").children, function (p) { out.push(p.textContent); });
+    return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  }
+
+  $("word").addEventListener("click", function () {
+    if (!window.AuditExport) { $("etat").textContent = "Le module d'export ne s'est pas chargé."; return; }
+    var items = [];
+    Array.prototype.forEach.call($("doc").children, function (p) {
+      var t = p.textContent, c = p.className || "";
+      var k = /tete/.test(c) ? "sur"
+        : (/date/.test(c) ? "dest"
+        : (/ref/.test(c) ? "h2" : (/titre/.test(c) ? "t1" : "p")));
+      items.push({ k: t.trim() ? k : "p", t: t });
+    });
+    var titre = $("objet").textContent.trim() || MOD.titre;
+    var base = (EMISE ? EMISE.reference + "-" : "") + titre;
+    var nom = base.normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 70);
+    window.AuditExport.telecharger(window.AuditExport.docx(items, titre),
+      (nom || "note-de-service") + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    $("etat").textContent = "Téléchargée en Word.";
+  });
+
+  $("imprimer").addEventListener("click", function () { window.print(); });
+
+  $("retour").addEventListener("click", function () {
+    if (!$("e-texte").classList.contains("cache")) {
+      $("titre-haut").textContent = THEME ? THEME.nom : "Notes de service";
+      ecran("e-notes");
+      return;
+    }
+    if (!$("e-notes").classList.contains("cache")) {
+      $("titre-haut").textContent = "Notes de service";
+      rendreThemes();
+      rendreRegistre();
+      ecran("e-themes");
+      return;
+    }
+    location.href = "gerer.html";
+  });
+
+  rendreThemes();
+  rendreRegistre();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+</body>
+</html>

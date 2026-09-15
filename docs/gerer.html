@@ -1759,9 +1759,14 @@
        fournisseur, au service des impôts, à l'assureur. Ils ont leur page, et
        l'entrée est ici parce que c'est ici qu'on vient quand on a quelque
        chose à écrire. Demande du 13 septembre 2026. */
+    /* Les notes de service au même endroit : une note s'écrit quand on a
+       quelque chose à faire savoir à tout le monde, et c'est ici qu'on vient.
+       Demande du 15 septembre 2026. */
     var h = '<p class="groupe">Écrire</p>' +
       '<button type="button" class="doc-ligne" data-vers="courriers.html">' +
-      "Courriers et e-mails (client, fournisseur, impôts, URSSAF, assurance, banque)</button>";
+      "Courriers et e-mails (client, fournisseur, impôts, URSSAF, assurance, banque)</button>" +
+      '<button type="button" class="doc-ligne" data-vers="notes-service.html">' +
+      "Notes de service (organisation, horaires, sécurité, discipline, matériel)</button>";
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
       g[1].forEach(function (cle) {
