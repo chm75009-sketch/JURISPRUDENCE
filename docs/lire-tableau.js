@@ -184,12 +184,13 @@
       return { s: it.str.trim(), x: t[4] || 0, y: t[5] || 0 };
     });
   }
-  function bandes(mots) {
+  function bandes(mots, tol) {
+    var t = tol || 3;
     var L = [];
     mots.slice().sort(function (a, b) { return b.y - a.y || a.x - b.x; })
       .forEach(function (m) {
         var d = L.length ? L[L.length - 1] : null;
-        if (d && Math.abs(d.y - m.y) <= 3) { d.mots.push(m); return; }
+        if (d && Math.abs(d.y - m.y) <= t) { d.mots.push(m); return; }
         L.push({ y: m.y, mots: [m] });
       });
     L.forEach(function (b) { b.mots.sort(function (a, c) { return a.x - c.x; }); });
@@ -278,20 +279,45 @@
       }
       return suite;
     }).then(function (pages) {
-      /* Les colonnes se cherchent sur tout le document : une page qui ne
-         porte que trois lignes profite de celles des autres. */
-      var toutes = [];
-      pages.forEach(function (mots) { toutes = toutes.concat(bandes(mots)); });
-      var cols = colonnesDe(toutes);
-      if (cols.length < 2) {
-        return toutes.map(function (b) {
-          return [b.mots.map(function (m) { return m.s; }).join(" ")];
-        });
-      }
-      var out = [];
-      pages.forEach(function (mots) { out = out.concat(enColonnes(bandes(mots), cols)); });
-      return out;
+      var lignes = enTableau(pages, 3);
+      /* LA COUCHE TEXTE PEUT N'ÊTRE PAS DU TEXTE. Mesuré le 15 septembre 2026
+         sur le registre du personnel de quatre-vingt-cinq salariés imprimé en
+         PDF depuis un téléphone : polices de type 3, aucune table de
+         caractères, et des lignes de carrés vides à l'écran. L'image, elle,
+         est parfaitement lisible, tableau couché d'un quart de tour compris.
+         On repart donc de l'image, et la reconnaissance rend ses mots avec
+         leur place : le tableau se rebâtit colonne par colonne comme pour un
+         PDF ordinaire. */
+      if (lisible(enTexte(lignes)) || !window.LireOCR || !window.LireOCR.mots) return lignes;
+      return window.LireOCR.mots(f, {}).then(function (pagesOcr) {
+        /* Les coordonnées viennent d'une image rendue au double : une bande
+           de ligne ne se mesure plus en points mais en pixels. La tolérance
+           suit la hauteur des mots eux-mêmes. */
+        var hauteurs = [];
+        pagesOcr.forEach(function (P) { P.forEach(function (m) { hauteurs.push(m.h || 10); }); });
+        hauteurs.sort(function (a, b) { return a - b; });
+        var med = hauteurs.length ? hauteurs[Math.floor(hauteurs.length / 2)] : 10;
+        if (window.LirePdf) window.LirePdf.venaitDuScan = true;
+        return enTableau(pagesOcr, Math.max(3, Math.round(med * 0.6)));
+      });
     });
+  }
+
+  /* Des mots situés, page par page, à un tableau. Les colonnes se cherchent
+     sur tout le document : une page qui ne porte que trois lignes profite de
+     celles des autres. */
+  function enTableau(pages, tol) {
+    var toutes = [];
+    pages.forEach(function (mots) { toutes = toutes.concat(bandes(mots, tol)); });
+    var cols = colonnesDe(toutes);
+    if (cols.length < 2) {
+      return toutes.map(function (b) {
+        return [b.mots.map(function (m) { return m.s; }).join(" ")];
+      });
+    }
+    var out = [];
+    pages.forEach(function (mots) { out = out.concat(enColonnes(bandes(mots, tol), cols)); });
+    return out;
   }
 
   function enTexte(lignes) {

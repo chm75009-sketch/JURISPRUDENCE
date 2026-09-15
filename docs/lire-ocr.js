@@ -80,20 +80,29 @@
   }
 
   var SEUIL_CONFIANCE = 70;
+  function resultat(r) {
+    var d = (r && r.data) || {};
+    return { texte: d.text || "", conf: d.confidence || 0, data: d };
+  }
   function lirePage(ouvrier, toile) {
     return ouvrier.recognize(toile).then(function (r) {
-      var best = { texte: (r && r.data && r.data.text) || "", conf: (r && r.data && r.data.confidence) || 0 };
+      var best = resultat(r);
       if (best.conf >= SEUIL_CONFIANCE) return best;
-      var angles = [180];
-      if (toile.width > toile.height) angles = [180, 90, 270];
+      /* Les quatre-vingt-dix degrés n'étaient essayés que sur une page plus
+         large que haute. Or un tableau en largeur s'imprime couramment sur
+         une page en hauteur, texte tourné d'un quart de tour : c'est le cas
+         du registre du personnel imprimé depuis un téléphone, mesuré le
+         15 septembre 2026, où l'image est parfaitement lisible mais couchée.
+         Les trois rotations sont donc essayées dans tous les cas, et
+         seulement quand la confiance est basse. */
+      var angles = [180, 90, 270];
       var suite = Promise.resolve(best);
       angles.forEach(function (a) {
         suite = suite.then(function (courant) {
           if (courant.conf >= SEUIL_CONFIANCE) return courant;
           return ouvrier.recognize(tourner(toile, a)).then(function (r2) {
-            var c2 = (r2 && r2.data && r2.data.confidence) || 0;
-            if (c2 > courant.conf) return { texte: (r2 && r2.data && r2.data.text) || "", conf: c2 };
-            return courant;
+            var autre = resultat(r2);
+            return autre.conf > courant.conf ? autre : courant;
           });
         });
       });
@@ -204,5 +213,82 @@
     });
   }
 
-  window.LireOCR = { texte: texte, charger: charger };
+
+  /* LES MOTS AVEC LEUR PLACE, POUR REBÂTIR UN TABLEAU.
+
+     La reconnaissance ne rend pas qu'un texte : elle rend chaque mot avec sa
+     boîte. Un registre du personnel lu en image redevient donc un tableau,
+     colonne par colonne, exactement comme un PDF dont la couche texte est
+     bonne. Sans cela, l'utilisateur récupérait un paragraphe et devait tout
+     retaper. Demande du 15 septembre 2026.
+
+     Les ordonnées sont renvoyées à l'endroit des PDF, croissantes vers le
+     haut, pour que le même code de mise en colonnes serve aux deux sources.  */
+  function mots(fichier, options) {
+    var o = options || {};
+    var dire = o.surProgres || function (p, n, etape) {
+      bandeau("Document scanné : lecture de l'image. " + etape + ".", etape === "Terminé");
+    };
+    var maxPages = o.pages || 20;
+    var T = null, ouvrier = null, doc = null;
+
+    dire(0, 0, "Chargement du moteur de reconnaissance");
+    return charger().then(function (Tesseract) {
+      T = Tesseract;
+      if (!window.LirePdf) throw new Error("Le lecteur de PDF n'est pas chargé.");
+      return window.LirePdf.charger();
+    }).then(function (pdfjsLib) {
+      return fichier.arrayBuffer().then(function (buf) {
+        return pdfjsLib.getDocument({ data: new Uint8Array(buf), isEvalSupported: false }).promise;
+      });
+    }).then(function (d) {
+      doc = d;
+      dire(0, doc.numPages, "Préparation");
+      return T.createWorker("fra", 1, {
+        workerPath: "ocr/worker.min.js",
+        corePath: "ocr/tesseract-core-simd.wasm.js",
+        langPath: "ocr",
+        gzip: true,
+      });
+    }).then(function (w) {
+      ouvrier = w;
+      var n = Math.min(doc.numPages, maxPages);
+      var suite = Promise.resolve([]);
+      for (var i = 1; i <= n; i++) {
+        (function (p) {
+          suite = suite.then(function (acc) {
+            dire(p, n, "Lecture de la page " + p + " sur " + n);
+            return doc.getPage(p)
+              .then(function (page) { return pageEnImage(page, 2); })
+              .then(function (toile) { return lirePage(ouvrier, toile); })
+              .then(function (r) {
+                var W = (r.data && r.data.words) || [];
+                acc.push(W.filter(function (m) {
+                  return m && m.text && m.text.trim() && (m.confidence == null || m.confidence > 30);
+                }).map(function (m) {
+                  var b = m.bbox || {};
+                  return { s: String(m.text).trim(), x: b.x0 || 0, y: -(b.y0 || 0),
+                    h: Math.max(1, (b.y1 || 0) - (b.y0 || 0)) };
+                }));
+                return acc;
+              });
+          });
+        })(i);
+      }
+      return suite;
+    }).then(function (pages) {
+      if (ouvrier) ouvrier.terminate();
+      dire(pages.length, pages.length, "Terminé");
+      var total = pages.reduce(function (n, p) { return n + p.length; }, 0);
+      if (!total) throw new Error("La reconnaissance n'a rien pu lire sur ce document : " +
+        "l'image est peut-être trop pâle, de travers ou de trop faible résolution.");
+      return pages;
+    }).catch(function (e) {
+      if (ouvrier) { try { ouvrier.terminate(); } catch (x) {} }
+      dire(0, 0, "Terminé");
+      throw e;
+    });
+  }
+
+  window.LireOCR = { texte: texte, mots: mots, charger: charger };
 })(window);
