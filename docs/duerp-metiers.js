@@ -1228,8 +1228,87 @@
      lui seul sept unités de travail et qu'il grossira. Il passe DEVANT les
      autres dans la reconnaissance : une entreprise de transport avec un
      entrepôt est d'abord un transporteur, et l'IDCC 16 leur est commun. */
+  /* ═══════════════════════════════════════════════════════════════════════
+     ALCOOL, MÉDICAMENTS ET SUBSTANCES : LE RISQUE, PAS LE CONTRÔLE.
+
+     Le règlement intérieur produit par l'application traite la question
+     depuis son article 7 : boissons autorisées, test salivaire sur les postes
+     de sécurité listés, éthylotest en cas de danger immédiat. Le document
+     unique, lui, n'en disait rien. Un avis extérieur du 15 septembre 2026 l'a
+     relevé, et c'est un vrai trou : le contrôle prévu par le règlement
+     suppose un risque décrit quelque part, et c'est ici qu'il se décrit.
+
+     Le document unique ne prévoit ni dépistage ni sanction, ce n'est pas son
+     objet. Il décrit la situation de travail où la vigilance peut être
+     diminuée, ce qu'on y fait pour l'éviter, qui s'en occupe et pour quand.
+
+     Le risque est posé sur les postes où une vigilance diminuée blesse :
+     conduite, engin, machine, hauteur, feu. Il ne l'est pas sur les postes
+     administratifs : l'inscrire partout ferait un document où il ne se lit
+     plus nulle part. Demande du 15 septembre 2026, à faire en premier.       */
+  var MESURES_VIGILANCE = [
+    "Liste écrite des postes où une vigilance diminuée met en danger le salarié ou autrui, revue à chaque changement d'organisation et connue de ceux qui les tiennent : c'est elle qui fonde toute mesure de prévention et tout contrôle prévu au règlement intérieur.",
+    "Le règlement intérieur et le présent document se relisent ensemble : l'un dit ce qui est autorisé, interdit, et comment un contrôle se fait ; l'autre décrit le risque que ce contrôle sert à prévenir. Un contrôle prévu sans risque décrit, ou un risque décrit sans conduite à tenir, laisse le poste sans prévention.",
+    "Pots, repas et fins de poste encadrés : quantité servie limitée, boissons sans alcool toujours disponibles, et personne ne reprend la route, un engin ou une machine après.",
+    "Un salarié qui se sait hors d'état de tenir son poste le dit et il est remplacé, sans que le fait de l'avoir dit soit retenu contre lui. La consigne est écrite et rappelée.",
+    "Traitement médical susceptible d'altérer la vigilance : le salarié en parle au médecin du travail, jamais à l'employeur, et l'aménagement du poste passe par le service de prévention et de santé au travail.",
+    "Encadrement formé à deux gestes : parler à un salarié dont l'état inquiète, et l'écarter du poste sur-le-champ. Écarter n'est pas sanctionner, et les deux ne se décident pas au même moment.",
+    "Ce qui est constaté s'écrit le jour même : date, heure, poste, ce qui a été vu, qui était présent, ce qui a été fait du salarié et de son travail.",
+    "Moyen de retour sans conduite personnelle prévu et payé quand un salarié est écarté d'un poste de conduite.",
+    "Coordonnées du service de prévention et de santé au travail et des relais d'aide affichées, sans que personne ait à les demander.",
+  ];
+  var SITUATIONS_VIGILANCE = {
+    "cuisine": "Le cuisinier reprend le piano et la friteuse en fin de service, après un pot servi en salle.",
+    "livraison": "Le livreur repart en deux-roues à la fermeture, après un service où les boissons ont circulé.",
+    "bar": "Le barman goûte et resservi toute la soirée, puis rentre en voiture après la fermeture.",
+    "reception": "Le magasinier prend le transpalette au début de l'après-midi, sous un traitement qui l'assomme et dont il n'a parlé à personne.",
+    "deplacements": "Le commercial reprend la route après un déjeuner client où du vin a été servi.",
+    "chariot": "Le cariste monte sur le chariot le lendemain d'une soirée, mal réveillé, et personne ne le remarque avant la première allée.",
+    "quai": "L'agent guide un camion au recul sur le quai, la veille d'un jour de repos, après un casse-croûte arrosé.",
+    "gros-oeuvre": "Le maçon remonte sur l'échafaudage après un casse-croûte où de la bière a circulé.",
+    "circulation": "Le conducteur d'engin manœuvre dans une zone où passent des piétons, sous un traitement qui ralentit ses réflexes.",
+    "production": "L'opérateur prend la ligne en équipe de nuit, sous un médicament acheté sans ordonnance qui fait dormir.",
+    "maintenance": "Le technicien intervient sur une machine consignée alors que son attention est diminuée, et saute une étape de la consignation.",
+    "conduite": "Le conducteur prend la route au petit matin après une courte nuit et un traitement contre le rhume qui fait dormir.",
+    "atelier": "Le mécanicien travaille sous un poids lourd levé sur le pont, après un pot d'atelier.",
+  };
+  /* Quelles unités portent le risque, métier par métier. */
+  var UNITES_VIGILANCE = {
+    "restauration": ["cuisine", "bar", "livraison"],
+    "commerce": ["reception"],
+    "bureau": ["deplacements"],
+    "entrepot": ["quai", "chariot"],
+    "batiment": ["gros-oeuvre", "circulation"],
+    "industrie": ["production", "maintenance"],
+    "transport": ["conduite", "atelier"],
+  };
+
+  function poserVigilance(metier) {
+    var cles = UNITES_VIGILANCE[metier && metier.cle];
+    if (!cles) return metier;
+    (metier.unites || []).forEach(function (u) {
+      if (cles.indexOf(u.cle) < 0) return;
+      var deja = (u.risques || []).some(function (r) { return r.cle === "vigilance"; });
+      if (deja) return;
+      u.risques.push({
+        cle: "vigilance",
+        n: "Vigilance diminuée : alcool, médicaments et autres substances",
+        m: "alcool|alcoolémie|alcoolemie|alcoolisé|stupéfiant|stupefiant|drogue|cannabis|" +
+           "médicament|medicament|traitement|vigilance|somnolence|addiction|éthylotest|" +
+           "ethylotest|salivaire|dépistage|depistage|sobriété|sobriete",
+        s: SITUATIONS_VIGILANCE[u.cle] ||
+           "Le salarié tient un poste où l'inattention blesse, alors que sa vigilance est diminuée.",
+        g: 4, f: 2, r: "Employeur, avec l'encadrement du poste", mois: 3,
+        mes: MESURES_VIGILANCE.slice(),
+      });
+    });
+    return metier;
+  }
+  METIERS.forEach(poserVigilance);
+
   function ajouter(metier) {
     if (!metier || !metier.cle) return;
+    poserVigilance(metier);
     for (var i = 0; i < METIERS.length; i++) if (METIERS[i].cle === metier.cle) { METIERS[i] = metier; return; }
     METIERS.unshift(metier);
   }
