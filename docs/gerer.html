@@ -95,17 +95,19 @@
   .tableau-doc .note-tab{font-size:14px;color:var(--texte-2);margin:10px 0 0}
   .dates{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
   .d{border:1px solid var(--filet);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px;background:var(--surface)}
+  .d.tard{border-left-color:var(--rouge)}
   /* PRESCRIT : ON NE PEUT PAS LE MANQUER. Demande du 16 septembre 2026,
-     « si prescrit avertissement en rouge clignotant ». Le clignotement
-     s'arrête pour qui a demandé des animations réduites : une alerte qui
-     bat sans fin est pénible, et pour certaines personnes, insupportable.
-     La couleur et le mot restent, eux : l'information ne dépend pas du
-     clignotement. */
-  .d.tard{border-left-color:var(--rouge);border-color:var(--rouge);
+     « si prescrit avertissement en rouge clignotant ». Sa propre classe, et
+     non celle des échéances « au plus tard » : la première version faisait
+     clignoter toutes les dates limites, y compris celles qui n'annoncent
+     aucun problème. Le clignotement s'arrête pour qui a demandé des
+     animations réduites ; la couleur et le mot restent, l'information ne
+     dépendant pas du clignotement. */
+  .d.prescrit{border-color:var(--rouge);border-left-color:var(--rouge);
     background:var(--rouge-clair);animation:bat 1.1s steps(1,end) infinite}
-  .d.tard .q,.d.tard .v,.d.tard .f{color:var(--rouge)}
+  .d.prescrit .q,.d.prescrit .v,.d.prescrit .f{color:var(--rouge)}
   @keyframes bat{0%,49%{background:var(--rouge-clair)}50%,100%{background:#fff}}
-  @media (prefers-reduced-motion:reduce){.d.tard{animation:none}}
+  @media (prefers-reduced-motion:reduce){.d.prescrit{animation:none}}
   .d.tot{border-left-color:var(--vert)}
   .d .q{display:block;font:600 11.5px/1.3 system-ui;text-transform:uppercase;letter-spacing:.07em;color:var(--texte-3)}
   .d .v{display:block;font:600 17px/1.3 system-ui;margin:3px 0 1px;color:var(--encre)}
@@ -116,6 +118,15 @@
   .refus b{display:block;margin-bottom:4px}
   .alerte{background:var(--ambre-clair);border:1px solid #e8ddc6;border-radius:8px;padding:10px 14px;
     margin:0 0 12px;color:var(--ambre);font-size:14.5px;line-height:1.55}
+  /* IL MANQUE QUELQUE CHOSE : ON NE PEUT PAS L'ENVOYER AINSI. Demande du
+     16 septembre 2026, « pour l'entretien préalable en rouge aussi
+     clignotant si une information manque ». Une convocation sans date,
+     sans heure ou sans lieu n'est pas une convocation. */
+  .alerte.manque{background:var(--rouge-clair);border-color:#e6cccc;color:var(--rouge);
+    font-weight:600;animation:bat 1.1s steps(1,end) infinite}
+  .alerte.manque ul{margin:6px 0 0;padding-left:20px;font-weight:400}
+  .alerte.manque li{margin:0 0 2px}
+  @media (prefers-reduced-motion:reduce){.alerte.manque{animation:none}}
 
   .feuille{padding:20px 18px;font:16px/1.55 Georgia,"Times New Roman",serif;color:var(--encre);border-radius:12px}
   @media (min-width:700px){.feuille{padding:38px 44px}}
@@ -1167,6 +1178,36 @@
     { id: "griefs", nom: "Ce que vous reprochez", t: "textarea", pleine: true,
       ph: "Le 3 septembre 2026, vous avez quitté votre poste à 19 h 30 sans prévenir, alors que le service commençait." }
   ];
+  /* LA CONVOCATION A TROIS MENTIONS QUI NE SE DEVINENT PAS : la date, l'heure
+     et le lieu de l'entretien. L'application écrivait « à 10 h 00, au siège de
+     la société » : une heure inventée et un lieu supposé, dans une lettre qui
+     doit les porter exactement. Ils se saisissent, et tant qu'ils manquent
+     l'écran le dit en rouge. Demande du 16 septembre 2026. */
+  var CHAMPS_ENTRETIEN = CHAMPS_SANCTION.concat([
+    { id: "eDate", nom: "Date de l'entretien", t: "date" },
+    { id: "eHeure", nom: "Heure de l'entretien", t: "text", ph: "10 h 00" },
+    { id: "eLieu", nom: "Lieu de l'entretien", t: "text", pleine: true, ph: "au siège de la société, 23 avenue du Château" }
+  ]);
+
+  /* Ce qui manque encore, nommé une fois pour toutes. */
+  function manques(v, avecEntretien) {
+    var m = [];
+    if (!String(v.nom || "").trim()) m.push("le nom et le prénom du salarié");
+    if (!v.faits) m.push("la date des faits");
+    if (!v.connaissance) m.push("la date à laquelle vous en avez eu connaissance");
+    if (!String(v.griefs || "").trim()) m.push("ce que vous reprochez, daté et circonstancié");
+    if (avecEntretien) {
+      if (!v.eDate) m.push("la date de l'entretien préalable");
+      if (!String(v.eHeure || "").trim()) m.push("l'heure de l'entretien");
+      if (!String(v.eLieu || "").trim()) m.push("le lieu de l'entretien");
+    }
+    return m;
+  }
+  function alerteManques(m, quoi) {
+    return { manque: true, t: "Cette " + quoi + " ne peut pas être envoyée en l'état : " +
+      m.length + " information" + (m.length > 1 ? "s" : "") + " manque" + (m.length > 1 ? "nt" : "") + ".",
+      liste: m };
+  }
   function deuxMois(v) {
     var conn = dateDe(v.connaissance) || dateDe(v.faits);
     var limite = conn ? plusMois(conn, 2) : null;
@@ -1178,7 +1219,7 @@
         d: "Dernier jour possible : " + dateFrJour(dm.limite),
         f: "Aucune sanction ne peut plus être prononcée sur ces seuls faits, connus le " +
            dateFr(dm.conn) + " (" + ref(["L1332-4"]) + "), sauf poursuites pénales engagées dans le même délai.",
-        c: "tard" };
+        c: "prescrit" };
     return { q: quoi, d: dm.limite ? dateFrJour(dm.limite) : "[date de connaissance à saisir]",
       f: "deux mois à compter du jour où vous avez eu connaissance des faits" + (dm.conn ? ", le " + dateFr(dm.conn) : "") + " (" + ref(["L1332-4"]) + ")",
       c: dm.prescrit ? "tard" : "" };
@@ -1192,13 +1233,18 @@
     var nomS = v.nom || "[nom et prénom du salarié]";
     var civ = civiliteDe(nomS);
     var dm = deuxMois(v);
-    var entretien = prochainOuvrable(jour(AUJOURDHUI, 7));
+    /* La date proposée reste un repère pour les cartes de délai ; la lettre,
+       elle, n'écrit que ce qui a été saisi. */
+    var entretien = dateDe(v.eDate) || prochainOuvrable(jour(AUJOURDHUI, 7));
+    var quand = v.eDate ? dateFrJour(dateDe(v.eDate)) : "[date de l'entretien]";
+    var heure = String(v.eHeure || "").trim() || "[heure]";
+    var lieu = String(v.eLieu || "").trim() || "[lieu de l'entretien]";
     var b = [];
     if (S.entretien) {
       b.push({ k: "t1", t: "Convocation à un entretien préalable" });
       enTete(b, nomS, "convocation à un entretien préalable", "Lettre recommandée avec avis de réception ou remise en main propre contre récépissé");
       b.push({ k: "p", t: "Nous envisageons de prendre à votre égard une sanction disciplinaire pouvant aller jusqu'à " + S.nom + "." });
-      b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + dateFrJour(entretien) + " à 10 h 00, au siège de la société." });
+      b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + "." });
       b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons le motif de la sanction envisagée et recueillerons vos explications (" + ref(["L1332-2"]) + ")." });
       b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise." });
       formule(b, civ);
@@ -1208,7 +1254,7 @@
     b.push({ k: "t1", t: "Notification de sanction" });
     enTete(b, nomS, S.objet, "Lettre recommandée avec avis de réception");
     if (S.entretien) {
-      b.push({ k: "p", t: "Nous vous avons reçu le " + dateFrJour(entretien) + " dans le cadre d'un entretien préalable à une sanction disciplinaire. Les explications que vous nous avez données ne nous ont pas permis de modifier notre appréciation des faits." });
+      b.push({ k: "p", t: "Nous vous avons reçu le " + quand + " dans le cadre d'un entretien préalable à une sanction disciplinaire. Les explications que vous nous avez données ne nous ont pas permis de modifier notre appréciation des faits." });
     }
     b.push({ k: "p", t: "Nous vous notifions par la présente " + S.nom + " pour les faits suivants" + (dm.conn && v.faits ? ", dont nous avons eu connaissance le " + dateFr(dm.conn) : "") + "." });
     griefsBlocs(b, v.griefs, (v.faits ? "Le " + dateFr(dateDe(v.faits)) + ", " : "") + "[rappelez ici les faits, datés et circonstanciés : ce sont eux, et eux seuls, qui fondent la sanction]");
@@ -1224,6 +1270,8 @@
       dates.push({ q: "Notification au plus tard", d: dateFrJour(plusMois(entretien, 1)), f: "un mois après le jour fixé pour l'entretien (" + ref(["L1332-2"]) + ")", c: "tard" });
     }
     var alertes = [];
+    var m = manques(v, !!S.entretien);
+    if (m.length) alertes.push(alerteManques(m, S.entretien ? "convocation" : "lettre"));
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
     return { blocs: b, dates: dates, alertes: alertes,
       loi: ["L1332-1", "L1332-2", "L1332-4", "L1332-5", "R1332-1"] };
@@ -1262,7 +1310,10 @@
     var civ = civiliteDe(nomS);
     var dm = deuxMois(v);
     var convocation = AUJOURDHUI;
-    var entretien = apresJoursOuvrables(convocation, 5);
+    var entretien = dateDe(v.eDate) || apresJoursOuvrables(convocation, 5);
+    var quand = v.eDate ? dateFrJour(dateDe(v.eDate)) : "[date de l'entretien]";
+    var heure = String(v.eHeure || "").trim() || "[heure]";
+    var lieu = String(v.eLieu || "").trim() || "[lieu de l'entretien]";
     var totNotif = apresJoursOuvrables(entretien, 2);
     var tardNotif = plusMois(entretien, 1);
     var b = [];
@@ -1270,7 +1321,7 @@
     b.push({ k: "t1", t: "Convocation à un entretien préalable au licenciement" });
     enTete(b, nomS, "convocation à un entretien préalable", "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
     b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement." });
-    b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + dateFrJour(entretien) + " à 10 h 00, au siège de la société." });
+    b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + "." });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons les motifs de la décision envisagée et recueillerons vos explications (" + ref(["L1232-3"]) + ")." });
     b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative. Cette liste est tenue à votre disposition à la direction départementale de l'emploi, du travail et des solidarités de [département] et à la mairie de " + ville() + " (" + ref(["L1232-4"]) + ")." });
     formule(b, civ);
@@ -1279,7 +1330,7 @@
 
     b.push({ k: "t1", t: "Notification de licenciement" });
     enTete(b, nomS, "notification de votre licenciement", "Lettre recommandée avec avis de réception");
-    b.push({ k: "p", t: "Nous vous avons reçu le " + dateFrJour(entretien) + " dans le cadre de l'entretien préalable auquel nous vous avions convoqué par lettre du " + dateFr(convocation) + ". Les explications que vous nous avez données ne nous ont pas permis de modifier notre appréciation de la situation." });
+    b.push({ k: "p", t: "Nous vous avons reçu le " + quand + " dans le cadre de l'entretien préalable auquel nous vous avions convoqué par lettre du " + dateFr(convocation) + ". Les explications que vous nous avez données ne nous ont pas permis de modifier notre appréciation de la situation." });
     b.push({ k: "p", t: "Nous vous notifions par la présente votre licenciement pour faute, pour les motifs suivants" + (dm.conn ? ", dont nous avons eu connaissance le " + dateFr(dm.conn) : "") + "." });
     griefsBlocs(b, v.griefs, (v.faits ? "Le " + dateFr(dateDe(v.faits)) + ", " : "") + "[énoncez ici les motifs, datés et circonstanciés ; ce sont eux qui fixent les limites du litige : ce qui n'y figure pas ne pourra pas être invoqué ensuite]");
     b.push({ k: "p", t: "Votre préavis, d'une durée " + SANS_ANCIENNETE + ", débutera à la date de première présentation de cette lettre (" + ref(["L1234-1", "L1234-3"]) + "). Si nous vous dispensons de l'exécuter, cette dispense ne réduira ni votre rémunération ni la date à laquelle votre contrat prend fin (" + ref(["L1234-5"]) + ")." });
@@ -1293,6 +1344,8 @@
       { q: "Notification au plus tôt", d: dateFrJour(totNotif), f: "deux jours ouvrables après l'entretien (" + ref(["L1232-6"]) + ")", c: "tot" },
       { q: "Notification au plus tard", d: dateFrJour(tardNotif), f: "un mois après le jour fixé pour l'entretien (" + ref(["L1332-2"]) + ")", c: "tard" }];
     var alertes = [];
+    var m = manques(v, true);
+    if (m.length) alertes.push(alerteManques(m, "convocation"));
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
     alertes.push("Vérifiez avant l'envoi qu'aucune protection ne s'applique : représentant du personnel (autorisation de l'inspection du travail), maternité (" + ref(["L1225-4"]) + "), accident du travail (" + ref(["L1226-9"]) + ").");
     return { blocs: b, dates: dates, alertes: alertes,
@@ -1492,13 +1545,16 @@
     var civ = civiliteDe(nomS);
     var poste = v.poste || "[emploi]";
     var convocation = AUJOURDHUI;
-    var entretien = apresJoursOuvrables(convocation, 5);
+    var entretien = dateDe(v.eDate) || apresJoursOuvrables(convocation, 5);
+    var quand = v.eDate ? dateFrJour(dateDe(v.eDate)) : "[date de l'entretien]";
+    var heure = String(v.eHeure || "").trim() || "[heure]";
+    var lieu = String(v.eLieu || "").trim() || "[lieu de l'entretien]";
     var totNotif = apresJoursOuvrables(entretien, 7);
     var b = [];
     b.push({ k: "t1", t: "Convocation à un entretien préalable au licenciement pour motif économique" });
     enTete(b, nomS, "convocation à un entretien préalable", "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
     b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement pour motif économique, la suppression de votre poste de " + poste + " étant envisagée pour les raisons qui vous seront exposées." });
-    b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + dateFrJour(entretien) + " à 10 h 00, au siège de la société (" + ref(["L1233-11"]) + ")." });
+    b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + " (" + ref(["L1233-11"]) + ")." });
     b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative ; cette liste est tenue à votre disposition à la direction départementale de l'emploi, du travail et des solidarités de [département] et à la mairie de " + ville() + " (" + ref(["L1233-13"]) + ")." });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous proposerons le bénéfice du contrat de sécurisation professionnelle et vous remettrons le document d'information correspondant (" + ref(["L1233-66", "L1233-65"]) + ")." });
     formule(b, civ);
@@ -1507,7 +1563,7 @@
 
     b.push({ k: "t1", t: "Notification de licenciement pour motif économique" });
     enTete(b, nomS, "notification de votre licenciement pour motif économique", "Lettre recommandée avec avis de réception");
-    b.push({ k: "p", t: "Nous vous avons reçu le " + dateFrJour(entretien) + " dans le cadre de l'entretien préalable auquel nous vous avions convoqué par lettre du " + dateFr(convocation) + "." });
+    b.push({ k: "p", t: "Nous vous avons reçu le " + quand + " dans le cadre de l'entretien préalable auquel nous vous avions convoqué par lettre du " + dateFr(convocation) + "." });
     b.push({ k: "p", t: "Nous vous notifions par la présente votre licenciement pour motif économique, pour les raisons suivantes (" + ref(["L1233-3", "L1233-16"]) + ")." });
     griefsBlocs(b, v.motif, "[le motif économique : difficultés économiques caractérisées par l'évolution d'un indicateur (commandes, chiffre d'affaires, pertes, trésorerie), mutations technologiques, réorganisation nécessaire à la sauvegarde de la compétitivité ou cessation d'activité ; puis son effet sur votre emploi : suppression du poste, transformation, ou modification du contrat que vous avez refusée]");
     b.push({ k: "p", t: "Votre poste de " + poste + " est supprimé. Nous avons recherché les possibilités de vous reclasser sur les emplois disponibles dans l'entreprise [et dans les entreprises du groupe situées sur le territoire national] : [aucun emploi disponible relevant de votre catégorie ou équivalent n'a pu vous être proposé / vous avez refusé l'offre du ... ] (" + ref(["L1233-4"]) + ")." });
@@ -1521,6 +1577,16 @@
       { q: "Entretien au plus tôt", d: dateFrJour(entretien), f: "cinq jours ouvrables après la présentation de la convocation, datée d'aujourd'hui (" + ref(["L1233-11"]) + ")", c: "tot" },
       { q: "Notification au plus tôt", d: dateFrJour(totNotif), f: "sept jours ouvrables à compter de la date prévue de l'entretien, quinze pour un cadre (" + ref(["L1233-15"]) + ")", c: "tot" }];
     var alertes = [];
+    /* La convocation économique porte les mêmes trois mentions que les
+       autres : sans elles, elle ne s'envoie pas. */
+    var mq = [];
+    if (!String(v.nom || "").trim()) mq.push("le nom et le prénom du salarié");
+    if (!String(v.poste || "").trim()) mq.push("l'emploi supprimé");
+    if (!String(v.motif || "").trim()) mq.push("le motif économique");
+    if (!v.eDate) mq.push("la date de l'entretien préalable");
+    if (!String(v.eHeure || "").trim()) mq.push("l'heure de l'entretien");
+    if (!String(v.eLieu || "").trim()) mq.push("le lieu de l'entretien");
+    if (mq.length) alertes.push(alerteManques(mq, "convocation"));
     if (effectif >= 50) alertes.push("À partir de cinquante salariés, un projet de dix licenciements ou plus sur trente jours relève du plan de sauvegarde de l'emploi : ces courriers ne valent que pour un licenciement individuel ou de moins de dix salariés (" + ref(["L1233-11", "L1233-15"]) + ").");
     alertes.push("Vérifiez avant l'envoi qu'aucune protection ne s'applique : représentant du personnel (autorisation de l'inspection du travail), maternité (" + ref(["L1225-4"]) + "), accident du travail (" + ref(["L1226-9"]) + ").");
     return { blocs: b, dates: dates, alertes: alertes,
@@ -1731,15 +1797,18 @@
       loi: ["L6315-1"] },
 
     avert: { titre: "Avertissement", champs: CHAMPS_SANCTION, produire: function (v) { return sanction(v, "avertissement"); } },
-    miseapied: { titre: "Mise à pied", champs: CHAMPS_SANCTION, produire: function (v) { return sanction(v, "miseapied"); } },
-    faute: { titre: "Licenciement pour faute", champs: CHAMPS_SANCTION, produire: licenciementFaute },
+    miseapied: { titre: "Mise à pied", champs: CHAMPS_ENTRETIEN, produire: function (v) { return sanction(v, "miseapied"); } },
+    faute: { titre: "Licenciement pour faute", champs: CHAMPS_ENTRETIEN, produire: licenciementFaute },
 
     rc: { titre: "Rupture conventionnelle", champs: [NOM, { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" },
         { id: "salaire", nom: "Salaire mensuel brut (euros)", t: "number", ph: "2 000" }, { id: "signature", nom: "Date de signature", t: "date", defaut: iso(AUJOURDHUI) }], produire: ruptureConventionnelle },
     demission: { titre: "Démission", champs: [NOM, { id: "reception", nom: "Démission reçue le", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" }, { id: "statut", nom: "Statut", t: "select", opts: STATUTS, defaut: "employe" }], produire: demission },
     eco: { titre: "Licenciement économique", champs: [NOM, { id: "poste", nom: "Emploi supprimé", t: "text", ph: "chef de rang" },
-        { id: "motif", nom: "Le motif économique, dans vos mots", t: "textarea", pleine: true, ph: "Le chiffre d'affaires du restaurant a baissé de 32 % sur les deux derniers trimestres par rapport aux mêmes trimestres de l'année précédente ; le second poste de chef de rang est supprimé." }], produire: licenciementEco },
+        { id: "motif", nom: "Le motif économique, dans vos mots", t: "textarea", pleine: true, ph: "Le chiffre d'affaires du restaurant a baissé de 32 % sur les deux derniers trimestres par rapport aux mêmes trimestres de l'année précédente ; le second poste de chef de rang est supprimé." },
+        { id: "eDate", nom: "Date de l'entretien", t: "date" },
+        { id: "eHeure", nom: "Heure de l'entretien", t: "text", ph: "10 h 00" },
+        { id: "eLieu", nom: "Lieu de l'entretien", t: "text", pleine: true, ph: "au siège de la société" }], produire: licenciementEco },
     fincdd: { titre: "Fin de CDD", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "serveur" }, { id: "terme", nom: "Date du terme", t: "date", defaut: iso(plusMois(AUJOURDHUI, 1)) }], produire: finCdd },
     retraite: { titre: "Départ en retraite", champs: [NOM, { id: "reception", nom: "Demande reçue le", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" }, { id: "salaire", nom: "Salaire mensuel brut (euros)", t: "number", ph: "2 000" }], produire: retraite },
@@ -1925,7 +1994,15 @@
     $("d-dates").hidden = !h;
     var a = "";
     if (r.refus) a += '<div class="refus"><b>Ce document n\'est pas produit.</b>' + r.refus.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>";
-    (r.alertes || []).forEach(function (t) { a += '<div class="alerte">' + ech(t) + "</div>"; });
+    (r.alertes || []).forEach(function (t) {
+      if (t && typeof t === "object" && t.manque) {
+        a += '<div class="alerte manque">' + ech(t.t) + "<ul>" +
+          (t.liste || []).map(function (x) { return "<li>" + ech(x) + "</li>"; }).join("") +
+          "</ul></div>";
+        return;
+      }
+      a += '<div class="alerte">' + ech(t) + "</div>";
+    });
     $("d-avis").innerHTML = a;
     TABLEAU = r.refus ? null : (r.tableau || null);
     REGLES = r.refus ? "" : (r.regles || "");
