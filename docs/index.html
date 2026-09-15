@@ -77,6 +77,9 @@
   footer{margin:40px 0 32px;padding-top:14px;border-top:1px solid var(--filet);
     font-size:15px;color:var(--texte-2);text-align:center}
   [hidden]{display:none !important}
+  footer #adresse-app{color:var(--accent);word-break:break-all}
+  footer .lien-copie{display:block;margin:10px auto 64px;border:1px solid var(--filet);background:var(--surface);
+    color:var(--encre);border-radius:var(--r2);font:600 13px/1 system-ui;padding:9px 14px;min-height:38px;width:auto}
 </style>
 </head>
 <body>
@@ -117,7 +120,11 @@
     </div>
   </section>
 
-  <footer>Tout se calcule dans votre navigateur, rien n'est envoyé<br><span id="version-app"></span></footer>
+  <footer>Tout se calcule dans votre navigateur, rien n'est envoyé<br>
+    <span id="version-app"></span><br>
+    <a id="adresse-app" href="#"></a><br>
+    <button type="button" id="copier-adresse" class="lien-copie">Copier le lien</button>
+  </footer>
 
 </main>
 
@@ -133,6 +140,29 @@
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
   if (window.VERSION_APP) $("version-app").textContent = "Version " + window.VERSION_APP + ", " + window.VERSION_DATE;
+
+  /* L'ADRESSE DE L'APPLICATION, SOUS LES YEUX.
+
+     Demande du 15 septembre 2026 : « je ne vois pas le lien url de
+     l'application ». Elle se lit ici telle qu'elle est ouverte, quel que soit
+     l'hébergement, et se copie d'un bouton pour être envoyée à un client. */
+  (function adresse() {
+    var a = $("adresse-app"), b = $("copier-adresse");
+    if (!a) return;
+    var u = location.origin + location.pathname.replace(/[^\/]*$/, "");
+    a.href = u;
+    a.textContent = u;
+    if (!b) return;
+    b.addEventListener("click", function () {
+      var fini = function (ok) {
+        b.textContent = ok ? "Lien copié" : "Copie impossible";
+        setTimeout(function () { b.textContent = "Copier le lien"; }, 2500);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText)
+        navigator.clipboard.writeText(u).then(function () { fini(true); }, function () { fini(false); });
+      else fini(false);
+    });
+  })();
 
   /* Les huit champs de la fiche, sans texte d'aide, avec des intitulés courts.
      Le SIRET, l'adresse et le représentant légal en font partie depuis le
