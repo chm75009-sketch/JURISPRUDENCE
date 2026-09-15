@@ -144,6 +144,11 @@ lisible sur un téléphone ?** Pas lisible en principe, lisible à l'écran, ess
 Un tableau ne s'affiche pas en texte à chasse fixe : il se rend en tableau, ou
 il se télécharge en classeur et ne s'affiche pas du tout.
 
+**La présentation est aussi importante que le contenu.** Posé le 15 septembre
+2026, dans ces termes : « la présentation est aussi importante que le contenu,
+note le aussi ». Les deux se valent : un contenu juste mal présenté ne vaut pas
+mieux qu'un contenu faux bien présenté. Rien ne part sans avoir été regardé.
+
 **La présentation est éliminatoire.** Posé le 14 septembre 2026, dans ces
 termes : « je t'ai toujours dit de ne pas faire un travail bâclé, la
 présentation est capitale, éliminatoire ». Ce n'est pas un critère parmi
