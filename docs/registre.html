@@ -1394,8 +1394,25 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (E.tenue[id] != null) $(id).value = E.tenue[id];
   });
   rendreTextes();
+
+  /* La liste d'audit pose déjà la question : « Avez-vous ce document ? ».
+     Quand elle l'a posée, elle passe la réponse dans l'adresse, et cette page
+     ouvre directement la suite au lieu de la redemander. */
+  var REP = (function () {
+    var m = String(location.search || "").match(/[?&]rep=(oui|non)/);
+    return m ? m[1] : "";
+  })();
+  if (REP) E.reponse = REP;
   garder();
-  ouvrir(E.reponse ? (E.reponse === "oui" ? "registre" : "registre") : "question");
+  if (E.reponse === "oui") ouvrir("import");
+  else if (E.reponse === "non") {
+    if (!E.salaries.length || E.salaries.every(function (x) {
+      return vide(x.nom) && vide(x.pre) && vide(x.emp) && vide(x.ent); })) {
+      E.salaries = exemples();
+      garder();
+    }
+    ouvrir("registre");
+  } else ouvrir("question");
 
   if ("serviceWorker" in navigator)
     window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
