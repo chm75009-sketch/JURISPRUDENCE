@@ -95,7 +95,17 @@
   .tableau-doc .note-tab{font-size:14px;color:var(--texte-2);margin:10px 0 0}
   .dates{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
   .d{border:1px solid var(--filet);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px;background:var(--surface)}
-  .d.tard{border-left-color:var(--rouge)}
+  /* PRESCRIT : ON NE PEUT PAS LE MANQUER. Demande du 16 septembre 2026,
+     « si prescrit avertissement en rouge clignotant ». Le clignotement
+     s'arrête pour qui a demandé des animations réduites : une alerte qui
+     bat sans fin est pénible, et pour certaines personnes, insupportable.
+     La couleur et le mot restent, eux : l'information ne dépend pas du
+     clignotement. */
+  .d.tard{border-left-color:var(--rouge);border-color:var(--rouge);
+    background:var(--rouge-clair);animation:bat 1.1s steps(1,end) infinite}
+  .d.tard .q,.d.tard .v,.d.tard .f{color:var(--rouge)}
+  @keyframes bat{0%,49%{background:var(--rouge-clair)}50%,100%{background:#fff}}
+  @media (prefers-reduced-motion:reduce){.d.tard{animation:none}}
   .d.tot{border-left-color:var(--vert)}
   .d .q{display:block;font:600 11.5px/1.3 system-ui;text-transform:uppercase;letter-spacing:.07em;color:var(--texte-3)}
   .d .v{display:block;font:600 17px/1.3 system-ui;margin:3px 0 1px;color:var(--encre)}
@@ -1147,8 +1157,13 @@
   }
   var CHAMPS_SANCTION = [
     { id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: "Monsieur Karim BENALI" },
-    { id: "faits", nom: "Date des faits", t: "date", defaut: iso(AUJOURDHUI) },
-    { id: "connaissance", nom: "Date à laquelle vous en avez eu connaissance", t: "date", defaut: iso(AUJOURDHUI) },
+    /* AUCUNE DE CES DEUX DATES NE SE DEVINE. Elles commandent le délai de
+       deux mois de L. 1332-4 : proposées au jour du jour, elles font croire
+       que le délai court d'aujourd'hui, alors que les faits sont peut-être
+       anciens et la sanction déjà prescrite. Elles restent vides et c'est le
+       client qui les porte. Demande du 16 septembre 2026. */
+    { id: "faits", nom: "Date des faits", t: "date" },
+    { id: "connaissance", nom: "Date à laquelle vous en avez eu connaissance", t: "date" },
     { id: "griefs", nom: "Ce que vous reprochez", t: "textarea", pleine: true,
       ph: "Le 3 septembre 2026, vous avez quitté votre poste à 19 h 30 sans prévenir, alors que le service commençait." }
   ];
@@ -1158,6 +1173,12 @@
     return { conn: conn, limite: limite, prescrit: !!(limite && AUJOURDHUI > limite) };
   }
   function carteDeuxMois(dm, quoi) {
+    if (dm.prescrit)
+      return { q: "Prescrit : le délai de deux mois est écoulé",
+        d: "Dernier jour possible : " + dateFrJour(dm.limite),
+        f: "Aucune sanction ne peut plus être prononcée sur ces seuls faits, connus le " +
+           dateFr(dm.conn) + " (" + ref(["L1332-4"]) + "), sauf poursuites pénales engagées dans le même délai.",
+        c: "tard" };
     return { q: quoi, d: dm.limite ? dateFrJour(dm.limite) : "[date de connaissance à saisir]",
       f: "deux mois à compter du jour où vous avez eu connaissance des faits" + (dm.conn ? ", le " + dateFr(dm.conn) : "") + " (" + ref(["L1332-4"]) + ")",
       c: dm.prescrit ? "tard" : "" };
