@@ -53,6 +53,10 @@
   .q-sous{font-size:var(--t2);color:var(--texte-2);margin:0 0 4px}
   .sal.exemple{border-style:dashed;background:var(--creux)}
   .sal.exemple .tete b::after{content:" · exemple";color:var(--texte-3);font-weight:400}
+  .sal .bouge input,.sal .bouge select,.sal .bouge input.rempli,.sal .bouge select.rempli{border-color:var(--rouge);color:var(--rouge);background:var(--rouge-clair)}
+  .sal .bouge .nom,.sal .bouge b{color:var(--rouge)}
+  .mv{font-style:normal;font-size:11px;color:var(--rouge);font-weight:600}
+  .feuille .b-rouge{margin:0 0 6px;font-size:14.5px;line-height:1.6;color:#C00000}
   .barre{margin:14px 0 0}
   .suite{margin:var(--e5) 0 0}
   button.doc-ligne{width:100%;border:0;border-bottom:1px solid var(--filet);border-radius:0;background:none;
@@ -397,6 +401,36 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
   var vide = function (x) { return String(x == null ? "" : x).trim() === ""; };
 
+  /* CE QUI A ÉTÉ AJOUTÉ OU CORRIGÉ APRÈS LE DÉPÔT.
+
+     Une ligne reprise d'un registre déposé garde ce que le fichier portait.
+     Un champ vide au dépôt et rempli depuis est un ajout ; un champ rempli au
+     dépôt et changé depuis est une correction. Les deux se voient en rouge, à
+     l'écran comme dans le document : l'employeur doit pouvoir montrer ce qu'il
+     a complété, et ne pas le confondre avec ce qu'il avait déjà. */
+  function mouvement(s, champ) {
+    if (!s || !s.repris || !s.src) return "";
+    var avant = s.src[champ] == null ? "" : String(s.src[champ]).trim();
+    var apres = s[champ] == null ? "" : String(s[champ]).trim();
+    if (avant === apres) return "";
+    if (!avant && apres) return "ajout";
+    if (avant && apres && avant !== apres) return "correction";
+    if (avant && !apres) return "retrait";
+    return "";
+  }
+  function bouges(s) {
+    var n = { ajout: 0, correction: 0, retrait: 0 };
+    if (!s.repris || !s.src) return n;
+    for (var k in s.src) if (Object.prototype.hasOwnProperty.call(s.src, k)) {
+      var m = mouvement(s, k);
+      if (m) n[m]++;
+    }
+    for (var c in s) if (Object.prototype.hasOwnProperty.call(s, c) &&
+      c !== "id" && c !== "src" && c !== "repris" && c !== "ex" &&
+      !Object.prototype.hasOwnProperty.call(s.src, c) && !vide(s[c])) n.ajout++;
+    return n;
+  }
+
   /* ──────────────────────────────────────────── ce qui manque à une ligne
 
      Deux listes, et elles ne disent pas la même chose. « manques » : une
@@ -610,18 +644,25 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       dedans = '<input type="' + (col.t === "date" ? "date" : "text") + '" data-id="' + ech(s.id) +
         '" data-c="' + col.c + '" value="' + ech(v) + '"' + (plein ? ' class="rempli"' : "") + ">";
     }
-    return '<label class="ch"><span class="nom">' + ech(col.lib) + "</span>" + dedans +
-      '<span class="sous">' + ech(col.fond) + "</span></label>";
+    var mv = mouvement(s, col.c);
+    return '<label class="ch' + (mv ? " bouge" : "") + '"><span class="nom">' + ech(col.lib) +
+      (mv ? ' <i class="mv">' + (mv === "ajout" ? "ajouté" : (mv === "correction" ? "corrigé" : "retiré")) + "</i>" : "") +
+      "</span>" + dedans + '<span class="sous">' + ech(col.fond) + "</span></label>";
   }
 
   function detail(s) {
     var e = function (c, lib, sous, type) {
-      return '<label><b>' + ech(lib) + "</b>" +
+      var mv = mouvement(s, c);
+      return '<label' + (mv ? ' class="bouge"' : "") + '><b>' + ech(lib) +
+        (mv ? ' <i class="mv">' + (mv === "ajout" ? "ajouté" : "corrigé") + "</i>" : "") + "</b>" +
         '<input type="' + (type || "text") + '" data-id="' + ech(s.id) + '" data-c="' + c +
         '" value="' + ech(s[c] || "") + '">' + (sous ? "<i>" + ech(sous) + "</i>" : "") + "</label>";
     };
     var sel = function (c, lib, opts, sous) {
-      return '<label><b>' + ech(lib) + "</b><select data-id=\"" + ech(s.id) + '" data-c="' + c + '">' +
+      var mv = mouvement(s, c);
+      return '<label' + (mv ? ' class="bouge"' : "") + '><b>' + ech(lib) +
+        (mv ? ' <i class="mv">' + (mv === "ajout" ? "ajouté" : "corrigé") + "</i>" : "") +
+        "</b><select data-id=\"" + ech(s.id) + '" data-c="' + c + '">' +
         opts.map(function (o) {
           return '<option value="' + ech(o.v) + '"' + ((s[c] || "") === o.v ? " selected" : "") + ">" +
             ech(o.lib) + "</option>"; }).join("") + "</select>" +
@@ -1088,6 +1129,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       IMPORT.corps.forEach(function (r) {
         var o = ligneImportee(r);
         if (vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp)) return;
+        /* Ce que le fichier portait est figé ici : tout ce qui s'en écartera
+           ensuite est un ajout ou une correction, et se verra en rouge. */
+        o.s.repris = true;
+        o.s.src = {};
+        for (var k in o.s) if (Object.prototype.hasOwnProperty.call(o.s, k) &&
+          k !== "id" && k !== "src" && k !== "repris" && k !== "ex")
+          o.s.src[k] = o.s[k];
         E.salaries.push(o.s); n++;
       });
       garder();
@@ -1155,7 +1203,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     return vide(v) ? "[" + (quoi || "à renseigner") + "]" : String(v).trim();
   }
   function produire() {
-    var L = [], n = 0, manqueTotal = 0, indecisTotal = 0;
+    var L = [], n = 0, manqueTotal = 0, indecisTotal = 0, ajoutTotal = 0, correctionTotal = 0;
     var lignes = ordonnes();
 
     L.push("REGISTRE UNIQUE DU PERSONNEL");
@@ -1171,6 +1219,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     L.push("");
     L.push("Les mentions non renseignées apparaissent entre crochets : elles sont visibles, elles");
     L.push("ne sont pas inventées.");
+    if (E.salaries.some(function (x) { return x.repris; })) {
+      L.push("");
+      L.push("⟦En rouge : ce qui a été ajouté ou corrigé après le dépôt du registre existant. Le reste");
+      L.push("⟦est repris tel que le fichier déposé le portait.");
+    }
     L.push("");
     L.push("═══ I. LES SALARIÉS, DANS L'ORDRE DES EMBAUCHES (L. 1221-13) ═══");
 
@@ -1182,17 +1235,26 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       n++;
       var m = manques(s), q = aEtablir(s);
       manqueTotal += m.length; indecisTotal += q.length;
+      var mv = bouges(s);
+      ajoutTotal += mv.ajout; correctionTotal += mv.correction;
       L.push("");
       L.push("── N° " + (vide(s.ent) ? "(non ordonnable)" : n) + " ────────────────────────────────────────");
-      L.push("  Nom : " + croch(s.nom) + "        Prénoms : " + croch(s.pre) + "   (L. 1221-13)");
-      L.push("  Nationalité : " + croch(s.nat) + "   (D. 1221-23, 1°)");
-      L.push("  Date de naissance : " + croch(s.nais) + "   (D. 1221-23, 2°)");
-      L.push("  Sexe : " + croch(s.sexe) + "   (D. 1221-23, 3°)");
-      L.push("  Emploi : " + croch(s.emp) + "   (D. 1221-23, 4°)");
-      L.push("  Qualification : " + croch(s.qua) + "   (D. 1221-23, 5°)");
-      L.push("  Date d'entrée dans l'établissement : " + croch(s.ent) + "   (D. 1221-23, 6°)");
-      L.push("  Date de sortie de l'établissement : " +
-        (vide(s.sor) ? "sans objet : salarié présent" : s.sor) + "   (D. 1221-23, 6°)");
+      /* Le « ⟦ » ouvre une ligne rouge : elle porte ce qui a été ajouté ou
+         corrigé depuis le dépôt du registre. Le marqueur est retiré au rendu. */
+      var rg = function (champ, texte) {
+        var m = mouvement(s, champ);
+        return (m ? "⟦" : "") + texte + (m ? "   [" + (m === "ajout" ? "ajouté" :
+          (m === "correction" ? "corrigé" : "retiré")) + "]" : "");
+      };
+      L.push(rg("nom", "  Nom : " + croch(s.nom) + "        Prénoms : " + croch(s.pre) + "   (L. 1221-13)"));
+      L.push(rg("nat", "  Nationalité : " + croch(s.nat) + "   (D. 1221-23, 1°)"));
+      L.push(rg("nais", "  Date de naissance : " + croch(s.nais) + "   (D. 1221-23, 2°)"));
+      L.push(rg("sexe", "  Sexe : " + croch(s.sexe) + "   (D. 1221-23, 3°)"));
+      L.push(rg("emp", "  Emploi : " + croch(s.emp) + "   (D. 1221-23, 4°)"));
+      L.push(rg("qua", "  Qualification : " + croch(s.qua) + "   (D. 1221-23, 5°)"));
+      L.push(rg("ent", "  Date d'entrée dans l'établissement : " + croch(s.ent) + "   (D. 1221-23, 6°)"));
+      L.push(rg("sor", "  Date de sortie de l'établissement : " +
+        (vide(s.sor) ? "sans objet : salarié présent" : s.sor) + "   (D. 1221-23, 6°)"));
       var men = mentions(s);
       if (men.length) {
         L.push("  Mentions particulières :");
@@ -1269,6 +1331,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     L.push("═══ CE QUE CE DOCUMENT NE PROUVE PAS ═══");
     L.push(manqueTotal + " mention(s) manquante(s) et " + indecisTotal + " situation(s) non tranchée(s) sur " +
       lignes.length + " ligne(s).");
+    if (ajoutTotal || correctionTotal)
+      L.push(ajoutTotal + " mention(s) ajoutée(s) et " + correctionTotal +
+        " corrigée(s) depuis le dépôt du registre, signalées en rouge.");
     L.push("");
     L.push("Ce document restitue une saisie ; il n'est pas le registre. L'article L. 1221-13 exige");
     L.push("que les mentions soient portées au moment de l'embauche et de façon indélébile, et");
@@ -1299,12 +1364,20 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       if (t === "") { out.push({ k: "vide", t: "" }); return; }
       if (/^═/.test(t)) { out.push({ k: "h1", t: t.replace(/═/g, "").trim() }); return; }
       if (/^──/.test(t)) { out.push({ k: "h2", t: t.replace(/─/g, "").trim() }); return; }
+      if (/^⟦/.test(t)) {
+        var r = t.replace(/^⟦\s*/, "");
+        var av = out[out.length - 1];
+        if (av && av.k === "rouge" && /^[a-zà-ÿ«(]/.test(r) && !/[.:;»)\]]$/.test(av.t)) { av.t += " " + r; return; }
+        out.push({ k: "rouge", t: r });
+        return;
+      }
       if (/^·/.test(t)) { out.push({ k: "puce", t: t.replace(/^·\s*/, "") }); return; }
       /* Le texte courant est écrit sur plusieurs lignes courtes : une ligne
          qui commence en minuscule, après une ligne qui ne finit pas une
          phrase, la continue. Les mentions (« Nom : … ») restent séparées. */
       var prev = out[out.length - 1];
       if (prev && prev.k === "p" && !/[.:;»)\]]$/.test(prev.t) && /^[a-zà-ÿ«(]/.test(t)) { prev.t += " " + t; return; }
+      if (prev && prev.k === "rouge" && /^[a-zà-ÿ«(]/.test(t) && !/[.:;»)\]]$/.test(prev.t)) { prev.t += " " + t; return; }
       out.push({ k: "p", t: t });
     });
     return out;

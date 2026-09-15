@@ -149,7 +149,10 @@
     interdit: function (i) { return par(i.t, { gras: true, couleur: "8E1B1B", cadre: true }) +
       par(i.pourquoi + "  ·  " + i.id, { taille: 18, couleur: "5F6874", cadre: true }); },
     acquis: function (i) { return par("✓ " + i.t + ", " + i.base, { puce: true }); },
+    rouge: function (i) { return '<p style="color:#C00000">' + ech(i.t) + "</p>"; },
     table: function (i) { return tableau(i.head, i.rows); },
+    /* Ce qui a été ajouté ou corrigé après coup, et qui doit se voir. */
+    rouge: function (i) { return par(i.t, { couleur: "C00000" }); },
   };
 
   /* Un troisième argument, facultatif : { paysage: true } pour un tableau
@@ -212,6 +215,7 @@
     interdit: function (i) { return "<p><b>" + ech(i.t) + "</b></p>" +
       '<p class="ap-note">' + ech(i.pourquoi + "  ·  " + i.id) + "</p>"; },
     acquis: function (i) { return "<ul><li>" + ech("✓ " + i.t + ", " + i.base) + "</li></ul>"; },
+    rouge: function (i) { return '<p style="color:#C00000">' + ech(i.t) + "</p>"; },
     table: function (i) {
       var lignes = [].concat(i.head ? [i.head] : [], i.rows || []);
       return window.Apercu ? window.Apercu.tableHtml(lignes, !!i.head) : "";
