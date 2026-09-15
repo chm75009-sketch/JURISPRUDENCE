@@ -50,7 +50,8 @@
                 "août", "septembre", "octobre", "novembre", "décembre"];
     var x = d instanceof Date ? d : new Date(d);
     if (isNaN(x)) return "[date]";
-    return x.getDate() + " " + MOIS[x.getMonth()] + " " + x.getFullYear();
+    /* Le premier du mois s'écrit « 1er » : « 1 octobre » n'est pas français. */
+    return (x.getDate() === 1 ? "1er" : x.getDate()) + " " + MOIS[x.getMonth()] + " " + x.getFullYear();
   }
 
   function dans(d, jours) {
@@ -908,10 +909,34 @@
       L.push("");
       L.push("Article 28 - Entrée en vigueur");
       L.push("");
-      L.push("Le présent règlement entre en vigueur le [DATE D'ENTRÉE EN VIGUEUR].");
+      /* LA DATE SAISIE AU PARCOURS ENTRE DANS LE RÈGLEMENT.
+
+         Le parcours demande déjà « Date d'entrée en vigueur indiquée par le
+         règlement » ; elle restait dans le questionnaire et l'article 28
+         gardait son crochet. Un avis extérieur du 15 septembre 2026 l'a relevé :
+         « la mention Établi le ne suffit pas, l'article 28 doit comporter une
+         date d'entrée en vigueur précise ». Elle s'y reporte, et le délai
+         d'un mois de L. 1321-4 est vérifié contre la dernière des deux
+         formalités de R. 1321-3, publicité et dépôt. */
+      var dv = String((ctx.donnees || {}).dateEntreeVigueur || "").trim();
+      var dPub = String((ctx.donnees || {}).datePublicite || "").trim();
+      var dDep = String((ctx.donnees || {}).dateDepotGreffe || "").trim();
+      var derniere = [dPub, dDep].filter(Boolean).sort().pop() || "";
+      L.push("Le présent règlement entre en vigueur le " +
+        (dv ? leJour(new Date(dv)) : "[DATE D'ENTRÉE EN VIGUEUR]") + ".");
       L.push("Cette date doit être postérieure d'un mois à l'accomplissement des");
       L.push("formalités de publicité, le délai courant à compter de la dernière en date");
       L.push("des formalités de publicité et de dépôt (L. 1321-4 ; R. 1321-3).");
+      if (dv && derniere) {
+        var mini = new Date(derniere);
+        mini.setMonth(mini.getMonth() + 1);
+        if (new Date(dv) <= mini) {
+          L.push("");
+          L.push("NOTE - La date ci-dessus n'est pas postérieure d'un mois à la dernière");
+          L.push("formalité, accomplie le " + leJour(new Date(derniere)) + " : au plus tôt, le");
+          L.push("règlement ne peut entrer en vigueur que le " + leJour(dans(mini, 1)) + ".");
+        }
+      }
       L.push("");
       L.push("Article 29 - Publicité");
       L.push("");
@@ -1449,7 +1474,22 @@
        les cinq formalités et leurs documents tiennent entre « DANS CET ORDRE »
        et les vérifications, qui reviennent au règlement parce qu'elles portent
        sur son contenu, non sur la procédure. */
-    var reglement = coupe(L, L[0], "DANS CET ORDRE");
+    /* LE MODE D'EMPLOI NE SE DÉPOSE PAS AU GREFFE.
+
+       Un avis extérieur du 15 septembre 2026 : le document sortait avec
+       « EXEMPLE, À ADAPTER », « COMMENT SE SERVIR DE CE DOCUMENT » et
+       « SUPPRIMEZ-LES avant le dépôt » dedans. Ces lignes servent à celui qui
+       remplit, pas au greffe : elles tiennent désormais leur propre onglet, et
+       le règlement commence à son titre. */
+    var iEx = -1, iRi = -1, iOrdre = L.length;
+    for (var k = 0; k < L.length; k++) {
+      if (iEx < 0 && L[k].indexOf("EXEMPLE, À ADAPTER") === 0) { iEx = k; continue; }
+      if (iEx >= 0 && iRi < 0 && L[k].indexOf("RÈGLEMENT INTÉRIEUR") === 0) { iRi = k; continue; }
+      if (iRi >= 0 && L[k].indexOf("DANS CET ORDRE") === 0) { iOrdre = k; break; }
+    }
+    var enTete    = iEx > 0 ? L.slice(0, iEx) : [];
+    var emploi    = (iEx >= 0 && iRi > iEx) ? L.slice(iEx, iRi) : [];
+    var reglement = enTete.concat(iRi >= 0 ? L.slice(iRi, iOrdre) : coupe(L, L[0], "DANS CET ORDRE"));
     var verifs    = coupe(L, "AVANT DE DÉPOSER", "LE DROIT QUI FONDE");
     var etapes    = coupe(L, "DANS CET ORDRE", "AVANT DE DÉPOSER");
     var droit     = coupe(L, "LE DROIT QUI FONDE", null);
@@ -1472,7 +1512,12 @@
     }).filter(function (x) { return x.texte.trim() !== ""; });
     return [
       { cle: "document", nom: "Le règlement",
-        texte: reglement.concat([""], verifs).join("\n") },
+        texte: reglement.join("\n") },
+      { cle: "emploi", nom: "Mode d'emploi",
+        texte: ["COMMENT SE SERVIR DE CE DOCUMENT, ET CE QU'IL RESTE À VÉRIFIER", "",
+          "Ces pages ne font pas partie du règlement et ne se déposent pas : elles",
+          "vous servent à le remplir.", ""]
+          .concat(emploi.slice(1)).concat([""], verifs).join("\n") },
       /* « pieces » : chaque sous-bouton porte ici une lettre autonome, qui
          s'emporte seule en Word. L'autre valeur possible est « entier », pour
          un onglet dont les sous-boutons sont les morceaux d'un même document
