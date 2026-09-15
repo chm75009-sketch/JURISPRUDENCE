@@ -300,18 +300,49 @@
     }).join("\n");
   }
 
+  /* CE QUI SORT ILLISIBLE NE S'AFFICHE PAS.
+
+     Mesuré le 15 septembre 2026 sur le registre du personnel : un fichier
+     déposé est ressorti en deux cent soixante-neuf lignes de carrés vides,
+     « ⧈ < ⧈ # ? ⧈⧈ », avec des menus de rapprochement en face de chacune.
+     Le cas type est un PDF dont les polices n'ont pas de table de caractères,
+     ou un document scanné : ce qu'on extrait n'est pas du texte, ce sont des
+     codes de glyphes.
+
+     Personne ne peut rapprocher des colonnes de cela, et l'écran ne doit même
+     pas l'essayer : on compte la part de caractères qui ne sont ni lettre, ni
+     chiffre, ni ponctuation courante, et au-delà du quart on refuse en disant
+     quoi faire. Mieux vaut un refus clair qu'un écran de carrés. */
+  function lisible(t) {
+    var s = String(t || "").replace(/\s+/g, "");
+    if (s.length < 20) return true;
+    var bons = s.replace(/[^0-9A-Za-zÀ-ÖØ-öø-ÿ.,;:!?'’"()\/%€$&+*=<>#@-]/g, "").length;
+    return bons / s.length >= 0.75;
+  }
+
+  function verifier(t, quoi) {
+    if (lisible(t)) return t;
+    var e = new Error(quoi === "pdf"
+      ? "Ce PDF n'a pas de texte lisible : il est scanné, ou ses polices n'ont pas " +
+        "de table de caractères. Déposez le registre en Excel, ou collez le tableau."
+      : "Ce fichier ne contient pas de texte lisible. Déposez-le en Excel, " +
+        "ou collez le tableau.");
+    e.illisible = true;
+    throw e;
+  }
+
   /* L'entrée publique : un fichier, un texte tabulé. */
   function depuisFichier(f) {
     var nom = String(f && f.name ? f.name : "").toLowerCase();
     if (/\.(csv|tsv|txt)$/.test(nom))
-      return f.text().then(function (t) { return t.replace(/^﻿/, ""); });
-    if (/\.pdf$/.test(nom)) return lirePdf(f).then(enTexte);
+      return f.text().then(function (t) { return verifier(t.replace(/^﻿/, ""), "texte"); });
+    if (/\.pdf$/.test(nom)) return lirePdf(f).then(enTexte).then(function (t) { return verifier(t, "pdf"); });
     if (/\.xlsx$/.test(nom))
-      return f.arrayBuffer().then(lireXlsx).then(enTexte);
+      return f.arrayBuffer().then(lireXlsx).then(enTexte).then(function (t) { return verifier(t, "xlsx"); });
     if (/\.docx$/.test(nom))
-      return f.arrayBuffer().then(lireDocx).then(enTexte);
+      return f.arrayBuffer().then(lireDocx).then(enTexte).then(function (t) { return verifier(t, "docx"); });
     return Promise.reject(new Error("Format non lu ici : déposez un .xlsx, un .csv, un .docx ou un .pdf."));
   }
 
-  window.LireTableau = { depuisFichier: depuisFichier, enTexte: enTexte };
+  window.LireTableau = { depuisFichier: depuisFichier, enTexte: enTexte, lisible: lisible };
 })(window);

@@ -1046,6 +1046,15 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var brut = $("i-source").value;
     var lignes = brut.replace(/^﻿/, "").split(/\r?\n/)
       .filter(function (l) { return l.trim() && l.trim().charAt(0) !== "#"; });
+    /* Un collage illisible ne se rapproche pas non plus : le contrôle est le
+       même que sur un fichier déposé. Mesuré le 15 septembre 2026. */
+    if (window.LireTableau && window.LireTableau.lisible && !window.LireTableau.lisible(brut)) {
+      $("i-resultat").innerHTML = '<div class="avis att"><b>Ce texte n\'est pas lisible</b>' +
+        "Ce qui a été collé n'est pas du texte : c'est le cas d'un PDF scanné ou d'un " +
+        "document dont les polices n'ont pas de table de caractères. Déposez le registre " +
+        "en Excel, ou retapez les lignes.</div>";
+      return;
+    }
     if (lignes.length < 2) {
       $("i-resultat").innerHTML = '<div class="avis att"><b>Rien de lisible</b>' +
         "Il faut une ligne d'intitulés, puis au moins une ligne de salarié, les colonnes séparées " +
