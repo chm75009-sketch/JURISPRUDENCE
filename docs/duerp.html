@@ -62,6 +62,8 @@
       <input id="d-etablissement" placeholder="adresse du site"></label>
   </div>
 
+  <div id="conv"></div>
+
   <div class="feuille" id="feuille"></div>
 
   <div class="barre pile">
@@ -74,12 +76,17 @@
 </main>
 
 <script src="profil.js"></script>
+<script src="convention.js"></script>
 <script src="audit-export.js"></script>
 <script src="base-documents.js"></script>
 <script src="duerp-metiers.js"></script>
 <script src="duerp-transport.js"></script>
 <script src="controler-duerp.js"></script>
 <script>
+  /* La convention commande la classification et les minima, et le document
+     unique se lit à côté d'elle : elle se rappelle ici, avec la date de sa
+     dernière vérification. Demande du 15 septembre 2026. */
+  if (window.Convention) window.Convention.poser(document.getElementById("conv"));
   if ("serviceWorker" in navigator)
     window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
 </script>

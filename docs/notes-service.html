@@ -125,6 +125,8 @@
     <p class="aide">Sur quoi porte votre note ?</p>
     <div class="fam" id="themes"></div>
 
+    <div id="conv"></div>
+
     <section class="registre" id="registre"></section>
   </section>
 
@@ -166,6 +168,7 @@
 <script src="audit-export.js"></script>
 <script src="base-documents.js"></script>
 <script src="droits.js"></script>
+<script src="convention.js"></script>
 <script src="notes-service.js"></script>
 <script src="notes-service-transport.js"></script>
 <script>
@@ -467,6 +470,10 @@
 
   rendreThemes();
   rendreRegistre();
+  /* La convention commande la classification, les minima et les préavis :
+     elle se rappelle là où l'on écrit, et se redemande quand elle a vieilli.
+     Demande du 15 septembre 2026. */
+  if (window.Convention) window.Convention.poser($("conv"));
 
   if ("serviceWorker" in navigator)
     window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
