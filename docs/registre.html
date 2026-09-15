@@ -941,14 +941,21 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   /* Les dates arrivent en « 01/09/2008 » ; les champs attendent
      « 2008-09-01 ». Une date illisible n'est pas devinée : elle est comptée
      et signalée. */
+  /* LA DATE SE CHERCHE DANS LA CELLULE, PAS SEULEMENT À SA PLACE.
+
+     Un registre écrit « — 24/06/2024 (50%) » dans la colonne de la date
+     d'entrée : le tiret dit que la nationalité manque, le pourcentage dit le
+     temps partiel, et la date est au milieu. Exiger que la cellule ne
+     contienne que la date faisait perdre les trois. Mesuré le 15 septembre
+     2026 : quinze dates annoncées illisibles sur un registre qui les portait. */
   function dateIso(v) {
     var s = String(v == null ? "" : v).trim();
     if (!s) return "";
-    var m = s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/);
+    var m = s.match(/(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/);
     if (m) return m[1] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[3]).slice(-2);
-    m = s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/);
+    m = s.match(/(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})/);
     if (m) return m[3] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2);
-    m = s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2})$/);
+    m = s.match(/(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2})(?!\d)/);
     if (m) { var an = parseInt(m[3], 10); an += (an > 50 ? 1900 : 2000);
       return an + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2); }
     return "";
@@ -1045,8 +1052,21 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       if (n > meilleur) { meilleur = n; hdr = k; }
     }
     var titres = decoupe(lignes[hdr]);
+    /* UN REGISTRE PAGINÉ RÉPÈTE SON EN-TÊTE, ET SON EN-TÊTE N'EST PAS UN
+       SALARIÉ. Sur cinq pages, l'intitulé revenait cinq fois et le titre du
+       document autant : douze dates illisibles annoncées, qui n'étaient que
+       des lignes de mise en page. Mesuré le 15 septembre 2026. */
+    var signature = function (l) {
+      return l.map(function (x) { return sansAccent(x); }).join("|").replace(/\|+$/, "");
+    };
+    var sigTitres = signature(titres);
     var corps = [];
-    for (var i = hdr + 1; i < lignes.length; i++) corps.push(decoupe(lignes[i]));
+    for (var i = hdr + 1; i < lignes.length; i++) {
+      var l = decoupe(lignes[i]);
+      if (!l.some(function (x) { return String(x).trim(); })) continue;
+      if (signature(l) === sigTitres) continue;
+      corps.push(l);
+    }
 
     IMPORT = { titres: titres, corps: corps, hdr: hdr,
       cibles: titres.map(function (t) { return proposeCible(t); }) };
@@ -1112,6 +1132,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       if (c === "nais" || c === "ent" || c === "sor") {
         var d = dateIso(v);
         if (!d) dateKo++; else s[c] = d;
+        /* « 24/06/2024 (50%) » : le taux qui accompagne la date dit le temps
+           de travail, et la mention « salarié à temps partiel » avec lui. */
+        if (/%/.test(v) && !brutTemps) brutTemps = v;
         return;
       }
       s[c] = v;
@@ -1132,12 +1155,18 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         "Tant qu'aucune colonne n'est rapprochée, il n'y a rien à ajouter.</div>";
       return;
     }
-    var apercu = IMPORT.corps.slice(0, 5).map(ligneImportee);
-    var datesKo = 0, natureKo = 0, tempsKo = 0;
+    var apercu = IMPORT.corps.map(ligneImportee).filter(function (o) {
+      return !(vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp));
+    }).slice(0, 5);
+    var datesKo = 0, natureKo = 0, tempsKo = 0, retenuesLignes = 0;
     IMPORT.corps.forEach(function (r) {
       var o = ligneImportee(r);
+      /* Une ligne qui ne porte ni nom, ni prénom, ni emploi n'entrera pas au
+         registre : ce qu'elle contient ne se compte pas comme perdu. */
+      if (vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp)) return;
+      retenuesLignes++;
       datesKo += o.dateKo;
-      if (o.brutNature && !o.s.nature) natureKo++;
+      if (o.brutNature && !o.s.nature && !tempsDe(o.brutNature)) natureKo++;
       if (o.brutTemps && !o.s.part) tempsKo++;
     });
 
@@ -1198,7 +1227,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         alertes.map(ech).join("</li><li>") + "</li></ul></div>";
 
     h = h0 + h;
-    h += '<div class="barre pile"><button type="button" class="btn" id="i-ecrire">Reprendre les ' + IMPORT.corps.length +
+    h += '<div class="barre pile"><button type="button" class="btn" id="i-ecrire">Reprendre les ' + retenuesLignes +
       " ligne(s) dans le registre</button></div>";
     $("i-apercu").innerHTML = h;
 
