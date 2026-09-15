@@ -76,17 +76,22 @@
   .sem button[aria-pressed="true"]{background:var(--accent-clair);border-color:var(--accent);color:var(--accent)}
 
   .jours{display:grid;gap:6px;margin:var(--e2) 0 0}
-  .entetes{display:grid;grid-template-columns:1fr 70px 70px 58px;gap:6px;padding:6px 10px 0;
-    font:600 10px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
-  .entetes span{text-align:center}
-  .entetes span:first-child{text-align:left}
   .jour{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;
     grid-template-areas:"q h" "s s";padding:9px 10px;border-radius:var(--r1);background:var(--creux)}
   @media (min-width:640px){.jour{grid-template-columns:70px 1fr 66px;grid-template-areas:"q s h"}}
   .jour.hors{background:transparent;border:1px dashed var(--filet)}
   .jour .quand{grid-area:q;font:600 var(--t2)/1.25 system-ui}
-  .jour .saisie{grid-area:s;display:grid;grid-template-columns:1fr 70px 70px 58px;gap:6px}
+  /* L'INTITULÉ SUR CHAQUE LIGNE, PAS SEULEMENT EN TÊTE DE SEMAINE.
+
+     Demandé deux fois le 15 septembre 2026 : « c'est quoi 17h60 ? », puis
+     « comment on peut savoir que c'est la pause ? ». L'en-tête de colonne
+     défile et laisse trois nombres côte à côte, qui se lisent comme des
+     heures. Chaque case porte donc son nom, juste au-dessus. */
+  .jour .saisie{grid-area:s;display:grid;grid-template-columns:1fr 70px 70px 58px;gap:2px 6px}
   .jour .saisie.seule{grid-template-columns:1fr}
+  .jour .cap{font:600 10px/1.2 system-ui;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--texte-3);text-align:center;align-self:end;padding-bottom:1px}
+  .jour .cap.g{text-align:left;padding-left:2px}
   /* 16 px au moins sur tout champ : en dessous, l'iPhone zoome de lui-même
      dès qu'on entre dans la case et la page part de travers. */
   .jour .saisie select,.jour .saisie input{width:100%;min-width:0;box-sizing:border-box;

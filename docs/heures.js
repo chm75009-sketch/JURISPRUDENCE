@@ -212,10 +212,11 @@
     garderMois(m);
   }
 
-  function entetes() {
-    var e = document.createElement("div");
-    e.className = "entetes";
-    e.innerHTML = "<span>Nature</span><span>Début</span><span>Fin</span><span>Pause min</span>";
+  /* Le nom d'une case, posé juste au-dessus d'elle. */
+  function cap(texte, gauche) {
+    var e = document.createElement("span");
+    e.className = "cap" + (gauche ? " g" : "");
+    e.textContent = texte;
     return e;
   }
 
@@ -227,10 +228,7 @@
     var courante = null;
 
     lignes.forEach(function (l, i) {
-      if (!courante) {
-        courante = { du: l.j, au: l.j, jours: [], noeud: null, cadre: null };
-        hote.appendChild(entetes());
-      }
+      if (!courante) courante = { du: l.j, au: l.j, jours: [], noeud: null, cadre: null };
       courante.jours.push(l);
       courante.au = l.j;
 
@@ -245,6 +243,16 @@
 
       var z = document.createElement("div");
       z.className = "saisie";
+
+      /* Les intitulés d'abord, la rangée des cases ensuite : la grille les
+         range en deux lignes, et un intitulé qui passe à la ligne ne décale
+         pas les cases. */
+      z.appendChild(cap("Nature", true));
+      if (l.n === "travail") {
+        z.appendChild(cap("Début"));
+        z.appendChild(cap("Fin"));
+        z.appendChild(cap("Pause min"));
+      }
 
       var nat = document.createElement("select");
       nat.id = "n-" + l.j;
