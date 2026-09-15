@@ -25,6 +25,38 @@
    pas ses 1,3 Mo. Rien ne sort du navigateur, comme pour les autres formats.  */
 
 (function (window) {
+
+  /* UN TEXTE EST-IL DU TEXTE ?
+
+     Mesuré le 15 septembre 2026 sur un registre imprimé en PDF depuis un
+     téléphone : le fichier porte une couche texte, mais ses polices sont de
+     type 3 et n'ont aucune table de caractères. Les codes extraits tombent
+     sur des signes imprimables, « K T V O L S », si bien qu'un simple compte
+     de caractères valides les déclarait lisibles.
+
+     Ce qui distingue du texte, ce n'est pas la nature des signes, c'est
+     qu'ils forment des mots. On compte donc la part des lettres qui
+     appartiennent à une suite d'au moins trois lettres : proche de un dans
+     une phrase, proche de zéro dans une liste de glyphes isolés. Un contenu
+     qui ne porte presque pas de lettres, un tableau de chiffres, n'est pas
+     jugé. */
+  var TOUTES_LETTRES, MOTS_LETTRES;
+  try {
+    TOUTES_LETTRES = new RegExp("\\p{L}", "gu");
+    MOTS_LETTRES = new RegExp("\\p{L}{3,}", "gu");
+  } catch (e) {
+    TOUTES_LETTRES = /[A-Za-zÀ-ÖØ-öø-ÿ]/g;
+    MOTS_LETTRES = /[A-Za-zÀ-ÖØ-öø-ÿ]{3,}/g;
+  }
+  function lisible(t) {
+    var s = String(t || "");
+    var lettres = (s.match(TOUTES_LETTRES) || []).length;
+    if (lettres < 20) return false;   /* ici, presque rien à lire vaut scan */
+    var longs = 0;
+    (s.match(MOTS_LETTRES) || []).forEach(function (m) { longs += m.length; });
+    return longs / lettres >= 0.5;
+  }
+
   "use strict";
 
   var CHARGEMENT = null;
@@ -239,10 +271,22 @@
            problème : la moitié des pièces d'un dossier social sont des scans.
            La reconnaissance de caractères prend le relais, dans le navigateur,
            sans que rien ne sorte du poste. */
-        if (!t) {
+        /* DU TEXTE QUI N'EN EST PAS. Mesuré le 15 septembre 2026 sur un
+           registre du personnel imprimé en PDF depuis un téléphone : le
+           fichier porte bien une couche texte, mais ses polices sont de type
+           3 et n'ont aucune table de caractères. Ce qui est stocké, ce ne
+           sont pas des lettres, ce sont des numéros de dessins. L'écran
+           affichait deux cent soixante-neuf lignes de carrés vides et
+           proposait de les rapprocher de colonnes.
+
+           Un PDF sans texte du tout partait déjà en reconnaissance ; un PDF
+           dont le texte est illisible doit y partir aussi. C'est le même
+           besoin : l'image, elle, est parfaitement lisible. */
+        if (!t || !lisible(t)) {
           if (!window.LireOCR) throw new Error(
-            "Ce PDF ne contient pas de texte : c'est un document scanné, une image, " +
-            "et le module de reconnaissance n'est pas chargé sur cet écran.");
+            "Ce PDF n'a pas de texte lisible : c'est un scan, ou ses polices n'ont pas " +
+            "de table de caractères, et le module de reconnaissance n'est pas chargé " +
+            "sur cet écran.");
           return window.LireOCR.texte(fichier, {
             surProgres: options && options.surProgres,
             pages: (options && options.pages) || 20,

@@ -304,20 +304,32 @@
 
      Mesuré le 15 septembre 2026 sur le registre du personnel : un fichier
      déposé est ressorti en deux cent soixante-neuf lignes de carrés vides,
-     « ⧈ < ⧈ # ? ⧈⧈ », avec des menus de rapprochement en face de chacune.
-     Le cas type est un PDF dont les polices n'ont pas de table de caractères,
-     ou un document scanné : ce qu'on extrait n'est pas du texte, ce sont des
-     codes de glyphes.
+     avec un menu de rapprochement en face de chacune.
 
-     Personne ne peut rapprocher des colonnes de cela, et l'écran ne doit même
-     pas l'essayer : on compte la part de caractères qui ne sont ni lettre, ni
-     chiffre, ni ponctuation courante, et au-delà du quart on refuse en disant
-     quoi faire. Mieux vaut un refus clair qu'un écran de carrés. */
+     Un premier contrôle comptait la part de signes valides. Il ne suffisait
+     pas : les codes de glyphes d'un PDF imprimé depuis un téléphone tombent
+     sur des signes imprimables, « K T V O L S », et passaient pour du texte.
+     Ce qui distingue du texte, ce n'est pas la nature des signes, c'est
+     qu'ils forment des mots. On compte donc la part des lettres qui
+     appartiennent à une suite d'au moins trois lettres : proche de un dans
+     une phrase, proche de zéro dans une liste de glyphes isolés. Un contenu
+     qui ne porte presque pas de lettres, un tableau de chiffres, n'est pas
+     jugé. */
+  var TOUTES_LETTRES, MOTS_LETTRES;
+  try {
+    TOUTES_LETTRES = new RegExp("\\p{L}", "gu");
+    MOTS_LETTRES = new RegExp("\\p{L}{3,}", "gu");
+  } catch (e) {
+    TOUTES_LETTRES = /[A-Za-zÀ-ÖØ-öø-ÿ]/g;
+    MOTS_LETTRES = /[A-Za-zÀ-ÖØ-öø-ÿ]{3,}/g;
+  }
   function lisible(t) {
-    var s = String(t || "").replace(/\s+/g, "");
-    if (s.length < 20) return true;
-    var bons = s.replace(/[^0-9A-Za-zÀ-ÖØ-öø-ÿ.,;:!?'’"()\/%€$&+*=<>#@-]/g, "").length;
-    return bons / s.length >= 0.75;
+    var s = String(t || "");
+    var lettres = (s.match(TOUTES_LETTRES) || []).length;
+    if (lettres < 20) return true;
+    var longs = 0;
+    (s.match(MOTS_LETTRES) || []).forEach(function (m) { longs += m.length; });
+    return longs / lettres >= 0.5;
   }
 
   function verifier(t, quoi) {
