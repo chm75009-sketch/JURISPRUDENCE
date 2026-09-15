@@ -64,7 +64,8 @@
       "  border-radius:10px;background:#f4f5f7;color:#16181d}",
       ".lc-liste-voile{position:static;flex:1;max-height:none;overflow-y:auto;border:0;box-shadow:none;",
       "  border-radius:0;font-size:16.5px;-webkit-overflow-scrolling:touch}",
-      ".lc-liste-voile .lc-o{min-height:48px;padding:13px 14px}",
+      ".lc-liste-voile .lc-o{min-height:48px;padding:13px 14px;touch-action:manipulation}",
+      ".lc-liste-voile{overscroll-behavior:contain}",
     ].join("\n");
     doc.head.appendChild(st);
   }
@@ -182,18 +183,33 @@
       cadre.innerHTML = h;
       cadre.hidden = false;
       if (cadre === boite) placer();
+      /* CHOISIR SANS EMPÊCHER DE FAIRE DÉFILER.
+
+         La petite liste posée sous un champ écoute « pointerdown » et annule
+         l'événement : sans cela, le champ perd le focus avant le clic et le
+         toucher n'aboutit jamais.
+
+         Mais la liste en plein écran, elle, est longue : sur un téléphone,
+         annuler « pointerdown » annule aussi le geste de défilement. Le doigt
+         qui voulait faire défiler choisissait le nom qu'il avait touché, et
+         la liste ne bougeait pas d'un pixel. Signalé le 16 septembre 2026 sur
+         une liste de salariés : « je n'arrive pas à sélectionner et à faire
+         défiler ».
+
+         Dans le plein écran, on écoute donc « click », qui ne se déclenche pas
+         après un défilement, et le champ y est déjà sans focus. */
+      var plein = (cadre === listeVoile);
       Array.prototype.forEach.call(cadre.querySelectorAll(".lc-o"), function (b) {
-        /* pointerdown : avant que le champ ne perde le focus, sinon le
-           toucher n'aboutit jamais sur téléphone. */
-        b.addEventListener("pointerdown", function (ev) {
-          ev.preventDefault();
+        var prendre = function (ev) {
+          if (!plein) ev.preventDefault();
           if (b.getAttribute("data-autre")) {
             enLibre = true; fermer(); fermerVoile();
             try { input.focus(); } catch (e) {}
             return;
           }
           choisir(retenues[Number(b.getAttribute("data-i"))]);
-        });
+        };
+        b.addEventListener(plein ? "click" : "pointerdown", prendre);
       });
     }
 
