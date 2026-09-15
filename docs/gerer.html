@@ -68,6 +68,10 @@
     font:400 18px/1.3 system-ui;min-height:52px;text-align:left;cursor:pointer}
   .doc-ligne:hover{background:var(--creux);color:var(--accent);border-color:var(--filet)}
   .doc-ligne::after{content:"\203A";color:var(--texte-2);font-size:24px;margin-left:10px;flex:none}
+  /* Le titre sur une ligne, ce qu'il couvre en gris dessous : trois lignes de
+     parenthèses par entrée se lisaient mal sur un téléphone. */
+  .doc-ligne .l{min-width:0}
+  .doc-ligne .l small{display:block;font:400 var(--t2)/1.4 system-ui;color:var(--texte-2);margin-top:2px}
 
   /* écran 5 : les champs, les dates, la feuille, les boutons */
   .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
@@ -1852,21 +1856,32 @@
     /* Les notes de service au même endroit : une note s'écrit quand on a
        quelque chose à faire savoir à tout le monde, et c'est ici qu'on vient.
        Demande du 15 septembre 2026. */
+    /* Le titre sur une ligne, ce qu'il couvre en gris dessous : trois lignes
+       de parenthèses par entrée se lisaient mal sur un téléphone. */
+    var ligne = function (vers, titre, sous) {
+      return '<button type="button" class="doc-ligne" data-vers="' + vers + '"><span class="l">' +
+        ech(titre) + "<small>" + ech(sous) + "</small></span></button>";
+    };
     var h = '<p class="groupe">Écrire</p>' +
-      '<button type="button" class="doc-ligne" data-vers="courriers.html">' +
-      "Courriers et e-mails (client, fournisseur, impôts, URSSAF, assurance, banque)</button>" +
-      '<button type="button" class="doc-ligne" data-vers="notes-service.html">' +
-      "Notes de service (organisation, horaires, sécurité, discipline, matériel)</button>" +
+      ligne("courriers.html", "Courriers et e-mails",
+        "client, fournisseur, impôts, URSSAF, assurance, banque") +
+      ligne("notes-service.html", "Notes de service",
+        "organisation, horaires, sécurité, discipline, matériel") +
       /* LE DÉCOMPTE DES HEURES, AU MÊME ENDROIT. Il se tient tous les mois,
          salarié par salarié, et c'est lui qu'on produit quand des heures
          supplémentaires sont réclamées : L. 3171-4 met à la charge de
          l'employeur les éléments qui justifient les horaires réalisés.
          Demande du 15 septembre 2026. */
       '<p class="groupe">Suivre</p>' +
-      '<button type="button" class="doc-ligne" data-vers="heures.html">' +
-      "Décompte des heures (relevé mensuel par salarié, à clore et à faire signer)</button>" +
-      '<button type="button" class="doc-ligne" data-vers="registre.html">' +
-      "Registre unique du personnel (entrées, sorties, mentions obligatoires)</button>";
+      ligne("heures.html", "Décompte des heures",
+        "relevé mensuel par salarié, à clore et à faire signer") +
+      ligne("registre.html", "Registre unique du personnel",
+        "entrées, sorties, mentions obligatoires") +
+      /* Transport : les véhicules et les titres des conducteurs ont les mêmes
+         échéances à surveiller que les visites médicales, et la même alerte.
+         Demande du 15 septembre 2026. */
+      ligne("flotte.html", "Flotte et conducteurs",
+        "contrôle technique, assurance, permis, FCO, cartes, visites médicales");
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
       g[1].forEach(function (cle) {

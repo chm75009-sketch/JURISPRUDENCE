@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flotte et conducteurs</title>
+<meta name="description" content="Les véhicules, leurs échéances, les conducteurs et leurs titres, avec l'alerte en rouge dès qu'une date est passée.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LA FLOTTE ET LES CONDUCTEURS.
+
+  Demande du 15 septembre 2026 : « prévoir un fichier flotte avec plaque
+  immatriculation contrôle technique kilométrage etc et des alertes en rouge
+  comme pour les salariés permis validité points retrait, et les suivis, et
+  visites ».
+
+  Deux fichiers, une seule logique : une date d'échéance, et une couleur qui
+  dit où l'on en est. Passée, elle clignote en rouge ; dans les trente jours,
+  elle est rouge ; dans les soixante, ambre. Le haut de l'écran compte ce qui
+  est dépassé, pour qu'on le voie sans rien ouvrir.
+
+  CE QUE L'ÉCRAN AFFIRME, ET CE QU'IL N'AFFIRME PAS.
+
+  Les périodicités du contrôle technique, du limiteur de vitesse, du
+  chronotachygraphe, de la FCO et des titres de conduite relèvent du code de
+  la route et de la réglementation des transports. Le relais Légifrance de
+  l'application ne sert que le code du travail : l'écran ne les affirme donc
+  pas. Chaque périodicité est un champ, pré-rempli avec la valeur la plus
+  courante, que vous corrigez ; ce sont vos dates qui commandent les alertes.
+
+  Le suivi médical du travail, lui, est du code du travail et a été lu à la
+  source le 15 septembre 2026, deux lectures concordantes chacune :
+
+    R. 4624-10  LEGIARTI000033769085  visite d'information et de prévention
+                                      dans les trois mois de la prise de poste
+    R. 4624-16  LEGIARTI000033769063  son renouvellement, périodicité qui ne
+                                      peut excéder cinq ans
+    R. 4624-22  LEGIARTI000033769092  le suivi individuel renforcé, pour les
+                                      postes à risques particuliers
+    R. 4624-28  LEGIARTI000033769094  son renouvellement, quatre ans au plus,
+                                      avec une visite intermédiaire deux ans
+                                      au plus tard après celle du médecin
+
+  Les conducteurs viennent du registre du personnel : on ne ressaisit pas un
+  nom déjà écrit. Tout reste sur le poste.
+-->
+
+<link rel="stylesheet" href="style.css">
+<style>
+  .onglets{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:var(--e4) 0 0}
+  .onglets button{min-height:48px;border-radius:var(--r1);border:1px solid var(--filet-2);
+    background:var(--surface);color:var(--texte-2);font:600 var(--t3) system-ui;width:100%;padding:0 10px}
+  .onglets button[aria-selected="true"]{background:var(--accent-clair);border-color:var(--accent);color:var(--accent)}
+
+  .compte{display:flex;flex-wrap:wrap;gap:8px;margin:var(--e4) 0 0}
+  .compte .c{font:600 var(--t1)/1 system-ui;padding:9px 12px;border-radius:999px;
+    background:var(--creux);color:var(--texte-2)}
+  .compte .c.rouge{background:var(--rouge-clair);color:var(--rouge)}
+  .compte .c.ambre{background:var(--ambre-clair);color:var(--ambre)}
+  .compte .c.vert{background:var(--vert-clair);color:var(--vert)}
+
+  .carte-v{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);
+    margin:var(--e3) 0 0;overflow:hidden}
+  .carte-v.urgent{border-color:var(--rouge)}
+  .carte-v > .tt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+    padding:13px 15px;cursor:pointer}
+  .carte-v > .tt .nom{font:700 var(--t4)/1.25 system-ui;letter-spacing:.02em}
+  .carte-v > .tt .sous{display:block;font:400 var(--t2)/1.4 system-ui;color:var(--texte-2);
+    letter-spacing:0;margin-top:2px}
+  .carte-v > .tt .fl{color:var(--texte-2);font-size:22px;line-height:1}
+  .ech{display:flex;flex-wrap:wrap;gap:6px;padding:0 15px 13px}
+  .ech .p{font:600 var(--t1)/1.25 system-ui;padding:7px 10px;border-radius:8px;
+    background:var(--creux);color:var(--texte-2)}
+  .ech .p b{font-weight:700}
+  .ech .p.vert{background:var(--vert-clair);color:var(--vert)}
+  .ech .p.ambre{background:var(--ambre-clair);color:var(--ambre)}
+  .ech .p.rouge{background:var(--rouge-clair);color:var(--rouge)}
+  /* Une échéance passée ne se lit pas, elle se voit : c'est la même alerte
+     que celle des sanctions prescrites. */
+  .ech .p.passe{background:var(--rouge);color:#fff;animation:bat 1.1s steps(1,end) infinite}
+  @keyframes bat{0%,49%{opacity:1}50%,100%{opacity:.45}}
+  @media (prefers-reduced-motion:reduce){.ech .p.passe{animation:none}}
+
+  .corps{border-top:1px solid var(--filet);padding:14px 15px;background:var(--creux)}
+  .gr{display:grid;grid-template-columns:1fr;gap:12px}
+  @media (min-width:560px){.gr{grid-template-columns:1fr 1fr}}
+  .gr label{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .gr label > span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .gr label.large{grid-column:1/-1}
+  .gr input,.gr select,.gr textarea{font-size:16px;min-height:46px;padding:9px 11px;width:100%;
+    min-width:0;box-sizing:border-box;border:1px solid var(--filet-2);border-radius:var(--r1);
+    background:var(--surface);color:var(--texte)}
+  .gr textarea{min-height:76px;line-height:1.45;resize:vertical}
+  .gr .aide{font:400 var(--t1)/1.4 system-ui;color:var(--texte-3);text-transform:none;letter-spacing:0}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin:var(--e3) 0 0}
+  .actions button{min-height:46px;border-radius:var(--r1);font:600 var(--t3) system-ui;width:auto;padding:0 16px}
+
+  .barre{display:flex;flex-direction:column;gap:10px;margin:var(--e4) 0 0}
+  @media (min-width:640px){.barre{flex-direction:row}.barre button{flex:1}}
+  .barre button{font:600 var(--t-bouton) system-ui;padding:14px;min-height:var(--h-bouton);
+    border-radius:var(--r2);width:100%}
+  .rien{padding:var(--e5) 0;color:var(--texte-2);font-size:var(--t3)}
+  .rien a{color:var(--accent)}
+  .note-page{margin:var(--e5) 0 0;padding-top:12px;border-top:1px solid var(--filet);
+    font-size:var(--t1);line-height:1.55;color:var(--texte-3)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="maj-dispo" id="maj-dispo">
+  <div class="wrap">
+    <span><b>Une nouvelle version est disponible.</b></span>
+    <button type="button" id="btn-maj">Recharger</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <div class="haut">
+    <a class="retour" href="gerer.html">&larr; Retour</a>
+    <b>Flotte et conducteurs</b>
+    <span id="ent"></span>
+  </div>
+
+  <div class="onglets" role="tablist">
+    <button type="button" id="o-veh" role="tab" aria-selected="true">Véhicules</button>
+    <button type="button" id="o-con" role="tab" aria-selected="false">Conducteurs</button>
+  </div>
+
+  <div class="compte" id="compte"></div>
+
+  <section id="e-veh">
+    <div class="barre">
+      <button type="button" id="v-ajouter">+ Ajouter un véhicule</button>
+    </div>
+    <div id="vehicules"></div>
+  </section>
+
+  <section id="e-con" hidden>
+    <div id="conducteurs"></div>
+    <p class="rien" id="con-vide" hidden>Le registre du personnel ne porte encore aucun salarié.
+      C'est lui qui donne les noms des conducteurs :
+      <a href="registre.html">ouvrir le registre du personnel</a>.</p>
+  </section>
+
+  <div class="barre">
+    <button type="button" id="b-excel">Télécharger le classeur Excel</button>
+    <button type="button" class="second" id="b-heures">Le décompte des heures de ces conducteurs</button>
+  </div>
+
+  <p class="note-page">Les périodicités du contrôle technique, du limiteur, du chronotachygraphe et
+    des titres de conduite relèvent du code de la route et de la réglementation des transports :
+    l'application ne les affirme pas, elle vous les laisse en champs, pré-remplis avec la valeur la
+    plus courante. Ce sont vos dates qui commandent les alertes. Le suivi médical du travail, lui,
+    suit le code du travail : visite d'information et de prévention dans les trois mois de la prise
+    de poste (R. 4624-10), renouvelée tous les cinq ans au plus (R. 4624-16) ; sur un poste à
+    risques particuliers, suivi individuel renforcé tous les quatre ans au plus, avec une visite
+    intermédiaire deux ans au plus tard après celle du médecin du travail (R. 4624-22 et R. 4624-28).</p>
+
+</main>
+
+<script src="apercu.js"></script>
+<script src="tableur-export.js"></script>
+<script src="profil.js"></script>
+<script src="version.js"></script>
+<script src="flotte.js"></script>
+<script>
+(function () {
+  "use strict";
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+  var b = document.getElementById("btn-maj");
+  if (b) b.addEventListener("click", function () { location.reload(); });
+})();
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

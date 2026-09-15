@@ -257,6 +257,16 @@ legend{font:600 var(--t3)/1 system-ui;color:var(--accent);padding:0 var(--e2)}
   gap:var(--e4) var(--e5);align-items:start}
 .champs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:var(--e3) var(--e4);align-items:start}
+/* UN CHAMP NE POUSSE JAMAIS LA PAGE DE CÔTÉ.
+
+   Sans « min-width:0 », une liste déroulante dont l'intitulé est long impose
+   sa largeur à sa colonne et la page déborde : mesuré le 15 septembre 2026
+   sur l'écran du comité, 402 px de large sur un téléphone de 390. Le texte
+   trop long est alors tronqué par la liste elle-même, comme il doit l'être,
+   et non par le bord de l'écran. */
+.champs label,.grille label{min-width:0}
+.champs input,.champs select,.champs textarea,
+.grille input,.grille select,.grille textarea{min-width:0;max-width:100%}
 label{display:block;font-size:var(--t3);color:var(--texte-2)}
 label .nom,label.ch .nom,label.champ span{display:block;font:400 var(--t3)/1.35 system-ui;
   color:var(--texte-2);letter-spacing:0;text-transform:none;margin:0 0 6px}
