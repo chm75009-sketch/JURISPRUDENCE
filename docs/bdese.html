@@ -189,8 +189,14 @@
           <label>Accès ouvert depuis le<input type="date" id="a-depuis"></label>
           <label>Accès permanent
             <select id="a-permanent"><option value=""></option><option value="oui">oui</option><option value="non">non</option></select></label>
+          <label>Qui tient la base à jour<input type="text" id="a-responsable" placeholder="nom et qualité"></label>
+          <label>À quelle fréquence
+            <select id="a-frequence"><option value=""></option><option>À chaque changement</option><option>Mensuelle</option>
+              <option>Trimestrielle</option><option>Semestrielle</option><option>Annuelle</option></select></label>
           <label class="large">Qui y a accès, nominativement<textarea id="a-personnes" placeholder="un par ligne : nom, qualité, date d'ouverture de l'accès"></textarea></label>
           <label class="large">Informations présentées comme confidentielles<textarea id="a-confidentiel" placeholder="lesquelles, et pourquoi"></textarea></label>
+          <label>Durée de la confidentialité<input type="text" id="a-duree" placeholder="jusqu'à quelle date, ou combien de temps"></label>
+          <label class="large">Conservation et trace des consultations<textarea id="a-trace" placeholder="où sont gardées les versions successives, et ce qui est noté des consultations"></textarea></label>
         </form>
         <div id="verdict-acces"></div>
       </div>
@@ -654,8 +660,15 @@
       ["Où elle se consulte", crochets(a["a-lieu"])],
       ["Accès ouvert depuis le", crochets(a["a-depuis"])],
       ["Accès permanent", crochets(a["a-permanent"]) + ". Accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central et aux délégués syndicaux (L. 2312-36)."],
+      ["Qui tient la base à jour", crochets(a["a-responsable"])],
+      ["Fréquence de mise à jour", crochets(a["a-frequence"])],
       ["Personnes ayant accès", crochets(String(a["a-personnes"] || "").split("\n").map(function (x) { return x.trim(); }).filter(Boolean).join(" ; "))],
       ["Informations présentées comme confidentielles", crochets(a["a-confidentiel"])],
+      ["Durée de la confidentialité", crochets(a["a-duree"])],
+      ["Conservation et trace des consultations", crochets(a["a-trace"])],
+      ["Une case sans donnée", "Aucune case ne reste vide : « à renseigner » tant que la donnée manque, " +
+        "« Néant » quand elle est nulle, « Non applicable » quand la rubrique ne concerne pas l'entreprise, " +
+        "et la raison dans la dernière colonne de l'onglet (R. 2312-10)."],
     ];
   }
 
@@ -668,8 +681,14 @@
                 l.sujet === p.sujet && l.section === p.section ? "" : l.sujet,
                 l.sous ? "    " + l.info : l.info];
     if (l.mere) return tete.concat(CTX.mil.map(function () { return ""; })).concat([""]);
-    return tete.concat(CTX.mil.map(function (m) { return valeur(l.cle, m.annee); }))
-      .concat([raison(l.cle)]);
+    /* Aucune case de donnée ne part vide : une case blanche ne dit pas si
+       l'information manque, si elle est nulle ou si elle ne concerne pas
+       l'entreprise. Tant qu'elle n'est pas remplie, elle porte « à
+       renseigner » ; c'est à l'entreprise d'y mettre le chiffre, « Néant » ou
+       « Non applicable », avec la raison dans la dernière colonne. */
+    return tete.concat(CTX.mil.map(function (m) {
+      return valeur(l.cle, m.annee) || "à renseigner";
+    })).concat([raison(l.cle)]);
   }
 
   function feuilles() {
@@ -792,7 +811,8 @@
      classeur. Deux points sont relevés tout de suite, l'accès qui n'est pas
      permanent (L. 2312-36) et le papier à partir de trois cents salariés
      (R. 2312-12). */
-  var ACCES = ["a-support", "a-lieu", "a-depuis", "a-permanent", "a-personnes", "a-confidentiel"];
+  var ACCES = ["a-support", "a-lieu", "a-depuis", "a-permanent", "a-responsable",
+    "a-frequence", "a-personnes", "a-confidentiel", "a-duree", "a-trace"];
   ACCES.forEach(function (id) {
     var el = document.getElementById(id);
     if (E.acces[id] != null) el.value = E.acces[id];
