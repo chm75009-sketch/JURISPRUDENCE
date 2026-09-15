@@ -41,6 +41,7 @@ const ESSENTIELS = [
   "./vocabulaire.json",
   /* L'agenda social lit les brouillons des audits et le moteur NAO, déjà listés. */
   "./agenda.html",
+  /* L'agenda lit aussi les échéances de la flotte : son fichier est listé plus bas. */
   /* Le générateur de documents des relations collectives : autonome, tout est dans la page. */
   "./documents.html",
   /* Les parcours guidés : la couche opératoire au-dessus des audits. La page

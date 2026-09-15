@@ -151,6 +151,8 @@
     { c: "note", lib: "Observations", t: "textarea", large: true },
   ];
 
+  var DU_FICHIER = "date portée au fichier de la flotte, à vérifier sur le justificatif";
+
   function vehicules() { return lire(CLE_V, []); }
   function garderVehicules(L) { garder(CLE_V, L); }
 
@@ -183,11 +185,14 @@
 
   function echeancesVehicule(v) {
     var L = [];
-    function pose(quoi, date) {
+    /* Le fondement accompagne l'échéance : c'est lui que l'agenda social
+       affiche sous la carte, et il dit d'où vient la date. */
+    function pose(quoi, date, fond) {
       if (!net(date)) return;
-      L.push({ quoi: quoi, date: date, etat: etat(date), jours: joursAvant(date) });
+      L.push({ quoi: quoi, date: date, etat: etat(date), jours: joursAvant(date), fond: fond || DU_FICHIER });
     }
-    pose("Contrôle technique", v.ct ? plusMois(v.ct, v.ctMois || CT_DEFAUT[v.genre] || 12) : "");
+    pose("Contrôle technique", v.ct ? plusMois(v.ct, v.ctMois || CT_DEFAUT[v.genre] || 12) : "",
+      "R. 323-22 à R. 323-25 du code de la route, selon le genre du véhicule, à compter du dernier contrôle");
     pose("Limiteur", v.lim ? plusMois(v.lim, v.limMois || 24) : "");
     pose("Chronotachygraphe", v.chrono ? plusMois(v.chrono, v.chronoMois || 24) : "");
     pose("Assurance", v.assur);
@@ -209,9 +214,9 @@
 
   function echeancesConducteur(f) {
     var L = [];
-    function pose(quoi, date) {
+    function pose(quoi, date, fond) {
       if (!net(date)) return;
-      L.push({ quoi: quoi, date: date, etat: etat(date), jours: joursAvant(date) });
+      L.push({ quoi: quoi, date: date, etat: etat(date), jours: joursAvant(date), fond: fond || DU_FICHIER });
     }
     pose("Permis", f.permisFin);
     pose("Fin de suspension", f.retraitFin);
@@ -223,17 +228,21 @@
        renouvellement de la visite d'information et de prévention (R. 4624-16),
        quatre ans au plus en suivi renforcé, avec une visite intermédiaire à
        deux ans au plus tard (R. 4624-28). */
-    if (f.suivi === "vip") pose("Visite de prévention", f.visiteTravail ? plusMois(f.visiteTravail, 60) : "");
+    if (f.suivi === "vip") pose("Visite de prévention", f.visiteTravail ? plusMois(f.visiteTravail, 60) : "",
+      "R. 4624-16 du code du travail : renouvellement selon une périodicité qui ne peut excéder cinq ans");
     if (f.suivi === "sir") {
-      pose("Visite du médecin", f.visiteTravail ? plusMois(f.visiteTravail, 48) : "");
+      pose("Visite du médecin", f.visiteTravail ? plusMois(f.visiteTravail, 48) : "",
+        "R. 4624-28 du code du travail : périodicité qui ne peut être supérieure à quatre ans");
       pose("Visite intermédiaire", f.visiteTravail
-        ? plusMois(f.visiteInter || f.visiteTravail, f.visiteInter ? 48 : 24) : "");
+        ? plusMois(f.visiteInter || f.visiteTravail, f.visiteInter ? 48 : 24) : "",
+        "R. 4624-28 du code du travail : visite intermédiaire deux ans au plus tard après celle du médecin du travail");
     }
     /* L'attestation d'absence de contre-indication à la conduite d'un
        équipement à risques particuliers vaut cinq ans, et sans elle
        l'autorisation de conduite ne vaut plus : R. 4323-56
        (LEGIARTI000051500371), lu à la source le 15 septembre 2026. */
-    pose("Attestation de conduite", f.attestConduite ? plusMois(f.attestConduite, 60) : "");
+    pose("Attestation de conduite", f.attestConduite ? plusMois(f.attestConduite, 60) : "",
+      "R. 4323-56 du code du travail : attestation d'une validité de cinq ans, sans laquelle l'autorisation de conduite ne vaut plus");
     var pts = parseInt(f.points, 10);
     if (!isNaN(pts)) {
       L.push({
@@ -513,7 +522,32 @@
 
   /* ──────────────────────────────── branchements ────────────────────────── */
 
+  /* CE QUE LES AUTRES ÉCRANS PEUVENT LIRE. L'agenda social ramasse ces
+     échéances avec les siennes : une visite médicale et un contrôle technique
+     se préparent au même endroit. Demande du 15 septembre 2026. */
+  function toutesEcheances() {
+    var out = [];
+    vehicules().forEach(function (v) {
+      echeancesVehicule(v).forEach(function (e) {
+        if (!e.date) return;
+        out.push({ quoi: e.quoi, qui: v.immat || "véhicule sans immatriculation",
+          date: e.date, etat: e.etat, jours: e.jours, fond: e.fond });
+      });
+    });
+    salaries().forEach(function (s) {
+      echeancesConducteur(fiche(s.id)).forEach(function (e) {
+        if (!e.date) return;
+        out.push({ quoi: e.quoi, qui: s.nom, date: e.date, etat: e.etat, jours: e.jours, fond: e.fond });
+      });
+    });
+    return out;
+  }
+  window.Flotte = { echeances: toutesEcheances };
+
   function demarrer() {
+    /* Le fichier est aussi chargé par l'agenda, qui n'a aucun de ces écrans :
+       sans cette garde, il s'y planterait au premier identifiant manquant. */
+    if (!$("compte")) return;
     var p = null;
     try {
       p = (window.Profil && window.Profil.lire) ? window.Profil.lire()

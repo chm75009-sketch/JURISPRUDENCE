@@ -14,6 +14,9 @@
 <script src="listes-auto.js"></script>
 <script src="apercu.js"></script>
 <script src="droits.js"></script>
+<!-- La flotte : chargée pour son API de lecture seule, window.Flotte.echeances().
+     Le fichier ne touche à rien tant que les écrans de sa page sont absents. -->
+<script src="flotte.js"></script>
 <!-- L'ÉCHÉANCIER, CONSTRUIT TOUT SEUL DEPUIS LA FICHE D'ENTREPRISE. Rien avant
      lui : pas de formulaire, pas de chapeau. L'effectif vient de la fiche, le
      reste des brouillons d'audit présents sur ce poste. Une carte par
@@ -263,7 +266,7 @@
   var NOMS_SOURCES = {
     agenda: "saisi ici", fiche: "repris de la fiche d'entreprise", nao: "repris de l'audit NAO", cse: "repris de l'audit CSE",
     bdese: "repris de l'audit BDESE", eco: "repris de l'audit du licenciement économique",
-    pse: "repris de l'audit PSE",
+    pse: "repris de l'audit PSE", flotte: "repris de Flotte et conducteurs",
   };
   var B = {};
   function chargerBrouillons() {
@@ -580,6 +583,26 @@
     } else {
       attentes.push({ t: "Élections du CSE : date des dernières élections non renseignée.",
         w: "Les mandats durent quatre ans (L. 2314-33) : sans la date des dernières élections, l'échéance du renouvellement ne peut pas être calculée." });
+    }
+
+    /* LES ÉCHÉANCES DE LA FLOTTE ET DES CONDUCTEURS, RAMASSÉES ICI.
+
+       Elles se tiennent dans leur écran, mais c'est ici qu'on regarde ce qui
+       vient : un contrôle technique dépassé, une visite médicale et une
+       consultation du comité se préparent au même endroit. Demande du
+       15 septembre 2026. */
+    if (window.Flotte && window.Flotte.echeances) {
+      window.Flotte.echeances().forEach(function (e) {
+        lignes.push({
+          tri: e.date, quand: enFr(e.date),
+          titre: e.quoi + " : " + e.qui,
+          fondement: e.fond,
+          docs: "le justificatif à jour, et la date reportée dans Flotte et conducteurs",
+          retard: e.etat === "passe",
+          detail: e.etat === "passe" ? "Échéance dépassée." : "",
+          prov: "flotte",
+        });
+      });
     }
 
     return { lignes: lignes, attentes: attentes, cadences: cadences, notes: notes,
