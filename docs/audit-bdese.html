@@ -152,7 +152,6 @@
   <section id="ecran-doc" hidden>
     <div class="barre pile">
       <button type="button" id="dl-xlsx">Télécharger le classeur</button>
-      <button type="button" class="second" id="dl-csv">Télécharger en CSV</button>
     </div>
 
     <form class="champs" id="champs" autocomplete="off" onsubmit="return false">
@@ -520,7 +519,7 @@
      depose le fichier dans iCloud Drive sans rien montrer : il faut sortir de
      l'application pour savoir ce qu'on vient de telecharger. Demande du
      13 septembre 2026, « je dois pouvoir l'ouvrir d'abord ». L'apercu rend le
-     classeur feuille par feuille, ou les lignes du CSV, et le bouton
+     classeur feuille par feuille, et le bouton
      « Enregistrer » fait seul partir le fichier. */
   function telecharger(contenu, nom, type, rendu) {
     var vu = rendu || (window.Apercu ? window.Apercu.pour(contenu) : null);
@@ -581,33 +580,11 @@
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
   });
 
-  /* Le CSV pour ceux qui n'ouvrent pas de classeur : point-virgule et
-     signature d'octets, les deux conditions pour qu'un tableur français
-     l'ouvre sans passer par un assistant d'importation. */
-  $("#dl-csv").addEventListener("click", function () {
-    var head = entetes(CTX);
-    var l = [
-      ["Base de données économiques, sociales et environnementales"],
-      ["Entreprise", CTX.ent || "[à renseigner]"],
-      ["Effectif", CTX.eff === null ? "[à renseigner]" : String(CTX.eff)],
-      ["Année en cours", String(CTX.an)],
-      ["Texte qui commande le contenu", texteApplicable(CTX)],
-      ["Version du texte lue", CTX.grille ? CTX.grille.version : "LEGIARTI000043975329"],
-      ["Millésimes", CTX.mil.map(function (m) { return m.annee + " (" + m.nature + ")"; }).join(", ")],
-      [],
-      ["Rubrique"].concat(head)];
-    rubriques(CTX).forEach(function (r) {
-      r.lignes.forEach(function (x) {
-        l.push([r.n + ". " + r.titre, x.section, x.sujet, x.info]
-          .concat(new Array(head.length - 3).fill("")));
-      });
-    });
-    var csv = "﻿" + l.map(function (r) {
-      return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(";");
-    }).join("\r\n");
-    telecharger(csv, nomFichier("csv"), "text/csv;charset=utf-8",
-      window.Apercu ? { titre: "Le CSV", html: window.Apercu.tableHtml(l) } : null);
-  });
+  /* PAS DE CSV. Il a été retiré le 15 septembre 2026, comme sur l'autre
+     écran de la base de données le 14 : le fichier sortait pourtant en UTF-8
+     avec sa signature d'octets, mais Excel l'ignore et rend « Ã© » partout.
+     Un tableau illisible ne vaut pas mieux que pas de tableau. Le classeur,
+     lui, s'ouvre partout et porte ses cadres. */
 
   /* ---------------------------------------------------------------- */
   /* Le texte de loi, replié sous le classeur. Les passages cités sont ceux
