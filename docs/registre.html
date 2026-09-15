@@ -1072,8 +1072,16 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var decoupe = function (l) { return l.split(sep).map(function (x) {
       return x.trim().replace(/^["']|["']$/g, ""); }); };
 
+    /* LA LIGNE D'INTITULÉS SE CHERCHE PLUS LOIN QUE HUIT LIGNES.
+
+       Mesuré le 16 septembre 2026 sur le registre de TEC lu en image : le
+       document porte son titre, ses articles, la dénomination, l'adresse, la
+       convention et l'effectif avant le tableau, soit huit lignes. Les
+       intitulés arrivaient en neuvième et n'étaient donc jamais examinés :
+       l'écran annonçait « aucune colonne reconnue » et proposait d'importer
+       des nationalités dans la colonne Emploi. On regarde vingt lignes. */
     var hdr = 0, meilleur = -1;
-    for (var k = 0; k < Math.min(lignes.length, 8); k++) {
+    for (var k = 0; k < Math.min(lignes.length, 20); k++) {
       var n = decoupe(lignes[k]).filter(function (t) { return proposeCible(t) !== ""; }).length;
       if (n > meilleur) { meilleur = n; hdr = k; }
     }
