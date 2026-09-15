@@ -154,7 +154,6 @@
   <section id="classeur">
     <div class="barre pile">
       <button type="button" id="dl-xlsx">Télécharger le classeur</button>
-      <button type="button" class="second" id="dl-csv">Télécharger en CSV</button>
     </div>
 
     <form class="champs" id="champs" autocomplete="off" onsubmit="return false">
@@ -493,7 +492,7 @@
       var vide = !(ligne || []).some(function (c) { return c !== null && c !== undefined && c !== ""; });
       if (vide) { x += '<row r="' + (i + 1) + '"/>'; return; }
       var titre = (i === 0 && pleines(ligne) === 1);
-      var style = titre ? 1 : (i === tete ? 2 : 3);
+      var style = titre ? 1 : (i === tete ? 2 : (tete >= 0 && (i - tete) % 2 === 0 ? 4 : 3));
       var largeur = titre ? 1 : (i < tete || tete < 0 ? ligne.length : nbCol);
       x += '<row r="' + (i + 1) + '"' + (titre ? ' ht="22" customHeight="1"' : "") + '>';
       for (var j = 0; j < largeur; j++) {
@@ -512,18 +511,20 @@
     '<fonts count="3"><font><sz val="11"/><name val="Calibri"/></font>' +
     '<font><b/><sz val="13"/><color rgb="FF1F3864"/><name val="Calibri"/></font>' +
     '<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>' +
-    '<fills count="3"><fill><patternFill patternType="none"/></fill>' +
+    '<fills count="4"><fill><patternFill patternType="none"/></fill>' +
     '<fill><patternFill patternType="gray125"/></fill>' +
-    '<fill><patternFill patternType="solid"><fgColor rgb="FFE7EAF0"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+    '<fill><patternFill patternType="solid"><fgColor rgb="FFE7EAF0"/><bgColor indexed="64"/></patternFill></fill>' +
+    '<fill><patternFill patternType="solid"><fgColor rgb="FFF7F8FB"/><bgColor indexed="64"/></patternFill></fill></fills>' +
     '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>' +
     '<border><left style="thin"><color rgb="FF9AA3AF"/></left><right style="thin"><color rgb="FF9AA3AF"/></right>' +
     '<top style="thin"><color rgb="FF9AA3AF"/></top><bottom style="thin"><color rgb="FF9AA3AF"/></bottom><diagonal/></border></borders>' +
     '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
-    '<cellXfs count="4">' +
+    '<cellXfs count="5">' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
     '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>' +
     '<xf numFmtId="0" fontId="2" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+    '<xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
     '</cellXfs></styleSheet>';
   function xlsx(feuilles) {
     var pris = {};
@@ -612,18 +613,24 @@
     ];
   }
 
-  function ligneValeurs(l) {
-    return [l.section, l.sujet, l.info]
+  /* La section et le sujet ne sont écrits qu'au changement : répétés sur
+     chaque ligne, ils noyaient la seule colonne qui compte, l'information à
+     renseigner. */
+  function ligneValeurs(l, precedent) {
+    var p = precedent || {};
+    return [l.section === p.section ? "" : l.section,
+            l.sujet === p.sujet && l.section === p.section ? "" : l.sujet, l.info]
       .concat(CTX.mil.map(function (m) { return valeur(l.cle, m.annee); }))
       .concat([raison(l.cle)]);
   }
 
   function feuilles() {
     var head = entetes(CTX);
-    var largeurs = [30, 44, 60].concat(CTX.mil.map(function () { return 16; })).concat([44]);
+    var largeurs = [26, 38, 62].concat(CTX.mil.map(function () { return 15; })).concat([40]);
     return [{ titre: "La base", largeurs: [36, 90], lignes: couverture() }].concat(rubriques(CTX).map(function (r) {
       var lignes = [[r.titre].concat(new Array(head.length - 1).fill("")), head];
-      r.lignes.forEach(function (l) { lignes.push(ligneValeurs(l)); });
+      var precedent = null;
+      r.lignes.forEach(function (l) { lignes.push(ligneValeurs(l, precedent)); precedent = l; });
       return { titre: r.n + " " + r.titre, lignes: lignes, largeurs: largeurs };
     }));
   }
@@ -641,22 +648,6 @@
   $("#dl-xlsx").addEventListener("click", function () {
     telecharger(xlsx(feuilles()), nomFichier("xlsx"),
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-  });
-
-  /* Le CSV pour ceux qui n'ouvrent pas de classeur : point-virgule et
-     signature d'octets, les deux conditions pour qu'un tableur français
-     l'ouvre sans passer par un assistant d'importation. */
-  $("#dl-csv").addEventListener("click", function () {
-    var head = entetes(CTX);
-    var l = couverture().concat([[], ["Rubrique"].concat(head)]);
-    rubriques(CTX).forEach(function (r) {
-      r.lignes.forEach(function (x) { l.push([r.n + ". " + r.titre].concat(ligneValeurs(x))); });
-    });
-    var csv = "﻿" + l.map(function (r) {
-      return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(";");
-    }).join("\r\n");
-    telecharger(csv, nomFichier("csv"), "text/csv;charset=utf-8",
-      window.Apercu ? { titre: "Le CSV", html: window.Apercu.tableHtml(l) } : null);
   });
 
   /* ---------------------------------------------------------------- */
