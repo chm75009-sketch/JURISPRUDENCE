@@ -103,6 +103,8 @@
   table.g td.vide input.rempli{background:var(--vert-clair)}
   table.g tr.sec td{background:var(--accent-clair);color:var(--accent);font:600 13.5px/1.35 system-ui;border-right:0}
   table.g tr.suj td{background:var(--creux);font:600 13.5px/1.35 system-ui;color:var(--encre);border-right:0}
+  table.g tr.mere td{background:#fff;font:600 13.5px/1.4 system-ui;color:var(--encre);border-right:0}
+  table.g tr.sous td.info{padding-left:22px;color:var(--texte-2)}
   @media (min-width:700px){
     table.g{font-size:14.5px}
     table.g th.info,table.g td.info{min-width:280px;max-width:420px}
@@ -259,6 +261,23 @@
   /* Chaque ligne a une clé stable : le numéro du thème, la lettre de la
      section, celle du sujet, puis le rang de l'information. Elle survit à un
      rechargement, et elle ne bouge pas si le décret ne bouge pas. */
+  /* CE QUE LE TEXTE DEMANDE, L'ÉCRAN LE DEMANDE AUSSI.
+
+     Une information qui se lit « mois par mois » n'a pas une case par année
+     mais douze ; une information qui se lit « par sexe » en a deux. La ligne
+     du décret reste en tête, sans case, et les cases sont sur les lignes
+     qu'elle appelle. Demande du 15 septembre 2026 : « il faut une cohérence
+     entre ce qu'on demande et ce qu'on affiche ». */
+  var MOIS_BDESE = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+  function ventilation(info) {
+    var t = String(info || "");
+    if (/mois par mois/i.test(t)) return MOIS_BDESE;
+    if (/par sexe|respectifs des femmes et des hommes|des femmes et des hommes/i.test(t))
+      return ["Femmes", "Hommes"];
+    return null;
+  }
+
   function rubriques(c) {
     if (c.grille) {
       return c.grille.rubriques.map(function (r) {
@@ -268,8 +287,13 @@
             var infos = (su.informations && su.informations.length) ? su.informations : [su.intitule];
             var base = r.n + "/" + (s.lettre || "-") + "/" + (su.lettre || "-") + "/";
             infos.forEach(function (i, k) {
-              lignes.push({ cle: base + k, section: (s.lettre ? s.lettre + ". " : "") + s.titre,
-                sujet: (su.lettre ? su.lettre + ") " : "") + su.intitule, info: i });
+              var sec = (s.lettre ? s.lettre + ". " : "") + s.titre;
+              var suj = (su.lettre ? su.lettre + ") " : "") + su.intitule;
+              var v = ventilation(i);
+              lignes.push({ cle: base + k, section: sec, sujet: suj, info: i, mere: !!v });
+              if (v) v.forEach(function (lib, j) {
+                lignes.push({ cle: base + k + "/" + j, section: sec, sujet: suj, info: lib, sous: true });
+              });
             });
           });
         });
@@ -336,8 +360,13 @@
           if (sansLettre(l.sujet) !== l.info)
             corps += '<tr class="suj"><td class="info">' + ech(l.sujet) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
         }
+        if (l.mere) {
+          corps += '<tr class="mere"><td class="info">' + ech(l.info) + '</td><td colspan="' +
+            (nbCol - 1) + '"></td></tr>';
+          return;
+        }
         var une = false;
-        corps += '<tr><td class="info">' + ech(l.info) + "</td>" +
+        corps += '<tr' + (l.sous ? ' class="sous"' : "") + '><td class="info">' + ech(l.info) + "</td>" +
           CTX.mil.map(function (m) {
             var v = valeur(l.cle, m.annee);
             if (v.trim()) une = true;
@@ -348,8 +377,9 @@
           (raison(l.cle).trim() ? ' class="rempli"' : "") + ' aria-label="' + ech(l.info + ", raison") + '"></td></tr>';
         if (une || raison(l.cle).trim()) pleines++;
       });
+      var aRemplir = r.lignes.filter(function (x) { return !x.mere; }).length;
       return '<div class="rb"><div class="tt"><h3>' + r.n + ". " + ech(r.titre) + "</h3>" +
-        '<span class="n' + (pleines === r.lignes.length ? " pleine" : "") + '">' + pleines + " / " + r.lignes.length + "</span></div>" +
+        '<span class="n' + (pleines === aRemplir ? " pleine" : "") + '">' + pleines + " / " + aRemplir + "</span></div>" +
         '<div class="grille-tab"><table class="g"><thead>' + head + "</thead><tbody>" + corps +
         "</tbody></table></div></div>";
     }).join("");
@@ -380,12 +410,14 @@
     var liste = rubriques(CTX);
     var titres = document.querySelectorAll("#rubriques .rb .n");
     liste.forEach(function (r, i) {
-      var n = 0;
+      var n = 0, aRemplir = 0;
       r.lignes.forEach(function (l) {
+        if (l.mere) return;
+        aRemplir++;
         var v = E.valeurs[l.cle] || {};
         if (Object.keys(v).some(function (a) { return String(v[a]).trim() !== ""; }) || raison(l.cle).trim()) n++;
       });
-      if (titres[i]) { titres[i].textContent = n + " / " + r.lignes.length; titres[i].className = "n" + (n === r.lignes.length ? " pleine" : ""); }
+      if (titres[i]) { titres[i].textContent = n + " / " + aRemplir; titres[i].className = "n" + (n === aRemplir ? " pleine" : ""); }
     });
   }
 
@@ -626,9 +658,11 @@
      renseigner. */
   function ligneValeurs(l, precedent) {
     var p = precedent || {};
-    return [l.section === p.section ? "" : l.section,
-            l.sujet === p.sujet && l.section === p.section ? "" : l.sujet, l.info]
-      .concat(CTX.mil.map(function (m) { return valeur(l.cle, m.annee); }))
+    var tete = [l.section === p.section ? "" : l.section,
+                l.sujet === p.sujet && l.section === p.section ? "" : l.sujet,
+                l.sous ? "    " + l.info : l.info];
+    if (l.mere) return tete.concat(CTX.mil.map(function () { return ""; })).concat([""]);
+    return tete.concat(CTX.mil.map(function (m) { return valeur(l.cle, m.annee); }))
       .concat([raison(l.cle)]);
   }
 
