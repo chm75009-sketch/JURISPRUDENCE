@@ -69,11 +69,14 @@
   .ref span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
   .ref input{font-size:16px;min-height:46px;padding:8px 6px;text-align:center;
     border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);color:var(--texte);width:100%;box-sizing:border-box}
-  .sem{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:var(--e3) 0 0}
-  .sem button{min-height:44px;padding:0;border-radius:var(--r1);
+  /* Les sept jours de la semaine de référence. La règle porte l'identifiant
+     du bloc, non une classe : « sem » servait aussi aux lignes de la feuille
+     imprimée, et leur imposait cette grille de sept colonnes. */
+  #r-jours{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:var(--e3) 0 0}
+  #r-jours button{min-height:44px;padding:0;border-radius:var(--r1);
     border:1px solid var(--filet-2);background:var(--surface);color:var(--texte-2);
     font:600 14px system-ui;width:auto}
-  .sem button[aria-pressed="true"]{background:var(--accent-clair);border-color:var(--accent);color:var(--accent)}
+  #r-jours button[aria-pressed="true"]{background:var(--accent-clair);border-color:var(--accent);color:var(--accent)}
 
   .jours{display:grid;gap:6px;margin:var(--e2) 0 0}
   .jour{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;
@@ -161,6 +164,29 @@
   .rien{padding:var(--e5) 0;color:var(--texte-2);font-size:var(--t3)}
   .rien a{color:var(--accent)}
   [hidden]{display:none !important}
+
+  /* LA FEUILLE À SIGNER. Elle n'existe qu'à l'impression : le même relevé,
+     posé en page, avec la place de la signature. Demande du 15 septembre
+     2026, « imprimer la fiche et l'envoyer au salarié pour signature ». */
+  #impression{display:none}
+  #impression h1{font:700 19px/1.3 system-ui;margin:0 0 4px}
+  #impression .sous{font-size:13px;color:#333;margin:0 0 14px}
+  #impression table{border-collapse:collapse;width:100%;font-size:11.5px;table-layout:fixed}
+  #impression th,#impression td{border:1px solid #999;padding:4px 6px;text-align:left}
+  #impression th{background:#eee;font-weight:600}
+  #impression td.n{text-align:right;font-variant-numeric:tabular-nums}
+  #impression tr.sem td{background:#f2f2f2;font-weight:600}
+  #impression .tot{margin:12px 0 0;font-size:13px}
+  #impression .sign{margin:22px 0 0;font-size:13px;line-height:2.2}
+  #impression .pied{margin:18px 0 0;font-size:10.5px;color:#444}
+  @page{margin:14mm}
+  @media print{
+    .haut,.mois,.etat,.bloc,.barre,details,.note-page,#e-vide,.maj-dispo,
+    #assist-bouton,#assist-panneau{display:none !important}
+    #impression{display:block !important}
+    body{background:#fff}
+    main.wrap{max-width:none;padding:0}
+  }
 </style>
 </head>
 <body>
@@ -214,7 +240,7 @@
         <label><span>Fin</span><input type="text" id="r-fin" inputmode="numeric" maxlength="5" placeholder="16:00"></label>
         <label><span>Pause min</span><input type="text" id="r-pause" inputmode="numeric" maxlength="3" placeholder="60"></label>
       </div>
-      <div class="sem" id="r-jours"></div>
+      <div id="r-jours"></div>
       <div class="barre"><button type="button" class="second" id="r-appliquer">Remettre tout le mois à cet horaire</button></div>
     </div>
 
@@ -275,6 +301,21 @@
       <div class="liste" id="recls"></div>
     </div>
 
+    <div class="bloc">
+      <h2>Remettre le récapitulatif au salarié</h2>
+      <p class="doux">Le même document dans les deux cas : le relevé du mois, jour par jour, avec la
+        semaine récapitulée et la place de la signature. Sur place, on l'imprime et on le fait signer.
+        À distance, on l'envoie par e-mail ; le fichier ne peut pas se glisser seul dans le message,
+        alors l'application le télécharge d'abord et vous n'avez qu'à le joindre.</p>
+      <label class="champ"><span>Adresse e-mail du salarié</span>
+        <input type="email" id="s-courriel" inputmode="email" autocomplete="off"
+          placeholder="prenom.nom@exemple.fr"></label>
+      <div class="barre">
+        <button type="button" id="b-imprimer">Imprimer pour signature sur place</button>
+        <button type="button" class="second" id="b-mail">Envoyer par e-mail au salarié</button>
+      </div>
+    </div>
+
     <div class="barre">
       <button type="button" id="b-excel">Télécharger le classeur Excel</button>
       <button type="button" class="second" id="b-word">Récapitulatif à signer, en Word</button>
@@ -304,6 +345,8 @@
     </details>
 
   </section>
+
+  <div id="impression"></div>
 
 </main>
 

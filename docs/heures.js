@@ -155,6 +155,9 @@
       f: r.f || "17:00",
       p: r.p == null ? 60 : r.p,
       jours: r.jours || { 1: true, 2: true, 3: true, 4: true, 5: true, 6: false, 0: false },
+      /* L'adresse du salarié vit ici aussi : c'est la seule chose qu'on
+         ajoute au registre, et elle ne sert qu'à lui envoyer son relevé. */
+      courriel: r.courriel || "",
     };
   }
   function garderRef(id, r) {
@@ -445,6 +448,7 @@
 
   function rendreRef() {
     var r = refDe(qui.id);
+    $("s-courriel").value = r.courriel || "";
     var choisi = -1;
     TYPES.forEach(function (t, i) {
       if (t.d === r.d && t.f === r.f && String(t.p) === String(r.p)) choisi = i;
@@ -561,6 +565,94 @@
       }
     });
     return t;
+  }
+
+  /* ───────────────────── la feuille à signer, et l'e-mail ───────────────── */
+
+  /* Le même relevé que le classeur et le Word, posé en page pour le papier :
+     la journée, la semaine, le total, puis la signature. */
+  function feuilleImpression() {
+    var p = entreprise(), m = moisDe(), r = refDe(qui.id), T = tableauMois();
+    var h = '<h1>Décompte des heures de travail</h1>';
+    h += '<p class="sous">' + ech(p.denomination || "") + (p.adresse ? " - " + ech(p.adresse) : "") +
+      "<br>Salarié : " + ech(qui.nom) + (qui.emp ? ", " + ech(qui.emp) : "") +
+      "<br>Mois : " + ech(MOIS[mo] + " " + an) +
+      "<br>Horaire de référence : " + ech(r.d + " - " + r.f + ", pause " + r.p + " minutes") + "</p>";
+    /* La récapitulation de semaine tient sur une seule cellule : autrement,
+       ses quatre cases vides élargissent la colonne du jour et le tableau
+       déborde de la page. */
+    h += "<table><colgroup>" +
+      ["19%", "19%", "14%", "14%", "17%", "17%"].map(function (w) {
+        return '<col style="width:' + w + '">'; }).join("") + "</colgroup>";
+    h += "<thead><tr>" + T[0].map(function (c) { return "<th>" + ech(c) + "</th>"; }).join("") +
+      "</tr></thead><tbody>";
+    T.slice(1).forEach(function (l) {
+      if (/^Semaine/.test(String(l[0]))) {
+        h += '<tr class="sem"><td colspan="4">' + ech(l[0]) + "</td><td>" + ech(l[4]) +
+          '</td><td class="n">' + ech(l[5]) + "</td></tr>";
+        return;
+      }
+      h += "<tr>" + l.map(function (c, i) {
+        return '<td' + (i === 5 ? ' class="n"' : "") + ">" + ech(c) + "</td>";
+      }).join("") + "</tr>";
+    });
+    h += "</tbody></table>";
+    h += '<p class="tot"><b>Total calculé par les jours : ' + ech(nbh(totalMois())) + ".</b>" +
+      "<br>Total retenu par l'entreprise : " +
+      ech(m.retenu ? nbh(nombre(m.retenu) || 0) : "à compléter") + "." +
+      (m.motif ? "<br>Motif de l'écart : " + ech(m.motif) + "." : "") +
+      (m.clos && m.clos.le ? "<br>Mois clos le " + ech(enFrancais(m.clos.le)) + " à " +
+        ech(m.clos.heure || "") + ", empreinte des lignes " + ech(m.clos.empreinte) + "." : "") + "</p>";
+    (m.rectifs || []).forEach(function (x) {
+      h += '<p class="tot">Rectificatif du ' + ech(enFrancais(x.jour)) + (x.h ? ", " + ech(x.h) + " h" : "") +
+        " : " + ech(x.motif) + " (enregistré le " + ech(enFrancais(x.le)) + ").</p>";
+    });
+    h += '<div class="sign">Remis au salarié le ..............................<br>' +
+      "Signature du salarié, précédée de la mention « reçu le » :<br><br>" +
+      "Pour l'entreprise, " + ech(p.responsable || "") + "<br>" +
+      "Signature :</div>";
+    h += '<p class="pied">Établi en application des articles L. 3171-2 et D. 3171-8 du code du travail. ' +
+      "La signature du salarié vaut réception du relevé, non renonciation à le contester : une " +
+      "réclamation reste possible et se note dans l'écran du décompte.</p>";
+    return h;
+  }
+
+  function imprimer() {
+    $("impression").innerHTML = feuilleImpression();
+    window.print();
+  }
+
+  /* L'e-mail. Un message ne peut pas emporter tout seul un fichier depuis une
+     page web : le récapitulatif Word est donc téléchargé d'abord, et le
+     message s'ouvre dans la messagerie du poste, prêt, à compléter d'une
+     pièce jointe. */
+  function parMail() {
+    var p = entreprise(), m = moisDe();
+    var r = refDe(qui.id);
+    var adresse = net($("s-courriel").value);
+    if (!adresse) { $("s-courriel").focus(); return; }
+    r.courriel = adresse;
+    garderRef(qui.id, r);
+
+    word();
+
+    var sujet = "Récapitulatif de vos heures - " + MOIS[mo] + " " + an;
+    var corps = [
+      "Bonjour,",
+      "",
+      "Vous trouverez en pièce jointe le récapitulatif de vos heures de travail pour le mois de " +
+        MOIS[mo] + " " + an + ".",
+      "Total retenu : " + (m.retenu ? nbh(nombre(m.retenu) || 0) : "à compléter") + ".",
+      "",
+      "Merci de nous le retourner signé. Si une journée vous paraît inexacte, indiquez-le en réponse " +
+        "à ce message : votre réclamation sera enregistrée et recevra une réponse écrite.",
+      "",
+      "Cordialement,",
+      (p.responsable || ""),
+      (p.denomination || ""),
+    ].join("\n");
+    window.location.href = "mailto:" + encodeURIComponent(adresse) +
+      "?subject=" + encodeURIComponent(sujet) + "&body=" + encodeURIComponent(corps);
   }
 
   function classeur() {
@@ -771,6 +863,13 @@
       rendreListes(m);
     });
 
+    $("b-imprimer").addEventListener("click", imprimer);
+    $("b-mail").addEventListener("click", parMail);
+    $("s-courriel").addEventListener("input", function () {
+      var r = refDe(qui.id);
+      r.courriel = $("s-courriel").value;
+      garderRef(qui.id, r);
+    });
     $("b-excel").addEventListener("click", classeur);
     $("b-word").addEventListener("click", word);
 
