@@ -270,6 +270,8 @@
       <h2>Clôture du mois</h2>
       <p class="doux">Une fois clos, le mois passe en lecture seule et son empreinte est calculée :
         si une valeur est retouchée après coup, l'empreinte ne correspond plus.</p>
+      <label class="champ" style="margin:0 0 12px;max-width:260px"><span>Date de la clôture</span>
+        <input type="date" id="cl-date"></label>
       <div class="barre">
         <button type="button" id="clore">Clore le mois</button>
         <button type="button" class="second" id="rectifier" hidden>Ouvrir un rectificatif</button>
@@ -312,14 +314,16 @@
       <h2>Remettre le récapitulatif au salarié</h2>
       <p class="doux">Le même document dans les deux cas : le relevé du mois, jour par jour, avec la
         semaine récapitulée et la place de la signature. Sur place, on l'imprime et on le fait signer.
-        À distance, on l'envoie par e-mail ; le fichier ne peut pas se glisser seul dans le message,
-        alors l'application le télécharge d'abord et vous n'avez qu'à le joindre.</p>
+        À distance, le bouton d'envoi ouvre la feuille de partage du téléphone avec le récapitulatif
+        déjà dedans : Mail, WhatsApp, Messenger, ce que vous voulez. Sur un ordinateur qui ne sait pas
+        partager, le fichier se télécharge et le message e-mail s'ouvre prêt, à compléter d'une pièce
+        jointe.</p>
       <label class="champ"><span>Adresse e-mail du salarié</span>
         <input type="email" id="s-courriel" inputmode="email" autocomplete="off"
           placeholder="prenom.nom@exemple.fr"></label>
       <div class="barre">
         <button type="button" id="b-imprimer">Imprimer pour signature sur place</button>
-        <button type="button" class="second" id="b-mail">Envoyer par e-mail au salarié</button>
+        <button type="button" class="second" id="b-mail">Envoyer le récapitulatif au salarié</button>
       </div>
     </div>
 

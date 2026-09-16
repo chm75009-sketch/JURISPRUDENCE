@@ -58,6 +58,7 @@
   function garderCle(c, v) {
     try { window.localStorage.setItem(c, JSON.stringify(v)); } catch (e) {}
   }
+  function net(v) { return String(v == null ? "" : v).trim(); }
   function nbh(n) { return n.toFixed(2).replace(".", ",") + " h"; }
   function enFrancais(iso) {
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ""));
@@ -504,6 +505,10 @@
     } else {
       $("sceau").hidden = true;
     }
+    /* La date de clôture se choisit : on clôt souvent le 5 du mois suivant,
+       parfois plus tard, et la date écrite doit être la vraie. */
+    $("cl-date").value = (m.clos && m.clos.le) || iso(new Date());
+    $("cl-date").disabled = clos;
     $("x-jour").value = an + "-" + ("0" + (mo + 1)).slice(-2) + "-01";
     if (!$("c-date").value) $("c-date").value = iso(new Date());
     rendreListes(m);
@@ -645,19 +650,19 @@
     window.print();
   }
 
-  /* L'e-mail. Un message ne peut pas emporter tout seul un fichier depuis une
-     page web : le récapitulatif Word est donc téléchargé d'abord, et le
-     message s'ouvre dans la messagerie du poste, prêt, à compléter d'une
-     pièce jointe. */
-  function parMail() {
+  /* ENVOYER LE RÉCAPITULATIF.
+
+     Le téléphone sait faire mieux qu'un e-mail : la feuille de partage pose
+     le fichier dans Mail, WhatsApp, Messenger ou les Fichiers, au choix. On
+     l'utilise quand elle existe. Sinon, on retombe sur le message
+     électronique : le fichier se télécharge, et le message s'ouvre prêt, à
+     compléter d'une pièce jointe, parce qu'une page web ne peut pas joindre
+     un fichier elle-même. */
+  function envoyer() {
     var p = entreprise(), m = moisDe();
     var r = refDe(qui.id);
     var adresse = net($("s-courriel").value);
-    if (!adresse) { $("s-courriel").focus(); return; }
-    r.courriel = adresse;
-    garderRef(qui.id, r);
-
-    word();
+    if (adresse) { r.courriel = adresse; garderRef(qui.id, r); }
 
     var sujet = "Récapitulatif de vos heures - " + MOIS[mo] + " " + an;
     var corps = [
@@ -674,8 +679,32 @@
       (p.responsable || ""),
       (p.denomination || ""),
     ].join("\n");
-    window.location.href = "mailto:" + encodeURIComponent(adresse) +
+    var w = construireWord();
+
+    /* La feuille de partage du téléphone, si elle accepte les fichiers. */
+    if (w && window.File && navigator.share && navigator.canShare) {
+      var fichier = null;
+      try {
+        fichier = new File([w.octets], w.nom,
+          { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+      } catch (e) { fichier = null; }
+      if (fichier && navigator.canShare({ files: [fichier] })) {
+        navigator.share({ files: [fichier], title: sujet, text: corps })
+          .catch(function () { /* partage refusé ou annulé : rien à dire */ });
+        return;
+      }
+    }
+
+    if (!adresse) { $("s-courriel").focus(); return; }
+    if (w) window.AuditExport.telecharger(w.octets, w.nom,
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    var lien = document.createElement("a");
+    lien.href = "mailto:" + encodeURIComponent(adresse) +
       "?subject=" + encodeURIComponent(sujet) + "&body=" + encodeURIComponent(corps);
+    lien.rel = "noopener";
+    document.body.appendChild(lien);
+    lien.click();
+    setTimeout(function () { lien.remove(); }, 1000);
   }
 
   function classeur() {
@@ -742,7 +771,14 @@
   }
 
   function word() {
-    if (!window.AuditExport) return;
+    var w = construireWord();
+    if (!w) return;
+    window.AuditExport.telecharger(w.octets, w.nom,
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  }
+
+  function construireWord() {
+    if (!window.AuditExport) return null;
     var p = entreprise(), m = moisDe();
     var r = refDe(qui.id);
     var T = tableauMois();
@@ -779,8 +815,7 @@
 
     var titre = "Décompte des heures - " + qui.nom + " - " + MOIS[mo] + " " + an;
     var nom = "decompte-heures-" + qui.id + "-" + an + "-" + ("0" + (mo + 1)).slice(-2) + ".docx";
-    window.AuditExport.telecharger(window.AuditExport.docx(items, titre),
-      nom, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    return { octets: window.AuditExport.docx(items, titre), nom: nom, titre: titre };
   }
 
   /* ──────────────────────────────── branchements ────────────────────────── */
@@ -866,7 +901,7 @@
         "qu'ouvrir un rectificatif daté.")) return;
       var d = new Date();
       m.clos = {
-        le: iso(d),
+        le: $("cl-date").value || iso(d),
         heure: ("0" + d.getHours()).slice(-2) + "h" + ("0" + d.getMinutes()).slice(-2),
         empreinte: empreinte(m),
       };
@@ -922,7 +957,7 @@
     });
 
     $("b-imprimer").addEventListener("click", imprimer);
-    $("b-mail").addEventListener("click", parMail);
+    $("b-mail").addEventListener("click", envoyer);
     $("s-courriel").addEventListener("input", function () {
       var r = refDe(qui.id);
       r.courriel = $("s-courriel").value;
