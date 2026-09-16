@@ -273,6 +273,7 @@
       <div class="barre">
         <button type="button" id="clore">Clore le mois</button>
         <button type="button" class="second" id="rectifier" hidden>Ouvrir un rectificatif</button>
+        <button type="button" class="second" id="rouvrir" hidden>Rouvrir le mois</button>
       </div>
       <div class="sceau" id="sceau" hidden><div class="t">Mois clos</div><div class="d" id="sceau-d"></div></div>
       <div id="f-rectif" hidden>
@@ -284,7 +285,13 @@
           <textarea id="x-motif" placeholder="ce qui a été constaté, et par qui"></textarea></label>
         <div class="barre"><button type="button" id="x-ok">Enregistrer le rectificatif</button></div>
       </div>
+      <div id="f-rouvrir" hidden>
+        <label class="champ" style="margin-top:10px"><span>Motif de la réouverture</span>
+          <textarea id="o-motif" placeholder="pourquoi le mois est rouvert, et par qui"></textarea></label>
+        <div class="barre"><button type="button" id="o-ok">Rouvrir le mois</button></div>
+      </div>
       <div class="liste" id="rectifs"></div>
+      <div class="liste" id="ouvertures"></div>
     </div>
 
     <div class="bloc">

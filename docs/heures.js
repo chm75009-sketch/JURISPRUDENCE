@@ -174,6 +174,7 @@
     m.jours = m.jours || {};
     m.rectifs = m.rectifs || [];
     m.recl = m.recl || [];
+    m.ouvertures = m.ouvertures || [];
     return m;
   }
   function garderMois(m) {
@@ -488,6 +489,8 @@
     $("clore").disabled = clos;
     $("clore").textContent = "Clore le mois de " + MOIS[mo];
     $("rectifier").hidden = !clos;
+    $("rouvrir").hidden = !clos;
+    $("f-rouvrir").hidden = true;
     $("f-rectif").hidden = true;
     $("t-retenu").value = m.retenu || "";
     $("t-retenu").disabled = clos;
@@ -507,6 +510,21 @@
   }
 
   function rendreListes(m) {
+    /* UNE CLÔTURE NE S'EFFACE PAS, ELLE SE LÈVE AU VU DE TOUS.
+
+       Rouvrir un mois clos est possible depuis le 16 septembre 2026, parce
+       qu'une erreur de manipulation ne doit pas enfermer un mois entier. Mais
+       la réouverture se date, se motive, et reste écrite à côté du sceau
+       qu'elle lève : un mois rouvert sans raison se verrait, et c'est bien le
+       but. */
+    $("ouvertures").innerHTML = (m.ouvertures || []).map(function (o) {
+      return '<div class="item"><div class="t">Mois rouvert le ' + ech(enFrancais(o.le)) +
+        (o.heure ? " à " + ech(o.heure) : "") + '</div><div class="meta">Il avait été clos le ' +
+        ech(enFrancais(o.closLe)) + ", empreinte " + ech(o.empreinte || "") +
+        ". Cette mention reste au mois.</div>" +
+        '<div class="corps">' + ech(o.motif) + "</div></div>";
+    }).join("");
+
     $("rectifs").innerHTML = (m.rectifs || []).map(function (r) {
       return '<div class="item"><div class="t">Rectificatif du ' + ech(enFrancais(r.jour) || "jour non précisé") +
         '</div><div class="meta">Ajouté le ' + ech(enFrancais(r.le)) +
@@ -607,6 +625,11 @@
       h += '<p class="tot">Rectificatif du ' + ech(enFrancais(x.jour)) + (x.h ? ", " + ech(x.h) + " h" : "") +
         " : " + ech(x.motif) + " (enregistré le " + ech(enFrancais(x.le)) + ").</p>";
     });
+    (m.ouvertures || []).forEach(function (o) {
+      h += '<p class="tot">Mois rouvert le ' + ech(enFrancais(o.le)) + (o.heure ? " à " + ech(o.heure) : "") +
+        ", après une clôture du " + ech(enFrancais(o.closLe)) + " (empreinte " + ech(o.empreinte || "") +
+        ") : " + ech(o.motif) + ".</p>";
+    });
     h += '<div class="sign">Remis au salarié le ..............................<br>' +
       "Signature du salarié, précédée de la mention « reçu le » :<br><br>" +
       "Pour l'entreprise, " + ech(p.responsable || "") + "<br>" +
@@ -685,8 +708,17 @@
       largeurs: [26, 22, 12, 12, 14, 12],
     }];
 
-    if ((m.rectifs || []).length || (m.recl || []).length) {
-      var L = [["Rectificatifs et réclamations"], []];
+    if ((m.rectifs || []).length || (m.recl || []).length || (m.ouvertures || []).length) {
+      var L = [["Rectificatifs, réouvertures et réclamations"], []];
+      if ((m.ouvertures || []).length) {
+        L.push(["Réouvertures du mois"]);
+        L.push(["Rouvert le", "Était clos le", "Empreinte levée", "Motif"]);
+        m.ouvertures.forEach(function (o) {
+          L.push([enFrancais(o.le) + (o.heure ? " à " + o.heure : ""), enFrancais(o.closLe),
+            o.empreinte || "", o.motif || ""]);
+        });
+        L.push([]);
+      }
       if ((m.rectifs || []).length) {
         L.push(["Rectificatifs après clôture"]);
         L.push(["Jour", "Heures rectifiées", "Enregistré le", "Motif"]);
@@ -733,6 +765,11 @@
     (m.rectifs || []).forEach(function (x) {
       items.push({ k: "rouge", t: "Rectificatif du " + enFrancais(x.jour) +
         (x.h ? ", " + x.h + " h" : "") + " : " + x.motif + " (enregistré le " + enFrancais(x.le) + ")." });
+    });
+    (m.ouvertures || []).forEach(function (o) {
+      items.push({ k: "rouge", t: "Mois rouvert le " + enFrancais(o.le) + (o.heure ? " à " + o.heure : "") +
+        ", après une clôture du " + enFrancais(o.closLe) + " (empreinte " + (o.empreinte || "") + ") : " +
+        o.motif + "." });
     });
     items.push({ k: "p", t: "Établi en application des articles L. 3171-2 et D. 3171-8 du code du travail." });
     items.push({ k: "p", t: " " });
@@ -836,6 +873,27 @@
       garderMois(m);
       rendreMois(); dessinerJours(); calculer();
       $("sceau").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    $("rouvrir").addEventListener("click", function () {
+      $("f-rouvrir").hidden = !$("f-rouvrir").hidden;
+      if (!$("f-rouvrir").hidden) $("o-motif").focus();
+    });
+    $("o-ok").addEventListener("click", function () {
+      var motif = $("o-motif").value.trim();
+      if (!motif) { $("o-motif").focus(); return; }
+      var m = moisDe();
+      if (!(m.clos && m.clos.le)) { $("f-rouvrir").hidden = true; return; }
+      var d = new Date();
+      m.ouvertures.push({
+        le: iso(d),
+        heure: ("0" + d.getHours()).slice(-2) + "h" + ("0" + d.getMinutes()).slice(-2),
+        closLe: m.clos.le, empreinte: m.clos.empreinte, motif: motif,
+      });
+      delete m.clos;
+      garderMois(m);
+      $("o-motif").value = "";
+      rendreMois(); dessinerJours(); calculer();
     });
 
     $("rectifier").addEventListener("click", function () {
