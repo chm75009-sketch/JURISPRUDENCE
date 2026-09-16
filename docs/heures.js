@@ -25,6 +25,20 @@
     "août", "septembre", "octobre", "novembre", "décembre"];
   var COURT = ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"];
   var LETTRE = ["D", "L", "M", "M", "J", "V", "S"];
+  /* LES HORAIRES TYPES. Ils ne sont qu'un pré-remplissage : trois champs
+     posés d'un geste, que l'on corrige aussitôt si le contrat dit autre chose.
+     Aucun n'est présenté comme une règle, et la semaine qu'il donne s'affiche
+     au-dessus, calculée sur les jours cochés. Demande du 15 septembre 2026. */
+  var TYPES = [
+    { d: "09:00", f: "17:00", p: 60, lib: "Bureau, 9h00 - 17h00, pause 1 h" },
+    { d: "08:00", f: "16:00", p: 60, lib: "Journée continue, 8h00 - 16h00, pause 1 h" },
+    { d: "08:00", f: "17:00", p: 60, lib: "Journée longue, 8h00 - 17h00, pause 1 h" },
+    { d: "06:00", f: "14:00", p: 30, lib: "Équipe du matin, 6h00 - 14h00, pause 30 min" },
+    { d: "14:00", f: "22:00", p: 30, lib: "Équipe d'après-midi, 14h00 - 22h00, pause 30 min" },
+    { d: "21:00", f: "06:00", p: 45, lib: "Équipe de nuit, 21h00 - 6h00, pause 45 min" },
+    { d: "09:00", f: "15:00", p: 30, lib: "Temps partiel, 9h00 - 15h00, pause 30 min" },
+  ];
+
   var NATURES = [
     ["travail", "Travail"], ["repos", "Repos"], ["conge", "Congé payé"],
     ["maladie", "Maladie"], ["ferie", "Férié"], ["absence", "Absence"],
@@ -76,6 +90,9 @@
     if (!l || l.n !== "travail") return 0;
     var a = enMinutes(l.d), b = enMinutes(l.f);
     if (a === null || b === null) return 0;
+    /* Une fin plus petite que le début est une nuit qui passe minuit : 21h00
+       à 6h00 fait neuf heures, pas moins que rien. */
+    if (b <= a) b += 1440;
     var v = b - a - (parseInt(l.p, 10) || 0);
     return v > 0 ? v / 60 : 0;
   }
@@ -428,6 +445,15 @@
 
   function rendreRef() {
     var r = refDe(qui.id);
+    var choisi = -1;
+    TYPES.forEach(function (t, i) {
+      if (t.d === r.d && t.f === r.f && String(t.p) === String(r.p)) choisi = i;
+    });
+    $("r-type").innerHTML = '<option value="">' +
+      (choisi < 0 ? "Horaire propre à ce salarié" : "- choisir un horaire type -") + "</option>" +
+      TYPES.map(function (t, i) {
+        return '<option value="' + i + '"' + (i === choisi ? " selected" : "") + ">" + ech(t.lib) + "</option>";
+      }).join("");
     $("r-deb").value = r.d;
     $("r-fin").value = r.f;
     $("r-pause").value = r.p;
@@ -653,6 +679,19 @@
       mo--; if (mo < 0) { mo = 11; an--; } tout(); });
     $("mois-apres").addEventListener("click", function () {
       mo++; if (mo > 11) { mo = 0; an++; } tout(); });
+
+    /* Un horaire type pose les trois champs ; le reste du mois se recalcule,
+       et les jours déjà corrigés à la main ne bougent pas. */
+    $("r-type").addEventListener("change", function () {
+      var i = $("r-type").value;
+      if (i === "") return;
+      var t = TYPES[parseInt(i, 10)];
+      if (!t) return;
+      var r = refDe(qui.id);
+      r.d = t.d; r.f = t.f; r.p = String(t.p);
+      garderRef(qui.id, r);
+      construire(); rendreRef(); rendreIdentite(); dessinerJours(); calculer();
+    });
 
     ["r-deb", "r-fin"].forEach(function (id) {
       $(id).addEventListener("blur", function () {
