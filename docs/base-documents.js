@@ -207,37 +207,36 @@
         .catch(function () {});
     }, true);
 
-    /* Les productions, par les deux chemins qu'elles prennent : le Word et le
-       classeur. Le classeur y manquait, et un état de parc téléchargé ne
-       laissait aucune trace dans « Mes documents ». Mesuré le 16 septembre
-       2026. */
-    var enrober = function (objet, typeDefaut) {
-      if (!objet || !objet.telecharger || objet.telecharger.__garde) return false;
-      var vrai = objet.telecharger;
-      var enrobe = function (octets, nom, type) {
-        try {
-          var t = type || typeDefaut || "application/octet-stream";
-          var blob = (octets && typeof octets.size === "number") ? octets : new Blob([octets], { type: t });
-          enregistrer(r, { nom: nom, sorte: "produit", type: t, contenu: blob }).catch(function () {});
-        } catch (e) { /* garder un document ne doit jamais empêcher de le télécharger */ }
-        return vrai.apply(this, arguments);
-      };
-      enrobe.__garde = true;
-      objet.telecharger = enrobe;
-      return true;
-    };
-    var poser = function () {
-      var a = enrober(window.AuditExport, "application/octet-stream");
-      var b = enrober(window.TableurExport,
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-      return a || b;
-    };
-    poser();
-    var essais = 0;
-    var t = setInterval(function () {
-      poser();
-      if (++essais > 40) clearInterval(t);
-    }, 250);
+    /* LES PRODUCTIONS, TOUTES, PAR LE SEUL GESTE QU'ELLES PARTAGENT.
+
+       Enrober les deux générateurs ne suffisait pas : un PDF, un zip, un
+       fichier produit par un écran qui n'en passe pas par eux repartait dans
+       les téléchargements sans laisser de trace. Or tout téléchargement, d'où
+       qu'il vienne, finit par le clic sur un lien porteur de « download ».
+       C'est donc là qu'on écoute, en capture, et l'on garde le fichier quel
+       que soit son format : Word, classeur, PDF, image, archive.
+       Demande du 16 septembre 2026 : « la base doit recevoir tout type de
+       document, dès qu'il est téléchargé il sera dans la base ». */
+    document.addEventListener("click", function (ev) {
+      var a = ev.target && ev.target.closest ? ev.target.closest("a[download]") : null;
+      if (!a) return;
+      if (a.hasAttribute("data-sans-base")) return;   /* un fichier qui SORT de la base n'y rentre pas une seconde fois */
+      var href = a.getAttribute("href") || "";
+      if (!href) return;
+      var interne = /^blob:/i.test(href) || /^data:/i.test(href) ||
+        (a.href && a.href.indexOf(location.origin) === 0);
+      if (!interne) return;                       /* un lien vers l'extérieur n'est pas un document produit */
+      var nom = a.getAttribute("download") || (a.href.split("/").pop() || "document");
+      var url = a.href;
+      /* Un même fichier cliqué deux fois de suite ne rentre qu'une fois. */
+      if (accrocher.__dernier === nom + "|" + url) return;
+      accrocher.__dernier = nom + "|" + url;
+      setTimeout(function () {
+        fetch(url).then(function (rep) { return rep.blob(); }).then(function (blob) {
+          return enregistrer(r, { nom: nom, sorte: "produit", type: blob.type || "", contenu: blob });
+        }).catch(function () { /* garder un document ne doit jamais gêner son téléchargement */ });
+      }, 0);
+    }, true);
   }
 
   if (document.readyState === "loading")

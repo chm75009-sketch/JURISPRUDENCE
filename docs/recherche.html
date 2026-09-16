@@ -2723,8 +2723,13 @@ async function collecter(){
 function telecharger(nom, contenu, type){
   const url = URL.createObjectURL(new Blob([contenu], {type}));
   const a = document.createElement("a");
-  a.href = url; a.download = nom; a.click();
-  setTimeout(()=>URL.revokeObjectURL(url), 5000);
+  a.href = url; a.download = nom;
+  /* Le lien entre dans la page avant d'être cliqué : un clic sur un noeud
+     détaché ne remonte pas jusqu'au document, et la base des documents, qui
+     écoute là, ne verrait jamais passer le fichier. */
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 5000);
 }
 function nomFichier(ext){
   const q = normaliser(etat.criteres.q).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50) || "recherche";
@@ -3084,6 +3089,8 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
+<script>window.RUBRIQUE_DOCS = "recherche";</script>
+<script src="base-documents.js"></script>
 <script src="assistant.js" defer></script>
 </body>
 </html>

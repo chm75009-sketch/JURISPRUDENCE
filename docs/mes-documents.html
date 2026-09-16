@@ -114,7 +114,12 @@
       var blob = (d.contenu && typeof d.contenu.size === "number")
         ? d.contenu : new Blob([d.contenu], { type: d.type || "text/plain" });
       var u = URL.createObjectURL(blob), a = document.createElement("a");
-      a.href = u; a.setAttribute("download", d.nom); document.body.appendChild(a); a.click();
+      a.href = u; a.setAttribute("download", d.nom);
+      /* Ce fichier SORT de la base : sans cette marque, l'accrochage
+         automatique le réenregistrerait à chaque téléchargement, et la
+         rubrique se remplirait de copies. */
+      a.setAttribute("data-sans-base", "1");
+      document.body.appendChild(a); a.click();
       setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 2000);
     });
   }
