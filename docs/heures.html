@@ -64,19 +64,23 @@
   .identite .q{color:var(--texte-3)}
   .identite .v{font-weight:600;text-align:right}
 
-  .ref{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:var(--e3) 0 0}
-  .ref label{display:flex;flex-direction:column;gap:5px}
-  .ref span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
-  .ref input{font-size:16px;min-height:46px;padding:8px 6px;text-align:center;
-    border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);color:var(--texte);width:100%;box-sizing:border-box}
-  /* Les sept jours de la semaine de référence. La règle porte l'identifiant
-     du bloc, non une classe : « sem » servait aussi aux lignes de la feuille
-     imprimée, et leur imposait cette grille de sept colonnes. */
-  #r-jours{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:var(--e3) 0 0}
-  #r-jours button{min-height:44px;padding:0;border-radius:var(--r1);
-    border:1px solid var(--filet-2);background:var(--surface);color:var(--texte-2);
-    font:600 14px system-ui;width:auto}
-  #r-jours button[aria-pressed="true"]{background:var(--accent-clair);border-color:var(--accent);color:var(--accent)}
+  /* LA SEMAINE DE RÉFÉRENCE : un bloc par jour, bâti comme les jours du mois,
+     avec une seconde ligne pour le service du soir. */
+  #r-sem{display:grid;gap:6px;margin:var(--e3) 0 0}
+  .jsem{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;
+    grid-template-areas:"q q" "s s";padding:9px 10px;border-radius:var(--r1);background:var(--creux)}
+  .jsem.hors{background:transparent;border:1px dashed var(--filet)}
+  .jsem .quand{grid-area:q;font:600 var(--t2)/1.25 system-ui}
+  .jsem .saisie{grid-area:s;display:grid;grid-template-columns:1fr 68px 68px 56px;gap:2px 6px}
+  .jsem .cap{font:600 10px/1.2 system-ui;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--texte-3);text-align:center;align-self:end;padding-bottom:1px}
+  .jsem .cap.g{text-align:left;padding-left:2px}
+  .jsem .lib{font:400 var(--t1)/1 system-ui;color:var(--texte-3);align-self:center}
+  .jsem select,.jsem input{width:100%;min-width:0;box-sizing:border-box;font-size:16px;
+    min-height:44px;padding:6px 4px;border:1px solid var(--filet-2);border-radius:var(--r1);
+    background:var(--surface);color:var(--texte)}
+  .jsem input{text-align:center}
+  .jsem select{padding-left:6px;padding-right:0}
 
   .jours{display:grid;gap:6px;margin:var(--e2) 0 0}
   .jour{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;
@@ -230,17 +234,13 @@
 
     <div class="bloc">
       <h2>Horaire de référence</h2>
-      <p class="doux">Celui du contrat. Il remplit d'avance tous les jours travaillés du mois,
-        et ne sert qu'à cela : chaque jour reste modifiable. Un horaire type le remplit en un geste,
-        et vous corrigez ensuite ce qui diffère.</p>
+      <p class="doux">La semaine du contrat, jour par jour. Elle remplit d'avance tous les jours
+        travaillés du mois et ne sert qu'à cela : chaque jour du mois reste modifiable. Un service
+        en coupure se saisit sur deux lignes, midi et soir. Un horaire type remplit les jours
+        travaillés en un geste, et vous corrigez ensuite ce qui diffère.</p>
       <label class="champ" style="margin:0 0 12px"><span>Horaire type</span>
         <select id="r-type" aria-label="Horaire type"></select></label>
-      <div class="ref">
-        <label><span>Début</span><input type="text" id="r-deb" inputmode="numeric" maxlength="5" placeholder="08:00"></label>
-        <label><span>Fin</span><input type="text" id="r-fin" inputmode="numeric" maxlength="5" placeholder="16:00"></label>
-        <label><span>Pause min</span><input type="text" id="r-pause" inputmode="numeric" maxlength="3" placeholder="60"></label>
-      </div>
-      <div id="r-jours"></div>
+      <div id="r-sem"></div>
       <div class="barre"><button type="button" class="second" id="r-appliquer">Remettre tout le mois à cet horaire</button></div>
     </div>
 

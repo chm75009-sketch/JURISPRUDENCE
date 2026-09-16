@@ -1222,6 +1222,80 @@
     }
     return m;
   }
+  /* ─────── L'ENTRETIEN TOMBE-T-IL SUR UN JOUR ET UNE HEURE DE TRAVAIL ? ──────
+
+     Une convocation fixée un jour de repos, ou à une heure où le salarié n'est
+     pas au travail, se retourne contre l'employeur : le temps de l'entretien
+     est du temps de travail, et le salarié n'a pas à venir sur son repos.
+     Mesuré le 16 septembre 2026 sur un serveur en coupure, convoqué un lundi,
+     son jour de repos, à dix heures, alors qu'il commence à midi.
+
+     La semaine de travail vient de l'écran « Décompte des heures », où elle est
+     saisie jour par jour, coupures comprises (clé « heures-reference »). Sans
+     elle, l'écran ne dit rien : il ne devine pas les horaires.              */
+  function sansAccentSimple(x) {
+    try {
+      return String(x == null ? "" : x).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    } catch (e) { return String(x == null ? "" : x).toLowerCase(); }
+  }
+  function semaineDuSalarie(nom) {
+    var cherche = sansAccentSimple(nom);
+    if (!cherche) return null;
+    var reg = null, refs = null;
+    try { reg = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) {}
+    try { refs = JSON.parse(localStorage.getItem("heures-reference") || "null"); } catch (e) {}
+    if (!refs) return null;
+    var id = null;
+    ((reg && reg.salaries) || []).forEach(function (x) {
+      var a = sansAccentSimple(String(x.nom || "") + " " + String(x.pre || ""));
+      var b = sansAccentSimple(String(x.pre || "") + " " + String(x.nom || ""));
+      if (!id && (a === cherche || b === cherche)) id = a;
+    });
+    if (!id && refs[cherche]) id = cherche;
+    var r = id ? refs[id] : null;
+    return r && r.sem ? r.sem : null;
+  }
+  var JOURS_SEM = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+  function minutesDe(t) {
+    var m = /^\s*(\d{1,2})\s*[:hH.]?\s*(\d{2})?/.exec(String(t == null ? "" : t));
+    return m ? parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0) : null;
+  }
+  function plagesDuJourSalarie(c) {
+    if (!c) return [];
+    if (c.plages) return c.plages;
+    var L = [];
+    if (c.d1 && c.f1) L.push([c.d1, c.f1]);
+    if (c.d2 && c.f2) L.push([c.d2, c.f2]);
+    return L;
+  }
+  function alerteHorsTravail(v) {
+    var sem = semaineDuSalarie(v.nom);
+    if (!sem || !v.eDate) return null;
+    var d = dateDe(v.eDate);
+    if (!d) return null;
+    var j = d.getDay(), c = sem[j] || sem[String(j)];
+    var plages = plagesDuJourSalarie(c);
+    if (!plages.length) {
+      return "L'entretien est fixé un " + JOURS_SEM[j] + ", qui est un jour de repos pour ce " +
+        "salarié d'après sa semaine de référence. Le temps de l'entretien est du temps de travail : " +
+        "choisissez un jour travaillé, ou son accord écrit et le paiement du temps passé.";
+    }
+    var quoi = plages.map(function (x) { return x[0] + " à " + x[1]; }).join(" et ");
+    var h = minutesDe(v.eHeure);
+    if (h === null) return null;
+    var dedans = plages.some(function (x) {
+      var a = minutesDe(x[0]), b = minutesDe(x[1]);
+      if (a === null || b === null) return false;
+      if (b <= a) b += 1440;
+      var t = h < a ? h + 1440 : h;
+      return t >= a && t <= b;
+    });
+    if (dedans) return null;
+    return "L'heure de l'entretien tombe en dehors du service de ce salarié : le " + JOURS_SEM[j] +
+      ", il travaille de " + quoi + ". Choisissez une heure comprise dans ce service.";
+  }
+
   function alerteManques(m, quoi) {
     return { manque: true, t: "Cette " + quoi + " ne peut pas être envoyée en l'état : " +
       m.length + " information" + (m.length > 1 ? "s" : "") + " manque" + (m.length > 1 ? "nt" : "") + ".",
@@ -1292,6 +1366,7 @@
     var m = manques(v, !!S.entretien);
     if (m.length) alertes.push(alerteManques(m, S.entretien ? "convocation" : "lettre"));
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
+    if (S.entretien) { var hb = alerteHorsTravail(v); if (hb) alertes.push(hb); }
     return { blocs: b, dates: dates, alertes: alertes,
       loi: ["L1332-1", "L1332-2", "L1332-4", "L1332-5", "R1332-1"] };
   }
@@ -1365,6 +1440,8 @@
     var alertes = [];
     var m = manques(v, true);
     if (m.length) alertes.push(alerteManques(m, "convocation"));
+    var hors = alerteHorsTravail(v);
+    if (hors) alertes.push(hors);
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
     alertes.push("Vérifiez avant l'envoi qu'aucune protection ne s'applique : représentant du personnel (autorisation de l'inspection du travail), maternité (" + ref(["L1225-4"]) + "), accident du travail (" + ref(["L1226-9"]) + ").");
     return { blocs: b, dates: dates, alertes: alertes,

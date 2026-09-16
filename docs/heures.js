@@ -148,19 +148,78 @@
   var VERROU = false;                   /* le mois affiché est-il clos      */
   var semaines = [];
 
+  /* LA SEMAINE DE RÉFÉRENCE, JOUR PAR JOUR, AVEC LES COUPURES.
+
+     Un horaire unique pour toute la semaine ne dit pas la restauration : un
+     serveur fait 12h00-15h00 et 19h00-23h00 le mardi, 15h30-23h00 le samedi,
+     et se repose le lundi et le jeudi. Chaque jour porte donc ses plages, une
+     ou deux, et sa pause. L'ancien format, un début, une fin et des jours
+     cochés, est repris tel quel à la première lecture. Demande du
+     16 septembre 2026, après une convocation fixée un jour de repos. */
   function refDe(id) {
     var t = lireCle(CLE_REF, {});
     var r = t[id] || {};
-    return {
-      d: r.d || "09:00",
-      f: r.f || "17:00",
-      p: r.p == null ? 60 : r.p,
-      jours: r.jours || { 1: true, 2: true, 3: true, 4: true, 5: true, 6: false, 0: false },
-      /* L'adresse du salarié vit ici aussi : c'est la seule chose qu'on
-         ajoute au registre, et elle ne sert qu'à lui envoyer son relevé. */
-      courriel: r.courriel || "",
-    };
+    var sem = r.sem;
+    if (!sem) {
+      sem = {};
+      var jours = r.jours || { 1: true, 2: true, 3: true, 4: true, 5: true, 6: false, 0: false };
+      for (var k = 0; k < 7; k++) {
+        sem[k] = jours[k]
+          ? { d1: r.d || "09:00", f1: r.f || "17:00", d2: "", f2: "", p: r.p == null ? "60" : String(r.p) }
+          : null;
+      }
+    }
+    for (var j = 0; j < 7; j++) {
+      var c = sem[j];
+      if (!c) { sem[j] = null; continue; }
+      if (c.plages) {
+        c.d1 = (c.plages[0] || ["", ""])[0]; c.f1 = (c.plages[0] || ["", ""])[1];
+        c.d2 = (c.plages[1] || ["", ""])[0]; c.f2 = (c.plages[1] || ["", ""])[1];
+        delete c.plages;
+      }
+      c.d1 = c.d1 || ""; c.f1 = c.f1 || ""; c.d2 = c.d2 || ""; c.f2 = c.f2 || "";
+      if (c.p == null) c.p = "0";
+    }
+    return { sem: sem, courriel: r.courriel || "" };
   }
+
+  /* Les plages réellement travaillées d'un jour : une, ou deux en coupure. Les
+     quatre heures sont gardées telles qu'elles sont tapées, même à moitié :
+     sinon la seconde plage disparaîtrait avant d'être finie. */
+  function plagesDe(c) {
+    if (!c) return [];
+    var L = [];
+    if (c.d1 && c.f1) L.push([c.d1, c.f1]);
+    if (c.d2 && c.f2) L.push([c.d2, c.f2]);
+    return L;
+  }
+
+  function baseDuJour(c) {
+    var plages = plagesDe(c);
+    if (!plages.length) return { n: "repos", d: "09:00", f: "17:00", p: "0" };
+    var deb = plages[0][0], fin = plages[plages.length - 1][1];
+    var a = enMinutes(deb), b = enMinutes(fin);
+    if (b <= a) b += 1440;
+    var travail = 0;
+    plages.forEach(function (x) {
+      var d1 = enMinutes(x[0]), f1 = enMinutes(x[1]);
+      if (d1 === null || f1 === null) return;
+      if (f1 <= d1) f1 += 1440;
+      travail += f1 - d1;
+    });
+    /* Ce qui sépare deux services, la coupure, se compte en pause : la grille du
+       mois garde une ligne par jour, et le total de la journée reste juste. */
+    var pause = (b - a) - travail + (parseInt(c.p, 10) || 0);
+    return { n: "travail", d: deb, f: fin, p: String(pause < 0 ? 0 : pause) };
+  }
+
+  function direPlages(c) {
+    var plages = plagesDe(c);
+    if (!plages.length) return "repos";
+    return plages.map(function (x) { return x[0] + " - " + x[1]; }).join(" et ") +
+      (parseInt(c.p, 10) ? ", pause " + parseInt(c.p, 10) + " min" : "");
+  }
+
   function garderRef(id, r) {
     var t = lireCle(CLE_REF, {});
     t[id] = r;
@@ -208,11 +267,7 @@
     lignes = [];
     for (var j = 1; j <= dernier; j++) {
       var sem = new Date(an, mo, j).getDay();
-      var travaille = !!r.jours[sem];
-      var base = {
-        n: travaille ? "travail" : "repos",
-        d: r.d, f: r.f, p: String(r.p),
-      };
+      var base = baseDuJour(r.sem[sem]);
       var saisi = m.jours[String(j)];
       lignes.push({
         j: j, sem: sem, base: base,
@@ -393,9 +448,12 @@
     return t;
   }
   function hebdoContrat() {
-    var r = refDe(qui.id), n = 0;
-    for (var k = 0; k < 7; k++) if (r.jours[k]) n++;
-    return duree({ n: "travail", d: r.d, f: r.f, p: r.p }) * n;
+    var r = refDe(qui.id), t = 0;
+    for (var k = 0; k < 7; k++) {
+      var b = baseDuJour(r.sem[k]);
+      if (b.n === "travail") t += duree(b);
+    }
+    return t;
   }
 
   function calculer() {
@@ -443,41 +501,92 @@
     if (qui.sor) l.push(["Sortie", enFrancais(qui.sor) || qui.sor]);
     if (qui.part) l.push(["Temps de travail", qui.part]);
     l.push(["Semaine de référence", nbh(hebdoContrat())]);
+    var r = refDe(qui.id);
+    for (var k = 1; k <= 7; k++) {
+      var j = k % 7, c = r.sem[j];
+      if (c) l.push([JOURS_LONG[j], direPlages(c)]);
+    }
     $("identite").innerHTML = l.map(function (x) {
       return '<div class="l"><span class="q">' + ech(x[0]) + '</span><span class="v">' + ech(x[1]) + "</span></div>";
     }).join("");
   }
 
+  var JOURS_LONG = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+
+  var JOURS_LONG = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+
   function rendreRef() {
     var r = refDe(qui.id);
     $("s-courriel").value = r.courriel || "";
-    var choisi = -1;
-    TYPES.forEach(function (t, i) {
-      if (t.d === r.d && t.f === r.f && String(t.p) === String(r.p)) choisi = i;
-    });
-    $("r-type").innerHTML = '<option value="">' +
-      (choisi < 0 ? "Horaire propre à ce salarié" : "- choisir un horaire type -") + "</option>" +
-      TYPES.map(function (t, i) {
-        return '<option value="' + i + '"' + (i === choisi ? " selected" : "") + ">" + ech(t.lib) + "</option>";
-      }).join("");
-    $("r-deb").value = r.d;
-    $("r-fin").value = r.f;
-    $("r-pause").value = r.p;
+    $("r-type").innerHTML = '<option value="">- appliquer un horaire type aux jours travaill\u00e9s -</option>' +
+      TYPES.map(function (t, i) { return '<option value="' + i + '">' + ech(t.lib) + "</option>"; }).join("");
+
     var h = "";
     for (var k = 1; k <= 7; k++) {
-      var j = k % 7;
-      h += '<button type="button" data-j="' + j + '" aria-pressed="' + (r.jours[j] ? "true" : "false") +
-        '" aria-label="' + COURT[j] + '">' + LETTRE[j] + "</button>";
+      var j = k % 7, c = r.sem[j];
+      h += '<div class="jsem' + (c ? "" : " hors") + '" data-j="' + j + '">' +
+        '<div class="quand">' + JOURS_LONG[j] + "</div>" +
+        '<div class="saisie">' +
+        '<span class="cap g">Service</span><span class="cap">D\u00e9but</span><span class="cap">Fin</span><span class="cap">Pause min</span>' +
+        '<select data-q="etat"><option value="repos"' + (c ? "" : " selected") + ">Repos</option>" +
+        '<option value="travail"' + (c ? " selected" : "") + ">Travail</option></select>" +
+        (c ? champTexte("d1", c.d1, "12:00") + champTexte("f1", c.f1, "15:00") + champTexte("p", c.p, "0") +
+             '<span class="cap g">2e service</span><span class="cap">D\u00e9but</span><span class="cap">Fin</span><span class="cap"></span>' +
+             '<span class="lib">coupure</span>' + champTexte("d2", c.d2, "19:00") +
+             champTexte("f2", c.f2, "23:00") + "<span></span>"
+           : "<span></span><span></span><span></span>") +
+        "</div></div>";
     }
-    $("r-jours").innerHTML = h;
-    Array.prototype.forEach.call($("r-jours").querySelectorAll("button"), function (b) {
-      b.addEventListener("click", function () {
-        var rr = refDe(qui.id), j = b.getAttribute("data-j");
-        rr.jours[j] = !rr.jours[j];
-        garderRef(qui.id, rr);
-        construire(); rendreRef(); rendreIdentite(); dessinerJours(); calculer();
+    $("r-sem").innerHTML = h;
+
+    Array.prototype.forEach.call($("r-sem").querySelectorAll("[data-q]"), function (el) {
+      if (el.tagName === "SELECT") {
+        el.addEventListener("change", function () { lireSemaine(true); });
+        return;
+      }
+      el.addEventListener("input", function () {
+        if (el.getAttribute("data-q") === "p") el.value = el.value.replace(/[^0-9]/g, "");
+        lireSemaine(false);
+      });
+      el.addEventListener("blur", function () {
+        if (el.getAttribute("data-q") !== "p") el.value = normaliser(el.value);
+        lireSemaine(false);
       });
     });
+  }
+
+  function champTexte(quoi, valeur, invite) {
+    return '<input type="text" data-q="' + quoi + '" value="' + ech(valeur || "") +
+      '" placeholder="' + invite + '" inputmode="numeric" maxlength="5" aria-label="' + quoi + '">';
+  }
+
+  /* On relit les sept jours d'un coup. L'\u00e9diteur n'est redessin\u00e9 que si un jour
+     change d'\u00e9tat : sinon la case qu'on remplit dispara\u00eetrait sous les doigts. */
+  function lireSemaine(redessiner) {
+    var r = refDe(qui.id), sem = {};
+    Array.prototype.forEach.call($("r-sem").querySelectorAll(".jsem"), function (bloc) {
+      var j = bloc.getAttribute("data-j");
+      var v = function (q) {
+        var el = bloc.querySelector('[data-q="' + q + '"]');
+        return el ? net(el.value) : "";
+      };
+      if (v("etat") !== "travail") { sem[j] = null; return; }
+      var c = { d1: v("d1"), f1: v("f1"), d2: v("d2"), f2: v("f2"), p: v("p") || "0" };
+      /* Un jour qui passe de repos \u00e0 travail n'a pas encore d'heures : on lui
+         donne celles d'un autre jour travaill\u00e9, sinon 9 heures 17 heures. */
+      if (!c.d1 && !c.f1 && !r.sem[j]) {
+        var modele = null;
+        for (var k = 0; k < 7 && !modele; k++) if (r.sem[k]) modele = r.sem[k];
+        c = modele
+          ? { d1: modele.d1, f1: modele.f1, d2: modele.d2, f2: modele.f2, p: modele.p }
+          : { d1: "09:00", f1: "17:00", d2: "", f2: "", p: "60" };
+      }
+      sem[j] = c;
+    });
+    garderRef(qui.id, { sem: sem, courriel: r.courriel });
+    construire();
+    if (redessiner) rendreRef();
+    rendreIdentite(); dessinerJours(); calculer();
   }
 
   function rendreMois() {
@@ -851,39 +960,15 @@
       if (i === "") return;
       var t = TYPES[parseInt(i, 10)];
       if (!t) return;
-      var r = refDe(qui.id);
-      r.d = t.d; r.f = t.f; r.p = String(t.p);
-      garderRef(qui.id, r);
+      var r = refDe(qui.id), sem = {}, aucun = true;
+      for (var k = 0; k < 7; k++) if (r.sem[k]) aucun = false;
+      for (var j = 0; j < 7; j++) {
+        var travaille = aucun ? (j >= 1 && j <= 5) : !!r.sem[j];
+        sem[j] = travaille ? { d1: t.d, f1: t.f, d2: "", f2: "", p: String(t.p) } : null;
+      }
+      garderRef(qui.id, { sem: sem, courriel: r.courriel });
+      $("r-type").value = "";
       construire(); rendreRef(); rendreIdentite(); dessinerJours(); calculer();
-    });
-
-    ["r-deb", "r-fin"].forEach(function (id) {
-      $(id).addEventListener("blur", function () {
-        var r = refDe(qui.id);
-        $(id).value = normaliser($(id).value);
-        if (id === "r-deb") r.d = $(id).value; else r.f = $(id).value;
-        garderRef(qui.id, r);
-        construire(); rendreIdentite(); dessinerJours(); calculer();
-      });
-    });
-    $("r-pause").addEventListener("input", function () {
-      var r = refDe(qui.id);
-      $("r-pause").value = $("r-pause").value.replace(/[^0-9]/g, "");
-      r.p = $("r-pause").value;
-      garderRef(qui.id, r);
-      construire(); rendreIdentite(); dessinerJours(); calculer();
-    });
-
-    /* Remettre le mois à l'horaire du contrat : on efface les écarts, pas le
-       mois. Les rectificatifs et les réclamations restent. */
-    $("r-appliquer").addEventListener("click", function () {
-      var m = moisDe();
-      if (m.clos && m.clos.le) { window.alert("Le mois est clos : il ne se réécrit plus."); return; }
-      if (!window.confirm("Remettre tous les jours de " + MOIS[mo] + " " + an +
-        " à l'horaire de référence ? Les horaires corrigés à la main seront perdus.")) return;
-      m.jours = {};
-      garderMois(m);
-      construire(); dessinerJours(); calculer();
     });
 
     $("t-retenu").addEventListener("input", function () {
