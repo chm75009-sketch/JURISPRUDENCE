@@ -183,6 +183,12 @@
   #impression .tot{margin:12px 0 0;font-size:13px}
   #impression .sign{margin:22px 0 0;font-size:13px;line-height:2.2}
   #impression .pied{margin:18px 0 0;font-size:10.5px;color:#444}
+  /* La déclaration du conducteur, sur le même papier que le récapitulatif. */
+  #impression p{font-size:12.5px;line-height:1.6;margin:0 0 8px}
+  #impression .i-sur{font-size:11px;color:#444;margin:0 0 10px}
+  #impression .i-puce{margin:0 0 8px;padding-left:14px;text-indent:-14px}
+  #impression .i-note{font-size:10.5px;color:#444;margin:16px 0 0;
+    border-top:1px solid #bbb;padding-top:8px}
   @page{margin:14mm}
   @media print{
     .haut,.mois,.etat,.bloc,.barre,details,.note-page,#e-vide,.maj-dispo,
@@ -324,6 +330,24 @@
       <div class="barre">
         <button type="button" id="b-imprimer">Imprimer pour signature sur place</button>
         <button type="button" class="second" id="b-mail">Envoyer le récapitulatif au salarié</button>
+      </div>
+    </div>
+
+    <!-- L'IMPRIMÉ DU CONDUCTEUR, JOINT AU DÉCOMPTE. Demande du 16 septembre
+         2026. L'entreprise de transport obtient de l'administration l'existence,
+         la catégorie et la validité du permis de ses conducteurs, non le nombre
+         de points : c'est le conducteur qui déclare ce point-là. -->
+    <div class="bloc">
+      <h2>Déclaration du conducteur, à joindre au décompte</h2>
+      <p class="doux">L'imprimé que le salarié signe en même temps que son relevé du mois : il y
+        déclare que son permis est valable, qu'il ne fait l'objet d'aucune rétention, suspension,
+        annulation ni invalidation, qu'il n'a pas perdu la totalité de ses points, et il s'engage à
+        prévenir l'entreprise sans délai si cela change. Le numéro et la catégorie du permis sont
+        repris de sa fiche dans <a href="flotte.html">Flotte et conducteurs</a> ; ce qui manque
+        laisse des pointillés à remplir à la main.</p>
+      <div class="barre">
+        <button type="button" id="b-decl-imp">Imprimer la déclaration</button>
+        <button type="button" class="second" id="b-decl">La déclaration en Word</button>
       </div>
     </div>
 

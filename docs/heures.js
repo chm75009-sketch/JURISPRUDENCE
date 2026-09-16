@@ -220,6 +220,38 @@
       (parseInt(c.p, 10) ? ", pause " + parseInt(c.p, 10) + " min" : "");
   }
 
+  /* L'HORAIRE DE LA SEMAINE EN UNE PHRASE.
+
+     Le récapitulatif Word écrivait encore « r.d - r.f, pause r.p », c'est-à-dire
+     l'ancien modèle à trois champs : depuis que la référence se tient jour par
+     jour, avec les coupures, ces trois-là n'existent plus et le document sortait
+     « undefined - undefined ». Les jours qui portent le même horaire se
+     regroupent, sinon la phrase ferait sept lignes. */
+  function bas(j) { return JOURS_LONG[j].toLowerCase(); }
+  function direSemaine(r) {
+    var ordre = [1, 2, 3, 4, 5, 6, 0], blocs = [], en = null;
+    ordre.forEach(function (j) {
+      var dit = direPlages(r.sem && r.sem[j]);
+      if (en && en.dit === dit) { en.fin = j; return; }
+      en = { dit: dit, deb: j, fin: j };
+      blocs.push(en);
+    });
+    function quand(b, article) {
+      if (b.deb === b.fin) return (article ? "le " : "") + bas(b.deb);
+      var i = ordre.indexOf(b.deb), k = ordre.indexOf(b.fin);
+      if (k - i === 1) return bas(b.deb) + " et " + bas(b.fin);
+      return "du " + bas(b.deb) + " au " + bas(b.fin);
+    }
+    var L = blocs.filter(function (b) { return b.dit !== "repos"; }).map(function (b) {
+      return quand(b, true) + ", " + b.dit;
+    });
+    var repos = blocs.filter(function (b) { return b.dit === "repos"; }).map(function (b) {
+      return quand(b, false);
+    });
+    if (!L.length) return "aucun horaire de référence n'est renseigné.";
+    return L.join(" ; ") + (repos.length ? ". Repos : " + repos.join(", ") + "." : ".");
+  }
+
   function garderRef(id, r) {
     var t = lireCle(CLE_REF, {});
     t[id] = r;
@@ -510,8 +542,6 @@
       return '<div class="l"><span class="q">' + ech(x[0]) + '</span><span class="v">' + ech(x[1]) + "</span></div>";
     }).join("");
   }
-
-  var JOURS_LONG = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
   var JOURS_LONG = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
 
@@ -896,7 +926,7 @@
       { k: "h1", t: "Décompte des heures de travail" },
       { k: "p", t: "Salarié : " + qui.nom + (qui.emp ? ", " + qui.emp : "") },
       { k: "p", t: "Mois : " + MOIS[mo] + " " + an },
-      { k: "p", t: "Horaire de référence : " + r.d + " - " + r.f + ", pause " + r.p + " minutes." },
+      { k: "p", t: "Horaire de référence : " + direSemaine(r) },
       { k: "table", head: T[0], rows: T.slice(1) },
       { k: "p", t: "Total calculé par les jours : " + nbh(totalMois()) + "." },
       { k: "p", t: "Total retenu par l'entreprise : " +
@@ -925,6 +955,106 @@
     var titre = "Décompte des heures - " + qui.nom + " - " + MOIS[mo] + " " + an;
     var nom = "decompte-heures-" + qui.id + "-" + an + "-" + ("0" + (mo + 1)).slice(-2) + ".docx";
     return { octets: window.AuditExport.docx(items, titre), nom: nom, titre: titre };
+  }
+
+  /* ───────────── L'IMPRIMÉ QUE LE CONDUCTEUR SIGNE AVEC SON DÉCOMPTE ──────
+
+     Demande du 16 septembre 2026 : « avec le décompte des heures, on joindra
+     un imprimé type que tu feras et que le salarié signera en s'engageant à
+     dire qu'il n'a pas perdu tous ses points ».
+
+     Pourquoi une déclaration, et pas une vérification. L'entreprise de
+     transport public routier de voyageurs ou de marchandises obtient bien de
+     l'administration, pour les personnes qu'elle emploie comme conducteur,
+     « les informations relatives à l'existence, la catégorie et la validité
+     du permis de conduire » : article L. 225-5, 11°, du code de la route
+     (LEGIARTI000054724576), et R. 225-5, I, 4° pour l'accès direct de ses
+     personnels habilités (LEGIARTI000050924285). Le nombre de points, lui,
+     n'est pas dans cette liste : l'accès aux informations enregistrées au
+     titre de l'article L. 225-1 est réservé aux autorités que L. 225-4
+     énumère (LEGIARTI000033460322), où l'employeur ne figure pas. D'où
+     l'imprimé : c'est le conducteur qui déclare.
+
+     Ce qu'il déclare tient au texte : « en cas de retrait de la totalité des
+     points, l'intéressé reçoit de l'autorité administrative l'injonction de
+     remettre son permis de conduire au préfet de son département de résidence
+     et perd le droit de conduire un véhicule », article L. 223-5, I
+     (LEGIARTI000039099768). Toutes ces lectures ont été faites deux fois, au
+     relais Légifrance, le 16 septembre 2026.
+
+     Les données du permis viennent de la fiche conducteur de la flotte : ce
+     qui est déjà saisi ne se retape pas, et ce qui manque laisse des pointillés. */
+  function permisDu(id) {
+    try {
+      var t = JSON.parse(window.localStorage.getItem("flotte-conducteurs") || "{}");
+      return t[id] || {};
+    } catch (e) { return {}; }
+  }
+
+  function pointilles(v, n) {
+    v = net(v);
+    return v || new Array((n || 22) + 1).join(".");
+  }
+
+  function declarationItems() {
+    var p = entreprise(), f = permisDu(qui.id);
+    var items = [
+      { k: "sur", t: (p.denomination || "") + (p.adresse ? " - " + p.adresse : "") },
+      { k: "h1", t: "Déclaration du conducteur sur la validité de son permis de conduire" },
+      { k: "p", t: "À joindre au décompte des heures du mois de " + MOIS[mo] + " " + an + "." },
+      { k: "p", t: "Je soussigné " + (qui.nom || pointilles("", 30)) +
+        (qui.emp ? ", " + qui.emp : "") + ", salarié de " + (p.denomination || pointilles("", 24)) +
+        ", déclare ce qui suit." },
+      { k: "puce", t: "Je suis titulaire du permis de conduire de la catégorie " +
+        pointilles(f.permisCat, 12) + ", délivré sous le numéro " + pointilles(f.permisNum, 18) +
+        ", en cours de validité" + (net(f.permisFin) ? " jusqu'au " + enFrancais(f.permisFin) : "") + "." },
+      { k: "puce", t: "Ce permis ne fait l'objet, à ce jour, d'aucune rétention, suspension, " +
+        "annulation ni invalidation." },
+      { k: "puce", t: "Il ne m'a pas été retiré la totalité de mes points, et je n'ai reçu aucune " +
+        "injonction de remettre mon permis de conduire au préfet." },
+      { k: "puce", t: "Je m'engage à informer l'entreprise sans délai, et par écrit, de toute " +
+        "décision qui affecterait la validité de mon permis : rétention, suspension, annulation, " +
+        "invalidation, ou retrait de la totalité des points." },
+      { k: "puce", t: "Lorsque ma catégorie l'exige, la visite médicale du permis est à jour" +
+        (net(f.visitePermisFin) ? ", valable jusqu'au " + enFrancais(f.visitePermisFin) : "") + "." },
+      { k: "note", t: "Le retrait de la totalité des points fait perdre le droit de conduire : " +
+        "l'intéressé reçoit l'injonction de remettre son permis au préfet (code de la route, " +
+        "article L. 223-5, I). L'entreprise de transport public routier peut obtenir de " +
+        "l'administration l'existence, la catégorie et la validité du permis des personnes qu'elle " +
+        "emploie comme conducteur (L. 225-5, 11°, et R. 225-5, I, 4°), mais non le nombre de points " +
+        "restants : c'est pourquoi cette déclaration est demandée au conducteur lui-même." },
+      { k: "p", t: " " },
+      { k: "p", t: "Fait à ........................, le ........................" },
+      { k: "p", t: "Signature du salarié :" },
+      { k: "p", t: " " },
+      { k: "p", t: "Pour l'entreprise, " + (p.responsable || "") },
+    ];
+    return items;
+  }
+
+  function declarationWord() {
+    if (!window.AuditExport) return;
+    var titre = "Déclaration du conducteur - " + qui.nom + " - " + MOIS[mo] + " " + an;
+    var nom = "declaration-conducteur-" + qui.id + "-" + an + "-" + ("0" + (mo + 1)).slice(-2) + ".docx";
+    window.AuditExport.telecharger(window.AuditExport.docx(declarationItems(), titre), nom,
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  }
+
+  /* Le même imprimé, sur le papier de l'imprimante : la zone d'impression sert
+     déjà au récapitulatif, elle porte ici la déclaration le temps du tirage. */
+  function declarationImprimer() {
+    var z = $("impression");
+    if (!z) return;
+    var garde = z.innerHTML;
+    z.innerHTML = declarationItems().map(function (x) {
+      if (x.k === "sur") return '<p class="i-sur">' + ech(x.t) + "</p>";
+      if (x.k === "h1") return "<h1>" + ech(x.t) + "</h1>";
+      if (x.k === "puce") return '<p class="i-puce">- ' + ech(x.t) + "</p>";
+      if (x.k === "note") return '<p class="i-note">' + ech(x.t) + "</p>";
+      return "<p>" + ech(x.t) + "</p>";
+    }).join("");
+    window.print();
+    setTimeout(function () { z.innerHTML = garde; }, 600);
   }
 
   /* ──────────────────────────────── branchements ────────────────────────── */
@@ -1050,6 +1180,8 @@
     });
     $("b-excel").addEventListener("click", classeur);
     $("b-word").addEventListener("click", word);
+    $("b-decl").addEventListener("click", declarationWord);
+    $("b-decl-imp").addEventListener("click", declarationImprimer);
 
     tout();
   }

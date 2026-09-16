@@ -201,6 +201,9 @@
     document.addEventListener("change", function (ev) {
       var el = ev.target;
       if (!el || el.tagName !== "INPUT" || el.type !== "file") return;
+      /* Un écran qui enregistre lui-même son dépôt, pour y joindre une note,
+         porte cette marque : sans elle, le fichier entrerait deux fois. */
+      if (el.hasAttribute("data-sans-base")) return;
       var f = el.files && el.files[0];
       if (!f) return;
       enregistrer(r, { nom: f.name, sorte: "depose", type: f.type || "", contenu: f })

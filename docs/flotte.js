@@ -20,6 +20,7 @@
   var CLE_V = "flotte-vehicules";
   var CLE_C = "flotte-conducteurs";
   var CLE_REG = "registre-personnel";
+  var CLE_IMP = "flotte-import-dernier";   /* ce que la dernière importation a ajouté */
 
   var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
     "août", "septembre", "octobre", "novembre", "décembre"];
@@ -106,6 +107,7 @@
     { c: "immat", lib: "Immatriculation", t: "text", maj: true, large: false },
     { c: "genre", lib: "Genre", t: "select", opts: GENRES },
     { c: "marque", lib: "Marque et modèle", t: "text" },
+    { c: "conducteur", lib: "Chauffeur attitré", t: "salarie" },
     { c: "mec", lib: "1re mise en circulation", t: "date" },
     { c: "km", lib: "Kilométrage", t: "num" },
     { c: "kmLe", lib: "Relevé le", t: "date" },
@@ -150,6 +152,22 @@
     { c: "attestConduite", lib: "Attestation médicale de conduite, délivrée le", t: "date" },
     { c: "vehicule", lib: "Véhicule habituel", t: "vehicule" },
     { c: "note", lib: "Observations", t: "textarea", large: true },
+  ];
+
+  /* LES PIÈCES QUI SE DÉPOSENT VÉHICULE PAR VÉHICULE.
+
+     Le certificat d'immatriculation et le procès-verbal du contrôle technique
+     ne sont pas des dates : ce sont des papiers, que le conducteur doit
+     présenter à toute réquisition des agents, avec son titre de conduite,
+     article R. 233-1 du code de la route, I, 1°, 2° et 7°
+     (LEGIARTI000053304279, deux lectures concordantes le 16 septembre 2026).
+     Les avoir dans l'application, c'est pouvoir les renvoyer au chauffeur le
+     jour où il les a laissés au dépôt. Le fichier entre dans la base des
+     documents, rubrique flotte, sous le nom de la pièce et l'immatriculation. */
+  var PIECES = [
+    { c: "grise", lib: "Carte grise" },
+    { c: "pvct", lib: "Procès-verbal du contrôle technique" },
+    { c: "assurance", lib: "Attestation d'assurance" },
   ];
 
   var DU_FICHIER = "date portée au fichier de la flotte, à vérifier sur le justificatif";
@@ -294,6 +312,16 @@
           return '<option value="' + ech(v.id) + '"' + (v.id === net(valeur) ? " selected" : "") +
             ">" + ech(v.immat || "sans immatriculation") + "</option>";
         }).join("") + "</select>";
+    } else if (ch.t === "salarie") {
+      /* Le nom ne se retape pas : il vient du registre du personnel, comme
+         partout ailleurs dans l'application. */
+      var G = salaries();
+      h += '<select id="' + id + '" data-ch="' + ch.c + '"><option value="">- aucun -</option>' +
+        G.map(function (s) {
+          return '<option value="' + ech(s.id) + '"' + (s.id === net(valeur) ? " selected" : "") +
+            ">" + ech(s.nom) + "</option>";
+        }).join("") + "</select>";
+      if (!G.length) h += '<small class="aide">Le registre du personnel ne porte encore aucun salarié.</small>';
     } else if (ch.t === "textarea") {
       h += '<textarea id="' + id + '" data-ch="' + ch.c + '">' + ech(valeur) + "</textarea>";
     } else {
@@ -305,18 +333,45 @@
     return h + "</label>";
   }
 
-  function brancher(cadre, prefixe, lit, ecrit) {
+  function brancher(cadre, prefixe, lit, ecrit, apres) {
     Array.prototype.forEach.call(cadre.querySelectorAll("[data-ch]"), function (el) {
       var quand = (el.tagName === "SELECT" || el.type === "date") ? "change" : "input";
       el.addEventListener(quand, function () {
         var o = lit(), c = el.getAttribute("data-ch");
         var v = el.value;
         if (c === "immat") v = v.toUpperCase();
+        var avant = o[c];
         o[c] = v;
         ecrit(o);
+        if (apres) apres(c, v, avant, o);
         rendre();
       });
     });
+  }
+
+  /* LE CHAUFFEUR ATTITRÉ ET SON VÉHICULE, LES DEUX FACES DU MÊME LIEN.
+
+     Le véhicule porte son chauffeur, le conducteur porte son véhicule : si
+     les deux se saisissent séparément, ils finissent par se contredire. Ce
+     qui est écrit d'un côté s'écrit de l'autre, et le conducteur qui perd
+     son véhicule le perd des deux côtés. */
+  function lierVehiculeConducteur(idVehicule, idSalarie, idSalarieAvant) {
+    if (idSalarieAvant && idSalarieAvant !== idSalarie) {
+      var a = fiche(idSalarieAvant);
+      if (a.vehicule === idVehicule) { a.vehicule = ""; garderFiche(idSalarieAvant, a); }
+    }
+    if (!idSalarie) return;
+    var f = fiche(idSalarie);
+    if (f.vehicule !== idVehicule) { f.vehicule = idVehicule; garderFiche(idSalarie, f); }
+  }
+
+  function lierConducteurVehicule(idSalarie, idVehicule, idVehiculeAvant) {
+    var L = vehicules(), change = false;
+    L.forEach(function (v) {
+      if (v.id === idVehiculeAvant && v.conducteur === idSalarie) { v.conducteur = ""; change = true; }
+      if (idVehicule && v.id === idVehicule && v.conducteur !== idSalarie) { v.conducteur = idSalarie; change = true; }
+    });
+    if (change) garderVehicules(L);
   }
 
   /* ─────────────────────────────── les écrans ───────────────────────────── */
@@ -352,7 +407,7 @@
             }
             return champHtml(ch, val, "v" + v.id);
           }).join("") +
-          '</div><div class="actions">' +
+          "</div>" + piecesHtml(v) + '<div class="actions">' +
           '<button type="button" class="second" data-sup="' + ech(v.id) + '">Retirer ce véhicule</button>' +
           "</div></div>" : "") +
         "</div>";
@@ -370,7 +425,58 @@
         function (o) {
           var T = vehicules();
           garderVehicules(T.map(function (x) { return x.id === o.id ? o : x; }));
+        },
+        function (c, val, avant) {
+          if (c === "conducteur") lierVehiculeConducteur(v.id, val, avant);
         });
+      brancherPieces(cadre, v.id);
+    });
+  }
+
+  /* ─────────────────────────── les pièces du véhicule ───────────────────── */
+
+  function piecesHtml(v) {
+    var p = v.pieces || {};
+    return '<div class="pieces"><p class="pt">Pièces du véhicule</p>' +
+      PIECES.map(function (x) {
+        var d = p[x.c];
+        return '<div class="piece"><span class="pl">' + ech(x.lib) + "</span>" +
+          (d ? '<span class="pok">' + ech(d.nom) + ", déposée le " + ech(enFrancais(d.le)) + "</span>" +
+            '<button type="button" class="lien" data-piece-sup="' + ech(v.id) + "|" + x.c + '">Retirer</button>'
+            : '<span class="pnon">à déposer</span>') +
+          '<input type="file" data-sans-base="1" data-piece="' + ech(v.id) + "|" + x.c + '" ' +
+          'accept="image/*,.pdf,.jpg,.jpeg,.png,.heic" aria-label="' + ech(x.lib) + '"></div>';
+      }).join("") +
+      '<p class="doux">Les pièces déposées se retrouvent dans <a href="mes-documents.html">Mes documents</a>, ' +
+      "rubrique Flotte.</p></div>";
+  }
+
+  function brancherPieces(cadre, idV) {
+    Array.prototype.forEach.call(cadre.querySelectorAll("[data-piece]"), function (el) {
+      el.addEventListener("change", function () {
+        var f = el.files && el.files[0];
+        if (!f) return;
+        var cle = el.getAttribute("data-piece").split("|")[1];
+        var lib = ""; PIECES.forEach(function (x) { if (x.c === cle) lib = x.lib; });
+        var L = vehicules(), v = null;
+        L.forEach(function (x) { if (x.id === idV) v = x; });
+        if (!v) return;
+        function poser(idDoc) {
+          var T = vehicules();
+          T.forEach(function (x) {
+            if (x.id !== idV) return;
+            x.pieces = x.pieces || {};
+            x.pieces[cle] = { nom: f.name, le: iso(new Date()), doc: idDoc || 0 };
+          });
+          garderVehicules(T);
+          rendre();
+        }
+        if (window.Documents && window.Documents.disponible()) {
+          window.Documents.enregistrer("flotte", { nom: f.name, sorte: "depose", type: f.type || "",
+            contenu: f, note: lib + " - " + (v.immat || "véhicule sans immatriculation") })
+            .then(function (l) { poser(l.id); }, function () { poser(0); });
+        } else poser(0);
+      });
     });
   }
 
@@ -402,8 +508,75 @@
       if (!cadre || !ouvert["c" + s.id]) return;
       brancher(cadre, "c" + s.id,
         function () { return fiche(s.id); },
-        function (o) { garderFiche(s.id, o); });
+        function (o) { garderFiche(s.id, o); },
+        function (c, val, avant) {
+          if (c === "vehicule") lierConducteurVehicule(s.id, val, avant);
+        });
     });
+  }
+
+  /* ─────────────────── CE QUI MANQUE, VÉHICULE PAR VÉHICULE ───────────────
+
+     Un état de parc repris chez le client donne quatre colonnes : une
+     immatriculation, une marque, un genre, une mention de financement. Tout
+     le reste manque, et personne ne va ouvrir quatre-vingt-dix fiches pour
+     voir laquelle est incomplète. L'écran le dit lui-même, et chaque manque
+     ouvre la fiche à l'endroit voulu.
+     Demande du 16 septembre 2026 : « une fois le parc importé il faudrait que
+     l'application rajoute toutes informations qui lui sont indispensables,
+     contrôle technique, carte grise (à importer si besoin est), prochain
+     contrôle, chauffeur attitré, etc. » */
+  function manque(v) {
+    var M = [], p = v.pieces || {};
+    var roule = v.genre !== "remorque";
+    var lourd = v.genre === "pl" || v.genre === "tracteur" ||
+      v.genre === "commun" || v.genre === "public10";
+    if (!net(v.immat)) M.push("immatriculation");
+    if (!net(v.genre) || v.genre === "autre") M.push("genre du véhicule");
+    if (!net(v.ct)) M.push("date du dernier contrôle technique");
+    if (!p.grise) M.push("carte grise");
+    if (roule && !net(v.assur)) M.push("échéance de l'assurance");
+    if (roule && !net(v.conducteur)) M.push("chauffeur attitré");
+    if (lourd && !net(v.chrono)) M.push("contrôle du chronotachygraphe");
+    if (lourd && !net(v.lim)) M.push("contrôle du limiteur");
+    if (lourd && !net(v.licenceFin)) M.push("copie conforme de licence");
+    if (!net(v.km)) M.push("kilométrage");
+    return M;
+  }
+
+  function rendreACompleter() {
+    var hote = $("acompleter");
+    if (!hote) return;
+    var L = vehicules().map(function (v) { return { v: v, m: manque(v) }; })
+      .filter(function (x) { return x.m.length; });
+    if (!L.length) {
+      hote.innerHTML = vehicules().length
+        ? '<p class="complet">Chaque véhicule porte ce qu\'il faut : contrôle technique, carte grise, ' +
+          "assurance, chauffeur attitré.</p>" : "";
+      return;
+    }
+    /* Le plus incomplet d'abord : c'est par lui qu'on commence. */
+    L.sort(function (a, b) { return b.m.length - a.m.length; });
+    var visibles = L.slice(0, 12);
+    hote.innerHTML =
+      '<details class="repli" id="manques"' + (ouvert.manques ? " open" : "") + '>' +
+      "<summary>À compléter : " + L.length + " véhicule" + (L.length > 1 ? "s" : "") + "</summary>" +
+      '<div class="corps"><p class="doux">Ce que l\'application attend de chaque véhicule pour ' +
+      "suivre ses échéances. Touchez une ligne : la fiche s'ouvre dessous.</p>" +
+      visibles.map(function (x) {
+        return '<button type="button" class="manque" data-ouvrir="' + ech(x.v.id) + '">' +
+          "<b>" + ech(x.v.immat || "Immatriculation à saisir") + "</b>" +
+          '<span class="mq">' + x.m.map(function (t) {
+            return '<span class="pu">' + ech(t) + "</span>";
+          }).join("") + "</span></button>";
+      }).join("") +
+      (L.length > visibles.length
+        ? '<p class="doux">et ' + (L.length - visibles.length) + " autre" +
+          (L.length - visibles.length > 1 ? "s" : "") + ", qui viendront quand ceux-ci seront faits.</p>"
+        : "") +
+      "</div></details>";
+    var d = $("manques");
+    if (d) d.addEventListener("toggle", function () { ouvert.manques = d.open; });
   }
 
   function rendreCompte() {
@@ -425,8 +598,19 @@
 
   function rendre() {
     rendreCompte();
+    rendreACompleter();
     rendreVehicules();
     rendreConducteurs();
+    var b = $("v-vider");
+    if (b) b.hidden = !vehicules().length;
+    var a = $("v-annuler"), der = lire(CLE_IMP, null);
+    if (a) {
+      var reste = der ? der.ids.filter(function (i) {
+        return vehicules().some(function (v) { return v.id === i; });
+      }).length : 0;
+      a.hidden = !reste;
+      if (reste) a.textContent = "Annuler la dernière importation (" + reste + ")";
+    }
   }
 
   /* ─────────────── REPRENDRE L'ÉTAT DE PARC DU CLIENT ───────────────────
@@ -564,7 +748,7 @@
     }
     var L = vehicules(), connus = {};
     L.forEach(function (v) { connus[net(v.immat).toUpperCase()] = true; });
-    var ajoutes = 0, doublons = 0, sans = 0;
+    var ajoutes = 0, doublons = 0, sans = 0, nes = [];
     LU.forEach(function (ligne) {
       var o = {};
       choix.forEach(function (c, i) {
@@ -586,9 +770,12 @@
       o.limMois = 24;
       o.chronoMois = 24;
       L.push(o);
+      nes.push(o.id);
       ajoutes++;
     });
     garderVehicules(L);
+    /* Une importation se défait : on retient ce qu'elle a ajouté, elle seule. */
+    if (nes.length) garder(CLE_IMP, { le: iso(new Date()), ids: nes });
     LU = [];
     $("i-texte").value = "";
     $("i-fichier").value = "";
@@ -602,7 +789,8 @@
       " ajouté" + (ajoutes > 1 ? "s" : "") +
       (doublons ? ", " + doublons + " déjà présent" + (doublons > 1 ? "s" : "") : "") +
       (sans ? ", " + sans + " ligne" + (sans > 1 ? "s" : "") + " sans immatriculation lisible" : "") +
-      ". Les dates de contrôle technique restent à compléter, véhicule par véhicule.</p>";
+      ". Ce qui manque à chacun est listé sous « À compléter », juste dessous.</p>";
+    ouvert.manques = true;
     rendre();
   }
 
@@ -617,21 +805,27 @@
     } catch (e) { p = null; }
     p = p || {};
 
-    var V = [["Immatriculation", "Genre", "Marque et modèle", "1re mise en circulation",
+    var V = [["Immatriculation", "Genre", "Marque et modèle", "Chauffeur attitré",
+      "1re mise en circulation",
       "Kilométrage", "Relevé le", "Dernier contrôle technique", "Prochain contrôle",
       "Prochain limiteur", "Prochain chronotachygraphe", "Assurance", "Copie conforme",
-      "Prochaine révision", "Extincteur", "Observations"]];
+      "Prochaine révision", "Extincteur", "Pièces déposées", "Ce qui manque", "Observations"]];
+    var nomDe = {};
+    salaries().forEach(function (s) { nomDe[s.id] = s.nom; });
     vehicules().forEach(function (v) {
       var genre = "";
       GENRES.forEach(function (g) { if (g[0] === v.genre) genre = g[1]; });
+      var pi = [];
+      PIECES.forEach(function (x) { if (v.pieces && v.pieces[x.c]) pi.push(x.lib); });
       V.push([
-        v.immat || "", genre, v.marque || "", enFrancais(v.mec), v.km || "", enFrancais(v.kmLe),
+        v.immat || "", genre, v.marque || "", nomDe[v.conducteur] || "",
+        enFrancais(v.mec), v.km || "", enFrancais(v.kmLe),
         enFrancais(v.ct), enFrancais(v.ct ? plusMois(v.ct, v.ctMois || CT_DEFAUT[v.genre] || 12) : ""),
         enFrancais(v.lim ? plusMois(v.lim, v.limMois || 24) : ""),
         enFrancais(v.chrono ? plusMois(v.chrono, v.chronoMois || 24) : ""),
         enFrancais(v.assur), enFrancais(v.licenceFin),
         enFrancais(v.revision) || (v.revisionKm ? v.revisionKm + " km" : ""),
-        enFrancais(v.extincteur), v.note || "",
+        enFrancais(v.extincteur), pi.join(", "), manque(v).join(", "), v.note || "",
       ]);
     });
     if (V.length === 1) V.push(V[0].map(function () { return ""; }));
@@ -754,9 +948,63 @@
       if (e) { e.focus(); e.scrollIntoView({ behavior: "smooth", block: "center" }); }
     });
 
+    /* VIDER LA FLOTTE, ET DÉFAIRE LA DERNIÈRE IMPORTATION.
+
+       Un état de parc repris de travers ne se rattrape pas à la main sur
+       quatre-vingt-dix fiches. Deux gestes, donc : tout retirer, ou retirer
+       seulement ce que la dernière importation a ajouté, ce qui laisse en
+       place les véhicules saisis avant elle.
+       Demande du 16 septembre 2026 : « quand on importe une flotte on peut la
+       supprimer aussi, je n'ai pas cette faculté sur l'application ». */
+    $("v-vider").addEventListener("click", function () {
+      var n = vehicules().length;
+      if (!n) return;
+      if (!window.confirm("Retirer les " + n + " véhicule" + (n > 1 ? "s" : "") +
+        " du fichier ? Les fiches des conducteurs et les pièces déposées, elles, sont gardées.")) return;
+      garderVehicules([]);
+      garder(CLE_IMP, null);
+      ouvert = {};
+      rendre();
+      window.scrollTo(0, 0);
+    });
+
+    $("v-annuler").addEventListener("click", function () {
+      var der = lire(CLE_IMP, null);
+      if (!der || !der.ids || !der.ids.length) return;
+      var dedans = {};
+      der.ids.forEach(function (i) { dedans[i] = true; });
+      var reste = vehicules().filter(function (v) { return !dedans[v.id]; });
+      var n = vehicules().length - reste.length;
+      if (!n) return;
+      if (!window.confirm("Retirer les " + n + " véhicule" + (n > 1 ? "s" : "") +
+        " ajouté" + (n > 1 ? "s" : "") + " par l'importation du " + enFrancais(der.le) + " ?")) return;
+      garderVehicules(reste);
+      garder(CLE_IMP, null);
+      rendre();
+      window.scrollTo(0, 0);
+    });
+
     /* Un seul écouteur pour tout l'écran : les fiches se redessinent sans
        cesse, des écouteurs posés sur chaque titre disparaîtraient avec elles. */
     document.addEventListener("click", function (ev) {
+      var o = ev.target.closest ? ev.target.closest("[data-ouvrir]") : null;
+      if (o) {
+        var vid = o.getAttribute("data-ouvrir");
+        ouvert["v" + vid] = true;
+        rendre();
+        var carte = document.querySelector('[data-v="' + vid + '"]');
+        if (carte && carte.scrollIntoView) carte.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      var ps = ev.target.closest ? ev.target.closest("[data-piece-sup]") : null;
+      if (ps) {
+        var duo = ps.getAttribute("data-piece-sup").split("|");
+        var T = vehicules();
+        T.forEach(function (x) { if (x.id === duo[0] && x.pieces) delete x.pieces[duo[1]]; });
+        garderVehicules(T);
+        rendre();
+        return;
+      }
       var t = ev.target.closest ? ev.target.closest("[data-plier]") : null;
       if (t) {
         var cle = t.getAttribute("data-plier");
@@ -770,6 +1018,7 @@
         var L = vehicules(), v = null;
         L.forEach(function (x) { if (x.id === id) v = x; });
         if (!window.confirm("Retirer " + ((v && v.immat) || "ce véhicule") + " du fichier ?")) return;
+        if (v && v.conducteur) lierVehiculeConducteur(id, "", v.conducteur);
         garderVehicules(L.filter(function (x) { return x.id !== id; }));
         delete ouvert["v" + id];
         rendre();

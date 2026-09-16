@@ -145,6 +145,37 @@
   .apercu-tab th{background:var(--creux);font-weight:600;color:var(--texte-2)}
   .apercu-tab select{font-size:16px;min-height:42px;padding:4px 6px;border:1px solid var(--filet-2);
     border-radius:8px;background:var(--surface);color:var(--texte);width:100%;min-width:150px}
+  /* CE QUI MANQUE. Une ligne par véhicule, les manques en pastilles : on voit
+     d'un coup d'oeil ce qui reste à faire après une reprise d'état de parc. */
+  .manque{display:block;width:100%;text-align:left;background:var(--surface);
+    border:1px solid var(--filet);border-radius:var(--r1);padding:12px 14px;margin:10px 0 0;
+    font:inherit;color:var(--texte);min-height:0}
+  /* Le survol des boutons de l'application les remplit d'encre : ici, la
+     ligne resterait illisible, pastilles comprises. */
+  .manque:hover,.manque:active,.manque:focus{background:var(--creux);color:var(--texte);
+    border-color:var(--accent)}
+  .manque b{display:block;font:700 var(--t3)/1.3 system-ui;letter-spacing:.02em}
+  .manque .mq{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .manque .pu{font:600 var(--t1)/1.25 system-ui;padding:6px 9px;border-radius:8px;
+    background:var(--ambre-clair);color:var(--ambre)}
+  .complet{margin:var(--e3) 0 0;padding:12px 14px;border-radius:var(--r1);
+    background:var(--vert-clair);color:var(--vert);font:600 var(--t2)/1.45 system-ui}
+  .danger{border-color:var(--rouge) !important;color:var(--rouge) !important}
+
+  /* LES PIÈCES DU VÉHICULE. Un dépôt par pièce, son état écrit à côté. */
+  .pieces{margin:var(--e3) 0 0;padding-top:12px;border-top:1px solid var(--filet)}
+  .pieces .pt{margin:0 0 10px;font:600 11px/1.2 system-ui;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--texte-3)}
+  .piece{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--filet)}
+  .piece .pl{font:600 var(--t2)/1.35 system-ui}
+  .piece .pok{font:400 var(--t1)/1.35 system-ui;color:var(--vert);grid-column:1/-1}
+  .piece .pnon{font:400 var(--t1)/1.35 system-ui;color:var(--texte-3);grid-column:1/-1}
+  .piece input[type=file]{grid-column:1/-1;font-size:16px;width:100%;max-width:100%}
+  .piece .lien{background:none;border:0;color:var(--rouge);font:600 var(--t1) system-ui;
+    padding:0;min-height:0;width:auto;text-decoration:underline}
+  .pieces .doux{margin:10px 0 0;font-size:var(--t1)}
+  .pieces .doux a{color:var(--accent)}
   .dit{margin:var(--e3) 0 0;font-size:var(--t2);color:var(--texte-2)}
   .dit.mal{color:var(--rouge)}
   .rien{padding:var(--e5) 0;color:var(--texte-2);font-size:var(--t3)}
@@ -181,7 +212,11 @@
   <section id="e-veh">
     <div class="barre">
       <button type="button" id="v-ajouter">+ Ajouter un véhicule</button>
+      <button type="button" class="second" id="v-annuler" hidden>Annuler la dernière importation</button>
+      <button type="button" class="second danger" id="v-vider" hidden>Vider la flotte</button>
     </div>
+
+    <div id="acompleter"></div>
 
     <!-- REPRENDRE L'ÉTAT DE PARC DU CLIENT. Personne ne retape quatre-vingt-dix
          immatriculations : le classeur du client se lit, ses colonnes se
