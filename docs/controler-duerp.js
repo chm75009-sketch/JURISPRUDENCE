@@ -200,11 +200,68 @@
       " du code du travail, " + LU + ".</p>";
   }
 
+  /* ─────── LE REGISTRE DU PERSONNEL, CONFRONTÉ AUX UNITÉS DE TRAVAIL ───────
+
+     Les unités de travail sont déduites de l'activité ; les emplois réels,
+     eux, sont écrits dans le registre du personnel. Quand un emploi du
+     registre ne correspond à aucune unité, le document le dit au lieu de
+     l'ignorer : il ne l'évalue pas à la place de l'employeur, il signale
+     qu'il reste à évaluer. Demande du 16 septembre 2026, relier les modules
+     chaque fois que c'est possible.                                        */
+  function motsDe(t) {
+    var x = String(t || "");
+    try { x = x.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); } catch (e) {}
+    return x.toLowerCase().split(/[^a-z0-9]+/).filter(function (m) { return m.length > 3; });
+  }
+  function emploisDuRegistre() {
+    var E = null;
+    try { E = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) { E = null; }
+    var L = (E && E.salaries) || [];
+    var compte = {};
+    L.forEach(function (s) {
+      if (String(s.sor || "").trim()) return;          /* les présents seulement */
+      var e = String(s.emp || "").trim();
+      if (!e) return;
+      compte[e] = (compte[e] || 0) + 1;
+    });
+    return Object.keys(compte).map(function (k) { return { emp: k, n: compte[k] }; });
+  }
+  function emploisNonCouverts(groupes) {
+    var emplois = emploisDuRegistre();
+    if (!emplois.length) return null;
+    var mots = [];
+    groupes.forEach(function (g) {
+      mots = mots.concat(motsDe(g.u.nom)).concat(motsDe(g.u.qui));
+    });
+    var manquants = emplois.filter(function (x) {
+      var m = motsDe(x.emp);
+      if (!m.length) return false;
+      return !m.some(function (w) { return mots.indexOf(w) >= 0; });
+    });
+    return { emplois: emplois, manquants: manquants };
+  }
+  function registrePhrase(groupes) {
+    var r = emploisNonCouverts(groupes);
+    if (!r) return "";
+    var total = r.emplois.reduce(function (n, x) { return n + x.n; }, 0);
+    var t = "Le registre du personnel porte " + total + " salarié" + (total > 1 ? "s" : "") +
+      " présent" + (total > 1 ? "s" : "") + ", sur " + r.emplois.length + " emploi" +
+      (r.emplois.length > 1 ? "s" : "") + " : " +
+      r.emplois.map(function (x) { return x.emp + " (" + x.n + ")"; }).join(", ") + ". ";
+    t += r.manquants.length
+      ? "Aucune unité de travail de ce document ne correspond à : " +
+        r.manquants.map(function (x) { return x.emp; }).join(", ") +
+        ". Ces emplois restent à évaluer, et leurs risques à ajouter ici."
+      : "Chacun se retrouve dans une unité de travail ci-dessus.";
+    return t;
+  }
+
   function documentHtml() {
     var groupes = inventaire();
     return enTeteHtml() +
       "<p>L'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail (R. 4121-1). Pour chaque risque : la situation de travail, une cotation de 1 à 16 (gravité multipliée par fréquence), les mesures de prévention retenues, un responsable et une échéance.</p>" +
       unitesHtml(groupes, 1) +
+      (registrePhrase(groupes) ? "<p>" + ech(registrePhrase(groupes)) + "</p>" : "") +
       planHtml(groupes, groupes.length + 1) +
       tenueHtml(groupes.length + 2) +
       signatureHtml();
@@ -239,6 +296,8 @@
     items.push({ k: "p", t: "Version du " + (dateFr(v("dateVersion")) || "[ date ]") + ", établie par " + ou("responsable", "responsable") + "." });
     items.push({ k: "p", t: "L'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail (R. 4121-1). Pour chaque risque : la situation de travail, une cotation de 1 à 16 (gravité multipliée par fréquence), les mesures de prévention retenues, un responsable et une échéance." });
     unitesItems(groupes, 1, items);
+    var phraseReg = registrePhrase(groupes);
+    if (phraseReg) items.push({ k: "p", t: phraseReg });
     var plan = planTrie(groupes);
     items.push({ k: "h2", t: (groupes.length + 1) + ". " + planTitre() });
     items.push({ k: "p", t: planPhrase() });

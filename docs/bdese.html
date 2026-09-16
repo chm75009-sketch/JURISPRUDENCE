@@ -172,9 +172,18 @@
 
     <div id="rubriques"></div>
 
-    <details class="repli paie"><summary>Reprendre la paie</summary>
+    <details class="repli paie"><summary>Reprendre la paie ou le registre du personnel</summary>
       <div class="corps">
         <select id="p-annee"></select>
+        <!-- LE REGISTRE NOURRIT LA BASE. Les effectifs, la répartition par sexe,
+             les contrats, les entrées et les sorties sont déjà écrits dans le
+             registre unique du personnel : les retaper ici serait les écrire
+             deux fois, et deux fois veut dire deux chiffres différents.
+             Demande du 16 septembre 2026. -->
+        <div class="barre pile">
+          <button type="button" class="second" id="p-registre">Reprendre le registre du personnel</button>
+        </div>
+        <p id="p-dit-registre" class="vers"></p>
         <textarea id="p-source" placeholder="Un libellé, puis une valeur, par ligne&#10;Effectif total au 31/12&#9;412&#10;Nombre de salariés en contrat à durée indéterminée&#9;376"></textarea>
         <div class="barre pile">
           <button type="button" id="p-analyser">Chercher les correspondances</button>
@@ -741,6 +750,64 @@
       return '<option value="' + m.annee + '"' + (sel ? " selected" : "") + ">" + m.annee + " (" + ech(m.nature) + ")</option>";
     }).join("");
   }
+
+  /* ─────────────── LE REGISTRE DU PERSONNEL, REPRIS EN LIGNES ───────────────
+
+     Les libellés sont ceux du décret, pour que le rapprochement par mots les
+     reconnaisse ; les nombres sont comptés sur le registre, à la date du
+     31 décembre de l'année choisie. Rien n'est écrit dans la base sans que
+     les correspondances aient été montrées et cochées : c'est le même chemin
+     que la reprise de la paie.                                             */
+  function lignesDuRegistre(annee) {
+    var E = null;
+    try { E = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) { E = null; }
+    var L = (E && E.salaries) || [];
+    if (!L.length) return null;
+    var fin = annee + "-12-31", debut = annee + "-01-01";
+    var present = L.filter(function (s) {
+      var e = String(s.ent || "").slice(0, 10), so = String(s.sor || "").slice(0, 10);
+      if (e && e > fin) return false;
+      if (so && so < debut) return false;
+      return !so || so >= debut;
+    });
+    var au31 = present.filter(function (s) {
+      var so = String(s.sor || "").slice(0, 10);
+      return !so || so > fin;
+    });
+    function compte(liste, f) { return liste.filter(f).length; }
+    var sexe = function (v) { return function (s) { return String(s.sexe || "").toLowerCase().indexOf(v) === 0; }; };
+    var nat = function (v) { return function (s) { return s.nature === v; }; };
+    var lignes = [
+      ["Effectif total au 31 décembre", au31.length],
+      ["Effectif hommes", compte(au31, sexe("m"))],
+      ["Effectif femmes", compte(au31, sexe("f"))],
+      ["Nombre de salariés en contrat à durée indéterminée", compte(au31, nat("cdi"))],
+      ["Nombre de salariés en contrat à durée déterminée", compte(au31, nat("cdd"))],
+      ["Nombre de salariés à temps partiel", compte(au31, function (s) { return s.part === "partiel"; })],
+      ["Nombre de salariés à temps complet", compte(au31, function (s) { return s.part === "complet"; })],
+      ["Nombre de contrats d'apprentissage", compte(au31, nat("apprenti"))],
+      ["Nombre de contrats de professionnalisation", compte(au31, nat("pro"))],
+      ["Nombre d'embauches dans l'année", compte(L, function (s) {
+        var e = String(s.ent || "").slice(0, 10); return e >= debut && e <= fin; })],
+      ["Nombre de départs dans l'année", compte(L, function (s) {
+        var so = String(s.sor || "").slice(0, 10); return so >= debut && so <= fin; })],
+    ];
+    return lignes.map(function (l) { return l[0] + "\t" + l[1]; }).join("\n");
+  }
+
+  $("#p-registre").addEventListener("click", function () {
+    var annee = $("#p-annee").value;
+    var t = lignesDuRegistre(annee);
+    if (!t) {
+      $("#p-dit-registre").textContent = "Le registre du personnel ne porte encore aucun salarié : " +
+        "il s'ouvre depuis Gérer, puis Registre unique du personnel.";
+      return;
+    }
+    $("#p-source").value = t;
+    $("#p-dit-registre").textContent = "Onze lignes reprises du registre, comptées au 31 décembre " +
+      annee + ". Vérifiez-les, puis cherchez les correspondances.";
+    $("#p-analyser").click();
+  });
 
   $("#p-analyser").addEventListener("click", function () {
     var annee = $("#p-annee").value;

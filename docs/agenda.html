@@ -267,6 +267,7 @@
     agenda: "saisi ici", fiche: "repris de la fiche d'entreprise", nao: "repris de l'audit NAO", cse: "repris de l'audit CSE",
     bdese: "repris de l'audit BDESE", eco: "repris de l'audit du licenciement économique",
     pse: "repris de l'audit PSE", flotte: "repris de Flotte et conducteurs",
+    registre: "repris du registre du personnel",
   };
   var B = {};
   function chargerBrouillons() {
@@ -584,6 +585,31 @@
       attentes.push({ t: "Élections du CSE : date des dernières élections non renseignée.",
         w: "Les mandats durent quatre ans (L. 2314-33) : sans la date des dernières élections, l'échéance du renouvellement ne peut pas être calculée." });
     }
+
+    /* LE DÉCOMPTE DES HEURES, TOUS LES MOIS.
+
+       Dès qu'un salarié est inscrit au registre, le relevé mensuel de ses
+       heures est un rendez-vous permanent, au même titre que les réunions du
+       comité : L. 3171-2 impose d'établir les documents de décompte quand
+       tous les salariés ne suivent pas le même horaire collectif, D. 3171-8
+       en donne la forme, quotidienne puis hebdomadaire. Demande du
+       16 septembre 2026 : relier les modules chaque fois que c'est possible. */
+    (function () {
+      var reg = null;
+      try { reg = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) { reg = null; }
+      var n = ((reg && reg.salaries) || []).filter(function (x) {
+        return String(x.nom || "").trim() || String(x.pre || "").trim();
+      }).length;
+      if (!n) return;
+      cadences.push({
+        titre: "Décompte des heures de chaque salarié",
+        rythme: "chaque mois, à clore et à faire signer",
+        fondement: "L. 3171-2 et D. 3171-8 (décompte quotidien, récapitulation hebdomadaire, dès que tous les salariés ne suivent pas le même horaire collectif)",
+        docs: "le relevé du mois, clos et remis au salarié ; les réclamations et leurs réponses",
+        prov: "registre",
+        detail: n + " salarié" + (n > 1 ? "s" : "") + " au registre du personnel. L'écran du décompte est dans Gérer.",
+      });
+    })();
 
     /* LES ÉCHÉANCES DE LA FLOTTE ET DES CONDUCTEURS, RAMASSÉES ICI.
 
