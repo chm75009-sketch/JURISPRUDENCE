@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.39";
+const CACHE = "jurisprudence-12.40";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -97,6 +97,8 @@ const ESSENTIELS = [
   /* La flotte et les conducteurs : les échéances se regardent sur le quai,
      souvent sans réseau. */
   "./flotte.html", "./flotte.js",
+  /* Lire un classeur du client, sans réseau comme le reste. */
+  "./lire-classeur.js",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */
   /* lire-pdf.js est ici ; pdfjs.js et pdfjs.worker.js ne le sont pas. La
      bibliothèque de lecture des PDF pèse 1,3 Mo : la mettre dans cette liste

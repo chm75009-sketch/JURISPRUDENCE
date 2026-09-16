@@ -115,6 +115,27 @@
   @media (min-width:640px){.barre{flex-direction:row}.barre button{flex:1}}
   .barre button{font:600 var(--t-bouton) system-ui;padding:14px;min-height:var(--h-bouton);
     border-radius:var(--r2);width:100%}
+  details.repli{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);
+    margin:var(--e3) 0 0;padding:0 15px}
+  details.repli summary{cursor:pointer;font:600 var(--t3) system-ui;color:var(--texte-2);
+    min-height:52px;display:flex;align-items:center}
+  details.repli .corps{padding:0 0 var(--e4);border-top:0;background:transparent}
+  .champ{display:flex;flex-direction:column;gap:6px}
+  .champ > span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .champ input,.champ textarea{font-size:16px;min-height:46px;padding:9px 11px;width:100%;
+    box-sizing:border-box;border:1px solid var(--filet-2);border-radius:var(--r1);
+    background:var(--surface);color:var(--texte)}
+  .champ textarea{min-height:90px;line-height:1.45;resize:vertical;font-family:inherit}
+  details.repli .doux{margin:0 0 var(--e3)}
+  .apercu-tab{overflow-x:auto;margin:var(--e3) 0 0}
+  .apercu-tab table{border-collapse:collapse;font-size:var(--t1);min-width:100%}
+  .apercu-tab th,.apercu-tab td{border:1px solid var(--filet);padding:6px 8px;text-align:left;
+    white-space:nowrap}
+  .apercu-tab th{background:var(--creux);font-weight:600;color:var(--texte-2)}
+  .apercu-tab select{font-size:16px;min-height:42px;padding:4px 6px;border:1px solid var(--filet-2);
+    border-radius:8px;background:var(--surface);color:var(--texte);width:100%;min-width:150px}
+  .dit{margin:var(--e3) 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .dit.mal{color:var(--rouge)}
   .rien{padding:var(--e5) 0;color:var(--texte-2);font-size:var(--t3)}
   .rien a{color:var(--accent)}
   .note-page{margin:var(--e5) 0 0;padding-top:12px;border-top:1px solid var(--filet);
@@ -150,6 +171,25 @@
     <div class="barre">
       <button type="button" id="v-ajouter">+ Ajouter un véhicule</button>
     </div>
+
+    <!-- REPRENDRE L'ÉTAT DE PARC DU CLIENT. Personne ne retape quatre-vingt-dix
+         immatriculations : le classeur du client se lit, ses colonnes se
+         reconnaissent, et l'on voit ce qui va être ajouté avant que ce le soit.
+         Demande du 16 septembre 2026, avec l'état de parc de TEC. -->
+    <details class="repli" id="import">
+      <summary>Reprendre un état de parc</summary>
+      <div class="corps">
+        <p class="doux">Le classeur du client, tel qu'il est. Aucune ligne d'en-tête n'est
+          nécessaire : les colonnes sont reconnues sur leur contenu, et vous les corrigez avant
+          d'ajouter. Une immatriculation déjà présente n'est jamais ajoutée deux fois.</p>
+        <label class="champ"><span>Un fichier .xlsx ou .csv</span>
+          <input type="file" id="i-fichier" accept=".xlsx,.csv,.txt,.tsv"></label>
+        <label class="champ" style="margin-top:12px"><span>ou le tableau collé depuis Excel</span>
+          <textarea id="i-texte" placeholder="AA-142-NH	RENAULT	Camion	SOLDE"></textarea></label>
+        <div class="barre"><button type="button" class="second" id="i-lire">Lire ce tableau</button></div>
+        <div id="i-apercu"></div>
+      </div>
+    </details>
     <div id="vehicules"></div>
   </section>
 
@@ -181,6 +221,7 @@
 
 <script src="apercu.js"></script>
 <script src="tableur-export.js"></script>
+<script src="lire-classeur.js"></script>
 <script src="profil.js"></script>
 <script src="version.js"></script>
 <script src="flotte.js"></script>

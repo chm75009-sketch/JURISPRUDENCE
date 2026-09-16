@@ -121,6 +121,7 @@
     { c: "revision", lib: "Prochaine révision, au plus tard le", t: "date" },
     { c: "revisionKm", lib: "ou au kilométrage", t: "num" },
     { c: "extincteur", lib: "Échéance de l'extincteur", t: "date" },
+    { c: "financement", lib: "Financement, soldé ou échéance", t: "text" },
     { c: "note", lib: "Observations", t: "textarea", large: true },
   ];
 
@@ -428,6 +429,176 @@
     rendreConducteurs();
   }
 
+  /* ─────────────── REPRENDRE L'ÉTAT DE PARC DU CLIENT ───────────────────
+
+     Le classeur arrive comme il est, souvent sans ligne d'en-tête : celui de
+     TEC, le 16 septembre 2026, porte quatre-vingt-dix véhicules en quatre
+     colonnes muettes. Les colonnes se reconnaissent donc sur leur contenu,
+     une immatriculation à la forme du numéro, un genre à ses mots. Rien n'est
+     ajouté avant que le tableau ait été montré et les colonnes confirmées.  */
+
+  var COLONNES_IMPORT = [
+    ["", "- ne pas importer -"],
+    ["immat", "Immatriculation"],
+    ["marque", "Marque et modèle"],
+    ["genre", "Genre du véhicule"],
+    ["financement", "Financement, soldé ou échéance"],
+    ["mec", "1re mise en circulation"],
+    ["ct", "Dernier contrôle technique"],
+    ["km", "Kilométrage"],
+    ["note", "Observations"],
+  ];
+
+  var IMMAT = /^[A-Z]{2}[- ]?\d{3}[- ]?[A-Z]{2}$|^\d{1,4}[- ]?[A-Z]{1,3}[- ]?\d{2}$/i;
+  var GENRES_MOTS = [
+    [/tracteur/i, "tracteur"],
+    [/semi|remorque/i, "remorque"],
+    [/camionnette|utilitaire|fourgon|vul/i, "vul"],
+    [/camion|porteur|poids/i, "pl"],
+    [/voiture|particuli|berline|vp\b/i, "vl"],
+    [/autocar|autobus|commun/i, "commun"],
+  ];
+  function genreDe(t) {
+    var x = String(t || "");
+    for (var i = 0; i < GENRES_MOTS.length; i++) if (GENRES_MOTS[i][0].test(x)) return GENRES_MOTS[i][1];
+    return "";
+  }
+  function dateDe(t) {
+    var x = net(t);
+    var m = /^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/.exec(x);
+    if (m) {
+      var a = m[3].length === 2 ? (parseInt(m[3], 10) > 50 ? "19" + m[3] : "20" + m[3]) : m[3];
+      return a + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2);
+    }
+    if (/^\d{4}-\d{2}-\d{2}$/.test(x)) return x;
+    return "";
+  }
+
+  var LU = [];              /* le tableau lu, en attente de confirmation     */
+
+  function deviner(lignes) {
+    var nb = 0;
+    lignes.forEach(function (l) { nb = Math.max(nb, l.length); });
+    var choix = [];
+    for (var c = 0; c < nb; c++) {
+      var vals = lignes.map(function (l) { return net(l[c]); }).filter(Boolean);
+      var immats = vals.filter(function (v) { return IMMAT.test(v); }).length;
+      var genres = vals.filter(function (v) { return genreDe(v); }).length;
+      var dates = vals.filter(function (v) { return dateDe(v); }).length;
+      var annees = vals.filter(function (v) { return /^(SOLDE|\d{4})$/i.test(v); }).length;
+      var nombres = vals.filter(function (v) { return /^\d{4,7}$/.test(v); }).length;
+      var seuil = Math.max(1, vals.length * 0.6);
+      if (immats >= seuil) choix.push("immat");
+      else if (genres >= seuil) choix.push("genre");
+      else if (dates >= seuil) choix.push("mec");
+      else if (annees >= seuil) choix.push("financement");
+      else if (nombres >= seuil) choix.push("km");
+      else if (vals.length) choix.push("marque");
+      else choix.push("");
+    }
+    /* Une seule colonne de marque : la première suffit, les autres deviennent
+       des observations. */
+    var vues = {};
+    return choix.map(function (c) {
+      if (!c) return "";
+      if (vues[c] && c !== "note") return "note";
+      vues[c] = true;
+      return c;
+    });
+  }
+
+  /* Les colonnes entièrement vides ne sont pas des colonnes : celle de TEC en
+     comptait deux avant l'immatriculation, et sur un téléphone elles seules
+     tenaient l'écran. */
+  function serrer(lignes) {
+    var nb = 0;
+    lignes.forEach(function (l) { nb = Math.max(nb, l.length); });
+    var garder = [];
+    for (var c = 0; c < nb; c++) {
+      var pleine = lignes.some(function (l) { return net(l[c]); });
+      if (pleine) garder.push(c);
+    }
+    return lignes.map(function (l) {
+      return garder.map(function (c) { return net(l[c]); });
+    });
+  }
+
+  function montrerApercu() {
+    var hote = $("i-apercu");
+    LU = serrer(LU.filter(function (l) { return l.some(function (c) { return net(c); }); }));
+    if (!LU.length) { hote.innerHTML = '<p class="dit mal">Rien de lisible dans ce tableau.</p>'; return; }
+    var choix = deviner(LU);
+    var nb = choix.length;
+    var h = '<div class="apercu-tab"><table><thead><tr>';
+    for (var c = 0; c < nb; c++) {
+      h += "<th><select data-col=\"" + c + "\">" + COLONNES_IMPORT.map(function (o) {
+        return '<option value="' + o[0] + '"' + (o[0] === choix[c] ? " selected" : "") + ">" + ech(o[1]) + "</option>";
+      }).join("") + "</select></th>";
+    }
+    h += "</tr></thead><tbody>";
+    LU.slice(0, 4).forEach(function (l) {
+      h += "<tr>";
+      for (var c = 0; c < nb; c++) h += "<td>" + ech(l[c] || "") + "</td>";
+      h += "</tr>";
+    });
+    h += "</tbody></table></div>";
+    h += '<p class="dit">' + LU.length + " ligne" + (LU.length > 1 ? "s" : "") +
+      " lue" + (LU.length > 1 ? "s" : "") + ". Les quatre premières sont montrées ; " +
+      "vérifiez l'intitulé de chaque colonne.</p>";
+    h += '<div class="barre"><button type="button" id="i-ajouter">Ajouter les véhicules</button></div>';
+    hote.innerHTML = h;
+    $("i-ajouter").addEventListener("click", importer);
+  }
+
+  function importer() {
+    var choix = [];
+    Array.prototype.forEach.call($("i-apercu").querySelectorAll("[data-col]"), function (sel) {
+      choix[parseInt(sel.getAttribute("data-col"), 10)] = sel.value;
+    });
+    if (choix.indexOf("immat") < 0) {
+      $("i-apercu").insertAdjacentHTML("beforeend",
+        '<p class="dit mal">Aucune colonne n\'est désignée comme l\'immatriculation : ' +
+        "sans elle, un véhicule ne peut pas être identifié.</p>");
+      return;
+    }
+    var L = vehicules(), connus = {};
+    L.forEach(function (v) { connus[net(v.immat).toUpperCase()] = true; });
+    var ajoutes = 0, doublons = 0, sans = 0;
+    LU.forEach(function (ligne) {
+      var o = {};
+      choix.forEach(function (c, i) {
+        if (!c) return;
+        var val = net(ligne[i]);
+        if (!val) return;
+        if (c === "immat") o.immat = val.toUpperCase();
+        else if (c === "genre") o.genre = genreDe(val) || "autre";
+        else if (c === "mec" || c === "ct") o[c] = dateDe(val);
+        else if (c === "note") o.note = (o.note ? o.note + " " : "") + val;
+        else o[c] = val;
+      });
+      if (!o.immat || !IMMAT.test(o.immat)) { sans++; return; }
+      if (connus[o.immat]) { doublons++; return; }
+      connus[o.immat] = true;
+      o.id = "v" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      if (!o.genre) o.genre = "autre";
+      o.ctMois = CT_DEFAUT[o.genre] || 12;
+      o.limMois = 24;
+      o.chronoMois = 24;
+      L.push(o);
+      ajoutes++;
+    });
+    garderVehicules(L);
+    LU = [];
+    $("i-texte").value = "";
+    $("i-fichier").value = "";
+    $("i-apercu").innerHTML = '<p class="dit">' + ajoutes + " véhicule" + (ajoutes > 1 ? "s" : "") +
+      " ajouté" + (ajoutes > 1 ? "s" : "") +
+      (doublons ? ", " + doublons + " déjà présent" + (doublons > 1 ? "s" : "") : "") +
+      (sans ? ", " + sans + " ligne" + (sans > 1 ? "s" : "") + " sans immatriculation lisible" : "") +
+      ". Les dates de contrôle technique restent à compléter, véhicule par véhicule.</p>";
+    rendre();
+  }
+
   /* ──────────────────────────────── le classeur ─────────────────────────── */
 
   function classeur() {
@@ -596,6 +767,33 @@
         delete ouvert["v" + id];
         rendre();
       }
+    });
+
+    $("i-lire").addEventListener("click", function () {
+      var f = $("i-fichier").files && $("i-fichier").files[0];
+      var colle = net($("i-texte").value);
+      if (colle) { LU = window.LireClasseur.texte(colle); montrerApercu(); return; }
+      if (!f) {
+        $("i-apercu").innerHTML = '<p class="dit mal">Choisissez un fichier, ou collez le tableau.</p>';
+        return;
+      }
+      if (/\.(csv|txt|tsv)$/i.test(f.name)) {
+        f.text().then(function (t) { LU = window.LireClasseur.texte(t); montrerApercu(); });
+        return;
+      }
+      if (!window.LireClasseur.possible()) {
+        $("i-apercu").innerHTML = '<p class="dit mal">Ce navigateur ne sait pas ouvrir un .xlsx. ' +
+          "Ouvrez le classeur, copiez les colonnes, et collez-les ci-dessus.</p>";
+        return;
+      }
+      $("i-apercu").innerHTML = '<p class="dit">Lecture du classeur...</p>';
+      window.LireClasseur.fichier(f).then(function (lignes) {
+        LU = lignes.filter(function (l) { return l.some(function (c) { return net(c); }); });
+        montrerApercu();
+      }, function () {
+        $("i-apercu").innerHTML = '<p class="dit mal">Ce fichier n\'a pas pu être lu. ' +
+          "Enregistrez-le en .csv, ou collez les colonnes ci-dessus.</p>";
+      });
     });
 
     $("b-excel").addEventListener("click", classeur);
