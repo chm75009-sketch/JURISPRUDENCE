@@ -797,7 +797,6 @@
     });
 
     $("b-excel").addEventListener("click", classeur);
-    $("b-heures").addEventListener("click", function () { window.location.href = "heures.html"; });
 
     rendre();
   }
