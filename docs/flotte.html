@@ -115,10 +115,21 @@
   @media (min-width:640px){.barre{flex-direction:row}.barre button{flex:1}}
   .barre button{font:600 var(--t-bouton) system-ui;padding:14px;min-height:var(--h-bouton);
     border-radius:var(--r2);width:100%}
-  details.repli{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);
+  /* LE REPLI D'IMPORT SE VOIT. Il ressemblait à une ligne de texte et personne
+     ne l'ouvrait : il prend la forme d'un bouton, comme celui qui ajoute un
+     véhicule. Demande du 16 septembre 2026. */
+  details.repli{border:2px solid var(--accent);border-radius:var(--r2);background:var(--accent-clair);
     margin:var(--e3) 0 0;padding:0 15px}
-  details.repli summary{cursor:pointer;font:600 var(--t3) system-ui;color:var(--texte-2);
-    min-height:52px;display:flex;align-items:center}
+  details.repli[open]{background:var(--surface);border-color:var(--filet)}
+  details.repli summary{cursor:pointer;font:600 var(--t-bouton) system-ui;color:var(--accent);
+    min-height:var(--h-bouton);display:flex;align-items:center;justify-content:center;gap:10px;
+    list-style:none;text-align:center}
+  details.repli summary::-webkit-details-marker{display:none}
+  details.repli summary::marker{content:""}
+  details.repli summary::after{content:"\25BE";font-size:14px}
+  details.repli[open] summary{color:var(--texte-2);justify-content:flex-start;text-align:left;
+    font-size:var(--t3);border-bottom:1px solid var(--filet)}
+  details.repli[open] summary::after{content:"\25B4"}
   details.repli .corps{padding:0 0 var(--e4);border-top:0;background:transparent}
   .champ{display:flex;flex-direction:column;gap:6px}
   .champ > span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
@@ -218,7 +229,9 @@
 
 </main>
 
+<script>window.RUBRIQUE_DOCS = "flotte";</script>
 <script src="apercu.js"></script>
+<script src="base-documents.js"></script>
 <script src="tableur-export.js"></script>
 <script src="lire-classeur.js"></script>
 <script src="profil.js"></script>

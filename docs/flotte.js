@@ -545,7 +545,8 @@
     h += '<p class="dit">' + LU.length + " ligne" + (LU.length > 1 ? "s" : "") +
       " lue" + (LU.length > 1 ? "s" : "") + ". Les quatre premières sont montrées ; " +
       "vérifiez l'intitulé de chaque colonne.</p>";
-    h += '<div class="barre"><button type="button" id="i-ajouter">Ajouter les véhicules</button></div>';
+    h += '<div class="barre"><button type="button" id="i-ajouter">Valider l\'importation de ' +
+      LU.length + " ligne" + (LU.length > 1 ? "s" : "") + "</button></div>";
     hote.innerHTML = h;
     $("i-ajouter").addEventListener("click", importer);
   }
@@ -591,6 +592,12 @@
     LU = [];
     $("i-texte").value = "";
     $("i-fichier").value = "";
+    /* On montre le résultat là où il se voit : la liste, juste dessous. */
+    if (ajoutes) {
+      $("import").open = false;
+      var premier = $("vehicules");
+      if (premier && premier.scrollIntoView) premier.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     $("i-apercu").innerHTML = '<p class="dit">' + ajoutes + " véhicule" + (ajoutes > 1 ? "s" : "") +
       " ajouté" + (ajoutes > 1 ? "s" : "") +
       (doublons ? ", " + doublons + " déjà présent" + (doublons > 1 ? "s" : "") : "") +

@@ -207,30 +207,37 @@
         .catch(function () {});
     }, true);
 
-    /* Les productions, par le seul chemin qu'elles prennent toutes. */
-    var poser = function () {
-      if (!window.AuditExport || !window.AuditExport.telecharger ||
-          window.AuditExport.telecharger.__garde) return false;
-      var vrai = window.AuditExport.telecharger;
+    /* Les productions, par les deux chemins qu'elles prennent : le Word et le
+       classeur. Le classeur y manquait, et un état de parc téléchargé ne
+       laissait aucune trace dans « Mes documents ». Mesuré le 16 septembre
+       2026. */
+    var enrober = function (objet, typeDefaut) {
+      if (!objet || !objet.telecharger || objet.telecharger.__garde) return false;
+      var vrai = objet.telecharger;
       var enrobe = function (octets, nom, type) {
         try {
-          var blob = (octets && typeof octets.size === "number")
-            ? octets : new Blob([octets], { type: type || "application/octet-stream" });
-          enregistrer(r, { nom: nom, sorte: "produit", type: type || "", contenu: blob })
-            .catch(function () {});
+          var t = type || typeDefaut || "application/octet-stream";
+          var blob = (octets && typeof octets.size === "number") ? octets : new Blob([octets], { type: t });
+          enregistrer(r, { nom: nom, sorte: "produit", type: t, contenu: blob }).catch(function () {});
         } catch (e) { /* garder un document ne doit jamais empêcher de le télécharger */ }
         return vrai.apply(this, arguments);
       };
       enrobe.__garde = true;
-      window.AuditExport.telecharger = enrobe;
+      objet.telecharger = enrobe;
       return true;
     };
-    if (!poser()) {
-      var essais = 0;
-      var t = setInterval(function () {
-        if (poser() || ++essais > 40) clearInterval(t);
-      }, 250);
-    }
+    var poser = function () {
+      var a = enrober(window.AuditExport, "application/octet-stream");
+      var b = enrober(window.TableurExport,
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      return a || b;
+    };
+    poser();
+    var essais = 0;
+    var t = setInterval(function () {
+      poser();
+      if (++essais > 40) clearInterval(t);
+    }, 250);
   }
 
   if (document.readyState === "loading")
