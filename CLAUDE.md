@@ -208,20 +208,38 @@ la correction ait été demandée.
 
 ## Écrire — la ponctuation et le ton
 
-Ces deux règles valent partout, sans exception : réponses dans la discussion,
-documents Word et PDF, courriers, contrats, notes, code et commentaires de code.
+Ces trois règles valent partout, sans exception, et pour TOUS les documents,
+quels qu'ils soient : réponses dans la discussion, conclusions, documents Word,
+PDF, classeurs, courriers, contrats, notes, bordereaux, écrans de
+l'application, code et commentaires de code. Redemandé le 17 septembre 2026 :
+« je t'ai déjà dit d'humaniser tous mes textes, et ne garde aucun marqueur de
+Claude et de l'intelligence artificielle, et tu ne mets jamais les grands
+tirets que les tirets du 6. Mets ça dans la mémoire de Claude pour tous les
+documents quels qu'ils soient. »
 
 **Jamais de tiret cadratin.** Le signe long est proscrit, de même que le tiret
 demi-cadratin. On écrit le trait d'union du clavier, celui de la touche 6.
 Quand une incise appelle une pause, on emploie la virgule, les parenthèses,
 le deux-points ou le point : c'est presque toujours meilleur. Les listes à
 puces commencent par ce même trait d'union. Règle posée le 6 septembre 2026.
+Elle se vérifie avant l'envoi, sur le fichier produit et non sur l'intention :
+un document qui contient un seul de ces signes est refait.
 
 **Humaniser.** Écrire comme on parle à quelqu'un, pas comme une machine rend
 un résultat. Des phrases de longueur inégale. Des mots ordinaires plutôt que
 du vocabulaire de rapport. Pas de formules de transition automatiques, pas de
 symétries trop régulières, pas de gras semé partout pour signaler l'important.
 Dire les choses directement, au lieu de les annoncer puis de les dire.
+
+**Aucun marqueur de Claude ni d'intelligence artificielle, nulle part.** Ni
+dans le texte, ni dans les en-têtes et pieds de page, ni dans les noms de
+fichiers, ni dans les métadonnées du document : l'auteur, le dernier
+enregistrement, le titre, le commentaire, la société, le générateur d'un PDF
+ne portent jamais autre chose que le nom de l'avocat ou de l'utilisatrice. Pas
+de signature automatique, pas de mention « généré par », pas d'avertissement
+sur l'origine du texte, pas de nom de modèle dans un commentaire de code ou un
+message de commit. Un document sort du cabinet : rien n'y indique par quoi il
+est passé.
 
 ## Lire — règle absolue, jamais de supposition
 
