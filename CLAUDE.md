@@ -315,6 +315,18 @@ en a trois. Une extraction de texte ne dit pas dans quelle colonne un chiffre se
 quand la position décide du sens, lire les coordonnées ou l'image de la page, pas le
 texte à plat. L'utilisatrice a dû corriger.
 
+Cas mesuré le 20 septembre 2026 - dossier BERTHET, les envois du Drive. Interrogé sur
+l'amplitude des journées, j'ai lu les captures dont le titre parlait d'horaires et laissé
+de côté, sans les ouvrir, celles dont le nom parlait de budget, d'objectifs, de moyens non
+alloués ou de la suppression d'un autre poste. J'ai aussi laissé fermés six dossiers
+d'envois entiers. Le tri s'est fait sur les noms de fichiers, c'est-à-dire sur ce que je
+croyais y trouver. Ce qui s'y trouvait : un recommandé revenu avec la mention « Pli avisé
+et non réclamé », une demande de priorité de réembauche jamais reprise dans les
+conclusions, un courrier RGPD qui visait deux articles du code du travail absents du
+dossier, et un article de l'accord collectif ouvrant des mesures renforcées que personne
+n'avait réclamées. Un fichier ne se juge pas à son nom. Tant que tout n'est pas ouvert,
+on ne dit pas qu'on a lu, on dit ce qui reste à lire.
+
 Le tout dit d'une manière qui prête à la machine une volonté : « ce que je voulais y lire ».
 Il n'y a ni volonté ni souhait. On décrit ce qui a été écrit et ce qui ne l'était pas, sans
 psychologie.
