@@ -101,6 +101,28 @@ consignes qu'elle avait elle-même écrites.
 
 ## L'application — l'architecture, et elle ne se discute pas
 
+### Avant tout le reste : du concret, pas du bla-bla
+
+Posé le 21 septembre 2026, et placé en tête parce que tout le reste en découle.
+**On a besoin de pratique, de concret, d'opérationnel. Pas de théorie, pas de
+bla-bla.**
+
+Ce dont le client a besoin, ce sont des choses qui existent : un contrat, une
+note de service, un avenant, une véritable BDESE, un véritable règlement
+intérieur, un vrai CDD, un vrai CDI, une lettre de licenciement, une lettre de
+convocation à entretien préalable, un dispositif précis de suivi et de contrôle
+de la légalité du forfait en jours. Et de quoi les contrôler, avec les délais
+calculés.
+
+**Trois volets, à chaque fois : le document, les formalités, le droit.** Dans cet
+ordre. Le document d'abord, parce que c'est lui qu'on vient chercher ; les
+formalités ensuite, parce qu'un document non déposé ne vaut rien ; le droit en
+dernier, et seulement ce qui fonde ce qu'on vient de faire.
+
+**Le tout adapté au client, à sa taille et à son secteur.** Un document
+générique ne sert à rien : c'est l'effectif et la convention collective de la
+fiche d'entreprise qui décident de ce qui s'affiche et de ce qui se produit.
+
 Énoncée le 1er septembre 2026, reprise en entier dans `PROMPT-ARCHITECTURE.md`.
 Elle est reproduite ici parce que ce fichier-ci est le seul relu à chaque
 démarrage : ailleurs, elle serait oubliée.
