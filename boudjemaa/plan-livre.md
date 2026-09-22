@@ -15,7 +15,19 @@ INTRODUCTION
 1. LA NAISSANCE
 - Le jour, le lieu.
 - Le récit des recherches sur ce lieu de naissance.
-- Sa carrière en Tunisie (RECHERCHE À FAIRE).
+- Sa carrière en Tunisie, à l'Union Sportive Béjaoise.
+- Martinelli, l'homme qui l'a révélé : la composition de l'U.S.B. du
+  28 février 1931 (L'Afrique du Nord illustrée, page 7) donne Martinelli II
+  demi et Martinelli I capitaine, avant ; celle du 30 juillet 1932 à
+  Souk-Ahras donne la même répartition, avec Boudjemaa dans la ligne d'avants
+  à côté de Martinelli I.
+- PHOTO À METTRE DANS LE LIVRE : l'équipe de l'Union Sportive Béjaoise,
+  L'Afrique du Nord illustrée du 28 février 1931, cliché Photo-Sultan, Béja
+  (photos/USBeja-1931-equipe.jpg). La légende ne nomme personne : impossible
+  de dire, sur cette image, lequel des onze hommes est Martinelli I et lequel
+  est Martinelli II. Recherche en cours d'une photographie légendée.
+- Le match de Souk-Ahras, 30 juillet 1932 : première trace de Boudjemaa sur un
+  terrain, à dix-sept ans (fac-similés photos/SoukAhras-1932-p1.jpg et p2).
 
 2. SOLLICITÉ EN FRANCE, VICTIME DE SON TALENT
 - Les deux contrats.
@@ -50,7 +62,9 @@ CE QUE L'AUTEUR DOIT DONNER
 - Ce qu'il a sur le tournoi Boudjemaa et sur Hamadi Agrebi.
 
 CE QUE JE DOIS TROUVER
-- Sa carrière en Tunisie avant 1935.
+- Sa carrière en Tunisie avant 1935: au-delà du match de Souk-Ahras du
+  30 juillet 1932, les autres matchs de l'U.S.B.
+- Le prénom de Martinelli, et son départ pour les Amériques.
 - Les deux contrats et la suspension, pièces à l'appui.
 - Le match amical de Marseille, date et compte rendu.
 - La guerre : arrestation éventuelle au retour en Tunisie.

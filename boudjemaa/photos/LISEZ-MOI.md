@@ -17,3 +17,8 @@ PHOTOGRAPHIES DE BOUDJEMAA
 
 À NOTER : l'entraîneur de Colmar est Lowy, qui était déjà son entraîneur à
 l'O.G.C. Nice en 1936.
+
+- SoukAhras-1932-p1.jpg, SoukAhras-1932-p2.jpg : le compte rendu de
+  Rapid C.M. Souk-Ahras - U.S. Béja, Souk-Ahras républicain du 30 juillet
+  1932. Boudjemaa y figure dans la ligne d'avants béjaoise. Fac-similés pour
+  le chapitre 1.

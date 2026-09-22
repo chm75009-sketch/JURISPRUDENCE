@@ -538,3 +538,54 @@ II, joue demi. Ils sont deux.
 POUR LE LIVRE : c'est l'équipe qui a formé Boudjemaa, photographiée quatre ans
 avant son départ. Il avait seize ans.
 
+
+---
+
+## [M2] Souk-Ahras républicain, 30 juillet 1932, pages 1 et 2
+
+Ark bpt6k86492368, vues 1 et 2. Pages lues en entier, colonne par colonne
+(reconnaissance de caractères, colonnes recoupées une à une).
+
+Titre : « LES SPORTS - Rapid C. M. Souk Ahrassien bat Union Sportive Béjaoise
+4 buts à 3 et abandon du terrain ».
+
+Ouverture : « Par une belle journée d'été et sous la haute présidence de
+Messieurs SULTANAS, adjoint au maire de SOUK-AHRAS, SI EL KAFI, khalifat du
+Caïd, du président de l'U.S.B, et de M. MUEDEB Secrétaire, s'est déroulé le
+grand Match amical qui opposait l'U.S BEJAOISE au RAPID CLUB MUSULMAN DE
+SOUK-AHRAS. »
+
+Composition, page 1 : « A 17 heures précises, Mr. HAMROUCHI rassemble les
+équipes qui s'alignent dans la formation suivante : U.S.B : "orange, noir" :
+David, Cohen, Aich, Martinelli (II), Arnone, Mary ; Martinelli (I), Boudjemaa,
+Chimento, Abouaf et Santaureau. R.C.M.S.A. : "bleu, rouge" : Fais, Kablouti
+(cap.), Biel ; Embarek, Miloud, Amrani ; Derouich, Guessouma, Bouchaieb,
+Cueilatti, Derdour. »
+
+Déroulé : Chimento tire, le gardien de Souk-Ahras bloque mal, Abouaf marque à
+la 7e minute (1-0) ; Derdour égalise d'un tir de vingt mètres (1-1) ; « la
+ligne d'attaque de l'U.S.B. réussit à marquer un but sur centrage de
+Martinelli » (2-1) ; Guessouma marque (2-2 puis le compte repart) ; sur un tir
+de l'arrière béjaois, Biel touche la balle de la main : « l'arbitre siffle la
+faute et Martinelli d'un geste sportif shotte le pénalty dans les mains de
+Fais. Celui-ci, répondant à la politesse, envoie le ballon en corner. »
+Mi-temps 2-1. Santaureau marque de la main sans que l'arbitre sanctionne
+(3-1). Puis Bouchaieb égalise, Derrouiche marque le quatrième, et « à ce
+moment Béja, fatiguée, découragée, désolée, voyant le match nul lui échapper,
+quittera le terrain sur l'ordre du directeur sportif. »
+
+Page 2, le jugement du chroniqueur sur Béja : « L'U.S.B. a déplacé une équipe
+homogène, entraînée, qui venant avec la certitude de vaincre réussit néanmoins
+à nous faire assister à un jeu efficace. Le goal particulièrement est à
+féliciter, il est défendu par des arrières énergiques et décidés ; la ligne
+intermédiaire alimenta continuellement une ligne d'avants où les Boudjemaa,
+Chimento et Martinelli brillèrent. » Et plus loin : « Les Embarek, Miloud et
+Amrani arrêtèrent souventes fois un Martinelli fougueux, un Santaureau rapide
+et un Chimento scientifique. »
+
+VERDICT : première trace documentaire de Boudjemaa sur un terrain, à
+dix-sept ans, dans la ligne d'avants de l'Union Sportive Béjaoise, trois ans
+avant son départ pour la France. Elle donne aussi la place des deux
+Martinelli : Martinelli (II) demi, Martinelli (I) avant, aux côtés de
+Boudjemaa - la même répartition que dans la composition de 1931.
+Fac-similés : photos/SoukAhras-1932-p1.jpg et photos/SoukAhras-1932-p2.jpg.
