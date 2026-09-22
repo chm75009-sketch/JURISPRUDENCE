@@ -921,3 +921,66 @@ annoncé le 30 avril. Une des deux informations est mal datée, ou bien il est
 revenu jouer en permission. Je ne tranche pas.
 
 LU : 41 sur 312.
+
+---
+
+## [41] Football (hebdomadaire), 15 juillet 1936, page 6 - PIÈCE MAÎTRESSE DU CHAPITRE 2
+
+Ark bpt6k7214889x, vue 6. Page officielle de la Fédération française de
+football association, siège social 22 rue de Londres, Henri Delaunay
+secrétaire général.
+
+Titre : « Demandes de licences professionnelles - DEUXIÈME LISTE DE LA SAISON
+1936-37 ». Chapeau : « Nous publions ci-après la deuxième liste des demandes
+de licences de joueurs professionnels français et étrangers parvenues à la
+F.F.F.A. du 6 au 11 juillet inclus. Les clubs qui auraient des objections à
+faire valoir à la délivrance de ces licences [...] »
+
+Et, à quatre lignes d'intervalle, dans la même liste :
+
+« O. G. C. Nice. - Boudjemaa Mohamed (Français). »
+« A. S. Saint-Etienne. - Boudjemaa Ben Mohamed el Memiti (Français). »
+
+VERDICT : les deux contrats ne sont pas une histoire rapportée, ils sont là,
+imprimés dans le bulletin de la Fédération, la même semaine, pour le même
+homme. Deux clubs ont déposé une demande de licence professionnelle pour lui
+entre le 6 et le 11 juillet 1936, et la Fédération appelle les objections.
+C'est le point de départ de la suspension. Le document donne aussi son nom
+complet tel que Saint-Étienne l'a déclaré : Boudjemaa Ben Mohamed el Memiti.
+Fac-similé : photos/Football-1936-deux-licences.jpg.
+
+LU : 42 sur 312.
+
+---
+
+## [42] Le Républicain du Gard, 12 juin 1936, page 3
+
+Ark bd6t53559393n, vue 3. Brève sur l'O.G.C. Nice : « Il songe à constituer
+une équipe de premier plan. Il n'a pas voulu accepter les offres qui lui ont
+été faites pour le transfert de son avant-centre Boudjemaa. »
+
+LU : 43 sur 312.
+
+---
+
+## [43] Le Journal du Maroc, 14 juin 1936, page 3
+
+Ark bpt6k8658018m, vue 3. « Nice a mis sur la liste des transferts :
+Boudjemâa. On cite parmi les joueurs qui renforceraient le team des Aiglons
+Liberati et deux bons joueurs [...] »
+
+VERDICT : à deux jours d'intervalle, deux journaux disent le contraire l'un
+de l'autre, Nice refusant les offres pour lui le 12 juin et l'inscrivant sur
+la liste des transferts le 14. C'est le moment exact où se noue l'affaire des
+deux licences.
+
+LU : 44 sur 312.
+
+---
+
+## [44] Football (hebdomadaire), 27 mai 1936, page 2
+
+Ark bpt6k72148821, vue 2. Tableau des résultats, division II : « Nice (10) 5 »
+avec les buteurs entre parenthèses : « Granier 2, Marino 2, Boudjema ».
+
+LU : 45 sur 312.
