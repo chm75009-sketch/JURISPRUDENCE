@@ -835,3 +835,50 @@ parvint à sauver l'honneur des "rouge et noir" visiteurs. »
 VERDICT : son but à Saint-Étienne, deux ans avant d'y signer.
 
 LU : 35 sur 312.
+
+---
+
+## [36] Le Républicain du Gard, 2 mars 1936, page 3
+
+Ark bd6t535643014, vue 3. Brèves de résultats : « Boudjema et Dubois ont
+acquis les buts de l'O.G.C. Nice contre l'Amiens A.C., qui a déçu. »
+
+LU : 36 sur 312.
+
+---
+
+## [37] Le Petit Parisien, 16 mars 1936, page 7
+
+Ark bpt6k663772t, vue 7. Dépêche « Nice, 15 mars (dép. Petit Parisien) »,
+Nice contre Rouen, signée Tournaire.
+
+« Les Niçois, de leur côté, percent quelquefois grâce à Boudjemaa, mais
+Bessero, le goal de Rouen, pare chaque fois de façon magnifique. »
+« On note de belles phases dans lesquelles les Niçois Boudjemaa, Marino et
+Moudry se font particulièrement remarquer. »
+« Enfin, à la trente-cinquième minute de jeu, après une magnifique descente
+de Boudjemaa, Marino marque le but pour Nice. »
+Et le jugement final : « A Nice, Boudjemaa réalisa une partie splendide ; il
+fut partout. Avec lui, il faut mentionner Dubois et Granier qui firent eux
+aussi bonne impression. »
+
+LU : 37 sur 312.
+
+---
+
+## [38] La Dépêche (Lille), 21 mars 1936, page 8
+
+Ark bd6t51552478q, vue 8. Annonce du match du Racing Club de Roubaix contre
+l'O.G.C. Nice. C'est le portrait le plus net trouvé jusqu'ici :
+
+« L'avant centre Boudjema est très dangereux et possède un déboulé
+foudroyant. Il est puissamment aidé par des ailiers rapides et des inters qui
+lui facilitent sa tâche. La ligne de demis, avec Moudry au centre, sans valoir
+la comparaison avec celle des doyens, n'en est pas moins efficace. Quant à la
+défense, Chaisaz dans les bois ; Schulzendorf et Kurdna forment une barrière
+difficile à franchir. »
+
+Composition annoncée : « Chaisaz, Schulzendorf, Kurdna, Schubert, Moudry,
+Galland, Marino, A. Beraudo, Boudjema, Gérin, Granier. »
+
+LU : 38 sur 312.
