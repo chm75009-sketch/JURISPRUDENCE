@@ -447,3 +447,65 @@ PLUS REVENIR SUR LA CÔTE D'AZUR. IL EST ACTUELLEMENT À BEJA. »
 VERDICT : c'est lui. Deuxième attestation imprimée de BÉJA comme son lieu, et
 la première trace de son refus de revenir à Nice. 15 septembre 1936.
 
+[24] 1937-01-16 - L'Auto, page 2 - À REVOIR
+Le recadrage automatique est tombé sur la page de tennis ; le passage sur
+Boudjemaa est ailleurs sur la même page. À reprendre.
+
+[25] 1939-04-27 - Le Petit Parisien, page 6  *** LA RÉPONSE SUR MARTINELLI + PORTRAIT ***
+Article signé Claude THUILLARD, avec une photographie de lui debout, en
+costume et cravate. Titre : « [...] aurait dit dimanche le Red Star à
+BOUDJEMAA ».
+Transcription :
+« Un garçon râblé, très brun, au chef pourvu d'une chevelure lourde, ondulée et
+luisante, des yeux marron assez étonnés, des dents éclatantes : le tout donne
+MOHAMMED BOUDJEMAA, VINGT-QUATRE ANS, INTÉRIEUR GAUCHE DES SPORTS RÉUNIS DE
+COLMAR, que le C.A.P. vient de recruter.
+
+EN FLÈCHE. - Avec son "collègue" Tellechea il complète un trio d'attaque dont
+Zopp est le point d'orgue. Et il faut voir à l'œuvre les trois compères quand
+ils sont dans ce qu'on est convenu d'appeler "un bon jour" ! Boudjemaa, pour sa
+part, s'agite, se détend, part en flèche, dribble long et tour à tour fait agir
+son ailier Belko ou l'avant-centre viennois - bientôt français - le
+"goal-getter" Zopp. Nous vous prions de croire que ce travail de préparation
+est réalisé avec autant de maîtrise que de clairvoyance. Un peu ce que
+représente la "vista" chez les footballeurs basques !
+
+MARTINELLI A L'ŒIL ! - Âgé de vingt-quatre ans, Mohammed - un de plus ! - EST
+NÉ À BÉJA, EN TUNISIE. Tout gamin, petit "yaouled" ÉCHAPPÉ DE LA BOUCHERIE
+PATERNELLE, Boudjemaa s'en allait rôder sur les touches du terrain de l'Union
+Sportive du cru. Comme nombre de jeunes Arabes, il avait une véritable vocation
+de footballeur. MAIS L'ENTRAÎNEUR DE L'U.S. BÉJA, MARTINELLI - QUI AVAIT LE
+FAMEUX ŒIL - NE TARDA PAS À REMARQUER CE NÉOPHYTE.
+
+BÉJA, C'EST TROP PETIT... - LES CONSEILS DU DÉVOUÉ "COACH" - DEPUIS PARTI POUR
+LES AMÉRIQUES - ne tombèrent point dans l'oreille d'un sourd. Ses qualités
+naturelles de souplesse et de rapidité aidant, le jeune inter progressa, fit
+parler de lui. Béja devint - à son avis - un centre trop restreint pour son
+activité. À vingt ans, on a besoin de tenter l'aventure, la chance, n'est-ce
+pas ? Boudjemaa ne faillit point à cette loi de nature et À DIX-NEUF ANS IL
+AVAIT CHANGÉ DE PÉNATES...
+Aussi, quand il fut cédé cette saison à Colmar, il avait déjà eu le temps - en
+deux ans de séjour dans la métropole - de se faire connaître avantageusement,
+sa bonne volonté et son désir de progresser sans cesse ayant été récompensés.
+
+LE RED STAR A BON GOÛT. - Mais un bruit court : les pérégrinations de Mohammed
+Boudjemaa ne sont point terminées... Le Red Star, sur le point de remonter en
+première division, a l'œil sur ce gaillard, promodèle, qui s'adapte partout
+rapidement, et il se pourrait fort que ce Nord-Africain quitte bientôt l'Alsace
+pour Paris...
+QUELLE JOIE ALORS À BÉJA ET EN TUNISIE AUSSI !
+                                              Claude THUILLARD. »
+
+VERDICT : c'est lui, et c'est la pièce que cherchait l'auteur.
+CE QU'ELLE APPORTE :
+- Le nom de celui qui l'a révélé : MARTINELLI, entraîneur de l'U.S. Béja,
+  « qui avait le fameux œil », « DEPUIS PARTI POUR LES AMÉRIQUES ».
+- Il EST NÉ À BÉJA (deuxième source de presse à le dire).
+- SON PÈRE ÉTAIT BOUCHER : « petit yaouled échappé de la boucherie paternelle ».
+- Il traînait sur les touches du terrain de l'U.S. Béja avant d'y jouer.
+- Il est parti de Tunisie À DIX-NEUF ANS, soit en 1933-1934.
+- Une PHOTOGRAPHIE de lui, debout, en costume, la seule en civil trouvée à ce
+  jour.
+POUR LE CHAPITRE 3 : « petit yaouled », « comme nombre de jeunes Arabes »,
+« ce Nord-Africain ».
+
