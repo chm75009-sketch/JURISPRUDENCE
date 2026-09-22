@@ -656,3 +656,60 @@ dix mois plus tard.
 Fac-similé : photos/AvenirSoukAhras-1934-OBeja.jpg.
 
 LU : 27 sur 312.
+
+---
+
+## [28] Le Forez sportif, 6 novembre 1935, page 2
+
+Ark bpt6k66818124, vue 2. Page lue en entier, colonne par colonne. Rubrique
+« En écoutant derrière les filets », en italique :
+
+« L'O.G.C. Nice vient d'accueillir dans ses rangs deux nouveaux éléments sur
+lesquels il fonde de sérieux espoirs : le Tunisien Boudjema et l'Espagnol
+Goye[t]. » La dernière lettre du nom espagnol est mangée par l'encre, je ne
+la donne pas pour sûre.
+
+VERDICT : l'annonce de son arrivée à Nice, six semaines avant le match contre
+Marseille. Il y est « le Tunisien Boudjema », sans prénom.
+Fac-similé : photos/ForezSportif-1935-arrivee-Nice.jpg.
+
+LU : 28 sur 312.
+
+---
+
+## [29] Le Petit Marseillais, 2 décembre 1935, page 8
+
+Ark bpt6k49191842, vue 8. Page lue en entier, colonne par colonne.
+
+Titre : « Marseille bat Nice PAR DEUX BUTS À ZÉRO ».
+
+« NICE. - Le match tant attendu, qui devait opposer l'Olympique de Marseille
+avec le club local, l'O.G.C.N., s'est déroulé au milieu d'une assistance
+considérable. »
+
+Ce que le compte rendu dit de lui, phrase par phrase :
+- « Nice domine légèrement et Boudjemaa fait de superbes ouvertures
+  inutilisées par Shubert. »
+- « Boudjemaa et A. Béraudo font un très grand labeur. »
+- « Un shoot de Boudjemaa est arrêté par Erevedian, qui met en corner ; botté
+  par Astori, il ne donne rien. »
+- « Boudjemaa ouvre à l'aile droite ; Schubert suit et va marquer, quand
+  Erevedian lui plonge dans les jambes et sauve le but. »
+- « La mi-temps arrive sur un score nul. A la reprise, Dubois, Marino et
+  Galand remplacent effectivement Gérin, Boudjemaa et Schubert, tandis que
+  Sautel joue à la place de Janin. »
+
+Les deux buts marseillais tombent en seconde mi-temps, après sa sortie :
+« A la 3e minute, Olej s'échappe [...] Audibert, pris à contre-pied, est
+battu par Janin. Après une série de passes devant les buts niçois, Janin
+donne à Crut, qui bat Audibert. »
+
+VERDICT : c'est bien le match Nice-Marseille du 1er décembre 1935, mais il
+s'est joué à Nice, pas à Marseille, et les trois remplacements à la mi-temps
+disent qu'il s'agit d'une rencontre amicale. Il y tient une place de premier
+plan pendant quarante-cinq minutes. Reste à confirmer avec l'auteur si c'est
+bien ce match qu'il a en tête pour le chapitre 4, ou un autre, joué à
+Marseille même.
+Fac-similé : photos/PetitMarseillais-1935-Nice-OM.jpg.
+
+LU : 29 sur 312.
