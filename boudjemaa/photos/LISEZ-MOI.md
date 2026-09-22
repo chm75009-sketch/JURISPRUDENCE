@@ -1,0 +1,19 @@
+PHOTOGRAPHIES DE BOUDJEMAA
+
+1. SR-Colmar-1938-equipe.jpg
+   Le Miroir des sports, 25 octobre 1938, page 7, « Présentation des trente-neuf
+   équipes professionnelles du football français (VII) ».
+   Légende imprimée : « S. R. Colmar - De g. à dr., 1er rang : Othman,
+   Villacampa, Tellechea, Zopp, BOUDJÉMAA, Belko. 2e rang, debout : Gougain,
+   Demuth, Logez, Wozniak, Delacourt, Jan, Lowy (entraîneur). »
+   Il est donc au premier rang, accroupi, CINQUIÈME EN PARTANT DE LA GAUCHE.
+   La convention des rangs est vérifiée sur la photo voisine du Toulouse F.C.,
+   dont la légende compte cinq noms au 1er rang pour cinq joueurs accroupis et
+   sept au 2e rang pour sept joueurs debout, entraîneur compris.
+   Gallica, ark:/12148/bpt6k97963516, vue 7.
+
+2. boudjemaa_portrait.jpg
+   Détail de la précédente, agrandi : son visage.
+
+À NOTER : l'entraîneur de Colmar est Lowy, qui était déjà son entraîneur à
+l'O.G.C. Nice en 1936.
