@@ -1325,3 +1325,20 @@ nom concerne la ligne d'attaque alésienne et la lecture est trop abîmée pour
 que j'affirme quoi que ce soit : je le signale et je n'en tire rien.
 
 LU : 73 sur 312.
+
+---
+
+## [70] Paris-soir, 7 février 1936, page 4
+
+Ark bpt6k76409855, vue 4. Composition d'une sélection appelée à rencontrer la
+Hongrie :
+
+« Voici l'équipe : Ehms (Antibes) ; Kurdna (O.G.C. Nice), Schwartz (A.S.
+Cannes) ; A. Béraudo et Moudry (Nice), Amand (Antibes) ; Guimbard, Kovacs,
+Franceschetti (A.S. Cannes), Pecchino (Antibes) et Boudjemaa (O.G.C. Nice).
+Remplaçants : Chaisaz, Schubert et Mo[udry]. »
+
+VERDICT : quatre mois après ses débuts en France, il est retenu en sélection
+régionale contre la Hongrie.
+
+LU : 74 sur 312.
