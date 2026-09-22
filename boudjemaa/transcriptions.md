@@ -589,3 +589,40 @@ avant son départ pour la France. Elle donne aussi la place des deux
 Martinelli : Martinelli (II) demi, Martinelli (I) avant, aux côtés de
 Boudjemaa - la même répartition que dans la composition de 1931.
 Fac-similés : photos/SoukAhras-1932-p1.jpg et photos/SoukAhras-1932-p2.jpg.
+
+---
+
+## [26] Le Petit Matin (Tunis), 16 janvier 1934, page 7
+
+Ark bpt6k8392766m, vue 7. Page lue en entier, colonne par colonne.
+Rubrique « Championnat de la Medjerdah ».
+
+Titre : « L'U.S. Béja dispose difficilement de l'O. Béja par 2 à 1 ».
+
+« A 15 heures, M. Navone, arbitre de Tunis, appelle les deux équipes qui
+présentent les formations suivantes : U.S. Béja : Baroufa, Ferracci, Cohen,
+Chatti, Martinelli, Laroche, Raousa, Morandi, Abouaf, Toukabri et Santoro.
+O. Béja : Allala, Boudjemaa, Moha[...] »
+
+Le match : « La balle est dans les 18 mètres des Olympiens. Boudjemaa hésite,
+Abouaf en profite pour ouvrir le score : USB : 1 - OB : 0. » Puis, sur un
+centrage de Morandi, « Abouaf n'a aucune peine à ajouter un deuxième but :
+USB : 2 - OB : 0 ». Kaddour sert Youssef, « Baroufa manque son arrêt » et la
+balle pénètre dans les filets : USB 2 - OB 1.
+
+Le jugement du chroniqueur : « Les Cigognes méritèrent le gain du match grâce
+à leur cran [...] Santoro, Abouaf et Cohen furent les meilleurs. L'Olympique,
+handicapé par l'absence d'un joueur et surtout par le jeûne du Ramadan, ne
+fournit pas sa partie habituelle. Sont à signaler : Allala, Boudjemaa,
+Khomsi, Kaddour et [...] »
+
+VERDICT : deux clubs à Béja en janvier 1934, l'Union Sportive et l'Olympique,
+et un Boudjemaa qui joue à l'Olympique, en défense, tandis que Martinelli est
+demi à l'U.S. Béja. C'est l'inverse de la composition du 30 juillet 1932, où
+un Boudjemaa était avant à l'U.S.B. aux côtés de Martinelli I. Les deux
+lectures sont certaines, les deux textes sont cités : ou bien il a changé de
+club entre 1932 et 1934, ou bien ce sont deux joueurs différents. Je ne
+tranche pas tant qu'une pièce ne le dira pas.
+Fac-similé : photos/PetitMatin-1934-derby-Beja.jpg.
+
+LU : 26 sur 312.
