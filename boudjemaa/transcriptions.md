@@ -747,3 +747,91 @@ avant, il marque, et le chroniqueur le cite en tête des hommes à féliciter.
 Fac-similé : photos/PetitMatin-1931-USBeja-juniors.jpg.
 
 LU : 30 sur 312.
+
+---
+
+## [31] L'Ouest-Éclair, 26 décembre 1935, page 7
+
+Ark bpt6k5005691, vue 7. Nice bat le C.A.P. 1 à 0, dépêche datée de Nice, 25
+décembre.
+
+« Dès le début, les Niçois dominent d'une façon très nette. Les avants de
+Nice multiplient leurs passes latérales mais n'arrivent pas à placer un shoot
+dans de bonnes conditions, malgré la fougue de leur nouvel avant-centre
+tunisien Boudjema. » Puis : « Hall est pénalisé d'un penalty sévère que Nice
+transforme. A la mi-temps : Nice, 1 ; C.A.P., 0. »
+
+VERDICT : il est avant-centre titulaire trois semaines après ses débuts.
+
+LU : 31 sur 312.
+
+---
+
+## [32] L'Auto, 21 février 1936, page 6
+
+Ark bpt6k46294444, vue 6. Entrefilet en italique, sans titre, entre deux
+brèves :
+
+« L'émoi était grand à Nice, où l'excellent avant centre de l'OGC de Nice, le
+Tunisien Boudjema, avait subitement disparu. On n'a pas été long à le
+retrouver. Boudjema avait eu le mal du pays et avait mis le cap sur la
+Tunisie. Mais il ne s'agit là que d'un coup de tête et le sympathique joueur
+est revenu à Nice où il a été accueilli à bras ouverts. »
+
+VERDICT : février 1936, il quitte Nice sans prévenir et repart vers la
+Tunisie. Le journal parle de « mal du pays » et de « coup de tête ». C'est,
+pour l'instant, le seul texte qui dise quelque chose de ce qu'il vivait loin
+de chez lui. A rapprocher de l'affaire des deux contrats et de la suspension,
+chapitre 2.
+Fac-similé : photos/LAuto-1936-mal-du-pays.jpg.
+
+LU : 32 sur 312.
+
+---
+
+## [33] Le Grand Écho du Nord de la France, 24 février 1936, page 6
+
+Ark bpt6k4765124f, vue 6. R.C. Lens bat l'O.G.C. Nice.
+
+Composition imprimée : « O.G.C. Nice. - Chaisaz ; Schiave, Schubert,
+Galland, Moudry, J. Bérando, Granier, Gérin, Boudjema, A. Bérando, Marino.
+R.C. Lens. - Leroux ; Dubreu, Mareck, Marian, François, Hus, Novicki, Siklo,
+Butina, Spechlt, Plovie. »
+
+« Menant par 4 buts à 0, les miniers soufflent alors et les Niçois vont mener
+des [attaques] dangereuses. Boudjema, Gérin, A. Béraudo, tour à tour forcent
+Leroux à intervenir. »
+
+LU : 33 sur 312.
+
+---
+
+## [34] L'Écho du Nord, 25 février 1936, page 6
+
+Ark bd6t54696090, vue 6. Même rencontre, Lens-Nice, vue de Lille.
+
+« Trois hommes manquaient dans l'équipe niçoise : Kurdna, Schultendorf et
+Dubois, mais Schiave, qui jouait à l'arrière, et Boudjema, qui remplaçait
+Dubois, fournirent un joli match et il n'est pas certain que les titulaires
+auraient fait beaucoup mieux sur le terrain détrempé et glissant des
+professionnels artésiens. »
+
+LU : 34 sur 312.
+
+---
+
+## [35] Le Forez sportif, 22 janvier 1936, page 3
+
+Ark bpt6k66818191, vue 3. Saint-Étienne contre Nice.
+
+« La formation niçoise, on le sait, ne comporte pas de grands noms, mais son
+jeu est, somme toute, assez plaisant à suivre. Boudjemaa, inter gauche ;
+Dubois, centre-avant ; Beraudo, demi-droit et Schulzendorf, arrière droit, se
+prodiguèrent avec plus de bonheur que leurs camarades. »
+
+Et la fin du match : « Tout de même, à l'ultime moment, l'intérieur Boudjemaa
+parvint à sauver l'honneur des "rouge et noir" visiteurs. »
+
+VERDICT : son but à Saint-Étienne, deux ans avant d'y signer.
+
+LU : 35 sur 312.
