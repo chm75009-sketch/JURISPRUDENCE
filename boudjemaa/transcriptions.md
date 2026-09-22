@@ -626,3 +626,33 @@ tranche pas tant qu'une pièce ne le dira pas.
 Fac-similé : photos/PetitMatin-1934-derby-Beja.jpg.
 
 LU : 26 sur 312.
+
+---
+
+## [27] L'Avenir de Souk-Ahras, 28 octobre 1934, page 5
+
+Ark bpt6k6234878g, vue 5. Page lue en entier, colonne par colonne.
+
+Rubrique « SPORTS », titre : « S.C.S.A. contre O. Béja ». Le texte, lu ligne à
+ligne : « [Profitant du] dimanche de libre [du] championnat départemental,
+[pour par]faire la forme de son [équipe, le] dévoué comité du Sporting
+Souk-Ahrassien a fait [venir] l'Olympique Béjaois, ré[cent vainqu]eur du
+Foot-Ball Club [...] de la Coupe de Tunisie, pour donner la réplique à son
+team premier. Ce sera une belle occasion d'applaudir cette excellente équipe
+Tunisienne qui se distingue actuellement en championnat de la Tunisie. »
+
+Composition, telle qu'imprimée : « Olympique de Béja : Allouche ; Khomissi,
+Bordjema I ; Aziz, Boudjema II (P. Sélection), Saïd (Cap) ; Kaddour, Amara,
+Youssef, Chelbi, Chouchan. » En face : « Sporting Club Souk-Ahras :
+Parlavechio ; Bianchi I, Bouacha I, Perdini, Méozzi, Fontana ; Amar, Scarpa,
+Sauvaire, Corsaletti, Jovillain. »
+
+VERDICT : l'Olympique de Béja compte deux Boudjemaa, le I arrière et le II
+demi centre, et le II porte la mention « (P. Sélection) », c'est-à-dire qu'il
+est pris en sélection. On retrouve autour d'eux les mêmes noms qu'au derby du
+15 janvier 1934 : Khomsi, Kaddour, Youssef. C'est, à ce jour, la dernière
+trace d'un Boudjemaa sur un terrain tunisien avant le départ pour la France,
+dix mois plus tard.
+Fac-similé : photos/AvenirSoukAhras-1934-OBeja.jpg.
+
+LU : 27 sur 312.
