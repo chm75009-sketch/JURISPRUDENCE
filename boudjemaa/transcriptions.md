@@ -509,3 +509,32 @@ CE QU'ELLE APPORTE :
 POUR LE CHAPITRE 3 : « petit yaouled », « comme nombre de jeunes Arabes »,
 « ce Nord-Africain ».
 
+
+--- DOSSIER MARTINELLI (celui qui l'a révélé) ---
+
+[M1] 1931-02-28 - L'Afrique du Nord illustrée, page 7
+« LA COUPE DE L'AFRIQUE DU NORD À BÔNE. - Le 8 février, le match pour la Coupe
+de l'Afrique du Nord s'est déroulé à Bône devant une nombreuse galerie au stade
+Sultana. Le référé Riéra, président de la Ligue d'Alger, rassembla les équipes
+dont la formation était la suivante :
+BÉJA (maillot rouge) ; goal : Imbach ; arrières : Karoubi et Nizzo ; demis :
+MARTINELLI II, Ferrara et Mari ; avants : Ducoussot, Touatti, Chimento,
+MARTINELLI I (CAPITAINE) et Obrich.
+Bône (damiers) : goal : Martinez ; arrières : Roggy et Delgatto ; demis : Furno,
+Xerri et Braia ; avants : Parizot, Cesari, Miglioni, Degiacomo, Guardamania.
+En première mi-temps les Béjaois ont l'avantage du vent et le jeu est mené par
+Xerri, Miglioni et Parizot qui met à côté une première fois. Le terrain sec se
+prêtait admirablement aux belles combinaisons et quelques minutes après
+l'ouverture, Miglioni place une balle à ras de terre, dans le coin et trompe la
+surveillance du goal de l'U.S.B. [...] Malgré une réaction des visiteurs,
+ceux-ci ne peuvent conclure et la fin est sifflée sur la victoire des
+meilleurs : ASB, 2 ; USB, 0. »
+Et, en bas de page, une PHOTOGRAPHIE légendée « L'ÉQUIPE DE L'UNION SPORTIVE
+BÉJAOISE », signée « Photo-Sultan, Béja ». Onze joueurs, six debout, cinq
+accroupis.
+CE QUE ÇA APPREND : Martinelli n'était pas seulement l'entraîneur. En février
+1931 il est AVANT-CENTRE ET CAPITAINE de l'U.S. Béja, et son frère, Martinelli
+II, joue demi. Ils sont deux.
+POUR LE LIVRE : c'est l'équipe qui a formé Boudjemaa, photographiée quatre ans
+avant son départ. Il avait seize ans.
+
