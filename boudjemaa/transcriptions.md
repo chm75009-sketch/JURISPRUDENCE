@@ -1157,3 +1157,68 @@ dictera la voie au football français en lui apportant cette fougue qui
 s'émousse tant dans la Métropole. »
 
 LU : 57 sur 312.
+
+---
+
+## [57] L'Éclair (Midi), 1er septembre 1938, page 3
+
+Ark bd6t53744459m, vue 3. Compositions de la deuxième division pour la
+journée d'ouverture. « Colmar. - Wozniack ; Gardet, Jan ; Demuth, Gougain,
+Othman ; Aravit, Tellechéa, Zopp, Boudjemaa, Belko. »
+Les pages 7 et 11 du même numéro, également lues en entier, ne portent rien
+sur lui.
+
+LU : 60 sur 312.
+
+---
+
+## [58] Le Petit Journal, 1er septembre 1938, page 8
+
+Ark bpt6k636622w, vue 8. Présentation de la saison de deuxième division :
+
+« Colmar a poursuivi en grand son effort de la saison dernière : Belko,
+Boudjemaa, Wozniack, Gougain sont les nouvelles recrues de cette équipe,
+entraînée par Lowy, lequel dispose maintenant de 24 joueurs "pros". »
+
+VERDICT : il arrive à Colmar à l'été 1938, avec Lowy comme entraîneur.
+
+LU : 61 sur 312.
+
+---
+
+## [59] L'Ouest-Éclair, 2 septembre 1938, page 10
+
+Ark bpt6k631163q, vue 10. Stade Rennais contre S.R. Colmar, avec le tableau
+des deux équipes face à face, où il figure inter gauche entre Belko et Zopp.
+
+« Comme un coup de fusil, une attaque de Colmar est partie. La défense
+rennaise a hésité. Pas Boudjemaa, qui [bat] froidement Miramond à la 11e
+minute. »
+
+LU : 62 sur 312.
+
+---
+
+## [60] La Dépêche de Brest, 2 septembre 1938, page 6
+
+Ark bpt6k3493724, vue 6. Même match : « Colmar est le pr[emier à attaquer],
+[...] la défense rennaise [hésite], Boudjemaa reprend [et bat] imparablement
+Miramond. »
+
+LU : 63 sur 312.
+
+---
+
+## [61] L'Écho du Maroc, 2 septembre 1938, page 7
+
+Ark bpt6k86611093, vue 7. Dépêche « Rennes, 1er septembre » :
+
+« Dès le début, Rennes est dangereux ; puis le jeu devient plus égal. Colmar
+joue mieux. A la 15e minute, Boudjemaa reprend la balle à Aravit et marque
+pour Colmar ; mais cinq minutes plus tard, Belunza égalise pour Rennes. »
+
+VERDICT : trois journaux, trois minutes différentes pour le même but, la 11e,
+la 15e et une non datée. C'est son premier but sous le maillot de Colmar,
+dès la première journée.
+
+LU : 64 sur 312.
