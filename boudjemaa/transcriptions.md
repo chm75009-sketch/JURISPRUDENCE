@@ -1045,3 +1045,115 @@ VERDICT : cinq jours après la liste des deux licences, la presse du Midi dit
 la chose en clair.
 
 LU : 49 sur 312.
+
+---
+
+## [49] Paris-soir, 30 mars 1937, page 8
+
+Ark bpt6k7641588b, vue 8. Racing de Paris contre Nice à Saint-Ouen, avec
+Ricardo Zamora dans les buts niçois et Samitier en attaque.
+
+« Nice joue bien et parvient même à marquer. Sa valeur est une heureuse
+révélation pour le public parisien. Les "nationaux" comme Boudjema et
+Brusseaux ne feraient pas mal en division nationale.
+- Encore des Nord-Africains, souligne Couard, réduit au rôle de spectateur. »
+(RACISME - à verser au chapitre 3.)
+
+« Boudjema suit une passe trop molle de Zivcovitch à Hiden, qui le bouscule,
+et Samitier, qui a suivi, marque dans les buts vides. NICE : 2 - PARIS : 0. »
+« Le jeu chauffe décidément et Boudjemaa, à son tour, adresse un shot qui
+frise le poteau. »
+Et, parmi les hommes en vue : « on note les bonnes [parties de] Brusseau,
+Boudjemaa et Sa[mitier, qui] a montré une maîtrise et un [métier]
+exceptionnels ».
+
+LU : 50 sur 312.
+
+---
+
+## [50] La Dépêche (Lille), 14 avril 1937, page 8
+
+Ark bd6t51504375c, vue 8. Annonce de U.S. Valenciennes contre Nice :
+
+« Saint-Etienne, le R.C. Paris, deux des meilleurs "onze" français du moment
+battus par l'O.G.C. Nice, voilà de quoi faire réfléchir les Valenciennois.
+L'O.G.C. Nice déplacera sa toute première équipe où brillent Samitier, le
+meilleur avant-centre que l'Espagne ait jamais produit, Boudjema, Chaisaz,
+Orlandini, Lowicky, etc. »
+
+LU : 51 sur 312.
+
+---
+
+## [51] Le Petit Journal, 18 avril 1937, page 8
+
+Ark bpt6k634676k, vue 8. Composition annoncée de Nice : « [Zamora ;]
+Schulzendorf, Kudrna, [...] Rodriguez, Brusseau, Boudjemaa, Lowicky [...] »
+
+LU : 52 sur 312.
+
+---
+
+## [52] Le Courrier du Pas-de-Calais, 21 avril 1937, page 3
+
+Ark bd6t514626437, vue 3. Avant Lens contre Nice :
+
+« Nice possède un team de grande classe où brillent les Chaisaz, Lowicky,
+Kudrna, Orlandini, Boudjemaa et le remarquable espagnol Samitier. »
+
+LU : 53 sur 312.
+
+---
+
+## [53] L'Auto, 23 avril 1937, page 6
+
+Ark bpt6k4629871d, vue 6. Olympique Saint-Quentinois contre Nice, signé
+Vicéville.
+
+« A la vingtième minute de jeu, l'inter droit Boudjemaa, sur un bel effort
+personnel, marque le deuxième but pour Nice. »
+
+LU : 54 sur 312.
+
+---
+
+## [54] Le Guetteur, 24 avril 1937, page 1
+
+Ark bd6t54498497d, vue 1. Valenciennes contre Nice.
+
+« Puis Nice réagit, Samitier et Boudjemaa, à la suite d'actions bien
+conduites, shootent successivement, mais de trop loin pour surprendre
+l'attention en éveil du goal [...] »
+Et le jugement : « A Nice, les meilleurs furent Boudjemaa, joueur rapide,
+scientifique et extrêmement dangereux ; Pellegrini, Chaisaz [...] Samitier,
+jugulé par Thomas, se signala par ses brutalités répétées. »
+
+LU : 55 sur 312.
+
+---
+
+## [55] Le Grand Écho de l'Aisne, 28 avril 1937, page 4
+
+Ark bpt6k4339052v, vue 4. Compte rendu de Saint-Quentin contre Nice, vu du
+côté local : « [...] belle passe de [...] minutes après, [le d]roit Boudjemaa
+[...] »
+
+LU : 56 sur 312.
+
+---
+
+## [56] La Dépêche de Constantine, 30 avril 1937, page 4
+
+Ark bd6t511615218, vue 4. Projet d'une sélection nord-africaine opposée à
+l'équipe de France. La composition proposée : « Gonzalès (Red-Star) ; Ben
+Bouali (Marseille) et Jasseron (AC) ; [...] Ortin (Red-Star) ; Zermani
+(Marseille) ou Haussaire (Cannes), Alcazar (Lille) ou Sintés (Sète) ou
+Boudjema (Nice), Zatelli (Marseille), Fructoso (RC Roubaix) et Janin
+(Red-Star) ou Rodriguez (Excelsior). »
+
+Et la phrase qui suit, à verser au chapitre 3 : « Le football nord-africain
+est appelé à un brillant avenir chez nous et c'est lui qui, peut-être,
+dictera la voie au football français en lui apportant cette fougue qui
+s'émousse tant dans la Métropole. »
+
+LU : 57 sur 312.
