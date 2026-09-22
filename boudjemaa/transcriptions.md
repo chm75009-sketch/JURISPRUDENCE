@@ -984,3 +984,64 @@ Ark bpt6k72148821, vue 2. Tableau des résultats, division II : « Nice (10) 5 �
 avec les buteurs entre parenthèses : « Granier 2, Marino 2, Boudjema ».
 
 LU : 45 sur 312.
+
+---
+
+## [45] Le Petit Matin (Tunis), 16 mai 1929, page 7
+
+Ark bpt6k8391310j, vue 7. Page lue en entier.
+
+Titre : « Le Sporting Club de Tabarka bat [l'Olympique de] Béja par 4 [à 1] ».
+
+« Pour l'honneur de la fête de Jeanne d'Arc, le Sporting-Club de Tabarka
+invita en un match de football association l'Olympique de Béja, société
+indigène nouvellement formée. »
+
+Le jeu : « Les arrières béjaois loupent mais le demi-centre Boudjemaa arrive
+à temps pour sauver et alimente remarquablement sa ligne d'avants. »
+Les meilleurs : « A Béja : David, Touati, Kaddour, Kenzey et Boudjemâa. »
+
+VERDICT : mai 1929, l'Olympique de Béja vient d'être fondé, « société
+indigène », et un Boudjemaa y est déjà demi-centre. Si c'est le nôtre, il a
+quatorze ans et neuf mois, ce qui est très jeune pour ce poste dans une
+équipe première. La composition de l'Olympique du 28 octobre 1934 porte
+d'ailleurs deux joueurs de ce nom, Boudjema I et Boudjema II. Il y a donc au
+moins deux Boudjemaa dans le football béjaois, et je ne dis pas lequel est
+lui.
+
+LU : 46 sur 312.
+
+---
+
+## [46] Le Petit Matin (Tunis), 26 juin 1929, page 3
+
+Ark bpt6k8391347k, vue 3. Même affiche, même résultat : Tabarka 4, Béja 1.
+
+« L'Olympique marque un superbe but par l'intermédiaire de Boudjemaa. »
+Et, aux considérations : « la jeune équipe de Béja ne fournit pas sa partie
+habituelle ».
+
+LU : 47 sur 312.
+
+---
+
+## [47] Le Petit Matin (Tunis), 3 juin 1929, page 5
+
+Ark bpt6k8391326d, vue 5. Un penalty transformé par un Boudjemaâ dans un
+match Racing contre Sporting, équipes « noir et blanc », et une mention
+spéciale à « Sagé, Boudjema et Valenza ». Rien dans la page ne rattache ce
+match à Béja : je le note, je ne le compte pas.
+
+LU : 48 sur 312.
+
+---
+
+## [48] Le Républicain du Gard, 20 juillet 1936, page 3
+
+Ark bd6t535582737, vue 3. Brève : « Boudjemâa, de l'O.G.C. Nice, a reçu des
+offres sérieuses de l'A.S. de Saint-Etienne. »
+
+VERDICT : cinq jours après la liste des deux licences, la presse du Midi dit
+la chose en clair.
+
+LU : 49 sur 312.
