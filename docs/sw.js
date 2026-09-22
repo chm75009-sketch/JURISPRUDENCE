@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.44";
+const CACHE = "jurisprudence-12.45";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -94,6 +94,9 @@ const ESSENTIELS = [
   /* Le décompte des heures se tient sur place, souvent sans réseau, et c'est
      la pièce qu'on produit quand des heures supplémentaires sont réclamées. */
   "./heures.html", "./heures.js",
+  /* Le forfait en jours : le document de contrôle se remplit là où le salarié
+     travaille, et c'est la pièce que l'employeur doit produire. */
+  "./forfait.html", "./forfait.js",
   /* La flotte et les conducteurs : les échéances se regardent sur le quai,
      souvent sans réseau. */
   "./flotte.html", "./flotte.js",

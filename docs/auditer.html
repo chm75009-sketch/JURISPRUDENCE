@@ -126,6 +126,11 @@
     { cle: "duerp",      nom: "Document unique (risques)",      seuil: 1,   non: "parcours.html?p=duerp&faire=1",        oui: "controler-duerp.html" },
     { cle: "affichages", nom: "Affichages obligatoires",        seuil: 1,   non: "parcours.html?p=affichages&faire=1",   oui: "controler-affichages.html" },
     { cle: "registre",   nom: "Registre du personnel",          seuil: 1,   non: "registre.html?rep=non",                oui: "registre.html?rep=oui" },
+    /* Le forfait en jours ne tient à aucun effectif : il tient à un accord
+       collectif (L. 3121-63) et à un suivi. La ligne s'ouvre donc dès le
+       premier salarié, avec la réserve qui dit quand elle concerne. */
+    { cle: "forfait",    nom: "Forfait en jours",               seuil: 1,   cond: "si un salarié est au forfait",
+      non: "forfait.html?rep=non", oui: "forfait.html?rep=oui" },
     { cle: "mutuelle",   nom: "Mutuelle d'entreprise",          seuil: 1,   non: "gerer.html" },
     { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "gerer.html" },
     { cle: "cse",        nom: "Comité social et économique", seuil: 11, non: "parcours.html?p=installation&faire=1", oui: "controler-cse.html" },

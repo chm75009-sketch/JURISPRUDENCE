@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forfait en jours</title>
+<meta name="description" content="La convention de forfait en jours : la construire, la contrôler, et tenir le suivi qui l'empêche de tomber.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LE FORFAIT EN JOURS : LE CONSTRUIRE, LE CONTRÔLER, LE SUIVRE.
+
+  Pourquoi cet écran existe. Un forfait en jours qui tombe coûte trois ans
+  d'heures supplémentaires. Il tombe de deux manières, et elles ne se
+  confondent pas. Il est nul quand ce qui le fonde manque : pas d'accord
+  collectif (L. 3121-63, LEGIARTI000033003340), pas d'écrit signé
+  (L. 3121-55, LEGIARTI000033003165), un salarié qui n'est pas autonome
+  (L. 3121-58, LEGIARTI000033003228), un accord dont les clauses ne
+  garantissent rien (L. 3121-64, LEGIARTI000036262805). Il est privé d'effet
+  quand il est valable mais qu'il n'a pas été suivi : entretien annuel non
+  tenu, document de contrôle absent, charge jamais regardée.
+
+  Ce que la Cour de cassation en dit, lu le 22 septembre 2026 :
+  - Soc. 10 janvier 2024, n° 22-15.782 (B, R) : l'employeur qui manque à l'une
+    des obligations de L. 3121-65 ne peut pas se prévaloir du régime
+    supplétif, et la convention conclue sous un accord qui ne répond pas à
+    L. 3121-64, II, 1° et 2°, est nulle.
+  - Soc. 11 mars 2025, n° 23-19.669 (B) : accord qui ne garantit pas une
+    amplitude et une charge raisonnables, convention nulle, heures
+    supplémentaires dues ; mais le manquement seul n'ouvre pas droit à
+    réparation, le salarié doit démontrer un préjudice distinct.
+  - Soc. 19 décembre 2018, n° 17-18.725 (B) : c'est à l'employeur de prouver
+    qu'il a respecté les stipulations de l'accord destinées à protéger la
+    santé et la sécurité. D'où cet écran : ce qui n'est pas écrit n'existe pas.
+  - Soc. 10 janvier 2024, n° 22-13.200 (B) : L. 3121-60 est d'ordre public,
+    et l'employeur informé d'une charge excessive doit y remédier en temps
+    utile.
+  - Soc. 6 janvier 2021, n° 17-28.234 (B) : quand la convention est privée
+    d'effet, l'employeur peut réclamer le remboursement des jours de repos
+    devenus indus.
+
+  Ce que l'écran fait. Il pose une question fermée, une seule : avez-vous une
+  convention signée ? « Non » ouvre la construction, de l'accord collectif
+  jusqu'au rétroplanning daté. « Oui » ouvre huit cases qui décident seules
+  du sort de la convention, et chaque case décochée ouvre le document qui la
+  répare. Ensuite vient le suivi : la grille du mois où chaque jour se
+  qualifie, les compteurs, les alertes, l'entretien annuel, l'avenant de
+  renonciation.
+
+  Tout vit sur le poste, comme le reste de l'application.
+-->
+
+<link rel="stylesheet" href="style.css">
+<style>
+  .haut b{font-size:var(--t4)}
+  .bloc{background:var(--surface);border:1px solid var(--filet);border-radius:var(--r2);
+    padding:var(--e4);margin:var(--e4) 0 0}
+  .bloc h2{font:600 var(--t0)/1 system-ui;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--texte-3);margin:0 0 var(--e3)}
+  .doux{font-size:var(--t2);color:var(--texte-2);margin:0 0 var(--e2)}
+
+  /* LA QUESTION D'ENTRÉE. Elle est la première chose de l'écran, et rien ne
+     la précède : c'est la règle de l'architecture. Deux boutons, pas trois. */
+  .question{background:var(--accent-clair);border:2px solid var(--accent);
+    border-radius:var(--r2);padding:var(--e5) var(--e4);margin:var(--e4) 0 0}
+  .question p{margin:0 0 var(--e4);font:600 var(--t5)/1.35 system-ui;color:var(--accent)}
+  .deuxb{display:grid;gap:10px}
+  @media (min-width:520px){.deuxb{grid-template-columns:1fr 1fr}}
+  .deuxb button{min-height:var(--h-bouton);font:600 var(--t-bouton) system-ui;border-radius:var(--r2)}
+  .repondu{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    font-size:var(--t2);color:var(--texte-2);margin:var(--e3) 0 0}
+  .repondu button{width:auto;min-height:var(--h-touche);padding:0 14px;font-size:var(--t2);
+    border-radius:999px;background:var(--surface);color:var(--accent);border:1px solid var(--filet-2)}
+
+  .champ{display:flex;flex-direction:column;gap:6px}
+  .champ > span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .champ input,.champ select,.champ textarea{font-size:16px;min-height:48px;padding:10px 12px;
+    border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);
+    color:var(--texte);width:100%;box-sizing:border-box}
+  .champ textarea{min-height:84px;line-height:1.45;resize:vertical}
+  .deux{display:grid;gap:10px;margin:var(--e3) 0 0}
+  @media (min-width:560px){.deux{grid-template-columns:1fr 1fr}}
+
+  .identite{display:grid;gap:2px;margin:var(--e3) 0 0}
+  .identite .l{display:flex;justify-content:space-between;gap:12px;padding:7px 0;
+    border-bottom:1px solid var(--filet);font-size:var(--t2)}
+  .identite .l:last-child{border-bottom:0}
+  .identite .q{color:var(--texte-3)}
+  .identite .v{font-weight:600;text-align:right}
+
+  /* LES CASES DU CONTRÔLE. Une ligne, un interrupteur, et sous la ligne ce
+     qui arrive si elle reste décochée. Rien à lire tant que tout est coché. */
+  .cases{display:grid;gap:8px;margin:var(--e3) 0 0}
+  .cas{border:1px solid var(--filet);border-radius:var(--r1);padding:11px 12px;background:var(--surface)}
+  .cas.ko{border-color:var(--rouge);background:var(--rouge-clair)}
+  .cas .tete{display:flex;align-items:flex-start;gap:11px}
+  .cas input[type=checkbox]{width:24px;height:24px;flex:0 0 auto;margin:2px 0 0;accent-color:var(--accent)}
+  .cas .lib{font:600 var(--t3)/1.35 system-ui;flex:1 1 auto}
+  .cas .suite{margin:9px 0 0 35px;font-size:var(--t2);color:var(--texte-2)}
+  /* La conséquence se lit en rouge, pas en gras : du gras sur cinq lignes ne
+     signale plus rien. */
+  .cas .suite b{color:var(--rouge);font-weight:400}
+  .cas .suite button{margin:9px 0 0;width:auto;min-height:44px;padding:0 14px;font-size:var(--t2);
+    border-radius:999px}
+
+  .verdict{margin:var(--e4) 0 0;border-radius:var(--r2);padding:var(--e4);border:2px solid}
+  .verdict.ok{border-color:var(--vert);background:var(--vert-clair)}
+  .verdict.tiede{border-color:var(--ambre);background:var(--ambre-clair)}
+  .verdict.ko{border-color:var(--rouge);background:var(--rouge-clair)}
+  .verdict .t{font:700 var(--t5)/1.25 system-ui}
+  .verdict.ok .t{color:var(--vert)}
+  .verdict.tiede .t{color:var(--ambre)}
+  .verdict.ko .t{color:var(--rouge)}
+  .verdict .d{margin-top:8px;font-size:var(--t3);line-height:1.5}
+
+  /* LE CALCUL DES JOURS DE REPOS. Un décompte, pas une formule : on voit ce
+     qui est retiré, ligne par ligne, et le résultat en bas. */
+  .compte{display:grid;gap:0;margin:var(--e3) 0 0}
+  .compte .l{display:flex;justify-content:space-between;gap:12px;padding:9px 0;
+    border-bottom:1px solid var(--filet);font-size:var(--t3)}
+  .compte .l:last-child{border-bottom:0;border-top:2px solid var(--accent);margin-top:4px;
+    font-weight:700;color:var(--accent);font-size:var(--t4)}
+  .compte .n{font-variant-numeric:tabular-nums;font-weight:600}
+
+  .tuiles{display:grid;gap:10px;margin:var(--e3) 0 0}
+  @media (min-width:560px){.tuiles{grid-template-columns:1fr 1fr 1fr}}
+  .tuile{border:1px solid var(--filet);border-radius:var(--r1);padding:12px 13px;background:var(--surface)}
+  .tuile .et{font:600 11px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-3)}
+  .tuile .n{font:700 25px/1.1 system-ui;margin-top:7px;font-variant-numeric:tabular-nums}
+  .tuile.chaud{border-color:var(--ambre);background:var(--ambre-clair)}
+  .tuile.chaud .n{color:var(--ambre)}
+  .tuile.froid{border-color:var(--rouge);background:var(--rouge-clair)}
+  .tuile.froid .n{color:var(--rouge)}
+
+  .mois{display:flex;align-items:center;gap:10px;margin:var(--e4) 0 0}
+  .mois button{width:48px;height:48px;flex:0 0 auto;border-radius:var(--r1);
+    border:1px solid var(--filet-2);background:var(--surface);color:var(--texte);
+    font-size:20px;line-height:1;padding:0}
+  .mois .quel{flex:1 1 auto;text-align:center;font:600 var(--t5)/1.2 system-ui}
+  .mois .quel small{display:block;font:400 var(--t1)/1.4 system-ui;color:var(--texte-3)}
+
+  /* LA GRILLE DU MOIS. Une ligne par jour, un choix par ligne. Un jour non
+     qualifié reste rouge : c'est lui qui fait tomber le document de contrôle,
+     puisque L. 3121-65, I, 1° veut le nombre ET la date des journées
+     travaillées. */
+  .jours{display:grid;gap:6px;margin:var(--e2) 0 0}
+  .jour{display:grid;grid-template-columns:78px 1fr;gap:8px 10px;align-items:center;
+    padding:9px 10px;border-radius:var(--r1);background:var(--creux)}
+  .jour.vide{background:var(--rouge-clair);box-shadow:inset 3px 0 0 var(--rouge)}
+  .jour.fin{background:transparent;border:1px dashed var(--filet)}
+  .jour .quand{font:600 var(--t2)/1.25 system-ui}
+  .jour select{width:100%;min-width:0;box-sizing:border-box;font-size:16px;min-height:44px;
+    padding:6px 8px;border:1px solid var(--filet-2);border-radius:var(--r1);
+    background:var(--surface);color:var(--texte)}
+  .jour.verrou select{background:var(--creux);color:var(--texte-2)}
+  .sem-bar{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    padding:9px 10px 13px;border-bottom:1px solid var(--filet);
+    font:600 var(--t1)/1.3 system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--texte-3)}
+  .sem-bar b{font:700 var(--t3) system-ui;color:var(--accent);letter-spacing:0;text-transform:none}
+  .sem-bar.trop b{color:var(--rouge)}
+
+  /* LES ALERTES. Chacune porte le bouton qui la traite : on n'affiche jamais
+     un problème sans ce qui le règle. */
+  .alertes{display:grid;gap:10px;margin:var(--e3) 0 0}
+  .al{border:1px solid var(--filet);border-left:3px solid var(--ambre);border-radius:var(--r1);
+    padding:12px 13px;background:var(--surface)}
+  .al.grave{border-left-color:var(--rouge)}
+  .al .t{font:600 var(--t3) system-ui}
+  .al .c{margin-top:5px;font-size:var(--t2);color:var(--texte-2)}
+  .al button{margin:10px 0 0;width:auto;min-height:44px;padding:0 14px;font-size:var(--t2);
+    border-radius:999px}
+  .calme{padding:var(--e4) 0;color:var(--vert);font-size:var(--t3);font-weight:600}
+
+  .liste{display:grid;gap:10px;margin:var(--e3) 0 0}
+  .item{border:1px solid var(--filet);border-left:3px solid var(--accent);border-radius:var(--r1);
+    padding:12px 13px;background:var(--surface)}
+  .item .t{font:600 var(--t3) system-ui}
+  .item .meta{font-size:var(--t1);color:var(--texte-3);margin-top:3px}
+  .item .corps{margin-top:8px;font-size:var(--t2);color:var(--texte-2);white-space:pre-wrap}
+
+  /* LE RÉTROPLANNING. Une étape par ligne, sa date calculée à droite. */
+  .plan{display:grid;gap:0;margin:var(--e3) 0 0}
+  .plan .e{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:11px 0;
+    border-bottom:1px solid var(--filet)}
+  .plan .e:last-child{border-bottom:0}
+  .plan .q{font:600 var(--t3)/1.35 system-ui}
+  .plan .d{font:700 var(--t3) system-ui;color:var(--accent);white-space:nowrap;text-align:right}
+  .plan .p{grid-column:1/-1;font-size:var(--t2);color:var(--texte-2)}
+
+  .barre{display:flex;flex-direction:column;gap:10px;margin:var(--e4) 0 0}
+  @media (min-width:640px){.barre{flex-direction:row}.barre button{flex:1}}
+  .barre button{font:600 var(--t-bouton) system-ui;padding:14px;min-height:var(--h-bouton);
+    border-radius:var(--r2);width:100%}
+  .rien{padding:var(--e5) 0;color:var(--texte-2);font-size:var(--t3)}
+  .rien a{color:var(--accent)}
+  .stop{border:2px solid var(--rouge);background:var(--rouge-clair);border-radius:var(--r2);
+    padding:var(--e4);margin:var(--e3) 0 0}
+  .stop .t{font:700 var(--t4)/1.3 system-ui;color:var(--rouge)}
+  .stop .d{margin-top:8px;font-size:var(--t3);line-height:1.5}
+  [hidden]{display:none !important}
+
+  #impression{display:none}
+  #impression h1{font:700 19px/1.3 system-ui;margin:0 0 4px}
+  #impression .sous{font-size:13px;color:#333;margin:0 0 14px}
+  #impression table{border-collapse:collapse;width:100%;font-size:11.5px;table-layout:fixed}
+  #impression th,#impression td{border:1px solid #999;padding:4px 6px;text-align:left}
+  #impression th{background:#eee;font-weight:600}
+  #impression tr.sem td{background:#f2f2f2;font-weight:600}
+  #impression .tot{margin:12px 0 0;font-size:13px}
+  #impression .sign{margin:22px 0 0;font-size:13px;line-height:2.2}
+  #impression .pied{margin:18px 0 0;font-size:10.5px;color:#444}
+  @page{margin:14mm}
+  @media print{
+    .haut,.bloc,.question,.barre,.mois,details,#assist-bouton,#assist-panneau,
+    .maj-dispo,#e-vide{display:none !important}
+    #impression{display:block !important}
+    body{background:#fff}
+    main.wrap{max-width:none;padding:0}
+  }
+</style>
+</head>
+<body>
+
+<div class="maj-dispo" id="maj-dispo">
+  <div class="wrap">
+    <span><b>Une nouvelle version est disponible.</b></span>
+    <button type="button" id="btn-maj">Recharger</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <div class="haut">
+    <a class="retour" href="gerer.html">&larr; Retour</a>
+    <b>Forfait en jours</b>
+    <span id="ent"></span>
+  </div>
+
+  <section id="e-vide" hidden>
+    <p class="rien">Le registre du personnel ne porte encore aucun salarié.
+      C'est lui qui donne les noms de cet écran :
+      <a href="registre.html">ouvrir le registre du personnel</a>.</p>
+  </section>
+
+  <section id="e-tout" hidden>
+
+    <div class="bloc">
+      <h2>Salarié</h2>
+      <p class="doux">Repris du registre du personnel, rien à ressaisir.</p>
+      <select id="qui" aria-label="Salarié"></select>
+      <div class="identite" id="identite"></div>
+    </div>
+
+    <!-- LA QUESTION, EN PREMIER, AVANT TOUT LE RESTE. -->
+    <div class="question" id="q-entree">
+      <p>Ce salarié a-t-il une convention de forfait en jours signée&nbsp;?</p>
+      <div class="deuxb">
+        <button type="button" id="rep-oui">Oui</button>
+        <button type="button" class="second" id="rep-non">Non</button>
+      </div>
+    </div>
+    <div class="repondu" id="q-rappel" hidden>
+      <span id="q-dit"></span>
+      <button type="button" id="q-changer">Changer</button>
+    </div>
+
+    <!-- ══════════════════ LA BRANCHE « NON » : ON CONSTRUIT ══════════════ -->
+    <div id="br-non" hidden>
+
+      <div class="bloc">
+        <h2>Ce salarié peut-il être au forfait</h2>
+        <p class="doux">Deux questions, et elles décident de tout : un forfait signé par un salarié
+          qui n'entre pas dans l'article L. 3121-58 est nul, même parfaitement rédigé.</p>
+        <label class="champ" style="margin-bottom:10px"><span>Sa situation</span>
+          <select id="el-cat">
+            <option value="">- à choisir -</option>
+            <option value="cadre">Cadre, et il ne suit pas l'horaire collectif de son service</option>
+            <option value="autre">Non cadre, mais sa durée de travail ne peut pas être prédéterminée</option>
+            <option value="non">Ni l'un ni l'autre : il suit un horaire</option>
+          </select></label>
+        <label class="champ"><span>Organise-t-il réellement son emploi du temps lui-même ?</span>
+          <select id="el-auto">
+            <option value="">- à choisir -</option>
+            <option value="oui">Oui, il décide de ses journées et de leur répartition</option>
+            <option value="non">Non, ses horaires lui sont donnés</option>
+          </select></label>
+        <div class="stop" id="el-stop" hidden>
+          <div class="t">Ce salarié ne peut pas être au forfait en jours.</div>
+          <div class="d" id="el-stop-d"></div>
+        </div>
+      </div>
+
+      <div class="bloc" id="b-accord">
+        <h2>L'accord collectif qui le fonde</h2>
+        <p class="doux">Sans accord collectif, la convention individuelle est nulle, quel que soit
+          son contenu. C'est le premier point à régler, avant d'écrire quoi que ce soit.</p>
+        <label class="champ"><span>Sur quoi repose le forfait ?</span>
+          <select id="ac-source">
+            <option value="">- à choisir -</option>
+            <option value="branche">Un accord de branche de notre convention collective</option>
+            <option value="entreprise">Un accord d'entreprise déjà conclu</option>
+            <option value="aucun">Aucun des deux</option>
+          </select></label>
+
+        <div id="ac-clauses" hidden>
+          <p class="doux" style="margin-top:14px">Cochez ce que l'accord contient réellement, texte
+            en main. Ce qui reste décoché est ce qui manque, et l'écran dit ce que cela change.</p>
+          <div class="cases" id="ac-liste"></div>
+          <div class="verdict" id="ac-verdict" hidden><div class="t"></div><div class="d"></div></div>
+        </div>
+
+        <div id="ac-voie" hidden>
+          <p class="doux" style="margin-top:14px">Deux questions, et la voie de conclusion se
+            déduit de votre effectif.</p>
+          <div class="deux">
+            <label class="champ"><span>Un délégué syndical ?</span>
+              <select id="ac-ds"><option value="">- à choisir -</option>
+                <option value="oui">Oui</option><option value="non">Non</option></select></label>
+            <label class="champ"><span>Des élus au CSE ?</span>
+              <select id="ac-cse"><option value="">- à choisir -</option>
+                <option value="oui">Oui</option><option value="non">Non</option>
+                <option value="carence">Non, procès-verbal de carence</option></select></label>
+          </div>
+          <div class="verdict tiede" id="ac-quelle" hidden><div class="t"></div><div class="d"></div></div>
+          <div class="barre" id="ac-boutons" hidden>
+            <button type="button" id="d-accord">Le projet d'accord, en Word</button>
+            <button type="button" class="second" id="d-vote">Les modalités du vote et le procès-verbal</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════ LA BRANCHE « OUI » : ON CONTRÔLE ══════════════ -->
+    <div id="br-oui" hidden>
+      <div class="bloc">
+        <h2>Huit cases, et le sort de la convention</h2>
+        <p class="doux">Cochez ce qui est vrai, pièce en main. Chaque case décochée dit ce qu'elle
+          entraîne et ouvre le document qui la répare.</p>
+        <div class="cases" id="ct-liste"></div>
+        <div class="verdict" id="ct-verdict"><div class="t"></div><div class="d"></div></div>
+        <div class="barre">
+          <button type="button" class="second" id="d-audit">Le rapport de contrôle, en Word</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CE QUE FIXE LA CONVENTION. Le bloc sert aux deux branches : qu'on
+         écrive la convention ou qu'on la contrôle, ce sont les mêmes chiffres
+         qui commandent le suivi, les compteurs et les alertes. -->
+    <div id="br-param" hidden>
+      <div class="bloc" id="b-jours">
+        <h2>Les jours de repos de l'année</h2>
+        <p class="doux">Le calendrier réel, pas une moyenne. Les fériés comptés sont ceux qui
+          tombent un jour ouvré de l'année choisie.</p>
+        <div class="deux">
+          <label class="champ"><span>Année de référence</span>
+            <input type="number" id="j-an" min="2020" max="2099" step="1"></label>
+          <label class="champ"><span>Jours du forfait</span>
+            <input type="number" id="j-nb" min="150" max="235" step="1" value="218"></label>
+        </div>
+        <div class="deux">
+          <label class="champ"><span>Congés payés acquis (jours ouvrés)</span>
+            <input type="number" id="j-cp" min="0" max="40" step="1" value="25"></label>
+          <label class="champ"><span>Entrée ou sortie en cours d'année</span>
+            <select id="j-prorata"><option value="non">Non, année complète</option>
+              <option value="oui">Oui, à proratiser</option></select></label>
+        </div>
+        <div class="deux" id="j-dates" hidden>
+          <label class="champ"><span>Présent à partir du</span><input type="date" id="j-du"></label>
+          <label class="champ"><span>Jusqu'au</span><input type="date" id="j-au"></label>
+        </div>
+        <div class="deux">
+          <label class="champ"><span>Période de référence</span>
+            <select id="c-periode">
+              <option value="civile">Année civile, du 1er janvier au 31 décembre</option>
+              <option value="juin">Du 1er juin au 31 mai</option>
+              <option value="autre">Autre période de douze mois</option>
+            </select></label>
+          <label class="champ"><span>Rémunération annuelle brute</span>
+            <input type="text" id="c-remun" inputmode="decimal" placeholder="48 000"></label>
+        </div>
+        <div class="compte" id="j-compte"></div>
+        <p class="doux" id="j-note" style="margin-top:12px"></p>
+      </div>
+    </div>
+
+    <div id="br-non2" hidden>
+      <div class="bloc" id="b-conv">
+        <h2>La convention de forfait</h2>
+        <p class="doux">Le document lui-même, à l'en-tête de l'entreprise. Un avenant si le contrat
+          existe déjà, une clause du contrat s'il reste à signer.</p>
+        <div class="deux">
+          <label class="champ"><span>Forme</span>
+            <select id="c-forme">
+              <option value="avenant">Avenant à un contrat existant</option>
+              <option value="clause">Clause d'un contrat à signer</option>
+            </select></label>
+          <label class="champ"><span>Prise d'effet</span><input type="date" id="c-effet"></label>
+        </div>
+        <label class="champ" style="margin-top:10px"><span>Fonctions et autonomie, en une phrase</span>
+          <textarea id="c-fonctions" placeholder="directeur commercial, il fixe lui-même ses rendez-vous, ses déplacements et l'organisation de ses journées"></textarea></label>
+        <div class="barre">
+          <button type="button" id="d-conv">La convention de forfait, en Word</button>
+          <button type="button" class="second" id="c-signee">Elle est signée, passer au suivi</button>
+        </div>
+      </div>
+
+      <div class="bloc" id="b-pack">
+        <h2>Le pack administratif</h2>
+        <p class="doux">Ce qui doit partir, et ce qui doit revenir. Un accord non déposé n'entre pas
+          en vigueur, et une convention remise sans décharge ne se prouve pas.</p>
+        <div class="barre">
+          <button type="button" class="second" id="d-decharge">Lettre de remise contre décharge</button>
+          <button type="button" class="second" id="d-cse">Consultation du CSE, ordre du jour</button>
+        </div>
+        <div class="barre">
+          <button type="button" class="second" id="d-notif">Notification aux organisations syndicales</button>
+          <button type="button" class="second" id="d-greffe">Lettre de dépôt au greffe du conseil de prud'hommes</button>
+        </div>
+      </div>
+
+      <div class="bloc" id="b-plan">
+        <h2>Le rétroplanning</h2>
+        <p class="doux">Les dates se calculent à partir de celle que vous donnez. Le suivi ne
+          s'ouvre qu'une fois l'accord déposé : avant, il n'y a rien à suivre.</p>
+        <label class="champ" style="max-width:280px"><span>Remise du projet aux salariés</span>
+          <input type="date" id="p-depart"></label>
+        <div class="plan" id="p-liste"></div>
+        <div class="deux">
+          <label class="champ"><span>Accord déposé le</span><input type="date" id="p-depot"></label>
+          <label class="champ"><span>Récépissé reçu</span>
+            <select id="p-recepisse"><option value="non">Pas encore</option>
+              <option value="oui">Oui</option></select></label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════ LE SUIVI ═══════════════════════════════ -->
+    <div id="br-suivi" hidden>
+
+      <div class="mois">
+        <button type="button" id="mois-avant" aria-label="Mois précédent">&lsaquo;</button>
+        <span class="quel"><span id="mois-nom"></span><small id="mois-sous"></small></span>
+        <button type="button" id="mois-apres" aria-label="Mois suivant">&rsaquo;</button>
+      </div>
+
+      <div class="bloc">
+        <h2>Le document de contrôle du mois</h2>
+        <p class="doux">Chaque jour se qualifie. Un jour laissé en rouge n'est pas qualifié, et le
+          mois ne peut pas être clos : l'article L. 3121-65, I, 1° veut le nombre et la date des
+          journées travaillées, pas un total. Le salarié peut le remplir, sous votre responsabilité.</p>
+        <div class="barre" style="margin-top:0">
+          <button type="button" class="second" id="s-remplir">Remplir le mois d'après la semaine type</button>
+        </div>
+        <div class="jours" id="jours"></div>
+      </div>
+
+      <div class="bloc">
+        <h2>Où en est l'année</h2>
+        <div class="tuiles" id="compteurs"></div>
+        <div class="barre">
+          <button type="button" id="s-clore">Clore le mois</button>
+          <button type="button" class="second" id="s-rouvrir" hidden>Rouvrir le mois</button>
+        </div>
+      </div>
+
+      <div class="bloc">
+        <h2>Ce qui doit être traité</h2>
+        <div class="alertes" id="alertes"></div>
+      </div>
+
+      <div class="bloc">
+        <h2>L'entretien annuel</h2>
+        <p class="doux">Charge de travail, organisation, articulation avec la vie personnelle,
+          rémunération : les quatre points de L. 3121-65, I, 3°. Ce qui est dit se note, et ce que
+          le salarié signale appelle une mesure, sinon la convention ne vaut plus rien.</p>
+        <div class="deux">
+          <label class="champ"><span>Tenu le</span><input type="date" id="e-date"></label>
+          <label class="champ"><span>Charge déclarée par le salarié</span>
+            <select id="e-charge">
+              <option value="raisonnable">Raisonnable</option>
+              <option value="lourde">Lourde, mais tenable</option>
+              <option value="excessive">Excessive</option>
+            </select></label>
+        </div>
+        <label class="champ" style="margin-top:10px"><span>Ce qui a été dit, et par qui</span>
+          <textarea id="e-dit" placeholder="les points soulevés, les périodes de surcharge, ce qui a été demandé"></textarea></label>
+        <label class="champ" style="margin-top:10px"><span>Les mesures décidées, avec leur échéance</span>
+          <textarea id="e-mesures" placeholder="ce qui est retiré de sa charge, ce qui est reporté, qui reprend quoi et à partir de quand"></textarea></label>
+        <div class="barre">
+          <button type="button" id="e-ok">Enregistrer l'entretien</button>
+          <button type="button" class="second" id="d-entretien">La trame d'entretien, en Word</button>
+        </div>
+        <div class="liste" id="entretiens"></div>
+      </div>
+
+      <div class="bloc">
+        <h2>Renoncer à des jours de repos</h2>
+        <p class="doux">Un avenant écrit, une majoration d'au moins 10 %, et il vaut pour la seule
+          année en cours : il ne se reconduit pas tout seul. À défaut de stipulation de l'accord, le
+          maximum travaillé dans l'année est de 235 jours.</p>
+        <div class="deux">
+          <label class="champ"><span>Jours auxquels il renonce</span>
+            <input type="number" id="r-nb" min="1" max="30" step="1"></label>
+          <label class="champ"><span>Majoration</span>
+            <input type="number" id="r-taux" min="10" max="100" step="1" value="10"></label>
+        </div>
+        <div class="deux">
+          <label class="champ"><span>Plafond fixé par l'accord</span>
+            <input type="number" id="r-plafond" min="218" max="282" step="1" placeholder="235 à défaut"></label>
+          <label class="champ"><span>Signé le</span><input type="date" id="r-date"></label>
+        </div>
+        <p class="doux" id="r-calcul" style="margin-top:12px"></p>
+        <div class="barre">
+          <button type="button" id="r-ok">Enregistrer la renonciation</button>
+          <button type="button" class="second" id="d-renonce">L'avenant de renonciation, en Word</button>
+        </div>
+        <div class="liste" id="renonces"></div>
+      </div>
+
+      <div class="bloc">
+        <h2>Sortir les pièces</h2>
+        <p class="doux">Le document de contrôle est la pièce que l'employeur produit devant le juge :
+          c'est à lui de prouver qu'il a respecté ce que l'accord promet.</p>
+        <div class="barre">
+          <button type="button" id="b-imprimer">Imprimer le document de contrôle</button>
+          <button type="button" class="second" id="b-word">Le document de contrôle, en Word</button>
+        </div>
+        <div class="barre">
+          <button type="button" class="second" id="b-excel">L'année entière, en classeur</button>
+        </div>
+      </div>
+
+    </div>
+
+    <details class="loi" style="margin-top:24px">
+      <summary>Voir le texte de loi</summary>
+      <div>
+        <p><b>Article L. 3121-55</b> : « La forfaitisation de la durée du travail doit faire l'objet
+          de l'accord du salarié et d'une convention individuelle de forfait établie par écrit. »
+          <span class="ident">LEGIARTI000033003165</span></p>
+        <p><b>Article L. 3121-58</b> : peuvent conclure un forfait en jours « les cadres qui disposent
+          d'une autonomie dans l'organisation de leur emploi du temps et dont la nature des fonctions
+          ne les conduit pas à suivre l'horaire collectif », et « les salariés dont la durée du temps
+          de travail ne peut être prédéterminée et qui disposent d'une réelle autonomie dans
+          l'organisation de leur emploi du temps ». <span class="ident">LEGIARTI000033003228</span></p>
+        <p><b>Article L. 3121-59</b> : le salarié peut renoncer à une partie de ses jours de repos ;
+          un avenant écrit fixe la majoration, « sans qu'il puisse être inférieur à 10 % ». Cet
+          avenant « est valable pour l'année en cours » et « ne peut être reconduit de manière
+          tacite ». <span class="ident">LEGIARTI000033003238</span></p>
+        <p><b>Article L. 3121-60</b> : « L'employeur s'assure régulièrement que la charge de travail
+          du salarié est raisonnable et permet une bonne répartition dans le temps de son travail. »
+          <span class="ident">LEGIARTI000033003246</span></p>
+        <p><b>Article L. 3121-63</b> : « Les forfaits annuels en heures ou en jours sur l'année sont
+          mis en place par un accord collectif d'entreprise ou d'établissement ou, à défaut, par une
+          convention ou un accord de branche. » <span class="ident">LEGIARTI000033003340</span></p>
+        <p><b>Article L. 3121-64</b> : l'accord détermine les catégories de salariés, la période de
+          référence, le nombre de jours « dans la limite de deux cent dix-huit jours », le traitement
+          des absences, arrivées et départs, et les caractéristiques des conventions individuelles
+          (I) ; puis l'évaluation et le suivi de la charge, la communication périodique employeur
+          salarié, et le droit à la déconnexion (II).
+          <span class="ident">LEGIARTI000036262805</span></p>
+        <p><b>Article L. 3121-65</b> : à défaut des clauses du II, 1° et 2°, la convention reste
+          valable si l'employeur établit « un document de contrôle faisant apparaître le nombre et la
+          date des journées ou demi-journées travaillées », s'assure de la compatibilité de la charge
+          avec les repos, et organise « une fois par an un entretien ».
+          <span class="ident">LEGIARTI000036262800</span></p>
+        <p><b>Article L. 3121-66</b> : en cas de renonciation à des jours de repos et à défaut de
+          précision de l'accord, « le nombre maximal de jours travaillés dans l'année est de deux
+          cent trente-cinq ». <span class="ident">LEGIARTI000033003387</span></p>
+        <p><b>Article L. 3131-1</b> : repos quotidien de onze heures consécutives au minimum.
+          <span class="ident">LEGIARTI000033020918</span></p>
+        <p><b>Article L. 3132-2</b> : repos hebdomadaire de vingt-quatre heures consécutives,
+          auxquelles s'ajoute le repos quotidien. <span class="ident">LEGIARTI000006902581</span></p>
+        <p><b>Article L. 3121-62</b> : le salarié au forfait n'est soumis ni à la durée quotidienne
+          maximale, ni aux durées hebdomadaires maximales, ni à la durée légale hebdomadaire. Les
+          repos, eux, restent dus. <span class="ident">LEGIARTI000033003264</span></p>
+        <p><b>Article L. 3121-61</b> : une rémunération « manifestement sans rapport avec les
+          sujétions imposées » ouvre une action en indemnité devant le juge judiciaire.
+          <span class="ident">LEGIARTI000033003253</span></p>
+      </div>
+    </details>
+
+    <details class="loi" style="margin-top:12px">
+      <summary>Voir la jurisprudence</summary>
+      <div>
+        <p><b>Soc. 10 janvier 2024, n° 22-15.782</b> : « En cas de manquement de l'employeur à l'une
+          des obligations prévues par l'article L. 3121-65 du code du travail, l'employeur ne peut
+          pas se prévaloir du régime dérogatoire institué par ce texte et la convention individuelle
+          de forfait en jours conclue, alors que l'accord collectif ouvrant le recours au forfait en
+          jours ne répond pas aux exigences de l'article L. 3121-64, II, 1° et 2°, est nulle. »</p>
+        <p><b>Soc. 11 mars 2025, n° 23-19.669</b> : un accord dont les dispositions ne garantissent
+          pas que « l'amplitude et la charge de travail restent raisonnables » rend la convention
+          nulle et ouvre le paiement des heures supplémentaires ; mais « un tel manquement n'ouvre
+          pas, à lui seul, droit à réparation » et le salarié doit démontrer un préjudice distinct.</p>
+        <p><b>Soc. 19 décembre 2018, n° 17-18.725</b> : « Il incombe à l'employeur de rapporter la
+          preuve qu'il a respecté les stipulations de l'accord collectif destinées à assurer la
+          protection de la santé et de la sécurité des salariés soumis au régime du forfait en
+          jours. »</p>
+        <p><b>Soc. 10 janvier 2024, n° 22-13.200</b> : l'article L. 3121-60 est d'ordre public.
+          L'employeur informé d'une charge incompatible avec une durée raisonnable de travail doit
+          y remédier en temps utile ; des convocations à l'entretien de 2018 envoyées en mars 2019
+          ne suffisent pas.</p>
+        <p><b>Soc. 6 janvier 2021, n° 17-28.234</b> : « Lorsqu'une convention de forfait est privée
+          d'effet, l'employeur peut, pour la période de suspension, réclamer le remboursement des
+          jours de réduction du temps de travail dont le paiement est devenu indu. »</p>
+      </div>
+    </details>
+
+  </section>
+
+  <div id="impression"></div>
+
+</main>
+
+<script>window.RUBRIQUE_DOCS = "forfait";</script>
+<script src="apercu.js"></script>
+<script src="base-documents.js"></script>
+<script src="audit-export.js"></script>
+<script src="tableur-export.js"></script>
+<script src="profil.js"></script>
+<script src="version.js"></script>
+<script src="forfait.js"></script>
+<script>
+(function () {
+  "use strict";
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+  var b = document.getElementById("btn-maj");
+  if (b) b.addEventListener("click", function () { location.reload(); });
+})();
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>
