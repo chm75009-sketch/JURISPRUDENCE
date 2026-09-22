@@ -882,3 +882,42 @@ Composition annoncée : « Chaisaz, Schulzendorf, Kurdna, Schubert, Moudry,
 Galland, Marino, A. Beraudo, Boudjema, Gérin, Granier. »
 
 LU : 38 sur 312.
+
+---
+
+## [39] L'Auto, 30 avril 1936, page 5
+
+Ark bpt6k4629513x, vue 5. Page entière lue, colonne par colonne. Rubrique
+« En parlant un peu du Midi... », une brève en italique, marquée d'un losange :
+
+« L'Olympique Gymnaste Club de Nice sera privé des services de son excellent
+avant centre Boudjema qui est parti sous les drapeaux en Tunisie. »
+
+VERDICT : fin avril 1936, il part au service militaire, en Tunisie. C'est
+l'explication de son absence des terrains niçois et cela éclaire autrement le
+« coup de tête » de février raconté par le même journal. A verser au
+chapitre 2 et au chapitre 6.
+Fac-similé : photos/LAuto-1936-sous-les-drapeaux.jpg.
+
+LU : 39 sur 312.
+
+---
+
+## [40] L'Auto, 25 mai 1936, pages 5 et 6
+
+Ark bpt6k4629538r, vues 5 et 6. Compte rendu du C.A.P. contre Nice, signé
+Robert Boutin.
+
+« Les Niçois possèdent en Boudjemaa un bien beau joueur, doublé d'un botteur
+émérite ; dommage que - même avec le sourire - il ait une tendance marquée à
+jouer l'homme. Moudry fit un excellent travail constructif. Schulzendorf fut
+précieux en défense, et Chaisaz très sûr dans les bois. »
+
+Composition niçoise, fin de la ligne : « [...] Moudry, Galland ; av. :
+Marino, Gérin, Dubois, Boudjemaa, Granier. »
+
+VERDICT : il joue donc encore le 24 mai, après le départ « sous les drapeaux »
+annoncé le 30 avril. Une des deux informations est mal datée, ou bien il est
+revenu jouer en permission. Je ne tranche pas.
+
+LU : 41 sur 312.
