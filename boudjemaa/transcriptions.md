@@ -590,6 +590,15 @@ Martinelli : Martinelli (II) demi, Martinelli (I) avant, aux côtés de
 Boudjemaa - la même répartition que dans la composition de 1931.
 Fac-similés : photos/SoukAhras-1932-p1.jpg et photos/SoukAhras-1932-p2.jpg.
 
+Complément du 22 septembre 2026, lu sur la même page de L'Afrique du Nord
+illustrée du 28 février 1931 : le match photographié est celui de la Coupe de
+l'Afrique du Nord, joué à Bône au stade Sultana le 8 février 1931, arbitré
+par M. Riéra, président de la Ligue d'Alger, « devant une nombreuse galerie ».
+Bône l'emporte 2 à 0 ; le but décrit est celui de Miglioni, « une balle à ras
+de terre, dans le coin ». Composition de Bône (damiers) : Martinez ; Roggy et
+Delgatto ; Furno, Xerri et Braia ; Parizot, Cesari, Miglioni, Degiacomo,
+Guardamania. La planche légendée pour le livre est photos/USBeja-1931-planche.jpg.
+
 ---
 
 ## [26] Le Petit Matin (Tunis), 16 janvier 1934, page 7

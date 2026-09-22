@@ -22,3 +22,7 @@ l'O.G.C. Nice en 1936.
   Rapid C.M. Souk-Ahras - U.S. Béja, Souk-Ahras républicain du 30 juillet
   1932. Boudjemaa y figure dans la ligne d'avants béjaoise. Fac-similés pour
   le chapitre 1.
+
+- USBeja-1931-planche.jpg : la photographie de l'équipe avec, dessous, la
+  légende complète pour le livre : le match de la Coupe de l'Afrique du Nord
+  à Bône le 8 février 1931, le score, et les deux compositions.
