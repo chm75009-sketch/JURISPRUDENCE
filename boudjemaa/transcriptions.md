@@ -713,3 +713,37 @@ Marseille même.
 Fac-similé : photos/PetitMarseillais-1935-Nice-OM.jpg.
 
 LU : 29 sur 312.
+
+---
+
+## [30] Le Petit Matin (Tunis), 13 janvier 1931, page 4
+
+Ark bpt6k8391962b, vue 4. Page lue en entier, colonne par colonne.
+
+Titre : « A BÉJA - U.S.B. (Juniors) bat Savoia (Juniors) par 3 à 0 ».
+
+« C'est sur un terrain impraticable que fut joué ce match fort intéressant
+par la bonne volonté et l'endurance des jeunes, mais nul au point de vue
+technique. Au coup de sifflet de M. Dahoui, les équipes présentent la
+formation suivante : BÉJA. - Berdah ; Aiche, Abitbol ; Cosentino Loulou,
+Armone, Ali ; Ransa, Bellity, Allala, Boudjemaâ et Rémy. SAVOIA. -
+Fracentino ; Gaspard, [...] Salsedo, Valente, Carnamel[...] »
+
+Le but : « Loulou, bouclant impeccablement Valente, descend en... glissant
+vers les bois des visiteurs ; chargé par Salsedo, il passe à Boudjemaâ, qui,
+d'un shoot précis, marque. »
+
+Puis : « sur passe de Raousa, Armone descend et place le ballon dans les
+filets de Fracentino, qui plonge, mais trop tard. Béja : 2 - Savoia : 0. »
+Et plus loin, Rausa reprend et marque le troisième.
+
+« CONSIDÉRATIONS. Arbitrage au-dessus de tout éloge. A Béja, Boudjemaâ,
+A[bitbol] et Allala sont à féliciter. [...] malgré tout, Bou[djemaâ], Ali et
+Allala s'entendent à merveille. »
+
+VERDICT : c'est la plus ancienne trace trouvée à ce jour. Janvier 1931, chez
+les juniors de l'Union Sportive de Béja, il a seize ans et cinq mois, il joue
+avant, il marque, et le chroniqueur le cite en tête des hommes à féliciter.
+Fac-similé : photos/PetitMatin-1931-USBeja-juniors.jpg.
+
+LU : 30 sur 312.
