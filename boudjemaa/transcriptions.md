@@ -1222,3 +1222,106 @@ la 15e et une non datée. C'est son premier but sous le maillot de Colmar,
 dès la première journée.
 
 LU : 64 sur 312.
+
+---
+
+## [62] L'Est républicain, 8 janvier 1939, page 7
+
+Ark bpt6k82835748, vue 7. Deux choses sur la même page.
+
+D'abord le classement des buteurs de la deuxième division, où il figure :
+« Szego (Mulhouse) 10 ; Alcazar (Nice) 10 ; Boudjemaa (Colmar) 10 ;
+Chloupek (Reims) 9 ; Parmeggiani (Mulhouse) 9 [...] »
+
+Ensuite, sous un titre en capitales, « M. BOUDJEMAA, IL FAUT PAYER ! » :
+
+« Le joueur Boudjemaa, transféré de Saint-Etienne à Colmar, avait quitté
+St-Etienne en y laissant quelques dettes. La commission du statut du joueur
+professionnel a décidé de faire rembourser, par Boudjemaa, à l'A.S.
+Saint-Etienne, la somme de 4.500 francs, à raison de 500 francs par mois. »
+
+VERDICT : à mi-saison 1938-39, il est dans les dix meilleurs buteurs de la
+division, et la Fédération lui fait rembourser 4 500 francs à son ancien club,
+par mensualités de 500 francs. Le ton du titre se passe de commentaire : à
+verser au chapitre 3.
+
+LU : 65 sur 312.
+
+---
+
+## [63] Le Petit Journal, 8 janvier 1939, page 7
+
+Ark bpt6k636750g, vue 7. La même décision, rubrique « Contentieux » :
+« [Boud]jema, transféré de [Saint-Etienne à] Colmar, a quitté la
+[société stéph]anoise en y laissant [des dettes]. La commission du
+[statut du joueur professionnel] a décidé [de faire] rembourser par
+Boud[jemaa...] »
+
+LU : 66 sur 312.
+
+---
+
+## [64] Strassburger neueste Nachrichten, 9 janvier 1939, page 4
+
+Ark bd6t59617094, vue 4. Compte rendu en allemand de S.R. Colmar contre
+Valenciennes, 1 à 0, au stade Joseph Lehmann, deux mille spectateurs.
+
+Composition : « Colmar : Collet, Demut, Delacourt, Gougain, Télétchea,
+Othmann, Heine, Gabrillargues, Zopp, Boudjema, Emonoz. »
+
+Le but : « Boudjema wurde foulgelegt und Zopp verwandelt den Elfmeter zum
+1:0 » - Boudjema est fauché et Zopp transforme le penalty.
+Et plus loin : « So schoss Boudjema einmal an den Pfosten » - il envoie une
+fois le ballon sur le poteau.
+
+LU : 67 sur 312.
+
+---
+
+## [65] Le Matin, 15 janvier 1939, page 6
+
+Ark bpt6k586209m, vue 6. Avant Colmar contre Red Star : « Que vaut le jeune
+Katz, le remplaçant, devant des gaillards comme Jaeck, Boudjemaa et Zopp ? »
+
+LU : 68 sur 312.
+
+---
+
+## [66] L'Ouest-Éclair, 17 janvier 1939, pages 9 et 11
+
+Arks bpt6k5016831 et bpt6k661503m. Colmar battu par le Red Star :
+« Zopp, qui est un brillant ailier, fut dépaysé à ce poste et, en dépit des
+efforts de Boudjemaa, ne put faire triompher son équipe. »
+
+LU : 70 sur 312.
+
+---
+
+## [67] Le Sport alsacien, 20 janvier 1939, page 4
+
+Ark bpt6k3149011h, vue 4. En allemand, un reproche d'entraînement insuffisant
+à toute l'attaque colmarienne : « Jedenfalls sind [...] auch Boudjema unter
+ihrer sonstigen Leistung geblieben, von Emonoz gar nicht zu reden. » -
+Boudjema lui aussi est resté en dessous de ses prestations habituelles.
+
+LU : 71 sur 312.
+
+---
+
+## [68] Le Forez sportif, 25 janvier 1939, page 4
+
+Ark bpt6k6681958g, vue 4. Le classement des buteurs, où il est encore cité :
+« [...] Moulet (Red Star), Boudjemaa (Colmar), [...] Thévenot (Rennes),
+Parmeggiani (Mulhouse) [...] »
+
+LU : 72 sur 312.
+
+---
+
+## [69] Paris-soir, 16 janvier 1939, page 7
+
+Ark bpt6k7644626h, vue 7. Alès contre Valenciennes. Le passage qui porte son
+nom concerne la ligne d'attaque alésienne et la lecture est trop abîmée pour
+que j'affirme quoi que ce soit : je le signale et je n'en tire rien.
+
+LU : 73 sur 312.
