@@ -901,3 +901,102 @@ pas si le coup franc est entré.
 
 Brusseaux avait ouvert la marque pour Nice ; Dubois manque deux fois le but
 tout fait. Pages lues.
+
+## Pages 63 à 70 - Samitier, Zamora, et les cinq mille livres écossaises
+
+**[62] Le Petit Méridional, 25 janvier 1937, page 3 - IL MARQUE SUR COUP
+FRANC.** Les colonnes citantes et leurs voisines lues en entier, soit tout le
+récit de France 1 Autriche 2 au Parc des Princes par Gambardella, et le
+compte rendu de Nice 3 Montpellier 1.
+
+Le jugement d'ensemble : « La ligne des demis [niçoise] composée de
+Rodriguez, Orlandini et Logez gagna le match [...] Elle assura un maximum de
+réussite à une attaque bien démembrée, dans laquelle Boudjemaa se montra le
+plus en vue. »
+
+Et le récit, qui complète ce que L'Éclair laissait en suspens : « Un nouveau
+coup franc est accordé aux Niçois, Boudjemaa le botte direct[ement] dans les
+filets. C'est le second but niçois. » Le coup franc de vingt mètres, obtenu
+sur une faute de Kaucsar, est donc bien entré. Pages lues.
+
+**[63] L'Auto, 1er février 1937, page 7 - DUNKERQUE 3 NICE 2, ET DEUX FOIS
+LUI.** Les colonnes citantes et leurs voisines lues en entier, soit toute la
+page des comptes rendus de la deuxième division. Celui qui le concerne est lu
+du premier au dernier mot.
+
+La composition : « Nice. - Chaisaz ; Sclavi, Kurdna ; Rodriguez, Orlandini,
+Logez ; Brusseaux, Gérin, Dubois, Boudjema, Pellegrino. »
+
+Deux passages : « Nice se reprend avec vigueur et dans la dernière minute
+égalise par Boudjema. » Puis, en seconde période : « Nice en veut et demeure
+[sur] place, tant et si bien que la balle rev[ient] une seconde fois chez
+Gianelloni sur [un centre] botté de Boudjema. » Dunkerque l'emporte finalement
+3 à 2, sur un coup franc d'Ayello qui glisse entre les doigts de Chaisaz, puis
+un but de Griffiths. Pages lues.
+
+**[65] Le Petit Havre, 3 mars 1937, page 5 - L'ÉQUIPE ANNONCÉE, AVEC
+SAMITIER.** La colonne citante et ses voisines lues en entier, dans une page
+où le football tient peu de place entre les annonces de théâtre, les
+demandes de matchs et les réunions de sociétés. La composition annoncée pour
+le Havre A.C. contre Nice, donnée en pyramide :
+
+« NICE : Chaisaz ; Schulzendorf, Kudrna ; Rodriguez, Orlandini, Logez ;
+Brusseaux, Gérin, Samitier, Boudjemaa, Lovichy. » Arbitre M. Delasalle.
+
+Samitier, l'Espagnol, est désormais avant-centre de Nice, et lui passe inter
+gauche. Pages lues.
+
+**[66] L'Auto-vélo, 5 mars 1937, page 4 - LE HAVRE 0 NICE 0.** La colonne
+citante et ses voisines lues en entier, soit le long article de Maurice
+Pefferkorn sur l'inefficacité des attaquants français après
+France-Belgique militaire, et les comptes rendus de la deuxième division.
+
+Sur le match : « L'équipe de Nice fut la meilleure au point de vue technique ;
+elle fut cependant dominée dans l'ensemble par [les joueurs] havrais qui, en
+trois occasions, [n'ont pas] su conclure sans la carence et la maladresse de
+ses avants. [...] Un fait, cependant, à noter : Jasseron ne lâcha pas d'une
+semelle l'avant centre Samitier, qui ne fut à aucun moment dangereux. »
+
+Et sur lui : « Les meilleurs furent, du côté des Hacmen : [Lefèvre], Fiévet et
+surtout Chalvidan, alors qu'Orlandini surclassa Jasseron et qu'ensuite
+Brusseaux, Boudjema, Kurdna et Chaisaz se signalèrent particulièrement chez
+les visiteurs. » Pages lues.
+
+**[68] L'Auto, 8 mars 1937, page 8 - CINQ MILLE LIVRES, OFFERTES SÉANCE
+TENANTE.** La colonne citante et sa voisine lues en entier, soit les
+résultats des championnats étrangers, la Coupe de Paris, une performance de
+natation des juniors du S.C.U.F., et deux brèves qui se suivent et qui sont,
+l'une comme l'autre, à garder.
+
+La première : « Zamora jouera à Nice, au moins jusqu'à la fin de la saison.
+Samitier l'y a décidé et Zamora est attendu à Nice pour ce soir. Zamora
+jouera sans contrat officiel, vraisemblablement, et ne disputera que les
+matches amicaux ou réserve. »
+
+La seconde, sous son propre titre : « **Boudjemaa a été demandé par un club
+écossais.** Nice, 7 [mars]. - Le président d'un club écossais a assisté
+aujourd'hui au match OGC Nice contre FC Nancy, et impressionné par le jeu de
+Boudjemaa, a offert, séance tenante, 5.000 livres pour le transfert de ce
+joueur. »
+
+Les cinq mille livres que portaient les notes de l'auteur sont donc
+confirmées à la source, avec la date et la circonstance : un président de
+club écossais présent au stade le 7 mars 1937, une offre faite sur-le-champ.
+Le journal ne nomme pas le club, et je ne le nomme pas non plus. Pages lues.
+
+**[69] L'Ouest-Éclair (édition de Caen), 8 mars 1937, page 7 - LE MATCH QUI A
+PROVOQUÉ L'OFFRE.** La colonne citante et ses voisines lues en entier, soit
+tous les comptes rendus de la journée. Celui de Nice, court, se lit en
+entier :
+
+« Nice, 7 mars. - Nice attaque et domine d'une façon manifeste, d'ailleurs
+les visiteurs ne réagissent que faiblement paraissant accepter la supériorité
+de Nice. Dès lors les joueurs locaux s'installent devant les buts de Nancy et
+c'est le bombardement. Gérin marque un joli but à la dixième minute, puis le
+même joueur marque un deuxième but dès la remise en jeu. A la mi-temps :
+Nice 2 - Nancy 0. A la reprise, Nice domine et Boudjemaa marque. Nice 3 -
+Nancy 0. Dès lors, les locaux lâchent leur pression et Bertrand marque pour
+Nancy. Finalement : O.G.C. Nice bat F.C. Nancy par 3 buts à 1. »
+
+C'est donc ce but-là, marqué en seconde mi-temps le 7 mars 1937, qui a valu
+l'offre écossaise. Pages lues.
