@@ -563,11 +563,13 @@
         (c ? champTexte("d1", c.d1, "12:00") + champTexte("f1", c.f1, "15:00") + champTexte("p", c.p, "0") +
              '<span class="cap g">2e service</span><span class="cap">D\u00e9but</span><span class="cap">Fin</span><span class="cap"></span>' +
              '<span class="lib">coupure</span>' + champTexte("d2", c.d2, "19:00") +
-             champTexte("f2", c.f2, "23:00") + "<span></span>"
+             champTexte("f2", c.f2, "23:00") + "<span></span>" +
+             '<span class="manque" data-manque="' + j + '"></span>'
            : "<span></span><span></span><span></span>") +
         "</div></div>";
     }
     $("r-sem").innerHTML = h;
+    direCeQuiManque(r.sem);
 
     Array.prototype.forEach.call($("r-sem").querySelectorAll("[data-q]"), function (el) {
       if (el.tagName === "SELECT") {
@@ -582,6 +584,28 @@
         if (el.getAttribute("data-q") !== "p") el.value = normaliser(el.value);
         lireSemaine(false);
       });
+    });
+  }
+
+  /* UNE PLAGE À MOITIÉ REMPLIE NE COMPTE PAS, ET IL FAUT LE DIRE.
+
+     Le second service n'entre dans le calcul que si son début ET sa fin sont
+     saisis : les heures grises du champ vide sont des exemples, non des
+     valeurs. Tapé « 14:00 » sans la fin, le haut de l'écran ne bougeait pas et
+     rien n'expliquait pourquoi. Mesuré le 23 septembre 2026 sur le vendredi
+     d'un chauffeur. */
+  function direCeQuiManque(sem) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-manque]"), function (el) {
+      var c = sem[el.getAttribute("data-manque")];
+      var dit = "";
+      if (c) {
+        if (c.d1 && !c.f1) dit = "Indiquez aussi l'heure de fin du premier service.";
+        else if (!c.d1 && c.f1) dit = "Indiquez aussi l'heure de début du premier service.";
+        else if (c.d2 && !c.f2) dit = "Second service : indiquez aussi l'heure de fin, sinon il ne compte pas.";
+        else if (!c.d2 && c.f2) dit = "Second service : indiquez aussi l'heure de début, sinon il ne compte pas.";
+      }
+      el.textContent = dit;
+      el.classList.toggle("vu", !!dit);
     });
   }
 
@@ -614,6 +638,7 @@
       sem[j] = c;
     });
     garderRef(qui.id, { sem: sem, courriel: r.courriel });
+    direCeQuiManque(sem);
     construire();
     if (redessiner) rendreRef();
     rendreIdentite(); dessinerJours(); calculer();

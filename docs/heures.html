@@ -81,6 +81,11 @@
     background:var(--surface);color:var(--texte)}
   .jsem input{text-align:center}
   .jsem select{padding-left:6px;padding-right:0}
+  /* Ce qui manque pour qu'une plage compte. Muet tant qu'il n'y a rien a
+     dire : une ligne d'aide permanente ne se lit plus au bout de deux jours. */
+  .jsem .manque{grid-column:1/-1;display:none;margin:4px 0 0;font:600 var(--t1)/1.35 system-ui;
+    color:var(--ambre)}
+  .jsem .manque.vu{display:block}
 
   .jours{display:grid;gap:6px;margin:var(--e2) 0 0}
   .jour{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;
