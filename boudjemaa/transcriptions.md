@@ -1466,3 +1466,189 @@ sévère composée de 12 membres et les réflexions d'un quatuor stéphanois dan
 lequel figurait un avocat. En somme, le droit et la logique ont [eu raison]. »
 
 LU : 82 sur 312.
+
+---
+
+## [78] L'Intransigeant, 30 octobre 1936, page 6 - LE RÉCIT COMPLET DE L'AFFAIRE
+
+Ark bpt6k7952781, vue 6. Grand titre en capitales : « Accusé, levez-vous ! »,
+puis le sous-titre en italique : « L'affaire Boudjemaa ». Un dessin de
+tribunal occupe la gauche. Signé MARIO BRUN. Transcription faite sur l'image
+en pleine résolution, ligne à ligne.
+
+« Boudjemaa Mohamed jouait au football, sans grande prétention, à l'U.S.
+Béja.
+
+Et voilà qu'un beau jour on alla le tirer de son bled.
+
+Boudjemaa se laissa emmener sans trop résister, et il suivit à Nice le grand
+Raoul Chaisaz, qui l'employa dans son entreprise et le confia aux bons soins
+de Lovy, l'entraîneur de l'O.G.C.
+
+Je ne sais si Boudjemaa réussit dans les primeurs ; mais ce qui est certain,
+c'est que chaque match de football disputé avec les "Aiglons" le vit
+progresser et s'affirmer avant centre d'une classe certaine. Et tout le monde
+de se réjouir à Nice, où l'on envisageait la formation d'une grande équipe
+pour la saison suivante !
+
+Las ! quand arriva la période des transferts et des contrats, l'amateur
+Boudjemaa, qui ne songeait déjà plus aux primeurs de Chaisaz, fut l'objet de
+bien des convoitises, et, dans son courrier, il reçut les offres les plus
+alléchantes. Nice lui avait bien promis un contrat, mais il y avait
+Saint-Etienne qui insistait, une lettre de M. Guichard l'empêchait de
+dormir...
+
+Cette lettre, au fond, l'embarrassait. Il avait une espèce de honte à la
+garder jalousement secrète dans son beau portefeuille tout neuf. Un jour, il
+se décida : il la montra à Me Tanzi, le bon président de l'O.G.C. Nice, qui
+lui donna immédiatement le conseil d'écrire ou de faire écrire - l'arabe
+n'étant pas déchiffrable pour tout le monde - à M. Guichard afin de lui ôter
+ses illusions... C'est ce que Mohamed s'empressa de faire.
+
+Mais l'A.S. Saint-Etienne revint à la charge et, par le truchement de son
+secrétaire, M. Marey, poursuivit Boudjemaa de ses assiduités, tout d'abord à
+Nice et, par la suite, en Tunisie, où notre Mohamed était allé passer des
+vacances qu'il avait espérées tranquilles.
+
+On pourrait écrire un chapitre spécial sur les péripéties du voyage en
+Tunisie de M. Marey, qui eut beaucoup de mal à trouver Béja et Boudjemaa.
+Passons là-dessus.
+
+Voilà M. Marey qui renouvelle à Mohamed les offres tentantes de l'A.S.
+Saint-Etienne, et voilà Mohamed perplexe, gêné, plongé dans de profondes
+réflexions. M. Marey insiste. Le 4 juillet, le petit footballeur tunisien
+écrit à son président : "Un monsieur BIEN MIS me fait la proposition que
+voici : Viens jouer à Saint-Etienne. Nous te donnerons 10.000 francs à la
+signature et 2.500 francs par mois. Je lui ai dit : Donnez-moi le temps de
+réfléchir. Qu'en pensez-vous ? Me donnez-vous ce qu'il me donne ? Il est venu
+spécialement pour moi de Saint-Etienne. Répondez le plus vite possible par
+oui ou par non pour que je ne commette pas de gaffe (sic), car il veut me
+faire signer le contrat vite, vite."
+
+Mais la réponse de Nice ne vint pas assez rapidement. M. Marey avait enlevé
+la partie entre temps. Pour ce faire, il avait tout simplement aligné sur une
+table vingt-cinq beaux billets de 500 francs et il avait dit à Boudjemaa
+ébloui : "C'est à toi !"
+
+Mettez-vous à la place du type qui, en plein bled, se voit offrir une petite
+fortune, à en juger du moins par le nombre des billets bleus par quoi elle se
+traduit !
+
+Boudjemaa signa donc pour Saint-Etienne et envoya à l'O.G.C. Nice une lettre
+de démission datée du 4 juillet, mais timbrée du 6...
+
+Las ! peu auparavant, le 2 juillet, notre Mohamed avait déjà signé pour
+l'O.G.C.N., touché ses appointements du mois de juillet, et son contrat,
+transmis par avion de Tunis par le correspondant des "Aiglons", avait été
+enregistré à la F.F.F.A. le 5. Celui de Saint-Etienne ne le fut que le
+8 juillet !
+
+L'affaire se gâtait alors : l'O.G.C. Nice porta plainte. En date du 30
+juillet intervenait une décision de la commission des Statuts et Règlements
+qui qualifiait Boudjemaa à l'O.G.C. Nice, mais le suspendait pour trois mois.
+
+Saint-Etienne n'introduisit pas moins Boudjemaa dans son équipe pour
+rencontrer Servette et Lille et fit appel de la décision. Nice, également,
+réclamait le sursis au sujet des trois mois de suspension. On entrait dans le
+maquis de la procédure.
+
+Il y eut, en effet, contestation de signatures, assertion de dol, etc., et,
+le 18 août, l'affaire revenait devant la commission. Ce jour-là, rue de
+Londres, on confronta Boudjemaa et Chaisaz qui l'avait fait venir et l'on
+écouta les doléances des dirigeants de Saint-Etienne. La décision fut
+renvoyée au 3 septembre, après audition des dirigeants niçois. La précédente
+décision fut confirmée.
+
+Nouvel appel de Saint-Etienne et de Nice, devant le Bureau Fédéral cette
+fois. Le Bureau Fédéral a confirmé les précédentes décisions, mais a porté à
+six mois la pénalité infligée au joueur Boudjemaa.
+
+En sorte qu'à l'heure actuelle l'O.G.C. Nice se trouve frustré d'un excellent
+joueur et qu'il est en droit de demander réparation des dommages que cette
+affaire lui a valus.
+
+Quant à Mohamed, dans son bled, il en a pour six mois à empaqueter des
+dattes...
+
+Il avait cru au mirage... MARIO BRUN. »
+
+VERDICT : c'est le récit complet, avec les dates, les sommes et les noms. Il
+donne trois choses qu'on n'a nulle part ailleurs. D'abord le rôle de Raoul
+Chaisaz, le gardien de but niçois, qui va le chercher à Béja, l'emploie dans
+son commerce de primeurs et le confie à Lovy, l'entraîneur du club, le même
+Lovy qu'il retrouvera à Colmar en 1938. Ensuite sa lettre du 4 juillet, la
+seule ligne de lui qu'on ait, où il demande conseil à son président avant de
+signer. Enfin, et c'est décisif pour le chapitre 3 : il écrit en arabe.
+« L'arabe n'étant pas déchiffrable pour tout le monde », dit l'article, et le
+président lui conseille d'écrire ou de faire écrire en français. Les journaux
+qui le disent « illettré » disent donc une chose fausse : il écrit, mais dans
+sa langue, et c'est sa langue qu'on tient pour rien.
+
+Pour le chapitre 3 encore, le vocabulaire de l'article lui-même : « on alla
+le tirer de son bled », « notre Mohamed », « le petit footballeur tunisien »,
+« dans son bled, il en a pour six mois à empaqueter des dattes », « il avait
+cru au mirage ».
+
+LU : 83 sur 312.
+
+---
+
+## [79] Nord-sports, 10 septembre 1936, page 4, et suite de la page 2
+
+Ark bpt6k9376097n. Deux notes. La première : « Boudjemaa a disparu de
+Saint-Etienne sans crier gare et personne ne l'a revu. Des coups de téléphone
+lancés de Marseille à Me Tanzi auraient pu laisser croire que Mohamed était
+dans la cité phocéenne. Mais personne ne s'y [trouvait]. »
+
+La seconde, page 4 : « Et toujours l'affaire Boudjemaa ! Les Stéphanois ont
+appris à leurs dépens maintenant ce qu'il en coûte de [...]. Ce dernier,
+estimant que l'attitude des dirigeants de l'A.S. Saint-Etienne était
+[quelque peu] troublante, vient sans autre [forme] de procès de leur fausser
+compagnie, regagnant sa Tunisie natale, [avec l'intention] de retrouver le
+chemin de la Riviera lorsqu'il aura purgé ses trois [mois] de suspension. »
+
+LU : 84 sur 312.
+
+---
+
+## [80] L'Intransigeant, 15 septembre 1936, page 4
+
+Ark bpt6k795233r, vue 4. Brève : « Boudjemaa, le versatile avant centre de
+Nice, qui avait signé deux licences et a écopé d'une suspension de trois mois
+pour cela, a déclaré qu'il ne voulait plus revenir sur la Côte d'Azur. Il est
+actuellement à Béja. »
+
+LU : 85 sur 312.
+
+---
+
+## [81] L'Écho du Maroc, 18 septembre 1936, page 9
+
+Ark bpt6k9374788g, vue 9. « BOUDJEMAA, le fantasque avant-centre des
+"Aiglons" niçois, dont on était sans nouvelles depuis quelques jours, se
+trouve actuellement à Béja où il attend que soit terminée sa suspension. Il a
+déclaré à un de nos amis, M. Ducousso, ne plus vouloir retourner jouer à
+Nice. »
+
+VERDICT : le nom de Ducousso, l'ami à qui il parle à Béja, est celui d'un
+avant de l'U.S. Béja de la composition de février 1931.
+
+LU : 86 sur 312.
+
+---
+
+## [82] L'Éclair (Midi) et La Dépêche, 8 octobre 1936
+
+Arks bd6t537437778 vue 3 et bpt6k41384422 vue 3. Les deux journaux donnent la
+même dépêche de Paris du 7 octobre, La Dépêche sous le titre « LA SUSPENSION
+DE BOUDJEMA EST PORTÉE À SIX MOIS » :
+
+« Le bureau fédéral a [statué] en ce qui concerne le joueur Boudjema [...] Il
+avait signé, avant le début de la saison, deux licences, l'une pour l'O.G.C.
+Nice, l'autre pour Saint-Etienne. La Commission centrale des règlements avait
+déclaré après enquête que Boudjema serait qualifié à Nice et lui avait
+infligé une suspension de trois mois. Le bureau fédéral a confirmé la
+décision de la Commission des règlements, précisant que Boudjema reste
+qualifié à Nice, mais a porté la suspension de trois à six mois. »
+
+LU : 88 sur 312.
