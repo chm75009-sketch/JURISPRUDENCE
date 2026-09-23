@@ -3768,3 +3768,71 @@ qu'il est mort, parmi ceux qui brillaient à côté de Samitier.
 **Fin de la lecture.** Les 312 entrées de la liste ont été parcourues ; chaque
 article où son nom apparaît a été lu en entier, colonnes voisines comprises, et
 restitué ici avec sa page, son journal, sa date et son identifiant Gallica.
+
+---
+
+## CORRECTIONS ET COMPLÉMENTS (23 septembre 2026)
+
+### 1. Une omission de ma part : le portrait du Petit Parisien
+
+Dans la section « Pages 263 à 270 » je n'ai rendu du **Petit Parisien du 27 avril
+1939, page 6** (bpt6k6836529) que l'annonce Colmar - Girondins. C'était incomplet :
+la même page porte, sur deux colonnes et avec une photographie de lui debout en
+costume et cravate, **un portrait signé Claude Thuillard**, qui est la pièce la plus
+personnelle du dossier après l'article de Mario Brun. Je l'avais lue ailleurs (elle
+figure dans `transcriptions.md`), mais elle manquait ici. Je la remets à sa place.
+
+Titre : « [Ce que] aurait dit dimanche le Red Star à **BOUDJEMAA** ».
+
+« Un garçon râblé, très brun, au chef pourvu d'une chevelure lourde, ondulée et
+luisante, des yeux marron assez étonnés, des dents éclatantes : le tout donne
+**Mohammed Boudjemaa, vingt-quatre ans, intérieur gauche des Sports Réunis de
+Colmar, que le C.A.P. vient de recruter.** »
+
+« **En flèche.** - Avec son "collègue" Tellechea il complète un trio d'attaque dont
+Zopp est le point d'orgue. [...] Boudjemaa, pour sa part, s'agite, se détend, part en
+flèche, dribble long et tour à tour fait agir son ailier Belko ou l'avant-centre
+viennois - bientôt français - le "goal-getter" Zopp. [...] Un peu ce que représente
+la "vista" chez les footballeurs basques ! »
+
+« **Martinelli a l'œil !** - Âgé de vingt-quatre ans, Mohammed - un de plus ! - est né
+à Béja, en Tunisie. Tout gamin, petit "yaouled" échappé de la boucherie paternelle,
+Boudjemaa s'en allait rôder sur les touches du terrain de l'Union Sportive du cru.
+Comme nombre de jeunes Arabes, il avait une véritable vocation de footballeur. Mais
+l'entraîneur de l'U.S. Béja, Martinelli - qui avait le fameux œil - ne tarda pas à
+remarquer ce néophyte. »
+
+« **Béja, c'est trop petit...** - Les conseils du dévoué "coach" - depuis parti pour
+les Amériques - ne tombèrent point dans l'oreille d'un sourd. [...] À vingt ans, on a
+besoin de tenter l'aventure, la chance, n'est-ce pas ? Boudjemaa ne faillit point à
+cette loi de nature et à dix-neuf ans il avait changé de pénates... »
+
+« **Le Red Star a bon goût.** - Mais un bruit court : les pérégrinations de Mohammed
+Boudjemaa ne sont point terminées... Le Red Star, sur le point de remonter en première
+division, a l'œil sur ce gaillard, promodèle, qui s'adapte partout rapidement, et il
+se pourrait fort que ce Nord-Africain quitte bientôt l'Alsace pour Paris...
+**Quelle joie alors à Béja et en Tunisie aussi !** »
+
+Deux choses à retenir, en plus du père boucher et de Martinelli :
+- **« que le C.A.P. vient de recruter »**. En avril 1939, Le Petit Parisien écrit donc
+  que le Cercle Athlétique de Paris l'a engagé. Rien dans la suite du dossier ne
+  confirme ce transfert : le 5 août 1939 il est toujours dans le onze de Colmar contre
+  Metz. Ou bien l'affaire s'est défaite, ou bien le journal s'est avancé. À vérifier.
+- il est né à Béja, dit ce journal, alors que l'état civil retenu jusqu'ici dit
+  Henchir El Hania. Les deux ne s'excluent pas : Henchir El Hania est un lieu-dit de
+  la région de Béja.
+
+### 2. Deux faire-part de plus, en Afrique du Nord
+
+**L'Écho d'Alger, 1er juin 1947, page 4** (bpt6k4153215g) : « L'excellent **footballer
+tunisien Boudjemaa** qui se distingua dans les rangs de Saint-Etienne, de Nice et de
+Colmar, est mort **vendredi passé** dans cette dernière ville des suites d'une
+pleurésie. »
+
+**L'Écho du Maroc, 5 juin 1947, page 4** (bpt6k8668241t) : « Le Nord-Africain
+**Boudjemaa**, qui opérait à Colmar, est décédé d'une pleurésie contractée il y a
+quelques mois. »
+
+Cela fait cinq faire-part connus (L'Équipe, France-soir, Le Courrier français du
+Sud-Ouest, L'Écho d'Alger, L'Écho du Maroc), et **trois d'entre eux disent vendredi**,
+c'est-à-dire le 30 mai 1947. La date du 29 mai reste à vérifier sur l'acte.
