@@ -3667,3 +3667,104 @@ Leclerq, Segaux ; **Boudjema**, Zopp ; Emmenegger, Battistella, Laner. »
 
 Huit ans après le jour de Noël 1938 où il avait battu le Red Star deux fois sur ce
 même terrain, il y revient. Zopp est encore à côté de lui.
+
+## Pages 303 à 312 - dernier lot
+
+Neuf articles, du 19 novembre 1946 au 17 septembre 1948. Les trois du printemps 1947
+sont les faire-part.
+
+### Les derniers matches
+
+**L'Alsace, quotidien du Haut-Rhin libéré, 19 novembre 1946, page 6**
+(bd6t528083477) : **Colmar bat Avignon 2 à 1**, 2 000 spectateurs. « Si la défense,
+et particulièrement Frey et Wawiniak, eut un début difficile, elle se racheta
+pleinement par la suite. Des demis, Lauer fut le meilleur joueur du terrain [...]
+**Parmi les avants, seul Zopp donna entière satisfaction, alors que Boudjemaa gâcha
+trop d'occasions par un jeu personnel.** »
+
+**L'Alsace, 13 décembre 1946, page 5** (bd6t52808368d) annonce le grand match de la
+saison à Colmar, le 15 décembre, contre le **S.K. Baťa**, deuxième du championnat de
+Tchécoslovaquie, « qui aligne une défense de tout premier ordre dont tous les
+[éléments] ont eu les honneurs de la sélection nationale ». Colmar : « Hoffmann,
+Demuth, Linkenheld, Lauer, Wawrniak, Deckert, Battistella, Zopp, Gévaudan,
+**Boudjemaa**, Emmenegger. »
+
+**L'Alsace, 14 janvier 1947, page 5** (bd6t528078482) : **Colmar "pros" bat Nîmes**,
+2 000 spectateurs, terrain lourd sous un soleil de printemps, « un des matches les
+plus plaisants joués cette saison à Colmar ». Lauer marque à la 12e, Gévaudan
+ensuite, Boissier réduit sur penalty juste avant la pause.
+
+Sur lui, deux fois le même reproche : « [...] toute l'aile droite avec Batistella,
+Zopp et Gévaudan firent de fort jolies choses, alors que **l'aile gauche, où
+Boudjemaa continue à pécher par un excès de personnalité, fut nettement moins
+forte**. » Et : « Colmar eut encore des chances réelles, notamment **quand Boudjemaa
+se présenta seul devant Sinibaldi, mais il omit de servir ses coéquipiers**. »
+
+**Le Soir, 17 janvier 1947, page 4** (bd6t515087483), à Marseille, annonce
+l'Olympique de Marseille contre Colmar. Le chroniqueur Victor Azaïs présente
+l'adversaire : « S. R. Colmar, [...] dont le président n'est autre que M. Lehmann,
+[...] 6e du classement [...] avec 23 points pour 7 [victoires,] matches nuls et 4
+défaites [...] a marqué 35 buts. » La formation : « Hoffmann ; Demuth, Linkenheld,
+Lauer, [Wawrniak], Deckert, Battistella, [Gévau]dan, **Boudjemaa**, Emmenegger. »
+
+Le président du club s'appelle Lehmann, comme le stade.
+
+### Sa mort
+
+**L'Équipe, 31 mai 1947, page 4** (bd6t51001286), sous le titre **« Boudjemaa est
+mort »**, dépêche signée Haengsi :
+
+« COLMAR. - **Boudjemaa avait contracté, voici quelques mois, une pleurésie. Le
+Nord-Africain, malgré tous les soins prodigués, s'est éteint hier à l'hôpital Pasteur
+de Colmar. Les Sports Réunis perdent un bon joueur et un excellent camarade.** »
+
+**France-soir, 1er juin 1947, page 4** (bpt6k4746498j), en brève : « **Le
+Nord-Africain Boudjemaa, qui opérait aux S.R. Colmar, est décédé d'une pleurésie
+contractée il y a quelques mois.** »
+
+**Le Courrier français du Sud-Ouest, organe du témoignage chrétien, 2 juin 1947, page
+4** (bd6t52762745b), sous le titre **« BOUDJEMAA EST MORT »** :
+
+« Colmar, 1er juin. Boudjemaa avait contracté, voici quelques mois, une pleurésie. Le
+Nord-Africain, malgré tous les soins prodigués, **s'est éteint vendredi à l'hôpital
+Pasteur de Colmar**. Les Sports Réunis perdent un bon joueur. »
+
+**Un point de date à trancher, et je ne le tranche pas.** La date retenue jusqu'ici
+est le 29 mai 1947, un jeudi. Les deux dépêches disent autre chose : L'Équipe du 31
+mai écrit « hier », soit le 30 ; Le Courrier du Sud-Ouest, le 2 juin, écrit
+« vendredi », soit le 30 aussi. Les deux journaux concordent sur le vendredi 30 mai.
+L'acte de décès est le seul juge ; il faut le demander à Colmar.
+
+Ce que les trois dépêches donnent et qui ne se discute pas : **une pleurésie
+contractée quelques mois plus tôt**, et **l'hôpital Pasteur de Colmar**.
+
+Il avait trente-deux ans. Neuf mois plus tôt il ouvrait le score contre Amiens.
+
+### Ce qu'on se rappelle de lui, un an après
+
+**Le Patriote de Nice et du Sud-Est, 10 juin 1948, page 2** (bd6t512487049), dans une
+chronique de Max Burlando qui égrène les noms de l'O.G.C. Nice d'avant-guerre :
+« [...] des hommes de classe : Haussaire, Schulzendorf, **Boudjemaa**, Brusseaux,
+Médan, Gnaoui, Cruel, Rodriguez, Castro, Emonoz. [...] Il [est bon] de rappeler ces
+noms [qui, pour] beaucoup d'entre nous, sont **des souvenirs**... »
+
+**Le Patriote de Nice, 17 septembre 1948, page 4** (bd6t51248785r), dans une histoire
+du football de la Côte d'Azur, le cite deux fois. Pour 1935-36 : « L'O.G.C.N., lui,
+opère en deuxième division. Avec ses Chaisaz, Audibert, Sclavi, Schulzendorf, J.
+Béraudo, Semeria, Logez, Marino, Dubois, Moudry, Astori, Schubert, Haussaire, A.
+Béraudo, Gerin, Galland, **Boudjemaa**, Bouthiaux, Falocci, etc., le "Gym", après un
+début moyen, se reprend pour terminer finalement neuvième. »
+
+Et pour 1936-37 : « Les Aiglons bénéficient, au mois d'octobre, de la rentrée du
+célèbre avant-centre espagnol **José Samitier**, qui donne un mordant remarquable à
+une équipe où **brillent** Brusseaux, Orlandini, **Boudjemaa**, Chaisaz,
+Schulzendorf, Kurdna, Rodriguez, [...] »
+
+Un an après sa mort, un journal de Nice le range, sans commentaire et sans savoir
+qu'il est mort, parmi ceux qui brillaient à côté de Samitier.
+
+---
+
+**Fin de la lecture.** Les 312 entrées de la liste ont été parcourues ; chaque
+article où son nom apparaît a été lu en entier, colonnes voisines comprises, et
+restitué ici avec sa page, son journal, sa date et son identifiant Gallica.
