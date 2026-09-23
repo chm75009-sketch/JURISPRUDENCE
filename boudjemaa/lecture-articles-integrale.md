@@ -2479,3 +2479,112 @@ pas.
 
 Au classement publié le lendemain, Colmar est cinquième avec 14 points en onze
 matches, et il vient de marquer deux buts dans le derby de sa région.
+
+## Pages 207 à 214
+
+Huit articles, du 14 novembre au 14 décembre 1938. Le plus important de tous ces
+lots, parce qu'un journal le nomme enfin deux fois : une fois par ce qu'il est,
+une fois par ce qu'il a fait.
+
+**Correction d'abord.** Dans la section précédente j'avais laissé ouverte la
+question du nombre de spectateurs au derby du 11 novembre. **Le Sport alsacien du
+14 novembre 1938, page 3** (bpt6k3148996d) la tranche : « Einnahmen : 40000 Fr. und
+über 6000 [Zuschauer] : neuer Rekord, alter Rekord 5023, 28595 Fr. » Plus de six
+mille spectateurs et quarante mille francs, record du club ; l'ancien record datait
+du 17 octobre 1937, 5 023 spectateurs et 28 595 francs. Les 5 500 du journal de
+Strasbourg étaient une estimation, pas un comptage.
+
+Le même journal explique la première mi-temps par autre chose que la forme : « die
+Früchte des seit ca. 10 Tagen unter Toussaints Leitung begonnenen
+[Rekupera]tionstrainings », les fruits d'une dizaine de jours d'entraînement
+commencés sous la direction d'un nommé Toussaint. L'Auto disait la même chose à sa
+manière, en parlant de « cours » organisés depuis quelque temps. L'entraîneur reste
+Lowy ; ce Toussaint semble s'occuper de la préparation physique. Je ne l'ai vu
+nulle part ailleurs, je le note sans conclure.
+
+**Le Sport alsacien, 14 novembre 1938, page 4** (même ark) donne le récit minute par
+minute, et c'est là qu'il est nommé comme il ne l'avait jamais été :
+
+« In der 15. Minute sehen wir **Boudjemaa** allein gegen [Laloué] stehen. Laloué
+versucht **den Araber** zu stoppen, aber umsonst. »
+
+L'Arabe. C'est la première fois, dans tout ce qui a été lu depuis le début, qu'un
+journal le désigne par autre chose que son nom, son poste ou son club. Ce n'est pas
+une injure sous la plume de 1938, c'est une désignation ordinaire, et c'est
+précisément ce qui la rend intéressante : on le nomme par son origine au moment où
+il déborde un défenseur. Le même journal, quelques lignes plus loin, écrit
+simplement : « Wieder einmal [zieht Boudj]emaa auf und davon und gut [platziert]
+setzt er das Leder zum 4:0 ins Netz. »
+
+Entre les deux, la violence. Delacourt est mis knock-out par Vrba et reste jusqu'à
+la pause sur la touche. En seconde mi-temps : « geraten Szego und Othmann einander
+in [die Haare] », Szego doit rentrer au vestiaire quelques minutes. Puis : « Da
+wälzt sich wieder **Boudjemaa**, von [...] gelegt, jammernd am Boden. » Il se roule
+par terre en gémissant, fauché.
+
+Et **Le Sport alsacien du 18 novembre 1938, page 5** (bpt6k3148997t) revient sur ce
+match dans un éditorial qui est le passage le plus dur lu jusqu'ici :
+
+« Aber das leidige Gewinnenmüssen, wozu man anscheinend beiderseitig im Versprechen
+von dicken Gewinnprämien einander zu übertrumpfen suchte, war letzten Endes doch
+wieder die Ursache, dass die rein sportliche Seite wieder in den Hintergrund
+gedrängt wurde. [...] Sachen wie der knock-out Delacourts durch Vrba [oder] der
+**Hahnenkampf Boudjemaa-Szego** gehören auf keinen Fall auf ein Fussballfeld. »
+
+Le combat de coqs Boudjemaa-Szego. Voilà ce que le journal retient, à côté du
+knock-out de Delacourt. Ce n'est donc pas « quelques Colmariens » anonymes : il est
+nommé, et nommé comme l'un des deux hommes d'une bagarre. Je l'écris parce que
+c'est écrit. On peut noter, sans que cela excuse quoi que ce soit, que le même
+journal l'avait montré quelques lignes plus haut se roulant à terre après avoir été
+fauché : le combat de coqs a deux coqs.
+
+Le même numéro rend **S.R. Colmar - Longwy 3:1** (13 novembre) : Collet ; Demuth,
+Delacourt ; Gougain, Schaden, Othman ; Emonoz, Villacampa, Zopp, **Boudjema**,
+Logez. Arbitre M. Richet. Mi-temps 1:1. Buts de Wasilewsky pour Longwy, Zopp (2) et
+Villacampa pour Colmar. Rien pour lui ce jour-là, et le journal note que « das Spiel
+von beiden Seiten recht fair durchgeführt wurde » : cette fois, correct des deux
+côtés.
+
+**L'Éclair comtois, 20 novembre 1938, page 4** (bpt6k9312310v) et **Le Petit
+Comtois** du même jour, page 5 (bpt6k9335742p), à Besançon, publient le même
+article avant un match du F.C. Mulhouse. Ils citent Jaeck, « international suisse
+qui, dimanche passé encore, était un des meilleurs hommes du derby alsacien
+Mulhouse-Colmar (pros) ; ceci malgré la présence sur le terrain des Schaden,
+Lalloué, Villacampa, **Boudjemaa**, Zopp, Parmégiani ». Son nom sert de mesure : on
+loue un gardien d'avoir bien tenu malgré lui.
+
+Le même article nomme, à Mulhouse, « Deiss et Carisio, joueurs nord-africains cédés
+pour un an au F. C. Mulhouse par le F. C. Sochaux ». Ils sont plusieurs, cette
+saison-là, dans ce coin d'Alsace.
+
+**Football, 23 novembre 1938, page 8** (bpt6k7214932g) : **Tourcoing joue à dix et
+bat Colmar**, 2-1. 1 100 spectateurs, recette 6 500 francs. « D'emblée les locaux
+partirent à l'attaque et il ne leur fallut pas longtemps pour marquer un premier
+but à Colmar, qui jouait bien au football, peut-être même très bien, mais manquait
+de foi. » Colmar égalise vers la demi-heure sur une sortie hasardeuse de Debeurme,
+Tourcoing perd Deffroyenne blessé juste avant la pause, joue à dix toute la seconde
+mi-temps et marque le but vainqueur à deux minutes de la fin. Colmar : « Collet ;
+Delacourt, Demuth ; Gougain, Tellechéa, Othmann ; Emonoz, Villacampa, Kriekl,
+**Boudjemaa**, Belko. » Belko est revenu, et un nommé Kriekl joue au centre.
+
+**Le Matin, 9 décembre 1938, page 6** (bpt6k5861722) : **Colmar et Reims 3-3**,
+joué le 8 décembre. « Au début, Reims domine nettement et marque, après une
+demi-heure de jeu, par Chloupeck, mais en seconde mi-temps Colmar fait ce qu'il veut
+et marque à trois reprises, par **Boudjema** (1 but) et [Zopp]. »
+
+**Football, 14 décembre 1938, page 8** (bpt6k72149349) donne le détail, et son but
+est un beau but : « La deuxième mi-temps fut tout à l'avantage des Colmariens. A la
+7e minute **Boudjemaa** dribbla deux adversaires et marqua des 16 mètres
+imparablement. » Puis Gougain centre sur la tête de Zopp à la 27e, Batteux ramène
+Reims à 2-2 à la 35e, Zopp remet Colmar devant à la 36e, et à la 44e « une échappée
+de Reims amena le ballon dans la surface de réparation où Gougain, serré de très
+près par deux Rémois, passa le ballon à son goal qui le rata ! 3 à 3 ». Recette
+4 936 francs seulement, le match ayant été joué à une heure tardive. Arbitre
+M. Cogneau. Meilleurs joueurs : « Tellechéa, Zopp, **Boudjemaa**, Gougain,
+Frelin ».
+
+Et le même numéro rend **Colmar 4 - Boulogne 2**, le 11 décembre, dans un brouillard
+intense, 1 500 spectateurs, recette 9 800 francs : « A la 34e minute **Boudjemaa**
+lance Emenoz qui shoote très fort en coin et marque le premier but. » Cette fois il
+donne. Le journal excuse la fatigue : les Colmariens étaient « fatigués par le match
+de jeudi contre Reims ».
