@@ -14,6 +14,29 @@ INTRODUCTION
 
 1. LA NAISSANCE
 - Le jour, le lieu.
+
+FORMULE RETENUE POUR LE LIVRE, arrêtée le 23 septembre 2026 :
+« Mohamed Boudjemaa est né le 13 août 1914 à Béja, et plus précisément à
+Henchir El Hania. »
+
+Ce qui la fonde et ce qu'elle réserve :
+- La date et le lieu viennent de son acte de décès, dressé à Colmar le
+  30 mai 1947, acte numéro 464 : « né à Henchi-el-Henaia, Tunisie, le treize
+  août mil neuf cent quatorze ». C'est le seul document d'état civil qu'on
+  ait sur lui.
+- La notice de l'A.S. Saint-Étienne écrit le même lieu autrement :
+  « Henchir El Hania ». Les deux graphies sont la même chose, transcrite deux
+  fois d'oreille.
+- Le Petit Parisien du 27 avril 1939 écrit simplement « né à Béja ». Ce n'est
+  pas une contradiction : un henchir est un domaine agricole, pas un village,
+  et on donne la ville dont il dépend.
+- La réserve : ce henchir n'a pas été localisé. Il ne figure sur aucune carte
+  ni dans aucun répertoire consultés, en français, en arabe, en italien et en
+  anglais. La seule attestation ancienne du nom est un rapport du Contrôle
+  civil de Béja au Résident Pichon, numérisé à Aix, où El Henaïa revient comme
+  lieu de résidence dans trois cheikhats de la région de Béja, ceux d'Azra,
+  d'Arab Madjour et d'El Menchar. Le chapitre raconte cette recherche telle
+  qu'elle s'est faite, et dit ce qui n'a pas été trouvé.
 - Le récit des recherches sur ce lieu de naissance.
 - Sa carrière en Tunisie, à l'Union Sportive Béjaoise.
 - Martinelli, l'homme qui l'a révélé : la composition de l'U.S.B. du
