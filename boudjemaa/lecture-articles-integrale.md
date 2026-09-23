@@ -1375,3 +1375,93 @@ lui réclamait.
 
 Et il n'est pas qualifié pour le premier match. Sa saison stéphanoise commence
 sur un banc, une fois de plus pour une affaire de papiers.
+
+## Pages 103 à 110 - l'automne stéphanois : la Suisse battue, sept buts aux Girondins
+
+**[102] Mülhauser Volksblatt, 21 août 1937, page 8** (ark bpt6k31386963),
+en allemand. Lu en entier. Sous le titre « Ein gutes Geschäft ! » (une bonne
+affaire) :
+
+« O. G. C. Nizza hat den tunesischen Fussballer Boudjemea für 50.000 Frs.
+vorteilhaft (aber ganz bestimmt !) an Saint-Etienne verkauft. »
+
+Soit : « L'O. G. C. Nice a vendu avantageusement (et c'est bien sûr !) le
+footballeur tunisien Boudjemea à Saint-Etienne pour 50.000 francs. »
+
+Le chiffre est le même que celui du Journal du Midi, et le journal alsacien
+ajoute un mot que les autres n'écrivent pas : **tunesischen**, tunisien. C'est
+la première source lue qui le désigne ainsi dans une phrase de fait, et non
+dans une liste de « Nord-Africains ».
+
+**[104] Le Forez sportif, 1er septembre 1937, page 3** (ark bpt6k6681891r), le
+journal de Saint-Etienne. Lu en entier. Le grand match du jour est
+Saint-Etienne-Nice, deuxième journée, et ce n'est pas là qu'il joue.
+
+Dans le compte rendu du lever de rideau, réserves de l'A.S.S.E. contre les
+Ripagériens de l'Athlétic-Club de Rive-de-Gier : « Côté stéphanois, Boudjemaa
+faisait sa rentrée. Le Tunisien fit honneur à son renom, de même que
+l'Autrichien Hermann. »
+
+Sa première apparition sous le maillot vert, quinze jours après le transfert,
+se fait donc dans l'équipe réserve, en ouverture du match contre son ancien
+club. Gambardella l'avait annoncé : il n'était pas qualifié. Le journal de la
+ville l'appelle lui aussi « le Tunisien », et parle de son « renom ».
+
+**[106] La Vigie marocaine, 8 septembre 1937, page 7** (ark bpt6k20033878). Lu
+en entier. Longue revue de la journée de championnat, club par club, du seul
+point de vue des joueurs marocains et nord-africains : « Boudjema opère à
+Saint-Etienne, mais nous n'y trouvons plus Charbit. Qu'est devenu l'ex-Olympien ?
+Saint-Etienne donnait la réplique à Alès ; rien d'autre à signaler, si ce n'est
+14.477 francs de recette. »
+
+Rien sur son jeu, mais la confirmation qu'à Casablanca on suit son nom à la
+trace, et que Charbit, l'autre nom nord-africain de Saint-Etienne, celui-là
+même qu'Eskenazi avait retenu dans sa sélection d'avril, a quitté le club.
+
+**[107] L'Ouest-Éclair, 10 septembre 1937, page 9** (ark bpt6k6308072), et
+**[108] L'Ouest-Éclair (Rennes), 12 septembre 1937, page 13** (ark
+bpt6k6610121). Les deux articles lus en entier, ils annoncent puis présentent
+l'amical Stade Rennais-A.S. Saint-Etienne du dimanche 12.
+
+Le fait d'abord : « L'A. S. Saint-Etienne bat l'équipe nationale suisse par
+2 buts à 0 [...] Les Stéphanois, affirmant une nette supériorité dans tous les
+compartiments du jeu, triomphèrent par 2 buts à 0 après avoir mené par 1 but à
+0 à la mi-temps. »
+
+Et la composition, imprimée en losange dans les deux numéros, la même que
+contre la Suisse : « Favier / Casy, Rolhion / Biechert, Odry, Rich / Pasquini,
+Tax, Beck, Boudjemaa, Roux. » Il est inter gauche, à côté de Beck.
+
+Le portrait, enfin, emprunté par L'Ouest-Éclair au chroniqueur parisien Louis
+Pere dans Football : « C'est là une grande équipe aux moyens athlétiques
+puissants, aux connaissances approfondies du jeu. [...] L'aile Tax-Pasquini
+fera frémir force défenses et à côté d'un Beck trépidant, **Boudjemaa reste un
+danger constant.** »
+
+**Un écart à signaler.** Le numéro du 10 septembre date la victoire sur la
+Suisse « Paris, le 8 septembre » et la dit jouée « en nocturne » ; celui du 12
+écrit que l'équipe est arrivée à Rennes « venant en droite ligne de Berne où
+elle a battu en un match d'entraînement l'équipe nationale A de la Suisse ».
+Paris ou Berne, le même journal dit les deux à deux jours d'intervalle. Le
+lieu reste à établir.
+
+**[109] L'Athlète (Bordeaux), 22 septembre 1937, page 4** (ark bpt6k4559419n).
+Lu en entier. Compte rendu de Saint-Etienne-Girondins du 19 septembre à
+Geoffroy-Guichard, signé du correspondant bordelais.
+
+Le score : « A. S. de Saint-Etienne bat Girondins-B.-F.-C. par 7 buts à 2. »
+
+La composition : « Saint-Etienne. - But : Favier ; arrières : Casy, Rolhion ;
+demis : Hermann, Obry, Rich ; avants : Pasquini, Tax, Beck, Boudjemaa,
+Biechert. »
+
+Le journal, qui écrit pour Bordeaux, ne s'attarde pas sur les vainqueurs :
+« Chez les vainqueurs, toute l'équipe a bien joué, cependant, il faut donner
+une mention spéciale au demi Hermann, qui est un footballeur de classe. »
+Boudjemaa n'est pas nommé dans les buts. Mais il est titulaire, à son poste,
+dans une équipe qui en met sept.
+
+Un mois après son arrivée, il est donc installé : inter gauche de l'attaque
+stéphanoise, à côté de Beck, dans l'équipe qui vient de battre la sélection
+nationale suisse et qui, écrit Louis Pere, « doit jouer les ténors dans le
+groupe Sud ».
