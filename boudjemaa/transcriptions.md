@@ -1993,3 +1993,177 @@ fera frémir force défenses et, à côté d'un Beck trépidant, Boudjemaa reste
 danger constant. »
 
 LU : 121 sur 312.
+
+---
+
+## [104] L'Athlète (Bordeaux), 22 septembre 1937, page 4, et La Petite Gironde, 28 septembre 1937, page 2
+
+Arks bpt6k4559419n et bpt6k4373149z. Saint-Étienne contre Bordeaux au stade
+Geoffroy-Guichard, le 19 septembre 1937 : « Saint-Etienne. - But : Favier ;
+arrières : Casy, Rolhion ; demis : Her[mann], Odry, Rich ; avants :
+Pasquini, [Tax], Beck, Boudjemaa, Biechert. »
+La Petite Gironde note que « pour la première fois Saint-Etienne jouait
+grand complet par suite des rentrées de Favier, Boudjemaa, Biechert et du
+prestigieux Hermann ».
+
+LU : 123 sur 312.
+
+---
+
+## [105] L'Athlète, 20 octobre et 10 novembre 1937
+
+Arks bpt6k4559423j et bpt6k4559426s. Le premier donne la composition niçoise
+de l'après-Boudjemaa ; le second explique le recrutement stéphanois : « L'A.S.
+de Saint-Etienne s'est en effet enrichie de Favier, gardien de buts de
+Boulogne ; de Kordjna, venu du F.K. de Berne ; de Casy, du F.C. de
+Mulhouse ; de Roux, du S.O. Montpellier ; de Lazaro, du Gallia d'Oran ; de
+Charbit, de l'Olympique de Marseille ; de Boudjemaa, de l'O.G.C. de Nice, et
+enfin du fameux Hermann, l'émule de Beck, du Libertas de Vienne. »
+
+LU : 125 sur 312.
+
+---
+
+## [106] L'Éclair (Midi), 13 janvier 1938, pages 3 et 15
+
+Ark bd6t53744231v. Une ligne dans les brèves : « Le Stéphanois Boudjemaa a
+quitté St-Etienne pour aller se reposer à Tunis. »
+
+LU : 127 sur 312.
+
+---
+
+## [107] Le Grand Écho du Nord, 2 mars 1938, page 7
+
+Ark bpt6k4765841c, vue 7. « [...] les "verts" vont bénéficier du retour de
+Boudjemaa et du renfort de Pasquini. »
+
+LU : 128 sur 312.
+
+---
+
+## [108] Le Petit Méridional, 8 mai 1938, page 7 - « BOUDJEMAA EST REVENU »
+
+Ark bpt6k41895549, vue 7. Titre : « Boudjemaa est revenu ».
+
+« Qui ne se souvient pas des folles équipées de Boudjemaa, ce Tunisien qui,
+après avoir brillé à Nice, passa à St-Etienne, ne fit qu'une courte
+apparition et retourna dans sa Tunisie natale en promettant de revenir. Les
+Stéphanois en avaient fait leur deuil et pensaient qu'ils ne le reverraient
+plus. Et voici que Boudjemaa vient de débarquer à St-Etienne au moment où on
+l'y attendait le moins. Mais aussi au moment peut-être où on en a le plus
+besoin. On sait en effet que Beck, avant-centre titulaire de l'A.S. de
+St-Etienne, sera quelque temps encore indisponible. L'enfant prodigue a donc
+été accueilli à bras ouverts et il est probable que c'est lui qui jouera
+avant-centre dimanche prochain à St-Etienne contre l'O. de [...] »
+
+VERDICT : parti se reposer à Tunis en janvier, il revient début mai 1938,
+sans prévenir, et rentre directement dans l'équipe. « Les folles équipées »,
+« l'enfant prodigue » : le ton, encore une fois, pour le chapitre 3.
+
+LU : 129 sur 312.
+
+---
+
+## [109] La Dépêche, 9 mai 1938, page 4
+
+Ark bpt6k4139361c, vue 4. Sa rentrée : « Boudjemaa faisait sa rentrée ; il
+fut le meilleur joueur d'une attaque qui fut très mal inspirée. Saint-Etienne
+menait pourtant de 2 à 0 après une demi-heure de jeu, points acquis par Tax
+et Boudjemaa. Juste avant la mi-temps, un magistral loupé de Biechert
+permettait à Griffiths de réduire l'écart. »
+
+LU : 130 sur 312.
+
+---
+
+## [110] L'Information méridionale, 15 mai 1938, page 4 - deux buts contre Dunkerque
+
+Ark bd6t54775957v, vue 4. Sous le titre « Saint-Etienne et Dunkerque ont
+match nul », et un intertitre « TROIS BUTS PENDANT LA PREMIÈRE MI-TEMPS » :
+
+« Concrétisant un avantage marqué, Boudjemaa score le premier à la septième
+minute de jeu. Trente minutes après, Gianelloni arrête un premier tir au même
+joueur, mais Boudjemaa reprend la balle et, d'un beau shoot, le plus beau
+peut-être de la saison, marque une deuxième fois. »
+
+Le même article porte plus bas un intertitre en capitales : « A
+SAINT-ETIENNE, BOUDJEMAA ».
+
+LU : 131 sur 312.
+
+---
+
+## [111] L'Information méridionale, 22 mai 1938, page 4
+
+Ark bd6t54775961r, vue 4. « Saint-Etienne peut se permettre d'in[jecter du]
+sang frais dans son équipe comme [avec] Boudjema et Casy : voilà des
+[hommes bie]n reposés comme le sera Beck quand [il rentre]ra. »
+
+LU : 132 sur 312.
+
+---
+
+## [112] L'Auto, 27 mai 1938, page 5
+
+Ark bpt6k4635127m, vue 5. Saint-Étienne contre Arras : « le match nul
+d'aujourd'hui montre encore une fois la f[aiblesse] de l'attaque des
+Stéphanois, dans laquelle Boudjema se démena [comme] un diable sans pouvoir
+lui donner le mordant nécessaire ».
+
+LU : 133 sur 312.
+
+---
+
+## [113] Saint-Étienne bat Tourcoing 7 à 3, 29 mai 1938 - LE MATCH DE LA MONTÉE
+
+Deux comptes rendus, lus l'un et l'autre en entier.
+
+La Dépêche (Lille) du 30 mai, page 7 (ark bd6t51502990h), titre : « A.S. DE
+SAINT-ETIENNE BAT U.S. DE TOURCOING PAR 7 À 3 ».
+
+« A la surprise générale, Tourcoing ouvre la marque à la cinquième minute.
+Mais Saint-Etienne a pris un gros avantage ensuite et, à la vingtième minute,
+marque par Boudjema. Quelques minutes après, Tourcoing marque un deuxième
+but, tandis que Boudjema s'offre le luxe de rater un penalty. A la mi-temps :
+Tourcoing 2 ; Saint-Etienne 1. »
+
+L'Auto du 30 mai, page 6 (ark bpt6k46351303), titre : « Tourcoing, fatigué, a
+dû s'incliner après avoir dominé - St-Etienne b. Tourcoing : 7-3 ».
+
+Compositions : « Tourcoing. - Morrent ; Dubre[uil], Roussel ; Druon,
+Bernasconi, Bre[ton] ; Leman, Lefebvre, Baickoucheff, Debruyckère,
+Chrysantis. Saint-Etienne. - Favier ; Casy, Rolhion ; Charbit, Odry, Rich ;
+Plovie, Tax, Herremann, Boudjemaa, Cabanne[s]. »
+
+Le récit : « Dès le coup d'envoi, on note un [échappée] de Plovie, qui, sur
+faute de la défense locale, ouvre la marque à la [cin]quième minute.
+Saint-Etienne réagit, Boudjemaa égalise d'un ras à terre à la vingtième
+minute. Puis Favier [est] battu par Lefebvre à la trente-cinquième minute et
+Boudjemaa [manque] un penalty.
+
+A la reprise, trois corners [sont] concédés contre Tourcoing. Cab[annes]
+égalise à la deuxième minute. L'avant-centre visiteur marque à la septième
+minute et Boudjemaa égalise deux minutes après, dans le but vide. [Puis] une
+seule équipe joue sur le terrain et Plovie, Tax, Herremann et Cabannes
+augmentent la marque. Recette : 45.200 francs. »
+
+Et la conclusion du journal : « Jusqu'au début de la deuxième mi-temps, le
+résultat final fut indécis. Tourcoing menait [par] 3 buts à 2. Mais, par la
+suite, les visiteurs jouèrent à dix, leur avant-centre blessé quittant le
+terrain ; une fatigue subite s'empara des Tourquennois, qui se laissèrent
+dominer manifestement par les Stéphanois, lesquels en profitèrent pour
+marquer cinq nouveaux buts et enlever nettement le match, leur permettant de
+jouer, la saison prochaine, en division nationale. »
+
+Les dirigeants stéphanois, cités : « Nous sommes très heureux du résultat
+obtenu dans l'ultime match. Après cinq années d'efforts, nous sommes
+parvenus enfin au résultat si longtemps désiré. »
+
+VERDICT : c'est le match du chapitre 7, et il est entièrement documenté. Deux
+buts de lui, dont l'égalisation de la vingtième minute et celle du but vide à
+la neuvième minute de la reprise, et un penalty manqué à la
+trente-cinquième. C'est ce match qui fait monter Saint-Étienne en division
+nationale.
+
+LU : 135 sur 312.
