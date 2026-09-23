@@ -2167,3 +2167,115 @@ trente-cinquième. C'est ce match qui fait monter Saint-Étienne en division
 nationale.
 
 LU : 135 sur 312.
+
+---
+
+## [114] Paris-soir, 30 mai 1938, page 10
+
+Ark bpt6k7644306q, vue 10. Le même match de Tourcoing, dans les mêmes termes,
+et le classement final de la deuxième division : « 1. Le Havre, 44 pts ;
+2. Saint-Etienne, [4]0 pts ». Le journal précise la deuxième mi-temps : « Au
+bout de deux minutes, Cabannes égalise. Mais, peu après, Baickoucheff redonne
+l'avantage aux nordistes, mais l'avant-centre de Tourcoing, blessé, quitte
+définitivement [le terrain]. »
+
+LU : 136 sur 312.
+
+---
+
+## [115] Sporting, 7 juin 1938, page 4
+
+Ark bpt6k7230357j, vue 4. Huit jours après la montée : « D'autre part,
+Boudjemaa et Hermann ne seraient pas retenus. »
+
+VERDICT : il fait monter le club le 29 mai, on ne le garde pas le 7 juin.
+
+LU : 137 sur 312.
+
+---
+
+## [116] L'Auto, 8 juin 1938, page 5
+
+Ark bpt6k4635141w, vue 5. Liste des joueurs libérés ou disponibles par club :
+« Saint-Etienne. - Guillard, Lazarro, [...] Boudjemaa, Charbit, [He]rmann,
+Odry. »
+
+LU : 138 sur 312.
+
+---
+
+## [117] Le Petit Havre, 28 juin 1938, page 5
+
+Ark bd6t526348383, vue 5. « Boudjemaa et Odry vont être transférés, le
+premier à Colmar, le second à Charleville. »
+
+LU : 139 sur 312.
+
+---
+
+## [118] Sporting, 5 juillet 1938, page 9
+
+Ark bpt6k7230353w, vue 9. Chronique alsacienne signée ALSAKICK : « Questions
+transferts, Colmar enregistre encore une bonne rentrée de [Saint-E]tienne :
+Boudjema, excellent [...] » et, plus loin : « A l'attaque, le choix est
+[large] : Emenoz, Boudjema, venant [de Saint-Etienn]e, Tellechea et Belko,
+ex-[Sochalie]ux, paraissent devoir figurer [parmi les] titulaires. »
+
+LU : 140 sur 312.
+
+---
+
+## [119] Football (hebdomadaire), 6 juillet 1938, page 2
+
+Ark bpt6k7214926r, vue 2. « BOUDJEMAA, l'ailier Nord-Africain qui défraya la
+chronique [l'an] dernier par suite des démêlés entre Nice et Saint-Etienne,
+quittera cette [année] le Sud de la France pour s'éla[ncer vers] Colmar où il
+a signé une nouvelle licence. »
+
+LU : 141 sur 312.
+
+---
+
+## [120] L'Écho des sports, 19 juillet 1938, page 5
+
+Ark bpt6k9561382w, vue 5. Un article sur les Nord-Africains du football
+français, qui le cite dans une longue liste : « Aznar, Bas[tien], Gonzalès,
+Piétri, Rabih, Fructuoso, Janin, Salas, Ben Bouali, Jasseron, Ortin, Zatelli,
+Aravit, Brusseaux, Pa[...], Curcuru, Zermani, Grauby, Benou[na], Branca,
+Mary, Boudjemaa, Haussaire, Aoued, Bohé, Castro, sans oublier les frères
+Raymond et Roger Couard. Tous, ou presque, firent partie soit de nos équipes
+de ligues ou des équipes de France A, France B, France "amateur", France
+"universitaire", ou [de l'] armée française. »
+Et le titre de la rubrique : « Qui n'a pas son joueur africain ? »
+
+LU : 142 sur 312.
+
+---
+
+## [121] L'Est républicain, 6 août 1938, page 5
+
+Ark bpt6k8283421s, vue 5. Présentation de Colmar : « [Gardet] en arrière, [...]
+Gougain, Shaden et Othmann en demis, Tellechea et Zopp seront encore les
+animateurs de l'attaque, dans laquelle Emenoz, Boudjema et l'ex-Sochalien
+Belko prendront place. »
+
+LU : 143 sur 312.
+
+---
+
+## [122] Ciné-HAC, 7 août 1938, page 2
+
+Ark bpt6k74065192, vue 2. Bulletin du Havre Athletic Club : « En avant, on a
+remercié Boudjemaa, parti à Colmar, et Plovie, parti dans le Midi. »
+
+LU : 144 sur 312.
+
+---
+
+## [123] Les Dernières Nouvelles de Strasbourg, 16 juillet et 13 août 1938, et Strassburger neueste Nachrichten, 13 août 1938
+
+Arks bd6t52643574w, bd6t52643602r et bd6t5962554m. L'équipe de Colmar
+présentée en tableau, avec lui à l'aile : « Wozniak ; Gardet, Delacour ;
+Ottmann, Schaden, Logez ; Boudjema, Zopp, Tellechea [et Belko] ».
+
+LU : 147 sur 312.
