@@ -1750,3 +1750,100 @@ Colmar, donc, pour 1938-1939 : la deuxième division alsacienne, alors que
 Saint-Etienne monte en division nationale avec les joueurs qu'il achète à sa
 place. Il aura joué une saison entière dans l'équipe qui monte et ne montera
 pas avec elle.
+
+## Pages 135 à 142 - l'été 1938 : Colmar, et une place dans une liste
+
+**[134] Sporting, 5 juillet 1938, page 9** (ark bpt6k7230353w), chronique
+d'Alsace signée ALSAKICK. Lu en entier. Sous le titre « Colmar se meuble... » :
+
+« À Colmar, M. Lehmann a envisagé [large]ment ses besoins en joueurs, car
+cette fois-ci, après [avoir] échoué de très peu dans ses [tentatives]
+d'accéder à la division nationale, le fervent président veut [arriver] à
+atteindre ce but. [...] Pour l'attaque, le choix est [large]. Emenoz,
+**Boudjema, venant de [Saint-Etienne]** ; Tellechea et Belko, ex-[Roubaix],
+paraissent devoir figurer comme titulaires. »
+
+L'article se termine par : « Colmar se meuble bien. » Le mot dit assez ce
+qu'est un joueur dans cette rubrique : du mobilier qu'on achète.
+
+**[135] Football, hebdomadaire de Marcel Rossini, 6 juillet 1938, page 2** (ark
+bpt6k7214926r). Lu en entier. Parmi les brèves de transfert :
+
+« **BOUDJEMAA, l'ailier Nord-Africain qui défraya la chronique l'an dernier,
+par suite des démêlés entre Nice et Saint-Etienne**, quittera cette saison le
+Sud de la France pour s'[installer] à Colmar où il a signé une nouvelle
+licence. »
+
+« Défraya la chronique » : deux ans après, l'affaire des deux licences reste
+ce par quoi un hebdomadaire parisien le présente à ses lecteurs.
+
+**[137] L'Écho des sports, 19 juillet 1938, page 5** (ark bpt6k9561382w), un
+long article de Charles Ferrandi sur deux colonnes, titré « L'Afrique du Nord
+est une véritable pépinière de footballeurs ». Lu en entier, c'est le meilleur
+texte du dossier pour comprendre où il se situe.
+
+Ferrandi remonte aux premiers sélectionnés de 1924, Alcoeel, Chesneau,
+Manzanarès, puis Bardot, Pozo, Liminana, les Blidéens Bonello et Salvano. Puis
+il dresse la liste de ceux qui jouent alors en France : « nous y notons les
+noms de Aznar, Bastien, Gonzalès, Piétri, Rabih, Fructuoso, Janin, Salas, Ben
+Bouali, Jasseron, Ortin, Zatelli, Aravit, Brusseaux, Pataa, Cureuru, Zermani,
+Grauby, Benouna, Branca, Mary, **Boudjemaa**, Haussaire, Aoued, Bohé, Castro,
+sans oublier les frères Raymond et Roger Couard. »
+
+Et il explique pourquoi les clubs se les disputent : « Pourquoi le joueur
+nord-africain possède-t-il une telle valeur ? C'est qu'en dehors de ses
+qualités de footballeur proprement dit, il possède cette autre qualité qui
+manque souvent aux joueurs de la métropole : **il joue avec cœur, il aime ses
+couleurs et il joue pour gagner.** S'il fait du football son métier, il l'aime
+toujours comme un jeu et, étant rétribué, fait preuve d'une réelle conscience
+professionnelle. »
+
+Puis ce regret, qui date le texte d'un mois après la Coupe du monde jouée en
+France : « Regrettons, en passant, qu'à l'occasion de la Coupe du Monde, on
+n'ait pas jugé utile d'accorder une chance à Ben Bouali, Zatelli ou autres.
+Ils se seraient certainement bien accommodés de la chaleur, des terrains secs
+où leur jeu de demi-volée aurait pu s'épanouir. »
+
+Il compose enfin, pour la démonstration, une sélection nord-africaine qui,
+dit-il, donnerait « du fil à retordre » à l'équipe de France : « Gonzalès - Ben
+Bouali, Jasseron - Charbit, Ortin, Bastien - Zatelli, Brusseaux, Couard, Aznar
+et Benouna ». Il ne l'y met pas, mais il le compte parmi les joueurs de la
+liste, à côté de tous les autres. C'est la deuxième fois, après Eskenazi en
+avril 1937, qu'un journaliste tient ce raisonnement, et il n'a toujours pas
+abouti.
+
+**[139] L'Est républicain, 6 août 1938, page 5** (ark bpt6k8283421s). Lu en
+entier. « L'équipe de Colmar prend forme. Colmar, dit-on, disposera de Wozniak
+dans les buts, de Gardet et Demuth à l'arrière, de Gougain, Shaden et Othmar en
+demis. Téléchéa et Zopp seront encore les animateurs de l'attaque dans laquelle
+Emenoz, **Boudjema** et l'ex-Sochalien Belko prendront place. »
+
+**[140] Ciné-HAC, bulletin officiel du Havre Athletic Club, 7 août 1938, page 2**
+(ark bpt6k74065192), une revue des effectifs des clubs de division nationale
+signée J.-D. Lu en entier. Sur les deux promus, Saint-Etienne et le HAC :
+
+« Saint-Etienne a acquis au fort prix : Llense, Snella, Hummenberger. [...]
+En avant, **on a remercié Boudjemaa, parti à Colmar**, et Plovie parti dans le
+Midi. Mais St-Etienne a les moyens, si cela s'avère nécessaire, pour acquérir
+les joueurs qu'il faut. »
+
+« On a remercié » : c'est le mot du bulletin d'un club rival, et c'est celui
+qui décrit le mieux la fin de l'aventure stéphanoise.
+
+**[141] Les Dernières nouvelles de Strasbourg, 13 août 1938, page 16** (ark
+bd6t52643602r). Lu en entier. Annonce de Colmar contre le N. A. C. Breda,
+vice-champion des Pays-Bas, le soir même au stade du Racing à Strasbourg, coup
+d'envoi à 18 h 15.
+
+La composition colmarienne, imprimée en losange : « Wozniak / Gardet, Delacour
+/ Ottmann, Schaden, Logez / **Boudjema**, Zopp, Teletchea, [...] Emmenoz. »
+
+Les Hollandais alignent huit internationaux, dont le capitaine Kools, seize
+sélections. Le journal précise que « l'engagement des deux équipes, et surtout
+celui du club hollandais, qui demandait à être payé en florins, constitue un
+risque financier important pour l'organisateur », et que les prix ont été
+baissés pour le public strasbourgeois.
+
+Une saison nouvelle commence donc, en Alsace, à mille kilomètres de Nice et de
+Saint-Etienne, et il y entre comme ailier d'une équipe de deuxième division qui
+veut monter.
