@@ -2598,3 +2598,86 @@ Colmar continua sa pression et à la 27e minute Gougain centra d'une façon
 précise sur la tête de Zopp qui marqua en coin. » Score final 3 à 3.
 
 LU : 191 sur 312.
+
+---
+
+## [142] L'affaire de la licence : Colmar bat Lens en Coupe et perd sur tapis vert, décembre 1938
+
+Six journaux, lus en entier.
+
+Excelsior du 24 décembre, page 7 (ark bpt6k4611834c), le plus clair :
+« "Pour disputer la Coupe, il faut qu'il ait [signé] avant le 10 août",
+disent les règlements de l'épreuve. [Pen]sant que le 10 août était [comp]ris
+dans les délais prescrits, les dirigeants de Colmar alignaient dimanche,
+contre Lens, le Nord-Africain Boudjemaa, qui [fut] enrôlé dans leur club le
+[10] août 1938. Fâcheuse interprétation des textes fédéraux ! Elle prive
+Colmar [du bé]néfice de sa jolie victoire [sur] les Lensois qui, à leur lieu
+[et pla]ce, disputeront les seizièmes [de fina]le. » Et le journaliste
+ajoute : « Certes, il faut des règlements, [des dé]lais précis, mais, en
+dehors [de l'af]faire Boudjemaa, cette date [du 10] août n'est-elle pas
+prématurée ? Pourquoi ne pas fixer la limite [de qua]lification au premier
+jour [du ch]ampionnat, voire même au [premi]er tour de Coupe ? »
+
+Le Républicain du Gard du 23 décembre, page 6 (ark bd6t53562665g) : « La
+Commission de la Coupe de France a jugé, hier soir, la réclamation formulée
+par le R.C. Lens contre le S.R. Colmar au sujet [du] joueur Boudjema, qui ne
+pouvait prendre part à cette épreuve, sa demande de qualification étant
+parvenue avec un jour de retard sur la date limite, c'est-à-dire le 10 août. »
+
+L'Écho du Nord du 23 décembre, page 6 (ark bd6t5474021n) : « il est à peu
+près certain que Lens aura gain de cause contre Colmar, qui a fait jouer dans
+son équipe le joueur Boudjemaa, non qualifié pour la Coupe. »
+
+Ciné-HAC du 24 décembre, page 3 (ark bpt6k7406536k) : « Lens le rescapé. En
+effet, Colmar a fait jouer contre Lens le joueur Boudjemaa, dont la licence
+était datée du 10 août, alors que le dernier délai pour signer était "avant
+le 10 août", soit le 9. Dura lex sed lex ! »
+
+La Provence sportive des 22 et 24 décembre, page 1 (arks bpt6k7037950d et
+bpt6k7037951t) : « Un dernier tuyau : Colmar aurait sans doute match perdu
+contre Lens pour avoir fait jouer Boudjemaa, non qualifié pour la Coupe » ;
+puis : « Ne savait-on pas que sa licence était parvenue avec un jour de
+retard ? Lens, en déposant sa réclamation, s'était pourtant chargé d'avertir
+les Alsaciens. Ne croyait-on pas en la victoire ? On s'aperçut trop tard que
+même sans Boudjema Colmar l'eût emporté. Reste que la loi est la loi. »
+
+VERDICT : un jour de retard sur un papier, et la victoire est effacée. C'est
+la deuxième fois qu'une signature et une date lui coûtent cher. En 1936 il y
+avait perdu six mois de sa vie de joueur ; en 1938 son club y perd un tour de
+Coupe de France.
+
+LU : 199 sur 312.
+
+---
+
+## [143] Colmar et Red Star 2 à 2, 25 décembre 1938 - ses deux buts
+
+Paris-soir du 26 décembre, page 9 (ark bpt6k76447864) : « Quelques minutes
+avant [le repos], Boudjemaa parvient à égaliser [pour] Colmar sur une belle
+action [de] Heine. A la mi-temps : Colmar, Red Star, 1-1. » Et le jugement :
+« Cependant, on doit décerner une mention toute spéciale au [Nord-Afri]cain
+Boudjemaa, auteur [des deux] buts, qui, par son action, fut le plus dangereux
+[des attaquants]. »
+
+La Dépêche du 26 décembre, page 6 (ark bpt6k41395916) : « Colmar [marqua par]
+Boudjemaa, consécutivement à deux belles offensives amorcées par Tellechia. »
+Et plus loin, sur le second but : « [Gyarmati, lui, se rendit coupable de]
+nombreuses irrégularités [et, dépa]ssé, il se laissa surprendre [par un]
+shoot de Boudjemaa, [des vingt] mètres. »
+Le même article : « [Colmar est une équi]pe athlétique, rapide, [avec deux]
+animateurs hors de [pair, Tellechea] et Boudjemaa. »
+
+La République de l'Est du 26 décembre, page 5 (ark bpt6k9330397q) : « quelques
+minutes avant le repos, réussit à égaliser par Boudjemaa. [...] Avant la fin,
+cependant, Boudjemaa réussit à égaliser. »
+
+LU : 202 sur 312.
+
+---
+
+## [144] Le Miroir des sports, 20 décembre 1938, page 8
+
+Ark bpt6k9797961z, vue 8. « L'attaque bénéficia de la liaison plus suivie
+[entre Tellechea et] Boudjemaa. »
+
+LU : 203 sur 312.
