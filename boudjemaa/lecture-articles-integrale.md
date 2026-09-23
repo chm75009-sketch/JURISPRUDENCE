@@ -382,3 +382,103 @@ colonne de brèves sportives, celle qui le concerne : « [B]oudjemaa, de l'O.G.
 
 L'intérêt de Saint-Étienne est donc de juillet 1936, un an avant le transfert
 de l'été 1937. Pages lues.
+
+## Pages 31 à 38 - l'affaire des deux licences, et ce qu'elle corrige
+
+**[32] Football, 19 août 1936, page 4 - « L'AFFAIRE BOUDJEMAA REBONDIT », EN
+ENTIER.** La colonne citante et ses voisines lues en entier. La voisine de
+gauche est la nécrologie de Zamora par Mario Brun, lue en entier. L'article
+qui le concerne porte ce titre et se lit en entier :
+
+« L'AFFAIRE BOUDJEMAA REBONDIT. Ce footballeur tunisien qui avait signé cette
+année deux licences, l'une pour Nice, l'autre pour Saint-Etienne, et qui,
+pour cela, avait été condamné à trois mois de suspension, est venu, en effet,
+rue de Londres affirmer sur l'honneur qu'il n'avait signé qu'une seule fois
+un contrat « pro » et qu'il l'avait signé pour Saint-Etienne. Il accuse même
+l'un de ses camarades niçois d'avoir contrefait sa signature. Dans l'attente
+d'une décision de la commission compétente abstenons-nous de tout autre
+commentaire. Mais, notons toutefois que Boudjemaa ayant accepté de toucher sa
+mensualité de joueur professionnel à Nice, donnait le mois dernier
+l'impression d'accepter le titre d'« Aiglon ». »
+
+Cet article corrige ce que j'ai écrit trois pages plus haut, et je le corrige
+donc : les deux lignes de la liste fédérale de juillet 1936, l'une pour Nice,
+l'autre pour Saint-Étienne, ne désignent pas deux hommes. C'est le même, et
+c'est de là que vient l'affaire. Il n'y a pas de second Boudjemaa. Je m'étais
+trompé en le supposant, et c'est la lecture de l'article entier qui le
+montre.
+
+Ce que l'article ajoute, et qui est neuf : une suspension de trois mois, une
+comparution rue de Londres au siège de la fédération, une affirmation sur
+l'honneur, et l'accusation portée contre un coéquipier niçois d'avoir imité
+sa signature. Page lue.
+
+**[33] L'Écho des sports, 25 août 1936, page 4 - « SUSPENDU INJUSTEMENT ».**
+La colonne citante et ses voisines lues en entier. C'est la présentation de
+la deuxième division par Jean Eskenazi, lue en entier, club par club, puis la
+présentation de l'équipe de Nice par René Du[chesne], lue en entier :
+gardiens, arrières, demis, ailes, et pour finir le quintette d'attaque, « une
+équation à cinq inconnues ».
+
+Et la phrase qui le concerne : « Ajoutons à cette équipe [qui ne comporte]
+pour ainsi dire pas de joueurs formés, que Boudjemaa, le meilleur avant et le
+seul shooteur, a été suspendu injustement et l'on peut se rendre compte
+facilement que ce n'est pas cette année que les Niçois feront des
+étincelles. »
+
+« Le meilleur avant et le seul shooteur » : c'est le jugement le plus net
+qu'un journal ait porté sur lui, et il tombe au moment où il est suspendu.
+Page lue.
+
+**[34] L'Écho du Maroc, 27 août 1936, page 6.** Les colonnes citantes et leur
+voisine lues en entier. Ce sont les cours du change, le concours de boules de
+l'A.S.P.T.T. de Rabat et un article sur l'ouverture du championnat, lus en
+entier. Son nom n'apparaît que dans une reprise de la liste des équipes.
+Pages lues et sans supplément.
+
+**[35] Nord-sports, 27 août 1936, page 2 - LA VERSION NIÇOISE, ET SON PRÉNOM
+DANS UNE PHRASE QUI FAIT MAL.** Les colonnes citantes et leurs voisines lues
+en entier. La page est faite des libres propos de Gambardella sur la
+représentation des ligues, lus en entier, et d'une rubrique de brèves
+intitulée « Tuyaux », lue en entier elle aussi. La brève qui le concerne
+répond à Football :
+
+« [A] croire un confrère stéphanois, [Bo]udjemaa, ce doux agneau, a été
+victime d'une machination [terr]ible de la part de ses dirigeants de l'O.G.C.
+Nice. La vérité est tout autre, nous écrit-on de Nice. [S']il a signé chez
+les « Aiglons », il [leur] doit beaucoup : il a [...] encaissé, contre reçu,
+sa mensualité de juillet, mensualité due au titre de joueur professionnel. Et
+Mohamed - illettré, peut-être, mais qui compte fort bien, lorsqu'il s'agit
+d'ar[gent] - [savait] tout cela. Mais tout rentrera dans l'ordre. »
+
+Deux choses. Son prénom est écrit en toutes lettres par un journal, Mohamed,
+ce qui confirme la liste fédérale. Et la phrase qui l'accompagne, « illettré,
+peut-être, mais qui compte fort bien, lorsqu'il s'agit d'argent », est la
+plus dure que j'aie lue sur lui ; elle ne dit rien de lui, elle dit la
+manière dont on parlait alors d'un joueur nord-africain. Je la rapporte telle
+quelle. Page lue.
+
+**[36] Nord-sports, 27 août 1936, page 4 - L'EFFECTIF NIÇOIS POUR 1936-37.**
+La colonne citante et sa voisine lues en entier, soit tout l'article d'Émile
+Laurence sur la reconstitution de l'équipe. L'effectif complet y est :
+« Gardiens de buts : Chaisaz (cap.), Audibert, Lanini. Arrières :
+Schulzendorf, Kudrna, Peter, Rami. Demis : Rodriguez, Szolar, Galland,
+Palmesani, Hirt, Falocel. Avants : Lovichy, Sillam, Csapo, Boudjema, Dubois,
+Max André, [Pellegrino]. »
+
+Le même article donne l'origine des nouveaux : Peter, militaire au 20e B.C.A.
+d'Antibes, champion de France amateur avec Valentigney ; Szolar, du Soroksar
+de Budapest ; Palmesani et Pellegrino, issus du Racing Club de Tunis ; Sillam,
+du F.C. Sousse, qui fait son service au 20e B.C.A. d'Antibes ; Csapo, un jeune
+Hongrois. Et les départs : « Haussaire à Cannes ; Marino à Rouen et Moudry à
+Dieppe. » Pages lues.
+
+**[37] Le Républicain du Gard, 29 août 1936, page 3 - IL MANQUE À LA REPRISE.**
+Les colonnes citantes et leur voisine lues en entier, soit la présentation
+complète de la première journée du championnat. La phrase qui le concerne :
+« l'O.G.C. de Nice n'est pas, lui non plus, resté inactif et bien qu'il doive
+opérer dimanche sans le concours de son avant-centre Boudjemaa, il est
+probable qu'une [victoire lui revienne]. »
+
+La suspension de trois mois le prive donc du premier match de la saison, le
+30 août 1936 contre le S.M. Caen. Pages lues.
