@@ -2681,3 +2681,60 @@ Ark bpt6k9797961z, vue 8. « L'attaque bénéficia de la liaison plus suivie
 [entre Tellechea et] Boudjemaa. »
 
 LU : 203 sur 312.
+
+---
+
+## [145] La suite de l'affaire de la licence, fin décembre 1938 et janvier 1939
+
+France olympique du 29 décembre 1938, page 3 (ark bpt6k32645102) : « Colmar,
+victorieux de Lens par 3 à 1 en trente-deuxième de finale, à Colmar, a été
+éliminé au bénéfice des Lensois parce que son joueur Boudjemaa n'avait pas
+été qualifié dans les délais. Boudjemaa ne fut qualifié que le 10 août : or,
+le règlement spécifie que la qualification doit être obtenue avant le 10
+août. Il manquait donc à Boudjemaa vingt-quatre heures. »
+
+Le Petit Parisien du 30 décembre 1938, page 6 (ark bpt6k664785k) : « Enfin,
+le directeur sportif des Sports Réunis de Colmar est venu exposer le point de
+vue de son club concernant la qualification du joueur Boudjema lors de son
+match de Coupe contre Lens. Là encore, le bureau fédéral n'a pu que confirmer
+la décision de la commission des statuts et règlements, donnant match perdu
+au club alsacien. »
+
+Et le procès-verbal lui-même, dans Football du 4 janvier 1939, page 9 (ark
+bpt6k7214935q) : « APPEL DES SPORTS RÉUNIS DE COLMAR D'UNE [DÉCISION] DE LA
+C.C. DES RÈGLEMENTS DU 21 DÉCEMBRE 1938 (QUALIFICATION DU JOUEUR
+BOUDJEMAA). [La Commission,] après avoir entendu M. Guignot pour la C.C. des
+règlements et les représentants des S.R. de Colmar et de Lens, adoptant les
+motifs des premiers juges, [confirme] la décision dont appel. »
+
+Le directeur sportif de Colmar qui va plaider à Paris, c'est Edouard Fischer,
+celui qui déclarera sa mort huit ans plus tard.
+
+LU : 206 sur 312.
+
+---
+
+## [146] Strassburger neueste Nachrichten, 27 décembre 1938, page 5
+
+Ark bd6t59598848, vue 5. Le compte rendu allemand de Colmar contre Red Star,
+avec les compositions et la ligne des buteurs : « Boudjémaa 2 ; Simonyi [2] ».
+« erst 1:0, aber [dann] gleicht Boudjemaa [aus] [...] wieder ist Boudjemaa
+[am Ball], Minuten später » - Boudjemaa égalise, puis de nouveau. Et
+l'appréciation : « Boudjemaa, als un[ermüdlicher Kämpfer] » - Boudjemaa,
+combattant infatigable.
+
+LU : 207 sur 312.
+
+---
+
+## [147] Football, 4 janvier 1939, pages 2 et 7, et L'Écho d'Oran, 8 janvier 1939, page 5
+
+Arks bpt6k7214935q et bd6t513419220. Le tableau des buteurs de la deuxième
+division où il figure, et le rappel de la dette : « Le joueur Boudjemaa,
+transféré de St-Etienne à Colmar, avait quitté Saint-Etienne en y laissant
+quelques dettes. La commission a décidé de faire rembourser par Boudjemaa à
+Saint-Etienne 4.500 francs, à raison de 500 francs par mois. »
+La page 7 donne aussi, pour un match de Colmar : « Buts marqués par :
+[...] Boudjemaa. Meilleurs joueurs : [Boudjema]a, Roviglione, Tellechéa. »
+
+LU : 210 sur 312.
