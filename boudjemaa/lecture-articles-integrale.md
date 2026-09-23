@@ -2588,3 +2588,112 @@ intense, 1 500 spectateurs, recette 9 800 francs : « A la 34e minute **Boudjema
 lance Emenoz qui shoote très fort en coin et marque le premier but. » Cette fois il
 donne. Le journal excuse la fatigue : les Colmariens étaient « fatigués par le match
 de jeudi contre Reims ».
+
+## Pages 215 à 222
+
+Six articles, du 19 au 24 décembre 1938. C'est l'épisode le plus dur de sa carrière
+et le plus documenté : il gagne un match de Coupe de France contre une équipe de
+première division, et il le fait perdre à son club pour un jour de retard
+administratif.
+
+Le 18 décembre 1938, trente-deuxièmes de finale de la Coupe de France :
+**S.R. Colmar 3 - Racing Club de Lens 1.** Lens joue en division nationale ; Colmar
+en deuxième division.
+
+**Gebweiler neueste Nachrichten, 19 décembre 1938, page 11** (bpt6k3153092c), sous
+le titre « Tellechea & Co schlagen die "Gueules noires" ». Mi-temps 0:1, corners
+1:4, « Trotz beissender Kälte ca 2000 Zuschauer », deux mille spectateurs malgré un
+froid mordant. Composition : « SRC : Collet ; Demuth, Delacourt ; Gougain, Tellechea,
+Othman ; Emonoz, Heiné, Zopp, **Boudjemaa**, Belko. »
+
+Le journal décrit les moments : Stanis ouvre le score pour Lens à la 11e minute.
+« Colmar ist mit seinen Vorstössen auch gefährlich. So verschiesst Emonoz vor dem
+Tor eine Belkoflanke und **Boudjemaa** schiesst ganz bombig an den Pfosten, das
+abgeprallte Leder kann aber Emonoz nicht verwerten. » Un tir énorme sur le poteau.
+Après la pause, Zopp égalise d'un coup franc par-dessus le mur, Heiné donne
+l'avantage à la 20e, Belko marque le troisième à la 84e sur un centre. Sur lui, le
+bilan du journal : « **Boudjemaa** besser aufkam ».
+
+**Le Miroir des sports, 20 décembre 1938, page 8** (bpt6k9797961z) consacre au match
+un long article signé **Achille Duchenne**, avec photographies. Il vaut d'être lu en
+entier, parce que c'est la plus belle page écrite sur lui jusqu'ici.
+
+Sur Lens : « les Artésiens jouèrent en équipe perdue, loin de chez elle, sans
+envergure, sans vitesse et sans âme. » Sur le premier but : « C'est une combinaison
+habile de l'un des trois joueurs du centre, deux passes à ras de terre, qui permit
+au Nordiste Stanis d'ouvrir la marque. » Sur la seconde mi-temps : « Le sort se
+modifia avec le changement de camp ; une seule équipe fut maîtresse du terrain :
+Colmar. Un coup franc à la limite des 18 mètres à la cinquante-septième minute de
+jeu valut d'abord l'égalisation réussie par Zopp avec une rare habileté. »
+
+Puis : « Il est à l'honneur du football local que la victoire ait été consacrée par
+un joueur formé du club. C'est, en effet, le jeune Heine qui assura l'avance de
+Colmar par un tir d'une admirable précision. Quelques minutes plus tard, l'issue de
+la rencontre devenait hors de doute, quand Belko, se trouvant seul démarqué, reçut
+la balle du même Heine. »
+
+Et sur lui : « L'attaque bénéficia de la liaison plus suivie des inters avec le
+joueur de flèche ; **Boudjemaa, excellent footballeur, opérant de volée [et]
+[tir]eur dangereux, fut très souvent en évidence.** »
+
+Duchenne loue aussi la défense : « Collet en particulier, fut très sûr et
+Delacour[t] particulièrement puissant et décidé. » Et il conclut : « Ce succès, qui
+qualifie Colmar pour les seizièmes de finale, met en évidence de façon
+particulièrement sensible, une équipe qu'il sera intéressant de suivre dans la
+saison. »
+
+Il ne savait pas encore. Le tirage au sort du 21 décembre donne « S.R. Colmar (ou
+R.C. Lens) contre Racing Club de Paris, au Havre » (**La Provence sportive, 22
+décembre 1938, page 1**, bpt6k7037950d, et **L'Écho du Nord, 23 décembre 1938, page
+6**, bd6t5474021n). Le « ou » dit tout : la réclamation est déjà déposée.
+
+La Provence sportive, en bas de colonne : « Un dernier tuyau : Colmar aurait sans
+doute match perdu contre Lens pour avoir fait jouer **Boudjemaa**, non qualifié pour
+la Coupe. »
+
+L'Écho du Nord, le lendemain : « on annonce officieusement qu'il est à peu près
+certain que Lens aura gain de cause contre Colmar qui a fait jouer dans son équipe
+le joueur **Boudjemma**, non qualifié pour la Coupe. »
+
+**Le Républicain du Gard, 23 décembre 1938, page 6** (bd6t53562665g) donne le fait
+judiciaire : « La Commission de la Coupe de France a jugé, hier soir, la réclamation
+formulée par le R.C. Lens contre le S.R. Colmar au sujet du joueur **Boudjema** qui
+ne pouvait prendre part à cette épreuve, sa demande de qualification étant parvenue
+avec un jour de retard sur la date limite, c'est-à-dire le 10 ao[ût]. »
+
+Et **Excelsior, 24 décembre 1938, page 7** (bpt6k4611834c) publie l'article le plus
+complet, sous le titre **« RÈGLEMENT DRACONIEN ! »**, signé M. A. :
+
+« "Pour qu'un footballeur soit qualifié pour disputer la Coupe de France, il faut
+qu'il ait signé sa licence avant le 10 août", disent les règlements de l'épreuve.
+Pensant que le 10 août était inclus dans les délais prescrits, les dirigeants de
+Colmar alignaient dimanche, contre Lens, le **Nord-Africain Boudjemaa qui s'était
+enrôlé dans leur club le 10 août 1938**. Fâcheuse interprétation des textes
+fédéraux ! Elle prive Colmar du bénéfice de sa jolie victoire sur les Lensois qui, à
+leur lieu et place, disputeront les seizièmes de finale.
+
+Certes, il faut des règlements, des délais précis, mais, en dehors de l'affaire
+Boudjemaa, cette date du 10 août n'est-elle pas prématurée ? Pourquoi ne pas fixer
+la limite de qualification au premier jour du championnat, voire même au premier
+tour de Coupe ? Les intentions des organisateurs qui ont voulu éviter qu'un
+footballeur puisse disputer une même Coupe sous des couleurs différentes seraient
+parfaitement respectées. Et ce règlement, sans changer de caractère, perdrait son
+caractère draconien. »
+
+Deux choses à retenir de cet article, et elles sont capitales.
+
+La première est une **date** : il a signé à Colmar le **10 août 1938**. C'est le
+premier document qui donne le jour exact de son arrivée. Le règlement disait
+« avant le 10 août » ; il a signé le 10. Un jour.
+
+La seconde est la manière dont un journal parisien le désigne : « le Nord-Africain
+Boudjemaa ». Pas l'inter gauche, pas le Colmarien. Là encore, on le nomme par son
+origine au moment où il est question de règles et de papiers.
+
+Il faut mesurer ce que cela fait. Le 18 décembre il est l'un des meilleurs hommes
+d'une victoire que Le Miroir des sports raconte sur une page entière ; le 22, cette
+victoire n'existe plus, et c'est son nom qui l'a effacée. Lens, battu sur le
+terrain, ira jouer le Racing de Paris au Havre à sa place.
+
+Aucun des articles lus ne rapporte un mot de lui là-dessus, ni un mot de ses
+dirigeants. Je n'ai pas trouvé, dans ce lot, de réaction du club.
