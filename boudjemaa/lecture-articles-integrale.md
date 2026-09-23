@@ -1667,3 +1667,86 @@ francs par le club qui l'avait fait suspendre, pas qualifié en août, titulaire
 en septembre, parti à Tunis en janvier, revenu sans prévenir en mai, meilleur
 homme de l'attaque pour sa rentrée, buteur au dernier match, et monté en
 division nationale avec Saint-Etienne.
+
+## Pages 127 à 134 - deux buts pour finir, puis la liste des transferts
+
+**[126] L'Auto, 30 mai 1938, page 6** (ark bpt6k46351303). Lu en entier. Le
+compte rendu de Saint-Etienne-Tourcoing par l'envoyé du journal, plus complet
+que celui des agences, et il corrige ce que j'ai écrit dans la section
+précédente d'après La Dépêche du Nord.
+
+La composition : « Saint-Etienne. - Favier ; Casy, Rolhion ; **Charbit**,
+Odry, Rich ; Plovie, Tax, Herremann, **Boudjemaa**, Cabanne. »
+
+Le déroulé : « Dès le coup d'envoi, on note un [shoot] de Plovie, qui, sur
+faute de la défense locale, ouvre la marque à la cinquième minute.
+Saint-Etienne réagit et **Boudjemaa égalise d'un ras à terre à la vingtième
+minute**. Puis Favier est battu par Lefebvre à la trente-cinquième minute et
+**Boudjemaa loupe un penalty**. À la reprise, trois corners sont concédés
+contre Tourcoing. Cabannes égalise à la deuxième minute. [L'avant-]centre
+visiteur marque à la septième minute et **Boudjemaa égalise douze minutes
+après, dans le but vide**. Puis une seule équipe joue sur le terrain et
+Plovie, Tax, Herremann et Cabannes augmentent la marque. » Recette :
+45 200 francs.
+
+Donc deux buts, et non un : le premier à la vingtième minute, le second au
+retour des vestiaires. Les deux sont des égalisations, dans un match que
+Saint-Etienne est mené 2-1 à la pause et finit par gagner 7 à 3. Et un penalty
+manqué entre les deux.
+
+**Correction.** Dans la section précédente, d'après La Dépêche du Nord et
+Paris-soir (qui reprennent la même dépêche), j'avais écrit qu'il avait marqué
+une fois et raté un penalty. L'Auto, qui a un envoyé sur place et donne les
+minutes, lui donne deux buts. Je retiens deux.
+
+Le même article donne ce que les dirigeants ont dit après le coup de sifflet :
+« "Vive la saison prochaine !" disent les dirigeants stéphanois. "Nous sommes
+très heureux du résultat obtenu dans l'ultime match. **Après cinq années
+d'efforts, nous sommes parvenus enfin au résultat si longtemps désiré.**" »
+
+**[127] Paris-soir, 30 mai 1938, page 10** (ark bpt6k7644306q). Lu en entier.
+Version courte de la même dépêche, avec le titre : « SAINT-ETIENNE TOUCHE
+ENFIN AU PORT. Grâce à ce succès, Saint-Etienne obtient le but recherché depuis
+si longtemps de l'accession en division nationale. » Un seul but lui est
+attribué, comme dans La Dépêche du Nord. Le reste de la page est consacré à la
+Coupe du monde, qui se joue à Paris dans les jours qui suivent.
+
+**[128] Sporting, hebdomadaire illustré, 7 juin 1938, page 4** (ark
+bpt6k7230357j). Lu en entier. La rubrique Lyonnais raconte le banquet des
+supporters stéphanois, « autour de M. Pierre Guichard, président de l'A.S.S.E. »,
+avec « une magnifique gerbe de fleurs offerte au capitaine des "pros", Roger
+Rolhion ».
+
+Puis, quelques lignes plus bas, la nouvelle qui suit la fête :
+
+« On a dit, un peu partout, que tous les équipiers premiers de l'Association
+Sportive de Saint-Etienne seraient conservés afin de les récompenser de leur
+succès. Cela n'empêche pas que de nombreux départs sont annoncés à la fin de
+cette semaine de trêve. Charbit, comme chaque année à pareille époque, parle
+d'émigrer sous d'autres cieux. [...] **D'autre part, Boudjemaa et Hermann ne
+seraient pas retenus.** »
+
+Quinze jours après la montée qu'il a contribué à décrocher, il n'est pas gardé.
+
+**[129] L'Auto, 8 juin 1938, page 5** (ark bpt6k4635141w). Lu en entier. La
+page est presque entière consacrée à la Coupe du monde (l'Italie à
+Saint-Germain, l'Allemagne, la Suisse). Dans un coin, sous le titre « Les
+transferts payants », la liste officielle des joueurs mis sur la liste par
+chaque club :
+
+« DIVISION II. Saint-Etienne. - Guillard, Lazarro, [...] **Boudjemaa**,
+Charbit, Hermann, Odry. »
+
+Ce n'est plus une rumeur de journal : c'est la liste fédérale.
+
+**[132] Le Petit Havre, 28 juin 1938, page 5** (ark bd6t526348383). Lu en
+entier. Rubrique « Echos sportifs », parmi les mouvements de l'été :
+
+« Saint-Etienne va engager Llense de Sète, Wallacek du Servette de Genève et
+sans doute Braü de Rennes ou Bruhin de Marseille. [...] **Boudjemaa et Odry
+vont être transférés, le premier à Colmar, le second à Charleville.** »
+
+Colmar, donc, pour 1938-1939 : la deuxième division alsacienne, alors que
+Saint-Etienne monte en division nationale avec les joueurs qu'il achète à sa
+place. Il aura joué une saison entière dans l'équipe qui monte et ne montera
+pas avec elle.
