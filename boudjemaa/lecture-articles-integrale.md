@@ -2320,3 +2320,80 @@ C'est la première photographie de lui rencontrée dans toute cette lecture. Il 
 genoux, au premier rang, cinquième en partant de la gauche, entre Zopp et Belko,
 ses deux voisins de la ligne d'attaque. Et debout derrière, à l'extrême droite du
 cliché, Lowy, l'entraîneur qui l'avait déjà à Nice en 1936.
+
+## Pages 191 à 198
+
+Six articles, du 22 au 31 octobre 1938, tous autour du déplacement à Troyes. Ce
+lot contient le premier portrait de lui en toutes lettres.
+
+**Le Petit Troyen, 22 octobre 1938, page 5** (bpt6k4335243b), l'avant-match, sous
+le titre « Les assauts des attaquants colmariens se briseront-ils sur la défense
+troyenne ? ». Le journal présente l'adversaire joueur par joueur :
+
+« La principale caractéristique du jeu pratiqué par le onze pro des Sports Réunis
+de Colmar semble être l'offensive à outrance. Le meilleur moyen de se défendre est
+d'attaquer, tel paraît être le mot d'ordre de l'entraîneur Lowy. »
+
+« Aux ailes : Emonoz et Belko. Nous connaissons le premier pour l'avoir vu à
+Troyes. Il fut l'artisan de la victoire colmarienne au Stade l'an passé. Belko [...]
+est un ailier de grande classe. Etoile de Sochaux, il fut sérieusement blessé et
+éloigné des grounds assez longtemps. Transféré à Colmar et complètement rétabli,
+"Bébé Cadum" est redevenu irrésistible par ses sprints, par ses feintes, par ses
+shots. »
+
+Puis la phrase qui le concerne : « Les postes d'inters sont confiés à deux autres :
+Tellechéa et **Boudjemaa**. Ex-joueur de Sochaux, Tellechéa est le stratège de la
+ligne, et **Boudjemaa, le travailleur**, [...] à leur actif, se dépensant du
+commencement [à la fin]. » Les crochets marquent ce que la coupure entre colonnes
+rend illisible.
+
+Le stratège et le travailleur. C'est la première fois qu'un journal le définit d'un
+mot, et le mot n'est pas celui du génie ni celui de la vitesse : c'est celui de
+l'homme qui court pendant quatre-vingt-dix minutes.
+
+**L'Auto, 22 octobre 1938, page 5** (bpt6k4635277v) donne l'équipe probable :
+« Colmar. - Collet ; Delacourt, Demuth ; Gougain, Schaden, Othman ; Emonoz,
+Tellechéa, [Zopp], **Boudjemaa**, Belko. » Le gardien n'est plus Wozniok mais
+Collet. Et, dans la même colonne, l'équipe de Saint-Etienne aligne désormais
+Gardet : l'échange annoncé un mois plus tôt est fait.
+
+**Le Sport alsacien, 24 octobre 1938, page 4** (bpt6k3148990x), en allemand, titre
+« Troyes - S. R. C[olmar] 2:0 » et commence par un reproche aux dirigeants : « Es
+war vielleicht ein Fehler, [den] Sturm, der in den letzten zwei Spielen 9 Tore
+geschossen hatte, auseinander zu reissen, aber augenscheinlich hat man [...] zulieb
+Zopp geopfert. » On a peut-être eu tort de disloquer une attaque qui avait marqué
+neuf buts en deux matches, et l'on a sacrifié Zopp. L'équipe du jour : « Collet ;
+[De]lacourt, Demuth ; Gougain, Schaden, Othman ; Emonoz, **Boudjema**, Villacampa,
+Tellechea, Belko. »
+
+Il change de côté : inter droit, avec Villacampa au centre à la place de Zopp.
+
+**Paris-soir, 24 octobre 1938, page 10** (bpt6k7644270j) : « Troyes imposa nettement
+son jeu après la reprise et, à la sixième minute, Camarata, bien parti dans le trou,
+sur un centre de Herrewyn, bat imparablement Collet. » Puis Krebs « d'une tête
+superbe ». Et sur eux : « A signaler, Schaden, **Boudjemaa** et Teletchéa se mirent
+en vedette chez les visiteurs, mais tombèrent sur une défense en nets progrès. »
+
+**Le Petit Champenois, 25 octobre 1938, page 5** (bpt6k82243495) le dit plus
+longuement, et c'est le compte rendu le plus précis du lot : « La première mi-temps
+fut incontestablement à l'avantage des visiteurs, qui grâce au travail de leurs deux
+intérieurs, **Boudjemaa** et Teletchea, bien soutenus par leur [demi] Schaden,
+mirent fréquemment la défense troyenne à [l'épreuve], alors que le gardien colmarien
+Collet n'avait qu'une seule fois, sur un coup franc de Raich, à montrer son talent. »
+
+Colmar domine, ne marque pas, et perd en dix minutes après la pause. Le journal
+rémois conclut : « A Colmar, Schaden, **Boudjemaa**, Teletchea, Emenoz primèrent
+leurs camarades. Villacampa qui suppléait Zopp au centre de l'attaque, fut d'une
+insigne faiblesse. »
+
+Le même journal note aussi, pour Troyes, que le gardien Bokor « en plongeant sur un
+shot de Belko, il se blessa au genou et atteignit péniblement la mi-temps ».
+
+**Les Dernières nouvelles de Strasbourg, 31 octobre 1938, page 4** (bd6t526433212)
+annonce pour le lendemain, jour de la Toussaint, un match amical au stade du Racing :
+« Le Racing [...] déplacera ses meilleurs éléments, c'est-à-dire les Collet,
+Delacourt, Demuth, Gougain, Schaden, Othmann, Emenoz, **Boudjema**, Zopp, Télétchéa,
+Belko et Villacampa. » Et : « Cette rencontre présentera plutôt le caractère d'un
+match de championnat, puisque les Colmariens n'admettent pas facilement la
+suprématie régionale des locaux. » Tribune 12 francs, pelouse couverte 6, militaires
+et scolaires 3, coup d'envoi 14 h 30.
