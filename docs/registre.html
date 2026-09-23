@@ -1749,7 +1749,20 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   })();
   if (REP) E.reponse = REP;
   garder();
-  if (E.reponse === "oui") ouvrir("import");
+
+  /* UN REGISTRE PLEIN NE SE REDEMANDE PAS.
+
+     La réponse « oui » ouvrait le dépôt, et elle restait gardée : à chaque
+     visite on redemandait le registre à quelqu'un qui l'avait déjà déposé, et
+     ses quatre-vingt-cinq salariés attendaient derrière cet écran. Signalé le
+     23 septembre 2026. Le dépôt ne s'ouvre donc plus de lui-même quand le
+     registre porte de vrais salariés ; il reste accessible d'un bouton, et
+     l'adresse avec « rep=oui » y mène toujours, pour en déposer un nouveau. */
+  var PLEIN = E.salaries.some(function (x) {
+    return !x.ex && (!vide(x.nom) || !vide(x.pre));
+  });
+  if (PLEIN && !REP) ouvrir("registre");
+  else if (E.reponse === "oui") ouvrir("import");
   else if (E.reponse === "non") {
     if (!E.salaries.length || E.salaries.every(function (x) {
       return vide(x.nom) && vide(x.pre) && vide(x.emp) && vide(x.ent); })) {
