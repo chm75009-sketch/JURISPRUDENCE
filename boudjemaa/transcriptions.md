@@ -2830,3 +2830,72 @@ Le Journal du Midi du 5 avril 1939, page 2 (ark bd6t510184165), donne la
 composition, lui à l'inter.
 
 LU : 220 sur 312.
+
+---
+
+## [150] Le Petit Parisien, 27 avril 1939, page 6 - LE PORTRAIT, ET MARTINELLI
+
+Ark bpt6k6836529, vue 6. Article signé Claude THUILLARD, avec une
+photographie de lui en pied, en costume, légendée « BOUDJEMAA - le
+Colmarien... de Tunis a le sourire ». Titre en manchette : « "Tu le r'verras
+Paname !" aurait dit dimanche le Red Star à BOUDJEMAA ». Transcription
+intégrale, faite sur l'image en pleine résolution.
+
+« Un garçon râblé, très brun, au chef pourvu d'une chevelure lourde, ondulée
+et luisante, des yeux marron assez étonnés, des dents éclatantes : le tout
+donne Mohammed Boudjemaa, vingt-quatre ans, intérieur gauche des Sports
+Réunis de Colmar, que le C.A.P. vient de recruter.
+
+EN FLÈCHE. - Avec son "collègue" Tellechea, il complète un trio d'attaque
+dont Zopp est le point d'orgue. Et il faut voir à l'œuvre les trois compères
+quand ils sont dans ce qu'on est convenu d'appeler "un bon jour" ! Boudjemaa,
+pour sa part, s'agite, se détend, part en flèche, dribble long et tour à tour
+fait agir son ailier Belko ou l'avant-centre viennois - bientôt français - le
+"goal-getter" Zopp. Nous vous prions de croire que ce travail de préparation
+est réalisé avec autant de maîtrise que de clairvoyance. Un peu ce que
+représente la "vista" chez les footballeurs basques !
+
+MARTINELLI A L'ŒIL ! - Agé de vingt-quatre ans, Mohammed - un de plus ! - est
+né à Béja, en Tunisie. Tout gamin, petit "yaouled" échappé de la boucherie
+paternelle, Boudjemaa s'en allait rôder sur les touches du terrain de l'Union
+Sportive du cru. Comme nombre de jeunes Arabes, il avait une véritable
+vocation de footballeur. Mais l'entraîneur de l'U.S. Béja, Martinelli - qui
+avait le fameux œil - ne tarda pas à remarquer ce néophyte.
+
+BÉJA, C'EST TROP PETIT... - Les conseils du dévoué "coach" - depuis parti
+pour les Amériques - ne tombèrent point dans l'oreille d'un sourd. Ses
+qualités naturelles de souplesse et de rapidité aidant, le jeune inter
+progressa, fit parler de lui. Béja devint - à son avis - un centre trop
+restreint pour son activité. A vingt ans, on a besoin de tenter l'aventure,
+la chance, n'est-ce pas ? Boudjemaa ne faillit point à cette loi de nature et
+à dix-neuf ans il avait changé de pénates...
+Aussi, quand il fut cédé cette saison à Colmar, il avait déjà eu le temps -
+en deux ans de séjour dans la métropole - de se faire connaître
+avantageusement, sa bonne volonté et son désir de progresser sans cesse ayant
+été récompensés.
+
+LE RED STAR A BON GOÛT. - Mais un bruit court : les pérégrinations de
+Mohammed Boudjemaa ne sont point terminées... Le Red Star, sur le point de
+remonter en première division, a l'œil sur ce gaillard, pro-modèle, qui
+s'adapte partout rapidement, et il se pourrait fort que ce Nord-Africain
+quitte bientôt l'Alsace pour Paris...
+Quelle joie alors à Béja et en Tunisie aussi ! »
+
+VERDICT : c'est l'article que cherchait l'auteur. Il donne, en toutes lettres,
+l'homme qui l'a révélé et ce qu'il est devenu : « l'entraîneur de l'U.S.
+Béja, Martinelli - qui avait le fameux œil - ne tarda pas à remarquer ce
+néophyte », et « les conseils du dévoué "coach" - depuis parti pour les
+Amériques ». Martinelli entraînait donc l'U.S. Béja, et il est parti pour les
+Amériques avant avril 1939.
+
+Il donne aussi ce qu'on ne trouve nulle part ailleurs : il est né à Béja, son
+père était boucher, il était gamin des rues, « petit yaouled échappé de la
+boucherie paternelle », et il traînait sur les touches du terrain de l'U.S.
+Béja. Il serait parti de Tunisie à dix-neuf ans, ce qui place son départ en
+1933 ou 1934 et non en 1935.
+
+Pour le chapitre 3, le vocabulaire est là aussi : « Comme nombre de jeunes
+Arabes », « ce Nord-Africain », « petit yaouled ».
+Planche : photos/PetitParisien-1939-portrait-planche.jpg.
+
+LU : 221 sur 312.

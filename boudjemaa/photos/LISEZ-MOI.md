@@ -39,3 +39,6 @@ l'O.G.C. Nice en 1936.
   trois photographies de la page 9 de But du 8 octobre 1946, « C'est avec
   bonne humeur qu'on prépare la victoire à Colmar », avec leurs légendes.
   Sur celle à la hache, c'est lui qui la lève.
+
+- PetitParisien-1939-portrait-planche.jpg : son portrait en pied du Petit
+  Parisien du 27 avril 1939, avec la légende du journal.
