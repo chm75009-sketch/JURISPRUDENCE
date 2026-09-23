@@ -1652,3 +1652,116 @@ décision de la Commission des règlements, précisant que Boudjema reste
 qualifié à Nice, mais a porté la suspension de trois à six mois. »
 
 LU : 88 sur 312.
+
+---
+
+## [83] L'Est républicain, 31 octobre 1936, page 5, et L'Éclair, 1er novembre 1936, page 3
+
+Arks bpt6k8282780c et bd6t53743801g. La suite financière de l'affaire :
+
+« Il restait à régler définitivement le cas du joueur Boudjema, qui avait
+signé deux licences au début de la saison, l'une à l'O.G.C. Nice et l'autre,
+postérieurement, à Saint-Etienne. Boudjema a été suspendu par la Fédération
+pour une durée de six mois [...] qualifié pour Nice, et [il a été décidé] par
+la commission [qu'il devait] restituer à Saint-Etienne le montant des frais
+avancés par ce dernier club, soit 10.700 francs. »
+
+Et L'Éclair, plus cru : « Le Niçois Boudjema ne se fit pas faute de se faire
+verser ces avances. Force lui fut, nous l'avons annoncé, de rester à l'O.G.C.
+Nice. Mais Saint-Etienne a voulu récupérer les sommes versées et Boudjema
+vient [d'être] mis dans l'obligation de rembourser 10.700 francs. Aïe ! »
+
+VERDICT : les 12 500 francs posés sur la table par M. Marey, il faut les
+rendre, et 10 700 francs sont réclamés. C'est cette dette qu'on lui fera
+encore rembourser deux ans plus tard, à 500 francs par mois, quand il sera à
+Colmar.
+
+LU : 90 sur 312.
+
+---
+
+## [84] L'Auto, 16 janvier 1937, page 2
+
+Ark bpt6k4629773w, vue 2. Procès-verbal de la Commission de discipline :
+« Remise de la peine du joueur Boudjema (O.G.C. Nice) accordée. Boudjema
+[pourra] donc prendre part, dimanche, au [match] de Coupe de France
+Nice-R.C. Strasbourg. »
+
+VERDICT : la grâce arrive à la mi-janvier 1937, avant le terme des six mois.
+Cette page était marquée « À REVOIR » dans une lecture précédente : elle est
+maintenant lue, et c'est une pièce importante.
+
+LU : 91 sur 312.
+
+---
+
+## [85] Sa rentrée : Nice contre Strasbourg, 17 janvier 1937, à Marseille
+
+Quatre journaux, quatre langues de compte rendu, tous lus en entier.
+
+Les Dernières Nouvelles de Strasbourg, 18 janvier, page 7 (ark
+bd6t52642091c) : « Le team de Nice est ainsi constitué : Chaisaz,
+Schulzendorf et Sclavi ; Rodriguez, Logez, Kudrna ; Gordolon, Sillam,
+Boudjemaa, Gérin, Lovichy. » Et plus loin : « Les Niçois, qui ont joué [...],
+ont été dangereux [par leur] inter-gauche Boudjemaa [...] » ; « Chez les
+Niçois, Boudjemaa et [...] leurs camarades ».
+
+Strassburger neueste Nachrichten, 18 janvier, page 3 (ark bd6t59607374) :
+mêmes compositions, « Nahezu 7000 Zuschauer » - près de sept mille
+spectateurs, dont les supporters niçois venus par train spécial.
+
+Mülhauser Volksblatt, 17 janvier, page 7 (ark bpt6k31385174) : « Nice hat
+gleich zwei klare Torchancen, aber in der Nervosität werden diese durch
+Boudjema ausgelassen » - Nice a d'emblée deux occasions nettes, mais dans la
+nervosité Boudjema les laisse passer. Score 0 à 0, prolongation.
+
+La Dépêche algérienne, 21 janvier, page 6 (ark bd6t5601145) : « Le
+Nord-Africain Boudjemaa, de Nice, qui avait été suspendu pour avoir signé
+deux licences, a fait sa rentrée contre Strasbourg. »
+
+Et Le Républicain du Gard du 19 janvier, page 4 (ark bd6t53559137b) :
+« [Bravo] à l'O.G.C. de Nice qui, à Marseille, a tenu en échec le R.C. de
+Strasbourg. [...] Il est probable que la requalification de Boudjemaa pour
+eux, d'une part, et la mise sur la touche de trois joueurs du R.C. de
+Strasbourg, d'autre part, aura été un stimulant précieux pour les Aiglons. »
+
+VERDICT : sa rentrée a lieu à Marseille, le 17 janvier 1937, en Coupe de
+France contre Strasbourg, six mois après le début de l'affaire. C'est
+peut-être là le match de Marseille du chapitre 4, plutôt que Nice-Marseille
+du 1er décembre 1935 : c'est à l'auteur de dire lequel il veut.
+
+LU : 96 sur 312.
+
+---
+
+## [86] Nice contre Montpellier, 24 janvier 1937
+
+L'Éclair du 25 janvier, page 7 (ark bd6t53743882x), et Le Petit Méridional du
+même jour, page 3 (ark bpt6k4189093p).
+
+Composition : « O.G.C. Nice : Chaisaz, Sclavi, Kudrna, Rodriguez, Orlandini,
+Logez, Brusseaux, Galland, Dubois, Boudjemaa, Pellegrino. »
+
+« On note aussitôt après deux bolides de Boudjemaa qui trouvent Cazal à la
+parade. » Puis : « Boudjemaa, fauché irrégulièrement à 20 mètres des bois par
+Kau[csar], tire directement la balle hors de [portée] sur le coup franc qui
+lui est accordé. » Le Petit Méridional confirme : « [Le coup franc est
+accordé] aux Niçois, Boudjemaa le botte directement dans les filets. C'est le
+second but niçois. »
+Et le jugement : « une attaque bien démembrée, dans laquelle Boudjemaa se
+montra le plus en vue ».
+
+VERDICT : une semaine après sa rentrée, il marque d'un coup franc direct de
+vingt mètres.
+
+LU : 98 sur 312.
+
+---
+
+## [87] Le Petit Matin (Tunis), 1937, page 7 - sans rapport
+
+Ark bpt6k83929684. Il s'agit d'un ordre du jour syndical protestant contre
+l'arrestation d'un secrétaire nommé Sghaier Boudjemaa. Homonyme, rien à voir
+avec le joueur. Je le note pour qu'on ne le reprenne pas par erreur.
+
+LU : 99 sur 312.
