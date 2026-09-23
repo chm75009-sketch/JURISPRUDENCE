@@ -3280,3 +3280,25 @@ plus noir que le charbon, leur apparaît, maintenant qu'il joue chez eux, plus
 blanc que la blanche hermine. » Le journaliste croit faire un bon mot.
 
 LU : 263 sur 312.
+
+---
+
+## [169] L'Express de l'Est, 11 octobre 1936 - la lettre du président Tanzi
+
+Pièce venue du Drive de l'auteur, rubrique « En quelques mots... FOOTBALL ».
+La reconnaissance de caractères est mauvaise sur ce document ; je donne ce qui
+est lisible, avec les manques entre crochets :
+
+« BOUDJEMAA [qui est actuellement] chez [lui, à Béja], où [il] purge [sa]
+suspension, [et qui] déclarait récemment [qu'il ne] voulait [plus] revenir à
+Nice, [vient de] recevoir une lettre du président de l'O.G.C. Nice, M. Tanzi,
+qui le priait de rejoindre Nice au plus tôt. Boudjemaa [...] a été touché par
+[la gentillesse] de ce [dirigeant] qui n'a eu que des [bontés] pour lui. [Il]
+a répondu qu'il regagnerait la Côte d'Azur [...] »
+
+VERDICT : après la décision qui porte la peine à six mois, le président de
+Nice lui écrit à Béja pour lui demander de revenir, et il accepte. C'est la
+fin de l'affaire, et c'est aussi la seule fois où l'on voit quelqu'un
+s'adresser à lui autrement que par voie de règlement.
+
+LU : 264 sur 312.
