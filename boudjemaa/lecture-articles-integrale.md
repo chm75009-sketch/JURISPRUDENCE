@@ -1217,3 +1217,70 @@ journaliste parisien retiendrait pour affronter l'équipe de France. En
 concurrence avec deux autres à son poste, et le journal le reprend à
 Constantine. C'est la marque la plus haute atteinte jusqu'ici dans sa
 carrière, et elle vient trois mois après la levée de sa suspension.
+
+## Pages 87 à 94 - l'article d'Eskenazi dans son texte, et le reproche de Sète
+
+**[86] Paris-soir, 30 avril 1937, page 8** (ark bpt6k7641619f). Lu en entier.
+C'est l'original de ce que La Dépêche de Constantine a repris la veille au
+soir, signé Jean Eskenazi, sous un titre en travers de la page : « Le football
+cherche un homme... » Delaunay, le secrétaire fédéral, cherche un adversaire à
+l'équipe de France après le report de France-Italie ; Eskenazi propose trois
+formules, les étrangers de France, les Nord-Africains, un match Nord-Sud.
+
+La sélection nord-africaine, dans le texte de Paris-soir, avec les noms que la
+version de Constantine avait coupés : « Gonzalès (Red Star) ; Ben Bouali
+(Marseille), Jasseron (H. A. C.) ; Charbit (Saint-Etienne), Ortin (Red Star),
+Bastien (Marseille) ; Zermani (Marseille) ou Haussaire (Cannes), Alcazar
+(Lille) ou Sintes (Sète) ou Boudjema (Nice), Zatelli (Marseille), Fructuoso
+(R. C. Roubaix), Janin (Red Star) ou Rodriguez (Excelsior). »
+
+Onze noms, trois postes ouverts, et le sien est l'une des trois solutions à
+l'inter gauche. Puis la phrase, telle qu'elle est imprimée ici : « Le football
+nord-africain est appelé à un brillant avenir chez nous et c'est lui qui,
+peut-être, dictera la voie au football français en lui apportant cette fougue
+qui s'émousse tant sur la Métropole. Qui sait si la prochaine ossature de
+l'équipe de France ne sera pas nord-africaine ? »
+
+À Constantine la phrase se terminait par un point d'exclamation, ici par un
+point d'interrogation. Petite chose, mais elle dit comment le propos a voyagé :
+posé comme une question à Paris, repris comme une annonce en Algérie.
+
+**[93] L'Information méridionale, 30 et 31 mai 1937, page 4** (ark
+bd6t54775749m). Lu en entier. Compte rendu d'un amical Sète-Nice au stade de
+Saint-Maurice, signé S. M., en fin de saison. C'est la pièce la plus pénible
+du dossier, et elle est la seule de ce genre.
+
+Le déroulé : « Le but des Sétois fut acquis par Presch, par un shoot d'une
+puissance telle que Zamora fut tenu de s'avouer vaincu, s'inscrivant lui-même
+un point en déviant le ballon dans la cage. Avant la mi-temps les Niçois
+inscrivirent un but qui fut refusé par l'arbitre. La 2me mi-temps permit au
+demi-centre Vallé de se mettre en évidence et à Samitier, sur centre de
+Brusseaux, d'égaliser par un très joli retourné. »
+
+La composition : « O. G. C. Nice. - Zamora, Camarata, Kudrna, Rodriguez,
+Orlandini puis Vallé, Logez, Brusseaux, E. Galland, Samitier, Boudjema,
+Pellegrino. »
+
+Puis les notes, et la phrase : « A Nice les meilleurs furent : Vallé, Zamora,
+Costamagna, Kudrna, Samitier. La partie de Boudjema fut intentionnellement
+défectueuse ; je veux croire qu'il y a erreur de la part de Mohamed. »
+
+Il faut la prendre pour ce qu'elle est. Un journaliste écrit, noir sur blanc,
+dans un quotidien, qu'il a joué mal exprès. Il n'avance aucun fait à l'appui,
+aucune action, aucun geste : rien que l'appréciation. Puis il se retire à demi
+dans la phrase suivante, « je veux croire qu'il y a erreur », sans dire de
+quelle erreur il parle ni de qui elle serait. Aucun autre journal lu jusqu'ici
+ne reprend le reproche, et c'est un match amical de fin de saison.
+
+Elle vaut pourtant d'être relevée pour une autre raison : elle l'appelle
+**Mohamed**. C'est la deuxième source, après les procès-verbaux fédéraux
+(« Boudjemaa Ben Mohamed »), à donner son prénom, et la seule qui l'emploie
+seul, comme on nomme quelqu'un qu'on connaît.
+
+**Chercher le contraire.** Le même article ne se tient pas debout d'un
+paragraphe à l'autre : il écrit d'abord que « le score est en faveur des
+locaux » et que « les visiteurs de loin furent les meilleurs », puis que le
+match « demeure à l'avantage des Sétois, qui dominèrent amplement tant en
+technique qu'en pratique ». Un compte rendu qui se contredit sur qui a dominé
+ne pèse pas lourd quand il accuse un joueur de tricher. Je le note, je ne
+l'écarte pas, et je dis qu'il est seul.
