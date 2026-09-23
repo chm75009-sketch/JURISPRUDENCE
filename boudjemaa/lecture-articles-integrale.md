@@ -1847,3 +1847,95 @@ baissés pour le public strasbourgeois.
 Une saison nouvelle commence donc, en Alsace, à mille kilomètres de Nice et de
 Saint-Etienne, et il y entre comme ailier d'une équipe de deuxième division qui
 veut monter.
+
+## Pages 143 à 150 - Colmar contre Breda, et les vacances qu'on prolonge
+
+**[143] L'Auto, 13 août 1938, page 7** (ark bpt6k46352076). Lu en entier. Un
+entretien avec M. Marey, secrétaire de l'A.S.S.E., sur l'effectif stéphanois de
+la première saison en division nationale : « Peu de joueurs ont quitté
+Saint-Etienne : **Boudjema est parti pour Colmar**, Plovie pour Toulouse,
+Guillard pour Longwy et Kadjna pour Antibes. »
+
+Et l'ambition du club, dite sans détour par Marey : « cette première saison
+parmi les ténors était pour eux une saison de mise au point, et le but final
+envisagé était seulement de ne pas redescendre en deuxième division pour la
+saison 1939-40. » Dix-sept joueurs, entraînés par Duckworth.
+
+**[142] Strassburger neueste Nachrichten, 13 août 1938, page 6** (ark
+bd6t5962554m), en allemand, et sa version française déjà lue dans Les
+Dernières nouvelles. Lu en entier. Même annonce du match Colmar-Breda, même
+composition, et cette précision sur le prix payé : le club hollandais exigeait
+d'être réglé en florins, « ein schweres finanzielles Opfer » pour
+l'organisateur.
+
+**[145] Le Sport alsacien, 16 août 1938, page 7** (ark bpt6k31489720). Lu en
+entier. Résultat : **S. R. Colmar bat N. A. C. Breda 2 à 1.** La composition
+colmarienne y figure avec son nom.
+
+**[146] Gebweiler neueste Nachrichten, 16 août 1938, page 11** (ark
+bpt6k3152987v), en allemand. Lu en entier. C'est le compte rendu détaillé, et
+il contient deux choses : l'action du premier but, et un jugement sur lui.
+
+Le but, à la 29e minute : « Boudjemaa köpft, der Ball prallt ab, Tellechea
+versiebt den Nachschuss, doch Zopp hat mehr Glück und lenkt den Ball ins
+Netz. » Soit : **Boudjemaa place une tête, le ballon revient, Tellechea manque
+la reprise, mais Zopp a plus de chance et le pousse au fond.**
+
+Breda égalise dès la reprise, à la 2e minute ; Aravit redonne l'avantage à
+Colmar à la 19e.
+
+Le jugement, dans le bilan des lignes : « Im Sturm sind Zopp und Tellechea die
+besten Einheiten. **Boudjemaa scheint vorerst zu persönlich zu wirken und muss
+unbedingt auf seine Nebenleute besser aufpassen.** »
+
+Soit : « En attaque, Zopp et Tellechea sont les meilleurs éléments. Boudjemaa
+paraît, pour l'instant, jouer de façon trop personnelle et doit absolument
+mieux tenir compte de ses partenaires. »
+
+**Chercher le contraire.** C'est le reproche inverse de celui que Le Guetteur
+de Valenciennes lui faisait en avril 1937, quand il le disait « rapide,
+scientifique et extrêmement dangereux », le meilleur de Nice. Un an et demi
+plus tard, dans une équipe neuve dont il ne connaît personne, un chroniqueur
+alsacien le trouve trop individuel. Les deux peuvent être vrais ; je les
+laisse côte à côte.
+
+**[147] Sporting, 16 août 1938, page 5** (ark bpt6k72303475). Lu en entier.
+L'effectif complet de Colmar, vingt-quatre joueurs : « But : Wozniak, Collet,
+Dessonet. Arrières : Gardet, Delacourt, Jan, Denneberger. Demis : Othman,
+Demuth, Lopez, Gougain, Kreuzer, Villacampa, Schaden, Emenegger. Avants :
+Meyer, Belko, Tellechea, Zopp, Arravit, Emenoz, Krickl, **Boudjemaa**,
+Fourmond. »
+
+Et, juste après la liste, cette note :
+
+« **Au sujet de Boudjemaa, signalons que ce joueur est encore en vacances
+qu'il semble prolonger malgré l'ordre de son nouveau club de rejoindre
+immédiatement son poste.** »
+
+C'est, à la lettre, ce que Nice écrivait de lui en 1936 et Saint-Etienne en
+1938. Troisième club, même phrase.
+
+**[148] Journal de Wissembourg, 20 août 1938, page 5** (ark bpt6k3037953t), en
+allemand. Lu en entier :
+
+« Im Laufe dieser Woche ist der Spieler Boudjemaa von seinen Ferien
+zurückgekehrt und in Colmar eingetroffen. Dieser Spieler kommt von der
+A. S. St. Etienne und die Colmarer Dirigeanten sind fest davon überzeugt, dass
+Boudjemaa den S. R. C.-Angriff verstärken wird und selbst das Glanzstück
+desselben sein kann. Boudjemaa spielt wahrscheinlich an Stelle von Tellechea,
+welcher dadurch den Halbrechtsposten einnimmt. »
+
+Soit : « Dans le courant de cette semaine, le joueur Boudjemaa est revenu de
+ses vacances et est arrivé à Colmar. Ce joueur vient de l'A. S. Saint-Etienne
+et les dirigeants colmariens sont fermement convaincus qu'il renforcera
+l'attaque du S. R. C. et qu'il peut même en être **le morceau de bravoure**
+(das Glanzstück). Boudjemaa jouera probablement à la place de Tellechea, qui
+passera de ce fait inter droit. »
+
+**Un écart de dates à signaler.** Les journaux alsaciens du 16 août l'alignent
+dans l'équipe qui bat Breda le 13, et lui attribuent la tête qui amène le
+premier but. Sporting, daté du 16, le dit encore en vacances, et le Journal de
+Wissembourg, daté du 20, annonce son arrivée « dans le courant de cette
+semaine ». Le plus vraisemblable est qu'il est arrivé juste à temps pour le
+match du 13, et que les deux hebdomadaires écrivent avec une semaine de
+retard. Je ne peux pas l'établir, je le note.
