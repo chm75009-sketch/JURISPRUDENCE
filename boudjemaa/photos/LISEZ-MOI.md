@@ -34,3 +34,8 @@ l'O.G.C. Nice en 1936.
   gauche.
 - Boudjemaa-Colmar-1938-portrait.jpg : son visage, détaché de cette même
   photographie.
+
+- But-1946-bourreau.jpg, But-1946-volley.jpg, But-1946-restaurant.jpg : les
+  trois photographies de la page 9 de But du 8 octobre 1946, « C'est avec
+  bonne humeur qu'on prépare la victoire à Colmar », avec leurs légendes.
+  Sur celle à la hache, c'est lui qui la lève.

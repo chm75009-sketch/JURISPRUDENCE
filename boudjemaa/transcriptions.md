@@ -2738,3 +2738,49 @@ La page 7 donne aussi, pour un match de Colmar : « Buts marqués par :
 [...] Boudjemaa. Meilleurs joueurs : [Boudjema]a, Roviglione, Tellechéa. »
 
 LU : 210 sur 312.
+
+---
+
+## [148] But, 8 octobre 1946, page 9 - LES PHOTOGRAPHIES DE COLMAR
+
+Ark bpt6k51784216, vue 9. Page entière, titre : « C'EST AVEC BONNE HUMEUR
+QU'ON PRÉPARE LA VICTOIRE À COLMAR ». Cinq photographies, quatre légendes.
+
+1. « Endurance, détente, adresse : qualités principales du footballeur.
+   L'arrière Frey comme un pur-sang, franchit la barre, mais avec le sourire
+   et en souplesse. »
+
+2. « Après l'entraînement, les joueurs de Colmar se rendent au restaurant
+   pour reprendre des forces. De gauche à droite : Lauer, Demuth, Zopp,
+   Boudjema, Chauveau, Emmenegger. »
+
+3. « Ayant "capturé" deux chèvres, ils posent pour BUT. De g. à dr. :
+   Marchesky, Gontier, Demuth, Zopp, Emmenegger, Chauveau, Batistella,
+   Ségaux et Lauer. »
+
+4. « Boudjema bourreau ! Non, simulacre de décapitation de Zopp par son
+   coéquipier. Les enfants s'amusent, mais ici le jeu est singulièrement...
+   particulier. »
+
+5. « Pour terminer l'entraînement, récréation. Petit match de volley-ball,
+   avec un filet qui n'est pas "tout neuf", mais qui n'en produit pas moins
+   ses heureux effets. »
+
+Et le texte au milieu de la page : « On ne parlait pas de Colmar au début de
+la saison. On fut même surpris que le club cher à M. Lehmann ait pris le
+départ du Championnat. Les anciens joueurs n'étaient pas rentrés, les
+nouveaux ne semblaient pas aptes à jouer un rôle en première. Mais, sous le
+signe de la camaraderie et de la bonne humeur, le "onze" colmarien fut
+constitué et entraîné, et de jolis résultats vinrent récompenser joueurs et
+dirigeants. Entre autres performances, Colmar a fait match nul avec Sochaux
+et Lyon, considérés comme les deux meilleures équipes de 2e division. Et l'on
+entrevoit que le club du Haut-Rhin terminera dans les premiers du groupe. »
+
+VERDICT : ces photographies sont les seules qui le montrent en dehors d'un
+terrain, huit mois avant sa mort. Sur la quatrième, c'est lui qui lève la
+hache au-dessus de la tête de Zopp, et il rit. Le journal en fait un jeu de
+mots, « Boudjema bourreau ». Planches pour le livre :
+photos/But-1946-bourreau.jpg, photos/But-1946-volley.jpg et
+photos/But-1946-restaurant.jpg.
+
+LU : 211 sur 312.
