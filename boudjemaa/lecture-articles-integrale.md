@@ -1939,3 +1939,77 @@ Wissembourg, daté du 20, annonce son arrivée « dans le courant de cette
 semaine ». Le plus vraisemblable est qu'il est arrivé juste à temps pour le
 match du 13, et que les deux hebdomadaires écrivent avec une semaine de
 retard. Je ne peux pas l'établir, je le note.
+
+## Pages 151 à 158 - la préparation colmarienne, et le champion de France battu
+
+**[152] La République de l'Est, 23 août 1938, page 5** (ark bpt6k9330273z). Lu
+en entier. Titre : « SOCHAUX BATTU A L'ENTRAINEMENT A COLMAR ». Le champion de
+France perd contre le club de deuxième division qui vient de le recruter.
+
+La composition : « Wozniak ; Gardet, Delacourt ; [...] Gougain, Othmann ;
+[Aravit], Téletchéa, Zopp, **Boudjema**, Belko. »
+
+Le déroulé : Sochaux ouvre à la 13e par Irrigaray sur passe de Gundolf ; trois
+minutes plus tard Belko s'échappe, Badina glisse sur la ligne de but et Aravit
+loge la balle dans les filets ; puis Téletchéa reprend de volée un centre
+d'Aravit. Colmar l'emporte.
+
+Le bilan du chroniqueur : « Chez les Colmariens, bonne partie d'ensemble de
+toute l'équipe. La défense se montra à peu près intraitable. Les demis
+soutinrent bien le train. Dans l'attaque, deux joueurs se mirent en évidence :
+Téletchéa, qui fut l'animateur de la ligne, et Belko, qui fut un danger
+constant pour les Franc-Comtois en première mi-temps. [...] Si le quintette
+enleva la victoire par son cran, pourtant, à l'exception de Téletchéa et de
+Belko, on ne tira pas assez au but. »
+
+Il est sur le terrain, il n'est pas cité. C'est la première fois dans tout ce
+dossier qu'un compte rendu détaillé d'un match qu'il a joué ne le nomme pas.
+
+**[153] Les Dernières nouvelles de Strasbourg, 25 août 1938, page 4** (ark
+bd6t52643613j). Lu en entier. Une brève de deux lignes : « Mulhouse vient de
+demander des licences professionnelles pour Lalloué (Sochaux), Karrer et Gall ;
+**Colmar pour Boudjemaa et Fourmond**. On se meuble dans le Haut-Rhin ! »
+
+Même verbe que dans Sporting six semaines plus tôt. La licence professionnelle
+n'est demandée que fin août, c'est-à-dire à quelques jours du championnat.
+
+La même colonne rapporte la décision fédérale sur l'affaire des faux
+certificats de réforme : le bureau de la 3 F. A. a décidé « de rayer des listes
+toutes personnes, joueurs ou dirigeants, dont la culpabilité serait établie »,
+et de suspendre « la délivrance de toute licence [aux] joueurs Bastien et Ben
+Bouali ». Deux des noms de la sélection nord-africaine d'Eskenazi et de
+Ferrandi sortent ainsi du football au moment même où lui entre à Colmar.
+
+**[154] Le Sport alsacien, 29 août 1938, page 3** (ark bpt6k3148976n), en
+allemand. Lu en entier. Dernier match de préparation, **Colmar-Nordstern Bâle
+2 à 2**, devant peu de monde à cause de la chaleur.
+
+La critique d'ensemble est sévère : « Haben die Colmarer in der ersten
+[Halbzeit als] schnellere Mannschaft tonangeb[end gewirkt], liess die zweite
+Halbzeit [manche Wü]nsche offen ! Vor allem ha[pert es] am schnellen und
+präzisen Ab[spiel : man] lief viel zu viel mit dem Ball [statt] ihn durch
+scharfes opportunes [Abspiel lau]fen zu lassen. » Soit : trop de conduite de
+balle, pas assez de passes rapides et précises.
+
+Et sur lui : « **Wohl hat Boudjemaa mehrere Chancen, die aber alle verschossen
+werden.** » Soit : « Boudjemaa a bien plusieurs occasions, mais elles sont
+toutes manquées. »
+
+Deux matches de préparation, deux appréciations froides : trop personnel
+contre Breda, des occasions gâchées contre Bâle. On est loin du « Glanzstück »
+que les dirigeants colmariens annonçaient huit jours plus tôt.
+
+**[156] L'Éclair, quotidien du Midi, 1er septembre 1938, page 3** (ark
+bd6t53744459m). Lu en entier. La veille de la première journée, les
+compositions probables de tous les clubs de deuxième division.
+
+« **Colmar. - Wozniack ; Gardet, Jan ; Demuth, Gougain, Othman ; Aravit,
+Tellechéa, Zopp, Boudjemaa, Belko.** »
+
+Il est inter gauche, titulaire, pour l'ouverture du championnat.
+
+Et, quelques lignes plus bas dans la même colonne, l'équipe de son ancien club :
+« O. G. C. Nice. - Nemeth ; Schulzendorf, Frusta ; Lozato, L. Vallé, Médan ;
+Monsallier, Luciano, J. Vallé, Alcazar, Baudin. » De l'équipe de 1937, il ne
+reste que Schulzendorf, Médan et Alcazar. Zamora, Samitier, Kudrna, Pellegrino,
+Gnaoui : tous partis.
