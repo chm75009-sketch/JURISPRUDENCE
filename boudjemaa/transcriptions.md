@@ -2511,3 +2511,90 @@ soutenus par leurs [demis], mirent fréquemment la défense troyenne à
 [mal] ».
 
 LU : 179 sur 312.
+
+---
+
+## [137] Le derby alsacien : Colmar bat Mulhouse 5 à 4, 11 novembre 1938 - deux buts
+
+Cinq journaux, lus en entier.
+
+Les Dernières Nouvelles de Strasbourg du 12 novembre, page 12 (ark
+bd6t526433338) : « Stade Joseph Lehmann, [plus de 6000] spectateurs, recette
+plus de 30.000 francs. S.R. Colmar : Collet ; Demuth, Delacourt ; Gougain,
+Télétchéa, Othmann ; Emonoz, Villacampa, Zopp, Boudjéma, L[ogez]. »
+« Marqueurs : Villacampa, Boudjéma (2), [Zopp], Logez, Parmeggiani. »
+Et le récit : « A la 7e minute, Villacampa ouvrit le score ; à la 16e minute,
+[Bohr]er bloque mal un shot de Boudjéma et laisse échapper la balle, 2-0 ; à
+la [22e] minute Zopp réussit le numéro [trois] ; à la 29e c'est encore
+Boudjéma qui réussit le 4e point. »
+
+Le Strassburger neueste Nachrichten du même jour, page 10 (ark bd6t5959924h),
+dit la même chose : « das zweite fiel in der 16. Minute, da Bohrer einen
+Schuss von Boudjema nur schlecht meistern konnte ; Zopp buchte Nummer drei in
+der 22. und dann wieder Boudjema Nummer vier in der 29. Minute. »
+
+L'Auto du 12 novembre, page 5 (ark bpt6k4635297m), et Paris-soir du même jour,
+page 10 (ark bpt6k7644742z) : « Colmar put marquer à quatre reprises, par
+l'intermédiaire de Villacampa, Zopp et Boudjema (2). »
+
+Le Sport alsacien des 14 novembre, pages 3 et 4 (ark bpt6k3148996d), donne le
+détail et une phrase qui fait mal : « In der 15. Minute sehen wir Boudjemaa
+allein gegen [Bohrer] ziehen. Laloué versucht den Araber zu stoppen, aber
+umsonst » - à la 15e minute, nous voyons Boudjemaa filer seul contre le
+gardien ; Laloué essaie d'arrêter l'Arabe, mais en vain.
+Et plus loin : « Wieder wälzt sich Boudjemaa, von [einem Gegner] gelegt,
+jammernd am Boden » - de nouveau Boudjemaa, fauché, se roule à terre en
+gémissant.
+
+RACISME, chapitre 3 : « der Araber », l'Arabe, employé comme nom propre au
+milieu d'un compte rendu où tous les autres sont nommés.
+
+LU : 185 sur 312.
+
+---
+
+## [138] Le Sport alsacien, 18 novembre 1938, page 5
+
+Ark bpt6k3148997t, vue 5. Longwy contre Colmar, 1 à 1 : « Colmar : Collet ;
+Demuth, Delacourt ; [Gougain ou Villacamp]a, Schaden, Othman ; Emonoz,
+Villacampa, Zopp, Boudjema, Logez. »
+
+LU : 186 sur 312.
+
+---
+
+## [139] L'Éclair comtois et Le Petit Comtois, 20 novembre 1938
+
+Arks bpt6k9312310v et bpt6k9335742p. La même chronique, annonçant Mulhouse :
+« Jaeck, international suisse qui, dimanche passé encore, était un des
+meilleurs hommes du derby alsacien Mulhouse-Colmar, ceci malgré la présence
+sur le terrain des Schaden, Lalloué, Villacampa, Boudjemaa, Zopp,
+Parmeggiani, etc. »
+
+LU : 188 sur 312.
+
+---
+
+## [140] Football (hebdomadaire), 23 novembre 1938, page 8
+
+Ark bpt6k7214932g, vue 8. « COLMAR : Collet ; Delacourt, Demuth ; Gougain,
+Tellechéa, Othmann ; Emonoz, Villacampa, Krickl, Boudjemaa, Belko. »
+
+LU : 189 sur 312.
+
+---
+
+## [141] Colmar et Reims 3 à 3, décembre 1938 - encore un but
+
+Le Matin du 9 décembre, page 6 (ark bpt6k5861722) : « Au début, Reims domine
+nettement et marque, après une demi-heure de jeu, par Chloupek, mais en
+seconde mi-temps Colmar fait ce qu'il veut et marque à trois reprises, par
+Boudjema (1 but) et [Zopp]. »
+
+Football du 14 décembre, page 8 (ark bpt6k72149349), donne le détail : « La
+deuxième mi-temps fut tout à l'avantage des Colmariens. A la 7e minute,
+Boudjemaa dribbla deux adversaires et marqua des 16 mètres imparablement.
+Colmar continua sa pression et à la 27e minute Gougain centra d'une façon
+précise sur la tête de Zopp qui marqua en coin. » Score final 3 à 3.
+
+LU : 191 sur 312.
