@@ -374,3 +374,124 @@ Colmar est décédé d'une pleurésie contractée il y a quelques mois. »
    l'occasion du match du 8 février 1931, Coupe de l'Afrique du Nord, Bône 2
    U.S. Béja 0, joué à Bône.
 10. **Le nom du président de Colmar qui vient le chercher en 1945** : Lehman.
+
+---
+
+## Les échanges du forum Foot-Nostalgie, janvier 2022
+
+Fichier « Echanges sur foot nostalgie site dédié à Saint Etienne janvier
+2022.docx ». L'auteur y écrit sous le pseudonyme « rth » et signe de son nom à
+la fin. Trois interlocuteurs, quatre messages, du 9 au 11 janvier 2022.
+
+Sa question de départ, le 9 janvier : il retrace la carrière en France de
+Boudjema, signé à Saint-Étienne le 20 août 1937, vendu par Nice 50 000 francs,
+malade après les troisième et quatrième journées, rentré se reposer à Béja,
+revenu contre Dunkerque le 8 mai 1938. Il demande des renseignements et des
+photographies.
+
+La réponse de « baltazar », le 10 janvier, est celle qui donne la chronologie
+niçoise et le métier du père. Elle est reproduite plus haut.
+
+La réponse d'Yvan Beck, le 11 janvier, ajoute ce que personne d'autre ne dit :
+
+« En ce qui concerne son passage à Saint-Étienne, il a fait couler beaucoup
+d'encre dans la presse de l'époque, d'abord à la suite du différend avec Nice
+déjà évoqué qui tend les relations entre les deux clubs et vaut une suspension
+au joueur. Le transfert est finalement conclu en début de saison suivante, mais
+les dirigeants des aiglons retardent sa qualification. Son arrivée constitue
+l'attraction du recrutement de cette saison-là, et ses débuts sont attendus
+avec impatience par les observateurs, et probablement les supporters.
+Malheureusement cette attente est déçue. Après avoir joué son deuxième match
+officiel contre Bordeaux avec une furonculose forçant l'admiration de son
+coéquipier, le gardien Favier, pour son courage pour avoir tenu sa place, il
+rentre en clinique à Saint-Étienne. D'après Jean Vieillard, l'historien de
+l'A.S.S.E., le directeur sportif Pierre Marey est allé le chercher dans les
+souks de Sousse pour le faire revenir. Il est décisif en jouant les cinq
+derniers matchs de la saison en marquant 4 buts, dont deux lors du match
+décisif contre Tourcoing, il est l'élément moteur du sprint final, conduisant à
+la première montée du club forézien. Malgré cela il est transféré à Colmar à
+l'inter-saison suivante, où son passage est remarqué. »
+
+Sur les photographies : « j'ai un plan visage de médiocre qualité, que j'avais
+posté et qui a disparu, et qui n'est malheureusement plus dans mes archives.
+Mais j'ai les originaux plus une caricature. Sur le bouquin de Vieillard ils
+ont écrit la légende portrait de 667 joueurs, il apparaît également dans une
+photo d'effectif, 1937-38, mais pas de scan désolé. Et pas de licence non
+plus. »
+
+Ce qu'il faut en retenir, et ce qui reste à faire :
+- La maladie a un nom : une furonculose, et il a joué avec, le 19 septembre
+  1937 contre Bordeaux, au point que le gardien Favier l'a admiré pour cela.
+  Puis la clinique à Saint-Étienne, puis le repos à Béja.
+- Deux pistes de photographies qui n'ont pas abouti : les originaux et la
+  caricature que détient Yvan Beck, et la photographie d'effectif 1937-1938.
+  Le livre de Jean Vieillard donne le portrait de 667 joueurs de l'A.S.S.E.,
+  le sien compris. Il faudrait ce livre.
+- Un écart de comptage : Yvan Beck dit cinq derniers matchs et quatre buts, la
+  fiche asse-stats dit sept matchs et cinq buts sur la saison. Les deux sont
+  compatibles si l'on compte à part les deux matchs de septembre 1937.
+
+---
+
+## L'étude de David Hansen sur l'OGC Nice, et ce qu'elle apporte au chapitre 3
+
+Fichier « recherches_regionales_215_4.pdf ». David Hansen, historien et
+professeur documentaliste au collège Valéri à Nice, « La professionnalisation
+d'un club de football : l'OGC Nice (1932-1950) », dans Recherches régionales,
+Alpes-Maritimes et contrées limitrophes, numéro 215, 2018. L'étude est faite
+sur les procès-verbaux du club conservés aux Archives départementales des
+Alpes-Maritimes.
+
+Boudjemaa y figure deux fois, dans le tableau des joueurs venus de l'étranger :
+« 1935/1936 Boudjemaa Mohammed, Tunisie française » et « 1936/1937 Boudjemaa
+Mohammed, Tunisie française ». C'est peu, mais c'est une confirmation par une
+source universitaire, sur archives du club, de ses deux saisons niçoises.
+
+Le reste de l'étude vaut pour le chapitre 3, parce qu'elle décrit le système
+qui l'a fait venir, et le vocabulaire de ce système.
+
+Le prospecteur : « Le dénommé Charles Elkabbach est présenté dans la presse
+sportive nationale comme l'homme qui a "africanisé l'OM et le football
+français". Négociant en laines à Oran, cet homme a su dénicher et exporter en
+France de nombreux joueurs africains. » Et la phrase qu'on lui prête :
+« l'Algérie et le Maroc n'ont pas encore tout donné [...]. Il y a beaucoup de
+trésors jalousement surveillés chez nous. Et la race des "perles noires" n'est
+pas morte. »
+
+Dénicher, exporter, importer, des trésors, une race : c'est le vocabulaire de
+la marchandise appliqué à des hommes, et il est imprimé dans la presse
+sportive nationale, pas dans un écrit privé.
+
+Le cadre juridique : le Code de l'indigénat n'est officiellement abrogé que par
+l'ordonnance du 7 mars 1944. Boudjemaa a joué, signé, été suspendu et jugé sous
+ce régime.
+
+Et le retournement de 1946 : « La prospection en Afrique du Nord est tellement
+intense qu'en 1946 la Fédération interdit pendant deux ans tout nouveau
+transfert de footballeurs en provenance de cette aire géographique. » Il rentre
+à Colmar en septembre 1945 ; en janvier 1946 on lui refuse sa licence amateur.
+Les deux faits se regardent.
+
+RACISME, chapitre 3 : tout ce paragraphe.
+
+---
+
+## Tunisie-France du 24 octobre 1949 : U.S. Béja et Olympique de Béja
+
+Fichier « Tunisie-France_ 24 octobre 1949 US beja et OB deux equipes
+différentes.pdf ». L'auteur l'a déposé pour trancher une question que je posais
+depuis le début : l'Union Sportive Béjaoise et l'Olympique de Béja sont-ils le
+même club sous deux noms, ou deux clubs ?
+
+La page de résultats du football tunisien les porte tous les deux, le même
+jour et dans la même compétition. On lit, dans la liste de la Coupe de
+Tunisie : « U.S. Béja-U.S.T. (après prolongations) », et, dans la même
+colonne, un match de l'A.S.F. contre l'Olympique, avec un compte rendu qui
+parle des « bois de Béja » et des « Tricolores béjaois ».
+
+Réserve, et elle est sérieuse : la reconnaissance de caractères de ce PDF mêle
+les colonnes et disloque l'ordre des mots, au point qu'aucune phrase entière
+n'est reproductible telle quelle. Les deux noms de clubs sont lisibles, la
+démonstration tient, mais les citations exactes demandent la lecture de
+l'image, que l'auteur a sur son Drive. Je ne cite donc rien d'autre de cette
+page tant que je ne l'ai pas vue.
