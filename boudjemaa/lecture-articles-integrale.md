@@ -307,3 +307,78 @@ Hombrouck, Thomas, Magnin ; av. : Desmarets, Lefèvre, Bertoni, Finamore,
 Dumas. O.G.C.N. - But : Chaisaz ; arr. : Schulzendorf, Kudrna ; demis :
 Schubert, Moudry, Galland ; av. : Marino, Gérin, Dubois, Boudjemaa,
 Granier. » Arbitre M. Prouvost. Pages lues.
+
+## Pages 23 à 30 - un prénom, une nationalité, et un second Boudjemaa
+
+**[22] Football, 27 mai 1936, page 2 - LE BILAN DE LA SAISON.** Les colonnes
+citantes et leurs voisines lues en entier. C'est la page de bilan de
+l'hebdomadaire : une longue analyse du Saint-Étienne 4 Rouen 1, lue en
+entier, où il n'est pas question de lui, puis les classements complets et la
+liste de tous les résultats de la semaine. Son nom n'y figure que comme
+buteur, entre parenthèses, dans la ligne de résultat de Nice. Le classement
+final de la division interrégionale met Nice neuvième sur dix-huit, avec 31
+points. Pages lues, rien de plus que le nom.
+
+**[23] Le Républicain du Gard, 12 juin 1936, page 3 - NICE REFUSE DE LE
+VENDRE.** La colonne citante et sa voisine lues en entier. La colonne est
+une suite de brèves sportives, toutes lues, dont celle-ci :
+
+« L'O.G.C. de Nice aura, dès la saison prochaine, grâce au généreux appui de
+la municipalité niçoise, un terrain digne de lui. Il songe à constituer une
+équipe de premier plan. Il n'a pas voulu accepter les offres qui lui ont été
+faites par le transfert de son avant-centre Boudjemaa. »
+
+Et, trois lignes plus bas : « On cite parmi les joueurs qui pourraient venir
+renforcer l'équipe des Aiglons, l'ailier droit Liberati et deux bons joueurs
+hongrois. » Pages lues.
+
+**[24] Le Journal du Maroc, 14 juin 1936, page 3 - LE MÊME FAIT, AUTREMENT
+DIT.** Les colonnes citantes et leurs voisines lues en entier. L'une porte un
+éditorial sur les tournées d'été des clubs français à l'étranger, lu en
+entier et sans rapport. Dans les « Petits échos », la brève qui le concerne
+dit l'inverse de la précédente : « Nice a mis sur la liste des transferts :
+Boudjemâa. On cite parmi les joueurs qui ren[forcer]ont le team des Aiglons
+[Liberati] et deux bons joueurs hongrois. »
+
+Le Républicain du Gard écrit que Nice refuse les offres ; Le Journal du Maroc
+écrit que Nice l'a mis sur la liste des transferts. Les deux brèves sont du
+même moment et se contredisent. Je ne tranche pas. Pages lues.
+
+**[26] Football, 15 juillet 1936, page 6, et [29] Le Forez sportif, 22
+juillet 1936, page 3 - SON PRÉNOM, SA NATIONALITÉ, ET UN AUTRE HOMME DU MÊME
+NOM.** Les colonnes citantes et leurs voisines lues en entier dans les deux
+journaux. C'est le même document officiel, publié deux fois : la deuxième
+liste des demandes de licences de joueurs professionnels parvenues à la
+F.F.F.A., club par club, avec pour chacun le nom, le prénom et la
+nationalité. Je l'ai lue en entier, du Sporting Club Fivois au C.S. Longwy.
+
+Deux lignes se suivent, et c'est la trouvaille de cette lecture :
+
+« O.G.C. Nice. - Boudjemaa Mohamed [(Français)]. »
+« A.S. Saint-Etienne. - Boudjemaa Ben Mohamed el Memiti (Français). »
+
+Ce que cela donne, et que je n'avais nulle part : un prénom, Mohamed, et une
+nationalité portée par la fédération, française.
+
+Ce que cela pose, et que je ne résous pas : en juillet 1936, deux joueurs du
+même nom demandent une licence professionnelle, l'un à Nice, l'autre à
+Saint-Étienne, et ce ne sont pas les mêmes noms complets. Le nôtre est celui
+de Nice, puisque c'est à Nice qu'il joue. Il y a donc, dès 1936, un second
+Boudjemaa à Saint-Étienne, un an avant que le nôtre y soit transféré. Toute
+mention de « Boudjemaa » à Saint-Étienne en 1936-1937 est désormais suspecte
+et doit être vérifiée. Cela pourrait aussi expliquer la composition niçoise
+d'octobre 1937 où son nom figure alors qu'il était vendu, mais je n'ai rien
+pour l'affirmer et je ne l'affirme pas.
+
+La même liste est reproduite mot pour mot par Le Forez sportif une semaine
+plus tard, ce qui écarte l'erreur d'impression d'un seul journal. Pages lues.
+
+**[28] Le Républicain du Gard, 20 juillet 1936, page 3 - SAINT-ÉTIENNE LE
+VEUT DÉJÀ.** Les colonnes citantes et leur voisine lues en entier. La page
+est presque entière consacrée au XVIe concours de boules du Jardin de la
+Fontaine et au circuit cycliste du Petit-Tortoni, lus en entier. Dans la
+colonne de brèves sportives, celle qui le concerne : « [B]oudjemaa, de l'O.G.
+[C. Nice, a] reçu des offres sérieuses de Saint-Étienne. »
+
+L'intérêt de Saint-Étienne est donc de juillet 1936, un an avant le transfert
+de l'été 1937. Pages lues.
