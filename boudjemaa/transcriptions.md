@@ -2279,3 +2279,76 @@ présentée en tableau, avec lui à l'aile : « Wozniak ; Gardet, Delacour ;
 Ottmann, Schaden, Logez ; Boudjema, Zopp, Tellechea [et Belko] ».
 
 LU : 147 sur 312.
+
+---
+
+## [124] L'Auto, 13 août 1938, page 7
+
+Ark bpt6k46352076, vue 7. Bilan des départs stéphanois : « Peu de joueurs ont
+quitté Saint-Etienne : Boudjema est parti pour Colmar, Plovie pour Toulouse,
+Guillard pour Longwy et Kudrna pour Antibes. »
+
+LU : 148 sur 312.
+
+---
+
+## [125] La saison colmarienne commence : les matchs de préparation, août 1938
+
+Quatre journaux alsaciens, lus en entier, trois en allemand.
+
+Le Sport alsacien du 16 août, page 7 (ark bpt6k31489720) : « Colmar :
+Wozniak, Gardet, Jan, De[muth], Orthmann, Aravit, Tellechea, [Boud]jema,
+Belko. Gleich zu Beginn des Treffens [waren die] Colmarer tonangebend »
+- dès le début, Colmar donne le ton, et une occasion de Boudjema dans les
+premières minutes.
+
+Gebweiler neueste Nachrichten du 16 août, page 11 (ark bpt6k3152987v), sur le
+match contre le N.A.C. Breda : « in der 29. Minute erfolg[reich] : Boudjemaa
+köpft, der Ball prallt ab, [...] versiebt den Nachschuss, doch Zopp hat
+Glück und lenkt den Ball ins Netz » - à la 29e minute, Boudjemaa place une
+tête, le ballon revient, la reprise est manquée, mais Zopp a de la chance et
+dévie le ballon au fond. Et le jugement du chroniqueur : « Im Sturm sind
+Zopp [...] die besten Einheiten. Boudjemaa [scheint] zu persönlich zu wirken
+[und sollte] auf seine Nebenleute bes[ser achten] » - Boudjemaa joue trop
+personnel et devrait mieux regarder ses partenaires.
+
+Le Journal de Wissembourg du 20 août, page 5 (ark bpt6k3037953t) : « Im Laufe
+dieser Woche ist der Spieler Boudjemaa von seinen Ferien zurückgekehrt und in
+Colmar eingetroffen. Dieser Spieler kommt von der A.S. St. Etienne und die
+Colmarer Dirigenten sind fest davon überzeugt, dass Boudjemaa den
+S.R.C.-Angriff verstärken wird und selbst das Glanzstück desselben sein kann.
+Boudjemaa spielt wahrscheinlich an Stelle von Tellechea und wird dadurch den
+Halbrechtsposten einnehmen. » - il rentre de vacances cette semaine, arrive à
+Colmar, vient de l'A.S. Saint-Étienne, et les dirigeants colmariens sont
+convaincus qu'il renforcera l'attaque et qu'il en sera même le joyau.
+
+Le Sport alsacien du 29 août, page 3 (ark bpt6k3148976n), contre Bâle :
+« Wohl hat Boudjemaa mehrere Chancen, die aber alle verschossen werden » -
+Boudjemaa a plusieurs occasions, toutes manquées.
+
+Et Sporting du 16 août, page 5 (ark bpt6k72303475) : « [le cas] de
+Boudjemaa, signa[lé plus haut : le jo]ueur est encore en va[cances et
+se]mble prolonger malgré [les appels de son] nouveau club de re[prendre
+immé]diatement son poste. »
+
+LU : 153 sur 312.
+
+---
+
+## [126] La République de l'Est, 23 août 1938, page 5
+
+Ark bpt6k9330273z, vue 5. Colmar contre le Racing Franc-Comtois :
+« Wozniak ; Gardet, Delacour ; [Demuth], Gougain, Othmann ; [Tellech]éa,
+Zopp, Boudjema, [...] »
+
+LU : 154 sur 312.
+
+---
+
+## [127] Les Dernières Nouvelles de Strasbourg, 25 août 1938, page 4
+
+Ark bd6t52643613j, vue 4. « [Col]mar vient de demander des [licences]
+professionnelles pour [...] Boudjemaa et Four[nier ?]. On se meuble dans le
+Haut-[Rhin]. »
+
+LU : 155 sur 312.
