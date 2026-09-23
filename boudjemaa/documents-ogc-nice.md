@@ -188,3 +188,16 @@ des siens, et personne à Colmar ne savait le nom de ses parents.
 
 Le lieu de naissance aussi s'écrit de deux façons : « Henchi-el-Henaia » sur
 l'acte de décès, « Henchir El Hania » dans la notice de Saint-Étienne.
+
+---
+
+## Une remarque sur « el Memiti »
+
+Le bulletin de la Fédération du 15 juillet 1936 imprime, pour la licence
+déposée par Saint-Étienne, « Boudjemaa Ben Mohamed el Memiti ». J'ai regardé
+la ligne à la loupe : c'est bien un M majuscule, le même que celui de
+Mohamed sur la même ligne. Or le stade de Béja s'appelle stade Boujemaa
+Kmiti. Un K de plomb mal venu se lit très facilement en M, et « Memiti » n'a
+pas d'existence ailleurs. C'est donc probablement Kmiti, mais je ne
+l'affirme pas : il faudrait l'acte de naissance ou un document tunisien pour
+le dire.
