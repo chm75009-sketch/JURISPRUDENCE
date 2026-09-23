@@ -1765,3 +1765,105 @@ l'arrestation d'un secrétaire nommé Sghaier Boudjemaa. Homonyme, rien à voir
 avec le joueur. Je le note pour qu'on ne le reprenne pas par erreur.
 
 LU : 99 sur 312.
+
+---
+
+## [88] Nice contre Dunkerque, 31 janvier 1937
+
+L'Auto du 1er février, page 7 (ark bpt6k4629789r), et L'Écho du Nord du
+2 février, page 6 (ark bd6t5471384z).
+
+Composition : « Nice. - Chaisaz, Sclavi, Kurdna, Rodriguez, Orlandini, Logez,
+Brusseaux, Gérin, Dubois, Boudjema et Pellegrino. »
+
+Le compte rendu de L'Écho du Nord : « Le jeu est très égal et les efforts de
+chaque équipe sont tout simplement splendides. Boudjema est partout et se
+dépense avec un égal bonheur en défense comme en attaque. » Et à la fin :
+« Ce match est l'un des plus beaux de la saison et Nice y a fait la meilleure
+impression. Boudjema, Brusseaux, Orlandini et Rodriguez ont été les plus en
+vue d'un team qui a fourni un très beau match. »
+
+LU : 101 sur 312.
+
+---
+
+## [89] Le Petit Havre, 3 mars 1937, page 5
+
+Ark bd6t526379940, vue 5. La feuille de match du Havre contre Nice, présentée
+en tableau, avec la ligne d'attaque niçoise : « Brusseaux, Lovichy, Gérin,
+Samitier, Boudjemaa ». Arbitre : M. Delasalle.
+
+LU : 102 sur 312.
+
+---
+
+## [90] L'Auto, 5 mars 1937, page 4
+
+Ark bpt6k4629821h, vue 4. Même match, vu de Paris : « Orlandini surclassa
+Jasseron, et [...] Brusseaux, Boudjema, Kurdna et [...] se signalèrent
+particulièrement [chez les] visiteurs. »
+
+LU : 103 sur 312.
+
+---
+
+## [91] L'Auto, 8 mars 1937, page 8 - UN CLUB ÉCOSSAIS OFFRE 5 000 LIVRES
+
+Ark bpt6k4629824r, vue 8. Titre : « Boudjemaa a été demandé par un club
+écossais ».
+
+« Nice, 7 mars. - Le président d'un club écossais a assisté aujourd'hui au
+match O.G.C. Nice contre F.C. Nancy et, impressionné par le jeu de
+Boudjemaa, a offert, séance tenante, 5.000 livres pour le transfert de ce
+joueur. »
+
+La même information paraît dans Le Journal du Midi du 9 mars, page 3 (ark
+bd6t51017475q). La page 7 du même numéro de L'Auto, lue en entier, ne porte
+rien sur lui.
+
+VERDICT : cinq mille livres sterling offertes sur-le-champ, moins d'un an
+après qu'on l'a suspendu six mois et contraint à rembourser 10 700 francs.
+C'est le sommet de sa cote.
+
+LU : 105 sur 312.
+
+---
+
+## [92] L'Ouest-Éclair, édition de Caen, 8 mars 1937, page 7
+
+Ark bpt6k501007x, vue 7. Nice contre Nancy, le match que regardait le
+président écossais : « Gérin marque un joli but à la dixième minute, puis le
+même joueur marque un deuxième but dès la remise en jeu. A la mi-temps :
+Nice 2 - Nancy 0. A la reprise, Nice domine et Boudjemaa marque. Nice 3 -
+Nancy 0. »
+
+LU : 106 sur 312.
+
+---
+
+## [93] Match (Paris), 15 mars 1937, page 4
+
+Ark bpt6k41549475, vue 4. « On pensait bien que l'explication entre Nice et
+Saint-Etienne serait sévère, car une certaine affaire Boudjema a provoqué,
+entre ces [deux] clubs, il y a quelques mois, une animosité [mal] calmée. »
+
+LU : 107 sur 312.
+
+---
+
+## [94] Nice bat Saint-Étienne, 28 mars 1937 : il marque contre eux
+
+L'Express du Midi du 30 mars, page 3 (ark bpt6k5392774j) : « Vers la 15e
+minute, à la suite d'une attaque générale, Boudjema fut arrêté par Hiden.
+Les deux joueurs roulèrent à terre, mais Pellegrino réussit à s'emparer de la
+balle et marqua très facilement un but. »
+
+Et le tableau des résultats de La Volonté indochinoise du 30 mars, page 8
+(ark bpt6k7294168j) : « Nice (0) 2 St-Etienne (0) 1 - (Boudjemaa,
+Pellegrino) (Rolhion). »
+
+VERDICT : huit mois après l'affaire, il marque contre Saint-Étienne, le club
+qui était allé le chercher à Béja avec vingt-cinq billets de cinq cents
+francs. Le chapitre s'écrit tout seul.
+
+LU : 109 sur 312.
