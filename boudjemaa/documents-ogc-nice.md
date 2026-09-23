@@ -201,3 +201,25 @@ Kmiti. Un K de plomb mal venu se lit très facilement en M, et « Memiti » n'a
 pas d'existence ailleurs. C'est donc probablement Kmiti, mais je ne
 l'affirme pas : il faudrait l'acte de naissance ou un document tunisien pour
 le dire.
+
+---
+
+## Béja ou Henchir El Hania : la remarque de l'auteur, 23 septembre 2026
+
+Trois sources, trois lieux de naissance, et ils ne se contredisent pas.
+
+- L'acte de décès de Colmar, seul document d'état civil : « né à
+  Henchi-el-Henaia, Tunisie, le treize août mil neuf cent quatorze ».
+- La notice de l'A.S. Saint-Étienne : « Né le 13 août 1914 à Henchir El Hania
+  (Tunisie) ».
+- Le Petit Parisien du 27 avril 1939 : « Mohammed - un de plus ! - est né à
+  Béja, en Tunisie ».
+
+L'observation de l'auteur est celle-ci : un henchir n'est pas un village,
+c'est un domaine, une ferme et ses terres. Personne, hors d'un registre, ne
+dit qu'il est né dans un henchir : on donne la ville dont il dépend, et ici
+c'est Béja. Ce n'est même pas un hameau comme El Menchar, qui, lui, a un nom
+sur les cartes. Les deux journaux qui écrivent « Béja » ne se trompent donc
+pas, ils abrègent, comme abrège tout le monde. Le lieu précis est celui que
+porte l'acte de décès, et il faut continuer à le chercher là où il est : dans
+la campagne autour de Béja.
