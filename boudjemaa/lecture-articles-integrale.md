@@ -2251,3 +2251,72 @@ courant, n'auraient pas lieu et seraient remis à une date ultérieure. »
 s'arrête. Il a vingt-quatre ans, il vient d'être blessé par un coup, et la saison
 qu'il commençait si bien se suspend sur une phrase administrative qui ne nomme pas
 ce qui arrive.
+
+## Pages 183 à 190
+
+Quatre articles sur huit entrées, du 9 au 22 octobre 1938. Le championnat
+reprend après la trêve de Munich, et ce lot donne la première photographie.
+
+**Le Grand écho du Nord, 9 octobre 1938, page 6** (bpt6k41440575), sous le titre
+« Les S.R. de Colmar à Dunkerque » : « Après la courte trêve imposée au
+championnat, Dunkerque va recevoir une des formations les plus brillantes de la 2e
+Division. Les Sports réunis de Colmar qui avaient laissé très forte impression l'an
+dernier se sont encore sérieusement renforcés et le team alsacien figure parmi les
+favoris de la saison. Cependant ses débuts n'ont pas donné la mesure exacte de sa
+valeur. » La composition annoncée : « Wozniak, Jan et Delacourt, Gougain, [Oth]mann,
+Logez, Emonoz, Tellechéa, Zopp, **Boudjema** et Belko. »
+
+**La Dépêche, journal quotidien de la région du Nord, 10 octobre 1938, page 7**
+(bd6t51504431j), rend le match en entier. **S.R. Colmar bat Olympique de Dunkerque
+par 5 à 4.** Arbitre M. Leroy. Colmar : « But : Wozniack ; arrières : Jan,
+Delacourt ; demis : Gougain, Othmann, Logez ; avants : Emonoz, Tellechea, Zopp,
+**Boudjemaa**, Belko. »
+
+Le déroulé, mot à mot : « D'entrée, les Colmariens, par l'entremise d'Emonoz,
+marquent le premier but. » Puis Griffiths égalise à la seizième sur passe de Machu.
+Machu se blesse, passe à l'aile gauche, « et jusqu'à la fin de la partie ne sera
+plus d'aucune utilité pour son équipe ». Colmar obtient un penalty « magistralement
+détourné en corner par Massemin ». Capron marque le deuxième dunkerquois à la
+quarante-deuxième. Mi-temps 2 à 1 pour Dunkerque. « A la reprise, Emonoz réédite son
+exploit du premier time », 2 à 2. « Belko opéra une belle descente et bat Massemin à
+la quatorzième minute. Colmar mène par 3 à 2. »
+
+Vient alors le passage qu'il faut citer en entier, parce qu'il ne flatte pas :
+« Une descente dunkerquoise amène Potaillon à deux mètres des buts de Wozniack, où
+il se trouve fauché par un arrière adverse. Injustement, l'arbitre n'accorde pas le
+pénalty. Le public "chahute". Les Alsaciens en profitent pour jouer dur et
+pratiquer des coups défendus. »
+
+C'est dans cette minute-là qu'il marque : « **Boudjemaa**, sur nouvelle sortie de
+Massemin, marque le quatrième but pour Colmar, à la vingtième minute. » Puis Belko
+reprend, passe à Tellechea, cinquième but. Dunkerque revient à 5-4 par Capron et
+Machu, « bien placé et quoique blessé ». Le compte rendu ne le cite pas parmi les
+meilleurs : à Colmar, « Enomoz, Belko, Tellechea, Othmann. En général, tous les
+Colmariens fournirent une bonne partie. »
+
+Quatrième but en cinq journées, donc, mais dans un match où son équipe joue dur et
+où le journaliste local ne le retient pas.
+
+**Gebweiler neueste Nachrichten, 17 octobre 1938, page 10** (bpt6k3153040n),
+en allemand. **S.R. Colmar Pro - A.S. Hautmont 4:4**, mi-temps 3:2, huit corners
+contre deux, « 1.800 Zuschauer, 11.500 Fr. Einnahmen ». L'équipe : « S. R. Colmar :
+Wozniok ; Jan, Delacourt ; Villacampa, Othman, Logez ; Emonoz, Tellechea, Zopp,
+**Boudjemaa**, Belko. Gougain fehlte wegen Verletzung. » Les buts vont à Belko,
+Emonoz deux fois et Zopp ; aucun pour lui. Le journal ne ménage pas le gardien :
+« Schliesslich hatte Wozniok im Tor erneut einen schwachen Tag », et, sur la ligne
+d'attaque, il écrit le contraire du reproche : « Ueber Colmars Elf ist trotz dem
+Unentschieden keineswegs der Stab zu brechen. Der Angriff (siehe die vier Tore) und
+die Läufer taten ihre Pflicht. » L'attaque a fait son devoir ; c'est la défense qui
+a lâché.
+
+**Le Petit Troyen, 22 octobre 1938, page 1** (bpt6k4335243b). Une photographie, en
+première page, de l'équipe de Colmar qui doit jouer le lendemain à Troyes. La
+légende, en entier : « Les S. R. de Colmar qui rencontreront demain l'A. S. T. S.
+Debout, de gauche à droite : Gougain, Demuth, Logez, Wozniok, Delacourt, Jan et
+Lowy, entraîneur. A genoux : Othman, Villacampa, Tellechea, Zopp, **Boudjemaa**,
+Belko. »
+
+C'est la première photographie de lui rencontrée dans toute cette lecture. Il est à
+genoux, au premier rang, cinquième en partant de la gauche, entre Zopp et Belko,
+ses deux voisins de la ligne d'attaque. Et debout derrière, à l'extrême droite du
+cliché, Lowy, l'entraîneur qui l'avait déjà à Nice en 1936.
