@@ -2697,3 +2697,120 @@ terrain, ira jouer le Racing de Paris au Havre à sa place.
 
 Aucun des articles lus ne rapporte un mot de lui là-dessus, ni un mot de ses
 dirigeants. Je n'ai pas trouvé, dans ce lot, de réaction du club.
+
+## Pages 223 à 230
+
+Huit articles, du 24 au 30 décembre 1938. La suite de l'affaire Lens, et, le jour de
+Noël, le meilleur match de sa vie.
+
+### L'affaire, jusqu'au bout
+
+**La Provence sportive, 24 décembre 1938, page 1** (bpt6k7037951t), sous le titre
+« LENS REPÊCHÉ SUR RÉCLAMATION » : « Dura lex sed lex. Evidemment. N'empêche que le
+repêchage de Lens sur réclamation n'ajoutera rien à sa gloire. Mais aussi quelle
+funeste idée poussa Colmar à aligner **Boudjema** non qualifié pour la Coupe. Ne
+savait-on pas que sa licence était parvenue avec un jour de retard ? **Lens en
+déposant sa réclamation s'était pourtant chargé d'avertir les Alsaciens.** Ne
+croyait-on pas en la victoire ? On s'aperçut trop tard que même sans Boudjema Colmar
+l'eût emporté. »
+
+Cette phrase-là change l'histoire : Lens avait prévenu. Colmar l'a aligné en le
+sachant.
+
+**Ciné..HAC, bulletin officiel du Havre athlétic club, 24 décembre 1938, page 3**
+(bpt6k7406536k) dit la chose le plus nettement du monde : « Lens le rescapé. En
+effet, Colmar a fait jouer contre Lens le joueur **Boudjemaa**, dont la licence
+était datée du 10 Août, alors que le dernier délai pour signer était "avant le 10
+Août", soit le 9. Dura lex sed lex ! »
+
+**France olympique, 29 décembre 1938, page 3** (bpt6k32645102) récapitule en
+donnant le chiffre : « Tout d'abord, Colmar, victorieux de Lens par 3 à 1, en
+trente-deuxième de finale, à Colmar, a été éliminé au bénéfice des Lensois, parce
+que son joueur **Boudjemaa** n'avait pas été qualifié dans les délais. Boudjemaa ne
+fut qualifié que le 10 août : or, le règlement spécifie que la qualification doit
+être obtenue avant le 10 août. **Il manquait donc à Boudjemaa vingt-quatre
+heures.** » (L'OCR donne « 19 août » à la première occurrence ; la phrase suivante,
+qui parle de vingt-quatre heures, impose de lire 10.)
+
+**Le Petit Parisien, 30 décembre 1938, page 6** (bpt6k664785k) clôt le dossier :
+« Enfin, le directeur sportif des Sports Réunis de Colmar est venu exposer le point
+de vue de son club concernant la qualification du joueur **Boudjema** lors de son
+match de Coupe contre Lens. Là encore, le bureau fédéral n'a pu que confirmer la
+décision de la commission des statuts et règlements, donnant match perdu au club
+alsacien. »
+
+Le club s'est donc déplacé, a plaidé, et a perdu. Vingt-quatre heures.
+
+### Le jour de Noël, à Saint-Ouen
+
+Le 25 décembre 1938, sur un terrain gelé et couvert de neige, Colmar va jouer au
+stade de Paris, à Saint-Ouen, contre le **Red Star**, leader de la deuxième
+division. **Red Star 2 - Colmar 2**, et les deux buts colmariens sont de lui.
+
+**Paris-soir, 26 décembre 1938, page 9** (bpt6k76447864) : « quelques minutes avant
+[la pause], **Boudjemaa** parvient à é[galiser pour] Colmar sur une belle ac[tion
+de la lig]ne [avec] Heine. » Puis, en seconde mi-temps, Fruleux redonne l'avantage
+aux Parisiens sur un centre de Gyarmati à la trentième minute, « [et] Colmar n'en
+reste pas [là : **Boud**]**jemaa, le meilleur homme [du ter]rain**, parvient à
+égalis[er quelques] minutes avant la fin, **[d'un shoot] de 40 mètres**, qui laisse
+[Défossé sur] place. »
+
+Et la conclusion du journal : « Cependant, on doit d[écerner une] mention toute
+spéciale [au **Nord-Afri**]**cain Boudjemaa, auteur [des deux] buts**, qui, par son
+action [...] fut le plus dangereux [avant du match]. »
+
+**La Dépêche, journal de la démocratie, 26 décembre 1938, page 6** (bpt6k41395916)
+donne le portrait le plus complet qu'un journal ait écrit de lui jusqu'à cette date.
+Sur le match d'abord : « Si les buts [du] Red Star furent obtenus [sur deux coups]
+francs bottés par Si[monyi, les Audo]niens manquèrent souvent des occasions de
+marquer. Colmar, lui, marqua par **Boudjemaa**, consécutivement à deux belles
+offensives amorcées par Tellechia. » Et sur le gardien-entraîneur parisien : « quant
+à Défossé, il se laissa sur[prendre par un] **shoot de Boudjemaa, botté des trente
+mètres**. »
+
+Puis, mot pour mot, le passage qui compte :
+
+« A Colmar, équipe athlétique, rapide et possédant **deux animateurs hors de pair :
+Tellechéa et Boudjemaa**. Le premier nommé domina nettement son vis-à-vis et son
+utilité fut [grande] ; [Gougain et Gabrillargues] constituèrent avec lui une ligne
+intermédiaire qui domina [celle des Parisiens]. **Quant à Boudjemaa, il est le
+cerveau de la quintette offensive. Il possède un shoot magnifique, [bon dribbleur]
+aussi ; toute la ligne [d'attaque semble] ne jouer que pour lui et [chercher à lui]
+procurer des occasions [de scorer].** »
+
+Le journal ajoute, sur les autres : « [Heiné, jeune esp]oir, ne déçut pas ; il a de
+réelles qualités qui ne demandent qu'à s'épanouir. Après eux, il convint [de citer]
+Collet qui effectua de très beaux arrêts et se sortit avec honneur [de situations
+diffi]ciles ; Belko, craintif [à l'excès], ne fut d'aucune utilité. »
+
+**La République de l'Est, 26 décembre 1938, page 5** (bpt6k9330397q) confirme le
+déroulé : Simonyi ouvre sur coup franc après une faute de Demuth, « Colmar [...]
+quelques minutes avant le repos, réussit à égaliser [par] **Boudjemaa** », puis
+Fruleux redonne l'avantage aux Parisiens, « Avant la fin, cependant, **Boudjemma**
+réussit à égaliser. »
+
+**Strassburger neueste Nachrichten, 27 décembre 1938, page 5** (bd6t59598848) titre
+le compte rendu de son envoyé spécial : « **Red Star Paris - S.R. Colmar 2:2.
+Boudjemaas Tore** » - les buts de Boudjemaa. « Tore : **Boudjemaa 2** ; Simonyi
+[2]. »
+
+Le journal alsacien est plus dur que les parisiens : « [Mit e]in wenig Glück hätten
+[die Colmarer] heute Paris als Sieger [verlassen kön]nen. [Während di]e Gäste durch
+**Boudjemaa** [zwei] schöne Tore vorlegten, [mussten die] Platzleute die ihrigen
+[...] an den Haaren herbeige[zogenen Freistö]ssen [verdanken]. » Deux beaux buts
+d'un côté, deux coups francs tirés par les cheveux de l'autre. Et sur l'arbitre :
+« mehrmals wurden die [Colmarer] durch unverständliche [Entscheidunge]n klar
+benachteiligt. »
+
+Le deuxième but : « [wieder ist Bo]udjemaa zur Stelle, 10 [Minuten spät]er, um
+gleichzuziehen [durch eine 40-Mete]r-Bombe gegen die Dé[fossé nichts] ausrichten
+kann. » Une bombe de quarante mètres contre laquelle Défossé ne peut rien. Les deux
+journaux disent trente mètres et quarante mètres ; personne n'a mesuré.
+
+Enfin : « [Besondere]s Lob verdienen heute [**Boudjemaa**, a]ls unermüdlicher
+Schaf[fer], sowie Gabrillargues [...] bei Colmar. » Un travailleur infatigable :
+c'est le mot du Petit Troyen deux mois plus tôt, écrit cette fois en allemand.
+
+Une semaine aura suffi pour qu'un journal parisien écrive de lui qu'il est « le
+cerveau de la quintette offensive » et que la fédération efface, pour vingt-quatre
+heures de retard, la victoire où il était déjà le meilleur.
