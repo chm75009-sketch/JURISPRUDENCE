@@ -2433,3 +2433,81 @@ Ark bpt6k7214930n, vue 8. « COLMAR : Wozniak ; Jan, Delacourt, Gardet,
 Gougain, Othmann ; Heine, Tellechea, Zopp, Boudjemaa, Emonoz. »
 
 LU : 164 sur 312.
+
+---
+
+## [133] Le Miroir des sports, 25 octobre 1938, page 7 - LA PHOTO OÙ IL EST NOMMÉ
+
+Ark bpt6k97963516, vue 7. Page de la série « Présentation des trente-neuf
+équipes professionnelles du football français (VII) ». Trois photographies
+d'équipe, Toulouse F.C., S.R. Colmar et U.S. Tourcoing, chacune avec sa
+légende nominative.
+
+Pour Colmar : « De g. à dr., 1er rang : Othman, Villacampa, Tellechea, Zopp,
+Boudjémaa, Belko. 2e rang, debout : Gougain, Demuth, Logez, Wozniak,
+Delacourt, Jan, Lowy (entraîneur). »
+
+VERDICT : c'est la seule photographie d'équipe trouvée à ce jour où son nom
+est imprimé à côté de son image. Premier rang, cinquième en partant de la
+gauche : un homme jeune, cheveux noirs ondulés, qui sourit largement. La
+planche légendée est photos/SRColmar-1938-planche.jpg et le portrait détaché
+photos/Boudjemaa-Colmar-1938-portrait.jpg.
+La légende donne aussi le nom de l'entraîneur de Colmar : Lowy, le même Lovy
+qui l'entraînait à Nice en 1935 et que L'Intransigeant cite dans son récit de
+l'affaire.
+
+LU : 165 sur 312.
+
+---
+
+## [134] Le Journal du Midi et Le Républicain du Gard, 27 septembre 1938
+
+Arks bd6t51018260w et bd6t535617769. La même brève : « Au cours du match du
+championnat de 2e division professionnelle qui mettait aux prises le jeudi
+[22] septembre à Colmar les S.R. de Colmar et le C.A.P., l'arbitre, M.
+Laurent, a expulsé du terrain le demi-centre parisien Zivkovitch qui avait
+chargé brutalement et blessé le colmarien Boudjemaa. »
+
+LU : 167 sur 312.
+
+---
+
+## [135] Le Petit Troyen, 22 octobre 1938, page 5 - le portrait du joueur
+
+Ark bpt6k4335243b, vue 5. Avant Troyes contre Colmar, une présentation de
+l'équipe adverse, homme par homme :
+
+« Les inters sont confiés à deux [hommes], Tellechéa et Boudjemaa.
+Ex-[Sochalie]n, Tellechéa est le stra[tège], et Boudjemaa, le travailleur, se
+dépensant du commencement [à la fin]. »
+Et sur Belko : « "Bébé Cadum" est [redou]table par ses sprints, par [la
+violence de] ses shots ».
+
+VERDICT : en six mots, le joueur qu'il est devenu à vingt-quatre ans : le
+travailleur, celui qui se dépense du commencement à la fin. La page 1 du même
+numéro donne la composition.
+
+LU : 169 sur 312.
+
+---
+
+## [136] Colmar, octobre et novembre 1938
+
+Six pages lues, toutes des compositions ou des comptes rendus de la saison :
+Le Grand Écho du Nord du 9 octobre (ark bpt6k41440575), La Dépêche du
+10 octobre (ark bd6t51504431j), Gebweiler neueste Nachrichten du 17 octobre
+(ark bpt6k3153040n), L'Auto du 22 octobre (ark bpt6k4635277v), Le Sport
+alsacien du 24 octobre (ark bpt6k3148990x), Les Dernières Nouvelles de
+Strasbourg du 31 octobre (ark bd6t526433212), Colmarer neueste Nachrichten du
+5 novembre (ark bpt6k3159315g) et L'Auto du 5 novembre (ark bpt6k4635290q).
+Il y figure chaque fois à l'inter, le plus souvent entre Zopp et Belko.
+
+Sur la défaite à Troyes, Paris-soir du 24 octobre (ark bpt6k7644270j) et Le
+Petit Champenois du 25 octobre (ark bpt6k82243495) : « Boudjemaa et Télétchea
+se mirent en vedette et échouèrent sur l'excellente défense troyenne » ; et
+« La première mi-temps fut incontestablement à l'avantage des visiteurs, qui,
+grâce au travail de leurs deux intérieurs, Boudjemaa et Tellechea, bien
+soutenus par leurs [demis], mirent fréquemment la défense troyenne à
+[mal] ».
+
+LU : 179 sur 312.

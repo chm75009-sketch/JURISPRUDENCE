@@ -26,3 +26,11 @@ l'O.G.C. Nice en 1936.
 - USBeja-1931-planche.jpg : la photographie de l'équipe avec, dessous, la
   légende complète pour le livre : le match de la Coupe de l'Afrique du Nord
   à Bône le 8 février 1931, le score, et les deux compositions.
+
+- SRColmar-1938-planche.jpg et sa version écran : l'équipe des Sports Réunis
+  de Colmar photographiée dans Le Miroir des sports du 25 octobre 1938, avec
+  la légende qui nomme les treize hommes. C'est la seule photographie
+  d'équipe où il est nommé : premier rang, le cinquième en partant de la
+  gauche.
+- Boudjemaa-Colmar-1938-portrait.jpg : son visage, détaché de cette même
+  photographie.
