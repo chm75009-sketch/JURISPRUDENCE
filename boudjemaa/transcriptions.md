@@ -3430,17 +3430,41 @@ Othmann ; Emenoz, Tellechea, Zopp, Boudjemaa, Belko. » Et le journal ajoute
 que Colmar semble « devoir réussir cette fois à prendre place parmi les
 ténors du football français ».
 
-Le Journal, sur Colmar contre le C.A. Paris, donne la composition en tableau,
-lui à l'inter : « Zopp, Boudjema, Heiné ; Othmann, Tellechéa, Gabrillargues ;
-Delacourt, Demuth ».
+Le Journal, sur Colmar contre le C.A. Paris. La page a été reprise le
+23 septembre 2026 en pleine résolution, et je la donne ici en entier.
 
-LU : 272 sur 312.
+Le titre : « Le C. A. Paris en danger devant Colmar ». Le texte : « Le C. A.
+Paris recevra cet après-midi, à 15 heures, au vélodrome Buffalo, pour le
+championnat de seconde division, les S. R. Colmar. La tâche qui attend les
+Capistes n'est pas des plus aisées si l'on veut bien considérer que Colmar,
+sixième au classement, possède une ligne d'attaque particulièrement
+dangereuse. »
+
+L'encadré « Les équipes à Buffalo » donne les deux formations en vis-à-vis,
+celle de Colmar imprimée à l'envers de celle de Paris, comme le veut l'usage
+des journaux d'alors.
+
+C. A. Paris : Gonzalès ; Calmels, Malvy ; Bersoullé, Cardon, Schuster ;
+Lamanna, Fascinek, Bongiorni, Frutuoso, Poutoux.
+
+S. R. Colmar : Wozniak ; Delacourt, Demuth ; Othmann, Telletchéa,
+Gabrillargues ; Emenoz, Boudjema, Zopp, Heiné, Gougain.
+
+Coup d'envoi à 15 heures.
+
+Il joue donc inter, entre Emenoz et Zopp, dans cette ligne d'attaque que le
+journal parisien dit « particulièrement dangereuse ». C'est la composition
+complète, et elle diffère de celle de septembre 1938 : Gardet, Villacampa,
+Tellechea et Belko n'y sont plus, Demuth, Gabrillargues et Heiné sont
+arrivés.
+
+LU : 273 sur 312.
 
 ---
 
 ## NOTE SUR LES PAGES QUI MANQUENT ENCORE - 23 septembre 2026
 
-Sur les 312 pages de la liste, 262 sont récupérées en bonne résolution et
+Sur les 312 pages de la liste, 263 sont récupérées en bonne résolution et
 lues. Les 50 autres ne le sont pas encore : Gallica refuse de servir leurs
 images, avec le message « You are not authorized to access this resource »
 sur le service d'images, ce qui est une limite de débit et non un défaut du
