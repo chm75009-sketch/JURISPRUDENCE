@@ -2085,3 +2085,98 @@ championne.**
 
 Et la saison s'ouvre comme la précédente s'était ouverte à Saint-Etienne : il
 marque, et l'équipe perd.
+
+## Pages 167 à 174 - trois buts en trois matches, dont un contre Nice
+
+**[166] Colmarer neueste Nachrichten, 6 septembre 1938, page 9** (ark
+bpt6k3159264m), en allemand. Lu en entier. Amical Colmar-Sète, gagné 3 à 1 par
+Colmar : « Nach Metz und Sochaux auch Sète » (après Metz et Sochaux, Sète
+aussi), le club de deuxième division continue de battre des clubs de première.
+
+Deux passages le concernent, et le second est un portrait.
+
+L'action du deuxième but : « Der Sturm an Colmar ist ständig im Angriff und
+bereits in der 5. Minute fällt auf Strafstoss hin, den Belko zu Boudjema
+("Ofside") schob, das zweite Tor für die Einheimischen. » Soit : sur un coup
+franc que Belko a poussé vers Boudjemaa (aux cris de « hors-jeu ! »), le
+deuxième but tombe pour les locaux.
+
+Et, plus tôt, alors que les Sétois protestent contre l'arbitre : « Sète geht
+nun mehr aus sich heraus. Brusseaux, Daho und Schmitt zeigen nette Sächelchen,
+bleiben aber auch im Reklamieren nicht im Rückstand. **Boudjemaa geht sogar
+noch einen Schritt weiter (ruhig Blut bitte !)** » Soit : « Brusseaux, Daho et
+Schmitt montrent de jolies choses, mais ne sont pas en reste pour réclamer.
+**Boudjemaa va même un pas plus loin (du calme, s'il vous plaît !).** »
+
+Plus loin encore : « Ein satter Strafstoss dieses Spielers landet am
+Querbalken, daher [ein] Corner. » Un coup franc puissant de ce joueur trouve la
+barre transversale.
+
+Le chroniqueur note enfin que le match a dû être arrêté avant la fin
+réglementaire par l'arbitre, M. Pflumio, la nuit tombant : « 23 Schattenbilder
+huschen im Halbdunkel dem kaum noch sichtbaren Ball nach, während man die
+Nordafrikaner schon überhaupt nicht mehr sieht » - vingt-trois ombres
+poursuivent dans la pénombre un ballon à peine visible, « tandis qu'on ne voit
+déjà plus du tout les Nord-Africains ». La phrase est de son temps ; je la
+laisse telle quelle, elle dit quelque chose du regard.
+
+**[167] Le Matin, [168] L'Ouest-Éclair, 9 septembre 1938**, et le résultat du
+jeudi 8 : **Colmar bat Nîmes 4 à 0.**
+
+Le Matin (ark bpt6k586081q), lu en entier, par téléphone de Colmar : « À la
+reprise, Colmar se décide à jouer. Il contrôle mieux la balle à terre, impose
+son jeu et finit par faire cavalier seul. Belko, son ailier gauche,
+**Boudjema son inter gauche** et Zopp, déjà nommé, marquent successivement
+trois buts : 4 à 0. »
+
+Et les meilleurs : « **Les meilleurs à Colmar : Wozniak, le goal, Boudjema et
+l'inter droit Telechea** ; à Nîmes, le demi-centre Mester et Zermani, le
+transfert de Marseille. »
+
+L'Ouest-Éclair (ark bpt6k661373d), lu en entier, donne la même chose sous le
+titre « COLMAR SURCLASSE NIMES » : « Colmar monopolise la balle, surtout sur la
+gauche bien servie par Telechea, et successivement Belko, Boudjemaa et Zopp
+assurèrent la victoire des locaux par 4 à 0. »
+
+**[171] Strassburger neueste Nachrichten, 12 septembre 1938, page 3** (ark
+bd6t59625838), en allemand. Lu en entier. Et c'est le match qu'il fallait
+trouver : **S. R. Colmar - O. G. C. Nice 2 à 1**, le dimanche 11 septembre.
+
+« Die Colmarer Profis mussten sich, um gegen Nice einen Sieg zu erringen,
+restlos ausgeben. Der Enderfolg stand lange in Frage, denn kurz vor der Pause
+kamen die Gäste auf Fehler Wozzioks in Führung. Nach der Pause jedoch ging
+Colmar mit Hochdruck ans Werk und **in der 10. Minute durch Boudjema**, und in
+der 28. durch Belko, kommt Colmar in Führung. Nice will egalisieren, aber der
+Schlusspfiff sieht Colmar als noch Sieger. »
+
+Soit : Nice mène à la pause sur une faute du gardien Wozniak ; à la reprise,
+Colmar attaque à fond et **c'est lui qui égalise à la dixième minute**, Belko
+donnant l'avantage à la vingt-huitième. Nice cherche à revenir, en vain.
+
+« Bei der S. R. C. ist die gesamte Elf zu belobigen. Ohne Gardet und Zopp
+antretend hat sie den Erfolg restlos verdient. »
+
+Il marque donc contre l'O.G.C. Nice, le club qu'il avait rejoint en fuyant
+Saint-Etienne en 1936, et qui l'avait vendu en 1937.
+
+**Le compte, à trois journées** : un but à Rennes le 1er septembre, un contre
+Nîmes le 8, un contre Nice le 11. Trois buts en trois matches de championnat,
+plus une part dans le deuxième but de l'amical contre Sète.
+
+**[173] Gebweiler neueste Nachrichten, 17 septembre 1938, page 10** (ark
+bpt6k3153015k), en allemand. Lu en entier. La veille du déplacement à Arras, et
+la composition annoncée montre ce que devient l'équipe :
+
+« S. R. C. hat zur Zeit mit der Aufstellung [der] Elf einige Schwierigkeiten.
+Nach Aravit, [der] nach Alger zu[rück]gekehrt ist, kommt ein [ander]er
+Rechtsaussen vorläufig nicht mehr in [Betra]cht, denn der Spieler Meyer wurde
+zum Militär eingezogen. Für Fourmond und Demuth [be]steht der gleiche Fall. »
+
+Aravit est reparti à Alger, Meyer, Fourmond et Demuth sont appelés sous les
+drapeaux ; Belko et Jan se sont blessés dimanche ; Gardet est sur la liste des
+transferts. On est à dix jours de Munich.
+
+La composition annoncée : « Wozniok ; Jan, Delacourt ; Demuth oder Villacampa,
+Gougain, Othmann ; Heiné, Tellechea, Zopp, **Boudjemaa**, Emonoz. »
+
+Il reste, et il reste inter gauche.
