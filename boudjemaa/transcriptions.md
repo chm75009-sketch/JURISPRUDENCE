@@ -3045,3 +3045,197 @@ il joue aux côtés de Ducousso, le même nom que l'avant de l'U.S. Béja de
 février 1931. Le fil de Béja ne s'est jamais rompu.
 
 LU : 240 sur 312.
+
+---
+
+## [157] L'Écho de Tunis, novembre 1943 et janvier 1944 - la sélection de Tunis
+
+L'Écho de Tunis du 8 novembre 1943, page 2 (ark bpt6k8379253w) : la
+composition annoncée, « et, enfin, dans l'attaque, outre l'ailier gauche
+susvisé, Boudjemaa, Ducousso, Berbèche et Younès. Un onze, en somme, qui a
+belle allure, qui comprend les vedettes de notre football et qui aura à cœur
+de rééditer la victoire remportée en mai dernier. »
+
+Un autre numéro de 1943, page 2 (ark bpt6k8379306k), donne une convocation :
+« Laroussi, Milazzo, Abdeselem, Vella, Statopoulos, Accacha, Fallahallah,
+Heller, Bsiri, Rachid, Bourourou, Younès, Boudjemaa, Lanfranchi, Ben
+Batouche, Ouardi, Berbèche. »
+
+L'Écho de Tunis du 2 janvier 1944, page 2 (ark bpt6k8379309t), compte rendu
+d'un match contre une équipe britannique devant un public nombreux où l'on
+voyait de nombreux militaires : « Sur le renvoi, Boudjemaa lance l'attaque,
+[le tir] de Younès passe au-dessus, puis c'est le Béjaois qui, des 18 mètres,
+essayant de tromper le goal, envoie également trop haut. » Et plus loin :
+« notre ailier droit [...] fera avorter les ouvertures de Boudjemaa par
+temporisation ou par hors-jeu » ; « Des shoots de [Lan]franchi, Boudjemaa et
+Younès [sont] bloqués ou déviés en corner ».
+
+Un autre numéro de 1944, page 2 (ark bpt6k8379310g) : « les verts marquèrent
+un point sur coup franc tiré sèchement ; puis ils ralentirent un instant leur
+action et la Tunisie eut quelques déboulés grâce à Boudjeméa. »
+
+VERDICT : pendant la guerre il est en Tunisie, il joue pour la sélection de
+Tunis, et les journaux de Tunis l'appellent « le Béjaois ».
+
+LU : 245 sur 312.
+
+---
+
+## [158] Le Petit Matin (Tunis), 1944, page 2 - UN HOMONYME À ÉCARTER ABSOLUMENT
+
+Ark bpt6k83929773, vue 2. Compte rendu d'un procès devant un tribunal
+militaire, présidence du colonel Tracol, ministère public capitaine Alberge :
+
+« Le sieur Mohamed Boudjema Ben Barim, originaire de Testour, qui avait
+déployé au profit des troupes de l'Axe une infâme activité, a été condamné à
+mort et à la confiscation de tous ses biens présents et à venir. Sept chefs
+d'accusation ont été relevés à son encontre : dénonciations de résistants,
+arrestations de soldats anglais, détention illégale d'armes et de munitions de
+guerre [...] »
+
+VERDICT : ce n'est pas lui, et il faut le dire fermement dans le livre si
+jamais quelqu'un ressort cette page. L'homme condamné s'appelle Mohamed
+Boudjema Ben Barim, il est originaire de Testour, et notre Boudjemaa jouait
+au même moment pour la sélection de Tunis, sous son nom, dans les colonnes du
+même journal. Homonymie, rien d'autre.
+
+LU : 246 sur 312.
+
+---
+
+## [159] Ce soir, 28 juin 1945, page 2 - LA CAPTIVITÉ
+
+Ark bpt6k76356506, vue 2. Une brève de trois lignes, au milieu des résultats
+de boxe :
+
+« Boudjema, l'ex-ailier gauche de Sète, rentré de captivité, a été transféré
+à Nice. »
+
+VERDICT : c'est la réponse à la question du chapitre 6. Il a été prisonnier.
+La brève dit trois choses d'un coup : il a joué à Sète, il rentre de
+captivité, et il est transféré à Nice en juin 1945. Reste à savoir où et
+quand il a été fait prisonnier ; l'engagement du F.C. Sète, annoncé en
+décembre 1940 et janvier 1941, et son passage en zone non occupée en février
+1941, sont les derniers jalons avant ce retour.
+
+LU : 247 sur 312.
+
+---
+
+## [160] Ce soir, 9 août 1945, page 2
+
+Ark bpt6k76356892, vue 2. La composition de Colmar pour la reprise :
+« Delacourt, Demuth, Gissinger, [...] Emonoz, Zopp, Boudjemaa, Herpin. »
+
+LU : 248 sur 312.
+
+---
+
+## [161] Les Dernières Nouvelles d'Alsace, 23 octobre 1945, page 6, et L'Alsace, 30 octobre 1945, page 2
+
+Arks bd6t52805857d et bd6t52808235p. Le retour à Colmar : « Colmar [a reçu]
+encore du renfort : Emonoz, qui faisait partie de l'équipe [avant] la guerre,
+est arrivé. Boudjema ne va pas tarder. »
+Et L'Alsace donne une sélection : « Alsace pro B : Diesel (F.C.M.), Decker
+(S.R. Colmar), Emmenegger Ch. (S.R.C.), Wodey (F.C.M.), Cléau, Othmann
+(S.R.C.), Harter, Schumacher, Bretz (F.C.M.), Boudjema, Krischke. »
+
+LU : 250 sur 312.
+
+---
+
+## [162] Sporting, 10 septembre 1946, page 7
+
+Ark bpt6k7230312z, vue 7. Amiens contre Colmar : « Boudjemaa, dont on
+attendait l'exhibition avec curiosité, ouvrit la marque à la 58e minute pour
+Colmar. Ce joueur [bais]sa nettement de pied en seconde [mi-]temps et ne
+réédita pas sa bonne première partie de jeu. »
+
+LU : 251 sur 312.
+
+---
+
+## [163] Le Populaire et La France libre, 21 septembre 1946
+
+Arks bd6t5718676d et bpt6k4119398v. Les deux journaux donnent la même
+composition de Colmar en tableau, avec lui à l'inter gauche : « Hoffmann ;
+Frey, Linkenheld, Wawrzyniak, Deckert ; Lauer, [Battistel]la, Boudjemaa,
+Emmenegger [...] »
+
+LU : 253 sur 312.
+
+---
+
+## [164] L'Alsace, 19 novembre 1946 et 13 décembre 1946, et 14 janvier 1947
+
+Arks bd6t528083477, bd6t52808368d et bd6t528078482. Les derniers mois où on
+le voit jouer, et le reproche qui revient : « Parmi les avants, seul Zopp
+donna entière satisfaction, alors que Boudjemaa gâcha trop d'occasions par un
+jeu personnel. » Puis, le 14 janvier 1947 : « l'aile gauche, où Boudjemaa
+continue à pécher par un excès de personnalité, fut nettement moins forte » ;
+et « Colmar eut encore des chances réelles, notamment quand Boudjemaa se
+présenta seul devant Sinibaldi, mais il omit de servir ses coéquipiers. »
+Le 13 décembre 1946, la composition pour recevoir le S.K. Bata : « Colmar :
+Hoffmann, Deckert, Linkenheld, Lauer, Wawrzyniak, Deckert, Battistella, Zopp,
+[Gévau]dan, Boudjemaa, Emmenegger. »
+
+LU : 256 sur 312.
+
+---
+
+## [165] Le Soir, 17 janvier 1947, page 4
+
+Ark bd6t515087483, vue 4. Composition de Colmar : « Demuth, Linkenheld,
+Lauer, [Wawrzyniak], Deckert, Battistella, [Gévau]dan, Boudjemaa,
+Emme[negger] ». C'est l'une des dernières feuilles de match où son nom
+figure.
+
+LU : 257 sur 312.
+
+---
+
+## [166] SA MORT, 29 mai 1947 - les trois dépêches
+
+L'Équipe du 31 mai 1947, page 4 (ark bd6t51001286), sous le titre
+« Boudjemaa est mort » :
+« COLMAR. - Boudjemaa avait contracté, voici quelques mois, une pleurésie. Le
+Nord-Africain, malgré tous les soins prodigués, s'est éteint hier à l'hôpital
+Pasteur de Colmar. Les Sports Réunis perdent un bon joueur et un excellent
+camarade. - Haengsi. »
+
+France-soir du 1er juin 1947, page 4 (ark bpt6k4746498j) : « Le Nord-Africain
+Boudjemaa, qui opérait aux S.R. Colmar, est décédé d'une pleurésie contractée
+il y a quelques mois. »
+
+Le Courrier français du Sud-Ouest du 2 juin 1947, page 4 (ark bd6t52762745b),
+sous le titre en capitales « BOUDJEMAA EST MORT », reprend la dépêche de
+Colmar du 1er juin : « Boudjemaa avait contracté, voici quelques mois, une
+pleurésie. Le Nord-Africain, malgré tous les soins prodigués, s'est éteint
+vendredi à l'hôpital Pasteur de Colmar. Les Sports Réunis perdent un bon
+joueur. »
+
+VERDICT : il est mort d'une pleurésie contractée quelques mois plus tôt. Et
+les deux sources se recoupent enfin : l'acte de décès dit « 39, Avenue de la
+Liberté », les journaux disent « l'hôpital Pasteur de Colmar ». C'est la même
+adresse. Il est donc mort à l'hôpital, et non chez lui, place de la
+Cathédrale.
+Une réserve de date : l'acte porte le 29 mai à 23 h 30 ; L'Équipe du 31 mai
+écrit « hier », soit le 30 ; Le Courrier du Sud-Ouest écrit « vendredi », qui
+est le 30. L'acte d'état civil fait foi.
+
+LU : 260 sur 312.
+
+---
+
+## [167] Le Patriote de Nice et du Sud-Est, 10 juin et 17 septembre 1948
+
+Arks bd6t512487049 et bd6t51248785r. Un an après sa mort, deux rétrospectives
+niçoises signées Max Burlando le citent parmi les noms de l'O.G.C. Nice :
+« des hommes de classe : Haussaire, [...] Schulzendorf, Boudjemaa, [...]
+Brusseaux, Médan, Gnaoui, [...] Rodriguez, Castro, [Em]onoz. Ce sont des noms
+dont beaucoup d'entre nous sont [restés les] souvenirs... » Et, sur la saison
+1936-37 : « une équipe où brillent Brusseaux, Orlandini, Boudjemaa, Chaisaz,
+Schulzendorf, Kurdna, Rodriguez, E. Galland, Palmesani, Gérin, Lovicky,
+[Sil]lam, Logez, Dubois, Pellegrino, [...] Lovy, Gordolon. »
+
+LU : 262 sur 312.
