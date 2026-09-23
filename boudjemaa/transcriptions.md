@@ -3354,3 +3354,37 @@ CE QUE ÇA APPORTE ET CE QUE ÇA COMPLIQUE :
   janvier 1941. Ces années-là restent à établir.
 
 LU : 266 sur 312.
+
+---
+
+## [171] Deux photographies de Saint-Étienne où il est nommé
+
+Pièces venues du Drive de l'auteur. Les images sont sur le Drive ; voici
+leurs légendes, lues et transcrites.
+
+1. Fichier « Photo d'équipe saint etienne boudjemma Tribune républicaine
+30 mai 1938.jpg », photo signée « Photo Tribune » :
+
+« Les joueurs professionnels de l'A.S. Saint-Etienne. Debout, de gauche à
+droite : BIECHERT, BECK, CHARBIT, CASY, FAVIER, ROLHION (capitaine), ODRY,
+RICH et Roger PASQUINI. Devant : le masseur GRIVORY, TAX, PLOVIE, CABANNES,
+HERMANN, BOUDJEMAA et KORDINA. »
+
+Il est donc au premier rang, sixième en partant de la gauche, l'avant-dernier.
+La photographie paraît le 30 mai 1938, le lendemain du match de Tourcoing et
+de la montée en division nationale.
+
+2. Fichier « boudjemaa 2 de la part de Bernard Cros équipe de saint étienne
+37 38.jpg », effectif complet de la saison :
+
+« EFFECTIF ASSE, SAISON 1937-1938. De gauche à droite au premier rang : Tax,
+Beck, Grivory, Marey, Duckworth, Rolhion, Charbit. Deuxième rang :
+Boudjemaa, Biechert, Favier, Guillard, Mugnier, Plovie. Troisième rang :
+Hermann, Odry, Casy, Kodrnja, Lazaro, Rich II, Varraud. »
+
+Il est le premier du deuxième rang, à gauche. Et au premier rang, quatrième,
+figure Marey : le secrétaire du club, celui-là même qui était allé le
+chercher à Béja avec les vingt-cinq billets de cinq cents francs, et que le
+procès-verbal de la Fédération cite comme représentant de Saint-Étienne.
+
+LU : 268 sur 312.
