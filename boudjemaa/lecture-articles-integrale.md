@@ -1,0 +1,214 @@
+# Les articles sur Boudjemaa, lus en entier, ligne par ligne
+
+Ce fichier reprend la lecture à zéro, sur une demande précise : lire l'article
+entier où il est cité, du premier au dernier mot, et pas seulement le passage
+qui porte son nom. Un article de journal de ces années court souvent sur deux
+ou trois colonnes ; la colonne qui porte le nom n'en est parfois que la fin.
+Je lis donc la colonne citante et ses voisines, je reconstitue l'article, et
+je le lis en entier avant d'en dire quoi que ce soit.
+
+Quand un article n'apporte rien de plus que le nom, je l'écris aussi : il est
+dit lu et sans supplément. Quand le texte contredit ce que j'avais transcrit
+ailleurs, je le dis et je corrige.
+
+## Pages 1 à 6
+
+**[0] Le Petit Matin (Tunis), 16 janvier 1934, page 7 - DEUX BOUDJEMAA LE
+MÊME JOUR, ET LES DEUX CLUBS DE BÉJA.** Six colonnes de la page lues, dont
+les trois qui le citent et leurs voisines. La page porte en réalité trois
+articles distincts qui donnent ce nom.
+
+Le premier est l'annonce de la manifestation de l'Aïd Esseghir au Vélo-Stade,
+pour le quinzième anniversaire de l'Espérance, fondée le 15 janvier 1919.
+L'article est lu en entier : programme, deux rencontres, coupe offerte par
+M. A. Benzerti pour les juniors et coupe A. Daoui pour la rencontre entre
+l'entente Espérance-Club Africain et l'U.S.T. La composition de l'entente y
+figure : « Entente : Laroussi ; Jelloul, Abdesse[lem], Derouche ; Naouar, Bel
+Arbi, Riahi ; Ben Said Ali, Gattoussi, Akkacha S., Boudjemaa et Meghirbi. »
+
+Le second est le compte rendu du championnat de La Medjerdah, à Béja, lu en
+entier : « L'U. S. Béja dispose difficilement de l'O. Béja par 2 à 1 ».
+Les deux compositions y sont : « U.S. Béja : Baroufa, Ferracci, Cohen,
+Chatti, Martinelli, Laroche, Raousa, Morandi, Abouaf, Tonkabri et Santoro.
+O. Béja : All[aïa], B[oudjemaa], Mola[ï]... » Le récit le nomme deux fois :
+« La balle est dans les 18 mètres [des] Olympiens. Boudjemaa hésite [et un
+attaquant] en profite pour ouvrir le score », puis, dans les considérations
+finales : « L'Olympique, handicapé par l'absence d'un joueur et surtout par le
+[manque de cohésion], ne fournit pas sa partie habituelle. Sont à signaler :
+[All]ala, Boudjemaa, Khomsi, Kaddo[ur et] Saïd. »
+
+Ce que cet article règle, et que je n'avais pas : les deux clubs de Béja
+existent bien et se rencontrent, l'U.S. Béja et l'Olympique de Béja. Il donne
+aussi le nom de Martinelli, arrière de l'U.S. Béja, resté en suspens.
+
+Ce qu'il ne règle pas : le Boudjemaa de l'Olympique de Béja est un arrière ou
+un demi, et un autre Boudjemaa joue le même jour à Tunis avec l'entente. Je
+n'ai rien dans la page pour dire lequel est le futur joueur de Nice, ni s'il
+est l'un des deux. Je l'écris tel quel. Pages lues.
+
+**[1] L'Écho du Maroc, 14 septembre 1935, page 6 - CE N'EST PAS LUI.** Les
+deux colonnes citantes et leur voisine lues en entier. Le nom apparaît deux
+fois, et deux fois dans des articles qui n'ont rien à voir avec le football :
+dans le compte rendu du tribunal de paix de Port-Lyautey, « Racolage de
+voyageurs : Boudje[maa ben] Bouih, renvoi de l'affaire », et dans la liste
+des amendes de simple police, « Boudjemaa ben [...] ». L'article entier est
+une chronique judiciaire locale, lue du premier au dernier mot : ouverture
+d'établissement dangereux, défauts de carte d'autorisation de transport,
+divagation d'animaux. Un homonyme, deux fois. Page lue, rien pour le dossier.
+
+**[2] Le Forez sportif, 6 novembre 1935, page 2 - SON ARRIVÉE À NICE.**
+La colonne citante et sa voisine lues en entier. C'est la rubrique « Les
+échos de la vie sportive », une suite de brèves séparées par des astérisques,
+et l'écho qui le concerne se lit en entier en trois lignes : « L'O.G.C. Nice
+vient d'accueillir dans [ses ra]ngs deux nouveaux éléments sur lesquels il
+fonde de sérieu[x] espoirs : le [Tun]isien Boudjema[a] et l'Espagnol Goye[z]. »
+
+C'est la première trace que j'aie de son arrivée à Nice, et elle le dit
+d'emblée tunisien. La même colonne annonce Dewaquez sélectionneur du Sud-Est
+et donne les équipes de France A et B pour la Suède et le Luxembourg, où
+figure Charbit, de Saint-Étienne, qu'il retrouvera deux ans plus tard.
+Page lue.
+
+**[3] Le Petit Marseillais, 2 décembre 1935, page 8 - SON PREMIER MATCH,
+EN ENTIER.** La colonne citante et ses deux voisines lues en entier. Le
+compte rendu de Nice contre l'Olympique de Marseille, joué la veille, est lu
+du coup d'envoi au coup de sifflet final. Il le cite quatre fois, et jamais
+en mal :
+
+« Nice domine légèrement et Boudjemaa fait de superbes ouvertures inutilisées
+par Sh[c]ubert. » Puis : « Boudjemaa et A. Béraudo font un très grand
+labeur ». Puis : « Un shoot de Boudjemaa est arrêté par Erevedian, qui met en
+corner ; botté par Astori, il ne donne rien. » Puis : « Boudjemaa ouvre à
+l'aile droite : Schubert suit et va marquer, quand Erevedian lui plonge dans
+les jambes et sauve le but. »
+
+Et la ligne qui décide de la fin de son match : « A la reprise, Dubois,
+Marino et Galand remplacent effectivement Gérin, Boudjemaa et Schubert,
+tandis que Sautel joue à la place de Janin. » Il sort donc à la mi-temps,
+dans ce qui est un match amical à remplacements libres. Marseille l'emporte
+2 à 0, par Janin puis Crut, tous deux dans le dernier quart d'heure.
+
+La date des notes de l'auteur, le 1er décembre 1935, est confirmée à la
+source. Pages lues.
+
+**[4] L'Ouest-Éclair, 26 décembre 1935, page 7 - AVANT-CENTRE LE JOUR DE
+NOËL.** La colonne citante et sa voisine lues en entier, c'est-à-dire toute
+la page des comptes rendus de la division interrégionale du 25 décembre.
+L'article sur Nice est court et se lit en entier :
+
+« Nice, 25 décembre. - Dès le début, les Niçois dominent d'une façon très
+nette. Les avants de Nice multiplient leurs passes latérales mais n'arrivent
+pas à placer un shoot dans de bonnes conditions, malgré la fougue de leur
+nouvel avant-centre tunisien Boudjema. Puis l'aile droite du C. A. P.
+s'échappe, le goal niçois laisse glisser la balle, mais un arrière éloigne le
+danger. Hall est pénalisé d'un penalty sévère que Nice transforme. A la
+mi-temps : Nice, 1 ; C. A. P., 0. » Puis Astori fait le second en bousculant
+le gardien parisien : 2 à 0.
+
+Deux choses à garder : il joue avant-centre le 25 décembre 1935, et le
+journal parle de sa « fougue ». La même page porte le Rouen 5 Saint-Étienne 0
+où jouent Guillard et Kovacs, et le Lens 4 Caen 0 où marque Plovie, deux noms
+qu'il croisera plus tard. Pages lues.
+
+## Pages 7 à 14 - l'hiver 1936 à Nice, et une première fugue
+
+**[6] Le Forez sportif, 22 janvier 1936, page 3 - SAINT-ÉTIENNE 3 NICE 1.**
+La colonne citante et sa voisine lues en entier, c'est-à-dire tout le compte
+rendu, les classements qui le précèdent et les parties amicales qui le
+suivent. L'article sur le match est lu du premier au dernier mot.
+
+Le chroniqueur juge d'abord Saint-Étienne, puis les visiteurs : « La
+formation niçoise, on le sait, ne comporte pas de grands noms, mais son jeu
+est, somme toute, assez plaisant à suivre. Boudjemaa, inter gauche ; Dubois,
+centre-avant ; Beraudo, demi-droit et Schulzendorf, arrière droit, se
+prodiguèrent avec plus de bonheur que leurs camarades. »
+
+Le récit : Pasquini marque à la quinzième minute sur une passe de Beck, puis
+un second avant le repos, encore « de connivence avec le talentueux Yvan » ;
+Kovacs fait le troisième en reprenant une passe de Pasquini. Et la fin :
+« Tout de même, à l'ultime moment, l'intérieur Boudjemaa parvint à sauver
+l'honneur des « rouge et noir » visiteurs. » Il marque donc, et il joue inter
+gauche, pas avant-centre. Pages lues.
+
+**[7] Paris-soir, 7 février 1936, page 4 - LA SÉLECTION CONTRE LA BULGARIE.**
+La colonne citante et sa voisine lues en entier. La colonne voisine est le
+récit de l'ouverture des Jeux olympiques d'hiver de Garmisch, avec le
+discours de Hitler et le serment olympique, lu en entier et sans rapport avec
+lui. L'entrefilet qui le concerne est dans « Autour de l'actualité », et se
+lit en entier en huit lignes :
+
+« L'Entente Azuréenne organise pour dimanche prochain sur le stade du
+Fort-Carré, à Antibes, un match international qui l'opposera à l'équipe
+officielle de Bulgarie. Voici l'équipe : Ehms (Antibes) ; Kurdna (O.G.C.
+Nice), Schwartz (A.S. Cannes) ; A. Béraudo et Moudry (Nice), Amand (Antibes) ;
+Guimbard, Kovacs, Franceschetti (A.S. Cannes), Pecchino (Antibes) et
+Boudjemaa (O.G.C. Nice). Remplaçants : Chaisaz, Schubert et Mosert. »
+
+C'est bien la Bulgarie, et bien à Antibes : ce que j'avais transcrit ailleurs
+comme un match contre la Hongrie était faux, et la correction tient. Pages
+lues.
+
+**[8] L'Auto-vélo, 21 février 1936, page 6 - IL DISPARAÎT ET REVIENT, DEUX
+ANS AVANT L'AUTRE FOIS.** La colonne citante et sa voisine lues en entier. La
+voisine est une longue page de championnat, de concours de pronostics et de
+brutalités anglaises, lue en entier. L'entrefilet qui le concerne ouvre la
+colonne et se lit en entier :
+
+« L'émoi était grand à Nice, où l'avant-centre de l'OGC de Nice, le Tunisien
+Boudjema, avait subitement disparu. On n'a pas été long à le retrouver.
+Boudjema [avait] eu le mal du pays et avait mis le cap sur [la] Tunisie. Mais
+il ne s'agit là que d'un coup de tête et le sympathique joueur est revenu à
+Nice où il a été accueilli à bras ouverts. »
+
+C'est une pièce que je n'avais pas du tout, et elle change la lecture de
+1938 : le départ de Saint-Étienne pour Tunis en janvier 1938 n'est pas le
+premier. Il était déjà parti de Nice en février 1936, pour la même raison, et
+revenu de lui-même. Deux mots à garder : « le mal du pays » et « un coup de
+tête ». Pages lues.
+
+**[9] Le Grand écho du Nord, 24 février 1936, et [10] L'Écho du Nord, 25
+février 1936 - LENS 5 NICE 0, EN ENTIER, DEUX FOIS.** Les colonnes citantes
+et leurs voisines lues en entier dans les deux journaux : c'est le même
+compte rendu, servi aux deux titres, et je l'ai lu deux fois pour m'assurer
+qu'ils ne divergeaient pas. Ils ne divergent pas.
+
+Le jugement sur lui, en tête d'article : « Trois hommes manquaient dans
+l'équipe niçoise : Kurdna, Schultendorf et Dubois, mais Schiave, qui jouait à
+l'arrière, et Boudjema, qui remplaçait Dubois, fournirent un joli match et il
+n'est pas certain que les titulaires auraient fait beaucoup mieux sur le
+terrain détrempé et glissant des professionnels artésiens. »
+
+La composition : « O.G.C. Nice. - Chaisaz ; Schiave, Schubert, Galland,
+Moudry, J. Bérando, Granier, Gérin, Boudjema, A. Bérando, Marino. » Arbitre
+M. Bowley, coup d'envoi à 14 h 30.
+
+Et la fin du match, quand Lens mène 4 à 0 : « Menant par 4 buts à 0, les
+miniers soufflent alors et les Niçois vont mener des attaques très
+dangereuses. Boudjema, Gérin, A. Bérando, tour à tour forcent Leroux à
+intervenir. » Les poteaux renvoient deux fois, trois corners de suite contre
+Lens, et l'arbitre siffle « avant que les courageux Niçois aient pu sauver
+l'honneur ». Il joue donc avant-centre ce jour-là, en remplacement de Dubois.
+Pages lues.
+
+**[11] Le Républicain du Gard, 2 mars 1936, page 3 - UN BUT CONTRE AMIENS.**
+La colonne citante lue en entier : c'est une rubrique de brèves, « Les échos
+de la journée », où chaque ligne est un fait détaché. Celle qui le concerne
+se lit en entier : « Boudjema et Dubois ont marqué les buts de l'O.G.C. Nice
+contre l'Amiens A.C. qui a déçu. » Page lue.
+
+**[13] Le Petit Parisien, 16 mars 1936, page 7 - NICE-ROUEN, EN ENTIER.**
+La colonne citante et sa voisine lues en entier. Le compte rendu de Nice
+contre Rouen, daté de Nice le 15 mars, le cite quatre fois, et c'est le
+meilleur article que j'aie sur lui à Nice :
+
+« Les Niçois, de leur côté, percent [au] centre grâce à Boudjemaa, mais
+Bessero, le goal de Rouen, pare chaque fois de façon magnifique. » Puis :
+« [des] phases dans lesquelles Boudjemaa, Marino et Moudry se font
+particulièrement remarquer. » Puis le but : « à la trente-cinquième minute de
+jeu, après une magnifique descente de Boudjemaa, Marino marque le but pour
+Nice. » Et, dans le jugement final : « Boudjemaa ré[alisa une partie
+splen]dide ; il fut [...] ». La phrase est coupée par la gouttière et la
+reconnaissance de caractères ne la rend pas ; je ne la complète pas.
+
+La même page donne Charleville 2 Roubaix 0, lu en entier, et les classements
+de la division interrégionale. Pages lues.
