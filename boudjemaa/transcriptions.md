@@ -2352,3 +2352,84 @@ professionnelles pour [...] Boudjemaa et Four[nier ?]. On se meuble dans le
 Haut-[Rhin]. »
 
 LU : 155 sur 312.
+
+---
+
+## [128] Colmar bat Sète, 4 septembre 1938
+
+Colmarer neueste Nachrichten du 6 septembre, page 9 (ark bpt6k3159264m), en
+allemand. Le chroniqueur relève son énervement : « Brusseaux, Daho und
+Schmitt zeigen nette Sächelchen, bleiben aber auch im Reklamieren nicht im
+Rückstand. Boudjemaa geht sogar noch einen Schritt weiter (ruhig Blut
+bitte !). Ein satter Strafstoss dieses Spielers landet am Querbalken » -
+Brusseaux, Daho et Schmitt réclament beaucoup, et Boudjemaa va encore un pas
+plus loin (du calme, s'il vous plaît !) ; un coup franc puissant de ce joueur
+finit sur la barre.
+Et plus loin : « bereits in der 5. Minute fällt auf [eine Vorlage von] Belko
+zu Boudjemaa (Ofside ?) das zweite Tor für die Einheimischen » - dès la 5e
+minute, sur une passe de Belko à Boudjemaa, hors jeu peut-être, tombe le
+deuxième but des locaux.
+
+LU : 156 sur 312.
+
+---
+
+## [129] Colmar surclasse Nîmes 4 à 0, 8 septembre 1938
+
+Le Matin du 9 septembre, page 6 (ark bpt6k586081q) : « A la reprise, Colmar
+se décide à jouer. Il contrôle mieux la balle à terre, [améliore] son jeu et
+finit par faire cavalier seul. Belko, son ailier gauche, Boudjema son
+inter-gauche et Zopp, déjà nommé, marquent successivement trois buts : 4 à 0,
+tandis que les Nîmois, qui ont perdu leur ardeur du début, ne peuvent
+percer. » Le journal ajoute que les meilleurs de Colmar furent « Wozniak, le
+goal, Boudjema et l'inter droit Tellechea ».
+
+L'Ouest-Éclair du 9 septembre, page 12 (ark bpt6k661373d), sous le titre
+« COLMAR SURCLASSE NIMES » : « Colmar monopolise la balle, surtout sur la
+gauche bien servie par Tellechea, et successivement Belko, Boudjemaa et Zopp
+assurèrent la victoire des locaux par 4 à 0. »
+
+LU : 158 sur 312.
+
+---
+
+## [130] Colmar bat Nice 2 à 1, 11 septembre 1938 - il marque contre Nice
+
+Les Dernières Nouvelles de Strasbourg du 12 septembre, page 8 (ark
+bd6t52643631g) : « COLMAR, 11 sept. - En face des Aiglons niçois, les pros
+colmariens durent se surpasser pour remporter finalement une pénible
+victoire. A la [pause], les Azuréens étaient au commandement par 1 but à
+zéro, but à la charge de Wozniak, le gardien. Après le changement de camp,
+Colmar travailla à fond. Boudjemaa, à la 10e, et Belko à la 28e minute,
+réussirent à percer la défense adverse, fixant ainsi le 2-1. La fin du match
+[fut] mouvementée, les Niçois se multipliant vainement pour égaliser. [...]
+4.200 spectateurs valurent une recette de 14.300 francs. »
+
+Le Strassburger neueste Nachrichten du même jour, page 3 (ark bd6t59625838),
+dit la même chose en allemand : « in der 10. Minute durch Boudjema, und in
+der 28. durch Belko, kommt Colmar in Führung ».
+
+VERDICT : un an après avoir quitté Nice, il marque contre Nice. Après
+Saint-Étienne en mars 1937, c'est le deuxième de ses anciens clubs qu'il
+punit.
+
+LU : 160 sur 312.
+
+---
+
+## [131] Gebweiler neueste Nachrichten, 17 septembre 1938, page 10, L'Auto du 17 septembre, page 5, et Ce soir du 19 septembre, page 6
+
+Arks bpt6k3153015k, bpt6k4635242n et bpt6k7633614q. Les compositions
+annoncées : « Wozniak ; Jan, Delacourt ; Demuth ou Villacampa, Gougain,
+Othmann ; Heine, Tellechea, Zopp, Boudjema, Emonoz. »
+
+LU : 163 sur 312.
+
+---
+
+## [132] Football (hebdomadaire), 21 septembre 1938, page 8
+
+Ark bpt6k7214930n, vue 8. « COLMAR : Wozniak ; Jan, Delacourt, Gardet,
+Gougain, Othmann ; Heine, Tellechea, Zopp, Boudjemaa, Emonoz. »
+
+LU : 164 sur 312.
