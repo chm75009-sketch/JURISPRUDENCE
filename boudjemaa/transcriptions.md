@@ -3388,3 +3388,31 @@ chercher à Béja avec les vingt-cinq billets de cinq cents francs, et que le
 procès-verbal de la Fédération cite comme représentant de Saint-Étienne.
 
 LU : 268 sur 312.
+
+---
+
+## [172] L'Est républicain, 31 décembre 1938 - « l'étoile actuelle de l'attaque de Colmar »
+
+Pièce du Drive. Présentation de l'équipe de Colmar avant le déplacement à
+Nancy, joueur par joueur. La reconnaissance de caractères est médiocre, mais
+la phrase se lit : « Boudjemaa, inter-gauche, vient de Saint-Etienne,
+[est l']étoile actuelle de l'attaque de Colmar. »
+Sur ses coéquipiers, le même article dit : « Delacourt, qui vient de
+l'Excelsior de Roubaix, a la délicate mission de remplacer Gardet » ;
+« Gabrillargues, la dernière recrue de Colmar, international, ex-joueur de
+Sète, puis de Sochaux » ; « Belko, ailier [gau]che, vient de Sochaux ».
+
+LU : 269 sur 312.
+
+---
+
+## [173] L'Est républicain, 4 juin 1939, page 7 - à revoir
+
+Pièce du Drive, sous le titre du fichier « amende 500 francs Boudjemaa ». La
+page porte bien une liste de sanctions de la commission de discipline, avec
+des amendes infligées à des joueurs de Colmar pour incorrections envers
+l'arbitre lors d'un match Longwy-Colmar, mais la reconnaissance de caractères
+massacre les noms. Je ne peux pas affirmer qu'il y figure. A relire sur
+l'image elle-même, que l'auteur a.
+
+LU : 270 sur 312.
