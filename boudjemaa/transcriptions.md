@@ -2784,3 +2784,49 @@ photos/But-1946-bourreau.jpg, photos/But-1946-volley.jpg et
 photos/But-1946-restaurant.jpg.
 
 LU : 211 sur 312.
+
+---
+
+## [149] Colmar, hiver et printemps 1939
+
+La Frontière du 4 mars 1939, page 1 (ark bd6t516025800), donne la composition
+et le palmarès de l'équipe : « quelques performances réalisées [par l'é]quipe
+de Colmar : [victoire]s sur Nîmes, 4 à 0 ; Nice, 2 à [1] ; [Dunk]erque, 5 à 4
+et 3 à 1 ; Alès, 1 à 0 [...] ». Il y est inter gauche, entre Zopp et Belko.
+
+Gebweiler neueste Nachrichten du 13 mars 1939, page 11 (ark bpt6k31531630),
+Colmar bat Troyes 4 à 1, et deux choses en ressortent. D'abord une blessure
+ancienne : « Boudjemaa, der [wegen einer] alten Verletzung ganz selten ins
+[Spiel zwischen] beiden Toren ge[kommen ist] » - Boudjemaa, qui, à cause
+d'une vieille blessure, n'est que rarement entré dans le jeu entre les deux
+buts. Ensuite ses deux buts : « während [...] Boudjemaa noch zweimal, in der
+[...] Minute und 5 Minuten vor [Schluss], für das E[ndergebnis] sorgt » - il
+marque encore deux fois, dont une à cinq minutes de la fin.
+
+Le Petit Méridional du 17 mars 1939, page 3 (ark bpt6k41900312), Colmar
+contre Nîmes, et le portrait de la ligne d'attaque : « L'équipe de Colmar
+possède une ligne d'avants animée par un centre fougueux, que suivent deux
+inters travailleurs dont l'un, Tellechea, a une [belle clas]se, et l'autre,
+Boudjemaa, est [un anim]ateur de premier ordre, deux [joueurs] rapides et
+bons shooteurs. » Et, dans le match : « Pressé à son tour, Boudjema dégage en
+corner [...] Ce n'est que partie remise, car Boudjema fait une main à son
+tour. Penalty que Berecz botte sur Wozniak, et que celui-ci arrête. »
+
+Le Petit Méridional du 8 avril 1939, page 3 (ark bpt6k4190069h), décision
+disciplinaire : « Un avertissement pour jeu incorrect au cours du match
+Colmar-Dieppe du 26 mars aux joueurs Zopp et Boudjemaa des S.R. de Colmar. »
+
+L'Éclair du 9 avril 1939, pages 6 et 7 (ark bd6t537446725), Nîmes contre
+Colmar : « A la vingtième minute, Colmar conduit une contre-attaque. Emenoz
+centre : Boudjema contrôle la balle et marque. » Et, aux considérations :
+« Après lui, d'un ensemble homogène, il convient de détacher les noms de
+Gabrillargues et de Boudjema. »
+
+Gebweiler neueste Nachrichten du 11 avril 1939, page 10 (ark bpt6k31253926) :
+« Zwar raffte sich [Colmar] auf, konnte auch in der [...] durch Boudjemaa auf
+2:1 [stellen] » - Colmar se ressaisit et revint à 2-1 par Boudjemaa.
+
+Le Journal du Midi du 5 avril 1939, page 2 (ark bd6t510184165), donne la
+composition, lui à l'inter.
+
+LU : 220 sur 312.
