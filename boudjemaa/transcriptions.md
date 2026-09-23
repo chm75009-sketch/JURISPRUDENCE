@@ -1330,8 +1330,11 @@ LU : 73 sur 312.
 
 ## [70] Paris-soir, 7 février 1936, page 4
 
-Ark bpt6k76409855, vue 4. Composition d'une sélection appelée à rencontrer la
-Hongrie :
+Ark bpt6k76409855, vue 4. Composition d'une sélection de l'Entente Azuréenne
+appelée à rencontrer, le dimanche suivant, au stade du Fort-Carré à Antibes,
+« l'équipe officielle de Bulgarie ». (Rectifié le 23 septembre 2026 à la
+lecture de la colonne entière : j'avais écrit la Hongrie, le journal écrit la
+Bulgarie.)
 
 « Voici l'équipe : Ehms (Antibes) ; Kurdna (O.G.C. Nice), Schwartz (A.S.
 Cannes) ; A. Béraudo et Moudry (Nice), Amand (Antibes) ; Guimbard, Kovacs,
