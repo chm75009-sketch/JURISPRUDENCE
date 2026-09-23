@@ -1867,3 +1867,129 @@ qui était allé le chercher à Béja avec vingt-cinq billets de cinq cents
 francs. Le chapitre s'écrit tout seul.
 
 LU : 109 sur 312.
+
+---
+
+## [95] Paris-soir, 30 avril 1937, page 8
+
+Ark bpt6k7641619f, vue 8. La même sélection nord-africaine que La Dépêche de
+Constantine, avec une phrase de plus à la fin : « Le football nord-africain
+est appelé à un brillant avenir chez nous et c'est lui qui, peut-être,
+dictera la voie au football français en lui apportant cette fougue qui
+s'émousse tant sur la Métropole. Qui sait si la prochaine ossature de
+l'équipe de France ne sera pas nord-africaine ? »
+
+LU : 110 sur 312.
+
+---
+
+## [96] L'Information méridionale, 30 mai 1937, page 4
+
+Ark bd6t54775749m, vue 4. F.C. Sète contre O.G.C. Nice, avec Zamora dans les
+buts niçois.
+
+Composition : « O.G.C. Nice. - Zamora, Camarata, Kudrna, Rodriguez,
+Orlandini puis Vallé, Logez, Brusseaux, E. Galland, Samitier, Boudjema,
+Pellegrino. »
+
+Et cette phrase, que je rapporte telle quelle : « A Nice, les meilleurs
+furent Vallé, Zamora, Costamagna, Kudrna, Samitier. La partie de Boudjema fut
+intentionnellement défectueuse ; je veux croire qu'il y a erreur de la part
+de Mohamed. »
+
+VERDICT : un chroniqueur écrit, noir sur blanc, qu'il a mal joué exprès. Il
+ne donne aucun fait à l'appui. On est en fin de saison, quelques semaines
+avant son transfert à Saint-Étienne. A verser au chapitre 3 : le soupçon de
+mauvaise volonté ne tombe jamais sur les mêmes.
+
+LU : 111 sur 312.
+
+---
+
+## [97] Le Petit Havre, 23 juin 1937, page 5, et L'Écho des sports, 6 juillet 1937, page 4
+
+Arks bd6t52638531d et bpt6k9561327p. Les projets niçois pour la saison
+1937-38 : Zamora remplacera Chaisaz dans les buts, et « [Schulzen]dorff,
+Costamagna, Rodriguez, [...] Samitier et Boudjemaa » signent leur papillon
+de renouvellement. L'Écho des sports : « L'aile gauche aura vraisemblablement
+deux titulaires : Pellegrino et Boudjemaa. »
+
+LU : 113 sur 312.
+
+---
+
+## [98] Les Dernières Nouvelles de Strasbourg, 12 août 1937, page 17
+
+Ark bd6t526414597, vue 17. La formation niçoise annoncée avec Ricardo Zamora
+dans les buts, et, à l'avant, « Gnaoui, [...] Boudjemaa ».
+
+LU : 114 sur 312.
+
+---
+
+## [99] Le Journal du Midi, 17 août 1937, page 3, et Mülhauser Volksblatt, 21 août 1937, page 8 - LE TRANSFERT
+
+Arks bd6t51017953v et bpt6k31386963.
+
+Le Journal du Midi : « L'A.S. St-Etienne a "acheté" Boudjemaa pour 50.000
+francs [...] sont restés à Saint-Etienne. »
+
+Le Mülhauser Volksblatt, en allemand, sous le titre « Ein gutes Geschäft ! »
+(une bonne affaire) : « O.G.C. Nizza hat den tunesischen Fussballer
+Boudjemaa für 50.000 Frs. vorteilhaft (aber ganz begreiflich) an
+Saint-Etienne verkauft » - Nice a vendu le footballeur tunisien Boudjemaa à
+Saint-Étienne pour 50 000 francs, avantageusement, mais de façon bien
+compréhensible.
+
+VERDICT : un an après l'affaire, Saint-Étienne l'obtient, et cette fois
+légalement, contre 50 000 francs versés à Nice. Ce que la Fédération avait
+refusé à Saint-Étienne en 1936, l'argent l'obtient en 1937.
+
+LU : 116 sur 312.
+
+---
+
+## [100] Le Républicain du Gard, 21 août 1937, page 4
+
+Ark bd6t53562479t, vue 4. « L'A.S. de Saint-Etienne, désireuse d'accéder
+enfin à la division nationale, a très bien fait les choses et elle vient
+encore de se procurer les services de Boudjemaa, qui d'ailleurs ne sera pas
+qualifié pour jouer contre Nîmes. »
+
+LU : 117 sur 312.
+
+---
+
+## [101] Le Forez sportif, 1er septembre 1937, page 3
+
+Ark bpt6k6681891r, vue 3. Match d'avant-saison de Saint-Étienne : « [...] au
+centre Jacob, et [...] Boudjemaa faisait [...] »
+
+LU : 118 sur 312.
+
+---
+
+## [102] La Vigie marocaine, 8 septembre 1937, page 7
+
+Ark bpt6k20033878, vue 7. Revue des Nord-Africains du championnat de France :
+« Boudjema opère à Saint-Etienne, mais nous n'y trouvons plus Charbit. »
+Et la liste : « les joueurs suivants, toujours nord-africains : Brault,
+Gonzalez, Ciampo, Jasseron, Aoued, Benouna, Boudjema, Attali, Lopez,
+Alcazar, Gnaoui, Masse, jouaient en seconde division. Comme quoi, le
+football nord-africain possède en France de nombreux ambassadeurs. »
+
+LU : 119 sur 312.
+
+---
+
+## [103] L'Ouest-Éclair, 10 et 12 septembre 1937
+
+Arks bpt6k6308072 vue 9 et bpt6k6610121 vue 13. La composition de
+Saint-Étienne présentée en tableau : « Favier ; Casy, Rolhion ; Biechert,
+Odry, Rich ; Pasquini, Tax, Beck, Boudjemaa, Roux. »
+
+Et, cité du confrère parisien Louis Pere dans Football : « L'aile Tax-Pasquini
+fera frémir force défenses et, à côté d'un Beck trépidant, Boudjemaa reste un
+danger constant. »
+
+LU : 121 sur 312.
