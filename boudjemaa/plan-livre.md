@@ -76,8 +76,12 @@ Ce qui la fonde et ce qu'elle réserve :
   de l'article.
 
 6. LA GUERRE
-- Retour en Tunisie. Est-il arrêté ? (À VÉRIFIER)
-- Retour en France.
+- Retour en Tunisie. Il est fait prisonnier : Ce soir du 28 juin 1945 écrit
+  qu'il est « rentré de captivité ». Où et quand, on ne le sait pas encore.
+- Avant cela, le F.C. Sète, de novembre 1940 à 1941, puis la Tunisie :
+  Tunisie contre France le 7 mai 1941, où L'Auto salue « Djema Djema », la
+  « vedette locale ».
+- Retour en France, et retour au S.R. Colmar le 20 septembre 1945.
 
 7. SAINT-ÉTIENNE, DIVISION 1
 - Ses débuts sous le maillot vert : Alès contre Saint-Étienne, 3 à 2, le
@@ -104,10 +108,20 @@ CE QUE JE DOIS TROUVER
   30 juillet 1932, les autres matchs de l'U.S.B.
 - Le prénom de Martinelli, et son départ pour les Amériques.
 - La composition de l'équipe de Saint-Étienne à chacun de ses matchs.
-- Le match amical de Marseille, date et compte rendu.
-- La guerre : arrestation éventuelle au retour en Tunisie.
+- Le match amical de Marseille, date et compte rendu. TROUVÉ : 1er décembre
+  1935, Marseille 2 Nice 0, Le Petit Marseillais du 2 décembre 1935.
+- La guerre : arrestation éventuelle au retour en Tunisie. RÉPONDU le
+  23 septembre 2026 par les notes de l'auteur : Ce soir du 28 juin 1945 écrit
+  « Boudjema, l'ex-ailier gauche de Sète, rentré de captivité, a été transféré
+  à Nice ». Reste à savoir où et quand il a été fait prisonnier.
 - Ses saisons tunisiennes entre Nice et Colmar : la notice de l'A.S.S.E.
   donne l'ordre des clubs, U.S. Béjaoise, E.S. Tunis, Club Africain, Sfax,
   Club Tunisien, puis Nice, Saint-Étienne, U.S. Béjaoise, Colmar, Nice,
   Espérance de Tunis, Colmar. Reste à dater chacun.
-- Le match de D1 à Saint-Étienne : deux buts, penalty manqué.
+- Le match de D1 à Saint-Étienne : deux buts, penalty manqué. TROUVÉ :
+  29 mai 1938, Saint-Étienne 7 Tourcoing 3, buts aux 20e et 57e minutes.
+
+TOUT LE DOSSIER DE L'AUTEUR est lu, mis en ordre et sourcé dans
+dossier-auteur.md, avec dix éléments que je n'avais pas, dont le métier du père
+(boucher), la captivité attestée, le prix du transfert (50 000 francs) et le
+nom du président de Colmar venu le chercher en 1945 (Lehman).
