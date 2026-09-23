@@ -3416,3 +3416,36 @@ massacre les noms. Je ne peux pas affirmer qu'il y figure. A relire sur
 l'image elle-même, que l'auteur a.
 
 LU : 270 sur 312.
+
+---
+
+## [174] Le Grand Écho du Nord, 17 septembre 1938, page 6, et Le Journal, 23 avril 1939, page 6
+
+Deux pages récupérées après plusieurs jours de tentatives, Gallica ayant
+d'abord refusé de les servir.
+
+Le Grand Écho du Nord, avant Arras contre Colmar : « La formation habituelle
+est la suivante : Wozniak ; Gardet, Delacourt ; Villacampa, Gougain,
+Othmann ; Emenoz, Tellechea, Zopp, Boudjemaa, Belko. » Et le journal ajoute
+que Colmar semble « devoir réussir cette fois à prendre place parmi les
+ténors du football français ».
+
+Le Journal, sur Colmar contre le C.A. Paris, donne la composition en tableau,
+lui à l'inter : « Zopp, Boudjema, Heiné ; Othmann, Tellechéa, Gabrillargues ;
+Delacourt, Demuth ».
+
+LU : 272 sur 312.
+
+---
+
+## NOTE SUR LES PAGES QUI MANQUENT ENCORE - 23 septembre 2026
+
+Sur les 312 pages de la liste, 262 sont récupérées en bonne résolution et
+lues. Les 50 autres ne le sont pas encore : Gallica refuse de servir leurs
+images, avec le message « You are not authorized to access this resource »
+sur le service d'images, ce qui est une limite de débit et non un défaut du
+document. Les titres concernés sont surtout Le Mémorial de Saint-Étienne, Le
+Petit Provençal, L'Express de Mulhouse, l'Echo de Sélestat, Der Republikaner
+de Mulhouse, Le Jour, La Tribune de l'Aube et Le Progrès de la Somme.
+Un programme tourne en continu, une requête par minute, et reprend la liste
+tant qu'elle n'est pas vide. Je n'abandonne aucune de ces pages.
