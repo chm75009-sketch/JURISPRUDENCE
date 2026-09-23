@@ -2180,3 +2180,74 @@ La composition annoncée : « Wozniok ; Jan, Delacourt ; Demuth oder Villacampa,
 Gougain, Othmann ; Heiné, Tellechea, Zopp, **Boudjemaa**, Emonoz. »
 
 Il reste, et il reste inter gauche.
+
+## Pages 175 à 182
+
+Huit articles, du 17 au 27 septembre 1938. La saison colmarienne, si bien partie,
+se casse en deux : une défaite, un coup de pied, et la mobilisation.
+
+**Le Grand écho du Nord, 17 septembre 1938, page 6** (bpt6k4144035k). L'annonce
+d'Arras-Colmar présente le club alsacien à ses lecteurs du Nord : « Cette équipe
+montée de toutes pièces la saison dernière, a longtemps fait figure de favori dans
+la compétition 1937-1938, et a échoué de justesse pour la montée en Division
+nationale, prenant une belle troisième place derrière Saint-Etienne. Sérieusement
+renforcée pour le présent championnat, notamment par plusieurs éléments venant de
+Sochaux, elle semble devoir réussir cette fois à prendre place parmi les ténors du
+football français. La formation habituelle est la suivante : Wosniak ; Gardet,
+Delacourt ; Villacampa, Gougain, Othmann ; Emenoz, Teletchea, Zoop, **Boudjemaa**,
+Belko. »
+
+Il faut lire cette phrase deux fois. Le club qu'il vient de rejoindre a manqué la
+montée de justesse, et celui qui la lui a prise, en tête du groupe, c'est
+Saint-Etienne, celui qu'il venait de quitter. Il change de camp dans le même duel.
+
+**L'Auto, 17 septembre 1938, page 5** (bpt6k4635242n) donne la même composition,
+et, à côté, un tableau « Nos équipes et leurs entraîneurs » pour les seize clubs de
+première division : cinq entraîneurs français, cinq britanniques, trois allemands,
+deux hongrois, un uruguayen. Le football professionnel français de 1938 se dirige
+en langues étrangères.
+
+**Ce soir, 19 septembre 1938, page 6** (bpt6k7633614q) reprend les formations
+probables : Colmar avec **Boudjemaa** inter gauche.
+
+**Football, 21 septembre 1938, page 8** (bpt6k7214930n) rend le match.
+**Arras 2, Colmar 0.** 1 860 spectateurs, 10 600 francs de recette, arbitre
+M. Gaborit, buts de Roussin et Piatkowski, meilleur homme du terrain Laczewny.
+Le compte rendu commence pourtant par le contraire du score : « D'entrée Colmar,
+par un jeu étudié, s'avère dangereux. [Sans] l'excellente forme du gardien
+[arra]geois, les Colmariens auraient [pu] scorer une ou deux fois au cours de la
+première demi-heure. » Les crochets sont les mots que l'OCR n'a pas rendus et que
+la phrase impose. Composition : « COLMAR : Wozniak ; Jan, Delacourt ; Gardet,
+Gougain, Othmann ; Helne, Telléchéa, Zopp, **Boudjemaa**, Ermonoz. »
+
+Première journée sans but pour lui depuis le début du championnat.
+
+**Le Journal du Midi, 27 septembre 1938, page 2** (bd6t51018260w) et **Le
+Républicain du Gard, 27 septembre 1938, page 4** (bd6t535617769) portent les mêmes
+échos, et ce sont les faits neufs de ce lot.
+
+Le premier : « Au cours du match du championnat de 2e division professionnelle qui
+mettait aux prises le jeudi 22 septembre à Colmar, les S.R. de Colmar et le C.A.P.,
+l'arbitre, M. Laurent, a expulsé du terrain le demi-centre parisien Zivkovitch qui
+avait chargé brutalement et blessé le colmarien **Boudjemaa**. »
+
+C'est la première fois, dans tout ce qui a été lu jusqu'ici, qu'un adversaire est
+expulsé pour l'avoir blessé. Jusqu'à Colmar, les articles parlaient de sa vitesse,
+de son jeu scientifique, de sa dangerosité ; ici, on le porte hors du terrain.
+
+Le second : « L'A.S. de Saint-Etienne cherche à se renforcer et voudrait notamment
+acquérir de nouveaux joueurs pour sa ligne d'avant. Elle vient de recueillir la
+signature du joueur Gardet, des S.R. de Colmar. » Et, plus loin : « En échange de
+l'arrière Gardet qui lui, a été transféré par les S.R. de Colmar, l'A.S. de
+St-Etienne a cédé à ce club, son blond demi Biechert. » Les deux clubs continuent
+de s'échanger des hommes, un mois après lui.
+
+Le troisième, dans Le Républicain du Gard seul : « La commission du groupement des
+clubs autorisés a décidé qu'en raison des mesures prises, les matches prévus au
+calendrier du championnat de 2e division professionnelle pour jeudi prochain 29
+courant, n'auraient pas lieu et seraient remis à une date ultérieure. »
+
+« En raison des mesures prises » : c'est la mobilisation de Munich. Le championnat
+s'arrête. Il a vingt-quatre ans, il vient d'être blessé par un coup, et la saison
+qu'il commençait si bien se suspend sur une phrase administrative qui ne nomme pas
+ce qui arrive.
