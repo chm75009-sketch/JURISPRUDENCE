@@ -1000,3 +1000,60 @@ Nancy. Finalement : O.G.C. Nice bat F.C. Nancy par 3 buts à 1. »
 
 C'est donc ce but-là, marqué en seconde mi-temps le 7 mars 1937, qui a valu
 l'offre écossaise. Pages lues.
+
+## Pages 71 à 78 - le but contre Saint-Etienne, le 14 mars 1937
+
+**[70] Le Journal du Midi, 9 mars 1937, page 3** (ark bd6t51017475q). Colonne
+citante et ses voisines lues en entier. Deux brèves, reprises telles quelles
+de L'Auto de la veille. La première : « Zamora jouera à Nice, au moins jusqu'à
+la fin de la saison, Samitier l'y a décidé et Zamora est attendu à Nice, pour
+ce soir. » La seconde : « Le président d'un club écossais a assisté dimanche
+au match O.G.C. Nice contre F.C. Nanc[y], et impressionné par le jeu de
+Boudjemaa a offert, séance tenante, 5.000 livres pour le transfert de ce
+joueur. » L'article n'ajoute rien à L'Auto du 8 mars, il confirme seulement
+que la nouvelle a circulé hors de Paris dès le lendemain.
+
+**[72] Match (Paris), 15 mars 1937, page 4** (ark bpt6k41549475), sous la
+signature de Marcel Rossini. Lu en entier. C'est le compte rendu de la
+journée de championnat. Le passage : « On pensait bien que l'explication
+entre Nice et Saint-Etienne serait sévère, car une certaine affaire Boudjema
+a provoqué, entre ces deux clubs il y a quelques mois une animosité difficile
+à calmer. On croyait pourtant les Stéphanois capables de franchir le pas. Il
+faut féliciter Nice pour son succès et dire aussi que Saint-Etienne a perdu
+sur la Côte d'Azur deux points précieux. »
+
+Deux choses s'en tirent. L'affaire des deux licences n'était pas éteinte huit
+mois après : un journaliste parisien la donne comme la clef du match, et il
+parle d'une « animosité difficile à calmer » entre les deux clubs. Et le mot
+« explication » dit ce que les deux équipes venaient chercher.
+
+**[77] La Volonté indochinoise, 30 mars 1937, page 8** (ark bpt6k7294168j).
+Article lu en entier : ce n'est pas un article, c'est le relevé complet des
+résultats de la quinzaine, « Matches passés », colonne 2, sur trois colonnes
+de page. Le 14 mars, division II : « Nice (0) 2 St-Etienne (0) 1 (Boudjemea,
+Pellegrino) (Rolhion.) »
+
+C'est le fait, et il vaut mieux que le commentaire de Rossini : le but qui
+ouvre le score contre Saint-Etienne est de lui. Zéro à zéro à la mi-temps, il
+marque, Pellegrino ajoute le second, Rolhion réduit. Le journal de Saïgon, qui
+recopie les dépêches sans savoir ce qu'elles portent, donne la seule chose que
+Match n'a pas écrite : le nom du buteur. Orthographié « Boudjemea », une graphie
+de plus.
+
+Le même relevé, un peu plus bas, donne le classement de division II à cette
+date : Saint-Etienne 4e avec 28 points en 24 matches, Nice 5e. Les deux points
+perdus par Saint-Etienne ce jour-là comptaient pour la montée.
+
+**[76] L'Express du Midi, 30 mars 1937, page 3** (ark bpt6k5392774j). Lu en
+entier. Amical au Stade de Paris, à Saint-Ouen, devant douze mille personnes
+environ. « Nice avait comme gardien de but, le fameux goal espagnol Ricardo
+Zamora. » Puis : « Vers la 15e minute, à la suite d'une attaque générale,
+Boudjema fut arrêté par Hiden. Les deux joueurs roulèrent à terre, mais
+Pellegrino réussit à s'emparer de la balle et marqua très facilement un but. »
+Nice bat le Racing 1 à 0. Le tableau de la page confirme : « A PARIS, O. G. C.
+de Nice bat R. C. de Paris par 1 à zéro ».
+
+La scène est à garder telle quelle. Hiden, le gardien autrichien du Racing, le
+plus connu d'Europe à cette date, sort dans ses pieds ; les deux hommes roulent
+à terre ; Pellegrino pousse la balle dans le but vide. Le but est de Pellegrino,
+l'action est de lui.
