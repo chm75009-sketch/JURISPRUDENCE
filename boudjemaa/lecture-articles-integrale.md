@@ -3002,3 +3002,106 @@ texte de l'article, lui, écrit 8 à 1.)
 Six mois après son arrivée, le club qu'il a rejoint le 10 août est celui qui marque
 le plus de buts de la division. Il reste inter gauche, et son nom figure toujours à
 la même place dans la ligne.
+
+## Pages 247 à 254
+
+Six articles, du 13 mars au 9 avril 1939. Une blessure ancienne qui le gêne, deux
+buts marqués quand même, un penalty concédé de la main, un avertissement, et un
+journal du Midi qui trouve enfin la formule.
+
+### Colmar - Troyes, 12 mars 1939, 4 à 1
+
+**Gebweiler neueste Nachrichten, 13 mars 1939, page 11** (bpt6k31531630). Mi-temps
+0:1 pour Troyes, corners 9:3, 2 300 spectateurs. Colmar : « Wozniok ; Demuth,
+Delacourt ; Villacampa, Tellechea, Gabrillargues ; Meyer, Heiné, Zopp,
+**Boudjemaa**, Emonoz. »
+
+Le déroulé est cocasse : à la 18e minute un tir lointain de Raich est dévié par
+Demuth dans son propre but ; Heiné égalise d'un effort personnel ; puis « kurz
+darauf war [Gonzalès so] liebenswürdig, durch ein Sel[bsttor] eine 2:1 Führung der
+S. R. C. zu besorgen » - Gonzalès eut l'amabilité d'offrir l'avantage à Colmar par
+un but contre son camp. Deux buts contre son camp dans le même match, un de chaque
+côté.
+
+Et voici le passage qui compte, parce qu'il apporte un fait médical :
+
+« Bei Colmar dauerte es sehr lang, bis die Angriffsaktionen ins Rollen kamen. Meyer
+hatte einen seiner unglücklichen Tage und **Boudjemaa, der sichtlich unter seiner
+alten Verletzung litt, kam nur ganz selten ins Spiel. Mit seinen beiden Toren gegen
+Spielende bewies er wenigstens seine Schusskraft.** »
+
+Boudjemaa, qui souffrait visiblement de son ancienne blessure, n'entra que très
+rarement dans le jeu ; avec ses deux buts en fin de partie, il montra au moins sa
+puissance de tir. Et le journal date les deux : « **Boudjemaa** noch zweimal in der
+28. Minute und 5 Minuten vor Schluss ».
+
+**Une blessure ancienne.** C'est la première fois qu'un journal parle d'une blessure
+qui le suit. Rien dans ce qui a été lu jusqu'ici ne dit laquelle, ni quand. Le coup
+de Zivkovitch, le 22 septembre à Colmar, est le seul dont on sache qu'il l'a blessé
+et qu'il a valu une expulsion ; je ne dis pas que c'est celle-là, je dis que c'est
+la seule qui soit écrite. Il faudra la chercher.
+
+Zopp et Heiné, dit le même journal, furent les attaquants les plus efficaces. Le
+mauvais jour de janvier s'explique peut-être moins par la boue que par ce que le
+journal alsacien appelle « seine alte Verletzung ».
+
+### Montpellier - Colmar, 1 à 1
+
+**Le Petit Méridional, 17 mars 1939, page 3** (bpt6k41900312). Emenoz ouvre pour
+Colmar : « Emenoz lancé, passe Chalvidan et bat Blanc de près. » Puis, en fin de
+première mi-temps, une double réclamation de penalty : « le stade vibre des cris du
+public qui réclame un penalty pour une main de Villacampa. Ce n'est que partie
+remise car **Boudjema fait une main à son tour**. Penalty que Berecz botte sur
+Vosniack, et que celui-ci arrête. » Le gardien colmarien sauve la faute de son
+inter.
+
+Et les « APPRÉCIATIONS » du journal, qui valent d'être lues en entier :
+
+« L'équipe de Colmar possède une ligne d'avant animée par un centre [avant] fougueux,
+que suivent deux inters travailleurs dont l'un, Teletchea, a une joli[e clas]se et
+l'autre, **Boudjemaa, est [un ré]alisateur de premier ordre**, deux [joueurs]
+rapides et bons shooteurs. En demis, Othman, très accrocheur, et Villacampa, fin
+joueur, encadrent bien le solide Gabrillargues dont la classe n'est pas à
+démontrer. »
+
+Réalisateur de premier ordre. Après « le travailleur » du Petit Troyen, « le cerveau
+de la quintette offensive » de La Dépêche et « der Araber » du Sport alsacien,
+voilà le quatrième mot qu'on lui donne, et c'est celui d'un homme qui marque.
+
+### L'avertissement
+
+**Le Petit Méridional, 8 avril 1939, page 3** (bpt6k4190069h), dans la liste des
+sanctions de la commission de discipline : « Un avertissement pour **jeu incorrect**
+au cours du match Colmar-Dieppe du 26 mars aux joueurs **Zopp et Boudjemaa** des
+S. R. de Colmar. »
+
+Le même jour, la même liste inflige 200 francs d'amende à Arbiza pour voie de fait,
+100 francs à Rizzo pour incorrection, un mois avec sursis à Veillard pour « voie de
+fait préméditée ». L'avertissement est la sanction la plus légère de la colonne ;
+c'est tout de même la deuxième fois que son nom paraît dans une affaire de jeu dur,
+après le « combat de coqs » de novembre.
+
+### Nîmes - Colmar, 2 à 1
+
+**Le Journal du Midi, 5 avril 1939, page 2** (bd6t510184165) annonce le match et
+donne la formation colmarienne : « [Wozniak ;] Delacourt, Demuth ; [Villacampa,
+Gabril]largues, Othmann ; [Meyer, Tellech]ea, Zopp, **Boudjemaa**, [Emenoz] », et
+promet « un match [très dis]puté qui nous tiendra [en haleine jusqu']au coup de
+sifflet final ».
+
+**L'Éclair, journal quotidien du Midi, 9 avril 1939, pages 6 et 7**
+(bd6t537446725) : « **Nîmes Olympique bat les Sports Réunis de Colmar (2 à 1)** ».
+Nègre est « transcendant » et le meilleur homme du terrain ; il marque d'un shoot de
+quinze mètres « dans le coin gauche supérieur des buts de Wosniak » ; la pluie
+transforme le terrain en patinoire.
+
+Le but colmarien : « A la vingtième minute, Colmar conduit une contre-attaque.
+Emenoz centre : **Boudjema contrôle la balle et marque.** Le match, après des
+alternatives diverses, s'achèvera sur ce score. »
+
+Et l'appréciation : « **Wosniak**, qui défendit ses buts avec [beau]coup de brio, en
+fut le meilleur. Après lui, d'un ensemble homogène, il convient de détacher les noms
+de **Gabrillargues et de Boudjema**. »
+
+Quatre buts en quatre semaines, avec une blessure ancienne dont un journal alsacien
+dit qu'elle le gêne visiblement.
