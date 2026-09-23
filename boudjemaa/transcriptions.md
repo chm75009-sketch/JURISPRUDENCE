@@ -3302,3 +3302,55 @@ fin de l'affaire, et c'est aussi la seule fois où l'on voit quelqu'un
 s'adresser à lui autrement que par voie de règlement.
 
 LU : 264 sur 312.
+
+---
+
+## [170] Les deux fiches communiquées par l'OGC Nice
+
+Fichiers « Fiche Boudjemma communiquée par Serge OGC Nice.jpg » et
+« Carrière Boudjemmaa communiquée par Serge de OGC Nice.jpg », sur le Drive.
+
+LA FICHE :
+« Mohammed BOUDJEMAA - Attaquant. Né le 13/08/1914 à Henchir El Hania
+(Tunisie Française). Nationalité : France. Club formateur : Union Sportive
+Béjaoise (Béja).
+34 matchs, 3060 minutes jouées, 34 fois titulaire, 17 victoires, 4 nuls,
+13 défaites, 13 buts, 0 expulsion.
+Nom exact : Ben Mohamed Ben Brahim Ben El Djilani BOUDJEMAA.
+Il signe, amateur, en octobre 1935 au Gym mais il doit attendre début
+décembre pour pouvoir jouer. En juillet 1936, alors qu'il a toujours une
+licence amateur au Gym, Saint-Étienne lui fait signer un contrat
+professionnel, la F.F.F.A. le suspend trois mois. En octobre, la F.F.F.A. le
+qualifie bien à Nice, mais le suspend 3 mois de plus. »
+
+LA CARRIÈRE, saison par saison :
+« 1932-1933 Olympique de Béja. 1933-1934 Espoir Sportif de Tunis. 1934-1935
+Club Africain de Tunis, puis Club Sportif Sfaxien (Sfax). 1935-1936 et
+1936-1937 Olympique Gymnaste Club de Nice. 1937-1938 Association Sportive de
+Saint-Étienne. 1938-1939 Sports Réunis de Colmar. 1939-1940 à 1945-1946 Union
+Sportive Béjaoise. 1946-1947 Sports Réunis de Colmar. »
+
+CE QUE ÇA APPORTE ET CE QUE ÇA COMPLIQUE :
+- Le chiffre exact de son passage à Nice : 34 matchs, tous comme titulaire,
+  3060 minutes, 13 buts, jamais expulsé. Sa suspension explique le petit
+  nombre de matchs pour deux saisons.
+- La date de sa signature à Nice, octobre 1935, et le fait qu'il n'a pu jouer
+  qu'à partir de début décembre : cela colle exactement à ce qu'on a lu, le
+  Forez sportif l'annonce le 6 novembre 1935 et il joue contre Marseille le
+  1er décembre.
+- La fiche confirme le nom exact de l'acte de décès et le lieu de naissance
+  de la notice de Saint-Étienne.
+- Mais la liste des clubs contredit celle de Saint-Étienne sur le point de
+  départ : Nice dit « Olympique de Béja » en 1932-33, Saint-Étienne dit
+  « U.S. Béjaoise » en premier. Et la fiche elle-même donne l'U.S. Béjaoise
+  comme club formateur. Les journaux de l'époque, eux, montrent un Boudjemaa
+  chez les juniors de l'U.S.B. en janvier 1931, un Boudjemaa avant à l'U.S.B.
+  en juillet 1932, et un Boudjemaa à l'Olympique en janvier et octobre 1934.
+  Les deux fiches sont des compilations modernes ; la presse est la source.
+  Je laisse le point ouvert dans le livre, en donnant les deux.
+- Une réserve encore : la fiche fait jouer à l'U.S. Béjaoise toutes les
+  saisons de 1939-40 à 1945-46, alors que Ce soir du 28 juin 1945 dit qu'il
+  rentre de captivité, et que L'Auto l'annonce à Sète en décembre 1940 et
+  janvier 1941. Ces années-là restent à établir.
+
+LU : 266 sur 312.
