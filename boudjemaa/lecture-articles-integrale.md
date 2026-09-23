@@ -482,3 +482,128 @@ probable qu'une [victoire lui revienne]. »
 
 La suspension de trois mois le prive donc du premier match de la saison, le
 30 août 1936 contre le S.M. Caen. Pages lues.
+
+## Pages 39 à 46 - le jugement, le départ pour Béja, et six mois au lieu de trois
+
+**[38] Football, 2 septembre 1936, page 10 - LE PROCÈS-VERBAL, EN ENTIER.**
+La colonne citante et ses voisines lues en entier. Ce sont les procès-verbaux
+de la Commission centrale des statuts et règlements, lus affaire par affaire,
+du premier au dernier paragraphe. Deux le concernent.
+
+Séance du 13 août 1936 : « Affaire : Boudjemaa (O.G.C. Nice contre A.S.
+Saint-Etienne). - La Commission, après avoir convoqué les parties et audition
+de MM. Laval et Marey pour l'A.S. Saint-Etienne ; Pagliano [et Tanzi] pour
+l'O.G.C. Nice, et Boudjemaa Ben Mohamed, attendu qu'il y a [fait] nouveau,
+décide de rouvrir le dossier et remet à quinzaine pour supplément
+d'enquête. »
+
+Séance du 27 août 1936 : « Affaire Boudjemaa (A.S. Saint-Etienne c. O.G.C.
+Nice). La Commission, après étude des nouvelles pièces versées au dossier par
+les deux clubs, décide, sur la demande de l'A.S. Saint-Etienne, de convoquer
+les parties en cause pour la réunion du 3 septembre. »
+
+Son nom complet, tel que la fédération l'écrit dans son procès-verbal :
+**Boudjemaa Ben Mohamed**. Et il est là, en personne, devant la commission.
+Pages lues.
+
+**[39] Nord-sports, 10 septembre 1936, page 2 - L'ÉPILOGUE, ET LA
+DISPARITION.** Les colonnes citantes et leurs voisines lues en entier. La
+page est faite de la rubrique « Échos », lue en entier, et de la rubrique
+« Tuyaux », lue en entier elle aussi. L'article qui le concerne se lit d'un
+bout à l'autre :
+
+« La fameuse affaire Boudjemaa [...] est à son épilogue. Enfin. Sans bruit,
+heureusement, elle a été jugée par la Commission Centrale des Règlements qui
+avait prévu un supplément d'enquête et Boudjemaa, après avoir purgé sa
+suspension, demeurera qualifié à son premier club, l'O.G.C. Nice. L'affaire a
+été rude, rue de Londres. Le jeune et valeureux Président des « rouge et
+noir », M. Pierre Tanzi, [a] subi l'assaut d'une Commission rigide et sévère
+composée de 12 membres et les réflexions d'un quatuor stéphanois dans lequel
+figurait un avocat. En somme, le droit et la logique ont triomphé. Et ce
+n'est que justice si l'on tient compte que les « aiglons » niçois seront
+privés d'un de leurs meilleurs éléments durant dix matches de championnat. »
+
+Puis, et c'est la suite du même article, en tête de la colonne suivante :
+« Mais si l'affaire est juridiquement terminée, un problème se pose...
+Boudjemaa a disparu de Saint-Etienne sans crier gare et personne ne l'a revu.
+Des coups de téléphone lancés de Marseille à M. Tanzi auraient pu laisser
+croire que Mohamed était dans la cité phocéenne. Mais personne ne s'y est
+trompé. Des farceurs, respirant les brumes de la Loire en étaient les
+auteurs. Mohamed va être recherché. Il reviendra à Nice, tout penaud, honteux
+comme un renard qu'une poule aurait pris. »
+
+Il était donc à Saint-Étienne pendant l'instruction, et il en repart sans
+prévenir. C'est la deuxième disparition en sept mois. Pages lues.
+
+**[40] Nord-sports, 10 septembre 1936, page 4 - IL EST REPARTI EN TUNISIE, ET
+NICE PERD SANS LUI.** Les colonnes citantes et leurs voisines lues en entier,
+soit le compte rendu de Boulogne 4 Nice 1 du 6 septembre, celui de
+Dunkerque 0 Charleville 2, la présentation de la journée suivante et le long
+portrait d'Ernest Payne.
+
+La composition niçoise, sans lui : « Chaisaz ; Kurdna et Schul[zendorf] ;
+[Rodriguez], Galland et Palmesani ; Lovichy, Gérin, Dubois, Csapo et
+Pellegrino. » Dubois marque le seul but niçois, Boulogne répond par quatre en
+dix minutes. Et le chroniqueur écrit que l'équipe vue à Boulogne l'an passé,
+celle « dans laquelle Boudjemaa avait fait si grosse impression », pratiquait
+un bien meilleur football.
+
+Puis, dans la rubrique de brèves : « Et toujours l'affaire Boudjemaa ! Les
+Stéphanois ont appris à leurs dépens maintenant ce qu'il en coûte de se
+moquer de [la Fédération]. Ce dernier, comprenant maintenant que l'attitude
+des dirigeants de l'A.S. Saint-Etienne était plus que trouble, vient sans
+autre forme de procès de leur fausser compagnie, regagnant sa Tunisie natale,
+avant de retrouver le chemin de la Riviera lorsqu'il aura purgé ses trois
+mois de suspension. »
+
+Il rentre donc en Tunisie en septembre 1936. Pages lues.
+
+**[41] Le Radical de Marseille et [42] L'Intransigeant, 15 septembre 1936 -
+LA MÊME BRÈVE, ET BÉJA.** Les colonnes citantes et leurs voisines lues en
+entier dans les deux journaux. Celles du Radical de Marseille sont remplies
+par l'évacuation des usines métallurgiques, le meurtre de la rue
+Bernard-du-Bois et la Foire de Marseille, lus en entier ; la brève sportive y
+est réduite à quelques mots de fin de colonne. Celle de L'Intransigeant la
+porte en entier, dans la rubrique « Football » :
+
+« Boudjemaa, le versatile avant centre de Nice, qui avait signé deux licences
+et a écopé d'une suspension de trois mois pour cela, a déclaré qu'il ne
+voulait plus revenir sur la Côte d'Azur. Il est actuellement à Béja. »
+
+Béja, écrit par un quotidien parisien. Et la lecture des deux pages confirme
+ce que j'avais noté ailleurs : Le Radical de Marseille ne fait que reprendre
+la série de brèves de L'Intransigeant, mot pour mot, y compris l'engagement
+de l'arrière Niko par Abbeville et la tournée de Ferencvaros. Ce n'est pas
+une source indépendante. Pages lues.
+
+**[43] L'Écho du Maroc, 18 septembre 1936, page 9 - UN TÉMOIN NOMMÉ.** La
+colonne citante et ses voisines lues en entier, soit l'annonce du match Stade
+Marocain contre Roches-Noires, l'article sur Charlton Athletic repris du
+Jour, le bulletin de la Bourse de Paris et la rubrique « Échos pris sur le
+vif », lue brève par brève. Celle qui le concerne :
+
+« BOUDJEMAA, le fantasque, avant-centre des « Aiglons » niçois, dont on était
+sans nouvelles depuis quelques jours, se trouve actuellement à Béja où il
+attend que soit terminée sa suspension. Il a déclaré à un de nos amis, M.
+Ducousso, ne plus vouloir retourner à Nice. »
+
+Un nom à retenir, celui du témoin : M. Ducousso, correspondant ou ami du
+journal, qui l'a vu à Béja en septembre 1936. Pages lues.
+
+**[45] L'Éclair, 8 octobre 1936, page 3 - TROIS MOIS DEVIENNENT SIX.** La
+colonne citante et ses voisines lues en entier, soit le récit de la première
+nuit des Six Jours de Paris, le Racing 2 Chelsea 1 à Londres et les décisions
+du bureau fédéral. Celle qui le concerne se lit en entier :
+
+« D'autre part, le bureau fédéral a[vait à étu]dier [le cas de] Boudjema de
+l'O.G.C. [Nice. Ce joueur], avant le début de la [s]aison, [avait sign]é deux
+licences ; l'une pour l'O.G.[C. Nice], l'autre pour [Saint-Éti]enne. La
+Commission centrale des règlements avait déclaré [ap]rès enquête que
+Boudjema serait qua[lifi]é à Nice et lui avait infligé une suspension de
+trois mois. Le bureau fédéral a confirmé la décision de la Commission des
+règlements, précisant que Boudjema reste qualifié à Nice, mais a porté la
+suspension de trois à six mois. »
+
+Six mois, et non trois. C'est la sanction définitive, et elle le tient hors
+des terrains jusqu'au début de 1937. La même colonne donne les arbitres de la
+journée suivante, dont M. Perrier pour Nice contre Troyes. Pages lues.
