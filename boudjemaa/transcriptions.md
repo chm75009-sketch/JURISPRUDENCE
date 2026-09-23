@@ -3239,3 +3239,44 @@ Schulzendorf, Kurdna, Rodriguez, E. Galland, Palmesani, Gérin, Lovicky,
 [Sil]lam, Logez, Dubois, Pellegrino, [...] Lovy, Gordolon. »
 
 LU : 262 sur 312.
+
+---
+
+## [168] L'Auto, 16 septembre 1937 - « c'était un diable déchaîné »
+
+Article de la « Petite chronique de la balle au bond », sous le titre
+« Erreur ne fait pas compte ». Pièce venue du Drive de l'auteur, lue en
+entier.
+
+« Après bien des [aléas] et des joutes oratoires, l'O.G.C. de Nice et l'A.S.
+de Saint-Etienne ont fini par se mettre définitivement d'accord sur le compte
+de Boudjemaa. Ce joueur de couleur, que les Stéphanois avaient fait plus noir
+que le charbon, leur apparaît, maintenant qu'il joue chez eux, plus blanc que
+la blanche hermine...
+
+Plaisanterie à part, ils ont avec lui un attaquant plein de dynamisme et
+d'ardeur. On s'en est aperçu dès le premier match que Boudjemaa a joué à
+l'A.S. de Saint-Etienne. C'était à Rive-de-Gier. Heureux d'en avoir enfin
+fini avec toutes les histoires et de retrouver le football après avoir passé
+ses vacances dans son bled tunisien, Boudjemaa s'ébattait comme poulain dans
+un pré. Il courait, dribblait, shootait, c'était un diable déchaîné.
+
+Lorsqu'il rentra au vestiaire, frais comme l'œil et applaudi par les
+assistants, une haute personnalité, toute pénétrée de sa compétence, s'avança
+vers lui, et, pour lui faire un compliment, lui dit : "Mais, mon garçon, vous
+n'avez pas de rate." Seulement, Boudjemaa n'est pas encore tout à fait
+familiarisé avec les finesses de la langue française, et il prit ça pour une
+insulte. On l'accusait donc de manquer de quelque chose ? On eut toutes les
+peines du monde à le calmer, à lui expliquer que dire à quelqu'un qu'il n'a
+pas de rate, c'est, par le fait même, affirmer qu'il est infatigable, et non
+pas qu'il est privé de quelque chose d'essentiel. »
+
+VERDICT : deux choses. La première est une scène, et c'est la plus belle qu'on
+ait de lui : le vestiaire de Rive-de-Gier, les applaudissements, le
+malentendu sur « vous n'avez pas de rate », et cet homme de vingt-trois ans
+qu'on a du mal à calmer parce qu'il a cru qu'on l'insultait. La seconde est
+pour le chapitre 3 : « Ce joueur de couleur, que les Stéphanois avaient fait
+plus noir que le charbon, leur apparaît, maintenant qu'il joue chez eux, plus
+blanc que la blanche hermine. » Le journaliste croit faire un bon mot.
+
+LU : 263 sur 312.
