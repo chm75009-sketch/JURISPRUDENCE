@@ -3105,3 +3105,85 @@ de **Gabrillargues et de Boudjema**. »
 
 Quatre buts en quatre semaines, avec une blessure ancienne dont un journal alsacien
 dit qu'elle le gêne visiblement.
+
+## Pages 255 à 262
+
+Six articles, du 11 au 23 avril 1939. Une tournée de Pâques dans le Midi, une équipe
+remaniée au point d'étonner son propre journal, et, pour la première fois, une
+phrase qui le place au niveau national.
+
+### La tournée de Pâques
+
+**Gebweiler neueste Nachrichten, 11 avril 1939, page 10** (bpt6k31253926), sous le
+titre « Osterreise der Colmarer Profis ». Deux matches en deux jours, quatre points
+en jeu, un seul rapporté.
+
+Samedi à Nîmes, sous la pluie : « bereits in der 5. Minute hatte der [Linksaussen
+von] Nimes nach Alleingang [das Tor erzielt]. Zwar raffte sich [Colmar] auf, konnte
+auch in der [zweiten Halbzeit] durch **Boudjemaa** auf 2:1 [verkürzen], aber zu
+einem Unentschieden reichte es jedoch nicht mehr. In der Zwischenzeit [hatte sich]
+Delacourt [verletzt]. » Son but ne suffit pas, et Delacourt se blesse.
+
+Dimanche à Nice, au soleil, 1:1. Et le journal n'en revient pas de la composition :
+« Wozniok ; Demuth, **Zopp** ; Gougain, Kreuzer, Othman ; Meyer, **Gabrillargues**,
+Heiné, **Boudjemaa**, Emonoz. » Zopp, l'avant-centre, joue arrière ; Gabrillargues,
+demi-centre, joue inter droit. « Angesichts dieser Aufstellung kommt man aus dem
+Staunen gar nicht mehr heraus. » Devant une telle formation, on ne sort plus de
+l'étonnement.
+
+Villacampa et Tellechea manquaient, blessés ; Delacourt aussi, depuis la veille ;
+Heiné était gêné dès le début du match par une blessure. Emonoz égalise cinq minutes
+avant la pause, et le journal soutient que Colmar aurait dû gagner : « die S. R. C.
+besass nach der Pause [die] Möglichkeit, mindestens 4-[5 Tore] zu erzielen, wenn nur
+ein [wenig Schussglück] dabei gewesen wäre. »
+
+Bilan : « Somit hat die [S.R.C. von den] feilgebotenen vier Punkten, an beiden Tagen
+nur einen Punkt mit nach Hause bringen können. »
+
+### Colmar - Arras, 1 à 1
+
+**Le Courrier du Pas-de-Calais, 18 avril 1939, page 5** (bd6t51462842h). Krickl
+ouvre pour Colmar à la 15e minute, Nicolas égalise à la 57e « qui utilisa avec
+beaucoup d'à-propos un centre de Woerth ». Le journal artésien est fier : « Toute
+l'équipe arrageoise a droit à des félicitations car elle a réussi un exploit que peu
+d'équipes ont accompli au stade [Joseph-]Lehmann. » Et il ne ménage pas les
+adversaires : « Les avants alsaciens se montrèrent inefficaces, mais il faut dire
+[que] la défense visiteuse joua avec brio. »
+
+L'équipe : « Colmar. - Wozniak ; Demuth, Zopp ; Villacampa, Gabrillargues, Logez ;
+Gougain, Heine, Krickl, **Boudjemaa**, Emenoz. » Zopp est encore arrière.
+
+**Les Dernières nouvelles de Strasbourg, 20 avril 1939, page 6** (bd6t526584640)
+reprennent la sanction de mars : « La Commission [de dis]cipline a adressé [un
+avertissement] pour jeu incorrect [à Zopp] et **Boudjemaa** [au cours du] match
+Colmar[-Dieppe]. »
+
+### Buffalo, 23 avril 1939
+
+Le C.A. Paris reçoit Colmar au vélodrome Buffalo, et c'est le seul match de
+championnat professionnel de la journée à Paris. Les trois quotidiens parisiens en
+parlent le matin même, et les trois donnent Colmar favori.
+
+**Excelsior, 23 avril 1939, page 6** (bpt6k4611560t) donne les équipes : « C. A. P.
+: Gonzalès ; Calmels, Malvy ; Bersoullé, Cardon, Schuster ; Lamanna, Fascinek,
+Bongiorni, Fructuoso, Poutoux. **Colmar** : Wosniak ; Demuth, Delacourt ;
+Gabrillargues, Tellechea, Othmann ; Gougain, Heiné, Zopp, **Boudjema**, Emenoz. »
+
+**Le Journal, 23 avril 1939, page 6** (bpt6k7634645k), sous le titre « **Le C. A.
+Paris en danger devant Colmar** » : « La tâche qui attend les Capistes n'est pas des
+plus aisées si l'on veut bien considérer que Colmar, sixième au classement, possède
+une ligne d'attaque particulièrement dangereuse. »
+
+**Paris-midi, 23 avril 1939, page 4** (bpt6k47379707), sous le titre « **Le C.A.P.
+risque d'être battu par Colmar** », écrit la phrase :
+
+« Colmar a effectué une saison très régulière et terminera certainement l'épreuve
+dans le groupe [de tête, immédiate]ment derrière les leaders. L'équipe alsacienne
+compte [de tr]ès bons éléments, comme Ga[brillargues, Tellechea], Zopp [et]
+**Boudjemaa, qui est un des meilleurs intérieurs français**. »
+
+Un des meilleurs intérieurs français. Il a vingt-quatre ans, il joue en deuxième
+division, il rembourse 500 francs par mois à Saint-Etienne, il traîne une ancienne
+blessure, et un quotidien parisien le range parmi les meilleurs à son poste dans le
+pays. C'est, de tout ce qui a été lu depuis le début, la phrase qui le situe le plus
+haut.
