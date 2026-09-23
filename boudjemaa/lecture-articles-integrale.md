@@ -2013,3 +2013,75 @@ Et, quelques lignes plus bas dans la même colonne, l'équipe de son ancien club
 Monsallier, Luciano, J. Vallé, Alcazar, Baudin. » De l'équipe de 1937, il ne
 reste que Schulzendorf, Médan et Alcazar. Zamora, Samitier, Kudrna, Pellegrino,
 Gnaoui : tous partis.
+
+## Pages 159 à 166 - le premier but de la saison, et une équipe qui déçoit
+
+Toute cette série tourne autour d'un seul match : Rennes-Colmar, le jeudi
+1er septembre 1938, première journée de deuxième division. Il y marque.
+
+**[159] Le Petit Journal, 1er septembre 1938, page 8** (ark bpt6k636622w). Lu
+en entier. L'avant-match, avec un renseignement neuf : « Colmar a poursuivi en
+grand son effort de la saison dernière : Belko, **Boudjemaa**, Wozniack,
+Gougain sont les nouvelles recrues de cette équipe, **entraînée par Lowy**,
+lequel dispose maintenant de 24 joueurs "pros". »
+
+Lowy est l'entraîneur qui était à Nice quand il y est arrivé en 1936, et que
+Kudrna a remplacé à l'été 1937. Ils se retrouvent à Colmar deux ans plus tard.
+C'est le seul fil qui relie ses trois clubs.
+
+Le journal pronostique : « Un match nul ne nous étonnerait pas. »
+
+**[162] L'Ouest-Éclair, 2 septembre 1938, page 10** (ark bpt6k631163q), compte
+rendu signé Paul Béguier. Lu en entier. C'est le plus long et le plus vivant
+des trois versions, et le plus dur pour Colmar.
+
+Le but, à la 11e minute : « **Comme un coup de fusil, une attaque de Colmar est
+partie. La défense rennaise a hésité. Pas Boudjemaa, qui [bat] froidement
+Miramond à la 11e minute.** »
+
+La composition, imprimée en vis-à-vis : « S. R. Colmar : Wozniak / Gardet, Jan
+/ Othmann, Gougain, Demuth / Belko, **Boudjemaa**, Zopp, Teletchéa, Aravit. »
+
+Rennes renverse tout : Belunza égalise à la vingtième, remet ça avant la pause,
+puis marque un troisième dès la reprise. Teletchéa réduit d'un boulet de vingt-
+cinq mètres à deux minutes de la fin, et Bonnet, sur l'engagement qui suit,
+part du rond central, dribble « un, deux, trois, quatre, cinq, peut-être six
+adversaires » et marque le quatrième. **Rennes bat Colmar 4 à 2.**
+
+Le jugement d'ensemble : « Des Colmariens, avouons qu'ils nous ont déçu. Ligne
+de demis médiocre. Défense incertaine (mais chanceuse !). **Avants moyens avec
+deux inters trop soucieux de soutenir leurs demis** (on comprend ça !). Deux
+ailiers timorés (dont Belko de plus en plus gras) et un centre-avant sans
+perçant et mal lancé. Les meilleurs furent : à Rennes, Bordier, Belunza et
+Braün. A Colmar : Teletchéa et Gardet. »
+
+Il est l'un des deux inters, et c'est lui qui a marqué le seul but de la
+première heure. Le chroniqueur ne le nomme ni dans les bons ni dans les
+mauvais, et lui reproche, avec l'autre inter, de reculer pour aider les demis.
+Le même reproche, presque, qu'à Gebweiler quinze jours plus tôt, mais à
+l'envers : trop personnel contre Breda, trop en retrait à Rennes.
+
+Béguier note aussi, en passant, « le méchant coup de pied que reçut de
+Teletchéa le brave Bœsinger », et, en seconde période, que les Colmariens
+« emploient la force pour se faire respecter. C'est détestable ».
+
+**[161] La Dépêche de Brest, 2 septembre 1938, page 6** (ark bpt6k3493724). Lu
+en entier. Version courte : « Colmar est le pre[mier à attaquer et toute] la
+défense ren[naise est prise]. **Boudjemaa reprend [et bat] imparablement
+Mir[amond]**. Colmar produit [du bon jeu] mais Rennes réagit [avec plus de]
+cohésion [...] égalise à la 24e minute. »
+
+**[163] L'Écho du Maroc, quotidien de Rabat, 2 septembre 1938, page 7** (ark
+bpt6k86611093). Lu en entier. Version de dépêche, avec un détail que les
+autres n'ont pas : **« A la 15me minute, Boudjemaa reprend la balle à
+[A]ravit et marque pour Colmar** ; mais cinq minutes plus tard, Belunza égalise
+pour Rennes. »
+
+Le but vient donc d'une passe d'Aravit, l'ailier droit. Pour la minute, les
+trois journaux donnent 11, 15 et « le premier quart d'heure » : l'écart est
+banal, le fait ne l'est pas. **Il ouvre le score du championnat pour son
+nouveau club, dans le match vedette de la journée, contre l'équipe qui sera
+championne.**
+
+Et la saison s'ouvre comme la précédente s'était ouverte à Saint-Etienne : il
+marque, et l'équipe perd.
