@@ -590,15 +590,6 @@ Martinelli : Martinelli (II) demi, Martinelli (I) avant, aux côtés de
 Boudjemaa - la même répartition que dans la composition de 1931.
 Fac-similés : photos/SoukAhras-1932-p1.jpg et photos/SoukAhras-1932-p2.jpg.
 
-Complément du 22 septembre 2026, lu sur la même page de L'Afrique du Nord
-illustrée du 28 février 1931 : le match photographié est celui de la Coupe de
-l'Afrique du Nord, joué à Bône au stade Sultana le 8 février 1931, arbitré
-par M. Riéra, président de la Ligue d'Alger, « devant une nombreuse galerie ».
-Bône l'emporte 2 à 0 ; le but décrit est celui de Miglioni, « une balle à ras
-de terre, dans le coin ». Composition de Bône (damiers) : Martinez ; Roggy et
-Delgatto ; Furno, Xerri et Braia ; Parizot, Cesari, Miglioni, Degiacomo,
-Guardamania. La planche légendée pour le livre est photos/USBeja-1931-planche.jpg.
-
 ---
 
 ## [26] Le Petit Matin (Tunis), 16 janvier 1934, page 7
@@ -1354,17 +1345,124 @@ LU : 74 sur 312.
 
 ---
 
-## Note du 23 septembre 2026 - le club tunisien est tranché
+## [71] Football (hebdomadaire), 19 août 1936, page 4
 
-La notice de l'A.S. Saint-Étienne, transmise par l'OGC Nice et transcrite
-dans documents-ogc-nice.md, donne la suite de ses clubs : « US Bejaoise
-(Tunisie) - ES Tunis - Club Africain - Sfax - Club Tunisien - OGC Nice -
-ASSE - US Bejaoise - Colmar - Nice - Espérance Tunis - Colmar ».
+Ark bpt6k72148947, vue 4. Rubrique « Pêle-mêle », en italique. Texte relu
+ligne à ligne sur l'image, en pleine résolution :
 
-C'est donc l'Union Sportive Béjaoise, et non l'Olympique de Béja, qui l'a
-formé. Les entrées [26], [45] et [47] ci-dessus, qui laissaient la question
-ouverte, se lisent désormais ainsi : le Boudjemaa de l'Olympique de Béja
-(1929 à 1934) est un homonyme, et le nôtre est celui des juniors de l'U.S.B.
-en janvier 1931 et de l'équipe première à Souk-Ahras en juillet 1932. Le
-derby du 15 janvier 1934 l'oppose donc à son homonyme, sauf à ce qu'une
-pièce dise le contraire.
+« L'AFFAIRE BOUDJEMAA REBONDIT. Ce footballeur tunisien qui avait signé cette
+année deux licences, l'une pour Nice, l'autre pour Saint-Etienne, et qui,
+pour cela, avait été condamné à trois mois de suspension, est venu, en effet,
+rue de Londres affirmer sur l'honneur qu'il n'avait signé qu'une seule fois
+un contrat "pro" et qu'il l'avait signé pour Saint-Etienne. Il accuse même
+l'un de ses camarades niçois d'avoir contrefait sa signature. Dans l'attente
+d'une décision de la commission compétente, abstenons-nous de tout autre
+commentaire. Mais notons toutefois que Boudjemaa, ayant accepté de toucher sa
+mensualité de joueur professionnel à Nice, donnait le mois dernier
+l'impression d'accepter le titre d'"Aiglon". »
+
+VERDICT : c'est la seule pièce où on l'entend, lui. Il se déplace rue de
+Londres, au siège de la Fédération, et affirme sur l'honneur n'avoir signé
+qu'une fois, pour Saint-Étienne, et qu'un joueur niçois a imité sa signature.
+Aucun des articles niçois ne rapporte cette version. Pièce centrale du
+chapitre 2.
+
+LU : 75 sur 312.
+
+---
+
+## [72] L'Écho des sports, 25 août 1936, page 4
+
+Ark bpt6k95612814, vue 4. Présentation de l'équipe de Nice pour la saison :
+« Ajoutons à cette équipe [...] que Boudjemaa, le meilleur [...], le seul
+shooteur, a été suspendu [...] et l'on peut se [douter] facilement que ce
+n'est [pas] cette année que les Niçois [feront des] étincelles. »
+
+LU : 76 sur 312.
+
+---
+
+## [73] Nord-sports, 27 août 1936, pages 2 et 4
+
+Ark bpt6k8661871v. Rubrique « Tuyaux » :
+
+« A en croire un confrère stéphanois, Boudjemaa, ce doux agneau, a été
+victime d'une machination terrible de la part de ses dirigeants de l'O.G.C.
+Nice. La vérité est tout autre, nous écrit-on de Nice. [La preu]ve : il a
+signé chez les "Aiglons" [...] il a même encaissé, contre reçu, sa mensualité
+de juillet, mensualité due au titre de joueur professionnel. Et Mohamed,
+illettré peut-être, mais qui [...] »
+
+Page 4, l'effectif niçois de la saison : « Avants : Lovichy, Sillam, Csapo,
+Boudjema, [Gérin,] Dubois [...] Palmesani et Pellegrini sont issus du Racing
+Club de Tunis. »
+
+RACISME, chapitre 3 : « ce doux agneau », « Et Mohamed, illettré
+peut-être ». On parle de lui comme d'un enfant ou d'une bête.
+
+LU : 78 sur 312.
+
+---
+
+## [74] L'Écho du Maroc, 27 août 1936, page 6
+
+Ark bpt6k8660555d, vue 6. L'effectif niçois annoncé sous la présidence de
+Me Pierre Tanzi : « au but, Chaisaz et Audibert ; à l'arrière :
+Schulzendorf, Kudrna, Peter, Frustz ; en demis : Rodriguez, Szolar, Galland,
+Hirt, Palmesani, Falocci ; à l'avant : Lovichy, Sillam, Csapo, Boudjemaa,
+Gérin, Dubois, Pellegrino, Gordolon, Schiaffino. »
+
+LU : 79 sur 312.
+
+---
+
+## [75] Le Républicain du Gard, 29 août 1936, page 3
+
+Ark bd6t53562013p, vue 3. Avant la première journée : « l'O.G.C. de Nice
+n'est pas, lui non plus, resté inactif et bien qu'il doive opérer dimanche
+sans le concours de son avant-centre Boudjemaa, il est probable qu'une
+[bonne équipe sera alignée]. »
+
+LU : 80 sur 312.
+
+---
+
+## [76] Football (Paris), 2 septembre 1936, page 10
+
+Ark bpt6k72148962, vue 10. Procès-verbaux officiels de la Commission. Deux
+passages :
+
+« Affaire Boudjemaa (O.G.C. Nice contre A.S. Saint-Etienne). - La Commission,
+après avoir convoqué les parties et audition de MM. Laval et Marey pour l'A.S.
+Saint-Etienne, Pagliano et [...] pour l'O.G.C. Nice, et Boudjemaa Ben
+Mohamed, attendu qu'il y a [fait] nouveau, décide de rouvrir le dossier et
+remet à quinzaine pour supplément d'enquête. »
+
+Et plus loin : « Affaire Boudjemaa (A.S. Saint-Etienne contre O.G.C. Nice). La
+Commission, après étude des nouvelles pièces versées au dossier par les deux
+clubs, décide, à la demande de l'A.S. Saint-Etienne, de convoquer les parties
+en cause pour la réunion du 3 septembre. »
+
+VERDICT : il est entendu en personne par la Commission, et le nom de Marey,
+celui que la notice de Saint-Étienne dit être allé le chercher dans les souks
+de Sousse, figure au procès-verbal comme représentant du club stéphanois.
+
+LU : 81 sur 312.
+
+---
+
+## [77] Nord-sports, 10 septembre 1936, page 2
+
+Ark bpt6k9376097n, vue 2.
+
+« La fameuse affaire Boudjemaa est à son épilogue. Enfin, et sans bruit,
+heureusement, elle a été jugée par la Commission Centrale des Règlements qui
+avait prévu un supplément d'enquête, et Boudjemaa, après avoir purgé sa
+suspension, demeurera qualifié à son premier club, l'O.G.C. Nice.
+
+L'affaire a été rude, rue de Londres. Le jeune et valeureux Président des
+"rouge et noir", Me Pierre Tanzi, a subi l'assaut d'une Commission rigide et
+sévère composée de 12 membres et les réflexions d'un quatuor stéphanois dans
+lequel figurait un avocat. En somme, le droit et la logique ont [eu raison]. »
+
+LU : 82 sur 312.
