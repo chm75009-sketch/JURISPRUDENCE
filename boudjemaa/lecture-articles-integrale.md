@@ -3437,3 +3437,143 @@ la France dans la colonne voisine.
 **Ce que ce lot ne dit pas.** Rien sur la mobilisation, rien sur 1939-1940, rien sur
 la manière dont il est rentré en Tunisie, rien sur une captivité. Le seul prisonnier
 nommé dans ces pages est l'entraîneur Jean Laurent. Il faudra chercher ailleurs.
+
+## Pages 287 à 294
+
+Huit articles, de novembre 1943 à juin 1945. C'est le lot le plus important de toute
+la lecture : on l'y voit jouer dans Tunis libérée, et la dernière ligne dit qu'il
+rentre de captivité.
+
+**Deux avertissements d'abord**, parce que deux articles de ce lot portent son nom et
+ne le concernent pas.
+
+**L'Écho de Tunis, 1943, page 2** (bpt6k8379271t), tribunal correctionnel : treize
+hommes ont mis au pillage, en décembre 1942 et pendant l'occupation allemande, le
+domaine de Saint-Joseph de Tébourba. Parmi les condamnés : « **Boudjema ben Amor ben
+Hadj Amara Zlassi**, à 5 ans d'emprisonnement ». Ce n'est pas lui : ni le même prénom
+d'usage, ni la même filiation, ni la même ville.
+
+**Le Petit Matin, Tunis, 1944, page 2** (bpt6k83929773), tribunal militaire, présidé
+par le colonel Tracol : « Le sieur **Mohamed Boudjema Ben R. Barim, originaire de
+Testour**, qui avait déployé au profit [des] troupes de l'Axe une infâme activité, a
+été condamné à mort et à la confiscation de tous ses biens présents et à venir. 7
+chefs d'accusation ont été relevés à son encontre : dénonciations de résistants,
+arrestations de soldats anglais, détention illégale d'armes et de munitions de
+guerre, tentatives d'homicides volontaires, vols. » Ce n'est pas lui non plus :
+Mohamed Boudjema ben R. Barim, de Testour, condamné à mort pour collaboration, est un
+autre homme. Je l'écris noir sur blanc parce que le nom se ressemble assez pour qu'on
+s'y trompe, et que se tromper là-dessus serait impardonnable.
+
+### 8 novembre 1943 : le gala sportif de la Résistance
+
+**L'Écho de Tunis, 8 novembre 1943, page 2** (bpt6k8379253w) annonce « deux belles
+rencontres » au stade municipal et donne la composition de la sélection de Tunis :
+« [...] El Arbi, Sillam et un métropolitain, Geline ; et, enfin, dans l'attaque,
+outre l'ailier gauche susvisé, **Boudjemaa**, Ducousso, Berbèche et Younès. **Un onze,
+en somme, qui a belle allure ; qui comprend les vedettes de notre football** et qui
+aura à cœur de rééditer la victoire remportée en mai dernier. » Le journal rappelle
+que la rencontre de mai s'est soldée « par 3 à 2 » pour les Britanniques.
+
+**L'Écho de Tunis, 1943, page 3** (bpt6k83792564) rend le match : « La défense locale
+arrache le match nul ». Le troisième but anglais vient d'un penalty « sanctionnant un
+peu sévèrement un arrêt un peu dur d'un arrière » ; Tunis bénéficie du même traitement
+« par compensation sans doute » sur une main dans la surface.
+
+Et les deux autres buts tunisiens : « **Les deux autres buts amenés par Boudjemaa
+furent signés, un [par] Ducousso et l'autre [par] Younès, et tous deux bien
+construits, ce qui aurait dû inciter les nôtres à pratiquer davantage le jeu de
+passes.** »
+
+Il ne marque pas, il fait marquer. Et le journal ajoute : « De notre côté, outre la
+défense dont nous avons déjà parlé, **Boudjemaa, Ducousso et Younès firent une très
+bonne partie**. »
+
+Le reste de l'article dit le lieu et l'heure de l'histoire mieux qu'un livre :
+« Entre les deux mi-temps et à la fin, l'équipe américaine de base-ball, qui était
+enfin arrivée, fit en compagnie de la sélection tunisienne une exhibition de ce sport
+si populaire aux Etats-Unis. » Et : « A l'issue de la réunion, les organisateurs
+recevaient les invités, les officiels, les joueurs et la Presse dans la salle réservée
+du Café de Paris. En quelques mots le docteur Orsini remercia tout le monde et **leva
+son verre à la prochaine victoire des armées alliées**. »
+
+Il pleut, d'ailleurs, et le journal remercie les services municipaux : « Jamais
+autrefois, avec l'averse tombée pendant près de deux heures, il eût été possible à
+deux équipes de pouvoir pratiquer convenablement leur jeu favori. »
+
+### 1er janvier 1944 : Entente Britannique 2 - Tunisie 1
+
+**L'Écho de Tunis, 1943, page 2** (bpt6k8379306k), fin décembre, convoque les
+sélectionnés : « Les joueurs suivants, sélectionnés pour les rencontres des 1er et 2
+janvier, sont priés de se trouver au siège social de la Ligue [le] 31 décembre à 18
+heures : Laroussi, Milazzo, Abdeselem, Vella, Statoboulos, Accacha, Fatihallah,
+Heller, Bsiri, Rachid, Bourourou, Younès, **Boudjemaa**, Lanfranchi, Ben Ba[...],
+Ouardi, Berbèche. »
+
+**L'Écho de Tunis, 2 janvier 1944, page 2** (bpt6k8379309t) rend le match du
+Nouvel An, arbitré par M. Mac Ghill, devant un stade où « l'on pouvait voir de
+nombreux militaires », après le lever des couleurs.
+
+« Sur le renvoi, **Boudjemaa lance l'attaque** ; [un centre] de Younès passe
+au-dessus, puis c'est le **Béjaois** qui, des 18 mètres, essayant de tromper le goal,
+envoie également trop haut. »
+
+Le mot « Béjaois » est, dans cette copie, imprimé « Béjuois ». Il désignerait un
+homme de Béja, et il est le seul de tout le dossier. La phrase peut se lire de deux
+façons : ou bien c'est un troisième joueur, ou bien c'est lui que le journal nomme
+ainsi, comme on écrit « le Stéphanois » ou « le Colmarien ». Je ne tranche pas. Mais
+c'est à vérifier en priorité sur l'image de la page, parce que si c'est lui, un
+journal de Tunis l'aura rattaché à sa ville natale de son vivant.
+
+Plus loin, le reproche : « notre ailier droit de Gebardi fera avorter les ouvertures
+de **Boudjemaa** par temporisation ou par hors-jeu. »
+
+Puis, en première mi-temps : « **Des shoots de Lanfranchi, Boudjemaa et Younès** sont
+bloqués ou déviés en corner [...] sans résultat. » Les Anglais marquent, et « la
+mi-temps est sifflée alors que tout [espoir] de vaincre s'est envolé du camp
+tunisois ».
+
+Et l'égalisation, à la reprise : « Sur une de celles-ci, **judicieusement lancée par
+Boudjemaa**, Younès trompe les demis, se trouve à portée de tir mais, gêné par un
+arrière, n'hésite pas à ouvrir sur de Gebardt, lequel se rabat, sort vainqueur d'un
+duel avec un défenseur et, d'un coup de pied bien ajusté, égalise sous les vivats des
+spectateurs. »
+
+Les Anglais marquent le but de la victoire cinq minutes avant la fin.
+
+### Sélection de Tunisie 4 - 9e D.I.M. 2
+
+**L'Écho de Tunis, 1944, page 2** (bpt6k8379310g), début janvier : « SÉLECTION DE
+TUNISIE : 4 / [9]e D.I.M. : 2 ». Contre une division d'infanterie. « La Tunisie
+attaqua également assez souvent, et les actions de Lanfranchi et des ailiers furent
+applaudies. Les verts marquèrent un point sur coup franc tiré sèchement ; puis ils
+ralentirent un instant leur action et **la Tunisie eut quelques déboulés grâce à
+Boudjemaa**. »
+
+### 28 juin 1945 : rentré de captivité
+
+**Ce soir, 28 juin 1945, page 2** (bpt6k76356506), rubrique « EN BREF », trois
+lignes :
+
+« **Boudjema, l'ex-ailier gauche de Sète, rentré de captivité, a été transféré à
+Nice.** »
+
+Trois faits dans une ligne, et un problème.
+
+Les faits : il a été **prisonnier**, il est **rentré**, il est **transféré à Nice** -
+le club où il avait débuté en France neuf ans plus tôt, en 1936, sous Lowy.
+
+Le problème : « l'ex-ailier gauche de Sète ». Or, en janvier 1941, L'Auto-vélo
+écrivait que Sète l'attendait « sans trop compter sur lui », et rien dans ce dossier
+ne montre qu'il y soit allé. Et en novembre 1943 et janvier 1944 il joue à Tunis, ce
+qui exclut une captivité en Allemagne depuis 1940.
+
+Trois lectures possibles, et je n'en choisis aucune :
+- il a bien joué à Sète entre 1941 et 1942, avant de rentrer en Tunisie ;
+- il a été mobilisé en Tunisie et fait prisonnier en 1944 ou 1945, l'armée d'Afrique
+  ayant combattu en Italie puis en France, ce qui accorderait tout sauf la mention de
+  Sète ;
+- le journal confond deux joueurs.
+
+Ce qui est sûr et qui ne dépend d'aucune de ces lectures : en juin 1945 un quotidien
+parisien écrit qu'un footballeur nommé Boudjema rentre de captivité et signe à Nice.
+Il mourra à Colmar le 29 mai 1947, vingt-trois mois plus tard.
