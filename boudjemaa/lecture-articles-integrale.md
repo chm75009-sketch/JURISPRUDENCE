@@ -212,3 +212,98 @@ reconnaissance de caractères ne la rend pas ; je ne la complète pas.
 
 La même page donne Charleville 2 Roubaix 0, lu en entier, et les classements
 de la division interrégionale. Pages lues.
+
+## Pages 15 à 22 - le printemps 1936, le service militaire, et une phrase sur lui que j'avais mal attribuée
+
+**[14] La Dépêche (Nord), 21 mars 1936, page 8 - COMMENT ON LE PRÉSENTE AU
+PUBLIC DU NORD.** La colonne citante et sa voisine lues en entier. La voisine
+est une page de cyclisme, de gala de boxe et d'un feuilleton d'Agatha
+Christie, lue en entier et sans rapport. L'annonce du match
+Roubaix-Nice, elle, est un article entier, lu du premier au dernier mot :
+
+« L'équipe niçoise, qui rencontrera, dimanche, à 15 heures, au parc
+J.-Dubrulle, celle du Racing-Club de Roubaix, viendra pour la première fois
+dans notre région. Cette équipe, qui est entraînée par l'ancien [entraîneur]
+lillois Lowy, possède d'excellents éléments qui ont fait leurs preuves et
+qui, à l'heure actuelle, sont en pleine forme. Le F.C. de Rouen en sait
+d'ailleurs quelque chose, car, dimanche dernier, les équipiers de Nicolas
+eurent bien du mal à juguler une attaque qui les menait de 1 à 0 à la
+mi-temps. »
+
+Puis la phrase sur lui, qui est la plus flatteuse que j'aie lue jusqu'ici :
+« L'avant-centre Boudjema est très dangereux et possède un déboulé
+foudroyant. Il est puissamment aidé par [...] ». La suite est coupée par la
+gouttière et je ne la complète pas.
+
+La composition annoncée : « Chaisaz, Schulzendorf, Kurdna, Schubert, Moudry,
+Galland, Marino, A. Beraudo, Boudjema, Gé[r]in, Granier. » Et le bilan des
+matchs retour de Nice : Boulogne 3-1, Amiens 2-0, Troyes, et une seule
+défaite, 2 à 1 contre Rouen. Arbitre M. Duruble. Pages lues.
+
+**[16] L'Auto-vélo, 30 avril 1936, page 5 - IL PART AU SERVICE MILITAIRE.**
+La colonne citante et sa voisine lues en entier. La voisine est le reportage
+sur les joueurs de Charleville avant la finale de la Coupe, avec le masseur
+M. Bureau et ses herbes, lu en entier et sans rapport. Dans les « Potins
+régionaux », qui sont une suite de brèves séparées par des puces et que j'ai
+lues toutes, celle qui le concerne se lit en entier :
+
+« L'Olympique Gymnaste Club de Nice sera privé des services de son excellent
+avant-centre Boudjema qui est parti sous les drapeaux en Tunisie. »
+
+C'est un fait que je n'avais nulle part : il fait son service militaire en
+Tunisie, et il part pour cela fin avril 1936. La même brève le qualifie
+d'« excellent ». Pages lues.
+
+**[18] L'Écho du Nord, 5 mai 1936, page 7 - NICE 6 DUNKERQUE 2, ET UN
+RETOUR.** La colonne citante et sa voisine lues en entier, c'est-à-dire
+toute la page des comptes rendus de la division interrégionale, dont le
+Lens 1 Saint-Étienne 0 qui la précède. L'article sur Nice est lu en entier :
+
+« Les jours se suivent et ne se ressemblent pas ; contre les S.O.
+Montpellier, les Niçois avaient paru figés au sol, hier leur attaque dans
+laquelle figurait Boudjemaa, absent il y a quinze jours, fournit une
+exhibition de football remarquable, ne cédant jamais pied, s'infiltrant avec
+une volonté tenace, malgré la défense redoutable des Dunkerquois. »
+
+Le récit : penalty transformé par Schulzendorf, tête de Moudry, but de
+Dubois, Dunkerque revient à 3-2 par Beunza et Guillou, Marino fait le
+quatrième avant la pause, puis « la deuxième mi-temps fut très équilibrée et
+[B]oudjemaa, d'un tir bolide, et Marino ensuite portèrent la marque à six ».
+
+Une chose ne se concilie pas et je ne la tranche pas : L'Auto-vélo du 30
+avril le dit parti au service militaire en Tunisie, et il joue le 3 mai à
+Nice, le journal notant seulement qu'il était « absent il y a quinze jours ».
+Ou le départ a été très court, ou l'une des deux feuilles se trompe. Pages
+lues.
+
+**[20] et [21] L'Auto-vélo, 25 mai 1936, pages 5 et 6 - NICE 4 C.A. PARIS 0,
+ET LA PHRASE QUE J'AVAIS MAL ATTRIBUÉE.** Les colonnes citantes et leurs
+voisines lues en entier, sur les deux pages, parce que l'article commence en
+page 5 et finit en page 6. Lu en entier, il oblige à corriger ce que j'avais
+écrit ailleurs.
+
+Le titre et le chapeau visent bien l'avant-centre parisien, pas lui : « le
+demi centre démontre [qu'un] joueur méchant [c'est] match perdu. [...]
+L'avant centre du C.A. Paris a deux fois perdu le match pour son club, hier,
+au Stade des Suisses. D'abord, il se montra d'une rare maladresse sur la
+balle, puis une mauvaise action lui valut un coup franc qui, bien tiré,
+permit à Boudjemaa de battre Weinstock. »
+
+Mais quelques lignes plus bas, le même article écrit ceci, et c'est de lui
+qu'il parle : « Les Niçois possèdent en Boudjemaa un bien beau joueur,
+doublé d'un botteur émérite ; dommage que - même avec le sourire - il ait une
+tendance marquée à jouer l'homme. Moudry fit un excellent travail
+constructif, Schulzendorf fut précieux en défense, et Chaisaz très sûr dans
+les bois. »
+
+J'avais donc corrigé à moitié. Il est exact que le reproche de « joueur
+méchant » du titre vise Bertoni, l'avant-centre parisien. Il est faux d'en
+conclure que rien ne lui était reproché : la même colonne lui reproche, à lui
+aussi, de jouer l'homme, et ajoute « même avec le sourire ». C'est le seul
+reproche de ce genre que j'aie lu sur lui, et il est à garder tel quel.
+
+Les compositions : « C.A.P. - But : Weinstock ; arr. : Hall, Calmels ; demis :
+Hombrouck, Thomas, Magnin ; av. : Desmarets, Lefèvre, Bertoni, Finamore,
+Dumas. O.G.C.N. - But : Chaisaz ; arr. : Schulzendorf, Kudrna ; demis :
+Schubert, Moudry, Galland ; av. : Marino, Gérin, Dubois, Boudjemaa,
+Granier. » Arbitre M. Prouvost. Pages lues.
