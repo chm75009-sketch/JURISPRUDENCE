@@ -2814,3 +2814,98 @@ c'est le mot du Petit Troyen deux mois plus tôt, écrit cette fois en allemand.
 Une semaine aura suffi pour qu'un journal parisien écrive de lui qu'il est « le
 cerveau de la quintette offensive » et que la fédération efface, pour vingt-quatre
 heures de retard, la victoire où il était déjà le meilleur.
+
+## Pages 231 à 238
+
+Huit articles, du 4 au 15 janvier 1939. Deux faits neufs, tous deux d'argent et de
+règlement, et un but égalisateur accordé alors qu'il était signalé hors jeu.
+
+### Nancy, 1er janvier 1939
+
+**Football, 4 janvier 1939, page 7** (bpt6k7214935q), sous le titre « Colmar frôle
+la défaite à Nancy » : « Temps couvert ; terrain marécageux et recouvert d'eau,
+2.000 spectateurs environ. C'est sur un terrain inondé que se déroula cette
+rencontre, de laquelle il convient surtout de retenir [l'ardeur] et le courage dont
+firent preuve les joueurs. Pataugeant dans l'eau et dans la boue, il ne purent que
+très difficilement se disputer la balle que l'eau freinait. Les chutes furent
+nombreuses et il s'ensuivit même quelques épisodes comiques. »
+
+Wana ouvre d'un coup franc de quarante mètres, Zopp égalise sur un cafouillage
+devant Pappas, Allen redonne l'avantage d'un tir de trente-cinq mètres. Puis :
+« En seconde mi-temps, Colmar domina et ce n'est cependant que dix minutes avant la
+fin que **Boudjemaa**, [...] **parti hors jeu et signalé comme tel par le juge de
+touche**, assura à son équipe le match nul ; Belko fut expulsé du terrain à la suite
+d'un coup volontaire porté à Harry. »
+
+Le but est donc irrégulier et le journal le dit. Arbitre M. Delasalle, 2-2, meilleurs
+joueurs des 22 : Allen, Wana, Roviglione, Tellechéa.
+
+Le même numéro, page 2, donne le classement des buteurs de deuxième division :
+Planques 23, J. Vallé 19, Newell 15, Fruleux 14, Vastag 14, Zopp 14, Belunza 13,
+Simonyi 13, Arbiza 11, Léglise 11, Griffiths 10, Samperio 10, Szego 10, Alcazar 10,
+**Boudjemaa 9**. Colmar est sixième de la division.
+
+### Le procès en appel
+
+**Football, 4 janvier 1939, page 9** publie le procès-verbal du bureau fédéral du
+2 janvier : « **APPEL DES SPORTS RÉUNIS DE COLMAR D'UNE [DÉCISION] DE LA C. DES
+RÈGLEMENTS DU 21 DÉCEMBRE 1938 (QUALIFICATION DU JOUEUR BOUDJEMAA)**. - Le Bureau,
+après avoir entendu M. Guignot, pour la C.C. [des règleme]nts et les représentants
+des S. R. de Colmar [et du R. C.] Lens, adoptant les motifs des premiers juges,
+[confirme la déci]sion dont appel. »
+
+Les deux clubs étaient venus plaider. C'est fini.
+
+### Les 4 500 francs
+
+Et voici le fait neuf, et il fait mal. **L'Écho d'Oran, 8 janvier 1939, page 5**
+(bd6t513419220), dans un entrefilet titré « FRUCTUOSO EST SUSPENDU » qui liste les
+sanctions de la commission de discipline :
+
+« Le joueur **Boudjemaa**, transféré de St-Etienne à Colmar, avait quitté
+Saint-Etienne y laissant quelques dettes. La commission a décidé de faire rembourser
+par Boudjemaa à Saint-Etienne, **4.500 fr. à raison de 500 fr. par mois**. »
+
+**Le Petit journal, 8 janvier 1939, page 7** (bpt6k636750g) publie la même
+information sous un titre qui dit le ton de l'époque : « **M. BOUDJEMAA, IL FAUT
+PAYER !** Le joueur Boudjemaa, transféré de Saint-Etienne à Colmar, avait quitté
+St-Etienne en y laissant quelques dettes. La commission du statut du joueur
+professionnel a décidé de faire rembourser, par Boudjemaa, à l'A.S. Saint-Etienne,
+la somme de 4.500 francs, à raison de 500 francs par mois. »
+
+Neuf mois de prélèvement. Et c'est la deuxième fois : en 1936 déjà, Saint-Etienne
+lui réclamait 10 700 francs et l'avait fait suspendre six mois. Le même club, la
+même mécanique. Trois semaines après avoir perdu sa victoire de Coupe pour
+vingt-quatre heures, il apprend qu'il doit rembourser son ancien club.
+
+Il faut noter aussi ce que l'entrefilet oranais met à côté de lui : « Bouzad Ahmed,
+qualifié l'an dernier à Saint-Eugène, à Alger, et qui avait quitté son club pour la
+Tunisie, 6 mois de suspension. » Les deux affaires nord-africaines du jour se
+suivent dans la même colonne du même journal d'Oran.
+
+### Colmar - Valenciennes, 8 janvier 1939
+
+**Strassburger neueste Nachrichten, 9 janvier 1939, page 4** (bd6t59617094) :
+**S. R. Colmar - Valenciennes 1:0.** « Stade Joseph Lehmann. Zuschauer : 2000.
+Colmar : Collet, Demut, Delacourt, Gougain, Télétchea, Othmann, Heine, Gabrillargues,
+Zopp, **Boudjema**, Emonoz. »
+
+Le but : « Es war recht viel Glück dabei, wenn die S. R. C. diesen Match gewinnen
+konnten. [...] in der 25. Minute [...] **Boudjema wurde foulgelegt und Zopp
+verwandelt den Elfmeter zum 1:0.** » Il obtient le penalty en se faisant faucher ;
+Zopp le transforme. Et plus tard : « So schoss **Boudjema** einmal an den Pfosten. »
+Encore le poteau.
+
+Le journal n'est pas tendre : « Aber Valenciennes blieb trotzdem bis zum Schluss die
+bessere Elf. » Valenciennes est resté la meilleure équipe.
+
+### Ce qu'on dit de lui à Paris
+
+**Le Matin, 15 janvier 1939, page 6** (bpt6k586209m), avant Colmar - Red Star : le
+Red Star vient de changer de gardien après « une sorte de révolution de palais avec
+l'incident Defossé ». Le journaliste s'interroge : « Que vaut le jeune Katz, le
+remplaçant, devant des gaillards comme Jaeck, **Boudjemaa** et Zopp ? C'est bien l'X
+du problème. »
+
+Un mois plus tôt, c'est lui qui avait mis Défossé par terre d'un tir de quarante
+mètres. Son nom sert maintenant d'épouvantail pour les gardiens.
