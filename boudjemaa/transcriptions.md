@@ -1351,3 +1351,20 @@ VERDICT : quatre mois après ses débuts en France, il est retenu en sélection
 régionale contre la Hongrie.
 
 LU : 74 sur 312.
+
+---
+
+## Note du 23 septembre 2026 - le club tunisien est tranché
+
+La notice de l'A.S. Saint-Étienne, transmise par l'OGC Nice et transcrite
+dans documents-ogc-nice.md, donne la suite de ses clubs : « US Bejaoise
+(Tunisie) - ES Tunis - Club Africain - Sfax - Club Tunisien - OGC Nice -
+ASSE - US Bejaoise - Colmar - Nice - Espérance Tunis - Colmar ».
+
+C'est donc l'Union Sportive Béjaoise, et non l'Olympique de Béja, qui l'a
+formé. Les entrées [26], [45] et [47] ci-dessus, qui laissaient la question
+ouverte, se lisent désormais ainsi : le Boudjemaa de l'Olympique de Béja
+(1929 à 1934) est un homonyme, et le nôtre est celui des juniors de l'U.S.B.
+en janvier 1931 et de l'équipe première à Souk-Ahras en juillet 1932. Le
+derby du 15 janvier 1934 l'oppose donc à son homonyme, sauf à ce qu'une
+pièce dise le contraire.

@@ -30,8 +30,14 @@ INTRODUCTION
   terrain, à dix-sept ans (fac-similés photos/SoukAhras-1932-p1.jpg et p2).
 
 2. SOLLICITÉ EN FRANCE, VICTIME DE SON TALENT
-- Les deux contrats.
-- Sa suspension.
+- Les deux contrats : la liste des demandes de licences de la Fédération,
+  publiée le 15 juillet 1936, porte les deux, Nice et Saint-Étienne, dans la
+  même colonne.
+- Sa suspension, en deux temps : trois mois à dater du 30 août 1936, décidés
+  par la Commission centrale des statuts et règlements ; appel de
+  Saint-Étienne rejeté le 12 septembre ; puis le Conseil fédéral, le
+  5 octobre 1936, porte la peine à six mois.
+- Les pièces sont transcrites dans documents-ogc-nice.md.
 
 3. LE RACISME ET L'ESPRIT COLONIALISTE
 - Section décidée le 22 septembre 2026, après la lecture de L'Intransigeant du
@@ -51,10 +57,19 @@ INTRODUCTION
 - Retour en France.
 
 7. SAINT-ÉTIENNE, DIVISION 1
+- Ses débuts sous le maillot vert : Alès contre Saint-Étienne, 3 à 2, le
+  5 septembre 1937.
 - Il marque deux buts, il rate un penalty.
+- Pierre Marey est allé le chercher dans les souks de Sousse pour le ramener
+  à Saint-Étienne (notice de l'A.S.S.E.).
 
 8. LA MORT
-- L'acte de décès, etc.
+- L'acte de décès de Colmar, numéro 464 de l'année 1947, transcrit en entier
+  dans documents-ogc-nice.md : mort le 29 mai 1947 à 23 h 30, 39 avenue de la
+  Liberté, domicilié 2 place de la Cathédrale, célibataire, déclaré par
+  Edouard Fischer, directeur sportif du club, et « fils de père et mère dont
+  les noms, prénoms, professions et le domicile ne sont pas connus du
+  déclarant ».
 
 CE QUE L'AUTEUR DOIT DONNER
 - Les noms des joueurs de son enfance à Béja.
@@ -65,7 +80,11 @@ CE QUE JE DOIS TROUVER
 - Sa carrière en Tunisie avant 1935: au-delà du match de Souk-Ahras du
   30 juillet 1932, les autres matchs de l'U.S.B.
 - Le prénom de Martinelli, et son départ pour les Amériques.
-- Les deux contrats et la suspension, pièces à l'appui.
+- La composition de l'équipe de Saint-Étienne à chacun de ses matchs.
 - Le match amical de Marseille, date et compte rendu.
 - La guerre : arrestation éventuelle au retour en Tunisie.
+- Ses saisons tunisiennes entre Nice et Colmar : la notice de l'A.S.S.E.
+  donne l'ordre des clubs, U.S. Béjaoise, E.S. Tunis, Club Africain, Sfax,
+  Club Tunisien, puis Nice, Saint-Étienne, U.S. Béjaoise, Colmar, Nice,
+  Espérance de Tunis, Colmar. Reste à dater chacun.
 - Le match de D1 à Saint-Étienne : deux buts, penalty manqué.
