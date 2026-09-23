@@ -1560,3 +1560,110 @@ Cannes. »
 Le séjour à Tunis a donc duré de la mi-janvier à la fin février 1938 : sept
 semaines environ. Il revient dans une équipe en tête de son groupe, qui vient
 d'en mettre sept à Boulogne.
+
+## Pages 119 à 126 - mai 1938 : le retour, et la montée en première division
+
+**Correction de la section précédente.** J'y ai écrit que le séjour à Tunis
+avait duré de la mi-janvier à la fin février 1938, parce que Le Grand écho du
+Nord du 2 mars annonçait que les « verts » allaient « bénéficier du retour de
+Boudjemaa ». Ce lot-ci montre que l'annonce était prématurée : il n'est revenu
+qu'au début de mai. L'absence a donc duré près de quatre mois, pas sept
+semaines. Le journal du Nord annonçait une attente, je l'ai lue comme un fait.
+
+**[119] Le Petit Méridional, 8 mai 1938, page 7** (ark bpt6k41895549). Lu en
+entier. Un entrefilet titré **« Boudjemaa est revenu »** :
+
+« Qui ne se souvient pas des folles équipées de Boudjemaa, ce Tunisien qui,
+après avoir [brillé] à Nice, passa à St-Etienne, ne fit qu'une courte
+apparition et retourna dans sa Tunisie natale en promettant de revenir. Les
+Stéphanois en avaient fait leur deuil et pensaient qu'ils ne le reverraient
+plus. Et voici que Boudjemaa vient de débarquer à St-Etienne au moment où on
+l'y attendait le moins. Mais aussi au moment peut-être où on en a le plus
+besoin. On sait, en effet, que Beck, avant-centre titulaire de l'A. S. de
+St-Etienne, sera quelque temps encore indisponible. **L'enfant prodigue** a
+donc été accueilli à bras ouverts et il est probable que c'est lui qui jouera
+avant-centre dimanche prochain à St-Etienne contre l'O. de Dunkerque. »
+
+Tout est dans ces lignes : « folles équipées », « en promettant de revenir »,
+« on en avait fait son deuil », « l'enfant prodigue ». C'est le ton qu'on
+emploie pour lui depuis 1936, et c'est la deuxième fois, après Mario Brun en
+1936, qu'un journaliste écrit son histoire comme un caractère plutôt que comme
+une carrière.
+
+**[120] La Dépêche (Toulouse), 9 mai 1938, page 4** (ark bpt6k4139361c). Lu en
+entier. Le journal titre « SAINT-ETIENNE EN DECLIN » : Saint-Etienne et
+Dunkerque font match nul, 3 à 3.
+
+« Les raisons du malaise ? Elles sont multiples : jeu latéral, fatigue,
+lenteur d'exécution et surtout manque de décision en avants. **Boudjemaa
+faisait sa rentrée ; il fut le meilleur joueur d'une attaque qui fut très mal
+inspirée.** Saint-Etienne menait pourtant de 2 à 0 après une demi-heure de jeu,
+points acquis par Tax et Boudjemaa. »
+
+**[122] L'Information méridionale, 15 et 16 mai 1938, page 4** (ark
+bd6t54775957v), compte rendu du même match signé E. Kincher. Lu en entier.
+C'est le plus détaillé, et il contredit La Dépêche sur un point.
+
+« Concrétisant un avantage marqué, Boudjemaa score le premier à la septième
+minute de jeu. Trente minutes après, Gianelloni arrête un premier tir au même
+joueur, mais **Boudjemaa reprend la balle et d'un beau shoot, le plus beau
+peut-être de la saison, marque une deuxième fois.** »
+
+Puis, sous l'intertitre « LE PROBLEME DU CENTRE AVANT » : « Le meilleur
+attaquant fut Boudjemaa qui effectua une rentrée très satisfaisante tant par
+son travail que par son shoot. Il maintint sa cadence durant tout le match. »
+
+Un intertitre de la colonne porte d'ailleurs son seul nom : « A SAINT-ETIENNE,
+BOUDJEMAA ».
+
+**L'écart.** La Dépêche donne les deux buts à Tax et à lui ; L'Information
+méridionale les lui donne tous les deux, et décrit la seconde action dans le
+détail (l'arrêt du gardien, la reprise). Le compte rendu détaillé pèse plus
+que la mention rapide, mais je ne tranche pas : pour sa rentrée, il a marqué
+au moins une fois, peut-être deux.
+
+Le même article note que Charbit jouait ce jour-là, « excellent pendant les
+quarante-cinq premières minutes » : les deux Nord-Africains de Saint-Etienne
+étaient donc bien sur le terrain ensemble.
+
+**[123] L'Information méridionale, 22 mai 1938, page 4** (ark bd6t54775961r),
+J. Véro. Lu en entier. L'analyse de la course à la montée : « Enfin,
+St-Etienne peut se permettre d'injecter du sang frais dans son équipe comme il
+l'a fait avec Boudjema et Casy : voilà des hommes bien reposés comme le sera
+Beck quand il va reprendre. Aussi ne puis-je croire que le second team
+ascendant ne soit pas St-Etienne. »
+
+Le séjour en Tunisie devient un argument sportif : il revient frais quand les
+autres sont épuisés.
+
+**[124] L'Auto, 27 mai 1938, page 5** (ark bpt6k4635127m). Lu en entier.
+Saint-Etienne-Arras, match nul, sous le titre « Défenses supérieures aux
+attaques » : « le match nul d'aujourd'hui montre encore une fois la faiblesse
+de l'attaque des Stéphanois dans laquelle **Boudjema se démena comme un diable
+sans pouvoir lui donner le mordant nécessaire**. Pasquini fit sa partie
+habituelle, mais Herremann et Kordjna furent encore les deux plus faibles de
+la ligne. » Recette : 49 100 francs.
+
+**[125] La Dépêche (région du Nord), 30 mai 1938, page 7** (ark
+bd6t51502990h). Lu en entier. Dernière journée, et le titre de la page le dit :
+« [Le Havre et] Saint-Etienne joueront l'[an prochain] en division nationale ».
+
+Le compte rendu : « À la surprise générale, Tourcoing ouvre la marque à la
+cinquième minute. Mais Saint-Etienne a pris un gros avantage ensuite et, à la
+vingtième minute, **marque par Boudjema**. Quelques minutes après, Tourcoing
+marque un deuxième but, tandis que **Boudjema s'offre le luxe de rater un
+penalty**. À la mi-temps : Tourcoing 2, Saint-Etienne 1. »
+
+Puis Cabannes égalise, Tourcoing reprend l'avantage, l'avant-centre nordiste
+sort blessé, et Saint-Etienne « bombarde sans arrêt les buts de Morrent,
+obtenant une dizaine de corners et quatre buts tirés successivement par
+Plovie, Tax, Hermann et Cabannes ». Saint-Etienne bat Tourcoing 7 à 3.
+
+Le classement de la même page donne Le Havre premier, Saint-Etienne deuxième.
+Les deux montent.
+
+Voilà donc ce que la saison 1937-1938 lui aura fait faire : acheté 50 000
+francs par le club qui l'avait fait suspendre, pas qualifié en août, titulaire
+en septembre, parti à Tunis en janvier, revenu sans prévenir en mai, meilleur
+homme de l'attaque pour sa rentrée, buteur au dernier match, et monté en
+division nationale avec Saint-Etienne.
