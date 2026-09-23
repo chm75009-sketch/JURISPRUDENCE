@@ -3577,3 +3577,93 @@ Trois lectures possibles, et je n'en choisis aucune :
 Ce qui est sûr et qui ne dépend d'aucune de ces lectures : en juin 1945 un quotidien
 parisien écrit qu'un footballeur nommé Boudjema rentre de captivité et signe à Nice.
 Il mourra à Colmar le 29 mai 1947, vingt-trois mois plus tard.
+
+## Pages 295 à 302
+
+Six articles, du 9 août 1945 au 21 septembre 1946. Il revient à Colmar, et c'est
+Jean Laurent, rentré du stalag, qui l'entraîne.
+
+### 9 août 1945 : Jean Laurent prend Colmar en main
+
+**Ce soir, 9 août 1945, page 2** (bpt6k76356892), chronique de François Thiébaud :
+
+« **Jean Laurent a pris en main l'entraînement des Colmariens.** [Du camp] où il fut
+longtemps détenu, il a ramené **son compagnon de captivité, Thierry**, un excellent
+inter originaire de Montargis. Un athlète au demeurant, qui fait excellente
+impression à l'entraînement.
+
+"- Je n'ai que des jeunes, nous disait Jean Laurent, mais je ne m'en plains pas. La
+tâche qu'on m'a offerte me plaît, car ce sont des gars sans prétention, qui
+m'écoutent et qui veulent se perfectionner." »
+
+Jean Laurent, c'est l'entraîneur dont Football écrivait le 22 mai 1941, à propos de
+la Tunisie, qu'il était « actuellement prisonnier ». Quatre ans plus tard il est
+libre et il entraîne Colmar. Dans la formation colmarienne que le journal imprime à
+côté figurent Delacourt, Demuth, Gissinger, Emonoz, Zopp, **Boudjemaa**, Herpin.
+
+Six semaines plus tôt, le même journal écrivait qu'il avait été transféré à Nice.
+Ce n'est pas à Nice qu'il revient.
+
+### 23 octobre 1945 : il ne va pas tarder
+
+**Les Dernières nouvelles d'Alsace, 23 octobre 1945, page 6** (bd6t52805857d), dans
+la rubrique « LE SAVIEZ-VOUS ? » :
+
+« Après Cléau, venant de [...], Colmar a reçu encore du renfort ; Emmenoz, qui
+faisait partie de l'équipe [avant] la guerre, est arrivé. **Boudjema ne va pas tarder
+[à rejoindre] l'équipe des haut-rhinois.** »
+
+Ils reviennent les uns après les autres, ceux de 1938 et 1939 : Emonoz, et lui.
+
+### 1er novembre 1945 : sélectionné en Alsace pro B
+
+**L'Alsace, édition de Mulhouse, 30 octobre 1945, page 2** (bd6t52808235p) annonce
+les matches de la Toussaint. Au stade de Bourtzwiller, l'Alsace pro B contre la
+sélection des Amateurs d'Alsace, à 15 heures.
+
+« **Alsace pro B** : Diesel (F.C.M.), Decker (S.R. Colmar), Emmenegger Ch. (S.R.C.),
+Wodey (F.C.M.), Cléau, Othmann (S.R.C.), Harter, Schumacher, Breta (F.C.M.),
+**Boudjema**, Krischke. »
+
+Il est donc arrivé, et sélectionné tout de suite. À trente et un ans, en novembre
+1945, il porte le maillot d'une sélection d'Alsace.
+
+### 8 septembre 1946 : son but contre Amiens
+
+**Sporting, 10 septembre 1946, page 7** (bpt6k7230312z), en seconde division :
+
+« **Amiens et Colmar (1 à 1).** Colmar. - Il faut reconnaître que Colmar a eu
+beaucoup de chance en réussissant le match nul devant Amiens. Les "leaders" du
+classement ont, en effet, démontré une supériorité assez nette dans tous les
+compartiments du jeu. Les attaquants amiénois, en particulier, au jeu vif et bien
+soudé, inquiétèrent souvent les défenseurs colmariens parmi lesquels Hoffmann se
+montra très sûr.
+
+**Boudjemaa, dont on attendait l'exhibition avec curiosité, ouvrit la marque à la
+58e minute pour Colmar. Ce joueur baissa nettement de pied en seconde mi-temps et ne
+réédita pas sa bonne première partie de jeu.**
+
+Streczyck égalisa pour Amiens à la [...] minute. Quelques attaques colmariennes se
+brisèrent sur un Capart intraitable et ce fut la fin de cette partie moyenne sans
+plus. »
+
+« Dont on attendait l'exhibition avec curiosité » : on l'attendait, donc, et on
+n'était pas sûr de ce qu'il restait. Il marque, puis il baisse. Il a trente-deux ans,
+il revient de captivité, et c'est la première fois qu'on lit sous une même plume les
+deux moitiés de la phrase.
+
+### 21 septembre 1946 : encore Saint-Ouen
+
+**Le Populaire, 21 septembre 1946, page 4** (bd6t5718676d) et **La France libre,
+organe de "Ceux de la Libération-Vengeance", 21 septembre 1946, page 4**
+(bpt6k4119398v) annoncent le match du lendemain, coup d'envoi à 16 heures, au stade
+de Saint-Ouen : C. A. Paris contre S. R. Colmar.
+
+« Difficile à vaincre, le onze alsacien ! Lyon et Amiens n'ont pu y parvenir et au
+contraire ont été tenus en échec. »
+
+La formation de Colmar, en pyramide : « Hoffmann ; [Lin]kenfeld, Wauzniak, Frer[e] ;
+Leclerq, Segaux ; **Boudjema**, Zopp ; Emmenegger, Battistella, Laner. »
+
+Huit ans après le jour de Noël 1938 où il avait battu le Red Star deux fois sur ce
+même terrain, il y revient. Zopp est encore à côté de lui.
