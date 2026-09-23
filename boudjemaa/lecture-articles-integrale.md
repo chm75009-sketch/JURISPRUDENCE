@@ -3269,3 +3269,51 @@ de] son avance, rempor[ta la décision]. »
 Chez les Colmariens, dit le journal, « se signalèrent Zopp, Em[onoz et]
 Gabrillargues ». Cette fois son nom n'est pas dans la liste des meilleurs ; il est
 dans le récit du deuxième but, comme passeur.
+
+## Pages 271 à 278
+
+Quatre articles seulement, les 1er et 3 mai 1939, mais l'un d'eux annonce qu'il va
+peut-être changer de club.
+
+### Complément : Colmar bat Toulouse 3 à 2
+
+**Strassburger neueste Nachrichten, 1er mai 1939, page 3** (bd6t5964616v) donne le
+score que la colonne mal imprimée des Dernières nouvelles ne permettait pas de
+lire : **COLMAR - TOULOUSE 3:2**, au stade Joseph-Lehmann, 2 400 spectateurs.
+
+Le récit : « Das Spiel sieht nach stürm[ischem] Start der Gäste den Colmarer[n
+bereits] in der vierten Minute [erfolg]reich. » Colmar marque dès la 4e minute. Puis :
+« In der [X.] Minute **flankt Boudjema vors [Tor und] Zopp köpft zum 2:0 ein.** »
+Son centre, la tête de Zopp, 2-0. Après la pause, Zopp fait 3-0 à la 17e.
+
+Toulouse revient : Demuth marque contre son camp à la 27e (3-1), Planques réduit une
+minute plus tard (3-2). « Zopp geht in der Verte[idigung] zurück, Toulouse setzt
+alles a[uf eine] Karte, spielt mit Intelligenz [und] Energie und steht öfters n[ahe
+dem] Ausgleich, aber schliesslich [bleiben] doch noch beide Punkte [in Colmar]. »
+Zopp recule en défense, Toulouse joue le tout pour le tout, frôle l'égalisation, et
+les deux points restent à Colmar.
+
+Le journal loue « im Half Gabrillargues und [Oth]mann sehr zufriedenstellend », et
+dit de Toulouse qu'il possède en Planquès « [den] Schützenkönig der zweiten
+[Division] », le roi des buteurs de la division.
+
+### Alès veut l'acheter
+
+**L'Éclair, 3 mai 1939** (bd6t53744692x), dans ses trois éditions du jour - pages 3,
+7 et 11, le même entrefilet trois fois - donne la nouvelle :
+
+Le club alésien, qui vient de se transformer et qui envisage aussi l'engagement d'un
+jeune ailier gauche nommé Vandevelde, « **serait en pourparlers avec Boudjema, de
+[Colmar]**, François Vovard, l'ancien [joueur] qui opère à Fives, et [un] demi-centre,
+dont les [dirigeants] se refusent à dire [le nom] ».
+
+L'Olympique d'Alès, deuxième division, groupe du Midi. C'est la première fois depuis
+son arrivée à Colmar qu'un journal écrit qu'un autre club le veut. La saison
+s'achève, il a vingt-quatre ans, et on parle de lui à mille kilomètres de l'Alsace.
+
+Le même entrefilet précise, deux lignes plus bas, que « L'Olympique de Marseille ne
+[compte pas céder] Ben Barek et conser[vera ses] joueurs actuels ». Son nom est dans
+la même colonne que celui de Ben Barek : c'est, à l'époque, la meilleure mesure de
+ce qu'on pense de lui.
+
+Rien, dans ce lot, ne dit ce qu'il est advenu de ces pourparlers.
