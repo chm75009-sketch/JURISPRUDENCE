@@ -607,3 +607,184 @@ suspension de trois à six mois. »
 Six mois, et non trois. C'est la sanction définitive, et elle le tient hors
 des terrains jusqu'au début de 1937. La même colonne donne les arbitres de la
 journée suivante, dont M. Perrier pour Nice contre Troyes. Pages lues.
+
+## Pages 47 à 54 - l'article de Mario Brun, qui raconte tout
+
+**[46] La Dépêche, 8 octobre 1936, page 3.** La colonne citante et sa voisine
+lues en entier. La voisine est un éditorial politique sur l'interdiction des
+manifestations de masse et sur la dévaluation de la lire, lu en entier et
+sans rapport. La brève qui le concerne porte un titre : « LA SUSPENSION DE
+BOUDJEMA EST PORTÉE A SIX MOIS », et se lit en entier : « le bureau fédéral a
+[décidé] en ce qui concerne le joueur Boudjema que, conformément à la
+décision prise dernièrement par la commission centrale des règlements, ce
+joueur serait qualifié à l'O[.G.C. Nice, pui]squ'il portait la suspension de
+3 à 6 mois. » Page lue.
+
+**[48] L'Intransigeant, 30 octobre 1936, page 6 - « L'AFFAIRE BOUDJEMAA »,
+PAR MARIO BRUN, EN ENTIER.** Les trois colonnes citantes et leurs voisines
+lues en entier. C'est de loin la pièce la plus importante que j'aie trouvée :
+un article suivi, signé Mario Brun, qui raconte toute l'histoire depuis le
+début. Je le donne ici en entier, parce qu'il ne se résume pas.
+
+« Boudjemaa Mohamed jouait au football, sans grande prétention, à l'U.S.
+Béja. Et voilà qu'un beau jour on alla le tirer de son bled. [Il se] laissa
+emmener et il suivit à Nice le grand Raoul Chaisaz, qui l'employa dans son
+entreprise et le confia aux bons soins de Lovy, l'entraîneur de l'O.G.C. Je
+ne sais si Boudjemaa réussit dans les primeurs ; mais, ce qui est [sûr], c'est
+que chaque match de football disputé avec [les] « Aiglons » le vit progresser
+et s'affirmer [comme un] avant centre [de] l'O.G.C. [Nice] d'une classe
+certaine. Et tout le monde de se réjouir à Nice, où l'on envisageait la
+formation d'une grande équipe pour la saison suivante !
+
+Las ! quand arriva la période des transferts et des contrats, l'amateur
+Boudjemaa, qui ne songeait déjà plus aux primeurs de Chaisaz, fut l'objet de
+bien des convoitises, et, dans son courrier, il reçut les offres les plus
+alléchantes. Nice lui avait bien promis un contrat, mais il y avait
+Saint-Etienne qui insistait, une lettre de M. Guichard l'empêchait de
+dormir...
+
+Cette lettre, au fond, l'embarrassait. Il avait une espèce de honte à la
+garder jalousement secrète dans son beau portefeuille tout neuf. Un jour, il
+se décida : il la montra à M. Tanzi, le bon président de l'O.G.C. Nice, qui
+lui donna immédiatement le conseil d'écrire ou de faire écrire - l'arabe
+n'étant pas déchiffrable pour tout le monde - à M. Guichard afin de lui ôter
+ses illusions. C'est ce que Mohamed s'empressa de faire.
+
+Mais l'A.S. Saint-Etienne revint à la charge et, par le truchement de son
+secrétaire, M. Marey, poursuivit Boudjemaa de ses assiduités, tout d'abord à
+Nice et, par la suite, en Tunisie, où notre Mohamed était allé passer des
+vacances qu'il avait espérées tranquilles.
+
+On pourrait écrire un chapitre spécial sur les péripéties du voyage en
+Tunisie de M. Marey, qui eut beaucoup de mal à trouver Béja et Boudjemaa.
+Passons là-dessus.
+
+Voilà M. Marey qui renouvelle à Mohamed les offres tentantes de l'A.S.
+Saint-Etienne, et voilà Mohamed perplexe, gêné, plongé dans de profondes
+réflexions. M. Marey insiste. Le 4 juillet, le petit footballeur tunisien
+écrit à son président : « Un monsieur BIEN MIS me fait la proposition que
+voici : « Viens jouer à Saint-Etienne. Nous te donnerons 10.000 francs à la
+signature et 2.500 francs par mois. » Je lui dis : « Donnez-moi le temps de
+réfléchir ». Qu'en pensez-vous ? Me donnez-vous ce qu'il me donne ? Il est
+venu spécialement pour moi de Saint-Etienne. Répondez le plus vite possible
+par oui ou par non pour que je ne commette pas de gaffe (sic), car il veut me
+faire signer le contrat vite, vite ».
+
+Mais la réponse de Nice ne vint pas assez rapidement. M. Marey avait enlevé
+la partie entre temps. Pour ce faire, il avait tout simplement aligné sur une
+table vingt-cinq beaux billets de 500 francs et il avait dit à Boudjemaa
+ébloui : « C'est à toi ! »
+
+Mettez-vous à la place du type qui, en plein bled, se voit offrir une petite
+fortune, à en juger du moins par le nombre des billets bleus par quoi elle se
+traduit !
+
+Boudjemaa signa donc pour Saint-Etienne et envoya à l'O.G.C. Nice une lettre
+de démission datée du 4 juillet, mais timbrée du 6...
+
+Las ! peu auparavant, le 2 juillet, notre Mohamed avait déjà signé pour
+l'O.G.C.N., touché ses appointements du mois de juillet, et son contrat,
+transmis par avion de Tunis [par] le correspondant des « Aiglons », avait été
+enregistré [le] 5. Celui de Saint-Etienne ne le fut que le [7] juillet !
+
+L'affaire se gâtait alors : l'O.G.C. Nice porta plainte. En date du 30
+juillet intervenait une décision de la commission [des] Statuts et Règlements
+qui qualifiait Boudjemaa [à] Nice, mais le suspendait pour trois mois.
+
+Saint-Etienne n'introduisit pas moins Boudjemaa dans son équipe pour
+rencontrer Servette et Lille et fit appel de la décision. Nice, également,
+réclamait le sursis au sujet des trois mois de suspension. On entrait dans le
+maquis de la procédure.
+
+Il y eut, en effet, contestation de signatures, assertion de dol, etc., et,
+le 18 août, l'affaire revenait devant la commission. Ce jour-là, rue de
+Londres, on confronta Boudjemaa et Chaisaz qui l'avait fait venir et l'on
+écouta les doléances des dirigeants de Saint-Etienne. La décision fut
+renvoyée au 3 septembre, après audition des dirigeants niçois. La précédente
+décision fut confirmée.
+
+Nouvel appel de Saint-Etienne et de Nice, devant le Bureau Fédéral cette
+fois. Le Bureau Fédéral a confirmé les précédentes décisions, mais a porté à
+six mois la pénalité infligée au joueur Boudjemaa.
+
+En sorte qu'à l'heure actuelle l'O.G.C. Nice se trouve frustré d'un excellent
+joueur et qu'il est en droit de demander réparation des dommages que cette
+affaire lui a valus.
+
+Quant à Mohamed, dans son bled, il en a pour six mois à empaqueter des
+dattes...
+
+Il avait cru au mirage... MARIO BRUN. »
+
+Ce que cet article règle, et qui n'était nulle part ailleurs :
+- il jouait à l'U.S. Béja, et non à l'Olympique de Béja. La question qui
+  traînait est tranchée ;
+- c'est Raoul Chaisaz, le gardien de Nice, qui est allé le chercher à Béja et
+  qui l'a employé dans son commerce de primeurs ;
+- il écrivait en arabe, et le journal le dit sans détour : « l'arabe n'étant
+  pas déchiffrable pour tout le monde ». Ce n'est donc pas un illettré, comme
+  Nord-sports le laissait entendre deux mois plus tôt, c'est un homme qui
+  écrit dans une langue que ses dirigeants ne lisent pas ;
+- la lettre du 4 juillet 1936 est citée mot pour mot, et c'est le seul texte
+  de lui que j'aie. Il y demande conseil à son président, il pèse, il
+  hésite, il craint de « commettre une gaffe » ;
+- les chiffres : 10 000 francs à la signature et 2 500 par mois promis par
+  Saint-Étienne, et vingt-cinq billets de 500 francs, soit 12 500 francs,
+  alignés sur une table ;
+- les dates exactes : signature à Nice le 2 juillet, contrat enregistré le 5 ;
+  lettre de démission datée du 4, timbrée du 6 ; contrat stéphanois enregistré
+  le 7 ;
+- il a joué pour Saint-Étienne contre le Servette et contre Lille pendant la
+  procédure ;
+- il a été confronté à Chaisaz rue de Londres le 18 août 1936.
+
+Et la dernière phrase, « Il avait cru au mirage », dit tout le mépris
+tranquille de l'époque pour un garçon de vingt-deux ans qu'on est allé
+chercher dans son village et qu'on se dispute à coups de billets.
+
+Les colonnes voisines, lues en entier, portent le rugby France-Allemagne, le
+record de l'heure d'Olmo, la boxe et les Six Jours ; rien d'autre sur lui.
+Pages lues.
+
+**[49] L'Est républicain, 31 octobre 1936, page 5 - LES 10 700 FRANCS.** La
+colonne citante et ses voisines lues en entier, soit les calendriers des
+championnats de Lorraine, les demandes de matchs et les sanctions
+fédérales. Celle qui le concerne se lit en entier :
+
+« Par ailleurs, il restait à régler définitivement le cas du joueur Boudjema,
+qui avait signé deux licences au début de la saison, l'une à l'O.G.C. Nice et
+l'autre postérieurement, à Saint-Etienne. Boudjema a été suspendu par la
+Fédération pour une durée de six mois [...] il est qualifié [ne] que pour
+Nice et [devra], par la commission, restituer à St-Etienne le montant des
+frais avancés par ce dernier club, soit 10.700 francs. »
+
+Le chiffre de 10 700 francs, que les notes de l'auteur donnaient comme une
+dette, est donc exactement cela : le remboursement à Saint-Étienne des
+avances touchées. Page lue.
+
+**[50] L'Éclair, 1er novembre 1936, page 3 - LE MÊME, EN PLUS SEC.** La
+colonne citante et sa voisine lues en entier. « [Bien] qu'il donna l'espoir
+aux dirigeants de [l'A.S.] Saint-Etienne d'être qualifié pour ce [club], le
+Niçois Boudjema ne se fit pas faute de faire verser ces avances. Force lui
+fut, [comme nous] l'avons annoncé, de rester à l'O.G.C. [Nice]. Mais
+Saint-Etienne a voulu récupérer [les] sommes versées et Boudjema vient
+[d'être] mis dans l'obligation de rembourser [10.700] francs. Aïe ! »
+Page lue.
+
+**[51] Le Petit Matin (Tunis), 1937 - CE N'EST PAS LUI.** La colonne citante
+et ses voisines lues en entier. Le nom apparaît dans l'ordre du jour d'une
+assemblée générale du syndicat des ouvriers des travaux publics de la région
+de Medjez el Bab, qui « proteste énergiquement contre l'arrestation de leur
+secrétaire Sghaier Boudjemaa », tabassé par un chef cantonnier et mis en
+cellule. Un autre homme, un autre prénom, un autre métier. Page lue, rien
+pour le dossier, mais le texte vaut d'être connu pour lui-même.
+
+**[52] L'Auto, 16 janvier 1937, page 2 - LA PEINE EST REMISE.** La colonne
+citante et ses voisines lues en entier, soit les décisions du bureau fédéral
+et les résultats de billard du Critérium de Paris. Celle qui le concerne :
+« [Remise] de la peine du joueur Boud[jema (O.]G.C. Nice) accordée. Boudjema
+[pourra] donc prendre part, dimanche, au [match] de Coupe de France Nice-R.C.
+[Strasbou]rg. »
+
+Les six mois n'auront donc pas été purgés en entier : la peine est remise en
+janvier 1937, et il rejoue tout de suite, en Coupe de France. Page lue.
