@@ -788,3 +788,116 @@ et les résultats de billard du Critérium de Paris. Celle qui le concerne :
 
 Les six mois n'auront donc pas été purgés en entier : la peine est remise en
 janvier 1937, et il rejoue tout de suite, en Coupe de France. Page lue.
+
+## Pages 55 à 62 - la rentrée, en Coupe de France
+
+**[55] Mülhauser Volksblatt, 17 janvier 1937, page 7 - EN ALLEMAND, DEUX
+OCCASIONS MANQUÉES.** La colonne citante et ses voisines lues en entier. La
+page est le tour complet des seizièmes de finale de la Coupe, lus match par
+match en allemand. Celui qui le concerne se lit en entier : « Nice - R. C.
+Strassburg 0:0. Nice hat gleich zwei klare Torchancen, aber in der Nervosität
+werden diese durch Boudjema ausgelassen. » Nice a d'emblée deux occasions
+nettes, et la nervosité les lui fait manquer toutes les deux.
+
+C'est son premier match après six mois de suspension, et le journal alsacien
+met le mot qu'il faut : la nervosité. La suite de l'article : Kurt Keller
+manque à trois mètres, la seconde mi-temps est très dure, Strasbourg domine,
+et en prolongation Fritz Keller marque un but qui est annulé. Pages lues.
+
+**[56] Les Dernières nouvelles de Strasbourg, 18 janvier 1937, page 7 - LE
+MATCH EN ENTIER, ET LE JUGEMENT DE JEAN BOYER.** Les colonnes citantes et
+leurs voisines lues en entier, soit le long compte rendu de Marcel de Renzis
+envoyé spécial, et celui de Marseille-Fives qui le précède, lu en entier lui
+aussi.
+
+La composition : « Le team de Nice est ainsi constitué : Chaisaz ;
+Schulzendorf et Sclavi ; Rodriguez, Logez, Kurdna ; Gordolon, Sillam,
+Boudjemaa, Gérin, Lovichy. » Arbitre M. Capdeville, près de sept mille
+spectateurs au stade Fernand-Bouisson, un train spécial de supporters
+niçois.
+
+Sur lui : « Les Niçois, qui ont joué avec une fougue endiablée, ont été
+dangereux sur échappée et leur inter-gauche Boudjemaa a souvent semé le
+désarroi dans la défense strasbourgeoise qui s'en est toujours tiré avec
+honneur. »
+
+Et le jugement que le journal va chercher auprès de Jean Boyer,
+ex-international : « Strasbourg, qui a un jeu plus académique, n'est pas venu
+à Marseille avec l'esprit de Coupe. Le public prend volontiers fait et cause
+pour ceux qu'il estime les plus faibles. Ce désavantage moral a fortement
+impressionné les Alsaciens et réduit leur efficacité. Partie méritante des
+Niçois qui ne laissèrent rien au hasard. Du côté Racing, Schwartz et le goal
+Mayer se sont affirmés comme les meilleurs par le sang-froid dont ils ont
+fait preuve. Chez les Niçois, Boudjemaa et la défense ont surclassé leurs
+camarades de club. À vrai dire Strasbourg méritait mieux. »
+
+Un international français dit donc, le jour de sa rentrée, qu'il a surclassé
+ses coéquipiers. Pages lues.
+
+**[57] Strassburger neueste Nachrichten, 18 janvier 1937, page 3.** La
+colonne citante et sa voisine lues en entier, soit la même rencontre racontée
+en allemand et la liste complète des résultats du dimanche. La composition y
+est identique. Rien de plus sur lui que ce que les deux autres journaux
+disent. Pages lues et sans supplément.
+
+**[58] Le Républicain du Gard, 19 janvier 1937, page 4 - CE QUE SA
+REQUALIFICATION A CHANGÉ.** La colonne citante et ses voisines lues en
+entier, soit le bilan complet des seizièmes de finale par Gambardella, ligue
+par ligue et division par division, et un feuilleton sur un jeu de paume.
+La phrase qui le concerne :
+
+« Il convient de tresser des couronnes à l'O.G.C. de Nice qui, à Marseille, a
+tenu en échec le R.C. de Strasbourg. On avait un peu rapidement conclu à la
+défaite des niçois qui comptent dans leurs rangs quelques joueurs non
+qualifiés pour la Coupe de France. Il est probable que la requalification de
+Boudjemaa pour eux, d'une part, et la mise sur la touche de trois joueurs du
+R.C. de Strasbourg, d'autre part, aura été un stimulant précieux pour les
+Aiglons. » Pages lues.
+
+**[59] La Dépêche algérienne, 21 janvier 1937, page 6 - COMMENT ON LE NOMME À
+ALGER.** La colonne citante et ses voisines lues en entier, soit les
+championnats militaires d'Alger, l'escrime, le hockey féminin, le billard et
+les informations militaires, lus en entier. La brève qui le concerne, dans
+les « Nouvelles sportives » : « Le Nord-Africain Boudjemaa, de Nice, qui
+avait été suspendu pour avoir signé deux licences, a fait sa rentrée contre
+Strasbourg. »
+
+À Alger, on l'appelle « le Nord-Africain ». À Paris, « le Tunisien ». Je note
+les deux. Page lue.
+
+**[60] Strassburger neueste Nachrichten, 22 janvier 1937, page 5 - LE MATCH
+À REJOUER, PERDU.** La colonne citante et ses voisines lues en entier. Le
+match rejoué se tient à Lyon, au stade de la Plaine du F.C. Lyon, le 21
+janvier, devant plus de trois mille spectateurs et dans un vent de tempête
+qui souffle dans la longueur du terrain, au point que les dégagements des
+gardiens finissent en corners.
+
+La composition niçoise est la même : « Nice mit : Chaisaz ; Schulzendorf,
+Sclavi ; Rodriguez, Kurdna, Logez ; Gordolon, Sillam, Boudjemaa, Gérin,
+Lovichy. » À la reprise, la domination strasbourgeoise devient telle que
+l'arbitre doit exclure Rodriguez pour une faute sur Fritz Keller, puis Ossi
+Rohr marque le but décisif. Strasbourg gagne 1-0 et se qualifie pour les
+huitièmes, « pour la première fois de sa carrière professionnelle ».
+
+La Coupe s'arrête donc là pour lui, deux matchs après sa rentrée. Pages lues.
+
+**[61] L'Éclair, 25 janvier 1937, page 7 - MONTPELLIER-NICE, DEUX BOLIDES ET
+UN COUP FRANC.** La colonne citante et ses voisines lues en entier. Deux
+mille spectateurs seulement, le grand prix hippique et le rugby Nice-Lanc
+ayant fait concurrence. Les absents sont donnés : à Nice, « Lovicky,
+Schulzendorf, blessés jeudi, et Samitier, grippé ».
+
+La composition : « O.G.C. Nice. - Chaisaz, Sclavi, Kurdna, Rodriguez,
+Orlandini, Logez, Brusseaux, Galland, Dubois, Boudjemaa, Pellegrino. »
+L'arbitre ayant lui aussi fait défaut, c'est M. Marenco, trouvé dans la
+tribune, qui siffle le coup d'envoi.
+
+Sur lui, deux passages : « On note aussitôt après deux bolides de Boudjemaa
+qui trouvent Cazal à la parade. » Et : « Par contre, Boudjemaa fauché
+irrégulièrement à 20 mètres des bois par Kaucsar, tire directement la balle
+hors de [portée], sur le coup franc qui lui est accordé. » La fin de la
+phrase est coupée par la gouttière et je ne la complète pas : je ne sais donc
+pas si le coup franc est entré.
+
+Brusseaux avait ouvert la marque pour Nice ; Dubois manque deux fois le but
+tout fait. Pages lues.
