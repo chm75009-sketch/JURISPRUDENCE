@@ -1057,3 +1057,163 @@ La scène est à garder telle quelle. Hiden, le gardien autrichien du Racing, le
 plus connu d'Europe à cette date, sort dans ses pieds ; les deux hommes roulent
 à terre ; Pellegrino pousse la balle dans le but vide. Le but est de Pellegrino,
 l'action est de lui.
+
+## Pages 79 à 86 - Saint-Ouen, Valenciennes, et une sélection nord-africaine
+
+**[78] Paris-soir, 30 mars 1937, page 8** (ark bpt6k7641588b), le compte rendu
+de Nice-Racing au Stade de Paris, signé Jean Eskenazi, plus la suite anonyme
+« Le film de la partie ». Article lu en entier, il court sur trois colonnes.
+
+C'est le meilleur texte trouvé jusqu'ici sur son jeu, et il contient aussi la
+phrase la plus dure du dossier.
+
+Le cadre d'abord : « Ricardo Zamora fait recette ! Car il y a une assistance
+honorable à Saint-Ouen pour ce match, qui présente un intérêt relatif. » Et :
+« une fois entrés dans le stade Zamora et Hiden se font mitrailler par les
+photographes. C'est beau d'être vedettes ! »
+
+Puis, en première mi-temps : « Nice joue bien et parvient même à marquer. Sa
+valeur est une heureuse révélation pour le public parisien. Les "nationaux"
+comme Boudjenta et Brusseaux ne feraient pas mal en division nationale. »
+Suit, en incise, sans commentaire du journaliste : « - Encore des
+Nord-Africains, souligne Couard, réduit au rôle de spectateur. »
+
+Couard est l'inter du Racing, blessé ce jour-là. La phrase est rapportée
+telle quelle, comme un mot d'esprit de tribune. Il faut la garder : c'est,
+dans tout ce qui a été lu, la seule fois où la réaction à sa présence est
+écrite sans détour.
+
+Le but, dans « Le film de la partie » : « Boudjema suit une passe trop molle
+de Zivcovitch à Hiden, qui le bouscule, et Samitier, qui a suivi, marque dans
+les buts vides. NICE 1 : PARIS : 0. »
+
+**Correction de ce que j'ai écrit plus haut.** Dans la section « Pages 71 à
+78 », d'après L'Express du Midi du 30 mars, j'ai donné le but à Pellegrino.
+Paris-soir, qui a un envoyé au stade et donne l'action minute par minute, le
+donne à Samitier. Les deux journaux décrivent la même action, la même sortie
+de Hiden, le même but dans la cage vide. Je ne tranche pas : L'Express du Midi
+résume une dépêche, Paris-soir raconte le match. Le nom du buteur reste
+incertain ; ce qui ne l'est pas, c'est que l'action part de lui.
+
+Quelques minutes plus tard : « Le but chauffe décidément et Boudjemaa, à son
+tour, adresse un shot qui frise le montant. »
+
+Et le bilan, à la fin : « Les attaquants furent surtout en vue en première
+mi-temps et on note les bonnes qualités de Brusseau, Boudjemaa et Samitier,
+qui a conservé une maîtrise et un sens du football exceptionnels. »
+
+Le reste de l'article donne le décor : Orlandini sorti sur blessure au genou,
+Nice à dix, Nice « invaincu depuis un mois et demi », et cette phrase sur
+l'enjeu, qui dit la place du club : « Le Racing, candidat au titre,
+connaîtra-t-il la défaite des mains d'un club de seconde division ? » Oui.
+Nice gagne 1 à 0.
+
+**[79] La Dépêche (Lille), 14 avril 1937, page 8** (ark bd6t51504375c). Lu en
+entier. Annonce du déplacement à Valenciennes : « L'O.G.C. Nice déplacera sa
+toute première équipe où brillent Samitier, le meilleur avant-centre que
+l'Espagne ait jamais produit, Boudjema, Chaisaz, Orlandini, Lowicky, etc. »
+Il est nommé deuxième, juste après Samitier.
+
+Le journal rappelle les deux résultats qui ont fait la réputation de l'équipe :
+« Ne viennent-ils pas de battre Saint-Etienne par [chiffre illisible] buts à 1
+et, exploit bien plus remarquable encore, de battre à Paris la fameuse phalange
+du R.C. Paris par 1 but à 0 ? Saint-Etienne, le R.C. Paris, deux des meilleurs
+"onze" français du moment battus par l'O.G.C. Nice, voilà de quoi faire
+réfléchir les Valenciennois. » Le chiffre du score de Saint-Etienne n'est pas
+lisible sur la numérisation ; La Volonté indochinoise donnait 2 à 1.
+
+**[81] Le Courrier du Pas-de-Calais, 21 avril 1937, page 3** (ark
+bd6t514626437). Lu en entier. Annonce de Lens-Nice : « Nice possède un team de
+grande classe où brillent les Chaisaz, Lowichy, Kudrna, Orlandini, Boudjemaa
+et le remarquable espagnol Samitier. » Zamora doit donner le coup d'envoi.
+Rien de plus, mais la liste est la même, et son nom y est toujours.
+
+**[82] L'Auto, 23 avril 1937, page 6** (ark bpt6k4629871d). Lu en entier. Deux
+choses, dans la même colonne.
+
+La première, un amical à Saint-Quentin la veille, devant plus de six mille
+personnes : « A la vingtième minute de jeu, l'inter droit Boudjemaa, sur un
+bel effort personnel, marque le deuxième but pour Nice. » Nice gagne 2 à 1.
+C'est la première fois qu'un journal donne son poste : inter droit.
+
+La seconde, quelques centimètres plus bas, sous le titre « Blasco, Samitier,
+Boesinger, Médan et Mattler pénalisés » : « Dans sa réunion d'hier soir, la
+Commission de discipline a infligé une suspension de huit jours sans sursis et
+200 fr. d'amende à Blasco, de l'US Valenciennes, et à Samitier, de l'OGC Nice.
+Cette décision sanctionne un échange de coups entre ces deux joueurs au cours
+du match Valenciennes-Nice, de dimanche dernier. »
+
+**[83] Le Guetteur, hebdomadaire de Valenciennes, 24 avril 1937, page 1** (ark
+bd6t54498497d). Article lu en entier, il occupe deux colonnes de la une et se
+poursuit en page intérieure. C'est le compte rendu du 0 à 0 du 18 avril au
+stade Nungesser, vu de Valenciennes, donc écrit contre Nice. Il n'en est que
+plus utile.
+
+La composition, telle qu'elle est imprimée : « Nice. - Chaisaz, Schulzendorf,
+Kurdna, Rodriguez, Ofandini, Logez, Brusseaux, Gerin, Samitier, Bondjeema,
+Piligrino. » Les noms sont massacrés, le sien deux fois dans le même journal,
+mais la place est claire : il est dans la ligne d'attaque, entre Samitier et
+Pellegrino.
+
+Le coup d'envoi est donné par Zamora, « le brillant portier espagnol,
+nombreuses fois capé ».
+
+En première mi-temps : « Puis Nice réagit, Samitier et Boudjemaa, à la suite
+d'actions bien conduites, shootent successivement, mais de trop loin pour
+surprendre l'attention en éveil du goal occasionnel de Valenciennes. »
+
+Le jugement final, et c'est un journal adverse qui l'écrit : « A Nice, les
+meilleurs furent Boudjemaa, joueur rapide, scientifique et extrêmement
+dangereux ; Pelligrini, Chaisaz, le vernis et la défense. Samitier, jugulé par
+Thomas, se signala par ses brutalités répétées. »
+
+Meilleur homme de Nice, nommé le premier, par la feuille de la ville d'en face.
+Et « scientifique » est le mot qu'on employait alors pour un joueur qui
+construit.
+
+L'incident Samitier, raconté de près, puisqu'il s'est produit devant eux :
+« Et c'est alors que survient un incident regrettable. Samitier lance un coup
+de pied à Blasko, alors que le jeu se déroulait dans le camp athénien. Un
+second Niçois vient à la rescousse et notre avant-centre, pour dégager,
+décoche un coup de poing à l'irascible Espagnol. L'arbitre n'a rien vu et il
+sanctionne les belligérants en les renvoyant tous deux au vestiaire. C'est un
+beau chahut déchaîné dans le public, mécontent du geste, et de l'arbitre et de
+l'Espagnol. »
+
+**Chercher le contraire.** Sur ce point le journal dessert la thèse de la
+vedette espagnole et sert la sienne, et il faut le dire : la star de l'équipe
+sort du terrain, lui reste, et c'est lui qu'on désigne comme le meilleur. Mais
+le même journal écrit aussi que Nice, en seconde mi-temps, « s'effondra sous
+la pression des Rouges » et que « c'est un miracle qu'elle n'ait pas alors
+encaissé 3 ou 4 buts ». La partie qu'il a faite est donc surtout celle de la
+première heure.
+
+**[85] La Dépêche de Constantine, 30 avril 1937, page 4** (ark bd6t511615218).
+Lu en entier. C'est la pièce la plus importante de ce lot.
+
+Sous le titre « LES NORD-AFRICAINS EN FRANCE » : « Paris, 29 avril. - On sait
+que M. Delaunay cherche une équipe à opposer à celle de France. A ce sujet,
+notre confrère Eskénazi, après avoir proposé une rencontre possible contre les
+étrangers de France ou un match Nord-Sud, suggère une autre solution : les
+Nord-Africains. »
+
+Suit la citation d'Eskenazi, le même qui l'avait vu jouer à Saint-Ouen un mois
+plus tôt : « On parle beaucoup d'eux. On n'a jamais autant parlé d'eux. Ils ont
+deux représentants dans l'équipe de France et c'est un commencement. On
+pourrait donc opposer à l'équipe nationale une sélection de Nord-Africains qui
+serait la suivante : Gonzalès (Red-Star) ; Ben Bouali (Marseille) et Jasseron
+(HAC) ; [...] Ortin (Red-Star) ; Zermani (Marseille) ou Haussaire (Cannes),
+Alcazar (Lille) ou Sintés (Sète) ou Boudjema (Nice), Zatelli (Marseille),
+Fructoso (RC Roubaix) et Janin (Red-Star) ou Rodriguez (Excelsior). »
+
+Puis : « Le football nord-africain est appelé à un brillant avenir chez nous et
+c'est lui qui, peut-être, dictera la voie au football français en lui apportant
+cette fougue qui s'émousse tant dans la Métropole. » Et pour finir, en tête de
+la colonne suivante : « Qui sait si la prochaine ossature de l'équipe de France
+ne sera pas nord-africaine ! »
+
+Il est donc cité, en avril 1937, parmi les joueurs d'Afrique du Nord qu'un
+journaliste parisien retiendrait pour affronter l'équipe de France. En
+concurrence avec deux autres à son poste, et le journal le reprend à
+Constantine. C'est la marque la plus haute atteinte jusqu'ici dans sa
+carrière, et elle vient trois mois après la levée de sa suspension.
