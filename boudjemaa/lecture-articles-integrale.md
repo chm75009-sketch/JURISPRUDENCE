@@ -3187,3 +3187,85 @@ division, il rembourse 500 francs par mois à Saint-Etienne, il traîne une anci
 blessure, et un quotidien parisien le range parmi les meilleurs à son poste dans le
 pays. C'est, de tout ce qui a été lu depuis le début, la phrase qui le situe le plus
 haut.
+
+## Pages 263 à 270
+
+Sept articles, du 24 avril au 1er mai 1939. Le match de Buffalo vu par quatre
+journaux, dont un qui se moque, et deux annonces qui le nomment vedette.
+
+### C.A. Paris 1 - Colmar 1, Buffalo, 23 avril 1939
+
+**L'Éclair, 24 avril 1939, pages 8 et 10** (bd6t53744684c), compte rendu signé
+A. Fourcade, publié deux fois dans le même numéro. Fructuoso marque à la 11e minute
+sur un centre de Lamanna, Colmar égalise cinq minutes plus tard. En seconde
+mi-temps : « Dès la reprise, Colmar attaque. Les défenseurs capistes veillent et
+rien n'aboutit. [...] L'avantage territorial appartient aux Alsaciens. [...] **Un tir
+de Boudjemaa est stoppé par Gonzalès.** »
+
+Et la conclusion : « Colmar pratiqua néanmoins le meilleur jeu, mais il se heurta à
+une excellente défense capiste. Les meilleurs furent à Colmar Demuth,
+Gabrillargues, Telletchea, Zopp, **Boudjemaa** et Emenoz. »
+
+**L'Auto-vélo, 24 avril 1939, page 6** (bpt6k4635459m), sous le titre « Match dur
+et très disputé à Buffalo » : « Le match joué hier à Buffalo, devant une bonne
+assistance, [...] fut ardemment disputé par les joueurs des deux clubs, et son
+résultat [est] parfaitement logique, car l'avantage [fut] très partagé. Comme il est
+habituel depuis quelque temps, l'arbitre du match [...] fut d'une insigne faiblesse,
+et ses [deux] juges de touche encore plus médiocres. » Le classement du jour place
+Colmar sixième.
+
+**Le Matin, 24 avril 1939, page 4** (bpt6k586308j), sous le titre « **Un arbitre
+fantaisiste à C. A. P.-Colmar** », va plus loin sur l'arbitrage : « Sans arrêt, les
+deux juges de touche signalèrent des hors-jeu imaginaires. Des corners furent
+sifflés sorties de but et des touches de but devinrent corners. On vit même
+l'arbitre accorder un penalty au C. A. P. pour un fauchage de [Demuth] sur
+Fazcinek, réparation annulée, puis transformée en chandelle d'arbitre ! »
+
+Mais c'est ailleurs que ce journal se singularise. Après avoir écrit : « Contre le
+C.A.P., Colmar a démontré hier à Buffalo qu'il possédait une des meilleures équipes
+de la division II », et cité « Gabrillargues, Teletchea, Zopp et **Boudjemaa** »
+parmi les joueurs de valeur, il ajoute ceci :
+
+« Si toute l'équipe pratique un bon football, il est évident que les dirigeants la
+nourrissent bien. Leur bonne mine et leur petit "œuf de Pâques" en sont la preuve.
+On ne pourrait trouver meilleurs représentants de la table ronde. Et, plus d'une
+fois, **Gabrillargues, Gougain ou Boudjemaa, à bout de souffle, durent
+s'arrêter**. »
+
+Je le cite en entier parce que c'est désobligeant et que ça ne doit pas être omis :
+un journal parisien écrit, le lendemain d'un match nul obtenu à l'extérieur, que les
+joueurs colmariens ont du ventre et manquent de souffle. Une semaine plus tôt, le
+même Paris-midi le classait parmi les meilleurs intérieurs de France. Les deux
+phrases sont dans le dossier ; je n'en choisis pas une.
+
+### Les annonces de la fin de saison
+
+**Sporting, revue hebdomadaire illustrée, 25 avril 1939, page 4** (bpt6k7230325k) et
+**Le Petit Parisien, 27 avril 1939, page 6** (bpt6k6836529) annoncent dans les mêmes
+termes Colmar contre les Girondins de Bordeaux :
+
+« L'on sait la classe [des joueurs du] S. R. Colmar qui compte [dans ses] rangs des
+footballeurs co[mme Telle]chea, Zopp, **Boudjema**, G[abrillargues, qui] sont
+d'authentiques ve[dettes et qui] auraient même dû valoir [au club] un autre
+classement [...] très dangereux. »
+
+Authentiques vedettes. C'est le mot, et il vient d'un hebdomadaire illustré et du
+Petit Parisien, pas d'un journal alsacien.
+
+### Colmar - Toulouse, 30 avril 1939
+
+**Les Dernières nouvelles de Strasbourg, 1er mai 1939, page 3** (bd6t526584766).
+La colonne est mal imprimée et le score final n'y est pas lisible, mais le déroulé
+l'est : « Partie ardemment [disputée de part] et d'autre et que les [Colmariens
+menèrent à un] moment par 3 à z[éro et qu'ils faillirent] perdre à la suite d'[un
+retour] final des Toulousa[ins]. »
+
+« Colmar débuta e[n force et mar]qua par Zopp dès [le début. A la] 33e minute, Zopp
+[reprit un centre] de **Boudjema** [...] Mais alors [les Toulousains se ré]veillent.
+Demuth [marque contre son] camp à la 72e minute [...] Planquès [réduit encore
+l'écart] [...] offensive à outrance [...] et finalement [Colmar, malgré la réduction
+de] son avance, rempor[ta la décision]. »
+
+Chez les Colmariens, dit le journal, « se signalèrent Zopp, Em[onoz et]
+Gabrillargues ». Cette fois son nom n'est pas dans la liste des meilleurs ; il est
+dans le récit du deuxième but, comme passeur.
