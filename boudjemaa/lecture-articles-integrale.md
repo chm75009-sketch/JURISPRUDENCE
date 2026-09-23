@@ -1465,3 +1465,98 @@ Un mois après son arrivée, il est donc installé : inter gauche de l'attaque
 stéphanoise, à côté de Beck, dans l'équipe qui vient de battre la sélection
 nationale suisse et qui, écrit Louis Pere, « doit jouer les ténors dans le
 groupe Sud ».
+
+## Pages 111 à 118 - le départ pour Tunis de janvier 1938, et le retour
+
+Ce lot donne la date qui manquait au dossier depuis le début : celle du
+voyage en Tunisie de 1938, et celle du retour.
+
+**[110] La Petite Gironde, 28 septembre 1937, page 2** (ark bpt6k4373149z). Lu
+en entier. Le correspondant bordelais explique la lourde défaite des Girondins
+à Saint-Etienne : « Si la presse a été unanime à souligner la forme
+exceptionnelle des Stéphanois, si elle a rapporté que, pour la première fois,
+Saint-Etienne jouait grand complet par suite des rentrées de Favier,
+Boudjemaa, Biechert et du prestigieux Hermann ; si elle a noté que cette même
+équipe venait de battre [récem]ment l'équipe nationale suisse, elle a
+complètement omis de [signaler la] mise hors de combat de l'excellent Ben
+Arab, au bout de dix minutes de jeu. »
+
+Son nom est donc l'un des quatre qui, réunis, font dire à la presse que
+Saint-Etienne joue « grand complet » pour la première fois de la saison.
+
+**[111] L'Athlète, 20 octobre 1937, page 1** (ark bpt6k4559423j). Lu en entier.
+Annonce de Girondins-Nice du 24 octobre, avec une longue présentation de
+Zamora et de Samitier. La composition niçoise annoncée est : « Avants :
+Grosser, Alcazar, Samitier, Gnaoui, Boudjemaa. »
+
+**C'est faux, et il faut le dire.** Le même journal, le 22 septembre, l'avait
+imprimé dans l'équipe de Saint-Etienne, et le 10 novembre il le rangera parmi
+les recrues stéphanoises de l'été. Le rédacteur a repris une liste d'effectif
+de Nice périmée depuis deux mois. Je le note pour qui lira ces pages après
+moi : un nom dans une composition annoncée n'est pas une preuve de présence, et
+celle-ci est démentie par deux numéros du même titre.
+
+**[112] L'Athlète, 10 novembre 1937, page 1** (ark bpt6k4559426s), signé
+R. Dahetze, avant le match du 11 novembre à Bordeaux. Lu en entier. C'est le
+récapitulatif du recrutement stéphanois de l'été, et il le place dans son
+contexte.
+
+Les départs d'abord : « Mugnier et Joumard jouent cette année à Nîmes, Kovacs
+est allé à Alès ; Stevanovitch fait les délices de Toulouse, et Langiller
+donne au C. A. P. une plus-value certaine. »
+
+Les arrivées ensuite : « L'A. S. de Saint-Etienne s'est, en effet, enrichie de
+Favier, gardien de buts de Boulogne ; de Kordjna, venu du F. K. de Berne ; de
+Casy, du F. C. de Mulhouse ; de Roux, du S. O. Montpellier ; de Lazaro, du
+Gallia d'Oran ; de Charbit, de l'Olympique de Marseille ; **de Boudjemaa, de
+l'O. G. C. de Nice**, et enfin du fameux Hermann, l'émule de Beck, du Libertas
+de Vienne. Et la décadence prévue ne se produisit pas. »
+
+Le palmarès qui suit : Nîmes 2-0, Toulouse 5-0, les Girondins 7-2, Montpellier
+3-1, Toulouse au retour 3-0 ; nuls contre Nice (0-0 et 1-1) et Alès (1-1) ;
+une seule défaite, le 5 septembre, contre Alès 3-2. « À l'heure actuelle ce
+club occupe la première place du groupe sud avec 13 points. »
+
+**Un second écart sur le match contre la Suisse.** Dahetze écrit : « la
+Fédération suisse de football, désirant entraîner son équipe avant sa
+rencontre avec le onze national de la France, demandera à l'A. S. de
+Saint-Etienne de vouloir bien se mesurer avec sa sélection. Les hommes de Beck
+réalisèrent un exploit sensationnel, puisqu'ils vainquirent les Helvètes par
+5 buts à 3. » L'Ouest-Éclair donnait 2 à 0. Ou il y a eu deux matches, ou l'un
+des deux journaux se trompe ; je ne tranche pas, mais le motif que donne
+Dahetze, la préparation de la Suisse avant France-Suisse, est nouveau et
+explique pourquoi un club de deuxième division rencontrait une sélection
+nationale.
+
+**[115] et [116] L'Éclair, quotidien du Midi, jeudi 13 janvier 1938**, page 3
+et page 15 (ark bd6t53744231v). Les deux versions de la même rubrique lues en
+entier ; celle de la page 3 est coupée par le bord, celle de la page 15 est
+complète. Entre un écho sur Zatelli et un autre sur le terrain du Nîmes
+Olympique :
+
+**« Le Stéphanois Boudjemaa a quitté St-Etienne pour aller se reposer à
+Tunis. »**
+
+Onze mots, et c'est la date. Janvier 1938, en pleine saison, le leader du
+groupe Sud laisse partir son inter gauche. Le journal écrit « se reposer » ;
+il n'en dit pas plus, ne donne ni durée, ni motif autre.
+
+La preuve par l'équipe, dans la même colonne : « L'A. S. de Saint-Etienne
+jouera demain à Dunkerque et dimanche à Tourcoing. Elle jouera dans la
+formation suivante : but, Favier ; arrières : Casy, Rolhion ; demis : Rich,
+Odry, Biechert ; avants : Pasquini, Plovie, Beck, Hermann, Tax. » Son poste
+est tenu par un autre.
+
+**[117] Le Grand écho du Nord de la France, 2 mars 1938, page 7** (ark
+bpt6k4765841c). Lu en entier. Compte rendu de Saint-Etienne-Boulogne du
+1er mars, gagné 7 à 0, avec trois buts de Beck en vingt minutes. Le classement
+de la page donne Saint-Etienne premier de deuxième division.
+
+À la fin du compte rendu : « Signalons que Korjuna et Pasquini étaient absents
+à Saint-Etienne et que les "verts" vont bénéficier **du retour de Boudjemaa**
+et du renfort de Pasquini, titulaire du Lausanne sportif et ex-équipier de
+Cannes. »
+
+Le séjour à Tunis a donc duré de la mi-janvier à la fin février 1938 : sept
+semaines environ. Il revient dans une équipe en tête de son groupe, qui vient
+d'en mettre sept à Boulogne.
