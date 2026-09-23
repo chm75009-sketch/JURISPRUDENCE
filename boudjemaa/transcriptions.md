@@ -2899,3 +2899,149 @@ Arabes », « ce Nord-Africain », « petit yaouled ».
 Planche : photos/PetitParisien-1939-portrait-planche.jpg.
 
 LU : 221 sur 312.
+
+---
+
+## [151] Colmar, printemps et été 1939
+
+Le Courrier du Pas-de-Calais du 18 avril 1939, page 5 (ark bd6t51462842h) :
+« Colmar. - Wozniak ; Demuth, Zopp ; Villacampa, Gabrillargues, Logez ;
+Gougain, Heine, Krickl, Boudjemaa, Emenoz. »
+
+Les Dernières Nouvelles de Strasbourg du 20 avril 1939, page 6 (ark
+bd6t526584640) : « La Commission de discipline a adressé [un avertissement]
+pour jeu incorrect [à Zopp] et Boudjemaa, [au cours du] match
+Colmar-[Dieppe]. »
+
+Excelsior du 23 avril 1939, page 6 (ark bpt6k4611560t), et L'Éclair du
+24 avril, pages 8 et 10 (ark bd6t53744684c), C.A. Paris contre Colmar : « Un
+tir de Boudjemaa est stoppé par Gonzalès. » Et le jugement : « Les meilleurs
+furent à Colmar Demuth, Gabrillargues, Tellechea, Zopp, Boudjemaa et
+Emenoz. »
+
+Le Matin du 24 avril 1939, page 4 (ark bpt6k586308j), sur le même match, une
+scène qui vaut d'être gardée : « A Colmar, les joueurs de valeur ne manquent
+pas : [...] Gabrillargues, Tellechea, Zopp et Boudjemaa. Si toute l'équipe
+pratique un bon football, il est évident que les dirigeants la nourrissent
+bien. Leur bonne mine et leur petit "œuf de Pâques" en sont la preuve. On ne
+pourrait trouver meilleurs représentants de la table ronde. Et, plus d'une
+fois, Gabrillargues, Gougain ou Boudjemaa, à bout de souffle, durent
+s'arrêter. »
+
+Paris-midi du 23 avril 1939, page 4 (ark bpt6k47379707) : « L'équipe
+alsacienne compte de très bons éléments, comme Gabrillargues, Tellechea,
+[...] Zopp et Boudjemaa, qui est un des meilleurs intérieurs français. »
+
+Sporting du 25 avril 1939, page 4 (ark bpt6k7230325k) : « L'on sait la classe
+[des] S.R. Colmar qui comptent [dans leurs] rangs des footballeurs
+[comme Telle]chea, Zopp, Boudjema, G[abrillargues. Ce] sont
+d'authentiques ve[dettes]. »
+
+Les Dernières Nouvelles de Strasbourg et le Strassburger neueste Nachrichten
+du 1er mai 1939 (arks bd6t526584766 et bd6t5964616v), Colmar contre
+Toulouse : « In der [16.] Minute flankt Boudjema vors Tor, Zopp köpft zum 2:0
+ein » - Boudjema centre et Zopp marque de la tête.
+
+L'Éclair du 3 mai 1939, pages 3, 7 et 11 (ark bd6t53744692x) : une brève qui
+annonce un mouvement, « [le club] serait en pourparlers avec Boudjema, de
+[Colmar] ».
+
+Le Messin du 5 août 1939, page 7 (ark bd6t51185056j), et L'Est républicain du
+même jour, page 6 (ark bpt6k8283783x), donnent la composition de Colmar en
+tableau pour un match à Metz : « Wozniack ; Costamagna, Demuth ;
+Gabrillargues, Vernay, Gougain ; Emonoz, Boudjema, Heine, Tellechéa,
+Herpin. » Le Messin ajoute : « Boudjema, [l'un des meilleurs du] onze
+alsacien ».
+
+VERDICT : la dernière saison d'avant-guerre. Il est donné par Paris-midi comme
+« un des meilleurs intérieurs français », et il joue encore le 6 août 1939 à
+Metz. Un mois plus tard, la guerre.
+
+LU : 234 sur 312.
+
+---
+
+## [152] Le Petit Matin (Tunis), 1941, page 2
+
+Ark bpt6k8392971m, vue 2. Dans une revue des joueurs nord-africains :
+« [...] Boudjemaa, un [des meilleurs foot]balleurs tunisiens, a [rejoint]
+l'Union sportive B[éjaoise]. »
+
+VERDICT : la trace de son retour à l'U.S. Béja pendant la guerre. A confirmer
+sur une lecture plus nette.
+
+LU : 235 sur 312.
+
+---
+
+## [153] L'Auto, 8 janvier 1941, page 3
+
+Ark bpt6k4642689s, vue 3. « Le F.C. de Sète attend encore l'arrivée de
+Boudjemaa, mais le Nord-Africain s'est montré à maintes reprises bien
+versatile, bien capricieux. C'est pourquoi on l'attend à Sète sans trop
+compter sur lui. »
+
+VERDICT : en janvier 1941, il est annoncé à Sète et n'y vient pas. Le
+vocabulaire est toujours le même, « versatile », « capricieux ».
+
+LU : 236 sur 312.
+
+---
+
+## [154] L'Auto, 7 mai 1941, page 2 - TUNISIE CONTRE FRANCE À TUNIS
+
+Ark bpt6k4642803z, vue 2. Compte rendu d'un match de la tournée de l'équipe
+de France en Afrique du Nord, à Tunis.
+
+« Boudjemaa, l'ex-Colmarien, [qui] est la vedette locale, ne jo[ua
+malheureus]ement que pendant 45 m[inutes]. »
+Et la scène du stade, qui est un document à elle seule : « L'équipe
+tunisienne est composée pour les 9/11e de Mu[sulmans] et la proportion entre
+chéchias et chapeaux était la même dans les tribunes. C'est vous dire que les
+ac[cla]mations des locaux furent [nourries] : Djema, Djema (Boudjemaa) et
+Mica, Mica (Micales) retentissants. Mais ces vivats décrurent au fur et à
+mesure que la marque augmentait au tableau d'affichage. »
+Et plus loin : « Avec Mouldi, Boudjemaa, B[el]beche et Draoua se
+distin[guèrent] ».
+
+VERDICT : mai 1941, il joue pour la Tunisie contre la France, à Tunis, devant
+un public qui scande son nom, « Djema, Djema ». Il est « la vedette locale ».
+C'est une pièce pour le chapitre 6.
+
+LU : 237 sur 312.
+
+---
+
+## [155] Football, 22 mai 1941, page 11
+
+Ark bpt6k7217263j, vue 11. Le même déplacement, vu de Paris : « [...] la
+victoire confortable (7-2) acquise au détriment d'une formation à forte
+représentation musulmane et dans laquelle Boudjemaa (ex-Colmar), Draoua
+(ex-H.A.C.), Mouldi et [Bel]cosso se distinguèrent. Malgré la netteté du
+score, il convient de signaler les progrès d'ensemble réalisés par les
+Tunisiens, beaucoup moins en contact avec la Métropole qu'Algériens et
+Marocains. N'est-il pas d'ailleurs étonnant de remarquer à ce sujet que la
+précédente rencontre remontait à 1933 ! »
+
+LU : 238 sur 312.
+
+---
+
+## [156] L'Écho de Tunis, 1943, pages 2 et 3
+
+Arks bpt6k8379255q et bpt6k83792564. Une sélection de Tunis contre une
+formation britannique, en pleine guerre.
+
+Composition : « Sélection de Tunis. But : Milazzo ; arrières : [Lom]pardi,
+Statepoulos ; demis : [...] Selgem, L'Arbi ; avants : [...] Boudjemaa,
+Ducousso, [...] Younès. »
+
+Et le compte rendu, page 3 : « Les deux autres [buts de] Boudjemaa furent
+[l'un sur passe de Du]cousso et l'autre [...] » ; « Boudjemaa [et] Younès
+firent une [bonne par]tie. »
+
+VERDICT : en 1943, à Tunis, il marque deux buts dans une sélection de Tunis, et
+il joue aux côtés de Ducousso, le même nom que l'avant de l'U.S. Béja de
+février 1931. Le fil de Béja ne s'est jamais rompu.
+
+LU : 240 sur 312.
