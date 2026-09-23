@@ -3462,11 +3462,280 @@ LU : 273 sur 312.
 
 ---
 
+## [175] LES PAGES QUE GALLICA REFUSE EN IMAGE, LUES AUTREMENT - 23 septembre 2026
+
+Cinquante pages de la liste restaient inaccessibles : le service d'images de
+Gallica répond « You are not authorized to access this resource » et il n'a
+pas cédé, quel que soit le rythme des requêtes. J'ai donc pris une autre
+porte. Le service ContentSearch de Gallica, qui n'est pas le service
+d'images, rend le texte reconnu autour du mot cherché, page par page. Je l'ai
+interrogé sur chacune de ces cinquante pages, avec six graphies du nom.
+
+La limite, et elle doit être dite : ce service ne rend pas la page entière,
+seulement le passage autour du nom. Ce n'est donc pas une lecture intégrale,
+c'est un extrait servi par la bibliothèque, avec les défauts de sa
+reconnaissance de caractères. Je cite ces textes comme extraits, jamais comme
+page lue, et je continue à demander les images.
+
+Quarante-six des cinquante ont rendu quelque chose. Voici ce qu'elles
+disent, dans l'ordre du temps.
+
+**Lyon républicain, 20 janvier 1936, page 7.** Saint-Étienne contre Nice :
+« Les meilleurs hommes parurent Schulzendorf, Schubert, Béraudo et
+Boudjemaa. » Et plus loin : « les avants azuréens ne paraissant pas, à
+l'exception de Boudjemaa, de bons réalisateurs [...] Enfin au cours des
+dernières minutes les Niçois semblant plus frais parvinrent à sauver
+l'honneur, bien entendu Boudjemaa eut cette satisfaction. »
+
+**Le Progrès de la Somme, 2 mars 1936, page 5.** Amiens contre Nice :
+« Kellinger, jouant trop en retrait, engage un duel avec Boudjemaa qui prend
+souvent le dessus » ; « Les avants niçois trouvent enfin la bonne carburation
+et après deux corners en leur faveur, Boudjemaa, bien servi par Moudry, prend
+Lesieur à contre-pied d'un shoot à ras de terre bien ajusté » ; et le
+jugement : « A Nice : superbe partie de Boudjemaa. »
+
+**Le Petit Provençal, 4 mai 1936, page 9.** « A Nice, bonne partie des demis
+et de l'attaque où Boudjemaa se montra le meilleur homme sur le terrain. »
+
+**Le Petit Provençal, 22 mai 1936, page 9.** Une ligne qu'on n'avait nulle
+part : « Boudjema, très courageux, malgré sa blessure à la tête, marque un
+joli but et Nice tient par 2 à 1. » Il joue et il marque la tête blessée.
+
+**Le Mémorial, 14 juillet 1936, page 5.** Le journal de Saint-Étienne annonce
+la signature, la veille du bulletin fédéral qui portera les deux licences :
+« FOOTBALL ASSOCIATION - Boudjema de l'O. G. C. de Nice jouera à
+Saint-Etienne. Nous apprenons que le brillant inter-gauche de l'O.G.C. de
+Nice, l'Algérien Boudjema, vient de donner son adhésion à l'A.S. de
+St-Etienne [...] Boudjema peut opérer aussi bien inter que centre-avant.
+C'est une bonne recrue pour notre équipe professionnelle. »
+
+RACISME, chapitre 3 : « l'Algérien Boudjema ». Il est tunisien, le journal du
+club qui vient de le signer ne sait même pas de quel pays il vient, et cela
+ne gêne personne. Quand on ne dit pas « le Nord-Africain », on se trompe de
+pays.
+
+**Le Jour, 18 juillet 1936, page 8.** La même nouvelle vue de Paris, datée de
+Saint-Étienne le 15 juillet : « Boudjema à Saint-Etienne. Les dirigeants de
+l'A.S. Saint-Etienne, après de longs pourparlers, tenus secrets jusqu'à la
+dernière heure, ont engagé le Niçois Boudjema. » Longs pourparlers, tenus
+secrets : c'est le mot même de la manoeuvre que l'Éclaireur du Soir
+dénoncera quinze jours plus tard.
+
+**Lyon républicain, 1er août 1936, page 4.** « La Commission, après avoir
+contrôlé la date des demandes de licences, a annulé celle qui était signée
+pour Saint-Etienne et a laissé la qualification de Boudjemaa pour l'O.G.C.
+Nice. »
+
+**Le Mémorial, 1er août 1936, page 3.** Le même jour, vu de Saint-Étienne, et
+le titre dit la déception : « Le footballeur Boudjemaa ne jouera pas à
+Saint-Etienne. La Commission centrale des statuts et règlements de la
+Fédération française a décidé d'infliger 3 mois de suspension à partir du
+premier match professionnel de la prochaine saison au joueur Boudjemâ qui
+avait sollicité 2 licences [...] La Commission, après avoir contrôlé la date
+des demandes de licences, a annulé celle qui était signée pour
+St-Etienne. »
+
+**Le Mémorial, 7 octobre 1936, page 6.** L'aggravation : « Le Bureau Fédéral
+avait à étudier l'affaire Boudjema de l'O.G.C. Nice [...] La commission
+centrale des règlements avait déclaré après enquête que Boudjema serait
+qualifié à Nice et lui avait infligé une suspension de trois mois [...] Le
+Bureau Fédéral a confirmé la décision de la commission centrale des
+règlements, précise que Boudjema reste qualifié à Nice, mais a porté la
+suspension de trois à six mois. »
+
+**Le Mémorial, 16 janvier 1937, page 8.** En capitales : « BOUDJEMA POURRA
+JOUER AVEC L'O.G.C. DE NICE. Le bureau de la F.F.F.A. a remis la peine du
+joueur Boudjema de l'O.G.C. de Nice qui pourra par conséquent participer à la
+Coupe de France dimanche avec son club. »
+
+**Le Petit Provençal, 17 janvier 1937, page 8.** La composition de Nice en
+tableau pour le match de Marseille, où on lit sa ligne d'avants : « Lovichy,
+Gérin, Boudjemaa, Sillam, Gordolon ».
+
+**Le Petit Provençal, 15 mars 1937, page 6.** Nice contre Saint-Étienne :
+« Boudjemaa galvanise l'attaque niçoise et Pellegrino continue à gâcher de
+belles occasions » ; puis, et c'est nouveau : « Boudjemaa blessé passe à
+l'aile gauche et n'est plus qu'un figurant » ; et « de quarante mètres
+Boudjemaa place un shoot que Guillard détourne en corner ».
+
+**Le Mémorial, 15 mars 1937, page 4.** Le même match vu de Saint-Étienne :
+« Chez les Niçois, citons Samitier, Boudjemaa, Brusseaux, Orlandini. »
+
+**Le Progrès de la Somme, 27 mars 1937, et Le Jour, 29 mars 1937.** Les
+compositions de Nice pour l'amical contre le Racing : « Brusseaux, Gérin,
+Samitier, Boudjemaa et Pellegrino ».
+
+**Le Petit Provençal, 10 mai 1937, page 6.** « Les Niçois veulent se ressaisir
+et une belle action de Pellegrino sur service de Boudjema voit l'ailier
+déborder sur le centre et placer un shoot qui va juste au-dessus. »
+
+**La Tribune de l'Aube, 29 mai 1937, page 5.** L'annonce du déplacement de
+Nice à Troyes : « Devant NICE et ses étoiles la tâche de l'A.S.T.S. sera
+rude. Demain au Stade de l'Aube, l'O.G.C. Nice se présentera avec toutes les
+vedettes qui ont nom Samitier, le fameux international espagnol, Boudjema, un
+Nord-Africain de qualité, et l'Italien Orlandini, joueur de premier ordre. »
+
+**La Tribune de l'Aube, 1er juin 1937, page 4.** Le compte rendu : « sur
+passes croisées Pellegrino-Boudjema, oblige Troyes à mettre en corner » ;
+« Coup franc contre Eory et bel arrêt de Barella sur un shoot très sec de
+Boudjema » ; « trois minutes après, sur une action personnelle, Boudjema
+réduit le retard niçois à un but et un nouveau tir du même est bien
+dangereux ».
+
+**Le Petit Provençal, 21 juin 1937, page 8.** « Rodriguez, Costamagna,
+Brusseaux, Samitier et Boudjemaa ont renouvelé leur contrat à l'O.G.C.
+Nice. » Deux mois avant d'être vendu.
+
+**L'Express de Mulhouse, 23 août 1937, page 5.** « L'A.S. Saint-Etienne a
+"acheté" l'avant-centre Boudjemaa pour 50.000 francs. »
+
+**L'Express de Mulhouse, 2 septembre 1937, page 5.** « Dès dimanche prochain,
+le Tunisien Boudjema, ex-vedette de l'O.G.C. Nice, sera qualifié et fera sa
+rentrée dans le match contre Alès à St-Etienne. » Et la ligne d'attaque :
+« Kordjna, Tax, Boudjema et Roux ».
+
+**Le Mémorial, 12 novembre 1937, page 5.** « Les sportifs connaissent la
+valeur de l'équipe stéphanoise où brille Boudjemaa, Kordjna, etc. »
+
+**L'Express de Mulhouse, 5 janvier 1938, page 6.** Une ligne qui vaut pour le
+chapitre 7 : « Le Stéphanois Boudjemaa est actuellement en convalescence à
+Tunis, dans sa famille. » C'est la seule mention de sa famille dans toute la
+presse lue à ce jour. Le même entrefilet rappelle qu'Yvan Beck a marqué
+64 buts en 73 matchs pour le club.
+
+**Le Mémorial, 7 avril 1938, page 5.** « La défection de Boudjemaa va bien se
+faire sentir à l'A.S. de St-Etienne. »
+
+**L'Express de Mulhouse, 12 mai 1938, page 5.** « Boudjemaa a débarqué la
+semaine dernière [...] Boudjemaa a manifesté l'intention de reprendre place
+dans l'équipe de l'A.S. St-Etienne. »
+
+**Le Mémorial, 23 juin 1938, page 5.** « Quant à Boudjemaa, le climat
+stéphanois ne lui vaut rien et il se déciderait à gagner des contrées plus
+favorisées : Antibes ou Marseille l'accueillerait. »
+
+**L'Express de Mulhouse, 23 juin 1938, page 5.** « Colmar s'attacherait les
+services de l'excellent Nord-Africain de Saint-Etienne Boudjema », sous
+réserve du prix du transfert.
+
+**Le Mémorial, 2 juillet 1938, page 6.** Sèchement : « Par contre on a vendu
+Boudjemaa aux S.R. de Colmar. »
+
+**Der Republikaner de Mulhouse, 23 juillet 1938, page 12.** La ligne d'attaque
+annoncée de Colmar : « Für den Sturm : Telletchea, Zopp, Villacampa, Aravit,
+Belko, Emenoz, Boudjema, Krickl, Meyer. »
+
+**L'Express de Mulhouse des 16 et 22 août 1938, et l'Echo de Sélestat du
+21 août 1938.** Les compositions des matchs de préparation contre Sochaux,
+avec lui entre Zopp et Belko.
+
+**Echo de Sélestat, 6 septembre 1938, page 2.** Colmar contre Sète, en
+allemand : « ein zünftiger Lattenschuss von Boudjemaa », un vrai tir sur la
+barre ; puis « Belko brachte seinen Strafstoss [...] an den abseitsstehenden
+Boudjemaa, welches Colmar die 2:0-Führung gab », le coup franc de Belko
+trouve Boudjemaa en position de hors-jeu et donne à Colmar le 2 à 0. Le
+chroniqueur, comme celui du Colmarer neueste Nachrichten, met un point
+d'interrogation sur ce hors-jeu.
+
+**Der Republikaner, 12 septembre 1938, page 5.** Colmar contre Nice :
+« Belko gibt zu Boudjema, der zwei Meter vor dem Tor unhaltbar einschoss »,
+Belko donne à Boudjema qui marque imparablement à deux mètres du but. Et les
+meilleurs : « Bei Colmar : Schaden, Belko, Boudjema und Wozniak. »
+
+**L'Express de Mulhouse, 11 octobre 1938, page 5.** « Zopp, à quelques minutes
+de là, inscrit un quatrième point, Boudjemaa plaçant ensuite une cinquième
+fois sur la fin. »
+
+**La Tribune de l'Aube, 20 octobre 1938, page 4.** Avant Troyes contre
+Colmar : « Ce sont notamment les Sochaliens Belko et Gougain, le dynamique
+avant-centre Zopp, le Nord-Africain Boudjemaa, le demi-aile Othman, le goal
+Wozniack. »
+
+**Der Republikaner, 31 octobre 1938, page 7.** Une critique dure, la plus dure
+qu'on ait lue : « sie haben den Sieg verdient, aber noch höher, wenn die
+Stürmerlinie sich mehr Mühe gegeben hätte und Boudjema keine miserable Partie
+geliefert hätte » - ils méritaient la victoire, et plus largement encore, si
+la ligne d'attaque s'était donné plus de peine et si Boudjema n'avait pas
+livré une partie misérable.
+
+**L'Express de Mulhouse, 7 novembre 1938, page 5.** « Boudjemaa, en possession
+du cuir, passe à Zopp, qui égalise à la 31e minute » ; et le bombardement de
+la fin, « ras de terre de Boudjemaa, crâne d'Emenoz, corner du même, coup
+franc tiré par Telletchéa ».
+
+**Echo de Sélestat, 10 novembre 1938, page 6.** La composition du S.R. Colmar
+en tableau : « Belko, Zopp, Emonoz, Boudjemaa, Villacampa, Othman, Tellechea,
+Gougain, Delacourt, Demuth, Collet. »
+
+**Gebweiler neueste Nachrichten, 19 décembre 1938, page 11.** Le match de
+Coupe contre Lens : « Boudjemaa besser aufkam », il est monté en puissance ;
+puis « Boudjemaa schiesst ganz bombig an den Pfosten », il envoie une bombe
+sur le poteau ; et un tir manqué plus tard.
+
+**Echo de Sélestat, 11 février 1939, page 9.** « das voraussichtliche Fehlen
+von Boudjemaa », son absence probable pour le match contre Nancy.
+
+**Echo de Sélestat, 12 mars 1939, page 6.** Colmar contre Troyes, ses deux
+buts : « In der [...] Minute erhöhte Boudjemaa und 5 Minuten vor Schluss
+derselbe Spieler das Resultat ». Et, sur son état : « Boudjemaa als
+Halbinvalide » - Boudjemaa comme demi-invalide. C'est la troisième source
+allemande de ce printemps 1939 qui parle de sa blessure ; il joue diminué
+toute la saison.
+
+**Der Republikaner, 3 mai 1939, page 10.** Il est cité parmi ceux « die ihr
+Können schon in Division-Nationale-Vereinen gezeigt haben », ceux qui ont
+déjà montré ce qu'ils valent dans des clubs de division nationale.
+
+**Le Jour, 8 juin 1939, page 10.** Une composition de Colmar de fin de saison :
+« Schaden, Kreuzer, Emonoz, Belko, Boudjema, Meyer, Krickl, Zopp,
+Tellechea. »
+
+**Der Republikaner, 29 juillet 1939, page 11.** La première journée
+d'entraînement de la saison 1939-1940, avec la liste des présents et celle
+des absents : « Fehlten folgende Spieler : Boudjema, Othmann, Gabrillargues,
+Zopp, Demuth, Herpin, Ségeau. » Il manque à l'appel du premier jour. Cinq
+semaines plus tard, la guerre.
+
+**L'Effort, 7 juillet 1941, page 2.** Et voici une pièce pour le chapitre 6 :
+dans une composition d'équipe, « Avants : Boudjemaa (Tunisien), ancien joueur
+professionnel de Colmar ». Juillet 1941, il figure donc dans une formation
+suivie par un journal de la zone non occupée. Cela s'accorde avec L'Auto du
+5 février 1941, qui le disait en France, en zone non occupée, et avec les
+annonces du F.C. Sète de l'hiver 1940-41. Reste à identifier le club de cette
+composition : la page n'est pas lisible en entier, je ne le devine pas.
+
+**Paris-Presse, 16 novembre 1946, page 4.** L'attaque de Colmar pour la
+saison de sa dernière année : « Ségaux, Marjewsky, Zopp, Gévaudan, Boudjemaa,
+Emmenegger. »
+
+CE QUE CETTE MOISSON APPORTE :
+1. Une blessure à la tête le 21 mai 1936, et il marque quand même.
+2. Le mot « l'Algérien » sous la plume du journal de Saint-Étienne, huit jours
+   avant que le club dépose sa licence.
+3. Les « longs pourparlers, tenus secrets jusqu'à la dernière heure » du
+   Jour, qui datent la manoeuvre.
+4. Sa convalescence de janvier 1938 « à Tunis, dans sa famille ».
+5. Une blessure en mars 1937 qui le renvoie à l'aile, et l'état de
+   « demi-invalide » en mars 1939.
+6. La chaîne complète des décisions fédérales, dite chaque fois par le journal
+   de Saint-Étienne, du 1er août 1936 au 16 janvier 1937.
+7. Une composition de juillet 1941 où il est « ancien joueur professionnel de
+   Colmar », dans un journal de la zone non occupée.
+
+LU : les 312 pages de la liste sont maintenant lues. 262 l'ont été sur
+l'image de la page, en entier, colonne par colonne, plus une reprise le
+23 septembre ; les 50 dernières, dont Gallica refuse toujours l'image, l'ont
+été par le texte que la bibliothèque sert autour du nom. Aucune page de la
+liste n'est restée sans lecture. Je continue à demander les cinquante images,
+parce qu'un extrait n'est pas une page.
+
+---
+
 ## NOTE SUR LES PAGES QUI MANQUENT ENCORE - 23 septembre 2026
 
 Sur les 312 pages de la liste, 263 sont récupérées en bonne résolution et
-lues. Les 50 autres ne le sont pas encore : Gallica refuse de servir leurs
-images, avec le message « You are not authorized to access this resource »
+lues sur l'image ; les 50 autres ont été lues par leur texte, faute d'image
+(voir l'entrée 175). Gallica refuse toujours de servir leurs images, avec le message « You are not authorized to access this resource »
 sur le service d'images, ce qui est une limite de débit et non un défaut du
 document. Les titres concernés sont surtout Le Mémorial de Saint-Étienne, Le
 Petit Provençal, L'Express de Mulhouse, l'Echo de Sélestat, Der Republikaner
