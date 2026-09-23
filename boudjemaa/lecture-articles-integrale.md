@@ -2397,3 +2397,85 @@ Belko et Villacampa. » Et : « Cette rencontre présentera plutôt le caractèr
 match de championnat, puisque les Colmariens n'admettent pas facilement la
 suprématie régionale des locaux. » Tribune 12 francs, pelouse couverte 6, militaires
 et scolaires 3, coup d'envoi 14 h 30.
+
+## Pages 199 à 206
+
+Cinq articles, du 5 au 12 novembre 1938. Le derby haut-rhinois, deux buts de lui,
+et un compte rendu qui ne cache rien de ce que le match avait de laid.
+
+**Colmarer neueste Nachrichten, 5 novembre 1938, page 10** (bpt6k3159315g) annonce
+le déplacement à Dieppe et met en garde : « Obwohl der F. C. Dieppe nur den letzten
+Platz einnimmt, so darf sich die S. R. C. doch keinen Illusionen hingeben. Ein
+F. C. Dieppe ist auf seinem Terrain jedem Gegner gefährlich. » La formation, en
+pyramide : « Emonoz, **Boudjemaa**, Zopp, Villacampa, Meyer » à l'attaque, et cette
+note : « [Belko] zog sich im Laufe dieser Woche im Training eine Muskelzerrung
+[zu]. » Belko s'est déchiré un muscle à l'entraînement.
+
+**L'Auto-vélo, 5 novembre 1938, page 5** (bpt6k4635290q) donne pourtant, le même
+jour, une équipe probable qui aligne encore Belko : « Colmar. - Collet ; Demuth,
+Delacourt ; [...] Athman ; Emonoz, Villacampa, Zopp, **Boudjema**, Belko. » Le
+journal parisien recopie une composition qui n'est plus la bonne ; le journal de
+Colmar, lui, savait. Je note l'écart sans le trancher, n'ayant pas lu le compte
+rendu de Dieppe-Colmar dans ce lot.
+
+Puis vient le 11 novembre, jour férié, et le derby contre Mulhouse.
+
+**Strassburger neueste Nachrichten, 12 novembre 1938, page 10** (bd6t5959924h),
+titre : « **S.R.C. - F.C.M 5:1. Rohes Derby !** » Derby brutal.
+
+« Stade Joseph Lehmann, 5500 Zuschauer, Einnahmen über 30000 Fr. S. R. Colmar :
+Collet ; Demuth, Delacourd ; Gougain, Tellechéa, Othmann ; Emenoz, Villacampa,
+Zopp, **Boudjema**, Logez. [...] Torschützen : Villacampa, **Boudjema (zwei)**,
+Zopp, Logez, Parmeggiani. »
+
+Deux buts. Le journal les date : « Das erste kam von Villacampa in der siebten
+Minute ; das zweite fiel in der 16. Minute, da Bohrer einen Schuss von **Boudjema**
+nur schlecht meistern konnte ; Zopp buchte Nummer drei in der 22. und dann wieder
+**Boudjema** Nummer vier in der 29. Minute. »
+
+Sur la première mi-temps, l'éloge est net : « die Colmarer Angriffsreihe [war]
+ungemein wendig und schusskräftig », d'une mobilité et d'une puissance de tir peu
+communes. Mais il faut lire la suite, parce qu'elle est accablante et qu'elle
+concerne son équipe :
+
+« Die ersten 20 Minuten des zweiten Times boten leider ein Bild, das nicht dazu
+angetan war, den Derbys weitere Anhänger zuzuführen. [...] Die Platzherren wollten
+es jetzt ganz wissen ; sie gingen derart ungestüm zu Werke, dass man nur noch Zeuge
+sein konnte von Fouls in allen Tonarten, wie grobes, gefährliches Spiel,
+Beinstellen, Halten des Gegners, unfaires Rempeln, ja sogar von Boxmatches. »
+
+Vingt minutes de coups, de crocs-en-jambe, de retenues, et même de matches de boxe.
+Et le journal donne l'explication qu'on lui a soufflée : « Man versicherte uns, dass
+es die Verdoppelung der Siegesprämie sei, wenn aus der F. C. M.-Niederlage eine
+kleine Katastrophe werden würde. » La prime de victoire doublée si la défaite
+mulhousienne tournait à la catastrophe. « Zu diesem Zwecke waren dann für einige
+Colmarer alle Mittel gut ... aber mit Fussball hatte dies jetzt wenig zu tun. »
+
+Le journal ne nomme pas ceux qui frappaient. Il écrit « für einige Colmarer », pour
+quelques Colmariens. Rien ne permet de dire qu'il était de ceux-là, et rien ne
+permet de dire le contraire ; ce qu'on sait, c'est qu'il a marqué ses deux buts
+avant cette demi-heure-là, aux 16e et 29e minutes.
+
+**L'Auto, 12 novembre 1938, page 5** (bpt6k4635297m) rend le même match sans un mot
+sur les coups : « Le match débuta [...] un avantage manifeste [...] à la huitième
+minute par [Villacampa]. **Boudjemaa** inscrivit [le deuxième] à la quinzième
+minute. Un peu plus tard, [Zopp aggrava] le score, et **Boudjemaa** [marqua] le
+quatrième but à la v[ingt-neuvième] minute. » Et : « Victoire méritée de [Colmar],
+pour lesquels les cours d'éc[ole ?] organisés depuis qu[elque temps] se sont fait
+sentir. » Joueurs à citer : « Tellechéa, Zoop, Gou[gain] ... »
+
+**Paris-soir, 12 novembre 1938, page 10** (bpt6k7644742z) : « COLMAR, le 11
+novembre. Jouée devant plus de six mille spectateurs, foule record pour Colmar,
+cette partie s'est soldée par une grosse surprise. En effet, durant toute la
+première mi-temps, les arrières mulhousiens accumulèrent les maladresses grossières
+de sorte que Colmar put marquer à quatre reprises, par l'intermédiaire de
+Villacampa, Zopp et **Boudjema (2)**. Dans l'ensemble, partie hachée mais
+passionnante par l'âpreté avec laquelle les vingt-deux joueurs défendirent leurs
+couleurs. »
+
+Les trois journaux ne comptent pas la même foule : 5 500 à Strasbourg, « plus de six
+mille » à Paris, record du stade Joseph-Lehmann dans les deux cas. Je ne tranche
+pas.
+
+Au classement publié le lendemain, Colmar est cinquième avec 14 points en onze
+matches, et il vient de marquer deux buts dans le derby de sa région.
