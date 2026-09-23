@@ -2909,3 +2909,96 @@ du problème. »
 
 Un mois plus tôt, c'est lui qui avait mis Défossé par terre d'un tir de quarante
 mètres. Son nom sert maintenant d'épouvantail pour les gardiens.
+
+## Pages 239 à 246
+
+Six articles, du 16 janvier au 4 mars 1939. Un creux, et il faut l'écrire comme il
+est : trois journaux sur quatre disent qu'il joue mal.
+
+### Colmar - Red Star, 15 janvier 1939, 0 à 0
+
+**Paris-soir, 16 janvier 1939, page 7** (bpt6k7644626h), compte rendu de **Jean
+Eskenazi**, envoyé spécial à Colmar. C'est le même Eskenazi qui, en avril 1937,
+composait pour Paris-soir une sélection nord-africaine où il le faisait figurer.
+
+« Comme au match aller, Red Star et Colmar ont fait match nul. Les deux équipes se
+valent et si la rencontre de cet après-midi fut moins brillante que celle de la
+Noël, il n'en demeure pas moins que le match d'aujourd'hui fut [de belle qualité] et
+nous souhaitons en voir de semblable chaque dimanche en deuxième division.
+
+Colmar eut le plus souvent, dans l'ensemble, le contrôle des opérations, mais dans
+le dernier quart d'heure, les Alsaciens devaient perdre pied et à ce moment-là le
+Red Star aurait bien pu s'assurer la décision... »
+
+Puis, sur les hommes : « A Colmar, la défense fournit un excellent match. Tellechéa
+fut moins en évidence qu'il y a quelque temps [; il est plus à l'aise] comme demi
+que comme intérieur. La ligne d'attaque [ne sut pas exploiter l]es situations qui
+[s'offrirent] à elle. **Boudjemaa était dans un mauvais jour** et Emenoz est
+beaucoup trop personnel. »
+
+Je l'écris tel quel. Deux semaines après les deux buts de Saint-Ouen, le même
+journal et vraisemblablement le même homme constatent le contraire.
+
+**L'Ouest-Éclair, 17 janvier 1939**, dans ses deux éditions (page 9, bpt6k5016831,
+et page 11, bpt6k661503m), donne une lecture différente et plus favorable :
+
+« Le Red Star a eu chaud à Colmar. Il s'en est tiré avec le match nul et il a eu la
+chance dans les dernières minutes de voir la balle de l'avant-centre Zopp taper sur
+la barre et retourner dans le rectangle de jeu. Autre chance qu'il a eue, celle de
+ne pas avoir devant lui l'avant-centre habituel Jaeck qui, blessé à un match récent,
+avait dû céder la place. Zopp qui est un brillant ailier, fut dépaysé à ce poste et
+**en dépit des efforts de Boudjemaa**, ne put faire triompher son équipe. Car il
+faut ajouter que pendant 65 minutes sur les 90 du match, Colmar s'installa dans le
+camp parisien et n'en sortit que rarement. »
+
+Deux remarques. La première : le journal parle d'un avant-centre de Colmar nommé
+**Jaeck**, blessé. Or Jaeck était l'avant-centre de Mulhouse en novembre et décembre.
+Je ne tranche pas : ou bien il a changé de club en janvier, ou bien il y a deux
+hommes de ce nom, ou bien le journal se trompe. Le Matin du 15 janvier écrivait lui
+aussi « des gaillards comme Jaeck, Boudjemaa et Zopp » en parlant de Colmar.
+
+La seconde : L'Ouest-Éclair et Paris-soir ne voient pas le même match. Pour l'un il
+a porté l'attaque en vain, pour l'autre il était mauvais.
+
+**Le Sport alsacien, 20 janvier 1939, page 4** (bpt6k3149011h), sous le titre « Von
+den S. R. C. », tranche du côté de Paris-soir, et plus sévèrement encore :
+« Jedenfalls sind [...] auch **Boudjema** unter ihrer sonstigen Leistung geblieben,
+von Emonoz gar nicht zu reden. » Ils sont restés en dessous de leur niveau habituel,
+et n'en parlons pas d'Emonoz.
+
+Le journal donne une explication qui n'est pas la paresse : « Man hatte den
+Eindruck, dass das Training und das Forcing der letzten Spiele auf den aufgeweichten
+Böden doch nicht ganz spurlos an [ihnen] vorübergegangen ist. » Les terrains détrempés
+et l'enchaînement des matches ont laissé des traces. On se rappelle Nancy le 1er
+janvier, sous l'eau, et Colmar le 8, sur un sol lourd.
+
+Il ajoute que Colmar, deuxième du classement, va à Reims chez le dauphin, et que
+l'humeur au club n'est pas optimiste : « Gerade in Reims waren die Colmarer noch nie
+vom Glück begünstigt. »
+
+**Le Forez sportif, 25 janvier 1939, page 4** (bpt6k6681958g), hebdomadaire de la
+région de Saint-Etienne, le fait figurer dans sa liste des buteurs de deuxième
+division. Le journal du pays qu'il a quitté, et qui lui réclame 4 500 francs,
+continue d'imprimer son nom chaque semaine.
+
+### Hautmont - Colmar, 5 mars 1939
+
+**La Frontière, feuille d'annonces de Maubeuge, 4 mars 1939, page 1**
+(bd6t516025800). En première page, l'annonce du match, et le tableau des deux
+équipes :
+
+« Composition des équipes : **Colmar** : Collet ou Wosniack ; Delacourt, Demuth ;
+Gabrillargues, Tellictchea, Heine ; Emenoz, Meyer, Zopp, **Boudjemaa**, Belko. »
+
+Et l'argument de vente : « Colmar qui vient de **pulvériser tous les records de
+scores jusqu'ici établis en ce championnat** de division interrégionale
+professionnelle, en battant dimanche dernier Dunkerque par 8 [buts] à 1. »
+
+Le journal liste les performances colmariennes de la saison : « Victoires sur :
+Nîmes, 4 à 0 ; Nice, 2 à [1] ; Dunkerque, 5 à 4 et 8 à [1] ; Alès, 1 à 0 ; Dieppe,
+8 à 1 ; Mulhouse, 5 à 1 ; Nancy [...] ». (L'OCR hésite entre 8 à 4 et 8 à 1 ; le
+texte de l'article, lui, écrit 8 à 1.)
+
+Six mois après son arrivée, le club qu'il a rejoint le 10 août est celui qui marque
+le plus de buts de la division. Il reste inter gauche, et son nom figure toujours à
+la même place dans la ligne.
