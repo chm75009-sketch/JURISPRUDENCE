@@ -1284,3 +1284,94 @@ match « demeure à l'avantage des Sétois, qui dominèrent amplement tant en
 technique qu'en pratique ». Un compte rendu qui se contredit sur qui a dominé
 ne pèse pas lourd quand il accuse un joueur de tricher. Je le note, je ne
 l'écarte pas, et je dis qu'il est seul.
+
+## Pages 95 à 102 - l'été 1937 : renouvelé à Nice, puis vendu à Saint-Etienne
+
+Ce lot tient en un fait, et il est gros : le club qu'il avait fui en juillet
+1936, celui qui lui réclamait 10 700 francs, l'achète en août 1937.
+
+**[97] Le Petit Havre, 23 juin 1937, page 5** (ark bd6t52638531d). Lu en
+entier. Rubrique « Echos sportifs ». Deux lignes qui comptent.
+
+D'abord son contrat : « Schulzendorff, Costamagna, Rodriguez, [...] Samitier
+et Boudjemaa [ont signé leur] papillon de renouvellement à l'O.G.C. Nice pour
+la saison 1937-1938. » Le début de la phrase est mangé par la reliure, mais le
+sens ne l'est pas : il est reconduit à Nice pour la saison suivante.
+
+Ensuite, deux échos plus haut, ce qui se prépare : « Nice fait un gros effort
+en ce moment. Jugez-en : Gnaoui Souilem, Alcazar, Médan, sont les derniers
+joueurs achetés. » Et : « Luis Vallé, international espagnol, [du] F.C. de
+Madrid [...] de 23 ans, a signé un contrat professionnel. » Nice se renforce à
+son poste et autour de son poste.
+
+**[98] L'Écho des sports, 6 juillet 1937, page 4** (ark bpt6k9561327p), article
+signé René Dunan, titré « Zamora reste à Nice ». Lu en entier. C'est le
+tableau complet de l'effectif niçois pour 1937-1938, poste par poste.
+
+Le problème du club y est posé sans détour : « [Les dirigeants] auront à payer
+cinq étrangers : Samitier, Vallé, Orlandini, Kudrna et Zamora. Cela n'est pas
+fait pour plaire aux supporters, qui déduisent que l'excellent arrière de la
+saison passée, Karel Kudrna, devenu entraîneur à la place de Lowy, ne pourra
+plus jouer. »
+
+Et la ligne d'attaque : « [L'aile] gauche aura vraisemblablement deux
+titulaires : Pellegrino et Boudjemaa. À l'intérieur Alcazar, qui vient de
+l'Olympique Lillois, et Gnaoui, pour lequel Nice a payé 30.000 francs au S. C.
+Fives. »
+
+Le 6 juillet, donc, il est annoncé titulaire.
+
+**Chercher le contraire.** La même page, deux colonnes plus loin, écrit :
+« La semaine dernière, en parlant de la venue du Niçois Pellegrino au Red
+Star, nous disions que cette rentrée ne résoudrait pas le problème de l'ailier
+gauche dans l'équipe audonienne. » Le journal annonce donc au même moment
+Pellegrino titulaire à Nice et parti au Red Star. La rubrique transferts de
+l'été 1937 se contredit d'une colonne à l'autre : on ne peut rien fonder sur
+elle seule.
+
+**[99] Les Dernières nouvelles de Strasbourg, 12 août 1937, page 17** (ark
+bd6t526414597). Lu en entier. L'écho concerne le transfert de Scherrer,
+l'ailier gauche strasbourgeois, à Nice, et donne à cette occasion l'équipe
+complète : « [Scherrer] a été désigné à l'issue [des] séances d'entraînement
+pour occuper la place d'ailier gauche dans [le onze] de l'O. G. C. Nice qui
+alignera la formation suivante : Buts : Ricardo Zamora ; Audibert, Gazelles ;
+Arrières : Schulzendorf, Costamagna, Kudrna ; Demis : Rodriguez, Luis Vallé,
+Orlandini, Médan ; Avants : Grosser (Mulhouse), Alcazar, Samitier, Gnaoui,
+Scherrer (Strasbourg), Boudjemaa, Joaquim Vallé, Pellegrino. »
+
+Le 12 août, il est encore dans l'effectif niçois.
+
+**[100] Le Journal du Midi, 17 août 1937, page 3** (ark bd6t51017953v). Lu en
+entier. Rubrique « Petites nouvelles sportives », un point noir entre deux
+autres :
+
+« L'A.S. St-Etienne a "acheté" Boudjemaa pour 50.000 francs. »
+
+Le mot acheté est entre guillemets dans le journal. Cinq jours après
+l'annonce strasbourgeoise, il est vendu.
+
+Et la preuve par l'absence, dans la même colonne, dix lignes plus bas :
+« L'O.G.C. Nice alignera cette saison l'équipe suivante : Buts, Zamora,
+Audibert ; arrières, Schulzendorf, Costamagna, Kudrna, Guilhan[nes] ; demis,
+Rodriguez, Vallé, Médan, Grosser, Orlandini ; avants, Samitier, Gnaoui,
+Scherrer, Pellegrino, Vallé Joachim, Miquel, Alcazar. » Son nom a disparu de
+la liste que le même journal, le même jour, imprime à côté de la nouvelle.
+
+**[101] Le Républicain du Gard, 21 août 1937, page 4** (ark bd6t53562479t),
+sous la signature d'Emmanuel Gambardella, à la veille de la première journée.
+Lu en entier. C'est la confirmation, et par une plume qui compte, Gambardella
+étant alors un des dirigeants les plus en vue du football français :
+
+« L'A. S. de Saint-Etienne, désireuse d'accéder enfin à la division nationale,
+a très bien fait les choses et elle vient encore de se procurer les services
+de Boudjema[a] qui d'ailleurs ne sera pas qualifié pour jouer contre Nimes. »
+
+Il faut mesurer ce que ces trois lignes disent, mises bout à bout avec ce qui
+précède dans ce dossier. En juillet 1936, il signe à Saint-Etienne, se rétracte
+le 4, part pour Nice, et Saint-Etienne obtient sa suspension pour six mois et
+la restitution de 10 700 francs. En août 1937, Saint-Etienne met 50 000 francs
+pour l'avoir. Le club qui l'a fait suspendre l'achète cinq fois le prix qu'il
+lui réclamait.
+
+Et il n'est pas qualifié pour le premier match. Sa saison stéphanoise commence
+sur un banc, une fois de plus pour une affaire de papiers.
