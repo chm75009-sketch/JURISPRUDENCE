@@ -3317,3 +3317,123 @@ la même colonne que celui de Ben Barek : c'est, à l'époque, la meilleure mesu
 ce qu'on pense de lui.
 
 Rien, dans ce lot, ne dit ce qu'il est advenu de ces pourparlers.
+
+## Pages 279 à 286
+
+Sept articles, et entre le deuxième et le troisième il y a la guerre. Du 5 août 1939
+au 8 janvier 1941, ce dossier ne contient rien. Le lot suivant le retrouve en
+Tunisie.
+
+### 5 août 1939 : Metz - Colmar, le dernier match d'avant
+
+**Le Messin, 5 août 1939, page 7** (bd6t51185056j) et **L'Est républicain, 5 août
+1939, page 6** (bpt6k8283783x) annoncent le match d'ouverture de saison entre les
+professionnels messins et colmariens, coup d'envoi à 18 h 15.
+
+Le Messin le présente ainsi : « [Telléchéa et Boudj]ema, **les deux talentueux
+inters du [onze] alsacien**. Remarquons en passant que l'équipe colmarienne, qui,
+avec [un pe]u plus de régularité, aurait pu s'attribuer, la saison dernière, une des
+deux premières places de la Division II, [a déjà] été battue par le F. C. Metz. Il
+[est vr]ai que les deux formations ne se [sont] rencontrées qu'en matches amicaux. »
+
+La composition, en pyramide : « **S. R. COLMAR** : Wozniack ; Costamagna, Demuth ;
+Gabrillargues, Vernay, Gougain ; Emonoz, **Boudjema**, Heiné, Telléchéa, Herpin. »
+Trois noms nouveaux, Costamagna, Vernay, Herpin. Lui est toujours là, cinquième
+saison de football professionnel.
+
+Vingt-six jours plus tard, l'Allemagne entre en Pologne.
+
+### Janvier 1941 : Sète l'attend et ne l'attend pas
+
+**L'Auto-vélo, 8 janvier 1941, page 3** (bpt6k4642689s), dans une chronique sur les
+transferts de la zone non occupée :
+
+« Le F[C] de Sète attend encore l'arrivée de **Boudjemaa**, mais **le Nord-Africain
+s'est montré à maintes reprises bien versatile, bien capricieux. C'est pourquoi on
+l'attend à Sète sans trop compter sur lui.** »
+
+C'est la première trace de lui depuis dix-sept mois, et elle est faite de reproches.
+Le F.C. Sète, grand club, première division, compte sur lui et n'y compte pas. Rien
+dans le dossier ne dit où il était, ni ce qu'il faisait, ni si on lui avait écrit.
+
+Il n'ira pas à Sète.
+
+### 1941 : Tunis
+
+**Le Petit Matin, Tunis, 1941, page 2** (bpt6k8392971m), dans une colonne de brèves
+sportives, à la suite d'un paragraphe sur le nombre de joueurs tunisiens dans les
+ligues nord-africaines :
+
+« - **Boudjemaa, un [des meilleurs foot]balleurs tunisiens, a [signé à] l'Union
+sportive B[...]** »
+
+La colonne est coupée et la fin du nom du club n'est pas lisible dans cette
+reproduction ; Gallica refuse aujourd'hui la recherche plein texte sur ce fascicule.
+Je ne devine pas le nom. Ce qui est lisible suffit : **en 1941 il est rentré en
+Tunisie, et un journal de Tunis écrit qu'il est un des meilleurs footballeurs
+tunisiens.**
+
+### 5 mai 1941 : Tunisie contre la sélection métropolitaine
+
+Une équipe de France officieuse fait une tournée en Afrique du Nord au printemps
+1941. Le dernier match a lieu à Tunis le 5 mai.
+
+**L'Auto, 7 mai 1941, page 2** (bpt6k4642803z), sous la plume de l'envoyé sur place :
+« Fort heureusement [pour la France] et pour Llense, qui fut bril[lant],
+**Boudjemaa, l'ex-Colmarien [qui] est la vedette locale, ne jou[a] seulement que
+pendant 45 m[inutes]**. »
+
+La vedette locale. Il joue une mi-temps, et le journaliste français écrit qu'il est
+heureux pour son équipe qu'il n'ait pas joué la seconde. Plus bas, dans la revue des
+hommes : « Avec Mouldi, **Boudjemaa**, B[ar]beche et Droua se distin[guèrent] ».
+
+Le même article note, sur la défense tunisienne, que « les arrières tunisiens
+comm[irent] la faute de s'aventurer [loin de] leur but » et que le gardien Mouldi
+« se montra faible sur [les balles hautes] ».
+
+**Football, 22 mai 1941, page 11** (bpt6k7217263j), dans le bilan de la tournée signé
+Louis Deschamps, sous l'intertitre « En Tunisie » :
+
+« Puis ce fut Tunis et le dernier match de la tournée. Il eut lieu le 5 mai. [...]
+[Les métropolitains] participèrent à la victoire confortable (7-2) acquise [au]
+détriment d'**une formation à forte représentation musulmane** et dans laquelle
+**Boudjemaa (ex-Colmar)**, Draoua (ex-H.A.C.), Mouldi et Roc[c]osso se
+distinguèrent. Malgré la netteté du score il convient de signaler les progrès
+d'ensemble réalisés par les Tunisiens, beaucoup moins en contact avec la Métropole
+qu'Algériens et Marocains. N'est-il pas d'ailleurs étonnant de remarquer à ce sujet
+que **la précédente rencontre remontait à 1933** ! »
+
+Le même article ajoute une ligne qui dit l'époque : « Ici, on déplore l'absence de
+l'entraîneur Jean Laurent, l'international bien connu, **actuellement prisonnier**,
+et dont on ne peut [que] louer l'excellence des résultats [par] lui obtenus. »
+
+### 1943 : Tunis libérée, contre les Britanniques
+
+**L'Écho de Tunis, 1943, page 2** (bpt6k8379255q). La page est celle d'un journal de
+Tunis après la libération de la ville : le général Mast, résident général de France,
+clôt la session du Grand Conseil ; l'Armée tunisienne souscrit 26 650 francs ; « La
+population israélite de Tunis, représentée par le Conseil élu de la Communauté, sur
+la proposition de Maître Félix Samama, son président, et répondant à l'appel de M. le
+général Mast [...] et à celui du Mouvement de la France Combattante de Tunisie,
+exprime avec émotion sa sympathie aux organisations de résistance, aux francs-tireurs
+et aux partisans qui, dans la Métropole, résistent à l'ennemi avec un courage sublime
+et préparent la Libération du Territoire, et décide [...] de participer à la
+Souscription Nationale [...] pour la somme globale de trois millions de francs. »
+
+Et dans la colonne d'à côté, le programme du stade municipal du Belvédère : football
+et base-ball, **Entente Britannique contre Sélection de Tunis** :
+
+« **Sélection de Tunis** : But : Milazzo ; arrières [Lom]pardi, Statepoulos ; demis
+[...], Selgem, [E]l Arbi ; avants [...], **Boudjemaa**, Ducousso, [...], Younès. »
+
+En face : « **Entente Britannique** : But : S. Benester ; arrières [...] chard,
+Walker ; demis : Stevenson, H. A[...], kada ; avants : Chssitr[...], Goldard, Wood,
+Neal[...]. »
+
+Voilà où il est en 1943 : à Tunis, dans une sélection de la ville, contre une équipe
+britannique, sur le terrain du Belvédère, pendant qu'on souscrit à la libération de
+la France dans la colonne voisine.
+
+**Ce que ce lot ne dit pas.** Rien sur la mobilisation, rien sur 1939-1940, rien sur
+la manière dont il est rentré en Tunisie, rien sur une captivité. Le seul prisonnier
+nommé dans ces pages est l'entraîneur Jean Laurent. Il faudra chercher ailleurs.
