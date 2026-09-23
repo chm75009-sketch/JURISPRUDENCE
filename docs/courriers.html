@@ -161,6 +161,7 @@
       <button type="button" class="p" id="copier">Copier pour l'e-mail</button>
       <button type="button" class="s" id="word">Télécharger en Word</button>
       <button type="button" class="s" id="imprimer">Imprimer</button>
+      <button type="button" class="s" id="dest-lettre">Destinataire</button>
       <button type="button" class="s" id="modele">Revenir au modèle</button>
     </div>
     <p class="etat" id="etat"></p>
@@ -234,6 +235,9 @@
   }
 
   var FAM = null, MOD = null, DEST = null;
+  /* Vrai quand on est alle chercher un destinataire depuis la lettre : on y
+     revient alors directement, sans repasser par la liste des modeles. */
+  var RETOUR_LETTRE = false;
 
   function ecran(id) {
     ["e-familles", "e-qui", "e-modeles", "e-lettre"].forEach(function (x) {
@@ -304,11 +308,38 @@
     }
   }
 
+  /* APRÈS LE DESTINATAIRE, OÙ VA-T-ON.
+
+     Demande du 23 septembre 2026 : « on peut avoir les modèles et ajouter le
+     destinataire s'il n'est pas sur la liste ». On peut donc ouvrir la lettre
+     sans destinataire, puis l'ajouter : on revient alors à la lettre, qui se
+     réécrit avec son bloc d'adresse, et non à la liste des modèles. */
+  function suite() {
+    if (RETOUR_LETTRE && MOD) {
+      RETOUR_LETTRE = false;
+      ouvrirModele(MOD.id);
+      $("etat").textContent = DEST
+        ? "Destinataire ajouté : " + DEST.nom + "."
+        : "Lettre sans destinataire.";
+      return;
+    }
+    RETOUR_LETTRE = false;
+    ouvrirModeles();
+  }
+
   $("dests").addEventListener("click", function (ev) {
     var b = ev.target.closest("button[data-d]");
     if (!b || !window.Carnet) return;
     DEST = window.Carnet.lire(b.getAttribute("data-d"));
-    ouvrirModeles();
+    suite();
+  });
+
+  $("dest-lettre").addEventListener("click", function () {
+    if (!FAM) return;
+    RETOUR_LETTRE = true;
+    rendreQui();
+    $("titre-haut").textContent = MOD ? MOD.nom : FAM.nom;
+    ecran("e-qui");
   });
 
   $("c-garder").addEventListener("click", function () {
@@ -319,10 +350,10 @@
       courriel: $("c-courriel").value, telephone: $("c-telephone").value,
       reference: $("c-reference").value,
     });
-    ouvrirModeles();
+    suite();
   });
 
-  $("sans-dest").addEventListener("click", function () { DEST = null; ouvrirModeles(); });
+  $("sans-dest").addEventListener("click", function () { DEST = null; suite(); });
 
   /* ───────────────────────── 3 · l'objet ────────────────────────────── */
   function ouvrirModeles() {
@@ -409,6 +440,7 @@
     $("note").classList.toggle("cache", !MOD.note);
     if (MOD.note) $("note").innerHTML = "<b>À vérifier avant d'envoyer.</b> " + ech(MOD.note);
     $("etat").textContent = "";
+    $("dest-lettre").textContent = DEST ? "Changer le destinataire" : "Ajouter le destinataire";
     ecran("e-lettre");
   }
 
