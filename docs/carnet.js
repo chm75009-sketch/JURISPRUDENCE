@@ -138,8 +138,21 @@
     };
   }
 
+  /* LES SALARIÉS DU REGISTRE, ET CEUX QUI N'Y SONT PAS.
+  
+     Le registre donne les salariés en poste ou sortis. Mais on écrit aussi à
+     un ancien salarié que le registre ne porte plus, à un candidat, à
+     quelqu'un qui n'y est pas encore : ceux-là se saisissent à la main et
+     viennent à la suite. Sans ce rattrapage, on pouvait les saisir et ils
+     disparaissaient. Mesuré le 23 septembre 2026. */
   function pour(famille) {
-    if (famille === "salarie") return salaries();
+    if (famille === "salarie") {
+      var mains = lireTout()
+        .filter(function (o) { return o.famille === "salarie"; })
+        .map(fiche)
+        .sort(function (a, b) { return a.nom.localeCompare(b.nom, "fr"); });
+      return salaries().concat(mains);
+    }
     return lireTout()
       .filter(function (o) { return o.famille === famille; })
       .map(fiche)

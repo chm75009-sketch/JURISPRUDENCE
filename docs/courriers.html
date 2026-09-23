@@ -280,6 +280,7 @@
     client: "Ajouter un client", fournisseur: "Ajouter un fournisseur",
     fisc: "Ajouter un service des impôts", urssaf: "Ajouter une URSSAF",
     assurance: "Ajouter un assureur", banque: "Ajouter une banque",
+    salarie: "Écrire à quelqu'un qui n'est pas au registre",
   };
 
   function rendreQui() {
@@ -295,17 +296,16 @@
     } else if (salaries) {
       $("dests").innerHTML = '<div class="vide">Votre registre du personnel ne porte encore ' +
         'aucun salarié. <a href="registre.html?rep=oui">Ouvrez-le</a> pour y déposer le vôtre ' +
-        "ou en saisir un : les salariés apparaîtront ici, sans avoir à être retapés.</div>";
+        "ou en saisir un : les salariés apparaîtront ici, sans avoir à être retapés. " +
+        "En attendant, vous pouvez écrire à quelqu'un en le saisissant ci-dessous.</div>";
     } else {
       $("dests").innerHTML = '<div class="vide">Aucun correspondant enregistré pour l\'instant. ' +
         "Le premier que vous ajoutez ci-dessous sera retrouvé à chaque courrier.</div>";
     }
-    $("ajout").classList.toggle("cache", salaries);
-    if (!salaries) {
-      $("tt-ajout").textContent = NOMS_AJOUT[FAM.cle] || "Ajouter un correspondant";
-      ["c-nom", "c-contact", "c-adresse", "c-courriel", "c-telephone", "c-reference"]
-        .forEach(function (i) { $(i).value = ""; });
-    }
+    $("ajout").classList.remove("cache");
+    $("tt-ajout").textContent = NOMS_AJOUT[FAM.cle] || "Ajouter un correspondant";
+    ["c-nom", "c-contact", "c-adresse", "c-courriel", "c-telephone", "c-reference"]
+      .forEach(function (i) { $(i).value = ""; });
   }
 
   /* APRÈS LE DESTINATAIRE, OÙ VA-T-ON.
