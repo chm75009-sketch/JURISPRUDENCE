@@ -97,6 +97,14 @@
   .lettre p.dest.derniere{margin-bottom:4px}
   .lettre p.date{margin:14px 0 16px;text-align:right;font-size:15px}
   .lettre .a-remplir{color:var(--rouge);font-weight:600}
+  .garder{margin:12px 0 0;border:1px solid var(--filet);border-radius:10px;
+    background:var(--carte);padding:12px 14px}
+  .garder p{margin:0 0 10px;font-size:15px;line-height:1.5;color:var(--encre)}
+  .garder .b{display:grid;gap:8px}
+  .garder button{min-height:44px;border-radius:9px;font:600 15.5px system-ui;cursor:pointer;width:100%}
+  .garder button.oui{background:var(--accent);color:#fff;border:2px solid var(--accent)}
+  .garder button.non{background:var(--surface);color:var(--texte-2);border:2px solid var(--filet)}
+  @media (min-width:520px){.garder .b{grid-template-columns:1fr 1fr}}
   .note{margin:12px 0 0;font-size:14.5px;line-height:1.6;color:var(--encre-2);
     background:var(--ambre-clair);border-left:3px solid var(--ambre);border-radius:0 8px 8px 0;padding:11px 13px}
   .note b{color:var(--ambre)}
@@ -107,7 +115,7 @@
   @media (min-width:520px){.barre{grid-template-columns:1fr 1fr}}
   .etat{margin:10px 0 0;font-size:14.5px;color:var(--vert);min-height:20px}
   .cache{display:none}
-  @media print{.haut,.barre,.fam,.liste,.etat,.note{display:none}.lettre{border:0;padding:0}}
+  @media print{.haut,.barre,.fam,.liste,.etat,.note,.garder{display:none}.lettre{border:0;padding:0}}
 </style>
 </head>
 <body>
@@ -138,7 +146,7 @@
       <label>Courriel<input type="email" id="c-courriel" autocomplete="off"></label>
       <label>Téléphone<input type="tel" id="c-telephone" autocomplete="off"></label>
       <label>Référence<input type="text" id="c-reference" placeholder="n° de compte, de contrat, de dossier" autocomplete="off"></label>
-      <div class="barre"><button type="button" class="p" id="c-garder">Garder et continuer</button></div>
+      <div class="barre"><button type="button" class="p" id="c-garder">Mettre sur le document</button></div>
     </div>
     <div class="barre"><button type="button" class="s" id="sans-dest">Continuer sans destinataire</button></div>
   </section>
@@ -156,6 +164,13 @@
       <div class="v" id="objet" contenteditable="true" spellcheck="true"></div>
     </div>
     <div class="lettre" id="lettre" contenteditable="true" spellcheck="true"></div>
+    <div class="garder cache" id="garder-dest">
+      <p id="garder-q"></p>
+      <div class="b">
+        <button type="button" class="oui" id="garder-oui">Oui, l'ajouter</button>
+        <button type="button" class="non" id="garder-non">Non, cette fois seulement</button>
+      </div>
+    </div>
     <div class="note cache" id="note"></div>
     <div class="barre">
       <button type="button" class="p" id="copier">Copier pour l'e-mail</button>
@@ -266,7 +281,14 @@
     CM.FAMILLES.forEach(function (f) { if (f.cle === cle) FAM = f; });
     if (!FAM) return;
     DEST = null;
+    MOD = null;
     $("titre-haut").textContent = FAM.nom;
+    /* AUCUN CORRESPONDANT : ON VA DROIT AUX MODÈLES.
+       Demande du 23 septembre 2026 : « même si aucun fournisseur ou aucun
+       client on doit pouvoir accéder au modèle ». Un écran de liste vide ne
+       sert à rien ; le destinataire s'ajoute depuis la lettre. */
+    var L = window.Carnet ? window.Carnet.pour(FAM.cle) : [];
+    if (!L.length) { ouvrirModeles(); return; }
     rendreQui();
     ecran("e-qui");
   }
@@ -342,15 +364,51 @@
     ecran("e-qui");
   });
 
+  /* LE CONTACT VA D'ABORD SUR LE DOCUMENT, LA LISTE VIENT APRÈS.
+
+     Demande du 23 septembre 2026 : « une fois le contact mis sur le document
+     on doit nous demander si ensuite il faut le rajouter à la liste ». Ce qui
+     est saisi ici n'est donc pas gardé tout de suite : la lettre s'écrit avec,
+     et la question se pose sous la lettre, une fois qu'on l'a sous les yeux. */
   $("c-garder").addEventListener("click", function () {
     var nom = $("c-nom").value.trim();
     if (!nom) { $("c-nom").focus(); return; }
-    DEST = window.Carnet.ajouter(FAM.cle, {
+    DEST = window.Carnet.provisoire(FAM.cle, {
       nom: nom, contact: $("c-contact").value, adresse: $("c-adresse").value,
       courriel: $("c-courriel").value, telephone: $("c-telephone").value,
       reference: $("c-reference").value,
     });
     suite();
+  });
+
+  /* La question sous la lettre, et seulement quand elle a lieu d'être : un
+     destinataire venu du carnet ou du registre y est déjà. */
+  var NOMS_LISTE = {
+    client: "vos clients", fournisseur: "vos fournisseurs",
+    fisc: "vos services des impôts", urssaf: "vos URSSAF",
+    assurance: "vos assureurs", banque: "vos banques",
+    salarie: "votre carnet",
+  };
+
+  function questionGarder() {
+    var aPoser = !!(DEST && DEST.brut && !DEST.id);
+    $("garder-dest").classList.toggle("cache", !aPoser);
+    if (!aPoser) return;
+    $("garder-q").textContent = "Faut-il ajouter " + DEST.nom + " à " +
+      (NOMS_LISTE[FAM.cle] || "votre carnet") + " pour les prochains courriers ?";
+  }
+
+  $("garder-oui").addEventListener("click", function () {
+    if (!DEST || !DEST.brut) return;
+    DEST = window.Carnet.ajouter(FAM.cle, DEST.brut);
+    $("garder-dest").classList.add("cache");
+    $("etat").textContent = DEST.nom + " est maintenant dans " +
+      (NOMS_LISTE[FAM.cle] || "votre carnet") + ".";
+  });
+
+  $("garder-non").addEventListener("click", function () {
+    $("garder-dest").classList.add("cache");
+    $("etat").textContent = "Gardé pour cette lettre seulement.";
   });
 
   $("sans-dest").addEventListener("click", function () { DEST = null; suite(); });
@@ -441,6 +499,7 @@
     if (MOD.note) $("note").innerHTML = "<b>À vérifier avant d'envoyer.</b> " + ech(MOD.note);
     $("etat").textContent = "";
     $("dest-lettre").textContent = DEST ? "Changer le destinataire" : "Ajouter le destinataire";
+    questionGarder();
     ecran("e-lettre");
   }
 
