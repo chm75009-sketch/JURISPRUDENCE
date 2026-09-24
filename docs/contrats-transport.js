@@ -240,7 +240,7 @@
     {
       cle: "pl",
       nom: "Conducteur marchandises PL ou SPL",
-      emploi: "Conducteur routier de marchandises",
+      emploi: "Conducteur de véhicule poids lourd de plus de 19 tonnes de poids total en charge",
       sous: "Courte distance, retour quotidien au domicile",
       roulant: true, annexe: "I", conduite: true,
       equivalence: "39 heures par semaine, 169 heures par mois",
@@ -258,7 +258,7 @@
     {
       cle: "grand",
       nom: "Conducteur grand routier ou longue distance",
-      emploi: "Conducteur routier grand routier ou longue distance",
+      emploi: "Conducteur hautement qualifié de véhicule poids lourd",
       sous: "Découchés, deux repas hors du domicile",
       roulant: true, annexe: "I", conduite: true, grandRoutier: true,
       equivalence: "43 heures par semaine, 186 heures par mois",
@@ -276,7 +276,7 @@
     {
       cle: "adr",
       nom: "Conducteur ADR ou température dirigée",
-      emploi: "Conducteur routier de marchandises dangereuses",
+      emploi: "Conducteur hautement qualifié de véhicule poids lourd, affecté au transport de marchandises dangereuses",
       sous: "Matières dangereuses, ou transport sous température dirigée",
       roulant: true, annexe: "I", conduite: true,
       equivalence: "39 heures par semaine, 169 heures par mois",
@@ -303,14 +303,14 @@
       maxSemaine: "48 heures sur une semaine isolée et 44 heures en moyenne sur douze " +
         "semaines (code du travail, L. 3121-20 et L. 3121-22)",
       coefs: ["110 M", "115 M", "118 M", "120 M", "128 M", "138 M", "150 M"],
-      coefDefaut: "120 M",
+      coefDefaut: "110 M",
       permis: "", titres: [],
       clauses: ["nuit"],
     },
     {
       cle: "employe",
       nom: "Employé : exploitation, administratif",
-      emploi: "Employé administratif d'exploitation",
+      emploi: "Employé de service administratif, commercial, contentieux, technique, d'exploitation, du personnel",
       sous: "Exploitant, agent de facturation, assistant, employé administratif",
       roulant: false, annexe: "II", conduite: false,
       equivalence: "durée légale, 35 heures par semaine, 151,67 heures par mois",
@@ -318,7 +318,7 @@
       maxSemaine: "48 heures sur une semaine isolée et 44 heures en moyenne sur douze " +
         "semaines (code du travail, L. 3121-20 et L. 3121-22)",
       coefs: ["105", "110", "115", "120", "125", "132,5", "140", "148,5"],
-      coefDefaut: "120",
+      coefDefaut: "125",
       permis: "", titres: [],
       clauses: ["nuit"],
     },
@@ -419,13 +419,18 @@
     return ref;
   }
 
-  /* Pour un temps partiel, la référence est la durée normale du poste. */
+  /* Pour un temps partiel, la référence est la garantie de 151,67 heures, et
+     non celle de la durée d'équivalence du poste : à temps partiel, le
+     conducteur ne fait pas les heures majorées que le barème de 169 heures
+     intègre, et proratiser depuis 169 heures paierait au-dessus du minimum.
+     Choix signalé à la relecture du 24 septembre 2026. */
   function garantiePartiel(p, coef) {
     if (p.annexe === "II") {
       var ge = CCN.salaires.garEmployes[coef];
       return ge ? { montant: ge, pour: "151,67", base: 151.67, exact: true } : null;
     }
-    return garantie(p, coef, p.mensuel);
+    var g = CCN.salaires.gar["151.67"][coef];
+    return g ? { montant: g, pour: "151,67", base: 151.67, exact: true } : null;
   }
 
   /* ══════════════════ 4 · LE CONTRAT, ARTICLE PAR ARTICLE ═══════════ */
@@ -490,8 +495,14 @@
       B.push({ k: "p", t: "L'entreprise engage le salarié à durée indéterminée à compter du " +
         dateFr(v.entree) + "." });
     }
-    B.push({ k: "p", t: "L'engagement est subordonné au résultat de la visite d'information et de " +
-      "prévention, ou de l'examen médical d'aptitude lorsque le poste le commande." });
+    /* La visite d'information et de prévention a lieu dans les trois mois qui
+       suivent la prise de poste et ne rend aucun avis d'aptitude (R. 4624-10) :
+       elle ne peut donc pas conditionner l'embauche. Seul l'examen médical
+       d'aptitude d'un poste à risques le peut. Relevé le 24 septembre 2026. */
+    B.push({ k: "p", t: "Le salarié bénéficiera de la visite d'information et de prévention dans " +
+      "les trois mois qui suivent sa prise de poste." +
+      (p.conduite ? " Le poste relevant d'un suivi adapté, l'entreprise saisit le service de " +
+        "prévention et de santé au travail dès l'embauche." : "") });
 
     /* ── 2 · emploi et classification ───────────────────────────────── */
     art("Emploi, qualification et classification");
@@ -566,11 +577,16 @@
       if (parSemaine < 24 - 0.01) {
         B.push({ k: "p", t: "Cette durée est inférieure à la durée minimale de vingt-quatre heures " +
           "par semaine fixée par l'article L. 3123-27 du code du travail. Elle est fixée à la " +
-          "demande écrite et motivée du salarié, qui figure en annexe 1 du présent contrat et en " +
+          "demande du salarié, écrite et motivée, qui figure en annexe 1 du présent contrat et en " +
           "fait partie intégrante, " + (net(v.motifPartiel)
             ? "pour le motif suivant : " + net(v.motifPartiel)
-            : "[MOTIF DE LA DEMANDE : CONTRAINTES PERSONNELLES, OU CUMUL D'ACTIVITÉS]") +
-          " (L. 3123-7 du code du travail)." });
+            : "[MOTIF DE LA DEMANDE, À REPRENDRE DE L'ANNEXE 1]") + "." });
+        B.push({ k: "p", t: "L'article L. 3123-7 du code du travail ouvre cette demande au salarié " +
+          "qui doit faire face à des contraintes personnelles, à celui qui cumule plusieurs " +
+          "activités pour atteindre un temps plein ou au moins vingt-quatre heures, à celui qui a " +
+          "atteint l'âge prévu au premier alinéa de l'article L. 161-22-1-5 du code de la sécurité " +
+          "sociale, et de droit à l'étudiant de moins de vingt-six ans, pour une durée compatible " +
+          "avec ses études." });
         B.push({ k: "p", t: "L'entreprise s'engage à regrouper les horaires du salarié sur des " +
           "journées ou des demi-journées régulières ou complètes." });
       }
@@ -734,16 +750,27 @@
         (p.annexe === "II" ? CCN.annexeII.demission : CCN.annexeI.demission) });
       (p.annexe === "II" ? CCN.annexeII.licenciement : CCN.annexeI.licenciement)
         .forEach(function (l) { B.push({ k: "puce", t: "licenciement, " + l }); });
-      B.push({ k: "p", t: "Quelle que soit la partie qui a pris l'initiative de la rupture, le " +
-        "salarié peut s'absenter pour chercher un autre emploi : " +
-        (p.annexe === "II" ? CCN.annexeII.rechercheEmploi : CCN.annexeI.rechercheEmploi) + "." });
+      if (p.annexe === "II") {
+        B.push({ k: "p", t: "Quelle que soit la partie qui a pris l'initiative de la rupture, le " +
+          "salarié peut s'absenter pour chercher un autre emploi : " + CCN.annexeII.rechercheEmploi + "." });
+      } else {
+        B.push({ k: "p", t: "En cas de licenciement, le salarié peut s'absenter deux heures par " +
+          "jour pendant le préavis pour chercher un autre emploi, ces heures étant payées dans la " +
+          "limite de douze heures." });
+        B.push({ k: "p", t: "En cas de démission, il a droit à douze heures d'absence pour " +
+          "rechercher un autre emploi, fixées d'un commun accord ou, à défaut, six heures à sa " +
+          "discrétion et six heures à celle de l'entreprise (" + CCN.annexeI.preavisArticle +
+          ", cas spécifique)." });
+      }
     }
 
     /* ── 11 · protection sociale ────────────────────────────────────── */
     art("Protection sociale");
     B.push({ k: "p", t: "Le salarié est affilié aux organismes suivants :" });
     B.push({ k: "puce", t: "retraite complémentaire : " +
-      (net(v.retraite) || "[NOM ET ADRESSE DE LA CAISSE DE RETRAITE COMPLÉMENTAIRE]") });
+      (net(v.retraite) || "CARCEPT, à laquelle le salarié est obligatoirement affilié après un an " +
+        "de service continu à temps complet (convention collective, annexe V, article 1er) ; " +
+        "adresse de la caisse : [ADRESSE]") });
     B.push({ k: "puce", t: "prévoyance : " +
       (net(v.prevoyance) || "[NOM ET ADRESSE DE L'ORGANISME DE PRÉVOYANCE]") });
     B.push({ k: "puce", t: "frais de santé : " +
@@ -846,7 +873,8 @@
       "[EMPLOYEUR ET DURÉE DE L'AUTRE ACTIVITÉ] (L. 3123-7)" });
     B.push({ k: "puce", t: "je poursuis des études et j'ai moins de vingt-six ans : la durée " +
       "compatible avec mes études m'est acquise de droit, à ma demande (L. 3123-7)" });
-    B.push({ k: "puce", t: "j'ai atteint l'âge ouvrant droit à la retraite progressive (L. 3123-7)" });
+    B.push({ k: "puce", t: "j'ai atteint l'âge prévu au premier alinéa de l'article L. 161-22-1-5 " +
+      "du code de la sécurité sociale (L. 3123-7)" });
     B.push({ k: "p", t: "[Rayer les mentions inutiles, ou ne garder que la ligne qui correspond.]" });
     B.push({ k: "p", t: "Je vous demande de bien vouloir regrouper mes horaires sur des journées ou " +
       "des demi-journées régulières ou complètes." });
@@ -927,6 +955,10 @@
         "salarié, annexée au contrat (L. 3123-7). La répartition entre les jours doit être écrite : " +
         "tant qu'elle ne l'est pas, le contrat est présumé à temps complet (L. 3123-6)." });
     }
+    B.push({ k: "puce", t: "Le coefficient et le groupe doivent correspondre à l'emploi tel que " +
+      "la nomenclature le définit. La table qui relie les groupes aux coefficients ne figure pas " +
+      "dans les textes servis par le relais Légifrance : elle se vérifie sur la grille de " +
+      "l'entreprise ou sur le barème de branche en vigueur." });
     B.push({ k: "puce", t: "L'essai et le préavis suivent l'" + (p.annexe === "II" ? CCN.annexeII.nom
       : CCN.annexeI.nom) + ". Un ouvrier de quai et un exploitant administratif ne relèvent pas de " +
       "la même annexe, ni de la même grille de coefficients." });
