@@ -353,6 +353,20 @@ Le tout dit d'une manière qui prête à la machine une volonté : « ce que je 
 Il n'y a ni volonté ni souhait. On décrit ce qui a été écrit et ce qui ne l'était pas, sans
 psychologie.
 
+Cas mesuré le 24 septembre 2026 - les contrats du transport. La table qui relie les
+groupes aux coefficients des ouvriers a été déclarée introuvable, et cette phrase est
+partie dans la note remise au client : « la table qui relie les groupes aux coefficients
+ne figure pas dans les textes servis par le relais Légifrance ». Elle y figure. Elle est
+dans l'avenant n° 72 du 5 décembre 1990 à l'annexe I (KALITEXT000005679139), texte
+téléchargé une heure plus tôt dans le répertoire de travail, ouvert, et filtré sur un mot
+qui n'y était pas : groupe 1 au 100 M, groupe 2 au 110 M, jusqu'au groupe 7 au 150 M. Le
+filtre n'a rien rendu, et l'absence de résultat a été écrite comme une absence de texte.
+Un fichier lu à travers un filtre n'est pas un fichier lu. Tant qu'on n'a pas ouvert le
+texte en entier, on n'écrit pas qu'une règle n'y est pas : on écrit qu'on ne l'a pas
+trouvée, et on dit où l'on a cherché. La relecture extérieure a commis exactement la même
+faute sur le même texte, ce qui ne l'excuse pas : deux lectures fautives ne font pas une
+vérification.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
