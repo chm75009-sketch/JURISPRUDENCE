@@ -306,6 +306,41 @@ def construire(sortie="Boudjemaa-livre.docx"):
     ]:
         par(doc, "- " + t, apres=5)
 
+    # repertoire complet des articles
+    import re as _re
+    rep = open("../repertoire-des-articles.md", encoding="utf-8").read().split("\n")
+    doc.add_page_break()
+    par(doc, "", apres=150)
+    p = par(doc, "RÉPERTOIRE DE TOUS LES ARTICLES", taille=20, gras=True,
+            couleur=BLEU, align=WD_ALIGN_PARAGRAPH.CENTER, apres=10)
+    filet(p)
+    par(doc, "Tous ceux où son nom figure, dans l'ordre du temps",
+        taille=11, couleur=GRIS, align=WD_ALIGN_PARAGRAPH.CENTER, apres=0)
+    doc.add_page_break()
+    attente = None
+    for ligne in rep:
+        l = ligne.rstrip()
+        if l.startswith("## "):
+            p = par(doc, l[3:].strip(), taille=15, gras=True, couleur=BLEU,
+                    avant=14, apres=6)
+            filet(p)
+            continue
+        m = _re.match(r"\*\*(.+)\*\*$", l)
+        if m:
+            attente = m.group(1)
+            continue
+        if attente and l.strip():
+            q = doc.add_paragraph()
+            q.paragraph_format.space_before = Pt(6)
+            q.paragraph_format.space_after = Pt(2)
+            q.paragraph_format.line_spacing = 1.1
+            r = q.add_run(attente)
+            r.font.size = Pt(9.5); r.bold = True; r.font.color.rgb = ENCRE
+            w = par(doc, l.strip(), taille=9.5, couleur=GRIS, apres=4,
+                    align=WD_ALIGN_PARAGRAPH.JUSTIFY, interligne=1.05)
+            w.paragraph_format.left_indent = Cm(0.5)
+            attente = None
+
     c = doc.core_properties
     c.author = "Mounir CHIKHAOUI"
     c.last_modified_by = "Mounir CHIKHAOUI"
