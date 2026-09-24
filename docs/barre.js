@@ -53,6 +53,7 @@
     { page: "flotte.html", nom: "Flotte et conducteurs" },
     { page: "agenda.html", nom: "Agenda social" },
     { page: "mes-documents.html", nom: "Mes documents" },
+    { page: "questions.html", nom: "Mes questions" },
     { page: "recherche.html", nom: "Recherche de jurisprudence" },
   ];
 

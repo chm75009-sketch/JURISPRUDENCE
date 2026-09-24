@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="barre.js"></script>
+<title>Mes questions</title>
+<meta name="description" content="Les questions de droit du travail de votre abonnement : cinq par mois, par ce seul canal.">
+
+<!--
+  LES QUESTIONS DE L'ABONNEMENT.
+
+  Demandé le 24 septembre 2026. Cinq questions de droit du travail par mois,
+  posées ici et nulle part ailleurs, avec la possibilité de joindre des
+  documents. À cinq, l'écran se ferme jusqu'au mois suivant.
+
+  Un écran, pas deux : la règle en haut, le compteur, le formulaire, puis les
+  questions déjà posées. Le détail de la mécanique est en tête de questions.js.
+-->
+
+<link rel="stylesheet" href="style.css">
+<style>
+  main.wrap{max-width:640px}
+
+  .compteur{display:flex;align-items:center;gap:14px;margin:16px 0 0;padding:16px;
+    border:1px solid var(--filet);border-radius:12px;background:var(--carte)}
+  .compteur .n{font:600 34px/1 system-ui;color:var(--accent);min-width:56px;text-align:center}
+  .compteur .n.zero{color:var(--rouge)}
+  .compteur .t{font-size:15.5px;line-height:1.45;color:var(--encre)}
+  .compteur .t small{display:block;color:var(--texte-2);font-size:14px;margin-top:3px}
+
+  .regle{margin:14px 0 0;font-size:14.5px;line-height:1.6;color:var(--encre-2);
+    background:var(--creux);border-radius:10px;padding:14px 15px}
+  .regle b{color:var(--encre)}
+  .regle ul{margin:8px 0 0;padding-left:18px}
+  .regle li{margin:0 0 5px}
+
+  .form{margin:18px 0 0;display:grid;gap:14px}
+  .form label{display:flex;flex-direction:column;gap:5px;font-size:14.5px;color:var(--texte-2)}
+  .form input[type=text],.form textarea{font-size:16px;padding:11px 12px;width:100%;
+    box-sizing:border-box;border:1px solid var(--filet-2);border-radius:9px;
+    background:var(--surface);color:var(--encre)}
+  .form input[type=text]{min-height:46px}
+  .form textarea{min-height:150px;resize:vertical;line-height:1.5}
+  .form .sous{font-size:13px;color:var(--texte-3);line-height:1.4}
+
+  .pieces{border:1px dashed var(--filet-2);border-radius:10px;padding:14px;background:var(--surface)}
+  .pieces .tt{display:block;font:600 15px/1.3 system-ui;color:var(--encre)}
+  .pieces .d{display:block;font-size:13.5px;color:var(--texte-2);margin-top:3px;line-height:1.45}
+  .pieces input[type=file]{margin-top:10px;font-size:15px;width:100%}
+  .pieces ul{margin:10px 0 0;padding-left:18px;font-size:14.5px;color:var(--encre)}
+  .pieces li{margin:0 0 4px}
+
+  .barre{display:grid;gap:8px;margin:6px 0 0}
+  .barre button{min-height:50px;border-radius:10px;font:600 16.5px system-ui;cursor:pointer;width:100%}
+  .barre button.p{background:var(--accent);color:#fff;border:2px solid var(--accent)}
+  .barre button.p:disabled{background:var(--filet);border-color:var(--filet);color:var(--texte-3);cursor:not-allowed}
+
+  .ferme{margin:18px 0 0;padding:18px 16px;border-radius:12px;border-left:3px solid var(--ambre);
+    background:var(--ambre-clair);font-size:15.5px;line-height:1.6;color:var(--encre-2)}
+  .ferme b{color:var(--ambre)}
+
+  .apres{margin:16px 0 0;padding:16px;border:1px solid var(--filet);border-radius:12px;
+    background:var(--carte);font-size:15px;line-height:1.55;color:var(--encre)}
+  .apres b{display:block;margin-bottom:6px}
+  .apres .rappel{margin-top:10px;font-size:14px;color:var(--texte-2)}
+
+  .journal{margin:22px 0 0}
+  .journal h2{font:600 16px/1.3 system-ui;color:var(--encre);margin:0 0 10px}
+  .journal .q{border:1px solid var(--filet);border-radius:10px;background:var(--carte);
+    padding:13px 15px;margin:0 0 10px}
+  .journal .q .h{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .journal .q .r{font:600 13px/1 system-ui;color:var(--accent)}
+  .journal .q .d{font-size:13px;color:var(--texte-3)}
+  .journal .q .o{font:600 15.5px/1.35 system-ui;color:var(--encre);margin-top:5px}
+  .journal .q .t{font-size:14.5px;line-height:1.5;color:var(--texte-2);margin-top:5px;
+    white-space:pre-wrap}
+  .journal .q .p{font-size:13.5px;color:var(--texte-3);margin-top:6px}
+  .journal .vide{font-size:14.5px;color:var(--texte-2);line-height:1.5}
+
+  .adresse{margin:20px 0 0;font-size:13.5px;color:var(--texte-3);line-height:1.5}
+  .adresse input{margin-top:6px;font-size:15px;padding:9px 11px;min-height:42px;width:100%;
+    box-sizing:border-box;border:1px solid var(--filet);border-radius:8px;
+    background:var(--surface);color:var(--encre)}
+  .etat{margin:10px 0 0;font-size:14.5px;color:var(--vert);min-height:20px}
+  .etat.manque{color:var(--texte-2)}
+  .cache{display:none}
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <div class="haut">
+    <a class="retour" href="index.html">&larr; Retour</a>
+    <b>Mes questions</b>
+    <span class="ent" id="ent"></span>
+  </div>
+
+  <div class="compteur">
+    <span class="n" id="n-reste">5</span>
+    <span class="t" id="t-reste"></span>
+  </div>
+
+  <div class="regle">
+    <b>Ce que couvre votre abonnement.</b>
+    <ul>
+      <li>Cinq questions de droit du travail par mois, une question à la fois.</li>
+      <li>Une question précise, pas la rédaction d'un contrat ni d'un autre document.</li>
+      <li>Les questions passent par cet écran, et par lui seul : aucun autre moyen n'est accepté.</li>
+      <li>Vous pouvez joindre des documents à l'appui de votre question.</li>
+    </ul>
+  </div>
+
+  <section id="e-form">
+    <div class="form">
+      <label>Objet de la question
+        <input type="text" id="objet" maxlength="120" autocomplete="off"
+               placeholder="en quelques mots">
+        <span class="sous">Il sera l'objet du message, avec la référence.</span>
+      </label>
+      <label>Votre question
+        <textarea id="texte" placeholder="Exposez la situation, puis la question. Donnez les dates, les personnes concernées et ce qui a déjà été fait."></textarea>
+        <span class="sous">Une seule question par envoi.</span>
+      </label>
+      <div class="pieces">
+        <span class="tt">Joindre des documents</span>
+        <span class="d">Contrat, courrier, planning, bulletin de paie. Ils restent sur votre
+          appareil et vous les joindrez au message qui va s'ouvrir.</span>
+        <input type="file" id="fichiers" multiple>
+        <ul id="liste-pieces"></ul>
+      </div>
+      <div class="barre">
+        <button type="button" class="p" id="envoyer" disabled>Envoyer la question</button>
+      </div>
+      <p class="etat" id="etat"></p>
+    </div>
+  </section>
+
+  <section id="e-ferme" class="cache">
+    <div class="ferme" id="txt-ferme"></div>
+  </section>
+
+  <section id="e-apres" class="cache">
+    <div class="apres" id="txt-apres"></div>
+    <div class="barre">
+      <button type="button" class="p" id="rouvrir">Rouvrir le message</button>
+    </div>
+  </section>
+
+  <div class="journal" id="journal"></div>
+
+  <div class="adresse">
+    Adresse à laquelle vos questions sont envoyées. Elle est gardée sur cet appareil.
+    <input type="email" id="adr" placeholder="cabinet@exemple.fr" autocomplete="off">
+  </div>
+
+</main>
+
+<script src="profil.js"></script>
+<script src="base-documents.js"></script>
+<script src="questions.js"></script>
+<script src="questions-ecran.js"></script>
+</body>
+</html>
