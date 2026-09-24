@@ -581,9 +581,11 @@
         "du contrat de travail." });
     }
     if (p.grandRoutier) {
+      /* La définition n'est pas un usage : elle est à l'article D. 3312-36 du
+         code des transports, lu le 24 septembre 2026. */
       B.push({ k: "p", t: "L'emploi est un emploi de grand routier ou longue distance : le service " +
-        "conduit le salarié à prendre régulièrement ses repos journaliers hors de son domicile, " +
-        "au moins six fois par mois." });
+        "comporte au moins six repos quotidiens par mois hors du domicile (code des transports, " +
+        "D. 3312-36)." });
     }
 
     /* ── 5 · durée du travail ───────────────────────────────────────── */
@@ -967,10 +969,10 @@
         "d'amplitude." });
     }
     if (p.grandRoutier) {
-      B.push({ k: "puce", t: "La qualité de grand routier suppose que le service conduise " +
-        "effectivement le salarié à prendre au moins six repos journaliers hors de son domicile " +
-        "par mois. Si ce n'est pas le cas, c'est la durée d'équivalence de 169 heures qui " +
-        "s'applique, et non 186." });
+      B.push({ k: "puce", t: "La qualité de grand routier suppose que le service comporte " +
+        "effectivement au moins six repos quotidiens par mois hors du domicile (D. 3312-36). Si ce " +
+        "n'est pas le cas, c'est la durée d'équivalence de 169 heures qui s'applique, et non 186, " +
+        "et la rémunération se recalcule sur cette base." });
     }
     if (cdd) {
       B.push({ k: "puce", t: "Le motif doit correspondre à un cas de recours de l'article L. 1242-2. " +
@@ -985,12 +987,20 @@
         "salarié, annexée au contrat (L. 3123-7). La répartition entre les jours doit être écrite : " +
         "tant qu'elle ne l'est pas, le contrat est présumé à temps complet (L. 3123-6)." });
     }
-    B.push({ k: "puce", t: "Le coefficient et le groupe doivent correspondre à l'emploi tel que " +
-      "la nomenclature le définit. Pour les ouvriers, la table qui relie les groupes aux " +
-      "coefficients est celle de l'" + CCN.groupes.source + " : groupe 2 au 110 M, groupe 4 au " +
-      "120 M, groupe 5 au 128 M, groupe 6 au 138 M, groupe 7 au 150 M. Le coefficient 150 M, " +
-      "conducteur hautement qualifié, suppose que le poste réunisse le nombre de points que la " +
-      "nomenclature exige." });
+    if (p.annexe === "II") {
+      B.push({ k: "puce", t: "Le coefficient doit correspondre à l'emploi tel que la nomenclature " +
+        "de l'annexe II le définit. La table qui relie les groupes aux coefficients des employés " +
+        "n'a pas été retrouvée pour le transport de marchandises : l'avenant n° 78 du 24 juillet " +
+        "2002, qui met le coefficient 125 au groupe 6, vise le transport de voyageurs. À vérifier " +
+        "sur la grille de l'entreprise avant de porter un groupe au contrat." });
+    } else {
+      B.push({ k: "puce", t: "Le coefficient et le groupe doivent correspondre à l'emploi tel que " +
+        "la nomenclature le définit. Pour les ouvriers, la table qui relie les groupes aux " +
+        "coefficients est celle de l'" + CCN.groupes.source + " : groupe 2 au 110 M, groupe 4 au " +
+        "120 M, groupe 5 au 128 M, groupe 6 au 138 M, groupe 7 au 150 M. Le coefficient 150 M, " +
+        "conducteur hautement qualifié, suppose que le poste réunisse le nombre de points que la " +
+        "nomenclature exige." });
+    }
     B.push({ k: "puce", t: "L'annexe V, qui rend l'affiliation à la CARCEPT obligatoire après un " +
       "an de service continu à temps complet, date de 1958 : vérifier auprès de l'institution " +
       "AGIRC-ARRCO dont relève l'entreprise quelle caisse gère aujourd'hui la retraite " +
@@ -1059,6 +1069,7 @@
 
   var DROIT = [
     { t: "Code des transports", a: [
+      ["D. 3312-36", "définition du grand routier : au moins six repos quotidiens par mois hors du domicile", "LEGIARTI000033450305"],
       ["D. 3312-45", "durée du travail réputée équivalente : 43 heures par semaine pour les grands routiers, 39 heures pour les autres roulants, 35 heures pour la messagerie", "LEGIARTI000033450327"],
       ["D. 3312-46", "heures rémunérées de la 36e heure jusqu'à la durée d'équivalence, 186 ou 169 heures par mois", "LEGIARTI000033450329"],
       ["R. 3312-47", "heures supplémentaires au-delà de la durée d'équivalence", "LEGIARTI000033450331"],

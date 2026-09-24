@@ -363,9 +363,14 @@ qui n'y était pas : groupe 1 au 100 M, groupe 2 au 110 M, jusqu'au groupe 7 au 
 filtre n'a rien rendu, et l'absence de résultat a été écrite comme une absence de texte.
 Un fichier lu à travers un filtre n'est pas un fichier lu. Tant qu'on n'a pas ouvert le
 texte en entier, on n'écrit pas qu'une règle n'y est pas : on écrit qu'on ne l'a pas
-trouvée, et on dit où l'on a cherché. La relecture extérieure a commis exactement la même
-faute sur le même texte, ce qui ne l'excuse pas : deux lectures fautives ne font pas une
-vérification.
+trouvée, et on dit où l'on a cherché.
+
+Même jour, la même faute sur un autre point, et la même correction. La définition du
+conducteur grand routier, six repos quotidiens par mois hors du domicile, a été présentée
+comme un critère de fait sans texte, faute de l'avoir trouvée : elle est à l'article
+D. 3312-36 du code des transports (LEGIARTI000033450305), que le relais sert, et qui n'a
+pas été interrogé sur ce numéro-là. Ne pas trouver un article après trois essais ne veut
+pas dire qu'il n'existe pas : cela veut dire qu'on a essayé trois numéros.
 
 ### Ne pas faire plaisir
 
