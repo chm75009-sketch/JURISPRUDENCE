@@ -2087,7 +2087,20 @@
       return '<button type="button" class="doc-ligne" data-vers="' + vers + '"><span class="l">' +
         ech(titre) + "<small>" + ech(sous) + "</small></span></button>";
     };
-    var h = '<p class="groupe">Écrire</p>' +
+    /* LES CONTRATS DU TRANSPORT, À PART. Demande du 24 septembre 2026 : des
+       contrats « conformes, précis, adaptés au secteur transport ». Le temps
+       de service, les titres de conduite et les frais de déplacement n'ont
+       rien à voir avec un contrat ordinaire : ils ont leur module, et il
+       n'apparaît que pour une entreprise du transport. */
+    var h = "";
+    var sect = String((profil && profil.secteur) || "");
+    var idcc = String((profil && profil.conventionCollective) || "");
+    if (/transport/i.test(sect) || /^0*16\b/.test(idcc.trim())) {
+      h += '<p class="groupe">Embaucher dans le transport</p>' +
+        ligne("contrats-transport.html", "Contrats du transport routier",
+          "conducteur PL ou SPL, grand routier, ADR, sédentaire");
+    }
+    h += '<p class="groupe">Écrire</p>' +
       ligne("courriers.html", "Courriers et e-mails",
         "client, fournisseur, impôts, URSSAF, assurance, banque") +
       ligne("notes-service.html", "Notes de service",

@@ -1,0 +1,406 @@
+/* L'ÉCRAN DES CONTRATS DU TRANSPORT.
+
+   Le fond est dans contrats-transport.js, qui porte les valeurs de la
+   convention et écrit le contrat. Ici, les trois écrans, les champs, le rendu,
+   le Word, et la relecture de la convention par le relais Légifrance.
+
+   Ce qui est gardé sur l'appareil : la dernière saisie, sous la clé
+   « contrats-transport », pour ne pas retaper l'entreprise à chaque contrat.
+   Rien n'est envoyé, sauf la relecture de la convention, qui ne demande que
+   des textes publics et n'envoie aucune donnée du salarié.                 */
+
+"use strict";
+(function (window, document) {
+
+  var CT = window.ContratsTransport;
+  var $ = function (id) { return document.getElementById(id); };
+  var ech = function (s) { return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+
+  var CLE = "contrats-transport";
+  var RELAIS = "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance";
+
+  var PROFIL = null, NATURE = "cdi", V = {}, BLOCS = [];
+
+  function profilEntreprise() {
+    try { return (window.Profil && window.Profil.lire()) || {}; } catch (e) { return {}; }
+  }
+  function garde() {
+    try { return JSON.parse(window.localStorage.getItem(CLE) || "{}") || {}; }
+    catch (e) { return {}; }
+  }
+  function garder() {
+    try { window.localStorage.setItem(CLE, JSON.stringify(V)); } catch (e) {}
+  }
+  function iso(d) {
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+  }
+
+  function ecran(id) {
+    ["e-profil", "e-champs", "e-contrat"].forEach(function (x) {
+      $(x).classList.toggle("cache", x !== id);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  /* ─────────────────────────── 1 · l'emploi ─────────────────────────── */
+  function rendreProfils() {
+    $("profils").innerHTML = CT.PROFILS.map(function (p) {
+      return '<button type="button" data-p="' + p.cle + '">' +
+        '<span class="n">' + ech(p.nom) + "</span>" +
+        '<span class="s">' + ech(p.sous) + "</span>" +
+        '<span class="d">Temps de service : ' + ech(p.equivalence) + "</span></button>";
+    }).join("");
+  }
+  $("profils").addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-p]");
+    if (b) ouvrirProfil(b.getAttribute("data-p"));
+  });
+
+  function ouvrirProfil(cle) {
+    PROFIL = CT.profil(cle);
+    $("titre-haut").textContent = PROFIL.nom;
+    $("aide-champs").textContent = "Ce qu'il faut savoir pour écrire le contrat. Ce qui reste " +
+      "entre crochets sera à compléter à la main.";
+    rendreChamps();
+    ecran("e-champs");
+  }
+
+  /* ─────────────────────── 2 · le salarié et le poste ───────────────── */
+  var CHAMPS_COMMUNS = [
+    { id: "nom", nom: "Nom et prénom du salarié", t: "text", large: true },
+    { id: "adresse", nom: "Adresse du salarié", t: "text", large: true },
+    { id: "naissance", nom: "Date de naissance", t: "date" },
+    { id: "lieuNaissance", nom: "Lieu de naissance", t: "text" },
+    { id: "nationalite", nom: "Nationalité", t: "text" },
+    { id: "nir", nom: "Numéro de sécurité sociale", t: "text" },
+    { id: "emploi", nom: "Emploi", t: "text" },
+    { id: "groupe", nom: "Groupe", t: "text" },
+    { id: "entree", nom: "Date d'entrée", t: "date" },
+    { id: "lieu", nom: "Lieu de rattachement", t: "text" },
+  ];
+
+  function champsDuProfil() {
+    var L = CHAMPS_COMMUNS.slice();
+    L.push({ id: "coef", nom: "Coefficient", t: "select", opts: PROFIL.coefs });
+    L.push({ id: "mensuel", nom: "Temps de service mensuel (heures)", t: "number",
+      sous: PROFIL.roulant ? "Durée d'équivalence : " + PROFIL.equivalence : "Durée légale : 151,67 heures" });
+    L.push({ id: "taux", nom: "Taux horaire brut (euros)", t: "number",
+      sous: "Taux conventionnel du coefficient, à confronter au SMIC" });
+    L.push({ id: "smic", nom: "SMIC horaire en vigueur (euros)", t: "number",
+      sous: "À vérifier : les taux conventionnels marchandises datent du 1er décembre 2023" });
+    if (PROFIL.roulant) {
+      L.push({ id: "zone", nom: "Zone de conduite", t: "text",
+        sous: "par exemple : national et européen" });
+    } else {
+      L.push({ id: "repartition", nom: "Répartition des horaires", t: "text", large: true,
+        sous: "à remplir seulement si le poste est à temps partiel" });
+    }
+    L.push({ id: "lieuSignature", nom: "Lieu de signature", t: "text" });
+    L.push({ id: "dateSignature", nom: "Date de signature", t: "date" });
+    return L;
+  }
+
+  function rendreChamps() {
+    var g = garde(), ent = profilEntreprise();
+    var L = champsDuProfil();
+    var defauts = {
+      emploi: PROFIL.nom,
+      coef: PROFIL.coefDefaut,
+      mensuel: String(PROFIL.mensuel),
+      taux: String(CT.tauxDe(PROFIL.coefDefaut) || ""),
+      entree: iso(new Date()),
+      dateSignature: iso(new Date()),
+      lieu: g.lieu || ent.adresse || "",
+      lieuSignature: g.lieuSignature || "",
+      zone: "national et européen",
+    };
+    V = {};
+    L.forEach(function (c) {
+      V[c.id] = (g[c.id] !== undefined && ["nom", "adresse", "naissance", "lieuNaissance",
+        "nationalite", "nir"].indexOf(c.id) < 0) ? g[c.id] : (defauts[c.id] || "");
+      if (defauts[c.id] && !V[c.id]) V[c.id] = defauts[c.id];
+    });
+    V.coef = defauts.coef; V.mensuel = defauts.mensuel; V.taux = defauts.taux;
+    V.emploi = defauts.emploi;
+
+    $("champs").innerHTML = L.map(function (c) {
+      var v = ech(V[c.id] || "");
+      var dedans;
+      if (c.t === "select") {
+        dedans = '<select data-c="' + c.id + '">' + c.opts.map(function (o) {
+          return '<option value="' + ech(o) + '"' + (o === V[c.id] ? " selected" : "") + ">" +
+            ech(o) + "</option>";
+        }).join("") + "</select>";
+      } else {
+        dedans = '<input type="' + (c.t === "number" ? "number" : c.t) + '" data-c="' + c.id +
+          '" value="' + v + '"' + (c.t === "number" ? ' step="0.01"' : "") + ">";
+      }
+      return '<label class="' + (c.large ? "large" : "") + '">' + ech(c.nom) + dedans +
+        (c.sous ? '<span class="sous">' + ech(c.sous) + "</span>" : "") + "</label>";
+    }).join("");
+    verifierSmic();
+  }
+
+  $("champs").addEventListener("input", function (ev) {
+    var c = ev.target.getAttribute && ev.target.getAttribute("data-c");
+    if (!c) return;
+    V[c] = ev.target.value;
+    if (c === "coef") {
+      var t = CT.tauxDe(V.coef);
+      if (t) {
+        V.taux = String(t);
+        var champ = $("champs").querySelector('[data-c="taux"]');
+        if (champ) champ.value = V.taux;
+      }
+    }
+    if (c === "taux" || c === "smic" || c === "coef") verifierSmic();
+    garder();
+  });
+  $("champs").addEventListener("change", function (ev) {
+    var c = ev.target.getAttribute && ev.target.getAttribute("data-c");
+    if (c) { V[c] = ev.target.value; if (c === "coef") rendreChampsTaux(); verifierSmic(); garder(); }
+  });
+  function rendreChampsTaux() {
+    var t = CT.tauxDe(V.coef);
+    var champ = $("champs").querySelector('[data-c="taux"]');
+    if (t && champ) { V.taux = String(t); champ.value = V.taux; }
+  }
+
+  /* LE SMIC PASSE AVANT LE TAUX CONVENTIONNEL.
+     Les taux « marchandises » n'ont pas bougé depuis le 1er décembre 2023.
+     Écrire un contrat au taux conventionnel sans regarder le SMIC, c'est
+     écrire un contrat illicite : l'écran le dit avant, pas après. */
+  function verifierSmic() {
+    var t = Number(V.taux) || 0, s = Number(V.smic) || 0;
+    var b = $("alerte-smic");
+    if (!s) {
+      b.classList.remove("cache");
+      b.innerHTML = "<b>Le SMIC n'est pas renseigné.</b> Les taux conventionnels du transport " +
+        "de marchandises datent du 1er décembre 2023 et sont passés sous le SMIC. Portez le SMIC " +
+        "horaire en vigueur : c'est lui qui s'appliquera s'il est plus élevé.";
+      return;
+    }
+    if (s > t) {
+      b.classList.remove("cache");
+      b.innerHTML = "<b>Le SMIC l'emporte.</b> Le taux du coefficient " + ech(V.coef) + " est de " +
+        CT.fr(t, 4) + " euros, le SMIC de " + CT.fr(s, 4) + " euros : c'est le SMIC qui sera " +
+        "porté au contrat.";
+      return;
+    }
+    b.classList.add("cache");
+  }
+
+  $("changer-profil").addEventListener("click", function () {
+    $("titre-haut").textContent = "Contrats du transport";
+    ecran("e-profil");
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".nature button"), function (b) {
+    b.addEventListener("click", function () {
+      NATURE = b.getAttribute("data-n");
+      Array.prototype.forEach.call(document.querySelectorAll(".nature button"), function (x) {
+        x.classList.toggle("actif", x === b);
+      });
+    });
+  });
+
+  /* ─────────────────────────── 3 · le contrat ───────────────────────── */
+  function valeurs() {
+    var v = {};
+    for (var k in V) if (Object.prototype.hasOwnProperty.call(V, k)) v[k] = V[k];
+    v.profil = PROFIL.cle;
+    v.nature = NATURE;
+    v.entreprise = profilEntreprise();
+    return v;
+  }
+
+  function html(blocs) {
+    return blocs.map(function (b) {
+      if (b.k === "trait") return '<p class="trait"></p>';
+      if (b.k === "h2") return "<h2>" + ech(b.t) + "</h2>";
+      if (b.k === "table") {
+        return "<table><thead><tr>" + b.head.map(function (h) { return "<th>" + ech(h) + "</th>"; }).join("") +
+          "</tr></thead><tbody>" + b.rows.map(function (r) {
+            return "<tr>" + r.map(function (c) { return "<td>" + ech(c) + "</td>"; }).join("") + "</tr>";
+          }).join("") + "</tbody></table>";
+      }
+      if (b.k === "puce") return '<p class="puce">- ' + ech(b.t) + "</p>";
+      return '<p class="' + (b.k === "sur" || b.k === "t1" || b.k === "note" ? b.k : "") + '">' +
+        ech(b.t) + "</p>";
+    }).join("");
+  }
+
+  $("produire").addEventListener("click", function () {
+    var v = valeurs();
+    BLOCS = CT.ecrire(v);
+    $("contrat").innerHTML = html(BLOCS);
+    rendreFormalites(v);
+    rendreDroit();
+    rendreMaj();
+    $("etat").textContent = "";
+    $("titre-haut").textContent = (NATURE === "cdd" ? "CDD " : "CDI ") + PROFIL.nom.toLowerCase();
+    garder();
+    ecran("e-contrat");
+  });
+
+  $("reprendre").addEventListener("click", function () {
+    $("titre-haut").textContent = PROFIL.nom;
+    ecran("e-champs");
+  });
+
+  function rendreFormalites(v) {
+    var L = CT.formalites(v);
+    $("formalites").innerHTML = "<h3>Les formalités, et quand</h3>" + L.map(function (f) {
+      return '<div class="l"><div class="q">' + ech(f.quoi) + "</div>" +
+        '<div class="d">' + ech(f.quand) + (f.ou ? " · " + ech(f.ou) : "") + "</div>" +
+        (f.loi ? '<div class="f">' + ech(f.loi) + "</div>" : "") + "</div>";
+    }).join("");
+  }
+
+  function rendreDroit() {
+    $("droit").innerHTML = CT.DROIT.map(function (g) {
+      return "<h4>" + ech(g.t) + "</h4>" + g.a.map(function (a) {
+        return '<div class="a"><b>' + ech(a[0]) + "</b> — " + ech(a[1]) +
+          "<span>" + ech(a[2]) + "</span></div>";
+      }).join("");
+    }).join("");
+  }
+
+  /* LA CONVENTION, RELUE À LA DEMANDE.
+     Les montants inscrits ici portent leur date. Ce bouton va les relire sur
+     Légifrance, par le même relais que la recherche, et dit si le texte lu est
+     toujours celui qui est écrit. Il ne change rien tout seul : il compare et
+     il rapporte. */
+  function rendreMaj() {
+    $("maj").innerHTML = "Convention collective IDCC 16, lue le " + CT.dateFr(CT.CCN.lu) + ". " +
+      "Frais de déplacement du " + CT.dateFr(CT.CCN.frais.depuis) + ", taux horaires du " +
+      CT.dateFr(CT.CCN.salaires.depuis) + ".<br>" +
+      '<button type="button" id="relire">Vérifier la convention sur Légifrance</button>' +
+      '<div id="dit-maj" style="margin-top:8px"></div>';
+    var b = $("relire");
+    if (b) b.addEventListener("click", relire);
+  }
+
+  function relire() {
+    var d = $("dit-maj");
+    d.textContent = "Lecture en cours...";
+    Promise.all([
+      lireTexte("KALITEXT000053715762"),
+      lireTexte("KALITEXT000049067154"),
+    ]).then(function (r) {
+      var lignes = [];
+      if (r[0]) lignes.push("Frais de déplacement : « " + r[0].titre + " », en vigueur depuis le " +
+        CT.dateFr(r[0].date) + ".");
+      if (r[1]) lignes.push("Rémunérations : « " + r[1].titre + " », en vigueur depuis le " +
+        CT.dateFr(r[1].date) + ".");
+      if (!lignes.length) { d.textContent = "Légifrance n'a rien rendu. Réessayez plus tard."; return; }
+      var memeFrais = r[0] && r[0].date === CT.CCN.frais.depuis;
+      var memeSalaire = r[1] && r[1].date === CT.CCN.salaires.depuis;
+      lignes.push(memeFrais && memeSalaire
+        ? "Ce sont bien les textes portés au contrat."
+        : "Un texte a changé de date : signalez-le, les montants du module sont à reprendre.");
+      d.innerHTML = lignes.map(ech).join("<br>");
+    }).catch(function () {
+      d.textContent = "Lecture impossible. Le relais n'a pas répondu.";
+    });
+  }
+
+  function lireTexte(id) {
+    return window.fetch(RELAIS, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ action: "ccn-texte", id: id }),
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return j && j.titre ? j : null; })
+      .catch(function () { return null; });
+  }
+
+  /* ─────────────────────── le document, à emporter ──────────────────── */
+  /* Le contrat est éditable à l'écran : ce qui part en Word est ce qui est
+     à l'écran au moment du clic, et non ce qui a été produit. */
+  function blocsDeLEcran() {
+    var out = [];
+    Array.prototype.forEach.call($("contrat").children, function (n) {
+      var t = n.textContent.trim();
+      if (n.tagName === "H2") { out.push({ k: "h2", t: t }); return; }
+      if (n.tagName === "TABLE") {
+        var head = [], rows = [];
+        Array.prototype.forEach.call(n.querySelectorAll("thead th"), function (c) { head.push(c.textContent.trim()); });
+        Array.prototype.forEach.call(n.querySelectorAll("tbody tr"), function (r) {
+          var L = [];
+          Array.prototype.forEach.call(r.children, function (c) { L.push(c.textContent.trim()); });
+          rows.push(L);
+        });
+        out.push({ k: "table", head: head, rows: rows });
+        return;
+      }
+      if (n.classList.contains("trait")) { out.push({ k: "trait" }); return; }
+      if (!t) { out.push({ k: "p", t: "" }); return; }
+      if (n.classList.contains("sur")) { out.push({ k: "sur", t: t }); return; }
+      if (n.classList.contains("t1")) { out.push({ k: "t1", t: t }); return; }
+      if (n.classList.contains("note")) { out.push({ k: "note", t: t }); return; }
+      if (n.classList.contains("puce")) { out.push({ k: "puce", t: t.replace(/^-\s*/, "") }); return; }
+      out.push({ k: "p", t: t });
+    });
+    return out;
+  }
+
+  function nomFichier() {
+    var qui = (V.nom || "salarie").replace(/[^A-Za-zÀ-ÿ0-9]+/g, "-").replace(/^-|-$/g, "");
+    return (NATURE === "cdd" ? "CDD" : "CDI") + "-" + qui + ".docx";
+  }
+
+  $("word").addEventListener("click", function () {
+    if (!window.AuditExport) return;
+    var titre = (NATURE === "cdd" ? "Contrat à durée déterminée" : "Contrat à durée indéterminée") +
+      " — " + (V.nom || "");
+    var octets = window.AuditExport.docx(blocsDeLEcran(), titre);
+    window.AuditExport.telecharger(octets, nomFichier());
+    $("etat").textContent = "Contrat téléchargé.";
+  });
+
+  $("imprimer").addEventListener("click", function () { window.print(); });
+
+  $("garder").addEventListener("click", function () {
+    if (!window.Documents || !window.AuditExport) return;
+    var titre = (NATURE === "cdd" ? "CDD" : "CDI") + " — " + (V.nom || "salarié");
+    var octets = window.AuditExport.docx(blocsDeLEcran(), titre);
+    window.Documents.enregistrer("contrats", {
+      nom: nomFichier(), sorte: "produit",
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      note: PROFIL.nom + ", " + (V.coef || "") + ", " + (V.entree ? CT.dateFr(V.entree) : ""),
+      contenu: new Blob([octets], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" }),
+    }).then(function () {
+      $("etat").textContent = "Gardé dans « Mes documents ».";
+    }).catch(function () {
+      $("etat").textContent = "Impossible de garder le document sur cet appareil.";
+    });
+  });
+
+  $("retour").addEventListener("click", function () {
+    if (!$("e-contrat").classList.contains("cache")) {
+      $("titre-haut").textContent = PROFIL.nom;
+      ecran("e-champs");
+      return;
+    }
+    if (!$("e-champs").classList.contains("cache")) {
+      $("titre-haut").textContent = "Contrats du transport";
+      ecran("e-profil");
+      return;
+    }
+    window.location.href = "gerer.html";
+  });
+
+  /* Le rappel de l'entreprise, comme sur les autres écrans. */
+  (function entete() {
+    var p = profilEntreprise();
+    var bits = [];
+    if (p.denomination) bits.push(p.denomination);
+    if (p.effectif) bits.push(p.effectif + " salariés");
+    $("ent").textContent = bits.join(" · ");
+  })();
+
+  rendreProfils();
+
+})(window, document);

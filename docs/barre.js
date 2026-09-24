@@ -47,6 +47,7 @@
     { page: "registre.html", nom: "Registre du personnel" },
     { page: "courriers.html", nom: "Courriers et e-mails" },
     { page: "notes-service.html", nom: "Notes de service" },
+    { page: "contrats-transport.html", nom: "Contrats du transport" },
     { page: "heures.html", nom: "Décompte des heures" },
     { page: "forfait.html", nom: "Forfait en jours" },
     { page: "flotte.html", nom: "Flotte et conducteurs" },
