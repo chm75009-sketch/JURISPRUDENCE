@@ -228,6 +228,20 @@
       rechercheEmploi: "deux heures par jour pendant le préavis, dans la limite d'un mois",
     },
 
+    /* Les groupes et leurs coefficients, ouvriers des entreprises de transport
+       routier de marchandises et des activités auxiliaires : avenant n° 72 du
+       5 décembre 1990, toujours en vigueur et étendu. La relecture du
+       24 septembre 2026 avait raison, la table est bien servie par le relais :
+       la note disait le contraire, elle est reprise. */
+    groupes: {
+      source: "Avenant n° 72 du 5 décembre 1990 à l'annexe I",
+      article: "KALIARTI000005850441",
+      parCoefficient: {
+        "100 M": "1", "110 M": "2", "115 M": "3", "118 M": "3 bis",
+        "120 M": "4", "128 M": "5", "138 M": "6", "150 M": "7",
+      },
+    },
+
     caisses: {
       article: "annexe I, article 3 bis",
       id: "KALIARTI000005849365",
@@ -275,9 +289,9 @@
     },
     {
       cle: "adr",
-      nom: "Conducteur ADR ou température dirigée",
+      nom: "Conducteur ADR, matières dangereuses",
       emploi: "Conducteur hautement qualifié de véhicule poids lourd, affecté au transport de marchandises dangereuses",
-      sous: "Matières dangereuses, ou transport sous température dirigée",
+      sous: "Le certificat ADR n'est exigé que pour les matières dangereuses, non pour la seule température dirigée",
       roulant: true, annexe: "I", conduite: true,
       equivalence: "39 heures par semaine, 169 heures par mois",
       mensuel: 169, hebdo: 39,
@@ -310,13 +324,16 @@
     {
       cle: "employe",
       nom: "Employé : exploitation, administratif",
+      exploitation: true,
       emploi: "Employé de service administratif, commercial, contentieux, technique, d'exploitation, du personnel",
       sous: "Exploitant, agent de facturation, assistant, employé administratif",
       roulant: false, annexe: "II", conduite: false,
       equivalence: "durée légale, 35 heures par semaine, 151,67 heures par mois",
       mensuel: 151.67, hebdo: 35,
-      maxSemaine: "48 heures sur une semaine isolée et 44 heures en moyenne sur douze " +
-        "semaines (code du travail, L. 3121-20 et L. 3121-22)",
+      maxSemaine: "48 heures sur une semaine isolée et, en moyenne sur douze semaines " +
+        "consécutives, 44 heures pour les services d'exploitation et les personnels " +
+        "administratifs dont l'activité est liée au rythme de ces services, 42 heures pour les " +
+        "autres personnels administratifs (convention collective, annexe II, article 10 bis)",
       coefs: ["105", "110", "115", "120", "125", "132,5", "140", "148,5"],
       coefDefaut: "125",
       permis: "", titres: [],
@@ -499,16 +516,25 @@
        suivent la prise de poste et ne rend aucun avis d'aptitude (R. 4624-10) :
        elle ne peut donc pas conditionner l'embauche. Seul l'examen médical
        d'aptitude d'un poste à risques le peut. Relevé le 24 septembre 2026. */
+    /* La visite d'information et de prévention a lieu dans les trois mois qui
+       suivent la prise de poste, sauf pour un travailleur de nuit, où elle est
+       préalable à l'affectation (R. 4624-18). Le suivi adapté n'est pas acquis
+       d'avance : il se décide à l'issue de la visite (R. 4624-17). Reformulé
+       le 24 septembre 2026, la version d'avant présentait le suivi adapté
+       comme donné. */
     B.push({ k: "p", t: "Le salarié bénéficiera de la visite d'information et de prévention dans " +
-      "les trois mois qui suivent sa prise de poste." +
-      (p.conduite ? " Le poste relevant d'un suivi adapté, l'entreprise saisit le service de " +
-        "prévention et de santé au travail dès l'embauche." : "") });
+      "les trois mois qui suivent sa prise de poste. S'il est travailleur de nuit au sens de " +
+      "l'article L. 3122-5 du code du travail, cette visite a lieu avant son affectation au poste " +
+      "(R. 4624-18). Des modalités de suivi adaptées peuvent être décidées à l'issue de la visite, " +
+      "selon son état de santé, son âge, ses conditions de travail ou les risques auxquels il est " +
+      "exposé (R. 4624-17)." });
 
     /* ── 2 · emploi et classification ───────────────────────────────── */
     art("Emploi, qualification et classification");
+    var groupe = net(v.groupe) || CCN.groupes.parCoefficient[net(v.coef)] || "";
     B.push({ k: "p", t: "Le salarié est engagé en qualité " +
       de(net(v.emploi) || p.emploi || p.nom) +
-      (net(v.groupe) ? ", groupe " + net(v.groupe) : "") +
+      (groupe ? ", groupe " + groupe : "") +
       ", coefficient " + (net(v.coef) || "[COEFFICIENT]") +
       " de la nomenclature des emplois de l'" + annexe.nom + " de la convention collective" +
       (cdd ? ", pour les besoins qui tiennent au motif ci-dessus" : "") + "." });
@@ -767,10 +793,14 @@
     /* ── 11 · protection sociale ────────────────────────────────────── */
     art("Protection sociale");
     B.push({ k: "p", t: "Le salarié est affilié aux organismes suivants :" });
+    /* L'annexe V ne rend l'affiliation à la CARCEPT obligatoire qu'après un an
+       de service continu à temps complet : avant, et pour un CDD court ou un
+       temps partiel, le contrat doit dire de quelle institution le salarié
+       relève. Relevé le 24 septembre 2026. */
     B.push({ k: "puce", t: "retraite complémentaire : " +
-      (net(v.retraite) || "CARCEPT, à laquelle le salarié est obligatoirement affilié après un an " +
-        "de service continu à temps complet (convention collective, annexe V, article 1er) ; " +
-        "adresse de la caisse : [ADRESSE]") });
+      (net(v.retraite) || "[NOM ET ADRESSE DE L'INSTITUTION AGIRC-ARRCO DONT RELÈVE L'ENTREPRISE]") +
+      ". Après un an de service continu à temps complet, l'affiliation à la CARCEPT est " +
+      "obligatoire (convention collective, annexe V, article 1er)" });
     B.push({ k: "puce", t: "prévoyance : " +
       (net(v.prevoyance) || "[NOM ET ADRESSE DE L'ORGANISME DE PRÉVOYANCE]") });
     B.push({ k: "puce", t: "frais de santé : " +
@@ -956,9 +986,16 @@
         "tant qu'elle ne l'est pas, le contrat est présumé à temps complet (L. 3123-6)." });
     }
     B.push({ k: "puce", t: "Le coefficient et le groupe doivent correspondre à l'emploi tel que " +
-      "la nomenclature le définit. La table qui relie les groupes aux coefficients ne figure pas " +
-      "dans les textes servis par le relais Légifrance : elle se vérifie sur la grille de " +
-      "l'entreprise ou sur le barème de branche en vigueur." });
+      "la nomenclature le définit. Pour les ouvriers, la table qui relie les groupes aux " +
+      "coefficients est celle de l'" + CCN.groupes.source + " : groupe 2 au 110 M, groupe 4 au " +
+      "120 M, groupe 5 au 128 M, groupe 6 au 138 M, groupe 7 au 150 M. Le coefficient 150 M, " +
+      "conducteur hautement qualifié, suppose que le poste réunisse le nombre de points que la " +
+      "nomenclature exige." });
+    B.push({ k: "puce", t: "L'annexe V, qui rend l'affiliation à la CARCEPT obligatoire après un " +
+      "an de service continu à temps complet, date de 1958 : vérifier auprès de l'institution " +
+      "AGIRC-ARRCO dont relève l'entreprise quelle caisse gère aujourd'hui la retraite " +
+      "complémentaire, et laquelle s'applique la première année, à un CDD court ou à un temps " +
+      "partiel." });
     B.push({ k: "puce", t: "L'essai et le préavis suivent l'" + (p.annexe === "II" ? CCN.annexeII.nom
       : CCN.annexeI.nom) + ". Un ouvrier de quai et un exploitant administratif ne relèvent pas de " +
       "la même annexe, ni de la même grille de coefficients." });
