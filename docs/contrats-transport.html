@@ -50,6 +50,11 @@
     border:2px solid var(--filet);background:var(--surface);color:var(--texte-2)}
   .nature button.actif{border-color:var(--accent);background:var(--accent-clair);color:var(--accent)}
 
+  .bascule{display:flex;align-items:center;gap:10px;margin:12px 0 0;padding:12px 14px;
+    border:1px solid var(--filet);border-radius:10px;background:var(--carte);cursor:pointer;
+    font:600 16px/1.3 system-ui;color:var(--encre);min-height:50px}
+  .bascule input{width:22px;height:22px;flex:none}
+
   .champs{display:grid;gap:14px;margin:18px 0 0}
   @media (min-width:560px){.champs{grid-template-columns:1fr 1fr}}
   .champs label{display:flex;flex-direction:column;gap:5px;font-size:14.5px;color:var(--texte-2)}
@@ -84,6 +89,17 @@
   .contrat table{width:100%;border-collapse:collapse;margin:0 0 14px;font-size:15px}
   .contrat th,.contrat td{border:1px solid var(--filet);padding:8px 10px;text-align:left}
   .contrat th{background:var(--creux);font-weight:600}
+
+  .hors{margin:14px 0 0;border:1px solid var(--ambre);border-radius:10px;background:var(--ambre-clair);
+    padding:16px}
+  .hors p.sur{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ambre);
+    font-weight:600;margin:0 0 4px}
+  .hors p.t1{font:600 18px/1.25 system-ui;color:var(--encre);margin:0 0 12px}
+  .hors p.trait{display:none}
+  .hors h2{font:600 15.5px/1.3 system-ui;color:var(--encre);margin:16px 0 8px}
+  .hors p{margin:0 0 10px;font-size:15px;line-height:1.55;color:var(--encre-2)}
+  .hors p.puce{margin:0 0 7px 18px;text-indent:-14px}
+  .hors p.note{font-size:14px;color:var(--texte-2);font-style:italic}
 
   .form{margin:18px 0 0;border:1px solid var(--filet);border-radius:10px;background:var(--carte);overflow:hidden}
   .form h3{margin:0;padding:13px 15px;font:600 15px/1.3 system-ui;color:var(--encre);
@@ -139,6 +155,11 @@
       <button type="button" data-n="cdi" class="actif">CDI</button>
       <button type="button" data-n="cdd">CDD</button>
     </div>
+    <!-- Le temps partiel change la durée du travail et ajoute les mentions de
+         L. 3123-6 : il se coche ici, et vaut pour le conducteur comme pour le
+         sédentaire. Demandé le 24 septembre 2026. -->
+    <label class="bascule"><input type="checkbox" id="partiel">
+      <span>Temps partiel</span></label>
     <div class="champs" id="champs"></div>
     <div class="alerte cache" id="alerte-smic"></div>
     <div class="barre">
@@ -150,6 +171,10 @@
   <!-- ══════ 3 · LE CONTRAT ══════ -->
   <section id="e-contrat" class="cache">
     <div class="contrat" id="contrat" contenteditable="true" spellcheck="true"></div>
+    <!-- La réserve et l'observation ne sont pas dans le contrat, et ne sont pas
+         éditables avec lui : elles suivent, séparées, et le document produit
+         les met après un saut de page. -->
+    <div class="hors" id="hors"></div>
     <div class="barre">
       <button type="button" class="p" id="word">Télécharger en Word</button>
       <button type="button" class="s" id="imprimer">Imprimer</button>

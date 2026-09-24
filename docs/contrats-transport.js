@@ -211,9 +211,20 @@
 
   /* ══════════════════ 3 · LES ARTICLES DU CONTRAT ═══════════════════ */
 
+  /* Les milliers se séparent dans la partie entière, jamais dans les
+     décimales : le taux horaire sortait « 12,4 300 euros ». Mesuré le
+     24 septembre 2026 sur les contrats relus. */
   function fr(n, dec) {
     var d = dec === undefined ? 2 : dec;
-    return Number(n).toFixed(d).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    var p = Number(n).toFixed(d).split(".");
+    return p[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ") + (p[1] ? "," + p[1] : "");
+  }
+
+  /* « de Argenteuil » ne se dit pas. */
+  function de(lieu) {
+    var s = net(lieu);
+    if (!s) return "";
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
   }
   function net(v) { return String(v == null ? "" : v).trim(); }
 
@@ -251,8 +262,16 @@
     var smic = Number(v.smic) || 0;
     var retenu = smic && smic > taux ? smic : taux;
 
+    /* LE MOTIF, PARTOUT DANS LE CDD.
+       Demande du 24 septembre 2026 : « tu mets le motif partout pour le CDD ».
+       Il ouvre le document, il est l'objet de l'article 1er, il est rappelé à
+       l'emploi et au terme. C'est lui qui rend le contrat licite, et c'est la
+       première chose que le juge regarde : un motif écrit une fois, au milieu
+       d'une page, se perd. */
+    var motif = net(v.motif) || "[MOTIF DU RECOURS]";
+
     B.push({ k: "sur", t: (cdd ? "Contrat de travail à durée déterminée" : "Contrat de travail à durée indéterminée") +
-      (partiel ? " à temps partiel" : "") });
+      (partiel ? " à temps partiel" : "") + (cdd ? " - motif : " + motif : "") });
     B.push({ k: "t1", t: p.nom });
     B.push({ k: "trait" });
 
@@ -271,16 +290,20 @@
     B.push({ k: "p", t: "d'autre part," });
     B.push({ k: "p", t: "il a été convenu ce qui suit." });
 
-    B.push({ k: "h2", t: "Article 1 - Engagement" });
+    B.push({ k: "h2", t: cdd ? "Article 1 - Engagement et motif du recours" : "Article 1 - Engagement" });
     if (cdd) {
       B.push({ k: "p", t: "L'entreprise engage le salarié à durée déterminée, à compter du " +
-        dateFr(v.entree) + ", pour le motif suivant : " + (v.motif || "[MOTIF DU RECOURS]") + "." });
+        dateFr(v.entree) + ", pour le motif suivant : " + motif + "." });
       B.push({ k: "p", t: v.terme
-        ? "Le contrat prend fin le " + dateFr(v.terme) + "."
+        ? "Le contrat prend fin le " + dateFr(v.terme) + ". Il est conclu pour ce motif et pour " +
+          "lui seul ; il cesse de plein droit à cette date."
         : "Le contrat est conclu sans terme précis ; il prendra fin à la réalisation de son objet, " +
-          "et il est conclu pour une durée minimale de " + (v.duree || "[DURÉE MINIMALE]") + "." });
+          "à savoir " + motif + ", et il est conclu pour une durée minimale de " +
+          (v.duree || "[DURÉE MINIMALE]") + "." });
       B.push({ k: "note", t: "Le motif doit être précis : c'est lui qui rend le contrat licite, et à défaut " +
-        "le contrat est réputé à durée indéterminée (L. 1242-12)." });
+        "le contrat est réputé à durée indéterminée (L. 1242-12). Le terme imprécis n'est possible que " +
+        "dans les cas de l'article L. 1242-7, remplacement, attente d'une entrée en service, emploi " +
+        "saisonnier ou d'usage : un accroissement temporaire d'activité appelle un terme daté." });
     } else {
       B.push({ k: "p", t: "L'entreprise engage le salarié à durée indéterminée à compter du " +
         dateFr(v.entree) + "." });
@@ -291,7 +314,8 @@
     B.push({ k: "h2", t: "Article 2 - Emploi, qualification et classification" });
     B.push({ k: "p", t: "Le salarié est engagé en qualité de " + (v.emploi || p.nom) +
       ", groupe " + (v.groupe || "[GROUPE]") + ", coefficient " + (v.coef || "[COEFFICIENT]") +
-      " de la nomenclature des emplois annexée à la convention collective." });
+      " de la nomenclature des emplois annexée à la convention collective" +
+      (cdd ? ", pour les besoins qui tiennent au motif ci-dessus, " + motif : "") + "." });
     B.push({ k: "p", t: "Il exerce ses fonctions sous l'autorité de l'entreprise et selon les " +
       "instructions qui lui sont données, dans le respect de la réglementation sociale " +
       "européenne applicable au transport routier." });
@@ -314,8 +338,8 @@
 
     var n = p.roulant ? 4 : 3;
     B.push({ k: "h2", t: "Article " + n + " - Lieu de travail et rattachement" });
-    B.push({ k: "p", t: "Le salarié est rattaché à l'établissement de " +
-      (v.lieu || ent.adresse || "[LIEU DE RATTACHEMENT]") + ", où il prend et quitte son service." });
+    B.push({ k: "p", t: "Le salarié est rattaché à l'établissement " +
+      de(v.lieu || ent.adresse || "[LIEU DE RATTACHEMENT]") + ", où il prend et quitte son service." });
     if (p.roulant) {
       B.push({ k: "p", t: "Par la nature même de l'emploi, le salarié exerce son activité sur " +
         "l'ensemble du territoire " + (v.zone || "national et, le cas échéant, européen") +
@@ -324,13 +348,43 @@
     }
 
     n++;
-    B.push({ k: "h2", t: "Article " + n + " - Durée du travail" });
+    B.push({ k: "h2", t: "Article " + n + " - Durée du travail" +
+      (partiel ? ", à temps partiel" : "") });
+    /* LE TEMPS PARTIEL, Y COMPRIS POUR UN CONDUCTEUR.
+       Demande du 24 septembre 2026. Un conducteur peut être à temps partiel :
+       il garde son temps de service et ses équivalences, mais le contrat doit
+       porter en plus ce qu'exige L. 3123-6, la durée, sa répartition, les cas
+       de modification et le délai de prévenance. Sans ces mentions, le contrat
+       est présumé à temps complet, et la présomption se paie en rappel de
+       salaire. */
+    if (partiel) {
+      B.push({ k: "p", t: "Le salarié est engagé à temps partiel pour une durée de " + fr(heures, 2) +
+        " heures par mois" + (p.roulant ? ", décomptée en temps de service" : "") +
+        ", répartie comme suit : " + (net(v.repartition) || "[RÉPARTITION ENTRE LES JOURS DE LA SEMAINE]") + "." });
+      B.push({ k: "p", t: "Cette répartition peut être modifiée dans les cas suivants : " +
+        (net(v.modification) || "[CAS DE MODIFICATION, PAR EXEMPLE ABSENCE D'UN SALARIÉ, SURCROÎT DE COMMANDES]") +
+        ". Toute modification est notifiée au salarié en respectant un délai de prévenance de sept " +
+        "jours ouvrés." });
+      B.push({ k: "p", t: "Les horaires de chaque journée travaillée sont communiqués au salarié par " +
+        (net(v.communication) || "[PLANNING REMIS OU AFFICHÉ, ET SELON QUELLE PÉRIODICITÉ]") + "." });
+      B.push({ k: "p", t: "Des heures complémentaires peuvent être demandées dans la limite du dixième " +
+        "de la durée prévue au contrat, ou du tiers lorsqu'un accord collectif le permet. Elles ne " +
+        "peuvent porter la durée du travail au niveau de la durée légale ou, pour le personnel " +
+        "roulant, au niveau de la durée d'équivalence." });
+      B.push({ k: "p", t: "Le salarié bénéficie d'une priorité pour occuper un emploi à temps complet " +
+        "ressortissant à sa catégorie professionnelle, ou un emploi équivalent." });
+      B.push({ k: "note", t: "Le contrat à temps partiel doit mentionner la qualification, les éléments " +
+        "de la rémunération, la durée et sa répartition, les cas de modification et la façon dont les " +
+        "horaires sont communiqués : à défaut, il est présumé à temps complet (L. 3123-6)." });
+    }
     if (p.roulant) {
       B.push({ k: "p", t: "La durée du travail du personnel roulant est décomptée en temps de service. " +
         "Pour l'emploi occupé, la durée réputée équivalente à la durée légale est fixée à " +
         p.equivalence + " (code des transports, D. 3312-45)." });
-      B.push({ k: "p", t: "Le temps de service mensuel du salarié est fixé à " + fr(heures, 2) +
-        " heures. Les heures de temps de service accomplies de la trente-sixième heure " +
+      B.push({ k: "p", t: (partiel
+        ? "Les heures de temps de service accomplies de la trente-sixième heure "
+        : "Le temps de service mensuel du salarié est fixé à " + fr(heures, 2) +
+          " heures. Les heures de temps de service accomplies de la trente-sixième heure ") +
         "hebdomadaire jusqu'à la durée d'équivalence sont rémunérées selon les taux prévus par " +
         "la convention collective (D. 3312-46) ; au-delà de la durée d'équivalence, elles sont " +
         "des heures supplémentaires (R. 3312-47)." });
@@ -345,19 +399,7 @@
         "de conducteur. Le salarié s'engage à introduire sa carte, à la conserver en état de " +
         "fonctionnement, à saisir manuellement les périodes non enregistrées et à remettre les " +
         "disques ou les données à l'entreprise selon la périodicité qu'elle fixe." });
-    } else if (partiel) {
-      B.push({ k: "p", t: "Le salarié est engagé à temps partiel pour une durée de " + fr(heures, 2) +
-        " heures par mois, réparties comme suit : " + (v.repartition || "[RÉPARTITION PAR JOUR]") + "." });
-      B.push({ k: "p", t: "Cette répartition peut être modifiée dans les cas suivants : " +
-        (v.modification || "[CAS DE MODIFICATION]") + ". Toute modification est notifiée au salarié " +
-        "en respectant un délai de prévenance de sept jours ouvrés, sauf accord des parties sur un " +
-        "délai plus court dans les conditions prévues par la convention collective." });
-      B.push({ k: "p", t: "Les heures complémentaires ne peuvent porter la durée du travail au niveau " +
-        "de la durée légale." });
-      B.push({ k: "note", t: "Le contrat à temps partiel doit mentionner la durée et sa répartition, " +
-        "les cas de modification et le délai de prévenance : à défaut, il est présumé à temps " +
-        "complet (L. 3123-6)." });
-    } else {
+    } else if (!partiel) {
       B.push({ k: "p", t: "La durée du travail est fixée à " + fr(heures, 2) + " heures par mois, " +
         "soit " + fr(p.hebdo, 0) + " heures par semaine, selon l'horaire affiché dans " +
         "l'établissement." });
@@ -489,6 +531,67 @@
     return B;
   }
 
+  /* ══════════ 3 bis · CE QUI NE FAIT PAS PARTIE DU CONTRAT ══════════ */
+
+  /* LA RÉSERVE D'USAGE, ET L'OBSERVATION.
+
+     Demande du 24 septembre 2026 : « tu mets une réserve d'usage, avec une
+     observation hors contrat qui dit le juge confronte après ce qui est écrit
+     par rapport à la réalité, c'est ce que les juges retiennent ».
+
+     Les deux sont hors du contrat, et le disent : une réserve glissée dans un
+     acte qu'on signe n'a pas de sens, et le salarié ne signe pas une note
+     d'avertissement. Sur le document produit, elles viennent après un saut de
+     page, sous un titre qui écarte toute ambiguïté.                        */
+  function reserve(v) {
+    var p = profil(v.profil);
+    var cdd = v && v.nature === "cdd";
+    var B = [];
+    B.push({ k: "saut" });
+    B.push({ k: "sur", t: "Ne fait pas partie du contrat" });
+    B.push({ k: "t1", t: "Réserve d'usage et observation" });
+    B.push({ k: "trait" });
+
+    B.push({ k: "h2", t: "Réserve d'usage" });
+    B.push({ k: "p", t: "Ce document est un modèle. Il a été établi au vu des textes en vigueur " +
+      "à la date de sa production, et il doit être relu et adapté au poste réel avant d'être " +
+      "signé. Ce qui reste entre crochets n'est pas une formalité : c'est ce que le modèle ne " +
+      "peut pas deviner." });
+    B.push({ k: "puce", t: "Le taux horaire porté au contrat doit être comparé au SMIC en vigueur " +
+      "au jour de l'embauche, et au minimum conventionnel du coefficient : c'est le plus élevé " +
+      "des trois qui s'applique." });
+    B.push({ k: "puce", t: "Les montants conventionnels, frais de déplacement, taux horaires et " +
+      "garanties annuelles, changent par avenant : il faut vérifier qu'aucun avenant postérieur " +
+      "n'est intervenu, et lequel vise le transport de marchandises." });
+    if (p.roulant) {
+      B.push({ k: "puce", t: "Les majorations propres au temps de service, la prime de travail de " +
+        "nuit et, pour les grands routiers, la garantie d'amplitude, s'ajoutent au salaire de base " +
+        "et doivent être portées sur le bulletin de paie." });
+    }
+    if (cdd) {
+      B.push({ k: "puce", t: "Le motif doit correspondre à un cas de recours de l'article L. 1242-2, " +
+        "et le terme être daté sauf dans les cas de l'article L. 1242-7. Le contrat doit être remis " +
+        "au salarié dans les deux jours ouvrables suivant l'embauche." });
+    }
+
+    B.push({ k: "h2", t: "Observation" });
+    B.push({ k: "p", t: "Le juge ne s'arrête pas à ce qui est écrit. Quand il est saisi, il " +
+      "confronte le contrat à ce qui s'est réellement passé : les horaires réellement faits, le " +
+      "travail réellement confié, le motif réellement à l'origine de l'embauche. C'est la réalité " +
+      "qu'il retient, et le contrat ne vaut que s'il la décrit." });
+    B.push({ k: "puce", t: "Un CDD dont le motif est écrit mais que les faits démentent est " +
+      "requalifié en contrat à durée indéterminée." });
+    B.push({ k: "puce", t: "Un temps partiel dont la répartition n'est pas tenue, ou dont les " +
+      "horaires changent sans cesse, est requalifié en temps complet." });
+    B.push({ k: "puce", t: "Une qualification ou un coefficient portés au contrat ne tiennent pas " +
+      "si les fonctions exercées sont d'un autre niveau : c'est le travail fait qui décide." });
+    B.push({ k: "puce", t: "Les heures payées doivent être celles qui ont été faites : les relevés " +
+      "du chronotachygraphe et les plannings pèsent plus lourd que la clause du contrat." });
+    B.push({ k: "note", t: "D'où la règle pratique : ce qu'on écrit, on le tient ; ce qu'on ne tient " +
+      "pas, on ne l'écrit pas." });
+    return B;
+  }
+
   /* ══════════════════ 4 · LES FORMALITÉS, ET LE DROIT ═══════════════ */
 
   function formalites(v) {
@@ -549,7 +652,8 @@
 
   window.ContratsTransport = {
     CCN: CCN, PROFILS: PROFILS, DROIT: DROIT,
-    profil: profil, tauxDe: tauxDe, ecrire: ecrire, formalites: formalites,
+    profil: profil, tauxDe: tauxDe, ecrire: ecrire, reserve: reserve,
+    formalites: formalites,
     fr: fr, dateFr: dateFr,
   };
 

@@ -20,7 +20,7 @@
   var CLE = "contrats-transport";
   var RELAIS = "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance";
 
-  var PROFIL = null, NATURE = "cdi", V = {}, BLOCS = [];
+  var PROFIL = null, NATURE = "cdi", PARTIEL = false, V = {}, BLOCS = [], HORS = [];
 
   function profilEntreprise() {
     try { return (window.Profil && window.Profil.lire()) || {}; } catch (e) { return {}; }
@@ -80,11 +80,36 @@
     { id: "lieu", nom: "Lieu de rattachement", t: "text" },
   ];
 
+  /* LE MOTIF ET LE TERME, DEMANDÉS AVANT TOUT LE RESTE POUR UN CDD.
+     C'est le motif qui rend le contrat licite, et le terme imprécis n'est
+     ouvert qu'aux cas de L. 1242-7 : l'écran met les deux en tête plutôt que
+     de les laisser en crochets au milieu du contrat. Demande du 24 septembre
+     2026, « tu mets le motif partout pour le CDD ». */
+  var CHAMPS_CDD = [
+    { id: "motif", nom: "Motif du recours", t: "text", large: true,
+      sous: "précis : qui est remplacé, quel surcroît, quelle saison" },
+    { id: "terme", nom: "Date de fin", t: "date",
+      sous: "obligatoire sauf remplacement, attente d'une entrée en service, saisonnier ou d'usage" },
+    { id: "duree", nom: "Durée minimale, si la fin n'est pas datée", t: "text" },
+  ];
+
+  var CHAMPS_PARTIEL = [
+    { id: "repartition", nom: "Répartition entre les jours", t: "text", large: true,
+      sous: "par exemple : lundi, mardi et jeudi de 8 h à 15 h" },
+    { id: "modification", nom: "Cas de modification de la répartition", t: "text", large: true,
+      sous: "absence d'un salarié, surcroît de commandes, intempéries" },
+    { id: "communication", nom: "Comment les horaires sont communiqués", t: "text", large: true,
+      sous: "planning affiché le vendredi pour la semaine suivante" },
+  ];
+
   function champsDuProfil() {
     var L = CHAMPS_COMMUNS.slice();
+    if (NATURE === "cdd") L = CHAMPS_CDD.concat(L);
+    if (PARTIEL) L = L.concat(CHAMPS_PARTIEL);
     L.push({ id: "coef", nom: "Coefficient", t: "select", opts: PROFIL.coefs });
-    L.push({ id: "mensuel", nom: "Temps de service mensuel (heures)", t: "number",
-      sous: PROFIL.roulant ? "Durée d'équivalence : " + PROFIL.equivalence : "Durée légale : 151,67 heures" });
+    L.push({ id: "mensuel", nom: PARTIEL ? "Heures par mois" : "Temps de service mensuel (heures)",
+      t: "number", sous: PARTIEL ? "moins que la durée d'équivalence du poste"
+        : (PROFIL.roulant ? "Durée d'équivalence : " + PROFIL.equivalence : "Durée légale : 151,67 heures") });
     L.push({ id: "taux", nom: "Taux horaire brut (euros)", t: "number",
       sous: "Taux conventionnel du coefficient, à confronter au SMIC" });
     L.push({ id: "smic", nom: "SMIC horaire en vigueur (euros)", t: "number",
@@ -92,9 +117,6 @@
     if (PROFIL.roulant) {
       L.push({ id: "zone", nom: "Zone de conduite", t: "text",
         sous: "par exemple : national et européen" });
-    } else {
-      L.push({ id: "repartition", nom: "Répartition des horaires", t: "text", large: true,
-        sous: "à remplir seulement si le poste est à temps partiel" });
     }
     L.push({ id: "lieuSignature", nom: "Lieu de signature", t: "text" });
     L.push({ id: "dateSignature", nom: "Date de signature", t: "date" });
@@ -115,14 +137,23 @@
       lieuSignature: g.lieuSignature || "",
       zone: "national et européen",
     };
+    /* Ce qui a déjà été tapé ne se perd pas quand on coche « temps partiel »
+       ou qu'on passe du CDI au CDD : les champs sont refaits, les valeurs
+       restent. */
+    var avant = V || {};
+    var neuf = !avant.emploi;
     V = {};
     L.forEach(function (c) {
+      if (avant[c.id] !== undefined && avant[c.id] !== "") { V[c.id] = avant[c.id]; return; }
       V[c.id] = (g[c.id] !== undefined && ["nom", "adresse", "naissance", "lieuNaissance",
-        "nationalite", "nir"].indexOf(c.id) < 0) ? g[c.id] : (defauts[c.id] || "");
+        "nationalite", "nir", "motif", "terme", "duree", "repartition", "modification",
+        "communication"].indexOf(c.id) < 0) ? g[c.id] : (defauts[c.id] || "");
       if (defauts[c.id] && !V[c.id]) V[c.id] = defauts[c.id];
     });
-    V.coef = defauts.coef; V.mensuel = defauts.mensuel; V.taux = defauts.taux;
-    V.emploi = defauts.emploi;
+    if (neuf) {
+      V.coef = defauts.coef; V.mensuel = defauts.mensuel; V.taux = defauts.taux;
+      V.emploi = defauts.emploi;
+    }
 
     $("champs").innerHTML = L.map(function (c) {
       var v = ech(V[c.id] || "");
@@ -202,7 +233,15 @@
       Array.prototype.forEach.call(document.querySelectorAll(".nature button"), function (x) {
         x.classList.toggle("actif", x === b);
       });
+      rendreChamps();
     });
+  });
+
+  $("partiel").addEventListener("change", function () {
+    PARTIEL = $("partiel").checked;
+    if (PARTIEL && V.mensuel && Number(V.mensuel) >= PROFIL.mensuel) V.mensuel = "";
+    if (!PARTIEL) V.mensuel = String(PROFIL.mensuel);
+    rendreChamps();
   });
 
   /* ─────────────────────────── 3 · le contrat ───────────────────────── */
@@ -211,6 +250,7 @@
     for (var k in V) if (Object.prototype.hasOwnProperty.call(V, k)) v[k] = V[k];
     v.profil = PROFIL.cle;
     v.nature = NATURE;
+    v.partiel = PARTIEL;
     v.entreprise = profilEntreprise();
     return v;
   }
@@ -234,7 +274,9 @@
   $("produire").addEventListener("click", function () {
     var v = valeurs();
     BLOCS = CT.ecrire(v);
+    HORS = CT.reserve(v);
     $("contrat").innerHTML = html(BLOCS);
+    $("hors").innerHTML = html(HORS.filter(function (b) { return b.k !== "saut"; }));
     rendreFormalites(v);
     rendreDroit();
     rendreMaj();
@@ -348,14 +390,14 @@
 
   function nomFichier() {
     var qui = (V.nom || "salarie").replace(/[^A-Za-zÀ-ÿ0-9]+/g, "-").replace(/^-|-$/g, "");
-    return (NATURE === "cdd" ? "CDD" : "CDI") + "-" + qui + ".docx";
+    return (NATURE === "cdd" ? "CDD" : "CDI") + (PARTIEL ? "-temps-partiel" : "") + "-" + qui + ".docx";
   }
 
   $("word").addEventListener("click", function () {
     if (!window.AuditExport) return;
     var titre = (NATURE === "cdd" ? "Contrat à durée déterminée" : "Contrat à durée indéterminée") +
       " - " + (V.nom || "");
-    var octets = window.AuditExport.docx(blocsDeLEcran(), titre);
+    var octets = window.AuditExport.docx(blocsDeLEcran().concat(HORS), titre);
     window.AuditExport.telecharger(octets, nomFichier());
     $("etat").textContent = "Contrat téléchargé.";
   });
@@ -365,7 +407,7 @@
   $("garder").addEventListener("click", function () {
     if (!window.Documents || !window.AuditExport) return;
     var titre = (NATURE === "cdd" ? "CDD" : "CDI") + " - " + (V.nom || "salarié");
-    var octets = window.AuditExport.docx(blocsDeLEcran(), titre);
+    var octets = window.AuditExport.docx(blocsDeLEcran().concat(HORS), titre);
     window.Documents.enregistrer("contrats", {
       nom: nomFichier(), sorte: "produit",
       type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
