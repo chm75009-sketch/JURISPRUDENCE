@@ -18,7 +18,7 @@ SPREADS = [
  ],
  "fac": "USBeja-1931-planche.jpg",
  "leg": "L'équipe de l'Union Sportive Béjaoise.",
- "src": "L'Afrique du Nord illustrée, 28 février 1931, page 7. Cliché Photo-Sultan, Béja. Gallica, Bibliothèque nationale de France."},
+ "src": "L'Afrique du Nord illustrée, 28 février 1931. Cliché Photo-Sultan, Béja. Gallica, ark:/12148/bpt6k57834963."},
 
 {"ch": "INTRODUCTION", "titre": "Ce que l'auteur apportera",
  "t": [
@@ -30,7 +30,7 @@ SPREADS = [
  ],
  "fac": "PetitMatin-1934-derby-Beja.jpg",
  "leg": "Le derby de Béja.",
- "src": "Le Petit Matin, Tunis, 1934. Gallica, Bibliothèque nationale de France."},
+ "src": "Le Petit Matin, Tunis, 16 janvier 1934, page 7. Gallica, ark:/12148/bpt6k8392766m."},
 
 {"ch": "1. LA NAISSANCE", "titre": "Le jour, le lieu",
  "t": [
@@ -76,7 +76,7 @@ SPREADS = [
  ],
  "fac": "USBeja-1931-texte.jpg",
  "leg": "La légende et les compositions du match de Bône.",
- "src": "L'Afrique du Nord illustrée, 28 février 1931, page 7. Gallica, Bibliothèque nationale de France."},
+ "src": "L'Afrique du Nord illustrée, 28 février 1931. Gallica, ark:/12148/bpt6k57834963."},
 
 {"ch": "1. LA NAISSANCE", "titre": "L'Union Sportive Béjaoise, et Martinelli",
  "t": [
@@ -87,7 +87,7 @@ SPREADS = [
  ],
  "fac": "PetitMatin-1931-USBeja-juniors.jpg",
  "leg": "Les juniors de l'Union Sportive Béjaoise.",
- "src": "Le Petit Matin, Tunis, 1931. Gallica, Bibliothèque nationale de France."},
+ "src": "Le Petit Matin, Tunis, 13 janvier 1931, page 5. Gallica, ark:/12148/bpt6k8391962b."},
 
 {"ch": "1. LA NAISSANCE", "titre": "Souk-Ahras, 30 juillet 1932",
  "t": [
@@ -98,7 +98,7 @@ SPREADS = [
  ],
  "fac": "SoukAhras-1932-p1.jpg",
  "leg": "Rapid C.M. Souk-Ahras contre U.S. Béja, première partie.",
- "src": "Le Souk-Ahras républicain, 30 juillet 1932. Gallica, Bibliothèque nationale de France."},
+ "src": "Le Souk-Ahras républicain, 30 juillet 1932. Gallica, ark:/12148/bpt6k86492368."},
 
 {"ch": "1. LA NAISSANCE", "titre": "Souk-Ahras, la suite du compte rendu",
  "t": [
@@ -109,7 +109,7 @@ SPREADS = [
  ],
  "fac": "SoukAhras-1932-p2.jpg",
  "leg": "Rapid C.M. Souk-Ahras contre U.S. Béja, seconde partie.",
- "src": "Le Souk-Ahras républicain, 30 juillet 1932. Gallica, Bibliothèque nationale de France."},
+ "src": "Le Souk-Ahras républicain, 30 juillet 1932. Gallica, ark:/12148/bpt6k86492368."},
 
 {"ch": "1. LA NAISSANCE", "titre": "Deux clubs, et non pas un",
  "t": [
@@ -120,7 +120,7 @@ SPREADS = [
  ],
  "fac": "AvenirSoukAhras-1934-OBeja.jpg",
  "leg": "L'Olympique de Béja.",
- "src": "L'Avenir de Souk-Ahras, 1934. Gallica, Bibliothèque nationale de France."},
+ "src": "L'Avenir de Souk-Ahras, 28 octobre 1934, page 5. Gallica, ark:/12148/bpt6k6234878g."},
 
 
 {"ch": "2. SOLLICITÉ EN FRANCE, VICTIME DE SON TALENT", "titre": "Les deux contrats",
@@ -198,8 +198,8 @@ SPREADS = [
   "C'est un correspondant parisien qui écrit cela, dans le journal de la ville dont il porte les couleurs, et c'est la phrase sur laquelle il a choisi de finir.",
  ],
  "fac": "fac-alsacien-1938.jpg",
- "leg": "« Laloué versucht den Araber zu stoppen, aber umsonst » : Laloué essaie d'arrêter l'Arabe, mais en vain.",
- "src": "Le Sport alsacien, 14 novembre 1938, page 3. Gallica, ark:/12148/bpt6k3148996d."},
+ "leg": "« Laloué versucht den Araber abzustoppen, aber umsonst » : Laloué essaie d'arrêter l'Arabe, mais en vain.",
+ "src": "Le Sport alsacien, 14 novembre 1938, page 4. Gallica, ark:/12148/bpt6k3148996d."},
 
 {"ch": "3. LE RACISME ET L'ESPRIT COLONIALISTE", "titre": "L'enfant, l'animal, l'illettré",
  "t": [
@@ -222,7 +222,7 @@ SPREADS = [
  ],
  "fac": "LAuto-1936-mal-du-pays.jpg",
  "leg": "« Le mal du pays ».",
- "src": "L'Auto, 1936. Gallica, Bibliothèque nationale de France."},
+ "src": "L'Auto, 21 février 1936, page 6. Gallica, ark:/12148/bpt6k46294444. Le bord droit de la colonne est perdu dans la numérisation."},
 
 {"ch": "4. LE MATCH AMICAL À MARSEILLE", "titre": "1er décembre 1935, Marseille 2 Nice 0",
  "t": [
@@ -233,7 +233,7 @@ SPREADS = [
  ],
  "fac": "PetitMarseillais-1935-Nice-OM.jpg",
  "leg": "Olympique de Marseille contre O.G.C. Nice.",
- "src": "Le Petit Marseillais, 2 décembre 1935. Gallica, Bibliothèque nationale de France."},
+ "src": "Le Petit Marseillais, 2 décembre 1935, page 8. Gallica, ark:/12148/bpt6k49191842."},
 
 
 {"ch": "5. LES SAISONS EN FRANCE", "titre": "L'arrivée à Nice, novembre 1935",
@@ -245,7 +245,7 @@ SPREADS = [
  ],
  "fac": "ForezSportif-1935-arrivee-Nice.jpg",
  "leg": "L'arrivée à Nice.",
- "src": "Le Forez sportif, 1935. Gallica, Bibliothèque nationale de France."},
+ "src": "Le Forez sportif, 6 novembre 1935, page 2. Gallica, Bibliothèque nationale de France."},
 
 {"ch": "5. LES SAISONS EN FRANCE", "titre": "1935-1936, la première saison",
  "t": [
@@ -442,7 +442,7 @@ SPREADS = [
  ],
  "fac": "But-1946-restaurant.jpg",
  "leg": "À table, au camp d'entraînement de Colmar.",
- "src": "But, 8 octobre 1946, page 9. Gallica, Bibliothèque nationale de France."},
+ "src": "But, 8 octobre 1946, page 9. Gallica, ark:/12148/bpt6k51784216."},
 
 {"ch": "5. LES SAISONS EN FRANCE", "titre": "« Boudjema bourreau ! »",
  "t": [
@@ -453,7 +453,7 @@ SPREADS = [
  ],
  "fac": "But-1946-bourreau.jpg",
  "leg": "« Boudjema bourreau ! »",
- "src": "But, 8 octobre 1946, page 9. Gallica, Bibliothèque nationale de France."},
+ "src": "But, 8 octobre 1946, page 9. Gallica, ark:/12148/bpt6k51784216."},
 
 {"ch": "8. LA MORT", "titre": "L'acte",
  "t": [
@@ -464,7 +464,7 @@ SPREADS = [
  ],
  "fac": "But-1946-volley.jpg",
  "leg": "Au volley-ball. Sept mois avant sa mort.",
- "src": "But, 8 octobre 1946, page 9. Gallica, Bibliothèque nationale de France."},
+ "src": "But, 8 octobre 1946, page 9. Gallica, ark:/12148/bpt6k51784216."},
 
 {"ch": "8. LA MORT", "titre": "Les cinq faire-part",
  "t": [
@@ -506,6 +506,6 @@ SPREADS = [
  ],
  "fac": "USBeja-1931-planche.jpg",
  "leg": "L'équipe d'où il est parti, seize ans plus tôt.",
- "src": "L'Afrique du Nord illustrée, 28 février 1931, page 7. Cliché Photo-Sultan, Béja."},
+ "src": "L'Afrique du Nord illustrée, 28 février 1931. Cliché Photo-Sultan, Béja."},
 
 ]
