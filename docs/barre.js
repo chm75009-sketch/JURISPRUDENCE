@@ -107,8 +107,9 @@
       h += '<li><a href="' + m.page + '"' + ici + '>' + m.nom + "</a></li>";
     });
     h += "</ul>";
-    if (seance()) h += '<button type="button" class="quitter" id="barre-quitter">Quitter, ' +
-      "et redemander le mot de passe</button>";
+    if (seance()) h += '<button type="button" class="quitter" id="barre-quitter">Quitter</button>' +
+      '<p class="apres">Le mot de passe sera redemandé à la prochaine ouverture. ' +
+      "Rien de ce qui est sur cet appareil n'est effacé.</p>";
     h += "</nav>";
     p.innerHTML = h;
     document.body.appendChild(p);

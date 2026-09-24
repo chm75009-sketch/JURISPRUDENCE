@@ -444,7 +444,10 @@ section.fiche label{display:flex;flex-direction:column;gap:6px;position:relative
   header.site .wrap:has(#barre-bouton-menu) h1{font-size:16px}
 }
 
-#barre-menu{position:fixed;inset:0;z-index:120}
+/* Le menu passe au-dessus de tout, y compris du bouton rond de l'assistant,
+   qui sinon recouvrait la dernière ligne de la feuille. */
+#barre-menu{position:fixed;inset:0;z-index:9992}
+body:has(#barre-menu) #assist-bouton{display:none}
 #barre-menu .fond{position:absolute;inset:0;background:rgba(17,24,36,.45)}
 #barre-menu .feuille{position:absolute;top:0;right:0;height:100%;width:min(86vw,340px);
   background:var(--surface);border-left:1px solid var(--filet);box-shadow:-2px 0 18px rgba(17,24,36,.18);
@@ -465,6 +468,7 @@ section.fiche label{display:flex;flex-direction:column;gap:6px;position:relative
   border:2px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);
   color:var(--texte-2);cursor:pointer}
 #barre-menu .quitter:hover{border-color:var(--rouge);color:var(--rouge)}
+#barre-menu .apres{margin:0 16px 22px;font:400 13.5px/1.5 system-ui;color:var(--texte-3)}
 
 /* Écran 3, l'audit : une ligne par obligation, 64 px, un filet dessous, le
    nom à gauche, Oui et Non à droite. Ce qui n'est pas dû à l'effectif reste
