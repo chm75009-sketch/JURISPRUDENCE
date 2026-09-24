@@ -192,7 +192,7 @@
     var g = garde(), ent = profilEntreprise();
     var L = champsDuProfil();
     var defauts = {
-      emploi: PROFIL.nom,
+      emploi: PROFIL.emploi || PROFIL.nom,
       coef: PROFIL.coefDefaut,
       mensuel: String(PROFIL.mensuel),
       taux: String(CT.tauxDe(PROFIL.coefDefaut, PROFIL.cle) || ""),

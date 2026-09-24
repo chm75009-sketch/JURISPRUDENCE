@@ -145,6 +145,10 @@
       },
       /* Garanties annuelles de rémunération des ouvriers, mêmes source et
          date. Elles ne valent que pour la durée qu'elles visent. */
+      garEmployes: {
+        "105": 22664.41, "110": 22664.41, "115": 22664.41, "120": 22664.41,
+        "125": 22683.16, "132,5": 22720.65, "140": 22776.89, "148,5": 23301.79,
+      },
       gar: {
         "151.67": { "110 M": 22664.41, "115 M": 22664.41, "118 M": 22664.41, "120 M": 22664.41,
           "128 M": 22720.65, "138 M": 22758.14, "150 M": 23301.79 },
@@ -236,6 +240,7 @@
     {
       cle: "pl",
       nom: "Conducteur marchandises PL ou SPL",
+      emploi: "Conducteur routier de marchandises",
       sous: "Courte distance, retour quotidien au domicile",
       roulant: true, annexe: "I", conduite: true,
       equivalence: "39 heures par semaine, 169 heures par mois",
@@ -253,6 +258,7 @@
     {
       cle: "grand",
       nom: "Conducteur grand routier ou longue distance",
+      emploi: "Conducteur routier grand routier ou longue distance",
       sous: "Découchés, deux repas hors du domicile",
       roulant: true, annexe: "I", conduite: true, grandRoutier: true,
       equivalence: "43 heures par semaine, 186 heures par mois",
@@ -270,6 +276,7 @@
     {
       cle: "adr",
       nom: "Conducteur ADR ou température dirigée",
+      emploi: "Conducteur routier de marchandises dangereuses",
       sous: "Matières dangereuses, ou transport sous température dirigée",
       roulant: true, annexe: "I", conduite: true,
       equivalence: "39 heures par semaine, 169 heures par mois",
@@ -288,6 +295,7 @@
     {
       cle: "ouvrier",
       nom: "Ouvrier sédentaire : quai, atelier",
+      emploi: "Manutentionnaire",
       sous: "Agent de quai, cariste, mécanicien, laveur",
       roulant: false, annexe: "I", conduite: false,
       equivalence: "durée légale, 35 heures par semaine, 151,67 heures par mois",
@@ -302,6 +310,7 @@
     {
       cle: "employe",
       nom: "Employé : exploitation, administratif",
+      emploi: "Employé administratif d'exploitation",
       sous: "Exploitant, agent de facturation, assistant, employé administratif",
       roulant: false, annexe: "II", conduite: false,
       equivalence: "durée légale, 35 heures par semaine, 151,67 heures par mois",
@@ -320,9 +329,16 @@
   /* Les milliers se séparent dans la partie entière, jamais dans les
      décimales : le taux horaire sortait « 12,4 300 euros ». Mesuré le
      24 septembre 2026. */
+  /* L'arrondi à deux décimales par toFixed rend 2 417,63 pour 2 417,635, le
+     flottant tombant juste en dessous. On arrondit d'abord, à la main.
+     Signalé à la relecture du 24 septembre 2026. */
+  function rond(n, dec) {
+    var f = Math.pow(10, dec === undefined ? 2 : dec);
+    return Math.round((Number(n) + Number.EPSILON * Math.abs(Number(n))) * f) / f;
+  }
   function fr(n, dec) {
     var d = dec === undefined ? 2 : dec;
-    var p = Number(n).toFixed(d).split(".");
+    var p = rond(n, d).toFixed(d).split(".");
     return p[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ") + (p[1] ? "," + p[1] : "");
   }
 
@@ -379,14 +395,37 @@
     };
   }
 
+  /* La garantie annuelle qui correspond à la durée. Les barèmes ne sont
+     publiés que pour 151,67, 169 et 200 heures : pour une durée intermédiaire
+     comme 186 heures, on retient le barème immédiatement inférieur, qui est
+     dû en tout état de cause, et le contrat dit que c'est un plancher. Pour un
+     temps partiel, c'est la durée de référence du poste qui sert de base, et
+     la garantie est ramenée au prorata. */
   function garantie(p, coef, heures) {
-    if (p.annexe === "II") return null;
-    var cles = { "151.67": 151.67, "169": 169, "200": 200 };
-    for (var k in cles) {
-      if (Math.abs(cles[k] - heures) < 0.5 && CCN.salaires.gar[k] && CCN.salaires.gar[k][coef])
-        return { montant: CCN.salaires.gar[k][coef], pour: k === "151.67" ? "151,67" : k };
+    if (p.annexe === "II") {
+      var ge = CCN.salaires.garEmployes[coef];
+      return ge ? { montant: ge, pour: "151,67", base: 151.67, exact: Math.abs(heures - 151.67) < 0.5 } : null;
     }
-    return null;
+    var cles = { "151.67": 151.67, "169": 169, "200": 200 };
+    var ref = null, meilleure = -1;
+    for (var c in cles) {
+      if (cles[c] <= heures + 0.5 && cles[c] > meilleure &&
+          CCN.salaires.gar[c] && CCN.salaires.gar[c][coef]) {
+        meilleure = cles[c];
+        ref = { montant: CCN.salaires.gar[c][coef], pour: c === "151.67" ? "151,67" : c,
+          base: cles[c], exact: Math.abs(cles[c] - heures) < 0.5 };
+      }
+    }
+    return ref;
+  }
+
+  /* Pour un temps partiel, la référence est la durée normale du poste. */
+  function garantiePartiel(p, coef) {
+    if (p.annexe === "II") {
+      var ge = CCN.salaires.garEmployes[coef];
+      return ge ? { montant: ge, pour: "151,67", base: 151.67, exact: true } : null;
+    }
+    return garantie(p, coef, p.mensuel);
   }
 
   /* ══════════════════ 4 · LE CONTRAT, ARTICLE PAR ARTICLE ═══════════ */
@@ -456,8 +495,10 @@
 
     /* ── 2 · emploi et classification ───────────────────────────────── */
     art("Emploi, qualification et classification");
-    B.push({ k: "p", t: "Le salarié est engagé en qualité de " + (net(v.emploi) || p.nom) +
-      ", groupe " + (net(v.groupe) || "[GROUPE]") + ", coefficient " + (net(v.coef) || "[COEFFICIENT]") +
+    B.push({ k: "p", t: "Le salarié est engagé en qualité " +
+      de(net(v.emploi) || p.emploi || p.nom) +
+      (net(v.groupe) ? ", groupe " + net(v.groupe) : "") +
+      ", coefficient " + (net(v.coef) || "[COEFFICIENT]") +
       " de la nomenclature des emplois de l'" + annexe.nom + " de la convention collective" +
       (cdd ? ", pour les besoins qui tiennent au motif ci-dessus" : "") + "." });
     B.push({ k: "p", t: "La convention collective applicable est la " + CCN.nom +
@@ -557,13 +598,15 @@
         "soit " + fr(p.hebdo, 0) + " heures par semaine, selon l'horaire affiché dans " +
         "l'établissement." });
     }
-    if (p.roulant) {
+    if (p.roulant && !partiel) {
       B.push({ k: "p", t: "Les heures de temps de service sont rémunérées, au-delà de la 152e heure " +
         "du mois, avec une majoration de 25 % jusqu'à la 186e heure incluse, et de 50 % à compter " +
         "de la 187e heure (" + CCN.majorations.source + ", article 2). Au-delà de la durée " +
         "d'équivalence, elles sont des heures supplémentaires (R. 3312-47) et ouvrent droit à la " +
         "compensation obligatoire en repos de l'article R. 3312-48, dont le décompte est " +
         "trimestriel." });
+    }
+    if (p.roulant) {
       B.push({ k: "p", t: "Le temps de service ne peut excéder douze heures par jour (R. 3312-51), ni " +
         p.maxSemaine + ". Lorsque le salarié est travailleur de nuit, ou accomplit une partie de " +
         "son travail entre 24 heures et 5 heures, sa durée quotidienne ne peut excéder dix heures " +
@@ -577,31 +620,44 @@
     }
 
     /* ── 6 · rémunération ───────────────────────────────────────────── */
+    /* LA GARANTIE ANNUELLE N'EST PAS UN RAPPEL, C'EST UN PLANCHER.
+       Le contrat citait la garantie et payait en dessous : douze fois le
+       salaire mensuel restait sous le montant cité. Le salaire est donc relevé
+       au douzième de la garantie quand le calcul horaire tombe plus bas, et le
+       contrat le dit. Défaut relevé à la relecture du 24 septembre 2026. */
     art("Rémunération");
     var s = salaire(p, heures, retenu);
-    if (p.roulant && s.m25 + s.m50 > 0) {
-      B.push({ k: "p", t: "Le salarié perçoit un salaire mensuel brut calculé sur la base de " +
-        fr(heures, 2) + " heures de temps de service au taux horaire de " + fr(retenu, 4) +
+    var g = partiel ? garantiePartiel(p, net(v.coef)) : garantie(p, net(v.coef), heures);
+    var garDue = g ? (partiel ? g.montant * heures / g.base : g.montant) : 0;
+    var mensuelGar = garDue / 12;
+    var mensuel = Math.max(s.total, mensuelGar);
+
+    var detail = (p.roulant && s.m25 + s.m50 > 0)
+      ? fr(heures, 2) + " heures de temps de service au taux horaire de " + fr(retenu, 4) +
         " euros, soit " + fr(s.base, 2) + " heures au taux normal, " + fr(s.m25, 2) +
         " heures majorées de 25 %" +
-        (s.m50 > 0 ? " et " + fr(s.m50, 2) + " heures majorées de 50 %" : "") +
-        ", représentant " + fr(s.total, 2) + " euros bruts par mois." });
-    } else {
-      B.push({ k: "p", t: "Le salarié perçoit un salaire mensuel brut calculé sur la base de " +
-        fr(heures, 2) + " heures au taux horaire de " + fr(retenu, 4) + " euros, soit " +
-        fr(s.total, 2) + " euros bruts par mois." });
-    }
-    var g = garantie(p, net(v.coef), heures);
-    if (g && !partiel) {
+        (s.m50 > 0 ? " et " + fr(s.m50, 2) + " heures majorées de 50 %" : "")
+      : fr(heures, 2) + " heures au taux horaire de " + fr(retenu, 4) + " euros";
+
+    B.push({ k: "p", t: "Le salarié perçoit un salaire mensuel brut de " + fr(mensuel, 2) +
+      " euros, calculé sur la base de " + detail + "." });
+    if (g && mensuelGar > s.total + 0.005) {
+      B.push({ k: "p", t: "Ce montant est celui de la garantie annuelle de rémunération attachée au " +
+        "coefficient " + net(v.coef) + (partiel ? ", ramenée à la durée du présent contrat" : "") +
+        ", soit " + fr(garDue, 2) + " euros par an : le calcul horaire y étant inférieur de " +
+        fr(mensuelGar - s.total, 2) + " euros par mois, c'est la garantie qui s'applique (" +
+        CCN.salaires.source + ", en vigueur depuis le " + dateFr(CCN.salaires.depuis) + ")." });
+    } else if (g) {
       B.push({ k: "p", t: "La rémunération annuelle du salarié ne peut être inférieure à la garantie " +
-        "annuelle de rémunération attachée au coefficient " + net(v.coef) + " pour " + g.pour +
-        " heures, soit " + fr(g.montant, 2) + " euros (" + CCN.salaires.source + ", en vigueur " +
-        "depuis le " + dateFr(CCN.salaires.depuis) + ")." });
-    } else if (g && partiel) {
-      var pro = g.montant * heures / (g.pour === "151,67" ? 151.67 : Number(g.pour));
-      B.push({ k: "p", t: "La garantie annuelle de rémunération du coefficient " + net(v.coef) +
-        " est de " + fr(g.montant, 2) + " euros pour " + g.pour + " heures ; ramenée à la durée du " +
-        "présent contrat, elle s'établit à " + fr(pro, 2) + " euros." });
+        "annuelle de rémunération attachée au coefficient " + net(v.coef) +
+        (partiel ? ", ramenée à la durée du présent contrat" : " pour " + g.pour + " heures") +
+        ", soit " + fr(garDue, 2) + " euros" +
+        (!g.exact && !partiel
+          ? ". Aucun barème n'étant publié pour " + fr(heures, 2) + " heures, ce montant est un " +
+            "plancher : la durée du contrat étant supérieure à " + g.pour + " heures, la " +
+            "rémunération lui est au moins égale"
+          : "") +
+        " (" + CCN.salaires.source + ", en vigueur depuis le " + dateFr(CCN.salaires.depuis) + ")." });
     }
     if (p.clauses.indexOf("nuit") >= 0) {
       B.push({ k: "p", t: "Tout travail effectif accompli " + CCN.nuit.periode + " donne lieu à une " +
@@ -678,10 +734,9 @@
         (p.annexe === "II" ? CCN.annexeII.demission : CCN.annexeI.demission) });
       (p.annexe === "II" ? CCN.annexeII.licenciement : CCN.annexeI.licenciement)
         .forEach(function (l) { B.push({ k: "puce", t: "licenciement, " + l }); });
-      B.push({ k: "p", t: "Pendant le préavis, quelle que soit la partie qui a pris l'initiative de " +
-        "la rupture, le salarié peut s'absenter " +
-        (p.annexe === "II" ? CCN.annexeII.rechercheEmploi : CCN.annexeI.rechercheEmploi) +
-        " pour chercher un autre emploi." });
+      B.push({ k: "p", t: "Quelle que soit la partie qui a pris l'initiative de la rupture, le " +
+        "salarié peut s'absenter pour chercher un autre emploi : " +
+        (p.annexe === "II" ? CCN.annexeII.rechercheEmploi : CCN.annexeI.rechercheEmploi) + "." });
     }
 
     /* ── 11 · protection sociale ────────────────────────────────────── */
@@ -775,8 +830,8 @@
       "par semaine" });
     B.push({ k: "p", t: "" });
     B.push({ k: "p", t: "Madame, Monsieur," });
-    B.push({ k: "p", t: "Je suis engagé à temps partiel en qualité de " +
-      (net(v.emploi) || p.nom) + " à compter du " + dateFr(v.entree) + "." });
+    B.push({ k: "p", t: "Je suis engagé à temps partiel en qualité " +
+      de(net(v.emploi) || p.emploi || p.nom) + " à compter du " + dateFr(v.entree) + "." });
     B.push({ k: "p", t: "Je demande que ma durée de travail soit fixée à " + fr(heures, 2) +
       " heures par mois, soit environ " + fr(parSemaine, 2) + " heures par semaine, c'est-à-dire " +
       "en dessous de la durée minimale de vingt-quatre heures par semaine prévue par l'article " +
@@ -979,6 +1034,7 @@
   window.ContratsTransport = {
     CCN: CCN, PROFILS: PROFILS, DROIT: DROIT,
     profil: profil, tauxDe: tauxDe, salaire: salaire, garantie: garantie,
+    garantiePartiel: garantiePartiel,
     ecrire: ecrire, reserve: reserve, formalites: formalites,
     annexeDemande: annexeDemande, annexeDue: annexeDue,
     fr: fr, dateFr: dateFr,
