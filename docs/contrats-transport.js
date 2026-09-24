@@ -271,7 +271,7 @@
     B.push({ k: "p", t: "d'autre part," });
     B.push({ k: "p", t: "il a été convenu ce qui suit." });
 
-    B.push({ k: "h2", t: "Article 1 — Engagement" });
+    B.push({ k: "h2", t: "Article 1 - Engagement" });
     if (cdd) {
       B.push({ k: "p", t: "L'entreprise engage le salarié à durée déterminée, à compter du " +
         dateFr(v.entree) + ", pour le motif suivant : " + (v.motif || "[MOTIF DU RECOURS]") + "." });
@@ -288,7 +288,7 @@
     B.push({ k: "p", t: "L'engagement est subordonné au résultat de la visite d'information et de " +
       "prévention, ou de l'examen médical d'aptitude lorsque le poste le commande." });
 
-    B.push({ k: "h2", t: "Article 2 — Emploi, qualification et classification" });
+    B.push({ k: "h2", t: "Article 2 - Emploi, qualification et classification" });
     B.push({ k: "p", t: "Le salarié est engagé en qualité de " + (v.emploi || p.nom) +
       ", groupe " + (v.groupe || "[GROUPE]") + ", coefficient " + (v.coef || "[COEFFICIENT]") +
       " de la nomenclature des emplois annexée à la convention collective." });
@@ -297,7 +297,7 @@
       "européenne applicable au transport routier." });
 
     if (p.roulant) {
-      B.push({ k: "h2", t: "Article 3 — Titres et qualifications exigés" });
+      B.push({ k: "h2", t: "Article 3 - Titres et qualifications exigés" });
       B.push({ k: "p", t: "Le salarié déclare détenir, et s'engage à maintenir en cours de validité " +
         "pendant toute l'exécution du contrat :" });
       B.push({ k: "puce", t: "le permis de conduire " + p.permis });
@@ -313,7 +313,7 @@
     }
 
     var n = p.roulant ? 4 : 3;
-    B.push({ k: "h2", t: "Article " + n + " — Lieu de travail et rattachement" });
+    B.push({ k: "h2", t: "Article " + n + " - Lieu de travail et rattachement" });
     B.push({ k: "p", t: "Le salarié est rattaché à l'établissement de " +
       (v.lieu || ent.adresse || "[LIEU DE RATTACHEMENT]") + ", où il prend et quitte son service." });
     if (p.roulant) {
@@ -324,7 +324,7 @@
     }
 
     n++;
-    B.push({ k: "h2", t: "Article " + n + " — Durée du travail" });
+    B.push({ k: "h2", t: "Article " + n + " - Durée du travail" });
     if (p.roulant) {
       B.push({ k: "p", t: "La durée du travail du personnel roulant est décomptée en temps de service. " +
         "Pour l'emploi occupé, la durée réputée équivalente à la durée légale est fixée à " +
@@ -365,7 +365,7 @@
     }
 
     n++;
-    B.push({ k: "h2", t: "Article " + n + " — Rémunération" });
+    B.push({ k: "h2", t: "Article " + n + " - Rémunération" });
     B.push({ k: "p", t: "Le salarié perçoit un salaire mensuel brut calculé sur la base de " +
       fr(heures, 2) + " heures au taux horaire de " + fr(retenu, 4) + " euros, soit " +
       fr(retenu * heures, 2) + " euros bruts par mois." });
@@ -391,7 +391,7 @@
 
     if (p.roulant) {
       n++;
-      B.push({ k: "h2", t: "Article " + n + " — Frais de déplacement" });
+      B.push({ k: "h2", t: "Article " + n + " - Frais de déplacement" });
       B.push({ k: "p", t: "Lorsque le service du salarié l'oblige à prendre un repas ou à découcher hors " +
         "de son domicile, l'entreprise lui verse les indemnités forfaitaires prévues par le " +
         "protocole du 30 avril 1974 annexé à la convention collective, aux taux en vigueur." });
@@ -414,7 +414,7 @@
     }
 
     n++;
-    B.push({ k: "h2", t: "Article " + n + " — Période d'essai" });
+    B.push({ k: "h2", t: "Article " + n + " - Période d'essai" });
     if (cdd) {
       B.push({ k: "p", t: "Le contrat comporte une période d'essai de " + (v.essai || "[DURÉE]") +
         ", calculée à raison d'un jour par semaine de contrat, dans la limite de deux semaines " +
@@ -431,14 +431,14 @@
     }
 
     n++;
-    B.push({ k: "h2", t: "Article " + n + " — Congés payés" });
+    B.push({ k: "h2", t: "Article " + n + " - Congés payés" });
     B.push({ k: "p", t: "Le salarié bénéficie des congés payés dans les conditions légales et " +
       "conventionnelles. Les dates sont fixées par l'entreprise en tenant compte des nécessités " +
       "du service." });
 
     if (!cdd) {
       n++;
-      B.push({ k: "h2", t: "Article " + n + " — Rupture du contrat" });
+      B.push({ k: "h2", t: "Article " + n + " - Rupture du contrat" });
       B.push({ k: "p", t: "Après la période d'essai, le contrat peut être rompu dans les conditions " +
         "légales, sous réserve du préavis fixé par la convention collective (" +
         CCN.preavis.article + ") :" });
@@ -447,14 +447,14 @@
     }
 
     n++;
-    B.push({ k: "h2", t: "Article " + n + " — Protection sociale" });
+    B.push({ k: "h2", t: "Article " + n + " - Protection sociale" });
     B.push({ k: "p", t: "Le salarié est affilié aux régimes de retraite complémentaire et de prévoyance " +
       "dont relève l'entreprise, ainsi qu'à la couverture « frais de santé » obligatoire de la " +
       "branche." });
 
     if (p.roulant) {
       n++;
-      B.push({ k: "h2", t: "Article " + n + " — Obligations particulières de conduite" });
+      B.push({ k: "h2", t: "Article " + n + " - Obligations particulières de conduite" });
       B.push({ k: "puce", t: "respecter les temps de conduite, de pause et de repos fixés par le " +
         "règlement (CE) n° 561/2006 et la réglementation nationale" });
       B.push({ k: "puce", t: "n'exercer aucune autre activité rémunérée susceptible de faire dépasser " +
@@ -475,7 +475,7 @@
     }
 
     n++;
-    B.push({ k: "h2", t: "Article " + n + " — Documents remis" });
+    B.push({ k: "h2", t: "Article " + n + " - Documents remis" });
     B.push({ k: "p", t: "Le salarié reconnaît avoir reçu un exemplaire du présent contrat, ainsi que " +
       "l'information sur la convention collective applicable, le règlement intérieur lorsqu'il " +
       "existe, et la notice des régimes de protection sociale." });

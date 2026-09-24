@@ -261,7 +261,7 @@
   function rendreDroit() {
     $("droit").innerHTML = CT.DROIT.map(function (g) {
       return "<h4>" + ech(g.t) + "</h4>" + g.a.map(function (a) {
-        return '<div class="a"><b>' + ech(a[0]) + "</b> — " + ech(a[1]) +
+        return '<div class="a"><b>' + ech(a[0]) + "</b> - " + ech(a[1]) +
           "<span>" + ech(a[2]) + "</span></div>";
       }).join("");
     }).join("");
@@ -354,7 +354,7 @@
   $("word").addEventListener("click", function () {
     if (!window.AuditExport) return;
     var titre = (NATURE === "cdd" ? "Contrat à durée déterminée" : "Contrat à durée indéterminée") +
-      " — " + (V.nom || "");
+      " - " + (V.nom || "");
     var octets = window.AuditExport.docx(blocsDeLEcran(), titre);
     window.AuditExport.telecharger(octets, nomFichier());
     $("etat").textContent = "Contrat téléchargé.";
@@ -364,7 +364,7 @@
 
   $("garder").addEventListener("click", function () {
     if (!window.Documents || !window.AuditExport) return;
-    var titre = (NATURE === "cdd" ? "CDD" : "CDI") + " — " + (V.nom || "salarié");
+    var titre = (NATURE === "cdd" ? "CDD" : "CDI") + " - " + (V.nom || "salarié");
     var octets = window.AuditExport.docx(blocsDeLEcran(), titre);
     window.Documents.enregistrer("contrats", {
       nom: nomFichier(), sorte: "produit",
