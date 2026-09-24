@@ -55,6 +55,7 @@
 -->
 
 <link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
 <script src="liste-choix.js"></script>
 <script src="listes-valeurs.js"></script>
 <script src="listes-auto.js"></script>
@@ -727,6 +728,12 @@
      LES ONGLETS
      ══════════════════════════════════════════════════════════════════════════ */
   var ECRAN = "depot";
+  /* LE RETOUR, ÉTAPE PAR ÉTAPE. Demande du 24 septembre 2026 :
+     « retour en arrière à chaque étape ». La barre suit les écrans et
+     rappelle la fonction d'affichage de la page pour revenir au précédent. */
+  if (window.Barre) window.Barre.ecrans(function (id) { onglet(id.replace(/^o-/, "")); },
+    "#o-depot, #o-articles, #o-sortie");
+
   function onglet(nom) {
     ECRAN = nom;
     ["depot", "articles", "sortie"].forEach(function (o) {

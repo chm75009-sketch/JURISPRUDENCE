@@ -45,6 +45,7 @@
 -->
 
 <link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
 <style>
   main.wrap{max-width:560px;padding-bottom:var(--e7)}
   main.wrap.large{max-width:760px}
@@ -553,6 +554,12 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      Un seul visible. Le bouton Retour du bandeau (droits.js) revient au
      registre depuis les autres, et quitte la page depuis le registre. */
   var ECRANS = ["question", "registre", "accueillis", "import", "tenue", "doc", "archives"];
+  /* LE RETOUR, ÉTAPE PAR ÉTAPE. Demande du 24 septembre 2026 :
+     « retour en arrière à chaque étape ». La barre suit les écrans et
+     rappelle la fonction d'affichage de la page pour revenir au précédent. */
+  if (window.Barre) window.Barre.ecrans(function (id) { ouvrir(id.replace(/^e-/, "")); },
+    "#e-question, #e-registre, #e-accueillis, #e-import, #e-tenue, #e-archives, #e-doc");
+
   function ouvrir(nom) {
     ECRANS.forEach(function (o) { $("e-" + o).hidden = o !== nom; });
     $("main").classList.toggle("large", nom === "doc" || nom === "import");

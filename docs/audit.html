@@ -60,6 +60,7 @@
 -->
 
 <link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
 <style>
   main.wrap{max-width:820px;padding-bottom:var(--e7)}
 
@@ -1147,6 +1148,12 @@
   });
 
   /* ═══════════════════════════════════ la question, et ce qu'elle commande */
+  /* LE RETOUR, ÉTAPE PAR ÉTAPE. Demande du 24 septembre 2026 :
+     « retour en arrière à chaque étape ». La barre suit les écrans et
+     rappelle la fonction d'affichage de la page pour revenir au précédent. */
+  if (window.Barre) window.Barre.ecrans(function (id) { ecran(id.replace(/^ecran-/, "")); },
+    "#ecran-question, #ecran-doc, #ecran-oui");
+
   function ecran(nom) {
     $("#ecran-question").hidden = nom !== "question";
     $("#ecran-doc").hidden = nom !== "doc";
