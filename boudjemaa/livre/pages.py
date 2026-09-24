@@ -466,17 +466,35 @@ SPREADS = [
  "leg": "Au volley-ball. Sept mois avant sa mort.",
  "src": "But, 8 octobre 1946, page 9. Gallica, Bibliothèque nationale de France."},
 
-{"ch": "8. LA MORT", "titre": "La maladie, et le jour",
+{"ch": "8. LA MORT", "titre": "Les cinq faire-part",
  "t": [
   "L'Équipe du samedi 31 mai 1947, sous la signature de Haenggi :",
   "> Boudjemaa est mort. COLMAR. Boudjemaa avait contracté voici quelques mois une pleurésie. Le Nord-Africain, malgré tous les soins prodigués, s'est éteint hier à l'hôpital Pasteur de Colmar. Les Sports Réunis perdent un bon joueur et un excellent camarade. Haenggi.",
   "Le signataire est probablement Charles Haenggi, journaliste et écrivain, 1880-1965, rédacteur à l'Elsässer Kurier puis aux Dernières Nouvelles de Colmar.",
-  "France-Soir du 1er juin 1947 : « Le Nord-Africain Boudjemaa qui opérait au S.R. Colmar est décédé d'une pleurésie contractée il y a quelques mois. » Deux journaux d'Afrique du Nord l'annoncent aussi : L'Écho d'Alger du 1er juin, page 4, et L'Écho du Maroc du 5 juin, page 4.",
-  "Sur le jour, il y a un écart. L'acte d'état civil dit le 29 mai à 23 h 30. Trois des cinq faire-part de presse écrivent « vendredi », c'est-à-dire le 30 mai. L'écart s'explique sans doute par l'heure : mort à vingt-trois heures trente, déclaré le lendemain. Ce livre retient le 29 mai 1947, parce que c'est ce que porte le seul acte d'état civil.",
+  "On connaît cinq faire-part. Les voici tous les cinq, parce qu'ils ne disent pas la même chose, et que l'écart entre eux est lui-même un document.",
+  "France-Soir, 1er juin 1947, page 4 :",
+  "> Le Nord-Africain Boudjemaa, qui opérait aux S. R. Colmar, est décédé d'une pleurésie contractée il y a quelques mois.",
+  "L'Écho d'Alger, 1er juin 1947, page 4 :",
+  "> L'excellent footballer tunisien Boudjemaa, qui se distingua dans les rangs de Saint-Etienne, de Nice et de Colmar, est mort vendredi passé dans cette dernière ville des suites d'une pleurésie.",
+  "Le Courrier français du Sud-Ouest, organe du témoignage chrétien, 2 juin 1947, page 4, sous le titre « BOUDJEMAA EST MORT » :",
+  "> Colmar, 1er juin. Boudjemaa avait contracté, voici quelques mois, une pleurésie. Le Nord-Africain, malgré tous les soins prodigués, s'est éteint vendredi à l'hôpital Pasteur de Colmar. Les Sports Réunis perdent un bon joueur.",
+  "L'Écho du Maroc, 5 juin 1947, page 4 :",
+  "> Le Nord-Africain Boudjemaa, qui opérait à Colmar, est décédé d'une pleurésie contractée il y a quelques mois.",
  ],
  "fac": "fac-equipe-1947.jpg",
  "leg": "« Boudjemaa est mort ».",
  "src": "L'Équipe, 31 mai 1947, page 4. Gallica, ark:/12148/bd6t51001286."},
+
+{"ch": "8. LA MORT", "titre": "Le seul qui le nomme par son pays",
+ "t": [
+  "Quatre de ces cinq textes l'appellent « le Nord-Africain », sans pays, et trois d'entre eux se recopient l'un l'autre à la virgule près. Un seul le nomme par le sien.",
+  "L'Écho d'Alger écrit « l'excellent footballer tunisien », et il est le seul à rappeler ses trois clubs, Saint-Etienne, Nice et Colmar. Le journal le plus proche de chez lui est aussi celui qui le reconnaît le mieux, et il le place ce jour-là entre un résultat de boxe et la mort de deux dirigeants algérois.",
+  "Sur le jour, il y a un écart qu'il faut dire. L'acte d'état civil porte le 29 mai à vingt-trois heures trente. Trois des cinq faire-part écrivent « vendredi », c'est-à-dire le 30 mai : L'Équipe, L'Écho d'Alger et Le Courrier français du Sud-Ouest. L'écart s'explique sans doute par l'heure, mort à vingt-trois heures trente et déclaré le lendemain à quinze heures.",
+  "Ce livre retient le 29 mai 1947, parce que c'est ce que porte le seul acte d'état civil qu'on ait sur lui. Mais trois journaux sur cinq disent le 30, et cela devait être écrit ici.",
+ ],
+ "fac": "fac-alger-1947.jpg",
+ "leg": "« L'excellent footballer tunisien Boudjemaa ».",
+ "src": "L'Écho d'Alger, 1er juin 1947, page 4. Gallica, ark:/12148/bpt6k4153215g."},
 
 {"ch": "8. LA MORT", "titre": "Le silence des journaux de sa ville",
  "t": [
