@@ -13,6 +13,7 @@ plus conservateur, que Word accepte.
   trait  filet horizontal                  {"k":"trait"}
   h1 h2 h3   titres de niveau              {"k":"h1","t":"…"}
   p      paragraphe                        {"k":"p","t":"…"}
+  cit    citation détachée, filet à gauche  {"k":"cit","t":"…"}
   note   paragraphe gris, plus petit       {"k":"note","t":"…"}
   puce   liste à puces                     {"k":"puce","t":"…"}
   enc    encadré titré                     {"k":"enc","titre":"…","t":"…"}
@@ -67,6 +68,19 @@ def _cadre(par, fond="F4F6FB"):
     p.append(bd)
 
 
+def _barre(par):
+    """Un filet vertical à gauche : la citation détachée."""
+    pr = par._p.get_or_add_pPr()
+    bd = OxmlElement("w:pBdr")
+    g = OxmlElement("w:left")
+    g.set(qn("w:val"), "single")
+    g.set(qn("w:sz"), "12")
+    g.set(qn("w:space"), "10")
+    g.set(qn("w:color"), "1F3864")
+    bd.append(g)
+    pr.append(bd)
+
+
 def _par(doc, texte, taille=11, gras=False, couleur=None, avant=0, apres=6, style=None):
     par = doc.add_paragraph(style=style)
     par.paragraph_format.space_before = Pt(avant)
@@ -101,6 +115,11 @@ def construire(elements, chemin):
             _par(doc, e.get("t"), taille=11.5, gras=True, couleur=BLEU, avant=10, apres=4)
         elif k == "p":
             _par(doc, e.get("t"))
+        elif k == "cit":
+            par = _par(doc, e.get("t"), taille=10.5, couleur=ENCRE, avant=4, apres=8)
+            par.paragraph_format.left_indent = Cm(0.9)
+            par.paragraph_format.right_indent = Cm(0.4)
+            _barre(par)
         elif k == "note":
             _par(doc, e.get("t"), taille=9.5, couleur=GRIS)
         elif k == "puce":
