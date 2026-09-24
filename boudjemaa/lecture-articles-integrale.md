@@ -3836,3 +3836,197 @@ quelques mois. »
 Cela fait cinq faire-part connus (L'Équipe, France-soir, Le Courrier français du
 Sud-Ouest, L'Écho d'Alger, L'Écho du Maroc), et **trois d'entre eux disent vendredi**,
 c'est-à-dire le 30 mai 1947. La date du 29 mai reste à vérifier sur l'acte.
+
+---
+
+## LES 50 PAGES QUE GALLICA REFUSE EN IMAGE, LUES PAR EXTRAITS (24 septembre 2026)
+
+Je disais en fin de lecture qu'il restait 49 pages dont Gallica ne sert pas l'image.
+Vérification faite, ce n'est pas une panne : ces documents renvoient un 403, c'est un
+refus de droits, et aucune insistance n'y changera rien. En revanche le texte de ces
+pages est indexé, et les extraits autour de son nom sont récupérables. Il y en avait
+cinquante, sauvegardés et jamais lus. Les voici.
+
+**Méthode, et sa limite :** ce ne sont pas des pages lues, ce sont des fenêtres de
+quelques lignes autour de son nom. Je ne peux donc pas dire que j'ai lu ces cinquante
+articles en entier, et je ne le dis pas. Ce qui suit est cité tel que l'index le rend,
+coquilles d'OCR comprises.
+
+### Nice, 1936 et 1937 : la première saison, jamais vue jusqu'ici
+
+**Lyon républicain, 20 janvier 1936, page 7** : « Les meilleurs hommes parurent
+Schulzendorf, Schubert, Béraudo et **Boudjemaa** [...] les avants azuréens ne
+paraissant pas, à l'exception de **Boudjemaa**, de bons réalisateurs [...] les Niçois
+semblant plus frais parvinrent à sauver l'honneur, bien entendu **Boudjemaa** eut
+cette satisfaction. »
+
+**Le Progrès de la Somme, 2 mars 1936, page 5** : « Kellinger, jouant trop en retrait,
+engage un duel avec **Boudjemaa** qui prend souvent le dessus [...] **Boudjemaa**, bien
+servi par Moudry, prend Lesieur à contre-pied d'un shoot à ras de terre bien ajusté
+[...] A Nice : **superbe partie de Boudjemaa**. »
+
+**Le Petit Provençal, 4 mai 1936, page 9** : « A Nice, bonne partie des demis et de
+l'attaque où **Boudjemaa se montra le meilleur homme sur le terrain**. »
+
+**Le Petit Provençal, 22 mai 1936, page 9** : « **Boudjema, très courageux, malgré sa
+blessure à la tête, marque un joli but** et Nice tient par 2 à 1. »
+
+Voilà donc une blessure à la tête au printemps 1936, et il joue avec.
+
+**Le Petit Provençal, 15 mars 1937, page 6** : « **Boudjemaa galvanise l'attaque
+niçoise** et Pellegrino continue à gâcher de belles occasions [...] **Boudjemaa blessé
+passe à l'aile gauche et n'est plus qu'un figurant** [...] de quarante mètres
+Boudjemaa place un shoot que Guillard détourne. »
+
+**La Tribune de l'Aube, 29 mai 1937, page 5**, avant Troyes - Nice : « l'O.G.C. Nice
+se présentera avec toutes les vedettes qui ont nom Samitier, le fameux international
+espagnol, **Boudjema, un Nord-Africain de qualité**, et l'Italien Orlandini, joueur de
+premier ordre. »
+
+**La Tribune de l'Aube, 1er juin 1937, page 4** : « sur passes croisées
+Pellegrino-**Boudjema** [...] bel arrêt de Barella sur un shoot très sec de
+**Boudjema** [...] sur une action personnelle, **Boudjema réduit le retard niçois** à
+un but et un nouveau tir du même est bien dangereux. »
+
+**Le Petit Provençal, 21 juin 1937, page 8** : « Rodriguez, Costamagna, Brusseaux,
+**Samitier et Boudjemaa ont renouvelé leur contrat à l'O.G.C. Nice**. »
+
+**Il a donc resigné à Nice en juin 1937**, et il est vendu à Saint-Étienne en août.
+Cela, aucun article lu jusqu'ici ne le disait.
+
+### L'affaire des deux licences, vue de Saint-Étienne
+
+**Le Jour, 18 juillet 1936, page 8** : « **Boudjema à Saint-Etienne.** Saint-Etienne,
+15 juillet. Les dirigeants de l'A. S. Saint-Etienne, **après de longs pourparlers,
+tenus secrets jusqu'à la dernière heure**, ont engagé le Niçois Boudjema. »
+
+**Le Mémorial, 14 juillet 1936, page 5**, journal de Saint-Étienne : « Nous apprenons
+que le brillant inter-gauche de l'O.G.C. de Nice, **l'Algérien Boudjema**, vient de
+donner son adhésion à l'A.S. de St-Etienne [...] Boudjema peut opérer aussi bien inter
+que centre-avant, c'est **une bonne recrue pour notre équipe professionnelle**. »
+
+L'Algérien. Il est tunisien. C'est la première fois qu'un journal se trompe de pays, et
+c'est le journal de la ville qui l'achète.
+
+**Le Mémorial, 1er août 1936, page 3** : « **le footballeur Boudjemaa ne jouera pas à
+Saint-Etienne.** La Commission centrale des statuts et règlements de la Fédération
+française a décidé d'infliger 3 mois de suspension à partir du premier match
+professionnel de la prochaine saison au joueur Boudjemâ qui avait sollicité 2
+licences. »
+
+**Le Mémorial, 16 janvier 1937, page 8** : « **BOUDJEMA POURRA JOUER AVEC L'O.G.C. DE
+NICE.** Le bureau de la 3 F.A. a remis la peine du joueur Boudjema de l'O.G.C. de Nice
+qui pourra par conséquent participer à la Coupe de France dimanche avec son club. »
+
+La peine de six mois a donc été remise, et il rejoue en janvier 1937.
+
+### Saint-Étienne : le prix, la maladie, le départ
+
+**L'Express de Mulhouse, 23 août 1937, page 5** : « L'A. S. Saint-Etienne a "acheté"
+l'avant-centre Boudjemaa **pour 50.000 francs**. »
+
+**L'Express de Mulhouse, 2 septembre 1937, page 5** : « Dès dimanche prochain, **le
+Tunisien Boudjema, ex-vedette de l'O.G.C. Nice**, sera qualifié et fera sa rentrée dans
+le match contre Alès à St-Etienne. »
+
+Et voici la pièce que je cherchais depuis le début sur son hiver 1938 :
+
+**L'Express de Mulhouse, 5 janvier 1938, page 6** : « **Le Stéphanois Boudjemaa est
+actuellement en convalescence à Tunis, dans sa famille.** »
+
+En convalescence. Dans sa famille. Ce n'est donc pas « aller se reposer » comme
+l'écrivait L'Éclair du 13 janvier : il est malade, et il est soigné chez lui. C'est
+aussi, dans tout le dossier, **la première et la seule mention de sa famille**.
+
+**Le Mémorial, 7 avril 1938, page 5** : « la **défection** de Boudjemaa va bien se
+faire sentir à l'A. S. de St-Etienne. »
+
+**L'Express de Mulhouse, 12 mai 1938, page 5** : « **Boudjemaa a débarqué la semaine
+dernière** [...] a manifesté l'intention de reprendre place dans l'équipe de l'A.S.
+St-Etienne. »
+
+**Le Mémorial, 23 juin 1938, page 5** : « quant à Boudjemaa **le climat stéphanois ne
+lui vaut rien** et il se déciderait à gagner des contrées plus favorisées : **Antibes
+ou Marseille** l'accueillerait. »
+
+**L'Express de Mulhouse, 23 juin 1938, page 5** : « il subsiste actuellement encore
+quelques différends, notamment pour ce qui est du prix de transfert, puisqu'en revanche
+**Colmar s'attacherait les services de l'excellent Nord-Africain de Saint-Etienne
+Boudjema**. »
+
+**Le Mémorial, 2 juillet 1938, page 6** : « Par contre **on a vendu Boudjemaa aux S.R.
+de Colmar**. »
+
+Tout se tient : une maladie en décembre 1937, une convalescence en Tunisie dans sa
+famille, un retour en mai, la montée gagnée, puis un départ dont le journal de
+Saint-Étienne donne le motif en une phrase - le climat ne lui vaut rien - et un
+transfert à Colmar négocié en juin, conclu début juillet 1938. Il signera le 10 août.
+
+### Colmar 1938-1939 : trois journaux alsaciens de plus
+
+**L'Express de Mulhouse, 11 octobre 1938, page 5** : « **Boudjemaa** [...] Enfin, Zopp,
+à quelques minutes de là, inscrit un quatrième point, **Boudjemaa plaçant ensuite une
+cinquième fois sur la fin**. » C'est le 5-4 de Dunkerque, vu d'Alsace.
+
+**Der Republikaner, Mülhauser Volkszeitung, 12 septembre 1938, page 5** : « **Belko
+gibt zu Boudjema, der zwei Meter vor dem Tor unhaltbar einschoß** » - Belko donne à
+Boudjema, qui marque de deux mètres, imparable. Et : « Bei Colmar : Schaden, Belko,
+Boudjema und Wozniak » parmi les meilleurs.
+
+**Echo de Sélestat, 6 septembre 1938, page 2** : « ein zünftiger Lattenschuss von
+**Boudjemaa** » - un beau tir sur la barre ; et « Belko brachte seinen Strafstoss
+[...] an den abseitsstehenden **Boudjemaa**, welches Colmar die 2:0-Führung gab » - le
+coup franc de Belko trouve Boudjemaa en position de hors-jeu, et cela donne le 2-0.
+
+**Der Republikaner, 31 octobre 1938, page 7**, et c'est dur : « sie haben den Sieg
+verdient, aber noch höher, wenn die Stürmerlinie sich mehr Mühe gegeben hätte und
+**Boudjema keine miserable Partie geliefert hätte** » - ils auraient gagné plus
+largement si la ligne d'attaque s'était donné plus de peine et si Boudjema n'avait pas
+livré une partie misérable.
+
+**Echo de Sélestat, 11 février 1939, page 9** : « das voraussichtliche **Fehlen von
+Boudjemaa** » - son absence probable.
+
+**Echo de Sélestat, 12 mars 1939, page 6**, et c'est le mot le plus net sur son état :
+« In [der 28.] Minute erhöhte **Boudjemaa** und 5 Minuten vor Schluss derselbe Spieler
+das Resultat [...] **Boudjemaa als Halbinvalide** und Emonoz [...] ». **Halbinvalide** :
+demi-invalide. Il marque deux fois en étant, dit le journal, à moitié invalide. C'est le
+même match que Gebweiler raconte en parlant de « son ancienne blessure ».
+
+**L'Express de Mulhouse, 3 mai 1939, page 10** : « **Boudjema**, Wozniak usw. stehen,
+die ihr Können schon in Division-Nationale-Vereinen gezeigt haben » - ceux qui ont déjà
+montré ce qu'ils savaient faire dans des clubs de division nationale.
+
+**Der Republikaner, 29 juillet 1939, page 11**, premier jour d'entraînement de la
+saison 1939-1940 : présents Wozniak, Scopsi, Delacourt, Costamagna, Wernay, Gougain,
+Frey, Gissinger, Emenoz, Heine, Tellechéa, Collet, Lopez ; « **Fehlten** folgende
+Spieler : **Boudjema**, Othmann, Gabrillargues, Zopp, Demuth, Herpin, Ségeau » -
+absents. Cinq semaines avant la guerre.
+
+### 7 juillet 1941 : une ligne dans un journal socialiste de la zone libre
+
+**L'Effort, organe socialiste de la reconstruction nationale, 7 juillet 1941, page 2**,
+dans une colonne qui parle du championnat de Tunisie de division d'honneur : « Avants :
+**Boudjemaa (Tunisien) ancien joueur professionnel de Colmar**. »
+
+C'est la plus ancienne trace de son retour en Tunisie : juillet 1941, et un journal de
+la zone libre le suit encore.
+
+### 16 novembre 1946 : Colmar d'après-guerre
+
+**Paris-presse, 16 novembre 1946, page 4** : « Ségaux ; Marjewsky, Zopp, Gévaudan,
+**Boudjemaa**, Emmenegger. »
+
+### Ce que ces cinquante extraits changent
+
+1. **Sa maladie de l'hiver 1938 est établie** : « en convalescence à Tunis, dans sa
+   famille », et « le climat stéphanois ne lui vaut rien ». La fiche de Saint-Étienne
+   parle d'une grave infection de six mois ; la presse de l'époque le confirme, en deux
+   phrases écrites sur le moment.
+2. **La seule mention de sa famille de tout le dossier** est là, dans L'Express de
+   Mulhouse du 5 janvier 1938.
+3. **Il avait renouvelé son contrat à Nice en juin 1937**, aux côtés de Samitier, avant
+   d'être vendu en août.
+4. **Antibes et Marseille le voulaient** en juin 1938, avant Colmar.
+5. **Il jouait à moitié invalide** en mars 1939, et marquait quand même deux fois.
+6. Le journal de Saint-Étienne l'a d'abord appelé **« l'Algérien »**.
