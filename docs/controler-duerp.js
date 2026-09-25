@@ -41,6 +41,8 @@
       t: "Le document unique d'évaluation des risques professionnels est transmis par l'employeur à chaque mise à jour au service de prévention et de santé au travail auquel il adhère." },
     { n: "R. 4121-1", id: "LEGIARTI000023795562",
       t: "L'employeur transcrit et met à jour dans un document unique les résultats de l'évaluation des risques pour la santé et la sécurité des travailleurs à laquelle il procède en application de l'article L. 4121-3. Cette évaluation comporte un inventaire des risques identifiés dans chaque unité de travail de l'entreprise ou de l'établissement, y compris ceux liés aux ambiances thermiques." },
+    { n: "R. 4121-1-1", id: "LEGIARTI000031818152",
+      t: "L'employeur consigne, en annexe du document unique : 1° Les données collectives utiles à l'évaluation des expositions individuelles aux facteurs de risques mentionnés à l'article L. 4161-1 de nature à faciliter la déclaration mentionnée à cet article [...] ; 2° La proportion de salariés exposés aux facteurs de risques professionnels mentionnés à l'article L. 4161-1, au-delà des seuils prévus au même article. Cette proportion est actualisée en tant que de besoin lors de la mise à jour du document unique." },
     { n: "R. 4121-2", id: "LEGIARTI000045386446",
       t: "La mise à jour du document unique d'évaluation des risques professionnels est réalisée : 1° Au moins chaque année dans les entreprises d'au moins onze salariés ; 2° Lors de toute décision d'aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail ; 3° Lorsqu'une information supplémentaire intéressant l'évaluation d'un risque est portée à la connaissance de l'employeur." },
     { n: "R. 4121-3", id: "LEGIARTI000045386448",
@@ -323,6 +325,64 @@
     items.push({ k: "p", t: POSTES_BLANC });
   }
 
+  /* L'ANNEXE DES DONNÉES COLLECTIVES D'EXPOSITION.
+
+     R. 4121-1-1 (LEGIARTI000031818152, lu le 25 septembre 2026) : « L'employeur
+     consigne, en annexe du document unique : 1° Les données collectives utiles
+     à l'évaluation des expositions individuelles aux facteurs de risques
+     mentionnés à l'article L. 4161-1 [...] ; 2° La proportion de salariés
+     exposés [...] au-delà des seuils prévus au même article. » Le document
+     n'avait pas cette annexe : elle manquait depuis l'origine, et c'est un
+     modèle envoyé le 25 septembre 2026 qui l'a mise en évidence.
+
+     Les dix facteurs sont ceux de L. 4161-1 (LEGIARTI000035640694), recopiés
+     dans l'ordre du texte. Les seuils, eux, sont au décret : l'application ne
+     les affirme pas, elle laisse l'employeur les constater. */
+  var FACTEURS = [
+    "Manutentions manuelles de charges",
+    "Postures pénibles, positions forcées des articulations",
+    "Vibrations mécaniques",
+    "Agents chimiques dangereux, y compris poussières et fumées",
+    "Activités en milieu hyperbare",
+    "Températures extrêmes",
+    "Bruit",
+    "Travail de nuit",
+    "Travail en équipes successives alternantes",
+    "Travail répétitif, à fréquence élevée et sous cadence contrainte",
+  ];
+  var ANNEXE_TEXTE = "L'employeur consigne en annexe du document unique les données collectives " +
+    "utiles à l'évaluation des expositions individuelles aux facteurs de risques professionnels, " +
+    "et la proportion de salariés exposés au-delà des seuils réglementaires (R. 4121-1-1). Les dix " +
+    "facteurs sont ceux de l'article L. 4161-1 ; les seuils sont fixés par décret et ne sont pas " +
+    "repris ici. Cette proportion est actualisée à chaque mise à jour du document.";
+
+  function annexeLignes() {
+    return FACTEURS.map(function (f) {
+      return [f, "[ oui / non ]", "[ nombre ]", "[ % de l'effectif ]",
+        "[ mesures en place ]", "[ observations ]"];
+    });
+  }
+  function annexeHtml(num) {
+    var h = "<h3>" + num + ". Annexe : données collectives d'exposition</h3>" +
+      "<p>" + ech(ANNEXE_TEXTE) + "</p>";
+    h += "<ul>" + FACTEURS.map(function (f) {
+      return "<li>" + ech(f) + " : <mark>[ exposition au-delà des seuils, nombre de salariés, " +
+        "proportion, mesures en place ]</mark></li>";
+    }).join("") + "</ul>";
+    return h;
+  }
+  function annexeItems(num, items) {
+    items.push({ k: "h2", t: num + ". Annexe : données collectives d'exposition" });
+    items.push({ k: "p", t: ANNEXE_TEXTE });
+    items.push({ k: "table", paysage: true,
+      proportions: [26, 11, 10, 13, 25, 15],
+      entetes: ["1F3864", "1F3864", "1F3864", "1F3864", "2F5D3A", "2F5D3A"],
+      head: ["Facteur de risque (L. 4161-1)", "Exposition au-delà des seuils",
+        "Salariés exposés", "Proportion de l'effectif", "Mesures de prévention en place",
+        "Observations"],
+      rows: annexeLignes() });
+  }
+
   function tenueHtml(num) {
     return "<h3>" + num + ". Tenue du document</h3>" +
       "<p>Mise à jour au moins chaque année à partir de onze salariés, lors de toute décision d'aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail, et lorsqu'une information supplémentaire intéressant l'évaluation d'un risque est portée à la connaissance de l'employeur (R. 4121-2).</p>" +
@@ -422,7 +482,8 @@
       (registrePhrase(groupes) ? "<p>" + ech(registrePhrase(groupes)) + "</p>" : "") +
       planHtml(groupes, groupes.length + 1) +
       postesHtml(groupes.length + 2, groupes) +
-      tenueHtml(groupes.length + 3) +
+      annexeHtml(groupes.length + 3) +
+      tenueHtml(groupes.length + 4) +
       signatureHtml();
   }
 
@@ -490,7 +551,8 @@
         return [p.n, prio, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)];
       }) });
     postesItems(groupes.length + 2, groupes, items);
-    tenueItems(groupes.length + 3, items);
+    annexeItems(groupes.length + 3, items);
+    tenueItems(groupes.length + 4, items);
     items.push({ k: "p", t: "Fait à " + ou("ville", "lieu") + ", le " + (dateFr(v("dateVersion")) || "[ date ]") + "." });
     items.push({ k: "p", t: ou("responsable", "responsable") + ", signature :" });
     items.push({ k: "note", t: "Textes : " + TEXTES.map(function (t) { return t.n + " (" + t.id + ")"; }).join(", ") + " du code du travail, " + LU + "." });
@@ -904,7 +966,8 @@
       rows: plan.map(function (p) { return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)]; }) });
     }
     postesItems(groupes.length + 2, groupes, items);
-    tenueItems(groupes.length + 3, items);
+    annexeItems(groupes.length + 3, items);
+    tenueItems(groupes.length + 4, items);
     items.push({ k: "p", t: "Fait à " + ou("ville", "lieu") + ", le " + dateFr(aujourdhui) + "." });
     items.push({ k: "p", t: ou("responsable", "responsable") + ", signature :" });
     /* Le compte rendu ferme le fichier comme il ferme l'écran. */
