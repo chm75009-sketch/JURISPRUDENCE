@@ -11,9 +11,9 @@ SPREADS = [
 
 {"ch": "INTRODUCTION", "titre": "Un mythe à Béja",
  "t": [
-  "Le stade de football de Béja porte son nom. On l'écrit Boujemaa Lokmiti, ou Kmiti, selon les graphies. C'est le point de départ de ce livre, et c'est aussi son énigme.",
+  "Le stade de football de Béja porte son nom. On l'écrit Boujemaa Lokmiti, ou Kmiti, selon les graphies.",
   "Dans les centaines d'articles de la presse française dépouillés pour ce travail, entre 1930 et 1950, ce nom de famille n'apparaît qu'une seule fois, sous une forme déformée, dans un bulletin de la Fédération de juillet 1936. Partout ailleurs, pendant douze ans, il n'est que Boudjemaa, parfois Boudjema, parfois Boudjéma, et souvent seulement « le Nord-Africain ».",
-  "Un homme dont une ville a donné le nom à son stade, et dont les journaux du pays où il a joué toute sa carrière n'ont jamais imprimé le nom de famille : c'est de cet écart que ce livre est né.",
+  "Une ville a donné son nom à son stade. Les journaux du pays où il a joué toute sa carrière n'ont jamais imprimé ce nom de famille.",
   "La photographie de la page suivante est la plus ancienne image connue de son club. Elle a été prise à l'occasion du match du 8 février 1931, en Coupe de l'Afrique du Nord, à Bône : Bône 2, U.S. Béja 0. Sa légende ne nomme personne. Impossible, donc, de dire lequel de ces onze hommes est Martinelli I, lequel est Martinelli II, et si Boudjemaa y figure. Une photographie légendée est recherchée.",
  ],
  "fac": "USBeja-1931-planche.jpg",
