@@ -295,7 +295,7 @@
     items.push({ k: "h2", t: num + ". Postes exposés à une vigilance diminuée" });
     items.push({ k: "p", t: postesTexte() });
     postesVigilance(groupes).forEach(function (x) {
-      items.push({ k: "p", t: "- " + x.u + " : " + x.qui });
+      items.push({ k: "puce", t: x.u + " : " + x.qui });
     });
     items.push({ k: "p", t: POSTES_BLANC });
   }
@@ -408,7 +408,10 @@
   function risqueItems(x, num, items) {
     items.push({ k: "h3", t: num + " " + x.r.n });
     items.push({ k: "p", t: x.r.s + " Gravité " + x.r.g + ", fréquence " + x.r.f + ", priorité " + x.pr.p + " : " + x.pr.mot + "." });
-    x.r.mes.forEach(function (m) { items.push({ k: "p", t: "- " + m }); });
+    /* De vraies puces, avec leur retrait, plutôt que des paragraphes
+       commençant par un tiret : les mesures d'un risque se lisent en
+       liste. Posé le 25 septembre 2026. */
+    x.r.mes.forEach(function (m) { items.push({ k: "puce", t: m }); });
     items.push({ k: "note", t: "Responsable : " + x.r.r + ". Échéance : " + dateFr(x.ech) + "." });
   }
   function unitesItems(groupes, depart, items) {
@@ -441,7 +444,11 @@
     items.push({ k: "p", t: planPhrase() });
     /* Sept colonnes ne tiennent pas en portrait : le tableau demande sa page
        en paysage quand le programme annuel est dû. Posé le 25 septembre 2026. */
+    /* Les proportions des colonnes : l'action et ses conditions d'exécution
+       portent le texte, la priorité et les dates n'ont besoin que d'un mot.
+       Posées le 25 septembre 2026, avec les bordures. */
     items.push({ k: "table", paysage: eff !== null && eff >= 50,
+      proportions: eff !== null && eff >= 50 ? [10, 14, 22, 18, 12, 10, 8, 6] : [12, 20, 34, 20, 14],
       head: eff !== null && eff >= 50
         ? ["Priorité", "Unité", "Action", "Conditions d'exécution", "Responsable", "Échéance", "Indicateur", "Coût"]
         : ["Priorité", "Unité", "Action", "Responsable", "Échéance"],

@@ -87,7 +87,8 @@
          le document unique. La mise en forme directe est gardée telle quelle,
          pour que l'aspect ne bouge pas. */
       (o.style ? '<w:pStyle w:val="' + o.style + '"/>' : "") +
-      (o.espaceAvant ? '<w:spacing w:before="' + o.espaceAvant + '" w:after="60"/>' : '<w:spacing w:after="60"/>') +
+      (o.serre ? '<w:spacing w:before="20" w:after="20"/>'
+        : (o.espaceAvant ? '<w:spacing w:before="' + o.espaceAvant + '" w:after="60"/>' : '<w:spacing w:after="60"/>')) +
       /* Le bloc destinataire et la date d'une lettre se posent à droite : sur
          le papier, c'est là qu'ils sont, et un courrier dont l'adresse du
          destinataire est à gauche ne ressemble pas à un courrier. */
@@ -132,25 +133,65 @@
     }
     return out + seg(s.slice(i), rpr);
   }
-  function cellule(texte, entete) {
-    return "<w:tc><w:tcPr><w:tcW w:w=\"0\" w:type=\"auto\"/>" +
-      (entete ? '<w:shd w:val="clear" w:fill="1F3864"/>' : "") + "</w:tcPr>" +
-      par(texte, { gras: !!entete, taille: 18, couleur: entete ? "FFFFFF" : null }) + "</w:tc>";
+  /* LES CELLULES : DU BLANC AUTOUR DU TEXTE, ET UNE LARGEUR TENUE.
+
+     Un tableau de trente-trois lignes se lit à la condition que les colonnes
+     gardent leur largeur d'une page à l'autre et que le texte ne touche pas
+     les traits. Demande du 25 septembre 2026, « fais les bordures des
+     tableaux et soigne la présentation ». */
+  function cellule(texte, entete, largeur, pair) {
+    var fond = entete ? "1F3864" : (pair ? "F2F5F9" : null);
+    return "<w:tc><w:tcPr>" +
+      (largeur ? '<w:tcW w:w="' + largeur + '" w:type="dxa"/>' : '<w:tcW w:w="0" w:type="auto"/>') +
+      (fond ? '<w:shd w:val="clear" w:color="auto" w:fill="' + fond + '"/>' : "") +
+      '<w:vAlign w:val="center"/></w:tcPr>' +
+      par(texte, { gras: !!entete, taille: 18, couleur: entete ? "FFFFFF" : null, serre: true }) +
+      "</w:tc>";
   }
-  function tableau(entetes, lignes) {
-    var x = '<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblBorders>' +
-      ["top", "left", "bottom", "right", "insideH", "insideV"].map(function (b) {
-        return "<w:" + b + ' w:val="single" w:sz="4" w:color="DCDFE4"/>'; }).join("") +
-      "</w:tblBorders></w:tblPr>";
+
+  /* Les largeurs, en vingtièmes de point, réparties sur la largeur utile de
+     la page. Un tableau peut donner ses proportions ; sinon les colonnes se
+     partagent également. */
+  function largeurs(entetes, prop, total) {
+    var n = Math.max(1, entetes.length);
+    if (!prop || prop.length !== n) {
+      var e = Math.floor(total / n);
+      return entetes.map(function () { return e; });
+    }
+    var somme = prop.reduce(function (a, b) { return a + b; }, 0) || 1;
+    return prop.map(function (x) { return Math.floor(total * x / somme); });
+  }
+
+  function tableau(entetes, lignes, opts) {
+    opts = opts || {};
+    /* En paysage, la largeur utile est celle de la page couchée moins les
+       marges ; en portrait, celle de la page debout. */
+    var utile = opts.paysage ? 14570 : 9638;
+    var L = largeurs(entetes, opts.proportions, utile);
+    var trait = function (b, epais, couleur) {
+      return "<w:" + b + ' w:val="single" w:sz="' + epais + '" w:color="' + couleur + '"/>';
+    };
+    var x = '<w:tbl><w:tblPr><w:tblW w:w="' + utile + '" w:type="dxa"/>' +
+      '<w:tblLayout w:type="fixed"/><w:tblBorders>' +
+      trait("top", 12, "1F3864") + trait("left", 8, "9AA4B2") +
+      trait("bottom", 12, "1F3864") + trait("right", 8, "9AA4B2") +
+      trait("insideH", 4, "C7CEDA") + trait("insideV", 4, "C7CEDA") +
+      "</w:tblBorders>" +
+      '<w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="100" w:type="dxa"/>' +
+      '<w:bottom w:w="60" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar>' +
+      "</w:tblPr>";
     /* La grille des colonnes est obligatoire : sans elle Word refuse le
        tableau, et le fichier entier avec lui. C'est le genre d'omission que
        seule une relecture du document produit met en évidence. */
-    x += "<w:tblGrid>" + entetes.map(function () {
-      return '<w:gridCol w:w="' + Math.floor(9638 / Math.max(1, entetes.length)) + '"/>'; }).join("") +
+    x += "<w:tblGrid>" + L.map(function (w) { return '<w:gridCol w:w="' + w + '"/>'; }).join("") +
       "</w:tblGrid>";
-    x += "<w:tr>" + entetes.map(function (h) { return cellule(h, true); }).join("") + "</w:tr>";
-    lignes.forEach(function (l) {
-      x += "<w:tr>" + l.map(function (c) { return cellule(c, false); }).join("") + "</w:tr>";
+    /* L'en-tête se répète en tête de chaque page : un tableau de trente-trois
+       lignes tient sur deux pages, et la seconde sans titres ne se lit pas. */
+    x += '<w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr>' +
+      entetes.map(function (h, i) { return cellule(h, true, L[i]); }).join("") + "</w:tr>";
+    lignes.forEach(function (l, il) {
+      x += "<w:tr><w:trPr><w:cantSplit/></w:trPr>" +
+        l.map(function (c, i) { return cellule(c, false, L[i], il % 2 === 1); }).join("") + "</w:tr>";
     });
     return x + "</w:tbl>" + par("");
   }
@@ -276,8 +317,11 @@
     var large = !!(opts && opts.paysage);
     var corps = items.map(function (i) {
       if (i.k === "table" && i.paysage && !large) {
-        return sautSection(false, opts) + tableau(i.head, i.rows) + sautSection(true, opts);
+        return sautSection(false, opts) +
+          tableau(i.head, i.rows, { paysage: true, proportions: i.proportions }) +
+          sautSection(true, opts);
       }
+      if (i.k === "table") return tableau(i.head, i.rows, { paysage: large, proportions: i.proportions });
       return VERS_WORD[i.k] ? VERS_WORD[i.k](i) : "";
     }).join("");
     var section = '<w:footerReference w:type="default" r:id="rIdPied"/>' +
