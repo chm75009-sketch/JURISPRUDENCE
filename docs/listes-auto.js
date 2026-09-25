@@ -112,18 +112,28 @@
     [/emploi|poste|fonction|m[ée]tier/i, "emp"],
   ];
 
+  /* La comparaison se fait sans accents, sans ponctuation, et sans la
+     civilité : les champs des lettres donnent « Monsieur Karim BENALI » quand
+     le registre porte « BENALI » et « Karim ». */
+  function pareil(x) {
+    var t = String(x == null ? "" : x);
+    try { t = t.normalize("NFD").replace(/[̀-ͯ]/g, ""); } catch (e) {}
+    return t.toLowerCase().replace(/^\s*(monsieur|madame|mademoiselle|m\.|mme|mlle)\s+/, "")
+      .replace(/[^a-z0-9]+/g, " ").trim();
+  }
+
   function salarieDuRegistre(nom) {
     var E = null;
     try { E = JSON.parse(window.localStorage.getItem("registre-personnel") || "null"); }
     catch (e) { return null; }
     var L = (E && E.salaries) || [];
-    var cherche = String(nom || "").trim().toLowerCase();
+    var cherche = pareil(nom);
     if (!cherche) return null;
     var trouve = null;
     L.forEach(function (s) {
-      var a = [String(s.pre || "").trim(), String(s.nom || "").trim()].filter(Boolean).join(" ");
-      var b = [String(s.nom || "").trim(), String(s.pre || "").trim()].filter(Boolean).join(" ");
-      if (!trouve && (a.toLowerCase() === cherche || b.toLowerCase() === cherche)) trouve = s;
+      var a = pareil(String(s.pre || "") + " " + String(s.nom || ""));
+      var b = pareil(String(s.nom || "") + " " + String(s.pre || ""));
+      if (!trouve && (a === cherche || b === cherche)) trouve = s;
     });
     return trouve;
   }
@@ -192,5 +202,18 @@
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", demarrer);
   else demarrer();
 
-  window.ListesAuto = { equiper: equiper, listeDe: listeDe, REGLES: REGLES };
+  /* L'ADRESSE DU SALARIÉ, POUR LES ÉCRANS QUI ÉCRIVENT DES LETTRES.
+
+     Elle est saisie sur la fiche du registre, où elle ne compte pas comme une
+     mention obligatoire, et les courriers la reprennent d'eux-mêmes plutôt
+     que d'écrire « [adresse du salarié] ». Demande du 25 septembre 2026.
+     Rien n'est rendu quand le nom ne correspond à aucune fiche : la lettre
+     garde alors son crochet, qui se voit. */
+  function adresseDuSalarie(nom) {
+    var s = salarieDuRegistre(nom);
+    return (s && String(s.adr || "").trim()) || "";
+  }
+
+  window.ListesAuto = { equiper: equiper, listeDe: listeDe, REGLES: REGLES,
+    salarie: salarieDuRegistre, adresse: adresseDuSalarie };
 })(window);

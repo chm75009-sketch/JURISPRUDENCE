@@ -545,12 +545,18 @@
   /* ═══════════════════════════════════════════════════════════════════════
      LES DOCUMENTS, UN PAR ONGLET.
      ══════════════════════════════════════════════════════════════════════ */
+  /* L'adresse vient de la fiche du salarié, au registre du personnel. Sans
+     fiche correspondante, le crochet reste, et il se voit. */
+  function adresseDe(nomS) {
+    var a = (window.ListesAuto && window.ListesAuto.adresse) ? window.ListesAuto.adresse(nomS) : "";
+    return a || "[adresse du salarié]";
+  }
   function enTete(b, nomS, objet, envoi, date) {
     b.push({ k: "p", t: profil.denomination });
     if (profil.adresse) b.push({ k: "p", t: profil.adresse });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: nomS });
-    b.push({ k: "p", t: "[adresse du salarié]" });
+    b.push({ k: "p", t: adresseDe(nomS) });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: ville() + ", le " + dateFr(date || new Date()) });
     b.push({ k: "p", t: envoi });

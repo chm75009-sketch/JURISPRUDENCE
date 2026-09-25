@@ -424,7 +424,8 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     return { id: "s" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       nom: "", pre: "", nat: "", nais: "", sexe: "", emp: "", qua: "", ent: "", sor: "",
       nature: "", natAutre: "", part: "", aut: "", autD: "", autDem: "",
-      etr: "", titT: "", titN: "", titCop: "", ettN: "", ettA: "", gpeN: "", gpeA: "", insc: "" };
+      etr: "", titT: "", titN: "", titCop: "", ettN: "", ettA: "", gpeN: "", gpeA: "",
+      insc: "", adr: "" };
   }
 
   var vide = function (x) { return String(x == null ? "" : x).trim() === ""; };
@@ -734,6 +735,20 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     h += e("insc", "Mention portée au registre le", "L. 1221-13 : au moment de l'embauche, de façon indélébile. D. 1221-25 pour les événements postérieurs.", "date");
     h += "</div>";
 
+    /* L'ADRESSE, QUI N'EST PAS UNE MENTION DU REGISTRE.
+
+       L'énumération de D. 1221-23 ne la contient pas, et le registre produit
+       par cet écran ne la porte donc nulle part. Elle est ici parce que les
+       lettres la réclament toutes et qu'elle se retapait à chaque fois :
+       convocation, avertissement, licenciement, fin de contrat. Demande du
+       25 septembre 2026, après une convocation sortie avec « [adresse du
+       salarié] » en toutes lettres. */
+    h += '<div class="bloc">' +
+      e("adr", "Adresse du salarié, pour les courriers",
+        "Elle ne figure pas sur le registre : l'énumération de D. 1221-23 ne la prévoit pas. " +
+        "Les lettres la reprennent d'elles-mêmes, convocation, sanction, licenciement, fin de contrat.") +
+      "</div>";
+
     var m = manques(s), q = aEtablir(s);
     if (m.length)
       h += '<div class="avis non"><b>Ce qui manque à cette ligne</b><ul class="manque">' +
@@ -934,6 +949,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     { c: "_tps", lib: "Temps de travail (propose « salarié à temps partiel »)", mots: ["temps de travail", "quotite", "horaire", "heures", "duree du travail", "temps"] },
     { c: "titT", lib: "Type du titre de travail", mots: ["titre de sejour", "type de titre", "autorisation de travail", "titre"] },
     { c: "titN", lib: "Numéro d'ordre du titre", mots: ["numero du titre", "numero de titre", "n titre"] },
+    /* L'adresse n'est pas une mention du registre, mais elle arrive souvent
+       dans le même tableau, et les courriers la réclament. */
+    { c: "adr",  lib: "Adresse du salarié (pour les courriers)",
+      mots: ["adresse du salarie", "adresse postale", "adresse", "domicile"] },
   ];
 
   function sansAccent(s) {

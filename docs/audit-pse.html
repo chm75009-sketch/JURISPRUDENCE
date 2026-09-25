@@ -917,7 +917,11 @@
     if (profil.adresse) b.push({ k: "p", t: profil.adresse });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: nomS });
-    b.push({ k: "p", t: d.adresse || "[adresse du salarié]" });
+    /* Ce que l'écran a saisi d'abord ; à défaut, la fiche du registre, où
+       l'adresse se tient depuis le 25 septembre 2026 ; à défaut, le crochet. */
+    b.push({ k: "p", t: d.adresse ||
+      ((window.ListesAuto && window.ListesAuto.adresse && window.ListesAuto.adresse(nomS)) ||
+        "[adresse du salarié]") });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: ville() + ", le [date, après la décision de l'administration]" });
     b.push({ k: "p", t: "Lettre recommandée avec avis de réception" });
