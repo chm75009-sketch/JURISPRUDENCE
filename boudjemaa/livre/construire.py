@@ -16,7 +16,7 @@ GRIS = RGBColor(0x5F, 0x68, 0x74)
 ENCRE = RGBColor(0x16, 0x18, 0x1D)
 
 LARGEUR_UTILE = Cm(16.6)
-HAUTEUR_IMAGE = Cm(19.8)
+HAUTEUR_IMAGE = Cm(17.5)
 
 ANNEXE = [
  ("PetitParisien-1939-portrait.jpg",
@@ -156,23 +156,25 @@ def page_image(doc, fichier, legende, source):
         larg = Emu(int(haut * l / h))
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p.paragraph_format.space_after = Pt(10)
+    p.paragraph_format.space_before = Pt(10)
+    p.paragraph_format.space_after = Pt(6)
+    p.paragraph_format.keep_with_next = True
     p.add_run().add_picture(fichier, width=larg)
     q = par(doc, legende, taille=10, gras=True, couleur=BLEU,
             align=WD_ALIGN_PARAGRAPH.CENTER, apres=3)
+    q.paragraph_format.keep_with_next = True
     par(doc, source, taille=8.5, couleur=GRIS,
-        align=WD_ALIGN_PARAGRAPH.CENTER, apres=0)
+        align=WD_ALIGN_PARAGRAPH.CENTER, apres=14)
 
 
 def page_reserve(doc, legende, source):
-    par(doc, "", apres=140)
     p = par(doc, "Document à insérer", taille=10, gras=True, couleur=BLEU,
-            align=WD_ALIGN_PARAGRAPH.CENTER, avant=8, apres=4)
+            align=WD_ALIGN_PARAGRAPH.CENTER, avant=14, apres=4)
     cadre(p)
     p = par(doc, legende, taille=11, align=WD_ALIGN_PARAGRAPH.CENTER, apres=4)
     cadre(p)
     p = par(doc, source, taille=8.5, couleur=GRIS,
-            align=WD_ALIGN_PARAGRAPH.CENTER, apres=8)
+            align=WD_ALIGN_PARAGRAPH.CENTER, apres=14)
     cadre(p)
 
 
@@ -190,7 +192,7 @@ def construire(sortie="Boudjemaa-livre.docx"):
     numeros_de_page(s)
 
     # page de titre
-    par(doc, "", apres=170)
+    par(doc, "", apres=150)
     par(doc, "BOUDJEMAA", taille=34, gras=True, couleur=ENCRE,
         align=WD_ALIGN_PARAGRAPH.CENTER, apres=6)
     p = par(doc, "Mohamed Boudjemaa, de Béja à Colmar", taille=14, couleur=GRIS,
@@ -201,7 +203,7 @@ def construire(sortie="Boudjemaa-livre.docx"):
     doc.add_page_break()
 
     # dédicace
-    par(doc, "", apres=190)
+    par(doc, "", apres=150)
     par(doc, "À Mounir Ben Sakhria,", taille=13, italique=True,
         align=WD_ALIGN_PARAGRAPH.CENTER, apres=2)
     par(doc, "désigné président, décédé en juin 2025.", taille=13, italique=True,
@@ -214,30 +216,33 @@ def construire(sortie="Boudjemaa-livre.docx"):
             avant=0, apres=12)
     filet(p)
     for t in [
-        "Ce livre se lit par doubles pages. À gauche le texte ; à droite, en regard, le document dont ce texte parle : la copie de l'article, ou la photographie, avec sa légende et sa référence complète.",
+        "Le texte court d'un bout à l'autre, sans interruption. Chaque fois qu'il s'appuie sur une pièce, la copie de l'article ou la photographie vient juste après, à sa place dans la lecture, avec sa légende et sa référence complète.",
         "Rien n'est affirmé ici qui n'ait été lu à la source. Chaque citation porte son journal, sa date, sa page et, quand la pièce est numérisée, l'identifiant qui permet de la retrouver.",
-        "Quand la page de droite porte un cadre au lieu d'une image, c'est que le document existe mais n'est pas reproductible en l'état : soit il est dans le dossier de l'auteur et non dans le fonds numérisé, soit la Bibliothèque nationale de France en refuse la reproduction. La référence est alors donnée telle quelle, pour que la pièce soit insérée à sa place.",
-        "Les documents qui ne sont pas exploités en regard d'une page sont reportés à l'annexe, à la fin du volume, avec leurs références.",
+        "Quand un cadre remplace une image, c'est que le document existe mais n'est pas reproductible en l'état : soit il est dans le dossier de l'auteur et non dans le fonds numérisé, soit la Bibliothèque nationale de France en refuse la reproduction. La référence est alors donnée telle quelle, pour que la pièce soit insérée à cet endroit.",
+        "Les documents qui ne sont pas exploités dans le texte sont reportés à l'annexe, à la fin du volume, avec leurs références.",
         "Trois parties de l'introduction restent à écrire par l'auteur, et elles sont signalées à leur place : les joueurs de son enfance à Béja, Mounir Ben Sakhria, et le tournoi Boudjemaa.",
     ]:
         par(doc, t, align=WD_ALIGN_PARAGRAPH.JUSTIFY, apres=8)
     doc.add_page_break()
 
     chapitre_courant = None
+    premier = True
+    vus = set()
     for sp in pages.SPREADS:
-        if sp["ch"] != chapitre_courant:
+        if sp["ch"] != chapitre_courant and sp["ch"] not in vus:
             chapitre_courant = sp["ch"]
-            par(doc, "", apres=150)
+            vus.add(sp["ch"])
+            if not premier:
+                doc.add_page_break()
             p = par(doc, chapitre_courant, taille=20, gras=True, couleur=BLEU,
-                    align=WD_ALIGN_PARAGRAPH.CENTER, apres=10)
+                    avant=0, apres=16)
             filet(p)
-            doc.add_page_break()
+            p.paragraph_format.keep_with_next = True
+        premier = False
 
-        # page de texte
-        par(doc, sp["ch"], taille=9, couleur=GRIS, apres=2)
-        p = par(doc, sp["titre"], taille=16, gras=True, couleur=BLEU,
-                avant=0, apres=12)
-        filet(p)
+        p = par(doc, sp["titre"], taille=14, gras=True, couleur=BLEU,
+                avant=16, apres=8)
+        p.paragraph_format.keep_with_next = True
         for t in sp["t"]:
             if t.startswith("> "):
                 q = par(doc, t[2:], taille=10.5, avant=4, apres=8,
@@ -247,55 +252,50 @@ def construire(sortie="Boudjemaa-livre.docx"):
                 barre_gauche(q)
             else:
                 par(doc, t, align=WD_ALIGN_PARAGRAPH.JUSTIFY, apres=8)
-        doc.add_page_break()
 
-        # page du document
         if sp["fac"]:
             page_image(doc, os.path.join("fac", sp["fac"]), sp["leg"], sp["src"])
         else:
             page_reserve(doc, sp["leg"], sp["src"])
-        doc.add_page_break()
 
     # annexe
-    par(doc, "", apres=150)
-    p = par(doc, "ANNEXE", taille=20, gras=True, couleur=BLEU,
-            align=WD_ALIGN_PARAGRAPH.CENTER, apres=10)
-    filet(p)
-    par(doc, "Les documents qui ne sont pas exploités en regard d'une page",
-        taille=11, couleur=GRIS, align=WD_ALIGN_PARAGRAPH.CENTER, apres=0)
     doc.add_page_break()
+    p = par(doc, "ANNEXE", taille=20, gras=True, couleur=BLEU, avant=0, apres=6)
+    filet(p)
+    p.paragraph_format.keep_with_next = True
+    p = par(doc, "Les documents qui ne sont pas exploités en regard du texte",
+            taille=11, couleur=GRIS, apres=10)
+    p.paragraph_format.keep_with_next = True
 
     for fichier, legende, source in ANNEXE:
         chemin = os.path.join("fac", fichier)
         if not os.path.exists(chemin):
             chemin = os.path.join("..", "photos", fichier)
         page_image(doc, chemin, legende, source)
-        doc.add_page_break()
 
-    par(doc, "ANNEXE", taille=9, couleur=GRIS, apres=2)
-    p = par(doc, "Les pièces à insérer, et où elles sont", taille=16, gras=True,
-            couleur=BLEU, apres=12)
+    p = par(doc, "Les pièces à insérer, et où elles sont", taille=14, gras=True,
+            couleur=BLEU, avant=16, apres=8)
+    p.paragraph_format.keep_with_next = True
     filet(p)
     for titre, source in RESTE:
-        par(doc, titre, taille=11, gras=True, apres=2)
+        p = par(doc, titre, taille=11, gras=True, apres=2)
+        p.paragraph_format.keep_with_next = True
         par(doc, source, taille=9.5, couleur=GRIS, apres=10)
-    doc.add_page_break()
 
-    par(doc, "ANNEXE", taille=9, couleur=GRIS, apres=2)
-    p = par(doc, "Ce que l'auteur doit donner", taille=16, gras=True,
-            couleur=BLEU, apres=12)
-    filet(p)
+    p = par(doc, "Ce que l'auteur doit donner", taille=14, gras=True,
+            couleur=BLEU, avant=16, apres=8)
+    p.paragraph_format.keep_with_next = True
     for t in A_FOURNIR:
         par(doc, "- " + t, apres=5)
-    p = par(doc, "Ce qui reste à chercher", taille=16, gras=True, couleur=BLEU,
-            avant=20, apres=12)
-    filet(p)
+    p = par(doc, "Ce qui reste à chercher", taille=14, gras=True, couleur=BLEU,
+            avant=16, apres=8)
+    p.paragraph_format.keep_with_next = True
     for t in A_CHERCHER:
         par(doc, "- " + t, apres=5)
 
-    p = par(doc, "État de la lecture au 24 septembre 2026", taille=16,
-            gras=True, couleur=BLEU, avant=20, apres=12)
-    filet(p)
+    p = par(doc, "État de la lecture au 24 septembre 2026", taille=14,
+            gras=True, couleur=BLEU, avant=16, apres=8)
+    p.paragraph_format.keep_with_next = True
     for t in [
         "312 pages de journaux lues ligne par ligne.",
         "382 numéros des Colmarer neueste Nachrichten, juillet 1938 - décembre 1939, interrogés un par un ; quinze le nomment, quatre articles lui sont consacrés, tous lus sur l'image et traduits.",
@@ -310,20 +310,21 @@ def construire(sortie="Boudjemaa-livre.docx"):
     import re as _re
     rep = open("../repertoire-des-articles.md", encoding="utf-8").read().split("\n")
     doc.add_page_break()
-    par(doc, "", apres=150)
     p = par(doc, "RÉPERTOIRE DE TOUS LES ARTICLES", taille=20, gras=True,
-            couleur=BLEU, align=WD_ALIGN_PARAGRAPH.CENTER, apres=10)
+            couleur=BLEU, avant=0, apres=6)
     filet(p)
-    par(doc, "Tous ceux où son nom figure, dans l'ordre du temps",
-        taille=11, couleur=GRIS, align=WD_ALIGN_PARAGRAPH.CENTER, apres=0)
-    doc.add_page_break()
+    p.paragraph_format.keep_with_next = True
+    p = par(doc, "Tous ceux où son nom figure, dans l'ordre du temps",
+            taille=11, couleur=GRIS, apres=10)
+    p.paragraph_format.keep_with_next = True
     attente = None
     for ligne in rep:
         l = ligne.rstrip()
         if l.startswith("## "):
-            p = par(doc, l[3:].strip(), taille=15, gras=True, couleur=BLEU,
-                    avant=14, apres=6)
+            p = par(doc, l[3:].strip(), taille=13, gras=True, couleur=BLEU,
+                    avant=12, apres=6)
             filet(p)
+            p.paragraph_format.keep_with_next = True
             continue
         m = _re.match(r"\*\*(.+)\*\*$", l)
         if m:
@@ -336,6 +337,7 @@ def construire(sortie="Boudjemaa-livre.docx"):
             q.paragraph_format.line_spacing = 1.1
             r = q.add_run(attente)
             r.font.size = Pt(9.5); r.bold = True; r.font.color.rgb = ENCRE
+            q.paragraph_format.keep_with_next = True
             w = par(doc, l.strip(), taille=9.5, couleur=GRIS, apres=4,
                     align=WD_ALIGN_PARAGRAPH.JUSTIFY, interligne=1.05)
             w.paragraph_format.left_indent = Cm(0.5)
