@@ -239,10 +239,142 @@ function fidelite(brut, rubriques) {
   const voir = x => { if (x && !brut.includes(x)) manquants.push(x.slice(0, 70)); };
   for (const r of rubriques) {
     voir(r.titre);
-    for (const s of r.sections) { voir(s.titre);
+    for (const s of r.sections) {
+      /* Une section marquée « hors » ne vient pas de cet article : l'index de
+         l'égalité est dû par R. 2312-7, qui ajoute aux tableaux de R. 2312-8
+         et R. 2312-9 sans y figurer. Le contrôle du mot pour mot ne peut donc
+         pas la chercher ici. L'exemption est nommée, jamais silencieuse. */
+      if (s.hors) continue;
+      voir(s.titre);
       for (const su of s.sujets) { voir(su.intitule); su.informations.forEach(voir); } }
   }
   return manquants;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CE QUE L'EXTRACTION DU DÉCRET LAISSE DERRIÈRE ELLE
+
+   Le texte de R. 2312-8 et de R. 2312-9 est découpé automatiquement. Trois
+   scories sont passées jusque dans le classeur du client, relevées par deux
+   relectures le 25 septembre 2026 :
+
+   1. le texte ne s'arrête pas à la dernière ligne du tableau : il enchaîne
+      sur la nomenclature des qualifications puis sur les cinquante-deux
+      notes de bas de page, qui sortaient comme des informations à renseigner ;
+   2. le premier indicateur d'une liste reste collé à l'intitulé du sujet,
+      après un deux-points : « i) Effectif : Effectif total au 31/12 ». Il
+      n'avait donc aucune ligne où être renseigné, et la colonne Sujet
+      répétait la colonne Information ;
+   3. les exposants des taux d'accidents, 10⁶ et 10³, reviennent en « 106 »
+      et « 10 ³ », ce qui change le sens du taux.
+
+   Ces trois nettoyages se font ici, sur l'arbre construit, et non dans le
+   découpage : le découpage suit le texte, et c'est bien ainsi.            */
+const FIN_DU_TABLEAU = "employés, techniciens et agents de maîtrise (ETAM)";
+
+/* LES EXPOSANTS PERDUS, ET POURQUOI ON N'Y TOUCHE PAS.
+
+   Le décret imprimé écrit « × 10⁶ » et « × 10³ » ; le texte servi par le
+   relais rend « × 106 » et « × 10 ³ », l'exposant ayant disparu à la
+   numérisation. Une relecture y a vu, le 25 septembre 2026, une faute de
+   notre traitement. Elle est en amont : le rétablir ici reviendrait à écrire
+   dans la base un libellé qui ne se retrouve pas mot pour mot dans le texte,
+   et c'est la garantie à laquelle ce module tient le plus. On laisse donc le
+   libellé tel qu'il est servi.                                             */
+
+function nettoyer(arbre) {
+  let fini = false;
+  (arbre.rubriques || []).forEach(function (r) {
+    if (fini) r.commentaire = true;
+    (r.sections || []).forEach(function (s) {
+      if (fini) s.commentaire = true;
+      (s.sujets || []).forEach(function (su) {
+        if (fini) { su.commentaire = true; return; }
+        const infos = (su.informations && su.informations.length) ? su.informations : [];
+        const coupe = infos.indexOf(FIN_DU_TABLEAU);
+        if (coupe >= 0) {
+          /* Ce qui suit dans ce sujet, et tout ce qui vient après dans l'arbre,
+             est du commentaire du décret : la nomenclature des qualifications
+             puis les notes de bas de page. Rien n'est supprimé, la couverture
+             du texte reste entière et le mot pour mot aussi ; ces lignes sont
+             seulement marquées, et les écrans comme les classeurs les passent.
+             Relevé le 25 septembre 2026 : elles sortaient au client comme des
+             informations à renseigner. */
+          su.commentaireDepuis = coupe;
+          fini = true;
+        }
+        /* Le premier indicateur, rendu à sa liste : « i) Effectif : Effectif
+           total au 31/12 » gardait l'indicateur dans l'intitulé du sujet, donc
+           sans ligne où le renseigner, et la colonne Sujet répétait la colonne
+           Information. Les deux morceaux viennent du texte, le mot pour mot
+           est intact. */
+        const k = String(su.intitule).indexOf(" : ");
+        if (k > 0 && !su.commentaire) {
+          const tete = String(su.intitule).slice(0, k).trim();
+          const queue = String(su.intitule).slice(k + 3).trim();
+          const premiere = String(infos[0] || "").trim();
+          /* L'intitulé n'est pas modifié : il doit rester tel que le décret
+             l'écrit, pour la couverture du texte comme pour le mot pour mot.
+             Ce sont deux repères qui sont posés à côté, et les écrans et les
+             classeurs s'en servent pour afficher un sujet court et rendre au
+             premier indicateur sa ligne. */
+          if (queue && premiere && premiere.indexOf(queue) === 0) su.court = tete;
+          else if (queue && infos.length && infos.indexOf(queue) < 0) {
+            su.court = tete;
+            su.premiere = queue;
+          }
+        }
+      });
+    });
+  });
+  return arbre;
+}
+
+/* Ce qu'un écran ou un classeur doit porter : tout, sauf le commentaire. */
+function informationsDues(su) {
+  if (!su || su.commentaire) return [];
+  let infos = (su.informations && su.informations.length) ? su.informations : [su.intitule];
+  const fin = (su.commentaireDepuis === undefined) ? infos.length : su.commentaireDepuis;
+  infos = infos.slice(0, fin);
+  if (su.premiere) infos = [su.premiere].concat(infos);
+  return infos.filter(function (i) { return /^[A-Za-zÀ-ÿ0-9]/.test(String(i).trim()); });
+}
+
+/* L'intitulé d'un sujet, tel qu'il s'affiche : sans le premier indicateur
+   qui lui était collé. */
+function intituleDu(su) { return (su && (su.court || su.intitule)) || ""; }
+
+/* L'INDEX DE L'ÉGALITÉ, QUE LE TABLEAU DU DÉCRET NE PORTE PAS.
+
+   R. 2312-7 (LEGIARTI000047548416, lu le 25 septembre 2026) : la base
+   « comporte également les indicateurs relatifs aux écarts de rémunération
+   entre les femmes et les hommes et aux actions mises en œuvre pour les
+   supprimer mentionnés à l'article L. 1142-8 ». Ils ne sont ni dans le
+   tableau de R. 2312-8 ni dans celui de R. 2312-9 : ils s'y ajoutent, et la
+   base les ignorait. L. 1142-8 vise les entreprises d'au moins cinquante
+   salariés, donc les deux régimes. Les composantes de l'index sont fixées
+   par décret et ne sont pas recopiées ici.                                */
+const INDEX_EGALITE = {
+  lettre: "", hors: "R. 2312-7", titre: "Index de l'égalité professionnelle (R. 2312-7)",
+  sujets: [{
+    lettre: "", intitule: "Indicateurs publiés au titre de L. 1142-8",
+    informations: [
+      "Indicateurs relatifs aux écarts de rémunération entre les femmes et les hommes et aux actions mises en œuvre pour les supprimer, tels que publiés chaque année (L. 1142-8)",
+      "Note globale obtenue, et date de la publication sur le site du ministère chargé du travail",
+      "Mesures de correction et, le cas échéant, programmation de mesures financières de rattrapage salarial lorsque les résultats sont en deçà du niveau fixé par décret (L. 1142-9)",
+      "Objectifs de progression publiés, et échéance des trois ans de mise en conformité (L. 1142-10)",
+    ],
+  }],
+};
+
+function poserIndexEgalite(arbre) {
+  const r = (arbre.rubriques || []).find(function (x) {
+    return /[ÉEe]galit[ée] professionnelle/i.test(String(x.titre));
+  });
+  if (!r) return arbre;
+  if ((r.sections || []).some(function (s) { return s.titre === INDEX_EGALITE.titre; })) return arbre;
+  r.sections = (r.sections || []).concat([JSON.parse(JSON.stringify(INDEX_EGALITE))]);
+  return arbre;
 }
 
 function construire() {
@@ -253,6 +385,7 @@ function construire() {
     const rubriques = decouper(brut);
     rubriques.forEach(r => { const p = auPlancher(r.n);
       r.plancher = p.length > 0; r.themesPlancher = p; });
+    poserIndexEgalite(nettoyer({ rubriques }));
     out[cle] = { article: art, version: T[art].id, seuil, rubriques,
       couverture: couverture(brut, rubriques), infidelites: fidelite(brut, rubriques) };
   }
@@ -325,3 +458,5 @@ if (require.main === module) {
   console.log("\n_bdese.json écrit.");
   if (ko) process.exit(1);
 }
+module.exports.informationsDues = informationsDues;
+module.exports.intituleDu = intituleDu;

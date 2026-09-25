@@ -56,9 +56,28 @@
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   };
   function colonne(n) { var s = ""; while (n > 0) { var r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = (n - r - 1) / 26; } return s; }
+  /* Les onglets d'Excel tiennent en trente et un caractères. Une coupure
+     brute donnait « 5 Activités sociales et », « 6 Rémunération des »,
+     « 7 Flux financiers à » : un titre qui s'arrête sur une conjonction ou une
+     préposition ne dit plus rien. Relevé le 25 septembre 2026 sur la base de
+     données. On coupe donc au dernier mot plein. */
+  var MOTS_CREUX = ["et", "de", "des", "du", "à", "au", "aux", "la", "le", "les",
+    "en", "dans", "pour", "par", "sur", "d", "l", "un", "une"];
   function nomOnglet(t, pris) {
     var s = String(t || "Feuille").replace(/[\\\/\?\*\[\]:]/g, " ").replace(/\s+/g, " ").trim();
-    if (s.length > 28) { s = s.slice(0, 28); var e = s.lastIndexOf(" "); if (e > 12) s = s.slice(0, e); }
+    if (s.length > 31) {
+      s = s.slice(0, 31);
+      var e = s.lastIndexOf(" ");
+      if (e > 12) s = s.slice(0, e);
+      /* Tant que le dernier mot est creux, on l'enlève : « Activités sociales
+         et » devient « Activités sociales ». */
+      var mots = s.split(" ");
+      while (mots.length > 2 &&
+             MOTS_CREUX.indexOf(mots[mots.length - 1].toLowerCase().replace(/['’]$/, "")) >= 0) {
+        mots.pop();
+      }
+      s = mots.join(" ");
+    }
     var base = s, i = 2;
     while (pris[s.toLowerCase()]) s = base.slice(0, 25) + " " + (i++);
     pris[s.toLowerCase()] = true;
@@ -100,11 +119,19 @@
     '<xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
     '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
 
+  /* La ligne d'en-tête d'une feuille : la première qui porte au moins quatre
+     cellules pleines. La même règle sert à figer le volet, à styler la ligne
+     et à la répéter à l'impression. */
+  function ligneEntete(lignes) {
+    var tete = -1;
+    (lignes || []).forEach(function (l, i) { if (tete < 0 && pleines(l) >= 4) tete = i; });
+    return tete;
+  }
   function feuilleXml(lignes, largeurs) {
     var x = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-      '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
-    var tete = -1;
-    lignes.forEach(function (l, i) { if (tete < 0 && pleines(l) >= 4) tete = i; });
+      '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+      '<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>';
+    var tete = ligneEntete(lignes);
     if (tete >= 0) x += '<sheetViews><sheetView workbookViewId="0"><pane ySplit="' + (tete + 1) + '" topLeftCell="A' + (tete + 2) + '" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>';
     x += '<sheetFormatPr defaultRowHeight="15"/>';
     var nbCol = Math.max.apply(null, lignes.map(function (l) { return (l || []).length; }).concat([1]));
@@ -137,10 +164,42 @@
       }
       x += "</row>";
     });
-    return x + "</sheetData></worksheet>";
+    x += "</sheetData>";
+    /* LA MISE EN PAGE POUR L'IMPRESSION.
+
+       Le classeur n'en avait aucune : dix colonnes sur du papier en portrait,
+       sans répétition de l'en-tête, donc illisible dès la seconde page.
+       Relevé le 25 septembre 2026. Paysage, ajusté à la largeur d'une page, et
+       la ligne d'en-tête répétée en haut de chaque feuille imprimée. */
+    x += '<printOptions horizontalCentered="0"/>' +
+      '<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/>' +
+      '<pageSetup orientation="landscape" fitToWidth="1" fitToHeight="0" paperSize="9"/>';
+    return x + "</worksheet>";
   }
 
-  function xlsx(feuilles) {
+  /* LES PROPRIÉTÉS DU CLASSEUR.
+
+     Le fichier n'en portait aucune : ni titre, ni auteur, ni date. Un lecteur
+     qui l'ouvre avec un outil tiers y voit alors le nom de cet outil, et une
+     relecture du 25 septembre 2026 a cru y lire « openpyxl » en auteur. On
+     écrit donc les nôtres, comme pour les documents Word. */
+  function proprietes(o) {
+    var d = new Date().toISOString().slice(0, 19) + "Z";
+    var qui = (o && o.auteur) || "";
+    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"' +
+      ' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"' +
+      ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
+      "<dc:title>" + ech((o && o.titre) || "") + "</dc:title>" +
+      "<dc:creator>" + ech(qui) + "</dc:creator>" +
+      "<cp:lastModifiedBy>" + ech(qui) + "</cp:lastModifiedBy>" +
+      '<dcterms:created xsi:type="dcterms:W3CDTF">' + d + "</dcterms:created>" +
+      '<dcterms:modified xsi:type="dcterms:W3CDTF">' + d + "</dcterms:modified>" +
+      "</cp:coreProperties>";
+  }
+
+  function xlsx(feuilles, opts) {
+    opts = opts || {};
     var pris = {};
     var noms = feuilles.map(function (f) { return nomOnglet(f.titre, pris); });
     var entrees = [
@@ -150,18 +209,30 @@
         '<Default Extension="xml" ContentType="application/xml"/>' +
         '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
         feuilles.map(function (f, i) { return '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'; }).join("") +
-        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>' },
+        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+        '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>' },
       { nom: "_rels/.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
-        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>' },
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+        '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>' },
       { nom: "xl/workbook.xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' +
-        feuilles.map(function (f, i) { return '<sheet name="' + ech(noms[i]) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>'; }).join("") + "</sheets></workbook>" },
+        feuilles.map(function (f, i) { return '<sheet name="' + ech(noms[i]) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>'; }).join("") + "</sheets>" +
+        /* La ligne d'en-tête se répète en haut de chaque page imprimée : sans
+           elle, la seconde page d'une rubrique n'a plus de colonnes nommées. */
+        '<definedNames>' + feuilles.map(function (f, i) {
+          var t = ligneEntete(f.lignes);
+          if (t < 0) return "";
+          return '<definedName name="_xlnm.Print_Titles" localSheetId="' + i + '">' +
+            "'" + ech(String(noms[i]).replace(/'/g, "''")) + "'!$" + (t + 1) + ":$" + (t + 1) +
+            "</definedName>";
+        }).join("") + "</definedNames></workbook>" },
       { nom: "xl/_rels/workbook.xml.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
         feuilles.map(function (f, i) { return '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>'; }).join("") +
         '<Relationship Id="rId' + (feuilles.length + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>' },
       { nom: "xl/styles.xml", contenu: STYLES },
+      { nom: "docProps/core.xml", contenu: proprietes(opts) },
     ];
     feuilles.forEach(function (f, i) { entrees.push({ nom: "xl/worksheets/sheet" + (i + 1) + ".xml", contenu: feuilleXml(f.lignes, f.largeurs) }); });
     var octets = zip(entrees);

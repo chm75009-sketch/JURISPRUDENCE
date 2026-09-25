@@ -229,6 +229,10 @@ module.exports.controles = C;
 module.exports.modele = modele;
 module.exports.mots = { DECLARE: DT.DECLARE, REGLE: DT.REGLE, DEGRES: DT.DEGRES };
 module.exports.contenu = () => CONTENU.construire();
+/* Les deux lectures d'un sujet, pour les écrans et les classeurs : ce qui
+   est dû, et l'intitulé sans le premier indicateur qui lui était collé. */
+module.exports.informationsDues = CONTENU.informationsDues;
+module.exports.intituleDu = CONTENU.intituleDu;
 module.exports.grilleDue = grilleDue;
 module.exports.millesimes = millesimes;
 module.exports.plancher = PLANCHER;
