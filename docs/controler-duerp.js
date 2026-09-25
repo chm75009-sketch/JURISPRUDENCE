@@ -167,6 +167,12 @@
   /* La seconde branche de la phrase du comité, celle de l'entreprise qui a
      organisé les élections sans trouver de candidat. Elle sort en rouge, et
      l'employeur supprime celle des deux phrases qui ne le concerne pas. */
+  var POSTES_BLANC = "[ Confirmez et nommez les postes réellement concernés, un par un, avec le " +
+    "nombre de salariés qui les tiennent : conduite d'un véhicule ou d'un engin, travail en hauteur, " +
+    "point chaud, machine dangereuse, travail isolé, manœuvre sur le quai. Retirez ceux qui " +
+    "n'existent pas dans l'entreprise, ajoutez ceux qui manquent. Cette liste est reprise telle " +
+    "quelle par le règlement intérieur ]";
+
   var CARENCE = "[ Si aucun comité n'est en place : les élections ont été organisées et un " +
     "procès-verbal de carence a été établi le [DATE], porté à la connaissance des salariés et " +
     "transmis à l'inspection du travail (L. 2314-9) ; le document est alors tenu à disposition " +
@@ -215,7 +221,9 @@
     if (eff === null)
       return "[ effectif non renseigné : à partir de cinquante salariés, programme annuel de prévention ; en deçà, liste d'actions consignée dans le document unique (L. 4121-3-1, III) ]";
     if (eff >= 50)
-      return "L'effectif étant de " + eff + " salariés, les résultats de l'évaluation débouchent sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail : la liste des mesures de l'année à venir avec, pour chacune, ses conditions d'exécution, un indicateur de résultat et l'estimation de son coût, les ressources mobilisables et un calendrier (L. 4121-3-1, III, 1°). L'indicateur et le coût de chaque mesure restent à écrire à la main.";
+      return "L'effectif étant de " + eff + " salariés, les résultats de l'évaluation débouchent sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail : la liste des mesures de l'année à venir avec, pour chacune, ses conditions d'exécution, un indicateur de résultat et l'estimation de son coût, les ressources mobilisables et un calendrier (L. 4121-3-1, III, 1°). Les conditions d'exécution, l'indicateur et le coût de chaque mesure restent à écrire à la main." +
+        " Ressources de l'entreprise mobilisables : [ budget de prévention de l'année, heures d'encadrement, personnes désignées, concours du service de prévention et de santé au travail, aide de la branche ou de la Carsat : à écrire ]." +
+        " Calendrier : les échéances portées au tableau ci-dessous en tiennent lieu, revues à chaque mise à jour.";
     return "L'effectif étant de " + eff + " salarié" + (eff > 1 ? "s" : "") + ", les résultats de l'évaluation débouchent sur la liste des actions de prévention des risques et de protection des salariés, consignée dans le présent document (L. 4121-3-1, III, 2°).";
   }
   function planTrie(groupes) {
@@ -233,6 +241,49 @@
         ". " + ech(p.x.r.r) + ", pour le " + ech(dateFr(p.x.ech)) + "." + "</li>";
     }).join("") + "</ol>";
     return h;
+  }
+
+
+  /* LA LISTE DES POSTES OÙ LA VIGILANCE COMPTE.
+
+     Le règlement intérieur fonde ses contrôles d'alcool et de stupéfiants sur
+     les postes « dont le document unique établit qu'une atteinte à la
+     vigilance y exposerait le salarié ou autrui à un danger ». Le document
+     unique disait de dresser cette liste sans la dresser : relevé le
+     25 septembre 2026, et c'est ce qui tenait les deux documents ensemble.
+     Elle est donc écrite ici, déduite des unités qui portent le risque, et
+     l'employeur la confirme poste par poste. Le même examen sert à compléter,
+     s'il y a lieu, la liste des postes à risques particuliers de R. 4624-23,
+     III, qui se fait « en cohérence avec l'évaluation des risques ». */
+  function postesVigilance(groupes) {
+    var out = [];
+    groupes.forEach(function (g) {
+      var a = (g.liste || []).some(function (x) { return x.r.cle === "vigilance"; });
+      if (a) out.push({ u: g.u.nom, qui: g.u.qui });
+    });
+    return out;
+  }
+  function postesTexte() {
+    return "Les postes énumérés ci-dessous sont ceux où une vigilance diminuée expose le salarié " +
+      "ou autrui à un danger. C'est cette liste que vise l'article du règlement intérieur qui " +
+      "autorise un contrôle, et elle n'a d'effet que si elle désigne des postes réels.";
+  }
+  function postesHtml(num, groupes) {
+    var L = postesVigilance(groupes);
+    var h = "<h3>" + num + ". Postes exposés à une vigilance diminuée</h3><p>" + ech(postesTexte()) + "</p>";
+    h += "<ul>" + L.map(function (x) {
+      return "<li><b>" + ech(x.u) + "</b> : " + ech(x.qui) + "</li>";
+    }).join("") + "</ul>";
+    h += "<p><mark>" + ech(POSTES_BLANC) + "</mark></p>";
+    return h;
+  }
+  function postesItems(num, groupes, items) {
+    items.push({ k: "h2", t: num + ". Postes exposés à une vigilance diminuée" });
+    items.push({ k: "p", t: postesTexte() });
+    postesVigilance(groupes).forEach(function (x) {
+      items.push({ k: "p", t: "- " + x.u + " : " + x.qui });
+    });
+    items.push({ k: "p", t: POSTES_BLANC });
   }
 
   function tenueHtml(num) {
@@ -333,7 +384,8 @@
       unitesHtml(groupes, 1) +
       (registrePhrase(groupes) ? "<p>" + ech(registrePhrase(groupes)) + "</p>" : "") +
       planHtml(groupes, groupes.length + 1) +
-      tenueHtml(groupes.length + 2) +
+      postesHtml(groupes.length + 2, groupes) +
+      tenueHtml(groupes.length + 3) +
       signatureHtml();
   }
 
@@ -377,14 +429,17 @@
        en paysage quand le programme annuel est dû. Posé le 25 septembre 2026. */
     items.push({ k: "table", paysage: eff !== null && eff >= 50,
       head: eff !== null && eff >= 50
-        ? ["Priorité", "Unité", "Action", "Responsable", "Échéance", "Indicateur", "Coût"]
+        ? ["Priorité", "Unité", "Action", "Conditions d'exécution", "Responsable", "Échéance", "Indicateur", "Coût"]
         : ["Priorité", "Unité", "Action", "Responsable", "Échéance"],
       rows: plan.map(function (p) {
-        var l = [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)];
-        if (eff !== null && eff >= 50) l.push("[ à définir ]", "[ à estimer ]");
-        return l;
+        if (eff !== null && eff >= 50) {
+          return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, "[ comment, par qui, avec quoi ]",
+            p.x.r.r, dateFr(p.x.ech), "[ à définir ]", "[ à estimer ]"];
+        }
+        return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)];
       }) });
-    tenueItems(groupes.length + 2, items);
+    postesItems(groupes.length + 2, groupes, items);
+    tenueItems(groupes.length + 3, items);
     items.push({ k: "p", t: "Fait à " + ou("ville", "lieu") + ", le " + (dateFr(v("dateVersion")) || "[ date ]") + "." });
     items.push({ k: "p", t: ou("responsable", "responsable") + ", signature :" });
     items.push({ k: "note", t: "Textes : " + TEXTES.map(function (t) { return t.n + " (" + t.id + ")"; }).join(", ") + " du code du travail, " + LU + "." });
@@ -397,7 +452,9 @@
        quelle version il s'agit. Posé le 25 septembre 2026. */
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, titre, {
-        auteur: P.denomination || "",
+        /* L'auteur du fichier est celui qui signe, non la raison sociale :
+           demande de la relecture du 25 septembre 2026. */
+        auteur: v("responsable") || P.responsable || P.denomination || "",
         pied: (P.denomination || "") + ", document unique, version du " +
           (dateFr(v("dateVersion")) || dateFr(aujourdhui)),
       }),
@@ -789,7 +846,8 @@
       items.push({ k: "table", head: ["Priorité", "Unité", "Action", "Responsable", "Échéance"],
         rows: plan.map(function (p) { return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)]; }) });
     }
-    tenueItems(groupes.length + 2, items);
+    postesItems(groupes.length + 2, groupes, items);
+    tenueItems(groupes.length + 3, items);
     items.push({ k: "p", t: "Fait à " + ou("ville", "lieu") + ", le " + dateFr(aujourdhui) + "." });
     items.push({ k: "p", t: ou("responsable", "responsable") + ", signature :" });
     /* Le compte rendu ferme le fichier comme il ferme l'écran. */

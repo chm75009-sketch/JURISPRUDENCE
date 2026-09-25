@@ -63,7 +63,7 @@
             mes: [
               "Amplitude et temps de service suivis chaque semaine sur les données du chronotachygraphe, écarts examinés avec le conducteur.",
               "Repos quotidiens et hebdomadaires garantis par le planning, y compris en cas d'aléa : un aléa se règle par un remplacement, pas par un repos rogné.",
-              "Travailleurs de nuit : suivi individuel régulier de l'état de santé (L. 3122-11) et visite d'information et de prévention préalable à l'affectation sur le poste (R. 4624-18), visites suivies et honorées.",
+              "Travailleurs de nuit : visite d'information et de prévention préalable à l'affectation sur le poste (R. 4624-18), puis modalités de suivi adaptées arrêtées à l'issue de cette visite, selon une périodicité qui n'excède pas trois ans (R. 4624-17), dans le cadre du suivi individuel régulier que leur reconnaît L. 3122-11. Visites suivies et honorées.",
               "Cabine équipée pour le repos : couchette, rideaux occultants, chauffage à l'arrêt.",
               "Consigne écrite autorisant l'arrêt immédiat en cas de somnolence, sans avoir à se justifier.",
             ] },
@@ -136,6 +136,69 @@
               "Guidage par un tiers uniquement si la personne reste visible dans le rétroviseur, consigne écrite.",
               "Caméra de recul et détecteurs sur les véhicules lors du renouvellement.",
               "Gilet haute visibilité porté dès la descente de cabine, sans exception.",
+            ] },
+          /* LES MARCHANDISES DANGEREUSES.
+
+             Absentes du document alors que l'entreprise a des conducteurs
+             ADR : relevé le 25 septembre 2026. Le risque est posé ici, sur
+             l'unité du chargement, parce que c'est au chargement et au
+             déchargement qu'il se joue d'abord. Les mesures décrivent
+             l'organisation ; l'application ne cite pas l'accord européen
+             lui-même, qu'elle n'a pas lu à la source. */
+          { n: "Marchandises dangereuses", m: "adr|matière dangereuse|matieres dangereuses|dangereuse|citerne|épandage|epandage|étiquetage",
+            s: "Un conducteur charge des fûts de classe 3 sans que les documents de transport ni les plaques aient été vérifiés, et le kit d'épandage du véhicule est incomplet.",
+            g: 4, f: 2, r: "Conseiller à la sécurité", mois: 1,
+            mes: [
+              "Conseiller à la sécurité désigné et joignable, ses rapports annuels classés et ses observations suivies d'effet.",
+              "Conducteurs titulaires d'une formation spéciale en cours de validité pour les classes transportées, et pour la citerne lorsqu'elle est utilisée.",
+              "Consignes écrites de sécurité à bord, dans une langue que le conducteur lit, vérifiées au départ avec les documents de transport.",
+              "Équipement de bord contrôlé avant chaque départ : extincteurs, protection individuelle, kit d'épandage, cales, signalisation.",
+              "Plaques, étiquettes et signalisation orange posées et retirées selon le chargement réel, jamais laissées sur un véhicule vide.",
+              "Interdiction de charger un colis endommagé ou mal étiqueté, avec consigne écrite d'appeler l'exploitation plutôt que de décider seul.",
+              "Conduite à tenir en cas de fuite ou d'accident affichée en cabine : se mettre en sécurité, baliser, alerter, ne jamais intervenir seul sur le produit.",
+              "[ Classes transportées par l'entreprise, véhicules concernés et nom du conseiller à la sécurité : à écrire ]",
+            ] },
+        ] },
+
+      /* ════════════════════════════════════════════════════════════════ */
+      /* LE QUAI ET LA MANUTENTION, UNE UNITÉ À PART.
+
+         Le chargement était décrit du côté du conducteur seulement. Les
+         manutentionnaires, le chariot, le gerbage et le transpalette n'avaient
+         donc aucune unité, alors que R. 4121-1 veut l'inventaire « dans chaque
+         unité de travail ». Relevé le 25 septembre 2026. */
+      { cle: "quai-manutention", nom: "Quai et manutention", m: "quai|manutention|manutentionnaire|chariot|cariste|gerbage|palette|transpalette|entrepôt",
+        qui: "Manutentionnaires, caristes et personnel de quai, pendant la réception, le tri et l'expédition.",
+        risques: [
+          { n: "Chute depuis le quai et heurt par un véhicule", m: "quai|chute|heurt|niveleur|recul|camion",
+            s: "Un agent recule d'un pas sur le bord du quai pendant qu'un porteur se met à quai, sans butoir ni signal.",
+            g: 4, f: 2, r: "Responsable d'exploitation", mois: 1,
+            mes: [
+              "Bords de quai matérialisés, butoirs et garde-corps escamotables aux portes non utilisées.",
+              "Calage ou blocage du véhicule à quai, clés remises à l'exploitation ou feu de quai asservi, personne ne repart sur un simple geste.",
+              "Niveleur de quai vérifié périodiquement, manœuvre réservée au personnel désigné par écrit.",
+              "Cheminements piétons tracés au sol et respectés, gilet haute visibilité sur tout le quai.",
+            ] },
+          { n: "Conduite de chariot automoteur et gerbage", m: "chariot|cariste|caces|autorisation de conduite|gerbage|rayonnage",
+            s: "Un cariste gerbe une palette filmée en hauteur, à la limite de charge, avec un collègue qui passe dans l'allée.",
+            g: 4, f: 3, r: "Responsable d'exploitation", mois: 1,
+            mes: [
+              "Autorisation de conduite délivrée par écrit après formation, aptitude médicale et connaissance des lieux, tenue à jour.",
+              "Charges et hauteurs de gerbage affichées par rayonnage, et jamais dépassées, même pour une palette.",
+              "Vitesse limitée dans l'entrepôt, klaxon aux croisements, allées dégagées et éclairées.",
+              "Rayonnages contrôlés une fois par an, échelles et lisses endommagées remplacées sans délai.",
+              "Piétons interdits dans les allées de gerbage pendant les manœuvres, séparation matérialisée.",
+              "Chariots vérifiés chaque jour par le conducteur, défauts consignés et traités avant remise en service.",
+            ] },
+          { n: "Manutention manuelle et port de charges", m: "manutention|charge|port|dos|lombalgie|gestes et postures",
+            s: "Trois heures de tri de colis au sol, en torsion, avec des charges de vingt kilos reprises une à une.",
+            g: 3, f: 4, r: "Responsable d'exploitation", mois: 2,
+            mes: [
+              "Aides à la manutention à portée du poste : transpalette, table élévatrice, convoyeur, diable.",
+              "Hauteurs de travail revues pour éviter le tri au sol et les reprises en torsion.",
+              "Formation gestes et postures assise sur les charges et les gestes réels du quai.",
+              "Rotation des tâches sur les postes les plus répétitifs, et pauses tenues.",
+              "[ Charges unitaires maximales retenues dans l'entreprise, par poste : à écrire ]",
             ] },
         ] },
 

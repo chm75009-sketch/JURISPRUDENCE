@@ -1274,6 +1274,7 @@
     "maintenance": "Le technicien intervient sur une machine consignée alors que son attention est diminuée, et saute une étape de la consignation.",
     "conduite": "Le conducteur prend la route au petit matin après une courte nuit et un traitement contre le rhume qui fait dormir.",
     "atelier": "Le mécanicien travaille sous un poids lourd levé sur le pont, après un pot d'atelier.",
+    "quai-manutention": "Le cariste prend le chariot en début d'après-midi, sous un traitement qui l'assomme et dont il n'a parlé à personne.",
   };
   /* ═══════════════════════════════════════════════════════════════════════
      LES AMBIANCES THERMIQUES, QUE LE TEXTE NOMME ET QUE LE DOCUMENT OUBLIAIT
@@ -1303,6 +1304,7 @@
     "chargement": "Le conducteur décharge une heure sur un quai ouvert, en janvier, après trois heures de cabine chauffée.",
     "atelier": "Le mécanicien travaille portes ouvertes en février, mains dans le gasoil froid, puis sous un toit de tôle en août.",
     "cour": "Le laveur travaille à l'eau dehors toute la matinée, par cinq degrés et du vent.",
+    "quai-manutention": "L'agent de quai travaille portes ouvertes toute la journée, en plein courant d'air, l'hiver.",
     "quai": "L'agent enchaîne les allers et retours entre la chambre froide et le quai en plein soleil.",
     "preparation": "Le préparateur porte des charges huit heures dans un entrepôt non chauffé, sous une toiture qui prend le soleil.",
     "chariot": "Le cariste passe la journée sur un chariot sans cabine, entre les quais ouverts et l'extérieur.",
@@ -1329,7 +1331,7 @@
     "entrepot": ["quai", "preparation", "chariot"],
     "batiment": ["gros-oeuvre", "second-oeuvre", "circulation"],
     "industrie": ["production", "maintenance", "magasin"],
-    "transport": ["conduite", "chargement", "atelier", "cour"],
+    "transport": ["conduite", "chargement", "quai-manutention", "atelier", "cour"],
   };
 
   function poserThermique(metier) {
@@ -1370,7 +1372,7 @@
     "entrepot": ["quai", "chariot"],
     "batiment": ["gros-oeuvre", "circulation"],
     "industrie": ["production", "maintenance"],
-    "transport": ["conduite", "atelier"],
+    "transport": ["conduite", "atelier", "quai-manutention"],
   };
 
   /* LE MÊME RISQUE SUR DEUX UNITÉS NE S'ÉCRIT PAS DEUX FOIS EN ENTIER.
