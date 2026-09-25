@@ -49,10 +49,10 @@ SPREADS = [
   "Le Petit Parisien du 27 avril 1939 écrit simplement : « Mohammed, un de plus, est né à Béja, en Tunisie ». Ce n'est pas une contradiction.",
   "Un henchir est un domaine agricole, une ferme et ses terres, pas un village. Personne, hors d'un registre, ne dit qu'il est né dans un henchir : on donne la ville dont il dépend, et ici c'est Béja. Ce n'est même pas un hameau comme El Menchar, qui, lui, a un nom sur les cartes. Les journaux qui écrivent Béja ne se trompent donc pas, ils abrègent, comme abrège tout le monde.",
   "Le lieu précis est celui que porte l'acte de décès, et il faut continuer à le chercher là où il est : dans la campagne autour de Béja.",
-  "L'article qui figure en regard est de Claude Thuillard. C'est le seul portrait de lui qu'un grand quotidien français ait publié de son vivant, avec sa photographie. On y lit la phrase qui dit le mieux ce qu'il représentait chez lui : « Quelle joie alors à Béja et en Tunisie aussi ! »",
+  "L'article qui figure en regard est de Claude Thuillard, et il porte ce titre : « Tu le r'verras Paname ! » aurait dit dimanche le Red Star à BOUDJEMAA. C'est le seul portrait de lui qu'un grand quotidien français ait publié de son vivant, avec sa photographie. On y lit la phrase qui dit le mieux ce qu'il représentait chez lui : « Quelle joie alors à Béja et en Tunisie aussi ! »",
  ],
  "fac": "PetitParisien-1939-article.jpg",
- "leg": "Le portrait de Claude Thuillard.",
+ "leg": "« Tu le r'verras Paname ! » aurait dit dimanche le Red Star à BOUDJEMAA. Le portrait de Claude Thuillard.",
  "src": "Le Petit Parisien, 27 avril 1939, page 6, colonnes 4 et 5. Gallica, ark:/12148/bpt6k6836529."},
 
 {"ch": "1. LA NAISSANCE", "titre": "Le récit d'une recherche qui n'a pas abouti",
