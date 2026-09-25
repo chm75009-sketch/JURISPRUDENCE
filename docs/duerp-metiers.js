@@ -1358,9 +1358,9 @@
         s: SITUATIONS_THERMIQUE[u.cle] ||
            "Le salarié tient son poste par forte chaleur ou par grand froid, sans que l'organisation change.",
         g: 3, f: 3, r: "Employeur, avec l'encadrement du poste", mois: 2,
-        cond: "fontaines et bouteilles d'eau mises aux postes exposés avant l'été ; consigne sur le " +
-          "coup de chaleur affichée en cabine et au quai ; organisation d'été arrêtée avec " +
-          "l'exploitation en mai, organisation d'hiver en octobre",
+        cond: "eau fraîche mise aux postes exposés avant la saison chaude ; consigne sur le coup de " +
+          "chaleur et sur le froid affichée à chacun des postes de l'unité ; organisation d'été " +
+          "et organisation d'hiver arrêtées avec l'encadrement avant chaque saison",
         ind: "points d'eau accessibles à moins de cinq minutes de chaque poste ; jours d'épisode " +
           "chaud où l'organisation a effectivement changé",
         mes: mesures,

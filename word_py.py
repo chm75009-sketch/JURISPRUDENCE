@@ -22,6 +22,7 @@ plus conservateur, que Word accepte.
 Usage : python3 word_py.py elements.json sortie.docx
 """
 import json
+import re
 import sys
 
 from docx import Document
@@ -67,15 +68,40 @@ def _cadre(par, fond="F4F6FB"):
     p.append(bd)
 
 
+ROUGE = RGBColor(0xB3, 0x26, 0x1E)
+_BLANC = re.compile(r"\[[^\[\]\n]{1,400}\]")
+
+
 def _par(doc, texte, taille=11, gras=False, couleur=None, avant=0, apres=6, style=None):
+    """Un paragraphe, et ses blancs à remplir en rouge.
+
+    Ce qui est entre crochets est ce que l'application ne peut pas connaître :
+    une date, un nom, une liste de postes. Les écrans et les documents produits
+    dans le navigateur le sortent en rouge depuis le 12 septembre 2026, pour
+    que l'employeur le voie avant de déposer. Les documents écrits par ce
+    script, eux, les rendaient en noir : ils passaient donc inaperçus, et un
+    règlement intérieur est parti ainsi. Relevé le 25 septembre 2026."""
     par = doc.add_paragraph(style=style)
     par.paragraph_format.space_before = Pt(avant)
     par.paragraph_format.space_after = Pt(apres)
-    r = par.add_run(texte or "")
-    r.font.size = Pt(taille)
-    r.bold = gras
-    if couleur is not None:
-        r.font.color.rgb = couleur
+    t = texte or ""
+    morceaux, i = [], 0
+    if couleur is None:
+        for m in _BLANC.finditer(t):
+            if m.start() > i:
+                morceaux.append((t[i:m.start()], False))
+            morceaux.append((m.group(0), True))
+            i = m.end()
+    if i < len(t):
+        morceaux.append((t[i:], False))
+    for texte_morceau, blanc in morceaux:
+        r = par.add_run(texte_morceau)
+        r.font.size = Pt(taille)
+        r.bold = gras or blanc
+        if blanc:
+            r.font.color.rgb = ROUGE
+        elif couleur is not None:
+            r.font.color.rgb = couleur
     return par
 
 

@@ -676,7 +676,11 @@
         L.push("Il informe par ailleurs l'entreprise de toute suspension ou invalidation de");
         L.push("son permis au plus tard le premier jour de travail suivant la mesure : c'est");
         L.push("à cette condition que la mesure n'emporte pas, par elle-même, la rupture de");
-        L.push("son contrat (accord relatif au permis à points, article 2).");
+        /* La date de l'accord vient de deux relectures concordantes du
+           25 septembre 2026, qui l'ont lu à la source : le relais ne rend
+           pas l'identifiant du texte porteur, et je n'ai pu lire que
+           l'article. */
+        L.push("son contrat (accord du 13 novembre 1992 relatif au permis à points, article 2).");
         L.push("");
         L.push("NOTE - La faute lourde de l'annexe I ne vise que les décisions de la");
         L.push("commission médicale départementale, et non les retraits judiciaires ou");

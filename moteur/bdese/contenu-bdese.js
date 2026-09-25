@@ -435,7 +435,8 @@ const INDEX_EGALITE = {
       "Indicateurs relatifs aux écarts de rémunération entre les femmes et les hommes et aux actions mises en œuvre pour les supprimer, tels que publiés chaque année (L. 1142-8)",
       "Note globale obtenue, et date de la publication sur le site du ministère chargé du travail",
       "Mesures de correction et, le cas échéant, programmation de mesures financières de rattrapage salarial lorsque les résultats sont en deçà du niveau fixé par décret (L. 1142-9)",
-      "Objectifs de progression publiés, et échéance des trois ans de mise en conformité (L. 1142-10)",
+      "Objectifs de progression de chacun des indicateurs, fixés et publiés lorsque les résultats sont en deçà du niveau défini par décret (L. 1142-9-1)",
+      "Délai de trois ans pour se mettre en conformité, et son échéance (L. 1142-10)",
     ],
   }],
 };
