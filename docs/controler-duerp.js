@@ -305,7 +305,10 @@
   function postesTexte() {
     return "Les postes énumérés ci-dessous sont ceux où une vigilance diminuée expose le salarié " +
       "ou autrui à un danger. C'est cette liste que vise l'article du règlement intérieur qui " +
-      "autorise un contrôle, et elle n'a d'effet que si elle désigne des postes réels.";
+      "autorise un contrôle, et elle n'a d'effet que si elle désigne des postes réels. Le même " +
+      "examen sert à compléter, s'il y a lieu, la liste des postes à risques particuliers, que " +
+      "l'employeur arrête après avis du médecin du travail et du comité, en cohérence avec la " +
+      "présente évaluation (R. 4624-23, III).";
   }
   function postesHtml(num, groupes) {
     var L = postesVigilance(groupes);

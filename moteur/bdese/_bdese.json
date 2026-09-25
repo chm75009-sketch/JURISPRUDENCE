@@ -73,9 +73,11 @@
           "les informations, pour l'année antérieure et l'année en cours, relatives aux congés individuels de formation, aux congés de bilan de compétences, aux congés de validation des acquis de l'expérience et aux congés pour enseignement accordés",
           "notamment leur objet, leur durée et leur coût, aux conditions dans lesquelles ces congés ont été accordés ou reportés ainsi qu'aux résultats obtenus",
           "le nombre des salariés bénéficiaires de l'abondement mentionné à l'avant-dernier alinéa du II de l'article L. 6315-1 ainsi que les sommes versées à ce titre",
-          "le nombre des salariés bénéficiaires de l'entretien professionnel mentionné au I de l'article L. 6315-1. Le bilan, pour l'année antérieure et l'année en cours, des conditions de mise en œuvre des contrats d'alternance : -les emplois occupés pendant et à l'issue de leur action ou de leur période de professionnalisation",
+          "le nombre des salariés bénéficiaires de l'entretien professionnel mentionné au I de l'article L. 6315-1.",
+          "Le bilan, pour l'année antérieure et l'année en cours, des conditions de mise en œuvre des contrats d'alternance : -les emplois occupés pendant et à l'issue de leur action ou de leur période de professionnalisation",
           "les effectifs intéressés par âge, sexe et niveau initial de formation",
-          "les résultats obtenus en fin d'action ou de période de professionnalisation ainsi que les conditions d'appréciation et de validation. Le bilan de la mise en œuvre du compte personnel de formation"
+          "les résultats obtenus en fin d'action ou de période de professionnalisation ainsi que les conditions d'appréciation et de validation.",
+          "Le bilan de la mise en œuvre du compte personnel de formation"
          ],
          "court": "Formation professionnelle",
          "premiere": "investissements en formation, publics concernés"
@@ -170,7 +172,8 @@
          "lettre": null,
          "intitule": "Stratégie d'action : A partir de l'analyse des données chiffrées mentionnées au A du 2°, la stratégie comprend les éléments suivants : -mesures prises au cours de l'année écoulée en vue d'assurer l'égalité professionnelle. Bilan des actions de l'année écoulée et, le cas échéant, de l'année précédente. Evaluation du niveau de réalisation des objectifs sur la base des indicateurs retenus. Explications sur les actions prévues non réalisées",
          "informations": [
-          "objectifs de progression pour l'année à venir et indicateurs associés. Définition qualitative et quantitative des mesures permettant de les atteindre conformément à l'article R. 2242-2. Evaluation de leur coût. Echéancier des mesures prévues"
+          "objectifs de progression pour l'année à venir et indicateurs associés.",
+          "Définition qualitative et quantitative des mesures permettant de les atteindre conformément à l'article R. 2242-2. Evaluation de leur coût. Echéancier des mesures prévues"
          ],
          "court": "Stratégie d'action",
          "premiere": "A partir de l'analyse des données chiffrées mentionnées au A du 2°, la stratégie comprend les éléments suivants : -mesures prises au cours de l'année écoulée en vue d'assurer l'égalité professionnelle. Bilan des actions de l'année écoulée et, le cas échéant, de l'année précédente. Evaluation du niveau de réalisation des objectifs sur la base des indicateurs retenus. Explications sur les actions prévues non réalisées"
@@ -473,7 +476,8 @@
         {
          "lettre": null,
          "intitule": "Environnement (1)",
-         "informations": []
+         "informations": [],
+         "commentaire": true
         }
        ]
       },
@@ -528,12 +532,12 @@
     }
    ],
    "couverture": {
-    "extraits": 109,
+    "extraits": 112,
     "couverts": 10798,
     "entete": 195,
     "contenu": 10798,
     "renvoi": null,
-    "structure": 412,
+    "structure": 415,
     "reliquat": 0,
     "fragments": [],
     "part": 100
@@ -943,7 +947,8 @@
          "lettre": "d",
          "intitule": "Rémunérations : Données chiffrées par sexe : -rémunération moyenne ou médiane mensuelle par catégorie professionnelle",
          "informations": [
-          "rémunération moyenne ou médiane mensuelle par niveau ou coefficient hiérarchique. Cet indicateur n'a pas à être renseigné lorsque sa mention est de nature à porter atteinte à la confidentialité des données correspondantes, compte tenu notamment du nombre réduit d'individus dans un niveau ou coefficient hiérarchique",
+          "rémunération moyenne ou médiane mensuelle par niveau ou coefficient hiérarchique.",
+          "Cet indicateur n'a pas à être renseigné lorsque sa mention est de nature à porter atteinte à la confidentialité des données correspondantes, compte tenu notamment du nombre réduit d'individus dans un niveau ou coefficient hiérarchique",
           "rémunération moyenne ou médiane mensuelle par tranche d'âge",
           "nombre de femmes dans les dix plus hautes rémunérations"
          ],
@@ -1039,7 +1044,8 @@
          "lettre": "c",
          "intitule": "Services de proximité : -participation de l'entreprise et du comité social et économique aux modes d'accueil de la petite enfance",
          "informations": [
-          "évolution des dépenses éligibles au crédit d'impôt famille. Concernant la notion de catégorie professionnelle, il peut s'agir de fournir des données distinguant :"
+          "évolution des dépenses éligibles au crédit d'impôt famille.",
+          "Concernant la notion de catégorie professionnelle, il peut s'agir de fournir des données distinguant :"
          ],
          "court": "Services de proximité",
          "premiere": "-participation de l'entreprise et du comité social et économique aux modes d'accueil de la petite enfance"
@@ -1069,7 +1075,8 @@
          "lettre": null,
          "intitule": "Stratégie d'action : A partir de l'analyse des indicateurs mentionnés aux I et II, la stratégie d'action comprend les éléments suivants : -mesures prises au cours de l'année écoulée en vue d'assurer l'égalité professionnelle. Bilan des actions de l'année écoulée et, le cas échéant, de l'année précédente. Evaluation du niveau de réalisation des objectifs sur la base des indicateurs retenus. Explications sur les actions prévues non réalisées",
          "informations": [
-          "objectifs de progression pour l'année à venir et indicateurs associés. Définition qualitative et quantitative des mesures permettant de les atteindre conformément à l'article R. 2242-2 . Evaluation de leur coût. Echéancier des mesures prévues"
+          "objectifs de progression pour l'année à venir et indicateurs associés.",
+          "Définition qualitative et quantitative des mesures permettant de les atteindre conformément à l'article R. 2242-2 . Evaluation de leur coût. Echéancier des mesures prévues"
          ],
          "court": "Stratégie d'action",
          "premiere": "A partir de l'analyse des indicateurs mentionnés aux I et II, la stratégie d'action comprend les éléments suivants : -mesures prises au cours de l'année écoulée en vue d'assurer l'égalité professionnelle. Bilan des actions de l'année écoulée et, le cas échéant, de l'année précédente. Evaluation du niveau de réalisation des objectifs sur la base des indicateurs retenus. Explications sur les actions prévues non réalisées"
@@ -1633,12 +1640,12 @@
     }
    ],
    "couverture": {
-    "extraits": 291,
+    "extraits": 294,
     "couverts": 31542,
     "entete": 261,
     "contenu": 31542,
     "renvoi": "Elle comporte également les informations relatives à la formation professionnelle et aux conditions de travail prévues au 1° A e et f de l'article R. 2312-8.",
-    "structure": 1072,
+    "structure": 1075,
     "reliquat": 0,
     "fragments": [],
     "part": 100

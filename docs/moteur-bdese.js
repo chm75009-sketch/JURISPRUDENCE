@@ -4,7 +4,7 @@
    de moteur/bdese, et versé au dépôt : le site ne construit rien.
    Ne pas le modifier à la main — rejouer l'empaquetage.
 
-   Empreinte du moteur au moment de l'empaquetage : 4ee45b22b136
+   Empreinte du moteur au moment de l'empaquetage : 5ecdd49e19e8
    {"articlesLus":32,"themesDuPlancher":10,"versionPlancher":"LEGIARTI000043975329","rubriquesR2312_8":10,"rubriquesR2312_9":10,"couvertureR2312_8":100,"couvertureR2312_9":100,"controles":17,"detection":1,"coherence":1,"donneesDemandees":33,"casRegime":12,"casDates":5,"casDelais":4,"casContradictoires":14,"verdicts":323,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"contenuAuditeSurRegimeIndetermine":0,"preuveConcluantConforme":0}
 */
 (function (global) {
@@ -21,7 +21,7 @@
     src(mod, mod.exports, require);
     return mod.exports;
   }
-  var __MANIFESTE = {"domaine":"base de données économiques, sociales et environnementales","etatPublication":"réglementaire publiée","catalogueReglementaire":{"exhaustif":true,"seuilDeSortie":100,"couvertures":{"R. 2312-8":100,"R. 2312-9":100},"mention":"Le texte du décret est intégralement consommé par le découpage, ou son reliquat est validé et rattaché à une règle."},"date":"2026-09-25","empreinte":"4ee45b22b136","perimetre":"Le module prépare, structure, documente et audite la base. Il ne fournit pas une base collaborative accessible simultanément à plusieurs catégories d'utilisateurs, et il n'est pas la base : la mise à disposition reste un acte de l'employeur.","fichiers":{"audit-bdese-client.js":"cfbd1feb6dd1","cas-regime.js":"2f4cfdd8c433","contenu-bdese.js":"5e03986a8f82","controles-bdese.js":"15c783c5c17e","dates.js":"b6d7e587bec3","engendrer-grille.js":"74d55346b3e5","fiche-bdese.json":"4d3c5d58776c","modeles-bdese.js":"2475e9f1a3dc","outils.js":"7401cc07f5a6","plancher-bdese.js":"531a1e4147d8","propositions-bdese.js":"976330e09f78","questionnaire-bdese.js":"a369ae05717a","recevabilite.js":"62a84856a6f1","regime-bdese.js":"2a10cd8d305e","regularisation-bdese.js":"27cd10f92d78","sonde.js":"ac23bba7af98","tests-bdese.js":"4b8c4ab24560","textes-bdese.json":"3e485ff27643","verifier-textes-bdese.js":"b108b69a921d"},"compteurs":{"articlesLus":32,"themesDuPlancher":10,"versionPlancher":"LEGIARTI000043975329","rubriquesR2312_8":10,"rubriquesR2312_9":10,"couvertureR2312_8":100,"couvertureR2312_9":100,"controles":17,"detection":1,"coherence":1,"donneesDemandees":33,"casRegime":12,"casDates":5,"casDelais":4,"casContradictoires":14,"verdicts":323,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"contenuAuditeSurRegimeIndetermine":0,"preuveConcluantConforme":0},"manifesteReglementaire":[{"article":"L2312-14","version":"LEGIARTI000036262404","caracteres":519,"relecture":"concordant"},{"article":"L2312-15","version":"LEGIARTI000038791194","caracteres":1157,"relecture":"concordant"},{"article":"L2312-17","version":"LEGIARTI000051559706","caracteres":1079,"relecture":"concordant"},{"article":"L2312-18","version":"LEGIARTI000052437125","caracteres":1599,"relecture":"concordant"},{"article":"L2312-19","version":"LEGIARTI000036262394","caracteres":1109,"relecture":"concordant"},{"article":"L2312-2","version":"LEGIARTI000035650754","caracteres":913,"relecture":"homonyme servi par le relais"},{"article":"L2312-21","version":"LEGIARTI000043975329","caracteres":2045,"relecture":"concordant"},{"article":"L2312-22","version":"LEGIARTI000043975191","caracteres":948,"relecture":"concordant"},{"article":"L2312-25","version":"LEGIARTI000048533627","caracteres":2159,"relecture":"concordant"},{"article":"L2312-26","version":"LEGIARTI000052437222","caracteres":4747,"relecture":"concordant"},{"article":"L2312-34","version":"LEGIARTI000035609830","caracteres":373,"relecture":"concordant"},{"article":"L2312-36","version":"LEGIARTI000048533625","caracteres":2804,"relecture":"concordant"},{"article":"L2312-4","version":"LEGIARTI000035650742","caracteres":203,"relecture":"concordant"},{"article":"L2312-5","version":"LEGIARTI000043893930","caracteres":1417,"relecture":"concordant"},{"article":"L2312-8","version":"LEGIARTI000043975196","caracteres":1567,"relecture":"concordant"},{"article":"L2312-83","version":"LEGIARTI000036761969","caracteres":424,"relecture":"concordant"},{"article":"L2312-84","version":"LEGIARTI000035611325","caracteres":376,"relecture":"concordant"},{"article":"L2316-1","version":"LEGIARTI000043975179","caracteres":872,"relecture":"concordant"},{"article":"L2316-20","version":"LEGIARTI000035633047","caracteres":417,"relecture":"concordant"},{"article":"L2316-22","version":"LEGIARTI000036761997","caracteres":593,"relecture":"concordant"},{"article":"R2312-10","version":"LEGIARTI000036411580","caracteres":592,"relecture":"homonyme servi par le relais"},{"article":"R2312-11","version":"LEGIARTI000036411584","caracteres":466,"relecture":"homonyme servi par le relais"},{"article":"R2312-12","version":"LEGIARTI000036411586","caracteres":675,"relecture":"concordant"},{"article":"R2312-13","version":"LEGIARTI000036411588","caracteres":306,"relecture":"concordant"},{"article":"R2312-14","version":"LEGIARTI000036411590","caracteres":602,"relecture":"concordant"},{"article":"R2312-15","version":"LEGIARTI000036411594","caracteres":372,"relecture":"concordant"},{"article":"R2312-16","version":"LEGIARTI000045680836","caracteres":364,"relecture":"concordant"},{"article":"R2312-5","version":"LEGIARTI000045680873","caracteres":489,"relecture":"illisible"},{"article":"R2312-6","version":"LEGIARTI000036411558","caracteres":1179,"relecture":"concordant"},{"article":"R2312-7","version":"LEGIARTI000047548416","caracteres":847,"relecture":"concordant"},{"article":"R2312-8","version":"LEGIARTI000049905537","caracteres":10993,"relecture":"concordant"},{"article":"R2312-9","version":"LEGIARTI000049905524","caracteres":31803,"relecture":"concordant"}],"textesRelus":{"date":"2026-08-16","articles":32,"concordants":28,"ecarts":0,"sansConclusion":4,"homonymesEcartes":10}};
+  var __MANIFESTE = {"domaine":"base de données économiques, sociales et environnementales","etatPublication":"réglementaire publiée","catalogueReglementaire":{"exhaustif":true,"seuilDeSortie":100,"couvertures":{"R. 2312-8":100,"R. 2312-9":100},"mention":"Le texte du décret est intégralement consommé par le découpage, ou son reliquat est validé et rattaché à une règle."},"date":"2026-09-25","empreinte":"5ecdd49e19e8","perimetre":"Le module prépare, structure, documente et audite la base. Il ne fournit pas une base collaborative accessible simultanément à plusieurs catégories d'utilisateurs, et il n'est pas la base : la mise à disposition reste un acte de l'employeur.","fichiers":{"audit-bdese-client.js":"cfbd1feb6dd1","cas-regime.js":"2f4cfdd8c433","contenu-bdese.js":"58ce86e12067","controles-bdese.js":"15c783c5c17e","dates.js":"b6d7e587bec3","engendrer-grille.js":"74d55346b3e5","fiche-bdese.json":"4d3c5d58776c","modeles-bdese.js":"2475e9f1a3dc","outils.js":"7401cc07f5a6","plancher-bdese.js":"531a1e4147d8","propositions-bdese.js":"976330e09f78","questionnaire-bdese.js":"a369ae05717a","recevabilite.js":"62a84856a6f1","regime-bdese.js":"2a10cd8d305e","regularisation-bdese.js":"27cd10f92d78","sonde.js":"ac23bba7af98","tests-bdese.js":"4b8c4ab24560","textes-bdese.json":"3e485ff27643","verifier-textes-bdese.js":"b108b69a921d"},"compteurs":{"articlesLus":32,"themesDuPlancher":10,"versionPlancher":"LEGIARTI000043975329","rubriquesR2312_8":10,"rubriquesR2312_9":10,"couvertureR2312_8":100,"couvertureR2312_9":100,"controles":17,"detection":1,"coherence":1,"donneesDemandees":33,"casRegime":12,"casDates":5,"casDelais":4,"casContradictoires":14,"verdicts":323,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"contenuAuditeSurRegimeIndetermine":0,"preuveConcluantConforme":0},"manifesteReglementaire":[{"article":"L2312-14","version":"LEGIARTI000036262404","caracteres":519,"relecture":"concordant"},{"article":"L2312-15","version":"LEGIARTI000038791194","caracteres":1157,"relecture":"concordant"},{"article":"L2312-17","version":"LEGIARTI000051559706","caracteres":1079,"relecture":"concordant"},{"article":"L2312-18","version":"LEGIARTI000052437125","caracteres":1599,"relecture":"concordant"},{"article":"L2312-19","version":"LEGIARTI000036262394","caracteres":1109,"relecture":"concordant"},{"article":"L2312-2","version":"LEGIARTI000035650754","caracteres":913,"relecture":"homonyme servi par le relais"},{"article":"L2312-21","version":"LEGIARTI000043975329","caracteres":2045,"relecture":"concordant"},{"article":"L2312-22","version":"LEGIARTI000043975191","caracteres":948,"relecture":"concordant"},{"article":"L2312-25","version":"LEGIARTI000048533627","caracteres":2159,"relecture":"concordant"},{"article":"L2312-26","version":"LEGIARTI000052437222","caracteres":4747,"relecture":"concordant"},{"article":"L2312-34","version":"LEGIARTI000035609830","caracteres":373,"relecture":"concordant"},{"article":"L2312-36","version":"LEGIARTI000048533625","caracteres":2804,"relecture":"concordant"},{"article":"L2312-4","version":"LEGIARTI000035650742","caracteres":203,"relecture":"concordant"},{"article":"L2312-5","version":"LEGIARTI000043893930","caracteres":1417,"relecture":"concordant"},{"article":"L2312-8","version":"LEGIARTI000043975196","caracteres":1567,"relecture":"concordant"},{"article":"L2312-83","version":"LEGIARTI000036761969","caracteres":424,"relecture":"concordant"},{"article":"L2312-84","version":"LEGIARTI000035611325","caracteres":376,"relecture":"concordant"},{"article":"L2316-1","version":"LEGIARTI000043975179","caracteres":872,"relecture":"concordant"},{"article":"L2316-20","version":"LEGIARTI000035633047","caracteres":417,"relecture":"concordant"},{"article":"L2316-22","version":"LEGIARTI000036761997","caracteres":593,"relecture":"concordant"},{"article":"R2312-10","version":"LEGIARTI000036411580","caracteres":592,"relecture":"homonyme servi par le relais"},{"article":"R2312-11","version":"LEGIARTI000036411584","caracteres":466,"relecture":"homonyme servi par le relais"},{"article":"R2312-12","version":"LEGIARTI000036411586","caracteres":675,"relecture":"concordant"},{"article":"R2312-13","version":"LEGIARTI000036411588","caracteres":306,"relecture":"concordant"},{"article":"R2312-14","version":"LEGIARTI000036411590","caracteres":602,"relecture":"concordant"},{"article":"R2312-15","version":"LEGIARTI000036411594","caracteres":372,"relecture":"concordant"},{"article":"R2312-16","version":"LEGIARTI000045680836","caracteres":364,"relecture":"concordant"},{"article":"R2312-5","version":"LEGIARTI000045680873","caracteres":489,"relecture":"illisible"},{"article":"R2312-6","version":"LEGIARTI000036411558","caracteres":1179,"relecture":"concordant"},{"article":"R2312-7","version":"LEGIARTI000047548416","caracteres":847,"relecture":"concordant"},{"article":"R2312-8","version":"LEGIARTI000049905537","caracteres":10993,"relecture":"concordant"},{"article":"R2312-9","version":"LEGIARTI000049905524","caracteres":31803,"relecture":"concordant"}],"textesRelus":{"date":"2026-08-16","articles":32,"concordants":28,"ecarts":0,"sansConclusion":4,"homonymesEcartes":10}};
   var __REGISTRE = (function () { var r = null || {};
     return { construire: function () { return r.construire || []; },
              coherence: function () { return r.coherence || {}; },
@@ -785,6 +785,46 @@ const FIN_DU_TABLEAU = "employés, techniciens et agents de maîtrise (ETAM)";
    et c'est la garantie à laquelle ce module tient le plus. On laisse donc le
    libellé tel qu'il est servi.                                             */
 
+/* DEUX PHRASES DU DÉCRET COUPÉES AU MAUVAIS ENDROIT.
+
+   Relevé le 25 septembre 2026, sur le classeur livré :
+
+   - une information qui commence par « et » ou « ainsi que » est la fin de la
+     phrase précédente, arrachée à elle : « c) Mesures envisagées en ce qui
+     concerne l'amélioration [...] des méthodes de production et
+     d'exploitation », puis, sur la ligne suivante, « et incidences de ces
+     mesures sur les conditions de travail ». Elle est recollée ;
+   - deux points distincts partagent une ligne quand le décret les sépare d'un
+     simple point : l'entretien professionnel et le bilan de l'alternance, la
+     professionnalisation et le compte personnel de formation. Ils sont
+     séparés.
+
+   Les deux opérations ne touchent qu'aux bornes : les morceaux se retrouvent
+   mot pour mot dans le texte, et pas un caractère n'est perdu.            */
+function recoller(infos) {
+  const out = [];
+  infos.forEach(function (i) {
+    const t = String(i).trim();
+    if (out.length && /^(et|ainsi que|ou)\s/.test(t)) out[out.length - 1] = out[out.length - 1] + " " + t;
+    else out.push(t);
+  });
+  return out;
+}
+
+function separer(infos) {
+  const out = [];
+  infos.forEach(function (i) {
+    const t = String(i).trim();
+    /* On ne coupe qu'après un point suivi d'une majuscule, et seulement si les
+       deux morceaux tiennent debout seuls. Le point d'une référence
+       d'article, « L. 6315-1 », n'est jamais suivi d'une majuscule. */
+    const m = t.match(/^(.{40,}?[^A-Z])\.\s+([A-ZÉÈÀ].{40,})$/);
+    if (m) { out.push(m[1] + "."); out.push(m[2]); }
+    else out.push(t);
+  });
+  return out;
+}
+
 function nettoyer(arbre) {
   let fini = false;
   (arbre.rubriques || []).forEach(function (r) {
@@ -793,8 +833,41 @@ function nettoyer(arbre) {
       if (fini) s.commentaire = true;
       (s.sujets || []).forEach(function (su) {
         if (fini) { su.commentaire = true; return; }
+        /* La borne se cherche AVANT tout recollage : la ligne de nomenclature
+           doit se retrouver telle quelle, et « et ouvriers. » qui la suit ne
+           doit pas lui être recollé. */
+        const brutes = (su.informations && su.informations.length) ? su.informations : [];
+        const coupe = brutes.indexOf(FIN_DU_TABLEAU);
+        if (su.informations && su.informations.length) {
+          const gardees = coupe >= 0 ? brutes.slice(0, coupe) : brutes;
+          const apres = coupe >= 0 ? brutes.slice(coupe) : [];
+          su.informations = separer(recoller(gardees))
+            /* La rubrique dont le titre revient en information ne dit rien :
+               « Environnement (1) », en section et en information. */
+            .filter(function (i) { return String(i).trim() !== String(r.titre).trim(); })
+            .concat(apres);
+        }
+        /* CE QU'ON NE RECOLLE PAS, ET POURQUOI.
+
+           Une relecture a vu une phrase coupée en deux : « c) Mesures
+           envisagées [...] des méthodes de production et d'exploitation »
+           d'un côté, « et incidences de ces mesures sur les conditions de
+           travail » de l'autre. La coupure n'est pas la nôtre : le décret
+           écrit un point-virgule entre les deux, « ...d'exploitation ; et
+           incidences... ». Les recoller ferait un libellé qui ne se retrouve
+           plus mot pour mot dans le texte, et c'est la garantie de ce module.
+           Vérifié le 25 septembre 2026. */
+        /* Un sujet qui n'a rien d'autre que le titre de sa rubrique ne
+           demande rien : « Environnement (1) », en section comme en
+           information. */
+        /* Le titre de la rubrique revenu trois fois, en section, en sujet et en
+           information : « Environnement (1) ». Le découpage a collé la
+           première section au titre de la rubrique, d'où la comparaison sur le
+           début. Ce n'est pas une donnée à porter. */
+        if ((!su.informations || !su.informations.length) &&
+            String(su.intitule).trim() === String(s.titre).trim() &&
+            String(r.titre).indexOf(String(su.intitule).trim()) === 0) su.commentaire = true;
         const infos = (su.informations && su.informations.length) ? su.informations : [];
-        const coupe = infos.indexOf(FIN_DU_TABLEAU);
         if (coupe >= 0) {
           /* Ce qui suit dans ce sujet, et tout ce qui vient après dans l'arbre,
              est du commentaire du décret : la nomenclature des qualifications
@@ -803,7 +876,7 @@ function nettoyer(arbre) {
              seulement marquées, et les écrans comme les classeurs les passent.
              Relevé le 25 septembre 2026 : elles sortaient au client comme des
              informations à renseigner. */
-          su.commentaireDepuis = coupe;
+          su.commentaireDepuis = su.informations.indexOf(FIN_DU_TABLEAU);
           fini = true;
         }
         /* Le premier indicateur, rendu à sa liste : « i) Effectif : Effectif

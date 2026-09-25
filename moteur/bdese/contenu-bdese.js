@@ -282,6 +282,46 @@ const FIN_DU_TABLEAU = "employés, techniciens et agents de maîtrise (ETAM)";
    et c'est la garantie à laquelle ce module tient le plus. On laisse donc le
    libellé tel qu'il est servi.                                             */
 
+/* DEUX PHRASES DU DÉCRET COUPÉES AU MAUVAIS ENDROIT.
+
+   Relevé le 25 septembre 2026, sur le classeur livré :
+
+   - une information qui commence par « et » ou « ainsi que » est la fin de la
+     phrase précédente, arrachée à elle : « c) Mesures envisagées en ce qui
+     concerne l'amélioration [...] des méthodes de production et
+     d'exploitation », puis, sur la ligne suivante, « et incidences de ces
+     mesures sur les conditions de travail ». Elle est recollée ;
+   - deux points distincts partagent une ligne quand le décret les sépare d'un
+     simple point : l'entretien professionnel et le bilan de l'alternance, la
+     professionnalisation et le compte personnel de formation. Ils sont
+     séparés.
+
+   Les deux opérations ne touchent qu'aux bornes : les morceaux se retrouvent
+   mot pour mot dans le texte, et pas un caractère n'est perdu.            */
+function recoller(infos) {
+  const out = [];
+  infos.forEach(function (i) {
+    const t = String(i).trim();
+    if (out.length && /^(et|ainsi que|ou)\s/.test(t)) out[out.length - 1] = out[out.length - 1] + " " + t;
+    else out.push(t);
+  });
+  return out;
+}
+
+function separer(infos) {
+  const out = [];
+  infos.forEach(function (i) {
+    const t = String(i).trim();
+    /* On ne coupe qu'après un point suivi d'une majuscule, et seulement si les
+       deux morceaux tiennent debout seuls. Le point d'une référence
+       d'article, « L. 6315-1 », n'est jamais suivi d'une majuscule. */
+    const m = t.match(/^(.{40,}?[^A-Z])\.\s+([A-ZÉÈÀ].{40,})$/);
+    if (m) { out.push(m[1] + "."); out.push(m[2]); }
+    else out.push(t);
+  });
+  return out;
+}
+
 function nettoyer(arbre) {
   let fini = false;
   (arbre.rubriques || []).forEach(function (r) {
@@ -290,8 +330,41 @@ function nettoyer(arbre) {
       if (fini) s.commentaire = true;
       (s.sujets || []).forEach(function (su) {
         if (fini) { su.commentaire = true; return; }
+        /* La borne se cherche AVANT tout recollage : la ligne de nomenclature
+           doit se retrouver telle quelle, et « et ouvriers. » qui la suit ne
+           doit pas lui être recollé. */
+        const brutes = (su.informations && su.informations.length) ? su.informations : [];
+        const coupe = brutes.indexOf(FIN_DU_TABLEAU);
+        if (su.informations && su.informations.length) {
+          const gardees = coupe >= 0 ? brutes.slice(0, coupe) : brutes;
+          const apres = coupe >= 0 ? brutes.slice(coupe) : [];
+          su.informations = separer(recoller(gardees))
+            /* La rubrique dont le titre revient en information ne dit rien :
+               « Environnement (1) », en section et en information. */
+            .filter(function (i) { return String(i).trim() !== String(r.titre).trim(); })
+            .concat(apres);
+        }
+        /* CE QU'ON NE RECOLLE PAS, ET POURQUOI.
+
+           Une relecture a vu une phrase coupée en deux : « c) Mesures
+           envisagées [...] des méthodes de production et d'exploitation »
+           d'un côté, « et incidences de ces mesures sur les conditions de
+           travail » de l'autre. La coupure n'est pas la nôtre : le décret
+           écrit un point-virgule entre les deux, « ...d'exploitation ; et
+           incidences... ». Les recoller ferait un libellé qui ne se retrouve
+           plus mot pour mot dans le texte, et c'est la garantie de ce module.
+           Vérifié le 25 septembre 2026. */
+        /* Un sujet qui n'a rien d'autre que le titre de sa rubrique ne
+           demande rien : « Environnement (1) », en section comme en
+           information. */
+        /* Le titre de la rubrique revenu trois fois, en section, en sujet et en
+           information : « Environnement (1) ». Le découpage a collé la
+           première section au titre de la rubrique, d'où la comparaison sur le
+           début. Ce n'est pas une donnée à porter. */
+        if ((!su.informations || !su.informations.length) &&
+            String(su.intitule).trim() === String(s.titre).trim() &&
+            String(r.titre).indexOf(String(su.intitule).trim()) === 0) su.commentaire = true;
         const infos = (su.informations && su.informations.length) ? su.informations : [];
-        const coupe = infos.indexOf(FIN_DU_TABLEAU);
         if (coupe >= 0) {
           /* Ce qui suit dans ce sujet, et tout ce qui vient après dans l'arbre,
              est du commentaire du décret : la nomenclature des qualifications
@@ -300,7 +373,7 @@ function nettoyer(arbre) {
              seulement marquées, et les écrans comme les classeurs les passent.
              Relevé le 25 septembre 2026 : elles sortaient au client comme des
              informations à renseigner. */
-          su.commentaireDepuis = coupe;
+          su.commentaireDepuis = su.informations.indexOf(FIN_DU_TABLEAU);
           fini = true;
         }
         /* Le premier indicateur, rendu à sa liste : « i) Effectif : Effectif
