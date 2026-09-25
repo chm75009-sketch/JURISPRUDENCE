@@ -145,6 +145,16 @@
   /* LE DOCUMENT, en HTML pour l'écran et en éléments pour le Word. */
   var TITRE = "Document unique d'évaluation des risques professionnels";
 
+  /* Les trois niveaux de priorité, et leur couleur dans le tableau : rouge
+     pâle, ambre, vert, assez clairs pour qu'un texte noir s'y lise et pour
+     qu'une impression en noir et blanc reste lisible. */
+  var FOND_PRIORITE = {
+    "action immédiate": "F7CFCF",
+    "prioritaire": "FCE3B4",
+    "à programmer": "D9EAD3",
+    "à surveiller": "E6EEF6",
+  };
+
   var INTRO = "L'évaluation comporte un inventaire des risques identifiés dans chaque unité de " +
     "travail, y compris ceux liés aux ambiances thermiques (R. 4121-1). Pour chaque risque : la " +
     "situation de travail, une cotation de 1 à 16 (gravité multipliée par fréquence), les mesures " +
@@ -240,9 +250,21 @@
         " Calendrier : les échéances portées au tableau ci-dessous en tiennent lieu, revues à chaque mise à jour.";
     return "L'effectif étant de " + eff + " salarié" + (eff > 1 ? "s" : "") + ", les résultats de l'évaluation débouchent sur la liste des actions de prévention des risques et de protection des salariés, consignée dans le présent document (L. 4121-3-1, III, 2°).";
   }
+  /* LE NUMÉRO DE LA SITUATION RELIE LE PLAN À L'ÉVALUATION.
+
+     Les deux modèles envoyés le 25 septembre 2026, celui d'un organisme de
+     formation et le guide Prév. 317 de la Carsat Aquitaine, numérotent chaque
+     situation dangereuse et font renvoyer le plan d'actions à ce numéro. Le
+     nôtre donnait l'unité et l'intitulé du risque, sans moyen de remonter au
+     paragraphe qui le décrit : le numéro le donne, et c'est celui des
+     sections, 1.1, 2.5, 3.2. */
   function planTrie(groupes) {
     var plan = [];
-    groupes.forEach(function (g) { g.liste.forEach(function (x) { plan.push({ u: g.u.nom, x: x }); }); });
+    groupes.forEach(function (g, ig) {
+      g.liste.forEach(function (x, ix) {
+        plan.push({ u: g.u.nom, n: (ig + 1) + "." + (ix + 1), x: x });
+      });
+    });
     plan.sort(function (a, b) { return b.x.pr.p - a.x.pr.p; });
     return plan;
   }
@@ -251,8 +273,9 @@
     var plan = planTrie(groupes);
     var h = "<h3>" + num + ". " + planTitre() + "</h3><p>" + ech(planPhrase()) + "</p>";
     h += "<ol>" + plan.map(function (p) {
-      return "<li>" + ech(p.u) + " : " + ech(p.x.r.n) + ". Priorité " + p.x.pr.p + ", " + ech(p.x.pr.mot) +
-        ". " + ech(p.x.r.r) + ", pour le " + ech(dateFr(p.x.ech)) + "." + "</li>";
+      return "<li><b>" + ech(p.n) + "</b> " + ech(p.u) + " : " + ech(p.x.r.n) + ". Priorité " +
+        p.x.pr.p + ", " + ech(p.x.pr.mot) + ". " + ech(p.x.r.r) + ", pour le " +
+        ech(dateFr(p.x.ech)) + "." + "</li>";
     }).join("") + "</ol>";
     return h;
   }
@@ -448,16 +471,23 @@
        portent le texte, la priorité et les dates n'ont besoin que d'un mot.
        Posées le 25 septembre 2026, avec les bordures. */
     items.push({ k: "table", paysage: eff !== null && eff >= 50,
-      proportions: eff !== null && eff >= 50 ? [10, 14, 22, 18, 12, 10, 8, 6] : [12, 20, 34, 20, 14],
+      proportions: eff !== null && eff >= 50 ? [5, 9, 13, 20, 17, 11, 9, 9, 7] : [6, 12, 20, 32, 18, 12],
       head: eff !== null && eff >= 50
-        ? ["Priorité", "Unité", "Action", "Conditions d'exécution", "Responsable", "Échéance", "Indicateur", "Coût"]
-        : ["Priorité", "Unité", "Action", "Responsable", "Échéance"],
+        ? ["N°", "Priorité", "Unité", "Action", "Conditions d'exécution", "Responsable", "Échéance", "Indicateur", "Coût"]
+        : ["N°", "Priorité", "Unité", "Action", "Responsable", "Échéance"],
+      /* L'évaluation en bleu, le plan d'action en vert : la séparation des
+         modèles du métier, reprise le 25 septembre 2026 sur le modèle que
+         l'utilisatrice a envoyé. La priorité prend la couleur de son niveau. */
+      entetes: eff !== null && eff >= 50
+        ? ["1F3864", "1F3864", "1F3864", "1F3864", "2F5D3A", "2F5D3A", "2F5D3A", "2F5D3A", "2F5D3A"]
+        : ["1F3864", "1F3864", "1F3864", "1F3864", "2F5D3A", "2F5D3A"],
       rows: plan.map(function (p) {
+        var prio = { t: p.x.pr.p + " " + p.x.pr.mot, fond: FOND_PRIORITE[p.x.pr.mot] || null };
         if (eff !== null && eff >= 50) {
-          return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, "[ comment, par qui, avec quoi ]",
+          return [p.n, prio, p.u, p.x.r.n, "[ comment, par qui, avec quoi ]",
             p.x.r.r, dateFr(p.x.ech), "[ à définir ]", "[ à estimer ]"];
         }
-        return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)];
+        return [p.n, prio, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)];
       }) });
     postesItems(groupes.length + 2, groupes, items);
     tenueItems(groupes.length + 3, items);
@@ -865,7 +895,13 @@
       var plan = planTrie(groupes);
       items.push({ k: "h2", t: (groupes.length + 1) + ". " + planTitre() + " : les actions ajoutées" });
       items.push({ k: "table", head: ["Priorité", "Unité", "Action", "Responsable", "Échéance"],
-        rows: plan.map(function (p) { return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)]; }) });
+        /* L'évaluation en bleu, le plan d'action en vert : la séparation des
+         modèles du métier, reprise le 25 septembre 2026 sur le modèle que
+         l'utilisatrice a envoyé. La priorité prend la couleur de son niveau. */
+      entetes: eff !== null && eff >= 50
+        ? ["1F3864", "1F3864", "1F3864", "1F3864", "2F5D3A", "2F5D3A", "2F5D3A", "2F5D3A", "2F5D3A"]
+        : ["1F3864", "1F3864", "1F3864", "1F3864", "2F5D3A", "2F5D3A"],
+      rows: plan.map(function (p) { return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)]; }) });
     }
     postesItems(groupes.length + 2, groupes, items);
     tenueItems(groupes.length + 3, items);

@@ -139,8 +139,15 @@
      gardent leur largeur d'une page à l'autre et que le texte ne touche pas
      les traits. Demande du 25 septembre 2026, « fais les bordures des
      tableaux et soigne la présentation ». */
-  function cellule(texte, entete, largeur, pair) {
-    var fond = entete ? "1F3864" : (pair ? "F2F5F9" : null);
+  /* Une cellule peut donner sa propre couleur de fond : { t: "...", fond:
+     "FFE7B3" }. C'est ainsi que la priorité se colore dans le programme de
+     prévention, vert, ambre ou rouge, comme sur les modèles du métier.
+     Demande du 25 septembre 2026. */
+  function cellule(texte, entete, largeur, pair, fondEntete) {
+    var propre = (texte && typeof texte === "object") ? texte : null;
+    if (propre) texte = propre.t;
+    var fond = entete ? (fondEntete || "1F3864")
+      : (propre && propre.fond) || (pair ? "F2F5F9" : null);
     return "<w:tc><w:tcPr>" +
       (largeur ? '<w:tcW w:w="' + largeur + '" w:type="dxa"/>' : '<w:tcW w:w="0" w:type="auto"/>') +
       (fond ? '<w:shd w:val="clear" w:color="auto" w:fill="' + fond + '"/>' : "") +
@@ -187,8 +194,9 @@
       "</w:tblGrid>";
     /* L'en-tête se répète en tête de chaque page : un tableau de trente-trois
        lignes tient sur deux pages, et la seconde sans titres ne se lit pas. */
+    var fonds = opts.entetes || [];
     x += '<w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr>' +
-      entetes.map(function (h, i) { return cellule(h, true, L[i]); }).join("") + "</w:tr>";
+      entetes.map(function (h, i) { return cellule(h, true, L[i], false, fonds[i]); }).join("") + "</w:tr>";
     lignes.forEach(function (l, il) {
       x += "<w:tr><w:trPr><w:cantSplit/></w:trPr>" +
         l.map(function (c, i) { return cellule(c, false, L[i], il % 2 === 1); }).join("") + "</w:tr>";
@@ -318,10 +326,10 @@
     var corps = items.map(function (i) {
       if (i.k === "table" && i.paysage && !large) {
         return sautSection(false, opts) +
-          tableau(i.head, i.rows, { paysage: true, proportions: i.proportions }) +
+          tableau(i.head, i.rows, { paysage: true, proportions: i.proportions, entetes: i.entetes }) +
           sautSection(true, opts);
       }
-      if (i.k === "table") return tableau(i.head, i.rows, { paysage: large, proportions: i.proportions });
+      if (i.k === "table") return tableau(i.head, i.rows, { paysage: large, proportions: i.proportions, entetes: i.entetes });
       return VERS_WORD[i.k] ? VERS_WORD[i.k](i) : "";
     }).join("");
     var section = '<w:footerReference w:type="default" r:id="rIdPied"/>' +
@@ -395,7 +403,11 @@
     acquis: function (i) { return "<ul><li>" + ech("✓ " + i.t + ", " + i.base) + "</li></ul>"; },
     rouge: function (i) { return '<p style="color:#C00000">' + ech(i.t) + "</p>"; },
     table: function (i) {
-      var lignes = [].concat(i.head ? [i.head] : [], i.rows || []);
+      /* Une cellule peut être un objet { t, fond } : l'aperçu n'en garde que
+         le texte, la couleur étant une affaire de document imprimé. */
+      var texte = function (c) { return (c && typeof c === "object") ? c.t : c; };
+      var lignes = [].concat(i.head ? [i.head.map(texte)] : [],
+        (i.rows || []).map(function (l) { return l.map(texte); }));
       return window.Apercu ? window.Apercu.tableHtml(lignes, !!i.head) : "";
     },
   };
